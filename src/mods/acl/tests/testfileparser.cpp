@@ -19,6 +19,7 @@ SCENARIO("config file is present","[fileparser]"){
                 parser.setFile("foobar.conf");
                 std::cout << "Read " << parser.read() << " bytes\n";
                 int ret = parser.parse();
+                parser.dump_tree();
                 std::cout << ret << "\n";
             }
         }

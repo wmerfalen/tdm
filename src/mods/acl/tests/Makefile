@@ -1,5 +1,5 @@
 GCC = g++
-FLAGS = -std=c++14 -Wall
+FLAGS = -std=c++14 -Wall -Werror
 
 #test-command: command.o
 #	$(GCC) $(FLAGS) command.o testcommand.cpp -o tcommand-main
