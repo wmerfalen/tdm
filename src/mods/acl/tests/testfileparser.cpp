@@ -6,12 +6,14 @@ SCENARIO("config file is present","[fileparser]"){
     GIVEN("config file has valid syntax"){
         WHEN("rule is present"){
             THEN("a valid ruleset should be built and can be retrieved"){
+                /*
                 using namespace mods::acl;
                 FileParser parser;
                 parser.setFile("/etc/foo/bar/non/existent/file");
                 int ret = parser.parse();
                 REQUIRE(ret == FileParser::FILE_CANNOT_OPEN);
                 std::cout << ret << "\n";
+                */
             }
             THEN("modifying rules should work"){
                 using namespace mods::acl;

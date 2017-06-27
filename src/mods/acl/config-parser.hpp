@@ -9,10 +9,11 @@
 #include <tuple>
 #include <map>
 #include <algorithm>
-#include "radix_tree/radix_tree.hpp"
+//#include "radix_tree/radix_tree.hpp"
 #include "color.hpp"
 #include "../util-map.hpp"
 #include <cstdarg>  //for variadic function m_expect_chain(int ...)
+#include <assert.h>
 
 #define dbg(f)  std::cout << Color::fg::green <<\
     "[" << Color::bg::blue << "debug: ]" << Color::bg::def << \
@@ -74,7 +75,9 @@ namespace mods {
                  *
                  */
                 typedef std::vector<bool>  rule;
-                typedef radix_tree<std::string,rule> tree;
+                typedef std::string tr_key;
+                typedef rule tr_value;
+                typedef std::map<tr_key,tr_value> tree;
                 typedef std::string cm_key;
                 typedef uint64_t cm_value;
                 typedef std::map<cm_key,cm_value> command_map;
@@ -100,25 +103,28 @@ namespace mods {
                 int read();
                 int parse();
                 inline void dump_tree(void){
+                    dbg("Dumptree");
                     for(auto leaf: m_tree){
                         //
-                        blu_text(leaf.first << " ");
-                        blu_text(leaf.second.size());
-                        for(unsigned i=0;i < leaf.second.size();i++){
-                            std::cout << "[command: " << \
-                                ::mods::util::maps::keyval_first<cm_key,cm_value>(m_command_map,i,"none found") << "]: ";
-                            if(leaf.second[i]){
-                                grn_text("allow");
-                            }else{
-                                red_text("deny");
-                            }
-                            std::cout << "\n";
-                        }
+                        blu_text("Tree element (first):" << leaf.first << " ");
+                        blu_text("Tree element size (second): " << leaf.second.size());
+                        dump_rules(leaf.second);
                         for(auto c: m_command_map){
                             blu_text("cmap: " << c.first << "-> " << c.second);
                         }
                     }
-                };
+                }
+                inline void dump_rules(rule r){
+                    for(unsigned i = 0; i < r.size();i++){
+                        std::cout << "[command: ";
+                        std::cout << ::mods::util::maps::keyval_first<cm_key,cm_value>(m_command_map,i,"none found") << "]: ";
+                        if(r[i]){
+                            dbg("dump rules: @@@ ALLOW @@@");
+                        }else{
+                            dbg("dump rules: ### DENY ###");
+                        }
+                    }
+                }
             private:
                 int m_accept_regex(const std::string &,std::vector<std::string>&);
                 int m_accept_regex(const std::string &);
@@ -155,6 +161,7 @@ namespace mods {
 
                 /* Commands and rules */
                 command_map m_command_map;
+                cm_value m_max_command;
                 tree m_tree;
                 std::string m_current_class;
                 std::string m_current_extended_class;
@@ -180,22 +187,77 @@ namespace mods {
                             if(m_command_map.find(cleaned.c_str()) == m_command_map.end()){
                                 //We need to insert this into the command map
                                 dbg("Didnt find string, inserting...");
-                                m_command_map.insert(std::pair<cm_key,cm_value>(cleaned.c_str(),++m_command_ctr));
+                                m_command_map.insert(std::pair<cm_key,cm_value>(cleaned.c_str(),m_command_ctr++));
+                                m_max_command = m_command_ctr;
                             }else{
                                 dbg("Found string: `" << cleaned.c_str() << "`. Skipping insert...");
                             }
                         }
                     }
-                };
+                }
                 inline void m_save_base_class(const std::vector<std::string>& vec){
-                    //TODO: generate rules based on m_current_access_type being either allow or deny
+                    //If the rule vector already exists in the tree, make sure the size is
+                    //big enough to accomodate the current command map size
+                    tr_value r;
+                    auto current_class_rules = m_tree.find(m_current_class);
+                    bool insert = (current_class_rules == m_tree.end());
+                    if(insert){
+                        dbg("reserving vec of size: " << m_command_map.size());
+                        r.reserve(m_max_command);
+                        for(unsigned i=0;i < m_max_command;i++){
+                            r.push_back(false);
+                        }
+                    }else{
+                        r = current_class_rules->second;
+                        dbg("Resizing vector to accomodate");
+                        r.resize(m_max_command,false);
+                    }
+                    for(auto &rule_name:vec){
+                        auto rule_name_cmd = m_command_map.find(rule_name);
+                        dbg("Vec element: " << rule_name);
+                        if(rule_name_cmd != m_command_map.end()){
+                            dbg("before we do .at(): " << r.size() << " : " << rule_name_cmd->second);
+                            assert(r.size() >= rule_name_cmd->second);
+                            if(m_current_access_type == E_ALLOW){
+                                r[rule_name_cmd->second] = true;
+                            }else{
+                                r[rule_name_cmd->second] = false;
+                            }
+                        }
+                    }
+                    dump_rules(r);
+                    dbg("current class: " << m_current_class);
+                    if(insert){
+                        m_tree.insert(std::pair<tr_key,tr_value>(m_current_class,r));
+                    }else{
+                        m_tree[m_current_class] = r;
+                    }
+                    dbg("Saved current class");
+                }
 
-                };
-
-                inline void m_save_extended_class(const std::vector<std::string>& vec){
+                inline void m_save_extended_class(const std::vector<std::string>& vec,const std::string & base_class){
                     //TODO: generate rules based on m_current_access_type, m_current_extended_class, and m_current_class
+                    auto base_class_rules = m_tree.find(base_class);
+                    if(base_class_rules != m_tree.end()){
+                        //We have found our base class. Extend it
+
+                    }else{
+                        m_report_line("Cannot declare a base class after extending it on line %d\n");
+                        return;
+                    }
 
                 };
+                inline void m_save_extended_class_default(const std::string & base_class){
+                    //TODO: generate rules based on m_current_access_type, m_current_extended_class, and m_current_class
+                    auto base_class_rules = m_tree.find(base_class);
+                    if(base_class_rules != m_tree.end()){
+                        //We have found our base class. Extend it
+                        m_tree[m_current_extended_class] = base_class_rules->second;
+                    }else{
+                        m_report_line("Cannot declare a base class after extending it on line %d\n");
+                        return;
+                    }
+                }
                 command_map m_d_map;
 
                 /* File properties */

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<todo version="0.1.20">
+    <note priority="medium" time="1493789761">
+        create an ACL system so that random players cant just issue dangerous commands like FUCKING "SHUTDOWN"
+    </note>
+</todo>

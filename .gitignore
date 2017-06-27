@@ -1,0 +1,14 @@
+bin
+log
+*.swp
+*.swo
+src/syslog*
+src/mods/experiment
+src/mods/acl/tests/mk
+src/mods/acl/tests/fileparser
+config.*
+src/.accepted
+src/mods/acl/experiment
+src/mods/acl/tests/original.conf
+syslog*
+*a.out*

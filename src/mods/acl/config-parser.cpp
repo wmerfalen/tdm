@@ -135,7 +135,7 @@ namespace mods {
             m20();
             //TODO: Make sure this is storing rules
             if(m_expect(E_COLON)){
-                dbg("Colon found haha");
+                dbg("Colon found");
                 if(m_expect(E_EXTENDS)){
                     m_toggle_file_offset_advance(false);
                     if(m_expect_chain(3,E_EXTENDED_CLASS,E_ARROW,E_DEFAULT)){
@@ -145,6 +145,7 @@ namespace mods {
                         m20();
                         dbg("Here comes the recursion");
                         dbg_recursion_register("m_access_rules");
+                        m_save_extended_class_default(m_current_extended_class);
                         return m_access_rules();
                     }
                 }else{
@@ -174,13 +175,17 @@ namespace mods {
                  * commands or files in any order and as many times as they want to
                  */
                 int com_result = 0, file_result = 0;
-                do{
+                //do{
+                dbg("Before files expect:");
+                m20();
                     file_result = m_expect(E_FILES);
                     if(file_result){
                         if(m_expect_chain(2,E_COLON,E_LIST_START)){
                             auto list = m_parse_list();
                             dm(list,"List item(file): ");
                             m_register_commands(list,E_FILES);
+                            dbg("Base class: " << m_current_class);
+                            m_save_base_class(list);
                         }else{
                             m_report_line("[files] Invalid syntax on line %d\n");
                             return -1;
@@ -192,14 +197,15 @@ namespace mods {
                             auto list = m_parse_list();
                             dm(list,"List item(command): ");
                             m_register_commands(list,E_COMMANDS);
+                            m_save_base_class(list);
                         }else{
                             m_report_line("[commands] Invalid syntax on line %d\n");
                             return -1;
                         }
                     }
-                }while(com_result > 0 || file_result > 0);
+                //}while(com_result > 0 || file_result > 0);
                 dbg("Outside of while com/file");
-                return 1;
+                return m_access_rules();
             }else{
                 m_report_line("Expected `->` on line %d\n");
                 return -1;
@@ -453,8 +459,6 @@ namespace mods {
             std::vector<std::string> matches;
             if(m_accept_regex("^-([[:lower:]]+)",matches)){
                 dbg("matched class: " << matches[0]);
-                rule r;
-                m_tree[matches[0]] = r;
                 m_current_class = matches[0];
                 m_increment_file_offset(matches[0].length() + 2);
                 return 1;
@@ -473,7 +477,6 @@ namespace mods {
                     dbg("Saving extended class");
                     m_current_extended_class = matches[0];
                     m_increment_file_offset(matches[0].length() + 1);
-                    m_tree[m_current_extended_class] = m_tree[matches[0]];
                     return 1;
                 }else{
                     m_report_line("Cannot extend from a forward declaration on line %d\n");

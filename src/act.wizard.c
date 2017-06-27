@@ -825,6 +825,14 @@ ACMD(do_stat)
 
 ACMD(do_shutdown)
 {
+  //The ACMD macro expands to: void do_shutdown(struct char_data *ch,char* argument,int cmd,int subcmd)
+  //=================================================================================================== 
+  /*
+   * Grab ACL object SINGLETON
+   * Check if current character can call this function
+   *
+   * mods::alc::rules* acl = mods::acl::rules::getInstance();
+   */
   char arg[MAX_INPUT_LENGTH];
 
   if (subcmd != SCMD_SHUTDOWN) {
