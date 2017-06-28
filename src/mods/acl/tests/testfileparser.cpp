@@ -1,28 +1,27 @@
 #define CATCH_CONFIG_MAIN
 #include "../../catch.hpp"
 #include "../config-parser.hpp"
+#include "../../util-conf.hpp"
 
 SCENARIO("config file is present","[fileparser]"){
     GIVEN("config file has valid syntax"){
         WHEN("rule is present"){
             THEN("a valid ruleset should be built and can be retrieved"){
-                /*
+                mods::util::conf::stfu = false;
+                mods::util::conf::genstr("/home/wmerfalen/foobar.conf","lol.conf");
                 using namespace mods::acl;
                 FileParser parser;
                 parser.setFile("/etc/foo/bar/non/existent/file");
                 int ret = parser.parse();
                 REQUIRE(ret == FileParser::FILE_CANNOT_OPEN);
-                std::cout << ret << "\n";
-                */
             }
             THEN("modifying rules should work"){
                 using namespace mods::acl;
                 FileParser parser;
                 parser.setFile("foobar.conf");
-                std::cout << "Read " << parser.read() << " bytes\n";
                 int ret = parser.parse();
                 parser.dump_tree();
-                std::cout << ret << "\n";
+                REQUIRE(ret > 0);
             }
         }
     }

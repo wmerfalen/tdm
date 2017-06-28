@@ -54,7 +54,7 @@ namespace mods {
                 m_fp.open(m_file_name);
                 m_opened = m_fp.is_open();
             }
-            if(!m_opened){
+            if(!m_opened || !m_fp.good()){
                 return FileParser::FILE_CANNOT_OPEN;
             }
             while(!m_fp.eof() && m_fp.good()){
@@ -73,8 +73,11 @@ namespace mods {
         }
 
         int FileParser::parse(){
-            m_block();
-            return FileParser::PARSE_FAIL;
+            int read_status = read();
+            if(read_status < 0){
+                return read_status;
+            }
+            return m_block();
         }
 
         int FileParser::m_store_extends(std::string & klass_name){
@@ -84,7 +87,7 @@ namespace mods {
         }
 
         int FileParser::m_block(void){
-            if(m_out_of_bounds()){ return 0;}
+            if(m_out_of_bounds()){ return 1;}
             if(m_comment()){
                 dbg("m_block recursion call [found comment]");
                 return m_block();
