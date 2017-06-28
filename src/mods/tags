@@ -1,0 +1,820 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AND_THEN	catch.hpp	11277;"	d
+AND_WHEN	catch.hpp	11275;"	d
+AllOf	catch.hpp	/^    inline Impl::MatchAllOf<T> AllOf( Impl::MatcherBase<T> const& m1, Impl::MatcherBase<T> const& m2 ) {$/;"	f	namespace:Catch::Matchers
+AllOf	catch.hpp	/^    inline Impl::MatchAllOf<T> AllOf( Impl::MatcherBase<T> const& m1, Impl::MatcherBase<T> const& m2, Impl::MatcherBase<T> const& m3 ) {$/;"	f	namespace:Catch::Matchers
+AnyOf	catch.hpp	/^    inline Impl::MatchAnyOf<T> AnyOf( Impl::MatcherBase<T> const& m1, Impl::MatcherBase<T> const& m2 ) {$/;"	f	namespace:Catch::Matchers
+AnyOf	catch.hpp	/^    inline Impl::MatchAnyOf<T> AnyOf( Impl::MatcherBase<T> const& m1, Impl::MatcherBase<T> const& m2, Impl::MatcherBase<T> const& m3 ) {$/;"	f	namespace:Catch::Matchers
+AssertionInfo	catch.hpp	/^        AssertionInfo() {}$/;"	f	struct:Catch::AssertionInfo
+AssertionInfo	catch.hpp	/^    struct AssertionInfo$/;"	s	namespace:Catch
+AssertionResult	catch.hpp	/^    class AssertionResult {$/;"	c	namespace:Catch
+AssertionResultData	catch.hpp	/^        AssertionResultData() : decomposedExpression( CATCH_NULL )$/;"	f	struct:Catch::AssertionResultData
+AssertionResultData	catch.hpp	/^    struct AssertionResultData$/;"	s	namespace:Catch
+AutoReg	catch.hpp	/^    AutoReg$/;"	f	struct:Catch::AutoReg
+AutoReg	catch.hpp	/^struct AutoReg {$/;"	s	namespace:Catch
+BG_BLUE	acl/color.hpp	/^			BG_BLUE     = 44,$/;"	e	enum:mods::Color::Code
+BG_DEFAULT	acl/color.hpp	/^			BG_DEFAULT  = 49$/;"	e	enum:mods::Color::Code
+BG_GREEN	acl/color.hpp	/^			BG_GREEN    = 42,$/;"	e	enum:mods::Color::Code
+BG_RED	acl/color.hpp	/^			BG_RED      = 41,$/;"	e	enum:mods::Color::Code
+BorgType	catch.hpp	/^    struct BorgType {$/;"	s	namespace:Catch::Detail
+CATCH_AND_THEN	catch.hpp	11204;"	d
+CATCH_AND_WHEN	catch.hpp	11202;"	d
+CATCH_ANON_TEST_CASE	catch.hpp	11185;"	d
+CATCH_ARC_ENABLED	catch.hpp	1462;"	d
+CATCH_ARC_STRONG	catch.hpp	1480;"	d
+CATCH_ARC_STRONG	catch.hpp	1496;"	d
+CATCH_AUTO_PTR	catch.hpp	361;"	d
+CATCH_AUTO_PTR	catch.hpp	363;"	d
+CATCH_BREAK_INTO_DEBUGGER	catch.hpp	2079;"	d
+CATCH_CAPTURE	catch.hpp	11165;"	d
+CATCH_CHECK	catch.hpp	11148;"	d
+CATCH_CHECKED_ELSE	catch.hpp	11151;"	d
+CATCH_CHECKED_IF	catch.hpp	11150;"	d
+CATCH_CHECK_FALSE	catch.hpp	11149;"	d
+CATCH_CHECK_NOFAIL	catch.hpp	11152;"	d
+CATCH_CHECK_NOTHROW	catch.hpp	11157;"	d
+CATCH_CHECK_THAT	catch.hpp	11159;"	d
+CATCH_CHECK_THROWS	catch.hpp	11154;"	d
+CATCH_CHECK_THROWS_AS	catch.hpp	11155;"	d
+CATCH_CHECK_THROWS_WITH	catch.hpp	11156;"	d
+CATCH_CONFIG_COLOUR_WINDOWS	catch.hpp	7606;"	d
+CATCH_CONFIG_CONSOLE_WIDTH	catch.hpp	3847;"	d
+CATCH_CONFIG_COUNTER	catch.hpp	315;"	d
+CATCH_CONFIG_CPP11_GENERATED_METHODS	catch.hpp	291;"	d
+CATCH_CONFIG_CPP11_IS_ENUM	catch.hpp	294;"	d
+CATCH_CONFIG_CPP11_LONG_LONG	catch.hpp	303;"	d
+CATCH_CONFIG_CPP11_NOEXCEPT	catch.hpp	288;"	d
+CATCH_CONFIG_CPP11_NULLPTR	catch.hpp	285;"	d
+CATCH_CONFIG_CPP11_OVERRIDE	catch.hpp	306;"	d
+CATCH_CONFIG_CPP11_SHUFFLE	catch.hpp	318;"	d
+CATCH_CONFIG_CPP11_TUPLE	catch.hpp	297;"	d
+CATCH_CONFIG_CPP11_TYPE_TRAITS	catch.hpp	321;"	d
+CATCH_CONFIG_CPP11_UNIQUE_PTR	catch.hpp	309;"	d
+CATCH_CONFIG_MAIN	acl/tests/testfileparser.cpp	1;"	d	file:
+CATCH_CONFIG_POSIX_SIGNALS	catch.hpp	328;"	d
+CATCH_CONFIG_VARIADIC_MACROS	catch.hpp	300;"	d
+CATCH_CONFIG_WINDOWS_SEH	catch.hpp	324;"	d
+CATCH_CPP11_OR_GREATER	catch.hpp	107;"	d
+CATCH_CPP14_OR_GREATER	catch.hpp	111;"	d
+CATCH_FAIL	catch.hpp	11174;"	d
+CATCH_GCC_HAS_NEW_PRAGMA	catch.hpp	173;"	d
+CATCH_GENERATE	catch.hpp	11190;"	d
+CATCH_GIVEN	catch.hpp	11200;"	d
+CATCH_IMPL	catch.hpp	53;"	d
+CATCH_INFO	catch.hpp	11162;"	d
+CATCH_INTERNAL_CONFIG_COUNTER	catch.hpp	230;"	d
+CATCH_INTERNAL_CONFIG_CPP11_GENERATED_METHODS	catch.hpp	206;"	d
+CATCH_INTERNAL_CONFIG_CPP11_GENERATED_METHODS	catch.hpp	249;"	d
+CATCH_INTERNAL_CONFIG_CPP11_IS_ENUM	catch.hpp	253;"	d
+CATCH_INTERNAL_CONFIG_CPP11_LONG_LONG	catch.hpp	265;"	d
+CATCH_INTERNAL_CONFIG_CPP11_NOEXCEPT	catch.hpp	123;"	d
+CATCH_INTERNAL_CONFIG_CPP11_NOEXCEPT	catch.hpp	205;"	d
+CATCH_INTERNAL_CONFIG_CPP11_NOEXCEPT	catch.hpp	245;"	d
+CATCH_INTERNAL_CONFIG_CPP11_NULLPTR	catch.hpp	119;"	d
+CATCH_INTERNAL_CONFIG_CPP11_NULLPTR	catch.hpp	177;"	d
+CATCH_INTERNAL_CONFIG_CPP11_NULLPTR	catch.hpp	200;"	d
+CATCH_INTERNAL_CONFIG_CPP11_NULLPTR	catch.hpp	241;"	d
+CATCH_INTERNAL_CONFIG_CPP11_OVERRIDE	catch.hpp	269;"	d
+CATCH_INTERNAL_CONFIG_CPP11_SHUFFLE	catch.hpp	207;"	d
+CATCH_INTERNAL_CONFIG_CPP11_SHUFFLE	catch.hpp	275;"	d
+CATCH_INTERNAL_CONFIG_CPP11_TUPLE	catch.hpp	257;"	d
+CATCH_INTERNAL_CONFIG_CPP11_TYPE_TRAITS	catch.hpp	208;"	d
+CATCH_INTERNAL_CONFIG_CPP11_TYPE_TRAITS	catch.hpp	278;"	d
+CATCH_INTERNAL_CONFIG_CPP11_UNIQUE_PTR	catch.hpp	201;"	d
+CATCH_INTERNAL_CONFIG_CPP11_UNIQUE_PTR	catch.hpp	272;"	d
+CATCH_INTERNAL_CONFIG_NO_POSIX_SIGNALS	catch.hpp	141;"	d
+CATCH_INTERNAL_CONFIG_VARIADIC_MACROS	catch.hpp	221;"	d
+CATCH_INTERNAL_CONFIG_VARIADIC_MACROS	catch.hpp	261;"	d
+CATCH_INTERNAL_CONFIG_WINDOWS_SEH	catch.hpp	197;"	d
+CATCH_INTERNAL_ERROR	catch.hpp	496;"	d
+CATCH_INTERNAL_LINEINFO	catch.hpp	495;"	d
+CATCH_INTERNAL_SUPPRESS_PARENTHESES_WARNINGS	catch.hpp	127;"	d
+CATCH_INTERNAL_SUPPRESS_PARENTHESES_WARNINGS	catch.hpp	181;"	d
+CATCH_INTERNAL_SUPPRESS_PARENTHESES_WARNINGS	catch.hpp	332;"	d
+CATCH_INTERNAL_UNSUPPRESS_PARENTHESES_WARNINGS	catch.hpp	130;"	d
+CATCH_INTERNAL_UNSUPPRESS_PARENTHESES_WARNINGS	catch.hpp	184;"	d
+CATCH_INTERNAL_UNSUPPRESS_PARENTHESES_WARNINGS	catch.hpp	333;"	d
+CATCH_METHOD_AS_TEST_CASE	catch.hpp	11171;"	d
+CATCH_NOEXCEPT	catch.hpp	/^        virtual const char* what() const CATCH_NOEXCEPT;$/;"	m	class:Catch::NotImplementedException
+CATCH_NOEXCEPT	catch.hpp	338;"	d
+CATCH_NOEXCEPT	catch.hpp	341;"	d
+CATCH_NOEXCEPT_IS	catch.hpp	339;"	d
+CATCH_NOEXCEPT_IS	catch.hpp	342;"	d
+CATCH_NOT_IMPLEMENTED	catch.hpp	518;"	d
+CATCH_NULL	catch.hpp	347;"	d
+CATCH_NULL	catch.hpp	349;"	d
+CATCH_OVERRIDE	catch.hpp	/^        virtual void reconstructExpression( std::string& dest ) const CATCH_OVERRIDE;$/;"	m	class:Catch::ResultBuilder
+CATCH_OVERRIDE	catch.hpp	354;"	d
+CATCH_OVERRIDE	catch.hpp	356;"	d
+CATCH_PLATFORM_MAC	catch.hpp	2025;"	d
+CATCH_REGISTER_LEGACY_REPORTER	catch.hpp	11188;"	d
+CATCH_REGISTER_REPORTER	catch.hpp	11187;"	d
+CATCH_REGISTER_TAG_ALIAS	catch.hpp	3047;"	d
+CATCH_REGISTER_TEST_CASE	catch.hpp	11172;"	d
+CATCH_REQUIRE	catch.hpp	11140;"	d
+CATCH_REQUIRE_FALSE	catch.hpp	11141;"	d
+CATCH_REQUIRE_NOTHROW	catch.hpp	11146;"	d
+CATCH_REQUIRE_THAT	catch.hpp	11160;"	d
+CATCH_REQUIRE_THROWS	catch.hpp	11143;"	d
+CATCH_REQUIRE_THROWS_AS	catch.hpp	11144;"	d
+CATCH_REQUIRE_THROWS_WITH	catch.hpp	11145;"	d
+CATCH_SCENARIO	catch.hpp	11194;"	d
+CATCH_SCENARIO_METHOD	catch.hpp	11195;"	d
+CATCH_SCOPED_CAPTURE	catch.hpp	11166;"	d
+CATCH_SCOPED_INFO	catch.hpp	11164;"	d
+CATCH_SECTION	catch.hpp	11173;"	d
+CATCH_SUCCEED	catch.hpp	11175;"	d
+CATCH_TEMP_CLARA_CONFIG_CONSOLE_WIDTH	catch.hpp	3987;"	d
+CATCH_TEMP_CLARA_CONFIG_CONSOLE_WIDTH	catch.hpp	5016;"	d
+CATCH_TEST_CASE	catch.hpp	11169;"	d
+CATCH_TEST_CASE_METHOD	catch.hpp	11170;"	d
+CATCH_THEN	catch.hpp	11203;"	d
+CATCH_TRANSLATE_EXCEPTION	catch.hpp	11263;"	d
+CATCH_TRAP	catch.hpp	2053;"	d
+CATCH_UNSAFE_UNRETAINED	catch.hpp	1479;"	d
+CATCH_UNSAFE_UNRETAINED	catch.hpp	1495;"	d
+CATCH_WARN	catch.hpp	11163;"	d
+CATCH_WHEN	catch.hpp	11201;"	d
+CLARA_AUTO_PTR	catch.hpp	4298;"	d
+CLARA_CONFIG_CONSOLE_WIDTH	catch.hpp	3988;"	d
+CLARA_CONFIG_CONSOLE_WIDTH	catch.hpp	3990;"	d
+CLARA_CONFIG_CONSOLE_WIDTH	catch.hpp	5015;"	d
+CLARA_CONFIG_CPP11_GENERATED_METHODS	catch.hpp	4264;"	d
+CLARA_CONFIG_CPP11_NOEXCEPT	catch.hpp	4261;"	d
+CLARA_CONFIG_CPP11_NULLPTR	catch.hpp	4258;"	d
+CLARA_CONFIG_CPP11_OVERRIDE	catch.hpp	4267;"	d
+CLARA_CONFIG_CPP11_UNIQUE_PTR	catch.hpp	4270;"	d
+CLARA_CONFIG_MAIN	catch.hpp	11132;"	d
+CLARA_CONFIG_MAIN	catch.hpp	59;"	d
+CLARA_CONFIG_MAIN_NOT_DEFINED	catch.hpp	58;"	d
+CLARA_CPP11_OR_GREATER	catch.hpp	4233;"	d
+CLARA_INTERNAL_CONFIG_CPP11_GENERATED_METHODS	catch.hpp	4222;"	d
+CLARA_INTERNAL_CONFIG_CPP11_GENERATED_METHODS	catch.hpp	4244;"	d
+CLARA_INTERNAL_CONFIG_CPP11_NOEXCEPT	catch.hpp	4193;"	d
+CLARA_INTERNAL_CONFIG_CPP11_NOEXCEPT	catch.hpp	4221;"	d
+CLARA_INTERNAL_CONFIG_CPP11_NOEXCEPT	catch.hpp	4240;"	d
+CLARA_INTERNAL_CONFIG_CPP11_NULLPTR	catch.hpp	4189;"	d
+CLARA_INTERNAL_CONFIG_CPP11_NULLPTR	catch.hpp	4203;"	d
+CLARA_INTERNAL_CONFIG_CPP11_NULLPTR	catch.hpp	4216;"	d
+CLARA_INTERNAL_CONFIG_CPP11_NULLPTR	catch.hpp	4236;"	d
+CLARA_INTERNAL_CONFIG_CPP11_OVERRIDE	catch.hpp	4248;"	d
+CLARA_INTERNAL_CONFIG_CPP11_UNIQUE_PTR	catch.hpp	4217;"	d
+CLARA_INTERNAL_CONFIG_CPP11_UNIQUE_PTR	catch.hpp	4251;"	d
+CLARA_NOEXCEPT	catch.hpp	4275;"	d
+CLARA_NOEXCEPT_IS	catch.hpp	4276;"	d
+CLARA_NULL	catch.hpp	4284;"	d
+CLARA_OVERRIDE	catch.hpp	4291;"	d
+CLARA_PLATFORM_WINDOWS	catch.hpp	4313;"	d
+CLICHE_TBC_TEXT_FORMAT_OUTER_NAMESPACE	catch.hpp	5227;"	d
+CLICHE_TBC_TEXT_FORMAT_OUTER_NAMESPACE	catch.hpp	5386;"	d
+CaseSensitive	catch.hpp	/^    struct CaseSensitive { enum Choice {$/;"	s	namespace:Catch
+Catch	catch.hpp	/^namespace Catch {$/;"	n
+Choice	catch.hpp	/^    struct CaseSensitive { enum Choice {$/;"	g	struct:Catch::CaseSensitive
+Code	acl/color.hpp	/^		enum Code {$/;"	g	namespace:mods::Color
+Color	acl/color.hpp	/^	namespace Color {$/;"	n	namespace:mods
+ContinueOnFailure	catch.hpp	/^        ContinueOnFailure = 0x02,   \/\/ Failures fail test, but execution continues$/;"	e	enum:Catch::ResultDisposition::Flags
+CopyableStream	catch.hpp	/^        CopyableStream( CopyableStream const& other ) {$/;"	f	struct:Catch::CopyableStream
+CopyableStream	catch.hpp	/^        CopyableStream() {}$/;"	f	struct:Catch::CopyableStream
+CopyableStream	catch.hpp	/^    struct CopyableStream {$/;"	s	namespace:Catch
+DecomposedExpression	catch.hpp	/^    struct DecomposedExpression$/;"	s	namespace:Catch
+Detail	catch.hpp	/^namespace Detail {$/;"	n	namespace:Catch
+DidntThrowException	catch.hpp	/^        DidntThrowException = Exception | 2,$/;"	e	enum:Catch::ResultWas::OfType
+E_ACCESS_START	acl/config-parser.hpp	/^                    E_ACCESS_TYPE, E_ACCESS_START, E_SCOPE, E_LIST_START, E_STRING, \\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_ACCESS_TYPE	acl/config-parser.hpp	/^                    E_ACCESS_TYPE, E_ACCESS_START, E_SCOPE, E_LIST_START, E_STRING, \\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_ALLOW	acl/config-parser.hpp	/^                    E_ALLOW, E_DENY,\\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_ARROW	acl/config-parser.hpp	/^                    E_LIST_END, E_COLON, E_EXTENDS, E_ARROW, E_FILES, E_COMMANDS,   \\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_BLOCK	acl/config-parser.hpp	/^                enum PARSE_TYPE { E_CLASS, E_EXTENDED_CLASS, E_COMMENT, E_BLOCK,    \\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_CLASS	acl/config-parser.hpp	/^                enum PARSE_TYPE { E_CLASS, E_EXTENDED_CLASS, E_COMMENT, E_BLOCK,    \\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_COLON	acl/config-parser.hpp	/^                    E_LIST_END, E_COLON, E_EXTENDS, E_ARROW, E_FILES, E_COMMANDS,   \\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_COMMANDS	acl/config-parser.hpp	/^                    E_LIST_END, E_COLON, E_EXTENDS, E_ARROW, E_FILES, E_COMMANDS,   \\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_COMMENT	acl/config-parser.hpp	/^                enum PARSE_TYPE { E_CLASS, E_EXTENDED_CLASS, E_COMMENT, E_BLOCK,    \\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_DEFAULT	acl/config-parser.hpp	/^                    E_DEFAULT\\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_DENY	acl/config-parser.hpp	/^                    E_ALLOW, E_DENY,\\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_EXTENDED_CLASS	acl/config-parser.hpp	/^                enum PARSE_TYPE { E_CLASS, E_EXTENDED_CLASS, E_COMMENT, E_BLOCK,    \\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_EXTENDS	acl/config-parser.hpp	/^                    E_LIST_END, E_COLON, E_EXTENDS, E_ARROW, E_FILES, E_COMMANDS,   \\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_FILES	acl/config-parser.hpp	/^                    E_LIST_END, E_COLON, E_EXTENDS, E_ARROW, E_FILES, E_COMMANDS,   \\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_LIST_END	acl/config-parser.hpp	/^                    E_LIST_END, E_COLON, E_EXTENDS, E_ARROW, E_FILES, E_COMMANDS,   \\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_LIST_START	acl/config-parser.hpp	/^                    E_ACCESS_TYPE, E_ACCESS_START, E_SCOPE, E_LIST_START, E_STRING, \\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_SCOPE	acl/config-parser.hpp	/^                    E_ACCESS_TYPE, E_ACCESS_START, E_SCOPE, E_LIST_START, E_STRING, \\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+E_STRING	acl/config-parser.hpp	/^                    E_ACCESS_TYPE, E_ACCESS_START, E_SCOPE, E_LIST_START, E_STRING, \\$/;"	e	enum:mods::acl::FileParser::PARSE_TYPE
+EnumStringMaker	catch.hpp	/^    struct EnumStringMaker$/;"	s	namespace:Catch::Detail
+EnumStringMaker	catch.hpp	/^    struct EnumStringMaker<T,true>$/;"	s	namespace:Catch::Detail
+Evaluator	catch.hpp	/^    class Evaluator{};$/;"	c	namespace:Catch::Internal
+Evaluator	catch.hpp	/^    struct Evaluator<T1, T2, IsEqualTo> {$/;"	s	namespace:Catch::Internal
+Evaluator	catch.hpp	/^    struct Evaluator<T1, T2, IsGreaterThan> {$/;"	s	namespace:Catch::Internal
+Evaluator	catch.hpp	/^    struct Evaluator<T1, T2, IsGreaterThanOrEqualTo> {$/;"	s	namespace:Catch::Internal
+Evaluator	catch.hpp	/^    struct Evaluator<T1, T2, IsLessThan> {$/;"	s	namespace:Catch::Internal
+Evaluator	catch.hpp	/^    struct Evaluator<T1, T2, IsLessThanOrEqualTo> {$/;"	s	namespace:Catch::Internal
+Evaluator	catch.hpp	/^    struct Evaluator<T1, T2, IsNotEqualTo> {$/;"	s	namespace:Catch::Internal
+Exception	catch.hpp	/^        Exception = 0x100 | FailureBit,$/;"	e	enum:Catch::ResultWas::OfType
+ExplicitFailure	catch.hpp	/^        ExplicitFailure = FailureBit | 2,$/;"	e	enum:Catch::ResultWas::OfType
+ExpressionFailed	catch.hpp	/^        ExpressionFailed = FailureBit | 1,$/;"	e	enum:Catch::ResultWas::OfType
+FG_BLUE	acl/color.hpp	/^			FG_BLUE     = 34,$/;"	e	enum:mods::Color::Code
+FG_DEFAULT	acl/color.hpp	/^			FG_DEFAULT  = 39,$/;"	e	enum:mods::Color::Code
+FG_GREEN	acl/color.hpp	/^			FG_GREEN    = 32,$/;"	e	enum:mods::Color::Code
+FG_RED	acl/color.hpp	/^			FG_RED      = 31,$/;"	e	enum:mods::Color::Code
+FILE_CANNOT_OPEN	acl/config-parser.cpp	/^        const int FileParser::FILE_CANNOT_OPEN = -2;$/;"	m	class:mods::acl::FileParser	file:
+FILE_CANNOT_OPEN	acl/config-parser.hpp	/^                static const int FILE_CANNOT_OPEN;$/;"	m	class:mods::acl::FileParser
+FILE_EOF	acl/config-parser.cpp	/^        const int FileParser::FILE_EOF = -3;$/;"	m	class:mods::acl::FileParser	file:
+FILE_EOF	acl/config-parser.hpp	/^                static const int FILE_EOF;$/;"	m	class:mods::acl::FileParser
+FLAGS	acl/experiment/Makefile	/^FLAGS = -std=c++14 -Wa,-adhln -g $/;"	m
+FLAGS	acl/tests/Makefile	/^FLAGS = -std=c++14 -Wall -Werror$/;"	m
+FailureBit	catch.hpp	/^        FailureBit = 0x10,$/;"	e	enum:Catch::ResultWas::OfType
+FalseTest	catch.hpp	/^        FalseTest = 0x04,           \/\/ Prefix expression with !$/;"	e	enum:Catch::ResultDisposition::Flags
+FalseType	catch.hpp	/^    struct FalseType { char sizer[2]; };$/;"	s	namespace:Catch::Detail
+FatalErrorCondition	catch.hpp	/^        FatalErrorCondition = 0x200 | FailureBit$/;"	e	enum:Catch::ResultWas::OfType
+FileParser	acl/config-parser.hpp	/^        class FileParser {$/;"	c	namespace:mods::acl
+Flags	catch.hpp	/^    struct ResultDisposition { enum Flags {$/;"	g	struct:Catch::ResultDisposition
+GCC	acl/experiment/Makefile	/^GCC = g++$/;"	m
+GCC	acl/tests/Makefile	/^GCC = g++$/;"	m
+GIVEN	catch.hpp	11273;"	d
+IContext	catch.hpp	/^    struct IContext$/;"	s	namespace:Catch
+IGeneratorInfo	catch.hpp	/^    struct IGeneratorInfo {$/;"	s	namespace:Catch
+IGeneratorsForTest	catch.hpp	/^    struct IGeneratorsForTest {$/;"	s	namespace:Catch
+IMutableContext	catch.hpp	/^    struct IMutableContext : IContext$/;"	s	namespace:Catch
+INTERNAL_CATCH_ELSE	catch.hpp	2175;"	d
+INTERNAL_CATCH_GENERATE	catch.hpp	2602;"	d
+INTERNAL_CATCH_IF	catch.hpp	2170;"	d
+INTERNAL_CATCH_INFO	catch.hpp	2250;"	d
+INTERNAL_CATCH_LINESTR	catch.hpp	2600;"	d
+INTERNAL_CATCH_LINESTR2	catch.hpp	2599;"	d
+INTERNAL_CATCH_METHOD_AS_TEST_CASE	catch.hpp	779;"	d
+INTERNAL_CATCH_MSG	catch.hpp	2232;"	d
+INTERNAL_CATCH_NO_THROW	catch.hpp	2180;"	d
+INTERNAL_CATCH_REACT	catch.hpp	2140;"	d
+INTERNAL_CATCH_REGISTER_LEGACY_REPORTER	catch.hpp	9591;"	d
+INTERNAL_CATCH_REGISTER_LISTENER	catch.hpp	9597;"	d
+INTERNAL_CATCH_REGISTER_REPORTER	catch.hpp	9594;"	d
+INTERNAL_CATCH_REGISTER_TESTCASE	catch.hpp	795;"	d
+INTERNAL_CATCH_SECTION	catch.hpp	2417;"	d
+INTERNAL_CATCH_STRINGIFY	catch.hpp	375;"	d
+INTERNAL_CATCH_STRINGIFY2	catch.hpp	374;"	d
+INTERNAL_CATCH_TEST	catch.hpp	2154;"	d
+INTERNAL_CATCH_TESTCASE	catch.hpp	775;"	d
+INTERNAL_CATCH_TESTCASE2	catch.hpp	771;"	d
+INTERNAL_CATCH_TEST_CASE_METHOD	catch.hpp	791;"	d
+INTERNAL_CATCH_TEST_CASE_METHOD2	catch.hpp	783;"	d
+INTERNAL_CATCH_THROWS	catch.hpp	2194;"	d
+INTERNAL_CATCH_THROWS_AS	catch.hpp	2211;"	d
+INTERNAL_CATCH_TRANSLATE_EXCEPTION	catch.hpp	2705;"	d
+INTERNAL_CATCH_TRANSLATE_EXCEPTION2	catch.hpp	2700;"	d
+INTERNAL_CATCH_UNIQUE_NAME	catch.hpp	369;"	d
+INTERNAL_CATCH_UNIQUE_NAME	catch.hpp	371;"	d
+INTERNAL_CATCH_UNIQUE_NAME_LINE	catch.hpp	367;"	d
+INTERNAL_CATCH_UNIQUE_NAME_LINE2	catch.hpp	366;"	d
+INTERNAL_CHECK_THAT	catch.hpp	2254;"	d
+IShared	catch.hpp	/^    struct IShared : NonCopyable {$/;"	s	namespace:Catch
+ITEM_TYPE	acl/config-parser.hpp	/^                enum ITEM_TYPE { ITEM_TYPE_FILES, ITEM_TYPE_COMMANDS };$/;"	g	class:mods::acl::FileParser
+ITEM_TYPE_COMMANDS	acl/config-parser.hpp	/^                enum ITEM_TYPE { ITEM_TYPE_FILES, ITEM_TYPE_COMMANDS };$/;"	e	enum:mods::acl::FileParser::ITEM_TYPE
+ITEM_TYPE_FILES	acl/config-parser.hpp	/^                enum ITEM_TYPE { ITEM_TYPE_FILES, ITEM_TYPE_COMMANDS };$/;"	e	enum:mods::acl::FileParser::ITEM_TYPE
+ITestCase	catch.hpp	/^    struct ITestCase : IShared {$/;"	s	namespace:Catch
+ITestCaseRegistry	catch.hpp	/^    struct ITestCaseRegistry {$/;"	s	namespace:Catch
+Impl	catch.hpp	/^    namespace Impl {$/;"	n	namespace:Catch::Matchers
+Info	catch.hpp	/^        Info = 1,$/;"	e	enum:Catch::ResultWas::OfType
+Internal	catch.hpp	/^namespace Internal {$/;"	n	namespace:Catch
+IsEqualTo	catch.hpp	/^        IsEqualTo,$/;"	e	enum:Catch::Internal::Operator
+IsGreaterThan	catch.hpp	/^        IsGreaterThan,$/;"	e	enum:Catch::Internal::Operator
+IsGreaterThanOrEqualTo	catch.hpp	/^        IsGreaterThanOrEqualTo$/;"	e	enum:Catch::Internal::Operator
+IsLessThan	catch.hpp	/^        IsLessThan,$/;"	e	enum:Catch::Internal::Operator
+IsLessThanOrEqualTo	catch.hpp	/^        IsLessThanOrEqualTo,$/;"	e	enum:Catch::Internal::Operator
+IsNotEqualTo	catch.hpp	/^        IsNotEqualTo,$/;"	e	enum:Catch::Internal::Operator
+IsStreamInsertable	catch.hpp	/^    struct IsStreamInsertable {$/;"	s	namespace:Catch::Detail
+MatchAllOf	catch.hpp	/^        struct MatchAllOf : MatcherBase<ArgT> {$/;"	s	namespace:Catch::Matchers::Impl
+MatchAnyOf	catch.hpp	/^        struct MatchAnyOf : MatcherBase<ArgT> {$/;"	s	namespace:Catch::Matchers::Impl
+MatchNotOf	catch.hpp	/^            MatchNotOf( MatcherBase<ArgT> const& underlyingMatcher ) : m_underlyingMatcher( underlyingMatcher ) {}$/;"	f	struct:Catch::Matchers::Impl::MatchNotOf
+MatchNotOf	catch.hpp	/^        struct MatchNotOf : MatcherBase<ArgT> {$/;"	s	namespace:Catch::Matchers::Impl
+MatcherBase	catch.hpp	/^        struct MatcherBase : MatcherUntypedBase {$/;"	s	namespace:Catch::Matchers::Impl
+MatcherUntypedBase	catch.hpp	/^        class MatcherUntypedBase {$/;"	c	namespace:Catch::Matchers::Impl
+Matchers	catch.hpp	/^namespace Matchers {$/;"	n	namespace:Catch
+MethodTestCase	catch.hpp	/^    MethodTestCase( void (C::*method)() ) : m_method( method ) {}$/;"	f	class:Catch::MethodTestCase
+MethodTestCase	catch.hpp	/^class MethodTestCase : public SharedImpl<ITestCase> {$/;"	c	namespace:Catch
+Modifier	acl/color.hpp	/^			Modifier(Code pCode) : code(pCode) {}$/;"	f	class:mods::Color::Modifier
+Modifier	acl/color.hpp	/^		class Modifier {$/;"	c	namespace:mods::Color
+NOMINMAX	catch.hpp	6246;"	d
+NOMINMAX	catch.hpp	6259;"	d
+NameAndDesc	catch.hpp	/^    NameAndDesc( const char* _name = "", const char* _description= "" )$/;"	f	struct:Catch::NameAndDesc
+NameAndDesc	catch.hpp	/^struct NameAndDesc {$/;"	s	namespace:Catch
+No	catch.hpp	/^        No$/;"	e	enum:Catch::CaseSensitive::Choice
+NonCopyable	catch.hpp	/^        NonCopyable() {}$/;"	f	class:Catch::NonCopyable
+NonCopyable	catch.hpp	/^    class NonCopyable {$/;"	c	namespace:Catch
+Normal	catch.hpp	/^        Normal = 0x01,$/;"	e	enum:Catch::ResultDisposition::Flags
+Not	catch.hpp	/^    inline Impl::MatchNotOf<T> Not( Impl::MatcherBase<T> const& underlyingMatcher ) {$/;"	f	namespace:Catch::Matchers
+NotImplementedException	catch.hpp	/^        NotImplementedException( NotImplementedException const& ) {}$/;"	f	class:Catch::NotImplementedException
+NotImplementedException	catch.hpp	/^    class NotImplementedException : public std::exception$/;"	c	namespace:Catch
+OC_TEST_CASE	catch.hpp	3391;"	d
+OfType	catch.hpp	/^    struct ResultWas { enum OfType {$/;"	g	struct:Catch::ResultWas
+Ok	catch.hpp	/^        Ok = 0,$/;"	e	enum:Catch::ResultWas::OfType
+Operator	catch.hpp	/^    enum Operator {$/;"	g	namespace:Catch::Internal
+OperatorTraits	catch.hpp	/^    template<> struct OperatorTraits<IsEqualTo>             { static const char* getName(){ return "=="; } };$/;"	s	namespace:Catch::Internal
+OperatorTraits	catch.hpp	/^    template<> struct OperatorTraits<IsGreaterThan>         { static const char* getName(){ return ">"; } };$/;"	s	namespace:Catch::Internal
+OperatorTraits	catch.hpp	/^    template<> struct OperatorTraits<IsGreaterThanOrEqualTo>{ static const char* getName(){ return ">="; } };$/;"	s	namespace:Catch::Internal
+OperatorTraits	catch.hpp	/^    template<> struct OperatorTraits<IsLessThan>            { static const char* getName(){ return "<"; } };$/;"	s	namespace:Catch::Internal
+OperatorTraits	catch.hpp	/^    template<> struct OperatorTraits<IsLessThanOrEqualTo>   { static const char* getName(){ return "<="; } };$/;"	s	namespace:Catch::Internal
+OperatorTraits	catch.hpp	/^    template<> struct OperatorTraits<IsNotEqualTo>          { static const char* getName(){ return "!="; } };$/;"	s	namespace:Catch::Internal
+OperatorTraits	catch.hpp	/^    template<Operator Op> struct OperatorTraits             { static const char* getName(){ return "*error*"; } };$/;"	s	namespace:Catch::Internal
+PARSE_FAIL	acl/config-parser.cpp	/^        const int FileParser::PARSE_FAIL = -1;$/;"	m	class:mods::acl::FileParser	file:
+PARSE_FAIL	acl/config-parser.hpp	/^                static const int PARSE_FAIL;$/;"	m	class:mods::acl::FileParser
+PARSE_TYPE	acl/config-parser.hpp	/^                enum PARSE_TYPE { E_CLASS, E_EXTENDED_CLASS, E_COMMENT, E_BLOCK,    \\$/;"	g	class:mods::acl::FileParser
+Ptr	catch.hpp	/^        Ptr( Ptr const& other ) : m_p( other.m_p ){$/;"	f	class:Catch::Ptr
+Ptr	catch.hpp	/^        Ptr( T* p ) : m_p( p ){$/;"	f	class:Catch::Ptr
+Ptr	catch.hpp	/^        Ptr() : m_p( CATCH_NULL ){}$/;"	f	class:Catch::Ptr
+Ptr	catch.hpp	/^    class Ptr {$/;"	c	namespace:Catch
+RADIX_TREE_HPP	acl/radix_tree/radix_tree.hpp	2;"	d
+RADIX_TREE_IT	acl/radix_tree/radix_tree_it.hpp	2;"	d
+RADIX_TREE_NODE_HPP	acl/radix_tree/radix_tree_node.hpp	2;"	d
+ResultBuilder	catch.hpp	/^    class ResultBuilder : public DecomposedExpression {$/;"	c	namespace:Catch
+ResultDisposition	catch.hpp	/^    struct ResultDisposition { enum Flags {$/;"	s	namespace:Catch
+ResultWas	catch.hpp	/^    struct ResultWas { enum OfType {$/;"	s	namespace:Catch
+SCENARIO	catch.hpp	11267;"	d
+SCENARIO_METHOD	catch.hpp	11268;"	d
+SKIP_WHITESPACE	acl/config-parser.hpp	29;"	d
+STITCH_CLARA_CLOSE_NAMESPACE	catch.hpp	4004;"	d
+STITCH_CLARA_CLOSE_NAMESPACE	catch.hpp	5008;"	d
+STITCH_CLARA_OPEN_NAMESPACE	catch.hpp	3993;"	d
+STITCH_CLARA_OPEN_NAMESPACE	catch.hpp	4003;"	d
+STITCH_CLARA_OPEN_NAMESPACE	catch.hpp	5007;"	d
+STITCH_CLARA_OPEN_NAMESPACE	catch.hpp	5011;"	d
+STITCH_TBC_TEXT_FORMAT_OPEN_NAMESPACE	catch.hpp	4009;"	d
+STITCH_TBC_TEXT_FORMAT_OPEN_NAMESPACE	catch.hpp	4159;"	d
+SafeBool	catch.hpp	/^    class SafeBool {$/;"	c	namespace:Catch
+SharedImpl	catch.hpp	/^        SharedImpl() : m_rc( 0 ){}$/;"	f	struct:Catch::SharedImpl
+SharedImpl	catch.hpp	/^    struct SharedImpl : T {$/;"	s	namespace:Catch
+SourceLineInfo	catch.hpp	/^    struct SourceLineInfo {$/;"	s	namespace:Catch
+StreamEndStop	catch.hpp	/^    struct StreamEndStop {$/;"	s	namespace:Catch
+StringMaker	catch.hpp	/^struct StringMaker :$/;"	s	namespace:Catch
+StringMaker	catch.hpp	/^struct StringMaker<R C::*> {$/;"	s	namespace:Catch
+StringMaker	catch.hpp	/^struct StringMaker<T*> {$/;"	s	namespace:Catch
+StringMakerBase	catch.hpp	/^    struct StringMakerBase {$/;"	s	namespace:Catch::Detail
+StringMakerBase	catch.hpp	/^    struct StringMakerBase<true> {$/;"	s	namespace:Catch::Detail
+SuppressFail	catch.hpp	/^        SuppressFail = 0x08         \/\/ Failures are reported but do not fail the test$/;"	e	enum:Catch::ResultDisposition::Flags
+TBC_TEXT_FORMAT_CONSOLE_WIDTH	catch.hpp	5225;"	d
+TBC_TEXT_FORMAT_H_INCLUDED	catch.hpp	4016;"	d
+TEST	acl/radix_tree/tests/test_radix_tree_erase.cpp	/^TEST(erase, change_size)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_erase.cpp	/^TEST(erase, empty_key)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_erase.cpp	/^TEST(erase, not_greedy)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_erase.cpp	/^TEST(erase, success_if_key_exist_fail_if_no_such_key)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_find.cpp	/^TEST(find, find_after_insert_or_erase)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_find.cpp	/^TEST(find, nothing_in_empty)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_greedy_match.cpp	/^TEST(greedy_match, complex_tree)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_insert.cpp	/^TEST(insert, after_erase)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_insert.cpp	/^TEST(insert, change_size)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_insert.cpp	/^TEST(insert, dont_replace_prev_value)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_insert.cpp	/^TEST(insert, fail_if_key_duplicate)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_insert.cpp	/^TEST(insert, operator_index_call_default_ctor)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_insert.cpp	/^TEST(insert, success_if_key_unique)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_iterator.cpp	/^TEST(iterator, begin_end)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_iterator.cpp	/^TEST(iterator, distance)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_iterator.cpp	/^TEST(iterator, increment)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_iterator.cpp	/^TEST(iterator, std__copy)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_longest_match.cpp	/^TEST(longest_match, complex_tree)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_longest_match.cpp	/^TEST(longest_match, empty_tree)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_prefix_match.cpp	/^TEST(prefix_match, complex_tree)$/;"	f
+TEST	acl/radix_tree/tests/test_radix_tree_prefix_match.cpp	/^TEST(prefix_match, empty_tree)$/;"	f
+THEN	catch.hpp	11276;"	d
+TWOBLUECUBES_CATCH_APPROX_HPP_INCLUDED	catch.hpp	2708;"	d
+TWOBLUECUBES_CATCH_ASSERTIONRESULT_HPP_INCLUDED	catch.hpp	7833;"	d
+TWOBLUECUBES_CATCH_ASSERTIONRESULT_H_INCLUDED	catch.hpp	887;"	d
+TWOBLUECUBES_CATCH_CAPTURE_HPP_INCLUDED	catch.hpp	829;"	d
+TWOBLUECUBES_CATCH_CLARA_H_INCLUDED	catch.hpp	3983;"	d
+TWOBLUECUBES_CATCH_COMMANDLINE_HPP_INCLUDED	catch.hpp	3443;"	d
+TWOBLUECUBES_CATCH_COMMON_HPP_INCLUDED	catch.hpp	8361;"	d
+TWOBLUECUBES_CATCH_COMMON_H_INCLUDED	catch.hpp	67;"	d
+TWOBLUECUBES_CATCH_COMPILER_CAPABILITIES_HPP_INCLUDED	catch.hpp	70;"	d
+TWOBLUECUBES_CATCH_CONFIG_HPP_INCLUDED	catch.hpp	3446;"	d
+TWOBLUECUBES_CATCH_CONSOLE_COLOUR_HPP_INCLUDED	catch.hpp	5394;"	d
+TWOBLUECUBES_CATCH_CONSOLE_COLOUR_IMPL_HPP_INCLUDED	catch.hpp	7582;"	d
+TWOBLUECUBES_CATCH_CONTEXT_H_INCLUDED	catch.hpp	521;"	d
+TWOBLUECUBES_CATCH_CONTEXT_IMPL_HPP_INCLUDED	catch.hpp	7390;"	d
+TWOBLUECUBES_CATCH_DEBUGGER_HPP_INCLUDED	catch.hpp	8507;"	d
+TWOBLUECUBES_CATCH_DEBUGGER_H_INCLUDED	catch.hpp	2019;"	d
+TWOBLUECUBES_CATCH_DEFAULT_MAIN_HPP_INCLUDED	catch.hpp	11099;"	d
+TWOBLUECUBES_CATCH_EVALUATE_HPP_INCLUDED	catch.hpp	1237;"	d
+TWOBLUECUBES_CATCH_EXCEPTION_TRANSLATOR_REGISTRY_HPP_INCLUDED	catch.hpp	7239;"	d
+TWOBLUECUBES_CATCH_EXPRESSION_LHS_HPP_INCLUDED	catch.hpp	1234;"	d
+TWOBLUECUBES_CATCH_FATAL_CONDITION_H_INCLUDED	catch.hpp	6227;"	d
+TWOBLUECUBES_CATCH_GENERATORS_HPP_INCLUDED	catch.hpp	2425;"	d
+TWOBLUECUBES_CATCH_GENERATORS_IMPL_HPP_INCLUDED	catch.hpp	7759;"	d
+TWOBLUECUBES_CATCH_HPP_INCLUDED	catch.hpp	14;"	d
+TWOBLUECUBES_CATCH_IMPL_HPP_INCLUDED	catch.hpp	3429;"	d
+TWOBLUECUBES_CATCH_INTERFACES_CAPTURE_H_INCLUDED	catch.hpp	1982;"	d
+TWOBLUECUBES_CATCH_INTERFACES_CONFIG_H_INCLUDED	catch.hpp	3720;"	d
+TWOBLUECUBES_CATCH_INTERFACES_EXCEPTION_H_INCLUDED	catch.hpp	2605;"	d
+TWOBLUECUBES_CATCH_INTERFACES_GENERATORS_H_INCLUDED	catch.hpp	524;"	d
+TWOBLUECUBES_CATCH_INTERFACES_REGISTRY_HUB_H_INCLUDED	catch.hpp	2611;"	d
+TWOBLUECUBES_CATCH_INTERFACES_REPORTER_H_INCLUDED	catch.hpp	5451;"	d
+TWOBLUECUBES_CATCH_INTERFACES_RUNNER_H_INCLUDED	catch.hpp	2085;"	d
+TWOBLUECUBES_CATCH_INTERFACES_TAG_ALIAS_REGISTRY_H_INCLUDED	catch.hpp	3025;"	d
+TWOBLUECUBES_CATCH_INTERFACES_TESTCASE_H_INCLUDED	catch.hpp	669;"	d
+TWOBLUECUBES_CATCH_LEGACY_REPORTER_ADAPTER_HPP_INCLUDED	catch.hpp	8181;"	d
+TWOBLUECUBES_CATCH_LEGACY_REPORTER_ADAPTER_H_INCLUDED	catch.hpp	8184;"	d
+TWOBLUECUBES_CATCH_LIST_HPP_INCLUDED	catch.hpp	5220;"	d
+TWOBLUECUBES_CATCH_MATCHERS_HPP_INCLUDED	catch.hpp	1005;"	d
+TWOBLUECUBES_CATCH_MATCHERS_STRING_H_INCLUDED	catch.hpp	2878;"	d
+TWOBLUECUBES_CATCH_MATCHERS_VECTOR_H_INCLUDED	catch.hpp	2934;"	d
+TWOBLUECUBES_CATCH_MESSAGE_HPP_INCLUDED	catch.hpp	8146;"	d
+TWOBLUECUBES_CATCH_MESSAGE_H_INCLUDED	catch.hpp	1926;"	d
+TWOBLUECUBES_CATCH_NOTIMPLEMENTED_EXCEPTION_HPP_INCLUDED	catch.hpp	7369;"	d
+TWOBLUECUBES_CATCH_NOTIMPLEMENTED_EXCEPTION_H_INCLUDED	catch.hpp	64;"	d
+TWOBLUECUBES_CATCH_OBJC_ARC_HPP_INCLUDED	catch.hpp	1457;"	d
+TWOBLUECUBES_CATCH_OBJC_HPP_INCLUDED	catch.hpp	3212;"	d
+TWOBLUECUBES_CATCH_OPTION_HPP_INCLUDED	catch.hpp	3049;"	d
+TWOBLUECUBES_CATCH_PLATFORM_H_INCLUDED	catch.hpp	2022;"	d
+TWOBLUECUBES_CATCH_PTR_HPP_INCLUDED	catch.hpp	548;"	d
+TWOBLUECUBES_CATCH_REENABLE_WARNINGS_H_INCLUDED	catch.hpp	9834;"	d
+TWOBLUECUBES_CATCH_REGISTRY_HUB_HPP_INCLUDED	catch.hpp	7004;"	d
+TWOBLUECUBES_CATCH_REPORTER_BASES_HPP_INCLUDED	catch.hpp	9265;"	d
+TWOBLUECUBES_CATCH_REPORTER_COMPACT_HPP_INCLUDED	catch.hpp	10746;"	d
+TWOBLUECUBES_CATCH_REPORTER_CONSOLE_HPP_INCLUDED	catch.hpp	10295;"	d
+TWOBLUECUBES_CATCH_REPORTER_JUNIT_HPP_INCLUDED	catch.hpp	10057;"	d
+TWOBLUECUBES_CATCH_REPORTER_MULTI_HPP_INCLUDED	catch.hpp	9126;"	d
+TWOBLUECUBES_CATCH_REPORTER_REGISTRARS_HPP_INCLUDED	catch.hpp	9514;"	d
+TWOBLUECUBES_CATCH_REPORTER_REGISTRY_HPP_INCLUDED	catch.hpp	7199;"	d
+TWOBLUECUBES_CATCH_REPORTER_XML_HPP_INCLUDED	catch.hpp	9262;"	d
+TWOBLUECUBES_CATCH_RESULT_BUILDER_HPP_INCLUDED	catch.hpp	8823;"	d
+TWOBLUECUBES_CATCH_RESULT_BUILDER_H_INCLUDED	catch.hpp	832;"	d
+TWOBLUECUBES_CATCH_RESULT_TYPE_H_INCLUDED	catch.hpp	835;"	d
+TWOBLUECUBES_CATCH_RUNNER_HPP_INCLUDED	catch.hpp	3440;"	d
+TWOBLUECUBES_CATCH_RUNNER_IMPL_HPP_INCLUDED	catch.hpp	5869;"	d
+TWOBLUECUBES_CATCH_SECTION_HPP_INCLUDED	catch.hpp	8469;"	d
+TWOBLUECUBES_CATCH_SECTION_H_INCLUDED	catch.hpp	2266;"	d
+TWOBLUECUBES_CATCH_SECTION_INFO_H_INCLUDED	catch.hpp	2269;"	d
+TWOBLUECUBES_CATCH_STREAMBUF_H_INCLUDED	catch.hpp	3783;"	d
+TWOBLUECUBES_CATCH_STREAM_HPP_INCLUDED	catch.hpp	7393;"	d
+TWOBLUECUBES_CATCH_STREAM_H_INCLUDED	catch.hpp	3780;"	d
+TWOBLUECUBES_CATCH_TAG_ALIAS_H_INCLUDED	catch.hpp	3028;"	d
+TWOBLUECUBES_CATCH_TAG_ALIAS_REGISTRY_HPP_INCLUDED	catch.hpp	8957;"	d
+TWOBLUECUBES_CATCH_TAG_ALIAS_REGISTRY_H_INCLUDED	catch.hpp	8960;"	d
+TWOBLUECUBES_CATCH_TEST_CASE_INFO_HPP_INCLUDED	catch.hpp	7921;"	d
+TWOBLUECUBES_CATCH_TEST_CASE_INFO_H_INCLUDED	catch.hpp	3128;"	d
+TWOBLUECUBES_CATCH_TEST_CASE_REGISTRY_IMPL_HPP_INCLUDED	catch.hpp	7007;"	d
+TWOBLUECUBES_CATCH_TEST_CASE_TRACKER_HPP_INCLUDED	catch.hpp	5872;"	d
+TWOBLUECUBES_CATCH_TEST_REGISTRY_HPP_INCLUDED	catch.hpp	666;"	d
+TWOBLUECUBES_CATCH_TEST_SPEC_HPP_INCLUDED	catch.hpp	3457;"	d
+TWOBLUECUBES_CATCH_TEST_SPEC_PARSER_HPP_INCLUDED	catch.hpp	3449;"	d
+TWOBLUECUBES_CATCH_TEXT_H_INCLUDED	catch.hpp	5223;"	d
+TWOBLUECUBES_CATCH_TIMER_H_INCLUDED	catch.hpp	2369;"	d
+TWOBLUECUBES_CATCH_TOSTRING_HPP_INCLUDED	catch.hpp	8621;"	d
+TWOBLUECUBES_CATCH_TOSTRING_H_INCLUDED	catch.hpp	1447;"	d
+TWOBLUECUBES_CATCH_TOTALS_HPP_INCLUDED	catch.hpp	2272;"	d
+TWOBLUECUBES_CATCH_TYPE_TRAITS_HPP_INCLUDED	catch.hpp	2097;"	d
+TWOBLUECUBES_CATCH_VERSION_HPP_INCLUDED	catch.hpp	8112;"	d
+TWOBLUECUBES_CATCH_VERSION_H_INCLUDED	catch.hpp	6774;"	d
+TWOBLUECUBES_CATCH_WILDCARD_PATTERN_HPP_INCLUDED	catch.hpp	3465;"	d
+TWOBLUECUBES_CATCH_WINDOWS_H_PROXY_H_INCLUDED	catch.hpp	6243;"	d
+TWOBLUECUBES_CATCH_XMLWRITER_HPP_INCLUDED	catch.hpp	9601;"	d
+TWOBLUECUBES_CLARA_COMPILERS_H_INCLUDED	catch.hpp	4164;"	d
+TWOBLUECUBES_CLARA_H_INCLUDED	catch.hpp	4002;"	d
+TWOBLUECUBES_SINGLE_INCLUDE_CATCH_HPP_INCLUDED	catch.hpp	12;"	d
+TWOBLUECUBES_TEXT_FORMAT_H_ALREADY_INCLUDED	catch.hpp	5233;"	d
+TestFailureException	catch.hpp	/^    struct TestFailureException{};$/;"	s	namespace:Catch
+TestFunction	catch.hpp	/^typedef void(*TestFunction)();$/;"	t	namespace:Catch
+ThrewException	catch.hpp	/^        ThrewException = Exception | 1,$/;"	e	enum:Catch::ResultWas::OfType
+TrueType	catch.hpp	/^    struct TrueType { char sizer[1]; };$/;"	s	namespace:Catch::Detail
+TupleDetail	catch.hpp	/^namespace TupleDetail {$/;"	n	namespace:Catch
+Unknown	catch.hpp	/^        Unknown = -1,$/;"	e	enum:Catch::ResultWas::OfType
+WHEN	catch.hpp	11274;"	d
+WIN32_LEAN_AND_MEAN	catch.hpp	6249;"	d
+WIN32_LEAN_AND_MEAN	catch.hpp	6262;"	d
+Warning	catch.hpp	/^        Warning = 2,$/;"	e	enum:Catch::ResultWas::OfType
+Yes	catch.hpp	/^        Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
+_BSD_SOURCE	catch.hpp	146;"	d
+__CIRCLEMUD_SRC_MODS_ACL_PARSER_HEADER__	acl/config-parser.hpp	2;"	d
+__MENTOC_UTIL_MAP_HEADER__	util-map.hpp	2;"	d
+acl	acl/config-parser.cpp	/^    namespace acl {$/;"	n	namespace:mods	file:
+acl	acl/config-parser.hpp	/^    namespace acl {$/;"	n	namespace:mods
+addRef	catch.hpp	/^        virtual void addRef() const {$/;"	f	struct:Catch::SharedImpl
+add_pointer	acl/experiment/typeof.cpp	/^constexpr type<T*> add_pointer(type<T>)$/;"	f
+add_rtentry	acl/radix_tree/examples/example2.cpp	/^void add_rtentry(const char *network, int prefix_len, const char *dst)$/;"	f
+addr	acl/radix_tree/examples/example2.cpp	/^    in_addr_t addr;$/;"	m	class:rtentry	file:
+alwaysFalse	catch.hpp	/^    inline bool alwaysFalse() { return false; }$/;"	f	namespace:Catch
+alwaysTrue	catch.hpp	/^    inline bool alwaysTrue() { return true; }$/;"	f	namespace:Catch
+append	acl/radix_tree/radix_tree.hpp	/^radix_tree_node<K, T>* radix_tree<K, T>::append(radix_tree_node<K, T> *parent, const value_type &val)$/;"	f	class:radix_tree
+applyEvaluator	catch.hpp	/^    bool applyEvaluator( T1 const& lhs, T2 const& rhs ) {$/;"	f	namespace:Catch::Internal
+arcSafeRelease	catch.hpp	/^inline void arcSafeRelease( NSObject* ){}$/;"	f
+arcSafeRelease	catch.hpp	/^inline void arcSafeRelease( NSObject* obj ) {$/;"	f
+begin	acl/radix_tree/radix_tree.hpp	/^radix_tree_node<K, T>* radix_tree<K, T>::begin(radix_tree_node<K, T> *node)$/;"	f	class:radix_tree
+begin	acl/radix_tree/radix_tree.hpp	/^typename radix_tree<K, T>::iterator radix_tree<K, T>::begin()$/;"	f	class:radix_tree
+bg	acl/color.hpp	/^        namespace bg {$/;"	n	namespace:mods::Color
+blu_text	acl/color.hpp	3;"	d
+capturedExpression	catch.hpp	/^        std::string capturedExpression;$/;"	m	struct:Catch::AssertionInfo
+check_nonexistent_prefixes	acl/radix_tree/tests/test_radix_tree_prefix_match.cpp	/^void check_nonexistent_prefixes(tree_t& tree)$/;"	f
+clear	acl/radix_tree/radix_tree.hpp	/^    void clear() {$/;"	f	class:radix_tree
+cm_key	acl/config-parser.hpp	/^                typedef std::string cm_key;$/;"	t	class:mods::acl::FileParser
+cm_value	acl/config-parser.hpp	/^                typedef uint64_t cm_value;$/;"	t	class:mods::acl::FileParser
+code	acl/color.hpp	/^			Code code;$/;"	m	class:mods::Color::Modifier
+colors	acl/color.hpp	/^    namespace colors {$/;"	n	namespace:mods
+command_map	acl/config-parser.hpp	/^                typedef std::map<cm_key,cm_value> command_map;$/;"	t	class:mods::acl::FileParser
+compare	catch.hpp	/^    bool compare( T1 const& lhs, T2 const& rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op, typename T> bool compare( T* lhs, int rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op, typename T> bool compare( T* lhs, long long rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op, typename T> bool compare( T* lhs, long rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op, typename T> bool compare( T* lhs, std::nullptr_t ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op, typename T> bool compare( int lhs, T* rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op, typename T> bool compare( long lhs, T* rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op, typename T> bool compare( long long lhs, T* rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op, typename T> bool compare( std::nullptr_t, T* rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( int lhs, unsigned char rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( int lhs, unsigned int rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( int lhs, unsigned long rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( long lhs, unsigned char rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( long lhs, unsigned int rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( long lhs, unsigned long rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( long long lhs, unsigned char rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( long long lhs, unsigned int rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( long long lhs, unsigned long long rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( long long lhs, unsigned long rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( unsigned char lhs, int rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( unsigned char lhs, long rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( unsigned int lhs, int rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( unsigned int lhs, long rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( unsigned long lhs, int rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( unsigned long lhs, long rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( unsigned long long lhs, char rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( unsigned long long lhs, int rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( unsigned long long lhs, long long rhs ) {$/;"	f	namespace:Catch::Internal
+compare	catch.hpp	/^    template<Operator Op> bool compare( unsigned long long lhs, long rhs ) {$/;"	f	namespace:Catch::Internal
+convert	catch.hpp	/^        static std::string convert( T const& ) { return unprintableString; }$/;"	f	struct:Catch::Detail::EnumStringMaker
+convert	catch.hpp	/^        static std::string convert( T const& _value ) {$/;"	f	struct:Catch::Detail::StringMakerBase
+convert	catch.hpp	/^        static std::string convert( T const& v )$/;"	f	struct:Catch::Detail::EnumStringMaker
+convert	catch.hpp	/^        static std::string convert( T const& v )$/;"	f	struct:Catch::Detail::StringMakerBase
+convert	catch.hpp	/^    static std::string convert( R C::* p ) {$/;"	f	struct:Catch::StringMaker
+convert	catch.hpp	/^    static std::string convert( U* p ) {$/;"	f	struct:Catch::StringMaker
+dbg	acl/config-parser.hpp	18;"	d
+dbg_blu	acl/config-parser.hpp	23;"	d
+dbg_grn	acl/config-parser.hpp	22;"	d
+dbg_recursion	acl/config-parser.cpp	/^        inline void dbg_recursion(const char* str){$/;"	f	namespace:mods::acl
+dbg_recursion_register	acl/config-parser.cpp	/^        inline void dbg_recursion_register(const char* str){$/;"	f	namespace:mods::acl
+dbg_red	acl/config-parser.hpp	24;"	d
+decomposedExpression	catch.hpp	/^        mutable DecomposedExpression const* decomposedExpression;$/;"	m	struct:Catch::AssertionResultData
+deleteAll	catch.hpp	/^    inline void deleteAll( ContainerT& container ) {$/;"	f	namespace:Catch
+deleteAllValues	catch.hpp	/^    inline void deleteAllValues( AssociativeContainerT& container ) {$/;"	f	namespace:Catch
+descend	acl/radix_tree/radix_tree_it.hpp	/^radix_tree_node<K, T>* radix_tree_it<K, T>::descend(radix_tree_node<K, T>* node) const$/;"	f	class:radix_tree_it
+description	catch.hpp	/^    const char* description;$/;"	m	struct:Catch::NameAndDesc
+dm	acl/config-parser.hpp	26;"	d
+dump_rules	acl/config-parser.cpp	/^        inline void FileParser::dump_rules(rule r){$/;"	f	class:mods::acl::FileParser
+dump_tree	acl/config-parser.cpp	/^        void FileParser::dump_tree(void){$/;"	f	class:mods::acl::FileParser
+empty	acl/radix_tree/radix_tree.hpp	/^    bool empty() const {$/;"	f	class:radix_tree
+end	acl/radix_tree/radix_tree.hpp	/^typename radix_tree<K, T>::iterator radix_tree<K, T>::end()$/;"	f	class:radix_tree
+erase	acl/radix_tree/radix_tree.hpp	/^bool radix_tree<K, T>::erase(const K &key)$/;"	f	class:radix_tree
+erase	acl/radix_tree/radix_tree.hpp	/^void radix_tree<K, T>::erase(iterator it)$/;"	f	class:radix_tree
+evaluate	catch.hpp	/^        static bool evaluate( T1 const& lhs, T2 const& rhs ) {$/;"	f	struct:Catch::Internal::Evaluator
+evaluate	catch.hpp	/^        static bool evaluate( T1 const& lhs, T2 const& rhs) {$/;"	f	struct:Catch::Internal::Evaluator
+fg	acl/color.hpp	/^        namespace fg {$/;"	n	namespace:mods::Color
+file	catch.hpp	/^        char const* file;$/;"	m	struct:Catch::SourceLineInfo
+find	acl/radix_tree/radix_tree.hpp	/^typename radix_tree<K, T>::iterator radix_tree<K, T>::find(const K &key)$/;"	f	class:radix_tree
+find_node	acl/radix_tree/radix_tree.hpp	/^radix_tree_node<K, T>* radix_tree<K, T>::find_node(const K &key, radix_tree_node<K, T> *node, int depth)$/;"	f	class:radix_tree
+find_route	acl/radix_tree/examples/example2.cpp	/^void find_route(const char *dst)$/;"	f
+get	catch.hpp	/^        T* get() const{ return m_p; }$/;"	f	class:Catch::Ptr
+getFile	acl/config-parser.hpp	/^                const char* getFile() const { return m_file_name.c_str(); }$/;"	f	class:mods::acl::FileParser
+getName	catch.hpp	/^    template<> struct OperatorTraits<IsEqualTo>             { static const char* getName(){ return "=="; } };$/;"	f	struct:Catch::Internal::OperatorTraits
+getName	catch.hpp	/^    template<> struct OperatorTraits<IsGreaterThan>         { static const char* getName(){ return ">"; } };$/;"	f	struct:Catch::Internal::OperatorTraits
+getName	catch.hpp	/^    template<> struct OperatorTraits<IsGreaterThanOrEqualTo>{ static const char* getName(){ return ">="; } };$/;"	f	struct:Catch::Internal::OperatorTraits
+getName	catch.hpp	/^    template<> struct OperatorTraits<IsLessThan>            { static const char* getName(){ return "<"; } };$/;"	f	struct:Catch::Internal::OperatorTraits
+getName	catch.hpp	/^    template<> struct OperatorTraits<IsLessThanOrEqualTo>   { static const char* getName(){ return "<="; } };$/;"	f	struct:Catch::Internal::OperatorTraits
+getName	catch.hpp	/^    template<> struct OperatorTraits<IsNotEqualTo>          { static const char* getName(){ return "!="; } };$/;"	f	struct:Catch::Internal::OperatorTraits
+getName	catch.hpp	/^    template<Operator Op> struct OperatorTraits             { static const char* getName(){ return "*error*"; } };$/;"	f	struct:Catch::Internal::OperatorTraits
+get_unique_keys	acl/radix_tree/tests/common.hpp	/^std::vector<std::string> get_unique_keys() {$/;"	f
+greedy_match	acl/radix_tree/examples/example1.cpp	/^void greedy_match(std::string key)$/;"	f
+greedy_match	acl/radix_tree/radix_tree.hpp	/^void radix_tree<K, T>::greedy_match(const K &key, std::vector<iterator> &vec)$/;"	f	class:radix_tree
+greedy_match	acl/radix_tree/radix_tree.hpp	/^void radix_tree<K, T>::greedy_match(radix_tree_node<K, T> *node, std::vector<iterator> &vec)$/;"	f	class:radix_tree
+grn_text	acl/color.hpp	1;"	d
+increment	acl/radix_tree/radix_tree_it.hpp	/^radix_tree_node<K, T>* radix_tree_it<K, T>::increment(radix_tree_node<K, T>* node) const$/;"	f	class:radix_tree_it
+insert	acl/radix_tree/examples/example1.cpp	/^void insert() {$/;"	f
+insert	acl/radix_tree/radix_tree.hpp	/^std::pair<typename radix_tree<K, T>::iterator, bool> radix_tree<K, T>::insert(const value_type &val)$/;"	f	class:radix_tree
+int_type	acl/config-parser.hpp	/^                typedef uint64_t int_type;$/;"	t	class:mods::acl::FileParser
+invoke	catch.hpp	/^    virtual void invoke() const {$/;"	f	class:Catch::MethodTestCase
+isBinaryExpression	catch.hpp	/^        virtual bool isBinaryExpression() const {$/;"	f	struct:Catch::DecomposedExpression
+isFalseTest	catch.hpp	/^    inline bool isFalseTest( int flags )                { return ( flags & ResultDisposition::FalseTest ) != 0; }$/;"	f	namespace:Catch
+isJustInfo	catch.hpp	/^    inline bool isJustInfo( int flags ) {$/;"	f	namespace:Catch
+isOk	catch.hpp	/^    inline bool isOk( ResultWas::OfType resultType ) {$/;"	f	namespace:Catch
+isTrue	catch.hpp	/^    inline bool isTrue( bool value ){ return value; }$/;"	f	namespace:Catch
+is_prefix_of	acl/radix_tree/tests/test_radix_tree_prefix_match.cpp	/^bool is_prefix_of(const std::string& prefix, const std::string& str) {$/;"	f
+is_unique	acl/radix_tree/tests/common.hpp	/^bool is_unique(_RAIter begin, _RAIter end) {$/;"	f
+it_child	acl/radix_tree/radix_tree_node.hpp	/^    typedef typename std::map<K, radix_tree_node<K, T>* >::iterator it_child;$/;"	t	class:radix_tree_node
+iterator	acl/radix_tree/radix_tree.hpp	/^    typedef radix_tree_it<K, T>   iterator;$/;"	t	class:radix_tree
+key_type	acl/radix_tree/radix_tree.hpp	/^    typedef K key_type;$/;"	t	class:radix_tree
+keyval_first	util-map.hpp	/^            Tkey keyval_first(std::map<Tkey,Tval>& m,const Tval value,Tkey default_value){$/;"	f	namespace:mods::util::maps
+line	catch.hpp	/^        std::size_t line;$/;"	m	struct:Catch::SourceLineInfo
+lineInfo	catch.hpp	/^        SourceLineInfo lineInfo;$/;"	m	struct:Catch::AssertionInfo
+longest_match	acl/radix_tree/examples/example1.cpp	/^void longest_match(std::string key)$/;"	f
+longest_match	acl/radix_tree/radix_tree.hpp	/^typename radix_tree<K, T>::iterator radix_tree<K, T>::longest_match(const K &key)$/;"	f	class:radix_tree
+m20	acl/config-parser.cpp	/^        inline void FileParser::m20(){ if(!print_debug){ return; } $/;"	f	class:mods::acl::FileParser
+m_accept_regex	acl/config-parser.cpp	/^        int FileParser::m_accept_regex(const std::string & regex_string){$/;"	f	class:mods::acl::FileParser
+m_accept_regex	acl/config-parser.cpp	/^        int FileParser::m_accept_regex(const std::string & regex_string,std::vector<std::string> & holder){$/;"	f	class:mods::acl::FileParser
+m_access_rules	acl/config-parser.cpp	/^        int FileParser::m_access_rules(void){$/;"	f	class:mods::acl::FileParser
+m_access_type	acl/config-parser.cpp	/^        std::tuple<int,bool> FileParser::m_access_type(void){$/;"	f	class:mods::acl::FileParser
+m_advance	acl/config-parser.cpp	/^        inline void FileParser::m_advance(size_t i){ if(m_out_of_bounds()){ return; } m_increment_file_offset(i); }$/;"	f	class:mods::acl::FileParser
+m_arrow	acl/config-parser.cpp	/^        int FileParser::m_arrow(void){$/;"	f	class:mods::acl::FileParser
+m_assertionInfo	catch.hpp	/^        AssertionInfo m_assertionInfo;$/;"	m	class:Catch::ResultBuilder
+m_at	acl/config-parser.cpp	/^        inline char FileParser::m_at(size_t offset){ $/;"	f	class:mods::acl::FileParser
+m_at	acl/config-parser.cpp	/^        inline char FileParser::m_at(void){ if(m_out_of_bounds()){ return '\\0'; } return m_at(m_get_file_offset()); }$/;"	f	class:mods::acl::FileParser
+m_block	acl/config-parser.cpp	/^        int FileParser::m_block(void){$/;"	f	class:mods::acl::FileParser
+m_cachedToString	catch.hpp	/^            mutable std::string m_cachedToString;$/;"	m	class:Catch::Matchers::Impl::MatcherUntypedBase
+m_children	acl/radix_tree/radix_tree_node.hpp	/^    std::map<K, radix_tree_node<K, T>*> m_children;$/;"	m	class:radix_tree_node
+m_class	acl/config-parser.cpp	/^        int FileParser::m_class(){$/;"	f	class:mods::acl::FileParser
+m_colon	acl/config-parser.cpp	/^        int FileParser::m_colon(void){$/;"	f	class:mods::acl::FileParser
+m_command_ctr	acl/config-parser.hpp	/^                cm_value m_command_ctr;$/;"	m	class:mods::acl::FileParser
+m_command_map	acl/config-parser.hpp	/^                command_map m_command_map;$/;"	m	class:mods::acl::FileParser
+m_commands	acl/config-parser.cpp	/^        int FileParser::m_commands(void){$/;"	f	class:mods::acl::FileParser
+m_comment	acl/config-parser.cpp	/^        int FileParser::m_comment(void){$/;"	f	class:mods::acl::FileParser
+m_count	catch.hpp	/^        std::size_t m_count;$/;"	m	struct:Catch::pluralise
+m_current_access_type	acl/config-parser.hpp	/^                PARSE_TYPE m_current_access_type;$/;"	m	class:mods::acl::FileParser
+m_current_class	acl/config-parser.hpp	/^                std::string m_current_class;$/;"	m	class:mods::acl::FileParser
+m_current_extended_class	acl/config-parser.hpp	/^                std::string m_current_extended_class;$/;"	m	class:mods::acl::FileParser
+m_d_map	acl/config-parser.hpp	/^                command_map m_d_map;$/;"	m	class:mods::acl::FileParser
+m_data	catch.hpp	/^        AssertionResultData m_data;$/;"	m	class:Catch::ResultBuilder
+m_default	acl/config-parser.cpp	/^        int FileParser::m_default(void){$/;"	f	class:mods::acl::FileParser
+m_depth	acl/radix_tree/radix_tree_node.hpp	/^    int m_depth;$/;"	m	class:radix_tree_node
+m_dont_advance_file_offset	acl/config-parser.hpp	/^                               m_line_number(1),m_dont_advance_file_offset(false){}$/;"	f	class:mods::acl::FileParser
+m_dont_advance_file_offset	acl/config-parser.hpp	/^                bool m_dont_advance_file_offset;$/;"	m	class:mods::acl::FileParser
+m_enum_to_string	acl/config-parser.cpp	/^        std::string FileParser::m_enum_to_string(int enum_id){$/;"	f	class:mods::acl::FileParser
+m_expect	acl/config-parser.cpp	/^        T FileParser::m_expect(PARSE_TYPE enum_id){$/;"	f	class:mods::acl::FileParser
+m_expect	acl/config-parser.cpp	/^        int FileParser::m_expect(PARSE_TYPE enum_id){$/;"	f	class:mods::acl::FileParser
+m_expect	acl/config-parser.cpp	/^        std::tuple<int,bool> FileParser::m_expect<std::tuple<int,bool>>(PARSE_TYPE enum_id){$/;"	f	class:mods::acl::FileParser
+m_expect_chain	acl/config-parser.cpp	/^        int FileParser::m_expect_chain(const T &expect_list, std::vector<int> &in_return_values){$/;"	f	class:mods::acl::FileParser
+m_expect_chain	acl/config-parser.cpp	/^        int FileParser::m_expect_chain(int count, ...){$/;"	f	class:mods::acl::FileParser
+m_extended_class	acl/config-parser.cpp	/^        int FileParser::m_extended_class(){$/;"	f	class:mods::acl::FileParser
+m_extends	acl/config-parser.cpp	/^        int FileParser::m_extends(void){$/;"	f	class:mods::acl::FileParser
+m_file_contents	acl/config-parser.hpp	/^                std::string m_file_contents;$/;"	m	class:mods::acl::FileParser
+m_file_name	acl/config-parser.hpp	/^                std::string m_file_name;$/;"	m	class:mods::acl::FileParser
+m_file_offset	acl/config-parser.hpp	/^                size_t m_file_offset;$/;"	m	class:mods::acl::FileParser
+m_files	acl/config-parser.cpp	/^        int FileParser::m_files(void){$/;"	f	class:mods::acl::FileParser
+m_fp	acl/config-parser.hpp	/^                std::ifstream m_fp;$/;"	m	class:mods::acl::FileParser
+m_get_file_offset	acl/config-parser.cpp	/^        size_t FileParser::m_get_file_offset(){$/;"	f	class:mods::acl::FileParser
+m_increment_file_offset	acl/config-parser.cpp	/^        size_t FileParser::m_increment_file_offset(size_t i){$/;"	f	class:mods::acl::FileParser
+m_info	catch.hpp	/^        AssertionInfo m_info;$/;"	m	class:Catch::AssertionResult
+m_is_leaf	acl/radix_tree/radix_tree_node.hpp	/^    bool m_is_leaf;$/;"	m	class:radix_tree_node
+m_key	acl/radix_tree/radix_tree_node.hpp	/^    K m_key;$/;"	m	class:radix_tree_node
+m_label	catch.hpp	/^        std::string m_label;$/;"	m	struct:Catch::pluralise
+m_lineInfo	catch.hpp	/^        SourceLineInfo m_lineInfo;$/;"	m	class:Catch::NotImplementedException
+m_line_number	acl/config-parser.hpp	/^                int_type m_line_number;$/;"	m	class:mods::acl::FileParser
+m_list_end	acl/config-parser.cpp	/^        int FileParser::m_list_end(void){$/;"	f	class:mods::acl::FileParser
+m_list_start	acl/config-parser.cpp	/^        int FileParser::m_list_start(void){$/;"	f	class:mods::acl::FileParser
+m_matchers	catch.hpp	/^            std::vector<MatcherBase<ArgT> const*> m_matchers;$/;"	m	struct:Catch::Matchers::Impl::MatchAllOf
+m_matchers	catch.hpp	/^            std::vector<MatcherBase<ArgT> const*> m_matchers;$/;"	m	struct:Catch::Matchers::Impl::MatchAnyOf
+m_max_command	acl/config-parser.hpp	/^                cm_value m_max_command;$/;"	m	class:mods::acl::FileParser
+m_method	catch.hpp	/^    void (C::*m_method)();$/;"	m	class:Catch::MethodTestCase
+m_move_after	acl/config-parser.cpp	/^        int FileParser::m_move_after(char c){$/;"	f	class:mods::acl::FileParser
+m_move_after_regex	acl/config-parser.cpp	/^        int FileParser::m_move_after_regex(const char* regex_string){$/;"	f	class:mods::acl::FileParser
+m_next_char	acl/config-parser.cpp	/^        char FileParser::m_next_char(){$/;"	f	class:mods::acl::FileParser
+m_nextline	acl/config-parser.cpp	/^        void FileParser::m_nextline(void){$/;"	f	class:mods::acl::FileParser
+m_opened	acl/config-parser.hpp	/^                bool m_opened;$/;"	m	class:mods::acl::FileParser
+m_out_of_bounds	acl/config-parser.cpp	/^        inline bool FileParser::m_out_of_bounds(void){ return m_get_file_offset() >= m_file_contents.length(); }$/;"	f	class:mods::acl::FileParser
+m_p	catch.hpp	/^        T* m_p;$/;"	m	class:Catch::Ptr
+m_parent	acl/radix_tree/radix_tree_node.hpp	/^    radix_tree_node<K, T> *m_parent;$/;"	m	class:radix_tree_node
+m_parse_list	acl/config-parser.cpp	/^        std::vector<std::string> FileParser::m_parse_list(){$/;"	f	class:mods::acl::FileParser
+m_pointee	acl/radix_tree/radix_tree_it.hpp	/^    radix_tree_node<K, T> *m_pointee;$/;"	m	class:radix_tree_it
+m_rc	catch.hpp	/^        mutable unsigned int m_rc;$/;"	m	struct:Catch::SharedImpl
+m_register_commands	acl/config-parser.cpp	/^        inline void FileParser::m_register_commands(const std::vector<std::string>& vec,PARSE_TYPE type){$/;"	f	class:mods::acl::FileParser
+m_report_line	acl/config-parser.cpp	/^        void FileParser::m_report_line(const char* s){ printf(s,m_line_number + 1); }$/;"	f	class:mods::acl::FileParser
+m_resultData	catch.hpp	/^        AssertionResultData m_resultData;$/;"	m	class:Catch::AssertionResult
+m_root	acl/radix_tree/radix_tree.hpp	/^    radix_tree_node<K, T>* m_root;$/;"	m	class:radix_tree
+m_save_base_class	acl/config-parser.cpp	/^        inline void FileParser::m_save_base_class(const std::vector<std::string>& vec){$/;"	f	class:mods::acl::FileParser
+m_save_extended_class	acl/config-parser.cpp	/^        inline void FileParser::m_save_extended_class(const std::vector<std::string>& vec,const std::string & base_class){$/;"	f	class:mods::acl::FileParser
+m_save_extended_class_default	acl/config-parser.cpp	/^        inline void FileParser::m_save_extended_class_default(const std::string & base_class){$/;"	f	class:mods::acl::FileParser
+m_set_tentative_file_offset	acl/config-parser.cpp	/^        inline void FileParser::m_set_tentative_file_offset(size_t i){ m_tentative_file_offset = i; }$/;"	f	class:mods::acl::FileParser
+m_shouldDebugBreak	catch.hpp	/^        bool m_shouldDebugBreak;$/;"	m	class:Catch::ResultBuilder
+m_shouldThrow	catch.hpp	/^        bool m_shouldThrow;$/;"	m	class:Catch::ResultBuilder
+m_size	acl/radix_tree/radix_tree.hpp	/^    size_type m_size;$/;"	m	class:radix_tree
+m_store_extends	acl/config-parser.cpp	/^        int FileParser::m_store_extends(std::string & klass_name){$/;"	f	class:mods::acl::FileParser
+m_store_items	acl/config-parser.cpp	/^        int FileParser::m_store_items(const std::string & klass_name){$/;"	f	class:mods::acl::FileParser
+m_stream	catch.hpp	/^        CopyableStream m_stream;$/;"	m	class:Catch::ResultBuilder
+m_substr	acl/config-parser.cpp	/^        inline std::string FileParser::m_substr(void){$/;"	f	class:mods::acl::FileParser
+m_tentative_file_offset	acl/config-parser.hpp	/^                size_t m_tentative_file_offset;$/;"	m	class:mods::acl::FileParser
+m_toggle_file_offset_advance	acl/config-parser.cpp	/^        inline void FileParser::m_toggle_file_offset_advance(bool b){$/;"	f	class:mods::acl::FileParser
+m_tree	acl/config-parser.hpp	/^                tree m_tree;$/;"	m	class:mods::acl::FileParser
+m_underlyingMatcher	catch.hpp	/^            MatcherBase<ArgT> const& m_underlyingMatcher;$/;"	m	struct:Catch::Matchers::Impl::MatchNotOf
+m_value	acl/radix_tree/radix_tree_node.hpp	/^    value_type *m_value;$/;"	m	class:radix_tree_node
+m_what	catch.hpp	/^        std::string m_what;$/;"	m	class:Catch::NotImplementedException
+macroName	catch.hpp	/^        std::string macroName;$/;"	m	struct:Catch::AssertionInfo
+main	acl/experiment/asm.cpp	/^int main(int argc,char** argv){$/;"	f
+main	acl/experiment/tuple-size.cpp	/^int main(int argc,char** argv){$/;"	f
+main	acl/experiment/typeof.cpp	/^int main(){$/;"	f
+main	acl/radix_tree/examples/example1.cpp	/^int main()$/;"	f
+main	acl/radix_tree/examples/example2.cpp	/^main()$/;"	f
+makeSafe	catch.hpp	/^        static type makeSafe( bool value ) {$/;"	f	class:Catch::SafeBool
+map_found_t	acl/radix_tree/tests/common.hpp	/^typedef std::map<std::string, int> map_found_t;$/;"	t
+mapped_type	acl/radix_tree/radix_tree.hpp	/^    typedef T mapped_type;$/;"	t	class:radix_tree
+maps	util-map.hpp	/^        namespace maps {$/;"	n	namespace:mods::util
+max	util-map.hpp	/^            Tval max(std::map<Tkey,Tval>& m){$/;"	f	namespace:mods::util::maps
+message	catch.hpp	/^        std::string message;$/;"	m	struct:Catch::AssertionResultData
+mods	acl/color.hpp	/^namespace mods {$/;"	n
+mods	acl/config-parser.cpp	/^namespace mods {$/;"	n	file:
+mods	acl/config-parser.hpp	/^namespace mods {$/;"	n
+mods	util-map.hpp	/^namespace mods {$/;"	n
+name	catch.hpp	/^    const char* name;$/;"	m	struct:Catch::NameAndDesc
+negate	catch.hpp	/^        void negate( bool parenthesize ) {$/;"	f	struct:Catch::AssertionResultData
+negated	catch.hpp	/^        bool negated;$/;"	m	struct:Catch::AssertionResultData
+opCast	catch.hpp	/^    inline T& opCast(T const& t) { return const_cast<T&>(t); }$/;"	f	namespace:Catch::Internal
+opCast	catch.hpp	/^    inline std::nullptr_t opCast(std::nullptr_t) { return nullptr; }$/;"	f	namespace:Catch::Internal
+operator !	catch.hpp	/^        MatchNotOf<ComparatorT> MatcherBase<ObjectT, ComparatorT>::operator ! () const {$/;"	f	class:Catch::Matchers::Impl::MatcherBase
+operator !	catch.hpp	/^        bool operator !() const { return m_p == CATCH_NULL; }$/;"	f	class:Catch::Ptr
+operator !=	acl/radix_tree/radix_tree_it.hpp	/^bool radix_tree_it<K, T>::operator!= (const radix_tree_it<K, T> &lhs) const$/;"	f	class:radix_tree_it
+operator &&	catch.hpp	/^            MatchAllOf<ArgT>& operator && ( MatcherBase<ArgT> const& other ) {$/;"	f	struct:Catch::Matchers::Impl::MatchAllOf
+operator &&	catch.hpp	/^        MatchAllOf<ComparatorT> MatcherBase<ObjectT, ComparatorT>::operator && ( MatcherBase const& other ) const {$/;"	f	class:Catch::Matchers::Impl::MatcherBase
+operator *	acl/radix_tree/radix_tree_it.hpp	/^std::pair<const K, T>& radix_tree_it<K, T>::operator* () const$/;"	f	class:radix_tree_it
+operator *	catch.hpp	/^        T& operator*() const { return *m_p; }$/;"	f	class:Catch::Ptr
+operator +	catch.hpp	/^        std::string operator+() {$/;"	f	struct:Catch::StreamEndStop
+operator +	catch.hpp	/^    T const& operator + ( T const& value, StreamEndStop ) {$/;"	f	namespace:Catch
+operator ++	acl/radix_tree/radix_tree_it.hpp	/^const radix_tree_it<K, T>& radix_tree_it<K, T>::operator++ ()$/;"	f	class:radix_tree_it
+operator ++	acl/radix_tree/radix_tree_it.hpp	/^radix_tree_it<K, T> radix_tree_it<K, T>::operator++ (int)$/;"	f	class:radix_tree_it
+operator ->	acl/radix_tree/radix_tree_it.hpp	/^std::pair<const K, T>* radix_tree_it<K, T>::operator-> () const$/;"	f	class:radix_tree_it
+operator ->	catch.hpp	/^        T* operator->() const { return m_p; }$/;"	f	class:Catch::Ptr
+operator <	acl/radix_tree/examples/example2.cpp	/^    bool operator< (const rtentry &rhs) const {$/;"	f	class:rtentry
+operator <<	acl/color.hpp	/^			operator<<(std::ostream& os, const Modifier& mod) {$/;"	f	class:mods::Color::Modifier
+operator <<	catch.hpp	/^        ResultBuilder& operator << ( T const& value ) {$/;"	f	class:Catch::ResultBuilder
+operator =	acl/radix_tree/radix_tree_it.hpp	/^    radix_tree_it& operator=(const radix_tree_it& r) { m_pointee = r.m_pointee; return *this; }$/;"	f	class:radix_tree_it
+operator =	catch.hpp	/^        CopyableStream& operator=( CopyableStream const& other ) {$/;"	f	struct:Catch::CopyableStream
+operator =	catch.hpp	/^        Ptr& operator = ( Ptr const& other ){$/;"	f	class:Catch::Ptr
+operator =	catch.hpp	/^        Ptr& operator = ( T* p ){$/;"	f	class:Catch::Ptr
+operator ==	acl/radix_tree/examples/example2.cpp	/^    bool operator== (const rtentry &rhs) const {$/;"	f	class:rtentry
+operator ==	acl/radix_tree/radix_tree_it.hpp	/^bool radix_tree_it<K, T>::operator== (const radix_tree_it<K, T> &lhs) const$/;"	f	class:radix_tree_it
+operator SafeBool::type	catch.hpp	/^        operator SafeBool::type() const { return SafeBool::makeSafe( m_p != CATCH_NULL ); }$/;"	f	class:Catch::Ptr
+operator []	acl/radix_tree/examples/example2.cpp	/^    in_addr_t operator[] (int n) const {$/;"	f	class:rtentry
+operator []	acl/radix_tree/radix_tree.hpp	/^T& radix_tree<K, T>::operator[] (const K &lhs)$/;"	f	class:radix_tree
+operator |	catch.hpp	/^    inline ResultDisposition::Flags operator | ( ResultDisposition::Flags lhs, ResultDisposition::Flags rhs ) {$/;"	f	namespace:Catch
+operator ||	catch.hpp	/^            MatchAnyOf<ArgT>& operator || ( MatcherBase<ArgT> const& other ) {$/;"	f	struct:Catch::Matchers::Impl::MatchAnyOf
+operator ||	catch.hpp	/^        MatchAnyOf<ComparatorT> MatcherBase<ObjectT, ComparatorT>::operator || ( MatcherBase const& other ) const {$/;"	f	class:Catch::Matchers::Impl::MatcherBase
+oss	catch.hpp	/^        std::ostringstream oss;$/;"	m	struct:Catch::CopyableStream
+other	catch.hpp	/^        SourceLineInfo(SourceLineInfo const& other)          = default;$/;"	m	struct:Catch::SourceLineInfo
+parenthesized	catch.hpp	/^        bool parenthesized;$/;"	m	struct:Catch::AssertionResultData
+parse	acl/config-parser.cpp	/^        int FileParser::parse(){$/;"	f	class:mods::acl::FileParser
+performOptionalSelector	catch.hpp	/^inline id performOptionalSelector( id obj, SEL sel ) {$/;"	f
+pluralise	catch.hpp	/^    struct pluralise {$/;"	s	namespace:Catch
+prefix_len	acl/radix_tree/examples/example2.cpp	/^    int       prefix_len;$/;"	m	class:rtentry	file:
+prefix_match	acl/radix_tree/examples/example1.cpp	/^void prefix_match(std::string key)$/;"	f
+prefix_match	acl/radix_tree/radix_tree.hpp	/^void radix_tree<K, T>::prefix_match(const K &key, std::vector<iterator> &vec)$/;"	f	class:radix_tree
+prepend	acl/radix_tree/radix_tree.hpp	/^radix_tree_node<K, T>* radix_tree<K, T>::prepend(radix_tree_node<K, T> *node, const value_type &val)$/;"	f	class:radix_tree
+print_debug	acl/config-parser.hpp	/^                bool print_debug;$/;"	m	class:mods::acl::FileParser
+radix_join	acl/radix_tree/examples/example2.cpp	/^rtentry radix_join(const rtentry &entry1, const rtentry &entry2)$/;"	f
+radix_join	acl/radix_tree/radix_tree.hpp	/^inline std::string radix_join<std::string>(const std::string &key1, const std::string &key2)$/;"	f
+radix_length	acl/radix_tree/examples/example2.cpp	/^int radix_length(const rtentry &entry)$/;"	f
+radix_length	acl/radix_tree/radix_tree.hpp	/^inline int radix_length<std::string>(const std::string &key)$/;"	f
+radix_substr	acl/radix_tree/examples/example2.cpp	/^rtentry radix_substr(const rtentry &entry, int begin, int num)$/;"	f
+radix_substr	acl/radix_tree/radix_tree.hpp	/^inline std::string radix_substr<std::string>(const std::string &key, int begin, int num)$/;"	f
+radix_tree	acl/radix_tree/radix_tree.hpp	/^    radix_tree() : m_size(0), m_root(NULL) { }$/;"	f	class:radix_tree
+radix_tree	acl/radix_tree/radix_tree.hpp	/^class radix_tree {$/;"	c
+radix_tree_it	acl/radix_tree/radix_tree_it.hpp	/^    radix_tree_it() : m_pointee(0) { }$/;"	f	class:radix_tree_it
+radix_tree_it	acl/radix_tree/radix_tree_it.hpp	/^    radix_tree_it(const radix_tree_it& r) : m_pointee(r.m_pointee) { }$/;"	f	class:radix_tree_it
+radix_tree_it	acl/radix_tree/radix_tree_it.hpp	/^    radix_tree_it(radix_tree_node<K, T> *p) : m_pointee(p) { }$/;"	f	class:radix_tree_it
+radix_tree_it	acl/radix_tree/radix_tree_it.hpp	/^class radix_tree_it : public std::iterator<std::forward_iterator_tag, std::pair<K, T> > {$/;"	c
+radix_tree_node	acl/radix_tree/radix_tree_node.hpp	/^    radix_tree_node() : m_children(), m_parent(NULL), m_value(NULL), m_depth(0), m_is_leaf(false), m_key() { }$/;"	f	class:radix_tree_node
+radix_tree_node	acl/radix_tree/radix_tree_node.hpp	/^class radix_tree_node {$/;"	c
+radix_tree_node	acl/radix_tree/radix_tree_node.hpp	/^radix_tree_node<K, T>::radix_tree_node(const value_type &val) :$/;"	f	class:radix_tree_node
+rawMemoryToString	catch.hpp	/^    inline std::string rawMemoryToString( const T& object ) {$/;"	f	namespace:Catch::Detail
+read	acl/config-parser.cpp	/^        int FileParser::read(){$/;"	f	class:mods::acl::FileParser
+reconstructExpression	catch.hpp	/^        std::string const& reconstructExpression() const {$/;"	f	class:Catch::AssertionResultData::std
+reconstructedExpression	catch.hpp	/^        mutable std::string reconstructedExpression;$/;"	m	struct:Catch::AssertionResultData
+recursion	acl/config-parser.cpp	/^        static std::map<const char*,unsigned int> recursion;$/;"	m	namespace:mods::acl	file:
+recursive_stack	acl/config-parser.cpp	/^        static std::stack<const char*> recursive_stack;$/;"	m	namespace:mods::acl	file:
+red_text	acl/color.hpp	2;"	d
+release	catch.hpp	/^        virtual void release() const {$/;"	f	struct:Catch::SharedImpl
+remove_duplicates	acl/config-parser.cpp	/^void remove_duplicates(std::vector<T>& vec)$/;"	f
+reset	catch.hpp	/^        void reset() {$/;"	f	class:Catch::Ptr
+resultDisposition	catch.hpp	/^        ResultDisposition::Flags resultDisposition;$/;"	m	struct:Catch::AssertionInfo
+resultType	catch.hpp	/^        ResultWas::OfType resultType;$/;"	m	struct:Catch::AssertionResultData
+rm_rtentry	acl/radix_tree/examples/example2.cpp	/^void rm_rtentry(const char *network, int prefix_len)$/;"	f
+rst_text	acl/color.hpp	4;"	d
+rtentry	acl/radix_tree/examples/example2.cpp	/^    rtentry() : addr(0), prefix_len(0) { }$/;"	f	class:rtentry
+rtentry	acl/radix_tree/examples/example2.cpp	/^class rtentry {$/;"	c	file:
+rttable	acl/radix_tree/examples/example2.cpp	/^radix_tree<rtentry, in_addr> rttable;$/;"	v
+rule	acl/config-parser.hpp	/^                typedef std::vector<bool>  rule;$/;"	t	class:mods::acl::FileParser
+s	catch.hpp	/^        static std::ostream &s;$/;"	m	struct:Catch::Detail::IsStreamInsertable
+setFile	acl/config-parser.hpp	/^                void setFile(const char* f){m_file_name = f; }$/;"	f	class:mods::acl::FileParser
+shouldContinueOnFailure	catch.hpp	/^    inline bool shouldContinueOnFailure( int flags )    { return ( flags & ResultDisposition::ContinueOnFailure ) != 0; }$/;"	f	namespace:Catch
+shouldSuppressFailure	catch.hpp	/^    inline bool shouldSuppressFailure( int flags )      { return ( flags & ResultDisposition::SuppressFail ) != 0; }$/;"	f	namespace:Catch
+size	acl/radix_tree/radix_tree.hpp	/^    size_type size()  const {$/;"	f	class:radix_tree
+size_type	acl/radix_tree/radix_tree.hpp	/^    typedef std::size_t           size_type;$/;"	t	class:radix_tree
+sizer	catch.hpp	/^    struct FalseType { char sizer[2]; };$/;"	m	struct:Catch::Detail::FalseType
+sizer	catch.hpp	/^    struct TrueType { char sizer[1]; };$/;"	m	struct:Catch::Detail::TrueType
+swap	catch.hpp	/^        void swap( Ptr& other ) { std::swap( m_p, other.m_p ); }$/;"	f	class:Catch::Ptr
+t	catch.hpp	/^        static T  const&t;$/;"	m	struct:Catch::Detail::IsStreamInsertable
+toString	catch.hpp	/^            std::string toString() const {$/;"	f	class:Catch::Matchers::Impl::MatcherUntypedBase
+toString	catch.hpp	/^std::string toString( std::vector<T,Allocator> const& v ) {$/;"	f	namespace:Catch
+tr_key	acl/config-parser.hpp	/^                typedef std::string tr_key;$/;"	t	class:mods::acl::FileParser
+tr_value	acl/config-parser.hpp	/^                typedef rule tr_value;$/;"	t	class:mods::acl::FileParser
+traverse	acl/radix_tree/examples/example1.cpp	/^void traverse() {$/;"	f
+tree	acl/config-parser.hpp	/^                typedef std::map<tr_key,tr_value> tree;$/;"	t	class:mods::acl::FileParser
+tree	acl/radix_tree/examples/example1.cpp	/^radix_tree<std::string, int> tree;$/;"	v
+tree_t	acl/radix_tree/tests/common.hpp	/^typedef radix_tree<std::string, int> tree_t;$/;"	t
+trueValue	catch.hpp	/^        void trueValue() const {}$/;"	f	class:Catch::SafeBool
+type	acl/experiment/typeof.cpp	/^struct type{ };$/;"	s	file:
+util	util-map.hpp	/^    namespace util {$/;"	n	namespace:mods
+util_print_until	acl/config-parser.cpp	/^        inline void FileParser::util_print_until(char c){ $/;"	f	class:mods::acl::FileParser
+value	catch.hpp	/^        enum { value = sizeof( testStreamable(s << t) ) == sizeof( TrueType ) };$/;"	e	enum:Catch::Detail::IsStreamInsertable::__anon1
+value_type	acl/radix_tree/radix_tree.hpp	/^    typedef std::pair<const K, T> value_type;$/;"	t	class:radix_tree
+value_type	acl/radix_tree/radix_tree_node.hpp	/^    typedef std::pair<const K, T> value_type;$/;"	t	class:radix_tree_node
+vec_found_to_map	acl/radix_tree/tests/common.hpp	/^map_found_t vec_found_to_map(const vector_found_t& vec) {$/;"	f
+vector_found_t	acl/radix_tree/tests/common.hpp	/^typedef std::vector<tree_t::iterator> vector_found_t;$/;"	t
+~DecomposedExpression	catch.hpp	/^        virtual ~DecomposedExpression() {}$/;"	f	struct:Catch::DecomposedExpression
+~FileParser	acl/config-parser.cpp	/^        FileParser::~FileParser(){$/;"	f	class:mods::acl::FileParser
+~MethodTestCase	catch.hpp	/^    virtual ~MethodTestCase() {}$/;"	f	class:Catch::MethodTestCase
+~Ptr	catch.hpp	/^        ~Ptr(){$/;"	f	class:Catch::Ptr
+~radix_tree	acl/radix_tree/radix_tree.hpp	/^    ~radix_tree() {$/;"	f	class:radix_tree
+~radix_tree_it	acl/radix_tree/radix_tree_it.hpp	/^    ~radix_tree_it() { }$/;"	f	class:radix_tree_it
+~radix_tree_node	acl/radix_tree/radix_tree_node.hpp	/^radix_tree_node<K, T>::~radix_tree_node()$/;"	f	class:radix_tree_node

@@ -41,23 +41,6 @@ namespace mods {
         const int FileParser::FILE_CANNOT_OPEN = -2;
         const int FileParser::FILE_EOF = -3;
 
-        static std::map<const char*,unsigned int> recursion;
-        static std::stack<const char*> recursive_stack;
-        inline void dbg_recursion_register(const char* str){
-            recursive_stack.push(str);
-        }
-        inline void dbg_recursion(const char* str){
-            if(recursive_stack.empty()){return;}
-            if(strcmp(recursive_stack.top(),str) == 0){
-                if(recursion.find(str) != recursion.end()){
-                    recursion[str] = 1;
-                }else{
-                    recursion[str]++;
-                }
-                dbg("[[[recursion:::" << str << ":::{{COUNT}}-->" << recursion[str]);
-            }
-        }
-
         /* Destructor */
         FileParser::~FileParser(){
             if(m_opened){
@@ -116,7 +99,6 @@ namespace mods {
 
         int FileParser::m_access_rules(void){
             if(m_out_of_bounds()){ return 0;}
-            dbg_recursion("m_access_rules");
             m20();
             dbg(m_get_file_offset());
             auto t_expect = m_expect<std::tuple<int,bool>>(E_ACCESS_TYPE);
@@ -143,8 +125,6 @@ namespace mods {
                         m_toggle_file_offset_advance(true);
                         dbg("Toggle file offset advance");
                         m20();
-                        dbg("Here comes the recursion");
-                        dbg_recursion_register("m_access_rules");
                         m_save_extended_class_default(m_current_extended_class);
                         return m_access_rules();
                     }
@@ -564,8 +544,159 @@ namespace mods {
             return m_increment_file_offset(0);
         }
 
+
+        void FileParser::dump_tree(void){
+            dbg("Dumptree");
+            for(auto leaf: m_tree){
+                //
+                dbg_blu("Tree element (first):" << leaf.first << " ");
+                dbg_blu("Tree element size (second): " << leaf.second.size());
+                if(print_debug){
+                    dump_rules(leaf.second);
+                }
+                for(auto c: m_command_map){
+                    dbg_blu("cmap: " << c.first << "-> " << c.second);
+                }
+            }
+        }
+        inline void FileParser::dump_rules(rule r){
+            if(print_debug){
+                for(unsigned i = 0; i < r.size();i++){
+                    std::cout << "[command: ";
+                    std::cout << ::mods::util::maps::keyval_first<cm_key,cm_value>(m_command_map,i,"none found") << "]: ";
+                    if(r[i]){
+                        dbg("dump rules: @@@ ALLOW @@@");
+                    }else{
+                        dbg("dump rules: ### DENY ###");
+                    }
+                }
+            }
+        }
+        inline void FileParser::m_register_commands(const std::vector<std::string>& vec,PARSE_TYPE type){
+            //TODO:
+            //Maybe in the future we will have 2 different structures. One for files
+            //and one for commands. In which case, `type` will play a role and decide
+            //which of those structures to register the command into
+            if(type == E_ALLOW){
+                dbg("Registering allow commands");
+            }else{
+                dbg("Registering deny commands");
+            }
+            for(auto& s:vec){
+                std::string cleaned = "";
+                for(auto sc:s){
+                    if(sc == ']' || isspace(sc)){
+                        continue;
+                    }else{
+                        cleaned += sc;
+                    }
+                }
+                if(cleaned.length()){
+                    if(m_command_map.find(cleaned.c_str()) == m_command_map.end()){
+                        //We need to insert this into the command map
+                        m_command_map.insert(std::pair<cm_key,cm_value>(cleaned.c_str(),m_command_ctr++));
+                    }
+                }
+            }
+        }
+        inline void FileParser::m_save_base_class(const std::vector<std::string>& vec){
+            //If the rule vector already exists in the tree, make sure the size is
+            //big enough to accomodate the current command map size
+            tr_value r;
+            auto current_class_rules = m_tree.find(m_current_class);
+            bool insert = (current_class_rules == m_tree.end());
+            if(insert){
+                dbg("Reserving vec of size: " << m_command_ctr);
+                r.reserve(m_command_ctr);
+                for(unsigned i=0;i < m_command_ctr;i++){
+                    r.push_back(false);
+                }
+            }else{
+                dbg("Resizing vector to accomodate");
+                r = std::move(current_class_rules->second);
+                r.resize(m_command_ctr,false);
+            }
+            for(auto &rule_name:vec){
+                auto rule_name_cmd = m_command_map.find(rule_name);
+                if(rule_name_cmd != m_command_map.end()){
+                    assert(r.size() > rule_name_cmd->second);
+                    if(m_current_access_type == E_ALLOW){
+                        r[rule_name_cmd->second] = true;
+                    }else{
+                        r[rule_name_cmd->second] = false;
+                    }
+                }
+            }
+            if(insert){
+                m_tree.insert(std::pair<tr_key,tr_value>(m_current_class,r));
+            }else{
+                m_tree[m_current_class] = r;
+            }
+        }
+
+        inline void FileParser::m_save_extended_class(const std::vector<std::string>& vec,const std::string & base_class){
+            //TODO: generate rules based on m_current_access_type, m_current_extended_class, and m_current_class
+            auto base_class_rules = m_tree.find(base_class);
+            if(base_class_rules != m_tree.end()){
+                //We have found our base class. Extend it
+
+            }else{
+                m_report_line("Cannot declare a base class after extending it on line %d\n");
+                return;
+            }
+
+        };
+        inline void FileParser::m_save_extended_class_default(const std::string & base_class){
+            //TODO: generate rules based on m_current_access_type, m_current_extended_class, and m_current_class
+            auto base_class_rules = m_tree.find(base_class);
+            if(base_class_rules != m_tree.end()){
+                //We have found our base class. Extend it
+                m_tree[m_current_extended_class] = base_class_rules->second;
+            }else{
+                m_report_line("Cannot declare a base class after extending it on line %d\n");
+                return;
+            }
+        }
+        inline bool FileParser::m_out_of_bounds(void){ return m_get_file_offset() >= m_file_contents.length(); }
+        inline void FileParser::m_set_tentative_file_offset(size_t i){ m_tentative_file_offset = i; }
+        inline void FileParser::m_toggle_file_offset_advance(bool b){
+            m_dont_advance_file_offset = b;
+            if(b){
+                m_set_tentative_file_offset(0);
+            }else{
+                m_file_offset += m_tentative_file_offset;
+            }
+        }
+
+        /* Status and reporting functions */
+        void FileParser::m_report_line(const char* s){ printf(s,m_line_number + 1); }
+
+        inline char FileParser::m_at(size_t offset){ 
+            try{ return m_file_contents.at(offset); }
+            catch(std::out_of_range const& e){ return '\0'; } 
+        }
+        inline char FileParser::m_at(void){ if(m_out_of_bounds()){ return '\0'; } return m_at(m_get_file_offset()); }
+        inline std::string FileParser::m_substr(void){
+            if(m_at() == '\0' || m_out_of_bounds()){
+                return "";
+            }
+            return m_file_contents.substr(m_get_file_offset());
+        }
+        inline void FileParser::m_advance(size_t i){ if(m_out_of_bounds()){ return; } m_increment_file_offset(i); }
+        inline void FileParser::util_print_until(char c){ 
+            if(!print_debug){
+                return;
+            }
+            if(m_out_of_bounds()){ return; }
+            int i=m_get_file_offset(); 
+            while(m_at(i) != c){ std::cout << m_at(i++); }
+        }
+        inline void FileParser::m20(){ if(!print_debug){ return; } 
+            if(m_out_of_bounds()){ dbg("m20: not printing"); return; }
+            std::cout << "[line:" << m_line_number << "]: ";
+            std::cout << m_file_contents.substr(m_get_file_offset(),20) << "\n"; 
+        }
+
     };
 
 };
-
-
