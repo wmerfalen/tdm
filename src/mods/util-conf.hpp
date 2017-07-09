@@ -81,18 +81,25 @@ namespace mods {
                 out << "#include <iostream>\n";
                 unsigned n_space_ctr = 0;
                 for(const auto & nm_space : ::mods::util::text::split(_name_space,"::",8)){
-                    out << "namespace " << nm_space << "{ ";            //open the namespaces
+                    for(unsigned i = n_space_ctr; i > 0; i--){ out << "\t"; }
+                    out << "namespace " << nm_space << "{\n";            //open the namespaces
                     n_space_ctr++;
                 }
-                out << "const unsigned char[] " << var_name << " = {";
+                out << "const unsigned char " << var_name << "[] = {";
                 if(m.is_open()){
                     std::cout << "foo";
                     std::array<char,1024> buf;
                     buf[1023] = '\0';
+                    unsigned ctr = 0;
                     do{
                         m.read((char*)&buf[0],1023);
-                        unsigned ctr = 0;
                         while(buf[ctr] != '\0'){
+                            if(ctr % 30 == 0){
+                                out << "\n";
+                                for(unsigned tabs=1; tabs < n_space_ctr;tabs++){
+                                    out << "\t";
+                                }
+                            }
                             out << "0x" << ::mods::util::conf::tohex(buf[ctr++]).c_str();
                             if(buf[ctr] != '\0'){
                                 out << ",";
@@ -100,9 +107,17 @@ namespace mods {
                         }
                         std::fill(buf.begin(),buf.end(),0);
                     }while(!m.eof());
+                    if(ctr){
+                        out << ",";
+                    }
+                    out << "0x00";
                 }
                 out << "};\n";  //End the char*[] declaration
-                for(unsigned i=0; i < n_space_ctr;i++){ out << "};\n"; } //Close the namespaces
+                for(unsigned i=0; i < n_space_ctr;i++){ 
+                    for(unsigned tabs=1; tabs < n_space_ctr - i;tabs++){
+                        out << "\t";
+                    }
+                    out << "};\n"; } //Close the namespaces
                 out << "#endif\n"; //close the preproccessor
                 m.close();
                 out.close();

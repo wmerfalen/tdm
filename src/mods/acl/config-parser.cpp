@@ -81,13 +81,13 @@ namespace mods {
         }
 
         int FileParser::m_store_extends(std::string & klass_name){
-
             dbg("Storing extends...");
             return 0;
         }
 
         int FileParser::m_block(void){
-            if(m_out_of_bounds()){ return 1;}
+            dbg("m_block calling m_out_of_bounds");
+            if(m_out_of_bounds()){ return 1; }
             if(m_comment()){
                 dbg("m_block recursion call [found comment]");
                 return m_block();
@@ -96,12 +96,25 @@ namespace mods {
                 m_report_line("Expected class on line %d\n"); 
                 return -1;
             }
-            while(m_access_rules() > 0){}
+            int access_rules;
+            do{
+                access_rules = m_access_rules();
+                if(access_rules == 0){  /* we've reached the end of the file */
+                    return 1;
+                }else if(access_rules < 0){
+                    m_report_line("Expected access rules on line %d\n");
+                    return -1;
+                }
+            }while(access_rules > 0);
             return m_block();
         }
 
         int FileParser::m_access_rules(void){
-            if(m_out_of_bounds()){ return 0;}
+            dbg("m_access_rules calling moob");
+            if(m_out_of_bounds()){ 
+                dbg("m_access_rules");
+                return 0;
+            }
             m20();
             dbg(m_get_file_offset());
             auto t_expect = m_expect<std::tuple<int,bool>>(E_ACCESS_TYPE);
@@ -283,11 +296,14 @@ namespace mods {
         }
 
         int FileParser::m_move_after(char c){
+            dbg("move after");
+            if(m_out_of_bounds()){ dbg("moving after failed (oob)"); return 0; }
             SKIP_WHITESPACE();
             while(m_get_file_offset() < m_file_contents.length()){
                 if(m_at() == '\n'){
                     m_line_number++;
                 }
+                dbg("m_at move after");
                 if(m_at() == c){
                     m_increment_file_offset(1);
                     return 1;
@@ -343,6 +359,7 @@ namespace mods {
         }
 
         int FileParser::m_list_start(void){
+            dbg("m_at list start");
             if(m_at() == '['){
                m_move_after('[');
                return 1; 
@@ -351,6 +368,7 @@ namespace mods {
         }
 
         int FileParser::m_list_end(void){
+            dbg("m_at list end");
             if(m_at() == ']'){
                 m_move_after(']');
                 return 1;
@@ -389,6 +407,7 @@ namespace mods {
             SKIP_WHITESPACE();
             dbg("Skipped whitespace (in comment)");
             m20();
+            dbg("m_at comment");
             if(m_at() == '#'){
                 dbg("Comment found");
                 m_move_after('\n');
@@ -399,6 +418,7 @@ namespace mods {
 
         int FileParser::m_arrow(void){
             int ret = 0;
+            dbg("m_at m arrow");
             if(m_at() == '-' && 
                     m_at(m_get_file_offset() +1) == '>'){
                 m_increment_file_offset(2);
@@ -435,6 +455,7 @@ namespace mods {
 
         char FileParser::m_next_char(){
             SKIP_WHITESPACE();
+            dbg("m_at m_next_char");
             return m_at();
         }
 
@@ -470,7 +491,12 @@ namespace mods {
         }
 
         void FileParser::m_nextline(void){
-            while(m_at() != '\n'){m_increment_file_offset(1); }
+            dbg("m_at nextline");
+            char mat = '\0';
+            do{
+                mat = m_at();
+                m_increment_file_offset(1);
+            }while(mat != '\0' && mat != '\n');
             m_line_number++;
         }
 
@@ -544,7 +570,7 @@ namespace mods {
         }
 
         size_t FileParser::m_get_file_offset(){
-            return m_increment_file_offset(0);
+            return m_file_offset;
         }
 
 
@@ -660,7 +686,14 @@ namespace mods {
                 return;
             }
         }
-        inline bool FileParser::m_out_of_bounds(void){ return m_get_file_offset() >= m_file_contents.length(); }
+        inline bool FileParser::m_out_of_bounds(void){ 
+            dbg("File offset is: " << m_get_file_offset());
+            dbg("File length: " << m_file_contents.length());
+            if(m_get_file_offset() >= m_file_contents.length()){
+                return true;
+            }
+            return !m_still_have_content();
+        }
         inline void FileParser::m_set_tentative_file_offset(size_t i){ m_tentative_file_offset = i; }
         inline void FileParser::m_toggle_file_offset_advance(bool b){
             m_dont_advance_file_offset = b;
@@ -678,26 +711,53 @@ namespace mods {
             try{ return m_file_contents.at(offset); }
             catch(std::out_of_range const& e){ return '\0'; } 
         }
-        inline char FileParser::m_at(void){ if(m_out_of_bounds()){ return '\0'; } return m_at(m_get_file_offset()); }
+        inline char FileParser::m_at(void){ 
+            dbg("m_at original function"); 
+            if(m_out_of_bounds()){ return '\0'; } 
+            dbg("trying fallback m_at");
+            return m_at(m_get_file_offset()); 
+        }
         inline std::string FileParser::m_substr(void){
+            dbg("m_substr");
             if(m_at() == '\0' || m_out_of_bounds()){
                 return "";
             }
             return m_file_contents.substr(m_get_file_offset());
         }
-        inline void FileParser::m_advance(size_t i){ if(m_out_of_bounds()){ return; } m_increment_file_offset(i); }
+        inline void FileParser::m_advance(size_t i){ dbg("m_advance"); if(m_out_of_bounds()){ return; } m_increment_file_offset(i); }
         inline void FileParser::util_print_until(char c){ 
             if(!print_debug){
                 return;
             }
+            dbg("util print until");
             if(m_out_of_bounds()){ return; }
             int i=m_get_file_offset(); 
             while(m_at(i) != c){ std::cout << m_at(i++); }
         }
         inline void FileParser::m20(){ if(!print_debug){ return; } 
+            dbg("m20");
             if(m_out_of_bounds()){ dbg("m20: not printing"); return; }
             std::cout << "[line:" << m_line_number << "]: ";
             std::cout << m_file_contents.substr(m_get_file_offset(),20) << "\n"; 
+        }
+        inline bool FileParser::m_still_have_content(){
+            auto offset = m_get_file_offset();
+            std::cout << "Tentative: " << m_tentative_file_offset << "| real: " << offset << " | mfc.length: " << m_file_contents.length() << "\n";
+            if(offset > m_file_contents.length()){
+                dbg("mshc - offset > mfc.len");
+                return false;
+            }
+            while(offset < m_file_contents.length()){
+                std::cout << (int)m_file_contents[offset] << "\n";
+                if(!isspace(m_file_contents[offset])){
+                    std::cout << "isspace: " << m_file_contents[offset] << "\n";
+                    dbg("still have content");
+                    return true;
+                }
+                offset++;
+            }
+            dbg("no content left");
+            return false;
         }
 
     };

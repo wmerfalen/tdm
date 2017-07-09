@@ -27,10 +27,10 @@
         for(auto i: m){ std::cout << prefix << i << "\n"; }\
     }
 #define SKIP_WHITESPACE() \
-    while(isspace(m_at())){\
+    while(!m_out_of_bounds() && isspace(m_at())){\
+        dbg("m_at SKIP");\
         if(m_at() == '\n'){ m_line_number++; }\
         m_increment_file_offset(1);\
-        if(m_get_file_offset() >= m_file_contents.length()){ break; }\
     }
 
 
@@ -188,6 +188,7 @@ namespace mods {
                 inline char m_at(void);
                 inline std::string m_substr(void);
                 inline void m_advance(size_t i);
+                inline bool m_still_have_content();
                 /* Purely utility functions for development */
                 inline void util_print_until(char c); 
                 inline void m20();
