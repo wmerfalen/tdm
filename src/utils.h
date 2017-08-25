@@ -14,11 +14,8 @@
 extern struct weather_data weather_info;
 extern FILE *logfile;
 
-#define log			basic_mud_log
-
 #define READ_SIZE	256
 
-/* public functions in utils.c */
 void	basic_mud_log(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
 void	basic_mud_vlog(const char *format, va_list args);
 int	touch(const char *path);
@@ -35,6 +32,9 @@ struct time_info_data *age(struct char_data *ch);
 int	num_pc_in_room(struct room_data *room);
 void	core_dump_real(const char *, int);
 int	room_is_dark(room_rnum room);
+
+void log(const char* format, ...);
+
 
 #define core_dump()		core_dump_real(__FILE__, __LINE__)
 
@@ -92,7 +92,6 @@ void	gain_condition(struct char_data *ch, int condition, int value);
 void	check_idling(struct char_data *ch);
 void	point_update(void);
 void	update_pos(struct char_data *victim);
-
 
 /* various constants *****************************************************/
 

@@ -112,6 +112,9 @@ namespace mods {
                 void dump_tree(void);
                 inline void dump_rules(rule r);
                 bool print_debug;
+                bool allowed(const char* role,const char* file_or_command){
+                  return m_tree[role][m_command_map[file_or_command]];
+                }
             private:
                 int m_accept_regex(const std::string &,std::vector<std::string>&);
                 int m_accept_regex(const std::string &);

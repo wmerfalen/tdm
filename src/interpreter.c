@@ -10,11 +10,14 @@
 
 #define __INTERPRETER_C__
 
+#include "globals.hpp"
+
 #include "conf.h"
 #include "sysdep.h"
 
 #include "structs.h"
 #include "comm.h"
+
 #include "interpreter.h"
 #include "db.h"
 #include "utils.h"
@@ -22,7 +25,6 @@
 #include "handler.h"
 #include "mail.h"
 #include "screen.h"
-
 
 /* external variables */
 extern room_rnum r_mortal_start_room;
@@ -60,6 +62,7 @@ void perform_complex_alias(struct txt_q *input_q, char *orig, struct alias_data 
 int perform_alias(struct descriptor_data *d, char *orig, size_t maxlen);
 int reserved_word(char *argument);
 int _parse_name(char *arg, char *name);
+
 
 /* prototypes for all do_x functions. */
 ACMD(do_action);

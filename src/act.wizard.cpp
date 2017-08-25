@@ -60,12 +60,12 @@ ACMD(do_at);
 ACMD(do_goto);
 ACMD(do_trans);
 ACMD(do_teleport);
+ACMD(do_shutdown);
 ACMD(do_vnum);
 void do_stat_room(struct char_data *ch);
 void do_stat_object(struct char_data *ch, struct obj_data *j);
 void do_stat_character(struct char_data *ch, struct char_data *k);
 ACMD(do_stat);
-ACMD(do_shutdown);
 void stop_snooping(struct char_data *ch);
 ACMD(do_snoop);
 ACMD(do_switch);
@@ -826,16 +826,7 @@ ACMD(do_stat)
 }
 
 
-mods::acl::Lambda do_shutdown([&](struct char_data* ch,char* argument,int cmd,int subcmd){
-  //The ACMD macro expands to: void do_shutdown(struct char_data *ch,char* argument,int cmd,int subcmd)
-  //=================================================================================================== 
-  /*
-   * Grab ACL object SINGLETON
-   * Check if current character can call this function
-   *
-   * mods::alc::rules* acl = mods::acl::rules::getInstance();
-   */
-  if(!mods::globals::acl_allowed(ch,"shutdown",__FILE__,cmd,argument,subcmd)) return; 
+ACL_ACMD(do_shutdown)
   char arg[MAX_INPUT_LENGTH];
 
   if (subcmd != SCMD_SHUTDOWN) {
@@ -865,7 +856,7 @@ mods::acl::Lambda do_shutdown([&](struct char_data* ch,char* argument,int cmd,in
     circle_shutdown = 1;
   } else
     send_to_char(ch, "Unknown shutdown option.\r\n");
-},__FILE__,"do_shutdown");
+}
 
 
 void snoop_check(struct char_data *ch)

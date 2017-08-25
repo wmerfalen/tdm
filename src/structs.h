@@ -8,6 +8,9 @@
 *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
 ************************************************************************ */
 
+#ifndef __CIRCLEMUD_STRUCTS_HEADER__
+#define __CIRCLEMUD_STRUCTS_HEADER__
+
 /*
  * Intended use of this macro is to allow external packages to work with
  * a variety of CircleMUD versions without modifications.  For instance,
@@ -1101,3 +1104,5 @@ struct guild_info_type {
   room_vnum guild_room;
   int direction;
 };
+
+#endif

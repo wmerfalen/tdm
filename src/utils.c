@@ -30,6 +30,13 @@ struct time_info_data *real_time_passed(time_t t2, time_t t1);
 struct time_info_data *mud_time_passed(time_t t2, time_t t1);
 void prune_crlf(char *txt);
 
+void log(const char* format,...){
+    va_list args;
+
+    va_start(args, format);
+    basic_mud_vlog(format, args);
+    va_end(args);
+}
 
 /* creates a random number in interval [from;to] */
 int rand_number(int from, int to)

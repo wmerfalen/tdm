@@ -10,6 +10,7 @@
 
 #define __COMM_C__
 
+#include "globals.hpp"
 #include "conf.h"
 #include "sysdep.h"
 
@@ -69,6 +70,14 @@
 #ifndef INVALID_SOCKET
 #define INVALID_SOCKET (-1)
 #endif
+
+/**
+ *  	-=[ C++ Mods ]=- 
+ */
+	
+#include "mods/acl/config-parser.hpp" 		/** Access Control List */
+
+/**  --=[ End C++ Mods ]=- **/
 
 /* externs */
 extern struct ban_list_element *ban_list;
@@ -205,6 +214,7 @@ void gettimeofday(struct timeval *t, struct timezone *dummy)
 
 int main(int argc, char **argv)
 {
+	mods::globals::init();
   ush_int port;
   int pos = 1;
   const char *dir;

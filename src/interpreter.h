@@ -7,9 +7,12 @@
 *  Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University *
 *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
 ************************************************************************ */
+#include "globals.hpp"
 
-#define ACMD(name)  \
-   void name(struct char_data *ch, char *argument, int cmd, int subcmd)
+#define ACMD(name) void name(struct char_data *ch, char *argument, int cmd, int subcmd)
+#define ACL_ACMD(name) void name(struct char_data* ch, char *argument, int cmd, int subcmd){\
+	if(!mods::globals::acl_allowed(ch,#name,__FILE__,cmd,argument,subcmd)) return;
+
 
 ACMD(do_move);
 

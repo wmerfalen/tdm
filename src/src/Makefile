@@ -3,7 +3,7 @@
 #
 
 # C compiler to use
-CC = g++ -std=c++14 
+CC = gcc
 
 # Path to cxref utility
 CXREF = cxref
@@ -30,15 +30,15 @@ OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
 	graph.o handler.o house.o interpreter.o limits.o magic.o mail.o \
 	mobact.o modify.o objsave.o olc.o random.o shop.o spec_assign.o \
 	spec_procs.o spell_parser.o spells.o utils.o weather.o \
-	bsd-snprintf.o globals.o acl.o
+	bsd-snprintf.o
 
 CXREF_FILES = act.comm.c act.informative.c act.item.c act.movement.c \
-	act.offensive.c act.other.c act.social.c act.wizard.cpp alias.c ban.c \
+	act.offensive.c act.other.c act.social.c act.wizard.c alias.c ban.c \
 	boards.c castle.c class.c comm.c config.c constants.c db.c fight.c \
 	graph.c handler.c house.c interpreter.c limits.c magic.c mail.c \
 	mobact.c modify.c objsave.c olc.c random.c shop.c spec_assign.c\
 	spec_procs.c spell_parser.c spells.c utils.c weather.c \
-	bsd-snprintf.c globals.cpp mods/acl/config-parser.cpp
+	bsd-snprintf.c
 
 default: all
 
@@ -97,10 +97,6 @@ ref:
 # Dependencies for the object files (automagically generated with
 # gcc -MM)
 
-acl.o: mods/acl/config-parser.cpp
-	$(CC) -c $(CFLAGS) mods/acl/config-parser.cpp -o acl.o
-globals.o: globals.hpp 
-	$(CC) -c $(CFLAGS) globals.cpp 
 act.comm.o: act.comm.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h \
   handler.h db.h screen.h
 	$(CC) -c $(CFLAGS) act.comm.c
@@ -122,10 +118,9 @@ act.other.o: act.other.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h 
 act.social.o: act.social.c conf.h sysdep.h structs.h utils.h comm.h \
   interpreter.h handler.h db.h spells.h
 	$(CC) -c $(CFLAGS) act.social.c
-act.wizard.o: act.wizard.cpp conf.h sysdep.h structs.h utils.h comm.h \
-  interpreter.h handler.h db.h spells.h house.h screen.h constants.h \
-  globals.hpp
-	$(CC) -c $(CFLAGS) act.wizard.cpp
+act.wizard.o: act.wizard.c conf.h sysdep.h structs.h utils.h comm.h \
+  interpreter.h handler.h db.h spells.h house.h screen.h constants.h
+	$(CC) -c $(CFLAGS) act.wizard.c
 alias.o: alias.c conf.h sysdep.h structs.h utils.h interpreter.h db.h
 	$(CC) -c $(CFLAGS) alias.c
 ban.o: ban.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h db.h
