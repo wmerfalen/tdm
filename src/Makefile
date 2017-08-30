@@ -33,7 +33,7 @@ OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
 	bsd-snprintf.o globals.o acl.o
 
 CXREF_FILES = act.comm.c act.informative.c act.item.c act.movement.c \
-	act.offensive.c act.other.c act.social.c act.wizard.cpp alias.c ban.c \
+	act.offensive.cpp act.other.c act.social.c act.wizard.cpp alias.c ban.c \
 	boards.c castle.c class.c comm.c config.c constants.c db.c fight.c \
 	graph.c handler.c house.c interpreter.c limits.c magic.c mail.c \
 	mobact.c modify.c objsave.c olc.c random.c shop.c spec_assign.c\
@@ -113,9 +113,9 @@ act.item.o: act.item.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h \
 act.movement.o: act.movement.c conf.h sysdep.h structs.h utils.h comm.h \
   interpreter.h handler.h db.h spells.h house.h constants.h
 	$(CC) -c $(CFLAGS) act.movement.c
-act.offensive.o: act.offensive.c conf.h sysdep.h structs.h utils.h comm.h \
+act.offensive.o: act.offensive.cpp conf.h sysdep.h structs.h utils.h comm.h \
   interpreter.h handler.h db.h spells.h
-	$(CC) -c $(CFLAGS) act.offensive.c
+	$(CC) -c $(CFLAGS) act.offensive.cpp
 act.other.o: act.other.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h \
   handler.h db.h spells.h screen.h house.h constants.h
 	$(CC) -c $(CFLAGS) act.other.c

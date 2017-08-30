@@ -188,6 +188,11 @@ ACMD(do_wizutil);
 ACMD(do_write);
 ACMD(do_zreset);
 
+ACMD(do_rnum);
+
+/* Military actions */
+ACMD(do_scan);
+
 
 /* This is the Master Command List(tm).
 
@@ -425,6 +430,7 @@ cpp_extern const struct command_info cmd_info[] = {
   { "rescue"   , POS_FIGHTING, do_rescue   , 1, 0 },
   { "restore"  , POS_DEAD    , do_restore  , LVL_GOD, 0 },
   { "return"   , POS_DEAD    , do_return   , 0, 0 },
+  { "rnum"    , POS_STANDING, do_rnum     , 0, 0 },
   { "roll"     , POS_RESTING , do_action   , 0, 0 },
   { "roomflags", POS_DEAD    , do_gen_tog  , LVL_IMMORT, SCMD_ROOMFLAGS },
   { "ruffle"   , POS_STANDING, do_action   , 0, 0 },
@@ -443,6 +449,7 @@ cpp_extern const struct command_info cmd_info[] = {
   { "show"     , POS_DEAD    , do_show     , LVL_IMMORT, 0 },
   { "shrug"    , POS_RESTING , do_action   , 0, 0 },
   { "shutdow"  , POS_DEAD    , do_shutdown , LVL_IMPL, 0 },
+  { "snipe" , POS_RESTING    , do_scan , 0, 0 },
   { "shutdown" , POS_DEAD    , do_shutdown , LVL_IMPL, SCMD_SHUTDOWN },
   { "sigh"     , POS_RESTING , do_action   , 0, 0 },
   { "sing"     , POS_RESTING , do_action   , 0, 0 },

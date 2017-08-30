@@ -19,6 +19,7 @@
 #include "handler.h"
 #include "db.h"
 #include "spells.h"
+#include <array>
 
 /* extern variables */
 extern int pk_allowed;
@@ -27,6 +28,7 @@ extern int pk_allowed;
 void raw_kill(struct char_data *ch);
 void check_killer(struct char_data *ch, struct char_data *vict);
 int compute_armor_class(struct char_data *ch);
+void los_scan(struct char_data* ch,int depth);
 
 /* local functions */
 ACMD(do_assist);
@@ -38,6 +40,85 @@ ACMD(do_flee);
 ACMD(do_bash);
 ACMD(do_rescue);
 ACMD(do_kick);
+
+/* Debugging type stuff */
+ACMD(do_rnum);
+
+/* Military actions */
+ACMD(do_scan);
+
+
+ACMD(do_rnum){
+	send_to_char(ch, std::to_string(ch->in_room).c_str());
+}
+ACMD(do_scan){
+	/* Check if sniper rifle is wielded */
+	std::array<char,MAX_INPUT_LENGTH> arg;
+	std::fill(arg.begin(),arg.end(),0);
+	one_argument(argument,(char*)&arg[0]);
+	if(!arg[0])
+		send_to_char(ch, "Whom do you wish to snipe?\r\n");
+	los_scan(ch,3);
+}
+
+#define stc(m) send_to_char(ch,(std::string(m) + std::string("\r\n")).c_str()); std::cerr << m << "\n"; std::cerr.flush();
+#define istc(m) send_to_char(ch,(std::to_string(m) + std::string("\r\n")).c_str()); std::cerr << m << "\n"; std::cerr.flush();
+void los_scan(struct char_data* ch,int depth){
+	/* Check if enemy is within 'depth' rooms n,e,s,w,u,d */
+	for(auto i_d : {NORTH,EAST,SOUTH,WEST,UP,DOWN}){
+		auto in_room = IN_ROOM(ch);
+		if(in_room == NOWHERE || in_room < 0){ stc("Invalid room id or nowher"); continue; }
+		auto current_exit = EXIT(ch,i_d);
+		auto next_room = 0;
+		if(current_exit){
+			stc("okay");
+			next_room = current_exit->to_room;
+			istc(next_room);
+		}else{
+			stc("not okay");
+			continue;
+		}
+		for(auto recursive_depth = depth;recursive_depth > -1;recursive_depth--){
+			stc("recursive depth");
+			if(next_room != NOWHERE && world[next_room].people){
+				stc("people okay");
+				//TODO uncomment this stuff and make it work
+				/*
+				if (EXIT_FLAGGED(EXIT(ch, i_d), EX_CLOSED)){
+					break;
+				}
+				*/
+				auto room_dir = world[next_room].dir_option[i_d];
+				auto room_id = 0;
+				if(room_dir && room_dir->general_description){
+					std::string s_dir = "";
+					room_id = room_dir->to_room;
+					stc("room_dir okay");
+					stc(room_dir->general_description);
+					istc(room_id);
+					switch(i_d){
+						case NORTH: s_dir = "[north]"; break;
+						case SOUTH: s_dir = "[south]"; break;
+						case EAST: s_dir = "[east]"; break;
+						case WEST: s_dir = "[west]"; break;
+						case UP: s_dir = "[up]"; break;
+						case DOWN: s_dir = "[down]"; break;
+					}
+					s_dir += ": ";
+					if(auto people = world[room_id].people){
+						s_dir += std::string("->") + std::string(people->player.name) + "\r\n\t ";
+					}
+					send_to_char(ch,(std::to_string(room_id) + s_dir).c_str());
+					next_room = room_dir->to_room;
+				}else{
+					break;
+				}
+			}else{
+				stc("people not okay");
+			}
+		}
+	}
+}
 
 
 ACMD(do_assist)
@@ -449,3 +530,4 @@ ACMD(do_kick)
 
   WAIT_STATE(ch, PULSE_VIOLENCE * 3);
 }
+
