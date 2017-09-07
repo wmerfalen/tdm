@@ -51,8 +51,8 @@ ACMD(do_scan);
 ACMD(do_rnum){
 	send_to_char(ch, std::to_string(ch->in_room).c_str());
 }
-ACMD(do_scan){
-	/* Check if sniper rifle is wielded */
+ACMD(do_snipe){
+	/* TODO: Check if sniper rifle is wielded */
 	std::array<char,MAX_INPUT_LENGTH> arg;
 	std::fill(arg.begin(),arg.end(),0);
 	one_argument(argument,(char*)&arg[0]);
@@ -61,63 +61,73 @@ ACMD(do_scan){
 	los_scan(ch,3);
 }
 
+ACMD(do_scan){
+	los_scan(ch,3);
+}
+
 #define stc(m) send_to_char(ch,(std::string(m) + std::string("\r\n")).c_str()); std::cerr << m << "\n"; std::cerr.flush();
 #define istc(m) send_to_char(ch,(std::to_string(m) + std::string("\r\n")).c_str()); std::cerr << m << "\n"; std::cerr.flush();
 void los_scan(struct char_data* ch,int depth){
 	/* Check if enemy is within 'depth' rooms n,e,s,w,u,d */
+	std::string s_dir;
 	for(auto i_d : {NORTH,EAST,SOUTH,WEST,UP,DOWN}){
 		auto in_room = IN_ROOM(ch);
-		if(in_room == NOWHERE || in_room < 0){ stc("Invalid room id or nowher"); continue; }
+		if(in_room == NOWHERE || in_room < 0){ continue; }
 		auto current_exit = EXIT(ch,i_d);
 		auto next_room = 0;
 		if(current_exit){
-			stc("okay");
 			next_room = current_exit->to_room;
-			istc(next_room);
 		}else{
-			stc("not okay");
 			continue;
 		}
-		for(auto recursive_depth = depth;recursive_depth > -1;recursive_depth--){
-			stc("recursive depth");
-			if(next_room != NOWHERE && world[next_room].people){
-				stc("people okay");
-				//TODO uncomment this stuff and make it work
-				/*
-				if (EXIT_FLAGGED(EXIT(ch, i_d), EX_CLOSED)){
-					break;
-				}
-				*/
-				auto room_dir = world[next_room].dir_option[i_d];
-				auto room_id = 0;
-				if(room_dir && room_dir->general_description){
-					std::string s_dir = "";
-					room_id = room_dir->to_room;
-					stc("room_dir okay");
-					stc(room_dir->general_description);
-					istc(room_id);
-					switch(i_d){
-						case NORTH: s_dir = "[north]"; break;
-						case SOUTH: s_dir = "[south]"; break;
-						case EAST: s_dir = "[east]"; break;
-						case WEST: s_dir = "[west]"; break;
-						case UP: s_dir = "[up]"; break;
-						case DOWN: s_dir = "[down]"; break;
-					}
-					s_dir += ": ";
-					if(auto people = world[room_id].people){
-						s_dir += std::string("->") + std::string(people->player.name) + "\r\n\t ";
-					}
-					send_to_char(ch,(std::to_string(room_id) + s_dir).c_str());
-					next_room = room_dir->to_room;
-				}else{
-					break;
-				}
-			}else{
-				stc("people not okay");
-			}
+		switch(i_d){
+			case NORTH: s_dir += "To the north"; break;
+			case SOUTH: s_dir += "To the south"; break;
+			case EAST: s_dir += "To the east"; break;
+			case WEST: s_dir += "To the west"; break;
+			case UP: s_dir += "Looking up"; break;
+			case DOWN: s_dir += "Looking down"; break;
 		}
+		s_dir += " ";
+		auto room_dir = current_exit;
+		std::vector<std::string> vec_room_list;
+		for(auto recursive_depth = depth;recursive_depth > -1;--recursive_depth){
+			auto room_id = 0;
+			if(world[next_room].people){
+				if(room_dir){
+					if (EXIT_FLAGGED(room_dir, EX_CLOSED)){
+						break;
+					}
+					room_id = room_dir->to_room;
+					if(auto people = world[room_id].people){
+						for(; people->next_in_room; people = people->next_in_room){
+							vec_room_list.push_back(std::string(people->player.name));
+						}
+					}
+				}
+			}
+			room_dir = world[next_room].dir_option[i_d];
+			if(!room_dir){ break; }
+			next_room = room_dir->to_room;
+			if(next_room == NOWHERE){ break; }
+		}
+		if(vec_room_list.size() == 0){
+			s_dir += " you see nothing interesting...\r\n";
+		}else{
+			s_dir += " you see ";
+			unsigned short i=0;
+			for(auto v: vec_room_list){
+				s_dir += v;
+				++i;
+				if(i + 1 < vec_room_list.size()){
+					s_dir += ", ";
+				}
+			}
+			s_dir += "\r\n";
+		}
+		vec_room_list.clear();
 	}
+	send_to_char(ch,s_dir.c_str());
 }
 
 

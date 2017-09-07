@@ -449,7 +449,7 @@ cpp_extern const struct command_info cmd_info[] = {
   { "show"     , POS_DEAD    , do_show     , LVL_IMMORT, 0 },
   { "shrug"    , POS_RESTING , do_action   , 0, 0 },
   { "shutdow"  , POS_DEAD    , do_shutdown , LVL_IMPL, 0 },
-  { "snipe" , POS_RESTING    , do_scan , 0, 0 },
+  { "scan" 		, POS_RESTING    , do_scan , 0, 0 },
   { "shutdown" , POS_DEAD    , do_shutdown , LVL_IMPL, SCMD_SHUTDOWN },
   { "sigh"     , POS_RESTING , do_action   , 0, 0 },
   { "sing"     , POS_RESTING , do_action   , 0, 0 },
