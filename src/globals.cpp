@@ -2,12 +2,15 @@
 #define __CIRCLEMUD_SRC_MODS_GLOBALS_SOURCE__ 1
 
 #include "globals.hpp"
+//#include "mods/players/search.hpp"
+#include <map>
 
 namespace mods {
     namespace globals {
 		std::unique_ptr<mods::acl::FileParser> config;
 		bool acl_good = false;
 		int acl_parse_code = 0;
+		std::map<int,char_data> players;
 		bool acl_allowed(struct char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd){
 			return false;
 		}
@@ -22,6 +25,7 @@ namespace mods {
 			}else{
 				acl_good = true;
 			}
+//			player_search = std::make_unique<mods::players::search>();
 		}
     };
 

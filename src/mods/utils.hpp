@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-std::string operator "" _s(const char* s){
+std::string operator "" _s(const char* s,long unsigned int i){
 	return std::string(s);
 }
 namespace mods {

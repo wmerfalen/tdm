@@ -44,7 +44,7 @@ default: all
 
 all: .accepted
 	$(MAKE) $(BINDIR)/circle
-	$(MAKE) utils
+	#$(MAKE) utils
 
 .accepted:
 	@./licheck less

@@ -20,6 +20,8 @@
 #include "db.h"
 #include "spells.h"
 #include <array>
+#include "mods/utils.hpp"
+#include "globals.hpp"
 
 /* extern variables */
 extern int pk_allowed;
@@ -28,7 +30,7 @@ extern int pk_allowed;
 void raw_kill(struct char_data *ch);
 void check_killer(struct char_data *ch, struct char_data *vict);
 int compute_armor_class(struct char_data *ch);
-void los_scan(struct char_data* ch,int depth);
+void los_scan(struct char_data* ch,int depth,std::vector<int>*);
 
 /* local functions */
 ACMD(do_assist);
@@ -55,21 +57,74 @@ ACMD(do_snipe){
 	/* TODO: Check if sniper rifle is wielded */
 	std::array<char,MAX_INPUT_LENGTH> arg;
 	std::fill(arg.begin(),arg.end(),0);
+	std::vector<int> scan;
 	one_argument(argument,(char*)&arg[0]);
 	if(!arg[0])
 		send_to_char(ch, "Whom do you wish to snipe?\r\n");
-	los_scan(ch,3);
+	los_scan(ch,3,&scan);
+	for(auto player_index : scan){
+		auto player = mods::globals::players[player_index];
+		if(strcmp(player.player.name,static_cast<char*>(&arg[0])) == 0){
+			send_to_char(ch,"Found!");
+		}
+	}
 }
 
 ACMD(do_scan){
-	los_scan(ch,3);
+	//los_scan(ch,3,&scan);
+	/*
+	std::string line = "To the north";
+	if(scan[NORTH].size() == 0){ line += " you see nothing special\r\n"; }
+	else{
+		for(auto i : scan[NORTH]){
+			line += " you see "_s + i + "\r\n";
+		}
+	}
+	line += "To the east";
+	if(scan[EAST].size() == 0){ line += " you see nothing special\r\n"; }
+	else
+	for(auto i : scan[EAST]){
+		line += " you see "_s + i + "\r\n";
+		
+	}
+	line += "To the west";
+	if(scan[WEST].size() == 0){ line += " you see nothing special\r\n"; }
+	else
+	for(auto i : scan[WEST]){
+		line += " you see "_s + i + "\r\n";
+		
+	}
+	line += "To the south";
+	if(scan[SOUTH].size() == 0){ line += " you see nothing special\r\n"; }
+	else
+	for(auto i : scan[SOUTH]){
+		line += " you see "_s + i + "\r\n";
+		
+	}
+	line += "Looking up";
+	if(scan[UP].size() == 0){ line += " you see nothing special\r\n"; }
+	else
+	for(auto i : scan[UP]){
+		line += " you see "_s + i + "\r\n";
+		
+	}
+	line += "Looking down";
+	if(scan[DOWN].size() == 0){ line += " you see nothing special\r\n"; }
+	else
+	for(auto i : scan[DOWN]){
+		line += " you see "_s + i + "\r\n";
+		
+	}
+	send_to_char(ch,line.c_str());
+	*/
 }
 
 #define stc(m) send_to_char(ch,(std::string(m) + std::string("\r\n")).c_str()); std::cerr << m << "\n"; std::cerr.flush();
 #define istc(m) send_to_char(ch,(std::to_string(m) + std::string("\r\n")).c_str()); std::cerr << m << "\n"; std::cerr.flush();
-void los_scan(struct char_data* ch,int depth){
+void los_scan(struct char_data* ch,int depth,std::vector<int>* vec_room_list){
 	/* Check if enemy is within 'depth' rooms n,e,s,w,u,d */
 	std::string s_dir;
+	
 	for(auto i_d : {NORTH,EAST,SOUTH,WEST,UP,DOWN}){
 		auto in_room = IN_ROOM(ch);
 		if(in_room == NOWHERE || in_room < 0){ continue; }
@@ -80,17 +135,8 @@ void los_scan(struct char_data* ch,int depth){
 		}else{
 			continue;
 		}
-		switch(i_d){
-			case NORTH: s_dir += "To the north"; break;
-			case SOUTH: s_dir += "To the south"; break;
-			case EAST: s_dir += "To the east"; break;
-			case WEST: s_dir += "To the west"; break;
-			case UP: s_dir += "Looking up"; break;
-			case DOWN: s_dir += "Looking down"; break;
-		}
 		s_dir += " ";
 		auto room_dir = current_exit;
-		std::vector<std::string> vec_room_list;
 		for(auto recursive_depth = depth;recursive_depth > -1;--recursive_depth){
 			auto room_id = 0;
 			if(world[next_room].people){
@@ -101,7 +147,7 @@ void los_scan(struct char_data* ch,int depth){
 					room_id = room_dir->to_room;
 					if(auto people = world[room_id].people){
 						for(; people->next_in_room; people = people->next_in_room){
-							vec_room_list.push_back(std::string(people->player.name));
+							vec_room_list->emplace_back(people->pfilepos);
 						}
 					}
 				}
@@ -111,23 +157,7 @@ void los_scan(struct char_data* ch,int depth){
 			next_room = room_dir->to_room;
 			if(next_room == NOWHERE){ break; }
 		}
-		if(vec_room_list.size() == 0){
-			s_dir += " you see nothing interesting...\r\n";
-		}else{
-			s_dir += " you see ";
-			unsigned short i=0;
-			for(auto v: vec_room_list){
-				s_dir += v;
-				++i;
-				if(i + 1 < vec_room_list.size()){
-					s_dir += ", ";
-				}
-			}
-			s_dir += "\r\n";
-		}
-		vec_room_list.clear();
 	}
-	send_to_char(ch,s_dir.c_str());
 }
 
 
