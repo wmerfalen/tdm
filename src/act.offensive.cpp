@@ -26,11 +26,15 @@
 /* extern variables */
 extern int pk_allowed;
 
+typedef char_player_data vec_player_data_element;
+typedef std::vector<vec_player_data_element> vec_player_data; 
 /* extern functions */
 void raw_kill(struct char_data *ch);
 void check_killer(struct char_data *ch, struct char_data *vict);
 int compute_armor_class(struct char_data *ch);
-void los_scan(struct char_data* ch,int depth,std::vector<int>*);
+void los_scan(struct char_data* ch,int depth,vec_player_data*);
+typedef std::function<void (room_rnum,int,vec_player_data_element)> los_scan_foreach_callback;
+void los_scan_foreach(struct char_data* ch,int depth,los_scan_foreach_callback);
 
 /* local functions */
 ACMD(do_assist);
@@ -57,71 +61,48 @@ ACMD(do_snipe){
 	/* TODO: Check if sniper rifle is wielded */
 	std::array<char,MAX_INPUT_LENGTH> arg;
 	std::fill(arg.begin(),arg.end(),0);
-	std::vector<int> scan;
+	vec_player_data scan;
 	one_argument(argument,(char*)&arg[0]);
 	if(!arg[0])
 		send_to_char(ch, "Whom do you wish to snipe?\r\n");
 	los_scan(ch,3,&scan);
-	for(auto player_index : scan){
-		auto player = mods::globals::players[player_index];
-		if(strcmp(player.player.name,static_cast<char*>(&arg[0])) == 0){
-			send_to_char(ch,"Found!");
+	for(auto player : scan){
+		if(mods::util::fuzzy_match(static_cast<char*>(&arg[0]),player.name)){
+			/* Check ammo */
+			send_to_char(ch,(std::string("You attacked ") + player.name).c_str());
 		}
 	}
 }
 
 ACMD(do_scan){
-	//los_scan(ch,3,&scan);
-	/*
-	std::string line = "To the north";
-	if(scan[NORTH].size() == 0){ line += " you see nothing special\r\n"; }
-	else{
-		for(auto i : scan[NORTH]){
-			line += " you see "_s + i + "\r\n";
+	vec_player_data scan;
+	los_scan_foreach(ch,3,[ch](room_rnum _room_id,int _dir,vec_player_data_element _ele){
+		std::string line;
+		switch(_dir){
+			case NORTH: line += "[north]";break;
+			case SOUTH: line += "[south]";break;
+			case EAST: line += "[east]";break;
+			case WEST: line += "[west]";break;
+			case UP: line += "[up]";break;
+			case DOWN: line += "[down]";break;
 		}
-	}
-	line += "To the east";
-	if(scan[EAST].size() == 0){ line += " you see nothing special\r\n"; }
-	else
-	for(auto i : scan[EAST]){
-		line += " you see "_s + i + "\r\n";
-		
-	}
-	line += "To the west";
-	if(scan[WEST].size() == 0){ line += " you see nothing special\r\n"; }
-	else
-	for(auto i : scan[WEST]){
-		line += " you see "_s + i + "\r\n";
-		
-	}
-	line += "To the south";
-	if(scan[SOUTH].size() == 0){ line += " you see nothing special\r\n"; }
-	else
-	for(auto i : scan[SOUTH]){
-		line += " you see "_s + i + "\r\n";
-		
-	}
-	line += "Looking up";
-	if(scan[UP].size() == 0){ line += " you see nothing special\r\n"; }
-	else
-	for(auto i : scan[UP]){
-		line += " you see "_s + i + "\r\n";
-		
-	}
-	line += "Looking down";
-	if(scan[DOWN].size() == 0){ line += " you see nothing special\r\n"; }
-	else
-	for(auto i : scan[DOWN]){
-		line += " you see "_s + i + "\r\n";
-		
-	}
-	send_to_char(ch,line.c_str());
-	*/
+		line += " you see ";
+		line += _ele.name;
+		line += "\r\n";
+		send_to_char(ch,line.c_str());
+	});
+
 }
 
-#define stc(m) send_to_char(ch,(std::string(m) + std::string("\r\n")).c_str()); std::cerr << m << "\n"; std::cerr.flush();
-#define istc(m) send_to_char(ch,(std::to_string(m) + std::string("\r\n")).c_str()); std::cerr << m << "\n"; std::cerr.flush();
-void los_scan(struct char_data* ch,int depth,std::vector<int>* vec_room_list){
+//#define stc(m) send_to_char(ch,(std::string(m) + std::string("\r\n")).c_str()); std::cerr << m << "\n"; std::cerr.flush();
+//#define istc(m) send_to_char(ch,(std::to_string(m) + std::string("\r\n")).c_str()); std::cerr << m << "\n"; std::cerr.flush();
+void los_scan(struct char_data* ch,int depth,vec_player_data* vec_room_list){
+	los_scan_foreach(ch,depth,[&](room_rnum room_id,int direction,vec_player_data_element _char_data){
+		vec_room_list->push_back(_char_data);
+	});
+}
+
+void los_scan_foreach(struct char_data* ch,int depth,los_scan_foreach_callback lambda_cb){
 	/* Check if enemy is within 'depth' rooms n,e,s,w,u,d */
 	std::string s_dir;
 	
@@ -147,7 +128,7 @@ void los_scan(struct char_data* ch,int depth,std::vector<int>* vec_room_list){
 					room_id = room_dir->to_room;
 					if(auto people = world[room_id].people){
 						for(; people->next_in_room; people = people->next_in_room){
-							vec_room_list->emplace_back(people->pfilepos);
+							lambda_cb(room_id,i_d,people->player);
 						}
 					}
 				}

@@ -153,6 +153,7 @@ ACMD(do_sit);
 ACMD(do_skillset);
 ACMD(do_sleep);
 ACMD(do_sneak);
+ACMD(do_snipe);
 ACMD(do_snoop);
 ACMD(do_spec_comm);
 ACMD(do_split);
@@ -462,6 +463,7 @@ cpp_extern const struct command_info cmd_info[] = {
   { "smile"    , POS_RESTING , do_action   , 0, 0 },
   { "smirk"    , POS_RESTING , do_action   , 0, 0 },
   { "snicker"  , POS_RESTING , do_action   , 0, 0 },
+  { "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
   { "snap"     , POS_RESTING , do_action   , 0, 0 },
   { "snarl"    , POS_RESTING , do_action   , 0, 0 },
   { "sneeze"   , POS_RESTING , do_action   , 0, 0 },
