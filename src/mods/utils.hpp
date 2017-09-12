@@ -5,10 +5,11 @@
 #include <string>
 #include <regex>
 
-std::string operator "" _s(const char* s,long unsigned int i){
-	return std::string(s);
-}
+#ifdef MENTOC_DEBUG
 #define dbg(a){ std::cerr << "debug[]: " << a << "\n"; }
+#else
+#define dbg(a)/* */
+#endif
 namespace mods {
     namespace util {
 		bool fuzzy_match(const char* _needle,const char* _haystack);
