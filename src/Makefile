@@ -30,16 +30,16 @@ OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
 	graph.o handler.o house.o interpreter.o limits.o magic.o mail.o \
 	mobact.o modify.o objsave.o olc.o random.o shop.o spec_assign.o \
 	spec_procs.o spell_parser.o spells.o utils.o weather.o \
-	bsd-snprintf.o globals.o acl.o mods_utils.o
+	bsd-snprintf.o globals.o acl.o mods_utils.o mods_player.o
 
 CXREF_FILES = act.comm.c act.informative.c act.item.c act.movement.c \
 	act.offensive.cpp act.other.c act.social.c act.wizard.cpp alias.c ban.c \
-	boards.c castle.c class.c comm.c config.c constants.c db.c fight.c \
+	boards.c castle.c class.c comm.c config.c constants.c db.cpp fight.c \
 	graph.c handler.c house.c interpreter.c limits.c magic.c mail.c \
 	mobact.c modify.c objsave.c olc.c random.c shop.c spec_assign.c\
 	spec_procs.c spell_parser.c spells.c utils.c weather.c \
 	bsd-snprintf.c globals.cpp mods/acl/config-parser.cpp \
-	mods/utils.hpp
+	mods/utils.hpp mods/player.hpp
 
 default: all
 
@@ -98,6 +98,8 @@ ref:
 # Dependencies for the object files (automagically generated with
 # gcc -MM)
 
+mods_player.o: mods/player.cpp
+	$(CC) -c $(CFLAGS) mods/player.cpp -o mods_player.o
 mods_utils.o: mods/utils.cpp
 	$(CC) -c $(CFLAGS) mods/utils.cpp -o mods_utils.o
 acl.o: mods/acl/config-parser.cpp
@@ -149,9 +151,9 @@ config.o: config.c conf.h sysdep.h structs.h interpreter.h
 	$(CC) -c $(CFLAGS) config.c
 constants.o: constants.c conf.h sysdep.h structs.h interpreter.h
 	$(CC) -c $(CFLAGS) constants.c
-db.o: db.c conf.h sysdep.h structs.h utils.h db.h comm.h handler.h spells.h mail.h \
+db.o: db.cpp conf.h sysdep.h structs.h utils.h db.h comm.h handler.h spells.h mail.h \
   interpreter.h house.h constants.h
-	$(CC) -c $(CFLAGS) db.c
+	$(CC) -c $(CFLAGS) db.cpp
 fight.o: fight.c conf.h sysdep.h structs.h utils.h comm.h handler.h interpreter.h \
   db.h spells.h screen.h constants.h
 	$(CC) -c $(CFLAGS) fight.c

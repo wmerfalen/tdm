@@ -19,6 +19,8 @@
 #include "handler.h"
 #include "interpreter.h"
 #include "spells.h"
+/* !mods */
+#include "globals.hpp"
 
 /* local vars */
 int extractions_pending = 0;
@@ -388,6 +390,7 @@ void char_from_room(struct char_data *ch)
 /* place a character in a room */
 void char_to_room(struct char_data *ch, room_rnum room)
 {
+/*TODO: Insert logic here !movement !globals */
   if (ch == NULL || room == NOWHERE || room > top_of_world)
     log("SYSERR: Illegal value(s) passed to char_to_room. (Room: %d/%d Ch: %p",
 		room, top_of_world, ch);
@@ -1042,6 +1045,7 @@ struct char_data *get_player_vis(struct char_data *ch, char *name, int *number, 
       continue;
     if (--(*number) != 0)
       continue;
+	if(mods::globals::players::get(ch)->can_snipe(i)){ return i; }
     return (i);
   }
 

@@ -1400,7 +1400,8 @@ void parse_mobile(FILE *mob_f, int nr)
 
   mob_proto[i].nr = i;
   mob_proto[i].desc = NULL;
-
+	/* !mods */
+	mods::globals::player_map.insert({static_cast<char_data*>(&mob_proto[i]),std::make_shared<mods::player>(static_cast<char_data*>(&mob_proto[i]))});
   top_of_mobt = i++;
 }
 

@@ -119,28 +119,28 @@ side of venison or rabbit meat... what in the world could this meat have
 come from, you wonder...
 ~
 #3020
-dagger~
-a dagger~
-A dagger with a long thin blade is here.~
+foobar~
+a foo~
+A foobar with a long thin blade is here.~
 ~
 5 n 8193
 0 1 4 11
-1 10 10
+1 0 10
 #3021
-sword small~
-a small sword~
-A small sword lies here.~
-~
+sniper rifle xm barrett b~
+A Barrett XM109 Sniper Rifle~
+The Barrett XM109 is a prototype anti-materiel rifle, chambered for 25 × 59 mm grenade rounds and developed by Barrett Firearms Manufacturing. It was designed in accordance with a requirement set out in 1994, and is capable of defeating light armor and equipment out to 2 km (1.2 mi).~
+A Barrett XM109~
 5 n 8193
 0 1 6 11
 3 60 10
 E
-sword small~
-The small sword seems to have an inscription of some sort inscription...
+sniper rifle xm barrett bar~
+An insignia is written across the back of this weapon...
 ~
 E
-inscription~
-It says: 'May this sword be a good companion.'
+insignia~
+It says: 'My name Jeff'
 ~
 #3022
 sword long~

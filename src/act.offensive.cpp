@@ -57,6 +57,7 @@ ACMD(do_scan);
 ACMD(do_rnum){
 	send_to_char(ch, std::to_string(ch->in_room).c_str());
 }
+
 ACMD(do_snipe){
 	/* TODO: Check if sniper rifle is wielded */
 	std::array<char,MAX_INPUT_LENGTH> arg;
