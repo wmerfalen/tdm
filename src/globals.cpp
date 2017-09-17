@@ -10,6 +10,7 @@ namespace mods {
     namespace globals {
 		using player = mods::player;
 		std::unique_ptr<mods::acl::FileParser> config;
+		std::shared_ptr<player> player_nobody;
 		bool acl_good = false;
 		int acl_parse_code = 0;
 		map_player_list player_map;
@@ -27,7 +28,9 @@ namespace mods {
 			}else{
 				acl_good = true;
 			}
+			player_nobody = nullptr;
 		}
+
     };
 
 };

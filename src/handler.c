@@ -1035,6 +1035,7 @@ struct char_data *get_player_vis(struct char_data *ch, char *name, int *number, 
   }
 
   for (i = character_list; i; i = i->next) {
+	auto player = mods::globals::players::get(ch);
     if (IS_NPC(i))
       continue;
     if (inroom == FIND_CHAR_ROOM && IN_ROOM(i) != IN_ROOM(ch))
@@ -1045,7 +1046,7 @@ struct char_data *get_player_vis(struct char_data *ch, char *name, int *number, 
       continue;
     if (--(*number) != 0)
       continue;
-	if(mods::globals::players::get(ch)->can_snipe(i)){ return i; }
+	if(player->has_weapon_capability(mods::weapon::mask_type::SNIPE) && player->can_snipe(i)){ return i; }
     return (i);
   }
 
@@ -1079,7 +1080,6 @@ struct char_data *get_char_room_vis(struct char_data *ch, char *name, int *numbe
 
   return (NULL);
 }
-
 
 struct char_data *get_char_world_vis(struct char_data *ch, char *name, int *number)
 {

@@ -22,19 +22,16 @@
 #include <array>
 #include "mods/utils.hpp"
 #include "globals.hpp"
+#include "mods/scan.hpp"
 
 /* extern variables */
 extern int pk_allowed;
 
-typedef char_player_data vec_player_data_element;
-typedef std::vector<vec_player_data_element> vec_player_data; 
 /* extern functions */
 void raw_kill(struct char_data *ch);
 void check_killer(struct char_data *ch, struct char_data *vict);
 int compute_armor_class(struct char_data *ch);
-void los_scan(struct char_data* ch,int depth,vec_player_data*);
-typedef std::function<void (room_rnum,int,vec_player_data_element)> los_scan_foreach_callback;
-void los_scan_foreach(struct char_data* ch,int depth,los_scan_foreach_callback);
+int snipe_hit(struct char_data*,struct char_data*,int);
 
 /* local functions */
 ACMD(do_assist);
@@ -58,26 +55,35 @@ ACMD(do_rnum){
 	send_to_char(ch, std::to_string(ch->in_room).c_str());
 }
 
+	using vpd = mods::scan::vec_player_data;
+	using vpde = mods::scan::vec_player_data_element;
 ACMD(do_snipe){
 	/* TODO: Check if sniper rifle is wielded */
 	std::array<char,MAX_INPUT_LENGTH> arg;
 	std::fill(arg.begin(),arg.end(),0);
-	vec_player_data scan;
+	vpd scan;
 	one_argument(argument,(char*)&arg[0]);
 	if(!arg[0])
 		send_to_char(ch, "Whom do you wish to snipe?\r\n");
-	los_scan(ch,3,&scan);
-	for(auto player : scan){
-		if(mods::util::fuzzy_match(static_cast<char*>(&arg[0]),player.name)){
+	mods::scan::los_scan(ch,3,&scan);
+	for(auto scanned_target : scan){
+		if(mods::util::fuzzy_match(static_cast<char*>(&arg[0]),scanned_target->player.name)){
 			/* Check ammo */
-			send_to_char(ch,(std::string("You attacked ") + player.name).c_str());
+			send_to_char(ch,scanned_target->player.name);
+			auto opponent = mods::globals::players::get<char_data*>(scanned_target);
+			if(opponent == mods::globals::player_nobody){
+				send_to_char(ch,"Can't find target");
+				return;
+			}
+      		snipe_hit(ch, opponent->cd(), TYPE_UNDEFINED);
+			return;
 		}
 	}
 }
 
 ACMD(do_scan){
-	vec_player_data scan;
-	los_scan_foreach(ch,3,[ch](room_rnum _room_id,int _dir,vec_player_data_element _ele){
+	vpd scan;
+	mods::scan::los_scan_foreach(ch,3,[ch](room_rnum _room_id,int _dir,vpde _ele){
 		std::string line;
 		switch(_dir){
 			case NORTH: line += "[north]";break;
@@ -88,58 +94,11 @@ ACMD(do_scan){
 			case DOWN: line += "[down]";break;
 		}
 		line += " you see ";
-		line += _ele.name;
+		line += _ele->player.name;
 		line += "\r\n";
 		send_to_char(ch,line.c_str());
 	});
 
-}
-
-//#define stc(m) send_to_char(ch,(std::string(m) + std::string("\r\n")).c_str()); std::cerr << m << "\n"; std::cerr.flush();
-//#define istc(m) send_to_char(ch,(std::to_string(m) + std::string("\r\n")).c_str()); std::cerr << m << "\n"; std::cerr.flush();
-void los_scan(struct char_data* ch,int depth,vec_player_data* vec_room_list){
-	los_scan_foreach(ch,depth,[&](room_rnum room_id,int direction,vec_player_data_element _char_data){
-		vec_room_list->push_back(_char_data);
-	});
-}
-
-void los_scan_foreach(struct char_data* ch,int depth,los_scan_foreach_callback lambda_cb){
-	/* Check if enemy is within 'depth' rooms n,e,s,w,u,d */
-	std::string s_dir;
-	
-	for(auto i_d : {NORTH,EAST,SOUTH,WEST,UP,DOWN}){
-		auto in_room = IN_ROOM(ch);
-		if(in_room == NOWHERE || in_room < 0){ continue; }
-		auto current_exit = EXIT(ch,i_d);
-		auto next_room = 0;
-		if(current_exit){
-			next_room = current_exit->to_room;
-		}else{
-			continue;
-		}
-		s_dir += " ";
-		auto room_dir = current_exit;
-		for(auto recursive_depth = depth;recursive_depth > -1;--recursive_depth){
-			auto room_id = 0;
-			if(world[next_room].people){
-				if(room_dir){
-					if (EXIT_FLAGGED(room_dir, EX_CLOSED)){
-						break;
-					}
-					room_id = room_dir->to_room;
-					if(auto people = world[room_id].people){
-						for(; people->next_in_room; people = people->next_in_room){
-							lambda_cb(room_id,i_d,people->player);
-						}
-					}
-				}
-			}
-			room_dir = world[next_room].dir_option[i_d];
-			if(!room_dir){ break; }
-			next_room = room_dir->to_room;
-			if(next_room == NOWHERE){ break; }
-		}
-	}
 }
 
 

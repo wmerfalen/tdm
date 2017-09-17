@@ -6,3 +6,4 @@
 [ ] -> :User must be in room before damage dealt
 [ ] -> MOB behaviour to track down snipers
 [ ] -> :Utilize graph.c to find path to sniper
+[ ] -> Global include file that doesn't require a million deps

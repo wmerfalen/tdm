@@ -27,10 +27,10 @@ LIBS =  -lcrypt
 OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
 	act.offensive.o act.other.o act.social.o act.wizard.o alias.o ban.o \
 	boards.o castle.o class.o comm.o config.o constants.o db.o fight.o \
-	graph.o handler.o house.o interpreter.o limits.o magic.o mail.o \
+	graph.o mods_player.o handler.o house.o interpreter.o limits.o magic.o mail.o \
 	mobact.o modify.o objsave.o olc.o random.o shop.o spec_assign.o \
 	spec_procs.o spell_parser.o spells.o utils.o weather.o \
-	bsd-snprintf.o globals.o acl.o mods_utils.o mods_player.o
+	bsd-snprintf.o acl.o mods_utils.o mods_scan.o globals.o
 
 CXREF_FILES = act.comm.c act.informative.c act.item.c act.movement.c \
 	act.offensive.cpp act.other.c act.social.c act.wizard.cpp alias.c ban.c \
@@ -39,7 +39,7 @@ CXREF_FILES = act.comm.c act.informative.c act.item.c act.movement.c \
 	mobact.c modify.c objsave.c olc.c random.c shop.c spec_assign.c\
 	spec_procs.c spell_parser.c spells.c utils.c weather.c \
 	bsd-snprintf.c globals.cpp mods/acl/config-parser.cpp \
-	mods/utils.hpp mods/player.hpp
+	mods/utils.hpp mods/player.hpp mods/scan.hpp
 
 default: all
 
@@ -98,13 +98,15 @@ ref:
 # Dependencies for the object files (automagically generated with
 # gcc -MM)
 
+mods_scan.o: mods/scan.cpp
+	$(CC) -c $(CFLAGS) mods/scan.cpp -o mods_scan.o
 mods_player.o: mods/player.cpp
 	$(CC) -c $(CFLAGS) mods/player.cpp -o mods_player.o
 mods_utils.o: mods/utils.cpp
 	$(CC) -c $(CFLAGS) mods/utils.cpp -o mods_utils.o
 acl.o: mods/acl/config-parser.cpp
 	$(CC) -c $(CFLAGS) mods/acl/config-parser.cpp -o acl.o
-globals.o: globals.hpp 
+globals.o: globals.cpp mods/player.cpp
 	$(CC) -c $(CFLAGS) globals.cpp 
 act.comm.o: act.comm.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h \
   handler.h db.h screen.h
@@ -118,7 +120,7 @@ act.item.o: act.item.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h \
 act.movement.o: act.movement.c conf.h sysdep.h structs.h utils.h comm.h \
   interpreter.h handler.h db.h spells.h house.h constants.h
 	$(CC) -c $(CFLAGS) act.movement.c
-act.offensive.o: act.offensive.cpp conf.h sysdep.h structs.h utils.h comm.h \
+act.offensive.o: globals.hpp mods/player.hpp act.offensive.cpp conf.h sysdep.h structs.h utils.h comm.h \
   interpreter.h handler.h db.h spells.h mods/utils.hpp
 	$(CC) -c $(CFLAGS) act.offensive.cpp
 act.other.o: act.other.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h \
@@ -160,7 +162,7 @@ fight.o: fight.c conf.h sysdep.h structs.h utils.h comm.h handler.h interpreter.
 graph.o: graph.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h \
   db.h spells.h
 	$(CC) -c $(CFLAGS) graph.c
-handler.o: handler.c conf.h sysdep.h structs.h utils.h comm.h db.h handler.h \
+handler.o: globals.hpp handler.c conf.h sysdep.h structs.h utils.h comm.h db.h handler.h \
   interpreter.h spells.h
 	$(CC) -c $(CFLAGS) handler.c
 house.o: house.c conf.h sysdep.h structs.h comm.h handler.h db.h interpreter.h \
