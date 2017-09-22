@@ -42,6 +42,7 @@ extern int top_of_p_table;
 extern int circle_restrict;
 extern int no_specials;
 extern int max_bad_pws;
+extern struct char_data* character_list;
 
 /* external functions */
 void echo_on(struct descriptor_data *d);
@@ -154,6 +155,7 @@ ACMD(do_skillset);
 ACMD(do_sleep);
 ACMD(do_sneak);
 ACMD(do_snipe);
+ACMD(do_reload);
 ACMD(do_snoop);
 ACMD(do_spec_comm);
 ACMD(do_split);
@@ -421,7 +423,8 @@ cpp_extern const struct command_info cmd_info[] = {
   { "reply"    , POS_SLEEPING, do_reply    , 0, 0 },
   { "rest"     , POS_RESTING , do_rest     , 0, 0 },
   { "read"     , POS_RESTING , do_look     , 0, SCMD_READ },
-  { "reload"   , POS_DEAD    , do_reboot   , LVL_IMPL, 0 },
+  { "reboot"   , POS_DEAD    , do_reboot   , LVL_IMPL, 0 },
+  { "reload"  , POS_RESTING , do_snipe   , 0, 0 },
   { "recite"   , POS_RESTING , do_use      , 0, SCMD_RECITE },
   { "receive"  , POS_STANDING, do_not_here , 1, 0 },
   { "remove"   , POS_RESTING , do_remove   , 0, 0 },

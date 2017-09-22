@@ -237,7 +237,6 @@ extern struct zone_data *zone_table;
 extern zone_rnum top_of_zone_table;
 
 extern struct descriptor_data *descriptor_list;
-extern struct char_data *character_list;
 extern struct player_special_data dummy_mob;
 
 extern struct index_data *mob_index;

@@ -30,6 +30,7 @@ extern int immort_level_ok;
 extern int use_autowiz;
 extern int min_wizlist_lev;
 extern int free_rent;
+extern struct char_data* character_list;
 
 /* local functions */
 int graf(int grafage, int p0, int p1, int p2, int p3, int p4, int p5, int p6);

@@ -60,6 +60,7 @@ $(BINDIR)/circle : $(OBJFILES)
 
 clean:
 	rm -f *.o
+	rm -f mods/*.o
 ref:
 #
 # Create the cross reference files

@@ -8,11 +8,7 @@
 *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
 ************************************************************************ */
 
-#include "conf.h"
-#include "sysdep.h"
-
-
-#include "structs.h"
+#include "types.hpp"
 #include "utils.h"
 #include "comm.h"
 #include "interpreter.h"
@@ -23,6 +19,7 @@
 #include "mods/utils.hpp"
 #include "globals.hpp"
 #include "mods/scan.hpp"
+#include "mods/weapon.hpp"
 
 /* extern variables */
 extern int pk_allowed;
@@ -58,27 +55,39 @@ ACMD(do_rnum){
 	using vpd = mods::scan::vec_player_data;
 	using vpde = mods::scan::vec_player_data_element;
 ACMD(do_snipe){
-	/* TODO: Check if sniper rifle is wielded */
-	std::array<char,MAX_INPUT_LENGTH> arg;
-	std::fill(arg.begin(),arg.end(),0);
+	MENTOC_PREAMBLE();	/* !mods */
+	if(!player->has_weapon_capability(mods::weapon::mask::snipe)){
+		send_to_char(ch,"You must be wielding a sniper rifle to do that!");
+		return;
+	}
+	/* Check ammo */
+	if(player->has_ammo() <= 0){
+		*player << "Out of ammo!\r\n";
+		return;
+	}
+	std::array<char,MAX_INPUT_LENGTH> victim;
+	std::fill(victim.begin(),victim.end(),0);
 	vpd scan;
-	one_argument(argument,(char*)&arg[0]);
-	if(!arg[0])
+	one_argument(argument,(char*)&victim[0]);
+	if(!victim[0])
 		send_to_char(ch, "Whom do you wish to snipe?\r\n");
 	mods::scan::los_scan(ch,3,&scan);
 	for(auto scanned_target : scan){
-		if(mods::util::fuzzy_match(static_cast<char*>(&arg[0]),scanned_target->player.name)){
-			/* Check ammo */
-			send_to_char(ch,scanned_target->player.name);
-			auto opponent = mods::globals::players::get<char_data*>(scanned_target);
-			if(opponent == mods::globals::player_nobody){
-				send_to_char(ch,"Can't find target");
-				return;
-			}
-      		snipe_hit(ch, opponent->cd(), TYPE_UNDEFINED);
+		if(mods::util::fuzzy_match(static_cast<char*>(&victim[0]),scanned_target->player.name)){
+      		snipe_hit(ch, scanned_target, TYPE_SNIPE);
+			player->ammo_adjustment(-1);
 			return;
 		}
 	}
+}
+
+ACMD(do_reload){
+	MENTOC_PREAMBLE(); /* !mods */
+	if(!player->has_ammo()){
+		*player << "You don't have any ammo.\r\n";
+		return;
+	}
+	*player << "Yo so I heard you leik to reloead\r\n";
 }
 
 ACMD(do_scan){

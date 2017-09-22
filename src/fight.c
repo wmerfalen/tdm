@@ -676,7 +676,6 @@ int skill_message(int dam, struct char_data *ch, struct char_data *vict,
  */
 int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype)
 {
-	/*TODO: Modify this code to allow sniping */
   if (GET_POS(victim) <= POS_DEAD) {
     /* This is "normal"-ish now with delayed extraction. -gg 3/15/2001 */
     if (PLR_FLAGGED(victim, PLR_NOTDEADYET) || MOB_FLAGGED(victim, MOB_NOTDEADYET))

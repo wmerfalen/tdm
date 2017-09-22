@@ -140,7 +140,7 @@
 #define TYPE_BLAST		     312
 #define TYPE_PUNCH		     313
 #define TYPE_STAB		     314
-
+#define TYPE_SNIPE			315	/* !mods */
 /* new attack types can be added here - up to TYPE_SUFFERING */
 #define TYPE_SUFFERING		     399
 

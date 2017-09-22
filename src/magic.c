@@ -20,12 +20,14 @@
 #include "db.h"
 #include "interpreter.h"
 #include "constants.h"
+#include "globals.hpp"
 
 
 /* external variables */
 extern int mini_mud;
 extern int pk_allowed;
 extern struct spell_info_type spell_info[];
+extern struct char_data* character_list;
 
 /* external functions */
 byte saving_throws(int class_num, int type, int level); /* class.c */

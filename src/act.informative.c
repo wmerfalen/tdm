@@ -20,7 +20,8 @@
 #include "spells.h"
 #include "screen.h"
 #include "constants.h"
-
+#include "globals.hpp"
+extern struct char_data* character_list;
 /* extern variables */
 extern int top_of_helpt;
 extern struct help_index_element *help_table;
@@ -472,7 +473,9 @@ void look_in_obj(struct char_data *ch, char *arg)
   else if (!(bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM |
 				 FIND_OBJ_EQUIP, ch, &dummy, &obj))) {
     send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(arg), arg);
-  } else if ((GET_OBJ_TYPE(obj) != ITEM_DRINKCON) &&
+  } else if(mods::globals::obj_map[obj->item_number]->holds_ammo){
+  	send_to_char(ch,std::string(std::to_string(obj->ammo) + " rounds.").c_str());
+  }else if ((GET_OBJ_TYPE(obj) != ITEM_DRINKCON) &&
 	     (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN) &&
 	     (GET_OBJ_TYPE(obj) != ITEM_CONTAINER))
     send_to_char(ch, "There's nothing inside that!\r\n");

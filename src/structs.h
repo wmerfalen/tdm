@@ -11,6 +11,12 @@
 #ifndef __CIRCLEMUD_STRUCTS_HEADER__
 #define __CIRCLEMUD_STRUCTS_HEADER__
 
+#include <iostream>
+#include <vector>
+#include <map>
+struct obj_data; 
+typedef uint64_t uuid_t;
+
 /*
  * Intended use of this macro is to allow external packages to work with
  * a variety of CircleMUD versions without modifications.  For instance,
@@ -607,6 +613,12 @@ struct obj_data {
    struct obj_flag_data obj_flags;/* Object information               */
    struct obj_affected_type affected[MAX_OBJ_AFFECT];  /* affects */
 
+   uuid_t uuid;
+	uint64_t ammo;
+	uint64_t ammo_max;
+	short loaded;
+	short holds_ammo;
+
    char	*name;                    /* Title of object :get etc.        */
    char	*description;		  /* When in room                     */
    char	*short_description;       /* when worn/carry/in cont.         */
@@ -905,6 +917,7 @@ struct follow_type {
 /* ================== Structure for player/non-player ===================== */
 struct char_data {
    int pfilepos;			 /* playerfile pos		  */
+   uuid_t uuid;
    mob_rnum nr;                          /* Mob's rnum			  */
    room_rnum in_room;                    /* Location (real room number)	  */
    room_rnum was_in_room;		 /* location for linkdead people  */
@@ -1105,4 +1118,7 @@ struct guild_info_type {
   int direction;
 };
 
+typedef std::map<obj_vnum,obj_data*> map_object_list;
+
 #endif
+

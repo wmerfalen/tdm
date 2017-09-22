@@ -24,6 +24,7 @@
 #include "interpreter.h"
 #include "house.h"
 #include "constants.h"
+#include "globals.hpp"
 
 /**************************************************************************
 *  declarations of most of the 'global' variables                         *
@@ -32,7 +33,7 @@
 struct room_data *world = NULL;	/* array of rooms		 */
 room_rnum top_of_world = 0;	/* ref to top element of world	 */
 
-struct char_data *character_list = NULL;	/* global linked list of
+extern struct char_data *character_list;	/* global linked list of
 						 * chars	 */
 struct index_data *mob_index;	/* index table for mobile file	 */
 struct char_data *mob_proto;	/* prototypes for mobs		 */
@@ -412,6 +413,8 @@ void boot_db(void)
 
   log("Generating player index.");
   build_player_index();
+  /* !mods */
+  mods::globals::load_player_map();
 
   log("Loading fight messages.");
   load_messages();
@@ -1401,7 +1404,8 @@ void parse_mobile(FILE *mob_f, int nr)
   mob_proto[i].nr = i;
   mob_proto[i].desc = NULL;
 	/* !mods */
-	mods::globals::player_map.insert({static_cast<char_data*>(&mob_proto[i]),std::make_shared<mods::player>(static_cast<char_data*>(&mob_proto[i]))});
+  mob_proto[i].uuid = mods::globals::get_uuid();
+	mods::globals::player_map.insert({i,std::make_shared<mods::player>(static_cast<char_data*>(&mob_proto[i]))});
   top_of_mobt = i++;
 }
 
@@ -1537,6 +1541,7 @@ char *parse_object(FILE *obj_f, int nr)
     case '$':
     case '#':
       check_object(obj_proto + i);
+      mods::globals::register_object(obj_proto[i]);
       top_of_objt = i++;
       return (line);
     default:
@@ -1847,7 +1852,7 @@ struct obj_data *create_obj(void)
   clear_object(obj);
   obj->next = object_list;
   object_list = obj;
-
+  //mods::globals::register_object(*obj);
   return (obj);
 }
 
@@ -1870,7 +1875,7 @@ struct obj_data *read_object(obj_vnum nr, int type) /* and obj_rnum */
   object_list = obj;
 
   obj_index[i].number++;
-
+  //mods::globals::register_object(*obj);
   return (obj);
 }
 

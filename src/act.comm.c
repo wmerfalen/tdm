@@ -19,10 +19,12 @@
 #include "handler.h"
 #include "db.h"
 #include "screen.h"
+#include "globals.hpp"
 
 /* extern variables */
 extern int level_can_shout;
 extern int holler_move_cost;
+extern struct char_data* character_list;
 
 /* local functions */
 void perform_tell(struct char_data *ch, struct char_data *vict, char *arg);

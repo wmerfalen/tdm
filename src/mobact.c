@@ -20,10 +20,12 @@
 #include "handler.h"
 #include "spells.h"
 #include "constants.h"
+#include "globals.hpp"
 
 
 /* external globals */
 extern int no_specials;
+extern struct char_data* character_list;
 
 /* external functions */
 ACMD(do_get);

@@ -35,6 +35,7 @@ extern int circle_restrict;
 extern int load_into_inventory;
 extern int buf_switches, buf_largecount, buf_overflows;
 extern int top_of_p_table;
+extern struct char_data* character_list;
 
 /* for chars */
 extern const char *pc_class_types[];

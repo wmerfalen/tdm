@@ -1,10 +1,12 @@
 #ifndef __CIRCLEMUD_SRC_MODS_GLOBALS_HEADER__
 #define __CIRCLEMUD_SRC_MODS_GLOBALS_HEADER__ 1
 
+
 #include <iostream>
 #include <string>
 #include <memory>
 #include <map>
+#include "types.hpp"
 #include "mods/acl/config-parser.hpp"
 #include "conf.h"
 #include "sysdep.h"
@@ -12,13 +14,20 @@
 #include "mods/player.hpp"
 #include <memory>
 
+#define MENTOC_PREAMBLE() auto player = mods::globals::players::get(ch->uuid); player->set_cd(ch); 
 namespace mods {
     namespace globals {
 		bool acl_allowed(struct char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd);
 		void init();
-		typedef std::map<char_data*,std::shared_ptr<mods::player>> map_player_list;
+		void load_player_map();
+		uuid_t get_uuid();
+		uuid_t obj_uuid();
+		typedef std::map<uuid_t,std::shared_ptr<mods::player>> map_player_list;
 		extern map_player_list player_map;
+		extern map_object_list obj_map;
 		extern std::shared_ptr<mods::player> player_nobody;
+		void register_object(obj_data&);
+		void register_object_list();
 		namespace players {
         	template <typename T>
 			inline std::shared_ptr<mods::player>& get(T ch){
@@ -30,12 +39,8 @@ namespace mods {
 				}
 			}
 			inline std::shared_ptr<mods::player>& name(const std::string & n){
-				for(auto player : mods::globals::player_map){
-					if(n.compare(player.first->player.name) == 0){
-						return player.second;
-					}
-				}
-				return mods::globals::player_map.end()->second;
+				//TODO: Find a better way to do this, obbvvvvvviously implement it correctly
+				return mods::globals::player_map.begin()->second;
 			}
 		};
 		/*

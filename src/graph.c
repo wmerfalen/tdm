@@ -20,6 +20,9 @@
 #include "db.h"
 #include "spells.h"
 
+#include "globals.hpp"
+
+
 
 /* external functions */
 ACMD(do_say);
@@ -27,6 +30,7 @@ ACMD(do_say);
 /* external variables */
 extern const char *dirs[];
 extern int track_through_doors;
+extern struct char_data* character_list;
 
 /* local functions */
 int VALID_EDGE(room_rnum x, int y);

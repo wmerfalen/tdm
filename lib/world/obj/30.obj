@@ -1,5 +1,5 @@
 #3000
-barrel beer~
+arrel beer~
 a barrel~
 A beer barrel has been left here.~
 ~
@@ -127,11 +127,11 @@ A foobar with a long thin blade is here.~
 0 1 4 11
 1 0 10
 #3021
-sniper rifle xm barrett b~
+xm109 sniper rifle xm barrett b [xm109]~
 A Barrett XM109 Sniper Rifle~
 The Barrett XM109 is a prototype anti-materiel rifle, chambered for 25 × 59 mm grenade rounds and developed by Barrett Firearms Manufacturing. It was designed in accordance with a requirement set out in 1994, and is capable of defeating light armor and equipment out to 2 km (1.2 mi).~
 A Barrett XM109~
-5 n 8193
+5 a 8193
 0 1 6 11
 3 60 10
 E
@@ -143,11 +143,11 @@ insignia~
 It says: 'My name Jeff'
 ~
 #3022
-sword long~
-a long sword~
-A long sword has been left here.~
+ammo xm109 [xm109]~
+XM109 Ammo~
+A bunch of XM109 ammo has been left here.~
 ~
-5 n 8193
+1 n 1
 0 1 8 3
 8 600 10
 #3023
