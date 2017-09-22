@@ -43,6 +43,13 @@ namespace mods {
 			return false;
 		}
 	}
+	bool player::has_equipment_tag(const std::string& tag) const {
+		for(auto item = m_char_data->carrying; item->next; item = item->next){
+			if(std::string(item->name).find(tag) != std::string::npos)
+				return true;
+		}
+		return false;
+	}
 	void player::ammo_adjustment(int increment){
 		weapon()->ammo += increment;
 	}

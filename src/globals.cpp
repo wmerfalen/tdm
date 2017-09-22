@@ -33,6 +33,7 @@ namespace mods {
 					obj.ammo = 12;
 					obj.ammo_max = 12;
 					std::cout << "############FOUND SNIPER RIFLE#############\n";
+					std::cout << obj.item_number << "\n";
 				}else{
 					obj.holds_ammo = 0;
 					obj.ammo = 0;

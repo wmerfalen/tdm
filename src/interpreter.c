@@ -135,6 +135,7 @@ ACMD(do_purge);
 ACMD(do_put);
 ACMD(do_qcomm);
 ACMD(do_quit);
+ACMD(do_reload);
 ACMD(do_reboot);
 ACMD(do_remove);
 ACMD(do_reply);
@@ -155,7 +156,6 @@ ACMD(do_skillset);
 ACMD(do_sleep);
 ACMD(do_sneak);
 ACMD(do_snipe);
-ACMD(do_reload);
 ACMD(do_snoop);
 ACMD(do_spec_comm);
 ACMD(do_split);
@@ -424,7 +424,7 @@ cpp_extern const struct command_info cmd_info[] = {
   { "rest"     , POS_RESTING , do_rest     , 0, 0 },
   { "read"     , POS_RESTING , do_look     , 0, SCMD_READ },
   { "reboot"   , POS_DEAD    , do_reboot   , LVL_IMPL, 0 },
-  { "reload"  , POS_RESTING , do_snipe   , 0, 0 },
+  { "reload"  , POS_RESTING , do_reload   , 0, 0 },
   { "recite"   , POS_RESTING , do_use      , 0, SCMD_RECITE },
   { "receive"  , POS_STANDING, do_not_here , 1, 0 },
   { "remove"   , POS_RESTING , do_remove   , 0, 0 },

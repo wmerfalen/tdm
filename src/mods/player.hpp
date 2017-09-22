@@ -28,6 +28,7 @@ namespace mods {
 			char_data* cd() const { return m_char_data; }
 			bool is_weapon_loaded();
 			bool has_ammo();
+			bool has_equipment_tag(const std::string&) const;
 			void ammo_adjustment(int);
 			void stc(int m){ 
 				send_to_char(m_char_data,std::to_string(m).c_str());

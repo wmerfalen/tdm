@@ -52,8 +52,8 @@ ACMD(do_rnum){
 	send_to_char(ch, std::to_string(ch->in_room).c_str());
 }
 
-	using vpd = mods::scan::vec_player_data;
-	using vpde = mods::scan::vec_player_data_element;
+using vpd = mods::scan::vec_player_data;
+using vpde = mods::scan::vec_player_data_element;
 ACMD(do_snipe){
 	MENTOC_PREAMBLE();	/* !mods */
 	if(!player->has_weapon_capability(mods::weapon::mask::snipe)){
@@ -83,14 +83,14 @@ ACMD(do_snipe){
 
 ACMD(do_reload){
 	MENTOC_PREAMBLE(); /* !mods */
-	if(!player->has_ammo()){
+	if(!player->has_equipment_tag("ammo")){
 		*player << "You don't have any ammo.\r\n";
 		return;
 	}
 	*player << "Yo so I heard you leik to reloead\r\n";
 }
 
-ACMD(do_scan){
+ACMD(do_scan){ /* !mods */
 	vpd scan;
 	mods::scan::los_scan_foreach(ch,3,[ch](room_rnum _room_id,int _dir,vpde _ele){
 		std::string line;
