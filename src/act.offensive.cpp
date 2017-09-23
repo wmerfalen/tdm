@@ -20,6 +20,7 @@
 #include "globals.hpp"
 #include "mods/scan.hpp"
 #include "mods/weapon.hpp"
+#include "globals.hpp"
 
 /* extern variables */
 extern int pk_allowed;
@@ -82,6 +83,10 @@ ACMD(do_snipe){
       		snipe_hit(ch, scanned_target, TYPE_SNIPE);
 			player->ammo_adjustment(-1);
 			player->weapon_cooldown_start(3,0);
+			auto time_now = static_cast<unsigned long>(time(NULL));
+			mods::globals::defer_queue->push_secs(3,[&](){
+				std::cout << static_cast<unsigned long>(time(NULL)) - time_now << "\r\n";
+			});
 			return;
 		}
 	}

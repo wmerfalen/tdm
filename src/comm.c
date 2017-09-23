@@ -616,7 +616,7 @@ void game_loop(socket_t mother_desc)
 
   /* The Main Loop.  The Big Cheese.  The Top Dog.  The Head Honcho.  The.. */
   while (!circle_shutdown) {
-
+	mods::globals::defer_queue->iteration();
     /* Sleep if we don't have any connections */
     if (descriptor_list == NULL) {
       log("No connections.  Going to sleep.");

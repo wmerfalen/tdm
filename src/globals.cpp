@@ -3,6 +3,7 @@
 
 #include "globals.hpp"
 #include "mods/player.hpp"
+#include "mods/deferred.hpp"
 #include <map>
 #include <memory>
 
@@ -13,6 +14,7 @@ namespace mods {
 		using player = mods::player;
 		std::unique_ptr<mods::acl::FileParser> config;
 		std::shared_ptr<player> player_nobody;
+		std::unique_ptr<mods::deferred> defer_queue;
 		namespace objects {
 			static bool populated = false;
 		};
@@ -57,6 +59,7 @@ namespace mods {
 				acl_good = true;
 			}
 			player_nobody = nullptr;
+			defer_queue = std::make_unique<mods::deferred>(TICK_RESOLUTION);
 		}
 		void load_player_map(){
 			for(auto it = character_list; it ;it = it->next){

@@ -30,7 +30,7 @@ OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
 	graph.o mods_player.o handler.o house.o interpreter.o limits.o magic.o mail.o \
 	mobact.o modify.o objsave.o olc.o random.o shop.o spec_assign.o \
 	spec_procs.o spell_parser.o spells.o utils.o weather.o \
-	bsd-snprintf.o acl.o mods_utils.o mods_scan.o globals.o
+	bsd-snprintf.o acl.o mods_utils.o mods_scan.o mods_deferred.o globals.o
 
 CXREF_FILES = act.comm.c act.informative.c act.item.c act.movement.c \
 	act.offensive.cpp act.other.c act.social.c act.wizard.cpp alias.c ban.c \
@@ -99,6 +99,8 @@ ref:
 # Dependencies for the object files (automagically generated with
 # gcc -MM)
 
+mods_deferred.o: mods/deferred.cpp mods/deferred.hpp
+	$(CC) -c $(CFLAGS) mods/deferred.cpp -o mods_deferred.o
 mods_scan.o: mods/scan.cpp
 	$(CC) -c $(CFLAGS) mods/scan.cpp -o mods_scan.o
 mods_player.o: mods/player.cpp
@@ -107,7 +109,7 @@ mods_utils.o: mods/utils.cpp
 	$(CC) -c $(CFLAGS) mods/utils.cpp -o mods_utils.o
 acl.o: mods/acl/config-parser.cpp
 	$(CC) -c $(CFLAGS) mods/acl/config-parser.cpp -o acl.o
-globals.o: globals.cpp mods/player.cpp
+globals.o: globals.cpp mods/player.cpp mods/deferred.hpp mods/deferred.cpp
 	$(CC) -c $(CFLAGS) globals.cpp 
 act.comm.o: act.comm.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h \
   handler.h db.h screen.h

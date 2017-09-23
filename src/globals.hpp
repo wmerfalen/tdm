@@ -13,6 +13,7 @@
 #include "structs.h"
 #include "mods/player.hpp"
 #include <memory>
+#include "mods/deferred.hpp"
 
 #define MENTOC_PREAMBLE() auto player = mods::globals::players::get(ch->uuid); player->set_cd(ch); 
 namespace mods {
@@ -26,6 +27,7 @@ namespace mods {
 		extern map_player_list player_map;
 		extern map_object_list obj_map;
 		extern std::shared_ptr<mods::player> player_nobody;
+		extern std::unique_ptr<mods::deferred> defer_queue;
 		void register_object(obj_data&);
 		void register_object_list();
 		namespace players {
