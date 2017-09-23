@@ -9,6 +9,7 @@
 #include "../structs.h"
 #include "../types.hpp"
 
+#define WEAPON_SET_NUM 1
 extern size_t send_to_char(struct char_data *ch, const char *messg, ...);
 
 namespace mods {
@@ -17,6 +18,7 @@ namespace mods {
 	};
     class player {
 		public:
+			typedef short weapon_set;
 			player() = delete;
 			player(char_data* ch);
 			bool has_weapon_capability(int);
@@ -28,7 +30,21 @@ namespace mods {
 			char_data* cd() const { return m_char_data; }
 			bool is_weapon_loaded();
 			bool has_ammo();
-			bool has_equipment_tag(const std::string&) const;
+			bool has_equipment_tag(const std::string&);
+			void weapon_cooldown_start(unsigned long duration,weapon_set set);
+			bool weapon_cooldown_expired(weapon_set);
+			/*
+			void weapon_cooldown_clear(weapon_set);
+			bool has_weapon_cooldown(weapon_set set){
+				if(m_cooldowns.find(set) == m_cooldowns.end()){
+					return false;
+				}
+				return true;
+			}
+			int weapon_cooldown_increment(){
+				return ++m_weapon_set;
+			}
+			*/
 			void ammo_adjustment(int);
 			void stc(int m){ 
 				send_to_char(m_char_data,std::to_string(m).c_str());
@@ -55,6 +71,8 @@ namespace mods {
 			obj_data* weapon();
 		protected:
 			char_data* m_char_data;
+			std::array<unsigned long,WEAPON_SET_NUM> m_weapon_cooldown;
+			weapon_set m_weapon_set;
     };
 };
 

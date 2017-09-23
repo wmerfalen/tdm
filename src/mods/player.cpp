@@ -28,6 +28,13 @@ namespace mods {
 		}
 		return false;
 	}
+	void player::weapon_cooldown_start(unsigned long duration,weapon_set set){
+		m_weapon_cooldown[set] = static_cast<unsigned long>(time(NULL)) + duration;
+	}
+	bool player::weapon_cooldown_expired(weapon_set set) {
+		auto cts = static_cast<unsigned long>(time(NULL));
+		return cts >= m_weapon_cooldown[set];
+	}
 	bool player::is_weapon_loaded(){
 		auto w = weapon();
 		if(!w){
@@ -43,10 +50,15 @@ namespace mods {
 			return false;
 		}
 	}
-	bool player::has_equipment_tag(const std::string& tag) const {
+	bool player::has_equipment_tag(const std::string& tag) {
+		if(!m_char_data->carrying){ return false; }
 		for(auto item = m_char_data->carrying; item->next; item = item->next){
-			if(std::string(item->name).find(tag) != std::string::npos)
+			if(std::string(item->name).find(std::string("[") + std::string(tag) + "]") != std::string::npos
+				&&
+				m_char_data == item->carried_by
+			){
 				return true;
+			}
 		}
 		return false;
 	}

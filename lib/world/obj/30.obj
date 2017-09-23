@@ -143,13 +143,17 @@ insignia~
 It says: 'My name Jeff'
 ~
 #3022
-ammo xm109 [xm109]~
+[ammo] ammo xm109 [xm109]~
 XM109 Ammo~
 A bunch of XM109 ammo has been left here.~
 ~
 1 n 1
 0 1 8 3
 8 600 10
+E
+ammo [ammo] xm109 [xm109]~
+It's a bunch of XM109 ammo.
+~
 #3023
 club wooden~
 a wooden club~

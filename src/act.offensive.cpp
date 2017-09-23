@@ -56,6 +56,11 @@ using vpd = mods::scan::vec_player_data;
 using vpde = mods::scan::vec_player_data_element;
 ACMD(do_snipe){
 	MENTOC_PREAMBLE();	/* !mods */
+	if(!player->weapon_cooldown_expired(0)){
+		*player << "{cooldown}\r\n";
+		return;
+	}
+	
 	if(!player->has_weapon_capability(mods::weapon::mask::snipe)){
 		send_to_char(ch,"You must be wielding a sniper rifle to do that!");
 		return;
@@ -76,6 +81,7 @@ ACMD(do_snipe){
 		if(mods::util::fuzzy_match(static_cast<char*>(&victim[0]),scanned_target->player.name)){
       		snipe_hit(ch, scanned_target, TYPE_SNIPE);
 			player->ammo_adjustment(-1);
+			player->weapon_cooldown_start(3,0);
 			return;
 		}
 	}
@@ -87,6 +93,9 @@ ACMD(do_reload){
 		*player << "You don't have any ammo.\r\n";
 		return;
 	}
+	/* Get ammo from ammo box */
+	/* Remove 12 rounds from ammo box */
+	/* Add 12 rounds to xm109 */
 	*player << "Yo so I heard you leik to reloead\r\n";
 }
 
