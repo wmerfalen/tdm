@@ -92,16 +92,21 @@ ACMD(do_snipe){
 	}
 }
 
+/* TODO: Implement weapon tags in the obj_data data structure */
 ACMD(do_reload){
 	MENTOC_PREAMBLE(); /* !mods */
-	if(!player->has_equipment_tag("ammo")){
+	/* TODO get wielded equipment tag */
+	if(!player->carrying_ammo_of_type(player->weapon()->weapon_type)){
 		*player << "You don't have any ammo.\r\n";
 		return;
 	}
+
 	/* Get ammo from ammo box */
+	*player << "You get ammo from an ammo box.\r\n";
 	/* Remove 12 rounds from ammo box */
 	/* Add 12 rounds to xm109 */
-	*player << "Yo so I heard you leik to reloead\r\n";
+	player->weapon()->ammo = 12;
+	*player << "You load 12 rounds into " << player->weapon()->name << "\r\n";
 }
 
 ACMD(do_scan){ /* !mods */

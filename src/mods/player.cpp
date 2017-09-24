@@ -35,6 +35,19 @@ namespace mods {
 		auto cts = static_cast<unsigned long>(time(NULL));
 		return cts >= m_weapon_cooldown[set];
 	}
+	bool player::carrying_ammo_of_type(const std::string& type){
+		for(auto item = m_char_data->carrying; item->next; item = item->next){
+			if(std::string(item->name).find(std::string("[ammo]")) != std::string::npos
+				&&
+				m_char_data == item->carried_by
+				&&
+				strcmp(type.c_str(),item->weapon_type) == 0
+			){
+				return true;
+			}
+		}
+		return false;
+	}
 	bool player::is_weapon_loaded(){
 		auto w = weapon();
 		if(!w){
@@ -52,6 +65,7 @@ namespace mods {
 	}
 	bool player::has_equipment_tag(const std::string& tag) {
 		if(!m_char_data->carrying){ return false; }
+		/* TODO: find a better way to do this. this loops through all objects in the game and checks if the person carrying it is the current player */
 		for(auto item = m_char_data->carrying; item->next; item = item->next){
 			if(std::string(item->name).find(std::string("[") + std::string(tag) + "]") != std::string::npos
 				&&

@@ -134,6 +134,7 @@ A Barrett XM109~
 5 a 8193
 0 1 6 11
 3 60 10
+[snipe]
 E
 sniper rifle xm barrett bar~
 An insignia is written across the back of this weapon...
@@ -143,15 +144,16 @@ insignia~
 It says: 'My name Jeff'
 ~
 #3022
-[ammo] ammo xm109 [xm109]~
+[ammo] ammo xm109 [xm109-ammo]~
 XM109 Ammo~
 A bunch of XM109 ammo has been left here.~
 ~
 1 n 1
 0 1 8 3
 8 600 10
+[snipe]
 E
-ammo [ammo] xm109 [xm109]~
+ammo [ammo] xm109 [xm109-ammo]~
 It's a bunch of XM109 ammo.
 ~
 #3023

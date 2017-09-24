@@ -618,7 +618,7 @@ struct obj_data {
 	uint64_t ammo_max;
 	short loaded;
 	short holds_ammo;
-
+	char* weapon_type;
    char	*name;                    /* Title of object :get etc.        */
    char	*description;		  /* When in room                     */
    char	*short_description;       /* when worn/carry/in cont.         */

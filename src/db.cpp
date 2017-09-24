@@ -1502,12 +1502,24 @@ char *parse_object(FILE *obj_f, int nr)
   strcat(buf2, ", after numeric constants\n"	/* strcat: OK (for 'buf2 >= 87') */
 	 "...expecting 'E', 'A', '$', or next object number");
   j = 0;
-
+	obj_proto[i].weapon_type = NULL;
   for (;;) {
     if (!get_line(obj_f, line)) {
       log("SYSERR: Format error in %s", buf2);
       exit(1);
     }
+	std::string strline = line;
+	auto bracket = strline.find("[");
+	if(bracket != std::string::npos && bracket == 0){
+		/* We have a weapon type tag */
+		auto end_bracket = strline.find("]");
+		if(end_bracket == std::string::npos){
+			log("SYSERR: [mods] INVALID weapon type tag <stub>");
+			exit(1);
+		}
+		obj_proto[i].weapon_type = const_cast<char*>(strline.substr(1,end_bracket -1).c_str());
+		continue;
+	}
     switch (*line) {
     case 'E':
       CREATE(new_descr, struct extra_descr_data, 1);

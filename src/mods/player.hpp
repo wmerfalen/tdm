@@ -33,6 +33,7 @@ namespace mods {
 			bool has_equipment_tag(const std::string&);
 			void weapon_cooldown_start(unsigned long duration,weapon_set set);
 			bool weapon_cooldown_expired(weapon_set);
+			bool carrying_ammo_of_type(const std::string&);
 			/*
 			void weapon_cooldown_clear(weapon_set);
 			bool has_weapon_cooldown(weapon_set set){
