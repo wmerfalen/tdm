@@ -3,7 +3,7 @@
 #
 
 # C compiler to use
-CC = g++ -std=c++14 
+CC = g++ -std=c++14 -I/home/llvm/code/c++/bnull-mud/src/mods/include -L/home/llvm/code/c++/bnull-mud/src/mods/lib 
 
 # Path to cxref utility
 CXREF = cxref
@@ -22,7 +22,7 @@ BINDIR = ../bin
 
 CFLAGS = -g -O2 $(MYFLAGS) $(PROFILE)
 
-LIBS =  -lcrypt 
+LIBS =  -lcrypt /home/llvm/code/c++/bnull-mud/src/mods/lib/liblmdb.so
 
 OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
 	act.offensive.o act.other.o act.social.o act.wizard.o alias.o ban.o \
@@ -110,7 +110,7 @@ mods_utils.o: mods/utils.cpp
 acl.o: mods/acl/config-parser.cpp
 	$(CC) -c $(CFLAGS) mods/acl/config-parser.cpp -o acl.o
 globals.o: globals.cpp mods/player.cpp mods/deferred.hpp mods/deferred.cpp
-	$(CC) -c $(CFLAGS) globals.cpp 
+	$(CC) -c $(CFLAGS) /home/llvm/code/c++/bnull-mud/src/mods/lib/liblmdb.so  globals.cpp 
 act.comm.o: act.comm.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h \
   handler.h db.h screen.h
 	$(CC) -c $(CFLAGS) act.comm.c

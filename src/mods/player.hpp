@@ -33,7 +33,9 @@ namespace mods {
 			bool has_equipment_tag(const std::string&);
 			void weapon_cooldown_start(unsigned long duration,weapon_set set);
 			bool weapon_cooldown_expired(weapon_set);
-			bool carrying_ammo_of_type(const std::string&);
+			bool carrying_ammo_of_type(const weapon_type_t &);
+			void stc_room(const room_rnum &);
+			void stc_room_desc(const room_rnum &);
 			/*
 			void weapon_cooldown_clear(weapon_set);
 			bool has_weapon_cooldown(weapon_set set){
@@ -47,6 +49,8 @@ namespace mods {
 			}
 			*/
 			void ammo_adjustment(int);
+			int ammo_type_adjustment(int,const weapon_type_t&);
+			obj_data* get_first_ammo_of_type(const weapon_type_t&) const;
 			void stc(int m){ 
 				send_to_char(m_char_data,std::to_string(m).c_str());
 			}
@@ -70,6 +74,7 @@ namespace mods {
 				return *this;
 			}
 			obj_data* weapon();
+			obj_data* get_ammo(const weapon_type_t &);
 		protected:
 			char_data* m_char_data;
 			std::array<unsigned long,WEAPON_SET_NUM> m_weapon_cooldown;

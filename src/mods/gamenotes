@@ -15,4 +15,17 @@
 		[ ] -> Reinforced walls cannot be breached with normal breach charges
 		[ ] -> Boarded up windows/doors and wood/plaster walls can be breached
 			[ ] -> mute jammers can prevent breaches
+	[ ] -> Flanking
+		[ ] -> CORE: Mobs can face north, east, south, west
+		[ ] -> IF a mob is facing east and you breach from the west, you can then snipe them which will cause a CRITICAL hit
 	
+[ ] -> BOTS
+	[ ] -> Robots cannot get stunned or lose consciousness
+		[ ] -> Instead, robots become less efficient and DAMROLL is reduced
+
+[ ] -> HIVE PRESENCE
+	[ ] -> A hive consists of a queen and several minions
+	[ ] -> A hive over time grows and consumes an area if not contained
+
+[ ] -> AI
+	[ ] -> Mobs should interact based on external data fed to the system

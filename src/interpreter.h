@@ -24,6 +24,7 @@ void	command_interpreter(struct char_data *ch, char *argument);
 int	search_block(char *arg, const char **list, int exact);
 char	lower( char c );
 char	*one_argument(char *argument, char *first_arg);
+char	*one_argument(char *argument, char *first_arg,unsigned int max_char);
 char	*one_word(char *argument, char *first_arg);
 char	*any_one_arg(char *argument, char *first_arg);
 char	*two_arguments(char *argument, char *first_arg, char *second_arg);

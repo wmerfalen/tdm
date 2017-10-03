@@ -1502,7 +1502,7 @@ char *parse_object(FILE *obj_f, int nr)
   strcat(buf2, ", after numeric constants\n"	/* strcat: OK (for 'buf2 >= 87') */
 	 "...expecting 'E', 'A', '$', or next object number");
   j = 0;
-	obj_proto[i].weapon_type = NULL;
+	obj_proto[i].weapon_type = WT_GENERIC;
   for (;;) {
     if (!get_line(obj_f, line)) {
       log("SYSERR: Format error in %s", buf2);
@@ -1517,7 +1517,11 @@ char *parse_object(FILE *obj_f, int nr)
 			log("SYSERR: [mods] INVALID weapon type tag <stub>");
 			exit(1);
 		}
-		obj_proto[i].weapon_type = const_cast<char*>(strline.substr(1,end_bracket -1).c_str());
+		
+		auto wtype = strline.substr(1,end_bracket -1);
+		if(wtype == "snipe"){
+			obj_proto[i].weapon_type = WT_SNIPE;
+		}
 		continue;
 	}
     switch (*line) {

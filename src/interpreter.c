@@ -954,7 +954,10 @@ int reserved_word(char *argument)
  * copy the first non-fill-word, space-delimited argument of 'argument'
  * to 'first_arg'; return a pointer to the remainder of the string.
  */
-char *one_argument(char *argument, char *first_arg)
+char *one_argument(char *argument, char *first_arg){
+	return one_argument(argument,first_arg,MAX_INPUT_LENGTH);
+}
+char *one_argument(char *argument, char *first_arg,unsigned int max_char)
 {
   char *begin = first_arg;
 
@@ -971,6 +974,10 @@ char *one_argument(char *argument, char *first_arg)
     while (*argument && !isspace(*argument)) {
       *(first_arg++) = LOWER(*argument);
       argument++;
+	  if(--max_char == 0){
+	  	*first_arg = '\0';
+	  	return first_arg;
+	  }
     }
 
     *first_arg = '\0';

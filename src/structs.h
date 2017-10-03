@@ -14,6 +14,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include "types.hpp"
 struct obj_data; 
 typedef uint64_t uuid_t;
 
@@ -613,12 +614,6 @@ struct obj_data {
    struct obj_flag_data obj_flags;/* Object information               */
    struct obj_affected_type affected[MAX_OBJ_AFFECT];  /* affects */
 
-   uuid_t uuid;
-	uint64_t ammo;
-	uint64_t ammo_max;
-	short loaded;
-	short holds_ammo;
-	char* weapon_type;
    char	*name;                    /* Title of object :get etc.        */
    char	*description;		  /* When in room                     */
    char	*short_description;       /* when worn/carry/in cont.         */
@@ -633,6 +628,13 @@ struct obj_data {
 
    struct obj_data *next_content; /* For 'contains' lists             */
    struct obj_data *next;         /* For the object list              */
+
+   uuid_t uuid;
+	int16_t ammo;
+	int16_t ammo_max;
+	short loaded;
+	short holds_ammo;
+	weapon_type_t weapon_type;
 };
 /* ======================================================================= */
 

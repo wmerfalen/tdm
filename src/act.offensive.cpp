@@ -56,11 +56,13 @@ ACMD(do_rnum){
 using vpd = mods::scan::vec_player_data;
 using vpde = mods::scan::vec_player_data_element;
 ACMD(do_snipe){
+	/* HOWTO: start an "Action Command" function declaration */
 	MENTOC_PREAMBLE();	/* !mods */
+	/*
 	if(!player->weapon_cooldown_expired(0)){
-		*player << "{cooldown}\r\n";
 		return;
 	}
+	*/
 	
 	if(!player->has_weapon_capability(mods::weapon::mask::snipe)){
 		send_to_char(ch,"You must be wielding a sniper rifle to do that!");
@@ -71,22 +73,28 @@ ACMD(do_snipe){
 		*player << "Out of ammo!\r\n";
 		return;
 	}
-	std::array<char,MAX_INPUT_LENGTH> victim;
+	constexpr unsigned int max_char = 16;
+	std::array<char,max_char> victim;
 	std::fill(victim.begin(),victim.end(),0);
 	vpd scan;
-	one_argument(argument,(char*)&victim[0]);
+	one_argument(argument,(char*)&victim[0],max_char);
 	if(!victim[0])
 		send_to_char(ch, "Whom do you wish to snipe?\r\n");
+	/* HOWTO: perform line of sight scans */
 	mods::scan::los_scan(ch,3,&scan);
 	for(auto scanned_target : scan){
+		/* HOWTO: fuzzy match two strings */
 		if(mods::util::fuzzy_match(static_cast<char*>(&victim[0]),scanned_target->player.name)){
-      		snipe_hit(ch, scanned_target, TYPE_SNIPE);
+			/* HOWTO: deal damage with a sniper rifle */
+      		auto damage = snipe_hit(ch, scanned_target, TYPE_SNIPE);
+			/* HOWTO: adjust ammo of player's current weapon */
 			player->ammo_adjustment(-1);
 			player->weapon_cooldown_start(3,0);
-			auto time_now = static_cast<unsigned long>(time(NULL));
+			/*
+			 * HOWTO: defer an action N seconds in the future
 			mods::globals::defer_queue->push_secs(3,[&](){
-				std::cout << static_cast<unsigned long>(time(NULL)) - time_now << "\r\n";
 			});
+			*/
 			return;
 		}
 	}
@@ -96,17 +104,41 @@ ACMD(do_snipe){
 ACMD(do_reload){
 	MENTOC_PREAMBLE(); /* !mods */
 	/* TODO get wielded equipment tag */
-	if(!player->carrying_ammo_of_type(player->weapon()->weapon_type)){
-		*player << "You don't have any ammo.\r\n";
+	if(!player->weapon()){
+		*player << "Invalid weapon to reload.\r\n";
 		return;
 	}
 
-	/* Get ammo from ammo box */
-	*player << "You get ammo from an ammo box.\r\n";
-	/* Remove 12 rounds from ammo box */
-	/* Add 12 rounds to xm109 */
-	player->weapon()->ammo = 12;
-	*player << "You load 12 rounds into " << player->weapon()->name << "\r\n";
+	if(player->weapon()->ammo > 0){
+		*player << "Weapon already loaded.\r\n";
+		return;
+	}
+	//*player << player->weapon()->weapon_type << "\r\n";
+
+	if(!player->carrying_ammo_of_type(player->weapon()->weapon_type)){
+		*player << "{1} You don't have any ammo.\r\n";
+		return;
+	}
+
+	auto ammo = player->get_ammo(player->weapon()->weapon_type);
+	if(ammo->ammo -12 < 0){
+		auto difference = ammo->ammo -12;
+		auto rounds = difference + 12;
+		if(rounds <= 0){
+			*player << "Out of ammo.\r\n";
+			ammo->ammo = 0;
+			return;
+		}
+		*player << "You load " << rounds << " rounds into " << player->weapon()->name << "\r\n";
+		ammo->ammo = 0;
+		player->weapon()->ammo = rounds;
+		return;
+	}else{
+		ammo->ammo -= 12;
+		player->weapon()->ammo = 12;
+		*player << "You load 12 rounds into " << player->weapon()->name << "\r\n";
+		return;
+	}
 }
 
 ACMD(do_scan){ /* !mods */

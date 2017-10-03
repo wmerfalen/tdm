@@ -13,11 +13,15 @@ The Immortal Board Room can be seen to the north.
 0 -1 1204
 S
 #1201
-The Inn Of The Gods~
-   The Inn of the Gods is a small room, holding only a shelf with many
-small precious stones on it.  When a God comes to rent his belongings,
-his essence is stored in the stones.  The Immortal Board Room is to
-the south.
+{grn}-{{/grn} {wht}o{/wht} {grn}( ( _{/grn} comm room {grn}_ ) ){/grn} {wht}o{/wht} {grn}}-{/grn}~
+	Amidst a wall of mainframes stands a workstation meant for communicating with the
+outside world and with internal staff here on the {STATION}. {if:EMP A dead calm haunts
+the room with the absence of all the worker drone mainframes. No sound can be heard except
+your breathing and the faint muffled commotion of crew scrambling to repair systems in the
+room to the east} {if:NORMAL The hum of a thousand machines working tediously on complex 
+algorithms can be heard.} Intricately woven sigils have been branded across each 
+mainframe, all with a unique purpose and semantic meaning. A desk protrudes here, 
+perhaps you should {bold}sit{bold} and send out a comm. 
 ~
 12 dj 0
 D2
@@ -47,17 +51,17 @@ The Immortal Board Room can be seen to the west.
 0 -1 1204
 S
 #1204
-The Immortal Board Room~
-   The main hang out of the Gods, the Immortal Board Room is the place to
-be.  Gods exchange messages here most every day.  The mortal board room is
-to the east and the meeting room for the gods is to the south.  To the north
-is the Gods' Inn and to the west is a post office for Gods.  There is a large
-staircase leading down to the main temple in the city of Midgaard.  In the
-northeast corner you spot a small staircase leading upwards.
+{grn}-{red}:{/red}{grn}{{/grn} {wht}o{/wht} {grn}[{/grn} {blu}IRQTF HEADQUARTERS BASE{/blu} {grn}]{/grn} {wht}o{/wht} {grn}}{/grn}{red}:{/red}{grn}-{/grn}~
+	The air is stuffy with the smell of electronics and equipment that looks
+state-of-the-art. A faint glimmer of light hums and radiates away from the control
+panels of about 30 different systems, each calculating a critical task. You feel 
+a sense of urgency as the hairs on the back of your neck raise from the sense of 
+duty that is instilled in you from your basic combat logistics programming. This is
+it-- the only home you'll ever know from here on out. 
 ~
 12 d 0
 D0
-The Gods' Inn can be seen just to the north.
+The communications room can be seen ahead to the north.
 ~
 ~
 0 -1 1201

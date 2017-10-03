@@ -127,7 +127,7 @@ A foobar with a long thin blade is here.~
 0 1 4 11
 1 0 10
 #3021
-xm109 sniper rifle xm barrett b [xm109]~
+xm109 sniper rifle xm barrett b [xm109] {snipe}~
 A Barrett XM109 Sniper Rifle~
 The Barrett XM109 is a prototype anti-materiel rifle, chambered for 25 × 59 mm grenade rounds and developed by Barrett Firearms Manufacturing. It was designed in accordance with a requirement set out in 1994, and is capable of defeating light armor and equipment out to 2 km (1.2 mi).~
 A Barrett XM109~
@@ -144,7 +144,7 @@ insignia~
 It says: 'My name Jeff'
 ~
 #3022
-[ammo] ammo xm109 [xm109-ammo]~
+[ammo] ammo xm109 [xm109-ammo] {snipe}~
 XM109 Ammo~
 A bunch of XM109 ammo has been left here.~
 ~

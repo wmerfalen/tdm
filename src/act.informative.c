@@ -405,6 +405,7 @@ ACMD(do_exits)
 
 void look_at_room(struct char_data *ch, int ignore_brief)
 {
+MENTOC_PREAMBLE();
   if (!ch->desc)
     return;
 
@@ -422,18 +423,22 @@ void look_at_room(struct char_data *ch, int ignore_brief)
     sprintbit(ROOM_FLAGS(IN_ROOM(ch)), room_bits, buf, sizeof(buf));
     send_to_char(ch, "[%5d] %s [ %s]", GET_ROOM_VNUM(IN_ROOM(ch)), world[IN_ROOM(ch)].name, buf);
   } else
-    send_to_char(ch, "%s", world[IN_ROOM(ch)].name);
+    //send_to_char(ch, "%s", world[IN_ROOM(ch)].name);
+	player->stc_room(IN_ROOM(ch));
 
   send_to_char(ch, "%s\r\n", CCNRM(ch, C_NRM));
+  //player->stc_ccnrm(CCNRM(ch,C_NRM));
 
   if ((!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_BRIEF)) || ignore_brief ||
       ROOM_FLAGGED(IN_ROOM(ch), ROOM_DEATH))
-    send_to_char(ch, "%s", world[IN_ROOM(ch)].description);
+	  player->stc_room_desc(IN_ROOM(ch));
+    //send_to_char(ch, "%s", world[IN_ROOM(ch)].description);
 
   /* autoexits */
   if (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_AUTOEXIT))
     do_auto_exits(ch);
 
+/* TODO: show map */
   /* now list characters & objects */
   send_to_char(ch, "%s", CCGRN(ch, C_NRM));
   list_obj_to_char(world[IN_ROOM(ch)].contents, ch, SHOW_OBJ_LONG, FALSE);
@@ -473,7 +478,11 @@ void look_in_obj(struct char_data *ch, char *arg)
   else if (!(bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM |
 				 FIND_OBJ_EQUIP, ch, &dummy, &obj))) {
     send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(arg), arg);
-  } else if(mods::globals::obj_map[obj->item_number]->holds_ammo){
+  } else if(mods::globals::obj_map[obj->item_number]->holds_ammo
+   		|| std::string(
+			mods::globals::obj_map[obj->item_number]->name)
+			.find("[ammo]") != std::string::npos
+  ){
   	send_to_char(ch,std::string(std::to_string(obj->ammo) + " rounds.").c_str());
   }else if ((GET_OBJ_TYPE(obj) != ITEM_DRINKCON) &&
 	     (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN) &&

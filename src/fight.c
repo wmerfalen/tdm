@@ -738,6 +738,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
   /* Set the maximum damage per round and subtract the hit points */
   dam = MAX(MIN(dam, 100), 0);
   GET_HIT(victim) -= dam;
+  send_to_char(ch,(std::string("{grn}[") + std::to_string(dam) + "] ").c_str());
 
   /* Gain exp for the hit */
   if (ch != victim)
@@ -766,32 +767,33 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
       dam_message(dam, ch, victim, attacktype);
     }
   }
+  send_to_char(ch,"{/grn}");
 
   /* Use send_to_char -- act() doesn't send message if you are DEAD. */
   switch (GET_POS(victim)) {
   case POS_MORTALLYW:
-    act("$n is mortally wounded, and will die soon, if not aided.", TRUE, victim, 0, 0, TO_ROOM);
-    send_to_char(victim, "You are mortally wounded, and will die soon, if not aided.\r\n");
+    act("{red}$n is mortally wounded, and will die soon, if not aided.{/red}", TRUE, victim, 0, 0, TO_ROOM);
+    send_to_char(victim, "{red}You are mortally wounded, and will die soon, if not aided.{/red}\r\n");
     break;
   case POS_INCAP:
-    act("$n is incapacitated and will slowly die, if not aided.", TRUE, victim, 0, 0, TO_ROOM);
-    send_to_char(victim, "You are incapacitated an will slowly die, if not aided.\r\n");
+    act("{red}$n is incapacitated and will slowly die, if not aided.{/red}", TRUE, victim, 0, 0, TO_ROOM);
+    send_to_char(victim, "{red}You are incapacitated an will slowly die, if not aided.{/red}\r\n");
     break;
   case POS_STUNNED:
-    act("$n is stunned, but will probably regain consciousness again.", TRUE, victim, 0, 0, TO_ROOM);
-    send_to_char(victim, "You're stunned, but will probably regain consciousness again.\r\n");
+    act("{red}$n is stunned, but will probably regain consciousness again.{/red}", TRUE, victim, 0, 0, TO_ROOM);
+    send_to_char(victim, "{red}You're stunned, but will probably regain consciousness again.{/red}\r\n");
     break;
   case POS_DEAD:
-    act("$n is dead!  R.I.P.", FALSE, victim, 0, 0, TO_ROOM);
-    send_to_char(victim, "You are dead!  Sorry...\r\n");
+    act("{red}$n is dead!  R.I.P.{/red}", FALSE, victim, 0, 0, TO_ROOM);
+    send_to_char(victim, "{red}You are dead!  Sorry...{/red}\r\n");
     break;
 
   default:			/* >= POSITION SLEEPING */
     if (dam > (GET_MAX_HIT(victim) / 4))
-      send_to_char(victim, "That really did HURT!\r\n");
+      send_to_char(victim, "{red}That really did HURT!{/red}\r\n");
 
     if (GET_HIT(victim) < (GET_MAX_HIT(victim) / 4)) {
-      send_to_char(victim, "%sYou wish that your wounds would stop BLEEDING so much!%s\r\n",
+      send_to_char(victim, "{red}%sYou wish that your wounds would stop BLEEDING so much!%s{/red}\r\n",
 		CCRED(victim, C_SPR), CCNRM(victim, C_SPR));
       if (ch != victim && MOB_FLAGGED(victim, MOB_WIMPY))
 	do_flee(victim, NULL, 0, 0);
@@ -1034,7 +1036,7 @@ int compute_thaco(struct char_data *ch, struct char_data *victim)
 }
 
 
-void snipe_hit(struct char_data *ch, struct char_data *victim, int type)
+int snipe_hit(struct char_data *ch, struct char_data *victim, int type)
 {
   struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
   int w_type, victim_ac, calc_thaco, dam, diceroll;
@@ -1114,7 +1116,7 @@ void snipe_hit(struct char_data *ch, struct char_data *victim, int type)
     /* at least 1 hp damage min per hit */
     dam = MAX(1, dam);
 
-    snipe_damage(ch, victim, dam, w_type);
+    	return snipe_damage(ch, victim, dam, w_type);
 	}
   
 }

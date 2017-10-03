@@ -614,6 +614,7 @@ void game_loop(socket_t mother_desc)
 
   gettimeofday(&last_time, (struct timezone *) 0);
 
+	mods::globals::pre_game_loop();
   /* The Main Loop.  The Big Cheese.  The Top Dog.  The Head Honcho.  The.. */
   while (!circle_shutdown) {
 	mods::globals::defer_queue->iteration();
@@ -2198,7 +2199,7 @@ size_t send_to_char(struct char_data *ch, const char *messg, ...)
     va_list args;
 
     va_start(args, messg);
-    left = vwrite_to_output(ch->desc, messg, args);
+    left = vwrite_to_output(ch->desc, mods::globals::color_eval(messg).c_str(), args);
     va_end(args);
     return left;
   }

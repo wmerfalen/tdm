@@ -1,3 +1,5 @@
+#ifndef __MODS_COLORS_HEADER__
+#define  __MODS_COLORS_HEADER__
 #define grn_text(a){ std::cout << ::mods::Color::fg::green << a << "\n"; rst_text(); }
 #define red_text(a){ std::cout << ::mods::Color::fg::red << a << "\n"; rst_text(); }
 #define blu_text(a){ std::cout << ::mods::Color::fg::blue << a << "\n"; rst_text(); }
@@ -42,3 +44,4 @@ namespace mods {
     };
 
 };
+#endif
