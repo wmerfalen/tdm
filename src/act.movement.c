@@ -427,6 +427,8 @@ int ok_pick(struct char_data *ch, obj_vnum keynum, int pickproof, int scmd)
 #define DOOR_IS_PICKPROOF(ch, obj, door) ((obj) ? \
 			(OBJVAL_FLAGGED(obj, CONT_PICKPROOF)) : \
 			(EXIT_FLAGGED(EXIT(ch, door), EX_PICKPROOF)))
+/* !mods */
+#define DOOR_IS_THERMITE(ch, obj, door) EXIT_FLAGGED(EXIT(ch, door), EX_REINFORCED)
 
 #define DOOR_IS_CLOSED(ch, obj, door)	(!(DOOR_IS_OPEN(ch, obj, door)))
 #define DOOR_IS_LOCKED(ch, obj, door)	(!(DOOR_IS_UNLOCKED(ch, obj, door)))
@@ -435,6 +437,7 @@ int ok_pick(struct char_data *ch, obj_vnum keynum, int pickproof, int scmd)
 
 ACMD(do_gen_door)
 {
+MENTOC_PREAMBLE();
   int door = -1;
   obj_vnum keynum;
   char type[MAX_INPUT_LENGTH], dir[MAX_INPUT_LENGTH];
@@ -452,6 +455,7 @@ ACMD(do_gen_door)
 
   if ((obj) || (door >= 0)) {
     keynum = DOOR_KEY(ch, obj, door);
+	/* TODO: !mods Add thermite and regularly breached doors */
     if (!(DOOR_IS_OPENABLE(ch, obj, door)))
       act("You can't $F that!", FALSE, ch, 0, cmd_door[subcmd], TO_CHAR);
     else if (!DOOR_IS_OPEN(ch, obj, door) &&
@@ -465,10 +469,15 @@ ACMD(do_gen_door)
       send_to_char(ch, "Oh.. it wasn't locked, after all..\r\n");
     else if (!(DOOR_IS_UNLOCKED(ch, obj, door)) &&
 	     IS_SET(flags_door[subcmd], NEED_UNLOCKED))
-      send_to_char(ch, "It seems to be locked.\r\n");
+      send_to_char(ch, "It is boarded up. Use {grn}'breach'{/grn} to break it open\r\n");
     else if (!has_key(ch, keynum) && (GET_LEVEL(ch) < LVL_GOD) &&
 	     ((subcmd == SCMD_LOCK) || (subcmd == SCMD_UNLOCK)))
-      send_to_char(ch, "You don't seem to have the proper key.\r\n");
+      send_to_char(ch, "You don't seem to have the proper key. Use {grn}'breach'{/grn} to {red}break{/red} it open\r\n");
+	/* TODO: Thermite door */
+	else if(DOOR_IS_THERMITE(ch,obj,door)){
+		*player << "Door is re-inforced. {red}Requires thermite charge{/red}\r\n";
+		return;
+	}
     else if (ok_pick(ch, keynum, DOOR_IS_PICKPROOF(ch, obj, door), subcmd))
       do_doorcmd(ch, obj, door, subcmd);
   }

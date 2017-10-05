@@ -29,3 +29,10 @@
 
 [ ] -> AI
 	[ ] -> Mobs should interact based on external data fed to the system
+	[ ] -> STATES
+		[ ] -> WANDER {possibility to hang with other groups of similar hp}
+		[ ] -> SUSPICIOUS {hasn't found player but found tracks of player}
+		[ ] -> FIGHT {shooting at player until player is dead}
+		[ ] -> PURSUIT {pursuing player if it's worth it}
+		[ ] -> SUSPICIOUS PHASE 2 {On alert for anything suspicious}
+[ ] -> 

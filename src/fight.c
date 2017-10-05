@@ -743,7 +743,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
   /* Gain exp for the hit */
   if (ch != victim)
     gain_exp(ch, GET_LEVEL(victim) * dam);
-
+	mods::globals::states[victim]->event(ch,mods::ai_state::AI_EVENT_SNIPED);
   update_pos(victim);
 
   /*

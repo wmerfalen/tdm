@@ -9,3 +9,8 @@
 [ ] -> Global include file that doesn't require a million deps
 [ ] -> Update sniping behaviour strings to not say dagger stuff
 [ ] -> Create world viewer/builder in browser
+#october{2017}
+[ ] -> Create preferences list and store it per player in lmdb
+[ ] -> Create breachable doors
+[ ] -> Create thermite only breachable doors
+[ ] -> Drones are players too ya know

@@ -50,6 +50,10 @@ void mobile_activity(void)
 
     if (!IS_MOB(ch))
       continue;
+  	auto ret = mods::globals::state_fetch(ch)->dispatch(ch);
+	if(ret){
+		continue;
+	}
 
     /* Examine call for special procedure */
     if (MOB_FLAGGED(ch, MOB_SPEC) && !no_specials) {
@@ -135,7 +139,10 @@ void mobile_activity(void)
             continue;
 
           found = TRUE;
-          act("'Hey!  You're the fiend that attacked me!!!', exclaims $n.", FALSE, ch, 0, 0, TO_ROOM);
+          auto ret = mods::globals::state_fetch(ch)->event(vict,mods::ai_state::AI_EVENT_ATTACKER_FOUND);
+		  if(ret == 0){
+		  	act("'Hey!  You're the fiend that attacked me!!!', exclaims $n.", FALSE, ch, 0, 0, TO_ROOM);
+		  }
           hit(ch, vict, TYPE_UNDEFINED);
         }
       }

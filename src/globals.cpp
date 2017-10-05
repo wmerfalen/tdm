@@ -7,9 +7,13 @@
 #include <map>
 #include <memory>
 #include "mods/lmdb/db.hpp"
+#include "mods/ai_state.hpp"
 
+#define LMDB_DB_FILE "/home/llvm/code/c++/bnull-mud/lib/"
+#define LMDB_DB_NAME "bnull"
 struct char_data* character_list = NULL;
 extern struct obj_data* object_list;
+extern void do_look(struct char_data *ch, char *argument, int cmd, int subcmd);
 namespace mods {
     namespace globals {
 		using player = mods::player;
@@ -18,6 +22,7 @@ namespace mods {
 		std::unique_ptr<mods::acl::FileParser> config;
 		std::shared_ptr<player> player_nobody;
 		std::unique_ptr<mods::deferred> defer_queue;
+		ai_state_map states;
 		namespace objects {
 			static bool populated = false;
 		};
@@ -62,8 +67,19 @@ namespace mods {
 		bool acl_allowed(struct char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd){
 			return false;
 		}
+		int mobile_activity(char_data* ch){
+			//TODO: Make calls to stock stuff like this: ::stock::do_look(*ch, nullptr 0,0);
+			if(states.find(ch) != states.end()){
+				return states[ch]->dispatch(ch);
+			}else{
+				states[ch] = std::make_unique<mods::ai_state>(ch,mods::ai_state::WANDER,250);
+			}
+			do_look(ch,nullptr,0,0);
+			return 1;
+		}
 		void init(){
 			config = std::make_unique<mods::acl::FileParser>();
+			db = std::make_unique<lmdb_db>(LMDB_DB_FILE,LMDB_DB_NAME,MDB_WRITEMAP | MDB_NOLOCK,0600,true);
 			config->setFile("acl.conf");
 			auto ret = config->parse();
 			acl_parse_code = ret;
@@ -76,27 +92,22 @@ namespace mods {
 			player_nobody = nullptr;
 			defer_queue = std::make_unique<mods::deferred>(TICK_RESOLUTION);
 		}
-
-		void pre_game_loop(){
-		std::cout << "Pre game loop\n";
-			/*
-			for(auto & obj : mods::globals::obj_map){
-				std::string o = obj.second->name;
-				if(o.find("{") != std::string::npos){
-					std::cout << "Found weapon type. Assinging...\n";
-					obj.second->weapon_type = const_cast<char*>(
-						o.substr(o.find("{")+1,o.find("}")-1).c_str()
-					);
-					
+		void refresh_player_states(){
+			for(auto ptr = character_list; ptr->next; ptr = ptr->next){
+				if(states.find(ptr) == states.end()){
+					states[ptr] = std::make_unique<mods::ai_state>(ptr,0,0);
 				}
 			}
-			*/
+		}
+		void pre_game_loop(){
+			std::cout << "Pre game loop\n";
+			refresh_player_states();
 		}
 		void load_player_map(){
 			for(auto it = character_list; it ;it = it->next){
 				std::cout << ".";
-			it->uuid = get_uuid();
-			mods::globals::player_map.insert({it->uuid,std::make_shared<mods::player>(static_cast<char_data*>(it))});
+				it->uuid = get_uuid();
+				mods::globals::player_map.insert({it->uuid,std::make_shared<mods::player>(static_cast<char_data*>(it))});
 			}
 		}
 		uuid_t get_uuid(){
@@ -107,6 +118,13 @@ namespace mods {
 			static uuid_t u = 0;
 			return ++u;
 		}
+   	  	std::unique_ptr<ai_state>& state_fetch(struct char_data* ch){
+            if(states.find(ch) == states.end()){
+                states[ch] = std::make_unique<ai_state>(ch,0,0);
+            }
+            return states[ch];
+        }
+    
 		std::string color_eval(std::string final_buffer){
 			final_buffer = replace_all(final_buffer,"{grn}","\033[32m");
 			final_buffer = replace_all(final_buffer,"{red}","\033[31m");

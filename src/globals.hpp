@@ -33,8 +33,12 @@ namespace mods {
 		extern std::shared_ptr<mods::player> player_nobody;
 		extern std::unique_ptr<mods::deferred> defer_queue;
 		extern std::unique_ptr<lmdb_db> db;
+		extern ai_state_map states;
+		std::unique_ptr<ai_state>& state_fetch(struct char_data* ch);
+		int mobile_activity(char_data*);
 		void register_object(obj_data&);
 		void register_object_list();
+		void refresh_player_states();
     	std::string color_eval(std::string final_buffer);
 		std::string replace_all(std::string str, const std::string& from, const std::string& to);
 		namespace players {

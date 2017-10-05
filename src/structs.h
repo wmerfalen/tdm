@@ -14,7 +14,11 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include "types.hpp"
+#include <memory>
+#include "mods/ai_state.hpp"
+enum weapon_type_t { WT_GENERIC =0, WT_SNIPE };
+typedef std::map<struct char_data*,std::unique_ptr<mods::ai_state>> ai_state_map;
+
 struct obj_data; 
 typedef uint64_t uuid_t;
 
@@ -105,6 +109,7 @@ typedef uint64_t uuid_t;
 #define EX_CLOSED		(1 << 1)   /* The door is closed	*/
 #define EX_LOCKED		(1 << 2)   /* The door is locked	*/
 #define EX_PICKPROOF		(1 << 3)   /* Lock can't be picked	*/
+#define EX_REINFORCED		(1 << 4) /* Door is re-inforced */
 
 
 /* Sector types: used in room_data.sector_type */
@@ -628,6 +633,7 @@ struct obj_data {
 
    struct obj_data *next_content; /* For 'contains' lists             */
    struct obj_data *next;         /* For the object list              */
+   uint8_t ai_state;
 
    uuid_t uuid;
 	int16_t ammo;

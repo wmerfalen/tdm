@@ -52,6 +52,10 @@ ACMD(do_scan);
 ACMD(do_rnum){
 	send_to_char(ch, std::to_string(ch->in_room).c_str());
 }
+ACMD(do_ammo){
+	MENTOC_PREAMBLE();
+	player->weapon()->ammo += 12;
+}
 
 using vpd = mods::scan::vec_player_data;
 using vpde = mods::scan::vec_player_data_element;
@@ -69,7 +73,7 @@ ACMD(do_snipe){
 		return;
 	}
 	/* Check ammo */
-	if(player->has_ammo() <= 0){
+	if(player->weapon()->ammo <= 0){
 		*player << "Out of ammo!\r\n";
 		return;
 	}
