@@ -1007,6 +1007,10 @@ void setup_dir(FILE *fl, int room, int dir)
     world[room].dir_option[dir]->exit_info = EX_ISDOOR;
   else if (t[0] == 2)
     world[room].dir_option[dir]->exit_info = EX_ISDOOR | EX_PICKPROOF;
+	/* !mods */
+	else if(t[0] == 3){
+	world[room].dir_option[dir]->exit_info = EX_ISDOOR | EX_REINFORCED;
+	}
   else
     world[room].dir_option[dir]->exit_info = 0;
 

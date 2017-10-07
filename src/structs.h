@@ -18,7 +18,9 @@
 #include "mods/ai_state.hpp"
 enum weapon_type_t { WT_GENERIC =0, WT_SNIPE };
 typedef std::map<struct char_data*,std::unique_ptr<mods::ai_state>> ai_state_map;
-
+typedef short faction_t;
+typedef short ai_state_t;
+typedef short goal_t;
 struct obj_data; 
 typedef uint64_t uuid_t;
 
@@ -690,7 +692,7 @@ struct room_direction_data {
 
    char	*keyword;		/* for open/close			*/
 
-   sh_int /*bitvector_t*/ exit_info;	/* Exit info			*/
+   int /*bitvector_t*/ exit_info;	/* Exit info			*/
    obj_vnum key;		/* Key's number (-1 for no key)		*/
    room_rnum to_room;		/* Where direction leads (NOWHERE)	*/
 };
@@ -759,6 +761,7 @@ struct char_player_data {
    struct time_data time;  /* PC's AGE in days                 */
    ubyte weight;       /* PC / NPC's weight                    */
    ubyte height;       /* PC / NPC's height                    */
+   ubyte faction;
 };
 
 
@@ -930,7 +933,6 @@ struct char_data {
    room_rnum in_room;                    /* Location (real room number)	  */
    room_rnum was_in_room;		 /* location for linkdead people  */
    int wait;				 /* wait for how many loops	  */
-
    struct char_player_data player;       /* Normal data                   */
    struct char_ability_data real_abils;	 /* Abilities without modifiers   */
    struct char_ability_data aff_abils;	 /* Abils with spells/stones/etc  */
@@ -951,6 +953,11 @@ struct char_data {
 
    struct follow_type *followers;        /* List of chars followers       */
    struct char_data *master;             /* Who is char following?        */
+   faction_t faction;
+	ai_state_t state;
+	bool is_faction_leader;
+	goal_t goal;
+
 };
 /* ====================================================================== */
 

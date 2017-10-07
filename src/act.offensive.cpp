@@ -94,6 +94,8 @@ ACMD(do_snipe){
 			/* HOWTO: adjust ammo of player's current weapon */
 			player->ammo_adjustment(-1);
 			player->weapon_cooldown_start(3,0);
+
+			mods::globals::room_event(ch,mods::ai_state::AI_WITNESS_ATTACK);
 			/*
 			 * HOWTO: defer an action N seconds in the future
 			mods::globals::defer_queue->push_secs(3,[&](){
@@ -102,6 +104,10 @@ ACMD(do_snipe){
 			return;
 		}
 	}
+}
+
+ACMD(do_thermite){
+	MENTOC_PREAMBLE();
 }
 
 /* TODO: Implement weapon tags in the obj_data data structure */

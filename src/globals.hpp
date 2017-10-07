@@ -39,8 +39,10 @@ namespace mods {
 		void register_object(obj_data&);
 		void register_object_list();
 		void refresh_player_states();
+		void room_event(struct char_data*,mods::ai_state::event_type_t);
     	std::string color_eval(std::string final_buffer);
 		std::string replace_all(std::string str, const std::string& from, const std::string& to);
+		const char* say_random(const mods::ai_state::event_type_t&);
 		namespace players {
         	template <typename T>
 			inline std::shared_ptr<mods::player>& get(T ch){

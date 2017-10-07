@@ -7,9 +7,7 @@
 #include "mods/ai_state.hpp"
 
 #define EXTERN_ACT(a) extern void a(struct char_data*, char* argument,int,int);
-
-//enum weapon_type_t { WT_GENERIC =0, WT_SNIPE };
-//typedef std::map<struct char_data*,std::unique_ptr<mods::ai_state>> ai_state_map;
+#define IS_OPPOSING_FACTION(us,them) (us->faction > 0 ? (them->faction < 0) : (them->faction > 0))
 #include "structs.h"
 
 #endif

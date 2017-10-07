@@ -6,6 +6,8 @@
 #include "mods/deferred.hpp"
 #include <map>
 #include <memory>
+#include <random>
+#include <iterator>
 #include "mods/lmdb/db.hpp"
 #include "mods/ai_state.hpp"
 
@@ -31,6 +33,33 @@ namespace mods {
 		/* Maps */
 		map_player_list player_map;
 		map_object_list obj_map;
+template <typename I>
+I random_element(I begin, I end)
+{
+    const unsigned long n = std::distance(begin, end);
+    const unsigned long divisor = (RAND_MAX + 1) / n;
+
+    unsigned long k;
+    do { std::srand(std::time(0)); k = std::rand() / divisor; } while (k >= n);
+
+    std::advance(begin, k);
+    return begin;
+}
+
+template<typename Iter, typename RandomGenerator>
+Iter select_randomly(Iter start, Iter end, RandomGenerator& g) {
+    std::uniform_int_distribution<> dis(0, std::distance(start, end) - 1);
+    std::advance(start, dis(g));
+    return start;
+}
+
+template<typename Iter>
+Iter select_randomly(Iter start, Iter end) {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    return select_randomly(start, end, gen);
+}
+
 		std::string replace_all(std::string str, const std::string& from, const std::string& to) {
 			size_t start_pos = 0;
 			while((start_pos = str.find(from, start_pos)) != std::string::npos) {
@@ -91,6 +120,50 @@ namespace mods {
 			}
 			player_nobody = nullptr;
 			defer_queue = std::make_unique<mods::deferred>(TICK_RESOLUTION);
+		}
+		void room_event(struct char_data* ch,mods::ai_state::event_type_t event){
+			for(auto c = ch; c->next_in_room; c = c->next_in_room){
+				state_fetch(c)->event(ch,event);
+			}
+		}
+		const char* say_random(const mods::ai_state::event_type_t & event){
+					const std::vector<const char*> witness = {
+						"I really shouldn't be a part of this",
+						"Whatever you're doing, you ought to stop! Right NOW!",
+						"I'm calling the cops...",
+						"Fucking low lives...",
+						"Scum of the earth! And this is where our tax dollars go to ladies and gentlemen.",
+						"Oh god, it's happening...",
+						"JESUS CHRIST WTF",
+						"Umm, you betta stop whatchu doin there",
+						"So it begins..."
+					};
+					const std::vector<const char*>wander = {
+						"Women themselves always still have in the background of all personal vanity an impersonal contempt -- for \"woman\"",
+						"Who has not, for the sake of his good reputation-- sacrificed himself once?",
+						"One begins to mistrust very clever people when they become embarrassed",
+						"Terrible experiences pose the riddle whether the person who has them is not terrible",
+						"Heavy, heavy-spirited people become lighter precisely through what makes others heavier, through hatred and love, and for a time they surface",
+						"Affability contains no hatred of men, but for that very reason too much contempt for me",
+						"A man's maturity-- consists in having found again the seriousness one had as a child, at play",
+						"To be ashamed of one's immorality-- that is a step on the staircase at whose end one is also ashamed of one's morality",
+						"One should part from life as Odysseus parted from Nausicaa-- blessing it rather than in love with it",
+						"What? A great man? I always see only the actor of his own ideal",
+						"If we train our conscience, it kisses us while it hurts us"
+					};
+			switch(event){
+				case mods::ai_state::AI_WITNESS_ATTACK:
+					//TODO: Load these strings from LMDB which loads from a file
+					return *select_randomly(witness.begin(),witness.end());
+					break;
+				case mods::ai_state::AI_EVENT_WANDER:
+					return *select_randomly(wander.begin(),wander.end());
+					break;
+				default:
+					return "woof";
+					break;
+			}
+			return "woof";
 		}
 		void refresh_player_states(){
 			for(auto ptr = character_list; ptr->next; ptr = ptr->next){

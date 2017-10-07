@@ -22,7 +22,6 @@
 #include "house.h"
 #include "constants.h"
 
-
 /* external variables  */
 extern int tunnel_size;
 
@@ -194,7 +193,13 @@ int perform_move(struct char_data *ch, int dir, int need_specials_check)
       send_to_char(ch, "The %s seems to be closed.\r\n", fname(EXIT(ch, dir)->keyword));
     else
       send_to_char(ch, "It seems to be closed.\r\n");
-  } else {
+  }
+	/* !mods */
+	else if(EXIT_FLAGGED(EXIT(ch,dir),EX_REINFORCED)){
+		send_to_char(ch,"Door is reinforced. You must use {red}thermite{/red} to breach\r\n");
+		return 0;
+	}
+  else {
     if (!ch->followers)
       return (do_simple_move(ch, dir, need_specials_check));
 
@@ -456,7 +461,11 @@ MENTOC_PREAMBLE();
   if ((obj) || (door >= 0)) {
     keynum = DOOR_KEY(ch, obj, door);
 	/* TODO: !mods Add thermite and regularly breached doors */
-    if (!(DOOR_IS_OPENABLE(ch, obj, door)))
+	if(DOOR_IS_THERMITE(ch,obj,door)){
+		*player << "Door is re-inforced. {red}Requires thermite charge{/red}\r\n";
+		return;
+	}
+	else if (!(DOOR_IS_OPENABLE(ch, obj, door)))
       act("You can't $F that!", FALSE, ch, 0, cmd_door[subcmd], TO_CHAR);
     else if (!DOOR_IS_OPEN(ch, obj, door) &&
 	     IS_SET(flags_door[subcmd], NEED_OPEN))
@@ -474,10 +483,6 @@ MENTOC_PREAMBLE();
 	     ((subcmd == SCMD_LOCK) || (subcmd == SCMD_UNLOCK)))
       send_to_char(ch, "You don't seem to have the proper key. Use {grn}'breach'{/grn} to {red}break{/red} it open\r\n");
 	/* TODO: Thermite door */
-	else if(DOOR_IS_THERMITE(ch,obj,door)){
-		*player << "Door is re-inforced. {red}Requires thermite charge{/red}\r\n";
-		return;
-	}
     else if (ok_pick(ch, keynum, DOOR_IS_PICKPROOF(ch, obj, door), subcmd))
       do_doorcmd(ch, obj, door, subcmd);
   }
