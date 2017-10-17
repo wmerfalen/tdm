@@ -10,9 +10,11 @@
 #include <iterator>
 #include "mods/lmdb/db.hpp"
 #include "mods/ai_state.hpp"
+#include "utils.h"
 
 #define LMDB_DB_FILE "/home/llvm/code/c++/bnull-mud/lib/"
 #define LMDB_DB_NAME "bnull"
+#define MODS_BREACH_DISORIENT 50
 struct char_data* character_list = NULL;
 extern struct obj_data* object_list;
 extern void do_look(struct char_data *ch, char *argument, int cmd, int subcmd);
@@ -165,6 +167,33 @@ Iter select_randomly(Iter start, Iter end) {
 			}
 			return "woof";
 		}
+		void room_event(room_vnum room,mods::ai_state::event_type_t event){
+			for(auto ptr = character_list; ptr->next; ptr = ptr->next){
+				if(IN_ROOM(ptr) == room){
+					if(event == mods::ai_state::BREACHED_NORTH  || 
+						event == mods::ai_state::BREACHED_SOUTH  || 
+						event == mods::ai_state::BREACHED_EAST ||
+						event == mods::ai_state::BREACHED_WEST
+					){
+						ptr->disorient += MODS_BREACH_DISORIENT;
+						{
+							if(event == mods::ai_state::BREACHED_NORTH){
+								send_to_char(ptr,"The {red}north{/red} door was breached.\r\n");
+							}
+							if(event == mods::ai_state::BREACHED_SOUTH){
+								send_to_char(ptr,"The {red}south{/red} door was breached.\r\n");
+							}
+							if(event == mods::ai_state::BREACHED_EAST){
+								send_to_char(ptr,"The {red}east{/red} door was breached.\r\n");
+							}
+							if(event == mods::ai_state::BREACHED_WEST){
+								send_to_char(ptr,"The {red}west{/red} door was breached.\r\n");
+							}
+						}
+					}
+				}
+			}
+		}
 		void refresh_player_states(){
 			for(auto ptr = character_list; ptr->next; ptr = ptr->next){
 				if(states.find(ptr) == states.end()){
@@ -197,7 +226,15 @@ Iter select_randomly(Iter start, Iter end) {
             }
             return states[ch];
         }
-    
+   		int opposite_dir(int dir){
+			if(dir == NORTH){ return SOUTH; }
+			if(dir == SOUTH){ return NORTH; }
+			if(dir == EAST){ return WEST; }
+			if(dir == WEST){ return EAST; }
+			if(dir == UP){ return DOWN; }
+			if(dir == DOWN){ return UP; }
+			return NORTH;
+		}
 		std::string color_eval(std::string final_buffer){
 			final_buffer = replace_all(final_buffer,"{grn}","\033[32m");
 			final_buffer = replace_all(final_buffer,"{red}","\033[31m");

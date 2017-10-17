@@ -3,7 +3,7 @@
 #
 
 # C compiler to use
-CC = g++ -std=c++14 -I/home/llvm/code/c++/bnull-mud/src/mods/include -L/home/llvm/code/c++/bnull-mud/src/mods/lib 
+CC = g++ -std=c++14 -fpermissive -I/home/llvm/code/c++/bnull-mud/src/mods/include -L/home/llvm/code/c++/bnull-mud/src/mods/lib 
 
 # Path to cxref utility
 CXREF = cxref
@@ -31,7 +31,7 @@ OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
 	mobact.o modify.o objsave.o olc.o random.o shop.o spec_assign.o \
 	spec_procs.o spell_parser.o spells.o utils.o weather.o \
 	bsd-snprintf.o acl.o mods_utils.o mods_scan.o mods_aistate.o \
-	mods_deferred.o globals.o
+	mods_deferred.o mods_prefs.o globals.o
 
 CXREF_FILES = act.comm.c act.informative.c act.item.c act.movement.c \
 	act.offensive.cpp act.other.c act.social.c act.wizard.cpp alias.c ban.c \
@@ -100,6 +100,8 @@ ref:
 # Dependencies for the object files (automagically generated with
 # gcc -MM)
 
+mods_prefs.o: mods/prefs.cpp mods/prefs.hpp 
+	$(CC) -c $(CFLAGS) mods/prefs.cpp -o mods_prefs.o
 mods_aistate.o: mods/ai_state.cpp mods/ai_state.hpp 
 	$(CC) -c $(CFLAGS) mods/ai_state.cpp -o mods_aistate.o
 mods_deferred.o: mods/deferred.cpp mods/deferred.hpp

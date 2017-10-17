@@ -21,6 +21,9 @@
 #include "spells.h"
 #include "screen.h"
 #include "constants.h"
+#include "mods/weapon.hpp"
+
+#define MOD_SNIPE_SAME_ROOM_THACO 250
 
 /* Structures */
 struct char_data *combat_list = NULL;	/* head of l-list of fighting chars */
@@ -1041,6 +1044,9 @@ int snipe_hit(struct char_data *ch, struct char_data *victim, int type)
   struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
   int w_type, victim_ac, calc_thaco, dam, diceroll;
 
+	/* TODO: if ch and victim are in the same room, the dice rolls should be *terrible*. 
+	* sniper rifle accuracy in close range combat should be incredibly terrible
+	*/
   /* Find the weapon type (for display purposes only) */
   if (wielded && GET_OBJ_TYPE(wielded) == ITEM_WEAPON)
     w_type = GET_OBJ_VAL(wielded, 3) + TYPE_HIT;
@@ -1053,7 +1059,11 @@ int snipe_hit(struct char_data *ch, struct char_data *victim, int type)
 
   /* Calculate chance of hit. Lower THAC0 is better for attacker. */
   calc_thaco = compute_thaco(ch, victim);
-
+  if(IN_ROOM(ch) == IN_ROOM(victim)){
+		/* Terrible accuracy if within the same room */
+		calc_thaco += MOD_SNIPE_SAME_ROOM_THACO;
+  }
+send_to_char(ch,(std::to_string(calc_thaco) + "\r\n").c_str());
   /* Calculate the raw armor including magic armor.  Lower AC is better for defender. */
   victim_ac = compute_armor_class(victim) / 10;
 
@@ -1125,6 +1135,7 @@ int snipe_hit(struct char_data *ch, struct char_data *victim, int type)
 
 void hit(struct char_data *ch, struct char_data *victim, int type)
 {
+MENTOC_PREAMBLE();
   struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
   int w_type, victim_ac, calc_thaco, dam, diceroll;
 
@@ -1147,6 +1158,11 @@ void hit(struct char_data *ch, struct char_data *victim, int type)
 
   /* Calculate chance of hit. Lower THAC0 is better for attacker. */
   calc_thaco = compute_thaco(ch, victim);
+  if(IN_ROOM(ch) == IN_ROOM(victim) && player->has_weapon_capability(mods::weapon::mask::snipe)){
+		/* Terrible accuracy if within the same room */
+		calc_thaco += MOD_SNIPE_SAME_ROOM_THACO;
+  }
+  send_to_char(ch,(std::to_string(calc_thaco) + "\r\n").c_str());
 
   /* Calculate the raw armor including magic armor.  Lower AC is better for defender. */
   victim_ac = compute_armor_class(victim) / 10;

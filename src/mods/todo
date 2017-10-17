@@ -3,14 +3,36 @@
 [ ] -> Create RIFLE item type
 [x] -> do_snipe: Must have AMMO before shooting
 [x] -> :Must be LOADED before sniping
-[ ] -> :User must be in room before damage dealt
+[ ] -> :[race condition]User must be in room before damage dealt
 [ ] -> MOB behaviour to track down snipers
 [ ] -> :Utilize graph.c to find path to sniper
-[ ] -> Global include file that doesn't require a million deps
-[ ] -> Update sniping behaviour strings to not say dagger stuff
+[x] -> Global include file that doesn't require a million deps
+[x] -> Update sniping behaviour strings to not say dagger stuff
 [ ] -> Create world viewer/builder in browser
 #october{2017}
 [ ] -> Create preferences list and store it per player in lmdb
-[ ] -> Create breachable doors
+[ ] -> :create screen width preference
+[ ] -> :create automap preference
+[x] -> Create breachable doors
+[x] -> :create thermite and breach items
+[ ] -> :create thermite command
+[x] -> :create breach command
+[x] -> create mute items
+[ ] -> :jam thermite and breach charges
 [ ] -> Create thermite only breachable doors
 [ ] -> Drones are players too ya know
+[ ] -> implement spray mechanics
+[ ] -> :spraying with shotgun types
+[ ] -> create shotgun weapon types
+[ ] -> create assault rifle weapon types
+[ ] -> create heavy rifle weapon types 
+[ ] -> :5 second reload time 
+[x] -> create smg weapon types
+[ ] -> implement primary and secondary weapons
+[ ] -> create automap functionality
+[ ] -> :maps should appear alongside room description text
+[ ] -> create dynamic dice 
+[ ] -> :ump45 should have better dice rolls when close to target
+[ ] -> :xm109 should have better dice rolls when further away
+[ ] -> :xm109 should have *terrible* dice rolls when close to target
+[ ] -> spraying with smg's should have *terrible* dice rolls when not close to target 

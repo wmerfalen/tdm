@@ -74,6 +74,7 @@ ACMD(do_at);
 ACMD(do_backstab);
 ACMD(do_ban);
 ACMD(do_bash);
+ACMD(do_breach);
 ACMD(do_cast);
 ACMD(do_color);
 ACMD(do_commands);
@@ -234,10 +235,11 @@ cpp_extern const struct command_info cmd_info[] = {
   { "autoexit" , POS_DEAD    , do_gen_tog  , 0, SCMD_AUTOEXIT },
 
   { "bounce"   , POS_STANDING, do_action   , 0, 0 },
-  { "backstab" , POS_STANDING, do_backstab , 1, 0 },
+  //{ "backstab" , POS_STANDING, do_backstab , 1, 0 },
   { "ban"      , POS_DEAD    , do_ban      , LVL_GRGOD, 0 },
   { "balance"  , POS_STANDING, do_not_here , 1, 0 },
-  { "bash"     , POS_FIGHTING, do_bash     , 1, 0 },
+  { "breach"     , POS_STANDING, do_breach     , 1, 0 },
+  //{ "bash"     , POS_FIGHTING, do_bash     , 1, 0 },
   { "beg"      , POS_RESTING , do_action   , 0, 0 },
   { "bleed"    , POS_RESTING , do_action   , 0, 0 },
   { "blush"    , POS_RESTING , do_action   , 0, 0 },
@@ -248,7 +250,7 @@ cpp_extern const struct command_info cmd_info[] = {
   { "buy"      , POS_STANDING, do_not_here , 0, 0 },
   { "bug"      , POS_DEAD    , do_gen_write, 0, SCMD_BUG },
 
-  { "cast"     , POS_SITTING , do_cast     , 1, 0 },
+  //{ "cast"     , POS_SITTING , do_cast     , 1, 0 },
   { "cackle"   , POS_RESTING , do_action   , 0, 0 },
   { "check"    , POS_STANDING, do_not_here , 1, 0 },
   { "chuckle"  , POS_RESTING , do_action   , 0, 0 },
@@ -350,7 +352,7 @@ cpp_extern const struct command_info cmd_info[] = {
   { "junk"     , POS_RESTING , do_drop     , 0, SCMD_JUNK },
 
   { "kill"     , POS_FIGHTING, do_kill     , 0, 0 },
-  { "kick"     , POS_FIGHTING, do_kick     , 1, 0 },
+  //{ "kick"     , POS_FIGHTING, do_kick     , 1, 0 },
   { "kiss"     , POS_RESTING , do_action   , 0, 0 },
 
   { "look"     , POS_RESTING , do_look     , 0, SCMD_LOOK },
@@ -369,7 +371,7 @@ cpp_extern const struct command_info cmd_info[] = {
   { "mail"     , POS_STANDING, do_not_here , 1, 0 },
   { "massage"  , POS_RESTING , do_action   , 0, 0 },
   { "mute"     , POS_DEAD    , do_wizutil  , LVL_GOD, SCMD_SQUELCH },
-  { "murder"   , POS_FIGHTING, do_hit      , 0, SCMD_MURDER },
+  //{ "murder"   , POS_FIGHTING, do_hit      , 0, SCMD_MURDER },
 
   { "news"     , POS_SLEEPING, do_gen_ps   , 0, SCMD_NEWS },
   { "nibble"   , POS_RESTING , do_action   , 0, 0 },

@@ -1003,13 +1003,16 @@ void setup_dir(FILE *fl, int room, int dir)
     log("SYSERR: Format error, %s", buf2);
     exit(1);
   }
-  if (t[0] == 1)
+  if (t[0] == 1){
     world[room].dir_option[dir]->exit_info = EX_ISDOOR;
-  else if (t[0] == 2)
+    SET_BIT(world[room].dir_option[dir]->exit_info,EX_CLOSED);
+  }else if (t[0] == 2){
     world[room].dir_option[dir]->exit_info = EX_ISDOOR | EX_PICKPROOF;
+    SET_BIT(world[room].dir_option[dir]->exit_info,EX_CLOSED);
 	/* !mods */
-	else if(t[0] == 3){
+	}else if(t[0] == 3){
 	world[room].dir_option[dir]->exit_info = EX_ISDOOR | EX_REINFORCED;
+    SET_BIT(world[room].dir_option[dir]->exit_info,EX_CLOSED);
 	}
   else
     world[room].dir_option[dir]->exit_info = 0;
@@ -1506,7 +1509,7 @@ char *parse_object(FILE *obj_f, int nr)
   strcat(buf2, ", after numeric constants\n"	/* strcat: OK (for 'buf2 >= 87') */
 	 "...expecting 'E', 'A', '$', or next object number");
   j = 0;
-	obj_proto[i].weapon_type = WT_GENERIC;
+	obj_proto[i].weapon_type = std::hash<std::string>{}("generic");
   for (;;) {
     if (!get_line(obj_f, line)) {
       log("SYSERR: Format error in %s", buf2);
@@ -1523,9 +1526,7 @@ char *parse_object(FILE *obj_f, int nr)
 		}
 		
 		auto wtype = strline.substr(1,end_bracket -1);
-		if(wtype == "snipe"){
-			obj_proto[i].weapon_type = WT_SNIPE;
-		}
+		obj_proto[i].weapon_type = std::hash<std::string>{}(wtype);
 		continue;
 	}
     switch (*line) {
@@ -2093,19 +2094,38 @@ void reset_zone(zone_rnum zone)
 		     EX_LOCKED);
 	  REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
 		     EX_CLOSED);
+	  REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
+		     EX_BREACHED);
 	  break;
 	case 1:
 	  SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
 		  EX_CLOSED);
 	  REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
 		     EX_LOCKED);
+	  REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
+		     EX_BREACHED);
 	  break;
 	case 2:
 	  SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
 		  EX_LOCKED);
 	  SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
 		  EX_CLOSED);
+	  REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
+		     EX_BREACHED);
+		REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
+			EX_REINFORCED);
 	  break;
+	/*!mods*/
+		case 3:
+			SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
+				EX_REINFORCED);
+	  SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
+		  EX_LOCKED);
+	  SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
+		  EX_CLOSED);
+	  REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
+		     EX_BREACHED);
+		break;
 	}
       last_cmd = 1;
       break;

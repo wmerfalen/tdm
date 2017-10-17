@@ -26,7 +26,9 @@ namespace mods {
 				MANIC,CHAOTIC,RESERVED
 			};
 			enum event_type_t {
-				AI_EVENT_SNIPED,AI_EVENT_ATTACKER_FOUND,AI_WITNESS_ATTACK,AI_EVENT_WANDER
+				AI_EVENT_SNIPED,AI_EVENT_ATTACKER_FOUND,AI_WITNESS_ATTACK,AI_EVENT_WANDER,
+				BREACHED_NORTH,BREACHED_SOUTH,BREACHED_EAST,BREACHED_WEST,
+				BREACHED_FROM_NORTH,BREACHED_FROM_SOUTH,BREACHED_FROM_EAST,BREACHED_FROM_WEST
 			};
 			ai_state() = delete;
 			ai_state(char_data* ch,uint8_t st,uint32_t aggr) : m_char_data(ch), m_state(st), mpub_aggro(aggr){

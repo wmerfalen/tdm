@@ -10,6 +10,7 @@
 
 extern struct obj_data* object_list;
 extern struct room_data* world;
+extern void do_auto_exits(struct char_data *ch);
 namespace mods {
 	std::string just_color_evaluation(std::string final_buffer);
 
@@ -80,6 +81,16 @@ namespace mods {
 		}else{
 			return false;
 		}
+	}
+	bool player::has_thermite(){
+		if(!m_char_data->carrying){ return false;}
+		for(auto item = m_char_data->carrying; item->next; item = item->next){
+			if(m_char_data != item->carried_by){ return false; }
+			if(item->weapon_type == std::hash<std::string>{}("thermite")){
+				return true;
+			}
+		}
+		return false;
 	}
 	bool player::has_equipment_tag(const std::string& tag) {
 		if(!m_char_data->carrying){ return false; }
@@ -159,6 +170,9 @@ namespace mods {
 			}
 		}
 		return nullptr;
+	}
+	void player::exits(){
+		do_auto_exits(m_char_data);
 	}
 };
 

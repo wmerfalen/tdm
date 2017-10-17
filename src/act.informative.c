@@ -67,6 +67,7 @@ ACMD(do_help);
 ACMD(do_who);
 ACMD(do_users);
 ACMD(do_gen_ps);
+ACMD(do_preferences); /*!mods */
 void perform_mortal_where(struct char_data *ch, char *arg);
 void perform_immort_where(struct char_data *ch, char *arg);
 ACMD(do_where);
@@ -96,6 +97,11 @@ int *cmd_sort_info;
 #define SHOW_OBJ_SHORT		1
 #define SHOW_OBJ_ACTION		2
 
+
+ACMD(do_preferences){
+	MENTOC_PREAMBLE();
+	
+}
 
 void show_obj_to_char(struct obj_data *obj, struct char_data *ch, int mode)
 {
@@ -359,7 +365,9 @@ void do_auto_exits(struct char_data *ch)
   for (door = 0; door < NUM_OF_DIRS; door++) {
     if (!EXIT(ch, door) || EXIT(ch, door)->to_room == NOWHERE)
       continue;
-    if (EXIT_FLAGGED(EXIT(ch, door), EX_CLOSED))
+    if (EXIT_FLAGGED(EXIT(ch, door), EX_CLOSED) && 
+		/*! mods */!EXIT_FLAGGED(EXIT(ch,door),EX_BREACHED) &&
+		/*! mods */!IS_SET(world[EXIT(ch,door)->to_room].dir_option[OPPOSITE_DIR(door)]->exit_info,EX_BREACHED))
       continue;
 
     send_to_char(ch, "%c ", LOWER(*dirs[door]));
@@ -409,13 +417,14 @@ MENTOC_PREAMBLE();
   if (!ch->desc)
     return;
 
+  /*
   if (IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch)) {
     send_to_char(ch, "It is pitch black...\r\n");
     return;
   } else if (AFF_FLAGGED(ch, AFF_BLIND)) {
     send_to_char(ch, "You see nothing but infinite darkness...\r\n");
     return;
-  }
+  }*/
   send_to_char(ch, "%s", CCCYN(ch, C_NRM));
   if (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_ROOMFLAGS)) {
     char buf[MAX_STRING_LENGTH];
@@ -436,9 +445,10 @@ MENTOC_PREAMBLE();
 
   /* autoexits */
   if (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_AUTOEXIT))
-    do_auto_exits(ch);
+    player->exits();//do_auto_exits(ch);
 
 /* TODO: show map */
+
   /* now list characters & objects */
   send_to_char(ch, "%s", CCGRN(ch, C_NRM));
   list_obj_to_char(world[IN_ROOM(ch)].contents, ch, SHOW_OBJ_LONG, FALSE);

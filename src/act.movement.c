@@ -188,7 +188,10 @@ int perform_move(struct char_data *ch, int dir, int need_specials_check)
     return (0);
   else if (!EXIT(ch, dir) || EXIT(ch, dir)->to_room == NOWHERE)
     send_to_char(ch, "Alas, you cannot go that way...\r\n");
-  else if (EXIT_FLAGGED(EXIT(ch, dir), EX_CLOSED)) {
+  else if (EXIT_FLAGGED(EXIT(ch, dir), EX_CLOSED) /* !mods */ 
+  	&& !EXIT_FLAGGED(EXIT(ch,dir),EX_BREACHED) &&
+	!IS_SET(world[EXIT(ch,dir)->to_room].dir_option[OPPOSITE_DIR(dir)]->exit_info,EX_BREACHED)
+	) {
     if (EXIT(ch, dir)->keyword)
       send_to_char(ch, "The %s seems to be closed.\r\n", fname(EXIT(ch, dir)->keyword));
     else
@@ -432,6 +435,7 @@ int ok_pick(struct char_data *ch, obj_vnum keynum, int pickproof, int scmd)
 #define DOOR_IS_PICKPROOF(ch, obj, door) ((obj) ? \
 			(OBJVAL_FLAGGED(obj, CONT_PICKPROOF)) : \
 			(EXIT_FLAGGED(EXIT(ch, door), EX_PICKPROOF)))
+#define DOOR_IS_BREACHED(ch, obj, door) (EXIT_FLAGGED(EXIT(ch, door), EX_BREACHED))
 /* !mods */
 #define DOOR_IS_THERMITE(ch, obj, door) EXIT_FLAGGED(EXIT(ch, door), EX_REINFORCED)
 
@@ -439,7 +443,6 @@ int ok_pick(struct char_data *ch, obj_vnum keynum, int pickproof, int scmd)
 #define DOOR_IS_LOCKED(ch, obj, door)	(!(DOOR_IS_UNLOCKED(ch, obj, door)))
 #define DOOR_KEY(ch, obj, door)		((obj) ? (GET_OBJ_VAL(obj, 2)) : \
 					(EXIT(ch, door)->key))
-
 ACMD(do_gen_door)
 {
 MENTOC_PREAMBLE();
@@ -463,6 +466,10 @@ MENTOC_PREAMBLE();
 	/* TODO: !mods Add thermite and regularly breached doors */
 	if(DOOR_IS_THERMITE(ch,obj,door)){
 		*player << "Door is re-inforced. {red}Requires thermite charge{/red}\r\n";
+		return;
+	}
+	else if (DOOR_IS_BREACHED(ch,obj,door)){
+		OPEN_DOOR(IN_ROOM(ch), obj, door);
 		return;
 	}
 	else if (!(DOOR_IS_OPENABLE(ch, obj, door)))

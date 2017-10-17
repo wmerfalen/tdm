@@ -664,12 +664,12 @@ Looking rather silly, $n tries to thrash at $N.
 * Pierce
 M
  311
-You succesfully pierce $N and $S dead body falls to the ground in a lifeless heap.
-$n pierces you.  You are no longer a living member of this world -- R.I.P.!
-$n pierces $N whose suddenly lifeless body falls to the ground!
-You try to pierce $N but pierce the air instead!
-$n pierces holes in the air.
-$n tries to pierce air instead of fighting $N.
+You succesfully shoot $N and $S dead body falls to the ground in a lifeless heap.
+$n shoots you.  You are no longer a living member of this world -- R.I.P.!
+$n shoots $N whose suddenly lifeless body falls to the ground!
+You try to shoot $N but shoot the air instead!
+$n shoots holes in the air.
+$n tries to shoot air instead of fighting $N.
 #
 #
 #
@@ -678,18 +678,18 @@ Your patience is almost gone when you stare back at $n.
 The air is loaded when $N angrily wards off a piercing attack from $n.
 M
  311
-You pierce $N's heart, you heartbreaker you...
+You shoot $N's heart, you heartbreaker you...
 $n breaks your heart, goodbye cruel world...
-$n pierces the heart of $N who falls to the ground clutching at the wound!
-You lunge at $N without managing to pierce $M.
-$n tries to pierce you but fails miserably.
-$n lunges at $N but can't pierce $M.
+$n shoots the heart of $N who falls to the ground clutching at the wound!
+You lunge at $N without managing to shoot $M.
+$n tries to shoot you but fails miserably.
+$n lunges at $N but can't shoot $M.
 #
 #
 #
 The great $N sends you a piercing look, OOPS!
-You return $n's pierce with a piercing look, hmmm...
-$N returns $n's pierce with a piercing look, hmmm...
+You return $n's shoot with a piercing look, hmmm...
+$N returns $n's shoot with a piercing look, hmmm...
 
 * Blast
 M
@@ -727,7 +727,7 @@ $n looks like $e would prefer to have punched a wall rather than trying to punch
 M
  314
 You stab $N through the heart!  Instant death!
-$n drives a stab at you, it pierces your heart!  RIP!
+$n drives a stab at you, it shoots your heart!  RIP!
 $n stabs brutally at $N, killing him as $N is impaled by $n!
 You stab at $N, missing!
 $n misses a particularily nasty stab in your direction!

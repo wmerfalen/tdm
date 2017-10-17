@@ -32,7 +32,9 @@ namespace mods{
 					auto room_id = 0;
 					if(world[next_room].people){
 						if(room_dir){
-							if (EXIT_FLAGGED(room_dir, EX_CLOSED)){
+							if (EXIT_FLAGGED(room_dir, EX_CLOSED)
+							|| 
+							EXIT_FLAGGED(room_dir,EX_REINFORCED)){
 								break;
 							}
 							room_id = room_dir->to_room;

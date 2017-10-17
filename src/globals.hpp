@@ -18,6 +18,9 @@
 
 #define MENTOC_PREAMBLE() auto player = mods::globals::players::get(ch->uuid); player->set_cd(ch); 
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
+#define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \
+strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(a,"down") == 0)
+#define OPPOSITE_DIR(a) mods::globals::opposite_dir(a)
 namespace mods {
     namespace globals {
 		using lmdb_db = gdns::lmdb::db;
@@ -40,6 +43,8 @@ namespace mods {
 		void register_object_list();
 		void refresh_player_states();
 		void room_event(struct char_data*,mods::ai_state::event_type_t);
+		void room_event(room_vnum,mods::ai_state::event_type_t);
+		int opposite_dir(int);
     	std::string color_eval(std::string final_buffer);
 		std::string replace_all(std::string str, const std::string& from, const std::string& to);
 		const char* say_random(const mods::ai_state::event_type_t&);

@@ -28,7 +28,7 @@ D2
 The Immortal Board Room can be seen to the south.
 ~
 ~
-0 -1 1204
+2 -1 1204
 S
 #1202
 The Ice Box Of The Gods~
@@ -64,34 +64,34 @@ D0
 The communications room can be seen ahead to the north.
 ~
 ~
-3 -1 1201
+2 -1 1201
 D1
 The Mortal Board Room can be seen just to the east.
 ~
 door~
-3 1 1203
+0 1 1203
 D2
 The Gods' Meeting Room is located to the south.
 ~
 ~
-3 -1 1200
+0 -1 1200
 D3
 The Gods' Post Office is just to the west.
 ~
 ~
-3 -1 1205
+0 -1 1205
 D4
 There is a small stair in the corner leading up to the social room of
 the Gods.
 ~
 ~
-3 -1 1206
+0 -1 1206
 D5
 You see the hustle and bustle of the Temple of Midgaard at the bottom of
 the stairs.
 ~
 ~
-3 -1 3001
+0 -1 3001
 S
 #1205
 The Post Office Of The Gods~

@@ -16,7 +16,8 @@
 #include <map>
 #include <memory>
 #include "mods/ai_state.hpp"
-enum weapon_type_t { WT_GENERIC =0, WT_SNIPE };
+#include <functional>
+typedef std::size_t weapon_type_t;
 typedef std::map<struct char_data*,std::unique_ptr<mods::ai_state>> ai_state_map;
 typedef short faction_t;
 typedef short ai_state_t;
@@ -112,6 +113,7 @@ typedef uint64_t uuid_t;
 #define EX_LOCKED		(1 << 2)   /* The door is locked	*/
 #define EX_PICKPROOF		(1 << 3)   /* Lock can't be picked	*/
 #define EX_REINFORCED		(1 << 4) /* Door is re-inforced */
+#define EX_BREACHED			(1 << 5) /* Door has been breached */
 
 
 /* Sector types: used in room_data.sector_type */
@@ -692,7 +694,7 @@ struct room_direction_data {
 
    char	*keyword;		/* for open/close			*/
 
-   int /*bitvector_t*/ exit_info;	/* Exit info			*/
+   int exit_info;	/* Exit info			*/
    obj_vnum key;		/* Key's number (-1 for no key)		*/
    room_rnum to_room;		/* Where direction leads (NOWHERE)	*/
 };
@@ -957,6 +959,7 @@ struct char_data {
 	ai_state_t state;
 	bool is_faction_leader;
 	goal_t goal;
+	short disorient;
 
 };
 /* ====================================================================== */

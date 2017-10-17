@@ -30,12 +30,14 @@ namespace mods {
 			char_data* cd() const { return m_char_data; }
 			bool is_weapon_loaded();
 			bool has_ammo();
+			bool has_thermite();
 			bool has_equipment_tag(const std::string&);
 			void weapon_cooldown_start(unsigned long duration,weapon_set set);
 			bool weapon_cooldown_expired(weapon_set);
 			bool carrying_ammo_of_type(const weapon_type_t &);
 			void stc_room(const room_rnum &);
 			void stc_room_desc(const room_rnum &);
+			void exits();
 			/*
 			void weapon_cooldown_clear(weapon_set);
 			bool has_weapon_cooldown(weapon_set set){

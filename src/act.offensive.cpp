@@ -21,6 +21,7 @@
 #include "mods/scan.hpp"
 #include "mods/weapon.hpp"
 #include "globals.hpp"
+#include "mods/prefs.hpp"
 
 /* extern variables */
 extern int pk_allowed;
@@ -47,6 +48,7 @@ ACMD(do_rnum);
 
 /* Military actions */
 ACMD(do_scan);
+ACMD(do_breach);
 
 
 ACMD(do_rnum){
@@ -95,7 +97,7 @@ ACMD(do_snipe){
 			player->ammo_adjustment(-1);
 			player->weapon_cooldown_start(3,0);
 
-			mods::globals::room_event(ch,mods::ai_state::AI_WITNESS_ATTACK);
+			//mods::globals::room_event(ch,mods::ai_state::AI_WITNESS_ATTACK);
 			/*
 			 * HOWTO: defer an action N seconds in the future
 			mods::globals::defer_queue->push_secs(3,[&](){
@@ -106,8 +108,106 @@ ACMD(do_snipe){
 	}
 }
 
+ACMD(do_breach){
+	MENTOC_PREAMBLE();
+	constexpr unsigned int max_char = 5;
+	std::array<char,max_char> direction;
+	one_argument(argument,&direction[0],max_char);
+	if(!argument || ! IS_DIRECTION((char*)&direction[0])){
+		*player << "usage: breach <direction>\r\n";
+		return;
+	}
+	*player << "You place a breach charge on the door...\r\n";
+	mods::ai_state::event_type_t dir;
+	int door = NORTH;
+	if(strcmp(&direction[0],"north") == 0 ){
+		dir = mods::ai_state::BREACHED_NORTH;
+		door = NORTH;
+	}
+	if(strcmp(&direction[0],"south") == 0){
+		dir = mods::ai_state::BREACHED_SOUTH;
+		door = SOUTH;
+	}
+	if(strcmp(&direction[0],"east") == 0){
+		dir = mods::ai_state::BREACHED_EAST;
+		door = EAST;
+	}
+	if(strcmp(&direction[0],"west") == 0){
+		dir = mods::ai_state::BREACHED_WEST;
+		door = WEST;
+	}
+	auto room = IN_ROOM(ch);
+	
+	mods::globals::defer_queue->push_secs(3,[room,dir,door](){
+		mods::globals::room_event(room,dir);
+		SET_BIT(world[room].dir_option[door]->exit_info,EX_BREACHED);
+		if(dir == NORTH){
+			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[SOUTH]->exit_info,EX_BREACHED);
+		}
+		if(dir == SOUTH){
+			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[NORTH]->exit_info,EX_BREACHED);
+		}
+		if(dir == EAST){
+			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[WEST]->exit_info,EX_BREACHED);
+		}
+		if(dir == WEST){
+			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[EAST]->exit_info,EX_BREACHED);
+		}
+	});
+
+}
+
 ACMD(do_thermite){
 	MENTOC_PREAMBLE();
+	if(!player->has_thermite()){
+		*player << "You do not have a thermite charge\r\n";
+		return;
+	}
+	constexpr unsigned int max_char = 5;
+	std::array<char,max_char> direction;
+	one_argument(argument,&direction[0],max_char);
+	if(!argument || ! IS_DIRECTION((char*)&direction[0])){
+		*player << "usage: thermite <direction>\r\n";
+		return;
+	}
+	*player << "You place a {red}thermite{/red} breach charge on the door...\r\n";
+	mods::ai_state::event_type_t dir;
+	int door = NORTH;
+	if(strcmp(&direction[0],"north") == 0 ){
+		dir = mods::ai_state::BREACHED_NORTH;
+		door = NORTH;
+	}
+	if(strcmp(&direction[0],"south") == 0){
+		dir = mods::ai_state::BREACHED_SOUTH;
+		door = SOUTH;
+	}
+	if(strcmp(&direction[0],"east") == 0){
+		dir = mods::ai_state::BREACHED_EAST;
+		door = EAST;
+	}
+	if(strcmp(&direction[0],"west") == 0){
+		dir = mods::ai_state::BREACHED_WEST;
+		door = WEST;
+	}
+	auto room = IN_ROOM(ch);
+	
+	mods::globals::defer_queue->push_secs(3,[room,dir,door](){
+		mods::globals::room_event(room,dir);
+		SET_BIT(world[room].dir_option[door]->exit_info,EX_BREACHED);
+		if(dir == NORTH){
+			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[SOUTH]->exit_info,EX_BREACHED);
+		}
+		if(dir == SOUTH){
+			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[NORTH]->exit_info,EX_BREACHED);
+		}
+		if(dir == EAST){
+			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[WEST]->exit_info,EX_BREACHED);
+		}
+		if(dir == WEST){
+			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[EAST]->exit_info,EX_BREACHED);
+		}
+	});
+
 }
 
 /* TODO: Implement weapon tags in the obj_data data structure */

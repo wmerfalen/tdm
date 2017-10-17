@@ -119,21 +119,26 @@ side of venison or rabbit meat... what in the world could this meat have
 come from, you wonder...
 ~
 #3020
-foobar~
-a foo~
-A foobar with a long thin blade is here.~
+ump45 ump sub smg [ump45]~
+A Heckler & Koch UMP45~
+The UMP45 is a submachine gun developed and manufactured by Heckler & Koch. The UMP has been adopted by various agencies such as the U.S. Customs and Border Protection. Heckler & Koch developed the UMP as a lighter and cheaper successor to the MP5, though both remain in production.~
+A UMP45~
+5 n n
+0 3 25 3
+8 600 10
+[smg]
+E
+ump45~
+The UMP45 is a submachine gun developed and manufactured by Heckler & Koch. The UMP has been adopted by various agencies such as the U.S. Customs and Border Protection. Heckler & Koch developed the UMP as a lighter and cheaper successor to the MP5, though both remain in production.
 ~
-5 n 8193
-0 1 4 11
-1 0 10
 #3021
 xm109 sniper rifle xm barrett b [xm109] {snipe}~
 A Barrett XM109 Sniper Rifle~
 The Barrett XM109 is a prototype anti-materiel rifle, chambered for 25 × 59 mm grenade rounds and developed by Barrett Firearms Manufacturing. It was designed in accordance with a requirement set out in 1994, and is capable of defeating light armor and equipment out to 2 km (1.2 mi).~
 A Barrett XM109~
-5 a 8193
-0 1 6 11
-3 60 10
+5 n n
+0 1 8 3
+8 600 10
 [snipe]
 E
 sniper rifle xm barrett bar~
@@ -157,37 +162,32 @@ ammo [ammo] xm109 [xm109-ammo]~
 It's a bunch of XM109 ammo.
 ~
 #3023
-club wooden~
-a wooden club~
-A simple looking wooden club is here.~
-~
-5 0 8193
-0 1 3 7
-3 12 10
-#3024
-warhammer hammer~
-a warhammer~
-A medium sized warhammer is here.~
+[thermite] thermite breach charge~
+a {red}thermite{/red} breach charge~
+A {red}thermite{/red} breach charge has been left here.~
 ~
 5 0 8193
 0 1 5 7
 6 50 10
-#3025
-flail large~
-a flail~
-A large flail is here.~
+[breach]
+#3024
+breach [breach] charge~
+a breach charge~
+A breach charge is here.~
 ~
 5 0 8193
 0 2 4 7
 6 625 10
-#3030
-torch~
-a torch~
-A large torch.~
+[breach]
+#3025
+[device] mute [mute]~
+a mute device~
+A mute device.~
 ~
 1 0 16185
 0 0 24 0
 1 10 10
+[mute]
 #3031
 lantern brass~
 a lantern~
