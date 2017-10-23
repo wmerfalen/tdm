@@ -173,6 +173,7 @@ ACMD(do_title);
 ACMD(do_toggle);
 ACMD(do_track);
 ACMD(do_trans);
+ACMD(do_throw);
 ACMD(do_unban);
 ACMD(do_ungroup);
 ACMD(do_use);
@@ -470,6 +471,7 @@ cpp_extern const struct command_info cmd_info[] = {
   { "smirk"    , POS_RESTING , do_action   , 0, 0 },
   { "snicker"  , POS_RESTING , do_action   , 0, 0 },
   { "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
+  { "throw"  , POS_RESTING , do_throw   , 0, 0 },
   { "ammo"  , POS_RESTING , do_ammo   , 0, 0 },
   { "snap"     , POS_RESTING , do_action   , 0, 0 },
   { "snarl"    , POS_RESTING , do_action   , 0, 0 },
@@ -1050,6 +1052,9 @@ char *two_arguments(char *argument, char *first_arg, char *second_arg)
   return (one_argument(one_argument(argument, first_arg), second_arg)); /* :-) */
 }
 
+char* three_arguments(char* argument,char *first_arg,char* second_arg,char* third_arg){
+	return (one_argument(one_argument(one_argument(argument,first_arg),second_arg),third_arg));
+}
 
 
 /*

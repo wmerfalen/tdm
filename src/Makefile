@@ -31,7 +31,7 @@ OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
 	mobact.o modify.o objsave.o olc.o random.o shop.o spec_assign.o \
 	spec_procs.o spell_parser.o spells.o utils.o weather.o \
 	bsd-snprintf.o acl.o mods_utils.o mods_scan.o mods_aistate.o \
-	mods_deferred.o mods_prefs.o globals.o
+	mods_deferred.o mods_prefs.o mods_projectile.o duktape.o globals.o
 
 CXREF_FILES = act.comm.c act.informative.c act.item.c act.movement.c \
 	act.offensive.cpp act.other.c act.social.c act.wizard.cpp alias.c ban.c \
@@ -100,6 +100,10 @@ ref:
 # Dependencies for the object files (automagically generated with
 # gcc -MM)
 
+duktape.o: duktape-2.2.0/src/duktape.h 
+	$(CC) -c $(CFLAGS) duktape-2.2.0/src/duktape.c -o duktape.o
+mods_projectile.o: mods/projectile.cpp mods/projectile.hpp 
+	$(CC) -c $(CFLAGS) mods/projectile.cpp -o mods_projectile.o
 mods_prefs.o: mods/prefs.cpp mods/prefs.hpp 
 	$(CC) -c $(CFLAGS) mods/prefs.cpp -o mods_prefs.o
 mods_aistate.o: mods/ai_state.cpp mods/ai_state.hpp 

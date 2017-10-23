@@ -52,7 +52,7 @@
  * However, if you decide you want to have an all-out knock-down drag-out
  * PK Mud, just set pk_allowed to YES - and anything goes.
  */
-int pk_allowed = NO;
+int pk_allowed = YES;
 
 /* is playerthieving allowed? */
 int pt_allowed = NO;

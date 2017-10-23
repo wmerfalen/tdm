@@ -15,6 +15,7 @@
 #define LMDB_DB_FILE "/home/llvm/code/c++/bnull-mud/lib/"
 #define LMDB_DB_NAME "bnull"
 #define MODS_BREACH_DISORIENT 50
+#define MODS_GRENADE_BASE_DAMAGE 66 
 struct char_data* character_list = NULL;
 extern struct obj_data* object_list;
 extern void do_look(struct char_data *ch, char *argument, int cmd, int subcmd);
@@ -190,6 +191,12 @@ Iter select_randomly(Iter start, Iter end) {
 								send_to_char(ptr,"The {red}west{/red} door was breached.\r\n");
 							}
 						}
+					}
+					if(event == mods::ai_state::GRENADE_FLIES_BY){
+						send_to_char(ptr,"A {grn}grenade{/grn} flies by\r\n");
+					}
+					if(event == mods::ai_state::GRENADE_EXPLOSION){
+						send_to_char(ptr,"A {grn}grenade{/grn} explodes!\r\n");
 					}
 				}
 			}

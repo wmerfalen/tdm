@@ -12,6 +12,7 @@ namespace mods {
 	namespace weapon {
 		struct mask {
 			static constexpr int snipe = 1;
+			static constexpr int grenade = 2;
 		};
 	};
 };

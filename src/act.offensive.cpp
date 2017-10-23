@@ -25,7 +25,7 @@
 
 /* extern variables */
 extern int pk_allowed;
-
+extern void three_arguments(char*,char*,char*,char*);
 /* extern functions */
 void raw_kill(struct char_data *ch);
 void check_killer(struct char_data *ch, struct char_data *vict);
@@ -61,6 +61,60 @@ ACMD(do_ammo){
 
 using vpd = mods::scan::vec_player_data;
 using vpde = mods::scan::vec_player_data_element;
+/* Arguments:
+ * throw <gren|grenade> <direction> <count>
+ */
+ACMD(do_throw){
+	MENTOC_PREAMBLE();
+	if(!player->has_inventory_capability(mods::weapon::mask::grenade)){
+		send_to_char(ch,"You must have a grenade to do that!");
+		return;
+	}
+	const char* usage = "usage throw <grenade> <direction> <room_count>\r\n";
+	std::array<char,MAX_INPUT_LENGTH> weapon;
+	std::array<char,MAX_INPUT_LENGTH> direction;
+	std::array<char,MAX_INPUT_LENGTH> count;
+	std::fill(weapon.begin(),weapon.end(),0);
+	std::fill(direction.begin(),direction.end(),0);
+	std::fill(count.begin(),count.end(),0);
+	three_arguments(argument,static_cast<char*>(&weapon[0]),static_cast<char*>(&direction[0]),static_cast<char*>(&count[0]));
+	int cnt = atoi(static_cast<const char*>(&count[0]));
+	if(!mods::util::fuzzy_match(static_cast<const char*>(&weapon[0]),"grenade") || !IS_DIRECTION(static_cast<const char*>(&direction[0])) || cnt <= 0){
+		send_to_char(ch,usage);
+		return;
+	}
+	if(cnt > 3){
+		send_to_char(ch,"But you can only throw up to 3 rooms away!\r\n");
+		return;
+	}
+	auto dir = NORTH;
+	if(strcmp(static_cast<const char*>(&direction[0]),"north") == 0 ){
+		dir = NORTH;
+	}
+	if(strcmp(static_cast<const char*>(&direction[0]),"south") == 0){
+		dir = SOUTH;
+	}
+	if(strcmp(static_cast<const char*>(&direction[0]),"east") == 0){
+		dir = EAST;
+	}
+	if(strcmp(static_cast<const char*>(&direction[0]),"west") == 0){
+		dir = WEST;
+	}
+	if(strcmp(static_cast<const char*>(&direction[0]),"up") == 0){
+		dir = UP;
+	}
+	if(strcmp(static_cast<const char*>(&direction[0]),"down") == 0){
+		dir = DOWN;
+	}
+	/* Resolve cnt rooms in direction.*/
+	auto room_id = mods::projectile::cast_finite(ch,IN_ROOM(ch),dir,cnt);
+	mods::globals::defer_queue->push_secs(3,[room_id,ch](){
+		for(auto person = world[room_id].people;person->next_in_room;person = person->next_in_room){
+			mods::projectile::grenade_damage(ch,person,66,0);
+		}
+	});
+
+}
 ACMD(do_snipe){
 	/* HOWTO: start an "Action Command" function declaration */
 	MENTOC_PREAMBLE();	/* !mods */

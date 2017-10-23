@@ -22,6 +22,7 @@ namespace mods {
 			player() = delete;
 			player(char_data* ch);
 			bool has_weapon_capability(int);
+			bool has_inventory_capability(int);
 			bool can_snipe(char_data *target);
 			void set_cd(char_data* ch){ m_char_data = ch; }
 			const char* name(){ return m_char_data->player.name; }

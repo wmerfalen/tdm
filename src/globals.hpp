@@ -15,6 +15,7 @@
 #include <memory>
 #include "mods/deferred.hpp"
 #include "mods/lmdb/db.hpp"
+#include "mods/projectile.hpp"
 
 #define MENTOC_PREAMBLE() auto player = mods::globals::players::get(ch->uuid); player->set_cd(ch); 
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);

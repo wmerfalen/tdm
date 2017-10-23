@@ -47,6 +47,9 @@ namespace mods {
 		}
 		return false;
 	}
+	bool player::has_inventory_capability(int type){
+		return true; //FIXME: 
+	}
 	void player::weapon_cooldown_start(unsigned long duration,weapon_set set){
 		m_weapon_cooldown[set] = static_cast<unsigned long>(time(NULL)) + duration;
 	}
