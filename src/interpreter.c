@@ -609,7 +609,9 @@ void command_interpreter(struct char_data *ch, char *argument)
   skip_spaces(&argument);
   if (!*argument)
     return;
-
+	if(!mods::globals::command_interpreter(ch,argument)){ /* !mods*/
+		return;
+	}
   /*
    * special case to handle one-character, non-alphanumeric commands;
    * requested by many people so "'hi" or ";godnet test" is possible.
@@ -662,6 +664,7 @@ void command_interpreter(struct char_data *ch, char *argument)
       break;
   } else if (no_specials || !special(ch, cmd, line))
     ((*cmd_info[cmd].command_pointer) (ch, line, cmd, cmd_info[cmd].subcmd));
+	mods::globals::post_command_interpreter(ch,argument);
 }
 
 /**************************************************************************
@@ -970,7 +973,7 @@ char *one_argument(char *argument, char *first_arg){
 char *one_argument(char *argument, char *first_arg,unsigned int max_char)
 {
   char *begin = first_arg;
-
+	if(first_arg == nullptr){ return argument; }
   if (!argument) {
     log("SYSERR: one_argument received a NULL pointer!");
     *first_arg = '\0';

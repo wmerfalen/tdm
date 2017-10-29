@@ -1,5 +1,5 @@
 #include "quests.hpp"
-#define dbg_print(a) { std::cerr << a << "\n"; }
+#define dbg_print(a) { /*std::cerr << a << "\n";*/ }
 //#define MAX_QUEST_TRIGGERS 32 
 #define Q_FORMAT "quest:{room_id}:{N}"
 #define Q_CURRENT_KEY "{player_name}:quest"
@@ -57,12 +57,9 @@ namespace mods{
 				key += ":";
 				key += std::to_string(ctr);
 				key += ":name";
-				dbg_print(key);
-				dbg_print("testing");
 				value = "";
 				mods::globals::db->get(key,value);
 				if(value.length()){
-					dbg_print("emplace");
 					quests.emplace_back(value);	
 				}else{
 					break;
@@ -79,8 +76,11 @@ namespace mods{
 		}
 
 		std::string current_value(room_rnum room,int t_index){
+			dbg_print("cv: " << Q_CURRENT_VALUE);
 			auto m = mods::globals::replace_all(Q_CURRENT_VALUE,"{room_id}",std::to_string(room));
-			return mods::globals::replace_all(m,"{N}",std::to_string(t_index));
+			m = mods::globals::replace_all(m,"{N}",std::to_string(t_index));
+			dbg_print("cv return: " << m );
+			return m;
 		}
 
 		/* Whether or not the quest has been completed */
@@ -118,9 +118,14 @@ namespace mods{
 //		}
 //
 		std::string current_quest(struct char_data *ch){
-			std::string current_quest_id;
+			std::string current_quest_id = "";
 			DBGET(current_key(ch),current_quest_id);
+			dbg_print("current quest: " << current_quest_id);
 			return current_quest_id;
+		}
+
+		bool has_quest(struct char_data * ch){
+			return current_quest(ch).length() > 0;
 		}
 
 //		void load_quest_code(struct char_data* ch,room_rnum room,int quest_id){
@@ -153,14 +158,19 @@ namespace mods{
 //		}
 
 		void load_quest_code(struct char_data* ch){
-			std::string quest_file = std::string("../../lib/quests/") + current_quest(ch) + ".js";
+			char temp[MAXPATHLEN];
+			std::string pwd = getcwd(temp, MAXPATHLEN) ? std::string( temp ) : std::string("");
+			std::string quest_file = pwd + std::string("/quests/") + current_quest(ch) + ".js";
+			//std::cout << quest_file << "\n";
 			/* Only one quest per room */
 			mods::globals::file_to_lmdb(quest_file,trigger_key(ch,IN_ROOM(ch),0));
 		}
 
 		int run_trigger(struct char_data* ch){
 			std::string js_code;
+			//TODO: this has to run ALL quests code, not just zero
 			DBGET(trigger_key(ch,0,0),js_code);
+			//std::cout << js_code << "\n";
 			mods::js::eval_string(js_code);
 			return 0;	//TODO: make use of return value to signify something?
 		}
@@ -171,11 +181,20 @@ namespace mods{
 			return value.length() > 0;
 		}
 
+		void leave_quest(struct char_data* ch,int quest_id){
+			 MENTOC_PREAMBLE();
+            std::string formatter = Q_FORMAT;
+            auto key = mods::globals::replace_all(formatter,"{room_id}",std::to_string(IN_ROOM(ch)));
+            key = mods::globals::replace_all(key,"{N}",std::to_string(quest_id));
+			DBSET(key,"");
+		}
+
 		void start_quest(struct char_data* ch,int quest_id){
 			 MENTOC_PREAMBLE();
             std::string formatter = Q_FORMAT;
             auto key = mods::globals::replace_all(formatter,"{room_id}",std::to_string(IN_ROOM(ch)));
             key = mods::globals::replace_all(key,"{N}",std::to_string(quest_id));
+			dbg_print("key : " << key);
 
             std::string name = key + ":name";
             std::string desc = key + ":desc";

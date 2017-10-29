@@ -31,16 +31,19 @@ namespace mods {
 		  *		-> db->put("char_data->player.name:quest","room_id:N");	//Set quest to room id
 		  *		-> 
 		  */
+
+		/* informative functions */
+		bool has_quest(struct char_data *ch);
+
+		/* player actions for questing */
 		void start_quest(struct char_data* ch,int quest_num);
+		void leave_quest(struct char_data* ch,int quest_num);
 		std::vector<std::string> list_quests(room_rnum room_id);
 		void load_c_functions(duk_context * ctx);
 		
-		/* Player questing and quest tracking */
+		/* lmdb keys for quest tracking */
 		std::string current_key(struct char_data* ch);
         std::string current_value(room_rnum room,int t_index);
-//        std::string trigger_key(struct char_data *ch,room_rnum room,int n_index,int t_index);
-//        std::string trigger_value(const std::string & type, const std::string & value);
-//		std::string trigger_index_key(struct char_data *ch,int t_index);
 		std::string complete_key(struct char_data *ch,room_rnum room,int n_index);
 		std::string trigger_key(struct char_data *ch,room_rnum room,int n_index);
 

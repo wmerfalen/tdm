@@ -10,6 +10,7 @@
 #include <iterator>
 #include "mods/lmdb/db.hpp"
 #include "mods/ai_state.hpp"
+#include "mods/quests.hpp"
 #include "utils.h"
 
 #define LMDB_DB_FILE "/home/llvm/code/c++/bnull-mud/lib/"
@@ -127,6 +128,7 @@ Iter select_randomly(Iter start, Iter end) {
 			duktape_context = mods::js::new_context();
 			mods::js::load_c_functions();
 			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js");
+			DBSET("quest:31:0:name","foobar");
 		}
 		void room_event(struct char_data* ch,mods::ai_state::event_type_t event){
 			for(auto c = ch; c->next_in_room; c = c->next_in_room){
@@ -134,42 +136,6 @@ Iter select_randomly(Iter start, Iter end) {
 			}
 		}
 		const char* say_random(const mods::ai_state::event_type_t & event){
-					const std::vector<const char*> witness = {
-						"I really shouldn't be a part of this",
-						"Whatever you're doing, you ought to stop! Right NOW!",
-						"I'm calling the cops...",
-						"Fucking low lives...",
-						"Scum of the earth! And this is where our tax dollars go to ladies and gentlemen.",
-						"Oh god, it's happening...",
-						"JESUS CHRIST WTF",
-						"Umm, you betta stop whatchu doin there",
-						"So it begins..."
-					};
-					const std::vector<const char*>wander = {
-						"Women themselves always still have in the background of all personal vanity an impersonal contempt -- for \"woman\"",
-						"Who has not, for the sake of his good reputation-- sacrificed himself once?",
-						"One begins to mistrust very clever people when they become embarrassed",
-						"Terrible experiences pose the riddle whether the person who has them is not terrible",
-						"Heavy, heavy-spirited people become lighter precisely through what makes others heavier, through hatred and love, and for a time they surface",
-						"Affability contains no hatred of men, but for that very reason too much contempt for me",
-						"A man's maturity-- consists in having found again the seriousness one had as a child, at play",
-						"To be ashamed of one's immorality-- that is a step on the staircase at whose end one is also ashamed of one's morality",
-						"One should part from life as Odysseus parted from Nausicaa-- blessing it rather than in love with it",
-						"What? A great man? I always see only the actor of his own ideal",
-						"If we train our conscience, it kisses us while it hurts us"
-					};
-			switch(event){
-				case mods::ai_state::AI_WITNESS_ATTACK:
-					//TODO: Load these strings from LMDB which loads from a file
-					return *select_randomly(witness.begin(),witness.end());
-					break;
-				case mods::ai_state::AI_EVENT_WANDER:
-					return *select_randomly(wander.begin(),wander.end());
-					break;
-				default:
-					return "woof";
-					break;
-			}
 			return "woof";
 		}
 		void room_event(room_vnum room,mods::ai_state::event_type_t event){
@@ -279,8 +245,35 @@ Iter select_randomly(Iter start, Iter end) {
             }
         }
 
+		bool command_interpreter(struct char_data *ch,char* argument){
+			if(mods::quests::has_quest(ch)){
+				mods::quests::run_trigger(ch);
+			}
+			return true;
+		}
+
+		void post_command_interpreter(struct char_data *ch,char* argument){
+			return;
+		}
+
     };
 
+	namespace utils {
+        int stoi(const std::string & str,int & in_int){
+            std::string::size_type sz;
+			try{
+            	in_int = std::stoi(str,&sz);
+			}catch(...){
+				return -1;
+			}
+            if(str.substr(sz).length()){
+                return -2;
+            }
+            else{
+                return 0;
+            }
+        }
+	}
 };
 
 

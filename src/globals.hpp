@@ -26,6 +26,7 @@ strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(
 #define OPPOSITE_DIR(a) mods::globals::opposite_dir(a)
 #define DBSET(key,value) mods::globals::db->put(key,value);
 #define DBGET(key,value) mods::globals::db->get(key,value);
+#define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
 namespace mods {
     namespace globals {
 		using lmdb_db = gdns::lmdb::db;
@@ -55,6 +56,8 @@ namespace mods {
     	std::string color_eval(std::string final_buffer);
 		std::string replace_all(std::string str, const std::string& from, const std::string& to);
 		const char* say_random(const mods::ai_state::event_type_t&);
+		bool command_interpreter(struct char_data *ch,char* argument);
+		void post_command_interpreter(struct char_data *ch, char* argument);
 		namespace players {
         	template <typename T>
 			inline std::shared_ptr<mods::player>& get(T ch){
@@ -73,7 +76,9 @@ namespace mods {
 		};
 		*/
     };
-
+	namespace utils {
+		int stoi(const std::string & str,int & in_int);
+	};
 };
 
 

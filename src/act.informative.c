@@ -102,22 +102,48 @@ int *cmd_sort_info;
 
 ACMD(do_quest){
 	MENTOC_PREAMBLE();
-	std::array<char,16> arg;
-	std::fill(arg.begin(),arg.end(),0);
-  	one_argument(argument, static_cast<char*>(&arg[0]),16);
-	if(std::string(static_cast<char*>(&arg[0])).compare("list") == 0){
+	CREATE_ARG(16,1);
+  	one_argument(argument, static_cast<char*>(&arg_1[0]),16);
+	if(std::string(static_cast<char*>(&arg_1[0])).compare("list") == 0){
 		auto quest_names = mods::quests::list_quests(IN_ROOM(ch));
 		for(auto qn : quest_names){
 			*player << "{grn}[ QUEST ]{/grn} " << qn << "\r\n";
 		}
 		return;
 	}
-	if(std::string(static_cast<char*>(&arg[0])).compare("join") == 0){
-//TODO: when multiple quests are allowed, this hard-coded zero needs to change
-		mods::quests::start_quest(ch,0);
+	if(std::string(static_cast<char*>(&arg_1[0])).compare("join") == 0){
+		CREATE_ARG(4,2);
+		two_arguments(argument,static_cast<char*>(&arg_1[0]),static_cast<char*>(&arg_2[0]));
+		std::string arg_2_str = static_cast<char*>(&arg_2[0]);
+		if(arg_2_str.length() == 0){
+			*player << "usage: quest join <number>\n";
+			return;
+		}
+		int quest_num = 0;
+		auto good = mods::utils::stoi(arg_2_str,quest_num);
+		if(good < 0){
+			*player << "usage: quest join <number>\n";
+			return;
+		}
+		mods::quests::start_quest(ch,quest_num);
 	}
-	if(std::string(static_cast<char*>(&arg[0])).compare("leave") == 0){
-//TODO:
+	if(std::string(static_cast<char*>(&arg_1[0])).compare("leave") == 0){
+//TODO: when multiple quests are allowed, this hard-coded zero needs to change
+		CREATE_ARG(4,2);
+		two_arguments(argument,static_cast<char*>(&arg_1[0]),static_cast<char*>(&arg_2[0]));
+		std::string arg_2_str = static_cast<char*>(&arg_2[0]);
+		if(arg_2_str.length() == 0){
+			*player << "usage: quest leave <number>\n";
+			return;
+		}	
+		int quest_num = 0;
+		auto good = mods::utils::stoi(arg_2_str,quest_num);
+		if(good < 0){
+			*player << "usage: quest leave <number>\n";
+			return;
+		}
+		mods::quests::leave_quest(ch,quest_num);
+		*player << "{red}You have left the quest{/red}\n";
 	}
 }
 

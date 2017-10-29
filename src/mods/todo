@@ -37,3 +37,4 @@
 [ ] -> :xm109 should have *terrible* dice rolls when close to target
 [ ] -> spraying with smg's should have *terrible* dice rolls when not close to target 
 [ ] -> Find out what the memory footprint is of a single duktape context
+[ ] -> create internal memory to javascript object of a character
