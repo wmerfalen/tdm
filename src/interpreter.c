@@ -157,6 +157,8 @@ ACMD(do_skillset);
 ACMD(do_sleep);
 ACMD(do_sneak);
 ACMD(do_snipe);
+ACMD(do_quest);
+ACMD(do_js);
 ACMD(do_ammo);
 ACMD(do_snoop);
 ACMD(do_spec_comm);
@@ -419,7 +421,7 @@ cpp_extern const struct command_info cmd_info[] = {
 
   { "quaff"    , POS_RESTING , do_use      , 0, SCMD_QUAFF },
   { "qecho"    , POS_DEAD    , do_qcomm    , LVL_IMMORT, SCMD_QECHO },
-  { "quest"    , POS_DEAD    , do_gen_tog  , 0, SCMD_QUEST },
+  //{ "quest"    , POS_DEAD    , do_gen_tog  , 0, SCMD_QUEST },
   { "qui"      , POS_DEAD    , do_quit     , 0, 0 },
   { "quit"     , POS_DEAD    , do_quit     , 0, SCMD_QUIT },
   { "qsay"     , POS_RESTING , do_qcomm    , 0, SCMD_QSAY },
@@ -470,6 +472,8 @@ cpp_extern const struct command_info cmd_info[] = {
   { "smile"    , POS_RESTING , do_action   , 0, 0 },
   { "smirk"    , POS_RESTING , do_action   , 0, 0 },
   { "snicker"  , POS_RESTING , do_action   , 0, 0 },
+  { "js"  , POS_RESTING , do_js   , 0, 0 },
+  { "quest"  , POS_RESTING , do_quest   , 0, 0 },
   { "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
   { "throw"  , POS_RESTING , do_throw   , 0, 0 },
   { "ammo"  , POS_RESTING , do_ammo   , 0, 0 },

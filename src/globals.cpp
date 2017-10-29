@@ -27,6 +27,7 @@ namespace mods {
 		std::unique_ptr<mods::acl::FileParser> config;
 		std::shared_ptr<player> player_nobody;
 		std::unique_ptr<mods::deferred> defer_queue;
+		duk_context* duktape_context;
 		ai_state_map states;
 		namespace objects {
 			static bool populated = false;
@@ -123,6 +124,9 @@ Iter select_randomly(Iter start, Iter end) {
 			}
 			player_nobody = nullptr;
 			defer_queue = std::make_unique<mods::deferred>(TICK_RESOLUTION);
+			duktape_context = mods::js::new_context();
+			mods::js::load_c_functions();
+			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js");
 		}
 		void room_event(struct char_data* ch,mods::ai_state::event_type_t event){
 			for(auto c = ch; c->next_in_room; c = c->next_in_room){
@@ -253,7 +257,28 @@ Iter select_randomly(Iter start, Iter end) {
 			final_buffer = replace_all(final_buffer,"{/blu}","\033[0m");
 			return final_buffer;
 		}
- 
+
+		int file_to_lmdb(const std::string& file, const std::string & key){
+            std::ifstream include_file(file,std::ios::in);
+            if(!include_file.is_open()){
+                return -1;
+            }
+            else{
+                std::vector<char> buffer;
+                struct stat statbuf;
+
+                if (stat(file.c_str(), &statbuf) == -1) {
+                    return -2;
+                }
+
+                buffer.reserve(statbuf.st_size + 1);
+                std::fill(buffer.begin(),buffer.end(),0);
+                include_file.read((char*)&buffer[0],statbuf.st_size);
+				DBSET(key,static_cast<char*>(&buffer[0]));
+                return statbuf.st_size;
+            }
+        }
+
     };
 
 };

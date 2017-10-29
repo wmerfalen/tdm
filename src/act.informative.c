@@ -21,6 +21,7 @@
 #include "screen.h"
 #include "constants.h"
 #include "globals.hpp"
+#include "mods/quests.hpp"
 extern struct char_data* character_list;
 /* extern variables */
 extern int top_of_helpt;
@@ -55,6 +56,8 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch, 
 void show_obj_to_char(struct obj_data *obj, struct char_data *ch, int mode);
 void list_obj_to_char(struct obj_data *list, struct char_data *ch, int mode, int show);
 void show_obj_modifiers(struct obj_data *obj, struct char_data *ch);
+ACMD(do_js);	/*!mods*/
+ACMD(do_quest);	/*!mods*/
 ACMD(do_look);
 ACMD(do_examine);
 ACMD(do_gold);
@@ -97,12 +100,36 @@ int *cmd_sort_info;
 #define SHOW_OBJ_SHORT		1
 #define SHOW_OBJ_ACTION		2
 
+ACMD(do_quest){
+	MENTOC_PREAMBLE();
+	std::array<char,16> arg;
+	std::fill(arg.begin(),arg.end(),0);
+  	one_argument(argument, static_cast<char*>(&arg[0]),16);
+	if(std::string(static_cast<char*>(&arg[0])).compare("list") == 0){
+		auto quest_names = mods::quests::list_quests(IN_ROOM(ch));
+		for(auto qn : quest_names){
+			*player << "{grn}[ QUEST ]{/grn} " << qn << "\r\n";
+		}
+		return;
+	}
+	if(std::string(static_cast<char*>(&arg[0])).compare("join") == 0){
+//TODO: when multiple quests are allowed, this hard-coded zero needs to change
+		mods::quests::start_quest(ch,0);
+	}
+	if(std::string(static_cast<char*>(&arg[0])).compare("leave") == 0){
+//TODO:
+	}
+}
 
 ACMD(do_preferences){
 	MENTOC_PREAMBLE();
 	
 }
 
+ACMD(do_js){
+	MENTOC_PREAMBLE();
+	mods::js::eval_string(argument);
+}
 void show_obj_to_char(struct obj_data *obj, struct char_data *ch, int mode)
 {
   if (!obj || !ch) {
