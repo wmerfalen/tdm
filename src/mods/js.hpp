@@ -15,6 +15,7 @@ typedef int socket_t;
 #include "../duktape/src/duktape.h"
 #include <sys/stat.h>
 #define JS_READ_CHUNK_SIZE 1024
+#define DT_FORMAT "{player_name}:mob_death_trigger"
 namespace mods {
 	namespace js {
 		void eval_string(const std::string & str);

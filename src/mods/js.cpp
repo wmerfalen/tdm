@@ -1,9 +1,32 @@
 #include "js.hpp"
 #include "quests.hpp"
+#define DT_FORMAT "{player_name}:mob_death_trigger"
 extern struct room_data* world;
 extern struct char_data* character_list;
 namespace mods{
 	namespace js {
+		static duk_ret_t mob_death_trigger(duk_context *ctx){
+			int num_args = duk_get_top(ctx);
+			/* First parameter is character name */
+			std::string char_name = duk_to_string(ctx,0);
+			std::string functor = duk_to_string(ctx,1);
+			std::string dt_key = mods::globals::replace_all(DT_FORMAT,"{player_name}",char_name);
+			DBSET(dt_key,functor);
+			return 0;	/* number of return values */
+		}
+		static duk_ret_t in_room(duk_context *ctx){
+			int num_args = duk_get_top(ctx);
+			/* First parameter is character name */
+			std::string c_name = duk_to_string(ctx,0);
+			for(auto ch = character_list; ch->next; ch = ch->next){
+				if(c_name.compare(ch->player.name) == 0){
+					duk_push_number(ctx,IN_ROOM(ch));	
+					return 1;
+				}
+			}
+			duk_push_number(ctx,-1);
+			return 1;	/* number of return values */
+		}
 		static duk_ret_t send_to_char(duk_context *ctx){
 			int num_args = duk_get_top(ctx);
 			/* First parameter is character name */
@@ -15,6 +38,21 @@ namespace mods{
 				}
 			}
 			return 0;	/* number of return values */
+		}
+		static duk_ret_t db_seti(duk_context *ctx){
+			int num_args = duk_get_top(ctx);
+			std::string key = duk_to_string(ctx,0);
+			auto value = duk_to_number(ctx,1);
+			mods::globals::db->put(key,std::to_string(value));
+			return 0;
+		}
+		static duk_ret_t db_geti(duk_context *ctx){
+			int num_args = duk_get_top(ctx);
+			std::string key = duk_to_string(ctx,0);
+			std::string value = "";
+			mods::globals::db->get(key,value);
+			duk_push_number(ctx,std::stoi(value));
+			return 1;
 		}
 		static duk_ret_t db_set(duk_context *ctx){
 			int num_args = duk_get_top(ctx);
@@ -44,10 +82,18 @@ namespace mods{
 		void load_c_functions(duk_context *ctx){
 			duk_push_c_function(ctx,mods::js::send_to_char,2);
 			duk_put_global_string(ctx,"send_to_char");
+			duk_push_c_function(ctx,mods::js::db_seti,2);
+			duk_put_global_string(ctx,"db_seti");
+			duk_push_c_function(ctx,mods::js::db_geti,1);
+			duk_put_global_string(ctx,"db_geti");
 			duk_push_c_function(ctx,mods::js::db_set,2);
 			duk_put_global_string(ctx,"db_set");
 			duk_push_c_function(ctx,mods::js::db_get,1);
 			duk_put_global_string(ctx,"db_get");
+			duk_push_c_function(ctx,mods::js::in_room,1);
+			duk_put_global_string(ctx,"in_room");
+			duk_push_c_function(ctx,mods::js::mob_death_trigger,2);
+			duk_put_global_string(ctx,"mob_death_trigger");
 
 			mods::quests::load_c_functions(ctx);
 		}

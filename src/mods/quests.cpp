@@ -9,19 +9,45 @@
 //#define Q_PLAYER_TRIGGER_VALUE "{type}:{N}"
 //#define Q_PLAYER_TRIGGER_INDEX_KEY "{player_name}:quest_trigger_index"
 #define Q_COMPLETE_KEY "{player_name}:quest_complete"
-
 #define Q_TRIGGER_CODE_KEY "quest_trigger_code:{room_id}:{N}:{T}"
 extern struct char_data* character_list;
 namespace mods{
 	namespace quests {
-		static duk_ret_t list_quests(duk_context *ctx){
+		static duk_ret_t quest_abort(duk_context *ctx){
 			auto nargs = duk_get_top(ctx);
 			std::string pname = duk_to_string(ctx,0);
-			dbg_print("before for");
+			std::string quest_major = duk_to_string(ctx,1);
+			std::string quest_minor = duk_to_string(ctx,2);
 			for(auto ch = character_list; ch->next; ch = ch->next){
 				MENTOC_PREAMBLE();
 				if(pname.compare(ch->player.name) == 0){
-					dbg_print("found");
+					leave_quest(ch,std::stoi(quest_major));
+					return 0;
+				}
+			}
+			return 0;
+		}
+		static duk_ret_t quest_complete(duk_context *ctx){
+			auto nargs = duk_get_top(ctx);
+			std::string pname = duk_to_string(ctx,0);
+			std::string quest_major = duk_to_string(ctx,1);
+			std::string quest_minor = duk_to_string(ctx,2);
+			for(auto ch = character_list; ch->next; ch = ch->next){
+				MENTOC_PREAMBLE();
+				if(pname.compare(ch->player.name) == 0){
+					leave_quest(ch,std::stoi(quest_major));
+					award_quest(ch,std::stoi(quest_major));
+					return 0;
+				}
+			}
+			return 0;
+		}
+		static duk_ret_t list_quests(duk_context *ctx){
+			auto nargs = duk_get_top(ctx);
+			std::string pname = duk_to_string(ctx,0);
+			for(auto ch = character_list; ch->next; ch = ch->next){
+				MENTOC_PREAMBLE();
+				if(pname.compare(ch->player.name) == 0){
 					auto quests = list_quests(IN_ROOM(ch));
 					for(auto qname : quests){
 					dbg_print(qname);
@@ -36,6 +62,10 @@ namespace mods{
 			//
 			duk_push_c_function(ctx,mods::quests::list_quests,1);
 			duk_put_global_string(ctx,"list_quests");
+			duk_push_c_function(ctx,mods::quests::quest_complete,3);
+			duk_put_global_string(ctx,"quest_complete");
+			duk_push_c_function(ctx,mods::quests::quest_abort,3);
+			duk_put_global_string(ctx,"quest_abort");
 
 		}
 
@@ -163,7 +193,31 @@ namespace mods{
 			std::string quest_file = pwd + std::string("/quests/") + current_quest(ch) + ".js";
 			//std::cout << quest_file << "\n";
 			/* Only one quest per room */
-			mods::globals::file_to_lmdb(quest_file,trigger_key(ch,IN_ROOM(ch),0));
+			quests_file_to_lmdb(ch,quest_file,trigger_key(ch,IN_ROOM(ch),0));
+		}
+
+		int quests_file_to_lmdb(struct char_data* ch,const std::string & quests_file,const std::string & lmdb_key){
+			std::ifstream include_file(quests_file,std::ios::in);
+            if(!include_file.is_open()){
+                return -1;
+            }
+            else{
+                std::vector<char> buffer;
+                struct stat statbuf;
+
+                if (stat(quests_file.c_str(), &statbuf) == -1) {
+                    return -2;
+                }
+
+                buffer.reserve(statbuf.st_size + 1);
+                std::fill(buffer.begin(),buffer.end(),0);
+                include_file.read((char*)&buffer[0],statbuf.st_size);
+				std::string buf = static_cast<char*>(&buffer[0]);	
+				/* start interpolation */
+				buf = mods::globals::replace_all(buf,"{character}",ch->player.name);
+                DBSET(lmdb_key,buf);
+                return statbuf.st_size;
+            }
 		}
 
 		int run_trigger(struct char_data* ch){
@@ -181,6 +235,12 @@ namespace mods{
 			return value.length() > 0;
 		}
 
+		void award_quest(struct char_data* ch,int quest_id){
+			 MENTOC_PREAMBLE();
+			 //TODO: Calculate quest reward tiers
+			 ch->points->gold += 50000;
+			 ch->points->exp += 500000;
+		}
 		void leave_quest(struct char_data* ch,int quest_id){
 			 MENTOC_PREAMBLE();
             std::string formatter = Q_FORMAT;
@@ -208,6 +268,7 @@ namespace mods{
 				/* set the current quest to incomplete ("0") */
 				DBSET(complete_key(ch,IN_ROOM(ch),quest_id),"0");
 				load_quest_code(ch);
+				run_trigger(ch);
 			}else{
 				*player << "Cannot find that quest\r\n";
 			}

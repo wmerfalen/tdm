@@ -40,6 +40,7 @@ namespace mods {
 		void leave_quest(struct char_data* ch,int quest_num);
 		std::vector<std::string> list_quests(room_rnum room_id);
 		void load_c_functions(duk_context * ctx);
+		int quests_file_to_lmdb(struct char_data* ch,const std::string & quests_file,const std::string & lmdb_key);
 		
 		/* lmdb keys for quest tracking */
 		std::string current_key(struct char_data* ch);

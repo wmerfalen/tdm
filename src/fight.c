@@ -55,6 +55,7 @@ void make_corpse(struct char_data *ch);
 void change_alignment(struct char_data *ch, struct char_data *victim);
 void death_cry(struct char_data *ch);
 void raw_kill(struct char_data *ch);
+void die(struct char_data *killer,struct char_data *victim); /* !mods */
 void die(struct char_data *ch);
 void group_gain(struct char_data *ch, struct char_data *victim);
 void solo_gain(struct char_data *ch, struct char_data *victim);
@@ -377,6 +378,23 @@ void raw_kill(struct char_data *ch)
 }
 
 
+void die(struct char_data* killer,struct char_data *victim)
+{
+	/* check if mob death trigger is active */
+	std::string functor;
+	DBGET(mods::globals::replace_all(DT_FORMAT,"{player_name}",killer->player.name),functor);
+	if(functor.length()){
+		functor += "(\"";
+		functor += killer->player.name;
+		functor += "\",\"";
+		functor += victim->player.name;
+		functor += "\",";
+		functor += "0);";	//TODO: Make this the zone where the player is killed at
+		mods::js::eval_string(functor);
+	}
+	die(victim);
+}
+
 
 void die(struct char_data *ch)
 {
@@ -687,7 +705,7 @@ int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int 
 
     log("SYSERR: Attempt to damage corpse '%s' in room #%d by '%s'.",
         GET_NAME(victim), GET_ROOM_VNUM(IN_ROOM(victim)), GET_NAME(ch));
-    die(victim);
+    die(ch,victim);
     return (-1);            /* -je, 7/7/92 */
   }
 
@@ -848,7 +866,7 @@ int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int 
       if (MOB_FLAGGED(ch, MOB_MEMORY))
     forget(ch, victim);
     }
-    die(victim);
+    die(ch,victim);
     return (-1);
   }
   return (dam);
@@ -871,7 +889,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
 
     log("SYSERR: Attempt to damage corpse '%s' in room #%d by '%s'.",
 		GET_NAME(victim), GET_ROOM_VNUM(IN_ROOM(victim)), GET_NAME(ch));
-    die(victim);
+    die(ch,victim);
     return (-1);			/* -je, 7/7/92 */
   }
 
@@ -1023,7 +1041,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
       if (MOB_FLAGGED(ch, MOB_MEMORY))
 	forget(ch, victim);
     }
-    die(victim);
+    die(ch,victim);
     return (-1);
   }
   return (dam);
@@ -1045,7 +1063,7 @@ int damage(struct char_data *ch, struct char_data *victim, int dam, int attackty
 
     log("SYSERR: Attempt to damage corpse '%s' in room #%d by '%s'.",
 		GET_NAME(victim), GET_ROOM_VNUM(IN_ROOM(victim)), GET_NAME(ch));
-    die(victim);
+    die(ch,victim);
     return (-1);			/* -je, 7/7/92 */
   }
 
@@ -1193,7 +1211,7 @@ int damage(struct char_data *ch, struct char_data *victim, int dam, int attackty
       if (MOB_FLAGGED(ch, MOB_MEMORY))
 	forget(ch, victim);
     }
-    die(victim);
+    die(ch,victim);
     return (-1);
   }
   return (dam);

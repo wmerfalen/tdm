@@ -23,7 +23,9 @@
 [ ] -> Drones are players too ya know
 [ ] -> implement spray mechanics
 [ ] -> :spraying with shotgun types
+[ ] -> :when in same room, default is spray
 [ ] -> create shotgun weapon types
+[ ] -> :shotgun damage rolls are good when in same room
 [ ] -> create assault rifle weapon types
 [ ] -> create heavy rifle weapon types 
 [ ] -> :5 second reload time 
@@ -31,10 +33,17 @@
 [ ] -> implement primary and secondary weapons
 [ ] -> create automap functionality
 [ ] -> :maps should appear alongside room description text
+[ ] -> :create algorithm to do automap functionality
 [ ] -> create dynamic dice 
 [ ] -> :ump45 should have better dice rolls when close to target
 [ ] -> :xm109 should have better dice rolls when further away
 [ ] -> :xm109 should have *terrible* dice rolls when close to target
 [ ] -> spraying with smg's should have *terrible* dice rolls when not close to target 
-[ ] -> Find out what the memory footprint is of a single duktape context
+[x] -> Find out what the memory footprint is of a single duktape context
 [ ] -> create internal memory to javascript object of a character
+#november{2017}
+[ ] -> implement 'recall' functionality
+[ ] -> implement 'add_exp(user,X)' js
+[ ] -> implement 'add_gold(user,X)' js
+[ ] -> implement a recoverable fatal error handler for duktape
+[ ] -> implement 'quest progress' command

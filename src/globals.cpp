@@ -128,7 +128,7 @@ Iter select_randomly(Iter start, Iter end) {
 			duktape_context = mods::js::new_context();
 			mods::js::load_c_functions();
 			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js");
-			DBSET("quest:31:0:name","foobar");
+			DBSET("quest:31:0:name","Eliminate HVT posing as civilian.");
 		}
 		void room_event(struct char_data* ch,mods::ai_state::event_type_t event){
 			for(auto c = ch; c->next_in_room; c = c->next_in_room){

@@ -26,6 +26,7 @@
 /* extern variables */
 extern int pk_allowed;
 extern void three_arguments(char*,char*,char*,char*);
+extern void die(struct char_data*,struct char_data*);
 /* extern functions */
 void raw_kill(struct char_data *ch);
 void check_killer(struct char_data *ch, struct char_data *vict);
@@ -109,7 +110,7 @@ ACMD(do_throw){
 	/* Resolve cnt rooms in direction.*/
 	auto room_id = mods::projectile::cast_finite(ch,IN_ROOM(ch),dir,cnt);
 	mods::globals::defer_queue->push_secs(3,[room_id,ch](){
-		for(auto person = world[room_id].people;person->next_in_room;person = person->next_in_room){
+		for(auto person = world[room_id].people;person;person = person->next_in_room){
 			mods::projectile::grenade_damage(ch,person,66,0);
 		}
 	});
@@ -434,7 +435,8 @@ ACMD(do_kill)
       act("You chop $M to pieces!  Ah!  The blood!", FALSE, ch, 0, vict, TO_CHAR);
       act("$N chops you to pieces!", FALSE, vict, 0, ch, TO_CHAR);
       act("$n brutally slays $N!", FALSE, ch, 0, vict, TO_NOTVICT);
-      raw_kill(vict);
+	  die(ch,vict);
+      //raw_kill(vict);
     }
   }
 }
