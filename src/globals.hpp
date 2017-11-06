@@ -51,6 +51,7 @@ namespace mods {
 		void refresh_player_states();
 		void room_event(struct char_data*,mods::ai_state::event_type_t);
 		void room_event(room_vnum,mods::ai_state::event_type_t);
+		void post_boot_db();
 		int file_to_lmdb(const std::string& file,const std::string& key);
 		int opposite_dir(int);
     	std::string color_eval(std::string final_buffer);

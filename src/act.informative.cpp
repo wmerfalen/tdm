@@ -58,6 +58,8 @@ void list_obj_to_char(struct obj_data *list, struct char_data *ch, int mode, int
 void show_obj_modifiers(struct obj_data *obj, struct char_data *ch);
 ACMD(do_js);	/*!mods*/
 ACMD(do_quest);	/*!mods*/
+ACMD(do_recall);	/*!mods*/
+ACMD(do_givemegold); /*!mods*/
 ACMD(do_look);
 ACMD(do_examine);
 ACMD(do_gold);
@@ -99,6 +101,21 @@ int *cmd_sort_info;
 #define SHOW_OBJ_LONG		0
 #define SHOW_OBJ_SHORT		1
 #define SHOW_OBJ_ACTION		2
+
+ACMD(do_givemegold){
+	MENTOC_PREAMBLE();
+	ch->points.gold += 50000;
+}
+
+ACMD(do_recall){
+	MENTOC_PREAMBLE();
+	//TODO: combat cooldown should prevent recall for 20 seconds
+	if(time(NULL) < ch->last_fight_timestamp + 20){
+		*player << "Cannot recall this soon after combat.";
+	}else{
+		char_to_room(ch,31);
+	}
+}
 
 ACMD(do_quest){
 	MENTOC_PREAMBLE();

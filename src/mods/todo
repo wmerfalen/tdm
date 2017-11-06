@@ -42,8 +42,16 @@
 [x] -> Find out what the memory footprint is of a single duktape context
 [ ] -> create internal memory to javascript object of a character
 #november{2017}
-[ ] -> implement 'recall' functionality
-[ ] -> implement 'add_exp(user,X)' js
-[ ] -> implement 'add_gold(user,X)' js
-[ ] -> implement a recoverable fatal error handler for duktape
-[ ] -> implement 'quest progress' command
+[x] -> implement 'recall' functionality {small}
+[ ] -> :implement cooldown if user has been in combat in the past 20 seconds {small}
+[ ] -> implement 'add_exp(user,X)' js {small}
+[ ] -> implement 'add_gold(user,X)' js {small}
+[ ] -> implement a recoverable fatal error handler for duktape {small}
+[ ] -> implement 'quest progress' command {small}
+[ ] -> create different types of ammo with different effects on gameplay {medium}
+[ ] -> :armor piercing rounds (+10 DICE SIDES) {small}
+[ ] -> create storage containers that cost money {medium}
+[ ] -> expand CAN_SEE macro to match behaviour when special goggles are worn {small}
+[ ] -> fix sniper rifle description. The long description is mistakenly the short description {small}
+[ ] -> group together XM109 ammo into xN descriptions when multiple are in the room
+[ ] -> when a character dies, only certain pieces of inventory should stay on the body {small}

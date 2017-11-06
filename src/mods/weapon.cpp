@@ -1,4 +1,4 @@
 #include "weapon.hpp"
 
-constexpr int mods::weapon::mask::snipe = 1;
+//constexpr int mods::weapon::mask::snipe = 1;
 

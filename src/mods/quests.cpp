@@ -238,8 +238,8 @@ namespace mods{
 		void award_quest(struct char_data* ch,int quest_id){
 			 MENTOC_PREAMBLE();
 			 //TODO: Calculate quest reward tiers
-			 ch->points->gold += 50000;
-			 ch->points->exp += 500000;
+			 ch->points.gold += 50000;
+			 ch->points.exp += 500000;
 		}
 		void leave_quest(struct char_data* ch,int quest_id){
 			 MENTOC_PREAMBLE();

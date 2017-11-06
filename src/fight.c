@@ -698,6 +698,7 @@ int skill_message(int dam, struct char_data *ch, struct char_data *vict,
  */
 int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype)
 {
+	ch->last_fight_timestamp = time(NULL);
   if (GET_POS(victim) <= POS_DEAD) {
     /* This is "normal"-ish now with delayed extraction. -gg 3/15/2001 */
     if (PLR_FLAGGED(victim, PLR_NOTDEADYET) || MOB_FLAGGED(victim, MOB_NOTDEADYET))
@@ -882,6 +883,7 @@ int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int 
  */
 int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype)
 {
+	ch->last_fight_timestamp = time(NULL);
   if (GET_POS(victim) <= POS_DEAD) {
     /* This is "normal"-ish now with delayed extraction. -gg 3/15/2001 */
     if (PLR_FLAGGED(victim, PLR_NOTDEADYET) || MOB_FLAGGED(victim, MOB_NOTDEADYET))
@@ -1055,6 +1057,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
  */
 int damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype)
 {
+	ch->last_fight_timestamp = time(NULL);
 	/*TODO: Modify this code to allow sniping */
   if (GET_POS(victim) <= POS_DEAD) {
     /* This is "normal"-ish now with delayed extraction. -gg 3/15/2001 */
@@ -1339,6 +1342,7 @@ send_to_char(ch,(std::to_string(calc_thaco) + "\r\n").c_str());
 void hit(struct char_data *ch, struct char_data *victim, int type)
 {
 MENTOC_PREAMBLE();
+	ch->last_fight_timestamp = time(NULL);
   struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
   int w_type, victim_ac, calc_thaco, dam, diceroll;
 

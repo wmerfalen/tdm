@@ -20,6 +20,8 @@
 struct char_data* character_list = NULL;
 extern struct obj_data* object_list;
 extern void do_look(struct char_data *ch, char *argument, int cmd, int subcmd);
+extern void char_from_room(struct char_data*);
+extern void char_to_room(struct char_data*,room_rnum);
 namespace mods {
     namespace globals {
 		using player = mods::player;
@@ -129,6 +131,13 @@ Iter select_randomly(Iter start, Iter end) {
 			mods::js::load_c_functions();
 			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js");
 			DBSET("quest:31:0:name","Eliminate HVT posing as civilian.");
+		}
+		void post_boot_db(){
+			for(auto ch = character_list; ch; ch = ch->next){
+				auto room = IN_ROOM(ch);
+				char_from_room(ch);
+				char_to_room(ch,room);
+			}
 		}
 		void room_event(struct char_data* ch,mods::ai_state::event_type_t event){
 			for(auto c = ch; c->next_in_room; c = c->next_in_room){

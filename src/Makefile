@@ -24,24 +24,29 @@ CFLAGS = -g -O2 $(MYFLAGS) $(PROFILE)
 
 LIBS =  -lcrypt /home/llvm/code/c++/bnull-mud/src/mods/lib/liblmdb.so
 
-OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
-	act.offensive.o act.other.o act.social.o act.wizard.o alias.o ban.o \
-	boards.o castle.o class.o comm.o config.o constants.o db.o fight.o \
-	graph.o mods_player.o handler.o house.o interpreter.o limits.o magic.o mail.o \
+MODS_SRC := $(wildcard mods/*.cpp)
+MODS_OBJ := $(patsubst mods/%.cpp,mods/%.o,$(MODS_SRC))
+CPP_SRC := $(wildcard *.cpp)
+CPP_OBJ := $(patsubst %.cpp,%.o,$(CPP_SRC))
+
+
+OBJFILES = act.comm.o act.item.o act.movement.o \
+	act.other.o act.social.o alias.o ban.o \
+	boards.o castle.o class.o comm.o config.o constants.o fight.o \
+	graph.o handler.o house.o interpreter.o limits.o magic.o mail.o \
 	mobact.o modify.o objsave.o olc.o random.o shop.o spec_assign.o \
 	spec_procs.o spell_parser.o spells.o utils.o weather.o \
-	bsd-snprintf.o acl.o mods_utils.o mods_scan.o mods_aistate.o \
-	mods_deferred.o mods_prefs.o mods_projectile.o duktape.o mods_js.o\
-	mods_quests.o globals.o
+	bsd-snprintf.o acl.o duktape.o $(MODS_OBJ) $(CPP_OBJ) 
 
 CXREF_FILES = act.comm.c act.informative.c act.item.c act.movement.c \
-	act.offensive.cpp act.other.c act.social.c act.wizard.cpp alias.c ban.c \
-	boards.c castle.c class.c comm.c config.c constants.c db.cpp fight.c \
+	act.other.c act.social.c act.wizard.cpp alias.c ban.c \
+	boards.c castle.c class.c comm.c config.c constants.c fight.c \
 	graph.c handler.c house.c interpreter.c limits.c magic.c mail.c \
 	mobact.c modify.c objsave.c olc.c random.c shop.c spec_assign.c\
 	spec_procs.c spell_parser.c spells.c utils.c weather.c \
 	bsd-snprintf.c globals.cpp mods/acl/config-parser.cpp \
-	mods/utils.hpp mods/player.hpp mods/scan.hpp
+	mods/utils.hpp mods/scan.hpp
+
 
 default: all
 
@@ -101,55 +106,29 @@ ref:
 # Dependencies for the object files (automagically generated with
 # gcc -MM)
 
-mods_quests.o: mods/quests.cpp mods/quests.hpp 
-	$(CC) -c $(CFLAGS) mods/quests.cpp -o mods_quests.o
-mods_js.o: mods/js.cpp mods/js.hpp 
-	$(CC) -c $(CFLAGS) mods/js.cpp -o mods_js.o
+%.o: %.cpp
+	$(CC) -c $(CFLAGS) -o $@ $<
+mods_%.o: mods/%.cpp
+	$(CC) -c $(CFLAGS) -o $@ $<
 duktape.o: duktape-2.2.0/src/duktape.h 
 	$(CC) -c $(CFLAGS) duktape-2.2.0/src/duktape.c -o duktape.o
-mods_projectile.o: mods/projectile.cpp mods/projectile.hpp 
-	$(CC) -c $(CFLAGS) mods/projectile.cpp -o mods_projectile.o
-mods_prefs.o: mods/prefs.cpp mods/prefs.hpp 
-	$(CC) -c $(CFLAGS) mods/prefs.cpp -o mods_prefs.o
-mods_aistate.o: mods/ai_state.cpp mods/ai_state.hpp 
-	$(CC) -c $(CFLAGS) mods/ai_state.cpp -o mods_aistate.o
-mods_deferred.o: mods/deferred.cpp mods/deferred.hpp
-	$(CC) -c $(CFLAGS) mods/deferred.cpp -o mods_deferred.o
-mods_scan.o: mods/scan.cpp
-	$(CC) -c $(CFLAGS) mods/scan.cpp -o mods_scan.o
-mods_player.o: mods/player.cpp
-	$(CC) -c $(CFLAGS) mods/player.cpp -o mods_player.o
-mods_utils.o: mods/utils.cpp
-	$(CC) -c $(CFLAGS) mods/utils.cpp -o mods_utils.o
 acl.o: mods/acl/config-parser.cpp
 	$(CC) -c $(CFLAGS) mods/acl/config-parser.cpp -o acl.o
-globals.o: globals.cpp mods/player.cpp mods/deferred.hpp mods/deferred.cpp mods/ai_state.cpp
-	$(CC) -c $(CFLAGS) /home/llvm/code/c++/bnull-mud/src/mods/lib/liblmdb.so  globals.cpp 
 act.comm.o: act.comm.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h \
   handler.h db.h screen.h
 	$(CC) -c $(CFLAGS) act.comm.c
-act.informative.o: act.informative.c conf.h sysdep.h structs.h utils.h comm.h \
-  interpreter.h handler.h db.h spells.h screen.h constants.h
-	$(CC) -c $(CFLAGS) act.informative.c
 act.item.o: act.item.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h \
   handler.h db.h spells.h constants.h
 	$(CC) -c $(CFLAGS) act.item.c
 act.movement.o: act.movement.c conf.h sysdep.h structs.h utils.h comm.h \
   interpreter.h handler.h db.h spells.h house.h constants.h
 	$(CC) -c $(CFLAGS) act.movement.c
-act.offensive.o: globals.hpp mods/player.hpp act.offensive.cpp conf.h sysdep.h structs.h utils.h comm.h \
-  interpreter.h handler.h db.h spells.h mods/utils.hpp
-	$(CC) -c $(CFLAGS) act.offensive.cpp
 act.other.o: act.other.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h \
   handler.h db.h spells.h screen.h house.h constants.h
 	$(CC) -c $(CFLAGS) act.other.c
 act.social.o: act.social.c conf.h sysdep.h structs.h utils.h comm.h \
   interpreter.h handler.h db.h spells.h
 	$(CC) -c $(CFLAGS) act.social.c
-act.wizard.o: act.wizard.cpp conf.h sysdep.h structs.h utils.h comm.h \
-  interpreter.h handler.h db.h spells.h house.h screen.h constants.h \
-  globals.hpp
-	$(CC) -c $(CFLAGS) act.wizard.cpp
 alias.o: alias.c conf.h sysdep.h structs.h utils.h interpreter.h db.h
 	$(CC) -c $(CFLAGS) alias.c
 ban.o: ban.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h db.h
@@ -170,9 +149,6 @@ config.o: config.c conf.h sysdep.h structs.h interpreter.h
 	$(CC) -c $(CFLAGS) config.c
 constants.o: constants.c conf.h sysdep.h structs.h interpreter.h
 	$(CC) -c $(CFLAGS) constants.c
-db.o: db.cpp conf.h sysdep.h structs.h utils.h db.h comm.h handler.h spells.h mail.h \
-  interpreter.h house.h constants.h
-	$(CC) -c $(CFLAGS) db.cpp
 fight.o: fight.c conf.h sysdep.h structs.h utils.h comm.h handler.h interpreter.h \
   db.h spells.h screen.h constants.h
 	$(CC) -c $(CFLAGS) fight.c

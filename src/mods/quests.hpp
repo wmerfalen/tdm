@@ -34,6 +34,7 @@ namespace mods {
 
 		/* informative functions */
 		bool has_quest(struct char_data *ch);
+		void award_quest(struct char_data*ch,int quest_id);
 
 		/* player actions for questing */
 		void start_quest(struct char_data* ch,int quest_num);

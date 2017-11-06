@@ -473,6 +473,7 @@ void boot_db(void)
   boot_time = time(0);
 
   log("Boot db -- DONE.");
+  mods::globals::post_boot_db();
 }
 
 
@@ -1842,7 +1843,6 @@ struct char_data *read_mobile(mob_vnum nr, int type) /* and mob_rnum */
   *mob = mob_proto[i];
   mob->next = character_list;
   character_list = mob;
-
   if (!mob->points.max_hit) {
     mob->points.max_hit = dice(mob->points.hit, mob->points.mana) +
       mob->points.move;
