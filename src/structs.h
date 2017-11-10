@@ -931,7 +931,7 @@ struct follow_type {
 struct char_data {
    int pfilepos;			 /* playerfile pos		  */
    uuid_t uuid;
-   int last_fight_timestamp;			/* timestamp of the last time the user fought */
+   time_t last_fight_timestamp;			/* timestamp of the last time the user fought */
    mob_rnum nr;                          /* Mob's rnum			  */
    room_rnum in_room;                    /* Location (real room number)	  */
    room_rnum was_in_room;		 /* location for linkdead people  */

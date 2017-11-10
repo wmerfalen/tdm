@@ -113,7 +113,9 @@ ACMD(do_recall){
 	if(time(NULL) < ch->last_fight_timestamp + 20){
 		*player << "Cannot recall this soon after combat.";
 	}else{
+		char_from_room(ch);
 		char_to_room(ch,31);
+		command_interpreter(ch, "l");
 	}
 }
 

@@ -412,9 +412,13 @@ void point_update(void)
   for (i = character_list; i; i = next_char) {
     next_char = i->next;
 	
+#ifdef ENABLE_MENTOC_HUNGRY__
     gain_condition(i, FULL, -1);
+#endif
     gain_condition(i, DRUNK, -1);
+#ifdef ENABLE_MENTOC_THIRSTY__
     gain_condition(i, THIRST, -1);
+#endif
 	
     if (GET_POS(i) >= POS_STUNNED) {
       GET_HIT(i) = MIN(GET_HIT(i) + hit_gain(i), GET_MAX_HIT(i));

@@ -146,7 +146,7 @@ namespace mods {
 	void player::stc_room(const room_rnum & rnum){
 		if(world[rnum].name){
 			std::string title = world[rnum].name;
-			stc_color_evaluation(title,this);
+			stc_color_evaluation(std::string("{grn}") + title + "{/grn}",this);
 		}
 	}
 

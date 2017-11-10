@@ -61,7 +61,6 @@ ACMD(do_ammo){
 }
 
 using vpd = mods::scan::vec_player_data;
-using vpde = mods::scan::vec_player_data_element;
 /* Arguments:
  * throw <gren|grenade> <direction> <count>
  */
@@ -308,7 +307,8 @@ ACMD(do_reload){
 
 ACMD(do_scan){ /* !mods */
 	vpd scan;
-	mods::scan::los_scan_foreach(ch,3,[ch](room_rnum _room_id,int _dir,vpde _ele){
+	mods::scan::los_scan_foreach(ch,3,[ch](room_rnum _room_id,int _dir,vpd _ele){
+		for(auto e : _ele){
 		std::string line;
 		switch(_dir){
 			case NORTH: line += "[north]";break;
@@ -319,9 +319,10 @@ ACMD(do_scan){ /* !mods */
 			case DOWN: line += "[down]";break;
 		}
 		line += " you see ";
-		line += _ele->player.name;
+		line += e->player.name;
 		line += "\r\n";
 		send_to_char(ch,line.c_str());
+		}
 	});
 
 }

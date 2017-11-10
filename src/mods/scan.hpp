@@ -17,7 +17,7 @@ namespace mods {
 	namespace scan {
 		typedef char_data* vec_player_data_element;
 		typedef std::vector<vec_player_data_element> vec_player_data; 
-		typedef std::function<void (room_rnum,int,vec_player_data_element)> los_scan_foreach_callback;
+		typedef std::function<void (room_rnum,int,vec_player_data)> los_scan_foreach_callback;
 		void los_scan(struct char_data* ch,int depth,vec_player_data* vec_room_list);
 		void los_scan_foreach(struct char_data* ch,int depth,los_scan_foreach_callback lambda_cb);
 	};

@@ -1,13 +1,14 @@
 #include "scan.hpp"
 
 extern struct room_data* world;
+extern struct char_data* character_list;
 namespace mods{
 	namespace scan {
 		void los_scan(struct char_data* ch,int depth,vec_player_data* vec_room_list){
 			los_scan_foreach(
 				ch,depth,
-				[&](room_rnum room_id,int direction,vec_player_data_element _char_data){
-					vec_room_list->push_back(_char_data);
+				[&](room_rnum room_id,int direction,vec_player_data _char_data){
+					*vec_room_list = _char_data;
 				}
 			);
 		}
@@ -38,11 +39,13 @@ namespace mods{
 								break;
 							}
 							room_id = room_dir->to_room;
+							lambda_cb(room_id,i_d,mods::globals::room_list[room_id]);
+							/*
 							if(auto people = world[room_id].people){
 								for(; people->next_in_room; people = people->next_in_room){
 									lambda_cb(room_id,i_d,people);
 								}
-							}
+							}*/
 						}
 					}
 					room_dir = world[next_room].dir_option[i_d];

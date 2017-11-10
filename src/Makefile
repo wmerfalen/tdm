@@ -3,7 +3,7 @@
 #
 
 # C compiler to use
-CC = g++ -std=c++14 -fpermissive -I/home/llvm/code/c++/bnull-mud/src/mods/include -L/home/llvm/code/c++/bnull-mud/src/mods/lib 
+CC = g++ -g -std=c++14 -fpermissive -I/home/llvm/code/c++/bnull-mud/src/mods/include -L/home/llvm/code/c++/bnull-mud/src/mods/lib 
 
 # Path to cxref utility
 CXREF = cxref

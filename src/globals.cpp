@@ -32,6 +32,7 @@ namespace mods {
 		std::unique_ptr<mods::deferred> defer_queue;
 		duk_context* duktape_context;
 		ai_state_map states;
+		std::vector<std::vector<struct char_data*>> room_list;
 		namespace objects {
 			static bool populated = false;
 		};
@@ -264,6 +265,29 @@ Iter select_randomly(Iter start, Iter end) {
 		void post_command_interpreter(struct char_data *ch,char* argument){
 			return;
 		}
+
+		void register_room(const room_rnum & r){
+			room_list.push_back({});
+		}
+
+		namespace rooms {
+			void char_from_room(struct char_data* ch){
+				auto room_id = IN_ROOM(ch);
+				auto place = std::find(room_list[room_id].begin(),room_list[room_id].end(),ch);
+				if(place == room_list[room_id].end()){ return; }
+				else{
+					room_list[room_id].erase(place);
+				}
+
+			}
+
+			void char_to_room(const room_rnum & room,struct char_data* ch){
+				auto place = std::find(room_list[room].begin(),room_list[room].end(),ch);
+				if(place == room_list[room].end()){ 
+					room_list[room].push_back(ch);	
+				}
+			}
+		};
 
     };
 

@@ -44,10 +44,12 @@ namespace mods {
 		extern std::unique_ptr<lmdb_db> db;
 		extern ai_state_map states;
 		extern duk_context* duktape_context;
+		extern std::vector<std::vector<struct char_data*>> room_list;
 		std::unique_ptr<ai_state>& state_fetch(struct char_data* ch);
 		int mobile_activity(char_data*);
 		void register_object(obj_data&);
 		void register_object_list();
+		void register_room(const room_rnum&);
 		void refresh_player_states();
 		void room_event(struct char_data*,mods::ai_state::event_type_t);
 		void room_event(room_vnum,mods::ai_state::event_type_t);
@@ -59,6 +61,10 @@ namespace mods {
 		const char* say_random(const mods::ai_state::event_type_t&);
 		bool command_interpreter(struct char_data *ch,char* argument);
 		void post_command_interpreter(struct char_data *ch, char* argument);
+		namespace rooms {
+			void char_from_room(struct char_data*);
+			void char_to_room(const room_rnum &,struct char_data*);
+		};
 		namespace players {
         	template <typename T>
 			inline std::shared_ptr<mods::player>& get(T ch){

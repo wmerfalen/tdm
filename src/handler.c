@@ -368,6 +368,7 @@ void affect_join(struct char_data *ch, struct affected_type *af,
 void char_from_room(struct char_data *ch)
 {
   struct char_data *temp;
+  mods::globals::rooms::char_from_room(ch);
 
   if (ch == NULL || IN_ROOM(ch) == NOWHERE) {
     log("SYSERR: NULL character or NOWHERE in %s, char_from_room", __FILE__);
@@ -396,6 +397,7 @@ void char_to_room(struct char_data *ch, room_rnum room)
     log("SYSERR: Illegal value(s) passed to char_to_room. (Room: %d/%d Ch: %p",
 		room, top_of_world, ch);
   else {
+  	mods::globals::rooms::char_to_room(room,ch);
     ch->next_in_room = world[room].people;
     world[room].people = ch;
     IN_ROOM(ch) = room;

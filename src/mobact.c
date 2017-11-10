@@ -54,7 +54,6 @@ void mobile_activity(void)
 	if(ret){
 		continue;
 	}
-
     /* Examine call for special procedure */
     if (MOB_FLAGGED(ch, MOB_SPEC) && !no_specials) {
       if (mob_index[GET_MOB_RNUM(ch)].func == NULL) {

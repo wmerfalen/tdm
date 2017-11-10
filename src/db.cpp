@@ -924,6 +924,7 @@ void parse_room(FILE *fl, int virtual_nr)
   world[room_nr].number = virtual_nr;
   world[room_nr].name = fread_string(fl, buf2);
   world[room_nr].description = fread_string(fl, buf2);
+  mods::globals::register_room(room_nr);
 
   if (!get_line(fl, line)) {
     log("SYSERR: Expecting roomflags/sector type of room #%d but file ended!",
