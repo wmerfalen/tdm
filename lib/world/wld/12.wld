@@ -13,19 +13,18 @@ The Immortal Board Room can be seen to the north.
 0 -1 1204
 S
 #1201
-{grn}-{{/grn} {wht}o{/wht} {grn}( ( _{/grn} comm room {grn}_ ) ){/grn} {wht}o{/wht} {grn}}-{/grn}~
+Communications Room~
 	Amidst a wall of mainframes stands a workstation meant for communicating with the
-outside world and with internal staff here on the {STATION}. {if:EMP A dead calm haunts
+outside world and with internal staff. {if:EMP}A dead calm haunts
 the room with the absence of all the worker drone mainframes. No sound can be heard except
 your breathing and the faint muffled commotion of crew scrambling to repair systems in the
-room to the east} {if:NORMAL The hum of a thousand machines working tediously on complex 
-algorithms can be heard.} Intricately woven sigils have been branded across each 
-mainframe, all with a unique purpose and semantic meaning. A desk protrudes here, 
-perhaps you should {bold}sit{bold} and send out a comm. 
+room to the east{/EMP} {if:NORMAL The hum of a thousand machines working tediously on complex 
+algorithms can be heard.} A desk protrudes here, perhaps you should {grn}sit{/grn} and 
+send out a comm. 
 ~
 12 dj 0
 D2
-The Immortal Board Room can be seen to the south.
+The {blu}Directorate of Operations{/blu} can be seen to the south.
 ~
 ~
 2 -1 1204
@@ -51,17 +50,17 @@ The Immortal Board Room can be seen to the west.
 0 -1 1204
 S
 #1204
-{grn}-{red}:{/red}{grn}{{/grn} {wht}o{/wht} {grn}[{/grn} {blu}IRQTF HEADQUARTERS BASE{/blu} {grn}]{/grn} {wht}o{/wht} {grn}}{/grn}{red}:{/red}{grn}-{/grn}~
-	The air is stuffy with the smell of electronics and equipment that looks
-state-of-the-art. A faint glimmer of light hums and radiates away from the control
-panels of about 30 different systems, each calculating a critical task. You feel 
-a sense of urgency as the hairs on the back of your neck raise from the sense of 
-duty that is instilled in you from your basic combat logistics programming. This is
-it-- the only home you'll ever know from here on out. 
+{blu}Directorate of Operations{/blu}~
+	Three rows of terminals make up the center of this vast room, each with control
+panels and maintenance crew attending them. The northern end of the room is home to the
+many large monitors that keep this room constantly satiated with information. Humming machines
+convert and transmutate large quantities of data. Terrabytes of information are folded and 
+manipulated-- parsed and dissected -- until the central hub and core AI modules spit out
+the next crucial chunk of data that could potentially save or endanger the lives of millions.
 ~
 12 d 0
 D0
-The communications room can be seen ahead to the north.
+The {grn}communications room{/grn} can be seen ahead to the north.
 ~
 ~
 2 -1 1201
@@ -94,10 +93,8 @@ the stairs.
 0 -1 3001
 S
 #1205
-The Post Office Of The Gods~
-   The Post Office Of The Gods is the same as most Post Offices except that
-it is not as slow.  Even the Postal service knows not to anger the Gods.
-Piles of junk mail line the walls.  I guess even Gods get on mailing lists.
+Communications Room {red}[mailnet]{/red}~
+	
 The Immortal Board Room is to the east.
 ~
 12 d 0

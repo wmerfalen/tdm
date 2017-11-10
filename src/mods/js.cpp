@@ -3,8 +3,42 @@
 #define DT_FORMAT "{player_name}:mob_death_trigger"
 extern struct room_data* world;
 extern struct char_data* character_list;
+extern void command_interpreter(struct char_data* ch,char* argument);
+extern void hit(struct char_data* ch,struct char_data* vict,int type);
 namespace mods{
 	namespace js {
+		static duk_ret_t hit(duk_context *ctx){
+			int num_args = duk_get_top(ctx);
+			/* First parameter is character name */
+			auto char_uuid = duk_to_number(ctx,0);
+			auto vict_uuid = duk_to_number(ctx,1);
+			short ctr = 0;
+			::hit(mods::globals::player_list[char_uuid],mods::globals::player_list[vict_uuid],0);
+			duk_push_number(ctx,1);
+			return 1;	/* number of return values */
+		}
+		static duk_ret_t uuid(duk_context *ctx){
+			int num_args = duk_get_top(ctx);
+			/* First parameter is character name */
+			std::string char_name = duk_to_string(ctx,0);
+			room_rnum room =  std::stoi(duk_to_string(ctx,1));
+			for(auto ch = character_list; ch; ch = ch->next){
+				if(char_name.compare(ch->player.name) == 0 && IN_ROOM(ch) == room){
+					duk_push_number(ctx,ch->uuid);
+					return 1;
+				}
+			}
+			duk_push_number(ctx,-1);
+			return 1;
+		}
+		static duk_ret_t command(duk_context *ctx){
+			int num_args = duk_get_top(ctx);
+			/* First parameter is character name */
+			auto char_uuid = duk_to_number(ctx,0);
+			std::string cmd =  duk_to_string(ctx,1);
+			command_interpreter(mods::globals::player_list[char_uuid],cmd.c_str());
+			return 0;	/* number of return values */
+		}
 		static duk_ret_t mob_death_trigger(duk_context *ctx){
 			int num_args = duk_get_top(ctx);
 			/* First parameter is character name */
@@ -26,6 +60,13 @@ namespace mods{
 			}
 			duk_push_number(ctx,-1);
 			return 1;	/* number of return values */
+		}
+		static duk_ret_t send_to_uuid(duk_context *ctx){
+			int num_args = duk_get_top(ctx);
+			/* First parameter is character name */
+			auto cuuid = duk_to_number(ctx,0);
+			send_to_char(mods::globals::player_list[cuuid],duk_to_string(ctx,1));
+			return 0;	/* number of return values */
 		}
 		static duk_ret_t send_to_char(duk_context *ctx){
 			int num_args = duk_get_top(ctx);
@@ -80,6 +121,14 @@ namespace mods{
 			load_c_functions(mods::globals::duktape_context);
 		}
 		void load_c_functions(duk_context *ctx){
+			duk_push_c_function(ctx,mods::js::uuid,2);
+			duk_put_global_string(ctx,"uuid");
+			duk_push_c_function(ctx,mods::js::hit,2);
+			duk_put_global_string(ctx,"hit");
+			duk_push_c_function(ctx,mods::js::command,2);
+			duk_put_global_string(ctx,"cmd");
+			duk_push_c_function(ctx,mods::js::send_to_uuid,2);
+			duk_put_global_string(ctx,"send_to_uuid");
 			duk_push_c_function(ctx,mods::js::send_to_char,2);
 			duk_put_global_string(ctx,"send_to_char");
 			duk_push_c_function(ctx,mods::js::db_seti,2);

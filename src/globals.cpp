@@ -33,6 +33,7 @@ namespace mods {
 		duk_context* duktape_context;
 		ai_state_map states;
 		std::vector<std::vector<struct char_data*>> room_list;
+		std::vector<struct char_data*> player_list;
 		namespace objects {
 			static bool populated = false;
 		};
@@ -134,10 +135,14 @@ Iter select_randomly(Iter start, Iter end) {
 			DBSET("quest:31:0:name","Eliminate HVT posing as civilian.");
 		}
 		void post_boot_db(){
+			auto top = character_list->uuid + 1;
+			player_list.reserve(top);
 			for(auto ch = character_list; ch; ch = ch->next){
-				auto room = IN_ROOM(ch);
-				char_from_room(ch);
-				char_to_room(ch,room);
+				if(ch->uuid > top){
+					top = ch->uuid + 1;
+					player_list.reserve(top);
+				}
+				player_list[ch->uuid] = ch;
 			}
 		}
 		void room_event(struct char_data* ch,mods::ai_state::event_type_t event){

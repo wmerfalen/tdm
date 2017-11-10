@@ -45,6 +45,7 @@ namespace mods {
 		extern ai_state_map states;
 		extern duk_context* duktape_context;
 		extern std::vector<std::vector<struct char_data*>> room_list;
+		extern std::vector<struct char_data *> player_list;
 		std::unique_ptr<ai_state>& state_fetch(struct char_data* ch);
 		int mobile_activity(char_data*);
 		void register_object(obj_data&);
