@@ -22,6 +22,7 @@ extern struct obj_data* object_list;
 extern void do_look(struct char_data *ch, char *argument, int cmd, int subcmd);
 extern void char_from_room(struct char_data*);
 extern void char_to_room(struct char_data*,room_rnum);
+extern void clear_char(struct char_data*);
 namespace mods {
     namespace globals {
 		using player = mods::player;
@@ -135,6 +136,10 @@ Iter select_randomly(Iter start, Iter end) {
 			DBSET("quest:31:0:name","Eliminate HVT posing as civilian.");
 		}
 		void post_boot_db(){
+			allocate_player_list();
+		}
+		void allocate_player_list(){
+			if(!character_list){ return; }
 			auto top = character_list->uuid + 1;
 			player_list.reserve(top);
 			for(auto ch = character_list; ch; ch = ch->next){
@@ -204,6 +209,12 @@ Iter select_randomly(Iter start, Iter end) {
 				mods::globals::player_map.insert({it->uuid,std::make_shared<mods::player>(static_cast<char_data*>(it))});
 			}
 		}
+		void create_char(struct char_data *ch){
+			CREATE(ch,struct char_data,1);
+			clear_char(ch);
+			ch->next = character_list;
+			character_list = ch;
+		}
 		uuid_t get_uuid(){
 			static uuid_t u = 0;
 			return ++u;
@@ -232,10 +243,12 @@ Iter select_randomly(Iter start, Iter end) {
 			final_buffer = replace_all(final_buffer,"{red}","\033[31m");
 			final_buffer = replace_all(final_buffer,"{blu}","\033[34m");
 			final_buffer = replace_all(final_buffer,"{wht}","\033[37m");
+			final_buffer = replace_all(final_buffer,"{gld}","\033[33m");
 			final_buffer = replace_all(final_buffer,"{/grn}","\033[0m");
 			final_buffer = replace_all(final_buffer,"{/wht}","\033[0m");
 			final_buffer = replace_all(final_buffer,"{/red}","\033[0m");
 			final_buffer = replace_all(final_buffer,"{/blu}","\033[0m");
+			final_buffer = replace_all(final_buffer,"{/gld}","\033[0m");
 			return final_buffer;
 		}
 
@@ -275,6 +288,13 @@ Iter select_randomly(Iter start, Iter end) {
 			room_list.push_back({});
 		}
 
+		void register_player(struct char_data* ch){
+			if(ch){
+				ch->uuid = get_uuid();
+				mods::globals::player_map.insert({ch->uuid,std::make_shared<mods::player>(ch)});
+				allocate_player_list();
+			}
+		}
 		namespace rooms {
 			void char_from_room(struct char_data* ch){
 				auto room_id = IN_ROOM(ch);

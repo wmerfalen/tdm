@@ -63,3 +63,4 @@
 [ ] -> :when a mute jammer is in a room, a drone can not see or do anything {small}
 [ ] -> create a room update system and store a list of pointers to characters in an lmdb key {large}
 [ ] -> implement dynamic room descriptions
+[x] -> color code exits {tiny}

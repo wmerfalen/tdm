@@ -432,7 +432,7 @@ void do_auto_exits(struct char_data *ch)
 {
   int door, slen = 0;
 
-  send_to_char(ch, "%s[ Exits: ", CCCYN(ch, C_NRM));
+  send_to_char(ch, "{gld}%s[ Exits: ", CCCYN(ch, C_NRM));
 
   for (door = 0; door < NUM_OF_DIRS; door++) {
     if (!EXIT(ch, door) || EXIT(ch, door)->to_room == NOWHERE)
@@ -446,7 +446,7 @@ void do_auto_exits(struct char_data *ch)
     slen++;
   }
 
-  send_to_char(ch, "%s]%s\r\n", slen ? "" : "None!", CCNRM(ch, C_NRM));
+  send_to_char(ch, "%s]%s{/gld}\r\n", slen ? "" : "None!", CCNRM(ch, C_NRM));
 }
 
 

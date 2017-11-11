@@ -1413,7 +1413,7 @@ void parse_mobile(FILE *mob_f, int nr)
   mob_proto[i].desc = NULL;
 	/* !mods */
   mob_proto[i].uuid = mods::globals::get_uuid();
-	mods::globals::player_map.insert({i,std::make_shared<mods::player>(static_cast<char_data*>(&mob_proto[i]))});
+	mods::globals::register_player(&mob_proto[i]);
   top_of_mobt = i++;
 }
 
@@ -2832,6 +2832,7 @@ void init_char(struct char_data *ch)
     GET_COND(ch, i) = (GET_LEVEL(ch) == LVL_IMPL ? -1 : 24);
 
   GET_LOADROOM(ch) = NOWHERE;
+  ch->drone = false;
 }
 
 

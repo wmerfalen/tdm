@@ -51,10 +51,13 @@ namespace mods {
 		void register_object(obj_data&);
 		void register_object_list();
 		void register_room(const room_rnum&);
+		void register_player(struct char_data* ch);
 		void refresh_player_states();
 		void room_event(struct char_data*,mods::ai_state::event_type_t);
 		void room_event(room_vnum,mods::ai_state::event_type_t);
 		void post_boot_db();
+		void create_char(struct char_data *ch);
+		void allocate_player_list();
 		int file_to_lmdb(const std::string& file,const std::string& key);
 		int opposite_dir(int);
     	std::string color_eval(std::string final_buffer);
