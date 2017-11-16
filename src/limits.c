@@ -371,12 +371,15 @@ void check_idling(struct char_data *ch)
 	stop_fighting(FIGHTING(ch));
 	stop_fighting(ch);
       }
-      act("$n disappears into the void.", TRUE, ch, 0, 0, TO_ROOM);
-      send_to_char(ch, "You have been idle, and are pulled into a void.\r\n");
-      save_char(ch);
-      Crash_crashsave(ch);
-      char_from_room(ch);
-      char_to_room(ch, 1);
+	  /*!mods*/
+	  if(!ch->drone){
+      	act("$n disappears into the void.", TRUE, ch, 0, 0, TO_ROOM);
+      	send_to_char(ch, "You have been idle, and are pulled into a void.\r\n");
+		save_char(ch);
+		Crash_crashsave(ch);
+		char_from_room(ch);
+		char_to_room(ch, 1);
+		}
     } else if (ch->char_specials.timer > idle_rent_time) {
       if (IN_ROOM(ch) != NOWHERE)
 	char_from_room(ch);

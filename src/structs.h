@@ -937,6 +937,9 @@ struct char_data {
    room_rnum was_in_room;		 /* location for linkdead people  */
    int wait;				 /* wait for how many loops	  */
    bool drone;
+   uuid_t drone_owner;
+   bool drone_simulate;
+   uuid_t drone_uuid;
    struct char_player_data player;       /* Normal data                   */
    struct char_ability_data real_abils;	 /* Abilities without modifiers   */
    struct char_ability_data aff_abils;	 /* Abils with spells/stones/etc  */

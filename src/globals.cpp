@@ -23,6 +23,8 @@ extern void do_look(struct char_data *ch, char *argument, int cmd, int subcmd);
 extern void char_from_room(struct char_data*);
 extern void char_to_room(struct char_data*,room_rnum);
 extern void clear_char(struct char_data*);
+extern void do_look(struct char_data*,char *argument, int cmd, int subcmd);
+extern struct player_special_data dummy_mob;
 namespace mods {
     namespace globals {
 		using player = mods::player;
@@ -209,11 +211,18 @@ Iter select_randomly(Iter start, Iter end) {
 				mods::globals::player_map.insert({it->uuid,std::make_shared<mods::player>(static_cast<char_data*>(it))});
 			}
 		}
-		void create_char(struct char_data *ch){
+		struct char_data* create_char(){
+			struct char_data *ch;	
 			CREATE(ch,struct char_data,1);
 			clear_char(ch);
-			ch->next = character_list;
+			ch->player_specials = (struct player_special_data*) calloc(1,sizeof(struct player_special_data));
+			memset((ch)->player_specials,0,sizeof((ch)->player_specials));
+			(ch)->player_specials->saved.pref = 0;
+			(ch)->affected = (struct affected_type*) calloc(1,sizeof(struct affected_type));
+			memset(&((ch)->affected),0,sizeof((ch)->affected));
+			(ch)->next = character_list;
 			character_list = ch;
+			return ch;
 		}
 		uuid_t get_uuid(){
 			static uuid_t u = 0;
@@ -274,10 +283,37 @@ Iter select_randomly(Iter start, Iter end) {
         }
 
 		bool command_interpreter(struct char_data *ch,char* argument){
-			if(mods::quests::has_quest(ch)){
+			if(mods::drone::started(ch)){
+				return mods::drone::interpret(ch,argument);
+			}
+			if(!ch->drone && mods::quests::has_quest(ch)){
 				mods::quests::run_trigger(ch);
 			}
 			return true;
+		}
+
+		int dir_int(char dir){
+			switch(dir){
+				case 'n':
+				case 'N':
+					return NORTH;
+				case 'e':
+				case 'E':
+					return EAST;
+				case 's':
+				case 'S':
+					return SOUTH;
+				case 'w':
+				case 'W':
+					return WEST;
+				case 'u':
+				case 'U':
+					return UP;
+				case 'd':
+				case 'D':
+					return DOWN;
+				default: return NORTH;
+			}
 		}
 
 		void post_command_interpreter(struct char_data *ch,char* argument){
@@ -290,9 +326,13 @@ Iter select_randomly(Iter start, Iter end) {
 
 		void register_player(struct char_data* ch){
 			if(ch){
+				std::cerr << "valid cdata\n";
 				ch->uuid = get_uuid();
 				mods::globals::player_map.insert({ch->uuid,std::make_shared<mods::player>(ch)});
 				allocate_player_list();
+			}
+			else{
+				std::cerr << "invalid cdata! (register_player) " << __FILE__ << ":" << __LINE__ << "\n";
 			}
 		}
 		namespace rooms {

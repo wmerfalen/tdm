@@ -342,9 +342,13 @@ ACMD(do_get)
 
   if (!*arg1)
     send_to_char(ch, "Get what?\r\n");
-  else if (!*arg2)
-    get_from_room(ch, arg1, 1);
-  else if (is_number(arg1) && !*arg3)
+  else if (!*arg2){
+	  if(std::string(arg1).compare("drone") == 0){
+		  mods::drone::get_drone(ch);
+	  }else{
+    	get_from_room(ch, arg1, 1);
+	  }
+  }else if (is_number(arg1) && !*arg3)
     get_from_room(ch, arg2, atoi(arg1));
   else {
     int amount = 1;

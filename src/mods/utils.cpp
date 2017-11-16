@@ -17,16 +17,21 @@ namespace mods {
 				return true;
 			}
 			if(needle.length() >= 1){
-			dbg("needle length greater than 3");
-				std::smatch our_matches;
-				std::string regex_string = needle;
-				regex_string = std::string("^") + regex_string + "([^[:space:]]+)";
-				std::regex_search(haystack,our_matches,
-						std::regex(regex_string),
-						match_not_null);
-						dbg("size:" << our_matches.size() );
-						
-				return our_matches.size() > 1;
+				/* If the string is composed of spaces, do a match against each word */
+				std::vector<std::string> words;
+				std::string current = "";
+				for(auto character : haystack){
+					if(character == ' ' && current.length()){
+						words.push_back(current);
+						continue;
+					}
+					current += character;
+				}
+				for(auto string : words){
+					if(std::regex_search(string, std::regex(needle), match_not_null)){
+						return true;
+					}
+				}
 			}
 			return false;
 		}

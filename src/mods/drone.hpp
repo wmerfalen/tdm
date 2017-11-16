@@ -8,6 +8,7 @@
 #include "../sysdep.h"
 #include "../structs.h"
 #include "../types.hpp"
+#include "extern.hpp"
 
 #define DRONE_WEAPON_SET_NUM 2
 extern size_t send_to_char(struct char_data *ch, const char *messg, ...);
@@ -18,7 +19,14 @@ namespace mods {
 			typedef short weapon_set;
 			drone();
 			drone(char_data* ch);
-			static drone& create(struct char_data* owner);
+			static struct char_data* create(struct char_data* owner);
+			static void start(struct char_data * owner);
+			static void stop(struct char_data * owner);
+			static bool started(struct char_data *owner);
+			static void simulate(struct char_data *owner,bool value);
+			static bool interpret(struct char_data *owner,const std::string & argument);
+			static struct char_data * get_existing(struct char_data* owner);
+			static void get_drone(struct char_data* owner);
 			/*
 			bool has_weapon_capability(int);
 			bool has_inventory_capability(int);

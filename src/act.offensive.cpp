@@ -31,7 +31,7 @@ extern void die(struct char_data*,struct char_data*);
 void raw_kill(struct char_data *ch);
 void check_killer(struct char_data *ch, struct char_data *vict);
 int compute_armor_class(struct char_data *ch);
-int snipe_hit(struct char_data*,struct char_data*,int);
+int snipe_hit(struct char_data*,struct char_data*,int,uint16_t);
 
 /* local functions */
 ACMD(do_assist);
@@ -144,9 +144,9 @@ ACMD(do_snipe){
 	mods::scan::los_scan(ch,3,&scan);
 	for(auto scanned_target : scan){
 		/* HOWTO: fuzzy match two strings */
-		if(mods::util::fuzzy_match(static_cast<char*>(&victim[0]),scanned_target->player.name)){
+		if(mods::util::fuzzy_match(static_cast<char*>(&victim[0]),scanned_target.ch->player.name)){
 			/* HOWTO: deal damage with a sniper rifle */
-      		auto damage = snipe_hit(ch, scanned_target, TYPE_SNIPE);
+      		auto damage = snipe_hit(ch, scanned_target.ch, TYPE_SNIPE,scanned_target.distance);
 			/* HOWTO: adjust ammo of player's current weapon */
 			player->ammo_adjustment(-1);
 			player->weapon_cooldown_start(3,0);
@@ -158,6 +158,8 @@ ACMD(do_snipe){
 			});
 			*/
 			return;
+		}else{
+			*player << "You can't find your target!\r\n";
 		}
 	}
 }
@@ -310,16 +312,36 @@ ACMD(do_scan){ /* !mods */
 	mods::scan::los_scan_foreach(ch,3,[ch](room_rnum _room_id,int _dir,vpd _ele){
 		for(auto e : _ele){
 		std::string line;
-		switch(_dir){
-			case NORTH: line += "[north]";break;
-			case SOUTH: line += "[south]";break;
-			case EAST: line += "[east]";break;
-			case WEST: line += "[west]";break;
-			case UP: line += "[up]";break;
-			case DOWN: line += "[down]";break;
+		line += "You see {grn}";
+		if(IS_NPC(e.ch)){
+			line += e.ch->player.short_descr;
+		}else{
+			line += e.ch->player.name;
 		}
-		line += " you see ";
-		line += e->player.name;
+		line += "{/grn}";
+		switch(e.distance){
+			case 0:
+				line += " close by";
+				break;
+			case 1:
+				break;
+			case 2:
+				line += " far off";
+				break;
+			default: line += "<>";
+			break;
+		}
+		if(_dir != UP && _dir != DOWN){
+			line += " to the ";
+		}
+		switch(_dir){
+			case NORTH: line += "north";break;
+			case SOUTH: line += "south";break;
+			case EAST: line += "east";break;
+			case WEST: line += "west";break;
+			case UP: line += " above you";break;
+			case DOWN: line += " below you";break;
+		}
 		line += "\r\n";
 		send_to_char(ch,line.c_str());
 		}

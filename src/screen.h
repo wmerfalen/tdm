@@ -26,14 +26,14 @@
 #define _clrlevel(ch) (!IS_NPC(ch) ? (PRF_FLAGGED((ch), PRF_COLOR_1) ? 1 : 0) + \
 		       (PRF_FLAGGED((ch), PRF_COLOR_2) ? 2 : 0) : 0)
 #define clr(ch,lvl) (_clrlevel(ch) >= (lvl))
-#define CCNRM(ch,lvl)  (clr((ch),(lvl))?KNRM:KNUL)
-#define CCRED(ch,lvl)  (clr((ch),(lvl))?KRED:KNUL)
-#define CCGRN(ch,lvl)  (clr((ch),(lvl))?KGRN:KNUL)
-#define CCYEL(ch,lvl)  (clr((ch),(lvl))?KYEL:KNUL)
-#define CCBLU(ch,lvl)  (clr((ch),(lvl))?KBLU:KNUL)
-#define CCMAG(ch,lvl)  (clr((ch),(lvl))?KMAG:KNUL)
-#define CCCYN(ch,lvl)  (clr((ch),(lvl))?KCYN:KNUL)
-#define CCWHT(ch,lvl)  (clr((ch),(lvl))?KWHT:KNUL)
+#define CCNRM(ch,lvl) KNUL /*(clr((ch),(lvl))?KNRM:KNUL*/
+#define CCRED(ch,lvl) KNUL /*(clr((ch),(lvl))?KRED:KNUL*/
+#define CCGRN(ch,lvl) KNUL /*(clr((ch),(lvl))?KGRN:KNUL*/
+#define CCYEL(ch,lvl) KNUL /*(clr((ch),(lvl))?KYEL:KNUL*/
+#define CCBLU(ch,lvl) KNUL /*(clr((ch),(lvl))?KBLU:KNUL*/
+#define CCMAG(ch,lvl) KNUL /*(clr((ch),(lvl))?KMAG:KNUL*/
+#define CCCYN(ch,lvl) KNUL /*(clr((ch),(lvl))?KCYN:KNUL*/
+#define CCWHT(ch,lvl) KNUL /*(clr((ch),(lvl))?KWHT:KNUL*/
 
 #define COLOR_LEV(ch) (_clrlevel(ch))
 

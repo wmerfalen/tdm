@@ -24,6 +24,7 @@
 #include "mods/weapon.hpp"
 
 #define MOD_SNIPE_SAME_ROOM_THACO 250
+#define MOD_SNIPE_DISTANCE_THACO 5
 
 /* Structures */
 struct char_data *combat_list = NULL;	/* head of l-list of fighting chars */
@@ -391,6 +392,14 @@ void die(struct char_data* killer,struct char_data *victim)
 		functor += "\",";
 		functor += "0);";	//TODO: Make this the zone where the player is killed at
 		mods::js::eval_string(functor);
+	}
+	if(victim->drone){
+		auto room = IN_ROOM(victim);
+		char_from_room(victim);
+		mods::drone::stop(mods::globals::player_list[victim->drone_owner]);
+		send_to_room(room,"A drone is destroyed.");
+		char_to_room(victim,NOWHERE);
+		return;
 	}
 	die(victim);
 }
@@ -1245,7 +1254,7 @@ int compute_thaco(struct char_data *ch, struct char_data *victim)
 }
 
 
-int snipe_hit(struct char_data *ch, struct char_data *victim, int type)
+int snipe_hit(struct char_data *ch, struct char_data *victim, int type,uint16_t distance)
 {
   struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
   int w_type, victim_ac, calc_thaco, dam, diceroll;
@@ -1268,6 +1277,8 @@ int snipe_hit(struct char_data *ch, struct char_data *victim, int type)
   if(IN_ROOM(ch) == IN_ROOM(victim)){
 		/* Terrible accuracy if within the same room */
 		calc_thaco += MOD_SNIPE_SAME_ROOM_THACO;
+  }else{
+	calc_thaco += distance + MOD_SNIPE_DISTANCE_THACO;
   }
 send_to_char(ch,(std::to_string(calc_thaco) + "\r\n").c_str());
   /* Calculate the raw armor including magic armor.  Lower AC is better for defender. */
@@ -1343,6 +1354,9 @@ void hit(struct char_data *ch, struct char_data *victim, int type)
 {
 MENTOC_PREAMBLE();
 	ch->last_fight_timestamp = time(NULL);
+	if(player->has_weapon_capability(mods::weapon::mask::snipe)){
+		return snipe_hit(ch,victim,type,-1);
+	}
   struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
   int w_type, victim_ac, calc_thaco, dam, diceroll;
 

@@ -102,7 +102,7 @@ namespace mods{
 
 		/* Currently executing quest goes here */
 		std::string current_key(struct char_data* ch){
-			return mods::globals::replace_all(Q_CURRENT_KEY,"{player_name}",ch->player.name);
+			return mods::globals::replace_all(Q_CURRENT_KEY,"{player_name}",std::string(ch->player.name));
 		}
 
 		std::string current_value(room_rnum room,int t_index){

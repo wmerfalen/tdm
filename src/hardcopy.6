@@ -1,0 +1,86 @@
+ Here. Alone. Always.
+03:14 < Obfuscate> There are only a few more details left and then I'll *know* I have something I can implement.
+03:14 < Obfuscate> I really should do this more often.
+15:43 < Obfuscate> Still not quite ready...
+16:09 < arpcat> I have to figure out this drone issue
+16:10 < arpcat> I spent most of yesterday just trying to fix this drone issue
+16:24 < Obfuscate> There are too many scattered dependencies in that codebase.
+16:24 < arpcat> the thing is this...
+16:24 < arpcat> a certain line is failing : send_to_char(ch,CCCYN(ch,C_NRM));
+16:24 < arpcat> I can recite that in my sleep because it's been failing and all subsequent calls using that ch pointer are failing
+16:24 < arpcat> but
+16:25 < arpcat> when I put cerr calls before and after the decomposed calls, it's fine
+16:25 < arpcat> so if I do std::cerr << "foo"; CCCYN(ch,C_NRM);
+16:25 < arpcat> it works fine
+16:25 < arpcat> if I do a send_to_char with the same pointer, it works fine
+16:25 < Obfuscate> valgrind
+16:26 < arpcat> I've eben in gdb
+16:26 < Obfuscate> valgrind makes it easier to see the source of the invalidity.
+16:27 < arpcat> but this is the thing
+16:27 < Obfuscate> It sounds like there's either a race condition or something is dependent on stack alignment.
+16:28 < arpcat> could it really be a race condition since it's only one thread of execution though?
+16:29 < Obfuscate> No threads? Doubtful. That would have to involve IO or signals.
+16:33 < Obfuscate> I'm also presuming those macros are plain function calls and so aren't getting concatenated with any adjacent statements or similar
+                   nonsense.
+16:35 < arpcat> gdb doesn't really help because it just repeats the macro line without telling me exactly whats being executed
+16:35 < arpcat> so I ahve to disas the portion
+16:39 < Obfuscate> ... and searching your git history doesn't reveal anything?
+16:45 < arpcat> I suspect the problem is with access sub structures of the pointer to char_data
+16:45 < arpcat> but
+16:46 < arpcat> like I said when I access the structures using the macros seperate from send_to_char, it works fine
+16:47 < Obfuscate> Would you like me to look it over? or would you prefer to tackle it on your own?
+16:48 < arpcat> Well the only thing I can think of that might help is if you logged in and saw for youself
+16:48 < arpcat> if you're willing to do that I can make arrangements
+16:48 < arpcat> but
+16:48 < arpcat> it's okay if you can't. I need to learn to debug this myself
+16:49 < Obfuscate> I was thinking I'd just look over the responsible section of code.
+16:50 < arpcat> I can push what I have up to git and show you
+16:50 < Obfuscate> Let's start with that.
+16:51 < arpcat> I have one more idea of what could be happening
+16:51 < arpcat> let me see if I can resolve this and then if that doesn't work, I'll push my code and let you see it
+16:52 < Obfuscate> ok
+17:05 < arpcat> okay so it's a substructure that's causing it
+17:05 < arpcat> ch->player_specials->saved.pref = 0; //This fails
+17:06 < arpcat> the ch is valid, the player_specials i calloc'd
+17:07 < Obfuscate> So, why is the surrounding context relevant then?
+17:12 < arpcat> So I'm using a macro that cm provides called CREATE which is a wrapper to calloc
+17:12 < arpcat> I call CREATE on ch->player_specials to allocate that buffer
+17:12 < arpcat> I think that's failing miserably
+17:12 < arpcat> so any time I try to access 'saved' of player_specials I get a segfault
+17:16 < Obfuscate> That could make sense.
+17:28 < arpcat> You're right about inlining functions
+17:28 < arpcat> I need to replace macros with inilined functions
+17:29 < arpcat> found the error
+17:29 < arpcat> calloc was returning zero
+17:31 < Obfuscate> That'll do it. Well done.
+17:31 < arpcat> :)
+17:44 < Obfuscate> I still need to figure out how to structure the new IR along with the algorithm to use for narrowing when binding variables.
+17:48 < Obfuscate> The linear case is simple and functions/multifunctions are already taken care of, but nonlinear phrases have forced me to change almost
+                   everything related to evaluation.
+17:54 < Obfuscate> I suppose not much of what I say makes sense to you. :|
+17:58 < Obfuscate> In simple terms, my problem is this: f(x,y) { return x+y; } z = f(x,y); // does different things depending on which of x,y,z are bound.
+17:58 < Obfuscate> x=1, y=2, z=f(x,y) -> z = 3 // simple
+18:00 < Obfuscate> x=1, y=?, z=f(x,y) -> z = 1+y // not so simple, since y and z may take on an infinite number of values.
+18:02 < Obfuscate> In the case of algebraic functions like above, it's actually not that hard of a problem, but in the general case it gets messy. :(
+18:03 < Obfuscate> Is this kind of thing interesting to you? or is it just noise?
+19:36 < arpcat> it's interesting but at the same time noise
+19:37 < arpcat> I still don't want you to not talk about it though
+19:37 < arpcat> I still want you to bring it up and talk casually to me about this stuff
+20:13 < arpcat> I fixed the issue completely
+20:13 < arpcat> I decided not to trust CM's macros and it turns out my manual calls to calloc prevailed
+20:40 < arpcat> I have a simple game I want to implement in js
+20:40 < arpcat> a really hacky game
+20:40 < arpcat> there are sets of doors in front of you
+20:40 < arpcat> these doors randomly open
+20:41 < arpcat> a zombie approaches and now its running toward you (the screen)
+20:41 < arpcat> if you press down the mouse and in front of this zombie, it'll raise a platform that will stop the zombie and it'll go splat
+20:41 < arpcat> I want to do this in cocos2d
+21:10 < Obfuscate> That's a pretty random game idea.
+21:11 < arpcat> it is
+21:11 < arpcat> I had a vision of it
+21:11 < arpcat> it'll be super easy to implement
+21:16 < Obfuscate> I'm going to try to make myself spend the time I would rubber ducking on documentation instead.
+21:19 < arpcat> so I won't see you as often?
+21:20 < Obfuscate> I'll still be here torturing you with random snippets of APL.
+ [21:21] [arpcat(+Zi)] [2:freenode/#alone(+nt)] [Act: 3]
+[#alone]

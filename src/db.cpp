@@ -2727,7 +2727,10 @@ void clear_char(struct char_data *ch)
   GET_WAS_IN(ch) = NOWHERE;
   GET_POS(ch) = POS_STANDING;
   ch->mob_specials.default_pos = POS_STANDING;
-
+	ch->drone_simulate = false;
+	ch->drone = false;
+	ch->drone_owner = 0;
+	ch->drone_uuid = 0;
   GET_AC(ch) = 100;		/* Basic Armor */
   if (ch->points.max_mana < 100)
     ch->points.max_mana = 100;

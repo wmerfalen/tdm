@@ -8,7 +8,9 @@ namespace mods{
 			los_scan_foreach(
 				ch,depth,
 				[&](room_rnum room_id,int direction,vec_player_data _char_data){
-					*vec_room_list = _char_data;
+					for(auto ch : _char_data){
+						vec_room_list->push_back(ch);
+					}
 				}
 			);
 		}
@@ -29,6 +31,7 @@ namespace mods{
 				}
 				s_dir += " ";
 				auto room_dir = current_exit;
+				uint16_t ctr = 0;
 				for(auto recursive_depth = depth;recursive_depth > -1;--recursive_depth){
 					auto room_id = 0;
 					if(world[next_room].people){
@@ -39,7 +42,14 @@ namespace mods{
 								break;
 							}
 							room_id = room_dir->to_room;
-							lambda_cb(room_id,i_d,mods::globals::room_list[room_id]);
+							vec_player_data list;
+							for(auto character : mods::globals::room_list[room_id]){
+								vec_player_data_element item;
+								item.ch = character;
+								item.distance = ctr;
+								list.push_back(item);
+							}
+							lambda_cb(room_id,i_d,list);
 							/*
 							if(auto people = world[room_id].people){
 								for(; people->next_in_room; people = people->next_in_room){
@@ -52,6 +62,7 @@ namespace mods{
 					if(!room_dir){ break; }
 					next_room = room_dir->to_room;
 					if(next_room == NOWHERE){ break; }
+					ctr++;
 				}
 			}
 		}

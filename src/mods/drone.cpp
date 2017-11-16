@@ -4,173 +4,101 @@
 #include "drone.hpp"
 #include "../structs.h"
 #include "../utils.h"
+#include "../screen.h"
 #include "weapon.hpp"
 #include "../globals.hpp"
 #include "acl/color.hpp"
 #include "player.hpp"
+#define DRONE_OWNER_KEY "{player}:drone"
+#include "extern.hpp"
 
-extern struct obj_data* object_list;
-extern struct room_data* world;
-extern void do_auto_exits(struct char_data *ch);
 namespace mods {
 	drone::drone(char_data* ch) : m_char_data(ch) { };
-	static drone& drone::create(struct char_data* owner){
-		struct char_data *ch;
-		mods::globals::create_char(ch);
+	static struct char_data* drone::create(struct char_data* owner){
+		struct char_data *ch = mods::globals::create_char();
 		ch->drone = true;
 		ch->desc = owner->desc;
+		ch->drone_owner = owner->uuid;
+		ch->player.name = strdup("A drone");
 		mods::globals::register_player(ch);
+		owner->drone_uuid = ch->uuid;
+		owner->drone_simulate = true;
+		IN_ROOM(ch) = IN_ROOM(owner);
+		ch->points.move = 9999;
+		ch->points.max_move = 9999;
+		memset(&ch->char_specials,0,sizeof(ch->char_specials));
+		ch->char_specials.position = POS_STANDING;
+		ch->char_specials.saved.idnum = ch->uuid;
+		REMOVE_BIT(MOB_FLAGS(ch),MOB_ISNPC);
+		char_from_room(ch);
+		char_to_room(ch,IN_ROOM(owner));
+		SET_BIT(ch->char_specials.saved.affected_by,AFF_SNEAK);
+		SET_BIT(ch->player_specials->saved.pref, PRF_AUTOEXIT);
+		return ch;
 	}
-	
-//	void drone::stc_room(const room_rnum & rnum){
-//		if(world[rnum].name){
-//			std::string title = world[rnum].name;
-//			mods::player::stc_color_evaluation(std::string("{grn}") + title + "{/grn}",this);
-//		}
-//	}
-//
-//	void drone::stc_room_desc(const room_rnum & rnum){
-//		if(world[rnum].description){
-//			std::string colored = mods::player::just_color_evaluation(world[rnum].description);
-//			/* TODO: get status of outside world, if EMP, then replace phrase with emp phrase */
-//			stc(colored);
-//		}
-//	}
-	/*
-	obj_data* drone::weapon(){
-		return GET_EQ(m_char_data, WEAR_WIELD);
-	}
-	*/
-	//using mask_t = mods::weapon::mask_type;
-	/*
-	bool drone::has_weapon_capability(int type){
-		auto w = weapon();
-		if(!w){
-			return false;
+	static void drone::start(struct char_data* owner){
+		auto drone = mods::drone::get_existing(owner);
+		if(drone == nullptr){
+			drone = mods::drone::create(owner);
 		}
-		switch(type){
-			case mods::weapon::mask::snipe:
-				return !!(std::string(w->name).find("snipe") != std::string::npos);
-				break;
-			default:
-				return false;
+		if(IN_ROOM(drone) != NOWHERE){
+			char_from_room(drone);
 		}
-		return false;
+		char_to_room(drone,IN_ROOM(owner));
+		owner->drone_simulate = true;
 	}
-	bool drone::has_inventory_capability(int type){
-		return true; //FIXME: 
+	static void drone::stop(struct char_data* owner){
+		owner->drone_simulate = false;
 	}
-	void drone::weapon_cooldown_start(unsigned long duration,weapon_set set){
-		m_weapon_cooldown[set] = static_cast<unsigned long>(time(NULL)) + duration;
+	static bool drone::started(struct char_data* owner){
+		return owner->drone_simulate;
 	}
-	bool drone::weapon_cooldown_expired(weapon_set set) {
-		auto cts = static_cast<unsigned long>(time(NULL));
-		return cts >= m_weapon_cooldown[set];
+	static void drone::simulate(struct char_data* owner,bool value){
+		owner->drone_simulate = value;
 	}
-	bool drone::carrying_ammo_of_type(const weapon_type_t& type){
-		for(auto item = m_char_data->carrying; item->next; item = item->next){
-			if(std::string(item->name).find("[ammo]") != std::string::npos
-				&&
-				m_char_data == item->carried_by
-				&&
-				type == item->weapon_type
-			){
-				return true;
+	static void drone::get_drone(struct char_data* owner){
+		auto drone = mods::globals::player_list[owner->drone_uuid];
+		if(IN_ROOM(owner) == IN_ROOM(drone)){
+			if(IN_ROOM(drone) != NOWHERE){
+				char_from_room(drone);
 			}
-		}
-		return false;
-	}
-	bool drone::is_weapon_loaded(){
-		auto w = weapon();
-		if(!w){
-			return false;
-		}
-		return true;
-	}
-	bool drone::has_ammo(){
-		auto w = weapon();
-		if(w->ammo > 0){
-			return true;
+			char_to_room(drone,NOWHERE);
 		}else{
+			send_to_char(owner,"Must be in the same room as your drone\r\n");
+		}
+	}
+	static struct char_data * drone::get_existing(struct char_data* owner){
+		if(owner->drone_uuid == 0 || owner->drone_uuid > mods::globals::player_list.size() -1){
+			return nullptr;
+		}
+		return mods::globals::player_list[owner->drone_uuid];
+	}
+
+	static bool drone::interpret(struct char_data *owner,const std::string & argument){
+		auto drone = mods::globals::player_list[owner->drone_uuid];
+		if(argument.compare("drone stop") == 0){
+			mods::drone::stop(owner);
+			return true;
+		}
+		if(argument.compare("scan") == 0){
+			command_interpreter(drone,"scan");
 			return false;
 		}
-	}
-	bool drone::has_thermite(){
-		if(!m_char_data->carrying){ return false;}
-		for(auto item = m_char_data->carrying; item->next; item = item->next){
-			if(m_char_data != item->carried_by){ return false; }
-			if(item->weapon_type == std::hash<std::string>{}("thermite")){
-				return true;
-			}
+		switch(argument[0]){
+			case 'n':
+			case 'e':
+			case 's':
+			case 'w':
+			case 'N':
+			case 'E':
+			case 'S':
+			case 'W':
+			case 'l':
+				command_interpreter(drone,argument.substr(0,1).c_str());
+				return false;
+			default: return false;
 		}
-		return false;
 	}
-	*/
-	//bool drone::has_equipment_tag(const std::string& tag) {
-	//	if(!m_char_data->carrying){ return false; }
-	//	/* TODO: find a better way to do this. this loops through all objects in the game and checks if the person carrying it is the current drone */
-	//	for(auto item = m_char_data->carrying; item->next; item = item->next){
-	//		if(std::string(item->name).find(std::string("[") + std::string(tag) + "]") != std::string::npos
-	//			&&
-	//			m_char_data == item->carried_by
-	//		){
-	//			return true;
-	//		}
-	//	}
-	//	return false;
-	//}
-	//void drone::ammo_adjustment(int increment){
-	//	weapon()->ammo += increment;
-	//}
-	//obj_data* drone::get_first_ammo_of_type(const weapon_type_t & type) const {
-	//	for(auto item = m_char_data->carrying; item->next; item = item->next){
-	//		if(item->weapon_type == type
-	//			&&
-	//			std::string(item->name).find("[ammo]")
-	//			&&
-	//			m_char_data == item->carried_by
-	//		){
-	//			return item;
-	//		}
-	//	}
-	//	return nullptr;
-	//}
-	///* returns:
-	// * 	the `ammo` trait of the obj_data struct after the increment has been applied.
-	// * if 0 (zero) is returned, then nothing was subtraced/added from the user's
-	// * ammo supply. This means the user doesn't have that ammo type
-	// */
-	//int drone::ammo_type_adjustment(int increment,const weapon_type_t & type){
-	//	if(!m_char_data->carrying){ return 0; }
-	//	for(auto item = m_char_data->carrying; item->next; item = item->next){
-	//		if(item->weapon_type == type
-	//			&&
-	//			std::string(item->name).find("[ammo]") != std::string::npos
-	//			&&
-	//			m_char_data == item->carried_by
-	//		){
-	//			item->ammo += increment;
-	//			return item->ammo;
-	//		}
-	//	}
-	//}
-	/*
-	obj_data* drone::get_ammo(const weapon_type_t & type){
-		for(auto item = m_char_data->carrying; item->next; item = item->next){
-			if(std::string(item->name).find("[ammo]") != std::string::npos
-				&&
-				m_char_data == item->carried_by
-				&&
-				type == item->weapon_type
-			){
-				return item;
-			}
-		}
-		return nullptr;
-	}
-	void drone::exits(){
-		do_auto_exits(m_char_data);
-	}*/
 };
 
 #endif

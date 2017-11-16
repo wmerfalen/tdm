@@ -18,6 +18,7 @@
 #include "mods/projectile.hpp"
 #include "duktape/src/duktape.h"
 #include "mods/js.hpp"
+#include "mods/drone.hpp"
 
 #define MENTOC_PREAMBLE() auto player = mods::globals::players::get(ch->uuid); player->set_cd(ch); 
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
@@ -27,6 +28,25 @@ strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(
 #define DBSET(key,value) mods::globals::db->put(key,value);
 #define DBGET(key,value) mods::globals::db->get(key,value);
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
+extern void clear_char(struct char_data*);
+extern struct char_data* character_list;
+#define CREATE_CHAR(ch) \
+	CREATE(ch,struct char_data,1);\
+	clear_char(ch);\
+	std::cerr << "foo\r\n";\
+	ch->player_specials = (struct player_special_data*) calloc(1,sizeof( struct player_special_data));\
+	std::cerr << "foo\r\n";\
+	memset(&((ch)->player_specials),0,sizeof((ch)->player_specials));\
+	std::cerr << "foo\r\n";\
+	std::cerr << (int)ch->player_specials << "\r\n";\
+	(ch)->player_specials->poofin = (ch)->player_specials->poofout = strdup("poof");\
+	std::cerr << "bar\r\n";\
+	(ch)->player_specials->saved.pref = 0;\
+	std::cerr << "bar\r\n";\
+	CREATE((ch)->affected, struct affected_type, 1);\
+	memset(&((ch)->affected),0,sizeof((ch)->affected));\
+	(ch)->next = character_list;\
+	character_list = ch;
 namespace mods {
     namespace globals {
 		using lmdb_db = gdns::lmdb::db;
@@ -56,7 +76,7 @@ namespace mods {
 		void room_event(struct char_data*,mods::ai_state::event_type_t);
 		void room_event(room_vnum,mods::ai_state::event_type_t);
 		void post_boot_db();
-		void create_char(struct char_data *ch);
+		struct char_data* create_char();
 		void allocate_player_list();
 		int file_to_lmdb(const std::string& file,const std::string& key);
 		int opposite_dir(int);
@@ -65,6 +85,7 @@ namespace mods {
 		const char* say_random(const mods::ai_state::event_type_t&);
 		bool command_interpreter(struct char_data *ch,char* argument);
 		void post_command_interpreter(struct char_data *ch, char* argument);
+		int dir_int(char);
 		namespace rooms {
 			void char_from_room(struct char_data*);
 			void char_to_room(const room_rnum &,struct char_data*);

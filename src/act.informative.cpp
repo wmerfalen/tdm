@@ -22,6 +22,7 @@
 #include "constants.h"
 #include "globals.hpp"
 #include "mods/quests.hpp"
+#include "mods/drone.hpp"
 extern struct char_data* character_list;
 /* extern variables */
 extern int top_of_helpt;
@@ -60,6 +61,7 @@ ACMD(do_js);	/*!mods*/
 ACMD(do_quest);	/*!mods*/
 ACMD(do_recall);	/*!mods*/
 ACMD(do_givemegold); /*!mods*/
+ACMD(do_drone);	/*!mods*/
 ACMD(do_look);
 ACMD(do_examine);
 ACMD(do_gold);
@@ -101,6 +103,25 @@ int *cmd_sort_info;
 #define SHOW_OBJ_LONG		0
 #define SHOW_OBJ_SHORT		1
 #define SHOW_OBJ_ACTION		2
+
+ACMD(do_drone){
+	MENTOC_PREAMBLE();
+	CREATE_ARG(16,1);
+  	one_argument(argument, static_cast<char*>(&arg_1[0]),16);
+	if(std::string(static_cast<char*>(&arg_1[0])).compare("start") == 0){
+		/* if user has a drone out already, ressurrect that drone */
+		if(!mods::drone::started(ch)){
+			mods::drone::start(ch);	
+		}
+		return;
+	}
+	if(std::string(static_cast<char*>(&arg_1[0])).compare("stop") == 0){
+		/* if user has a drone out already, ressurrect that drone */
+		mods::drone::stop(ch);	
+		return;
+	}
+	*player << "usage: drone <start|stop>\r\n";
+}
 
 ACMD(do_givemegold){
 	MENTOC_PREAMBLE();
@@ -382,21 +403,25 @@ void list_one_char(struct char_data *i, struct char_data *ch)
   if (!IS_NPC(i) && PLR_FLAGGED(i, PLR_WRITING))
     send_to_char(ch, " (writing)");
 
-  if (GET_POS(i) != POS_FIGHTING)
-    send_to_char(ch, "%s", positions[(int) GET_POS(i)]);
-  else {
-    if (FIGHTING(i)) {
-      send_to_char(ch, " is here, fighting ");
-      if (FIGHTING(i) == ch)
-	send_to_char(ch, "YOU!");
-      else {
-	if (IN_ROOM(i) == IN_ROOM(FIGHTING(i)))
-	  send_to_char(ch, "%s!", PERS(FIGHTING(i), ch));
-	else
-	  send_to_char(ch,  "someone who has already left!");
-      }
-    } else			/* NIL fighting pointer */
-      send_to_char(ch, " is here struggling with thin air.");
+  if(i->drone){
+	send_to_char(ch," is idling here.");
+  }else{
+	  if (GET_POS(i) != POS_FIGHTING)
+		send_to_char(ch, "%s", positions[(int) GET_POS(i)]);
+	  else {
+		if (FIGHTING(i)) {
+		  send_to_char(ch, " is here, fighting ");
+		  if (FIGHTING(i) == ch)
+		send_to_char(ch, "YOU!");
+		  else {
+		if (IN_ROOM(i) == IN_ROOM(FIGHTING(i)))
+		  send_to_char(ch, "%s!", PERS(FIGHTING(i), ch));
+		else
+		  send_to_char(ch,  "someone who has already left!");
+		  }
+		} else			/* NIL fighting pointer */
+		  send_to_char(ch, " is here struggling with thin air.");
+	  }
   }
 
   if (AFF_FLAGGED(ch, AFF_DETECT_ALIGN)) {
@@ -497,6 +522,7 @@ MENTOC_PREAMBLE();
     send_to_char(ch, "You see nothing but infinite darkness...\r\n");
     return;
   }*/
+  std::cerr << (int)ch << (int)&ch->char_specials << "\r\n";
   send_to_char(ch, "%s", CCCYN(ch, C_NRM));
   if (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_ROOMFLAGS)) {
     char buf[MAX_STRING_LENGTH];
