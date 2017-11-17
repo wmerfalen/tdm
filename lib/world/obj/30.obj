@@ -133,20 +133,16 @@ The UMP45 is a submachine gun developed and manufactured by Heckler & Koch. The 
 ~
 #3021
 xm109 sniper rifle xm barrett b [xm109] {snipe}~
-A Barrett XM109 Sniper Rifle~
-The Barrett XM109 is a prototype anti-materiel rifle, chambered for 25 × 59 mm grenade rounds and developed by Barrett Firearms Manufacturing. It was designed in accordance with a requirement set out in 1994, and is capable of defeating light armor and equipment out to 2 km (1.2 mi).~
+A Barrett XM109~
+A Barrett XM109 has been left here.~
 A Barrett XM109~
 5 n n
-0 1 8 3
+0 3 250 3
 8 600 10
 [snipe]
 E
-sniper rifle xm barrett bar~
-An insignia is written across the back of this weapon...
-~
-E
-insignia~
-It says: 'My name Jeff'
+xm109 sniper snipe rifle xm barrett b~
+The Barrett XM109 is a prototype anti-materiel rifle, chambered for 25 × 59 mm grenade rounds and developed by Barrett Firearms Manufacturing. It was designed in accordance with a requirement set out in 1994, and is capable of defeating light armor and equipment out to 2 km (1.2 mi).
 ~
 #3022
 [ammo] ammo xm109 [xm109-ammo] {snipe}~

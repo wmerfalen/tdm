@@ -953,7 +953,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
   }
 
   /* Set the maximum damage per round and subtract the hit points */
-  dam = MAX(MIN(dam, 100), 0);
+  //dam = MAX(MIN(dam, 100), 0);
   GET_HIT(victim) -= dam;
   send_to_char(ch,(std::string("{grn}[") + std::to_string(dam) + "] ").c_str());
 
@@ -1278,7 +1278,7 @@ int snipe_hit(struct char_data *ch, struct char_data *victim, int type,uint16_t 
 		/* Terrible accuracy if within the same room */
 		calc_thaco += MOD_SNIPE_SAME_ROOM_THACO;
   }else{
-	calc_thaco += distance + MOD_SNIPE_DISTANCE_THACO;
+	calc_thaco += distance * MOD_SNIPE_DISTANCE_THACO;
   }
 send_to_char(ch,(std::to_string(calc_thaco) + "\r\n").c_str());
   /* Calculate the raw armor including magic armor.  Lower AC is better for defender. */
