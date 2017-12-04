@@ -19,8 +19,11 @@ namespace mods {
     class player {
 		public:
 			typedef short weapon_set;
+			using chdata = struct char_data;
+			using chdata_ptr = struct char_data *;
 			player() = delete;
 			player(char_data* ch);
+			static constexpr int PAGE_SIZE = 40;
 			bool has_weapon_capability(int);
 			bool has_inventory_capability(int);
 			bool can_snipe(char_data *target);
@@ -39,6 +42,10 @@ namespace mods {
 			void stc_room(const room_rnum &);
 			void stc_room_desc(const room_rnum &);
 			void exits();
+			player& pager_start();
+			player& pager_end();
+			void pager_next_page();
+			void page(int page_number);
 			/*
 			void weapon_cooldown_clear(weapon_set);
 			bool has_weapon_cooldown(weapon_set set){
@@ -58,30 +65,66 @@ namespace mods {
 				send_to_char(m_char_data,std::to_string(m).c_str());
 			}
 			void stc(const std::string m){
-				send_to_char(m_char_data,m.c_str());
+				if(m.length()){
+					send_to_char(m_char_data,m.c_str());
+				}
 			}
 			void stc(const char* m){
-				send_to_char(m_char_data,m);
+				if(m){
+					send_to_char(m_char_data,m);
+				}
+			}
+			void queue_page_fragment(std::string_view fragment){
+				for(auto c : fragment){
+					m_current_page_fragment += c;
+					if(c == '\n'){
+						m_pages.push_back(m_current_page_fragment);
+						m_current_page_fragment = "";
+					}
+				}
+			}
+			/* conversion operator to char_data* */
+			operator chdata_ptr() const {
+				return m_char_data;
 			}
 			/* TODO: Operator << for sending to the character */
 			player& operator<<(const char* m){
-				stc(m);	
+				if(m_do_paging){
+					queue_page_fragment(m);
+				}else{
+					stc(m);	
+				}
 				return *this;
 			}
 			player& operator<<(const std::string m){
-				stc(m);	
+				if(m_do_paging){
+					queue_page_fragment(m);
+				}else{
+					stc(m);	
+				}
 				return *this;
 			}
 			player& operator<<(int m){
-				stc(m);	
+				if(m_do_paging){
+					queue_page_fragment(std::to_string(m));
+				}else{
+					stc(m);	
+				}
 				return *this;
 			}
+			void pager_clear();
+			bool paging() const { return m_pages.size(); }
 			obj_data* weapon();
 			obj_data* get_ammo(const weapon_type_t &);
 		protected:
 			char_data* m_char_data;
 			std::array<unsigned long,WEAPON_SET_NUM> m_weapon_cooldown;
 			weapon_set m_weapon_set;
+			bool m_do_paging;
+			unsigned int m_page;
+			unsigned int m_current_page;
+			std::string m_current_page_fragment;
+			std::vector<std::string> m_pages;
     };
 };
 

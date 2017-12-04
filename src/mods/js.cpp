@@ -110,11 +110,18 @@ namespace mods{
 			duk_push_string(ctx,value.c_str());
 			return 1;
 		}
-		void eval_string(duk_context* ctx,const std::string& str){
-			duk_eval_string(ctx,str.c_str());
+		static duk_ret_t unsafe_code(duk_context *ctx,void* udata){
+			duk_push_string(ctx,static_cast<char*>(udata));
+			duk_eval(ctx);
+			return 0;
 		}
-		void eval_string(const std::string & str){
-			load_c_functions(mods::globals::duktape_context);
+		void eval_string(duk_context* ctx,std::string_view str){
+			if(duk_safe_call(ctx,mods::js::unsafe_code,static_cast<const void*>(str.data()),0,1) != 0){
+				std::cerr << "Unexpected js error: " << duk_safe_to_string(ctx,-1) << "\r\n";
+			}
+			duk_pop(ctx);
+		}
+		void eval_string(std::string_view str){
 			eval_string(mods::globals::duktape_context,str);
 		}
 		void load_c_functions(){
@@ -157,29 +164,29 @@ namespace mods{
 				path = m_dir + "/" + m_file;
 			}
 			std::ifstream include_file(path,std::ios::in);
-			if(!include_file.is_open()){
-				return false;
-			}
-			else{
-				std::vector<char> buffer;
-				struct stat statbuf;
+            if(!include_file.is_open()){
+                return false;
+            }
+            else{
+                std::vector<char> buffer;
+                struct stat statbuf;
 
-				if (stat(path.c_str(), &statbuf) == -1) {
-					return false;
-				}
+                if (stat(path.c_str(), &statbuf) == -1) {
+                    return false;
+                }
 
-				buffer.reserve(statbuf.st_size);
-				std::fill(buffer.begin(),buffer.end(),0);
-				
-				while(!include_file.eof()){
-					include_file.read((char*)&buffer[0],JS_READ_CHUNK_SIZE);
-				}
-				eval_string(m_context,std::string((char*)&buffer[0]));
-				return true;
+                buffer.reserve(statbuf.st_size);
+                std::fill(buffer.begin(),buffer.end(),0);
+
+                while(!include_file.eof()){
+                    include_file.read((char*)&buffer[0],JS_READ_CHUNK_SIZE);
+                }
+                eval_string(m_context,std::string((char*)&buffer[0]));
 			}
+			return true;
 		}
-		int load_library(duk_context *ctx,const std::string & file){
-			auto m = new include(ctx,file);
+		int load_library(duk_context *ctx,std::string_view file){
+			auto m = std::make_unique<include>(ctx,file);
 			if(m->good()){
 				return 0;
 			}

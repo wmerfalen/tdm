@@ -10,26 +10,29 @@ typedef int socket_t;
 #include "../conf.h"
 #include "../sysdep.h"
 #include <array>
-#include "../mods/utils.hpp"
+#include "../mods/util.hpp"
 #include "../globals.hpp"
 #include "../duktape/src/duktape.h"
 #include <sys/stat.h>
+#include <string_view>
 #define JS_READ_CHUNK_SIZE 1024
 #define DT_FORMAT "{player_name}:mob_death_trigger"
 namespace mods {
 	namespace js {
-		void eval_string(const std::string & str);
-		void eval_string(duk_context *ctx,const std::string & str);
+		void eval_file(std::string_view str);
+		void eval_file(duk_context *ctx,std::string_view str);
+		void eval_string(std::string_view str);
+		void eval_string(duk_context *ctx,std::string_view str);
 		void load_c_functions();
 		void load_c_functions(duk_context *ctx);
-		int load_library(duk_context *ctx,const std::string & file);
+		int load_library(duk_context *ctx,std::string_view file);
 		struct include {
 			include() = delete;
-			include(duk_context *ctx,const std::string & file) 
+			include(duk_context *ctx,std::string_view file) 
 				: m_file(file), m_context(ctx) {
 					m_include_success = include_file();	
 			}
-			include(duk_context *ctx,const std::string & directory,const std::string & file) 
+			include(duk_context *ctx,std::string_view directory,std::string_view file) 
 				: m_file(file), m_dir(directory), m_context(ctx) {
 					m_include_success = include_file();
 				}
@@ -39,8 +42,8 @@ namespace mods {
 			inline void set_dir(const std::string& m){ m_dir = m; }
 			inline void set_context(duk_context *ctx){ m_context = ctx; }
 
-			inline const std::string & get_file(){ return m_file; }
-			inline const std::string & get_dir(){ return m_dir; }
+			inline std::string_view get_file(){ return m_file; }
+			inline std::string_view get_dir(){ return m_dir; }
 			inline duk_context* get_context(){ return m_context; }
 			private:
 				std::string m_file;

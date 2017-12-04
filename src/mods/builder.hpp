@@ -1,0 +1,57 @@
+#ifndef __MENTOC_MODS_BUILDER_HEADER__
+#define __MENTOC_MODS_BUILDER_HEADER__
+#include <time.h>
+#include <netdb.h>
+#include <sys/socket.h>
+#include <cstdio>
+typedef int socket_t;
+#include "../structs.h"
+#include "../utils.h"
+#include "../conf.h"
+#include "../sysdep.h"
+#include <array>
+#include "../mods/util.hpp"
+#include "../globals.hpp"
+#include "../duktape/src/duktape.h"
+#include <sys/stat.h>
+#include <string_view>
+#include "../interpreter.h"
+namespace mods::builder {
+//struct room_data {
+//   1    room_vnum number;        /* Rooms number (vnum)            */
+//   2    zone_rnum zone;              /* Room zone (for resetting)          */
+//   3    int  sector_type;            /* sector type (move/hide)            */
+//   4    char *name;                  /* Rooms name 'You are ...'           */
+//   5    char *description;           /* Shown when entered                 */
+//   6    struct extra_descr_data *ex_description; /* for examine/look       */
+//   7    struct room_direction_data *dir_option[NUM_OF_DIRS]; /* Directions */
+//   8    int /*bitvector_t*/ room_flags;      /* DEATH,DARK ... etc */
+//   9
+//  10    byte light;                  /* Number of lightsources in room     */
+//  11    SPECIAL(*func);
+//  12
+//  13    struct obj_data *contents;   /* List of items in room              */
+//  14    struct char_data *people;    /* List of NPC / PC in room           */
+//  15 };
+//  16
+	/* Factory method to generate a room for us */
+	struct room_data new_room(struct char_data* ch);
+	bool flush_to_db(struct char_data *ch,room_vnum room);
+	bool title(room_rnum room,std::string_view str_title);
+	bool description(room_rnum room,std::string_view str_description);
+	std::optional<std::string> dir_option(room_rnum,int direction,std::optional<std::string_view> description,
+			std::optional<std::string_view> keywords,
+			std::optional<int> exit_info,
+			std::optional<int> key,
+			std::optional<room_rnum> to_room
+	);
+	bool create_direction(room_rnum room_id,int direction,room_rnum room);
+	bool destroy_direction(room_rnum,int direction);
+	int save_to_db(room_rnum in_room);
+	int import_room(struct room_data*);
+	bool save_zone_to_db(std::string_view name,int room_start,int room_end,int lifespan,int reset_mode);
+};
+
+ACMD(do_rbuild);
+ACMD(do_rbuildzone);
+#endif

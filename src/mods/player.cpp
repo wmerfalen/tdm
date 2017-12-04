@@ -7,16 +7,12 @@
 #include "weapon.hpp"
 #include "../globals.hpp"
 #include "acl/color.hpp"
+#include "prefs.hpp"
 
 extern struct obj_data* object_list;
 extern struct room_data* world;
 extern void do_auto_exits(struct char_data *ch);
 namespace mods {
-	std::string just_color_evaluation(std::string final_buffer);
-
-	void stc_color_evaluation(const std::string & title,player* p){
-		*p << just_color_evaluation(title) << "\r\n";
-	}
 	std::string just_color_evaluation(std::string final_buffer){
 		final_buffer = mods::globals::replace_all(final_buffer,"{grn}","\033[32m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{red}","\033[31m");
@@ -28,10 +24,81 @@ namespace mods {
 		final_buffer = mods::globals::replace_all(final_buffer,"{/blu}","\033[0m");
 		return final_buffer;
 	}
+	void stc_color_evaluation(const std::string & title,player* p){
+		*p << just_color_evaluation(title) << "\r\n";
+	}
+
+	std::string word_wrap(std::string_view paragraph,int width){
+		std::string buffer;
+		if(width <= 0){
+			return std::string(paragraph);
+		}
+		int position = 1;
+		for(auto cint = 0; cint < paragraph.length();cint++){
+			if(isspace(paragraph[cint])){ 
+				if(buffer.begin() != buffer.end() && 
+						isspace(*(buffer.end() - 1))){
+					continue;
+				}else{
+					buffer += ' ';
+					++position;
+				}
+			}else{
+				buffer += paragraph[cint];
+				++position;
+			}
+			if(position >= width){
+				if(!isspace(paragraph[cint])){
+					//Perform backtracking
+					//====================
+					for(int k = buffer.size();k > 0;k--){
+						if(isspace(buffer[k])){
+							buffer[k] = '\n';
+							break;
+						}
+					}
+					position = 1;
+				}
+			}
+		}
+		return buffer;
+	}
+
 	using mask_t = mods::weapon::mask_type;
-	player::player(char_data* ch) : m_char_data(ch) { };
+	player::player(char_data* ch) : m_char_data(ch),m_do_paging(false),
+		m_page(0),m_current_page(0),m_current_page_fragment("") { };
 	bool player::can_snipe(char_data *target){
 		return true;
+	}
+	void player::page(int pg){
+		if(m_pages.size() == 0 || pg * mods::player::PAGE_SIZE >= m_pages.size()){
+			return;
+		}
+		std::string acc = "";
+		unsigned i = pg * mods::player::PAGE_SIZE;
+		for(; i < m_pages.size() && i < (pg + 1) * mods::player::PAGE_SIZE;i++){
+			acc += m_pages[i];
+		}
+		if(i != m_pages.size()){
+			acc += std::string("--[ page number ") + std::to_string(pg +1)  + "/"; 
+			acc += std::to_string((m_pages.size() / mods::player::PAGE_SIZE) + 1) + \
+				   ":: press (q) to quit or page number ]--";
+		}else{
+			m_do_paging = false;
+			m_current_page = 0;
+		}
+		if(acc.length()){
+			stc(acc);
+			m_current_page = pg;
+		}
+	}
+	void player::pager_next_page(){
+		if((m_current_page +1) * mods::player::PAGE_SIZE >= m_pages.size()){
+			m_do_paging = false;
+			m_current_page = 0;
+			return;
+		}
+		page(m_current_page +1);
 	}
 	bool player::has_weapon_capability(int type){
 		auto w = weapon();
@@ -111,6 +178,28 @@ namespace mods {
 	void player::ammo_adjustment(int increment){
 		weapon()->ammo += increment;
 	}
+	player& player::pager_start(){
+		m_do_paging = true;
+		m_pages.clear();
+		m_page = 0;
+		return *this;
+	}
+	player& player::pager_end(){
+		m_do_paging = false;
+		if(m_current_page_fragment.length()){
+			if(m_pages.begin() == m_pages.end()){
+				m_pages.push_back(m_current_page_fragment);
+			}else{
+				auto it = m_pages.end() -1;
+				*it += m_current_page_fragment;
+			}
+		}
+		m_current_page_fragment = "";
+		return *this;
+	}
+	void player::pager_clear(){
+		m_pages.clear();
+	}
 	obj_data* player::get_first_ammo_of_type(const weapon_type_t & type) const {
 		for(auto item = m_char_data->carrying; item->next; item = item->next){
 			if(item->weapon_type == type
@@ -155,7 +244,14 @@ namespace mods {
 		if(world[rnum].description){
 			std::string colored = just_color_evaluation(world[rnum].description);
 			/* TODO: get status of outside world, if EMP, then replace phrase with emp phrase */
-			stc(colored);
+			auto player = this;
+			auto value = PLAYER_GET("screen_width");
+			if(value.length()){
+				stc(word_wrap(colored,std::stoi(value)) + "\r\n");
+				return;
+			}else{
+				stc(word_wrap(colored,80) + "\r\n");
+			}
 		}
 	}
 	obj_data* player::weapon(){

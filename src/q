@@ -1,0 +1,11 @@
+ room_number | zone | sector_type |                 name                 |                                           description                                            | ex_keyword | ex_description | light | room_flag 
+-------------+------+-------------+--------------------------------------+--------------------------------------------------------------------------------------------------+------------+----------------+-------+-----------
+        1204 |    2 |           0 | {blu}Directorate of Operations{/blu} |         Three rows of terminals make up the center of this vast room, each with control\r       +|            |                |     0 |         8
+             |      |             |                                      | panels and maintenance crew attending them. The northern end of the room is home to the\r       +|            |                |       | 
+             |      |             |                                      | many large monitors that keep this room constantly satiated with information. Humming machines\r+|            |                |       | 
+             |      |             |                                      | convert and transmutate large quantities of data. Terrabytes of information are folded and \r   +|            |                |       | 
+             |      |             |                                      | manipulated-- parsed and dissected -- until the central hub and core AI modules spit out\r      +|            |                |       | 
+             |      |             |                                      | the next crucial chunk of data that could potentially save or endanger the lives of millions.\r +|            |                |       | 
+             |      |             |                                      |                                                                                                  |            |                |       | 
+(1 row)
+

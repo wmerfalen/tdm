@@ -159,6 +159,11 @@ ACMD(do_sneak);
 ACMD(do_recall);
 ACMD(do_givemegold);
 ACMD(do_snipe);
+ACMD(do_rbuildzone);
+ACMD(do_rnumlist);
+ACMD(do_rnumtele);
+ACMD(do_pref);
+ACMD(do_rbuild);
 ACMD(do_drone);
 ACMD(do_quest);
 ACMD(do_js);
@@ -480,6 +485,11 @@ cpp_extern const struct command_info cmd_info[] = {
   { "recall"  , POS_RESTING , do_recall   , 0, 0 },
   { "givemegold"  , POS_RESTING , do_givemegold   , 0, 0 },
   { "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
+  { "zbuild"  , POS_RESTING , do_rbuildzone   , LVL_IMMORT, 0 },
+  { "rnumtele"  , POS_RESTING , do_rnumtele   , LVL_IMMORT, 0 },
+  { "rnumlist"  , POS_RESTING , do_rnumlist   , LVL_IMMORT, 0 },
+  { "pref"  , POS_RESTING , do_pref   , 0, 0 },
+  { "rbuild"  , POS_RESTING , do_rbuild   , LVL_IMMORT, 0 },
   { "drone"  , POS_RESTING , do_drone   , 0, 0 },
   { "throw"  , POS_RESTING , do_throw   , 0, 0 },
   { "ammo"  , POS_RESTING , do_ammo   , 0, 0 },
@@ -613,11 +623,11 @@ void command_interpreter(struct char_data *ch, char *argument)
 
   /* just drop to next line for hitting CR */
   skip_spaces(&argument);
-  if (!*argument)
-    return;
 	if(!mods::globals::command_interpreter(ch,argument)){ /* !mods*/
 		return;
 	}
+  if (!*argument)
+    return;
   /*
    * special case to handle one-character, non-alphanumeric commands;
    * requested by many people so "'hi" or ";godnet test" is possible.

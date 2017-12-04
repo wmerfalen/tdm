@@ -3,7 +3,7 @@
 #
 
 # C compiler to use
-CC = g++ -g -A -da -std=c++17 -fpermissive -I/home/llvm/code/c++/bnull-mud/src/mods/include -L/home/llvm/code/c++/bnull-mud/src/mods/lib 
+CC = g++-7 -g -A -da -std=c++17 -fpermissive -I/home/llvm/code/c++/bnull-mud/src/mods/include -L/home/llvm/code/c++/bnull-mud/src/mods/lib 
 
 # Path to cxref utility
 CXREF = cxref
@@ -22,7 +22,7 @@ BINDIR = ../bin
 
 CFLAGS = -g -O2 $(MYFLAGS) $(PROFILE)
 
-LIBS =  -lcrypt /home/llvm/code/c++/bnull-mud/src/mods/lib/liblmdb.so
+LIBS =  -lcrypt -lpqxx -lpq /home/llvm/code/c++/bnull-mud/src/mods/lib/liblmdb.so 
 
 MODS_SRC := $(wildcard mods/*.cpp)
 MODS_OBJ := $(patsubst mods/%.cpp,mods/%.o,$(MODS_SRC))

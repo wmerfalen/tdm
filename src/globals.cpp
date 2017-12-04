@@ -24,6 +24,7 @@ extern void char_from_room(struct char_data*);
 extern void char_to_room(struct char_data*,room_rnum);
 extern void clear_char(struct char_data*);
 extern void do_look(struct char_data*,char *argument, int cmd, int subcmd);
+extern void parse_sql_rooms();
 extern struct player_special_data dummy_mob;
 namespace mods {
     namespace globals {
@@ -37,6 +38,8 @@ namespace mods {
 		ai_state_map states;
 		std::vector<std::vector<struct char_data*>> room_list;
 		std::vector<struct char_data*> player_list;
+		std::unique_ptr<pqxx::connection> pq_con;
+		bool f_import_rooms;
 		namespace objects {
 			static bool populated = false;
 		};
@@ -135,10 +138,12 @@ Iter select_randomly(Iter start, Iter end) {
 			duktape_context = mods::js::new_context();
 			mods::js::load_c_functions();
 			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js");
-			DBSET("quest:31:0:name","Eliminate HVT posing as civilian.");
+			pq_con = std::make_unique<pqxx::connection>(mods::conf::pq_connection.c_str());
+			f_import_rooms = false;
 		}
 		void post_boot_db(){
 			allocate_player_list();
+			parse_sql_rooms();
 		}
 		void allocate_player_list(){
 			if(!character_list){ return; }
@@ -248,6 +253,7 @@ Iter select_randomly(Iter start, Iter end) {
 			return NORTH;
 		}
 		std::string color_eval(std::string final_buffer){
+			/*
 			final_buffer = replace_all(final_buffer,"{grn}","\033[32m");
 			final_buffer = replace_all(final_buffer,"{red}","\033[31m");
 			final_buffer = replace_all(final_buffer,"{blu}","\033[34m");
@@ -258,6 +264,7 @@ Iter select_randomly(Iter start, Iter end) {
 			final_buffer = replace_all(final_buffer,"{/red}","\033[0m");
 			final_buffer = replace_all(final_buffer,"{/blu}","\033[0m");
 			final_buffer = replace_all(final_buffer,"{/gld}","\033[0m");
+			*/
 			return final_buffer;
 		}
 
@@ -288,6 +295,24 @@ Iter select_randomly(Iter start, Iter end) {
 			}
 			if(!ch->drone && mods::quests::has_quest(ch)){
 				mods::quests::run_trigger(ch);
+			}
+			MENTOC_PREAMBLE();
+			if(player->paging()){
+				if(std::string(argument).length() == 0){
+					player->pager_next_page();
+					return false;
+				}
+				if(std::string(argument).compare("q") == 0){
+					player->pager_clear();
+					player->pager_end();
+					return false;
+				}
+				try{
+					player->page(std::stoi(argument) - 1);
+				}catch(const std::exception &e){
+					return true;
+				}
+				return false;
 			}
 			return true;
 		}
@@ -326,7 +351,6 @@ Iter select_randomly(Iter start, Iter end) {
 
 		void register_player(struct char_data* ch){
 			if(ch){
-				std::cerr << "valid cdata\n";
 				ch->uuid = get_uuid();
 				mods::globals::player_map.insert({ch->uuid,std::make_shared<mods::player>(ch)});
 				allocate_player_list();

@@ -19,6 +19,8 @@
 #include "duktape/src/duktape.h"
 #include "mods/js.hpp"
 #include "mods/drone.hpp"
+#include <pqxx/pqxx>
+#include "mods/conf.hpp"
 
 #define MENTOC_PREAMBLE() auto player = mods::globals::players::get(ch->uuid); player->set_cd(ch); 
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
@@ -33,16 +35,11 @@ extern struct char_data* character_list;
 #define CREATE_CHAR(ch) \
 	CREATE(ch,struct char_data,1);\
 	clear_char(ch);\
-	std::cerr << "foo\r\n";\
 	ch->player_specials = (struct player_special_data*) calloc(1,sizeof( struct player_special_data));\
-	std::cerr << "foo\r\n";\
 	memset(&((ch)->player_specials),0,sizeof((ch)->player_specials));\
-	std::cerr << "foo\r\n";\
 	std::cerr << (int)ch->player_specials << "\r\n";\
 	(ch)->player_specials->poofin = (ch)->player_specials->poofout = strdup("poof");\
-	std::cerr << "bar\r\n";\
 	(ch)->player_specials->saved.pref = 0;\
-	std::cerr << "bar\r\n";\
 	CREATE((ch)->affected, struct affected_type, 1);\
 	memset(&((ch)->affected),0,sizeof((ch)->affected));\
 	(ch)->next = character_list;\
@@ -62,10 +59,12 @@ namespace mods {
 		extern std::shared_ptr<mods::player> player_nobody;
 		extern std::unique_ptr<mods::deferred> defer_queue;
 		extern std::unique_ptr<lmdb_db> db;
+		extern std::unique_ptr<pqxx::connection> pq_con;
 		extern ai_state_map states;
 		extern duk_context* duktape_context;
 		extern std::vector<std::vector<struct char_data*>> room_list;
 		extern std::vector<struct char_data *> player_list;
+		extern bool f_import_rooms;
 		std::unique_ptr<ai_state>& state_fetch(struct char_data* ch);
 		int mobile_activity(char_data*);
 		void register_object(obj_data&);

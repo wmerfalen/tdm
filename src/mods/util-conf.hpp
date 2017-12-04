@@ -1,4 +1,4 @@
-#ifndef __MENTOC_UTIL_CONF_HEADER__
+/#ifndef __MENTOC_UTIL_CONF_HEADER__
 #define  __MENTOC_UTIL_CONF_HEADER__
 
 #include <iostream>
@@ -87,7 +87,7 @@ namespace mods {
                 }
                 out << "const unsigned char " << var_name << "[] = {";
                 if(m.is_open()){
-                    std::cout << "foo";
+                    //std::cout << "foo";
                     std::array<char,1024> buf;
                     buf[1023] = '\0';
                     unsigned ctr = 0;

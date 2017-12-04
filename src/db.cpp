@@ -24,12 +24,15 @@
 #include "house.h"
 #include "constants.h"
 #include "globals.hpp"
+#include "mods/pq.hpp"
+#include <vector>
 
 /**************************************************************************
 *  declarations of most of the 'global' variables                         *
 **************************************************************************/
 
-struct room_data *world = NULL;	/* array of rooms		 */
+void parse_sql_rooms(); 
+std::vector<struct room_data> world;	/* array of rooms		 */
 room_rnum top_of_world = 0;	/* ref to top element of world	 */
 
 extern struct char_data *character_list;	/* global linked list of
@@ -327,7 +330,8 @@ void destroy_db(void)
       free(world[cnt].dir_option[itr]);
     }
   }
-  free(world);
+  /* We don't need to free the world since it's a std::vector now !mods */
+  //free(world);
 
   /* Objects */
   for (cnt = 0; cnt <= top_of_objt; cnt++) {
@@ -749,7 +753,8 @@ void index_boot(int mode)
    */
   switch (mode) {
   case DB_BOOT_WLD:
-    CREATE(world, struct room_data, rec_count);
+    //CREATE(world, struct room_data, rec_count);
+	world.reserve(rec_count);
     size[0] = sizeof(struct room_data) * rec_count;
     log("   %d rooms, %d bytes.", rec_count, size[0]);
     break;
@@ -900,10 +905,44 @@ bitvector_t asciiflag_conv(char *flag)
 }
 
 
+static int room_nr = 0, zone = 0;
 /* load the rooms */
+void parse_sql_rooms(){
+	struct room_data room;
+	auto trans = mods::pq::transaction(*mods::globals::pq_con);
+	auto result = mods::pq::exec(trans,"SELECT COUNT(*) FROM room");
+	mods::pq::commit(trans);
+	auto sql_rooms = mods::pq::as_int(result,0,0);
+	auto world_top = mods::globals::room_list.size();
+	auto old_world = world;
+	auto trans2 = mods::pq::transaction(*mods::globals::pq_con);
+	auto r = mods::pq::exec(trans2,"SELECT * FROM room");
+	for(auto row: r){
+		struct room_data room;
+		room.number = row[1].as<int>();
+		room.zone = row[2].as<int>();
+		room.name = strdup(row["name"].c_str());
+		room.description = strdup(row["description"].c_str());
+  		room.room_flags = row[9].as<int>();
+  		room.sector_type = row[3].as<int>();
+		room.ex_description = nullptr;
+		room.func = nullptr;
+		room.contents = nullptr;
+		room.people = nullptr;
+		room.light = row[8].as<int>();
+		//TODO: setup directions to work properly here (dir_option)
+		world.push_back(room);
+		mods::globals::register_room(++room_nr);
+      	top_of_world = room_nr;
+	}
+	mods::pq::commit(trans2);
+	std::cerr << "Number of rooms in postgres: " << mods::pq::as_int(result,0,0) << "\r\n";
+	//TODO: uncomment this out so that renum_world works
+	//renum_world();
+	return;
+}
 void parse_room(FILE *fl, int virtual_nr)
 {
-  static int room_nr = 0, zone = 0;
   int t[10], i;
   char line[READ_SIZE], flags[128], buf2[MAX_STRING_LENGTH], buf[128];
   struct extra_descr_data *new_descr;
@@ -924,7 +963,6 @@ void parse_room(FILE *fl, int virtual_nr)
   world[room_nr].number = virtual_nr;
   world[room_nr].name = fread_string(fl, buf2);
   world[room_nr].description = fread_string(fl, buf2);
-  mods::globals::register_room(room_nr);
 
   if (!get_line(fl, line)) {
     log("SYSERR: Expecting roomflags/sector type of room #%d but file ended!",
@@ -975,6 +1013,7 @@ void parse_room(FILE *fl, int virtual_nr)
       break;
     case 'S':			/* end of room */
       top_of_world = room_nr++;
+  		mods::globals::register_room(room_nr);
       return;
     default:
       log("%s", buf);
@@ -982,7 +1021,6 @@ void parse_room(FILE *fl, int virtual_nr)
     }
   }
 }
-
 
 
 /* read direction data */
@@ -2849,14 +2887,15 @@ room_rnum real_room(room_vnum vnum)
   top = top_of_world;
 
   /* perform binary search on world-table */
+  
   for (;;) {
     mid = (bot + top) / 2;
 
-    if ((world + mid)->number == vnum)
+    if ((world[mid]).number == vnum)
       return (mid);
     if (bot >= top)
       return (NOWHERE);
-    if ((world + mid)->number > vnum)
+    if ((world[mid]).number > vnum)
       top = mid - 1;
     else
       bot = mid + 1;

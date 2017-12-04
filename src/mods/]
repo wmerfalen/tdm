@@ -10,7 +10,7 @@ typedef int socket_t;
 #include "../conf.h"
 #include "../sysdep.h"
 #include <array>
-#include "../mods/utils.hpp"
+#include "../mods/util.hpp"
 #include "../globals.hpp"
 
 namespace mods {

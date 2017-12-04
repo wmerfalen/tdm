@@ -16,7 +16,7 @@
 #include "db.h"
 #include "spells.h"
 #include <array>
-#include "mods/utils.hpp"
+#include "mods/util.hpp"
 #include "globals.hpp"
 #include "mods/scan.hpp"
 #include "mods/weapon.hpp"

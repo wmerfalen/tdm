@@ -393,9 +393,9 @@ void char_from_room(struct char_data *ch)
 void char_to_room(struct char_data *ch, room_rnum room)
 {
 /*TODO: Insert logic here !movement !globals */
-  if (ch == NULL || room == NOWHERE || room > top_of_world)
+  if (ch == NULL || room == NOWHERE || room > mods::globals::room_list.size())
     log("SYSERR: Illegal value(s) passed to char_to_room. (Room: %d/%d Ch: %p",
-		room, top_of_world, ch);
+		room, mods::globals::room_list.size(), ch);
   else {
   	mods::globals::rooms::char_to_room(room,ch);
     ch->next_in_room = world[room].people;

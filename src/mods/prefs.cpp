@@ -38,3 +38,32 @@ namespace mods {
 		}
     };
 
+ACMD(do_pref){
+	MENTOC_PREAMBLE();
+	constexpr unsigned int max_char = 11;
+	std::array<char,max_char> item;
+	std::array<char,max_char> value;
+	one_argument(one_argument(argument,&item[0],max_char),&value[0],max_char);
+	if(std::string(&item[0]).compare("width") == 0){
+		PLAYER_SET("screen_width",&value[0]);
+		try{
+			auto v_int = std::stoi(&value[0]);
+			PLAYER_SET("screen_width",&value[0]);
+		}catch(const std::exception &e){
+			*player << "{red}Invalid width{/red}\r\n";
+			return;
+		}
+		*player << "{gld}Screen width set to: " << &value[0] << "\r\n";
+	}
+
+	*player << "{gld}::[ preferences ]::{/gld}\r\n";
+	std::string line = "";
+	for(unsigned i =0; i < 80;i++){
+		line += "=";
+	}
+	*player << "{gld}" << line << "{/gld}\r\n";
+	auto width = PLAYER_GET("screen_width");
+	*player << "     width: " << width << "\r\n";
+	*player << "{gld}" << line << "{/gld}\r\n";
+	*player << "{gld} usage: pref <item> <value> {/gld}{blu}(Example: pref width 80){/blu}\r\n";
+}

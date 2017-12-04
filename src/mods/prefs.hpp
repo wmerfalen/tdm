@@ -10,6 +10,7 @@
 #include "../structs.h"
 #include "../types.hpp"
 #include "../globals.hpp"
+#include "../interpreter.h"
 #define PREFS_SEPARATOR std::to_string(":")
 #define PREFS_FORMAT_STRING "{name}:prefs:{key}"
 #define DYNAMIC_FORMAT_STRING "{name}:{prefs}:{key}"
@@ -34,4 +35,6 @@ namespace mods {
     };
 };
 
+
+ACMD(do_pref);
 #endif

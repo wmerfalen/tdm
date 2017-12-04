@@ -1,3 +1,5 @@
+#ifndef __INTERPRETER_HEADER__
+#define __INTERPRETER_HEADER__
 /* ************************************************************************
 *   File: interpreter.h                                 Part of CircleMUD *
 *  Usage: header file: public procs, macro defs, subcommand defines       *
@@ -212,3 +214,4 @@ struct alias_data {
 #define SCMD_UNLOCK     2
 #define SCMD_LOCK       3
 #define SCMD_PICK       4
+#endif

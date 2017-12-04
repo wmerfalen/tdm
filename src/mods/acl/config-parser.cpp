@@ -591,8 +591,8 @@ namespace mods {
         inline void FileParser::dump_rules(rule r){
             if(print_debug){
                 for(unsigned i = 0; i < r.size();i++){
-                    std::cout << "[command: ";
-                    std::cout << ::mods::util::maps::keyval_first<cm_key,cm_value>(m_command_map,i,"none found") << "]: ";
+                    //std::cout << "[command: ";
+                    //std::cout << ::mods::util::maps::keyval_first<cm_key,cm_value>(m_command_map,i,"none found") << "]: ";
                     if(r[i]){
                         dbg("dump rules: @@@ ALLOW @@@");
                     }else{
@@ -732,25 +732,25 @@ namespace mods {
             dbg("util print until");
             if(m_out_of_bounds()){ return; }
             int i=m_get_file_offset(); 
-            while(m_at(i) != c){ std::cout << m_at(i++); }
+            while(m_at(i) != c){ /* std::cout << m_at(i++); */ }
         }
         inline void FileParser::m20(){ if(!print_debug){ return; } 
             dbg("m20");
             if(m_out_of_bounds()){ dbg("m20: not printing"); return; }
-            std::cout << "[line:" << m_line_number << "]: ";
-            std::cout << m_file_contents.substr(m_get_file_offset(),20) << "\n"; 
+            //std::cout << "[line:" << m_line_number << "]: ";
+            //std::cout << m_file_contents.substr(m_get_file_offset(),20) << "\n"; 
         }
         inline bool FileParser::m_still_have_content(){
             auto offset = m_get_file_offset();
-            std::cout << "Tentative: " << m_tentative_file_offset << "| real: " << offset << " | mfc.length: " << m_file_contents.length() << "\n";
+            //std::cout << "Tentative: " << m_tentative_file_offset << "| real: " << offset << " | mfc.length: " << m_file_contents.length() << "\n";
             if(offset > m_file_contents.length()){
                 dbg("mshc - offset > mfc.len");
                 return false;
             }
             while(offset < m_file_contents.length()){
-                std::cout << (int)m_file_contents[offset] << "\n";
+                //std::cout << (int)m_file_contents[offset] << "\n";
                 if(!isspace(m_file_contents[offset])){
-                    std::cout << "isspace: " << m_file_contents[offset] << "\n";
+                    //std::cout << "isspace: " << m_file_contents[offset] << "\n";
                     dbg("still have content");
                     return true;
                 }

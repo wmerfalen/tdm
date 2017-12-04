@@ -237,6 +237,10 @@ int main(int argc, char **argv)
   dir = DFLT_DIR;
 
   while ((pos < argc) && (*(argv[pos]) == '-')) {
+	  if(std::string(argv[pos]).compare("--import-rooms")){
+		mods::globals::f_import_rooms = true;
+		continue;
+	  }
     switch (*(argv[pos] + 1)) {
     case 'o':
       if (*(argv[pos] + 2))
@@ -2428,7 +2432,6 @@ void act(const char *str, int hide_invisible, struct char_data *ch,
   else if (obj && IN_ROOM(obj) != NOWHERE)
     to = world[IN_ROOM(obj)].people;
   else {
-  	//TODO: Figure out why this code runs when sniping
     log("SYSERR: no valid target to act()!");
     return;
   }

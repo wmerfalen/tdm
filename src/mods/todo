@@ -1,17 +1,21 @@
 #september{2017}
 [x] -> Create AMMO item type
-[ ] -> Create RIFLE item type
+[x] -> Create RIFLE item type
 [x] -> do_snipe: Must have AMMO before shooting
 [x] -> :Must be LOADED before sniping
-[ ] -> :[race condition]User must be in room before damage dealt
-[ ] -> MOB behaviour to track down snipers
+[x] -> :[race condition]User must be in room before damage dealt
+[ ] -> MOB behaviour to track down snipers {medium}
+[ ] -> :implement a behaviour tree for tracking down snipers {medium}
 [ ] -> :Utilize graph.c to find path to sniper
 [x] -> Global include file that doesn't require a million deps
 [x] -> Update sniping behaviour strings to not say dagger stuff
-[ ] -> Create world viewer/builder in browser
+[-] -> Create world viewer/builder in browser
+[ ] -> :Create in-game world builder {medium}
+[ ] -> :flush these rooms to lmdb {small}
+[ ] -> :when parsing rooms in db.cpp also parse lmdb rooms {small}
 #october{2017}
-[ ] -> Create preferences list and store it per player in lmdb {medium}
-[ ] -> :create screen width preference {small}
+[x] -> Create preferences list and store it per player in lmdb {medium}
+[x] -> :create screen width preference {small}
 [ ] -> :create automap preference
 [x] -> Create breachable doors
 [x] -> :create thermite and breach items
@@ -20,11 +24,11 @@
 [x] -> create mute items
 [ ] -> :jam thermite and breach charges
 [ ] -> Create thermite only breachable doors
-[ ] -> Drones are players too ya know
+[x] -> Drones are players too ya know
 [ ] -> implement spray mechanics
 [ ] -> :spraying with shotgun types
 [ ] -> :when in same room, default is spray
-[ ] -> create shotgun weapon types
+[x] -> create shotgun weapon types
 [ ] -> :shotgun damage rolls are good when in same room
 [ ] -> create assault rifle weapon types
 [ ] -> create heavy rifle weapon types 
@@ -47,7 +51,7 @@
 [x] -> :implement cooldown if user has been in combat in the past 20 seconds {small}
 [ ] -> implement 'add_exp(user,X)' js {small}
 [ ] -> implement 'add_gold(user,X)' js {small}
-[ ] -> implement a recoverable fatal error handler for duktape {small}
+[x] -> implement a recoverable fatal error handler for duktape {small}
 [ ] -> implement 'quest progress' command {small}
 [ ] -> create different types of ammo with different effects on gameplay {medium}
 [ ] -> :armor piercing rounds (+10 DICE SIDES) {small}
@@ -65,3 +69,5 @@
 [ ] -> implement dynamic room descriptions
 [x] -> color code exits {tiny}
 [ ] -> implement corrosive effects {medium}
+[ ] -> implement SCAN command for scanning a weapon's meta data
+[ ] -> migrate all room files to lmdb {large}
