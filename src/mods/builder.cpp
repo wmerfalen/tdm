@@ -1,6 +1,7 @@
 #include "builder.hpp"
 #include "quests.hpp"
 #include "pq.hpp"
+#include "util.hpp"
 #include <stdlib.h> //For itoa
 
 namespace mods::builder{
@@ -386,11 +387,12 @@ ACMD(do_rbuildzone){
 		std::string arg = argument;
 		auto past = arg.substr(arg.find("delete ")+7);
 		for(auto id : mods::util::arglist<std::vector<std::string>>(past)){
-			try{
-				mods::builder::delete_zone(std::stoi(id));
-			}catch(...){
+			auto zone = mods::util::stoi(id);
+			if(zone.value_or(-1) == -1){
 				*player << "{red}Unable to delete id: " << id << "{/red}\r\n";
+				return;
 			}
+			mods::builder::delete_zone(zone.value());
 			*player << "{red}Deleted zone: " << id << "{/red}\r\n";
 		}
 		return;
@@ -408,7 +410,27 @@ ACMD(do_rbuildzone){
 			}
 		}else{
 			// " rbuildzone <new> <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>\r\n" <<
-			if(!mods::builder::save_zone_to_db(arglist[2],std::stoi(arglist[0]),std::stoi(arglist[1]),std::stoi(arglist[3]),std::stoi(arglist[4]))){
+			auto arg_0 = mods::util::stoi(arglist[0]);
+			if(arg_0.value_or(-1) == -1){
+				*player << "{red}Invalid parameter 1{/red}\r\n";
+				return;
+			}
+			auto arg_1 = mods::util::stoi(arglist[1]);
+			if(arg_1.value_or(-1) == -1){
+				*player << "{red}Invalid parameter 2{/red}\r\n";
+				return;
+			}
+			auto arg_3 = mods::util::stoi(arglist[3]);
+			if(arg_3.value_or(-1) == -1){
+				*player << "{red}Invalid parameter 4{/red}\r\n";
+				return;
+			}
+			auto arg_4 = mods::util::stoi(arglist[4]);
+			if(arg_4.value_or(-1) == -1){
+				*player << "{red}Invalid parameter 5{/red}\r\n";
+				return;
+			}
+			if(!mods::builder::save_zone_to_db(arglist[2],arg_0.value(),arg_1.value(),arg_3.value(),arg_4.value())){
 				*player << "{red}Unable to save new zone{/red}\r\n";
 			}else{
 				*player << "{red}New zone created{/red}\r\n";
@@ -543,13 +565,13 @@ ACMD(do_rbuild){
 	if(std::string(&command[0]).compare("set") == 0){
 		auto set = std::string(argument);
 		set = set.substr(set.find("rnum ") + 5);
-		try{
-			world[IN_ROOM(ch)].number = std::stoi(set);
-		}catch(const std::exception &e){
+		auto number = mods::util::stoi(set);
+		if(number.value_or(-1) == -1){
 			*player << "{red}Invalid number{/red}\r\n";
 			return;
 		}
-		*player << "{red}real room number set to " << std::stoi(set) << "{/red}\r\n";
+		world[IN_ROOM(ch)].number = number.value();
+		*player << "{red}real room number set to " << number.value() << "{/red}\r\n";
 		return;
 	}
 	if(std::string(&command[0]).compare("title") == 0){
@@ -593,12 +615,12 @@ ACMD(do_rbuild){
 			*player << "{red}Invalid direction{/red}\r\n";
 			return;
 		}
-		room_rnum room = std::stoi(&room_id[0]);
-		if(room > mods::globals::room_list.size()){
+		auto room = mods::util::stoi(&room_id[0]);
+		if(room.value_or(-1) == -1 || room > mods::globals::room_list.size()){
 			*player << "{red}Invalid room number{/red}\r\n";
 			return;
 		}
-		if(mods::builder::create_direction(IN_ROOM(ch),mods::globals::dir_int(direction[0]),room)){
+		if(mods::builder::create_direction(IN_ROOM(ch),mods::globals::dir_int(direction[0]),room.value())){
 			*player << "{red}Direction created{/red}\r\n";
 		}else{
 			*player << "{red}Error{/red}\r\n";
@@ -665,8 +687,13 @@ ACMD(do_rbuild){
 		}
 		if(str_item.compare("key") == 0){
 			description = description.substr(description.find("key ") + 4);
+			auto key = mods::util::stoi(description);
+			if(key.value_or(-1) == -1){
+				*player << "{red}Invalid key{/red}\r\n";
+				return;
+			}
 			auto ret = mods::builder::dir_option(IN_ROOM(ch),mods::globals::dir_int(direction[0]),std::nullopt,
-				std::nullopt,std::nullopt,std::stoi(description),std::nullopt).value_or("success");
+				std::nullopt,std::nullopt,key.value(),std::nullopt).value_or("success");
 			if(ret.compare("success") == 0){
 				*player << "{red}key changed to:{/red} " << description << "\r\n";
 			}else{
@@ -676,8 +703,13 @@ ACMD(do_rbuild){
 		}
 		if(str_item.compare("to_room") == 0){
 			description = description.substr(description.find("to_room ") + 8);
+			auto to_room = mods::util::stoi(description);
+			if(to_room.value_or(-1) == -1){
+				*player << "{red}Invalid room number{/red}\r\n";
+				return;
+			}
 			auto ret = mods::builder::dir_option(IN_ROOM(ch),mods::globals::dir_int(direction[0]),std::nullopt,
-				std::nullopt,std::nullopt,std::nullopt,std::stoi(description)).value_or("success");
+				std::nullopt,std::nullopt,std::nullopt,to_room.value()).value_or("success");
 			if(ret.compare("success") == 0){
 				*player << "{red}to_room changed to:{/red} " << description << "\r\n";
 			}else{

@@ -253,7 +253,6 @@ Iter select_randomly(Iter start, Iter end) {
 			return NORTH;
 		}
 		std::string color_eval(std::string final_buffer){
-			/*
 			final_buffer = replace_all(final_buffer,"{grn}","\033[32m");
 			final_buffer = replace_all(final_buffer,"{red}","\033[31m");
 			final_buffer = replace_all(final_buffer,"{blu}","\033[34m");
@@ -264,7 +263,6 @@ Iter select_randomly(Iter start, Iter end) {
 			final_buffer = replace_all(final_buffer,"{/red}","\033[0m");
 			final_buffer = replace_all(final_buffer,"{/blu}","\033[0m");
 			final_buffer = replace_all(final_buffer,"{/gld}","\033[0m");
-			*/
 			return final_buffer;
 		}
 
@@ -307,10 +305,10 @@ Iter select_randomly(Iter start, Iter end) {
 					player->pager_end();
 					return false;
 				}
-				try{
-					player->page(std::stoi(argument) - 1);
-				}catch(const std::exception &e){
-					return true;
+				int page_number = 0;
+				auto good = mods::util::stoi(argument);
+				if(good.has_value()){
+					player->page(page_number);
 				}
 				return false;
 			}
@@ -380,22 +378,6 @@ Iter select_randomly(Iter start, Iter end) {
 
     };
 
-	namespace utils {
-        int stoi(const std::string & str,int & in_int){
-            std::string::size_type sz;
-			try{
-            	in_int = std::stoi(str,&sz);
-			}catch(...){
-				return -1;
-			}
-            if(str.substr(sz).length()){
-                return -2;
-            }
-            else{
-                return 0;
-            }
-        }
-	}
 };
 
 

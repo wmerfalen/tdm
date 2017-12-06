@@ -46,13 +46,12 @@ ACMD(do_pref){
 	one_argument(one_argument(argument,&item[0],max_char),&value[0],max_char);
 	if(std::string(&item[0]).compare("width") == 0){
 		PLAYER_SET("screen_width",&value[0]);
-		try{
-			auto v_int = std::stoi(&value[0]);
-			PLAYER_SET("screen_width",&value[0]);
-		}catch(const std::exception &e){
+		auto v_int = mods::util::stoi(&value[0]);
+		if(v_int.value_or(-1) == -1){
 			*player << "{red}Invalid width{/red}\r\n";
 			return;
 		}
+		PLAYER_SET("screen_width",&value[0]);
 		*player << "{gld}Screen width set to: " << &value[0] << "\r\n";
 	}
 

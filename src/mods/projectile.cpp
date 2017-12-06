@@ -1,6 +1,5 @@
 #include "projectile.hpp"
 
-extern struct room_data* world;
 extern int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype);
 namespace mods{
 	namespace projectile {

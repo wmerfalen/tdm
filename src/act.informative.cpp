@@ -23,6 +23,8 @@
 #include "globals.hpp"
 #include "mods/quests.hpp"
 #include "mods/drone.hpp"
+#include "mods/util.hpp"
+
 extern struct char_data* character_list;
 /* extern variables */
 extern int top_of_helpt;
@@ -159,13 +161,12 @@ ACMD(do_quest){
 			*player << "usage: quest join <number>\n";
 			return;
 		}
-		int quest_num = 0;
-		auto good = mods::utils::stoi(arg_2_str,quest_num);
-		if(good < 0){
-			*player << "usage: quest join <number>\n";
+		auto quest_num = mods::util::stoi(arg_2_str);
+		if(quest_num.value_or(-1) == -1){
+			*player << "{red}Invalid quest number\r\n";
 			return;
 		}
-		mods::quests::start_quest(ch,quest_num);
+		mods::quests::start_quest(ch,quest_num.value());
 	}
 	if(std::string(static_cast<char*>(&arg_1[0])).compare("leave") == 0){
 //TODO: when multiple quests are allowed, this hard-coded zero needs to change
@@ -176,13 +177,12 @@ ACMD(do_quest){
 			*player << "usage: quest leave <number>\n";
 			return;
 		}	
-		int quest_num = 0;
-		auto good = mods::utils::stoi(arg_2_str,quest_num);
-		if(good < 0){
-			*player << "usage: quest leave <number>\n";
+		auto quest_num = mods::util::stoi(arg_2_str);
+		if(quest_num.value_or(-1) == -1){
+			*player << "{red}Invalid quest number\r\n";
 			return;
 		}
-		mods::quests::leave_quest(ch,quest_num);
+		mods::quests::leave_quest(ch,quest_num.value());
 		*player << "{red}You have left the quest{/red}\n";
 	}
 }

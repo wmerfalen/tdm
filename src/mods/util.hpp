@@ -49,7 +49,7 @@ namespace mods::util{
 		}
 		return arglist;
 	}
-
+	std::optional<int> stoi(std::string_view str,int base=10);
 };
 
 #endif

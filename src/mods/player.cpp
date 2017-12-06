@@ -10,7 +10,6 @@
 #include "prefs.hpp"
 
 extern struct obj_data* object_list;
-extern struct room_data* world;
 extern void do_auto_exits(struct char_data *ch);
 namespace mods {
 	std::string just_color_evaluation(std::string final_buffer){
@@ -247,7 +246,10 @@ namespace mods {
 			auto player = this;
 			auto value = PLAYER_GET("screen_width");
 			if(value.length()){
-				stc(word_wrap(colored,std::stoi(value)) + "\r\n");
+				auto i_value = mods::util::stoi(value);
+				if(i_value.has_value()){
+					stc(word_wrap(colored,i_value.value()) + "\r\n");
+				}
 				return;
 			}else{
 				stc(word_wrap(colored,80) + "\r\n");

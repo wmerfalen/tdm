@@ -1142,7 +1142,7 @@ int special(struct char_data *ch, int cmd, char *arg)
 
   /* special in room? */
   if (GET_ROOM_SPEC(IN_ROOM(ch)) != NULL)
-    if (GET_ROOM_SPEC(IN_ROOM(ch)) (ch, world + IN_ROOM(ch), cmd, arg))
+    if (GET_ROOM_SPEC(IN_ROOM(ch)) (ch, static_cast<void*>(&world[IN_ROOM(ch)]), cmd, arg))
       return (1);
 
   /* special in equipment list? */

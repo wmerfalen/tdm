@@ -2,6 +2,7 @@
 #include "quests.hpp"
 #include "pq.hpp"
 #include <stdlib.h> //For itoa
+#include "util.hpp"
 
 namespace mods::immortal{
 
@@ -12,14 +13,14 @@ ACMD(do_rnumtele){
     std::array<char,max_char> room_id;
 	std::fill(room_id.begin(),room_id.end(),0);
 	one_argument(argument,&room_id[0],max_char);
-	try{
-		int r = std::stoi(&room_id[0]);
-		char_from_room(player->cd());
-		char_to_room(player->cd(),r);
-		command_interpreter(player->cd(),"l");
-	}catch(const std::exception &e){
+	auto r = mods::util::stoi(&room_id[0]);
+	if(r.value_or(-1) == -1){
 		*player << "{red}Invalid room number{/red}\r\n";
+		return;
 	}
+	char_from_room(player->cd());
+	char_to_room(player->cd(),r.value());
+	command_interpreter(player->cd(),"l");
 }
 
 ACMD(do_rnumlist){

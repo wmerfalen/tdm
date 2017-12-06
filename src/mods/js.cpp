@@ -1,8 +1,8 @@
 #include "js.hpp"
 #include "quests.hpp"
+#include "util.hpp"
+#include "extern.hpp"
 #define DT_FORMAT "{player_name}:mob_death_trigger"
-extern struct room_data* world;
-extern struct char_data* character_list;
 extern void command_interpreter(struct char_data* ch,char* argument);
 extern void hit(struct char_data* ch,struct char_data* vict,int type);
 namespace mods{
@@ -21,11 +21,14 @@ namespace mods{
 			int num_args = duk_get_top(ctx);
 			/* First parameter is character name */
 			std::string char_name = duk_to_string(ctx,0);
-			room_rnum room =  std::stoi(duk_to_string(ctx,1));
-			for(auto ch = character_list; ch; ch = ch->next){
-				if(char_name.compare(ch->player.name) == 0 && IN_ROOM(ch) == room){
-					duk_push_number(ctx,ch->uuid);
-					return 1;
+			auto i_room = mods::util::stoi(duk_to_string(ctx,1));
+			if(i_room.has_value()){
+				room_rnum room = i_room.value();
+				for(auto ch = character_list; ch; ch = ch->next){
+					if(char_name.compare(ch->player.name) == 0 && IN_ROOM(ch) == room){
+						duk_push_number(ctx,ch->uuid);
+						return 1;
+					}
 				}
 			}
 			duk_push_number(ctx,-1);
@@ -92,7 +95,10 @@ namespace mods{
 			std::string key = duk_to_string(ctx,0);
 			std::string value = "";
 			mods::globals::db->get(key,value);
-			duk_push_number(ctx,std::stoi(value));
+			auto i_value = mods::util::stoi(value);
+			if(i_value.has_value()){
+				duk_push_number(ctx,i_value.value());
+			}
 			return 1;
 		}
 		static duk_ret_t db_set(duk_context *ctx){

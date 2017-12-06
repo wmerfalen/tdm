@@ -230,7 +230,6 @@ struct ban_list_element {
 /* global buffering system */
 
 #ifndef __DB_C__
-extern struct room_data *world;
 extern room_rnum top_of_world;
 
 extern struct zone_data *zone_table;

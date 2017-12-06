@@ -1,6 +1,5 @@
 #include "scan.hpp"
 
-extern struct room_data* world;
 extern struct char_data* character_list;
 namespace mods{
 	namespace scan {

@@ -21,7 +21,10 @@ namespace mods{
 			for(auto ch = character_list; ch->next; ch = ch->next){
 				MENTOC_PREAMBLE();
 				if(pname.compare(ch->player.name) == 0){
-					leave_quest(ch,std::stoi(quest_major));
+					auto i_quest_major = mods::util::stoi(quest_major);
+					if(i_quest_major.has_value()){
+						leave_quest(ch,i_quest_major.value());
+					}
 					return 0;
 				}
 			}
@@ -35,8 +38,11 @@ namespace mods{
 			for(auto ch = character_list; ch->next; ch = ch->next){
 				MENTOC_PREAMBLE();
 				if(pname.compare(ch->player.name) == 0){
-					leave_quest(ch,std::stoi(quest_major));
-					award_quest(ch,std::stoi(quest_major));
+					auto i_quest_major = mods::util::stoi(quest_major);
+					if(i_quest_major.has_value()){
+						leave_quest(ch,i_quest_major.value());
+						award_quest(ch,i_quest_major.value());
+					}
 					return 0;
 				}
 			}
