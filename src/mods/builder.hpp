@@ -50,6 +50,7 @@ namespace mods::builder {
 	int save_to_db(room_rnum in_room);
 	int import_room(struct room_data*);
 	bool save_zone_to_db(std::string_view name,int room_start,int room_end,int lifespan,int reset_mode);
+	void zone_place(int zone_id,std::string_view command, std::string_view if_flag,std::string_view arg1, std::string_view arg2,std::string_view arg3);
 };
 
 ACMD(do_rbuild);

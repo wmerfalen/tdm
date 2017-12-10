@@ -21,6 +21,7 @@
 #include "mods/drone.hpp"
 #include <pqxx/pqxx>
 #include "mods/conf.hpp"
+#include "mods/chat.hpp"
 
 #define MENTOC_PREAMBLE() auto player = mods::globals::players::get(ch->uuid); player->set_cd(ch); 
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
@@ -64,6 +65,8 @@ namespace mods {
 		extern duk_context* duktape_context;
 		extern std::vector<std::vector<struct char_data*>> room_list;
 		extern std::vector<struct char_data *> player_list;
+		extern std::vector<mods::chat::channel> chan;
+		extern std::vector<std::string> chan_verbs;
 		extern bool f_import_rooms;
 		std::unique_ptr<ai_state>& state_fetch(struct char_data* ch);
 		int mobile_activity(char_data*);

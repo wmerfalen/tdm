@@ -32,6 +32,7 @@
 **************************************************************************/
 
 void parse_sql_rooms(); 
+void parse_sql_zones();
 std::vector<struct room_data> world;	/* array of rooms		 */
 room_rnum top_of_world = 0;	/* ref to top element of world	 */
 
@@ -46,7 +47,7 @@ struct index_data *obj_index;	/* index table for object file	 */
 struct obj_data *obj_proto;	/* prototypes for objs		 */
 obj_rnum top_of_objt = 0;	/* top of object index table	 */
 
-struct zone_data *zone_table;	/* zone table			 */
+std::vector<zone_data> zone_table;	/* zone table			 */
 zone_rnum top_of_zone_table = 0;/* top element of zone tab	 */
 struct message_list fight_messages[MAX_MESSAGES];	/* fighting messages	 */
 
@@ -248,11 +249,17 @@ ACMD(do_reboot)
 
 void boot_world(void)
 {
-  log("Loading zone table.");
-  index_boot(DB_BOOT_ZON);
+  //log("Loading zone table.");
+  //index_boot(DB_BOOT_ZON);
+	log("Parsing sql zones.");
+  parse_sql_zones();
 
-  log("Loading rooms.");
-  index_boot(DB_BOOT_WLD);
+  //log("Loading rooms.");
+  //index_boot(DB_BOOT_WLD);
+
+
+  log("Parsing sql rooms.");
+  parse_sql_rooms();
 
   log("Renumbering rooms.");
   renum_world();
@@ -377,7 +384,6 @@ void destroy_db(void)
     if (zone_table[cnt].cmd)
       free(zone_table[cnt].cmd);
   }
-  free(zone_table);
 }
 
 
@@ -466,7 +472,7 @@ void boot_db(void)
     House_boot();
   }
 
-  for (i = 0; i <= top_of_zone_table; i++) {
+  for (i = 0; i < top_of_zone_table; i++) {
     log("Resetting #%d: %s (rooms %d-%d).", zone_table[i].number,
 	zone_table[i].name, zone_table[i].bot, zone_table[i].top);
     reset_zone(i);
@@ -773,8 +779,7 @@ void index_boot(int mode)
     log("   %d objs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
     break;
   case DB_BOOT_ZON:
-    CREATE(zone_table, struct zone_data, rec_count);
-    size[0] = sizeof(struct zone_data) * rec_count;
+	log("!DEPRECATED! DB_BOOT_ZON");
     log("   %d zones, %d bytes.", rec_count, size[0]);
     break;
   case DB_BOOT_HLP:
@@ -906,17 +911,91 @@ bitvector_t asciiflag_conv(char *flag)
 
 
 static int room_nr = 0, zone = 0;
+/* load the zones */
+void parse_sql_zones(){
+	auto trans2 = mods::pq::transaction(*mods::globals::pq_con);
+	auto r = mods::pq::exec(trans2,"SELECT * FROM zone");
+	mods::pq::commit(trans2);
+	for(auto row: r){
+		struct zone_data z;
+//struct zone_data {
+//  1    char *name;          /* name of this zone                  */
+//  2    int  lifespan;           /* how long between resets (minutes)  */
+//  3    int  age;                /* current age of this zone (minutes) */
+//  4    room_vnum bot;           /* starting room number for this zone */
+//  5    room_vnum top;           /* upper limit for rooms in this zone */
+//  6
+//  7    int  reset_mode;         /* conditions for reset (see below)   */
+//  8    zone_vnum number;        /* virtual number of this zone    */
+//  9    struct reset_com *cmd;   /* command table for reset            */
+// 10
+// 11    /*
+// 12     * Reset mode:
+// 13     *   0: Don't reset, and don't update age.
+// 14     *   1: Reset if no PC's are located in zone.
+// 15     *   2: Just reset.
+// 16     */
+// 17 };
+// 18
+//		select * from zone;
+//		 id | zone_start | zone_end | zone_name | lifespan | reset_mode
+//		 ----+------------+----------+-----------+----------+------------
+//		 (0 rows)
+		z.name = strdup(row["zone_name"].c_str());
+		z.lifespan = row[4].as<int>();
+		z.age = 0;
+		z.bot = row[1].as<int>();
+		z.top = row[2].as<int>();
+		z.reset_mode = row[5].as<int>();
+		z.number = row[0].as<int>();
+//struct reset_com {
+//  1    char command;   /* current command                      */
+//  2
+//  3    bool if_flag;    /* if TRUE: exe only if preceding exe'd */
+//  4    int  arg1;       /*                                      */
+//  5    int  arg2;       /* Arguments to the command             */
+//  6    int  arg3;       /*                                      */
+//  7    int line;        /* line number this command appears on  */
+//  8
+//  9    /*
+// 10     *  Commands:              *
+// 11     *  'M': Read a mobile     *
+// 12     *  'O': Read an object    *
+// 13     *  'G': Give obj to mob   *
+// 14     *  'P': Put obj in obj    *
+// 15     *  'G': Obj to char       *
+// 16     *  'E': Obj to char equip *
+// 17     *  'D': Set state of door *
+// 18    */
+// 19 };
+// 20
+		//TODO: SELECT COUNT(*) FROM zone_data where zone_id = z.number
+		auto trans3 = mods::pq::transaction(*mods::globals::pq_con);
+		auto r2 = mods::pq::exec(trans3,"SELECT COUNT(*) FROM zone_data");
+		mods::pq::commit(trans3);
+		//TODO: z = (struct reset_com*)calloc(sizeof(reset_com),count_result[0][0].as<int>());
+		//TODO: for(auto row : zone_data_result){
+		z.cmd = (struct reset_com*)calloc(sizeof(reset_com),1);
+		z.cmd->command = '*';
+		z.cmd->if_flag = true;
+		z.cmd->arg1 = 0;
+		z.cmd->arg2 = 0;
+		z.cmd->arg3 = 0;
+		z.cmd->line = 0;
+		zone_table.push_back(z);
+	}
+	top_of_zone_table = zone_table.size();
+}
 /* load the rooms */
 void parse_sql_rooms(){
 	struct room_data room;
 	auto trans = mods::pq::transaction(*mods::globals::pq_con);
 	auto result = mods::pq::exec(trans,"SELECT COUNT(*) FROM room");
 	mods::pq::commit(trans);
-	auto sql_rooms = mods::pq::as_int(result,0,0);
-	auto world_top = mods::globals::room_list.size();
-	auto old_world = world;
+	world.reserve(mods::pq::as_int(result,0,0));
 	auto trans2 = mods::pq::transaction(*mods::globals::pq_con);
 	auto r = mods::pq::exec(trans2,"SELECT * FROM room");
+	mods::pq::commit(trans2);
 	for(auto row: r){
 		struct room_data room;
 		room.number = row[1].as<int>();
@@ -931,14 +1010,44 @@ void parse_sql_rooms(){
 		room.people = nullptr;
 		room.light = row[8].as<int>();
 		//TODO: setup directions to work properly here (dir_option)
+		for(unsigned i = 0; i < NUM_OF_DIRS;i++){
+			room.dir_option[i] = (room_direction_data*) calloc(sizeof(room_direction_data),1);
+			room.dir_option[i]->general_description = nullptr;
+			room.dir_option[i]->keyword = nullptr;
+			room.dir_option[i]->exit_info = 0;
+			room.dir_option[i]->key = -1;
+			room.dir_option[i]->to_room = NOWHERE;
+		}
+
 		world.push_back(room);
-		mods::globals::register_room(++room_nr);
-      	top_of_world = room_nr;
+		mods::globals::register_room(world.size());
+      	top_of_world = world.size();
 	}
-	mods::pq::commit(trans2);
+
+	auto trans4 = mods::pq::transaction(*mods::globals::pq_con);
+	r = mods::pq::exec(trans4,"SELECT * FROM room");
+	mods::pq::commit(trans4);
+	for(auto row: r){
+		auto trans3 = mods::pq::transaction(*mods::globals::pq_con);
+		auto r2 = mods::pq::exec(trans3,
+			std::string(
+				"SELECT exit_direction,to_room FROM room_direction_data WHERE room_number="
+			)
+			+ 
+			trans3.quote(
+				row[1].as<int>()
+			)
+		);
+		for(auto row2: r2){
+			auto direction = row2[0].as<int>();
+			auto room_number = row2[1].as<int>();
+			std::cerr << "direction: " << direction << "|room_number: " << row[1].as<int>() << "\n";
+			room.dir_option[direction]->to_room = real_room(row[1].as<int>());
+			std::cerr << "Real room number: " << room.dir_option[direction]->to_room << "\n";
+		}
+	}
 	std::cerr << "Number of rooms in postgres: " << mods::pq::as_int(result,0,0) << "\r\n";
-	//TODO: uncomment this out so that renum_world works
-	//renum_world();
+	top_of_world = world.size();
 	return;
 }
 void parse_room(FILE *fl, int virtual_nr)
@@ -1087,7 +1196,7 @@ void renum_world(void)
 {
   int room, door;
 
-  for (room = 0; room <= top_of_world; room++)
+  for (room = 0; room < top_of_world; room++)
     for (door = 0; door < NUM_OF_DIRS; door++)
       if (world[room].dir_option[door])
 	if (world[room].dir_option[door]->to_room != NOWHERE)
@@ -1116,7 +1225,7 @@ void renum_zone_table(void)
   zone_rnum zone;
   char buf[128];
 
-  for (zone = 0; zone <= top_of_zone_table; zone++)
+  for (zone = 0; zone < top_of_zone_table; zone++)
     for (cmd_no = 0; ZCMD.command != 'S'; cmd_no++) {
       a = b = c = 0;
       olda = ZCMD.arg1;
@@ -2029,6 +2138,8 @@ void reset_zone(zone_rnum zone)
   struct char_data *mob = NULL;
   struct obj_data *obj, *obj_to;
 
+  //TODO: decide if this is needed or not. for now ignoreing this function
+  return;
   for (cmd_no = 0; ZCMD.command != 'S'; cmd_no++) {
 
     if (ZCMD.if_flag && !last_cmd)
@@ -2885,6 +2996,11 @@ room_rnum real_room(room_vnum vnum)
 
   bot = 0;
   top = top_of_world;
+  for(unsigned i =top; i > 0;i--){
+	if(world[i].number == vnum){
+		return i;
+	}
+  }
 
   /* perform binary search on world-table */
   
@@ -2955,6 +3071,8 @@ obj_rnum real_object(obj_vnum vnum)
 /* returns the real number of the zone with given virtual number */
 room_rnum real_zone(room_vnum vnum)
 {
+	//TODO: decide to fix this or just leave it alone as zero. Zones may or may not be needed 
+	return 0;
   room_rnum bot, top, mid;
 
   bot = 0;
@@ -2964,11 +3082,11 @@ room_rnum real_zone(room_vnum vnum)
   for (;;) {
     mid = (bot + top) / 2;
 
-    if ((zone_table + mid)->number == vnum)
+    if ((zone_table[mid]).number == vnum)
       return (mid);
     if (bot >= top)
       return (NOWHERE);
-    if ((zone_table + mid)->number > vnum)
+    if ((zone_table[mid]).number > vnum)
       top = mid - 1;
     else
       bot = mid + 1;

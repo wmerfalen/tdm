@@ -87,7 +87,6 @@ namespace mods {
 			operator chdata_ptr() const {
 				return m_char_data;
 			}
-			/* TODO: Operator << for sending to the character */
 			player& operator<<(const char* m){
 				if(m_do_paging){
 					queue_page_fragment(m);

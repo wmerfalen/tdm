@@ -168,10 +168,10 @@ int rent_file_timeout = 30;
 /* ROOM NUMBERS */
 
 /* virtual number of room that mortals should enter at */
-room_vnum mortal_start_room = 1204;
+room_vnum mortal_start_room = 27088;
 
 /* virtual number of room that immorts should enter at by default */
-room_vnum immort_start_room = 1204;
+room_vnum immort_start_room = 27088;
 
 /* virtual number of room that frozen players should enter at */
 room_vnum frozen_start_room = 1202;

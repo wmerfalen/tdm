@@ -39,6 +39,8 @@ namespace mods {
 		std::vector<std::vector<struct char_data*>> room_list;
 		std::vector<struct char_data*> player_list;
 		std::unique_ptr<pqxx::connection> pq_con;
+		std::vector<mods::chat::channel> chan;
+		std::vector<std::string> chan_verbs;
 		bool f_import_rooms;
 		namespace objects {
 			static bool populated = false;
@@ -143,7 +145,6 @@ Iter select_randomly(Iter start, Iter end) {
 		}
 		void post_boot_db(){
 			allocate_player_list();
-			parse_sql_rooms();
 		}
 		void allocate_player_list(){
 			if(!character_list){ return; }
@@ -199,9 +200,11 @@ Iter select_randomly(Iter start, Iter end) {
 			}
 		}
 		void refresh_player_states(){
-			for(auto ptr = character_list; ptr->next; ptr = ptr->next){
-				if(states.find(ptr) == states.end()){
-					states[ptr] = std::make_unique<mods::ai_state>(ptr,0,0);
+			if(character_list){
+				for(auto ptr = character_list; ptr->next; ptr = ptr->next){
+					if(states.find(ptr) == states.end()){
+						states[ptr] = std::make_unique<mods::ai_state>(ptr,0,0);
+					}
 				}
 			}
 		}
@@ -305,10 +308,9 @@ Iter select_randomly(Iter start, Iter end) {
 					player->pager_end();
 					return false;
 				}
-				int page_number = 0;
 				auto good = mods::util::stoi(argument);
 				if(good.has_value()){
-					player->page(page_number);
+					player->page(good.value() - 1);
 				}
 				return false;
 			}

@@ -78,12 +78,13 @@ namespace mods {
 		for(; i < m_pages.size() && i < (pg + 1) * mods::player::PAGE_SIZE;i++){
 			acc += m_pages[i];
 		}
-		if(i != m_pages.size()){
+		if(i < m_pages.size()){
 			acc += std::string("--[ page number ") + std::to_string(pg +1)  + "/"; 
 			acc += std::to_string((m_pages.size() / mods::player::PAGE_SIZE) + 1) + \
 				   ":: press (q) to quit or page number ]--";
 		}else{
-			m_do_paging = false;
+			pager_clear();
+			pager_end();
 			m_current_page = 0;
 		}
 		if(acc.length()){
@@ -93,8 +94,8 @@ namespace mods {
 	}
 	void player::pager_next_page(){
 		if((m_current_page +1) * mods::player::PAGE_SIZE >= m_pages.size()){
-			m_do_paging = false;
-			m_current_page = 0;
+			pager_clear();
+			pager_end();
 			return;
 		}
 		page(m_current_page +1);

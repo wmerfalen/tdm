@@ -171,7 +171,8 @@ namespace mods::builder{
 						up_sql += ", exit_key=";
 						up_sql += up_txn.quote(world[in_room].dir_option[direction]->key);
 						up_sql += ", to_room=";
-						up_sql += up_txn.quote(world[in_room].dir_option[direction]->to_room);
+						auto real_room_num = world[world[in_room].dir_option[direction]->to_room].number;
+						up_sql += up_txn.quote(real_room_num);
 						up_sql += " WHERE exit_direction=";
 						up_sql += up_txn.quote(direction);
 						up_sql += " AND room_number=";
@@ -195,7 +196,8 @@ namespace mods::builder{
 						sql += ",";
 						sql += txn2.quote(world[in_room].dir_option[direction]->key);
 						sql += ",";
-						sql += txn2.quote(world[in_room].dir_option[direction]->to_room);
+						auto real_room_num = world[world[in_room].dir_option[direction]->to_room].number;
+						sql += txn2.quote(real_room_num);
 						sql += ");";
 						std::cerr << "commit " << direction << " on 2\n";
 						mods::pq::exec(txn2,sql);
@@ -343,6 +345,26 @@ namespace mods::builder{
 		mods::pq::commit(txn);
 		return true;
 	}
+	void zone_place(int zone_id,std::string_view zone_command,std::string_view if_flag,std::string_view arg1,std::string_view arg2,std::string_view arg3){
+		auto txn = mods::pq::transaction(*mods::globals::pq_con);
+		std::string sql = "INSERT INTO zone_data "
+			"(zone_id,zone_command,zone_if_flag,zone_arg1,zone_arg2,zone_arg3)"
+			" VALUES(";
+		sql += txn.quote(zone_id);
+		sql += ",";
+		sql += txn.quote(zone_command.data());
+		sql += ",";
+		sql += txn.quote(if_flag.data());
+		sql += ",";
+		sql += txn.quote(arg1.data());
+		sql += ",";
+		sql += txn.quote(arg2.data());
+		sql += ",";
+		sql += txn.quote(arg3.data());
+		sql += ")";
+		mods::pq::exec(txn,sql);
+		mods::pq::commit(txn);
+	}
 };
 
 
@@ -356,7 +378,7 @@ ACMD(do_rbuildzone){
 				   "  |____[example]\r\n" <<
 				   "  |:: zbuild help\r\n" <<
 				   "  |:: (this help menu will show up)\r\n" <<
-				   " zbuild <new> <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>\r\n" <<
+				   " zbuild new <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>\r\n" <<
 				   "  |--> Creates a new zone and maps the parameters to each field in the database.\r\n" <<
 				   "  |____[example]\r\n" <<
 				   "  |:: zbuild new 1200 1299 \"The never ending frost\" 90 2\r\n" <<
@@ -365,15 +387,33 @@ ACMD(do_rbuildzone){
 				   "  |:: used here. 90 is the lifespan and 2 is the most common reset \r\n" <<
 				   "  |:: mode so leave it at that for now.)\r\n" <<
 				   "\r\n" << 
-				   " zbuild <list>\r\n" <<
+				   " zbuild list\r\n" <<
 				   "  |--> lists the current zones saved to the db\r\n" <<
 				   "  |____[example]\r\n" <<
 				   "  |:: zbuild list\r\n"<<
 				   "\r\n" << 
-				   " zbuild <delete> <id>...<N>\r\n" <<
+				   " zbuild delete <id>...<N>\r\n" <<
 				   "  |--> deletes the zone from the db with the id <id>. Multiple IDs can be specified\r\n" <<
 				   "  |____[example]\r\n" <<
 				   "  |:: zbuild delete 1\r\n" <<
+				   "\r\n" << 
+				   " zbuild place <zone_id> <command> <if_flag> <arg1> <arg2> <arg3>\r\n" <<
+				   "  |--> creates a reset command for the zone 'zone_id'.\r\n" <<
+				   "  |____[example]\r\n" <<
+				   "  |:: zbuild reset 5 M 0 1500 500 300\r\n" <<
+				   "  |:: (creates a reset command that grabs the mobile (specified by M) and uses \r\n" <<
+				   "  |:: the three arguments 1500, 500, and 300 as the arguments to the reset zone\r\n" <<
+				   "  |:: function\r\n" <<
+       			   "  |::  Commands:\r\n" <<
+       			   "  |:: 'M': Read a mobile\r\n" <<
+       			   "  |:: 'O': Read an object\r\n" <<
+       			   "  |:: 'G': Give obj to mob\r\n" <<
+       			   "  |:: 'P': Put obj in obj\r\n" <<
+       			   "  |:: 'G': Obj to char\r\n" <<
+       			   "  |:: 'E': Obj to char equip\r\n" <<
+       			   "  |:: 'D': Set state of door\r\n" <<
+				   "  |:: For more information, see http://www.circlemud.org/cdp/building/building-6.html#ss6.1\r\n" <<
+				   "  |:: )\r\n" <<
 				   "\r\n";
 		player->pager_end();
 		player->page(0);
@@ -383,6 +423,24 @@ ACMD(do_rbuildzone){
     std::array<char,max_char> command;
 	std::fill(command.begin(),command.end(),0);		
 	one_argument(argument,&command[0],max_char);
+	if(std::string(&command[0]).compare("place") == 0){
+		std::string arg = argument;
+		auto past = arg.substr(arg.find("place ")+6);
+		auto args = mods::util::arglist<std::vector<std::string>>(past);
+		auto zone_id = mods::util::stoi(args[0]);
+		if(!zone_id.has_value()){
+			*player << "{red} Invalid zone id{/red}\r\n";
+			return;
+		}
+		auto zone_command = args[1];
+		auto if_flag = args[2];
+		auto arg1 = args[3];
+		auto arg2 = args[4];
+		auto arg3 = args[5];
+		mods::builder::zone_place(zone_id.value(),zone_command,if_flag,arg1,arg2,arg3);
+		*player << "{red}Placed object in zone{/red}\r\n";
+		return;
+	}
 	if(std::string(&command[0]).compare("delete") == 0){
 		std::string arg = argument;
 		auto past = arg.substr(arg.find("delete ")+7);
