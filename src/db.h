@@ -170,7 +170,7 @@ struct zone_data {
 
    int	reset_mode;         /* conditions for reset (see below)   */
    zone_vnum number;	    /* virtual number of this zone	  */
-   struct reset_com *cmd;   /* command table for reset	          */
+   std::vector<reset_com> cmd;   /* command table for reset	          */
 
    /*
     * Reset mode:

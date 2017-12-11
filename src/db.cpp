@@ -47,7 +47,7 @@ struct index_data *obj_index;	/* index table for object file	 */
 struct obj_data *obj_proto;	/* prototypes for objs		 */
 obj_rnum top_of_objt = 0;	/* top of object index table	 */
 
-std::vector<zone_data> zone_table;	/* zone table			 */
+std::vector<struct zone_data> zone_table;	/* zone table			 */
 zone_rnum top_of_zone_table = 0;/* top element of zone tab	 */
 struct message_list fight_messages[MAX_MESSAGES];	/* fighting messages	 */
 
@@ -261,9 +261,6 @@ void boot_world(void)
   log("Parsing sql rooms.");
   parse_sql_rooms();
 
-  log("Renumbering rooms.");
-  renum_world();
-
   log("Checking start rooms.");
   check_start_rooms();
 
@@ -381,8 +378,6 @@ void destroy_db(void)
   for (cnt = 0; cnt <= top_of_zone_table; cnt++) {
     if (zone_table[cnt].name)
       free(zone_table[cnt].name);
-    if (zone_table[cnt].cmd)
-      free(zone_table[cnt].cmd);
   }
 }
 
@@ -971,18 +966,24 @@ void parse_sql_zones(){
 // 20
 		//TODO: SELECT COUNT(*) FROM zone_data where zone_id = z.number
 		auto trans3 = mods::pq::transaction(*mods::globals::pq_con);
-		auto r2 = mods::pq::exec(trans3,"SELECT COUNT(*) FROM zone_data");
+		auto zone_data_result = mods::pq::exec(trans3,
+			std::string(
+				"SELECT * FROM zone_data where zone_id="
+			) + 
+			trans3.quote(z.number)
+		);
 		mods::pq::commit(trans3);
-		//TODO: z = (struct reset_com*)calloc(sizeof(reset_com),count_result[0][0].as<int>());
-		//TODO: for(auto row : zone_data_result){
-		z.cmd = (struct reset_com*)calloc(sizeof(reset_com),1);
-		z.cmd->command = '*';
-		z.cmd->if_flag = true;
-		z.cmd->arg1 = 0;
-		z.cmd->arg2 = 0;
-		z.cmd->arg3 = 0;
-		z.cmd->line = 0;
-		zone_table.push_back(z);
+		for(auto row : zone_data_result){
+			struct reset_com res;
+			res.command = row[2].as<int>();
+			res.if_flag = row[3].as<int>();
+			res.arg1 = row[4].as<int>();
+			res.arg2 = row[5].as<int>();
+			res.arg3 = row[6].as<int>();
+			res.line = row[0].as<int>();
+			z.cmd.push_back(res);
+		}
+		zone_table.emplace_back(z);
 	}
 	top_of_zone_table = zone_table.size();
 }
@@ -1031,7 +1032,7 @@ void parse_sql_rooms(){
 		auto trans3 = mods::pq::transaction(*mods::globals::pq_con);
 		auto r2 = mods::pq::exec(trans3,
 			std::string(
-				"SELECT exit_direction,to_room FROM room_direction_data WHERE room_number="
+				"SELECT * FROM room_direction_data WHERE room_number="
 			)
 			+ 
 			trans3.quote(
@@ -1039,11 +1040,33 @@ void parse_sql_rooms(){
 			)
 		);
 		for(auto row2: r2){
-			auto direction = row2[0].as<int>();
+			//id | room_number | exit_direction | general_description | keyword | exit_info | exit_key | to_room
+			auto direction = row2[2].as<int>();
 			auto room_number = row2[1].as<int>();
-			std::cerr << "direction: " << direction << "|room_number: " << row[1].as<int>() << "\n";
-			room.dir_option[direction]->to_room = real_room(row[1].as<int>());
-			std::cerr << "Real room number: " << room.dir_option[direction]->to_room << "\n";
+			std::cerr << "direction: " << direction << "|room_number: " << row2[1].as<int>() << "\n";
+			world[real_room(row2[1].as<int>())].dir_option[direction]->general_description = strdup(row2["general_description"].c_str());
+			world[real_room(row2[1].as<int>())].dir_option[direction]->keyword = strdup(row2["keyword"].c_str());
+			auto exit_info = row2[5].as<int>();
+			switch(exit_info){
+				case 1:
+					world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info = EX_ISDOOR;
+					SET_BIT(world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info,EX_CLOSED);
+					break;
+				case 2:
+					world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info = EX_ISDOOR | EX_PICKPROOF;
+					SET_BIT(world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info,EX_CLOSED);
+					break;
+				case 3:
+					world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info = EX_ISDOOR | EX_REINFORCED;
+					SET_BIT(world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info,EX_CLOSED);
+					break;
+				default:
+					world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info = EX_ISDOOR;
+					break;
+			}
+			world[real_room(row2[1].as<int>())].dir_option[direction]->key = row2[6].as<int>();
+			world[real_room(row2[1].as<int>())].dir_option[direction]->to_room = real_room(row2[7].as<int>());
+			std::cerr << "Real room number: " << real_room(world[real_room(row2[1].as<int>())].dir_option[direction]->to_room) << "\n";
 		}
 	}
 	std::cerr << "Number of rooms in postgres: " << mods::pq::as_int(result,0,0) << "\r\n";
@@ -1205,7 +1228,6 @@ void renum_world(void)
 }
 
 
-#define ZCMD zone_table[zone].cmd[cmd_no]
 
 /*
  * "resulve vnums into rnums in the zone reset tables"
@@ -1222,11 +1244,11 @@ void renum_zone_table(void)
 {
   int cmd_no;
   room_rnum a, b, c, olda, oldb, oldc;
-  zone_rnum zone;
   char buf[128];
 
-  for (zone = 0; zone < top_of_zone_table; zone++)
-    for (cmd_no = 0; ZCMD.command != 'S'; cmd_no++) {
+  //for (zone = 0; zone < top_of_zone_table; zone++)
+  for(unsigned zone = 0; zone < zone_table.size(); zone++ ){
+	  for(auto ZCMD : zone_table[zone].cmd){
       a = b = c = 0;
       olda = ZCMD.arg1;
       oldb = ZCMD.arg2;
@@ -1268,6 +1290,7 @@ void renum_zone_table(void)
 	ZCMD.command = '*';
       }
     }
+  }
 }
 
 
@@ -1726,101 +1749,8 @@ char *parse_object(FILE *obj_f, int nr)
 /* load the zone table and command tables */
 void load_zones(FILE *fl, char *zonename)
 {
-  static zone_rnum zone = 0;
-  int cmd_no, num_of_cmds = 0, line_num = 0, tmp, error;
-  char *ptr, buf[READ_SIZE], zname[READ_SIZE], buf2[MAX_STRING_LENGTH];
-
-  strlcpy(zname, zonename, sizeof(zname));
-
-  /* Skip first 3 lines lest we mistake the zone name for a command. */
-  for (tmp = 0; tmp < 3; tmp++)
-    get_line(fl, buf);
-
-  /*  More accurate count. Previous was always 4 or 5 too high. -gg 2001/1/17
-   *  Note that if a new zone command is added to reset_zone(), this string
-   *  will need to be updated to suit. - ae.
-   */
-  while (get_line(fl, buf))
-    if ((strchr("MOPGERD", buf[0]) && buf[1] == ' ') || (buf[0] == 'S' && buf[1] == '\0'))
-      num_of_cmds++;
-
-  rewind(fl);
-
-  if (num_of_cmds == 0) {
-    log("SYSERR: %s is empty!", zname);
-    exit(1);
-  } else
-    CREATE(Z.cmd, struct reset_com, num_of_cmds);
-
-  line_num += get_line(fl, buf);
-
-  if (sscanf(buf, "#%hd", &Z.number) != 1) {
-    log("SYSERR: Format error in %s, line %d", zname, line_num);
-    exit(1);
-  }
-  snprintf(buf2, sizeof(buf2), "beginning of zone #%d", Z.number);
-
-  line_num += get_line(fl, buf);
-  if ((ptr = strchr(buf, '~')) != NULL)	/* take off the '~' if it's there */
-    *ptr = '\0';
-  Z.name = strdup(buf);
-
-  line_num += get_line(fl, buf);
-  if (sscanf(buf, " %hd %hd %d %d ", &Z.bot, &Z.top, &Z.lifespan, &Z.reset_mode) != 4) {
-    log("SYSERR: Format error in numeric constant line of %s", zname);
-    exit(1);
-  }
-  if (Z.bot > Z.top) {
-    log("SYSERR: Zone %d bottom (%d) > top (%d).", Z.number, Z.bot, Z.top);
-    exit(1);
-  }
-
-  cmd_no = 0;
-
-  for (;;) {
-    if ((tmp = get_line(fl, buf)) == 0) {
-      log("SYSERR: Format error in %s - premature end of file", zname);
-      exit(1);
-    }
-    line_num += tmp;
-    ptr = buf;
-    skip_spaces(&ptr);
-
-    if ((ZCMD.command = *ptr) == '*')
-      continue;
-
-    ptr++;
-
-    if (ZCMD.command == 'S' || ZCMD.command == '$') {
-      ZCMD.command = 'S';
-      break;
-    }
-    error = 0;
-    if (strchr("MOEPD", ZCMD.command) == NULL) {	/* a 3-arg command */
-      if (sscanf(ptr, " %d %d %d ", &tmp, &ZCMD.arg1, &ZCMD.arg2) != 3)
-	error = 1;
-    } else {
-      if (sscanf(ptr, " %d %d %d %d ", &tmp, &ZCMD.arg1, &ZCMD.arg2,
-		 &ZCMD.arg3) != 4)
-	error = 1;
-    }
-
-    ZCMD.if_flag = tmp;
-
-    if (error) {
-      log("SYSERR: Format error in %s, line %d: '%s'", zname, line_num, buf);
-      exit(1);
-    }
-    ZCMD.line = line_num;
-    cmd_no++;
-  }
-
-  if (num_of_cmds != cmd_no + 1) {
-    log("SYSERR: Zone command count mismatch for %s. Estimated: %d, Actual: %d", zname, num_of_cmds, cmd_no + 1);
-    exit(1);
-  }
-
-  top_of_zone_table = zone++;
+	log("!DEPRECATED!: Call to load_zones");
+	return;
 }
 
 #undef Z
@@ -2125,7 +2055,7 @@ void log_zone_error(zone_rnum zone, int cmd_no, const char *message)
 {
   mudlog(NRM, LVL_GOD, TRUE, "SYSERR: zone file: %s", message);
   mudlog(NRM, LVL_GOD, TRUE, "SYSERR: ...offending cmd: '%c' cmd in zone #%d, line %d",
-	ZCMD.command, zone_table[zone].number, ZCMD.line);
+	"redacted", zone_table[zone].number, "redacted");
 }
 
 #define ZONE_ERROR(message) \
@@ -2138,9 +2068,8 @@ void reset_zone(zone_rnum zone)
   struct char_data *mob = NULL;
   struct obj_data *obj, *obj_to;
 
-  //TODO: decide if this is needed or not. for now ignoreing this function
-  return;
-  for (cmd_no = 0; ZCMD.command != 'S'; cmd_no++) {
+  //for (cmd_no = 0; ZCMD.command != 'S'; cmd_no++) {
+  for(auto ZCMD : zone_table[zone].cmd){
 
     if (ZCMD.if_flag && !last_cmd)
       continue;

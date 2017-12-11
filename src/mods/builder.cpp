@@ -149,7 +149,8 @@ namespace mods::builder{
 				mods::pq::commit(txn);
 			}
 			for(auto direction = 0; direction < NUM_OF_DIRS;direction++){
-				if(world[in_room].dir_option[direction]){
+				if(world[in_room].dir_option[direction] &&
+				   world[in_room].dir_option[direction]->general_description != nullptr){
 					auto check_txn = mods::pq::transaction(*mods::globals::pq_con);
 					std::string check_sql = "SELECT COUNT(room_number) FROM room_direction_data ";
 					check_sql += " WHERE room_number=";
@@ -367,6 +368,30 @@ namespace mods::builder{
 	}
 };
 
+ACMD(do_obuild){
+	MENTOC_PREAMBLE();
+    if(std::string(argument).length() == 0 || std::string(argument).compare("help") == 0){
+        player->pager_start();
+		*player << "usage: \r\n" << 
+				   " obuild help\r\n" <<
+				   "\r\n";
+		player->pager_end();
+		player->page(0);
+		return;
+	}
+	constexpr unsigned int max_char = 10;
+    std::array<char,max_char> command;
+	std::fill(command.begin(),command.end(),0);		
+	one_argument(argument,&command[0],max_char);
+	if(std::string(&command[0]).compare("place") == 0){
+		std::string arg = argument;
+		auto past = arg.substr(arg.find("place ")+6);
+		auto args = mods::util::arglist<std::vector<std::string>>(past);
+		return;
+	}
+	*player << "{red}Currently not integrated{/red}\r\n";
+	return;
+}
 
 ACMD(do_rbuildzone){
 	MENTOC_PREAMBLE();	
@@ -734,8 +759,13 @@ ACMD(do_rbuild){
 		}
 		if(str_item.compare("einfo") == 0){
 			description = description.substr(description.find("einfo ") + 6);
+			auto exit_info = mods::util::stoi(description);
+			if(!exit_info.has_value()){
+				*player << "{red}Invalid exit info. Must be 0-3{/red}\r\n";
+				return;
+			}
 			auto ret = mods::builder::dir_option(IN_ROOM(ch),mods::globals::dir_int(direction[0]),std::nullopt,
-				std::nullopt,EX_ISDOOR,std::nullopt,std::nullopt).value_or("success");
+				std::nullopt,exit_info.value(),std::nullopt,std::nullopt).value_or("success");
 			if(ret.compare("success") == 0){
 				*player << "{red}exit_info changed to:{/red} EX_ISDOOR\r\n";
 			}else{

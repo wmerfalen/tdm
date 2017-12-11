@@ -460,12 +460,21 @@ void do_auto_exits(struct char_data *ch)
   send_to_char(ch, "{gld}%s[ Exits: ", CCCYN(ch, C_NRM));
 
   for (door = 0; door < NUM_OF_DIRS; door++) {
-    if (!EXIT(ch, door) || EXIT(ch, door)->to_room == NOWHERE)
-      continue;
+    if (!EXIT(ch, door)){
+		std::cerr << "Is not an exit: " << door << "\n";
+		continue;
+	}
+	if(EXIT(ch, door)->to_room == NOWHERE){
+		std::cerr << "Exit leads nowhere: " << door << "\n";
+		continue;
+	}
+		
     if (EXIT_FLAGGED(EXIT(ch, door), EX_CLOSED) && 
 		/*! mods */!EXIT_FLAGGED(EXIT(ch,door),EX_BREACHED) &&
-		/*! mods */!IS_SET(world[EXIT(ch,door)->to_room].dir_option[OPPOSITE_DIR(door)]->exit_info,EX_BREACHED))
+		/*! mods */!IS_SET(world[EXIT(ch,door)->to_room].dir_option[OPPOSITE_DIR(door)]->exit_info,EX_BREACHED)){
+		std::cerr << "is closed: " << door << "\n";
       continue;
+	}
 
     send_to_char(ch, "%c ", LOWER(*dirs[door]));
     slen++;
