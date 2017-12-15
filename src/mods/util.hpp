@@ -5,6 +5,7 @@
 #include <string>
 #include <regex>
 #include "../globals.hpp"
+#include <optional>
 
 #ifdef MENTOC_DEBUG
 #define dbg(a){ std::cerr << "debug[]: " << a << "\n"; }
@@ -50,6 +51,22 @@ namespace mods::util{
 		return arglist;
 	}
 	std::optional<int> stoi(std::string_view str,int base=10);
+	int constexpr length(const char* str)
+	{
+			return *str ? 1 + length(str + 1) : 0;
+	}
+
+	template<int max_char,typename Container>
+	inline std::optional<Container> subcmd_args(std::string_view argument,const char* subcmd){
+		std::array<char,max_char> command;
+		std::fill(command.begin(),command.end(),0);
+		one_argument(argument.data(),&command[0],max_char);
+		if(std::string(&command[0]).compare(subcmd) == 0){
+			std::string arg = argument.data();
+			return mods::util::arglist<Container>(arg);
+		}
+		return {};
+	}
 };
 
 #endif

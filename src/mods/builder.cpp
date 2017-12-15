@@ -368,28 +368,106 @@ namespace mods::builder{
 	}
 };
 
+using args_t = std::vector<std::string>;
 ACMD(do_obuild){
 	MENTOC_PREAMBLE();
     if(std::string(argument).length() == 0 || std::string(argument).compare("help") == 0){
         player->pager_start();
 		*player << "usage: \r\n" << 
 				   " obuild help\r\n" <<
+				   "  |--> this help menu\r\n" <<
+				   "  |____[example]\r\n" <<
+				   "  |:: obuild help\r\n" <<
+				   "  |:: (this help menu will show up)\r\n" <<
+				   " obuild new\r\n" <<
+				   " obuild list\r\n" <<
+				   " obuild attr <object_id> <attr> <value>\r\n" <<
+				   "  |:: -:[attributes]:-\r\n" <<
+				   "  |:: item_number\r\n" << 
+				   "  |:: name\r\n" << 
+				   "  |:: desc\r\n" << 
+				   "  |:: short_desc\r\n" << 
+				   "  |:: action_desc\r\n" << 
+				   "  |:: worn_on\r\n" << 
+				   "  |:: weapon_type\r\n" << 
+				   "  |:: weapon_ammo\r\n" << 
+				   "  |:: weapon_ammo_max\r\n" << 
+				   "  |:: weapon_holds_ammo\r\n" << 
+				   "  |:: extra_keyword <keyword>\r\n" <<
+				   "  |:: extra_description <description>\r\n" <<
+				   "  |:: flags\r\n" << 
+				   "  |:: affected <location> <modifier>\r\n" <<
+				   " obuild list like <pattern>\r\n" <<
+				   " obuild flag <object_id> <attr> <value>\r\n"<<
+				   "  |:: -:[attributes]:-\r\n" <<
+				   "  |:: value_0\r\n" <<
+				   "  |:: value_1\r\n" <<
+				   "  |:: value_2\r\n" <<
+				   "  |:: value_3\r\n" <<
+				   "  |:: type_flag\r\n" <<
+				   "  |:: wear_flags\r\n" <<
+				   "  |:: extra_flags\r\n" <<
+				   "  |:: weight\r\n" <<
+				   "  |:: cost\r\n" <<
+				   "  |:: cost_per_day\r\n" <<
+				   "  |:: timer\r\n" <<
+				   "  |:: bitvector\r\n" <<
+				   " obuild save <object_id>\r\n" <<
 				   "\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
 	}
-	constexpr unsigned int max_char = 10;
-    std::array<char,max_char> command;
-	std::fill(command.begin(),command.end(),0);		
-	one_argument(argument,&command[0],max_char);
-	if(std::string(&command[0]).compare("place") == 0){
-		std::string arg = argument;
-		auto past = arg.substr(arg.find("place ")+6);
-		auto args = mods::util::arglist<std::vector<std::string>>(past);
+	auto args = mods::util::subcmd_args<3,args_t>(argument,"new");
+	if(args.has_value()){
+		*player << "{red}Creating new object{/red}\r\n";
+		obj_data * obj = (obj_data*)calloc(sizeof(obj_data),1);
+		memset(static_cast<void*>(obj),0,sizeof(obj_data));
+		
 		return;
 	}
-	*player << "{red}Currently not integrated{/red}\r\n";
+	args = mods::util::subcmd_args<4,args_t>(argument,"list");
+	if(args.has_value()){
+		*player << "{red}listing...{/red}\r\n";
+		return;
+	}
+	args = mods::util::subcmd_args<4,args_t>(argument,"attr");
+	if(args.has_value()){
+		*player << "{red}listing...{/red}\r\n";
+		auto arg_vec = args.value();
+		auto get_intval = [&](std::string_view str) -> std::optional<int>{
+			if(arg_vec[1].compare(str.data()) == 0){
+				auto i_value = mods::util::stoi(arg_vec[2]);
+				if(!i_value.has_value()){
+					*player << "{red}Please use a valid numeric value.{/red}\r\n";
+					return std::nullopt_t;
+				}
+				return i_value.value();
+			}
+		};
+		auto get_strval = [&](std::string_view str) -> std::optional<char*>{
+			if(arg_vec[1].compare(str.data()) == 0){
+				return strdup(arg_vec[2].c_str());
+			}
+			return std::nullopt_t;
+		};
+
+#define MENTOC_OBI(i) {obj->##i = get_intval("##i").value_or(obj->##i);
+#define MENTOC_OBI2(i,a) {obj->##i = get_intval("##a").value_or(obj->##i);
+#define MENTOC_OBS(i) {obj->##i = get_strval("##i").value_or(obj->##i);
+#define MENTOC_OBS2(i,a) {obj->##i = get_intval("##a").value_or(obj->##i);
+		MENTOC_OBI(item_number);
+		MENTOC_OBI(weapon_type);
+		MENTOC_OBI(worn_on);
+		MENTOC_OBI2(ammo,weapon_ammo);
+		MENTOC_OBI2(ammo_max,weapon_ammo_max);
+		MENTOC_OBI2(holds_ammo,weapon_holds_ammo);
+		MENTOC_OBI2(ammo,weapon_ammo);
+		MENTOC_OBS(name);
+		MENTOC_OBS(description);
+		MENTOC_OBS(short_description);
+		MENTOC_OBS(action_description);
+	}
 	return;
 }
 

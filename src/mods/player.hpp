@@ -11,7 +11,6 @@
 
 #define WEAPON_SET_NUM 1
 extern size_t send_to_char(struct char_data *ch, const char *messg, ...);
-
 namespace mods {
 	namespace weapon {
 		enum mask_type { SNIPE, SHOTGUN };
