@@ -2,8 +2,13 @@
 #include "quests.hpp"
 #include "pq.hpp"
 #include "util.hpp"
+#include "object.hpp"
 #include <stdlib.h> //For itoa
+#include "sql.hpp"
 
+using objtype = mods::object::type;
+using pq_txn = mods::pq::transaction;
+using sql_compositor = mods::sql::compositor<pq_txn>;
 namespace mods::builder{
 	bool save_zone_to_db(std::string_view name,int room_start,int room_end,int lifespan,int reset_mode){
 		try{
@@ -366,6 +371,152 @@ namespace mods::builder{
 		mods::pq::exec(txn,sql);
 		mods::pq::commit(txn);
 	}
+	bool save_object(obj_data* obj){
+
+		auto txn_01 = mods::pq::transaction(*mods::globals::pq_con);
+		sql_compositor comp3("object",&txn_01);
+		auto sql = comp3.select("id").from("object").
+			where("obj_item_number","=",std::to_string(obj->item_number))
+			.sql();
+		auto check_result_01 = mods::pq::exec(txn_01,sql);
+		mods::pq::commit(txn_01);
+		auto check_i = 0;
+		if(check_result_01.size()){
+			check_i = mods::pq::as_int(check_result_01,0,0);
+			/* update the fields */
+			auto txn = mods::pq::transaction(*mods::globals::pq_con);
+			std::string update_sql = "UPDATE object SET ";
+			update_sql += "obj_flags = 0,"; 	//TODO decide what to do with this
+			update_sql += "obj_name =";
+			update_sql += txn.quote(obj->name);
+			update_sql += ", obj_description = ";
+			update_sql += txn.quote(obj->description);
+			update_sql += ", obj_short_description = ";
+			update_sql += txn.quote(obj->short_description);
+			update_sql += ", obj_action_description = ";
+			update_sql += txn.quote(obj->action_description);
+			update_sql += ", obj_type = ";
+			update_sql += txn.quote(obj->type);
+			update_sql += ", obj_worn_on = ";
+			update_sql += txn.quote(obj->worn_on);
+			if(std::string(obj->ex_description->keyword).length()){
+				update_sql += ", obj_extra_keyword = ";
+				update_sql += txn.quote(obj->ex_description->keyword);
+			}
+			if(std::string(obj->ex_description->description).length()){
+				update_sql += ", obj_extra_description = ";
+				update_sql += txn.quote(obj->ex_description->description);
+			}
+			update_sql += " WHERE obj_item_number=";
+			update_sql += txn.quote(obj->item_number);
+			auto result = mods::pq::exec(txn,update_sql);
+			mods::pq::commit(txn);
+		}else{
+			/* insert into the db */
+			auto txn0 = txn();
+			sql_compositor comp("object",&txn0);
+			sql_compositor::value_map my_map;
+			my_map["obj_item_number"] = std::to_string(obj->item_number);
+			my_map["obj_flags"] = "0";
+			my_map["obj_name"] = obj->name;
+			my_map["obj_description"] = obj->description;
+			my_map["obj_short_description"] = obj->short_description;
+			if(obj->action_description){
+				my_map["obj_action_description"] = obj->action_description;
+			}
+			my_map["obj_type"] = std::to_string(obj->type);
+			my_map["obj_worn_on"] = std::to_string(obj->worn_on);
+			my_map["obj_type_data"] = "0";
+			if(obj->ex_description && obj->ex_description->keyword){
+				my_map["obj_extra_keyword"] = obj->ex_description->keyword;
+			}
+			if(obj->ex_description && obj->ex_description->description){
+				my_map["obj_extra_description"] = obj->ex_description->description;
+			}
+			auto sql = comp.insert().into("object")
+				.values(my_map).sql();
+			std::cerr << sql << "\n";
+			mods::pq::exec(txn0,sql);
+			mods::pq::commit(txn0);
+			auto txn4 = txn();
+			sql = "SELECT id from object where obj_item_number=";
+			sql += txn4.quote(obj->item_number);
+			auto res = mods::pq::exec(txn4,sql);
+			mods::pq::commit(txn4);
+			check_i = mods::pq::as_int(res,0,0);
+		}
+		switch(obj->type){
+			case objtype::WEAPON:
+				auto txn3 = txn();
+				sql_compositor comp3("object_weapon",&txn3);
+				auto sql = comp3.select("id").from("object_weapon").
+					where("obj_fk_id","=",std::to_string(check_i))
+					.sql();
+				auto check_result = mods::pq::exec(txn3,sql);
+				mods::pq::commit(txn3);
+				auto weapon_exists = mods::pq::as_int(check_result,0,0);
+				if(weapon_exists){
+					auto txn5 = txn();
+					sql_compositor comp("object_weapon",&txn5);
+					auto sql = comp.update({
+						{"obj_ammo_type",std::to_string(obj->weapon_type)},
+						{"obj_ammo_max",std::to_string(obj->ammo_max)},
+						{"obj_cooldown",std::to_string(0)},
+						{"obj_can_snipe",std::to_string(0)}
+					}).where("obj_fk_id","=",std::to_string(check_i))
+					.sql();
+					mods::pq::exec(txn5,sql);
+					mods::pq::commit(txn5);
+				}else{
+					auto txn6 = txn();
+					sql_compositor comp("object_weapon",&txn6);
+					auto sql = comp.insert().into("object_weapon")
+						.values({
+							{"obj_fk_id",std::to_string(check_i)},
+							{"obj_ammo_max",std::to_string(obj->ammo_max)},
+							{"obj_ammo_type",std::to_string(obj->weapon_type)},
+							{"obj_cooldown",std::to_string(0)},
+							{"obj_can_snipe",std::to_string(0)}
+						})
+						.sql();
+					std::cerr << sql << "\n";
+					mods::pq::exec(txn6,sql);
+					mods::pq::commit(txn6);
+				}
+				break;
+		}
+		auto txn6 = mods::pq::transaction(*mods::globals::pq_con);
+		std::string sel_weapon_sql = 
+			std::string(
+				"select id from affected_type where aff_fk_id="
+			) + txn6.quote(check_i);
+		auto check_result = mods::pq::exec(txn6,sel_weapon_sql);
+		mods::pq::commit(txn6);
+		if(check_result.size()){
+			auto txn8 = txn();
+			std::string sql = std::string(
+				"DELETE FROM affected_type where obj_fk_id=") 
+				+ txn8.quote(check_i);
+			mods::pq::exec(txn8,sql);
+			mods::pq::commit(txn8);
+		}
+		for(unsigned i =0; i < MAX_OBJ_AFFECT;i++){
+			auto txn7 = txn();
+			std::string loc,mod;
+			if(obj->affected[i].location && obj->affected[i].modifier){
+			auto sql = sql_compositor(nullptr,&txn7).insert()
+				.into("affected_type")
+				.values({
+					{"aff_fk_id",std::to_string(check_i)},
+					{"aff_location",mods::util::itoa(obj->affected[i].location)},
+					{"aff_modifier", mods::util::itoa(obj->affected[i].modifier)}
+				})
+				.sql();
+			mods::pq::exec(txn7,sql);
+			mods::pq::commit(txn7);
+			}
+		}
+	}
 };
 
 using args_t = std::vector<std::string>;
@@ -413,49 +564,153 @@ ACMD(do_obuild){
 				   "  |:: timer\r\n" <<
 				   "  |:: bitvector\r\n" <<
 				   " obuild save <object_id>\r\n" <<
+				   " obuild show <object_id>\r\n" <<
 				   "\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
 	}
-	auto args = mods::util::subcmd_args<3,args_t>(argument,"new");
+	auto args = mods::util::subcmd_args<4,args_t>(argument,"new");
 	if(args.has_value()){
 		*player << "{red}Creating new object{/red}\r\n";
 		obj_data * obj = (obj_data*)calloc(sizeof(obj_data),1);
 		memset(static_cast<void*>(obj),0,sizeof(obj_data));
-		
+		obj->next = object_list;
+		object_list = obj;
+		*player << "{red}Object created{/red}\r\n";
 		return;
 	}
-	args = mods::util::subcmd_args<4,args_t>(argument,"list");
+	args = mods::util::subcmd_args<5,args_t>(argument,"save");
 	if(args.has_value()){
-		*player << "{red}listing...{/red}\r\n";
+		//TODO: !mundane make this a function
+		auto arg_vec = args.value();
+		if(arg_vec.size() == 1){
+			*player << "{red}Please supply an object id{/red}\r\n";
+			return;
+		}
+		auto index = mods::util::stoi(arg_vec[1]);
+		obj_data * obj = nullptr;
+		unsigned ctr = 0;
+		if(index.has_value()){
+			auto obj_list = object_list;
+			for(;obj_list ; obj_list = obj_list->next){
+				if(ctr++ == index.value()){
+					obj = obj_list;
+					break;
+				}
+			}
+		}else{
+			*player << "{red}" << args.value()[1] << " is not a valid number{/red}\r\n";
+			return;
+		}
+		if(!obj){
+			*player << "{red}Index not found.{/red}\r\n";
+			return;
+		}
+		*player << "{red}Saving object{/red}\r\n";
+		mods::builder::save_object(obj);
+		*player << "{red}Object saved{/red}\r\n";
 		return;
 	}
-	args = mods::util::subcmd_args<4,args_t>(argument,"attr");
+	args = mods::util::subcmd_args<5,args_t>(argument,"list");
 	if(args.has_value()){
 		*player << "{red}listing...{/red}\r\n";
+		unsigned obj_id = 0;
+		player->pager_start();
+		for(auto obj = object_list; obj; obj = obj->next){
+			*player << "{gld}[" << obj_id++ << "]{/gld} :->{red} [" <<
+				obj->short_description << "]{/red}\r\n";
+		}
+		player->pager_end();
+		player->page(0);
+		return;
+	}
+	args = mods::util::subcmd_args<5,args_t>(argument,"show");
+	if(args.has_value()){
+		//TODO: !mundane make this a function
+		auto arg_vec = args.value();
+		if(arg_vec.size() == 1){
+			*player << "{red}Please supply an object id{/red}\r\n";
+			return;
+		}
+		auto index = mods::util::stoi(arg_vec[1]);
+		obj_data * obj = nullptr;
+		unsigned ctr = 0;
+		if(index.has_value()){
+			auto obj_list = object_list;
+			for(;obj_list ; obj_list = obj_list->next){
+				if(ctr++ == index.value()){
+					obj = obj_list;
+					break;
+				}
+			}
+		}else{
+			*player << "{red}" << args.value()[1] << " is not a valid number{/red}\r\n";
+			return;
+		}
+		if(!obj){
+			*player << "{red}Index not found.{/red}\r\n";
+			return;
+		}
+		player->pager_start();
+		*player << 
+			"{red}name: {/red}" << obj->name << "\r\n" <<
+			"{red}short_description: {/red}" << obj->short_description << "\r\n" <<
+			"{red}action_description: {/red}" << obj->action_description << "\r\n" <<
+			"{red}item_number: {/red}" << obj->item_number << "\r\n" << 
+			"{red}weapon_type: {/red}" << obj->weapon_type << "\r\n" << 
+			"{red}worn_on: {/red}" << obj->worn_on << "\r\n" << 
+			"{red}weapon_ammo: {/red}" << obj->ammo << "\r\n" << 
+			"{red}weapon_ammo_max: {/red} " << obj->ammo_max << "\r\n" << 
+			"{red}weapon_holds_ammo: {/red}: " << obj->holds_ammo << "\r\n" << 
+			"\r\n";
+		player->pager_end();
+		player->page(0);
+		return;
+	}
+	args = mods::util::subcmd_args<5,args_t>(argument,"attr");
+	if(args.has_value()){
 		auto arg_vec = args.value();
 		auto get_intval = [&](std::string_view str) -> std::optional<int>{
-			if(arg_vec[1].compare(str.data()) == 0){
-				auto i_value = mods::util::stoi(arg_vec[2]);
+			if(arg_vec[2].compare(str.data()) == 0){
+				*player << "matches: " << str.data() << "\r\n";
+				auto i_value = mods::util::stoi(arg_vec[3]);
 				if(!i_value.has_value()){
 					*player << "{red}Please use a valid numeric value.{/red}\r\n";
-					return std::nullopt_t;
+					return std::nullopt;
 				}
 				return i_value.value();
 			}
 		};
 		auto get_strval = [&](std::string_view str) -> std::optional<char*>{
-			if(arg_vec[1].compare(str.data()) == 0){
-				return strdup(arg_vec[2].c_str());
+			*player << arg_vec[2] << "\r\n";
+			if(arg_vec[2].compare(str.data()) == 0){
+				*player << "matches: " << str.data() << "\r\n";
+				return strdup(arg_vec[3].c_str());
 			}
-			return std::nullopt_t;
+			return std::nullopt;
 		};
-
-#define MENTOC_OBI(i) {obj->##i = get_intval("##i").value_or(obj->##i);
-#define MENTOC_OBI2(i,a) {obj->##i = get_intval("##a").value_or(obj->##i);
-#define MENTOC_OBS(i) {obj->##i = get_strval("##i").value_or(obj->##i);
-#define MENTOC_OBS2(i,a) {obj->##i = get_intval("##a").value_or(obj->##i);
+		auto index = mods::util::stoi(args.value()[1]);
+		obj_data * obj = nullptr;
+		unsigned ctr = 0;
+		if(index.has_value()){
+			auto obj_list = object_list;
+			for(;obj_list ; obj_list = obj_list->next){
+				if(ctr++ == index.value()){
+					*player << "found it\r\n";
+					obj = obj_list;
+					break;
+				}
+			}
+		}
+		if(!obj){
+			*player << "{red}Invalid index{/red}\r\n";
+			return;
+		}
+#define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
+#define MENTOC_OBI2(i,a) obj->i = get_intval(#a).value_or(obj->i);
+#define MENTOC_OBS(i) obj->i = get_strval(#i).value_or(obj->i);
+#define MENTOC_OBS2(i,a) obj->i = get_strval(#a).value_or(obj->i);
 		MENTOC_OBI(item_number);
 		MENTOC_OBI(weapon_type);
 		MENTOC_OBI(worn_on);
@@ -467,6 +722,7 @@ ACMD(do_obuild){
 		MENTOC_OBS(description);
 		MENTOC_OBS(short_description);
 		MENTOC_OBS(action_description);
+		*player << "{red}Set attribute{/red}\r\n";
 	}
 	return;
 }
@@ -884,4 +1140,4 @@ ACMD(do_rbuild){
 			return;
 		}
 	}
-}
+};

@@ -6,6 +6,7 @@
 #include <regex>
 #include "../globals.hpp"
 #include <optional>
+#include <stdlib.h>
 
 #ifdef MENTOC_DEBUG
 #define dbg(a){ std::cerr << "debug[]: " << a << "\n"; }
@@ -26,12 +27,6 @@ namespace mods::util{
 		unsigned string_length = argument.length();
 		for(auto c : argument){
 			--string_length;
-			if(c == ' '){
-				if(!escaped && current.length()){
-					flush(current);
-					current = "";
-				}
-			}
 			if(c == '"'){
 				if(escaped){
 					flush(current);
@@ -40,6 +35,17 @@ namespace mods::util{
 				}else{
 					escaped = true;
 				}
+				continue;
+			}
+			if(c == ' ' && !escaped){
+				if(current.length()){
+					flush(current);
+					current = "";
+				}
+				continue;
+			}
+			if(c == ' ' && escaped){
+				current += c;
 				continue;
 			}
 			current += c;
@@ -66,6 +72,12 @@ namespace mods::util{
 			return mods::util::arglist<Container>(arg);
 		}
 		return {};
+	}
+	inline std::string itoa(int number){
+		std::array<char,16> buf;
+		std::fill(buf.begin(),buf.end(),0);
+		snprintf(&buf[0],16,"%d",number);
+		return &buf[0];
 	}
 };
 

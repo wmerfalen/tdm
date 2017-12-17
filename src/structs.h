@@ -645,6 +645,7 @@ struct obj_data {
 	short loaded;
 	short holds_ammo;
 	weapon_type_t weapon_type;
+	int16_t type;
 };
 /* ======================================================================= */
 

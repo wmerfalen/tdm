@@ -11,4 +11,11 @@ namespace mods::pq {
 	void commit(transaction& txn){
 		txn.commit();
 	}
+	int count(std::string_view query){
+		auto txn = mods::pq::transaction(*mods::globals::pq_con);
+		auto check_result = mods::pq::exec(txn,query.data());
+		mods::pq::commit(txn);
+		return mods::pq::as_int(check_result,0,0);
+	}
+
 };
