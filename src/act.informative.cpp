@@ -1509,7 +1509,10 @@ void perform_immort_where(struct char_data *ch, char *arg)
 	send_to_char(ch, "M%3d. %-25s - [%5d] %s\r\n", ++num, GET_NAME(i),
 		GET_ROOM_VNUM(IN_ROOM(i)), world[IN_ROOM(i)].name);
       }
-    for (num = 0, k = object_list; k; k = k->next)
+	num = 0;
+    for (auto & obj_reference : object_list){
+		/* TODO !test !integrity */
+		k = &obj_reference;
       if (CAN_SEE_OBJ(ch, k) && isname(arg, k->name)) {
 	found = 1;
 	print_object_location(++num, k, ch, TRUE);

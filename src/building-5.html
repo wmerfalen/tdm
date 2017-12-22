@@ -1,0 +1,563 @@
+<HTML>
+<HEAD>
+<TITLE>The CircleMUD Builder's Manual: Object Files</TITLE>
+</HEAD>
+<BODY>
+<A HREF="building-4.html">Previous</A>
+<A HREF="building-6.html">Next</A>
+<A HREF="building.html#toc5">Table of Contents</A>
+<HR>
+<H2><A NAME="s5">5. Object Files</A></H2>
+
+<H2><A NAME="ss5.1">5.1 The Format of an Object</A></H2>
+
+
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+#&lt;virtual number&gt;
+&lt;alias list&gt;~
+&lt;short description&gt;~
+&lt;long description&gt;~
+&lt;action description&gt;~
+&lt;type flag&gt; &lt;extra (effects) bitvector&gt; &lt;wear bitvector&gt;
+&lt;value 0&gt; &lt;value 1&gt; &lt;value 2&gt; &lt;value 3&gt;
+&lt;weight&gt; &lt;cost&gt; &lt;rent per day&gt;
+{Zero or more Extra Descriptions and/or Affect Fields}
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+</P>
+<P>There can be an unlimited number of Extra Descriptions and up to 6 Affect
+Fields.</P>
+<P>
+<DL>
+<DT><B>Virtual Number</B><DD><P>This number is critical; it is the identity of the object within the
+game.  It is the number that will be used to reference the object from zone
+files and is the number used to ``load'' objects from within the game.  The
+virtual numbers must appear in increasing order in the object file.</P>
+
+<DT><B>Alias List</B><DD><P>The list of keywords, separated by spaces, that can be used by players
+to identify the object.  The object can only be identified using the
+keywords that appear in its alias list; it cannot be identified by a word
+that appears only in its name.  Great care should be taken to ensure that
+the spellings of names and aliases match.  Fill words such as ``the,'' ``a,''
+and ``an'' should not appear in the Alias List.</P>
+
+<DT><B>Short Description</B><DD><P>The description of the object used by the MUD when the object is used. 
+For example, a short description of ``a long, green stick'' would result in
+messages such as ``The Beastly Fido picks up the long, green stick.''  The
+Short Description should never end with a punctuation mark because it will
+be inserted into the middle of sentences.</P>
+
+<DT><B>Long Description</B><DD><P>The description displayed when the object is seen lying on the ground,
+for example, ``A furled umbrella is lying here.''
+Unlike the Short Description, the
+Long Description should end with appropriate punctuation.</P>
+
+<DT><B>Action Description</B><DD><P>Action Descriptions are primarily used for magical objects (staves,
+wands, scrolls, and potions) to specify what message displayed to the room
+when the magical item is used.  The Action Description should be given in
+the act format specified in act.doc.  If no Action Description is present,
+a default message will be used:</P>
+<P>Staves:  Rasmussen taps &lt;object&gt; three times on the ground.</P>
+<P>Wands: Rasmussen points &lt;object&gt; at Onivel.</P>
+<P>Scrolls: Rasmussen recites &lt;object&gt;.</P>
+<P>Potions: Rasmussen quaffs &lt;object&gt;.</P>
+<P>For objects which are readable papers, the Action Description contains
+the text on the paper.</P>
+
+<DT><B>Type Flag</B><DD><P>A number which specifies what type of object is being defined; also
+controls the meanings of value0 through value4.  The Type Flag must be one
+of the following numbers:</P>
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+1    LIGHT          Item is a light source.
+2    SCROLL         Item is a magical scroll.
+3    WAND           Item is a magical wand.
+4    STAFF          Item is a magical staff.
+5    WEAPON         Item is a weapon.
+6    FIREWEAPON     Currently not implemented.  Do not use.
+7    MISSILE        Currently not implemented.  Do not use.
+8    TREASURE       Item is treasure other than gold coins (e.g. gems)
+9    ARMOR          Item is armor.
+10   POTION         Item is a magical potion.
+11   WORN           Currently not implemented.  Do not use.
+12   OTHER          Miscellaneous object with no special properties.
+13   TRASH          Trash -- junked by cleaners, not bought by shopkeepers.
+14   TRAP           Currently not implemented.  Do not use.
+15   CONTAINER      Item is a container.
+16   NOTE           Item is a note (can be written on).
+17   DRINKCON       Item is a drink container.
+18   KEY            Item is a key.
+19   FOOD           Item is food.
+20   MONEY          Item is money (gold coins).
+21   PEN            Item is a pen.
+22   BOAT           Item is a boat; allows you to traverse SECT_WATER_NOSWIM.
+23   FOUNTAIN       Item is a fountain.
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>Extra (Effects) Bitvector</B><DD><P>A bitvector (see section 
+<A HREF="building-2.html#bitvectors">Using Bitvectors</A>), to define the ``special
+effects'' of the object.  Flags that are marked as ``cosmetic'' merely add an
+interesting message to the object when it is examined, but has no
+substantive effect otherwise.  The flags have the following values:</P>
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+1     a   GLOW           Item is glowing (cosmetic).
+2     b   HUM            Item is humming (cosmetic).
+4     c   NORENT         Item cannot be rented.
+8     d   NODONATE       Item cannot be donated.
+16    e   NOINVIS        Item cannot be made invisible.
+32    f   INVISIBLE      Item is invisible.
+64    g   MAGIC          Item has a magical aura and can't be enchanted.
+128   h   NODROP         Item is cursed and cannot be dropped.
+256   i   BLESS          Item is blessed (cosmetic).
+512   j   ANTI_GOOD      Item can't be used by good-aligned characters.
+1024  k   ANTI_EVIL      Item can't be used by evil-aligned characters.
+2048  l   ANTI_NEUTRAL   Item can't be used by neutral align characters.
+4096  m   ANTI_MAGIC_USER Item can't be used by the Mage class.
+8192  n   ANTI_CLERIC    Item can't be used by the Cleric class.
+16384 o   ANTI_THIEF     Item can't be used by the Thief class.
+32768 p   ANTI_WARRIOR   Item can't be used by the Warrior class.
+65536 q   NOSELL         Shopkeepers will not buy or sell the item.
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>Wear Bitvector</B><DD><P>A bitvector (see section 
+<A HREF="building-2.html#bitvectors">Using Bitvectors</A>)
+with the following values:</P>
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+1     a   WEAR_TAKE      Item can be taken (picked up off the ground).
+2     b   WEAR_FINGER    Item can be worn on the fingers.
+4     c   WEAR_NECK      Item can be worn around the neck.
+8     d   WEAR_BODY      Item can be worn on the body.
+16    e   WEAR_HEAD      Item can be worn on the head.
+32    f   WEAR_LEGS      Item can be worn on the legs.
+64    g   WEAR_FEET      Item can be worn on the feet.
+128   h   WEAR_HANDS     Item can be worn on the hands.
+256   i   WEAR_ARMS      Item can be worn on the arms.
+512   j   WEAR_SHIELD    Item can be used as a shield.
+1024  k   WEAR_ABOUT     Item can be worn about the body.
+2048  l   WEAR_WAIST     Item can be worn around the waist.
+4096  m   WEAR_WRIST     Item can be worn around the wrist.
+8192  n   WEAR_WIELD     Item can be wielded; e.g. weapons.
+16384 o   WEAR_HOLD      Item can be held (the ``hold'' command).
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+</P>
+<P>Note that the TAKE bit controls whether or not an item can be picked up
+using the ``get'' command, whereas the HOLD bit controls if the object can be
+worn using the ``hold'' command.</P>
+
+<DT><B>Value 0, Value 1, Value 2, Value 3</B><DD><P>These values are very central.  They define the object's abilities
+based on the Type Flag.  See the subsection ``Object Value Definitions'' below
+for a detailed description of the four Value fields.</P>
+
+<DT><B>Weight</B><DD><P>The weight of the object.  The weight controls how many strength points
+a character must have to take the object, and is used to calculate when bags
+and other containers become full.</P>
+
+<DT><B>Cost</B><DD><P>The value of the object in gold coins; used by shopkeepers.</P>
+
+<DT><B>Rent Per Day</B><DD><P>The cost per day to rent the object in the Reception.</P>
+</DL>
+</P>
+
+
+<H2><A NAME="ss5.2">5.2 Object Value Definitions</A></H2>
+
+<P>The meaning of an object's four values (value 0 through value 3) vary
+depending on the Type Flag of the object.</P>
+<P>In the table below, ``unused'' means that the server ignores the value;
+it can be set to any number (but 0 is always a safe bet).  ``unimplemented''
+indicates a Type Flag currently not recognized by the server.</P>
+<P>An index of spell numbers for use with magical objects can be found in
+the Appendix 
+<A HREF="building-8.html#spellnums">Spell Numbers</A>.</P>
+<P>
+<DL>
+<DT><B>LIGHT (Type Flag 1)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: unused
+     value 1: unused
+     value 2: Capacity of light in hours.
+                0: Burned out light.
+               -1: Eternal light source.
+     value 3: unused
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>SCROLL (Type Flag 2)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: Level at which scroll's spells are cast.
+     value 1: Spell number 1
+     value 2: Spell number 2
+     value 3: Spell number 3
+          If less than 3 spells are desired, set unused values to -1.
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>WAND (Type Flag 3)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: Level at which wand's spell is cast.
+     value 1: Charge capacity of wand (&gt;= 1)
+     value 2: Current number of charges remaining
+     value 3: Spell number
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>STAFF (Type Flag 4)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: Level at which staff's spell is cast.
+     value 1: Charge capacity of staff (&gt;= 1)
+     value 2: Current number of charges remaining
+     value 3: Spell number
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>WEAPON (Type Flag 5)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: unused
+     value 1: Number of damage dice
+     value 2: Size of damage dice
+     value 3: Weapon type for damage messages, one of:
+               0    hit/hits
+               1    sting/stings
+               2    whip/whips
+               3    slash/slashes
+               4    bite/bites
+               5    bludgeon/bludgeons
+               6    crush/crushes
+               7    pound/pounds
+               8    claw/claws
+               9    maul/mauls
+               10   thrash/thrashes
+               11   pierce/pierces
+               12   blast/blasts
+               13   punch/punches
+               14   stab/stabs
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>FIREWEAPON (Type Flag 6)</B><DD><P>unimplemented (do not use)</P>
+
+<DT><B>MISSILE (Type Flag 7)</B><DD><P>unimplemented (do not use)</P>
+
+<DT><B>TREASURE (Type Flag 8)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: unused
+     value 1: unused
+     value 2: unused
+     value 3: unused
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>ARMOR (Type Flag 9)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: AC-apply of the armor.  Note that the effective change
+               to AC is this value times a multiplier based on where
+               the armor is worn.  Values &gt;0 enhance the armor class;
+               values &lt;0 damage the armor class (cursed armor, for
+               example).
+     value 1: unused
+     value 2: unused
+     value 3: unused
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>POTION (Type Flag 10)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: Level at which the potion's spells are cast.
+     value 1: Spell number 1
+     value 2: Spell number 2
+     value 3: Spell number 3
+          If less than 3 spells are desired, set unused values to -1.
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>WORN (Type Flag 11)</B><DD><P>unimplemented (do not use)</P>
+
+<DT><B>OTHER (Type Flag 12)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: unused
+     value 1: unused
+     value 2: unused
+     value 3: unused
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>TRASH (Type Flag 13)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: unused
+     value 1: unused
+     value 2: unused
+     value 3: unused
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>TRAP (Type Flag 14)</B><DD><P>unimplemented (do not use)</P>
+
+<DT><B>CONTAINER (Type Flag 15)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: Capacity (max containable weight) of container
+     value 1: Container flag bitvector (MUST be a numeric bitvector)
+          1    CLOSEABLE      Container can be closed and locked.
+          2    PICKPROOF      Lock on container can't be picked.
+          4    CLOSED         Container is closed when created.
+          8    LOCKED         Container is locked when created.
+     value 2: The vnum of the key object that opens this container.
+               -1 if it has no key.
+     value 3: Reserved for internal use -- always set as 0.
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>NOTE (Type Flag 16)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: Language of writing (unimplemented).
+     value 1: unused
+     value 2: unused
+     value 3: unused
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>DRINKCON (Type Flag 17)</B><DD><P>See Appendix 
+<A HREF="building-9.html#drinknums">Item Values for Drink Containers</A>.</P>
+
+<DT><B>KEY (Type Flag 18)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: unused
+     value 1: unused
+     value 2: unused
+     value 3: unused
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>FOOD (Type Flag 19)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: The number of hours of hunger satisfied by this food.
+     value 1: unused
+     value 2: unused
+     value 3: Non-zero if the food is poisoned, 0 otherwise.
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>MONEY (Type Flag 20)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: The number of gold coins in the pile.
+     value 1: unused
+     value 2: unused
+     value 3: unused
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>PEN (Type Flag 21)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: unused
+     value 1: unused
+     value 2: unused
+     value 3: unused
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+<DT><B>BOAT (Type Flag 22)</B><DD><P>
+<BLOCKQUOTE><CODE>
+<PRE>
+     value 0: unused
+     value 1: unused
+     value 2: unused
+     value 3: unused
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+<DT><B>FOUNTAIN (Type Flag 23)</B><DD><P>See Appendix 
+<A HREF="building-9.html#drinknums">Item Values for Drink Containers</A>.</P>
+</DL>
+</P>
+
+
+<H2><A NAME="ss5.3">5.3 Object Extra Descriptions</A></H2>
+
+<P>Object Extra Descriptions allow players to examine certain aspects of
+objects defined by the world builder, just like Room Extra Descriptions. 
+There can be an unlimited number of Extra Descriptions per object.  The
+format is exactly the same as for rooms:</P>
+
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+E
+&lt;keyword list&gt;~
+&lt;description text&gt;
+~
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+</P>
+<P>
+<DL>
+<DT><B>Keyword List</B><DD><P>A space-separated list of keywords which will access the description in
+this E section.</P>
+
+<DT><B>Description Text</B><DD><P>The text that will be displayed when a player types
+``look &lt;keyword&gt;,''
+where &lt;keyword&gt; is one of the keywords specified in the Keyword List
+of this E section.</P>
+</DL>
+</P>
+
+
+<H2><A NAME="ss5.4">5.4 Object Affect Fields</A></H2>
+
+<P>Object Affect Fields give objects magical properties.  They affect
+characters when the object is worn, not when picked up.</P>
+<P>The format of an Object Affect Field is:</P>
+
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+A
+&lt;location&gt; &lt;value&gt;
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+</P>
+<P>
+<DL>
+<DT><B>Location</B><DD><P>The aspect of the character affected by the object.  It must be one of
+the following numbers:</P>
+
+<P>
+<BLOCKQUOTE><CODE>
+<HR>
+<PRE>
+0    NONE           No effect (typically not used).
+1    STR            Apply to strength.
+2    DEX            Apply to dexterity.
+3    INT            Apply to intelligence.
+4    WIS            Apply to wisdom.
+5    CON            Apply to constitution.
+6    CHA            Apply to charisma.
+7    CLASS          Unimplemented.  Do not use.
+8    LEVEL          Unimplemented.  Do not use.
+9    AGE            Apply to character's MUD age, in MUD-years.
+10   CHAR_WEIGHT    Apply to weight.
+11   CHAR_HEIGHT    Apply to height.
+12   MANA           Apply to MAX mana points.
+13   HIT            Apply to MAX hit points.
+14   MOVE           Apply to MAX movement points.
+15   GOLD           Unimplemented.  Do not use.
+16   EXP            Unimplemented.  Do not use.
+17   AC             Apply to armor class (AC).
+18   HITROLL        Apply to hitroll.
+19   DAMROLL        Apply to damage roll bonus.
+20   SAVING_PARA    Apply to save throw: paralyze
+21   SAVING_ROD     Apply to save throw: rods
+22   SAVING_PETRI   Apply to save throw: petrif
+23   SAVING_BREATH  Apply to save throw: breath
+24   SAVING_SPELL   Apply to save throw: spells
+</PRE>
+<HR>
+</CODE></BLOCKQUOTE>
+</P>
+
+<DT><B>Value</B><DD><P>The number used to modify the Location.</P>
+</DL>
+</P>
+<P>For example, an A field which reads:
+<BLOCKQUOTE><CODE>
+<PRE>
+A
+12 50
+</PRE>
+</CODE></BLOCKQUOTE>
+
+will add 50 to the maximum mana of the character.</P>
+
+
+<H2><A NAME="ss5.5">5.5 Object File Example</A></H2>
+
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+#901
+shield minotaur~
+a dark minotaur shield~
+A dark minotaur shield has been left here.~
+~
+9 dgh 513
+12 0 0 0
+15 5000 1350
+E
+shield minotaur~
+A strong, sturdy shield.  It brings to mind legends of a shield that
+provided protection from poisonous gases.
+~
+A
+23 -4
+A
+4 2
+</PRE>
+</CODE></BLOCKQUOTE>
+</P>
+<P>This object is virtual number 901, is a Type 9 object (armor), cannot be
+donated, has a magical aura, and cannot be dropped.  It can be picked up and
+worn as a shield.  It has an AC-apply of 12, weighs 15 pounds, is valued at
+5000 coins and costs 1350 coins per day to rent.  Its Affect fields
+indicate that this object affects spell saving throws by -4 and increases
+Wisdom by 2.</P>
+
+
+<HR>
+<A HREF="building-4.html">Previous</A>
+<A HREF="building-6.html">Next</A>
+<A HREF="building.html#toc5">Table of Contents</A>
+</BODY>
+</HTML>

@@ -18,7 +18,7 @@
 #define MODS_BREACH_DISORIENT 50
 #define MODS_GRENADE_BASE_DAMAGE 66 
 struct char_data* character_list = NULL;
-extern struct obj_data* object_list;
+extern std::vector<obj_data> object_list;
 extern void do_look(struct char_data *ch, char *argument, int cmd, int subcmd);
 extern void char_from_room(struct char_data*);
 extern void char_to_room(struct char_data*,room_rnum);
@@ -87,8 +87,8 @@ Iter select_randomly(Iter start, Iter end) {
 		}
 		 
 		void register_object_list(){
-			for(auto i = object_list; i->next; i = i->next){
-				obj_map.insert({i->item_number,i});
+			for(auto & i : object_list){
+				obj_map.insert({i.item_number,&i});
 			}
 		}
 		void register_object(obj_data& obj){

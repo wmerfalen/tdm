@@ -635,11 +635,14 @@ struct obj_data *get_obj_num(obj_rnum nr)
 {
   struct obj_data *i;
 
-  for (i = object_list; i; i = i->next)
-    if (GET_OBJ_RNUM(i) == nr)
+  for (auto & obj_reference :  object_list){
+	  i = &obj_reference;
+    if (GET_OBJ_RNUM(i) == nr){
       return (i);
+	}
+  }
 
-  return (NULL);
+  return (nullptr);
 }
 
 
@@ -800,11 +803,16 @@ void extract_obj(struct obj_data *obj)
   while (obj->contains)
     extract_obj(obj->contains);
 
-  REMOVE_FROM_LIST(obj, object_list, next);
-
   if (GET_OBJ_RNUM(obj) != NOTHING)
     (obj_index[GET_OBJ_RNUM(obj)].number)--;
-  free_obj(obj);
+  for(auto iterator = object_list.begin();
+		  iterator != object_list.end();
+		  ++iterator){
+	  if(&(*iterator) == obj){
+		  object_list.erase(iterator);
+		  break;
+	  }
+  }
 }
 
 
@@ -1173,12 +1181,13 @@ struct obj_data *get_obj_vis(struct char_data *ch, char *name, int *number)
     return (i);
 
   /* ok.. no luck yet. scan the entire obj list   */
-  for (i = object_list; i && *number; i = i->next)
+  for (auto & obj_reference : object_list){
+	  i = &obj_reference;
     if (isname(name, i->name))
       if (CAN_SEE_OBJ(ch, i))
 	if (--(*number) == 0)
 	  return (i);
-
+	}
   return (NULL);
 }
 

@@ -1,0 +1,19 @@
+template <bool TrivialSize, bool ConstantSize, bool ConstantSizeType, class SizeType>
+struct size_traits_base {
+	typedef SizeType size_type;
+	static constexpr bool cache_size = !TrivialSize;
+	static constexpr bool const_width = ConstantSize;
+	static constexpr bool const_width_size_type = ConstantSizeType;
+	/* elided */
+};
+template <class T> struct size_traits;
+template <> struct size_traits<std::experimental::string_view>
+	: size_traits_base<true, false, false, std::experimental::string_view::size_type> {};
+template <> struct size_traits<uint8_t>
+	: size_traits_base<true, true, true, uint8_t> {};
+template <> struct size_traits<uint16_t>
+	: size_traits_base<true, true, true, uint8_t> {};
+template <> struct size_traits<uint32_t>
+	: size_traits_base<true, true, true, uint8_t> {};
+template <> struct size_traits<uint64_t>
+	: size_traits_base<true, true, true, uint8_t> {};

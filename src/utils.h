@@ -176,7 +176,6 @@ void	update_pos(struct char_data *victim);
          temp->next = (item)->next;	\
    }					\
 
-
 /* basic bitvector utils *************************************************/
 
 

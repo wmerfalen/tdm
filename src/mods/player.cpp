@@ -34,11 +34,37 @@ namespace mods {
 		}
 		int position = 1;
 		for(auto cint = 0; cint < paragraph.length();cint++){
+			/* if we run into an open brace then that means it's a color code.
+			 * Push past the color code and decrement the position counter as
+			 * we go.
+			 */
+			if(paragraph[cint] == '{'){
+				while(paragraph[cint] != '}'
+					&& cint < paragraph.length()
+				){ buffer += paragraph[cint++]; --position;}
+				buffer += '}';
+				continue;
+			}
+			/* Edge case where the first character in the paragraph is
+			 * a color code. The position needs to be 1 since after pushing
+			 * past the color code, the position would be a negative value
+			 */
+			if(position < 1){
+				position = 1;
+			}
 			if(isspace(paragraph[cint])){ 
+				/* if the buffer is non-empty and that most recent character
+				 * pushed is a space then we would be essentially doubling
+				 * up on spaces if we didn't 'continue' here.
+				 */
 				if(buffer.begin() != buffer.end() && 
 						isspace(*(buffer.end() - 1))){
 					continue;
 				}else{
+					/* the most recent character was *not* a space so we 
+					 * can safely append a space without fear of doubling
+					 * down on spaces
+					 */
 					buffer += ' ';
 					++position;
 				}
@@ -46,6 +72,9 @@ namespace mods {
 				buffer += paragraph[cint];
 				++position;
 			}
+			/* we have pushed past the desired screen width. For this, 
+			 * back track to the last space and insert a newline
+			 */
 			if(position >= width){
 				if(!isspace(paragraph[cint])){
 					//Perform backtracking
@@ -56,6 +85,7 @@ namespace mods {
 							break;
 						}
 					}
+					/* reset the position back to 1 */
 					position = 1;
 				}
 			}

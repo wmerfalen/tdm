@@ -1,0 +1,30 @@
+template <class... Args> void encode_pass1(char* out, Args const&... args);
+template <> void encode_pass1(char* out) {}
+template <class Arg, class... Args> void encode_pass1(char* out, Arg const& arg, Args const&... args) {
+	if constexpr (size_traits<Arg>::const_width) encode_value(out, arg);
+	encode_pass1(out, args...);
+}
+template <class... Args> void encode_pass2(char* out, Args const&... args);
+template <> void encode_pass2(char* out) {}
+template <class Arg, class... Args> void encode_pass2(char* out, Arg const& arg, Args const&... args) {
+	if constexpr (size_traits<Arg>::fast_encode_size) encode_size(out, arg);
+	encode_pass2(out, args...);
+}
+template <class... Args> void encode_pass3(char* out, Args const&... args);
+template <> void encode_pass3(char* out) {}
+template <class Arg, class... Args> void encode_pass3(char* out, Arg const& arg, Args const&... args) {
+	if constexpr (size_traits<Arg>::tiny_encode_size) encode_size_tiny(out, arg);
+	encode_pass3(out, args...);
+}
+template <class... Args> void encode_pass4(char* out, Args const&... args);
+template <> void encode_pass4(char* out) {}
+template <class Arg, class... Args> void encode_pass4(char* out, Arg const& arg, Args const&... args) {
+	if constexpr (!size_traits<Arg>::const_width) {
+		if constexpr (size_traits<Arg>::tiny_encode_value) {
+			tiny_encode_value(out, arg);
+		} else {
+			encode_value(out, arg);
+		}
+	}
+	encode_pass4(out, args...);
+}

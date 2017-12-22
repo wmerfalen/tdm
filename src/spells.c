@@ -167,7 +167,9 @@ ASPELL(spell_locate_object)
   strlcpy(name, fname(obj->name), sizeof(name));
   j = level / 2;
 
-  for (i = object_list; i && (j > 0); i = i->next) {
+  for (auto & obj_reference : object_list){
+	  /*TODO !test !integrity */
+	  auto i = &obj_reference;
     if (!isname(name, i->name))
       continue;
 

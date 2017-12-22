@@ -1,0 +1,563 @@
+"<HTML>\r\n" << 
+"<HEAD>\r\n" << 
+"<TITLE>The CircleMUD Builder's Manual: Object Files</TITLE>\r\n" << 
+"</HEAD>\r\n" << 
+"<BODY>\r\n" << 
+"<A HREF="building-4.html">Previous</A>\r\n" << 
+"<A HREF="building-6.html">Next</A>\r\n" << 
+"<A HREF="building.html#toc5">Table of Contents</A>\r\n" << 
+"<HR>\r\n" << 
+"<H2><A NAME="s5">5. Object Files</A></H2>\r\n" << 
+"\r\n" << 
+"<H2><A NAME="ss5.1">5.1 The Format of an Object</A></H2>\r\n" << 
+"\r\n" << 
+"\r\n" << 
+"<P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<HR>\r\n" << 
+"<PRE>\r\n" << 
+"#&lt;virtual number&gt;\r\n" << 
+"&lt;alias list&gt;~\r\n" << 
+"&lt;short description&gt;~\r\n" << 
+"&lt;long description&gt;~\r\n" << 
+"&lt;action description&gt;~\r\n" << 
+"&lt;type flag&gt; &lt;extra (effects) bitvector&gt; &lt;wear bitvector&gt;\r\n" << 
+"&lt;value 0&gt; &lt;value 1&gt; &lt;value 2&gt; &lt;value 3&gt;\r\n" << 
+"&lt;weight&gt; &lt;cost&gt; &lt;rent per day&gt;\r\n" << 
+"{Zero or more Extra Descriptions and/or Affect Fields}\r\n" << 
+"</PRE>\r\n" << 
+"<HR>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"<P>There can be an unlimited number of Extra Descriptions and up to 6 Affect\r\n" << 
+"Fields.</P>\r\n" << 
+"<P>\r\n" << 
+"<DL>\r\n" << 
+"<DT><B>Virtual Number</B><DD><P>This number is critical; it is the identity of the object within the\r\n" << 
+"game.  It is the number that will be used to reference the object from zone\r\n" << 
+"files and is the number used to ``load'' objects from within the game.  The\r\n" << 
+"virtual numbers must appear in increasing order in the object file.</P>\r\n" << 
+"\r\n" << 
+"<DT><B>Alias List</B><DD><P>The list of keywords, separated by spaces, that can be used by players\r\n" << 
+"to identify the object.  The object can only be identified using the\r\n" << 
+"keywords that appear in its alias list; it cannot be identified by a word\r\n" << 
+"that appears only in its name.  Great care should be taken to ensure that\r\n" << 
+"the spellings of names and aliases match.  Fill words such as ``the,'' ``a,''\r\n" << 
+"and ``an'' should not appear in the Alias List.</P>\r\n" << 
+"\r\n" << 
+"<DT><B>Short Description</B><DD><P>The description of the object used by the MUD when the object is used. \r\n" << 
+"For example, a short description of ``a long, green stick'' would result in\r\n" << 
+"messages such as ``The Beastly Fido picks up the long, green stick.''  The\r\n" << 
+"Short Description should never end with a punctuation mark because it will\r\n" << 
+"be inserted into the middle of sentences.</P>\r\n" << 
+"\r\n" << 
+"<DT><B>Long Description</B><DD><P>The description displayed when the object is seen lying on the ground,\r\n" << 
+"for example, ``A furled umbrella is lying here.''\r\n" << 
+"Unlike the Short Description, the\r\n" << 
+"Long Description should end with appropriate punctuation.</P>\r\n" << 
+"\r\n" << 
+"<DT><B>Action Description</B><DD><P>Action Descriptions are primarily used for magical objects (staves,\r\n" << 
+"wands, scrolls, and potions) to specify what message displayed to the room\r\n" << 
+"when the magical item is used.  The Action Description should be given in\r\n" << 
+"the act format specified in act.doc.  If no Action Description is present,\r\n" << 
+"a default message will be used:</P>\r\n" << 
+"<P>Staves:  Rasmussen taps &lt;object&gt; three times on the ground.</P>\r\n" << 
+"<P>Wands: Rasmussen points &lt;object&gt; at Onivel.</P>\r\n" << 
+"<P>Scrolls: Rasmussen recites &lt;object&gt;.</P>\r\n" << 
+"<P>Potions: Rasmussen quaffs &lt;object&gt;.</P>\r\n" << 
+"<P>For objects which are readable papers, the Action Description contains\r\n" << 
+"the text on the paper.</P>\r\n" << 
+"\r\n" << 
+"<DT><B>Type Flag</B><DD><P>A number which specifies what type of object is being defined; also\r\n" << 
+"controls the meanings of value0 through value4.  The Type Flag must be one\r\n" << 
+"of the following numbers:</P>\r\n" << 
+"<P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<HR>\r\n" << 
+"<PRE>\r\n" << 
+"1    LIGHT          Item is a light source.\r\n" << 
+"2    SCROLL         Item is a magical scroll.\r\n" << 
+"3    WAND           Item is a magical wand.\r\n" << 
+"4    STAFF          Item is a magical staff.\r\n" << 
+"5    WEAPON         Item is a weapon.\r\n" << 
+"6    FIREWEAPON     Currently not implemented.  Do not use.\r\n" << 
+"7    MISSILE        Currently not implemented.  Do not use.\r\n" << 
+"8    TREASURE       Item is treasure other than gold coins (e.g. gems)\r\n" << 
+"9    ARMOR          Item is armor.\r\n" << 
+"10   POTION         Item is a magical potion.\r\n" << 
+"11   WORN           Currently not implemented.  Do not use.\r\n" << 
+"12   OTHER          Miscellaneous object with no special properties.\r\n" << 
+"13   TRASH          Trash -- junked by cleaners, not bought by shopkeepers.\r\n" << 
+"14   TRAP           Currently not implemented.  Do not use.\r\n" << 
+"15   CONTAINER      Item is a container.\r\n" << 
+"16   NOTE           Item is a note (can be written on).\r\n" << 
+"17   DRINKCON       Item is a drink container.\r\n" << 
+"18   KEY            Item is a key.\r\n" << 
+"19   FOOD           Item is food.\r\n" << 
+"20   MONEY          Item is money (gold coins).\r\n" << 
+"21   PEN            Item is a pen.\r\n" << 
+"22   BOAT           Item is a boat; allows you to traverse SECT_WATER_NOSWIM.\r\n" << 
+"23   FOUNTAIN       Item is a fountain.\r\n" << 
+"</PRE>\r\n" << 
+"<HR>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>Extra (Effects) Bitvector</B><DD><P>A bitvector (see section \r\n" << 
+"<A HREF="building-2.html#bitvectors">Using Bitvectors</A>), to define the ``special\r\n" << 
+"effects'' of the object.  Flags that are marked as ``cosmetic'' merely add an\r\n" << 
+"interesting message to the object when it is examined, but has no\r\n" << 
+"substantive effect otherwise.  The flags have the following values:</P>\r\n" << 
+"<P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<HR>\r\n" << 
+"<PRE>\r\n" << 
+"1     a   GLOW           Item is glowing (cosmetic).\r\n" << 
+"2     b   HUM            Item is humming (cosmetic).\r\n" << 
+"4     c   NORENT         Item cannot be rented.\r\n" << 
+"8     d   NODONATE       Item cannot be donated.\r\n" << 
+"16    e   NOINVIS        Item cannot be made invisible.\r\n" << 
+"32    f   INVISIBLE      Item is invisible.\r\n" << 
+"64    g   MAGIC          Item has a magical aura and can't be enchanted.\r\n" << 
+"128   h   NODROP         Item is cursed and cannot be dropped.\r\n" << 
+"256   i   BLESS          Item is blessed (cosmetic).\r\n" << 
+"512   j   ANTI_GOOD      Item can't be used by good-aligned characters.\r\n" << 
+"1024  k   ANTI_EVIL      Item can't be used by evil-aligned characters.\r\n" << 
+"2048  l   ANTI_NEUTRAL   Item can't be used by neutral align characters.\r\n" << 
+"4096  m   ANTI_MAGIC_USER Item can't be used by the Mage class.\r\n" << 
+"8192  n   ANTI_CLERIC    Item can't be used by the Cleric class.\r\n" << 
+"16384 o   ANTI_THIEF     Item can't be used by the Thief class.\r\n" << 
+"32768 p   ANTI_WARRIOR   Item can't be used by the Warrior class.\r\n" << 
+"65536 q   NOSELL         Shopkeepers will not buy or sell the item.\r\n" << 
+"</PRE>\r\n" << 
+"<HR>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>Wear Bitvector</B><DD><P>A bitvector (see section \r\n" << 
+"<A HREF="building-2.html#bitvectors">Using Bitvectors</A>)\r\n" << 
+"with the following values:</P>\r\n" << 
+"<P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<HR>\r\n" << 
+"<PRE>\r\n" << 
+"1     a   WEAR_TAKE      Item can be taken (picked up off the ground).\r\n" << 
+"2     b   WEAR_FINGER    Item can be worn on the fingers.\r\n" << 
+"4     c   WEAR_NECK      Item can be worn around the neck.\r\n" << 
+"8     d   WEAR_BODY      Item can be worn on the body.\r\n" << 
+"16    e   WEAR_HEAD      Item can be worn on the head.\r\n" << 
+"32    f   WEAR_LEGS      Item can be worn on the legs.\r\n" << 
+"64    g   WEAR_FEET      Item can be worn on the feet.\r\n" << 
+"128   h   WEAR_HANDS     Item can be worn on the hands.\r\n" << 
+"256   i   WEAR_ARMS      Item can be worn on the arms.\r\n" << 
+"512   j   WEAR_SHIELD    Item can be used as a shield.\r\n" << 
+"1024  k   WEAR_ABOUT     Item can be worn about the body.\r\n" << 
+"2048  l   WEAR_WAIST     Item can be worn around the waist.\r\n" << 
+"4096  m   WEAR_WRIST     Item can be worn around the wrist.\r\n" << 
+"8192  n   WEAR_WIELD     Item can be wielded; e.g. weapons.\r\n" << 
+"16384 o   WEAR_HOLD      Item can be held (the ``hold'' command).\r\n" << 
+"</PRE>\r\n" << 
+"<HR>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"<P>Note that the TAKE bit controls whether or not an item can be picked up\r\n" << 
+"using the ``get'' command, whereas the HOLD bit controls if the object can be\r\n" << 
+"worn using the ``hold'' command.</P>\r\n" << 
+"\r\n" << 
+"<DT><B>Value 0, Value 1, Value 2, Value 3</B><DD><P>These values are very central.  They define the object's abilities\r\n" << 
+"based on the Type Flag.  See the subsection ``Object Value Definitions'' below\r\n" << 
+"for a detailed description of the four Value fields.</P>\r\n" << 
+"\r\n" << 
+"<DT><B>Weight</B><DD><P>The weight of the object.  The weight controls how many strength points\r\n" << 
+"a character must have to take the object, and is used to calculate when bags\r\n" << 
+"and other containers become full.</P>\r\n" << 
+"\r\n" << 
+"<DT><B>Cost</B><DD><P>The value of the object in gold coins; used by shopkeepers.</P>\r\n" << 
+"\r\n" << 
+"<DT><B>Rent Per Day</B><DD><P>The cost per day to rent the object in the Reception.</P>\r\n" << 
+"</DL>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"\r\n" << 
+"<H2><A NAME="ss5.2">5.2 Object Value Definitions</A></H2>\r\n" << 
+"\r\n" << 
+"<P>The meaning of an object's four values (value 0 through value 3) vary\r\n" << 
+"depending on the Type Flag of the object.</P>\r\n" << 
+"<P>In the table below, ``unused'' means that the server ignores the value;\r\n" << 
+"it can be set to any number (but 0 is always a safe bet).  ``unimplemented''\r\n" << 
+"indicates a Type Flag currently not recognized by the server.</P>\r\n" << 
+"<P>An index of spell numbers for use with magical objects can be found in\r\n" << 
+"the Appendix \r\n" << 
+"<A HREF="building-8.html#spellnums">Spell Numbers</A>.</P>\r\n" << 
+"<P>\r\n" << 
+"<DL>\r\n" << 
+"<DT><B>LIGHT (Type Flag 1)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: unused\r\n" << 
+"     value 1: unused\r\n" << 
+"     value 2: Capacity of light in hours.\r\n" << 
+"                0: Burned out light.\r\n" << 
+"               -1: Eternal light source.\r\n" << 
+"     value 3: unused\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>SCROLL (Type Flag 2)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: Level at which scroll's spells are cast.\r\n" << 
+"     value 1: Spell number 1\r\n" << 
+"     value 2: Spell number 2\r\n" << 
+"     value 3: Spell number 3\r\n" << 
+"          If less than 3 spells are desired, set unused values to -1.\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>WAND (Type Flag 3)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: Level at which wand's spell is cast.\r\n" << 
+"     value 1: Charge capacity of wand (&gt;= 1)\r\n" << 
+"     value 2: Current number of charges remaining\r\n" << 
+"     value 3: Spell number\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>STAFF (Type Flag 4)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: Level at which staff's spell is cast.\r\n" << 
+"     value 1: Charge capacity of staff (&gt;= 1)\r\n" << 
+"     value 2: Current number of charges remaining\r\n" << 
+"     value 3: Spell number\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>WEAPON (Type Flag 5)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: unused\r\n" << 
+"     value 1: Number of damage dice\r\n" << 
+"     value 2: Size of damage dice\r\n" << 
+"     value 3: Weapon type for damage messages, one of:\r\n" << 
+"               0    hit/hits\r\n" << 
+"               1    sting/stings\r\n" << 
+"               2    whip/whips\r\n" << 
+"               3    slash/slashes\r\n" << 
+"               4    bite/bites\r\n" << 
+"               5    bludgeon/bludgeons\r\n" << 
+"               6    crush/crushes\r\n" << 
+"               7    pound/pounds\r\n" << 
+"               8    claw/claws\r\n" << 
+"               9    maul/mauls\r\n" << 
+"               10   thrash/thrashes\r\n" << 
+"               11   pierce/pierces\r\n" << 
+"               12   blast/blasts\r\n" << 
+"               13   punch/punches\r\n" << 
+"               14   stab/stabs\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>FIREWEAPON (Type Flag 6)</B><DD><P>unimplemented (do not use)</P>\r\n" << 
+"\r\n" << 
+"<DT><B>MISSILE (Type Flag 7)</B><DD><P>unimplemented (do not use)</P>\r\n" << 
+"\r\n" << 
+"<DT><B>TREASURE (Type Flag 8)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: unused\r\n" << 
+"     value 1: unused\r\n" << 
+"     value 2: unused\r\n" << 
+"     value 3: unused\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>ARMOR (Type Flag 9)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: AC-apply of the armor.  Note that the effective change\r\n" << 
+"               to AC is this value times a multiplier based on where\r\n" << 
+"               the armor is worn.  Values &gt;0 enhance the armor class;\r\n" << 
+"               values &lt;0 damage the armor class (cursed armor, for\r\n" << 
+"               example).\r\n" << 
+"     value 1: unused\r\n" << 
+"     value 2: unused\r\n" << 
+"     value 3: unused\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>POTION (Type Flag 10)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: Level at which the potion's spells are cast.\r\n" << 
+"     value 1: Spell number 1\r\n" << 
+"     value 2: Spell number 2\r\n" << 
+"     value 3: Spell number 3\r\n" << 
+"          If less than 3 spells are desired, set unused values to -1.\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>WORN (Type Flag 11)</B><DD><P>unimplemented (do not use)</P>\r\n" << 
+"\r\n" << 
+"<DT><B>OTHER (Type Flag 12)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: unused\r\n" << 
+"     value 1: unused\r\n" << 
+"     value 2: unused\r\n" << 
+"     value 3: unused\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>TRASH (Type Flag 13)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: unused\r\n" << 
+"     value 1: unused\r\n" << 
+"     value 2: unused\r\n" << 
+"     value 3: unused\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>TRAP (Type Flag 14)</B><DD><P>unimplemented (do not use)</P>\r\n" << 
+"\r\n" << 
+"<DT><B>CONTAINER (Type Flag 15)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: Capacity (max containable weight) of container\r\n" << 
+"     value 1: Container flag bitvector (MUST be a numeric bitvector)\r\n" << 
+"          1    CLOSEABLE      Container can be closed and locked.\r\n" << 
+"          2    PICKPROOF      Lock on container can't be picked.\r\n" << 
+"          4    CLOSED         Container is closed when created.\r\n" << 
+"          8    LOCKED         Container is locked when created.\r\n" << 
+"     value 2: The vnum of the key object that opens this container.\r\n" << 
+"               -1 if it has no key.\r\n" << 
+"     value 3: Reserved for internal use -- always set as 0.\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>NOTE (Type Flag 16)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: Language of writing (unimplemented).\r\n" << 
+"     value 1: unused\r\n" << 
+"     value 2: unused\r\n" << 
+"     value 3: unused\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>DRINKCON (Type Flag 17)</B><DD><P>See Appendix \r\n" << 
+"<A HREF="building-9.html#drinknums">Item Values for Drink Containers</A>.</P>\r\n" << 
+"\r\n" << 
+"<DT><B>KEY (Type Flag 18)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: unused\r\n" << 
+"     value 1: unused\r\n" << 
+"     value 2: unused\r\n" << 
+"     value 3: unused\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>FOOD (Type Flag 19)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: The number of hours of hunger satisfied by this food.\r\n" << 
+"     value 1: unused\r\n" << 
+"     value 2: unused\r\n" << 
+"     value 3: Non-zero if the food is poisoned, 0 otherwise.\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>MONEY (Type Flag 20)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: The number of gold coins in the pile.\r\n" << 
+"     value 1: unused\r\n" << 
+"     value 2: unused\r\n" << 
+"     value 3: unused\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>PEN (Type Flag 21)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: unused\r\n" << 
+"     value 1: unused\r\n" << 
+"     value 2: unused\r\n" << 
+"     value 3: unused\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"<DT><B>BOAT (Type Flag 22)</B><DD><P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"     value 0: unused\r\n" << 
+"     value 1: unused\r\n" << 
+"     value 2: unused\r\n" << 
+"     value 3: unused\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"<DT><B>FOUNTAIN (Type Flag 23)</B><DD><P>See Appendix \r\n" << 
+"<A HREF="building-9.html#drinknums">Item Values for Drink Containers</A>.</P>\r\n" << 
+"</DL>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"\r\n" << 
+"<H2><A NAME="ss5.3">5.3 Object Extra Descriptions</A></H2>\r\n" << 
+"\r\n" << 
+"<P>Object Extra Descriptions allow players to examine certain aspects of\r\n" << 
+"objects defined by the world builder, just like Room Extra Descriptions. \r\n" << 
+"There can be an unlimited number of Extra Descriptions per object.  The\r\n" << 
+"format is exactly the same as for rooms:</P>\r\n" << 
+"\r\n" << 
+"<P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<HR>\r\n" << 
+"<PRE>\r\n" << 
+"E\r\n" << 
+"&lt;keyword list&gt;~\r\n" << 
+"&lt;description text&gt;\r\n" << 
+"~\r\n" << 
+"</PRE>\r\n" << 
+"<HR>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"<P>\r\n" << 
+"<DL>\r\n" << 
+"<DT><B>Keyword List</B><DD><P>A space-separated list of keywords which will access the description in\r\n" << 
+"this E section.</P>\r\n" << 
+"\r\n" << 
+"<DT><B>Description Text</B><DD><P>The text that will be displayed when a player types\r\n" << 
+"``look &lt;keyword&gt;,''\r\n" << 
+"where &lt;keyword&gt; is one of the keywords specified in the Keyword List\r\n" << 
+"of this E section.</P>\r\n" << 
+"</DL>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"\r\n" << 
+"<H2><A NAME="ss5.4">5.4 Object Affect Fields</A></H2>\r\n" << 
+"\r\n" << 
+"<P>Object Affect Fields give objects magical properties.  They affect\r\n" << 
+"characters when the object is worn, not when picked up.</P>\r\n" << 
+"<P>The format of an Object Affect Field is:</P>\r\n" << 
+"\r\n" << 
+"<P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<HR>\r\n" << 
+"<PRE>\r\n" << 
+"A\r\n" << 
+"&lt;location&gt; &lt;value&gt;\r\n" << 
+"</PRE>\r\n" << 
+"<HR>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"<P>\r\n" << 
+"<DL>\r\n" << 
+"<DT><B>Location</B><DD><P>The aspect of the character affected by the object.  It must be one of\r\n" << 
+"the following numbers:</P>\r\n" << 
+"\r\n" << 
+"<P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<HR>\r\n" << 
+"<PRE>\r\n" << 
+"0    NONE           No effect (typically not used).\r\n" << 
+"1    STR            Apply to strength.\r\n" << 
+"2    DEX            Apply to dexterity.\r\n" << 
+"3    INT            Apply to intelligence.\r\n" << 
+"4    WIS            Apply to wisdom.\r\n" << 
+"5    CON            Apply to constitution.\r\n" << 
+"6    CHA            Apply to charisma.\r\n" << 
+"7    CLASS          Unimplemented.  Do not use.\r\n" << 
+"8    LEVEL          Unimplemented.  Do not use.\r\n" << 
+"9    AGE            Apply to character's MUD age, in MUD-years.\r\n" << 
+"10   CHAR_WEIGHT    Apply to weight.\r\n" << 
+"11   CHAR_HEIGHT    Apply to height.\r\n" << 
+"12   MANA           Apply to MAX mana points.\r\n" << 
+"13   HIT            Apply to MAX hit points.\r\n" << 
+"14   MOVE           Apply to MAX movement points.\r\n" << 
+"15   GOLD           Unimplemented.  Do not use.\r\n" << 
+"16   EXP            Unimplemented.  Do not use.\r\n" << 
+"17   AC             Apply to armor class (AC).\r\n" << 
+"18   HITROLL        Apply to hitroll.\r\n" << 
+"19   DAMROLL        Apply to damage roll bonus.\r\n" << 
+"20   SAVING_PARA    Apply to save throw: paralyze\r\n" << 
+"21   SAVING_ROD     Apply to save throw: rods\r\n" << 
+"22   SAVING_PETRI   Apply to save throw: petrif\r\n" << 
+"23   SAVING_BREATH  Apply to save throw: breath\r\n" << 
+"24   SAVING_SPELL   Apply to save throw: spells\r\n" << 
+"</PRE>\r\n" << 
+"<HR>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"\r\n" << 
+"<DT><B>Value</B><DD><P>The number used to modify the Location.</P>\r\n" << 
+"</DL>\r\n" << 
+"</P>\r\n" << 
+"<P>For example, an A field which reads:\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"A\r\n" << 
+"12 50\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"\r\n" << 
+"will add 50 to the maximum mana of the character.</P>\r\n" << 
+"\r\n" << 
+"\r\n" << 
+"<H2><A NAME="ss5.5">5.5 Object File Example</A></H2>\r\n" << 
+"\r\n" << 
+"<P>\r\n" << 
+"<BLOCKQUOTE><CODE>\r\n" << 
+"<PRE>\r\n" << 
+"#901\r\n" << 
+"shield minotaur~\r\n" << 
+"a dark minotaur shield~\r\n" << 
+"A dark minotaur shield has been left here.~\r\n" << 
+"~\r\n" << 
+"9 dgh 513\r\n" << 
+"12 0 0 0\r\n" << 
+"15 5000 1350\r\n" << 
+"E\r\n" << 
+"shield minotaur~\r\n" << 
+"A strong, sturdy shield.  It brings to mind legends of a shield that\r\n" << 
+"provided protection from poisonous gases.\r\n" << 
+"~\r\n" << 
+"A\r\n" << 
+"23 -4\r\n" << 
+"A\r\n" << 
+"4 2\r\n" << 
+"</PRE>\r\n" << 
+"</CODE></BLOCKQUOTE>\r\n" << 
+"</P>\r\n" << 
+"<P>This object is virtual number 901, is a Type 9 object (armor), cannot be\r\n" << 
+"donated, has a magical aura, and cannot be dropped.  It can be picked up and\r\n" << 
+"worn as a shield.  It has an AC-apply of 12, weighs 15 pounds, is valued at\r\n" << 
+"5000 coins and costs 1350 coins per day to rent.  Its Affect fields\r\n" << 
+"indicate that this object affects spell saving throws by -4 and increases\r\n" << 
+"Wisdom by 2.</P>\r\n" << 
+"\r\n" << 
+"\r\n" << 
+"<HR>\r\n" << 
+"<A HREF="building-4.html">Previous</A>\r\n" << 
+"<A HREF="building-6.html">Next</A>\r\n" << 
+"<A HREF="building.html#toc5">Table of Contents</A>\r\n" << 
+"</BODY>\r\n" << 
+"</HTML>\r\n" << 

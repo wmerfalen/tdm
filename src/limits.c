@@ -447,8 +447,8 @@ void point_update(void)
   }
 
   /* objects */
-  for (j = object_list; j; j = next_thing) {
-    next_thing = j->next;	/* Next in object list */
+  for (auto & obj_reference : object_list){
+	  j = &obj_reference;
 
     /* If this is a corpse */
     if (IS_CORPSE(j)) {

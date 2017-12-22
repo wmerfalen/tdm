@@ -1998,7 +1998,9 @@ ACMD(do_show)
 	  con++;
       }
     }
-    for (obj = object_list; obj; obj = obj->next)
+    for (auto & obj_reference : object_list){
+		/* TODO !test !integrity */
+		obj = &obj_reference;
       k++;
     send_to_char(ch,
 	"Current stats:\r\n"

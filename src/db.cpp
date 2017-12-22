@@ -25,14 +25,16 @@
 #include "constants.h"
 #include "globals.hpp"
 #include "mods/pq.hpp"
+#include "mods/sql.hpp"
 #include <vector>
 
 /**************************************************************************
 *  declarations of most of the 'global' variables                         *
 **************************************************************************/
-
+using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 void parse_sql_rooms(); 
 void parse_sql_zones();
+int parse_sql_objects();
 std::vector<struct room_data> world;	/* array of rooms		 */
 room_rnum top_of_world = 0;	/* ref to top element of world	 */
 
@@ -42,9 +44,9 @@ struct index_data *mob_index;	/* index table for mobile file	 */
 struct char_data *mob_proto;	/* prototypes for mobs		 */
 mob_rnum top_of_mobt = 0;	/* top of mobile index table	 */
 
-struct obj_data *object_list = NULL;	/* global linked list of objs	 */
-struct index_data *obj_index;	/* index table for object file	 */
-struct obj_data *obj_proto;	/* prototypes for objs		 */
+std::vector<obj_data> object_list;	/* vector of objs	 */
+std::vector<index_data> obj_index;	/* index table for object file	 */
+std::vector<obj_data> obj_proto;	/* prototypes for objs		 */
 obj_rnum top_of_objt = 0;	/* top of object index table	 */
 
 std::vector<struct zone_data> zone_table;	/* zone table			 */
@@ -267,8 +269,9 @@ void boot_world(void)
   log("Loading mobs and generating index.");
   index_boot(DB_BOOT_MOB);
 
-  log("Loading objs and generating index.");
-  index_boot(DB_BOOT_OBJ);
+  log("Loading sql objs and generating index.");
+  //index_boot(DB_BOOT_OBJ);
+	parse_sql_objects();
 
   log("Renumbering zone table.");
   renum_zone_table();
@@ -309,11 +312,7 @@ void destroy_db(void)
   }
 
   /* Active Objects */
-  while (object_list) {
-    objtmp = object_list;
-    object_list = object_list->next;
-    free_obj(objtmp);
-  }
+  /* object_list frees itself thanks to destructors !mods */
 
   /* Rooms */
   for (cnt = 0; cnt <= top_of_world; cnt++) {
@@ -349,8 +348,8 @@ void destroy_db(void)
       free(obj_proto[cnt].action_description);
     free_extra_descriptions(obj_proto[cnt].ex_description);
   }
-  free(obj_proto);
-  free(obj_index);
+  //free(obj_proto);
+  //free(obj_index);
 
   /* Mobiles */
   for (cnt = 0; cnt <= top_of_mobt; cnt++) {
@@ -767,8 +766,9 @@ void index_boot(int mode)
     log("   %d mobs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
     break;
   case DB_BOOT_OBJ:
-    CREATE(obj_proto, struct obj_data, rec_count);
-    CREATE(obj_index, struct index_data, rec_count);
+    //CREATE(obj_proto, struct obj_data, rec_count);
+    //CREATE(obj_index, struct index_data, rec_count);
+	//obj_index.reserve(rec_count);
     size[0] = sizeof(struct index_data) * rec_count;
     size[1] = sizeof(struct obj_data) * rec_count;
     log("   %d objs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
@@ -870,7 +870,7 @@ void discrete_load(FILE *fl, int mode, char *filename)
 	  parse_mobile(fl, nr);
 	  break;
 	case DB_BOOT_OBJ:
-	  strlcpy(line, parse_object(fl, nr), sizeof(line));
+	  //strlcpy(line, parse_object(fl, nr), sizeof(line));
 	  break;
 	}
     } else {
@@ -905,6 +905,72 @@ bitvector_t asciiflag_conv(char *flag)
 }
 
 
+int parse_sql_objects(){
+	auto txn = txn();
+	sql_compositor comp("object",&txn);
+	auto sql = comp
+		.select("COUNT(*)")
+		.from("object")
+		.where("1","=","1")
+		sql();
+	auto result = mods::pq::exec(txn,sql);
+	mods::pq::commit(txn);
+	if(result.size()){
+		auto count = mods::pq::as_int(result,0,0);
+		if(count > 0){
+			obj_index.reserve(count);
+			obj_proto.reserve(count);
+			auto txn2 = txn();
+			auto rows = mods::pq::exec(txn2,sql_compositor("object",&txn2)
+				.select("*")
+				.from("object")
+				.inner_join("affected_type")
+				.on("affected_type.aff_fk_id","=","object.id")
+				.inner_join("object_flags")
+				.on("object_flags.obj_fk_id","=","object.id")
+				.left_join("object_weapon")
+				.on("object_weapon.obj_fk_id","=","object.id")
+				.where("1","=","1")
+				.sql()
+			);
+			unsigned item = 0;
+			for(auto & row : rows){
+				obj_index[item].vnum = row["obj_item_number"].as<int>();
+				obj_index[item].number = 256;
+				obj_proto[item].item_number = row["obj_item_number"].as<int>();
+				obj_proto[item].name = strdup(row["obj_name"].c_str());
+				obj_proto[item].description = strdup(row["obj_description"].c_str());
+#define MENTOC_STR(sql_name,obj_name) \
+				if(row[#sql_name].length()){\
+					obj_proto[item]obj_name = \
+						strdup(row[#sql_name].c_str());\
+				}else{\
+					obj_proto[item]obj_name = nullptr;\
+				}
+				MENTOC_STR(obj_short_description,.short_description);
+				MENTOC_STR(obj_action_description,.action_description);
+				obj_proto[item]->ex_description = (extra_descr_data*)
+					calloc(1,sizeof(extra_descr_data));
+				MENTOC_STR(obj_ex_keyword,->ex_description->keyword);
+				MENTOC_STR(obj_ex_description,->ex_description->description);
+				obj_proto[item]->ex_description->next = nullptr;
+				obj_proto[item].worn_on = row["obj_worn_on"].as<int>();
+				obj_proto[item].type = row["obj_type"].as<int>();
+				obj_proto[item].ammo = row["obj_ammo"].as<int>();
+				obj_proto[item].ammo_max = row["obj_ammo_max"].as<int>();
+				obj_proto[item].holds_ammo = row["obj_holds_ammo"].as<int>();
+				obj_proto[item].weapon_type = std::hash<std::string>{}
+					(
+						row["obj_type_data"]
+					);
+				++item;
+			}
+		}
+	}else{
+		log("[notice] no objects from sql");
+	}
+	return 0;
+}
 static int room_nr = 0, zone = 0;
 /* load the zones */
 void parse_sql_zones(){
@@ -1049,8 +1115,9 @@ void parse_sql_rooms(){
 			auto exit_info = row2[5].as<int>();
 			switch(exit_info){
 				case 1:
+				default:
 					world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info = EX_ISDOOR;
-					SET_BIT(world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info,EX_CLOSED);
+					REMOVE_BIT(world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info,EX_CLOSED);
 					break;
 				case 2:
 					world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info = EX_ISDOOR | EX_PICKPROOF;
@@ -1059,9 +1126,6 @@ void parse_sql_rooms(){
 				case 3:
 					world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info = EX_ISDOOR | EX_REINFORCED;
 					SET_BIT(world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info,EX_CLOSED);
-					break;
-				default:
-					world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info = EX_ISDOOR;
 					break;
 			}
 			world[real_room(row2[1].as<int>())].dir_option[direction]->key = row2[6].as<int>();
@@ -1075,83 +1139,9 @@ void parse_sql_rooms(){
 }
 void parse_room(FILE *fl, int virtual_nr)
 {
-  int t[10], i;
-  char line[READ_SIZE], flags[128], buf2[MAX_STRING_LENGTH], buf[128];
-  struct extra_descr_data *new_descr;
-
-  /* This really had better fit or there are other problems. */
-  snprintf(buf2, sizeof(buf2), "room #%d", virtual_nr);
-
-  if (virtual_nr < zone_table[zone].bot) {
-    log("SYSERR: Room #%d is below zone %d.", virtual_nr, zone);
-    exit(1);
-  }
-  while (virtual_nr > zone_table[zone].top)
-    if (++zone > top_of_zone_table) {
-      log("SYSERR: Room %d is outside of any zone.", virtual_nr);
-      exit(1);
-    }
-  world[room_nr].zone = zone;
-  world[room_nr].number = virtual_nr;
-  world[room_nr].name = fread_string(fl, buf2);
-  world[room_nr].description = fread_string(fl, buf2);
-
-  if (!get_line(fl, line)) {
-    log("SYSERR: Expecting roomflags/sector type of room #%d but file ended!",
-	virtual_nr);
-    exit(1);
-  }
-
-  if (sscanf(line, " %d %s %d ", t, flags, t + 2) != 3) {
-    log("SYSERR: Format error in roomflags/sector type of room #%d",
-	virtual_nr);
-    exit(1);
-  }
-  /* t[0] is the zone number; ignored with the zone-file system */
-
-  world[room_nr].room_flags = asciiflag_conv(flags);
-  sprintf(flags, "object #%d", virtual_nr);	/* sprintf: OK (until 399-bit integers) */
-  check_bitvector_names(world[room_nr].room_flags, room_bits_count, flags, "room");
-
-  world[room_nr].sector_type = t[2];
-
-  world[room_nr].func = NULL;
-  world[room_nr].contents = NULL;
-  world[room_nr].people = NULL;
-  world[room_nr].light = 0;	/* Zero light sources */
-
-  for (i = 0; i < NUM_OF_DIRS; i++)
-    world[room_nr].dir_option[i] = NULL;
-
-  world[room_nr].ex_description = NULL;
-
-  snprintf(buf, sizeof(buf), "SYSERR: Format error in room #%d (expecting D/E/S)", virtual_nr);
-
-  for (;;) {
-    if (!get_line(fl, line)) {
-      log("%s", buf);
-      exit(1);
-    }
-    switch (*line) {
-    case 'D':
-      setup_dir(fl, room_nr, atoi(line + 1));
-      break;
-    case 'E':
-      CREATE(new_descr, struct extra_descr_data, 1);
-      new_descr->keyword = fread_string(fl, buf2);
-      new_descr->description = fread_string(fl, buf2);
-      new_descr->next = world[room_nr].ex_description;
-      world[room_nr].ex_description = new_descr;
-      break;
-    case 'S':			/* end of room */
-      top_of_world = room_nr++;
-  		mods::globals::register_room(room_nr);
-      return;
-    default:
-      log("%s", buf);
-      exit(1);
-    }
-  }
+	auto str = "[DEPRECATED] parse_room";
+	log(str);
+	std::cerr << str << "\n";
 }
 
 
@@ -1593,6 +1583,9 @@ void parse_mobile(FILE *mob_f, int nr)
 /* read all objects from obj file; generate index and prototypes */
 char *parse_object(FILE *obj_f, int nr)
 {
+	log("[DEPRECATED] parse_object");
+	return nullptr;
+#if 0
   static int i = 0;
   static char line[READ_SIZE];
   int t[10], j, retval;
@@ -1741,6 +1734,7 @@ char *parse_object(FILE *obj_f, int nr)
       exit(1);
     }
   }
+#endif
 }
 
 
@@ -1946,12 +1940,16 @@ struct obj_data *create_obj(void)
 {
   struct obj_data *obj;
 
+  /*
   CREATE(obj, struct obj_data, 1);
   clear_object(obj);
   obj->next = object_list;
   object_list = obj;
-  //mods::globals::register_object(*obj);
-  return (obj);
+  */
+  obj = &(*(object_list.end()-1));
+  mods::globals::register_object(*obj);
+  object_list.emplace_back({});
+  return obj;
 }
 
 
@@ -1965,13 +1963,13 @@ struct obj_data *read_object(obj_vnum nr, int type) /* and obj_rnum */
     log("Object (%c) %d does not exist in database.", type == VIRTUAL ? 'V' : 'R', nr);
     return (NULL);
   }
-
+#if 0
   CREATE(obj, struct obj_data, 1);
   clear_object(obj);
   *obj = obj_proto[i];
   obj->next = object_list;
   object_list = obj;
-
+#endif
   obj_index[i].number++;
   //mods::globals::register_object(*obj);
   return (obj);
