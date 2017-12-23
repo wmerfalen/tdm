@@ -2002,6 +2002,7 @@ ACMD(do_show)
 		/* TODO !test !integrity */
 		obj = &obj_reference;
       k++;
+	}
     send_to_char(ch,
 	"Current stats:\r\n"
 	"  %5d players in game  %5d connected\r\n"
@@ -2093,7 +2094,7 @@ ACMD(do_show)
   default:
     send_to_char(ch, "Sorry, I don't understand that.\r\n");
     break;
-  }
+  }//end switch
 }
 
 

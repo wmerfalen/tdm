@@ -1503,12 +1503,13 @@ void perform_immort_where(struct char_data *ch, char *arg)
 	}
       }
   } else {
-    for (i = character_list; i; i = i->next)
+    for (i = character_list; i; i = i->next){
       if (CAN_SEE(ch, i) && IN_ROOM(i) != NOWHERE && isname(arg, i->player.name)) {
 	found = 1;
 	send_to_char(ch, "M%3d. %-25s - [%5d] %s\r\n", ++num, GET_NAME(i),
 		GET_ROOM_VNUM(IN_ROOM(i)), world[IN_ROOM(i)].name);
       }
+	}
 	num = 0;
     for (auto & obj_reference : object_list){
 		/* TODO !test !integrity */
@@ -1517,9 +1518,10 @@ void perform_immort_where(struct char_data *ch, char *arg)
 	found = 1;
 	print_object_location(++num, k, ch, TRUE);
       }
+	}
     if (!found)
       send_to_char(ch, "Couldn't find any such thing.\r\n");
-  }
+  }//End else
 }
 
 

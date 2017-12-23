@@ -243,7 +243,7 @@ extern struct char_data *mob_proto;
 extern mob_rnum top_of_mobt;
 
 extern struct index_data *obj_index;
-extern struct obj_data *object_list;
+extern std::vector<obj_data> object_list;
 extern struct obj_data *obj_proto;
 extern obj_rnum top_of_objt;
 #endif

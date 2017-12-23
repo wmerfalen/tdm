@@ -21,7 +21,7 @@ typedef std::string str_object;
 namespace mods::sql {
 	template <typename T>
 	struct compositor {
-		constexpr int query_parts = 5;
+		constexpr static int query_parts = 5;
 		compositor() = delete;
 		~compositor() = default;
 		compositor(str_object table, T* txn_ptr) :
@@ -120,7 +120,7 @@ namespace mods::sql {
 				++ctr;
 			}
 			value_sql += ")";
-			m_query[4] value_sql;
+			m_query[4] = value_sql;
 			return *this;
 		}
 		compositor<T>& left_join(std::string_view table){

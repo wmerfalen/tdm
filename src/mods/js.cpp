@@ -3,10 +3,23 @@
 #include "util.hpp"
 #include "extern.hpp"
 #define DT_FORMAT "{player_name}:mob_death_trigger"
+#define JS_TEST_PATH "../lib/js/tests/"
 extern void command_interpreter(struct char_data* ch,char* argument);
 extern void hit(struct char_data* ch,struct char_data* vict,int type);
 namespace mods{
 	namespace js {
+		int load_library(duk_context*,std::string_view);
+		namespace test {
+		static duk_ret_t require_test(duk_context *ctx){
+			int num_args = duk_get_top(ctx);
+			/* First parameter is character name */
+			auto fname = duk_to_string(ctx,0);
+			std::string path = JS_TEST_PATH;
+			path += fname;
+			duk_push_number(ctx,mods::js::load_library(ctx,path));
+			return 1;	/* number of return values */
+		}
+		};
 		static duk_ret_t hit(duk_context *ctx){
 			int num_args = duk_get_top(ctx);
 			/* First parameter is character name */
@@ -133,6 +146,10 @@ namespace mods{
 		void load_c_functions(){
 			load_c_functions(mods::globals::duktape_context);
 		}
+		void load_c_test_functions(duk_context *ctx){
+			duk_push_c_function(ctx,mods::js::test::require_test,1);
+			duk_put_global_string(ctx,"require_test");
+		}
 		void load_c_functions(duk_context *ctx){
 			duk_push_c_function(ctx,mods::js::uuid,2);
 			duk_put_global_string(ctx,"uuid");
@@ -158,6 +175,7 @@ namespace mods{
 			duk_put_global_string(ctx,"mob_death_trigger");
 
 			mods::quests::load_c_functions(ctx);
+			mods::js::load_c_test_functions(ctx);
 		}
 
 		duk_context* new_context(){

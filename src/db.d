@@ -16,4 +16,4 @@ db.o: db.cpp conf.h sysdep.h structs.h mods/ai_state.hpp mods/../conf.h \
  mods/../mods/util.hpp duktape/src/duktape.h duktape/src/duk_config.h \
  mods/js.hpp mods/../duktape/src/duktape.h mods/drone.hpp mods/extern.hpp \
  mods/conf.hpp mods/chat.hpp mods/../interpreter.h house.h constants.h \
- mods/pq.hpp
+ mods/pq.hpp mods/sql.hpp

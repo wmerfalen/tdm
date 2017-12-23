@@ -912,11 +912,12 @@ int parse_sql_objects(){
 		.select("COUNT(*)")
 		.from("object")
 		.where("1","=","1")
-		sql();
+		.sql();
 	auto result = mods::pq::exec(txn,sql);
 	mods::pq::commit(txn);
 	if(result.size()){
 		auto count = mods::pq::as_int(result,0,0);
+		log((std::to_string(count) + " objects found in postgres").c_str());
 		if(count > 0){
 			obj_index.reserve(count);
 			obj_proto.reserve(count);
@@ -934,14 +935,14 @@ int parse_sql_objects(){
 				.sql()
 			);
 			unsigned item = 0;
-			for(auto & row : rows){
+			for(auto  row : rows){
 				obj_index[item].vnum = row["obj_item_number"].as<int>();
 				obj_index[item].number = 256;
 				obj_proto[item].item_number = row["obj_item_number"].as<int>();
 				obj_proto[item].name = strdup(row["obj_name"].c_str());
 				obj_proto[item].description = strdup(row["obj_description"].c_str());
 #define MENTOC_STR(sql_name,obj_name) \
-				if(row[#sql_name].length()){\
+				if(std::string(row[#sql_name].c_str()).length()){\
 					obj_proto[item]obj_name = \
 						strdup(row[#sql_name].c_str());\
 				}else{\
@@ -949,11 +950,11 @@ int parse_sql_objects(){
 				}
 				MENTOC_STR(obj_short_description,.short_description);
 				MENTOC_STR(obj_action_description,.action_description);
-				obj_proto[item]->ex_description = (extra_descr_data*)
+				obj_proto[item].ex_description = (extra_descr_data*)
 					calloc(1,sizeof(extra_descr_data));
-				MENTOC_STR(obj_ex_keyword,->ex_description->keyword);
-				MENTOC_STR(obj_ex_description,->ex_description->description);
-				obj_proto[item]->ex_description->next = nullptr;
+				MENTOC_STR(obj_ex_keyword,.ex_description->keyword);
+				MENTOC_STR(obj_ex_description,.ex_description->description);
+				obj_proto[item].ex_description->next = nullptr;
 				obj_proto[item].worn_on = row["obj_worn_on"].as<int>();
 				obj_proto[item].type = row["obj_type"].as<int>();
 				obj_proto[item].ammo = row["obj_ammo"].as<int>();
@@ -961,7 +962,7 @@ int parse_sql_objects(){
 				obj_proto[item].holds_ammo = row["obj_holds_ammo"].as<int>();
 				obj_proto[item].weapon_type = std::hash<std::string>{}
 					(
-						row["obj_type_data"]
+						row["obj_type_data"].c_str()
 					);
 				++item;
 			}
@@ -1946,9 +1947,10 @@ struct obj_data *create_obj(void)
   obj->next = object_list;
   object_list = obj;
   */
+  struct obj_data tmp;
+  object_list.push_back(tmp);
   obj = &(*(object_list.end()-1));
   mods::globals::register_object(*obj);
-  object_list.emplace_back({});
   return obj;
 }
 
@@ -2977,17 +2979,17 @@ obj_rnum real_object(obj_vnum vnum)
   obj_rnum bot, top, mid;
 
   bot = 0;
-  top = top_of_objt;
+  top = obj_index.size();
 
   /* perform binary search on obj-table */
   for (;;) {
     mid = (bot + top) / 2;
 
-    if ((obj_index + mid)->vnum == vnum)
+    if ((obj_index[mid]).vnum == vnum)
       return (mid);
     if (bot >= top)
       return (NOTHING);
-    if ((obj_index + mid)->vnum > vnum)
+    if ((obj_index[mid]).vnum > vnum)
       top = mid - 1;
     else
       bot = mid + 1;
