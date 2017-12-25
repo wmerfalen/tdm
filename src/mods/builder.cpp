@@ -769,7 +769,7 @@ ACMD(do_obuild){
 	auto args = mods::util::subcmd_args<4,args_t>(argument,"new");
 	if(args.has_value()){
 		*player << "{red}Creating new object{/red}\r\n";
-		object_list.push_back({});
+		obj_proto.push_back({});
 		*player << "{red}Object created{/red}\r\n";
 		return;
 	}
@@ -785,11 +785,11 @@ ACMD(do_obuild){
 		obj_data * obj = nullptr;
 		unsigned ctr = 0;
 		if(index.has_value()){
-			if(index.value() >= object_list.size()){
+			if(index.value() >= obj_proto.size()){
 				*player << "{red} Out of bounds{/red}\r\n";
 				return;
 			}
-			obj = &object_list[index.value()];
+			obj = &obj_proto[index.value()];
 		}else{
 			*player << "{red}" << args.value()[1] << " is not a valid number{/red}\r\n";
 			return;
@@ -808,7 +808,7 @@ ACMD(do_obuild){
 		*player << "{red}listing...{/red}\r\n";
 		unsigned obj_id = 0;
 		player->pager_start();
-		for(auto& obj_reference : object_list){
+		for(auto& obj_reference : obj_proto){
 			auto obj = &obj_reference;
 			*player << "{gld}[" << obj_id++ << "]{/gld} :->{red} [" <<
 				obj->short_description << "]{/red}\r\n";
@@ -835,11 +835,11 @@ ACMD(do_obuild){
 		obj_data * obj = nullptr;
 		unsigned ctr = 0;
 		if(index.has_value()){
-			if(index.value() >= object_list.size()){
+			if(index.value() >= obj_proto.size()){
 				*player << "{red} Out of bounds{/red}\r\n";
 				return;
 			}
-			obj = &object_list[index.value()];
+			obj = &obj_proto[index.value()];
 		}else{
 			*player << "{red}" << args.value()[1] << " is not a valid number{/red}\r\n";
 			return;
@@ -875,11 +875,11 @@ ACMD(do_obuild){
 		obj_data * obj = nullptr;
 		unsigned ctr = 0;
 		if(index.has_value()){
-			if(index.value() >= object_list.size()){
+			if(index.value() >= obj_proto.size()){
 				*player << "{red} Out of bounds{/red}\r\n";
 				return;
 			}
-			obj = &object_list[index.value()];
+			obj = &obj_proto[index.value()];
 		}else{
 			*player << "{red}" << args.value()[1] << " is not a valid number{/red}\r\n";
 			return;
@@ -998,11 +998,11 @@ ACMD(do_obuild){
 		obj_data * obj = nullptr;
 		unsigned ctr = 0;
 		if(index.has_value()){
-			if(index.value() >= object_list.size()){
+			if(index.value() >= obj_proto.size()){
 				*player << "{red} Out of bounds{/red}\r\n";
 				return;
 			}
-			obj = &object_list[index.value()];
+			obj = &obj_proto[index.value()];
 		}
 		if(!obj){
 			*player << "{red}Invalid index{/red}\r\n";

@@ -25,7 +25,6 @@ std::function<int,(std::string_view)> expect<token_type::number>{
 		return std::stoi(chunk.data());
 	};
 }
-template<>
 int main(int argc,char** argv){
 	std::string str_input;
 	std::getline(std::cin,str_input);

@@ -10,6 +10,8 @@
 #define __MENTOC_MODS_SQL_HEADER__
 #include <array>
 #include <map>
+#include <vector>
+#include <iostream>
 #if defined(__cpp_lib_string_view) && __cpp_lib_string_view==201603
 #include <string_view>
 typedef std::string_view str_object;

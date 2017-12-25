@@ -13,3 +13,4 @@ extern void do_auto_exits(struct char_data *ch);
 extern std::vector<room_data> world;
 extern int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype);
 extern struct char_data* character_list;
+extern std::vector<obj_data> obj_proto;

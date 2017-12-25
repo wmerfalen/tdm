@@ -925,9 +925,9 @@ int parse_sql_objects(){
 			auto rows = mods::pq::exec(txn2,sql_compositor("object",&txn2)
 				.select("*")
 				.from("object")
-				.inner_join("affected_type")
+				.left_join("affected_type")
 				.on("affected_type.aff_fk_id","=","object.id")
-				.inner_join("object_flags")
+				.left_join("object_flags")
 				.on("object_flags.obj_fk_id","=","object.id")
 				.left_join("object_weapon")
 				.on("object_weapon.obj_fk_id","=","object.id")
@@ -935,35 +935,48 @@ int parse_sql_objects(){
 				.sql()
 			);
 			unsigned item = 0;
+			log((std::string("Objects ") + std::to_string(rows.size())).c_str());
 			for(auto  row : rows){
-				obj_index[item].vnum = row["obj_item_number"].as<int>();
-				obj_index[item].number = 256;
-				obj_proto[item].item_number = row["obj_item_number"].as<int>();
-				obj_proto[item].name = strdup(row["obj_name"].c_str());
-				obj_proto[item].description = strdup(row["obj_description"].c_str());
+				struct index_data index;
+				index.vnum = row["obj_item_number"].as<int>();
+				index.number = 0;
+				obj_index.push_back(index);
+				struct obj_data proto;
+				proto.item_number = row["obj_item_number"].as<int>();
+				proto.name = strdup(row["obj_name"].c_str());
+				proto.description = strdup(row["obj_description"].c_str());
 #define MENTOC_STR(sql_name,obj_name) \
 				if(std::string(row[#sql_name].c_str()).length()){\
-					obj_proto[item]obj_name = \
+					proto.obj_name = \
 						strdup(row[#sql_name].c_str());\
 				}else{\
-					obj_proto[item]obj_name = nullptr;\
+					proto.obj_name = nullptr;\
 				}
-				MENTOC_STR(obj_short_description,.short_description);
-				MENTOC_STR(obj_action_description,.action_description);
-				obj_proto[item].ex_description = (extra_descr_data*)
+				MENTOC_STR(obj_short_description,short_description);
+				MENTOC_STR(obj_action_description,action_description);
+				proto.ex_description = (extra_descr_data*)
 					calloc(1,sizeof(extra_descr_data));
-				MENTOC_STR(obj_ex_keyword,.ex_description->keyword);
-				MENTOC_STR(obj_ex_description,.ex_description->description);
-				obj_proto[item].ex_description->next = nullptr;
-				obj_proto[item].worn_on = row["obj_worn_on"].as<int>();
-				obj_proto[item].type = row["obj_type"].as<int>();
-				obj_proto[item].ammo = row["obj_ammo"].as<int>();
-				obj_proto[item].ammo_max = row["obj_ammo_max"].as<int>();
-				obj_proto[item].holds_ammo = row["obj_holds_ammo"].as<int>();
-				obj_proto[item].weapon_type = std::hash<std::string>{}
+				MENTOC_STR(obj_extra_keyword,ex_description->keyword);
+				MENTOC_STR(obj_extra_description,ex_description->description);
+				proto.ex_description->next = nullptr;
+				proto.worn_on = row["obj_worn_on"].as<int>();
+				proto.type = row["obj_type"].as<int>();
+				proto.ammo = 0;
+				if(!row["obj_ammo_max"].is_null()){
+					proto.ammo_max = row["obj_ammo_max"].as<int>();
+				}else{
+					proto.ammo_max = 0;
+				}
+				proto.holds_ammo = 0;
+				if(!row["obj_type_data"].is_null()){
+				proto.weapon_type = std::hash<std::string>{}
 					(
 						row["obj_type_data"].c_str()
 					);
+				}else{
+					proto.weapon_type = 0;
+				}
+				obj_proto.push_back(proto);
 				++item;
 			}
 		}

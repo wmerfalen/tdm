@@ -9,7 +9,6 @@
 #include "acl/color.hpp"
 #include "prefs.hpp"
 
-extern struct obj_data* object_list;
 extern void do_auto_exits(struct char_data *ch);
 namespace mods {
 	std::string just_color_evaluation(std::string final_buffer){
