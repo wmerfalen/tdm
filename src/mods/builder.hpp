@@ -34,6 +34,10 @@ namespace mods::builder {
 //  14    struct char_data *people;    /* List of NPC / PC in room           */
 //  15 };
 //  16
+	extern std::array<std::pair<int,std::string>,17> extra_flags;
+	extern std::array<std::pair<int,std::string>,15> wear_flags;
+	extern std::array<std::pair<int,std::string>,25> affected_flags;
+	extern std::array<std::pair<int,std::string>,23> type_flags; 
 	/* Factory method to generate a room for us */
 	struct room_data new_room(struct char_data* ch);
 	bool flush_to_db(struct char_data *ch,room_vnum room);
@@ -51,6 +55,8 @@ namespace mods::builder {
 	int import_room(struct room_data*);
 	bool save_zone_to_db(std::string_view name,int room_start,int room_end,int lifespan,int reset_mode);
 	void zone_place(int zone_id,std::string_view command, std::string_view if_flag,std::string_view arg1, std::string_view arg2,std::string_view arg3);
+	std::optional<obj_data*> instantiate_object_by_index(int index);
+	std::optional<obj_data*> instantiate_object_by_vnum(obj_vnum vnum);
 };
 
 ACMD(do_rbuild);

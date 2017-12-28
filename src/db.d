@@ -1,8 +1,8 @@
 db.o: db.cpp conf.h sysdep.h structs.h mods/ai_state.hpp mods/../conf.h \
  mods/../sysdep.h mods/../structs.h mods/../types.hpp mods/../conf.h \
  mods/../sysdep.h mods/../mods/ai_state.hpp mods/../structs.h utils.h \
- db.h comm.h handler.h spells.h mail.h interpreter.h globals.hpp \
- types.hpp mods/acl/config-parser.hpp mods/acl/color.hpp \
+ db.h mods/extern.hpp comm.h handler.h spells.h mail.h interpreter.h \
+ globals.hpp types.hpp mods/acl/config-parser.hpp mods/acl/color.hpp \
  mods/acl/../util-map.hpp mods/player.hpp mods/util.hpp \
  mods/../globals.hpp mods/deferred.hpp mods/lmdb/db.hpp \
  /home/llvm/code/c++/bnull-mud/src/mods/include/gsl/gsl \

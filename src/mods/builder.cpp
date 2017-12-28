@@ -14,6 +14,112 @@
 using objtype = mods::object::type;
 typedef mods::sql::compositor<mods::pq::transaction> sql_compositor;
 namespace mods::builder{
+	std::array<std::pair<int,std::string>,23> type_flags = { {
+		{ITEM_LIGHT,"LIGHT"},
+		{ITEM_SCROLL,"SCROLL"},
+		{ITEM_WAND,"WAND"},
+		{ITEM_STAFF,"STAFF"},
+		{ITEM_WEAPON,"WEAPON"},
+		{ITEM_FIREWEAPON,"FIREWEAPON"},
+		{ITEM_MISSILE,"MISSILE"},
+		{ITEM_TREASURE,"TREASURE"},
+		{ITEM_ARMOR,"ARMOR"},
+		{ITEM_POTION,"POTION"},
+		{ITEM_WORN,"WORN"},
+		{ITEM_OTHER,"OTHER"},
+		{ITEM_TRASH,"TRASH"},
+		{ITEM_TRAP,"TRAP"},
+		{ITEM_CONTAINER,"CONTAINER"},
+		{ITEM_NOTE,"NOTE"},
+		{ITEM_DRINKCON,"DRINKCON"},
+		{ITEM_KEY,"KEY"},
+		{ITEM_FOOD,"FOOD"},
+		{ITEM_MONEY,"MONEY"},
+		{ITEM_PEN,"PEN"},
+		{ITEM_BOAT,"BOAT"},
+		{ITEM_FOUNTAIN,"FOUNTAIN"}
+	}};
+	std::array<std::pair<int,std::string>,17> extra_flags = { {
+			{ITEM_GLOW,"GLOW"},
+			{ITEM_HUM,"HUM"},
+			{ITEM_NORENT,"NORENT"},
+            {ITEM_NODONATE,"NODONATE"},
+            {ITEM_NOINVIS,"NOINVIS"},
+            {ITEM_INVISIBLE,"INVISIBLE"},
+			{ITEM_MAGIC,"MAGIC"},
+			{ITEM_NODROP,"NODROP"},
+            {ITEM_BLESS,"BLESS"},
+			{ITEM_ANTI_GOOD,"ANTI_GOOD"},
+            {ITEM_ANTI_EVIL,"ANTI_EVIL"},
+			{ITEM_ANTI_NEUTRAL,"ANTI_NEUTRAL"},
+            {ITEM_ANTI_MAGIC_USER,"ANTI_MAGIC_USER"},
+			{ITEM_ANTI_CLERIC,"ANTI_CLERIC"},
+            {ITEM_ANTI_THIEF,"ANTI_THIEF"},
+			{ITEM_ANTI_WARRIOR,"ANTI_WARRIOR"},
+            {ITEM_NOSELL,"NOSELL"}
+	}};
+	std::array<std::pair<int,std::string>,25> affected_flags = { {
+		{APPLY_NONE,"NONE"},
+		{APPLY_STR,"STR"},
+		{APPLY_DEX,"DEX"},
+		{APPLY_INT,"INT"},
+		{APPLY_WIS,"WIS"},
+		{APPLY_CON,"CON"},
+		{APPLY_CHA,"CHA"},
+		{APPLY_CLASS,"CLASS"},
+		{APPLY_LEVEL,"LEVEL"},
+		{APPLY_AGE,"AGE"},
+		{APPLY_CHAR_WEIGHT,"CHAR_WEIGHT"},
+		{APPLY_CHAR_HEIGHT,"CHAR_HEIGHT"},
+		{APPLY_MANA,"MANA"},
+		{APPLY_HIT,"HIT"},
+		{APPLY_MOVE,"MOVE"},
+		{APPLY_GOLD,"GOLD"},
+		{APPLY_EXP,"EXP"},
+		{APPLY_AC,"AC"},
+		{APPLY_HITROLL,"HITROLL"},
+		{APPLY_DAMROLL,"DAMROLL"},
+		{APPLY_SAVING_PARA,"SAVING_PARA"},
+		{APPLY_SAVING_ROD,"SAVING_ROD"},
+		{APPLY_SAVING_PETRI,"SAVING_PETRI"},
+		{APPLY_SAVING_BREATH,"SAVING_BREATH"},
+		{APPLY_SAVING_SPELL,"SAVING_SPELL"}
+	}};
+	std::array<std::pair<int,std::string>,15> wear_flags = { {
+            {ITEM_WEAR_TAKE,"TAKE"},
+            {ITEM_WEAR_FINGER,"FINGER"},
+            {ITEM_WEAR_NECK,"NECK"},
+            {ITEM_WEAR_BODY,"BODY"},
+            {ITEM_WEAR_HEAD,"HEAD"},
+            {ITEM_WEAR_LEGS,"LEGS"},
+            {ITEM_WEAR_FEET,"FEET"},
+            {ITEM_WEAR_HANDS,"HANDS"},
+            {ITEM_WEAR_ARMS,"ARMS"},
+            {ITEM_WEAR_SHIELD,"SHIELD"},
+            {ITEM_WEAR_ABOUT,"ABOUT"},
+            {ITEM_WEAR_WAIST,"WAIST"},
+            {ITEM_WEAR_WRIST,"WRIST"},
+            {ITEM_WEAR_WIELD,"WIELD"},
+            {ITEM_WEAR_HOLD,"HOLD"}
+        } };
+	std::optional<obj_data*> instantiate_object_by_index(int index){
+		if(index >= obj_proto.size()){
+			return std::nullopt;
+		}
+		object_list.push_back(obj_proto[index]);
+		return &(*(object_list.end()-1));
+	}
+	std::optional<obj_data*> instantiate_object_by_vnum(obj_vnum vnum){
+		obj_data* obj;
+		for(auto & obj_reference : obj_proto){
+			if(obj_reference.item_number == vnum){
+				obj = &obj_reference;
+				object_list.push_back(obj_reference);
+				return obj;
+			}
+		}
+		return std::nullopt;
+	}
 	bool save_zone_to_db(std::string_view name,int room_start,int room_end,int lifespan,int reset_mode){
 		try{
 		/*
@@ -502,13 +608,17 @@ ACMD(do_obuild){
 "22   SAVING_PETRI   Apply to save throw: petrif\r\n" <<
 "23   SAVING_BREATH  Apply to save throw: breath\r\n" <<
 "24   SAVING_SPELL   Apply to save throw: spells\r\n" <<
+"usage: obuild affected <object_id> <affected_slot> <location> <modifier>\r\n" << 
+"example: obuild affected 0 3 CHAR_WEIGHT 15\r\n" <<
+"(this will set the affected slot number 3 on object zero to modify \r\n" <<
+"the character's weight by 15)\r\n" <<
 "\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
 	}
 		
-	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("bitvector") == 0){
+	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("extra_flags") == 0){
 		player->pager_start();
 		*player <<
 "1     a   GLOW           Item is glowing (cosmetic).\r\n" <<
@@ -741,9 +851,15 @@ ACMD(do_obuild){
 				   "  |:: extra_keyword <keyword>\r\n" <<
 				   "  |:: extra_description <description>\r\n" <<
 				   "  |:: flags\r\n" << 
-				   "  |:: affected <index> <location> <modifier>\r\n" <<
+				   " obuild affected <object_id> set <affected_slot> <location> <modifier>\r\n" <<
+				   " obuild affected <object_id> del <affected_slot>\r\n" <<
+				   "  |____[example]\r\n" <<
+				   "  |:: obuild affected 6 3 STR 25\r\n" <<
+				   "  |:: (this will set the affected slot number 3 on object 6 \r\n" << 
+				   "      to modify strength by 25)\r\n" <<
 				   "  |:: {red}see obuild help affected{/red}\r\n" <<
-				   " obuild list like <pattern>\r\n" <<
+				   " obuild flag <object_id> extra_flags <value>\r\n"<<
+				   " {red}see obuild help extra_flags{/red}\r\n" <<	
 				   " obuild flag <object_id> <attr> <value>\r\n"<<
 				   " {red}see obuild help flags{/red}\r\n" <<
 				   "  |:: -:[attributes]:-\r\n" <<
@@ -803,6 +919,22 @@ ACMD(do_obuild){
 		*player << "{red}Object saved{/red}\r\n";
 		return;
 	}
+	args = mods::util::subcmd_args<12,args_t>(argument,"instantiate");
+	if(args.has_value()){
+		auto arg_vec = args.value();
+		auto i_value = mods::util::stoi(arg_vec[1]);
+		if(!i_value.has_value()){
+			*player << "{red}Please use a valid numeric value.{/red}\r\n";
+			return;
+		}else{
+			auto index = i_value.value();
+			if(index >= obj_proto.size()){
+				*player << "{red}Out of bounds{/red}\r\n";
+				return;
+			}
+		}
+		return;
+	}
 	args = mods::util::subcmd_args<5,args_t>(argument,"list");
 	if(args.has_value()){
 		*player << "{red}listing...{/red}\r\n";
@@ -852,15 +984,149 @@ ACMD(do_obuild){
 		MENTOC_OBI2(obj_flags.value[1],value_1);
 		MENTOC_OBI2(obj_flags.value[2],value_2);
 		MENTOC_OBI2(obj_flags.value[3],value_3);
-		MENTOC_OBI2(obj_flags.type_flag,type_flag);
-		MENTOC_OBI2(obj_flags.wear_flags,wear_flags);
-		MENTOC_OBI2(obj_flags.extra_flags,extra_flags);
 		MENTOC_OBI2(obj_flags.weight,weight);
 		MENTOC_OBI2(obj_flags.cost,cost);
 		MENTOC_OBI2(obj_flags.cost_per_day,cost_per_day);
 		MENTOC_OBI2(obj_flags.timer,timer);
 		MENTOC_OBI2(obj_flags.bitvector,bitvector);
+		//TODO !mundane make these flag code fragments into a function
+		if(arg_vec[2].compare("extra_flags") == 0){
+			if(arg_vec.end() <= arg_vec.begin() + 3){
+				*player << "{red}Please supply one or more flags{/red}\r\n";
+				return;
+			}
+			auto flag = arg_vec.begin() + 3;
+			obj->obj_flags.bitvector = 0;
+			for(;flag != arg_vec.end();++flag){
+				bool found = false;
+				for(auto & ex_flag : mods::builder::extra_flags){
+					if(ex_flag.second.compare(*flag) == 0){
+						obj->obj_flags.bitvector |= ex_flag.first;
+						found = true;
+						break;
+					}
+				}
+				if(!found){
+					*player << "{red}Unrecognized flag: " << *flag 
+						<< ", ignoring... see: obuild help extra{/red}\r\n";
+				}
+			}
+
+		}
+		if(arg_vec[2].compare("type_flag") == 0){
+			if(arg_vec.end() <= arg_vec.begin() + 3){
+				*player << "{red}Please supply a type flag{/red}\r\n";
+				return;
+			}
+			auto flag = arg_vec.begin() + 3;
+			obj->obj_flags.type_flag = 0;
+			bool found = false;
+			for(auto & type_flag : mods::builder::type_flags){
+				if(type_flag.second.compare(*flag) == 0){
+					obj->obj_flags.type_flag = type_flag.first;
+					found = true;
+					break;
+				}
+			}
+			if(!found){
+				*player << "{red}Unrecognized type flag: " << *flag 
+					<< ", ignoring... {/red}\r\n";
+			}
+		}
+		if(arg_vec[2].compare("wear_flags") == 0){
+			if(arg_vec.end() <= arg_vec.begin() + 3){
+				*player << "{red}Please supply wear flags{/red}\r\n";
+				return;
+			}
+			auto flag = arg_vec.begin() + 3;
+			obj->obj_flags.wear_flags = 0;
+			for(;flag != arg_vec.end();++flag){
+				bool found = false;
+				for(auto & wear_flag : mods::builder::wear_flags){
+					if(wear_flag.second.compare(*flag) == 0){
+						obj->obj_flags.wear_flags |= wear_flag.first;
+						found = true;
+						break;
+					}
+				}
+				if(!found){
+					*player << "{red}Unrecognized wear flag: " << *flag 
+						<< ", ignoring... {/red}\r\n";
+				}
+			}
+		}
 		*player << "{red}Object updated{/red}\r\n";
+		return;
+	}
+	args = mods::util::subcmd_args<9,args_t>(argument,"affected");
+	if(args.has_value()){
+		auto arg_vec = args.value();
+		if(arg_vec.size() > 3 && arg_vec[2].compare("del") == 0){
+			//User is trying to delete an affected slot
+			auto slot = mods::util::stoi(arg_vec[3]);
+			if(!slot.has_value() || slot.value() > MAX_OBJ_AFFECT){
+				*player << "{red} Invalid slot index{/red}\r\n";
+				return;
+			}
+			auto index = mods::util::stoi(arg_vec[1]);
+			obj_data * obj = nullptr;
+			unsigned ctr = 0;
+			if(index.has_value()){
+				if(index.value() >= obj_proto.size()){
+					*player << "{red} Object index Out of bounds{/red}\r\n";
+					return;
+				}
+				obj = &obj_proto[index.value()];
+			}else{
+				*player << "{red}" << args.value()[1] << " is not a valid number{/red}\r\n";
+				return;
+			}
+			obj->affected[slot.value()].location = 0;
+			obj->affected[slot.value()].modifier = 0;
+			*player << "{red}Slot cleared{/red}\r\n";
+			return;
+		}
+		if(arg_vec.size() < 6){
+			*player << "{red}Not enough arguments. See: obuild help affected{/red}\r\n";
+			return;
+		}
+		if(arg_vec[2].compare("set") == 0){
+			auto index = mods::util::stoi(arg_vec[1]);
+			obj_data * obj = nullptr;
+			unsigned ctr = 0;
+			if(index.has_value()){
+				if(index.value() >= obj_proto.size()){
+					*player << "{red} Out of bounds{/red}\r\n";
+					return;
+				}
+				obj = &obj_proto[index.value()];
+			}else{
+				*player << "{red}" << args.value()[1] << " is not a valid number{/red}\r\n";
+				return;
+			}
+			if(!obj){
+				*player << "{red}Index not found.{/red}\r\n";
+				return;
+			}
+			auto aff_index = mods::util::stoi(arg_vec[3]);
+			auto location = mods::util::stoi(arg_vec[4]);
+			auto modifier = mods::util::stoi(arg_vec[5]);
+			if(aff_index.has_value() && 
+					location.has_value() && modifier.has_value()){
+				if(aff_index.value() >= MAX_OBJ_AFFECT){
+					*player << "{red} aff_index must be less than " << MAX_OBJ_AFFECT << "{/red}\r\n";
+					return;
+				}
+				obj->affected[aff_index.value()].location = location.value();
+				obj->affected[aff_index.value()].modifier = modifier.value();
+				*player << "{red}Object updated{/red}\r\n";
+				return;
+			}else{
+				*player << "{red}location and modifier are required{/red}\r\n";
+				return;
+			}
+		}
+		*player << "{red}Unknown mode: '" << arg_vec[2] << "'\r\n";
 		return;
 	}
 	args = mods::util::subcmd_args<5,args_t>(argument,"show");
@@ -900,7 +1166,8 @@ ACMD(do_obuild){
 			"{red}weapon_ammo: {/red}" << obj->ammo << "\r\n" << 
 			"{red}weapon_ammo_max: {/red} " << obj->ammo_max << "\r\n" << 
 			"{red}weapon_holds_ammo: {/red}: " << obj->holds_ammo << "\r\n" << 
-			"{gld}::Wear Flags::{/gld}\r\n";
+			"{gld}::Wear Flags::{/gld}\r\n" << 
+			"{red}value: {/red}" << std::to_string(obj->obj_flags.wear_flags ) <<  "\r\n";
 #define MENTOC_WEAR(a){ if(obj->obj_flags.wear_flags & a){*player << #a << ", ";} }
 			MENTOC_WEAR(ITEM_WEAR_TAKE);
 			MENTOC_WEAR(ITEM_WEAR_FINGER);
@@ -917,15 +1184,8 @@ ACMD(do_obuild){
 			MENTOC_WEAR(ITEM_WEAR_WRIST);
 			MENTOC_WEAR(ITEM_WEAR_WIELD);
 			MENTOC_WEAR(ITEM_WEAR_HOLD);
-			MENTOC_WEAR(WEAR_FINGER_L);
-			MENTOC_WEAR(WEAR_FINGER_R);
-			MENTOC_WEAR(WEAR_LIGHT);
-			MENTOC_WEAR(WEAR_NECK_1);
-			MENTOC_WEAR(WEAR_NECK_2);
-			MENTOC_WEAR(WEAR_WRIST_L);
-			MENTOC_WEAR(WEAR_WRIST_R);
 			*player << "{gld}::Type::{/gld}\r\n";
-#define MENTOC_TYPE(a){ if(obj->obj_flags.type_flag & a){*player << #a << "\r\n"; } }
+#define MENTOC_TYPE(a){ if(obj->obj_flags.type_flag == a){*player << #a << "\r\n"; } }
 			MENTOC_TYPE(ITEM_LIGHT);
 			MENTOC_TYPE(ITEM_SCROLL);
 			MENTOC_TYPE(ITEM_WAND);
@@ -968,6 +1228,19 @@ ACMD(do_obuild){
 			MENTOC_BITVECTOR(ITEM_ANTI_THIEF);
 			MENTOC_BITVECTOR(ITEM_ANTI_WARRIOR);
 			MENTOC_BITVECTOR(ITEM_NOSELL);
+		for(unsigned index = 0;
+			index < MAX_OBJ_AFFECT; index++){
+			*player << "{red}affected[" << index << "]->location: {/red} " <<
+				obj->affected[index].location << 
+				" {red}modifier: {/red} ";
+			for(auto & flag : mods::builder::affected_flags){
+				if(flag.first == obj->affected[index].modifier){
+					*player << flag.second;
+					break;
+				}
+			}
+			*player << "\r\n";
+		}
 		player->pager_end();
 		player->page(0);
 		return;

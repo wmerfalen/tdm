@@ -925,8 +925,6 @@ int parse_sql_objects(){
 			auto rows = mods::pq::exec(txn2,sql_compositor("object",&txn2)
 				.select("*")
 				.from("object")
-				.left_join("affected_type")
-				.on("affected_type.aff_fk_id","=","object.id")
 				.left_join("object_flags")
 				.on("object_flags.obj_fk_id","=","object.id")
 				.left_join("object_weapon")
@@ -936,12 +934,40 @@ int parse_sql_objects(){
 			);
 			unsigned item = 0;
 			log((std::string("Objects ") + std::to_string(rows.size())).c_str());
+			mods::pq::commit(txn2);
 			for(auto  row : rows){
 				struct index_data index;
 				index.vnum = row["obj_item_number"].as<int>();
 				index.number = 0;
 				obj_index.push_back(index);
 				struct obj_data proto;
+				auto txn3 = txn();
+				auto aff_rows = mods::pq::exec(txn3,sql_compositor("affected_type",&txn3)
+					.select("aff_location,aff_modifier")
+					.from("affected_type")
+					.where("aff_fk_id","=",row["obj_item_number"].c_str())
+					.sql()
+				);
+				mods::pq::commit(txn3);
+				for(unsigned i = 0; i < MAX_OBJ_AFFECT;i++){
+					proto.affected[i].location = 0;
+					proto.affected[i].modifier = 0;
+				}
+				unsigned aff_index = 0;
+				for(auto aff_row : aff_rows){
+					if(aff_index >= MAX_OBJ_AFFECT){
+						log(
+						(std::string(
+							"WARNING: sql has more affected rows than allowed on object #")
+						+ std::to_string(row["obj_item_number"].as<int>())
+						).c_str()
+						);
+						break;
+					}
+					proto.affected[aff_index].location = aff_row["aff_location"].as<int>();
+					proto.affected[aff_index].modifier = aff_row["aff_modifier"].as<int>();
+					++aff_index;
+				}
 				proto.item_number = row["obj_item_number"].as<int>();
 				proto.name = strdup(row["obj_name"].c_str());
 				proto.description = strdup(row["obj_description"].c_str());
@@ -962,6 +988,7 @@ int parse_sql_objects(){
 				proto.worn_on = row["obj_worn_on"].as<int>();
 				proto.type = row["obj_type"].as<int>();
 				proto.ammo = 0;
+				
 				if(!row["obj_ammo_max"].is_null()){
 					proto.ammo_max = row["obj_ammo_max"].as<int>();
 				}else{
@@ -1740,7 +1767,6 @@ char *parse_object(FILE *obj_f, int nr)
     case '$':
     case '#':
       check_object(obj_proto + i);
-      mods::globals::register_object(obj_proto[i]);
       top_of_objt = i++;
       return (line);
     default:
@@ -1963,7 +1989,6 @@ struct obj_data *create_obj(void)
   struct obj_data tmp;
   object_list.push_back(tmp);
   obj = &(*(object_list.end()-1));
-  mods::globals::register_object(*obj);
   return obj;
 }
 
@@ -1974,7 +1999,7 @@ struct obj_data *read_object(obj_vnum nr, int type) /* and obj_rnum */
   struct obj_data *obj;
   obj_rnum i = type == VIRTUAL ? real_object(nr) : nr;
 
-  if (i == NOTHING || i > top_of_objt) {
+  if (i == NOTHING || i > obj_proto.size()) {
     log("Object (%c) %d does not exist in database.", type == VIRTUAL ? 'V' : 'R', nr);
     return (NULL);
   }
@@ -1985,8 +2010,9 @@ struct obj_data *read_object(obj_vnum nr, int type) /* and obj_rnum */
   obj->next = object_list;
   object_list = obj;
 #endif
+  *obj = obj_proto[i];
+  object_list.push_back(*obj);
   obj_index[i].number++;
-  //mods::globals::register_object(*obj);
   return (obj);
 }
 

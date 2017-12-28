@@ -16,4 +16,4 @@ spell_parser.o: spell_parser.c conf.h sysdep.h structs.h \
  mods/../mods/util.hpp duktape/src/duktape.h duktape/src/duk_config.h \
  mods/js.hpp mods/../duktape/src/duktape.h mods/drone.hpp mods/extern.hpp \
  mods/conf.hpp mods/chat.hpp mods/../interpreter.h spells.h handler.h \
- comm.h db.h
+ comm.h db.h mods/extern.hpp

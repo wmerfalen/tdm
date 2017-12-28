@@ -1,10 +1,11 @@
 spec_assign.o: spec_assign.c conf.h sysdep.h structs.h mods/ai_state.hpp \
  mods/../conf.h mods/../sysdep.h mods/../structs.h mods/../types.hpp \
  mods/../conf.h mods/../sysdep.h mods/../mods/ai_state.hpp \
- mods/../structs.h db.h interpreter.h globals.hpp types.hpp \
- mods/acl/config-parser.hpp mods/acl/color.hpp mods/acl/../util-map.hpp \
- mods/player.hpp mods/util.hpp mods/../globals.hpp mods/deferred.hpp \
- mods/lmdb/db.hpp /home/llvm/code/c++/bnull-mud/src/mods/include/gsl/gsl \
+ mods/../structs.h db.h mods/extern.hpp interpreter.h globals.hpp \
+ types.hpp mods/acl/config-parser.hpp mods/acl/color.hpp \
+ mods/acl/../util-map.hpp mods/player.hpp mods/util.hpp \
+ mods/../globals.hpp mods/deferred.hpp mods/lmdb/db.hpp \
+ /home/llvm/code/c++/bnull-mud/src/mods/include/gsl/gsl \
  /home/llvm/code/c++/bnull-mud/src/mods/include/gsl/gsl_assert \
  /home/llvm/code/c++/bnull-mud/src/mods/include/gsl/gsl_util \
  /home/llvm/code/c++/bnull-mud/src/mods/include/gsl/multi_span \

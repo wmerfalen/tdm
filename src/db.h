@@ -7,7 +7,7 @@
 *  Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University *
 *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
 ************************************************************************ */
-
+#include "mods/extern.hpp"
 /* arbitrary constants used by index_boot() (must be unique) */
 #define DB_BOOT_WLD	0
 #define DB_BOOT_MOB	1
@@ -244,7 +244,6 @@ extern mob_rnum top_of_mobt;
 
 extern struct index_data *obj_index;
 extern std::vector<obj_data> object_list;
-extern struct obj_data *obj_proto;
 extern obj_rnum top_of_objt;
 #endif
 

@@ -14,5 +14,5 @@ modify.o: modify.c conf.h sysdep.h structs.h mods/ai_state.hpp \
  mods/lmdb/liblmdb/lmdb.h mods/projectile.hpp mods/../utils.h \
  mods/../mods/util.hpp duktape/src/duktape.h duktape/src/duk_config.h \
  mods/js.hpp mods/../duktape/src/duktape.h mods/drone.hpp mods/extern.hpp \
- mods/conf.hpp mods/chat.hpp mods/../interpreter.h handler.h db.h comm.h \
- spells.h mail.h boards.h
+ mods/conf.hpp mods/chat.hpp mods/../interpreter.h handler.h db.h \
+ mods/extern.hpp comm.h spells.h mail.h boards.h

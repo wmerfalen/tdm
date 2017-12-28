@@ -14,4 +14,5 @@ interpreter.o: interpreter.c globals.hpp types.hpp conf.h sysdep.h \
  mods/../mods/util.hpp duktape/src/duktape.h duktape/src/duk_config.h \
  mods/js.hpp mods/../duktape/src/duktape.h mods/drone.hpp mods/extern.hpp \
  mods/conf.hpp mods/chat.hpp mods/../interpreter.h mods/../globals.hpp \
- comm.h interpreter.h db.h utils.h spells.h handler.h mail.h screen.h
+ comm.h interpreter.h db.h mods/extern.hpp utils.h spells.h handler.h \
+ mail.h screen.h

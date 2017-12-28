@@ -1,8 +1,8 @@
 objsave.o: objsave.c conf.h sysdep.h structs.h mods/ai_state.hpp \
  mods/../conf.h mods/../sysdep.h mods/../structs.h mods/../types.hpp \
  mods/../conf.h mods/../sysdep.h mods/../mods/ai_state.hpp \
- mods/../structs.h comm.h handler.h db.h interpreter.h globals.hpp \
- types.hpp mods/acl/config-parser.hpp mods/acl/color.hpp \
+ mods/../structs.h comm.h handler.h db.h mods/extern.hpp interpreter.h \
+ globals.hpp types.hpp mods/acl/config-parser.hpp mods/acl/color.hpp \
  mods/acl/../util-map.hpp mods/player.hpp mods/util.hpp \
  mods/../globals.hpp mods/deferred.hpp mods/lmdb/db.hpp \
  /home/llvm/code/c++/bnull-mud/src/mods/include/gsl/gsl \

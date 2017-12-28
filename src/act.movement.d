@@ -16,4 +16,4 @@ act.movement.o: act.movement.c conf.h sysdep.h structs.h \
  mods/../mods/util.hpp duktape/src/duktape.h duktape/src/duk_config.h \
  mods/js.hpp mods/../duktape/src/duktape.h mods/drone.hpp mods/extern.hpp \
  mods/conf.hpp mods/chat.hpp mods/../interpreter.h handler.h db.h \
- spells.h house.h constants.h
+ mods/extern.hpp spells.h house.h constants.h
