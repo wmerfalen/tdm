@@ -79,6 +79,19 @@ namespace mods::util{
 		snprintf(&buf[0],16,"%d",number);
 		return &buf[0];
 	}
+	template<typename T>
+	inline linked_list_remove(T item, T head){
+		if ((item) == (head))
+			head = (item)->next;
+		else { 
+			T temp = head;
+			while (temp && (temp->next != (item)))
+				temp = temp->next;
+			if (temp)
+				temp->next = (item)->next;
+		}
+	}
+ 
 };
 
 #endif

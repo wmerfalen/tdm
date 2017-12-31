@@ -21,6 +21,7 @@
 #include "screen.h"
 #include "constants.h"
 #include "globals.hpp"
+#include "mods/extern.hpp"
 #include "mods/quests.hpp"
 #include "mods/drone.hpp"
 #include "mods/util.hpp"
@@ -137,7 +138,7 @@ ACMD(do_recall){
 		*player << "Cannot recall this soon after combat.";
 	}else{
 		char_from_room(ch);
-		char_to_room(ch,31);
+		char_to_room(ch,real_room(mortal_start_room));
 		command_interpreter(ch, "l");
 	}
 }
@@ -268,7 +269,9 @@ void list_obj_to_char(struct obj_data *list, struct char_data *ch, int mode, int
   struct obj_data *i;
   bool found = FALSE;
 
+  int ctr = 0;
   for (i = list; i; i = i->next_content) {
+	  std::cerr << "iterations: " << ctr++ << "\n";
     if (CAN_SEE_OBJ(ch, i)) {
       show_obj_to_char(i, ch, mode);
       found = TRUE;

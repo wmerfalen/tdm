@@ -939,6 +939,7 @@ int parse_sql_objects(){
 				struct index_data index;
 				index.vnum = row["obj_item_number"].as<int>();
 				index.number = 0;
+				index.func = nullptr;
 				obj_index.push_back(index);
 				struct obj_data proto;
 				auto txn3 = txn();
@@ -976,19 +977,77 @@ int parse_sql_objects(){
 					proto.obj_name = \
 						strdup(row[#sql_name].c_str());\
 				}else{\
-					proto.obj_name = nullptr;\
+					proto.obj_name = strdup("<default>");\
 				}
 				MENTOC_STR(obj_short_description,short_description);
 				MENTOC_STR(obj_action_description,action_description);
-				proto.ex_description = (extra_descr_data*)
-					calloc(1,sizeof(extra_descr_data));
-				MENTOC_STR(obj_extra_keyword,ex_description->keyword);
-				MENTOC_STR(obj_extra_description,ex_description->description);
+				auto txn5 = txn();
+				auto ed_rows = mods::pq::exec(txn5,sql_compositor("extra_description",&txn5)
+					.select("*")
+					.from("extra_description")
+					.where("obj_fk_id","=",row["id"].c_str())
+					.sql()
+				);
+				proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
+				proto.ex_description->next = nullptr;
+				proto.ex_description->keyword = proto.ex_description->description = nullptr;
+				if(ed_rows.size()){
+					auto ex_desc = proto.ex_description;
+					auto previous = ex_desc;
+					int ctr = 0;
+					for(auto ed_row : ed_rows){
+						if(!ex_desc){
+							ex_desc = (extra_descr_data*)
+								calloc(1,sizeof(extra_descr_data));
+						}
+						ex_desc->keyword = strdup(ed_row["extra_keyword"].c_str());
+						ex_desc->description = strdup(ed_row["extra_description"].c_str());
+						ex_desc->next = nullptr;
+						if(ctr){
+							previous->next = ex_desc;
+						}
+						previous = ex_desc;
+						ex_desc = ex_desc->next;
+					}
+				}
+				mods::pq::commit(txn5);
 				proto.ex_description->next = nullptr;
 				proto.worn_on = row["obj_worn_on"].as<int>();
 				proto.type = row["obj_type"].as<int>();
 				proto.ammo = 0;
-				
+				memset(&proto.obj_flags,0,sizeof(obj_flag_data));
+				//TODO: !small do obj->flags fetching from db
+				auto txn4 = txn();
+				auto flag_rows = mods::pq::exec(txn4,sql_compositor("affected_type",&txn4)
+					.select("*")
+					.from("object_flags")
+					.where("obj_fk_id","=",row["id"].c_str())
+					.sql()
+				);
+				mods::pq::commit(txn4);
+				if(flag_rows.size()){
+					auto flag_row = flag_rows[0];
+					if(!flag_row["value_0"].is_null()){
+						proto.obj_flags.value[0] = flag_row["value_0"].as<int>();
+					}
+					if(!flag_row["value_1"].is_null()){
+						proto.obj_flags.value[1] = flag_row["value_1"].as<int>();
+					}
+					if(!flag_row["value_2"].is_null()){
+						proto.obj_flags.value[2] = flag_row["value_2"].as<int>();
+					}
+					if(!flag_row["value_3"].is_null()){
+						proto.obj_flags.value[3] = flag_row["value_3"].as<int>();
+					}
+					proto.obj_flags.type_flag = flag_row["type_flag"].as<int>();
+					proto.obj_flags.wear_flags = flag_row["wear_flags"].as<int>();
+					proto.obj_flags.extra_flags = flag_row["extra_flags"].as<int>();
+					proto.obj_flags.weight = flag_row["weight"].as<int>();
+					proto.obj_flags.cost = flag_row["cost"].as<int>();
+					proto.obj_flags.cost_per_day = flag_row["cost_per_day"].as<int>();
+					proto.obj_flags.timer = flag_row["timer"].as<int>();
+					proto.obj_flags.bitvector = flag_row["bitvector"].as<int>();
+				}
 				if(!row["obj_ammo_max"].is_null()){
 					proto.ammo_max = row["obj_ammo_max"].as<int>();
 				}else{
@@ -1003,6 +1062,7 @@ int parse_sql_objects(){
 				}else{
 					proto.weapon_type = 0;
 				}
+				proto.carried_by = proto.worn_by = nullptr;
 				obj_proto.push_back(proto);
 				++item;
 			}

@@ -133,8 +133,7 @@ namespace mods::builder{
 		   );
 		*/
 		auto txn = txn();
-		sql_compositor comp(nullptr,&txn);
-		auto sql = sql_compositor(nullptr,&txn)
+		auto sql = sql_compositor("zone",&txn)
 			.insert()
 			.into("zone")
 			.values({
@@ -180,7 +179,7 @@ namespace mods::builder{
  room_flag      | integer                |           | not null |
 */
 			auto check_txn = txn();
-			auto check_sql = sql_compositor(nullptr,&check_txn)
+			auto check_sql = sql_compositor("room",&check_txn)
 				.select("COUNT(room_number)")
 				.from("room")
 				.where("room_number","=",std::to_string(world[in_room].number))
@@ -253,7 +252,7 @@ namespace mods::builder{
 					if(check_result.size()){
 						/* update the row instead of inserting it */
 						auto up_txn = txn();
-						sql_compositor comp(nullptr,&up_txn);
+						sql_compositor comp("room_direction_data",&up_txn);
 						auto up_sql = comp
 							.update("room_direction_data")
 							.set(values)
@@ -264,7 +263,7 @@ namespace mods::builder{
 						mods::pq::commit(up_txn);
 					}else{
 						auto txn2 = txn();
-						sql_compositor comp(nullptr,&txn2);
+						sql_compositor comp("room_direction_data",&txn2);
 						auto sql = comp
 							.insert()
 							.into("room_direction_data")
@@ -417,7 +416,7 @@ namespace mods::builder{
 	}
 	void zone_place(int zone_id,std::string_view zone_command,std::string_view if_flag,std::string_view arg1,std::string_view arg2,std::string_view arg3){
 		auto txn = txn();
-		sql_compositor comp(nullptr,&txn);
+		sql_compositor comp("zone_data",&txn);
 		auto sql = comp
 			.insert()
 			.into("zone_data")
@@ -434,7 +433,6 @@ namespace mods::builder{
 		mods::pq::commit(txn);
 	}
 	bool save_object(obj_data* obj){
-
 		auto txn_01 = txn();
 		sql_compositor comp3("object",&txn_01);
 		auto sql = comp3.select("id").from("object").
@@ -465,7 +463,7 @@ namespace mods::builder{
 			check_i = mods::pq::as_int(check_result_01,0,0);
 			/* update the fields */
 			auto txn = txn();
-			sql_compositor comp(nullptr,&txn);
+			sql_compositor comp("object",&txn);
 			auto update_sql = comp
 				.update("object")
 				.set(my_map)
@@ -479,11 +477,10 @@ namespace mods::builder{
 			sql_compositor comp("object",&txn0);
 			auto sql = comp.insert().into("object")
 				.values(my_map).sql();
-			std::cerr << sql << "\n";
 			mods::pq::exec(txn0,sql);
 			mods::pq::commit(txn0);
 			auto txn4 = txn();
-			sql_compositor comp2(nullptr,&txn4);
+			sql_compositor comp2("object",&txn4);
 			sql = comp2
 				.select("id")
 				.from("object")
@@ -495,8 +492,8 @@ namespace mods::builder{
 				check_i = mods::pq::as_int(res,0,0);
 			}
 		}
-		switch(obj->type){
-			case objtype::WEAPON:
+		switch(obj->obj_flags.type_flag){
+			case ITEM_WEAPON:
 				auto txn3 = txn();
 				sql_compositor comp3("object_weapon",&txn3);
 				auto sql = comp3.select("id").from("object_weapon").
@@ -512,8 +509,8 @@ namespace mods::builder{
 					.set({
 						{"obj_ammo_type",std::to_string(obj->weapon_type)},
 						{"obj_ammo_max",std::to_string(obj->ammo_max)},
-						{"obj_cooldown",std::to_string(0)},
-						{"obj_can_snipe",std::to_string(0)}
+						{"obj_cooldown","0"},
+						{"obj_can_snipe","0"}
 					}).where("obj_fk_id","=",std::to_string(check_i))
 					.sql();
 					mods::pq::exec(txn5,sql);
@@ -530,7 +527,6 @@ namespace mods::builder{
 							{"obj_can_snipe",std::to_string(0)}
 						})
 						.sql();
-					std::cerr << sql << "\n";
 					mods::pq::exec(txn6,sql);
 					mods::pq::commit(txn6);
 				}
@@ -551,21 +547,65 @@ namespace mods::builder{
 			mods::pq::exec(txn8,sql);
 			mods::pq::commit(txn8);
 		}
+		auto txn9 = txn();
+		auto sql9 = std::string(
+				"DELETE FROM object_flags where obj_fk_id=")
+			+ txn9.quote(check_i)
+		;
+		mods::pq::exec(txn9,sql9);
+		mods::pq::commit(txn9);
+		auto txn10 = txn();
+		auto sql10 = sql_compositor("object_flags",&txn10)
+			.insert()
+			.into("object_flags")
+			.values({
+				{"obj_fk_id",std::to_string(check_i)},
+				{"value_0",mods::util::itoa(obj->obj_flags.value[0])},
+				{"value_1",mods::util::itoa(obj->obj_flags.value[1])},
+				{"value_2",mods::util::itoa(obj->obj_flags.value[2])},
+				{"value_3",mods::util::itoa(obj->obj_flags.value[3])},
+				{"type_flag",mods::util::itoa(obj->obj_flags.type_flag)},
+				{"wear_flags",mods::util::itoa(obj->obj_flags.wear_flags)},
+				{"extra_flags",mods::util::itoa(obj->obj_flags.extra_flags)},
+				{"weight",mods::util::itoa(obj->obj_flags.weight)},
+				{"cost",mods::util::itoa(obj->obj_flags.cost)},
+				{"cost_per_day",mods::util::itoa(obj->obj_flags.cost_per_day)},
+				{"timer",mods::util::itoa(obj->obj_flags.timer)},
+				{"bitvector",mods::util::itoa(obj->obj_flags.bitvector)}
+			})
+			.sql();
+		mods::pq::exec(txn10,sql10);
+		mods::pq::commit(txn10);
 		for(unsigned i =0; i < MAX_OBJ_AFFECT;i++){
 			auto txn7 = txn();
 			std::string loc,mod;
 			if(obj->affected[i].location && obj->affected[i].modifier){
-			auto sql = sql_compositor(nullptr,&txn7).insert()
-				.into("affected_type")
-				.values({
-					{"aff_fk_id",std::to_string(check_i)},
-					{"aff_location",mods::util::itoa(obj->affected[i].location)},
-					{"aff_modifier", mods::util::itoa(obj->affected[i].modifier)}
-				})
-				.sql();
-			mods::pq::exec(txn7,sql);
-			mods::pq::commit(txn7);
+				auto sql = sql_compositor("affected_type",&txn7).insert()
+					.into("affected_type")
+					.values({
+						{"aff_fk_id",std::to_string(check_i)},
+						{"aff_location",mods::util::itoa(obj->affected[i].location)},
+						{"aff_modifier", mods::util::itoa(obj->affected[i].modifier)}
+					})
+					.sql();
+				mods::pq::exec(txn7,sql);
+				mods::pq::commit(txn7);
 			}
+		}
+		/* save ex_description linked lists */
+		for(auto ex_desc = obj->ex_description;ex_desc;ex_desc = ex_desc->next){
+			if(!ex_desc->keyword || !ex_desc->description){ break; }
+			auto txn8 = txn();
+			mods::pq::exec(txn8,sql_compositor("extra_description",&txn8)
+				.insert()
+				.into("extra_description")
+				.values({
+					{"obj_fk_id",std::to_string(check_i)},
+					{"extra_keyword",ex_desc->keyword},
+					{"extra_description",ex_desc->description}
+				})
+				.sql()
+			);
 		}
 	}
 };
@@ -848,9 +888,12 @@ ACMD(do_obuild){
 				   "  |:: weapon_ammo\r\n" << 
 				   "  |:: weapon_ammo_max\r\n" << 
 				   "  |:: weapon_holds_ammo\r\n" << 
-				   "  |:: extra_keyword <keyword>\r\n" <<
-				   "  |:: extra_description <description>\r\n" <<
 				   "  |:: flags\r\n" << 
+				   " obuild ex <object_id> set <index> <keyword> <description>\r\n" <<
+				   " obuild ex <object_id> del <index>\r\n" <<
+				   "  |____[example]\r\n" <<
+				   "  |:: obuild ex 6 set 0 \"keyword\" \"my description\"\r\n" <<
+				   "  |:: obuild ex 6 del 0\r\n" <<
 				   " obuild affected <object_id> set <affected_slot> <location> <modifier>\r\n" <<
 				   " obuild affected <object_id> del <affected_slot>\r\n" <<
 				   "  |____[example]\r\n" <<
@@ -867,7 +910,7 @@ ACMD(do_obuild){
 				   "  |:: value_1\r\n" <<
 				   "  |:: value_2\r\n" <<
 				   "  |:: value_3\r\n" <<
-				   "  |:: type_flag {red}see: obuild help type_flags{/red}\r\n" <<
+				   "  |:: type_flags {red}see: obuild help type_flags{/red}\r\n" <<
 				   "  |:: wear_flags {red}see: obuild help wear_flags{/red}\r\n" <<
 				   "  |:: extra_flags\r\n" <<
 				   "  |:: weight\r\n" <<
@@ -919,6 +962,98 @@ ACMD(do_obuild){
 		*player << "{red}Object saved{/red}\r\n";
 		return;
 	}
+	args = mods::util::subcmd_args<3,args_t>(argument,"ex");
+	if(args.has_value()){
+		auto arg_vec = args.value();
+		auto i_value = mods::util::stoi(arg_vec[1]);
+		struct obj_data* obj = nullptr;
+		if(!i_value.has_value()){
+			*player << "{red}Please use a valid numeric value.{/red}\r\n";
+			return;
+		}else{
+			auto index = i_value.value();
+			if(index >= obj_proto.size()){
+				*player << "{red}Out of bounds{/red}\r\n";
+				return;
+			}
+			obj = &obj_proto[index];
+		}
+		if(arg_vec.size() < 3){
+			*player << "{red}Invalid number of arguments{/red}\r\n";
+			return;
+		}
+		if(arg_vec[2].compare("create") == 0 && arg_vec.size() == 4){
+			//ex 0 create 10
+			auto ex_desc = obj->ex_description;
+			auto ex_create = mods::util::stoi(arg_vec[3]);
+			if(ex_create.has_value()){
+				if(ex_create.value() > 10){
+					*player << "{red}Only 10 maximum ex_descriptions are possible{/red}\r\n";
+					return;
+				}
+				extra_descr_data* previous = ex_desc;
+				for(int i = ex_create.value(); i > 0; --i){
+					if(!ex_desc){
+						ex_desc = (extra_descr_data*)calloc(1,sizeof(extra_descr_data));
+						ex_desc->keyword = ex_desc->description = strdup("<default>");
+						ex_desc->next = nullptr;
+						if(i < ex_create.value()){ previous->next = ex_desc; }
+						previous = ex_desc;
+						ex_desc = ex_desc->next;
+						continue;
+					}
+					previous = ex_desc;
+					ex_desc = ex_desc->next;
+				}
+				*player << "{red}Extra descriptions created{/red}\r\n";
+				return;
+			}else{
+				*player << "{red}Invalid create value{/red}\r\n";
+				return;
+			}
+			return;
+		}
+		if(arg_vec[2].compare("set") == 0 && arg_vec.size() == 6){
+		//obuild ex <object_id> set <index> <keyword> <description>
+		//       0    1          2   3         4         5
+			auto index = mods::util::stoi(arg_vec[3]);
+			if(index.has_value()){
+				int iterations = 0;
+				auto ex_desc = obj->ex_description;
+				for(;iterations < index.value();iterations++){
+					if(!ex_desc){
+						*player << "{red}Out of bounds{/red}\r\n";
+						return;
+					}
+					ex_desc = ex_desc->next;
+				}
+				ex_desc->keyword = strdup(arg_vec[4].c_str());
+				ex_desc->description = strdup(arg_vec[5].c_str());
+			}
+		}
+		if(arg_vec[2].compare("del") == 0 && arg_vec.size() == 4){
+			//obuild ex <object_id> del <index>
+			//        0    1         2     3
+			auto index = mods::util::stoi(arg_vec[3]);
+			if(index.has_value()){
+				int iterations = 0;
+				auto ex_desc = obj->ex_description;
+				auto previous = ex_desc;
+				for(;iterations < index.value();iterations++){
+					if(!ex_desc){
+						*player << "{red}Out of bounds{/red}\r\n";
+						return;
+					}
+					ex_desc = ex_desc->next;
+				}
+				mods::util::linked_list_remove<extra_descr_data*>(ex_desc,obj->ex_description);
+				*player << "{red}ex_description removed{/red}\r\n";
+				return;
+			}
+			*player << "{red}Invalid index{/red}\r\n";
+			return;
+		}
+	}
 	args = mods::util::subcmd_args<12,args_t>(argument,"instantiate");
 	if(args.has_value()){
 		auto arg_vec = args.value();
@@ -932,6 +1067,11 @@ ACMD(do_obuild){
 				*player << "{red}Out of bounds{/red}\r\n";
 				return;
 			}
+			object_list.push_back(obj_proto[index]);
+			auto obj = &(*(object_list.end() -1));
+			obj->carried_by = obj->worn_by = nullptr;
+			obj_to_room(obj,IN_ROOM(player->cd()));
+			*player << "{red}Object created, look on the floor{/red}\r\n";
 		}
 		return;
 	}
@@ -1013,7 +1153,7 @@ ACMD(do_obuild){
 			}
 
 		}
-		if(arg_vec[2].compare("type_flag") == 0){
+		if(arg_vec[2].compare("type_flags") == 0){
 			if(arg_vec.end() <= arg_vec.begin() + 3){
 				*player << "{red}Please supply a type flag{/red}\r\n";
 				return;
@@ -1158,9 +1298,21 @@ ACMD(do_obuild){
 		*player << 
 			"{gld}::Object data::{/gld}\r\n" <<
 			"{red}name: {/red}" << obj->name <<  "\r\n" <<
+			"{red}description: {/red}" << obj->description << "\r\n" <<
 			"{red}short_description: {/red}" << obj->short_description << "\r\n" <<
 			"{red}action_description: {/red}" << obj->action_description << "\r\n" <<
-			"{red}item_number: {/red}" << obj->item_number << "\r\n" << 
+			"{red}ex_descriptions: {/red}";
+			auto ex_desc = obj->ex_description;
+			unsigned ex_ctr = 0;
+			for(; ex_desc ; ex_desc = ex_desc->next){
+				*player << "{red}[" << ex_ctr << "]keyword: {/red}" << ex_desc->keyword << "\r\n";
+				*player << "{red}[" << ex_ctr << "]description: {/red}" << ex_desc->description << "\r\n";
+				++ex_ctr;
+			}
+			if(!ex_ctr){
+				*player << "\r\n";
+			}
+			*player << "{red}item_number: {/red}" << obj->item_number << "\r\n" << 
 			"{red}weapon_type: {/red}" << obj->weapon_type << "\r\n" << 
 			"{red}worn_on: {/red}" << obj->worn_on << "\r\n" << 
 			"{red}weapon_ammo: {/red}" << obj->ammo << "\r\n" << 
