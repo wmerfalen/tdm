@@ -8,6 +8,7 @@ namespace mods::object {
 	enum type {
 		WEAPON = 1,
 		CONTAINER,
+		SENTINEL
 
 	};
 };

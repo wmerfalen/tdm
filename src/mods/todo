@@ -71,3 +71,13 @@
 [ ] -> implement corrosive effects {medium}
 [ ] -> implement SCAN command for scanning a weapon's meta data
 [ ] -> migrate all room files to lmdb {large}
+#january{2018} //happy new year
+[ ] -> drone recon assists {medium}
+[ ] -> :implement scanning while in drone mode
+[ ] -> :mark an enemy as scanned. This enemy will then appear when the player performs a 'scan' in player mode
+[ ] -> :only scanned enemies appear when a player types 'scan' in player mode
+[ ] -> build mbuild (mob build) commands {medium}
+[ ] -> unit test build commands {large}
+[ ] -> unit test obuild 
+[ ] -> unit test rbuild
+[ ] -> unit test zbuild

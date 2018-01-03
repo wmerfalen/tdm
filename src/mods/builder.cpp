@@ -14,6 +14,11 @@
 using objtype = mods::object::type;
 typedef mods::sql::compositor<mods::pq::transaction> sql_compositor;
 namespace mods::builder{
+	std::array<std::pair<int,std::string>,3> type2_flags = { {
+		{objtype::WEAPON,"WEAPON"},
+		{objtype::CONTAINER,"CONTAINER"},
+		{objtype::SENTINEL,"SENTINEL"}
+	} };
 	std::array<std::pair<int,std::string>,23> type_flags = { {
 		{ITEM_LIGHT,"LIGHT"},
 		{ITEM_SCROLL,"SCROLL"},
@@ -245,7 +250,7 @@ namespace mods::builder{
 					std::map<std::string,std::string> values = {
 								{"general_description",world[in_room].dir_option[direction]->general_description},
 								{"keyword",world[in_room].dir_option[direction]->keyword},
-								{"exit_into",std::to_string(world[in_room].dir_option[direction]->exit_info)},
+								{"exit_info",std::to_string(world[in_room].dir_option[direction]->exit_info)},
 								{"exit_key",std::to_string(world[in_room].dir_option[direction]->key)},
 								{"to_room",std::to_string(real_room_num)}
 					};
@@ -432,7 +437,7 @@ namespace mods::builder{
 		mods::pq::exec(txn,sql);
 		mods::pq::commit(txn);
 	}
-	bool save_object(obj_data* obj){
+	std::pair<bool,std::string> save_object(obj_data* obj){
 		auto txn_01 = txn();
 		sql_compositor comp3("object",&txn_01);
 		auto sql = comp3.select("id").from("object").
@@ -444,6 +449,11 @@ namespace mods::builder{
 		sql_compositor::value_map my_map;
 		my_map["obj_item_number"] = std::to_string(obj->item_number);
 		my_map["obj_flags"] = "0";
+#define MENTOC_CHK_OBJ(item) if(!obj->item){ return {false,std::string(#item) + " is empty"}; }
+		MENTOC_CHK_OBJ(name);
+		MENTOC_CHK_OBJ(description);
+		MENTOC_CHK_OBJ(short_description);
+		MENTOC_CHK_OBJ(action_description);
 		my_map["obj_name"] = obj->name;
 		my_map["obj_description"] = obj->description;
 		my_map["obj_short_description"] = obj->short_description;
@@ -455,9 +465,13 @@ namespace mods::builder{
 		my_map["obj_type_data"] = "0";
 		if(obj->ex_description && obj->ex_description->keyword){
 			my_map["obj_extra_keyword"] = obj->ex_description->keyword;
+		}else{
+			return {false,"atleast one ex_description->keyword is required"};
 		}
 		if(obj->ex_description && obj->ex_description->description){
 			my_map["obj_extra_description"] = obj->ex_description->description;
+		}else{
+			return {false,"atleast one ex_description->description is required"};
 		}
 		if(check_result_01.size()){
 			check_i = mods::pq::as_int(check_result_01,0,0);
@@ -607,6 +621,7 @@ namespace mods::builder{
 				.sql()
 			);
 		}
+		return {true,"saved successfully"};
 	}
 };
 
@@ -958,7 +973,11 @@ ACMD(do_obuild){
 			return;
 		}
 		*player << "{red}Saving object{/red}\r\n";
-		mods::builder::save_object(obj);
+		auto return_status = mods::builder::save_object(obj);
+		if(!return_status.first){
+			*player << "{red}ERROR: " << return_status.second << "{/red}\r\n";
+			return;
+		}
 		*player << "{red}Object saved{/red}\r\n";
 		return;
 	}
@@ -1509,7 +1528,7 @@ ACMD(do_rbuildzone){
 				   " zbuild place <zone_id> <command> <if_flag> <arg1> <arg2> <arg3>\r\n" <<
 				   "  |--> creates a reset command for the zone 'zone_id'.\r\n" <<
 				   "  |____[example]\r\n" <<
-				   "  |:: zbuild reset 5 M 0 1500 500 300\r\n" <<
+				   "  |:: zbuild place 5 M 0 1500 500 300\r\n" <<
 				   "  |:: (creates a reset command that grabs the mobile (specified by M) and uses \r\n" <<
 				   "  |:: the three arguments 1500, 500, and 300 as the arguments to the reset zone\r\n" <<
 				   "  |:: function\r\n" <<
@@ -1521,8 +1540,99 @@ ACMD(do_rbuildzone){
        			   "  |:: 'G': Obj to char\r\n" <<
        			   "  |:: 'E': Obj to char equip\r\n" <<
        			   "  |:: 'D': Set state of door\r\n" <<
-				   "  |:: For more information, see http://www.circlemud.org/cdp/building/building-6.html#ss6.1\r\n" <<
 				   "  |:: )\r\n" <<
+"Each command consists of a letter, identifying the command-type,\r\n"<<
+"followed by three or four arguments.  The first argument, common to all the\r\n"<<
+"commands, is called the ``if-flag.''  If the if-flag for a command is 1, that\r\n"<<
+"command is only executed if the command immediately before it was executed\r\n"<<
+"as well.  If the if-flag is 0, the command is always executed.  If-flags are\r\n"<<
+"useful for things like equipping mobiles--you don't want to try to equip\r\n"<<
+"a mobile that has not been loaded.\r\n"<<
+"Commands that load mobiles and objects also include a ``max existing''\r\n"<<
+"argument.  This specifies the maximum number of copies of the mobile or\r\n"<<
+"object that are allowed to exist in the entire world at once.  If the number\r\n"<<
+"currently existing is greater than or equal to the ``max existing'' limit, the\r\n"<<
+"command is not executed.\r\n"<<
+"The valid zone-reset commands are M, O, G, E, P, D, and R.\r\n"<<
+"\r\n"<<
+"{gld}M: load a mobile{/gld}Format: M <if-flag> <mob vnum> <max existing> <room vnum>\r\n"<<
+"Mob vnum is the vnum of the mob to be loaded.  Room vnum is the vnum of\r\n"<<
+"the room in which the mob should be placed.  The mob will be loaded\r\n"<<
+"into the room.\r\n"<<
+"\r\n"<<
+"{gld}O: load an object{/gld}Format: O <if-flag> <obj vnum> <max existing> <room vnum>\r\n"<<
+"Obj vnum is the vnum of the obj to be loaded.  Room vnum is the vnum of\r\n"<<
+"the room in which the obj should be placed.  The object will be loaded\r\n"<<
+"and left lying on the ground.\r\n"<<
+"\r\n"<<
+"{gld}G: give object to mobile{/gld}Format: G <if-flag> <obj vnum> <max existing>\r\n"<<
+"Obj vnum is the vnum of the obj to be given.  The object will be loaded\r\n"<<
+"and placed in the inventory of the last mobile loaded with an ``M''\r\n"<<
+"command.\r\n"<<
+"This command will usually be used with an if-flag of 1, since\r\n"<<
+"attempting to give an object to a non-existing mobile will result in an\r\n"<<
+"error.\r\n"<<
+"\r\n"<<
+"{gld}E: equip mobile with object{/gld}Format: E <if-flag> <obj vnum> <max existing> <equipment position>\r\n"<<
+"Obj vnum is the vnum of the obj to be equipped.  The object will be\r\n"<<
+"loaded and added to the equipment list of the last mobile loaded with\r\n"<<
+"an ``M'' command.  Equipment Position should be one of the following:\r\n"<<
+"\r\n"<<
+"          0    Used as light\r\n"<<
+"          1    Worn on right finger\r\n"<<
+"          2    Worn on left finger\r\n"<<
+"          3    First object worn around neck\r\n"<<
+"          4    Second object worn around neck\r\n"<<
+"          5    Worn on body\r\n"<<
+"          6    Worn on head\r\n"<<
+"          7    Worn on legs\r\n"<<
+"          8    Worn on feet\r\n"<<
+"          9    Worn on hands\r\n"<<
+"          10   Worn on arms\r\n"<<
+"          11   Worn as shield\r\n"<<
+"          12   Worn about body\r\n"<<
+"          13   Worn around waist\r\n"<<
+"          14   Worn around right wrist\r\n"<<
+"          15   Worn around left wrist\r\n"<<
+"          16   Wielded as a weapon\r\n"<<
+"          17   Held\r\n"<<
+"\r\n"<<
+"This command will usually be used with an if-flag of 1, since\r\n"<<
+"attempting to give an object to a non-existing mobile will result in an\r\n"<<
+"error.\r\n"<<
+"\r\n"<<
+"{gld}P: put object in object{/gld}Format: P <if-flag> <obj vnum 1> <max existing> <obj vnum 2>\r\n"<<
+"An object with Obj Vnum 1 will be loaded, and placed inside of the copy\r\n"<<
+"of Obj Vnum 2 most recently loaded.\r\n"<<
+"This command will usually be used with an if-flag of 1, since\r\n"<<
+"attempting to put an object inside of a non-existing object will result\r\n"<<
+"in an error.\r\n"<<
+"\r\n"<<
+"{gld}D: set the state of a door{/gld}Format: D <if-flag> <room vnum> <exit num> <state>\r\n"<<
+"Room vnum is the virtual number of the room with the door to be set.\r\n"<<
+"Exit num being one of:\r\n"<<
+"\r\n"<<
+"          0    North\r\n"<<
+"          1    East\r\n"<<
+"          2    South\r\n"<<
+"          3    West\r\n"<<
+"          4    Up\r\n"<<
+"          5    Down \r\n"<<
+"\r\n"<<
+"State being one of:\r\n"<<
+"\r\n"<<
+"          0    Open\r\n"<<
+"          1    Closed\r\n"<<
+"          2    Closed and locked\r\n"<<
+"\r\n"<<
+"Care should be taken to set both sides of a door correctly.  Closing\r\n"<<
+"the north exit of one room does not automatically close the south exit\r\n"<<
+"of the room on the other side of the door.\r\n"<<
+"\r\n"<<
+"{gld}R: remove object from room{/gld}Format: R <if-flag> <room vnum> <obj vnum>\r\n"<<
+"If an object with vnum Obj Vnum exists in the room with vnum Room Vnum,\r\n"<<
+"it will be removed from the room and purged.\r\n"<<
+"\r\n"<<
 				   "\r\n";
 		player->pager_end();
 		player->page(0);

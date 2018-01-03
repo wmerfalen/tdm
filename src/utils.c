@@ -20,6 +20,7 @@
 #include "spells.h"
 #include "handler.h"
 #include "interpreter.h"
+#include <random>	//C++ library
 
 
 /* external globals */
@@ -49,18 +50,10 @@ int rand_number(int from, int to)
     log("SYSERR: rand_number() should be called with lowest, then highest. (%d, %d), not (%d, %d).", from, to, to, from);
   }
 
-  /*
-   * This should always be of the form:
-   *
-   *	((float)(to - from + 1) * rand() / (float)(RAND_MAX + from) + from);
-   *
-   * if you are using rand() due to historical non-randomness of the
-   * lower bits in older implementations.  We always use circle_random()
-   * though, which shouldn't have that problem. Mean and standard
-   * deviation of both are identical (within the realm of statistical
-   * identity) if the rand() implementation is non-broken.
-   */
-  return ((circle_random() % (to - from + 1)) + from);
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dis(from,to);
+	return dis(gen);
 }
 
 

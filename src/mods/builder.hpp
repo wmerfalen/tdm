@@ -38,6 +38,7 @@ namespace mods::builder {
 	extern std::array<std::pair<int,std::string>,15> wear_flags;
 	extern std::array<std::pair<int,std::string>,25> affected_flags;
 	extern std::array<std::pair<int,std::string>,23> type_flags; 
+	extern std::array<std::pair<int,std::string>,3> type2_flags; 
 	/* Factory method to generate a room for us */
 	struct room_data new_room(struct char_data* ch);
 	bool flush_to_db(struct char_data *ch,room_vnum room);

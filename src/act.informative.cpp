@@ -598,9 +598,8 @@ void look_in_obj(struct char_data *ch, char *arg)
   else if (!(bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM |
 				 FIND_OBJ_EQUIP, ch, &dummy, &obj))) {
     send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(arg), arg);
-  } else if(mods::globals::obj_map[obj->item_number]->holds_ammo
-   		|| std::string(
-			mods::globals::obj_map[obj->item_number]->name)
+  } else if(obj->holds_ammo
+   		|| std::string(obj->name)
 			.find("[ammo]") != std::string::npos
   ){
   	send_to_char(ch,std::string(std::to_string(obj->ammo) + " rounds.").c_str());

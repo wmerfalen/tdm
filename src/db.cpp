@@ -1063,6 +1063,11 @@ int parse_sql_objects(){
 					proto.weapon_type = 0;
 				}
 				proto.carried_by = proto.worn_by = nullptr;
+				proto.next_content = nullptr;
+				proto.contains = nullptr;
+				proto.in_obj = nullptr;
+				proto.worn_by = nullptr;
+				proto.carried_by = nullptr;
 				obj_proto.push_back(proto);
 				++item;
 			}
