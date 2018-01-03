@@ -65,6 +65,19 @@ namespace mods{
 			command_interpreter(mods::globals::player_list[char_uuid],cmd.c_str());
 			return 0;	/* number of return values */
 		}
+		static duk_ret_t command_exec(duk_context *ctx){
+			int num_args = duk_get_top(ctx);
+			/* First parameter is character name */
+			auto char_uuid = duk_to_number(ctx,0);
+			std::string cmd =  duk_to_string(ctx,1);
+			auto player = mods::globals::players::get(char_uuid); 
+			player->set_cd(mods::globals::player_list[char_uuid]);
+			player->capture_output(true);
+			command_interpreter(mods::globals::player_list[char_uuid],cmd.c_str());
+			player->capture_output(false);
+			duk_push_string(ctx,player->get_captured_output().data());
+			return 1;
+		}
 		static duk_ret_t mob_death_trigger(duk_context *ctx){
 			int num_args = duk_get_top(ctx);
 			/* First parameter is character name */
@@ -169,6 +182,8 @@ namespace mods{
 			duk_put_global_string(ctx,"uuid");
 			duk_push_c_function(ctx,mods::js::hit,2);
 			duk_put_global_string(ctx,"hit");
+			duk_push_c_function(ctx,mods::js::command_exec,2);
+			duk_put_global_string(ctx,"cmd_exec");
 			duk_push_c_function(ctx,mods::js::command,2);
 			duk_put_global_string(ctx,"cmd");
 			duk_push_c_function(ctx,mods::js::send_to_uuid,2);

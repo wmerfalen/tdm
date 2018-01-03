@@ -61,15 +61,24 @@ namespace mods {
 			int ammo_type_adjustment(int,const weapon_type_t&);
 			obj_data* get_first_ammo_of_type(const weapon_type_t&) const;
 			void stc(int m){ 
+				if(m_capture_output){
+					m_captured_output += std::to_string(m);
+				}
 				send_to_char(m_char_data,std::to_string(m).c_str());
 			}
 			void stc(const std::string m){
 				if(m.length()){
+					if(m_capture_output){
+						m_captured_output += m;
+					}
 					send_to_char(m_char_data,m.c_str());
 				}
 			}
 			void stc(const char* m){
 				if(m){
+					if(m_capture_output){
+						m_captured_output += m;
+					}
 					send_to_char(m_char_data,m);
 				}
 			}
@@ -114,11 +123,16 @@ namespace mods {
 			bool paging() const { return m_pages.size(); }
 			obj_data* weapon();
 			obj_data* get_ammo(const weapon_type_t &);
+			void capture_output(bool capture_status);
+			std::string_view get_captured_output();
+			void clear_captured_output();
 		protected:
 			char_data* m_char_data;
 			std::array<unsigned long,WEAPON_SET_NUM> m_weapon_cooldown;
 			weapon_set m_weapon_set;
 			bool m_do_paging;
+			bool m_capture_output;
+			std::string m_captured_output;
 			unsigned int m_page;
 			unsigned int m_current_page;
 			std::string m_current_page_fragment;

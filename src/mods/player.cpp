@@ -91,6 +91,17 @@ namespace mods {
 		}
 		return buffer;
 	}
+	void player::capture_output(bool capture_status){
+		m_capture_output = capture_status;
+	}
+
+	std::string_view player::get_captured_output(){
+		return m_captured_output;
+	}
+
+	void player::clear_captured_output(){
+		m_captured_output = "";
+	}
 
 	using mask_t = mods::weapon::mask_type;
 	player::player(char_data* ch) : m_char_data(ch),m_do_paging(false),
