@@ -35,13 +35,14 @@ using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 void parse_sql_rooms(); 
 void parse_sql_zones();
 int parse_sql_objects();
+void parse_sql_mobiles();
 std::vector<struct room_data> world;	/* array of rooms		 */
 room_rnum top_of_world = 0;	/* ref to top element of world	 */
 
 extern struct char_data *character_list;	/* global linked list of
 						 * chars	 */
-struct index_data *mob_index;	/* index table for mobile file	 */
-struct char_data *mob_proto;	/* prototypes for mobs		 */
+std::vector<index_data> mob_index;	/* index table for mobile file	 */
+std::vector<char_data> mob_proto;	/* prototypes for mobs		 */
 mob_rnum top_of_mobt = 0;	/* top of mobile index table	 */
 
 std::vector<obj_data> object_list;	/* vector of objs	 */
@@ -266,8 +267,8 @@ void boot_world(void)
   log("Checking start rooms.");
   check_start_rooms();
 
-  log("Loading mobs and generating index.");
-  index_boot(DB_BOOT_MOB);
+  log("Loading sql mobs and generating index.");
+  parse_sql_mobiles();
 
   log("Loading sql objs and generating index.");
   //index_boot(DB_BOOT_OBJ);
@@ -348,8 +349,6 @@ void destroy_db(void)
       free(obj_proto[cnt].action_description);
     free_extra_descriptions(obj_proto[cnt].ex_description);
   }
-  //free(obj_proto);
-  //free(obj_index);
 
   /* Mobiles */
   for (cnt = 0; cnt <= top_of_mobt; cnt++) {
@@ -367,8 +366,6 @@ void destroy_db(void)
     while (mob_proto[cnt].affected)
       affect_remove(&mob_proto[cnt], mob_proto[cnt].affected);
   }
-  free(mob_proto);
-  free(mob_index);
 
   /* Shops */
   destroy_shops();
@@ -759,8 +756,6 @@ void index_boot(int mode)
     log("   %d rooms, %d bytes.", rec_count, size[0]);
     break;
   case DB_BOOT_MOB:
-    CREATE(mob_proto, struct char_data, rec_count);
-    CREATE(mob_index, struct index_data, rec_count);
     size[0] = sizeof(struct index_data) * rec_count;
     size[1] = sizeof(struct char_data) * rec_count;
     log("   %d mobs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
@@ -867,7 +862,6 @@ void discrete_load(FILE *fl, int mode, char *filename)
 	  parse_room(fl, nr);
 	  break;
 	case DB_BOOT_MOB:
-	  parse_mobile(fl, nr);
 	  break;
 	case DB_BOOT_OBJ:
 	  //strlcpy(line, parse_object(fl, nr), sizeof(line));
@@ -904,6 +898,79 @@ bitvector_t asciiflag_conv(char *flag)
   return (flags);
 }
 
+void parse_sql_mobiles(){
+	char_data proto;
+	clear_char(&proto);
+	proto.player_specials = &dummy_mob;
+	proto.player.name = nullptr;
+	proto.player.short_descr = nullptr;
+	proto.player.long_descr = nullptr;
+	proto.player.description = nullptr;
+	proto.player.title = nullptr;
+	proto.char_specials.saved.act = 0;
+  	SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
+    REMOVE_BIT(proto.char_specials.saved.act, MOB_NOTDEADYET);
+	proto.char_specials.saved.affected_by = 0;
+	proto.char_specials.saved.alignment = 0;
+
+  /* AGGR_TO_ALIGN is ignored if the mob is AGGRESSIVE. */
+  if (MOB_FLAGGED(&proto, MOB_AGGRESSIVE) && MOB_FLAGGED(&proto, MOB_AGGR_GOOD | MOB_AGGR_EVIL | MOB_AGGR_NEUTRAL))
+    log("SYSERR: Mob both Aggressive and Aggressive_to_Alignment.");
+
+	proto.real_abils.str = 11;
+	proto.real_abils.intel = 11;
+	proto.real_abils.wis = 11;
+	proto.real_abils.dex = 11;
+	proto.real_abils.con = 11;
+	proto.real_abils.cha = 11;
+
+	GET_LEVEL(&proto) = 0;
+	GET_HITROLL(&proto) = 20 - 0;
+	GET_AC(&proto) = 10 * 1;
+
+	/* max hit = 0 is a flag that H, M, V is xdy+z */
+	GET_MAX_HIT(&proto) = 0;
+	GET_HIT(&proto) = 0;
+	GET_MANA(&proto) = 0;
+	GET_MOVE(&proto) = 0;
+	GET_MAX_MANA(&proto) = 10;
+	GET_MAX_MOVE(&proto) = 50;
+	proto.mob_specials.damnodice = 0;
+	proto.mob_specials.damsizedice = 0;
+	GET_DAMROLL(&proto) = 0;
+	GET_GOLD(&proto) = 0;
+	GET_EXP(&proto) = 0;
+	GET_POS(&proto) = 0;
+	GET_DEFAULT_POS(&proto) = 0;
+	GET_SEX(&proto) = 0;
+	GET_CLASS(&proto) = 0;
+	GET_WEIGHT(&proto) = 200;
+	GET_HEIGHT(&proto) = 198;
+	/*
+	* these are now save applies; base save numbers for MOBs are now from
+	* the warrior save table.
+	*/
+	unsigned j = 0;
+	for (; j < 5; j++){
+		GET_SAVE(&proto, j) = 0;
+	}
+	proto.aff_abils = proto.real_abils;
+
+	for (; j < NUM_WEARS; j++){
+		proto.equipment[j] = nullptr;
+	}
+	proto.nr = 0;
+	proto.desc = nullptr;
+	proto.uuid = mods::globals::get_uuid();
+	mods::globals::register_player(&proto);
+	mob_proto.push_back(proto);
+	top_of_mobt = mob_proto.size();
+	index_data m_index;
+	m_index.vnum = 0;
+	m_index.number = 0;
+	m_index.func = nullptr;
+	mob_index.push_back(m_index);
+}
 
 int parse_sql_objects(){
 	auto txn = txn();
@@ -1393,6 +1460,7 @@ void renum_zone_table(void)
 
 void parse_simple_mob(FILE *mob_f, int i, int nr)
 {
+#if 0
   int j, t[10];
   char line[READ_SIZE];
 
@@ -1473,6 +1541,7 @@ void parse_simple_mob(FILE *mob_f, int i, int nr)
    */
   for (j = 0; j < 5; j++)
     GET_SAVE(mob_proto + i, j) = 0;
+#endif
 }
 
 
@@ -1592,6 +1661,9 @@ void parse_enhanced_mob(FILE *mob_f, int i, int nr)
 
 void parse_mobile(FILE *mob_f, int nr)
 {
+	log("[DEPRECATED] parse_mobile");
+	return;
+#if 0
   static int i = 0;
   int j, t[10];
   char line[READ_SIZE], *tmpptr, letter;
@@ -1601,7 +1673,7 @@ void parse_mobile(FILE *mob_f, int nr)
   mob_index[i].number = 0;
   mob_index[i].func = NULL;
 
-  clear_char(mob_proto + i);
+  clear_char(mob_proto[i]);
 
   /*
    * Mobiles should NEVER use anything in the 'player_specials' structure.
@@ -1620,7 +1692,7 @@ void parse_mobile(FILE *mob_f, int nr)
       *tmpptr = LOWER(*tmpptr);
   mob_proto[i].player.long_descr = fread_string(mob_f, buf2);
   mob_proto[i].player.description = fread_string(mob_f, buf2);
-  GET_TITLE(mob_proto + i) = NULL;
+  GET_TITLE(mob_proto[i]) = NULL;
 
   /* *** Numeric data *** */
   if (!get_line(mob_f, line)) {
@@ -1639,19 +1711,19 @@ void parse_mobile(FILE *mob_f, int nr)
     exit(1);
   }
 
-  MOB_FLAGS(mob_proto + i) = asciiflag_conv(f1);
-  SET_BIT(MOB_FLAGS(mob_proto + i), MOB_ISNPC);
-  if (MOB_FLAGGED(mob_proto + i, MOB_NOTDEADYET)) {
+  MOB_FLAGS(mob_proto[i]) = asciiflag_conv(f1);
+  SET_BIT(MOB_FLAGS(mob_proto[i]), MOB_ISNPC);
+  if (MOB_FLAGGED(mob_proto[i], MOB_NOTDEADYET)) {
     /* Rather bad to load mobiles with this bit already set. */
     log("SYSERR: Mob #%d has reserved bit MOB_NOTDEADYET set.", nr);
     REMOVE_BIT(MOB_FLAGS(mob_proto + i), MOB_NOTDEADYET);
   }
-  check_bitvector_names(MOB_FLAGS(mob_proto + i), action_bits_count, buf2, "mobile");
+  check_bitvector_names(MOB_FLAGS(mob_proto[i]), action_bits_count, buf2, "mobile");
 
   AFF_FLAGS(mob_proto + i) = asciiflag_conv(f2);
-  check_bitvector_names(AFF_FLAGS(mob_proto + i), affected_bits_count, buf2, "mobile affect");
+  check_bitvector_names(AFF_FLAGS(mob_proto[i]), affected_bits_count, buf2, "mobile affect");
 
-  GET_ALIGNMENT(mob_proto + i) = t[2];
+  GET_ALIGNMENT(mob_proto[i]) = t[2];
 
   /* AGGR_TO_ALIGN is ignored if the mob is AGGRESSIVE. */
   if (MOB_FLAGGED(mob_proto + i, MOB_AGGRESSIVE) && MOB_FLAGGED(mob_proto + i, MOB_AGGR_GOOD | MOB_AGGR_EVIL | MOB_AGGR_NEUTRAL))
@@ -1681,6 +1753,7 @@ void parse_mobile(FILE *mob_f, int nr)
   mob_proto[i].uuid = mods::globals::get_uuid();
 	mods::globals::register_player(&mob_proto[i]);
   top_of_mobt = i++;
+#endif
 }
 
 
@@ -3065,11 +3138,11 @@ mob_rnum real_mobile(mob_vnum vnum)
   for (;;) {
     mid = (bot + top) / 2;
 
-    if ((mob_index + mid)->vnum == vnum)
+    if ((mob_index[mid]).vnum == vnum)
       return (mid);
     if (bot >= top)
       return (NOBODY);
-    if ((mob_index + mid)->vnum > vnum)
+    if ((mob_index[mid]).vnum > vnum)
       top = mid - 1;
     else
       bot = mid + 1;
