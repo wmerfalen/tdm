@@ -13,6 +13,7 @@ extern void do_auto_exits(struct char_data *ch);
 extern std::vector<room_data> world;
 extern int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype);
 extern struct char_data* character_list;
+extern std::vector<char_data> mob_proto;
 extern std::vector<obj_data> obj_proto;
 extern void obj_to_room(struct obj_data *object, room_rnum room);
 extern room_vnum mortal_start_room;

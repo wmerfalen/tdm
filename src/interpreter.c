@@ -159,6 +159,7 @@ ACMD(do_sneak);
 ACMD(do_recall);
 ACMD(do_givemegold);
 ACMD(do_snipe);
+ACMD(do_mbuild);
 ACMD(do_obuild);
 ACMD(do_chanmgr);
 ACMD(do_rbuildzone);
@@ -487,6 +488,7 @@ cpp_extern const struct command_info cmd_info[] = {
   { "recall"  , POS_RESTING , do_recall   , 0, 0 },
   { "givemegold"  , POS_RESTING , do_givemegold   , 0, 0 },
   { "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
+  { "mbuild"  , POS_RESTING , do_mbuild   , LVL_GOD, 0 },
   { "obuild"  , POS_RESTING , do_obuild   , LVL_GOD, 0 },
   { "chanmgr"  , POS_RESTING , do_chanmgr   , LVL_IMMORT, 0 },
   { "zbuild"  , POS_RESTING , do_rbuildzone   , LVL_IMMORT, 0 },

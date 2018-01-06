@@ -901,75 +901,101 @@ bitvector_t asciiflag_conv(char *flag)
 void parse_sql_mobiles(){
 	char_data proto;
 	clear_char(&proto);
-	proto.player_specials = &dummy_mob;
-	proto.player.name = nullptr;
-	proto.player.short_descr = nullptr;
-	proto.player.long_descr = nullptr;
-	proto.player.description = nullptr;
-	proto.player.title = nullptr;
-	proto.char_specials.saved.act = 0;
-  	SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
-    REMOVE_BIT(proto.char_specials.saved.act, MOB_NOTDEADYET);
-	proto.char_specials.saved.affected_by = 0;
-	proto.char_specials.saved.alignment = 0;
+	auto txn = txn();
+	sql_compositor comp("mobile",&txn);
+	auto sql = comp
+		.select("COUNT(*)")
+		.from("mobile")
+		.where("1","=","1")
+		.sql();
+	auto result = mods::pq::exec(txn,sql);
+	mods::pq::commit(txn);
+	if(result.size()){
+		auto txn2 = txn();
+		auto result2 = 
+			mods::pq::exec(txn2,sql_compositor("mobile",&txn2)
+				.select("*")
+				.from("mobile")
+				.where("1","=","1")
+				.sql()
+			);
+		for(auto row : result2){
+			proto.player_specials = &dummy_mob;
+			proto.player.name = strdup(row["name"].c_str());
+			proto.player.short_descr = strdup(row["short_description"].c_str());
+			proto.player.long_descr = strdup(row["long_description"].c_str());
+			if(!row["description"].is_null()){
+				proto.player.description = strdup(row["description"].c_str());
+			}else{
+				proto.player.description = nullptr;
+			}
+			proto.player.title = nullptr;
+			proto.char_specials.saved.act = row["action_bitvector"].as<int>();
+			SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
+			REMOVE_BIT(proto.char_specials.saved.act, MOB_NOTDEADYET);
+			proto.char_specials.saved.affected_by = 0;
+			proto.char_specials.saved.alignment = row["alignment"].as<int>();
 
-  /* AGGR_TO_ALIGN is ignored if the mob is AGGRESSIVE. */
-  if (MOB_FLAGGED(&proto, MOB_AGGRESSIVE) && MOB_FLAGGED(&proto, MOB_AGGR_GOOD | MOB_AGGR_EVIL | MOB_AGGR_NEUTRAL))
-    log("SYSERR: Mob both Aggressive and Aggressive_to_Alignment.");
+		  /* AGGR_TO_ALIGN is ignored if the mob is AGGRESSIVE. */
+		  if (MOB_FLAGGED(&proto, MOB_AGGRESSIVE) && MOB_FLAGGED(&proto, MOB_AGGR_GOOD | MOB_AGGR_EVIL | MOB_AGGR_NEUTRAL))
+			log("SYSERR: Mob both Aggressive and Aggressive_to_Alignment.");
 
-	proto.real_abils.str = 11;
-	proto.real_abils.intel = 11;
-	proto.real_abils.wis = 11;
-	proto.real_abils.dex = 11;
-	proto.real_abils.con = 11;
-	proto.real_abils.cha = 11;
+#define MENTOC_ABIL_SET(struct_name,sql_name) proto.real_abils.struct_name = row[#sql_name].as<int>();
+		  	MENTOC_ABIL_SET(str,ability_strength);
+		  	MENTOC_ABIL_SET(intel,ability_intelligence);
+		  	MENTOC_ABIL_SET(wis,ability_wisdom);
+		  	MENTOC_ABIL_SET(dex,ability_dexterity);
+		  	MENTOC_ABIL_SET(con,ability_constitution);
+		  	MENTOC_ABIL_SET(cha,ability_charisma);
 
-	GET_LEVEL(&proto) = 0;
-	GET_HITROLL(&proto) = 20 - 0;
-	GET_AC(&proto) = 10 * 1;
+			GET_LEVEL(&proto) = row["mob_level"].as<int>();
+			GET_HITROLL(&proto) = 20 - row["hitroll"].as<int>();
+			GET_AC(&proto) = 10 * row["armor_class"].as<int>();
 
-	/* max hit = 0 is a flag that H, M, V is xdy+z */
-	GET_MAX_HIT(&proto) = 0;
-	GET_HIT(&proto) = 0;
-	GET_MANA(&proto) = 0;
-	GET_MOVE(&proto) = 0;
-	GET_MAX_MANA(&proto) = 10;
-	GET_MAX_MOVE(&proto) = 50;
-	proto.mob_specials.damnodice = 0;
-	proto.mob_specials.damsizedice = 0;
-	GET_DAMROLL(&proto) = 0;
-	GET_GOLD(&proto) = 0;
-	GET_EXP(&proto) = 0;
-	GET_POS(&proto) = 0;
-	GET_DEFAULT_POS(&proto) = 0;
-	GET_SEX(&proto) = 0;
-	GET_CLASS(&proto) = 0;
-	GET_WEIGHT(&proto) = 200;
-	GET_HEIGHT(&proto) = 198;
-	/*
-	* these are now save applies; base save numbers for MOBs are now from
-	* the warrior save table.
-	*/
-	unsigned j = 0;
-	for (; j < 5; j++){
-		GET_SAVE(&proto, j) = 0;
+			/* max hit = 0 is a flag that H, M, V is xdy+z */
+			GET_MAX_HIT(&proto) = row["max_hitpoints"].as<int>();
+			GET_HIT(&proto) = row["hitpoints"].as<int>();
+			GET_MANA(&proto) = row["mana"].as<int>();
+			GET_MOVE(&proto) = row["move"].as<int>();
+			GET_MAX_MANA(&proto) = row["max_mana"].as<int>();
+			GET_MAX_MOVE(&proto) = row["max_move"].as<int>();
+			proto.mob_specials.damnodice = row["dam_no_dice"].as<int>();
+			proto.mob_specials.damsizedice = row["dam_size_dice"].as<int>();
+			GET_DAMROLL(&proto) = row["dam_roll"].as<int>();
+			GET_GOLD(&proto) = row["gold"].as<int>();
+			GET_EXP(&proto) = row["experience_points"].as<int>();
+			GET_POS(&proto) = row["load_position"].as<int>();
+			GET_DEFAULT_POS(&proto) = row["default_position"].as<int>();
+			GET_SEX(&proto) = row["sex"].as<int>();
+			GET_CLASS(&proto) = row["mob_class"].as<int>();
+			GET_WEIGHT(&proto) = row["weight"].as<int>(); 
+			GET_HEIGHT(&proto) = row["height"].as<int>();
+			/*
+			* these are now save applies; base save numbers for MOBs are now from
+			* the warrior save table.
+			*/
+			unsigned j = 0;
+			for (; j < 5; j++){
+				GET_SAVE(&proto, j) = 0;
+			}
+			proto.aff_abils = proto.real_abils;
+
+			for (; j < NUM_WEARS; j++){
+				proto.equipment[j] = nullptr;
+			}
+			proto.nr = 0;
+			proto.desc = nullptr;
+			proto.uuid = mods::globals::get_uuid();
+			mods::globals::register_player(&proto);
+			mob_proto.push_back(proto);
+			top_of_mobt = mob_proto.size();
+			index_data m_index;
+			m_index.vnum = row["virtual_number"].as<int>();
+			m_index.number = 0;
+			m_index.func = nullptr;
+			mob_index.push_back(m_index);
+		}
 	}
-	proto.aff_abils = proto.real_abils;
-
-	for (; j < NUM_WEARS; j++){
-		proto.equipment[j] = nullptr;
-	}
-	proto.nr = 0;
-	proto.desc = nullptr;
-	proto.uuid = mods::globals::get_uuid();
-	mods::globals::register_player(&proto);
-	mob_proto.push_back(proto);
-	top_of_mobt = mob_proto.size();
-	index_data m_index;
-	m_index.vnum = 0;
-	m_index.number = 0;
-	m_index.func = nullptr;
-	mob_index.push_back(m_index);
 }
 
 int parse_sql_objects(){
@@ -3133,7 +3159,7 @@ mob_rnum real_mobile(mob_vnum vnum)
 
   bot = 0;
   top = top_of_mobt;
-
+	if(top == 0){ return NOBODY; }
   /* perform binary search on mob-table */
   for (;;) {
     mid = (bot + top) / 2;

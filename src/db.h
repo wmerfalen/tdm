@@ -239,7 +239,6 @@ extern struct descriptor_data *descriptor_list;
 extern struct player_special_data dummy_mob;
 
 extern struct index_data *mob_index;
-extern struct char_data *mob_proto;
 extern mob_rnum top_of_mobt;
 
 extern struct index_data *obj_index;

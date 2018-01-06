@@ -1,42 +1,39 @@
 # Generated automatically from Makefile.in by configure.
 # CircleMUD Makefile.in - Makefile template used by 'configure'
 #
-
+THIS_DIR = $(shell pwd)
 # C compiler to use
-CC = g++-7 -g -A -da -std=c++17 -fpermissive -MMD -I/home/llvm/code/c++/bnull-mud/src/mods/include -L/home/llvm/code/c++/bnull-mud/src/mods/lib 
+CC = g++-7 -g -A -da -std=c++17 -fpermissive -MMD \
+	 -I$(THIS_DIR)/mods/include \
+	 -L$(THIS_DIR)/mods/lib \
+	 -I$(THIS_DIR)/boost-cpp \
+	 -L$(THIS_DIR)/boost-cpp/libs 
 
 # Path to cxref utility
 CXREF = cxref
 
 # Any special flags you want to pass to the compiler
-MYFLAGS = -Wall -Wno-char-subscripts
+MYFLAGS = -Wall -Wno-char-subscripts -Wcomment
 
 #flags for profiling (see hacker.doc for more information)
 PROFILE = 
-
-##############################################################################
-# Do Not Modify Anything Below This Line (unless you know what you're doing) #
-##############################################################################
 
 BINDIR = ../bin
 
 CFLAGS = -g -O2 $(MYFLAGS) $(PROFILE)
 
-LIBS =  -lcrypt -lpqxx -lpq /home/llvm/code/c++/bnull-mud/src/mods/lib/liblmdb.so 
 
 MODS_SRC := $(wildcard mods/*.cpp)
 MODS_OBJ := $(patsubst mods/%.cpp,mods/%.o,$(MODS_SRC))
 CPP_SRC := $(wildcard *.cpp)
 CPP_OBJ := $(patsubst %.cpp,%.o,$(CPP_SRC))
+C_SRC := $(wildcard *.c)
+C_OBJ := $(patsubst %.c,%.o,$(C_SRC))
 
+LIBS =  -lcrypt -lpqxx -lpq $(THIS_DIR)/mods/lib/liblmdb.so 
 
-OBJFILES = act.comm.o act.item.o act.movement.o \
-	act.other.o act.social.o alias.o ban.o \
-	boards.o castle.o class.o comm.o config.o constants.o fight.o \
-	graph.o handler.o house.o interpreter.o limits.o magic.o mail.o \
-	mobact.o modify.o objsave.o olc.o random.o shop.o spec_assign.o \
-	spec_procs.o spell_parser.o spells.o utils.o weather.o \
-	bsd-snprintf.o acl.o duktape.o $(MODS_OBJ) $(CPP_OBJ) 
+#TODO add lmdb.so
+OBJFILES = acl.o duktape.o $(MODS_OBJ) $(CPP_OBJ) $(C_OBJ)
 
 CXREF_FILES = act.comm.c act.informative.c act.item.c act.movement.c \
 	act.other.c act.social.c act.wizard.cpp alias.c ban.c \
@@ -114,99 +111,5 @@ duktape.o: duktape-2.2.0/src/duktape.h
 	$(CC) -c $(CFLAGS) duktape-2.2.0/src/duktape.c -o duktape.o
 acl.o: mods/acl/config-parser.cpp
 	$(CC) -c $(CFLAGS) mods/acl/config-parser.cpp -o acl.o
-act.comm.o: act.comm.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h \
-  handler.h db.h screen.h
-	$(CC) -c $(CFLAGS) act.comm.c
-act.item.o: act.item.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h \
-  handler.h db.h spells.h constants.h
-	$(CC) -c $(CFLAGS) act.item.c
-act.movement.o: act.movement.c conf.h sysdep.h structs.h utils.h comm.h \
-  interpreter.h handler.h db.h spells.h house.h constants.h
-	$(CC) -c $(CFLAGS) act.movement.c
-act.other.o: act.other.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h \
-  handler.h db.h spells.h screen.h house.h constants.h
-	$(CC) -c $(CFLAGS) act.other.c
-act.social.o: act.social.c conf.h sysdep.h structs.h utils.h comm.h \
-  interpreter.h handler.h db.h spells.h
-	$(CC) -c $(CFLAGS) act.social.c
-alias.o: alias.c conf.h sysdep.h structs.h utils.h interpreter.h db.h
-	$(CC) -c $(CFLAGS) alias.c
-ban.o: ban.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h db.h
-	$(CC) -c $(CFLAGS) ban.c
-boards.o: boards.c conf.h sysdep.h structs.h utils.h comm.h db.h boards.h \
-  interpreter.h handler.h
-	$(CC) -c $(CFLAGS) boards.c
-castle.o: castle.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h \
-  handler.h db.h spells.h
-	$(CC) -c $(CFLAGS) castle.c
-class.o: class.c conf.h sysdep.h structs.h db.h utils.h spells.h interpreter.h \
-  constants.h
-	$(CC) -c $(CFLAGS) class.c
-comm.o: comm.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h \
-  db.h house.h
-	$(CC) -c $(CFLAGS) comm.c
-config.o: config.c conf.h sysdep.h structs.h interpreter.h
-	$(CC) -c $(CFLAGS) config.c
-constants.o: constants.c conf.h sysdep.h structs.h interpreter.h
-	$(CC) -c $(CFLAGS) constants.c
-fight.o: fight.c conf.h sysdep.h structs.h utils.h comm.h handler.h interpreter.h \
-  db.h spells.h screen.h constants.h
-	$(CC) -c $(CFLAGS) fight.c
-graph.o: graph.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h \
-  db.h spells.h
-	$(CC) -c $(CFLAGS) graph.c
-handler.o: globals.hpp handler.c conf.h sysdep.h structs.h utils.h comm.h db.h handler.h \
-  interpreter.h spells.h
-	$(CC) -c $(CFLAGS) handler.c
-house.o: house.c conf.h sysdep.h structs.h comm.h handler.h db.h interpreter.h \
-  utils.h house.h constants.h
-	$(CC) -c $(CFLAGS) house.c
-interpreter.o: interpreter.c conf.h sysdep.h structs.h comm.h interpreter.h db.h \
-  utils.h spells.h handler.h mail.h screen.h
-	$(CC) -c $(CFLAGS) interpreter.c
-limits.o: limits.c conf.h sysdep.h structs.h utils.h spells.h comm.h db.h \
-  handler.h
-	$(CC) -c $(CFLAGS) limits.c
-magic.o: magic.c conf.h sysdep.h structs.h utils.h comm.h spells.h handler.h db.h \
-  constants.h
-	$(CC) -c $(CFLAGS) magic.c
-mail.o: mail.c conf.h sysdep.h structs.h utils.h comm.h db.h interpreter.h \
-  handler.h mail.h
-	$(CC) -c $(CFLAGS) mail.c
-mobact.o: mobact.c conf.h sysdep.h structs.h utils.h db.h comm.h interpreter.h \
-  handler.h spells.h constants.h
-	$(CC) -c $(CFLAGS) mobact.c
-modify.o: modify.c conf.h sysdep.h structs.h utils.h interpreter.h handler.h db.h \
-  comm.h spells.h mail.h boards.h
-	$(CC) -c $(CFLAGS) modify.c
-objsave.o: objsave.c conf.h sysdep.h structs.h comm.h handler.h db.h \
-  interpreter.h utils.h spells.h
-	$(CC) -c $(CFLAGS) objsave.c
-olc.o: olc.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h db.h \
-  olc.h
-	$(CC) -c $(CFLAGS) olc.c
-random.o: random.c utils.h
-	$(CC) -c $(CFLAGS) random.c
-shop.o: shop.c conf.h sysdep.h structs.h comm.h handler.h db.h interpreter.h \
-  utils.h shop.h constants.h
-	$(CC) -c $(CFLAGS) shop.c
-spec_assign.o: spec_assign.c conf.h sysdep.h structs.h db.h interpreter.h \
-  utils.h
-	$(CC) -c $(CFLAGS) spec_assign.c
-spec_procs.o: spec_procs.c conf.h sysdep.h structs.h utils.h comm.h \
-  interpreter.h handler.h db.h spells.h constants.h
-	$(CC) -c $(CFLAGS) spec_procs.c
-spell_parser.o: spell_parser.c conf.h sysdep.h structs.h utils.h interpreter.h \
-  spells.h handler.h comm.h db.h
-	$(CC) -c $(CFLAGS) spell_parser.c
-spells.o: spells.c conf.h sysdep.h structs.h utils.h comm.h spells.h handler.h \
-  db.h constants.h interpreter.h
-	$(CC) -c $(CFLAGS) spells.c
-utils.o: utils.c conf.h sysdep.h structs.h utils.h comm.h screen.h spells.h \
-  handler.h db.h interpreter.h
-	$(CC) -c $(CFLAGS) utils.c
-weather.o: weather.c conf.h sysdep.h structs.h utils.h comm.h handler.h \
-  interpreter.h db.h
-	$(CC) -c $(CFLAGS) weather.c
-bsd-snprintf.o: bsd-snprintf.c conf.h sysdep.h
-	$(CC) -c $(CFLAGS) bsd-snprintf.c
+liblmdb.so: 
+	#todo

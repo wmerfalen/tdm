@@ -6,6 +6,7 @@
 #include <stdlib.h> //For itoa
 #include "sql.hpp"
 #include "../structs.h"
+#include "extern.hpp"
 
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
 #define MENTOC_OBI2(i,a) obj->i = get_intval(#a).value_or(obj->i);
@@ -446,6 +447,67 @@ namespace mods::builder{
 		mods::pq::exec(txn,sql);
 		mods::pq::commit(txn);
 	}
+	char_data new_blank_character(bool npc = false){
+		char_data proto;
+		proto.player_specials = &dummy_mob;
+		const char* foo = "foo";
+		proto.player.name = strdup(foo);
+		proto.player.short_descr = strdup(foo);
+		proto.player.long_descr = strdup(foo);
+		proto.player.description = strdup(foo);
+		proto.player.title = nullptr;
+		proto.char_specials.saved.act = 0;
+		if(npc){
+			SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
+		}else{
+			REMOVE_BIT(proto.char_specials.saved.act, MOB_ISNPC);
+		}
+		REMOVE_BIT(proto.char_specials.saved.act, MOB_NOTDEADYET);
+		proto.char_specials.saved.affected_by = 0;
+		proto.char_specials.saved.alignment = 0;
+#define MENTOC_ABIL_SET2(struct_name) proto.real_abils.struct_name = 0;
+		MENTOC_ABIL_SET2(str);
+		MENTOC_ABIL_SET2(intel);
+		MENTOC_ABIL_SET2(wis);
+		MENTOC_ABIL_SET2(dex);
+		MENTOC_ABIL_SET2(con);
+		MENTOC_ABIL_SET2(cha);
+
+		GET_LEVEL(&proto) = 0;
+		GET_HITROLL(&proto) = 0;
+		GET_AC(&proto) = 0;
+
+		/* max hit = 0 is a flag that H, M, V is xdy+z */
+		GET_MAX_HIT(&proto) = 0;
+		GET_HIT(&proto) = 0;
+		GET_MANA(&proto) = 0;
+		GET_MOVE(&proto) = 0;
+		GET_MAX_MANA(&proto) = 0;
+		GET_MAX_MOVE(&proto) = 0;
+		proto.mob_specials.damnodice = 0;
+		proto.mob_specials.damsizedice = 0;
+		GET_DAMROLL(&proto) = 0;
+		GET_GOLD(&proto) = 0;
+		GET_EXP(&proto) = 0;
+		GET_POS(&proto) = 0;
+		GET_DEFAULT_POS(&proto) = 0;
+		GET_SEX(&proto) = 0;
+		GET_CLASS(&proto) = 0;
+		GET_WEIGHT(&proto) = 0; 
+		GET_HEIGHT(&proto) = 0;
+		unsigned j = 0;
+		for (; j < 5; j++){
+			GET_SAVE(&proto, j) = 0;
+		}
+		proto.aff_abils = proto.real_abils;
+
+		for (; j < NUM_WEARS; j++){
+			proto.equipment[j] = nullptr;
+		}
+		proto.nr = 0;
+		proto.desc = nullptr;
+		return proto;
+	}
 	std::pair<bool,std::string> save_object(obj_data* obj){
 		auto txn_01 = txn();
 		sql_compositor comp3("object",&txn_01);
@@ -635,6 +697,39 @@ namespace mods::builder{
 };
 
 using args_t = std::vector<std::string>;
+ACMD(do_mbuild){
+	MENTOC_PREAMBLE();
+	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
+	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0){
+		player->pager_start();
+		*player << "usage: \r\n" << 
+				   " mbuild help\r\n" <<
+				   "  |--> this help menu\r\n" <<
+				   "  |____[example]\r\n" <<
+				   "  |:: mbuild help\r\n" <<
+				   "  |:: (this help menu will show up)\r\n" <<
+				   " mbuild new\r\n" <<
+				   " mbuild list\r\n" <<
+				   " mbuild attr <object_id> <attr> <value>\r\n" <<
+				   "  |:: -:[attributes]:-\r\n" <<
+				   "  |:: weapon_ammo\r\n" << 
+				   "  |:: weapon_ammo_max\r\n" << 
+				   "  |:: weapon_holds_ammo\r\n" << 
+			"\r\n"
+		;
+		player->pager_end();
+		player->page(0);
+		return;
+	}
+	auto args = mods::util::subcmd_args<4,args_t>(argument,"new");
+	if(args.has_value()){
+		mob_proto.push_back(mods::builder::new_blank_character(true));
+		mods::builder::report_success(player,"Mobile created");
+		return;
+	}
+
+}
+
 ACMD(do_obuild){
 	MENTOC_PREAMBLE();
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
@@ -1431,6 +1526,7 @@ ACMD(do_obuild){
 				}
 				return i_value.value();
 			}
+			return std::nullopt;
 		};
 		auto get_strval = [&](std::string_view str) -> std::optional<char*>{
 			*player << arg_vec[2] << "\r\n";

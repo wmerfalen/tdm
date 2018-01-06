@@ -57,10 +57,6 @@ namespace mods::util{
 		return arglist;
 	}
 	std::optional<int> stoi(std::string_view str,int base=10);
-	int constexpr length(const char* str)
-	{
-			return *str ? 1 + length(str + 1) : 0;
-	}
 
 	template<int max_char,typename Container>
 	inline std::optional<Container> subcmd_args(std::string_view argument,const char* subcmd){
@@ -80,7 +76,7 @@ namespace mods::util{
 		return &buf[0];
 	}
 	template<typename T>
-	inline linked_list_remove(T item, T head){
+	inline void linked_list_remove(T item, T head){
 		if ((item) == (head))
 			head = (item)->next;
 		else { 
