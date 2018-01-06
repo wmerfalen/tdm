@@ -7,7 +7,7 @@ CC = g++-7 -g -A -da -std=c++17 -fpermissive -MMD \
 	 -I$(THIS_DIR)/mods/include \
 	 -L$(THIS_DIR)/mods/lib \
 	 -I$(THIS_DIR)/boost-cpp \
-	 -L$(THIS_DIR)/boost-cpp/libs 
+	 -L$(THIS_DIR)/boost-cpp/build/lib 
 
 # Path to cxref utility
 CXREF = cxref

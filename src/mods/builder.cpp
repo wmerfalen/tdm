@@ -15,6 +15,70 @@
 using objtype = mods::object::type;
 typedef mods::sql::compositor<mods::pq::transaction> sql_compositor;
 namespace mods::builder{
+	std::array<std::pair<int,std::string>,3> sex_flags = { {
+		{SEX_NEUTRAL,"NEUTRAL"},
+		{SEX_MALE,"MALE"},
+		{SEX_FEMALE,"FEMALE"}
+	} };
+
+	std::array<std::pair<int,std::string>,19> mob_act_flags = { {
+		{MOB_SPEC,"SPEC"},         
+		{MOB_SENTINEL,"SENTINEL"},     
+		{MOB_SCAVENGER,"SCAVENGER"},    
+		{MOB_ISNPC,"ISNPC"},        
+		{MOB_AWARE,"AWARE"},    
+		{MOB_AGGRESSIVE,"AGGRESSIVE"},   
+		{MOB_STAY_ZONE,"STAY_ZONE"},
+		{MOB_WIMPY,"WIMPY"},        
+		{MOB_AGGR_EVIL,"AGGR_EVIL"},
+		{MOB_AGGR_GOOD,"AGGR_GOOD"},
+		{MOB_AGGR_NEUTRAL,"AGGR_NEUTRAL"},
+		{MOB_MEMORY,"MEMORY"},   
+		{MOB_HELPER,"HELPER"},   
+		{MOB_NOCHARM,"NOCHARM"},  
+		{MOB_NOSUMMON,"NOSUMMON"},     
+		{MOB_NOSLEEP,"NOSLEEP"},  
+		{MOB_NOBASH,"NOBASH"},   
+		{MOB_NOBLIND,"NOBLIND"},  
+		{MOB_NOTDEADYET,"NOTDEADYET"}   
+	} };
+
+	std::array<std::pair<int,std::string>,22> aff_flags = { {
+		{AFF_BLIND,"BLIND"},
+		{AFF_INVISIBLE,"INVISIBLE"},
+		{AFF_DETECT_ALIGN,"DETECT_ALIGN"},
+		{AFF_DETECT_INVIS,"DETECT_INVIS"},
+		{AFF_DETECT_MAGIC,"DETECT_MAGIC"},
+		{AFF_SENSE_LIFE,"SENSE_LIFE"},
+		{AFF_WATERWALK,"WATERWALK"},
+		{AFF_SANCTUARY,"SANCTUARY"},
+		{AFF_GROUP,"GROUP"},
+		{AFF_CURSE,"CURSE"},
+		{AFF_INFRAVISION,"INFRAVISION"},
+		{AFF_POISON,"POISON"},
+		{AFF_PROTECT_EVIL,"PROTECT_EVIL"},
+		{AFF_PROTECT_GOOD,"PROTECT_GOOD"},
+		{AFF_SLEEP,"SLEEP"},
+		{AFF_NOTRACK,"NOTRACK"},
+		{AFF_UNUSED16,"UNUSED16"},
+		{AFF_UNUSED17,"UNUSED17"},
+		{AFF_SNEAK,"SNEAK"},
+		{AFF_HIDE,"HIDE"},
+		{AFF_UNUSED20,"UNUSED20"},
+		{AFF_CHARM,"CHARM"},
+	} };
+	std::array<std::pair<int,std::string>,9> position_flags = { {
+		{POS_DEAD,"DEAD"},
+		{POS_MORTALLYW,"MORTALLYW"},
+		{POS_INCAP,"INCAP"},
+		{POS_STUNNED,"STUNNED"},
+		{POS_SLEEPING,"SLEEPING"},
+		{POS_RESTING,"RESTING"},
+		{POS_SITTING,"SITTING"},
+		{POS_FIGHTING,"FIGHTING"},
+		{POS_STANDING,"STANDING"}
+	} };
+
 	std::array<std::pair<int,std::string>,3> type2_flags = { {
 		{objtype::WEAPON,"WEAPON"},
 		{objtype::CONTAINER,"CONTAINER"},
@@ -45,6 +109,7 @@ namespace mods::builder{
 		{ITEM_BOAT,"BOAT"},
 		{ITEM_FOUNTAIN,"FOUNTAIN"}
 	}};
+
 	std::array<std::pair<int,std::string>,17> extra_flags = { {
 			{ITEM_GLOW,"GLOW"},
 			{ITEM_HUM,"HUM"},
@@ -700,6 +765,42 @@ using args_t = std::vector<std::string>;
 ACMD(do_mbuild){
 	MENTOC_PREAMBLE();
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
+	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0
+		&& vec_args[1].compare("action") == 0){
+		player->pager_start();
+		*player << "possible flags:\r\n";
+		for(auto & flag : mods::builder::mob_act_flags){
+			*player << flag.second << "\r\n";
+		}
+		*player << "\r\n";
+		player->pager_end();
+		player->page(0);
+		return;
+	}
+	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0
+		&& vec_args[1].compare("sex") == 0){
+		player->pager_start();
+		*player << "possible flags:\r\n";
+		for(auto & flag : mods::builder::sex_flags){
+			*player << flag.second << "\r\n";
+		}
+		*player << "\r\n";
+		player->pager_end();
+		player->page(0);
+		return;
+	}
+	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0
+		&& vec_args[1].compare("default_position") == 0){
+		player->pager_start();
+		*player << "possible flags:\r\n";
+		for(auto & flag : mods::builder::position_flags){
+			*player << flag.second << "\r\n";
+		}
+		*player << "\r\n";
+		player->pager_end();
+		player->page(0);
+		return;
+	}
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0){
 		player->pager_start();
 		*player << "usage: \r\n" << 
@@ -710,11 +811,26 @@ ACMD(do_mbuild){
 				   "  |:: (this help menu will show up)\r\n" <<
 				   " mbuild new\r\n" <<
 				   " mbuild list\r\n" <<
-				   " mbuild attr <object_id> <attr> <value>\r\n" <<
+				   " mbuild attr <mob_id> <attr> <value>\r\n" <<
 				   "  |:: -:[attributes]:-\r\n" <<
-				   "  |:: weapon_ammo\r\n" << 
-				   "  |:: weapon_ammo_max\r\n" << 
-				   "  |:: weapon_holds_ammo\r\n" << 
+				   "  |:: name\r\n" << 
+				   "  |:: short_description\r\n" << 
+				   "  |:: long_description\r\n" << 
+				   "  |:: description\r\n" << 
+				   "  |:: mana\r\n" << 
+				   "  |:: max_mana\r\n" << 
+				   "  |:: hit\r\n" << 
+				   "  |:: max_hit\r\n" << 
+				   "  |:: move\r\n" << 
+				   "  |:: max_move\r\n" << 
+				   "  |:: armor\r\n" << 
+				   "  |:: gold\r\n" << 
+				   "  |:: exp\r\n" << 
+				   "  |:: hitroll\r\n" << 
+				   "  |:: damroll\r\n" << 
+				   "  |:: sex {red}see mbuild help sex{/red}\r\n" << 
+				   "  |:: default_position {red}see mbuild help default_position{/red}\r\n" << 
+				   "  |:: action {red}see mbuild help action{/red}\r\n" << 
 			"\r\n"
 		;
 		player->pager_end();
@@ -727,7 +843,188 @@ ACMD(do_mbuild){
 		mods::builder::report_success(player,"Mobile created");
 		return;
 	}
+	args = mods::util::subcmd_args<5,args_t>(argument,"list");
+	if(args.has_value()){
+		mods::builder::report_status(player,"listing...");
+		unsigned mob_id = 0;
+		player->pager_start();
+		for(auto& mob_reference : mob_proto){
+			auto mob = &mob_reference;
+			*player << "{gld}[" << mob_id++ << "]{/gld} :->{red} [" <<
+				mob->player.short_descr << "]{/red}";
+		}
+		player->pager_end();
+		player->page(0);
+		return;
+	}
 
+	args = mods::util::subcmd_args<5,args_t>(argument,"show");
+	if(args.has_value()){
+		auto arg_vec = args.value();
+		if(arg_vec.size() < 2){
+			mods::builder::report_error(player,"Invalid number of arguments");
+			return;
+		}
+		auto index = mods::util::stoi(arg_vec[1]);
+		if(!index.has_value() || index.value() >= mob_proto.size()){
+			mods::builder::report_error(player,"Invalid index");
+			return;
+		}
+		auto obj = &mob_proto[index.value()];
+		player->pager_start();
+		*player << "{gld}::player::{/gld}\r\n";
+#define MENTOC_SHOW_OBJ_FLAGS(display_name,struct_member,flag_structure) \
+		for(auto & obj_flag : flag_structure){\
+			if(obj_flag.first == obj->struct_member){\
+				*player << "{red}" << #display_name << "{/red}: " <<\
+					obj_flag.second << "\r\n";\
+				break;\
+			}\
+		}
+#define MENTOC_SHOW_OBJ_BITVECTOR(display_name,struct_member,flag_structure) \
+		*player << "{red}" << #display_name << "{/red}: ";\
+		for(auto & obj_flag : flag_structure){\
+			if(obj_flag.first & obj->struct_member){\
+				*player << obj_flag.second << " ";\
+			}\
+		}\
+		*player << "\r\n";
+#define MENTOC_SHOW_OBJ(display_name,struct_member) \
+		*player << "{red}" << #display_name << "{/red}: " << obj->struct_member << "\r\n";
+		MENTOC_SHOW_OBJ(name,player.name);
+		MENTOC_SHOW_OBJ(short_description,player.short_descr);
+		MENTOC_SHOW_OBJ(long_description,player.long_descr);
+		MENTOC_SHOW_OBJ(description,player.description);
+		MENTOC_SHOW_OBJ_FLAGS(sex,player.sex,mods::builder::sex_flags);
+		MENTOC_SHOW_OBJ(level,player.level);
+		MENTOC_SHOW_OBJ(weight,player.weight);
+		MENTOC_SHOW_OBJ(height,player.height);
+		MENTOC_SHOW_OBJ(strength,real_abils.str);
+		MENTOC_SHOW_OBJ(strength_add,real_abils.str_add);
+		MENTOC_SHOW_OBJ(intelligence,real_abils.intel);
+		MENTOC_SHOW_OBJ(wisdom,real_abils.wis);
+		MENTOC_SHOW_OBJ(dexterity,real_abils.dex);
+		MENTOC_SHOW_OBJ(constitution,real_abils.con);
+		MENTOC_SHOW_OBJ(charisma,real_abils.cha);
+		MENTOC_SHOW_OBJ_FLAGS(default_position,mob_specials.default_pos,mods::builder::position_flags);
+		MENTOC_SHOW_OBJ(damnodice,mob_specials.damnodice);
+		MENTOC_SHOW_OBJ(damsizedice,mob_specials.damsizedice);
+		MENTOC_SHOW_OBJ(mana,points.mana);
+		MENTOC_SHOW_OBJ(max_mana,points.max_mana);
+		MENTOC_SHOW_OBJ(hit,points.hit);
+		MENTOC_SHOW_OBJ(max_hit,points.max_hit);
+		MENTOC_SHOW_OBJ(move,points.move);
+		MENTOC_SHOW_OBJ(max_move,points.max_move);
+		MENTOC_SHOW_OBJ(armor,points.armor);
+		MENTOC_SHOW_OBJ(gold,points.gold);
+		MENTOC_SHOW_OBJ(exp,points.exp);
+		MENTOC_SHOW_OBJ(hitroll,points.hitroll);
+		MENTOC_SHOW_OBJ(damroll,points.damroll);
+		player->pager_end();
+		player->page(0);
+		return;
+	}
+
+	args = mods::util::subcmd_args<5,args_t>(argument,"attr");
+	if(args.has_value()){
+		auto arg_vec = args.value();
+		if(arg_vec.size() < 4){
+			mods::builder::report_error(player,"Invalid number of arguments");
+			return;
+		}
+		auto get_intval = [&](std::string_view str) -> std::optional<int>{
+			if(arg_vec[2].compare(str.data()) == 0){
+				auto i_value = mods::util::stoi(arg_vec[3]);
+				if(!i_value.has_value()){
+					mods::builder::report_error(player,"Please use a valid numeric value.");
+					return std::nullopt;
+				}
+				return i_value.value();
+			}
+			return std::nullopt;
+		};
+		auto get_strval = [&](std::string_view str) -> std::optional<char*>{
+			if(arg_vec[2].compare(str.data()) == 0){
+				return strdup(arg_vec[3].c_str());
+			}
+			return std::nullopt;
+		};
+		auto index = mods::util::stoi(arg_vec[1]);
+		if(index.has_value() && index.value() < mob_proto.size()){
+			auto obj = &mob_proto[index.value()];
+			MENTOC_OBS2(player.name,name);
+			MENTOC_OBS2(player.short_descr,short_description);
+			MENTOC_OBS2(player.long_descr,long_description);
+			MENTOC_OBS2(player.description,description);
+			MENTOC_OBI2(points.mana,mana);
+			MENTOC_OBI2(points.max_mana,max_mana);
+			MENTOC_OBI2(points.hit,hit);
+			MENTOC_OBI2(points.max_hit,max_hit);
+			MENTOC_OBI2(points.move,move);
+			MENTOC_OBI2(points.max_move,max_move);
+			MENTOC_OBI2(points.armor,armor);
+			MENTOC_OBI2(points.gold,gold);
+			MENTOC_OBI2(points.exp,exp);
+			MENTOC_OBI2(points.hitroll,hitroll);
+			MENTOC_OBI2(points.damroll,damroll);
+			if(arg_vec[2].compare("sex") == 0){
+				if(arg_vec.end() <= arg_vec.begin() + 3){
+					mods::builder::report_error(player,"Please supply a flag");
+					return;
+				}
+				auto flag = arg_vec.begin() + 3;
+				bool found = false;
+				for(auto & ex_flag : mods::builder::sex_flags){
+					if(ex_flag.second.compare(*flag) == 0){
+						obj->player.sex = ex_flag.first;
+						found = true;
+						break;
+					}
+				}
+				if(!found){
+					mods::builder::report_error(player,std::string("Unrecognized flag: ") + *flag );
+				}
+			}
+			if(arg_vec[2].compare("action") == 0){
+				if(arg_vec.end() <= arg_vec.begin() + 3){
+					mods::builder::report_error(player,"Please supply action flags");
+					return;
+				}
+				auto flag = arg_vec.begin() + 3;
+				bool found = false;
+				obj->char_specials.saved.act = 0;
+				for(auto & ex_flag : mods::builder::mob_act_flags){
+					if(ex_flag.second.compare(*flag) == 0){
+						obj->char_specials.saved.act |= ex_flag.first;
+						found = true;
+						break;
+					}
+				}
+				if(!found){
+					mods::builder::report_error(player,std::string("Unrecognized flag: ") + *flag );
+				}
+			}
+			if(arg_vec[2].compare("default_position") == 0){
+				if(arg_vec.end() <= arg_vec.begin() + 3){
+					mods::builder::report_error(player,"Please supply a flag");
+					return;
+				}
+				auto flag = arg_vec.begin() + 3;
+				bool found = false;
+				for(auto & ex_flag : mods::builder::position_flags){
+					if(ex_flag.second.compare(*flag) == 0){
+						obj->mob_specials.default_pos = ex_flag.first;
+						found = true;
+						break;
+					}
+				}
+				if(!found){
+					mods::builder::report_error(player,std::string("Unrecognized flag: ") + *flag );
+				}
+			}
+		}
+		return;
+	}
 }
 
 ACMD(do_obuild){
