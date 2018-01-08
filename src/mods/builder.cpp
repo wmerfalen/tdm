@@ -538,73 +538,83 @@ namespace mods::builder{
 		return new_blank_character(true);
 	}
 	std::pair<bool,std::string> save_player(char_data* obj){
-		auto txn_01 = txn();
-		auto result_01 = mods::pq::exec(txn_01,sql_compositor("mobile",&txn_01)
-			.select("id")
-			.from("mobile")
-			.where("mob_virtual_number","=",mods::util::itoa(obj->nr))
-			.sql()
-		);
-		mods::pq::commit(txn_01);
-#define MENTOC_PLAYER_NULL_CHECK(item)\
-		if(!obj->item){\
-			return {false,std::string(#item) + " is null!"};\
-		}
-		MENTOC_PLAYER_NULL_CHECK(player.name);
-		MENTOC_PLAYER_NULL_CHECK(player.short_descr);
-		MENTOC_PLAYER_NULL_CHECK(player.long_descr);
-		MENTOC_PLAYER_NULL_CHECK(player.description);
-		
-		sql_compositor::value_map p_map;
-		p_map["mob_virtual_number"] = mods::util::itoa(obj->nr);
-		p_map["mob_name"] = obj->player.name;
-		p_map["mob_short_description"] = obj->player.short_descr;
-		p_map["mob_long_description"] = obj->player.long_descr;
-		p_map["mob_description"] = obj->player.description;
-		p_map["mob_ability_strength"] = mods::util::itoa(obj->real_abils.str);
-		p_map["mob_ability_strength_add"] = mods::util::itoa(obj->real_abils.str_add);
-		p_map["mob_ability_intelligence"] = mods::util::itoa(obj->real_abils.intel);
-		p_map["mob_ability_wisdom"] = mods::util::itoa(obj->real_abils.wis);
-		p_map["mob_ability_dexterity"] = mods::util::itoa(obj->real_abils.dex);
-		p_map["mob_ability_constitution"] = mods::util::itoa(obj->real_abils.con);
-		p_map["mob_ability_charisma"] = mods::util::itoa(obj->real_abils.cha);
-		p_map["mob_mana"] = mods::util::itoa(obj->points.mana);
-		p_map["mob_max_mana"] = mods::util::itoa(obj->points.max_mana);
-		p_map["mob_hitpoints"] = mods::util::itoa(obj->points.hit);
-		p_map["mob_max_hitpoints"] = mods::util::itoa(obj->points.max_hit);
-		p_map["mob_move"] = mods::util::itoa(obj->points.move);
-		p_map["mob_max_move"] = mods::util::itoa(obj->points.max_move);
-		p_map["mob_armor"] = mods::util::itoa(obj->points.armor);
-		p_map["mob_gold"] = mods::util::itoa(obj->points.gold);
-		p_map["mob_exp"] = mods::util::itoa(obj->points.experience_points);
-		p_map["mob_hitroll"] = mods::util::itoa(obj->points.hitroll);
-		p_map["mob_default_position"] = mods::util::itoa(obj->mob_specials.default_pos);
-		p_map["mob_damnodice"] = mods::util::itoa(obj->mob_specials.damnodice);
-		p_map["mob_alignment"] = mods::util::itoa(obj->char_specials.saved.alignment);
-		p_map["mob_action_bitvector"] = mods::util::itoa(obj->char_specials.saved.act);
-		p_map["mob_affection_bitvector"] = mods::util::itoa(obj->char_specials.saved.affected_by);
-		p_map["mob_attack_type"] = mods::util::itoa(obj->mob_specials.attack_type);
-		p_map["mob_weight"] = mods::util::itoa(obj->player.weight);
-		p_map["mob_height"] = mods::util::itoa(obj->player.height);
-		auto txn_02 = txn();
-		std::string sql = "";
-		if(result_01.size()){
-			//Update
-			sql = sql_compositor("mobile",&txn_02)
-				.update("mobile")
-				.set(p_map)
+		try{
+			auto txn_01 = txn();
+			auto result_01 = mods::pq::exec(txn_01,sql_compositor("mobile",&txn_01)
+				.select("mob_id")
+				.from("mobile")
 				.where("mob_virtual_number","=",mods::util::itoa(obj->nr))
-				.sql();
-		}else{
-			//Insert
-			sql = sql_compositor("mobile",&txn_02)
-				.insert()
-				.into("mobile")
-				.values(p_map)
-				.sql();
+				.sql()
+			);
+			mods::pq::commit(txn_01);
+#define MENTOC_PLAYER_NULL_CHECK(item)\
+			if(!obj->item){\
+				return {false,std::string(#item) + " is null!"};\
+			}
+			MENTOC_PLAYER_NULL_CHECK(player.name);
+			MENTOC_PLAYER_NULL_CHECK(player.short_descr);
+			MENTOC_PLAYER_NULL_CHECK(player.long_descr);
+			MENTOC_PLAYER_NULL_CHECK(player.description);
+			
+			sql_compositor::value_map p_map;
+			p_map["mob_virtual_number"] = mods::util::itoa(obj->nr);
+			p_map["mob_name"] = obj->player.name;
+			p_map["mob_short_description"] = obj->player.short_descr;
+			p_map["mob_long_description"] = obj->player.long_descr;
+			p_map["mob_description"] = obj->player.description;
+			p_map["mob_ability_strength"] = mods::util::itoa(obj->real_abils.str);
+			p_map["mob_ability_strength_add"] = mods::util::itoa(obj->real_abils.str_add);
+			p_map["mob_ability_intelligence"] = mods::util::itoa(obj->real_abils.intel);
+			p_map["mob_ability_wisdom"] = mods::util::itoa(obj->real_abils.wis);
+			p_map["mob_ability_dexterity"] = mods::util::itoa(obj->real_abils.dex);
+			p_map["mob_ability_constitution"] = mods::util::itoa(obj->real_abils.con);
+			p_map["mob_ability_charisma"] = mods::util::itoa(obj->real_abils.cha);
+			p_map["mob_mana"] = mods::util::itoa(obj->points.mana);
+			p_map["mob_max_mana"] = mods::util::itoa(obj->points.max_mana);
+			p_map["mob_hitpoints"] = mods::util::itoa(obj->points.hit);
+			p_map["mob_max_hitpoints"] = mods::util::itoa(obj->points.max_hit);
+			p_map["mob_move"] = mods::util::itoa(obj->points.move);
+			p_map["mob_max_move"] = mods::util::itoa(obj->points.max_move);
+			p_map["mob_armor"] = mods::util::itoa(obj->points.armor);
+			p_map["mob_gold"] = mods::util::itoa(obj->points.gold);
+			p_map["mob_exp"] = mods::util::itoa(obj->points.exp);
+			p_map["mob_hitroll"] = mods::util::itoa(obj->points.hitroll);
+			p_map["mob_default_position"] = mods::util::itoa(obj->mob_specials.default_pos);
+			p_map["mob_damnodice"] = mods::util::itoa(obj->mob_specials.damnodice);
+			p_map["mob_load_position"] = mods::util::itoa(GET_POS(obj));
+			p_map["mob_alignment"] = mods::util::itoa(obj->char_specials.saved.alignment);
+			p_map["mob_action_bitvector"] = mods::util::itoa(obj->char_specials.saved.act);
+			p_map["mob_affection_bitvector"] = mods::util::itoa(obj->char_specials.saved.affected_by);
+			p_map["mob_attack_type"] = mods::util::itoa(obj->mob_specials.attack_type);
+			p_map["mob_weight"] = mods::util::itoa(obj->player.weight);
+			p_map["mob_height"] = mods::util::itoa(obj->player.height);
+			p_map["mob_level"] = "0";	//TODO: find this
+			p_map["mob_sex"] = "0"; //TODO: find this
+			p_map["mob_damsizedice"] = "0"; //TODO: find this
+			p_map["mob_damroll"] = "0"; //TODO: find this
+			p_map["mob_class"] = "0"; //TODO: find this
+			auto txn_02 = txn();
+			std::string sql = "";
+			if(result_01.size()){
+				//Update
+				sql = sql_compositor("mobile",&txn_02)
+					.update("mobile")
+					.set(p_map)
+					.where("mob_virtual_number","=",mods::util::itoa(obj->nr))
+					.sql();
+			}else{
+				//Insert
+				sql = sql_compositor("mobile",&txn_02)
+					.insert()
+					.into("mobile")
+					.values(p_map)
+					.sql();
+			}
+			mods::pq::exec(txn_02,sql);
+			mods::pq::commit(txn_02);
+		}catch(const std::exception &e){
+			return {false,e.what()};
 		}
-		mods::pq::exec(txn_02,sql);
-		mods::pq::commit(txn_02);
 		return {true,"Successfully saved player."};
 	}
 	std::pair<bool,std::string> save_object(obj_data* obj){
@@ -889,6 +899,28 @@ ACMD(do_mbuild){
 		}
 		player->pager_end();
 		player->page(0);
+		return;
+	}
+
+	args = mods::util::subcmd_args<5,args_t>(argument,"save");
+	if(args.has_value()){
+		auto arg_vec = args.value();
+		if(arg_vec.size() < 2){
+			mods::builder::report_error(player,"Invalid number of arguments");
+			return;
+		}
+		auto index = mods::util::stoi(arg_vec[1]);
+		if(!index.has_value() || index.value() >= mob_proto.size()){
+			mods::builder::report_error(player,"Invalid index");
+			return;
+		}
+		auto obj = &mob_proto[index.value()];
+		auto return_pair = mods::builder::save_player(obj);
+		if(!return_pair.first){
+			mods::builder::report_error(player,return_pair.second);
+			return;
+		}
+		mods::builder::report_success(player,"Object saved.");
 		return;
 	}
 

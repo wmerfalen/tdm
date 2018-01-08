@@ -1,3 +1,4 @@
+DROP TABLE mobile;
 CREATE TABLE mobile (
 	mob_id SERIAL,
 	mob_virtual_number INTEGER NOT NULL,
@@ -26,8 +27,8 @@ CREATE TABLE mobile (
 	mob_max_move INTEGER NOT NULL,
 	/* mob_barehand_damage INTEGER NOT NULL, */
 	mob_gold INTEGER NOT NULL,
-	mob_experience_points INTEGER NOT NULL,
-	/* mob_load_position VARCHAR(2), */
+	mob_exp INTEGER NOT NULL,
+	mob_load_position INTEGER NOT NULL, 
 	mob_default_position INTEGER NOT NULL, 
 	mob_sex INTEGER NOT NULL,
 	mob_hitpoints INTEGER,

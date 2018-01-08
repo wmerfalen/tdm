@@ -950,7 +950,7 @@ void parse_sql_mobiles(){
 
 			GET_LEVEL(&proto) = row["mob_level"].as<int>();
 			GET_HITROLL(&proto) = 20 - row["mob_hitroll"].as<int>();
-			GET_AC(&proto) = 10 * row["mob_armor_class"].as<int>();
+			GET_AC(&proto) = 10 * row["mob_armor"].as<int>();
 
 			/* max hit = 0 is a flag that H, M, V is xdy+z */
 			GET_MAX_HIT(&proto) = row["mob_max_hitpoints"].as<int>();
@@ -959,15 +959,15 @@ void parse_sql_mobiles(){
 			GET_MOVE(&proto) = row["mob_move"].as<int>();
 			GET_MAX_MANA(&proto) = row["mob_max_mana"].as<int>();
 			GET_MAX_MOVE(&proto) = row["mob_max_move"].as<int>();
-			proto.mob_specials.damnodice = row["mob_dam_no_dice"].as<int>();
-			proto.mob_specials.damsizedice = row["mob_dam_size_dice"].as<int>();
-			GET_DAMROLL(&proto) = row["mob_dam_roll"].as<int>();
+			proto.mob_specials.damnodice = row["mob_damnodice"].as<int>();
+			proto.mob_specials.damsizedice = row["mob_damsizedice"].as<int>();
+			GET_DAMROLL(&proto) = row["mob_damroll"].as<int>();
 			GET_GOLD(&proto) = row["mob_gold"].as<int>();
-			GET_EXP(&proto) = row["mob_experience_points"].as<int>();
+			GET_EXP(&proto) = row["mob_exp"].as<int>();
 			GET_POS(&proto) = row["mob_load_position"].as<int>();
-			GET_DEFAULT_POS(&proto) = row["mob_default_position"].as<int>();
+			GET_DEFAULT_POS(&proto) = row["mob_load_position"].as<int>();
 			GET_SEX(&proto) = row["mob_sex"].as<int>();
-			GET_CLASS(&proto) = row["mob_mob_class"].as<int>();
+			GET_CLASS(&proto) = row["mob_class"].as<int>();
 			GET_WEIGHT(&proto) = row["mob_weight"].as<int>(); 
 			GET_HEIGHT(&proto) = row["mob_height"].as<int>();
 			/*
@@ -990,7 +990,7 @@ void parse_sql_mobiles(){
 			mob_proto.push_back(proto);
 			top_of_mobt = mob_proto.size();
 			index_data m_index;
-			m_index.vnum = row["virtual_number"].as<int>();
+			m_index.vnum = row["mob_virtual_number"].as<int>();
 			m_index.number = 0;
 			m_index.func = nullptr;
 			mob_index.push_back(m_index);
