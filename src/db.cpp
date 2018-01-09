@@ -50,7 +50,7 @@ std::vector<index_data> obj_index;	/* index table for object file	 */
 std::vector<obj_data> obj_proto;	/* prototypes for objs		 */
 obj_rnum top_of_objt = 0;	/* top of object index table	 */
 
-std::vector<struct zone_data> zone_table;	/* zone table			 */
+std::vector<zone_data> zone_table;	/* zone table			 */
 zone_rnum top_of_zone_table = 0;/* top element of zone tab	 */
 struct message_list fight_messages[MAX_MESSAGES];	/* fighting messages	 */
 
@@ -369,12 +369,6 @@ void destroy_db(void)
 
   /* Shops */
   destroy_shops();
-
-  /* Zones */
-  for (cnt = 0; cnt <= top_of_zone_table; cnt++) {
-    if (zone_table[cnt].name)
-      free(zone_table[cnt].name);
-  }
 }
 
 
@@ -463,7 +457,7 @@ void boot_db(void)
     House_boot();
   }
 
-  for (i = 0; i < top_of_zone_table; i++) {
+  for (i = 0; i < zone_table.size(); i++) {
     log("Resetting #%d: %s (rooms %d-%d).", zone_table[i].number,
 	zone_table[i].name, zone_table[i].bot, zone_table[i].top);
     reset_zone(i);
@@ -1173,6 +1167,7 @@ int parse_sql_objects(){
 static int room_nr = 0, zone = 0;
 /* load the zones */
 void parse_sql_zones(){
+	log("[status] Loading sql zones");
 	auto trans2 = mods::pq::transaction(*mods::globals::pq_con);
 	auto r = mods::pq::exec(trans2,"SELECT * FROM zone");
 	mods::pq::commit(trans2);
@@ -1240,7 +1235,8 @@ void parse_sql_zones(){
 		mods::pq::commit(trans3);
 		for(auto row : zone_data_result){
 			struct reset_com res;
-			res.command = row[2].as<int>();
+			std::string command = row[2].c_str();
+			res.command = command[0];
 			res.if_flag = row[3].as<int>();
 			res.arg1 = row[4].as<int>();
 			res.arg2 = row[5].as<int>();
@@ -1249,6 +1245,7 @@ void parse_sql_zones(){
 			z.cmd.push_back(res);
 		}
 		zone_table.emplace_back(z);
+		log("zone loaded");
 	}
 	top_of_zone_table = zone_table.size();
 }
@@ -2202,7 +2199,7 @@ void zone_update(void)
     timer = 0;
 
     /* since one minute has passed, increment zone ages */
-    for (i = 0; i <= top_of_zone_table; i++) {
+    for (i = 0; i < zone_table.size(); i++) {
       if (zone_table[i].age < zone_table[i].lifespan &&
 	  zone_table[i].reset_mode)
 	(zone_table[i].age)++;
@@ -2271,7 +2268,7 @@ void reset_zone(zone_rnum zone)
   struct char_data *mob = NULL;
   struct obj_data *obj, *obj_to;
 
-  //for (cmd_no = 0; ZCMD.command != 'S'; cmd_no++) {
+  log("Resetting zone: %d",zone);
   for(auto ZCMD : zone_table[zone].cmd){
 
     if (ZCMD.if_flag && !last_cmd)
@@ -2290,7 +2287,7 @@ void reset_zone(zone_rnum zone)
     case 'M':			/* read a mobile */
       if (mob_index[ZCMD.arg1].number < ZCMD.arg2) {
 	mob = read_mobile(ZCMD.arg1, REAL);
-	char_to_room(mob, ZCMD.arg3);
+	char_to_room(mob, real_room(ZCMD.arg3));
 	last_cmd = 1;
       } else
 	last_cmd = 0;

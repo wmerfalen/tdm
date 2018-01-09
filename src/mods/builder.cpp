@@ -582,6 +582,7 @@ namespace mods::builder{
 			p_map["mob_default_position"] = mods::util::itoa(obj->mob_specials.default_pos);
 			p_map["mob_damnodice"] = mods::util::itoa(obj->mob_specials.damnodice);
 			p_map["mob_load_position"] = mods::util::itoa(GET_POS(obj));
+			p_map["mob_default_position"] = mods::util::itoa(GET_POS(obj));
 			p_map["mob_alignment"] = mods::util::itoa(obj->char_specials.saved.alignment);
 			p_map["mob_action_bitvector"] = mods::util::itoa(obj->char_specials.saved.act);
 			p_map["mob_affection_bitvector"] = mods::util::itoa(obj->char_specials.saved.affected_by);
