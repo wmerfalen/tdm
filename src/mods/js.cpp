@@ -208,6 +208,23 @@ namespace mods{
 			mods::js::load_c_require_functions(ctx);
 		}
 
+		bool run_test_suite(mods::player & player,std::string_view suite){
+			//TODO: decide if globals::duktape_context is the best choice to run tests in... probably not. Run it in it's own context
+			std::string path = mods::js::JS_TEST_PATH;
+			path += suite.data();	//TODO: sanitize this
+			if(mods::js::load_library(mods::globals::duktape_context,path) == -1){
+				return false;
+			}
+			//TODO: this is horribly inefficient and prone to abuse. change this !efficiency !security
+			eval_string(mods::globals::duktape_context,
+				std::string("player_uuid = ")
+				+ 
+				std::string(mods::util::itoa(player.cd()->uuid)) + 
+				";\n"
+			);
+			return true;
+		}
+
 		duk_context* new_context(){
 			return duk_create_heap_default();
 		}

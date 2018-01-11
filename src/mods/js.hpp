@@ -26,6 +26,7 @@ namespace mods {
 		void load_c_functions();
 		void load_c_functions(duk_context *ctx);
 		int load_library(duk_context *ctx,std::string_view file);
+		bool run_test_suite(mods::player & player,std::string_view suite);
 		struct include {
 			include() = delete;
 			include(duk_context *ctx,std::string_view file) 

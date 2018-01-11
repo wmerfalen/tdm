@@ -1305,31 +1305,34 @@ void parse_sql_rooms(){
 			//id | room_number | exit_direction | general_description | keyword | exit_info | exit_key | to_room
 			auto direction = row2[2].as<int>();
 			auto room_number = row2[1].as<int>();
-			std::cerr << "direction: " << direction << "|room_number: " << row2[1].as<int>() << "\n";
-			world[real_room(row2[1].as<int>())].dir_option[direction]->general_description = strdup(row2["general_description"].c_str());
-			world[real_room(row2[1].as<int>())].dir_option[direction]->keyword = strdup(row2["keyword"].c_str());
+			auto real_room_number = real_room(row2[1].as<int>());
+			if(real_room_number == NOWHERE){
+				log("Invalid real_room_number: %d",row2[1].as<int>());
+				continue;
+			}
+			world[real_room_number].dir_option[direction]->general_description = strdup(row2["general_description"].c_str());
+			world[real_room_number].dir_option[direction]->keyword = strdup(row2["keyword"].c_str());
 			auto exit_info = row2[5].as<int>();
 			switch(exit_info){
 				case 1:
 				default:
-					world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info = EX_ISDOOR;
-					REMOVE_BIT(world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info,EX_CLOSED);
+					world[real_room_number].dir_option[direction]->exit_info = EX_ISDOOR;
+					REMOVE_BIT(world[real_room_number].dir_option[direction]->exit_info,EX_CLOSED);
 					break;
 				case 2:
-					world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info = EX_ISDOOR | EX_PICKPROOF;
-					SET_BIT(world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info,EX_CLOSED);
+					world[real_room_number].dir_option[direction]->exit_info = EX_ISDOOR | EX_PICKPROOF;
+					SET_BIT(world[real_room_number].dir_option[direction]->exit_info,EX_CLOSED);
 					break;
 				case 3:
-					world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info = EX_ISDOOR | EX_REINFORCED;
-					SET_BIT(world[real_room(row2[1].as<int>())].dir_option[direction]->exit_info,EX_CLOSED);
+					world[real_room_number].dir_option[direction]->exit_info = EX_ISDOOR | EX_REINFORCED;
+					SET_BIT(world[real_room_number].dir_option[direction]->exit_info,EX_CLOSED);
 					break;
 			}
-			world[real_room(row2[1].as<int>())].dir_option[direction]->key = row2[6].as<int>();
-			world[real_room(row2[1].as<int>())].dir_option[direction]->to_room = real_room(row2[7].as<int>());
-			std::cerr << "Real room number: " << real_room(world[real_room(row2[1].as<int>())].dir_option[direction]->to_room) << "\n";
+			world[real_room_number].dir_option[direction]->key = row2[6].as<int>();
+			world[real_room_number].dir_option[direction]->to_room = real_room(row2[7].as<int>());
 		}
 	}
-	std::cerr << "Number of rooms in postgres: " << mods::pq::as_int(result,0,0) << "\r\n";
+	log("Number of rooms in postgres: %d",mods::pq::as_int(result,0,0));
 	top_of_world = world.size();
 	return;
 }
@@ -3125,12 +3128,12 @@ room_rnum real_room(room_vnum vnum)
 
   bot = 0;
   top = top_of_world;
-  for(unsigned i =top; i > 0;i--){
+  for(unsigned i =0; i < world.size();i++){
 	if(world[i].number == vnum){
 		return i;
 	}
   }
-
+  return NOWHERE;
   /* perform binary search on world-table */
   
   for (;;) {
