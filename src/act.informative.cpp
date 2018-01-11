@@ -543,7 +543,6 @@ MENTOC_PREAMBLE();
     send_to_char(ch, "You see nothing but infinite darkness...\r\n");
     return;
   }*/
-  std::cerr << (int)ch << (int)&ch->char_specials << "\r\n";
   send_to_char(ch, "%s", CCCYN(ch, C_NRM));
   if (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_ROOMFLAGS)) {
     char buf[MAX_STRING_LENGTH];
@@ -552,7 +551,7 @@ MENTOC_PREAMBLE();
     send_to_char(ch, "[%5d] %s [ %s]", GET_ROOM_VNUM(IN_ROOM(ch)), world[IN_ROOM(ch)].name, buf);
   } else
     //send_to_char(ch, "%s", world[IN_ROOM(ch)].name);
-	//player->stc_room(IN_ROOM(ch));
+	player->stc_room(IN_ROOM(ch));
 
   send_to_char(ch, "%s\r\n", CCNRM(ch, C_NRM));
   //player->stc_ccnrm(CCNRM(ch,C_NRM));

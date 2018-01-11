@@ -70,12 +70,11 @@ namespace mods{
 			/* First parameter is character name */
 			auto char_uuid = duk_to_number(ctx,0);
 			std::string cmd =  duk_to_string(ctx,1);
-			auto player = mods::globals::players::get(char_uuid); 
-			player->set_cd(mods::globals::player_list[char_uuid]);
-			player->capture_output(true);
-			command_interpreter(mods::globals::player_list[char_uuid],cmd.c_str());
-			player->capture_output(false);
-			duk_push_string(ctx,player->get_captured_output().data());
+			auto player = mods::globals::player_list.at(char_uuid); 
+			player.capture_output(true);
+			command_interpreter(player,cmd.c_str());
+			player.capture_output(false);
+			duk_push_string(ctx,player.get_captured_output().data());
 			return 1;
 		}
 		static duk_ret_t mob_death_trigger(duk_context *ctx){
@@ -104,7 +103,7 @@ namespace mods{
 			int num_args = duk_get_top(ctx);
 			/* First parameter is character name */
 			auto cuuid = duk_to_number(ctx,0);
-			send_to_char(mods::globals::player_list[cuuid],duk_to_string(ctx,1));
+			send_to_char(mods::globals::player_list.at(cuuid),duk_to_string(ctx,1));
 			return 0;	/* number of return values */
 		}
 		static duk_ret_t send_to_char(duk_context *ctx){
@@ -209,18 +208,19 @@ namespace mods{
 		}
 
 		bool run_test_suite(mods::player & player,std::string_view suite){
-			//TODO: decide if globals::duktape_context is the best choice to run tests in... probably not. Run it in it's own context
+			auto ctx = mods::js::new_context();
 			std::string path = mods::js::JS_TEST_PATH;
-			path += suite.data();	//TODO: sanitize this
-			if(mods::js::load_library(mods::globals::duktape_context,path) == -1){
+			std::string file = suite.data();
+			for(auto & ch: file){
+				if(!std::isalpha(ch)){ continue; }
+				else{ path += ch; }
+			}
+			mods::js::load_c_functions(ctx);
+			if(mods::js::load_library(ctx,path) == -1){
 				return false;
 			}
-			//TODO: this is horribly inefficient and prone to abuse. change this !efficiency !security
-			eval_string(mods::globals::duktape_context,
-				std::string("player_uuid = ")
-				+ 
-				std::string(mods::util::itoa(player.cd()->uuid)) + 
-				";\n"
+			eval_string(ctx,std::string("test_main(") + 
+				std::string(mods::util::itoa(player.cd()->uuid)) + ");"
 			);
 			return true;
 		}

@@ -57,7 +57,7 @@ namespace mods {
 		owner->drone_simulate = value;
 	}
 	static void drone::get_drone(struct char_data* owner){
-		auto drone = mods::globals::player_list[owner->drone_uuid];
+		auto drone = mods::globals::player_list[owner->drone_uuid].cd();
 		if(IN_ROOM(owner) == IN_ROOM(drone)){
 			if(IN_ROOM(drone) != NOWHERE){
 				char_from_room(drone);

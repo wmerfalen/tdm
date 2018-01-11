@@ -37,7 +37,7 @@ namespace mods {
 		duk_context* duktape_context;
 		ai_state_map states;
 		std::vector<std::vector<struct char_data*>> room_list;
-		std::vector<struct char_data*> player_list;
+		std::vector<mods::player> player_list;
 		std::unique_ptr<pqxx::connection> pq_con;
 		std::vector<mods::chat::channel> chan;
 		std::vector<std::string> chan_verbs;
@@ -48,7 +48,6 @@ namespace mods {
 		bool acl_good = false;
 		int acl_parse_code = 0;
 		/* Maps */
-		map_player_list player_map;
 		map_object_list obj_map;
 template <typename I>
 I random_element(I begin, I end)
@@ -144,19 +143,6 @@ Iter select_randomly(Iter start, Iter end) {
 			f_import_rooms = false;
 		}
 		void post_boot_db(){
-			allocate_player_list();
-		}
-		void allocate_player_list(){
-			if(!character_list){ return; }
-			auto top = character_list->uuid + 1;
-			player_list.reserve(top);
-			for(auto ch = character_list; ch; ch = ch->next){
-				if(ch->uuid > top){
-					top = ch->uuid + 1;
-					player_list.reserve(top);
-				}
-				player_list[ch->uuid] = ch;
-			}
 		}
 		void room_event(struct char_data* ch,mods::ai_state::event_type_t event){
 			for(auto c = ch; c->next_in_room; c = c->next_in_room){
@@ -211,13 +197,6 @@ Iter select_randomly(Iter start, Iter end) {
 		void pre_game_loop(){
 			std::cout << "Pre game loop\n";
 			refresh_player_states();
-		}
-		void load_player_map(){
-			for(auto it = character_list; it ;it = it->next){
-				std::cout << ".";
-				it->uuid = get_uuid();
-				mods::globals::player_map.insert({it->uuid,std::make_shared<mods::player>(static_cast<char_data*>(it))});
-			}
 		}
 		struct char_data* create_char(){
 			struct char_data *ch;	
@@ -351,9 +330,9 @@ Iter select_randomly(Iter start, Iter end) {
 
 		void register_player(struct char_data* ch){
 			if(ch){
-				ch->uuid = get_uuid();
-				mods::globals::player_map.insert({ch->uuid,std::make_shared<mods::player>(ch)});
-				allocate_player_list();
+				auto uuid = mods::globals::player_list.size();
+				ch->uuid = uuid;
+				mods::globals::player_list.emplace_back(ch);
 			}
 			else{
 				std::cerr << "invalid cdata! (register_player) " << __FILE__ << ":" << __LINE__ << "\n";

@@ -91,6 +91,15 @@ namespace mods {
 		}
 		return buffer;
 	}
+
+	player::player(mods::player* ptr){
+		m_char_data = ptr->cd();
+		m_page = 0;
+		m_current_page = 0;
+		m_do_paging = false;
+		m_current_page_fragment = "";
+		m_capture_output = false;
+	}
 	void player::capture_output(bool capture_status){
 		m_capture_output = capture_status;
 	}

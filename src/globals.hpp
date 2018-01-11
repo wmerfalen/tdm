@@ -23,7 +23,7 @@
 #include "mods/conf.hpp"
 #include "mods/chat.hpp"
 
-#define MENTOC_PREAMBLE() auto player = mods::globals::players::get(ch->uuid); player->set_cd(ch); 
+#define MENTOC_PREAMBLE() auto player = std::make_shared<mods::player>(&mods::globals::player_list.at(ch->uuid));
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
 #define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \
 strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(a,"down") == 0)
@@ -54,8 +54,6 @@ namespace mods {
 		void load_player_map();
 		uuid_t get_uuid();
 		uuid_t obj_uuid();
-		typedef std::map<uuid_t,std::shared_ptr<mods::player>> map_player_list;
-		extern map_player_list player_map;
 		extern map_object_list obj_map;
 		extern std::shared_ptr<mods::player> player_nobody;
 		extern std::unique_ptr<mods::deferred> defer_queue;
@@ -64,7 +62,7 @@ namespace mods {
 		extern ai_state_map states;
 		extern duk_context* duktape_context;
 		extern std::vector<std::vector<struct char_data*>> room_list;
-		extern std::vector<struct char_data *> player_list;
+		extern std::vector<mods::player> player_list;
 		extern std::vector<mods::chat::channel> chan;
 		extern std::vector<std::string> chan_verbs;
 		extern bool f_import_rooms;
@@ -79,7 +77,6 @@ namespace mods {
 		void room_event(room_vnum,mods::ai_state::event_type_t);
 		void post_boot_db();
 		struct char_data* create_char();
-		void allocate_player_list();
 		int file_to_lmdb(const std::string& file,const std::string& key);
 		int opposite_dir(int);
     	std::string color_eval(std::string final_buffer);
@@ -91,17 +88,6 @@ namespace mods {
 		namespace rooms {
 			void char_from_room(struct char_data*);
 			void char_to_room(const room_rnum &,struct char_data*);
-		};
-		namespace players {
-        	template <typename T>
-			inline std::shared_ptr<mods::player>& get(T ch){
-				auto it = mods::globals::player_map.find(ch);
-				if(it == mods::globals::player_map.end()){
-					return player_nobody;
-				}else{
-					return mods::globals::player_map[ch];
-				}
-			}
 		};
 		/*
 		namespace players {

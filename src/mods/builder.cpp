@@ -876,6 +876,8 @@ ACMD(do_mbuild){
 				   "  |:: sex {red}see mbuild help sex{/red}\r\n" << 
 				   "  |:: default_position {red}see mbuild help default_position{/red}\r\n" << 
 				   "  |:: action {red}see mbuild help action{/red}\r\n" << 
+				   " mbuild save <mob_id>\r\n" <<
+				   " mbuild show <mob_id>\r\n" <<
 			"\r\n"
 		;
 		player->pager_end();
@@ -896,7 +898,7 @@ ACMD(do_mbuild){
 		for(auto& mob_reference : mob_proto){
 			auto mob = &mob_reference;
 			*player << "{gld}[" << mob_id++ << "]{/gld} :->{red} [" <<
-				mob->player.short_descr << "]{/red}";
+				mob->player.short_descr << "]{/red}\r\n";
 		}
 		player->pager_end();
 		player->page(0);

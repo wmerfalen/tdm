@@ -1046,7 +1046,7 @@ struct char_data *get_player_vis(struct char_data *ch, char *name, int *number, 
   }
 
   for (i = character_list; i; i = i->next) {
-	auto player = mods::globals::players::get(ch->uuid);
+	auto player = &mods::globals::player_list.at(ch->uuid);
     if (IS_NPC(i))
       continue;
     if (inroom == FIND_CHAR_ROOM && IN_ROOM(i) != IN_ROOM(ch))

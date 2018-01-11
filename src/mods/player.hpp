@@ -22,6 +22,7 @@ namespace mods {
 			using chdata_ptr = struct char_data *;
 			player() = delete;
 			player(char_data* ch);
+			player(mods::player* p);
 			static constexpr int PAGE_SIZE = 40;
 			bool has_weapon_capability(int);
 			bool has_inventory_capability(int);

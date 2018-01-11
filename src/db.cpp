@@ -407,8 +407,6 @@ void boot_db(void)
 
   log("Generating player index.");
   build_player_index();
-  /* !mods */
-  mods::globals::load_player_map();
 
   log("Loading fight messages.");
   load_messages();
