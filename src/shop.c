@@ -35,7 +35,7 @@ ACMD(do_say);
 void sort_keeper_objs(struct char_data *keeper, int shop_nr);
 
 /* Local variables */
-struct shop_data *shop_index;
+std::vector<shop_data> shop_index;
 int top_shop = -1;
 int cmd_say, cmd_tell, cmd_emote, cmd_slap, cmd_puke;
 
@@ -1164,9 +1164,14 @@ char *read_shop_message(int mnum, room_vnum shr, FILE *shop_f, const char *why)
   return (tbuf);
 }
 
+void boot_sql_shops(){
+	shop_data m;	
+}
 
 void boot_the_shops(FILE *shop_f, char *filename, int rec_count)
 {
+	log("deprecated: boot_the_shops");
+	return;
   char *buf, buf2[256];
   int temp, count, new_format = FALSE;
   struct shop_buy_data list[MAX_SHOP_OBJ + 1];
@@ -1181,8 +1186,12 @@ void boot_the_shops(FILE *shop_f, char *filename, int rec_count)
       snprintf(buf2, sizeof(buf2), "shop #%d in shop file %s", temp, filename);
       free(buf);		/* Plug memory leak! */
       top_shop++;
-      if (!top_shop)
-	CREATE(shop_index, struct shop_data, rec_count);
+      if (!top_shop){
+	shop_data default_shop = {0};
+		for(unsigned i = 0; i < rec_count;i++){
+			shop_index.push_back(default_shop);
+		}
+	  }
       SHOP_NUM(top_shop) = temp;
       temp = read_list(shop_f, list, new_format, MAX_PROD, LIST_PRODUCE);
       CREATE(shop_index[top_shop].producing, obj_vnum, temp);
@@ -1495,7 +1504,7 @@ void destroy_shops(void)
 {
   ssize_t cnt, itr;
 
-  if (!shop_index)
+  if (!shop_index.size())
     return;
 
   for (cnt = 0; cnt <= top_shop; cnt++) {
@@ -1526,7 +1535,5 @@ void destroy_shops(void)
     }
   }
 
-  free(shop_index);
-  shop_index = NULL;
   top_shop = -1;
 }
