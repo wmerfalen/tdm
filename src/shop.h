@@ -8,6 +8,9 @@
 *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
 ************************************************************************ */
 
+#ifndef __SHOP_HEADER__
+#define __SHOP_HEADER__
+
 
 struct shop_buy_data {
    int type;
@@ -144,3 +147,5 @@ struct stack_data {
 #define MSG_NO_USED_WANDSTAFF	"I don't buy used up wands or staves!"
 #define MSG_CANT_KILL_KEEPER	"Get out of here before I call the guards!"
 
+
+#endif

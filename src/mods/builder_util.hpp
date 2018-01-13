@@ -88,7 +88,7 @@ namespace mods::builder_util{
 		mods::player* player,
 		const std::string & argument,
 		VectorObjectType & vector_objects,
-		std::function<NameType(typename VectorObjectType::reference_type)> data_extractor
+		std::function<NameType(typename VectorObjectType::value_type)> data_extractor
 	){
 		auto args = mods::util::subcmd_args<5,args_t>(argument,"list");
 		if(args.has_value()){
@@ -96,8 +96,7 @@ namespace mods::builder_util{
 			unsigned vo_id = 0;
 			player->pager_start();
 			for(auto& vo_reference : vector_objects){
-				auto vector_object_ptr = &vo_reference;
-				*player << "{gld}[" << vo_id++ << "]{/gld} :->{red} [" << data_extractor << "]{/red}\r\n";
+				*player << "{gld}[" << vo_id++ << "]{/gld} :->{red} [" << data_extractor(vo_reference) << "]{/red}\r\n";
 			}
 			player->pager_end();
 			player->page(0);

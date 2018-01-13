@@ -42,6 +42,10 @@ namespace mods{
 							}
 							room_id = room_dir->to_room;
 							vec_player_data list;
+							if(room_id == -1 || room_id > mods::globals::room_list.size()){
+								std::cerr << "requested room_id: " << room_id << " but room_list.size() is " << mods::globals::room_list.size() << "\n";
+								continue;
+							}
 							for(auto character : mods::globals::room_list[room_id]){
 								vec_player_data_element item;
 								item.ch = character;

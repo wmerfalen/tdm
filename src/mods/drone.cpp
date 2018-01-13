@@ -57,7 +57,7 @@ namespace mods {
 		owner->drone_simulate = value;
 	}
 	static void drone::get_drone(struct char_data* owner){
-		auto drone = mods::globals::player_list[owner->drone_uuid].cd();
+		auto drone = mods::globals::player_list[owner->drone_uuid]->cd();
 		if(IN_ROOM(owner) == IN_ROOM(drone)){
 			if(IN_ROOM(drone) != NOWHERE){
 				char_from_room(drone);
@@ -71,7 +71,7 @@ namespace mods {
 		if(owner->drone_uuid == 0 || owner->drone_uuid > mods::globals::player_list.size() -1){
 			return nullptr;
 		}
-		return mods::globals::player_list[owner->drone_uuid];
+		return mods::globals::player_list[owner->drone_uuid]->cd();
 	}
 
 	static bool drone::interpret(struct char_data *owner,const std::string & argument){
@@ -81,7 +81,7 @@ namespace mods {
 			return true;
 		}
 		if(argument.compare("scan") == 0){
-			command_interpreter(drone,"scan");
+			command_interpreter(drone->cd(),"scan");
 			return false;
 		}
 		switch(argument[0]){
@@ -94,7 +94,7 @@ namespace mods {
 			case 'S':
 			case 'W':
 			case 'l':
-				command_interpreter(drone,argument.substr(0,1).c_str());
+				command_interpreter(drone->cd(),argument.substr(0,1).c_str());
 				return false;
 			default: return false;
 		}

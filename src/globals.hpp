@@ -23,7 +23,7 @@
 #include "mods/conf.hpp"
 #include "mods/chat.hpp"
 
-#define MENTOC_PREAMBLE() auto player = std::make_shared<mods::player>(&mods::globals::player_list.at(ch->uuid));
+#define MENTOC_PREAMBLE() auto player = mods::globals::player_list.at(ch->uuid); player->set_cd(ch);
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
 #define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \
 strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(a,"down") == 0)
@@ -62,7 +62,7 @@ namespace mods {
 		extern ai_state_map states;
 		extern duk_context* duktape_context;
 		extern std::vector<std::vector<struct char_data*>> room_list;
-		extern std::vector<mods::player> player_list;
+		extern std::vector<std::shared_ptr<mods::player>> player_list;
 		extern std::vector<mods::chat::channel> chan;
 		extern std::vector<std::string> chan_verbs;
 		extern bool f_import_rooms;

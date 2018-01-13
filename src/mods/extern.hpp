@@ -1,3 +1,4 @@
+#include "../shop.h"
 extern void do_auto_exits(struct char_data *ch);
 extern void char_from_room(struct char_data*);
 extern struct player_special_data dummy_mob;
@@ -19,3 +20,4 @@ extern void obj_to_room(struct obj_data *object, room_rnum room);
 extern room_vnum mortal_start_room;
 extern room_vnum immort_start_room;
 extern room_vnum frozen_start_room;
+extern std::vector<shop_data> shop_index;

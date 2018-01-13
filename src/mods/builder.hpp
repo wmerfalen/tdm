@@ -58,6 +58,21 @@ namespace mods::builder {
 	void zone_place(int zone_id,std::string_view command, std::string_view if_flag,std::string_view arg1, std::string_view arg2,std::string_view arg3);
 	std::optional<obj_data*> instantiate_object_by_index(int index);
 	std::optional<obj_data*> instantiate_object_by_vnum(obj_vnum vnum);
+	void report_error(mods::player* player,std::string_view message);
+	void report_status(mods::player* player,std::string_view message);
+	void report_success(mods::player* player,std::string_view message);
+	template <typename T>
+	void report_error(T player,std::string_view message){
+	*player << "{red}[error]: {/red}" << message.data() << "\r\n";
+	}
+	template <typename T>
+	void report_status(T player,std::string_view message){
+	*player << "{gld}[status]: {/gld}" << message.data() << "\r\n";
+	}
+	template <typename T>
+	void report_success(T player,std::string_view message){
+	*player << "{grn}[success]: {/grn}" << message.data() << "\r\n";
+	}
 	void report_error(std::shared_ptr<mods::player> player,std::string_view message);
 	void report_status(std::shared_ptr<mods::player> player,std::string_view message);
 	void report_success(std::shared_ptr<mods::player> player,std::string_view message);

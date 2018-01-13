@@ -36,7 +36,7 @@ namespace mods{
 			auto char_uuid = duk_to_number(ctx,0);
 			auto vict_uuid = duk_to_number(ctx,1);
 			short ctr = 0;
-			::hit(mods::globals::player_list[char_uuid],mods::globals::player_list[vict_uuid],0);
+			::hit(mods::globals::player_list[char_uuid]->cd(),mods::globals::player_list[vict_uuid]->cd(),0);
 			duk_push_number(ctx,1);
 			return 1;	/* number of return values */
 		}
@@ -62,7 +62,7 @@ namespace mods{
 			/* First parameter is character name */
 			auto char_uuid = duk_to_number(ctx,0);
 			std::string cmd =  duk_to_string(ctx,1);
-			command_interpreter(mods::globals::player_list[char_uuid],cmd.c_str());
+			command_interpreter(mods::globals::player_list[char_uuid]->cd(),cmd.c_str());
 			return 0;	/* number of return values */
 		}
 		static duk_ret_t command_exec(duk_context *ctx){
@@ -71,10 +71,10 @@ namespace mods{
 			auto char_uuid = duk_to_number(ctx,0);
 			std::string cmd =  duk_to_string(ctx,1);
 			auto player = mods::globals::player_list.at(char_uuid); 
-			player.capture_output(true);
-			command_interpreter(player,cmd.c_str());
-			player.capture_output(false);
-			duk_push_string(ctx,player.get_captured_output().data());
+			player->capture_output(true);
+			command_interpreter(player->cd(),cmd.c_str());
+			player->capture_output(false);
+			duk_push_string(ctx,player->get_captured_output().data());
 			return 1;
 		}
 		static duk_ret_t mob_death_trigger(duk_context *ctx){
@@ -103,7 +103,7 @@ namespace mods{
 			int num_args = duk_get_top(ctx);
 			/* First parameter is character name */
 			auto cuuid = duk_to_number(ctx,0);
-			send_to_char(mods::globals::player_list.at(cuuid),duk_to_string(ctx,1));
+			send_to_char(mods::globals::player_list.at(cuuid)->cd(),duk_to_string(ctx,1));
 			return 0;	/* number of return values */
 		}
 		static duk_ret_t send_to_char(duk_context *ctx){

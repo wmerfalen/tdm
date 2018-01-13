@@ -8,6 +8,7 @@
 #include "../structs.h"
 #include "extern.hpp"
 #include "builder_util.hpp"
+#include "../shop.h"
 
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
 #define MENTOC_OBI2(i,a) obj->i = get_intval(#a).value_or(obj->i);
@@ -844,7 +845,58 @@ ACMD(do_sbuild){
 		player->pager_end();
 		player->page(0);
 	}
+	/*
+	mods::builder_util::list_object_vector<std::vector<shop_data>,std::string>(
+		player.get(),
+		argument,
+		shop_index,
+		[](shop_data & shop) -> std::string {
+			return std::string(mods::util::itoa(shop.vnum));
+		}
+	);
 
+	mods::builder_util::save_object_vector<std::vector<shop_data>>(
+		player.get(),
+		argument,
+		shop_index,
+		[](shop_data shop) -> std::pair<bool,std::string> {
+			mods::builder_util::post_modify_callback pm_callback = []() -> std::pair<bool,std::string> {
+				return {true,""};
+			};
+			mods::builder_util::value_callback value_setter = [&](sql_compositor::value_map & s_map){
+				s_map["shop_vnum"] = mods::util::itoa(shop.vnum);
+				s_map["shop_profit_buy"] = mods::util::itoa(shop.profit_buy);
+				s_map["shop_profit_sell"] = mods::util::itoa(shop.profit_sell);
+				//s_map["shop_type"] = mods::util::itoa(shop.type);
+				s_map["shop_no_such_item1"] = (shop.no_such_item1);
+				s_map["shop_no_such_item2"] = (shop.no_such_item2);
+				s_map["shop_missing_cash1"] = (shop.missing_cash1);
+				s_map["shop_missing_cash2"] = (shop.missing_cash2);
+				s_map["shop_do_not_buy"] =(shop.do_not_buy);
+				s_map["shop_message_buy"] = (shop.message_buy);
+				s_map["shop_message_sell"] =(shop.message_sell);
+				s_map["shop_temper1"] = mods::util::itoa(shop.temper1);
+				s_map["shop_bitvector"] = mods::util::itoa(shop.bitvector);
+				s_map["shop_keeper"] = mods::util::itoa(shop.keeper);
+				s_map["shop_with_who"] = mods::util::itoa(shop.with_who);
+				//s_map["shop_in_room"] = mods::util::itoa(shop.in_room);
+				s_map["shop_open1"] = mods::util::itoa(shop.open1);
+				s_map["shop_open2"] = mods::util::itoa(shop.open2);
+				s_map["shop_close1"] = mods::util::itoa(shop.close1);
+				s_map["shop_close2"] = mods::util::itoa(shop.close2);
+				s_map["shop_bankAccount"] = mods::util::itoa(shop.bankAccount);
+				s_map["shop_lastsort"] = mods::util::itoa(shop.lastsort);
+			};
+			return mods::builder_util::save_to_db<std::string>(
+				"shops",
+				"shop_id",
+				std::string(mods::util::itoa(shop.vnum)),
+				value_setter,
+				pm_callback
+			);
+		}
+	);
+	*/
 }
 ACMD(do_mbuild){
 	MENTOC_PREAMBLE();
