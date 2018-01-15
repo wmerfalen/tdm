@@ -85,14 +85,14 @@ namespace mods::builder_util{
 	}
 	template <typename VectorObjectType,typename NameType>
 	void list_object_vector(
-		mods::player* player,
+		std::shared_ptr<mods::player>& player,
 		const std::string & argument,
 		VectorObjectType & vector_objects,
-		std::function<NameType(typename VectorObjectType::value_type)> data_extractor
+		std::function<NameType(typename VectorObjectType::value_type & )> data_extractor
 	){
 		auto args = mods::util::subcmd_args<5,args_t>(argument,"list");
 		if(args.has_value()){
-			mods::builder::report_status(player,"listing...");
+			mods::builder::report_status<std::shared_ptr<mods::player>>(player,"listing...");
 			unsigned vo_id = 0;
 			player->pager_start();
 			for(auto& vo_reference : vector_objects){
@@ -106,7 +106,7 @@ namespace mods::builder_util{
 
 	template <typename VectorObjectType>
 	void save_object_vector(
-		mods::player* player,
+		std::shared_ptr<mods::player>& player,
 		const std::string & argument,
 		VectorObjectType & vector_objects,
 		std::function<std::pair<bool,std::string>(typename VectorObjectType::value_type)> save_function
@@ -115,27 +115,27 @@ namespace mods::builder_util{
 		if(args.has_value()){
 			auto arg_vec = args.value();
 			if(arg_vec.size() < 2){
-				mods::builder::report_error(player,"Invalid number of arguments");
+				mods::builder::report_error<std::shared_ptr<mods::player>>(player,"Invalid number of arguments");
 				return;
 			}
 			auto index = mods::util::stoi(arg_vec[1]);
 			if(!index.has_value() || index.value() >= vector_objects.size()){
-				mods::builder::report_error(player,"Invalid index");
+				mods::builder::report_error<std::shared_ptr<mods::player>>(player,"Invalid index");
 				return;
 			}
 			auto return_pair = save_function(vector_objects[index.value()]);
 			if(!return_pair.first){
-				mods::builder::report_error(player,return_pair.second);
+				mods::builder::report_error<std::shared_ptr<mods::player>>(player,return_pair.second);
 				return;
 			}
-			mods::builder::report_success(player,"Object saved.");
+			mods::builder::report_success<std::shared_ptr<mods::player>>(player,"Object saved.");
 			return;
 		}
 	}
 
 	template <typename VectorObjectType>
 	void show_object_vector(
-		mods::player* player,
+		std::shared_ptr<mods::player>& player,
 		const std::string & argument,
 		VectorObjectType & vector_objects,
 		std::function<void(typename VectorObjectType::value_type)> show_function
@@ -144,12 +144,12 @@ namespace mods::builder_util{
 		if(args.has_value()){
 			auto arg_vec = args.value();
 			if(arg_vec.size() < 2){
-				mods::builder::report_error(player,"Invalid number of arguments");
+				mods::builder::report_error<std::shared_ptr<mods::player>>(player,"Invalid number of arguments");
 				return;
 			}
 			auto index = mods::util::stoi(arg_vec[1]);
 			if(!index.has_value() || index.value() >= vector_objects.size()){
-				mods::builder::report_error(player,"Invalid index");
+				mods::builder::report_error<std::shared_ptr<mods::player>>(player,"Invalid index");
 				return;
 			}
 			show_function(vector_objects[index.value()]);
@@ -159,7 +159,7 @@ namespace mods::builder_util{
 
 	template <typename VectorObjectType>
 	void set_attribute_on_object_vector(
-		mods::player* player,
+		std::shared_ptr<mods::player>& player,
 		const std::string & argument,
 		VectorObjectType & vector_objects,
 		std::function<void(typename VectorObjectType::value_type,const std::string &,const std::string &)> set_function
@@ -168,7 +168,7 @@ namespace mods::builder_util{
 		if(args.has_value()){
 			auto arg_vec = args.value();
 			if(arg_vec.size() < 4){
-				mods::builder::report_error(player,"Invalid number of arguments");
+				mods::builder::report_error<std::shared_ptr<mods::player>>(player,"Invalid number of arguments");
 				return;
 			}
 			auto index = mods::util::stoi(arg_vec[1]);
@@ -182,7 +182,7 @@ namespace mods::builder_util{
 
 	template <typename VectorObjectType>
 	void instantiate_object_vector(
-		mods::player* player,
+		std::shared_ptr<mods::player>& player,
 		const std::string & argument,
 		VectorObjectType & vector_objects,
 		std::function<void(typename VectorObjectType::value_type)> show_function
@@ -192,11 +192,11 @@ namespace mods::builder_util{
 			auto arg_vec = args.value();
 			auto i_value = mods::util::stoi(arg_vec[1]);
 			if(!i_value.has_value()){
-				mods::builder::report_error(player,"Please use a valid numeric value.");
+				mods::builder::report_error<std::shared_ptr<mods::player>>(player,"Please use a valid numeric value.");
 			}else{
 				auto index = i_value.value();
 				if(index >= vector_objects.size()){
-					mods::builder::report_error(player,"Out of bounds");
+					mods::builder::report_error<std::shared_ptr<mods::player>>(player,"Out of bounds");
 				}
 				instantiate_function(vector_objects[index]);
 				return;

@@ -364,6 +364,8 @@ void page_string(struct descriptor_data *d, char *str, int keep_internal)
 /* The call that displays the next page. */
 void show_string(struct descriptor_data *d, char *input)
 {
+	auto ch = d->character;
+	MENTOC_PREAMBLE();
   char buffer[MAX_STRING_LENGTH], buf[MAX_INPUT_LENGTH];
   int diff;
 
@@ -436,7 +438,8 @@ void show_string(struct descriptor_data *d, char *input)
     else
       /* Tack \r\n onto the end to fix bug with prompt overwriting last line. */
       strcpy(buffer + diff, "\r\n");	/* strcpy: OK (size checked) */
-    send_to_char(d->character, "%s", buffer);
+    //send_to_char(d->character, "%s", buffer);
+	*player << buffer;
     d->showstr_page++;
   }
 }

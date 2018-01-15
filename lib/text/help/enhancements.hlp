@@ -1,0 +1,74 @@
+#
+RIFLE-SCOPES
+
+Rifle scopes affect weaponry based on the types of weapons they are applied to.
+Imagine setting a 6x scope on a sub-machine gun. It doesn't make much sense since
+a sub-machine gun's effective range is closer to the target. Now imagine taking that
+same 6x scope and applying it to an assault rifle or sniper rifle. This makes much more
+sense and this is the heart of the rifle scope system. 
+
+{gld}Types of scopes{/gld}
+{blu}Red Dot{/blu}: A red dot scope offers little to no magnification and is best utilized with
+sub-machine guns. It can be mounted on assault rifles as well. A Red Dot scope affects DAMROLL
+when firing at a target within the same room. 
+{blu}ACOG (Advanced Combat Optical Gunsight){/blu}: A scope for sub-machine guns and assault 
+rifles. An ACOG scope affects DAMROLL and THAC0. 
+{blu}6x scope{/blu}: A long-range scope that can only be applied to sniper rifles. A 6x
+scope increases DAMROLL and THAC0 when sniping from 2-3 rooms away. Sniping one room away
+does not have as big of a DAMROLL and THAC0 alteration as sniping 2-3 rooms away.
+
+#
+AMMO-TYPES
+
+Stock ammo in the mud has basic properties to get the job done. This stock ammo is available
+in and around the weapon supply just east of recall. More advanced ammo types exist in the mud
+and can be acquired by running raids. When a weapon is loaded with an advanced ammo type, THAC0
+is affected by a variable amount depending on the ammo attributes. 
+
+{gld}Types of ammo{/gld}
+{blu}Armor Piercing{/blu}: A powerful ammo type that dramatically increases the weapon's chance
+of piercing through a target's armor. THAC0 is increased on a weapon with Armor Piercing rounds
+loaded in it's cartridge.
+{blu}Incendiary{/blu}: An incendiary ammo type will cause fire damage to a target in addition to
+the damage done by the attack itself. Fire damage is applied to the target as a secondary damage
+type to the target. 
+
+# 
+DRONES
+
+Drones are an integral part of intelligence operations for scouting out targets. To start a drone
+simply type:
+  drone start
+Immediately, if you type 'look' you will see yourself standing there. You are now in the drone's
+perspective and you can now roam anywhere. mobs do not attack drones, so a drone is a good way
+of scouting an area to spot enemies. 
+
+Drones can bypass locked or reinforced doors. You can scan enemies with your drone and these 
+enemies will show up on your tactical hud. When you exit drone mode, you can type 'hudscan' 
+and the enemies you scanned with your drone will appear. 
+
+To leave your drone type:
+  drone stop
+
+When you stop your drone, it will be left in the room where you typed drone stop. To retrieve
+your drone simply type 'get drone'. 
+
+See also: DRONE-SCAN-ASSIST DRONE-SCANNING
+#
+DRONE-SCANNING
+
+Drones can scan enemies and mark them on your tactical hud. By default, typing 'scan' while
+in drone mode will scan all enemies and keep track of their positions. To scan only a single
+enemy type: 'scan <enemy> <direction>' where enemy is the name of the mob and direction is 
+the direction to search for said enemy. Scanning a single enemy will keep that enemy on
+your tactical hud. 
+
+See also: TACTICAL-HUD HUDSCAN
+#
+DRONE-SCAN-ASSIST
+
+When you scan with your drone, an enemy's position will appear on your group's tactical hud.
+You must be in a group for this to work. If a scanned enemy is killed by another player, your 
+player will get a drone scan assist in the form of extra experience points. Drone scan assists
+give you 10% exp of the total exp that the enemy is worth. 
+$

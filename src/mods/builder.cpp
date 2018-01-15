@@ -845,10 +845,9 @@ ACMD(do_sbuild){
 		player->pager_end();
 		player->page(0);
 	}
-	/*
 	mods::builder_util::list_object_vector<std::vector<shop_data>,std::string>(
-		player.get(),
-		argument,
+		player,
+		std::string(argument),
 		shop_index,
 		[](shop_data & shop) -> std::string {
 			return std::string(mods::util::itoa(shop.vnum));
@@ -856,8 +855,8 @@ ACMD(do_sbuild){
 	);
 
 	mods::builder_util::save_object_vector<std::vector<shop_data>>(
-		player.get(),
-		argument,
+		player,
+		std::string(argument),
 		shop_index,
 		[](shop_data shop) -> std::pair<bool,std::string> {
 			mods::builder_util::post_modify_callback pm_callback = []() -> std::pair<bool,std::string> {
@@ -896,7 +895,6 @@ ACMD(do_sbuild){
 			);
 		}
 	);
-	*/
 }
 ACMD(do_mbuild){
 	MENTOC_PREAMBLE();

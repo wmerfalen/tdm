@@ -73,9 +73,6 @@ namespace mods::builder {
 	void report_success(T player,std::string_view message){
 	*player << "{grn}[success]: {/grn}" << message.data() << "\r\n";
 	}
-	void report_error(std::shared_ptr<mods::player> player,std::string_view message);
-	void report_status(std::shared_ptr<mods::player> player,std::string_view message);
-	void report_success(std::shared_ptr<mods::player> player,std::string_view message);
 };
 
 ACMD(do_rbuild);
