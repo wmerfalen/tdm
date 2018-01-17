@@ -9,6 +9,7 @@
 #include "extern.hpp"
 #include "builder_util.hpp"
 #include "../shop.h"
+#include "../db.h"
 
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
 #define MENTOC_OBI2(i,a) obj->i = get_intval(#a).value_or(obj->i);
@@ -193,6 +194,37 @@ namespace mods::builder{
 			}
 		}
 		return std::nullopt;
+	}
+	std::pair<bool,std::string> update_zone_commands(int zone_id){
+		if(zone_id >= zone_table.size()){
+			return {false,"Zone id is out of bounds. Cannot process zone commands"};
+		}
+		try{
+			auto txn = txn();
+			mods::pq::exec(txn,std::string("DELETE FROM zone_data where zone_id=") + txn.quote(zone_table[zone_id].number));
+			mods::pq::commit(txn);
+
+			for(unsigned i = 0; i < zone_table[zone_id].cmd.size(); i++){
+			auto txn2 = txn();
+			auto sql = sql_compositor("zone_data",&txn2)
+				.insert()
+				.into("zone_data")
+				.values({
+					{"zone_id",std::to_string(zone_table[zone_id].number)},
+					{"zone_command",std::to_string(zone_table[zone_id].cmd[i].command)},
+					{"zone_if_flag",std::to_string(zone_table[zone_id].cmd[i].if_flag)},
+					{"zone_arg1",std::to_string(zone_table[zone_id].cmd[i].arg1)},
+					{"zone_arg2",std::to_string(zone_table[zone_id].cmd[i].arg2)},
+					{"zone_arg3",std::to_string(zone_table[zone_id].cmd[i].arg3)}
+				})
+				.sql();
+			mods::pq::exec(txn2,sql);
+			mods::pq::commit(txn2);
+			}
+		}catch(std::exception &e){
+			return {false,std::string("Saving zone commands failed: ") + e.what()};
+		}
+		return {true,"Saved all zone commands successfully"};
 	}
 	bool save_zone_to_db(std::string_view name,int room_start,int room_end,int lifespan,int reset_mode){
 		try{
@@ -495,7 +527,7 @@ namespace mods::builder{
 			.insert()
 			.into("zone_data")
 			.values({
-				{"zone_id",std::to_string(zone_id)},
+				{"zone_id",std::to_string(zone_table[zone_id].number)},
 				{"zone_command",zone_command.data()},
 				{"zone_if_flag",if_flag.data()},
 				{"zone_arg1",arg1.data()},
@@ -858,7 +890,7 @@ ACMD(do_sbuild){
 		player,
 		std::string(argument),
 		shop_index,
-		[](shop_data shop) -> std::pair<bool,std::string> {
+		[](shop_data & shop) -> std::pair<bool,std::string> {
 			mods::builder_util::post_modify_callback pm_callback = []() -> std::pair<bool,std::string> {
 				return {true,""};
 			};
@@ -893,6 +925,14 @@ ACMD(do_sbuild){
 				value_setter,
 				pm_callback
 			);
+		}
+	);
+	mods::builder_util::show_object_vector<std::vector<shop_data>>(
+		player,
+		std::string(argument),
+		shop_index,
+		[](shop_data & shop) -> void {
+			
 		}
 	);
 }
@@ -2052,49 +2092,10 @@ ACMD(do_obuild){
 
 ACMD(do_rbuildzone){
 	MENTOC_PREAMBLE();	
-    if(std::string(argument).length() == 0 || std::string(argument).compare("help") == 0){
-        player->pager_start();
-		*player << "usage: \r\n" << 
-				   " zbuild help\r\n" <<
-				   "  |--> this help menu\r\n" << 
-				   "  |____[example]\r\n" <<
-				   "  |:: zbuild help\r\n" <<
-				   "  |:: (this help menu will show up)\r\n" <<
-				   " zbuild new <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>\r\n" <<
-				   "  |--> Creates a new zone and maps the parameters to each field in the database.\r\n" <<
-				   "  |____[example]\r\n" <<
-				   "  |:: zbuild new 1200 1299 \"The never ending frost\" 90 2\r\n" <<
-				   "  |:: (creates a new zone which starts at rnum 1200 and ends on 1209\r\n" <<
-				   "  |:: \"The never ending frost\" will be the name of the zone. Quotes must be \r\n" <<
-				   "  |:: used here. 90 is the lifespan and 2 is the most common reset \r\n" <<
-				   "  |:: mode so leave it at that for now.)\r\n" <<
-				    
-				   " zbuild list\r\n" <<
-				   "  |--> lists the current zones saved to the db\r\n" <<
-				   "  |____[example]\r\n" <<
-				   "  |:: zbuild list\r\n"<<
-				    
-				   " zbuild delete <id>...<N>\r\n" <<
-				   "  |--> deletes the zone from the db with the id <id>. Multiple IDs can be specified\r\n" <<
-				   "  |____[example]\r\n" <<
-				   "  |:: zbuild delete 1\r\n" <<
-				    
-				   " zbuild place <zone_id> <command> <if_flag> <arg1> <arg2> <arg3>\r\n" <<
-				   "  |--> creates a reset command for the zone 'zone_id'.\r\n" <<
-				   "  |____[example]\r\n" <<
-				   "  |:: zbuild place 5 M 0 1500 500 300\r\n" <<
-				   "  |:: (creates a reset command that grabs the mobile (specified by M) and uses \r\n" <<
-				   "  |:: the three arguments 1500, 500, and 300 as the arguments to the reset zone\r\n" <<
-				   "  |:: function\r\n" <<
-       			   "  |::  Commands:\r\n" <<
-       			   "  |:: 'M': Read a mobile\r\n" <<
-       			   "  |:: 'O': Read an object\r\n" <<
-       			   "  |:: 'G': Give obj to mob\r\n" <<
-       			   "  |:: 'P': Put obj in obj\r\n" <<
-       			   "  |:: 'G': Obj to char\r\n" <<
-       			   "  |:: 'E': Obj to char equip\r\n" <<
-       			   "  |:: 'D': Set state of door\r\n" <<
-				   "  |:: )\r\n" <<
+	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
+	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("place") == 0){
+		player->pager_start();
+		*player <<
 "Each command consists of a letter, identifying the command-type,\r\n"<<
 "followed by three or four arguments.  The first argument, common to all the\r\n"<<
 "commands, is called the ``if-flag.''  If the if-flag for a command is 1, that\r\n"<<
@@ -2186,7 +2187,57 @@ ACMD(do_rbuildzone){
 "{gld}R: remove object from room{/gld}Format: R <if-flag> <room vnum> <obj vnum>\r\n"<<
 "If an object with vnum Obj Vnum exists in the room with vnum Room Vnum,\r\n"<<
 "it will be removed from the room and purged.\r\n"<<
-"\r\n"<<
+"\r\n";
+		player->pager_end();
+		player->page(0);
+		return;
+	}
+    if(std::string(argument).length() == 0 || std::string(argument).compare("help") == 0){
+        player->pager_start();
+		*player << "usage: \r\n" << 
+				   " zbuild help\r\n" <<
+				   "  |--> this help menu\r\n" << 
+				   "  |____[example]\r\n" <<
+				   "  |:: zbuild help\r\n" <<
+				   "  |:: (this help menu will show up)\r\n" <<
+				   " zbuild new <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>\r\n" <<
+				   "  |--> Creates a new zone and maps the parameters to each field in the database.\r\n" <<
+				   "  |____[example]\r\n" <<
+				   "  |:: zbuild new 1200 1299 \"The never ending frost\" 90 2\r\n" <<
+				   "  |:: (creates a new zone which starts at rnum 1200 and ends on 1209\r\n" <<
+				   "  |:: \"The never ending frost\" will be the name of the zone. Quotes must be \r\n" <<
+				   "  |:: used here. 90 is the lifespan and 2 is the most common reset \r\n" <<
+				   "  |:: mode so leave it at that for now.)\r\n" <<
+				   " zbuild list\r\n" <<
+				   "  |--> lists the current zones saved to the db\r\n" <<
+				   "  |____[example]\r\n" <<
+				   "  |:: zbuild list\r\n"<<
+				    
+				   " zbuild delete <id>...<N>\r\n" <<
+				   "  |--> deletes the zone from the db with the id <id>. Multiple IDs can be specified\r\n" <<
+				   "  |____[example]\r\n" <<
+				   "  |:: zbuild delete 1\r\n" <<
+				   " zbuild place <zone_id> <command> <if_flag> <arg1> <arg2> <arg3>\r\n" <<
+				   "  |--> creates a reset command for the zone 'zone_id'.\r\n" <<
+				   "  |____[example]\r\n" <<
+				   "  |:: zbuild place 5 M 0 1500 500 300\r\n" <<
+				   "  |:: (creates a reset command that grabs the mobile (specified by M) and uses \r\n" <<
+				   "  |:: the three arguments 1500, 500, and 300 as the arguments to the reset zone\r\n" <<
+				   "  |:: function\r\n" <<
+       			   "  |::  Commands:\r\n" <<
+       			   "  |:: 'M': Read a mobile\r\n" <<
+       			   "  |:: 'O': Read an object\r\n" <<
+       			   "  |:: 'G': Give obj to mob\r\n" <<
+       			   "  |:: 'P': Put obj in obj\r\n" <<
+       			   "  |:: 'G': Obj to char\r\n" <<
+       			   "  |:: 'E': Obj to char equip\r\n" <<
+       			   "  |:: 'D': Set state of door\r\n" <<
+				   "  |:: )\r\n" <<
+				   " {red}see: zbuild help place{/red}\r\n" <<
+				   " zbuild place-list <zone_id>\r\n" <<
+				   "  |--> lists all place commands for 'zone_id'.\r\n" <<
+				   " zbuild place-remove <zone_id> <place_id>\r\n" <<
+				   "  |--> removes the place command 'place_id' in zone 'zone_id'\r\n" << 
 				   "\r\n";
 		player->pager_end();
 		player->page(0);
@@ -2196,6 +2247,52 @@ ACMD(do_rbuildzone){
     std::array<char,max_char> command;
 	std::fill(command.begin(),command.end(),0);		
 	one_argument(argument,&command[0],max_char);
+	auto args = mods::util::subcmd_args<5,args_t>(argument,"save");
+	if(args.has_value()){
+		auto arg_vec = args.value();
+		if(arg_vec.size() < 2){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Please provide a zone id");
+			return;
+		}
+		auto zone_id = mods::util::stoi(arg_vec[1]);
+		if(!zone_id.has_value()){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid zone id");
+			return;
+		}
+		if(zone_id.value() >= zone_table.size()){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
+			return;
+		}
+		mods::builder_util::value_callback value_callback = [&](sql_compositor::value_map & values){
+			values["zone_start"] = mods::util::itoa(zone_table[zone_id.value()].bot);
+			values["zone_end"] = mods::util::itoa(zone_table[zone_id.value()].top);
+			values["zone_name"] = zone_table[zone_id.value()].name;
+			values["lifespan"] = std::to_string(zone_table[zone_id.value()].lifespan);
+			values["reset_mode"] = std::to_string(zone_table[zone_id.value()].reset_mode);
+		};
+		mods::builder_util::post_modify_callback post_modify_callback = []() -> std::pair<bool,std::string> {
+			return {true,""};
+		};
+		auto status = mods::builder_util::save_to_db<std::string>(
+			"zone",
+			"id",
+			std::to_string(zone_table[zone_id.value()].number),
+			value_callback,
+    		post_modify_callback
+		);
+		if(status.first){
+			mods::builder::report_success<shrd_ptr_player_t>(player,"Saved zone");
+		}else{
+			mods::builder::report_error<shrd_ptr_player_t>(player,status.second);
+		}
+		auto status2 = mods::builder::update_zone_commands(zone_id.value());
+		if(status2.first){
+			mods::builder::report_success<shrd_ptr_player_t>(player,"Saved zone commands");
+		}else{
+			mods::builder::report_error<shrd_ptr_player_t>(player,status2.second);
+		}
+		return;
+	}
 	if(std::string(&command[0]).compare("place") == 0){
 		std::string arg = argument;
 		auto past = arg.substr(arg.find("place ")+6);
@@ -2294,6 +2391,90 @@ ACMD(do_rbuildzone){
 		} 
 		player->pager_end();
 		player->page(0);
+		return;
+	}
+	args = mods::util::subcmd_args<11,args_t>(argument,"place-list");
+	if(args.has_value()){
+		auto arg_vec = args.value();
+		//place-list <zone_id>
+		// 0            1
+		if(arg_vec.size() < 2){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid number of arguments");
+			return;
+		}
+		auto index = mods::util::stoi(arg_vec[1]);
+		if(!index.has_value()){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid index");
+			return;
+		}
+		if(index.value() >= zone_table.size()){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
+			return;
+		}
+		int current_mobile = 0;
+		int ctr = 0;
+		for(auto ZCMD : zone_table[index.value()].cmd){
+			if(ZCMD.command == '*'){ break; }
+			*player << "{red}[{/red}" << ctr << "{red}] ->{/red}";
+			switch (ZCMD.command) {
+			case 'M':
+				current_mobile = ZCMD.arg1;
+				*player << "{red}mobile{/red}: " << ZCMD.arg1 << "{red} to room: {/red}" << ZCMD.arg3 << "\r\n";
+			break;
+			case 'O':
+				*player << "{red}object{/red}: " << ZCMD.arg1 << "{red} to room: {/red}" << ZCMD.arg3 << "\r\n";
+			break;
+			case 'G':
+				*player << "{red}give object{/red}: " << ZCMD.arg1 << "{red} to mobile{/red}: " << current_mobile << "\r\n";
+			break;
+			case 'E':
+				*player << "{red}equip mobile({/red}" << current_mobile << "{red}) with object{/red}: " << ZCMD.arg1 << "\r\n";
+			break;
+			case 'P':
+				*player << "{red}put object({/red}" << ZCMD.arg1 << "{red}) in object{/red}: " << ZCMD.arg3 << "\r\n";
+			break;
+			case 'D':
+				*player << "{red}set state of door{/red}:" << ZCMD.arg1 << " {red}to{/red}:" << ZCMD.arg2 << "\r\n";
+			break;
+			case 'R': 
+				*player << "{red}remove object({/red}" << ZCMD.arg2 << "{red}) from room{/red}:" << ZCMD.arg1 << "\r\n";
+			break;
+			}
+		}
+		return;
+	}
+	args = mods::util::subcmd_args<13,args_t>(argument,"place-remove");
+	if(args.has_value()){
+		auto arg_vec = args.value();
+		if(arg_vec.size() < 3){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Not enough arguments");
+			return;
+		}
+		//place-remove <zone_id> <command_index>
+		//     0           1           2
+		auto index = mods::util::stoi(arg_vec[1]);
+		if(!index.has_value()){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid index");
+			return;
+		}
+		if(index.value() >= zone_table.size()){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
+			return;
+		}
+		auto command_index = mods::util::stoi(arg_vec[2]);
+		if(!command_index.has_value()){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid command index");
+			return;
+		}
+		auto command_vec = zone_table[index.value()].cmd;
+		if(command_index.value() >= command_vec.size()){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Command index out of bounds");
+			return;
+		}
+		zone_table[index.value()].cmd.erase(
+			zone_table[index.value()].cmd.begin() + command_index.value()
+		);
+		mods::builder::report_status<shrd_ptr_player_t>(player,"Index removed");
 		return;
 	}
 };

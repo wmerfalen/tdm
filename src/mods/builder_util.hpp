@@ -109,7 +109,7 @@ namespace mods::builder_util{
 		std::shared_ptr<mods::player>& player,
 		const std::string & argument,
 		VectorObjectType & vector_objects,
-		std::function<std::pair<bool,std::string>(typename VectorObjectType::value_type)> save_function
+		std::function<std::pair<bool,std::string>(typename VectorObjectType::value_type &)> save_function
 	){
 		auto args = mods::util::subcmd_args<5,args_t>(argument,"save");
 		if(args.has_value()){
@@ -138,7 +138,7 @@ namespace mods::builder_util{
 		std::shared_ptr<mods::player>& player,
 		const std::string & argument,
 		VectorObjectType & vector_objects,
-		std::function<void(typename VectorObjectType::value_type)> show_function
+		std::function<void(typename VectorObjectType::value_type &)> show_function
 	){
 		auto args = mods::util::subcmd_args<5,args_t>(argument,"show");
 		if(args.has_value()){
@@ -162,7 +162,7 @@ namespace mods::builder_util{
 		std::shared_ptr<mods::player>& player,
 		const std::string & argument,
 		VectorObjectType & vector_objects,
-		std::function<void(typename VectorObjectType::value_type,const std::string &,const std::string &)> set_function
+		std::function<void(typename VectorObjectType::value_type & ,const std::string &,const std::string &)> set_function
 	){
 		auto args = mods::util::subcmd_args<5,args_t>(argument,"attr");
 		if(args.has_value()){
@@ -185,7 +185,7 @@ namespace mods::builder_util{
 		std::shared_ptr<mods::player>& player,
 		const std::string & argument,
 		VectorObjectType & vector_objects,
-		std::function<void(typename VectorObjectType::value_type)> show_function
+		std::function<void(int)> instantiate_function
 	){
 		auto args = mods::util::subcmd_args<12,args_t>(argument,"instantiate");
 		if(args.has_value()){
@@ -198,7 +198,7 @@ namespace mods::builder_util{
 				if(index >= vector_objects.size()){
 					mods::builder::report_error<std::shared_ptr<mods::player>>(player,"Out of bounds");
 				}
-				instantiate_function(vector_objects[index]);
+				instantiate_function(index);
 				return;
 			}
 		}

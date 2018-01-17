@@ -232,7 +232,7 @@ struct ban_list_element {
 #ifndef __DB_C__
 extern room_rnum top_of_world;
 
-extern struct zone_data *zone_table;
+extern std::vector<zone_data> zone_table;
 extern zone_rnum top_of_zone_table;
 
 extern struct descriptor_data *descriptor_list;
