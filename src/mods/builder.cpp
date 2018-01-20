@@ -10,6 +10,7 @@
 #include "builder_util.hpp"
 #include "../shop.h"
 #include "../db.h"
+#include "../globals.hpp"
 
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
 #define MENTOC_OBI2(i,a) obj->i = get_intval(#a).value_or(obj->i);
@@ -18,6 +19,7 @@
 using objtype = mods::object::type;
 using shrd_ptr_player_t = std::shared_ptr<mods::player>;
 typedef mods::sql::compositor<mods::pq::transaction> sql_compositor;
+extern void parse_sql_zones();
 namespace mods::builder{
 	std::array<std::pair<int,std::string>,3> sex_flags = { {
 		{SEX_NEUTRAL,"NEUTRAL"},
@@ -195,6 +197,30 @@ namespace mods::builder{
 		}
 		return std::nullopt;
 	}
+	void pave_to(char_data* ch,room_data * current_room,int direction){
+		MENTOC_PREAMBLE();
+		mods::builder::report_status<shrd_ptr_player_t>(player,std::string("start_room: ") + std::to_string(
+					ch->pavements->start_room)
+		);
+		mods::builder::new_room(ch,direction);
+		ch->pavements->rooms.push_back(world.size()-1);
+		auto created_room = world.end()- 1;
+		created_room->number = ch->pavements->start_room + ch->pavements->current_room_number;
+		created_room->zone = ch->pavements->zone_id;
+		if(!create_direction(IN_ROOM(ch),direction,world.size() -1 )){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Couldn't create direction to that room!");
+			return;
+		}
+		if(!create_direction(world.size()-1,OPPOSITE_DIR(direction),IN_ROOM(ch))){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Couldn't create bind-back direction to that room!");
+			return;
+		}
+		world[world.size()-1].dir_option[OPPOSITE_DIR(direction)]->general_description = strdup(world[IN_ROOM(ch)].name);
+		world[world.size()-1].dir_option[OPPOSITE_DIR(direction)]->keyword = strdup("door");
+		ch->pavements->current_room_number++;
+		mods::builder::report_status<shrd_ptr_player_t>(player,"Paved room to that direction");
+	}
+
 	std::pair<bool,std::string> update_zone_commands(int zone_id){
 		if(zone_id >= zone_table.size()){
 			return {false,"Zone id is out of bounds. Cannot process zone commands"};
@@ -286,7 +312,7 @@ namespace mods::builder{
 */
 			auto check_txn = txn();
 			auto check_sql = sql_compositor("room",&check_txn)
-				.select("COUNT(room_number)")
+				.select("room_number")
 				.from("room")
 				.where("room_number","=",std::to_string(world[in_room].number))
 				.sql();
@@ -297,6 +323,7 @@ namespace mods::builder{
 			values["sector_type"] = std::to_string(world[in_room].sector_type);
 			values["name"] = world[in_room].name;
 			values["description"] = world[in_room].description;
+			values["room_number"] = std::to_string(world[in_room].number);
 			if(world[in_room].ex_description && world[in_room].ex_description->keyword){
 				values["ex_keyword"] = (world[in_room].ex_description->keyword);
 			}
@@ -332,13 +359,16 @@ namespace mods::builder{
 				mods::pq::exec(txn,sql);
 				mods::pq::commit(txn);
 			}
+			auto del_txn = txn();
+			mods::pq::exec(del_txn,std::string("DELETE FROM room_direction_data where room_number=") + std::to_string(world[in_room].number));
+			mods::pq::commit(del_txn);
 			for(auto direction = 0; direction < NUM_OF_DIRS;direction++){
 				if(world[in_room].dir_option[direction] &&
 				   world[in_room].dir_option[direction]->general_description != nullptr){
 					auto check_txn = txn();
 					sql_compositor comp("room_direction_data",&check_txn);
 					std::string check_sql = comp.
-						select("COUNT(room_number)")
+						select("room_number")
 						.from("room_direction_data")
 						.where("room_number","=",std::to_string(world[in_room].number))
 						.op_and("exit_direction","=",std::to_string(direction))
@@ -353,7 +383,9 @@ namespace mods::builder{
 								{"keyword",world[in_room].dir_option[direction]->keyword},
 								{"exit_info",std::to_string(world[in_room].dir_option[direction]->exit_info)},
 								{"exit_key",std::to_string(world[in_room].dir_option[direction]->key)},
-								{"to_room",std::to_string(real_room_num)}
+								{"to_room",std::to_string(real_room_num)},
+								{"room_number",std::to_string(world[in_room].number)},
+								{"exit_direction",std::to_string(direction)}
 					};
 					if(check_result.size()){
 						/* update the row instead of inserting it */
@@ -2360,6 +2392,7 @@ ACMD(do_rbuildzone){
 			if(!mods::builder::save_zone_to_db(arglist[2],arg_0.value(),arg_1.value(),arg_3.value(),arg_4.value())){
 				mods::builder::report_error<shrd_ptr_player_t>(player,"Unable to save new zone");
 			}else{
+				parse_sql_zones();
 				mods::builder::report_success<shrd_ptr_player_t>(player,"New zone created");
 			}
 		}
@@ -2373,8 +2406,10 @@ ACMD(do_rbuildzone){
 		mods::pq::commit(txn);
 
 		player->pager_start();
+		unsigned ictr = 0;
 		for(auto row : check_result){
 			std::string acc = "{red}";
+			acc += std::string("Internal ZoneID:{/red}") + std::to_string(ictr++) + "::";
 			acc += std::to_string(row[0].as<int>());
 			acc += "{/red}[";
 			acc += std::to_string(row[1].as<int>());
@@ -2481,6 +2516,7 @@ ACMD(do_rbuildzone){
 
 ACMD(do_rbuild){
 	MENTOC_PREAMBLE();	
+	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
     if(std::string(argument).length() == 0 || std::string(argument).compare("help") == 0){
         player->pager_start() << "usage: \r\n" << 
 				   " rbuild help\r\n" <<
@@ -2553,7 +2589,32 @@ ACMD(do_rbuild){
 				   "  |:: (the north exit will require a key numbered 123)\r\n" <<
 				   "  |:: rbuild dopt north to_room 27\r\n" << 
 				   "  |:: (the north room will lead to room number 27)\r\n" <<
-				   "[documentation written on 2017-11-22]\r\n" <<
+				   " rbuild pave <on|off> <room_number_start> <zone_id>\r\n" <<
+				   "  |--> starts the pave mode where any direction you go to will automatically \r\n" <<
+				   "  |    create and bind rooms. Helpful for when you want to carve out a ton of\r\n" <<
+				   "  |    different rooms and fill in the descriptions for them later\r\n" <<
+				   "  |    You must supply the room_number_start argument as this will be the virtual room \r\n" <<
+				   "  |    number that the paved rooms will start at.\r\n" <<
+				   "  |    When you are done paving type 'rbuild pave off')\r\n"<<
+				   "  |____[examples]\r\n" <<
+				   "  |:: rbuild pave on 100\r\n" <<
+				   "  |   (starts pave mode. The first room will have a virtual room number of 100, and the next \r\n" <<
+				   "  |   subsequent rooms will be 101, 102, etc. until you type 'rbuild pave off'. Once in pave mode, \r\n" <<
+				   "  |   walk to a bunch of different rooms and pave out a walkway. When you type 'rbuild pave off' it will \r\n" <<
+				   "  |   give you a transaction id number. Remember this transaction ID number because that is how you refer to the set\r\n" <<
+				   "  |   of paved rooms when you want to save. To save a set of paved rooms type 'rbuild save-paved <transaction_id_number>'\r\n" <<
+				   "  |   where transaction_id_number is the transaction id returned when you typed 'rbuild pave off'. If you forget \r\n" <<
+				   "  |   your transaction id number, you can type 'rbuild list-paved' and it will show you a list of paved walkways\r\n" <<
+				   "  |   that you currently have)\r\n" <<
+				   "  |:: rbuild pave off\r\n" <<
+				   "  |--> (stops the pave mode)\r\n" <<
+				   " rbuild save-paved <transaction_id_number>\r\n" <<
+				   "  |--> saves all of the paved rooms that were created for the transaction id number specified.\r\n" <<
+				   " rbuild clear-paved <transaction_id_number>\r\n" <<
+				   "  |--> clears all of the paved rooms that were created\r\n" <<
+				   " rbuild list-paved\r\n" <<
+				   "  |--> lists all the currently paved transaction id numbers\r\n" <<
+				   "[documentation written on 2018-01-19]\r\n" <<
 				   "\r\n";
 		player->pager_end();
 		player->page(0);
@@ -2732,5 +2793,84 @@ ACMD(do_rbuild){
 			}
 			return;
 		}
+	}
+	auto args = mods::util::subcmd_args<11,args_t>(argument,"list-paved");
+	if(args.has_value()){
+		if(!player->cd()->pavements){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"No pavements to list");
+			return;
+		}
+		for(auto room_id : player->cd()->pavements->rooms){
+			mods::builder::report_status<shrd_ptr_player_t>(player,std::to_string(room_id));
+		}
+		return;
+	}
+	args = mods::util::subcmd_args<11,args_t>(argument,"save-paved");
+	if(args.has_value()){
+		if(!player->cd()->pavements){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"No pavements to save");
+			return;
+		}
+		unsigned saved_room_counter = 0;
+		for(auto room_id : player->cd()->pavements->rooms){
+			if(room_id >= world.size()){
+				mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Cannot save room id#: ") + std::to_string(room_id));
+				continue;
+			}else{
+				if(mods::builder::save_to_db(room_id) < 0){
+					mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Unable to save room id#: " ) + std::to_string(world[room_id].number));
+					break;
+				}else{
+					saved_room_counter++;
+				}
+			}
+		}
+		mods::builder::report_success<shrd_ptr_player_t>(player,std::string("Saved ") + std::to_string(saved_room_counter) + " rooms");
+		return;
+	}
+	args = mods::util::subcmd_args<5,args_t>(argument,"pave");
+	if(args.has_value()){
+		auto arg_vec = args.value();
+		//pave on|off <starting_room_number> <zone_id>
+		// 0    1        2                     3
+	 	if(arg_vec.size() < 2){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Please specify on or off as the second argument");
+			return;
+		}
+
+		if(arg_vec[1].compare("on") == 0){
+			if(arg_vec.size() < 4){
+				mods::builder::report_error<shrd_ptr_player_t>(player,"Please specify a starting room number");
+				return;
+			}
+			auto starting_room_number = mods::util::stoi(arg_vec[2]);
+			auto zone_id = mods::util::stoi(arg_vec[3]);
+			if(!zone_id.has_value()){
+				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid zone id");
+				return;
+			}
+			if(zone_id.value() >= zone_table.size()){
+				mods::builder::report_error<shrd_ptr_player_t>(player,"Zone id is out of bounds");
+				return;
+			}
+
+			if(!starting_room_number.has_value()){
+				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid starting room number");
+				return;
+			}else{
+				player->cd()->pave_mode = true;
+				player->cd()->pavements = std::make_shared<pavement>(starting_room_number.value(),zone_id.value());
+			}
+			mods::builder::report_status<shrd_ptr_player_t>(player,"Starting pave mode. You can start moving around now. To stop, type 'rbuild pave off'");
+			return;
+		}
+
+		if(arg_vec[1].compare("off") == 0){
+			player->cd()->pave_mode = false;
+			mods::builder::report_status<shrd_ptr_player_t>(player,"Stopped pave mode.");
+			mods::builder::report_status<shrd_ptr_player_t>(player,"Transaction ID: 0");
+			return;
+		}
+		return;
 	}
 };

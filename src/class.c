@@ -46,19 +46,20 @@ const char *title_female(int chclass, int level);
 /* Names first */
 
 const char *class_abbrevs[] = {
-  "Mu",
-  "Cl",
-  "Th",
-  "Wa",
+  "Eng",
+  "Med",
+  "Spr",
+  "Mrn",
   "\n"
 };
 
 
 const char *pc_class_types[] = {
-  "Magic User",
-  "Cleric",
-  "Thief",
-  "Warrior",
+  "Engineer",//"Magic User",
+  "Medic",//"Cleric",
+  "Sniper",//"Thief",
+  "Marine",//"Warrior",
+  "Support",
   "\n"
 };
 
@@ -67,10 +68,10 @@ const char *pc_class_types[] = {
 const char *class_menu =
 "\r\n"
 "Select a class:\r\n"
-"  [C]leric\r\n"
-"  [T]hief\r\n"
-"  [W]arrior\r\n"
-"  [M]agic-user\r\n";
+"  [M]edic\r\n"
+"  [S]niper\r\n"
+"  M[A]rine\r\n"
+"  [E]engineer\r\n";
 
 
 
@@ -81,13 +82,12 @@ const char *class_menu =
 
 int parse_class(char arg)
 {
-  arg = LOWER(arg);
-
   switch (arg) {
-  case 'm': return CLASS_MAGIC_USER;
-  case 'c': return CLASS_CLERIC;
-  case 'w': return CLASS_WARRIOR;
-  case 't': return CLASS_THIEF;
+  case 'E': return CLASS_ENGINEER;
+  case 'M': return CLASS_MEDIC;
+  case 'A': return CLASS_MARINE;
+  case 'S': return CLASS_SNIPER;
+  case 'U' : return CLASS_SUPPORT;
   default:  return CLASS_UNDEFINED;
   }
 }
@@ -164,10 +164,10 @@ int prac_params[4][NUM_CLASSES] = {
 struct guild_info_type guild_info[] = {
 
 /* Midgaard */
-  { CLASS_MAGIC_USER,	3017,	SCMD_SOUTH	},
-  { CLASS_CLERIC,	3004,	SCMD_NORTH	},
-  { CLASS_THIEF,	3027,	SCMD_EAST	},
-  { CLASS_WARRIOR,	3021,	SCMD_EAST	},
+  { CLASS_ENGINEER,	3017,	SCMD_SOUTH	},
+  { CLASS_MEDIC,	3004,	SCMD_NORTH	},
+  { CLASS_SNIPER,	3027,	SCMD_EAST	},
+  { CLASS_MARINE,	3021,	SCMD_EAST	},
 
 /* Brass Dragon */
   { -999 /* all */ ,	5065,	SCMD_WEST	},
@@ -190,7 +190,7 @@ struct guild_info_type guild_info[] = {
 byte saving_throws(int class_num, int type, int level)
 {
   switch (class_num) {
-  case CLASS_MAGIC_USER:
+  case CLASS_ENGINEER:
     switch (type) {
     case SAVING_PARA:	/* Paralyzation */
       switch (level) {
@@ -432,7 +432,7 @@ byte saving_throws(int class_num, int type, int level)
       break;
     }
     break;
-  case CLASS_CLERIC:
+  case CLASS_MEDIC:
     switch (type) {
     case SAVING_PARA:	/* Paralyzation */
       switch (level) {
@@ -674,7 +674,7 @@ byte saving_throws(int class_num, int type, int level)
       break;
     }
     break;
-  case CLASS_THIEF:
+  case CLASS_SNIPER:
     switch (type) {
     case SAVING_PARA:	/* Paralyzation */
       switch (level) {
@@ -916,7 +916,7 @@ byte saving_throws(int class_num, int type, int level)
       break;
     }
     break;
-  case CLASS_WARRIOR:
+  case CLASS_MARINE:
     switch (type) {
     case SAVING_PARA:	/* Paralyzation */
       switch (level) {
@@ -1220,7 +1220,7 @@ byte saving_throws(int class_num, int type, int level)
 int thaco(int class_num, int level)
 {
   switch (class_num) {
-  case CLASS_MAGIC_USER:
+  case CLASS_ENGINEER:
     switch (level) {
     case  0: return 100;
     case  1: return  20;
@@ -1260,7 +1260,7 @@ int thaco(int class_num, int level)
     default:
       log("SYSERR: Missing level for mage thac0.");
     }
-  case CLASS_CLERIC:
+  case CLASS_MEDIC:
     switch (level) {
     case  0: return 100;
     case  1: return  20;
@@ -1300,7 +1300,7 @@ int thaco(int class_num, int level)
     default:
       log("SYSERR: Missing level for cleric thac0.");
     }
-  case CLASS_THIEF:
+  case CLASS_SNIPER:
     switch (level) {
     case  0: return 100;
     case  1: return  20;
@@ -1340,7 +1340,7 @@ int thaco(int class_num, int level)
     default:
       log("SYSERR: Missing level for thief thac0.");
     }
-  case CLASS_WARRIOR:
+  case CLASS_MARINE:
     switch (level) {
     case  0: return 100;
     case  1: return  20;
@@ -1422,7 +1422,7 @@ void roll_real_abils(struct char_data *ch)
   ch->real_abils.str_add = 0;
 
   switch (GET_CLASS(ch)) {
-  case CLASS_MAGIC_USER:
+  case CLASS_ENGINEER:
     ch->real_abils.intel = table[0];
     ch->real_abils.wis = table[1];
     ch->real_abils.dex = table[2];
@@ -1430,7 +1430,7 @@ void roll_real_abils(struct char_data *ch)
     ch->real_abils.con = table[4];
     ch->real_abils.cha = table[5];
     break;
-  case CLASS_CLERIC:
+  case CLASS_MEDIC:
     ch->real_abils.wis = table[0];
     ch->real_abils.intel = table[1];
     ch->real_abils.str = table[2];
@@ -1438,7 +1438,7 @@ void roll_real_abils(struct char_data *ch)
     ch->real_abils.con = table[4];
     ch->real_abils.cha = table[5];
     break;
-  case CLASS_THIEF:
+  case CLASS_SNIPER:
     ch->real_abils.dex = table[0];
     ch->real_abils.str = table[1];
     ch->real_abils.con = table[2];
@@ -1446,7 +1446,7 @@ void roll_real_abils(struct char_data *ch)
     ch->real_abils.wis = table[4];
     ch->real_abils.cha = table[5];
     break;
-  case CLASS_WARRIOR:
+  case CLASS_MARINE:
     ch->real_abils.str = table[0];
     ch->real_abils.dex = table[1];
     ch->real_abils.con = table[2];
@@ -1476,13 +1476,13 @@ void do_start(struct char_data *ch)
 
   switch (GET_CLASS(ch)) {
 
-  case CLASS_MAGIC_USER:
+  case CLASS_ENGINEER:
     break;
 
-  case CLASS_CLERIC:
+  case CLASS_MEDIC:
     break;
 
-  case CLASS_THIEF:
+  case CLASS_SNIPER:
     SET_SKILL(ch, SKILL_SNEAK, 10);
     SET_SKILL(ch, SKILL_HIDE, 5);
     SET_SKILL(ch, SKILL_STEAL, 15);
@@ -1491,7 +1491,7 @@ void do_start(struct char_data *ch)
     SET_SKILL(ch, SKILL_TRACK, 10);
     break;
 
-  case CLASS_WARRIOR:
+  case CLASS_MARINE:
     break;
   }
 
@@ -1524,27 +1524,27 @@ void advance_level(struct char_data *ch)
 
   switch (GET_CLASS(ch)) {
 
-  case CLASS_MAGIC_USER:
+  case CLASS_ENGINEER:
     add_hp += rand_number(3, 8);
     add_mana = rand_number(GET_LEVEL(ch), (int)(1.5 * GET_LEVEL(ch)));
     add_mana = MIN(add_mana, 10);
     add_move = rand_number(0, 2);
     break;
 
-  case CLASS_CLERIC:
+  case CLASS_MEDIC:
     add_hp += rand_number(5, 10);
     add_mana = rand_number(GET_LEVEL(ch), (int)(1.5 * GET_LEVEL(ch)));
     add_mana = MIN(add_mana, 10);
     add_move = rand_number(0, 2);
     break;
 
-  case CLASS_THIEF:
+  case CLASS_SNIPER:
     add_hp += rand_number(7, 13);
     add_mana = 0;
     add_move = rand_number(1, 3);
     break;
 
-  case CLASS_WARRIOR:
+  case CLASS_MARINE:
     add_hp += rand_number(10, 15);
     add_mana = 0;
     add_move = rand_number(1, 3);
@@ -1628,74 +1628,74 @@ int invalid_class(struct char_data *ch, struct obj_data *obj)
 void init_spell_levels(void)
 {
   /* MAGES */
-  spell_level(SPELL_MAGIC_MISSILE, CLASS_MAGIC_USER, 1);
-  spell_level(SPELL_DETECT_INVIS, CLASS_MAGIC_USER, 2);
-  spell_level(SPELL_DETECT_MAGIC, CLASS_MAGIC_USER, 2);
-  spell_level(SPELL_CHILL_TOUCH, CLASS_MAGIC_USER, 3);
-  spell_level(SPELL_INFRAVISION, CLASS_MAGIC_USER, 3);
-  spell_level(SPELL_INVISIBLE, CLASS_MAGIC_USER, 4);
-  spell_level(SPELL_ARMOR, CLASS_MAGIC_USER, 4);
-  spell_level(SPELL_BURNING_HANDS, CLASS_MAGIC_USER, 5);
-  spell_level(SPELL_LOCATE_OBJECT, CLASS_MAGIC_USER, 6);
-  spell_level(SPELL_STRENGTH, CLASS_MAGIC_USER, 6);
-  spell_level(SPELL_SHOCKING_GRASP, CLASS_MAGIC_USER, 7);
-  spell_level(SPELL_SLEEP, CLASS_MAGIC_USER, 8);
-  spell_level(SPELL_LIGHTNING_BOLT, CLASS_MAGIC_USER, 9);
-  spell_level(SPELL_BLINDNESS, CLASS_MAGIC_USER, 9);
-  spell_level(SPELL_DETECT_POISON, CLASS_MAGIC_USER, 10);
-  spell_level(SPELL_COLOR_SPRAY, CLASS_MAGIC_USER, 11);
-  spell_level(SPELL_ENERGY_DRAIN, CLASS_MAGIC_USER, 13);
-  spell_level(SPELL_CURSE, CLASS_MAGIC_USER, 14);
-  spell_level(SPELL_POISON, CLASS_MAGIC_USER, 14);
-  spell_level(SPELL_FIREBALL, CLASS_MAGIC_USER, 15);
-  spell_level(SPELL_CHARM, CLASS_MAGIC_USER, 16);
-  spell_level(SPELL_ENCHANT_WEAPON, CLASS_MAGIC_USER, 26);
-  spell_level(SPELL_CLONE, CLASS_MAGIC_USER, 30);
+  spell_level(SPELL_MAGIC_MISSILE, CLASS_ENGINEER, 1);
+  spell_level(SPELL_DETECT_INVIS, CLASS_ENGINEER, 2);
+  spell_level(SPELL_DETECT_MAGIC, CLASS_ENGINEER, 2);
+  spell_level(SPELL_CHILL_TOUCH, CLASS_ENGINEER, 3);
+  spell_level(SPELL_INFRAVISION, CLASS_ENGINEER, 3);
+  spell_level(SPELL_INVISIBLE, CLASS_ENGINEER, 4);
+  spell_level(SPELL_ARMOR, CLASS_ENGINEER, 4);
+  spell_level(SPELL_BURNING_HANDS, CLASS_ENGINEER, 5);
+  spell_level(SPELL_LOCATE_OBJECT, CLASS_ENGINEER, 6);
+  spell_level(SPELL_STRENGTH, CLASS_ENGINEER, 6);
+  spell_level(SPELL_SHOCKING_GRASP, CLASS_ENGINEER, 7);
+  spell_level(SPELL_SLEEP, CLASS_ENGINEER, 8);
+  spell_level(SPELL_LIGHTNING_BOLT, CLASS_ENGINEER, 9);
+  spell_level(SPELL_BLINDNESS, CLASS_ENGINEER, 9);
+  spell_level(SPELL_DETECT_POISON, CLASS_ENGINEER, 10);
+  spell_level(SPELL_COLOR_SPRAY, CLASS_ENGINEER, 11);
+  spell_level(SPELL_ENERGY_DRAIN, CLASS_ENGINEER, 13);
+  spell_level(SPELL_CURSE, CLASS_ENGINEER, 14);
+  spell_level(SPELL_POISON, CLASS_ENGINEER, 14);
+  spell_level(SPELL_FIREBALL, CLASS_ENGINEER, 15);
+  spell_level(SPELL_CHARM, CLASS_ENGINEER, 16);
+  spell_level(SPELL_ENCHANT_WEAPON, CLASS_ENGINEER, 26);
+  spell_level(SPELL_CLONE, CLASS_ENGINEER, 30);
 
   /* CLERICS */
-  spell_level(SPELL_CURE_LIGHT, CLASS_CLERIC, 1);
-  spell_level(SPELL_ARMOR, CLASS_CLERIC, 1);
-  spell_level(SPELL_CREATE_FOOD, CLASS_CLERIC, 2);
-  spell_level(SPELL_CREATE_WATER, CLASS_CLERIC, 2);
-  spell_level(SPELL_DETECT_POISON, CLASS_CLERIC, 3);
-  spell_level(SPELL_DETECT_ALIGN, CLASS_CLERIC, 4);
-  spell_level(SPELL_CURE_BLIND, CLASS_CLERIC, 4);
-  spell_level(SPELL_BLESS, CLASS_CLERIC, 5);
-  spell_level(SPELL_DETECT_INVIS, CLASS_CLERIC, 6);
-  spell_level(SPELL_BLINDNESS, CLASS_CLERIC, 6);
-  spell_level(SPELL_INFRAVISION, CLASS_CLERIC, 7);
-  spell_level(SPELL_PROT_FROM_EVIL, CLASS_CLERIC, 8);
-  spell_level(SPELL_POISON, CLASS_CLERIC, 8);
-  spell_level(SPELL_GROUP_ARMOR, CLASS_CLERIC, 9);
-  spell_level(SPELL_CURE_CRITIC, CLASS_CLERIC, 9);
-  spell_level(SPELL_SUMMON, CLASS_CLERIC, 10);
-  spell_level(SPELL_REMOVE_POISON, CLASS_CLERIC, 10);
-  spell_level(SPELL_WORD_OF_RECALL, CLASS_CLERIC, 12);
-  spell_level(SPELL_EARTHQUAKE, CLASS_CLERIC, 12);
-  spell_level(SPELL_DISPEL_EVIL, CLASS_CLERIC, 14);
-  spell_level(SPELL_DISPEL_GOOD, CLASS_CLERIC, 14);
-  spell_level(SPELL_SANCTUARY, CLASS_CLERIC, 15);
-  spell_level(SPELL_CALL_LIGHTNING, CLASS_CLERIC, 15);
-  spell_level(SPELL_HEAL, CLASS_CLERIC, 16);
-  spell_level(SPELL_CONTROL_WEATHER, CLASS_CLERIC, 17);
-  spell_level(SPELL_SENSE_LIFE, CLASS_CLERIC, 18);
-  spell_level(SPELL_HARM, CLASS_CLERIC, 19);
-  spell_level(SPELL_GROUP_HEAL, CLASS_CLERIC, 22);
-  spell_level(SPELL_REMOVE_CURSE, CLASS_CLERIC, 26);
+  spell_level(SPELL_CURE_LIGHT, CLASS_MEDIC, 1);
+  spell_level(SPELL_ARMOR, CLASS_MEDIC, 1);
+  spell_level(SPELL_CREATE_FOOD, CLASS_MEDIC, 2);
+  spell_level(SPELL_CREATE_WATER, CLASS_MEDIC, 2);
+  spell_level(SPELL_DETECT_POISON, CLASS_MEDIC, 3);
+  spell_level(SPELL_DETECT_ALIGN, CLASS_MEDIC, 4);
+  spell_level(SPELL_CURE_BLIND, CLASS_MEDIC, 4);
+  spell_level(SPELL_BLESS, CLASS_MEDIC, 5);
+  spell_level(SPELL_DETECT_INVIS, CLASS_MEDIC, 6);
+  spell_level(SPELL_BLINDNESS, CLASS_MEDIC, 6);
+  spell_level(SPELL_INFRAVISION, CLASS_MEDIC, 7);
+  spell_level(SPELL_PROT_FROM_EVIL, CLASS_MEDIC, 8);
+  spell_level(SPELL_POISON, CLASS_MEDIC, 8);
+  spell_level(SPELL_GROUP_ARMOR, CLASS_MEDIC, 9);
+  spell_level(SPELL_CURE_CRITIC, CLASS_MEDIC, 9);
+  spell_level(SPELL_SUMMON, CLASS_MEDIC, 10);
+  spell_level(SPELL_REMOVE_POISON, CLASS_MEDIC, 10);
+  spell_level(SPELL_WORD_OF_RECALL, CLASS_MEDIC, 12);
+  spell_level(SPELL_EARTHQUAKE, CLASS_MEDIC, 12);
+  spell_level(SPELL_DISPEL_EVIL, CLASS_MEDIC, 14);
+  spell_level(SPELL_DISPEL_GOOD, CLASS_MEDIC, 14);
+  spell_level(SPELL_SANCTUARY, CLASS_MEDIC, 15);
+  spell_level(SPELL_CALL_LIGHTNING, CLASS_MEDIC, 15);
+  spell_level(SPELL_HEAL, CLASS_MEDIC, 16);
+  spell_level(SPELL_CONTROL_WEATHER, CLASS_MEDIC, 17);
+  spell_level(SPELL_SENSE_LIFE, CLASS_MEDIC, 18);
+  spell_level(SPELL_HARM, CLASS_MEDIC, 19);
+  spell_level(SPELL_GROUP_HEAL, CLASS_MEDIC, 22);
+  spell_level(SPELL_REMOVE_CURSE, CLASS_MEDIC, 26);
 
   /* THIEVES */
-  spell_level(SKILL_SNEAK, CLASS_THIEF, 1);
-  spell_level(SKILL_PICK_LOCK, CLASS_THIEF, 2);
-  spell_level(SKILL_BACKSTAB, CLASS_THIEF, 3);
-  spell_level(SKILL_STEAL, CLASS_THIEF, 4);
-  spell_level(SKILL_HIDE, CLASS_THIEF, 5);
-  spell_level(SKILL_TRACK, CLASS_THIEF, 6);
+  spell_level(SKILL_SNEAK, CLASS_SNIPER, 1);
+  spell_level(SKILL_PICK_LOCK, CLASS_SNIPER, 2);
+  spell_level(SKILL_BACKSTAB, CLASS_SNIPER, 3);
+  spell_level(SKILL_STEAL, CLASS_SNIPER, 4);
+  spell_level(SKILL_HIDE, CLASS_SNIPER, 5);
+  spell_level(SKILL_TRACK, CLASS_SNIPER, 6);
 
   /* WARRIORS */
-  spell_level(SKILL_KICK, CLASS_WARRIOR, 1);
-  spell_level(SKILL_RESCUE, CLASS_WARRIOR, 3);
-  spell_level(SKILL_TRACK, CLASS_WARRIOR, 9);
-  spell_level(SKILL_BASH, CLASS_WARRIOR, 12);
+  spell_level(SKILL_KICK, CLASS_MARINE, 1);
+  spell_level(SKILL_RESCUE, CLASS_MARINE, 3);
+  spell_level(SKILL_TRACK, CLASS_MARINE, 9);
+  spell_level(SKILL_BASH, CLASS_MARINE, 12);
 }
 
 
@@ -1725,7 +1725,7 @@ int level_exp(int chclass, int level)
 
   switch (chclass) {
 
-    case CLASS_MAGIC_USER:
+    case CLASS_ENGINEER:
     switch (level) {
       case  0: return 0;
       case  1: return 1;
@@ -1763,7 +1763,7 @@ int level_exp(int chclass, int level)
     }
     break;
 
-    case CLASS_CLERIC:
+    case CLASS_MEDIC:
     switch (level) {
       case  0: return 0;
       case  1: return 1;
@@ -1801,7 +1801,7 @@ int level_exp(int chclass, int level)
     }
     break;
 
-    case CLASS_THIEF:
+    case CLASS_SNIPER:
     switch (level) {
       case  0: return 0;
       case  1: return 1;
@@ -1839,7 +1839,7 @@ int level_exp(int chclass, int level)
     }
     break;
 
-    case CLASS_WARRIOR:
+    case CLASS_MARINE:
     switch (level) {
       case  0: return 0;
       case  1: return 1;
@@ -1900,46 +1900,46 @@ const char *title_male(int chclass, int level)
 
   switch (chclass) {
 
-    case CLASS_MAGIC_USER:
+    case CLASS_ENGINEER:
     switch (level) {
-      case  1: return "the Apprentice of Magic";
-      case  2: return "the Spell Student";
-      case  3: return "the Scholar of Magic";
-      case  4: return "the Delver in Spells";
-      case  5: return "the Medium of Magic";
-      case  6: return "the Scribe of Magic";
-      case  7: return "the Seer";
-      case  8: return "the Sage";
-      case  9: return "the Illusionist";
-      case 10: return "the Abjurer";
-      case 11: return "the Invoker";
-      case 12: return "the Enchanter";
-      case 13: return "the Conjurer";
-      case 14: return "the Magician";
-      case 15: return "the Creator";
-      case 16: return "the Savant";
-      case 17: return "the Magus";
-      case 18: return "the Wizard";
-      case 19: return "the Warlock";
-      case 20: return "the Sorcerer";
-      case 21: return "the Necromancer";
-      case 22: return "the Thaumaturge";
-      case 23: return "the Student of the Occult";
-      case 24: return "the Disciple of the Uncanny";
-      case 25: return "the Minor Elemental";
-      case 26: return "the Greater Elemental";
-      case 27: return "the Crafter of Magics";
-      case 28: return "the Shaman";
-      case 29: return "the Keeper of Talismans";
-      case 30: return "the Archmage";
-      case LVL_IMMORT: return "the Immortal Warlock";
-      case LVL_GOD: return "the Avatar of Magic";
-      case LVL_GRGOD: return "the God of Magic";
-      default: return "the Mage";
+      case  1: return "the Apprentice Engineer";
+      case  2: return "the Apprentice Engineer";
+      case  3: return "the Aspiring Engineer";
+      case  4: return "the Aspiring Engineer";
+      case  5: return "the Engineer";
+      case  6: return "the Engineer";
+      case  7: return "the Engineer";
+      case  8: return "the Engineer";
+      case  9: return "the Gifted Engineer";
+      case 10: return "the Gifted Engineer";
+      case 11: return "the Blackbox Hacker";
+      case 12: return "the Blackbox Hacker";
+      case 13: return "the Gifted Hacker";
+      case 14: return "the Gifted Hacker";
+      case 15: return "the Master Engineer";
+      case 16: return "the Savant Engineer";
+      case 17: return "the Crafty Veteran Engineer";
+      case 18: return "the Engineering Wizard";
+      case 19: return "the Elite Engineer";
+      case 20: return "the Elite Engineer";
+      case 21: return "the Elite Engineer";
+      case 22: return "the Legendary Engineer";
+      case 23: return "the Legendary Engineer";
+      case 24: return "the Disciple of Engineering";
+      case 25: return "the Demi-god of Engineering";
+      case 26: return "the Greater Demi-god of Engineering";
+      case 27: return "the Master Craftsman";
+      case 28: return "Godlike Engineer";
+      case 29: return "Weaver of Engineering feats";
+      case 30: return "Big Boss of Engineering";
+      case LVL_IMMORT: return "the Immortal Engineer";
+      case LVL_GOD: return "the Godlike Engineer";
+      case LVL_GRGOD: return "the God of Engineering";
+      default: return "the Engineer";
     }
     break;
 
-    case CLASS_CLERIC:
+    case CLASS_MEDIC:
     switch (level) {
       case  1: return "the Believer";
       case  2: return "the Attendant";
@@ -1969,37 +1969,37 @@ const char *title_male(int chclass, int level)
     }
     break;
 
-    case CLASS_THIEF:
+    case CLASS_SNIPER:
     switch (level) {
-      case  1: return "the Pilferer";
-      case  2: return "the Footpad";
-      case  3: return "the Filcher";
-      case  4: return "the Pick-Pocket";
-      case  5: return "the Sneak";
-      case  6: return "the Pincher";
-      case  7: return "the Cut-Purse";
-      case  8: return "the Snatcher";
-      case  9: return "the Sharper";
-      case 10: return "the Rogue";
-      case 11: return "the Robber";
-      case 12: return "the Magsman";
-      case 13: return "the Highwayman";
-      case 14: return "the Burglar";
-      case 15: return "the Thief";
-      case 16: return "the Knifer";
-      case 17: return "the Quick-Blade";
-      case 18: return "the Killer";
-      case 19: return "the Brigand";
-      case 20: return "the Cut-Throat";
+      case  1: return "the Apprentice Sniper";
+      case  2: return "the Apprentice Sniper";
+      case  3: return "the Aspiring Sniper";
+      case  4: return "the Aspiring Sniper";
+      case  5: return "the Marksman";
+      case  6: return "the Marksman";
+      case  7: return "the Marksman";
+      case  8: return "the Marksman";
+      case  9: return "the Sharp Shooter";
+      case 10: return "the Sharp Shooter";
+      case 11: return "the Rogue Sharp Shooter";
+      case 12: return "the Rogue Sharp Shooter";
+      case 13: return "the Elite Sharp Shooter";
+      case 14: return "the Gifted Sharp Shooter";
+      case 15: return "the Master Sharp Shooter";
+      case 16: return "the Master Marksman";
+      case 17: return "the Elite Sniper";
+      case 18: return "the Elite Sniper";
+      case 19: return "the Elite Sniper";
+      case 20: return "the Legendary Sniper";
       /* no one ever thought up these titles 21-30 */
-      case LVL_IMMORT: return "the Immortal Assasin";
-      case LVL_GOD: return "the Demi God of thieves";
-      case LVL_GRGOD: return "the God of thieves and tradesmen";
-      default: return "the Thief";
+      case LVL_IMMORT: return "the Immortal Sniper";
+      case LVL_GOD: return "the Godlike Sniper";
+      case LVL_GRGOD: return "the God of Sniping";
+      default: return "the Sniper";
     }
     break;
 
-    case CLASS_WARRIOR:
+    case CLASS_MARINE:
     switch(level) {
       case  1: return "the Swordpupil";
       case  2: return "the Recruit";
@@ -2047,46 +2047,46 @@ const char *title_female(int chclass, int level)
 
   switch (chclass) {
 
-    case CLASS_MAGIC_USER:
+    case CLASS_ENGINEER:
     switch (level) {
-      case  1: return "the Apprentice of Magic";
-      case  2: return "the Spell Student";
-      case  3: return "the Scholar of Magic";
-      case  4: return "the Delveress in Spells";
-      case  5: return "the Medium of Magic";
-      case  6: return "the Scribess of Magic";
-      case  7: return "the Seeress";
-      case  8: return "the Sage";
-      case  9: return "the Illusionist";
-      case 10: return "the Abjuress";
-      case 11: return "the Invoker";
-      case 12: return "the Enchantress";
-      case 13: return "the Conjuress";
-      case 14: return "the Witch";
-      case 15: return "the Creator";
-      case 16: return "the Savant";
-      case 17: return "the Craftess";
-      case 18: return "the Wizard";
-      case 19: return "the War Witch";
-      case 20: return "the Sorceress";
-      case 21: return "the Necromancress";
-      case 22: return "the Thaumaturgess";
-      case 23: return "the Student of the Occult";
-      case 24: return "the Disciple of the Uncanny";
-      case 25: return "the Minor Elementress";
-      case 26: return "the Greater Elementress";
-      case 27: return "the Crafter of Magics";
-      case 28: return "Shaman";
-      case 29: return "the Keeper of Talismans";
-      case 30: return "Archwitch";
-      case LVL_IMMORT: return "the Immortal Enchantress";
-      case LVL_GOD: return "the Empress of Magic";
-      case LVL_GRGOD: return "the Goddess of Magic";
-      default: return "the Witch";
+      case  1: return "the Apprentice Engineer";
+      case  2: return "the Apprentice Engineer";
+      case  3: return "the Aspiring Engineer";
+      case  4: return "the Aspiring Engineer";
+      case  5: return "the Engineer";
+      case  6: return "the Engineer";
+      case  7: return "the Engineer";
+      case  8: return "the Engineer";
+      case  9: return "the Gifted Engineer";
+      case 10: return "the Gifted Engineer";
+      case 11: return "the Blackbox Hacker";
+      case 12: return "the Blackbox Hacker";
+      case 13: return "the Gifted Hacker";
+      case 14: return "the Gifted Hacker";
+      case 15: return "the Master Engineer";
+      case 16: return "the Savant Engineer";
+      case 17: return "the Crafty Veteran Engineer";
+      case 18: return "the Engineering Wizard";
+      case 19: return "the Elite Engineer";
+      case 20: return "the Elite Engineer";
+      case 21: return "the Elite Engineer";
+      case 22: return "the Legendary Engineer";
+      case 23: return "the Legendary Engineer";
+      case 24: return "the Disciple of Engineering";
+      case 25: return "the Demi-goddess of Engineering";
+      case 26: return "the Greater Demi-goddess of Engineering";
+      case 27: return "the Master Craftswoman";
+      case 28: return "Godlike Engineer";
+      case 29: return "Weaver of Engineering feats";
+      case 30: return "Big Boss of Engineering";
+      case LVL_IMMORT: return "the Immortal Engineer";
+      case LVL_GOD: return "the Empress of Engineering";
+      case LVL_GRGOD: return "the Goddess of Engineering";
+      default: return "the Engineer";
     }
     break;
 
-    case CLASS_CLERIC:
+    case CLASS_MEDIC:
     switch (level) {
       case  1: return "the Believer";
       case  2: return "the Attendant";
@@ -2116,37 +2116,37 @@ const char *title_female(int chclass, int level)
     }
     break;
 
-    case CLASS_THIEF:
+    case CLASS_SNIPER:
     switch (level) {
-      case  1: return "the Pilferess";
-      case  2: return "the Footpad";
-      case  3: return "the Filcheress";
-      case  4: return "the Pick-Pocket";
-      case  5: return "the Sneak";
-      case  6: return "the Pincheress";
-      case  7: return "the Cut-Purse";
-      case  8: return "the Snatcheress";
-      case  9: return "the Sharpress";
-      case 10: return "the Rogue";
-      case 11: return "the Robber";
-      case 12: return "the Magswoman";
-      case 13: return "the Highwaywoman";
-      case 14: return "the Burglaress";
-      case 15: return "the Thief";
-      case 16: return "the Knifer";
-      case 17: return "the Quick-Blade";
-      case 18: return "the Murderess";
-      case 19: return "the Brigand";
-      case 20: return "the Cut-Throat";
+      case  1: return "the Apprentice Sniper";
+      case  2: return "the Apprentice Sniper";
+      case  3: return "the Aspiring Sniper";
+      case  4: return "the Aspiring Sniper";
+      case  5: return "the Marksman";
+      case  6: return "the Marksman";
+      case  7: return "the Marksman";
+      case  8: return "the Marksman";
+      case  9: return "the Sharp Shooter";
+      case 10: return "the Sharp Shooter";
+      case 11: return "the Rogue Sharp Shooter";
+      case 12: return "the Rogue Sharp Shooter";
+      case 13: return "the Elite Sharp Shooter";
+      case 14: return "the Gifted Sharp Shooter";
+      case 15: return "the Master Sharp Shooter";
+      case 16: return "the Master Marksman";
+      case 17: return "the Elite Sniper";
+      case 18: return "the Elite Sniper";
+      case 19: return "the Elite Sniper";
+      case 20: return "the Legendary Sniper";
       /* no one ever thought up these titles 21-30 */
-      case LVL_IMMORT: return "the Immortal Assasin";
-      case LVL_GOD: return "the Demi Goddess of thieves";
-      case LVL_GRGOD: return "the Goddess of thieves and tradesmen";
-      default: return "the Thief";
+      case LVL_IMMORT: return "the Immortal Sniper";
+      case LVL_GOD: return "the Godlike Sniper";
+      case LVL_GRGOD: return "the God of Sniping";
+      default: return "the Sniper";
     }
     break;
 
-    case CLASS_WARRIOR:
+    case CLASS_MARINE:
     switch(level) {
       case  1: return "the Swordpupil";
       case  2: return "the Recruit";

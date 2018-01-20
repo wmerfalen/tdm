@@ -40,7 +40,7 @@ namespace mods::builder {
 	extern std::array<std::pair<int,std::string>,23> type_flags; 
 	extern std::array<std::pair<int,std::string>,3> type2_flags; 
 	/* Factory method to generate a room for us */
-	struct room_data new_room(struct char_data* ch);
+	struct room_data new_room(struct char_data* ch,int direction);
 	bool flush_to_db(struct char_data *ch,room_vnum room);
 	bool title(room_rnum room,std::string_view str_title);
 	bool description(room_rnum room,std::string_view str_description);
@@ -56,6 +56,7 @@ namespace mods::builder {
 	int import_room(struct room_data*);
 	bool save_zone_to_db(std::string_view name,int room_start,int room_end,int lifespan,int reset_mode);
 	void zone_place(int zone_id,std::string_view command, std::string_view if_flag,std::string_view arg1, std::string_view arg2,std::string_view arg3);
+	void pave_to(char_data* ch,room_data* room,int direction);
 	std::optional<obj_data*> instantiate_object_by_index(int index);
 	std::optional<obj_data*> instantiate_object_by_vnum(obj_vnum vnum);
 	void report_error(mods::player* player,std::string_view message);

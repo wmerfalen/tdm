@@ -11,6 +11,7 @@
 #include "mods/lmdb/db.hpp"
 #include "mods/ai_state.hpp"
 #include "mods/quests.hpp"
+#include "mods/builder.hpp"
 #include "utils.h"
 
 #define LMDB_DB_FILE "/home/llvm/code/c++/bnull-mud/lib/"
@@ -270,13 +271,13 @@ Iter select_randomly(Iter start, Iter end) {
         }
 
 		bool command_interpreter(struct char_data *ch,char* argument){
+			MENTOC_PREAMBLE();
 			if(mods::drone::started(ch)){
 				return mods::drone::interpret(ch,argument);
 			}
 			if(!ch->drone && mods::quests::has_quest(ch)){
 				mods::quests::run_trigger(ch);
 			}
-			MENTOC_PREAMBLE();
 			if(player->paging()){
 				if(std::string(argument).length() == 0){
 					player->pager_next_page();
@@ -292,6 +293,42 @@ Iter select_randomly(Iter start, Iter end) {
 					player->page(good.value() - 1);
 				}
 				return false;
+			}
+			if(player->cd()->pave_mode){
+				//If is a direction and that direction is not an exit, 
+				//then pave a way to that exit
+				int door = 0;
+				std::cerr << "'" << argument << "'\r\n";
+				switch(argument[0]){
+					case 'u':
+					case 'U':
+						door = UP;
+						break;
+					case 's':
+					case 'S':
+						door = SOUTH;
+						break;
+					case 'w':
+					case 'W':
+						door = WEST;
+						break;
+					case 'e':
+					case 'E':
+						door = EAST;
+						break;
+					case 'n':
+					case 'N':
+						door = NORTH;
+						break;
+					case 'd':
+					case 'D':
+						door = DOWN;
+						break;
+				}
+				if(!CAN_GO(player->cd(),door)){
+					mods::builder::pave_to(player->cd(),&world[IN_ROOM(ch)],door);
+					return true;
+				}
 			}
 			return true;
 		}

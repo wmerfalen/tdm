@@ -487,9 +487,11 @@ void	update_pos(struct char_data *victim);
 #define IS_CLERIC(ch)		(!IS_NPC(ch) && \
 				(GET_CLASS(ch) == CLASS_CLERIC))
 #define IS_THIEF(ch)		(!IS_NPC(ch) && \
-				(GET_CLASS(ch) == CLASS_THIEF))
+				(GET_CLASS(ch) == CLASS_SNIPER))
 #define IS_WARRIOR(ch)		(!IS_NPC(ch) && \
 				(GET_CLASS(ch) == CLASS_WARRIOR))
+#define IS_SUPPORT(ch)		(!IS_NPC(ch) && \
+				(GET_CLASS(ch) == CLASS_SUPPORT))
 
 #define OUTSIDE(ch) (!ROOM_FLAGGED(IN_ROOM(ch), ROOM_INDOORS))
 

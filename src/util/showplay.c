@@ -40,17 +40,17 @@ void show(char *filename)
       exit(0);
     }
     switch (player.chclass) {
-    case CLASS_THIEF:
-      strcpy(classname, "Th");
+    case CLASS_SNIPER:
+      strcpy(classname, "Sn");
       break;
     case CLASS_WARRIOR:
-      strcpy(classname, "Wa");
+      strcpy(classname, "Ma");
       break;
     case CLASS_MAGIC_USER:
-      strcpy(classname, "Mu");
+      strcpy(classname, "En");
       break;
     case CLASS_CLERIC:
-      strcpy(classname, "Cl");
+      strcpy(classname, "Me");
       break;
     default:
       strcpy(classname, "--");

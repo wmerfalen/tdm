@@ -1165,6 +1165,7 @@ int parse_sql_objects(){
 static int room_nr = 0, zone = 0;
 /* load the zones */
 void parse_sql_zones(){
+	zone_table.clear();
 	log("[status] Loading sql zones");
 	auto trans2 = mods::pq::transaction(*mods::globals::pq_con);
 	auto r = mods::pq::exec(trans2,"SELECT * FROM zone");
@@ -1272,12 +1273,7 @@ void parse_sql_rooms(){
 		room.light = row[8].as<int>();
 		//TODO: setup directions to work properly here (dir_option)
 		for(unsigned i = 0; i < NUM_OF_DIRS;i++){
-			room.dir_option[i] = (room_direction_data*) calloc(sizeof(room_direction_data),1);
-			room.dir_option[i]->general_description = nullptr;
-			room.dir_option[i]->keyword = nullptr;
-			room.dir_option[i]->exit_info = 0;
-			room.dir_option[i]->key = -1;
-			room.dir_option[i]->to_room = NOWHERE;
+			room.dir_option[i] = nullptr;
 		}
 
 		world.push_back(room);
@@ -1308,6 +1304,7 @@ void parse_sql_rooms(){
 				log("Invalid real_room_number: %d",row2[1].as<int>());
 				continue;
 			}
+			world[real_room_number].dir_option[direction] = (room_direction_data*) calloc(sizeof(room_direction_data),1);
 			world[real_room_number].dir_option[direction]->general_description = strdup(row2["general_description"].c_str());
 			world[real_room_number].dir_option[direction]->keyword = strdup(row2["keyword"].c_str());
 			auto exit_info = row2[5].as<int>();
@@ -3010,6 +3007,7 @@ void clear_char(struct char_data *ch)
 	ch->drone = false;
 	ch->drone_owner = 0;
 	ch->drone_uuid = 0;
+	ch->pave_mode = false;
   GET_AC(ch) = 100;		/* Basic Armor */
   if (ch->points.max_mana < 100)
     ch->points.max_mana = 100;
