@@ -16,9 +16,7 @@
 #include "structs.h"
 #include "interpreter.h"	/* alias_data definition for structs.h */
 
-#define TRUE	1
 #define YES	1
-#define FALSE	0
 #define NO	0
 
 /*

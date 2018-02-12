@@ -1165,7 +1165,7 @@ char *read_shop_message(int mnum, room_vnum shr, FILE *shop_f, const char *why)
 }
 
 void boot_sql_shops(){
-	shop_data m;	
+	return;
 }
 
 void boot_the_shops(FILE *shop_f, char *filename, int rec_count)
@@ -1188,7 +1188,7 @@ void boot_the_shops(FILE *shop_f, char *filename, int rec_count)
       top_shop++;
       if (!top_shop){
 	shop_data default_shop = {0};
-		for(unsigned i = 0; i < rec_count;i++){
+		for(int i = 0; i < rec_count;i++){
 			shop_index.push_back(default_shop);
 		}
 	  }

@@ -1862,12 +1862,7 @@ ACMD(do_wizutil)
 /* FIXME: overflow possible */
 size_t print_zone_to_buf(char *bufptr, size_t left, zone_rnum zone)
 {
-  return snprintf(bufptr, left,
-	"%3d %-30.30s Age: %3d; Reset: %3d (%1d); Range: %5d-%5d\r\n",
-	zone_table[zone].number, zone_table[zone].name,
-	zone_table[zone].age, zone_table[zone].lifespan,
-	zone_table[zone].reset_mode,
-	zone_table[zone].bot, zone_table[zone].top);
+	return 0;
 }
 
 

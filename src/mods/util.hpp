@@ -8,11 +8,6 @@
 #include <optional>
 #include <stdlib.h>
 
-#ifdef MENTOC_DEBUG
-#define dbg(a){ std::cerr << "debug[]: " << a << "\n"; }
-#else
-#define dbg(a)/* */
-#endif
 namespace mods::util{
 	bool fuzzy_match(const char* _needle,const char* _haystack);
 	std::string color_eval(std::string final_buffer);
@@ -56,13 +51,13 @@ namespace mods::util{
 		}
 		return arglist;
 	}
-	std::optional<int> stoi(std::string_view str,int base=10);
+	std::optional<int> stoi(std::string_view str);
 
 	template<int max_char,typename Container>
-	inline std::optional<Container> subcmd_args(std::string_view argument,const char* subcmd){
+	inline std::optional<Container> subcmd_args(std::string argument,const char* subcmd){
 		std::array<char,max_char> command;
 		std::fill(command.begin(),command.end(),0);
-		one_argument(argument.data(),&command[0],max_char);
+		one_argument(const_cast<char*>(argument.c_str()),&command[0],max_char);
 		if(std::string(&command[0]).compare(subcmd) == 0){
 			std::string arg = argument.data();
 			return mods::util::arglist<Container>(arg);

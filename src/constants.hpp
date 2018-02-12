@@ -14,7 +14,7 @@
 #include "structs.h"
 #include "interpreter.h"	/* alias_data */
 
-const char *circlemud_version =
+constexpr const char *circlemud_version =
 	"CircleMUD, version 4.1";
 
 /* strings corresponding to ordinals/bitvectors in structs.h ***********/

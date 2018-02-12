@@ -241,7 +241,6 @@ void run_autowiz(void)
     /* Abusing signed -> unsigned conversion to avoid '-1' check. */
     if (res < sizeof(buf)) {
       mudlog(CMP, LVL_IMMORT, FALSE, "Initiating autowiz.");
-      system(buf);
       reboot_wizlists();
     } else
       log("Cannot run autowiz: command-line doesn't fit in buffer.");
@@ -409,7 +408,7 @@ void check_idling(struct char_data *ch)
 void point_update(void)
 {
   struct char_data *i, *next_char;
-  struct obj_data *j, *next_thing, *jj, *next_thing2;
+  struct obj_data *j, *jj, *next_thing2;
 
   /* characters */
   for (i = character_list; i; i = next_char) {

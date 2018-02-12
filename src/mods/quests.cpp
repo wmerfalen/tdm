@@ -14,7 +14,6 @@ extern struct char_data* character_list;
 namespace mods{
 	namespace quests {
 		static duk_ret_t quest_abort(duk_context *ctx){
-			auto nargs = duk_get_top(ctx);
 			std::string pname = duk_to_string(ctx,0);
 			std::string quest_major = duk_to_string(ctx,1);
 			std::string quest_minor = duk_to_string(ctx,2);
@@ -31,7 +30,6 @@ namespace mods{
 			return 0;
 		}
 		static duk_ret_t quest_complete(duk_context *ctx){
-			auto nargs = duk_get_top(ctx);
 			std::string pname = duk_to_string(ctx,0);
 			std::string quest_major = duk_to_string(ctx,1);
 			std::string quest_minor = duk_to_string(ctx,2);
@@ -49,7 +47,6 @@ namespace mods{
 			return 0;
 		}
 		static duk_ret_t list_quests(duk_context *ctx){
-			auto nargs = duk_get_top(ctx);
 			std::string pname = duk_to_string(ctx,0);
 			for(auto ch = character_list; ch->next; ch = ch->next){
 				MENTOC_PREAMBLE();

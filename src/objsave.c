@@ -452,8 +452,9 @@ int Crash_load(struct char_data *ch)
     mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s entering game with no equipment.", GET_NAME(ch));
     return (1);
   }
+  int fread_ret = 0;
   if (!feof(fl))
-    fread(&rent, sizeof(struct rent_info), 1, fl);
+    fread_ret = fread(&rent, sizeof(struct rent_info), 1, fl);
   else {
     log("SYSERR: Crash_load: %s's rent file was empty!", GET_NAME(ch));
     return (1);
@@ -493,8 +494,9 @@ int Crash_load(struct char_data *ch)
     break;
   }
 
+  fread_ret = 0;
   while (!feof(fl)) {
-    fread(&object, sizeof(struct obj_file_elem), 1, fl);
+    fread_ret = fread(&object, sizeof(struct obj_file_elem), 1, fl);
     if (ferror(fl)) {
       perror("SYSERR: Reading crash file: Crash_load");
       fclose(fl);

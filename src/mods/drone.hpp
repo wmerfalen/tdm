@@ -65,13 +65,13 @@ namespace mods {
 			obj_data* get_first_ammo_of_type(const weapon_type_t&) const;
 			*/
 			void stc(int m){ 
-				send_to_char(m_char_data,std::to_string(m).c_str());
+				send_to_char(m_char_data,"%s",std::to_string(m).c_str());
 			}
 			void stc(const std::string m){
-				send_to_char(m_char_data,m.c_str());
+				send_to_char(m_char_data,"%s",m.c_str());
 			}
 			void stc(const char* m){
-				send_to_char(m_char_data,m);
+				send_to_char(m_char_data,"%s",m);
 			}
 			/* TODO: Operator << for sending to the character */
 			drone& operator<<(const char* m){

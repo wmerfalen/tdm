@@ -23,6 +23,7 @@ ACMD(do_move);
 #define IS_MOVE(cmdnum) (cmd_info[cmdnum].command_pointer == do_move)
 
 void	command_interpreter(struct char_data *ch, char *argument);
+void	command_interpreter(struct char_data *ch, const char *argument);
 int	search_block(char *arg, const char **list, int exact);
 char	lower( char c );
 char	*one_argument(char *argument, char *first_arg);

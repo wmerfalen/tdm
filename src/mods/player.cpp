@@ -32,7 +32,7 @@ namespace mods {
 			return std::string(paragraph);
 		}
 		int position = 1;
-		for(auto cint = 0; cint < paragraph.length();cint++){
+		for(unsigned cint = 0; cint < paragraph.length();cint++){
 			/* if we run into an open brace then that means it's a color code.
 			 * Push past the color code and decrement the position counter as
 			 * we go.
@@ -92,6 +92,33 @@ namespace mods {
 		return buffer;
 	}
 
+	void player::set_class_capability(const class_capability_t & caps){
+		m_class_info.clear();
+		for(auto & capability : caps){
+			switch(capability){
+				case class_type::MEDIC:
+					m_class_info.push_back(std::make_unique<classes::medic>(m_self_ptr));
+					break;
+				case class_type::SNIPER:
+					m_class_info.push_back(std::make_unique<classes::sniper>(m_self_ptr));
+					break;
+				case class_type::MARINE:
+					m_class_info.push_back(std::make_unique<classes::marine>(m_self_ptr));
+					break;
+				case class_type::SUPPORT:
+					m_class_info.push_back(std::make_unique<classes::support>(m_self_ptr));
+					break;
+				case class_type::ENGINEER:
+					m_class_info.push_back(std::make_unique<classes::engineer>(m_self_ptr));
+					break;
+			}
+			m_class_capability.push_back(capability);
+		}
+	}
+	void player::set_shared_ptr(std::shared_ptr<mods::player>& self_ptr){
+		m_self_ptr = self_ptr;
+	}
+
 	player::player(mods::player* ptr){
 		m_char_data = ptr->cd();
 		m_page = 0;
@@ -99,6 +126,7 @@ namespace mods {
 		m_do_paging = false;
 		m_current_page_fragment = "";
 		m_capture_output = false;
+		m_executing_js = false;
 	}
 	void player::capture_output(bool capture_status){
 		m_capture_output = capture_status;
@@ -114,9 +142,18 @@ namespace mods {
 
 	using mask_t = mods::weapon::mask_type;
 	player::player(char_data* ch) : m_char_data(ch),m_do_paging(false),
-		m_page(0),m_current_page(0),m_current_page_fragment("") { };
+		m_page(0),m_current_page(0),m_current_page_fragment(""),m_executing_js(false) {
+		};
 	bool player::can_snipe(char_data *target){
 		return true;
+	}
+	std::unique_ptr<mods::classes::base>& player::get_class(class_type c_type){
+		for(auto & ptr : m_class_info){
+			if(ptr->kind() == c_type){
+				return ptr;
+			}
+		}
+		return *m_class_info.begin();
 	}
 	void player::page(int pg){
 		if(m_pages.size() == 0 || pg * mods::player::PAGE_SIZE >= m_pages.size()){
@@ -186,6 +223,10 @@ namespace mods {
 		}
 		return false;
 	}
+	std::string player::js_object(){
+		std::string obj = std::string("{ 'name': '") + std::string(cd()->player.name) + std::string("','uuid':");
+		return obj + std::to_string(cd()->uuid) + "}";
+	}
 	bool player::is_weapon_loaded(){
 		auto w = weapon();
 		if(!w){
@@ -211,6 +252,10 @@ namespace mods {
 		}
 		return false;
 	}
+	bool player::has_class_capability(class_type type) {
+		return !(std::find(m_class_capability.begin(),m_class_capability.end(),type) == m_class_capability.end());
+	}
+
 	bool player::has_equipment_tag(const std::string& tag) {
 		if(!m_char_data->carrying){ return false; }
 		/* TODO: find a better way to do this. this loops through all objects in the game and checks if the person carrying it is the current player */
@@ -245,6 +290,12 @@ namespace mods {
 		}
 		m_current_page_fragment = "";
 		return *this;
+	}
+	void player::executing_js(bool true_false){
+		m_executing_js = true_false;
+	}
+	bool player::is_executing_js() const{
+		return m_executing_js;
 	}
 	void player::pager_clear(){
 		m_pages.clear();
@@ -287,8 +338,28 @@ namespace mods {
 			stc_color_evaluation(std::string("{grn}") + title + "{/grn}",this);
 		}
 	}
-
-
+	void player::stc(const char* m){
+		if(m){
+			if(m_capture_output){
+				m_captured_output += m;
+			}
+			send_to_char(m_char_data,m);
+		}
+	}
+	void player::stc(const std::string m){
+		if(m.length()){
+			if(m_capture_output){
+				m_captured_output += m;
+			}
+			send_to_char(m_char_data,m.c_str());
+		}
+	}
+	void player::stc(int m){
+		if(m_capture_output){
+			m_captured_output += std::to_string(m);
+		}
+		send_to_char(m_char_data,std::to_string(m).c_str());
+	}
 	void player::stc_room_desc(const room_rnum & rnum){
 		if(world[rnum].description){
 			std::string colored = just_color_evaluation(world[rnum].description);

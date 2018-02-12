@@ -476,8 +476,7 @@ void	update_pos(struct char_data *victim);
 
 #define CAN_GO(ch, door) (EXIT(ch,door) && \
 			 (EXIT(ch,door)->to_room != NOWHERE) && \
-			 !IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)) //|| \
-		//	 IS_SET(EXIT(ch,door)->exit_info,EX_BREACHED) /*!mods*/)
+			 !IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED))
 
 
 #define CLASS_ABBR(ch) (IS_NPC(ch) ? "--" : class_abbrevs[(int)GET_CLASS(ch)])

@@ -43,11 +43,12 @@ namespace mods {
 				m_state = m;
 				return *this;
 			}
-
 			/* Spot or unspot certain mobs/player */
 			uint32_t dispatch(struct char_data*);
 			uint32_t event(struct char_data*,event_type_t);
-			
+		protected:
+			struct char_data* m_char_data;
+			uint8_t m_state;
 			/* Affects how fast it goes from wander to fight */
 			int32_t mpub_aggro;
 			int32_t mpub_lenient;
@@ -63,9 +64,6 @@ namespace mods {
 			/* Boolean values */
 			uint32_t mpub_stunned;
 			uint32_t mpub_dead;
-		protected:
-			struct char_data* m_char_data;
-			uint8_t m_state;
     };
 };
 

@@ -19,7 +19,6 @@
 #define MODS_BREACH_DISORIENT 50
 #define MODS_GRENADE_BASE_DAMAGE 66 
 struct char_data* character_list = NULL;
-extern std::vector<obj_data> object_list;
 extern void do_look(struct char_data *ch, char *argument, int cmd, int subcmd);
 extern void char_from_room(struct char_data*);
 extern void char_to_room(struct char_data*,room_rnum);
@@ -43,6 +42,7 @@ namespace mods {
 		std::vector<mods::chat::channel> chan;
 		std::vector<std::string> chan_verbs;
 		bool f_import_rooms;
+		std::shared_ptr<mods::player> current_player;
 		namespace objects {
 			static bool populated = false;
 		};
@@ -272,6 +272,7 @@ Iter select_randomly(Iter start, Iter end) {
 
 		bool command_interpreter(struct char_data *ch,char* argument){
 			MENTOC_PREAMBLE();
+			current_player = player;
 			if(mods::drone::started(ch)){
 				return mods::drone::interpret(ch,argument);
 			}
@@ -369,7 +370,9 @@ Iter select_randomly(Iter start, Iter end) {
 			if(ch){
 				auto uuid = mods::globals::player_list.size();
 				ch->uuid = uuid;
-				mods::globals::player_list.emplace_back(std::make_shared<mods::player>(ch));
+				auto player_ptr = std::make_shared<mods::player>(ch);
+				player_ptr->set_shared_ptr(player_ptr);
+				mods::globals::player_list.emplace_back(player_ptr);
 			}
 			else{
 				std::cerr << "invalid cdata! (register_player) " << __FILE__ << ":" << __LINE__ << "\n";
@@ -389,7 +392,6 @@ Iter select_randomly(Iter start, Iter end) {
 			void char_to_room(const room_rnum & room,struct char_data* ch){
 				auto place = std::find(room_list[room].begin(),room_list[room].end(),ch);
 				if(place == room_list[room].end()){ 
-					std::cerr << "pushing back " << ch->player.name << " to room: " << room << "\n";
 					room_list[room].push_back(ch);	
 				}
 			}

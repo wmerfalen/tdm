@@ -195,7 +195,14 @@ ACMD(do_preferences){
 
 ACMD(do_js){
 	MENTOC_PREAMBLE();
-	mods::js::eval_string(argument);
+	mods::js::eval_string(std::string(argument) + ";");
+}
+
+ACMD(do_newjs){
+	MENTOC_PREAMBLE();
+	mods::globals::duktape_context = mods::js::new_context();
+	mods::js::load_base_functions(mods::globals::duktape_context);
+	mods::js::load_c_require_functions(mods::globals::duktape_context);
 }
 ACMD(do_jstest){
 	MENTOC_PREAMBLE();
@@ -280,7 +287,16 @@ void list_obj_to_char(struct obj_data *list, struct char_data *ch, int mode, int
 
   int ctr = 0;
   for (i = list; i; i = i->next_content) {
-	  std::cerr << "iterations: " << ctr++ << "\n";
+	  if(i){
+		  std::cerr << std::hex << i << "<!-- i\n";
+		  for(unsigned o = 0; o < object_list.size();o++){
+			  if(&object_list[o] == i){
+				  std::cerr << "exists in object list at: " << o << "\n";
+				  std::cerr << "object_list[o]->name: " << std::hex << object_list[o].name << "\n";
+				  break;
+			  }
+		  }
+	  }
     if (CAN_SEE_OBJ(ch, i)) {
       show_obj_to_char(i, ch, mode);
       found = TRUE;
@@ -381,26 +397,6 @@ void list_one_char(struct char_data *i, struct char_data *ch)
     " is standing here."
   };
 
-  if (IS_NPC(i) && i->player.long_descr && GET_POS(i) == GET_DEFAULT_POS(i)) {
-    if (AFF_FLAGGED(i, AFF_INVISIBLE))
-      send_to_char(ch, "*");
-
-    if (AFF_FLAGGED(ch, AFF_DETECT_ALIGN)) {
-      if (IS_EVIL(i))
-	send_to_char(ch, "(Red Aura) ");
-      else if (IS_GOOD(i))
-	send_to_char(ch, "(Blue Aura) ");
-    }
-    send_to_char(ch, "%s", i->player.long_descr);
-
-    if (AFF_FLAGGED(i, AFF_SANCTUARY))
-      act("...$e glows with a bright light!", FALSE, i, 0, ch, TO_VICT);
-    if (AFF_FLAGGED(i, AFF_BLIND))
-      act("...$e is groping around blindly!", FALSE, i, 0, ch, TO_VICT);
-
-    return;
-  }
-
   if (IS_NPC(i))
     send_to_char(ch, "%c%s", UPPER(*i->player.short_descr), i->player.short_descr + 1);
   else
@@ -469,22 +465,19 @@ void do_auto_exits(struct char_data *ch)
 {
   int door, slen = 0;
 
-  send_to_char(ch, "{gld}%s[ Exits: ", CCCYN(ch, C_NRM));
+  send_to_char(ch, "{gld}[ Exits: ");
 
   for (door = 0; door < NUM_OF_DIRS; door++) {
     if (!EXIT(ch, door)){
-		std::cerr << "Is not an exit: " << door << "\n";
 		continue;
 	}
 	if(EXIT(ch, door)->to_room == NOWHERE){
-		std::cerr << "Exit leads nowhere: " << door << "\n";
 		continue;
 	}
 		
     if (EXIT_FLAGGED(EXIT(ch, door), EX_CLOSED) && 
 		/*! mods */!EXIT_FLAGGED(EXIT(ch,door),EX_BREACHED) &&
 		/*! mods */!IS_SET(world[EXIT(ch,door)->to_room].dir_option[OPPOSITE_DIR(door)]->exit_info,EX_BREACHED)){
-		std::cerr << "is closed: " << door << "\n";
       continue;
 	}
 
@@ -492,7 +485,7 @@ void do_auto_exits(struct char_data *ch)
     slen++;
   }
 
-  send_to_char(ch, "%s]%s{/gld}\r\n", slen ? "" : "None!", CCNRM(ch, C_NRM));
+  send_to_char(ch, "%s]{/gld}\r\n", slen ? "" : "None!");
 }
 
 

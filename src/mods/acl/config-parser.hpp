@@ -15,6 +15,7 @@
 #include <cstdarg>  //for variadic function m_expect_chain(int ...)
 #include <assert.h>
 
+constexpr static bool print_debug = false;
 #define dbg(f) if(print_debug){  std::cout << Color::fg::green <<\
     "[" << Color::bg::blue << "debug: ]" << Color::bg::def << \
      Color::fg::blue << f << "\n" << Color::fg::def;\

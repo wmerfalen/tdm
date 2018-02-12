@@ -35,7 +35,6 @@ namespace mods::builder_util{
 			sql_compositor::value_map values;
 			fill_value_function(values);
 			if(check_result.size()){
-				int check_i = mods::pq::as_int(check_result,0,0);
 				/* update the record */
 				auto txn = txn();
 				auto sql = sql_compositor(table_name,&txn)
@@ -119,7 +118,8 @@ namespace mods::builder_util{
 				return;
 			}
 			auto index = mods::util::stoi(arg_vec[1]);
-			if(!index.has_value() || index.value() >= vector_objects.size()){
+			std::size_t i = index.value();
+			if(!index.has_value() || i >= vector_objects.size()){
 				mods::builder::report_error<std::shared_ptr<mods::player>>(player,"Invalid index");
 				return;
 			}

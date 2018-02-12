@@ -27,6 +27,7 @@
 #include "mods/pq.hpp"
 #include "mods/sql.hpp"
 #include <vector>
+#include <deque>
 
 /**************************************************************************
 *  declarations of most of the 'global' variables                         *
@@ -36,7 +37,7 @@ void parse_sql_rooms();
 void parse_sql_zones();
 int parse_sql_objects();
 void parse_sql_mobiles();
-std::vector<struct room_data> world;	/* array of rooms		 */
+std::vector<room_data> world;	/* array of rooms		 */
 room_rnum top_of_world = 0;	/* ref to top element of world	 */
 
 extern struct char_data *character_list;	/* global linked list of
@@ -45,7 +46,7 @@ std::vector<index_data> mob_index;	/* index table for mobile file	 */
 std::vector<char_data> mob_proto;	/* prototypes for mobs		 */
 mob_rnum top_of_mobt = 0;	/* top of mobile index table	 */
 
-std::vector<obj_data> object_list;	/* vector of objs	 */
+std::deque<obj_data> object_list;	/* vector of objs	 */
 std::vector<index_data> obj_index;	/* index table for object file	 */
 std::vector<obj_data> obj_proto;	/* prototypes for objs		 */
 obj_rnum top_of_objt = 0;	/* top of object index table	 */
@@ -303,7 +304,6 @@ void destroy_db(void)
 {
   ssize_t cnt, itr;
   struct char_data *chtmp;
-  struct obj_data *objtmp;
 
   /* Active Mobiles & Players */
   while (character_list) {
@@ -375,7 +375,7 @@ void destroy_db(void)
 /* body of the booting system */
 void boot_db(void)
 {
-  zone_rnum i;
+  unsigned i;
 
   log("Boot db -- BEGIN.");
 
@@ -1250,7 +1250,6 @@ void parse_sql_zones(){
 }
 /* load the rooms */
 void parse_sql_rooms(){
-	struct room_data room;
 	auto trans = mods::pq::transaction(*mods::globals::pq_con);
 	auto result = mods::pq::exec(trans,"SELECT COUNT(*) FROM room");
 	mods::pq::commit(trans);
@@ -1335,7 +1334,6 @@ void parse_room(FILE *fl, int virtual_nr)
 {
 	auto str = "[DEPRECATED] parse_room";
 	log(str);
-	std::cerr << str << "\n";
 }
 
 
@@ -1426,7 +1424,6 @@ void renum_world(void)
  */
 void renum_zone_table(void)
 {
-  int cmd_no;
   room_rnum a, b, c, olda, oldb, oldc;
   char buf[128];
 
@@ -1469,7 +1466,7 @@ void renum_zone_table(void)
 	if (!mini_mud) {
 	  snprintf(buf, sizeof(buf), "Invalid vnum %d, cmd disabled",
 			 a == NOWHERE ? olda : b == NOWHERE ? oldb : oldc);
-	  log_zone_error(zone, cmd_no, buf);
+	  log_zone_error(zone, 0, buf);
 	}
 	ZCMD.command = '*';
       }
@@ -2146,8 +2143,9 @@ struct obj_data *create_obj(void)
   object_list = obj;
   */
   struct obj_data tmp;
+  clear_object(&tmp);
   object_list.push_back(tmp);
-  obj = &(*(object_list.end()-1));
+  obj = &(object_list.at(object_list.size()-1));
   return obj;
 }
 
@@ -2155,10 +2153,11 @@ struct obj_data *create_obj(void)
 /* create a new object from a prototype */
 struct obj_data *read_object(obj_vnum nr, int type) /* and obj_rnum */
 {
-  struct obj_data *obj;
+  struct obj_data obj;
   obj_rnum i = type == VIRTUAL ? real_object(nr) : nr;
 
-  if (i == NOTHING || i > obj_proto.size()) {
+  std::size_t ii = i;
+  if (i == NOTHING || ii > obj_proto.size()) {
     log("Object (%c) %d does not exist in database.", type == VIRTUAL ? 'V' : 'R', nr);
     return (NULL);
   }
@@ -2169,10 +2168,11 @@ struct obj_data *read_object(obj_vnum nr, int type) /* and obj_rnum */
   obj->next = object_list;
   object_list = obj;
 #endif
-  *obj = obj_proto[i];
-  object_list.push_back(*obj);
+  clear_object(&obj);
+  obj = obj_proto[i];
+  object_list.push_back(obj);
   obj_index[i].number++;
-  return (obj);
+  return &object_list.at(object_list.size()-1);
 }
 
 
@@ -2253,7 +2253,7 @@ void log_zone_error(zone_rnum zone, int cmd_no, const char *message)
 {
   mudlog(NRM, LVL_GOD, TRUE, "SYSERR: zone file: %s", message);
   mudlog(NRM, LVL_GOD, TRUE, "SYSERR: ...offending cmd: '%c' cmd in zone #%d, line %d",
-	"redacted", zone_table[zone].number, "redacted");
+	'0', zone_table[zone].number, 0);
 }
 
 #define ZONE_ERROR(message) \
@@ -3011,6 +3011,7 @@ void clear_char(struct char_data *ch)
   GET_AC(ch) = 100;		/* Basic Armor */
   if (ch->points.max_mana < 100)
     ch->points.max_mana = 100;
+  ch->carrying = nullptr;
 }
 
 
@@ -3199,26 +3200,14 @@ obj_rnum real_object(obj_vnum vnum)
 /* returns the real number of the zone with given virtual number */
 room_rnum real_zone(room_vnum vnum)
 {
-	//TODO: decide to fix this or just leave it alone as zero. Zones may or may not be needed 
-	return 0;
-  room_rnum bot, top, mid;
-
-  bot = 0;
-  top = top_of_zone_table;
-
-  /* perform binary search on zone-table */
-  for (;;) {
-    mid = (bot + top) / 2;
-
-    if ((zone_table[mid]).number == vnum)
-      return (mid);
-    if (bot >= top)
-      return (NOWHERE);
-    if ((zone_table[mid]).number > vnum)
-      top = mid - 1;
-    else
-      bot = mid + 1;
-  }
+	room_rnum real_zone_number = 0;
+	for(auto & zone : zone_table){
+		if(zone.number == vnum){
+			return real_zone_number;
+		}
+		real_zone_number++;
+	}
+	return NOWHERE;
 }
 
 

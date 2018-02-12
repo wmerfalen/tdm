@@ -160,12 +160,12 @@ void load_messages(void)
     fight_messages[i].msg = NULL;
   }
 
-  fgets(chk, 128, fl);
+  auto f = fgets(chk, 128, fl);
   while (!feof(fl) && (*chk == '\n' || *chk == '*'))
-    fgets(chk, 128, fl);
+    f= fgets(chk, 128, fl);
 
   while (*chk == 'M') {
-    fgets(chk, 128, fl);
+    f = fgets(chk, 128, fl);
     sscanf(chk, " %d\n", &type);
     for (i = 0; (i < MAX_MESSAGES) && (fight_messages[i].a_type != type) &&
 	 (fight_messages[i].a_type); i++);
@@ -191,7 +191,7 @@ void load_messages(void)
     messages->god_msg.attacker_msg = fread_action(fl, i);
     messages->god_msg.victim_msg = fread_action(fl, i);
     messages->god_msg.room_msg = fread_action(fl, i);
-    fgets(chk, 128, fl);
+    f = fgets(chk, 128, fl);
     while (!feof(fl) && (*chk == '\n' || *chk == '*'))
       fgets(chk, 128, fl);
   }
@@ -307,8 +307,9 @@ void make_corpse(struct char_data *ch)
 
   /* transfer character's inventory to the corpse */
   corpse->contains = ch->carrying;
-  for (o = corpse->contains; o != NULL; o = o->next_content)
-    o->in_obj = corpse;
+  for (o = corpse->contains; o != NULL; o = o->next_content){
+	o->in_obj = corpse;
+  }
   object_list_new_owner(corpse, NULL);
 
   /* transfer character's equipment to the corpse */
@@ -776,7 +777,7 @@ int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int 
   /* Set the maximum damage per round and subtract the hit points */
   dam = MAX(MIN(dam, 100), 0);
   GET_HIT(victim) -= dam;
-  send_to_char(ch,(std::string("{grn}[") + std::to_string(dam) + "] ").c_str());
+  send_to_char(ch,"%s",(std::string("{grn}[") + std::to_string(dam) + "] ").c_str());
 
   /* Gain exp for the hit */
 /* FIXME: Find out how to gain exp for ch if ch is nullptr */
@@ -809,7 +810,7 @@ int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int 
     }
   }
 */
-  send_to_char(ch,"{/grn}");
+  send_to_char(ch,"%s","{/grn}");
 
   /* Use send_to_char -- act() doesn't send message if you are DEAD. */
   switch (GET_POS(victim)) {
@@ -955,7 +956,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
   /* Set the maximum damage per round and subtract the hit points */
   //dam = MAX(MIN(dam, 100), 0);
   GET_HIT(victim) -= dam;
-  send_to_char(ch,(std::string("{grn}[") + std::to_string(dam) + "] ").c_str());
+  send_to_char(ch,"%s",(std::string("{grn}[") + std::to_string(dam) + "] ").c_str());
 
   /* Gain exp for the hit */
   if (ch != victim)
@@ -984,7 +985,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
       dam_message(dam, ch, victim, attacktype);
     }
   }
-  send_to_char(ch,"{/grn}");
+  send_to_char(ch,"%s","{/grn}");
 
   /* Use send_to_char -- act() doesn't send message if you are DEAD. */
   switch (GET_POS(victim)) {

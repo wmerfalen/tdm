@@ -162,7 +162,6 @@ namespace gdns {
 							std::cerr << "[lmdb] invalid parameter to mdb_get\n";
 							return -1;
 						default:
-							int ctr = 0;
 							char buf[v.mv_size + 1];
 							memset(buf,0,v.mv_size +1);
 							bcopy(v.mv_data,buf,v.mv_size);

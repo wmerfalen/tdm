@@ -63,38 +63,38 @@
 /* names of various files and directories */
 #define INDEX_FILE	"index"		/* index of world files		*/
 #define MINDEX_FILE	"index.mini"	/* ... and for mini-mud-mode	*/
-#define WLD_PREFIX	LIB_WORLD"wld"SLASH	/* room definitions	*/
-#define MOB_PREFIX	LIB_WORLD"mob"SLASH	/* monster prototypes	*/
-#define OBJ_PREFIX	LIB_WORLD"obj"SLASH	/* object prototypes	*/
-#define ZON_PREFIX	LIB_WORLD"zon"SLASH	/* zon defs & command tables */
-#define SHP_PREFIX	LIB_WORLD"shp"SLASH	/* shop definitions	*/
-#define HLP_PREFIX	LIB_TEXT"help"SLASH	/* for HELP <keyword>	*/
+#define WLD_PREFIX	"world/wld/"/* room definitions	*/
+#define MOB_PREFIX  "world/mob/"/* monster prototypes	*/
+#define OBJ_PREFIX	"world/obj/"/* object prototypes	*/
+#define ZON_PREFIX	"world/zon/"/* zon defs & command tables */
+#define SHP_PREFIX	"world/shp/"	/* shop definitions	*/
+#define HLP_PREFIX	"text/help/"	/* for HELP <keyword>	*/
 
-#define CREDITS_FILE	LIB_TEXT"credits" /* for the 'credits' command	*/
-#define NEWS_FILE	LIB_TEXT"news"	/* for the 'news' command	*/
-#define MOTD_FILE	LIB_TEXT"motd"	/* messages of the day / mortal	*/
-#define IMOTD_FILE	LIB_TEXT"imotd"	/* messages of the day / immort	*/
-#define GREETINGS_FILE	LIB_TEXT"greetings"	/* The opening screen.	*/
-#define HELP_PAGE_FILE	LIB_TEXT_HELP"screen"	/* for HELP <CR>	*/
-#define INFO_FILE	LIB_TEXT"info"		/* for INFO		*/
-#define WIZLIST_FILE	LIB_TEXT"wizlist"	/* for WIZLIST		*/
-#define IMMLIST_FILE	LIB_TEXT"immlist"	/* for IMMLIST		*/
-#define BACKGROUND_FILE	LIB_TEXT"background"/* for the background story	*/
-#define POLICIES_FILE	LIB_TEXT"policies"  /* player policies/rules	*/
-#define HANDBOOK_FILE	LIB_TEXT"handbook"  /* handbook for new immorts	*/
+#define CREDITS_FILE	"text/credits" /* for the 'credits' command	*/
+#define NEWS_FILE	"text/news"	/* for the 'news' command	*/
+#define MOTD_FILE	"text/motd"	/* messages of the day / mortal	*/
+#define IMOTD_FILE	"text/imotd"	/* messages of the day / immort	*/
+#define GREETINGS_FILE	"text/greetings"	/* The opening screen.	*/
+#define HELP_PAGE_FILE	"text/help/screen"	/* for HELP <CR>	*/
+#define INFO_FILE	"text/info"		/* for INFO		*/
+#define WIZLIST_FILE	"text/wizlist"	/* for WIZLIST		*/
+#define IMMLIST_FILE	"text/immlist"	/* for IMMLIST		*/
+#define BACKGROUND_FILE	"text/background"/* for the background story	*/
+#define POLICIES_FILE	"text/policies"  /* player policies/rules	*/
+#define HANDBOOK_FILE	"text/handbook"  /* handbook for new immorts	*/
 
-#define IDEA_FILE	LIB_MISC"ideas"	   /* for the 'idea'-command	*/
-#define TYPO_FILE	LIB_MISC"typos"	   /*         'typo'		*/
-#define BUG_FILE	LIB_MISC"bugs"	   /*         'bug'		*/
-#define MESS_FILE	LIB_MISC"messages" /* damage messages		*/
-#define SOCMESS_FILE	LIB_MISC"socials"  /* messages for social acts	*/
-#define XNAME_FILE	LIB_MISC"xnames"   /* invalid name substrings	*/
+#define IDEA_FILE	"misc/ideas"	   /* for the 'idea'-command	*/
+#define TYPO_FILE	"misc/typos"	   /*         'typo'		*/
+#define BUG_FILE	"misc/bugs"	   /*         'bug'		*/
+#define MESS_FILE	"misc/messages" /* damage messages		*/
+#define SOCMESS_FILE	"misc/socials"  /* messages for social acts	*/
+#define XNAME_FILE	"misc/xnames"   /* invalid name substrings	*/
 
-#define PLAYER_FILE	LIB_ETC"players"   /* the player database	*/
-#define MAIL_FILE	LIB_ETC"plrmail"   /* for the mudmail system	*/
-#define BAN_FILE	LIB_ETC"badsites"  /* for the siteban system	*/
-#define HCONTROL_FILE	LIB_ETC"hcontrol"  /* for the house system	*/
-#define TIME_FILE	LIB_ETC"time"	   /* for calendar system	*/
+#define PLAYER_FILE	"etc/players"   /* the player database	*/
+#define MAIL_FILE	"etc/plrmail"   /* for the mudmail system	*/
+#define BAN_FILE	"etc/badsites"  /* for the siteban system	*/
+#define HCONTROL_FILE	"etc/hcontrol"  /* for the house system	*/
+#define TIME_FILE	"etc/time"	   /* for calendar system	*/
 
 /* public procedures in db.c */
 void	boot_db(void);
@@ -165,8 +165,8 @@ struct zone_data {
    char	*name;		    /* name of this zone                  */
    int	lifespan;           /* how long between resets (minutes)  */
    int	age;                /* current age of this zone (minutes) */
-   room_vnum bot;           /* starting room number for this zone */
-   room_vnum top;           /* upper limit for rooms in this zone */
+   uint64_t bot;           /* starting room number for this zone */
+   uint64_t top;           /* upper limit for rooms in this zone */
 
    int	reset_mode;         /* conditions for reset (see below)   */
    zone_vnum number;	    /* virtual number of this zone	  */
@@ -242,7 +242,6 @@ extern struct index_data *mob_index;
 extern mob_rnum top_of_mobt;
 
 extern struct index_data *obj_index;
-extern std::vector<obj_data> object_list;
 extern obj_rnum top_of_objt;
 #endif
 

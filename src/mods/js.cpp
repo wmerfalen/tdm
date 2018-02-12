@@ -8,11 +8,10 @@ extern void hit(struct char_data* ch,struct char_data* vict,int type);
 namespace mods{
 	namespace js {
 		int load_library(duk_context*,std::string_view);
-		constexpr static char * JS_PATH = "../lib/js/";
-		constexpr static char * JS_TEST_PATH = "../lib/js/tests/";
+		constexpr static const char * JS_PATH = "../lib/js/";
+		constexpr static const char * JS_TEST_PATH = "../lib/js/tests/";
 		namespace test {
 		static duk_ret_t require_test(duk_context *ctx){
-			int num_args = duk_get_top(ctx);
 			/* First parameter is character name */
 			auto fname = duk_to_string(ctx,0);
 			std::string path = mods::js::JS_TEST_PATH;
@@ -22,7 +21,6 @@ namespace mods{
 		}
 		};
 		static duk_ret_t require_js(duk_context *ctx){
-			int num_args = duk_get_top(ctx);
 			/* First parameter is character name */
 			auto fname = duk_to_string(ctx,0);
 			std::string path = mods::js::JS_PATH;
@@ -31,54 +29,64 @@ namespace mods{
 			return 1;	/* number of return values */
 		}
 		static duk_ret_t hit(duk_context *ctx){
-			int num_args = duk_get_top(ctx);
 			/* First parameter is character name */
 			auto char_uuid = duk_to_number(ctx,0);
 			auto vict_uuid = duk_to_number(ctx,1);
-			short ctr = 0;
 			::hit(mods::globals::player_list[char_uuid]->cd(),mods::globals::player_list[vict_uuid]->cd(),0);
 			duk_push_number(ctx,1);
 			return 1;	/* number of return values */
 		}
+		static duk_ret_t get_current_player(duk_context *ctx){
+			/* First parameter is character name */
+			duk_idx_t obj_idx;
+
+			obj_idx = duk_push_object(ctx);
+			duk_push_int(ctx, mods::globals::current_player->cd()->uuid);
+			duk_put_prop_string(ctx, obj_idx, "uuid");
+			duk_push_string(ctx, mods::globals::current_player->cd()->player.name);
+			duk_put_prop_string(ctx, obj_idx, "name");
+			return 1;
+		}
+		static duk_ret_t send(duk_context *ctx){
+			/* First parameter is character name */
+			std::string message = duk_to_string(ctx,0);
+			*mods::globals::current_player << message << "\r\n";
+			duk_push_number(ctx,0);
+			return 0;
+		}
 		static duk_ret_t uuid(duk_context *ctx){
-			int num_args = duk_get_top(ctx);
 			/* First parameter is character name */
 			std::string char_name = duk_to_string(ctx,0);
-			auto i_room = mods::util::stoi(duk_to_string(ctx,1));
-			if(i_room.has_value()){
-				room_rnum room = i_room.value();
-				for(auto ch = character_list; ch; ch = ch->next){
-					if(char_name.compare(ch->player.name) == 0 && IN_ROOM(ch) == room){
-						duk_push_number(ctx,ch->uuid);
-						return 1;
-					}
+			for(auto ch = character_list; ch; ch = ch->next){
+				if(char_name.compare(ch->player.name) == 0 && !IS_NPC(ch)){
+					duk_push_number(ctx,ch->uuid);
+					return 1;
 				}
 			}
 			duk_push_number(ctx,-1);
 			return 1;
 		}
-		static duk_ret_t command(duk_context *ctx){
-			int num_args = duk_get_top(ctx);
+		static duk_ret_t cmd(duk_context *ctx){
 			/* First parameter is character name */
-			auto char_uuid = duk_to_number(ctx,0);
-			std::string cmd =  duk_to_string(ctx,1);
-			command_interpreter(mods::globals::player_list[char_uuid]->cd(),cmd.c_str());
+			std::string cmd =  duk_to_string(ctx,0);
+			mods::globals::current_player->executing_js(true);
+			command_interpreter(mods::globals::current_player->cd(),cmd.c_str());
+			mods::globals::current_player->executing_js(false);
 			return 0;	/* number of return values */
 		}
-		static duk_ret_t command_exec(duk_context *ctx){
-			int num_args = duk_get_top(ctx);
+		static duk_ret_t cmd_exec(duk_context *ctx){
 			/* First parameter is character name */
-			auto char_uuid = duk_to_number(ctx,0);
-			std::string cmd =  duk_to_string(ctx,1);
-			auto player = mods::globals::player_list.at(char_uuid); 
+			std::string cmd =  duk_to_string(ctx,0);
+			auto player = mods::globals::current_player;
+			mods::globals::current_player->executing_js(true);
 			player->capture_output(true);
 			command_interpreter(player->cd(),cmd.c_str());
 			player->capture_output(false);
+			mods::globals::current_player->executing_js(false);
 			duk_push_string(ctx,player->get_captured_output().data());
 			return 1;
 		}
 		static duk_ret_t mob_death_trigger(duk_context *ctx){
-			int num_args = duk_get_top(ctx);
 			/* First parameter is character name */
 			std::string char_name = duk_to_string(ctx,0);
 			std::string functor = duk_to_string(ctx,1);
@@ -87,7 +95,6 @@ namespace mods{
 			return 0;	/* number of return values */
 		}
 		static duk_ret_t in_room(duk_context *ctx){
-			int num_args = duk_get_top(ctx);
 			/* First parameter is character name */
 			std::string c_name = duk_to_string(ctx,0);
 			for(auto ch = character_list; ch->next; ch = ch->next){
@@ -100,33 +107,31 @@ namespace mods{
 			return 1;	/* number of return values */
 		}
 		static duk_ret_t send_to_uuid(duk_context *ctx){
-			int num_args = duk_get_top(ctx);
 			/* First parameter is character name */
 			auto cuuid = duk_to_number(ctx,0);
 			send_to_char(mods::globals::player_list.at(cuuid)->cd(),duk_to_string(ctx,1));
 			return 0;	/* number of return values */
 		}
 		static duk_ret_t send_to_char(duk_context *ctx){
-			int num_args = duk_get_top(ctx);
 			/* First parameter is character name */
 			std::string c_name = duk_to_string(ctx,0);
 			for(auto ch = character_list; ch->next; ch = ch->next){
 				if(c_name.compare(ch->player.name) == 0){
-					send_to_char(ch,duk_to_string(ctx,1));
-					return 0;
+					if(!IS_NPC(ch)){
+						send_to_char(ch,duk_to_string(ctx,1));
+						return 0;
+					}
 				}
 			}
 			return 0;	/* number of return values */
 		}
 		static duk_ret_t db_seti(duk_context *ctx){
-			int num_args = duk_get_top(ctx);
 			std::string key = duk_to_string(ctx,0);
 			auto value = duk_to_number(ctx,1);
 			mods::globals::db->put(key,std::to_string(value));
 			return 0;
 		}
 		static duk_ret_t db_geti(duk_context *ctx){
-			int num_args = duk_get_top(ctx);
 			std::string key = duk_to_string(ctx,0);
 			std::string value = "";
 			mods::globals::db->get(key,value);
@@ -137,14 +142,12 @@ namespace mods{
 			return 1;
 		}
 		static duk_ret_t db_set(duk_context *ctx){
-			int num_args = duk_get_top(ctx);
 			std::string key = duk_to_string(ctx,0);
 			std::string value = duk_to_string(ctx,1);
 			mods::globals::db->put(key,value);
 			return 0;
 		}
 		static duk_ret_t db_get(duk_context *ctx){
-			int num_args = duk_get_top(ctx);
 			std::string key = duk_to_string(ctx,0);
 			std::string value = "";
 			mods::globals::db->get(key,value);
@@ -156,14 +159,30 @@ namespace mods{
 			duk_eval(ctx);
 			return 0;
 		}
-		void eval_string(duk_context* ctx,std::string_view str){
-			if(duk_safe_call(ctx,mods::js::unsafe_code,static_cast<const void*>(str.data()),0,1) != 0){
-				std::cerr << "Unexpected js error: " << duk_safe_to_string(ctx,-1) << "\r\n";
+		void log_js_error(std::string_view error){
+			std::cerr << "js error: " << error.data() << "\n";
+		}
+		
+		void contextual_eval_string(char_data* player,duk_context* ctx,const std::string & str){
+			auto shrd_ptr_player = mods::globals::player_list.at(player->uuid);
+			std::string code = std::string("player_object = ") + shrd_ptr_player->js_object() + std::string(";\n");
+			code += str;
+			if(duk_safe_call(ctx,mods::js::unsafe_code,static_cast<void*>(const_cast<char*>(code.c_str())),0,1) != 0){
+				log_js_error(duk_safe_to_string(ctx,-1));
+			}
+			duk_pop(ctx);
+		}
+		void contextual_eval_string(mods::player* player,duk_context* ctx,const std::string & str){
+			contextual_eval_string(player->cd(),ctx,str);
+		}
+		void eval_string(duk_context* ctx,const std::string & str){
+			if(duk_safe_call(ctx,mods::js::unsafe_code,static_cast<void*>(const_cast<char*>(str.c_str())),0,1) != 0){
+				log_js_error(duk_safe_to_string(ctx,-1));
 			}
 			duk_pop(ctx);
 		}
 		void eval_string(std::string_view str){
-			eval_string(mods::globals::duktape_context,str);
+			eval_string(mods::globals::duktape_context,str.data());
 		}
 		void load_c_functions(){
 			load_c_functions(mods::globals::duktape_context);
@@ -176,14 +195,18 @@ namespace mods{
 			duk_push_c_function(ctx,mods::js::test::require_test,1);
 			duk_put_global_string(ctx,"require_test");
 		}
-		void load_c_functions(duk_context *ctx){
-			duk_push_c_function(ctx,mods::js::uuid,2);
+		void load_base_functions(duk_context *ctx){
+			duk_push_c_function(ctx,mods::js::get_current_player,0);
+			duk_put_global_string(ctx,"get_current_player");
+			duk_push_c_function(ctx,mods::js::send,1);
+			duk_put_global_string(ctx,"send");
+			duk_push_c_function(ctx,mods::js::uuid,1);
 			duk_put_global_string(ctx,"uuid");
 			duk_push_c_function(ctx,mods::js::hit,2);
 			duk_put_global_string(ctx,"hit");
-			duk_push_c_function(ctx,mods::js::command_exec,2);
+			duk_push_c_function(ctx,mods::js::cmd_exec,2);
 			duk_put_global_string(ctx,"cmd_exec");
-			duk_push_c_function(ctx,mods::js::command,2);
+			duk_push_c_function(ctx,mods::js::cmd,2);
 			duk_put_global_string(ctx,"cmd");
 			duk_push_c_function(ctx,mods::js::send_to_uuid,2);
 			duk_put_global_string(ctx,"send_to_uuid");
@@ -201,7 +224,10 @@ namespace mods{
 			duk_put_global_string(ctx,"in_room");
 			duk_push_c_function(ctx,mods::js::mob_death_trigger,2);
 			duk_put_global_string(ctx,"mob_death_trigger");
+		}
 
+		void load_c_functions(duk_context *ctx){
+			mods::js::load_base_functions(ctx);
 			mods::quests::load_c_functions(ctx);
 			mods::js::load_c_test_functions(ctx);
 			mods::js::load_c_require_functions(ctx);
@@ -250,7 +276,7 @@ namespace mods{
                 std::fill(buffer.begin(),buffer.end(),0);
 
                 while(!include_file.eof()){
-                    include_file.read((char*)&buffer[0],JS_READ_CHUNK_SIZE);
+                    include_file.read((char*)&buffer[0],statbuf.st_size);
                 }
                 eval_string(m_context,std::string((char*)&buffer[0]));
 			}

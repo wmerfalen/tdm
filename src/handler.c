@@ -393,7 +393,8 @@ void char_from_room(struct char_data *ch)
 void char_to_room(struct char_data *ch, room_rnum room)
 {
 /*TODO: Insert logic here !movement !globals */
-  if (ch == NULL || room == NOWHERE || room > mods::globals::room_list.size())
+	std::size_t r = room;
+  if (ch == NULL || room == NOWHERE || r > mods::globals::room_list.size())
     log("SYSERR: Illegal value(s) passed to char_to_room. (Room: %d/%d Ch: %p",
 		room, mods::globals::room_list.size(), ch);
   else {
@@ -787,8 +788,6 @@ void object_list_new_owner(struct obj_data *list, struct char_data *ch)
 /* Extract an object from the world */
 void extract_obj(struct obj_data *obj)
 {
-  struct obj_data *temp;
-
   if (obj->worn_by != NULL)
     if (unequip_char(obj->worn_by, obj->worn_on) != obj)
       log("SYSERR: Inconsistent worn_by and worn_on pointers!!");

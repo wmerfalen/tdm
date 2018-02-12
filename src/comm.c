@@ -13,6 +13,7 @@
 #include "globals.hpp"
 #include "conf.h"
 #include "sysdep.h"
+#include "mods/extern.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -2252,6 +2253,23 @@ void send_to_outdoor(const char *messg, ...)
 }
 
 
+void send_to_room_except(room_rnum room, const std::vector<char_data*> & except, const char *messg, ...)
+{
+  struct char_data *i;
+  va_list args;
+
+  if (messg == NULL)
+    return;
+
+  for (i = world[room].people; i; i = i->next_in_room) {
+    if (!i->desc || std::find(except.begin(),except.end(),i) != except.end())
+      continue;
+
+    va_start(args, messg);
+    vwrite_to_output(i->desc, messg, args);
+    va_end(args);
+  }
+}
 
 void send_to_room(room_rnum room, const char *messg, ...)
 {

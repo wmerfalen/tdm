@@ -518,7 +518,7 @@ typedef uint64_t uuid_t;
 #define LARGE_BUFSIZE	   (MAX_SOCK_BUF - GARBAGE_SPACE - MAX_PROMPT_LENGTH)
 
 #define HISTORY_SIZE		5	/* Keep last 5 commands. */
-#define MAX_STRING_LENGTH	8192
+#define MAX_STRING_LENGTH	2*8192
 #define MAX_INPUT_LENGTH	5096	/* Max length per *line* of input */
 #define MAX_RAW_INPUT_LENGTH	5596	/* Max size of *raw* input */
 #define MAX_MESSAGES		60
@@ -936,10 +936,10 @@ struct follow_type {
 /* Pave mode structure for builders */
 struct pavement {
 	room_vnum start_room;
-	room_vnum current_room_number;
-	std::vector<room_rnum> rooms;
 	int transact_id;
+	room_vnum current_room_number;
 	int zone_id;
+	std::vector<room_rnum> rooms;
 	pavement() = delete;
 	pavement(room_vnum start,int z_id) :  start_room(start), transact_id(0), 
 	current_room_number(0),zone_id(z_id) {}

@@ -46,7 +46,7 @@ namespace mods {
 			final_buffer = mods::globals::replace_all(final_buffer,"{/blu}","\033[0m");
 			return final_buffer;
 		}
-		std::optional<int> stoi(std::string_view str,int base =10){
+		std::optional<int> stoi(std::string_view str){
 			try{
 				return std::stoi(str.data());
 			}catch(...){

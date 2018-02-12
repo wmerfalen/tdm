@@ -22,10 +22,14 @@ namespace mods {
 		void eval_file(std::string_view str);
 		void eval_file(duk_context *ctx,std::string_view str);
 		void eval_string(std::string_view str);
-		void eval_string(duk_context *ctx,std::string_view str);
+		void eval_string(duk_context *ctx,const std::string& str);
 		void load_c_functions();
 		void load_c_functions(duk_context *ctx);
 		int load_library(duk_context *ctx,std::string_view file);
+		void contextual_eval_string(mods::player* player,duk_context* ctx,const std::string & str);
+		void contextual_eval_string(char_data * player,duk_context* ctx,const std::string & str);
+		void load_base_functions(duk_context *ctx);
+		void load_c_require_functions(duk_context *ctx);
 		bool run_test_suite(mods::player & player,std::string_view suite);
 		struct include {
 			include() = delete;

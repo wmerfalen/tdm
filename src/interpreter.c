@@ -159,6 +159,8 @@ ACMD(do_sneak);
 ACMD(do_recall);
 ACMD(do_givemegold);
 ACMD(do_snipe);
+ACMD(do_heal);
+ACMD(do_newjs);
 ACMD(do_jstest);
 ACMD(do_mbuild);
 ACMD(do_obuild);
@@ -489,6 +491,8 @@ cpp_extern const struct command_info cmd_info[] = {
   { "recall"  , POS_RESTING , do_recall   , 0, 0 },
   { "givemegold"  , POS_RESTING , do_givemegold   , 0, 0 },
   { "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
+  { "heal"  , POS_RESTING , do_heal   , 0, 0 },
+  { "newjs"  , POS_RESTING , do_newjs   , LVL_GOD, 0 },
   { "jstest"  , POS_RESTING , do_jstest   , LVL_GOD, 0 },
   { "mbuild"  , POS_RESTING , do_mbuild   , LVL_GOD, 0 },
   { "obuild"  , POS_RESTING , do_obuild   , LVL_GOD, 0 },
@@ -621,6 +625,9 @@ const char *reserved[] =
  * It makes sure you are the proper level and position to execute the command,
  * then calls the appropriate function.
  */
+void command_interpreter(struct char_data *ch, const char *argument){
+	command_interpreter(ch,const_cast<char*>(argument));
+}
 void command_interpreter(struct char_data *ch, char *argument)
 {
   int cmd, length;
@@ -1144,6 +1151,8 @@ int find_command(const char *command)
 
 int special(struct char_data *ch, int cmd, char *arg)
 {
+	//TODO: decide if we need this
+	return 0;
   struct obj_data *i;
   struct char_data *k;
   int j;
