@@ -50,6 +50,7 @@ const char *class_abbrevs[] = {
   "Med",
   "Spr",
   "Mrn",
+  "Sup",
   "\n"
 };
 
@@ -68,10 +69,11 @@ const char *pc_class_types[] = {
 const char *class_menu =
 "\r\n"
 "Select a class:\r\n"
+"  [E]ngineer\r\n"
 "  [M]edic\r\n"
 "  [S]niper\r\n"
 "  M[A]rine\r\n"
-"  [E]engineer\r\n";
+"  S[U]pport\r\n";
 
 
 
@@ -1627,75 +1629,6 @@ int invalid_class(struct char_data *ch, struct obj_data *obj)
  */
 void init_spell_levels(void)
 {
-  /* MAGES */
-  spell_level(SPELL_MAGIC_MISSILE, CLASS_ENGINEER, 1);
-  spell_level(SPELL_DETECT_INVIS, CLASS_ENGINEER, 2);
-  spell_level(SPELL_DETECT_MAGIC, CLASS_ENGINEER, 2);
-  spell_level(SPELL_CHILL_TOUCH, CLASS_ENGINEER, 3);
-  spell_level(SPELL_INFRAVISION, CLASS_ENGINEER, 3);
-  spell_level(SPELL_INVISIBLE, CLASS_ENGINEER, 4);
-  spell_level(SPELL_ARMOR, CLASS_ENGINEER, 4);
-  spell_level(SPELL_BURNING_HANDS, CLASS_ENGINEER, 5);
-  spell_level(SPELL_LOCATE_OBJECT, CLASS_ENGINEER, 6);
-  spell_level(SPELL_STRENGTH, CLASS_ENGINEER, 6);
-  spell_level(SPELL_SHOCKING_GRASP, CLASS_ENGINEER, 7);
-  spell_level(SPELL_SLEEP, CLASS_ENGINEER, 8);
-  spell_level(SPELL_LIGHTNING_BOLT, CLASS_ENGINEER, 9);
-  spell_level(SPELL_BLINDNESS, CLASS_ENGINEER, 9);
-  spell_level(SPELL_DETECT_POISON, CLASS_ENGINEER, 10);
-  spell_level(SPELL_COLOR_SPRAY, CLASS_ENGINEER, 11);
-  spell_level(SPELL_ENERGY_DRAIN, CLASS_ENGINEER, 13);
-  spell_level(SPELL_CURSE, CLASS_ENGINEER, 14);
-  spell_level(SPELL_POISON, CLASS_ENGINEER, 14);
-  spell_level(SPELL_FIREBALL, CLASS_ENGINEER, 15);
-  spell_level(SPELL_CHARM, CLASS_ENGINEER, 16);
-  spell_level(SPELL_ENCHANT_WEAPON, CLASS_ENGINEER, 26);
-  spell_level(SPELL_CLONE, CLASS_ENGINEER, 30);
-
-  /* CLERICS */
-  spell_level(SPELL_CURE_LIGHT, CLASS_MEDIC, 1);
-  spell_level(SPELL_ARMOR, CLASS_MEDIC, 1);
-  spell_level(SPELL_CREATE_FOOD, CLASS_MEDIC, 2);
-  spell_level(SPELL_CREATE_WATER, CLASS_MEDIC, 2);
-  spell_level(SPELL_DETECT_POISON, CLASS_MEDIC, 3);
-  spell_level(SPELL_DETECT_ALIGN, CLASS_MEDIC, 4);
-  spell_level(SPELL_CURE_BLIND, CLASS_MEDIC, 4);
-  spell_level(SPELL_BLESS, CLASS_MEDIC, 5);
-  spell_level(SPELL_DETECT_INVIS, CLASS_MEDIC, 6);
-  spell_level(SPELL_BLINDNESS, CLASS_MEDIC, 6);
-  spell_level(SPELL_INFRAVISION, CLASS_MEDIC, 7);
-  spell_level(SPELL_PROT_FROM_EVIL, CLASS_MEDIC, 8);
-  spell_level(SPELL_POISON, CLASS_MEDIC, 8);
-  spell_level(SPELL_GROUP_ARMOR, CLASS_MEDIC, 9);
-  spell_level(SPELL_CURE_CRITIC, CLASS_MEDIC, 9);
-  spell_level(SPELL_SUMMON, CLASS_MEDIC, 10);
-  spell_level(SPELL_REMOVE_POISON, CLASS_MEDIC, 10);
-  spell_level(SPELL_WORD_OF_RECALL, CLASS_MEDIC, 12);
-  spell_level(SPELL_EARTHQUAKE, CLASS_MEDIC, 12);
-  spell_level(SPELL_DISPEL_EVIL, CLASS_MEDIC, 14);
-  spell_level(SPELL_DISPEL_GOOD, CLASS_MEDIC, 14);
-  spell_level(SPELL_SANCTUARY, CLASS_MEDIC, 15);
-  spell_level(SPELL_CALL_LIGHTNING, CLASS_MEDIC, 15);
-  spell_level(SPELL_HEAL, CLASS_MEDIC, 16);
-  spell_level(SPELL_CONTROL_WEATHER, CLASS_MEDIC, 17);
-  spell_level(SPELL_SENSE_LIFE, CLASS_MEDIC, 18);
-  spell_level(SPELL_HARM, CLASS_MEDIC, 19);
-  spell_level(SPELL_GROUP_HEAL, CLASS_MEDIC, 22);
-  spell_level(SPELL_REMOVE_CURSE, CLASS_MEDIC, 26);
-
-  /* THIEVES */
-  spell_level(SKILL_SNEAK, CLASS_SNIPER, 1);
-  spell_level(SKILL_PICK_LOCK, CLASS_SNIPER, 2);
-  spell_level(SKILL_BACKSTAB, CLASS_SNIPER, 3);
-  spell_level(SKILL_STEAL, CLASS_SNIPER, 4);
-  spell_level(SKILL_HIDE, CLASS_SNIPER, 5);
-  spell_level(SKILL_TRACK, CLASS_SNIPER, 6);
-
-  /* WARRIORS */
-  spell_level(SKILL_KICK, CLASS_MARINE, 1);
-  spell_level(SKILL_RESCUE, CLASS_MARINE, 3);
-  spell_level(SKILL_TRACK, CLASS_MARINE, 9);
-  spell_level(SKILL_BASH, CLASS_MARINE, 12);
 }
 
 
@@ -1941,33 +1874,15 @@ const char *title_male(int chclass, int level)
 
     case CLASS_MEDIC:
     switch (level) {
-      case  1: return "the Believer";
-      case  2: return "the Attendant";
-      case  3: return "the Acolyte";
-      case  4: return "the Novice";
-      case  5: return "the Missionary";
-      case  6: return "the Adept";
-      case  7: return "the Deacon";
-      case  8: return "the Vicar";
-      case  9: return "the Priest";
-      case 10: return "the Minister";
-      case 11: return "the Canon";
-      case 12: return "the Levite";
-      case 13: return "the Curate";
-      case 14: return "the Monk";
-      case 15: return "the Healer";
-      case 16: return "the Chaplain";
-      case 17: return "the Expositor";
-      case 18: return "the Bishop";
-      case 19: return "the Arch Bishop";
-      case 20: return "the Patriarch";
-      /* no one ever thought up these titles 21-30 */
-      case LVL_IMMORT: return "the Immortal Cardinal";
-      case LVL_GOD: return "the Inquisitor";
-      case LVL_GRGOD: return "the God of good and evil";
-      default: return "the Cleric";
+      case  1: return "the Apprentice Medic";
+      case  2: return "the Apprentice Medic";
+      case  3: return "the Aspiring Medic";
+      case  4: return "the Aspiring Medic";
+      case LVL_IMMORT: return "the Immortal Medic";
+      case LVL_GOD: return "the Doctor of Medicine";
+      case LVL_GRGOD: return "the God of Medicine";
+      default: return "the Medic";
     }
-    break;
 
     case CLASS_SNIPER:
     switch (level) {
@@ -2001,31 +1916,12 @@ const char *title_male(int chclass, int level)
 
     case CLASS_MARINE:
     switch(level) {
-      case  1: return "the Swordpupil";
+      case  1: 
       case  2: return "the Recruit";
-      case  3: return "the Sentry";
-      case  4: return "the Fighter";
-      case  5: return "the Soldier";
-      case  6: return "the Warrior";
-      case  7: return "the Veteran";
-      case  8: return "the Swordsman";
-      case  9: return "the Fencer";
-      case 10: return "the Combatant";
-      case 11: return "the Hero";
-      case 12: return "the Myrmidon";
-      case 13: return "the Swashbuckler";
-      case 14: return "the Mercenary";
-      case 15: return "the Swordmaster";
-      case 16: return "the Lieutenant";
-      case 17: return "the Champion";
-      case 18: return "the Dragoon";
-      case 19: return "the Cavalier";
-      case 20: return "the Knight";
-      /* no one ever thought up these titles 21-30 */
       case LVL_IMMORT: return "the Immortal Warlord";
       case LVL_GOD: return "the Extirpator";
       case LVL_GRGOD: return "the God of war";
-      default: return "the Warrior";
+      default: return "the Marine";
     }
     break;
   }
@@ -2088,31 +1984,15 @@ const char *title_female(int chclass, int level)
 
     case CLASS_MEDIC:
     switch (level) {
-      case  1: return "the Believer";
-      case  2: return "the Attendant";
-      case  3: return "the Acolyte";
-      case  4: return "the Novice";
-      case  5: return "the Missionary";
-      case  6: return "the Adept";
-      case  7: return "the Deaconess";
-      case  8: return "the Vicaress";
-      case  9: return "the Priestess";
-      case 10: return "the Lady Minister";
-      case 11: return "the Canon";
-      case 12: return "the Levitess";
-      case 13: return "the Curess";
-      case 14: return "the Nunne";
-      case 15: return "the Healess";
-      case 16: return "the Chaplain";
-      case 17: return "the Expositress";
-      case 18: return "the Bishop";
-      case 19: return "the Arch Lady of the Church";
-      case 20: return "the Matriarch";
+      case  1: return "the Apprentice Medic";
+      case  2: return "the Apprentice Medic";
+      case  3: return "the Aspiring Medic";
+      case  4: return "the Aspiring Medic";
       /* no one ever thought up these titles 21-30 */
-      case LVL_IMMORT: return "the Immortal Priestess";
-      case LVL_GOD: return "the Inquisitress";
-      case LVL_GRGOD: return "the Goddess of good and evil";
-      default: return "the Cleric";
+      case LVL_IMMORT: return "the Immortal Medic";
+      case LVL_GOD: return "the Empress of Medicine";
+      case LVL_GRGOD: return "the Goddess of Medicine";
+      default: return "the Medic";
     }
     break;
 
@@ -2148,31 +2028,12 @@ const char *title_female(int chclass, int level)
 
     case CLASS_MARINE:
     switch(level) {
-      case  1: return "the Swordpupil";
+      case  1: return "the Recruit";
       case  2: return "the Recruit";
-      case  3: return "the Sentress";
-      case  4: return "the Fighter";
-      case  5: return "the Soldier";
-      case  6: return "the Warrior";
-      case  7: return "the Veteran";
-      case  8: return "the Swordswoman";
-      case  9: return "the Fenceress";
-      case 10: return "the Combatess";
-      case 11: return "the Heroine";
-      case 12: return "the Myrmidon";
-      case 13: return "the Swashbuckleress";
-      case 14: return "the Mercenaress";
-      case 15: return "the Swordmistress";
-      case 16: return "the Lieutenant";
-      case 17: return "the Lady Champion";
-      case 18: return "the Lady Dragoon";
-      case 19: return "the Cavalier";
-      case 20: return "the Lady Knight";
-      /* no one ever thought up these titles 21-30 */
       case LVL_IMMORT: return "the Immortal Lady of War";
       case LVL_GOD: return "the Queen of Destruction";
       case LVL_GRGOD: return "the Goddess of war";
-      default: return "the Warrior";
+      default: return "the Marine";
     }
     break;
   }

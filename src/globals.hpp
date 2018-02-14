@@ -67,6 +67,7 @@ namespace mods {
 		extern std::vector<std::string> chan_verbs;
 		extern bool f_import_rooms;
 		extern std::shared_ptr<mods::player> current_player;
+		void init_player(char_data*);
 		std::unique_ptr<ai_state>& state_fetch(struct char_data* ch);
 		int mobile_activity(char_data*);
 		void register_object(obj_data&);

@@ -1362,7 +1362,6 @@ void nanny(struct descriptor_data *d, char *arg)
       clear_char(d->character);
       CREATE(d->character->player_specials, struct player_special_data, 1);
       d->character->desc = d;
-	  mods::globals::register_player(d->character);
     }
     if (!*arg)
       STATE(d) = CON_CLOSE;
@@ -1391,7 +1390,6 @@ void nanny(struct descriptor_data *d, char *arg)
 	  }
 	  CREATE(d->character, struct char_data, 1);
 	  clear_char(d->character);
-	  mods::globals::register_player(d->character);
 	  CREATE(d->character->player_specials, struct player_special_data, 1);
 	  d->character->desc = d;
 	  CREATE(d->character->player.name, char, strlen(tmp_name) + 1);
@@ -1643,6 +1641,8 @@ void nanny(struct descriptor_data *d, char *arg)
       if (PLR_FLAGGED(d->character, PLR_FROZEN))
 	load_room = r_frozen_start_room;
 
+	  mods::globals::register_player(d->character);
+	  mods::globals::init_player(d->character);
       send_to_char(d->character, "%s", WELC_MESSG);
       d->character->next = character_list;
       character_list = d->character;

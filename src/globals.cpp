@@ -365,6 +365,11 @@ Iter select_randomly(Iter start, Iter end) {
 		void register_room(const room_rnum & r){
 			room_list.push_back({});
 		}
+		void init_player(char_data* ch){
+			MENTOC_PREAMBLE();
+			mods::player::class_type class_type = ch->player.chclass;
+			player->set_class_capability({class_type});
+		}
 
 		void register_player(struct char_data* ch){
 			if(ch){
