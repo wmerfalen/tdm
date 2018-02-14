@@ -2,7 +2,7 @@
 #define  __MENTOC_MODS_CLASSES_TYPES_HEADER__
 
 namespace mods::classes {
-	enum types { 
+	enum types {
 		ENGINEER = 0,
 		MEDIC,
 		SNIPER,

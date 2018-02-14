@@ -4,18 +4,18 @@
 #include "base.hpp"
 
 namespace mods::classes {
-    struct engineer : base {
-		constexpr types kind(){
+	struct engineer : base {
+		constexpr types kind() {
 			return types::ENGINEER;
 		}
 		typedef std::shared_ptr<mods::player> player_ptr;
 		player_ptr player_obj;
 		/* constructors and destructors */
 		engineer() = delete;
-		engineer(player_ptr& p) : player_obj(p)
-		{}
+		engineer(player_ptr& p) : player_obj(p) {
+		}
 		~engineer() = default;
-    };
+	};
 };
 
 #endif

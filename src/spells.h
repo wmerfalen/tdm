@@ -166,17 +166,17 @@
 #define TAR_OBJ_EQUIP	(1 << 10)
 
 struct spell_info_type {
-   byte min_position;	/* Position for caster	 */
-   int mana_min;	/* Min amount of mana used by a spell (highest lev) */
-   int mana_max;	/* Max amount of mana used by a spell (lowest lev) */
-   int mana_change;	/* Change in mana used by spell from lev to lev */
+	byte min_position;	/* Position for caster	 */
+	int mana_min;	/* Min amount of mana used by a spell (highest lev) */
+	int mana_max;	/* Max amount of mana used by a spell (lowest lev) */
+	int mana_change;	/* Change in mana used by spell from lev to lev */
 
-   int min_level[NUM_CLASSES];
-   int routines;
-   byte violent;
-   int targets;         /* See below for use with TAR_XXX  */
-   const char *name;	/* Input size not limited. Originates from string constants. */
-   const char *wear_off_msg;	/* Input size not limited. Originates from string constants. */
+	int min_level[NUM_CLASSES];
+	int routines;
+	byte violent;
+	int targets;         /* See below for use with TAR_XXX  */
+	const char *name;	/* Input size not limited. Originates from string constants. */
+	const char *wear_off_msg;	/* Input size not limited. Originates from string constants. */
 };
 
 /* Possible Targets:
@@ -204,8 +204,8 @@ struct spell_info_type {
 /* Attacktypes with grammar */
 
 struct attack_hit_type {
-   const char	*singular;
-   const char	*plural;
+	const char	*singular;
+	const char	*plural;
 };
 
 
@@ -231,10 +231,10 @@ ASPELL(spell_detect_poison);
 int find_skill_num(char *name);
 
 int mag_damage(int level, struct char_data *ch, struct char_data *victim,
-  int spellnum, int savetype);
+               int spellnum, int savetype);
 
 void mag_affects(int level, struct char_data *ch, struct char_data *victim,
-  int spellnum, int savetype);
+                 int spellnum, int savetype);
 
 void mag_groups(int level, struct char_data *ch, int spellnum, int savetype);
 
@@ -243,27 +243,27 @@ void mag_masses(int level, struct char_data *ch, int spellnum, int savetype);
 void mag_areas(int level, struct char_data *ch, int spellnum, int savetype);
 
 void mag_summons(int level, struct char_data *ch, struct obj_data *obj,
- int spellnum, int savetype);
+                 int spellnum, int savetype);
 
 void mag_points(int level, struct char_data *ch, struct char_data *victim,
- int spellnum, int savetype);
+                int spellnum, int savetype);
 
 void mag_unaffects(int level, struct char_data *ch, struct char_data *victim,
-  int spellnum, int type);
+                   int spellnum, int type);
 
 void mag_alter_objs(int level, struct char_data *ch, struct obj_data *obj,
-  int spellnum, int type);
+                    int spellnum, int type);
 
 void mag_creations(int level, struct char_data *ch, int spellnum);
 
 int	call_magic(struct char_data *caster, struct char_data *cvict,
-  struct obj_data *ovict, int spellnum, int level, int casttype);
+               struct obj_data *ovict, int spellnum, int level, int casttype);
 
 void	mag_objectmagic(struct char_data *ch, struct obj_data *obj,
-			char *argument);
+                        char *argument);
 
 int	cast_spell(struct char_data *ch, struct char_data *tch,
-  struct obj_data *tobj, int spellnum);
+               struct obj_data *tobj, int spellnum);
 
 
 /* other prototypes */

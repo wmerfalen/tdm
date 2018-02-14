@@ -4,17 +4,17 @@
 #include "base.hpp"
 
 namespace mods::classes {
-    struct sniper : base {
-		constexpr types kind(){
+	struct sniper : base {
+		constexpr types kind() {
 			return types::SNIPER;
 		}
 		typedef std::shared_ptr<mods::player> player_ptr;
-        player_ptr player_obj;
+		player_ptr player_obj;
 		/* constructors and destructors */
 		sniper() = delete;
 		sniper(player_ptr& p) : player_obj(p) {}
 		~sniper() = default;
-    };
+	};
 };
 
 #endif

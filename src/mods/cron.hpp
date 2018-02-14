@@ -12,7 +12,7 @@
 #include "../types.hpp"
 
 namespace mods {
-    class cron {
+	class cron {
 		public:
 			cron() = delete;
 			cron(uint64_t tick_resolution) : m_tres(tick_resolution) {
@@ -20,19 +20,19 @@ namespace mods {
 			}
 			~cron() = default;
 			/* TODO: Operator << for sending to the character */
-			cron& operator<<(const char* m){
+			cron& operator<<(const char* m) {
 				return *this;
 			}
-			cron& operator<<(const std::string m){
+			cron& operator<<(const std::string m) {
 				return *this;
 			}
-			cron& operator<<(int m){
+			cron& operator<<(int m) {
 				return *this;
 			}
 		protected:
 			std::queue<std::function<void()>> m_q;
 			uint64_t m_tres;
-    };
+	};
 };
 
 #endif

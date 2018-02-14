@@ -305,16 +305,16 @@
 /* #undef NEED_STRERROR_PROTO */
 
 /* Check for a prototype to stricmp. */
-#define NEED_STRICMP_PROTO 
+#define NEED_STRICMP_PROTO
 
 /* Check for a prototype to strlcpy. */
-#define NEED_STRLCPY_PROTO 
+#define NEED_STRLCPY_PROTO
 
 /* Check for a prototype to strncasecmp. */
 /* #undef NEED_STRNCASECMP_PROTO */
 
 /* Check for a prototype to strnicmp. */
-#define NEED_STRNICMP_PROTO 
+#define NEED_STRNICMP_PROTO
 
 /* Check for a prototype to system. */
 /* #undef NEED_SYSTEM_PROTO */

@@ -37,19 +37,19 @@ namespace mods::builder {
 	extern std::array<std::pair<int,std::string>,17> extra_flags;
 	extern std::array<std::pair<int,std::string>,15> wear_flags;
 	extern std::array<std::pair<int,std::string>,25> affected_flags;
-	extern std::array<std::pair<int,std::string>,23> type_flags; 
-	extern std::array<std::pair<int,std::string>,3> type2_flags; 
+	extern std::array<std::pair<int,std::string>,23> type_flags;
+	extern std::array<std::pair<int,std::string>,3> type2_flags;
 	/* Factory method to generate a room for us */
 	struct room_data new_room(struct char_data* ch,int direction);
 	bool flush_to_db(struct char_data *ch,room_vnum room);
 	bool title(room_rnum room,std::string_view str_title);
 	bool description(room_rnum room,std::string_view str_description);
 	std::optional<std::string> dir_option(room_rnum,int direction,std::optional<std::string_view> description,
-			std::optional<std::string_view> keywords,
-			std::optional<int> exit_info,
-			std::optional<int> key,
-			std::optional<room_rnum> to_room
-	);
+	                                      std::optional<std::string_view> keywords,
+	                                      std::optional<int> exit_info,
+	                                      std::optional<int> key,
+	                                      std::optional<room_rnum> to_room
+	                                     );
 	bool create_direction(room_rnum room_id,int direction,room_rnum room);
 	bool destroy_direction(room_rnum,int direction);
 	int save_to_db(room_rnum in_room);
@@ -63,16 +63,16 @@ namespace mods::builder {
 	void report_status(mods::player* player,std::string_view message);
 	void report_success(mods::player* player,std::string_view message);
 	template <typename T>
-	void report_error(T player,std::string_view message){
-	*player << "{red}[error]: {/red}" << message.data() << "\r\n";
+	void report_error(T player,std::string_view message) {
+		*player << "{red}[error]: {/red}" << message.data() << "\r\n";
 	}
 	template <typename T>
-	void report_status(T player,std::string_view message){
-	*player << "{gld}[status]: {/gld}" << message.data() << "\r\n";
+	void report_status(T player,std::string_view message) {
+		*player << "{gld}[status]: {/gld}" << message.data() << "\r\n";
 	}
 	template <typename T>
-	void report_success(T player,std::string_view message){
-	*player << "{grn}[success]: {/grn}" << message.data() << "\r\n";
+	void report_success(T player,std::string_view message) {
+		*player << "{grn}[success]: {/grn}" << message.data() << "\r\n";
 	}
 };
 

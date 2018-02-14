@@ -138,15 +138,15 @@ int	vnum_object(char *searchname, struct char_data *ch);
 
 /* structure for the reset commands */
 struct reset_com {
-   char	command;   /* current command                      */
+	char	command;   /* current command                      */
 
-   bool if_flag;	/* if TRUE: exe only if preceding exe'd */
-   int	arg1;		/*                                      */
-   int	arg2;		/* Arguments to the command             */
-   int	arg3;		/*                                      */
-   int line;		/* line number this command appears on  */
+	bool if_flag;	/* if TRUE: exe only if preceding exe'd */
+	int	arg1;		/*                                      */
+	int	arg2;		/* Arguments to the command             */
+	int	arg3;		/*                                      */
+	int line;		/* line number this command appears on  */
 
-   /* 
+	/*
 	*  Commands:              *
 	*  'M': Read a mobile     *
 	*  'O': Read an object    *
@@ -155,59 +155,59 @@ struct reset_com {
 	*  'G': Obj to char       *
 	*  'E': Obj to char equip *
 	*  'D': Set state of door *
-   */
+	*/
 };
 
 
 
 /* zone definition structure. for the 'zone-table'   */
 struct zone_data {
-   char	*name;		    /* name of this zone                  */
-   int	lifespan;           /* how long between resets (minutes)  */
-   int	age;                /* current age of this zone (minutes) */
-   uint64_t bot;           /* starting room number for this zone */
-   uint64_t top;           /* upper limit for rooms in this zone */
+	char	*name;		    /* name of this zone                  */
+	int	lifespan;           /* how long between resets (minutes)  */
+	int	age;                /* current age of this zone (minutes) */
+	uint64_t bot;           /* starting room number for this zone */
+	uint64_t top;           /* upper limit for rooms in this zone */
 
-   int	reset_mode;         /* conditions for reset (see below)   */
-   zone_vnum number;	    /* virtual number of this zone	  */
-   std::vector<reset_com> cmd;   /* command table for reset	          */
+	int	reset_mode;         /* conditions for reset (see below)   */
+	zone_vnum number;	    /* virtual number of this zone	  */
+	std::vector<reset_com> cmd;   /* command table for reset	          */
 
-   /*
-    * Reset mode:
-    *   0: Don't reset, and don't update age.
-    *   1: Reset if no PC's are located in zone.
-    *   2: Just reset.
-    */
+	/*
+	 * Reset mode:
+	 *   0: Don't reset, and don't update age.
+	 *   1: Reset if no PC's are located in zone.
+	 *   2: Just reset.
+	 */
 };
 
 
 
 /* for queueing zones for update   */
 struct reset_q_element {
-   zone_rnum zone_to_reset;            /* ref to zone_data */
-   struct reset_q_element *next;
+	zone_rnum zone_to_reset;            /* ref to zone_data */
+	struct reset_q_element *next;
 };
 
 
 
 /* structure for the update queue     */
 struct reset_q_type {
-   struct reset_q_element *head;
-   struct reset_q_element *tail;
+	struct reset_q_element *head;
+	struct reset_q_element *tail;
 };
 
 
 
 struct player_index_element {
-   char	*name;
-   long id;
+	char	*name;
+	long id;
 };
 
 
 struct help_index_element {
-   char	*keyword;
-   char *entry;
-   int duplicate;
+	char	*keyword;
+	char *entry;
+	int duplicate;
 };
 
 
@@ -219,11 +219,11 @@ struct help_index_element {
 
 #define BANNED_SITE_LENGTH    50
 struct ban_list_element {
-   char	site[BANNED_SITE_LENGTH+1];
-   int	type;
-   time_t date;
-   char	name[MAX_NAME_LENGTH+1];
-   struct ban_list_element *next;
+	char	site[BANNED_SITE_LENGTH+1];
+	int	type;
+	time_t date;
+	char	name[MAX_NAME_LENGTH+1];
+	struct ban_list_element *next;
 };
 
 

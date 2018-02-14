@@ -15,22 +15,22 @@ typedef int socket_t;
 
 namespace mods {
 	namespace quests {
-		/* 
+		/*
 		 * Quest record
 		 * [room_rnum][quest_name][level_req][exp_gained]
 		 *
 		 * quest step record
 		 * [room_rnum][action_taken][lambda]
 		 */
-		 /* quests list ->
-		  * 	-> lookup room id
-		  *		-> get number of quests
-		  *		->
-		  *		-> db->get("quest:room_id:N:name"); //Value is the quest name
-		  * 	-> db->get("quest:room_id:N:desc"); //Value is the quest description as a blob
-		  *		-> db->put("char_data->player.name:quest","room_id:N");	//Set quest to room id
-		  *		-> 
-		  */
+		/* quests list ->
+		 * 	-> lookup room id
+		 *		-> get number of quests
+		 *		->
+		 *		-> db->get("quest:room_id:N:name"); //Value is the quest name
+		 * 	-> db->get("quest:room_id:N:desc"); //Value is the quest description as a blob
+		 *		-> db->put("char_data->player.name:quest","room_id:N");	//Set quest to room id
+		 *		->
+		 */
 
 		/* informative functions */
 		bool has_quest(struct char_data *ch);
@@ -41,11 +41,11 @@ namespace mods {
 		void leave_quest(struct char_data* ch,int quest_num);
 		std::vector<std::string> list_quests(room_rnum room_id);
 		void load_c_functions(duk_context * ctx);
-		int quests_file_to_lmdb(struct char_data* ch,const std::string & quests_file,const std::string & lmdb_key);
-		
+		int quests_file_to_lmdb(struct char_data* ch,const std::string& quests_file,const std::string& lmdb_key);
+
 		/* lmdb keys for quest tracking */
 		std::string current_key(struct char_data* ch);
-        std::string current_value(room_rnum room,int t_index);
+		std::string current_value(room_rnum room,int t_index);
 		std::string complete_key(struct char_data *ch,room_rnum room,int n_index);
 		std::string trigger_key(struct char_data *ch,room_rnum room,int n_index);
 

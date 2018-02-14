@@ -14,14 +14,14 @@ namespace mods {
 };
 #include "../structs.h"
 #include "../types.hpp"
-#define MOD_LENIENT_MAX 666 
+#define MOD_LENIENT_MAX 666
 #define MOD_SUSPICIOUS_MAX 666
 
 typedef struct char_data char_data;
 namespace mods {
-    class ai_state {
+	class ai_state {
 		public:
-			enum state { 
+			enum state {
 				WANDER, SUSPICIOUS, FIGHT,SUSPICIOUS2,PROTECT,AGGRESSIVE_PROTECT,
 				MANIC,CHAOTIC,RESERVED
 			};
@@ -33,13 +33,13 @@ namespace mods {
 				ROOM_EMP,ROOM_NORMAL
 			};
 			ai_state() = delete;
-			ai_state(char_data* ch,uint8_t st,uint32_t aggr) : m_char_data(ch), m_state(st), mpub_aggro(aggr){
+			ai_state(char_data* ch,uint8_t st,uint32_t aggr) : m_char_data(ch), m_state(st), mpub_aggro(aggr) {
 				mpub_lenient = mpub_suspicious = mpub_intelligence = mpub_stunned = mpub_dead = 0;
 				mpub_lenient = 333;
 			}
 			~ai_state() = default;
 			/* TODO: Operator << for sending to the character */
-			ai_state& operator<<(const state & m){
+			ai_state& operator<<(const state& m) {
 				m_state = m;
 				return *this;
 			}
@@ -64,7 +64,7 @@ namespace mods {
 			/* Boolean values */
 			uint32_t mpub_stunned;
 			uint32_t mpub_dead;
-    };
+	};
 };
 
 #endif

@@ -5,8 +5,8 @@
 #include "../player.hpp"
 #include <memory>
 namespace mods::classes {
-    struct base {
-		virtual types kind(){ 
+	struct base {
+		virtual types kind() {
 			return types::UNDEFINED;
 		}
 		typedef std::shared_ptr<mods::player> player_ptr;
@@ -14,7 +14,7 @@ namespace mods::classes {
 		/* constructors and destructors */
 		base() = default;
 		virtual ~base() = default;
-    };
+	};
 };
 
 #endif

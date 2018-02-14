@@ -16,7 +16,7 @@ void	affect_remove(struct char_data *ch, struct affected_type *af);
 void	affect_from_char(struct char_data *ch, int type);
 bool	affected_by_spell(struct char_data *ch, int type);
 void	affect_join(struct char_data *ch, struct affected_type *af,
-bool add_dur, bool avg_dur, bool add_mod, bool avg_mod);
+                    bool add_dur, bool avg_dur, bool add_mod, bool avg_mod);
 
 
 /* utility */
@@ -80,7 +80,7 @@ int	find_all_dots(char *arg);
 /* Generic Find */
 
 int	generic_find(char *arg, bitvector_t bitvector, struct char_data *ch,
-		struct char_data **tar_ch, struct obj_data **tar_obj);
+                 struct char_data **tar_ch, struct obj_data **tar_obj);
 
 #define FIND_CHAR_ROOM     (1 << 0)
 #define FIND_CHAR_WORLD    (1 << 1)
@@ -109,4 +109,4 @@ void	forget(struct char_data *ch, struct char_data *victim);
 void	remember(struct char_data *ch, struct char_data *victim);
 int	damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype);
 int	skill_message(int dam, struct char_data *ch, struct char_data *vict,
-		      int attacktype);
+                  int attacktype);

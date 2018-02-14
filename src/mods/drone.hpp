@@ -14,7 +14,7 @@
 extern size_t send_to_char(struct char_data *ch, const char *messg, ...);
 
 namespace mods {
-    class drone {
+	class drone {
 		public:
 			typedef short weapon_set;
 			drone();
@@ -24,18 +24,26 @@ namespace mods {
 			static void stop(struct char_data * owner);
 			static bool started(struct char_data *owner);
 			static void simulate(struct char_data *owner,bool value);
-			static bool interpret(struct char_data *owner,const std::string & argument);
+			static bool interpret(struct char_data *owner,const std::string& argument);
 			static struct char_data * get_existing(struct char_data* owner);
 			static void get_drone(struct char_data* owner);
 			/*
 			bool has_weapon_capability(int);
 			bool has_inventory_capability(int);
 			*/
-			void set_cd(char_data* ch){ m_char_data = ch; }
-			const char* name(){ return m_char_data->player.name; }
-			uuid_t uuid() const { return m_char_data->uuid; }
+			void set_cd(char_data* ch) {
+				m_char_data = ch;
+			}
+			const char* name() {
+				return m_char_data->player.name;
+			}
+			uuid_t uuid() const {
+				return m_char_data->uuid;
+			}
 			~drone() = default;
-			char_data* cd() const { return m_char_data; }
+			char_data* cd() const {
+				return m_char_data;
+			}
 			/*
 			bool is_weapon_loaded();
 			bool has_ammo();
@@ -64,37 +72,37 @@ namespace mods {
 			int ammo_type_adjustment(int,const weapon_type_t&);
 			obj_data* get_first_ammo_of_type(const weapon_type_t&) const;
 			*/
-			void stc(int m){ 
+			void stc(int m) {
 				send_to_char(m_char_data,"%s",std::to_string(m).c_str());
 			}
-			void stc(const std::string m){
+			void stc(const std::string m) {
 				send_to_char(m_char_data,"%s",m.c_str());
 			}
-			void stc(const char* m){
+			void stc(const char* m) {
 				send_to_char(m_char_data,"%s",m);
 			}
 			/* TODO: Operator << for sending to the character */
-			drone& operator<<(const char* m){
-				stc(m);	
+			drone& operator<<(const char* m) {
+				stc(m);
 				return *this;
 			}
-			drone& operator<<(const std::string m){
-				stc(m);	
+			drone& operator<<(const std::string m) {
+				stc(m);
 				return *this;
 			}
-			drone& operator<<(int m){
-				stc(m);	
+			drone& operator<<(int m) {
+				stc(m);
 				return *this;
 			}
 			obj_data* weapon();
-			obj_data* get_ammo(const weapon_type_t &);
+			obj_data* get_ammo(const weapon_type_t&);
 		protected:
 			char_data* m_char_data;
 			/*
 			std::array<unsigned long,DRONE_WEAPON_SET_NUM> m_weapon_cooldown;
 			weapon_set m_weapon_set;
 			*/
-    };
+	};
 };
 
 #endif

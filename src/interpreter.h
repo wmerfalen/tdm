@@ -25,7 +25,7 @@ ACMD(do_move);
 void	command_interpreter(struct char_data *ch, char *argument);
 void	command_interpreter(struct char_data *ch, const char *argument);
 int	search_block(char *arg, const char **list, int exact);
-char	lower( char c );
+char	lower(char c);
 char	*one_argument(char *argument, char *first_arg);
 char	*one_argument(char *argument, char *first_arg,unsigned int max_char);
 char	*one_word(char *argument, char *first_arg);
@@ -45,12 +45,12 @@ char	*delete_doubledollar(char *string);
 
 
 struct command_info {
-   const char *command;
-   byte minimum_position;
-   void	(*command_pointer)
-	   (struct char_data *ch, char *argument, int cmd, int subcmd);
-   sh_int minimum_level;
-   int	subcmd;
+	const char *command;
+	byte minimum_position;
+	void	(*command_pointer)
+	(struct char_data *ch, char *argument, int cmd, int subcmd);
+	sh_int minimum_level;
+	int	subcmd;
 };
 
 /*
@@ -67,10 +67,10 @@ extern const struct command_info cmd_info[];
  * named member.
  */
 struct alias_data {
-  char *alias;
-  char *replacement;
-  int type;
-  struct alias_data *next;
+	char *alias;
+	char *replacement;
+	int type;
+	struct alias_data *next;
 };
 
 #define ALIAS_SIMPLE	0
@@ -96,7 +96,7 @@ struct alias_data {
 
 /* do_gen_ps */
 #define SCMD_INFO       0
-#define SCMD_HANDBOOK   1 
+#define SCMD_HANDBOOK   1
 #define SCMD_CREDITS    2
 #define SCMD_NEWS       3
 #define SCMD_WIZLIST    4

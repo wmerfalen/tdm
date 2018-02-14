@@ -26,30 +26,44 @@ namespace mods {
 		void load_c_functions();
 		void load_c_functions(duk_context *ctx);
 		int load_library(duk_context *ctx,std::string_view file);
-		void contextual_eval_string(mods::player* player,duk_context* ctx,const std::string & str);
-		void contextual_eval_string(char_data * player,duk_context* ctx,const std::string & str);
+		void contextual_eval_string(mods::player* player,duk_context* ctx,const std::string& str);
+		void contextual_eval_string(char_data * player,duk_context* ctx,const std::string& str);
 		void load_base_functions(duk_context *ctx);
 		void load_c_require_functions(duk_context *ctx);
-		bool run_test_suite(mods::player & player,std::string_view suite);
+		bool run_test_suite(mods::player& player,std::string_view suite);
 		struct include {
-			include() = delete;
-			include(duk_context *ctx,std::string_view file) 
-				: m_file(file), m_context(ctx) {
-					m_include_success = include_file();	
-			}
-			include(duk_context *ctx,std::string_view directory,std::string_view file) 
-				: m_file(file), m_dir(directory), m_context(ctx) {
+				include() = delete;
+				include(duk_context *ctx,std::string_view file)
+					: m_file(file), m_context(ctx) {
 					m_include_success = include_file();
 				}
-			bool include_file() ;
-			inline bool good() { return m_include_success; }
-			inline void set_file(const std::string& m){ m_file = m; }
-			inline void set_dir(const std::string& m){ m_dir = m; }
-			inline void set_context(duk_context *ctx){ m_context = ctx; }
+				include(duk_context *ctx,std::string_view directory,std::string_view file)
+					: m_file(file), m_dir(directory), m_context(ctx) {
+					m_include_success = include_file();
+				}
+				bool include_file() ;
+				inline bool good() {
+					return m_include_success;
+				}
+				inline void set_file(const std::string& m) {
+					m_file = m;
+				}
+				inline void set_dir(const std::string& m) {
+					m_dir = m;
+				}
+				inline void set_context(duk_context *ctx) {
+					m_context = ctx;
+				}
 
-			inline std::string_view get_file(){ return m_file; }
-			inline std::string_view get_dir(){ return m_dir; }
-			inline duk_context* get_context(){ return m_context; }
+				inline std::string_view get_file() {
+					return m_file;
+				}
+				inline std::string_view get_dir() {
+					return m_dir;
+				}
+				inline duk_context* get_context() {
+					return m_context;
+				}
 			private:
 				std::string m_file;
 				std::string m_dir;

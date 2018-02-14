@@ -1,5 +1,5 @@
-GCC = g++
-FLAGS = -std=c++14 -Wall -Werror
+GCC = g++-7
+FLAGS = -std=c++17 -Wall -Werror
 OUTDIR = build
 
 main: main.cpp

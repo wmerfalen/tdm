@@ -51,34 +51,34 @@ void ASSIGNOBJ(obj_vnum obj, SPECIAL(fname));
 
 /* functions to perform assignments */
 
-void ASSIGNMOB(mob_vnum mob, SPECIAL(fname))
-{
-  mob_rnum rnum;
+void ASSIGNMOB(mob_vnum mob, SPECIAL(fname)) {
+	mob_rnum rnum;
 
-  if ((rnum = real_mobile(mob)) != NOBODY)
-    mob_index[rnum].func = fname;
-  else if (!mini_mud)
-    log("SYSERR: Attempt to assign spec to non-existant mob #%d", mob);
+	if((rnum = real_mobile(mob)) != NOBODY) {
+		mob_index[rnum].func = fname;
+	} else if(!mini_mud) {
+		log("SYSERR: Attempt to assign spec to non-existant mob #%d", mob);
+	}
 }
 
-void ASSIGNOBJ(obj_vnum obj, SPECIAL(fname))
-{
-  obj_rnum rnum;
+void ASSIGNOBJ(obj_vnum obj, SPECIAL(fname)) {
+	obj_rnum rnum;
 
-  if ((rnum = real_object(obj)) != NOTHING)
-    obj_index[rnum].func = fname;
-  else if (!mini_mud)
-    log("SYSERR: Attempt to assign spec to non-existant obj #%d", obj);
+	if((rnum = real_object(obj)) != NOTHING) {
+		obj_index[rnum].func = fname;
+	} else if(!mini_mud) {
+		log("SYSERR: Attempt to assign spec to non-existant obj #%d", obj);
+	}
 }
 
-void ASSIGNROOM(room_vnum room, SPECIAL(fname))
-{
-  room_rnum rnum;
+void ASSIGNROOM(room_vnum room, SPECIAL(fname)) {
+	room_rnum rnum;
 
-  if ((rnum = real_room(room)) != NOWHERE)
-    world[rnum].func = fname;
-  else if (!mini_mud)
-    log("SYSERR: Attempt to assign spec to non-existant room #%d", room);
+	if((rnum = real_room(room)) != NOWHERE) {
+		world[rnum].func = fname;
+	} else if(!mini_mud) {
+		log("SYSERR: Attempt to assign spec to non-existant room #%d", room);
+	}
 }
 
 
@@ -87,26 +87,24 @@ void ASSIGNROOM(room_vnum room, SPECIAL(fname))
 ******************************************************************** */
 
 /* assign special procedures to mobiles */
-void assign_mobiles(void)
-{
+void assign_mobiles(void) {
 }
 
 
 
 /* assign special procedures to objects */
-void assign_objects(void)
-{
+void assign_objects(void) {
 }
 
 
 
 /* assign special procedures to rooms */
-void assign_rooms(void)
-{
-  room_rnum i;
+void assign_rooms(void) {
+	room_rnum i;
 
-  if (dts_are_dumps)
-    for (i = 0; i <= top_of_world; i++)
-      if (ROOM_FLAGGED(i, ROOM_DEATH))
-	world[i].func = dump;
+	if(dts_are_dumps)
+		for(i = 0; i <= top_of_world; i++)
+			if(ROOM_FLAGGED(i, ROOM_DEATH)) {
+				world[i].func = dump;
+			}
 }

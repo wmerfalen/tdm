@@ -4,17 +4,17 @@
 #include "base.hpp"
 
 namespace mods::classes {
-    struct marine : base {
-		constexpr types kind(){
+	struct marine : base {
+		constexpr types kind() {
 			return types::MARINE;
 		}
 		typedef std::shared_ptr<mods::player> player_ptr;
-        player_ptr player_obj;
+		player_ptr player_obj;
 		/* constructors and destructors */
 		marine() = delete;
 		marine(player_ptr& p) : player_obj(p) {}
 		~marine() = default;
-    };
+	};
 };
 
 #endif

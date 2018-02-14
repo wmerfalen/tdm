@@ -14,7 +14,7 @@
 
 namespace mods {
 	drone::drone(char_data* ch) : m_char_data(ch) { };
-	static struct char_data* drone::create(struct char_data* owner){
+	static struct char_data* drone::create(struct char_data* owner) {
 		struct char_data *ch = mods::globals::create_char();
 		ch->drone = true;
 		ch->desc = owner->desc;
@@ -36,55 +36,64 @@ namespace mods {
 		SET_BIT(ch->player_specials->saved.pref, PRF_AUTOEXIT);
 		return ch;
 	}
-	static void drone::start(struct char_data* owner){
+	static void drone::start(struct char_data* owner) {
 		auto drone = mods::drone::get_existing(owner);
-		if(drone == nullptr){
+
+		if(drone == nullptr) {
 			drone = mods::drone::create(owner);
 		}
-		if(IN_ROOM(drone) != NOWHERE){
+
+		if(IN_ROOM(drone) != NOWHERE) {
 			char_from_room(drone);
 		}
+
 		char_to_room(drone,IN_ROOM(owner));
 		owner->drone_simulate = true;
 	}
-	static void drone::stop(struct char_data* owner){
+	static void drone::stop(struct char_data* owner) {
 		owner->drone_simulate = false;
 	}
-	static bool drone::started(struct char_data* owner){
+	static bool drone::started(struct char_data* owner) {
 		return owner->drone_simulate;
 	}
-	static void drone::simulate(struct char_data* owner,bool value){
+	static void drone::simulate(struct char_data* owner,bool value) {
 		owner->drone_simulate = value;
 	}
-	static void drone::get_drone(struct char_data* owner){
+	static void drone::get_drone(struct char_data* owner) {
 		auto drone = mods::globals::player_list[owner->drone_uuid]->cd();
-		if(IN_ROOM(owner) == IN_ROOM(drone)){
-			if(IN_ROOM(drone) != NOWHERE){
+
+		if(IN_ROOM(owner) == IN_ROOM(drone)) {
+			if(IN_ROOM(drone) != NOWHERE) {
 				char_from_room(drone);
 			}
+
 			char_to_room(drone,NOWHERE);
-		}else{
+		} else {
 			send_to_char(owner,"Must be in the same room as your drone\r\n");
 		}
 	}
-	static struct char_data * drone::get_existing(struct char_data* owner){
-		if(owner->drone_uuid == 0 || owner->drone_uuid > mods::globals::player_list.size() -1){
+	static struct char_data * drone::get_existing(struct char_data* owner) {
+		if(owner->drone_uuid == 0 || owner->drone_uuid > mods::globals::player_list.size() -1) {
 			return nullptr;
 		}
+
 		return mods::globals::player_list[owner->drone_uuid]->cd();
 	}
 
-	static bool drone::interpret(struct char_data *owner,const std::string & argument){
+	static bool drone::interpret(struct char_data *owner,const std::string& argument) {
 		auto drone = mods::globals::player_list[owner->drone_uuid];
-		if(argument.compare("drone stop") == 0){
+
+		if(argument.compare("drone stop") == 0) {
 			mods::drone::stop(owner);
 			return true;
 		}
-		if(argument.compare("scan") == 0){
+
+		if(argument.compare("scan") == 0) {
 			command_interpreter(drone->cd(),"scan");
 			return false;
 		}
-		switch(argument[0]){
+
+		switch(argument[0]) {
 			case 'n':
 			case 'e':
 			case 's':
@@ -96,7 +105,9 @@ namespace mods {
 			case 'l':
 				command_interpreter(drone->cd(),argument.substr(0,1).c_str());
 				return false;
-			default: return false;
+
+			default:
+				return false;
 		}
 	}
 };

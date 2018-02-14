@@ -17,20 +17,20 @@
 #define BOARD_MAGIC	1048575	/* arbitrary number - see modify.c */
 
 struct board_msginfo {
-   int	slot_num;     /* pos of message in "master index" */
-   char	*heading;     /* pointer to message's heading */
-   int	level;        /* level of poster */
-   int	heading_len;  /* size of header (for file write) */
-   int	message_len;  /* size of message text (for file write) */
+	int	slot_num;     /* pos of message in "master index" */
+	char	*heading;     /* pointer to message's heading */
+	int	level;        /* level of poster */
+	int	heading_len;  /* size of header (for file write) */
+	int	message_len;  /* size of message text (for file write) */
 };
 
 struct board_info_type {
-   obj_vnum vnum;	/* vnum of this board */
-   int	read_lvl;	/* min level to read messages on this board */
-   int	write_lvl;	/* min level to write messages on this board */
-   int	remove_lvl;	/* min level to remove messages from this board */
-   char	filename[50];	/* file to save this board to */
-   obj_rnum rnum;	/* rnum of this board */
+	obj_vnum vnum;	/* vnum of this board */
+	int	read_lvl;	/* min level to read messages on this board */
+	int	write_lvl;	/* min level to write messages on this board */
+	int	remove_lvl;	/* min level to remove messages from this board */
+	char	filename[50];	/* file to save this board to */
+	obj_rnum rnum;	/* rnum of this board */
 };
 
 #define BOARD_VNUM(i) (board_info[i].vnum)
