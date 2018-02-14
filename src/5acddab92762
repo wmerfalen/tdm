@@ -1,8 +1,0 @@
-template <class... Args> struct cache_size_count;
-template <> struct cache_size_count<> {
-	static constexpr uint8_t value = 0;
-};
-template <class T, class... Args> struct cache_size_count<T, Args...> {
-	static constexpr uint8_t value = size_traits<T>::cache_size
-		+ cache_size_count<Args...>::value;
-};

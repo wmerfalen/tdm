@@ -5,7 +5,7 @@
 boost-cpp
 js-warnings
 warnings
-*.objs
 ../js-warnings
-boost_1_66_0/
+boost_1_66_0
 ../lib
+GSL
