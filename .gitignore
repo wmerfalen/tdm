@@ -12,3 +12,5 @@ src/mods/acl/experiment
 src/mods/acl/tests/original.conf
 syslog*
 *a.out*
+js-warnings
+lib
