@@ -2,7 +2,7 @@
 #define  __MENTOC_MODS_CLASSES_MEDIC_HEADER__
 
 #include "base.hpp"
-
+#include "../../comm.h"
 namespace mods::classes {
 	struct medic : base {
 		typedef std::shared_ptr<mods::player> player_ptr;

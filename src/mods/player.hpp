@@ -32,7 +32,7 @@ namespace mods {
 			using   class_type = mods::classes::types;
 			typedef short weapon_set;
 			typedef std::vector<class_type> class_capability_t;
-			typedef std::vector<std::unique_ptr<mods::classes::base>> class_info_t;
+			typedef std::vector<std::shared_ptr<mods::classes::base>> class_info_t;
 			using   chdata = struct char_data;
 			using   chdata_ptr = struct char_data *;
 
@@ -58,7 +58,7 @@ namespace mods {
 			bool has_weapon_capability(int);
 
 			/* class info */
-			std::unique_ptr<mods::classes::base>& get_class(class_type);
+			std::shared_ptr<mods::classes::base>& get_class(class_type);
 
 			/* ammo gettters */
 			obj_data* get_first_ammo_of_type(const weapon_type_t&) const;

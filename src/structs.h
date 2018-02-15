@@ -17,6 +17,9 @@
 #include <memory>
 #include "mods/ai_state.hpp"
 #include <functional>
+namespace mods {
+	class player;
+};
 typedef std::size_t weapon_type_t;
 typedef std::map<struct char_data*,std::unique_ptr<mods::ai_state>> ai_state_map;
 typedef short faction_t;
@@ -987,6 +990,7 @@ struct char_data {
 	short disorient;
 	bool pave_mode;
 	std::shared_ptr<pavement> pavements;
+	std::shared_ptr<mods::player> player_ptr;
 };
 /* ====================================================================== */
 

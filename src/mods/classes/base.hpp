@@ -2,8 +2,10 @@
 #define  __MENTOC_MODS_CLASSES_BASE_HEADER__
 
 #include "types.hpp"
-#include "../player.hpp"
 #include <memory>
+namespace mods {
+	class player;
+};
 namespace mods::classes {
 	struct base {
 		virtual types kind() {
@@ -16,5 +18,6 @@ namespace mods::classes {
 		virtual ~base() = default;
 	};
 };
+#include "../player.hpp"
 
 #endif

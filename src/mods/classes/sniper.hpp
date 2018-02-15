@@ -1,8 +1,7 @@
 #ifndef __MENTOC_MODS_CLASSES_SNIPER_HEADER__
 #define  __MENTOC_MODS_CLASSES_SNIPER_HEADER__
-
 #include "base.hpp"
-
+#include <memory>
 namespace mods::classes {
 	struct sniper : base {
 		constexpr types kind() {

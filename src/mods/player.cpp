@@ -110,23 +110,23 @@ namespace mods {
 		for(auto& capability : caps) {
 			switch(capability) {
 				case class_type::MEDIC:
-					m_class_info.push_back(std::make_unique<classes::medic>(m_self_ptr));
+					m_class_info.push_back(std::make_shared<classes::medic>(m_self_ptr));
 					break;
 
 				case class_type::SNIPER:
-					m_class_info.push_back(std::make_unique<classes::sniper>(m_self_ptr));
+					m_class_info.push_back(std::make_shared<classes::sniper>(m_self_ptr));
 					break;
 
 				case class_type::MARINE:
-					m_class_info.push_back(std::make_unique<classes::marine>(m_self_ptr));
+					m_class_info.push_back(std::make_shared<classes::marine>(m_self_ptr));
 					break;
 
 				case class_type::SUPPORT:
-					m_class_info.push_back(std::make_unique<classes::support>(m_self_ptr));
+					m_class_info.push_back(std::make_shared<classes::support>(m_self_ptr));
 					break;
 
 				case class_type::ENGINEER:
-					m_class_info.push_back(std::make_unique<classes::engineer>(m_self_ptr));
+					m_class_info.push_back(std::make_shared<classes::engineer>(m_self_ptr));
 					break;
 			}
 
@@ -135,6 +135,7 @@ namespace mods {
 	}
 	void player::set_shared_ptr(std::shared_ptr<mods::player>& self_ptr) {
 		m_self_ptr = self_ptr;
+		cd()->player_ptr = self_ptr;
 	}
 
 	player::player(mods::player* ptr) {
@@ -165,7 +166,7 @@ namespace mods {
 	bool player::can_snipe(char_data *target) {
 		return true;
 	}
-	std::unique_ptr<mods::classes::base>& player::get_class(class_type c_type) {
+	std::shared_ptr<mods::classes::base>& player::get_class(class_type c_type) {
 		for(auto& ptr : m_class_info) {
 			if(ptr->kind() == c_type) {
 				return ptr;
