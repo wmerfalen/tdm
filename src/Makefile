@@ -3,28 +3,27 @@
 #
 THIS_DIR = $(shell pwd)
 # C compiler to use
-           CC = g++-7 -g -A -da -std=c++17 -fpermissive -MMD \
-                                     -I$(THIS_DIR)/mods/include \
-                                     -L$(THIS_DIR)/mods/lib \
-                                     -I$(THIS_DIR)/boost-cpp \
-                                     -L$(THIS_DIR)/boost-cpp/build/lib
+CC = g++-7 -g -A -da -std=c++17 -fpermissive -MMD \
+-I$(THIS_DIR)/mods/include \
+-L$(THIS_DIR)/mods/lib \
+-I$(THIS_DIR)/boost-cpp \
+-L$(THIS_DIR)/boost-cpp/build/lib
 
 # Path to cxref utility
-                                     CXREF = cxref
+CXREF = cxref
 
 # Any special flags you want to pass to the compiler
-                                             MYFLAGS = -Wall -Wno-char-subscripts -Wcomment
+MYFLAGS = -Wall -Wno-char-subscripts -Wcomment
 
 #flags for profiling (see hacker.doc for more information)
-                                                       PROFILE =
+PROFILE =
 
-                                                           BINDIR = ../bin
+BINDIR = ../bin
 
-                                                                    CFLAGS = -g -O2 $(MYFLAGS) $(PROFILE)
+CFLAGS = -g -O2 $(MYFLAGS) $(PROFILE)
 
 
-                                                                             MODS_SRC :
-                                                                             = $(wildcard mods/*.cpp)
+MODS_SRC := $(wildcard mods/*.cpp)
 MODS_OBJ := $(patsubst mods/%.cpp,mods/%.o,$(MODS_SRC))
 MODS_CLASSES_SRC := $(wildcard mods/classes/*.cpp)
 MODS_CLASSES_OBJ := $(patsubst mods/classes/%.cpp,mods/classes/%.o,$(MODS_CLASSES_SRC))

@@ -8,6 +8,7 @@ src/mods/acl/tests/mk
 src/mods/acl/tests/fileparser
 config.*
 src/.accepted
+src/mods/test/*
 src/mods/acl/experiment
 src/mods/acl/tests/original.conf
 syslog*

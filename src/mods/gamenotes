@@ -3,36 +3,57 @@
 		[ ] -> if attacked while cooking grenade, grenade is dropped!
 		[ ] -> if cooked 5 seconds (total is six till it goes off) it has DISORIENT+5 to all mobs/players 1 room away
 	[ ] -> Shrapnel has 60% chance of inflicting 10% GREN DAM 1 room away, 5% GREN DAM 2 rooms away
-[ ] -> DISORIENT
-	[ ] -> Remaps actions from being one thing to another. 
-		[ ] -> If player is disoriented, reloading can cause one of 3 things to happen
-			-> 1) Accidentally fire gun (50% chance of hitting friendly)
-			-> 2) Drop ammo (30% AMMO reduction)
-			-> 3) Wander into friendly fire (30% chance of getting hit. 10% chance FATAL)
-		[ ] -> If player is disoriented, sniping is 30% less accurate 
 [ ] -> BREACH CHARGES
 	[ ] -> Breachable surfaces 
 		[ ] -> Reinforced walls cannot be breached with normal breach charges
-		[ ] -> Boarded up windows/doors and wood/plaster walls can be breached
 			[ ] -> mute jammers can prevent breaches
-	[ ] -> Flanking
-		[ ] -> CORE: Mobs can face north, east, south, west
-		[ ] -> IF a mob is facing east and you breach from the west, you can then snipe them which will cause a CRITICAL hit
-	
-[ ] -> BOTS
-	[ ] -> Robots cannot get stunned or lose consciousness
-		[ ] -> Instead, robots become less efficient and DAMROLL is reduced
+[ ] -> TYPES OF ENEMIES
+	[ ] -> Reptilians
+		[ ] -> A shape-shifting alien that can take on a human appearance
+		[ ] -> pursuit of mind-control technologies
+		[ ] -> willing to trade humans or human body parts for money
+	[ ] -> Humans
+		[ ] -> Crime lords that are engaged in various activities
+			[ ] -> Drug/human trafficking
+		[ ] -> Radical extremists
+			[ ] -> suicide bombers
+			[ ] -> brain-washed citizens
+		[ ] -> thieves
+	[ ] -> Altered Humans
+		[ ] -> implants on the back of their necks control them from afar. 
+			[ ] -> control unit in reptilian base can be disabled 
+				[ ] -> guards will no longer be aggressive
+		[ ] 
+		[ ] -> cybernetic implants that, if not damaged, can be dismembered and salvaged to make loot
+	[ ] -> Guardians
+		[ ] -> alien beings with human features
+		[ ] -> superior strength and high intelligence
+		[ ] -> generally good, but their pursuit of the highest morals can ironically result in immoral deeds.
+		[ ] -> tall and muscular. generally light skinned
+[ ] -> QUESTS
+	[ ] -> Disrupt the reptilian presence
+		[ ] -> tactical map will be randomly populated with areas that are known to have reptilian shape-shifters. Use a custom drone that you can find at the Tacnav armory to scan all individuals in the area. Take out any that are marked as ALIEN THREAT
+		[ ] -> 
+	[ ] -> Kidnap radical extremists and trade them in to the reptilians
+		[ ] -> visit the congregation at the extremist hide out and use a tranquilizer gun to knockout N radical extremists. Use your helium extraction unit to lift the bodies into the air. An air unit will lock onto their location and bring them back to base. Make your way back to base. The bodies will be loaded into a truck in the underground parking garage. Look for the truck marked MK-ULTRA-6. Get in the truck and drive it to the Francescos Italian restaurant. Look at the AI driving module for info on how to navigate to the restaurant. Once there, a man will enter the truck. He will give you the cash for your efforts.  
 
-[ ] -> HIVE PRESENCE
-	[ ] -> A hive consists of a queen and several minions
-	[ ] -> A hive over time grows and consumes an area if not contained
-
-[ ] -> AI
-	[ ] -> Mobs should interact based on external data fed to the system
-	[ ] -> STATES
-		[ ] -> WANDER {possibility to hang with other groups of similar hp}
-		[ ] -> SUSPICIOUS {hasn't found player but found tracks of player}
-		[ ] -> FIGHT {shooting at player until player is dead}
-		[ ] -> PURSUIT {pursuing player if it's worth it}
-		[ ] -> SUSPICIOUS PHASE 2 {On alert for anything suspicious}
-[ ] -> 
+[ ] -> AREAS
+	[ ] -> underground sewer base
+		[ ] -> some of the lower reptilian beings dwell down here
+		[ ] -> experimental drone beings will melee players
+			[ ] -> when killed, corrossive acid from their blood is sprayed. chance of getting hit
+		[ ] -> at the heart of the sewer system is a large area that contains a dome cover. When you find the entrance into the dome you can take an elevator down to a power plant. This power plant supplies the reptilian bases with power and energy. The reptilians rely on heating and cooling to regulate their body temperature. If you destory the generators in this power plant, it will take 2 IRL days for the generators to be repaired. While the generators are down, all reptilians that reside in the main reptilian base will be at 75% of their HP
+	[ ] -> polygamist cult churches
+		[ ] -> several churches reside in different areas across the mud
+	[ ] -> Lawton City
+		[ ] -> Downtown Lawton 
+			[ ] -> Melting pot. All TYPES OF ENEMIES reside here
+			[ ] -> entrance to underground sewer is here
+			[ ] -> some gun/armory shops reside here
+			[ ] -> restaurants reside here 
+				[ ] -> Los Putos Mexican Food
+					[ ] -> run by the Puto Locos crime organization
+					[ ] -> killing all the workers will make one drop a key
+						[ ] -> key opens a back door that leads to a large storage garage. This storage garage leads to an underground tunnel that ultimately leads to one of the Puto Locos drug labs.
+				[ ]
+			[ ] -> reptilian-run Francesco's Italian food

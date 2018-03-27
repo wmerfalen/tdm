@@ -86,6 +86,7 @@ namespace mods {
 			player->capture_output(false);
 			mods::globals::current_player->executing_js(false);
 			duk_push_string(ctx,player->get_captured_output().data());
+			player->clear_captured_output();
 			return 1;
 		}
 		static duk_ret_t mob_death_trigger(duk_context *ctx) {

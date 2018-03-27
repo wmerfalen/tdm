@@ -22,6 +22,8 @@
 #include "constants.h"
 #include "globals.hpp"
 
+#include "mods/behaviour_tree_impl.hpp"
+using behaviour_tree = mods::behaviour_tree_impl;
 
 /* external globals */
 extern int no_specials;
@@ -38,6 +40,7 @@ bool aggressive_mob_on_a_leash(struct char_data *slave, struct char_data *master
 
 #define MOB_AGGR_TO_ALIGN (MOB_AGGR_EVIL | MOB_AGGR_NEUTRAL | MOB_AGGR_GOOD)
 
+
 void mobile_activity(void) {
 	struct char_data *ch, *next_ch, *vict;
 	struct obj_data *obj, *best_obj;
@@ -48,12 +51,6 @@ void mobile_activity(void) {
 		next_ch = ch->next;
 
 		if(!IS_MOB(ch)) {
-			continue;
-		}
-
-		auto ret = mods::globals::state_fetch(ch)->dispatch(ch);
-
-		if(ret) {
 			continue;
 		}
 
@@ -204,8 +201,11 @@ void mobile_activity(void) {
 		}
 
 		/* Add new mobile actions here */
+		if(MOB_FLAGGED(ch,MOB_HAS_TREE)){
+			behaviour_tree::dispatch(ch);
+		}
 
-	}				/* end for() */
+	}/* end for() */
 }
 
 

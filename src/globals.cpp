@@ -237,7 +237,7 @@ namespace mods {
 		}
 		std::unique_ptr<ai_state>& state_fetch(struct char_data* ch) {
 			if(states.find(ch) == states.end()) {
-				states[ch] = std::make_unique<ai_state>(ch,0,0);
+				return states[ch] = std::make_unique<ai_state>(ch,0,0);
 			}
 
 			return states[ch];
@@ -343,41 +343,43 @@ namespace mods {
 				int door = 0;
 				std::cerr << "'" << argument << "'\r\n";
 
-				switch(argument[0]) {
-					case 'u':
-					case 'U':
-						door = UP;
-						break;
+				if(std::string(argument).length() == 1){
+					switch(argument[0]) {
+						case 'u':
+						case 'U':
+							door = UP;
+							break;
 
-					case 's':
-					case 'S':
-						door = SOUTH;
-						break;
+						case 's':
+						case 'S':
+							door = SOUTH;
+							break;
 
-					case 'w':
-					case 'W':
-						door = WEST;
-						break;
+						case 'w':
+						case 'W':
+							door = WEST;
+							break;
 
-					case 'e':
-					case 'E':
-						door = EAST;
-						break;
+						case 'e':
+						case 'E':
+							door = EAST;
+							break;
 
-					case 'n':
-					case 'N':
-						door = NORTH;
-						break;
+						case 'n':
+						case 'N':
+							door = NORTH;
+							break;
 
-					case 'd':
-					case 'D':
-						door = DOWN;
-						break;
-				}
+						case 'd':
+						case 'D':
+							door = DOWN;
+							break;
+					}
 
-				if(!CAN_GO(player->cd(),door)) {
-					mods::builder::pave_to(player->cd(),&world[IN_ROOM(ch)],door);
-					return true;
+					if(!CAN_GO(player->cd(),door)) {
+						mods::builder::pave_to(player->cd(),&world[IN_ROOM(ch)],door);
+						return true;
+					}
 				}
 			}
 

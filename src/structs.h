@@ -217,6 +217,7 @@ typedef uint64_t uuid_t;
 #define MOB_NOBASH	 (1 << 16) /* Mob can't be bashed (e.g. trees)	*/
 #define MOB_NOBLIND	 (1 << 17) /* Mob can't be blinded		*/
 #define MOB_NOTDEADYET   (1 << 18) /* (R) Mob being extracted.		*/
+#define MOB_HAS_TREE (1 << 19) /* If the mob has a behaviour tree */
 
 
 /* Preference flags: used by char_data.player_specials.pref */
@@ -915,6 +916,7 @@ struct mob_special_data {
 	byte default_pos;        /* Default position for NPC                */
 	byte damnodice;          /* The number of damage dice's	       */
 	byte damsizedice;        /* The size of the damage dice's           */
+	int16_t behaviour_tree;
 };
 
 

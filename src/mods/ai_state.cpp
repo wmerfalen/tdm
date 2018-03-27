@@ -25,9 +25,7 @@ extern size_t send_to_char(struct char_data *ch, const char *messg, ...);
 extern void hit(struct char_data *ch, struct char_data *victim, int type);
 namespace mods {
 	void seed() {
-		struct timeval t;
-		gettimeofday(&t,nullptr);
-		std::srand(t.tv_usec);
+		/** deprecated */
 	}
 	uint32_t ai_state::dispatch(struct char_data* ch) {
 		return 0;

@@ -486,6 +486,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "smile"    , POS_RESTING , do_action   , 0, 0 },
 	{ "smirk"    , POS_RESTING , do_action   , 0, 0 },
 	{ "snicker"  , POS_RESTING , do_action   , 0, 0 },
+	/** mods */
 	{ "js"  , POS_RESTING , do_js   , 0, 0 },
 	{ "quest"  , POS_RESTING , do_quest   , 0, 0 },
 	{ "recall"  , POS_RESTING , do_recall   , 0, 0 },
@@ -505,6 +506,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "drone"  , POS_RESTING , do_drone   , 0, 0 },
 	{ "throw"  , POS_RESTING , do_throw   , 0, 0 },
 	{ "ammo"  , POS_RESTING , do_ammo   , 0, 0 },
+	/** -- end mods */
 	{ "snap"     , POS_RESTING , do_action   , 0, 0 },
 	{ "snarl"    , POS_RESTING , do_action   , 0, 0 },
 	{ "sneeze"   , POS_RESTING , do_action   , 0, 0 },

@@ -11,6 +11,7 @@
 #include "../shop.h"
 #include "../db.h"
 #include "../globals.hpp"
+#include "jx.hpp"
 
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
 #define MENTOC_OBI2(i,a) obj->i = get_intval(#a).value_or(obj->i);
@@ -18,6 +19,7 @@
 #define MENTOC_OBS2(i,a) obj->i = get_strval(#a).value_or(obj->i);
 using objtype = mods::object::type;
 using shrd_ptr_player_t = std::shared_ptr<mods::player>;
+using jxcomp = mods::jx::compositor;
 typedef mods::sql::compositor<mods::pq::transaction> sql_compositor;
 extern void parse_sql_zones();
 namespace mods::builder {
@@ -1813,6 +1815,9 @@ ACMD(do_obuild) {
 	if(args.has_value()) {
 		mods::builder::report_status<shrd_ptr_player_t>(player,"Creating new object");
 		obj_proto.push_back({});
+		if(player->is_executing_js()){
+			*player << "{index: " << obj_proto.size() - 1 << "}";
+		}
 		mods::builder::report_success<shrd_ptr_player_t>(player,"Object created");
 		return;
 	}
@@ -2031,16 +2036,34 @@ ACMD(do_obuild) {
 	if(args.has_value()) {
 		mods::builder::report_status<shrd_ptr_player_t>(player,"listing...");
 		unsigned obj_id = 0;
-		player->pager_start();
-
-		for(auto& obj_reference : obj_proto) {
-			auto obj = &obj_reference;
-			*player << "{gld}[" << obj_id++ << "]{/gld} :->{red} [" <<
-			        obj->short_description << "]{/red}";
+		if(!player->is_executing_js()){
+			player->pager_start();
 		}
 
-		player->pager_end();
-		player->page(0);
+		jxcomp jx; 
+		jx.array_start("objects");
+		for(auto& obj_reference : obj_proto) {
+			auto obj = &obj_reference;
+			if(player->is_executing_js()){
+				jx.object_start("")
+					.push("index",obj_id)
+					.push("item_number",obj->item_number)
+					.push("name",obj->name)
+					.push("short_description",obj->short_description)
+				.object_end();
+			}else{
+				*player << "{gld}[" << obj_id << "]{/gld} :->{red} [" <<
+						obj->short_description << "]{/red}";
+			}
+			obj_id++;
+		}
+		if(player->is_executing_js()){
+			jx.array_end();
+			*player << jx.get();
+		}else{
+			player->pager_end();
+			player->page(0);
+		}
 		return;
 	}
 
@@ -2858,34 +2881,56 @@ ACMD(do_rbuildzone) {
 	}
 
 	if(std::string(&command[0]).compare("list") == 0) {
-		mods::builder::report_status<shrd_ptr_player_t>(player,"listing...");
+		if(!player->is_executing_js()){
+			mods::builder::report_status<shrd_ptr_player_t>(player,"listing...");
+		}
 		auto txn = mods::pq::transaction(*mods::globals::pq_con);
 		std::string check_sql = "SELECT id,zone_start,zone_end,zone_name,lifespan,reset_mode FROM zone";
 		auto check_result = mods::pq::exec(txn,check_sql);
 		mods::pq::commit(txn);
 
-		player->pager_start();
-
-		for(auto row : check_result) {
-			std::string acc = "{red}";
-			acc += std::string("Virtual ZoneID:{/red}");
-			acc += std::to_string(row[0].as<int>());
-			acc += "{/red}[";
-			acc += std::to_string(row[1].as<int>());
-			acc += "-";
-			acc += std::to_string(row[2].as<int>());
-			acc += "]{gld}{";
-			acc += row["zone_name"].c_str();
-			acc += "}{/gld} (";
-			acc += std::to_string(row[4].as<int>());
-			acc += ") (";
-			acc += std::to_string(row[5].as<int>());
-			acc += ")\r\n";
-			*player << acc;
+		if(!player->is_executing_js()){
+			player->pager_start();
 		}
 
-		player->pager_end();
-		player->page(0);
+		jxcomp jx; 
+		jx.array_start("zones");
+		for(auto row : check_result) {
+			if(!player->is_executing_js()){
+				std::string acc = "{red}";
+				acc += std::string("Virtual ZoneID:{/red}");
+				acc += std::to_string(row[0].as<int>());
+				acc += "{/red}[";
+				acc += std::to_string(row[1].as<int>());
+				acc += "-";
+				acc += std::to_string(row[2].as<int>());
+				acc += "]{gld}{";
+				acc += row["zone_name"].c_str();
+				acc += "}{/gld} (";
+				acc += std::to_string(row[4].as<int>());
+				acc += ") (";
+				acc += std::to_string(row[5].as<int>());
+				acc += ")\r\n";
+				*player << acc;
+			}else{
+				jx.object_start("")
+					.push("id",row[0].as<int>())
+					.push("start",row[1].as<int>())
+					.push("end",row[2].as<int>())
+					.push("name",row["zone_name"].c_str())
+					.push("lifespan",row["lifespan"].as<int>())
+					.push("reset_mode",row["reset_mode"].as<int>())
+				.object_end();
+			}
+		}
+
+		if(player->is_executing_js()){
+			jx.array_end();
+			*player << jx.get();
+		}else{
+			player->pager_end();
+			player->page(0);
+		}
 		return;
 	}
 
@@ -3093,7 +3138,7 @@ ACMD(do_rbuild) {
 		                      "  |    number that the paved rooms will start at.\r\n" <<
 		                      "  |    When you are done paving type 'rbuild pave off')\r\n"<<
 		                      "  |____[examples]\r\n" <<
-		                      "  |:: rbuild pave on 100\r\n" <<
+		                      "  |:: rbuild pave on 100 5\r\n" <<
 		                      "  |   (starts pave mode. The first room will have a virtual room number of 100, and the next \r\n" <<
 		                      "  |   subsequent rooms will be 101, 102, etc. until you type 'rbuild pave off'. Once in pave mode, \r\n" <<
 		                      "  |   walk to a bunch of different rooms and pave out a walkway. When you type 'rbuild pave off' it will \r\n" <<

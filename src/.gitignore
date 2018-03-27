@@ -9,3 +9,5 @@ warnings
 boost_1_66_0
 ../lib
 GSL
+../callgrind.out*
+mods/test/*

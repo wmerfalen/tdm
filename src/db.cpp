@@ -28,6 +28,8 @@
 #include "mods/sql.hpp"
 #include <vector>
 #include <deque>
+#include "mods/behaviour_tree_impl.hpp"
+using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 
 /**************************************************************************
 *  declarations of most of the 'global' variables                         *
@@ -1037,6 +1039,7 @@ void parse_sql_mobiles() {
 			GET_MAX_MOVE(&proto) = row["mob_max_move"].as<int>();
 			proto.mob_specials.damnodice = row["mob_damnodice"].as<int>();
 			proto.mob_specials.damsizedice = row["mob_damsizedice"].as<int>();
+			proto.mob_specials.behaviour_tree = behaviour_tree::NONE;
 			GET_DAMROLL(&proto) = row["mob_damroll"].as<int>();
 			GET_GOLD(&proto) = row["mob_gold"].as<int>();
 			GET_EXP(&proto) = row["mob_exp"].as<int>();
@@ -3249,6 +3252,7 @@ void reset_char(struct char_data *ch) {
 	FIGHTING(ch) = NULL;
 	ch->char_specials.position = POS_STANDING;
 	ch->mob_specials.default_pos = POS_STANDING;
+	ch->mob_specials.behaviour_tree = behaviour_tree::NONE;
 	ch->char_specials.carry_weight = 0;
 	ch->char_specials.carry_items = 0;
 
@@ -3279,6 +3283,7 @@ void clear_char(struct char_data *ch) {
 	GET_WAS_IN(ch) = NOWHERE;
 	GET_POS(ch) = POS_STANDING;
 	ch->mob_specials.default_pos = POS_STANDING;
+	ch->mob_specials.behaviour_tree = behaviour_tree::NONE;
 	ch->drone_simulate = false;
 	ch->drone = false;
 	ch->drone_owner = 0;

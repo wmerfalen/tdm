@@ -1,5 +1,5 @@
-#ifndef __MENTOC_MODS_SQL_HEADER__
-#define __MENTOC_MODS_SQL_HEADER__
+#ifndef __MENTOC_MODS_JX_HEADER__
+#define __MENTOC_MODS_JX_HEADER__
 #include <map>
 #include <vector>
 #include <iostream>
@@ -117,6 +117,10 @@ namespace mods::jx {
 				push(key,std::to_string(value));
 				return *this;
 			}
+			compositor& push(const std::string& key, unsigned int value) {
+				push(key,std::to_string(value));
+				return *this;
+			}
 			compositor& push(const std::string& key, const std::string& value) {
 				if(m_levels[m_current_level]) {
 					m_parts.push_back(",");
@@ -135,6 +139,8 @@ namespace mods::jx {
 					m_parts.push_back(",");
 				}
 
+				m_levels[m_current_level]++;
+
 				++m_current_level;
 
 				if(key.length() == 0) {
@@ -146,6 +152,7 @@ namespace mods::jx {
 				return *this;
 			}
 			compositor& object_end() {
+				m_levels[m_current_level] = 0;
 				--m_current_level;
 				m_parts.push_back("}");
 				return *this;
@@ -166,6 +173,7 @@ namespace mods::jx {
 				return *this;
 			}
 			compositor& array_end() {
+				m_levels[m_current_level] = 0;
 				--m_current_level;
 				m_parts.push_back("]");
 				return *this;

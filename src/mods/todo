@@ -10,13 +10,13 @@
 [x] -> Global include file that doesn't require a million deps
 [x] -> Update sniping behaviour strings to not say dagger stuff
 [-] -> Create world viewer/builder in browser
-[ ] -> :Create in-game world builder {medium}
-[ ] -> :flush these rooms to lmdb {small}
-[ ] -> :when parsing rooms in db.cpp also parse lmdb rooms {small}
+[x] -> :Create in-game world builder {medium}
+[x] -> :flush these rooms to lmdb {small}
+[-] -> :when parsing rooms in db.cpp also parse lmdb rooms {small}
 #october{2017}
 [x] -> Create preferences list and store it per player in lmdb {medium}
 [x] -> :create screen width preference {small}
-[ ] -> :create automap preference
+[x] -> :create automap preference
 [x] -> Create breachable doors
 [x] -> :create thermite and breach items
 [ ] -> :create thermite command
