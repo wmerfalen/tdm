@@ -9,7 +9,7 @@
 ************************************************************************ */
 
 #define NUM_RESERVED_DESCS	8
-
+#include "structs.h"
 /* comm.c */
 size_t	send_to_char(struct char_data *ch, const char *messg, ...) __attribute__((format(printf, 2, 3)));
 void	send_to_all(const char *messg, ...) __attribute__((format(printf, 1, 2)));

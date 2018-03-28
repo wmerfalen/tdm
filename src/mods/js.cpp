@@ -114,7 +114,7 @@ namespace mods {
 		static duk_ret_t send_to_uuid(duk_context *ctx) {
 			/* First parameter is character name */
 			auto cuuid = duk_to_number(ctx,0);
-			send_to_char(mods::globals::player_list.at(cuuid)->cd(),duk_to_string(ctx,1));
+			send_to_char(mods::globals::player_list.at(cuuid)->cd(),"%s",duk_to_string(ctx,1));
 			return 0;	/* number of return values */
 		}
 		static duk_ret_t send_to_char(duk_context *ctx) {
@@ -124,7 +124,7 @@ namespace mods {
 			for(auto ch = character_list; ch->next; ch = ch->next) {
 				if(c_name.compare(ch->player.name) == 0) {
 					if(!IS_NPC(ch)) {
-						send_to_char(ch,duk_to_string(ctx,1));
+						send_to_char(ch,"%s",duk_to_string(ctx,1));
 						return 0;
 					}
 				}

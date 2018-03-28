@@ -23,7 +23,6 @@
 #include "globals.hpp"
 
 #include "mods/behaviour_tree_impl.hpp"
-using behaviour_tree = mods::behaviour_tree_impl;
 
 /* external globals */
 extern int no_specials;
@@ -202,7 +201,7 @@ void mobile_activity(void) {
 
 		/* Add new mobile actions here */
 		if(MOB_FLAGGED(ch,MOB_HAS_TREE)){
-			behaviour_tree::dispatch(ch);
+			mods::behaviour_tree_impl::dispatch(ch);
 		}
 
 	}/* end for() */

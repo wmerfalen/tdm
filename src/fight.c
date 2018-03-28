@@ -22,6 +22,7 @@
 #include "screen.h"
 #include "constants.h"
 #include "mods/weapon.hpp"
+#include "mods/behaviour_tree_impl.hpp"
 
 #define MOD_SNIPE_SAME_ROOM_THACO 250
 #define MOD_SNIPE_DISTANCE_THACO 5
@@ -966,6 +967,9 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
 	ch->last_fight_timestamp = time(NULL);
 
 	if(GET_POS(victim) <= POS_DEAD) {
+		if(IS_NPC(victim)){
+			victim->mob_specials.behaviour_tree = mods::behaviour_tree_impl::NONE;
+		}
 		/* This is "normal"-ish now with delayed extraction. -gg 3/15/2001 */
 		if(PLR_FLAGGED(victim, PLR_NOTDEADYET) || MOB_FLAGGED(victim, MOB_NOTDEADYET)) {
 			return (-1);
@@ -1154,6 +1158,12 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
 
 		die(ch,victim);
 		return (-1);
+	}
+
+	/** Add behaviour tree if it's a mob */
+	if(IS_NPC(victim) && victim->mob_specials.behaviour_tree != 
+			mods::behaviour_tree_impl::snipe_tracking){
+		victim->mob_specials.behaviour_tree = mods::behaviour_tree_impl::snipe_tracking;
 	}
 
 	return (dam);

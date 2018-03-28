@@ -1757,7 +1757,6 @@ ACMD(do_wiznet) {
 	     buf2[MAX_INPUT_LENGTH + MAX_NAME_LENGTH + 32];
 	struct descriptor_data *d;
 	char emote = FALSE;
-	char any = FALSE;
 	int level = LVL_IMMORT;
 
 	skip_spaces(&argument);
@@ -1792,7 +1791,7 @@ ACMD(do_wiznet) {
 		case '@':
 			send_to_char(ch, "God channel status:\r\n");
 
-			for(any = 0, d = descriptor_list; d; d = d->next) {
+			for(d = descriptor_list; d; d = d->next) {
 				if(STATE(d) != CON_PLAYING || GET_LEVEL(d->character) < LVL_IMMORT) {
 					continue;
 				}
@@ -2037,7 +2036,6 @@ ACMD(do_show) {
 	zone_vnum zvn;
 	byte self = FALSE;
 	struct char_data *vict;
-	struct obj_data *obj;
 	struct descriptor_data *d;
 	char field[MAX_INPUT_LENGTH], value[MAX_INPUT_LENGTH],
 	     arg[MAX_INPUT_LENGTH], buf[MAX_STRING_LENGTH];
@@ -2173,25 +2171,19 @@ ACMD(do_show) {
 				}
 			}
 
-			for(auto& obj_reference : object_list) {
-				/* TODO !test !integrity */
-				obj = &obj_reference;
-				k++;
-			}
-
 			send_to_char(ch,
 			             "Current stats:\r\n"
 			             "  %5d players in game  %5d connected\r\n"
 			             "  %5d registered\r\n"
 			             "  %5d mobiles          %5d prototypes\r\n"
-			             "  %5d objects          %5d prototypes\r\n"
+			             "  %lu objects          %5d prototypes\r\n"
 			             "  %5d rooms            %5d zones\r\n"
 			             "  %5d large bufs\r\n"
 			             "  %5d buf switches     %5d overflows\r\n",
 			             i, con,
 			             top_of_p_table + 1,
 			             j, top_of_mobt + 1,
-			             k, top_of_objt + 1,
+			             object_list.size(), top_of_objt + 1,
 			             top_of_world + 1, top_of_zone_table + 1,
 			             buf_largecount,
 			             buf_switches, buf_overflows

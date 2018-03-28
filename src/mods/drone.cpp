@@ -14,7 +14,7 @@
 
 namespace mods {
 	drone::drone(char_data* ch) : m_char_data(ch) { };
-	static struct char_data* drone::create(struct char_data* owner) {
+	 struct char_data* drone::create(struct char_data* owner) {
 		struct char_data *ch = mods::globals::create_char();
 		ch->drone = true;
 		ch->desc = owner->desc;
@@ -36,7 +36,7 @@ namespace mods {
 		SET_BIT(ch->player_specials->saved.pref, PRF_AUTOEXIT);
 		return ch;
 	}
-	static void drone::start(struct char_data* owner) {
+	 void drone::start(struct char_data* owner) {
 		auto drone = mods::drone::get_existing(owner);
 
 		if(drone == nullptr) {
@@ -50,16 +50,16 @@ namespace mods {
 		char_to_room(drone,IN_ROOM(owner));
 		owner->drone_simulate = true;
 	}
-	static void drone::stop(struct char_data* owner) {
+	 void drone::stop(struct char_data* owner) {
 		owner->drone_simulate = false;
 	}
-	static bool drone::started(struct char_data* owner) {
+	 bool drone::started(struct char_data* owner) {
 		return owner->drone_simulate;
 	}
-	static void drone::simulate(struct char_data* owner,bool value) {
+	 void drone::simulate(struct char_data* owner,bool value) {
 		owner->drone_simulate = value;
 	}
-	static void drone::get_drone(struct char_data* owner) {
+	 void drone::get_drone(struct char_data* owner) {
 		auto drone = mods::globals::player_list[owner->drone_uuid]->cd();
 
 		if(IN_ROOM(owner) == IN_ROOM(drone)) {
@@ -72,7 +72,7 @@ namespace mods {
 			send_to_char(owner,"Must be in the same room as your drone\r\n");
 		}
 	}
-	static struct char_data * drone::get_existing(struct char_data* owner) {
+	 struct char_data * drone::get_existing(struct char_data* owner) {
 		if(owner->drone_uuid == 0 || owner->drone_uuid > mods::globals::player_list.size() -1) {
 			return nullptr;
 		}
@@ -80,7 +80,7 @@ namespace mods {
 		return mods::globals::player_list[owner->drone_uuid]->cd();
 	}
 
-	static bool drone::interpret(struct char_data *owner,const std::string& argument) {
+	 bool drone::interpret(struct char_data *owner,const std::string& argument) {
 		auto drone = mods::globals::player_list[owner->drone_uuid];
 
 		if(argument.compare("drone stop") == 0) {

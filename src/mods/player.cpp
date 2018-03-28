@@ -128,6 +128,9 @@ namespace mods {
 				case class_type::ENGINEER:
 					m_class_info.push_back(std::make_shared<classes::engineer>(m_self_ptr));
 					break;
+				case class_type::UNDEFINED:
+				default:
+					break;
 			}
 
 			m_class_capability.push_back(capability);
@@ -160,8 +163,8 @@ namespace mods {
 	}
 
 	using mask_t = mods::weapon::mask_type;
-	player::player(char_data* ch) : m_char_data(ch),m_do_paging(false),
-		m_page(0),m_current_page(0),m_current_page_fragment(""),m_executing_js(false) {
+	player::player(char_data* ch) : m_executing_js(false), m_char_data(ch),m_do_paging(false),
+		m_page(0),m_current_page(0),m_current_page_fragment("") {
 	};
 	bool player::can_snipe(char_data *target) {
 		return true;
@@ -176,14 +179,15 @@ namespace mods {
 		return *m_class_info.begin();
 	}
 	void player::page(int pg) {
-		if(m_pages.size() == 0 || pg * mods::player::PAGE_SIZE >= m_pages.size()) {
+		assert(pg >= 0);
+		if(m_pages.size() == 0 || static_cast<std::size_t>(pg * mods::player::PAGE_SIZE) >= m_pages.size()) {
 			return;
 		}
 
 		std::string acc = "";
 		unsigned i = pg * mods::player::PAGE_SIZE;
 
-		for(; i < m_pages.size() && i < (pg + 1) * mods::player::PAGE_SIZE; i++) {
+		for(; i < m_pages.size() && i < static_cast<std::size_t>((pg + 1) * mods::player::PAGE_SIZE); i++) {
 			acc += m_pages[i];
 		}
 
@@ -381,6 +385,7 @@ namespace mods {
 				return item->ammo;
 			}
 		}
+		return 0;
 	}
 	void player::stc_room(const room_rnum& rnum) {
 		if(world[rnum].name) {
@@ -394,7 +399,7 @@ namespace mods {
 				m_captured_output += m;
 			}
 
-			send_to_char(m_char_data,m);
+			send_to_char(m_char_data,"%s",m);
 		}
 	}
 	void player::stc(const std::string m) {
@@ -403,7 +408,7 @@ namespace mods {
 				m_captured_output += m;
 			}
 
-			send_to_char(m_char_data,m.c_str());
+			send_to_char(m_char_data,"%s",m.c_str());
 		}
 	}
 	void player::stc(int m) {
@@ -411,7 +416,7 @@ namespace mods {
 			m_captured_output += std::to_string(m);
 		}
 
-		send_to_char(m_char_data,std::to_string(m).c_str());
+		send_to_char(m_char_data,"%s",std::to_string(m).c_str());
 	}
 	void player::stc_room_desc(const room_rnum& rnum) {
 		if(world[rnum].description) {

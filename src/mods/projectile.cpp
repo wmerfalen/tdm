@@ -7,7 +7,8 @@ namespace mods {
 			room_rnum room_id = 0;
 			room_rnum previous = 0;
 
-			for(unsigned room_depth = 0; room_depth < depth; ++room_depth) {
+			assert(depth > -1);
+			for(unsigned room_depth = 0; room_depth < static_cast<std::size_t>(depth); ++room_depth) {
 				room_id = resolve_room(source_room,direction,room_depth);
 
 				if(previous == room_id) {
@@ -15,7 +16,7 @@ namespace mods {
 				}
 
 				previous = room_id;
-				send_to_char(source_char,std::to_string(room_id).c_str());
+				send_to_char(source_char,"%s",std::to_string(room_id).c_str());
 				mods::globals::room_event(room_id,mods::ai_state::GRENADE_FLIES_BY);
 			}
 

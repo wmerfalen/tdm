@@ -167,7 +167,8 @@ namespace mods::builder_util {
 
 			auto index = mods::util::stoi(arg_vec[1]);
 
-			if(!index.has_value() || index.value() >= vector_objects.size()) {
+			if(!index.has_value() || index.value() < 0 || 
+					static_cast<std::size_t>(index.value()) >= vector_objects.size()) {
 				mods::builder::report_error<std::shared_ptr<mods::player>>(player,"Invalid index");
 				return;
 			}

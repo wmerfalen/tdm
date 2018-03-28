@@ -13,6 +13,7 @@
 #include "mods/quests.hpp"
 #include "mods/builder.hpp"
 #include "utils.h"
+#include "mods/behaviour_tree_impl.hpp"
 
 #define LMDB_DB_FILE "/home/llvm/code/c++/bnull-mud/lib/"
 #define LMDB_DB_NAME "bnull"
@@ -152,6 +153,7 @@ namespace mods {
 			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js");
 			pq_con = std::make_unique<pqxx::connection>(mods::conf::pq_connection.c_str());
 			f_import_rooms = false;
+			mods::behaviour_tree_impl::load_trees();
 		}
 		void post_boot_db() {
 		}

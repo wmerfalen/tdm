@@ -1,4 +1,5 @@
 #include "chat.hpp"
+#include "../utils.h"
 
 namespace mods::chat {
 	void channel::set_name(std::string_view name) {
@@ -53,7 +54,15 @@ namespace mods::chat {
 		msg = mods::util::color_eval(msg);
 
 		for(auto descriptor : m_subscribers) {
-			write(descriptor,msg.c_str(),msg.length());
+			auto write_value = write(descriptor,msg.c_str(),msg.length());
+			if(write_value == -1){
+				log(
+					(
+					 std::string("channel::transmit::write error: ") + 
+					 strerror(errno)
+					 ).c_str()
+				);
+			}
 		}
 	}
 };
