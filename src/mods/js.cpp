@@ -10,6 +10,7 @@ namespace mods {
 		int load_library(duk_context*,std::string_view);
 		constexpr static const char * JS_PATH = "../lib/js/";
 		constexpr static const char * JS_TEST_PATH = "../lib/js/tests/";
+		constexpr static const char * JS_PROFILES_PATH = "../lib/js/profiles/";
 		namespace test {
 			static duk_ret_t require_test(duk_context *ctx) {
 				/* First parameter is character name */
@@ -268,6 +269,13 @@ namespace mods {
 			            std::string(mods::util::itoa(player.cd()->uuid)) + ");"
 			           );
 			return true;
+		}
+
+
+		void run_profile_scripts(std::string_view player_name){
+			/** 
+			 * load_library(mods::globals::duktape_context,(std::string(JS_PROFILES_PATH) + player_name.data()) + ".js");
+			 */
 		}
 
 		duk_context* new_context() {

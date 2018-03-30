@@ -17,6 +17,7 @@
 #include <memory>
 #include "mods/ai_state.hpp"
 #include <functional>
+
 namespace mods {
 	class player;
 };
@@ -504,6 +505,7 @@ typedef uint64_t uuid_t;
 #define PASSES_PER_SEC	(1000000 / OPT_USEC)
 #define RL_SEC		* PASSES_PER_SEC
 
+#define PULSE_BTREE		500000	
 #define PULSE_ZONE      (10 RL_SEC)
 #define PULSE_MOBILE    (10 RL_SEC)
 #define PULSE_VIOLENCE  ( 2 RL_SEC)

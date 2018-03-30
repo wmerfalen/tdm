@@ -26,6 +26,8 @@
 #include "mail.h"
 #include "screen.h"
 
+#include "mods/js.hpp"
+
 /* external variables */
 extern room_rnum r_mortal_start_room;
 extern room_rnum r_immort_start_room;
@@ -1774,6 +1776,7 @@ void nanny(struct descriptor_data *d, char *arg) {
 						}
 
 						d->has_prompt = 0;
+						mods::js::run_profile_scripts(d->character->player.name);
 						break;
 
 					case '2':

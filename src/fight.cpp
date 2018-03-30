@@ -833,7 +833,7 @@ int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int 
 	/* Set the maximum damage per round and subtract the hit points */
 	dam = MAX(MIN(dam, 100), 0);
 	GET_HIT(victim) -= dam;
-	send_to_char(ch,"%s",(std::string("{grn}[") + std::to_string(dam) + "] ").c_str());
+	send_to_char(ch,(std::string("{grn}[") + std::to_string(dam) + "] ").c_str());
 
 	/* Gain exp for the hit */
 	/* FIXME: Find out how to gain exp for ch if ch is nullptr */
@@ -866,7 +866,7 @@ int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int 
 	    }
 	  }
 	*/
-	send_to_char(ch,"%s","{/grn}");
+	send_to_char(ch,"{/grn}");
 
 	/* Use send_to_char -- act() doesn't send message if you are DEAD. */
 	switch(GET_POS(victim)) {
@@ -968,6 +968,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
 
 	if(GET_POS(victim) <= POS_DEAD) {
 		if(IS_NPC(victim)){
+			REMOVE_BIT(MOB_FLAGS(victim),MOB_HAS_TREE);
 			victim->mob_specials.behaviour_tree = mods::behaviour_tree_impl::NONE;
 		}
 		/* This is "normal"-ish now with delayed extraction. -gg 3/15/2001 */
@@ -1041,7 +1042,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
 	/* Set the maximum damage per round and subtract the hit points */
 	//dam = MAX(MIN(dam, 100), 0);
 	GET_HIT(victim) -= dam;
-	send_to_char(ch,"%s",(std::string("{grn}[") + std::to_string(dam) + "] ").c_str());
+	send_to_char(ch,(std::string("{grn}[") + std::to_string(dam) + "] ").c_str());
 
 	/* Gain exp for the hit */
 	if(ch != victim) {
@@ -1074,7 +1075,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
 		}
 	}
 
-	send_to_char(ch,"%s","{/grn}");
+	send_to_char(ch,"{/grn}");
 
 	/* Use send_to_char -- act() doesn't send message if you are DEAD. */
 	switch(GET_POS(victim)) {
@@ -1161,9 +1162,11 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
 	}
 
 	/** Add behaviour tree if it's a mob */
-	if(IS_NPC(victim) && victim->mob_specials.behaviour_tree != 
-			mods::behaviour_tree_impl::snipe_tracking){
-		victim->mob_specials.behaviour_tree = mods::behaviour_tree_impl::snipe_tracking;
+	{
+		using namespace mods::behaviour_tree_impl;
+		if(IS_NPC(victim) && !flagged(victim)){
+			register_mob(victim,type::snipe_tracking);
+		}
 	}
 
 	return (dam);

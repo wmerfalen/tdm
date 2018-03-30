@@ -399,7 +399,7 @@ namespace mods {
 				m_captured_output += m;
 			}
 
-			send_to_char(m_char_data,"%s",m);
+			send_to_char(m_char_data,m);
 		}
 	}
 	void player::stc(const std::string m) {
@@ -408,7 +408,7 @@ namespace mods {
 				m_captured_output += m;
 			}
 
-			send_to_char(m_char_data,"%s",m.c_str());
+			send_to_char(m_char_data,m.c_str());
 		}
 	}
 	void player::stc(int m) {
@@ -416,7 +416,7 @@ namespace mods {
 			m_captured_output += std::to_string(m);
 		}
 
-		send_to_char(m_char_data,"%s",std::to_string(m).c_str());
+		send_to_char(m_char_data,std::to_string(m).c_str());
 	}
 	void player::stc_room_desc(const room_rnum& rnum) {
 		if(world[rnum].description) {

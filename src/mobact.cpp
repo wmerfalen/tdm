@@ -22,8 +22,6 @@
 #include "constants.h"
 #include "globals.hpp"
 
-#include "mods/behaviour_tree_impl.hpp"
-
 /* external globals */
 extern int no_specials;
 extern struct char_data* character_list;
@@ -49,7 +47,7 @@ void mobile_activity(void) {
 	for(ch = character_list; ch; ch = next_ch) {
 		next_ch = ch->next;
 
-		if(!IS_MOB(ch)) {
+		if(!IS_MOB(ch) || MOB_FLAGGED(ch,MOB_HAS_TREE)) {
 			continue;
 		}
 
@@ -199,10 +197,6 @@ void mobile_activity(void) {
 			}
 		}
 
-		/* Add new mobile actions here */
-		if(MOB_FLAGGED(ch,MOB_HAS_TREE)){
-			mods::behaviour_tree_impl::dispatch(ch);
-		}
 
 	}/* end for() */
 }

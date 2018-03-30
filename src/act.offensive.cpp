@@ -57,7 +57,9 @@ ACMD(do_rnum) {
 }
 ACMD(do_ammo) {
 	MENTOC_PREAMBLE();
-	player->weapon()->ammo += 12;
+	if(player->weapon()){
+		player->weapon()->ammo += 12;
+	}
 }
 
 using vpd = mods::scan::vec_player_data;

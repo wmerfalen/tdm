@@ -913,6 +913,9 @@ void heartbeat(int pulse) {
 		check_idle_passwords();
 	}
 
+	if(!(pulse % PULSE_BTREE)) {
+
+	}
 	if(!(pulse % PULSE_MOBILE)) {
 		mobile_activity();
 	}
