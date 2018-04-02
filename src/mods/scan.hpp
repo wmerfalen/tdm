@@ -19,10 +19,29 @@ namespace mods {
 			char_data* ch;
 			uint16_t distance;
 		} vec_player_data_element;
+		typedef char_data* chptr;
 		typedef std::vector<vec_player_data_element> vec_player_data;
-		typedef std::function<void (room_rnum,int,vec_player_data)> los_scan_foreach_callback;
-		void los_scan(struct char_data* ch,int depth,vec_player_data* vec_room_list);
-		void los_scan_foreach(struct char_data* ch,int depth,los_scan_foreach_callback lambda_cb);
+		typedef std::function<bool (room_rnum,int,vec_player_data)> los_scan_foreach_callback;
+		typedef struct {
+			bool found;
+			int direction;
+			uint16_t distance;
+		} find_results_t;
+		extern int directions[];
+		constexpr unsigned num_directions = 6;
+		typedef std::array<std::vector<room_rnum>,num_directions> room_list_t;
+
+		void los_scan(char_data* ch,int depth,vec_player_data* vec_room_list);
+		void los_scan_foreach(char_data* ch,int depth,los_scan_foreach_callback lambda_cb);
+
+		/**
+		 * Simply list rooms within line of sight for recursive_depth depth
+		 */
+		void los_list_rooms(chptr hunter,room_list_t & room_list,unsigned depth);
+		/**
+		 * Line of sight scan for hunted starting at hunter's current position
+		 */
+		find_results_t los_find(chptr hunter,chptr hunted);
 	};
 };
 #endif

@@ -1,10 +1,12 @@
 #ifndef __MENTOC_MODS_BEHAVIOUR_TREE_IMPL_HEADER__
 #define  __MENTOC_MODS_BEHAVIOUR_TREE_IMPL_HEADER__
 
+#include <iterator>
 #include <vector>
-
 #include "behaviour_tree.hpp"
-
+#include "scan.hpp"
+#include "util.hpp"
+#include "../spells.h"
 
 namespace mods {
 	namespace behaviour_tree_impl { 
@@ -17,7 +19,8 @@ namespace mods {
 		using status = mods::behaviour_tree_status;
 		enum type { 
 			NONE = node_wrapper::NONE,
-			snipe_tracking = 0
+			snipe_tracking = 0,
+			suspicious_roaming,
 		};
 		void dispatch(argument_type ch);
 		void load_trees();
@@ -27,6 +30,10 @@ namespace mods {
 		constexpr int mob_has_tree = ((1 << 19));
 		bool inline flagged(const argument_type & mob){
 			return mob->char_specials.saved.act & mob_has_tree;
+		}
+		bool inline flagged(const argument_type & mob,const type & type){
+			return mob->char_specials.saved.act & mob_has_tree && 
+				mob->mob_specials.behaviour_tree == type;
 		}
 	};
 };

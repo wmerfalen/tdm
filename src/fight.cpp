@@ -1049,7 +1049,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
 		gain_exp(ch, GET_LEVEL(victim) * dam);
 	}
 
-	mods::globals::states[victim]->event(ch,mods::ai_state::AI_EVENT_SNIPED);
+	//mods::globals::states[victim]->event(ch,mods::ai_state::AI_EVENT_SNIPED);
 	update_pos(victim);
 
 	/*
@@ -1158,14 +1158,29 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
 		}
 
 		die(ch,victim);
+		if(IS_NPC(victim)){
+			mods::behaviour_tree_impl::unregister_mob(victim);
+			/**
+			 * "forget" the player pointer that sniped us
+			 */
+			victim->mob_specials.snipe_tracking = nullptr;
+		}
 		return (-1);
 	}
 
 	/** Add behaviour tree if it's a mob */
 	{
 		using namespace mods::behaviour_tree_impl;
-		if(IS_NPC(victim) && !flagged(victim)){
+		if(IS_NPC(victim) && !flagged(victim,type::snipe_tracking)){
+			/**
+			 * This will register the mob as having a behaviour tree.
+			 */
 			register_mob(victim,type::snipe_tracking);
+			/**
+			 * We need to remember the character that sniped us, so
+			 * place their char_data pointer in memory.
+			 */
+			victim->mob_specials.snipe_tracking = ch;
 		}
 	}
 
@@ -1494,7 +1509,7 @@ int snipe_hit(struct char_data *ch, struct char_data *victim, int type,uint16_t 
 
 		return snipe_damage(ch, victim, dam, w_type);
 	}
-
+	return 0;
 }
 
 

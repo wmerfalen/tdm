@@ -358,7 +358,7 @@ ACMD(do_reload) {
 
 ACMD(do_scan) { /* !mods */
 	vpd scan;
-	mods::scan::los_scan_foreach(ch,3,[ch](room_rnum _room_id,int _dir,vpd _ele) {
+	mods::scan::los_scan_foreach(ch,3,[ch](room_rnum _room_id,int _dir,vpd _ele) -> bool {
 		for(auto e : _ele) {
 			std::string line;
 			line += "You see {grn}";
@@ -420,6 +420,7 @@ ACMD(do_scan) { /* !mods */
 
 			line += "\r\n";
 			send_to_char(ch,line.c_str());
+			return true;	/** true means keep iterating */
 		}
 	});
 

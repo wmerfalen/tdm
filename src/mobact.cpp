@@ -24,7 +24,7 @@
 
 /* external globals */
 extern int no_specials;
-extern struct char_data* character_list;
+extern char_data* character_list;
 
 /* external functions */
 ACMD(do_get);
@@ -32,14 +32,14 @@ ACMD(do_action);
 
 /* local functions */
 void mobile_activity(void);
-void clearMemory(struct char_data *ch);
-bool aggressive_mob_on_a_leash(struct char_data *slave, struct char_data *master, struct char_data *attack);
+void clearMemory(char_data *ch);
+bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *attack);
 
 #define MOB_AGGR_TO_ALIGN (MOB_AGGR_EVIL | MOB_AGGR_NEUTRAL | MOB_AGGR_GOOD)
 
 
 void mobile_activity(void) {
-	struct char_data *ch, *next_ch, *vict;
+	char_data *ch, *next_ch, *vict;
 	struct obj_data *obj, *best_obj;
 	int door, found, max;
 	memory_rec *names;
@@ -129,7 +129,7 @@ void mobile_activity(void) {
 		}
 
 		/* Mob Memory */
-		if(MOB_FLAGGED(ch, MOB_MEMORY) && MEMORY(ch)) {
+		if(MOB_FLAGGED(ch, MOB_MEMORY) && MEMORY(ch).size()) {
 			found = FALSE;
 
 			for(vict = world[IN_ROOM(ch)].people; vict && !found; vict = vict->next_in_room) {
@@ -137,23 +137,12 @@ void mobile_activity(void) {
 					continue;
 				}
 
-				for(names = MEMORY(ch); names && !found; names = names->next) {
-					if(names->id != GET_IDNUM(vict)) {
-						continue;
-					}
-
+				if(ch->mob_specials.memory.end() != 
+						ch->mob_specials.memory.find(vict)){
 					/* Can a master successfully control the charmed monster? */
 					if(aggressive_mob_on_a_leash(ch, ch->master, vict)) {
 						continue;
 					}
-
-					found = TRUE;
-					auto ret = mods::globals::state_fetch(ch)->event(vict,mods::ai_state::AI_EVENT_ATTACKER_FOUND);
-
-					if(ret == 0) {
-						act("'Hey!  You're the fiend that attacked me!!!', exclaims $n.", FALSE, ch, 0, 0, TO_ROOM);
-					}
-
 					hit(ch, vict, TYPE_UNDEFINED);
 				}
 			}
@@ -206,68 +195,25 @@ void mobile_activity(void) {
 /* Mob Memory Routines */
 
 /* make ch remember victim */
-void remember(struct char_data *ch, struct char_data *victim) {
-	memory_rec *tmp;
+void remember(char_data *ch,char_data *victim) {
 	bool present = FALSE;
 
 	if(!IS_NPC(ch) || IS_NPC(victim) || PRF_FLAGGED(victim, PRF_NOHASSLE)) {
 		return;
 	}
-
-	for(tmp = MEMORY(ch); tmp && !present; tmp = tmp->next)
-		if(tmp->id == GET_IDNUM(victim)) {
-			present = TRUE;
-		}
-
-	if(!present) {
-		CREATE(tmp, memory_rec, 1);
-		tmp->next = MEMORY(ch);
-		tmp->id = GET_IDNUM(victim);
-		MEMORY(ch) = tmp;
-	}
+	ch->mob_specials.memory.emplace(victim);
 }
 
 
 /* make ch forget victim */
-void forget(struct char_data *ch, struct char_data *victim) {
-	memory_rec *curr, *prev = NULL;
-
-	if(!(curr = MEMORY(ch))) {
-		return;
-	}
-
-	while(curr && curr->id != GET_IDNUM(victim)) {
-		prev = curr;
-		curr = curr->next;
-	}
-
-	if(!curr) {
-		return;    /* person wasn't there at all. */
-	}
-
-	if(curr == MEMORY(ch)) {
-		MEMORY(ch) = curr->next;
-	} else {
-		prev->next = curr->next;
-	}
-
-	free(curr);
+void forget(char_data *ch,char_data *victim) {
+	ch->mob_specials.memory.erase(victim);
 }
 
 
 /* erase ch's memory */
-void clearMemory(struct char_data *ch) {
-	memory_rec *curr, *next;
-
-	curr = MEMORY(ch);
-
-	while(curr) {
-		next = curr->next;
-		free(curr);
-		curr = next;
-	}
-
-	MEMORY(ch) = NULL;
+void clearMemory(char_data *ch) {
+	ch->mob_specials.memory.clear();
 }
 
 
@@ -277,7 +223,7 @@ void clearMemory(struct char_data *ch) {
  * see if their master can talk them out of it, eye them
  * down, or otherwise intimidate the slave.
  */
-bool aggressive_mob_on_a_leash(struct char_data *slave, struct char_data *master, struct char_data *attack) {
+bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *attack) {
 	static int snarl_cmd;
 	int dieroll;
 

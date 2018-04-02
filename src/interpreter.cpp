@@ -167,7 +167,7 @@ ACMD(do_jstest);
 ACMD(do_mbuild);
 ACMD(do_obuild);
 ACMD(do_chanmgr);
-ACMD(do_rbuildzone);
+ACMD(do_zbuild);
 ACMD(do_rnumlist);
 ACMD(do_rnumtele);
 ACMD(do_pref);
@@ -500,7 +500,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "mbuild"  , POS_RESTING , do_mbuild   , LVL_GOD, 0 },
 	{ "obuild"  , POS_RESTING , do_obuild   , LVL_GOD, 0 },
 	{ "chanmgr"  , POS_RESTING , do_chanmgr   , LVL_IMMORT, 0 },
-	{ "zbuild"  , POS_RESTING , do_rbuildzone   , LVL_IMMORT, 0 },
+	{ "zbuild"  , POS_RESTING , do_zbuild   , LVL_IMMORT, 0 },
 	{ "rnumtele"  , POS_RESTING , do_rnumtele   , LVL_IMMORT, 0 },
 	{ "rnumlist"  , POS_RESTING , do_rnumlist   , LVL_IMMORT, 0 },
 	{ "pref"  , POS_RESTING , do_pref   , 0, 0 },

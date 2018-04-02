@@ -2568,7 +2568,7 @@ ACMD(do_obuild) {
 	return;
 }
 
-ACMD(do_rbuildzone) {
+ACMD(do_zbuild) {
 	MENTOC_PREAMBLE();
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 

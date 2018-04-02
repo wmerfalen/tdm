@@ -1,5 +1,4 @@
 #include "behaviour_tree_impl.hpp"
-#include <iterator>
 
 namespace mods::behaviour_tree_impl {
 	container_t trees;
@@ -18,22 +17,9 @@ namespace mods::behaviour_tree_impl {
 		}
 		return;
 	}
-	template <typename ContainerType,typename FindType,typename IteratorType>
-	bool exists(const ContainerType * container_ptr, 
-			const FindType & find_me,
-			IteratorType & found_at ){
-		return (
-				found_at = 
-				std::find(
-					container_ptr->begin(),
-					container_ptr->end(),
-					find_me
-				)
-			)!= container_ptr->end();
-	}
 	void register_mob(const argument_type & mob,const type & tree){
 		mob_list_t::const_iterator found_at;
-		if(!exists<decltype(mobs_with_trees),decltype(mob),decltype(found_at)>(
+		if(!mods::util::exists<decltype(mobs_with_trees),decltype(mob)>(
 					&mobs_with_trees,
 					mob,
 					found_at)){
@@ -55,29 +41,60 @@ namespace mods::behaviour_tree_impl {
 		);
 	}
 	void load_trees(){
-		/** tracking down snipers */
+		/**
+		 * tracking down snipers 
+		 */
 		node snipe_tracking(node::node_type_t::SELECTOR);
 		snipe_tracking.append_child(node::create_sequence({
-				node::create_leaf(
-					[](argument_type mob) -> status{
-						std::cerr << "scanning for attacker";
-						return status::FAILURE;
+			node::create_leaf(
+				[](argument_type mob) -> status{
+				/** 
+				 * Scan all directions. If the player can be seen, 
+				 * then move there.
+				 */
+				if(mob->mob_specials.snipe_tracking == nullptr){
+					return status::FAILURE;
+				}
+				auto find_results = mods::scan::los_find(mob,mob->mob_specials.snipe_tracking);
+				if(find_results.found){
+					/**
+					 * Move find_results.dinstance steps toward the player
+					 */
+					for(decltype(find_results.distance) steps = find_results.distance; 
+						steps > 0; --steps){
+						/**
+						 * The 'direction' member will tell us where we need to go.
+						 */
+						perform_move(mob,find_results.direction,0);
 					}
-				),
-				node::create_leaf(
-					[](argument_type mob) -> status{
-						std::cerr << "leaf selector 2";
-						return status::SUCCESS;
-					}
-				),
-				node::create_leaf(
-					[](argument_type mob) -> status{
-						std::cerr << "leaf selector 3";
-						return status::FAILURE;
-					}
-				)
+					return status::SUCCESS;
+				}
+				return status::FAILURE;
+			}),
+			node::create_leaf(
+				[](argument_type mob) -> status{
+				if(IN_ROOM(mob->mob_specials.snipe_tracking)){
+					act("$n says 'I've got you now you little twerp!'", FALSE, mob, 0, 0, TO_ROOM);
+					hit(mob, mob->mob_specials.snipe_tracking, TYPE_UNDEFINED);
+					unregister_mob(mob);
+					return status::SUCCESS;
+				}else{
+					return status::FAILURE;
+				}
 			})
+			})/** End create_sequence */
 		);
 		trees.emplace_back("snipe-tracking",snipe_tracking);
+
+		/**
+		 * Suspicious roaming tree. 
+		 */
+		node suspicious_roaming(node::node_type_t::SELECTOR);
+		suspicious_roaming.append_child(node::create_selector({
+
+			})
+		);
+		trees.emplace_back("suspicious-roaming",suspicious_roaming);
 	}
+
 };

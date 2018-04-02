@@ -77,5 +77,5 @@ namespace mods::builder {
 };
 
 ACMD(do_rbuild);
-ACMD(do_rbuildzone);
+ACMD(do_zbuild);
 #endif

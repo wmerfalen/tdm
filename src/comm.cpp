@@ -77,6 +77,7 @@
  */
 
 #include "mods/acl/config-parser.hpp" 		/** Access Control List */
+#include "mods/behaviour_tree_impl.hpp"
 
 /**  --=[ End C++ Mods ]=- **/
 
@@ -914,7 +915,7 @@ void heartbeat(int pulse) {
 	}
 
 	if(!(pulse % PULSE_BTREE)) {
-
+		mods::behaviour_tree_impl::run_trees();
 	}
 	if(!(pulse % PULSE_MOBILE)) {
 		mobile_activity();

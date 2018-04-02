@@ -98,6 +98,20 @@ namespace mods::util {
 		}
 	}
 
+	template <typename ContainerType,typename FindType>
+	bool exists(const ContainerType * container_ptr,
+		const FindType & find_me,
+		typename ContainerType::const_iterator & found_at ){
+		return (
+			found_at =
+			std::find(
+				container_ptr->begin(),
+				container_ptr->end(),
+				find_me
+			)
+		)!= container_ptr->end();
+	}
+
 };
 
 #endif

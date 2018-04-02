@@ -2278,7 +2278,7 @@ struct char_data *create_char(void) {
 /* create a new mobile from a prototype */
 struct char_data *read_mobile(mob_vnum nr, int type) { /* and mob_rnum */
 	mob_rnum i;
-	struct char_data *mob;
+	char_data *mob;
 
 	if(type == VIRTUAL) {
 		if((i = real_mobile(nr)) == NOBODY) {

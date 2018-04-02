@@ -15,6 +15,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <set>
 #include "mods/ai_state.hpp"
 #include <functional>
 
@@ -23,6 +24,7 @@ namespace mods {
 };
 typedef std::size_t weapon_type_t;
 typedef std::map<struct char_data*,std::unique_ptr<mods::ai_state>> ai_state_map;
+typedef std::set<char_data*> memory_rec_t;
 typedef short faction_t;
 typedef short ai_state_t;
 typedef short goal_t;
@@ -505,7 +507,7 @@ typedef uint64_t uuid_t;
 #define PASSES_PER_SEC	(1000000 / OPT_USEC)
 #define RL_SEC		* PASSES_PER_SEC
 
-#define PULSE_BTREE		500000	
+#define PULSE_BTREE		(1 RL_SEC)
 #define PULSE_ZONE      (10 RL_SEC)
 #define PULSE_MOBILE    (10 RL_SEC)
 #define PULSE_VIOLENCE  ( 2 RL_SEC)
@@ -738,6 +740,7 @@ struct room_data {
 
 /* memory structure for characters */
 struct memory_rec_struct {
+	/* TODO: replace this with std::vector<char_data*> */
 	long	id;
 	struct memory_rec_struct *next;
 };
@@ -913,11 +916,12 @@ struct player_special_data {
 
 /* Specials used by NPCs, not PCs */
 struct mob_special_data {
-	memory_rec *memory;	    /* List of attackers to remember	       */
+	memory_rec_t memory;
 	byte	attack_type;        /* The Attack Type Bitvector for NPC's     */
 	byte default_pos;        /* Default position for NPC                */
 	byte damnodice;          /* The number of damage dice's	       */
 	byte damsizedice;        /* The size of the damage dice's           */
+	char_data* snipe_tracking;
 	int16_t behaviour_tree;
 };
 
