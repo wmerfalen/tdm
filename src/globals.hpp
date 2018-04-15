@@ -22,6 +22,8 @@
 #include <pqxx/pqxx>
 #include "mods/conf.hpp"
 #include "mods/chat.hpp"
+#include <deque>
+#include "db.h"
 
 #define MENTOC_PREAMBLE() auto player = mods::globals::player_list.at(ch->uuid); player->set_cd(ch);
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
@@ -33,13 +35,11 @@ strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
 extern void clear_char(struct char_data*);
 extern struct char_data* character_list;
+extern std::deque<char_data> mob_list;
 #define CREATE_CHAR(ch) \
 	CREATE(ch,struct char_data,1);\
 	clear_char(ch);\
-	ch->player_specials = (struct player_special_data*) calloc(1,sizeof( struct player_special_data));\
-	memset(&((ch)->player_specials),0,sizeof((ch)->player_specials));\
-	std::cerr << (int)ch->player_specials << "\r\n";\
-	(ch)->player_specials->poofin = (ch)->player_specials->poofout = strdup("poof");\
+	ch->player_specials = std::make_unique<player_special_data>();\
 	(ch)->player_specials->saved.pref = 0;\
 	CREATE((ch)->affected, struct affected_type, 1);\
 	memset(&((ch)->affected),0,sizeof((ch)->affected));\
@@ -70,6 +70,7 @@ namespace mods {
 		void init_player(char_data*);
 		std::unique_ptr<ai_state>& state_fetch(struct char_data* ch);
 		int mobile_activity(char_data*);
+		char_data* read_mobile(const mob_vnum &,const int & type);
 		void register_object(obj_data&);
 		void register_object_list();
 		void register_room(const room_rnum&);

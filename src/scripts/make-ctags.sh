@@ -7,4 +7,4 @@ ctags -R -f tags --links=no --totals=yes \
 	--exclude=boost-cpp --exclude=mods/lib \
 	--exclude=mods/lmdb --exclude=mods/php \
 	--exclude='*.py' --exclude=Makefile* \
-	--exclude='duktape*' --languages='C++'
+	--exclude='duktape*' --languages='C++' --languages='C'

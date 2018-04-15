@@ -6,7 +6,6 @@
 #include "behaviour_tree.hpp"
 #include "scan.hpp"
 #include "util.hpp"
-#include "../spells.h"
 
 namespace mods {
 	namespace behaviour_tree_impl { 
@@ -28,6 +27,9 @@ namespace mods {
 		void register_mob(const argument_type &,const type &);
 		void unregister_mob(const argument_type &);
 		constexpr int mob_has_tree = ((1 << 19));
+#ifndef TYPE_UNDEFINED
+		#define TYPE_UNDEFINED -1
+#endif
 		bool inline flagged(const argument_type & mob){
 			return mob->char_specials.saved.act & mob_has_tree;
 		}

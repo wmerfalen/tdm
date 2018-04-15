@@ -1,3 +1,5 @@
+#ifndef __MENTOC_DB_HEADER__
+#define __MENTOC_DB_HEADER__
 /* ************************************************************************
 *   File: db.h                                          Part of CircleMUD *
 *  Usage: header file for database handling                               *
@@ -133,8 +135,10 @@ void	free_obj(struct obj_data *obj);
 struct obj_data *read_object(obj_vnum nr, int type);
 int	vnum_object(char *searchname, struct char_data *ch);
 
-#define REAL 0
-#define VIRTUAL 1
+typedef enum { \
+	REAL=0,\
+	VIRTUAL\
+} num_type_t;
 
 /* structure for the reset commands */
 struct reset_com {
@@ -250,3 +254,7 @@ extern char	*OK;
 extern char	*NOPERSON;
 extern char	*NOEFFECT;
 #endif
+
+
+
+#endif	//header inclusion protection

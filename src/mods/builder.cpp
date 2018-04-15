@@ -220,16 +220,23 @@ namespace mods::builder {
 
 		return std::nullopt;
 	}
+
+	inline void initialize_builder(char_data* player){
+		if(!player->builder_data){
+			player->builder_data = std::make_shared<builder_data_t>();
+		}
+	}
 	void pave_to(char_data* ch,room_data * current_room,int direction) {
 		MENTOC_PREAMBLE();
+		initialize_builder(ch);
 		mods::builder::report_status<shrd_ptr_player_t>(player,std::string("start_room: ") + std::to_string(
-		                                                    ch->pavements->start_room)
+		                                                    ch->builder_data->room_pavements.start_room)
 		                                               );
 		mods::builder::new_room(ch,direction);
-		ch->pavements->rooms.push_back(world.size()-1);
+		ch->builder_data->room_pavements.rooms.push_back(world.size()-1);
 		auto created_room = world.end()- 1;
-		created_room->number = ch->pavements->start_room + ch->pavements->current_room_number;
-		created_room->zone = ch->pavements->zone_id;
+		created_room->number = ch->builder_data->room_pavements.start_room + ch->builder_data->room_pavements.current_room_number;
+		created_room->zone = ch->builder_data->room_pavements.zone_id;
 
 		if(!create_direction(IN_ROOM(ch),direction,world.size() -1)) {
 			mods::builder::report_error<shrd_ptr_player_t>(player,"Couldn't create direction to that room!");
@@ -243,7 +250,7 @@ namespace mods::builder {
 
 		world[world.size()-1].dir_option[OPPOSITE_DIR(direction)]->general_description = strdup(world[IN_ROOM(ch)].name);
 		world[world.size()-1].dir_option[OPPOSITE_DIR(direction)]->keyword = strdup("door");
-		ch->pavements->current_room_number++;
+		ch->builder_data->room_pavements.current_room_number++;
 		mods::builder::report_status<shrd_ptr_player_t>(player,"Paved room to that direction");
 	}
 
@@ -615,28 +622,32 @@ namespace mods::builder {
 		mods::pq::commit(txn);
 		return true;
 	}
-	void zone_place(int zone_id,std::string_view zone_command,std::string_view if_flag,std::string_view arg1,std::string_view arg2,std::string_view arg3) {
-		auto txn = txn();
-		sql_compositor comp("zone_data",&txn);
-		auto sql = comp
-		           .insert()
-		           .into("zone_data")
-		.values({
-			{"zone_id",std::to_string(zone_table[zone_id].number)},
-			{"zone_command",zone_command.data()},
-			{"zone_if_flag",if_flag.data()},
-			{"zone_arg1",arg1.data()},
-			{"zone_arg2",arg2.data()},
-			{"zone_arg3",arg3.data()},
-		})
-		.sql();
-		mods::pq::exec(txn,sql);
-		mods::pq::commit(txn);
+	std::pair<bool,std::string> zone_place(int zone_id,std::string_view zone_command,std::string_view if_flag,std::string_view arg1,std::string_view arg2,std::string_view arg3) {
+		try{
+			auto txn = txn();
+			sql_compositor comp("zone_data",&txn);
+			auto sql = comp
+					   .insert()
+					   .into("zone_data")
+			.values({
+				{"zone_id",std::to_string(zone_table[zone_id].number)},
+				{"zone_command",zone_command.data()},
+				{"zone_if_flag",if_flag.data()},
+				{"zone_arg1",arg1.data()},
+				{"zone_arg2",arg2.data()},
+				{"zone_arg3",arg3.data()},
+			})
+			.sql();
+			mods::pq::exec(txn,sql);
+			mods::pq::commit(txn);
+		} catch(std::exception& e) {
+			return {false,std::string("Exception occurred: ") + e.what()};
+		}
+		return {true,"Saved zone successfully."};
 	}
 	char_data new_blank_character(bool npc = false) {
 		char_data proto;
 		memset(&proto,0,sizeof(proto));
-		proto.player_specials = &dummy_mob;
 		const char* foo = "foo";
 		proto.player.name = strdup(foo);
 		proto.player.short_descr = strdup(foo);
@@ -958,6 +969,7 @@ namespace mods::builder {
 using args_t = std::vector<std::string>;
 ACMD(do_sbuild) {
 	MENTOC_PREAMBLE();
+	mods::builder::initialize_builder(player->cd());
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
@@ -1063,6 +1075,7 @@ ACMD(do_sbuild) {
 }
 ACMD(do_mbuild) {
 	MENTOC_PREAMBLE();
+	mods::builder::initialize_builder(player->cd());
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0
@@ -1477,6 +1490,7 @@ ACMD(do_mbuild) {
 
 ACMD(do_obuild) {
 	MENTOC_PREAMBLE();
+	mods::builder::initialize_builder(player->cd());
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("weapon_type") == 0) {
@@ -2570,6 +2584,7 @@ ACMD(do_obuild) {
 
 ACMD(do_zbuild) {
 	MENTOC_PREAMBLE();
+	mods::builder::initialize_builder(player->cd());
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("place") == 0) {
@@ -2692,11 +2707,47 @@ ACMD(do_zbuild) {
 		        "  |--> lists the current zones saved to the db\r\n" <<
 		        "  |____[example]\r\n" <<
 		        "  |:: zbuild list\r\n"<<
-
 		        " zbuild delete <id>...<N>\r\n" <<
 		        "  |--> deletes the zone from the db with the id <id>. Multiple IDs can be specified\r\n" <<
 		        "  |____[example]\r\n" <<
 		        "  |:: zbuild delete 1\r\n" <<
+				" zbuild mob <zone_id> <mob_vnum> <room_vnum> <max> <if_flag>\r\n" <<
+				"  |--> places the mob identified by mob_vnum in the room room_vnum\r\n" <<
+				" zbuild obj <zone_id> <obj_vnum> <room_vnum> <max> <if_flag>\r\n" <<
+				"  |--> places object obj_vnum in room room_vnum\r\n" <<
+				" zbuild obj2mob <zone_id> <obj_vnum> <mob_vnum> <max> <if_flag>\r\n" <<
+				"  |--> gives object obj_vnum to mob mob_vnum\r\n" <<
+				" zbuild obj2obj <zone_id> <obj_vnum> <obj_vnum2> <max> <if_flag>\r\n" <<
+				"  |--> places object obj_vnum into object obj_vnum2\r\n" <<
+				"\r\n" <<
+				" /-------------------------------------------------------------\\\r\n" <<
+				" | P A V E M E N T S  S Y S T E M                   version 0.1|\r\n" <<
+				" |_____________________________________________________________/\r\n" <<
+				" zbuild pave <mob|obj> <mob_vnum|obj_vnum>\r\n" <<
+				"  |____[example]\r\n" <<
+				"  |:: zbuild pave mob 1050\r\n" <<
+				"  |:: (remembers the mob with vnum of 1050. You can then type 'zbuild here'\r\n" <<
+				"  |:: to place a mob in the room you are currently in.)\r\n"<<
+				"  |____[example]\r\n" <<
+				"  |:: zbuild pave obj 90\r\n" <<
+				"  |:: (remembers the obj with vnum of 90. You can then type 'zbuild here <obj>'\r\n" <<
+				"  |:: to place the object in the specified object. If you don't specify <obj>\r\n" <<
+				"  |:: then it will default to placing the object within the room you are currently\r\n" <<
+				"  |:: standing in.)\r\n" <<
+				" zbuild here [obj]\r\n" <<
+				"  |___[example]\r\n" <<
+				"  |:: (places the object or mob in the current room (if no arguments are given).\r\n" <<
+				"  |:: if [obj] is specified then this command will place the current object in [obj]\r\n" <<
+				"  |:: Obviously, you can't place a mob in an object so [obj] is only honoured for objects)\r\n" <<
+				" zbuild pave list\r\n" <<
+				"  |:: (lists all the pavements currently in your session)\r\n" <<
+				" zbuild switch <id>\r\n" <<
+				"  |:: (switches to the pavement with and id of <id>. To see current\r\n" <<
+				"  |:: pavements use 'zbuild pave list')\r\n" <<
+				"\r\n" <<
+				" /-------------------------------------------------------------\\\r\n" <<
+				" | M A N U A L  P L A C E M E N T S                            |\r\n" <<
+				" |_____________________________________________________________/\r\n" <<
 		        " zbuild place <zone_id> <command> <if_flag> <arg1> <arg2> <arg3>\r\n" <<
 		        "  |--> creates a reset command for the zone 'zone_id'.\r\n" <<
 		        "  |____[example]\r\n" <<
@@ -2787,14 +2838,49 @@ ACMD(do_zbuild) {
 		return;
 	}
 
+	if(std::string(&command[0]).compare("mob") == 0) {
+		std::string arg = argument;
+		auto past = arg.substr(arg.find("mob ")+4);
+		auto args = mods::util::arglist<std::vector<std::string>>(past);
+		auto zone_id = mods::util::stoi(args[0]);
+
+		if(!zone_id.has_value() || static_cast<unsigned>(zone_id.value()) >= zone_table.size()) {
+			mods::builder::report_error<shrd_ptr_player_t>(player," Invalid zone id");
+			return;
+		}
+
+		if(args.size() < 6){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Not enough arguments");
+			return;
+		}
+
+		auto zone_command = "M";
+		auto if_flag = args[4];
+		auto mob_vnum = args[1];
+		auto max_existing = args[2];
+		auto room_vnum = args[3];
+		auto result = mods::builder::zone_place(zone_id.value(),zone_command,if_flag,mob_vnum,max_existing,room_vnum);
+		if(!result.first){
+			mods::builder::report_error<shrd_ptr_player_t>(player,result.second);
+		}else{
+			mods::builder::report_success<shrd_ptr_player_t>(player,"Placed mob in zone successfully");
+		}
+		return;
+	}
+
 	if(std::string(&command[0]).compare("place") == 0) {
 		std::string arg = argument;
 		auto past = arg.substr(arg.find("place ")+6);
 		auto args = mods::util::arglist<std::vector<std::string>>(past);
 		auto zone_id = mods::util::stoi(args[0]);
 
-		if(!zone_id.has_value()) {
+		if(!zone_id.has_value() || static_cast<unsigned>(zone_id.value()) >= zone_table.size()) {
 			mods::builder::report_error<shrd_ptr_player_t>(player," Invalid zone id");
+			return;
+		}
+		 
+		if(args.size() < 6){
+			mods::builder::report_error<shrd_ptr_player_t>(player,"Not enough arguments");
 			return;
 		}
 
@@ -3056,6 +3142,7 @@ ACMD(do_zbuild) {
 
 ACMD(do_rbuild) {
 	MENTOC_PREAMBLE();
+	mods::builder::initialize_builder(player->cd());
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
 	if(std::string(argument).length() == 0 || std::string(argument).compare("help") == 0) {
@@ -3387,12 +3474,7 @@ ACMD(do_rbuild) {
 	auto args = mods::util::subcmd_args<11,args_t>(argument,"list-paved");
 
 	if(args.has_value()) {
-		if(!player->cd()->pavements) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"No pavements to list");
-			return;
-		}
-
-		for(auto room_id : player->cd()->pavements->rooms) {
+		for(auto room_id : player->cd()->builder_data->room_pavements.rooms) {
 			mods::builder::report_status<shrd_ptr_player_t>(player,std::to_string(room_id));
 		}
 
@@ -3402,14 +3484,9 @@ ACMD(do_rbuild) {
 	args = mods::util::subcmd_args<11,args_t>(argument,"save-paved");
 
 	if(args.has_value()) {
-		if(!player->cd()->pavements) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"No pavements to save");
-			return;
-		}
-
 		unsigned saved_room_counter = 0;
 
-		for(auto room_id : player->cd()->pavements->rooms) {
+		for(auto room_id : player->cd()->builder_data->room_pavements.rooms) {
 			std::size_t rid = room_id;
 
 			if(rid >= world.size()) {
@@ -3464,8 +3541,9 @@ ACMD(do_rbuild) {
 				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid starting room number");
 				return;
 			} else {
-				player->cd()->pave_mode = true;
-				player->cd()->pavements = std::make_shared<pavement>(starting_room_number.value(),zone_id.value());
+				player->cd()->builder_data->room_pave_mode = true;
+				player->cd()->builder_data->room_pavements.start_room = starting_room_number.value();
+				player->cd()->builder_data->room_pavements.zone_id = zone_id.value();
 			}
 
 			mods::builder::report_status<shrd_ptr_player_t>(player,"Starting pave mode. You can start moving around now. To stop, type 'rbuild pave off'");
@@ -3473,7 +3551,7 @@ ACMD(do_rbuild) {
 		}
 
 		if(arg_vec[1].compare("off") == 0) {
-			player->cd()->pave_mode = false;
+			player->cd()->builder_data->room_pave_mode = false;
 			mods::builder::report_status<shrd_ptr_player_t>(player,"Stopped pave mode.");
 			mods::builder::report_status<shrd_ptr_player_t>(player,"Transaction ID: 0");
 			return;

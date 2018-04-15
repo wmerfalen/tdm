@@ -882,6 +882,7 @@ void perform_complex_alias(struct txt_q *input_q, char *orig, struct alias_data 
  *      have been placed at the front of the character's input queue.
  */
 int perform_alias(struct descriptor_data *d, char *orig, size_t maxlen) {
+	return 0;	/** TODO: fix this function */
 	char first_arg[MAX_INPUT_LENGTH], *ptr;
 	struct alias_data *a, *tmp;
 
@@ -1422,7 +1423,7 @@ void nanny(struct descriptor_data *d, char *arg) {
 			if(d->character == NULL) {
 				CREATE(d->character, struct char_data, 1);
 				clear_char(d->character);
-				CREATE(d->character->player_specials, struct player_special_data, 1);
+				d->character->player_specials = std::make_unique<player_special_data>();
 				d->character->desc = d;
 			}
 
@@ -1456,7 +1457,7 @@ void nanny(struct descriptor_data *d, char *arg) {
 
 						CREATE(d->character, struct char_data, 1);
 						clear_char(d->character);
-						CREATE(d->character->player_specials, struct player_special_data, 1);
+						d->character->player_specials = std::make_unique<player_special_data>();
 						d->character->desc = d;
 						CREATE(d->character->player.name, char, strlen(tmp_name) + 1);
 						strcpy(d->character->player.name, CAP(tmp_name));	/* strcpy: OK (size checked above) */
@@ -1776,7 +1777,6 @@ void nanny(struct descriptor_data *d, char *arg) {
 						}
 
 						d->has_prompt = 0;
-						mods::js::run_profile_scripts(d->character->player.name);
 						break;
 
 					case '2':

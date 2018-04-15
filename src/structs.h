@@ -18,6 +18,7 @@
 #include <set>
 #include "mods/ai_state.hpp"
 #include <functional>
+#include <array>
 
 namespace mods {
 	class player;
@@ -835,8 +836,8 @@ struct char_special_data_saved {
 
 /* Special playing constants shared by PCs and NPCs which aren't in pfile */
 struct char_special_data {
-	struct char_data *fighting;	/* Opponent				*/
-	struct char_data *hunting;	/* Char hunted by this char		*/
+	char_data *fighting;	/* Opponent				*/
+	char_data *hunting;	/* Char hunted by this char		*/
 
 	byte position;		/* Standing, fighting, sleeping, etc.	*/
 
@@ -844,55 +845,33 @@ struct char_special_data {
 	byte carry_items;		/* Number of items carried		*/
 	int	timer;			/* Timer for update			*/
 
-	struct char_special_data_saved saved; /* constants saved in plrfile	*/
+	char_special_data_saved saved; /* constants saved in plrfile	*/
 };
 
 
-/*
- *  If you want to add new values to the playerfile, do it here.  DO NOT
- * ADD, DELETE OR MOVE ANY OF THE VARIABLES - doing so will change the
- * size of the structure and ruin the playerfile.  However, you can change
- * the names of the spares to something more meaningful, and then use them
- * in your new code.  They will automatically be transferred from the
- * playerfile into memory when players log in.
- */
 struct player_special_data_saved {
-	byte skills[MAX_SKILLS+1];	/* array of skills plus skill 0		*/
+	constexpr static unsigned conditions_max = 3;
+	constexpr static unsigned max_skills = MAX_SKILLS;
+	constexpr static unsigned max_tongue = MAX_TONGUE;
+	std::array<byte,max_skills> skills;	/* array of skills plus skill 0		*/
 	byte PADDING0;		/* used to be spells_to_learn		*/
-	bool talks[MAX_TONGUE];	/* PC s Tongues 0 for NPC		*/
+	std::array<bool,max_tongue> talks;	/* PC s Tongues 0 for NPC		*/
 	int	wimp_level;		/* Below this # of hit points, flee!	*/
 	byte freeze_level;		/* Level of god who froze char, if any	*/
 	sh_int invis_level;		/* level of invisibility		*/
 	room_vnum load_room;		/* Which room to place char in		*/
 	long /*bitvector_t*/	pref;	/* preference flags for PC's.		*/
 	ubyte bad_pws;		/* number of bad password attemps	*/
-	sbyte conditions[3];         /* Drunk, full, thirsty			*/
+	std::array<sbyte,conditions_max> conditions;         /* Drunk, full, thirsty			*/
 
-	/* spares below for future expansion.  You can change the names from
-	   'sparen' to something meaningful, but don't change the order.  */
-
-	ubyte spare0;
-	ubyte spare1;
-	ubyte spare2;
-	ubyte spare3;
-	ubyte spare4;
-	ubyte spare5;
-	int spells_to_learn;		/* How many can you learn yet this level*/
-	int spare7;
-	int spare8;
-	int spare9;
-	int spare10;
-	int spare11;
-	int spare12;
-	int spare13;
-	int spare14;
-	int spare15;
-	int spare16;
-	long	spare17;
-	long	spare18;
-	long	spare19;
-	long	spare20;
-	long	spare21;
+	player_special_data_saved() : PADDING0(0),
+		wimp_level(0),freeze_level(0),invis_level(0),
+		load_room(0),pref(0),bad_pws(0),
+		spells_to_learn(0){
+			std::fill(skills.begin(),skills.end(),0);
+			std::fill(talks.begin(),talks.end(),0);
+			std::fill(conditions.begin(),conditions.end(),0);
+		}
 };
 
 /*
@@ -903,14 +882,18 @@ struct player_special_data_saved {
  * player_special_data_saved will corrupt the playerfile.
  */
 struct player_special_data {
-	struct player_special_data_saved saved;
-
-	char	*poofin;		/* Description on arrival of a god.     */
-	char	*poofout;		/* Description upon a god's exit.       */
+	player_special_data_saved saved;
+	std::string	poofin;		/* Description on arrival of a god.     */
+	std::string poofout;		/* Description upon a god's exit.       */
 	struct alias_data *aliases;	/* Character's aliases			*/
 	long last_tell;		/* idnum of last tell from		*/
 	void *last_olc_targ;		/* olc control				*/
 	int last_olc_mode;		/* olc control				*/
+	bool js_profile_initialized;
+	player_special_data() : poofin(""),
+		poofout(""),last_tell(0),last_olc_targ(nullptr),
+		last_olc_mode(-1),js_profile_initialized(false){}
+	~player_special_data() = default;
 };
 
 
@@ -945,18 +928,36 @@ struct follow_type {
 };
 
 /* Pave mode structure for builders */
-struct pavement {
+struct room_pavement_t {
 	room_vnum start_room;
 	int transact_id;
 	room_vnum current_room_number;
 	int zone_id;
 	std::vector<room_rnum> rooms;
-	pavement() = delete;
-	pavement(room_vnum start,int z_id) :  start_room(start), transact_id(0),
+	room_pavement_t() : start_room(0), transact_id(-1),
+		current_room_number(0), zone_id(-1){}
+	room_pavement_t(room_vnum start,int z_id) :  start_room(start), transact_id(0),
 		current_room_number(0),zone_id(z_id) {}
-	~pavement() = default;
+	~room_pavement_t() = default;
 };
 
+struct zone_pavement_t {
+	typedef std::vector<mob_vnum> mob_pavements_t;
+	typedef std::vector<obj_vnum> obj_pavements_t;
+	mob_pavements_t mob;
+	obj_pavements_t obj;
+	zone_pavement_t() = default;
+	~zone_pavement_t() = default;
+};
+
+struct builder_data_t {
+	bool room_pave_mode;
+	bool zone_pave_mode;
+	room_pavement_t room_pavements;
+	zone_pavement_t zone_pavements;
+	builder_data_t() : room_pave_mode(false),zone_pave_mode(false) {}
+	~builder_data_t() = default;
+};
 
 /* ================== Structure for player/non-player ===================== */
 struct char_data {
@@ -976,7 +977,7 @@ struct char_data {
 	struct char_ability_data aff_abils;	 /* Abils with spells/stones/etc  */
 	struct char_point_data points;        /* Points                        */
 	struct char_special_data char_specials;	/* PC/NPC specials	  */
-	struct player_special_data *player_specials; /* PC specials		  */
+	std::shared_ptr<player_special_data> player_specials; /* PC specials		  */
 	struct mob_special_data mob_specials;	/* NPC specials		  */
 
 	struct affected_type *affected;       /* affected by what spells       */
@@ -991,14 +992,18 @@ struct char_data {
 
 	struct follow_type *followers;        /* List of chars followers       */
 	struct char_data *master;             /* Who is char following?        */
-	faction_t faction;
-	ai_state_t state;
+
+	std::shared_ptr<mods::player> player_ptr;
+	/**
+	 * The following will be deprecated
+	 */
 	bool is_faction_leader;
 	goal_t goal;
 	short disorient;
-	bool pave_mode;
-	std::shared_ptr<pavement> pavements;
-	std::shared_ptr<mods::player> player_ptr;
+	faction_t faction;
+	ai_state_t state;
+
+	std::shared_ptr<builder_data_t> builder_data;
 };
 /* ====================================================================== */
 

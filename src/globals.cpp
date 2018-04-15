@@ -216,13 +216,49 @@ namespace mods {
 			std::cout << "Pre game loop\n";
 			refresh_player_states();
 		}
+		char_data* read_mobile(const mob_vnum & nr,const int & type){
+			char_data* mob;	
+			mob_rnum i;
+
+			if(type == VIRTUAL) {
+				if((i = real_mobile(nr)) == NOBODY) {
+					log("WARNING: Mobile vnum %d does not exist in database.", nr);
+					return nullptr;
+				}
+			} else {
+				i = nr;
+			}
+		 
+			mob_list.emplace_back(mob_proto[i]);
+			mob = &(*(mob_list.end()-1));
+			clear_char(mob);
+			*mob = mob_proto[i];
+			mob->next = character_list;
+			character_list = mob;
+
+			if(!mob->points.max_hit) {
+				mob->points.max_hit = dice(mob->points.hit, mob->points.mana) +
+									  mob->points.move;
+			} else {
+				mob->points.max_hit = rand_number(mob->points.hit, mob->points.mana);
+			}
+
+			mob->points.hit = mob->points.max_hit;
+			mob->points.mana = mob->points.max_mana;
+			mob->points.move = mob->points.max_move;
+
+			mob->player.time.birth = time(0);
+			mob->player.time.played = 0;
+			mob->player.time.logon = time(0);
+
+			mob_index[i].number++;
+			return (mob);
+		}
 		struct char_data* create_char() {
 			struct char_data *ch;
 			CREATE(ch,struct char_data,1);
 			clear_char(ch);
-			ch->player_specials = (struct player_special_data*) calloc(1,sizeof(struct player_special_data));
-			memset((ch)->player_specials,0,sizeof((ch)->player_specials));
-			(ch)->player_specials->saved.pref = 0;
+			ch->player_specials = std::make_unique<player_special_data>();
 			(ch)->affected = (struct affected_type*) calloc(1,sizeof(struct affected_type));
 			memset(&((ch)->affected),0,sizeof((ch)->affected));
 			(ch)->next = character_list;
@@ -339,7 +375,7 @@ namespace mods {
 				return false;
 			}
 
-			if(player->cd()->pave_mode) {
+			if(player->cd()->builder_data && player->cd()->builder_data->room_pave_mode) {
 				//If is a direction and that direction is not an exit,
 				//then pave a way to that exit
 				int door = 0;

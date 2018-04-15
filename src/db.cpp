@@ -48,7 +48,8 @@ std::vector<index_data> mob_index;	/* index table for mobile file	 */
 std::vector<char_data> mob_proto;	/* prototypes for mobs		 */
 mob_rnum top_of_mobt = 0;	/* top of mobile index table	 */
 
-std::deque<obj_data> object_list;	/* vector of objs	 */
+std::deque<obj_data> object_list;	/* list of objs	 */
+std::deque<char_data> mob_list;		/* list of mobs */
 std::vector<index_data> obj_index;	/* index table for object file	 */
 std::vector<obj_data> obj_proto;	/* prototypes for objs		 */
 obj_rnum top_of_objt = 0;	/* top of object index table	 */
@@ -995,7 +996,6 @@ void parse_sql_mobiles() {
 		                  );
 
 		for(auto row : result2) {
-			proto.player_specials = &dummy_mob;
 			proto.player.name = strdup(row["mob_name"].c_str());
 			proto.player.short_descr = strdup(row["mob_short_description"].c_str());
 			proto.player.long_descr = strdup(row["mob_long_description"].c_str());
@@ -1068,7 +1068,6 @@ void parse_sql_mobiles() {
 			proto.nr = 0;
 			proto.desc = nullptr;
 			proto.uuid = mods::globals::get_uuid();
-			mods::globals::register_player(&proto);
 			mob_proto.push_back(proto);
 			top_of_mobt = mob_proto.size();
 			index_data m_index;
@@ -1828,108 +1827,6 @@ void parse_enhanced_mob(FILE *mob_f, int i, int nr) {
 void parse_mobile(FILE *mob_f, int nr) {
 	log("[DEPRECATED] parse_mobile");
 	return;
-#if 0
-	static int i = 0;
-	int j, t[10];
-	char line[READ_SIZE], *tmpptr, letter;
-	char f1[128], f2[128], buf2[128];
-
-	mob_index[i].vnum = nr;
-	mob_index[i].number = 0;
-	mob_index[i].func = NULL;
-
-	clear_char(mob_proto[i]);
-
-	/*
-	 * Mobiles should NEVER use anything in the 'player_specials' structure.
-	 * The only reason we have every mob in the game share this copy of the
-	 * structure is to save newbie coders from themselves. -gg 2/25/98
-	 */
-	mob_proto[i].player_specials = &dummy_mob;
-	sprintf(buf2, "mob vnum %d", nr);	/* sprintf: OK (for 'buf2 >= 19') */
-
-	/***** String data *****/
-	mob_proto[i].player.name = fread_string(mob_f, buf2);
-	tmpptr = mob_proto[i].player.short_descr = fread_string(mob_f, buf2);
-
-	if(tmpptr && *tmpptr)
-		if(!str_cmp(fname(tmpptr), "a") || !str_cmp(fname(tmpptr), "an") ||
-		        !str_cmp(fname(tmpptr), "the")) {
-			*tmpptr = LOWER(*tmpptr);
-		}
-
-	mob_proto[i].player.long_descr = fread_string(mob_f, buf2);
-	mob_proto[i].player.description = fread_string(mob_f, buf2);
-	GET_TITLE(mob_proto[i]) = NULL;
-
-	/* *** Numeric data *** */
-	if(!get_line(mob_f, line)) {
-		log("SYSERR: Format error after string section of mob #%d\n"
-		    "...expecting line of form '# # # {S | E}', but file ended!", nr);
-		exit(1);
-	}
-
-#ifdef CIRCLE_ACORN	/* Ugh. */
-
-	if(sscanf(line, "%s %s %d %s", f1, f2, t + 2, &letter) != 4) {
-#else
-
-	if(sscanf(line, "%s %s %d %c", f1, f2, t + 2, &letter) != 4) {
-#endif
-		log("SYSERR: Format error after string section of mob #%d\n"
-		    "...expecting line of form '# # # {S | E}'", nr);
-		exit(1);
-	}
-
-	MOB_FLAGS(mob_proto[i]) = asciiflag_conv(f1);
-	SET_BIT(MOB_FLAGS(mob_proto[i]), MOB_ISNPC);
-
-	if(MOB_FLAGGED(mob_proto[i], MOB_NOTDEADYET)) {
-		/* Rather bad to load mobiles with this bit already set. */
-		log("SYSERR: Mob #%d has reserved bit MOB_NOTDEADYET set.", nr);
-		REMOVE_BIT(MOB_FLAGS(mob_proto + i), MOB_NOTDEADYET);
-	}
-
-	check_bitvector_names(MOB_FLAGS(mob_proto[i]), action_bits_count, buf2, "mobile");
-
-	AFF_FLAGS(mob_proto + i) = asciiflag_conv(f2);
-	check_bitvector_names(AFF_FLAGS(mob_proto[i]), affected_bits_count, buf2, "mobile affect");
-
-	GET_ALIGNMENT(mob_proto[i]) = t[2];
-
-	/* AGGR_TO_ALIGN is ignored if the mob is AGGRESSIVE. */
-	if(MOB_FLAGGED(mob_proto + i, MOB_AGGRESSIVE) && MOB_FLAGGED(mob_proto + i, MOB_AGGR_GOOD | MOB_AGGR_EVIL | MOB_AGGR_NEUTRAL)) {
-		log("SYSERR: Mob #%d both Aggressive and Aggressive_to_Alignment.", nr);
-	}
-
-	switch(UPPER(letter)) {
-		case 'S':	/* Simple monsters */
-			parse_simple_mob(mob_f, i, nr);
-			break;
-
-		case 'E':	/* Circle3 Enhanced monsters */
-			parse_enhanced_mob(mob_f, i, nr);
-			break;
-
-		/* add new mob types here.. */
-		default:
-			log("SYSERR: Unsupported mob type '%c' in mob #%d", letter, nr);
-			exit(1);
-	}
-
-	mob_proto[i].aff_abils = mob_proto[i].real_abils;
-
-	for(j = 0; j < NUM_WEARS; j++) {
-		mob_proto[i].equipment[j] = NULL;
-	}
-
-	mob_proto[i].nr = i;
-	mob_proto[i].desc = NULL;
-	/* !mods */
-	mob_proto[i].uuid = mods::globals::get_uuid();
-	mods::globals::register_player(&mob_proto[i]);
-	top_of_mobt = i++;
-#endif
 }
 
 
@@ -1939,178 +1836,6 @@ void parse_mobile(FILE *mob_f, int nr) {
 char *parse_object(FILE *obj_f, int nr) {
 	log("[DEPRECATED] parse_object");
 	return nullptr;
-#if 0
-	static int i = 0;
-	static char line[READ_SIZE];
-	int t[10], j, retval;
-	char *tmpptr;
-	char f1[READ_SIZE], f2[READ_SIZE], buf2[128];
-	struct extra_descr_data *new_descr;
-
-	obj_index[i].vnum = nr;
-	obj_index[i].number = 0;
-	obj_index[i].func = NULL;
-
-	clear_object(obj_proto + i);
-	obj_proto[i].item_number = i;
-
-	sprintf(buf2, "object #%d", nr);	/* sprintf: OK (for 'buf2 >= 19') */
-
-	/* *** string data *** */
-	if((obj_proto[i].name = fread_string(obj_f, buf2)) == NULL) {
-		log("SYSERR: Null obj name or format error at or near %s", buf2);
-		exit(1);
-	}
-
-	tmpptr = obj_proto[i].short_description = fread_string(obj_f, buf2);
-
-	if(tmpptr && *tmpptr)
-		if(!str_cmp(fname(tmpptr), "a") || !str_cmp(fname(tmpptr), "an") ||
-		        !str_cmp(fname(tmpptr), "the")) {
-			*tmpptr = LOWER(*tmpptr);
-		}
-
-	tmpptr = obj_proto[i].description = fread_string(obj_f, buf2);
-
-	if(tmpptr && *tmpptr) {
-		CAP(tmpptr);
-	}
-
-	obj_proto[i].action_description = fread_string(obj_f, buf2);
-
-	/* *** numeric data *** */
-	if(!get_line(obj_f, line)) {
-		log("SYSERR: Expecting first numeric line of %s, but file ended!", buf2);
-		exit(1);
-	}
-
-	if((retval = sscanf(line, " %d %s %s", t, f1, f2)) != 3) {
-		log("SYSERR: Format error in first numeric line (expecting 3 args, got %d), %s", retval, buf2);
-		exit(1);
-	}
-
-	/* Object flags checked in check_object(). */
-	GET_OBJ_TYPE(obj_proto + i) = t[0];
-	GET_OBJ_EXTRA(obj_proto + i) = asciiflag_conv(f1);
-	GET_OBJ_WEAR(obj_proto + i) = asciiflag_conv(f2);
-
-	if(!get_line(obj_f, line)) {
-		log("SYSERR: Expecting second numeric line of %s, but file ended!", buf2);
-		exit(1);
-	}
-
-	if((retval = sscanf(line, "%d %d %d %d", t, t + 1, t + 2, t + 3)) != 4) {
-		log("SYSERR: Format error in second numeric line (expecting 4 args, got %d), %s", retval, buf2);
-		exit(1);
-	}
-
-	GET_OBJ_VAL(obj_proto + i, 0) = t[0];
-	GET_OBJ_VAL(obj_proto + i, 1) = t[1];
-	GET_OBJ_VAL(obj_proto + i, 2) = t[2];
-	GET_OBJ_VAL(obj_proto + i, 3) = t[3];
-
-	if(!get_line(obj_f, line)) {
-		log("SYSERR: Expecting third numeric line of %s, but file ended!", buf2);
-		exit(1);
-	}
-
-	if((retval = sscanf(line, "%d %d %d", t, t + 1, t + 2)) != 3) {
-		log("SYSERR: Format error in third numeric line (expecting 3 args, got %d), %s", retval, buf2);
-		exit(1);
-	}
-
-	GET_OBJ_WEIGHT(obj_proto + i) = t[0];
-	GET_OBJ_COST(obj_proto + i) = t[1];
-	GET_OBJ_RENT(obj_proto + i) = t[2];
-
-	/* check to make sure that weight of containers exceeds curr. quantity */
-	if(GET_OBJ_TYPE(obj_proto + i) == ITEM_DRINKCON || GET_OBJ_TYPE(obj_proto + i) == ITEM_FOUNTAIN) {
-		if(GET_OBJ_WEIGHT(obj_proto + i) < GET_OBJ_VAL(obj_proto + i, 1)) {
-			GET_OBJ_WEIGHT(obj_proto + i) = GET_OBJ_VAL(obj_proto + i, 1) + 5;
-		}
-	}
-
-	/* *** extra descriptions and affect fields *** */
-
-	for(j = 0; j < MAX_OBJ_AFFECT; j++) {
-		obj_proto[i].affected[j].location = APPLY_NONE;
-		obj_proto[i].affected[j].modifier = 0;
-	}
-
-	strcat(buf2, ", after numeric constants\n"	/* strcat: OK (for 'buf2 >= 87') */
-	       "...expecting 'E', 'A', '$', or next object number");
-	j = 0;
-	obj_proto[i].weapon_type = std::hash<std::string> {}("generic");
-
-	for(;;) {
-		if(!get_line(obj_f, line)) {
-			log("SYSERR: Format error in %s", buf2);
-			exit(1);
-		}
-
-		std::string strline = line;
-		auto bracket = strline.find("[");
-
-		if(bracket != std::string::npos && bracket == 0) {
-			/* We have a weapon type tag */
-			auto end_bracket = strline.find("]");
-
-			if(end_bracket == std::string::npos) {
-				log("SYSERR: [mods] INVALID weapon type tag <stub>");
-				exit(1);
-			}
-
-			auto wtype = strline.substr(1,end_bracket -1);
-			obj_proto[i].weapon_type = std::hash<std::string> {}(wtype);
-			continue;
-		}
-
-		switch(*line) {
-			case 'E':
-				CREATE(new_descr, struct extra_descr_data, 1);
-				new_descr->keyword = fread_string(obj_f, buf2);
-				new_descr->description = fread_string(obj_f, buf2);
-				new_descr->next = obj_proto[i].ex_description;
-				obj_proto[i].ex_description = new_descr;
-				break;
-
-			case 'A':
-				if(j >= MAX_OBJ_AFFECT) {
-					log("SYSERR: Too many A fields (%d max), %s", MAX_OBJ_AFFECT, buf2);
-					exit(1);
-				}
-
-				if(!get_line(obj_f, line)) {
-					log("SYSERR: Format error in 'A' field, %s\n"
-					    "...expecting 2 numeric constants but file ended!", buf2);
-					exit(1);
-				}
-
-				if((retval = sscanf(line, " %d %d ", t, t + 1)) != 2) {
-					log("SYSERR: Format error in 'A' field, %s\n"
-					    "...expecting 2 numeric arguments, got %d\n"
-					    "...offending line: '%s'", buf2, retval, line);
-					exit(1);
-				}
-
-				obj_proto[i].affected[j].location = t[0];
-				obj_proto[i].affected[j].modifier = t[1];
-				j++;
-				break;
-
-			case '$':
-			case '#':
-				check_object(obj_proto + i);
-				top_of_objt = i++;
-				return (line);
-
-			default:
-				log("SYSERR: Format error in (%c): %s", *line, buf2);
-				exit(1);
-		}
-	}
-
-#endif
 }
 
 
@@ -2277,6 +2002,8 @@ struct char_data *create_char(void) {
 
 /* create a new mobile from a prototype */
 struct char_data *read_mobile(mob_vnum nr, int type) { /* and mob_rnum */
+	return mods::globals::read_mobile(nr,type);
+	/*
 	mob_rnum i;
 	char_data *mob;
 
@@ -2313,6 +2040,7 @@ struct char_data *read_mobile(mob_vnum nr, int type) { /* and mob_rnum */
 	mob_index[i].number++;
 
 	return (mob);
+	*/
 }
 
 
@@ -2744,8 +2472,8 @@ void store_to_char(struct char_file_u *st, struct char_data *ch) {
 	int i;
 
 	/* to save memory, only PC's -- not MOB's -- have player_specials */
-	if(ch->player_specials == NULL) {
-		CREATE(ch->player_specials, struct player_special_data, 1);
+	if(!ch->player_specials) {
+		ch->player_specials = std::make_shared<player_special_data>();
 	}
 
 	GET_SEX(ch) = st->sex;
@@ -2770,8 +2498,6 @@ void store_to_char(struct char_file_u *st, struct char_data *ch) {
 	ch->points = st->points;
 	ch->char_specials.saved = st->char_specials_saved;
 	ch->player_specials->saved = st->player_specials_saved;
-	POOFIN(ch) = NULL;
-	POOFOUT(ch) = NULL;
 	GET_LAST_TELL(ch) = NOBODY;
 
 	if(ch->points.max_mana < 100) {
@@ -3011,24 +2737,10 @@ void free_char(struct char_data *ch) {
 	int i;
 	struct alias_data *a;
 
-	if(ch->player_specials != NULL && ch->player_specials != &dummy_mob) {
+	if(ch->player_specials) {
 		while((a = GET_ALIASES(ch)) != NULL) {
 			GET_ALIASES(ch) = (GET_ALIASES(ch))->next;
 			free_alias(a);
-		}
-
-		if(ch->player_specials->poofin) {
-			free(ch->player_specials->poofin);
-		}
-
-		if(ch->player_specials->poofout) {
-			free(ch->player_specials->poofout);
-		}
-
-		free(ch->player_specials);
-
-		if(IS_NPC(ch)) {
-			log("SYSERR: Mob %s (#%d) had player_specials allocated!", GET_NAME(ch), GET_MOB_VNUM(ch));
 		}
 	}
 
@@ -3288,7 +3000,6 @@ void clear_char(struct char_data *ch) {
 	ch->drone = false;
 	ch->drone_owner = 0;
 	ch->drone_uuid = 0;
-	ch->pave_mode = false;
 	GET_AC(ch) = 100;		/* Basic Armor */
 
 	if(ch->points.max_mana < 100) {
@@ -3318,8 +3029,8 @@ void init_char(struct char_data *ch) {
 	int i;
 
 	/* create a player_special structure */
-	if(ch->player_specials == NULL) {
-		CREATE(ch->player_specials, struct player_special_data, 1);
+	if(!ch->player_specials) {
+		ch->player_specials = std::make_shared<player_special_data>();
 	}
 
 	/* *** if this is our first player --- he be God *** */

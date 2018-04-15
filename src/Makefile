@@ -10,7 +10,7 @@ CC = g++-7 -g -A -da -std=c++17 -fpermissive -MMD \
 -L$(THIS_DIR)/boost-cpp/build/lib
 
 # Any special flags you want to pass to the compiler
-MYFLAGS = -Wall -Wno-char-subscripts -Wcomment -Wno-format-zero-length
+MYFLAGS = -Wall -Wno-char-subscripts -Wcomment -Wno-format-zero-length -Wno-format-security
 
 #flags for profiling (see hacker.doc for more information)
 PROFILE =

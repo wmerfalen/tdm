@@ -314,12 +314,8 @@ void list_obj_to_char(struct obj_data *list, struct char_data *ch, int mode, int
 
 	for(i = list; i; i = i->next_content) {
 		if(i) {
-			std::cerr << std::hex << i << "<!-- i\n";
-
 			for(unsigned o = 0; o < object_list.size(); o++) {
 				if(&object_list[o] == i) {
-					std::cerr << "exists in object list at: " << o << "\n";
-					std::cerr << "object_list[o]->name: " << std::hex << object_list[o].name << "\n";
 					break;
 				}
 			}

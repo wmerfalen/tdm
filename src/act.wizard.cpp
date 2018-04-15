@@ -260,13 +260,21 @@ ACMD(do_goto) {
 		return;
 	}
 
-	snprintf(buf, sizeof(buf), "$n %s", POOFOUT(ch) ? POOFOUT(ch) : "disappears in a puff of smoke.");
+	if(ch->player_specials){
+		snprintf(buf, sizeof(buf), "$n %s", ch->player_specials->poofout.length() ? ch->player_specials->poofout.c_str() : "disappears in a puff of smoke.");
+	}else{
+		snprintf(buf,sizeof(buf),"$n leaves the room.");
+	}
 	act(buf, TRUE, ch, 0, 0, TO_ROOM);
 
 	char_from_room(ch);
 	char_to_room(ch, location);
 
-	snprintf(buf, sizeof(buf), "$n %s", POOFIN(ch) ? POOFIN(ch) : "appears with an ear-splitting bang.");
+	if(ch->player_specials){
+		snprintf(buf, sizeof(buf), "$n %s", (ch)->player_specials->poofin.length() ? ch->player_specials->poofin.c_str() : "appears with an ear-splitting bang.");
+	}else{
+		snprintf(buf, sizeof(buf), "$n enters the room.");
+	}
 	act(buf, TRUE, ch, 0, 0, TO_ROOM);
 
 	look_at_room(ch, 0);
@@ -1506,33 +1514,21 @@ ACMD(do_gecho) {
 
 
 ACMD(do_poofset) {
-	char **msg;
-
+	skip_spaces(&argument);
+	if(!*argument){
+		send_to_char(ch,"%s","That doesn't seem to be a valid string.");
+		return;
+	}
 	switch(subcmd) {
 		case SCMD_POOFIN:
-			msg = &(POOFIN(ch));
+			(ch)->player_specials->poofin = *argument;
 			break;
-
 		case SCMD_POOFOUT:
-			msg = &(POOFOUT(ch));
+			(ch)->player_specials->poofout = *argument;
 			break;
-
 		default:
 			return;
 	}
-
-	skip_spaces(&argument);
-
-	if(*msg) {
-		free(*msg);
-	}
-
-	if(!*argument) {
-		*msg = NULL;
-	} else {
-		*msg = strdup(argument);
-	}
-
 	send_to_char(ch, "%s", OK);
 }
 
