@@ -688,7 +688,7 @@ void do_stat_character(struct char_data *ch, struct char_data *k) {
 
 		send_to_char(ch, "Hometown: [%d], Speaks: [%d/%d/%d], (STL[%d]/per[%d]/NSTL[%d])\r\n",
 		             k->player.hometown, GET_TALK(k, 0), GET_TALK(k, 1), GET_TALK(k, 2),
-		             GET_PRACTICES(k), int_app[GET_INT(k)].learn,
+		             0, int_app[GET_INT(k)].learn,
 		             wis_app[GET_WIS(k)].bonus);
 	}
 
@@ -2130,9 +2130,9 @@ ACMD(do_show) {
 
 			send_to_char(ch, "Player: %-12s (%s) [%2d %s]\r\n", vbuf.name,
 			             genders[(int) vbuf.sex], vbuf.level, class_abbrevs[(int) vbuf.chclass]);
-			send_to_char(ch, "Au: %-8d  Bal: %-8d  Exp: %-8d  Align: %-5d  Lessons: %-3d\r\n",
+			send_to_char(ch, "Au: %-8d  Bal: %-8d  Exp: %-8d  Align: %-5d\r\n",
 			             vbuf.points.gold, vbuf.points.bank_gold, vbuf.points.exp,
-			             vbuf.char_specials_saved.alignment, vbuf.player_specials_saved.spells_to_learn);
+			             vbuf.char_specials_saved.alignment);
 			/* ctime() uses static buffer: do not combine. */
 			send_to_char(ch, "Started: %-20.16s  ", ctime(&vbuf.birth));
 			send_to_char(ch, "Last: %-20.16s  Played: %3dh %2dm\r\n", ctime(&vbuf.last_logon), vbuf.played / 3600, vbuf.played / 60 % 60);
@@ -2602,7 +2602,6 @@ int perform_set(struct char_data *ch, struct char_data *vict, int mode,
 
 		case 27:
 		case 28:
-			GET_PRACTICES(vict) = RANGE(0, 100);
 			break;
 
 		case 29:

@@ -10,11 +10,11 @@
 #include "../sysdep.h"
 #include "../structs.h"
 #include "../types.hpp"
-#define TICK_RESOLUTION 20
 
 namespace mods {
 	class deferred {
 		public:
+			constexpr static uint64_t TICK_RESOLUTION = 20;
 			typedef unsigned long seconds;
 			deferred() = delete;
 			deferred(uint64_t tick_resolution) : m_tres(tick_resolution),

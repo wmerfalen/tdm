@@ -37,13 +37,14 @@ namespace mods {
 		std::unique_ptr<mods::deferred> defer_queue;
 		duk_context* duktape_context;
 		ai_state_map states;
-		std::vector<std::vector<struct char_data*>> room_list;
+		std::vector<std::vector<char_data*>> room_list;
 		std::vector<std::shared_ptr<mods::player>> player_list;
 		std::unique_ptr<pqxx::connection> pq_con;
 		std::vector<mods::chat::channel> chan;
 		std::vector<std::string> chan_verbs;
 		bool f_import_rooms;
 		std::shared_ptr<mods::player> current_player;
+		std::string bootup_test_suite;
 		namespace objects {
 			static bool populated = false;
 		};
@@ -147,13 +148,14 @@ namespace mods {
 			}
 
 			player_nobody = nullptr;
-			defer_queue = std::make_unique<mods::deferred>(TICK_RESOLUTION);
+			defer_queue = std::make_unique<mods::deferred>(mods::deferred::TICK_RESOLUTION);
 			duktape_context = mods::js::new_context();
 			mods::js::load_c_functions();
 			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js");
 			pq_con = std::make_unique<pqxx::connection>(mods::conf::pq_connection.c_str());
 			f_import_rooms = false;
 			mods::behaviour_tree_impl::load_trees();
+
 		}
 		void post_boot_db() {
 		}
@@ -215,6 +217,39 @@ namespace mods {
 		void pre_game_loop() {
 			std::cout << "Pre game loop\n";
 			refresh_player_states();
+			if(bootup_test_suite.length() > 0){
+				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
+				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
+				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
+				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
+				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
+				std::string prefix = "/bin/bash -c ";
+				constexpr unsigned int arr_size = 1024;
+				std::array<char,arr_size> arr;
+				std::fill(arr.begin(),arr.end(),0);
+				auto ptr = getcwd(&arr[0],arr_size);
+				if(ptr == nullptr){
+					std::cerr << "Couldn't grab PWD!\n";
+					exit(1);
+				}
+				for(auto ch : arr){
+					if(ch == 0){ break; }
+					prefix += ch;
+				}
+				prefix += "/../src/scripts/test-suites/";
+				prefix += bootup_test_suite + "-";
+				std::string cmd_a = prefix + "a &";
+				std::string cmd_b = prefix + "b &";
+				defer_queue->push_secs(0,[cmd_a,cmd_b](){ 
+						std::cerr << "[log] executing test suite\n";
+						system(cmd_a.c_str()); 
+						system(cmd_b.c_str()); 
+				});
+				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
+				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
+				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
+				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
+			}
 		}
 		char_data* read_mobile(const mob_vnum & nr,const int & type){
 			char_data* mob;	

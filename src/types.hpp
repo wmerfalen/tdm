@@ -7,7 +7,6 @@
 #include "mods/ai_state.hpp"
 
 #define EXTERN_ACT(a) extern void a(struct char_data*, char* argument,int,int);
-#define IS_OPPOSING_FACTION(us,them) (us->faction > 0 ? (them->faction < 0) : (them->faction > 0))
 #include "structs.h"
 
 #endif

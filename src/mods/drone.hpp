@@ -8,6 +8,7 @@
 #include "../sysdep.h"
 #include "../structs.h"
 #include "../types.hpp"
+#include "../globals.hpp"
 #include "extern.hpp"
 
 #define DRONE_WEAPON_SET_NUM 2

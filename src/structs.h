@@ -26,7 +26,6 @@ namespace mods {
 typedef std::size_t weapon_type_t;
 typedef std::map<struct char_data*,std::unique_ptr<mods::ai_state>> ai_state_map;
 typedef std::set<char_data*> memory_rec_t;
-typedef short faction_t;
 typedef short ai_state_t;
 typedef short goal_t;
 struct obj_data;
@@ -766,8 +765,9 @@ struct time_data {
 
 
 /* general player-related info, usually PC's and NPC's */
+/** TODO place this is the db */
 struct char_player_data {
-	char	passwd[MAX_PWD_LENGTH+1]; /* character's password      */
+	constexpr static unsigned max_pwd_length = MAX_PWD_LENGTH+1;
 	char	*name;	       /* PC / NPC s name (kill ...  )         */
 	char	*short_descr;  /* for NPC 'actions'                    */
 	char	*long_descr;   /* for 'look'			       */
@@ -780,11 +780,22 @@ struct char_player_data {
 	struct time_data time;  /* PC's AGE in days                 */
 	ubyte weight;       /* PC / NPC's weight                    */
 	ubyte height;       /* PC / NPC's height                    */
-	ubyte faction;
+	/** TODO: phase this out */
+	char	passwd[max_pwd_length];
+	char_player_data() : name(nullptr),short_descr(nullptr),
+	long_descr(nullptr),description(nullptr),title(nullptr),
+	sex(0),chclass(0),level(0),hometown(0),weight(0),height(0) {
+		std::fill(m_passwd.begin(),m_passwd.end(),0);
+		memset(passwd,0,max_pwd_length);
+	}
+	~char_player_data() = default;
+	private:
+	std::array<char,max_pwd_length>	m_passwd; /* character's password      */
 };
 
 
 /* Char's abilities.  Used in char_file_u *DO*NOT*CHANGE* */
+/** TODO place this in the db */
 struct char_ability_data {
 	sbyte str;
 	sbyte str_add;      /* 000 - 100 if strength 18             */
@@ -793,10 +804,18 @@ struct char_ability_data {
 	sbyte dex;
 	sbyte con;
 	sbyte cha;
+	char_ability_data() : str(0),str_add(0),intel(0),
+	wis(0),dex(0),con(0),cha(0){}
+	~char_ability_data() = default;
 };
 
 
 /* Char's points.  Used in char_file_u *DO*NOT*CHANGE* */
+/** TODO: construct this using a "player template" identifier
+ * In essence, it would be an enum that is passed to the constructor.
+ * The enum would be a class type or a specifier to how much each field
+ * should default to. 
+ */
 struct char_point_data {
 	sh_int mana;
 	sh_int max_mana;     /* Max mana for PC/NPC			   */
@@ -812,6 +831,10 @@ struct char_point_data {
 
 	sbyte hitroll;       /* Any bonus or penalty to the hit roll    */
 	sbyte damroll;       /* Any bonus or penalty to the damage roll */
+	char_point_data() : mana(0),max_mana(0),hit(0),max_hit(0),
+	move(0),max_move(0),armor(0),gold(0),bank_gold(0),exp(0),
+	hitroll(0),damroll(0){}
+	~char_point_data() = default;
 };
 
 
@@ -866,8 +889,7 @@ struct player_special_data_saved {
 
 	player_special_data_saved() : PADDING0(0),
 		wimp_level(0),freeze_level(0),invis_level(0),
-		load_room(0),pref(0),bad_pws(0),
-		spells_to_learn(0){
+		load_room(0),pref(0),bad_pws(0) {
 			std::fill(skills.begin(),skills.end(),0);
 			std::fill(talks.begin(),talks.end(),0);
 			std::fill(conditions.begin(),conditions.end(),0);
@@ -882,7 +904,7 @@ struct player_special_data_saved {
  * player_special_data_saved will corrupt the playerfile.
  */
 struct player_special_data {
-	player_special_data_saved saved;
+	struct player_special_data_saved saved;
 	std::string	poofin;		/* Description on arrival of a god.     */
 	std::string poofout;		/* Description upon a god's exit.       */
 	struct alias_data *aliases;	/* Character's aliases			*/
@@ -890,7 +912,7 @@ struct player_special_data {
 	void *last_olc_targ;		/* olc control				*/
 	int last_olc_mode;		/* olc control				*/
 	bool js_profile_initialized;
-	player_special_data() : poofin(""),
+	player_special_data() : aliases(nullptr), poofin(""),
 		poofout(""),last_tell(0),last_olc_targ(nullptr),
 		last_olc_mode(-1),js_profile_initialized(false){}
 	~player_special_data() = default;
@@ -972,35 +994,33 @@ struct char_data {
 	uuid_t drone_owner;
 	bool drone_simulate;
 	uuid_t drone_uuid;
-	struct char_player_data player;       /* Normal data                   */
-	struct char_ability_data real_abils;	 /* Abilities without modifiers   */
-	struct char_ability_data aff_abils;	 /* Abils with spells/stones/etc  */
-	struct char_point_data points;        /* Points                        */
-	struct char_special_data char_specials;	/* PC/NPC specials	  */
+	char_player_data player;       /* Normal data                   */
+	char_ability_data real_abils;	 /* Abilities without modifiers   */
+	char_ability_data aff_abils;	 /* Abils with spells/stones/etc  */
+	char_point_data points;        /* Points                        */
+	char_special_data char_specials;	/* PC/NPC specials	  */
 	std::shared_ptr<player_special_data> player_specials; /* PC specials		  */
-	struct mob_special_data mob_specials;	/* NPC specials		  */
+	mob_special_data mob_specials;	/* NPC specials		  */
 
-	struct affected_type *affected;       /* affected by what spells       */
-	struct obj_data *equipment[NUM_WEARS];/* Equipment array               */
+	affected_type *affected;       /* affected by what spells       */
+	obj_data *equipment[NUM_WEARS];/* Equipment array               */
 
-	struct obj_data *carrying;            /* Head of list                  */
+	obj_data *carrying;            /* Head of list                  */
 	struct descriptor_data *desc;         /* NULL for mobiles              */
 
-	struct char_data *next_in_room;     /* For room->people - list         */
-	struct char_data *next;             /* For either monster or ppl-list  */
-	struct char_data *next_fighting;    /* For fighting list               */
+	char_data *next_in_room;     /* For room->people - list         */
+	char_data *next;             /* For either monster or ppl-list  */
+	char_data *next_fighting;    /* For fighting list               */
 
-	struct follow_type *followers;        /* List of chars followers       */
-	struct char_data *master;             /* Who is char following?        */
+	follow_type *followers;        /* List of chars followers       */
+	char_data *master;             /* Who is char following?        */
 
 	std::shared_ptr<mods::player> player_ptr;
 	/**
 	 * The following will be deprecated
 	 */
-	bool is_faction_leader;
 	goal_t goal;
 	short disorient;
-	faction_t faction;
 	ai_state_t state;
 
 	std::shared_ptr<builder_data_t> builder_data;

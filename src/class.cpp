@@ -3626,12 +3626,6 @@ void advance_level(struct char_data *ch) {
 		ch->points.max_mana += add_mana;
 	}
 
-	if(IS_MAGIC_USER(ch) || IS_CLERIC(ch)) {
-		GET_PRACTICES(ch) += MAX(2, wis_app[GET_WIS(ch)].bonus);
-	} else {
-		GET_PRACTICES(ch) += MIN(2, MAX(1, wis_app[GET_WIS(ch)].bonus));
-	}
-
 	if(GET_LEVEL(ch) >= LVL_IMMORT) {
 		for(i = 0; i < 3; i++) {
 			GET_COND(ch, i) = (char) -1;

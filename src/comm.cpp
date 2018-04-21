@@ -237,8 +237,9 @@ int main(int argc, char **argv) {
 	dir = DFLT_DIR;
 
 	while((pos < argc) && (*(argv[pos]) == '-')) {
-		if(std::string(argv[pos]).compare("--import-rooms")) {
+		if(std::string(argv[pos]).compare("--import-rooms") == 0) {
 			mods::globals::f_import_rooms = true;
+			++pos;
 			continue;
 		}
 
@@ -254,7 +255,18 @@ int main(int argc, char **argv) {
 				}
 
 				break;
-
+			case 'T':
+				if(argc > pos +1){
+					mods::globals::bootup_test_suite = argv[pos+1];
+					++pos;
+					std::cerr << mods::globals::bootup_test_suite.c_str() << "\n";
+					std::cerr << "parsed test suite\n";
+				}else{
+					std::cerr << "SYSERR: Invalid test suite\n";
+					exit(1);
+				}
+				std::cerr << "[break] test suite\n";
+				break;
 			case 'd':
 				if(*(argv[pos] + 2)) {
 					dir = argv[pos] + 2;
@@ -304,6 +316,7 @@ int main(int argc, char **argv) {
 				       "  -q             Quick boot (doesn't scan rent for object limits)\n"
 				       "  -r             Restrict MUD -- no new players allowed.\n"
 				       "  -s             Suppress special procedure assignments.\n",
+					   "  -T <test_suite>Run test suite as character 'Far'\n",
 				       argv[0]
 				      );
 				exit(0);

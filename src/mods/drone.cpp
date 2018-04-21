@@ -2,11 +2,11 @@
 #define  __MENTOC_MODS_DRONE_SOURCE__
 
 #include "drone.hpp"
+#include "../globals.hpp"
 #include "../structs.h"
 #include "../utils.h"
 #include "../screen.h"
 #include "weapon.hpp"
-#include "../globals.hpp"
 #include "acl/color.hpp"
 #include "player.hpp"
 #define DRONE_OWNER_KEY "{player}:drone"
@@ -89,7 +89,9 @@ namespace mods {
 		}
 
 		if(argument.compare("scan") == 0) {
-			command_interpreter(drone->cd(),"scan");
+			for(auto & ch : mods::globals::room_list[drone->cd()->in_room]){
+				mods::player(ch) << "You have been spotted.\r\n";
+			}
 			return false;
 		}
 

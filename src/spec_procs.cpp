@@ -140,14 +140,11 @@ void list_skills(struct char_data *ch) {
 	size_t len = 0;
 	char buf2[MAX_STRING_LENGTH];
 
-	if(!GET_PRACTICES(ch)) {
-		send_to_char(ch, "You have no practice sessions remaining.\r\n");
-		return;
-	}
-
-	len = snprintf(buf2, sizeof(buf2), "You have %d practice session%s remaining.\r\n"
-	               "You know of the following %ss:\r\n", GET_PRACTICES(ch),
-	               GET_PRACTICES(ch) == 1 ? "" : "s", SPLSKL(ch));
+	/** TODO: Devise practice system !medium */
+	/** TODO: Once practice system in place, list them here */
+	len = snprintf(buf2, sizeof(buf2), "You have %d practice session remaining.\r\n"
+	               "You know of the following %ss:\r\n", 0,
+	               SPLSKL(ch));
 
 	for(sortpos = 1; sortpos <= MAX_SKILLS; sortpos++) {
 		i = spell_sort_info[sortpos];
@@ -185,11 +182,6 @@ SPECIAL(guild) {
 		return (TRUE);
 	}
 
-	if(GET_PRACTICES(ch) <= 0) {
-		send_to_char(ch, "You do not seem to be able to practice now.\r\n");
-		return (TRUE);
-	}
-
 	skill_num = find_skill_num(argument);
 
 	if(skill_num < 1 ||
@@ -204,8 +196,8 @@ SPECIAL(guild) {
 	}
 
 	send_to_char(ch, "You practice for a while...\r\n");
-	GET_PRACTICES(ch)--;
 
+	/** TODO: decrement practice session here */
 	percent = GET_SKILL(ch, skill_num);
 	percent += MIN(MAXGAIN(ch), MAX(MINGAIN(ch), int_app[GET_INT(ch)].learn));
 
