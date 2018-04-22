@@ -8,6 +8,11 @@ std::string operator "" _s(const char* s,long unsigned int i) {
 }
 namespace mods {
 	namespace util {
+		bool preg_match(std::string_view regex,std::string_view haystack) {
+			using namespace std::regex_constants;
+			return std::regex_search(haystack.data(), std::regex(regex.data()), match_not_null);
+		}
+
 		bool fuzzy_match(const char* _needle,const char* _haystack) {
 			std::string needle = _needle,haystack = _haystack;
 			using namespace std::regex_constants;
@@ -58,6 +63,27 @@ namespace mods {
 			} catch(...) {
 				return std::nullopt;
 			}
+		}
+		directory_list_t glob(std::string_view path){
+			directory_list_t files;
+#ifdef MENTOC_CPP_2017
+			std::string path = dir.data();
+			for (auto & p : std::filesystem::directory_iterator(path))
+				files.emplace_back(p);
+#else
+			DIR *dir;
+			struct dirent *ent;
+			if ((dir = opendir (path.data())) != NULL) {
+			  /* print all the files and directories within directory */
+			  while ((ent = readdir (dir)) != NULL) {
+				files.emplace_back(ent->d_name);
+			  }
+			  closedir (dir);
+			  return files;
+			} else {
+				return {};
+			}
+#endif
 		}
 	};
 };

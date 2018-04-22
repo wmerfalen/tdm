@@ -26,4 +26,3 @@ expect {
 		}
 }
 sleep 10
-interact

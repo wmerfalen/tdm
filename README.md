@@ -60,6 +60,11 @@ have everything ready before 2019. This README is currently written on the begin
 of January 2018. A full year of development should see many improvements and a stable
 codebase to launch. 
 
+#Latest improvements
+beta features:
+- Deploying a test suite within src/scripts/test-suites/A-\*. Where '\*' is either a or b
+- Behaviour tree for tracking down snipers
+
 # Dependencies
 * libpqxx
 * GSL

@@ -7,8 +7,15 @@
 #include "../globals.hpp"
 #include <optional>
 #include <stdlib.h>
+#ifdef MENTOC_CPP_2017
+#include <filesystem>
+#else
+#include <dirent.h>
+#endif
 
 namespace mods::util {
+	using directory_list_t = std::vector<std::string>;
+	directory_list_t glob(std::string_view);
 	bool fuzzy_match(const char* _needle,const char* _haystack);
 	std::string color_eval(std::string final_buffer);
 	template <typename T>
@@ -111,6 +118,14 @@ namespace mods::util {
 			)
 		)!= container_ptr->end();
 	}
+	auto sanitize = [](const std::string & command,std::string& sanitized){
+		sanitized = "";
+		for(auto ch: command){
+			if(std::isalpha(ch)){
+				sanitized += ch;
+			}
+		}
+	};
 
 };
 

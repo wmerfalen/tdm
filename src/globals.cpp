@@ -14,6 +14,8 @@
 #include "mods/builder.hpp"
 #include "utils.h"
 #include "mods/behaviour_tree_impl.hpp"
+#include "mods/util.hpp"
+#include "mods/pregame.hpp"
 
 #define LMDB_DB_FILE "/home/llvm/code/c++/bnull-mud/lib/"
 #define LMDB_DB_NAME "bnull"
@@ -123,14 +125,6 @@ namespace mods {
 			return false;
 		}
 		int mobile_activity(char_data* ch) {
-			//TODO: Make calls to stock stuff like this: ::stock::do_look(*ch, nullptr 0,0);
-			if(states.find(ch) != states.end()) {
-				return states[ch]->dispatch(ch);
-			} else {
-				states[ch] = std::make_unique<mods::ai_state>(ch,mods::ai_state::WANDER,250);
-			}
-
-			do_look(ch,nullptr,0,0);
 			return 1;
 		}
 		void init() {
@@ -159,11 +153,7 @@ namespace mods {
 		}
 		void post_boot_db() {
 		}
-		void room_event(struct char_data* ch,mods::ai_state::event_type_t event) {
-			for(auto c = ch; c->next_in_room; c = c->next_in_room) {
-				state_fetch(c)->event(ch,event);
-			}
-		}
+		void room_event(struct char_data* ch,mods::ai_state::event_type_t event) { }
 		const char* say_random(const mods::ai_state::event_type_t& event) {
 			return "woof";
 		}
@@ -218,37 +208,7 @@ namespace mods {
 			std::cout << "Pre game loop\n";
 			refresh_player_states();
 			if(bootup_test_suite.length() > 0){
-				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
-				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
-				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
-				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
-				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
-				std::string prefix = "/bin/bash -c ";
-				constexpr unsigned int arr_size = 1024;
-				std::array<char,arr_size> arr;
-				std::fill(arr.begin(),arr.end(),0);
-				auto ptr = getcwd(&arr[0],arr_size);
-				if(ptr == nullptr){
-					std::cerr << "Couldn't grab PWD!\n";
-					exit(1);
-				}
-				for(auto ch : arr){
-					if(ch == 0){ break; }
-					prefix += ch;
-				}
-				prefix += "/../src/scripts/test-suites/";
-				prefix += bootup_test_suite + "-";
-				std::string cmd_a = prefix + "a &";
-				std::string cmd_b = prefix + "b &";
-				defer_queue->push_secs(0,[cmd_a,cmd_b](){ 
-						std::cerr << "[log] executing test suite\n";
-						system(cmd_a.c_str()); 
-						system(cmd_b.c_str()); 
-				});
-				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
-				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
-				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
-				/** TODO FIXME THIS IS TERRIBLE. FIX THIS ASAP */
+				mods::pregame::boot_suite(bootup_test_suite);
 			}
 		}
 		char_data* read_mobile(const mob_vnum & nr,const int & type){
