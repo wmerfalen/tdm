@@ -16,6 +16,7 @@
 #include <map>
 #include <memory>
 #include <set>
+#include "mods/string.hpp"
 #include "mods/ai_state.hpp"
 #include <functional>
 #include <array>
@@ -705,9 +706,9 @@ struct rent_info {
 
 
 struct room_direction_data {
-	char	*general_description;       /* When look DIR.			*/
+	mods::string general_description;       /* When look DIR.			*/
 
-	char	*keyword;		/* for open/close			*/
+	mods::string keyword;		/* for open/close			*/
 
 	int exit_info;	/* Exit info			*/
 	obj_vnum key;		/* Key's number (-1 for no key)		*/
@@ -717,11 +718,14 @@ struct room_direction_data {
 
 /* ================== Memory Structure for room ======================= */
 struct room_data {
+	room_data() : number(0),zone(0),sector_type(0),
+		room_flags(0),light(0),func(nullptr){ }
+	~room_data() = default;
 	room_vnum number;		/* Rooms number	(vnum)		      */
 	zone_rnum zone;              /* Room zone (for resetting)          */
 	int	sector_type;            /* sector type (move/hide)            */
-	char	*name;                  /* Rooms name 'You are ...'           */
-	char	*description;           /* Shown when entered                 */
+	mods::string	name;                  /* Rooms name 'You are ...'           */
+	mods::string	description;           /* Shown when entered                 */
 	struct extra_descr_data *ex_description; /* for examine/look       */
 	struct room_direction_data *dir_option[NUM_OF_DIRS]; /* Directions */
 	int /*bitvector_t*/ room_flags;		/* DEATH,DARK ... etc */

@@ -52,7 +52,9 @@ $(BINDIR)/circle : $(OBJFILES)
 clean:
 	rm -f *.o
 	rm -f mods/*.o
-	rm -f mds/classes/*.o
+	rm *.d mods/*.d
+	rm -f mods/classes/*.o
+	rm -f mods/classes/*.d
 
 %.o: %.cpp
 	$(CC) -c $(CFLAGS) -o $@ $<

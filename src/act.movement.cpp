@@ -426,7 +426,7 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd) 
 		         obj ? "" : "the ", obj ? "$p" : EXIT(ch, door)->keyword ? "$F" : "door");
 
 	if(!obj || IN_ROOM(obj) != NOWHERE) {
-		act(buf, FALSE, ch, obj, obj ? 0 : EXIT(ch, door)->keyword, TO_ROOM);
+		act(buf, FALSE, ch, obj, obj ? 0 : static_cast<char*>(EXIT(ch, door)->keyword), TO_ROOM);
 	}
 
 	/* Notify the other room */

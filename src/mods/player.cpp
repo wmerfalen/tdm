@@ -389,7 +389,7 @@ namespace mods {
 	}
 	void player::stc_room(const room_rnum& rnum) {
 		if(world[rnum].name) {
-			std::string title = world[rnum].name;
+			std::string title = static_cast<char*>(world[rnum].name);
 			stc_color_evaluation(std::string("{grn}") + title + "{/grn}",this);
 		}
 	}
@@ -420,7 +420,7 @@ namespace mods {
 	}
 	void player::stc_room_desc(const room_rnum& rnum) {
 		if(world[rnum].description) {
-			std::string colored = just_color_evaluation(world[rnum].description);
+			std::string colored = just_color_evaluation(static_cast<char*>(world[rnum].description));
 			/* TODO: get status of outside world, if EMP, then replace phrase with emp phrase */
 			auto player = this;
 			auto value = PLAYER_GET("screen_width");

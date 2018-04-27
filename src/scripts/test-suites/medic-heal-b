@@ -1,0 +1,23 @@
+#!/usr/bin/expect -f
+set prompt {\$ $}    ; # this is a regular expression that should match the
+                       # *end* of you bash prompt. Alter it as required.
+spawn nc localhost 4000
+expect {
+	"By what name do you wish to be known?" { send "sniper\r\n" }
+}
+expect "Password:" { send "foo\r\n" }
+expect "*** PRESS RETURN:" { send "\r\n" }
+expect " Make your choice:" { send "1\r\n" }
+expect "Directorate of Operations" { send_user "at recall\n" 
+send "l\r"}
+sleep 3
+send "l\r"
+expect "Foo the Apprentice Sniper is standing here." {
+	send "tell Foo move\r"
+	send "west\r"
+	send "scan\r"
+}
+expect -re "You .*Foo.* to the east" {
+send_user "Found him\n"
+	send "tell Foo done\r"
+}

@@ -205,7 +205,7 @@ namespace mods {
 			}
 		}
 		void pre_game_loop() {
-			std::cout << "Pre game loop\n";
+			std::cerr << "[event] Pre game loop\n";
 			refresh_player_states();
 			if(bootup_test_suite.length() > 0){
 				mods::pregame::boot_suite(bootup_test_suite);
@@ -374,7 +374,6 @@ namespace mods {
 				//If is a direction and that direction is not an exit,
 				//then pave a way to that exit
 				int door = 0;
-				std::cerr << "'" << argument << "'\r\n";
 
 				if(std::string(argument).length() == 1){
 					switch(argument[0]) {
@@ -484,7 +483,6 @@ namespace mods {
 				} else {
 					room_list[room_id].erase(place);
 				}
-
 			}
 
 			void char_to_room(const room_rnum& room,struct char_data* ch) {

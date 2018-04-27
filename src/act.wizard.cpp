@@ -901,7 +901,7 @@ ACMD(do_stat) {
 }
 
 
-ACL_ACMD(do_shutdown)
+ACMD(do_shutdown){
 char arg[MAX_INPUT_LENGTH];
 
 if(subcmd != SCMD_SHUTDOWN) {

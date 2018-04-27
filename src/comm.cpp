@@ -259,7 +259,6 @@ int main(int argc, char **argv) {
 				if(argc > pos +1){
 					mods::globals::bootup_test_suite = argv[pos+1];
 					++pos;
-					std::cerr << mods::globals::bootup_test_suite.c_str() << "\n";
 					std::cerr << "parsed test suite\n";
 				}else{
 					std::cerr << "SYSERR: Invalid test suite\n";
@@ -693,13 +692,6 @@ void game_loop(socket_t mother_desc) {
 		maxdesc = mother_desc;
 
 		for(d = descriptor_list; d; d = d->next) {
-#ifndef CIRCLE_WINDOWS
-
-			if(d->descriptor > maxdesc) {
-				maxdesc = d->descriptor;
-			}
-
-#endif
 			FD_SET(d->descriptor, &input_set);
 			FD_SET(d->descriptor, &output_set);
 			FD_SET(d->descriptor, &exc_set);
@@ -908,10 +900,8 @@ void game_loop(socket_t mother_desc) {
 			pulse = 0;
 		}
 
-#ifdef CIRCLE_UNIX
 		/* Update tics for deadlock protection (UNIX only) */
 		tics++;
-#endif
 	}
 }
 

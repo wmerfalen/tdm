@@ -78,13 +78,60 @@ namespace mods {
 			void set_shared_ptr(std::shared_ptr<mods::player>&);
 
 			/* informational functions */
-			const char*    name()       {
-				return m_char_data->player.name;
+			sh_int& mana() {
+				return m_char_data->points.mana;
 			}
-			uuid_t         uuid() const {
+			sh_int& max_mana() {
+				return m_char_data->points.max_mana;
+			}
+			sh_int& hp() {
+				return m_char_data->points.hit;
+			}
+			sh_int& max_hp() {
+				return m_char_data->points.max_hit;
+			}
+			sh_int& move() {
+				return m_char_data->points.move;
+			}
+			sh_int& max_move() {
+				return m_char_data->points.max_move;
+			}
+
+			sh_int& armor() {
+				return m_char_data->points.armor;
+			}
+			int& gold() {
+				return m_char_data->points.gold;
+			}
+			int& bank_gold() {
+				return m_char_data->points.bank_gold;
+			}
+			int& exp() {
+				return m_char_data->points.exp;
+			}
+			sbyte& hitroll() {
+				return m_char_data->points.hitroll;
+			}
+			sbyte& damroll() {
+				return m_char_data->points.damroll;
+			}
+			byte& level(){
+				return m_char_data->player.level;
+			}
+			std::string& name() {
+				m_name = static_cast<char *>(m_char_data->player.name);
+				return m_name;
+			}
+			byte& sex(){
+				return m_char_data->player.sex;
+			}
+			room_rnum& room(){
+				return m_char_data->in_room;
+			}
+			uuid_t uuid() const {
 				return m_char_data->uuid;
 			}
-			char_data*     cd()   const {
+			char_data* cd() const {
 				return m_char_data;
 			}
 			obj_data*      weapon();
@@ -98,7 +145,6 @@ namespace mods {
 			/* weapon cooldown functions */
 			void weapon_cooldown_start(unsigned long duration,weapon_set set);
 			bool weapon_cooldown_expired(weapon_set);
-
 
 			/* communication functions */
 			void stc_room(const room_rnum&);
@@ -129,16 +175,14 @@ namespace mods {
 				} else {
 					stc(m);
 				}
-
 				return *this;
 			}
-			player& operator<<(const std::string m) {
+			player& operator<<(const std::string& m) {
 				if(m_do_paging) {
 					queue_page_fragment(m);
 				} else {
 					stc(m);
 				}
-
 				return *this;
 			}
 			player& operator<<(int m) {
@@ -160,6 +204,7 @@ namespace mods {
 			std::string_view get_captured_output();
 			void clear_captured_output();
 		private:
+			std::string	m_name;
 			class_capability_t m_class_capability;
 			bool         m_executing_js;
 			char_data*   m_char_data;

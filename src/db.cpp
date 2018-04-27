@@ -319,14 +319,6 @@ void destroy_db(void) {
 
 	/* Rooms */
 	for(cnt = 0; cnt <= top_of_world; cnt++) {
-		if(world[cnt].name) {
-			free(world[cnt].name);
-		}
-
-		if(world[cnt].description) {
-			free(world[cnt].description);
-		}
-
 		free_extra_descriptions(world[cnt].ex_description);
 
 		for(itr = 0; itr < NUM_OF_DIRS; itr++) {
@@ -334,6 +326,7 @@ void destroy_db(void) {
 				continue;
 			}
 
+			/** TODO: make dir_option elements not crappy malloc'd :) */
 			if(world[cnt].dir_option[itr]->general_description) {
 				free(world[cnt].dir_option[itr]->general_description);
 			}
@@ -1380,8 +1373,8 @@ void parse_sql_rooms() {
 		struct room_data room;
 		room.number = row[1].as<int>();
 		room.zone = row[2].as<int>();
-		room.name = strdup(row["name"].c_str());
-		room.description = strdup(row["description"].c_str());
+		room.name = row["name"].c_str();
+		room.description = row["description"].c_str();
 		room.room_flags = row[9].as<int>();
 		room.sector_type = row[3].as<int>();
 		room.ex_description = nullptr;

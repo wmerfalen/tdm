@@ -247,7 +247,7 @@ void olc_interpreter(void *targ, int mode, char *arg) {
 		case OLC_NAME:
 			switch(mode) {
 				case OLC_ROOM:
-					olc_string(&(olc_room->name), MAX_ROOM_NAME, arg);
+					//olc_string(&(olc_room->name), MAX_ROOM_NAME, arg);
 					break;
 
 				case OLC_MOB:
@@ -268,7 +268,7 @@ void olc_interpreter(void *targ, int mode, char *arg) {
 		case OLC_DESC:
 			switch(mode) {
 				case OLC_ROOM:
-					olc_string(&olc_room->description, MAX_ROOM_DESC, arg);
+					//olc_string(&olc_room->description, MAX_ROOM_DESC, arg);
 					break;
 
 				case OLC_MOB:

@@ -426,8 +426,8 @@ namespace mods::builder {
 					mods::pq::commit(check_txn);
 					auto real_room_num = world[world[in_room].dir_option[direction]->to_room].number;
 					std::map<std::string,std::string> values = {
-						{"general_description",world[in_room].dir_option[direction]->general_description},
-						{"keyword",world[in_room].dir_option[direction]->keyword},
+						{"general_description",static_cast<std::string>(world[in_room].dir_option[direction]->general_description)},
+						{"keyword",static_cast<std::string>(world[in_room].dir_option[direction]->keyword)},
 						{"exit_info",std::to_string(world[in_room].dir_option[direction]->exit_info)},
 						{"exit_key",std::to_string(world[in_room].dir_option[direction]->key)},
 						{"to_room",std::to_string(real_room_num)},

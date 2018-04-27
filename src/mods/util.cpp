@@ -13,17 +13,15 @@ namespace mods {
 			return std::regex_search(haystack.data(), std::regex(regex.data()), match_not_null);
 		}
 
-		bool fuzzy_match(const char* _needle,const char* _haystack) {
+		bool fuzzy_match(const std::string& _needle,const std::string & _haystack) {
 			std::string needle = _needle,haystack = _haystack;
-			using namespace std::regex_constants;
 
 			/* If matches EXACTLY (strcmp) */
 			if(needle.compare(haystack) == 0) {
-				dbg("haystack compmare");
 				return true;
 			}
 
-			if(needle.length() >= 1) {
+			if(needle.length()) {
 				/* If the string is composed of spaces, do a match against each word */
 				std::vector<std::string> words;
 				std::string current = "";
@@ -31,14 +29,18 @@ namespace mods {
 				for(auto character : haystack) {
 					if(character == ' ' && current.length()) {
 						words.push_back(current);
+						current.clear();
 						continue;
 					}
-
 					current += character;
 				}
 
-				for(auto string : words) {
-					if(std::regex_search(string, std::regex(needle), match_not_null)) {
+				if(current.size()){
+					words.push_back(current);
+				}
+
+				for(auto str : words) {
+					if(std::regex_search(str, std::regex(needle.c_str(),std::regex_constants::ECMAScript | std::regex_constants::icase), std::regex_constants::match_not_null)) {
 						return true;
 					}
 				}

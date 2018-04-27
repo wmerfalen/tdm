@@ -20,17 +20,22 @@ ACMD(do_heal) {
 	auto ptr = dynamic_cast<mods::classes::medic*>(player->get_class(class_type::MEDIC).get());
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
+	bool healed = false;
+	unsigned room = static_cast<unsigned>(player->room());
 	for(auto& v : vec_args) {
-		if(v.compare("me") == 0 || v.compare("self") == 0 || v.compare(player->cd()->player.name) == 0) {
-			ptr->heal_player(player);
-			continue;
-		}
-
-		for(auto people = world[IN_ROOM(player->cd())].people; people; people = people->next) {
-			if(mods::util::fuzzy_match(v.c_str(),people->player.name)) {
-				ptr->heal_player(people->player_ptr);
-				break;
+		if(mods::globals::room_list.size() > room){
+			for(auto person : mods::globals::room_list[room]){
+				if(mods::util::fuzzy_match(v,person->player.name)) {
+					ptr->heal_player(person->player_ptr);
+					healed = true;
+					break;
+				}
 			}
+		}else{
+			std::cerr << "[bounds] player->room (" << room << ") >= room_list.size " << __FILE__ << "\n";
 		}
+	}
+	if(!healed){
+		*player << "You couldn't find your target!\n";
 	}
 }
