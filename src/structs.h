@@ -772,11 +772,11 @@ struct time_data {
 /** TODO place this is the db */
 struct char_player_data {
 	constexpr static unsigned max_pwd_length = MAX_PWD_LENGTH+1;
-	char	*name;	       /* PC / NPC s name (kill ...  )         */
-	char	*short_descr;  /* for NPC 'actions'                    */
-	char	*long_descr;   /* for 'look'			       */
-	char	*description;  /* Extra descriptions                   */
-	char	*title;        /* PC / NPC's title                     */
+	mods::string name;	       /* PC / NPC s name (kill ...  )         */
+	mods::string short_descr;  /* for NPC 'actions'                    */
+	mods::string long_descr;   /* for 'look'			       */
+	mods::string description;  /* Extra descriptions                   */
+	mods::string title;        /* PC / NPC's title                     */
 	byte sex;           /* PC / NPC's sex                       */
 	byte chclass;       /* PC / NPC's class		       */
 	byte level;         /* PC / NPC's level                     */
@@ -785,12 +785,9 @@ struct char_player_data {
 	ubyte weight;       /* PC / NPC's weight                    */
 	ubyte height;       /* PC / NPC's height                    */
 	/** TODO: phase this out */
-	char	passwd[max_pwd_length];
-	char_player_data() : name(nullptr),short_descr(nullptr),
-	long_descr(nullptr),description(nullptr),title(nullptr),
-	sex(0),chclass(0),level(0),hometown(0),weight(0),height(0) {
+	mods::string passwd;
+	char_player_data() : sex(0),chclass(0),level(0),hometown(0),weight(0),height(0) {
 		std::fill(m_passwd.begin(),m_passwd.end(),0);
-		memset(passwd,0,max_pwd_length);
 	}
 	~char_player_data() = default;
 	private:
@@ -916,8 +913,8 @@ struct player_special_data {
 	void *last_olc_targ;		/* olc control				*/
 	int last_olc_mode;		/* olc control				*/
 	bool js_profile_initialized;
-	player_special_data() : aliases(nullptr), poofin(""),
-		poofout(""),last_tell(0),last_olc_targ(nullptr),
+	player_special_data() :  poofin(""),
+		poofout(""),aliases(nullptr),last_tell(0),last_olc_targ(nullptr),
 		last_olc_mode(-1),js_profile_initialized(false){}
 	~player_special_data() = default;
 };
@@ -1036,9 +1033,9 @@ struct char_data {
 /*             BEWARE: Changing it will ruin the playerfile		  */
 struct char_file_u {
 	/* char_player_data */
-	char	name[MAX_NAME_LENGTH+1];
-	char	description[EXDSCR_LENGTH];
-	char	title[MAX_TITLE_LENGTH+1];
+	mods::string name;
+	mods::string description;
+	mods::string title;
 	byte sex;
 	byte chclass;
 	byte level;
@@ -1057,7 +1054,7 @@ struct char_file_u {
 	struct affected_type affected[MAX_AFFECT];
 
 	time_t last_logon;		/* Time (in secs) of last logon */
-	char host[HOST_LENGTH+1];	/* host of last logon */
+	mods::string host;	/* host of last logon */
 };
 /* ====================================================================== */
 
@@ -1079,8 +1076,16 @@ struct txt_q {
 
 
 struct descriptor_data {
+	descriptor_data() : descriptor(0), bad_pws(0), idle_tics(0),
+	connected(0), desc_num(0),login_time(0),showstr_head(0),
+	showstr_vector(0),showstr_count(0),showstr_page(0),str(0),
+	max_str(0),mail_to(0),has_prompt(0),output(nullptr),history(0),
+	history_pos(0),bufptr(0),bufspace(0){
+
+	}
+	~descriptor_data() = default;
 	socket_t	descriptor;	/* file descriptor for socket		*/
-	char	host[HOST_LENGTH+1];	/* hostname				*/
+	std::string host;		/* hostname				*/
 	byte	bad_pws;		/* number of bad pw attemps this login	*/
 	byte idle_tics;		/* tics idle at password prompt		*/
 	int	connected;		/* mode of 'connectedness'		*/
@@ -1108,7 +1113,6 @@ struct descriptor_data {
 	struct char_data *original;	/* original char if switched		*/
 	struct descriptor_data *snooping; /* Who is this char snooping	*/
 	struct descriptor_data *snoop_by; /* And who is snooping this char	*/
-	struct descriptor_data *next; /* link to next descriptor		*/
 };
 
 

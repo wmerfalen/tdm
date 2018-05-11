@@ -165,14 +165,14 @@ void load_messages(void) {
 		fight_messages[i].msg = NULL;
 	}
 
-	auto f = fgets(chk, 128, fl);
+	fgets(chk, 128, fl);
 
 	while(!feof(fl) && (*chk == '\n' || *chk == '*')) {
-		f= fgets(chk, 128, fl);
+		fgets(chk, 128, fl);
 	}
 
 	while(*chk == 'M') {
-		f = fgets(chk, 128, fl);
+		fgets(chk, 128, fl);
 		sscanf(chk, " %d\n", &type);
 
 		for(i = 0; (i < MAX_MESSAGES) && (fight_messages[i].a_type != type) &&
@@ -201,7 +201,7 @@ void load_messages(void) {
 		messages->god_msg.attacker_msg = fread_action(fl, i);
 		messages->god_msg.victim_msg = fread_action(fl, i);
 		messages->god_msg.room_msg = fread_action(fl, i);
-		f = fgets(chk, 128, fl);
+		fgets(chk, 128, fl);
 
 		while(!feof(fl) && (*chk == '\n' || *chk == '*')) {
 			fgets(chk, 128, fl);
@@ -241,7 +241,7 @@ void check_killer(struct char_data *ch, struct char_data *vict) {
 	SET_BIT(PLR_FLAGS(ch), PLR_KILLER);
 	send_to_char(ch, "If you want to be a PLAYER KILLER, so be it...\r\n");
 	mudlog(BRF, LVL_IMMORT, TRUE, "PC Killer bit set on %s for initiating attack on %s at %s.",
-	       GET_NAME(ch), GET_NAME(vict), world[IN_ROOM(vict)].name);
+	       GET_NAME(ch).c_str(), GET_NAME(vict).c_str(), world[IN_ROOM(vict)].name.c_str());
 }
 
 
@@ -302,10 +302,10 @@ void make_corpse(struct char_data *ch) {
 	IN_ROOM(corpse) = NOWHERE;
 	corpse->name = strdup("corpse");
 
-	snprintf(buf2, sizeof(buf2), "The corpse of %s is lying here.", GET_NAME(ch));
+	snprintf(buf2, sizeof(buf2), "The corpse of %s is lying here.", GET_NAME(ch).c_str());
 	corpse->description = strdup(buf2);
 
-	snprintf(buf2, sizeof(buf2), "the corpse of %s", GET_NAME(ch));
+	snprintf(buf2, sizeof(buf2), "the corpse of %s", GET_NAME(ch).c_str());
 	corpse->short_description = strdup(buf2);
 
 	GET_OBJ_TYPE(corpse) = ITEM_CONTAINER;
@@ -405,7 +405,7 @@ void raw_kill(struct char_data *ch) {
 void die(struct char_data* killer,struct char_data *victim) {
 	/* check if mob death trigger is active */
 	std::string functor;
-	DBGET(mods::globals::replace_all(DT_FORMAT,"{player_name}",killer->player.name),functor);
+	DBGET(mods::globals::replace_all(DT_FORMAT,"{player_name}",killer->player.name.c_str()),functor);
 
 	if(functor.length()) {
 		functor += "(\"";
@@ -941,7 +941,7 @@ int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int 
 		}
 
 		if(!IS_NPC(victim)) {
-			mudlog(BRF, LVL_IMMORT, TRUE, "%s killed by %s at %s", GET_NAME(victim), GET_NAME(ch), world[IN_ROOM(victim)].name);
+			mudlog(BRF, LVL_IMMORT, TRUE, "%s killed by %s at %s", GET_NAME(victim).c_str(), GET_NAME(ch).c_str(), world[IN_ROOM(victim)].name.c_str());
 
 			if(MOB_FLAGGED(ch, MOB_MEMORY)) {
 				forget(ch, victim);
@@ -1150,7 +1150,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
 		}
 
 		if(!IS_NPC(victim)) {
-			mudlog(BRF, LVL_IMMORT, TRUE, "%s killed by %s at %s", GET_NAME(victim), GET_NAME(ch), world[IN_ROOM(victim)].name);
+			mudlog(BRF, LVL_IMMORT, TRUE, "%s killed by %s at %s", GET_NAME(victim).c_str(), GET_NAME(ch).c_str(), world[IN_ROOM(victim)].name.c_str());
 
 			if(MOB_FLAGGED(ch, MOB_MEMORY)) {
 				forget(ch, victim);
@@ -1372,7 +1372,7 @@ int damage(struct char_data *ch, struct char_data *victim, int dam, int attackty
 		}
 
 		if(!IS_NPC(victim)) {
-			mudlog(BRF, LVL_IMMORT, TRUE, "%s killed by %s at %s", GET_NAME(victim), GET_NAME(ch), world[IN_ROOM(victim)].name);
+			mudlog(BRF, LVL_IMMORT, TRUE, "%s killed by %s at %s", GET_NAME(victim).c_str(), GET_NAME(ch).c_str(), world[IN_ROOM(victim)].name.c_str());
 
 			if(MOB_FLAGGED(ch, MOB_MEMORY)) {
 				forget(ch, victim);
@@ -1519,7 +1519,8 @@ void hit(struct char_data *ch, struct char_data *victim, int type) {
 	ch->last_fight_timestamp = time(NULL);
 
 	if(player->has_weapon_capability(mods::weapon::mask::snipe)) {
-		return snipe_hit(ch,victim,type,-1);
+		snipe_hit(ch,victim,type,-1);
+		return;
 	}
 
 	struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);

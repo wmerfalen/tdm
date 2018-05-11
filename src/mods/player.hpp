@@ -119,7 +119,7 @@ namespace mods {
 				return m_char_data->player.level;
 			}
 			std::string& name() {
-				m_name = static_cast<char *>(m_char_data->player.name);
+				m_name = m_char_data->player.name.c_str();
 				return m_name;
 			}
 			byte& sex(){

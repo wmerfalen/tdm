@@ -14,6 +14,7 @@
 #include "conf.h"
 #include "sysdep.h"
 #include "mods/extern.hpp"
+#include <sys/epoll.h>
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -103,8 +104,9 @@ extern int *cmd_sort_info;
 extern struct time_info_data time_info;		/* In db.c */
 extern char *help;
 
+using descriptor_list_t = std::deque<descriptor_data>;
+descriptor_list_t descriptor_list;		/* master desc list */
 /* local globals */
-struct descriptor_data *descriptor_list = NULL;		/* master desc list */
 struct txt_block *bufpool = 0;	/* pool of large output buffers */
 int buf_largecount = 0;		/* # of large buffers which exist */
 int buf_overflows = 0;		/* # of overflows of output */
@@ -120,6 +122,8 @@ byte reread_wizlist;		/* signal: SIGUSR1 */
 byte emergency_unban;		/* signal: SIGUSR2 */
 FILE *logfile = NULL;		/* Where to send the log messages. */
 const char *text_overflow = "**OVERFLOW**\r\n";
+int epoll_fd = -1;
+epoll_event epoll_ev;
 
 /* functions in this file */
 RETSIGTYPE reread_wizlists(int sig);
@@ -314,7 +318,7 @@ int main(int argc, char **argv) {
 				       "  -o <file>      Write log to <file> instead of stderr.\n"
 				       "  -q             Quick boot (doesn't scan rent for object limits)\n"
 				       "  -r             Restrict MUD -- no new players allowed.\n"
-				       "  -s             Suppress special procedure assignments.\n",
+				       "  -s             Suppress special procedure assignments.\n"
 					   "  -T <test_suite>Run test suite as character 'Far'\n",
 				       argv[0]
 				      );
@@ -416,8 +420,8 @@ void init_game(ush_int port) {
 
 	log("Closing all sockets.");
 
-	while(descriptor_list) {
-		close_socket(descriptor_list);
+	for(auto & desc : descriptor_list){
+		close_socket(&desc);
 	}
 
 	CLOSE_SOCKET(mother_desc);
@@ -642,266 +646,205 @@ int get_max_players(void) {
  * such as mobile_activity().
  */
 void game_loop(socket_t mother_desc) {
-	fd_set input_set, output_set, exc_set, null_set;
-	struct timeval last_time, opt_time, process_time, temp_time;
-	struct timeval before_sleep, now, timeout;
 	char comm[MAX_INPUT_LENGTH];
-	struct descriptor_data *d, *next_d;
-	int pulse = 0, missed_pulses, maxdesc, aliased;
-
-	/* initialize various time values */
-	null_time.tv_sec = 0;
-	null_time.tv_usec = 0;
-	opt_time.tv_usec = OPT_USEC;
-	opt_time.tv_sec = 0;
-	FD_ZERO(&null_set);
-
-	gettimeofday(&last_time, (struct timezone *) 0);
 
 	mods::globals::pre_game_loop();
+    const int size = 10; // hint
+    epoll_fd = epoll_create (size);
+    if (epoll_fd == -1) {
+        std::cerr << "[epoll] epoll_create failed: " << strerror (errno) << "\n";
+        return;
+    }
 
+    // add fd to reactor
+    epoll_ev.events = EPOLLIN; // new connection is a read event
+    epoll_ev.data.fd = mother_desc; // user data
+    int r = epoll_ctl (epoll_fd, EPOLL_CTL_ADD, mother_desc, &epoll_ev);
+    if (r == -1) {
+        std::cerr << "[epoll] epoll_ctl failed: " << strerror (errno) << "\n";
+        close (epoll_fd);
+        close (mother_desc);
+        return;
+    }
+
+	std::cerr << "[epoll] epoll_ctl okay\n";
+
+	int aliased = 0;
 	/* The Main Loop.  The Big Cheese.  The Top Dog.  The Head Honcho.  The.. */
 	while(!circle_shutdown) {
 		mods::globals::defer_queue->iteration();
 
-		/* Sleep if we don't have any connections */
-		if(descriptor_list == NULL) {
-			log("No connections.  Going to sleep.");
-			FD_ZERO(&input_set);
-			FD_SET(mother_desc, &input_set);
-
-			if(select(mother_desc + 1, &input_set, (fd_set *) 0, (fd_set *) 0, NULL) < 0) {
-				if(errno == EINTR) {
-					log("Waking up to process signal.");
-				} else {
-					perror("SYSERR: Select coma");
-				}
-			} else {
-				log("New connection.  Waking up.");
-			}
-
-			gettimeofday(&last_time, (struct timezone *) 0);
-		}
-
-		/* Set up the input, output, and exception sets for select(). */
-		FD_ZERO(&input_set);
-		FD_ZERO(&output_set);
-		FD_ZERO(&exc_set);
-		FD_SET(mother_desc, &input_set);
-
-		maxdesc = mother_desc;
-
-		for(d = descriptor_list; d; d = d->next) {
-			FD_SET(d->descriptor, &input_set);
-			FD_SET(d->descriptor, &output_set);
-			FD_SET(d->descriptor, &exc_set);
-		}
-
-		/*
-		 * At this point, we have completed all input, output and heartbeat
-		 * activity from the previous iteration, so we have to put ourselves
-		 * to sleep until the next 0.1 second tick.  The first step is to
-		 * calculate how long we took processing the previous iteration.
-		 */
-
-		gettimeofday(&before_sleep, (struct timezone *) 0); /* current time */
-		timediff(&process_time, &before_sleep, &last_time);
-
-		/*
-		 * If we were asleep for more than one pass, count missed pulses and sleep
-		 * until we're resynchronized with the next upcoming pulse.
-		 */
-		if(process_time.tv_sec == 0 && process_time.tv_usec < OPT_USEC) {
-			missed_pulses = 0;
-		} else {
-			missed_pulses = process_time.tv_sec * PASSES_PER_SEC;
-			missed_pulses += process_time.tv_usec / OPT_USEC;
-			process_time.tv_sec = 0;
-			process_time.tv_usec = process_time.tv_usec % OPT_USEC;
-		}
-
-		/* Calculate the time we should wake up */
-		timediff(&temp_time, &opt_time, &process_time);
-		timeadd(&last_time, &before_sleep, &temp_time);
-
-		/* Now keep sleeping until that time has come */
-		gettimeofday(&now, (struct timezone *) 0);
-		timediff(&timeout, &last_time, &now);
-
-		/* Go to sleep */
-		do {
-			circle_sleep(&timeout);
-			gettimeofday(&now, (struct timezone *) 0);
-			timediff(&timeout, &last_time, &now);
-		} while(timeout.tv_usec || timeout.tv_sec);
-
-		/* Poll (without blocking) for new input, output, and exceptions */
-		if(select(maxdesc + 1, &input_set, &output_set, &exc_set, &null_time) < 0) {
-			perror("SYSERR: Select poll");
+		epoll_event events[size];
+		constexpr int timeout = 5;	/* miliseconds */
+		// and wait for events
+		int r = epoll_wait (epoll_fd, events, size, timeout);
+		if (r == -1) {
+			std::cerr << "[epoll] epoll_wait returned -1\n";
+			close (epoll_fd);
+			close (mother_desc);
 			return;
 		}
 
-		/* If there are new connections waiting, accept them. */
-		if(FD_ISSET(mother_desc, &input_set)) {
-			new_descriptor(mother_desc);
-		}
-
-		/* Kick out the freaky folks in the exception set and marked for close */
-		for(d = descriptor_list; d; d = next_d) {
-			next_d = d->next;
-
-			if(FD_ISSET(d->descriptor, &exc_set)) {
-				FD_CLR(d->descriptor, &input_set);
-				FD_CLR(d->descriptor, &output_set);
-				close_socket(d);
-			}
-		}
-
-		/* Process descriptors with input pending */
-		for(d = descriptor_list; d; d = next_d) {
-			next_d = d->next;
-
-			if(FD_ISSET(d->descriptor, &input_set))
-				if(process_input(d) < 0) {
-					close_socket(d);
-				}
-		}
-
-		/* Process commands we just read from process_input */
-		for(d = descriptor_list; d; d = next_d) {
-			next_d = d->next;
-
-			/*
-			 * Not combined to retain --(d->wait) behavior. -gg 2/20/98
-			 * If no wait state, no subtraction.  If there is a wait
-			 * state then 1 is subtracted. Therefore we don't go less
-			 * than 0 ever and don't require an 'if' bracket. -gg 2/27/99
-			 */
-			if(d->character) {
-				GET_WAIT_STATE(d->character) -= (GET_WAIT_STATE(d->character) > 0);
-
-				if(GET_WAIT_STATE(d->character)) {
+		// demultiplex events
+		int i = 0;
+		while (i < r) {
+			if (events[i].data.fd == mother_desc) {
+				new_descriptor(mother_desc);
+			}else{
+				if(process_input(&(*mods::globals::socket_map[events[i].data.fd].second)) < 0){
+					mods::globals::deregister_player(mods::globals::socket_map[events[i].data.fd].first);
+					/** close_socket will free() most of the data associated with this descriptor_list element */
+					close_socket(&(*mods::globals::socket_map[events[i].data.fd].second));
+					/** Remove the descriptor_list element by iterator */
+					descriptor_list.erase(mods::globals::socket_map[events[i].data.fd].second);
+					++i;
 					continue;
 				}
-			}
-
-			if(!get_from_q(&d->input, comm, &aliased)) {
-				continue;
-			}
-
-			if(d->character) {
-				/* Reset the idle timer & pull char back from void if necessary */
-				d->character->char_specials.timer = 0;
-
-				if(STATE(d) == CON_PLAYING && GET_WAS_IN(d->character) != NOWHERE) {
-					if(IN_ROOM(d->character) != NOWHERE) {
-						char_from_room(d->character);
+				/** d will likely be a std::deque<descriptor_data>::iterator object */
+				auto d = mods::globals::socket_map[events[i].data.fd].second;
+				if(d->character) {
+					if(!get_from_q(&d->input, comm, &aliased)) {
+						++i;
+						continue;
 					}
+					// Reset the idle timer & pull char back from void if necessary 
+					d->character->char_specials.timer = 0;
+					if(STATE(d) == CON_PLAYING && GET_WAS_IN(d->character) != NOWHERE) {
+						if(IN_ROOM(d->character) != NOWHERE) {
+							char_from_room(d->character);
+						}
+						char_to_room(d->character, GET_WAS_IN(d->character));
+						GET_WAS_IN(d->character) = NOWHERE;
+						act("$n has returned.", TRUE, d->character, 0, 0, TO_ROOM);
+						GET_WAIT_STATE(d->character) = 1;
+						d->has_prompt = FALSE;
 
-					char_to_room(d->character, GET_WAS_IN(d->character));
-					GET_WAS_IN(d->character) = NOWHERE;
-					act("$n has returned.", TRUE, d->character, 0, 0, TO_ROOM);
-				}
+						if(d->str) {	// Writing boards, mail, etc. 
+							string_add(&(*d), comm);
+						} else if(d->showstr_count) { // Reading something w/ pager 
+							show_string(&(*d), comm);
+						} else if(STATE(&(*d)) != CON_PLAYING) { // In menus, etc. 
+							nanny(&(*d), comm);
+						} else {			// else: we're playing normally. 
+							if(aliased) {	// To prevent recursive aliases. 
+								d->has_prompt = TRUE;    // To get newline before next cmd output. 
+							} else if(perform_alias(&(*d), comm, sizeof(comm))) { // Run it through aliasing system 
+								get_from_q(&d->input, comm, &aliased);
+							}
+						}
 
-				GET_WAIT_STATE(d->character) = 1;
-			}
-
-			d->has_prompt = FALSE;
-
-			if(d->str) {	/* Writing boards, mail, etc. */
-				string_add(d, comm);
-			} else if(d->showstr_count) { /* Reading something w/ pager */
-				show_string(d, comm);
-			} else if(STATE(d) != CON_PLAYING) { /* In menus, etc. */
-				nanny(d, comm);
-			} else {			/* else: we're playing normally. */
-				if(aliased) {	/* To prevent recursive aliases. */
-					d->has_prompt = TRUE;    /* To get newline before next cmd output. */
-				} else if(perform_alias(d, comm, sizeof(comm))) { /* Run it through aliasing system */
-					get_from_q(&d->input, comm, &aliased);
-				}
-
-				command_interpreter(d->character, comm); /* Send it to interpreter */
-			}
-		}
-
-		/* Send queued output out to the operating system (ultimately to user). */
-		for(d = descriptor_list; d; d = next_d) {
-			next_d = d->next;
-
-			if(*(d->output) && FD_ISSET(d->descriptor, &output_set)) {
-				/* Output for this player is ready. */
-
-				process_output(d);
-
-				if(d->bufptr == 0) {	/* All output sent. */
-					d->has_prompt = TRUE;
+						command_interpreter(d->character, comm); // Send it to interpreter 
+					}
 				}
 			}
+			++i;
 		}
 
-		/* Print prompts for other descriptors who had no other output */
-		for(d = descriptor_list; d; d = d->next) {
-			if(!d->has_prompt && d->bufptr == 0) {
-				write_to_descriptor(d->descriptor, make_prompt(d));
-				d->has_prompt = TRUE;
-			}
+		/* Process commands we just read from process_input 
+			 for(d = descriptor_list; d; d = next_d) {
+			 next_d = d->next;
+
+			 if(d->character) {
+			 GET_WAIT_STATE(d->character) -= (GET_WAIT_STATE(d->character) > 0);
+
+			 if(GET_WAIT_STATE(d->character)) {
+			 continue;
+			 }
+			 }
+
+			 if(!get_from_q(&d->input, comm, &aliased)) {
+			 continue;
+			 }
+
+			 if(d->character) {
+		// Reset the idle timer & pull char back from void if necessary 
+		d->character->char_specials.timer = 0;
+
+		if(STATE(d) == CON_PLAYING && GET_WAS_IN(d->character) != NOWHERE) {
+		if(IN_ROOM(d->character) != NOWHERE) {
+		char_from_room(d->character);
 		}
 
-		/* Kick out folks in the CON_CLOSE or CON_DISCONNECT state */
-		for(d = descriptor_list; d; d = next_d) {
-			next_d = d->next;
-
-			if(STATE(d) == CON_CLOSE || STATE(d) == CON_DISCONNECT) {
-				close_socket(d);
-			}
+		char_to_room(d->character, GET_WAS_IN(d->character));
+		GET_WAS_IN(d->character) = NOWHERE;
+		act("$n has returned.", TRUE, d->character, 0, 0, TO_ROOM);
 		}
 
-		/*
-		 * Now, we execute as many pulses as necessary--just one if we haven't
-		 * missed any pulses, or make up for lost time if we missed a few
-		 * pulses by sleeping for too long.
-		 */
-		missed_pulses++;
-
-		if(missed_pulses <= 0) {
-			log("SYSERR: **BAD** MISSED_PULSES NONPOSITIVE (%d), TIME GOING BACKWARDS!!", missed_pulses);
-			missed_pulses = 1;
+		GET_WAIT_STATE(d->character) = 1;
 		}
 
-		/* If we missed more than 30 seconds worth of pulses, just do 30 secs */
-		if(missed_pulses > 30 RL_SEC) {
-			log("SYSERR: Missed %d seconds worth of pulses.", missed_pulses / PASSES_PER_SEC);
-			missed_pulses = 30 RL_SEC;
+		d->has_prompt = FALSE;
+
+		if(d->str) {	// Writing boards, mail, etc. 
+		string_add(d, comm);
+		} else if(d->showstr_count) { // Reading something w/ pager 
+		show_string(d, comm);
+		} else if(STATE(d) != CON_PLAYING) { // In menus, etc. 
+		nanny(d, comm);
+		} else {			// else: we're playing normally. 
+		if(aliased) {	// To prevent recursive aliases. 
+		d->has_prompt = TRUE;    // To get newline before next cmd output. 
+		} else if(perform_alias(d, comm, sizeof(comm))) { // Run it through aliasing system 
+		get_from_q(&d->input, comm, &aliased);
 		}
 
-		/* Now execute the heartbeat functions */
-		while(missed_pulses--) {
-			heartbeat(++pulse);
+		command_interpreter(d->character, comm); // Send it to interpreter 
 		}
-
-		/* Check for any signals we may have received. */
-		if(reread_wizlist) {
-			reread_wizlist = FALSE;
-			mudlog(CMP, LVL_IMMORT, TRUE, "Signal received - rereading wizlists.");
-			reboot_wizlists();
 		}
+		*/
 
-		if(emergency_unban) {
-			emergency_unban = FALSE;
-			mudlog(BRF, LVL_IMMORT, TRUE, "Received SIGUSR2 - completely unrestricting game (emergent)");
-			ban_list = NULL;
-			circle_restrict = 0;
-			num_invalid = 0;
-		}
+		/* Send queued output out to the operating system (ultimately to user). 
+			 for(d = descriptor_list; d; d = next_d) {
+			 next_d = d->next;
 
-		/* Roll pulse over after 10 hours */
-		if(pulse >= (10 * 60 * 60 * PASSES_PER_SEC)) {
-			pulse = 0;
-		}
+			 if(*(d->output) && FD_ISSET(d->descriptor, &output_set)) {
+			 process_output(d);
+			 if(d->bufptr == 0) {	// All output sent.
+			 d->has_prompt = TRUE;
+			 }
+			 }
+			 }
+			 */
 
-		/* Update tics for deadlock protection (UNIX only) */
-		tics++;
+		/* Print prompts for other descriptors who had no other output 
+			 for(d = descriptor_list; d; d = d->next) {
+			 if(!d->has_prompt && d->bufptr == 0) {
+			 write_to_descriptor(d->descriptor, make_prompt(d));
+			 d->has_prompt = TRUE;
+			 }
+			 }
+			 */
+
+		/* Kick out folks in the CON_CLOSE or CON_DISCONNECT state 
+			 for(d = descriptor_list; d; d = next_d) {
+			 next_d = d->next;
+			 if(STATE(d) == CON_CLOSE || STATE(d) == CON_DISCONNECT) {
+			 close_socket(d);
+			 }
+			 }
+			 */
+
+		/* Now execute the heartbeat functions 
+			 while(missed_pulses--) {
+			 heartbeat(++pulse);
+			 }
+			 */
+
+		/* Check for any signals we may have received. 
+			 if(reread_wizlist) {
+			 reread_wizlist = FALSE;
+			 mudlog(CMP, LVL_IMMORT, TRUE, "Signal received - rereading wizlists.");
+			 reboot_wizlists();
+			 }
+
+			 if(emergency_unban) {
+			 emergency_unban = FALSE;
+			 mudlog(BRF, LVL_IMMORT, TRUE, "Received SIGUSR2 - completely unrestricting game (emergent)");
+			 ban_list = NULL;
+			 circle_restrict = 0;
+			 num_invalid = 0;
+			 }
+			 */
 	}
 }
 
@@ -957,8 +900,8 @@ void heartbeat(int pulse) {
 
 
 /* ******************************************************************
-*  general utility stuff (for local use)                            *
-****************************************************************** */
+ *  general utility stuff (for local use)                            *
+ ****************************************************************** */
 
 /*
  *  new code to calculate time differences, which works on systems
@@ -1010,18 +953,17 @@ void timeadd(struct timeval *rslt, struct timeval *a, struct timeval *b) {
 
 void record_usage(void) {
 	int sockets_connected = 0, sockets_playing = 0;
-	struct descriptor_data *d;
 
-	for(d = descriptor_list; d; d = d->next) {
+	for(auto & d : descriptor_list){
 		sockets_connected++;
 
-		if(STATE(d) == CON_PLAYING) {
+		if(STATE(&d) == CON_PLAYING) {
 			sockets_playing++;
 		}
 	}
 
 	log("nusage: %-3d sockets connected, %-3d sockets playing",
-	    sockets_connected, sockets_playing);
+			sockets_connected, sockets_playing);
 
 #ifdef RUSAGE	/* Not RUSAGE_SELF because it doesn't guarantee prototype. */
 	{
@@ -1029,7 +971,7 @@ void record_usage(void) {
 
 		getrusage(RUSAGE_SELF, &ru);
 		log("rusage: user time: %ld sec, system time: %ld sec, max res size: %ld",
-		    ru.ru_utime.tv_sec, ru.ru_stime.tv_sec, ru.ru_maxrss);
+				ru.ru_utime.tv_sec, ru.ru_stime.tv_sec, ru.ru_maxrss);
 	}
 #endif
 
@@ -1076,8 +1018,8 @@ char *make_prompt(struct descriptor_data *d) {
 		strcpy(prompt, "] ");    /* strcpy: OK (for 'MAX_PROMPT_LENGTH >= 3') */
 	} else if(d->showstr_count) {
 		snprintf(prompt, sizeof(prompt),
-		         "\r\n[ Return to continue, (q)uit, (r)efresh, (b)ack, or page number (%d/%d) ]",
-		         d->showstr_page, d->showstr_count);
+				"\r\n[ Return to continue, (q)uit, (r)efresh, (b)ack, or page number (%d/%d) ]",
+				d->showstr_page, d->showstr_count);
 	} else if(STATE(d) == CON_PLAYING && !IS_NPC(d->character)) {
 		int count;
 		size_t len = 0;
@@ -1272,8 +1214,8 @@ size_t vwrite_to_output(struct descriptor_data *t, const char *format, va_list a
 
 
 /* ******************************************************************
-*  socket handling                                                  *
-****************************************************************** */
+ *  socket handling                                                  *
+ ****************************************************************** */
 
 
 /*
@@ -1340,7 +1282,7 @@ int parse_ip(const char *addr, struct in_addr *inaddr) {
 /* If you have neither function - sorry, you can't do specific binding. */
 int parse_ip(const char *addr, struct in_addr *inaddr) {
 	log("SYSERR: warning: you're trying to set DFLT_IP but your system has no "
-	    "functions to parse IP addresses (how bizarre!)");
+			"functions to parse IP addresses (how bizarre!)");
 	return (0);
 }
 
@@ -1377,7 +1319,7 @@ int new_descriptor(socket_t s) {
 	int sockets_connected = 0;
 	socklen_t i;
 	static int last_desc = 0;	/* last descriptor number */
-	struct descriptor_data *newd;
+	struct descriptor_data newd;
 	struct sockaddr_in peer;
 	struct hostent *from;
 
@@ -1398,23 +1340,15 @@ int new_descriptor(socket_t s) {
 		return (0);
 	}
 
-	/* make sure we have room for it */
-	for(newd = descriptor_list; newd; newd = newd->next) {
-		sockets_connected++;
-	}
-
-	if(sockets_connected >= max_players) {
+	if(++sockets_connected >= max_players) {
 		write_to_descriptor(desc, "Sorry, CircleMUD is full right now... please try again later!\r\n");
 		CLOSE_SOCKET(desc);
 		return (0);
 	}
 
-	/* create a new descriptor */
-	CREATE(newd, struct descriptor_data, 1);
-
 	/* find the sitename */
 	if(nameserver_is_slow || !(from = gethostbyaddr((char *) &peer.sin_addr,
-	                                                sizeof(peer.sin_addr), AF_INET))) {
+					sizeof(peer.sin_addr), AF_INET))) {
 
 		/* resolution failed */
 		if(!nameserver_is_slow) {
@@ -1422,61 +1356,46 @@ int new_descriptor(socket_t s) {
 		}
 
 		/* find the numeric site address */
-		strncpy(newd->host, (char *)inet_ntoa(peer.sin_addr), HOST_LENGTH);	/* strncpy: OK (n->host:HOST_LENGTH+1) */
-		*(newd->host + HOST_LENGTH) = '\0';
+		newd.host = inet_ntoa(peer.sin_addr);
 	} else {
-		strncpy(newd->host, from->h_name, HOST_LENGTH);	/* strncpy: OK (n->host:HOST_LENGTH+1) */
-		*(newd->host + HOST_LENGTH) = '\0';
+		newd.host = from->h_name;
 	}
 
 	/* determine if the site is banned */
-	if(isbanned(newd->host) == BAN_ALL) {
+	if(isbanned(newd.host.c_str()) == BAN_ALL) {
 		CLOSE_SOCKET(desc);
-		mudlog(CMP, LVL_GOD, TRUE, "Connection attempt denied from [%s]", newd->host);
-		free(newd);
-		return (0);
-	}
+		mudlog(CMP, LVL_GOD, TRUE, "Connection attempt denied from [%s]", newd.host.c_str());
+				return (0);
+				}else{
+				descriptor_list.emplace_back(newd);
+				}
 
-#if 0
-	/*
-	 * Log new connections - probably unnecessary, but you may want it.
-	 * Note that your immortals may wonder if they see a connection from
-	 * your site, but you are wizinvis upon login.
-	 */
-	mudlog(CMP, LVL_GOD, FALSE, "New connection from [%s]", newd->host);
-#endif
+				/* initialize descriptor data */
+				newd.descriptor = desc;
+				newd.output = newd.small_outbuf;
+				newd.bufspace = SMALL_BUFSIZE - 1;
+				newd.login_time = time(0);
+				newd.has_prompt = 1;  /* prompt is part of greetings */
+				STATE(&newd) = CON_GET_NAME;
 
-	/* initialize descriptor data */
-	newd->descriptor = desc;
-	newd->idle_tics = 0;
-	newd->output = newd->small_outbuf;
-	newd->bufspace = SMALL_BUFSIZE - 1;
-	newd->login_time = time(0);
-	*newd->output = '\0';
-	newd->bufptr = 0;
-	newd->has_prompt = 1;  /* prompt is part of greetings */
-	STATE(newd) = CON_GET_NAME;
+				/*
+				 * This isn't exactly optimal but allows us to make a design choice.
+				 * Do we embed the history in descriptor_data or keep it dynamically
+				 * allocated and allow a user defined history size?
+				 */
+				/** TODO: replace history with vector */
+				CREATE(newd.history, char *, HISTORY_SIZE);
 
-	/*
-	 * This isn't exactly optimal but allows us to make a design choice.
-	 * Do we embed the history in descriptor_data or keep it dynamically
-	 * allocated and allow a user defined history size?
-	 */
-	CREATE(newd->history, char *, HISTORY_SIZE);
+				if(++last_desc == 1000) {
+					/* Ring buffer logic, it seems */
+					last_desc = 1;
+				}
 
-	if(++last_desc == 1000) {
-		last_desc = 1;
-	}
+				newd.desc_num = last_desc;
 
-	newd->desc_num = last_desc;
+				write_to_output(&newd, "%s", GREETINGS);
 
-	/* prepend to list */
-	newd->next = descriptor_list;
-	descriptor_list = newd;
-
-	write_to_output(newd, "%s", GREETINGS);
-
-	return (0);
+				return (0);
 }
 
 
@@ -1878,133 +1797,133 @@ int process_input(struct descriptor_data *t) {
 	} while(nl_pos == NULL);
 
 #else
-	}
+}
 
-	while(0);
+while(0);
 
-	if(nl_pos == NULL) {
-		return (0);
-	}
+if(nl_pos == NULL) {
+	return (0);
+}
 
 #endif /* POSIX_NONBLOCK_BROKEN */
 
-	/*
-	 * okay, at this point we have at least one newline in the string; now we
-	 * can copy the formatted data to a new array for further processing.
-	 */
+/*
+ * okay, at this point we have at least one newline in the string; now we
+ * can copy the formatted data to a new array for further processing.
+ */
 
-	read_point = t->inbuf;
+read_point = t->inbuf;
 
-	while(nl_pos != NULL) {
-		write_point = tmp;
-		space_left = MAX_INPUT_LENGTH - 1;
+while(nl_pos != NULL) {
+	write_point = tmp;
+	space_left = MAX_INPUT_LENGTH - 1;
 
-		/* The '> 1' reserves room for a '$ => $$' expansion. */
-		for(ptr = read_point; (space_left > 1) && (ptr < nl_pos); ptr++) {
-			if(*ptr == '\b' || *ptr == 127) {  /* handle backspacing or delete key */
-				if(write_point > tmp) {
-					if(*(--write_point) == '$') {
-						write_point--;
-						space_left += 2;
-					} else {
-						space_left++;
-					}
-				}
-			} else if(isascii(*ptr) && isprint(*ptr)) {
-				if((*(write_point++) = *ptr) == '$') {		/* copy one character */
-					*(write_point++) = '$';	/* if it's a $, double it */
-					space_left -= 2;
+	/* The '> 1' reserves room for a '$ => $$' expansion. */
+	for(ptr = read_point; (space_left > 1) && (ptr < nl_pos); ptr++) {
+		if(*ptr == '\b' || *ptr == 127) {  /* handle backspacing or delete key */
+			if(write_point > tmp) {
+				if(*(--write_point) == '$') {
+					write_point--;
+					space_left += 2;
 				} else {
-					space_left--;
+					space_left++;
 				}
 			}
-		}
-
-		*write_point = '\0';
-
-		if((space_left <= 0) && (ptr < nl_pos)) {
-			char buffer[MAX_INPUT_LENGTH + 64];
-
-			snprintf(buffer, sizeof(buffer), "Line too long.  Truncated to:\r\n%s\r\n", tmp);
-
-			if(write_to_descriptor(t->descriptor, buffer) < 0) {
-				return (-1);
+		} else if(isascii(*ptr) && isprint(*ptr)) {
+			if((*(write_point++) = *ptr) == '$') {		/* copy one character */
+				*(write_point++) = '$';	/* if it's a $, double it */
+				space_left -= 2;
+			} else {
+				space_left--;
 			}
 		}
-
-		if(t->snoop_by) {
-			write_to_output(t->snoop_by, "%% %s\r\n", tmp);
-		}
-
-		failed_subst = 0;
-
-		if(*tmp == '!' && !(*(tmp + 1))) {	/* Redo last command. */
-			strcpy(tmp, t->last_input);    /* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
-		} else if(*tmp == '!' && *(tmp + 1)) {
-			char *commandln = (tmp + 1);
-			int starting_pos = t->history_pos,
-			    cnt = (t->history_pos == 0 ? HISTORY_SIZE - 1 : t->history_pos - 1);
-
-			skip_spaces(&commandln);
-
-			for(; cnt != starting_pos; cnt--) {
-				if(t->history[cnt] && is_abbrev(commandln, t->history[cnt])) {
-					strcpy(tmp, t->history[cnt]);	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
-					strcpy(t->last_input, tmp);	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
-					write_to_output(t, "%s\r\n", tmp);
-					break;
-				}
-
-				if(cnt == 0) {	/* At top, loop to bottom. */
-					cnt = HISTORY_SIZE;
-				}
-			}
-		} else if(*tmp == '^') {
-			if(!(failed_subst = perform_subst(t, t->last_input, tmp))) {
-				strcpy(t->last_input, tmp);    /* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
-			}
-		} else {
-			strcpy(t->last_input, tmp);	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
-
-			if(t->history[t->history_pos]) {
-				free(t->history[t->history_pos]);    /* Clear the old line. */
-			}
-
-			t->history[t->history_pos] = strdup(tmp);	/* Save the new. */
-
-			if(++t->history_pos >= HISTORY_SIZE) {	/* Wrap to top. */
-				t->history_pos = 0;
-			}
-		}
-
-		if(!failed_subst) {
-			write_to_q(tmp, &t->input, 0);
-		}
-
-		/* find the end of this line */
-		while(ISNEWL(*nl_pos)) {
-			nl_pos++;
-		}
-
-		/* see if there's another newline in the input buffer */
-		read_point = ptr = nl_pos;
-
-		for(nl_pos = NULL; *ptr && !nl_pos; ptr++)
-			if(ISNEWL(*ptr)) {
-				nl_pos = ptr;
-			}
-	}
-
-	/* now move the rest of the buffer up to the beginning for the next pass */
-	write_point = t->inbuf;
-
-	while(*read_point) {
-		*(write_point++) = *(read_point++);
 	}
 
 	*write_point = '\0';
 
-	return (1);
+	if((space_left <= 0) && (ptr < nl_pos)) {
+		char buffer[MAX_INPUT_LENGTH + 64];
+
+		snprintf(buffer, sizeof(buffer), "Line too long.  Truncated to:\r\n%s\r\n", tmp);
+
+		if(write_to_descriptor(t->descriptor, buffer) < 0) {
+			return (-1);
+		}
+	}
+
+	if(t->snoop_by) {
+		write_to_output(t->snoop_by, "%% %s\r\n", tmp);
+	}
+
+	failed_subst = 0;
+
+	if(*tmp == '!' && !(*(tmp + 1))) {	/* Redo last command. */
+		strcpy(tmp, t->last_input);    /* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
+	} else if(*tmp == '!' && *(tmp + 1)) {
+		char *commandln = (tmp + 1);
+		int starting_pos = t->history_pos,
+				cnt = (t->history_pos == 0 ? HISTORY_SIZE - 1 : t->history_pos - 1);
+
+		skip_spaces(&commandln);
+
+		for(; cnt != starting_pos; cnt--) {
+			if(t->history[cnt] && is_abbrev(commandln, t->history[cnt])) {
+				strcpy(tmp, t->history[cnt]);	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
+				strcpy(t->last_input, tmp);	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
+				write_to_output(t, "%s\r\n", tmp);
+				break;
+			}
+
+			if(cnt == 0) {	/* At top, loop to bottom. */
+				cnt = HISTORY_SIZE;
+			}
+		}
+	} else if(*tmp == '^') {
+		if(!(failed_subst = perform_subst(t, t->last_input, tmp))) {
+			strcpy(t->last_input, tmp);    /* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
+		}
+	} else {
+		strcpy(t->last_input, tmp);	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
+
+		if(t->history[t->history_pos]) {
+			free(t->history[t->history_pos]);    /* Clear the old line. */
+		}
+
+		t->history[t->history_pos] = strdup(tmp);	/* Save the new. */
+
+		if(++t->history_pos >= HISTORY_SIZE) {	/* Wrap to top. */
+			t->history_pos = 0;
+		}
+	}
+
+	if(!failed_subst) {
+		write_to_q(tmp, &t->input, 0);
+	}
+
+	/* find the end of this line */
+	while(ISNEWL(*nl_pos)) {
+		nl_pos++;
+	}
+
+	/* see if there's another newline in the input buffer */
+	read_point = ptr = nl_pos;
+
+	for(nl_pos = NULL; *ptr && !nl_pos; ptr++)
+		if(ISNEWL(*ptr)) {
+			nl_pos = ptr;
+		}
+}
+
+/* now move the rest of the buffer up to the beginning for the next pass */
+write_point = t->inbuf;
+
+while(*read_point) {
+	*(write_point++) = *(read_point++);
+}
+
+*write_point = '\0';
+
+return (1);
 }
 
 
@@ -2065,9 +1984,7 @@ int perform_subst(struct descriptor_data *t, char *orig, char *subst) {
 
 
 void close_socket(struct descriptor_data *d) {
-	struct descriptor_data *temp;
-
-	REMOVE_FROM_LIST(d, descriptor_list, next);
+	mods::globals::socket_map.erase(d->descriptor);
 	CLOSE_SOCKET(d->descriptor);
 	flush_queues(d);
 
@@ -2133,29 +2050,23 @@ void close_socket(struct descriptor_data *d) {
 	if(d->showstr_count) {
 		free(d->showstr_vector);
 	}
-
-	free(d);
 }
 
 
 
 void check_idle_passwords(void) {
-	struct descriptor_data *d, *next_d;
-
-	for(d = descriptor_list; d; d = next_d) {
-		next_d = d->next;
-
-		if(STATE(d) != CON_PASSWORD && STATE(d) != CON_GET_NAME) {
+	for(auto & d : descriptor_list) {
+		if(STATE(&d) != CON_PASSWORD && STATE(&d) != CON_GET_NAME) {
 			continue;
 		}
 
-		if(!d->idle_tics) {
-			d->idle_tics++;
+		if(!d.idle_tics) {
+			d.idle_tics++;
 			continue;
 		} else {
-			echo_on(d);
-			write_to_output(d, "\r\nTimed out... goodbye.\r\n");
-			STATE(d) = CON_CLOSE;
+			echo_on(&d);
+			write_to_output(&d, "\r\nTimed out... goodbye.\r\n");
+			STATE(&d) = CON_CLOSE;
 		}
 	}
 }
@@ -2224,8 +2135,8 @@ void nonblock(socket_t s) {
 
 
 /* ******************************************************************
-*  signal-handling functions (formerly signals.c).  UNIX only.      *
-****************************************************************** */
+ *  signal-handling functions (formerly signals.c).  UNIX only.      *
+ ****************************************************************** */
 
 #if defined(CIRCLE_UNIX) || defined(CIRCLE_MACINTOSH)
 
@@ -2262,7 +2173,7 @@ RETSIGTYPE checkpointing(int sig) {
 RETSIGTYPE hupsig(int sig) {
 	log("SYSERR: Received SIGHUP, SIGINT, or SIGTERM.  Shutting down...");
 	exit(1);			/* perhaps something more elegant should
-				 * substituted */
+								 * substituted */
 }
 
 #endif	/* CIRCLE_UNIX */
@@ -2341,8 +2252,8 @@ void signal_setup(void) {
 #endif	/* CIRCLE_UNIX || CIRCLE_MACINTOSH */
 
 /* ****************************************************************
-*       Public routines for system-to-player-communication        *
-**************************************************************** */
+ *       Public routines for system-to-player-communication        *
+ **************************************************************** */
 
 size_t send_to_char(struct char_data *ch, const char *messg, ...) {
 	if(ch->desc && messg && *messg) {
@@ -2360,45 +2271,42 @@ size_t send_to_char(struct char_data *ch, const char *messg, ...) {
 
 
 void send_to_all(const char *messg, ...) {
-	struct descriptor_data *i;
 	va_list args;
 
 	if(messg == NULL) {
 		return;
 	}
 
-	for(i = descriptor_list; i; i = i->next) {
-		if(STATE(i) != CON_PLAYING) {
+	for(auto & i : descriptor_list){
+		if(STATE(&i) != CON_PLAYING) {
 			continue;
 		}
 
 		va_start(args, messg);
-		vwrite_to_output(i, messg, args);
+		vwrite_to_output(&i, messg, args);
 		va_end(args);
 	}
 }
 
 
 void send_to_outdoor(const char *messg, ...) {
-	struct descriptor_data *i;
-
 	if(!messg || !*messg) {
 		return;
 	}
 
-	for(i = descriptor_list; i; i = i->next) {
+	for(auto & i : descriptor_list){
 		va_list args;
 
-		if(STATE(i) != CON_PLAYING || i->character == NULL) {
+		if(STATE(&i) != CON_PLAYING || i.character == nullptr) {
 			continue;
 		}
 
-		if(!AWAKE(i->character) || !OUTSIDE(i->character)) {
+		if(!AWAKE(i.character) || !OUTSIDE(i.character)) {
 			continue;
 		}
 
 		va_start(args, messg);
-		vwrite_to_output(i, messg, args);
+		vwrite_to_output(&i, messg, args);
 		va_end(args);
 	}
 }
@@ -2447,12 +2355,12 @@ void send_to_room(room_rnum room, const char *messg, ...) {
 const char *ACTNULL = "<NULL>";
 
 #define CHECK_NULL(pointer, expression) \
-  if ((pointer) == NULL) i = ACTNULL; else i = (expression);
+	if ((pointer) == NULL) i = ACTNULL; else i = (expression);
 
 
 /* higher-level communication: the act() function */
 void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
-                 const void *vict_obj, const struct char_data *to) {
+		const void *vict_obj, const struct char_data *to) {
 	const char *i = NULL;
 	char lbuf[MAX_STRING_LENGTH], *buf, *j;
 	bool uppercasenext = FALSE;
@@ -2526,7 +2434,7 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
 					CHECK_NULL(vict_obj, fname((const char *) vict_obj));
 					break;
 
-				/* uppercase previous word */
+					/* uppercase previous word */
 				case 'u':
 					for(j=buf; j > lbuf && !isspace((int) *(j-1)); j--);
 
@@ -2537,7 +2445,7 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
 					i = "";
 					break;
 
-				/* uppercase next word */
+					/* uppercase next word */
 				case 'U':
 					uppercasenext = TRUE;
 					i = "";
@@ -2581,10 +2489,10 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
 
 
 #define SENDOK(ch)	((ch)->desc && (to_sleeping || AWAKE(ch)) && \
-			(IS_NPC(ch) || !PLR_FLAGGED((ch), PLR_WRITING)))
+		(IS_NPC(ch) || !PLR_FLAGGED((ch), PLR_WRITING)))
 
 void act(const char *str, int hide_invisible, struct char_data *ch,
-         struct obj_data *obj, const void *vict_obj, int type) {
+		struct obj_data *obj, const void *vict_obj, int type) {
 	const struct char_data *to;
 	int to_sleeping;
 
@@ -2712,7 +2620,7 @@ int open_logfile(const char *filename, FILE *stderr_fp) {
 
 	if(logfile) {
 		printf("Using log file '%s'%s.\n",
-		       filename, stderr_fp ? " with redirection" : "");
+				filename, stderr_fp ? " with redirection" : "");
 		return (TRUE);
 	}
 

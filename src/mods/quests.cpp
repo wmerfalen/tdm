@@ -137,13 +137,13 @@ namespace mods {
 		/* Whether or not the quest has been completed */
 		std::string complete_key(struct char_data *ch,room_rnum room,int n_index) {
 			auto m = mods::globals::replace_all(Q_COMPLETE_KEY,"{room_id}",std::to_string(room));
-			m = mods::globals::replace_all(m,"{player_name}",ch->player.name);
+			m = mods::globals::replace_all(m,"{player_name}",ch->player.name.c_str());
 			return mods::globals::replace_all(m,"{N}",std::to_string(n_index));
 		}
 
 		std::string trigger_key(struct char_data *ch,room_rnum room,int n_index) {
 			auto m = mods::globals::replace_all(Q_TRIGGER_KEY,"{room_id}",std::to_string(room));
-			m = mods::globals::replace_all(m,"{player_name}",ch->player.name);
+			m = mods::globals::replace_all(m,"{player_name}",ch->player.name.c_str());
 			return mods::globals::replace_all(m,"{N}",std::to_string(n_index));
 		}
 
@@ -235,7 +235,7 @@ namespace mods {
 				include_file.read((char*)&buffer[0],statbuf.st_size);
 				std::string buf = static_cast<char*>(&buffer[0]);
 				/* start interpolation */
-				buf = mods::globals::replace_all(buf,"{character}",ch->player.name);
+				buf = mods::globals::replace_all(buf,"{character}",ch->player.name.c_str());
 				DBSET(lmdb_key,buf);
 				return statbuf.st_size;
 			}

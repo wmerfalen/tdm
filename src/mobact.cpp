@@ -42,8 +42,6 @@ void mobile_activity(void) {
 	char_data *ch, *next_ch, *vict;
 	struct obj_data *obj, *best_obj;
 	int door, found, max;
-	memory_rec *names;
-
 	for(ch = character_list; ch; ch = next_ch) {
 		next_ch = ch->next;
 
@@ -196,8 +194,6 @@ void mobile_activity(void) {
 
 /* make ch remember victim */
 void remember(char_data *ch,char_data *victim) {
-	bool present = FALSE;
-
 	if(!IS_NPC(ch) || IS_NPC(victim) || PRF_FLAGGED(victim, PRF_NOHASSLE)) {
 		return;
 	}

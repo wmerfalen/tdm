@@ -16,7 +16,7 @@
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
 #define MENTOC_OBI2(i,a) obj->i = get_intval(#a).value_or(obj->i);
 #define MENTOC_OBS(i) obj->i = get_strval(#i).value_or(obj->i);
-#define MENTOC_OBS2(i,a) obj->i = get_strval(#a).value_or(obj->i);
+#define MENTOC_OBS2(i,a) obj->i = get_strval(#a).value_or(obj->i.c_str());
 using objtype = mods::object::type;
 using shrd_ptr_player_t = std::shared_ptr<mods::player>;
 using jxcomp = mods::jx::compositor;
@@ -525,7 +525,6 @@ namespace mods::builder {
 		std::size_t rid = room_id;
 
 		if(rid < mods::globals::room_list.size()) {
-			free(world[room_id].name);
 			world[room_id].name = strdup(str_title.data());
 			return true;
 		}
@@ -536,7 +535,6 @@ namespace mods::builder {
 		std::size_t rid = room_id;
 
 		if(rid < mods::globals::room_list.size()) {
-			free(world[room_id].description);
 			world[room_id].description = strdup(str_description.data());
 			return true;
 		}
@@ -565,12 +563,10 @@ namespace mods::builder {
 		}
 
 		if(description.value_or("-1").compare("-1") != 0) {
-			free(world[room_id].dir_option[direction]->general_description);
 			world[room_id].dir_option[direction]->general_description = strdup(description.value().data());
 		}
 
 		if(keywords.value_or("-1").compare("-1") != 0) {
-			free(world[room_id].dir_option[direction]->keyword);
 			world[room_id].dir_option[direction]->keyword = strdup(keywords.value().data());
 		}
 
@@ -1374,9 +1370,9 @@ ACMD(do_mbuild) {
 
 			return std::nullopt;
 		};
-		auto get_strval = [&](std::string_view str) -> std::optional<char*> {
+		auto get_strval = [&](std::string_view str) -> std::optional<const char*> {
 			if(arg_vec[2].compare(str.data()) == 0) {
-				return strdup(arg_vec[3].c_str());
+				return arg_vec[3].c_str();
 			}
 
 			return std::nullopt;

@@ -261,7 +261,7 @@ void auto_equip(struct char_data *ch, struct obj_data *obj, int location) {
 					equip_char(ch, obj, j);
 				}
 			} else {	/* Oops, saved a player with double equipment? */
-				mudlog(BRF, LVL_IMMORT, TRUE, "SYSERR: autoeq: '%s' already equipped in position %d.", GET_NAME(ch), location);
+				mudlog(BRF, LVL_IMMORT, TRUE, "SYSERR: autoeq: '%s' already equipped in position %d.", GET_NAME(ch).c_str(), location);
 				location = LOC_INVENTORY;
 			}
 		}
@@ -326,7 +326,7 @@ int Crash_delete_crashfile(struct char_data *ch) {
 	}
 
 	if(rent.rentcode == RENT_CRASH) {
-		Crash_delete_file(GET_NAME(ch));
+		Crash_delete_file(GET_NAME(ch).ptr());
 	}
 
 	return (1);
@@ -408,7 +408,7 @@ void update_obj_file(void) {
 
 	for(i = 0; i <= top_of_p_table; i++)
 		if(*player_table[i].name) {
-			Crash_clean_file(player_table[i].name);
+			Crash_clean_file(player_table[i].name.ptr());
 		}
 }
 
@@ -537,16 +537,14 @@ int Crash_load(struct char_data *ch) {
 			             "Contact a God for assistance.\r\n");
 		}
 
-		mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s entering game with no equipment.", GET_NAME(ch));
+		mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s entering game with no equipment.", GET_NAME(ch).c_str());
 		return (1);
 	}
 
-	int fread_ret = 0;
-
 	if(!feof(fl)) {
-		fread_ret = fread(&rent, sizeof(struct rent_info), 1, fl);
+		fread(&rent, sizeof(struct rent_info), 1, fl);
 	} else {
-		log("SYSERR: Crash_load: %s's rent file was empty!", GET_NAME(ch));
+		log("SYSERR: Crash_load: %s's rent file was empty!", GET_NAME(ch).c_str());
 		return (1);
 	}
 
@@ -556,7 +554,7 @@ int Crash_load(struct char_data *ch) {
 
 		if(cost > GET_GOLD(ch) + GET_BANK_GOLD(ch)) {
 			fclose(fl);
-			mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s entering game, rented equipment lost (no $).", GET_NAME(ch));
+			mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s entering game, rented equipment lost (no $).", GET_NAME(ch).c_str());
 			Crash_crashsave(ch);
 			return (2);
 		} else {
@@ -568,32 +566,30 @@ int Crash_load(struct char_data *ch) {
 
 	switch(orig_rent_code = rent.rentcode) {
 		case RENT_RENTED:
-			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s un-renting and entering game.", GET_NAME(ch));
+			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s un-renting and entering game.", GET_NAME(ch).c_str());
 			break;
 
 		case RENT_CRASH:
-			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s retrieving crash-saved items and entering game.", GET_NAME(ch));
+			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s retrieving crash-saved items and entering game.", GET_NAME(ch).c_str());
 			break;
 
 		case RENT_CRYO:
-			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s un-cryo'ing and entering game.", GET_NAME(ch));
+			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s un-cryo'ing and entering game.", GET_NAME(ch).c_str());
 			break;
 
 		case RENT_FORCED:
 		case RENT_TIMEDOUT:
-			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s retrieving force-saved items and entering game.", GET_NAME(ch));
+			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s retrieving force-saved items and entering game.", GET_NAME(ch).c_str());
 			break;
 
 		default:
 			mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE,
-			       "SYSERR: %s entering game with undefined rent code %d.", GET_NAME(ch), rent.rentcode);
+			       "SYSERR: %s entering game with undefined rent code %d.", GET_NAME(ch).c_str(), rent.rentcode);
 			break;
 	}
 
-	fread_ret = 0;
-
 	while(!feof(fl)) {
-		fread_ret = fread(&object, sizeof(struct obj_file_elem), 1, fl);
+		fread(&object, sizeof(struct obj_file_elem), 1, fl);
 
 		if(ferror(fl)) {
 			perror("SYSERR: Reading crash file: Crash_load");
@@ -726,7 +722,7 @@ int Crash_load(struct char_data *ch) {
 
 	/* Little hoarding check. -gg 3/1/98 */
 	mudlog(NRM, MAX(GET_INVIS_LEV(ch), LVL_GOD), TRUE, "%s (level %d) has %d object%s (max %d).",
-	       GET_NAME(ch), GET_LEVEL(ch), num_objs, num_objs != 1 ? "s" : "", max_obj_save);
+	       GET_NAME(ch).c_str(), GET_LEVEL(ch), num_objs, num_objs != 1 ? "s" : "", max_obj_save);
 
 	/* turn this into a crash file by re-writing the control block */
 	rent.rentcode = RENT_CRASH;
@@ -958,7 +954,7 @@ void Crash_idlesave(struct char_data *ch) {
 
 		if(j == NUM_WEARS) {	/* No equipment or inventory. */
 			fclose(fp);
-			Crash_delete_file(GET_NAME(ch));
+			Crash_delete_file(GET_NAME(ch).ptr());
 			return;
 		}
 	}
@@ -1296,14 +1292,14 @@ int gen_receptionist(struct char_data *ch, struct char_data *recep,
 			act("$n stores your belongings and helps you into your private chamber.", FALSE, recep, 0, ch, TO_VICT);
 			Crash_rentsave(ch, cost);
 			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s has rented (%d/day, %d tot.)",
-			       GET_NAME(ch), cost, GET_GOLD(ch) + GET_BANK_GOLD(ch));
+			       GET_NAME(ch).c_str(), cost, GET_GOLD(ch) + GET_BANK_GOLD(ch));
 		} else {			/* cryo */
 			act("$n stores your belongings and helps you into your private chamber.\r\n"
 			    "A white mist appears in the room, chilling you to the bone...\r\n"
 			    "You begin to lose consciousness...",
 			    FALSE, recep, 0, ch, TO_VICT);
 			Crash_cryosave(ch, cost);
-			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s has cryo-rented.", GET_NAME(ch));
+			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s has cryo-rented.", GET_NAME(ch).c_str());
 			SET_BIT(PLR_FLAGS(ch), PLR_CRYO);
 		}
 
@@ -1331,14 +1327,12 @@ SPECIAL(cryogenicist) {
 
 
 void Crash_save_all(void) {
-	struct descriptor_data *d;
-
-	for(d = descriptor_list; d; d = d->next) {
-		if((STATE(d) == CON_PLAYING) && !IS_NPC(d->character)) {
-			if(PLR_FLAGGED(d->character, PLR_CRASH)) {
-				Crash_crashsave(d->character);
-				save_char(d->character);
-				REMOVE_BIT(PLR_FLAGS(d->character), PLR_CRASH);
+	for(auto & d : descriptor_list) {
+		if((STATE(&d) == CON_PLAYING) && !IS_NPC(d.character)) {
+			if(PLR_FLAGGED(d.character, PLR_CRASH)) {
+				Crash_crashsave(d.character);
+				save_char(d.character);
+				REMOVE_BIT(PLR_FLAGS(d.character), PLR_CRASH);
 			}
 		}
 	}

@@ -274,7 +274,7 @@ void show_obj_to_char(struct obj_data *obj, struct char_data *ch, int mode) {
 			break;
 
 		default:
-			log("SYSERR: Bad display mode (%d) in show_obj_to_char().", mode);
+			log("SYSERR: Bad display mode (%d.in show_obj_to_char().", mode);
 			return;
 	}
 
@@ -1263,14 +1263,14 @@ ACMD(do_who) {
 
 	send_to_char(ch, "Players\r\n-------\r\n");
 
-	for(d = descriptor_list; d; d = d->next) {
-		if(STATE(d) != CON_PLAYING) {
+	for(auto & d : descriptor_list) {
+		if(STATE(&d) != CON_PLAYING) {
 			continue;
 		}
 
-		if(d->original) {
-			tch = d->original;
-		} else if(!(tch = d->character)) {
+		if(d.original) {
+			tch = d.original;
+		} else if(!(tch = d.character)) {
 			continue;
 		}
 
@@ -1454,23 +1454,23 @@ ACMD(do_users) {
 
 	one_argument(argument, arg);
 
-	for(d = descriptor_list; d; d = d->next) {
-		if(STATE(d) != CON_PLAYING && playing) {
+	for(auto & d : descriptor_list) {
+		if(STATE(&d) != CON_PLAYING && playing) {
 			continue;
 		}
 
-		if(STATE(d) == CON_PLAYING && deadweight) {
+		if(STATE(&d) == CON_PLAYING && deadweight) {
 			continue;
 		}
 
-		if(STATE(d) == CON_PLAYING) {
-			if(d->original) {
-				tch = d->original;
-			} else if(!(tch = d->character)) {
+		if(STATE(&d) == CON_PLAYING) {
+			if(d.original) {
+				tch = d.original;
+			} else if(!(tch = d.character)) {
 				continue;
 			}
 
-			if(*host_search && !strstr(d->host, host_search)) {
+			if(*host_search && !strstr(d.host.c_str(), host_search)) {
 				continue;
 			}
 
@@ -1495,52 +1495,52 @@ ACMD(do_users) {
 				continue;
 			}
 
-			if(d->original)
-				sprintf(classname, "[%2d %s]", GET_LEVEL(d->original),
-				        CLASS_ABBR(d->original));
+			if(d.original)
+				sprintf(classname, "[%2d %s]", GET_LEVEL(d.original),
+				        CLASS_ABBR(d.original));
 			else
-				sprintf(classname, "[%2d %s]", GET_LEVEL(d->character),
-				        CLASS_ABBR(d->character));
+				sprintf(classname, "[%2d %s]", GET_LEVEL(d.character),
+				        CLASS_ABBR(d.character));
 		} else {
 			strcpy(classname, "   -   ");
 		}
 
-		timeptr = asctime(localtime(&d->login_time));
+		timeptr = asctime(localtime(&d.login_time));
 		timeptr += 11;
 		*(timeptr + 8) = '\0';
 
-		if(STATE(d) == CON_PLAYING && d->original) {
+		if(STATE(&d)== CON_PLAYING && d.original) {
 			strcpy(state, "Switched");
 		} else {
-			strcpy(state, connected_types[STATE(d)]);
+			strcpy(state, connected_types[STATE(&d)]);
 		}
 
-		if(d->character && STATE(d) == CON_PLAYING && GET_LEVEL(d->character) < LVL_GOD)
-			sprintf(idletime, "%3d", d->character->char_specials.timer *
+		if(d.character && STATE(&d)== CON_PLAYING && GET_LEVEL(d.character) < LVL_GOD)
+			sprintf(idletime, "%3d", d.character->char_specials.timer *
 			        SECS_PER_MUD_HOUR / SECS_PER_REAL_MIN);
 		else {
 			strcpy(idletime, "");
 		}
 
-		sprintf(line, "%3d %-7s %-12s %-14s %-3s %-8s ", d->desc_num, classname,
-		        d->original && d->original->player.name ? d->original->player.name :
-		        d->character && d->character->player.name ? d->character->player.name :
+		sprintf(line, "%3d %-7s %-12s %-14s %-3s %-8s ", d.desc_num, classname,
+		        d.original && d.original->player.name ? d.original->player.name :
+		        d.character && d.character->player.name ? d.character->player.name :
 		        "UNDEFINED",
 		        state, idletime, timeptr);
 
-		if(d->host && *d->host) {
-			sprintf(line + strlen(line), "[%s]\r\n", d->host);
+		if(d.host.length()) {
+			sprintf(line + strlen(line), "[%s]\r\n", d.host.c_str());
 		} else {
 			strcat(line, "[Hostname unknown]\r\n");
 		}
 
-		if(STATE(d) != CON_PLAYING) {
+		if(STATE(&d) != CON_PLAYING) {
 			sprintf(line2, "%s%s%s", CCGRN(ch, C_SPR), line, CCNRM(ch, C_SPR));
 			strcpy(line, line2);
 		}
 
-		if(STATE(d) != CON_PLAYING ||
-		        (STATE(d) == CON_PLAYING && CAN_SEE(ch, d->character))) {
+		if(STATE(&d) != CON_PLAYING ||
+		        (STATE(&d) == CON_PLAYING && CAN_SEE(ch, d.character))) {
 			send_to_char(ch, "%s", line);
 			num_can_see++;
 		}
@@ -1615,12 +1615,12 @@ void perform_mortal_where(struct char_data *ch, char *arg) {
 	if(!*arg) {
 		send_to_char(ch, "Players in your Zone\r\n--------------------\r\n");
 
-		for(d = descriptor_list; d; d = d->next) {
-			if(STATE(d) != CON_PLAYING || d->character == ch) {
+		for(auto &d : descriptor_list) {
+			if(STATE(&d) != CON_PLAYING || d.character == ch) {
 				continue;
 			}
 
-			if((i = (d->original ? d->original : d->character)) == NULL) {
+			if((i = (d.original ? d.original : d.character)) == NULL) {
 				continue;
 			}
 
@@ -1693,15 +1693,15 @@ void perform_immort_where(struct char_data *ch, char *arg) {
 	if(!*arg) {
 		send_to_char(ch, "Players\r\n-------\r\n");
 
-		for(d = descriptor_list; d; d = d->next)
-			if(STATE(d) == CON_PLAYING) {
-				i = (d->original ? d->original : d->character);
+		for(auto & d : descriptor_list)
+			if(STATE(&d) == CON_PLAYING) {
+				i = (d.original ? d.original : d.character);
 
 				if(i && CAN_SEE(ch, i) && (IN_ROOM(i) != NOWHERE)) {
-					if(d->original)
+					if(d.original)
 						send_to_char(ch, "%-20s - [%5d] %s (in %s)\r\n",
-						             GET_NAME(i), GET_ROOM_VNUM(IN_ROOM(d->character)),
-						             world[IN_ROOM(d->character)].name, GET_NAME(d->character));
+						             GET_NAME(i), GET_ROOM_VNUM(IN_ROOM(d.character)),
+						             world[IN_ROOM(d.character)].name, GET_NAME(d.character));
 					else {
 						send_to_char(ch, "%-20s - [%5d] %s\r\n", GET_NAME(i), GET_ROOM_VNUM(IN_ROOM(i)), world[IN_ROOM(i)].name);
 					}

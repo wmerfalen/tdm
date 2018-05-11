@@ -164,9 +164,9 @@ ACMD(do_snipe) {
 
 	for(auto scanned_target : scan) {
 		/* HOWTO: fuzzy match two strings */
-		if(mods::util::fuzzy_match(static_cast<char*>(&victim[0]),scanned_target.ch->player.name)) {
+		if(mods::util::fuzzy_match(static_cast<char*>(&victim[0]),scanned_target.ch->player.name.c_str())) {
 			/* HOWTO: deal damage with a sniper rifle */
-			auto damage = snipe_hit(ch, scanned_target.ch, TYPE_SNIPE,scanned_target.distance);
+			snipe_hit(ch, scanned_target.ch, TYPE_SNIPE,scanned_target.distance);
 			/* HOWTO: adjust ammo of player's current weapon */
 			player->ammo_adjustment(-1);
 			player->weapon_cooldown_start(3,0);
@@ -422,6 +422,7 @@ ACMD(do_scan) { /* !mods */
 			send_to_char(ch,line.c_str());
 			return true;	/** true means keep iterating */
 		}
+		return false;
 	});
 
 }

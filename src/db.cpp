@@ -58,7 +58,7 @@ std::vector<zone_data> zone_table;	/* zone table			 */
 zone_rnum top_of_zone_table = 0;/* top element of zone tab	 */
 struct message_list fight_messages[MAX_MESSAGES];	/* fighting messages	 */
 
-struct player_index_element *player_table = NULL;	/* index to plr file	 */
+std::deque<player_index_element> player_table;	/* index to plr file	 */
 FILE *player_fl = NULL;		/* file desc of player file	 */
 int top_of_p_table = 0;		/* ref to top of table		 */
 long top_idnum = 0;		/* highest idnum in use		 */
@@ -158,7 +158,7 @@ extern int scheck;
 extern room_vnum mortal_start_room;
 extern room_vnum immort_start_room;
 extern room_vnum frozen_start_room;
-extern struct descriptor_data *descriptor_list;
+extern std::deque<descriptor_data>  descriptor_list;
 extern const char *unused_spellname;	/* spell_parser.c */
 
 /*************************************************************************
@@ -328,11 +328,6 @@ void destroy_db(void) {
 
 			/** TODO: make dir_option elements not crappy malloc'd :) */
 			if(world[cnt].dir_option[itr]->general_description) {
-				free(world[cnt].dir_option[itr]->general_description);
-			}
-
-			if(world[cnt].dir_option[itr]->keyword) {
-				free(world[cnt].dir_option[itr]->keyword);
 			}
 
 			free(world[cnt].dir_option[itr]);
@@ -365,26 +360,6 @@ void destroy_db(void) {
 
 	/* Mobiles */
 	for(cnt = 0; cnt <= top_of_mobt; cnt++) {
-		if(mob_proto[cnt].player.name) {
-			free(mob_proto[cnt].player.name);
-		}
-
-		if(mob_proto[cnt].player.title) {
-			free(mob_proto[cnt].player.title);
-		}
-
-		if(mob_proto[cnt].player.short_descr) {
-			free(mob_proto[cnt].player.short_descr);
-		}
-
-		if(mob_proto[cnt].player.long_descr) {
-			free(mob_proto[cnt].player.long_descr);
-		}
-
-		if(mob_proto[cnt].player.description) {
-			free(mob_proto[cnt].player.description);
-		}
-
 		while(mob_proto[cnt].affected) {
 			affect_remove(&mob_proto[cnt], mob_proto[cnt].affected);
 		}
@@ -405,6 +380,7 @@ void boot_db(void) {
 	reset_time();
 
 	log("Reading news, credits, help, bground, info & motds.");
+	/*
 	file_to_string_alloc(NEWS_FILE, &news);
 	file_to_string_alloc(CREDITS_FILE, &credits);
 	file_to_string_alloc(MOTD_FILE, &motd);
@@ -420,6 +396,7 @@ void boot_db(void) {
 	if(file_to_string_alloc(GREETINGS_FILE, &GREETINGS) == 0) {
 		prune_crlf(GREETINGS);
 	}
+	*/
 
 	log("Loading spell definitions.");
 	mag_assign_spells();
@@ -565,20 +542,8 @@ void save_mud_time(struct time_info_data *when) {
 
 
 void free_player_index(void) {
-	int tp;
-
-	if(!player_table) {
-		return;
-	}
-
-	for(tp = 0; tp <= top_of_p_table; tp++)
-		if(player_table[tp].name) {
-			free(player_table[tp].name);
-		}
-
-	free(player_table);
-	player_table = NULL;
-	top_of_p_table = 0;
+	log("[deprecated] free_player_index");
+	return;
 }
 
 
@@ -615,9 +580,7 @@ void build_player_index(void) {
 
 	if(recs) {
 		log("   %ld players in database.", recs);
-		CREATE(player_table, struct player_index_element, recs);
 	} else {
-		player_table = NULL;
 		top_of_p_table = -1;
 		return;
 	}
@@ -631,10 +594,9 @@ void build_player_index(void) {
 
 		/* new record */
 		nr++;
-		CREATE(player_table[nr].name, char, strlen(dummy.name) + 1);
-
-		for(i = 0; (*(player_table[nr].name + i) = LOWER(*(dummy.name + i))); i++)
-			;
+		for(i = 0; LOWER(*(dummy.name + i)); i++){
+			player_table[nr].name.concat(LOWER(*(dummy.name.ptr() + i)));
+		}
 
 		player_table[nr].id = dummy.char_specials_saved.idnum;
 		top_idnum = MAX(top_idnum, dummy.char_specials_saved.idnum);
@@ -980,26 +942,25 @@ void parse_sql_mobiles() {
 
 	if(result.size()) {
 		auto txn2 = txn();
+		std::cerr << "foobar\n";
 		auto result2 =
 		    mods::pq::exec(txn2,sql_compositor("mobile",&txn2)
-		                   .select("*")
+					.select("*")
 		                   .from("mobile")
 		                   .where("1","=","1")
 		                   .sql()
 		                  );
 
 		for(auto row : result2) {
-			proto.player.name = strdup(row["mob_name"].c_str());
-			proto.player.short_descr = strdup(row["mob_short_description"].c_str());
-			proto.player.long_descr = strdup(row["mob_long_description"].c_str());
+			std::cerr << "foo";
+			proto.player.name.assign(row["mob_name"].c_str());
+			proto.player.short_descr.assign(row["mob_short_description"].c_str());
+			proto.player.long_descr.assign(row["mob_long_description"].c_str());
 
 			if(!row["mob_description"].is_null()) {
-				proto.player.description = strdup(row["mob_description"].c_str());
-			} else {
-				proto.player.description = nullptr;
+				proto.player.description.assign(row["mob_description"].c_str());
 			}
 
-			proto.player.title = nullptr;
 			proto.char_specials.saved.act = row["mob_action_bitvector"].as<int>();
 			SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
 			REMOVE_BIT(proto.char_specials.saved.act, MOB_NOTDEADYET);
@@ -1269,7 +1230,6 @@ int parse_sql_objects() {
 
 	return 0;
 }
-static int room_nr = 0, zone = 0;
 /* load the zones */
 void parse_sql_zones() {
 	zone_table.clear();
@@ -1412,7 +1372,6 @@ void parse_sql_rooms() {
 		for(auto row2: r2) {
 			//id | room_number | exit_direction | general_description | keyword | exit_info | exit_key | to_room
 			auto direction = row2[2].as<int>();
-			auto room_number = row2[1].as<int>();
 			auto real_room_number = real_room(row2[1].as<int>());
 
 			if(real_room_number == NOWHERE) {
@@ -1960,7 +1919,7 @@ int vnum_mobile(char *searchname, struct char_data *ch) {
 
 	for(nr = 0; nr <= top_of_mobt; nr++)
 		if(isname(searchname, mob_proto[nr].player.name)) {
-			send_to_char(ch, "%3d. [%5d] %s\r\n", ++found, mob_index[nr].vnum, mob_proto[nr].player.short_descr);
+			send_to_char(ch, "%3d. [%5d] %s\r\n", ++found, mob_index[nr].vnum, mob_proto[nr].player.short_descr.c_str());
 		}
 
 	return (found);
@@ -2087,7 +2046,7 @@ struct obj_data *read_object(obj_vnum nr, int type) { /* and obj_rnum */
 
 /* update zone ages, queue for reset if necessary, and dequeue when possible */
 void zone_update(void) {
-	int i;
+	unsigned int i;
 	struct reset_q_element *update_u, *temp;
 	static int timer = 0;
 
@@ -2168,7 +2127,7 @@ void log_zone_error(zone_rnum zone, int cmd_no, const char *message) {
 
 /* execute the reset command table of a given zone */
 void reset_zone(zone_rnum zone) {
-	int cmd_no, last_cmd = 0;
+	int cmd_no = 0, last_cmd = 0;
 	struct char_data *mob = NULL;
 	struct obj_data *obj, *obj_to;
 
@@ -2349,22 +2308,20 @@ void reset_zone(zone_rnum zone) {
 
 /* for use in reset_zone; return TRUE if zone 'nr' is free of PC's  */
 int is_empty(zone_rnum zone_nr) {
-	struct descriptor_data *i;
-
-	for(i = descriptor_list; i; i = i->next) {
-		if(STATE(i) != CON_PLAYING) {
+	for(auto & i : descriptor_list) {
+		if(STATE(&i) != CON_PLAYING) {
 			continue;
 		}
 
-		if(IN_ROOM(i->character) == NOWHERE) {
+		if(IN_ROOM(i.character) == NOWHERE) {
 			continue;
 		}
 
-		if(GET_LEVEL(i->character) >= LVL_IMMORT) {
+		if(GET_LEVEL(i.character) >= LVL_IMMORT) {
 			continue;
 		}
 
-		if(world[IN_ROOM(i->character)].zone != zone_nr) {
+		if(world[IN_ROOM(i.character)].zone != zone_nr) {
 			continue;
 		}
 
@@ -2412,7 +2369,7 @@ char *get_name_by_id(long id) {
 
 	for(i = 0; i <= top_of_p_table; i++)
 		if(player_table[i].id == id) {
-			return (player_table[i].name);
+			return (player_table[i].name.ptr());
 		}
 
 	return (NULL);
@@ -2451,8 +2408,7 @@ void save_char(struct char_data *ch) {
 
 	char_to_store(ch, &st);
 
-	strncpy(st.host, ch->desc->host, HOST_LENGTH);	/* strncpy: OK (s.host:HOST_LENGTH+1) */
-	st.host[HOST_LENGTH] = '\0';
+	st.host = ch->desc->host;
 
 	fseek(player_fl, GET_PFILEPOS(ch) * sizeof(struct char_file_u), SEEK_SET);
 	fwrite(&st, sizeof(struct char_file_u), 1, player_fl);
@@ -2475,8 +2431,8 @@ void store_to_char(struct char_file_u *st, struct char_data *ch) {
 
 	ch->player.short_descr = NULL;
 	ch->player.long_descr = NULL;
-	ch->player.title = strdup(st->title);
-	ch->player.description = strdup(st->description);
+	ch->player.title = (st->title);
+	ch->player.description = (st->description.c_str());
 
 	ch->player.hometown = st->hometown;
 	ch->player.time.birth = st->birth;
@@ -2503,12 +2459,8 @@ void store_to_char(struct char_file_u *st, struct char_data *ch) {
 	ch->points.hitroll = 0;
 	ch->points.damroll = 0;
 
-	if(ch->player.name) {
-		free(ch->player.name);
-	}
-
 	ch->player.name = strdup(st->name);
-	strlcpy(ch->player.passwd, st->pwd, sizeof(ch->player.passwd));
+	ch->player.passwd = st->pwd;
 
 	/* Add all spell effects */
 	for(i = 0; i < MAX_AFFECT; i++) {
@@ -2604,26 +2556,25 @@ void char_to_store(struct char_data *ch, struct char_file_u *st) {
 	st->points.damroll = 0;
 
 	if(GET_TITLE(ch)) {
-		strlcpy(st->title, GET_TITLE(ch), MAX_TITLE_LENGTH);
+		st->title = GET_TITLE(ch);
 	} else {
-		*st->title = '\0';
+		st->title.clear();
 	}
 
 	if(ch->player.description) {
 		if(strlen(ch->player.description) >= sizeof(st->description)) {
 			log("SYSERR: char_to_store: %s's description length: %d, max: %d! "
 			    "Truncated.", GET_PC_NAME(ch), strlen(ch->player.description),
-			    sizeof(st->description));
-			ch->player.description[sizeof(st->description) - 3] = '\0';
-			strcat(ch->player.description, "\r\n");	/* strcat: OK (previous line makes room) */
+			    (st->description.length()));
+			ch->player.description.concat("\r\n");
 		}
 
-		strcpy(st->description, ch->player.description);	/* strcpy: OK (checked above) */
+		st->description = ch->player.description.c_str();	/* strcpy: OK (checked above) */
 	} else {
-		*st->description = '\0';
+		st->description.clear();
 	}
 
-	strcpy(st->name, GET_NAME(ch));	/* strcpy: OK (that's what GET_NAME came from) */
+	st->name = GET_NAME(ch);
 	strcpy(st->pwd, GET_PASSWD(ch));	/* strcpy: OK (that's what GET_PASSWD came from) */
 
 	/* add spell and eq affections back in now */
@@ -2658,20 +2609,17 @@ int create_entry(char *name) {
 	int i, pos;
 
 	if(top_of_p_table == -1) {	/* no table */
-		CREATE(player_table, struct player_index_element, 1);
+		player_table.emplace_back();
 		pos = top_of_p_table = 0;
 	} else if((pos = get_ptable_by_name(name)) == -1) {	/* new name */
 		i = ++top_of_p_table + 1;
-
-		RECREATE(player_table, struct player_index_element, i);
 		pos = top_of_p_table;
 	}
 
-	CREATE(player_table[pos].name, char, strlen(name) + 1);
-
 	/* copy lowercase equivalent of name to table field */
-	for(i = 0; (player_table[pos].name[i] = LOWER(name[i])); i++)
-		/* Nothing */;
+	for(i = 0; LOWER(name[i]); i++){
+		player_table[pos].name.concat(LOWER(name[i]));
+	}
 
 	return (pos);
 }
@@ -2727,57 +2675,12 @@ char *fread_string(FILE *fl, const char *error) {
 
 /* release memory allocated for a char struct */
 void free_char(struct char_data *ch) {
-	int i;
 	struct alias_data *a;
 
 	if(ch->player_specials) {
 		while((a = GET_ALIASES(ch)) != NULL) {
 			GET_ALIASES(ch) = (GET_ALIASES(ch))->next;
 			free_alias(a);
-		}
-	}
-
-	if(!IS_NPC(ch) || (IS_NPC(ch) && GET_MOB_RNUM(ch) == NOBODY)) {
-		/* if this is a player, or a non-prototyped non-player, free all */
-		if(GET_NAME(ch)) {
-			free(GET_NAME(ch));
-		}
-
-		if(ch->player.title) {
-			free(ch->player.title);
-		}
-
-		if(ch->player.short_descr) {
-			free(ch->player.short_descr);
-		}
-
-		if(ch->player.long_descr) {
-			free(ch->player.long_descr);
-		}
-
-		if(ch->player.description) {
-			free(ch->player.description);
-		}
-	} else if((i = GET_MOB_RNUM(ch)) != NOBODY) {
-		/* otherwise, free strings only if the string is not pointing at proto */
-		if(ch->player.name && ch->player.name != mob_proto[i].player.name) {
-			free(ch->player.name);
-		}
-
-		if(ch->player.title && ch->player.title != mob_proto[i].player.title) {
-			free(ch->player.title);
-		}
-
-		if(ch->player.short_descr && ch->player.short_descr != mob_proto[i].player.short_descr) {
-			free(ch->player.short_descr);
-		}
-
-		if(ch->player.long_descr && ch->player.long_descr != mob_proto[i].player.long_descr) {
-			free(ch->player.long_descr);
-		}
-
-		if(ch->player.description && ch->player.description != mob_proto[i].player.description) {
-			free(ch->player.description);
 		}
 	}
 
@@ -2864,36 +2767,7 @@ void free_obj(struct obj_data *obj) {
  * as to avoid special cases.
  */
 int file_to_string_alloc(const char *name, char **buf) {
-	int temppage;
-	char temp[MAX_STRING_LENGTH];
-	struct descriptor_data *in_use;
-
-	for(in_use = descriptor_list; in_use; in_use = in_use->next)
-		if(in_use->showstr_vector && *in_use->showstr_vector == *buf) {
-			return (-1);
-		}
-
-	/* Lets not free() what used to be there unless we succeeded. */
-	if(file_to_string(name, temp) < 0) {
-		return (-1);
-	}
-
-	for(in_use = descriptor_list; in_use; in_use = in_use->next) {
-		if(!in_use->showstr_count || *in_use->showstr_vector != *buf) {
-			continue;
-		}
-
-		/* Let's be nice and leave them at the page they were on. */
-		temppage = in_use->showstr_page;
-		paginate_string((in_use->showstr_head = strdup(*in_use->showstr_vector)), in_use);
-		in_use->showstr_page = temppage;
-	}
-
-	if(*buf) {
-		free(*buf);
-	}
-
-	*buf = strdup(temp);
+	log("[deprecated]: file_to_string_alloc");
 	return (0);
 }
 

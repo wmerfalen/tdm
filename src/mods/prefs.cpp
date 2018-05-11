@@ -2,7 +2,7 @@
 namespace mods {
 	std::string prefs::namify(const std::string& key,struct char_data* c) {
 		std::string format = PREFS_FORMAT_STRING;
-		std::string named = mods::globals::replace_all(format,"{name}",c->player.name);
+		std::string named = mods::globals::replace_all(format,"{name}",c->player.name.c_str());
 		named = mods::globals::replace_all(named,"{key}",key);
 		return named;
 	}
@@ -21,7 +21,7 @@ namespace mods {
 	}
 	std::string prefs::dynamic_namify(const std::string& key,const std::string& section,struct char_data* c) {
 		std::string format = DYNAMIC_FORMAT_STRING;
-		std::string named = mods::globals::replace_all(format,"{name}",c->player.name);
+		std::string named = mods::globals::replace_all(format,"{name}",c->player.name.c_str());
 		named = mods::globals::replace_all(named,"{prefs}",section);
 		named = mods::globals::replace_all(named,"{key}",key);
 		return named;

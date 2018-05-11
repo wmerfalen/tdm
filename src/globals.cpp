@@ -33,8 +33,8 @@ namespace mods {
 	namespace globals {
 		using player = mods::player;
 		using lmdb_db = gdns::lmdb::db;
+		socket_map_t socket_map;
 		std::unique_ptr<lmdb_db> db;
-		std::unique_ptr<mods::acl::FileParser> config;
 		std::shared_ptr<player> player_nobody;
 		std::unique_ptr<mods::deferred> defer_queue;
 		duk_context* duktape_context;
@@ -47,11 +47,6 @@ namespace mods {
 		bool f_import_rooms;
 		std::shared_ptr<mods::player> current_player;
 		std::string bootup_test_suite;
-		namespace objects {
-			static bool populated = false;
-		};
-		bool acl_good = false;
-		int acl_parse_code = 0;
 		/* Maps */
 		map_object_list obj_map;
 		template <typename I>
@@ -128,19 +123,7 @@ namespace mods {
 			return 1;
 		}
 		void init() {
-			config = std::make_unique<mods::acl::FileParser>();
 			db = std::make_unique<lmdb_db>(LMDB_DB_FILE,LMDB_DB_NAME,MDB_WRITEMAP | MDB_NOLOCK,0600,true);
-			config->setFile("acl.conf");
-			auto ret = config->parse();
-			acl_parse_code = ret;
-
-			if(ret < 0) {
-				std::cerr << "Error parsing config file: " << ret << " error code\n";
-				acl_good = false;
-			} else {
-				acl_good = true;
-			}
-
 			player_nobody = nullptr;
 			defer_queue = std::make_unique<mods::deferred>(mods::deferred::TICK_RESOLUTION);
 			duktape_context = mods::js::new_context();
@@ -458,11 +441,13 @@ namespace mods {
 		}
 		void init_player(char_data* ch) {
 			MENTOC_PREAMBLE();
-			mods::player::class_type class_type = ch->player.chclass;
-			player->set_class_capability({class_type});
+			player->set_class_capability({mods::classes::types(ch->player.chclass)});
 		}
 
-		void register_player(struct char_data* ch) {
+		void deregister_player(char_data* ch) {
+			
+		}
+		void register_player(char_data* ch) {
 			if(ch) {
 				auto uuid = mods::globals::player_list.size();
 				ch->uuid = uuid;

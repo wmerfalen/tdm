@@ -25,6 +25,7 @@
 extern int level_can_shout;
 extern int holler_move_cost;
 extern struct char_data* character_list;
+extern std::deque<descriptor_data> descriptor_list;
 
 /* local functions */
 void perform_tell(struct char_data *ch, struct char_data *vict, char *arg);
@@ -337,58 +338,11 @@ ACMD(do_write) {
 	}
 }
 
-
-
-ACMD(do_page) {
-	struct descriptor_data *d;
-	struct char_data *vict;
-	char buf2[MAX_INPUT_LENGTH], arg[MAX_INPUT_LENGTH];
-
-	half_chop(argument, arg, buf2);
-
-	if(IS_NPC(ch)) {
-		send_to_char(ch, "Monsters can't page.. go away.\r\n");
-	} else if(!*arg) {
-		send_to_char(ch, "Whom do you wish to page?\r\n");
-	} else {
-		char buf[MAX_STRING_LENGTH];
-
-		snprintf(buf, sizeof(buf), "\007\007*$n* %s", buf2);
-
-		if(!str_cmp(arg, "all")) {
-			if(GET_LEVEL(ch) > LVL_GOD) {
-				for(d = descriptor_list; d; d = d->next)
-					if(STATE(d) == CON_PLAYING && d->character) {
-						act(buf, FALSE, ch, 0, d->character, TO_VICT);
-					}
-			} else {
-				send_to_char(ch, "You will never be godly enough to do that!\r\n");
-			}
-
-			return;
-		}
-
-		if((vict = get_char_vis(ch, arg, NULL, FIND_CHAR_WORLD)) != NULL) {
-			act(buf, FALSE, ch, 0, vict, TO_VICT);
-
-			if(PRF_FLAGGED(ch, PRF_NOREPEAT)) {
-				send_to_char(ch, "%s", OK);
-			} else {
-				act(buf, FALSE, ch, 0, vict, TO_CHAR);
-			}
-		} else {
-			send_to_char(ch, "There is no such person in the game!\r\n");
-		}
-	}
-}
-
-
 /**********************************************************************
  * generalized communication func, originally by Fred C. Merkel (Torg) *
   *********************************************************************/
 
 ACMD(do_gen_comm) {
-	struct descriptor_data *i;
 	char color_on[24];
 	char buf1[MAX_INPUT_LENGTH];
 
@@ -503,26 +457,26 @@ ACMD(do_gen_comm) {
 	snprintf(buf1, sizeof(buf1), "$n %ss, '%s'", com_msgs[subcmd][1], argument);
 
 	/* now send all the strings out */
-	for(i = descriptor_list; i; i = i->next) {
-		if(STATE(i) == CON_PLAYING && i != ch->desc && i->character &&
-		        !PRF_FLAGGED(i->character, channels[subcmd]) &&
-		        !PLR_FLAGGED(i->character, PLR_WRITING) &&
-		        !ROOM_FLAGGED(IN_ROOM(i->character), ROOM_SOUNDPROOF)) {
+	for(auto & i : descriptor_list){
+		if(STATE(&i) == CON_PLAYING && i.character && i.character->uuid != ch->uuid &&
+		        !PRF_FLAGGED(i.character, channels[subcmd]) &&
+		        !PLR_FLAGGED(i.character, PLR_WRITING) &&
+		        !ROOM_FLAGGED(IN_ROOM(i.character), ROOM_SOUNDPROOF)) {
 
 			if(subcmd == SCMD_SHOUT &&
-			        ((world[IN_ROOM(ch)].zone != world[IN_ROOM(i->character)].zone) ||
-			         !AWAKE(i->character))) {
+			        ((world[IN_ROOM(ch)].zone != world[IN_ROOM(i.character)].zone) ||
+			         !AWAKE(i.character))) {
 				continue;
 			}
 
-			if(COLOR_LEV(i->character) >= C_NRM) {
-				send_to_char(i->character, "%s", color_on);
+			if(COLOR_LEV(i.character) >= C_NRM) {
+				send_to_char(i.character, "%s", color_on);
 			}
 
-			act(buf1, FALSE, ch, 0, i->character, TO_VICT | TO_SLEEP);
+			act(buf1, FALSE, ch, 0, i.character, TO_VICT | TO_SLEEP);
 
-			if(COLOR_LEV(i->character) >= C_NRM) {
-				send_to_char(i->character, "%s", KNRM);
+			if(COLOR_LEV(i.character) >= C_NRM) {
+				send_to_char(i.character, "%s", KNRM);
 			}
 		}
 	}
@@ -541,7 +495,6 @@ ACMD(do_qcomm) {
 		send_to_char(ch, "%c%s?  Yes, fine, %s we must, but WHAT??\r\n", UPPER(*CMD_NAME), CMD_NAME + 1, CMD_NAME);
 	} else {
 		char buf[MAX_STRING_LENGTH];
-		struct descriptor_data *i;
 
 		if(PRF_FLAGGED(ch, PRF_NOREPEAT)) {
 			send_to_char(ch, "%s", OK);
@@ -558,9 +511,9 @@ ACMD(do_qcomm) {
 			strlcpy(buf, argument, sizeof(buf));
 		}
 
-		for(i = descriptor_list; i; i = i->next)
-			if(STATE(i) == CON_PLAYING && i != ch->desc && PRF_FLAGGED(i->character, PRF_QUEST)) {
-				act(buf, 0, ch, 0, i->character, TO_VICT | TO_SLEEP);
+		for(auto & i : descriptor_list)
+			if(STATE(&i) == CON_PLAYING && i.character->uuid != ch->uuid && PRF_FLAGGED(i.character, PRF_QUEST)) {
+				act(buf, 0, ch, 0, i.character, TO_VICT | TO_SLEEP);
 			}
 	}
 }

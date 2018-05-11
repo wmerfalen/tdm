@@ -184,7 +184,7 @@ int strn_cmp(const char *arg1, const char *arg2, int n) {
 
 /* log a death trap hit */
 void log_death_trap(struct char_data *ch) {
-	mudlog(BRF, LVL_IMMORT, TRUE, "%s hit death trap #%d (%s)", GET_NAME(ch), GET_ROOM_VNUM(IN_ROOM(ch)), world[IN_ROOM(ch)].name);
+	mudlog(BRF, LVL_IMMORT, TRUE, "%s hit death trap #%d (%s)", GET_NAME(ch).c_str(), GET_ROOM_VNUM(IN_ROOM(ch)), world[IN_ROOM(ch)].name.c_str());
 }
 
 
@@ -244,7 +244,6 @@ int touch(const char *path) {
  */
 void mudlog(int type, int level, int file, const char *str, ...) {
 	char buf[MAX_STRING_LENGTH];
-	struct descriptor_data *i;
 	va_list args;
 
 	if(str == NULL) {
@@ -267,24 +266,24 @@ void mudlog(int type, int level, int file, const char *str, ...) {
 	va_end(args);
 	strcat(buf, " ]\r\n");	/* strcat: OK */
 
-	for(i = descriptor_list; i; i = i->next) {
-		if(STATE(i) != CON_PLAYING || IS_NPC(i->character)) { /* switch */
+	for(auto & i : descriptor_list) {
+		if(STATE(&i) != CON_PLAYING || IS_NPC(i.character)) { /* switch */
 			continue;
 		}
 
-		if(GET_LEVEL(i->character) < level) {
+		if(GET_LEVEL(i.character) < level) {
 			continue;
 		}
 
-		if(PLR_FLAGGED(i->character, PLR_WRITING)) {
+		if(PLR_FLAGGED(i.character, PLR_WRITING)) {
 			continue;
 		}
 
-		if(type > (PRF_FLAGGED(i->character, PRF_LOG1) ? 1 : 0) + (PRF_FLAGGED(i->character, PRF_LOG2) ? 2 : 0)) {
+		if(type > (PRF_FLAGGED(i.character, PRF_LOG1) ? 1 : 0) + (PRF_FLAGGED(i.character, PRF_LOG2) ? 2 : 0)) {
 			continue;
 		}
 
-		send_to_char(i->character, "%s%s%s", CCGRN(i->character, C_NRM), buf, CCNRM(i->character, C_NRM));
+		send_to_char(i.character, "%s%s%s", CCGRN(i.character, C_NRM), buf, CCNRM(i.character, C_NRM));
 	}
 }
 

@@ -284,7 +284,6 @@ ACMD(do_goto) {
 
 ACMD(do_trans) {
 	char buf[MAX_INPUT_LENGTH];
-	struct descriptor_data *i;
 	struct char_data *victim;
 
 	one_argument(argument, buf);
@@ -315,9 +314,9 @@ ACMD(do_trans) {
 			return;
 		}
 
-		for(i = descriptor_list; i; i = i->next)
-			if(STATE(i) == CON_PLAYING && i->character && i->character != ch) {
-				victim = i->character;
+		for(auto & i : descriptor_list){
+			if(STATE(&i) == CON_PLAYING && i.character && i.character != ch) {
+				victim = i.character;
 
 				if(GET_LEVEL(victim) >= GET_LEVEL(ch)) {
 					continue;
@@ -330,7 +329,7 @@ ACMD(do_trans) {
 				act("$n has transferred you!", FALSE, ch, 0, victim, TO_VICT);
 				look_at_room(victim, 0);
 			}
-
+		}
 		send_to_char(ch, "%s", OK);
 	}
 }
@@ -398,7 +397,7 @@ void do_stat_room(struct char_data *ch) {
 	struct obj_data *j;
 	struct char_data *k;
 
-	send_to_char(ch, "Room name: %s%s%s\r\n", CCCYN(ch, C_NRM), rm->name, CCNRM(ch, C_NRM));
+	send_to_char(ch, "Room name: %s%s%s\r\n", CCCYN(ch, C_NRM), rm->name.c_str(), CCNRM(ch, C_NRM));
 
 	sprinttype(rm->sector_type, sector_types, buf2, sizeof(buf2));
 	send_to_char(ch, "Zone: [%3d], VNum: [%s%5d%s], RNum: [%5d], Type: %s\r\n",
@@ -1491,18 +1490,17 @@ ACMD(do_invis) {
 
 
 ACMD(do_gecho) {
-	struct descriptor_data *pt;
-
 	skip_spaces(&argument);
 	delete_doubledollar(argument);
 
 	if(!*argument) {
 		send_to_char(ch, "That must be a mistake...\r\n");
 	} else {
-		for(pt = descriptor_list; pt; pt = pt->next)
-			if(STATE(pt) == CON_PLAYING && pt->character && pt->character != ch) {
-				send_to_char(pt->character, "%s\r\n", argument);
+		for(auto & pt : descriptor_list){
+			if(STATE(&pt) == CON_PLAYING && pt.character && pt.character != ch) {
+				send_to_char(pt.character, "%s\r\n", argument);
 			}
+		}
 
 		if(PRF_FLAGGED(ch, PRF_NOREPEAT)) {
 			send_to_char(ch, "%s", OK);
@@ -1536,7 +1534,6 @@ ACMD(do_poofset) {
 
 ACMD(do_dc) {
 	char arg[MAX_INPUT_LENGTH];
-	struct descriptor_data *d;
 	int num_to_dc;
 
 	one_argument(argument, arg);
@@ -1546,9 +1543,16 @@ ACMD(do_dc) {
 		return;
 	}
 
-	for(d = descriptor_list; d && d->desc_num != num_to_dc; d = d->next);
+	auto d = descriptor_list.begin();
+	bool found = false;
+	for(; d != descriptor_list.end();++d){
+		if(d->desc_num == num_to_dc){
+			found = true;
+			break;
+		}
+	}
 
-	if(!d) {
+	if(!found) {
 		send_to_char(ch, "No such connection.\r\n");
 		return;
 	}
@@ -1693,7 +1697,6 @@ ACMD(do_last) {
 
 
 ACMD(do_force) {
-	struct descriptor_data *i, *next_desc;
 	struct char_data *vict, *next_force;
 	char arg[MAX_INPUT_LENGTH], to_force[MAX_INPUT_LENGTH], buf1[MAX_INPUT_LENGTH + 32];
 
@@ -1733,10 +1736,8 @@ ACMD(do_force) {
 		send_to_char(ch, "%s", OK);
 		mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s forced all to %s", GET_NAME(ch), to_force);
 
-		for(i = descriptor_list; i; i = next_desc) {
-			next_desc = i->next;
-
-			if(STATE(i) != CON_PLAYING || !(vict = i->character) || (!IS_NPC(vict) && GET_LEVEL(vict) >= GET_LEVEL(ch))) {
+		for(auto & i : descriptor_list){
+			if(STATE(&i) != CON_PLAYING || !(vict = i.character) || (!IS_NPC(vict) && GET_LEVEL(vict) >= GET_LEVEL(ch))) {
 				continue;
 			}
 
@@ -1751,7 +1752,6 @@ ACMD(do_force) {
 ACMD(do_wiznet) {
 	char buf1[MAX_INPUT_LENGTH + MAX_NAME_LENGTH + 32],
 	     buf2[MAX_INPUT_LENGTH + MAX_NAME_LENGTH + 32];
-	struct descriptor_data *d;
 	char emote = FALSE;
 	int level = LVL_IMMORT;
 
@@ -1787,19 +1787,19 @@ ACMD(do_wiznet) {
 		case '@':
 			send_to_char(ch, "God channel status:\r\n");
 
-			for(d = descriptor_list; d; d = d->next) {
-				if(STATE(d) != CON_PLAYING || GET_LEVEL(d->character) < LVL_IMMORT) {
+			for(auto & d : descriptor_list) {
+				if(STATE(&d) != CON_PLAYING || GET_LEVEL(d.character) < LVL_IMMORT) {
 					continue;
 				}
 
-				if(!CAN_SEE(ch, d->character)) {
+				if(!CAN_SEE(ch, d.character)) {
 					continue;
 				}
 
-				send_to_char(ch, "  %-*s%s%s%s\r\n", MAX_NAME_LENGTH, GET_NAME(d->character),
-				             PLR_FLAGGED(d->character, PLR_WRITING) ? " (Writing)" : "",
-				             PLR_FLAGGED(d->character, PLR_MAILING) ? " (Writing mail)" : "",
-				             PRF_FLAGGED(d->character, PRF_NOWIZ) ? " (Offline)" : "");
+				send_to_char(ch, "  %-*s%s%s%s\r\n", MAX_NAME_LENGTH, GET_NAME(d.character),
+				             PLR_FLAGGED(d.character, PLR_WRITING) ? " (Writing)" : "",
+				             PLR_FLAGGED(d.character, PLR_MAILING) ? " (Writing mail)" : "",
+				             PRF_FLAGGED(d.character, PRF_NOWIZ) ? " (Offline)" : "");
 			}
 
 			return;
@@ -1832,20 +1832,20 @@ ACMD(do_wiznet) {
 		snprintf(buf2, sizeof(buf1), "Someone: %s%s\r\n", emote ? "<--- " : "", argument);
 	}
 
-	for(d = descriptor_list; d; d = d->next) {
-		if((STATE(d) == CON_PLAYING) && (GET_LEVEL(d->character) >= level) &&
-		        (!PRF_FLAGGED(d->character, PRF_NOWIZ)) &&
-		        (!PLR_FLAGGED(d->character, PLR_WRITING | PLR_MAILING))
-		        && (d != ch->desc || !(PRF_FLAGGED(d->character, PRF_NOREPEAT)))) {
-			send_to_char(d->character, "%s", CCCYN(d->character, C_NRM));
+	for(auto & d : descriptor_list) {
+		if((STATE(&d) == CON_PLAYING) && (GET_LEVEL(d.character) >= level) &&
+		        (!PRF_FLAGGED(d.character, PRF_NOWIZ)) &&
+		        (!PLR_FLAGGED(d.character, PLR_WRITING | PLR_MAILING))
+		        && (!(PRF_FLAGGED(d.character, PRF_NOREPEAT)))) {
+			send_to_char(d.character, "%s", CCCYN(d.character, C_NRM));
 
-			if(CAN_SEE(d->character, ch)) {
-				send_to_char(d->character, "%s", buf1);
+			if(CAN_SEE(d.character, ch)) {
+				send_to_char(d.character, "%s", buf1);
 			} else {
-				send_to_char(d->character, "%s", buf2);
+				send_to_char(d.character, "%s", buf2);
 			}
 
-			send_to_char(d->character, "%s", CCNRM(d->character, C_NRM));
+			send_to_char(d.character, "%s", CCNRM(d.character, C_NRM));
 		}
 	}
 
@@ -2032,7 +2032,6 @@ ACMD(do_show) {
 	zone_vnum zvn;
 	byte self = FALSE;
 	struct char_data *vict;
-	struct descriptor_data *d;
 	char field[MAX_INPUT_LENGTH], value[MAX_INPUT_LENGTH],
 	     arg[MAX_INPUT_LENGTH], buf[MAX_STRING_LENGTH];
 
@@ -2193,7 +2192,7 @@ ACMD(do_show) {
 			for(i = 0, k = 0; i <= top_of_world; i++)
 				for(j = 0; j < NUM_OF_DIRS; j++)
 					if(world[i].dir_option[j] && world[i].dir_option[j]->to_room == 0) {
-						nlen = snprintf(buf + len, sizeof(buf) - len, "%2d: [%5d] %s\r\n", ++k, GET_ROOM_VNUM(i), world[i].name);
+						nlen = snprintf(buf + len, sizeof(buf) - len, "%2d: [%5d] %s\r\n", ++k, GET_ROOM_VNUM(i), world[i].name.c_str());
 
 						if(len + nlen >= sizeof(buf) || nlen < 0) {
 							break;
@@ -2211,7 +2210,7 @@ ACMD(do_show) {
 
 			for(i = 0, j = 0; i <= top_of_world; i++)
 				if(ROOM_FLAGGED(i, ROOM_DEATH)) {
-					nlen = snprintf(buf + len, sizeof(buf) - len, "%2d: [%5d] %s\r\n", ++j, GET_ROOM_VNUM(i), world[i].name);
+					nlen = snprintf(buf + len, sizeof(buf) - len, "%2d: [%5d] %s\r\n", ++j, GET_ROOM_VNUM(i), world[i].name.c_str());
 
 					if(len + nlen >= sizeof(buf) || nlen < 0) {
 						break;
@@ -2229,7 +2228,7 @@ ACMD(do_show) {
 
 			for(i = 0, j = 0; i <= top_of_world; i++)
 				if(ROOM_FLAGGED(i, ROOM_GODROOM)) {
-					nlen = snprintf(buf + len, sizeof(buf) - len, "%2d: [%5d] %s\r\n", ++j, GET_ROOM_VNUM(i), world[i].name);
+					nlen = snprintf(buf + len, sizeof(buf) - len, "%2d: [%5d] %s\r\n", ++j, GET_ROOM_VNUM(i), world[i].name.c_str());
 
 					if(len + nlen >= sizeof(buf) || nlen < 0) {
 						break;
@@ -2256,21 +2255,21 @@ ACMD(do_show) {
 			i = 0;
 			send_to_char(ch, "People currently snooping:\r\n--------------------------\r\n");
 
-			for(d = descriptor_list; d; d = d->next) {
-				if(d->snooping == NULL || d->character == NULL) {
+			for(auto & d : descriptor_list) {
+				if(d.snooping == NULL || d.character == NULL) {
 					continue;
 				}
 
-				if(STATE(d) != CON_PLAYING || GET_LEVEL(ch) < GET_LEVEL(d->character)) {
+				if(STATE(&d) != CON_PLAYING || GET_LEVEL(ch) < GET_LEVEL(d.character)) {
 					continue;
 				}
 
-				if(!CAN_SEE(ch, d->character) || IN_ROOM(d->character) == NOWHERE) {
+				if(!CAN_SEE(ch, d.character) || IN_ROOM(d.character) == NOWHERE) {
 					continue;
 				}
 
 				i++;
-				send_to_char(ch, "%-10s - snooped by %s.\r\n", GET_NAME(d->snooping->character), GET_NAME(d->character));
+				send_to_char(ch, "%-10s - snooped by %s.\r\n", GET_NAME(d.snooping->character), GET_NAME(d.character));
 			}
 
 			if(i == 0) {
@@ -2727,7 +2726,6 @@ int perform_set(struct char_data *ch, struct char_data *vict, int mode,
 			}
 
 			strncpy(GET_PASSWD(vict), CRYPT(val_arg, GET_NAME(vict)), MAX_PWD_LENGTH);	/* strncpy: OK (G_P:MAX_PWD_LENGTH) */
-			*(GET_PASSWD(vict) + MAX_PWD_LENGTH) = '\0';
 			send_to_char(ch, "Password changed to '%s'.\r\n", val_arg);
 			break;
 

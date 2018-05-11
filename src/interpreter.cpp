@@ -130,7 +130,7 @@ ACMD(do_look);
 ACMD(do_not_here);
 ACMD(do_olc);
 ACMD(do_order);
-ACMD(do_page);
+//ACMD(do_page);
 ACMD(do_poofset);
 ACMD(do_pour);
 ACMD(do_practice);
@@ -415,7 +415,7 @@ cpp_extern const struct command_info cmd_info[] = {
 
 	{ "put"      , POS_RESTING , do_put      , 0, 0 },
 	{ "pat"      , POS_RESTING , do_action   , 0, 0 },
-	{ "page"     , POS_DEAD    , do_page     , LVL_GOD, 0 },
+	//{ "page"     , POS_DEAD    , do_page     , LVL_GOD, 0 },
 	{ "pardon"   , POS_DEAD    , do_wizutil  , LVL_GOD, SCMD_PARDON },
 	{ "peer"     , POS_RESTING , do_action   , 0, 0 },
 	{ "pick"     , POS_STANDING, do_gen_door , 1, SCMD_PICK },
@@ -1268,7 +1268,6 @@ int _parse_name(char *arg, char *name) {
 
 /* This function seems a bit over-extended. */
 int perform_dupe_check(struct descriptor_data *d) {
-	struct descriptor_data *k, *next_k;
 	struct char_data *target = NULL, *ch, *next_ch;
 	int mode = 0;
 
@@ -1279,48 +1278,46 @@ int perform_dupe_check(struct descriptor_data *d) {
 	 * other descriptors controlling a character with the same ID number.
 	 */
 
-	for(k = descriptor_list; k; k = next_k) {
-		next_k = k->next;
-
-		if(k == d) {
+	for(auto & k : descriptor_list){
+		if(&k == d) {
 			continue;
 		}
 
-		if(k->original && (GET_IDNUM(k->original) == id)) {
+		if(k.original && (GET_IDNUM(k.original) == id)) {
 			/* Original descriptor was switched, booting it and restoring normal body control. */
 
 			write_to_output(d, "\r\nMultiple login detected -- disconnecting.\r\n");
-			STATE(k) = CON_CLOSE;
+			STATE(&k) = CON_CLOSE;
 
 			if(!target) {
-				target = k->original;
+				target = k.original;
 				mode = UNSWITCH;
 			}
 
-			if(k->character) {
-				k->character->desc = NULL;
+			if(k.character) {
+				k.character->desc = NULL;
 			}
 
-			k->character = NULL;
-			k->original = NULL;
-		} else if(k->character && GET_IDNUM(k->character) == id && k->original) {
+			k.character = NULL;
+			k.original = NULL;
+		} else if(k.character && GET_IDNUM(k.character) == id && k.original) {
 			/* Character taking over their own body, while an immortal was switched to it. */
 
-			do_return(k->character, NULL, 0, 0);
-		} else if(k->character && GET_IDNUM(k->character) == id) {
+			do_return(k.character, NULL, 0, 0);
+		} else if(k.character && GET_IDNUM(k.character) == id) {
 			/* Character taking over their own body. */
 
-			if(!target && STATE(k) == CON_PLAYING) {
-				write_to_output(k, "\r\nThis body has been usurped!\r\n");
-				target = k->character;
+			if(!target && STATE(&k) == CON_PLAYING) {
+				write_to_output(&k, "\r\nThis body has been usurped!\r\n");
+				target = k.character;
 				mode = USURP;
 			}
 
-			k->character->desc = NULL;
-			k->character = NULL;
-			k->original = NULL;
-			write_to_output(k, "\r\nMultiple login detected -- disconnecting.\r\n");
-			STATE(k) = CON_CLOSE;
+			k.character->desc = NULL;
+			k.character = NULL;
+			k.original = NULL;
+			write_to_output(&k, "\r\nMultiple login detected -- disconnecting.\r\n");
+			STATE(&k) = CON_CLOSE;
 		}
 	}
 
@@ -1389,7 +1386,7 @@ int perform_dupe_check(struct descriptor_data *d) {
 		case RECON:
 			write_to_output(d, "Reconnecting.\r\n");
 			act("$n has reconnected.", TRUE, d->character, 0, 0, TO_ROOM);
-			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d->character)), TRUE, "%s [%s] has reconnected.", GET_NAME(d->character), d->host);
+			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d->character)), TRUE, "%s [%s] has reconnected.", GET_NAME(d->character), d->host.c_str());
 			break;
 
 		case USURP:
@@ -1403,7 +1400,7 @@ int perform_dupe_check(struct descriptor_data *d) {
 
 		case UNSWITCH:
 			write_to_output(d, "Reconnecting to unswitched char.");
-			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d->character)), TRUE, "%s [%s] has reconnected.", GET_NAME(d->character), d->host);
+			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d->character)), TRUE, "%s [%s] has reconnected.", GET_NAME(d->character), d->host.c_str());
 			break;
 	}
 
@@ -1418,14 +1415,24 @@ void nanny(struct descriptor_data *d, char *arg) {
 
 	skip_spaces(&arg);
 
+	bool descriptor_iterator_found = false;
 	switch(STATE(d)) {
 		case CON_GET_NAME:		/* wait for input of name */
+			descriptor_iterator_found = false;
 			if(d->character == NULL) {
 				CREATE(d->character, struct char_data, 1);
 				clear_char(d->character);
 				d->character->player_specials = std::make_unique<player_special_data>();
 				d->character->desc = d;
 			}
+			for(auto it = descriptor_list.begin(); it != descriptor_list.end(); ++it){
+				if(it->descriptor == d->descriptor){
+					mods::globals::socket_map[d->descriptor] = std::make_pair(d->character,it);
+					descriptor_iterator_found = true;
+					break;
+				}
+			}
+			assert(descriptor_iterator_found);
 
 			if(!*arg) {
 				STATE(d) = CON_CLOSE;
@@ -1495,8 +1502,8 @@ void nanny(struct descriptor_data *d, char *arg) {
 
 		case CON_NAME_CNFRM:		/* wait for conf. of new name    */
 			if(UPPER(*arg) == 'Y') {
-				if(isbanned(d->host) >= BAN_NEW) {
-					mudlog(NRM, LVL_GOD, TRUE, "Request for new char %s denied from [%s] (siteban)", GET_PC_NAME(d->character), d->host);
+				if(isbanned(d->host.c_str()) >= BAN_NEW) {
+					mudlog(NRM, LVL_GOD, TRUE, "Request for new char %s denied from [%s] (siteban)", GET_PC_NAME(d->character), d->host.c_str());
 					write_to_output(d, "Sorry, new characters are not allowed from your site!\r\n");
 					STATE(d) = CON_CLOSE;
 					return;
@@ -1504,7 +1511,7 @@ void nanny(struct descriptor_data *d, char *arg) {
 
 				if(circle_restrict) {
 					write_to_output(d, "Sorry, new players can't be created at the moment.\r\n");
-					mudlog(NRM, LVL_GOD, TRUE, "Request for new char %s denied from [%s] (wizlock)", GET_PC_NAME(d->character), d->host);
+					mudlog(NRM, LVL_GOD, TRUE, "Request for new char %s denied from [%s] (wizlock)", GET_PC_NAME(d->character), d->host.c_str());
 					STATE(d) = CON_CLOSE;
 					return;
 				}
@@ -1542,7 +1549,7 @@ void nanny(struct descriptor_data *d, char *arg) {
 				STATE(d) = CON_CLOSE;
 			} else {
 				if(strncmp(CRYPT(arg, GET_PASSWD(d->character)), GET_PASSWD(d->character), MAX_PWD_LENGTH)) {
-					mudlog(BRF, LVL_GOD, TRUE, "Bad PW: %s [%s]", GET_NAME(d->character), d->host);
+					mudlog(BRF, LVL_GOD, TRUE, "Bad PW: %s [%s]", GET_NAME(d->character), d->host.c_str());
 					GET_BAD_PWS(d->character)++;
 					save_char(d->character);
 
@@ -1562,18 +1569,18 @@ void nanny(struct descriptor_data *d, char *arg) {
 				GET_BAD_PWS(d->character) = 0;
 				d->bad_pws = 0;
 
-				if(isbanned(d->host) == BAN_SELECT &&
+				if(isbanned(d->host.c_str()) == BAN_SELECT &&
 				        !PLR_FLAGGED(d->character, PLR_SITEOK)) {
 					write_to_output(d, "Sorry, this char has not been cleared for login from your site!\r\n");
 					STATE(d) = CON_CLOSE;
-					mudlog(NRM, LVL_GOD, TRUE, "Connection attempt for %s denied from %s", GET_NAME(d->character), d->host);
+					mudlog(NRM, LVL_GOD, TRUE, "Connection attempt for %s denied from %s", GET_NAME(d->character), d->host.c_str());
 					return;
 				}
 
 				if(GET_LEVEL(d->character) < circle_restrict) {
 					write_to_output(d, "The game is temporarily restricted.. try again later.\r\n");
 					STATE(d) = CON_CLOSE;
-					mudlog(NRM, LVL_GOD, TRUE, "Request for login denied for %s [%s] (wizlock)", GET_NAME(d->character), d->host);
+					mudlog(NRM, LVL_GOD, TRUE, "Request for login denied for %s [%s] (wizlock)", GET_NAME(d->character), d->host.c_str());
 					return;
 				}
 
@@ -1588,7 +1595,7 @@ void nanny(struct descriptor_data *d, char *arg) {
 					write_to_output(d, "%s", motd);
 				}
 
-				mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(d->character)), TRUE, "%s [%s] has connected.", GET_NAME(d->character), d->host);
+				mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(d->character)), TRUE, "%s [%s] has connected.", GET_NAME(d->character), d->host.c_str());
 
 				if(load_result) {
 					write_to_output(d, "\r\n\r\n\007\007\007"
@@ -1613,7 +1620,6 @@ void nanny(struct descriptor_data *d, char *arg) {
 			}
 
 			strncpy(GET_PASSWD(d->character), CRYPT(arg, GET_PC_NAME(d->character)), MAX_PWD_LENGTH);	/* strncpy: OK (G_P:MAX_PWD_LENGTH+1) */
-			*(GET_PASSWD(d->character) + MAX_PWD_LENGTH) = '\0';
 
 			write_to_output(d, "\r\nPlease retype password: ");
 
@@ -1695,7 +1701,7 @@ void nanny(struct descriptor_data *d, char *arg) {
 			write_to_output(d, "%s\r\n*** PRESS RETURN: ", motd);
 			STATE(d) = CON_RMOTD;
 
-			mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player.", GET_NAME(d->character), d->host);
+			mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player.", GET_NAME(d->character), d->host.c_str());
 			break;
 
 		case CON_RMOTD:		/* read CR after printing motd   */
@@ -1782,13 +1788,12 @@ void nanny(struct descriptor_data *d, char *arg) {
 					case '2':
 						if(d->character->player.description) {
 							write_to_output(d, "Old description:\r\n%s", d->character->player.description);
-							free(d->character->player.description);
-							d->character->player.description = NULL;
+							d->character->player.description.clear();
 						}
 
 						write_to_output(d, "Enter the new text you'd like others to see when they look at you.\r\n"
 						                "Terminate with a '@' on a new line.\r\n");
-						d->str = &d->character->player.description;
+						d->str = d->character->player.description.ptrptr();
 						d->max_str = EXDSCR_LENGTH;
 						STATE(d) = CON_EXDESC;
 						break;

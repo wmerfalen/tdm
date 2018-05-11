@@ -913,7 +913,6 @@ void update_char_objects(struct char_data *ch) {
 /* Extract a ch completely from the world, and leave his stuff behind */
 void extract_char_final(struct char_data *ch) {
 	struct char_data *k, *temp;
-	struct descriptor_data *d;
 	struct obj_data *obj;
 	int i;
 
@@ -929,9 +928,9 @@ void extract_char_final(struct char_data *ch) {
 	 * we're checking below this loop to the proper value.
 	 */
 	if(!IS_NPC(ch) && !ch->desc) {
-		for(d = descriptor_list; d; d = d->next)
-			if(d->original == ch) {
-				do_return(d->character, NULL, 0, 0);
+		for(auto & d : descriptor_list)
+			if(d.original == ch) {
+				do_return(d.character, NULL, 0, 0);
 				break;
 			}
 	}
@@ -955,13 +954,13 @@ void extract_char_final(struct char_data *ch) {
 			 * for being link-dead, so we want CON_CLOSE to clean everything up.
 			 * If we're here, we know it's a player so no IS_NPC check required.
 			 */
-			for(d = descriptor_list; d; d = d->next) {
-				if(d == ch->desc) {
+			for(auto & d : descriptor_list) {
+				if(d.descriptor == ch->desc->descriptor) {
 					continue;
 				}
 
-				if(d->character && GET_IDNUM(ch) == GET_IDNUM(d->character)) {
-					STATE(d) = CON_CLOSE;
+				if(d.character && GET_IDNUM(ch) == GET_IDNUM(d.character)) {
+					STATE(&d) = CON_CLOSE;
 				}
 			}
 

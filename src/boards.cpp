@@ -396,7 +396,6 @@ int Board_display_msg(int board_type, struct char_data *ch, char *arg, struct ob
 int Board_remove_msg(int board_type, struct char_data *ch, char *arg, struct obj_data *board) {
 	int ind, msg, slot_num;
 	char number[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
-	struct descriptor_data *d;
 
 	one_argument(arg, number);
 
@@ -450,8 +449,8 @@ int Board_remove_msg(int board_type, struct char_data *ch, char *arg, struct obj
 		return (1);
 	}
 
-	for(d = descriptor_list; d; d = d->next)
-		if(STATE(d) == CON_PLAYING && d->str == &(msg_storage[slot_num])) {
+	for(auto & d : descriptor_list)
+		if(STATE(&d) == CON_PLAYING && d.str == &(msg_storage[slot_num])) {
 			send_to_char(ch, "At least wait until the author is finished before removing it!\r\n");
 			return (1);
 		}

@@ -251,7 +251,7 @@ void olc_interpreter(void *targ, int mode, char *arg) {
 					break;
 
 				case OLC_MOB:
-					olc_string(&olc_mob->player.short_descr, MAX_MOB_NAME, arg);
+					olc_string(olc_mob->player.short_descr.ptrptr(), MAX_MOB_NAME, arg);
 					break;
 
 				case OLC_OBJ:
@@ -272,7 +272,7 @@ void olc_interpreter(void *targ, int mode, char *arg) {
 					break;
 
 				case OLC_MOB:
-					olc_string(&olc_mob->player.long_descr, MAX_MOB_DESC, arg);
+					olc_string(olc_mob->player.long_descr.ptrptr(), MAX_MOB_DESC, arg);
 					break;
 
 				case OLC_OBJ:

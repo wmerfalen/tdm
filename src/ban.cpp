@@ -246,7 +246,7 @@ ACMD(do_unban) {
 	REMOVE_FROM_LIST(ban_node, ban_list, next);
 	send_to_char(ch, "Site unbanned.\r\n");
 	mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "%s removed the %s-player ban on %s.",
-	       GET_NAME(ch), ban_types[ban_node->type], ban_node->site);
+	       GET_NAME(ch).c_str(), ban_types[ban_node->type], ban_node->site);
 
 	free(ban_node);
 	write_ban_list();
@@ -265,7 +265,6 @@ int num_invalid = 0;
 
 int Valid_Name(char *newname) {
 	int i;
-	struct descriptor_data *dt;
 	char tempname[MAX_INPUT_LENGTH];
 
 	/*
@@ -274,9 +273,9 @@ int Valid_Name(char *newname) {
 	 * will not have a character name yet and other people sitting at the
 	 * prompt won't have characters yet.
 	 */
-	for(dt = descriptor_list; dt; dt = dt->next)
-		if(dt->character && GET_NAME(dt->character) && !str_cmp(GET_NAME(dt->character), newname)) {
-			return (STATE(dt) == CON_PLAYING);
+	for(auto & dt : descriptor_list)
+		if(dt.character && GET_NAME(dt.character) && !str_cmp(GET_NAME(dt.character), newname)) {
+			return (STATE(&dt)== CON_PLAYING);
 		}
 
 	/* return valid if list doesn't exist */

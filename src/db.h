@@ -203,7 +203,7 @@ struct reset_q_type {
 
 
 struct player_index_element {
-	char	*name;
+	mods::string name;
 	long id;
 };
 
@@ -239,7 +239,7 @@ extern room_rnum top_of_world;
 extern std::vector<zone_data> zone_table;
 extern zone_rnum top_of_zone_table;
 
-extern struct descriptor_data *descriptor_list;
+extern std::deque<descriptor_data> descriptor_list;
 extern struct player_special_data dummy_mob;
 
 extern struct index_data *mob_index;
