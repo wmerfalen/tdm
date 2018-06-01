@@ -1,12 +1,12 @@
 /* ************************************************************************
-*   File: structs.h                                     Part of CircleMUD *
-*  Usage: header file for central structures and contstants               *
-*                                                                         *
-*  All rights reserved.  See license.doc for complete information.        *
-*                                                                         *
-*  Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University *
-*  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
-************************************************************************ */
+ *   File: structs.h                                     Part of CircleMUD *
+ *  Usage: header file for central structures and contstants               *
+ *                                                                         *
+ *  All rights reserved.  See license.doc for complete information.        *
+ *                                                                         *
+ *  Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University *
+ *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
+ ************************************************************************ */
 
 #ifndef __CIRCLEMUD_STRUCTS_HEADER__
 #define __CIRCLEMUD_STRUCTS_HEADER__
@@ -79,7 +79,7 @@ typedef uint64_t uuid_t;
 #endif
 
 #define SPECIAL(name) \
-   int (name)(struct char_data *ch, void *me, int cmd, char *argument)
+	int (name)(struct char_data *ch, void *me, int cmd, char *argument)
 
 
 /* room-related defines *************************************************/
@@ -297,7 +297,7 @@ typedef uint64_t uuid_t;
 
 /* Character equipment positions: used as index for char_data.equipment[] */
 /* NOTE: Don't confuse these constants with the ITEM_ bitvectors
-   which control the valid places you can wear a piece of equipment */
+	 which control the valid places you can wear a piece of equipment */
 #define WEAR_LIGHT      0
 #define WEAR_FINGER_R   1
 #define WEAR_FINGER_L   2
@@ -557,8 +557,8 @@ typedef uint64_t uuid_t;
 #endif
 
 /**********************************************************************
-* Structures                                                          *
-**********************************************************************/
+ * Structures                                                          *
+ **********************************************************************/
 
 
 typedef signed char		sbyte;
@@ -719,7 +719,7 @@ struct room_direction_data {
 /* ================== Memory Structure for room ======================= */
 struct room_data {
 	room_data() : number(0),zone(0),sector_type(0),
-		room_flags(0),light(0),func(nullptr){ }
+	room_flags(0),light(0),func(nullptr){ }
 	~room_data() = default;
 	room_vnum number;		/* Rooms number	(vnum)		      */
 	zone_rnum zone;              /* Room zone (for resetting)          */
@@ -889,12 +889,12 @@ struct player_special_data_saved {
 	std::array<sbyte,conditions_max> conditions;         /* Drunk, full, thirsty			*/
 
 	player_special_data_saved() : PADDING0(0),
-		wimp_level(0),freeze_level(0),invis_level(0),
-		load_room(0),pref(0),bad_pws(0) {
-			std::fill(skills.begin(),skills.end(),0);
-			std::fill(talks.begin(),talks.end(),0);
-			std::fill(conditions.begin(),conditions.end(),0);
-		}
+	wimp_level(0),freeze_level(0),invis_level(0),
+	load_room(0),pref(0),bad_pws(0) {
+		std::fill(skills.begin(),skills.end(),0);
+		std::fill(talks.begin(),talks.end(),0);
+		std::fill(conditions.begin(),conditions.end(),0);
+	}
 };
 
 /*
@@ -914,8 +914,8 @@ struct player_special_data {
 	int last_olc_mode;		/* olc control				*/
 	bool js_profile_initialized;
 	player_special_data() :  poofin(""),
-		poofout(""),aliases(nullptr),last_tell(0),last_olc_targ(nullptr),
-		last_olc_mode(-1),js_profile_initialized(false){}
+	poofout(""),aliases(nullptr),last_tell(0),last_olc_targ(nullptr),
+	last_olc_mode(-1),js_profile_initialized(false){}
 	~player_special_data() = default;
 };
 
@@ -958,9 +958,9 @@ struct room_pavement_t {
 	int zone_id;
 	std::vector<room_rnum> rooms;
 	room_pavement_t() : start_room(0), transact_id(-1),
-		current_room_number(0), zone_id(-1){}
+	current_room_number(0), zone_id(-1){}
 	room_pavement_t(room_vnum start,int z_id) :  start_room(start), transact_id(0),
-		current_room_number(0),zone_id(z_id) {}
+	current_room_number(0),zone_id(z_id) {}
 	~room_pavement_t() = default;
 };
 
@@ -984,6 +984,44 @@ struct builder_data_t {
 
 /* ================== Structure for player/non-player ===================== */
 struct char_data {
+	char_data() = default;
+	~char_data() = default;
+	char_data(char_data* o){
+		pfilepos = o->pfilepos;
+		uuid = o->uuid;
+		last_fight_timestamp = o->last_fight_timestamp;
+		nr = o->nr;
+		in_room = o->in_room;
+		was_in_room = o->was_in_room;
+		wait = o->wait;
+		drone = o->drone;
+		drone_owner = o->drone_owner;
+		drone_simulate = o->drone_simulate;
+		drone_uuid = o->drone_uuid;
+		player = o->player;       /* Normal data                   */
+		real_abils = o->real_abils;  /* Abilities without modifiers   */
+		aff_abils = o->aff_abils;   /* Abils with spells/stones/etc  */
+		points = o->points;        /* Points                        */
+		char_specials = o->char_specials;  /* PC/NPC specials    */
+		player_specials = o->player_specials; /* PC specials      */
+		mob_specials = o->mob_specials;  /* NPC specials     */
+		affected = o->affected;       /* affected by what spells       */
+		for(unsigned i = 0; i < NUM_WEARS; i++){
+			equipment[i] = o->equipment[i];/* Equipment array               */
+		}
+		carrying = o->carrying;            /* Head of list                  */
+		desc = o->desc;         /* NULL for mobiles              */
+		next_in_room = o->next_in_room;     /* For room->people - list         */
+		next = o->next;             /* For either monster or ppl-list  */
+		next_fighting = o->next_fighting;    /* For fighting list               */
+		followers = o->followers;        /* List of chars followers       */
+		master = o->master;             /* Who is char following?        */
+		player_ptr = o->player_ptr;
+		goal = o->goal;
+		disorient = o->disorient;
+		state = o->state;
+		builder_data = o->builder_data;
+	}
 	int pfilepos;			 /* playerfile pos		  */
 	uuid_t uuid;
 	time_t last_fight_timestamp;			/* timestamp of the last time the user fought */
@@ -1080,7 +1118,8 @@ struct descriptor_data {
 	connected(0), desc_num(0),login_time(0),showstr_head(0),
 	showstr_vector(0),showstr_count(0),showstr_page(0),str(0),
 	max_str(0),mail_to(0),has_prompt(0),output(nullptr),history(0),
-	history_pos(0),bufptr(0),bufspace(0){
+	history_pos(0),bufptr(0),bufspace(0),large_outbuf(nullptr),input({}),
+	character(nullptr),original(nullptr),snooping(nullptr),snoop_by(nullptr){
 
 	}
 	~descriptor_data() = default;
@@ -1103,7 +1142,7 @@ struct descriptor_data {
 	char	last_input[MAX_INPUT_LENGTH]; /* the last input			*/
 	char small_outbuf[SMALL_BUFSIZE];  /* standard output buffer		*/
 	char *output;		/* ptr to the current output buffer	*/
-	char **history;		/* History of commands, for ! mostly.	*/
+	std::vector<char*> history;		/* History of commands, for ! mostly.	*/
 	int	history_pos;		/* Circular array position.		*/
 	int  bufptr;			/* ptr to end of current output		*/
 	int	bufspace;		/* space left in the output buffer	*/

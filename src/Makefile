@@ -3,18 +3,18 @@ builddir = build
 CC = g++-7
 BINDIR = ../bin
 
-lmdbout = mods/lib
+lmdbout = $(CURDIR)/mods/lib
 lmdb = $(lmdbout)/lmdb.so
 duktapeout = $(builddir)/duktape
 duktape = $(duktapeout)/duktape.o
 
 thirdparty = $(duktape) $(lmdb)
 FLAGS = -g -O2 -Wall -Wno-unused-result \
-	-Wno-char-subscripts    -Wcomment \
+	-Wno-char-subscripts -Wcomment \
 	-Wno-format-zero-length -Wno-format-security\
-	-A -da -std=c++17       -fpermissive -MMD\
-	-L$(CURDIR)/$(lmdbout)  -Lboost-cpp/build/lib\
-	-Imods/include -Iboost-cpp\
+	-A -da -std=c++17 -fpermissive -MMD\
+	-L$(lmdbout) -Lboost-cpp/build/lib\
+	-Imods/include -Iboost-cpp
 LIBS = -lcrypt -lpqxx -lpq -llmdb
 buildobj = act.comm act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
@@ -48,4 +48,4 @@ $(duktape): duktape-2.2.0/src/duktape.h duktape-2.2.0/src/duktape.c
 	$(CC) -c $(FLAGS) duktape-2.2.0/src/duktape.c -o $(duktape)
 
 $(lmdb):
-	make mods/lmdb/liblmdb/liblmdb.so ; cp mods/lmdb/liblmdb/liblmdb.so $(lmdb)
+	make $(lmdb)

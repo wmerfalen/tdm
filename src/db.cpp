@@ -29,6 +29,8 @@
 #include <vector>
 #include <deque>
 #include "mods/behaviour_tree_impl.hpp"
+#include "mods/pq.hpp"
+#include "mods/sql.hpp"
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 
 /**************************************************************************
@@ -76,7 +78,7 @@ char *credits = NULL;		/* game credits			 */
 char *news = NULL;		/* mud news			 */
 char *motd = NULL;		/* message of the day - mortals */
 char *imotd = NULL;		/* message of the day - immorts */
-char *GREETINGS = NULL;		/* opening credits screen	*/
+std::string GREETINGS = "";		/* opening credits screen	*/
 char *help = NULL;		/* help screen			 */
 char *info = NULL;		/* info page			 */
 char *wizlist = NULL;		/* list of higher gods		 */
@@ -176,7 +178,7 @@ void reboot_wizlists(void) {
 void free_text_files(void) {
 	char **textfiles[] = {
 		&wizlist, &immlist, &news, &credits, &motd, &imotd, &help, &info,
-		&policies, &handbook, &background, &GREETINGS, NULL
+		&policies, &handbook, &background, NULL
 	};
 	int rf;
 
@@ -200,9 +202,10 @@ ACMD(do_reboot) {
 	one_argument(argument, arg);
 
 	if(!str_cmp(arg, "all") || *arg == '*') {
+		/*
 		if(file_to_string_alloc(GREETINGS_FILE, &GREETINGS) == 0) {
 			prune_crlf(GREETINGS);
-		}
+		}*/
 
 		file_to_string_alloc(WIZLIST_FILE, &wizlist);
 		file_to_string_alloc(IMMLIST_FILE, &immlist);
@@ -238,9 +241,10 @@ ACMD(do_reboot) {
 	} else if(!str_cmp(arg, "background")) {
 		file_to_string_alloc(BACKGROUND_FILE, &background);
 	} else if(!str_cmp(arg, "greetings")) {
+		/*
 		if(file_to_string_alloc(GREETINGS_FILE, &GREETINGS) == 0) {
 			prune_crlf(GREETINGS);
-		}
+		}*/
 	} else if(!str_cmp(arg, "xhelp")) {
 		if(help_table) {
 			free_help();
@@ -407,7 +411,9 @@ void boot_db(void) {
 	index_boot(DB_BOOT_HLP);
 
 	log("Generating player index.");
-	build_player_index();
+	/*FIXME: replace this functionality: 
+	 * build_player_index();
+	 */
 
 	log("Loading fight messages.");
 	load_messages();
@@ -549,7 +555,7 @@ void free_player_index(void) {
 
 /* generate index table for the player file */
 void build_player_index(void) {
-	int nr = -1, i;
+	int nr = -1;
 	long size, recs;
 	struct char_file_u dummy;
 
@@ -594,9 +600,7 @@ void build_player_index(void) {
 
 		/* new record */
 		nr++;
-		for(i = 0; LOWER(*(dummy.name + i)); i++){
-			player_table[nr].name.concat(LOWER(*(dummy.name.ptr() + i)));
-		}
+		player_table[nr].name.assign(dummy.name.c_str());
 
 		player_table[nr].id = dummy.char_specials_saved.idnum;
 		top_idnum = MAX(top_idnum, dummy.char_specials_saved.idnum);
@@ -783,7 +787,6 @@ void index_boot(int mode) {
 
 		case DB_BOOT_ZON:
 			log("!DEPRECATED! DB_BOOT_ZON");
-			log("   %d zones, %d bytes.", rec_count, size[0]);
 			break;
 
 		case DB_BOOT_HLP:
@@ -2344,7 +2347,8 @@ long get_ptable_by_name(const char *name) {
 	int i;
 
 	for(i = 0; i <= top_of_p_table; i++)
-		if(!str_cmp(player_table[i].name, name)) {
+		if(static_cast<std::string>(
+					player_table[i].name).compare(name) == 0) {
 			return (i);
 		}
 
@@ -2377,27 +2381,28 @@ char *get_name_by_id(long id) {
 
 
 /* Load a char, TRUE if loaded, FALSE if not */
-int load_char(const char *name, struct char_file_u *char_element) {
-	int player_i;
-
-	if((player_i = get_ptable_by_name(name)) >= 0) {
-		fseek(player_fl, player_i * sizeof(struct char_file_u), SEEK_SET);
-		fread(char_element, sizeof(struct char_file_u), 1, player_fl);
-		return (player_i);
-	} else {
-		return (-1);
-	}
-}
+bool load_char(const char *name, struct char_file_u *char_element) {
+	try{
+		auto txn = txn();
+		sql_compositor comp("player",&txn);
+		auto result = mods::pq::exec(txn,comp
+				.select("*")
+				.from("player")
+				.where("name","=",name)
+				.sql());
+			return true;
+    } catch(std::exception& e) {
+			mudlog(CMP,LVL_GOD,FALSE,(std::string("Error `load_char`: ") + e.what()).c_str());
+			return false;
+		}
+	return false;
+}	
 
 
 
 
 /*
- * write the vital data of a player to the player file
- *
- * And that's it! No more fudging around with the load room.
- * Unfortunately, 'host' modifying is still here due to lack
- * of that variable in the char_data structure.
+ * write the vital data of a player to sql
  */
 void save_char(struct char_data *ch) {
 	struct char_file_u st;
@@ -2406,47 +2411,135 @@ void save_char(struct char_data *ch) {
 		return;
 	}
 
-	char_to_store(ch, &st);
-
 	st.host = ch->desc->host;
-
-	fseek(player_fl, GET_PFILEPOS(ch) * sizeof(struct char_file_u), SEEK_SET);
-	fwrite(&st, sizeof(struct char_file_u), 1, player_fl);
+	try {
+      auto txn = txn();
+			sql_compositor comp("player",&txn);
+			auto result = mods::pq::exec(txn,comp
+				.select("*")
+				.from("player")
+				.where("name","=",ch->player.name.c_str())
+				.sql());
+      mods::pq::commit(txn);
+			sql_compositor::value_map values;
+			values["player_name"] = ch->player.name.c_str();
+			values["player_short_description"] = ch->player.short_descr;
+			values["player_long_description"] = ch->player.long_descr;
+			values["player_action_bitvector"] = std::to_string(ch->char_specials.saved.act);
+			values["player_ability_strength"] = std::to_string(ch->real_abils.str);
+			values["player_ability_strength_add"] = std::to_string(ch->real_abils.str_add);
+			values["player_ability_intelligence"] = std::to_string(ch->real_abils.intel);
+			values["player_ability_wisdom"] = std::to_string(ch->real_abils.wis);
+			values["player_ability_dexterity"] = std::to_string(ch->real_abils.dex);
+			values["player_ability_constitution"] = std::to_string(ch->real_abils.con);
+			values["player_ability_charisma"] = std::to_string(ch->real_abils.cha);
+			values["player_ability_alignment"] = std::to_string(ch->char_specials.saved.alignment);
+			values["player_attack_type"] = std::to_string(ch->real_abils.con);
+			values["player_ability_constitution"] = std::to_string(ch->real_abils.con);
+			values["player_attack_type"] = "0";
+			values["player_type"] = "PC";
+			values["player_alignment"] = "0";
+			values["player_level"] = "0";
+			values["player_hitroll"] = "0";
+			values["player_armor"] = "0";
+			values["player_max_hitpoints"] = std::to_string(ch->points.max_hit);
+			values["player_max_mana"] = std::to_string(ch->points.max_mana);
+			values["player_max_move"] = std::to_string(ch->points.max_move);
+			values["player_gold"] = std::to_string(ch->points.gold);
+			values["player_exp"] = std::to_string(ch->points.exp);
+			values["player_sex"] = ch->player.sex == SEX_MALE ? "M" : "F";
+			values["player_hitpoints"] = std::to_string(ch->points.max_hit);
+			values["player_mana"] = std::to_string(ch->points.mana);
+			values["player_move"] = std::to_string(ch->points.move);
+			values["player_damnodice"] = std::to_string(0);
+			values["player_damsizedice"] = "0";
+			values["player_damroll"] = std::to_string(ch->points.damroll);
+			values["player_weight"] = std::to_string(ch->player.weight);
+			values["player_height"] = std::to_string(ch->player.height);
+			values["player_class"] = std::to_string(ch->player.chclass);
+			values["player_title"] = ch->player.title.c_str();
+			values["player_hometown"] = std::to_string(ch->player.hometown);
+			if(result.size()){
+				auto update_txn = txn();
+				mods::pq::exec(update_txn,comp
+						.update("player")
+						.set(values)
+						.where("player_name","=",ch->player.name.c_str())
+						.sql());
+			}else{
+				auto insert_txn = txn();
+				mods::pq::exec(insert_txn,comp
+						.insert()
+						.into("player")
+						.values(values)
+						.sql());
+			}
+    } catch(std::exception& e) {
+			mudlog(CMP,LVL_GOD,FALSE,(std::string("Error `save_char`: ") + e.what()).c_str());
+			return;
+		}
 }
 
 
 
-/* copy data from the file structure to a char struct */
-void store_to_char(struct char_file_u *st, struct char_data *ch) {
-	int i;
 
+
+bool parse_sql_player(const char* name,char_data* ch){
+	try{
+		auto txn = txn();
+		sql_compositor comp("player",&txn);
+		auto result = mods::pq::exec(txn,comp
+				.select("*")
+				.from("player")
+				.where("name","=",name)
+				.sql()
+				);
+		if(result.size()){
+			for(auto row : result){
+				ch->player.name.assign(name);
+				ch->player.short_descr.assign(row["player_short_description"].c_str());
+				ch->player.long_descr.assign(row["player_long_description"].c_str());
+				ch->char_specials.saved.act = row["player_action_bitvector"].as<int>();
+				ch->real_abils.str = row["player_ability_strength"].as<int>();
+				ch->real_abils.str_add = row["player_ability_strength_add"].as<int>();
+				ch->real_abils.intel = row["player_ability_intelligence"].as<int>();
+				ch->real_abils.wis = row["player_ability_wisdom"].as<int>();
+				ch->real_abils.dex = row["player_ability_dexterity"].as<int>();
+				ch->real_abils.con = row["player_ability_constitution"].as<int>();
+				ch->real_abils.cha = row["player_ability_charisma"].as<int>();
+				ch->char_specials.saved.alignment = row["player_ability_alignment"].as<int>();
+				ch->points.max_hit = row["player_max_hitpoints"].as<int>();
+				ch->points.max_mana = row["player_max_mana"].as<int>();
+				ch->points.max_move = row["player_max_move"].as<int>();
+				ch->points.gold = row["player_gold"].as<int>();
+				ch->points.exp = row["player_exp"].as<int>();
+				ch->player.sex = std::string(row["player_sex"].c_str()).compare("M") == 0 ? SEX_MALE : SEX_FEMALE;
+				ch->points.max_hit = row["player_hitpoints"].as<int>();
+				ch->points.mana = row["player_mana"].as<int>();
+				ch->points.move = row["player_move"].as<int>();
+				ch->points.damroll = row["player_damroll"].as<int>();
+				ch->player.weight = row["player_weight"].as<int>();
+				ch->player.height = row["player_height"].as<int>();
+				ch->player.chclass = row["player_class"].as<int>();
+				ch->player.title.assign(row["player_title"].c_str());
+				ch->player.hometown = row["player_hometown"].as<int>();
+				GET_PASSWD(ch).assign(row["player_password"].c_str());
+				break;
+			}
+		}
+	}catch(std::exception& e){
+		mudlog(CMP,LVL_GOD,FALSE,(std::string("Error `parse_sql_player`: ") + e.what()).c_str());
+		return false;
+	}
 	/* to save memory, only PC's -- not MOB's -- have player_specials */
 	if(!ch->player_specials) {
 		ch->player_specials = std::make_shared<player_special_data>();
 	}
 
-	GET_SEX(ch) = st->sex;
-	GET_CLASS(ch) = st->chclass;
-	GET_LEVEL(ch) = st->level;
-
-	ch->player.short_descr = NULL;
-	ch->player.long_descr = NULL;
-	ch->player.title = (st->title);
-	ch->player.description = (st->description.c_str());
-
-	ch->player.hometown = st->hometown;
-	ch->player.time.birth = st->birth;
-	ch->player.time.played = st->played;
+	ch->player.time.birth = 0;
+	ch->player.time.played = 0;
 	ch->player.time.logon = time(0);
 
-	ch->player.weight = st->weight;
-	ch->player.height = st->height;
-
-	ch->real_abils = st->abilities;
-	ch->aff_abils = st->abilities;
-	ch->points = st->points;
-	ch->char_specials.saved = st->char_specials_saved;
-	ch->player_specials->saved = st->player_specials_saved;
 	GET_LAST_TELL(ch) = NOBODY;
 
 	if(ch->points.max_mana < 100) {
@@ -2459,27 +2552,21 @@ void store_to_char(struct char_file_u *st, struct char_data *ch) {
 	ch->points.hitroll = 0;
 	ch->points.damroll = 0;
 
-	ch->player.name = strdup(st->name);
-	ch->player.passwd = st->pwd;
-
-	/* Add all spell effects */
-	for(i = 0; i < MAX_AFFECT; i++) {
-		if(st->affected[i].type) {
-			affect_to_char(ch, &st->affected[i]);
-		}
-	}
-
 	/*
 	 * If you're not poisioned and you've been away for more than an hour of
 	 * real time, we'll set your HMV back to full
 	 */
 
-	if(!AFF_FLAGGED(ch, AFF_POISON) &&
-	        time(0) - st->last_logon >= SECS_PER_REAL_HOUR) {
+	if(!AFF_FLAGGED(ch, AFF_POISON)){
 		GET_HIT(ch) = GET_MAX_HIT(ch);
 		GET_MOVE(ch) = GET_MAX_MOVE(ch);
 		GET_MANA(ch) = GET_MAX_MANA(ch);
 	}
+	return true;
+}
+/* copy data from the file structure to a char struct */
+void store_to_char(struct char_file_u *st, struct char_data *ch) {
+	parse_sql_player(st->name,ch);
 }				/* store_to_char */
 
 
@@ -2575,7 +2662,6 @@ void char_to_store(struct char_data *ch, struct char_file_u *st) {
 	}
 
 	st->name = GET_NAME(ch);
-	strcpy(st->pwd, GET_PASSWD(ch));	/* strcpy: OK (that's what GET_PASSWD came from) */
 
 	/* add spell and eq affections back in now */
 	for(i = 0; i < MAX_AFFECT; i++) {
@@ -2605,7 +2691,7 @@ void save_etext(struct char_data *ch) {
  * If the name already exists, by overwriting a deleted character, then
  * we re-use the old position.
  */
-int create_entry(char *name) {
+int create_entry(const char *name) {
 	int i, pos;
 
 	if(top_of_p_table == -1) {	/* no table */
@@ -2692,7 +2778,6 @@ void free_char(struct char_data *ch) {
 		ch->desc->character = NULL;
 	}
 
-	free(ch);
 }
 
 
@@ -2915,9 +3000,9 @@ void init_char(struct char_data *ch) {
 	}
 
 	set_title(ch, NULL);
-	ch->player.short_descr = NULL;
-	ch->player.long_descr = NULL;
-	ch->player.description = NULL;
+	ch->player.short_descr = "";
+	ch->player.long_descr = "";
+	ch->player.description = "";
 
 	ch->player.time.birth = time(0);
 	ch->player.time.logon = time(0);
@@ -2946,10 +3031,10 @@ void init_char(struct char_data *ch) {
 		GET_HEIGHT(ch) = rand_number(150, 180); /* 5'0" - 6'0" */
 	}
 
-	if((i = get_ptable_by_name(GET_NAME(ch))) != -1) {
+	if((i = get_ptable_by_name(GET_NAME(ch).c_str())) != -1) {
 		player_table[i].id = GET_IDNUM(ch) = ++top_idnum;
 	} else {
-		log("SYSERR: init_char: Character '%s' not found in player table.", GET_NAME(ch));
+		log("SYSERR: init_char: Character '%s' not found in player table.", GET_NAME(ch).c_str());
 	}
 
 	for(i = 1; i <= MAX_SKILLS; i++) {

@@ -141,7 +141,7 @@ ACMD(do_send) {
 	if(PRF_FLAGGED(ch, PRF_NOREPEAT)) {
 		send_to_char(ch, "Sent.\r\n");
 	} else {
-		send_to_char(ch, "You send '%s' to %s.\r\n", buf, GET_NAME(vict));
+		send_to_char(ch, "You send '%s' to %s.\r\n", buf, GET_NAME(vict).c_str());
 	}
 }
 
@@ -427,7 +427,7 @@ void do_stat_room(struct char_data *ch) {
 			continue;
 		}
 
-		column += send_to_char(ch, "%s %s(%s)", found++ ? "," : "", GET_NAME(k),
+		column += send_to_char(ch, "%s %s(%s)", found++ ? "," : "", GET_NAME(k).c_str(),
 		                       !IS_NPC(k) ? "PC" : (!IS_MOB(k) ? "NPC" : "MOB"));
 
 		if(column >= 62) {
@@ -659,10 +659,10 @@ void do_stat_character(struct char_data *ch, struct char_data *k) {
 	sprinttype(GET_SEX(k), genders, buf, sizeof(buf));
 	send_to_char(ch, "%s %s '%s'  IDNum: [%5ld], In room [%5d]\r\n",
 	             buf, (!IS_NPC(k) ? "PC" : (!IS_MOB(k) ? "NPC" : "MOB")),
-	             GET_NAME(k), GET_IDNUM(k), GET_ROOM_VNUM(IN_ROOM(k)));
+	             GET_NAME(k).c_str(), GET_IDNUM(k), GET_ROOM_VNUM(IN_ROOM(k)));
 
 	if(IS_MOB(k)) {
-		send_to_char(ch, "Alias: %s, VNum: [%5d], RNum: [%5d]\r\n", k->player.name, GET_MOB_VNUM(k), GET_MOB_RNUM(k));
+		send_to_char(ch, "Alias: %s, VNum: [%5d], RNum: [%5d]\r\n", k->player.name.c_str(), GET_MOB_VNUM(k), GET_MOB_RNUM(k));
 	}
 
 	send_to_char(ch, "Title: %s\r\n", k->player.title ? k->player.title : "<None>");
@@ -850,7 +850,7 @@ ACMD(do_stat) {
 			CREATE(victim, struct char_data, 1);
 			clear_char(victim);
 
-			if(load_char(buf2, &tmp_store) >= 0) {
+			if(load_char(buf2, &tmp_store)) {
 				store_to_char(&tmp_store, victim);
 				victim->player.time.logon = tmp_store.last_logon;
 				char_to_room(victim, 0);
@@ -1206,7 +1206,7 @@ ACMD(do_purge) {
 			act("$n disintegrates $N.", FALSE, ch, 0, vict, TO_NOTVICT);
 
 			if(!IS_NPC(vict)) {
-				mudlog(BRF, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s has purged %s.", GET_NAME(ch), GET_NAME(vict));
+				mudlog(BRF, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s has purged %s.", GET_NAME(ch).c_str(), GET_NAME(vict).c_str());
 
 				if(vict->desc) {
 					STATE(vict->desc) = CON_CLOSE;
@@ -1679,7 +1679,7 @@ ACMD(do_last) {
 		return;
 	}
 
-	if(load_char(arg, &chdata) < 0) {
+	if(load_char(arg, &chdata) == false) {
 		send_to_char(ch, "There is no such player.\r\n");
 		return;
 	}
@@ -1691,7 +1691,7 @@ ACMD(do_last) {
 
 	send_to_char(ch, "[%5ld] [%2d %s] %-12s : %-18s : %-20s\r\n",
 	             chdata.char_specials_saved.idnum, chdata.level,
-	             class_abbrevs[(int) chdata.chclass], chdata.name, chdata.host,
+	             class_abbrevs[(int) chdata.chclass], chdata.name.c_str(), chdata.host.c_str(),
 	             ctime(&chdata.last_logon));
 }
 
@@ -1714,13 +1714,13 @@ ACMD(do_force) {
 		} else {
 			send_to_char(ch, "%s", OK);
 			act(buf1, TRUE, ch, NULL, vict, TO_VICT);
-			mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s forced %s to %s", GET_NAME(ch), GET_NAME(vict), to_force);
+			mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s forced %s to %s", GET_NAME(ch).c_str(), GET_NAME(vict).c_str(), to_force);
 			command_interpreter(vict, to_force);
 		}
 	} else if(!str_cmp("room", arg)) {
 		send_to_char(ch, "%s", OK);
 		mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s forced room %d to %s",
-		       GET_NAME(ch), GET_ROOM_VNUM(IN_ROOM(ch)), to_force);
+		       GET_NAME(ch).c_str(), GET_ROOM_VNUM(IN_ROOM(ch)), to_force);
 
 		for(vict = world[IN_ROOM(ch)].people; vict; vict = next_force) {
 			next_force = vict->next_in_room;
@@ -1734,7 +1734,7 @@ ACMD(do_force) {
 		}
 	} else { /* force all */
 		send_to_char(ch, "%s", OK);
-		mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s forced all to %s", GET_NAME(ch), to_force);
+		mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s forced all to %s", GET_NAME(ch).c_str(), to_force);
 
 		for(auto & i : descriptor_list){
 			if(STATE(&i) != CON_PLAYING || !(vict = i.character) || (!IS_NPC(vict) && GET_LEVEL(vict) >= GET_LEVEL(ch))) {
@@ -1796,7 +1796,7 @@ ACMD(do_wiznet) {
 					continue;
 				}
 
-				send_to_char(ch, "  %-*s%s%s%s\r\n", MAX_NAME_LENGTH, GET_NAME(d.character),
+				send_to_char(ch, "  %-*s%s%s%s\r\n", MAX_NAME_LENGTH, GET_NAME(d.character).c_str(),
 				             PLR_FLAGGED(d.character, PLR_WRITING) ? " (Writing)" : "",
 				             PLR_FLAGGED(d.character, PLR_MAILING) ? " (Writing mail)" : "",
 				             PRF_FLAGGED(d.character, PRF_NOWIZ) ? " (Offline)" : "");
@@ -1825,10 +1825,10 @@ ACMD(do_wiznet) {
 	}
 
 	if(level > LVL_IMMORT) {
-		snprintf(buf1, sizeof(buf1), "%s: <%d> %s%s\r\n", GET_NAME(ch), level, emote ? "<--- " : "", argument);
+		snprintf(buf1, sizeof(buf1), "%s: <%d> %s%s\r\n", GET_NAME(ch).c_str(), level, emote ? "<--- " : "", argument);
 		snprintf(buf2, sizeof(buf1), "Someone: <%d> %s%s\r\n", level, emote ? "<--- " : "", argument);
 	} else {
-		snprintf(buf1, sizeof(buf1), "%s: %s%s\r\n", GET_NAME(ch), emote ? "<--- " : "", argument);
+		snprintf(buf1, sizeof(buf1), "%s: %s%s\r\n", GET_NAME(ch).c_str(), emote ? "<--- " : "", argument);
 		snprintf(buf2, sizeof(buf1), "Someone: %s%s\r\n", emote ? "<--- " : "", argument);
 	}
 
@@ -1874,7 +1874,7 @@ ACMD(do_zreset) {
 		}
 
 		send_to_char(ch, "Reset world.\r\n");
-		mudlog(NRM, MAX(LVL_GRGOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s reset entire world.", GET_NAME(ch));
+		mudlog(NRM, MAX(LVL_GRGOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s reset entire world.", GET_NAME(ch).c_str());
 		return;
 	} else if(*arg == '.') {
 		i = world[IN_ROOM(ch)].zone;
@@ -1890,7 +1890,7 @@ ACMD(do_zreset) {
 	if(i <= top_of_zone_table) {
 		reset_zone(i);
 		send_to_char(ch, "Reset zone %d (#%d): %s.\r\n", i, zone_table[i].number, zone_table[i].name);
-		mudlog(NRM, MAX(LVL_GRGOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s reset zone %d (%s)", GET_NAME(ch), i, zone_table[i].name);
+		mudlog(NRM, MAX(LVL_GRGOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s reset zone %d (%s)", GET_NAME(ch).c_str(), i, zone_table[i].name);
 	} else {
 		send_to_char(ch, "Invalid zone number.\r\n");
 	}
@@ -1935,21 +1935,21 @@ ACMD(do_wizutil) {
 				REMOVE_BIT(PLR_FLAGS(vict), PLR_THIEF | PLR_KILLER);
 				send_to_char(ch, "Pardoned.\r\n");
 				send_to_char(vict, "You have been pardoned by the Gods!\r\n");
-				mudlog(BRF, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s pardoned by %s", GET_NAME(vict), GET_NAME(ch));
+				mudlog(BRF, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s pardoned by %s", GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
 				break;
 
 			case SCMD_NOTITLE:
 				result = PLR_TOG_CHK(vict, PLR_NOTITLE);
 				mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) Notitle %s for %s by %s.",
-				       ONOFF(result), GET_NAME(vict), GET_NAME(ch));
-				send_to_char(ch, "(GC) Notitle %s for %s by %s.\r\n", ONOFF(result), GET_NAME(vict), GET_NAME(ch));
+				       ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
+				send_to_char(ch, "(GC) Notitle %s for %s by %s.\r\n", ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
 				break;
 
 			case SCMD_SQUELCH:
 				result = PLR_TOG_CHK(vict, PLR_NOSHOUT);
 				mudlog(BRF, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) Squelch %s for %s by %s.",
-				       ONOFF(result), GET_NAME(vict), GET_NAME(ch));
-				send_to_char(ch, "(GC) Squelch %s for %s by %s.\r\n", ONOFF(result), GET_NAME(vict), GET_NAME(ch));
+				       ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
+				send_to_char(ch, "(GC) Squelch %s for %s by %s.\r\n", ONOFF(result), GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
 				break;
 
 			case SCMD_FREEZE:
@@ -1968,7 +1968,7 @@ ACMD(do_wizutil) {
 				send_to_char(vict, "A bitter wind suddenly rises and drains every erg of heat from your body!\r\nYou feel frozen!\r\n");
 				send_to_char(ch, "Frozen.\r\n");
 				act("A sudden cold wind conjured from nowhere freezes $n!", FALSE, vict, 0, 0, TO_ROOM);
-				mudlog(BRF, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s frozen by %s.", GET_NAME(vict), GET_NAME(ch));
+				mudlog(BRF, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s frozen by %s.", GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
 				break;
 
 			case SCMD_THAW:
@@ -1979,11 +1979,11 @@ ACMD(do_wizutil) {
 
 				if(GET_FREEZE_LEV(vict) > GET_LEVEL(ch)) {
 					send_to_char(ch, "Sorry, a level %d God froze %s... you can't unfreeze %s.\r\n",
-					             GET_FREEZE_LEV(vict), GET_NAME(vict), HMHR(vict));
+					             GET_FREEZE_LEV(vict), GET_NAME(vict).c_str(), HMHR(vict));
 					return;
 				}
 
-				mudlog(BRF, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s un-frozen by %s.", GET_NAME(vict), GET_NAME(ch));
+				mudlog(BRF, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s un-frozen by %s.", GET_NAME(vict).c_str(), GET_NAME(ch).c_str());
 				REMOVE_BIT(PLR_FLAGS(vict), PLR_FROZEN);
 				send_to_char(vict, "A fireball suddenly explodes in front of you, melting the ice!\r\nYou feel thawed.\r\n");
 				send_to_char(ch, "Thawed.\r\n");
@@ -2122,12 +2122,12 @@ ACMD(do_show) {
 				return;
 			}
 
-			if(load_char(value, &vbuf) < 0) {
+			if(load_char(value, &vbuf) == false) {
 				send_to_char(ch, "There is no such player.\r\n");
 				return;
 			}
 
-			send_to_char(ch, "Player: %-12s (%s) [%2d %s]\r\n", vbuf.name,
+			send_to_char(ch, "Player: %-12s (%s) [%2d %s]\r\n", vbuf.name.c_str(),
 			             genders[(int) vbuf.sex], vbuf.level, class_abbrevs[(int) vbuf.chclass]);
 			send_to_char(ch, "Au: %-8d  Bal: %-8d  Exp: %-8d  Align: %-5d\r\n",
 			             vbuf.points.gold, vbuf.points.bank_gold, vbuf.points.exp,
@@ -2269,7 +2269,7 @@ ACMD(do_show) {
 				}
 
 				i++;
-				send_to_char(ch, "%-10s - snooped by %s.\r\n", GET_NAME(d.snooping->character), GET_NAME(d.character));
+				send_to_char(ch, "%-10s - snooped by %s.\r\n", GET_NAME(d.snooping->character).c_str(), GET_NAME(d.character).c_str());
 			}
 
 			if(i == 0) {
@@ -2406,10 +2406,10 @@ int perform_set(struct char_data *ch, struct char_data *vict, int mode,
 			return (0);
 		}
 
-		send_to_char(ch, "%s %s for %s.\r\n", set_fields[mode].cmd, ONOFF(on), GET_NAME(vict));
+		send_to_char(ch, "%s %s for %s.\r\n", set_fields[mode].cmd, ONOFF(on), GET_NAME(vict).c_str());
 	} else if(set_fields[mode].type == NUMBER) {
 		value = atoi(val_arg);
-		send_to_char(ch, "%s's %s set to %d.\r\n", GET_NAME(vict), set_fields[mode].cmd, value);
+		send_to_char(ch, "%s's %s set to %d.\r\n", GET_NAME(vict).c_str(), set_fields[mode].cmd, value);
 	} else {
 		send_to_char(ch, "%s", OK);
 	}
@@ -2425,12 +2425,12 @@ int perform_set(struct char_data *ch, struct char_data *vict, int mode,
 
 		case 2:
 			set_title(vict, val_arg);
-			send_to_char(ch, "%s's title is now: %s\r\n", GET_NAME(vict), GET_TITLE(vict));
+			send_to_char(ch, "%s's title is now: %s\r\n", GET_NAME(vict).c_str(), GET_TITLE(vict).c_str());
 			break;
 
 		case 3:
 			SET_OR_REMOVE(PRF_FLAGS(vict), PRF_SUMMONABLE);
-			send_to_char(ch, "Nosummon %s for %s.\r\n", ONOFF(!on), GET_NAME(vict));
+			send_to_char(ch, "Nosummon %s for %s.\r\n", ONOFF(!on), GET_NAME(vict).c_str());
 			break;
 
 		case 4:
@@ -2608,12 +2608,12 @@ int perform_set(struct char_data *ch, struct char_data *vict, int mode,
 		case 31:
 			if(!str_cmp(val_arg, "off")) {
 				GET_COND(vict, (mode - 29)) = -1; /* warning: magic number here */
-				send_to_char(ch, "%s's %s now off.\r\n", GET_NAME(vict), set_fields[mode].cmd);
+				send_to_char(ch, "%s's %s now off.\r\n", GET_NAME(vict).c_str(), set_fields[mode].cmd);
 			} else if(is_number(val_arg)) {
 				value = atoi(val_arg);
 				RANGE(0, 24);
 				GET_COND(vict, (mode - 29)) = value; /* and here too */
-				send_to_char(ch, "%s's %s set to %d.\r\n", GET_NAME(vict), set_fields[mode].cmd, value);
+				send_to_char(ch, "%s's %s set to %d.\r\n", GET_NAME(vict).c_str(), set_fields[mode].cmd, value);
 			} else {
 				send_to_char(ch, "Must be 'off' or a value from 0 to 24.\r\n");
 				return (0);
@@ -2690,7 +2690,7 @@ int perform_set(struct char_data *ch, struct char_data *vict, int mode,
 				if(real_room(rvnum) != NOWHERE) {
 					SET_BIT(PLR_FLAGS(vict), PLR_LOADROOM);
 					GET_LOADROOM(vict) = rvnum;
-					send_to_char(ch, "%s will enter at room #%d.", GET_NAME(vict), GET_LOADROOM(vict));
+					send_to_char(ch, "%s will enter at room #%d.", GET_NAME(vict).c_str(), GET_LOADROOM(vict));
 				} else {
 					send_to_char(ch, "That room does not exist!\r\n");
 					return (0);
@@ -2725,7 +2725,7 @@ int perform_set(struct char_data *ch, struct char_data *vict, int mode,
 				return (0);
 			}
 
-			strncpy(GET_PASSWD(vict), CRYPT(val_arg, GET_NAME(vict)), MAX_PWD_LENGTH);	/* strncpy: OK (G_P:MAX_PWD_LENGTH) */
+			GET_PASSWD(vict).assign(CRYPT(val_arg, GET_NAME(vict)));
 			send_to_char(ch, "Password changed to '%s'.\r\n", val_arg);
 			break;
 

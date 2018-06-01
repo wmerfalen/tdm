@@ -141,7 +141,18 @@ namespace mods {
 		cd()->player_ptr = self_ptr;
 	}
 
+	player::player(descriptor_iterator_t desc){
+		m_shared_ptr = std::make_shared<char_data>();
+		m_char_data = m_shared_ptr.get();
+		m_page = 0;
+		m_current_page = 0;
+		m_do_paging = false;
+		m_current_page_fragment = "";
+		m_capture_output = false;
+		m_executing_js = false;
+	}
 	player::player(mods::player* ptr) {
+		m_shared_ptr = std::make_shared<char_data>(ptr->cd());
 		m_char_data = ptr->cd();
 		m_page = 0;
 		m_current_page = 0;

@@ -83,27 +83,9 @@ void load_banned(void) {
 }
 
 
-int isbanned(char *hostname) {
-	int i;
-	struct ban_list_element *banned_node;
-	char *nextchar;
-
-	if(!hostname || !*hostname) {
-		return (0);
-	}
-
-	i = 0;
-
-	for(nextchar = hostname; *nextchar; nextchar++) {
-		*nextchar = LOWER(*nextchar);
-	}
-
-	for(banned_node = ban_list; banned_node; banned_node = banned_node->next)
-		if(strstr(hostname, banned_node->site)) {	/* if hostname is a substring */
-			i = MAX(i, banned_node->type);
-		}
-
-	return (i);
+int isbanned(const char *hostname) {
+	log("[deprecated] banning by hostname (isbanned)");
+	return 0;
 }
 
 
@@ -209,7 +191,7 @@ ACMD(do_ban) {
 	ban_list = ban_node;
 
 	mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "%s has banned %s for %s players.",
-	       GET_NAME(ch), site, ban_types[ban_node->type]);
+	       GET_NAME(ch).c_str(), site, ban_types[ban_node->type]);
 	send_to_char(ch, "Site banned.\r\n");
 	write_ban_list();
 }

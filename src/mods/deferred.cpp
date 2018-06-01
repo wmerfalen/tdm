@@ -7,7 +7,6 @@ namespace mods {
 		m_secs.insert(std::make_pair(time(NULL) + secs,lambda));
 	}
 	void deferred::iteration() {
-		std::cerr << ".";
 		{
 			auto now = static_cast<unsigned long>(time(NULL));
 			auto f = m_secs.find(now);

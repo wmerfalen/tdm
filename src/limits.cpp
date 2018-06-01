@@ -288,7 +288,7 @@ void gain_exp(struct char_data *ch, int gain) {
 
 		if(is_altered) {
 			mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s advanced %d level%s to level %d.",
-			       GET_NAME(ch), num_levels, num_levels == 1 ? "" : "s", GET_LEVEL(ch));
+			       GET_NAME(ch).c_str(), num_levels, num_levels == 1 ? "" : "s", GET_LEVEL(ch));
 
 			if(num_levels == 1) {
 				send_to_char(ch, "You rise a level!\r\n");
@@ -334,7 +334,7 @@ void gain_exp_regardless(struct char_data *ch, int gain) {
 
 		if(is_altered) {
 			mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s advanced %d level%s to level %d.",
-			       GET_NAME(ch), num_levels, num_levels == 1 ? "" : "s", GET_LEVEL(ch));
+			       GET_NAME(ch).c_str(), num_levels, num_levels == 1 ? "" : "s", GET_LEVEL(ch));
 
 			if(num_levels == 1) {
 				send_to_char(ch, "You rise a level!\r\n");
@@ -435,7 +435,7 @@ void check_idling(struct char_data *ch) {
 				Crash_idlesave(ch);
 			}
 
-			mudlog(CMP, LVL_GOD, TRUE, "%s force-rented and extracted (idle).", GET_NAME(ch));
+			mudlog(CMP, LVL_GOD, TRUE, "%s force-rented and extracted (idle).", GET_NAME(ch).c_str());
 			extract_char(ch);
 		}
 	}

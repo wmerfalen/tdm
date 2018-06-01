@@ -230,7 +230,7 @@ int Board_write_message(int board_type, struct char_data *ch, char *arg, struct 
 	tmstr = (char *) asctime(localtime(&ct));
 	*(tmstr + strlen(tmstr) - 1) = '\0';
 
-	snprintf(buf2, sizeof(buf2), "(%s)", GET_NAME(ch));
+	snprintf(buf2, sizeof(buf2), "(%s)", GET_NAME(ch).c_str());
 	snprintf(buf, sizeof(buf), "%6.10s %-12s :: %s", tmstr, buf2, arg);
 	NEW_MSG_INDEX(board_type).heading = strdup(buf);
 	NEW_MSG_INDEX(board_type).level = GET_LEVEL(ch);
@@ -428,7 +428,7 @@ int Board_remove_msg(int board_type, struct char_data *ch, char *arg, struct obj
 		return (1);
 	}
 
-	snprintf(buf, sizeof(buf), "(%s)", GET_NAME(ch));
+	snprintf(buf, sizeof(buf), "(%s)", GET_NAME(ch).c_str());
 
 	if(GET_LEVEL(ch) < REMOVE_LVL(board_type) &&
 	        !(strstr(MSG_HEADING(board_type, ind), buf))) {

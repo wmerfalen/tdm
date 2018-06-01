@@ -633,7 +633,7 @@ int get_filename(char *filename, size_t fbufsize, int mode, const char *orig_nam
 			break;
 	}
 
-	snprintf(filename, fbufsize, "%s%s"SLASH"%s.%s", prefix, middle, name, suffix);
+	snprintf(filename, fbufsize, "%s%s" SLASH "%s.%s", prefix, middle, name, suffix);
 	return (1);
 }
 

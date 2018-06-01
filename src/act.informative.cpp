@@ -310,8 +310,6 @@ void list_obj_to_char(struct obj_data *list, struct char_data *ch, int mode, int
 	struct obj_data *i;
 	bool found = FALSE;
 
-	int ctr = 0;
-
 	for(i = list; i; i = i->next_content) {
 		if(i) {
 			for(unsigned o = 0; o < object_list.size(); o++) {
@@ -374,7 +372,7 @@ void look_at_char(struct char_data *i, struct char_data *ch) {
 	}
 
 	if(i->player.description) {
-		send_to_char(ch, "%s", i->player.description);
+		send_to_char(ch, "%s", i->player.description.c_str());
 	} else {
 		act("You see nothing special about $m.", FALSE, i, 0, ch, TO_VICT);
 	}
@@ -433,7 +431,7 @@ void list_one_char(struct char_data *i, struct char_data *ch) {
 	if(IS_NPC(i)) {
 		send_to_char(ch, "%c%s", UPPER(*i->player.short_descr), i->player.short_descr + 1);
 	} else {
-		send_to_char(ch, "%s %s", i->player.name, GET_TITLE(i));
+		send_to_char(ch, "%s %s", i->player.name.c_str(), GET_TITLE(i).c_str());
 	}
 
 	if(AFF_FLAGGED(i, AFF_INVISIBLE)) {
@@ -559,7 +557,7 @@ ACMD(do_exits) {
 
 		if(GET_LEVEL(ch) >= LVL_IMMORT)
 			send_to_char(ch, "%-5s - [%5d] %s\r\n", dirs[door], GET_ROOM_VNUM(EXIT(ch, door)->to_room),
-			             world[EXIT(ch, door)->to_room].name);
+			             world[EXIT(ch, door)->to_room].name.c_str());
 		else
 			send_to_char(ch, "%-5s - %s\r\n", dirs[door], IS_DARK(EXIT(ch, door)->to_room) &&
 			             !CAN_SEE_IN_DARK(ch) ? "Too dark to tell." : world[EXIT(ch, door)->to_room].name);
@@ -593,7 +591,7 @@ void look_at_room(struct char_data *ch, int ignore_brief) {
 		char buf[MAX_STRING_LENGTH];
 
 		sprintbit(ROOM_FLAGS(IN_ROOM(ch)), room_bits, buf, sizeof(buf));
-		send_to_char(ch, "[%5d] %s [ %s]", GET_ROOM_VNUM(IN_ROOM(ch)), world[IN_ROOM(ch)].name, buf);
+		send_to_char(ch, "[%5d] %s [ %s]", GET_ROOM_VNUM(IN_ROOM(ch)), world[IN_ROOM(ch)].name.c_str(), buf);
 	} else
 		//send_to_char(ch, "%s", world[IN_ROOM(ch)].name);
 	{
@@ -630,7 +628,7 @@ void look_at_room(struct char_data *ch, int ignore_brief) {
 void look_in_direction(struct char_data *ch, int dir) {
 	if(EXIT(ch, dir)) {
 		if(EXIT(ch, dir)->general_description) {
-			send_to_char(ch, "%s", EXIT(ch, dir)->general_description);
+			send_to_char(ch, "%s", EXIT(ch, dir)->general_description.c_str());
 		} else {
 			send_to_char(ch, "You see nothing special.\r\n");
 		}
@@ -815,26 +813,28 @@ void look_at_target(struct char_data *ch, char *arg) {
 ACMD(do_look) {
 	int look_type;
 
-	if(!ch->desc) {
-		return;
-	}
-
 	if(GET_POS(ch) < POS_SLEEPING) {
+		d("char's pos is less than sleeping");
 		send_to_char(ch, "You can't see anything but stars!\r\n");
 	} else if(AFF_FLAGGED(ch, AFF_BLIND)) {
+		d("Char is blind");
 		send_to_char(ch, "You can't see a damned thing, you're blind!\r\n");
 	} else if(IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch)) {
+		d("its dark and char cant see in dark");
 		send_to_char(ch, "It is pitch black...\r\n");
 		list_char_to_char(world[IN_ROOM(ch)].people, ch);	/* glowing red eyes */
 	} else {
+		d("performing halfchop");
 		char arg[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
 
 		half_chop(argument, arg, arg2);
 
 		if(subcmd == SCMD_READ) {
 			if(!*arg) {
+				d("read what?");
 				send_to_char(ch, "Read what?\r\n");
 			} else {
+				d("look at target");
 				look_at_target(ch, arg);
 			}
 
@@ -842,16 +842,21 @@ ACMD(do_look) {
 		}
 
 		if(!*arg) {		/* "look" alone, without an argument at all */
+			d("looking at room");
 			look_at_room(ch, 1);
 		} else if(is_abbrev(arg, "in")) {
+			d("looking in obj");
 			look_in_obj(ch, arg2);
 		}
 		/* did the char type 'look <direction>?' */
 		else if((look_type = search_block(arg, dirs, FALSE)) >= 0) {
+			d("looking in dir");
 			look_in_direction(ch, look_type);
 		} else if(is_abbrev(arg, "at")) {
+			d("looking at target");
 			look_at_target(ch, arg2);
 		} else {
+			d("looking at targe2");
 			look_at_target(ch, arg);
 		}
 	}
@@ -936,7 +941,7 @@ ACMD(do_score) {
 	             playing_time.hours, playing_time.hours == 1 ? "" : "s");
 
 	send_to_char(ch, "This ranks you as %s %s (level %d).\r\n",
-	             GET_NAME(ch), GET_TITLE(ch), GET_LEVEL(ch));
+	             GET_NAME(ch).c_str(), GET_TITLE(ch).c_str(), GET_LEVEL(ch));
 
 	switch(GET_POS(ch)) {
 		case POS_DEAD:
@@ -1186,7 +1191,6 @@ ACMD(do_help) {
 
 /* FIXME: This whole thing just needs rewritten. */
 ACMD(do_who) {
-	struct descriptor_data *d;
 	struct char_data *tch;
 	char name_search[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
 	char mode;
@@ -1307,15 +1311,15 @@ ACMD(do_who) {
 		if(short_list) {
 			send_to_char(ch, "%s[%2d %s] %-12.12s%s%s",
 			             (GET_LEVEL(tch) >= LVL_IMMORT ? CCYEL(ch, C_SPR) : ""),
-			             GET_LEVEL(tch), CLASS_ABBR(tch), GET_NAME(tch),
+			             GET_LEVEL(tch), CLASS_ABBR(tch), GET_NAME(tch).c_str(),
 			             (GET_LEVEL(tch) >= LVL_IMMORT ? CCNRM(ch, C_SPR) : ""),
 			             ((!(++num_can_see % 4)) ? "\r\n" : ""));
 		} else {
 			num_can_see++;
 			send_to_char(ch, "%s[%2d %s] %s %s",
 			             (GET_LEVEL(tch) >= LVL_IMMORT ? CCYEL(ch, C_SPR) : ""),
-			             GET_LEVEL(tch), CLASS_ABBR(tch), GET_NAME(tch),
-			             GET_TITLE(tch));
+			             GET_LEVEL(tch), CLASS_ABBR(tch), GET_NAME(tch).c_str(),
+			             GET_TITLE(tch).c_str());
 
 			if(GET_INVIS_LEV(tch)) {
 				send_to_char(ch, " (i%d)", GET_INVIS_LEV(tch));
@@ -1380,7 +1384,6 @@ ACMD(do_users) {
 	char state[30], *timeptr, mode;
 	char name_search[MAX_INPUT_LENGTH], host_search[MAX_INPUT_LENGTH];
 	struct char_data *tch;
-	struct descriptor_data *d;
 	int low = 0, high = LVL_IMPL, num_can_see = 0;
 	int showclass = 0, outlaws = 0, playing = 0, deadweight = 0;
 	char buf[MAX_INPUT_LENGTH], arg[MAX_INPUT_LENGTH];
@@ -1598,7 +1601,7 @@ ACMD(do_gen_ps) {
 			break;
 
 		case SCMD_WHOAMI:
-			send_to_char(ch, "%s\r\n", GET_NAME(ch));
+			send_to_char(ch, "%s\r\n", GET_NAME(ch).c_str());
 			break;
 
 		default:
@@ -1610,7 +1613,6 @@ ACMD(do_gen_ps) {
 
 void perform_mortal_where(struct char_data *ch, char *arg) {
 	struct char_data *i;
-	struct descriptor_data *d;
 
 	if(!*arg) {
 		send_to_char(ch, "Players in your Zone\r\n--------------------\r\n");
@@ -1632,7 +1634,7 @@ void perform_mortal_where(struct char_data *ch, char *arg) {
 				continue;
 			}
 
-			send_to_char(ch, "%-20s - %s\r\n", GET_NAME(i), world[IN_ROOM(i)].name);
+			send_to_char(ch, "%-20s - %s\r\n", GET_NAME(i).c_str(), world[IN_ROOM(i)].name.c_str());
 		}
 	} else {			/* print only FIRST char, not all. */
 		for(i = character_list; i; i = i->next) {
@@ -1648,7 +1650,7 @@ void perform_mortal_where(struct char_data *ch, char *arg) {
 				continue;
 			}
 
-			send_to_char(ch, "%-25s - %s\r\n", GET_NAME(i), world[IN_ROOM(i)].name);
+			send_to_char(ch, "%-25s - %s\r\n", GET_NAME(i).c_str(), world[IN_ROOM(i)].name.c_str());
 			return;
 		}
 
@@ -1666,7 +1668,7 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
 	}
 
 	if(IN_ROOM(obj) != NOWHERE) {
-		send_to_char(ch, "[%5d] %s\r\n", GET_ROOM_VNUM(IN_ROOM(obj)), world[IN_ROOM(obj)].name);
+		send_to_char(ch, "[%5d] %s\r\n", GET_ROOM_VNUM(IN_ROOM(obj)), world[IN_ROOM(obj)].name.c_str());
 	} else if(obj->carried_by) {
 		send_to_char(ch, "carried by %s\r\n", PERS(obj->carried_by, ch));
 	} else if(obj->worn_by) {
@@ -1687,7 +1689,6 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
 void perform_immort_where(struct char_data *ch, char *arg) {
 	struct char_data *i;
 	struct obj_data *k;
-	struct descriptor_data *d;
 	int num = 0, found = 0;
 
 	if(!*arg) {
@@ -1700,10 +1701,10 @@ void perform_immort_where(struct char_data *ch, char *arg) {
 				if(i && CAN_SEE(ch, i) && (IN_ROOM(i) != NOWHERE)) {
 					if(d.original)
 						send_to_char(ch, "%-20s - [%5d] %s (in %s)\r\n",
-						             GET_NAME(i), GET_ROOM_VNUM(IN_ROOM(d.character)),
-						             world[IN_ROOM(d.character)].name, GET_NAME(d.character));
+						             GET_NAME(i).c_str(), GET_ROOM_VNUM(IN_ROOM(d.character)),
+						             world[IN_ROOM(d.character)].name.c_str(), GET_NAME(d.character).c_str());
 					else {
-						send_to_char(ch, "%-20s - [%5d] %s\r\n", GET_NAME(i), GET_ROOM_VNUM(IN_ROOM(i)), world[IN_ROOM(i)].name);
+						send_to_char(ch, "%-20s - [%5d] %s\r\n", GET_NAME(i).c_str(), GET_ROOM_VNUM(IN_ROOM(i)), world[IN_ROOM(i)].name.c_str());
 					}
 				}
 			}
@@ -1711,8 +1712,8 @@ void perform_immort_where(struct char_data *ch, char *arg) {
 		for(i = character_list; i; i = i->next) {
 			if(CAN_SEE(ch, i) && IN_ROOM(i) != NOWHERE && isname(arg, i->player.name)) {
 				found = 1;
-				send_to_char(ch, "M%3d. %-25s - [%5d] %s\r\n", ++num, GET_NAME(i),
-				             GET_ROOM_VNUM(IN_ROOM(i)), world[IN_ROOM(i)].name);
+				send_to_char(ch, "M%3d. %-25s - [%5d] %s\r\n", ++num, GET_NAME(i).c_str(),
+				             GET_ROOM_VNUM(IN_ROOM(i)), world[IN_ROOM(i)].name.c_str());
 			}
 		}
 
@@ -1752,11 +1753,10 @@ ACMD(do_where) {
 
 ACMD(do_levels) {
 	char buf[MAX_STRING_LENGTH];
-	size_t i, len = 0;
+	unsigned i = 0, len = 0;
 	int nlen;
 
 	if(IS_NPC(ch)) {
-		send_to_char(ch, "You ain't nothin' but a hound-dog.\r\n");
 		return;
 	}
 

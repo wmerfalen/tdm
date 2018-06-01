@@ -193,11 +193,10 @@ ACMD(do_olc) {
 
 /* OLC interpreter command; called by do_olc */
 void olc_interpreter(void *targ, int mode, char *arg) {
-	int error = 0, command;
+	int command;
 	char command_string[MAX_INPUT_LENGTH];
-	struct char_data *olc_mob = NULL;
-	struct room_data *olc_room = NULL;
-	struct obj_data *olc_obj = NULL;
+	struct char_data *olc_mob = nullptr;
+	struct obj_data *olc_obj = nullptr;
 
 	half_chop(arg, command_string, arg);
 
@@ -208,7 +207,7 @@ void olc_interpreter(void *targ, int mode, char *arg) {
 
 	switch(mode) {
 		case OLC_ROOM:
-			olc_room = (struct room_data *) targ;
+			//olc_room = (struct room_data *) targ;
 			break;
 
 		case OLC_MOB:
@@ -238,7 +237,6 @@ void olc_interpreter(void *targ, int mode, char *arg) {
 					break;
 
 				default:
-					error = 1;
 					break;
 			}
 
@@ -259,7 +257,6 @@ void olc_interpreter(void *targ, int mode, char *arg) {
 					break;
 
 				default:
-					error = 1;
 					break;
 			}
 
@@ -280,7 +277,6 @@ void olc_interpreter(void *targ, int mode, char *arg) {
 					break;
 
 				default:
-					error = 1;
 					break;
 			}
 
@@ -298,7 +294,6 @@ void olc_interpreter(void *targ, int mode, char *arg) {
 					break;
 
 				default:
-					error = 1;
 					break;
 			}
 

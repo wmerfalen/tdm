@@ -531,7 +531,7 @@ void hcontrol_pay_house(struct char_data *ch, char *arg) {
 	} else if((i = find_house(atoi(arg))) == NOWHERE) {
 		send_to_char(ch, "Unknown house.\r\n");
 	} else {
-		mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "Payment for house %s collected by %s.", arg, GET_NAME(ch));
+		mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "Payment for house %s collected by %s.", arg, GET_NAME(ch).c_str());
 
 		house_control[i].last_payment = time(0);
 		House_save_control();

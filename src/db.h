@@ -101,7 +101,7 @@
 /* public procedures in db.c */
 void	boot_db(void);
 void	destroy_db(void);
-int	create_entry(char *name);
+int	create_entry(const char *name);
 void	zone_update(void);
 char	*fread_string(FILE *fl, const char *error);
 long	get_id_by_name(const char *name);
@@ -119,7 +119,7 @@ obj_rnum real_object(obj_vnum vnum);
 
 void	char_to_store(struct char_data *ch, struct char_file_u *st);
 void	store_to_char(struct char_file_u *st, struct char_data *ch);
-int	load_char(const char *name, struct char_file_u *char_element);
+bool	load_char(const char *name, struct char_file_u *char_element);
 void	save_char(struct char_data *ch);
 void	init_char(struct char_data *ch);
 struct char_data* create_char(void);

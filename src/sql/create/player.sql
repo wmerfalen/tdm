@@ -33,5 +33,9 @@ CREATE TABLE player (
 	player_damroll INTEGER NOT NULL,
 	player_weight INTEGER NOT NULL,
 	player_height INTEGER NOT NULL,
-	player_class INTEGER NOT NULL
+	player_class INTEGER NOT NULL,
+	player_title VARCHAR(256) NOT NULL,
+	player_hometown VARCHAR(16) NOT NULL,
+	player_password VARCHAR(512),
+	player_type VARCHAR(3) NOT NULL 
 );

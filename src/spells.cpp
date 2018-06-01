@@ -130,11 +130,11 @@ ASPELL(spell_summon) {
 			send_to_char(victim, "%s just tried to summon you to: %s.\r\n"
 			             "%s failed because you have summon protection on.\r\n"
 			             "Type NOSUMMON to allow other players to summon you.\r\n",
-			             GET_NAME(ch), world[IN_ROOM(ch)].name.c_str(),
+			             GET_NAME(ch).c_str(), world[IN_ROOM(ch)].name.c_str(),
 			             (ch->player.sex == SEX_MALE) ? "He" : "She");
 
-			send_to_char(ch, "You failed because %s has summon protection on.\r\n", GET_NAME(victim));
-			mudlog(BRF, LVL_IMMORT, TRUE, "%s failed summoning %s to %s.", GET_NAME(ch), GET_NAME(victim), world[IN_ROOM(ch)].name.c_str());
+			send_to_char(ch, "You failed because %s has summon protection on.\r\n", GET_NAME(victim).c_str());
+			mudlog(BRF, LVL_IMMORT, TRUE, "%s failed summoning %s to %s.", GET_NAME(ch).c_str(), GET_NAME(victim).c_str(), world[IN_ROOM(ch)].name.c_str());
 			return;
 		}
 	}
@@ -346,11 +346,11 @@ ASPELL(spell_identify) {
 			}
 		}
 	} else if(victim) {		/* victim */
-		send_to_char(ch, "Name: %s\r\n", GET_NAME(victim));
+		send_to_char(ch, "Name: %s\r\n", GET_NAME(victim).c_str());
 
 		if(!IS_NPC(victim))
 			send_to_char(ch, "%s is %d years, %d months, %d days and %d hours old.\r\n",
-			             GET_NAME(victim), age(victim)->year, age(victim)->month,
+			             GET_NAME(victim).c_str(), age(victim)->year, age(victim)->month,
 			             age(victim)->day, age(victim)->hours);
 
 		send_to_char(ch, "Height %d cm, Weight %d pounds\r\n", GET_HEIGHT(victim), GET_WEIGHT(victim));

@@ -81,7 +81,7 @@ ACMD(do_quit) {
 		die(ch);
 	} else {
 		act("$n has left the game.", TRUE, ch, 0, 0, TO_ROOM);
-		mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s has quit the game.", GET_NAME(ch));
+		mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s has quit the game.", GET_NAME(ch).c_str());
 		send_to_char(ch, "Goodbye, friend.. Come back soon!\r\n");
 
 		/*  We used to check here for duping attempts, but we may as well
@@ -125,7 +125,7 @@ ACMD(do_save) {
 			return;
 		}
 
-		send_to_char(ch, "Saving %s and aliases.\r\n", GET_NAME(ch));
+		send_to_char(ch, "Saving %s and aliases.\r\n", GET_NAME(ch).c_str());
 	}
 
 	write_aliases(ch);
@@ -377,7 +377,7 @@ ACMD(do_title) {
 		send_to_char(ch, "Sorry, titles can't be longer than %d characters.\r\n", MAX_TITLE_LENGTH);
 	} else {
 		set_title(ch, argument);
-		send_to_char(ch, "Okay, you're now %s %s.\r\n", GET_NAME(ch), GET_TITLE(ch));
+		send_to_char(ch, "Okay, you're now %s %s.\r\n", GET_NAME(ch).c_str(), GET_TITLE(ch).c_str());
 	}
 }
 
@@ -631,12 +631,12 @@ ACMD(do_split) {
 
 		/* Abusing signed/unsigned to make sizeof work. */
 		len = snprintf(buf, sizeof(buf), "%s splits %d coins; you receive %d.\r\n",
-		               GET_NAME(ch), amount, share);
+		               GET_NAME(ch).c_str(), amount, share);
 
 		if(rest && len < sizeof(buf)) {
 			snprintf(buf + len, sizeof(buf) - len,
 			         "%d coin%s %s not splitable, so %s keeps the money.\r\n", rest,
-			         (rest == 1) ? "" : "s", (rest == 1) ? "was" : "were", GET_NAME(ch));
+			         (rest == 1) ? "" : "s", (rest == 1) ? "was" : "were", GET_NAME(ch).c_str());
 		}
 
 		if(AFF_FLAGGED(k, AFF_GROUP) && IN_ROOM(k) == IN_ROOM(ch) &&
@@ -875,7 +875,7 @@ ACMD(do_gen_write) {
 		return;
 	}
 
-	mudlog(CMP, LVL_IMMORT, FALSE, "%s %s: %s", GET_NAME(ch), CMD_NAME, argument);
+	mudlog(CMP, LVL_IMMORT, FALSE, "%s %s: %s", GET_NAME(ch).c_str(), CMD_NAME, argument);
 
 	if(stat(filename, &fbuf) < 0) {
 		perror("SYSERR: Can't stat() file");
@@ -893,7 +893,7 @@ ACMD(do_gen_write) {
 		return;
 	}
 
-	fprintf(fl, "%-8s (%6.6s) [%5d] %s\n", GET_NAME(ch), (tmp + 4),
+	fprintf(fl, "%-8s (%6.6s) [%5d] %s\n", GET_NAME(ch).c_str(), (tmp + 4),
 	        GET_ROOM_VNUM(IN_ROOM(ch)), argument);
 	fclose(fl);
 	send_to_char(ch, "Okay.  Thanks!\r\n");

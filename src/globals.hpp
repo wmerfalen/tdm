@@ -33,6 +33,7 @@ strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(
 #define DBSET(key,value) mods::globals::db->put(key,value);
 #define DBGET(key,value) mods::globals::db->get(key,value);
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
+#define d(a) std::cerr << "[debug]: " << a << "\n";
 extern void clear_char(struct char_data*);
 extern struct char_data* character_list;
 extern std::deque<char_data> mob_list;
@@ -80,6 +81,7 @@ namespace mods {
 		void register_player(char_data* ch);
 		void deregister_player(char_data* ch);
 		void refresh_player_states();
+		std::shared_ptr<mods::player> new_connection(const descriptor_data&);
 		void room_event(struct char_data*,mods::ai_state::event_type_t);
 		void room_event(room_vnum,mods::ai_state::event_type_t);
 		void post_boot_db();

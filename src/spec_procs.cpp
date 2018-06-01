@@ -713,7 +713,7 @@ SPECIAL(pet_shops) {
 				continue;
 			}
 
-			send_to_char(ch, "%8d - %s\r\n", PET_PRICE(pet), GET_NAME(pet));
+			send_to_char(ch, "%8d - %s\r\n", PET_PRICE(pet), GET_NAME(pet).c_str());
 		}
 
 		return (TRUE);
@@ -738,12 +738,12 @@ SPECIAL(pet_shops) {
 		SET_BIT(AFF_FLAGS(pet), AFF_CHARM);
 
 		if(*pet_name) {
-			snprintf(buf, sizeof(buf), "%s %s", pet->player.name, pet_name);
+			snprintf(buf, sizeof(buf), "%s %s", pet->player.name.c_str(), pet_name);
 			/* free(pet->player.name); don't free the prototype! */
 			pet->player.name = strdup(buf);
 
 			snprintf(buf, sizeof(buf), "%sA small sign on a chain around the neck says 'My name is %s'\r\n",
-			         pet->player.description, pet_name);
+			         pet->player.description.c_str(), pet_name);
 			/* free(pet->player.description); don't free the prototype! */
 			pet->player.description = strdup(buf);
 		}

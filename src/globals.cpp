@@ -65,6 +65,21 @@ namespace mods {
 			return begin;
 		}
 
+		std::shared_ptr<mods::player> new_connection(const descriptor_data& desc){
+			descriptor_list.emplace_back(desc);
+      auto player_ptr = std::make_shared<mods::player>(descriptor_list.end()-1);
+      player_ptr->set_shared_ptr(player_ptr);
+			auto uuid = mods::globals::player_list.size();
+      player_ptr->cd()->uuid = uuid;
+      mods::globals::player_list.emplace_back(player_ptr);
+			mods::globals::register_player(player_ptr->cd());
+			(descriptor_list.end()-1)->character = player_ptr->cd();
+			mods::globals::socket_map[desc.descriptor] = std::make_pair(
+				player_ptr->cd(),
+				descriptor_list.end()-1
+			);
+			return player_ptr;
+		}
 		template<typename Iter, typename RandomGenerator>
 		Iter select_randomly(Iter start, Iter end, RandomGenerator& g) {
 			std::uniform_int_distribution<> dis(0, std::distance(start, end) - 1);
@@ -195,7 +210,6 @@ namespace mods {
 			}
 		}
 		char_data* read_mobile(const mob_vnum & nr,const int & type){
-			char_data* mob;	
 			mob_rnum i;
 
 			if(type == VIRTUAL) {
@@ -208,11 +222,8 @@ namespace mods {
 			}
 		 
 			mob_list.emplace_back(mob_proto[i]);
-			mob = &(*(mob_list.end()-1));
-			clear_char(mob);
-			*mob = mob_proto[i];
-			mob->next = character_list;
-			character_list = mob;
+			(mob_list.end()-1)->next = character_list;
+			auto mob = character_list = &(*(mob_list.end()-1));
 
 			if(!mob->points.max_hit) {
 				mob->points.max_hit = dice(mob->points.hit, mob->points.mana) +
@@ -325,20 +336,24 @@ namespace mods {
 			current_player = player;
 
 			if(mods::drone::started(ch)) {
+				d("drone started. interpretting");
 				return mods::drone::interpret(ch,argument);
 			}
 
 			if(!ch->drone && mods::quests::has_quest(ch)) {
+				d("Running trigger for quests");
 				mods::quests::run_trigger(ch);
 			}
 
 			if(player->paging()) {
+				d("Is paging");
 				if(std::string(argument).length() == 0) {
 					player->pager_next_page();
 					return false;
 				}
 
 				if(std::string(argument).compare("q") == 0) {
+					d("quitting pager");
 					player->pager_clear();
 					player->pager_end();
 					return false;
@@ -353,11 +368,13 @@ namespace mods {
 				return false;
 			}
 
+			d("Checking builder data");
 			if(player->cd()->builder_data && player->cd()->builder_data->room_pave_mode) {
 				//If is a direction and that direction is not an exit,
 				//then pave a way to that exit
 				int door = 0;
 
+				d("has builder and pave mode data");
 				if(std::string(argument).length() == 1){
 					switch(argument[0]) {
 						case 'u':
@@ -397,7 +414,7 @@ namespace mods {
 					}
 				}
 			}
-
+			d("returning from command_interpreter");
 			return true;
 		}
 

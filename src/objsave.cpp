@@ -407,7 +407,7 @@ void update_obj_file(void) {
 	int i;
 
 	for(i = 0; i <= top_of_p_table; i++)
-		if(*player_table[i].name) {
+		if(player_table[i].name.length()) {
 			Crash_clean_file(player_table[i].name.ptr());
 		}
 }

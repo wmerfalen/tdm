@@ -141,7 +141,7 @@ ACMD(do_insult) {
 			send_to_char(ch, "Can't hear you!\r\n");
 		} else {
 			if(victim != ch) {
-				send_to_char(ch, "You insult %s.\r\n", GET_NAME(victim));
+				send_to_char(ch, "You insult %s.\r\n", GET_NAME(victim).c_str());
 
 				switch(rand_number(0, 2)) {
 					case 0:

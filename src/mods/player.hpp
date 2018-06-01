@@ -35,11 +35,13 @@ namespace mods {
 			typedef std::vector<std::shared_ptr<mods::classes::base>> class_info_t;
 			using   chdata = struct char_data;
 			using   chdata_ptr = struct char_data *;
+			using		descriptor_iterator_t = std::deque<descriptor_data>::iterator;
 
 			/* constructors and destructors */
 			player() = delete;
 			player(char_data* ch);
 			player(mods::player* p);
+			player(descriptor_iterator_t d);
 			~player() = default;
 
 			static constexpr int PAGE_SIZE = 40;
@@ -219,6 +221,7 @@ namespace mods {
 			std::vector<std::string> m_pages;
 			class_info_t m_class_info;
 			std::shared_ptr<mods::player> m_self_ptr;
+			std::shared_ptr<char_data> m_shared_ptr;
 	};
 };
 

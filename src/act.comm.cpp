@@ -249,7 +249,7 @@ ACMD(do_spec_comm) {
 		if(PRF_FLAGGED(ch, PRF_NOREPEAT)) {
 			send_to_char(ch, "%s", OK);
 		} else {
-			send_to_char(ch, "You %s %s, '%s'\r\n", action_sing, GET_NAME(vict), buf2);
+			send_to_char(ch, "You %s %s, '%s'\r\n", action_sing, GET_NAME(vict).c_str(), buf2);
 		}
 
 		act(action_others, FALSE, ch, 0, vict, TO_NOTVICT);
