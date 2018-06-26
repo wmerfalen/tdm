@@ -65,21 +65,6 @@ namespace mods {
 			return begin;
 		}
 
-		std::shared_ptr<mods::player> new_connection(const descriptor_data& desc){
-			descriptor_list.emplace_back(desc);
-      auto player_ptr = std::make_shared<mods::player>(descriptor_list.end()-1);
-      player_ptr->set_shared_ptr(player_ptr);
-			auto uuid = mods::globals::player_list.size();
-      player_ptr->cd()->uuid = uuid;
-      mods::globals::player_list.emplace_back(player_ptr);
-			mods::globals::register_player(player_ptr->cd());
-			(descriptor_list.end()-1)->character = player_ptr->cd();
-			mods::globals::socket_map[desc.descriptor] = std::make_pair(
-				player_ptr->cd(),
-				descriptor_list.end()-1
-			);
-			return player_ptr;
-		}
 		template<typename Iter, typename RandomGenerator>
 		Iter select_randomly(Iter start, Iter end, RandomGenerator& g) {
 			std::uniform_int_distribution<> dis(0, std::distance(start, end) - 1);
@@ -244,6 +229,7 @@ namespace mods {
 			return (mob);
 		}
 		struct char_data* create_char() {
+			log("[deprecated] mods::globals::create_char");
 			struct char_data *ch;
 			CREATE(ch,struct char_data,1);
 			clear_char(ch);
@@ -461,19 +447,15 @@ namespace mods {
 			player->set_class_capability({mods::classes::types(ch->player.chclass)});
 		}
 
-		void deregister_player(char_data* ch) {
-			
+		void deregister_player(char_data* ch){
+			log("[stub] deregister_player(char_data*)");
+		}
+		void deregister_player(std::shared_ptr<mods::player> player) {
+			close_socket(player->desc());
+			//descriptor_list.erase(
 		}
 		void register_player(char_data* ch) {
-			if(ch) {
-				auto uuid = mods::globals::player_list.size();
-				ch->uuid = uuid;
-				auto player_ptr = std::make_shared<mods::player>(ch);
-				player_ptr->set_shared_ptr(player_ptr);
-				mods::globals::player_list.emplace_back(player_ptr);
-			} else {
-				std::cerr << "invalid cdata! (register_player) " << __FILE__ << ":" << __LINE__ << "\n";
-			}
+			log("[deprecated] mods::globals::register_player");
 		}
 		namespace rooms {
 			void char_from_room(struct char_data* ch) {

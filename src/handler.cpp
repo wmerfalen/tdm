@@ -944,23 +944,23 @@ void extract_char_final(struct char_data *ch) {
 		 * If this body is not possessed, the owner won't have a
 		 * body after the removal so dump them to the main menu.
 		 */
-		if(ch->desc->original) {
+		if(ch->desc.original) {
 			do_return(ch, NULL, 0, 0);
 		} else {
 			/*
 			 * Now we boot anybody trying to log in with the same character, to
 			 * help guard against duping.  CON_DISCONNECT is used to close a
-			 * descriptor without extracting the d->character associated with it,
+			 * descriptor without extracting the d.character associated with it,
 			 * for being link-dead, so we want CON_CLOSE to clean everything up.
 			 * If we're here, we know it's a player so no IS_NPC check required.
 			 */
 			for(auto & d : descriptor_list) {
-				if(d.descriptor == ch->desc->descriptor) {
+				if(d.descriptor == ch->desc.descriptor) {
 					continue;
 				}
 
 				if(d.character && GET_IDNUM(ch) == GET_IDNUM(d.character)) {
-					STATE(&d) = CON_CLOSE;
+					STATE(d) = CON_CLOSE;
 				}
 			}
 

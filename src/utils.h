@@ -8,14 +8,23 @@
 *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
 ************************************************************************ */
 
-
+#include <cstdio>
+#include <deque>
+#include "structs.h"
 /* external declarations and prototypes **********************************/
-
+namespace mods{
+	struct descriptor_data;
+};
 extern struct weather_data weather_info;
 extern FILE *logfile;
 
 #define READ_SIZE	256
-
+#ifndef __STATE_GUARD__
+#define __STATE_GUARD__
+int& STATE(mods::descriptor_data &d);
+int& STATE(mods::descriptor_data *d);
+int& STATE(std::deque<mods::descriptor_data>::iterator d);
+#endif
 void	basic_mud_log(const char *format, ...) __attribute__((format(printf, 1, 2)));
 void	basic_mud_vlog(const char *format, va_list args);
 int	touch(const char *path);
@@ -269,7 +278,7 @@ void	update_pos(struct char_data *victim);
  * of GET_LEVEL?  JE
  */
 #define GET_REAL_LEVEL(ch) \
-   (ch->desc && ch->desc->original ? GET_LEVEL(ch->desc->original) : \
+   (ch->desc && ch->desc.original ? GET_LEVEL(ch->desc.original) : \
     GET_LEVEL(ch))
 
 #define GET_CLASS(ch)   ((ch)->player.chclass)
@@ -363,7 +372,7 @@ void	update_pos(struct char_data *victim);
 /* descriptor-based utils ************************************************/
 
 /* Hrm, not many.  We should make more. -gg 3/4/99 */
-#define STATE(d)	((d)->connected)
+//#define STATE(d)	((d)->connected)
 
 
 /* object utils **********************************************************/

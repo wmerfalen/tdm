@@ -30,19 +30,22 @@ namespace mods {
 	class player {
 		public:
 			using   class_type = mods::classes::types;
+			using 	descriptor_data_t = std::deque<descriptor_data>;
+			using 	descriptor_data_iterator_t = descriptor_data_t::iterator;
 			typedef short weapon_set;
 			typedef std::vector<class_type> class_capability_t;
 			typedef std::vector<std::shared_ptr<mods::classes::base>> class_info_t;
 			using   chdata = struct char_data;
 			using   chdata_ptr = struct char_data *;
-			using		descriptor_iterator_t = std::deque<descriptor_data>::iterator;
+			using		descriptor_t = mods::descriptor_data;
+			using		descriptor_iterator_t = std::deque<mods::descriptor_data>::iterator;
 
 			/* constructors and destructors */
-			player() = delete;
-			player(char_data* ch);
-			player(mods::player* p);
-			player(descriptor_iterator_t d);
-			~player() = default;
+			player();
+			player(char_data*);
+			player(mods::player*);
+			~player();
+			void init();
 
 			static constexpr int PAGE_SIZE = 40;
 
@@ -176,8 +179,7 @@ namespace mods {
 					queue_page_fragment(m);
 				} else {
 					stc(m);
-				}
-				return *this;
+				} return *this;
 			}
 			player& operator<<(const std::string& m) {
 				if(m_do_paging) {
@@ -200,12 +202,16 @@ namespace mods {
 			bool paging() const {
 				return m_pages.size();
 			}
+			void set_desc(std::deque<descriptor_data>::iterator it){ m_desc_iterator = it; }
+			void set_char_on_descriptor(std::deque<descriptor_data>::iterator it);
+			descriptor_data& desc(){ return *m_desc_iterator; }
 
 			/* captured output */
 			void capture_output(bool capture_status);
 			std::string_view get_captured_output();
 			void clear_captured_output();
-		private:
+		private: 
+			descriptor_data_iterator_t m_desc_iterator;
 			std::string	m_name;
 			class_capability_t m_class_capability;
 			bool         m_executing_js;

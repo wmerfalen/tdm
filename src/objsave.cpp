@@ -1328,7 +1328,7 @@ SPECIAL(cryogenicist) {
 
 void Crash_save_all(void) {
 	for(auto & d : descriptor_list) {
-		if((STATE(&d) == CON_PLAYING) && !IS_NPC(d.character)) {
+		if((STATE(d) == CON_PLAYING) && !IS_NPC(d.character)) {
 			if(PLR_FLAGGED(d.character, PLR_CRASH)) {
 				Crash_crashsave(d.character);
 				save_char(d.character);

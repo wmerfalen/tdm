@@ -33,7 +33,8 @@ strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(
 #define DBSET(key,value) mods::globals::db->put(key,value);
 #define DBGET(key,value) mods::globals::db->get(key,value);
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
-#define d(a) std::cerr << "[debug]: " << a << "\n";
+#define d(a) std::cerr << "[debug]: " << a << "\n" << std::flush;
+
 extern void clear_char(struct char_data*);
 extern struct char_data* character_list;
 extern std::deque<char_data> mob_list;
@@ -48,8 +49,9 @@ extern std::deque<char_data> mob_list;
 	character_list = ch;
 namespace mods {
     namespace globals {
+			using player_ptr_t = std::shared_ptr<mods::player>;
 		using lmdb_db = gdns::lmdb::db;
-		using socket_map_t = std::map<int,std::pair<char_data*,std::deque<descriptor_data>::iterator>>;
+		using socket_map_t = std::map<int,player_ptr_t>;
 		bool acl_allowed(struct char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd);
 		void init();
 		void pre_game_loop();
@@ -81,7 +83,6 @@ namespace mods {
 		void register_player(char_data* ch);
 		void deregister_player(char_data* ch);
 		void refresh_player_states();
-		std::shared_ptr<mods::player> new_connection(const descriptor_data&);
 		void room_event(struct char_data*,mods::ai_state::event_type_t);
 		void room_event(room_vnum,mods::ai_state::event_type_t);
 		void post_boot_db();

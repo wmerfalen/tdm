@@ -25,7 +25,7 @@
 extern int level_can_shout;
 extern int holler_move_cost;
 extern struct char_data* character_list;
-extern std::deque<descriptor_data> descriptor_list;
+extern std::deque<mods::descriptor_data> descriptor_list;
 
 /* local functions */
 void perform_tell(struct char_data *ch, struct char_data *vict, char *arg);
@@ -458,7 +458,7 @@ ACMD(do_gen_comm) {
 
 	/* now send all the strings out */
 	for(auto & i : descriptor_list){
-		if(STATE(&i) == CON_PLAYING && i.character && i.character->uuid != ch->uuid &&
+		if(STATE(i) == CON_PLAYING && i.character && i.character->uuid != ch->uuid &&
 		        !PRF_FLAGGED(i.character, channels[subcmd]) &&
 		        !PLR_FLAGGED(i.character, PLR_WRITING) &&
 		        !ROOM_FLAGGED(IN_ROOM(i.character), ROOM_SOUNDPROOF)) {
@@ -512,7 +512,7 @@ ACMD(do_qcomm) {
 		}
 
 		for(auto & i : descriptor_list)
-			if(STATE(&i) == CON_PLAYING && i.character->uuid != ch->uuid && PRF_FLAGGED(i.character, PRF_QUEST)) {
+			if(STATE(i) == CON_PLAYING && i.character->uuid != ch->uuid && PRF_FLAGGED(i.character, PRF_QUEST)) {
 				act(buf, 0, ch, 0, i.character, TO_VICT | TO_SLEEP);
 			}
 	}

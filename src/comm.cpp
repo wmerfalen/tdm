@@ -11,6 +11,7 @@
 #define __COMM_C__
 
 #include "globals.hpp"
+#include <array>
 #include "conf.h"
 #include "sysdep.h"
 #include "mods/extern.hpp"
@@ -49,7 +50,6 @@
 # include <inetlib.h>
 # include <sys/ioctl.h>
 #endif
-
 /*
  * Note, most includes for all platforms are in sysdep.h.  The list of
  * files that is included is controlled by conf.h for that platform.
@@ -90,7 +90,7 @@ extern const char *circlemud_version;
 extern int circle_restrict;
 extern int mini_mud;
 extern int no_rent_check;
-extern FILE *player_fl;
+
 extern ush_int DFLT_PORT;
 extern const char *DFLT_DIR;
 extern const char *DFLT_IP;
@@ -104,7 +104,7 @@ extern int *cmd_sort_info;
 extern struct time_info_data time_info;		/* In db.c */
 extern char *help;
 
-using descriptor_list_t = std::deque<descriptor_data>;
+using descriptor_list_t = std::deque<mods::descriptor_data>;
 descriptor_list_t descriptor_list;		/* master desc list */
 /* local globals */
 struct txt_block *bufpool = 0;	/* pool of large output buffers */
@@ -133,8 +133,8 @@ RETSIGTYPE checkpointing(int sig);
 RETSIGTYPE hupsig(int sig);
 ssize_t perform_socket_read(socket_t desc, char *read_point,size_t space_left);
 ssize_t perform_socket_write(socket_t desc, const char *txt,size_t length);
-void echo_off(struct descriptor_data *d);
-void echo_on(struct descriptor_data *d);
+void echo_off(mods::descriptor_data &d);
+void echo_on(mods::descriptor_data &d);
 void circle_sleep(struct timeval *timeout);
 int get_from_q(struct txt_q *queue, char *dest, int *aliased);
 void init_game(ush_int port);
@@ -143,15 +143,15 @@ void game_loop(socket_t mother_desc);
 socket_t init_socket(ush_int port);
 int new_descriptor(socket_t s);
 int get_max_players(void);
-int process_output(descriptor_data &in_t);
-int process_input(descriptor_data &t);
+int process_output(mods::descriptor_data &in_t);
+int process_input(mods::descriptor_data &t);
 void timediff(struct timeval *diff, struct timeval *a, struct timeval *b);
 void timeadd(struct timeval *sum, struct timeval *a, struct timeval *b);
-void flush_queues(struct descriptor_data *d);
+void flush_queues(mods::descriptor_data &d);
 void nonblock(socket_t s);
-int perform_subst(struct descriptor_data *t, char *orig, char *subst);
+int perform_subst(mods::descriptor_data &t, char *orig, char *subst);
 void record_usage(void);
-char *make_prompt(struct descriptor_data *point);
+char *make_prompt(mods::descriptor_data &point);
 void check_idle_passwords(void);
 void heartbeat(int pulse);
 struct in_addr *get_bind_addr(void);
@@ -169,10 +169,10 @@ void boot_world(void);
 void affect_update(void);	/* In magic.c */
 void mobile_activity(void);
 void perform_violence(void);
-void show_string(struct descriptor_data *d, char *input);
+void show_string(mods::descriptor_data d, char *input);
 int isbanned(const char *hostname);
 void weather_and_time(int mode);
-int perform_alias(struct descriptor_data *d, char *orig, size_t maxlen);
+int perform_alias(mods::descriptor_data d, char *orig, size_t maxlen);
 void clear_free_list(void);
 void free_messages(void);
 void Board_clear_all(void);
@@ -421,11 +421,11 @@ void init_game(ush_int port) {
 	log("Closing all sockets.");
 
 	for(auto & desc : descriptor_list){
-		close_socket(&desc);
+		close_socket(desc);
 	}
 
 	CLOSE_SOCKET(mother_desc);
-	fclose(player_fl);
+
 
 	log("Saving current MUD time.");
 	save_mud_time(&time_info);
@@ -683,6 +683,7 @@ void game_loop(socket_t mother_desc) {
 		epoll_event events[size];
 		constexpr int epoll_timeout = 5;	/* miliseconds */
 		// and wait for events
+		//d(".");
 		int r = epoll_wait (epoll_fd, events, size, epoll_timeout);
 		if (r == -1) {
 			d("[epoll] epoll_wait returned -1");
@@ -698,81 +699,82 @@ void game_loop(socket_t mother_desc) {
 			new_desc = 0;
 			auto operating_socket = events[i].data.fd;
 			if (events[i].data.fd == mother_desc) {
+				d("new descriptor detected");
 				new_desc = new_descriptor(mother_desc);
 				operating_socket = new_desc;
 				epoll_ev.events = EPOLLIN; // new connection is a read event
 				epoll_ev.data.fd = new_desc; // user data
 				int r = epoll_ctl (epoll_fd, EPOLL_CTL_ADD, new_desc, &epoll_ev);
 				if (r == -1) {
+					/** FIXME: de-reg and de-alloc player obj here -- remove from socket_map*/
 					d("[epoll] epoll_ctl failed: " << strerror (errno));
 					close (epoll_fd);
 					close (mother_desc);
 					return;
 				}
 			}
-			auto descriptor_iterator = mods::globals::socket_map.find(
-					operating_socket
-					);
-			if(descriptor_iterator == mods::globals::socket_map.end()){
+			auto it = mods::globals::socket_map.find(operating_socket);
+			if(it == mods::globals::socket_map.end()){
+				d("socket not found in socket_map");
 				++i;
 				continue;
 			}
-			if(process_input(*((descriptor_iterator->second).second)) < 0){
+			auto player = it->second;
+
+			if(process_input(player->desc()) < 0){
 				d("process_input < 0");
-				mods::globals::deregister_player(mods::globals::socket_map[
-						operating_socket].first);
-				/** close_socket will free() most of the data associated with this descriptor_list element */
-				close_socket(&(*mods::globals::socket_map[operating_socket].second));
-				/** Remove the descriptor_list element by iterator */
-				descriptor_list.erase(mods::globals::socket_map[operating_socket].second);
+				/** FIXME de-reg and de-alloc -- remove from socket_map */
+				mods::globals::deregister_player(player->cd());
 				++i;
 				continue;
 			}
-			/** d is a std::deque<descriptor_data>::iterator */
-			auto player = mods::globals::socket_map[operating_socket].first;
-			auto d = mods::globals::socket_map[operating_socket].second;
-			if(player) {
+			{
 				d("Player pointer good. Getting from q");
-				if(!get_from_q(&d->input, comm, &aliased)) {
+				if(!get_from_q(&player->desc().input, comm, &aliased)) {
 					d("Player didnt supply get_from_q with anything so we're continuing...");
 					++i;
 					continue;
 				}
 				// Reset the idle timer & pull char back from void if necessary 
-				d->character->char_specials.timer = 0;
-				if(STATE(d) == CON_PLAYING && GET_WAS_IN(d->character) != NOWHERE) {
-					if(IN_ROOM(d->character) != NOWHERE) {
-						char_from_room(d->character);
+				player->cd()->char_specials.timer = 0;
+				if(STATE(player->desc()) == CON_PLAYING && GET_WAS_IN(player->cd()) != NOWHERE) {
+					if(IN_ROOM(player->cd()) != NOWHERE) {
+						char_from_room(player->cd());
 					}
-					char_to_room(d->character, GET_WAS_IN(d->character));
-					GET_WAS_IN(d->character) = NOWHERE;
-					act("$n has returned.", TRUE, d->character, 0, 0, TO_ROOM);
+					char_to_room(player->cd(), GET_WAS_IN(player->cd()));
+					GET_WAS_IN(player->cd()) = NOWHERE;
+					act("$n has returned.", TRUE, player->cd(), 0, 0, TO_ROOM);
 				}
-				GET_WAIT_STATE(d->character) = 1;
-			}//end if(player)
-			d->has_prompt = FALSE;
+				GET_WAIT_STATE(player->cd()) = 1;
+			}
+			player->desc().has_prompt = FALSE;
 
-			if(d->str) {	// Writing boards, mail, etc. 
+			if(player->desc().str) {	// Writing boards, mail, etc. 
 				d("string_add being called");
-				string_add(&(*d), comm);
-			} else if(d->showstr_count) { // Reading something w/ pager 
+				string_add((player->desc()), comm);
+			} else if(player->desc().showstr_count) { // Reading something w/ pager 
 				d("show_string");
-				show_string(&(*d), comm);
-			} else if(STATE(&(*d)) != CON_PLAYING) { // In menus, etc. 
+				show_string(player->desc(), comm);
+			} else if(STATE(player->desc()) != CON_PLAYING) { // In menus, etc. 
 				d("nanny");
-				nanny(&(*d), comm);
+				nanny(player->desc(), comm);
+				d("after nanny");
 			} else {			// else: we're playing normally. 
+				d("if(aliased)");
 				if(aliased) {	// To prevent recursive aliases. 
-					d->has_prompt = TRUE;    // To get newline before next cmd output. 
-				} else if(perform_alias(&(*d), comm, sizeof(comm))) { // Run it through aliasing system 
-					get_from_q(&d->input, comm, &aliased);
+					//d("aliased... has_prompt = TRUE");
+					player->desc().has_prompt = TRUE;    // To get newline before next cmd output. 
+				} else if(perform_alias(player->desc(), comm, sizeof(comm))) { // Run it through aliasing system 
+					//d("get_from_q");
+					get_from_q(&player->desc().input, comm, &aliased);
 				}
 			}
 			d("calling command_interpreter...");
-			command_interpreter(d->character, comm); // Send it to interpreter 
+			command_interpreter(player->cd(), comm); // Send it to interpreter 
 			++i;
 			gettimeofday(&last_time, (struct timezone *) 0);
 		}//end while(i < r)
+		//d("outside");
 
 		/*
 		 * At this point, we have completed all input, output and heartbeat
@@ -812,11 +814,11 @@ void game_loop(socket_t mother_desc) {
 
 		/**TODO: refactor this to not loop through all descriptors but to instead queue up data to be output and output them accordingly */
 		for(auto & d : descriptor_list) {
-			if(*(d.output)) {
-				d("Output to be sent");
-				process_output(d);
-				if(d.bufptr == 0) {	// All output sent.
-					d("All output sent");
+			d("for loop: " << d.host.c_str());
+			if(d.has_output) {
+				d("has output (d.output non-null)");
+				d.flush_output();
+				if(!d.has_output) {	// All output sent.
 					d.has_prompt = TRUE;
 				}
 			}
@@ -825,15 +827,17 @@ void game_loop(socket_t mother_desc) {
 		/* Print prompts for other descriptors who had no other output */
 		for(auto & d : descriptor_list) {
 			if(!d.has_prompt && d.bufptr == 0) {
-				write_to_descriptor(d.descriptor, make_prompt(&d));
+				d("!d.has_prompt");
+				write_to_descriptor(d.descriptor, make_prompt(d));
 				d.has_prompt = TRUE;
 			}
 		}
 
 		/* Kick out folks in the CON_CLOSE or CON_DISCONNECT state */
-		for(auto & d : descriptor_list) {
-			if(STATE(&d) == CON_CLOSE || STATE(&d) == CON_DISCONNECT) {
-				close_socket(&d);
+		for(auto & d_element : descriptor_list) {
+			if(STATE(d_element) == CON_CLOSE || STATE(d_element) == CON_DISCONNECT) {
+				d("taking care of disco/close socket");
+				close_socket(d_element);
 			}
 		}
 
@@ -880,6 +884,7 @@ void game_loop(socket_t mother_desc) {
 }
 
 void heartbeat(int pulse) {
+	//d("heartbeat");
 	static int mins_since_crashsave = 0;
 
 	if(!(pulse % PULSE_ZONE)) {
@@ -905,7 +910,7 @@ void heartbeat(int pulse) {
 		weather_and_time(1);
 		affect_update();
 		point_update();
-		fflush(player_fl);
+
 	}
 
 	if(auto_save && !(pulse % PULSE_AUTOSAVE)) {	/* 1 minute */
@@ -987,7 +992,7 @@ void record_usage(void) {
 	for(auto & d : descriptor_list){
 		sockets_connected++;
 
-		if(STATE(&d) == CON_PLAYING) {
+		if(STATE(d) == CON_PLAYING) {
 			sockets_playing++;
 		}
 	}
@@ -1012,7 +1017,7 @@ void record_usage(void) {
 /*
  * Turn off echoing (specific to telnet client)
  */
-void echo_off(struct descriptor_data *d) {
+void echo_off(mods::descriptor_data &d) {
 	char off_string[] = {
 		(char) IAC,
 		(char) WILL,
@@ -1023,11 +1028,10 @@ void echo_off(struct descriptor_data *d) {
 	write_to_output(d, "%s", off_string);
 }
 
-
 /*
  * Turn on echoing (specific to telnet client)
  */
-void echo_on(struct descriptor_data *d) {
+void echo_on(mods::descriptor_data &d) {
 	char on_string[] = {
 		(char) IAC,
 		(char) WONT,
@@ -1038,50 +1042,49 @@ void echo_on(struct descriptor_data *d) {
 	write_to_output(d, "%s", on_string);
 }
 
-
-char *make_prompt(struct descriptor_data *d) {
+char *make_prompt(mods::descriptor_data &d) {
 	static char prompt[MAX_PROMPT_LENGTH];
 
 	/* Note, prompt is truncated at MAX_PROMPT_LENGTH chars (structs.h) */
 
-	if(d->str) {
+	if(d.str) {
 		strcpy(prompt, "] ");    /* strcpy: OK (for 'MAX_PROMPT_LENGTH >= 3') */
-	} else if(d->showstr_count) {
+	} else if(d.showstr_count) {
 		snprintf(prompt, sizeof(prompt),
-				"\r\n[ Return to continue, (q)uit, (r)efresh, (b)ack, or page number (%d/%d) ]",
-				d->showstr_page, d->showstr_count);
-	} else if(STATE(d) == CON_PLAYING && !IS_NPC(d->character)) {
+				"\r\n[ Return to continue, (q)uit, (r)efresh, (b)ack, or page number (%d/%d]",
+				d.showstr_page, d.showstr_count);
+	} else if(STATE(d)== CON_PLAYING && !IS_NPC(d.character)) {
 		int count;
 		size_t len = 0;
 
 		*prompt = '\0';
 
-		if(GET_INVIS_LEV(d->character) && len < sizeof(prompt)) {
-			count = snprintf(prompt + len, sizeof(prompt) - len, "i%d ", GET_INVIS_LEV(d->character));
+		if(GET_INVIS_LEV(d.character) && len < sizeof(prompt)) {
+			count = snprintf(prompt + len, sizeof(prompt) - len, "i%d", GET_INVIS_LEV(d.character));
 
 			if(count >= 0) {
 				len += count;
 			}
 		}
 
-		if(PRF_FLAGGED(d->character, PRF_DISPHP) && len < sizeof(prompt)) {
-			count = snprintf(prompt + len, sizeof(prompt) - len, "%dH ", GET_HIT(d->character));
+		if(PRF_FLAGGED(d.character, PRF_DISPHP) && len < sizeof(prompt)) {
+			count = snprintf(prompt + len, sizeof(prompt) - len, "%dH ", GET_HIT(d.character));
 
 			if(count >= 0) {
 				len += count;
 			}
 		}
 
-		if(PRF_FLAGGED(d->character, PRF_DISPMANA) && len < sizeof(prompt)) {
-			count = snprintf(prompt + len, sizeof(prompt) - len, "%dM ", GET_MANA(d->character));
+		if(PRF_FLAGGED(d.character, PRF_DISPMANA) && len < sizeof(prompt)) {
+			count = snprintf(prompt + len, sizeof(prompt) - len, "%dM ", GET_MANA(d.character));
 
 			if(count >= 0) {
 				len += count;
 			}
 		}
 
-		if(PRF_FLAGGED(d->character, PRF_DISPMOVE) && len < sizeof(prompt)) {
-			count = snprintf(prompt + len, sizeof(prompt) - len, "%dV ", GET_MOVE(d->character));
+		if(PRF_FLAGGED(d.character, PRF_DISPMOVE) && len < sizeof(prompt)) {
+			count = snprintf(prompt + len, sizeof(prompt) - len, "%dV ", GET_MOVE(d.character));
 
 			if(count >= 0) {
 				len += count;
@@ -1091,8 +1094,8 @@ char *make_prompt(struct descriptor_data *d) {
 		if(len < sizeof(prompt)) {
 			strncat(prompt, "> ", sizeof(prompt) - len - 1);    /* strncat: OK */
 		}
-	} else if(STATE(d) == CON_PLAYING && IS_NPC(d->character)) {
-		snprintf(prompt, sizeof(prompt), "%s> ", GET_NAME(d->character).c_str());
+	} else if(STATE(d) == CON_PLAYING && IS_NPC(d.character)) {
+		snprintf(prompt, sizeof(prompt), "%s> ", GET_NAME(d.character).c_str());
 	} else {
 		*prompt = '\0';
 	}
@@ -1148,98 +1151,64 @@ int get_from_q(struct txt_q *queue, char *dest, int *aliased) {
 
 
 /* Empty the queues before closing connection */
-void flush_queues(struct descriptor_data *d) {
-	if(d->large_outbuf) {
-		d->large_outbuf->next = bufpool;
-		bufpool = d->large_outbuf;
-	}
-
-	while(d->input.head) {
-		struct txt_block *tmp = d->input.head;
-		d->input.head = d->input.head->next;
-		free(tmp->text);
-		free(tmp);
-	}
+void flush_queues(mods::descriptor_data &d) {
+	log("[deprecated] flush_queues");
+	return;
 }
 
 
 /* Add a new string to a player's output queue. For outside use. */
-size_t write_to_output(struct descriptor_data *t, const char *txt, ...) {
+size_t write_to_output(mods::descriptor_data &t, const char *txt, ...) {
 	va_list args;
 	size_t left;
 
 	va_start(args, txt);
+	d("write_to_output: " << txt);
 	left = vwrite_to_output(t, txt, args);
 	va_end(args);
 
 	return left;
 }
 
-
 /* Add a new string to a player's output queue. */
-size_t vwrite_to_output(struct descriptor_data *t, const char *format, va_list args) {
-	static char txt[MAX_STRING_LENGTH];
+size_t _old_unused_vwrite_to_output_unused_(mods::descriptor_data &t, const char *format, va_list args) {
+	std::array<char,MAX_STRING_LENGTH> txt;
+	std::fill(txt.begin(),txt.end(),0);
 	size_t wantsize;
 	int size;
 
-	/* if we're in the overflow state already, ignore this new output */
-	if(t->bufspace == 0) {
-		return (0);
-	}
-
-	wantsize = size = vsnprintf(txt, sizeof(txt), format, args);
+	wantsize = size = vsnprintf(&txt[0], MAX_STRING_LENGTH-1, format, args);
 
 	/* If exceeding the size of the buffer, truncate it for the overflow message */
-	if(size < 0 || wantsize >= sizeof(txt)) {
-		size = sizeof(txt) - 1;
-		strcpy(txt + size - strlen(text_overflow), text_overflow);	/* strcpy: OK */
-	}
-
-	/*
-	 * If the text is too big to fit into even a large buffer, truncate
-	 * the new text to make it fit.  (This will switch to the overflow
-	 * state automatically because t->bufspace will end up 0.)
-	 */
-	if(size + t->bufptr + 1 > LARGE_BUFSIZE) {
-		size = LARGE_BUFSIZE - t->bufptr - 1;
+	
+	if(size < 0 || wantsize >= MAX_STRING_LENGTH -1) {
+		size = MAX_STRING_LENGTH - 1;
+		strcpy(&txt[0] + size - strlen(text_overflow), text_overflow);	/* strcpy: OK */
+	}else{
 		txt[size] = '\0';
-		buf_overflows++;
+		d("[[[QUEUEING_OUTPUT]]]:->[" << &txt[0] << "]");
+		t.queue_output(&txt[0]);	/* strcpy: OK (size checked above) */
 	}
+	return 0;
+}
 
-	/*
-	 * If we have enough space, just write to buffer and that's it! If the
-	 * text just barely fits, then it's switched to a large buffer instead.
-	 */
-	if(t->bufspace > size) {
-		strcpy(t->output + t->bufptr, txt);	/* strcpy: OK (size checked above) */
-		t->bufspace -= size;
-		t->bufptr += size;
-		return (t->bufspace);
+size_t vwrite_to_output(mods::descriptor_data &t, const char *format, va_list args) {
+	char txt[MAX_STRING_LENGTH];
+	memset(txt,0,MAX_STRING_LENGTH);
+	int size;
+
+	size = vsnprintf(txt, MAX_STRING_LENGTH-1, format, args);
+
+	/* If exceeding the size of the buffer, truncate it for the overflow message */
+	if(size < 0) {
+		size = MAX_STRING_LENGTH - 1;
+		strcpy(txt + size - strlen(text_overflow), text_overflow);	/* strcpy: OK */
+		d("[[[vwrite_to_output::OVERFLOW]]]");
+	}else{
+		txt[size] = '\0';
 	}
-
-	buf_switches++;
-
-	/* if the pool has a buffer in it, grab it */
-	if(bufpool != NULL) {
-		t->large_outbuf = bufpool;
-		bufpool = bufpool->next;
-	} else {			/* else create a new one */
-		CREATE(t->large_outbuf, struct txt_block, 1);
-		CREATE(t->large_outbuf->text, char, LARGE_BUFSIZE);
-		buf_largecount++;
-	}
-
-	strcpy(t->large_outbuf->text, t->output);	/* strcpy: OK (size checked previously) */
-	t->output = t->large_outbuf->text;	/* make big buffer primary */
-	strcat(t->output, txt);	/* strcat: OK (size checked) */
-
-	/* set the pointer for the next write */
-	t->bufptr = strlen(t->output);
-
-	/* calculate how much space is left in the buffer */
-	t->bufspace = LARGE_BUFSIZE - 1 - t->bufptr;
-
-	return (t->bufspace);
+	t.queue_output(&txt[0]);	/* strcpy: OK (size checked above) */
+	return 0;
 }
 
 
@@ -1345,21 +1314,33 @@ int set_sendbuf(socket_t s) {
 	return (0);
 }
 
+void deregister_player(const std::shared_ptr<mods::player> & player_obj){
+	for(auto p = mods::globals::player_list.begin(); p !=  mods::globals::player_list.end();p++){
+		if(*p == player_obj){
+			mods::globals::player_list.erase(p);
+			return;
+		}
+	}
+}
+
 int new_descriptor(socket_t s) {
 	socket_t desc;
 	int sockets_connected = 0;
 	socklen_t i;
 	static int last_desc = 0;	/* last descriptor number */
-	struct descriptor_data newd;
 	struct sockaddr_in peer;
 	struct hostent *from;
 
 	/* accept the new connection */
 	i = sizeof(peer);
+	auto player = mods::globals::player_list.emplace_back(std::make_shared<mods::player>());
+	auto descriptor = descriptor_list.emplace_back();
+	player->set_desc(descriptor_list.end()-1);
+	player->set_char_on_descriptor(descriptor_list.end()-1);
 
-	memset(&newd,0,sizeof(newd));
 	if((desc = accept(s, (struct sockaddr *) &peer, &i)) == INVALID_SOCKET) {
 		perror("SYSERR: accept");
+		deregister_player(player);
 		return (-1);
 	}
 
@@ -1369,12 +1350,14 @@ int new_descriptor(socket_t s) {
 	/* set the send buffer size */
 	if(set_sendbuf(desc) < 0) {
 		CLOSE_SOCKET(desc);
+		deregister_player(player);
 		return (0);
 	}
 
 	if(++sockets_connected >= max_players) {
 		write_to_descriptor(desc, "Sorry, CircleMUD is full right now... please try again later!\r\n");
 		CLOSE_SOCKET(desc);
+		deregister_player(player);
 		return (0);
 	}
 
@@ -1388,41 +1371,44 @@ int new_descriptor(socket_t s) {
 		}
 
 		/* find the numeric site address */
-		newd.host = inet_ntoa(peer.sin_addr);
+		player->desc().host = inet_ntoa(peer.sin_addr);
 	} else {
-		newd.host = from->h_name;
+		player->desc().host = from->h_name;
 	}
 
 	/* determine if the site is banned */
-	if(isbanned(newd.host.c_str())) {
+	if(isbanned(player->desc().host.c_str())) {
 		CLOSE_SOCKET(desc);
-		mudlog(CMP, LVL_GOD, TRUE, "Connection attempt denied from [%s]", newd.host.c_str());
+		mudlog(CMP, LVL_GOD, TRUE, "Connection attempt denied from [%s]", player->desc().host.c_str());
+		deregister_player(player);
 		return (0);
 	}else{
 		log("new connection");
 
 		/* initialize descriptor data */
-		newd.descriptor = desc;
-		newd.output = newd.small_outbuf;
-		newd.bufspace = SMALL_BUFSIZE - 1;
-		newd.login_time = time(0);
-		newd.has_prompt = 1;  /* prompt is part of greetings */
-		STATE(&newd) = CON_GET_NAME;
+		player->desc().descriptor = desc;
+		player->desc().login_time = time(0);
+		player->desc().has_prompt = 1;  /* prompt is part of greetings */
+		STATE(player->desc()) = CON_GET_NAME;
 
 		/*
 		 * This isn't exactly optimal but allows us to make a design choice.
-		 * Do we embed the history in descriptor_data or keep it dynamically
+		 * Do we embed the history in mods::descriptor_data or keep it dynamically
 		 * allocated and allow a user defined history size?
 		 */
-		newd.history.clear();
 		if(++last_desc == 1000) {
 			/* Ring buffer logic, it seems */
 			last_desc = 1;
 		}
-		newd.desc_num = last_desc;
+		player->desc().desc_num = last_desc;
 		GREETINGS = "Username:";
-		write_to_output(&newd, "%s",GREETINGS.c_str());
-		mods::globals::new_connection(newd);
+		write_to_output(player->desc(), "%s",GREETINGS.c_str());
+		mods::globals::socket_map.insert (
+				std::pair<int,mods::globals::player_ptr_t>(
+					desc,player
+				)
+		);
+		d("returning socket descriptor [player obj created :)]");
 		return (desc);
 	}
 }
@@ -1438,97 +1424,9 @@ int new_descriptor(socket_t s) {
  *	 2 bytes: extra \r\n for non-comapct
  *      14 bytes: unused
  */
-int process_output(descriptor_data &in_t) {
-	char i[MAX_SOCK_BUF], *osb = i + 2;
-	int result;
-	auto t = &in_t;
-
-	/* we may need this \r\n for later -- see below */
-	strcpy(i, "\r\n");	/* strcpy: OK (for 'MAX_SOCK_BUF >= 3') */
-
-	/* now, append the 'real' output */
-	strcpy(osb, t->output);	/* strcpy: OK (t->output:LARGE_BUFSIZE < osb:MAX_SOCK_BUF-2) */
-
-	/* if we're in the overflow state, notify the user */
-	if(t->bufspace == 0) {
-		strcat(osb, "**OVERFLOW**\r\n");    /* strcpy: OK (osb:MAX_SOCK_BUF-2 reserves space) */
-	}
-
-	/* add the extra CRLF if the person isn't in compact mode */
-	if(STATE(t) == CON_PLAYING && t->character && !IS_NPC(t->character) && !PRF_FLAGGED(t->character, PRF_COMPACT)) {
-		strcat(osb, "\r\n");    /* strcpy: OK (osb:MAX_SOCK_BUF-2 reserves space) */
-	}
-
-	/* add a prompt */
-	strcat(i, make_prompt(t));	/* strcpy: OK (i:MAX_SOCK_BUF reserves space) */
-
-	/*
-	 * now, send the output.  If this is an 'interruption', use the prepended
-	 * CRLF, otherwise send the straight output sans CRLF.
-	 */
-	if(t->has_prompt) {
-		t->has_prompt = FALSE;
-		result = write_to_descriptor(t->descriptor, i);
-
-		if(result >= 2) {
-			result -= 2;
-		}
-	} else {
-		result = write_to_descriptor(t->descriptor, osb);
-	}
-
-	if(result < 0) {	/* Oops, fatal error. Bye! */
-		close_socket(t);
-		return (-1);
-	} else if(result == 0) {	/* Socket buffer full. Try later. */
-		return (0);
-	}
-
-	/* Handle snooping: prepend "% " and send to snooper. */
-	if(t->snoop_by) {
-		write_to_output(t->snoop_by, "%% %*s%%%%", result, t->output);
-	}
-
-	/* The common case: all saved output was handed off to the kernel buffer. */
-	if(result >= t->bufptr) {
-		/*
-		 * if we were using a large buffer, put the large buffer on the buffer pool
-		 * and switch back to the small one
-		 */
-		if(t->large_outbuf) {
-			t->large_outbuf->next = bufpool;
-			bufpool = t->large_outbuf;
-			t->large_outbuf = NULL;
-			t->output = t->small_outbuf;
-		}
-
-		/* reset total bufspace back to that of a small buffer */
-		t->bufspace = SMALL_BUFSIZE - 1;
-		t->bufptr = 0;
-		*(t->output) = '\0';
-
-		/*
-		 * If the overflow message or prompt were partially written, try to save
-		 * them. There will be enough space for them if this is true.  'result'
-		 * is effectively unsigned here anyway.
-		 */
-		if((unsigned int)result < strlen(osb)) {
-			size_t savetextlen = strlen(osb + result);
-
-			strcat(t->output, osb + result);
-			t->bufptr   -= savetextlen;
-			t->bufspace += savetextlen;
-		}
-
-	} else {
-		/* Not all data in buffer sent.  result < output buffersize. */
-
-		strcpy(t->output, t->output + result);	/* strcpy: OK (overlap) */
-		t->bufptr   -= result;
-		t->bufspace += result;
-	}
-
-	return (result);
+int process_output(mods::descriptor_data &in_t) {
+	log("[deprecated] process_output");
+	return 0;
 }
 
 
@@ -1774,7 +1672,7 @@ ssize_t perform_socket_read(socket_t desc, char *read_point, size_t space_left) 
  * character. (Do you really need 256 characters on a line?)
  * -gg 1/21/2000
  */
-int process_input(descriptor_data & t) {
+int process_input(mods::descriptor_data & t) {
 	int buf_length, failed_subst;
 	ssize_t bytes_read;
 	size_t space_left;
@@ -1792,6 +1690,7 @@ int process_input(descriptor_data & t) {
 			return (-1);
 		}
 
+		d("t.descriptor: " << t.descriptor);
 		bytes_read = perform_socket_read(t.descriptor, read_point, space_left);
 
 		if(bytes_read < 0) {	/* Error, disconnect them. */
@@ -1882,7 +1781,7 @@ while(nl_pos != NULL) {
 	}
 
 	if(t.snoop_by) {
-		write_to_output(t.snoop_by, "%% %s\r\n", tmp);
+		write_to_output(*t.snoop_by, "%% %s\r\n", tmp);
 	}
 
 	failed_subst = 0;
@@ -1891,35 +1790,31 @@ while(nl_pos != NULL) {
 		strcpy(tmp, t.last_input);    /* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
 	} else if(*tmp == '!' && *(tmp + 1)) {
 		char *commandln = (tmp + 1);
-		int starting_pos = t.history_pos,
-				cnt = (t.history_pos == 0 ? HISTORY_SIZE - 1 : t.history_pos - 1);
-
 		skip_spaces(&commandln);
 
-		for(; cnt != starting_pos; cnt--) {
-			if(t.history[cnt] && is_abbrev(commandln, t.history[cnt])) {
-				strcpy(tmp, t.history[cnt]);	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
+		for(auto & line : t.history){
+			if(is_abbrev(commandln, line)) {
+				strcpy(tmp, line);	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
 				strcpy(t.last_input, tmp);	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
-				write_to_output(&t, "%s\r\n", tmp);
+				write_to_output(t, "%s\r\n", tmp);
 				break;
-			}
-
-			if(cnt == 0) {	/* At top, loop to bottom. */
-				cnt = HISTORY_SIZE;
 			}
 		}
 	} else if(*tmp == '^') {
-		if(!(failed_subst = perform_subst(&t, t.last_input, tmp))) {
+		if(!(failed_subst = perform_subst(t, t.last_input, tmp))) {
 			strcpy(t.last_input, tmp);    /* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
 		}
 	} else {
 		strcpy(t.last_input, tmp);	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
 
-		if(t.history[t.history_pos]) {
-			free(t.history[t.history_pos]);    /* Clear the old line. */
+		/** NOTES: !mods |-> I think history should just be a std::array<std::string,HISTORY_SIZE> and we do ring buffer logic around it. FIXME */
+		if(t.history_pos < HISTORY_SIZE && t.history[t.history_pos].length()) {
+			t.history[t.history_pos].clear();    /* Clear the old line. */
+			t.history_pos = 0;
 		}
-
-		t.history[t.history_pos] = strdup(tmp);	/* Save the new. */
+		if(t.history_pos < HISTORY_SIZE){
+			t.history[t.history_pos].assign(tmp);	/* Save the new. */
+		}
 
 		if(++t.history_pos >= HISTORY_SIZE) {	/* Wrap to top. */
 			t.history_pos = 0;
@@ -1962,7 +1857,7 @@ return (1);
  * orig string, i.e. the one being modified.  subst contains the
  * substition string, i.e. "^telm^tell"
  */
-int perform_subst(struct descriptor_data *t, char *orig, char *subst) {
+int perform_subst(mods::descriptor_data &t, char *orig, char *subst) {
 	char newsub[MAX_INPUT_LENGTH + 5];
 
 	char *first, *second, *strpos;
@@ -2013,60 +1908,61 @@ int perform_subst(struct descriptor_data *t, char *orig, char *subst) {
 
 
 
-void close_socket(struct descriptor_data *d) {
-	mods::globals::socket_map.erase(d->descriptor);
-	CLOSE_SOCKET(d->descriptor);
+void close_socket(mods::descriptor_data d) {
+	/** FIXME there are some free() calls here that need to be eliminated but first the mallocs need to be found and the members turned into stl containers. */
+	mods::globals::socket_map.erase(d.descriptor);
+	CLOSE_SOCKET(d.descriptor);
 	flush_queues(d);
 
 	/* Forget snooping */
-	if(d->snooping) {
-		d->snooping->snoop_by = NULL;
+	if(d.snooping) {
+		d.snooping->snoop_by = nullptr;
 	}
 
-	if(d->snoop_by) {
-		write_to_output(d->snoop_by, "Your victim is no longer among us.\r\n");
-		d->snoop_by->snooping = NULL;
+	if(d.snoop_by) {
+		write_to_output(*d.snoop_by, "Your victim is no longer among us.\r\n");
+		d.snoop_by->snooping = nullptr;
 	}
 
-	if(d->character) {
+	if(d.character) {
 		/* If we're switched, this resets the mobile taken. */
-		d->character->desc = NULL;
+		d.character->desc.clear();
 
 		/* Plug memory leak, from Eric Green. */
-		if(!IS_NPC(d->character) && PLR_FLAGGED(d->character, PLR_MAILING) && d->str) {
-			if(*(d->str)) {
-				free(*(d->str));
+		if(!IS_NPC(d.character) && PLR_FLAGGED(d.character, PLR_MAILING) && d.str) {
+			if(*(d.str)) {
+				free(*(d.str));
 			}
 
-			free(d->str);
+			free(d.str);
 		}
 
-		if(STATE(d) == CON_PLAYING || STATE(d) == CON_DISCONNECT) {
-			struct char_data *link_challenged = d->original ? d->original : d->character;
+		if(STATE(d)== CON_PLAYING || STATE(d)== CON_DISCONNECT) {
+			struct char_data *link_challenged = d.original ? d.original : d.character;
 
 			/* We are guaranteed to have a person. */
 			act("$n has lost $s link.", TRUE, link_challenged, 0, 0, TO_ROOM);
 			save_char(link_challenged);
 			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(link_challenged)), TRUE, "Closing link to: %s.", GET_NAME(link_challenged).c_str());
 		} else {
-			mudlog(CMP, LVL_IMMORT, TRUE, "Losing player: %s.", GET_NAME(d->character) ? GET_NAME(d->character) : "<null>");
-			free_char(d->character);
+			mudlog(CMP, LVL_IMMORT, TRUE, "Losing player: %s.", GET_NAME(d.character) ? GET_NAME(d.character).c_str() : "<null>");
+			free_char(d.character);
 		}
 	} else {
 		mudlog(CMP, LVL_IMMORT, TRUE, "Losing descriptor without char.");
 	}
 
 	/* JE 2/22/95 -- part of my unending quest to make switch stable */
-	if(d->original && d->original->desc) {
-		d->original->desc = NULL;
+	if(d.original && d.original->desc) {
+		d.original->desc.clear();
 	}
 
-	if(d->showstr_head) {
-		free(d->showstr_head);
+	if(d.showstr_head) {
+		free(d.showstr_head);
 	}
 
-	if(d->showstr_count) {
-		free(d->showstr_vector);
+	if(d.showstr_count) {
+		free(d.showstr_vector);
 	}
 }
 
@@ -2074,7 +1970,7 @@ void close_socket(struct descriptor_data *d) {
 
 void check_idle_passwords(void) {
 	for(auto & d : descriptor_list) {
-		if(STATE(&d) != CON_PASSWORD && STATE(&d) != CON_GET_NAME) {
+		if(STATE(d) != CON_PASSWORD && STATE(d) != CON_GET_NAME) {
 			continue;
 		}
 
@@ -2082,9 +1978,9 @@ void check_idle_passwords(void) {
 			d.idle_tics++;
 			continue;
 		} else {
-			echo_on(&d);
-			write_to_output(&d, "\r\nTimed out... goodbye.\r\n");
-			STATE(&d) = CON_CLOSE;
+			echo_on(d);
+			write_to_output(d, "\r\nTimed out... goodbye.\r\n");
+			STATE(d) = CON_CLOSE;
 		}
 	}
 }
@@ -2296,12 +2192,12 @@ void send_to_all(const char *messg, ...) {
 	}
 
 	for(auto & i : descriptor_list){
-		if(STATE(&i) != CON_PLAYING) {
+		if(STATE(i) != CON_PLAYING) {
 			continue;
 		}
 
 		va_start(args, messg);
-		vwrite_to_output(&i, messg, args);
+		vwrite_to_output(i, messg, args);
 		va_end(args);
 	}
 }
@@ -2315,7 +2211,7 @@ void send_to_outdoor(const char *messg, ...) {
 	for(auto & i : descriptor_list){
 		va_list args;
 
-		if(STATE(&i) != CON_PLAYING || i.character == nullptr) {
+		if(STATE(i) != CON_PLAYING || i.character == nullptr) {
 			continue;
 		}
 
@@ -2324,7 +2220,7 @@ void send_to_outdoor(const char *messg, ...) {
 		}
 
 		va_start(args, messg);
-		vwrite_to_output(&i, messg, args);
+		vwrite_to_output(i, messg, args);
 		va_end(args);
 	}
 }
@@ -2378,7 +2274,7 @@ const char *ACTNULL = "<NULL>";
 
 /* higher-level communication: the act() function */
 void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
-		const void *vict_obj, const struct char_data *to) {
+		const void *vict_obj, struct char_data *to) {
 	const char *i = NULL;
 	char lbuf[MAX_STRING_LENGTH], *buf, *j;
 	bool uppercasenext = FALSE;
@@ -2502,6 +2398,7 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
 	*(++buf) = '\n';
 	*(++buf) = '\0';
 
+	d("write to output from perfor_act: " << CAP(lbuf));
 	write_to_output(to->desc, "%s", CAP(lbuf));
 }
 
@@ -2509,9 +2406,9 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
 #define SENDOK(ch)	((ch)->desc && (to_sleeping || AWAKE(ch)) && \
 		(IS_NPC(ch) || !PLR_FLAGGED((ch), PLR_WRITING)))
 
-void act(const char *str, int hide_invisible, struct char_data *ch,
-		struct obj_data *obj, const void *vict_obj, int type) {
-	const struct char_data *to;
+void act(const char *str, int hide_invisible, char_data *ch,
+		struct obj_data *obj, void *vict_obj, int type) {
+	char_data *to;
 	int to_sleeping;
 
 	if(!str || !*str) {
@@ -2543,8 +2440,10 @@ void act(const char *str, int hide_invisible, struct char_data *ch,
 	}
 
 	if(type == TO_VICT) {
-		if((to = (const struct char_data *) vict_obj) != NULL && SENDOK(to)) {
-			perform_act(str, ch, obj, vict_obj, to);
+		auto vict = static_cast<char_data*>(vict_obj);
+		if(vict != nullptr && SENDOK(vict)) {
+			d("perform_act");
+			perform_act(str, ch, obj, vict_obj, vict);
 		}
 
 		return;

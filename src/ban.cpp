@@ -256,8 +256,8 @@ int Valid_Name(char *newname) {
 	 * prompt won't have characters yet.
 	 */
 	for(auto & dt : descriptor_list)
-		if(dt.character && GET_NAME(dt.character) && !str_cmp(GET_NAME(dt.character), newname)) {
-			return (STATE(&dt)== CON_PLAYING);
+		if(dt.character && GET_NAME(dt.character).length() && !str_cmp(GET_NAME(dt.character).c_str(), newname)) {
+			return (STATE(dt)== CON_PLAYING);
 		}
 
 	/* return valid if list doesn't exist */

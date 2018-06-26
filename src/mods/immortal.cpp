@@ -35,7 +35,7 @@ ACMD(do_rnumlist) {
 			line += std::to_string(i);
 			line += "]{/red}	";
 			line += "{gld}{";
-			line += world[i].name;
+			line += world[i].name.c_str();
 			line += "}{/gld}->";
 			line += std::to_string(world[i].number);
 			line += "::";

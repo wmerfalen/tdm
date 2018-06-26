@@ -409,9 +409,9 @@ void die(struct char_data* killer,struct char_data *victim) {
 
 	if(functor.length()) {
 		functor += "(\"";
-		functor += killer->player.name;
+		functor += killer->player.name.c_str();
 		functor += "\",\"";
-		functor += victim->player.name;
+		functor += victim->player.name.c_str();
 		functor += "\",";
 		functor += "0);";	//TODO: Make this the zone where the player is killed at
 		mods::js::eval_string(functor);

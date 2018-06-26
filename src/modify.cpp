@@ -22,7 +22,7 @@
 #include "mail.h"
 #include "boards.h"
 
-void show_string(struct descriptor_data *d, char *input);
+void show_string(mods::descriptor_data d, char *input);
 
 extern struct spell_info_type spell_info[];
 extern const char *MENU;
@@ -33,7 +33,7 @@ void smash_tilde(char *str);
 ACMD(do_skillset);
 char *next_page(char *str);
 int count_pages(char *str);
-void paginate_string(char *str, struct descriptor_data *d);
+void paginate_string(char *str, mods::descriptor_data d);
 
 const char *string_fields[] = {
 	"name",
@@ -90,22 +90,22 @@ void smash_tilde(char *str) {
  * else you may want through it.  The improved editor patch when updated
  * could use it to pass the old text buffer, for instance.
  */
-void string_write(struct descriptor_data *d, char **writeto, size_t len, long mailto, void *data) {
-	if(d->character && !IS_NPC(d->character)) {
-		SET_BIT(PLR_FLAGS(d->character), PLR_WRITING);
+void string_write(mods::descriptor_data d, char **writeto, size_t len, long mailto, void *data) {
+	if(d.character && !IS_NPC(d.character)) {
+		SET_BIT(PLR_FLAGS(d.character), PLR_WRITING);
 	}
 
 	if(data) {
 		mudlog(BRF, LVL_IMMORT, TRUE, "SYSERR: string_write: I don't understand special data.");
 	}
 
-	d->str = writeto;
-	d->max_str = len;
-	d->mail_to = mailto;
+	d.str = writeto;
+	d.max_str = len;
+	d.mail_to = mailto;
 }
 
-/* Add user input to the 'current' string (as defined by d->str) */
-void string_add(struct descriptor_data *d, char *str) {
+/* Add user input to the 'current' string (as defined by d.str) */
+void string_add(mods::descriptor_data d, char *str) {
 	int terminator;
 
 	/* determine if this is the terminal string, and truncate if so */
@@ -119,45 +119,45 @@ void string_add(struct descriptor_data *d, char *str) {
 
 	smash_tilde(str);
 
-	if(!(*d->str)) {
-		if(strlen(str) + 3 > d->max_str) {  /* \r\n\0 */
-			send_to_char(d->character, "String too long - Truncated.\r\n");
-			strcpy(&str[d->max_str - 3], "\r\n");	/* strcpy: OK (size checked) */
-			CREATE(*d->str, char, d->max_str);
-			strcpy(*d->str, str);	/* strcpy: OK (size checked) */
+	if(!(*d.str)) {
+		if(strlen(str) + 3 > d.max_str) {  /* \r\n\0 */
+			send_to_char(d.character, "String too long - Truncated.\r\n");
+			strcpy(&str[d.max_str - 3], "\r\n");	/* strcpy: OK (size checked) */
+			CREATE(*d.str, char, d.max_str);
+			strcpy(*d.str, str);	/* strcpy: OK (size checked) */
 			terminator = 1;
 		} else {
-			CREATE(*d->str, char, strlen(str) + 3);
-			strcpy(*d->str, str);	/* strcpy: OK (size checked) */
+			CREATE(*d.str, char, strlen(str) + 3);
+			strcpy(*d.str, str);	/* strcpy: OK (size checked) */
 		}
 	} else {
-		if(strlen(str) + strlen(*d->str) + 3 > d->max_str) {  /* \r\n\0 */
-			send_to_char(d->character, "String too long.  Last line skipped.\r\n");
+		if(strlen(str) + strlen(*d.str) + 3 > d.max_str) {  /* \r\n\0 */
+			send_to_char(d.character, "String too long.  Last line skipped.\r\n");
 			terminator = 1;
 		} else {
-			RECREATE(*d->str, char, strlen(*d->str) + strlen(str) + 3); /* \r\n\0 */
-			strcat(*d->str, str);	/* strcat: OK (size precalculated) */
+			RECREATE(*d.str, char, strlen(*d.str) + strlen(str) + 3); /* \r\n\0 */
+			strcat(*d.str, str);	/* strcat: OK (size precalculated) */
 		}
 	}
 
 	if(terminator) {
-		if(STATE(d) == CON_PLAYING && (PLR_FLAGGED(d->character, PLR_MAILING))) {
-			store_mail(d->mail_to, GET_IDNUM(d->character), *d->str);
-			d->mail_to = 0;
-			free(*d->str);
-			free(d->str);
+		if(STATE(d) == CON_PLAYING && (PLR_FLAGGED(d.character, PLR_MAILING))) {
+			store_mail(d.mail_to, GET_IDNUM(d.character), *d.str);
+			d.mail_to = 0;
+			free(*d.str);
+			free(d.str);
 			write_to_output(d, "Message sent!\r\n");
 
-			if(!IS_NPC(d->character)) {
-				REMOVE_BIT(PLR_FLAGS(d->character), PLR_MAILING | PLR_WRITING);
+			if(!IS_NPC(d.character)) {
+				REMOVE_BIT(PLR_FLAGS(d.character), PLR_MAILING | PLR_WRITING);
 			}
 		}
 
-		d->str = NULL;
+		d.str = NULL;
 
-		if(d->mail_to >= BOARD_MAGIC) {
-			Board_save_board(d->mail_to - BOARD_MAGIC);
-			d->mail_to = 0;
+		if(d.mail_to >= BOARD_MAGIC) {
+			Board_save_board(d.mail_to - BOARD_MAGIC);
+			d.mail_to = 0;
 		}
 
 		if(STATE(d) == CON_EXDESC) {
@@ -165,11 +165,11 @@ void string_add(struct descriptor_data *d, char *str) {
 			STATE(d) = CON_MENU;
 		}
 
-		if(STATE(d) == CON_PLAYING && d->character && !IS_NPC(d->character)) {
-			REMOVE_BIT(PLR_FLAGS(d->character), PLR_WRITING);
+		if(STATE(d) == CON_PLAYING && d.character && !IS_NPC(d.character)) {
+			REMOVE_BIT(PLR_FLAGS(d.character), PLR_WRITING);
 		}
 	} else {
-		strcat(*d->str, "\r\n");    /* strcat: OK (size checked) */
+		strcat(*d.str, "\r\n");    /* strcat: OK (size checked) */
 	}
 }
 
@@ -354,23 +354,23 @@ int count_pages(char *str) {
  * page_string function, after showstr_vector has been allocated and
  * showstr_count set.
  */
-void paginate_string(char *str, struct descriptor_data *d) {
+void paginate_string(char *str, mods::descriptor_data d) {
 	int i;
 
-	if(d->showstr_count) {
-		*(d->showstr_vector) = str;
+	if(d.showstr_count) {
+		*(d.showstr_vector) = str;
 	}
 
-	for(i = 1; i < d->showstr_count && str; i++) {
-		str = d->showstr_vector[i] = next_page(str);
+	for(i = 1; i < d.showstr_count && str; i++) {
+		str = d.showstr_vector[i] = next_page(str);
 	}
 
-	d->showstr_page = 0;
+	d.showstr_page = 0;
 }
 
 
 /* The call that gets the paging ball rolling... */
-void page_string(struct descriptor_data *d, char *str, int keep_internal) {
+void page_string(mods::descriptor_data d, char *str, int keep_internal) {
 	char actbuf[MAX_INPUT_LENGTH] = "";
 
 	if(!d) {
@@ -381,12 +381,12 @@ void page_string(struct descriptor_data *d, char *str, int keep_internal) {
 		return;
 	}
 
-	d->showstr_count = count_pages(str);
-	CREATE(d->showstr_vector, char *, d->showstr_count);
+	d.showstr_count = count_pages(str);
+	CREATE(d.showstr_vector, char *, d.showstr_count);
 
 	if(keep_internal) {
-		d->showstr_head = strdup(str);
-		paginate_string(d->showstr_head, d);
+		d.showstr_head = strdup(str);
+		paginate_string(d.showstr_head, d);
 	} else {
 		paginate_string(str, d);
 	}
@@ -396,8 +396,8 @@ void page_string(struct descriptor_data *d, char *str, int keep_internal) {
 
 
 /* The call that displays the next page. */
-void show_string(struct descriptor_data *d, char *input) {
-	auto ch = d->character;
+void show_string(mods::descriptor_data d, char *input) {
+	auto ch = d.character;
 	MENTOC_PREAMBLE();
 	char buffer[MAX_STRING_LENGTH], buf[MAX_INPUT_LENGTH];
 	int diff;
@@ -406,13 +406,13 @@ void show_string(struct descriptor_data *d, char *input) {
 
 	/* Q is for quit. :) */
 	if(LOWER(*buf) == 'q') {
-		free(d->showstr_vector);
-		d->showstr_vector = NULL;
-		d->showstr_count = 0;
+		free(d.showstr_vector);
+		d.showstr_vector = NULL;
+		d.showstr_count = 0;
 
-		if(d->showstr_head) {
-			free(d->showstr_head);
-			d->showstr_head = NULL;
+		if(d.showstr_head) {
+			free(d.showstr_head);
+			d.showstr_head = NULL;
 		}
 
 		return;
@@ -421,51 +421,51 @@ void show_string(struct descriptor_data *d, char *input) {
 	 * it again.
 	 */
 	else if(LOWER(*buf) == 'r') {
-		d->showstr_page = MAX(0, d->showstr_page - 1);
+		d.showstr_page = MAX(0, d.showstr_page - 1);
 	}
 
 	/* B is for back, so back up two pages internally so we can display the
 	 * correct page here.
 	 */
 	else if(LOWER(*buf) == 'b') {
-		d->showstr_page = MAX(0, d->showstr_page - 2);
+		d.showstr_page = MAX(0, d.showstr_page - 2);
 	}
 
 	/* Feature to 'goto' a page.  Just type the number of the page and you
 	 * are there!
 	 */
 	else if(isdigit(*buf)) {
-		d->showstr_page = MAX(0, MIN(atoi(buf) - 1, d->showstr_count - 1));
+		d.showstr_page = MAX(0, MIN(atoi(buf) - 1, d.showstr_count - 1));
 	}
 
 	else if(*buf) {
-		send_to_char(d->character, "Valid commands while paging are RETURN, Q, R, B, or a numeric value.\r\n");
+		send_to_char(d.character, "Valid commands while paging are RETURN, Q, R, B, or a numeric value.\r\n");
 		return;
 	}
 
 	/* If we're displaying the last page, just send it to the character, and
 	 * then free up the space we used.
 	 */
-	if(d->showstr_page + 1 >= d->showstr_count) {
-		send_to_char(d->character, "%s", d->showstr_vector[d->showstr_page]);
-		free(d->showstr_vector);
-		d->showstr_vector = NULL;
-		d->showstr_count = 0;
+	if(d.showstr_page + 1 >= d.showstr_count) {
+		send_to_char(d.character, "%s", d.showstr_vector[d.showstr_page]);
+		free(d.showstr_vector);
+		d.showstr_vector = NULL;
+		d.showstr_count = 0;
 
-		if(d->showstr_head) {
-			free(d->showstr_head);
-			d->showstr_head = NULL;
+		if(d.showstr_head) {
+			free(d.showstr_head);
+			d.showstr_head = NULL;
 		}
 	}
 	/* Or if we have more to show.... */
 	else {
-		diff = d->showstr_vector[d->showstr_page + 1] - d->showstr_vector[d->showstr_page];
+		diff = d.showstr_vector[d.showstr_page + 1] - d.showstr_vector[d.showstr_page];
 
 		if(diff > MAX_STRING_LENGTH - 3) { /* 3=\r\n\0 */
 			diff = MAX_STRING_LENGTH - 3;
 		}
 
-		strncpy(buffer, d->showstr_vector[d->showstr_page], diff);	/* strncpy: OK (size truncated above) */
+		strncpy(buffer, d.showstr_vector[d.showstr_page], diff);	/* strncpy: OK (size truncated above) */
 
 		/*
 		 * Fix for prompt overwriting last line in compact mode submitted by
@@ -487,8 +487,8 @@ void show_string(struct descriptor_data *d, char *input) {
 			strcpy(buffer + diff, "\r\n");    /* strcpy: OK (size checked) */
 		}
 
-		//send_to_char(d->character, "%s", buffer);
+		//send_to_char(d.character, "%s", buffer);
 		*player << buffer;
-		d->showstr_page++;
+		d.showstr_page++;
 	}
 }

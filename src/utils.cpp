@@ -26,6 +26,25 @@
 /* external globals */
 extern struct time_data time_info;
 
+/**
+ * STATE macro overload - temporary while we refactor
+ */
+int& STATE(mods::descriptor_data &d){	
+	//d("STATE non-iterator. connected: " << d.connected);
+#ifdef __MENTOC_PRINT_STATE_DEPRECATION__
+	std::cerr << "STATE() deprecated: " << __FILE__ << ":" << __LINE__ << "\n";
+#endif
+	return d.connected;
+}
+int& STATE(std::deque<mods::descriptor_data>::iterator d){ 
+	//d("STATE [iterator]. connected: " << d->connected);
+#ifdef __MENTOC_PRINT_STATE_DEPRECATION__
+	std::cerr << "STATE() deprecated: " << __FILE__ << ":" << __LINE__ << "\n";
+#endif
+	return (d)->connected; 
+}
+
+
 /* local functions */
 struct time_info_data *real_time_passed(time_t t2, time_t t1);
 struct time_info_data *mud_time_passed(time_t t2, time_t t1);
@@ -267,7 +286,7 @@ void mudlog(int type, int level, int file, const char *str, ...) {
 	strcat(buf, " ]\r\n");	/* strcat: OK */
 
 	for(auto & i : descriptor_list) {
-		if(STATE(&i) != CON_PLAYING || IS_NPC(i.character)) { /* switch */
+		if(STATE(i) != CON_PLAYING || IS_NPC(i.character)) { /* switch */
 			continue;
 		}
 
@@ -663,7 +682,7 @@ int num_pc_in_room(struct room_data *room) {
  *
  * XXX: Wonder if flushing streams includes sockets?
  */
-extern FILE *player_fl;
+
 void core_dump_real(const char *who, int line) {
 	log("SYSERR: Assertion failed at %s:%d!", who, line);
 
@@ -673,7 +692,7 @@ void core_dump_real(const char *who, int line) {
 	fflush(stdout);
 	fflush(stderr);
 	fflush(logfile);
-	fflush(player_fl);
+
 	/* Everything, just in case, for the systems that support it. */
 	fflush(NULL);
 

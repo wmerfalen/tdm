@@ -181,13 +181,13 @@ ASPELL(spell_locate_object) {
 		send_to_char(ch, "%c%s", UPPER(*i->short_description), i->short_description);
 
 		if(i->carried_by) {
-			send_to_char(ch, " is being carried by %s.\r\n", PERS(i->carried_by, ch));
+			send_to_char(ch, " is being carried by %s.\r\n", PERS(i->carried_by, ch).c_str());
 		} else if(IN_ROOM(i) != NOWHERE) {
 			send_to_char(ch, " is in %s.\r\n", world[IN_ROOM(i)].name.c_str());
 		} else if(i->in_obj) {
 			send_to_char(ch, " is in %s.\r\n", i->in_obj->short_description);
 		} else if(i->worn_by) {
-			send_to_char(ch, " is being worn by %s.\r\n", PERS(i->worn_by, ch));
+			send_to_char(ch, " is being worn by %s.\r\n", PERS(i->worn_by, ch).c_str());
 		} else {
 			send_to_char(ch, "'s location is uncertain.\r\n");
 		}

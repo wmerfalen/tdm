@@ -60,7 +60,7 @@ int mail_recip_ok(const char *name) {
 	CREATE(victim, struct char_data, 1);
 	clear_char(victim);
 
-	if(load_char(name, &tmp_store) >= 0) {
+	if(load_char(name, &tmp_store)) {
 		store_to_char(&tmp_store, victim);
 		char_to_room(victim, 0);
 

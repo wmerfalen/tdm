@@ -239,7 +239,7 @@ extern room_rnum top_of_world;
 extern std::vector<zone_data> zone_table;
 extern zone_rnum top_of_zone_table;
 
-extern std::deque<descriptor_data> descriptor_list;
+extern std::deque<mods::descriptor_data> descriptor_list;
 extern struct player_special_data dummy_mob;
 
 extern struct index_data *mob_index;

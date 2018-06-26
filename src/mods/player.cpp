@@ -10,6 +10,7 @@
 #include "prefs.hpp"
 
 extern void do_auto_exits(struct char_data *ch);
+extern mods::player::descriptor_data_t descriptor_list;
 namespace mods {
 	std::string just_color_evaluation(std::string final_buffer) {
 		final_buffer = mods::globals::replace_all(final_buffer,"{grn}","\033[32m");
@@ -141,15 +142,24 @@ namespace mods {
 		cd()->player_ptr = self_ptr;
 	}
 
-	player::player(descriptor_iterator_t desc){
+	player::player(){
 		m_shared_ptr = std::make_shared<char_data>();
 		m_char_data = m_shared_ptr.get();
+		/** I don't like this class call FIXME */
+		set_class_capability({mods::classes::types(0)});
+		/** Need a better uuid generator than this */
+		m_char_data->uuid = mods::globals::player_list.size();
+		/** I H_A_T_E that we are still tied to the linked list FIXME */
+		m_char_data->next = character_list;
+		character_list = m_char_data;
+		/** FIXME: need to set the m_char_data->desc */
 		m_page = 0;
 		m_current_page = 0;
 		m_do_paging = false;
 		m_current_page_fragment = "";
 		m_capture_output = false;
 		m_executing_js = false;
+		mods::globals::player_list.emplace_back(this); d("yo");
 	}
 	player::player(mods::player* ptr) {
 		m_shared_ptr = std::make_shared<char_data>(ptr->cd());
@@ -468,6 +478,38 @@ namespace mods {
 	}
 	void player::exits() {
 		do_auto_exits(m_char_data);
+	}
+	player::~player(){
+		if(m_desc_iterator != descriptor_list.end()){
+			descriptor_list.erase(m_desc_iterator);
+		}
+	}
+	void player::set_char_on_descriptor(std::deque<descriptor_data>::iterator it){
+		it->character = this->cd();
+	}
+	void player::init(){
+		m_desc_iterator = descriptor_list.end();
+		m_name.clear();
+		m_class_capability = {};
+		m_executing_js = false;
+		if(m_char_data){
+			m_char_data = nullptr;
+		}
+		std::fill(m_weapon_cooldown.begin(),m_weapon_cooldown.end(),0);
+		m_weapon_set = {};
+		m_do_paging = m_capture_output = false;
+		m_captured_output.clear();
+		m_page = 0;
+		m_current_page = 0;
+		m_current_page_fragment.clear();
+		m_pages.clear();
+		m_class_info = {};
+		if(m_self_ptr){
+			m_self_ptr.reset();
+		}
+		if(m_shared_ptr){
+			m_shared_ptr.reset();
+		}
 	}
 };
 

@@ -364,8 +364,8 @@ namespace mods::builder {
 			sql_compositor::value_map values;
 			values["zone"] = std::to_string(world[in_room].zone);
 			values["sector_type"] = std::to_string(world[in_room].sector_type);
-			values["name"] = world[in_room].name;
-			values["description"] = world[in_room].description;
+			values["name"] = world[in_room].name.c_str();
+			values["description"] = world[in_room].description.c_str();
 			values["room_number"] = std::to_string(world[in_room].number);
 
 			if(world[in_room].ex_description && world[in_room].ex_description->keyword) {
@@ -411,7 +411,7 @@ namespace mods::builder {
 
 			for(auto direction = 0; direction < NUM_OF_DIRS; direction++) {
 				if(world[in_room].dir_option[direction] &&
-				        world[in_room].dir_option[direction]->general_description != nullptr) {
+				        world[in_room].dir_option[direction]->general_description) {
 					auto check_txn = txn();
 					sql_compositor comp("room_direction_data",&check_txn);
 					std::string check_sql = comp.
@@ -690,10 +690,10 @@ namespace mods::builder {
 
 			sql_compositor::value_map p_map;
 			p_map["mob_virtual_number"] = mods::util::itoa(obj->nr);
-			p_map["mob_name"] = obj->player.name;
-			p_map["mob_short_description"] = obj->player.short_descr;
-			p_map["mob_long_description"] = obj->player.long_descr;
-			p_map["mob_description"] = obj->player.description;
+			p_map["mob_name"] = obj->player.name.c_str();
+			p_map["mob_short_description"] = obj->player.short_descr.c_str();
+			p_map["mob_long_description"] = obj->player.long_descr.c_str();
+			p_map["mob_description"] = obj->player.description.c_str();
 			p_map["mob_ability_strength"] = mods::util::itoa(obj->real_abils.str);
 			p_map["mob_ability_strength_add"] = mods::util::itoa(obj->real_abils.str_add);
 			p_map["mob_ability_intelligence"] = mods::util::itoa(obj->real_abils.intel);
@@ -1222,7 +1222,7 @@ ACMD(do_mbuild) {
 		for(auto& mob_reference : mob_proto) {
 			auto mob = &mob_reference;
 			*player << "{gld}[" << mob_id++ << "]{/gld} :->{red} [" <<
-			        mob->player.short_descr << "]{/red}\r\n";
+			        mob->player.short_descr.c_str() << "]{/red}\r\n";
 		}
 
 		player->pager_end();
@@ -1311,11 +1311,11 @@ ACMD(do_mbuild) {
 		*player << "\r\n";
 #define MENTOC_SHOW_OBJ(display_name,struct_member) \
 		*player << "{red}" << #display_name << "{/red}: " << obj->struct_member << "\r\n";
-		MENTOC_SHOW_OBJ(name,player.name);
+		MENTOC_SHOW_OBJ(name,player.name.c_str());
 		MENTOC_SHOW_OBJ(virtual_number,nr);
-		MENTOC_SHOW_OBJ(short_description,player.short_descr);
-		MENTOC_SHOW_OBJ(long_description,player.long_descr);
-		MENTOC_SHOW_OBJ(description,player.description);
+		MENTOC_SHOW_OBJ(short_description,player.short_descr.c_str());
+		MENTOC_SHOW_OBJ(long_description,player.long_descr.c_str());
+		MENTOC_SHOW_OBJ(description,player.description.c_str());
 		MENTOC_SHOW_OBJ_FLAGS(sex,player.sex,mods::builder::sex_flags);
 		MENTOC_SHOW_OBJ(level,player.level);
 		MENTOC_SHOW_OBJ(weight,player.weight);

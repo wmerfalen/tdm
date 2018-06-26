@@ -9,25 +9,25 @@ duktapeout = $(builddir)/duktape
 duktape = $(duktapeout)/duktape.o
 
 thirdparty = $(duktape) $(lmdb)
-FLAGS = -g -O2 -Wall -Wno-unused-result \
+FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-Wno-char-subscripts -Wcomment \
 	-Wno-format-zero-length -Wno-format-security\
 	-A -da -std=c++17 -fpermissive -MMD\
 	-L$(lmdbout) -Lboost-cpp/build/lib\
 	-Imods/include -Iboost-cpp
-LIBS = -lcrypt -lpqxx -lpq -llmdb
+LIBS = -lcrypt -lpqxx -lpq -llmdb -lscrypt
 buildobj = act.comm act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
 					 act.wizard alias ban boards bsd-snprintf castle \
 					 class comm config constants db fight globals graph\
 					 handler house interpreter limits magic mail mobact\
 					 modify objsave olc random shop spec_assign spec_procs\
-					 spell_parser spells utils weather mods/ai_state\
+					 spell_parser spells structs utils weather mods/ai_state\
 					 mods/behaviour_tree_impl mods/acl/config-parser mods/builder \
 					 mods/chat mods/conf mods/deferred mods/drone mods/immortal\
 					 mods/js mods/player mods/pq mods/prefs mods/pregame\
 					 mods/projectile mods/quests mods/scan mods/sql mods/util\
-					 mods/weapon mods/classes/medic
+					 mods/weapon mods/classes/medic mods/string
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
 all: $(builddir) $(objects) $(thirdparty)

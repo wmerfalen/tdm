@@ -23,6 +23,7 @@
 
 namespace mods {
 	class player;
+	struct descriptor_data;
 };
 typedef std::size_t weapon_type_t;
 typedef std::map<struct char_data*,std::unique_ptr<mods::ai_state>> ai_state_map;
@@ -741,7 +742,6 @@ struct room_data {
 
 /* char-related structures ************************************************/
 
-
 /* memory structure for characters */
 struct memory_rec_struct {
 	/* TODO: replace this with std::vector<char_data*> */
@@ -788,6 +788,7 @@ struct char_player_data {
 	mods::string passwd;
 	char_player_data() : sex(0),chclass(0),level(0),hometown(0),weight(0),height(0) {
 		std::fill(m_passwd.begin(),m_passwd.end(),0);
+		std::cerr << "[char_player_data] instantiation\n";
 	}
 	~char_player_data() = default;
 	private:
@@ -983,6 +984,86 @@ struct builder_data_t {
 };
 
 /* ================== Structure for player/non-player ===================== */
+struct txt_block {
+	char	*text;
+	int aliased;
+	struct txt_block *next;
+};
+
+
+struct txt_q {
+	struct txt_block *head;
+	struct txt_block *tail;
+};
+/** FIXME This use of namespace mods is random and out of place */
+namespace mods {
+	struct descriptor_data {
+		using history_type_t = std::array<mods::string,HISTORY_SIZE>;
+		using history_pos_type_t = std::size_t;
+		constexpr static size_t OUTPUT_SIZE = LARGE_BUFSIZE+1;
+		descriptor_data(){ clear(); }
+		~descriptor_data(){ 
+			clear(); 
+		}
+		operator bool() const {
+			return !!connected;
+		}
+		void clear(){ 
+			/* Clear out the entire struct */
+			descriptor = 0; bad_pws = 0; idle_tics = 0;
+			bufptr = 0;bufspace = 0;large_outbuf = nullptr; input = {};
+			character = nullptr; original = nullptr;
+			connected = 0; desc_num = 0;login_time = 0;showstr_head = 0;
+			showstr_vector = 0;showstr_count = 0;showstr_page = 0;str = 0;
+			max_str = 0;mail_to = 0;has_prompt = 0;
+			history_pos = 0;
+			has_output = false;
+			memset(inbuf,0,sizeof(inbuf));
+			memset(last_input,0,sizeof(last_input));
+			memset(small_outbuf,0,sizeof(small_outbuf));
+			output.clear();
+		}
+		void set_state(int c) { connected = c; }
+		socket_t	descriptor;	/* file descriptor for socket		*/
+		mods::string host;		/* hostname				*/
+		byte	bad_pws;		/* number of bad pw attemps this login	*/
+		byte idle_tics;		/* tics idle at password prompt		*/
+		int bufptr;
+		int bufspace;
+		struct txt_block *large_outbuf; /* ptr to large buffer, if we need it */
+		struct txt_q input;             /* q of unprocessed input               */
+		char_data *character;    /* linked to char                       */
+		char_data *original;     /* original char if switched            */
+		int	connected;		/* mode of 'connectedness'		*/
+		int	desc_num;		/* unique num assigned to desc		*/
+		time_t login_time;		/* when the person connected		*/
+		char *showstr_head;		/* for keeping track of an internal str	*/
+		char **showstr_vector;	/* for paging through texts		*/
+		int  showstr_count;		/* number of pages to page through	*/
+		int  showstr_page;		/* which page are we currently showing?	*/
+		char	**str;			/* for the modify-str system		*/
+		size_t max_str;	        /*		-			*/
+		long	mail_to;		/* name for mail system			*/
+		int	has_prompt;		/* is the user at a prompt?             */
+		char	inbuf[MAX_RAW_INPUT_LENGTH];  /* buffer for raw input		*/
+		char	last_input[MAX_INPUT_LENGTH]; /* the last input			*/
+		char small_outbuf[SMALL_BUFSIZE];  /* standard output buffer		*/
+		history_type_t history;		/* History of commands, for ! mostly.	*/
+		history_pos_type_t history_pos;
+		std::shared_ptr<mods::descriptor_data> snooping; /* Who is this char snooping	*/
+		std::shared_ptr<mods::descriptor_data> snoop_by; /* And who is snooping this char	*/
+		bool has_output;
+		size_t queue_output(const std::string &s){
+			std::cerr << "___QUEUE_OUTPUT__::[" << std::string(s).data() << "]\n";
+			output.emplace_back(s);
+			has_output = true;
+			return s.length();
+		}
+		size_t flush_output();
+		private:
+		std::vector<std::string> output;		/* ptr to the current output buffer	*/
+	};
+};
 struct char_data {
 	char_data() = default;
 	~char_data() = default;
@@ -1045,7 +1126,7 @@ struct char_data {
 	obj_data *equipment[NUM_WEARS];/* Equipment array               */
 
 	obj_data *carrying;            /* Head of list                  */
-	struct descriptor_data *desc;         /* NULL for mobiles              */
+	mods::descriptor_data desc;         /* NULL for mobiles              */
 
 	char_data *next_in_room;     /* For room->people - list         */
 	char_data *next;             /* For either monster or ppl-list  */
@@ -1100,59 +1181,8 @@ struct char_file_u {
 /* descriptor-related structures ******************************************/
 
 
-struct txt_block {
-	char	*text;
-	int aliased;
-	struct txt_block *next;
-};
 
 
-struct txt_q {
-	struct txt_block *head;
-	struct txt_block *tail;
-};
-
-
-struct descriptor_data {
-	descriptor_data() : descriptor(0), bad_pws(0), idle_tics(0),
-	connected(0), desc_num(0),login_time(0),showstr_head(0),
-	showstr_vector(0),showstr_count(0),showstr_page(0),str(0),
-	max_str(0),mail_to(0),has_prompt(0),output(nullptr),history(0),
-	history_pos(0),bufptr(0),bufspace(0),large_outbuf(nullptr),input({}),
-	character(nullptr),original(nullptr),snooping(nullptr),snoop_by(nullptr){
-
-	}
-	~descriptor_data() = default;
-	socket_t	descriptor;	/* file descriptor for socket		*/
-	std::string host;		/* hostname				*/
-	byte	bad_pws;		/* number of bad pw attemps this login	*/
-	byte idle_tics;		/* tics idle at password prompt		*/
-	int	connected;		/* mode of 'connectedness'		*/
-	int	desc_num;		/* unique num assigned to desc		*/
-	time_t login_time;		/* when the person connected		*/
-	char *showstr_head;		/* for keeping track of an internal str	*/
-	char **showstr_vector;	/* for paging through texts		*/
-	int  showstr_count;		/* number of pages to page through	*/
-	int  showstr_page;		/* which page are we currently showing?	*/
-	char	**str;			/* for the modify-str system		*/
-	size_t max_str;	        /*		-			*/
-	long	mail_to;		/* name for mail system			*/
-	int	has_prompt;		/* is the user at a prompt?             */
-	char	inbuf[MAX_RAW_INPUT_LENGTH];  /* buffer for raw input		*/
-	char	last_input[MAX_INPUT_LENGTH]; /* the last input			*/
-	char small_outbuf[SMALL_BUFSIZE];  /* standard output buffer		*/
-	char *output;		/* ptr to the current output buffer	*/
-	std::vector<char*> history;		/* History of commands, for ! mostly.	*/
-	int	history_pos;		/* Circular array position.		*/
-	int  bufptr;			/* ptr to end of current output		*/
-	int	bufspace;		/* space left in the output buffer	*/
-	struct txt_block *large_outbuf; /* ptr to large buffer, if we need it */
-	struct txt_q input;		/* q of unprocessed input		*/
-	struct char_data *character;	/* linked to char			*/
-	struct char_data *original;	/* original char if switched		*/
-	struct descriptor_data *snooping; /* Who is this char snooping	*/
-	struct descriptor_data *snoop_by; /* And who is snooping this char	*/
-};
 
 
 /* other miscellaneous structures ***************************************/

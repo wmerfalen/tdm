@@ -450,7 +450,7 @@ int Board_remove_msg(int board_type, struct char_data *ch, char *arg, struct obj
 	}
 
 	for(auto & d : descriptor_list)
-		if(STATE(&d) == CON_PLAYING && d.str == &(msg_storage[slot_num])) {
+		if(STATE(d) == CON_PLAYING && d.str == &(msg_storage[slot_num])) {
 			send_to_char(ch, "At least wait until the author is finished before removing it!\r\n");
 			return (1);
 		}

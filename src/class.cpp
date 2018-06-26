@@ -84,18 +84,23 @@ const char *class_menu =
 
 int parse_class(char arg) {
 	switch(arg) {
+		case 'e':
 		case 'E':
 			return CLASS_ENGINEER;
 
+		case 'm':
 		case 'M':
 			return CLASS_MEDIC;
 
+		case 'a':
 		case 'A':
 			return CLASS_MARINE;
 
+		case 's':
 		case 'S':
 			return CLASS_SNIPER;
 
+		case 'u':
 		case 'U' :
 			return CLASS_SUPPORT;
 

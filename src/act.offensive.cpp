@@ -364,9 +364,9 @@ ACMD(do_scan) { /* !mods */
 			line += "You see {grn}";
 
 			if(IS_NPC(e.ch)) {
-				line += e.ch->player.short_descr;
+				line += e.ch->player.short_descr.c_str();
 			} else {
-				line += e.ch->player.name;
+				line += e.ch->player.name.c_str();
 			}
 
 			line += "{/grn}";

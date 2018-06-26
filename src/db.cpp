@@ -1,12 +1,12 @@
 /* ************************************************************************
-*   File: db.c                                          Part of CircleMUD *
-*  Usage: Loading/saving chars, booting/resetting world, internal funcs   *
-*                                                                         *
-*  All rights reserved.  See license.doc for complete information.        *
-*                                                                         *
-*  Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University *
-*  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
-************************************************************************ */
+ *   File: db.c                                          Part of CircleMUD *
+ *  Usage: Loading/saving chars, booting/resetting world, internal funcs   *
+ *                                                                         *
+ *  All rights reserved.  See license.doc for complete information.        *
+ *                                                                         *
+ *  Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University *
+ *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
+ ************************************************************************ */
 
 #define __DB_C__
 
@@ -34,8 +34,8 @@
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 
 /**************************************************************************
-*  declarations of most of the 'global' variables                         *
-**************************************************************************/
+ *  declarations of most of the 'global' variables                         *
+ **************************************************************************/
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 void parse_sql_rooms();
 void parse_sql_zones();
@@ -45,7 +45,7 @@ std::vector<room_data> world;	/* array of rooms		 */
 room_rnum top_of_world = 0;	/* ref to top element of world	 */
 
 extern struct char_data *character_list;	/* global linked list of
-						 * chars	 */
+																					 * chars	 */
 std::vector<index_data> mob_index;	/* index table for mobile file	 */
 std::vector<char_data> mob_proto;	/* prototypes for mobs		 */
 mob_rnum top_of_mobt = 0;	/* top of mobile index table	 */
@@ -61,7 +61,7 @@ zone_rnum top_of_zone_table = 0;/* top element of zone tab	 */
 struct message_list fight_messages[MAX_MESSAGES];	/* fighting messages	 */
 
 std::deque<player_index_element> player_table;	/* index to plr file	 */
-FILE *player_fl = NULL;		/* file desc of player file	 */
+
 int top_of_p_table = 0;		/* ref to top of table		 */
 long top_idnum = 0;		/* highest idnum in use		 */
 
@@ -137,7 +137,7 @@ void reset_time(void);
 long get_ptable_by_name(const char *name);
 
 /* external functions */
-void paginate_string(char *str, struct descriptor_data *d);
+void paginate_string(char *str, mods::descriptor_data d);
 struct time_info_data *mud_time_passed(time_t t2, time_t t1);
 void free_alias(struct alias_data *a);
 void load_messages(void);
@@ -160,12 +160,12 @@ extern int scheck;
 extern room_vnum mortal_start_room;
 extern room_vnum immort_start_room;
 extern room_vnum frozen_start_room;
-extern std::deque<descriptor_data>  descriptor_list;
+extern std::deque<mods::descriptor_data>  descriptor_list;
 extern const char *unused_spellname;	/* spell_parser.c */
 
 /*************************************************************************
-*  routines for booting the system                                       *
-*************************************************************************/
+ *  routines for booting the system                                       *
+ *************************************************************************/
 
 /* this is necessary for the autowiz system */
 void reboot_wizlists(void) {
@@ -203,9 +203,9 @@ ACMD(do_reboot) {
 
 	if(!str_cmp(arg, "all") || *arg == '*') {
 		/*
-		if(file_to_string_alloc(GREETINGS_FILE, &GREETINGS) == 0) {
-			prune_crlf(GREETINGS);
-		}*/
+			 if(file_to_string_alloc(GREETINGS_FILE, &GREETINGS) == 0) {
+			 prune_crlf(GREETINGS);
+			 }*/
 
 		file_to_string_alloc(WIZLIST_FILE, &wizlist);
 		file_to_string_alloc(IMMLIST_FILE, &immlist);
@@ -242,9 +242,9 @@ ACMD(do_reboot) {
 		file_to_string_alloc(BACKGROUND_FILE, &background);
 	} else if(!str_cmp(arg, "greetings")) {
 		/*
-		if(file_to_string_alloc(GREETINGS_FILE, &GREETINGS) == 0) {
-			prune_crlf(GREETINGS);
-		}*/
+			 if(file_to_string_alloc(GREETINGS_FILE, &GREETINGS) == 0) {
+			 prune_crlf(GREETINGS);
+			 }*/
 	} else if(!str_cmp(arg, "xhelp")) {
 		if(help_table) {
 			free_help();
@@ -385,22 +385,22 @@ void boot_db(void) {
 
 	log("Reading news, credits, help, bground, info & motds.");
 	/*
-	file_to_string_alloc(NEWS_FILE, &news);
-	file_to_string_alloc(CREDITS_FILE, &credits);
-	file_to_string_alloc(MOTD_FILE, &motd);
-	file_to_string_alloc(IMOTD_FILE, &imotd);
-	file_to_string_alloc(HELP_PAGE_FILE, &help);
-	file_to_string_alloc(INFO_FILE, &info);
-	file_to_string_alloc(WIZLIST_FILE, &wizlist);
-	file_to_string_alloc(IMMLIST_FILE, &immlist);
-	file_to_string_alloc(POLICIES_FILE, &policies);
-	file_to_string_alloc(HANDBOOK_FILE, &handbook);
-	file_to_string_alloc(BACKGROUND_FILE, &background);
+		 file_to_string_alloc(NEWS_FILE, &news);
+		 file_to_string_alloc(CREDITS_FILE, &credits);
+		 file_to_string_alloc(MOTD_FILE, &motd);
+		 file_to_string_alloc(IMOTD_FILE, &imotd);
+		 file_to_string_alloc(HELP_PAGE_FILE, &help);
+		 file_to_string_alloc(INFO_FILE, &info);
+		 file_to_string_alloc(WIZLIST_FILE, &wizlist);
+		 file_to_string_alloc(IMMLIST_FILE, &immlist);
+		 file_to_string_alloc(POLICIES_FILE, &policies);
+		 file_to_string_alloc(HANDBOOK_FILE, &handbook);
+		 file_to_string_alloc(BACKGROUND_FILE, &background);
 
-	if(file_to_string_alloc(GREETINGS_FILE, &GREETINGS) == 0) {
-		prune_crlf(GREETINGS);
-	}
-	*/
+		 if(file_to_string_alloc(GREETINGS_FILE, &GREETINGS) == 0) {
+		 prune_crlf(GREETINGS);
+		 }
+		 */
 
 	log("Loading spell definitions.");
 	mag_assign_spells();
@@ -466,7 +466,7 @@ void boot_db(void) {
 
 	for(i = 0; i < zone_table.size(); i++) {
 		log("Resetting #%d: %s (rooms %d-%d).", zone_table[i].number,
-		    zone_table[i].name, zone_table[i].bot, zone_table[i].top);
+				zone_table[i].name, zone_table[i].bot, zone_table[i].top);
 		reset_zone(i);
 	}
 
@@ -510,7 +510,7 @@ void reset_time(void) {
 	}
 
 	log("   Current Gametime: %dH %dD %dM %dY.", time_info.hours,
-	    time_info.day, time_info.month, time_info.year);
+			time_info.day, time_info.month, time_info.year);
 
 	weather_info.pressure = 960;
 
@@ -555,58 +555,8 @@ void free_player_index(void) {
 
 /* generate index table for the player file */
 void build_player_index(void) {
-	int nr = -1;
-	long size, recs;
-	struct char_file_u dummy;
-
-	if(!(player_fl = fopen(PLAYER_FILE, "r+b"))) {
-		if(errno != ENOENT) {
-			perror("SYSERR: fatal error opening playerfile");
-			exit(1);
-		} else {
-			log("No playerfile.  Creating a new one.");
-			touch(PLAYER_FILE);
-
-			if(!(player_fl = fopen(PLAYER_FILE, "r+b"))) {
-				perror("SYSERR: fatal error opening playerfile");
-				exit(1);
-			}
-		}
-	}
-
-	fseek(player_fl, 0L, SEEK_END);
-	size = ftell(player_fl);
-	rewind(player_fl);
-
-	if(size % sizeof(struct char_file_u)) {
-		log("\aWARNING:  PLAYERFILE IS PROBABLY CORRUPT!");
-	}
-
-	recs = size / sizeof(struct char_file_u);
-
-	if(recs) {
-		log("   %ld players in database.", recs);
-	} else {
-		top_of_p_table = -1;
-		return;
-	}
-
-	for(;;) {
-		fread(&dummy, sizeof(struct char_file_u), 1, player_fl);
-
-		if(feof(player_fl)) {
-			break;
-		}
-
-		/* new record */
-		nr++;
-		player_table[nr].name.assign(dummy.name.c_str());
-
-		player_table[nr].id = dummy.char_specials_saved.idnum;
-		top_idnum = MAX(top_idnum, dummy.char_specials_saved.idnum);
-	}
-
-	top_of_p_table = nr;
+	log("[deprecated] build_player_index");
+	return;
 }
 
 /*
@@ -731,7 +681,7 @@ void index_boot(int mode) {
 
 		if(!(db_file = fopen(buf2, "r"))) {
 			log("SYSERR: File '%s' listed in '%s/%s': %s", buf2, prefix,
-			    index_filename, strerror(errno));
+					index_filename, strerror(errno));
 			fscanf(db_index, "%s\n", buf1);
 			continue;
 		} else {
@@ -755,7 +705,7 @@ void index_boot(int mode) {
 		}
 
 		log("SYSERR: boot error - 0 records counted in %s/%s.", prefix,
-		    index_filename);
+				index_filename);
 		exit(1);
 	}
 
@@ -862,9 +812,9 @@ void discrete_load(FILE *fl, int mode, char *filename) {
 					log("SYSERR: %s file %s is empty!", modes[mode], filename);
 				} else {
 					log("SYSERR: Format error in %s after %s #%d\n"
-					    "...expecting a new %s, but file ended!\n"
-					    "(maybe the file is not terminated with '$'?)", filename,
-					    modes[mode], nr, modes[mode]);
+							"...expecting a new %s, but file ended!\n"
+							"(maybe the file is not terminated with '$'?)", filename,
+							modes[mode], nr, modes[mode]);
 				}
 
 				exit(1);
@@ -899,7 +849,7 @@ void discrete_load(FILE *fl, int mode, char *filename) {
 				}
 		} else {
 			log("SYSERR: Format error in %s file %s near %s #%d", modes[mode],
-			    filename, modes[mode], nr);
+					filename, modes[mode], nr);
 			log("SYSERR: ... offending line: '%s'", line);
 			exit(1);
 		}
@@ -936,10 +886,10 @@ void parse_sql_mobiles() {
 	auto txn = txn();
 	sql_compositor comp("mobile",&txn);
 	auto sql = comp
-	           .select("COUNT(*)")
-	           .from("mobile")
-	           .where("1","=","1")
-	           .sql();
+		.select("COUNT(*)")
+		.from("mobile")
+		.where("1","=","1")
+		.sql();
 	auto result = mods::pq::exec(txn,sql);
 	mods::pq::commit(txn);
 
@@ -947,12 +897,12 @@ void parse_sql_mobiles() {
 		auto txn2 = txn();
 		std::cerr << "foobar\n";
 		auto result2 =
-		    mods::pq::exec(txn2,sql_compositor("mobile",&txn2)
+			mods::pq::exec(txn2,sql_compositor("mobile",&txn2)
 					.select("*")
-		                   .from("mobile")
-		                   .where("1","=","1")
-		                   .sql()
-		                  );
+					.from("mobile")
+					.where("1","=","1")
+					.sql()
+					);
 
 		for(auto row : result2) {
 			std::cerr << "foo";
@@ -1007,9 +957,9 @@ void parse_sql_mobiles() {
 			GET_WEIGHT(&proto) = row["mob_weight"].as<int>();
 			GET_HEIGHT(&proto) = row["mob_height"].as<int>();
 			/*
-			* these are now save applies; base save numbers for MOBs are now from
-			* the warrior save table.
-			*/
+			 * these are now save applies; base save numbers for MOBs are now from
+			 * the warrior save table.
+			 */
 			unsigned j = 0;
 
 			for(; j < 5; j++) {
@@ -1023,7 +973,7 @@ void parse_sql_mobiles() {
 			}
 
 			proto.nr = 0;
-			proto.desc = nullptr;
+			proto.desc.clear();
 			proto.uuid = mods::globals::get_uuid();
 			mob_proto.push_back(proto);
 			top_of_mobt = mob_proto.size();
@@ -1040,10 +990,10 @@ int parse_sql_objects() {
 	auto txn = txn();
 	sql_compositor comp("object",&txn);
 	auto sql = comp
-	           .select("COUNT(*)")
-	           .from("object")
-	           .where("1","=","1")
-	           .sql();
+		.select("COUNT(*)")
+		.from("object")
+		.where("1","=","1")
+		.sql();
 	auto result = mods::pq::exec(txn,sql);
 	mods::pq::commit(txn);
 
@@ -1056,15 +1006,15 @@ int parse_sql_objects() {
 			obj_proto.reserve(count);
 			auto txn2 = txn();
 			auto rows = mods::pq::exec(txn2,sql_compositor("object",&txn2)
-			                           .select("*")
-			                           .from("object")
-			                           .left_join("object_flags")
-			                           .on("object_flags.obj_fk_id","=","object.id")
-			                           .left_join("object_weapon")
-			                           .on("object_weapon.obj_fk_id","=","object.id")
-			                           .where("1","=","1")
-			                           .sql()
-			                          );
+					.select("*")
+					.from("object")
+					.left_join("object_flags")
+					.on("object_flags.obj_fk_id","=","object.id")
+					.left_join("object_weapon")
+					.on("object_weapon.obj_fk_id","=","object.id")
+					.where("1","=","1")
+					.sql()
+					);
 			unsigned item = 0;
 			log((std::string("Objects ") + std::to_string(rows.size())).c_str());
 			mods::pq::commit(txn2);
@@ -1078,11 +1028,11 @@ int parse_sql_objects() {
 				struct obj_data proto;
 				auto txn3 = txn();
 				auto aff_rows = mods::pq::exec(txn3,sql_compositor("affected_type",&txn3)
-				                               .select("aff_location,aff_modifier")
-				                               .from("affected_type")
-				                               .where("aff_fk_id","=",row["obj_item_number"].c_str())
-				                               .sql()
-				                              );
+						.select("aff_location,aff_modifier")
+						.from("affected_type")
+						.where("aff_fk_id","=",row["obj_item_number"].c_str())
+						.sql()
+						);
 				mods::pq::commit(txn3);
 
 				for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
@@ -1095,11 +1045,11 @@ int parse_sql_objects() {
 				for(auto aff_row : aff_rows) {
 					if(aff_index >= MAX_OBJ_AFFECT) {
 						log(
-						    (std::string(
-						         "WARNING: sql has more affected rows than allowed on object #")
-						     + std::to_string(row["obj_item_number"].as<int>())
-						    ).c_str()
-						);
+								(std::string(
+														 "WARNING: sql has more affected rows than allowed on object #")
+								 + std::to_string(row["obj_item_number"].as<int>())
+								).c_str()
+							 );
 						break;
 					}
 
@@ -1114,7 +1064,7 @@ int parse_sql_objects() {
 #define MENTOC_STR(sql_name,obj_name) \
 				if(std::string(row[#sql_name].c_str()).length()){\
 					proto.obj_name = \
-						strdup(row[#sql_name].c_str());\
+					strdup(row[#sql_name].c_str());\
 				}else{\
 					proto.obj_name = strdup("<default>");\
 				}
@@ -1122,11 +1072,11 @@ int parse_sql_objects() {
 				MENTOC_STR(obj_action_description,action_description);
 				auto txn5 = txn();
 				auto ed_rows = mods::pq::exec(txn5,sql_compositor("extra_description",&txn5)
-				                              .select("*")
-				                              .from("extra_description")
-				                              .where("obj_fk_id","=",row["id"].c_str())
-				                              .sql()
-				                             );
+						.select("*")
+						.from("extra_description")
+						.where("obj_fk_id","=",row["id"].c_str())
+						.sql()
+						);
 				proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
 				proto.ex_description->next = nullptr;
 				proto.ex_description->keyword = proto.ex_description->description = nullptr;
@@ -1139,7 +1089,7 @@ int parse_sql_objects() {
 					for(auto ed_row : ed_rows) {
 						if(!ex_desc) {
 							ex_desc = (extra_descr_data*)
-							          calloc(1,sizeof(extra_descr_data));
+								calloc(1,sizeof(extra_descr_data));
 						}
 
 						ex_desc->keyword = strdup(ed_row["extra_keyword"].c_str());
@@ -1164,11 +1114,11 @@ int parse_sql_objects() {
 				//TODO: !small do obj->flags fetching from db
 				auto txn4 = txn();
 				auto flag_rows = mods::pq::exec(txn4,sql_compositor("affected_type",&txn4)
-				                                .select("*")
-				                                .from("object_flags")
-				                                .where("obj_fk_id","=",row["id"].c_str())
-				                                .sql()
-				                               );
+						.select("*")
+						.from("object_flags")
+						.where("obj_fk_id","=",row["id"].c_str())
+						.sql()
+						);
 				mods::pq::commit(txn4);
 
 				if(flag_rows.size()) {
@@ -1210,9 +1160,9 @@ int parse_sql_objects() {
 
 				if(!row["obj_type_data"].is_null()) {
 					proto.weapon_type = std::hash<std::string> {}
-					                    (
-					                        row["obj_type_data"].c_str()
-					                    );
+					(
+					 row["obj_type_data"].c_str()
+					);
 				} else {
 					proto.weapon_type = 0;
 				}
@@ -1243,29 +1193,29 @@ void parse_sql_zones() {
 
 	for(auto row: r) {
 		struct zone_data z;
-//struct zone_data {
-//  1    char *name;          /* name of this zone                  */
-//  2    int  lifespan;           /* how long between resets (minutes)  */
-//  3    int  age;                /* current age of this zone (minutes) */
-//  4    room_vnum bot;           /* starting room number for this zone */
-//  5    room_vnum top;           /* upper limit for rooms in this zone */
-//  6
-//  7    int  reset_mode;         /* conditions for reset (see below)   */
-//  8    zone_vnum number;        /* virtual number of this zone    */
-//  9    struct reset_com *cmd;   /* command table for reset            */
-// 10
-// 11    /*
-// 12     * Reset mode:
-// 13     *   0: Don't reset, and don't update age.
-// 14     *   1: Reset if no PC's are located in zone.
-// 15     *   2: Just reset.
-// 16     */
-// 17 };
-// 18
-//		select * from zone;
-//		 id | zone_start | zone_end | zone_name | lifespan | reset_mode
-//		 ----+------------+----------+-----------+----------+------------
-//		 (0 rows)
+		//struct zone_data {
+		//  1    char *name;          /* name of this zone                  */
+		//  2    int  lifespan;           /* how long between resets (minutes)  */
+		//  3    int  age;                /* current age of this zone (minutes) */
+		//  4    room_vnum bot;           /* starting room number for this zone */
+		//  5    room_vnum top;           /* upper limit for rooms in this zone */
+		//  6
+		//  7    int  reset_mode;         /* conditions for reset (see below)   */
+		//  8    zone_vnum number;        /* virtual number of this zone    */
+		//  9    struct reset_com *cmd;   /* command table for reset            */
+		// 10
+		// 11    /*
+		// 12     * Reset mode:
+		// 13     *   0: Don't reset, and don't update age.
+		// 14     *   1: Reset if no PC's are located in zone.
+		// 15     *   2: Just reset.
+		// 16     */
+		// 17 };
+		// 18
+		//		select * from zone;
+		//		 id | zone_start | zone_end | zone_name | lifespan | reset_mode
+		//		 ----+------------+----------+-----------+----------+------------
+		//		 (0 rows)
 		z.name = strdup(row["zone_name"].c_str());
 		z.lifespan = row[4].as<int>();
 		z.age = 0;
@@ -1273,35 +1223,35 @@ void parse_sql_zones() {
 		z.top = row[2].as<int>();
 		z.reset_mode = row[5].as<int>();
 		z.number = row[0].as<int>();
-//struct reset_com {
-//  1    char command;   /* current command                      */
-//  2
-//  3    bool if_flag;    /* if TRUE: exe only if preceding exe'd */
-//  4    int  arg1;       /*                                      */
-//  5    int  arg2;       /* Arguments to the command             */
-//  6    int  arg3;       /*                                      */
-//  7    int line;        /* line number this command appears on  */
-//  8
-//  9    /*
-// 10     *  Commands:              *
-// 11     *  'M': Read a mobile     *
-// 12     *  'O': Read an object    *
-// 13     *  'G': Give obj to mob   *
-// 14     *  'P': Put obj in obj    *
-// 15     *  'G': Obj to char       *
-// 16     *  'E': Obj to char equip *
-// 17     *  'D': Set state of door *
-// 18    */
-// 19 };
-// 20
+		//struct reset_com {
+		//  1    char command;   /* current command                      */
+		//  2
+		//  3    bool if_flag;    /* if TRUE: exe only if preceding exe'd */
+		//  4    int  arg1;       /*                                      */
+		//  5    int  arg2;       /* Arguments to the command             */
+		//  6    int  arg3;       /*                                      */
+		//  7    int line;        /* line number this command appears on  */
+		//  8
+		//  9    /*
+		// 10     *  Commands:              *
+		// 11     *  'M': Read a mobile     *
+		// 12     *  'O': Read an object    *
+		// 13     *  'G': Give obj to mob   *
+		// 14     *  'P': Put obj in obj    *
+		// 15     *  'G': Obj to char       *
+		// 16     *  'E': Obj to char equip *
+		// 17     *  'D': Set state of door *
+		// 18    */
+		// 19 };
+		// 20
 		//TODO: SELECT COUNT(*) FROM zone_data where zone_id = z.number
 		auto trans3 = mods::pq::transaction(*mods::globals::pq_con);
 		auto zone_data_result = mods::pq::exec(trans3,
-		                                       std::string(
-		                                           "SELECT * FROM zone_data where zone_id="
-		                                       ) +
-		                                       trans3.quote(z.number)
-		                                      );
+				std::string(
+					"SELECT * FROM zone_data where zone_id="
+					) +
+				trans3.quote(z.number)
+				);
 		mods::pq::commit(trans3);
 
 		for(auto row : zone_data_result) {
@@ -1363,14 +1313,14 @@ void parse_sql_rooms() {
 	for(auto row: r) {
 		auto trans3 = mods::pq::transaction(*mods::globals::pq_con);
 		auto r2 = mods::pq::exec(trans3,
-		                         std::string(
-		                             "SELECT * FROM room_direction_data WHERE room_number="
-		                         )
-		                         +
-		                         trans3.quote(
-		                             row[1].as<int>()
-		                         )
-		                        );
+				std::string(
+					"SELECT * FROM room_direction_data WHERE room_number="
+					)
+				+
+				trans3.quote(
+					row[1].as<int>()
+					)
+				);
 
 		for(auto row2: r2) {
 			//id | room_number | exit_direction | general_description | keyword | exit_info | exit_key | to_room
@@ -1494,7 +1444,7 @@ void renum_world(void) {
 			if(world[room].dir_option[door])
 				if(world[room].dir_option[door]->to_room != NOWHERE)
 					world[room].dir_option[door]->to_room =
-					    real_room(world[room].dir_option[door]->to_room);
+						real_room(world[room].dir_option[door]->to_room);
 }
 
 
@@ -1563,7 +1513,7 @@ void renum_zone_table(void) {
 			if(a == NOWHERE || b == NOWHERE || c == NOWHERE) {
 				if(!mini_mud) {
 					snprintf(buf, sizeof(buf), "Invalid vnum %d, cmd disabled",
-					         a == NOWHERE ? olda : b == NOWHERE ? oldb : oldc);
+							a == NOWHERE ? olda : b == NOWHERE ? oldb : oldc);
 					log_zone_error(zone, 0, buf);
 				}
 
@@ -1593,9 +1543,9 @@ void parse_simple_mob(FILE *mob_f, int i, int nr) {
 	}
 
 	if(sscanf(line, " %d %d %d %dd%d+%d %dd%d+%d ",
-	          t, t + 1, t + 2, t + 3, t + 4, t + 5, t + 6, t + 7, t + 8) != 9) {
+				t, t + 1, t + 2, t + 3, t + 4, t + 5, t + 6, t + 7, t + 8) != 9) {
 		log("SYSERR: Format error in mob #%d, first line after S flag\n"
-		    "...expecting line of form '# # # #d#+# #d#+#'", nr);
+				"...expecting line of form '# # # #d#+# #d#+#'", nr);
 		exit(1);
 	}
 
@@ -1618,13 +1568,13 @@ void parse_simple_mob(FILE *mob_f, int i, int nr) {
 
 	if(!get_line(mob_f, line)) {
 		log("SYSERR: Format error in mob #%d, second line after S flag\n"
-		    "...expecting line of form '# #', but file ended!", nr);
+				"...expecting line of form '# #', but file ended!", nr);
 		exit(1);
 	}
 
 	if(sscanf(line, " %d %d ", t, t + 1) != 2) {
 		log("SYSERR: Format error in mob #%d, second line after S flag\n"
-		    "...expecting line of form '# #'", nr);
+				"...expecting line of form '# #'", nr);
 		exit(1);
 	}
 
@@ -1633,13 +1583,13 @@ void parse_simple_mob(FILE *mob_f, int i, int nr) {
 
 	if(!get_line(mob_f, line)) {
 		log("SYSERR: Format error in last line of mob #%d\n"
-		    "...expecting line of form '# # #', but file ended!", nr);
+				"...expecting line of form '# # #', but file ended!", nr);
 		exit(1);
 	}
 
 	if(sscanf(line, " %d %d %d ", t, t + 1, t + 2) != 3) {
 		log("SYSERR: Format error in last line of mob #%d\n"
-		    "...expecting line of form '# # #'", nr);
+				"...expecting line of form '# # #'", nr);
 		exit(1);
 	}
 
@@ -1688,7 +1638,7 @@ void interpret_espec(const char *keyword, const char *value, int i, int nr) {
 	/*
 	 * If there isn't a colon, there is no value.  While Boolean options are
 	 * possible, we don't actually have any.  Feel free to make some.
-	*/
+	 */
 	if(value) {
 		num_arg = atoi(value);
 	}
@@ -1735,7 +1685,7 @@ void interpret_espec(const char *keyword, const char *value, int i, int nr) {
 
 	if(!matched) {
 		log("SYSERR: Warning: unrecognized espec keyword %s in mob #%d",
-		    keyword, nr);
+				keyword, nr);
 	}
 }
 
@@ -1913,8 +1863,8 @@ int hsort(const void *a, const void *b) {
 
 
 /*************************************************************************
-*  procedures for resetting, both play-time and boot-time	 	 *
-*************************************************************************/
+ *  procedures for resetting, both play-time and boot-time	 	 *
+ *************************************************************************/
 
 
 int vnum_mobile(char *searchname, struct char_data *ch) {
@@ -1959,43 +1909,43 @@ struct char_data *create_char(void) {
 struct char_data *read_mobile(mob_vnum nr, int type) { /* and mob_rnum */
 	return mods::globals::read_mobile(nr,type);
 	/*
-	mob_rnum i;
-	char_data *mob;
+		 mob_rnum i;
+		 char_data *mob;
 
-	if(type == VIRTUAL) {
-		if((i = real_mobile(nr)) == NOBODY) {
-			log("WARNING: Mobile vnum %d does not exist in database.", nr);
-			return (NULL);
-		}
-	} else {
-		i = nr;
-	}
+		 if(type == VIRTUAL) {
+		 if((i = real_mobile(nr)) == NOBODY) {
+		 log("WARNING: Mobile vnum %d does not exist in database.", nr);
+		 return (NULL);
+		 }
+		 } else {
+		 i = nr;
+		 }
 
-	CREATE(mob, struct char_data, 1);
-	clear_char(mob);
-	*mob = mob_proto[i];
-	mob->next = character_list;
-	character_list = mob;
+		 CREATE(mob, struct char_data, 1);
+		 clear_char(mob);
+	 *mob = mob_proto[i];
+	 mob->next = character_list;
+	 character_list = mob;
 
-	if(!mob->points.max_hit) {
-		mob->points.max_hit = dice(mob->points.hit, mob->points.mana) +
-		                      mob->points.move;
-	} else {
-		mob->points.max_hit = rand_number(mob->points.hit, mob->points.mana);
-	}
+	 if(!mob->points.max_hit) {
+	 mob->points.max_hit = dice(mob->points.hit, mob->points.mana) +
+	 mob->points.move;
+	 } else {
+	 mob->points.max_hit = rand_number(mob->points.hit, mob->points.mana);
+	 }
 
-	mob->points.hit = mob->points.max_hit;
-	mob->points.mana = mob->points.max_mana;
-	mob->points.move = mob->points.max_move;
+	 mob->points.hit = mob->points.max_hit;
+	 mob->points.mana = mob->points.max_mana;
+	 mob->points.move = mob->points.max_move;
 
-	mob->player.time.birth = time(0);
-	mob->player.time.played = 0;
-	mob->player.time.logon = time(0);
+	 mob->player.time.birth = time(0);
+	 mob->player.time.played = 0;
+	 mob->player.time.logon = time(0);
 
-	mob_index[i].number++;
+	 mob_index[i].number++;
 
-	return (mob);
-	*/
+	 return (mob);
+	 */
 }
 
 
@@ -2004,11 +1954,11 @@ struct obj_data *create_obj(void) {
 	struct obj_data *obj;
 
 	/*
-	CREATE(obj, struct obj_data, 1);
-	clear_object(obj);
-	obj->next = object_list;
-	object_list = obj;
-	*/
+		 CREATE(obj, struct obj_data, 1);
+		 clear_object(obj);
+		 obj->next = object_list;
+		 object_list = obj;
+		 */
 	struct obj_data tmp;
 	clear_object(&tmp);
 	object_list.push_back(tmp);
@@ -2066,12 +2016,12 @@ void zone_update(void) {
 		/* since one minute has passed, increment zone ages */
 		for(i = 0; i < zone_table.size(); i++) {
 			if(zone_table[i].age < zone_table[i].lifespan &&
-			        zone_table[i].reset_mode) {
+					zone_table[i].reset_mode) {
 				(zone_table[i].age)++;
 			}
 
 			if(zone_table[i].age >= zone_table[i].lifespan &&
-			        zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode) {
+					zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode) {
 				/* enqueue zone */
 
 				CREATE(update_u, struct reset_q_element, 1);
@@ -2096,7 +2046,7 @@ void zone_update(void) {
 	/* this code is executed every 10 seconds (i.e. PULSE_ZONE) */
 	for(update_u = reset_q.head; update_u; update_u = update_u->next)
 		if(zone_table[update_u->zone_to_reset].reset_mode == 2 ||
-		        is_empty(update_u->zone_to_reset)) {
+				is_empty(update_u->zone_to_reset)) {
 			reset_zone(update_u->zone_to_reset);
 			mudlog(CMP, LVL_GOD, FALSE, "Auto zone reset: %s", zone_table[update_u->zone_to_reset].name);
 
@@ -2105,7 +2055,7 @@ void zone_update(void) {
 				reset_q.head = reset_q.head->next;
 			} else {
 				for(temp = reset_q.head; temp->next != update_u;
-				        temp = temp->next);
+						temp = temp->next);
 
 				if(!update_u->next) {
 					reset_q.tail = temp;
@@ -2122,11 +2072,11 @@ void zone_update(void) {
 void log_zone_error(zone_rnum zone, int cmd_no, const char *message) {
 	mudlog(NRM, LVL_GOD, TRUE, "SYSERR: zone file: %s", message);
 	mudlog(NRM, LVL_GOD, TRUE, "SYSERR: ...offending cmd: '%c' cmd in zone #%d, line %d",
-	       '0', zone_table[zone].number, 0);
+			'0', zone_table[zone].number, 0);
 }
 
 #define ZONE_ERROR(message) \
-	{ log_zone_error(zone, cmd_no, message); last_cmd = 0; }
+{ log_zone_error(zone, cmd_no, message); last_cmd = 0; }
 
 /* execute the reset command table of a given zone */
 void reset_zone(zone_rnum zone) {
@@ -2247,50 +2197,50 @@ void reset_zone(zone_rnum zone) {
 
 			case 'D':			/* set state of door */
 				if(ZCMD.arg2 < 0 || ZCMD.arg2 >= NUM_OF_DIRS ||
-				        (world[ZCMD.arg1].dir_option[ZCMD.arg2] == NULL)) {
+						(world[ZCMD.arg1].dir_option[ZCMD.arg2] == NULL)) {
 					ZONE_ERROR("door does not exist, command disabled");
 					ZCMD.command = '*';
 				} else
 					switch(ZCMD.arg3) {
 						case 0:
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_LOCKED);
+									EX_LOCKED);
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_CLOSED);
+									EX_CLOSED);
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_BREACHED);
+									EX_BREACHED);
 							break;
 
 						case 1:
 							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							        EX_CLOSED);
+									EX_CLOSED);
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_LOCKED);
+									EX_LOCKED);
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_BREACHED);
+									EX_BREACHED);
 							break;
 
 						case 2:
 							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							        EX_LOCKED);
+									EX_LOCKED);
 							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							        EX_CLOSED);
+									EX_CLOSED);
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_BREACHED);
+									EX_BREACHED);
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_REINFORCED);
+									EX_REINFORCED);
 							break;
 
-						/*!mods*/
+							/*!mods*/
 						case 3:
 							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							        EX_REINFORCED);
+									EX_REINFORCED);
 							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							        EX_LOCKED);
+									EX_LOCKED);
 							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							        EX_CLOSED);
+									EX_CLOSED);
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_BREACHED);
+									EX_BREACHED);
 							break;
 					}
 
@@ -2312,7 +2262,7 @@ void reset_zone(zone_rnum zone) {
 /* for use in reset_zone; return TRUE if zone 'nr' is free of PC's  */
 int is_empty(zone_rnum zone_nr) {
 	for(auto & i : descriptor_list) {
-		if(STATE(&i) != CON_PLAYING) {
+		if(STATE(i) != CON_PLAYING) {
 			continue;
 		}
 
@@ -2339,8 +2289,8 @@ int is_empty(zone_rnum zone_nr) {
 
 
 /*************************************************************************
-*  stuff related to the save/load player system				 *
-*************************************************************************/
+ *  stuff related to the save/load player system				 *
+ *************************************************************************/
 
 
 long get_ptable_by_name(const char *name) {
@@ -2390,11 +2340,11 @@ bool load_char(const char *name, struct char_file_u *char_element) {
 				.from("player")
 				.where("name","=",name)
 				.sql());
-			return true;
-    } catch(std::exception& e) {
-			mudlog(CMP,LVL_GOD,FALSE,(std::string("Error `load_char`: ") + e.what()).c_str());
-			return false;
-		}
+		return true;
+	} catch(std::exception& e) {
+		mudlog(CMP,LVL_GOD,FALSE,(std::string("Error `load_char`: ") + e.what()).c_str());
+		return false;
+	}
 	return false;
 }	
 
@@ -2407,77 +2357,79 @@ bool load_char(const char *name, struct char_file_u *char_element) {
 void save_char(struct char_data *ch) {
 	struct char_file_u st;
 
-	if(IS_NPC(ch) || !ch->desc || GET_PFILEPOS(ch) < 0) {
+	if(IS_NPC(ch) || !ch->desc.host.length()) {
+		d("save_char - IS_NPC: " << IS_NPC(ch) << " host: " << ch->desc.host.c_str() << "[not saving]");
 		return;
 	}
 
-	st.host = ch->desc->host;
+	st.host = ch->desc.host;
 	try {
-      auto txn = txn();
-			sql_compositor comp("player",&txn);
-			auto result = mods::pq::exec(txn,comp
+		auto txn = txn();
+		sql_compositor comp("player",&txn);
+		auto result = mods::pq::exec(txn,comp
 				.select("*")
 				.from("player")
 				.where("name","=",ch->player.name.c_str())
 				.sql());
-      mods::pq::commit(txn);
-			sql_compositor::value_map values;
-			values["player_name"] = ch->player.name.c_str();
-			values["player_short_description"] = ch->player.short_descr;
-			values["player_long_description"] = ch->player.long_descr;
-			values["player_action_bitvector"] = std::to_string(ch->char_specials.saved.act);
-			values["player_ability_strength"] = std::to_string(ch->real_abils.str);
-			values["player_ability_strength_add"] = std::to_string(ch->real_abils.str_add);
-			values["player_ability_intelligence"] = std::to_string(ch->real_abils.intel);
-			values["player_ability_wisdom"] = std::to_string(ch->real_abils.wis);
-			values["player_ability_dexterity"] = std::to_string(ch->real_abils.dex);
-			values["player_ability_constitution"] = std::to_string(ch->real_abils.con);
-			values["player_ability_charisma"] = std::to_string(ch->real_abils.cha);
-			values["player_ability_alignment"] = std::to_string(ch->char_specials.saved.alignment);
-			values["player_attack_type"] = std::to_string(ch->real_abils.con);
-			values["player_ability_constitution"] = std::to_string(ch->real_abils.con);
-			values["player_attack_type"] = "0";
-			values["player_type"] = "PC";
-			values["player_alignment"] = "0";
-			values["player_level"] = "0";
-			values["player_hitroll"] = "0";
-			values["player_armor"] = "0";
-			values["player_max_hitpoints"] = std::to_string(ch->points.max_hit);
-			values["player_max_mana"] = std::to_string(ch->points.max_mana);
-			values["player_max_move"] = std::to_string(ch->points.max_move);
-			values["player_gold"] = std::to_string(ch->points.gold);
-			values["player_exp"] = std::to_string(ch->points.exp);
-			values["player_sex"] = ch->player.sex == SEX_MALE ? "M" : "F";
-			values["player_hitpoints"] = std::to_string(ch->points.max_hit);
-			values["player_mana"] = std::to_string(ch->points.mana);
-			values["player_move"] = std::to_string(ch->points.move);
-			values["player_damnodice"] = std::to_string(0);
-			values["player_damsizedice"] = "0";
-			values["player_damroll"] = std::to_string(ch->points.damroll);
-			values["player_weight"] = std::to_string(ch->player.weight);
-			values["player_height"] = std::to_string(ch->player.height);
-			values["player_class"] = std::to_string(ch->player.chclass);
-			values["player_title"] = ch->player.title.c_str();
-			values["player_hometown"] = std::to_string(ch->player.hometown);
-			if(result.size()){
-				auto update_txn = txn();
-				mods::pq::exec(update_txn,comp
-						.update("player")
-						.set(values)
-						.where("player_name","=",ch->player.name.c_str())
-						.sql());
-			}else{
-				auto insert_txn = txn();
-				mods::pq::exec(insert_txn,comp
-						.insert()
-						.into("player")
-						.values(values)
-						.sql());
-			}
-    } catch(std::exception& e) {
-			mudlog(CMP,LVL_GOD,FALSE,(std::string("Error `save_char`: ") + e.what()).c_str());
-			return;
+		mods::pq::commit(txn);
+		sql_compositor::value_map values;
+		values["player_name"] = ch->player.name.c_str();
+		values["player_short_description"] = ch->player.short_descr.c_str();
+		values["player_long_description"] = ch->player.long_descr.c_str();
+		values["player_action_bitvector"] = std::to_string(ch->char_specials.saved.act);
+		values["player_ability_strength"] = std::to_string(ch->real_abils.str);
+		values["player_ability_strength_add"] = std::to_string(ch->real_abils.str_add);
+		values["player_ability_intelligence"] = std::to_string(ch->real_abils.intel);
+		values["player_ability_wisdom"] = std::to_string(ch->real_abils.wis);
+		values["player_ability_dexterity"] = std::to_string(ch->real_abils.dex);
+		values["player_ability_constitution"] = std::to_string(ch->real_abils.con);
+		values["player_ability_charisma"] = std::to_string(ch->real_abils.cha);
+		values["player_ability_alignment"] = std::to_string(ch->char_specials.saved.alignment);
+		values["player_attack_type"] = std::to_string(ch->real_abils.con);
+		values["player_ability_constitution"] = std::to_string(ch->real_abils.con);
+		values["player_attack_type"] = "0";
+		values["player_type"] = "PC";
+		values["player_alignment"] = "0";
+		values["player_level"] = "0";
+		values["player_hitroll"] = "0";
+		values["player_armor"] = "0";
+		values["player_max_hitpoints"] = std::to_string(ch->points.max_hit);
+		values["player_max_mana"] = std::to_string(ch->points.max_mana);
+		values["player_max_move"] = std::to_string(ch->points.max_move);
+		values["player_gold"] = std::to_string(ch->points.gold);
+		values["player_exp"] = std::to_string(ch->points.exp);
+		values["player_sex"] = ch->player.sex == SEX_MALE ? "M" : "F";
+		values["player_hitpoints"] = std::to_string(ch->points.max_hit);
+		values["player_mana"] = std::to_string(ch->points.mana);
+		values["player_move"] = std::to_string(ch->points.move);
+		values["player_damnodice"] = std::to_string(0);
+		values["player_damsizedice"] = "0";
+		values["player_damroll"] = std::to_string(ch->points.damroll);
+		values["player_weight"] = std::to_string(ch->player.weight);
+		values["player_height"] = std::to_string(ch->player.height);
+		values["player_class"] = std::to_string(ch->player.chclass);
+		values["player_title"] = ch->player.title.c_str();
+		values["player_hometown"] = std::to_string(ch->player.hometown);
+		if(result.size()){
+			auto update_txn = txn();
+			mods::pq::exec(update_txn,comp
+					.update("player")
+					.set(values)
+					.where("player_name","=",ch->player.name.c_str())
+					.sql());
+		}else{
+			auto insert_txn = txn();
+			mods::pq::exec(insert_txn,comp
+					.insert()
+					.into("player")
+					.values(values)
+					.sql());
 		}
+	} catch(std::exception& e) {
+		mudlog(CMP,LVL_GOD,FALSE,(std::string("Error `save_char`: ") + e.what()).c_str());
+		return;
+	}
+	d("char saved to db");
 }
 
 
@@ -2651,8 +2603,8 @@ void char_to_store(struct char_data *ch, struct char_file_u *st) {
 	if(ch->player.description) {
 		if(strlen(ch->player.description) >= sizeof(st->description)) {
 			log("SYSERR: char_to_store: %s's description length: %d, max: %d! "
-			    "Truncated.", GET_PC_NAME(ch), strlen(ch->player.description),
-			    (st->description.length()));
+					"Truncated.", GET_PC_NAME(ch), strlen(ch->player.description),
+					(st->description.length()));
 			ch->player.description.concat("\r\n");
 		}
 
@@ -2692,6 +2644,8 @@ void save_etext(struct char_data *ch) {
  * we re-use the old position.
  */
 int create_entry(const char *name) {
+	log("[deprecated] create_entry (for player tables)");
+	return 0;
 	int i, pos;
 
 	if(top_of_p_table == -1) {	/* no table */
@@ -2713,8 +2667,8 @@ int create_entry(const char *name) {
 
 
 /************************************************************************
-*  funcs of a (more or less) general utility nature			*
-************************************************************************/
+ *  funcs of a (more or less) general utility nature			*
+ ************************************************************************/
 
 
 /* read and allocate space for a '~'-terminated string from a given file */
@@ -2775,7 +2729,7 @@ void free_char(struct char_data *ch) {
 	}
 
 	if(ch->desc) {
-		ch->desc->character = NULL;
+		ch->desc.character = NULL;
 	}
 
 }
@@ -2987,6 +2941,7 @@ void init_char(struct char_data *ch) {
 
 	/* *** if this is our first player --- he be God *** */
 	if(top_of_p_table == 0) {
+		d("first char. he is a god");
 		GET_LEVEL(ch) = LVL_IMPL;
 		GET_EXP(ch) = 7000000;
 
@@ -3031,11 +2986,12 @@ void init_char(struct char_data *ch) {
 		GET_HEIGHT(ch) = rand_number(150, 180); /* 5'0" - 6'0" */
 	}
 
+	/*
 	if((i = get_ptable_by_name(GET_NAME(ch).c_str())) != -1) {
 		player_table[i].id = GET_IDNUM(ch) = ++top_idnum;
 	} else {
 		log("SYSERR: init_char: Character '%s' not found in player table.", GET_NAME(ch).c_str());
-	}
+	}*/
 
 	for(i = 1; i <= MAX_SKILLS; i++) {
 		if(GET_LEVEL(ch) < LVL_IMPL) {
@@ -3065,6 +3021,7 @@ void init_char(struct char_data *ch) {
 
 	GET_LOADROOM(ch) = NOWHERE;
 	ch->drone = false;
+	d("init_char [done]");
 }
 
 
@@ -3193,11 +3150,11 @@ int check_object(struct obj_data *obj) {
 
 	if(GET_OBJ_WEIGHT(obj) < 0 && (error = TRUE))
 		log("SYSERR: Object #%d (%s) has negative weight (%d).",
-		    GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_WEIGHT(obj));
+				GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_WEIGHT(obj));
 
 	if(GET_OBJ_RENT(obj) < 0 && (error = TRUE))
 		log("SYSERR: Object #%d (%s) has negative cost/day (%d).",
-		    GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_RENT(obj));
+				GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_RENT(obj));
 
 	snprintf(objname, sizeof(objname), "Object #%d (%s)", GET_OBJ_VNUM(obj), obj->short_description);
 	error |= check_bitvector_names(GET_OBJ_WEAR(obj), wear_bits_count, objname, "object wear");
@@ -3206,43 +3163,43 @@ int check_object(struct obj_data *obj) {
 
 	switch(GET_OBJ_TYPE(obj)) {
 		case ITEM_DRINKCON: {
-				char onealias[MAX_INPUT_LENGTH], *space = strrchr(obj->name, ' ');
+													char onealias[MAX_INPUT_LENGTH], *space = strrchr(obj->name, ' ');
 
-				strlcpy(onealias, space ? space + 1 : obj->name, sizeof(onealias));
+													strlcpy(onealias, space ? space + 1 : obj->name, sizeof(onealias));
 
-				if(search_block(onealias, drinknames, TRUE) < 0 && (error = TRUE))
-					log("SYSERR: Object #%d (%s) doesn't have drink type as last alias. (%s)",
-					    GET_OBJ_VNUM(obj), obj->short_description, obj->name);
-			}
+													if(search_block(onealias, drinknames, TRUE) < 0 && (error = TRUE))
+														log("SYSERR: Object #%d (%s) doesn't have drink type as last alias. (%s)",
+																GET_OBJ_VNUM(obj), obj->short_description, obj->name);
+												}
 
-		/* Fall through. */
+												/* Fall through. */
 		case ITEM_FOUNTAIN:
-			if(GET_OBJ_VAL(obj, 1) > GET_OBJ_VAL(obj, 0) && (error = TRUE))
-				log("SYSERR: Object #%d (%s) contains (%d) more than maximum (%d).",
-				    GET_OBJ_VNUM(obj), obj->short_description,
-				    GET_OBJ_VAL(obj, 1), GET_OBJ_VAL(obj, 0));
+												if(GET_OBJ_VAL(obj, 1) > GET_OBJ_VAL(obj, 0) && (error = TRUE))
+													log("SYSERR: Object #%d (%s) contains (%d) more than maximum (%d).",
+															GET_OBJ_VNUM(obj), obj->short_description,
+															GET_OBJ_VAL(obj, 1), GET_OBJ_VAL(obj, 0));
 
-			break;
+												break;
 
 		case ITEM_SCROLL:
 		case ITEM_POTION:
-			error |= check_object_level(obj, 0);
-			error |= check_object_spell_number(obj, 1);
-			error |= check_object_spell_number(obj, 2);
-			error |= check_object_spell_number(obj, 3);
-			break;
+												error |= check_object_level(obj, 0);
+												error |= check_object_spell_number(obj, 1);
+												error |= check_object_spell_number(obj, 2);
+												error |= check_object_spell_number(obj, 3);
+												break;
 
 		case ITEM_WAND:
 		case ITEM_STAFF:
-			error |= check_object_level(obj, 0);
-			error |= check_object_spell_number(obj, 3);
+												error |= check_object_level(obj, 0);
+												error |= check_object_spell_number(obj, 3);
 
-			if(GET_OBJ_VAL(obj, 2) > GET_OBJ_VAL(obj, 1) && (error = TRUE))
-				log("SYSERR: Object #%d (%s) has more charges (%d) than maximum (%d).",
-				    GET_OBJ_VNUM(obj), obj->short_description,
-				    GET_OBJ_VAL(obj, 2), GET_OBJ_VAL(obj, 1));
+												if(GET_OBJ_VAL(obj, 2) > GET_OBJ_VAL(obj, 1) && (error = TRUE))
+													log("SYSERR: Object #%d (%s) has more charges (%d) than maximum (%d).",
+															GET_OBJ_VNUM(obj), obj->short_description,
+															GET_OBJ_VAL(obj, 2), GET_OBJ_VAL(obj, 1));
 
-			break;
+												break;
 	}
 
 	return (error);
@@ -3274,7 +3231,7 @@ int check_object_spell_number(struct obj_data *obj, int val) {
 
 	if(error)
 		log("SYSERR: Object #%d (%s) has out of range spell #%d.",
-		    GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_VAL(obj, val));
+				GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_VAL(obj, val));
 
 	/*
 	 * This bug has been fixed, but if you don't like the special behavior...
@@ -3282,11 +3239,11 @@ int check_object_spell_number(struct obj_data *obj, int val) {
 #if 0
 
 	if(GET_OBJ_TYPE(obj) == ITEM_STAFF &&
-	        HAS_SPELL_ROUTINE(GET_OBJ_VAL(obj, val), MAG_AREAS | MAG_MASSES))
+			HAS_SPELL_ROUTINE(GET_OBJ_VAL(obj, val), MAG_AREAS | MAG_MASSES))
 		log("... '%s' (#%d) uses %s spell '%s'.",
-		    obj->short_description,	GET_OBJ_VNUM(obj),
-		    HAS_SPELL_ROUTINE(GET_OBJ_VAL(obj, val), MAG_AREAS) ? "area" : "mass",
-		    skill_name(GET_OBJ_VAL(obj, val)));
+				obj->short_description,	GET_OBJ_VNUM(obj),
+				HAS_SPELL_ROUTINE(GET_OBJ_VAL(obj, val), MAG_AREAS) ? "area" : "mass",
+				skill_name(GET_OBJ_VAL(obj, val)));
 
 #endif
 
@@ -3299,8 +3256,8 @@ int check_object_spell_number(struct obj_data *obj, int val) {
 
 	if((spellname == unused_spellname || !str_cmp("UNDEFINED", spellname)) && (error = TRUE))
 		log("SYSERR: Object #%d (%s) uses '%s' spell #%d.",
-		    GET_OBJ_VNUM(obj), obj->short_description, spellname,
-		    GET_OBJ_VAL(obj, val));
+				GET_OBJ_VNUM(obj), obj->short_description, spellname,
+				GET_OBJ_VAL(obj, val));
 
 	return (error);
 }
@@ -3310,7 +3267,7 @@ int check_object_level(struct obj_data *obj, int val) {
 
 	if((GET_OBJ_VAL(obj, val) < 0 || GET_OBJ_VAL(obj, val) > LVL_IMPL) && (error = TRUE))
 		log("SYSERR: Object #%d (%s) has out of range level #%d.",
-		    GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_VAL(obj, val));
+				GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_VAL(obj, val));
 
 	return (error);
 }
