@@ -255,7 +255,7 @@ void show_obj_to_char(struct obj_data *obj, struct char_data *ch, int mode) {
 						char notebuf[MAX_NOTE_LENGTH + 64];
 
 						snprintf(notebuf, sizeof(notebuf), "There is something written on it:\r\n\r\n%s", obj->action_description);
-						page_string(ch->desc, notebuf, TRUE);
+						page_string(*ch->desc, notebuf, TRUE);
 					} else {
 						send_to_char(ch, "It's blank.\r\n");
 					}
@@ -367,7 +367,7 @@ void look_at_char(struct char_data *i, struct char_data *ch) {
 	int j, found;
 	struct obj_data *tmp_obj;
 
-	if(!ch->desc) {
+	if(!ch->has_desc) {
 		return;
 	}
 
@@ -442,7 +442,7 @@ void list_one_char(struct char_data *i, struct char_data *ch) {
 		send_to_char(ch, " (hidden)");
 	}
 
-	if(!IS_NPC(i) && !i->desc) {
+	if(!IS_NPC(i) && !i->has_desc) {
 		send_to_char(ch, " (linkless)");
 	}
 
@@ -573,7 +573,8 @@ ACMD(do_exits) {
 void look_at_room(struct char_data *ch, int ignore_brief) {
 	MENTOC_PREAMBLE();
 
-	if(!ch->desc) {
+	if(!ch->has_desc) {
+		d("look_at_room: char doesnt have a desc! WTF");
 		return;
 	}
 
@@ -736,7 +737,7 @@ void look_at_target(struct char_data *ch, char *arg) {
 	struct obj_data *obj, *found_obj = NULL;
 	char *desc;
 
-	if(!ch->desc) {
+	if(!ch->has_desc) {
 		return;
 	}
 
@@ -771,7 +772,7 @@ void look_at_target(struct char_data *ch, char *arg) {
 
 	/* Does the argument match an extra desc in the room? */
 	if((desc = find_exdesc(arg, world[IN_ROOM(ch)].ex_description)) != NULL && ++i == fnum) {
-		page_string(ch->desc, desc, FALSE);
+		page_string(*ch->desc, desc, FALSE);
 		return;
 	}
 
@@ -1136,14 +1137,14 @@ ACMD(do_weather) {
 ACMD(do_help) {
 	int chk, bot, top, mid, minlen;
 
-	if(!ch->desc) {
+	if(!ch->has_desc) {
 		return;
 	}
 
 	skip_spaces(&argument);
 
 	if(!*argument) {
-		page_string(ch->desc, help, 0);
+		page_string(*ch->desc, help, 0);
 		return;
 	}
 
@@ -1169,7 +1170,7 @@ ACMD(do_help) {
 				mid--;
 			}
 
-			page_string(ch->desc, help_table[mid].entry, 0);
+			page_string(*ch->desc, help_table[mid].entry, 0);
 			return;
 		} else {
 			if(chk > 0) {
@@ -1554,39 +1555,39 @@ ACMD(do_users) {
 ACMD(do_gen_ps) {
 	switch(subcmd) {
 		case SCMD_CREDITS:
-			page_string(ch->desc, credits, 0);
+			page_string(*ch->desc, credits, 0);
 			break;
 
 		case SCMD_NEWS:
-			page_string(ch->desc, news, 0);
+			page_string(*ch->desc, news, 0);
 			break;
 
 		case SCMD_INFO:
-			page_string(ch->desc, info, 0);
+			page_string(*ch->desc, info, 0);
 			break;
 
 		case SCMD_WIZLIST:
-			page_string(ch->desc, wizlist, 0);
+			page_string(*ch->desc, wizlist, 0);
 			break;
 
 		case SCMD_IMMLIST:
-			page_string(ch->desc, immlist, 0);
+			page_string(*ch->desc, immlist, 0);
 			break;
 
 		case SCMD_HANDBOOK:
-			page_string(ch->desc, handbook, 0);
+			page_string(*ch->desc, handbook, 0);
 			break;
 
 		case SCMD_POLICIES:
-			page_string(ch->desc, policies, 0);
+			page_string(*ch->desc, policies, 0);
 			break;
 
 		case SCMD_MOTD:
-			page_string(ch->desc, motd, 0);
+			page_string(*ch->desc, motd, 0);
 			break;
 
 		case SCMD_IMOTD:
-			page_string(ch->desc, imotd, 0);
+			page_string(*ch->desc, imotd, 0);
 			break;
 
 		case SCMD_CLEAR:
@@ -1793,7 +1794,7 @@ ACMD(do_levels) {
 		snprintf(buf + len, sizeof(buf) - len, "[%2d] %8d          : Immortality\r\n",
 		         LVL_IMMORT, level_exp(GET_CLASS(ch), LVL_IMMORT));
 
-	page_string(ch->desc, buf, TRUE);
+	page_string(*ch->desc, buf, TRUE);
 }
 
 

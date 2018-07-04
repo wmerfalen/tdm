@@ -24,6 +24,7 @@ extern FILE *logfile;
 int& STATE(mods::descriptor_data &d);
 int& STATE(mods::descriptor_data *d);
 int& STATE(std::deque<mods::descriptor_data>::iterator d);
+int& STATE(std::shared_ptr<mods::descriptor_data> d);
 #endif
 void	basic_mud_log(const char *format, ...) __attribute__((format(printf, 1, 2)));
 void	basic_mud_vlog(const char *format, va_list args);
@@ -278,7 +279,7 @@ void	update_pos(struct char_data *victim);
  * of GET_LEVEL?  JE
  */
 #define GET_REAL_LEVEL(ch) \
-   (ch->desc && ch->desc.original ? GET_LEVEL(ch->desc.original) : \
+   (ch->has_desc && ch->desc->original ? GET_LEVEL(ch->desc->original) : \
     GET_LEVEL(ch))
 
 #define GET_CLASS(ch)   ((ch)->player.chclass)

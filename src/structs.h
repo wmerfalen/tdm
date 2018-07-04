@@ -20,11 +20,11 @@
 #include "mods/ai_state.hpp"
 #include <functional>
 #include <array>
-
 namespace mods {
 	class player;
 	struct descriptor_data;
 };
+extern std::deque<mods::descriptor_data> descriptor_list;
 typedef std::size_t weapon_type_t;
 typedef std::map<struct char_data*,std::unique_ptr<mods::ai_state>> ai_state_map;
 typedef std::set<char_data*> memory_rec_t;
@@ -786,10 +786,7 @@ struct char_player_data {
 	ubyte height;       /* PC / NPC's height                    */
 	/** TODO: phase this out */
 	mods::string passwd;
-	char_player_data() : sex(0),chclass(0),level(0),hometown(0),weight(0),height(0) {
-		std::fill(m_passwd.begin(),m_passwd.end(),0);
-		std::cerr << "[char_player_data] instantiation\n";
-	}
+	char_player_data();
 	~char_player_data() = default;
 	private:
 	std::array<char,max_pwd_length>	m_passwd; /* character's password      */
@@ -1022,6 +1019,7 @@ namespace mods {
 			memset(last_input,0,sizeof(last_input));
 			memset(small_outbuf,0,sizeof(small_outbuf));
 			output.clear();
+			host.clear();
 		}
 		void set_state(int c) { connected = c; }
 		socket_t	descriptor;	/* file descriptor for socket		*/
@@ -1032,8 +1030,8 @@ namespace mods {
 		int bufspace;
 		struct txt_block *large_outbuf; /* ptr to large buffer, if we need it */
 		struct txt_q input;             /* q of unprocessed input               */
-		char_data *character;    /* linked to char                       */
-		char_data *original;     /* original char if switched            */
+		char_data *character;    /** FIXME: turn to mods::player */
+		char_data *original;    /** FIXME: turn to mods::player */
 		int	connected;		/* mode of 'connectedness'		*/
 		int	desc_num;		/* unique num assigned to desc		*/
 		time_t login_time;		/* when the person connected		*/
@@ -1053,56 +1051,20 @@ namespace mods {
 		std::shared_ptr<mods::descriptor_data> snooping; /* Who is this char snooping	*/
 		std::shared_ptr<mods::descriptor_data> snoop_by; /* And who is snooping this char	*/
 		bool has_output;
-		size_t queue_output(const std::string &s){
-			std::cerr << "___QUEUE_OUTPUT__::[" << std::string(s).data() << "]\n";
-			output.emplace_back(s);
-			has_output = true;
-			return s.length();
-		}
+		size_t queue_output(const std::string &s);
 		size_t flush_output();
 		private:
 		std::vector<std::string> output;		/* ptr to the current output buffer	*/
 	};
 };
 struct char_data {
-	char_data() = default;
+	char_data(){
+		std::cerr << "[char_data] constructor yo\n";
+		init();	
+	};
 	~char_data() = default;
-	char_data(char_data* o){
-		pfilepos = o->pfilepos;
-		uuid = o->uuid;
-		last_fight_timestamp = o->last_fight_timestamp;
-		nr = o->nr;
-		in_room = o->in_room;
-		was_in_room = o->was_in_room;
-		wait = o->wait;
-		drone = o->drone;
-		drone_owner = o->drone_owner;
-		drone_simulate = o->drone_simulate;
-		drone_uuid = o->drone_uuid;
-		player = o->player;       /* Normal data                   */
-		real_abils = o->real_abils;  /* Abilities without modifiers   */
-		aff_abils = o->aff_abils;   /* Abils with spells/stones/etc  */
-		points = o->points;        /* Points                        */
-		char_specials = o->char_specials;  /* PC/NPC specials    */
-		player_specials = o->player_specials; /* PC specials      */
-		mob_specials = o->mob_specials;  /* NPC specials     */
-		affected = o->affected;       /* affected by what spells       */
-		for(unsigned i = 0; i < NUM_WEARS; i++){
-			equipment[i] = o->equipment[i];/* Equipment array               */
-		}
-		carrying = o->carrying;            /* Head of list                  */
-		desc = o->desc;         /* NULL for mobiles              */
-		next_in_room = o->next_in_room;     /* For room->people - list         */
-		next = o->next;             /* For either monster or ppl-list  */
-		next_fighting = o->next_fighting;    /* For fighting list               */
-		followers = o->followers;        /* List of chars followers       */
-		master = o->master;             /* Who is char following?        */
-		player_ptr = o->player_ptr;
-		goal = o->goal;
-		disorient = o->disorient;
-		state = o->state;
-		builder_data = o->builder_data;
-	}
+	char_data(char_data* o);
+	void init();
 	int pfilepos;			 /* playerfile pos		  */
 	uuid_t uuid;
 	time_t last_fight_timestamp;			/* timestamp of the last time the user fought */
@@ -1126,7 +1088,8 @@ struct char_data {
 	obj_data *equipment[NUM_WEARS];/* Equipment array               */
 
 	obj_data *carrying;            /* Head of list                  */
-	mods::descriptor_data desc;         /* NULL for mobiles              */
+	bool has_desc;
+	std::shared_ptr<mods::descriptor_data> desc;         /* NULL for mobiles              */
 
 	char_data *next_in_room;     /* For room->people - list         */
 	char_data *next;             /* For either monster or ppl-list  */

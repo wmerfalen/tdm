@@ -245,9 +245,10 @@ ACMD(do_unban) {
 char *invalid_list[MAX_INVALID_NAMES];
 int num_invalid = 0;
 
-int Valid_Name(char *newname) {
+int Valid_Name(const char *newname) {
 	int i;
 	char tempname[MAX_INPUT_LENGTH];
+	memset(tempname,0,sizeof(tempname));
 
 	/*
 	 * Make sure someone isn't trying to create this same name.  We want to
@@ -255,10 +256,11 @@ int Valid_Name(char *newname) {
 	 * will not have a character name yet and other people sitting at the
 	 * prompt won't have characters yet.
 	 */
-	for(auto & dt : descriptor_list)
-		if(dt.character && GET_NAME(dt.character).length() && !str_cmp(GET_NAME(dt.character).c_str(), newname)) {
-			return (STATE(dt)== CON_PLAYING);
+	for(auto & p : mods::globals::player_list){
+		if(p->cd() && GET_NAME(p->cd()).length() && !str_cmp(GET_NAME(p->cd()).c_str(), newname)) {
+			return (STATE(p->desc())== CON_PLAYING);
 		}
+	}
 
 	/* return valid if list doesn't exist */
 	if(!invalid_list || num_invalid < 1) {

@@ -1239,7 +1239,7 @@ int gen_receptionist(struct char_data *ch, struct char_data *recep,
 		return (FALSE);
 	}
 
-	if(!ch->desc || IS_NPC(ch)) {
+	if(!ch->has_desc || IS_NPC(ch)) {
 		return (FALSE);
 	}
 

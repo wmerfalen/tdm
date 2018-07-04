@@ -136,7 +136,7 @@ void say_spell(struct char_data *ch, int spellnum, struct char_data *tch,
 	snprintf(buf2, sizeof(buf2), format, buf);
 
 	for(i = world[IN_ROOM(ch)].people; i; i = i->next_in_room) {
-		if(i == ch || i == tch || !i->desc || !AWAKE(i)) {
+		if(i == ch || i == tch || !i->has_desc || !AWAKE(i)) {
 			continue;
 		}
 

@@ -68,7 +68,7 @@ ACMD(do_gen_tog);
 
 
 ACMD(do_quit) {
-	if(IS_NPC(ch) || !ch->desc) {
+	if(IS_NPC(ch) || !ch->has_desc) {
 		return;
 	}
 
@@ -106,7 +106,7 @@ ACMD(do_quit) {
 
 
 ACMD(do_save) {
-	if(IS_NPC(ch) || !ch->desc) {
+	if(IS_NPC(ch) || !ch->has_desc) {
 		return;
 	}
 

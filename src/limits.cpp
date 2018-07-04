@@ -419,14 +419,14 @@ void check_idling(struct char_data *ch) {
 
 			char_to_room(ch, 3);
 
-			if(ch->desc) {
-				STATE(ch->desc) = CON_DISCONNECT;
+			if(ch->has_desc) {
+				ch->desc->set_state(CON_DISCONNECT);
 				/*
 				 * For the 'if (d.character)' test in close_socket().
 				 * -gg 3/1/98 (Happy anniversary.)
 				 */
-				ch->desc.character = NULL;
-				ch->desc.clear();
+				ch->desc->character = NULL;
+				ch->desc->clear();
 			}
 
 			if(free_rent) {

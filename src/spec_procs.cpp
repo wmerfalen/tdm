@@ -164,7 +164,7 @@ void list_skills(struct char_data *ch) {
 		strcpy(buf2 + sizeof(buf2) - strlen(overflow) - 1, overflow);    /* strcpy: OK */
 	}
 
-	page_string(ch->desc, buf2, TRUE);
+	page_string(*ch->desc, buf2, TRUE);
 }
 
 

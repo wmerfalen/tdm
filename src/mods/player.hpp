@@ -202,16 +202,18 @@ namespace mods {
 			bool paging() const {
 				return m_pages.size();
 			}
-			void set_desc(std::deque<descriptor_data>::iterator it){ m_desc_iterator = it; }
+			void set_desc(std::deque<descriptor_data>::iterator it){ 
+				m_desc = std::make_shared<mods::descriptor_data>(*it);
+			}
 			void set_char_on_descriptor(std::deque<descriptor_data>::iterator it);
-			descriptor_data& desc(){ return *m_desc_iterator; }
+			descriptor_data& desc(){ return *m_desc; }
 
 			/* captured output */
 			void capture_output(bool capture_status);
 			std::string_view get_captured_output();
 			void clear_captured_output();
 		private: 
-			descriptor_data_iterator_t m_desc_iterator;
+			std::shared_ptr<mods::descriptor_data> m_desc;
 			std::string	m_name;
 			class_capability_t m_class_capability;
 			bool         m_executing_js;

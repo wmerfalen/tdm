@@ -346,7 +346,7 @@ void make_corpse(struct char_data *ch) {
 		 * bug. The duplication has been fixed (knock on wood) but the
 		 * test below shall live on, for a while. -gg 3/3/2002
 		 */
-		if(IS_NPC(ch) || ch->desc) {
+		if(IS_NPC(ch) || ch->has_desc) {
 			money = create_money(GET_GOLD(ch));
 			obj_to_obj(money, corpse);
 		}
@@ -914,7 +914,7 @@ int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int 
 	}
 
 	/* Help out poor linkless people who are attacked */
-	if(!IS_NPC(victim) && !(victim->desc) && GET_POS(victim) > POS_STUNNED) {
+	if(!IS_NPC(victim) && !(victim->has_desc) && GET_POS(victim) > POS_STUNNED) {
 		do_flee(victim, NULL, 0, 0);
 
 		if(!FIGHTING(victim)) {
@@ -932,7 +932,7 @@ int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int 
 
 	/* Uh oh.  Victim died. */
 	if(GET_POS(victim) == POS_DEAD) {
-		if(ch != victim && (IS_NPC(victim) || victim->desc)) {
+		if(ch != victim && (IS_NPC(victim) || victim->has_desc)) {
 			if(AFF_FLAGGED(ch, AFF_GROUP)) {
 				group_gain(ch, victim);
 			} else {
@@ -1123,7 +1123,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
 	}
 
 	/* Help out poor linkless people who are attacked */
-	if(!IS_NPC(victim) && !(victim->desc) && GET_POS(victim) > POS_STUNNED) {
+	if(!IS_NPC(victim) && !(victim->has_desc) && GET_POS(victim) > POS_STUNNED) {
 		do_flee(victim, NULL, 0, 0);
 
 		if(!FIGHTING(victim)) {
@@ -1141,7 +1141,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
 
 	/* Uh oh.  Victim died. */
 	if(GET_POS(victim) == POS_DEAD) {
-		if(ch != victim && (IS_NPC(victim) || victim->desc)) {
+		if(ch != victim && (IS_NPC(victim) || victim->has_desc)) {
 			if(AFF_FLAGGED(ch, AFF_GROUP)) {
 				group_gain(ch, victim);
 			} else {
@@ -1345,7 +1345,7 @@ int damage(struct char_data *ch, struct char_data *victim, int dam, int attackty
 	}
 
 	/* Help out poor linkless people who are attacked */
-	if(!IS_NPC(victim) && !(victim->desc) && GET_POS(victim) > POS_STUNNED) {
+	if(!IS_NPC(victim) && !(victim->has_desc) && GET_POS(victim) > POS_STUNNED) {
 		do_flee(victim, NULL, 0, 0);
 
 		if(!FIGHTING(victim)) {
@@ -1363,7 +1363,7 @@ int damage(struct char_data *ch, struct char_data *victim, int dam, int attackty
 
 	/* Uh oh.  Victim died. */
 	if(GET_POS(victim) == POS_DEAD) {
-		if(ch != victim && (IS_NPC(victim) || victim->desc)) {
+		if(ch != victim && (IS_NPC(victim) || victim->has_desc)) {
 			if(AFF_FLAGGED(ch, AFF_GROUP)) {
 				group_gain(ch, victim);
 			} else {

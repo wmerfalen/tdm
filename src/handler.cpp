@@ -927,7 +927,7 @@ void extract_char_final(struct char_data *ch) {
 	 * need to stuff them back into their own body.  This will set ch->desc
 	 * we're checking below this loop to the proper value.
 	 */
-	if(!IS_NPC(ch) && !ch->desc) {
+	if(!IS_NPC(ch) && !ch->has_desc) {
 		for(auto & d : descriptor_list)
 			if(d.original == ch) {
 				do_return(d.character, NULL, 0, 0);
@@ -935,7 +935,7 @@ void extract_char_final(struct char_data *ch) {
 			}
 	}
 
-	if(ch->desc) {
+	if(ch->has_desc) {
 		/*
 		 * This time we're extracting the body someone has switched into
 		 * (not the body of someone switching as above) so we need to put
@@ -944,7 +944,7 @@ void extract_char_final(struct char_data *ch) {
 		 * If this body is not possessed, the owner won't have a
 		 * body after the removal so dump them to the main menu.
 		 */
-		if(ch->desc.original) {
+		if(ch->desc->original) {
 			do_return(ch, NULL, 0, 0);
 		} else {
 			/*
@@ -955,7 +955,7 @@ void extract_char_final(struct char_data *ch) {
 			 * If we're here, we know it's a player so no IS_NPC check required.
 			 */
 			for(auto & d : descriptor_list) {
-				if(d.descriptor == ch->desc.descriptor) {
+				if(d.descriptor == ch->desc->descriptor) {
 					continue;
 				}
 
@@ -965,7 +965,7 @@ void extract_char_final(struct char_data *ch) {
 			}
 
 			STATE(ch->desc) = CON_MENU;
-			write_to_output(ch->desc, "%s", MENU);
+			write_to_output(*ch->desc, "%s", MENU);
 		}
 	}
 
@@ -1020,7 +1020,7 @@ void extract_char_final(struct char_data *ch) {
 	}
 
 	/* If there's a descriptor, they're in the menu now. */
-	if(IS_NPC(ch) || !ch->desc) {
+	if(IS_NPC(ch) || !ch->has_desc) {
 		free_char(ch);
 	}
 }

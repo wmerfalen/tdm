@@ -747,30 +747,32 @@ void game_loop(socket_t mother_desc) {
 				}
 				GET_WAIT_STATE(player->cd()) = 1;
 			}
-			player->desc().has_prompt = FALSE;
-
+			player->desc().has_prompt = false;
+			/* player->desc().has_prompt = FALSE;
 			if(player->desc().str) {	// Writing boards, mail, etc. 
 				d("string_add being called");
 				string_add((player->desc()), comm);
 			} else if(player->desc().showstr_count) { // Reading something w/ pager 
 				d("show_string");
 				show_string(player->desc(), comm);
-			} else if(STATE(player->desc()) != CON_PLAYING) { // In menus, etc. 
+			} else 
+			*/
+			if(STATE(player->desc()) != CON_PLAYING) { // In menus, etc. 
 				d("nanny");
-				nanny(player->desc(), comm);
+				nanny(player, comm);
 				d("after nanny");
 			} else {			// else: we're playing normally. 
 				d("if(aliased)");
 				if(aliased) {	// To prevent recursive aliases. 
-					//d("aliased... has_prompt = TRUE");
+					d("aliased... has_prompt = TRUE");
 					player->desc().has_prompt = TRUE;    // To get newline before next cmd output. 
 				} else if(perform_alias(player->desc(), comm, sizeof(comm))) { // Run it through aliasing system 
 					//d("get_from_q");
 					get_from_q(&player->desc().input, comm, &aliased);
 				}
+				d("calling command_interpreter...");
+				command_interpreter(player->cd(), comm); // Send it to interpreter 
 			}
-			d("calling command_interpreter...");
-			command_interpreter(player->cd(), comm); // Send it to interpreter 
 			++i;
 			gettimeofday(&last_time, (struct timezone *) 0);
 		}//end while(i < r)
@@ -813,31 +815,26 @@ void game_loop(socket_t mother_desc) {
 		} while(timeout.tv_usec || timeout.tv_sec);
 
 		/**TODO: refactor this to not loop through all descriptors but to instead queue up data to be output and output them accordingly */
-		for(auto & d : descriptor_list) {
-			d("for loop: " << d.host.c_str());
-			if(d.has_output) {
-				d("has output (d.output non-null)");
-				d.flush_output();
-				if(!d.has_output) {	// All output sent.
-					d.has_prompt = TRUE;
-				}
+		for(auto & p : mods::globals::player_list) {
+			if(p->desc().has_output) {
+				p->desc().flush_output();
 			}
 		}
 
 		/* Print prompts for other descriptors who had no other output */
-		for(auto & d : descriptor_list) {
-			if(!d.has_prompt && d.bufptr == 0) {
-				d("!d.has_prompt");
-				write_to_descriptor(d.descriptor, make_prompt(d));
-				d.has_prompt = TRUE;
+		for(auto & p : mods::globals::player_list) {
+			if(!p->desc().has_output && !p->desc().has_prompt){
+				write_to_descriptor(p->desc().descriptor, make_prompt(p->desc()));
+				p->desc().has_prompt = true;
 			}
 		}
 
 		/* Kick out folks in the CON_CLOSE or CON_DISCONNECT state */
-		for(auto & d_element : descriptor_list) {
-			if(STATE(d_element) == CON_CLOSE || STATE(d_element) == CON_DISCONNECT) {
+		for(auto & p : mods::globals::player_list) {
+			if(STATE(p->desc()) == CON_CLOSE || STATE(p->desc()) == CON_DISCONNECT) {
+				/** FIXME  do proper shutdown of char */
 				d("taking care of disco/close socket");
-				close_socket(d_element);
+				close_socket(p->desc());
 			}
 		}
 
@@ -1187,6 +1184,7 @@ size_t _old_unused_vwrite_to_output_unused_(mods::descriptor_data &t, const char
 	}else{
 		txt[size] = '\0';
 		d("[[[QUEUEING_OUTPUT]]]:->[" << &txt[0] << "]");
+		d("[queueing] on obj:{" << t.host.c_str() << "}{}");
 		t.queue_output(&txt[0]);	/* strcpy: OK (size checked above) */
 	}
 	return 0;
@@ -1316,7 +1314,7 @@ int set_sendbuf(socket_t s) {
 
 void deregister_player(const std::shared_ptr<mods::player> & player_obj){
 	for(auto p = mods::globals::player_list.begin(); p !=  mods::globals::player_list.end();p++){
-		if(*p == player_obj){
+		if((*p)->uuid() == player_obj->uuid()){
 			mods::globals::player_list.erase(p);
 			return;
 		}
@@ -1336,6 +1334,7 @@ int new_descriptor(socket_t s) {
 	auto player = mods::globals::player_list.emplace_back(std::make_shared<mods::player>());
 	auto descriptor = descriptor_list.emplace_back();
 	player->set_desc(descriptor_list.end()-1);
+	player->desc().character = player->cd();
 	player->set_char_on_descriptor(descriptor_list.end()-1);
 
 	if((desc = accept(s, (struct sockaddr *) &peer, &i)) == INVALID_SOCKET) {
@@ -1402,6 +1401,7 @@ int new_descriptor(socket_t s) {
 		}
 		player->desc().desc_num = last_desc;
 		GREETINGS = "Username:";
+		d("player->desc().descriptor: " << player->desc().descriptor);
 		write_to_output(player->desc(), "%s",GREETINGS.c_str());
 		mods::globals::socket_map.insert (
 				std::pair<int,mods::globals::player_ptr_t>(
@@ -1926,7 +1926,7 @@ void close_socket(mods::descriptor_data d) {
 
 	if(d.character) {
 		/* If we're switched, this resets the mobile taken. */
-		d.character->desc.clear();
+		d.character->desc->clear();
 
 		/* Plug memory leak, from Eric Green. */
 		if(!IS_NPC(d.character) && PLR_FLAGGED(d.character, PLR_MAILING) && d.str) {
@@ -1953,8 +1953,8 @@ void close_socket(mods::descriptor_data d) {
 	}
 
 	/* JE 2/22/95 -- part of my unending quest to make switch stable */
-	if(d.original && d.original->desc) {
-		d.original->desc.clear();
+	if(d.original && d.original->has_desc) {
+		d.original->desc->clear();
 	}
 
 	if(d.showstr_head) {
@@ -2170,12 +2170,12 @@ void signal_setup(void) {
  **************************************************************** */
 
 size_t send_to_char(struct char_data *ch, const char *messg, ...) {
-	if(ch->desc && messg && *messg) {
+	if(ch->has_desc && messg && *messg) {
 		size_t left;
 		va_list args;
 
 		va_start(args, messg);
-		left = vwrite_to_output(ch->desc, mods::globals::color_eval(messg).c_str(), args);
+		left = vwrite_to_output(*ch->desc, mods::globals::color_eval(messg).c_str(), args);
 		va_end(args);
 		return left;
 	}
@@ -2235,12 +2235,12 @@ void send_to_room_except(room_rnum room, const std::vector<char_data*>& except, 
 	}
 
 	for(i = world[room].people; i; i = i->next_in_room) {
-		if(!i->desc || std::find(except.begin(),except.end(),i) != except.end()) {
+		if(!i->has_desc || std::find(except.begin(),except.end(),i) != except.end()) {
 			continue;
 		}
 
 		va_start(args, messg);
-		vwrite_to_output(i->desc, messg, args);
+		vwrite_to_output(*i->desc, messg, args);
 		va_end(args);
 	}
 }
@@ -2254,12 +2254,12 @@ void send_to_room(room_rnum room, const char *messg, ...) {
 	}
 
 	for(i = world[room].people; i; i = i->next_in_room) {
-		if(!i->desc) {
+		if(!i->has_desc) {
 			continue;
 		}
 
 		va_start(args, messg);
-		vwrite_to_output(i->desc, messg, args);
+		vwrite_to_output(*i->desc, messg, args);
 		va_end(args);
 	}
 }
@@ -2399,11 +2399,11 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
 	*(++buf) = '\0';
 
 	d("write to output from perfor_act: " << CAP(lbuf));
-	write_to_output(to->desc, "%s", CAP(lbuf));
+	write_to_output(*to->desc, "%s", CAP(lbuf));
 }
 
 
-#define SENDOK(ch)	((ch)->desc && (to_sleeping || AWAKE(ch)) && \
+#define SENDOK(ch)	((ch)->has_desc && (to_sleeping || AWAKE(ch)) && \
 		(IS_NPC(ch) || !PLR_FLAGGED((ch), PLR_WRITING)))
 
 void act(const char *str, int hide_invisible, char_data *ch,

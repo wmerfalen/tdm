@@ -480,15 +480,20 @@ namespace mods {
 		do_auto_exits(m_char_data);
 	}
 	player::~player(){
-		if(m_desc_iterator != descriptor_list.end()){
-			descriptor_list.erase(m_desc_iterator);
+		if(m_desc){
+			/** FIXME: dire. Must erase the proper element. How do we know?  (maybe use descriptor num)*/
+			//descriptor_list.erase(m_desc_iterator);
 		}
 	}
 	void player::set_char_on_descriptor(std::deque<descriptor_data>::iterator it){
+		std::cerr << "[set_char_on_descriptor]:" << it->host.c_str() \
+			<< "[char:]: " << this->cd()->player.name.c_str() << "\n";
 		it->character = this->cd();
+		it->character->desc = m_desc;
+		it->character->has_desc = true;
 	}
 	void player::init(){
-		m_desc_iterator = descriptor_list.end();
+		m_desc.reset();
 		m_name.clear();
 		m_class_capability = {};
 		m_executing_js = false;

@@ -165,7 +165,7 @@ SPECIAL(gen_board) {
 		loaded = 1;
 	}
 
-	if(!ch->desc) {
+	if(!ch->has_desc) {
 		return (0);
 	}
 
@@ -238,7 +238,7 @@ int Board_write_message(int board_type, struct char_data *ch, char *arg, struct 
 	send_to_char(ch, "Write your message.  Terminate with a @ on a new line.\r\n\r\n");
 	act("$n starts to write a message.", TRUE, ch, 0, 0, TO_ROOM);
 
-	string_write(ch->desc, &(msg_storage[NEW_MSG_INDEX(board_type).slot_num]),
+	string_write(*ch->desc, &(msg_storage[NEW_MSG_INDEX(board_type).slot_num]),
 	             MAX_MESSAGE_LENGTH, board_type + BOARD_MAGIC, NULL);
 
 	num_of_msgs[board_type]++;
@@ -250,7 +250,7 @@ int Board_show_board(int board_type, struct char_data *ch, char *arg, struct obj
 	int i;
 	char tmp[MAX_STRING_LENGTH], buf[MAX_STRING_LENGTH];
 
-	if(!ch->desc) {
+	if(!ch->has_desc) {
 		return (0);
 	}
 
@@ -311,7 +311,7 @@ int Board_show_board(int board_type, struct char_data *ch, char *arg, struct obj
 		}
 
 #endif
-		page_string(ch->desc, buf, TRUE);
+		page_string(*ch->desc, buf, TRUE);
 	}
 
 	return (1);
@@ -387,7 +387,7 @@ int Board_display_msg(int board_type, struct char_data *ch, char *arg, struct ob
 	         MSG_HEADING(board_type, ind),
 	         msg_storage[MSG_SLOTNUM(board_type, ind)]);
 
-	page_string(ch->desc, buffer, TRUE);
+	page_string(*ch->desc, buffer, TRUE);
 
 	return (1);
 }

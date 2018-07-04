@@ -973,7 +973,6 @@ void parse_sql_mobiles() {
 			}
 
 			proto.nr = 0;
-			proto.desc.clear();
 			proto.uuid = mods::globals::get_uuid();
 			mob_proto.push_back(proto);
 			top_of_mobt = mob_proto.size();
@@ -2357,12 +2356,14 @@ bool load_char(const char *name, struct char_file_u *char_element) {
 void save_char(struct char_data *ch) {
 	struct char_file_u st;
 
-	if(IS_NPC(ch) || !ch->desc.host.length()) {
-		d("save_char - IS_NPC: " << IS_NPC(ch) << " host: " << ch->desc.host.c_str() << "[not saving]");
+	/**
+	 * FIXME: NOW -> This is why users are not being saved */
+	if(IS_NPC(ch) || !ch->has_desc) {
+		d("save_char - IS_NPC: " << IS_NPC(ch) << "[not saving]");
 		return;
 	}
 
-	st.host = ch->desc.host;
+	st.host = ch->desc->host;
 	try {
 		auto txn = txn();
 		sql_compositor comp("player",&txn);
@@ -2728,8 +2729,8 @@ void free_char(struct char_data *ch) {
 		affect_remove(ch, ch->affected);
 	}
 
-	if(ch->desc) {
-		ch->desc.character = NULL;
+	if(ch->has_desc) {
+		ch->desc->character = nullptr;
 	}
 
 }
@@ -2853,21 +2854,21 @@ int file_to_string(const char *name, char *buf) {
 
 
 /* clear some of the the working variables of a char */
-void reset_char(struct char_data *ch) {
+void reset_char(char_data *ch) {
 	int i;
 
 	for(i = 0; i < NUM_WEARS; i++) {
-		GET_EQ(ch, i) = NULL;
+		GET_EQ(ch, i) = nullptr;
 	}
 
-	ch->followers = NULL;
-	ch->master = NULL;
+	ch->followers = nullptr;
+	ch->master = nullptr;
 	IN_ROOM(ch) = NOWHERE;
-	ch->carrying = NULL;
-	ch->next = NULL;
-	ch->next_fighting = NULL;
-	ch->next_in_room = NULL;
-	FIGHTING(ch) = NULL;
+	ch->carrying = nullptr;
+	ch->next = nullptr;
+	ch->next_fighting = nullptr;
+	ch->next_in_room = nullptr;
+	FIGHTING(ch) = nullptr;
 	ch->char_specials.position = POS_STANDING;
 	ch->mob_specials.default_pos = POS_STANDING;
 	ch->mob_specials.behaviour_tree = behaviour_tree::NONE;
@@ -2954,10 +2955,10 @@ void init_char(struct char_data *ch) {
 		GET_MOVE(ch) = GET_MAX_MOVE(ch);
 	}
 
-	set_title(ch, NULL);
-	ch->player.short_descr = "";
-	ch->player.long_descr = "";
-	ch->player.description = "";
+	set_title(ch, nullptr);
+	ch->player.short_descr.clear();
+	ch->player.long_descr.clear();
+	ch->player.description.clear();
 
 	ch->player.time.birth = time(0);
 	ch->player.time.logon = time(0);

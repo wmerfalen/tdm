@@ -56,7 +56,7 @@ void echo_off(mods::descriptor_data &d);
 void do_start(struct char_data *ch);
 int parse_class(char arg);
 int special(struct char_data *ch, int cmd, char *arg);
-int Valid_Name(char *newname);
+int Valid_Name(const char *newname);
 void read_aliases(struct char_data *ch);
 void delete_aliases(const char *charname);
 
@@ -1304,7 +1304,7 @@ int perform_dupe_check(mods::descriptor_data d) {
 			}
 
 			if(k.character) {
-				k.character->desc.clear();
+				k.character->desc->clear();
 			}
 
 			k.character = NULL;
@@ -1322,7 +1322,7 @@ int perform_dupe_check(mods::descriptor_data d) {
 				mode = USURP;
 			}
 
-			k.character->desc.clear();
+			k.character->desc->clear();
 			k.character = NULL;
 			k.original = NULL;
 			write_to_output(k, "\r\nMultiple login detected -- disconnecting.\r\n");
@@ -1351,7 +1351,7 @@ int perform_dupe_check(mods::descriptor_data d) {
 		}
 
 		/* ignore chars with descriptors (already handled by above step) */
-		if(ch->desc) {
+		if(ch->has_desc) {
 			continue;
 		}
 
@@ -1384,7 +1384,7 @@ int perform_dupe_check(mods::descriptor_data d) {
 	/* Okay, we've found a target.  Connect d to target. */
 	free_char(d.character); /* get rid of the old char */
 	d.character = target;
-	d.character->desc = d;
+	*d.character->desc = d;
 	d.original = NULL;
 	d.character->char_specials.timer = 0;
 	REMOVE_BIT(PLR_FLAGS(d.character), PLR_MAILING | PLR_WRITING);
@@ -1419,12 +1419,13 @@ int perform_dupe_check(mods::descriptor_data d) {
 
 
 /* deal with newcomers and other non-playing sockets */
-void nanny(mods::descriptor_data &d, char *arg) {
+void nanny(std::shared_ptr<mods::player> p, char *arg) {
 	d("nanny -entrance");
 	int load_result;	/* Overloaded variable */
 
 	skip_spaces(&arg);
 
+	auto & d = p->desc();
 	switch(STATE(d)) {
 		case CON_GET_NAME:		/* wait for input of name */
 			if(!*arg) {
@@ -1436,7 +1437,7 @@ void nanny(mods::descriptor_data &d, char *arg) {
 				struct char_file_u tmp_store;
 				memset(&tmp_store,0,sizeof(tmp_store));
 				mods::string tmp_ptr(arg);
-				if(!Valid_Name(tmp_ptr.ptr()) ||
+				if(!Valid_Name(tmp_ptr.c_str()) ||
 						fill_word(strncpy(&buf[0], tmp_ptr.c_str(),MAX_INPUT_LENGTH)) || 
 						reserved_word(&buf[0])) {	/* strcpy: OK (mutual MAX_INPUT_LENGTH) */
 					write_to_output(d, "Invalid name, please try another.\r\nName: ");
@@ -1450,14 +1451,14 @@ void nanny(mods::descriptor_data &d, char *arg) {
 						d("PLR_FLAGGED(PLR_DELETED)");
 						/* We get a false positive from the original deleted character. */
 						/* Check for multiple creations... */
-						if(!Valid_Name(tmp_ptr.ptr())) {
+						if(!Valid_Name(tmp_ptr.c_str())) {
 							write_to_output(d, "Invalid name, please try another.\r\nName: ");
 							return;
 						}
 
 						clear_char(d.character);
 						d.character->player_specials = std::make_unique<player_special_data>();
-						d.character->desc = d;
+						*d.character->desc = d;
 						d.character->player.name.assign(tmp_ptr.c_str());
 						write_to_output(d, "Did I get that right, %s (Y/N)? ", tmp_ptr.c_str());
 						d("con-name-cnfrm");
@@ -1477,7 +1478,7 @@ void nanny(mods::descriptor_data &d, char *arg) {
 					/* player unknown -- make new character */
 
 					/* Check for multiple creations of a character. */
-					if(!Valid_Name(tmp_ptr.ptr())) {
+					if(!Valid_Name(tmp_ptr.c_str())) {
 						write_to_output(d, "Invalid name, please try another.\r\nName: ");
 						return;
 					}

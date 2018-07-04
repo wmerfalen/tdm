@@ -1023,7 +1023,7 @@ void shopping_list(char *arg, struct char_data *ch, struct char_data *keeper, in
 				strncat(buf, list_object(last_obj, cnt, lindex, shop_nr, keeper, ch), sizeof(buf) - len - 1);    /* strncat: OK */
 			}
 
-		page_string(ch->desc, buf, TRUE);
+		page_string(*ch->desc, buf, TRUE);
 	}
 }
 
@@ -1492,7 +1492,7 @@ void list_all_shops(struct char_data *ch) {
 		                customer_string(shop_nr, FALSE));
 	}
 
-	page_string(ch->desc, buf, TRUE);
+	page_string(*ch->desc, buf, TRUE);
 }
 
 

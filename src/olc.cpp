@@ -314,7 +314,7 @@ void olc_string(char **string, size_t maxlen, char *arg) {
 	if(!*arg) {
 		send_to_char(olc_ch, "Enter new string (max of %d characters); use '@' on a new line when done.\r\n", (int) maxlen);
 		**string = '\0';
-		string_write(olc_ch->desc, string, maxlen, 0, NULL);
+		string_write(*olc_ch->desc, string, maxlen, 0, NULL);
 	} else {
 		if(strlen(arg) > maxlen) {
 			send_to_char(olc_ch, "String too long (cannot be more than %d chars).\r\n", (int) maxlen);

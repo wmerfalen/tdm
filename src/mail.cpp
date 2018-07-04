@@ -514,7 +514,7 @@ char *read_delete(long recipient) {
 ****************************************************************/
 
 SPECIAL(postmaster) {
-	if(!ch->desc || IS_NPC(ch)) {
+	if(!ch->has_desc || IS_NPC(ch)) {
 		return (0);    /* so mobs don't get caught here */
 	}
 
@@ -586,7 +586,7 @@ void postmaster_send_mail(struct char_data *ch, struct char_data *mailman,
 
 	/* Start writing! */
 	CREATE(mailwrite, char *, 1);
-	string_write(ch->desc, mailwrite, MAX_MAIL_SIZE, recipient, NULL);
+	string_write(*ch->desc, mailwrite, MAX_MAIL_SIZE, recipient, NULL);
 }
 
 

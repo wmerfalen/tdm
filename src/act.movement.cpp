@@ -178,7 +178,7 @@ int do_simple_move(struct char_data *ch, int dir, int need_specials_check) {
 		act("$n has arrived.", TRUE, ch, 0, 0, TO_ROOM);
 	}
 
-	if(ch->desc) {
+	if(ch->has_desc) {
 		look_at_room(ch, 0);
 	}
 

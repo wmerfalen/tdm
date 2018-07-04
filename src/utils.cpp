@@ -29,6 +29,9 @@ extern struct time_data time_info;
 /**
  * STATE macro overload - temporary while we refactor
  */
+int& STATE(std::shared_ptr<mods::descriptor_data> d){	
+	return (d)->connected;
+}
 int& STATE(mods::descriptor_data &d){	
 	//d("STATE non-iterator. connected: " << d.connected);
 #ifdef __MENTOC_PRINT_STATE_DEPRECATION__
@@ -286,6 +289,7 @@ void mudlog(int type, int level, int file, const char *str, ...) {
 	strcat(buf, " ]\r\n");	/* strcat: OK */
 
 	for(auto & i : descriptor_list) {
+		if(!i.character){ continue; }
 		if(STATE(i) != CON_PLAYING || IS_NPC(i.character)) { /* switch */
 			continue;
 		}

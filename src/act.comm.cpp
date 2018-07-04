@@ -133,7 +133,7 @@ int is_tell_ok(struct char_data *ch, struct char_data *vict) {
 		send_to_char(ch, "You can't tell other people while you have notell on.\r\n");
 	} else if(ROOM_FLAGGED(IN_ROOM(ch), ROOM_SOUNDPROOF)) {
 		send_to_char(ch, "The walls seem to absorb your words.\r\n");
-	} else if(!IS_NPC(vict) && !vict->desc) {     /* linkless */
+	} else if(!IS_NPC(vict) && !vict->has_desc) {     /* linkless */
 		act("$E's linkless at the moment.", FALSE, ch, 0, vict, TO_CHAR | TO_SLEEP);
 	} else if(PLR_FLAGGED(vict, PLR_WRITING)) {
 		act("$E's writing a message right now; try again later.", FALSE, ch, 0, vict, TO_CHAR | TO_SLEEP);
@@ -271,7 +271,7 @@ ACMD(do_write) {
 
 	two_arguments(argument, papername, penname);
 
-	if(!ch->desc) {
+	if(!ch->has_desc) {
 		return;
 	}
 
@@ -334,7 +334,7 @@ ACMD(do_write) {
 		/* we can write - hooray! */
 		send_to_char(ch, "Write your note.  End with '@' on a new line.\r\n");
 		act("$n begins to jot down a note.", TRUE, ch, 0, 0, TO_ROOM);
-		string_write(ch->desc, &paper->action_description, MAX_NOTE_LENGTH, 0, NULL);
+		//string_write(ch->desc, &paper->action_description, MAX_NOTE_LENGTH, 0, NULL);
 	}
 }
 
@@ -400,7 +400,7 @@ ACMD(do_gen_comm) {
 	};
 
 	/* to keep pets, etc from being ordered to shout */
-	if(!ch->desc) {
+	if(!ch->has_desc) {
 		return;
 	}
 
