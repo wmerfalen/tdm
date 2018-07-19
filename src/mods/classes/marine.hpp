@@ -5,7 +5,7 @@
 
 namespace mods::classes {
 	struct marine : base {
-		constexpr types kind() {
+		types kind() {
 			return types::MARINE;
 		}
 		typedef std::shared_ptr<mods::player> player_ptr;

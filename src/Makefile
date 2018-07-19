@@ -2,9 +2,11 @@ src = .
 builddir = build
 CC = g++-7
 BINDIR = ../bin
+DATA_DIR = $(CURDIR)/../lib/
+LMDBNAME = bnull
 
-lmdbout = $(CURDIR)/mods/lib
-lmdb = $(lmdbout)/lmdb.so
+lmdbdir = $(CURDIR)/liblmdb
+lmdb = $(lmdbdir)/liblmdb.so
 duktapeout = $(builddir)/duktape
 duktape = $(duktapeout)/duktape.o
 
@@ -13,9 +15,10 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-Wno-char-subscripts -Wcomment \
 	-Wno-format-zero-length -Wno-format-security\
 	-A -da -std=c++17 -fpermissive -MMD\
-	-L$(lmdbout) -Lboost-cpp/build/lib\
-	-Imods/include -Iboost-cpp
-LIBS = -lcrypt -lpqxx -lpq -llmdb -lscrypt
+	-Lboost-cpp/build/lib\
+	-Imods/include -Iboost-cpp -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
+	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__
+LIBS = -lcrypt -lpqxx -lpq -lscrypt
 buildobj = act.comm act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
 					 act.wizard alias ban boards bsd-snprintf castle \
@@ -28,16 +31,18 @@ buildobj = act.comm act.informative act.item act.medic \
 					 mods/js mods/player mods/pq mods/prefs mods/pregame\
 					 mods/projectile mods/quests mods/scan mods/sql mods/util\
 					 mods/weapon mods/classes/medic mods/string
+
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
-all: $(builddir) $(objects) $(thirdparty)
+all: $(builddir) $(objects) $(thirdparty) $(DATA_DIR)
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS)
 clean:
-	rm -f $(addprefix $(builddir)/,*.o *.d mods/*.o \
+	make -f $(lmdbdir)/Makefile clean ; \
+		rm -f $(addprefix $(builddir)/,*.o *.d  mods/*.o \
 		mods/*.d mods/classes/*.o mods/classes/*.d)
 
 $(builddir):
-	mkdir -p $(builddir)/mods/classes $(duktapeout) $(lmdbout)
+	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/acl/
 
 $(builddir)/%.o: %.cpp
 	$(CC) -c $(FLAGS) -o $@ $<
@@ -48,4 +53,7 @@ $(duktape): duktape-2.2.0/src/duktape.h duktape-2.2.0/src/duktape.c
 	$(CC) -c $(FLAGS) duktape-2.2.0/src/duktape.c -o $(duktape)
 
 $(lmdb):
-	make $(lmdb)
+	cd $(lmdbdir) && make clean ; make liblmdb.so && cd $(src)
+
+$(DATA_DIR):
+	mkdir $(DATA_DIR)

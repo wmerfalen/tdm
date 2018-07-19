@@ -5,10 +5,18 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <vector>
+
+/** __MENTOC_NO_DEPS__ Essentially means that
+ * we only want the behaviour tree implementation and no
+ * other dependencies, hence the "NO_DEPS".
+ */
+#ifdef __MENTOC_NO_DEPS__
+#else
 #include "../conf.h"
 #include "../sysdep.h"
 #include "../structs.h"
 #include "../types.hpp"
+#endif
 #include "behaviour_tree_node.hpp"
 
 namespace mods {

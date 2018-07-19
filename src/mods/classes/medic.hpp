@@ -6,7 +6,7 @@
 namespace mods::classes {
 	struct medic : base {
 		typedef std::shared_ptr<mods::player> player_ptr;
-		constexpr types kind() {
+		types kind() {
 			return types::MEDIC;
 		}
 

@@ -40,6 +40,8 @@
 # include <mmsystem.h>
 #endif /* CIRCLE_WINDOWS */
 
+		/** !fixme: do proper shutdown here */
+		/** !hellyeah: hell yeah good job */
 #ifdef CIRCLE_AMIGA		/* Includes for the Amiga */
 # include <sys/ioctl.h>
 # include <clib/socket_protos.h>
@@ -254,7 +256,7 @@ int main(int argc, char **argv) {
 				} else if(++pos < argc) {
 					LOGNAME = argv[pos];
 				} else {
-					puts("SYSERR: File name to log to expected after option -o.");
+					log("SYSERR: File name to log to expected after option -o.");
 					exit(1);
 				}
 
@@ -276,7 +278,7 @@ int main(int argc, char **argv) {
 				} else if(++pos < argc) {
 					dir = argv[pos];
 				} else {
-					puts("SYSERR: Directory arg expected after option -d.");
+					log("SYSERR: Directory arg expected after option -d.");
 					exit(1);
 				}
 
@@ -285,27 +287,27 @@ int main(int argc, char **argv) {
 			case 'm':
 				mini_mud = 1;
 				no_rent_check = 1;
-				puts("Running in minimized mode & with no rent check.");
+				log("Running in minimized mode & with no rent check.");
 				break;
 
 			case 'c':
 				scheck = 1;
-				puts("Syntax check mode enabled.");
+				log("Syntax check mode enabled.");
 				break;
 
 			case 'q':
 				no_rent_check = 1;
-				puts("Quick boot mode -- rent check supressed.");
+				log("Quick boot mode -- rent check supressed.");
 				break;
 
 			case 'r':
 				circle_restrict = 1;
-				puts("Restricting game -- no new players allowed.");
+				log("Restricting game -- no new players allowed.");
 				break;
 
 			case 's':
 				no_specials = 1;
-				puts("Suppressing assignment of special routines.");
+				log("Suppressing assignment of special routines.");
 				break;
 
 			case 'h':
@@ -663,7 +665,7 @@ void game_loop(socket_t mother_desc) {
 	const int size = 10; // hint
 	epoll_fd = epoll_create (size);
 	if (epoll_fd == -1) {
-		std::cerr << "[epoll] epoll_create failed: " << strerror (errno) << "\n";
+		log((std::string("SYSERR: [epoll] epoll_create failed: ")+strerror (errno)).c_str());
 		return;
 	}
 	// add fd to reactor
@@ -671,43 +673,43 @@ void game_loop(socket_t mother_desc) {
 	epoll_ev.data.fd = mother_desc; // user data
 	int r = epoll_ctl (epoll_fd, EPOLL_CTL_ADD, mother_desc, &epoll_ev);
 	if (r == -1) {
-		d("[epoll] epoll_ctl failed: " << strerror (errno));
+		log((std::string("SYSERR: [epoll] epoll_ctl failed: ")+strerror(errno)).c_str());
+					/** fixme: do proper shutdown here */
 		close (epoll_fd);
 		close (mother_desc);
 		return;
 	}
+	/** !hellyeah:woohoo */
 	gettimeofday(&last_time, (struct timezone *) 0);
 	while(!circle_shutdown) {
 		mods::globals::defer_queue->iteration();
 
 		epoll_event events[size];
 		constexpr int epoll_timeout = 5;	/* miliseconds */
-		// and wait for events
-		//d(".");
 		int r = epoll_wait (epoll_fd, events, size, epoll_timeout);
 		if (r == -1) {
-			d("[epoll] epoll_wait returned -1");
+			log("SYSERR [epoll] epoll_wait returned -1");
+					/** fixme: do proper shutdown here */
 			close (epoll_fd);
 			close (mother_desc);
 			return;
 		}
 
-		// demultiplex events
 		int i = 0;
 		int new_desc = 0;
 		while (i < r) {
 			new_desc = 0;
 			auto operating_socket = events[i].data.fd;
 			if (events[i].data.fd == mother_desc) {
-				d("new descriptor detected");
 				new_desc = new_descriptor(mother_desc);
 				operating_socket = new_desc;
 				epoll_ev.events = EPOLLIN; // new connection is a read event
 				epoll_ev.data.fd = new_desc; // user data
 				int r = epoll_ctl (epoll_fd, EPOLL_CTL_ADD, new_desc, &epoll_ev);
 				if (r == -1) {
-					/** FIXME: de-reg and de-alloc player obj here -- remove from socket_map*/
-					d("[epoll] epoll_ctl failed: " << strerror (errno));
+					/** fixme: de-reg and de-alloc player obj here -- remove from socket_map*/
+					log((std::string("SYSERR:[epoll] epoll_ctl failed: ") + strerror(errno)).c_str());
+					/** fixme: do proper shutdown here */
 					close (epoll_fd);
 					close (mother_desc);
 					return;
@@ -715,15 +717,14 @@ void game_loop(socket_t mother_desc) {
 			}
 			auto it = mods::globals::socket_map.find(operating_socket);
 			if(it == mods::globals::socket_map.end()){
-				d("socket not found in socket_map");
 				++i;
 				continue;
 			}
 			auto player = it->second;
 
 			if(process_input(player->desc()) < 0){
-				d("process_input < 0");
-				/** FIXME de-reg and de-alloc -- remove from socket_map */
+				log("SYSERR: process_input < 0 for player descriptor");
+				/** fixme: de-reg and de-alloc -- remove from socket_map */
 				mods::globals::deregister_player(player->cd());
 				++i;
 				continue;
@@ -748,15 +749,6 @@ void game_loop(socket_t mother_desc) {
 				GET_WAIT_STATE(player->cd()) = 1;
 			}
 			player->desc().has_prompt = false;
-			/* player->desc().has_prompt = FALSE;
-			if(player->desc().str) {	// Writing boards, mail, etc. 
-				d("string_add being called");
-				string_add((player->desc()), comm);
-			} else if(player->desc().showstr_count) { // Reading something w/ pager 
-				d("show_string");
-				show_string(player->desc(), comm);
-			} else 
-			*/
 			if(STATE(player->desc()) != CON_PLAYING) { // In menus, etc. 
 				d("nanny");
 				nanny(player, comm);
@@ -776,7 +768,6 @@ void game_loop(socket_t mother_desc) {
 			++i;
 			gettimeofday(&last_time, (struct timezone *) 0);
 		}//end while(i < r)
-		//d("outside");
 
 		/*
 		 * At this point, we have completed all input, output and heartbeat
@@ -814,7 +805,7 @@ void game_loop(socket_t mother_desc) {
 			timediff(&timeout, &last_time, &now);
 		} while(timeout.tv_usec || timeout.tv_sec);
 
-		/**TODO: refactor this to not loop through all descriptors but to instead queue up data to be output and output them accordingly */
+		/** !todo: refactor this to not loop through all descriptors but to instead queue up data to be output and output them accordingly */
 		for(auto & p : mods::globals::player_list) {
 			if(p->desc().has_output) {
 				p->desc().flush_output();
@@ -832,7 +823,7 @@ void game_loop(socket_t mother_desc) {
 		/* Kick out folks in the CON_CLOSE or CON_DISCONNECT state */
 		for(auto & p : mods::globals::player_list) {
 			if(STATE(p->desc()) == CON_CLOSE || STATE(p->desc()) == CON_DISCONNECT) {
-				/** FIXME  do proper shutdown of char */
+				/** !fixme:  do proper shutdown of char */
 				d("taking care of disco/close socket");
 				close_socket(p->desc());
 			}
@@ -1807,7 +1798,7 @@ while(nl_pos != NULL) {
 	} else {
 		strcpy(t.last_input, tmp);	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
 
-		/** NOTES: !mods |-> I think history should just be a std::array<std::string,HISTORY_SIZE> and we do ring buffer logic around it. FIXME */
+		/** NOTES: !mods |-> I think history should just be a std::array<std::string,HISTORY_SIZE> and we do ring buffer logic around it. fixme: */
 		if(t.history_pos < HISTORY_SIZE && t.history[t.history_pos].length()) {
 			t.history[t.history_pos].clear();    /* Clear the old line. */
 			t.history_pos = 0;
@@ -1909,7 +1900,7 @@ int perform_subst(mods::descriptor_data &t, char *orig, char *subst) {
 
 
 void close_socket(mods::descriptor_data d) {
-	/** FIXME there are some free() calls here that need to be eliminated but first the mallocs need to be found and the members turned into stl containers. */
+	/** fixme: there are some free() calls here that need to be eliminated but first the mallocs need to be found and the members turned into stl containers. */
 	mods::globals::socket_map.erase(d.descriptor);
 	CLOSE_SOCKET(d.descriptor);
 	flush_queues(d);
@@ -2487,10 +2478,10 @@ void setup_log(const char *filename, int fd) {
 #else
 
 	if((s_fp = fdopen(STDERR_FILENO, "w")) == NULL) {
-		puts("SYSERR: Error opening stderr, trying stdout.");
+		log("SYSERR: Error opening stderr, trying stdout.");
 
 		if((s_fp = fdopen(STDOUT_FILENO, "w")) == NULL) {
-			puts("SYSERR: Error opening stdout, trying a file.");
+			log("SYSERR: Error opening stdout, trying a file.");
 
 			/* If we don't have a file, try a default. */
 			if(filename == NULL || *filename == '\0') {
@@ -2504,7 +2495,7 @@ void setup_log(const char *filename, int fd) {
 	if(filename == NULL || *filename == '\0') {
 		/* No filename, set us up with the descriptor we just opened. */
 		logfile = s_fp;
-		puts("Using file descriptor for logging.");
+		log("Using file descriptor for logging.");
 		return;
 	}
 
@@ -2524,7 +2515,7 @@ void setup_log(const char *filename, int fd) {
 	}
 
 	/* Erp, that didn't work either, just die. */
-	puts("SYSERR: Couldn't open anything to log to, giving up.");
+	log("SYSERR: Couldn't open anything to log to, giving up.");
 	exit(1);
 }
 

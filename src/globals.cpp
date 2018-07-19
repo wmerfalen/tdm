@@ -17,8 +17,6 @@
 #include "mods/util.hpp"
 #include "mods/pregame.hpp"
 
-#define LMDB_DB_FILE "/home/llvm/code/c++/bnull-mud/lib/"
-#define LMDB_DB_NAME "bnull"
 #define MODS_BREACH_DISORIENT 50
 #define MODS_GRENADE_BASE_DAMAGE 66
 struct char_data* character_list = NULL;
@@ -97,16 +95,16 @@ namespace mods {
 		}
 		void register_object(obj_data& obj) {
 			if(obj.name) {
+				/** !fixme: this is lame. Don't search within the name to find out it's type. That's slow af. */
 				if(std::string(obj.name).find("[ammo]") !=std::string::npos) {
 					obj.holds_ammo = 1;
 				}
 
+				/** !fixme: see above fixme */
 				if(std::string(obj.name).find("snipe") != std::string::npos) {
 					obj.holds_ammo = 1;
 					obj.ammo = 12;
 					obj.ammo_max = 12;
-					std::cout << "############FOUND SNIPER RIFLE#############\n";
-					std::cout << obj.item_number << "\n";
 				} else {
 					obj.holds_ammo = 0;
 					obj.ammo = 0;
@@ -116,6 +114,11 @@ namespace mods {
 
 			obj_map.insert({obj.item_number,&obj});
 		}
+
+		void shutdown(void){
+			exit(0);
+		}
+		/** !todo: phase this function out */
 		bool acl_allowed(struct char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd) {
 			return false;
 		}
@@ -123,13 +126,28 @@ namespace mods {
 			return 1;
 		}
 		void init() {
-			db = std::make_unique<lmdb_db>(LMDB_DB_FILE,LMDB_DB_NAME,MDB_WRITEMAP | MDB_NOLOCK,0600,true);
+			if(!mods::util::dir_exists(LMDB_DB_DIRECTORY)){
+				/** !idea: if lmdb dir doesn't exist fallback to regular key/value pairs in postgres? something? idk */
+				auto err = mkdir(LMDB_DB_DIRECTORY,0700);
+				if(err == -1){
+					log(
+						(std::string("SYSERR: The lmdb database directory couldn't be created: ") + mods::util::err::get_string(errno)).c_str()
+					);
+					mods::globals::shutdown();
+				}
+			}
+			db = std::make_unique<lmdb_db>(LMDB_DB_DIRECTORY,LMDB_DB_NAME,MDB_WRITEMAP | MDB_NOLOCK,0600,true);
 			player_nobody = nullptr;
 			defer_queue = std::make_unique<mods::deferred>(mods::deferred::TICK_RESOLUTION);
 			duktape_context = mods::js::new_context();
 			mods::js::load_c_functions();
 			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js");
-			pq_con = std::make_unique<pqxx::connection>(mods::conf::pq_connection.c_str());
+			try{
+				pq_con = std::make_unique<pqxx::connection>(mods::conf::pq_connection.c_str());
+			}catch(pqxx::broken_connection & e){
+				std::cerr << "[debug]: It seems that there was a problem connecting to a local postgres server. Do you have one installed? \n";
+				mods::globals::shutdown();
+			}
 			f_import_rooms = false;
 			mods::behaviour_tree_impl::load_trees();
 

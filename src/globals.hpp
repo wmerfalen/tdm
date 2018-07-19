@@ -82,6 +82,7 @@ namespace mods {
 		void register_room(const room_rnum&);
 		void register_player(char_data* ch);
 		void deregister_player(char_data* ch);
+		void shutdown();
 		void refresh_player_states();
 		void room_event(struct char_data*,mods::ai_state::event_type_t);
 		void room_event(room_vnum,mods::ai_state::event_type_t);

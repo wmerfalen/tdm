@@ -7,12 +7,15 @@
 #include "../globals.hpp"
 #include <optional>
 #include <stdlib.h>
+#include <sys/types.h>	/** for opendir() */
+#include <dirent.h>			/** for opendir() */
+#include <sys/stat.h>		/** for mkdir() */
 #ifdef MENTOC_CPP_2017
 #include <filesystem>
 #else
 #include <dirent.h>
 #endif
-
+	
 namespace mods::util {
 	using directory_list_t = std::vector<std::string>;
 	directory_list_t glob(std::string_view);
@@ -82,12 +85,8 @@ namespace mods::util {
 
 		return {};
 	}
-	inline std::string itoa(int number) {
-		std::array<char,16> buf;
-		std::fill(buf.begin(),buf.end(),0);
-		snprintf(&buf[0],16,"%d",number);
-		return &buf[0];
-	}
+	std::string itoa(int number);
+
 	template<typename T>
 	inline void linked_list_remove(T item, T head) {
 		if((item) == (head)) {
@@ -118,15 +117,13 @@ namespace mods::util {
 			)
 		)!= container_ptr->end();
 	}
-	auto sanitize = [](const std::string & command,std::string& sanitized){
-		sanitized = "";
-		for(auto ch: command){
-			if(std::isalpha(ch)){
-				sanitized += ch;
-			}
-		}
-	};
+	extern std::function<void(const std::string&,std::string&)> sanitize;
+	bool dir_exists(const char*);
 
+};
+
+namespace mods::util::err {
+	std::string get_string(int);
 };
 
 #endif

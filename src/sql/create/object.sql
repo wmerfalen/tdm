@@ -1,4 +1,3 @@
-DROP TABLE object;
 CREATE TABLE object (
 	id SERIAL,
 	obj_item_number INTEGER NOT NULL,

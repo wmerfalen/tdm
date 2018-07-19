@@ -5,10 +5,14 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <vector>
+#ifdef __MENTOC_NO_DEPS__
+#else
 #include "../conf.h"
 #include "../sysdep.h"
 #include "../structs.h"
 #include "../types.hpp"
+#endif
+
 #include "behaviour_tree_status.hpp"
 #include <functional>
 

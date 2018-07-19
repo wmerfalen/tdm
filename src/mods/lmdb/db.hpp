@@ -27,7 +27,7 @@
 		#include <locale>
 
 #define GDNS_BUFFER_SIZE 512
-/** FIXME: find the C++ way of doing this stupid macro */
+/** !fixme: find the C++ way of doing this stupid macro */
 #include <stdlib.h>
 #ifdef GDNS_STFU
 #define GDNS_DEBUG(__text__) { /* */ }
@@ -75,7 +75,7 @@ namespace gdns {
 		struct gdns_env{ 
 			MDB_env* env;
 			gdns_env(MDB_env* e) : env(e) {}
-			gdns_env() : env(nullptr) {}
+			gdns_env() = delete;
 			~gdns_env(){
 				if(env){
 					mdb_env_close(env);
@@ -113,11 +113,11 @@ namespace gdns {
 
 				/** Open the lmdb database handle */
 				int open_flags = flags;
-				if(dbi_name != NULL && b_create){
+				if(dbi_name != nullptr && b_create){
 					open_flags |= MDB_CREATE;
 					mdb_env_set_maxdbs(env->env,max_dbs);
 				}
-				if(mdb_env_open(env->env,file,open_flags /*MDB_WRITEMAP | MDB_NOLOCK*/,permissions) < 0){
+				if(mdb_env_open(env->env,file,open_flags,permissions) < 0){
 					std::cerr << "[lmdb] failed to open directory '/tmp/ghostdns' make sure it exists!\n";
 					return -1;
 				}
@@ -125,10 +125,11 @@ namespace gdns {
 				MDB_txn *_txn;
 				{
 					/** Begin transaction */
-					if(mdb_txn_begin(env->env,NULL,flags /*MDB_WRITEMAP | MDB_NOLOCK*/,&_txn) < 0){
+					if(mdb_txn_begin(env->env,NULL,flags,&_txn) < 0){
 						std::cerr << "[lmdb] failed to open transaction!\n";
 						return -1;
 					}
+					std::cerr << "[lmdb] transaction started via mdb_txn_begin\n";
 					txn = std::make_unique<gdns_txn>(_txn);
 
 					/** Open the database */

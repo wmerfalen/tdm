@@ -1,4 +1,3 @@
-DROP TABLE mobile;
 CREATE TABLE mobile (
 	mob_id SERIAL,
 	mob_virtual_number INTEGER NOT NULL,

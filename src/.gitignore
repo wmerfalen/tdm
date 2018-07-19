@@ -11,3 +11,4 @@ boost_1_66_0
 GSL
 ../callgrind.out*
 mods/test/*
+*.so

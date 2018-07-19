@@ -66,6 +66,12 @@ namespace mods {
 				return std::nullopt;
 			}
 		}
+	std::string itoa(int number) {
+		std::array<char,16> buf;
+		std::fill(buf.begin(),buf.end(),0);
+		snprintf(&buf[0],16,"%d",number);
+		return &buf[0];
+	}
 		directory_list_t glob(std::string_view path){
 			directory_list_t files;
 #ifdef MENTOC_CPP_2017
@@ -87,7 +93,36 @@ namespace mods {
 			}
 #endif
 		}
+		std::function<void(const std::string&,std::string&)> sanitize = [](const std::string & command,std::string& sanitized){
+		sanitized = "";
+		for(auto ch: command){
+			if(std::isalpha(ch)){
+				sanitized += ch;
+			}
+		}
 	};
+
+	bool dir_exists(const char* dir){
+		auto dir_fp = opendir(dir);
+		if(dir_fp == nullptr){
+			return false;
+		}
+		else{
+		closedir(dir_fp);
+		return true;
+		}
+	}
+
+	};
+};
+
+namespace mods::util::err {
+	std::string get_string(int _errno){
+		std::array<char,256> buf;
+		std::fill(buf.begin(),buf.end(),0);
+		strerror_r(_errno,static_cast<char*>(&buf[0]),255);
+		return std::string(static_cast<const char*>(&buf[0]));
+	}
 };
 
 #endif

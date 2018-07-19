@@ -4,7 +4,7 @@
 #include <memory>
 namespace mods::classes {
 	struct sniper : base {
-		constexpr types kind() {
+		types kind() {
 			return types::SNIPER;
 		}
 		typedef std::shared_ptr<mods::player> player_ptr;

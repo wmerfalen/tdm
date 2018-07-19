@@ -5,7 +5,7 @@
 
 namespace mods::classes {
 	struct support : base {
-		constexpr types kind() {
+		types kind() {
 			return types::SUPPORT;
 		}
 		typedef std::shared_ptr<mods::player> player_ptr;

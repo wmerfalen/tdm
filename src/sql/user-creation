@@ -1,0 +1,2 @@
+CREATE ROLE postgres_mud_user LOGIN PASSWORD 'postgresmudpassword';
+CREATE DATABASE postgres_mud WITH OWNER = postgres_mud_user;

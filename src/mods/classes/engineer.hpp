@@ -5,7 +5,7 @@
 
 namespace mods::classes {
 	struct engineer : base {
-		constexpr types kind() {
+		types kind() {
 			return types::ENGINEER;
 		}
 		typedef std::shared_ptr<mods::player> player_ptr;
