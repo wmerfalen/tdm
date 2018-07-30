@@ -13,4 +13,4 @@ GSL
 mods/test/*
 *.so
 build/*
-
+tinker/code-features/*

@@ -16,7 +16,6 @@
 #include "mods/behaviour_tree_impl.hpp"
 #include "mods/util.hpp"
 #include "mods/pregame.hpp"
-#include "signals.hpp"
 
 extern int errno;
 #define MODS_BREACH_DISORIENT 50
@@ -128,8 +127,6 @@ namespace mods {
 			return 1;
 		}
 		void init(int argc,char** argv) {
-			std::cerr << "[debug]: calling init_sighandler... \n";
-			init_sighandler();
 			int pos = 0;
 			std::string lmdb_dir = LMDB_DB_DIRECTORY;
 			f_import_rooms = false;
