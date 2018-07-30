@@ -21,6 +21,7 @@
 #include "spells.h"
 /* !mods */
 #include "globals.hpp"
+#include "mods/loops.hpp"
 
 /* local vars */
 int extractions_pending = 0;
@@ -884,8 +885,8 @@ void update_object(struct obj_data *obj, int use) {
 void update_char_objects(struct char_data *ch) {
 	int i;
 
-	if(GET_EQ(ch, WEAR_LIGHT) != NULL)
-		if(GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT)
+	if(GET_EQ(ch, WEAR_LIGHT) != nullptr){
+		if(GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT){
 			if(GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2) > 0) {
 				i = --GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2);
 
@@ -898,11 +899,14 @@ void update_char_objects(struct char_data *ch) {
 					world[IN_ROOM(ch)].light--;
 				}
 			}
+		}
+	}
 
-	for(i = 0; i < NUM_WEARS; i++)
+	for(i = 0; i < NUM_WEARS; i++){
 		if(GET_EQ(ch, i)) {
 			update_object(GET_EQ(ch, i), 2);
 		}
+	}
 
 	if(ch->carrying) {
 		update_object(ch->carrying, 1);
@@ -1001,10 +1005,11 @@ void extract_char_final(struct char_data *ch) {
 	}
 
 	/* we can't forget the hunters either... */
-	for(temp = character_list; temp; temp = temp->next)
+	for(temp = character_list; temp; temp = temp->next){
 		if(HUNTING(temp) == ch) {
 			HUNTING(temp) = NULL;
 		}
+	}
 
 	char_from_room(ch);
 
@@ -1106,43 +1111,36 @@ void extract_pending_chars(void) {
 
 struct char_data *get_player_vis(struct char_data *ch, char *name, int *number, int inroom) {
 	MENTOC_PREAMBLE();
-	struct char_data *i;
 	int num;
 
 	if(!number) {
 		number = &num;
 		num = get_number(&name);
 	}
+	char_data* char_return = nullptr;
 
-	for(i = character_list; i; i = i->next) {
-		if(IS_NPC(i)) {
-			continue;
-		}
-
+	mods::loops::foreach_player([ch,&char_return,inroom,name,number](char_data* i){
 		if(inroom == FIND_CHAR_ROOM && IN_ROOM(i) != IN_ROOM(ch)) {
-			continue;
+			return true;
 		}
 
 		if(str_cmp(i->player.name, name)) { /* If not same, continue */
-			continue;
+			return true;
 		}
 
 		if(!CAN_SEE(ch, i)) {
-			continue;
+			return true;
 		}
 
 		if(--(*number) != 0) {
-			continue;
+			return true;
 		}
 
-		if(player->has_weapon_capability(mods::weapon::mask_type::SNIPE) && player->can_snipe(i)) {
-			return i;
-		}
+		char_return = i;
+		return false;
+	});
 
-		return (i);
-	}
-
-	return (NULL);
+	return nullptr;
 }
 
 

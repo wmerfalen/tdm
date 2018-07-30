@@ -30,7 +30,7 @@ buildobj = act.comm act.informative act.item act.medic \
 					 mods/chat mods/conf mods/deferred mods/drone mods/immortal\
 					 mods/js mods/player mods/pq mods/prefs mods/pregame\
 					 mods/projectile mods/quests mods/scan mods/sql mods/util\
-					 mods/weapon mods/classes/medic mods/string
+					 mods/weapon mods/classes/medic mods/string mods/loops signals
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
