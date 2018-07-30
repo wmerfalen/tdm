@@ -20,7 +20,6 @@ namespace mods {
 		ch->desc = owner->desc;
 		ch->drone_owner = owner->uuid;
 		ch->player.name = strdup("A drone");
-		mods::globals::register_player(ch);
 		owner->drone_uuid = ch->uuid;
 		owner->drone_simulate = true;
 		IN_ROOM(ch) = IN_ROOM(owner);

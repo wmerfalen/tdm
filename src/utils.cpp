@@ -21,6 +21,7 @@
 #include "handler.h"
 #include "interpreter.h"
 #include <random>	//C++ library
+#include <stdio.h>	/** for STDERR descriptor */
 
 
 /* external globals */
@@ -219,7 +220,10 @@ void basic_mud_vlog(const char *format, va_list args) {
 	char *time_s = asctime(localtime(&ct));
 
 	if(logfile == NULL) {
-		puts("SYSERR: Using log() before stream was initialized!");
+		fprintf(stderr, "%-15.15s :: ", time_s + 4);
+		vfprintf(stderr, format, args);
+		fputc('\n', stderr);
+		fflush(stderr);
 		return;
 	}
 

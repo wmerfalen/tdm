@@ -21,6 +21,7 @@
 #include "spells.h"
 #include "constants.h"
 #include "globals.hpp"
+#include "mods/loops.hpp"
 
 /* external globals */
 extern int no_specials;
@@ -39,14 +40,13 @@ bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *att
 
 
 void mobile_activity(void) {
-	char_data *ch, *next_ch, *vict;
-	struct obj_data *obj, *best_obj;
-	int door, found, max;
-	for(ch = character_list; ch; ch = next_ch) {
-		next_ch = ch->next;
+	mods::loops::foreach_mob([](char_data* ch){
+		char_data *vict;
+		struct obj_data *obj, *best_obj;
+		int door, found, max;
 
-		if(!IS_MOB(ch) || MOB_FLAGGED(ch,MOB_HAS_TREE)) {
-			continue;
+		if(MOB_FLAGGED(ch,MOB_HAS_TREE)) {
+			return true;
 		}
 
 		/* Examine call for special procedure */
@@ -59,14 +59,14 @@ void mobile_activity(void) {
 				char actbuf[MAX_INPUT_LENGTH] = "";
 
 				if((mob_index[GET_MOB_RNUM(ch)].func)(ch, ch, 0, actbuf)) {
-					continue;    /* go to next char */
+					return true;
 				}
 			}
 		}
 
 		/* If the mob has no specproc, do the default actions */
 		if(FIGHTING(ch) || !AWAKE(ch)) {
-			continue;
+			return true;
 		}
 
 		/* Scavenger (picking up objects) */
@@ -184,8 +184,9 @@ void mobile_activity(void) {
 			}
 		}
 
-
+		return true;
 	}/* end for() */
+	);
 }
 
 

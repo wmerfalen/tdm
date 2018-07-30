@@ -50,10 +50,11 @@ extern std::deque<char_data> mob_list;
 namespace mods {
     namespace globals {
 			using player_ptr_t = std::shared_ptr<mods::player>;
+			using player_list_t = std::vector<std::shared_ptr<mods::player>>;
 		using lmdb_db = gdns::lmdb::db;
 		using socket_map_t = std::map<int,player_ptr_t>;
 		bool acl_allowed(struct char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd);
-		void init();
+		void init(int,char**);
 		void pre_game_loop();
 		void load_player_map();
 		uuid_t get_uuid();
@@ -67,7 +68,7 @@ namespace mods {
 		extern ai_state_map states;
 		extern duk_context* duktape_context;
 		extern std::vector<std::vector<struct char_data*>> room_list;
-		extern std::vector<std::shared_ptr<mods::player>> player_list;
+		extern player_list_t player_list;
 		extern std::vector<mods::chat::channel> chan;
 		extern std::vector<std::string> chan_verbs;
 		extern bool f_import_rooms;
@@ -80,8 +81,6 @@ namespace mods {
 		void register_object(obj_data&);
 		void register_object_list();
 		void register_room(const room_rnum&);
-		void register_player(char_data* ch);
-		void deregister_player(char_data* ch);
 		void shutdown();
 		void refresh_player_states();
 		void room_event(struct char_data*,mods::ai_state::event_type_t);

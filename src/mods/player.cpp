@@ -108,6 +108,7 @@ namespace mods {
 	void player::set_class_capability(const class_capability_t& caps) {
 		m_class_info.clear();
 
+		/*
 		for(auto& capability : caps) {
 			switch(capability) {
 				case class_type::MEDIC:
@@ -136,10 +137,15 @@ namespace mods {
 
 			m_class_capability.push_back(capability);
 		}
+		*/
 	}
 	void player::set_shared_ptr(std::shared_ptr<mods::player>& self_ptr) {
+		std::cerr << "[deprecated] set_shared_ptr\n";
+		return;
+		/*
 		m_self_ptr = self_ptr;
 		cd()->player_ptr = self_ptr;
+		*/
 	}
 
 	player::player(){
@@ -159,7 +165,6 @@ namespace mods {
 		m_current_page_fragment = "";
 		m_capture_output = false;
 		m_executing_js = false;
-		mods::globals::player_list.emplace_back(this); d("yo");
 	}
 	player::player(mods::player* ptr) {
 		m_shared_ptr = std::make_shared<char_data>(ptr->cd());
@@ -479,12 +484,6 @@ namespace mods {
 	void player::exits() {
 		do_auto_exits(m_char_data);
 	}
-	player::~player(){
-		if(m_desc){
-			/** FIXME: dire. Must erase the proper element. How do we know?  (maybe use descriptor num)*/
-			//descriptor_list.erase(m_desc_iterator);
-		}
-	}
 	void player::set_char_on_descriptor(std::deque<descriptor_data>::iterator it){
 		std::cerr << "[set_char_on_descriptor]:" << it->host.c_str() \
 			<< "[char:]: " << this->cd()->player.name.c_str() << "\n";
@@ -493,7 +492,9 @@ namespace mods {
 		it->character->has_desc = true;
 	}
 	void player::init(){
-		m_desc.reset();
+		if(m_desc){
+			m_desc.reset();
+		}
 		m_name.clear();
 		m_class_capability = {};
 		m_executing_js = false;
@@ -509,9 +510,6 @@ namespace mods {
 		m_current_page_fragment.clear();
 		m_pages.clear();
 		m_class_info = {};
-		if(m_self_ptr){
-			m_self_ptr.reset();
-		}
 		if(m_shared_ptr){
 			m_shared_ptr.reset();
 		}

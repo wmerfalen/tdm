@@ -16,6 +16,8 @@
 #include "sysdep.h"
 #include "mods/extern.hpp"
 #include <sys/epoll.h>
+#include "mods/pq.hpp"
+#include "signals.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -40,8 +42,6 @@
 # include <mmsystem.h>
 #endif /* CIRCLE_WINDOWS */
 
-		/** !fixme: do proper shutdown here */
-		/** !hellyeah: hell yeah good job */
 #ifdef CIRCLE_AMIGA		/* Includes for the Amiga */
 # include <sys/ioctl.h>
 # include <clib/socket_protos.h>
@@ -75,14 +75,8 @@
 #define INVALID_SOCKET (-1)
 #endif
 
-/**
- *  	-=[ C++ Mods ]=-
- */
-
 #include "mods/acl/config-parser.hpp" 		/** Access Control List */
 #include "mods/behaviour_tree_impl.hpp"
-
-/**  --=[ End C++ Mods ]=- **/
 
 /* externs */
 extern struct ban_list_element *ban_list;
@@ -117,7 +111,7 @@ int circle_shutdown = 0;	/* clean shutdown */
 int circle_reboot = 0;		/* reboot the game after a shutdown */
 int no_specials = 0;		/* Suppress ass. of special routines */
 int max_players = 0;		/* max descriptors available */
-int tics = 0;			/* for extern checkpointing */
+uint64_t tics = 0;			/* for extern checkpointing */
 int scheck = 0;			/* for syntax checking mode */
 struct timeval null_time;	/* zero-valued time structure */
 byte reread_wizlist;		/* signal: SIGUSR1 */
@@ -126,6 +120,26 @@ FILE *logfile = NULL;		/* Where to send the log messages. */
 const char *text_overflow = "**OVERFLOW**\r\n";
 int epoll_fd = -1;
 epoll_event epoll_ev;
+
+std::size_t handle_disconnects(){
+		/* Kick out folks in the CON_CLOSE or CON_DISCONNECT state */
+		std::vector<typename mods::globals::player_list_t::iterator> players_to_destroy;
+		for(auto it = mods::globals::player_list.begin(); 
+				it != mods::globals::player_list.end(); ++it ) {
+			auto desc = (*it)->desc();
+			if(STATE(desc) == CON_CLOSE || STATE(desc) == CON_DISCONNECT) {
+				players_to_destroy.push_back(it);
+			}
+		}
+
+		for(auto player_iterator : players_to_destroy){
+			mods::globals::player_list.erase(player_iterator);
+		}
+		auto ret = players_to_destroy.size();
+		players_to_destroy.clear();
+		return ret;
+}
+
 
 /* functions in this file */
 RETSIGTYPE reread_wizlists(int sig);
@@ -193,6 +207,19 @@ void Free_Invalid_List(void);
 #endif
 
 
+void deregister_player(std::shared_ptr<mods::player> & player_obj){
+	std::set<mods::globals::player_list_t::iterator> players_to_destroy;
+	for(auto it = mods::globals::player_list.begin();it != mods::globals::player_list.end();++it){
+		if((*it)->desc().descriptor == player_obj->desc().descriptor){
+			players_to_destroy.insert(it);
+		}
+	}
+	for(auto & it : players_to_destroy){
+		mods::globals::player_list.erase(it);
+	}
+	return;
+}
+
 /***********************************************************************
  *  main game loop and related stuff                                    *
  ***********************************************************************/
@@ -220,7 +247,7 @@ void gettimeofday(struct timeval *t, struct timezone *dummy) {
 
 
 int main(int argc, char **argv) {
-	mods::globals::init();
+	mods::globals::init(argc,argv);
 	ush_int port;
 	int pos = 1;
 	const char *dir;
@@ -243,12 +270,6 @@ int main(int argc, char **argv) {
 	dir = DFLT_DIR;
 
 	while((pos < argc) && (*(argv[pos]) == '-')) {
-		if(std::string(argv[pos]).compare("--import-rooms") == 0) {
-			mods::globals::f_import_rooms = true;
-			++pos;
-			continue;
-		}
-
 		switch(*(argv[pos] + 1)) {
 			case 'o':
 				if(*(argv[pos] + 2)) {
@@ -312,7 +333,7 @@ int main(int argc, char **argv) {
 
 			case 'h':
 				/* From: Anil Mahajan <amahajan@proxicom.com> */
-				printf("Usage: %s [-c] [-m] [-q] [-r] [-s] [-d pathname] [port #]\n"
+				std::cerr << "Usage: " << argv[0] << " [-c] [-m] [-q] [-r] [-s] [-d pathname] [port #]\n"
 						"  -c             Enable syntax check mode.\n"
 						"  -d <directory> Specify library directory (defaults to 'lib').\n"
 						"  -h             Print this command line argument help.\n"
@@ -321,13 +342,14 @@ int main(int argc, char **argv) {
 						"  -q             Quick boot (doesn't scan rent for object limits)\n"
 						"  -r             Restrict MUD -- no new players allowed.\n"
 						"  -s             Suppress special procedure assignments.\n"
-						"  -T <test_suite>Run test suite as character 'Far'\n",
-						argv[0]
-						);
-				exit(0);
-
+						"  -T <test_suite>Run test suite as character 'Far'\n"
+						"  --lmdb-dir=DIR Which directory to save the lmdb file to\n"
+						"  --import-rooms Import rooms\n"
+						"  --pg-user=user Use 'user' as postgres user\n"
+						"  --pg-db=db     Use 'db' as postgres db\n";
+				mods::globals::shutdown();
 			default:
-				printf("SYSERR: Unknown option -%c in argument string.\n", *(argv[pos] + 1));
+				std::cerr << "SYSERR: Unknown option -" << *(argv[pos]+1) << " in argument string.\n";
 				break;
 		}
 
@@ -336,11 +358,11 @@ int main(int argc, char **argv) {
 
 	if(pos < argc) {
 		if(!isdigit(*argv[pos])) {
-			printf("Usage: %s [-c] [-m] [-q] [-r] [-s] [-d pathname] [port #]\n", argv[0]);
-			exit(1);
+			std::cerr << "Usage: " << argv[0] << " [-c] [-m] [-q] [-r] [-s] [-d pathname] [port #]\n";
+			mods::globals::shutdown();
 		} else if((port = atoi(argv[pos])) <= 1024) {
-			printf("SYSERR: Illegal port number %d.\n", port);
-			exit(1);
+			std::cerr << "SYSERR: Illegal port number " << port << ".\n";
+			mods::globals::shutdown();
 		}
 	}
 
@@ -674,12 +696,11 @@ void game_loop(socket_t mother_desc) {
 	int r = epoll_ctl (epoll_fd, EPOLL_CTL_ADD, mother_desc, &epoll_ev);
 	if (r == -1) {
 		log((std::string("SYSERR: [epoll] epoll_ctl failed: ")+strerror(errno)).c_str());
-					/** fixme: do proper shutdown here */
+					/** !fixme: do proper shutdown here */
 		close (epoll_fd);
 		close (mother_desc);
 		return;
 	}
-	/** !hellyeah:woohoo */
 	gettimeofday(&last_time, (struct timezone *) 0);
 	while(!circle_shutdown) {
 		mods::globals::defer_queue->iteration();
@@ -689,7 +710,7 @@ void game_loop(socket_t mother_desc) {
 		int r = epoll_wait (epoll_fd, events, size, epoll_timeout);
 		if (r == -1) {
 			log("SYSERR [epoll] epoll_wait returned -1");
-					/** fixme: do proper shutdown here */
+					/** !fixme: do proper shutdown here */
 			close (epoll_fd);
 			close (mother_desc);
 			return;
@@ -697,6 +718,7 @@ void game_loop(socket_t mother_desc) {
 
 		int i = 0;
 		int new_desc = 0;
+		gettimeofday(&last_time, (struct timezone *) 0);
 		while (i < r) {
 			new_desc = 0;
 			auto operating_socket = events[i].data.fd;
@@ -707,9 +729,9 @@ void game_loop(socket_t mother_desc) {
 				epoll_ev.data.fd = new_desc; // user data
 				int r = epoll_ctl (epoll_fd, EPOLL_CTL_ADD, new_desc, &epoll_ev);
 				if (r == -1) {
-					/** fixme: de-reg and de-alloc player obj here -- remove from socket_map*/
+					/** !fixme: de-reg and de-alloc player obj here -- remove from socket_map*/
 					log((std::string("SYSERR:[epoll] epoll_ctl failed: ") + strerror(errno)).c_str());
-					/** fixme: do proper shutdown here */
+					/** !fixme: do proper shutdown here */
 					close (epoll_fd);
 					close (mother_desc);
 					return;
@@ -723,16 +745,14 @@ void game_loop(socket_t mother_desc) {
 			auto player = it->second;
 
 			if(process_input(player->desc()) < 0){
-				log("SYSERR: process_input < 0 for player descriptor");
-				/** fixme: de-reg and de-alloc -- remove from socket_map */
-				mods::globals::deregister_player(player->cd());
+				mods::globals::socket_map.erase(it);
+				deregister_player(player);
 				++i;
 				continue;
 			}
 			{
 				d("Player pointer good. Getting from q");
 				if(!get_from_q(&player->desc().input, comm, &aliased)) {
-					d("Player didnt supply get_from_q with anything so we're continuing...");
 					++i;
 					continue;
 				}
@@ -766,7 +786,6 @@ void game_loop(socket_t mother_desc) {
 				command_interpreter(player->cd(), comm); // Send it to interpreter 
 			}
 			++i;
-			gettimeofday(&last_time, (struct timezone *) 0);
 		}//end while(i < r)
 
 		/*
@@ -808,6 +827,7 @@ void game_loop(socket_t mother_desc) {
 		/** !todo: refactor this to not loop through all descriptors but to instead queue up data to be output and output them accordingly */
 		for(auto & p : mods::globals::player_list) {
 			if(p->desc().has_output) {
+				std::cerr << "[debug]: flushing..." << tics <<" \n";
 				p->desc().flush_output();
 			}
 		}
@@ -820,15 +840,7 @@ void game_loop(socket_t mother_desc) {
 			}
 		}
 
-		/* Kick out folks in the CON_CLOSE or CON_DISCONNECT state */
-		for(auto & p : mods::globals::player_list) {
-			if(STATE(p->desc()) == CON_CLOSE || STATE(p->desc()) == CON_DISCONNECT) {
-				/** !fixme:  do proper shutdown of char */
-				d("taking care of disco/close socket");
-				close_socket(p->desc());
-			}
-		}
-
+		handle_disconnects();
 		/*
 		 * Now, we execute as many pulses as necessary--just one if we haven't
 		 * missed any pulses, or make up for lost time if we missed a few
@@ -866,6 +878,10 @@ void game_loop(socket_t mother_desc) {
 			circle_restrict = 0;
 			num_invalid = 0;
 		}
+		if(tics + 1 == UINT_MAX){
+			tics = 0;
+		}
+		++tics;
 
 	}//
 
@@ -1303,14 +1319,6 @@ int set_sendbuf(socket_t s) {
 	return (0);
 }
 
-void deregister_player(const std::shared_ptr<mods::player> & player_obj){
-	for(auto p = mods::globals::player_list.begin(); p !=  mods::globals::player_list.end();p++){
-		if((*p)->uuid() == player_obj->uuid()){
-			mods::globals::player_list.erase(p);
-			return;
-		}
-	}
-}
 
 int new_descriptor(socket_t s) {
 	socket_t desc;
@@ -1650,6 +1658,7 @@ ssize_t perform_socket_read(socket_t desc, char *read_point, size_t space_left) 
 	return (-1);
 }
 
+
 /*
  * ASSUMPTION: There will be no newlines in the raw input buffer when this
  * function is called.  We must maintain that before returning.
@@ -1668,12 +1677,20 @@ int process_input(mods::descriptor_data & t) {
 	ssize_t bytes_read;
 	size_t space_left;
 	char *ptr, *read_point, *write_point, *nl_pos = NULL;
-	char tmp[MAX_INPUT_LENGTH];
+	std::array<char,MAX_INPUT_LENGTH> tmp;
+
+	std::fill(tmp.begin(),tmp.end(),0);
 
 	/* first, find the point where we left off reading data */
-	buf_length = strlen(t.inbuf);
-	read_point = t.inbuf + buf_length;
-	space_left = MAX_RAW_INPUT_LENGTH - buf_length - 1;
+	if(t.inbuf.length()){
+		buf_length = t.inbuf.length();
+		bcopy(t.inbuf.c_str(),&tmp[0],t.inbuf.length());
+		read_point = static_cast<char*>(&tmp[buf_length-1]);
+		space_left = MAX_RAW_INPUT_LENGTH - buf_length - 1;
+	}else{
+		read_point = &tmp[0];
+		space_left = MAX_RAW_INPUT_LENGTH - 1;
+	}
 
 	do {
 		if(space_left <= 0) {
@@ -1681,7 +1698,6 @@ int process_input(mods::descriptor_data & t) {
 			return (-1);
 		}
 
-		d("t.descriptor: " << t.descriptor);
 		bytes_read = perform_socket_read(t.descriptor, read_point, space_left);
 
 		if(bytes_read < 0) {	/* Error, disconnect them. */
@@ -1691,14 +1707,15 @@ int process_input(mods::descriptor_data & t) {
 		}
 
 		/* at this point, we know we got some data from the read */
-
 		*(read_point + bytes_read) = '\0';	/* terminate the string */
 
+		std::cerr << "[debug]: read_buff after perform_socket_read:\n'" << &tmp[0] << "'\n";
 		/* search for a newline in the data we just read */
 		for(ptr = read_point; *ptr && !nl_pos; ptr++)
 			if(ISNEWL(*ptr)) {
 				nl_pos = ptr;
 			}
+			
 
 		read_point += bytes_read;
 		space_left -= bytes_read;
@@ -1731,17 +1748,16 @@ if(nl_pos == NULL) {
  * okay, at this point we have at least one newline in the string; now we
  * can copy the formatted data to a new array for further processing.
  */
+read_point = &tmp[0];
 
-read_point = t.inbuf;
-
-while(nl_pos != NULL) {
-	write_point = tmp;
+while(nl_pos != nullptr) {
+	write_point = &tmp[0];
 	space_left = MAX_INPUT_LENGTH - 1;
 
 	/* The '> 1' reserves room for a '$ => $$' expansion. */
 	for(ptr = read_point; (space_left > 1) && (ptr < nl_pos); ptr++) {
 		if(*ptr == '\b' || *ptr == 127) {  /* handle backspacing or delete key */
-			if(write_point > tmp) {
+			if(write_point > &tmp[0]) {
 				if(*(--write_point) == '$') {
 					write_point--;
 					space_left += 2;
@@ -1764,7 +1780,7 @@ while(nl_pos != NULL) {
 	if((space_left <= 0) && (ptr < nl_pos)) {
 		char buffer[MAX_INPUT_LENGTH + 64];
 
-		snprintf(buffer, sizeof(buffer), "Line too long.  Truncated to:\r\n%s\r\n", tmp);
+		snprintf(buffer, sizeof(buffer), "Line too long.  Truncated to:\r\n%s\r\n", &tmp[0]);
 
 		if(write_to_descriptor(t.descriptor, buffer) < 0) {
 			return (-1);
@@ -1772,39 +1788,39 @@ while(nl_pos != NULL) {
 	}
 
 	if(t.snoop_by) {
-		write_to_output(*t.snoop_by, "%% %s\r\n", tmp);
+		write_to_output(*t.snoop_by, "%% %s\r\n", &tmp[0]);
 	}
 
 	failed_subst = 0;
 
-	if(*tmp == '!' && !(*(tmp + 1))) {	/* Redo last command. */
-		strcpy(tmp, t.last_input);    /* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
-	} else if(*tmp == '!' && *(tmp + 1)) {
-		char *commandln = (tmp + 1);
+	if(tmp[0] == '!' && !tmp[1] ) {	/* Redo last command. */
+		strcpy(&tmp[0], t.last_input.data());    /* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
+	} else if(tmp[0] == '!' && tmp[1]) {
+		char *commandln = (&tmp[1]);
 		skip_spaces(&commandln);
 
 		for(auto & line : t.history){
 			if(is_abbrev(commandln, line)) {
-				strcpy(tmp, line);	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
-				strcpy(t.last_input, tmp);	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
-				write_to_output(t, "%s\r\n", tmp);
+				strcpy(&tmp[0], line);	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
+				t.last_input =  &tmp[0];	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
+				write_to_output(t, "%s\r\n", &tmp[0]);
 				break;
 			}
 		}
-	} else if(*tmp == '^') {
-		if(!(failed_subst = perform_subst(t, t.last_input, tmp))) {
-			strcpy(t.last_input, tmp);    /* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
-		}
+	} else if(tmp[0] == '^') {
+		//if(!(failed_subst = perform_subst(t, t.last_input.data(), &tmp[0]))) {
+		//	t.last_input = &tmp[0];    /* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
+		//}
 	} else {
-		strcpy(t.last_input, tmp);	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
+		t.last_input =  &tmp[0];	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
 
-		/** NOTES: !mods |-> I think history should just be a std::array<std::string,HISTORY_SIZE> and we do ring buffer logic around it. fixme: */
+		/** !fixme: !mods |-> I think history should just be a std::array<std::string,HISTORY_SIZE> and we do ring buffer logic around it. !fixme: */
 		if(t.history_pos < HISTORY_SIZE && t.history[t.history_pos].length()) {
 			t.history[t.history_pos].clear();    /* Clear the old line. */
 			t.history_pos = 0;
 		}
 		if(t.history_pos < HISTORY_SIZE){
-			t.history[t.history_pos].assign(tmp);	/* Save the new. */
+			t.history[t.history_pos].assign(&tmp[0]);	/* Save the new. */
 		}
 
 		if(++t.history_pos >= HISTORY_SIZE) {	/* Wrap to top. */
@@ -1813,7 +1829,7 @@ while(nl_pos != NULL) {
 	}
 
 	if(!failed_subst) {
-		write_to_q(tmp, &t.input, 0);
+		write_to_q(&tmp[0], &t.input, 0);
 	}
 
 	/* find the end of this line */
@@ -1831,13 +1847,9 @@ while(nl_pos != NULL) {
 }
 
 /* now move the rest of the buffer up to the beginning for the next pass */
-write_point = t.inbuf;
-
-while(*read_point) {
-	*(write_point++) = *(read_point++);
+if(read_point){
+	t.inbuf = read_point;
 }
-
-*write_point = '\0';
 
 return (1);
 }
@@ -1900,7 +1912,7 @@ int perform_subst(mods::descriptor_data &t, char *orig, char *subst) {
 
 
 void close_socket(mods::descriptor_data d) {
-	/** fixme: there are some free() calls here that need to be eliminated but first the mallocs need to be found and the members turned into stl containers. */
+	/** !fixme: there are some free() calls here that need to be eliminated but first the mallocs need to be found and the members turned into stl containers. */
 	mods::globals::socket_map.erase(d.descriptor);
 	CLOSE_SOCKET(d.descriptor);
 	flush_queues(d);
@@ -2550,14 +2562,6 @@ void circle_sleep(struct timeval *timeout) {
 void circle_sleep(struct timeval *timeout) {
 	sleep(timeout->tv_sec);
 	usleep(timeout->tv_usec);
-	return;
-	std::cerr << "sleep: " << timeout->tv_sec << ", usec: " << timeout->tv_usec << "\n";
-	if(select(0, (fd_set *) 0, (fd_set *) 0, (fd_set *) 0, timeout) < 0) {
-		if(errno != EINTR) {
-			perror("SYSERR: Select sleep");
-			exit(1);
-		}
-	}
 }
 
 #endif /* CIRCLE_WINDOWS */

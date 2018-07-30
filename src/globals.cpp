@@ -16,7 +16,9 @@
 #include "mods/behaviour_tree_impl.hpp"
 #include "mods/util.hpp"
 #include "mods/pregame.hpp"
+#include "signals.hpp"
 
+extern int errno;
 #define MODS_BREACH_DISORIENT 50
 #define MODS_GRENADE_BASE_DAMAGE 66
 struct char_data* character_list = NULL;
@@ -38,7 +40,7 @@ namespace mods {
 		duk_context* duktape_context;
 		ai_state_map states;
 		std::vector<std::vector<char_data*>> room_list;
-		std::vector<std::shared_ptr<mods::player>> player_list;
+		player_list_t player_list;
 		std::unique_ptr<pqxx::connection> pq_con;
 		std::vector<mods::chat::channel> chan;
 		std::vector<std::string> chan_verbs;
@@ -125,9 +127,50 @@ namespace mods {
 		int mobile_activity(char_data* ch) {
 			return 1;
 		}
-		void init() {
-			if(!mods::util::dir_exists(LMDB_DB_DIRECTORY)){
-				/** !idea: if lmdb dir doesn't exist fallback to regular key/value pairs in postgres? something? idk */
+		void init(int argc,char** argv) {
+			std::cerr << "[debug]: calling init_sighandler... \n";
+			init_sighandler();
+			int pos = 0;
+			std::string lmdb_dir = LMDB_DB_DIRECTORY;
+			f_import_rooms = false;
+			while(++pos < argc){
+				if(strncmp(argv[pos],"--import-rooms",14) == 0){
+					f_import_rooms = true;
+					continue;
+				}
+				if(strncmp(argv[pos],"--lmdb-dir=",11) == 0){
+					std::string argument = argv[pos];
+					if(argument.length() < 12){
+						std::cerr << "--lmdb-dir expects an argument, none found: " << argv[pos] <<"\n"
+							<< "Exiting...\n";
+						mods::globals::shutdown();
+					}
+					lmdb_dir = argument.substr(11,argument.length()-11);
+					continue;
+				}
+				if(strncmp(argv[pos],"--pg-user=",10) == 0){
+					std::string argument = argv[pos];
+					if(argument.length() < 11){
+						std::cerr << "--pg-user expects an argument, none found: " << argv[pos] <<"\n"
+							<< "Exiting...\n";
+						mods::globals::shutdown();
+					}
+					mods::conf::postgres_user = argument.substr(10,argument.length()-10);
+					continue;
+				}
+				if(strncmp(argv[pos],"--pg-db=",8) == 0){
+					std::string argument = argv[pos];
+					if(argument.length() < 9){
+						std::cerr << "--pg-db expects an argument, none found: " << argv[pos] <<"\n"
+							<< "Exiting...\n";
+						mods::globals::shutdown();
+					}
+					mods::conf::postgres_db = argument.substr(8,argument.length()-8);
+					continue;
+				}
+			}
+
+			if(!mods::util::dir_exists(lmdb_dir.c_str())){
 				auto err = mkdir(LMDB_DB_DIRECTORY,0700);
 				if(err == -1){
 					log(
@@ -143,12 +186,14 @@ namespace mods {
 			mods::js::load_c_functions();
 			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js");
 			try{
-				pq_con = std::make_unique<pqxx::connection>(mods::conf::pq_connection.c_str());
+				pq_con = std::make_unique<pqxx::connection>(
+					(std::string("dbname=") + mods::conf::postgres_db + " user="  + 
+					 mods::conf::postgres_user).c_str()
+				);
 			}catch(pqxx::broken_connection & e){
-				std::cerr << "[debug]: It seems that there was a problem connecting to a local postgres server. Do you have one installed? \n";
+				log((std::string("[postgres-exception]: An exception was caught while trying to connect to the postgres server: '") + e.what() + "'").c_str());
 				mods::globals::shutdown();
 			}
-			f_import_rooms = false;
 			mods::behaviour_tree_impl::load_trees();
 
 		}
@@ -223,14 +268,17 @@ namespace mods {
 			} else {
 				i = nr;
 			}
+			if(mob_proto.size() <= i){
+				std::cerr << "[mods::globals::read_mobile]: requested mob_proto index is invalid: " << i << ". mob_proto.size() is currently: " << mob_proto.size() << "\nIgnoring...\n";
+				return nullptr;
+			}
 		 
 			mob_list.emplace_back(mob_proto[i]);
 			(mob_list.end()-1)->next = character_list;
 			auto mob = character_list = &(*(mob_list.end()-1));
 
 			if(!mob->points.max_hit) {
-				mob->points.max_hit = dice(mob->points.hit, mob->points.mana) +
-									  mob->points.move;
+				mob->points.max_hit = dice(mob->points.hit, mob->points.mana) + mob->points.move;
 			} else {
 				mob->points.max_hit = rand_number(mob->points.hit, mob->points.mana);
 			}
@@ -465,16 +513,6 @@ namespace mods {
 			player->set_class_capability({mods::classes::types(ch->player.chclass)});
 		}
 
-		void deregister_player(char_data* ch){
-			log("[stub] deregister_player(char_data*)");
-		}
-		void deregister_player(std::shared_ptr<mods::player> player) {
-			close_socket(player->desc());
-			//descriptor_list.erase(
-		}
-		void register_player(char_data* ch) {
-			log("[deprecated] mods::globals::register_player");
-		}
 		namespace rooms {
 			void char_from_room(struct char_data* ch) {
 				auto room_id = IN_ROOM(ch);

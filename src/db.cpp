@@ -149,7 +149,7 @@ void sort_commands(void);
 void sort_spells(void);
 void load_banned(void);
 void Read_Invalid_List(void);
-void boot_the_shops(FILE *shop_f, char *filename, int rec_count);
+void boot_the_shops(void);
 int hsort(const void *a, const void *b);
 void prune_crlf(char *txt);
 void destroy_shops(void);
@@ -625,147 +625,33 @@ int count_hash_records(FILE *fl) {
 
 
 void index_boot(int mode) {
-	const char *index_filename, *prefix = NULL;	/* NULL or egcs 1.1 complains */
-	FILE *db_index, *db_file;
-	int rec_count = 0, size[2];
-	char buf2[PATH_MAX], buf1[MAX_STRING_LENGTH];
-
 	switch(mode) {
 		case DB_BOOT_WLD:
-			prefix = WLD_PREFIX;
+			world.clear();
 			break;
 
 		case DB_BOOT_MOB:
-			prefix = MOB_PREFIX;
 			break;
 
 		case DB_BOOT_OBJ:
-			prefix = OBJ_PREFIX;
 			break;
 
 		case DB_BOOT_ZON:
-			prefix = ZON_PREFIX;
-			break;
-
-		case DB_BOOT_SHP:
-			prefix = SHP_PREFIX;
 			break;
 
 		case DB_BOOT_HLP:
-			prefix = HLP_PREFIX;
-			break;
-
-		default:
-			log("SYSERR: Unknown subcommand %d to index_boot!", mode);
-			exit(1);
-	}
-
-	if(mini_mud) {
-		index_filename = MINDEX_FILE;
-	} else {
-		index_filename = INDEX_FILE;
-	}
-
-	snprintf(buf2, sizeof(buf2), "%s%s", prefix, index_filename);
-
-	if(!(db_index = fopen(buf2, "r"))) {
-		log("SYSERR: opening index file '%s': %s", buf2, strerror(errno));
-		exit(1);
-	}
-
-	/* first, count the number of records in the file so we can malloc */
-	fscanf(db_index, "%s\n", buf1);
-
-	while(*buf1 != '$') {
-		snprintf(buf2, sizeof(buf2), "%s%s", prefix, buf1);
-
-		if(!(db_file = fopen(buf2, "r"))) {
-			log("SYSERR: File '%s' listed in '%s/%s': %s", buf2, prefix,
-					index_filename, strerror(errno));
-			fscanf(db_index, "%s\n", buf1);
-			continue;
-		} else {
-			if(mode == DB_BOOT_ZON) {
-				rec_count++;
-			} else if(mode == DB_BOOT_HLP) {
-				rec_count += count_alias_records(db_file);
-			} else {
-				rec_count += count_hash_records(db_file);
-			}
-		}
-
-		fclose(db_file);
-		fscanf(db_index, "%s\n", buf1);
-	}
-
-	/* Exit if 0 records, unless this is shops */
-	if(!rec_count) {
-		if(mode == DB_BOOT_SHP) {
-			return;
-		}
-
-		log("SYSERR: boot error - 0 records counted in %s/%s.", prefix,
-				index_filename);
-		exit(1);
-	}
-
-	/*
-	 * NOTE: "bytes" does _not_ include strings or other later malloc'd things.
-	 */
-	switch(mode) {
-		case DB_BOOT_WLD:
-			//CREATE(world, struct room_data, rec_count);
-			world.reserve(rec_count);
-			size[0] = sizeof(struct room_data) * rec_count;
-			log("   %d rooms, %d bytes.", rec_count, size[0]);
-			break;
-
-		case DB_BOOT_MOB:
-			size[0] = sizeof(struct index_data) * rec_count;
-			size[1] = sizeof(struct char_data) * rec_count;
-			log("   %d mobs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
-			break;
-
-		case DB_BOOT_OBJ:
-			//CREATE(obj_proto, struct obj_data, rec_count);
-			//CREATE(obj_index, struct index_data, rec_count);
-			//obj_index.reserve(rec_count);
-			size[0] = sizeof(struct index_data) * rec_count;
-			size[1] = sizeof(struct obj_data) * rec_count;
-			log("   %d objs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
-			break;
-
-		case DB_BOOT_ZON:
-			log("!DEPRECATED! DB_BOOT_ZON");
-			break;
-
-		case DB_BOOT_HLP:
-			CREATE(help_table, struct help_index_element, rec_count);
-			size[0] = sizeof(struct help_index_element) * rec_count;
-			log("   %d entries, %d bytes.", rec_count, size[0]);
 			break;
 	}
-
-	rewind(db_index);
-	fscanf(db_index, "%s\n", buf1);
-
-	while(*buf1 != '$') {
-		snprintf(buf2, sizeof(buf2), "%s%s", prefix, buf1);
-
-		if(!(db_file = fopen(buf2, "r"))) {
-			log("SYSERR: %s: %s", buf2, strerror(errno));
-			exit(1);
-		}
 
 		switch(mode) {
 			case DB_BOOT_WLD:
 			case DB_BOOT_OBJ:
 			case DB_BOOT_MOB:
-				discrete_load(db_file, mode, buf2);
+				//discrete_load(db_file, mode, buf2);
 				break;
 
 			case DB_BOOT_ZON:
-				load_zones(db_file, buf2);
+				//load_zones(db_file, buf2);
 				break;
 
 			case DB_BOOT_HLP:
@@ -773,24 +659,18 @@ void index_boot(int mode) {
 				 * If you think about it, we have a race here.  Although, this is the
 				 * "point-the-gun-at-your-own-foot" type of race.
 				 */
-				load_help(db_file);
+				//load_help(db_file);
 				break;
 
 			case DB_BOOT_SHP:
-				boot_the_shops(db_file, buf2, rec_count);
+				//boot_the_shops();
 				break;
 		}
 
-		fclose(db_file);
-		fscanf(db_index, "%s\n", buf1);
-	}
-
-	fclose(db_index);
-
 	/* sort the help index */
 	if(mode == DB_BOOT_HLP) {
-		qsort(help_table, top_of_helpt, sizeof(struct help_index_element), hsort);
-		top_of_helpt--;
+		//qsort(help_table, top_of_helpt, sizeof(struct help_index_element), hsort);
+		//top_of_helpt--;
 	}
 }
 
@@ -2103,7 +1983,7 @@ void reset_zone(zone_rnum zone) {
 
 			case 'M':			/* read a mobile */
 				if(mob_index[ZCMD.arg1].number < ZCMD.arg2) {
-					mob = read_mobile(ZCMD.arg1, REAL);
+					mob = read_mobile(ZCMD.arg2, REAL);
 					char_to_room(mob, real_room(ZCMD.arg3));
 					last_cmd = 1;
 				} else {
@@ -2356,10 +2236,8 @@ bool load_char(const char *name, struct char_file_u *char_element) {
 void save_char(struct char_data *ch) {
 	struct char_file_u st;
 
-	/**
-	 * FIXME: NOW -> This is why users are not being saved */
-	if(IS_NPC(ch) || !ch->has_desc) {
-		d("save_char - IS_NPC: " << IS_NPC(ch) << "[not saving]");
+	if(IS_NPC(ch)) {
+		d("[save_char] - IS_NPC: not saving");
 		return;
 	}
 

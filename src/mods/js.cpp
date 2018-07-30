@@ -29,6 +29,30 @@ namespace mods {
 			duk_push_number(ctx,mods::js::load_library(ctx,path));
 			return 1;	/* number of return values */
 		}
+		static duk_ret_t list_mobiles(duk_context *ctx){
+			
+		}
+		static duk_ret_t read_mobile(duk_context *ctx){
+			if(duk_get_top(ctx) < 2){
+				duk_push_number(ctx,1);
+				return -1;
+			}
+			uint32_t mob_id = duk_to_uint32(ctx,0);
+			uint32_t room_id = duk_to_uint32(ctx,1);
+			auto mob = read_mobile(mob_id,REAL);
+			if(!mob){
+				duk_push_number(ctx,1);
+				return -2;
+			}
+			auto real_room_id = real_room(room_id);
+			if(real_room_id == NOWHERE){
+				duk_push_number(ctx,1);
+				return -3;
+			}
+			char_to_room(mob,real_room_id);
+			duk_push_number(ctx,1);
+			return 1;
+		}
 		static duk_ret_t hit(duk_context *ctx) {
 			/* First parameter is character name */
 			auto char_uuid = duk_to_number(ctx,0);
@@ -69,6 +93,11 @@ namespace mods {
 			duk_push_number(ctx,-1);
 			return 1;
 		}
+		static duk_ret_t room(duk_context *ctx){
+			duk_push_number(ctx,1);
+			return mods::globals::current_player->cd()->in_room;
+		}
+
 		static duk_ret_t cmd(duk_context *ctx) {
 			/* First parameter is character name */
 			std::string cmd =  duk_to_string(ctx,0);
@@ -209,6 +238,10 @@ namespace mods {
 			duk_put_global_string(ctx,"require_test");
 		}
 		void load_base_functions(duk_context *ctx) {
+			duk_push_c_function(ctx,mods::js::room,0);
+			duk_put_global_string(ctx,"room");
+			duk_push_c_function(ctx,mods::js::read_mobile,2);
+			duk_put_global_string(ctx,"read_mobile");
 			duk_push_c_function(ctx,mods::js::get_current_player,0);
 			duk_put_global_string(ctx,"get_current_player");
 			duk_push_c_function(ctx,mods::js::send,1);

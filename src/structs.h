@@ -995,13 +995,12 @@ struct txt_q {
 /** FIXME This use of namespace mods is random and out of place */
 namespace mods {
 	struct descriptor_data {
+		using buffer_type_t = std::string;
 		using history_type_t = std::array<mods::string,HISTORY_SIZE>;
 		using history_pos_type_t = std::size_t;
 		constexpr static size_t OUTPUT_SIZE = LARGE_BUFSIZE+1;
 		descriptor_data(){ clear(); }
-		~descriptor_data(){ 
-			clear(); 
-		}
+		~descriptor_data() = default;
 		operator bool() const {
 			return !!connected;
 		}
@@ -1015,9 +1014,9 @@ namespace mods {
 			max_str = 0;mail_to = 0;has_prompt = 0;
 			history_pos = 0;
 			has_output = false;
-			memset(inbuf,0,sizeof(inbuf));
-			memset(last_input,0,sizeof(last_input));
-			memset(small_outbuf,0,sizeof(small_outbuf));
+			inbuf.clear();
+			last_input.clear();
+			small_outbuf.clear();
 			output.clear();
 			host.clear();
 		}
@@ -1043,9 +1042,9 @@ namespace mods {
 		size_t max_str;	        /*		-			*/
 		long	mail_to;		/* name for mail system			*/
 		int	has_prompt;		/* is the user at a prompt?             */
-		char	inbuf[MAX_RAW_INPUT_LENGTH];  /* buffer for raw input		*/
-		char	last_input[MAX_INPUT_LENGTH]; /* the last input			*/
-		char small_outbuf[SMALL_BUFSIZE];  /* standard output buffer		*/
+		buffer_type_t inbuf;  /* buffer for raw input		*/
+		buffer_type_t last_input; /* the last input			*/
+		buffer_type_t small_outbuf;  /* standard output buffer		*/
 		history_type_t history;		/* History of commands, for ! mostly.	*/
 		history_pos_type_t history_pos;
 		std::shared_ptr<mods::descriptor_data> snooping; /* Who is this char snooping	*/
@@ -1054,7 +1053,7 @@ namespace mods {
 		size_t queue_output(const std::string &s);
 		size_t flush_output();
 		private:
-		std::vector<std::string> output;		/* ptr to the current output buffer	*/
+		std::string output;		/* ptr to the current output buffer	*/
 	};
 };
 struct char_data {

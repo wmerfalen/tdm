@@ -20,7 +20,7 @@
 using objtype = mods::object::type;
 using shrd_ptr_player_t = std::shared_ptr<mods::player>;
 using jxcomp = mods::jx::compositor;
-typedef mods::sql::compositor<mods::pq::transaction> sql_compositor;
+using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 extern void parse_sql_zones();
 namespace mods::builder {
 	std::array<std::pair<int,std::string>,4> weapon_type_flags = { {

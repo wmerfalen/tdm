@@ -1,6 +1,8 @@
 #include "conf.hpp"
 
 namespace mods::conf {
-	/** !todo: make this available from the cmd line */
-	const std::string pq_connection = "dbname=postgres_mud user=postgres_mud_user";
+	std::string postgres_user = "postgres";
+	std::string postgres_db = "postgres_mud";
+	std::string postgres_password = "postgresmudpassword";
+	short postgres_port = 0;
 };

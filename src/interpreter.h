@@ -12,8 +12,6 @@
 #include "globals.hpp"
 
 #define ACMD(name) void name(struct char_data *ch, char *argument, int cmd, int subcmd)
-#define ACL_ACMD(name) void name(struct char_data* ch, char *argument, int cmd, int subcmd){\
-	if(!mods::globals::acl_allowed(ch,#name,__FILE__,cmd,argument,subcmd)) return;
 
 
 ACMD(do_move);

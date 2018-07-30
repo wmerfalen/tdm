@@ -44,7 +44,7 @@ namespace mods {
 			player();
 			player(char_data*);
 			player(mods::player*);
-			~player();
+			~player() = default;
 			void init();
 
 			static constexpr int PAGE_SIZE = 40;
@@ -228,7 +228,6 @@ namespace mods {
 			std::string  m_current_page_fragment;
 			std::vector<std::string> m_pages;
 			class_info_t m_class_info;
-			std::shared_ptr<mods::player> m_self_ptr;
 			std::shared_ptr<char_data> m_shared_ptr;
 	};
 };

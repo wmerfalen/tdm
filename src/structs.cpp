@@ -97,7 +97,7 @@ char_data::char_data(char_data* o){
 	}
 namespace mods{
 		size_t descriptor_data::queue_output(const std::string &s){
-			output.emplace_back(s);
+			output += s;
 			has_output = true;
 			return s.length();
 		}
@@ -106,20 +106,15 @@ namespace mods{
 				has_output = false; 
 				return 0; 
 			}
-			std::array<char,MAX_SOCK_BUF> i;
-			std::fill(i.begin(),i.end(),0);
-			char *osb = &i[0];
-			osb += 2;
-
-			/* TODO: if(!PRF_FLAGGED(character, PRF_COMPACT)) { ... add \r\n } */
-			std::size_t result = write_to_descriptor(descriptor,static_cast<const char*>(output.begin()->c_str()));
+			
+			std::size_t result = write_to_descriptor(descriptor,output.c_str());
 
 			/* Handle snooping: prepend "% " and send to snooper. */
 			if(snoop_by) {
-				write_to_output(*snoop_by, "%% %*s%%%%", static_cast<int>(result), output.begin()->c_str());
+				write_to_output(*snoop_by, "%% %*s%%%%", static_cast<int>(result), output.c_str());
 			}
-			output.erase(output.begin());
-			has_output = output.size() > 0;
+			output.clear();
+			has_output = false;
 			return (result);
 		}
 };
