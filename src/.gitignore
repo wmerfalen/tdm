@@ -12,3 +12,5 @@ GSL
 ../callgrind.out*
 mods/test/*
 *.so
+build/*
+
