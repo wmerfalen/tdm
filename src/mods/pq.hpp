@@ -1,5 +1,12 @@
 #ifndef __MENTOC_MODS_PQ_HEADER__
 #define __MENTOC_MODS_PQ_HEADER__
+
+#include "lmdb.hpp"
+
+namespace pq {
+	inline void transaction(void){}
+
+#if 0
 #include <time.h>
 #include <netdb.h>
 #include <sys/socket.h>
@@ -24,6 +31,6 @@ namespace mods::pq {
 	void commit(transaction&);
 	int count(std::string_view query);
 };
-
+#endif
 
 #endif

@@ -16,7 +16,6 @@
 #include "sysdep.h"
 #include "mods/extern.hpp"
 #include <sys/epoll.h>
-#include "mods/pq.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>

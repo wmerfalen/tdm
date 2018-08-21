@@ -167,14 +167,14 @@ ACMD(do_snipe);
 ACMD(do_heal);
 ACMD(do_newjs);
 ACMD(do_jstest);
-ACMD(do_mbuild);
-ACMD(do_obuild);
+//ACMD(do_mbuild);
+//ACMD(do_obuild);
 ACMD(do_chanmgr);
-ACMD(do_zbuild);
+//ACMD(do_zbuild);
 ACMD(do_rnumlist);
 ACMD(do_rnumtele);
 ACMD(do_pref);
-ACMD(do_rbuild);
+//ACMD(do_rbuild);
 ACMD(do_drone);
 ACMD(do_quest);
 ACMD(do_js);
@@ -500,14 +500,14 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "heal"  , POS_RESTING , do_heal   , 0, 0 },
 	{ "newjs"  , POS_RESTING , do_newjs   , LVL_GOD, 0 },
 	{ "jstest"  , POS_RESTING , do_jstest   , LVL_GOD, 0 },
-	{ "mbuild"  , POS_RESTING , do_mbuild   , LVL_GOD, 0 },
-	{ "obuild"  , POS_RESTING , do_obuild   , LVL_GOD, 0 },
+	//{ "mbuild"  , POS_RESTING , do_mbuild   , LVL_GOD, 0 },
+	//{ "obuild"  , POS_RESTING , do_obuild   , LVL_GOD, 0 },
 	{ "chanmgr"  , POS_RESTING , do_chanmgr   , LVL_IMMORT, 0 },
-	{ "zbuild"  , POS_RESTING , do_zbuild   , LVL_IMMORT, 0 },
+	//{ "zbuild"  , POS_RESTING , do_zbuild   , LVL_IMMORT, 0 },
 	{ "rnumtele"  , POS_RESTING , do_rnumtele   , LVL_IMMORT, 0 },
 	{ "rnumlist"  , POS_RESTING , do_rnumlist   , LVL_IMMORT, 0 },
 	{ "pref"  , POS_RESTING , do_pref   , 0, 0 },
-	{ "rbuild"  , POS_RESTING , do_rbuild   , LVL_IMMORT, 0 },
+	//{ "rbuild"  , POS_RESTING , do_rbuild   , LVL_IMMORT, 0 },
 	{ "drone"  , POS_RESTING , do_drone   , 0, 0 },
 	{ "throw"  , POS_RESTING , do_throw   , 0, 0 },
 	{ "ammo"  , POS_RESTING , do_ammo   , 0, 0 },
