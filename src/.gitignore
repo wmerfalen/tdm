@@ -1,3 +1,4 @@
+../.killscript
 *.o
 ../bin/*
 ../bin
