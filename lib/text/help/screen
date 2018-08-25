@@ -1,0 +1,41 @@
+-------------------------------------------------------------------------------
+Movement:                          | Communication:
+NORTH SOUTH EAST WEST UP DOWN      | SAY GSAY SHOUT HOLLER TELL ASK WHISPER
+LOOK EXITS ENTER LEAVE             | MAIL RECEIVE CHECK GOSSIP GRATS AUCTION
+SLEEP WAKE REST SIT STAND          | NOTELL NOSHOUT NOGOSSIP NOGRATS NOAUCTION
+(LOCK UNLOCK OPEN CLOSE)           |
+-------------------------------------------------------------------------------
+Objects:                           | Information: 
+GET DROP JUNK DONATE PUT GIVE WEAR | SCORE HELP INFO WHO NEWS TIME WEATHER
+GRAB INVENTORY EQUIPMENT REMOVE    | WHERE CONSIDER LEVELS WIZLIST IMMLIST
+EXAMINE EAT DRINK TASTE SIP POUR   | CREDITS TOGGLE FLAGS WIZHELP
+-------------------------------------------------------------------------------
+Combat:                            | Utility:
+KILL WIELD FLEE ASSIST TRACK       | ! BUG IDEA TYPO QUIT SAVE BRIEF COMPACT
+(KICK BASH RESCUE )                | TITLE NOSUMMON COMMANDS SOCIALS DISPLAY
+-------------------------------------------------------------------------------
+                           {gld}[ IN-GAME TOPICS ]{/gld}
+	{blu}
+     The following keywords are topics for this mud's dynamics. Simply type
+	 help <keyword> and it will bring up an article for you to read. These are
+	 not actual commands. 
+	 {/blu}
+{gld}Enhancements:{/gld}                      | {gld}Situational Awareness:{/gld}
+{blu}RIFLE-SCOPES  AMMO-TYPES{/blu}           | {blu}SCAN DRONE-SCANNING DRONE-SCAN-ASSIST{/blu}
+                                              | {blu}ENEMY-MAP{/blu}
+{gld}Combat:{/gld}                            | {gld}Dynamics:{/gld}
+{blu}SNIPING GRENADES SUPPRESSING-FIRE{/blu}  | {blu}QUESTING BREACHING-DOORS RAIDING{/blu}
+                                   | 
+-------------------------------------------------------------------------------
+                           {gld}[ MUD COMMANDS ]{/gld}
+	{blu}
+     The following are mud commands that can be executed by any player. These
+	 commands are unique to this mud and have specific meanings and actions
+	 associated with them.
+	 {/blu}
+{gld}Enhancements:{/gld}                      | {gld}Situational Awareness:{/gld}
+{blu}attach{/blu}                             | {blu}scan drone hudscan{/blu}
+-----------------------------------|-------------------------------------------
+{gld}Combat:{/gld}                            | {gld}Dynamics:{/gld}
+{blu}snipe throw spray wield{/blu}            | {blu}quest breach{/blu}
+-----------------------------------|------------------------------------------- 
