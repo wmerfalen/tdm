@@ -53,12 +53,14 @@ namespace mods {
 			using player_list_t = std::vector<std::shared_ptr<mods::player>>;
 		using lmdb_db = gdns::lmdb::db;
 		using socket_map_t = std::map<int,player_ptr_t>;
+		enum boot_type_t { BOOT_DB,BOOT_HELL };
 		bool acl_allowed(struct char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd);
 		void init(int,char**);
 		void pre_game_loop();
 		void load_player_map();
 		uuid_t get_uuid();
 		uuid_t obj_uuid();
+		extern boot_type_t boot_type;
 		extern map_object_list obj_map;
 		extern socket_map_t socket_map;
 		extern std::shared_ptr<mods::player> player_nobody;

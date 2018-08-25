@@ -32,6 +32,7 @@ namespace mods {
 	namespace globals {
 		using player = mods::player;
 		using lmdb_db = gdns::lmdb::db;
+		boot_type_t boot_type;
 		socket_map_t socket_map;
 		std::unique_ptr<lmdb_db> db;
 		std::shared_ptr<player> player_nobody;
@@ -130,9 +131,14 @@ namespace mods {
 			int pos = 0;
 			std::string lmdb_dir = LMDB_DB_DIRECTORY;
 			f_import_rooms = false;
+			boot_type = BOOT_DB;
 			while(++pos < argc){
 				if(strncmp(argv[pos],"--import-rooms",14) == 0){
 					f_import_rooms = true;
+					continue;
+				}
+				if(strncmp(argv[pos],"--hell",6) == 0){
+					boot_type = BOOT_HELL;
 					continue;
 				}
 				if(strncmp(argv[pos],"--lmdb-dir=",11) == 0){
@@ -192,7 +198,6 @@ namespace mods {
 				mods::globals::shutdown();
 			}
 			mods::behaviour_tree_impl::load_trees();
-
 		}
 		void post_boot_db() {
 		}
@@ -417,53 +422,55 @@ namespace mods {
 				return false;
 			}
 
-			d("Checking builder data");
-			if(player->cd()->builder_data && player->cd()->builder_data->room_pave_mode) {
-				//If is a direction and that direction is not an exit,
-				//then pave a way to that exit
-				int door = 0;
+			//d("Checking builder data");
+			//if(player->cd()->builder_data && player->cd()->builder_data->room_pave_mode) {
+			//	//If is a direction and that direction is not an exit,
+			//	//then pave a way to that exit
+			//	int door = 0;
 
-				d("has builder and pave mode data");
-				if(std::string(argument).length() == 1){
-					switch(argument[0]) {
-						case 'u':
-						case 'U':
-							door = UP;
-							break;
+			//	d("has builder and pave mode data");
+			//	if(std::string(argument).length() == 1){
+			//		switch(argument[0]) {
+			//			case 'u':
+			//			case 'U':
+			//				door = UP;
+			//				break;
 
-						case 's':
-						case 'S':
-							door = SOUTH;
-							break;
+			//			case 's':
+			//			case 'S':
+			//				door = SOUTH;
+			//				break;
 
-						case 'w':
-						case 'W':
-							door = WEST;
-							break;
+			//			case 'w':
+			//			case 'W':
+			//				door = WEST;
+			//				break;
 
-						case 'e':
-						case 'E':
-							door = EAST;
-							break;
+			//			case 'e':
+			//			case 'E':
+			//				door = EAST;
+			//				break;
 
-						case 'n':
-						case 'N':
-							door = NORTH;
-							break;
+			//			case 'n':
+			//			case 'N':
+			//				door = NORTH;
+			//				break;
 
-						case 'd':
-						case 'D':
-							door = DOWN;
-							break;
-					}
+			//			case 'd':
+			//			case 'D':
+			//				door = DOWN;
+			//				break;
+			//		}
 
-					if(!CAN_GO(player->cd(),door)) {
-						mods::builder::pave_to(player->cd(),&world[IN_ROOM(ch)],door);
-						return true;
-					}
-				}
-			}
-			d("returning from command_interpreter");
+			//		/*
+			//		if(!CAN_GO(player->cd(),door)) {
+			//			mods::builder::pave_to(player->cd(),&world[IN_ROOM(ch)],door);
+			//			return true;
+			//		}
+			//		*/
+			//	}
+			//}
+			//d("returning from command_interpreter");
 			return true;
 		}
 

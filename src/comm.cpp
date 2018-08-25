@@ -425,7 +425,18 @@ void init_game(ush_int port) {
 	log("Opening mother connection.");
 	mother_desc = init_socket(port);
 
-	boot_db();
+	switch(mods::globals::boot_type){
+		case mods::globals::boot_type_t::BOOT_DB:
+			boot_db();
+			break;
+		case mods::globals::boot_type_t::BOOT_HELL:
+			boot_hell();
+			break;
+		default:
+			log("Unknown boot type requested. Defaulting to BOOT_DB");
+			boot_db();
+			break;
+	}
 
 #if defined(CIRCLE_UNIX) || defined(CIRCLE_MACINTOSH)
 	log("Signal trapping.");

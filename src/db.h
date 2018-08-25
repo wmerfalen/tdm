@@ -99,6 +99,7 @@
 #define TIME_FILE	"etc/time"	   /* for calendar system	*/
 
 /* public procedures in db.c */
+void  boot_hell(void);
 void	boot_db(void);
 void	destroy_db(void);
 int	create_entry(const char *name);

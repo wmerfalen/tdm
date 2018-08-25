@@ -31,12 +31,16 @@
 #include "mods/behaviour_tree_impl.hpp"
 #include "mods/pq.hpp"
 #include "mods/sql.hpp"
+#include "mods/lmdb.hpp"
+#include "mods/hell.hpp"
+#include <string_view>
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 
 /**************************************************************************
  *  declarations of most of the 'global' variables                         *
  **************************************************************************/
-using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
+using sql_compositor = mods::sql::compositor<std::size_t>;
+bool db_has_been_booted = false;
 void parse_sql_rooms();
 void parse_sql_zones();
 int parse_sql_objects();
@@ -259,6 +263,115 @@ ACMD(do_reboot) {
 	send_to_char(ch, "%s", OK);
 }
 
+void boot_hell(void){
+	log("Booting hell");
+	unsigned i;
+
+	log("Boot hell -- BEGIN.");
+
+	log("Resetting the game time:");
+	reset_time();
+
+	log("Reading news, credits, help, bground, info & motds.");
+	/*
+		 file_to_string_alloc(NEWS_FILE, &news);
+		 file_to_string_alloc(CREDITS_FILE, &credits);
+		 file_to_string_alloc(MOTD_FILE, &motd);
+		 file_to_string_alloc(IMOTD_FILE, &imotd);
+		 file_to_string_alloc(HELP_PAGE_FILE, &help);
+		 file_to_string_alloc(INFO_FILE, &info);
+		 file_to_string_alloc(WIZLIST_FILE, &wizlist);
+		 file_to_string_alloc(IMMLIST_FILE, &immlist);
+		 file_to_string_alloc(POLICIES_FILE, &policies);
+		 file_to_string_alloc(HANDBOOK_FILE, &handbook);
+		 file_to_string_alloc(BACKGROUND_FILE, &background);
+
+		 if(file_to_string_alloc(GREETINGS_FILE, &GREETINGS) == 0) {
+		 prune_crlf(GREETINGS);
+		 }
+		 */
+
+	log("Loading spell definitions.");
+	if(mods::hell::mag_assign_spells){ 
+		mag_assign_spells();
+	}
+
+	log("Loading help entries.");
+	if(mods::hell::index_boot_hlp){index_boot(DB_BOOT_HLP);}
+
+	log("Generating player index.");
+	/*FIXME: replace this functionality: 
+	 * build_player_index();
+	 */
+
+	log("Loading fight messages.");
+	if(mods::hell::load_messages){load_messages();}
+
+	if(mods::hell::boot_social_messages){
+	log("Loading social messages.");
+	boot_social_messages();
+	};
+
+	log("Assigning function pointers:");
+
+	if(!no_specials) {
+		log("   Mobiles.");
+		if(mods::hell::assign_mobiles){assign_mobiles();}
+		log("   Shopkeepers.");
+		if(mods::hell::assign_the_shopkeepers){assign_the_shopkeepers();};
+		log("   Objects.");
+		if(mods::hell::assign_objects){assign_objects();}
+		log("   Rooms.");
+		if(mods::hell::assign_rooms){assign_rooms();}
+	}
+
+	log("Assigning spell and skill levels.");
+	if(mods::hell::init_spell_levels){init_spell_levels();};
+
+	log("Sorting command list and spells.");
+	if(mods::hell::sort_commands){sort_commands();};
+	if(mods::hell::sort_spells){sort_spells();};
+
+	log("Booting mail system.");
+
+	if(mods::hell::scan_file){
+	if(!scan_file()) {
+		log("    Mail boot failed -- Mail system disabled");
+		no_mail = 1;
+	}
+	}
+
+	log("Reading banned site and invalid-name list.");
+	if(mods::hell::load_banned){load_banned();};
+	if(mods::hell::Read_Invalid_List){Read_Invalid_List();};
+
+	if(!no_rent_check) {
+		log("Deleting timed-out crash and rent files:");
+		if(mods::hell::update_obj_file){update_obj_file();};
+		log("   Done.");
+	}
+
+	/* Moved here so the object limit code works. -gg 6/24/98 */
+	if(!mini_mud) {
+		log("Booting houses.");
+		if(mods::hell::House_boot){House_boot();};
+	}
+
+	for(i = 0; i < zone_table.size(); i++) {
+		log("Resetting #%d: %s (rooms %d-%d).", zone_table[i].number,
+				zone_table[i].name, zone_table[i].bot, zone_table[i].top);
+		reset_zone(i);
+	}
+
+	reset_q.head = reset_q.tail = NULL;
+
+	boot_time = time(0);
+
+	log("Boot db -- DONE.");
+	mods::globals::post_boot_db();
+
+	db_has_been_booted = true;
+}
 
 void boot_world(void) {
 	//log("Loading zone table.");
@@ -476,6 +589,7 @@ void boot_db(void) {
 
 	log("Boot db -- DONE.");
 	mods::globals::post_boot_db();
+	db_has_been_booted = true;
 }
 
 

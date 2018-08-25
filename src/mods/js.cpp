@@ -29,9 +29,10 @@ namespace mods {
 			duk_push_number(ctx,mods::js::load_library(ctx,path));
 			return 1;	/* number of return values */
 		}
+		/*
 		static duk_ret_t list_mobiles(duk_context *ctx){
-			
-		}
+			return 0;
+		}*/
 		static duk_ret_t read_mobile(duk_context *ctx){
 			if(duk_get_top(ctx) < 2){
 				duk_push_number(ctx,1);
