@@ -19,7 +19,6 @@
 #include "duktape/src/duktape.h"
 #include "mods/js.hpp"
 #include "mods/drone.hpp"
-#include <pqxx/pqxx>
 #include "mods/conf.hpp"
 #include "mods/chat.hpp"
 #include <deque>

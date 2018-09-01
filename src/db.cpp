@@ -367,6 +367,30 @@ void boot_hell(void){
 
 	boot_time = time(0);
 
+	log("Creating hell hole");
+
+	struct room_data room;
+	room.number = 0;
+	room.zone = 0;
+	room.name = "hell hole";
+	room.description = "-void-";
+	room.room_flags = 0;
+	room.sector_type = 0;
+	room.ex_description = nullptr;
+	room.func = nullptr;
+	room.contents = nullptr;
+	room.people = nullptr;
+	room.light = 0;
+
+	//TODO: setup directions to work properly here (dir_option)
+	for(unsigned i = 0; i < NUM_OF_DIRS; i++) {
+		room.dir_option[i] = nullptr;
+	}
+
+	world.push_back(room);
+	mods::globals::register_room(world.size());
+	top_of_world = world.size();
+
 	log("Boot db -- DONE.");
 	mods::globals::post_boot_db();
 
