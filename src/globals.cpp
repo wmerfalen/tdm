@@ -41,7 +41,6 @@ namespace mods {
 		ai_state_map states;
 		std::vector<std::vector<char_data*>> room_list;
 		player_list_t player_list;
-		std::unique_ptr<pqxx::connection> pq_con;
 		std::vector<mods::chat::channel> chan;
 		std::vector<std::string> chan_verbs;
 		bool f_import_rooms;
@@ -151,26 +150,6 @@ namespace mods {
 					lmdb_dir = argument.substr(11,argument.length()-11);
 					continue;
 				}
-				if(strncmp(argv[pos],"--pg-user=",10) == 0){
-					std::string argument = argv[pos];
-					if(argument.length() < 11){
-						std::cerr << "--pg-user expects an argument, none found: " << argv[pos] <<"\n"
-							<< "Exiting...\n";
-						mods::globals::shutdown();
-					}
-					mods::conf::postgres_user = argument.substr(10,argument.length()-10);
-					continue;
-				}
-				if(strncmp(argv[pos],"--pg-db=",8) == 0){
-					std::string argument = argv[pos];
-					if(argument.length() < 9){
-						std::cerr << "--pg-db expects an argument, none found: " << argv[pos] <<"\n"
-							<< "Exiting...\n";
-						mods::globals::shutdown();
-					}
-					mods::conf::postgres_db = argument.substr(8,argument.length()-8);
-					continue;
-				}
 			}
 
 			if(!mods::util::dir_exists(lmdb_dir.c_str())){
@@ -188,15 +167,6 @@ namespace mods {
 			duktape_context = mods::js::new_context();
 			mods::js::load_c_functions();
 			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js");
-			try{
-				pq_con = std::make_unique<pqxx::connection>(
-					(std::string("dbname=") + mods::conf::postgres_db + " user="  + 
-					 mods::conf::postgres_user).c_str()
-				);
-			}catch(pqxx::broken_connection & e){
-				log((std::string("[postgres-exception]: An exception was caught while trying to connect to the postgres server: '") + e.what() + "'").c_str());
-				mods::globals::shutdown();
-			}
 			mods::behaviour_tree_impl::load_trees();
 		}
 		void post_boot_db() {
@@ -270,7 +240,7 @@ namespace mods {
 			} else {
 				i = nr;
 			}
-			if(mob_proto.size() <= i){
+			if(mob_proto.size() <= std::size_t(i)){
 				std::cerr << "[mods::globals::read_mobile]: requested mob_proto index is invalid: " << i << ". mob_proto.size() is currently: " << mob_proto.size() << "\nIgnoring...\n";
 				return nullptr;
 			}
@@ -471,6 +441,7 @@ namespace mods {
 			//	}
 			//}
 			//d("returning from command_interpreter");
+			d("returning from command_interpreter");
 			return true;
 		}
 

@@ -1,4 +1,5 @@
 ../lib/data.mdb
+../.killscript
 *.o
 ../bin/*
 ../bin

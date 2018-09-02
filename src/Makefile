@@ -18,7 +18,7 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-Lboost-cpp/build/lib\
 	-Imods/include -Iboost-cpp -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__
-LIBS = -lcrypt -lpqxx -lpq -lscrypt
+LIBS = -lcrypt -lscrypt
 buildobj = act.comm act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
 					 act.wizard alias ban boards bsd-snprintf castle \
@@ -26,9 +26,9 @@ buildobj = act.comm act.informative act.item act.medic \
 					 handler house interpreter limits magic mail mobact\
 					 modify objsave olc random shop spec_assign spec_procs\
 					 spell_parser spells structs utils weather mods/ai_state\
-					 mods/behaviour_tree_impl mods/acl/config-parser mods/builder \
+					 mods/behaviour_tree_impl mods/acl/config-parser mods/lmdb\
 					 mods/chat mods/conf mods/deferred mods/drone mods/immortal\
-					 mods/js mods/player mods/pq mods/prefs mods/pregame\
+					 mods/js mods/player mods/prefs mods/pregame\
 					 mods/projectile mods/quests mods/scan mods/sql mods/util\
 					 mods/weapon mods/classes/medic mods/string mods/loops\
 					 mods/hell

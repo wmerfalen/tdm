@@ -65,7 +65,6 @@ namespace mods {
 		extern std::shared_ptr<mods::player> player_nobody;
 		extern std::unique_ptr<mods::deferred> defer_queue;
 		extern std::unique_ptr<lmdb_db> db;
-		extern std::unique_ptr<pqxx::connection> pq_con;
 		extern ai_state_map states;
 		extern duk_context* duktape_context;
 		extern std::vector<std::vector<struct char_data*>> room_list;

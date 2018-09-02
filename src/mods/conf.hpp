@@ -14,10 +14,5 @@ typedef int socket_t;
 #include "../globals.hpp"
 
 namespace mods::conf {
-	extern const std::string pq_connection;
-	extern std::string postgres_user;
-	extern std::string postgres_db;
-	extern std::string postgres_password;
-	extern short postgres_port;
 };
 #endif

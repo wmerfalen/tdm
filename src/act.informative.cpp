@@ -137,6 +137,10 @@ ACMD(do_givemegold) {
 
 ACMD(do_recall) {
 	MENTOC_PREAMBLE();
+	if(mods::globals::boot_type == mods::globals::boot_type_t::BOOT_HELL){
+		*player << "Ah Ah Ahh... You didn't say the magic word...";
+		return;
+	}
 
 	//TODO: combat cooldown should prevent recall for 20 seconds
 	if(time(NULL) < ch->last_fight_timestamp + 20) {
