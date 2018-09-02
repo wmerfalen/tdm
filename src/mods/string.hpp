@@ -21,12 +21,8 @@ namespace mods {
 		const char* operator*(){ return m_str.c_str(); }
 		void assign(const std::string & other);
 		const char* c_str() const;
-		unsigned int length() const {
-			return m_str.length();
-		}
-		void clear(){
-			m_str.clear();
-		}
+		unsigned int length() const;
+		void clear();
 		char* ptr() {
 			return m_cptr;
 		}

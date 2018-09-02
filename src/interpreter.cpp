@@ -1458,7 +1458,7 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 
 						clear_char(d.character);
 						d.character->player_specials = std::make_unique<player_special_data>();
-						*d.character->desc = d;
+						d.character->desc = std::make_shared<mods::descriptor_data>(p->desc());
 						d.character->player.name.assign(tmp_ptr.c_str());
 						write_to_output(d, "Did I get that right, %s (Y/N)? ", tmp_ptr.c_str());
 						d("con-name-cnfrm");
