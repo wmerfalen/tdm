@@ -163,7 +163,10 @@ namespace mods::lmdb {
 	inline transaction_ptr update(table_type_t table){
 		return std::make_unique<transaction_t>(table,transact_type_t::UPDATE);
 	}
-	inline transaction_ptr insert(table_type_t table){
+	inline transaction_ptr update(std::string_view table){
+		return std::make_unique<transaction_t>(table,transact_type_t::UPDATE);
+	}
+	inline transaction_ptr insert(std::string_view table){
 		return std::make_unique<transaction_t>(table,transact_type_t::INSERT);
 	}
 
@@ -251,11 +254,11 @@ namespace mods::lmdb {
 		status_type_t status() const {
 			return m_status;
 		}
-			int get(const std::string& key,std::string & in_value){
+			int get(std::string_view key,std::string & in_value){
 				//if(m_good){
 					MDB_val k;
 					k.mv_size = key.length();
-					k.mv_data = (void*)key.c_str();
+					k.mv_data = (void*)key.data();
 					MDB_val v;
 					int ret = mdb_get(m_txn,m_dbi,&k,&v);
 					switch(ret){
@@ -375,8 +378,7 @@ inline bool db_update(mods::lmdb::table_type_t table,const mods::lmdb::mutable_m
 }
 
 inline bool db_insert(std::string_view table,const mods::lmdb::mutable_map_t & values){
-	//return mods::lmdb::insert(table)->values(values);
-	return true;
+	return mods::lmdb::insert(table)->values(values);
 }
 
 #endif

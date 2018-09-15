@@ -16,6 +16,7 @@
 #include "mods/behaviour_tree_impl.hpp"
 #include "mods/util.hpp"
 #include "mods/pregame.hpp"
+#include "mods/testing_index.hpp"
 
 extern int errno;
 #define MODS_BREACH_DISORIENT 50
@@ -130,7 +131,24 @@ namespace mods {
 			std::string lmdb_dir = LMDB_DB_DIRECTORY;
 			f_import_rooms = false;
 			boot_type = BOOT_DB;
+			std::string argument;
 			while(++pos < argc){
+				if(argv[pos]){
+					argument = argv[pos];
+				}else{
+					argument = "";
+				}
+				if(strncmp(argv[pos],"--testing=",10) == 0){
+					if(argument.substr(10,argument.length()-10).compare("lmdb") == 0){
+						mods::testing::lmdb::db test(argc,argv);
+						mods::globals::shutdown();
+						return;
+					}
+					std::cerr << "something went wrong. That cmdline arg wasn't recognized most likely\n";
+					std::cerr << "use: --testing=lmdb (as an example)\n";
+					mods::globals::shutdown();
+					return;
+				}
 				if(strncmp(argv[pos],"--import-rooms",14) == 0){
 					f_import_rooms = true;
 					continue;
@@ -140,7 +158,6 @@ namespace mods {
 					continue;
 				}
 				if(strncmp(argv[pos],"--lmdb-dir=",11) == 0){
-					std::string argument = argv[pos];
 					if(argument.length() < 12){
 						std::cerr << "--lmdb-dir expects an argument, none found: " << argv[pos] <<"\n"
 							<< "Exiting...\n";
