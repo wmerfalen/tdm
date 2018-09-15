@@ -31,7 +31,6 @@ extern struct player_special_data dummy_mob;
 namespace mods {
 	namespace globals {
 		using player = mods::player;
-		using lmdb_db = gdns::lmdb::db;
 		boot_type_t boot_type;
 		socket_map_t socket_map;
 		std::unique_ptr<lmdb_db> db;

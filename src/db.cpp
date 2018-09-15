@@ -30,8 +30,6 @@
 #include "mods/behaviour_tree_impl.hpp"
 #include "mods/sql.hpp"
 #include "mods/lmdb.hpp"
-using db_table = mods::lmdb::table_type_t;
-using db_key = mods::lmdb::key_type_t;
 #include "mods/hell.hpp"
 #include <string_view>
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
@@ -901,7 +899,7 @@ bitvector_t asciiflag_conv(char *flag) {
 void parse_sql_mobiles() {
 	char_data proto;
 	clear_char(&proto);
-	auto result = db_get_all(db_table::mobile);
+	auto result = db_get_all("mobile");
 
 	if(result.size()) {
 		std::cerr << "foobar\n";
@@ -987,13 +985,13 @@ void parse_sql_mobiles() {
 }
 
 int parse_sql_objects() {
-	auto result = db_get_all(db_table::object);
+	auto result = db_get_all("object");
 
 	if(result.size()) {
 
 			obj_index.reserve(result.size());
 			obj_proto.reserve(result.size());
-			auto rows = db_get_all(db_table::object);
+			auto rows = db_get_all("object");
 			for(auto  row : rows) {
 				struct index_data index;
 				index.vnum = std::get<int>(row["obj_item_number"]);
@@ -1002,7 +1000,7 @@ int parse_sql_objects() {
 				obj_index.push_back(index);
 				struct obj_data proto;
 				//!proposed lmdb code:
-				auto aff_rows = db_get(db_table::affected_type,db_key::item_number,std::get<int>(row["obj_item_number"]));
+				auto aff_rows = db_get("affected_type",db_key({"meta","item_number",std::get<std::string>(row["obj_item_number"])}));
 				for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
 					proto.affected[i].location = 0;
 					proto.affected[i].modifier = 0;
@@ -1038,7 +1036,7 @@ int parse_sql_objects() {
 				}
 				MENTOC_STR(obj_short_description,short_description);
 				MENTOC_STR(obj_action_description,action_description);
-				auto ed_rows = db_get(db_table::extra_description,db_key::object_id,std::get<uint64_t>(row["id"]));
+				auto ed_rows = db_get("extra_description",db_key({"meta","object_id",std::get<std::string>(row["id"])}));
 				proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
 				proto.ex_description->next = nullptr;
 				proto.ex_description->keyword = proto.ex_description->description = nullptr;
@@ -1073,7 +1071,7 @@ int parse_sql_objects() {
 				proto.ammo = 0;
 				memset(&proto.obj_flags,0,sizeof(obj_flag_data));
 				//TODO: !small do obj->flags fetching from db
-				auto flag_rows = db_get(db_table::affected_type_object_flags,db_key::object_id,std::get<int>(row["id"]));	//TODO: change to uint64_t in all places
+				auto flag_rows = db_get("affected_type_object_flags",db_key({"meta","object_id",std::get<std::string>(row["id"])}));
 
 				if(flag_rows.size()) {
 					auto flag_row = rows[0];
@@ -1140,7 +1138,7 @@ void parse_sql_zones() {
 	zone_table.clear();
 	log("[status] Loading sql zones");
 
-	for(auto row: db_get_all(db_table::zone)) {
+	for(auto row: db_get_all("zone")) {
 		struct zone_data z;
 		//struct zone_data {
 		//  1    char *name;          /* name of this zone                  */
@@ -1196,7 +1194,7 @@ void parse_sql_zones() {
 		//TODO: SELECT COUNT(*) FROM zone_data where zone_id = z.number
 		
 
-		for(auto row : db_get(db_table::zone_data,db_key::id,z.number)) {
+		for(auto row : db_get("zone_data",db_key({"meta","id",std::to_string(z.number)}))) {
 			struct reset_com res;
 			res.command =std::get<int>(row["command"]);
 			res.if_flag =std::get<int>(row["if_flag"]);
@@ -1215,7 +1213,7 @@ void parse_sql_zones() {
 }
 /* load the rooms */
 void parse_sql_rooms() {
-	auto result = db_get_all(db_table::rooms);
+	auto result = db_get_all("rooms");
 	world.reserve(result.size());
 
 	for(auto row: result) {
@@ -1243,7 +1241,7 @@ void parse_sql_rooms() {
 	}
 
 	for(auto row: result) {
-		auto r2 = db_get(db_table::room_direction_data,db_key::room_number, std::get<int>(row["number"]));
+		auto r2 = db_get("room_direction_data",db_key({"meta_array","room_number", std::get<std::string>(row["number"])}));
 
 		for(auto row2: r2) {
 			//id | room_number | exit_direction | general_description | keyword | exit_info | exit_key | to_room
@@ -2255,7 +2253,7 @@ char *get_name_by_id(long id) {
 /* Load a char, TRUE if loaded, FALSE if not */
 bool load_char(const char *name, struct char_file_u *char_element) {
 	try{
-		auto result = db_get(db_table::player,db_key::name,name);
+		auto result = db_get("player",db_key({"meta","name",name}));
 		return true;
 	} catch(std::exception& e) {
 		mudlog(CMP,LVL_GOD,FALSE,(std::string("Error `load_char`: ") + e.what()).c_str());
@@ -2280,7 +2278,7 @@ void save_char(struct char_data *ch) {
 
 	st.host = ch->desc->host;
 	try {
-		auto result = db_get(db_table::player,db_key::name,ch->player.name);
+		auto result = db_get("player",db_key({"meta","name",std::string(ch->player.name)}));
 		mods::lmdb::mutable_map_t values;
 		values["player_name"] = ch->player.name;
 		values["player_short_description"] = ch->player.short_descr;
@@ -2320,9 +2318,9 @@ void save_char(struct char_data *ch) {
 		values["player_title"] = ch->player.title;
 		values["player_hometown"] = (ch->player.hometown);
 		if(result.size()){
-			db_update(db_table::player,values,db_key::name,ch->player.name);
+			db_update("player",values,"name",(ch->player.name.c_str()));
 		}else{
-			db_insert(db_table::player,values);
+			db_insert("player",values);
 		}
 	} catch(std::exception& e) {
 		mudlog(CMP,LVL_GOD,FALSE,(std::string("Error `save_char`: ") + e.what()).c_str());
@@ -2337,7 +2335,7 @@ void save_char(struct char_data *ch) {
 
 bool parse_sql_player(const char* name,char_data* ch){
 	try{
-		auto result = db_get(db_table::player,db_key::name,name);
+		auto result = db_get("player",db_key({"meta_array","name",(name)}));
 		if(result.size()){
 			for(auto row : result){
 				ch->player.name.assign(name);

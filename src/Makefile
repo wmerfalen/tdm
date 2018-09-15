@@ -48,7 +48,7 @@ $(builddir):
 $(builddir)/%.o: %.cpp
 	$(CC) -c $(FLAGS) -o $@ $<
 
--include $(buildobj:=.d)
+-include $(objects:.o=.d)
 
 $(duktape): duktape-2.2.0/src/duktape.h duktape-2.2.0/src/duktape.c
 	$(CC) -c $(FLAGS) duktape-2.2.0/src/duktape.c -o $(duktape)

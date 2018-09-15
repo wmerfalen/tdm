@@ -14,7 +14,7 @@
 #include "mods/player.hpp"
 #include <memory>
 #include "mods/deferred.hpp"
-#include "mods/lmdb/db.hpp"
+#include "mods/lmdb.hpp"
 #include "mods/projectile.hpp"
 #include "duktape/src/duktape.h"
 #include "mods/js.hpp"
@@ -50,7 +50,7 @@ namespace mods {
     namespace globals {
 			using player_ptr_t = std::shared_ptr<mods::player>;
 			using player_list_t = std::vector<std::shared_ptr<mods::player>>;
-		using lmdb_db = gdns::lmdb::db;
+		using lmdb_db = mods::lmdb::db_handle;
 		using socket_map_t = std::map<int,player_ptr_t>;
 		enum boot_type_t { BOOT_DB,BOOT_HELL };
 		bool acl_allowed(struct char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd);

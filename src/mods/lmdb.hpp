@@ -10,6 +10,7 @@
 #include "string.hpp"
 #include "../liblmdb/lmdb.h"
 #include <tuple>
+#include "schema.hpp"
 
 namespace mods::lmdb {
 	std::string operator "" _s(const char*,std::size_t);
@@ -27,7 +28,6 @@ namespace mods::lmdb {
 		object_id,room_number,row_id_list
 	};
 
-	struct consumer {};
 	using mutable_map_t = std::map<std::string_view,variant_t>;
 	using result_container_t = std::vector<std::map<std::string_view,variant_t>>;
 
@@ -43,15 +43,26 @@ namespace mods::lmdb {
 	using row_id_list_t = std::vector<uint64_t>;
 
 	/**
+	 * ##############################
 	 * A typical transaction
+	 * ##############################
+	 */
+	/**
+	 * ##############################
+	 * A typical transaction
+	 * ##############################
+	 */
+	/**
+	 * ##############################
+	 * A typical transaction
+	 * ##############################
 	 */
 	struct transaction_t {
 		selector_type_t selector(const key_type_t & column,const uint64_t & row_id){
 			return {m_table,column,0,row_id};
 		}
 		uint64_t get_row_id_list(row_id_list_t & rows){
-			auto key = selector(key_type_t::row_id_list,0);
-			std::cerr << key.row_id << "\n";
+			//auto key = selector(key_type_t::row_id_list,0);
 			return 0;
 		}
 		void set_str_table(table_type_t e_table){
@@ -73,10 +84,14 @@ namespace mods::lmdb {
 #undef MENTOC_T
 		}
 
+		transaction_t(std::string_view ce_table,transact_type_t type) : m_type(type){
+			m_str_table = ce_table;
+		}
 		transaction_t(table_type_t e_table,transact_type_t type) : m_table(e_table), m_type(type){
 			set_str_table(e_table);
 		}
 		transaction_t() = delete;
+
 		std::string_view table_cstr() const { return m_str_table; }
 		table_type_t table() const { return m_table; }
 		transact_type_t type() const { return m_type; }
@@ -84,18 +99,26 @@ namespace mods::lmdb {
 		 * get(key,val) is basically like the sql version of "where".
 		 * i.e.: get("user_id",123); //sql equiv: select * from users where user_id = 123
 		 */
-		template <typename T>
-			result_container_t get(const key_type_t & key,T val){
+			result_container_t get(std::string_view key){
 				result_container_t r;
-
+				
 				return result_container_t();
 			}
 
 		/**
 		 * The sql equivalent of this is 'select * from table'
 		 */
-		result_container_t get_all(){
+		template <typename T>
+		result_container_t get_all(T consumer){
 			//TODO: fetch results
+			std::string id_list_selector  = std::string(table_cstr()) + "|id_list";
+			std::string csv_list;
+			if(consumer->get(id_list_selector,csv_list) < 0){
+				std::cerr << "[lmdb]get_all failed with query: " << id_list_selector << "\n";
+			}
+			else{
+				std::cerr << "[lmdb]revrieved: " << csv_list << "\n";
+			}
 			return  result_container_t();
 		}
 		template <typename T>
@@ -112,24 +135,50 @@ namespace mods::lmdb {
 		transact_type_t m_type;
 		MDB_env* m_env;
 	};
+	/**
+	 * ##############################
+	 * A typical transaction
+	 * ##############################
+	 */
+	/**
+	 * ##############################
+	 * A typical transaction
+	 * ##############################
+	 */
+	/**
+	 * ##############################
+	 * A typical transaction
+	 * ##############################
+	 */
 
 	/**
 	 * Transactions
 	 */
 	using transaction_ptr = std::unique_ptr<transaction_t>;
 	using transaction_pool_t = std::vector<std::unique_ptr<transaction_t>>;
-	inline static transaction_pool_t transact_pool;
-
-	inline transaction_ptr exec(table_type_t table){
-		return std::move(transact_pool.emplace_back(std::make_unique<transaction_t>(table,transact_type_t::EXEC)));
+	inline transaction_ptr exec(std::string_view table){
+		return std::move(std::make_unique<transaction_t>(table,transact_type_t::EXEC));
 	}
 
 	inline transaction_ptr update(table_type_t table){
-		return std::move(transact_pool.emplace_back(std::make_unique<transaction_t>(table,transact_type_t::UPDATE)));
+		return std::make_unique<transaction_t>(table,transact_type_t::UPDATE);
 	}
 	inline transaction_ptr insert(table_type_t table){
-		return std::move(transact_pool.emplace_back(std::make_unique<transaction_t>(table,transact_type_t::INSERT)));
+		return std::make_unique<transaction_t>(table,transact_type_t::INSERT);
 	}
+
+
+
+
+/*
+ #####   #####           #    #    ##    #    #  #####   #       ######
+ #    #  #    #          #    #   #  #   ##   #  #    #  #       #
+ #    #  #####           ######  #    #  # #  #  #    #  #       #####
+ #    #  #    #          #    #  ######  #  # #  #    #  #       #
+ #    #  #    #          #    #  #    #  #   ##  #    #  #       #
+ #####   #####  #######  #    #  #    #  #    #  #####   ######  ######
+*/
+
 	struct _db_handle {
 		using status_type_t = std::array<std::tuple<bool,std::string>,3>;
 		_db_handle(std::string_view directory,std::string_view db_name,const uint64_t & flags,const uint16_t & mode,bool unused) 
@@ -202,6 +251,57 @@ namespace mods::lmdb {
 		status_type_t status() const {
 			return m_status;
 		}
+			int get(const std::string& key,std::string & in_value){
+				//if(m_good){
+					MDB_val k;
+					k.mv_size = key.length();
+					k.mv_data = (void*)key.c_str();
+					MDB_val v;
+					int ret = mdb_get(m_txn,m_dbi,&k,&v);
+					switch(ret){
+						case MDB_NOTFOUND:
+							return 0;
+						case EINVAL:
+							std::cerr << "[lmdb] invalid parameter to mdb_get\n";
+							return -1;
+						default:
+							char buf[v.mv_size + 1];
+							memset(buf,0,v.mv_size +1);
+							bcopy(v.mv_data,buf,v.mv_size);
+							in_value = buf;
+							return 1;
+					}
+				//}
+				return -2;
+			}
+			int put(const std::string& key,const std::string & value){
+				//if(m_good){
+					MDB_val k;
+					k.mv_size = key.length();
+					k.mv_data = (void*)key.c_str();
+					MDB_val v;
+					v.mv_size = value.length();
+					v.mv_data = (void*)value.c_str();
+					int ret = mdb_put(m_txn,m_dbi,&k,&v,0);
+					switch(ret){
+						case MDB_MAP_FULL:
+							std::cerr << "[lmdb] database is full, see mdb_env_set_mapsize()\n";
+							return -3;
+						case EINVAL:
+							std::cerr << "[lmdb] invalid parameter to mdb_get\n";
+							return -1;
+						case EACCES:
+							std::cerr << "[lmdb] invalid parameter to mdb_get\n";
+							return -4;
+						case MDB_TXN_FULL:
+							std::cerr << "[lmdb] transaction has too many dirty pages\n";
+							return -5;
+						default:
+							return 1;
+					}
+				//}
+				return -2;
+			}
 		_db_handle() = delete;
 		~_db_handle(){
 			if(std::get<0>(m_status[0])){
@@ -232,27 +332,51 @@ namespace mods::lmdb {
 		uint16_t m_mode;
 	};
 
-	using handle = _db_handle;
+
+	using db_handle = _db_handle;
+
+
+};
+
+namespace mods::globals {
+	extern std::unique_ptr<mods::lmdb::db_handle> db;
 };
 
 
-
-template <typename T>
-inline mods::lmdb::result_container_t db_get(mods::lmdb::table_type_t table,const mods::lmdb::key_type_t & field,T& value){
-	return mods::lmdb::exec(table)->get<T>(field,value);
+inline static std::string_view db_key(const std::vector<std::string> & parts){
+	std::string query;
+	std::size_t count = 0;
+	for(auto & part : parts){
+		query += part;
+		if(++count == parts.size()){
+			break;
+		}
+		query += "|";
+	}
+	return query;
 }
 
-inline mods::lmdb::result_container_t db_get_all(mods::lmdb::table_type_t table){
-	return mods::lmdb::exec(table)->get_all();
+inline mods::lmdb::result_container_t db_get(std::string_view table,std::string_view key){
+	return mods::lmdb::exec(table)->get(key);
 }
 
-template <typename T>
-inline bool db_update(mods::lmdb::table_type_t table,const mods::lmdb::mutable_map_t & values,const mods::lmdb::key_type_t & field,const T & value ){
-	return mods::lmdb::update(table)->set<const T&>(values,field,value);
+inline mods::lmdb::result_container_t db_get_all(std::string_view table){
+	return mods::lmdb::exec(table)->get_all<mods::lmdb::db_handle*>(mods::globals::db.get());
 }
 
-inline bool db_insert(mods::lmdb::table_type_t table,const mods::lmdb::mutable_map_t & values){
-	return mods::lmdb::insert(table)->values(values);
+inline bool db_update(std::string_view table,const mods::lmdb::mutable_map_t & values,
+		std::string_view field,std::string_view value ){
+	//return mods::lmdb::update(table)->set<const T&>(values,field,value);
+	return true;
+}
+inline bool db_update(mods::lmdb::table_type_t table,const mods::lmdb::mutable_map_t & values,const mods::lmdb::key_type_t & field,std::string_view value ){
+	//return mods::lmdb::update(table)->set<const T&>(values,field,value);
+	return true;
+}
+
+inline bool db_insert(std::string_view table,const mods::lmdb::mutable_map_t & values){
+	//return mods::lmdb::insert(table)->values(values);
+	return true;
 }
 
 #endif
