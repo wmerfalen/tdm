@@ -129,6 +129,8 @@ namespace mods {
 		void init(int argc,char** argv) {
 			int pos = 0;
 			std::string lmdb_dir = LMDB_DB_DIRECTORY;
+			std::string lmdb_name = LMDB_DB_NAME;
+			std::string f_test_suite = "";
 			f_import_rooms = false;
 			boot_type = BOOT_DB;
 			std::string argument;
@@ -139,15 +141,8 @@ namespace mods {
 					argument = "";
 				}
 				if(strncmp(argv[pos],"--testing=",10) == 0){
-					if(argument.substr(10,argument.length()-10).compare("lmdb") == 0){
-						mods::testing::lmdb::db test(argc,argv);
-						mods::globals::shutdown();
-						return;
-					}
-					std::cerr << "something went wrong. That cmdline arg wasn't recognized most likely\n";
-					std::cerr << "use: --testing=lmdb (as an example)\n";
-					mods::globals::shutdown();
-					return;
+					f_test_suite = argument.substr(10,argument.length()-10);
+					continue;
 				}
 				if(strncmp(argv[pos],"--import-rooms",14) == 0){
 					f_import_rooms = true;
@@ -155,6 +150,10 @@ namespace mods {
 				}
 				if(strncmp(argv[pos],"--hell",6) == 0){
 					boot_type = BOOT_HELL;
+					continue;
+				}
+				if(strncmp(argv[pos],"--lmdb-name=",12) == 0){
+					lmdb_name = argument.substr(12,argument.length()-12);
 					continue;
 				}
 				if(strncmp(argv[pos],"--lmdb-dir=",11) == 0){
@@ -169,7 +168,7 @@ namespace mods {
 			}
 
 			if(!mods::util::dir_exists(lmdb_dir.c_str())){
-				auto err = mkdir(LMDB_DB_DIRECTORY,0700);
+				auto err = mkdir(lmdb_dir.c_str(),0700);
 				if(err == -1){
 					log(
 						(std::string("SYSERR: The lmdb database directory couldn't be created: ") + mods::util::err::get_string(errno)).c_str()
@@ -177,7 +176,11 @@ namespace mods {
 					mods::globals::shutdown();
 				}
 			}
-			db = std::make_unique<lmdb_db>(LMDB_DB_DIRECTORY,LMDB_DB_NAME,MDB_WRITEMAP | MDB_NOLOCK,0600,true);
+			db = std::make_unique<lmdb_db>(lmdb_dir,lmdb_name,MDB_WRITEMAP,0600,true);
+			if(f_test_suite.length()){
+				mods::testing::lmdb::db test(argc,argv);
+				mods::globals::shutdown();
+			}
 			player_nobody = nullptr;
 			defer_queue = std::make_unique<mods::deferred>(mods::deferred::TICK_RESOLUTION);
 			duktape_context = mods::js::new_context();

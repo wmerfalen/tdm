@@ -40,10 +40,10 @@ all: $(builddir) $(objects) $(thirdparty) $(DATA_DIR)
 clean:
 	make -f $(lmdbdir)/Makefile clean ; \
 		rm -f $(addprefix $(builddir)/,*.o *.d  mods/*.o \
-		mods/*.d mods/classes/*.o mods/classes/*.d)
+		mods/*.d mods/classes/*.o mods/classes/*.d mods/testing/*/*.o)
 
 $(builddir):
-	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/acl/
+	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/acl/ $(builddir)/mods/testing/lmdb
 
 $(builddir)/%.o: %.cpp
 	$(CC) -c $(FLAGS) -o $@ $<
