@@ -76,8 +76,53 @@ namespace mods::lmdb {
 
 		_db_handle::_db_handle(std::string_view directory,std::string_view db_name,const uint64_t & flags,const uint16_t & mode,bool unused) 
 			:m_good(false), m_closed(true), m_dir(directory), m_name(db_name), m_flags(flags), m_mode(mode) {
+				m_transaction_open = false;
+				m_transaction_good = false;
 				open();
 			}
+		/*
+		std::tuple<bool,std::string,MDB_txn*> _db_handle::new_txn(){
+			int r = 0;
+			std::string reason{""};
+			if((r = mdb_txn_begin(m_env,0,0,&m_txn)) != 0){
+				std::string reason = "An unknown error occured: "_s + std::to_string(r);
+				switch(r){
+					case MDB_PANIC: reason = "a fatal error occurred earlier and the environment must be shut down."; break;
+					case MDB_MAP_RESIZED: reason = "another process wrote data beyond this MDB_env's mapsize and this environment's map must be resized as well. See mdb_env_set_mapsize()."; break;
+					case MDB_READERS_FULL: reason = "a read-only transaction was requested and the reader lock table is full. See mdb_env_set_maxreaders()."; break;
+					case ENOMEM: reason = "out of memory."; break;
+					default: reason += "|mdb_strerror:";
+									 reason += mdb_strerror(r); break;
+				}
+				reason += " [via:mdb_txn_begin]";
+				return {false,reason,m_txn};
+			}
+			return {true,reason,m_txn};
+		}
+
+		bool _db_handle::new_dbi(){
+			int r = 0;
+			std::string reason{""};
+			if((r = mdb_dbi_open(m_txn,0,0,&m_dbi)) != 0){
+				std::string reason = "An unknown error occured: "_s + std::to_string(r);
+				switch(r){
+					case MDB_NOTFOUND : reason = "the specified database doesn't exist in the environment and MDB_CREATE was not specified."; break;
+					case MDB_DBS_FULL : reason = "too many databases have been opened. See mdb_env_set_maxdbs()."; break;
+					default: reason += "|mdb_strerror:";
+									 reason += mdb_strerror(r); break;
+				}
+				reason += " [via:mdb_dbi_open]";
+				reason += " m_name: '";
+				reason += m_name + "'";
+				m_status[3] = {false,reason};
+				m_good = false;
+				return false;
+			}
+			m_status[4] = {true,"DBI handle opened successfully. Ready for get/put."};
+			m_good = true;
+			return true;
+		}
+		*/
 		bool _db_handle::open(){
 			std::cerr << "[lmdb]::open()\n";
 			m_closed = true;
@@ -135,10 +180,11 @@ namespace mods::lmdb {
 				reason += " [via:mdb_txn_begin]";
 				m_status[2] = {false,reason};
 				close();
-				m_good = false;
+				m_transaction_good = m_transaction_open = m_good = false;
 				return false;
 			}
 			m_status[2] = {true,"Transaction opened successfully."};
+			m_transaction_good = m_transaction_open = true;
 			if((r = mdb_dbi_open(m_txn,0,0,&m_dbi)) != 0){
 				std::string reason = "An unknown error occured: "_s + std::to_string(r);
 				switch(r){
@@ -159,12 +205,57 @@ namespace mods::lmdb {
 			m_good = true;
 			return true;
 		}
+		bool _db_handle::renew_txn(){
+			if(m_transaction_open){
+				mdb_txn_abort(m_txn);
+				m_transaction_open = false;
+				m_transaction_good = false;
+			}
+			int r = 0;
+			std::string reason{""};
+			if((r = mdb_txn_begin(m_env,0,0,&m_txn)) != 0){
+				std::string reason = "An unknown error occured: "_s + std::to_string(r);
+				switch(r){
+					case MDB_PANIC: reason = "a fatal error occurred earlier and the environment must be shut down."; break;
+					case MDB_MAP_RESIZED: reason = "another process wrote data beyond this MDB_env's mapsize and this environment's map must be resized as well. See mdb_env_set_mapsize()."; break;
+					case MDB_READERS_FULL: reason = "a read-only transaction was requested and the reader lock table is full. See mdb_env_set_maxreaders()."; break;
+					case ENOMEM: reason = "out of memory."; break;
+					default: reason += "|mdb_strerror:";
+									 reason += mdb_strerror(r); break;
+				}
+				reason += " [via:mdb_txn_begin]";
+				m_status[2] = {false,reason};
+				return false;
+			}
+			m_status[2] = {true,"Transaction opened successfully."};
+			/*
+			if((r = mdb_dbi_open(m_txn,0,0,&m_dbi)) != 0){
+				std::string reason = "An unknown error occured: "_s + std::to_string(r);
+				switch(r){
+					case MDB_NOTFOUND : reason = "the specified database doesn't exist in the environment and MDB_CREATE was not specified."; break;
+					case MDB_DBS_FULL : reason = "too many databases have been opened. See mdb_env_set_maxdbs()."; break;
+					default: reason += "|mdb_strerror:";
+									 reason += mdb_strerror(r); break;
+				}
+				reason += " [via:mdb_dbi_open]";
+				reason += " m_name: '";
+				reason += m_name + "'";
+				m_status[3] = {false,reason};
+				return false;
+			}
+			m_status[4] = {true,"DBI handle opened successfully. Ready for get/put."};
+			m_good = true;
+			*/
+			return true;
+		}
 			int _db_handle::get(std::string_view key,std::string & in_value){
 				if(m_good){
 					std::cerr << "[lmdb]get::m_good okay\n";
 					MDB_val k;
 					k.mv_size = key.length();
 					k.mv_data = (void*)key.data();
+					std::cerr << "[debug]db_handle::get key.data: '" << key.data() << "'";
+					std::cerr << "[debug]key.length: " << key.length() << "\n";
 					MDB_val v;
 					int ret = mdb_get(m_txn,m_dbi,&k,&v);
 					switch(ret){
@@ -184,6 +275,16 @@ namespace mods::lmdb {
 					std::cerr << "[lmdb]get::m_good NOT okay\n";
 					return -2;
 				}
+			}
+			int _db_handle::put(std::string_view key,const std::string & value,bool renew){
+				if(renew){
+					if(m_transaction_good || m_transaction_open){
+						mdb_txn_commit(m_txn);
+						m_transaction_good = m_transaction_open = false;
+					}
+					renew_txn();
+				}
+				return put(std::string(key.data()),value);
 			}
 			int _db_handle::put(std::string_view key,const std::string & value){
 				return put(std::string(key.data()),value);
@@ -212,19 +313,26 @@ namespace mods::lmdb {
 							std::cerr << "[lmdb] transaction has too many dirty pages\n";
 							return -5;
 						default:
-							return 1;
+							std::cerr << "[lmdb]::default error: " << ret << "\n";
+							std::cerr << "[lmdb]::default strerror: " << mdb_strerror(ret) << "\n";
+							if(std::string("Successful").compare(mdb_strerror(ret)) == 0){
+								return 0;
+							}
 					}
 				}else{
 					std::cerr << "[lmdb]::put m_good NOT okay\n";
 					return -2;
 				}
+				return 0;
 			}
 			std::tuple<bool,std::string_view> _db_handle::commit(){
 				if(m_good){
 					auto ret = mdb_txn_commit(m_txn);
 					if(ret){
+						m_transaction_good = false;
 						return {false,std::string("[lmdb]::commit failed: ") + mdb_strerror(ret)};
 					}else{
+						m_transaction_good = false;
 						return {true,"[lmdb]::commit good"};
 					}
 				}else{
@@ -235,6 +343,9 @@ namespace mods::lmdb {
 			m_good = false;
 			if(std::get<0>(m_status[0])){
 				mdb_env_close(m_env);
+			}
+			if(m_transaction_good || m_transaction_open){
+				mdb_txn_abort(m_txn);
 			}
 		}
 		void _db_handle::close(){
@@ -248,6 +359,11 @@ namespace mods::lmdb {
 			if(std::get<0>(m_status[0])){
 				mdb_env_close(m_env);
 			}
+			if(m_transaction_open){
+				mdb_txn_abort(m_txn);
+			}
+			m_transaction_open = false;
+			m_transaction_good = false;
 			m_good = false;
 			m_closed = true;
 		}

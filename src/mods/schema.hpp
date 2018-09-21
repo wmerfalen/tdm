@@ -1,10 +1,35 @@
 #ifndef __MENTOC_MODS_SCHEMA_HEADER__
 #define __MENTOC_MODS_SCHEMA_HEADER__
+#include <string>
+#include <vector>
+#include <map>
+#include <boost/hana.hpp>
 
 namespace mods::schema { 
-	using schema_list_t = std::vector<std::tuple<std::string,std::vector<std::string>>>;
+	using schema_list_t = std::map<std::string,std::vector<std::string>>;
+/*
+ * TODO: Implement boost::hana into this class.
+// 1. Give introspection capabilities to 'Person'
+struct Person {
+  BOOST_HANA_DEFINE_STRUCT(Person,
+    (std::string, name),
+    (int, age)
+  );
+};
+// 2. Write a generic serializer (bear with std::ostream for the example)
+auto serialize = [](std::ostream& os, auto const& object) {
+  hana::for_each(hana::members(object), [&](auto member) {
+    os << member << std::endl;
+  });
+};
+// 3. Use it
+Person john{"John", 30};
+serialize(std::cout, john);
+// output:
+// John
+// 30
+*/
 	static schema_list_t db = {
-		{
 			{"player",{
 									"player_id",
 									"player_virtual_number",
@@ -259,7 +284,6 @@ namespace mods::schema {
 										 "zone_arg3"		// integer NOT NULL
 									 }
 			}
-		}
 	};
 
 };

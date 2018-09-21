@@ -161,7 +161,9 @@ namespace mods::lmdb {
 		using status_type_t = std::array<std::tuple<bool,std::string>,status_step_count>;
 		_db_handle(std::string_view directory,std::string_view db_name,const uint64_t & flags,const uint16_t & mode,bool unused);
 		bool open();
+		int put(std::string_view key,const std::string & value,bool renew);
 		status_type_t status() const;
+		std::tuple<bool,std::string,MDB_txn*> new_txn();
 			int get(std::string_view key,std::string & in_value);
 			int put(std::string_view key,const std::string & value);
 			int put(const std::string& key,const std::string & value);
@@ -170,6 +172,7 @@ namespace mods::lmdb {
 		~_db_handle();
 		void close();
 		void dump_status() const;
+		bool renew_txn();
 		private:
 		bool m_good;
 		bool m_closed;
@@ -179,6 +182,8 @@ namespace mods::lmdb {
 			}
 		}
 		status_type_t m_status;
+		bool m_transaction_open;
+		bool m_transaction_good;
 		MDB_env*	m_env;
 		MDB_txn*	m_txn;
 		MDB_dbi	m_dbi;
