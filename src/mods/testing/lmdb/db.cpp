@@ -22,8 +22,6 @@ int_status_t initialize_table_schema(std::string_view table,db_handle* ptr_db){
 
 	debug("initialize_table_schema: table: '" << table.data() << "'");
 	std::string str_buffer;
-	//for(const auto & [table_name,columns] : mods::schema::db){
-	//if(table_name.compare(table.data()) == 0){
 	assert(mods::schema::db.find(std::string(table.data())) != 
 			mods::schema::db.end());
 	for(auto & m : mods::schema::db[std::string(table)]){
@@ -49,6 +47,9 @@ int_status_t initialize_table_schema(std::string_view table,db_handle* ptr_db){
 }
 
 
+/**
+ * initliaze_row
+ */
 aligned_int_t initialize_row(std::string_view table,db_handle* ptr_db,bool & error){
 	ptr_db->renew_txn();
 	std::string id_list;
@@ -117,6 +118,9 @@ aligned_int_t initialize_row(std::string_view table,db_handle* ptr_db,bool & err
 	return next_id;
 }
 
+/**
+ * new_record
+ */
 aligned_int_t new_record(std::string_view table,db_handle* ptr_db,bool & error){
 	bool init_error = false;
 	auto id = initialize_row(table,ptr_db,init_error);

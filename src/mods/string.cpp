@@ -5,7 +5,8 @@ namespace mods {
 	string::string(){
 		m_mallocd = false;
 		m_cptr = nullptr;
-		assign(std::string(""));
+		//assign(std::string(""));
+		m_str = "";
 		std::cerr << "mods::string::string constructor\n";
 	}
 	string::string(const char* str){
@@ -27,18 +28,24 @@ namespace mods {
 		return m_str.length();
 	}
 	void string::clear(){
-		assign(std::string());
+		///std::cerr <<"m_str: " << m_str.c_str() << "\n";
+		m_str = "";
+		if(m_mallocd){
+			free(m_cptr);
+		}
+		m_cptr = nullptr;
+		m_mallocd = false;
 	}
 	string& string::operator=(const char* other){
-		m_str.clear();
-		this->concat(other);
+		m_str = "";
+		this->assign(other);
 		return *this;
 	}
 	string& string::operator=(char* other){
 		if(other){
 			m_str = std::string(other);
 		}else{
-			m_str.clear();
+			m_str = "";
 		}
 		return *this;
 	}
@@ -46,12 +53,16 @@ namespace mods {
 		if(other.m_str.length()){
 			m_str = other.m_str;
 		}else{
-			m_str.clear();
+			m_str = "";
 		}
 		return *this;
 	}
 	string& string::operator=(const std::string & other){
-		m_str.assign(std::string(other.c_str()));
+		if(other.length()){
+			m_str.assign(std::string(other.c_str()));
+		}else{
+			m_str = "";
+		}
 		return *this;
 	}
 	void string::assign(const std::string & other){
@@ -59,7 +70,11 @@ namespace mods {
 		m_debug(other.c_str());
 		m_debug("end of other.c_str()");
 		std::cerr << "strlen of other: " << strlen(other.c_str()) << "\n";
-		m_str.assign(std::string(other.c_str()));
+		if(other.length()){
+			m_str.assign(std::string(other.c_str()));
+		}else{
+			m_str = "";
+		}
 		m_debug("after m_str assignment");
 		m_realloc();
 	}
@@ -69,8 +84,10 @@ namespace mods {
 		return m_str.c_str();
 	}
 	void string::concat(const std::string & str){
-		m_str += str;
-		m_realloc();
+		if(str.length()){
+			m_str.append(str);
+			m_realloc();
+		}
 	}
 	void string::concat(int ch){
 		m_str += std::to_string(ch);

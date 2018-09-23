@@ -2821,43 +2821,43 @@ void clear_object(struct obj_data *obj) {
  * Called during character creation after picking character class
  * (and then never again for that character).
  */
-void init_char(struct char_data *ch) {
+void init_char(std::shared_ptr<mods::player> player) {
 	int i;
 
 	/* create a player_special structure */
-	if(!ch->player_specials) {
-		ch->player_specials = std::make_shared<player_special_data>();
+	if(!player->cd()->player_specials) {
+		player->cd()->player_specials = std::make_shared<player_special_data>();
 	}
 
 	/* *** if this is our first player --- he be God *** */
 	if(top_of_p_table == 0) {
 		d("first char. he is a god");
-		GET_LEVEL(ch) = LVL_IMPL;
-		GET_EXP(ch) = 7000000;
+		GET_LEVEL(player->cd()) = LVL_IMPL;
+		GET_EXP(player->cd()) = 7000000;
 
 		/* The implementor never goes through do_start(). */
-		GET_MAX_HIT(ch) = 500;
-		GET_MAX_MANA(ch) = 100;
-		GET_MAX_MOVE(ch) = 82;
-		GET_HIT(ch) = GET_MAX_HIT(ch);
-		GET_MANA(ch) = GET_MAX_MANA(ch);
-		GET_MOVE(ch) = GET_MAX_MOVE(ch);
+		GET_MAX_HIT(player->cd()) = 500;
+		GET_MAX_MANA(player->cd()) = 100;
+		GET_MAX_MOVE(player->cd()) = 82;
+		GET_HIT(player->cd()) = GET_MAX_HIT(player->cd());
+		GET_MANA(player->cd()) = GET_MAX_MANA(player->cd());
+		GET_MOVE(player->cd()) = GET_MAX_MOVE(player->cd());
 	}
 
-	set_title(ch, nullptr);
-	ch->player.short_descr.clear();
-	ch->player.long_descr.clear();
-	ch->player.description.clear();
+	set_title(player->cd(), nullptr);
+	player->cd()->player.short_descr = "";
+	player->cd()->player.long_descr.clear();
+	player->cd()->player.description.clear();
 
-	ch->player.time.birth = time(0);
-	ch->player.time.logon = time(0);
-	ch->player.time.played = 0;
+	player->cd()->player.time.birth = time(0);
+	player->cd()->player.time.logon = time(0);
+	player->cd()->player.time.played = 0;
 
-	GET_HOME(ch) = 1;
-	GET_AC(ch) = 100;
+	GET_HOME(player->cd()) = 1;
+	GET_AC(player->cd()) = 100;
 
 	for(i = 0; i < MAX_TONGUE; i++) {
-		GET_TALK(ch, i) = 0;
+		GET_TALK(player->cd(), i) = 0;
 	}
 
 	/*
@@ -2868,49 +2868,49 @@ void init_char(struct char_data *ch) {
 	 * Height is in centimeters. Weight is in pounds.  The only place they're
 	 * ever printed (in stock code) is SPELL_IDENTIFY.
 	 */
-	if(GET_SEX(ch) == SEX_MALE) {
-		GET_WEIGHT(ch) = rand_number(120, 180);
-		GET_HEIGHT(ch) = rand_number(160, 200); /* 5'4" - 6'8" */
+	if(GET_SEX(player->cd()) == SEX_MALE) {
+		GET_WEIGHT(player->cd()) = rand_number(120, 180);
+		GET_HEIGHT(player->cd()) = rand_number(160, 200); /* 5'4" - 6'8" */
 	} else {
-		GET_WEIGHT(ch) = rand_number(100, 160);
-		GET_HEIGHT(ch) = rand_number(150, 180); /* 5'0" - 6'0" */
+		GET_WEIGHT(player->cd()) = rand_number(100, 160);
+		GET_HEIGHT(player->cd()) = rand_number(150, 180); /* 5'0" - 6'0" */
 	}
 
 	/*
-	if((i = get_ptable_by_name(GET_NAME(ch).c_str())) != -1) {
-		player_table[i].id = GET_IDNUM(ch) = ++top_idnum;
+	if((i = get_ptable_by_name(GET_NAME(player->cd()).c_str())) != -1) {
+		player_table[i].id = GET_IDNUM(player->cd()) = ++top_idnum;
 	} else {
-		log("SYSERR: init_char: Character '%s' not found in player table.", GET_NAME(ch).c_str());
+		log("SYSERR: init_char: Character '%s' not found in player table.", GET_NAME(player->cd()).c_str());
 	}*/
 
 	for(i = 1; i <= MAX_SKILLS; i++) {
-		if(GET_LEVEL(ch) < LVL_IMPL) {
-			SET_SKILL(ch, i, 0);
+		if(GET_LEVEL(player->cd()) < LVL_IMPL) {
+			SET_SKILL(player->cd(), i, 0);
 		} else {
-			SET_SKILL(ch, i, 100);
+			SET_SKILL(player->cd(), i, 100);
 		}
 	}
 
-	AFF_FLAGS(ch) = 0;
+	AFF_FLAGS(player->cd()) = 0;
 
 	for(i = 0; i < 5; i++) {
-		GET_SAVE(ch, i) = 0;
+		GET_SAVE(player->cd(), i) = 0;
 	}
 
-	ch->real_abils.intel = 25;
-	ch->real_abils.wis = 25;
-	ch->real_abils.dex = 25;
-	ch->real_abils.str = 25;
-	ch->real_abils.str_add = 100;
-	ch->real_abils.con = 25;
-	ch->real_abils.cha = 25;
+	player->cd()->real_abils.intel = 25;
+	player->cd()->real_abils.wis = 25;
+	player->cd()->real_abils.dex = 25;
+	player->cd()->real_abils.str = 25;
+	player->cd()->real_abils.str_add = 100;
+	player->cd()->real_abils.con = 25;
+	player->cd()->real_abils.cha = 25;
 
 	for(i = 0; i < 3; i++) {
-		GET_COND(ch, i) = (GET_LEVEL(ch) == LVL_IMPL ? -1 : 24);
+		GET_COND(player->cd(), i) = (GET_LEVEL(player->cd()) == LVL_IMPL ? -1 : 24);
 	}
 
-	GET_LOADROOM(ch) = NOWHERE;
-	ch->drone = false;
+	GET_LOADROOM(player->cd()) = NOWHERE;
+	player->cd()->drone = false;
 	d("init_char [done]");
 }
 

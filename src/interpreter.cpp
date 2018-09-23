@@ -1445,9 +1445,9 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 				}
 
 				if(load_char(tmp_ptr.c_str(), &tmp_store)) {
-					store_to_char(&tmp_store, d.character);
+					store_to_char(&tmp_store, p->cd());
 
-					if(PLR_FLAGGED(d.character, PLR_DELETED)) {
+					if(PLR_FLAGGED(p->cd(), PLR_DELETED)) {
 						d("PLR_FLAGGED(PLR_DELETED)");
 						/* We get a false positive from the original deleted character. */
 						/* Check for multiple creations... */
@@ -1456,18 +1456,17 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 							return;
 						}
 
-						clear_char(d.character);
-						d.character->player_specials = std::make_unique<player_special_data>();
-						d.character->desc = std::make_shared<mods::descriptor_data>(p->desc());
-						d.character->player.name.assign(tmp_ptr.c_str());
+						p->cd()->player_specials = std::make_unique<player_special_data>();
+						p->cd()->desc = std::make_shared<mods::descriptor_data>(p->desc());
+						p->cd()->player.name.assign(tmp_ptr.c_str());
 						write_to_output(d, "Did I get that right, %s (Y/N)? ", tmp_ptr.c_str());
 						d("con-name-cnfrm");
 						d.set_state(CON_NAME_CNFRM);
 					} else {
 						/* undo it just in case they are set */
-						REMOVE_BIT(PLR_FLAGS(d.character),
+						REMOVE_BIT(PLR_FLAGS(p->cd()),
 								PLR_WRITING | PLR_MAILING | PLR_CRYO);
-						REMOVE_BIT(AFF_FLAGS(d.character), AFF_GROUP);
+						REMOVE_BIT(AFF_FLAGS(p->cd()), AFF_GROUP);
 						write_to_output(d, "Password: ");
 						echo_off(d);
 						d.idle_tics = 0;
@@ -1482,7 +1481,7 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 						write_to_output(d, "Invalid name, please try another.\r\nName: ");
 						return;
 					}
-					d.character->player.name = tmp_ptr;
+					p->cd()->player.name = tmp_ptr;
 
 					write_to_output(d, "Did I get that right, %s (Y/N)? ", tmp_ptr.c_str());
 					d.set_state(CON_NAME_CNFRM);
@@ -1495,7 +1494,7 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 			if(UPPER(*arg) == 'Y') {
 				d("con-name-cnfrm");
 				if(mods::ban_system::isbanned(d.host.c_str())) {
-					mudlog(NRM, LVL_GOD, TRUE, "Request for new char %s denied from [%s] (siteban)", GET_PC_NAME(d.character).c_str(), d.host.c_str());
+					mudlog(NRM, LVL_GOD, TRUE, "Request for new char %s denied from [%s] (siteban)", GET_PC_NAME(p->cd()).c_str(), d.host.c_str());
 					write_to_output(d, "Sorry, new characters are not allowed from your site!\r\n");
 					d.set_state(CON_CLOSE);
 					return;
@@ -1503,12 +1502,12 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 
 				if(circle_restrict) {
 					write_to_output(d, "Sorry, new players can't be created at the moment.\r\n");
-					mudlog(NRM, LVL_GOD, TRUE, "Request for new char %s denied from [%s] (wizlock)", GET_PC_NAME(d.character).c_str(), d.host.c_str());
+					mudlog(NRM, LVL_GOD, TRUE, "Request for new char %s denied from [%s] (wizlock)", GET_PC_NAME(p->cd()).c_str(), d.host.c_str());
 					d.set_state(CON_CLOSE);
 					return;
 				}
 
-				write_to_output(d, "New character.\r\nGive me a password for %s: ", GET_PC_NAME(d.character).c_str());
+				write_to_output(d, "New character.\r\nGive me a password for %s: ", GET_PC_NAME(p->cd()).c_str());
 				echo_off(d);
 				d.set_state(CON_NEWPASSWD);
 			} else if(*arg == 'n' || *arg == 'N') {
@@ -1546,14 +1545,14 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 				outbuf.reserve(outbuf_size);
 				std::fill(outbuf.begin(),outbuf.end(),0);
 				char_data temp_char;
-				if(parse_sql_player(d.character->player.name.c_str(),&temp_char) && 
-						0 == mods::crypto::encrypt(GET_PASSWD(d.character).c_str(), outbuf)){
+				if(parse_sql_player(p->cd()->player.name.c_str(),&temp_char) && 
+						0 == mods::crypto::encrypt(GET_PASSWD(p->cd()).c_str(), outbuf)){
 					/** User authenticated correctly */
 				}else{
-					mudlog(BRF, LVL_GOD, TRUE, "Bad PW: %s [%s]", GET_NAME(d.character).c_str(), d.host.c_str());
-					GET_BAD_PWS(d.character)++;
+					mudlog(BRF, LVL_GOD, TRUE, "Bad PW: %s [%s]", GET_NAME(p->cd()).c_str(), d.host.c_str());
+					GET_BAD_PWS(p->cd())++;
 					/** TODO: make sure save_char is working. It currently seems not to be working properly. */
-					save_char(d.character);
+					save_char(p->cd());
 
 					if(++(d.bad_pws) >= max_bad_pws) {	/* 3 strikes and you're out. */
 						write_to_output(d, "Wrong password... disconnecting.\r\n");
@@ -1567,22 +1566,22 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 				}
 
 				/* Password was correct. */
-				load_result = GET_BAD_PWS(d.character);
-				GET_BAD_PWS(d.character) = 0;
+				load_result = GET_BAD_PWS(p->cd());
+				GET_BAD_PWS(p->cd()) = 0;
 				d.bad_pws = 0;
 
 				if(mods::ban_system::isbanned(d.host.c_str()) &&
-						!PLR_FLAGGED(d.character, PLR_SITEOK)) {
+						!PLR_FLAGGED(p->cd(), PLR_SITEOK)) {
 					write_to_output(d, "Sorry, this char has not been cleared for login from your site!\r\n");
 					d.set_state(CON_CLOSE);
-					mudlog(NRM, LVL_GOD, TRUE, "Connection attempt for %s denied from %s", GET_NAME(d.character).c_str(), d.host.c_str());
+					mudlog(NRM, LVL_GOD, TRUE, "Connection attempt for %s denied from %s", GET_NAME(p->cd()).c_str(), d.host.c_str());
 					return;
 				}
 
-				if(GET_LEVEL(d.character) < circle_restrict) {
+				if(GET_LEVEL(p->cd()) < circle_restrict) {
 					write_to_output(d, "The game is temporarily restricted.. try again later.\r\n");
 					d.set_state(CON_CLOSE);
-					mudlog(NRM, LVL_GOD, TRUE, "Request for login denied for %s [%s] (wizlock)", GET_NAME(d.character).c_str(), d.host.c_str());
+					mudlog(NRM, LVL_GOD, TRUE, "Request for login denied for %s [%s] (wizlock)", GET_NAME(p->cd()).c_str(), d.host.c_str());
 					return;
 				}
 
@@ -1591,20 +1590,20 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 					return;
 				}
 
-				if(GET_LEVEL(d.character) >= LVL_IMMORT) {
+				if(GET_LEVEL(p->cd()) >= LVL_IMMORT) {
 					write_to_output(d, "%s", imotd);
 				} else {
 					write_to_output(d, "%s", motd);
 				}
 
-				mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(d.character)), TRUE, "%s [%s] has connected.", GET_NAME(d.character).c_str(), d.host.c_str());
+				mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(p->cd())), TRUE, "%s [%s] has connected.", GET_NAME(p->cd()).c_str(), d.host.c_str());
 
 				if(load_result) {
 					write_to_output(d, "\r\n\r\n\007\007\007"
 							"%s%d LOGIN FAILURE%s SINCE LAST SUCCESSFUL LOGIN.%s\r\n",
-							CCRED(d.character, C_SPR), load_result,
-							(load_result > 1) ? "S" : "", CCNRM(d.character, C_SPR));
-					GET_BAD_PWS(d.character) = 0;
+							CCRED(p->cd(), C_SPR), load_result,
+							(load_result > 1) ? "S" : "", CCNRM(p->cd(), C_SPR));
+					GET_BAD_PWS(p->cd()) = 0;
 				}
 
 				write_to_output(d, "\r\n*** PRESS RETURN: ");
@@ -1618,12 +1617,12 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 		case CON_CHPWD_GETNEW:
 			d("con-chpwd-getnew");
 			if(!*arg || strlen(arg) > MAX_PWD_LENGTH || strlen(arg) < 3 ||
-					!str_cmp(arg, GET_PC_NAME(d.character))) {
+					!str_cmp(arg, GET_PC_NAME(p->cd()))) {
 				write_to_output(d, "\r\nIllegal password.\r\nPassword: ");
 				return;
 			}
 
-			GET_PASSWD(d.character).assign(CRYPT(arg, GET_PC_NAME(d.character).c_str()));
+			GET_PASSWD(p->cd()).assign(CRYPT(arg, GET_PC_NAME(p->cd()).c_str()));
 
 			write_to_output(d, "\r\nPlease retype password: ");
 
@@ -1640,7 +1639,7 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 		case CON_CNFPASSWD:
 		case CON_CHPWD_VRFY:
 			d("calling crypt");
-			if(strncmp(CRYPT(arg, GET_PASSWD(d.character)), GET_PASSWD(d.character),
+			if(strncmp(CRYPT(arg, GET_PASSWD(p->cd())), GET_PASSWD(p->cd()),
 						MAX_PWD_LENGTH)) {
 				write_to_output(d, "\r\nPasswords don't match... start over.\r\nPassword: ");
 
@@ -1660,7 +1659,7 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 				write_to_output(d, "\r\nWhat is your sex (M/F)? ");
 				d.set_state(CON_QSEX);
 			} else {
-				save_char(d.character);
+				save_char(p->cd());
 				write_to_output(d, "\r\nDone.\r\n%s", MENU);
 				d.set_state(CON_MENU);
 			}
@@ -1671,12 +1670,12 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 			switch(*arg) {
 				case 'm':
 				case 'M':
-					d.character->player.sex = SEX_MALE;
+					p->cd()->player.sex = SEX_MALE;
 					break;
 
 				case 'f':
 				case 'F':
-					d.character->player.sex = SEX_FEMALE;
+					p->cd()->player.sex = SEX_FEMALE;
 					break;
 
 				default:
@@ -1698,19 +1697,20 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 				return;
 			} else {
 				d("set class to load_result: " << load_result);
-				GET_CLASS(d.character) = load_result;
+				GET_CLASS(p->cd()) = load_result;
 			}
 
 			/* Now GET_NAME() will work properly. */
 			d("init_char");
-			init_char(d.character);
+			init_char(p);
 			d("save_char");
-			save_char(d.character);
+			REMOVE_BIT(MOB_FLAGS(p->cd()), MOB_ISNPC);
+			save_char(p->cd());
 			write_to_output(d, "%s\r\n*** PRESS RETURN: ", motd);
 			d("set CON_RMOTD");
 			d.set_state(CON_RMOTD);
 
-			mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player.", GET_NAME(d.character).c_str(), d.host.c_str());
+			mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player.", GET_NAME(p->cd()).c_str(), d.host.c_str());
 			break;
 
 		case CON_RMOTD:		/* read CR after printing motd   */
@@ -1732,11 +1732,11 @@ case CON_MENU: {		/* get selection from main menu  */
 
 	 case '1':
 		 d("reset_char");
-		 reset_char(d.character);
-		 read_aliases(d.character);
+		 reset_char(p->cd());
+		 read_aliases(p->cd());
 
-		 if(PLR_FLAGGED(d.character, PLR_INVSTART)) {
-			 GET_INVIS_LEV(d.character) = GET_LEVEL(d.character);
+		 if(PLR_FLAGGED(p->cd(), PLR_INVSTART)) {
+			 GET_INVIS_LEV(p->cd()) = GET_LEVEL(p->cd());
 		 }
 
 		 /*
@@ -1744,13 +1744,13 @@ case CON_MENU: {		/* get selection from main menu  */
 			* or equip_char() will gripe about the person in NOWHERE.
 			*/
 		 d("load_room");
-		 if((load_room = GET_LOADROOM(d.character)) != NOWHERE) {
+		 if((load_room = GET_LOADROOM(p->cd())) != NOWHERE) {
 			 load_room = real_room(load_room);
 		 }
 
 		 /* If char was saved with NOWHERE, or real_room above failed... */
 		 if(load_room == NOWHERE) {
-			 if(GET_LEVEL(d.character) >= LVL_IMMORT) {
+			 if(GET_LEVEL(p->cd()) >= LVL_IMMORT) {
 				 d("placing in immor room");
 				 load_room = r_immort_start_room;
 			 } else {
@@ -1759,40 +1759,40 @@ case CON_MENU: {		/* get selection from main menu  */
 			 }
 		 }
 
-		 if(PLR_FLAGGED(d.character, PLR_FROZEN)) {
+		 if(PLR_FLAGGED(p->cd(), PLR_FROZEN)) {
 			 d("player being placed in frozen start room");
 			 load_room = r_frozen_start_room;
 		 }
 
-		 send_to_char(d.character, "%s", WELC_MESSG);
-		 char_to_room(d.character, load_room);
-		 load_result = Crash_load(d.character);
+		 send_to_char(p->cd(), "%s", WELC_MESSG);
+		 char_to_room(p->cd(), load_room);
+		 load_result = Crash_load(p->cd());
 
 		 /* Clear their load room if it's not persistant. */
-		 if(!PLR_FLAGGED(d.character, PLR_LOADROOM)) {
-			 GET_LOADROOM(d.character) = NOWHERE;
+		 if(!PLR_FLAGGED(p->cd(), PLR_LOADROOM)) {
+			 GET_LOADROOM(p->cd()) = NOWHERE;
 		 }
 
-		 save_char(d.character);
+		 save_char(p->cd());
 
-		 act("$n has entered the game.", TRUE, d.character, 0, 0, TO_ROOM);
+		 act("$n has entered the game.", TRUE, p->cd(), 0, 0, TO_ROOM);
 
 		 d.set_state(CON_PLAYING);
 
-		 if(GET_LEVEL(d.character) == 0) {
-			 do_start(d.character);
-			 send_to_char(d.character, "%s", START_MESSG);
+		 if(GET_LEVEL(p->cd()) == 0) {
+			 do_start(p->cd());
+			 send_to_char(p->cd(), "%s", START_MESSG);
 		 }
 
 		 d("looking at room");
-		 look_at_room(d.character, 0);
+		 look_at_room(p->cd(), 0);
 
-		 if(has_mail(GET_IDNUM(d.character))) {
-			 send_to_char(d.character, "You have mail waiting.\r\n");
+		 if(has_mail(GET_IDNUM(p->cd()))) {
+			 send_to_char(p->cd(), "You have mail waiting.\r\n");
 		 }
 
 		 if(load_result == 2) {	/* rented items lost */
-			 send_to_char(d.character, "\r\n\007You could not afford your rent!\r\n"
+			 send_to_char(p->cd(), "\r\n\007You could not afford your rent!\r\n"
 					 "Your possesions have been donated to the Salvation Army!\r\n");
 		 }
 
@@ -1800,14 +1800,14 @@ case CON_MENU: {		/* get selection from main menu  */
 		 break;
 
 	 case '2':
-		 if(d.character->player.description) {
-			 write_to_output(d, "Old description:\r\n%s", d.character->player.description.c_str());
-			 d.character->player.description.clear();
+		 if(p->cd()->player.description) {
+			 write_to_output(d, "Old description:\r\n%s", p->cd()->player.description.c_str());
+			 p->cd()->player.description.clear();
 		 }
 
 		 write_to_output(d, "Enter the new text you'd like others to see when they look at you.\r\n"
 				 "Terminate with a '@' on a new line.\r\n");
-		 d.str = d.character->player.description.ptrptr();
+		 d.str = p->cd()->player.description.ptrptr();
 		 d.max_str = EXDSCR_LENGTH;
 		 d.set_state(CON_EXDESC);
 		 break;
@@ -1838,7 +1838,7 @@ case CON_MENU: {		/* get selection from main menu  */
 }
 
 		case CON_CHPWD_GETOLD:
-									 if(strncmp(CRYPT(arg, GET_PASSWD(d.character)), GET_PASSWD(d.character), MAX_PWD_LENGTH)) {
+									 if(strncmp(CRYPT(arg, GET_PASSWD(p->cd())), GET_PASSWD(p->cd()), MAX_PWD_LENGTH)) {
 										 echo_on(d);
 										 write_to_output(d, "\r\nIncorrect password.\r\n%s", MENU);
 										 d.set_state(CON_MENU);
@@ -1852,7 +1852,7 @@ case CON_MENU: {		/* get selection from main menu  */
 		case CON_DELCNF1:
 									 echo_on(d);
 
-									 if(strncmp(CRYPT(arg, GET_PASSWD(d.character)), GET_PASSWD(d.character), MAX_PWD_LENGTH)) {
+									 if(strncmp(CRYPT(arg, GET_PASSWD(p->cd())), GET_PASSWD(p->cd()), MAX_PWD_LENGTH)) {
 										 write_to_output(d, "\r\nIncorrect password.\r\n%s", MENU);
 										 d.set_state(CON_MENU);
 									 } else {
@@ -1866,23 +1866,23 @@ case CON_MENU: {		/* get selection from main menu  */
 
 		case CON_DELCNF2:
 									 if(!strcmp(arg, "yes") || !strcmp(arg, "YES")) {
-										 if(PLR_FLAGGED(d.character, PLR_FROZEN)) {
+										 if(PLR_FLAGGED(p->cd(), PLR_FROZEN)) {
 											 write_to_output(d, "You try to kill yourself, but the ice stops you.\r\n"
 													 "Character not deleted.\r\n\r\n");
 											 d.set_state(CON_CLOSE);
 											 return;
 										 }
 
-										 if(GET_LEVEL(d.character) < LVL_GRGOD) {
-											 SET_BIT(PLR_FLAGS(d.character), PLR_DELETED);
+										 if(GET_LEVEL(p->cd()) < LVL_GRGOD) {
+											 SET_BIT(PLR_FLAGS(p->cd()), PLR_DELETED);
 										 }
 
-										 save_char(d.character);
-										 Crash_delete_file(GET_NAME(d.character).ptr());
-										 delete_aliases(GET_NAME(d.character).c_str());
+										 save_char(p->cd());
+										 Crash_delete_file(GET_NAME(p->cd()).ptr());
+										 delete_aliases(GET_NAME(p->cd()).c_str());
 										 write_to_output(d, "Character '%s' deleted!\r\n"
-												 "Goodbye.\r\n", GET_NAME(d.character).c_str());
-										 mudlog(NRM, LVL_GOD, TRUE, "%s (lev %d) has self-deleted.", GET_NAME(d.character).c_str(), GET_LEVEL(d.character));
+												 "Goodbye.\r\n", GET_NAME(p->cd()).c_str());
+										 mudlog(NRM, LVL_GOD, TRUE, "%s (lev %d) has self-deleted.", GET_NAME(p->cd()).c_str(), GET_LEVEL(p->cd()));
 										 d.set_state(CON_CLOSE);
 										 return;
 									 } else {
@@ -1902,7 +1902,7 @@ case CON_MENU: {		/* get selection from main menu  */
 
 		default:
 									 log("SYSERR: Nanny: illegal state of con'ness (%d) for '%s'; closing connection.",
-											 STATE(d), d.character ? GET_NAME(d.character) : "<unknown>");
+											 STATE(d), p->cd() ? GET_NAME(p->cd()) : "<unknown>");
 									 d.set_state(CON_DISCONNECT);	/* Safest to do. */
 									 break;
 	}

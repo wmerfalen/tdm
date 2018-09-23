@@ -122,7 +122,7 @@ void	char_to_store(struct char_data *ch, struct char_file_u *st);
 void	store_to_char(struct char_file_u *st, struct char_data *ch);
 bool	load_char(const char *name, struct char_file_u *char_element);
 void	save_char(struct char_data *ch);
-void	init_char(struct char_data *ch);
+void	init_char(std::shared_ptr<mods::player>);
 struct char_data* create_char(void);
 struct char_data *read_mobile(mob_vnum nr, int type);
 int	vnum_mobile(char *searchname, struct char_data *ch);

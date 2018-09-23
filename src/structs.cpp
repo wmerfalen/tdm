@@ -4,6 +4,7 @@
 #include <array>
 
 char_player_data::char_player_data(){
+	std::cerr << "[char_player_data]::constructor yo\n";
   name.clear();         /* PC / NPC s name (kill ...  )         */
   short_descr.clear();  /* for NPC 'actions'                    */
   long_descr.clear();   /* for 'look'             */
@@ -16,6 +17,7 @@ char_player_data::char_player_data(){
   /** TODO: phase this out */
   passwd.clear();
 	std::fill(m_passwd.begin(),m_passwd.end(),0);
+	std::cerr << "[char_player_data]::constructor yo done\n";
 }
 char_data::char_data(char_data* o){
 		has_desc = false;
