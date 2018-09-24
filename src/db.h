@@ -126,7 +126,6 @@ void	init_char(std::shared_ptr<mods::player>);
 struct char_data* create_char(void);
 struct char_data *read_mobile(mob_vnum nr, int type);
 int	vnum_mobile(char *searchname, struct char_data *ch);
-void	clear_char(struct char_data *ch);
 void	reset_char(struct char_data *ch);
 void	free_char(struct char_data *ch);
 

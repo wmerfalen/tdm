@@ -148,6 +148,16 @@ namespace mods {
 		*/
 	}
 
+	player::player(player_type_enum_t type){
+		switch(type){
+			case DRONE:
+				player();
+				break;
+			default:
+				player();
+				break;
+		}
+	}
 	player::player(){
 		m_shared_ptr = std::make_shared<char_data>();
 		m_char_data = m_shared_ptr.get();

@@ -847,24 +847,26 @@ ACMD(do_stat) {
 		} else if((victim = get_player_vis(ch, buf2, NULL, FIND_CHAR_WORLD)) != NULL) {
 			do_stat_character(ch, victim);
 		} else {
-			CREATE(victim, struct char_data, 1);
-			clear_char(victim);
+			/** TODO: !needs-testing - Removed CREATE/clear_char() combo. */
+			std::cerr << "[deprecation-notice]: clear_char (do_stat)\n";
+			std::cerr << "[stub]: clear_char (do_stat)\n";
+
+			char_data temp_victim_shadow;
 
 			if(load_char(buf2, &tmp_store)) {
-				store_to_char(&tmp_store, victim);
+				store_to_char(&tmp_store, &temp_victim_shadow);
 				victim->player.time.logon = tmp_store.last_logon;
-				char_to_room(victim, 0);
+				char_to_room(&temp_victim_shadow, 0);
 
-				if(GET_LEVEL(victim) > GET_LEVEL(ch)) {
+				if(GET_LEVEL(&temp_victim_shadow) > GET_LEVEL(ch)) {
 					send_to_char(ch, "Sorry, you can't do that.\r\n");
 				} else {
 					do_stat_character(ch, victim);
 				}
 
-				extract_char_final(victim);
+				extract_char_final(&temp_victim_shadow);
 			} else {
 				send_to_char(ch, "There is no such player.\r\n");
-				free(victim);
 			}
 		}
 	} else if(is_abbrev(buf1, "object")) {
@@ -2780,7 +2782,7 @@ ACMD(do_set) {
 	struct char_data *vict = NULL, *cbuf = NULL;
 	struct char_file_u tmp_store;
 	char field[MAX_INPUT_LENGTH], name[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
-	int mode, len, player_i = 0, retval;
+	int mode = 0, len = 0, retval =0;
 	char is_file = 0, is_player = 0;
 
 	half_chop(argument, name, buf);
@@ -2817,9 +2819,12 @@ ACMD(do_set) {
 		}
 	} else if(is_file) {
 		/* try to load the player off disk */
+		/** TODO: create temporary character function that is global and we can call. */
+		std::cerr << "[deprecation-notice]: CREATE/clear_char combo\n";
+		std::cerr << "[stub]: CREATE/clear_char combo\n";
+		/*
 		CREATE(cbuf, struct char_data, 1);
 		clear_char(cbuf);
-
 		if((player_i = load_char(name, &tmp_store)) > -1) {
 			store_to_char(&tmp_store, cbuf);
 
@@ -2835,6 +2840,9 @@ ACMD(do_set) {
 			send_to_char(ch, "There is no such player.\r\n");
 			return;
 		}
+		*/
+		return;
+
 	}
 
 	/* find the command in the list */

@@ -54,9 +54,11 @@ int mail_recip_ok(const char *name);
 
 int mail_recip_ok(const char *name) {
 	struct char_file_u tmp_store;
-	struct char_data *victim;
 	int ret = FALSE;
 
+	std::cerr << "[deprecation-notice]: create/clear char (mail_recip_ok)\n";
+	std::cerr << "[stub]: create/clear char (mail_recip_ok)\n";
+	/*
 	CREATE(victim, struct char_data, 1);
 	clear_char(victim);
 
@@ -72,6 +74,7 @@ int mail_recip_ok(const char *name) {
 	} else {
 		free(victim);
 	}
+	*/
 
 	return ret;
 }

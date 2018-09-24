@@ -285,18 +285,6 @@ namespace mods {
 			mob_index[i].number++;
 			return (mob);
 		}
-		struct char_data* create_char() {
-			log("[deprecated] mods::globals::create_char");
-			struct char_data *ch;
-			CREATE(ch,struct char_data,1);
-			clear_char(ch);
-			ch->player_specials = std::make_unique<player_special_data>();
-			(ch)->affected = (struct affected_type*) calloc(1,sizeof(struct affected_type));
-			memset(&((ch)->affected),0,sizeof((ch)->affected));
-			(ch)->next = character_list;
-			character_list = ch;
-			return ch;
-		}
 		uuid_t get_uuid() {
 			static uuid_t u = 0;
 			return ++u;

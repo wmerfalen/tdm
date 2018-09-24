@@ -20,9 +20,10 @@ namespace mods {
 #include "../sysdep.h"
 #include "../structs.h"
 #include "../types.hpp"
+#include "drone.hpp"
 
 #define WEAPON_SET_NUM 1
-extern size_t send_to_char(struct char_data *ch, const char *messg, ...);
+extern size_t send_to_char(char_data *ch, const char *messg, ...);
 namespace mods {
 	namespace weapon {
 		enum mask_type { SMG, SNIPE, SHOTGUN, GRENADE };
@@ -35,15 +36,19 @@ namespace mods {
 			typedef short weapon_set;
 			typedef std::vector<class_type> class_capability_t;
 			typedef std::vector<std::shared_ptr<mods::classes::base>> class_info_t;
-			using   chdata = struct char_data;
-			using   chdata_ptr = struct char_data *;
+			using   chdata = char_data;
+			using   chdata_ptr = char_data *;
 			using		descriptor_t = mods::descriptor_data;
 			using		descriptor_iterator_t = std::deque<mods::descriptor_data>::iterator;
+			enum player_type_enum_t { 
+				PLAYER, MOB, DRONE
+			};
 
 			/* constructors and destructors */
 			player();
 			player(char_data*);
 			player(mods::player*);
+			player(player_type_enum_t);
 			~player() = default;
 			void init();
 
@@ -204,6 +209,9 @@ namespace mods {
 			}
 			void set_desc(std::deque<descriptor_data>::iterator it){ 
 				m_desc = std::make_shared<mods::descriptor_data>(*it);
+			}
+			void set_desc(std::shared_ptr<descriptor_data> it){ 
+				m_desc = it;
 			}
 			void set_char_on_descriptor(std::deque<descriptor_data>::iterator it);
 			descriptor_data& desc(){ return *m_desc; }

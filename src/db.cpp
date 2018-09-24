@@ -898,7 +898,6 @@ bitvector_t asciiflag_conv(char *flag) {
 
 void parse_sql_mobiles() {
 	char_data proto;
-	clear_char(&proto);
 	auto result = db_get_all("mobile");
 
 	if(result.size()) {
@@ -1812,19 +1811,6 @@ int vnum_object(char *searchname, struct char_data *ch) {
 }
 
 
-/* create a character, and add it to the char list */
-struct char_data *create_char(void) {
-	struct char_data *ch;
-
-	CREATE(ch, struct char_data, 1);
-	clear_char(ch);
-	ch->next = character_list;
-	character_list = ch;
-
-	return (ch);
-}
-
-
 /* create a new mobile from a prototype */
 struct char_data *read_mobile(mob_vnum nr, int type) { /* and mob_rnum */
 	return mods::globals::read_mobile(nr,type);
@@ -1842,7 +1828,7 @@ struct char_data *read_mobile(mob_vnum nr, int type) { /* and mob_rnum */
 		 }
 
 		 CREATE(mob, struct char_data, 1);
-		 clear_char(mob);
+		 clear_char(mob);	//commented out
 	 *mob = mob_proto[i];
 	 mob->next = character_list;
 	 character_list = mob;
@@ -2779,31 +2765,6 @@ void reset_char(char_data *ch) {
 	GET_LAST_TELL(ch) = NOBODY;
 }
 
-
-
-/* clear ALL the working variables of a char; do NOT free any space alloc'ed */
-void clear_char(struct char_data *ch) {
-	memset((char *) ch, 0, sizeof(struct char_data));
-
-	IN_ROOM(ch) = NOWHERE;
-	GET_PFILEPOS(ch) = -1;
-	GET_MOB_RNUM(ch) = NOBODY;
-	GET_WAS_IN(ch) = NOWHERE;
-	GET_POS(ch) = POS_STANDING;
-	ch->mob_specials.default_pos = POS_STANDING;
-	ch->mob_specials.behaviour_tree = behaviour_tree::NONE;
-	ch->drone_simulate = false;
-	ch->drone = false;
-	ch->drone_owner = 0;
-	ch->drone_uuid = 0;
-	GET_AC(ch) = 100;		/* Basic Armor */
-
-	if(ch->points.max_mana < 100) {
-		ch->points.max_mana = 100;
-	}
-
-	ch->carrying = nullptr;
-}
 
 
 void clear_object(struct obj_data *obj) {

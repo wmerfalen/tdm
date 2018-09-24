@@ -14,18 +14,25 @@
 
 namespace mods {
 	drone::drone(char_data* ch) : m_char_data(ch) { };
-	 struct char_data* drone::create(struct char_data* owner) {
-		struct char_data *ch = mods::globals::create_char();
+	 struct char_data* drone::create(char_data* owner) {
+	auto player = mods::globals::player_list.emplace_back(
+			std::make_shared<mods::player>()
+	);
+	player->set_desc(owner->desc);
+	player->desc().character = player->cd();
+	/** TODO: !uncertainty! -> question: "Does this need to be uncommented?" */
+	//player->set_char_on_descriptor();
+		auto ch = player->cd();
 		ch->drone = true;
 		ch->desc = owner->desc;
 		ch->drone_owner = owner->uuid;
-		ch->player.name = strdup("A drone");
+		ch->player.name.assign("A drone");
 		owner->drone_uuid = ch->uuid;
 		owner->drone_simulate = true;
 		IN_ROOM(ch) = IN_ROOM(owner);
 		ch->points.move = 9999;
 		ch->points.max_move = 9999;
-		memset(&ch->char_specials,0,sizeof(ch->char_specials));
+		//memset(&ch->char_specials,0,sizeof(ch->char_specials));
 		ch->char_specials.position = POS_STANDING;
 		ch->char_specials.saved.idnum = ch->uuid;
 		REMOVE_BIT(MOB_FLAGS(ch),MOB_ISNPC);
@@ -33,7 +40,7 @@ namespace mods {
 		char_to_room(ch,IN_ROOM(owner));
 		SET_BIT(ch->char_specials.saved.affected_by,AFF_SNEAK);
 		SET_BIT(ch->player_specials->saved.pref, PRF_AUTOEXIT);
-		return ch;
+		return;
 	}
 	 void drone::start(struct char_data* owner) {
 		auto drone = mods::drone::get_existing(owner);
