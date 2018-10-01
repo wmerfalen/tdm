@@ -40,7 +40,7 @@ namespace mods {
 		char_to_room(ch,IN_ROOM(owner));
 		SET_BIT(ch->char_specials.saved.affected_by,AFF_SNEAK);
 		SET_BIT(ch->player_specials->saved.pref, PRF_AUTOEXIT);
-		return;
+		return player->cd();
 	}
 	 void drone::start(struct char_data* owner) {
 		auto drone = mods::drone::get_existing(owner);

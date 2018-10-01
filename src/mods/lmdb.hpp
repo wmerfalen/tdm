@@ -158,22 +158,33 @@ namespace mods::lmdb {
 
 	struct _db_handle {
 		constexpr static std::size_t status_step_count = 5;
+		constexpr static int KEY_NOT_FOUND = 0;
+		constexpr static int KEY_FETCHED_OKAY = 1;
+		using tuple_return_type_t = std::tuple<bool,std::string>; 
 		using status_type_t = std::array<std::tuple<bool,std::string>,status_step_count>;
 		_db_handle(std::string_view directory,std::string_view db_name,const uint64_t & flags,const uint16_t & mode,bool unused);
 		bool open();
 		int put(std::string_view key,const std::string & value,bool renew);
+		int del(std::string_view key);
 		status_type_t status() const;
-		std::tuple<bool,std::string,MDB_txn*> new_txn();
-			int get(std::string_view key,std::string & in_value);
-			int put(std::string_view key,const std::string & value);
-			int put(const std::string& key,const std::string & value);
-		std::tuple<bool,std::string_view> commit();
+		int get(std::string_view key,std::string & in_value);
+		int put(std::string_view key,const std::string & value);
+		int put(const std::string& key,const std::string & value);
+
+		int get(MDB_txn*,std::string_view key,std::string & in_value);
+		int put(MDB_txn*,std::string_view key,const std::string & value);
+		tuple_return_type_t commit();
+		tuple_return_type_t new_txn();
+		tuple_return_type_t new_txn(MDB_txn**);
+		tuple_return_type_t open_dbi();
+		tuple_return_type_t abort_txn();
 		_db_handle() = delete;
 		~_db_handle();
 		void close();
 		void dump_status() const;
-		bool renew_txn();
+		tuple_return_type_t renew_txn();
 		private:
+		bool m_dbi_opened;
 		bool m_good;
 		bool m_closed;
 		void m_clear_status(){
@@ -212,5 +223,5 @@ bool db_update(std::string_view table,const mods::lmdb::mutable_map_t & values,
 bool db_update(mods::lmdb::table_type_t table,const mods::lmdb::mutable_map_t & values,const mods::lmdb::key_type_t & field,std::string_view value );
 bool db_insert(std::string_view table,const mods::lmdb::mutable_map_t & values);
 
-#endif
 
+#endif

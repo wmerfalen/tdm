@@ -10,6 +10,7 @@
 *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
 ************************************************************************ */
 #include "mods/extern.hpp"
+#include "mods/db.hpp"
 /* arbitrary constants used by index_boot() (must be unique) */
 #define DB_BOOT_WLD	0
 #define DB_BOOT_MOB	1
@@ -102,6 +103,7 @@
 void  boot_hell(void);
 void	boot_db(void);
 void	destroy_db(void);
+bool char_exists(std::string_view,mods::db::aligned_int_t&);
 int	create_entry(const char *name);
 void	zone_update(void);
 char	*fread_string(FILE *fl, const char *error);

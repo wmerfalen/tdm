@@ -29,6 +29,8 @@ extern void clear_char(struct char_data*);
 extern void do_look(struct char_data*,char *argument, int cmd, int subcmd);
 extern void parse_sql_rooms();
 extern struct player_special_data dummy_mob;
+extern int circle_shutdown;
+extern int port_main(int,char**);
 namespace mods {
 	namespace globals {
 		using player = mods::player;
@@ -117,7 +119,7 @@ namespace mods {
 		}
 
 		void shutdown(void){
-			exit(0);
+			circle_shutdown = 1;
 		}
 		/** !todo: phase this function out */
 		bool acl_allowed(struct char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd) {
@@ -139,6 +141,10 @@ namespace mods {
 					argument = argv[pos];
 				}else{
 					argument = "";
+				}
+				if(strncmp(argv[pos],"--sql-port",10) == 0){
+					exit(port_main(argc -1,static_cast<char**>(&argv[1])));
+					continue;
 				}
 				if(strncmp(argv[pos],"--testing=",10) == 0){
 					f_test_suite = argument.substr(10,argument.length()-10);
@@ -177,16 +183,21 @@ namespace mods {
 				}
 			}
 			db = std::make_unique<lmdb_db>(lmdb_dir,lmdb_name,MDB_WRITEMAP,0600,true);
-			if(f_test_suite.length()){
-				mods::testing::lmdb::db test(argc,argv);
-				mods::globals::shutdown();
-			}
 			player_nobody = nullptr;
 			defer_queue = std::make_unique<mods::deferred>(mods::deferred::TICK_RESOLUTION);
 			duktape_context = mods::js::new_context();
 			mods::js::load_c_functions();
 			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js");
 			mods::behaviour_tree_impl::load_trees();
+			if(f_test_suite.length()){
+				if(!f_test_suite.compare("db")){
+					mods::testing::lmdb::db test(argc,argv);
+				}
+				if(!f_test_suite.compare("player_syncing")){
+					mods::testing::lmdb::player_syncing test(argc,argv);
+				}
+				mods::globals::shutdown();
+			}
 		}
 		void post_boot_db() {
 		}
@@ -508,6 +519,10 @@ namespace mods {
 			}
 
 			void char_to_room(const room_rnum& room,struct char_data* ch) {
+				if(room >= 0 && std::size_t(room) >= room_list.size()){
+					std::cerr << "[char_to_room]: WARNING. Requested room is out of bounds: " << room << "\n";
+					return;
+				}
 				auto place = std::find(room_list[room].begin(),room_list[room].end(),ch);
 
 				if(place == room_list[room].end()) {

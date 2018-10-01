@@ -159,6 +159,7 @@ namespace mods {
 		}
 	}
 	player::player(){
+		std::cerr << "player::player yo\n";
 		m_shared_ptr = std::make_shared<char_data>();
 		m_char_data = m_shared_ptr.get();
 		/** I don't like this class call FIXME */

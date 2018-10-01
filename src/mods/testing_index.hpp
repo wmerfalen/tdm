@@ -9,5 +9,6 @@
 	};
 
 DESCRIBE_TESTING_SUITE(lmdb,db)
+DESCRIBE_TESTING_SUITE(lmdb,player_syncing)
 
 #endif

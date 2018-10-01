@@ -31,7 +31,8 @@ buildobj = act.comm act.informative act.item act.medic \
 					 mods/js mods/player mods/prefs mods/pregame\
 					 mods/projectile mods/quests mods/scan mods/sql mods/util\
 					 mods/weapon mods/classes/medic mods/string mods/loops\
-					 mods/hell mods/testing/lmdb/db
+					 mods/hell mods/db mods/testing/lmdb/player-syncing\
+					 mods/testing/lmdb/db sql/port
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
@@ -43,7 +44,7 @@ clean:
 		mods/*.d mods/classes/*.o mods/classes/*.d mods/testing/*/*.o)
 
 $(builddir):
-	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/acl/ $(builddir)/mods/testing/lmdb
+	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/acl/ $(builddir)/mods/testing/lmdb $(builddir)/sql
 
 $(builddir)/%.o: %.cpp
 	$(CC) -c $(FLAGS) -o $@ $<

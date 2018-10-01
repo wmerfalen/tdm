@@ -16,3 +16,4 @@ syslog*
 js-warnings
 lib
 callgrind.out*
+.killscript

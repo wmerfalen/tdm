@@ -1,7 +1,6 @@
 ../lib/plrobjs/*/*
 hana/*
 ../lib/data.mdb
-../.killscript
 *.o
 ../bin/*
 ../bin
@@ -18,3 +17,4 @@ mods/test/*
 *.so
 build/*
 tinker/code-features/*
+../lib/etc/time

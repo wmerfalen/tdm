@@ -49,7 +49,7 @@ extern std::deque<char_data> mob_list;
 namespace mods {
     namespace globals {
 			using player_ptr_t = std::shared_ptr<mods::player>;
-			using player_list_t = std::vector<std::shared_ptr<mods::player>>;
+			using player_list_t = std::vector<player_ptr_t>;
 		using lmdb_db = mods::lmdb::db_handle;
 		using socket_map_t = std::map<int,player_ptr_t>;
 		enum boot_type_t { BOOT_DB,BOOT_HELL };

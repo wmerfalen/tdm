@@ -479,7 +479,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "shrug"    , POS_RESTING , do_action   , 0, 0 },
 	{ "shutdow"  , POS_DEAD    , do_shutdown , LVL_IMPL, 0 },
 	{ "scan" 		, POS_RESTING    , do_scan , 0, 0 },
-	{ "shutdown" , POS_DEAD    , do_shutdown , LVL_IMPL, SCMD_SHUTDOWN },
+	{ "shutdown" , POS_RESTING   , do_shutdown , 0, SCMD_SHUTDOWN },
 	{ "sigh"     , POS_RESTING , do_action   , 0, 0 },
 	{ "sing"     , POS_RESTING , do_action   , 0, 0 },
 	{ "sip"      , POS_RESTING , do_drink    , 0, SCMD_SIP },
@@ -1444,25 +1444,26 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 					return;
 				}
 
-				if(load_char(tmp_ptr.c_str(), &tmp_store)) {
-					store_to_char(&tmp_store, p->cd());
+				mods::db::aligned_int_t user_id = 0;
+				if(char_exists(tmp_ptr.c_str(),user_id)) {
+					//store_to_char(&tmp_store, p->cd());
 
-					if(PLR_FLAGGED(p->cd(), PLR_DELETED)) {
-						d("PLR_FLAGGED(PLR_DELETED)");
-						/* We get a false positive from the original deleted character. */
-						/* Check for multiple creations... */
-						if(!Valid_Name(tmp_ptr.c_str())) {
-							write_to_output(d, "Invalid name, please try another.\r\nName: ");
-							return;
-						}
+					//if(PLR_FLAGGED(p->cd(), PLR_DELETED)) {
+					//	d("PLR_FLAGGED(PLR_DELETED)");
+					//	/* We get a false positive from the original deleted character. */
+					//	/* Check for multiple creations... */
+					//	if(!Valid_Name(tmp_ptr.c_str())) {
+					//		write_to_output(d, "Invalid name, please try another.\r\nName: ");
+					//		return;
+					//	}
 
-						p->cd()->player_specials = std::make_unique<player_special_data>();
-						p->cd()->desc = std::make_shared<mods::descriptor_data>(p->desc());
-						p->cd()->player.name.assign(tmp_ptr.c_str());
-						write_to_output(d, "Did I get that right, %s (Y/N)? ", tmp_ptr.c_str());
-						d("con-name-cnfrm");
-						d.set_state(CON_NAME_CNFRM);
-					} else {
+					//	p->cd()->player_specials = std::make_unique<player_special_data>();
+					//	p->cd()->desc = std::make_shared<mods::descriptor_data>(p->desc());
+					//	p->cd()->player.name.assign(tmp_ptr.c_str());
+					//	write_to_output(d, "Did I get that right, %s (Y/N)? ", tmp_ptr.c_str());
+					//	d("con-name-cnfrm");
+					//	d.set_state(CON_NAME_CNFRM);
+					//} else {
 						/* undo it just in case they are set */
 						REMOVE_BIT(PLR_FLAGS(p->cd()),
 								PLR_WRITING | PLR_MAILING | PLR_CRYO);
@@ -1471,7 +1472,7 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 						echo_off(d);
 						d.idle_tics = 0;
 						d.set_state(CON_PASSWORD);
-					}
+					//}
 				} else {
 					d("Player unknown");
 					/* player unknown -- make new character */
@@ -1545,9 +1546,9 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 				outbuf.reserve(outbuf_size);
 				std::fill(outbuf.begin(),outbuf.end(),0);
 				char_data temp_char;
-				if(parse_sql_player(p->cd()->player.name.c_str(),&temp_char) && 
-						0 == mods::crypto::encrypt(GET_PASSWD(p->cd()).c_str(), outbuf)){
-					/** User authenticated correctly */
+
+				if(0 == mods::crypto::encrypt(GET_PASSWD(p->cd()).c_str(), outbuf)){
+					//
 				}else{
 					mudlog(BRF, LVL_GOD, TRUE, "Bad PW: %s [%s]", GET_NAME(p->cd()).c_str(), d.host.c_str());
 					GET_BAD_PWS(p->cd())++;

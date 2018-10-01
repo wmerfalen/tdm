@@ -24,20 +24,18 @@
 #include "house.h"
 #include "constants.h"
 #include "globals.hpp"
-#include "mods/sql.hpp"
 #include <vector>
 #include <deque>
 #include "mods/behaviour_tree_impl.hpp"
-#include "mods/sql.hpp"
-#include "mods/lmdb.hpp"
+//#include "mods/sql.hpp"
+//#include "mods/lmdb.hpp"
+#include "mods/db.hpp"
 #include "mods/hell.hpp"
-#include <string_view>
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 
 /**************************************************************************
  *  declarations of most of the 'global' variables                         *
  **************************************************************************/
-using sql_compositor = mods::sql::compositor<std::size_t>;
 bool db_has_been_booted = false;
 void parse_sql_rooms();
 void parse_sql_zones();
@@ -429,84 +427,90 @@ void boot_world(void) {
 
 
 void free_extra_descriptions(struct extra_descr_data *edesc) {
-	struct extra_descr_data *enext;
-
-	for(; edesc; edesc = enext) {
-		enext = edesc->next;
-
-		free(edesc->keyword);
-		free(edesc->description);
-		free(edesc);
-	}
+//	struct extra_descr_data *enext;
+//
+//	for(; edesc; edesc = enext) {
+//		enext = edesc->next;
+//
+//		free(edesc->keyword);
+//		free(edesc->description);
+//		free(edesc);
+//	}
+	std::cerr << "[stub]: free_extra_descriptions - things will break if malloc()'d\n";
 }
 
 
 /* Free the world, in a memory allocation sense. */
 void destroy_db(void) {
-	ssize_t cnt, itr;
-	struct char_data *chtmp;
-
+	mods::globals::db->commit();
+	mods::globals::db->close();
+//	ssize_t cnt, itr;
+//	struct char_data *chtmp;
+//
 	/* Active Mobiles & Players */
-	while(character_list) {
-		chtmp = character_list;
-		character_list = character_list->next;
-		free_char(chtmp);
-	}
-
-	/* Active Objects */
-	/* object_list frees itself thanks to destructors !mods */
-
-	/* Rooms */
-	for(cnt = 0; cnt <= top_of_world; cnt++) {
-		free_extra_descriptions(world[cnt].ex_description);
-
-		for(itr = 0; itr < NUM_OF_DIRS; itr++) {
-			if(!world[cnt].dir_option[itr]) {
-				continue;
-			}
-
-			/** TODO: make dir_option elements not crappy malloc'd :) */
-			if(world[cnt].dir_option[itr]->general_description) {
-			}
-
-			free(world[cnt].dir_option[itr]);
-		}
-	}
-
-	/* We don't need to free the world since it's a std::vector now !mods */
-	//free(world);
-
-	/* Objects */
-	for(cnt = 0; cnt <= top_of_objt; cnt++) {
-		if(obj_proto[cnt].name) {
-			free(obj_proto[cnt].name);
-		}
-
-		if(obj_proto[cnt].description) {
-			free(obj_proto[cnt].description);
-		}
-
-		if(obj_proto[cnt].short_description) {
-			free(obj_proto[cnt].short_description);
-		}
-
-		if(obj_proto[cnt].action_description) {
-			free(obj_proto[cnt].action_description);
-		}
-
-		free_extra_descriptions(obj_proto[cnt].ex_description);
-	}
-
-	/* Mobiles */
-	for(cnt = 0; cnt <= top_of_mobt; cnt++) {
-		while(mob_proto[cnt].affected) {
-			affect_remove(&mob_proto[cnt], mob_proto[cnt].affected);
-		}
-	}
-
-	/* Shops */
-	destroy_shops();
+//	
+//	while(character_list) {
+//		chtmp = character_list;
+//		character_list = character_list->next;
+//		free_char(chtmp);
+//	}
+//
+//	/* Active Objects */
+//	/* object_list frees itself thanks to destructors !mods */
+//
+//	/* Rooms */
+//	for(cnt = 0; cnt <= top_of_world; cnt++) {
+//		free_extra_descriptions(world[cnt].ex_description);
+//
+//		for(itr = 0; itr < NUM_OF_DIRS; itr++) {
+//			if(!world[cnt].dir_option[itr]) {
+//				continue;
+//			}
+//
+//			/** TODO: make dir_option elements not crappy malloc'd :) */
+//			if(world[cnt].dir_option[itr]->general_description) {
+//			}
+//
+//			free(world[cnt].dir_option[itr]);
+//		}
+//	}
+//
+//	/* We don't need to free the world since it's a std::vector now !mods */
+//	//free(world);
+//
+//	/* Objects */
+//	for(cnt = 0; cnt <= top_of_objt; cnt++) {
+//		if(obj_proto[cnt].name) {
+//			free(obj_proto[cnt].name);
+//		}
+//
+//		if(obj_proto[cnt].description) {
+//			free(obj_proto[cnt].description);
+//		}
+//
+//		if(obj_proto[cnt].short_description) {
+//			free(obj_proto[cnt].short_description);
+//		}
+//
+//		if(obj_proto[cnt].action_description) {
+//			free(obj_proto[cnt].action_description);
+//		}
+//
+//		free_extra_descriptions(obj_proto[cnt].ex_description);
+//	}
+//
+//	/* Mobiles */
+//	for(cnt = 0; cnt <= top_of_mobt; cnt++) {
+//		while(mob_proto[cnt].affected) {
+//			affect_remove(&mob_proto[cnt], mob_proto[cnt].affected);
+//		}
+//	}
+//
+//	/* Shops */
+//	destroy_shops();
+	std::cerr << "[stub]: destory_db - things will break if malloc()'d\n";
 }
+
 
 
 /* body of the booting system */
@@ -2235,17 +2239,40 @@ char *get_name_by_id(long id) {
 	return (NULL);
 }
 
+bool char_exists(std::string_view name,
+		mods::db::aligned_int_t & meta_int_id){
+	meta_int_id = 0;
+	std::string user_id = "0";
+	auto ptr_db = mods::globals::db.get();
+	ptr_db->renew_txn();
+	auto ret = ptr_db->get(db_key(
+				{"player","meta","name",name.data()}),
+			user_id);
+	if(db_handle::KEY_FETCHED_OKAY != ret){
+		ptr_db->abort_txn();
+		return false;
+	}
+	std::stringstream stream;
+	stream << user_id;
+	stream >> meta_int_id;
+	return (meta_int_id != 0);
+}
 
 /* Load a char, TRUE if loaded, FALSE if not */
 bool load_char(const char *name, struct char_file_u *char_element) {
-	try{
-		auto result = db_get("player",db_key({"meta","name",name}));
+	mods::db::mutable_map_t values;
+	auto tuple_ret = mods::db::lmdb_load_by_meta(
+			"name",std::string(name),"player",
+			mods::globals::db.get(),
+			values);
+	if(std::get<0>(tuple_ret)){
+		mudlog(CMP,LVL_GOD,FALSE,(std::string("loaded character: '") + name).c_str());
 		return true;
-	} catch(std::exception& e) {
-		mudlog(CMP,LVL_GOD,FALSE,(std::string("Error `load_char`: ") + e.what()).c_str());
+	}else{
+		mudlog(CMP,LVL_GOD,FALSE,(std::string("Error `load_char`: ") + 
+					std::get<1>(tuple_ret)).c_str());
 		return false;
 	}
-	return false;
 }	
 
 
@@ -2262,57 +2289,12 @@ void save_char(struct char_data *ch) {
 		return;
 	}
 
-	st.host = ch->desc->host;
-	try {
-		auto result = db_get("player",db_key({"meta","name",std::string(ch->player.name)}));
-		mods::lmdb::mutable_map_t values;
-		values["player_name"] = ch->player.name;
-		values["player_short_description"] = ch->player.short_descr;
-		values["player_long_description"] = ch->player.long_descr;
-		values["player_action_bitvector"] = (ch->char_specials.saved.act);
-		values["player_ability_strength"] = (ch->real_abils.str);
-		values["player_ability_strength_add"] = (ch->real_abils.str_add);
-		values["player_ability_intelligence"] = (ch->real_abils.intel);
-		values["player_ability_wisdom"] = (ch->real_abils.wis);
-		values["player_ability_dexterity"] = (ch->real_abils.dex);
-		values["player_ability_constitution"] = (ch->real_abils.con);
-		values["player_ability_charisma"] = (ch->real_abils.cha);
-		values["player_ability_alignment"] = (ch->char_specials.saved.alignment);
-		values["player_attack_type"] = (ch->real_abils.con);
-		values["player_ability_constitution"] = (ch->real_abils.con);
-		values["player_attack_type"] = 0;
-		values["player_type"] = "PC";
-		values["player_alignment"] = 0;
-		values["player_level"] = 0;
-		values["player_hitroll"] = 0;
-		values["player_armor"] = 0;
-		values["player_max_hitpoints"] = (ch->points.max_hit);
-		values["player_max_mana"] = (ch->points.max_mana);
-		values["player_max_move"] = (ch->points.max_move);
-		values["player_gold"] = (ch->points.gold);
-		values["player_exp"] = (ch->points.exp);
-		values["player_sex"] = ch->player.sex == SEX_MALE ? "M" : "F";
-		values["player_hitpoints"] = (ch->points.max_hit);
-		values["player_mana"] = (ch->points.mana);
-		values["player_move"] = (ch->points.move);
-		values["player_damnodice"] = (0);
-		values["player_damsizedice"] = "0";
-		values["player_damroll"] = (ch->points.damroll);
-		values["player_weight"] = (ch->player.weight);
-		values["player_height"] = (ch->player.height);
-		values["player_class"] = (ch->player.chclass);
-		values["player_title"] = ch->player.title;
-		values["player_hometown"] = (ch->player.hometown);
-		if(result.size()){
-			db_update("player",values,"name",(ch->player.name.c_str()));
-		}else{
-			db_insert("player",values);
-		}
-	} catch(std::exception& e) {
-		mudlog(CMP,LVL_GOD,FALSE,(std::string("Error `save_char`: ") + e.what()).c_str());
-		return;
+	auto ret = mods::db::lmdb_save_char(ch->player.name.c_str(),ch,mods::globals::db.get());
+	if(std::get<0>(ret)){
+		d("char saved to db");
+	}else{
+		log((std::string("Failed to save char to db: ") + std::get<1>(ret)).c_str());
 	}
-	d("char saved to db");
 }
 
 
