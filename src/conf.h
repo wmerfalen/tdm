@@ -330,4 +330,3 @@
 
 /* Check for a prototype to write. */
 /* #undef NEED_WRITE_PROTO */
-

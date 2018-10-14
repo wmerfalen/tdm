@@ -31,6 +31,9 @@ extern void parse_sql_rooms();
 extern struct player_special_data dummy_mob;
 extern int circle_shutdown;
 extern int port_main(int,char**);
+namespace config {
+	extern void init(int,char**);
+};
 namespace mods {
 	namespace globals {
 		using player = mods::player;
@@ -198,6 +201,7 @@ namespace mods {
 				}
 				mods::globals::shutdown();
 			}
+			config::init(argc,argv);
 		}
 		void post_boot_db() {
 		}

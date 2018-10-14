@@ -9,6 +9,7 @@
 ************************************************************************ */
 
 #include "conf.h"
+#include "config.hpp"
 #include "sysdep.h"
 
 #include "structs.h"
@@ -417,7 +418,7 @@ void check_idling(struct char_data *ch) {
 				char_from_room(ch);
 			}
 
-			char_to_room(ch, 3);
+			char_to_room(ch, config::rooms::idle());
 
 			if(ch->has_desc) {
 				ch->desc->set_state(CON_DISCONNECT);
@@ -429,11 +430,18 @@ void check_idling(struct char_data *ch) {
 				ch->desc->clear();
 			}
 
+#ifdef __MENTOC_RENT_DYNAMICS__
 			if(free_rent) {
 				Crash_rentsave(ch, 0);
 			} else {
 				Crash_idlesave(ch);
 			}
+#else
+			auto save_status = db::save_char(ch);
+			if(save_status < 0){
+				std::cerr << "check_idling[db::save_char]->error saving character\n";
+			}
+#endif
 
 			mudlog(CMP, LVL_GOD, TRUE, "%s force-rented and extracted (idle).", GET_NAME(ch).c_str());
 			extract_char(ch);

@@ -257,6 +257,12 @@ extern char	*NOPERSON;
 extern char	*NOEFFECT;
 #endif
 
-
+/**
+ * I've decided that it'll be nice to have database functionality
+ * inside this db namespace.
+ */
+namespace db {
+	int16_t save_char(const mods::player&);
+};
 
 #endif	//header inclusion protection

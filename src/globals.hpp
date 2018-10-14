@@ -9,6 +9,7 @@
 #include "types.hpp"
 #include "mods/acl/config-parser.hpp"
 #include "conf.h"
+#include "config.hpp"
 #include "sysdep.h"
 #include "structs.h"
 #include "mods/player.hpp"

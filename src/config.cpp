@@ -10,11 +10,12 @@
 
 #define __CONFIG_C__
 
-#include "conf.h"
+#include "config.hpp"
 #include "sysdep.h"
 
 #include "structs.h"
 #include "interpreter.h"	/* alias_data definition for structs.h */
+#include <regex>
 
 #define YES	1
 #define NO	0
@@ -166,13 +167,13 @@ int rent_file_timeout = 30;
 /* ROOM NUMBERS */
 
 /* virtual number of room that mortals should enter at */
-room_vnum mortal_start_room = 2;
+config::rooms::room_type_t mortal_start_room = 2;
 
 /* virtual number of room that immorts should enter at by default */
-room_vnum immort_start_room = 1;
+config::rooms::room_type_t immort_start_room = 1;
 
 /* virtual number of room that frozen players should enter at */
-room_vnum frozen_start_room = 0;
+config::rooms::room_type_t frozen_start_room = 0;
 
 /*
  * virtual numbers of donation rooms.  note: you must change code in
@@ -305,3 +306,26 @@ int use_autowiz = YES;
 /* If yes, what is the lowest level which should be on the wizlist?  (All
    immort levels below the level you specify will go on the immlist instead.) */
 int min_wizlist_lev = LVL_GOD;
+
+namespace config {
+	namespace rooms {
+		room_type_t idle(){
+			return config::rooms::IDLE;
+		}
+	};
+	void init(int argc,char** argv){
+		int pos = 0;
+		while(++pos < argc){
+			std::string arg = argv[pos];
+			std::regex re("\\-\\-conf\\-([a-zA-Z_0-9]+)=(.*)");
+			std::smatch matches;
+			if(std::regex_search(arg,matches,re)){
+				update_db(matches.str(1),matches.str(2));
+			}
+		}
+	}
+	void update_db(std::string_view option,std::string_view value){
+		std::string key = std::string("config:") + option.data();
+		mods::globals::db->put(key,value.data());
+	}
+};

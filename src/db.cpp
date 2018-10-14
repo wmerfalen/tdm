@@ -33,6 +33,24 @@
 #include "mods/hell.hpp"
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 
+namespace db {
+	int16_t save_char(const mods::player& ch){
+		auto c = ch.cd();
+		if(IS_NPC(c)) {
+			d("db::save_char[IS_NPC]->not saving");
+			return -1;
+		}
+
+		auto ret = mods::db::lmdb_save_char(c->player.name.c_str(),c,mods::globals::db.get());
+		if(std::get<0>(ret)){
+			d("char saved to db");
+			return 0;
+		}else{
+			log(("db::save_char[error]->Failed to save char to db: "_s + std::get<1>(ret)).c_str());
+			return -2;
+		}
+	}
+};
 /**************************************************************************
  *  declarations of most of the 'global' variables                         *
  **************************************************************************/
@@ -304,8 +322,8 @@ void boot_hell(void){
 	if(mods::hell::load_messages){load_messages();}
 
 	if(mods::hell::boot_social_messages){
-	log("Loading social messages.");
-	boot_social_messages();
+		log("Loading social messages.");
+		boot_social_messages();
 	};
 
 	log("Assigning function pointers:");
@@ -331,10 +349,10 @@ void boot_hell(void){
 	log("Booting mail system.");
 
 	if(mods::hell::scan_file){
-	if(!scan_file()) {
-		log("    Mail boot failed -- Mail system disabled");
-		no_mail = 1;
-	}
+		if(!scan_file()) {
+			log("    Mail boot failed -- Mail system disabled");
+			no_mail = 1;
+		}
 	}
 
 	log("Reading banned site and invalid-name list.");
@@ -427,15 +445,15 @@ void boot_world(void) {
 
 
 void free_extra_descriptions(struct extra_descr_data *edesc) {
-//	struct extra_descr_data *enext;
-//
-//	for(; edesc; edesc = enext) {
-//		enext = edesc->next;
-//
-//		free(edesc->keyword);
-//		free(edesc->description);
-//		free(edesc);
-//	}
+	//	struct extra_descr_data *enext;
+	//
+	//	for(; edesc; edesc = enext) {
+	//		enext = edesc->next;
+	//
+	//		free(edesc->keyword);
+	//		free(edesc->description);
+	//		free(edesc);
+	//	}
 	std::cerr << "[stub]: free_extra_descriptions - things will break if malloc()'d\n";
 }
 
@@ -444,70 +462,70 @@ void free_extra_descriptions(struct extra_descr_data *edesc) {
 void destroy_db(void) {
 	mods::globals::db->commit();
 	mods::globals::db->close();
-//	ssize_t cnt, itr;
-//	struct char_data *chtmp;
-//
+	//	ssize_t cnt, itr;
+	//	struct char_data *chtmp;
+	//
 	/* Active Mobiles & Players */
-//	
-//	while(character_list) {
-//		chtmp = character_list;
-//		character_list = character_list->next;
-//		free_char(chtmp);
-//	}
-//
-//	/* Active Objects */
-//	/* object_list frees itself thanks to destructors !mods */
-//
-//	/* Rooms */
-//	for(cnt = 0; cnt <= top_of_world; cnt++) {
-//		free_extra_descriptions(world[cnt].ex_description);
-//
-//		for(itr = 0; itr < NUM_OF_DIRS; itr++) {
-//			if(!world[cnt].dir_option[itr]) {
-//				continue;
-//			}
-//
-//			/** TODO: make dir_option elements not crappy malloc'd :) */
-//			if(world[cnt].dir_option[itr]->general_description) {
-//			}
-//
-//			free(world[cnt].dir_option[itr]);
-//		}
-//	}
-//
-//	/* We don't need to free the world since it's a std::vector now !mods */
-//	//free(world);
-//
-//	/* Objects */
-//	for(cnt = 0; cnt <= top_of_objt; cnt++) {
-//		if(obj_proto[cnt].name) {
-//			free(obj_proto[cnt].name);
-//		}
-//
-//		if(obj_proto[cnt].description) {
-//			free(obj_proto[cnt].description);
-//		}
-//
-//		if(obj_proto[cnt].short_description) {
-//			free(obj_proto[cnt].short_description);
-//		}
-//
-//		if(obj_proto[cnt].action_description) {
-//			free(obj_proto[cnt].action_description);
-//		}
-//
-//		free_extra_descriptions(obj_proto[cnt].ex_description);
-//	}
-//
-//	/* Mobiles */
-//	for(cnt = 0; cnt <= top_of_mobt; cnt++) {
-//		while(mob_proto[cnt].affected) {
-//			affect_remove(&mob_proto[cnt], mob_proto[cnt].affected);
-//		}
-//	}
-//
-//	/* Shops */
-//	destroy_shops();
+	//	
+	//	while(character_list) {
+	//		chtmp = character_list;
+	//		character_list = character_list->next;
+	//		free_char(chtmp);
+	//	}
+	//
+	//	/* Active Objects */
+	//	/* object_list frees itself thanks to destructors !mods */
+	//
+	//	/* Rooms */
+	//	for(cnt = 0; cnt <= top_of_world; cnt++) {
+	//		free_extra_descriptions(world[cnt].ex_description);
+	//
+	//		for(itr = 0; itr < NUM_OF_DIRS; itr++) {
+	//			if(!world[cnt].dir_option[itr]) {
+	//				continue;
+	//			}
+	//
+	//			/** TODO: make dir_option elements not crappy malloc'd :) */
+	//			if(world[cnt].dir_option[itr]->general_description) {
+	//			}
+	//
+	//			free(world[cnt].dir_option[itr]);
+	//		}
+	//	}
+	//
+	//	/* We don't need to free the world since it's a std::vector now !mods */
+	//	//free(world);
+	//
+	//	/* Objects */
+	//	for(cnt = 0; cnt <= top_of_objt; cnt++) {
+	//		if(obj_proto[cnt].name) {
+	//			free(obj_proto[cnt].name);
+	//		}
+	//
+	//		if(obj_proto[cnt].description) {
+	//			free(obj_proto[cnt].description);
+	//		}
+	//
+	//		if(obj_proto[cnt].short_description) {
+	//			free(obj_proto[cnt].short_description);
+	//		}
+	//
+	//		if(obj_proto[cnt].action_description) {
+	//			free(obj_proto[cnt].action_description);
+	//		}
+	//
+	//		free_extra_descriptions(obj_proto[cnt].ex_description);
+	//	}
+	//
+	//	/* Mobiles */
+	//	for(cnt = 0; cnt <= top_of_mobt; cnt++) {
+	//		while(mob_proto[cnt].affected) {
+	//			affect_remove(&mob_proto[cnt], mob_proto[cnt].affected);
+	//		}
+	//	}
+	//
+	//	/* Shops */
+	//	destroy_shops();
 	std::cerr << "[stub]: destory_db - things will break if malloc()'d\n";
 }
 
@@ -783,29 +801,29 @@ void index_boot(int mode) {
 			break;
 	}
 
-		switch(mode) {
-			case DB_BOOT_WLD:
-			case DB_BOOT_OBJ:
-			case DB_BOOT_MOB:
-				//discrete_load(db_file, mode, buf2);
-				break;
+	switch(mode) {
+		case DB_BOOT_WLD:
+		case DB_BOOT_OBJ:
+		case DB_BOOT_MOB:
+			//discrete_load(db_file, mode, buf2);
+			break;
 
-			case DB_BOOT_ZON:
-				//load_zones(db_file, buf2);
-				break;
+		case DB_BOOT_ZON:
+			//load_zones(db_file, buf2);
+			break;
 
-			case DB_BOOT_HLP:
-				/*
-				 * If you think about it, we have a race here.  Although, this is the
-				 * "point-the-gun-at-your-own-foot" type of race.
-				 */
-				//load_help(db_file);
-				break;
+		case DB_BOOT_HLP:
+			/*
+			 * If you think about it, we have a race here.  Although, this is the
+			 * "point-the-gun-at-your-own-foot" type of race.
+			 */
+			//load_help(db_file);
+			break;
 
-			case DB_BOOT_SHP:
-				//boot_the_shops();
-				break;
-		}
+		case DB_BOOT_SHP:
+			//boot_the_shops();
+			break;
+	}
 
 	/* sort the help index */
 	if(mode == DB_BOOT_HLP) {
@@ -992,144 +1010,144 @@ int parse_sql_objects() {
 
 	if(result.size()) {
 
-			obj_index.reserve(result.size());
-			obj_proto.reserve(result.size());
-			auto rows = db_get_all("object");
-			for(auto  row : rows) {
-				struct index_data index;
-				index.vnum = std::get<int>(row["obj_item_number"]);
-				index.number = 0;
-				index.func = nullptr;
-				obj_index.push_back(index);
-				struct obj_data proto;
-				//!proposed lmdb code:
-				auto aff_rows = db_get("affected_type",db_key({"meta","item_number",std::get<std::string>(row["obj_item_number"])}));
-				for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
-					proto.affected[i].location = 0;
-					proto.affected[i].modifier = 0;
-				}
-
-				unsigned aff_index = 0;
-
-				for(auto aff_row : aff_rows) {
-					if(aff_index >= MAX_OBJ_AFFECT) {
-						log(
-								(std::string(
-														 "WARNING: sql has more affected rows than allowed on object #")
-								 + std::to_string(std::get<int>(row["obj_item_number"]))
-								).c_str()
-							 );
-						break;
-					}
-
-					proto.affected[aff_index].location = std::get<int>(row["aff_location"]);
-					proto.affected[aff_index].modifier = std::get<int>(row["aff_modifier"]);
-					++aff_index;
-				}
-
-				proto.item_number = std::get<int>(row["obj_item_number"]);
-				proto.name = strdup(std::get<const char*>(row["obj_name"]));
-				proto.description = strdup(std::get<const char*>(row["obj_description"]));
-#define MENTOC_STR(sql_name,obj_name) \
-				if(std::string(std::get<const char*>(row[#sql_name])).length()){\
-					proto.obj_name = \
-					strdup(std::get<const char*>(row[#sql_name]));\
-				}else{\
-					proto.obj_name = strdup("<default>");\
-				}
-				MENTOC_STR(obj_short_description,short_description);
-				MENTOC_STR(obj_action_description,action_description);
-				auto ed_rows = db_get("extra_description",db_key({"meta","object_id",std::get<std::string>(row["id"])}));
-				proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
-				proto.ex_description->next = nullptr;
-				proto.ex_description->keyword = proto.ex_description->description = nullptr;
-
-				if(ed_rows.size()) {
-					auto ex_desc = proto.ex_description;
-					auto previous = ex_desc;
-					int ctr = 0;
-
-					for(auto ed_row : ed_rows) {
-						if(!ex_desc) {
-							ex_desc = (extra_descr_data*)
-								calloc(1,sizeof(extra_descr_data));
-						}
-
-						ex_desc->keyword = strdup(std::get<const char*>(row["extra_keyword"]));
-						ex_desc->description = strdup(std::get<const char*>(row["extra_description"]));
-						ex_desc->next = nullptr;
-
-						if(ctr) {
-							previous->next = ex_desc;
-						}
-
-						previous = ex_desc;
-						ex_desc = ex_desc->next;
-					}
-				}
-
-				proto.ex_description->next = nullptr;
-				proto.worn_on = std::get<int>(row["obj_worn_on"]);
-				proto.type = std::get<int>(row["obj_type"]);
-				proto.ammo = 0;
-				memset(&proto.obj_flags,0,sizeof(obj_flag_data));
-				//TODO: !small do obj->flags fetching from db
-				auto flag_rows = db_get("affected_type_object_flags",db_key({"meta","object_id",std::get<std::string>(row["id"])}));
-
-				if(flag_rows.size()) {
-					auto flag_row = rows[0];
-
-					if(std::get<const char*>(row["value_0"]) != nullptr) {
-						proto.obj_flags.value[0] = std::get<int>(row["value_0"]);
-					}
-
-					if(std::get<const char*>(flag_row["value_1"]) != nullptr) {
-						proto.obj_flags.value[1] = std::get<int>(row["value_1"]);
-					}
-
-					if(std::get<const char*>(flag_row["value_2"]) != nullptr) {
-						proto.obj_flags.value[2] = std::get<int>(row["value_2"]);
-					}
-
-					if(std::get<const char*>(flag_row["value_3"]) != nullptr) {
-						proto.obj_flags.value[3] = std::get<int>(row["value_3"]);
-					}
-
-					proto.obj_flags.type_flag =std::get<int>(row["type_flag"]);
-					proto.obj_flags.wear_flags = std::get<int>(row["wear_flags"]);
-					proto.obj_flags.extra_flags =std::get<int>(row["extra_flags"]);
-					proto.obj_flags.weight = std::get<int>(row["weight"]);
-					proto.obj_flags.cost = std::get<int>(row["cost"]);
-					proto.obj_flags.cost_per_day =std::get<int>(row["cost_per_day"]);
-					proto.obj_flags.timer = std::get<int>(row["timer"]);
-					proto.obj_flags.bitvector = std::get<int>(row["bitvector"]);
-				}
-
-				if(std::get<const char*>(row["obj_ammo_max"]) != nullptr) {
-					proto.ammo_max = std::get<int>(row["obj_ammo_max"]);
-				} else {
-					proto.ammo_max = 0;
-				}
-
-				proto.holds_ammo = 0;
-
-				if(std::get<const char*>(row["obj_type_data"]) != nullptr) {
-					proto.weapon_type = std::hash<std::string> {}
-					(
-					std::get<const char*>(row["obj_type_data"])
-					);
-				} else {
-					proto.weapon_type = 0;
-				}
-
-				proto.carried_by = proto.worn_by = nullptr;
-				proto.next_content = nullptr;
-				proto.contains = nullptr;
-				proto.in_obj = nullptr;
-				proto.worn_by = nullptr;
-				proto.carried_by = nullptr;
-				obj_proto.push_back(proto);
+		obj_index.reserve(result.size());
+		obj_proto.reserve(result.size());
+		auto rows = db_get_all("object");
+		for(auto  row : rows) {
+			struct index_data index;
+			index.vnum = std::get<int>(row["obj_item_number"]);
+			index.number = 0;
+			index.func = nullptr;
+			obj_index.push_back(index);
+			struct obj_data proto;
+			//!proposed lmdb code:
+			auto aff_rows = db_get("affected_type",db_key({"meta","item_number",std::get<std::string>(row["obj_item_number"])}));
+			for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
+				proto.affected[i].location = 0;
+				proto.affected[i].modifier = 0;
 			}
+
+			unsigned aff_index = 0;
+
+			for(auto aff_row : aff_rows) {
+				if(aff_index >= MAX_OBJ_AFFECT) {
+					log(
+							(std::string(
+													 "WARNING: sql has more affected rows than allowed on object #")
+							 + std::to_string(std::get<int>(row["obj_item_number"]))
+							).c_str()
+						 );
+					break;
+				}
+
+				proto.affected[aff_index].location = std::get<int>(row["aff_location"]);
+				proto.affected[aff_index].modifier = std::get<int>(row["aff_modifier"]);
+				++aff_index;
+			}
+
+			proto.item_number = std::get<int>(row["obj_item_number"]);
+			proto.name = strdup(std::get<const char*>(row["obj_name"]));
+			proto.description = strdup(std::get<const char*>(row["obj_description"]));
+#define MENTOC_STR(sql_name,obj_name) \
+			if(std::string(std::get<const char*>(row[#sql_name])).length()){\
+				proto.obj_name = \
+				strdup(std::get<const char*>(row[#sql_name]));\
+			}else{\
+				proto.obj_name = strdup("<default>");\
+			}
+			MENTOC_STR(obj_short_description,short_description);
+			MENTOC_STR(obj_action_description,action_description);
+			auto ed_rows = db_get("extra_description",db_key({"meta","object_id",std::get<std::string>(row["id"])}));
+			proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
+			proto.ex_description->next = nullptr;
+			proto.ex_description->keyword = proto.ex_description->description = nullptr;
+
+			if(ed_rows.size()) {
+				auto ex_desc = proto.ex_description;
+				auto previous = ex_desc;
+				int ctr = 0;
+
+				for(auto ed_row : ed_rows) {
+					if(!ex_desc) {
+						ex_desc = (extra_descr_data*)
+							calloc(1,sizeof(extra_descr_data));
+					}
+
+					ex_desc->keyword = strdup(std::get<const char*>(row["extra_keyword"]));
+					ex_desc->description = strdup(std::get<const char*>(row["extra_description"]));
+					ex_desc->next = nullptr;
+
+					if(ctr) {
+						previous->next = ex_desc;
+					}
+
+					previous = ex_desc;
+					ex_desc = ex_desc->next;
+				}
+			}
+
+			proto.ex_description->next = nullptr;
+			proto.worn_on = std::get<int>(row["obj_worn_on"]);
+			proto.type = std::get<int>(row["obj_type"]);
+			proto.ammo = 0;
+			memset(&proto.obj_flags,0,sizeof(obj_flag_data));
+			//TODO: !small do obj->flags fetching from db
+			auto flag_rows = db_get("affected_type_object_flags",db_key({"meta","object_id",std::get<std::string>(row["id"])}));
+
+			if(flag_rows.size()) {
+				auto flag_row = rows[0];
+
+				if(std::get<const char*>(row["value_0"]) != nullptr) {
+					proto.obj_flags.value[0] = std::get<int>(row["value_0"]);
+				}
+
+				if(std::get<const char*>(flag_row["value_1"]) != nullptr) {
+					proto.obj_flags.value[1] = std::get<int>(row["value_1"]);
+				}
+
+				if(std::get<const char*>(flag_row["value_2"]) != nullptr) {
+					proto.obj_flags.value[2] = std::get<int>(row["value_2"]);
+				}
+
+				if(std::get<const char*>(flag_row["value_3"]) != nullptr) {
+					proto.obj_flags.value[3] = std::get<int>(row["value_3"]);
+				}
+
+				proto.obj_flags.type_flag =std::get<int>(row["type_flag"]);
+				proto.obj_flags.wear_flags = std::get<int>(row["wear_flags"]);
+				proto.obj_flags.extra_flags =std::get<int>(row["extra_flags"]);
+				proto.obj_flags.weight = std::get<int>(row["weight"]);
+				proto.obj_flags.cost = std::get<int>(row["cost"]);
+				proto.obj_flags.cost_per_day =std::get<int>(row["cost_per_day"]);
+				proto.obj_flags.timer = std::get<int>(row["timer"]);
+				proto.obj_flags.bitvector = std::get<int>(row["bitvector"]);
+			}
+
+			if(std::get<const char*>(row["obj_ammo_max"]) != nullptr) {
+				proto.ammo_max = std::get<int>(row["obj_ammo_max"]);
+			} else {
+				proto.ammo_max = 0;
+			}
+
+			proto.holds_ammo = 0;
+
+			if(std::get<const char*>(row["obj_type_data"]) != nullptr) {
+				proto.weapon_type = std::hash<std::string> {}
+				(
+				 std::get<const char*>(row["obj_type_data"])
+				);
+			} else {
+				proto.weapon_type = 0;
+			}
+
+			proto.carried_by = proto.worn_by = nullptr;
+			proto.next_content = nullptr;
+			proto.contains = nullptr;
+			proto.in_obj = nullptr;
+			proto.worn_by = nullptr;
+			proto.carried_by = nullptr;
+			obj_proto.push_back(proto);
+		}
 	} else {
 		log("[notice] no objects from sql");
 	}
@@ -1195,7 +1213,7 @@ void parse_sql_zones() {
 		// 19 };
 		// 20
 		//TODO: SELECT COUNT(*) FROM zone_data where zone_id = z.number
-		
+
 
 		for(auto row : db_get("zone_data",db_key({"meta","id",std::to_string(z.number)}))) {
 			struct reset_com res;
@@ -2282,20 +2300,9 @@ bool load_char(const char *name, struct char_file_u *char_element) {
  * write the vital data of a player to sql
  */
 void save_char(struct char_data *ch) {
-	struct char_file_u st;
-
-	if(IS_NPC(ch)) {
-		d("[save_char] - IS_NPC: not saving");
-		return;
-	}
-
-	auto ret = mods::db::lmdb_save_char(ch->player.name.c_str(),ch,mods::globals::db.get());
-	if(std::get<0>(ret)){
-		d("char saved to db");
-	}else{
-		log((std::string("Failed to save char to db: ") + std::get<1>(ret)).c_str());
-	}
+	db::save_char(ch);
 }
+
 
 
 
@@ -2820,11 +2827,11 @@ void init_char(std::shared_ptr<mods::player> player) {
 	}
 
 	/*
-	if((i = get_ptable_by_name(GET_NAME(player->cd()).c_str())) != -1) {
-		player_table[i].id = GET_IDNUM(player->cd()) = ++top_idnum;
-	} else {
-		log("SYSERR: init_char: Character '%s' not found in player table.", GET_NAME(player->cd()).c_str());
-	}*/
+		 if((i = get_ptable_by_name(GET_NAME(player->cd()).c_str())) != -1) {
+		 player_table[i].id = GET_IDNUM(player->cd()) = ++top_idnum;
+		 } else {
+		 log("SYSERR: init_char: Character '%s' not found in player table.", GET_NAME(player->cd()).c_str());
+		 }*/
 
 	for(i = 1; i <= MAX_SKILLS; i++) {
 		if(GET_LEVEL(player->cd()) < LVL_IMPL) {
