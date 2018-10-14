@@ -3,9 +3,6 @@
 
 #include "util.hpp"
 
-std::string operator "" _s(const char* s,long unsigned int i) {
-	return std::string(s);
-}
 namespace mods {
 	namespace util {
 		bool preg_match(std::string_view regex,std::string_view haystack) {

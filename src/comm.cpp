@@ -892,7 +892,7 @@ void game_loop(socket_t mother_desc) {
 		}
 		++tics;
 
-	}//
+	}
 
 }
 

@@ -78,7 +78,6 @@ static inline aligned_int_t insert_row(aligned_int_t id,std::string_view table,b
 	auto tuple_return = db->commit();
 	if(std::get<0>(tuple_return)){
 		debug("initialize_row commit succeeded!\n");
-	}else{
 	}
 	error = false;
 	return id;
@@ -138,13 +137,9 @@ int port_main(int argc,char** argv){
 						}
 						db->commit();
 					};
-		std::map<std::string,std::function<void(std::string,short,std::string)>>
-			callbacks = {
-				{"room",lambda },
-				{"room_direction_data",lambda }
-			};
-		for(auto & ele : callbacks){
-			clear_id_list(ele.first);
+		for(auto & table : mods::schema::db){
+			std::cerr << "[clear_id_list]: " << table.first.c_str() << "\n";
+			clear_id_list(table.first.c_str());
 		}
 		while(!feof(fp)){
 			std::vector<char> buffer;
@@ -159,28 +154,23 @@ int port_main(int argc,char** argv){
 				continue;
 			}else{
 				ci = 0;
-				bool type_parsed = false;
+				bool table_parsed = false;
 				std::string key = "";
+				std::string value = "";
+				std::string table = "";
 				key = "";
+				table = "";
 				do {
-					std::string type = "";
-					type = "";
-					if(!type_parsed){
+					if(!table_parsed){
 						do{
-							type += buffer[ci++];
+							table += buffer[ci++];
 						}while(buffer[ci] != ':');
-						if(callbacks.find(type) != callbacks.end()){
-							key = type;
-						}else{
-							std::cerr << "unsupported table: " << type << "\n";
-							break;
-						}
-						type_parsed = true;
+						table_parsed = true;
 						++ci;
 						continue;
 					}
 					uid = "0";
-					type = "";
+					value = "";
 					bool escaped = 0;
 					bool b_quote = 0;
 					escaped = 0;
@@ -196,16 +186,15 @@ int port_main(int argc,char** argv){
 						if(buffer[ci] == '\''){
 							if(b_quote){
 								if(escaped){
-									type += buffer[ci];
+									value += buffer[ci];
 									escaped = false;
 									++ci;
 									continue;
 								}
 								b_quote = false;
 								++ci;
-								//std::cerr << "field:'" << type.c_str() << "'\n";
-								callbacks[key](key,column_ctr++,type);
-								type = "";
+								lambda(table,column_ctr++,value);
+								value = "";
 								++ci;
 								continue;
 							}else{
@@ -215,7 +204,7 @@ int port_main(int argc,char** argv){
 							}
 						}
 						if(b_quote && buffer[ci] == ' '){
-							type += buffer[ci];
+							value += buffer[ci];
 							++ci;
 							continue;
 						}
@@ -224,26 +213,24 @@ int port_main(int argc,char** argv){
 							continue;
 						}
 						if(!b_quote && buffer[ci] == ','){
-							//std::cerr << "field:'" << type.c_str() << "'\n";
-							callbacks[key](key,column_ctr++,type);
-							type = "";
+							lambda(table,column_ctr++,value);
+							value = "";
 							++ci;
 							continue;
 						}
-						type += buffer[ci];
+						value += buffer[ci];
 						++ci;
 						if(buffer[ci] == 0xa){
-							//std::cerr << "field:'" << type.c_str() << "'\n";
-							callbacks[key](key,column_ctr++,type);
+							lambda(table,column_ctr++,value);
 						}
 					}while(buffer[ci] != '\0' && buffer[ci] != 0xa);
 					escaped = 0;
 					b_quote = 0;
-					if(type.length() == 0){
+					if(value.length() == 0){
 						break;
 					}
 				}while(buffer[ci] != 0xa && buffer[ci] != '\0');
-				type_parsed = false;
+				table_parsed = false;
 			}
 		}
 	}

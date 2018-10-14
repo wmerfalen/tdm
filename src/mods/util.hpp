@@ -16,6 +16,13 @@
 #include <dirent.h>
 #endif
 	
+#ifndef __MENTOC_STRING_LIT__
+#define __MENTOC_STRING_LIT__
+static inline std::string operator "" _s(const char* s,long unsigned int i) {
+	return std::string(s);
+}
+#endif
+
 namespace mods::util {
 	using directory_list_t = std::vector<std::string>;
 	directory_list_t glob(std::string_view);

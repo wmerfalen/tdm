@@ -10,6 +10,7 @@
 
 #include "conf.h"
 #include "sysdep.h"
+#include "mods/util.hpp" //for operator"" _s
 
 
 #include "structs.h"
@@ -860,6 +861,7 @@ void Crash_crashsave(struct char_data *ch) {
 	FILE *fp;
 
 	if(IS_NPC(ch)) {
+		d("Crash_crashsave[IS_NPC]->attempted to save char but is an NPC: '" << ch->player.name.c_str() << "'");
 		return;
 	}
 
