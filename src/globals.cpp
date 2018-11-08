@@ -133,12 +133,12 @@ namespace mods {
 		}
 		void init(int argc,char** argv) {
 			int pos = 0;
-			std::string lmdb_dir = LMDB_DB_DIRECTORY;
-			std::string lmdb_name = LMDB_DB_NAME;
-			std::string f_test_suite = "";
+			std::string argument,
+				lmdb_dir = LMDB_DB_DIRECTORY,
+				lmdb_name = LMDB_DB_NAME,
+				f_test_suite;
 			f_import_rooms = false;
 			boot_type = BOOT_DB;
-			std::string argument;
 			while(++pos < argc){
 				if(argv[pos]){
 					argument = argv[pos];
@@ -503,7 +503,10 @@ namespace mods {
 		}
 
 		void register_room(const room_rnum& r) {
-			room_list.push_back({});
+			top_of_world = world.size();
+			for(; room_list.size() < world.size();){
+				room_list.push_back({});
+			}
 		}
 		void init_player(char_data* ch) {
 			MENTOC_PREAMBLE();
@@ -523,14 +526,17 @@ namespace mods {
 			}
 
 			void char_to_room(const room_rnum& room,struct char_data* ch) {
-				if(room >= 0 && std::size_t(room) >= room_list.size()){
-					std::cerr << "[char_to_room]: WARNING. Requested room is out of bounds: " << room << "\n";
+				auto target_room = room;
+				if(boot_type == boot_type_t::BOOT_HELL){
+					target_room = 0;
+				}else if(target_room >= 0 && std::size_t(target_room) >= room_list.size()){
+					std::cerr << "[char_to_room]: WARNING. Requested room is out of bounds: " << target_room << "\n";
 					return;
 				}
-				auto place = std::find(room_list[room].begin(),room_list[room].end(),ch);
+				auto place = std::find(room_list[target_room].begin(),room_list[target_room].end(),ch);
 
-				if(place == room_list[room].end()) {
-					room_list[room].push_back(ch);
+				if(place == room_list[target_room].end()) {
+					room_list[target_room].push_back(ch);
 				}
 			}
 		};

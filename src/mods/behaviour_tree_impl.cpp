@@ -74,7 +74,7 @@ namespace mods::behaviour_tree_impl {
 			node::create_leaf(
 				[](argument_type mob) -> status{
 				if(IN_ROOM(mob->mob_specials.snipe_tracking)){
-					act("$n says 'I've got you now you little twerp!'", FALSE, mob, 0, 0, TO_ROOM);
+					act("$n attempts to drag you down by your equipment.", FALSE, mob, 0, 0, TO_ROOM);
 					hit(mob, mob->mob_specials.snipe_tracking, TYPE_UNDEFINED);
 					unregister_mob(mob);
 					return status::SUCCESS;

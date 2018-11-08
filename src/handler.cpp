@@ -388,9 +388,14 @@ void char_from_room(struct char_data *ch) {
 	struct char_data *temp;
 	mods::globals::rooms::char_from_room(ch);
 
-	if(ch == NULL || IN_ROOM(ch) == NOWHERE) {
-		log("SYSERR: NULL character or NOWHERE in %s, char_from_room", __FILE__);
-		exit(1);
+	if(ch == NULL){
+		log("char_from_room[SYSERR]->'NULL character'");
+		return;
+	}
+	
+	if(IN_ROOM(ch) == NOWHERE) {
+		log("char_from_room[SYSERR]->'NOWHERE'");
+		return;
 	}
 
 	if(FIGHTING(ch) != NULL) {
@@ -414,7 +419,7 @@ void char_to_room(struct char_data *ch, room_rnum room) {
 	/*TODO: Insert logic here !movement !globals */
 	std::size_t r = room;
 
-	if(ch == NULL || room == NOWHERE || r > mods::globals::room_list.size())
+	if(ch == NULL || room == NOWHERE || r >= mods::globals::room_list.size())
 		log("SYSERR: Illegal value(s) passed to char_to_room. (Room: %d/%d Ch: %p",
 		    room, mods::globals::room_list.size(), ch);
 	else {
@@ -430,9 +435,12 @@ void char_to_room(struct char_data *ch, room_rnum room) {
 				}
 
 		/* Stop fighting now, if we left. */
-		if(FIGHTING(ch) && IN_ROOM(ch) != IN_ROOM(FIGHTING(ch))) {
-			stop_fighting(FIGHTING(ch));
-			stop_fighting(ch);
+		std::cerr << "char_to_room[room]->'" << room << "'\n";
+		if(FIGHTING(ch)){
+			if(IN_ROOM(ch) != IN_ROOM(FIGHTING(ch))) {
+				stop_fighting(FIGHTING(ch));
+				stop_fighting(ch);
+			}
 		}
 	}
 }
@@ -923,7 +931,6 @@ void extract_char_final(struct char_data *ch) {
 	if(IN_ROOM(ch) == NOWHERE) {
 		log("SYSERR: NOWHERE extracting char %s. (%s, extract_char_final)",
 		    GET_NAME(ch), __FILE__);
-		exit(1);
 	}
 
 	/*
@@ -932,11 +939,12 @@ void extract_char_final(struct char_data *ch) {
 	 * we're checking below this loop to the proper value.
 	 */
 	if(!IS_NPC(ch) && !ch->has_desc) {
-		for(auto & d : descriptor_list)
+		for(auto & d : descriptor_list){
 			if(d.original == ch) {
 				do_return(d.character, NULL, 0, 0);
 				break;
 			}
+		}
 	}
 
 	if(ch->has_desc) {
@@ -964,11 +972,11 @@ void extract_char_final(struct char_data *ch) {
 				}
 
 				if(d.character && GET_IDNUM(ch) == GET_IDNUM(d.character)) {
-					STATE(d) = CON_CLOSE;
+					d.set_state(CON_CLOSE);
 				}
 			}
 
-			STATE(ch->desc) = CON_MENU;
+			ch->desc->set_state(CON_MENU);
 			write_to_output(*ch->desc, "%s", MENU);
 		}
 	}

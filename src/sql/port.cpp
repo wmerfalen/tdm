@@ -12,6 +12,9 @@
 #include <functional>
 #include <string>
 
+#ifndef debug
+#define debug(a){ std::cerr << "[debug]->" << a << "\n"; }
+#endif
 std::shared_ptr<db_handle> db;
 void usage(){
 	std::cerr << "usage: ./a.out <lmdb-dir> <lmdb-name> <lmdb-file>\n" <<

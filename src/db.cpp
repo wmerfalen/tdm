@@ -27,8 +27,6 @@
 #include <vector>
 #include <deque>
 #include "mods/behaviour_tree_impl.hpp"
-//#include "mods/sql.hpp"
-//#include "mods/lmdb.hpp"
 #include "mods/db.hpp"
 #include "mods/hell.hpp"
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
@@ -403,7 +401,6 @@ void boot_hell(void){
 
 	world.push_back(room);
 	mods::globals::register_room(world.size());
-	top_of_world = world.size();
 
 	log("Boot db -- DONE.");
 	mods::globals::post_boot_db();
@@ -926,26 +923,24 @@ void parse_sql_mobiles() {
 		std::cerr << "foobar\n";
 
 		for(auto row : result) {
-			proto.player.name = std::get<mods::string>(row["mob_name"]);
-			proto.player.short_descr = std::get<mods::string>(row["mob_short_description"]);
-			proto.player.long_descr = std::get<mods::string>(row["mob_long_description"]);
+			proto.player.name.assign(row["mob_name"].c_str());
+			proto.player.short_descr.assign(row["mob_short_description"].c_str());
+			proto.player.long_descr.assign(row["mob_long_description"]);
 
-			if(std::get<const char*>(row["mob_description"]) != nullptr) {
-				proto.player.description = std::get<mods::string>(row["mob_description"]);
-			}
+			proto.player.description.assign(row["mob_description"]);
 
-			proto.char_specials.saved.act = std::get<int>(row["mob_action_bitvector"]);
+			proto.char_specials.saved.act = mods::util::stoi<int>(row["mob_action_bitvector"]);
 			SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
 			REMOVE_BIT(proto.char_specials.saved.act, MOB_NOTDEADYET);
 			proto.char_specials.saved.affected_by = 0;
-			proto.char_specials.saved.alignment = std::get<int>(row["mob_alignment"]);
+			proto.char_specials.saved.alignment = mods::util::stoi<int>(row["mob_alignment"]);
 
 			/* AGGR_TO_ALIGN is ignored if the mob is AGGRESSIVE. */
 			if(MOB_FLAGGED(&proto, MOB_AGGRESSIVE) && MOB_FLAGGED(&proto, MOB_AGGR_GOOD | MOB_AGGR_EVIL | MOB_AGGR_NEUTRAL)) {
 				log("SYSERR: Mob both Aggressive and Aggressive_to_Alignment.");
 			}
 
-#define MENTOC_ABIL_SET(struct_name,sql_name) proto.real_abils.struct_name = std::get<int>(row[#sql_name]);
+#define MENTOC_ABIL_SET(struct_name,sql_name) proto.real_abils.struct_name = mods::util::stoi<int>(row[#sql_name]);
 			MENTOC_ABIL_SET(str,mob_ability_strength);
 			MENTOC_ABIL_SET(intel,mob_ability_intelligence);
 			MENTOC_ABIL_SET(wis,mob_ability_wisdom);
@@ -953,29 +948,29 @@ void parse_sql_mobiles() {
 			MENTOC_ABIL_SET(con,mob_ability_constitution);
 			MENTOC_ABIL_SET(cha,mob_ability_charisma);
 
-			GET_LEVEL(&proto) = std::get<int>(row["mob_level"]);
-			GET_HITROLL(&proto) = 20 -std::get<int>(row["mob_hitroll"]);
-			GET_AC(&proto) = 10 *std::get<int>(row["mob_armor"]);
+			GET_LEVEL(&proto) = mods::util::stoi<int>(row["mob_level"]);
+			GET_HITROLL(&proto) = 20 -mods::util::stoi<int>(row["mob_hitroll"]);
+			GET_AC(&proto) = 10 *mods::util::stoi<int>(row["mob_armor"]);
 
 			/* max hit = 0 is a flag that H, M, V is xdy+z */
-			GET_MAX_HIT(&proto) = std::get<int>(row["mob_max_hitpoints"]);
-			GET_HIT(&proto) = std::get<int>(row["mob_hitpoints"]);
-			GET_MANA(&proto) = std::get<int>(row["mob_mana"]);
-			GET_MOVE(&proto) = std::get<int>(row["mob_move"]);
-			GET_MAX_MANA(&proto) = std::get<int>(row["mob_max_mana"]);
-			GET_MAX_MOVE(&proto) = std::get<int>(row["mob_max_move"]);
-			proto.mob_specials.damnodice = std::get<int>(row["mob_damnodice"]);
-			proto.mob_specials.damsizedice = std::get<int>(row["mob_damsizedice"]);
+			GET_MAX_HIT(&proto) = mods::util::stoi<int>(row["mob_max_hitpoints"]);
+			GET_HIT(&proto) = mods::util::stoi<int>(row["mob_hitpoints"]);
+			GET_MANA(&proto) = mods::util::stoi<int>(row["mob_mana"]);
+			GET_MOVE(&proto) = mods::util::stoi<int>(row["mob_move"]);
+			GET_MAX_MANA(&proto) = mods::util::stoi<int>(row["mob_max_mana"]);
+			GET_MAX_MOVE(&proto) = mods::util::stoi<int>(row["mob_max_move"]);
+			proto.mob_specials.damnodice = mods::util::stoi<int>(row["mob_damnodice"]);
+			proto.mob_specials.damsizedice = mods::util::stoi<int>(row["mob_damsizedice"]);
 			proto.mob_specials.behaviour_tree = behaviour_tree::NONE;
-			GET_DAMROLL(&proto) = std::get<int>(row["mob_damroll"]);
-			GET_GOLD(&proto) = std::get<int>(row["mob_gold"]);
-			GET_EXP(&proto) = std::get<int>(row["mob_exp"]);
-			GET_POS(&proto) = std::get<int>(row["mob_load_position"]);
-			GET_DEFAULT_POS(&proto) = std::get<int>(row["mob_load_position"]);
-			GET_SEX(&proto) = std::get<int>(row["mob_sex"]);
-			GET_CLASS(&proto) = std::get<int>(row["mob_class"]);
-			GET_WEIGHT(&proto) = std::get<int>(row["mob_weight"]);
-			GET_HEIGHT(&proto) = std::get<int>(row["mob_height"]);
+			GET_DAMROLL(&proto) = mods::util::stoi<int>(row["mob_damroll"]);
+			GET_GOLD(&proto) = mods::util::stoi<int>(row["mob_gold"]);
+			GET_EXP(&proto) = mods::util::stoi<int>(row["mob_exp"]);
+			GET_POS(&proto) = mods::util::stoi<int>(row["mob_load_position"]);
+			GET_DEFAULT_POS(&proto) = mods::util::stoi<int>(row["mob_load_position"]);
+			GET_SEX(&proto) = mods::util::stoi<int>(row["mob_sex"]);
+			GET_CLASS(&proto) = mods::util::stoi<int>(row["mob_class"]);
+			GET_WEIGHT(&proto) = mods::util::stoi<int>(row["mob_weight"]);
+			GET_HEIGHT(&proto) = mods::util::stoi<int>(row["mob_height"]);
 			/*
 			 * these are now save applies; base save numbers for MOBs are now from
 			 * the warrior save table.
@@ -997,7 +992,7 @@ void parse_sql_mobiles() {
 			mob_proto.push_back(proto);
 			top_of_mobt = mob_proto.size();
 			index_data m_index;
-			m_index.vnum = std::get<int>(row["mob_virtual_number"]);
+			m_index.vnum = mods::util::stoi<int>(row["mob_virtual_number"]);
 			m_index.number = 0;
 			m_index.func = nullptr;
 			mob_index.push_back(m_index);
@@ -1012,16 +1007,15 @@ int parse_sql_objects() {
 
 		obj_index.reserve(result.size());
 		obj_proto.reserve(result.size());
-		auto rows = db_get_all("object");
-		for(auto  row : rows) {
+		for(auto  row : result) {
 			struct index_data index;
-			index.vnum = std::get<int>(row["obj_item_number"]);
+			index.vnum = mods::util::stoi<int>(row["object_item_number"]);
 			index.number = 0;
 			index.func = nullptr;
 			obj_index.push_back(index);
 			struct obj_data proto;
 			//!proposed lmdb code:
-			auto aff_rows = db_get("affected_type",db_key({"meta","item_number",std::get<std::string>(row["obj_item_number"])}));
+			auto aff_rows = db_get_by_meta("affected_type","item_number",row["object_item_number"]);
 			for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
 				proto.affected[i].location = 0;
 				proto.affected[i].modifier = 0;
@@ -1034,30 +1028,30 @@ int parse_sql_objects() {
 					log(
 							(std::string(
 													 "WARNING: sql has more affected rows than allowed on object #")
-							 + std::to_string(std::get<int>(row["obj_item_number"]))
+							 + std::to_string(mods::util::stoi<int>(row["object_item_number"]))
 							).c_str()
 						 );
 					break;
 				}
 
-				proto.affected[aff_index].location = std::get<int>(row["aff_location"]);
-				proto.affected[aff_index].modifier = std::get<int>(row["aff_modifier"]);
+				proto.affected[aff_index].location = mods::util::stoi<int>(row["aff_location"]);
+				proto.affected[aff_index].modifier = mods::util::stoi<int>(row["aff_modifier"]);
 				++aff_index;
 			}
 
-			proto.item_number = std::get<int>(row["obj_item_number"]);
-			proto.name = strdup(std::get<const char*>(row["obj_name"]));
-			proto.description = strdup(std::get<const char*>(row["obj_description"]));
+			proto.item_number = mods::util::stoi<int>(row["object_item_number"]);
+			proto.name = strdup((row["object_name"]).c_str());
+			proto.description = strdup((row["object_description"]).c_str());
 #define MENTOC_STR(sql_name,obj_name) \
-			if(std::string(std::get<const char*>(row[#sql_name])).length()){\
+			if(std::string((row[#sql_name])).length()){\
 				proto.obj_name = \
-				strdup(std::get<const char*>(row[#sql_name]));\
+				strdup((row[#sql_name]).c_str());\
 			}else{\
 				proto.obj_name = strdup("<default>");\
 			}
 			MENTOC_STR(obj_short_description,short_description);
 			MENTOC_STR(obj_action_description,action_description);
-			auto ed_rows = db_get("extra_description",db_key({"meta","object_id",std::get<std::string>(row["id"])}));
+			auto ed_rows = db_get_by_meta("extra_description","object_item_number",row["id"]);
 			proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
 			proto.ex_description->next = nullptr;
 			proto.ex_description->keyword = proto.ex_description->description = nullptr;
@@ -1073,8 +1067,8 @@ int parse_sql_objects() {
 							calloc(1,sizeof(extra_descr_data));
 					}
 
-					ex_desc->keyword = strdup(std::get<const char*>(row["extra_keyword"]));
-					ex_desc->description = strdup(std::get<const char*>(row["extra_description"]));
+					ex_desc->keyword = strdup((row["extra_keyword"]).c_str());
+					ex_desc->description = strdup(row["extra_description"].c_str());
 					ex_desc->next = nullptr;
 
 					if(ctr) {
@@ -1087,54 +1081,54 @@ int parse_sql_objects() {
 			}
 
 			proto.ex_description->next = nullptr;
-			proto.worn_on = std::get<int>(row["obj_worn_on"]);
-			proto.type = std::get<int>(row["obj_type"]);
+			proto.worn_on = mods::util::stoi<int>(row["object_worn_on"]);
+			proto.type = mods::util::stoi<int>(row["object_type"]);
 			proto.ammo = 0;
 			memset(&proto.obj_flags,0,sizeof(obj_flag_data));
 			//TODO: !small do obj->flags fetching from db
-			auto flag_rows = db_get("affected_type_object_flags",db_key({"meta","object_id",std::get<std::string>(row["id"])}));
+			auto flag_rows = db_get_by_meta("object_flags","object_number",(row["id"]));
 
 			if(flag_rows.size()) {
-				auto flag_row = rows[0];
+				auto flag_row = result[0];
 
-				if(std::get<const char*>(row["value_0"]) != nullptr) {
-					proto.obj_flags.value[0] = std::get<int>(row["value_0"]);
+				if((row["value_0"]).length()) {
+					proto.obj_flags.value[0] = mods::util::stoi<int>(row["value_0"]);
 				}
 
-				if(std::get<const char*>(flag_row["value_1"]) != nullptr) {
-					proto.obj_flags.value[1] = std::get<int>(row["value_1"]);
+				if((flag_row["value_1"]).length()) {
+					proto.obj_flags.value[1] = mods::util::stoi<int>(row["value_1"]);
 				}
 
-				if(std::get<const char*>(flag_row["value_2"]) != nullptr) {
-					proto.obj_flags.value[2] = std::get<int>(row["value_2"]);
+				if((flag_row["value_2"]).length()) {
+					proto.obj_flags.value[2] = mods::util::stoi<int>(row["value_2"]);
 				}
 
-				if(std::get<const char*>(flag_row["value_3"]) != nullptr) {
-					proto.obj_flags.value[3] = std::get<int>(row["value_3"]);
+				if((flag_row["value_3"]).length()) {
+					proto.obj_flags.value[3] = mods::util::stoi<int>(row["value_3"]);
 				}
 
-				proto.obj_flags.type_flag =std::get<int>(row["type_flag"]);
-				proto.obj_flags.wear_flags = std::get<int>(row["wear_flags"]);
-				proto.obj_flags.extra_flags =std::get<int>(row["extra_flags"]);
-				proto.obj_flags.weight = std::get<int>(row["weight"]);
-				proto.obj_flags.cost = std::get<int>(row["cost"]);
-				proto.obj_flags.cost_per_day =std::get<int>(row["cost_per_day"]);
-				proto.obj_flags.timer = std::get<int>(row["timer"]);
-				proto.obj_flags.bitvector = std::get<int>(row["bitvector"]);
+				proto.obj_flags.type_flag =mods::util::stoi<int>(row["type_flag"]);
+				proto.obj_flags.wear_flags = mods::util::stoi<int>(row["wear_flags"]);
+				proto.obj_flags.extra_flags =mods::util::stoi<int>(row["extra_flags"]);
+				proto.obj_flags.weight = mods::util::stoi<int>(row["weight"]);
+				proto.obj_flags.cost = mods::util::stoi<int>(row["cost"]);
+				proto.obj_flags.cost_per_day =mods::util::stoi<int>(row["cost_per_day"]);
+				proto.obj_flags.timer = mods::util::stoi<int>(row["timer"]);
+				proto.obj_flags.bitvector = mods::util::stoi<int>(row["bitvector"]);
 			}
 
-			if(std::get<const char*>(row["obj_ammo_max"]) != nullptr) {
-				proto.ammo_max = std::get<int>(row["obj_ammo_max"]);
+			if((row["object_ammo_max"]).length()) {
+				proto.ammo_max = mods::util::stoi<int>(row["object_ammo_max"]);
 			} else {
 				proto.ammo_max = 0;
 			}
 
 			proto.holds_ammo = 0;
 
-			if(std::get<const char*>(row["obj_type_data"]) != nullptr) {
+			if((row["object_type_data"]).length()) {
 				proto.weapon_type = std::hash<std::string> {}
 				(
-				 std::get<const char*>(row["obj_type_data"])
+				 (row["object_type_data"])
 				);
 			} else {
 				proto.weapon_type = 0;
@@ -1184,13 +1178,13 @@ void parse_sql_zones() {
 		//		 id | zone_start | zone_end | zone_name | lifespan | reset_mode
 		//		 ----+------------+----------+-----------+----------+------------
 		//		 (0 rows)
-		z.name =std::get<char *>(row["zone_name"]);
-		z.lifespan =std::get<int>(row["lifespan"]);
+		z.name =(char*)row["zone_name"].c_str();
+		z.lifespan = mods::util::stoi<int>(row["lifespan"]);
 		z.age = 0;
-		z.bot =std::get<int>(row["bot"]);
-		z.top =std::get<int>(row["top"]);
-		z.reset_mode =std::get<int>(row["reset_mode"]);
-		z.number =std::get<int>(row["number"]);
+		z.bot =mods::util::stoi<int>(row["bot"]);
+		z.top =mods::util::stoi<int>(row["top"]);
+		z.reset_mode =mods::util::stoi<int>(row["reset_mode"]);
+		z.number =mods::util::stoi<int>(row["number"]);
 		//struct reset_com {
 		//  1    char command;   /* current command                      */
 		//  2
@@ -1215,41 +1209,43 @@ void parse_sql_zones() {
 		//TODO: SELECT COUNT(*) FROM zone_data where zone_id = z.number
 
 
-		for(auto row : db_get("zone_data",db_key({"meta","id",std::to_string(z.number)}))) {
+		for(auto row : db_get_by_meta("zone_data","zone_number",std::to_string(z.number))) {
 			struct reset_com res;
-			res.command =std::get<int>(row["command"]);
-			res.if_flag =std::get<int>(row["if_flag"]);
-			res.arg1 =std::get<int>(row["arg1"]);
-			res.arg2 =std::get<int>(row["arg2"]);
-			res.arg3 =std::get<int>(row["arg3"]);
-			res.line =std::get<int>(row["line"]);
+			res.command =mods::util::stoi<int>(row["command"]);
+			res.if_flag =mods::util::stoi<int>(row["if_flag"]);
+			res.arg1 =mods::util::stoi<int>(row["arg1"]);
+			res.arg2 =mods::util::stoi<int>(row["arg2"]);
+			res.arg3 =mods::util::stoi<int>(row["arg3"]);
+			res.line =mods::util::stoi<int>(row["line"]);
 			z.cmd.push_back(res);
 		}
 
 		zone_table.emplace_back(z);
-		log("zone loaded");
+		log((std::string("zone ") + std::to_string(z.number) + " loaded").c_str());
 	}
 
 	top_of_zone_table = zone_table.size();
 }
 /* load the rooms */
 void parse_sql_rooms() {
-	auto result = db_get_all("rooms");
+	auto result = db_get_all("room");
 	world.reserve(result.size());
+	std::cerr << "parse_sql_rooms[result.size()]->" << result.size() << "\n";
 
 	for(auto row: result) {
+		std::cerr << "parse_sql_rooms[room]->'" << mods::util::stoi<int>(row["number"]) << "'\n";
 		struct room_data room;
-		room.number = std::get<int>(row["number"]);
-		room.zone = std::get<int>(row["zone"]);
-		room.name =std::get<char*>(row["name"]);
-		room.description =std::get<char*>(row["description"]);
-		room.room_flags = std::get<int>(row["room_flags"]);
-		room.sector_type = std::get<int>(row["sector_type"]);
+		room.number = mods::util::stoi<int>(row["number"]);
+		room.zone = mods::util::stoi<int>(row["zone"]);
+		room.name =(row["name"]).c_str();
+		room.description =(row["description"]).c_str();
+		room.room_flags = mods::util::stoi<int>(row["room_flags"]);
+		room.sector_type = mods::util::stoi<int>(row["sector_type"]);
 		room.ex_description = nullptr;
 		room.func = nullptr;
 		room.contents = nullptr;
 		room.people = nullptr;
-		room.light = std::get<int>(row["light"]);
+		room.light = mods::util::stoi<int>(row["light"]);
 
 		//TODO: setup directions to work properly here (dir_option)
 		for(unsigned i = 0; i < NUM_OF_DIRS; i++) {
@@ -1262,22 +1258,22 @@ void parse_sql_rooms() {
 	}
 
 	for(auto row: result) {
-		auto r2 = db_get("room_direction_data",db_key({"meta_array","room_number", std::get<std::string>(row["number"])}));
+		auto r2 = db_get_by_meta("room_direction_data","room_number", (row["number"]));
 
 		for(auto row2: r2) {
 			//id | room_number | exit_direction | general_description | keyword | exit_info | exit_key | to_room
-			auto direction = std::get<int>(row2["direction"]);
-			auto real_room_number = real_room(std::get<int>(row2["real_room_number"]));
+			auto direction = mods::util::stoi<int>(row2["direction"]);
+			auto real_room_number = real_room(mods::util::stoi<int>(row2["real_room_number"]));
 
 			if(real_room_number == NOWHERE) {
-				log("Invalid real_room_number: %d",std::get<int>(row2["real_room_number"]));
+				log("Invalid real_room_number: %d",mods::util::stoi<int>(row2["real_room_number"]));
 				continue;
 			}
 
 			world[real_room_number].dir_option[direction] = (room_direction_data*) calloc(sizeof(room_direction_data),1);
-			world[real_room_number].dir_option[direction]->general_description = strdup(std::get<const char*>(row2["general_description"]));
-			world[real_room_number].dir_option[direction]->keyword = strdup(std::get<const char*>(row2["keyword"]));
-			auto exit_info = std::get<int>(row2["exit_info"]);
+			world[real_room_number].dir_option[direction]->general_description = strdup((row2["general_description"]).c_str());
+			world[real_room_number].dir_option[direction]->keyword = strdup((row2["keyword"]).c_str());
+			auto exit_info = mods::util::stoi<int>(row2["exit_info"]);
 
 			switch(exit_info) {
 				case 1:
@@ -1297,8 +1293,8 @@ void parse_sql_rooms() {
 					break;
 			}
 
-			world[real_room_number].dir_option[direction]->key = std::get<int>(row2["key"]);
-			world[real_room_number].dir_option[direction]->to_room = real_room(std::get<int>(row2["to_room"]));
+			world[real_room_number].dir_option[direction]->key = mods::util::stoi<int>(row2["key"]);
+			world[real_room_number].dir_option[direction]->to_room = real_room(mods::util::stoi<int>(row2["to_room"]));
 		}
 	}
 
@@ -1355,23 +1351,32 @@ void setup_dir(FILE *fl, int room, int dir) {
 void check_start_rooms(void) {
 	if((r_mortal_start_room = real_room(mortal_start_room)) == NOWHERE) {
 		log("SYSERR:  Mortal start room does not exist.  Change in config.c.");
-		exit(1);
+		if(world.size() > 0){
+			log("defaulting to 0");
+			r_mortal_start_room = 0;
+		}
 	}
 
 	if((r_immort_start_room = real_room(immort_start_room)) == NOWHERE) {
-		if(!mini_mud) {
-			log("SYSERR:  Warning: Immort start room does not exist.  Change in config.c.");
+		log("SYSERR:  Warning: Immort start room does not exist.  Change in config.c.");
+		if(world.size() > 0){
+			log("defaulting to 0");
+			r_immort_start_room = 0;
+		}else{
+			log("defaulting to r_mortal_start_room");
+			r_immort_start_room = r_mortal_start_room;
 		}
-
-		r_immort_start_room = r_mortal_start_room;
 	}
 
 	if((r_frozen_start_room = real_room(frozen_start_room)) == NOWHERE) {
-		if(!mini_mud) {
-			log("SYSERR:  Warning: Frozen start room does not exist.  Change in config.c.");
+		log("SYSERR:  Warning: Frozen start room does not exist.  Change in config.c.");
+		if(world.size() > 0){
+			log("defaulting to 0");
+			r_frozen_start_room = 0;
+		}else{
+			log("defaulting to r_mortal_start_room");
+			r_frozen_start_room = r_mortal_start_room;
 		}
-
-		r_frozen_start_room = r_mortal_start_room;
 	}
 }
 
@@ -1907,13 +1912,6 @@ struct obj_data *read_object(obj_vnum nr, int type) { /* and obj_rnum */
 		return (NULL);
 	}
 
-#if 0
-	CREATE(obj, struct obj_data, 1);
-	clear_object(obj);
-	*obj = obj_proto[i];
-	obj->next = object_list;
-	object_list = obj;
-#endif
 	clear_object(&obj);
 	obj = obj_proto[i];
 	object_list.push_back(obj);
@@ -2310,37 +2308,38 @@ void save_char(struct char_data *ch) {
 
 bool parse_sql_player(const char* name,char_data* ch){
 	try{
-		auto result = db_get("player",db_key({"meta_array","name",(name)}));
+		//FIXME: name needs to be user_id. 
+		auto result = db_get_by_meta("player","name",name);
 		if(result.size()){
 			for(auto row : result){
 				ch->player.name.assign(name);
-				ch->player.short_descr.assign(std::get<const char*>(row["player_short_description"]));
-				ch->player.long_descr.assign(std::get<const char*>(row["player_long_description"]));
-				ch->char_specials.saved.act = std::get<int>(row["player_action_bitvector"]);
-				ch->real_abils.str = std::get<int>(row["player_ability_strength"]);
-				ch->real_abils.str_add = std::get<int>(row["player_ability_strength_add"]);
-				ch->real_abils.intel = std::get<int>(row["player_ability_intelligence"]);
-				ch->real_abils.wis = std::get<int>(row["player_ability_wisdom"]);
-				ch->real_abils.dex = std::get<int>(row["player_ability_dexterity"]);
-				ch->real_abils.con = std::get<int>(row["player_ability_constitution"]);
-				ch->real_abils.cha = std::get<int>(row["player_ability_charisma"]);
-				ch->char_specials.saved.alignment = std::get<int>(row["player_ability_alignment"]);
-				ch->points.max_hit = std::get<int>(row["player_max_hitpoints"]);
-				ch->points.max_mana = std::get<int>(row["player_max_mana"]);
-				ch->points.max_move = std::get<int>(row["player_max_move"]);
-				ch->points.gold = std::get<int>(row["player_gold"]);
-				ch->points.exp = std::get<int>(row["player_exp"]);
-				ch->player.sex = std::get<byte>(row["player_sex"]);
-				ch->points.max_hit = std::get<int>(row["player_hitpoints"]);
-				ch->points.mana = std::get<int>(row["player_mana"]);
-				ch->points.move = std::get<int>(row["player_move"]);
-				ch->points.damroll = std::get<int>(row["player_damroll"]);
-				ch->player.weight = std::get<int>(row["player_weight"]);
-				ch->player.height = std::get<int>(row["player_height"]);
-				ch->player.chclass = std::get<int>(row["player_class"]);
-				ch->player.title.assign(std::get<const char*>(row["player_title"]));
-				ch->player.hometown = std::get<int>(row["player_hometown"]);
-				GET_PASSWD(ch).assign(std::get<const char*>(row["player_password"]));
+				ch->player.short_descr.assign((row["player_short_description"]));
+				ch->player.long_descr.assign((row["player_long_description"]));
+				ch->char_specials.saved.act = mods::util::stoi<int>(row["player_action_bitvector"]);
+				ch->real_abils.str = mods::util::stoi<int>(row["player_ability_strength"]);
+				ch->real_abils.str_add = mods::util::stoi<int>(row["player_ability_strength_add"]);
+				ch->real_abils.intel = mods::util::stoi<int>(row["player_ability_intelligence"]);
+				ch->real_abils.wis = mods::util::stoi<int>(row["player_ability_wisdom"]);
+				ch->real_abils.dex = mods::util::stoi<int>(row["player_ability_dexterity"]);
+				ch->real_abils.con = mods::util::stoi<int>(row["player_ability_constitution"]);
+				ch->real_abils.cha = mods::util::stoi<int>(row["player_ability_charisma"]);
+				ch->char_specials.saved.alignment = mods::util::stoi<int>(row["player_ability_alignment"]);
+				ch->points.max_hit = mods::util::stoi<int>(row["player_max_hitpoints"]);
+				ch->points.max_mana = mods::util::stoi<int>(row["player_max_mana"]);
+				ch->points.max_move = mods::util::stoi<int>(row["player_max_move"]);
+				ch->points.gold = mods::util::stoi<int>(row["player_gold"]);
+				ch->points.exp = mods::util::stoi<int>(row["player_exp"]);
+				ch->player.sex = mods::util::stoi<byte>(row["player_sex"]);
+				ch->points.max_hit = mods::util::stoi<int>(row["player_hitpoints"]);
+				ch->points.mana = mods::util::stoi<int>(row["player_mana"]);
+				ch->points.move = mods::util::stoi<int>(row["player_move"]);
+				ch->points.damroll = mods::util::stoi<int>(row["player_damroll"]);
+				ch->player.weight = mods::util::stoi<int>(row["player_weight"]);
+				ch->player.height = mods::util::stoi<int>(row["player_height"]);
+				ch->player.chclass = mods::util::stoi<int>(row["player_class"]);
+				ch->player.title.assign((row["player_title"]));
+				ch->player.hometown = mods::util::stoi<int>(row["player_hometown"]);
+				GET_PASSWD(ch).assign((row["player_password"]));
 				break;
 			}
 		}

@@ -34,6 +34,9 @@ namespace mods::builder {
 //  14    struct char_data *people;    /* List of NPC / PC in room           */
 //  15 };
 //  16
+	constexpr static int ROOM_NUMBER_OUT_OF_RANGE = -1;
+	constexpr static int ROOM_NAME_EMPTY = -2;
+	constexpr static int ROOM_DESC_EMPTY = -3;
 	extern std::array<std::pair<int,std::string>,17> extra_flags;
 	extern std::array<std::pair<int,std::string>,15> wear_flags;
 	extern std::array<std::pair<int,std::string>,25> affected_flags;

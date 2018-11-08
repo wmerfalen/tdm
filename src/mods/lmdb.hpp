@@ -2,7 +2,6 @@
 #define  __MENTOC_MODS_LMDB_HEADER__
 
 #include <iostream>
-#include <variant>
 #include <vector>
 #include <map>
 #include <string_view>
@@ -12,12 +11,12 @@
 #include "../liblmdb/lmdb.h"
 #include <tuple>
 #include "schema.hpp"
-
+using aligned_int_t = uint64_t;
+using tuple_status_t = std::tuple<bool,std::string,aligned_int_t>;
 namespace mods::lmdb {
 	inline static std::string operator "" _s(const char* str,std::size_t size){ 
 		return std::string(str);
 	}
-	using variant_t = std::variant<std::string_view,mods::string,std::string,const char*,uint64_t,int64_t,int,nullptr_t,short,char,unsigned char,char*,unsigned char*,sbyte>;
 	enum transact_type_t {
 		EXEC, UPDATE, INSERT 
 	};
@@ -31,8 +30,8 @@ namespace mods::lmdb {
 		object_id,room_number,row_id_list
 	};
 
-	using mutable_map_t = std::map<std::string_view,variant_t>;
-	using result_container_t = std::vector<std::map<std::string_view,variant_t>>;
+	using mutable_map_t = std::map<std::string_view,std::string>;
+	using result_container_t = std::vector<std::map<std::string_view,std::string>>;
 
 	struct _selector {
 		table_type_t table;
@@ -93,16 +92,21 @@ namespace mods::lmdb {
 		 * get(key,val) is basically like the sql version of "where".
 		 * i.e.: get("user_id",123); //sql equiv: select * from users where user_id = 123
 		 */
-			result_container_t get(std::string_view key);
+		template <typename T>
+			std::string get(T consumer,std::string_view key);
 
+		template <typename T>
+		result_container_t get_by_id(T consumer,std::string_view id);
+		template <typename T>
+		result_container_t get_by_meta(T consumer,std::string_view column,std::string_view equals_value);
 		/**
 		 * The sql equivalent of this is 'select * from table'
 		 */
 		template <typename T>
 		result_container_t get_all(T consumer);
-		template <typename T>
-			bool set(const mutable_map_t & values,const key_type_t & field,T value);
-		bool values(const mutable_map_t & values);
+		tuple_status_t set(mutable_map_t & values,
+				std::string_view where_id_equals);
+		tuple_status_t values(mutable_map_t & values);
 		private: 
 		table_type_t m_table;
 		std::string m_str_table;
@@ -215,13 +219,19 @@ namespace mods::globals {
 
 
 std::string db_key(const std::vector<std::string_view> & parts);
-
-mods::lmdb::result_container_t db_get(std::string_view table,std::string_view key);
+std::string db_get(std::string_view table,std::string_view key);
+mods::lmdb::result_container_t db_get_by_id(std::string_view table,std::string_view id);
+mods::lmdb::result_container_t db_get_by_meta(std::string_view table,std::string_view col,std::string_view equals);
 mods::lmdb::result_container_t db_get_all(std::string_view table);
-bool db_update(std::string_view table,const mods::lmdb::mutable_map_t & values,
-		std::string_view field,std::string_view value );
-bool db_update(mods::lmdb::table_type_t table,const mods::lmdb::mutable_map_t & values,const mods::lmdb::key_type_t & field,std::string_view value );
+bool db_update(mods::lmdb::table_type_t table,
+		mods::lmdb::mutable_map_t & values,
+		std::string_view value);
 bool db_insert(std::string_view table,const mods::lmdb::mutable_map_t & values);
 
+extern tuple_status_t new_record_with_values(std::string_view table,
+		mods::lmdb::db_handle* ptr_db,
+		mods::lmdb::mutable_map_t& values,
+		bool & error,
+		std::optional<aligned_int_t> use_this_id);
 
 #endif

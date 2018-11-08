@@ -930,7 +930,7 @@ ALTER TABLE ONLY public.zone_data ALTER COLUMN id SET DEFAULT nextval('public.zo
 -- Data for Name: mobile; Type: TABLE DATA; Schema: public; Owner: llvm
 --
 
-INSERT INTO public.mobile VALUES (1, 0, 'chef putos employee', 'A pissed looking Los Putos employee', 'A pissed looking Los Putos employee', 'This particular employee looks like he just got out of a federal penitentiary. He''s most likely hiding some weapon in one of the many compartments that should be used for storing utensils and food paraphernalia.', '8', '0', 25, 0, 25, 0, 25, 0, 25, 0, 0, 0, 20, 0, 250, 250, 250, 5000, 0, 8, 8, 0, 250, 250, 250, 25, 0, 0, 50, 15, 0);
+INSERT INTO public.mobile VALUES (1, 0, 'chef  employee', 'A pissed looking Los  employee', 'A pissed looking Los  employee', 'This particular employee looks like he just got out of a federal penitentiary. He''s most likely hiding some weapon in one of the many compartments that should be used for storing utensils and food paraphernalia.', '8', '0', 25, 0, 25, 0, 25, 0, 25, 0, 0, 0, 20, 0, 250, 250, 250, 5000, 0, 8, 8, 0, 250, 250, 250, 25, 0, 0, 50, 15, 0);
 
 
 --
@@ -993,9 +993,9 @@ INSERT INTO public.room VALUES (83, 126, 10, 0, 'Reverand Avenue', 'Of all the t
 INSERT INTO public.room VALUES (84, 127, 10, 0, 'Armor And Supplies', 'description', NULL, NULL, 0, 0);
 INSERT INTO public.room VALUES (85, 128, 10, 0, 'Reverand Avenue', 'Of all the things that can be attributed to Downtown Lawton, faith surely is not one of them. From the abandoned streets and overcrowded walkways protrudes the infamous Sixth Tower Church. Worshippers gather and pay heed to the all famous deity. 
 ', NULL, NULL, 0, 0);
-INSERT INTO public.room VALUES (86, 129, 10, 0, 'Los Putos Mexican Food', 'description', NULL, NULL, 0, 0);
+INSERT INTO public.room VALUES (86, 129, 10, 0, 'Los  Mexican Food', 'description', NULL, NULL, 0, 0);
 INSERT INTO public.room VALUES (87, 130, 10, 0, 'title', 'description', NULL, NULL, 0, 0);
-INSERT INTO public.room VALUES (88, 131, 10, 0, 'Los Putos Mexican Food Back Entrance', 'description', NULL, NULL, 0, 0);
+INSERT INTO public.room VALUES (88, 131, 10, 0, 'Los  Mexican Food Back Entrance', 'description', NULL, NULL, 0, 0);
 INSERT INTO public.room VALUES (89, 132, 10, 0, 'Entrance to an underground tunnel', 'description', NULL, NULL, 0, 0);
 INSERT INTO public.room VALUES (90, 133, 10, 0, 'Inside a tunnel', 'This crudely carved out tunnel allows the average height male to comfortably walk through. The purpose of this tunnel isn''t immediately obvious, but knowing the residents of Downtown Lawton, it''s likely connected to drugs. Blue canvases are draped across the ground and grey canvases are laid over the padded walls. Why are the walls padded?
 ', NULL, NULL, 0, 0);
@@ -1065,11 +1065,11 @@ INSERT INTO public.room_direction_data VALUES (201, 128, 1, 'Reverand Avenue', '
 INSERT INTO public.room_direction_data VALUES (202, 129, 0, 'general description', 'keyword', 1, -1, 130);
 INSERT INTO public.room_direction_data VALUES (203, 129, 2, 'Reverand Avenue', 'door', 1, -1, 128);
 INSERT INTO public.room_direction_data VALUES (204, 130, 0, 'general description', 'keyword', 1, -1, 131);
-INSERT INTO public.room_direction_data VALUES (205, 130, 2, 'Los Putos Mexican Food', 'door', 1, -1, 129);
+INSERT INTO public.room_direction_data VALUES (205, 130, 2, 'Los  Mexican Food', 'door', 1, -1, 129);
 INSERT INTO public.room_direction_data VALUES (206, 131, 2, 'title', 'door', 1, -1, 130);
 INSERT INTO public.room_direction_data VALUES (207, 131, 5, 'general description', 'keyword', 1, -1, 132);
 INSERT INTO public.room_direction_data VALUES (208, 132, 3, 'general description', 'keyword', 1, -1, 133);
-INSERT INTO public.room_direction_data VALUES (209, 132, 4, 'Los Putos Mexican Food Back Entrance', 'door', 1, -1, 131);
+INSERT INTO public.room_direction_data VALUES (209, 132, 4, 'Los  Mexican Food Back Entrance', 'door', 1, -1, 131);
 INSERT INTO public.room_direction_data VALUES (210, 133, 1, 'Entrance to an underground tunnel', 'door', 1, -1, 132);
 INSERT INTO public.room_direction_data VALUES (211, 133, 3, 'general description', 'keyword', 1, -1, 134);
 INSERT INTO public.room_direction_data VALUES (212, 134, 1, 'Inside a tunnel', 'door', 1, -1, 133);

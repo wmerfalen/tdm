@@ -7,28 +7,8 @@
 
 namespace mods::schema { 
 	using schema_list_t = std::map<std::string,std::vector<std::string>>;
-/*
- * TODO: Implement boost::hana into this class.
-// 1. Give introspection capabilities to 'Person'
-struct Person {
-  BOOST_HANA_DEFINE_STRUCT(Person,
-    (std::string, name),
-    (int, age)
-  );
-};
-// 2. Write a generic serializer (bear with std::ostream for the example)
-auto serialize = [](std::ostream& os, auto const& object) {
-  hana::for_each(hana::members(object), [&](auto member) {
-    os << member << std::endl;
-  });
-};
-// 3. Use it
-Person john{"John", 30};
-serialize(std::cout, john);
-// output:
-// John
-// 30
-*/
+	constexpr static const char* PLACE_HOLDER_VALUE = "\x01";
+/*!TODO: Implement boost::hana into this class.*/
 	static schema_list_t db = {
 			{"player",{
 									"player_id",
@@ -69,219 +49,193 @@ serialize(std::cout, john);
 									"player_title",
 									"player_hometown",
 									"player_password",
-									"player_type"
+									"player_type",
+									"meta|player_name"
 								}
 			},
 			{"affected_type",{
-												 "id", //integer NOT NULL,
-												 "aff_fk_id", //integer NOT NULL,
-												 "aff_location", //integer NOT NULL,
-												 "aff_modifier" //integer NOT NULL
+												 "id",
+												 "object_number",
+												 "aff_location",
+												 "aff_modifier",
+												 "meta|object_number"
 											 }
 			},
 
 			{"extra_description",{
-														 "id",		// integer NOT NULL,
-														 "obj_fk_id",		// integer NOT NULL,
-														 "extra_keyword",		// character varying(64),
-														 "extra_description"		// character varying(1024)
+														 "id",
+														 "object_number",
+														 "extra_keyword",		
+														 "extra_description",
+														 "meta|object_number"
 													 }
 			},
 
 			{"mob_zone",{
-										"id",		// integer NOT NULL,
-										"zone_id",		// integer NOT NULL,
-										"mob_id",		// integer NOT NULL,
-										"room_id",		// integer NOT NULL,
-										"max_existing"		// integer
+										"id",		
+										"zone_id",
+										"mob_id",
+										"room_id",
+										"max_existing"
 									}
 			},
 
 
 			{"mobile",{
-									"mob_id",		// integer NOT NULL,
-									"mob_virtual_number",		// integer NOT NULL,
-									"mob_name",		// character varying(256) NOT NULL,
-									"mob_short_description",		// character varying(64) NOT NULL,
-									"mob_long_description",		// character varying(512) NOT NULL,
-									"mob_description",		// text,
-									"mob_action_bitvector",		// character varying(2) NOT NULL,
-									"mob_affection_bitvector",		// character varying(2) NOT NULL,
-									"mob_ability_strength",		// integer NOT NULL,
-									"mob_ability_strength_add",		// integer NOT NULL,
-									"mob_ability_intelligence",		// integer NOT NULL,
-									"mob_ability_wisdom",		// integer NOT NULL,
-									"mob_ability_dexterity",		// integer NOT NULL,
-									"mob_ability_constitution",		// integer NOT NULL,
-									"mob_ability_charisma",		// integer NOT NULL,
-									"mob_alignment",		// integer NOT NULL,
-									"mob_attack_type",		// integer NOT NULL,
-									"mob_level",		// integer NOT NULL,
-									"mob_hitroll",		// integer NOT NULL,
-									"mob_armor",		// integer NOT NULL,
-									"mob_max_hitpoints",		// integer NOT NULL,
-									"mob_max_mana",		// integer NOT NULL,
-									"mob_max_move",		// integer NOT NULL,
-									"mob_gold",		// integer NOT NULL,
-									"mob_exp",		// integer NOT NULL,
-									"mob_load_position",		// integer NOT NULL,
-									"mob_default_position",		// integer NOT NULL,
-									"mob_sex",		// integer NOT NULL,
-									"mob_hitpoints",		// integer,
-									"mob_mana",		// integer NOT NULL,
-									"mob_move",		// integer NOT NULL,
-									"mob_damnodice",		// integer NOT NULL,
-									"mob_damsizedice",		// integer NOT NULL,
-									"mob_damroll",		// integer NOT NULL,
-									"mob_weight",		// integer NOT NULL,
-									"mob_height",		// integer NOT NULL,
-									"mob_class"		// integer NOT NULL
+									"mob_id",		
+									"mob_virtual_number",		
+									"mob_name",		
+									"mob_short_description",		
+									"mob_long_description",		
+									"mob_description",		
+									"mob_action_bitvector",		
+									"mob_affection_bitvector",		
+									"mob_ability_strength",		
+									"mob_ability_strength_add",		
+									"mob_ability_intelligence",		
+									"mob_ability_wisdom",		
+									"mob_ability_dexterity",		
+									"mob_ability_constitution",		
+									"mob_ability_charisma",		
+									"mob_alignment",		
+									"mob_attack_type",		
+									"mob_level",		
+									"mob_hitroll",		
+									"mob_armor",		
+									"mob_max_hitpoints",		
+									"mob_max_mana",		
+									"mob_max_move",		
+									"mob_gold",		
+									"mob_exp",		
+									"mob_load_position",		
+									"mob_default_position",		
+									"mob_sex",		
+									"mob_hitpoints",		
+									"mob_mana",		
+									"mob_move",		
+									"mob_damnodice",		
+									"mob_damsizedice",		
+									"mob_damroll",		
+									"mob_weight",		
+									"mob_height",		
+									"mob_class",
+									"meta|mob_name",
+									"meta|mob_virtual_number",
+									"meta|mob_class"
 								}
 			},
 			{"object",{
-									"id",		// integer NOT NULL,
-									"obj_item_number",		// integer NOT NULL,
-									"obj_flags",		// integer NOT NULL,
-									"obj_name",		// character varying(128) NOT NULL,
-									"obj_description",		// character varying(1024),
-									"obj_short_description",		// character varying(64) NOT NULL,
-									"obj_action_description",		// character varying(32),
-									"obj_type",		// integer,
-									"obj_worn_on",		// integer,
-									"obj_type_data",		// character varying(16),
-									"obj_extra_keyword",		// character varying(64),
-									"obj_extra_description"		// character varying(1024)
+									"id",		
+									"object_number",		
+									"object_flags",		
+									"object_name",		
+									"object_description",		
+									"object_short_description",		
+									"object_action_description",		
+									"object_type",		
+									"object_worn_on",		
+									"object_type_data",		
+									"object_extra_keyword",		
+									"object_extra_description",
+									"meta|object_number",
+									"meta|object_name",
+									"meta|object_type"
 								}
 			},
 
 			{"object_flags",{
-												"id",		// integer NOT NULL,
-												"obj_fk_id",		// integer NOT NULL,
-												"value_0",		// integer NOT NULL,
-												"value_1",		// integer NOT NULL,
-												"value_2",		// integer NOT NULL,
-												"value_3",		// integer NOT NULL,
-												"type_flag",		// integer NOT NULL,
-												"wear_flags",		// integer NOT NULL,
-												"extra_flags",		// integer NOT NULL,
-												"weight",		// integer NOT NULL,
-												"cost",		// integer NOT NULL,
-												"cost_per_day",		// integer NOT NULL,
-												"timer",		// integer NOT NULL,
-												"bitvector"		// integer NOT NULL
+												"id",		
+												"object_number",		
+												"value_0",		
+												"value_1",		
+												"value_2",		
+												"value_3",		
+												"type_flag",		
+												"wear_flags",		
+												"extra_flags",		
+												"weight",		
+												"cost",		
+												"cost_per_day",		
+												"timer",		
+												"bitvector",
+												"meta|object_number"
 											}
 			},
 
 			{"object_weapon",{
-												 "id",		// integer NOT NULL,
-												 "obj_fk_id",		// integer NOT NULL,
-												 "obj_ammo_max",		// integer NOT NULL,
-												 "obj_ammo_type",		// integer NOT NULL,
-												 "obj_cooldown",		// integer NOT NULL,
-												 "obj_can_snipe"		// boolean NOT NULL
+												 "id",		
+												 "object_number",		
+												 "object_ammo_max",		
+												 "object_ammo_type",		
+												 "object_cooldown",		
+												 "object_can_snipe",
+												 "meta|object_number"
 											 }
 			},
 
-			{"player",{
-									"player_id",		// integer NOT NULL,
-									"player_virtual_number",		// integer NOT NULL,
-									"player_name",		// character varying(256) NOT NULL,
-									"player_short_description",		// character varying(64) NOT NULL,
-									"player_long_description",		// character varying(512) NOT NULL,
-									"player_description",		// text,
-									"player_action_bitvector",		// character varying(2) NOT NULL,
-									"player_affection_bitvector",		// character varying(2) NOT NULL,
-									"player_ability_strength",		// integer NOT NULL,
-									"player_ability_strength_add",		// integer NOT NULL,
-									"player_ability_intelligence",		// integer NOT NULL,
-									"player_ability_wisdom",		// integer NOT NULL,
-									"player_ability_dexterity",		// integer NOT NULL,
-									"player_ability_constitution",		// integer NOT NULL,
-									"player_ability_charisma",		// integer NOT NULL,
-									"player_alignment",		// integer NOT NULL,
-									"player_attack_type",		// integer NOT NULL,
-									"player_level",		// integer NOT NULL,
-									"player_hitroll",		// integer NOT NULL,
-									"player_armor",		// integer NOT NULL,
-									"player_max_hitpoints",		// integer NOT NULL,
-									"player_max_mana",		// integer NOT NULL,
-									"player_max_move",		// integer NOT NULL,
-									"player_gold",		// integer NOT NULL,
-									"player_exp",		// integer NOT NULL,
-									"player_sex",		// integer NOT NULL,
-									"player_hitpoints",		// integer,
-									"player_mana",		// integer NOT NULL,
-									"player_move",		// integer NOT NULL,
-									"player_damnodice",		// integer NOT NULL,
-									"player_damsizedice",		// integer NOT NULL,
-									"player_damroll",		// integer NOT NULL,
-									"player_weight",		// integer NOT NULL,
-									"player_height",		// integer NOT NULL,
-									"player_class",		// integer NOT NULL,
-									"player_title",		// character varying(256) NOT NULL,
-									"player_hometown",		// character varying(16) NOT NULL,
-									"player_password",		// character varying(512),
-									"player_type"		// character varying(3) NOT NULL
-								}
-			},
-
 			{"room",{
-								"id",		// integer NOT NULL,
-								"room_number",		// integer NOT NULL,
-								"zone",		// integer NOT NULL,
-								"sector_type",		// integer NOT NULL,
-								"name",		// character varying(256) NOT NULL,
-								"description",		// text NOT NULL,
-								"ex_keyword",		// character varying(256),
-								"ex_description",		// text,
-								"light",		// integer,
-								"room_flag"		// integer NOT NULL
+								"id",		
+								"room_number",		
+								"zone",		
+								"sector_type",		
+								"name",		
+								"description",		
+								"ex_keyword",		
+								"ex_description",		
+								"light",		
+								"room_flag",
+								"meta|room_number",
+								"meta|zone",
+								"meta|name"
 							}
 			},
 
 			{"room_direction_data",{
-															 "id",		// integer NOT NULL,
-															 "room_number",		// integer NOT NULL,
-															 "exit_direction",		// integer NOT NULL,
-															 "general_description",		// character varying(256) NOT NULL,
-															 "keyword",		// character varying(16),
-															 "exit_info",		// integer,
-															 "exit_key",		// integer,
-															 "to_room"		// integer NOT NULL
+															 "id",		
+															 "room_number",		
+															 "exit_direction",		
+															 "general_description",		
+															 "keyword",		
+															 "exit_info",		
+															 "exit_key",		
+															 "to_room",
+															 "meta|room_number"
 														 }
 			},
 
 			{"tasks",{
-								 "id",		// integer,
-								 "t_name"		// character varying(256)
+								 "id",		
+								 "t_name"		
 							 }
 			},
 
 			{"tasks_notes",{
-											 "id",		// integer,
-											 "task_id",		// integer,
-											 "t_notes"		// character varying(256)
+											 "id",		
+											 "task_id",		
+											 "t_notes"		
 										 }
 			},
 
 			{"zone",{
-								"id",		// integer NOT NULL,
-								"zone_start",		// integer NOT NULL,
-								"zone_end",		// integer NOT NULL,
-								"zone_name",		// character varying(64) NOT NULL,
-								"lifespan",		// integer NOT NULL,
-								"reset_mode"		// integer NOT NULL
+								"id",
+								"zone_start",
+								"zone_end",
+								"zone_name",
+								"lifespan",
+								"reset_mode",
+								"meta|zone_name"
 							}
 			},
 
 			{"zone_data",{
-										 "id",		// integer NOT NULL,
-										 "zone_id",		// integer NOT NULL,
-										 "zone_command",		// character varying(1) NOT NULL,
-										 "zone_if_flag",		// character varying(1) NOT NULL,
-										 "zone_arg1",		// integer NOT NULL,
-										 "zone_arg2",		// integer NOT NULL,
-										 "zone_arg3"		// integer NOT NULL
+										 "id",
+										 "zone_id",
+										 "zone_command",
+										 "zone_if_flag",
+										 "zone_arg1",
+										 "zone_arg2",
+										 "zone_arg3",
+										 "meta|zone_id"
 									 }
 			}
 	};

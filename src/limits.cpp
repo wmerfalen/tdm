@@ -394,6 +394,7 @@ void gain_condition(struct char_data *ch, int condition, int value) {
 }
 
 
+
 void check_idling(struct char_data *ch) {
 	if(++(ch->char_specials.timer) > idle_void) {
 		if(GET_WAS_IN(ch) == NOWHERE && IN_ROOM(ch) != NOWHERE) {
@@ -411,7 +412,7 @@ void check_idling(struct char_data *ch) {
 				save_char(ch);
 				Crash_crashsave(ch);
 				char_from_room(ch);
-				char_to_room(ch, 1);
+				char_to_room(ch, config::rooms::idle());
 			}
 		} else if(ch->char_specials.timer > idle_rent_time) {
 			if(IN_ROOM(ch) != NOWHERE) {
@@ -436,20 +437,24 @@ void check_idling(struct char_data *ch) {
 			} else {
 				Crash_idlesave(ch);
 			}
+			mudlog(CMP, LVL_GOD, TRUE, "%s force-rented and extracted (idle).", GET_NAME(ch).c_str());
+			extract_char(ch);
 #else
 			auto save_status = db::save_char(ch);
 			if(save_status < 0){
 				std::cerr << "check_idling[db::save_char]->error saving character\n";
 			}
 #endif
-
-			mudlog(CMP, LVL_GOD, TRUE, "%s force-rented and extracted (idle).", GET_NAME(ch).c_str());
-			extract_char(ch);
 		}
 	}
 }
 
 
+ACMD(do_idle){
+	MENTOC_PREAMBLE();
+	player->cd()->char_specials.timer = idle_void + 1;
+	check_idling(player->cd());
+}
 
 /* Update PCs, NPCs, and objects */
 void point_update(void) {

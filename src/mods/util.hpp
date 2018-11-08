@@ -77,6 +77,14 @@ namespace mods::util {
 
 		return arglist;
 	}
+	template <typename T>
+	T stoi(const std::string& i){
+		T m;
+		std::stringstream ss;
+		ss.str(i);
+		ss >> m;
+		return m;
+	}
 	std::optional<int> stoi(std::string_view str);
 
 	template<int max_char,typename Container>

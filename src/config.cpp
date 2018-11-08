@@ -167,13 +167,13 @@ int rent_file_timeout = 30;
 /* ROOM NUMBERS */
 
 /* virtual number of room that mortals should enter at */
-config::rooms::room_type_t mortal_start_room = 2;
+config::rooms::room_type_t mortal_start_room = 27089;
 
 /* virtual number of room that immorts should enter at by default */
-config::rooms::room_type_t immort_start_room = 1;
+config::rooms::room_type_t immort_start_room = 27089;
 
 /* virtual number of room that frozen players should enter at */
-config::rooms::room_type_t frozen_start_room = 0;
+config::rooms::room_type_t frozen_start_room = 27089;
 
 /*
  * virtual numbers of donation rooms.  note: you must change code in
@@ -311,6 +311,9 @@ namespace config {
 	namespace rooms {
 		room_type_t idle(){
 			return config::rooms::IDLE;
+		}
+		room_type_t mortal_start(){
+			return config::rooms::MORTAL_START;
 		}
 	};
 	void init(int argc,char** argv){

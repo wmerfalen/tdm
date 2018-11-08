@@ -1,0 +1,24 @@
+{
+    "name": "cmplusplus/devblog",
+    "description": "The devblog for the antics of the cm++ author.",
+    "type": "project",
+    "license": "wtfpl",
+		"autoload": {
+			"psr-4": {"siegemud\\":"siegemud"}
+		},
+    "authors": [
+        {
+            "name": "Siege Mud",
+            "email": "sige.mud@bnull.net"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/wmerfalen/slenderize.git"
+        }
+    ],
+    "require": {
+			"wmerfalen/slenderize": "dev-master"
+		}
+}

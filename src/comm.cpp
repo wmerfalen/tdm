@@ -107,7 +107,7 @@ int buf_overflows = 0;		/* # of overflows of output */
 int buf_switches = 0;		/* # of switches from small to large buf */
 int circle_shutdown = 0;	/* clean shutdown */
 int circle_reboot = 0;		/* reboot the game after a shutdown */
-int no_specials = 0;		/* Suppress ass. of special routines */
+int no_specials = 0;		/* Suppress special routines */
 int max_players = 0;		/* max descriptors available */
 uint64_t tics = 0;			/* for extern checkpointing */
 int scheck = 0;			/* for syntax checking mode */
@@ -119,6 +119,19 @@ const char *text_overflow = "**OVERFLOW**\r\n";
 int epoll_fd = -1;
 epoll_event epoll_ev;
 
+int64_t destroy_socket(socket_t & sock_fd){
+	/** It's completely normal to specify nullptr as the last parameter
+	 * since we are specifying EPOLL_CTL_DEL. In other words, we are 
+	 * not using epoll_ctl as a way to register a socket to be watched.
+	 */
+	auto r = epoll_ctl (epoll_fd, EPOLL_CTL_DEL, sock_fd, nullptr);
+	close(sock_fd);
+	if(r == -1){
+		std::cerr << "destroy_socket::epoll_ctl[error]->'" << strerror(errno) << "'\n";
+		return -1;
+	}
+	return 0;
+}
 std::size_t handle_disconnects(){
 		/* Kick out folks in the CON_CLOSE or CON_DISCONNECT state */
 		std::vector<typename mods::globals::player_list_t::iterator> players_to_destroy;
@@ -126,11 +139,17 @@ std::size_t handle_disconnects(){
 				it != mods::globals::player_list.end(); ++it ) {
 			auto desc = (*it)->desc();
 			if(STATE(desc) == CON_CLOSE || STATE(desc) == CON_DISCONNECT) {
+				std::cerr << "[debug] -- found one descriptor with CON_CLOSE || CON_DISCONNECT\n";
 				players_to_destroy.push_back(it);
 			}
 		}
 
 		for(auto player_iterator : players_to_destroy){
+			auto socket_iterator = mods::globals::socket_map.find((*player_iterator)->desc().descriptor);
+			if(socket_iterator != mods::globals::socket_map.end()){
+				CLOSE_SOCKET((*player_iterator)->desc().descriptor);
+				mods::globals::socket_map.erase(socket_iterator);
+			}
 			mods::globals::player_list.erase(player_iterator);
 		}
 		auto ret = players_to_destroy.size();
@@ -334,18 +353,21 @@ int main(int argc, char **argv) {
 				std::cerr << "Usage: " << argv[0] << " [-c] [-m] [-q] [-r] [-s] [-d pathname] [port #]\n"
 						"  -c             Enable syntax check mode.\n"
 						"  -d <directory> Specify library directory (defaults to 'lib').\n"
-						"  -h             Print this command line argument help.\n"
+						"  -h             This screen.\n"
 						"  -m             Start in mini-MUD mode.\n"
 						"  -o <file>      Write log to <file> instead of stderr.\n"
-						"  -q             Quick boot (doesn't scan rent for object limits)\n"
+						"  -q             Quick boot (doesn't scan rent for object limits).\n"
 						"  -r             Restrict MUD -- no new players allowed.\n"
 						"  -s             Suppress special procedure assignments.\n"
-						"  -T <test_suite>Run test suite as character 'Far'\n"
-						"  --lmdb-dir=DIR Which directory to save the lmdb file to\n"
+						"  -T <test_suite>Run test suite as implementor.\n"
+						"  --sql-port     Run the 'postgres to lmdb' port command.\n"
+						"  --testing=<N>  Run the test suite labeled N.\n"
+						"  --lmdb-dir=N   Save lmdb to the directory at N.\n"
+						"  --lmdb-name=N  Name the lmdb database N.\n"
+						"  --hell         Minimalist mode. Useful for testing.\n"
 						"  --import-rooms Import rooms\n"
-						"  --pg-user=user Use 'user' as postgres user\n"
-						"  --pg-db=db     Use 'db' as postgres db\n";
-				mods::globals::shutdown();
+						;
+				exit(0);
 			default:
 				std::cerr << "SYSERR: Unknown option -" << *(argv[pos]+1) << " in argument string.\n";
 				break;
@@ -425,14 +447,11 @@ void init_game(ush_int port) {
 	mother_desc = init_socket(port);
 
 	switch(mods::globals::boot_type){
-		case mods::globals::boot_type_t::BOOT_DB:
-			boot_db();
-			break;
 		case mods::globals::boot_type_t::BOOT_HELL:
 			boot_hell();
 			break;
+		case mods::globals::boot_type_t::BOOT_DB:
 		default:
-			log("Unknown boot type requested. Defaulting to BOOT_DB");
 			boot_db();
 			break;
 	}
@@ -457,7 +476,7 @@ void init_game(ush_int port) {
 		close_socket(desc);
 	}
 
-	CLOSE_SOCKET(mother_desc);
+	close(mother_desc);
 
 
 	log("Saving current MUD time.");
@@ -482,36 +501,6 @@ socket_t init_socket(ush_int port) {
 	struct sockaddr_in sa;
 	int opt;
 
-#ifdef CIRCLE_WINDOWS
-	{
-		WORD wVersionRequested;
-		WSADATA wsaData;
-
-		wVersionRequested = MAKEWORD(1, 1);
-
-		if(WSAStartup(wVersionRequested, &wsaData) != 0) {
-			log("SYSERR: WinSock not available!");
-			exit(1);
-		}
-
-		/*
-		 * 4 = stdin, stdout, stderr, mother_desc.  Windows might
-		 * keep sockets and files separate, in which case this isn't
-		 * necessary, but we will err on the side of caution.
-		 */
-		if((wsaData.iMaxSockets - 4) < max_players) {
-			max_players = wsaData.iMaxSockets - 4;
-		}
-
-		log("Max players set to %d", max_players);
-
-		if((s = socket(PF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
-			log("SYSERR: Error opening network connection: Winsock error #%d",
-					WSAGetLastError());
-			exit(1);
-		}
-	}
-#else
 	/*
 	 * Should the first argument to socket() be AF_INET or PF_INET?  I don't
 	 * know, take your pick.  PF_INET seems to be more widely adopted, and
@@ -528,9 +517,7 @@ socket_t init_socket(ush_int port) {
 		exit(1);
 	}
 
-#endif				/* CIRCLE_WINDOWS */
-
-#if defined(SO_REUSEADDR) && !defined(CIRCLE_MACINTOSH)
+#if defined(SO_REUSEADDR)
 	opt = 1;
 
 	if(setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char *) &opt, sizeof(opt)) < 0) {
@@ -547,7 +534,7 @@ socket_t init_socket(ush_int port) {
 	 * SO_LINGER, even though setsockopt() is unimplimented.
 	 *	(from Dean Takemori <dean@UHHEPH.PHYS.HAWAII.EDU>)
 	 */
-#if defined(SO_LINGER) && !defined(CIRCLE_MACINTOSH)
+#if defined(SO_LINGER)
 	{
 		struct linger ld;
 
@@ -718,11 +705,8 @@ void game_loop(socket_t mother_desc) {
 		constexpr int epoll_timeout = 5;	/* miliseconds */
 		int r = epoll_wait (epoll_fd, events, size, epoll_timeout);
 		if (r == -1) {
-			log("SYSERR [epoll] epoll_wait returned -1");
-					/** !fixme: do proper shutdown here */
-			close (epoll_fd);
-			close (mother_desc);
-			return;
+			std::cerr << "game_loop::epoll_wait[-1]->'" << strerror(errno) << "'\n";
+			continue;
 		}
 
 		int i = 0;
@@ -836,7 +820,6 @@ void game_loop(socket_t mother_desc) {
 		/** !todo: refactor this to not loop through all descriptors but to instead queue up data to be output and output them accordingly */
 		for(auto & p : mods::globals::player_list) {
 			if(p->desc().has_output) {
-				std::cerr << "[debug]: flushing..." << tics <<" \n";
 				p->desc().flush_output();
 			}
 		}
@@ -891,7 +874,6 @@ void game_loop(socket_t mother_desc) {
 			tics = 0;
 		}
 		++tics;
-
 	}
 
 }
@@ -1347,6 +1329,7 @@ int new_descriptor(socket_t s) {
 
 	if((desc = accept(s, (struct sockaddr *) &peer, &i)) == INVALID_SOCKET) {
 		perror("SYSERR: accept");
+		destroy_socket(desc);
 		deregister_player(player);
 		return (-1);
 	}
@@ -1356,14 +1339,16 @@ int new_descriptor(socket_t s) {
 
 	/* set the send buffer size */
 	if(set_sendbuf(desc) < 0) {
-		CLOSE_SOCKET(desc);
+		log("SYSERR: set_sendbuf failed");
+		destroy_socket(desc);
 		deregister_player(player);
 		return (0);
 	}
 
 	if(++sockets_connected >= max_players) {
 		write_to_descriptor(desc, "Sorry, CircleMUD is full right now... please try again later!\r\n");
-		CLOSE_SOCKET(desc);
+		log("Rejected user due to full server");
+		destroy_socket(desc);
 		deregister_player(player);
 		return (0);
 	}
@@ -1374,7 +1359,7 @@ int new_descriptor(socket_t s) {
 
 		/* resolution failed */
 		if(!nameserver_is_slow) {
-			perror("SYSERR: gethostbyaddr");
+			log("SYSERR: gethostbyaddr");
 		}
 
 		/* find the numeric site address */
@@ -1385,7 +1370,7 @@ int new_descriptor(socket_t s) {
 
 	/* determine if the site is banned */
 	if(isbanned(player->desc().host.c_str())) {
-		CLOSE_SOCKET(desc);
+		destroy_socket(desc);
 		mudlog(CMP, LVL_GOD, TRUE, "Connection attempt denied from [%s]", player->desc().host.c_str());
 		deregister_player(player);
 		return (0);
@@ -1923,8 +1908,8 @@ int perform_subst(mods::descriptor_data &t, char *orig, char *subst) {
 void close_socket(mods::descriptor_data d) {
 	/** !fixme: there are some free() calls here that need to be eliminated but first the mallocs need to be found and the members turned into stl containers. */
 	mods::globals::socket_map.erase(d.descriptor);
-	CLOSE_SOCKET(d.descriptor);
 	flush_queues(d);
+	destroy_socket(d.descriptor);
 
 	/* Forget snooping */
 	if(d.snooping) {
@@ -1949,7 +1934,7 @@ void close_socket(mods::descriptor_data d) {
 			free(d.str);
 		}
 
-		if(STATE(d)== CON_PLAYING || STATE(d)== CON_DISCONNECT) {
+		if(STATE(d)== CON_PLAYING || STATE(d)== CON_CLOSE ||  STATE(d)== CON_DISCONNECT) {
 			struct char_data *link_challenged = d.original ? d.original : d.character;
 
 			/* We are guaranteed to have a person. */
@@ -1958,7 +1943,6 @@ void close_socket(mods::descriptor_data d) {
 			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(link_challenged)), TRUE, "Closing link to: %s.", GET_NAME(link_challenged).c_str());
 		} else {
 			mudlog(CMP, LVL_IMMORT, TRUE, "Losing player: %s.", GET_NAME(d.character) ? GET_NAME(d.character).c_str() : "<null>");
-			free_char(d.character);
 		}
 	} else {
 		mudlog(CMP, LVL_IMMORT, TRUE, "Losing descriptor without char.");
@@ -1976,6 +1960,7 @@ void close_socket(mods::descriptor_data d) {
 	if(d.showstr_count) {
 		free(d.showstr_vector);
 	}
+	/** !TODO: do we use deregister_player here? */
 }
 
 

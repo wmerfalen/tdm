@@ -54,6 +54,12 @@ void write_aliases(struct char_data *ch) {
 }
 
 void read_aliases(struct char_data *ch) {
+	std::cerr << "read_aliases[deprecation-notice]->'" <<
+		"Please don't use read_aliases until it has been" <<
+		" usurped by lmdb! -wm 2018-10-15\n";
+	GET_ALIASES(ch) = nullptr;
+	//CREATE(GET_ALIASES(ch),alias_data,1);
+	return;
 	FILE *file;
 	char xbuf[MAX_STRING_LENGTH];
 	struct alias_data *t2, *prev = NULL;

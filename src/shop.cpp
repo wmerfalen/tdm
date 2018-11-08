@@ -1105,6 +1105,9 @@ SPECIAL(shop_keeper) {
 int ok_damage_shopkeeper(struct char_data *ch, struct char_data *victim) {
 	int sindex;
 
+	if(static_cast<std::size_t>(GET_MOB_RNUM(victim)) >= mob_index.size()){
+		return 0;
+	}
 	if(!IS_MOB(victim) || mob_index[GET_MOB_RNUM(victim)].func != shop_keeper) {
 		return (TRUE);
 	}

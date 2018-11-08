@@ -577,8 +577,21 @@ ACMD(do_exits) {
 void look_at_room(struct char_data *ch, int ignore_brief) {
 	MENTOC_PREAMBLE();
 
+	d("look at room entry");
 	if(!ch->has_desc) {
 		d("look_at_room: char doesnt have a desc! WTF");
+		return;
+	}
+
+	d("look at room in_room(ch): " << IN_ROOM(ch));
+	if(IN_ROOM(ch) < 0){
+		d("look_at_room[IN_ROOM(ch)]->'is -1'");
+		return;
+	}
+
+	if(world.size() <= std::size_t(IN_ROOM(ch))){
+		d("look_at_room[world.size()<=IN_ROOM(ch)]->world.size():'" <<
+				world.size() << "'|IN_ROOM(ch):'" << IN_ROOM(ch) << "'");
 		return;
 	}
 
@@ -590,16 +603,17 @@ void look_at_room(struct char_data *ch, int ignore_brief) {
 	  send_to_char(ch, "You see nothing but infinite darkness...\r\n");
 	  return;
 	}*/
+	d("world.size:" << world.size());
+	d("1");
 	send_to_char(ch, "%s", CCCYN(ch, C_NRM));
 
 	if(!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_ROOMFLAGS)) {
+		d("2");
 		char buf[MAX_STRING_LENGTH];
 
 		sprintbit(ROOM_FLAGS(IN_ROOM(ch)), room_bits, buf, sizeof(buf));
 		send_to_char(ch, "[%5d] %s [ %s]", GET_ROOM_VNUM(IN_ROOM(ch)), world[IN_ROOM(ch)].name.c_str(), buf);
-	} else
-		//send_to_char(ch, "%s", world[IN_ROOM(ch)].name);
-	{
+	} else {
 		player->stc_room(IN_ROOM(ch));
 	}
 

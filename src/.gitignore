@@ -1,5 +1,5 @@
 ../lib/plrobjs/*/*
-hana/*
+hana
 ../lib/data.mdb
 *.o
 ../bin/*

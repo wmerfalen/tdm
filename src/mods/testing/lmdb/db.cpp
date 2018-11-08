@@ -159,7 +159,7 @@ namespace mods::testing::lmdb {
 		initialize_table_schema("player",mods::globals::db.get());
 		b_error = false;
 		auto ret = new_record("player",mods::globals::db.get(),b_error);
-		if(ret == 0 && b_error){
+		if(!std::get<0>(ret)){
 			std::cerr << "new_Record failed\n";
 		}else{
 			std::cerr << "[new_record] created\n";

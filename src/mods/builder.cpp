@@ -197,23 +197,23 @@ namespace mods::builder {
 			{ITEM_WEAR_HOLD,"HOLD"}
 		}
 	};
-	std::optional<obj_data*> instantiate_object_by_index(int index) {
+	std::optional<object_data*> instantiate_object_by_index(int index) {
 		std::size_t i = index;
 
-		if(i >= obj_proto.size()) {
+		if(i >= object_proto.size()) {
 			return std::nullopt;
 		}
 
-		object_list.push_back(obj_proto[index]);
+		object_list.push_back(object_proto[index]);
 		return &(*(object_list.end()-1));
 	}
-	std::optional<obj_data*> instantiate_object_by_vnum(obj_vnum vnum) {
-		obj_data* obj;
+	std::optional<object_data*> instantiate_object_by_vnum(object_vnum vnum) {
+		object_data* obj;
 
-		for(auto& obj_reference : obj_proto) {
-			if(obj_reference.item_number == vnum) {
-				obj = &obj_reference;
-				object_list.push_back(obj_reference);
+		for(auto& object_reference : object_proto) {
+			if(object_reference.item_number == vnum) {
+				obj = &object_reference;
+				object_list.push_back(object_reference);
 				return obj;
 			}
 		}
@@ -290,78 +290,30 @@ namespace mods::builder {
 		return {true,"Saved all zone commands successfully"};
 	}
 	bool save_zone_to_db(std::string_view name,int room_start,int room_end,int lifespan,int reset_mode) {
-		try {
-			/*
-			CREATE TABLE zone (
-				   id SERIAL,
-				   zone_start INTEGER NOT NULL,
-				   zone_end INTEGER NOT NULL,
-				   zone_name VARCHAR(64) NOT NULL,
-				   lifespan INTEGER NOT NULL,
-				   reset_mode INTEGER NOT NULL
-			   );
-			*/
-			auto txn = txn();
-			auto sql = sql_compositor("zone",&txn)
-			           .insert()
-			           .into("zone")
-			.values({
+		return db_insert("zone", {
 				{"zone_start",std::to_string(room_start)},
 				{"zone_end",std::to_string(room_end)},
 				{"zone_name",name.data()},
 				{"lifespan",std::to_string(lifespan)},
 				{"reset_mode",std::to_string(reset_mode)}
-			})
-			.sql();
-			mods::pq::exec(txn,sql);
-			mods::pq::commit(txn);
-		} catch(const std::exception& e) {
-			return false;
-		}
-
-		return true;
+			});
 	}
 	int save_to_db(room_rnum in_room) {
 		auto world_top = mods::globals::room_list.size();
 		std::size_t ir = in_room;
 
-		if(ir > world_top) {
-			return -1;
+		if(ir >= world_top) {
+			return mods::builder::ROOM_NUMBER_OUT_OF_RANGE;
 		}
 
 		if(!world[in_room].name) {
-			return -2;
+			return mods::builder::ROOM_NAME_EMPTY;
 		}
 
 		if(!world[in_room].description) {
-			return -3;
+			return mods::builder::ROOM_DESC_EMPTY;
 		}
 
-		try {
-			std::string sql;
-			/*
-			                    Table "public.room"
-			     Column     |          Type          | Collation | Nullable | Default
-			----------------+------------------------+-----------+----------+---------
-			 room_number    | integer                |           | not null |
-			 zone           | integer                |           | not null |
-			 sector_type    | integer                |           | not null |
-			 name           | character varying(256) |           | not null |
-			 description    | text                   |           | not null |
-			 ex_keyword     | character varying(256) |           |          |
-			 ex_description | text                   |           |          |
-			 light          | integer                |           |          |
-			 room_flag      | integer                |           | not null |
-			*/
-			auto check_txn = txn();
-			auto check_sql = sql_compositor("room",&check_txn)
-			                 .select("room_number")
-			                 .from("room")
-			                 .where("room_number","=",std::to_string(world[in_room].number))
-			                 .sql();
-			auto check_result = mods::pq::exec(check_txn,check_sql);
-			mods::pq::commit(check_txn);
-			sql_compositor::value_map values;
 			values["zone"] = std::to_string(world[in_room].zone);
 			values["sector_type"] = std::to_string(world[in_room].sector_type);
 			values["name"] = world[in_room].name.c_str();
@@ -384,25 +336,21 @@ namespace mods::builder {
 			sprintf(&num[0],"%d",world[in_room].room_flags);
 			values["room_flag"] = &num[0];
 
-			if(check_result.size()) {
+			auto room_record = db_get_by_meta("room","room_number",
+				std::to_string(world[ir].number));
+			if(room_record.size()){
 				/* update the record */
-				auto txn = txn();
-				auto sql = sql_compositor("room",&txn)
-				           .update("room")
-				           .set(values)
-				           .where("room_number","=",std::to_string(world[in_room].number))
-				           .sql();
-				mods::pq::exec(txn,sql);
-				mods::pq::commit(txn);
+				auto ret = db_update("room",values,room_record[0]["id"]);
+				if(!std::get<0>(ret)){
+					std::cerr << "error updating room: '" << std::get<1> << "\n";
+					return -3;
+				}
 			} else {
-				auto txn = txn();
-				auto sql = sql_compositor("room",&txn)
-				           .insert()
-				           .into("room")
-				           .values(values)
-				           .sql();
-				mods::pq::exec(txn,sql);
-				mods::pq::commit(txn);
+				auto ret = db_insert("room",values);
+				if(!std::get<0>(ret)){
+					std::cerr << "error inserting room to db: '" << std::get<1> << "\n";
+					return -2;
+				}
 			}
 
 			auto del_txn = txn();
@@ -423,7 +371,6 @@ namespace mods::builder {
 					check_sql += " AND exit_direction=";
 					check_sql += check_txn.quote(direction);
 					auto check_result = mods::pq::exec(check_txn,check_sql);
-					mods::pq::commit(check_txn);
 					auto real_room_num = world[world[in_room].dir_option[direction]->to_room].number;
 					std::map<std::string,std::string> values = {
 						{"general_description",static_cast<std::string>(world[in_room].dir_option[direction]->general_description)},
@@ -460,10 +407,6 @@ namespace mods::builder {
 					}
 				}
 			}
-		} catch(const std::exception& e) {
-			std::cerr << "error saving room #" << world[in_room].number << " (world[" << in_room << "]: " << e.what() << "\n";
-			return -1;
-		}
 
 		return 0;
 	}
@@ -752,44 +695,44 @@ namespace mods::builder {
 
 		return {true,"Successfully saved player."};
 	}
-	std::pair<bool,std::string> save_object(obj_data* obj) {
+	std::pair<bool,std::string> save_object(object_data* obj) {
 		try {
 			auto txn_01 = txn();
 			sql_compositor comp3("object",&txn_01);
 			auto sql = comp3.select("id").from("object").
-			           where("obj_item_number","=",std::to_string(obj->item_number))
+			           where("object_item_number","=",std::to_string(obj->item_number))
 			           .sql();
 			auto check_result_01 = mods::pq::exec(txn_01,sql);
 			mods::pq::commit(txn_01);
 			auto check_i = 0;
 			sql_compositor::value_map my_map;
-			my_map["obj_item_number"] = std::to_string(obj->item_number);
-			my_map["obj_flags"] = "0";
+			my_map["object_item_number"] = std::to_string(obj->item_number);
+			my_map["object_flags"] = "0";
 #define MENTOC_CHK_OBJ(item) if(!obj->item){ return {false,std::string(#item) + " is empty"}; }
 			MENTOC_CHK_OBJ(name);
 			MENTOC_CHK_OBJ(description);
 			MENTOC_CHK_OBJ(short_description);
 			MENTOC_CHK_OBJ(action_description);
-			my_map["obj_name"] = obj->name;
-			my_map["obj_description"] = obj->description;
-			my_map["obj_short_description"] = obj->short_description;
+			my_map["object_name"] = obj->name;
+			my_map["object_description"] = obj->description;
+			my_map["object_short_description"] = obj->short_description;
 
 			if(obj->action_description) {
-				my_map["obj_action_description"] = obj->action_description;
+				my_map["object_action_description"] = obj->action_description;
 			}
 
-			my_map["obj_type"] = std::to_string(obj->type);
-			my_map["obj_worn_on"] = std::to_string(obj->worn_on);
-			my_map["obj_type_data"] = "0";
+			my_map["object_type"] = std::to_string(obj->type);
+			my_map["object_worn_on"] = std::to_string(obj->worn_on);
+			my_map["object_type_data"] = "0";
 
 			if(obj->ex_description && obj->ex_description->keyword) {
-				my_map["obj_extra_keyword"] = obj->ex_description->keyword;
+				my_map["object_extra_keyword"] = obj->ex_description->keyword;
 			} else {
 				return {false,"atleast one ex_description->keyword is required"};
 			}
 
 			if(obj->ex_description && obj->ex_description->description) {
-				my_map["obj_extra_description"] = obj->ex_description->description;
+				my_map["object_extra_description"] = obj->ex_description->description;
 			} else {
 				return {false,"atleast one ex_description->description is required"};
 			}
@@ -802,7 +745,7 @@ namespace mods::builder {
 				auto update_sql = comp
 				                  .update("object")
 				                  .set(my_map)
-				                  .where("obj_item_number","=",std::to_string(obj->item_number))
+				                  .where("object_item_number","=",std::to_string(obj->item_number))
 				                  .sql();
 				auto result = mods::pq::exec(txn,update_sql);
 				mods::pq::commit(txn);
@@ -819,7 +762,7 @@ namespace mods::builder {
 				sql = comp2
 				      .select("id")
 				      .from("object")
-				      .where("obj_item_number","=",std::to_string(obj->item_number))
+				      .where("object_item_number","=",std::to_string(obj->item_number))
 				      .sql();
 				auto res = mods::pq::exec(txn4,sql);
 				mods::pq::commit(txn4);
@@ -829,12 +772,12 @@ namespace mods::builder {
 				}
 			}
 
-			switch(obj->obj_flags.type_flag) {
+			switch(obj->object_flags.type_flag) {
 				case ITEM_WEAPON:
 					auto txn3 = txn();
 					sql_compositor comp3("object_weapon",&txn3);
 					auto sql = comp3.select("id").from("object_weapon").
-					           where("obj_fk_id","=",std::to_string(check_i))
+					           where("object_number","=",std::to_string(check_i))
 					           .sql();
 					auto check_result = mods::pq::exec(txn3,sql);
 					mods::pq::commit(txn3);
@@ -844,11 +787,11 @@ namespace mods::builder {
 						sql_compositor comp("object_weapon",&txn5);
 						auto sql = comp.update("object_weapon")
 						.set({
-							{"obj_ammo_type",std::to_string(obj->weapon_type)},
-							{"obj_ammo_max",std::to_string(obj->ammo_max)},
-							{"obj_cooldown","0"},
-							{"obj_can_snipe","0"}
-						}).where("obj_fk_id","=",std::to_string(check_i))
+							{"object_ammo_type",std::to_string(obj->weapon_type)},
+							{"object_ammo_max",std::to_string(obj->ammo_max)},
+							{"object_cooldown","0"},
+							{"object_can_snipe","0"}
+						}).where("object_number","=",std::to_string(check_i))
 						.sql();
 						mods::pq::exec(txn5,sql);
 						mods::pq::commit(txn5);
@@ -857,11 +800,11 @@ namespace mods::builder {
 						sql_compositor comp("object_weapon",&txn6);
 						auto sql = comp.insert().into("object_weapon")
 						.values({
-							{"obj_fk_id",std::to_string(check_i)},
-							{"obj_ammo_max",std::to_string(obj->ammo_max)},
-							{"obj_ammo_type",std::to_string(obj->weapon_type)},
-							{"obj_cooldown","0"},
-							{"obj_can_snipe","0"}
+							{"object_number",std::to_string(check_i)},
+							{"object_ammo_max",std::to_string(obj->ammo_max)},
+							{"object_ammo_type",std::to_string(obj->weapon_type)},
+							{"object_cooldown","0"},
+							{"object_can_snipe","0"}
 						})
 						.sql();
 						mods::pq::exec(txn6,sql);
@@ -874,7 +817,7 @@ namespace mods::builder {
 			auto txn6 = mods::pq::transaction(*mods::globals::pq_con);
 			std::string sel_weapon_sql =
 			    std::string(
-			        "select id from affected_type where aff_fk_id="	//TODO: !mundane use new shit
+			        "select id from affected_type where object_number="	//TODO: !mundane use new shit
 			    ) + txn6.quote(check_i);
 			auto check_result = mods::pq::exec(txn6,sel_weapon_sql);
 			mods::pq::commit(txn6);
@@ -882,7 +825,7 @@ namespace mods::builder {
 			if(check_result.size()) {
 				auto txn8 = txn();
 				std::string sql = std::string(
-				                      "DELETE FROM affected_type where obj_fk_id=") 	//TODO: !mundane use new shit
+				                      "DELETE FROM affected_type where object_number=") 	//TODO: !mundane use new shit
 				                  + txn8.quote(check_i);
 				mods::pq::exec(txn8,sql);
 				mods::pq::commit(txn8);
@@ -890,7 +833,7 @@ namespace mods::builder {
 
 			auto txn9 = txn();
 			auto sql9 = std::string(
-			                "DELETE FROM object_flags where obj_fk_id=")
+			                "DELETE FROM object_flags where object_number=")
 			            + txn9.quote(check_i)
 			            ;
 			mods::pq::exec(txn9,sql9);
@@ -900,19 +843,19 @@ namespace mods::builder {
 			             .insert()
 			             .into("object_flags")
 			.values({
-				{"obj_fk_id",std::to_string(check_i)},
-				{"value_0",mods::util::itoa(obj->obj_flags.value[0])},
-				{"value_1",mods::util::itoa(obj->obj_flags.value[1])},
-				{"value_2",mods::util::itoa(obj->obj_flags.value[2])},
-				{"value_3",mods::util::itoa(obj->obj_flags.value[3])},
-				{"type_flag",mods::util::itoa(obj->obj_flags.type_flag)},
-				{"wear_flags",mods::util::itoa(obj->obj_flags.wear_flags)},
-				{"extra_flags",mods::util::itoa(obj->obj_flags.extra_flags)},
-				{"weight",mods::util::itoa(obj->obj_flags.weight)},
-				{"cost",mods::util::itoa(obj->obj_flags.cost)},
-				{"cost_per_day",mods::util::itoa(obj->obj_flags.cost_per_day)},
-				{"timer",mods::util::itoa(obj->obj_flags.timer)},
-				{"bitvector",mods::util::itoa(obj->obj_flags.bitvector)}
+				{"object_number",std::to_string(check_i)},
+				{"value_0",mods::util::itoa(obj->object_flags.value[0])},
+				{"value_1",mods::util::itoa(obj->object_flags.value[1])},
+				{"value_2",mods::util::itoa(obj->object_flags.value[2])},
+				{"value_3",mods::util::itoa(obj->object_flags.value[3])},
+				{"type_flag",mods::util::itoa(obj->object_flags.type_flag)},
+				{"wear_flags",mods::util::itoa(obj->object_flags.wear_flags)},
+				{"extra_flags",mods::util::itoa(obj->object_flags.extra_flags)},
+				{"weight",mods::util::itoa(obj->object_flags.weight)},
+				{"cost",mods::util::itoa(obj->object_flags.cost)},
+				{"cost_per_day",mods::util::itoa(obj->object_flags.cost_per_day)},
+				{"timer",mods::util::itoa(obj->object_flags.timer)},
+				{"bitvector",mods::util::itoa(obj->object_flags.bitvector)}
 			})
 			.sql();
 			mods::pq::exec(txn10,sql10);
@@ -926,7 +869,7 @@ namespace mods::builder {
 					auto sql = sql_compositor("affected_type",&txn7).insert()
 					           .into("affected_type")
 					.values({
-						{"aff_fk_id",std::to_string(check_i)},
+						{"object_number",std::to_string(check_i)},
 						{"aff_location",mods::util::itoa(obj->affected[i].location)},
 						{"aff_modifier", mods::util::itoa(obj->affected[i].modifier)}
 					})
@@ -947,7 +890,7 @@ namespace mods::builder {
 				               .insert()
 				               .into("extra_description")
 				.values({
-					{"obj_fk_id",std::to_string(check_i)},
+					{"object_number",std::to_string(check_i)},
 					{"extra_keyword",ex_desc->keyword},
 					{"extra_description",ex_desc->description}
 				})
@@ -1294,18 +1237,18 @@ ACMD(do_mbuild) {
 		player->pager_start();
 		*player << "{gld}::player::{/gld}\r\n";
 #define MENTOC_SHOW_OBJ_FLAGS(display_name,struct_member,flag_structure) \
-		for(auto & obj_flag : flag_structure){\
-			if(obj_flag.first == obj->struct_member){\
+		for(auto & object_flag : flag_structure){\
+			if(object_flag.first == obj->struct_member){\
 				*player << "{red}" << #display_name << "{/red}: " <<\
-					obj_flag.second << "\r\n";\
+					object_flag.second << "\r\n";\
 				break;\
 			}\
 		}
 #define MENTOC_SHOW_OBJ_BITVECTOR(display_name,struct_member,flag_structure) \
 		*player << "{red}" << #display_name << "{/red}: ";\
-		for(auto & obj_flag : flag_structure){\
-			if(obj_flag.first & obj->struct_member){\
-				*player << obj_flag.second << " ";\
+		for(auto & object_flag : flag_structure){\
+			if(object_flag.first & obj->struct_member){\
+				*player << object_flag.second << " ";\
 			}\
 		}\
 		*player << "\r\n";
@@ -1824,9 +1767,9 @@ ACMD(do_obuild) {
 
 	if(args.has_value()) {
 		mods::builder::report_status<shrd_ptr_player_t>(player,"Creating new object");
-		obj_proto.push_back({});
+		object_proto.push_back({});
 		if(player->is_executing_js()){
-			*player << "{index: " << obj_proto.size() - 1 << "}";
+			*player << "{index: " << object_proto.size() - 1 << "}";
 		}
 		mods::builder::report_success<shrd_ptr_player_t>(player,"Object created");
 		return;
@@ -1844,17 +1787,17 @@ ACMD(do_obuild) {
 		}
 
 		auto index = mods::util::stoi(arg_vec[1]);
-		obj_data * obj = nullptr;
+		object_data * obj = nullptr;
 
 		if(index.has_value()) {
 			std::size_t i = index.value();
 
-			if(i >= obj_proto.size()) {
+			if(i >= object_proto.size()) {
 				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
 				return;
 			}
 
-			obj = &obj_proto[index.value()];
+			obj = &object_proto[index.value()];
 		} else {
 			mods::builder::report_error<shrd_ptr_player_t>(player,std::string(args.value()[1]) + " is not a valid number");
 			return;
@@ -1882,7 +1825,7 @@ ACMD(do_obuild) {
 	if(args.has_value()) {
 		auto arg_vec = args.value();
 		auto i_value = mods::util::stoi(arg_vec[1]);
-		struct obj_data* obj = nullptr;
+		struct object_data* obj = nullptr;
 
 		if(!i_value.has_value()) {
 			mods::builder::report_error<shrd_ptr_player_t>(player,"Please use a valid numeric value");
@@ -1891,12 +1834,12 @@ ACMD(do_obuild) {
 			auto index = i_value.value();
 			std::size_t i = i_value.value();
 
-			if(i >= obj_proto.size()) {
+			if(i >= object_proto.size()) {
 				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
 				return;
 			}
 
-			obj = &obj_proto[index];
+			obj = &object_proto[index];
 		}
 
 		if(arg_vec.size() < 3) {
@@ -2026,15 +1969,15 @@ ACMD(do_obuild) {
 			auto index = i_value.value();
 			std::size_t i = index;
 
-			if(i >= obj_proto.size()) {
+			if(i >= object_proto.size()) {
 				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
 				return;
 			}
 
-			object_list.push_back(obj_proto[index]);
+			object_list.push_back(object_proto[index]);
 			auto obj = &(*(object_list.end() -1));
 			obj->carried_by = obj->worn_by = nullptr;
-			obj_to_room(obj,IN_ROOM(player->cd()));
+			object_to_room(obj,IN_ROOM(player->cd()));
 			mods::builder::report_success<shrd_ptr_player_t>(player,"Object created, look on the floor");
 		}
 
@@ -2045,27 +1988,27 @@ ACMD(do_obuild) {
 
 	if(args.has_value()) {
 		mods::builder::report_status<shrd_ptr_player_t>(player,"listing...");
-		unsigned obj_id = 0;
+		unsigned object_id = 0;
 		if(!player->is_executing_js()){
 			player->pager_start();
 		}
 
 		jxcomp jx; 
 		jx.array_start("objects");
-		for(auto& obj_reference : obj_proto) {
-			auto obj = &obj_reference;
+		for(auto& object_reference : object_proto) {
+			auto obj = &object_reference;
 			if(player->is_executing_js()){
 				jx.object_start("")
-					.push("index",obj_id)
+					.push("index",object_id)
 					.push("item_number",obj->item_number)
 					.push("name",obj->name)
 					.push("short_description",obj->short_description)
 				.object_end();
 			}else{
-				*player << "{gld}[" << obj_id << "]{/gld} :->{red} [" <<
+				*player << "{gld}[" << object_id << "]{/gld} :->{red} [" <<
 						obj->short_description << "]{/red}";
 			}
-			obj_id++;
+			object_id++;
 		}
 		if(player->is_executing_js()){
 			jx.array_end();
@@ -2096,17 +2039,17 @@ ACMD(do_obuild) {
 			return std::nullopt;
 		};
 		auto index = mods::util::stoi(arg_vec[1]);
-		obj_data * obj = nullptr;
+		object_data * obj = nullptr;
 
 		if(index.has_value()) {
 			std::size_t i = index.value();
 
-			if(i >= obj_proto.size()) {
+			if(i >= object_proto.size()) {
 				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
 				return;
 			}
 
-			obj = &obj_proto[index.value()];
+			obj = &object_proto[index.value()];
 		} else {
 			mods::builder::report_error<shrd_ptr_player_t>(player,"not a valid number");
 			return;
@@ -2117,15 +2060,15 @@ ACMD(do_obuild) {
 			return;
 		}
 
-		MENTOC_OBI2(obj_flags.value[0],value_0);
-		MENTOC_OBI2(obj_flags.value[1],value_1);
-		MENTOC_OBI2(obj_flags.value[2],value_2);
-		MENTOC_OBI2(obj_flags.value[3],value_3);
-		MENTOC_OBI2(obj_flags.weight,weight);
-		MENTOC_OBI2(obj_flags.cost,cost);
-		MENTOC_OBI2(obj_flags.cost_per_day,cost_per_day);
-		MENTOC_OBI2(obj_flags.timer,timer);
-		MENTOC_OBI2(obj_flags.bitvector,bitvector);
+		MENTOC_OBI2(object_flags.value[0],value_0);
+		MENTOC_OBI2(object_flags.value[1],value_1);
+		MENTOC_OBI2(object_flags.value[2],value_2);
+		MENTOC_OBI2(object_flags.value[3],value_3);
+		MENTOC_OBI2(object_flags.weight,weight);
+		MENTOC_OBI2(object_flags.cost,cost);
+		MENTOC_OBI2(object_flags.cost_per_day,cost_per_day);
+		MENTOC_OBI2(object_flags.timer,timer);
+		MENTOC_OBI2(object_flags.bitvector,bitvector);
 
 		//TODO !mundane make these flag code fragments into a function
 		if(arg_vec[2].compare("extra_flags") == 0) {
@@ -2135,14 +2078,14 @@ ACMD(do_obuild) {
 			}
 
 			auto flag = arg_vec.begin() + 3;
-			obj->obj_flags.bitvector = 0;
+			obj->object_flags.bitvector = 0;
 
 			for(; flag != arg_vec.end(); ++flag) {
 				bool found = false;
 
 				for(auto& ex_flag : mods::builder::extra_flags) {
 					if(ex_flag.second.compare(*flag) == 0) {
-						obj->obj_flags.bitvector |= ex_flag.first;
+						obj->object_flags.bitvector |= ex_flag.first;
 						found = true;
 						break;
 					}
@@ -2162,12 +2105,12 @@ ACMD(do_obuild) {
 			}
 
 			auto flag = arg_vec.begin() + 3;
-			obj->obj_flags.type_flag = 0;
+			obj->object_flags.type_flag = 0;
 			bool found = false;
 
 			for(auto& type_flag : mods::builder::type_flags) {
 				if(type_flag.second.compare(*flag) == 0) {
-					obj->obj_flags.type_flag = type_flag.first;
+					obj->object_flags.type_flag = type_flag.first;
 					found = true;
 					break;
 				}
@@ -2185,14 +2128,14 @@ ACMD(do_obuild) {
 			}
 
 			auto flag = arg_vec.begin() + 3;
-			obj->obj_flags.wear_flags = 0;
+			obj->object_flags.wear_flags = 0;
 
 			for(; flag != arg_vec.end(); ++flag) {
 				bool found = false;
 
 				for(auto& wear_flag : mods::builder::wear_flags) {
 					if(wear_flag.second.compare(*flag) == 0) {
-						obj->obj_flags.wear_flags |= wear_flag.first;
+						obj->object_flags.wear_flags |= wear_flag.first;
 						found = true;
 						break;
 					}
@@ -2223,17 +2166,17 @@ ACMD(do_obuild) {
 			}
 
 			auto index = mods::util::stoi(arg_vec[1]);
-			obj_data * obj = nullptr;
+			object_data * obj = nullptr;
 
 			if(index.has_value()) {
 				std::size_t i = index.value();
 
-				if(i >= obj_proto.size()) {
+				if(i >= object_proto.size()) {
 					mods::builder::report_error<shrd_ptr_player_t>(player,"Object index Out of bounds");
 					return;
 				}
 
-				obj = &obj_proto[index.value()];
+				obj = &object_proto[index.value()];
 			} else {
 				mods::builder::report_error<shrd_ptr_player_t>(player,"not a valid number");
 				return;
@@ -2252,17 +2195,17 @@ ACMD(do_obuild) {
 
 		if(arg_vec[2].compare("set") == 0) {
 			auto index = mods::util::stoi(arg_vec[1]);
-			obj_data * obj = nullptr;
+			object_data * obj = nullptr;
 
 			if(index.has_value()) {
 				std::size_t i = index.value();
 
-				if(i >= obj_proto.size()) {
+				if(i >= object_proto.size()) {
 					mods::builder::report_error<shrd_ptr_player_t>(player," Out of bounds");
 					return;
 				}
 
-				obj = &obj_proto[index.value()];
+				obj = &object_proto[index.value()];
 			} else {
 				mods::builder::report_error<shrd_ptr_player_t>(player,"not a valid number");
 				return;
@@ -2310,17 +2253,17 @@ ACMD(do_obuild) {
 		}
 
 		auto index = mods::util::stoi(arg_vec[1]);
-		obj_data * obj = nullptr;
+		object_data * obj = nullptr;
 
 		if(index.has_value()) {
 			std::size_t i = index.value();
 
-			if(i >= obj_proto.size()) {
+			if(i >= object_proto.size()) {
 				mods::builder::report_error<shrd_ptr_player_t>(player," Out of bounds");
 				return;
 			}
 
-			obj = &obj_proto[index.value()];
+			obj = &object_proto[index.value()];
 		} else {
 			mods::builder::report_error<shrd_ptr_player_t>(player,"Not a valid number");
 			return;
@@ -2359,8 +2302,8 @@ ACMD(do_obuild) {
 		        "{red}weapon_ammo_max: {/red} " << obj->ammo_max << "\r\n" <<
 		        "{red}weapon_holds_ammo: {/red}: " << obj->holds_ammo << "\r\n" <<
 		        "{gld}::Wear Flags::{/gld}\r\n" <<
-		        "{red}value: {/red}" << std::to_string(obj->obj_flags.wear_flags) <<  "\r\n";
-#define MENTOC_WEAR(a){ if(obj->obj_flags.wear_flags & a){*player << #a << ", ";} }
+		        "{red}value: {/red}" << std::to_string(obj->object_flags.wear_flags) <<  "\r\n";
+#define MENTOC_WEAR(a){ if(obj->object_flags.wear_flags & a){*player << #a << ", ";} }
 		MENTOC_WEAR(ITEM_WEAR_TAKE);
 		MENTOC_WEAR(ITEM_WEAR_FINGER);
 		MENTOC_WEAR(ITEM_WEAR_NECK);
@@ -2377,7 +2320,7 @@ ACMD(do_obuild) {
 		MENTOC_WEAR(ITEM_WEAR_WIELD);
 		MENTOC_WEAR(ITEM_WEAR_HOLD);
 		*player << "{gld}::Type::{/gld}\r\n";
-#define MENTOC_TYPE(a){ if(obj->obj_flags.type_flag == a){*player << #a << "\r\n"; } }
+#define MENTOC_TYPE(a){ if(obj->object_flags.type_flag == a){*player << #a << "\r\n"; } }
 		MENTOC_TYPE(ITEM_LIGHT);
 		MENTOC_TYPE(ITEM_SCROLL);
 		MENTOC_TYPE(ITEM_WAND);
@@ -2402,7 +2345,7 @@ ACMD(do_obuild) {
 		MENTOC_TYPE(ITEM_BOAT);
 		MENTOC_TYPE(ITEM_FOUNTAIN);
 		*player << "{gld}::Bitvector::{/gld}\r\n";
-#define MENTOC_BITVECTOR(a){ if(obj->obj_flags.bitvector & a){*player << #a << "\r\n"; } }
+#define MENTOC_BITVECTOR(a){ if(obj->object_flags.bitvector & a){*player << #a << "\r\n"; } }
 		MENTOC_BITVECTOR(ITEM_GLOW);
 		MENTOC_BITVECTOR(ITEM_HUM);
 		MENTOC_BITVECTOR(ITEM_NORENT);
@@ -2438,15 +2381,15 @@ ACMD(do_obuild) {
 		}
 
 #define MENTOC_SHOW_FLAG(member,display) *player << "{red}" << #display << "{/red}: " << obj->member << "\r\n";
-		MENTOC_SHOW_FLAG(obj_flags.value[0],value_0);
-		MENTOC_SHOW_FLAG(obj_flags.value[1],value_1);
-		MENTOC_SHOW_FLAG(obj_flags.value[2],value_2);
-		MENTOC_SHOW_FLAG(obj_flags.value[3],value_3);
-		MENTOC_SHOW_FLAG(obj_flags.weight,weight);
-		MENTOC_SHOW_FLAG(obj_flags.cost,cost);
-		MENTOC_SHOW_FLAG(obj_flags.cost_per_day,cost_per_day);
-		MENTOC_SHOW_FLAG(obj_flags.timer,timer);
-		MENTOC_SHOW_FLAG(obj_flags.bitvector,bitvector);
+		MENTOC_SHOW_FLAG(object_flags.value[0],value_0);
+		MENTOC_SHOW_FLAG(object_flags.value[1],value_1);
+		MENTOC_SHOW_FLAG(object_flags.value[2],value_2);
+		MENTOC_SHOW_FLAG(object_flags.value[3],value_3);
+		MENTOC_SHOW_FLAG(object_flags.weight,weight);
+		MENTOC_SHOW_FLAG(object_flags.cost,cost);
+		MENTOC_SHOW_FLAG(object_flags.cost_per_day,cost_per_day);
+		MENTOC_SHOW_FLAG(object_flags.timer,timer);
+		MENTOC_SHOW_FLAG(object_flags.bitvector,bitvector);
 		//TODO !mundane make these flag code fragments into a function
 		player->pager_end();
 		player->page(0);
@@ -2480,17 +2423,17 @@ ACMD(do_obuild) {
 			return std::nullopt;
 		};
 		auto index = mods::util::stoi(args.value()[1]);
-		obj_data * obj = nullptr;
+		object_data * obj = nullptr;
 
 		if(index.has_value()) {
 			std::size_t i = index.value();
 
-			if(i >= obj_proto.size()) {
+			if(i >= object_proto.size()) {
 				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
 				return;
 			}
 
-			obj = &obj_proto[index.value()];
+			obj = &object_proto[index.value()];
 		}
 
 		if(!obj) {
@@ -2709,17 +2652,17 @@ ACMD(do_zbuild) {
 		        "  |:: zbuild delete 1\r\n" <<
 				" zbuild mob <zone_id> <mob_vnum> <room_vnum> <max> <if_flag>\r\n" <<
 				"  |--> places the mob identified by mob_vnum in the room room_vnum\r\n" <<
-				" zbuild obj <zone_id> <obj_vnum> <room_vnum> <max> <if_flag>\r\n" <<
-				"  |--> places object obj_vnum in room room_vnum\r\n" <<
-				" zbuild obj2mob <zone_id> <obj_vnum> <mob_vnum> <max> <if_flag>\r\n" <<
-				"  |--> gives object obj_vnum to mob mob_vnum\r\n" <<
-				" zbuild obj2obj <zone_id> <obj_vnum> <obj_vnum2> <max> <if_flag>\r\n" <<
-				"  |--> places object obj_vnum into object obj_vnum2\r\n" <<
+				" zbuild obj <zone_id> <object_vnum> <room_vnum> <max> <if_flag>\r\n" <<
+				"  |--> places object object_vnum in room room_vnum\r\n" <<
+				" zbuild obj2mob <zone_id> <object_vnum> <mob_vnum> <max> <if_flag>\r\n" <<
+				"  |--> gives object object_vnum to mob mob_vnum\r\n" <<
+				" zbuild obj2obj <zone_id> <object_vnum> <object_vnum2> <max> <if_flag>\r\n" <<
+				"  |--> places object object_vnum into object object_vnum2\r\n" <<
 				"\r\n" <<
 				" /-------------------------------------------------------------\\\r\n" <<
 				" | P A V E M E N T S  S Y S T E M                   version 0.1|\r\n" <<
 				" |_____________________________________________________________/\r\n" <<
-				" zbuild pave <mob|obj> <mob_vnum|obj_vnum>\r\n" <<
+				" zbuild pave <mob|obj> <mob_vnum|object_vnum>\r\n" <<
 				"  |____[example]\r\n" <<
 				"  |:: zbuild pave mob 1050\r\n" <<
 				"  |:: (remembers the mob with vnum of 1050. You can then type 'zbuild here'\r\n" <<

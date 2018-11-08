@@ -244,7 +244,7 @@ extern zone_rnum top_of_zone_table;
 extern std::deque<mods::descriptor_data> descriptor_list;
 extern struct player_special_data dummy_mob;
 
-extern struct index_data *mob_index;
+extern std::vector<index_data> mob_index;
 extern mob_rnum top_of_mobt;
 
 extern struct index_data *obj_index;

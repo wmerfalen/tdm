@@ -31,6 +31,8 @@
 #include "mods/crypto.hpp"
 
 /* external variables */
+extern int destroy_socket(socket_t&);
+extern std::size_t handle_disconnects();
 extern bool parse_sql_player(const char*,char_data*);
 extern room_rnum r_mortal_start_room;
 extern room_rnum r_immort_start_room;
@@ -61,7 +63,8 @@ void read_aliases(struct char_data *ch);
 void delete_aliases(const char *charname);
 
 /* local functions */
-int perform_dupe_check(mods::descriptor_data d);
+int64_t perform_dupe_check(mods::descriptor_data& d);
+int64_t perform_dupe_check(std::shared_ptr<mods::player>);
 struct alias_data *find_alias(struct alias_data *alias_list, char *str);
 void free_alias(struct alias_data *a);
 void perform_complex_alias(struct txt_q *input_q, char *orig, struct alias_data *a);
@@ -119,6 +122,7 @@ ACMD(do_help);
 ACMD(do_hide);
 ACMD(do_hit);
 ACMD(do_house);
+ACMD(do_idle);
 ACMD(do_insult);
 ACMD(do_inventory);
 ACMD(do_invis);
@@ -497,6 +501,10 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "recall"  , POS_RESTING , do_recall   , 0, 0 },
 	{ "givemegold"  , POS_RESTING , do_givemegold   , 0, 0 },
 	{ "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
+	/** !NOTE: this is for simulating the 'pulled into a void' 
+	 * behaviour. It's useful for testing.
+	 */
+	{ "idle"  , POS_RESTING , do_idle   , 0, 0 },
 	{ "heal"  , POS_RESTING , do_heal   , 0, 0 },
 	{ "newjs"  , POS_RESTING , do_newjs   , LVL_GOD, 0 },
 	{ "jstest"  , POS_RESTING , do_jstest   , LVL_GOD, 0 },
@@ -1275,61 +1283,34 @@ int _parse_name(char *arg, char *name) {
 #define USURP		2
 #define UNSWITCH	3
 
+
 /* This function seems a bit over-extended. */
-int perform_dupe_check(mods::descriptor_data d) {
-	struct char_data *target = NULL, *ch, *next_ch;
-	int mode = 0;
-
-	int id = GET_IDNUM(d.character);
-
-	/*
-	 * Now that this descriptor has successfully logged in, disconnect all
-	 * other descriptors controlling a character with the same ID number.
-	 */
-
-	for(auto & k : descriptor_list){
-		if(k == d) {
-			continue;
-		}
-
-		if(k.original && (GET_IDNUM(k.original) == id)) {
-			/* Original descriptor was switched, booting it and restoring normal body control. */
-
-			write_to_output(d, "\r\nMultiple login detected -- disconnecting.\r\n");
-			STATE(k) = CON_CLOSE;
-
-			if(!target) {
-				target = k.original;
-				mode = UNSWITCH;
-			}
-
-			if(k.character) {
-				k.character->desc->clear();
-			}
-
-			k.character = NULL;
-			k.original = NULL;
-		} else if(k.character && GET_IDNUM(k.character) == id && k.original) {
-			/* Character taking over their own body, while an immortal was switched to it. */
-
-			do_return(k.character, NULL, 0, 0);
-		} else if(k.character && GET_IDNUM(k.character) == id) {
-			/* Character taking over their own body. */
-
-			if(!target && STATE(k) == CON_PLAYING) {
-				write_to_output(k, "\r\nThis body has been usurped!\r\n");
-				target = k.character;
-				mode = USURP;
-			}
-
-			k.character->desc->clear();
-			k.character = NULL;
-			k.original = NULL;
-			write_to_output(k, "\r\nMultiple login detected -- disconnecting.\r\n");
-			STATE(k) = CON_CLOSE;
+int64_t perform_dupe_check(std::shared_ptr<mods::player> p){
+	std::string name = p->name();
+	p->desc().set_state(CON_PLAYING);
+	int64_t kicked = 0;
+	for(auto& player_ptr : mods::globals::player_list){
+		std::cerr << "perform_dupe_check[debug]->'" << 
+			"p->uuid(): " << p->uuid() << "|player_ptr->uuid(): " <<
+			player_ptr->uuid() << ". p->name(): '" << p->name() << "'|'" <<
+			player_ptr->name().c_str() << "'. p->time(): '" << p->time() << "'|'" << 
+			player_ptr->time() << "'\n";
+		if(p->uuid() != player_ptr->uuid() && 
+				name.compare(player_ptr->name().c_str()) == 0 &&
+			p->time() > player_ptr->time()){
+			std::cerr << "perform_dupe_check[kicking]->'" <<
+				player_ptr->uuid() << "'|desc:'" << player_ptr->desc().descriptor << 
+				"'|p->desc().descriptor:'" << p->desc().descriptor << 
+				"'\n";
+			player_ptr->desc().set_state(CON_CLOSE);
+			++kicked;
 		}
 	}
+	handle_disconnects();
+	return kicked;
+}
 
+int64_t perform_dupe_check(mods::descriptor_data& d) {
 	/*
 	 * now, go through the character list, deleting all characters that
 	 * are not already marked for deletion from the above step (i.e., in the
@@ -1339,6 +1320,7 @@ int perform_dupe_check(mods::descriptor_data d) {
 	 * duplicates, though theoretically none should be able to exist).
 	 */
 
+	/*
 	for(ch = character_list; ch; ch = next_ch) {
 		next_ch = ch->next;
 
@@ -1346,28 +1328,28 @@ int perform_dupe_check(mods::descriptor_data d) {
 			continue;
 		}
 
-		if(GET_IDNUM(ch) != id) {
+		if(ch->uuid != id) {
 			continue;
 		}
 
-		/* ignore chars with descriptors (already handled by above step) */
+		// ignore chars with descriptors (already handled by above step) 
 		if(ch->has_desc) {
 			continue;
 		}
 
-		/* don't extract the target char we've found one already */
+		// don't extract the target char we've found one already 
 		if(ch == target) {
 			continue;
 		}
 
-		/* we don't already have a target and found a candidate for switching */
+		// we don't already have a target and found a candidate for switching 
 		if(!target) {
 			target = ch;
 			mode = RECON;
 			continue;
 		}
 
-		/* we've found a duplicate - blow him away, dumping his eq in limbo. */
+		// we've found a duplicate - blow him away, dumping his eq in limbo. 
 		if(IN_ROOM(ch) != NOWHERE) {
 			char_from_room(ch);
 		}
@@ -1376,13 +1358,13 @@ int perform_dupe_check(mods::descriptor_data d) {
 		extract_char(ch);
 	}
 
-	/* no target for switching into was found - allow login to continue */
+	// no target for switching into was found - allow login to continue 
 	if(!target) {
 		return (0);
 	}
 
-	/* Okay, we've found a target.  Connect d to target. */
-	free_char(d.character); /* get rid of the old char */
+	// Okay, we've found a target.  Connect d to target. 
+	//free_char(d.character); // get rid of the old char 
 	d.character = target;
 	*d.character->desc = d;
 	d.original = NULL;
@@ -1412,6 +1394,7 @@ int perform_dupe_check(mods::descriptor_data d) {
 			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d.character)), TRUE, "%s [%s] has reconnected.", GET_NAME(d.character).c_str(), d.host.c_str());
 			break;
 	}
+	*/
 
 	return (1);
 }
@@ -1464,6 +1447,7 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 					//	d("con-name-cnfrm");
 					//	d.set_state(CON_NAME_CNFRM);
 					//} else {
+						p->cd()->player.name.assign(tmp_ptr.c_str());
 						/* undo it just in case they are set */
 						REMOVE_BIT(PLR_FLAGS(p->cd()),
 								PLR_WRITING | PLR_MAILING | PLR_CRYO);
@@ -1547,23 +1531,33 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 				std::fill(outbuf.begin(),outbuf.end(),0);
 				char_data temp_char;
 
-				if(0 == mods::crypto::encrypt(GET_PASSWD(p->cd()).c_str(), outbuf)){
-					//
-				}else{
-					mudlog(BRF, LVL_GOD, TRUE, "Bad PW: %s [%s]", GET_NAME(p->cd()).c_str(), d.host.c_str());
-					GET_BAD_PWS(p->cd())++;
-					/** TODO: make sure save_char is working. It currently seems not to be working properly. */
-					save_char(p->cd());
-
-					if(++(d.bad_pws) >= max_bad_pws) {	/* 3 strikes and you're out. */
-						write_to_output(d, "Wrong password... disconnecting.\r\n");
-						d.set_state(CON_CLOSE);
-					} else {
-						write_to_output(d, "Wrong password.\r\nPassword: ");
-						echo_off(d);
+				bool authenticated = false;
+				std::string pw(arg);
+				std::string compare;
+				if(0 == mods::crypto::encrypt(pw, outbuf)){
+					std::copy(outbuf.begin(),outbuf.end(),std::back_inserter(compare));
+					std::string user_id = db_get("player",db_key({"meta","name",p->name()}));
+					if(user_id.length()){
+						std::cerr << "user_id: " << user_id << "\n";
+						std::string hashed_pw = db_get("player",db_key({"password",user_id}));
+						authenticated = hashed_pw.compare(compare) == 0;
 					}
+				}
+				if(!authenticated){
+						mudlog(BRF, LVL_GOD, TRUE, "Bad PW: %s [%s]", GET_NAME(p->cd()).c_str(), d.host.c_str());
+						GET_BAD_PWS(p->cd())++;
+						/** TODO: make sure save_char is working. It currently seems not to be working properly. */
+						save_char(p->cd());
 
-					return;
+						if(++(d.bad_pws) >= max_bad_pws) {	/* 3 strikes and you're out. */
+							write_to_output(d, "Wrong password... disconnecting.\r\n");
+							d.set_state(CON_CLOSE);
+						} else {
+							write_to_output(d, "Wrong password.\r\nPassword: ");
+							echo_off(d);
+						}
+
+						return;
 				}
 
 				/* Password was correct. */
@@ -1587,9 +1581,7 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 				}
 
 				/* check and make sure no other copies of this player are logged in */
-				if(perform_dupe_check(d)) {
-					return;
-				}
+				perform_dupe_check(p);
 
 				if(GET_LEVEL(p->cd()) >= LVL_IMMORT) {
 					write_to_output(d, "%s", imotd);
@@ -1723,8 +1715,6 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 
 case CON_MENU: {		/* get selection from main menu  */
 								 d("menu");
- room_vnum load_room;
-
  switch(*arg) {
 	 case '0':
 		 write_to_output(d, "Goodbye.\r\n");
@@ -1744,37 +1734,44 @@ case CON_MENU: {		/* get selection from main menu  */
 			* We have to place the character in a room before equipping them
 			* or equip_char() will gripe about the person in NOWHERE.
 			*/
-		 d("load_room");
-		 if((load_room = GET_LOADROOM(p->cd())) != NOWHERE) {
-			 load_room = real_room(load_room);
-		 }
-
-		 /* If char was saved with NOWHERE, or real_room above failed... */
-		 if(load_room == NOWHERE) {
-			 if(GET_LEVEL(p->cd()) >= LVL_IMMORT) {
-				 d("placing in immor room");
-				 load_room = r_immort_start_room;
-			 } else {
-				 d("placing char i mortal_start_room: " << r_mortal_start_room);
-				 load_room = r_mortal_start_room;
-			 }
-		 }
-
-		 if(PLR_FLAGGED(p->cd(), PLR_FROZEN)) {
-			 d("player being placed in frozen start room");
-			 load_room = r_frozen_start_room;
-		 }
-
-		 send_to_char(p->cd(), "%s", WELC_MESSG);
-		 char_to_room(p->cd(), load_room);
-		 load_result = Crash_load(p->cd());
-
-		 /* Clear their load room if it's not persistant. */
-		 if(!PLR_FLAGGED(p->cd(), PLR_LOADROOM)) {
-			 GET_LOADROOM(p->cd()) = NOWHERE;
-		 }
-
-		 save_char(p->cd());
+//		 d("load_room");
+//		 if((load_room = GET_LOADROOM(p->cd())) != NOWHERE) {
+//			 load_room = real_room(load_room);
+//		 }
+//		 d("user's load_room: " << load_room);
+//
+//		 /* If char was saved with NOWHERE, or real_room above failed... */
+//		 if(load_room == NOWHERE) {
+//			 if(GET_LEVEL(p->cd()) >= LVL_IMMORT) {
+//				 d("placing in immor room");
+//				 load_room = r_immort_start_room;
+//			 } else {
+//				 d("placing char i mortal_start_room: " << r_mortal_start_room);
+//				 load_room = r_mortal_start_room;
+//			 }
+//		 }
+//
+//		 if(PLR_FLAGGED(p->cd(), PLR_FROZEN)) {
+//			 d("player being placed in frozen start room");
+//			 load_room = r_frozen_start_room;
+//		 }
+//
+//		 send_to_char(p->cd(), "%s", WELC_MESSG);
+//		 char_to_room(p->cd(), load_room);
+#ifdef __MENTOC_RENT_DYNAMICS__
+//		 load_result = Crash_load(p->cd());
+#endif
+//
+//		 /* Clear their load room if it's not persistant. */
+//		 if(!PLR_FLAGGED(p->cd(), PLR_LOADROOM)) {
+//			 GET_LOADROOM(p->cd()) = NOWHERE;
+//		 }
+//
+		 //save_char(p->cd());
+		 /** !TODO: create an is_immortal() function and call it like this:
+			* if(is_immortal(p)){ ... load player into immortal room .. }
+			*/
+		 IN_ROOM(p->cd()) = config::rooms::mortal_start();
 
 		 act("$n has entered the game.", TRUE, p->cd(), 0, 0, TO_ROOM);
 
@@ -1792,10 +1789,12 @@ case CON_MENU: {		/* get selection from main menu  */
 			 send_to_char(p->cd(), "You have mail waiting.\r\n");
 		 }
 
+#ifdef __MENTOC_RENT_DYNAMICS__
 		 if(load_result == 2) {	/* rented items lost */
 			 send_to_char(p->cd(), "\r\n\007You could not afford your rent!\r\n"
 					 "Your possesions have been donated to the Salvation Army!\r\n");
 		 }
+#endif
 
 		 d.has_prompt = 0;
 		 break;

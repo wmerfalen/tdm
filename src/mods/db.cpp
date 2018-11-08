@@ -143,11 +143,7 @@ tuple_status_t lmdb_write_values(
 		const mutable_map_t& values){
 	ptr_db->renew_txn();
 	for(auto & [key,value] : values){
-		auto ptr_if = std::get_if<std::string>(&value);
-		if(ptr_if == nullptr){
-			continue;
-		}
-		auto ret = ptr_db->put(db_key({table,key,str_id}),*ptr_if);
+		auto ret = ptr_db->put(db_key({table,key,str_id}),value);
 		if(ret){
 			ptr_db->dump_status();
 			ptr_db->abort_txn();

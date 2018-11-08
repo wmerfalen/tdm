@@ -14,6 +14,6 @@ src/mods/acl/tests/original.conf
 syslog*
 *a.out*
 js-warnings
-lib
+lib/etc/time
 callgrind.out*
 .killscript
