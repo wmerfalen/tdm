@@ -1,8 +1,4 @@
-<?php 
-require(dirname(__FILE__) . '/../vendor/autoload.php');
-use siegemud\src\Page as Page;
-Page::fetch_or_capture('2018-11-07','Dynamics First, Optimizations Second.');
-?>
+<?php require_once(dirname(__FILE__) . '/init.php'); \siege\start('2018-11-07','Dynamics First, Optimizations Second.'); ?>
 <p class='content'>
 <b>It&apos;s easy</b> to fall into the trap of <i>endless optimization</i>.
 Especially when tasked with upgrading a codebase that has been hacked on by
@@ -48,7 +44,4 @@ game is nothing if nobody likes it.
 	<?php echo Page::get()->signature(); ?>
 </p>
 <?php
-Page::get()
-	->end_capture()
-	->print(); 
-?>
+\siege\end();
