@@ -9,6 +9,52 @@ namespace mods::schema {
 	using schema_list_t = std::map<std::string,std::vector<std::string>>;
 	constexpr static const char* PLACE_HOLDER_VALUE = "\x01";
 /*!TODO: Implement boost::hana into this class.*/
+	static schema_list_t db_meta_values = {
+		{"player",{
+								"meta|player_name"
+							}
+		},
+		{"affected_type",{
+											 "meta|object_number"
+										 }
+		},
+		{"extra_description",{
+											 "meta|object_number"
+										 }
+		},
+		{"mobile",{
+								"meta|mob_name",
+								"meta|mob_virtual_number",
+								"meta|mob_class"
+							}
+		},
+		{"object_flags",{
+											"meta|object_number"
+										}
+		},
+		{"object_weapon",{
+											 "meta|object_number"
+										 }
+		},
+		{"room",{
+								"meta|room_number",
+								"meta|zone",
+								"meta|name"
+						}
+		},
+		{"room_direction_data",{
+															 "meta|room_number"
+													 }
+		},
+		{"zone",{
+							"meta|zone_name"
+						}
+		},
+		{"zone_data",{
+									 "meta|zone_id"
+								 }
+		}
+	};
 	static schema_list_t db = {
 			{"player",{
 									"player_id",
@@ -49,8 +95,7 @@ namespace mods::schema {
 									"player_title",
 									"player_hometown",
 									"player_password",
-									"player_type",
-									"meta|player_name"
+									"player_type"
 								}
 			},
 			{"affected_type",{
@@ -58,7 +103,6 @@ namespace mods::schema {
 												 "object_number",
 												 "aff_location",
 												 "aff_modifier",
-												 "meta|object_number"
 											 }
 			},
 
@@ -67,7 +111,6 @@ namespace mods::schema {
 														 "object_number",
 														 "extra_keyword",		
 														 "extra_description",
-														 "meta|object_number"
 													 }
 			},
 
@@ -184,9 +227,6 @@ namespace mods::schema {
 								"ex_description",		
 								"light",		
 								"room_flag",
-								"meta|room_number",
-								"meta|zone",
-								"meta|name"
 							}
 			},
 
@@ -199,7 +239,6 @@ namespace mods::schema {
 															 "exit_info",		
 															 "exit_key",		
 															 "to_room",
-															 "meta|room_number"
 														 }
 			},
 
@@ -223,7 +262,6 @@ namespace mods::schema {
 								"zone_name",
 								"lifespan",
 								"reset_mode",
-								"meta|zone_name"
 							}
 			},
 

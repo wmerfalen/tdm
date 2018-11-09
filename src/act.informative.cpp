@@ -350,7 +350,15 @@ void diag_char_to_char(struct char_data *i, struct char_data *ch) {
 		{  -1, "is bleeding awfully from big wounds."	},
 	};
 	int percent, ar_index;
-	const char *pers = PERS(i, ch);
+	mods::string pers;
+	if(i == ch){
+		pers = i->player.name.c_str();
+	}else{
+		pers = PERS(i, ch);
+		if(!pers){
+			pers = "Someone";
+		}
+	}
 
 	if(GET_MAX_HIT(i) > 0) {
 		percent = (100 * GET_HIT(i)) / GET_MAX_HIT(i);
@@ -363,7 +371,7 @@ void diag_char_to_char(struct char_data *i, struct char_data *ch) {
 			break;
 		}
 
-	send_to_char(ch, "%c%s %s\r\n", UPPER(*pers), pers + 1, diagnosis[ar_index].text);
+	send_to_char(ch, "%s %s\r\n", pers.c_str(), diagnosis[ar_index].text);
 }
 
 

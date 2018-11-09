@@ -998,8 +998,19 @@ namespace mods {
 		using buffer_type_t = std::string;
 		using history_type_t = std::array<mods::string,HISTORY_SIZE>;
 		using history_pos_type_t = std::size_t;
+		enum queue_behaviour_enum_t {
+			NORMAL = 0,
+			IGNORE_ALL,
+			REDIRECT_TO_PLAYER,
+			REDIRECT_TO_FILESYSTEM,
+			REDIRECT_TO_DB
+		};
 		constexpr static size_t OUTPUT_SIZE = LARGE_BUFSIZE+1;
 		descriptor_data(){ clear(); }
+		descriptor_data(queue_behaviour_enum_t queue_behaviour){ 
+			clear();
+			set_queue_behaviour(queue_behaviour);
+		}
 		~descriptor_data() = default;
 		operator bool() const {
 			return !!connected;
@@ -1014,11 +1025,18 @@ namespace mods {
 			max_str = 0;mail_to = 0;has_prompt = 0;
 			history_pos = 0;
 			has_output = false;
+			m_queue_behaviour = queue_behaviour_enum_t::NORMAL;
 			inbuf.clear();
 			last_input.clear();
 			small_outbuf.clear();
 			output.clear();
 			host.clear();
+		}
+		void set_queue_behaviour(queue_behaviour_enum_t queue_behaviour){ 
+			m_queue_behaviour = queue_behaviour;
+		}
+		queue_behaviour_enum_t get_queue_behaviour() const {
+			return m_queue_behaviour;
 		}
 		void set_state(int c) { connected = c; }
 		socket_t	descriptor;	/* file descriptor for socket		*/
@@ -1053,6 +1071,7 @@ namespace mods {
 		size_t queue_output(const std::string &s);
 		size_t flush_output();
 		private:
+		queue_behaviour_enum_t m_queue_behaviour;
 		std::string output;		/* ptr to the current output buffer	*/
 	};
 };

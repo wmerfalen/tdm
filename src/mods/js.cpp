@@ -2,11 +2,43 @@
 #include "quests.hpp"
 #include "util.hpp"
 #include "extern.hpp"
+#include "loops.hpp"
+#include "../spells.h"
 #define DT_FORMAT "{player_name}:mob_death_trigger"
 extern void command_interpreter(struct char_data* ch,char* argument);
 extern void hit(struct char_data* ch,struct char_data* vict,int type);
+extern void affect_from_char(struct char_data *ch, int type);
 namespace mods {
 	namespace js {
+		namespace utils {
+			struct find_player_payload_t {
+				find_player_payload_t(std::string_view name) : player_name(name.data()), found(false){
+					player = nullptr;
+				}
+				std::string player_name;
+				bool found;
+				std::shared_ptr<mods::player> player;
+			};
+			static inline bool __find_player_by_name(std::shared_ptr<mods::player> player_ptr,find_player_payload_t* param){
+				param->found = false;
+				std::cerr << "current-player(find):'" << player_ptr->name().c_str() << "'\nLooking for: '" << param->player_name.c_str() << "'\n";
+					if(std::string(player_ptr->name().c_str()).compare(param->player_name.c_str()) == 0){
+						param->found = true;
+						param->player = player_ptr;
+						return false;//False means stop looping, we're done. 
+					}else{
+						return true;//True means keep looping, we're not done
+					}
+			}
+			std::shared_ptr<mods::player> find_player_by_name(std::string_view name,bool& found){
+				find_player_payload_t payload(name);
+				mods::loops::foreach_player<mods::js::utils::find_player_payload_t>(
+						__find_player_by_name, &payload);
+				found = payload.found;
+				return payload.player;
+			}
+
+		};//end utils namespace
 		int load_library(duk_context*,std::string_view);
 		constexpr static const char * JS_PATH = "../lib/js/";
 		constexpr static const char * JS_TEST_PATH = "../lib/js/tests/";
@@ -80,8 +112,111 @@ namespace mods {
 			duk_push_number(ctx,0);
 			return 0;
 		}
+		static duk_ret_t modify_affected_flags(duk_context *ctx) {
+			/** TODO: get array from duktape */
+			std::string name = duk_to_string(ctx,0);
+			std::string key = duk_to_string(ctx,1);
+			bool on = (bool)duk_to_number(ctx,2);
+				bool found = false;
+				auto player_ptr = utils::find_player_by_name(name,found);
+				if(!found){
+					duk_push_number(ctx,-1);
+					return 1;
+				}
+
+if(key.compare("BLIND") == 0){ if(on){ player_ptr->affect(AFF_BLIND); }else{ player_ptr->remove_affect(AFF_BLIND); }}
+else if(key.compare("INVISIBLE") == 0){ if(on){ player_ptr->affect(AFF_INVISIBLE); }else{ player_ptr->remove_affect(AFF_INVISIBLE); }}
+else if(key.compare("DETECT_ALIGN") == 0){ if(on){ player_ptr->affect(AFF_DETECT_ALIGN); }else{ player_ptr->remove_affect(AFF_DETECT_ALIGN); }}
+else if(key.compare("DETECT_INVIS") == 0){ if(on){ player_ptr->affect(AFF_DETECT_INVIS); }else{ player_ptr->remove_affect(AFF_DETECT_INVIS); }}
+else if(key.compare("DETECT_MAGIC") == 0){ if(on){ player_ptr->affect(AFF_DETECT_MAGIC); }else{ player_ptr->remove_affect(AFF_DETECT_MAGIC); }}
+else if(key.compare("SENSE_LIFE") == 0){ if(on){ player_ptr->affect(AFF_SENSE_LIFE); }else{ player_ptr->remove_affect(AFF_SENSE_LIFE); }}
+else if(key.compare("WATERWALK") == 0){ if(on){ player_ptr->affect(AFF_WATERWALK); }else{ player_ptr->remove_affect(AFF_WATERWALK); }}
+else if(key.compare("SANCTUARY") == 0){ if(on){ player_ptr->affect(AFF_SANCTUARY); }else{ player_ptr->remove_affect(AFF_SANCTUARY); }}
+else if(key.compare("GROUP") == 0){ if(on){ player_ptr->affect(AFF_GROUP); }else{ player_ptr->remove_affect(AFF_GROUP); }}
+else if(key.compare("CURSE") == 0){ if(on){ player_ptr->affect(AFF_CURSE); }else{ player_ptr->remove_affect(AFF_CURSE); }}
+else if(key.compare("INFRAVISION") == 0){ if(on){ player_ptr->affect(AFF_INFRAVISION); }else{ player_ptr->remove_affect(AFF_INFRAVISION); }}
+else if(key.compare("POISON") == 0){ if(on){ player_ptr->affect(AFF_POISON); }else{ player_ptr->remove_affect(AFF_POISON); }}
+else if(key.compare("PROTECT_EVIL") == 0){ if(on){ player_ptr->affect(AFF_PROTECT_EVIL); }else{ player_ptr->remove_affect(AFF_PROTECT_EVIL); }}
+else if(key.compare("PROTECT_GOOD") == 0){ if(on){ player_ptr->affect(AFF_PROTECT_GOOD); }else{ player_ptr->remove_affect(AFF_PROTECT_GOOD); }}
+else if(key.compare("SLEEP") == 0){ if(on){ player_ptr->affect(AFF_SLEEP); }else{ player_ptr->remove_affect(AFF_SLEEP); }}
+else if(key.compare("NOTRACK") == 0){ if(on){ player_ptr->affect(AFF_NOTRACK); }else{ player_ptr->remove_affect(AFF_NOTRACK); }}
+else if(key.compare("UNUSED16") == 0){ if(on){ player_ptr->affect(AFF_UNUSED16); }else{ player_ptr->remove_affect(AFF_UNUSED16); }}
+else if(key.compare("UNUSED17") == 0){ if(on){ player_ptr->affect(AFF_UNUSED17); }else{ player_ptr->remove_affect(AFF_UNUSED17); }}
+else if(key.compare("SNEAK") == 0){ if(on){ player_ptr->affect(AFF_SNEAK); }else{ player_ptr->remove_affect(AFF_SNEAK); }}
+else if(key.compare("HIDE") == 0){ if(on){ player_ptr->affect(AFF_HIDE); }else{ player_ptr->remove_affect(AFF_HIDE); }}
+else if(key.compare("UNUSED20") == 0){ if(on){ player_ptr->affect(AFF_UNUSED20); }else{ player_ptr->remove_affect(AFF_UNUSED20); }}
+else if(key.compare("CHARM") == 0){ if(on){ player_ptr->affect(AFF_CHARM); }else{ player_ptr->remove_affect(AFF_CHARM); }}
+duk_push_number(ctx,0);
+return 1;
+		}
+		static duk_ret_t affect_from_char(duk_context *ctx) {
+			/** TODO: get array from duktape */
+			std::string name = duk_to_string(ctx,0);
+			std::string key = duk_to_string(ctx,1);
+				bool found = false;
+				auto player_ptr = utils::find_player_by_name(name,found);
+				if(!found){
+					duk_push_number(ctx,-1);
+					return 1;
+				}
+if(key.compare("ARMOR") == 0){ ::affect_from_char(*player_ptr,SPELL_ARMOR); }
+if(key.compare("TELEPORT") == 0){ ::affect_from_char(*player_ptr,SPELL_TELEPORT); }
+if(key.compare("BLESS") == 0){ ::affect_from_char(*player_ptr,SPELL_BLESS); }
+if(key.compare("BLINDNESS") == 0){ ::affect_from_char(*player_ptr,SPELL_BLINDNESS); }
+if(key.compare("BURNING_HANDS") == 0){ ::affect_from_char(*player_ptr,SPELL_BURNING_HANDS); }
+if(key.compare("CALL_LIGHTNING") == 0){ ::affect_from_char(*player_ptr,SPELL_CALL_LIGHTNING); }
+if(key.compare("CHARM") == 0){ ::affect_from_char(*player_ptr,SPELL_CHARM); }
+if(key.compare("CHILL_TOUCH") == 0){ ::affect_from_char(*player_ptr,SPELL_CHILL_TOUCH); }
+if(key.compare("CLONE") == 0){ ::affect_from_char(*player_ptr,SPELL_CLONE); }
+if(key.compare("COLOR_SPRAY") == 0){ ::affect_from_char(*player_ptr,SPELL_COLOR_SPRAY); }
+if(key.compare("CONTROL_WEATHER") == 0){ ::affect_from_char(*player_ptr,SPELL_CONTROL_WEATHER); }
+if(key.compare("CREATE_FOOD") == 0){ ::affect_from_char(*player_ptr,SPELL_CREATE_FOOD); }
+if(key.compare("CREATE_WATER") == 0){ ::affect_from_char(*player_ptr,SPELL_CREATE_WATER); }
+if(key.compare("CURE_BLIND") == 0){ ::affect_from_char(*player_ptr,SPELL_CURE_BLIND); }
+if(key.compare("CURE_CRITIC") == 0){ ::affect_from_char(*player_ptr,SPELL_CURE_CRITIC); }
+if(key.compare("CURE_LIGHT") == 0){ ::affect_from_char(*player_ptr,SPELL_CURE_LIGHT); }
+if(key.compare("CURSE") == 0){ ::affect_from_char(*player_ptr,SPELL_CURSE); }
+if(key.compare("DETECT_ALIGN") == 0){ ::affect_from_char(*player_ptr,SPELL_DETECT_ALIGN); }
+if(key.compare("DETECT_INVIS") == 0){ ::affect_from_char(*player_ptr,SPELL_DETECT_INVIS); }
+if(key.compare("DETECT_MAGIC") == 0){ ::affect_from_char(*player_ptr,SPELL_DETECT_MAGIC); }
+if(key.compare("DETECT_POISON") == 0){ ::affect_from_char(*player_ptr,SPELL_DETECT_POISON); }
+if(key.compare("DISPEL_EVIL") == 0){ ::affect_from_char(*player_ptr,SPELL_DISPEL_EVIL); }
+if(key.compare("EARTHQUAKE") == 0){ ::affect_from_char(*player_ptr,SPELL_EARTHQUAKE); }
+if(key.compare("ENCHANT_WEAPON") == 0){ ::affect_from_char(*player_ptr,SPELL_ENCHANT_WEAPON); }
+if(key.compare("ENERGY_DRAIN") == 0){ ::affect_from_char(*player_ptr,SPELL_ENERGY_DRAIN); }
+if(key.compare("FIREBALL") == 0){ ::affect_from_char(*player_ptr,SPELL_FIREBALL); }
+if(key.compare("HARM") == 0){ ::affect_from_char(*player_ptr,SPELL_HARM); }
+if(key.compare("HEAL") == 0){ ::affect_from_char(*player_ptr,SPELL_HEAL); }
+if(key.compare("INVISIBLE") == 0){ ::affect_from_char(*player_ptr,SPELL_INVISIBLE); }
+if(key.compare("LIGHTNING_BOLT") == 0){ ::affect_from_char(*player_ptr,SPELL_LIGHTNING_BOLT); }
+if(key.compare("LOCATE_OBJECT") == 0){ ::affect_from_char(*player_ptr,SPELL_LOCATE_OBJECT); }
+if(key.compare("MAGIC_MISSILE") == 0){ ::affect_from_char(*player_ptr,SPELL_MAGIC_MISSILE); }
+if(key.compare("POISON") == 0){ ::affect_from_char(*player_ptr,SPELL_POISON); }
+if(key.compare("PROT_FROM_EVIL") == 0){ ::affect_from_char(*player_ptr,SPELL_PROT_FROM_EVIL); }
+if(key.compare("REMOVE_CURSE") == 0){ ::affect_from_char(*player_ptr,SPELL_REMOVE_CURSE); }
+if(key.compare("SANCTUARY") == 0){ ::affect_from_char(*player_ptr,SPELL_SANCTUARY); }
+if(key.compare("SHOCKING_GRASP") == 0){ ::affect_from_char(*player_ptr,SPELL_SHOCKING_GRASP); }
+if(key.compare("SLEEP") == 0){ ::affect_from_char(*player_ptr,SPELL_SLEEP); }
+if(key.compare("STRENGTH") == 0){ ::affect_from_char(*player_ptr,SPELL_STRENGTH); }
+if(key.compare("SUMMON") == 0){ ::affect_from_char(*player_ptr,SPELL_SUMMON); }
+if(key.compare("VENTRILOQUATE") == 0){ ::affect_from_char(*player_ptr,SPELL_VENTRILOQUATE); }
+if(key.compare("WORD_OF_RECALL") == 0){ ::affect_from_char(*player_ptr,SPELL_WORD_OF_RECALL); }
+if(key.compare("REMOVE_POISON") == 0){ ::affect_from_char(*player_ptr,SPELL_REMOVE_POISON); }
+if(key.compare("SENSE_LIFE") == 0){ ::affect_from_char(*player_ptr,SPELL_SENSE_LIFE); }
+if(key.compare("ANIMATE_DEAD") == 0){ ::affect_from_char(*player_ptr,SPELL_ANIMATE_DEAD); }
+if(key.compare("DISPEL_GOOD") == 0){ ::affect_from_char(*player_ptr,SPELL_DISPEL_GOOD); }
+if(key.compare("GROUP_ARMOR") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_ARMOR); }
+if(key.compare("GROUP_HEAL") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_HEAL); }
+if(key.compare("GROUP_RECALL") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_RECALL); }
+if(key.compare("INFRAVISION") == 0){ ::affect_from_char(*player_ptr,SPELL_INFRAVISION); }
+if(key.compare("WATERWALK") == 0){ ::affect_from_char(*player_ptr,SPELL_WATERWALK); }
+			duk_push_number(ctx,0);
+			return 1;
+		}
+
 		static duk_ret_t uuid(duk_context *ctx) {
 			/* First parameter is character name */
+
 			std::string char_name = duk_to_string(ctx,0);
 
 			for(auto ch = character_list; ch; ch = ch->next) {
@@ -93,6 +228,22 @@ namespace mods {
 
 			duk_push_number(ctx,-1);
 			return 1;
+		}
+		static duk_ret_t char_from_room(duk_context *ctx){
+			std::string c_name = duk_to_string(ctx,0);
+
+			if(c_name.length()){
+				bool found = false;
+				auto player_ptr = utils::find_player_by_name(c_name,found);
+				if(found){
+					std::cerr << "found player bypayload\n";
+					mods::globals::rooms::char_from_room(*(player_ptr));
+					duk_push_number(ctx,0);
+					return 1;
+				}
+			}
+			duk_push_number(ctx,-1);
+			return 1; //mods::globals::current_player->cd()->in_room;
 		}
 		static duk_ret_t room(duk_context *ctx){
 			duk_push_number(ctx,1);
@@ -151,16 +302,12 @@ namespace mods {
 		static duk_ret_t send_to_char(duk_context *ctx) {
 			/* First parameter is character name */
 			std::string c_name = duk_to_string(ctx,0);
-
-			for(auto ch = character_list; ch->next; ch = ch->next) {
-				if(c_name.compare(ch->player.name) == 0) {
-					if(!IS_NPC(ch)) {
-						send_to_char(ch,"%s",duk_to_string(ctx,1));
-						return 0;
-					}
+				bool found = false;
+				auto player_ptr = utils::find_player_by_name(c_name,found);
+				if(found){
+					::send_to_char(*player_ptr,"%s",duk_to_string(ctx,1));
+					return 0;
 				}
-			}
-
 			return 0;	/* number of return values */
 		}
 		static duk_ret_t db_seti(duk_context *ctx) {
@@ -178,7 +325,6 @@ namespace mods {
 			if(i_value.has_value()) {
 				duk_push_number(ctx,i_value.value());
 			}
-
 			return 1;
 		}
 		static duk_ret_t db_set(duk_context *ctx) {
@@ -271,14 +417,80 @@ namespace mods {
 			duk_put_global_string(ctx,"in_room");
 			duk_push_c_function(ctx,mods::js::mob_death_trigger,2);
 			duk_put_global_string(ctx,"mob_death_trigger");
+			duk_push_c_function(ctx,mods::js::char_from_room,1);
+			duk_put_global_string(ctx,"char_from_room");
 		}
 
-		void load_c_functions(duk_context *ctx) {
-			mods::js::load_base_functions(ctx);
-			mods::quests::load_c_functions(ctx);
-			mods::js::load_c_test_functions(ctx);
-			mods::js::load_c_require_functions(ctx);
+		//enum mask_type { SMG, SNIPE, SHOTGUN, GRENADE };
+			//typedef short weapon_set;
+			//using		time_type_t = unsigned long;//std::chrono::system_clock::time_point;
+			//enum player_type_enum_t { 
+			//	PLAYER, MOB, DRONE,
+		//		PLAYER_MUTED_DESCRIPTOR,
+		//		MOB_MUTED_DESCRIPTOR,
+		//		DRONE_MUTED_DESCRIPTOR
+		//	};
+
+
+		//	void init();
+
+		//	std::string js_object();
+
+		//	bool has_ammo();
+		//	bool has_class_capability(class_type);
+		//	bool has_equipment_tag(const std::string&);
+		//	bool has_inventory_capability(int);
+		//	bool has_thermite();
+		//	bool has_weapon_capability(int);
+
+
+		//	obj_data* get_first_ammo_of_type(const weapon_type_t&) const;
+
+		//	bool can_snipe(char_data *target);
+		//	bool is_weapon_loaded();
+		//	bool carrying_ammo_of_type(const weapon_type_t&);
+		//	void ammo_adjustment(int);
+		//	int  ammo_type_adjustment(int,const weapon_type_t&);
+
+		//	void set_class_capability(const class_capability_t& caps);
+		//	time_type_t time() const;
+		static duk_ret_t set_points(duk_context *ctx) {
+			/** TODO: get array from duktape */
+			std::string name = duk_to_string(ctx,0);
+			std::string key = duk_to_string(ctx,1);
+				bool found = false;
+				auto player_ptr = utils::find_player_by_name(name,found);
+				if(!found){
+					duk_push_number(ctx,-1);
+					return 1;
+				}
+				auto value = duk_to_number(ctx,2);
+				if(key.compare("name") == 0){ 
+					std::string str_value = duk_to_string(ctx,2);
+					player_ptr->name() = str_value;
+					goto __set_points_cleanup;
+				}
+			if(key.compare("mana") == 0){ player_ptr->mana() = static_cast<sh_int>(value); }
+			else if(key.compare("max_mana") == 0){ player_ptr->max_mana() = static_cast<sh_int>(value); }
+			else if(key.compare("hp") == 0){ player_ptr->hp() = static_cast<sh_int>(value); }
+			else if(key.compare("max_hp") == 0){ player_ptr->max_hp() = static_cast<sh_int>(value); }
+			else if(key.compare("move") == 0){ player_ptr->move() = static_cast<sh_int>(value); }
+			else if(key.compare("max_move") == 0){ player_ptr->max_move() = static_cast<sh_int>(value); }
+			else if(key.compare("armor") == 0){ player_ptr->armor() = static_cast<sh_int>(value); }
+			else if(key.compare("gold") == 0){ player_ptr->gold() = static_cast<int>(value); }
+			else if(key.compare("bank_gold") == 0){ player_ptr->bank_gold() = static_cast<int>(value); }
+			else if(key.compare("exp") == 0){ player_ptr->exp() = static_cast<int>(value); }
+			else if(key.compare("hitroll") == 0){ player_ptr->hitroll() = static_cast<sbyte>(value); }
+			else if(key.compare("damroll") == 0){ player_ptr->damroll() = static_cast<sbyte>(value); }
+			else if(key.compare("level") == 0){ player_ptr->level() = static_cast<byte>(value); }
+			else if(key.compare("sex") == 0){ player_ptr->sex() = static_cast<byte>(value); }
+			else if(key.compare("room") == 0){ player_ptr->room() = static_cast<room_rnum>(value); }
+			else if(key.compare("uuid") == 0){ player_ptr->uuid() = static_cast<uuid_t>(value); }
+__set_points_cleanup:
+					duk_push_number(ctx,0);
+					return 1;
 		}
+
 
 		bool run_test_suite(mods::player& player,std::string_view suite) {
 			auto ctx = mods::js::new_context();
@@ -300,11 +512,19 @@ namespace mods {
 			}
 
 			eval_string(ctx,std::string("test_main(") +
-			            std::string(mods::util::itoa(player.cd()->uuid)) + ");"
-			           );
+					std::string(mods::util::itoa(player.cd()->uuid)) + ");"
+					);
 			return true;
 		}
 
+		void load_mods_player_functions(duk_context *ctx) {
+			duk_push_c_function(ctx,mods::js::set_points,3);
+			duk_put_global_string(ctx,"set_points");
+			duk_push_c_function(ctx,mods::js::modify_affected_flags,3);
+			duk_put_global_string(ctx,"modify_affected_flags");
+			duk_push_c_function(ctx,mods::js::affect_from_char,3);
+			duk_put_global_string(ctx,"affect_from_char");
+		}
 
 		void run_profile_scripts(std::string_view player_name){
 			/** 
@@ -355,6 +575,13 @@ namespace mods {
 			}
 
 			return -1;
+		}
+		void load_c_functions(duk_context *ctx) {
+			mods::js::load_base_functions(ctx);
+			mods::quests::load_c_functions(ctx);
+			mods::js::load_c_test_functions(ctx);
+			mods::js::load_c_require_functions(ctx);
+			mods::js::load_mods_player_functions(ctx);
 		}
 	};
 };

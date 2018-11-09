@@ -33,10 +33,28 @@ namespace mods::lmdb {
 			std::string selector  = db_key({table_cstr(),"meta",column,equals_value});
 			std::string row_id;
 			mutable_map_t mapped;
+			if(mods::schema::db.find(table_cstr().data()) == mods::schema::db.end()){
+				std::cerr << "WARNING: application code asked for table that doesn't exist: '" << table_cstr() << "'\n";
+				std::cerr << "Returning empty result\n";
+				return r;
+			}
+			if(mods::schema::db_meta_values.find(table_cstr().data()) == 
+					mods::schema::db_meta_values.end()){
+				std::cerr << "WARNING: attempt to search db_meta_values, but table doesn't have any: \n";
+				std::cerr << "Table: '" << table_cstr().data() << "'\n";
+				std::cerr << "Meta: '" << column.data() << "'\n";
+				return r;
+			}
+			std::vector<std::string> fields_to_grab;
+			if(consumer->is_using_pluck_filter()){
+				fields_to_grab = consumer->get_pluck_filter();
+			}else{
+				fields_to_grab = mods::schema::db[table_cstr().data()];
+			}
 			if(consumer->get(selector,row_id) >= 0){
-				for(unsigned i=0; i < mods::schema::db[table_cstr().data()].size();i++){
+				for(auto & field_name : fields_to_grab){
 					std::string element_selector  = db_key({table_cstr(),
-							mods::schema::db[table_cstr().data()][i].c_str(),
+							field_name.c_str(),
 							row_id});
 					std::string value;
 					value.clear();
@@ -45,7 +63,7 @@ namespace mods::lmdb {
 						continue;
 					}
 					mapped.insert(std::make_pair(
-								mods::schema::db[table_cstr().data()][i].c_str(),
+								field_name.c_str(),
 								value));
 				}
 			}
@@ -59,9 +77,15 @@ namespace mods::lmdb {
 		result_container_t transaction_t::get_by_id(T consumer,std::string_view id){
 			result_container_t r;
 			mutable_map_t mapped;
-				for(unsigned i=0; i < mods::schema::db[table_cstr().data()].size();i++){
+			std::vector<std::string> fields_to_grab;
+			if(consumer->is_using_pluck_filter()){
+				fields_to_grab = consumer->get_pluck_filter();
+			}else{
+				fields_to_grab = mods::schema::db[table_cstr().data()];
+			}
+				for(auto & field_name : fields_to_grab){
 					std::string element_selector  = db_key({table_cstr(),
-							mods::schema::db[table_cstr().data()][i].c_str(),
+							field_name.data(),
 							id});
 					std::string value;
 					value.clear();
@@ -70,7 +94,7 @@ namespace mods::lmdb {
 						continue;
 					}
 					mapped.insert(std::make_pair(
-								mods::schema::db[table_cstr().data()][i].c_str(),
+								field_name.data(),
 								value));
 				}
 			if(mapped.size()){
@@ -99,11 +123,16 @@ namespace mods::lmdb {
 				std::copy(csv_list.begin(),csv_list.end(),std::back_inserter(deserialized_id_list));
 			}
 			csv_list.clear();
+			std::vector<std::string> fields_to_grab;
+			if(consumer->is_using_pluck_filter()){
+				fields_to_grab = consumer->get_pluck_filter();
+			}else{
+				fields_to_grab = mods::schema::db[table_cstr().data()];
+			}
 			for(auto & id: deserialized_id_list){
-				mapped.clear();
-				for(unsigned i=0; i < mods::schema::db[table_cstr().data()].size();i++){
+				for(auto & field_name : fields_to_grab){
 					std::string element_selector  = db_key({table_cstr(),
-							mods::schema::db[table_cstr().data()][i].c_str(),
+							field_name.c_str(),
 							std::to_string(id)});
 					std::string value;
 					value.clear();
@@ -113,11 +142,12 @@ namespace mods::lmdb {
 						continue;
 					}
 					mapped.insert(std::make_pair(
-								mods::schema::db[table_cstr().data()][i].c_str(),
+								field_name.c_str(),
 								value));
 				}
 				if(mapped.size()){
 					results.emplace_back(mapped);
+					mapped.clear();
 				}
 			}
 			return  results;
@@ -170,8 +200,26 @@ namespace mods::lmdb {
 #####   #####  #######  #    #  #    #  #    #  #####   ######  ######
 */
 
+	void _db_handle::set_pluck_filter(const std::vector<std::string> & cols){
+		m_pluck = cols;
+		m_use_pluck = true;
+	}
+	void _db_handle::clear_pluck_filter(){
+		m_pluck.clear();
+		m_use_pluck = false;
+	}
+	const std::vector<std::string> & _db_handle::get_pluck_filter() const {
+		return m_pluck;
+	}
+		void _db_handle::use_pluck_filter(bool b){
+			m_use_pluck = b;
+		}
+		bool _db_handle::is_using_pluck_filter() const { 
+			return m_use_pluck;
+		}
 	_db_handle::_db_handle(std::string_view directory,std::string_view db_name,const uint64_t & flags,const uint16_t & mode,bool unused) 
-		:m_good(false), m_closed(true), m_dir(directory), m_name(db_name), m_flags(flags), m_mode(mode) {
+		: m_use_pluck(false), m_good(false), m_closed(true), 
+		m_dir(directory), m_name(db_name), m_flags(flags), m_mode(mode) {
 			m_transaction_open = false;
 			m_transaction_good = false;
 			m_dbi_opened = false;
@@ -308,6 +356,7 @@ namespace mods::lmdb {
 		}
 	}
 	_db_handle::tuple_return_type_t _db_handle::renew_txn(){
+		clear_pluck_filter();
 		if(m_transaction_good || m_transaction_open){
 			mdb_txn_commit(m_txn);
 			m_transaction_good = m_transaction_open = false;
@@ -318,7 +367,6 @@ namespace mods::lmdb {
 			return tuple;
 		}
 		if(!m_dbi_opened){
-			std::cerr << "[lmdb][debug]: dbi not opened\n";
 			return open_dbi();
 		}
 		return {true,""};
@@ -461,6 +509,12 @@ std::string db_get(std::string_view table,std::string_view key){
 	return mods::lmdb::exec(table)->get<mods::lmdb::db_handle*>(mods::globals::db.get(),key);
 }
 
+mods::lmdb::result_container_t db_get_all_pluck(std::string_view table,const std::vector<std::string>& pluck){
+	mods::globals::db.get()->renew_txn();
+	mods::globals::db.get()->set_pluck_filter(pluck);
+	auto transaction = mods::lmdb::exec(table);
+	return transaction->get_all<mods::lmdb::db_handle*>(mods::globals::db.get());
+}
 mods::lmdb::result_container_t db_get_all(std::string_view table){
 	mods::globals::db.get()->renew_txn();
 	return mods::lmdb::exec(table)->get_all<mods::lmdb::db_handle*>(mods::globals::db.get());

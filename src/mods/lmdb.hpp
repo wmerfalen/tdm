@@ -167,6 +167,11 @@ namespace mods::lmdb {
 		using tuple_return_type_t = std::tuple<bool,std::string>; 
 		using status_type_t = std::array<std::tuple<bool,std::string>,status_step_count>;
 		_db_handle(std::string_view directory,std::string_view db_name,const uint64_t & flags,const uint16_t & mode,bool unused);
+		void set_pluck_filter(const std::vector<std::string> &);
+		void clear_pluck_filter();
+		const std::vector<std::string>& get_pluck_filter() const;
+		void use_pluck_filter(bool b);
+		bool is_using_pluck_filter() const;
 		bool open();
 		int put(std::string_view key,const std::string & value,bool renew);
 		int del(std::string_view key);
@@ -188,6 +193,8 @@ namespace mods::lmdb {
 		void dump_status() const;
 		tuple_return_type_t renew_txn();
 		private:
+		bool m_use_pluck;
+		std::vector<std::string> m_pluck;
 		bool m_dbi_opened;
 		bool m_good;
 		bool m_closed;
@@ -223,6 +230,7 @@ std::string db_get(std::string_view table,std::string_view key);
 mods::lmdb::result_container_t db_get_by_id(std::string_view table,std::string_view id);
 mods::lmdb::result_container_t db_get_by_meta(std::string_view table,std::string_view col,std::string_view equals);
 mods::lmdb::result_container_t db_get_all(std::string_view table);
+mods::lmdb::result_container_t db_get_all_pluck(std::string_view table,const std::vector<const std::string&>& pluck);
 bool db_update(mods::lmdb::table_type_t table,
 		mods::lmdb::mutable_map_t & values,
 		std::string_view value);

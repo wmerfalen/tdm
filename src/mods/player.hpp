@@ -43,8 +43,12 @@ namespace mods {
 			using		descriptor_iterator_t = std::deque<mods::descriptor_data>::iterator;
 			using		time_type_t = unsigned long;//std::chrono::system_clock::time_point;
 			enum player_type_enum_t { 
-				PLAYER, MOB, DRONE
+				PLAYER, MOB, DRONE,
+				PLAYER_MUTED_DESCRIPTOR,
+				MOB_MUTED_DESCRIPTOR,
+				DRONE_MUTED_DESCRIPTOR
 			};
+
 
 			/* constructors and destructors */
 			player();
@@ -84,15 +88,20 @@ namespace mods {
 
 			/* setters */
 			void set_class_capability(const class_capability_t& caps);
-			void set_cd(char_data* ch) {
-				m_char_data = ch;
-			}
+			void set_cd(char_data* ch);
 			void set_shared_ptr(std::shared_ptr<mods::player>&);
 
-			time_type_t time() const {
-				return m_time;
-			}
+			time_type_t time() const;
 
+			void affect(int64_t flag);
+			void remove_affect(int64_t flag);
+			std::map<int64_t,bool> get_affected();
+			void clear_all_affected();
+
+			void affect_plr(int64_t flag);
+			void remove_affect_plr(int64_t flag);
+			std::map<int64_t,bool> get_affected_plr();
+			void clear_all_affected_plr();
 			/* informational functions */
 			sh_int& mana() {
 				return m_char_data->points.mana;
@@ -144,7 +153,7 @@ namespace mods {
 			room_rnum& room(){
 				return m_char_data->in_room;
 			}
-			uuid_t uuid() const {
+			uuid_t& uuid() const {
 				return m_char_data->uuid;
 			}
 			char_data* cd() const {
@@ -175,6 +184,9 @@ namespace mods {
 			player&             pager_end();
 			void                pager_next_page();
 			void                page(int page_number);
+			/** TODO: all these queueing functions and overloaded operators need to accomodate
+			 * the new player_type_enum_t values when it comes to muting queued output.
+			 */
 			void                queue_page_fragment(std::string_view fragment) {
 				for(auto c : fragment) {
 					m_current_page_fragment += c;
@@ -213,21 +225,23 @@ namespace mods {
 			bool paging() const {
 				return m_pages.size();
 			}
-			void set_desc(std::deque<descriptor_data>::iterator it){ 
-				m_desc = std::make_shared<mods::descriptor_data>(*it);
-			}
-			void set_desc(std::shared_ptr<descriptor_data> it){ 
-				m_desc = it;
-			}
+			void set_desc(std::deque<descriptor_data>::iterator it);
+			void set_desc(std::shared_ptr<descriptor_data> it);
 			void set_char_on_descriptor(std::deque<descriptor_data>::iterator it);
-			descriptor_data& desc(){ return *m_desc; }
+			descriptor_data& desc();
 
 			/* captured output */
 			void capture_output(bool capture_status);
 			std::string_view get_captured_output();
 			void clear_captured_output();
+			void set_type(player_type_enum_t t);
+			player_type_enum_t type(){
+				return m_type;
+			}
 		private: 
 			void m_set_time();
+			std::map<int64_t,bool> m_affected;
+			std::map<int64_t,bool> m_affected_plr;
 			std::shared_ptr<mods::descriptor_data> m_desc;
 			std::string	m_name;
 			class_capability_t m_class_capability;
@@ -245,6 +259,7 @@ namespace mods {
 			class_info_t m_class_info;
 			std::shared_ptr<char_data> m_shared_ptr;
 			time_type_t	m_time;
+			player_type_enum_t m_type;
 	};
 };
 

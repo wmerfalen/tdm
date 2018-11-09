@@ -4,7 +4,6 @@
 #include <array>
 
 char_player_data::char_player_data(){
-	std::cerr << "[char_player_data]::constructor yo\n";
   name.clear();         /* PC / NPC s name (kill ...  )         */
   short_descr.clear();  /* for NPC 'actions'                    */
   long_descr.clear();   /* for 'look'             */
@@ -17,7 +16,6 @@ char_player_data::char_player_data(){
   /** TODO: phase this out */
   passwd.clear();
 	std::fill(m_passwd.begin(),m_passwd.end(),0);
-	std::cerr << "[char_player_data]::constructor yo done\n";
 }
 char_data::char_data(char_data* o){
 		has_desc = false;
@@ -99,24 +97,49 @@ char_data::char_data(char_data* o){
 	}
 namespace mods{
 		size_t descriptor_data::queue_output(const std::string &s){
-			output += s;
-			has_output = true;
-			return s.length();
+			switch(m_queue_behaviour){
+				case queue_behaviour_enum_t::NORMAL:
+					output += s;
+					has_output = true;
+					return s.length();
+					break;
+				case queue_behaviour_enum_t::IGNORE_ALL:
+					has_output = false;
+					return 0;
+				case queue_behaviour_enum_t::REDIRECT_TO_PLAYER:
+				case queue_behaviour_enum_t::REDIRECT_TO_FILESYSTEM:
+				case queue_behaviour_enum_t::REDIRECT_TO_DB:
+				default:
+					return 0;
+			}
 		}
 		size_t mods::descriptor_data::flush_output(){
-			if(output.size() == 0){ 
-				has_output = false; 
-				return 0; 
-			}
-			
-			std::size_t result = write_to_descriptor(descriptor,output.c_str());
+		std::size_t result; 
+			switch(m_queue_behaviour){
+				case queue_behaviour_enum_t::NORMAL:
+					if(output.size() == 0){ 
+						has_output = false; 
+						return 0; 
+					}
 
-			/* Handle snooping: prepend "% " and send to snooper. */
-			if(snoop_by) {
-				write_to_output(*snoop_by, "%% %*s%%%%", static_cast<int>(result), output.c_str());
+					result = write_to_descriptor(descriptor,output.c_str());
+
+					/* Handle snooping: prepend "% " and send to snooper. */
+					if(snoop_by) {
+						write_to_output(*snoop_by, "%% %*s%%%%", static_cast<int>(result), output.c_str());
+					}
+					output.clear();
+					has_output = false;
+					return (result);
+					break;
+				case queue_behaviour_enum_t::IGNORE_ALL:
+					has_output = false;
+					return 0;
+				case queue_behaviour_enum_t::REDIRECT_TO_PLAYER:
+				case queue_behaviour_enum_t::REDIRECT_TO_FILESYSTEM:
+				case queue_behaviour_enum_t::REDIRECT_TO_DB:
+				default:
+					return 0;
 			}
-			output.clear();
-			has_output = false;
-			return (result);
 		}
 };

@@ -9,6 +9,13 @@
 #include "acl/color.hpp"
 #include "prefs.hpp"
 #include <chrono>
+/**
+ * TODO: All these stc* functions need to be altered to accomodate
+ * the new player_type_enum_t values. If output is to be muted, then
+ * we can stop the output from this class and avoid the overhead of
+ * calling whatever functions the send_to_char function calls to queue
+ * output.
+ */
 
 extern void do_auto_exits(struct char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
@@ -168,6 +175,32 @@ namespace mods {
 				player();
 				break;
 		}
+		set_type(type);
+	}
+	void player::set_type(player_type_enum_t type){
+		/**
+		 * FIXME: take appropriate action on a per type basis. 
+		 * TODO: If it's a drone, then the appropriate drone flags need to be set
+		 * TODO: if it's a mob, then it needs to have IS_NPC return true.. so, set that flag
+		 * TODO: if it's a player, set the IS_NPC flag to false. Also, figure out how to handle descriptor_data
+		 */
+		m_type = type;
+		switch(type){
+			case player_type_enum_t::PLAYER:
+			case player_type_enum_t::MOB:
+			case player_type_enum_t::DRONE:
+				if(m_desc){
+					m_desc->set_queue_behaviour(mods::descriptor_data::queue_behaviour_enum_t::NORMAL);
+				}
+				break;
+			case player_type_enum_t::PLAYER_MUTED_DESCRIPTOR:
+			case player_type_enum_t::MOB_MUTED_DESCRIPTOR:
+			case player_type_enum_t::DRONE_MUTED_DESCRIPTOR:
+				if(m_desc){
+					m_desc->set_queue_behaviour(mods::descriptor_data::queue_behaviour_enum_t::IGNORE_ALL);
+				}
+				break;
+		}
 	}
 	player::player(){
 		m_set_time();
@@ -189,6 +222,7 @@ namespace mods {
 		m_executing_js = false;
 	}
 	player::player(mods::player* ptr) {
+		/**TODO: should we set the queue_behaviour flags on the descriptor data items on *this? */
 		m_shared_ptr = std::make_shared<char_data>(ptr->cd());
 		m_char_data = ptr->cd();
 		m_page = 0;
@@ -217,6 +251,7 @@ namespace mods {
 			m_set_time();
 	};
 	bool player::can_snipe(char_data *target) {
+		/** TODO: figure out why this function was created. */
 		return true;
 	}
 	std::shared_ptr<mods::classes::base>& player::get_class(class_type c_type) {
@@ -542,6 +577,99 @@ namespace mods {
 			m_shared_ptr.reset();
 		}
 	}
+			void player::set_cd(char_data* ch) {
+				m_char_data = ch;
+			}
+			player::time_type_t player::time() const {
+				return m_time;
+			}
+			void player::set_desc(std::deque<descriptor_data>::iterator it){ 
+				m_desc = std::make_shared<mods::descriptor_data>(*it);
+				set_type(m_type);	//This will indirectly call the set_queue_behaviour function on our new descriptor_data object
+			}
+			void player::set_desc(std::shared_ptr<descriptor_data> it){ 
+				m_desc = it;
+				set_type(m_type);	//This will indirectly call the set_queue_behaviour function on our new descriptor_data object
+			}
+			descriptor_data& player::desc(){ 
+				if(m_desc){
+					return *m_desc;
+				}else{
+					std::cerr << "Warning: player::desc() called but m_desc is null. Creating temporary descriptor_data shared_ptr\n";
+					set_desc(std::make_shared<mods::descriptor_data>());
+					return *m_desc;
+				}
+			}
+			void player::affect(int64_t flag){
+				SET_BIT(AFF_FLAGS(cd()), flag);
+			}
+
+			void player::remove_affect(int64_t flag){
+				REMOVE_BIT(AFF_FLAGS(cd()), flag);
+			}
+			void player::clear_all_affected(){
+				for(auto &pair : this->get_affected()){
+					this->remove_affect(pair.first);
+				}
+			}
+			std::map<int64_t,bool> player::get_affected(){
+m_affected[AFF_BLIND] = IS_SET(AFF_FLAGS(cd()),AFF_BLIND);
+m_affected[AFF_INVISIBLE] = IS_SET(AFF_FLAGS(cd()),AFF_INVISIBLE);
+m_affected[AFF_DETECT_ALIGN] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_ALIGN);
+m_affected[AFF_DETECT_INVIS] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_INVIS);
+m_affected[AFF_DETECT_MAGIC] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_MAGIC);
+m_affected[AFF_SENSE_LIFE] = IS_SET(AFF_FLAGS(cd()),AFF_SENSE_LIFE);
+m_affected[AFF_WATERWALK] = IS_SET(AFF_FLAGS(cd()),AFF_WATERWALK);
+m_affected[AFF_SANCTUARY] = IS_SET(AFF_FLAGS(cd()),AFF_SANCTUARY);
+m_affected[AFF_GROUP] = IS_SET(AFF_FLAGS(cd()),AFF_GROUP);
+m_affected[AFF_CURSE] = IS_SET(AFF_FLAGS(cd()),AFF_CURSE);
+m_affected[AFF_INFRAVISION] = IS_SET(AFF_FLAGS(cd()),AFF_INFRAVISION);
+m_affected[AFF_POISON] = IS_SET(AFF_FLAGS(cd()),AFF_POISON);
+m_affected[AFF_PROTECT_EVIL] = IS_SET(AFF_FLAGS(cd()),AFF_PROTECT_EVIL);
+m_affected[AFF_PROTECT_GOOD] = IS_SET(AFF_FLAGS(cd()),AFF_PROTECT_GOOD);
+m_affected[AFF_SLEEP] = IS_SET(AFF_FLAGS(cd()),AFF_SLEEP);
+m_affected[AFF_NOTRACK] = IS_SET(AFF_FLAGS(cd()),AFF_NOTRACK);
+m_affected[AFF_UNUSED16] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED16);
+m_affected[AFF_UNUSED17] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED17);
+m_affected[AFF_SNEAK] = IS_SET(AFF_FLAGS(cd()),AFF_SNEAK);
+m_affected[AFF_HIDE] = IS_SET(AFF_FLAGS(cd()),AFF_HIDE);
+m_affected[AFF_UNUSED20] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED20);
+m_affected[AFF_CHARM] = IS_SET(AFF_FLAGS(cd()),AFF_CHARM);
+return m_affected;
+			}
+			void player::affect_plr(int64_t flag){
+				SET_BIT(PLR_FLAGS(cd()), flag);
+			}
+
+			void player::remove_affect_plr(int64_t flag){
+				REMOVE_BIT(PLR_FLAGS(cd()), flag);
+			}
+			void player::clear_all_affected_plr(){
+				for(auto &pair : this->get_affected_plr()){
+					this->remove_affect_plr(pair.first);
+				}
+			}
+			std::map<int64_t,bool> player::get_affected_plr(){
+m_affected_plr[PLR_KILLER] = IS_SET(PLR_FLAGS(cd()),PLR_KILLER);
+m_affected_plr[PLR_THIEF] = IS_SET(PLR_FLAGS(cd()),PLR_THIEF);
+m_affected_plr[PLR_FROZEN] = IS_SET(PLR_FLAGS(cd()),PLR_FROZEN);
+m_affected_plr[PLR_DONTSET] = IS_SET(PLR_FLAGS(cd()),PLR_DONTSET);
+m_affected_plr[PLR_WRITING] = IS_SET(PLR_FLAGS(cd()),PLR_WRITING);
+m_affected_plr[PLR_MAILING] = IS_SET(PLR_FLAGS(cd()),PLR_MAILING);
+m_affected_plr[PLR_CRASH] = IS_SET(PLR_FLAGS(cd()),PLR_CRASH);
+m_affected_plr[PLR_SITEOK] = IS_SET(PLR_FLAGS(cd()),PLR_SITEOK);
+m_affected_plr[PLR_NOSHOUT] = IS_SET(PLR_FLAGS(cd()),PLR_NOSHOUT);
+m_affected_plr[PLR_NOTITLE] = IS_SET(PLR_FLAGS(cd()),PLR_NOTITLE);
+m_affected_plr[PLR_DELETED] = IS_SET(PLR_FLAGS(cd()),PLR_DELETED);
+m_affected_plr[PLR_LOADROOM] = IS_SET(PLR_FLAGS(cd()),PLR_LOADROOM);
+m_affected_plr[PLR_NOWIZLIST] = IS_SET(PLR_FLAGS(cd()),PLR_NOWIZLIST);
+m_affected_plr[PLR_NODELETE] = IS_SET(PLR_FLAGS(cd()),PLR_NODELETE);
+m_affected_plr[PLR_INVSTART] = IS_SET(PLR_FLAGS(cd()),PLR_INVSTART);
+m_affected_plr[PLR_CRYO] = IS_SET(PLR_FLAGS(cd()),PLR_CRYO);
+m_affected_plr[PLR_NOTDEADYET] = IS_SET(PLR_FLAGS(cd()),PLR_NOTDEADYET);
+				return m_affected_plr;
+			}
+
 };
 
 #endif
