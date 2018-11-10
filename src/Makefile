@@ -32,7 +32,8 @@ buildobj = act.comm act.informative act.item act.medic \
 					 mods/projectile mods/quests mods/scan mods/sql mods/util\
 					 mods/weapon mods/classes/medic mods/string mods/loops\
 					 mods/hell mods/db mods/testing/lmdb/player-syncing\
-					 mods/testing/lmdb/db mods/player-scaffolding sql/port
+					 mods/testing/lmdb/db mods/player-scaffolding sql/port\
+					 mods/meta_utils mods/acl_list
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

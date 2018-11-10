@@ -1,159 +1,134 @@
 #include "lmdb.hpp"
 #include "db.hpp"
+#include "meta_utils.hpp"
+#include "player.hpp"
 
 namespace mods::db {
-tuple_status_t lmdb_commit(db_handle* ptr_db,std::string_view from_where){
-	lmdb_return(ptr_db->commit(),"lmdb_commit");
-}
-tuple_status_t lmdb_save_char(
-		std::string_view player_name,
-		char_data * ch,
-		db_handle* ptr_db){
-	mutable_map_t values;
-	lmdb_export_char(ch,values);
 
-	std::string_view table = "player";
-	std::string existing_user_id;
-	aligned_int_t user_id = 0;
-	lmdb_get(ptr_db,
-		db_key({table,"meta","name",player_name.data()}),
-		existing_user_id,
-		{
-			std::stringstream stream;
-			stream << existing_user_id;
-			stream >> user_id;
-		},{}
-	);
-
-	/**
-	 * If the user id was successfully parsed, it would *not* be zero.
-	 * So this next if statement is checking if we want to update or not
-	 */
-	if(user_id != 0){
-		lmdb_return_if_fail(lmdb_update_char(player_name,ptr_db,values,existing_user_id),"lmdb_write_meta_values");
-	}else{
-		lmdb_return_if_fail(lmdb_insert_char(player_name,ptr_db,values),"lmdb_write_meta_values");
+aligned_int_t save_record_get_id(
+		const std::string& table,
+		mutable_map_t* values){
+	auto status = mods::db::save_record(table,values);
+	if(std::get<0>(status)){
+		return std::get<2>(status);
 	}
-	return lmdb_commit(ptr_db,"lmdb_save_char");
-}
-
-tuple_status_t lmdb_update_char(
-		std::string_view player_name,
-		db_handle* ptr_db,
-		const mutable_map_t &values,
-		std::string_view str_id){
-	std::string table = "player";
-	lmdb_return_if_fail(lmdb_write_meta_values(table,ptr_db,{
-			{std::string("name|") + player_name.data(),str_id.data()}
-	}),"lmdb_update_char");
-	return lmdb_write_values(player_name,
-			table,
-			ptr_db,
-			values
-	);
-}
-
-tuple_status_t lmdb_insert_char(
-		std::string_view player_name,
-		db_handle* ptr_db,
-		const mutable_map_t &values){
-	std::string table = "player";
-	bool init_error = 0;
-	auto id = initialize_row(table,ptr_db,init_error);
-	if(init_error){
-		return {false,"Couldn't initialize row",0};
+	else{
+		return 0;
 	}
-	lmdb_write_meta_values(table,ptr_db,{
-			{std::string("name|") + player_name.data(),std::to_string(id)}
-	});
-	return lmdb_write_values(std::to_string(id),
-			"player",
-			ptr_db,
-			values
-	);
 }
 
-tuple_status_t lmdb_write_meta_values(
-		std::string_view table,
-		db_handle* ptr_db,
-		std::map<std::string,std::string> meta_values){
-	if(meta_values.size()){
-		ptr_db->renew_txn();
-		for(auto & [key,value] : meta_values){
-			lmdb_put(
-					ptr_db,db_key({table,"meta",key}),value,
-					{ ;; },{
-						ptr_db->dump_status();
-						ptr_db->abort_txn();
-						return tuple_status_t(true,"lmdb_write_meta_values: Failed to place key in db",0);
-					};
-			);
-		}
-		return lmdb_commit(ptr_db,"lmdb_write_meta_values");
-	}else{
-		return {false,"empty map",0};
-	}
-	return {false,"unreachable code reached. How?",0};
-}
-
-tuple_status_t lmdb_load_by_meta(
-		std::string_view meta_key,
-		std::string_view meta_value,
-		std::string_view table,
-		db_handle* ptr_db,
-		mutable_map_t& values
-		){
-	std::string user_id = "0";
+aligned_int_t initialize_row(
+		const std::string& table){
+	auto ptr_db = mods::globals::db.get();
 	ptr_db->renew_txn();
-	auto ret = ptr_db->get(db_key(
-				{table.data(),"meta",meta_key.data(),meta_value.data()}),
-			user_id);
-	if(db_handle::KEY_FETCHED_OKAY != ret){
-		ptr_db->abort_txn();
-		return {false,"Meta value doesn't exist",0};
+	std::string id_list;
+	auto ret = ptr_db->get(db_key({table,"id_list"}),id_list);
+	if(ret < 0){
+		return 0;
 	}
-	aligned_int_t meta_int_id = 0;
-	std::stringstream stream;
-	stream << user_id;
-	stream >> meta_int_id;
-	if(meta_int_id == 0){
-		return {false,"Couldn't unserialize meta id",0};
+
+	aligned_int_t next_id = 0;
+	std::vector<aligned_int_t> deserialized_id_list;
+	if(id_list.begin() == id_list.end()){
+		deserialized_id_list.push_back(0);
+		next_id = 0;
 	}
-	assert(mods::schema::db.find(std::string(table.data())) != 
-			mods::schema::db.end());
-	std::string value;
-	for(auto & column : mods::schema::db[std::string(table)]){
-		value = "";
-		ret = ptr_db->get(db_key(
-				{table.data(),column,user_id}),
-			value);
-		if(db_handle::KEY_FETCHED_OKAY == ret){
-			values[column] = value; 
-		}else{
-			values[column] = "";
+	else{
+		std::copy(id_list.begin(),id_list.end(),std::back_inserter(deserialized_id_list));
+	}
+	++next_id;
+	deserialized_id_list[0] = next_id;
+	id_list.clear();
+	deserialized_id_list.push_back(next_id);
+	debug("saving deserialized_id_list with the next_id: "<< next_id << " and a new size of: " << deserialized_id_list.size());
+	std::string str_buffer{""};
+	std::copy(deserialized_id_list.begin(),deserialized_id_list.end(),
+			std::back_inserter(str_buffer));
+	ret = ptr_db->put(db_key({table,"id_list"}),str_buffer);
+	if(ret < 0){
+		return 0;
+	}
+
+	ret = ptr_db->put(db_key({table.data(),std::to_string(next_id)}),"active");
+	if(ret < 0){
+		return 0;
+	}
+	auto tuple_return = ptr_db->commit();
+	if(!std::get<0>(tuple_return)){
+		std::cerr << "error: commit failed (initialize_row)\n";
+		return 0;
+	}
+	return next_id;
+}
+
+tuple_status_t save_record(const std::string& table,mutable_map_t* values){
+	std::string existing_records_primary_key_id = "";
+	aligned_int_t pk_id = 0;
+		auto items_placed = mods::meta_utils::do_meta_easy(
+				table,values,&pk_id);
+		if(items_placed < 0){
+			std::cout << "info: no meta values were placed\n";
+		}
+		if(items_placed >= 0){
+			std::cout << "info: " << items_placed << " meta values placed\n";
+		}
+		std::cout << "debug: pk_id so far: '" << pk_id << "\n";
+
+	if(pk_id != 0){
+		std::cout << "debug: primary key 'id' good. Updating record\n";
+	}else{
+		pk_id = initialize_row(table);
+		if(pk_id == 0){
+			return {false,"Couldn't initialize row",0};
 		}
 	}
-	return {true,"Fetched",meta_int_id};
+	assert(pk_id != 0);
+	(*values)["id"] = pk_id;
+		auto write_status =  lmdb_write_values(
+				table,
+				values);
+		if(!std::get<0>(write_status)){
+			std::cerr << "error: lmdb_write_values failed with: '" << std::get<1>(write_status) << "'\n";
+		}else{
+			std::cout << "debug: wrote record\n";
+		}
+	auto tuple_status = mods::globals::db->commit();
+	if(std::get<0>(tuple_status)){
+		return {true,"saved",pk_id};
+	}else{
+		return {false,std::get<1>(tuple_status),0};
+	}
+}
+tuple_status_t save_char(
+		std::shared_ptr<mods::player> player_ptr){
+	mutable_map_t values;
+	lmdb_export_char(player_ptr,values);
+	return save_record("player",&values);
 }
 
 tuple_status_t lmdb_write_values(
-		std::string_view str_id,
-		std::string_view table,
-		db_handle* ptr_db,
-		const mutable_map_t& values){
+		const std::string& table,
+		mutable_map_t* values){
+	auto ptr_db = mods::globals::db.get();
 	ptr_db->renew_txn();
-	for(auto & [key,value] : values){
-		auto ret = ptr_db->put(db_key({table,key,str_id}),value);
+	uint64_t errors =0;
+	std::string pk_id = (*values)["id"];
+	for(auto & [key,value] : *values){
+		auto ret = ptr_db->put(db_key({table,key,pk_id}),value);
 		if(ret){
-			ptr_db->dump_status();
-			ptr_db->abort_txn();
-			return {false,"Failed to place key in db",0};
+			++errors;
 		}
 	}
-	return {true,"",0};
+	if(errors){
+		return {true,std::string("saved, but with ") + std::to_string(errors) + " errors",errors};
+	}
+	return {true,"saved",0};
 }
 
-void lmdb_export_char(char_data* ch, mutable_map_t &values){
+void lmdb_export_char(std::shared_ptr<mods::player> player_ptr, mutable_map_t &values){
+	/** TODO: instead of using the char_data accesses, create functions(or use existing ones) on mods::player object */
+	auto ch = player_ptr->cd();
+		values["id"] = std::to_string(ch->db_id());
 		values["player_name"] = std::to_string(ch->player.name);
 		values["player_short_description"] = std::to_string(ch->player.short_descr);
 		values["player_long_description"] = std::to_string(ch->player.long_descr);

@@ -396,6 +396,7 @@ void gain_condition(struct char_data *ch, int condition, int value) {
 
 
 void check_idling(struct char_data *ch) {
+	MENTOC_PREAMBLE();
 	if(++(ch->char_specials.timer) > idle_void) {
 		if(GET_WAS_IN(ch) == NOWHERE && IN_ROOM(ch) != NOWHERE) {
 			GET_WAS_IN(ch) = IN_ROOM(ch);
@@ -409,7 +410,7 @@ void check_idling(struct char_data *ch) {
 			if(!ch->drone) {
 				act("$n disappears into the void.", TRUE, ch, 0, 0, TO_ROOM);
 				send_to_char(ch, "You have been idle, and are pulled into a void.\r\n");
-				save_char(ch);
+				save_char(player);
 				Crash_crashsave(ch);
 				char_from_room(ch);
 				char_to_room(ch, config::rooms::idle());
@@ -440,7 +441,7 @@ void check_idling(struct char_data *ch) {
 			mudlog(CMP, LVL_GOD, TRUE, "%s force-rented and extracted (idle).", GET_NAME(ch).c_str());
 			extract_char(ch);
 #else
-			auto save_status = db::save_char(ch);
+			auto save_status = db::save_char(player);
 			if(save_status < 0){
 				std::cerr << "check_idling[db::save_char]->error saving character\n";
 			}

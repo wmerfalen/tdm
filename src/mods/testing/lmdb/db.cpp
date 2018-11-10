@@ -154,16 +154,16 @@ using int_status_t = mods::lmdb::error::int_status_t;
 namespace mods::testing::lmdb {
 	db::db(int argc,char** argv){
 
-		bool b_error = false;
-		initialize_row("player",mods::globals::db.get(),b_error);
-		initialize_table_schema("player",mods::globals::db.get());
-		b_error = false;
+		mods::db::initialize_row("player");
+		//initialize_table_schema("player",mods::globals::db.get());
+		/*
 		auto ret = new_record("player",mods::globals::db.get(),b_error);
 		if(!std::get<0>(ret)){
 			std::cerr << "new_Record failed\n";
 		}else{
 			std::cerr << "[new_record] created\n";
 		}
+		*/
 
 	}
 };

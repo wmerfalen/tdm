@@ -100,10 +100,11 @@
 #define TIME_FILE	"etc/time"	   /* for calendar system	*/
 
 /* public procedures in db.c */
+using aligned_int_t = uint64_t;
 void  boot_hell(void);
 void	boot_db(void);
 void	destroy_db(void);
-bool char_exists(std::string_view,mods::db::aligned_int_t&);
+bool char_exists(const std::string&,aligned_int_t&);
 int	create_entry(const char *name);
 void	zone_update(void);
 char	*fread_string(FILE *fl, const char *error);
@@ -122,8 +123,8 @@ obj_rnum real_object(obj_vnum vnum);
 
 void	char_to_store(struct char_data *ch, struct char_file_u *st);
 void	store_to_char(struct char_file_u *st, struct char_data *ch);
-bool	load_char(const char *name, struct char_file_u *char_element);
-void	save_char(struct char_data *ch);
+bool	load_char(const std::string& name);
+void	save_char(std::shared_ptr<mods::player>);
 void	init_char(std::shared_ptr<mods::player>);
 struct char_data* create_char(void);
 struct char_data *read_mobile(mob_vnum nr, int type);
@@ -262,7 +263,7 @@ extern char	*NOEFFECT;
  * inside this db namespace.
  */
 namespace db {
-	int16_t save_char(const mods::player&);
+	int16_t save_char(std::shared_ptr<mods::player>);
 };
 
 #endif	//header inclusion protection

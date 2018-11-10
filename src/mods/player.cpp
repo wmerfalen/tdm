@@ -166,6 +166,7 @@ namespace mods {
 		}
 	}
 	player::player(player_type_enum_t type){
+		set_god_mode(false);
 		m_set_time();
 		switch(type){
 			case DRONE:
@@ -203,6 +204,7 @@ namespace mods {
 		}
 	}
 	player::player(){
+		set_god_mode(false);
 		m_set_time();
 		m_shared_ptr = std::make_shared<char_data>();
 		m_char_data = m_shared_ptr.get();
@@ -232,6 +234,7 @@ namespace mods {
 		m_capture_output = false;
 		m_executing_js = false;
 		m_time = ptr->time();
+		set_god_mode(ptr->god_mode());
 	}
 	void player::capture_output(bool capture_status) {
 		m_capture_output = capture_status;
@@ -555,6 +558,9 @@ namespace mods {
 		it->character->has_desc = true;
 	}
 	void player::init(){
+		set_god_mode(false);
+		set_imp_mode(false);
+		set_bui_mode(false);
 		if(m_desc){
 			m_desc.reset();
 		}
@@ -668,6 +674,46 @@ m_affected_plr[PLR_INVSTART] = IS_SET(PLR_FLAGS(cd()),PLR_INVSTART);
 m_affected_plr[PLR_CRYO] = IS_SET(PLR_FLAGS(cd()),PLR_CRYO);
 m_affected_plr[PLR_NOTDEADYET] = IS_SET(PLR_FLAGS(cd()),PLR_NOTDEADYET);
 				return m_affected_plr;
+			}
+
+			bool player::god_mode() const{
+				return m_god_mode;
+			}
+			bool player::implementor_mode() const{
+				return m_imp_mode;
+			}
+			bool player::builder_mode() const{
+				return m_bui_mode;
+			}
+			void player::set_god_mode(bool b){
+				m_god_mode = b;
+			}
+			void player::set_imp_mode(bool b){
+				m_imp_mode = b;
+			}
+			void player::set_bui_mode(bool b){
+				m_bui_mode = b;
+			}
+			void player::done() {
+				this->stc("It has been done.\n");
+			}
+			bool player::has_builder_data(){
+				if(cd()->builder_data){
+					return true;
+				}
+				return false;
+			}
+			bool player::room_pave_mode(){
+				if(this->has_builder_data()){
+					return cd()->builder_data->room_pave_mode;
+				}
+				return false;
+			}
+			bool player::zone_pave_mode(){
+				if(this->has_builder_data()){
+					return cd()->builder_data->zone_pave_mode;
+				}
+				return false;
 			}
 
 };

@@ -853,7 +853,8 @@ ACMD(do_stat) {
 
 			char_data temp_victim_shadow;
 
-			if(load_char(buf2, &tmp_store)) {
+			std::string name = buf2;
+			if(load_char(name)) {
 				store_to_char(&tmp_store, &temp_victim_shadow);
 				victim->player.time.logon = tmp_store.last_logon;
 				char_to_room(&temp_victim_shadow, 0);
@@ -1381,7 +1382,7 @@ ACMD(do_advance) {
 
 	gain_exp_regardless(victim,
 	                    level_exp(GET_CLASS(victim), newlevel) - GET_EXP(victim));
-	save_char(victim);
+	save_char(std::make_shared<mods::player>(victim));
 }
 
 ACMD(do_restore) {
@@ -1682,7 +1683,7 @@ ACMD(do_last) {
 		return;
 	}
 
-	if(load_char(arg, &chdata) == false) {
+	if(load_char(std::string(arg)) == false) {
 		send_to_char(ch, "There is no such player.\r\n");
 		return;
 	}
@@ -2013,7 +2014,7 @@ ACMD(do_wizutil) {
 				break;
 		}
 
-		save_char(vict);
+		save_char(std::make_shared<mods::player>(vict));
 	}
 }
 
@@ -2125,7 +2126,7 @@ ACMD(do_show) {
 				return;
 			}
 
-			if(load_char(value, &vbuf) == false) {
+			if(load_char(std::string(value)) == false) {
 				send_to_char(ch, "There is no such player.\r\n");
 				return;
 			}
@@ -2859,7 +2860,7 @@ ACMD(do_set) {
 	/* save the character if a change was made */
 	if(retval) {
 		if(!is_file && !IS_NPC(vict)) {
-			save_char(vict);
+			save_char(std::make_shared<mods::player>(vict));
 		}
 
 		if(is_file) {

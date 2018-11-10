@@ -112,6 +112,64 @@ namespace mods {
 			duk_push_number(ctx,0);
 			return 0;
 		}
+		static duk_ret_t clear_all_plr_flags(duk_context *ctx) {
+			/** TODO: get array from duktape */
+			std::string name = duk_to_string(ctx,0);
+				bool found = false;
+				auto player_ptr = utils::find_player_by_name(name,found);
+				if(!found){
+					duk_push_number(ctx,-1);
+					return 1;
+				}
+				player_ptr->clear_all_affected_plr();
+				duk_push_number(ctx,0);
+				return 1;
+		}
+		static duk_ret_t clear_all_affected_flags(duk_context *ctx) {
+			/** TODO: get array from duktape */
+			std::string name = duk_to_string(ctx,0);
+				bool found = false;
+				auto player_ptr = utils::find_player_by_name(name,found);
+				if(!found){
+					duk_push_number(ctx,-1);
+					return 1;
+				}
+				player_ptr->clear_all_affected();
+				duk_push_number(ctx,0);
+				return 1;
+		}
+
+		static duk_ret_t modify_plr_flags(duk_context *ctx) {
+			/** TODO: get array from duktape */
+			std::string name = duk_to_string(ctx,0);
+			std::string key = duk_to_string(ctx,1);
+			bool on = (bool)duk_to_number(ctx,2);
+				bool found = false;
+				auto player_ptr = utils::find_player_by_name(name,found);
+				if(!found){
+					duk_push_number(ctx,-1);
+					return 1;
+				}
+if(key.compare("KILLER")==0){ if(on){ player_ptr->affect_plr(PLR_KILLER); }else{ player_ptr->remove_affect_plr(PLR_KILLER); }}
+else if(key.compare("THIEF")==0){ if(on){ player_ptr->affect_plr(PLR_THIEF); }else{ player_ptr->remove_affect_plr(PLR_THIEF); }}
+else if(key.compare("FROZEN")==0){ if(on){ player_ptr->affect_plr(PLR_FROZEN); }else{ player_ptr->remove_affect_plr(PLR_FROZEN); }}
+else if(key.compare("DONTSET")==0){ if(on){ player_ptr->affect_plr(PLR_DONTSET); }else{ player_ptr->remove_affect_plr(PLR_DONTSET); }}
+else if(key.compare("WRITING")==0){ if(on){ player_ptr->affect_plr(PLR_WRITING); }else{ player_ptr->remove_affect_plr(PLR_WRITING); }}
+else if(key.compare("MAILING")==0){ if(on){ player_ptr->affect_plr(PLR_MAILING); }else{ player_ptr->remove_affect_plr(PLR_MAILING); }}
+else if(key.compare("CRASH")==0){ if(on){ player_ptr->affect_plr(PLR_CRASH); }else{ player_ptr->remove_affect_plr(PLR_CRASH); }}
+else if(key.compare("SITEOK")==0){ if(on){ player_ptr->affect_plr(PLR_SITEOK); }else{ player_ptr->remove_affect_plr(PLR_SITEOK); }}
+else if(key.compare("NOSHOUT")==0){ if(on){ player_ptr->affect_plr(PLR_NOSHOUT); }else{ player_ptr->remove_affect_plr(PLR_NOSHOUT); }}
+else if(key.compare("NOTITLE")==0){ if(on){ player_ptr->affect_plr(PLR_NOTITLE); }else{ player_ptr->remove_affect_plr(PLR_NOTITLE); }}
+else if(key.compare("DELETED")==0){ if(on){ player_ptr->affect_plr(PLR_DELETED); }else{ player_ptr->remove_affect_plr(PLR_DELETED); }}
+else if(key.compare("LOADROOM")==0){ if(on){ player_ptr->affect_plr(PLR_LOADROOM); }else{ player_ptr->remove_affect_plr(PLR_LOADROOM); }}
+else if(key.compare("NOWIZLIST")==0){ if(on){ player_ptr->affect_plr(PLR_NOWIZLIST); }else{ player_ptr->remove_affect_plr(PLR_NOWIZLIST); }}
+else if(key.compare("NODELETE")==0){ if(on){ player_ptr->affect_plr(PLR_NODELETE); }else{ player_ptr->remove_affect_plr(PLR_NODELETE); }}
+else if(key.compare("INVSTART")==0){ if(on){ player_ptr->affect_plr(PLR_INVSTART); }else{ player_ptr->remove_affect_plr(PLR_INVSTART); }}
+else if(key.compare("CRYO")==0){ if(on){ player_ptr->affect_plr(PLR_CRYO); }else{ player_ptr->remove_affect_plr(PLR_CRYO); }}
+else if(key.compare("NOTDEADYET")==0){ if(on){ player_ptr->affect_plr(PLR_NOTDEADYET); }else{ player_ptr->remove_affect_plr(PLR_NOTDEADYET); }}
+				duk_push_number(ctx,0);
+				return 1;
+		}
 		static duk_ret_t modify_affected_flags(duk_context *ctx) {
 			/** TODO: get array from duktape */
 			std::string name = duk_to_string(ctx,0);
@@ -524,6 +582,12 @@ __set_points_cleanup:
 			duk_put_global_string(ctx,"modify_affected_flags");
 			duk_push_c_function(ctx,mods::js::affect_from_char,3);
 			duk_put_global_string(ctx,"affect_from_char");
+			duk_push_c_function(ctx,mods::js::modify_plr_flags,3);
+			duk_put_global_string(ctx,"modify_plr_flags");
+			duk_push_c_function(ctx,mods::js::clear_all_plr_flags,1);
+			duk_put_global_string(ctx,"clear_all_plr_flags");
+			duk_push_c_function(ctx,mods::js::clear_all_affected_flags,1);
+			duk_put_global_string(ctx,"clear_all_affected_flags");
 		}
 
 		void run_profile_scripts(std::string_view player_name){

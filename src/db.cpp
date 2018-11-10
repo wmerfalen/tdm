@@ -29,17 +29,13 @@
 #include "mods/behaviour_tree_impl.hpp"
 #include "mods/db.hpp"
 #include "mods/hell.hpp"
+#include "mods/meta_utils.hpp"
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 
-namespace db {
-	int16_t save_char(const mods::player& ch){
-		auto c = ch.cd();
-		if(IS_NPC(c)) {
-			d("db::save_char[IS_NPC]->not saving");
-			return -1;
-		}
 
-		auto ret = mods::db::lmdb_save_char(c->player.name.c_str(),c,mods::globals::db.get());
+namespace db {
+	int16_t save_char(std::shared_ptr<mods::player> player_ptr){
+		auto ret = mods::db::save_char(player_ptr);
 		if(std::get<0>(ret)){
 			d("char saved to db");
 			return 0;
@@ -49,6 +45,11 @@ namespace db {
 		}
 	}
 };
+void save_char(std::shared_ptr<mods::player> player_ptr){
+	if(db::save_char(player_ptr) < 0){
+		std::cerr << "error: save_char failed\n";
+	}
+}
 /**************************************************************************
  *  declarations of most of the 'global' variables                         *
  **************************************************************************/
@@ -2255,40 +2256,33 @@ char *get_name_by_id(long id) {
 	return (NULL);
 }
 
-bool char_exists(std::string_view name,
-		mods::db::aligned_int_t & meta_int_id){
+bool char_exists(const std::string& name, aligned_int_t & meta_int_id){
 	meta_int_id = 0;
-	std::string user_id = "0";
-	auto ptr_db = mods::globals::db.get();
-	ptr_db->renew_txn();
-	auto ret = ptr_db->get(db_key(
-				{"player","meta","name",name.data()}),
-			user_id);
-	if(db_handle::KEY_FETCHED_OKAY != ret){
-		ptr_db->abort_txn();
-		return false;
-	}
-	std::stringstream stream;
-	stream << user_id;
-	stream >> meta_int_id;
-	return (meta_int_id != 0);
-}
-
-/* Load a char, TRUE if loaded, FALSE if not */
-bool load_char(const char *name, struct char_file_u *char_element) {
-	mods::db::mutable_map_t values;
-	auto tuple_ret = mods::db::lmdb_load_by_meta(
-			"name",std::string(name),"player",
-			mods::globals::db.get(),
-			values);
-	if(std::get<0>(tuple_ret)){
-		mudlog(CMP,LVL_GOD,FALSE,(std::string("loaded character: '") + name).c_str());
+	if(load_char(name)){
+		mutable_map_t values;
+		values["player_name"] = name;
+	auto meta_vals = mods::meta_utils::get_all_meta_values("player",&values);
+		meta_int_id = mods::util::stoi<aligned_int_t>(meta_vals[0].second);
 		return true;
 	}else{
-		mudlog(CMP,LVL_GOD,FALSE,(std::string("Error `load_char`: ") + 
-					std::get<1>(tuple_ret)).c_str());
 		return false;
 	}
+}
+
+
+/* Load a char, TRUE if loaded, FALSE if not */
+bool load_char(const std::string& name) {
+	mutable_map_t values;
+	values["player_name"] = name;
+	auto meta_vals = mods::meta_utils::get_all_meta_values("player",&values);
+	if(meta_vals.size()){
+		if(meta_vals[0].second.compare("0") == 0){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	return false;
 }	
 
 
@@ -2297,21 +2291,16 @@ bool load_char(const char *name, struct char_file_u *char_element) {
 /*
  * write the vital data of a player to sql
  */
-void save_char(struct char_data *ch) {
-	db::save_char(ch);
-}
-
-
-
-
 
 
 bool parse_sql_player(const char* name,char_data* ch){
 	try{
 		//FIXME: name needs to be user_id. 
 		auto result = db_get_by_meta("player","name",name);
+		/** TODO: update this stuff with the new values in mods::schema::db and the meta values from mods::schema::db_meta_values */
 		if(result.size()){
 			for(auto row : result){
+				ch->set_db_id(mods::util::stoi<aligned_int_t>(row["id"]));
 				ch->player.name.assign(name);
 				ch->player.short_descr.assign((row["player_short_description"]));
 				ch->player.long_descr.assign((row["player_long_description"]));
@@ -2340,6 +2329,7 @@ bool parse_sql_player(const char* name,char_data* ch){
 				ch->player.title.assign((row["player_title"]));
 				ch->player.hometown = mods::util::stoi<int>(row["player_hometown"]);
 				GET_PASSWD(ch).assign((row["player_password"]));
+				/** FIXME: if points aren't sane values, reset the character via the new points reset code */
 				break;
 			}
 		}
@@ -2382,7 +2372,10 @@ bool parse_sql_player(const char* name,char_data* ch){
 }
 /* copy data from the file structure to a char struct */
 void store_to_char(struct char_file_u *st, struct char_data *ch) {
-	parse_sql_player(st->name,ch);
+	MENTOC_PREAMBLE();
+	mods::db::save_char(player);
+	//save_char(ch);
+	//parse_sql_player(st->name,ch);
 }				/* store_to_char */
 
 

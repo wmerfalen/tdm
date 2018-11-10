@@ -6,7 +6,7 @@ namespace mods::testing::lmdb {
 		using namespace mods::db;
 		auto player = mods::globals::player_list.emplace_back(
 				std::make_shared<mods::player>());
-		lmdb_save_char("far",player->cd(),mods::globals::db.get());
+		mods::db::save_char(player);
 		mods::globals::db->close();
 	}
 };

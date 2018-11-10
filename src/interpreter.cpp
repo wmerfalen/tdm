@@ -643,7 +643,7 @@ void command_interpreter(struct char_data *ch, const char *argument) {
 	command_interpreter(ch,const_cast<char*>(argument));
 }
 void command_interpreter(struct char_data *ch, char *argument) {
-	d("This is our argument: " << argument);
+	MENTOC_PREAMBLE();
 	int cmd, length;
 	char *line;
 	char arg[MAX_INPUT_LENGTH];
@@ -653,7 +653,15 @@ void command_interpreter(struct char_data *ch, char *argument) {
 	/* just drop to next line for hitting CR */
 	skip_spaces(&argument);
 
-	if(!mods::globals::command_interpreter(ch,argument)) { /* !mods*/
+	if(!mods::globals::command_interpreter(player,argument)) { /* !mods*/
+		if(player->god_mode()){
+			for(length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++){
+				if(!strncmp(cmd_info[cmd].command, arg, length)){
+					((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd));
+					break;
+				}
+			}
+		}
 		return;
 	}
 
@@ -675,11 +683,14 @@ void command_interpreter(struct char_data *ch, char *argument) {
 	}
 
 	/* otherwise, find the command */
-	for(length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++)
-		if(!strncmp(cmd_info[cmd].command, arg, length))
+	for(length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++){
+		if(!strncmp(cmd_info[cmd].command, arg, length)){
 			if(GET_LEVEL(ch) >= cmd_info[cmd].minimum_level) {
 				break;
 			}
+		}
+	}
+
 
 	if(*cmd_info[cmd].command == '\n') {
 		send_to_char(ch, "Huh?!?\r\n");
@@ -723,11 +734,9 @@ void command_interpreter(struct char_data *ch, char *argument) {
 		}
 	}
 	else if(no_specials || !special(ch, cmd, line)) {
-		d("using command pointer in interpreter");
 		((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd));
 	}
 
-	d("post command interpretter being called");
 	mods::globals::post_command_interpreter(ch,argument);
 }
 
@@ -1427,8 +1436,8 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 					return;
 				}
 
-				mods::db::aligned_int_t user_id = 0;
-				if(char_exists(tmp_ptr.c_str(),user_id)) {
+				aligned_int_t user_id = 0;
+				if(char_exists(std::string(tmp_ptr.c_str()),user_id)) {
 					//store_to_char(&tmp_store, p->cd());
 
 					//if(PLR_FLAGGED(p->cd(), PLR_DELETED)) {
@@ -1547,7 +1556,7 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 						mudlog(BRF, LVL_GOD, TRUE, "Bad PW: %s [%s]", GET_NAME(p->cd()).c_str(), d.host.c_str());
 						GET_BAD_PWS(p->cd())++;
 						/** TODO: make sure save_char is working. It currently seems not to be working properly. */
-						save_char(p->cd());
+						save_char(p);
 
 						if(++(d.bad_pws) >= max_bad_pws) {	/* 3 strikes and you're out. */
 							write_to_output(d, "Wrong password... disconnecting.\r\n");
@@ -1652,7 +1661,7 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 				write_to_output(d, "\r\nWhat is your sex (M/F)? ");
 				d.set_state(CON_QSEX);
 			} else {
-				save_char(p->cd());
+				save_char(p);
 				write_to_output(d, "\r\nDone.\r\n%s", MENU);
 				d.set_state(CON_MENU);
 			}
@@ -1698,7 +1707,7 @@ void nanny(std::shared_ptr<mods::player> p, char *arg) {
 			init_char(p);
 			d("save_char");
 			REMOVE_BIT(MOB_FLAGS(p->cd()), MOB_ISNPC);
-			save_char(p->cd());
+			save_char(p);
 			write_to_output(d, "%s\r\n*** PRESS RETURN: ", motd);
 			d("set CON_RMOTD");
 			d.set_state(CON_RMOTD);
@@ -1877,7 +1886,7 @@ case CON_MENU: {		/* get selection from main menu  */
 											 SET_BIT(PLR_FLAGS(p->cd()), PLR_DELETED);
 										 }
 
-										 save_char(p->cd());
+										 save_char(p);
 										 Crash_delete_file(GET_NAME(p->cd()).ptr());
 										 delete_aliases(GET_NAME(p->cd()).c_str());
 										 write_to_output(d, "Character '%s' deleted!\r\n"

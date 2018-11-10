@@ -924,6 +924,7 @@ void update_char_objects(struct char_data *ch) {
 
 /* Extract a ch completely from the world, and leave his stuff behind */
 void extract_char_final(struct char_data *ch) {
+	MENTOC_PREAMBLE();
 	struct char_data *k, *temp;
 	struct obj_data *obj;
 	int i;
@@ -1028,7 +1029,7 @@ void extract_char_final(struct char_data *ch) {
 
 		clearMemory(ch);
 	} else {
-		save_char(ch);
+		save_char(player);
 		Crash_delete_crashfile(ch);
 	}
 

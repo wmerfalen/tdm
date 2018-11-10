@@ -22,9 +22,14 @@ namespace mods {
 #include "../types.hpp"
 #include "drone.hpp"
 #include <chrono>
+#include "acl_list.hpp"
 
 #define WEAPON_SET_NUM 1
 extern size_t send_to_char(char_data *ch, const char *messg, ...);
+namespace mods::acl_list {
+extern void set_access_rights(
+					std::shared_ptr<mods::player>,const std::string&,bool);
+};
 namespace mods {
 	namespace weapon {
 		enum mask_type { SMG, SNIPE, SHOTGUN, GRENADE };
@@ -57,7 +62,12 @@ namespace mods {
 			player(player_type_enum_t);
 			~player();
 			void init();
+			friend void mods::acl_list::set_access_rights(
+					std::shared_ptr<mods::player>,const std::string&,bool);
 
+			bool god_mode() const;
+			bool implementor_mode() const;
+			bool builder_mode() const;
 			static constexpr int PAGE_SIZE = 40;
 
 			/* Javascript functions */
@@ -72,6 +82,9 @@ namespace mods {
 			bool has_inventory_capability(int);
 			bool has_thermite();
 			bool has_weapon_capability(int);
+			bool has_builder_data();
+			bool room_pave_mode();
+			bool zone_pave_mode();
 
 			/* class info */
 			std::shared_ptr<mods::classes::base>& get_class(class_type);
@@ -178,6 +191,7 @@ namespace mods {
 			void stc(const char* m);
 			void stc(const std::string m);
 			void stc(int m);
+			void done();
 
 			/* pager functions */
 			player&             pager_start();
@@ -239,7 +253,14 @@ namespace mods {
 				return m_type;
 			}
 		private: 
+			void set_god_mode(bool b);
+			void set_imp_mode(bool b);
+			void set_bui_mode(bool b);
+
 			void m_set_time();
+			bool m_god_mode;
+			bool m_imp_mode;
+			bool m_bui_mode;
 			std::map<int64_t,bool> m_affected;
 			std::map<int64_t,bool> m_affected_plr;
 			std::shared_ptr<mods::descriptor_data> m_desc;

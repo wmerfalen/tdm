@@ -106,6 +106,7 @@ ACMD(do_quit) {
 
 
 ACMD(do_save) {
+	MENTOC_PREAMBLE();
 	if(IS_NPC(ch) || !ch->has_desc) {
 		return;
 	}
@@ -129,7 +130,7 @@ ACMD(do_save) {
 	}
 
 	write_aliases(ch);
-	save_char(ch);
+	save_char(player);
 	Crash_crashsave(ch);
 
 	if(ROOM_FLAGGED(IN_ROOM(ch), ROOM_HOUSE_CRASH)) {

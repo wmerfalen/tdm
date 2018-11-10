@@ -3591,6 +3591,7 @@ void do_start(struct char_data *ch) {
  * each class every time they gain a level.
  */
 void advance_level(struct char_data *ch) {
+	MENTOC_PREAMBLE();
 	int add_hp, add_mana = 0, add_move = 0, i;
 
 	add_hp = con_app[GET_CON(ch)].hitp;
@@ -3640,7 +3641,7 @@ void advance_level(struct char_data *ch) {
 	}
 
 	snoop_check(ch);
-	save_char(ch);
+	save_char(player);
 }
 
 

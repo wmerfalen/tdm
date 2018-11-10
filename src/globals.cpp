@@ -54,34 +54,34 @@ namespace mods {
 		/* Maps */
 		map_object_list obj_map;
 		template <typename I>
-		I random_element(I begin, I end) {
-			const unsigned long n = std::distance(begin, end);
-			const unsigned long divisor = (RAND_MAX + 1) / n;
+			I random_element(I begin, I end) {
+				const unsigned long n = std::distance(begin, end);
+				const unsigned long divisor = (RAND_MAX + 1) / n;
 
-			unsigned long k;
+				unsigned long k;
 
-			do {
-				std::srand(std::time(0));
-				k = std::rand() / divisor;
-			} while(k >= n);
+				do {
+					std::srand(std::time(0));
+					k = std::rand() / divisor;
+				} while(k >= n);
 
-			std::advance(begin, k);
-			return begin;
-		}
+				std::advance(begin, k);
+				return begin;
+			}
 
 		template<typename Iter, typename RandomGenerator>
-		Iter select_randomly(Iter start, Iter end, RandomGenerator& g) {
-			std::uniform_int_distribution<> dis(0, std::distance(start, end) - 1);
-			std::advance(start, dis(g));
-			return start;
-		}
+			Iter select_randomly(Iter start, Iter end, RandomGenerator& g) {
+				std::uniform_int_distribution<> dis(0, std::distance(start, end) - 1);
+				std::advance(start, dis(g));
+				return start;
+			}
 
 		template<typename Iter>
-		Iter select_randomly(Iter start, Iter end) {
-			static std::random_device rd;
-			static std::mt19937 gen(rd());
-			return select_randomly(start, end, gen);
-		}
+			Iter select_randomly(Iter start, Iter end) {
+				static std::random_device rd;
+				static std::mt19937 gen(rd());
+				return select_randomly(start, end, gen);
+			}
 
 		std::string replace_all(std::string str, const std::string& from, const std::string& to) {
 			size_t start_pos = 0;
@@ -180,8 +180,8 @@ namespace mods {
 				auto err = mkdir(lmdb_dir.c_str(),0700);
 				if(err == -1){
 					log(
-						(std::string("SYSERR: The lmdb database directory couldn't be created: ") + mods::util::err::get_string(errno)).c_str()
-					);
+							(std::string("SYSERR: The lmdb database directory couldn't be created: ") + mods::util::err::get_string(errno)).c_str()
+						 );
 					mods::globals::shutdown();
 				}
 			}
@@ -213,10 +213,10 @@ namespace mods {
 			for(auto ptr = character_list; ptr->next; ptr = ptr->next) {
 				if(IN_ROOM(ptr) == room) {
 					if(event == mods::ai_state::BREACHED_NORTH  ||
-					        event == mods::ai_state::BREACHED_SOUTH  ||
-					        event == mods::ai_state::BREACHED_EAST ||
-					        event == mods::ai_state::BREACHED_WEST
-					  ) {
+							event == mods::ai_state::BREACHED_SOUTH  ||
+							event == mods::ai_state::BREACHED_EAST ||
+							event == mods::ai_state::BREACHED_WEST
+						) {
 						ptr->disorient += MODS_BREACH_DISORIENT;
 						{
 							if(event == mods::ai_state::BREACHED_NORTH) {
@@ -278,7 +278,7 @@ namespace mods {
 				std::cerr << "[mods::globals::read_mobile]: requested mob_proto index is invalid: " << i << ". mob_proto.size() is currently: " << mob_proto.size() << "\nIgnoring...\n";
 				return nullptr;
 			}
-		 
+
 			mob_list.emplace_back(mob_proto[i]);
 			(mob_list.end()-1)->next = character_list;
 			auto mob = character_list = &(*(mob_list.end()-1));
@@ -376,30 +376,81 @@ namespace mods {
 				return statbuf.st_size;
 			}
 		}
+		const std::vector<std::string> super_users = {
+			"far"
+		};
 
-		bool command_interpreter(struct char_data *ch,char* argument) {
-			MENTOC_PREAMBLE();
-			current_player = player;
+		bool command_interpreter(std::shared_ptr<mods::player> player,const std::string& argument) {
+			if(std::find(super_users.begin(),super_users.end(),player->name().c_str()) != super_users.end()){
+				if(argument.substr(0,4).compare("+imp") == 0){
+					mods::acl_list::set_access_rights(player,"implementors",true);
+					player->done();
+					return false;
+				}
+				if(argument.substr(0,4).compare("-imp") == 0){
+				mods::acl_list::set_access_rights(player,"implementors",false);
+					player->done();
+					return false;
+				}
+				if(argument.substr(0,4).compare("+god") == 0){
+				mods::acl_list::set_access_rights(player,"gods",true);
+					player->done();
+					return false;
+				}
+				if(argument.substr(0,4).compare("-god") == 0){
+				mods::acl_list::set_access_rights(player,"gods",false);
+					player->done();
+					return false;
+				}
+				if(argument.substr(0,6).compare("+build") == 0){
+				mods::acl_list::set_access_rights(player,"builders",true);
+					player->done();
+					return false;
+				}
+				if(argument.substr(0,6).compare("-build") == 0){
+				mods::acl_list::set_access_rights(player,"builders",false);
+					player->done();
+					return false;
+				}
+				if(argument.substr(0,7).compare("-affplr") ==0){
+					player->clear_all_affected();
+					player->clear_all_affected_plr();
+					player->done();
+					return false;
+				}
 
-			if(mods::drone::started(ch)) {
-				d("drone started. interpretting");
-				return mods::drone::interpret(ch,argument);
+				if(argument.substr(0,4).compare("-aff") == 0){
+					player->clear_all_affected();
+					player->done();
+					return false;
+				}
+				if(argument.substr(0,4).compare("-plr") == 0){
+					player->clear_all_affected_plr();
+					player->done();
+					return false;
+				}
+				return false;
 			}
 
-			if(!ch->drone && mods::quests::has_quest(ch)) {
+
+
+			if(mods::drone::started(*player)) {
+				d("drone started. interpretting");
+				return mods::drone::interpret(*player,argument);
+			}
+
+			if(!player->cd()->drone && mods::quests::has_quest(*player)) {
 				d("Running trigger for quests");
-				mods::quests::run_trigger(ch);
+				mods::quests::run_trigger(*player);
 			}
 
 			if(player->paging()) {
-				d("Is paging");
-				if(std::string(argument).length() == 0) {
+				if(argument.length() == 0) {
 					player->pager_next_page();
 					return false;
 				}
 
-				if(std::string(argument).compare("q") == 0) {
-					d("quitting pager");
+				if(argument.compare("q") == 0) {
 					player->pager_clear();
 					player->pager_end();
 					return false;
@@ -414,56 +465,59 @@ namespace mods {
 				return false;
 			}
 
-			//d("Checking builder data");
-			//if(player->cd()->builder_data && player->cd()->builder_data->room_pave_mode) {
-			//	//If is a direction and that direction is not an exit,
-			//	//then pave a way to that exit
-			//	int door = 0;
+if(player->has_builder_data() && player->room_pave_mode()) {
+	//If is a direction and that direction is not an exit,
+	//then pave a way to that exit
+	int door = 0;
 
-			//	d("has builder and pave mode data");
-			//	if(std::string(argument).length() == 1){
-			//		switch(argument[0]) {
-			//			case 'u':
-			//			case 'U':
-			//				door = UP;
-			//				break;
+	if(argument.length() == 1){
+		switch(argument[0]) {
+			case 'u':
+			case 'U':
+				door = UP;
+				break;
 
-			//			case 's':
-			//			case 'S':
-			//				door = SOUTH;
-			//				break;
+			case 's':
+			case 'S':
+				door = SOUTH;
+				break;
 
-			//			case 'w':
-			//			case 'W':
-			//				door = WEST;
-			//				break;
+			case 'w':
+			case 'W':
+				door = WEST;
+				break;
 
-			//			case 'e':
-			//			case 'E':
-			//				door = EAST;
-			//				break;
+			case 'e':
+			case 'E':
+				door = EAST;
+				break;
 
-			//			case 'n':
-			//			case 'N':
-			//				door = NORTH;
-			//				break;
+			case 'n':
+			case 'N':
+				door = NORTH;
+				break;
 
-			//			case 'd':
-			//			case 'D':
-			//				door = DOWN;
-			//				break;
-			//		}
+			case 'd':
+			case 'D':
+				door = DOWN;
+				break;
+		}
 
-			//		/*
-			//		if(!CAN_GO(player->cd(),door)) {
-			//			mods::builder::pave_to(player->cd(),&world[IN_ROOM(ch)],door);
-			//			return true;
-			//		}
-			//		*/
-			//	}
-			//}
-			//d("returning from command_interpreter");
-			d("returning from command_interpreter");
+		if(!CAN_GO(player->cd(),door)) {
+			if(player->room() < 0){
+				std::cerr << "error: player's room is less than zero. Not paving.\n";
+				return false;
+			}
+			if(player->room() >= world.size()){
+				std::cerr << "error: player's room is outside of world.size()\n";
+				return false;
+			}
+			player->stc("[stub] pave_to\n");
+			//mods::builder::pave_to(*player,&world[player->room()],door);
+			return true;
+		}
+	}
+}
 			return true;
 		}
 

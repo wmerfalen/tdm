@@ -93,7 +93,7 @@ namespace mods {
     	std::string color_eval(std::string final_buffer);
 		std::string replace_all(std::string str, const std::string& from, const std::string& to);
 		const char* say_random(const mods::ai_state::event_type_t&);
-		bool command_interpreter(struct char_data *ch,char* argument);
+		bool command_interpreter(std::shared_ptr<mods::player>,const std::string& argument);
 		void post_command_interpreter(struct char_data *ch, char* argument);
 		int dir_int(char);
 		namespace rooms {

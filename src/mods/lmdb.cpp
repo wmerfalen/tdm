@@ -1,4 +1,5 @@
 #include "lmdb.hpp"
+#include "db.hpp"
 #include <sstream>
 namespace mods::lmdb {
 	using aligned_int_t = uint64_t;
@@ -160,20 +161,15 @@ namespace mods::lmdb {
 		std::stringstream ss;
 		ss.str(where_id_equals.data());
 		ss >> id;
-		return new_record_with_values(table_cstr(),
-			mods::globals::db.get(),
-			values,
-			error,
-			id);
+		values["id"] = id;
+		return  mods::db::save_record(std::string(table_cstr().data()),
+			&values
+		);
 	}
 	tuple_status_t transaction_t::values(
 			mutable_map_t & values){
-		bool error = false;
-		return new_record_with_values(table_cstr(),
-			mods::globals::db.get(),
-			values,
-			error,
-			std::nullopt);
+		return mods::db::save_record(std::string(table_cstr().data()),
+			&values);
 	}
 	/**
 	 * ##############################

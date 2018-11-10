@@ -32,6 +32,7 @@ typedef short ai_state_t;
 typedef short goal_t;
 struct obj_data;
 typedef uint64_t uuid_t;
+using aligned_int_t = uint64_t;
 
 /*
  * Intended use of this macro is to allow external packages to work with
@@ -1077,11 +1078,13 @@ namespace mods {
 };
 struct char_data {
 	char_data(){
-		std::cerr << "[char_data] constructor yo\n";
+		std::cout << "debug: [char_data] constructor\n";
 		init();	
 	};
 	~char_data() = default;
 	char_data(char_data* o);
+	aligned_int_t db_id(){ return m_db_id; }
+	void set_db_id(aligned_int_t id){ m_db_id = id; }
 	void init();
 	int pfilepos;			 /* playerfile pos		  */
 	uuid_t uuid;
@@ -1125,6 +1128,8 @@ struct char_data {
 	ai_state_t state;
 
 	std::shared_ptr<builder_data_t> builder_data;
+	protected:
+	aligned_int_t m_db_id;
 };
 /* ====================================================================== */
 

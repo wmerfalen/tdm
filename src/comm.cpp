@@ -1939,7 +1939,7 @@ void close_socket(mods::descriptor_data d) {
 
 			/* We are guaranteed to have a person. */
 			act("$n has lost $s link.", TRUE, link_challenged, 0, 0, TO_ROOM);
-			save_char(link_challenged);
+			save_char(std::make_shared<mods::player>(link_challenged));
 			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(link_challenged)), TRUE, "Closing link to: %s.", GET_NAME(link_challenged).c_str());
 		} else {
 			mudlog(CMP, LVL_IMMORT, TRUE, "Losing player: %s.", GET_NAME(d.character) ? GET_NAME(d.character).c_str() : "<null>");
