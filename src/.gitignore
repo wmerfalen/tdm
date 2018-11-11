@@ -19,3 +19,7 @@ build/*
 tinker/code-features/*
 ../lib/etc/time
 libcryptopp.a
+../data
+../lib/lock.mdb
+../sql-port-run
+

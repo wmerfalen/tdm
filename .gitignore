@@ -17,3 +17,7 @@ js-warnings
 lib/etc/time
 callgrind.out*
 .killscript
+data/
+
+lib/lock.mdb
+
