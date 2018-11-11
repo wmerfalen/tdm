@@ -323,12 +323,12 @@ namespace config {
 			std::regex re("\\-\\-conf\\-([a-zA-Z_0-9]+)=(.*)");
 			std::smatch matches;
 			if(std::regex_search(arg,matches,re)){
-				update_db(matches.str(1),matches.str(2));
+				//update_db(matches.str(1),matches.str(2));
 			}
 		}
 	}
-	void update_db(std::string_view option,std::string_view value){
+	void update_db(std::string option,std::string value){
 		std::string key = std::string("config:") + option.data();
-		mods::globals::db->put(key,value.data());
+		mods::globals::db->put(key,value);
 	}
 };

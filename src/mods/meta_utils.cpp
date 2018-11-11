@@ -1,6 +1,7 @@
 #include "lmdb.hpp"
 #include "db.hpp"
 #include "meta_utils.hpp"
+#include "util.hpp"
 
 namespace mods::meta_utils {
 	constexpr static const char* meta = "meta";
@@ -11,6 +12,18 @@ namespace mods::meta_utils {
 		COULDNT_FIND_USER_ID = -1
 	};
 	std::string extract_reference_field_from_meta_key(const std::string& key){
+		/**
+		 * Since I've decided that putting "meta|<column>" for each key in the 
+		 * db_meta_values container is extremely redundant, there is no need
+		 * to attempt to parse the key. In the future when the key gets more complex
+		 * and needs a pipe-delimited syntax, this function will need to change.
+		 * For now, let's keep it simple and just have the column name. As of
+		 * 2018-11-10, the values in db_meta_values went from "meta|player_name"
+		 * to just "player_name".
+		 * -wm 2018-11-10
+		 */
+		return key;
+		/*
 		std::string temp = "";
 		std::vector<std::string> parsed_fields;
 
@@ -28,20 +41,43 @@ namespace mods::meta_utils {
 			}
 		}
 		return "";
+		*/
 	}
 	std::vector<std::pair<std::string,std::string>> get_all_meta_values(
 			const std::string& table,mutable_map_t* mapped_values_ptr){
-		if(mapped_values_ptr == nullptr){
-			std::cerr << "WARNING: received a null mapped_values_ptr in get_all_meta_values!\n";
-			return {};
-		}
 		std::vector<std::pair<std::string,std::string>> result;
 		for(std::string & str_meta_key : mods::schema::db_meta_values[table]){
 			std::string field = extract_reference_field_from_meta_key(str_meta_key);
 			std::string field_value = (*mapped_values_ptr)[field];
+			if(field_value.length() == 0){
+				continue;
+			}
+			std::cout << "debug: get_all_meta_values field:'" << field << "' value: '" << field_value << "'\n";
 			result.emplace_back(std::make_pair(field,field_value));
 		}
 		return result;
+	}
+	std::optional<aligned_int_t> get_pk_by_meta(
+			const std::string& table,mutable_map_t* users_data){
+		auto meta_vals = get_all_meta_values(table,users_data);
+		if(meta_vals.size() == 0){
+			return std::nullopt;
+		}
+		auto ptr_db = mods::globals::db.get();
+		std::string str_pk = "";
+		for(auto & [field_name,field_value] : meta_vals){
+			if(field_value.length()){
+				ptr_db->get(db_key({table,"meta",field_name,field_value}),str_pk);
+				if(str_pk.length()){
+					auto i = mods::util::stoi_optional<aligned_int_t>(str_pk);
+					if(i.has_value()){
+						return i;
+					}
+					str_pk.clear();
+				}
+			}
+		}
+		return std::nullopt;
 	}
 	/**
 	 * This function will generate all the meta keys that you'll need to place in the db depending on which table you pass in. If the table has no meta values, it'll return an empty vector.

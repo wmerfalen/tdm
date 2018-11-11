@@ -58,23 +58,6 @@ int mail_recip_ok(const char *name) {
 
 	std::cerr << "[deprecation-notice]: create/clear char (mail_recip_ok)\n";
 	std::cerr << "[stub]: create/clear char (mail_recip_ok)\n";
-	/*
-	CREATE(victim, struct char_data, 1);
-	clear_char(victim);
-
-	if(load_char(name, &tmp_store)) {
-		store_to_char(&tmp_store, victim);
-		char_to_room(victim, 0);
-
-		if(!PLR_FLAGGED(victim, PLR_DELETED)) {
-			ret = TRUE;
-		}
-
-		extract_char_final(victim);
-	} else {
-		free(victim);
-	}
-	*/
 
 	return ret;
 }

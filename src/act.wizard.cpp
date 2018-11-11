@@ -854,7 +854,7 @@ ACMD(do_stat) {
 			char_data temp_victim_shadow;
 
 			std::string name = buf2;
-			if(load_char(name)) {
+			if(char_exists(name)) {
 				store_to_char(&tmp_store, &temp_victim_shadow);
 				victim->player.time.logon = tmp_store.last_logon;
 				char_to_room(&temp_victim_shadow, 0);
@@ -1683,7 +1683,7 @@ ACMD(do_last) {
 		return;
 	}
 
-	if(load_char(std::string(arg)) == false) {
+	if(char_exists(std::string(arg)) == false) {
 		send_to_char(ch, "There is no such player.\r\n");
 		return;
 	}
@@ -2126,7 +2126,7 @@ ACMD(do_show) {
 				return;
 			}
 
-			if(load_char(std::string(value)) == false) {
+			if(char_exists(std::string(value)) == false) {
 				send_to_char(ch, "There is no such player.\r\n");
 				return;
 			}
@@ -2823,25 +2823,6 @@ ACMD(do_set) {
 		/** TODO: create temporary character function that is global and we can call. */
 		std::cerr << "[deprecation-notice]: CREATE/clear_char combo\n";
 		std::cerr << "[stub]: CREATE/clear_char combo\n";
-		/*
-		CREATE(cbuf, struct char_data, 1);
-		clear_char(cbuf);
-		if((player_i = load_char(name, &tmp_store)) > -1) {
-			store_to_char(&tmp_store, cbuf);
-
-			if(GET_LEVEL(cbuf) >= GET_LEVEL(ch)) {
-				free_char(cbuf);
-				send_to_char(ch, "Sorry, you can't do that.\r\n");
-				return;
-			}
-
-			vict = cbuf;
-		} else {
-			free(cbuf);
-			send_to_char(ch, "There is no such player.\r\n");
-			return;
-		}
-		*/
 		return;
 
 	}

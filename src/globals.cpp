@@ -145,10 +145,12 @@ namespace mods {
 				}else{
 					argument = "";
 				}
+				/*
 				if(strncmp(argv[pos],"--sql-port",10) == 0){
 					exit(port_main(argc -1,static_cast<char**>(&argv[1])));
 					continue;
 				}
+				*/
 				if(strncmp(argv[pos],"--testing=",10) == 0){
 					f_test_suite = argument.substr(10,argument.length()-10);
 					continue;
@@ -508,7 +510,7 @@ if(player->has_builder_data() && player->room_pave_mode()) {
 				std::cerr << "error: player's room is less than zero. Not paving.\n";
 				return false;
 			}
-			if(player->room() >= world.size()){
+			if(player->room() >= 0 && std::size_t(player->room()) >= world.size()){
 				std::cerr << "error: player's room is outside of world.size()\n";
 				return false;
 			}

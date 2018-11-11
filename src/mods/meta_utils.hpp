@@ -12,6 +12,7 @@ namespace mods::meta_utils {
 			const std::string& table,mutable_map_t* mapped_values_ptr);
 	std::vector<std::string> generate_meta_keys(const std::string& table,
 			mutable_map_t* mapped_values_ptr);
+	std::optional<aligned_int_t> get_pk_by_meta( const std::string& table,mutable_map_t* users_data);
 	int do_meta_easy_by_pk( const std::string & table, mutable_map_t* values);
 	int do_meta_easy( const std::string & table, mutable_map_t* values,
 			aligned_int_t* optional_place_found_id_here);

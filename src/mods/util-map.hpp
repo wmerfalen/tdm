@@ -10,6 +10,12 @@
 namespace mods {
 	namespace util {
 		namespace maps {
+			template <typename TKey,typename TVal>
+			static inline void dump(std::map<TKey,TVal> m){
+				for(auto & [k,v]: m){
+					std::cout << "[" << k << "]->'" << v << "'\n";
+				}
+			}
 			template <typename Tkey,typename Tval>
 			Tkey keyval_first(std::map<Tkey,Tval>& m,const Tval value,Tkey default_value) {
 				for(auto& i:m) {

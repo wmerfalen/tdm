@@ -18,3 +18,4 @@ mods/test/*
 build/*
 tinker/code-features/*
 ../lib/etc/time
+libcryptopp.a

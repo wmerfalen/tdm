@@ -1,6 +1,7 @@
 #include "lmdb.hpp"
 #include "db.hpp"
 #include <sstream>
+#include "util.hpp"
 namespace mods::lmdb {
 	using aligned_int_t = uint64_t;
 	selector_type_t transaction_t::selector(const key_type_t & column,const uint64_t & row_id){
@@ -11,7 +12,7 @@ namespace mods::lmdb {
 		return 0;
 	}
 
-	transaction_t::transaction_t(std::string_view ce_table,transact_type_t type) : m_type(type){
+	transaction_t::transaction_t(std::string ce_table,transact_type_t type) : m_type(type){
 		m_str_table = ce_table;
 	}
 	transaction_t::transaction_t(table_type_t e_table,transact_type_t type) : m_table(e_table), m_type(type){
@@ -23,83 +24,31 @@ namespace mods::lmdb {
 	 * i.e.: get("user_id",123); //sql equiv: select * from users where user_id = 123
 	 */
 	template <typename T>
-		std::string transaction_t::get(T consumer,std::string_view key){
+		std::string transaction_t::get(T consumer,std::string key){
 			std::string value = "";
-			consumer->get(db_key({table_cstr(),key.data()}),value);
+			consumer->get(db_key({table_cstr(),key}),value);
 			return value;
 		}
 	template <typename T>
-		result_container_t transaction_t::get_by_meta(T consumer,std::string_view column,std::string_view equals_value){
+		result_container_t transaction_t::get_by_meta(T consumer,std::string column,std::string equals_value){
 			result_container_t r;
-			std::string selector  = db_key({table_cstr(),"meta",column,equals_value});
-			std::string row_id;
-			mutable_map_t mapped;
-			if(mods::schema::db.find(table_cstr().data()) == mods::schema::db.end()){
-				std::cerr << "WARNING: application code asked for table that doesn't exist: '" << table_cstr() << "'\n";
-				std::cerr << "Returning empty result\n";
-				return r;
-			}
-			if(mods::schema::db_meta_values.find(table_cstr().data()) == 
-					mods::schema::db_meta_values.end()){
-				std::cerr << "WARNING: attempt to search db_meta_values, but table doesn't have any: \n";
-				std::cerr << "Table: '" << table_cstr().data() << "'\n";
-				std::cerr << "Meta: '" << column.data() << "'\n";
-				return r;
-			}
-			std::vector<std::string> fields_to_grab;
-			if(consumer->is_using_pluck_filter()){
-				fields_to_grab = consumer->get_pluck_filter();
-			}else{
-				fields_to_grab = mods::schema::db[table_cstr().data()];
-			}
-			if(consumer->get(selector,row_id) >= 0){
-				for(auto & field_name : fields_to_grab){
-					std::string element_selector  = db_key({table_cstr(),
-							field_name.c_str(),
-							row_id});
-					std::string value;
-					value.clear();
-					auto ret = consumer->get(element_selector,value);
-					if(ret < 0){
-						continue;
-					}
-					mapped.insert(std::make_pair(
-								field_name.c_str(),
-								value));
-				}
-			}
-			if(mapped.size()){
-				r.emplace_back(mapped);
+			mutable_map_t where_data;
+			mutable_map_t row;
+			where_data[column] = equals_value;
+			mods::db::load_record_by_meta(table_cstr(),&where_data,row);
+			if(row.size()){
+				r.emplace_back(row);
 			}
 			return r;
 		}
 
 	template <typename T>
-		result_container_t transaction_t::get_by_id(T consumer,std::string_view id){
+		result_container_t transaction_t::get_by_id(T consumer,std::string id){
 			result_container_t r;
-			mutable_map_t mapped;
-			std::vector<std::string> fields_to_grab;
-			if(consumer->is_using_pluck_filter()){
-				fields_to_grab = consumer->get_pluck_filter();
-			}else{
-				fields_to_grab = mods::schema::db[table_cstr().data()];
-			}
-				for(auto & field_name : fields_to_grab){
-					std::string element_selector  = db_key({table_cstr(),
-							field_name.data(),
-							id});
-					std::string value;
-					value.clear();
-					auto ret = consumer->get(element_selector,value);
-					if(ret < 0){
-						continue;
-					}
-					mapped.insert(std::make_pair(
-								field_name.data(),
-								value));
-				}
-			if(mapped.size()){
-				r.emplace_back(mapped);
+			mutable_map_t row;
+			mods::db::load_record(table_cstr(),id,row);
+			if(row.size()){
+				r.emplace_back(row);
 			}
 			return r;
 		}
@@ -115,7 +64,7 @@ namespace mods::lmdb {
 				std::cerr << "[lmdb]get_all failed with query: " << id_list_selector << "\n";
 			}
 			else{
-				std::cerr << "[lmdb]retrieved: " << csv_list << "\n";
+				std::cout << "info: retrieved: " << csv_list << "\n";
 			}
 			result_container_t results;
 			mutable_map_t mapped;
@@ -124,24 +73,14 @@ namespace mods::lmdb {
 				std::copy(csv_list.begin(),csv_list.end(),std::back_inserter(deserialized_id_list));
 			}
 			csv_list.clear();
-			std::vector<std::string> fields_to_grab;
-			if(consumer->is_using_pluck_filter()){
-				fields_to_grab = consumer->get_pluck_filter();
-			}else{
-				fields_to_grab = mods::schema::db[table_cstr().data()];
-			}
 			for(auto & id: deserialized_id_list){
-				for(auto & field_name : fields_to_grab){
+				for(auto & field_name : consumer->fields_to_grab(table_cstr())){
 					std::string element_selector  = db_key({table_cstr(),
 							field_name.c_str(),
 							std::to_string(id)});
 					std::string value;
 					value.clear();
-					auto ret = consumer->get(element_selector,value);
-					if(ret < 0){
-						std::cerr << "get_all[" << element_selector << "]failed\n";
-						continue;
-					}
+					consumer->get(element_selector,value);
 					mapped.insert(std::make_pair(
 								field_name.c_str(),
 								value));
@@ -155,20 +94,20 @@ namespace mods::lmdb {
 		}
 	tuple_status_t transaction_t::set(
 			mutable_map_t & values,
-			std::string_view where_id_equals){
-		bool error = false;
-		aligned_int_t id;
-		std::stringstream ss;
-		ss.str(where_id_equals.data());
-		ss >> id;
-		values["id"] = id;
-		return  mods::db::save_record(std::string(table_cstr().data()),
+			std::string where_id_equals){
+		auto opt_id = mods::util::stoi_optional<aligned_int_t>(where_id_equals);
+		if(opt_id.has_value()){
+			values["id"] = opt_id.value();
+		}else{
+			std::cerr << "warning: set() was supplied with an unparseable pk: '" << where_id_equals << "'\n";
+		}
+		return  mods::db::save_record(std::string(table_cstr()),
 			&values
 		);
 	}
 	tuple_status_t transaction_t::values(
 			mutable_map_t & values){
-		return mods::db::save_record(std::string(table_cstr().data()),
+		return mods::db::save_record(std::string(table_cstr()),
 			&values);
 	}
 	/**
@@ -195,6 +134,14 @@ namespace mods::lmdb {
 #    #  #    #          #    #  #    #  #   ##  #    #  #       #
 #####   #####  #######  #    #  #    #  #    #  #####   ######  ######
 */
+	std::vector<std::string> _db_handle::fields_to_grab(const std::string& table){
+		auto ptr_db = mods::globals::db.get();
+		if(ptr_db->is_using_pluck_filter()){
+			return get_pluck_filter();
+		}else{
+			return mods::schema::db[table];
+		}
+	}
 
 	void _db_handle::set_pluck_filter(const std::vector<std::string> & cols){
 		m_pluck = cols;
@@ -213,7 +160,7 @@ namespace mods::lmdb {
 		bool _db_handle::is_using_pluck_filter() const { 
 			return m_use_pluck;
 		}
-	_db_handle::_db_handle(std::string_view directory,std::string_view db_name,const uint64_t & flags,const uint16_t & mode,bool unused) 
+	_db_handle::_db_handle(std::string directory,std::string db_name,const uint64_t & flags,const uint16_t & mode,bool unused) 
 		: m_use_pluck(false), m_good(false), m_closed(true), 
 		m_dir(directory), m_name(db_name), m_flags(flags), m_mode(mode) {
 			m_transaction_open = false;
@@ -322,14 +269,19 @@ namespace mods::lmdb {
 		m_dbi_opened = true;
 		return {true,""};
 	}
-	int _db_handle::get(std::string_view key,std::string & in_value){
+	std::string _db_handle::get(std::string key){
+		std::string value;
+		this->get(key,value);
+		return value;
+	}
+	int _db_handle::get(std::string key,std::string & in_value){
+		if(!m_good){
+			this->renew_txn();
+		}
 		if(m_good){
-			std::cerr << "[lmdb]get::m_good okay\n";
 			MDB_val k;
 			k.mv_size = key.length();
-			k.mv_data = (void*)key.data();
-			std::cerr << "[debug]db_handle::get key.data: '" << key.data() << "'";
-			std::cerr << "[debug]key.length: " << key.length() << "\n";
+			k.mv_data = (void*)key.c_str();
 			MDB_val v;
 			memset(&v,0,sizeof(v));
 			int ret = mdb_get(m_txn,m_dbi,&k,&v);
@@ -344,6 +296,7 @@ namespace mods::lmdb {
 					memset(buf,0,v.mv_size +1);
 					bcopy(v.mv_data,buf,v.mv_size);
 					in_value = buf;
+					std::cout << "debug: got '" << key << "' as '" << in_value << "'\n";
 					return _db_handle::KEY_FETCHED_OKAY;
 			}
 		}else{
@@ -360,6 +313,7 @@ namespace mods::lmdb {
 		auto tuple = new_txn();
 		if(!std::get<0>(tuple)){
 			std::cerr << "[lmdb]: warning new_txn failed via renew_txn\n";
+			m_good = false;
 			return tuple;
 		}
 		if(!m_dbi_opened){
@@ -367,13 +321,13 @@ namespace mods::lmdb {
 		}
 		return {true,""};
 	}
-	int _db_handle::del(std::string_view key){
+	int _db_handle::del(std::string key){
 		MDB_val k;
-		k.mv_data = (void*)key.data();
+		k.mv_data = (void*)key.c_str();
 		k.mv_size = key.length();
 		return mdb_del(m_txn,m_dbi,&k,nullptr);
 	}
-	int _db_handle::put(std::string_view key,const std::string & value,bool renew){
+	int _db_handle::put(std::string key,std::string value,bool renew){
 		if(renew){
 			if(m_transaction_good || m_transaction_open){
 				mdb_txn_commit(m_txn);
@@ -381,20 +335,19 @@ namespace mods::lmdb {
 			}
 			renew_txn();
 		}
-		return put(std::string(key.data()),value);
+		return put(std::string(key),value);
 	}
-	int _db_handle::put(std::string_view key,const std::string & value){
-		return put(std::string(key.data()),value);
-	}
-	int _db_handle::put(const std::string& key,const std::string & value){
+	int _db_handle::put(std::string key,std::string value){
+		if(!m_good){
+			this->renew_txn();
+		}
 		if(m_good){
-			std::cerr << "[lmdb]::put m_good okay\n";
 			MDB_val k;
 			k.mv_size = key.length();
-			k.mv_data = (void*)key.data();
+			k.mv_data = (void*)key.c_str();
 			MDB_val v;
 			v.mv_size = value.length();
-			v.mv_data = (void*)value.data();
+			v.mv_data = (void*)value.c_str();
 			int ret = mdb_put(m_txn,m_dbi,&k,&v,0);
 			switch(ret){
 				case MDB_MAP_FULL:
@@ -415,6 +368,7 @@ namespace mods::lmdb {
 						 std::cerr << "[lmdb]::default strerror: " << mdb_strerror(ret) << "\n";
 						 */
 					if(std::string("Successful").compare(mdb_strerror(ret)) == 0){
+						std::cout << "debug: put: '" << key << "' as '" << value << "'\n";
 						return 0;
 					}
 			}
@@ -487,7 +441,7 @@ namespace mods::globals {
 	extern std::unique_ptr<mods::lmdb::db_handle> db;
 };
 
-std::string db_key(const std::vector<std::string_view> & parts){
+std::string db_key(const std::vector<std::string> & parts){
 	std::string query = "";
 	std::size_t count = 0;
 	for(auto & part : parts){
@@ -500,69 +454,63 @@ std::string db_key(const std::vector<std::string_view> & parts){
 	return query;
 }
 
-std::string db_get(std::string_view table,std::string_view key){
+std::string db_get(std::string table,std::string key){
 	mods::globals::db.get()->renew_txn();
 	return mods::lmdb::exec(table)->get<mods::lmdb::db_handle*>(mods::globals::db.get(),key);
 }
-
-mods::lmdb::result_container_t db_get_all_pluck(std::string_view table,const std::vector<std::string>& pluck){
-	mods::globals::db.get()->renew_txn();
-	mods::globals::db.get()->set_pluck_filter(pluck);
-	auto transaction = mods::lmdb::exec(table);
-	return transaction->get_all<mods::lmdb::db_handle*>(mods::globals::db.get());
-}
-mods::lmdb::result_container_t db_get_all(std::string_view table){
+mods::lmdb::result_container_t db_get_all(std::string table){
 	mods::globals::db.get()->renew_txn();
 	return mods::lmdb::exec(table)->get_all<mods::lmdb::db_handle*>(mods::globals::db.get());
 }
 
-mods::lmdb::result_container_t db_get_by_id(std::string_view table,std::string_view id){
+mods::lmdb::result_container_t db_get_all_pluck(std::string table,const std::vector<std::string>& pluck){
+	mods::globals::db->renew_txn();
+	mods::globals::db->set_pluck_filter(pluck);
+	auto r = db_get_all(table);
+	mods::globals::db->clear_pluck_filter();
+	return r;
+}
+
+mods::lmdb::result_container_t db_get_by_id(std::string table,std::string id){
 	mods::globals::db.get()->renew_txn();
 	return mods::lmdb::exec(table)->get_by_id<mods::lmdb::db_handle*>(mods::globals::db.get(),id);
 }
 
-mods::lmdb::result_container_t db_get_by_meta(std::string_view table,
-		std::string_view column,std::string_view equals){
-	mods::globals::db.get()->renew_txn();
+mods::lmdb::result_container_t db_get_by_meta(std::string table,
+		std::string column,std::string equals){
 	return mods::lmdb::exec(table)->get_by_meta<mods::lmdb::db_handle*>(mods::globals::db.get(),column,equals);
 }
 
-bool db_exists_by_id(std::string_view table,std::string_view id){
-	auto r = mods::lmdb::exec(table)->get<mods::lmdb::db_handle*>(
-		mods::globals::db.get(),db_key({"id",id})
-	);
-	if(r.size() > 0 && r.compare(mods::schema::PLACE_HOLDER_VALUE) != 0){
+
+bool db_exists_by_meta(std::string table,
+		std::string column,std::string equals){
+	mutable_map_t where_data,row;
+	where_data[column] = equals;
+	mods::db::load_record_by_meta(table,&where_data,row);
+	if(row.size()){
 		return true;
 	}else{
 		return false;
 	}
-	return false;
 }
 
-bool db_exists_by_meta(std::string_view table,
-		std::string_view column,std::string_view equals){
-	auto r = mods::lmdb::exec(table)->get<mods::lmdb::db_handle*>(
-		mods::globals::db.get(),db_key({"meta",column,equals})
-	);
-	/** check that the size is greater than zero, but also it's important
-	 * that we check that the value _ISN'T_ the placeholder value which 
-	 * we put in fields that the user hasn't given us a proper value for.
-	 */
-	if(r.size() > 0 && r.compare(mods::schema::PLACE_HOLDER_VALUE) != 0){
+bool db_exists_by_id(std::string table,std::string id){
+	std::cerr << "[deprecated] db_exists_by_id\n";
+	mutable_map_t row;
+	mods::db::load_record(table,id,row);
+	if(row.size()){
 		return true;
-	}else{
-		return false;
 	}
 	return false;
 }
 
-tuple_status_t db_update(std::string_view table,
+tuple_status_t db_update(std::string table,
 		mods::lmdb::mutable_map_t & values,
-		std::string_view id){
+		std::string id){
 	return mods::lmdb::update(table)->set(values,id);
 }
 
-tuple_status_t db_insert(std::string_view table,
+tuple_status_t db_insert(std::string table,
 		mods::lmdb::mutable_map_t & values){
 	return mods::lmdb::insert(table)->values(values);
 }

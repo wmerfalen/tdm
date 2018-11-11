@@ -104,6 +104,8 @@ using aligned_int_t = uint64_t;
 void  boot_hell(void);
 void	boot_db(void);
 void	destroy_db(void);
+bool char_exists(std::shared_ptr<mods::player>);
+bool char_exists(const std::string&);
 bool char_exists(const std::string&,aligned_int_t&);
 int	create_entry(const char *name);
 void	zone_update(void);

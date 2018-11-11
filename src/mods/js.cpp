@@ -4,6 +4,7 @@
 #include "extern.hpp"
 #include "loops.hpp"
 #include "../spells.h"
+#include "db.hpp"
 #define DT_FORMAT "{player_name}:mob_death_trigger"
 extern void command_interpreter(struct char_data* ch,char* argument);
 extern void hit(struct char_data* ch,struct char_data* vict,int type);
@@ -303,6 +304,20 @@ if(key.compare("WATERWALK") == 0){ ::affect_from_char(*player_ptr,SPELL_WATERWAL
 			duk_push_number(ctx,-1);
 			return 1; //mods::globals::current_player->cd()->in_room;
 		}
+		static duk_ret_t set_char_pk_id(duk_context *ctx){
+			std::string c_name = duk_to_string(ctx,0);
+			aligned_int_t pk = duk_to_number(ctx,1);
+				bool found = false;
+				auto player_ptr = utils::find_player_by_name(c_name,found);
+				if(found){
+					player_ptr->set_db_id(pk);
+					mods::db::save_char(player_ptr);
+					duk_push_number(ctx,0);
+					return 1;
+				}
+					duk_push_number(ctx,-1);
+					return 1;
+		}
 		static duk_ret_t room(duk_context *ctx){
 			duk_push_number(ctx,1);
 			return mods::globals::current_player->cd()->in_room;
@@ -588,6 +603,8 @@ __set_points_cleanup:
 			duk_put_global_string(ctx,"clear_all_plr_flags");
 			duk_push_c_function(ctx,mods::js::clear_all_affected_flags,1);
 			duk_put_global_string(ctx,"clear_all_affected_flags");
+			duk_push_c_function(ctx,mods::js::set_char_pk_id,2);
+			duk_put_global_string(ctx,"set_char_pk_id");
 		}
 
 		void run_profile_scripts(std::string_view player_name){

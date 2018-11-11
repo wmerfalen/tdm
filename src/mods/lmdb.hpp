@@ -30,8 +30,8 @@ namespace mods::lmdb {
 		object_id,room_number,row_id_list
 	};
 
-	using mutable_map_t = std::map<std::string_view,std::string>;
-	using result_container_t = std::vector<std::map<std::string_view,std::string>>;
+	using mutable_map_t = std::map<std::string,std::string>;
+	using result_container_t = std::vector<std::map<std::string,std::string>>;
 
 	struct _selector {
 		table_type_t table;
@@ -81,11 +81,11 @@ namespace mods::lmdb {
 #undef MENTOC_T
 		}
 
-		transaction_t(std::string_view ce_table,transact_type_t type);
+		transaction_t(std::string ce_table,transact_type_t type);
 		transaction_t(table_type_t e_table,transact_type_t type);
 		transaction_t() = delete;
 
-		std::string_view table_cstr() const { return m_str_table; }
+		std::string table_cstr() const { return m_str_table; }
 		table_type_t table() const { return m_table; }
 		transact_type_t type() const { return m_type; }
 		/**
@@ -93,19 +93,19 @@ namespace mods::lmdb {
 		 * i.e.: get("user_id",123); //sql equiv: select * from users where user_id = 123
 		 */
 		template <typename T>
-			std::string get(T consumer,std::string_view key);
+			std::string get(T consumer,std::string key);
 
 		template <typename T>
-		result_container_t get_by_id(T consumer,std::string_view id);
+		result_container_t get_by_id(T consumer,std::string id);
 		template <typename T>
-		result_container_t get_by_meta(T consumer,std::string_view column,std::string_view equals_value);
+		result_container_t get_by_meta(T consumer,std::string column,std::string equals_value);
 		/**
 		 * The sql equivalent of this is 'select * from table'
 		 */
 		template <typename T>
 		result_container_t get_all(T consumer);
 		tuple_status_t set(mutable_map_t & values,
-				std::string_view where_id_equals);
+				std::string where_id_equals);
 		tuple_status_t values(mutable_map_t & values);
 		private: 
 		table_type_t m_table;
@@ -134,17 +134,17 @@ namespace mods::lmdb {
 	 */
 	using transaction_ptr = std::unique_ptr<transaction_t>;
 	using transaction_pool_t = std::vector<std::unique_ptr<transaction_t>>;
-	inline transaction_ptr exec(std::string_view table){
+	inline transaction_ptr exec(std::string table){
 		return std::move(std::make_unique<transaction_t>(table,transact_type_t::EXEC));
 	}
 
 	inline transaction_ptr update(table_type_t table){
 		return std::make_unique<transaction_t>(table,transact_type_t::UPDATE);
 	}
-	inline transaction_ptr update(std::string_view table){
+	inline transaction_ptr update(std::string table){
 		return std::make_unique<transaction_t>(table,transact_type_t::UPDATE);
 	}
-	inline transaction_ptr insert(std::string_view table){
+	inline transaction_ptr insert(std::string table){
 		return std::make_unique<transaction_t>(table,transact_type_t::INSERT);
 	}
 
@@ -166,22 +166,23 @@ namespace mods::lmdb {
 		constexpr static int KEY_FETCHED_OKAY = 1;
 		using tuple_return_type_t = std::tuple<bool,std::string>; 
 		using status_type_t = std::array<std::tuple<bool,std::string>,status_step_count>;
-		_db_handle(std::string_view directory,std::string_view db_name,const uint64_t & flags,const uint16_t & mode,bool unused);
+		_db_handle(std::string directory,std::string db_name,const uint64_t & flags,const uint16_t & mode,bool unused);
+		std::vector<std::string> fields_to_grab(const std::string& table);
 		void set_pluck_filter(const std::vector<std::string> &);
 		void clear_pluck_filter();
 		const std::vector<std::string>& get_pluck_filter() const;
 		void use_pluck_filter(bool b);
 		bool is_using_pluck_filter() const;
 		bool open();
-		int put(std::string_view key,const std::string & value,bool renew);
-		int del(std::string_view key);
+		int put(std::string key,std::string value,bool renew);
+		int del(std::string key);
 		status_type_t status() const;
-		int get(std::string_view key,std::string & in_value);
-		int put(std::string_view key,const std::string & value);
-		int put(const std::string& key,const std::string & value);
+		int get(std::string key,std::string & in_value);
+		int put(std::string key,std::string value);
 
-		int get(MDB_txn*,std::string_view key,std::string & in_value);
-		int put(MDB_txn*,std::string_view key,const std::string & value);
+		int get(MDB_txn*,std::string key,std::string & in_value);
+		int put(MDB_txn*,std::string key,std::string value);
+		std::string get(std::string key);
 		tuple_return_type_t commit();
 		tuple_return_type_t new_txn();
 		tuple_return_type_t new_txn(MDB_txn**);
@@ -225,18 +226,18 @@ namespace mods::globals {
 };
 
 
-std::string db_key(const std::vector<std::string_view> & parts);
-std::string db_get(std::string_view table,std::string_view key);
-mods::lmdb::result_container_t db_get_by_id(std::string_view table,std::string_view id);
-mods::lmdb::result_container_t db_get_by_meta(std::string_view table,std::string_view col,std::string_view equals);
-mods::lmdb::result_container_t db_get_all(std::string_view table);
-mods::lmdb::result_container_t db_get_all_pluck(std::string_view table,const std::vector<const std::string&>& pluck);
+std::string db_key(const std::vector<std::string> & parts);
+std::string db_get(std::string table,std::string key);
+mods::lmdb::result_container_t db_get_by_id(std::string table,std::string id);
+mods::lmdb::result_container_t db_get_by_meta(std::string table,std::string col,std::string equals);
+mods::lmdb::result_container_t db_get_all(std::string table);
+mods::lmdb::result_container_t db_get_all_pluck(std::string table,const std::vector<const std::string&>& pluck);
 bool db_update(mods::lmdb::table_type_t table,
 		mods::lmdb::mutable_map_t & values,
-		std::string_view value);
-bool db_insert(std::string_view table,const mods::lmdb::mutable_map_t & values);
+		std::string value);
+bool db_insert(std::string table,const mods::lmdb::mutable_map_t & values);
 
-extern tuple_status_t new_record_with_values(std::string_view table,
+extern tuple_status_t new_record_with_values(std::string table,
 		mods::lmdb::db_handle* ptr_db,
 		mods::lmdb::mutable_map_t& values,
 		bool & error,

@@ -94,7 +94,6 @@ char_data::char_data(char_data* o){
 		has_desc = false;
 		desc.reset();
 		player_specials = std::make_shared<player_special_data>();
-		set_db_id(0);
 	}
 namespace mods{
 		size_t descriptor_data::queue_output(const std::string &s){

@@ -9,55 +9,63 @@ namespace mods::schema {
 	using schema_list_t = std::map<std::string,std::vector<std::string>>;
 	constexpr static const char* PLACE_HOLDER_VALUE = "\x01";
 /*!TODO: Implement boost::hana into this class.*/
+	static schema_list_t db_meta_array_values = {
+		{"player",{
+								"player_class",
+								"player_hometown",
+								"player_type"
+							}
+		}
+	};
 	static schema_list_t db_meta_values = {
 		{"player",{
-								"meta|player_name"
+								"player_name",
 							}
 		},
 		{"affected_type",{
-											 "meta|object_number"
+											 "object_number"
 										 }
 		},
 		{"extra_description",{
-											 "meta|object_number"
+											 "object_number"
 										 }
 		},
 		{"mobile",{
-								"meta|mob_name",
-								"meta|mob_virtual_number",
-								"meta|mob_class"
+								"mob_name",
+								"mob_virtual_number",
+								"mob_class"
 							}
 		},
 		{"object_flags",{
-											"meta|object_number"
+											"object_number"
 										}
 		},
 		{"object_weapon",{
-											 "meta|object_number"
+											 "object_number"
 										 }
 		},
 		{"room",{
-								"meta|room_number",
-								"meta|zone",
-								"meta|name"
+								"room_number",
+								"zone",
+								"name"
 						}
 		},
 		{"room_direction_data",{
-															 "meta|room_number"
+															 "room_number"
 													 }
 		},
 		{"zone",{
-							"meta|zone_name"
+							"zone_name"
 						}
 		},
 		{"zone_data",{
-									 "meta|zone_id"
+									 "zone_id"
 								 }
 		}
 	};
 	static schema_list_t db = {
 			{"player",{
-									"player_id",
+									"id",
 									"player_virtual_number",
 									"player_name",
 									"player_short_description",
@@ -65,6 +73,7 @@ namespace mods::schema {
 									"player_description",
 									"player_action_bitvector",
 									"player_affection_bitvector",
+									"player_affection_plr_bitvector",
 									"player_ability_strength",
 									"player_ability_strength_add",
 									"player_ability_intelligence",
@@ -125,7 +134,7 @@ namespace mods::schema {
 
 
 			{"mobile",{
-									"mob_id",		
+									"id",		
 									"mob_virtual_number",		
 									"mob_name",		
 									"mob_short_description",		
@@ -162,9 +171,9 @@ namespace mods::schema {
 									"mob_weight",		
 									"mob_height",		
 									"mob_class",
-									"meta|mob_name",
-									"meta|mob_virtual_number",
-									"meta|mob_class"
+									"mob_name",
+									"mob_virtual_number",
+									"mob_class"
 								}
 			},
 			{"object",{
@@ -180,9 +189,9 @@ namespace mods::schema {
 									"object_type_data",		
 									"object_extra_keyword",		
 									"object_extra_description",
-									"meta|object_number",
-									"meta|object_name",
-									"meta|object_type"
+									"object_number",
+									"object_name",
+									"object_type"
 								}
 			},
 
@@ -201,7 +210,7 @@ namespace mods::schema {
 												"cost_per_day",		
 												"timer",		
 												"bitvector",
-												"meta|object_number"
+												"object_number"
 											}
 			},
 
@@ -212,7 +221,7 @@ namespace mods::schema {
 												 "object_ammo_type",		
 												 "object_cooldown",		
 												 "object_can_snipe",
-												 "meta|object_number"
+												 "object_number"
 											 }
 			},
 
@@ -273,7 +282,7 @@ namespace mods::schema {
 										 "zone_arg1",
 										 "zone_arg2",
 										 "zone_arg3",
-										 "meta|zone_id"
+										 "zone_id"
 									 }
 			}
 	};

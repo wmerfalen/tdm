@@ -1,3 +1,4 @@
+#if 0
 /**
  * Please note: This program is slow. It will get the job
  * done, but if you're looking to replicate this functionality
@@ -242,3 +243,4 @@ int port_main(int argc,char** argv){
 	return 0;
 }
 
+#endif

@@ -2257,33 +2257,53 @@ char *get_name_by_id(long id) {
 }
 
 bool char_exists(const std::string& name, aligned_int_t & meta_int_id){
+	std::cout << "debug: char_exists param: '" << name << "'\n";
 	meta_int_id = 0;
-	if(load_char(name)){
-		mutable_map_t values;
-		values["player_name"] = name;
-	auto meta_vals = mods::meta_utils::get_all_meta_values("player",&values);
-		meta_int_id = mods::util::stoi<aligned_int_t>(meta_vals[0].second);
+	mutable_map_t where,row;
+	where["player_name"] = name;
+	mods::db::load_record_by_meta("player",&where,row);
+	mods::util::maps::dump<std::string,std::string>(row);
+	if(row.size()){
+		std::cout << "debug: found record for player\n";
 		return true;
-	}else{
-		return false;
-	}
-}
-
-
-/* Load a char, TRUE if loaded, FALSE if not */
-bool load_char(const std::string& name) {
-	mutable_map_t values;
-	values["player_name"] = name;
-	auto meta_vals = mods::meta_utils::get_all_meta_values("player",&values);
-	if(meta_vals.size()){
-		if(meta_vals[0].second.compare("0") == 0){
-			return false;
-		}else{
-			return true;
-		}
 	}
 	return false;
 }	
+
+bool char_exists(std::shared_ptr<mods::player> player_ptr){
+	return char_exists(player_ptr->name().c_str());
+}
+bool char_exists(const std::string& name){
+	aligned_int_t i;
+	return char_exists(name,i);
+}
+
+/* Load a char, TRUE if loaded, FALSE if not */
+/*
+bool load_char(const std::string& user_name) {
+	std::cout << "debug: load_char's parameter: '" << user_name << "'\n";
+	mutable_map_t row,where;
+	where["player_name"] = user_name;
+	mods::meta_utils::load_record_by_meta("player",&where,row);
+	mods::util::maps::dump<std::string,std::string>(row);
+	if(row.size()){
+		std::cout << "debug: found record for player\n";
+		return true;
+	}
+	return false;
+}	
+
+bool load_char_by_name(const std::string& name) {
+	mutable_map_t values,row;
+	values["player_name"] = name;
+	mods::meta_utils::load_record_by_meta("player",&values,row);
+	mods::util::maps::dump<std::string,std::string>(row);
+	if(values.size()){
+		return true;
+	}
+	return false;
+}	
+*/
 
 
 
@@ -2293,90 +2313,76 @@ bool load_char(const std::string& name) {
  */
 
 
-bool parse_sql_player(const char* name,char_data* ch){
-	try{
-		//FIXME: name needs to be user_id. 
-		auto result = db_get_by_meta("player","name",name);
-		/** TODO: update this stuff with the new values in mods::schema::db and the meta values from mods::schema::db_meta_values */
-		if(result.size()){
-			for(auto row : result){
-				ch->set_db_id(mods::util::stoi<aligned_int_t>(row["id"]));
-				ch->player.name.assign(name);
-				ch->player.short_descr.assign((row["player_short_description"]));
-				ch->player.long_descr.assign((row["player_long_description"]));
-				ch->char_specials.saved.act = mods::util::stoi<int>(row["player_action_bitvector"]);
-				ch->real_abils.str = mods::util::stoi<int>(row["player_ability_strength"]);
-				ch->real_abils.str_add = mods::util::stoi<int>(row["player_ability_strength_add"]);
-				ch->real_abils.intel = mods::util::stoi<int>(row["player_ability_intelligence"]);
-				ch->real_abils.wis = mods::util::stoi<int>(row["player_ability_wisdom"]);
-				ch->real_abils.dex = mods::util::stoi<int>(row["player_ability_dexterity"]);
-				ch->real_abils.con = mods::util::stoi<int>(row["player_ability_constitution"]);
-				ch->real_abils.cha = mods::util::stoi<int>(row["player_ability_charisma"]);
-				ch->char_specials.saved.alignment = mods::util::stoi<int>(row["player_ability_alignment"]);
-				ch->points.max_hit = mods::util::stoi<int>(row["player_max_hitpoints"]);
-				ch->points.max_mana = mods::util::stoi<int>(row["player_max_mana"]);
-				ch->points.max_move = mods::util::stoi<int>(row["player_max_move"]);
-				ch->points.gold = mods::util::stoi<int>(row["player_gold"]);
-				ch->points.exp = mods::util::stoi<int>(row["player_exp"]);
-				ch->player.sex = mods::util::stoi<byte>(row["player_sex"]);
-				ch->points.max_hit = mods::util::stoi<int>(row["player_hitpoints"]);
-				ch->points.mana = mods::util::stoi<int>(row["player_mana"]);
-				ch->points.move = mods::util::stoi<int>(row["player_move"]);
-				ch->points.damroll = mods::util::stoi<int>(row["player_damroll"]);
-				ch->player.weight = mods::util::stoi<int>(row["player_weight"]);
-				ch->player.height = mods::util::stoi<int>(row["player_height"]);
-				ch->player.chclass = mods::util::stoi<int>(row["player_class"]);
-				ch->player.title.assign((row["player_title"]));
-				ch->player.hometown = mods::util::stoi<int>(row["player_hometown"]);
-				GET_PASSWD(ch).assign((row["player_password"]));
+bool parse_sql_player(std::shared_ptr<mods::player> player_ptr){
+		mutable_map_t values;
+		values["player_name"] = player_ptr->name().c_str();
+		mutable_map_t row;
+		mods::db::load_record_by_meta("player",&values,row);
+		if(row.size()){
+			player_ptr->set_db_id(mods::util::stoi<aligned_int_t>(row["id"]));
+			player_ptr->set_password(row["player_password"]);
+				player_ptr->cd()->player.short_descr.assign((row["player_short_description"]));
+				player_ptr->cd()->player.long_descr.assign((row["player_long_description"]));
+				player_ptr->cd()->char_specials.saved.act = mods::util::stoi<int>(row["player_action_bitvector"]);
+				player_ptr->cd()->real_abils.str = mods::util::stoi<int>(row["player_ability_strength"]);
+				player_ptr->cd()->real_abils.str_add = mods::util::stoi<int>(row["player_ability_strength_add"]);
+				player_ptr->cd()->real_abils.intel = mods::util::stoi<int>(row["player_ability_intelligence"]);
+				player_ptr->cd()->real_abils.wis = mods::util::stoi<int>(row["player_ability_wisdom"]);
+				player_ptr->cd()->real_abils.dex = mods::util::stoi<int>(row["player_ability_dexterity"]);
+				player_ptr->cd()->real_abils.con = mods::util::stoi<int>(row["player_ability_constitution"]);
+				player_ptr->cd()->real_abils.cha = mods::util::stoi<int>(row["player_ability_charisma"]);
+				player_ptr->cd()->char_specials.saved.alignment = mods::util::stoi<int>(row["player_ability_alignment"]);
+				player_ptr->cd()->points.max_hit = mods::util::stoi<int>(row["player_max_hitpoints"]);
+				player_ptr->cd()->points.max_mana = mods::util::stoi<int>(row["player_max_mana"]);
+				player_ptr->cd()->points.max_move = mods::util::stoi<int>(row["player_max_move"]);
+				player_ptr->cd()->points.gold = mods::util::stoi<int>(row["player_gold"]);
+				player_ptr->cd()->points.exp = mods::util::stoi<int>(row["player_exp"]);
+				player_ptr->cd()->player.sex = mods::util::stoi<byte>(row["player_sex"]);
+				player_ptr->cd()->points.max_hit = mods::util::stoi<int>(row["player_hitpoints"]);
+				player_ptr->cd()->points.mana = mods::util::stoi<int>(row["player_mana"]);
+				player_ptr->cd()->points.move = mods::util::stoi<int>(row["player_move"]);
+				player_ptr->cd()->points.damroll = mods::util::stoi<int>(row["player_damroll"]);
+				player_ptr->cd()->points.hitroll = mods::util::stoi<int>(row["player_hitroll"]);
+				player_ptr->cd()->player.weight = mods::util::stoi<int>(row["player_weight"]);
+				player_ptr->cd()->player.height = mods::util::stoi<int>(row["player_height"]);
+				player_ptr->cd()->player.chclass = mods::util::stoi<int>(row["player_class"]);
+				player_ptr->cd()->player.title.assign((row["player_title"]));
+				player_ptr->cd()->player.hometown = mods::util::stoi<int>(row["player_hometown"]);
+				player_ptr->set_affect_by_serialized(row["player_affection_bitvector"]);
+				player_ptr->set_affect_plr_by_serialized(row["player_affection_plr_bitvector"]);
 				/** FIXME: if points aren't sane values, reset the character via the new points reset code */
-				break;
-			}
+		}else{
+			std::cout << "info: no values returned for parse_sql_player by name: '" << player_ptr->name().c_str() << "'\n";
+			return false;
 		}
-	}catch(std::exception& e){
-		mudlog(CMP,LVL_GOD,FALSE,(std::string("Error `parse_sql_player`: ") + e.what()).c_str());
-		return false;
-	}
-	/* to save memory, only PC's -- not MOB's -- have player_specials */
-	if(!ch->player_specials) {
-		ch->player_specials = std::make_shared<player_special_data>();
-	}
+		player_ptr->set_time_birth(0);
+		player_ptr->set_time_played(0);
+		player_ptr->set_time_logon(time(0));
 
-	ch->player.time.birth = 0;
-	ch->player.time.played = 0;
-	ch->player.time.logon = time(0);
 
-	GET_LAST_TELL(ch) = NOBODY;
-
-	if(ch->points.max_mana < 100) {
-		ch->points.max_mana = 100;
-	}
-
+		auto ch = player_ptr->cd();
 	ch->char_specials.carry_weight = 0;
 	ch->char_specials.carry_items = 0;
 	ch->points.armor = 100;
-	ch->points.hitroll = 0;
-	ch->points.damroll = 0;
 
 	/*
 	 * If you're not poisioned and you've been away for more than an hour of
 	 * real time, we'll set your HMV back to full
 	 */
 
+	/*
 	if(!AFF_FLAGGED(ch, AFF_POISON)){
 		GET_HIT(ch) = GET_MAX_HIT(ch);
 		GET_MOVE(ch) = GET_MAX_MOVE(ch);
 		GET_MANA(ch) = GET_MAX_MANA(ch);
-	}
+	}*/
 	return true;
 }
 /* copy data from the file structure to a char struct */
 void store_to_char(struct char_file_u *st, struct char_data *ch) {
 	MENTOC_PREAMBLE();
 	mods::db::save_char(player);
-	//save_char(ch);
-	//parse_sql_player(st->name,ch);
-}				/* store_to_char */
+}
 
 
 

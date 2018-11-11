@@ -9,6 +9,8 @@
 #include "acl/color.hpp"
 #include "prefs.hpp"
 #include <chrono>
+#include <bitset>
+#include <algorithm>
 /**
  * TODO: All these stc* functions need to be altered to accomodate
  * the new player_type_enum_t values. If output is to be muted, then
@@ -20,6 +22,40 @@
 extern void do_auto_exits(struct char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
 namespace mods {
+	constexpr static int16_t PLR_FLAG_BIT_COUNT = 16;
+	constexpr static int16_t AFF_FLAG_BIT_COUNT = 22;
+				const std::array<int64_t,PLR_FLAG_BIT_COUNT> all_plr_flags = {
+					PLR_KILLER,PLR_THIEF,PLR_FROZEN,PLR_DONTSET,
+					PLR_WRITING,PLR_MAILING,PLR_CRASH,PLR_SITEOK,
+					PLR_NOSHOUT,PLR_NOTITLE,PLR_DELETED,PLR_LOADROOM,
+					PLR_NOWIZLIST,PLR_INVSTART,PLR_CRYO,
+					PLR_NOTDEADYET
+				};
+				const std::array<int64_t,AFF_FLAG_BIT_COUNT> all_aff_flags = {
+AFF_BLIND,
+AFF_INVISIBLE,
+AFF_DETECT_ALIGN,
+AFF_DETECT_INVIS,
+AFF_DETECT_MAGIC,
+AFF_SENSE_LIFE,
+AFF_WATERWALK,
+AFF_SANCTUARY,
+AFF_GROUP,
+AFF_CURSE,
+AFF_INFRAVISION,
+AFF_POISON,
+AFF_PROTECT_EVIL,
+AFF_PROTECT_GOOD,
+AFF_SLEEP,
+AFF_NOTRACK,
+AFF_UNUSED16,
+AFF_UNUSED17,
+AFF_SNEAK,
+AFF_HIDE,
+AFF_UNUSED20,
+AFF_CHARM
+
+				};
 	std::string just_color_evaluation(std::string final_buffer) {
 		final_buffer = mods::globals::replace_all(final_buffer,"{grn}","\033[32m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{red}","\033[31m");
@@ -167,6 +203,8 @@ namespace mods {
 	}
 	player::player(player_type_enum_t type){
 		set_god_mode(false);
+		set_bui_mode(false);
+		set_imp_mode(false);
 		m_set_time();
 		switch(type){
 			case DRONE:
@@ -205,12 +243,20 @@ namespace mods {
 	}
 	player::player(){
 		set_god_mode(false);
+		set_bui_mode(false);
+		set_imp_mode(false);
 		m_set_time();
+		descriptor_list.emplace_back();
+		auto descriptor = descriptor_list.end()-1;
 		m_shared_ptr = std::make_shared<char_data>();
 		m_char_data = m_shared_ptr.get();
+		descriptor->character  = this->cd();
+		set_desc(descriptor);
 		/** I don't like this class call FIXME */
-		set_class_capability({mods::classes::types(0)});
+		//set_class_capability({mods::classes::types(0)});
+		m_char_data->player_specials = std::make_unique<player_special_data>();
 		/** Need a better uuid generator than this */
+		/** FIXME: this is not how uuid's should be generated */
 		m_char_data->uuid = mods::globals::player_list.size();
 		/** I H_A_T_E that we are still tied to the linked list FIXME */
 		m_char_data->next = character_list;
@@ -222,6 +268,7 @@ namespace mods {
 		m_current_page_fragment = "";
 		m_capture_output = false;
 		m_executing_js = false;
+		set_type(player_type_enum_t::PLAYER);
 	}
 	player::player(mods::player* ptr) {
 		/**TODO: should we set the queue_behaviour flags on the descriptor data items on *this? */
@@ -235,6 +282,9 @@ namespace mods {
 		m_executing_js = false;
 		m_time = ptr->time();
 		set_god_mode(ptr->god_mode());
+		set_bui_mode(ptr->builder_mode());
+		set_imp_mode(ptr->implementor_mode());
+		/** TODO: investigate this function. I have a feeling that m_desc needs to be updated here */
 	}
 	void player::capture_output(bool capture_status) {
 		m_capture_output = capture_status;
@@ -553,6 +603,8 @@ namespace mods {
 		do_auto_exits(m_char_data);
 	}
 	void player::set_char_on_descriptor(std::deque<descriptor_data>::iterator it){
+		std::cerr << "DEPRECATED-> player::set_char_on_descriptor\n";
+		return;
 		it->character = this->cd();
 		it->character->desc = m_desc;
 		it->character->has_desc = true;
@@ -715,7 +767,169 @@ m_affected_plr[PLR_NOTDEADYET] = IS_SET(PLR_FLAGS(cd()),PLR_NOTDEADYET);
 				}
 				return false;
 			}
+			void player::set_db_id(aligned_int_t id){
+				m_db_id = id;
+			}
+			aligned_int_t player::get_db_id() const {
+				return m_db_id;
+			}
 
+			void player::set_password(std::string pw){
+				m_password = pw;
+			}
+			std::string player::get_password(){
+				return m_password;
+			}
+			void player::set_bad_password_count(int i){
+				if(m_desc){
+					m_desc->bad_pws = i;
+				}else{
+					std::cerr << "warning: ncrement_bad_password_count called but m_desc is null\n";
+				}
+			}
+			void player::increment_bad_password_count(){
+				if(m_desc){
+					++m_desc->bad_pws;
+				}else{
+					std::cerr << "warning: ncrement_bad_password_count called but m_desc is null\n";
+				}
+			}
+			int player::get_bad_password_count(){
+				if(m_desc){
+					return m_desc->bad_pws;
+				}else{
+					std::cerr << "warning: get_bad_password_count called but m_desc is null\n";
+					return 0;
+				}
+			}
+			void player::set_state(int state){
+				if(m_desc){
+					m_desc->connected = state;
+				}else{
+					std::cerr << "warning: set_state called but m_desc is null\n";
+				}
+			}
+
+			int player::state(){
+				if(m_desc){
+					return m_desc->connected;
+				}else{
+					std::cerr << "warning: state called but m_desc is null\n";
+					if(cd()->desc){
+						std::cout << "info: char_data ptr has a desc, so we're returning that\n";
+						return cd()->desc->connected;
+					}
+					return 0;
+				}
+			}
+			void player::set_host(std::string host){
+				if(m_desc){
+					m_desc->host = host;
+				}else{
+					std::cerr << "warning: player::set_host called but m_desc is null\n";
+				}
+			}
+			std::string player::host() const {
+				if(m_desc){
+					return m_desc->host.c_str();
+				}else{
+					std::cerr << "warning: player::host called but m_desc is null\n";
+				}
+				return "unknown";
+			}
+			void player::deactivate_account(){
+				
+				/** TODO: what do we need to do to deactivate the account? 
+				 * for now, I think just setting an active flag for the player would be enough
+				 */
+				std::cout << "stub: player::deactivate_account\n";
+			}
+			void player::set_time_birth(time_t b){
+				this->cd()->player.time.birth = b;
+			}
+			time_t player::get_time_birth() const {
+				return this->cd()->player.time.birth;
+			}
+
+			void player::set_time_logon(time_t t){
+				this->cd()->player.time.logon = t;
+			}
+			time_t player::get_time_login() const {
+				return this->cd()->player.time.logon;
+			}
+			void player::set_time_played(int t){
+				this->cd()->player.time.played = t;
+			}
+			int player::get_time_played() const{
+				return this->cd()->player.time.played;
+			}
+
+			/** Affect serialize and deserialization routines */
+			void player::set_affect_by_serialized(std::string data){
+				std::string bit_string;
+				bit_string.resize(AFF_FLAG_BIT_COUNT);
+				std::fill(bit_string.begin(),bit_string.end(),'0');
+				std::copy(data.begin(),data.end(),bit_string.begin());
+				std::bitset<AFF_FLAG_BIT_COUNT> bits(bit_string);
+				for(unsigned i =0; i < AFF_FLAG_BIT_COUNT; ++i){
+					for(auto flag : mods::all_aff_flags){
+						if(bits[flag]){
+							this->affect(flag);
+						}else{
+							this->remove_affect(flag);
+						}
+					}
+				}
+			}
+			std::string player::serialize_affect(){
+				std::string bit_string;
+				bit_string.reserve(AFF_FLAG_BIT_COUNT);
+				std::fill(bit_string.begin(),bit_string.end(),'0');
+				for(auto& [flag,status]: this->get_affected()){
+					if(status){
+						bit_string[flag] = '1';
+					}
+				}
+				return bit_string;
+			}
+
+
+			/** PLR_* Affects */
+			void player::set_affect_plr_by_serialized(std::string data){
+				std::string bit_string;
+				bit_string.resize(PLR_FLAG_BIT_COUNT);
+				std::fill(bit_string.begin(),bit_string.end(),'0');
+				std::copy(data.begin(),data.end(),bit_string.begin());
+				std::bitset<PLR_FLAG_BIT_COUNT> bits(bit_string);
+				for(unsigned i =0; i < PLR_FLAG_BIT_COUNT; ++i){
+					for(auto flag : mods::all_plr_flags){
+						if(bits[flag]){
+							this->affect_plr(flag);
+						}else{
+							this->remove_affect_plr(flag);
+						}
+					}
+				}
+			}
+			std::string player::serialize_affect_plr(){
+				std::string bit_string;
+				bit_string.reserve(PLR_FLAG_BIT_COUNT);
+				std::fill(bit_string.begin(),bit_string.end(),'0');
+				for(auto& [flag,status]: this->get_affected_plr()){
+					if(status){
+						bit_string[flag] = '1';
+					}
+				}
+				return bit_string;
+			}
+
+			bool player::has_affect(int64_t flag){
+				return get_affected()[flag];
+			}
+			bool player::has_affect_plr(int64_t flag) {
+				return get_affected_plr()[flag];
+			}
+			/* Javascript functions */
 };
 
 #endif

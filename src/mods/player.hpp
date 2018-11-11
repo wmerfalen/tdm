@@ -65,10 +65,22 @@ namespace mods {
 			friend void mods::acl_list::set_access_rights(
 					std::shared_ptr<mods::player>,const std::string&,bool);
 
+			void set_db_id(aligned_int_t id);
+			aligned_int_t get_db_id() const;
+			void set_password(std::string pw);
+			std::string get_password();
 			bool god_mode() const;
 			bool implementor_mode() const;
 			bool builder_mode() const;
 			static constexpr int PAGE_SIZE = 40;
+
+			/** for the player.time.* variables */
+			void set_time_birth(time_t b);
+			time_t get_time_birth() const;
+			void set_time_logon(time_t t);
+			time_t get_time_login() const;
+			void set_time_played(int t);
+			int get_time_played() const;
 
 			/* Javascript functions */
 			bool is_executing_js() const;
@@ -106,15 +118,25 @@ namespace mods {
 
 			time_type_t time() const;
 
+			/** Affects */
+			bool has_affect(int64_t flag) ;
 			void affect(int64_t flag);
 			void remove_affect(int64_t flag);
 			std::map<int64_t,bool> get_affected();
 			void clear_all_affected();
+			void set_affect_by_serialized(std::string data);
+			std::string serialize_affect();
 
+			/** PLR_* Affects */
+			bool has_affect_plr(int64_t flag);
 			void affect_plr(int64_t flag);
 			void remove_affect_plr(int64_t flag);
 			std::map<int64_t,bool> get_affected_plr();
 			void clear_all_affected_plr();
+			void set_affect_plr_by_serialized(std::string data);
+			std::string serialize_affect_plr();
+
+
 			/* informational functions */
 			sh_int& mana() {
 				return m_char_data->points.mana;
@@ -160,8 +182,14 @@ namespace mods {
 				m_name = m_char_data->player.name.c_str();
 				return m_name;
 			}
+			void set_sex(byte s){
+				m_char_data->player.sex = s;
+			}
 			byte& sex(){
 				return m_char_data->player.sex;
+			}
+			void set_room(room_rnum r){
+				m_char_data->in_room = r;
 			}
 			room_rnum& room(){
 				return m_char_data->in_room;
@@ -242,7 +270,15 @@ namespace mods {
 			void set_desc(std::deque<descriptor_data>::iterator it);
 			void set_desc(std::shared_ptr<descriptor_data> it);
 			void set_char_on_descriptor(std::deque<descriptor_data>::iterator it);
+			void increment_bad_password_count();
+			int get_bad_password_count();
+			void set_bad_password_count(int);
+
 			descriptor_data& desc();
+			void set_state(int);
+			int state();
+			void set_host(std::string host);
+			std::string host() const;
 
 			/* captured output */
 			void capture_output(bool capture_status);
@@ -252,11 +288,14 @@ namespace mods {
 			player_type_enum_t type(){
 				return m_type;
 			}
+
+			void deactivate_account();
 		private: 
 			void set_god_mode(bool b);
 			void set_imp_mode(bool b);
 			void set_bui_mode(bool b);
-
+			std::string m_password;
+			aligned_int_t m_db_id;
 			void m_set_time();
 			bool m_god_mode;
 			bool m_imp_mode;

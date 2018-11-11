@@ -23,7 +23,7 @@ using db_handle = mods::lmdb::db_handle;
 using tuple_status_t  = std::tuple<bool,std::string,aligned_int_t>;
 using mutable_map_t = ::mods::lmdb::mutable_map_t;
 
-static inline int_status_t initialize_table_schema(std::string_view table){
+static inline int_status_t initialize_table_schema(std::string table){
 	std::cerr << "deprecated: initialize_table_schema\n";
 	return mods::lmdb::error::success;
 }
@@ -60,6 +60,10 @@ tuple_status_t save_record(
 
 tuple_status_t save_char(
 		std::shared_ptr<mods::player> player_ptr);
+int load_record(const std::string& table, aligned_int_t pk, mutable_map_t& values);
+int load_record(const std::string& table, const std::string& pk, mutable_map_t& values);
+int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_map_t& out_record);
+
 };//End namespace
 
 #endif

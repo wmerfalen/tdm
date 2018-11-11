@@ -1321,15 +1321,12 @@ int new_descriptor(socket_t s) {
 
 	/* accept the new connection */
 	i = sizeof(peer);
+
 	auto player = mods::globals::player_list.emplace_back(std::make_shared<mods::player>());
-	auto descriptor = descriptor_list.emplace_back();
-	player->set_desc(descriptor_list.end()-1);
-	player->desc().character = player->cd();
-	player->set_char_on_descriptor(descriptor_list.end()-1);
 
 	if((desc = accept(s, (struct sockaddr *) &peer, &i)) == INVALID_SOCKET) {
 		perror("SYSERR: accept");
-		destroy_socket(desc);
+		destroy_socket(desc);//TODO: merge destroy_socket functionality into deregister_player process
 		deregister_player(player);
 		return (-1);
 	}
@@ -1363,13 +1360,13 @@ int new_descriptor(socket_t s) {
 		}
 
 		/* find the numeric site address */
-		player->desc().host = inet_ntoa(peer.sin_addr);
+		player->set_host(inet_ntoa(peer.sin_addr));
 	} else {
-		player->desc().host = from->h_name;
+		player->set_host(from->h_name);
 	}
 
 	/* determine if the site is banned */
-	if(isbanned(player->desc().host.c_str())) {
+	if(isbanned(player->host().c_str())) {
 		destroy_socket(desc);
 		mudlog(CMP, LVL_GOD, TRUE, "Connection attempt denied from [%s]", player->desc().host.c_str());
 		deregister_player(player);
@@ -1381,7 +1378,7 @@ int new_descriptor(socket_t s) {
 		player->desc().descriptor = desc;
 		player->desc().login_time = time(0);
 		player->desc().has_prompt = 1;  /* prompt is part of greetings */
-		STATE(player->desc()) = CON_GET_NAME;
+		player->set_state(CON_GET_NAME);
 
 		/*
 		 * This isn't exactly optimal but allows us to make a design choice.
@@ -1401,7 +1398,6 @@ int new_descriptor(socket_t s) {
 					desc,player
 				)
 		);
-		d("returning socket descriptor [player obj created :)]");
 		return (desc);
 	}
 }

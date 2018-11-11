@@ -128,7 +128,9 @@ tuple_status_t lmdb_write_values(
 void lmdb_export_char(std::shared_ptr<mods::player> player_ptr, mutable_map_t &values){
 	/** TODO: instead of using the char_data accesses, create functions(or use existing ones) on mods::player object */
 	auto ch = player_ptr->cd();
-		values["id"] = std::to_string(ch->db_id());
+		values["id"] = std::to_string(player_ptr->get_db_id());
+		values["player_affection_plr_bitvector"] = player_ptr->serialize_affect_plr();
+		values["player_affection_bitvector"] = player_ptr->serialize_affect();
 		values["player_name"] = std::to_string(ch->player.name);
 		values["player_short_description"] = std::to_string(ch->player.short_descr);
 		values["player_long_description"] = std::to_string(ch->player.long_descr);
@@ -170,5 +172,46 @@ void lmdb_export_char(std::shared_ptr<mods::player> player_ptr, mutable_map_t &v
 		values["player_armor"] = std::to_string(ch->points.armor);
 		return;
 }
+
+int load_record(const std::string& table, aligned_int_t pk, mutable_map_t& values){
+	auto str_pk = std::to_string(pk);
+	return load_record(table,str_pk,values);
+}
+int load_record(const std::string& table, const std::string& pk, mutable_map_t& values){
+	auto ptr_db = mods::globals::db.get();
+	std::string value;
+	int count = 0;
+	for(auto & key : ptr_db->fields_to_grab(table)){
+		value.clear();
+		ptr_db->get(db_key({table,key,pk}),value);
+		values[key] = value;
+		++count;
+	}
+	return count;
+}
+
+
+int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_map_t& out_record){
+	if(values == nullptr){
+		std::cerr << "error: values is a nullptr in load_record_by_meta\n";
+		return -1;
+	}
+	auto ptr_db = mods::globals::db.get();
+	for(auto & [col,value] : mods::meta_utils::get_all_meta_values(table,values)){
+		std::string pk_id;
+		pk_id.clear();
+		ptr_db->get(db_key({table,"meta",col,value}),pk_id);
+		auto opt_pk = mods::util::stoi_optional<aligned_int_t>(pk_id);
+		if(opt_pk.has_value() && opt_pk.value() != 0){
+			std::cout << "debug: found pk: '" << opt_pk.value() << "'\n";
+			auto i = load_record(table,opt_pk.value(),out_record);
+			return i;
+		}
+	}
+	return 0;
+}
+
+
+
 
 };

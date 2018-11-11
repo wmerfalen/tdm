@@ -85,6 +85,18 @@ namespace mods::util {
 		ss >> m;
 		return m;
 	}
+	template <typename T>
+	std::optional<T> stoi_optional(std::string_view str){
+		T i;
+		std::stringstream ss;
+		ss << str;
+		ss >> i;
+		if(ss.fail()){
+			return std::nullopt;
+		}else{
+			return i;
+		}
+	}
 	std::optional<int> stoi(std::string_view str);
 
 	template<int max_char,typename Container>
