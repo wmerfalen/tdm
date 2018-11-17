@@ -760,16 +760,16 @@ struct alias_data *find_alias(struct alias_data *alias_list, char *str) {
 
 void free_alias(struct alias_data *a) {
 	/*
-	if(a->alias) {
-		free(a->alias);
-	}
+		 if(a->alias) {
+		 free(a->alias);
+		 }
 
-	if(a->replacement) {
-		free(a->replacement);
-	}
+		 if(a->replacement) {
+		 free(a->replacement);
+		 }
 
-	free(a);
-	*/
+		 free(a);
+		 */
 }
 
 
@@ -1300,18 +1300,9 @@ int64_t perform_dupe_check(std::shared_ptr<mods::player> p){
 	p->desc().set_state(CON_PLAYING);
 	int64_t kicked = 0;
 	for(auto& player_ptr : mods::globals::player_list){
-		std::cerr << "perform_dupe_check[debug]->'" << 
-			"p->uuid(): " << p->uuid() << "|player_ptr->uuid(): " <<
-			player_ptr->uuid() << ". p->name(): '" << p->name() << "'|'" <<
-			player_ptr->name().c_str() << "'. p->time(): '" << p->time() << "'|'" << 
-			player_ptr->time() << "'\n";
 		if(p->uuid() != player_ptr->uuid() && 
 				name.compare(player_ptr->name().c_str()) == 0 &&
-			p->time() > player_ptr->time()){
-			std::cerr << "perform_dupe_check[kicking]->'" <<
-				player_ptr->uuid() << "'|desc:'" << player_ptr->desc().descriptor << 
-				"'|p->desc().descriptor:'" << p->desc().descriptor << 
-				"'\n";
+				(p->time()) > (player_ptr->time())){
 			player_ptr->desc().set_state(CON_CLOSE);
 			++kicked;
 		}
@@ -1331,98 +1322,95 @@ int64_t perform_dupe_check(mods::descriptor_data& d) {
 	 */
 
 	/*
-	for(ch = character_list; ch; ch = next_ch) {
-		next_ch = ch->next;
+		 for(ch = character_list; ch; ch = next_ch) {
+		 next_ch = ch->next;
 
-		if(IS_NPC(ch)) {
-			continue;
-		}
+		 if(IS_NPC(ch)) {
+		 continue;
+		 }
 
-		if(ch->uuid != id) {
-			continue;
-		}
+		 if(ch->uuid != id) {
+		 continue;
+		 }
 
-		// ignore chars with descriptors (already handled by above step) 
-		if(ch->has_desc) {
-			continue;
-		}
+	// ignore chars with descriptors (already handled by above step) 
+	if(ch->has_desc) {
+	continue;
+	}
 
-		// don't extract the target char we've found one already 
-		if(ch == target) {
-			continue;
-		}
+	// don't extract the target char we've found one already 
+	if(ch == target) {
+	continue;
+	}
 
-		// we don't already have a target and found a candidate for switching 
-		if(!target) {
-			target = ch;
-			mode = RECON;
-			continue;
-		}
+	// we don't already have a target and found a candidate for switching 
+	if(!target) {
+	target = ch;
+	mode = RECON;
+	continue;
+	}
 
-		// we've found a duplicate - blow him away, dumping his eq in limbo. 
-		if(IN_ROOM(ch) != NOWHERE) {
-			char_from_room(ch);
-		}
+	// we've found a duplicate - blow him away, dumping his eq in limbo. 
+	if(IN_ROOM(ch) != NOWHERE) {
+	char_from_room(ch);
+	}
 
-		char_to_room(ch, 1);
-		extract_char(ch);
+	char_to_room(ch, 1);
+	extract_char(ch);
 	}
 
 	// no target for switching into was found - allow login to continue 
 	if(!target) {
-		return (0);
+	return (0);
 	}
 
 	// Okay, we've found a target.  Connect d to target. 
 	//free_char(d.character); // get rid of the old char 
 	d.character = target;
-	*d.character->desc = d;
-	d.original = NULL;
-	d.character->char_specials.timer = 0;
-	REMOVE_BIT(PLR_FLAGS(d.character), PLR_MAILING | PLR_WRITING);
-	REMOVE_BIT(AFF_FLAGS(d.character), AFF_GROUP);
-	p->set_state(CON_PLAYING);
+	 *d.character->desc = d;
+	 d.original = NULL;
+	 d.character->char_specials.timer = 0;
+	 REMOVE_BIT(PLR_FLAGS(d.character), PLR_MAILING | PLR_WRITING);
+	 REMOVE_BIT(AFF_FLAGS(d.character), AFF_GROUP);
+	 p->set_state(CON_PLAYING);
 
-	switch(mode) {
-		case RECON:
-			write_to_output(d, "Reconnecting.\r\n");
-			act("$n has reconnected.", TRUE, d.character, 0, 0, TO_ROOM);
-			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d.character)), TRUE, "%s [%s] has reconnected.", GET_NAME(d.character).c_str(), d.host.c_str());
-			break;
+	 switch(mode) {
+	 case RECON:
+	 write_to_output(d, "Reconnecting.\r\n");
+	 act("$n has reconnected.", TRUE, d.character, 0, 0, TO_ROOM);
+	 mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d.character)), TRUE, "%s [%s] has reconnected.", GET_NAME(d.character).c_str(), d.host.c_str());
+	 break;
 
-		case USURP:
-			write_to_output(d, "You take over your own body, already in use!\r\n");
-			act("$n suddenly keels over in pain, surrounded by a white aura...\r\n"
-					"$n's body has been taken over by a new spirit!",
-					TRUE, d.character, 0, 0, TO_ROOM);
-			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d.character)), TRUE,
-					"%s has re-logged in ... disconnecting old socket.", GET_NAME(d.character).c_str());
-			break;
+	 case USURP:
+	 write_to_output(d, "You take over your own body, already in use!\r\n");
+	 act("$n suddenly keels over in pain, surrounded by a white aura...\r\n"
+	 "$n's body has been taken over by a new spirit!",
+	 TRUE, d.character, 0, 0, TO_ROOM);
+	 mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d.character)), TRUE,
+	 "%s has re-logged in ... disconnecting old socket.", GET_NAME(d.character).c_str());
+	 break;
 
-		case UNSWITCH:
-			write_to_output(d, "Reconnecting to unswitched char.");
-			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d.character)), TRUE, "%s [%s] has reconnected.", GET_NAME(d.character).c_str(), d.host.c_str());
-			break;
-	}
-	*/
+	 case UNSWITCH:
+	 write_to_output(d, "Reconnecting to unswitched char.");
+	mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d.character)), TRUE, "%s [%s] has reconnected.", GET_NAME(d.character).c_str(), d.host.c_str());
+	break;
+}
+*/
 
-	return (1);
+return (1);
 }
 
 
 
 /* deal with newcomers and other non-playing sockets */
 void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
-	d("nanny -entrance");
 	int load_result;	/* Overloaded variable */
 
 	skip_spaces(&in_arg);
 	auto & d = p->desc();
-	if(!in_arg || !*in_arg){
-		p->set_state(CON_CLOSE);
-	}
 	mutable_map_t row;
 	std::string arg = in_arg;
+	tuple_status_t status;
 
 	switch(p->state()) {
 		case CON_GET_NAME:		/* wait for input of name */
@@ -1431,8 +1419,6 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 			} else {
 				std::array<char,MAX_INPUT_LENGTH + 1> buf;
 				std::fill(buf.begin(),buf.end(),0);
-				struct char_file_u tmp_store;
-				memset(&tmp_store,0,sizeof(tmp_store));
 				if(!Valid_Name(arg.c_str()) ||
 						fill_word(strncpy(&buf[0], arg.c_str(),MAX_INPUT_LENGTH)) || 
 						reserved_word(&buf[0])) {	/* strcpy: OK (mutual MAX_INPUT_LENGTH) */
@@ -1440,35 +1426,37 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 					return;
 				}
 
+				p->set_name(arg);
 				aligned_int_t user_id = 0;
-				if(!char_exists(arg,user_id)) {
-					/**
-					 *  TODO: I still want this PLR_DELETED functionality so that we can maintain the
-					 *  class circle functionality that people are so accustomed to.
-					 */
-					//if(PLR_FLAGGED(p->cd(), PLR_DELETED)) {
-					//	d("PLR_FLAGGED(PLR_DELETED)");
-					//	/* We get a false positive from the original deleted character. */
-					//	/* Check for multiple creations... */
-					//	if(!Valid_Name(tmp_ptr.c_str())) {
-					//		write_to_output(d, "Invalid name, please try another.\r\nName: ");
-					//		return;
-					//	}
-
-					p->name().assign(arg);
+				//auto id = mods::db::initialize_row("player");
+				//db_put("player",db_key({"meta","player_name",p->name()}),std::to_string(id));
+				//mods::globals::db->commit();
+				auto pk_id = db_get(db_key({"player","meta","player_name",p->name()}));
+				if(pk_id.length() == 0 || pk_id.compare("0") == 0 ||
+					mods::util::stoi_optional<aligned_int_t>(pk_id).has_value() == false ||
+						mods::util::stoi_optional<aligned_int_t>(pk_id).value_or(0) == 0){
 					p->set_db_id(0);
-					write_to_output(d, "Did I get that right, %s (Y/N)? ", arg.c_str());
-						p->set_state(CON_NAME_CNFRM);
-					} else {
-						std::cout << "info: player '" << arg << "' user_id: '" << user_id << "'\n";
-						p->set_db_id(user_id);
-						p->name().assign(arg);
-						p->clear_all_affected();
-						p->clear_all_affected_plr();
-						write_to_output(d, "Password: ");
-						echo_off(d);
-						d.idle_tics = 0;
-						p->set_state(CON_PASSWORD);
+					write_to_output(d, "Did I get that right, %s (Y/N)? ", p->name().c_str());
+					p->set_state(CON_NAME_CNFRM);
+				} else {
+					std::cout << "info: player '" << arg << "' user_id: '" << user_id << "'\n";
+					p->set_db_id(mods::util::stoi_optional<aligned_int_t>(pk_id).value_or(0));
+					if(p->get_db_id() == 0){
+						std::cerr << "error: existing user has an invalid pk\n";
+					}else{
+						if(parse_sql_player(p)){
+							p->clear_all_affected();
+							p->clear_all_affected_plr();
+							write_to_output(d, "Password: ");
+							echo_off(d);
+							d.idle_tics = 0;
+							p->set_state(CON_PASSWORD);
+						}else{
+							p->set_db_id(0);
+							write_to_output(d, "Did I get that right, %s (Y/N)? ", p->name().c_str());
+							p->set_state(CON_NAME_CNFRM);
+						}
+					}
 				}
 			}
 			break;
@@ -1491,8 +1479,10 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 
 				write_to_output(d, "New character.\r\nGive me a password for %s: ", p->name().c_str());
 				echo_off(d);
+				p->set_db_id(0);
 				p->set_state(CON_NEWPASSWD);
 			} else if(arg[0] == 'n' || arg[0] == 'N') {
+				p->set_name("");
 				write_to_output(d, "Okay, what IS it, then? ");
 				/** FIXME: possibly have to clear the char_data struct here */
 				p->set_state(CON_GET_NAME);
@@ -1527,28 +1517,27 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 				std::fill(outbuf.begin(),outbuf.end(),0);
 				std::string compare;
 				/** FIXME: this entire if statement is broken. it always lets the user in */
-					std::copy(outbuf.begin(),outbuf.end(),std::back_inserter(compare));
-					mods::globals::db->set_pluck_filter({"player_password"});
-					std::cout << "info: " << p->name().c_str() << "'s pk_id: '" << p->get_db_id() << "'\n";
-					mods::db::load_record("player",p->get_db_id(),row);
-					mods::globals::db->clear_pluck_filter();
-					if(row.size()){
-						std::cout << "info: found 'player_password' as: '" << row["player_password"] << "'\n" 
-							<< "comparing to: '" << compare << "'\n";
-					}
+				std::copy(outbuf.begin(),outbuf.end(),std::back_inserter(compare));
+				mods::globals::db->set_pluck_filter({"player_password"});
+				std::cout << "info: " << p->name().c_str() << "'s pk_id: '" << p->get_db_id() << "'\n";
+				mods::db::load_record("player",p->get_db_id(),row);
+				mods::globals::db->clear_pluck_filter();
+				if(row.size()){
+					std::cout << "info: found 'player_password' as: '" << row["player_password"] << "'\n" 
+						<< "comparing to: '" << compare << "'\n";
+				}
 				if(row["player_password"].compare(compare) != 0){
-						mudlog(BRF, LVL_GOD, TRUE, "Bad PW: %s [%s]", p->name().c_str(), p->host().c_str());
-						p->increment_bad_password_count();
-						save_char(p);
+					mudlog(BRF, LVL_GOD, TRUE, "Bad PW: %s [%s]", p->name().c_str(), p->host().c_str());
+					p->increment_bad_password_count();
 
-						if(p->get_bad_password_count() >= max_bad_pws){
-							write_to_output(d, "Wrong password... disconnecting.\r\n");
-							p->set_state(CON_CLOSE);
-						} else {
-							write_to_output(d, "Wrong password.\r\nPassword: ");
-							echo_off(d);
-						}
-						return;
+					if(p->get_bad_password_count() >= max_bad_pws){
+						write_to_output(d, "Wrong password... disconnecting.\r\n");
+						p->set_state(CON_CLOSE);
+					} else {
+						write_to_output(d, "Wrong password.\r\nPassword: ");
+						echo_off(d);
+					}
+					return;
 				}
 
 				/* Password was correct. */
@@ -1600,7 +1589,7 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 		case CON_CHPWD_GETNEW:
 			d("con-chpwd-getnew");
 			if(arg.length() > MAX_PWD_LENGTH || arg.length() < 3 ||
-					arg.compare(p->name().c_str()) == 0) {
+					arg.compare(p->name()) == 0) {
 				write_to_output(d, "\r\nIllegal password.\r\nPassword: ");
 				return;
 			}
@@ -1619,7 +1608,7 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 
 		case CON_CNFPASSWD:
 		case CON_CHPWD_VRFY:
-				if(arg.compare(p->get_password()) != 0){
+			if(arg.compare(p->get_password()) != 0){
 				write_to_output(d, "\r\nPasswords don't match... start over.\r\nPassword: ");
 
 				if(p->state() == CON_CNFPASSWD) {
@@ -1636,7 +1625,6 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 				write_to_output(d, "\r\nWhat is your sex (M/F)? ");
 				p->set_state(CON_QSEX);
 			} else {
-				save_char(p);
 				write_to_output(d, "\r\nDone.\r\n%s", MENU);
 				p->set_state(CON_MENU);
 			}
@@ -1673,157 +1661,171 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 				write_to_output(d, "\r\nThat's not a class.\r\nClass: ");
 				return;
 			} else {
-				d("set class to load_result: " << load_result);
 				GET_CLASS(p->cd()) = load_result;
 			}
 
 			/* Now GET_NAME() will work properly. */
-			d("init_char");
-			init_char(p);
-			d("save_char");
+			//init_char(p);
 			REMOVE_BIT(MOB_FLAGS(p->cd()), MOB_ISNPC);
-			save_char(p);
-			write_to_output(d, "%s\r\n*** PRESS RETURN: ", motd);
 			d("set CON_RMOTD");
 			p->set_state(CON_RMOTD);
+			p->set_db_id(0);
+			status = mods::db::save_new_char(p);
+			if(std::get<0>(status)){
+				std::cout << "debug: new character '" << p->name() << "' pk: " << std::get<2>(status) << "\n";
+				p->set_db_id(std::get<2>(status));
+				if(parse_sql_player(p) == false){
+					std::cerr << "error: after saving to the db, we couldn't parse the player's info\n";
+				}else{
+					std::cout << "info: player created and initialized successfully\n";
+					mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player.", p->name().c_str(), p->host().c_str());
+				}
+			}else{
+				std::cerr << "error: save_new_char failed: '" << std::get<1>(status) << "'\n";
+				mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player creation failed: '%s'.", p->name().c_str(), p->host().c_str(),std::get<1>(status).c_str());
+			}
+			write_to_output(d, "%s\r\n*** PRESS RETURN: ", motd);
 
-			mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player.", p->name().c_str(), p->host().c_str());
 			break;
 
 		case CON_RMOTD:		/* read CR after printing motd   */
 			d("rmotd");
 			write_to_output(d, "%s", MENU);
 			p->set_state(CON_MENU);
+			parse_sql_player(p);
 			d("set CON_MENU");
 			break;
 
-case CON_MENU: {		/* get selection from main menu  */
-								 d("menu");
- switch(arg[0]) {
-	 case '0':
-		 write_to_output(d, "Goodbye.\r\n");
-		 p->set_state(CON_CLOSE);
-		 break;
+		case CON_MENU: {		/* get selection from main menu  */
+										 switch(arg[0]) {
+											 case '0':
+												 write_to_output(d, "Goodbye.\r\n");
+												 p->set_state(CON_CLOSE);
+												 break;
 
-	 case '1':
-		 d("reset_char");
-		 reset_char(p->cd());
-		 //read_aliases(p->cd());
+											 case '1':
+												 //reset_char(p->cd());
+												 //read_aliases(p->cd());
 
-		 if(p->has_affect_plr(PLR_INVSTART)){
-			 GET_INVIS_LEV(p->cd()) = p->level();
-		 }
+												 if(p->has_affect_plr(PLR_INVSTART)){
+													 GET_INVIS_LEV(p->cd()) = p->level();
+												 }
 
-		 /*
-			* We have to place the character in a room before equipping them
-			* or equip_char() will gripe about the person in NOWHERE.
-			*/
-//		 d("load_room");
-//		 if((load_room = GET_LOADROOM(p->cd())) != NOWHERE) {
-//			 load_room = real_room(load_room);
-//		 }
-//		 d("user's load_room: " << load_room);
-//
-//		 /* If char was saved with NOWHERE, or real_room above failed... */
-//		 if(load_room == NOWHERE) {
-//			 if(p->level() >= LVL_IMMORT) {
-//				 d("placing in immor room");
-//				 load_room = r_immort_start_room;
-//			 } else {
-//				 d("placing char i mortal_start_room: " << r_mortal_start_room);
-//				 load_room = r_mortal_start_room;
-//			 }
-//		 }
-//
-//		 if(PLR_FLAGGED(p->cd(), PLR_FROZEN)) {
-//			 d("player being placed in frozen start room");
-//			 load_room = r_frozen_start_room;
-//		 }
-//
-//		 send_to_char(p->cd(), "%s", WELC_MESSG);
-//		 char_to_room(p->cd(), load_room);
+												 /*
+													* We have to place the character in a room before equipping them
+													* or equip_char() will gripe about the person in NOWHERE.
+													*/
+												 //		 d("load_room");
+												 //		 if((load_room = GET_LOADROOM(p->cd())) != NOWHERE) {
+												 //			 load_room = real_room(load_room);
+												 //		 }
+												 //		 d("user's load_room: " << load_room);
+												 //
+												 //		 /* If char was saved with NOWHERE, or real_room above failed... */
+												 //		 if(load_room == NOWHERE) {
+												 //			 if(p->level() >= LVL_IMMORT) {
+												 //				 d("placing in immor room");
+												 //				 load_room = r_immort_start_room;
+												 //			 } else {
+												 //				 d("placing char i mortal_start_room: " << r_mortal_start_room);
+												 //				 load_room = r_mortal_start_room;
+												 //			 }
+												 //		 }
+												 //
+												 //		 if(PLR_FLAGGED(p->cd(), PLR_FROZEN)) {
+												 //			 d("player being placed in frozen start room");
+												 //			 load_room = r_frozen_start_room;
+												 //		 }
+												 //
+												 //		 send_to_char(p->cd(), "%s", WELC_MESSG);
+												 //		 char_to_room(p->cd(), load_room);
 #ifdef __MENTOC_RENT_DYNAMICS__
-//		 load_result = Crash_load(p->cd());
+												 //		 load_result = Crash_load(p->cd());
 #endif
-//
-//		 /* Clear their load room if it's not persistant. */
-//		 if(!PLR_FLAGGED(p->cd(), PLR_LOADROOM)) {
-//			 GET_LOADROOM(p->cd()) = NOWHERE;
-//		 }
-//
-		 //save_char(p->cd());
-		 /** !TODO: create an is_immortal() function and call it like this:
-			* if(is_immortal(p)){ ... load player into immortal room .. }
-			*/
-		 p->set_room(config::rooms::mortal_start());
+												 //
+												 //		 /* Clear their load room if it's not persistant. */
+												 //		 if(!PLR_FLAGGED(p->cd(), PLR_LOADROOM)) {
+												 //			 GET_LOADROOM(p->cd()) = NOWHERE;
+												 //		 }
+												 //
+												 //save_char(p->cd());
+												 /** !TODO: create an is_immortal() function and call it like this:
+													* if(is_immortal(p)){ ... load player into immortal room .. }
+													*/
+												 //std::cout << "sending welcom message\n";
+												 p->stc("welcome");//WELC_MESSG);
+													p->set_room(0);
+												 if(world.size() == 0){
+													 std::cerr << "error: world.size is empty!\n";
+												 }
+												 //p->set_room(config::rooms::mortal_start());
+												 char_to_room(p->cd(),p->room());
+												 act("$n has entered the game.", TRUE, p->cd(), 0, 0, TO_ROOM);
+												 p->set_state(CON_PLAYING);
 
-		 act("$n has entered the game.", TRUE, p->cd(), 0, 0, TO_ROOM);
+												 if(p->level() == 0) {
+													 do_start(p->cd());
+													 p->stc(START_MESSG);
+												 }
 
-		 p->set_state(CON_PLAYING);
+												 d("looking at room");
+												 look_at_room(p->cd(), 0);
 
-		 if(p->level() == 0) {
-			 do_start(p->cd());
-			 send_to_char(p->cd(), "%s", START_MESSG);
-		 }
-
-		 d("looking at room");
-		 look_at_room(p->cd(), 0);
-
-		 if(has_mail(GET_IDNUM(p->cd()))) {
-			 send_to_char(p->cd(), "You have mail waiting.\r\n");
-		 }
+												 if(has_mail(GET_IDNUM(p->cd()))) {
+													 p->stc("You have mail waiting.\r\n");
+												 }
 
 #ifdef __MENTOC_RENT_DYNAMICS__
-		 if(load_result == 2) {	/* rented items lost */
-			 send_to_char(p->cd(), "\r\n\007You could not afford your rent!\r\n"
-					 "Your possesions have been donated to the Salvation Army!\r\n");
-		 }
+												 if(load_result == 2) {	/* rented items lost */
+													 send_to_char(p->cd(), "\r\n\007You could not afford your rent!\r\n"
+															 "Your possesions have been donated to the Salvation Army!\r\n");
+												 }
 #endif
 
-		 d.has_prompt = 0;
-		 break;
+												 p->desc().has_prompt = 0;
+												 break;
 
-	 case '2':
-		 if(p->cd()->player.description) {
-			 write_to_output(d, "Old description:\r\n%s", p->cd()->player.description.c_str());
-			 p->cd()->player.description.clear();
-		 }
+											 case '2':
+												 if(p->cd()->player.description) {
+													 write_to_output(d, "Old description:\r\n%s", p->cd()->player.description.c_str());
+													 p->cd()->player.description.clear();
+												 }
 
-		 write_to_output(d, "Enter the new text you'd like others to see when they look at you.\r\n"
-				 "Terminate with a '@' on a new line.\r\n");
-		 d.str = p->cd()->player.description.ptrptr();
-		 d.max_str = EXDSCR_LENGTH;
-		 p->set_state(CON_EXDESC);
-		 break;
+												 write_to_output(d, "Enter the new text you'd like others to see when they look at you.\r\n"
+														 "Terminate with a '@' on a new line.\r\n");
+												 d.str = p->cd()->player.description.ptrptr();
+												 d.max_str = EXDSCR_LENGTH;
+												 p->set_state(CON_EXDESC);
+												 break;
 
-	 case '3':
-		 page_string(d, background, 0);	/**FIXME*/
-		 p->set_state(CON_RMOTD);
-		 break;
+											 case '3':
+												 page_string(d, background, 0);	/**FIXME*/
+												 p->set_state(CON_RMOTD);
+												 break;
 
-	 case '4':
-		 write_to_output(d, "\r\nEnter your old password: ");
-		 echo_off(d);
-		 p->set_state(CON_CHPWD_GETOLD);
-		 break;
+											 case '4':
+												 write_to_output(d, "\r\nEnter your old password: ");
+												 echo_off(d);
+												 p->set_state(CON_CHPWD_GETOLD);
+												 break;
 
-	 case '5':
-		 write_to_output(d, "\r\nEnter your password for verification: ");
-		 echo_off(d);
-		 p->set_state(CON_DELCNF1);
-		 break;
+											 case '5':
+												 write_to_output(d, "\r\nEnter your password for verification: ");
+												 echo_off(d);
+												 p->set_state(CON_DELCNF1);
+												 break;
 
-	 default:
-		 write_to_output(d, "\r\nThat's not a menu choice!\r\n%s", MENU);
-		 break;
- }
+											 default:
+												 write_to_output(d, "\r\nThat's not a menu choice!\r\n%s", MENU);
+												 break;
+										 }
 
- break;
-}
+										 break;
+									 }
 
 		case CON_CHPWD_GETOLD:
-									 
-									if(p->get_password().compare(arg) != 0){
+
+									 if(p->get_password().compare(arg) != 0){
 										 echo_on(d);
 										 write_to_output(d, "\r\nIncorrect password.\r\n%s", MENU);
 										 p->set_state(CON_MENU);
@@ -1862,9 +1864,7 @@ case CON_MENU: {		/* get selection from main menu  */
 											 p->affect_plr(PLR_DELETED);
 										 }
 
-										 save_char(p);
-										 //Crash_delete_file(p->name().c_str().ptr());
-										 //delete_aliases(p->name().c_str());
+										 mods::db::save_char(p);
 										 write_to_output(d, "Character '%s' deleted!\r\n"
 												 "Goodbye.\r\n", p->name().c_str());
 										 mudlog(NRM, LVL_GOD, TRUE, "%s (lev %d) has self-deleted.", p->name().c_str(), p->level());
@@ -1892,5 +1892,5 @@ case CON_MENU: {		/* get selection from main menu  */
 									 p->set_state(CON_DISCONNECT);	/* Safest to do. */
 									 break;
 	}
-d("outside nanny switch");
+	d("outside nanny switch");
 }

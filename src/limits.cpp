@@ -216,20 +216,24 @@ int move_gain(struct char_data *ch) {
 
 
 
-void set_title(struct char_data *ch, char *title) {
-	if(title == NULL) {
+void set_title(char_data* ch, const char* title) {
+	MENTOC_PREAMBLE();
+	set_title(player,title);
+}
+void set_title(std::shared_ptr<mods::player> player, const char* title) {
+	if(!title){
+		auto ch = player->cd();
+		std::string final_title;
 		if(GET_SEX(ch) == SEX_FEMALE) {
-			title = title_female(GET_CLASS(ch), GET_LEVEL(ch));
+			final_title = title_female(player->chclass(), player->level());
 		} else {
-			title = title_male(GET_CLASS(ch), GET_LEVEL(ch));
+			final_title = title_male(player->chclass(), player->level());
 		}
+		player->title().assign(final_title);
+		return;
+	}else{
+		player->title().assign(title);
 	}
-
-	if(strlen(title) > MAX_TITLE_LENGTH) {
-		title[MAX_TITLE_LENGTH] = '\0';
-	}
-
-	GET_TITLE(ch).assign(title);
 }
 
 
@@ -395,8 +399,8 @@ void gain_condition(struct char_data *ch, int condition, int value) {
 
 
 
-void check_idling(struct char_data *ch) {
-	MENTOC_PREAMBLE();
+void check_idling(std::shared_ptr<mods::player> player) {
+	auto ch = player->cd();
 	if(++(ch->char_specials.timer) > idle_void) {
 		if(GET_WAS_IN(ch) == NOWHERE && IN_ROOM(ch) != NOWHERE) {
 			GET_WAS_IN(ch) = IN_ROOM(ch);
@@ -410,7 +414,7 @@ void check_idling(struct char_data *ch) {
 			if(!ch->drone) {
 				act("$n disappears into the void.", TRUE, ch, 0, 0, TO_ROOM);
 				send_to_char(ch, "You have been idle, and are pulled into a void.\r\n");
-				save_char(player);
+				mods::db::save_char(player);
 				Crash_crashsave(ch);
 				char_from_room(ch);
 				char_to_room(ch, config::rooms::idle());
@@ -441,8 +445,8 @@ void check_idling(struct char_data *ch) {
 			mudlog(CMP, LVL_GOD, TRUE, "%s force-rented and extracted (idle).", GET_NAME(ch).c_str());
 			extract_char(ch);
 #else
-			auto save_status = db::save_char(player);
-			if(save_status < 0){
+			auto save_status = mods::db::save_char(player);
+			if(std::get<0>(save_status) == false){
 				std::cerr << "check_idling[db::save_char]->error saving character\n";
 			}
 #endif
@@ -454,7 +458,7 @@ void check_idling(struct char_data *ch) {
 ACMD(do_idle){
 	MENTOC_PREAMBLE();
 	player->cd()->char_specials.timer = idle_void + 1;
-	check_idling(player->cd());
+	check_idling(player);
 }
 
 /* Update PCs, NPCs, and objects */
@@ -501,7 +505,9 @@ void point_update(void) {
 			update_char_objects(i);
 
 			if(GET_LEVEL(i) < idle_max_level) {
-				check_idling(i);
+				auto ch = i;
+				MENTOC_PREAMBLE();
+				check_idling(player);
 			}
 		}
 	}

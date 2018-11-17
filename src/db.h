@@ -101,6 +101,7 @@
 
 /* public procedures in db.c */
 using aligned_int_t = uint64_t;
+bool parse_sql_player(std::shared_ptr<mods::player>);
 void  boot_hell(void);
 void	boot_db(void);
 void	destroy_db(void);
@@ -126,7 +127,7 @@ obj_rnum real_object(obj_vnum vnum);
 void	char_to_store(struct char_data *ch, struct char_file_u *st);
 void	store_to_char(struct char_file_u *st, struct char_data *ch);
 bool	load_char(const std::string& name);
-void	save_char(std::shared_ptr<mods::player>);
+extern tuple_status_t	mods::db::save_char(std::shared_ptr<mods::player>);
 void	init_char(std::shared_ptr<mods::player>);
 struct char_data* create_char(void);
 struct char_data *read_mobile(mob_vnum nr, int type);

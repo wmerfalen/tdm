@@ -36,6 +36,21 @@ namespace mods {
 	};
 	class player {
 		public:
+			enum plr {
+					KILLER = 0,THIEF,FROZEN,DONTSET,
+					WRITING,MAILING,CRASH,SITEOK,
+					NOSHOUT,NOTITLE,DELETED,LOADROOM,
+					NOWIZLIST,INVSTART,CRYO,
+					__FIRST = KILLER,
+					__LAST = CRYO
+			};
+			enum aff {
+					BLIND = 0, INVISIBLE, DETECT_ALIGN, DETECT_INVIS, DETECT_MAGIC, SENSE_LIFE, WATERWALK,
+					SANCTUARY, GROUP, CURSE, INFRAVISION, POISON, PROTECT_EVIL, PROTECT_GOOD,
+					SLEEP, NOTRACK, UNUSED16, UNUSED17, SNEAK, HIDE,
+					__FIRST = BLIND,
+					__LAST = HIDE
+			};
 			using   class_type = mods::classes::types;
 			using 	descriptor_data_t = std::deque<descriptor_data>;
 			using 	descriptor_data_iterator_t = descriptor_data_t::iterator;
@@ -53,6 +68,7 @@ namespace mods {
 				MOB_MUTED_DESCRIPTOR,
 				DRONE_MUTED_DESCRIPTOR
 			};
+			enum player_flag
 
 
 			/* constructors and destructors */
@@ -69,9 +85,15 @@ namespace mods {
 			aligned_int_t get_db_id() const;
 			void set_password(std::string pw);
 			std::string get_password();
+			std::string password(){
+				return this->get_password();
+			}
 			bool god_mode() const;
 			bool implementor_mode() const;
 			bool builder_mode() const;
+			void set_god_mode(bool b);
+			void set_imp_mode(bool b);
+			void set_bui_mode(bool b);
 			static constexpr int PAGE_SIZE = 40;
 
 			/** for the player.time.* variables */
@@ -119,10 +141,48 @@ namespace mods {
 			time_type_t time() const;
 
 			/** Affects */
+			/**
+			 * @return returns the legacy AFF_ flag given the modern aff flag
+			 */
+			static inline int64_t aff2legacy(aff f){
+				for(unsigned i=0; i < AFF_FLAG_COUNT;i++){
+					if(all_aff_flags[i].first == f){
+						return all_aff_flags[i].second;
+					}
+				}
+				return 0;
+			}
+			static inline aff legacy2aff(int64_t f){
+				for(unsigned i=0; i < AFF_FLAG_COUNT;i++){
+					if(all_aff_flags[i].second == f){
+						return all_aff_flags[i].first;
+					}
+				}
+				return 0;
+			}
+			/**
+			 * @return returns the legacy PLR_ flag given the modern plr flag
+			 */
+			static inline int64_t plr2legacy(plr f){
+				for(unsigned i=0; i < PLR_FLAG_COUNT;i++){
+					if(all_plr_flags[i].first == f){
+						return all_plr_flags[i].second;
+					}
+				}
+				return 0;
+			}
+			static inline plr legacy2plr(int64_t f){
+				for(unsigned i=0; i < PLR_FLAG_COUNT;i++){
+					if(all_plr_flags[i].second == f){
+						return all_plr_flags[i].first;
+					}
+				}
+				return 0;
+			}
 			bool has_affect(int64_t flag) ;
 			void affect(int64_t flag);
 			void remove_affect(int64_t flag);
-			std::map<int64_t,bool> get_affected();
+			std::map<aff,bool> get_affected();
 			void clear_all_affected();
 			void set_affect_by_serialized(std::string data);
 			std::string serialize_affect();
@@ -135,6 +195,48 @@ namespace mods {
 			void clear_all_affected_plr();
 			void set_affect_plr_by_serialized(std::string data);
 			std::string serialize_affect_plr();
+
+			/** char_special_data_saved */
+			char_special_data& char_specials(){
+				return m_char_data->char_specials;
+			}
+			char_data* fighting(){
+				return this->char_specials().fighting;
+			}
+			char_data* hunting(){
+				return this->char_specials().hunting;
+			}
+			byte& position(){
+				return this->char_specials().position;
+			}
+
+	int&	carry_weight(){
+		return this->char_specials().carry_weight;
+	}
+	byte& carry_items(){
+		return this->char_specials().carry_items;
+	}
+	int&	timer(){
+		return this->char_specials().timer;
+	}
+
+	char_special_data_saved& saved(){
+		return this->char_specials().saved;
+	}
+
+	char_ability_data& real_abils(){	 /* Abilities without modifiers   */
+		return m_char_data->real_abils;
+	}
+	char_ability_data& aff_abils(){	 /* Abils with spells/stones/etc  */
+		return m_char_data->aff_abils;
+	}
+
+	sh_int* apply_saving_throw(){
+		return this->char_specials().saved.apply_saving_throw;
+	}
+	sh_int& apply_saving_throw(std::size_t i){
+		return this->char_specials().saved.apply_saving_throw[i];
+	}
 
 
 			/* informational functions */
@@ -178,8 +280,42 @@ namespace mods {
 			byte& level(){
 				return m_char_data->player.level;
 			}
+			ubyte& weight(){
+				return m_char_data->player.weight;
+			}
+			ubyte& height(){
+				return m_char_data->player.height;
+			}
+			void set_title(const std::string& t){
+				m_char_data->player.title.assign(t);
+			}
+			mods::string& title(){
+				return m_char_data->player.title;
+			}
+			mods::string& short_descr(){
+				return m_char_data->player.short_descr;
+			}
+			mods::string& long_descr(){
+				return m_char_data->player.long_descr;
+			}
+			mods::string& description(){
+				return m_char_data->player.description;
+			}
+			byte& chclass(){
+				return m_char_data->player.chclass;
+			}
+			sh_int& hometown(){
+				return m_char_data->player.hometown;
+			}
+			time_data& ch_time(){
+				return m_char_data->player.time;
+			}
+			void set_name(std::string n){
+				this->cd()->player.name.assign(n);
+				m_name = n;
+			}
 			std::string& name() {
-				m_name = m_char_data->player.name.c_str();
+				m_name = this->cd()->player.name.c_str();
 				return m_name;
 			}
 			void set_sex(byte s){
@@ -270,6 +406,8 @@ namespace mods {
 			void set_desc(std::deque<descriptor_data>::iterator it);
 			void set_desc(std::shared_ptr<descriptor_data> it);
 			void set_char_on_descriptor(std::deque<descriptor_data>::iterator it);
+			void set_socket(socket_t d);
+			socket_t socket();
 			void increment_bad_password_count();
 			int get_bad_password_count();
 			void set_bad_password_count(int);
@@ -290,10 +428,8 @@ namespace mods {
 			}
 
 			void deactivate_account();
+			std::string generic_serialize(std::map<int64_t,bool>* vals);
 		private: 
-			void set_god_mode(bool b);
-			void set_imp_mode(bool b);
-			void set_bui_mode(bool b);
 			std::string m_password;
 			aligned_int_t m_db_id;
 			void m_set_time();
@@ -318,6 +454,7 @@ namespace mods {
 			std::vector<std::string> m_pages;
 			class_info_t m_class_info;
 			std::shared_ptr<char_data> m_shared_ptr;
+			std::shared_ptr<player_special_data> m_player_specials;
 			time_type_t	m_time;
 			player_type_enum_t m_type;
 	};

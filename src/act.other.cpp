@@ -130,7 +130,7 @@ ACMD(do_save) {
 	}
 
 	write_aliases(ch);
-	save_char(player);
+	mods::db::save_char(player);
 	Crash_crashsave(ch);
 
 	if(ROOM_FLAGGED(IN_ROOM(ch), ROOM_HOUSE_CRASH)) {
@@ -377,8 +377,10 @@ ACMD(do_title) {
 	} else if(strlen(argument) > MAX_TITLE_LENGTH) {
 		send_to_char(ch, "Sorry, titles can't be longer than %d characters.\r\n", MAX_TITLE_LENGTH);
 	} else {
-		set_title(ch, argument);
-		send_to_char(ch, "Okay, you're now %s %s.\r\n", GET_NAME(ch).c_str(), GET_TITLE(ch).c_str());
+		MENTOC_PREAMBLE();
+		set_title(player, argument);
+		*player << "Okay, you're now " << player->name().c_str() << " " <<
+			player->title().c_str() << "\r\n";
 	}
 }
 

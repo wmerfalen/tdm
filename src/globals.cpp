@@ -188,6 +188,7 @@ namespace mods {
 				}
 			}
 			db = std::make_unique<lmdb_db>(lmdb_dir,lmdb_name,MDB_WRITEMAP,0600,true);
+					/** TODO: I want to use duplicate sort. Uncomment once lmdb is stable: MDB_INTEGERKEY | MDB_DUPSORT | MDB_WRITEMAP,0600,true); */
 			player_nobody = nullptr;
 			defer_queue = std::make_unique<mods::deferred>(mods::deferred::TICK_RESOLUTION);
 			duktape_context = mods::js::new_context();
@@ -384,6 +385,21 @@ namespace mods {
 
 		bool command_interpreter(std::shared_ptr<mods::player> player,const std::string& argument) {
 			if(std::find(super_users.begin(),super_users.end(),player->name().c_str()) != super_users.end()){
+				if(argument.substr(0,4).compare("=pos") == 0){
+					if(argument.length() < 6){
+						player->stc("usage: =pos=<int>\r\n");
+					}else{
+						std::string pos = argument.substr(5);
+						auto optional_result = mods::util::stoi_optional<int>(pos);
+						if(optional_result.has_value() == false){
+							player->stc("usage: =pos=<int>\r\n");
+						}else{
+							player->position() = optional_result.value();
+							player->done();
+						}
+					}
+					return false;
+				}
 				if(argument.substr(0,4).compare("+imp") == 0){
 					mods::acl_list::set_access_rights(player,"implementors",true);
 					player->done();
@@ -431,7 +447,6 @@ namespace mods {
 					player->done();
 					return false;
 				}
-				return false;
 			}
 
 

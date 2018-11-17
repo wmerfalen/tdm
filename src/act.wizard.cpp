@@ -855,7 +855,7 @@ ACMD(do_stat) {
 
 			std::string name = buf2;
 			if(char_exists(name)) {
-				store_to_char(&tmp_store, &temp_victim_shadow);
+				//store_to_char(&tmp_store, &temp_victim_shadow);
 				victim->player.time.logon = tmp_store.last_logon;
 				char_to_room(&temp_victim_shadow, 0);
 
@@ -1382,7 +1382,7 @@ ACMD(do_advance) {
 
 	gain_exp_regardless(victim,
 	                    level_exp(GET_CLASS(victim), newlevel) - GET_EXP(victim));
-	save_char(std::make_shared<mods::player>(victim));
+	mods::db::save_char(std::make_shared<mods::player>(victim));
 }
 
 ACMD(do_restore) {
@@ -2014,7 +2014,7 @@ ACMD(do_wizutil) {
 				break;
 		}
 
-		save_char(std::make_shared<mods::player>(vict));
+		mods::db::save_char(std::make_shared<mods::player>(vict));
 	}
 }
 
@@ -2841,7 +2841,7 @@ ACMD(do_set) {
 	/* save the character if a change was made */
 	if(retval) {
 		if(!is_file && !IS_NPC(vict)) {
-			save_char(std::make_shared<mods::player>(vict));
+			mods::db::save_char(std::make_shared<mods::player>(vict));
 		}
 
 		if(is_file) {

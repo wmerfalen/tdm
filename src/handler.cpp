@@ -416,13 +416,15 @@ void char_from_room(struct char_data *ch) {
 
 /* place a character in a room */
 void char_to_room(struct char_data *ch, room_rnum room) {
+	MENTOC_PREAMBLE();
 	/*TODO: Insert logic here !movement !globals */
 	std::size_t r = room;
 
-	if(ch == NULL || room == NOWHERE || r >= mods::globals::room_list.size())
+	if(ch == NULL || room == NOWHERE || r >= mods::globals::room_list.size()){
 		log("SYSERR: Illegal value(s) passed to char_to_room. (Room: %d/%d Ch: %p",
 		    room, mods::globals::room_list.size(), ch);
-	else {
+		return;
+	}else {
 		mods::globals::rooms::char_to_room(room,ch);
 		ch->next_in_room = world[room].people;
 		world[room].people = ch;
@@ -436,7 +438,7 @@ void char_to_room(struct char_data *ch, room_rnum room) {
 
 		/* Stop fighting now, if we left. */
 		std::cerr << "char_to_room[room]->'" << room << "'\n";
-		if(FIGHTING(ch)){
+		if(player->fighting()){
 			if(IN_ROOM(ch) != IN_ROOM(FIGHTING(ch))) {
 				stop_fighting(FIGHTING(ch));
 				stop_fighting(ch);
@@ -1029,7 +1031,7 @@ void extract_char_final(struct char_data *ch) {
 
 		clearMemory(ch);
 	} else {
-		save_char(player);
+		mods::db::save_char(player);
 		Crash_delete_crashfile(ch);
 	}
 

@@ -28,28 +28,11 @@
 #include <deque>
 #include "mods/behaviour_tree_impl.hpp"
 #include "mods/db.hpp"
+#include "mods/lmdb.hpp"
 #include "mods/hell.hpp"
 #include "mods/meta_utils.hpp"
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 
-
-namespace db {
-	int16_t save_char(std::shared_ptr<mods::player> player_ptr){
-		auto ret = mods::db::save_char(player_ptr);
-		if(std::get<0>(ret)){
-			d("char saved to db");
-			return 0;
-		}else{
-			log(("db::save_char[error]->Failed to save char to db: "_s + std::get<1>(ret)).c_str());
-			return -2;
-		}
-	}
-};
-void save_char(std::shared_ptr<mods::player> player_ptr){
-	if(db::save_char(player_ptr) < 0){
-		std::cerr << "error: save_char failed\n";
-	}
-}
 /**************************************************************************
  *  declarations of most of the 'global' variables                         *
  **************************************************************************/
@@ -924,6 +907,8 @@ void parse_sql_mobiles() {
 		std::cerr << "foobar\n";
 
 		for(auto row : result) {
+			//mods::meta_utils::write_meta("mobile",&row);
+
 			proto.player.name.assign(row["mob_name"].c_str());
 			proto.player.short_descr.assign(row["mob_short_description"].c_str());
 			proto.player.long_descr.assign(row["mob_long_description"]);
@@ -1009,6 +994,7 @@ int parse_sql_objects() {
 		obj_index.reserve(result.size());
 		obj_proto.reserve(result.size());
 		for(auto  row : result) {
+			//mods::meta_utils::write_meta("object",&row);
 			struct index_data index;
 			index.vnum = mods::util::stoi<int>(row["object_item_number"]);
 			index.number = 0;
@@ -1025,6 +1011,7 @@ int parse_sql_objects() {
 			unsigned aff_index = 0;
 
 			for(auto aff_row : aff_rows) {
+				//mods::meta_utils::write_meta("affected_type",&aff_row);
 				if(aff_index >= MAX_OBJ_AFFECT) {
 					log(
 							(std::string(
@@ -1034,7 +1021,6 @@ int parse_sql_objects() {
 						 );
 					break;
 				}
-
 				proto.affected[aff_index].location = mods::util::stoi<int>(row["aff_location"]);
 				proto.affected[aff_index].modifier = mods::util::stoi<int>(row["aff_modifier"]);
 				++aff_index;
@@ -1155,6 +1141,7 @@ void parse_sql_zones() {
 	log("[status] Loading sql zones");
 
 	for(auto row: db_get_all("zone")) {
+		//mods::meta_utils::write_meta("zone",&row);
 		struct zone_data z;
 		//struct zone_data {
 		//  1    char *name;          /* name of this zone                  */
@@ -1211,6 +1198,7 @@ void parse_sql_zones() {
 
 
 		for(auto row : db_get_by_meta("zone_data","zone_number",std::to_string(z.number))) {
+			//mods::meta_utils::write_meta("zone_data",&row);
 			struct reset_com res;
 			res.command =mods::util::stoi<int>(row["command"]);
 			res.if_flag =mods::util::stoi<int>(row["if_flag"]);
@@ -1234,7 +1222,8 @@ void parse_sql_rooms() {
 	std::cerr << "parse_sql_rooms[result.size()]->" << result.size() << "\n";
 
 	for(auto row: result) {
-		std::cerr << "parse_sql_rooms[room]->'" << mods::util::stoi<int>(row["number"]) << "'\n";
+		std::cout << "parse_sql_rooms[room]->'" << mods::util::stoi<int>(row["number"]) << "'\n";
+		//mods::meta_utils::write_meta("room",&row);
 		struct room_data room;
 		room.number = mods::util::stoi<int>(row["number"]);
 		room.zone = mods::util::stoi<int>(row["zone"]);
@@ -1259,9 +1248,15 @@ void parse_sql_rooms() {
 	}
 
 	for(auto row: result) {
+		if(row["number"].length() == 0){
+			std::cout << "warning: skipping direction data since room number is an empty value\n";
+			continue;
+		}
+		std::cout << "getting by room number: '" << row["number"] << "'\n";
 		auto r2 = db_get_by_meta("room_direction_data","room_number", (row["number"]));
 
 		for(auto row2: r2) {
+			//mods::meta_utils::write_meta("room_direction_data",&row2);
 			//id | room_number | exit_direction | general_description | keyword | exit_info | exit_key | to_room
 			auto direction = mods::util::stoi<int>(row2["direction"]);
 			auto real_room_number = real_room(mods::util::stoi<int>(row2["real_room_number"]));
@@ -2317,10 +2312,14 @@ bool parse_sql_player(std::shared_ptr<mods::player> player_ptr){
 		mutable_map_t values;
 		values["player_name"] = player_ptr->name().c_str();
 		mutable_map_t row;
-		mods::db::load_record_by_meta("player",&values,row);
-		if(row.size()){
-			player_ptr->set_db_id(mods::util::stoi<aligned_int_t>(row["id"]));
-			player_ptr->set_password(row["player_password"]);
+		std::cout << "info: name: '" <<player_ptr->name().c_str() << "'\n";
+		int items_fetched = mods::db::load_record_by_meta("player",&values,row);
+		if(items_fetched > 0){
+			std::cout << "parse_sql_player fetched " << items_fetched << "\n";
+			row["id"] = std::to_string(player_ptr->get_db_id());
+			row["player_name"] = player_ptr->name().c_str();
+			mods::util::maps::dump<std::string,std::string>(row);
+			mods::meta_utils::write_meta("player",&row);
 				player_ptr->cd()->player.short_descr.assign((row["player_short_description"]));
 				player_ptr->cd()->player.long_descr.assign((row["player_long_description"]));
 				player_ptr->cd()->char_specials.saved.act = mods::util::stoi<int>(row["player_action_bitvector"]);
@@ -2380,6 +2379,8 @@ bool parse_sql_player(std::shared_ptr<mods::player> player_ptr){
 }
 /* copy data from the file structure to a char struct */
 void store_to_char(struct char_file_u *st, struct char_data *ch) {
+	std::cerr << "DEPRECATED -- Store_to_char\n";
+	return;
 	MENTOC_PREAMBLE();
 	mods::db::save_char(player);
 }
@@ -2772,15 +2773,12 @@ void clear_object(struct obj_data *obj) {
 void init_char(std::shared_ptr<mods::player> player) {
 	int i;
 
-	/* create a player_special structure */
-	if(!player->cd()->player_specials) {
-		player->cd()->player_specials = std::make_shared<player_special_data>();
-	}
-
 	/* *** if this is our first player --- he be God *** */
 	if(top_of_p_table == 0) {
 		d("first char. he is a god");
-		GET_LEVEL(player->cd()) = LVL_IMPL;
+		player->set_imp_mode(true);
+		player->set_god_mode(true);
+		player->set_bui_mode(true);
 		GET_EXP(player->cd()) = 7000000;
 
 		/* The implementor never goes through do_start(). */
@@ -2792,17 +2790,17 @@ void init_char(std::shared_ptr<mods::player> player) {
 		GET_MOVE(player->cd()) = GET_MAX_MOVE(player->cd());
 	}
 
-	set_title(player->cd(), nullptr);
-	player->cd()->player.short_descr = "";
-	player->cd()->player.long_descr.clear();
-	player->cd()->player.description.clear();
+	set_title(player, "");
+	player->short_descr().clear();
+	player->long_descr().clear();
+	player->description().clear();
 
-	player->cd()->player.time.birth = time(0);
-	player->cd()->player.time.logon = time(0);
-	player->cd()->player.time.played = 0;
+	player->set_time_birth(time(0));
+	player->set_time_logon(time(0));
+	player->set_time_played(0);
 
-	GET_HOME(player->cd()) = 1;
-	GET_AC(player->cd()) = 100;
+	player->hometown() = 1;
+	player->armor() = 100;
 
 	for(i = 0; i < MAX_TONGUE; i++) {
 		GET_TALK(player->cd(), i) = 0;
@@ -2816,12 +2814,12 @@ void init_char(std::shared_ptr<mods::player> player) {
 	 * Height is in centimeters. Weight is in pounds.  The only place they're
 	 * ever printed (in stock code) is SPELL_IDENTIFY.
 	 */
-	if(GET_SEX(player->cd()) == SEX_MALE) {
-		GET_WEIGHT(player->cd()) = rand_number(120, 180);
-		GET_HEIGHT(player->cd()) = rand_number(160, 200); /* 5'4" - 6'8" */
+	if(player->sex() == SEX_MALE) {
+		player->weight() = rand_number(120, 180);
+		player->height() = rand_number(160, 200); /* 5'4" - 6'8" */
 	} else {
-		GET_WEIGHT(player->cd()) = rand_number(100, 160);
-		GET_HEIGHT(player->cd()) = rand_number(150, 180); /* 5'0" - 6'0" */
+		player->weight() = rand_number(100, 160);
+		player->height() = rand_number(150, 180); /* 5'0" - 6'0" */
 	}
 
 	/*
@@ -2832,29 +2830,29 @@ void init_char(std::shared_ptr<mods::player> player) {
 		 }*/
 
 	for(i = 1; i <= MAX_SKILLS; i++) {
-		if(GET_LEVEL(player->cd()) < LVL_IMPL) {
+		if(player->level() < LVL_IMPL) {
 			SET_SKILL(player->cd(), i, 0);
 		} else {
 			SET_SKILL(player->cd(), i, 100);
 		}
 	}
 
-	AFF_FLAGS(player->cd()) = 0;
+	player->clear_all_affected();
 
 	for(i = 0; i < 5; i++) {
-		GET_SAVE(player->cd(), i) = 0;
+		player->saved().apply_saving_throw[i] = 0;
 	}
 
-	player->cd()->real_abils.intel = 25;
-	player->cd()->real_abils.wis = 25;
-	player->cd()->real_abils.dex = 25;
-	player->cd()->real_abils.str = 25;
-	player->cd()->real_abils.str_add = 100;
-	player->cd()->real_abils.con = 25;
-	player->cd()->real_abils.cha = 25;
+	player->real_abils().intel = 25;
+	player->real_abils().wis = 25;
+	player->real_abils().dex = 25;
+	player->real_abils().str = 25;
+	player->real_abils().str_add = 100;
+	player->real_abils().con = 25;
+	player->real_abils().cha = 25;
 
 	for(i = 0; i < 3; i++) {
-		GET_COND(player->cd(), i) = (GET_LEVEL(player->cd()) == LVL_IMPL ? -1 : 24);
+		GET_COND(player->cd(), i) = (player->level() == LVL_IMPL ? -1 : 24);
 	}
 
 	GET_LOADROOM(player->cd()) = NOWHERE;

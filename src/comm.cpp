@@ -433,6 +433,7 @@ int main(int argc, char **argv) {
 
 /* Init sockets, run game, and cleanup sockets */
 void init_game(ush_int port) {
+	db_renew_txn();
 	socket_t mother_desc;
 
 	/* We don't want to restart if we crash before we get up. */
@@ -1322,12 +1323,10 @@ int new_descriptor(socket_t s) {
 	/* accept the new connection */
 	i = sizeof(peer);
 
-	auto player = mods::globals::player_list.emplace_back(std::make_shared<mods::player>());
 
 	if((desc = accept(s, (struct sockaddr *) &peer, &i)) == INVALID_SOCKET) {
 		perror("SYSERR: accept");
 		destroy_socket(desc);//TODO: merge destroy_socket functionality into deregister_player process
-		deregister_player(player);
 		return (-1);
 	}
 
@@ -1338,7 +1337,6 @@ int new_descriptor(socket_t s) {
 	if(set_sendbuf(desc) < 0) {
 		log("SYSERR: set_sendbuf failed");
 		destroy_socket(desc);
-		deregister_player(player);
 		return (0);
 	}
 
@@ -1346,19 +1344,18 @@ int new_descriptor(socket_t s) {
 		write_to_descriptor(desc, "Sorry, CircleMUD is full right now... please try again later!\r\n");
 		log("Rejected user due to full server");
 		destroy_socket(desc);
-		deregister_player(player);
 		return (0);
 	}
 
+	auto player = mods::globals::player_list.emplace_back(std::make_shared<mods::player>());
+	player->set_socket(desc);
 	/* find the sitename */
 	if(nameserver_is_slow || !(from = gethostbyaddr((char *) &peer.sin_addr,
 					sizeof(peer.sin_addr), AF_INET))) {
-
 		/* resolution failed */
 		if(!nameserver_is_slow) {
 			log("SYSERR: gethostbyaddr");
 		}
-
 		/* find the numeric site address */
 		player->set_host(inet_ntoa(peer.sin_addr));
 	} else {
@@ -1375,10 +1372,10 @@ int new_descriptor(socket_t s) {
 		log("new connection");
 
 		/* initialize descriptor data */
-		player->desc().descriptor = desc;
 		player->desc().login_time = time(0);
 		player->desc().has_prompt = 1;  /* prompt is part of greetings */
 		player->set_state(CON_GET_NAME);
+		player->set_socket(desc);
 
 		/*
 		 * This isn't exactly optimal but allows us to make a design choice.
@@ -1391,7 +1388,6 @@ int new_descriptor(socket_t s) {
 		}
 		player->desc().desc_num = last_desc;
 		GREETINGS = "Username:";
-		d("player->desc().descriptor: " << player->desc().descriptor);
 		write_to_output(player->desc(), "%s",GREETINGS.c_str());
 		mods::globals::socket_map.insert (
 				std::pair<int,mods::globals::player_ptr_t>(
@@ -1935,7 +1931,7 @@ void close_socket(mods::descriptor_data d) {
 
 			/* We are guaranteed to have a person. */
 			act("$n has lost $s link.", TRUE, link_challenged, 0, 0, TO_ROOM);
-			save_char(std::make_shared<mods::player>(link_challenged));
+			mods::db::save_char(std::make_shared<mods::player>(link_challenged));
 			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(link_challenged)), TRUE, "Closing link to: %s.", GET_NAME(link_challenged).c_str());
 		} else {
 			mudlog(CMP, LVL_IMMORT, TRUE, "Losing player: %s.", GET_NAME(d.character) ? GET_NAME(d.character).c_str() : "<null>");

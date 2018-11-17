@@ -2,6 +2,7 @@
 #include "db.hpp"
 #include "meta_utils.hpp"
 #include "util.hpp"
+#include "util-map.hpp"
 
 namespace mods::meta_utils {
 	constexpr static const char* meta = "meta";
@@ -11,6 +12,19 @@ namespace mods::meta_utils {
 	enum return_codes {
 		COULDNT_FIND_USER_ID = -1
 	};
+	void write_meta(std::string table,mutable_map_t* values){
+		if((*values)["id"].length() == 0){
+			std::cerr << "error: write_meta called with invalid id field\n";
+			return;
+		}
+		if(mods::util::stoi_optional<aligned_int_t>((*values)["id"]).has_value() == false){
+			std::cerr << "error: write_meta called but pk is not a valid int. value: '" << (*values)["id"] << "'\n";
+			return;
+		}
+		for(auto &key : get_all_meta_values(table,values)){
+			db_put(key,(*values)["id"]);
+		}
+	}
 	std::string extract_reference_field_from_meta_key(const std::string& key){
 		/**
 		 * Since I've decided that putting "meta|<column>" for each key in the 
@@ -43,148 +57,22 @@ namespace mods::meta_utils {
 		return "";
 		*/
 	}
-	std::vector<std::pair<std::string,std::string>> get_all_meta_values(
+	std::vector<std::string> get_all_meta_values(
 			const std::string& table,mutable_map_t* mapped_values_ptr){
-		std::vector<std::pair<std::string,std::string>> result;
+		std::cout << "debug: get_all_meta_values has received: \n";
+		mods::util::maps::dump<std::string,std::string>(*mapped_values_ptr);
+		std::cout << "debug: end dump\n";
+		std::vector<std::string> result;
 		for(std::string & str_meta_key : mods::schema::db_meta_values[table]){
 			std::string field = extract_reference_field_from_meta_key(str_meta_key);
 			std::string field_value = (*mapped_values_ptr)[field];
 			if(field_value.length() == 0){
+				std::cerr << "warning: meta field_value empty for field: '" << field << "'\n";
 				continue;
 			}
 			std::cout << "debug: get_all_meta_values field:'" << field << "' value: '" << field_value << "'\n";
-			result.emplace_back(std::make_pair(field,field_value));
+			result.emplace_back(db_key({table,"meta",field,field_value}));
 		}
 		return result;
-	}
-	std::optional<aligned_int_t> get_pk_by_meta(
-			const std::string& table,mutable_map_t* users_data){
-		auto meta_vals = get_all_meta_values(table,users_data);
-		if(meta_vals.size() == 0){
-			return std::nullopt;
-		}
-		auto ptr_db = mods::globals::db.get();
-		std::string str_pk = "";
-		for(auto & [field_name,field_value] : meta_vals){
-			if(field_value.length()){
-				ptr_db->get(db_key({table,"meta",field_name,field_value}),str_pk);
-				if(str_pk.length()){
-					auto i = mods::util::stoi_optional<aligned_int_t>(str_pk);
-					if(i.has_value()){
-						return i;
-					}
-					str_pk.clear();
-				}
-			}
-		}
-		return std::nullopt;
-	}
-	/**
-	 * This function will generate all the meta keys that you'll need to place in the db depending on which table you pass in. If the table has no meta values, it'll return an empty vector.
-	 * @returns a vector<string> of lmdb keys that you'll need to write
-	 */
-	std::vector<std::string> generate_meta_keys(const std::string& table,
-			mutable_map_t* mapped_values_ptr){
-		if(mapped_values_ptr == nullptr){
-			std::cerr << "WARNING: received a null mapped_values_ptr in generate_meta_keys!\n";
-			return {};
-		}
-		std::vector<std::string> result;
-		result.reserve(mods::schema::db_meta_values[table].size());
-		for(std::string & str_meta_key : mods::schema::db_meta_values[table]){
-			std::string field = extract_reference_field_from_meta_key(str_meta_key);
-			std::string field_value = (*mapped_values_ptr)[field];
-			result.emplace_back(db_key({table.data(),
-						"meta",field,field_value}));
-		}
-		return result;
-
-	}
-	int do_meta_easy_by_pk( const std::string & table, mutable_map_t* values){
-		std::stringstream ss;
-		ss << (*values)["id"];
-		aligned_int_t id = 0;
-		ss >> id;
-		auto id_ptr = std::make_shared<aligned_int_t>(id);
-		auto status = do_meta_easy(table,values,id_ptr,nullptr);
-		if(status < 0){
-			if(status == -1){
-				std::cerr << "do_meta_easy: error. primary key ('id') is either not in db, or in mutable map\n";
-			}
-		}else if(status == 0){
-			std::cout << "info: do_meta_easy didn't place anything in the db. meta schema is likely empty for given table '" <<
-				table << "'\n";
-		}
-		if(status > 0){
-			std::cout << "debug: placed " << status << " items in meta for table '" << table << "'\n";
-		}
-		return status;
-	}
-	int do_meta_easy(  const std::string & table, mutable_map_t* values,
-			aligned_int_t* out_place_user_id_here){
-		aligned_int_t found_user_id = 0;
-		int status = do_meta_easy(table,values,nullptr,&found_user_id);
-		if(status < 0){
-			if(status == -1){
-				std::cerr << "do_meta_easy: error. primary key ('id') is either not in db, or in mutable map\n";
-			}
-		}else if(status == 0){
-			std::cout << "info: do_meta_easy didn't place anything in the db. meta schema is likely empty for given table '" <<
-				table << "'\n";
-		}
-		if(status > 0){
-			std::cout << "debug: placed " << status << " items in meta for table '" << table << "'\n";
-		}
-		if(found_user_id != 0 && out_place_user_id_here != nullptr){
-			*out_place_user_id_here = found_user_id;
-		}
-		return status;
-	}
-
-	int do_meta_easy(  const std::string & table, mutable_map_t* values,
-			std::shared_ptr<aligned_int_t> optional_user_id,aligned_int_t* out_place_found_user_id_here){
-		auto ptr_db = mods::globals::db.get();
-		aligned_int_t found_user_id = 0;
-		std::string existing_user_id = "";
-		int items_put = 0;
-		auto vector_meta_keys = mods::meta_utils::generate_meta_keys(table,values);
-		if(!optional_user_id){
-			//Then we have to search the meta values for the user_id in the database
-			for(auto & key : vector_meta_keys){
-				found_user_id = 0;
-				ptr_db->get(
-						key.data(),
-						existing_user_id);
-						std::stringstream stream;
-						stream << existing_user_id;
-						stream >> found_user_id;
-				if(found_user_id != 0){
-					break;
-				}
-			}
-		}else{
-			found_user_id = *optional_user_id;
-		}
-		if(found_user_id == 0){
-			std::cout << "info: attemping to get id from values\n";
-			if((*values)["id"].length()){
-				std::stringstream stream;
-				stream << (*values)["id"];
-				stream >> found_user_id;
-				std::cout << "debug: stringstream extracted: 'id' field as: " << found_user_id << "\n";
-			}
-		}
-		if(found_user_id != 0){
-			for(auto & str_meta_key : vector_meta_keys){
-				ptr_db->put(str_meta_key, std::to_string(found_user_id));
-			}
-		}else{ 
-			std::cerr << "primary key ('id') is zero (do_meta_easy)\n";
-			items_put = -1;
-		}
-		if(out_place_found_user_id_here != nullptr){
-			*out_place_found_user_id_here = found_user_id;
-		}
-		return items_put;
 	}
 };//End namespace

@@ -13,7 +13,10 @@
 #include "schema.hpp"
 using aligned_int_t = uint64_t;
 using tuple_status_t = std::tuple<bool,std::string,aligned_int_t>;
+	using mutable_map_t = std::map<std::string,std::string>;
+	using result_container_t = std::vector<std::map<std::string,std::string>>;
 namespace mods::lmdb {
+	using mutable_map_t = std::map<std::string,std::string>;
 	inline static std::string operator "" _s(const char* str,std::size_t size){ 
 		return std::string(str);
 	}
@@ -30,8 +33,6 @@ namespace mods::lmdb {
 		object_id,room_number,row_id_list
 	};
 
-	using mutable_map_t = std::map<std::string,std::string>;
-	using result_container_t = std::vector<std::map<std::string,std::string>>;
 
 	struct _selector {
 		table_type_t table;
@@ -95,18 +96,11 @@ namespace mods::lmdb {
 		template <typename T>
 			std::string get(T consumer,std::string key);
 
-		template <typename T>
-		result_container_t get_by_id(T consumer,std::string id);
-		template <typename T>
-		result_container_t get_by_meta(T consumer,std::string column,std::string equals_value);
 		/**
 		 * The sql equivalent of this is 'select * from table'
 		 */
 		template <typename T>
 		result_container_t get_all(T consumer);
-		tuple_status_t set(mutable_map_t & values,
-				std::string where_id_equals);
-		tuple_status_t values(mutable_map_t & values);
 		private: 
 		table_type_t m_table;
 		std::string m_str_table;
@@ -134,6 +128,7 @@ namespace mods::lmdb {
 	 */
 	using transaction_ptr = std::unique_ptr<transaction_t>;
 	using transaction_pool_t = std::vector<std::unique_ptr<transaction_t>>;
+	/*
 	inline transaction_ptr exec(std::string table){
 		return std::move(std::make_unique<transaction_t>(table,transact_type_t::EXEC));
 	}
@@ -147,6 +142,7 @@ namespace mods::lmdb {
 	inline transaction_ptr insert(std::string table){
 		return std::make_unique<transaction_t>(table,transact_type_t::INSERT);
 	}
+	*/
 
 
 
@@ -225,22 +221,24 @@ namespace mods::globals {
 	extern std::unique_ptr<mods::lmdb::db_handle> db;
 };
 
-
+void db_renew_txn();
 std::string db_key(const std::vector<std::string> & parts);
-std::string db_get(std::string table,std::string key);
-mods::lmdb::result_container_t db_get_by_id(std::string table,std::string id);
-mods::lmdb::result_container_t db_get_by_meta(std::string table,std::string col,std::string equals);
-mods::lmdb::result_container_t db_get_all(std::string table);
-mods::lmdb::result_container_t db_get_all_pluck(std::string table,const std::vector<const std::string&>& pluck);
-bool db_update(mods::lmdb::table_type_t table,
-		mods::lmdb::mutable_map_t & values,
-		std::string value);
-bool db_insert(std::string table,const mods::lmdb::mutable_map_t & values);
-
-extern tuple_status_t new_record_with_values(std::string table,
-		mods::lmdb::db_handle* ptr_db,
-		mods::lmdb::mutable_map_t& values,
-		bool & error,
-		std::optional<aligned_int_t> use_this_id);
-
+std::string db_get(std::string key);
+void db_put(std::string key,std::string value);
+//mods::lmdb::result_container_t db_get_by_id(std::string table,std::string id);
+//mods::lmdb::result_container_t db_get_by_meta(std::string table,std::string col,std::string equals);
+result_container_t db_get_all(std::string table);
+result_container_t db_get_by_meta(std::string table, std::string col,std::string value);
+//mods::lmdb::result_container_t db_get_all_pluck(std::string table,const std::vector<const std::string&>& pluck);
+//bool db_update(mods::lmdb::table_type_t table,
+//		mods::lmdb::mutable_map_t & values,
+//		std::string value);
+//bool db_insert(std::string table,const mods::lmdb::mutable_map_t & values);
+//
+//extern tuple_status_t new_record_with_values(std::string table,
+//		mods::lmdb::db_handle* ptr_db,
+//		mods::lmdb::mutable_map_t& values,
+//		bool & error,
+//		std::optional<aligned_int_t> use_this_id);
+//
 #endif

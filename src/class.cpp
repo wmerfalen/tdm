@@ -3537,10 +3537,11 @@ void roll_real_abils(struct char_data *ch) {
 
 /* Some initializations for characters, including initial skills */
 void do_start(struct char_data *ch) {
-	GET_LEVEL(ch) = 1;
-	GET_EXP(ch) = 1;
+	MENTOC_PREAMBLE();
+	player->level() = 1;
+	player->exp() = 1;
 
-	set_title(ch, NULL);
+	set_title(player,"");
 	roll_real_abils(ch);
 
 	GET_MAX_HIT(ch)  = 10;
@@ -3641,7 +3642,7 @@ void advance_level(struct char_data *ch) {
 	}
 
 	snoop_check(ch);
-	save_char(player);
+	mods::db::save_char(player);
 }
 
 

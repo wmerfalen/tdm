@@ -22,39 +22,38 @@
 extern void do_auto_exits(struct char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
 namespace mods {
-	constexpr static int16_t PLR_FLAG_BIT_COUNT = 16;
-	constexpr static int16_t AFF_FLAG_BIT_COUNT = 22;
-				const std::array<int64_t,PLR_FLAG_BIT_COUNT> all_plr_flags = {
-					PLR_KILLER,PLR_THIEF,PLR_FROZEN,PLR_DONTSET,
-					PLR_WRITING,PLR_MAILING,PLR_CRASH,PLR_SITEOK,
-					PLR_NOSHOUT,PLR_NOTITLE,PLR_DELETED,PLR_LOADROOM,
-					PLR_NOWIZLIST,PLR_INVSTART,PLR_CRYO,
-					PLR_NOTDEADYET
+	constexpr static int64_t PLR_FLAG_COUNT = plr::__LAST + 1;
+	constexpr static int64_t AFF_FLAG_COUNT = aff::__LAST + 1;
+				const std::array<std::pair<mods::player::plr,int64_t>,PLR_FLAG_COUNT> all_plr_flags = {
+					{plr::KILLER,PLR_KILLER},{plr::THIEF,PLR_THIEF},{plr::FROZEN,PLR_FROZEN},{plr::DONTSET,PLR_DONTSET},
+					{plr::WRITING,PLR_WRITING},{plr::MAILING,PLR_MAILING},{plr::CRASH,PLR_CRASH},{plr::SITEOK,PLR_SITEOK},
+					{plr::NOSHOUT,PLR_NOSHOUT},{plr::NOTITLE,PLR_NOTITLE},{plr::DELETED,PLR_DELETED},{plr::LOADROOM,PLR_LOADROOM},
+					{plr::NOWIZLIST,PLR_NOWIZLIST},{plr::INVSTART,PLR_INVSTART},{plr::CRYO,PLR_CRYO},
+					{plr::NOTDEADYET,PLR_NOTDEADYET}
 				};
-				const std::array<int64_t,AFF_FLAG_BIT_COUNT> all_aff_flags = {
-AFF_BLIND,
-AFF_INVISIBLE,
-AFF_DETECT_ALIGN,
-AFF_DETECT_INVIS,
-AFF_DETECT_MAGIC,
-AFF_SENSE_LIFE,
-AFF_WATERWALK,
-AFF_SANCTUARY,
-AFF_GROUP,
-AFF_CURSE,
-AFF_INFRAVISION,
-AFF_POISON,
-AFF_PROTECT_EVIL,
-AFF_PROTECT_GOOD,
-AFF_SLEEP,
-AFF_NOTRACK,
-AFF_UNUSED16,
-AFF_UNUSED17,
-AFF_SNEAK,
-AFF_HIDE,
-AFF_UNUSED20,
-AFF_CHARM
-
+				const std::array<int64_t,AFF_FLAG_COUNT> all_aff_flags = {
+{aff::BLIND,AFF_BLIND},
+ {aff::INVISIBLE,AFF_INVISIBLE},
+ {aff::DETECT_ALIGN,AFF_DETECT_ALIGN},
+ {aff::DETECT_INVIS,AFF_DETECT_INVIS},
+ {aff::DETECT_MAGIC,AFF_DETECT_MAGIC},
+ {aff::SENSE_LIFE,AFF_SENSE_LIFE},
+ {aff::WATERWALK,AFF_WATERWALK},
+{aff::SANCTUARY,AFF_SANCTUARY},
+ {aff::GROUP,AFF_GROUP},
+ {aff::CURSE,AFF_CURSE},
+ {aff::INFRAVISION,AFF_INFRAVISION},
+ {aff::POISON,AFF_POISON},
+ {aff::PROTECT_EVIL,AFF_PROTECT_EVIL},
+ {aff::PROTECT_GOOD,AFF_PROTECT_GOOD},
+{aff::SLEEP,AFF_SLEEP},
+ {aff::NOTRACK,AFF_NOTRACK},
+ {aff::UNUSED16,AFF_UNUSED16},
+ {aff::UNUSED17,AFF_UNUSED17},
+ {aff::SNEAK,AFF_SNEAK},
+ {aff::HIDE,AFF_HIDE},
+{aff::UNUSED20,AFF_UNUSED20},
+{aff::CHARM,AFF_CHARM}
 				};
 	std::string just_color_evaluation(std::string final_buffer) {
 		final_buffer = mods::globals::replace_all(final_buffer,"{grn}","\033[32m");
@@ -252,13 +251,14 @@ AFF_CHARM
 		m_char_data = m_shared_ptr.get();
 		descriptor->character  = this->cd();
 		set_desc(descriptor);
+		set_char_on_descriptor(descriptor);
 		/** I don't like this class call FIXME */
 		//set_class_capability({mods::classes::types(0)});
-		m_char_data->player_specials = std::make_unique<player_special_data>();
+		m_player_specials = std::make_shared<player_special_data>();
+		m_char_data->player_specials = m_player_specials;
 		/** Need a better uuid generator than this */
 		/** FIXME: this is not how uuid's should be generated */
 		m_char_data->uuid = mods::globals::player_list.size();
-		/** I H_A_T_E that we are still tied to the linked list FIXME */
 		m_char_data->next = character_list;
 		character_list = m_char_data;
 		/** FIXME: need to set the m_char_data->desc */
@@ -603,8 +603,6 @@ AFF_CHARM
 		do_auto_exits(m_char_data);
 	}
 	void player::set_char_on_descriptor(std::deque<descriptor_data>::iterator it){
-		std::cerr << "DEPRECATED-> player::set_char_on_descriptor\n";
-		return;
 		it->character = this->cd();
 		it->character->desc = m_desc;
 		it->character->has_desc = true;
@@ -670,29 +668,29 @@ AFF_CHARM
 					this->remove_affect(pair.first);
 				}
 			}
-			std::map<int64_t,bool> player::get_affected(){
-m_affected[AFF_BLIND] = IS_SET(AFF_FLAGS(cd()),AFF_BLIND);
-m_affected[AFF_INVISIBLE] = IS_SET(AFF_FLAGS(cd()),AFF_INVISIBLE);
-m_affected[AFF_DETECT_ALIGN] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_ALIGN);
-m_affected[AFF_DETECT_INVIS] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_INVIS);
-m_affected[AFF_DETECT_MAGIC] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_MAGIC);
-m_affected[AFF_SENSE_LIFE] = IS_SET(AFF_FLAGS(cd()),AFF_SENSE_LIFE);
-m_affected[AFF_WATERWALK] = IS_SET(AFF_FLAGS(cd()),AFF_WATERWALK);
-m_affected[AFF_SANCTUARY] = IS_SET(AFF_FLAGS(cd()),AFF_SANCTUARY);
-m_affected[AFF_GROUP] = IS_SET(AFF_FLAGS(cd()),AFF_GROUP);
-m_affected[AFF_CURSE] = IS_SET(AFF_FLAGS(cd()),AFF_CURSE);
-m_affected[AFF_INFRAVISION] = IS_SET(AFF_FLAGS(cd()),AFF_INFRAVISION);
-m_affected[AFF_POISON] = IS_SET(AFF_FLAGS(cd()),AFF_POISON);
-m_affected[AFF_PROTECT_EVIL] = IS_SET(AFF_FLAGS(cd()),AFF_PROTECT_EVIL);
-m_affected[AFF_PROTECT_GOOD] = IS_SET(AFF_FLAGS(cd()),AFF_PROTECT_GOOD);
-m_affected[AFF_SLEEP] = IS_SET(AFF_FLAGS(cd()),AFF_SLEEP);
-m_affected[AFF_NOTRACK] = IS_SET(AFF_FLAGS(cd()),AFF_NOTRACK);
-m_affected[AFF_UNUSED16] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED16);
-m_affected[AFF_UNUSED17] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED17);
-m_affected[AFF_SNEAK] = IS_SET(AFF_FLAGS(cd()),AFF_SNEAK);
-m_affected[AFF_HIDE] = IS_SET(AFF_FLAGS(cd()),AFF_HIDE);
-m_affected[AFF_UNUSED20] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED20);
-m_affected[AFF_CHARM] = IS_SET(AFF_FLAGS(cd()),AFF_CHARM);
+			std::map<aff,bool> player::get_affected(){
+m_affected[aff::BLIND] = IS_SET(AFF_FLAGS(cd()),AFF_BLIND);
+m_affected[aff::INVISIBLE] = IS_SET(AFF_FLAGS(cd()),AFF_INVISIBLE);
+m_affected[aff::DETECT_ALIGN] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_ALIGN);
+m_affected[aff::DETECT_INVIS] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_INVIS);
+m_affected[aff::DETECT_MAGIC] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_MAGIC);
+m_affected[aff::SENSE_LIFE] = IS_SET(AFF_FLAGS(cd()),AFF_SENSE_LIFE);
+m_affected[aff::WATERWALK] = IS_SET(AFF_FLAGS(cd()),AFF_WATERWALK);
+m_affected[aff::SANCTUARY] = IS_SET(AFF_FLAGS(cd()),AFF_SANCTUARY);
+m_affected[aff::GROUP] = IS_SET(AFF_FLAGS(cd()),AFF_GROUP);
+m_affected[aff::CURSE] = IS_SET(AFF_FLAGS(cd()),AFF_CURSE);
+m_affected[aff::INFRAVISION] = IS_SET(AFF_FLAGS(cd()),AFF_INFRAVISION);
+m_affected[aff::POISON] = IS_SET(AFF_FLAGS(cd()),AFF_POISON);
+m_affected[aff::PROTECT_EVIL] = IS_SET(AFF_FLAGS(cd()),AFF_PROTECT_EVIL);
+m_affected[aff::PROTECT_GOOD] = IS_SET(AFF_FLAGS(cd()),AFF_PROTECT_GOOD);
+m_affected[aff::SLEEP] = IS_SET(AFF_FLAGS(cd()),AFF_SLEEP);
+m_affected[aff::NOTRACK] = IS_SET(AFF_FLAGS(cd()),AFF_NOTRACK);
+m_affected[aff::UNUSED16] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED16);
+m_affected[aff::UNUSED17] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED17);
+m_affected[aff::SNEAK] = IS_SET(AFF_FLAGS(cd()),AFF_SNEAK);
+m_affected[aff::HIDE] = IS_SET(AFF_FLAGS(cd()),AFF_HIDE);
+m_affected[aff::UNUSED20] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED20);
+m_affected[aff::CHARM] = IS_SET(AFF_FLAGS(cd()),AFF_CHARM);
 return m_affected;
 			}
 			void player::affect_plr(int64_t flag){
@@ -708,23 +706,23 @@ return m_affected;
 				}
 			}
 			std::map<int64_t,bool> player::get_affected_plr(){
-m_affected_plr[PLR_KILLER] = IS_SET(PLR_FLAGS(cd()),PLR_KILLER);
-m_affected_plr[PLR_THIEF] = IS_SET(PLR_FLAGS(cd()),PLR_THIEF);
-m_affected_plr[PLR_FROZEN] = IS_SET(PLR_FLAGS(cd()),PLR_FROZEN);
-m_affected_plr[PLR_DONTSET] = IS_SET(PLR_FLAGS(cd()),PLR_DONTSET);
-m_affected_plr[PLR_WRITING] = IS_SET(PLR_FLAGS(cd()),PLR_WRITING);
-m_affected_plr[PLR_MAILING] = IS_SET(PLR_FLAGS(cd()),PLR_MAILING);
-m_affected_plr[PLR_CRASH] = IS_SET(PLR_FLAGS(cd()),PLR_CRASH);
-m_affected_plr[PLR_SITEOK] = IS_SET(PLR_FLAGS(cd()),PLR_SITEOK);
-m_affected_plr[PLR_NOSHOUT] = IS_SET(PLR_FLAGS(cd()),PLR_NOSHOUT);
-m_affected_plr[PLR_NOTITLE] = IS_SET(PLR_FLAGS(cd()),PLR_NOTITLE);
-m_affected_plr[PLR_DELETED] = IS_SET(PLR_FLAGS(cd()),PLR_DELETED);
-m_affected_plr[PLR_LOADROOM] = IS_SET(PLR_FLAGS(cd()),PLR_LOADROOM);
-m_affected_plr[PLR_NOWIZLIST] = IS_SET(PLR_FLAGS(cd()),PLR_NOWIZLIST);
-m_affected_plr[PLR_NODELETE] = IS_SET(PLR_FLAGS(cd()),PLR_NODELETE);
-m_affected_plr[PLR_INVSTART] = IS_SET(PLR_FLAGS(cd()),PLR_INVSTART);
-m_affected_plr[PLR_CRYO] = IS_SET(PLR_FLAGS(cd()),PLR_CRYO);
-m_affected_plr[PLR_NOTDEADYET] = IS_SET(PLR_FLAGS(cd()),PLR_NOTDEADYET);
+m_affected_plr[plr::KILLER] = IS_SET(PLR_FLAGS(cd()),PLR_KILLER);
+m_affected_plr[plr::THIEF] = IS_SET(PLR_FLAGS(cd()),PLR_THIEF);
+m_affected_plr[plr::FROZEN] = IS_SET(PLR_FLAGS(cd()),PLR_FROZEN);
+m_affected_plr[plr::DONTSET] = IS_SET(PLR_FLAGS(cd()),PLR_DONTSET);
+m_affected_plr[plr::WRITING] = IS_SET(PLR_FLAGS(cd()),PLR_WRITING);
+m_affected_plr[plr::MAILING] = IS_SET(PLR_FLAGS(cd()),PLR_MAILING);
+m_affected_plr[plr::CRASH] = IS_SET(PLR_FLAGS(cd()),PLR_CRASH);
+m_affected_plr[plr::SITEOK] = IS_SET(PLR_FLAGS(cd()),PLR_SITEOK);
+m_affected_plr[plr::NOSHOUT] = IS_SET(PLR_FLAGS(cd()),PLR_NOSHOUT);
+m_affected_plr[plr::NOTITLE] = IS_SET(PLR_FLAGS(cd()),PLR_NOTITLE);
+m_affected_plr[plr::DELETED] = IS_SET(PLR_FLAGS(cd()),PLR_DELETED);
+m_affected_plr[plr::LOADROOM] = IS_SET(PLR_FLAGS(cd()),PLR_LOADROOM);
+m_affected_plr[plr::NOWIZLIST] = IS_SET(PLR_FLAGS(cd()),PLR_NOWIZLIST);
+m_affected_plr[plr::NODELETE] = IS_SET(PLR_FLAGS(cd()),PLR_NODELETE);
+m_affected_plr[plr::INVSTART] = IS_SET(PLR_FLAGS(cd()),PLR_INVSTART);
+m_affected_plr[plr::CRYO] = IS_SET(PLR_FLAGS(cd()),PLR_CRYO);
+m_affected_plr[plr::NOTDEADYET] = IS_SET(PLR_FLAGS(cd()),PLR_NOTDEADYET);
 				return m_affected_plr;
 			}
 
@@ -864,70 +862,76 @@ m_affected_plr[PLR_NOTDEADYET] = IS_SET(PLR_FLAGS(cd()),PLR_NOTDEADYET);
 				return this->cd()->player.time.played;
 			}
 
-			/** Affect serialize and deserialization routines */
+			/** PLR_* Affects */
 			void player::set_affect_by_serialized(std::string data){
-				std::string bit_string;
-				bit_string.resize(AFF_FLAG_BIT_COUNT);
-				std::fill(bit_string.begin(),bit_string.end(),'0');
-				std::copy(data.begin(),data.end(),bit_string.begin());
-				std::bitset<AFF_FLAG_BIT_COUNT> bits(bit_string);
-				for(unsigned i =0; i < AFF_FLAG_BIT_COUNT; ++i){
-					for(auto flag : mods::all_aff_flags){
-						if(bits[flag]){
-							this->affect(flag);
+				std::vector<aligned_int_t> buffer;
+				std::copy(data.begin(),data.end(),buffer.begin());
+				this->clear_all_affected();
+				for(unsigned i =0; i < buffer.size(); ++i){
+					for(auto &[flag,legacy_flag] : mods::all_aff_flags){
+						if(std::find(buffer.begin(),buffer.end(),flag) != buffer.end()){
+							this->affect(legacy_flag);
 						}else{
-							this->remove_affect(flag);
+							this->remove_affect(legacy_flag);
 						}
 					}
 				}
 			}
-			std::string player::serialize_affect(){
-				std::string bit_string;
-				bit_string.reserve(AFF_FLAG_BIT_COUNT);
-				std::fill(bit_string.begin(),bit_string.end(),'0');
-				for(auto& [flag,status]: this->get_affected()){
+			std::string player::generic_serialize(std::map<uint64_t,bool>* vals){
+				std::vector<uint64_t> buffer;
+				for(auto &[flag,status] : *vals){
 					if(status){
-						bit_string[flag] = '1';
+						buffer.emplace_back(flag);
 					}
 				}
-				return bit_string;
+				if(buffer.size() == 0){
+					return "";
+				}
+				std::string serialized;
+				serialized.resize(buffer.size() * sizeof(uint64_t));
+				std::fill(serialized.begin(),serialize.end(),0);
+				std::copy(buffer.begin(),buffer.end(),serialized.begin());
+				return serialized;
 			}
 
+			/** PLR_* Affects */
+			std::string player::serialize_affect(){
+				auto f= this->get_affected();
+				return this->generic_serialize(static_cast<std::map<uint64_t,bool>*>(&f));
+			}
+			std::string player::serialize_affect_plr(){
+				auto f= this->get_affected_plr();
+				return this->generic_serialize(static_cast<std::map<uint64_t,bool>*>(&f));
+			}
 
 			/** PLR_* Affects */
 			void player::set_affect_plr_by_serialized(std::string data){
-				std::string bit_string;
-				bit_string.resize(PLR_FLAG_BIT_COUNT);
-				std::fill(bit_string.begin(),bit_string.end(),'0');
-				std::copy(data.begin(),data.end(),bit_string.begin());
-				std::bitset<PLR_FLAG_BIT_COUNT> bits(bit_string);
-				for(unsigned i =0; i < PLR_FLAG_BIT_COUNT; ++i){
-					for(auto flag : mods::all_plr_flags){
-						if(bits[flag]){
-							this->affect_plr(flag);
+				std::vector<aligned_int_t> buffer;
+				std::copy(data.begin(),data.end(),buffer.begin());
+				this->clear_all_affected_plr();
+				for(unsigned i =0; i < buffer.size(); ++i){
+					for(auto &[flag,legacy_flag] : mods::all_plr_flags){
+						if(std::find(buffer.begin(),buffer.end(),flag) != buffer.end()){
+							this->affect_plr(legacy_flag);
 						}else{
-							this->remove_affect_plr(flag);
+							this->remove_affect_plr(legacy_flag);
 						}
 					}
 				}
 			}
-			std::string player::serialize_affect_plr(){
-				std::string bit_string;
-				bit_string.reserve(PLR_FLAG_BIT_COUNT);
-				std::fill(bit_string.begin(),bit_string.end(),'0');
-				for(auto& [flag,status]: this->get_affected_plr()){
-					if(status){
-						bit_string[flag] = '1';
-					}
-				}
-				return bit_string;
-			}
 
-			bool player::has_affect(int64_t flag){
+			bool player::has_affect(uint64_t flag){
 				return get_affected()[flag];
 			}
-			bool player::has_affect_plr(int64_t flag) {
+			bool player::has_affect_plr(uint64_t flag) {
 				return get_affected_plr()[flag];
+			}
+			void player::set_socket(socket_t d){
+				this->desc().descriptor = d;
+				this->cd()->desc->descriptor = d;
+			}
+			socket_t player::socket(){
+				return this->desc().descriptor;
 			}
 			/* Javascript functions */
 };

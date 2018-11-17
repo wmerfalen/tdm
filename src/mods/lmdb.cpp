@@ -7,10 +7,6 @@ namespace mods::lmdb {
 	selector_type_t transaction_t::selector(const key_type_t & column,const uint64_t & row_id){
 		return {m_table,column,0,row_id};
 	}
-	uint64_t transaction_t::get_row_id_list(row_id_list_t & rows){
-		//auto key = selector(key_type_t::row_id_list,0);
-		return 0;
-	}
 
 	transaction_t::transaction_t(std::string ce_table,transact_type_t type) : m_type(type){
 		m_str_table = ce_table;
@@ -23,49 +19,15 @@ namespace mods::lmdb {
 	 * get(key,val) is basically like the sql version of "where".
 	 * i.e.: get("user_id",123); //sql equiv: select * from users where user_id = 123
 	 */
-	template <typename T>
-		std::string transaction_t::get(T consumer,std::string key){
-			std::string value = "";
-			consumer->get(db_key({table_cstr(),key}),value);
-			return value;
-		}
-	template <typename T>
-		result_container_t transaction_t::get_by_meta(T consumer,std::string column,std::string equals_value){
-			result_container_t r;
-			mutable_map_t where_data;
-			mutable_map_t row;
-			where_data[column] = equals_value;
-			mods::db::load_record_by_meta(table_cstr(),&where_data,row);
-			if(row.size()){
-				r.emplace_back(row);
-			}
-			return r;
-		}
-
-	template <typename T>
-		result_container_t transaction_t::get_by_id(T consumer,std::string id){
-			result_container_t r;
-			mutable_map_t row;
-			mods::db::load_record(table_cstr(),id,row);
-			if(row.size()){
-				r.emplace_back(row);
-			}
-			return r;
-		}
 
 	/**
 	 * The sql equivalent of this is 'select * from table'
 	 */
 	template <typename T>
 		result_container_t transaction_t::get_all(T consumer){
-			std::string id_list_selector  = db_key({table_cstr(),"id_list"});
 			std::string csv_list;
-			if(consumer->get(id_list_selector,csv_list) < 0){
-				std::cerr << "[lmdb]get_all failed with query: " << id_list_selector << "\n";
-			}
-			else{
-				std::cout << "info: retrieved: " << csv_list << "\n";
-			}
+			csv_list = consumer->get(db_key({table_cstr(),"id_list"}));
+			std::cout << "info: get_all() retrieved: " << csv_list.size() << "\n";
 			result_container_t results;
 			mutable_map_t mapped;
 			std::vector<aligned_int_t> deserialized_id_list;
@@ -80,9 +42,9 @@ namespace mods::lmdb {
 							std::to_string(id)});
 					std::string value;
 					value.clear();
-					consumer->get(element_selector,value);
+					value = consumer->get(db_key({table_cstr(),field_name,std::to_string(id)}));
 					mapped.insert(std::make_pair(
-								field_name.c_str(),
+								field_name,
 								value));
 				}
 				if(mapped.size()){
@@ -92,6 +54,7 @@ namespace mods::lmdb {
 			}
 			return  results;
 		}
+	/*
 	tuple_status_t transaction_t::set(
 			mutable_map_t & values,
 			std::string where_id_equals){
@@ -102,14 +65,16 @@ namespace mods::lmdb {
 			std::cerr << "warning: set() was supplied with an unparseable pk: '" << where_id_equals << "'\n";
 		}
 		return  mods::db::save_record(std::string(table_cstr()),
-			&values
+			&values,
+			where_id_equals
 		);
 	}
 	tuple_status_t transaction_t::values(
 			mutable_map_t & values){
-		return mods::db::save_record(std::string(table_cstr()),
+		return mods::db::new_record(std::string(table_cstr()),
 			&values);
 	}
+	*/
 	/**
 	 * ##############################
 	 * A typical transaction
@@ -169,12 +134,13 @@ namespace mods::lmdb {
 			open();
 		}
 	bool _db_handle::open(){
-		std::cerr << "[lmdb]::open()\n";
+		std::cout << "debug: [lmdb]::open()\n";
 		m_closed = true;
 		m_good = false;
 		m_clear_status();
 		int r = 0;
 		if((r = mdb_env_create(&m_env)) != 0){
+			std::cerr << "error: mdb_env_create\n";
 			m_status[0] = {false,"There was an error in mdb_env_create(): "_s + std::to_string(r) + \
 				"|mdb_strerror: " + mdb_strerror(r) + "[via:mdb_env_create]"};
 			close();
@@ -216,6 +182,7 @@ namespace mods::lmdb {
 		return true;
 	}
 	_db_handle::tuple_return_type_t _db_handle::abort_txn(){
+		std::cout << "info: db_handle::abort_txn called\n";
 		if(m_transaction_open){
 			mdb_txn_abort(m_txn);
 			m_transaction_open = false;
@@ -225,6 +192,7 @@ namespace mods::lmdb {
 		return {false,"A transaction wasn't open to begin with."};
 	}
 	_db_handle::tuple_return_type_t _db_handle::new_txn(){
+		std::cout << "debug: db_handle::new_txn() entry\n";
 		int r = 0;
 		if((r = mdb_txn_begin(m_env,0,0,&m_txn)) != 0){
 			std::string reason = "An unknown error occured: "_s + std::to_string(r);
@@ -244,10 +212,12 @@ namespace mods::lmdb {
 			return {false,reason};
 		}
 		//m_status[2] = {true,"Transaction opened successfully."};
+		std::cout << "debug: db_handle::new_txn() okay\n";
 		m_transaction_good = m_transaction_open = true;
 		return {true,""};
 	}
 	_db_handle::tuple_return_type_t _db_handle::open_dbi(){
+		std::cout << "debug: db_handle::open_dbi() called\n";
 		int r = 0;
 		if((r = mdb_dbi_open(m_txn,0,0,&m_dbi)) != 0){
 			m_dbi_opened= false;
@@ -263,22 +233,29 @@ namespace mods::lmdb {
 			reason += m_name + "'";
 			m_status[3] = {false,reason};
 			m_good = false;
+			std::cerr << "error: db_handle::open_dbi() failed: " << reason << "\n";
 			return {false,reason};
 		}
 		m_status[4] = {true,"DBI handle opened successfully. Ready for get/put."};
 		m_dbi_opened = true;
+		std::cout << "debug: db_handle::open_dbi() okay\n";
 		return {true,""};
 	}
 	std::string _db_handle::get(std::string key){
+		std::cout << "debug: db_handle::get(str) called\n";
 		std::string value;
 		this->get(key,value);
 		return value;
 	}
 	int _db_handle::get(std::string key,std::string & in_value){
+		std::cout << "debug: db_handle::get(key,value) called\n";
+		static int recursion_count = 0;
 		if(!m_good){
+			std::cout << "debug: db_handle::get(key,value) renewing transaction\n";
 			this->renew_txn();
 		}
 		if(m_good){
+			std::cout << "debug: db_handle::get(key,value) m_good okay\n";
 			MDB_val k;
 			k.mv_size = key.length();
 			k.mv_data = (void*)key.c_str();
@@ -290,21 +267,31 @@ namespace mods::lmdb {
 					return _db_handle::KEY_NOT_FOUND;
 				case EINVAL:
 					std::cerr << "[lmdb] invalid parameter to mdb_get\n";
+					this->renew_txn();
+					++recursion_count;
+					if(recursion_count > 3){
+						recursion_count = 0;
+						std::cout << "info: stopping after recursing 3 times via db_handle::get()\n";
+						return EINVAL;
+					}
+					std::cout << "debug: recursion level: " << recursion_count << "\n";
+					return this->get(key,in_value);
 					return EINVAL;
 				default:
 					char buf[v.mv_size + 1];
 					memset(buf,0,v.mv_size +1);
 					bcopy(v.mv_data,buf,v.mv_size);
 					in_value = buf;
-					std::cout << "debug: got '" << key << "' as '" << in_value << "'\n";
+					std::cout << "debug: db_handle::get(key,value) got '" << key << "' as '" << in_value << "'\n";
 					return _db_handle::KEY_FETCHED_OKAY;
 			}
 		}else{
-			std::cerr << "[lmdb]get::m_good NOT okay\n";
+			std::cerr << "error: [lmdb]get::m_good NOT okay\n";
 			return -2;
 		}
 	}
 	_db_handle::tuple_return_type_t _db_handle::renew_txn(){
+		std::cout << "debug: db_handle::renew_txn() called\n";
 		clear_pluck_filter();
 		if(m_transaction_good || m_transaction_open){
 			mdb_txn_commit(m_txn);
@@ -319,6 +306,7 @@ namespace mods::lmdb {
 		if(!m_dbi_opened){
 			return open_dbi();
 		}
+		std::cout << "debug: db_handle::renew_txn() okay\n";
 		return {true,""};
 	}
 	int _db_handle::del(std::string key){
@@ -328,6 +316,7 @@ namespace mods::lmdb {
 		return mdb_del(m_txn,m_dbi,&k,nullptr);
 	}
 	int _db_handle::put(std::string key,std::string value,bool renew){
+		std::cout << "debug: db_handle::put(key,value,renew) called\n";
 		if(renew){
 			if(m_transaction_good || m_transaction_open){
 				mdb_txn_commit(m_txn);
@@ -339,9 +328,11 @@ namespace mods::lmdb {
 	}
 	int _db_handle::put(std::string key,std::string value){
 		if(!m_good){
+			std::cout << "debug: db_handle::put -- renewing transaction\n";
 			this->renew_txn();
 		}
 		if(m_good){
+			std::cout << "debug: db_handle::m_good is true\n";
 			MDB_val k;
 			k.mv_size = key.length();
 			k.mv_data = (void*)key.c_str();
@@ -380,11 +371,14 @@ namespace mods::lmdb {
 	}
 	_db_handle::tuple_return_type_t _db_handle::commit(){
 		if(m_good){
+			std::cout << "debug: db_handle::commit -- m_good is good\n";
 			auto ret = mdb_txn_commit(m_txn);
 			if(ret){
+				std::cerr << "error: db_handle::commit -- failed:" << mdb_strerror(ret) << "\n";
 				m_transaction_good = false;
 				return {false,std::string("[lmdb]::commit failed: ") + mdb_strerror(ret)};
 			}else{
+				std::cout << "debug: commit good\n";
 				m_transaction_open = m_transaction_good = false;
 				return {true,"[lmdb]::commit good"};
 			}
@@ -393,7 +387,7 @@ namespace mods::lmdb {
 		}
 	}
 	_db_handle::~_db_handle(){
-		std::cerr << "[~_db_handle]: destructor yo\n";
+		std::cout << "debug: [~_db_handle]: destructor yo\n";
 		m_good = false;
 		if(m_transaction_open){
 			mdb_txn_abort(m_txn);
@@ -454,22 +448,37 @@ std::string db_key(const std::vector<std::string> & parts){
 	return query;
 }
 
-std::string db_get(std::string table,std::string key){
-	mods::globals::db.get()->renew_txn();
-	return mods::lmdb::exec(table)->get<mods::lmdb::db_handle*>(mods::globals::db.get(),key);
-}
-mods::lmdb::result_container_t db_get_all(std::string table){
-	mods::globals::db.get()->renew_txn();
-	return mods::lmdb::exec(table)->get_all<mods::lmdb::db_handle*>(mods::globals::db.get());
+void db_renew_txn(){
+	mods::globals::db->renew_txn();
 }
 
-mods::lmdb::result_container_t db_get_all_pluck(std::string table,const std::vector<std::string>& pluck){
-	mods::globals::db->renew_txn();
+std::string db_get(std::string key){
+	return mods::globals::db->get(key);
+}
+void db_put(std::string key,std::string value){
+	mods::globals::db->put(key,value);
+}
+result_container_t db_get_all(std::string table){
+	mods::lmdb::transaction_t t(table,mods::lmdb::transact_type_t::EXEC);
+	return t.get_all<mods::lmdb::db_handle*>(mods::globals::db.get());
+}
+
+result_container_t db_get_all_pluck(std::string table,const std::vector<std::string>& pluck){
 	mods::globals::db->set_pluck_filter(pluck);
 	auto r = db_get_all(table);
 	mods::globals::db->clear_pluck_filter();
 	return r;
 }
+
+result_container_t db_get_by_meta(std::string table, std::string col,std::string value){
+	result_container_t r;
+	mutable_map_t where,out;
+	where[col] = value;
+	mods::db::load_record_by_meta(table,&where,out);
+	r.emplace_back(out);
+	return r;
+}
+/*
 
 mods::lmdb::result_container_t db_get_by_id(std::string table,std::string id){
 	mods::globals::db.get()->renew_txn();
@@ -514,3 +523,4 @@ tuple_status_t db_insert(std::string table,
 		mods::lmdb::mutable_map_t & values){
 	return mods::lmdb::insert(table)->values(values);
 }
+*/
