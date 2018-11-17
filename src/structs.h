@@ -203,7 +203,7 @@ using aligned_int_t = uint64_t;
 #define PLR_NOTDEADYET	(1 << 16)  /* (R) Player being extracted.	*/
 
 
-/* Mobile flags: used by char_data.char_specials.act */
+	/* Mobile flags: used by char_data.char_specials.act */
 #define MOB_SPEC         (1 << 0)  /* Mob has a callable spec-proc	*/
 #define MOB_SENTINEL     (1 << 1)  /* Mob should not move		*/
 #define MOB_SCAVENGER    (1 << 2)  /* Mob picks up stuff on the ground	*/
@@ -226,7 +226,7 @@ using aligned_int_t = uint64_t;
 #define MOB_HAS_TREE (1 << 19) /* If the mob has a behaviour tree */
 
 
-/* Preference flags: used by char_data.player_specials.pref */
+	/* Preference flags: used by char_data.player_specials.pref */
 #define PRF_BRIEF       (1 << 0)  /* Room descs won't normally be shown	*/
 #define PRF_COMPACT     (1 << 1)  /* No extra CRLF pair before prompts	*/
 #define PRF_DEAF	(1 << 2)  /* Can't hear shouts			*/
@@ -251,8 +251,8 @@ using aligned_int_t = uint64_t;
 #define PRF_ROOMFLAGS	(1 << 21) /* Can see room flags (ROOM_x)	*/
 #define PRF_DISPAUTO	(1 << 22) /* Show prompt HP, MP, MV when < 30%.	*/
 
-/* Affect bits: used in char_data.char_specials.saved.affected_by */
-/* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
+	/* Affect bits: used in char_data.char_specials.saved.affected_by */
+	/* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
 #define AFF_BLIND             (1 << 0)	   /* (R) Char is blind		*/
 #define AFF_INVISIBLE         (1 << 1)	   /* Char is invisible		*/
 #define AFF_DETECT_ALIGN      (1 << 2)	   /* Char is sensitive to align*/
@@ -277,7 +277,7 @@ using aligned_int_t = uint64_t;
 #define AFF_CHARM             (1 << 21)	   /* Char is charmed		*/
 
 
-/* Modes of connectedness: used by descriptor_data.state */
+	/* Modes of connectedness: used by descriptor_data.state */
 #define CON_PLAYING	 0	/* Playing - Nominal state		*/
 #define CON_CLOSE	 1	/* User disconnect, remove character.	*/
 #define CON_GET_NAME	 2	/* By what name ..?			*/
@@ -297,9 +297,9 @@ using aligned_int_t = uint64_t;
 #define CON_DELCNF2	 16	/* Delete confirmation 2		*/
 #define CON_DISCONNECT	 17	/* In-game link loss (leave character)	*/
 
-/* Character equipment positions: used as index for char_data.equipment[] */
-/* NOTE: Don't confuse these constants with the ITEM_ bitvectors
-	 which control the valid places you can wear a piece of equipment */
+	/* Character equipment positions: used as index for char_data.equipment[] */
+	/* NOTE: Don't confuse these constants with the ITEM_ bitvectors
+		 which control the valid places you can wear a piece of equipment */
 #define WEAR_LIGHT      0
 #define WEAR_FINGER_R   1
 #define WEAR_FINGER_L   2
@@ -322,10 +322,10 @@ using aligned_int_t = uint64_t;
 #define NUM_WEARS      18	/* This must be the # of eq positions!! */
 
 
-/* object-related defines ********************************************/
+	/* object-related defines ********************************************/
 
 
-/* Item types: used by obj_data.obj_flags.type_flag */
+	/* Item types: used by obj_data.obj_flags.type_flag */
 #define ITEM_LIGHT      1		/* Item is a light source	*/
 #define ITEM_SCROLL     2		/* Item is a scroll		*/
 #define ITEM_WAND       3		/* Item is a wand		*/
@@ -351,7 +351,7 @@ using aligned_int_t = uint64_t;
 #define ITEM_FOUNTAIN  23		/* Item is a fountain		*/
 
 
-/* Take/Wear flags: used by obj_data.obj_flags.wear_flags */
+	/* Take/Wear flags: used by obj_data.obj_flags.wear_flags */
 #define ITEM_WEAR_TAKE		(1 << 0)  /* Item can be takes		*/
 #define ITEM_WEAR_FINGER	(1 << 1)  /* Can be worn on finger	*/
 #define ITEM_WEAR_NECK		(1 << 2)  /* Can be worn around neck 	*/
@@ -369,7 +369,7 @@ using aligned_int_t = uint64_t;
 #define ITEM_WEAR_HOLD		(1 << 14) /* Can be held		*/
 
 
-/* Extra object flags: used by obj_data.obj_flags.extra_flags */
+	/* Extra object flags: used by obj_data.obj_flags.extra_flags */
 #define ITEM_GLOW          (1 << 0)	/* Item is glowing		*/
 #define ITEM_HUM           (1 << 1)	/* Item is humming		*/
 #define ITEM_NORENT        (1 << 2)	/* Item cannot be rented	*/
@@ -389,7 +389,7 @@ using aligned_int_t = uint64_t;
 #define ITEM_NOSELL	   (1 << 16)	/* Shopkeepers won't touch it	*/
 
 
-/* Modifier constants used with obj affects ('A' fields) */
+	/* Modifier constants used with obj affects ('A' fields) */
 #define APPLY_NONE              0	/* No effect			*/
 #define APPLY_STR               1	/* Apply to strength		*/
 #define APPLY_DEX               2	/* Apply to dexterity		*/
@@ -417,14 +417,14 @@ using aligned_int_t = uint64_t;
 #define APPLY_SAVING_SPELL     24	/* Apply to save throw: spells	*/
 
 
-/* Container flags - value[1] */
+	/* Container flags - value[1] */
 #define CONT_CLOSEABLE      (1 << 0)	/* Container can be closed	*/
 #define CONT_PICKPROOF      (1 << 1)	/* Container is pickproof	*/
 #define CONT_CLOSED         (1 << 2)	/* Container is closed		*/
 #define CONT_LOCKED         (1 << 3)	/* Container is locked		*/
 
 
-/* Some different kind of liquids for use in values of drink containers */
+	/* Some different kind of liquids for use in values of drink containers */
 #define LIQ_WATER      0
 #define LIQ_BEER       1
 #define LIQ_WINE       2
@@ -443,30 +443,30 @@ using aligned_int_t = uint64_t;
 #define LIQ_CLEARWATER 15
 
 
-/* other miscellaneous defines *******************************************/
+	/* other miscellaneous defines *******************************************/
 
 
-/* Player conditions */
+	/* Player conditions */
 #define DRUNK        0
 #define FULL         1
 #define THIRST       2
 
 
-/* Sun state for weather_data */
+	/* Sun state for weather_data */
 #define SUN_DARK	0
 #define SUN_RISE	1
 #define SUN_LIGHT	2
 #define SUN_SET		3
 
 
-/* Sky conditions for weather_data */
+	/* Sky conditions for weather_data */
 #define SKY_CLOUDLESS	0
 #define SKY_CLOUDY	1
 #define SKY_RAINING	2
 #define SKY_LIGHTNING	3
 
 
-/* Rent codes */
+	/* Rent codes */
 #define RENT_UNDEF      0
 #define RENT_CRASH      1
 #define RENT_RENTED     2
@@ -475,37 +475,37 @@ using aligned_int_t = uint64_t;
 #define RENT_TIMEDOUT   5
 
 
-/* other #defined constants **********************************************/
+	/* other #defined constants **********************************************/
 
-/*
- * **DO**NOT** blindly change the number of levels in your MUD merely by
- * changing these numbers and without changing the rest of the code to match.
- * Other changes throughout the code are required.  See coding.doc for
- * details.
- *
- * LVL_IMPL should always be the HIGHEST possible immortal level, and
- * LVL_IMMORT should always be the LOWEST immortal level.  The number of
- * mortal levels will always be LVL_IMMORT - 1.
- */
+	/*
+	 * **DO**NOT** blindly change the number of levels in your MUD merely by
+	 * changing these numbers and without changing the rest of the code to match.
+	 * Other changes throughout the code are required.  See coding.doc for
+	 * details.
+	 *
+	 * LVL_IMPL should always be the HIGHEST possible immortal level, and
+	 * LVL_IMMORT should always be the LOWEST immortal level.  The number of
+	 * mortal levels will always be LVL_IMMORT - 1.
+	 */
 #define LVL_IMPL	34
 #define LVL_GRGOD	33
 #define LVL_GOD		32
 #define LVL_IMMORT	31
 
-/* Level of the 'freeze' command */
+	/* Level of the 'freeze' command */
 #define LVL_FREEZE	LVL_GRGOD
 
 #define NUM_OF_DIRS	6	/* number of directions in a room (nsewud) */
 #define MAGIC_NUMBER	(0x06)	/* Arbitrary number that won't be in a string */
 
-/*
- * OPT_USEC determines how many commands will be processed by the MUD per
- * second and how frequently it does socket I/O.  A low setting will cause
- * actions to be executed more frequently but will increase overhead due to
- * more cycling to check.  A high setting (e.g. 1 Hz) may upset your players
- * as actions (such as large speedwalking chains) take longer to be executed.
- * You shouldn't need to adjust this.
- */
+	/*
+	 * OPT_USEC determines how many commands will be processed by the MUD per
+	 * second and how frequently it does socket I/O.  A low setting will cause
+	 * actions to be executed more frequently but will increase overhead due to
+	 * more cycling to check.  A high setting (e.g. 1 Hz) may upset your players
+	 * as actions (such as large speedwalking chains) take longer to be executed.
+	 * You shouldn't need to adjust this.
+	 */
 #define OPT_USEC	100000		/* 10 passes per second */
 #define PASSES_PER_SEC	(1000000 / OPT_USEC)
 #define RL_SEC		* PASSES_PER_SEC
@@ -520,12 +520,12 @@ using aligned_int_t = uint64_t;
 #define PULSE_USAGE	(5 * 60 RL_SEC)	/* 5 mins */
 #define PULSE_TIMESAVE	(30 * 60 RL_SEC) /* should be >= SECS_PER_MUD_HOUR */
 
-/* Variables for the output buffering system */
+	/* Variables for the output buffering system */
 #define MAX_SOCK_BUF            (12 * 1024) /* Size of kernel's sock buf   */
 #define MAX_PROMPT_LENGTH       96          /* Max length of prompt        */
 #define GARBAGE_SPACE		32          /* Space for **OVERFLOW** etc  */
 #define SMALL_BUFSIZE		1024        /* Static output buffer size   */
-/* Max amount of output that can be buffered */
+	/* Max amount of output that can be buffered */
 #define LARGE_BUFSIZE	   (MAX_SOCK_BUF - GARBAGE_SPACE - MAX_PROMPT_LENGTH)
 
 #define HISTORY_SIZE		5	/* Keep last 5 commands. */
@@ -544,724 +544,724 @@ using aligned_int_t = uint64_t;
 #define MAX_OBJ_AFFECT		6 /* Used in obj_file_elem *DO*NOT*CHANGE* */
 #define MAX_NOTE_LENGTH		1000	/* arbitrary */
 
-/*
- * A MAX_PWD_LENGTH of 10 will cause BSD-derived systems with MD5 passwords
- * and GNU libc 2 passwords to be truncated.  On BSD this will enable anyone
- * with a name longer than 5 character to log in with any password.  If you
- * have such a system, it is suggested you change the limit to 20.
- *
- * Please note that this will erase your player files.  If you are not
- * prepared to do so, simply erase these lines but heed the above warning.
- */
+	/*
+	 * A MAX_PWD_LENGTH of 10 will cause BSD-derived systems with MD5 passwords
+	 * and GNU libc 2 passwords to be truncated.  On BSD this will enable anyone
+	 * with a name longer than 5 character to log in with any password.  If you
+	 * have such a system, it is suggested you change the limit to 20.
+	 *
+	 * Please note that this will erase your player files.  If you are not
+	 * prepared to do so, simply erase these lines but heed the above warning.
+	 */
 #if defined(HAVE_UNSAFE_CRYPT) && MAX_PWD_LENGTH == 10
 #error You need to increase MAX_PWD_LENGTH to at least 20.
 #error See the comment near these errors for more explanation.
 #endif
 
-/**********************************************************************
- * Structures                                                          *
- **********************************************************************/
+	/**********************************************************************
+	 * Structures                                                          *
+	 **********************************************************************/
 
 
-typedef signed char		sbyte;
-typedef unsigned char		ubyte;
-typedef signed short int	sh_int;
-typedef unsigned short int	ush_int;
+	typedef signed char		sbyte;
+	typedef unsigned char		ubyte;
+	typedef signed short int	sh_int;
+	typedef unsigned short int	ush_int;
 #if !defined(__cplusplus)	/* Anyone know a portable method? */
-typedef char			bool;
+	typedef char			bool;
 #endif
 
 #if !defined(CIRCLE_WINDOWS) || defined(LCC_WIN32)	/* Hm, sysdep.h? */
-typedef signed char			byte;
+	typedef signed char			byte;
 #endif
 
-/* Various virtual (human-reference) number types. */
-typedef IDXTYPE room_vnum;
-typedef IDXTYPE obj_vnum;
-typedef IDXTYPE mob_vnum;
-typedef IDXTYPE zone_vnum;
-typedef IDXTYPE shop_vnum;
+	/* Various virtual (human-reference) number types. */
+	typedef IDXTYPE room_vnum;
+	typedef IDXTYPE obj_vnum;
+	typedef IDXTYPE mob_vnum;
+	typedef IDXTYPE zone_vnum;
+	typedef IDXTYPE shop_vnum;
 
-/* Various real (array-reference) number types. */
-typedef IDXTYPE room_rnum;
-typedef IDXTYPE obj_rnum;
-typedef IDXTYPE mob_rnum;
-typedef IDXTYPE zone_rnum;
-typedef IDXTYPE shop_rnum;
-
-
-/*
- * Bitvector type for 32 bit unsigned long bitvectors.
- * 'unsigned long long' will give you at least 64 bits if you have GCC.
- *
- * Since we don't want to break the pfiles, you'll have to search throughout
- * the code for "bitvector_t" and change them yourself if you'd like this
- * extra flexibility.
- */
-typedef unsigned long int	bitvector_t;
-
-/* Extra description: used in objects, mobiles, and rooms */
-struct extra_descr_data {
-	char	*keyword;                 /* Keyword in look/examine          */
-	char	*description;             /* What to see                      */
-	struct extra_descr_data *next; /* Next in list                     */
-};
+	/* Various real (array-reference) number types. */
+	typedef IDXTYPE room_rnum;
+	typedef IDXTYPE obj_rnum;
+	typedef IDXTYPE mob_rnum;
+	typedef IDXTYPE zone_rnum;
+	typedef IDXTYPE shop_rnum;
 
 
-/* object-related structures ******************************************/
+	/*
+	 * Bitvector type for 32 bit unsigned long bitvectors.
+	 * 'unsigned long long' will give you at least 64 bits if you have GCC.
+	 *
+	 * Since we don't want to break the pfiles, you'll have to search throughout
+	 * the code for "bitvector_t" and change them yourself if you'd like this
+	 * extra flexibility.
+	 */
+	typedef unsigned long int	bitvector_t;
+
+	/* Extra description: used in objects, mobiles, and rooms */
+	struct extra_descr_data {
+		char	*keyword;                 /* Keyword in look/examine          */
+		char	*description;             /* What to see                      */
+		struct extra_descr_data *next; /* Next in list                     */
+	};
 
 
-/* object flags; used in obj_data */
-struct obj_flag_data {
-	int	value[4];	/* Values of the item (see list)    */
-	byte type_flag;	/* Type of item			    */
-	int /*bitvector_t*/	wear_flags;	/* Where you can wear it	    */
-	int /*bitvector_t*/	extra_flags;	/* If it hums, glows, etc.	    */
-	int	weight;		/* Weigt what else                  */
-	int	cost;		/* Value when sold (gp.)            */
-	int	cost_per_day;	/* Cost to keep pr. real day        */
-	int	timer;		/* Timer for object                 */
-	long /*bitvector_t*/	bitvector;	/* To set chars bits                */
-};
+	/* object-related structures ******************************************/
 
 
-/* Used in obj_file_elem *DO*NOT*CHANGE* */
-struct obj_affected_type {
-	byte location;      /* Which ability to change (APPLY_XXX) */
-	sbyte modifier;     /* How much it changes by              */
-};
+	/* object flags; used in obj_data */
+	struct obj_flag_data {
+		int	value[4];	/* Values of the item (see list)    */
+		byte type_flag;	/* Type of item			    */
+		int /*bitvector_t*/	wear_flags;	/* Where you can wear it	    */
+		int /*bitvector_t*/	extra_flags;	/* If it hums, glows, etc.	    */
+		int	weight;		/* Weigt what else                  */
+		int	cost;		/* Value when sold (gp.)            */
+		int	cost_per_day;	/* Cost to keep pr. real day        */
+		int	timer;		/* Timer for object                 */
+		long /*bitvector_t*/	bitvector;	/* To set chars bits                */
+	};
 
 
-/* ================== Memory Structure for Objects ================== */
-struct obj_data {
-	obj_vnum item_number;	/* Where in data-base			*/
-	room_rnum in_room;		/* In what room -1 when conta/carr	*/
-
-	struct obj_flag_data obj_flags;/* Object information               */
-	struct obj_affected_type affected[MAX_OBJ_AFFECT];  /* affects */
-
-	char	*name;                    /* Title of object :get etc.        */
-	char	*description;		  /* When in room                     */
-	char	*short_description;       /* when worn/carry/in cont.         */
-	char	*action_description;      /* What to write when used          */
-	struct extra_descr_data *ex_description; /* extra descriptions     */
-	struct char_data *carried_by;  /* Carried by :NULL in room/conta   */
-	struct char_data *worn_by;	  /* Worn by?			      */
-	sh_int worn_on;		  /* Worn where?		      */
-
-	struct obj_data *in_obj;       /* In what object NULL when none    */
-	struct obj_data *contains;     /* Contains objects                 */
-
-	struct obj_data *next_content; /* For 'contains' lists             */
-	struct obj_data *next;         /* For the object list              */
-	uint8_t ai_state;
-
-	uuid_t uuid;
-	int16_t ammo;
-	int16_t ammo_max;
-	short loaded;
-	short holds_ammo;
-	weapon_type_t weapon_type;
-	int16_t type;
-};
-/* ======================================================================= */
+	/* Used in obj_file_elem *DO*NOT*CHANGE* */
+	struct obj_affected_type {
+		byte location;      /* Which ability to change (APPLY_XXX) */
+		sbyte modifier;     /* How much it changes by              */
+	};
 
 
-/* ====================== File Element for Objects ======================= */
-/*                 BEWARE: Changing it will ruin rent files		   */
-struct obj_file_elem {
-	obj_vnum item_number;
+	/* ================== Memory Structure for Objects ================== */
+	struct obj_data {
+		obj_vnum item_number;	/* Where in data-base			*/
+		room_rnum in_room;		/* In what room -1 when conta/carr	*/
+
+		struct obj_flag_data obj_flags;/* Object information               */
+		struct obj_affected_type affected[MAX_OBJ_AFFECT];  /* affects */
+
+		char	*name;                    /* Title of object :get etc.        */
+		char	*description;		  /* When in room                     */
+		char	*short_description;       /* when worn/carry/in cont.         */
+		char	*action_description;      /* What to write when used          */
+		struct extra_descr_data *ex_description; /* extra descriptions     */
+		struct char_data *carried_by;  /* Carried by :NULL in room/conta   */
+		struct char_data *worn_by;	  /* Worn by?			      */
+		sh_int worn_on;		  /* Worn where?		      */
+
+		struct obj_data *in_obj;       /* In what object NULL when none    */
+		struct obj_data *contains;     /* Contains objects                 */
+
+		struct obj_data *next_content; /* For 'contains' lists             */
+		struct obj_data *next;         /* For the object list              */
+		uint8_t ai_state;
+
+		uuid_t uuid;
+		int16_t ammo;
+		int16_t ammo_max;
+		short loaded;
+		short holds_ammo;
+		weapon_type_t weapon_type;
+		int16_t type;
+	};
+	/* ======================================================================= */
+
+
+	/* ====================== File Element for Objects ======================= */
+	/*                 BEWARE: Changing it will ruin rent files		   */
+	struct obj_file_elem {
+		obj_vnum item_number;
 
 #if USE_AUTOEQ
-	sh_int location;
+		sh_int location;
 #endif
-	int	value[4];
-	int /*bitvector_t*/	extra_flags;
-	int	weight;
-	int	timer;
-	long /*bitvector_t*/	bitvector;
-	struct obj_affected_type affected[MAX_OBJ_AFFECT];
-};
+		int	value[4];
+		int /*bitvector_t*/	extra_flags;
+		int	weight;
+		int	timer;
+		long /*bitvector_t*/	bitvector;
+		struct obj_affected_type affected[MAX_OBJ_AFFECT];
+	};
 
 
-/* header block for rent files.  BEWARE: Changing it will ruin rent files  */
-struct rent_info {
-	int	time;
-	int	rentcode;
-	int	net_cost_per_diem;
-	int	gold;
-	int	account;
-	int	nitems;
-	int	spare0;
-	int	spare1;
-	int	spare2;
-	int	spare3;
-	int	spare4;
-	int	spare5;
-	int	spare6;
-	int	spare7;
-};
-/* ======================================================================= */
+	/* header block for rent files.  BEWARE: Changing it will ruin rent files  */
+	struct rent_info {
+		int	time;
+		int	rentcode;
+		int	net_cost_per_diem;
+		int	gold;
+		int	account;
+		int	nitems;
+		int	spare0;
+		int	spare1;
+		int	spare2;
+		int	spare3;
+		int	spare4;
+		int	spare5;
+		int	spare6;
+		int	spare7;
+	};
+	/* ======================================================================= */
 
 
-/* room-related structures ************************************************/
+	/* room-related structures ************************************************/
 
 
-struct room_direction_data {
-	mods::string general_description;       /* When look DIR.			*/
+	struct room_direction_data {
+		mods::string general_description;       /* When look DIR.			*/
 
-	mods::string keyword;		/* for open/close			*/
+		mods::string keyword;		/* for open/close			*/
 
-	int exit_info;	/* Exit info			*/
-	obj_vnum key;		/* Key's number (-1 for no key)		*/
-	room_rnum to_room;		/* Where direction leads (NOWHERE)	*/
-};
-
-
-/* ================== Memory Structure for room ======================= */
-struct room_data {
-	room_data() : number(0),zone(0),sector_type(0),
-	room_flags(0),light(0),func(nullptr){ }
-	~room_data() = default;
-	room_vnum number;		/* Rooms number	(vnum)		      */
-	zone_rnum zone;              /* Room zone (for resetting)          */
-	int	sector_type;            /* sector type (move/hide)            */
-	mods::string	name;                  /* Rooms name 'You are ...'           */
-	mods::string	description;           /* Shown when entered                 */
-	struct extra_descr_data *ex_description; /* for examine/look       */
-	struct room_direction_data *dir_option[NUM_OF_DIRS]; /* Directions */
-	int /*bitvector_t*/ room_flags;		/* DEATH,DARK ... etc */
-
-	byte light;                  /* Number of lightsources in room     */
-	SPECIAL(*func);
-
-	struct obj_data *contents;   /* List of items in room              */
-	struct char_data *people;    /* List of NPC / PC in room           */
-};
-/* ====================================================================== */
+		int exit_info;	/* Exit info			*/
+		obj_vnum key;		/* Key's number (-1 for no key)		*/
+		room_rnum to_room;		/* Where direction leads (NOWHERE)	*/
+	};
 
 
-/* char-related structures ************************************************/
+	/* ================== Memory Structure for room ======================= */
+	struct room_data {
+		room_data() : number(0),zone(0),sector_type(0),
+		room_flags(0),light(0),func(nullptr){ }
+		~room_data() = default;
+		room_vnum number;		/* Rooms number	(vnum)		      */
+		zone_rnum zone;              /* Room zone (for resetting)          */
+		int	sector_type;            /* sector type (move/hide)            */
+		mods::string	name;                  /* Rooms name 'You are ...'           */
+		mods::string	description;           /* Shown when entered                 */
+		struct extra_descr_data *ex_description; /* for examine/look       */
+		struct room_direction_data *dir_option[NUM_OF_DIRS]; /* Directions */
+		int /*bitvector_t*/ room_flags;		/* DEATH,DARK ... etc */
 
-/* memory structure for characters */
-struct memory_rec_struct {
-	/* TODO: replace this with std::vector<char_data*> */
-	long	id;
-	struct memory_rec_struct *next;
-};
+		byte light;                  /* Number of lightsources in room     */
+		SPECIAL(*func);
 
-typedef struct memory_rec_struct memory_rec;
-
-
-/* This structure is purely intended to be an easy way to transfer */
-/* and return information about time (real or mudwise).            */
-struct time_info_data {
-	int hours, day, month;
-	sh_int year;
-};
-
-
-/* These data contain information about a players time data */
-struct time_data {
-	time_t birth;    /* This represents the characters age                */
-	time_t logon;    /* Time of the last logon (used to calculate played) */
-	int	played;     /* This is the total accumulated time played in secs */
-};
+		struct obj_data *contents;   /* List of items in room              */
+		struct char_data *people;    /* List of NPC / PC in room           */
+	};
+	/* ====================================================================== */
 
 
-/* general player-related info, usually PC's and NPC's */
-/** TODO place this is the db */
-struct char_player_data {
-	constexpr static unsigned max_pwd_length = MAX_PWD_LENGTH+1;
-	mods::string name;	       /* PC / NPC s name (kill ...  )         */
-	mods::string short_descr;  /* for NPC 'actions'                    */
-	mods::string long_descr;   /* for 'look'			       */
-	mods::string description;  /* Extra descriptions                   */
-	mods::string title;        /* PC / NPC's title                     */
-	byte sex;           /* PC / NPC's sex                       */
-	byte chclass;       /* PC / NPC's class		       */
-	byte level;         /* PC / NPC's level                     */
-	sh_int hometown;    /* PC s Hometown (zone)                 */
-	struct time_data time;  /* PC's AGE in days                 */
-	ubyte weight;       /* PC / NPC's weight                    */
-	ubyte height;       /* PC / NPC's height                    */
-	/** TODO: phase this out */
-	mods::string passwd;
-	char_player_data();
-	~char_player_data() = default;
-	private:
-	std::array<char,max_pwd_length>	m_passwd; /* character's password      */
-};
+	/* char-related structures ************************************************/
+
+	/* memory structure for characters */
+	struct memory_rec_struct {
+		/* TODO: replace this with std::vector<char_data*> */
+		long	id;
+		struct memory_rec_struct *next;
+	};
+
+	typedef struct memory_rec_struct memory_rec;
 
 
-/* Char's abilities.  Used in char_file_u *DO*NOT*CHANGE* */
-/** TODO place this in the db */
-struct char_ability_data {
-	sbyte str;
-	sbyte str_add;      /* 000 - 100 if strength 18             */
-	sbyte intel;
-	sbyte wis;
-	sbyte dex;
-	sbyte con;
-	sbyte cha;
-	char_ability_data() : str(0),str_add(0),intel(0),
-	wis(0),dex(0),con(0),cha(0){}
-	~char_ability_data() = default;
-};
+	/* This structure is purely intended to be an easy way to transfer */
+	/* and return information about time (real or mudwise).            */
+	struct time_info_data {
+		int hours, day, month;
+		sh_int year;
+	};
 
 
-/* Char's points.  Used in char_file_u *DO*NOT*CHANGE* */
-/** TODO: construct this using a "player template" identifier
- * In essence, it would be an enum that is passed to the constructor.
- * The enum would be a class type or a specifier to how much each field
- * should default to. 
- */
-struct char_point_data {
-	sh_int mana;
-	sh_int max_mana;     /* Max mana for PC/NPC			   */
-	sh_int hit;
-	sh_int max_hit;      /* Max hit for PC/NPC                      */
-	sh_int move;
-	sh_int max_move;     /* Max move for PC/NPC                     */
-
-	sh_int armor;        /* Internal -100..100, external -10..10 AC */
-	int	gold;           /* Money carried                           */
-	int	bank_gold;	/* Gold the char has in a bank account	   */
-	int	exp;            /* The experience of the player            */
-
-	sbyte hitroll;       /* Any bonus or penalty to the hit roll    */
-	sbyte damroll;       /* Any bonus or penalty to the damage roll */
-	char_point_data() : mana(0),max_mana(0),hit(0),max_hit(0),
-	move(0),max_move(0),armor(0),gold(0),bank_gold(0),exp(0),
-	hitroll(0),damroll(0){}
-	~char_point_data() = default;
-};
+	/* These data contain information about a players time data */
+	struct time_data {
+		time_t birth;    /* This represents the characters age                */
+		time_t logon;    /* Time of the last logon (used to calculate played) */
+		int	played;     /* This is the total accumulated time played in secs */
+	};
 
 
-/*
- * char_special_data_saved: specials which both a PC and an NPC have in
- * common, but which must be saved to the playerfile for PC's.
- *
- * WARNING:  Do not change this structure.  Doing so will ruin the
- * playerfile.  If you want to add to the playerfile, use the spares
- * in player_special_data.
- */
-struct char_special_data_saved {
-	int	alignment;		/* +-1000 for alignments                */
-	long	idnum;			/* player's idnum; -1 for mobiles	*/
-	long /*bitvector_t*/ act;	/* act flag for NPC's; player flag for PC's */
-
-	long /*bitvector_t*/	affected_by;
-	/* Bitvector for spells/skills affected by */
-	sh_int apply_saving_throw[5]; /* Saving throw (Bonuses)		*/
-};
-
-
-/* Special playing constants shared by PCs and NPCs which aren't in pfile */
-struct char_special_data {
-	char_data *fighting;	/* Opponent				*/
-	char_data *hunting;	/* Char hunted by this char		*/
-
-	byte position;		/* Standing, fighting, sleeping, etc.	*/
-
-	int	carry_weight;		/* Carried weight			*/
-	byte carry_items;		/* Number of items carried		*/
-	int	timer;			/* Timer for update			*/
-
-	char_special_data_saved saved; /* constants saved in plrfile	*/
-	char_special_data() : fighting(nullptr), hunting(nullptr), position(POS_STANDING),
-		carry_weight(0), carry_items(0),timer(time(0)){}
-	~char_special_data() = default;
-};
-
-
-struct player_special_data_saved {
-	constexpr static unsigned conditions_max = 3;
-	constexpr static unsigned max_skills = MAX_SKILLS;
-	constexpr static unsigned max_tongue = MAX_TONGUE;
-	std::array<byte,max_skills> skills;	/* array of skills plus skill 0		*/
-	byte PADDING0;		/* used to be spells_to_learn		*/
-	std::array<bool,max_tongue> talks;	/* PC s Tongues 0 for NPC		*/
-	int	wimp_level;		/* Below this # of hit points, flee!	*/
-	byte freeze_level;		/* Level of god who froze char, if any	*/
-	sh_int invis_level;		/* level of invisibility		*/
-	room_vnum load_room;		/* Which room to place char in		*/
-	long /*bitvector_t*/	pref;	/* preference flags for PC's.		*/
-	ubyte bad_pws;		/* number of bad password attemps	*/
-	std::array<sbyte,conditions_max> conditions;         /* Drunk, full, thirsty			*/
-
-	player_special_data_saved() : PADDING0(0),
-	wimp_level(0),freeze_level(0),invis_level(0),
-	load_room(0),pref(0),bad_pws(0) {
-		std::fill(skills.begin(),skills.end(),0);
-		std::fill(talks.begin(),talks.end(),0);
-		std::fill(conditions.begin(),conditions.end(),0);
-	}
-};
-
-/*
- * Specials needed only by PCs, not NPCs.  Space for this structure is
- * not allocated in memory for NPCs, but it is for PCs and the portion
- * of it labelled 'saved' is saved in the playerfile.  This structure can
- * be changed freely; beware, though, that changing the contents of
- * player_special_data_saved will corrupt the playerfile.
- */
-struct player_special_data {
-	struct player_special_data_saved saved;
-	std::string	poofin;		/* Description on arrival of a god.     */
-	std::string poofout;		/* Description upon a god's exit.       */
-	struct alias_data *aliases;	/* Character's aliases			*/
-	long last_tell;		/* idnum of last tell from		*/
-	void *last_olc_targ;		/* olc control				*/
-	int last_olc_mode;		/* olc control				*/
-	bool js_profile_initialized;
-	player_special_data() :  poofin(""),
-	poofout(""),aliases(nullptr),last_tell(0),last_olc_targ(nullptr),
-	last_olc_mode(-1),js_profile_initialized(false){}
-	~player_special_data() = default;
-};
-
-
-/* Specials used by NPCs, not PCs */
-struct mob_special_data {
-	memory_rec_t memory;
-	byte	attack_type;        /* The Attack Type Bitvector for NPC's     */
-	byte default_pos;        /* Default position for NPC                */
-	byte damnodice;          /* The number of damage dice's	       */
-	byte damsizedice;        /* The size of the damage dice's           */
-	char_data* snipe_tracking;
-	int16_t behaviour_tree;
-};
-
-
-/* An affect structure.  Used in char_file_u *DO*NOT*CHANGE* */
-struct affected_type {
-	sh_int type;          /* The type of spell that caused this      */
-	sh_int duration;      /* For how long its effects will last      */
-	sbyte modifier;       /* This is added to apropriate ability     */
-	byte location;        /* Tells which ability to change(APPLY_XXX)*/
-	long /*bitvector_t*/	bitvector; /* Tells which bits to set (AFF_XXX) */
-
-	struct affected_type *next;
-};
-
-
-/* Structure used for chars following other chars */
-struct follow_type {
-	struct char_data *follower;
-	struct follow_type *next;
-};
-
-/* Pave mode structure for builders */
-struct room_pavement_t {
-	room_vnum start_room;
-	int transact_id;
-	room_vnum current_room_number;
-	int zone_id;
-	std::vector<room_rnum> rooms;
-	room_pavement_t() : start_room(0), transact_id(-1),
-	current_room_number(0), zone_id(-1){}
-	room_pavement_t(room_vnum start,int z_id) :  start_room(start), transact_id(0),
-	current_room_number(0),zone_id(z_id) {}
-	~room_pavement_t() = default;
-};
-
-struct zone_pavement_t {
-	typedef std::vector<mob_vnum> mob_pavements_t;
-	typedef std::vector<obj_vnum> obj_pavements_t;
-	mob_pavements_t mob;
-	obj_pavements_t obj;
-	zone_pavement_t() = default;
-	~zone_pavement_t() = default;
-};
-
-struct builder_data_t {
-	bool room_pave_mode;
-	bool zone_pave_mode;
-	room_pavement_t room_pavements;
-	zone_pavement_t zone_pavements;
-	builder_data_t() : room_pave_mode(false),zone_pave_mode(false) {}
-	~builder_data_t() = default;
-};
-
-/* ================== Structure for player/non-player ===================== */
-struct txt_block {
-	char	*text;
-	int aliased;
-	struct txt_block *next;
-};
-
-
-struct txt_q {
-	struct txt_block *head;
-	struct txt_block *tail;
-};
-/** FIXME This use of namespace mods is random and out of place */
-namespace mods {
-	struct descriptor_data {
-		using buffer_type_t = std::string;
-		using history_type_t = std::array<mods::string,HISTORY_SIZE>;
-		using history_pos_type_t = std::size_t;
-		enum queue_behaviour_enum_t {
-			NORMAL = 0,
-			IGNORE_ALL,
-			REDIRECT_TO_PLAYER,
-			REDIRECT_TO_FILESYSTEM,
-			REDIRECT_TO_DB
-		};
-		constexpr static size_t OUTPUT_SIZE = LARGE_BUFSIZE+1;
-		descriptor_data(){ clear(); }
-		descriptor_data(queue_behaviour_enum_t queue_behaviour){ 
-			clear();
-			set_queue_behaviour(queue_behaviour);
-		}
-		~descriptor_data() = default;
-		operator bool() const {
-			return !!connected;
-		}
-		void clear(){ 
-			/* Clear out the entire struct */
-			descriptor = 0; bad_pws = 0; idle_tics = 0;
-			bufptr = 0;bufspace = 0;large_outbuf = nullptr; input = {};
-			character = nullptr; original = nullptr;
-			connected = 0; desc_num = 0;login_time = 0;showstr_head = 0;
-			showstr_vector = 0;showstr_count = 0;showstr_page = 0;str = 0;
-			max_str = 0;mail_to = 0;has_prompt = 0;
-			history_pos = 0;
-			has_output = false;
-			m_queue_behaviour = queue_behaviour_enum_t::NORMAL;
-			inbuf.clear();
-			last_input.clear();
-			small_outbuf.clear();
-			output.clear();
-			host.clear();
-		}
-		void set_queue_behaviour(queue_behaviour_enum_t queue_behaviour){ 
-			m_queue_behaviour = queue_behaviour;
-		}
-		queue_behaviour_enum_t get_queue_behaviour() const {
-			return m_queue_behaviour;
-		}
-		void set_state(int c) { connected = c; }
-		socket_t	descriptor;	/* file descriptor for socket		*/
-		mods::string host;		/* hostname				*/
-		byte	bad_pws;		/* number of bad pw attemps this login	*/
-		byte idle_tics;		/* tics idle at password prompt		*/
-		int bufptr;
-		int bufspace;
-		struct txt_block *large_outbuf; /* ptr to large buffer, if we need it */
-		struct txt_q input;             /* q of unprocessed input               */
-		char_data *character;    /** FIXME: turn to mods::player */
-		char_data *original;    /** FIXME: turn to mods::player */
-		int	connected;		/* mode of 'connectedness'		*/
-		int	desc_num;		/* unique num assigned to desc		*/
-		time_t login_time;		/* when the person connected		*/
-		char *showstr_head;		/* for keeping track of an internal str	*/
-		char **showstr_vector;	/* for paging through texts		*/
-		int  showstr_count;		/* number of pages to page through	*/
-		int  showstr_page;		/* which page are we currently showing?	*/
-		char	**str;			/* for the modify-str system		*/
-		size_t max_str;	        /*		-			*/
-		long	mail_to;		/* name for mail system			*/
-		int	has_prompt;		/* is the user at a prompt?             */
-		buffer_type_t inbuf;  /* buffer for raw input		*/
-		buffer_type_t last_input; /* the last input			*/
-		buffer_type_t small_outbuf;  /* standard output buffer		*/
-		history_type_t history;		/* History of commands, for ! mostly.	*/
-		history_pos_type_t history_pos;
-		std::shared_ptr<mods::descriptor_data> snooping; /* Who is this char snooping	*/
-		std::shared_ptr<mods::descriptor_data> snoop_by; /* And who is snooping this char	*/
-		bool has_output;
-		size_t queue_output(const std::string &s);
-		size_t flush_output();
+	/* general player-related info, usually PC's and NPC's */
+	/** TODO place this is the db */
+	struct char_player_data {
+		constexpr static unsigned max_pwd_length = MAX_PWD_LENGTH+1;
+		mods::string name;	       /* PC / NPC s name (kill ...  )         */
+		mods::string short_descr;  /* for NPC 'actions'                    */
+		mods::string long_descr;   /* for 'look'			       */
+		mods::string description;  /* Extra descriptions                   */
+		mods::string title;        /* PC / NPC's title                     */
+		byte sex;           /* PC / NPC's sex                       */
+		byte chclass;       /* PC / NPC's class		       */
+		byte level;         /* PC / NPC's level                     */
+		sh_int hometown;    /* PC s Hometown (zone)                 */
+		struct time_data time;  /* PC's AGE in days                 */
+		ubyte weight;       /* PC / NPC's weight                    */
+		ubyte height;       /* PC / NPC's height                    */
+		/** TODO: phase this out */
+		mods::string passwd;
+		char_player_data();
+		~char_player_data() = default;
 		private:
-		queue_behaviour_enum_t m_queue_behaviour;
-		std::string output;		/* ptr to the current output buffer	*/
+		std::array<char,max_pwd_length>	m_passwd; /* character's password      */
 	};
-};
-struct char_data {
-	char_data(){
-		std::cout << "debug: [char_data] constructor\n";
-		init();	
+
+
+	/* Char's abilities.  Used in char_file_u *DO*NOT*CHANGE* */
+	/** TODO place this in the db */
+	struct char_ability_data {
+		sbyte str;
+		sbyte str_add;      /* 000 - 100 if strength 18             */
+		sbyte intel;
+		sbyte wis;
+		sbyte dex;
+		sbyte con;
+		sbyte cha;
+		char_ability_data() : str(0),str_add(0),intel(0),
+		wis(0),dex(0),con(0),cha(0){}
+		~char_ability_data() = default;
 	};
-	~char_data() = default;
-	char_data(char_data* o);
-	void init();
-	int pfilepos;			 /* playerfile pos		  */
-	uuid_t uuid;
-	time_t last_fight_timestamp;			/* timestamp of the last time the user fought */
-	mob_rnum nr;                          /* Mob's rnum			  */
-	room_rnum in_room;                    /* Location (real room number)	  */
-	room_rnum was_in_room;		 /* location for linkdead people  */
-	int wait;				 /* wait for how many loops	  */
-	bool drone;
-	uuid_t drone_owner;
-	bool drone_simulate;
-	uuid_t drone_uuid;
-	char_player_data player;       /* Normal data                   */
-	char_ability_data real_abils;	 /* Abilities without modifiers   */
-	char_ability_data aff_abils;	 /* Abils with spells/stones/etc  */
-	char_point_data points;        /* Points                        */
-	char_special_data char_specials;	/* PC/NPC specials	  */
-	std::shared_ptr<player_special_data> player_specials; /* PC specials		  */
-	mob_special_data mob_specials;	/* NPC specials		  */
 
-	affected_type *affected;       /* affected by what spells       */
-	obj_data *equipment[NUM_WEARS];/* Equipment array               */
 
-	obj_data *carrying;            /* Head of list                  */
-	bool has_desc;
-	std::shared_ptr<mods::descriptor_data> desc;         /* NULL for mobiles              */
-
-	char_data *next_in_room;     /* For room->people - list         */
-	char_data *next;             /* For either monster or ppl-list  */
-	char_data *next_fighting;    /* For fighting list               */
-
-	follow_type *followers;        /* List of chars followers       */
-	char_data *master;             /* Who is char following?        */
-
-	std::shared_ptr<mods::player> player_ptr;
-	/**
-	 * The following will be deprecated
+	/* Char's points.  Used in char_file_u *DO*NOT*CHANGE* */
+	/** TODO: construct this using a "player template" identifier
+	 * In essence, it would be an enum that is passed to the constructor.
+	 * The enum would be a class type or a specifier to how much each field
+	 * should default to. 
 	 */
-	goal_t goal;
-	short disorient;
-	ai_state_t state;
+	struct char_point_data {
+		sh_int mana;
+		sh_int max_mana;     /* Max mana for PC/NPC			   */
+		sh_int hit;
+		sh_int max_hit;      /* Max hit for PC/NPC                      */
+		sh_int move;
+		sh_int max_move;     /* Max move for PC/NPC                     */
 
-	std::shared_ptr<builder_data_t> builder_data;
-};
-/* ====================================================================== */
+		sh_int armor;        /* Internal -100..100, external -10..10 AC */
+		int	gold;           /* Money carried                           */
+		int	bank_gold;	/* Gold the char has in a bank account	   */
+		int	exp;            /* The experience of the player            */
 
-
-/* ==================== File Structure for Player ======================= */
-/*             BEWARE: Changing it will ruin the playerfile		  */
-struct char_file_u {
-	/* char_player_data */
-	mods::string name;
-	mods::string description;
-	mods::string title;
-	byte sex;
-	byte chclass;
-	byte level;
-	sh_int hometown;
-	time_t birth;   /* Time of birth of character     */
-	int	played;    /* Number of secs played in total */
-	ubyte weight;
-	ubyte height;
-
-	char	pwd[MAX_PWD_LENGTH+1];    /* character's password */
-
-	struct char_special_data_saved char_specials_saved;
-	struct player_special_data_saved player_specials_saved;
-	struct char_ability_data abilities;
-	struct char_point_data points;
-	struct affected_type affected[MAX_AFFECT];
-
-	time_t last_logon;		/* Time (in secs) of last logon */
-	mods::string host;	/* host of last logon */
-};
-/* ====================================================================== */
+		sbyte hitroll;       /* Any bonus or penalty to the hit roll    */
+		sbyte damroll;       /* Any bonus or penalty to the damage roll */
+		char_point_data() : mana(0),max_mana(0),hit(0),max_hit(0),
+		move(0),max_move(0),armor(0),gold(0),bank_gold(0),exp(0),
+		hitroll(0),damroll(0){}
+		~char_point_data() = default;
+	};
 
 
-/* descriptor-related structures ******************************************/
+	/*
+	 * char_special_data_saved: specials which both a PC and an NPC have in
+	 * common, but which must be saved to the playerfile for PC's.
+	 *
+	 * WARNING:  Do not change this structure.  Doing so will ruin the
+	 * playerfile.  If you want to add to the playerfile, use the spares
+	 * in player_special_data.
+	 */
+	struct char_special_data_saved {
+		int	alignment;		/* +-1000 for alignments                */
+		long	idnum;			/* player's idnum; -1 for mobiles	*/
+		long /*bitvector_t*/ act;	/* act flag for NPC's; player flag for PC's */
+
+		long /*bitvector_t*/	affected_by;
+		/* Bitvector for spells/skills affected by */
+		sh_int apply_saving_throw[5]; /* Saving throw (Bonuses)		*/
+	};
+
+
+	/* Special playing constants shared by PCs and NPCs which aren't in pfile */
+	struct char_special_data {
+		char_data *fighting;	/* Opponent				*/
+		char_data *hunting;	/* Char hunted by this char		*/
+
+		byte position;		/* Standing, fighting, sleeping, etc.	*/
+
+		int	carry_weight;		/* Carried weight			*/
+		byte carry_items;		/* Number of items carried		*/
+		int	timer;			/* Timer for update			*/
+
+		char_special_data_saved saved; /* constants saved in plrfile	*/
+		char_special_data() : fighting(nullptr), hunting(nullptr), position(POS_STANDING),
+		carry_weight(0), carry_items(0),timer(time(0)){}
+		~char_special_data() = default;
+	};
+
+
+	struct player_special_data_saved {
+		constexpr static unsigned conditions_max = 3;
+		constexpr static unsigned max_skills = MAX_SKILLS;
+		constexpr static unsigned max_tongue = MAX_TONGUE;
+		std::array<byte,max_skills> skills;	/* array of skills plus skill 0		*/
+		byte PADDING0;		/* used to be spells_to_learn		*/
+		std::array<bool,max_tongue> talks;	/* PC s Tongues 0 for NPC		*/
+		int	wimp_level;		/* Below this # of hit points, flee!	*/
+		byte freeze_level;		/* Level of god who froze char, if any	*/
+		sh_int invis_level;		/* level of invisibility		*/
+		room_vnum load_room;		/* Which room to place char in		*/
+		long /*bitvector_t*/	pref;	/* preference flags for PC's.		*/
+		ubyte bad_pws;		/* number of bad password attemps	*/
+		std::array<sbyte,conditions_max> conditions;         /* Drunk, full, thirsty			*/
+
+		player_special_data_saved() : PADDING0(0),
+		wimp_level(0),freeze_level(0),invis_level(0),
+		load_room(0),pref(0),bad_pws(0) {
+			std::fill(skills.begin(),skills.end(),0);
+			std::fill(talks.begin(),talks.end(),0);
+			std::fill(conditions.begin(),conditions.end(),0);
+		}
+	};
+
+	/*
+	 * Specials needed only by PCs, not NPCs.  Space for this structure is
+	 * not allocated in memory for NPCs, but it is for PCs and the portion
+	 * of it labelled 'saved' is saved in the playerfile.  This structure can
+	 * be changed freely; beware, though, that changing the contents of
+	 * player_special_data_saved will corrupt the playerfile.
+	 */
+	struct player_special_data {
+		struct player_special_data_saved saved;
+		std::string	poofin;		/* Description on arrival of a god.     */
+		std::string poofout;		/* Description upon a god's exit.       */
+		struct alias_data *aliases;	/* Character's aliases			*/
+		long last_tell;		/* idnum of last tell from		*/
+		void *last_olc_targ;		/* olc control				*/
+		int last_olc_mode;		/* olc control				*/
+		bool js_profile_initialized;
+		player_special_data() :  poofin(""),
+		poofout(""),aliases(nullptr),last_tell(0),last_olc_targ(nullptr),
+		last_olc_mode(-1),js_profile_initialized(false){}
+		~player_special_data() = default;
+	};
+
+
+	/* Specials used by NPCs, not PCs */
+	struct mob_special_data {
+		memory_rec_t memory;
+		byte	attack_type;        /* The Attack Type Bitvector for NPC's     */
+		byte default_pos;        /* Default position for NPC                */
+		byte damnodice;          /* The number of damage dice's	       */
+		byte damsizedice;        /* The size of the damage dice's           */
+		char_data* snipe_tracking;
+		int16_t behaviour_tree;
+	};
+
+
+	/* An affect structure.  Used in char_file_u *DO*NOT*CHANGE* */
+	struct affected_type {
+		sh_int type;          /* The type of spell that caused this      */
+		sh_int duration;      /* For how long its effects will last      */
+		sbyte modifier;       /* This is added to apropriate ability     */
+		byte location;        /* Tells which ability to change(APPLY_XXX)*/
+		long /*bitvector_t*/	bitvector; /* Tells which bits to set (AFF_XXX) */
+
+		struct affected_type *next;
+	};
+
+
+	/* Structure used for chars following other chars */
+	struct follow_type {
+		struct char_data *follower;
+		struct follow_type *next;
+	};
+
+	/* Pave mode structure for builders */
+	struct room_pavement_t {
+		room_vnum start_room;
+		int transact_id;
+		room_vnum current_room_number;
+		int zone_id;
+		std::vector<room_rnum> rooms;
+		room_pavement_t() : start_room(0), transact_id(-1),
+		current_room_number(0), zone_id(-1){}
+		room_pavement_t(room_vnum start,int z_id) :  start_room(start), transact_id(0),
+		current_room_number(0),zone_id(z_id) {}
+		~room_pavement_t() = default;
+	};
+
+	struct zone_pavement_t {
+		typedef std::vector<mob_vnum> mob_pavements_t;
+		typedef std::vector<obj_vnum> obj_pavements_t;
+		mob_pavements_t mob;
+		obj_pavements_t obj;
+		zone_pavement_t() = default;
+		~zone_pavement_t() = default;
+	};
+
+	struct builder_data_t {
+		bool room_pave_mode;
+		bool zone_pave_mode;
+		room_pavement_t room_pavements;
+		zone_pavement_t zone_pavements;
+		builder_data_t() : room_pave_mode(false),zone_pave_mode(false) {}
+		~builder_data_t() = default;
+	};
+
+	/* ================== Structure for player/non-player ===================== */
+	struct txt_block {
+		char	*text;
+		int aliased;
+		struct txt_block *next;
+	};
+
+
+	struct txt_q {
+		struct txt_block *head;
+		struct txt_block *tail;
+	};
+	/** FIXME This use of namespace mods is random and out of place */
+	namespace mods {
+		struct descriptor_data {
+			using buffer_type_t = std::string;
+			using history_type_t = std::array<mods::string,HISTORY_SIZE>;
+			using history_pos_type_t = std::size_t;
+			enum queue_behaviour_enum_t {
+				NORMAL = 0,
+				IGNORE_ALL,
+				REDIRECT_TO_PLAYER,
+				REDIRECT_TO_FILESYSTEM,
+				REDIRECT_TO_DB
+			};
+			constexpr static size_t OUTPUT_SIZE = LARGE_BUFSIZE+1;
+			descriptor_data(){ clear(); }
+			descriptor_data(queue_behaviour_enum_t queue_behaviour){ 
+				clear();
+				set_queue_behaviour(queue_behaviour);
+			}
+			~descriptor_data() = default;
+			operator bool() const {
+				return !!connected;
+			}
+			void clear(){ 
+				/* Clear out the entire struct */
+				descriptor = 0; bad_pws = 0; idle_tics = 0;
+				bufptr = 0;bufspace = 0;large_outbuf = nullptr; input = {};
+				character = nullptr; original = nullptr;
+				connected = 0; desc_num = 0;login_time = 0;showstr_head = 0;
+				showstr_vector = 0;showstr_count = 0;showstr_page = 0;str = 0;
+				max_str = 0;mail_to = 0;has_prompt = 0;
+				history_pos = 0;
+				has_output = false;
+				m_queue_behaviour = queue_behaviour_enum_t::NORMAL;
+				inbuf.clear();
+				last_input.clear();
+				small_outbuf.clear();
+				output.clear();
+				host.clear();
+			}
+			void set_queue_behaviour(queue_behaviour_enum_t queue_behaviour){ 
+				m_queue_behaviour = queue_behaviour;
+			}
+			queue_behaviour_enum_t get_queue_behaviour() const {
+				return m_queue_behaviour;
+			}
+			void set_state(int c) { connected = c; }
+			socket_t	descriptor;	/* file descriptor for socket		*/
+			mods::string host;		/* hostname				*/
+			byte	bad_pws;		/* number of bad pw attemps this login	*/
+			byte idle_tics;		/* tics idle at password prompt		*/
+			int bufptr;
+			int bufspace;
+			struct txt_block *large_outbuf; /* ptr to large buffer, if we need it */
+			struct txt_q input;             /* q of unprocessed input               */
+			char_data *character;    /** FIXME: turn to mods::player */
+			char_data *original;    /** FIXME: turn to mods::player */
+			int	connected;		/* mode of 'connectedness'		*/
+			int	desc_num;		/* unique num assigned to desc		*/
+			time_t login_time;		/* when the person connected		*/
+			char *showstr_head;		/* for keeping track of an internal str	*/
+			char **showstr_vector;	/* for paging through texts		*/
+			int  showstr_count;		/* number of pages to page through	*/
+			int  showstr_page;		/* which page are we currently showing?	*/
+			char	**str;			/* for the modify-str system		*/
+			size_t max_str;	        /*		-			*/
+			long	mail_to;		/* name for mail system			*/
+			int	has_prompt;		/* is the user at a prompt?             */
+			buffer_type_t inbuf;  /* buffer for raw input		*/
+			buffer_type_t last_input; /* the last input			*/
+			buffer_type_t small_outbuf;  /* standard output buffer		*/
+			history_type_t history;		/* History of commands, for ! mostly.	*/
+			history_pos_type_t history_pos;
+			std::shared_ptr<mods::descriptor_data> snooping; /* Who is this char snooping	*/
+			std::shared_ptr<mods::descriptor_data> snoop_by; /* And who is snooping this char	*/
+			bool has_output;
+			size_t queue_output(const std::string &s);
+			size_t flush_output();
+			private:
+			queue_behaviour_enum_t m_queue_behaviour;
+			std::string output;		/* ptr to the current output buffer	*/
+		};
+	};
+	struct char_data {
+		char_data(){
+			std::cout << "debug: [char_data] constructor\n";
+			init();	
+		};
+		~char_data() = default;
+		char_data(char_data* o);
+		void init();
+		int pfilepos;			 /* playerfile pos		  */
+		uuid_t uuid;
+		time_t last_fight_timestamp;			/* timestamp of the last time the user fought */
+		mob_rnum nr;                          /* Mob's rnum			  */
+		room_rnum in_room;                    /* Location (real room number)	  */
+		room_rnum was_in_room;		 /* location for linkdead people  */
+		int wait;				 /* wait for how many loops	  */
+		bool drone;
+		uuid_t drone_owner;
+		bool drone_simulate;
+		uuid_t drone_uuid;
+		char_player_data player;       /* Normal data                   */
+		char_ability_data real_abils;	 /* Abilities without modifiers   */
+		char_ability_data aff_abils;	 /* Abils with spells/stones/etc  */
+		char_point_data points;        /* Points                        */
+		char_special_data char_specials;	/* PC/NPC specials	  */
+		std::shared_ptr<player_special_data> player_specials; /* PC specials		  */
+		mob_special_data mob_specials;	/* NPC specials		  */
+
+		affected_type *affected;       /* affected by what spells       */
+		obj_data *equipment[NUM_WEARS];/* Equipment array               */
+
+		obj_data *carrying;            /* Head of list                  */
+		bool has_desc;
+		std::shared_ptr<mods::descriptor_data> desc;         /* NULL for mobiles              */
+
+		char_data *next_in_room;     /* For room->people - list         */
+		char_data *next;             /* For either monster or ppl-list  */
+		char_data *next_fighting;    /* For fighting list               */
+
+		follow_type *followers;        /* List of chars followers       */
+		char_data *master;             /* Who is char following?        */
+
+		std::shared_ptr<mods::player> player_ptr;
+		/**
+		 * The following will be deprecated
+		 */
+		goal_t goal;
+		short disorient;
+		ai_state_t state;
+
+		std::shared_ptr<builder_data_t> builder_data;
+	};
+	/* ====================================================================== */
+
+
+	/* ==================== File Structure for Player ======================= */
+	/*             BEWARE: Changing it will ruin the playerfile		  */
+	struct char_file_u {
+		/* char_player_data */
+		mods::string name;
+		mods::string description;
+		mods::string title;
+		byte sex;
+		byte chclass;
+		byte level;
+		sh_int hometown;
+		time_t birth;   /* Time of birth of character     */
+		int	played;    /* Number of secs played in total */
+		ubyte weight;
+		ubyte height;
+
+		char	pwd[MAX_PWD_LENGTH+1];    /* character's password */
+
+		struct char_special_data_saved char_specials_saved;
+		struct player_special_data_saved player_specials_saved;
+		struct char_ability_data abilities;
+		struct char_point_data points;
+		struct affected_type affected[MAX_AFFECT];
+
+		time_t last_logon;		/* Time (in secs) of last logon */
+		mods::string host;	/* host of last logon */
+	};
+	/* ====================================================================== */
+
+
+	/* descriptor-related structures ******************************************/
 
 
 
 
 
 
-/* other miscellaneous structures ***************************************/
+	/* other miscellaneous structures ***************************************/
 
 
-struct msg_type {
-	char	*attacker_msg;  /* message to attacker */
-	char	*victim_msg;    /* message to victim   */
-	char	*room_msg;      /* message to room     */
-};
+	struct msg_type {
+		char	*attacker_msg;  /* message to attacker */
+		char	*victim_msg;    /* message to victim   */
+		char	*room_msg;      /* message to room     */
+	};
 
 
-struct message_type {
-	struct msg_type die_msg;	/* messages when death			*/
-	struct msg_type miss_msg;	/* messages when miss			*/
-	struct msg_type hit_msg;	/* messages when hit			*/
-	struct msg_type god_msg;	/* messages when hit on god		*/
-	struct message_type *next;	/* to next messages of this kind.	*/
-};
+	struct message_type {
+		struct msg_type die_msg;	/* messages when death			*/
+		struct msg_type miss_msg;	/* messages when miss			*/
+		struct msg_type hit_msg;	/* messages when hit			*/
+		struct msg_type god_msg;	/* messages when hit on god		*/
+		struct message_type *next;	/* to next messages of this kind.	*/
+	};
 
 
-struct message_list {
-	int	a_type;			/* Attack type				*/
-	int	number_of_attacks;	/* How many attack messages to chose from. */
-	struct message_type *msg;	/* List of messages.			*/
-};
+	struct message_list {
+		int	a_type;			/* Attack type				*/
+		int	number_of_attacks;	/* How many attack messages to chose from. */
+		struct message_type *msg;	/* List of messages.			*/
+	};
 
 
-struct dex_skill_type {
-	sh_int p_pocket;
-	sh_int p_locks;
-	sh_int traps;
-	sh_int sneak;
-	sh_int hide;
-};
+	struct dex_skill_type {
+		sh_int p_pocket;
+		sh_int p_locks;
+		sh_int traps;
+		sh_int sneak;
+		sh_int hide;
+	};
 
 
-struct dex_app_type {
-	sh_int reaction;
-	sh_int miss_att;
-	sh_int defensive;
-};
+	struct dex_app_type {
+		sh_int reaction;
+		sh_int miss_att;
+		sh_int defensive;
+	};
 
 
-struct str_app_type {
-	sh_int tohit;    /* To Hit (THAC0) Bonus/Penalty        */
-	sh_int todam;    /* Damage Bonus/Penalty                */
-	sh_int carry_w;  /* Maximum weight that can be carrried */
-	sh_int wield_w;  /* Maximum weight that can be wielded  */
-};
+	struct str_app_type {
+		sh_int tohit;    /* To Hit (THAC0) Bonus/Penalty        */
+		sh_int todam;    /* Damage Bonus/Penalty                */
+		sh_int carry_w;  /* Maximum weight that can be carrried */
+		sh_int wield_w;  /* Maximum weight that can be wielded  */
+	};
 
 
-struct wis_app_type {
-	byte bonus;       /* how many practices player gains per lev */
-};
+	struct wis_app_type {
+		byte bonus;       /* how many practices player gains per lev */
+	};
 
 
-struct int_app_type {
-	byte learn;       /* how many % a player learns a spell/skill */
-};
+	struct int_app_type {
+		byte learn;       /* how many % a player learns a spell/skill */
+	};
 
 
-struct con_app_type {
-	sh_int hitp;
-	sh_int shock;
-};
+	struct con_app_type {
+		sh_int hitp;
+		sh_int shock;
+	};
 
 
-struct weather_data {
-	int	pressure;	/* How is the pressure ( Mb ) */
-	int	change;	/* How fast and what way does it change. */
-	int	sky;	/* How is the sky. */
-	int	sunlight;	/* And how much sun. */
-};
+	struct weather_data {
+		int	pressure;	/* How is the pressure ( Mb ) */
+		int	change;	/* How fast and what way does it change. */
+		int	sky;	/* How is the sky. */
+		int	sunlight;	/* And how much sun. */
+	};
 
 
-/*
- * Element in monster and object index-tables.
- *
- * NOTE: Assumes sizeof(mob_vnum) >= sizeof(obj_vnum)
- */
-struct index_data {
-	mob_vnum	vnum;	/* virtual number of this mob/obj		*/
-	int		number;	/* number of existing units of this mob/obj	*/
-	SPECIAL(*func);
-};
+	/*
+	 * Element in monster and object index-tables.
+	 *
+	 * NOTE: Assumes sizeof(mob_vnum) >= sizeof(obj_vnum)
+	 */
+	struct index_data {
+		mob_vnum	vnum;	/* virtual number of this mob/obj		*/
+		int		number;	/* number of existing units of this mob/obj	*/
+		SPECIAL(*func);
+	};
 
-struct guild_info_type {
-	int pc_class;
-	room_vnum guild_room;
-	int direction;
-};
+	struct guild_info_type {
+		int pc_class;
+		room_vnum guild_room;
+		int direction;
+	};
 
-typedef std::map<obj_vnum,obj_data*> map_object_list;
+	typedef std::map<obj_vnum,obj_data*> map_object_list;
 
 #endif
 

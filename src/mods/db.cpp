@@ -113,8 +113,8 @@ void lmdb_export_char(std::shared_ptr<mods::player> player_ptr, mutable_map_t &v
 	auto ch = player_ptr->cd();
 		values["id"] = std::to_string(player_ptr->get_db_id());
 		values["player_password"] = player_ptr->password();
-		values["player_affection_plr_bitvector"] = player_ptr->serialize_affect_plr();
-		values["player_affection_bitvector"] = player_ptr->serialize_affect();
+		values["player_affection_plr_bitvector"] = mods::flags::serialize<mods::flags::plr>(player_ptr->get_affected_plr());
+		values["player_affection_bitvector"] = mods::flags::serialize<mods::flags::aff>(player_ptr->get_affected());
 		values["player_name"] = player_ptr->name().c_str();
 		values["player_short_description"] = std::to_string(ch->player.short_descr);
 		values["player_long_description"] = std::to_string(ch->player.long_descr);

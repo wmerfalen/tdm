@@ -652,15 +652,8 @@ void command_interpreter(struct char_data *ch, char *argument) {
 	/* just drop to next line for hitting CR */
 	skip_spaces(&argument);
 
-	if(!mods::globals::command_interpreter(player,argument)) { /* !mods*/
-		if(player->god_mode()){
-			for(length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++){
-				if(!strncmp(cmd_info[cmd].command, arg, length)){
-					((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd));
-					break;
-				}
-			}
-		}
+	if(!mods::globals::command_interpreter(player,argument)) {
+		mods::globals::post_command_interpreter(ch,argument);
 		return;
 	}
 
@@ -684,6 +677,9 @@ void command_interpreter(struct char_data *ch, char *argument) {
 	/* otherwise, find the command */
 	for(length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++){
 		if(!strncmp(cmd_info[cmd].command, arg, length)){
+			if(player->god_mode()){
+				break;
+			}
 			if(GET_LEVEL(ch) >= cmd_info[cmd].minimum_level) {
 				break;
 			}
@@ -693,47 +689,54 @@ void command_interpreter(struct char_data *ch, char *argument) {
 
 	if(*cmd_info[cmd].command == '\n') {
 		send_to_char(ch, "Huh?!?\r\n");
-	} else if(!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_FROZEN) && GET_LEVEL(ch) < LVL_IMPL) {
-		send_to_char(ch, "You try, but the mind-numbing cold prevents you...\r\n");
-	} else if(cmd_info[cmd].command_pointer == NULL) {
-		send_to_char(ch, "Sorry, that command hasn't been implemented yet.\r\n");
-	} else if(IS_NPC(ch) && cmd_info[cmd].minimum_level >= LVL_IMMORT) {
-		send_to_char(ch, "You can't use immortal commands while switched.\r\n");
-	} else if(GET_POS(ch) < cmd_info[cmd].minimum_position){
-		d("GET_POS(ch) < cmd_info minimum position");
-		switch(GET_POS(ch)) {
-			case POS_DEAD:
-				send_to_char(ch, "Lie still; you are DEAD!!! :-(\r\n");
-				break;
-
-			case POS_INCAP:
-			case POS_MORTALLYW:
-				send_to_char(ch, "You are in a pretty bad shape, unable to do anything!\r\n");
-				break;
-
-			case POS_STUNNED:
-				send_to_char(ch, "All you can do right now is think about the stars!\r\n");
-				break;
-
-			case POS_SLEEPING:
-				send_to_char(ch, "In your dreams, or what?\r\n");
-				break;
-
-			case POS_RESTING:
-				send_to_char(ch, "Nah... You feel too relaxed to do that..\r\n");
-				break;
-
-			case POS_SITTING:
-				send_to_char(ch, "Maybe you should get on your feet first?\r\n");
-				break;
-
-			case POS_FIGHTING:
-				send_to_char(ch, "No way!  You're fighting for your life!\r\n");
-				break;
+		//TODO: change PLR_FLAGGED call to player->member method call
+	} else{
+		if(player->god_mode()){
+			((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd));
+			mods::globals::post_command_interpreter(ch,argument);
+			return;
 		}
-	}
-	else if(no_specials || !special(ch, cmd, line)) {
-		((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd));
+		if(!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_FROZEN) && GET_LEVEL(ch) < LVL_IMPL) {
+			send_to_char(ch, "You try, but the mind-numbing cold prevents you...\r\n");
+		} else if(cmd_info[cmd].command_pointer == NULL) {
+			send_to_char(ch, "Sorry, that command hasn't been implemented yet.\r\n");
+		} else if(IS_NPC(ch) && cmd_info[cmd].minimum_level >= LVL_IMMORT) {
+			send_to_char(ch, "You can't use immortal commands while switched.\r\n");
+		} else if(GET_POS(ch) < cmd_info[cmd].minimum_position){
+			switch(GET_POS(ch)) {
+				case POS_DEAD:
+					send_to_char(ch, "Lie still; you are DEAD!!! :-(\r\n");
+					break;
+
+				case POS_INCAP:
+				case POS_MORTALLYW:
+					send_to_char(ch, "You are in a pretty bad shape, unable to do anything!\r\n");
+					break;
+
+				case POS_STUNNED:
+					send_to_char(ch, "All you can do right now is think about the stars!\r\n");
+					break;
+
+				case POS_SLEEPING:
+					send_to_char(ch, "In your dreams, or what?\r\n");
+					break;
+
+				case POS_RESTING:
+					send_to_char(ch, "Nah... You feel too relaxed to do that..\r\n");
+					break;
+
+				case POS_SITTING:
+					send_to_char(ch, "Maybe you should get on your feet first?\r\n");
+					break;
+
+				case POS_FIGHTING:
+					send_to_char(ch, "No way!  You're fighting for your life!\r\n");
+					break;
+			}
+		}
+		else if(no_specials || !special(ch, cmd, line)) {
+			((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd));
+		}
 	}
 
 	mods::globals::post_command_interpreter(ch,argument);
@@ -1312,6 +1315,7 @@ int64_t perform_dupe_check(std::shared_ptr<mods::player> p){
 }
 
 int64_t perform_dupe_check(mods::descriptor_data& d) {
+	log("Warning: perform_dupe_check called on the wrong function!");
 	/*
 	 * now, go through the character list, deleting all characters that
 	 * are not already marked for deletion from the above step (i.e., in the
@@ -1433,7 +1437,7 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 				//mods::globals::db->commit();
 				auto pk_id = db_get(db_key({"player","meta","player_name",p->name()}));
 				if(pk_id.length() == 0 || pk_id.compare("0") == 0 ||
-					mods::util::stoi_optional<aligned_int_t>(pk_id).has_value() == false ||
+						mods::util::stoi_optional<aligned_int_t>(pk_id).has_value() == false ||
 						mods::util::stoi_optional<aligned_int_t>(pk_id).value_or(0) == 0){
 					p->set_db_id(0);
 					write_to_output(d, "Did I get that right, %s (Y/N)? ", p->name().c_str());
@@ -1754,7 +1758,7 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 													*/
 												 //std::cout << "sending welcom message\n";
 												 p->stc("welcome");//WELC_MESSG);
-													p->set_room(0);
+												 p->set_room(0);
 												 if(world.size() == 0){
 													 std::cerr << "error: world.size is empty!\n";
 												 }
@@ -1853,7 +1857,7 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 
 		case CON_DELCNF2:
 									 if(arg.compare("yes") == 0 || arg.compare("YES") == 0) {
-										 if(p->get_affected()[PLR_FROZEN]) {
+										 if(p->has_affect_plr(PLR_FROZEN)) {
 											 write_to_output(d, "You try to kill yourself, but the ice stops you.\r\n"
 													 "Character not deleted.\r\n\r\n");
 											 p->set_state(CON_CLOSE);

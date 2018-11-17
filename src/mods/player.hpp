@@ -7,8 +7,9 @@
 #include <vector>
 
 namespace mods {
-	class player;
+	struct player;
 };
+#include "flags.hpp"
 #include "classes/types.hpp"
 #include "classes/base.hpp"
 #include "classes/medic.hpp"
@@ -36,21 +37,6 @@ namespace mods {
 	};
 	class player {
 		public:
-			enum plr {
-					KILLER = 0,THIEF,FROZEN,DONTSET,
-					WRITING,MAILING,CRASH,SITEOK,
-					NOSHOUT,NOTITLE,DELETED,LOADROOM,
-					NOWIZLIST,INVSTART,CRYO,
-					__FIRST = KILLER,
-					__LAST = CRYO
-			};
-			enum aff {
-					BLIND = 0, INVISIBLE, DETECT_ALIGN, DETECT_INVIS, DETECT_MAGIC, SENSE_LIFE, WATERWALK,
-					SANCTUARY, GROUP, CURSE, INFRAVISION, POISON, PROTECT_EVIL, PROTECT_GOOD,
-					SLEEP, NOTRACK, UNUSED16, UNUSED17, SNEAK, HIDE,
-					__FIRST = BLIND,
-					__LAST = HIDE
-			};
 			using   class_type = mods::classes::types;
 			using 	descriptor_data_t = std::deque<descriptor_data>;
 			using 	descriptor_data_iterator_t = descriptor_data_t::iterator;
@@ -68,7 +54,6 @@ namespace mods {
 				MOB_MUTED_DESCRIPTOR,
 				DRONE_MUTED_DESCRIPTOR
 			};
-			enum player_flag
 
 
 			/* constructors and destructors */
@@ -144,57 +129,24 @@ namespace mods {
 			/**
 			 * @return returns the legacy AFF_ flag given the modern aff flag
 			 */
-			static inline int64_t aff2legacy(aff f){
-				for(unsigned i=0; i < AFF_FLAG_COUNT;i++){
-					if(all_aff_flags[i].first == f){
-						return all_aff_flags[i].second;
-					}
-				}
-				return 0;
-			}
-			static inline aff legacy2aff(int64_t f){
-				for(unsigned i=0; i < AFF_FLAG_COUNT;i++){
-					if(all_aff_flags[i].second == f){
-						return all_aff_flags[i].first;
-					}
-				}
-				return 0;
-			}
-			/**
-			 * @return returns the legacy PLR_ flag given the modern plr flag
-			 */
-			static inline int64_t plr2legacy(plr f){
-				for(unsigned i=0; i < PLR_FLAG_COUNT;i++){
-					if(all_plr_flags[i].first == f){
-						return all_plr_flags[i].second;
-					}
-				}
-				return 0;
-			}
-			static inline plr legacy2plr(int64_t f){
-				for(unsigned i=0; i < PLR_FLAG_COUNT;i++){
-					if(all_plr_flags[i].second == f){
-						return all_plr_flags[i].first;
-					}
-				}
-				return 0;
-			}
-			bool has_affect(int64_t flag) ;
-			void affect(int64_t flag);
-			void remove_affect(int64_t flag);
-			std::map<aff,bool> get_affected();
+			bool has_affect(uint64_t f);
+			bool has_affect(mods::flags::aff f);
+			void affect(uint64_t flag);
+			void affect(mods::flags::aff flag);
+			void remove_affect(uint64_t flag);
+			void remove_affect(mods::flags::aff flag);
+			const std::map<mods::flags::aff,bool>& get_affected();
 			void clear_all_affected();
-			void set_affect_by_serialized(std::string data);
-			std::string serialize_affect();
 
 			/** PLR_* Affects */
-			bool has_affect_plr(int64_t flag);
-			void affect_plr(int64_t flag);
-			void remove_affect_plr(int64_t flag);
-			std::map<int64_t,bool> get_affected_plr();
+			bool has_affect_plr(uint64_t flag);
+			bool has_affect_plr(mods::flags::plr flag);
+			void affect_plr(uint64_t flag);
+			void affect_plr(mods::flags::plr flag);
+			void remove_affect_plr(uint64_t flag);
+			void remove_affect_plr(mods::flags::plr flag);
+			const std::map<mods::flags::plr,bool>& get_affected_plr();
 			void clear_all_affected_plr();
-			void set_affect_plr_by_serialized(std::string data);
-			std::string serialize_affect_plr();
 
 			/** char_special_data_saved */
 			char_special_data& char_specials(){
@@ -368,7 +320,6 @@ namespace mods {
 			void                queue_page_fragment(std::string_view fragment) {
 				for(auto c : fragment) {
 					m_current_page_fragment += c;
-
 					if(c == '\n') {
 						m_pages.push_back(m_current_page_fragment);
 						m_current_page_fragment = "";
@@ -427,8 +378,11 @@ namespace mods {
 				return m_type;
 			}
 
+			/** TODO: call a CRM function. In fact, maybe don't even
+			 * store this deactivate_account() function on this 
+			 * object
+			 */
 			void deactivate_account();
-			std::string generic_serialize(std::map<int64_t,bool>* vals);
 		private: 
 			std::string m_password;
 			aligned_int_t m_db_id;
@@ -436,8 +390,8 @@ namespace mods {
 			bool m_god_mode;
 			bool m_imp_mode;
 			bool m_bui_mode;
-			std::map<int64_t,bool> m_affected;
-			std::map<int64_t,bool> m_affected_plr;
+			std::map<mods::flags::aff,bool> m_affected;
+			std::map<mods::flags::plr,bool> m_affected_plr;
 			std::shared_ptr<mods::descriptor_data> m_desc;
 			std::string	m_name;
 			class_capability_t m_class_capability;
@@ -461,5 +415,6 @@ namespace mods {
 };
 
 #include "util.hpp"
+
 
 #endif

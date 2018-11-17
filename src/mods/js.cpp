@@ -109,7 +109,9 @@ namespace mods {
 		static duk_ret_t send(duk_context *ctx) {
 			/* First parameter is character name */
 			std::string message = duk_to_string(ctx,0);
-			*mods::globals::current_player << message << "\r\n";
+			if(mods::globals::current_player){
+				*mods::globals::current_player << message << "\r\n";
+			}
 			duk_push_number(ctx,0);
 			return 0;
 		}

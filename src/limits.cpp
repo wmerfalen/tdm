@@ -18,6 +18,7 @@
 #include "comm.h"
 #include "db.h"
 #include "handler.h"
+#include "mods/loops.hpp"
 #include "interpreter.h"
 
 
@@ -463,13 +464,16 @@ ACMD(do_idle){
 
 /* Update PCs, NPCs, and objects */
 void point_update(void) {
-	struct char_data *i, *next_char;
 	struct obj_data *j, *jj, *next_thing2;
 
 	/* characters */
-	for(i = character_list; i; i = next_char) {
-		next_char = i->next;
-
+	mods::loops::foreach_all([&](char_data* ch) -> bool {
+			std::cerr << "foreach_all point update\n";
+			if(!ch){
+				log(std::string("foreach_all recieved null char_data ptr"));
+				return true;
+			}
+			auto i = ch;
 #ifdef ENABLE_MENTOC_HUNGRY__
 		gain_condition(i, FULL, -1);
 #endif
@@ -482,22 +486,22 @@ void point_update(void) {
 			GET_HIT(i) = MIN(GET_HIT(i) + hit_gain(i), GET_MAX_HIT(i));
 			GET_MANA(i) = MIN(GET_MANA(i) + mana_gain(i), GET_MAX_MANA(i));
 			GET_MOVE(i) = MIN(GET_MOVE(i) + move_gain(i), GET_MAX_MOVE(i));
-
-			if(AFF_FLAGGED(i, AFF_POISON))
+			if(AFF_FLAGGED(i, AFF_POISON)){
 				if(damage(i, i, 2, SPELL_POISON) == -1) {
-					continue;    /* Oops, they died. -gg 6/24/98 */
+					return true;    /* Oops, they died. -gg 6/24/98 */
 				}
+			}
 
 			if(GET_POS(i) <= POS_STUNNED) {
 				update_pos(i);
 			}
 		} else if(GET_POS(i) == POS_INCAP) {
 			if(damage(i, i, 1, TYPE_SUFFERING) == -1) {
-				continue;
+				return true;
 			}
 		} else if(GET_POS(i) == POS_MORTALLYW) {
 			if(damage(i, i, 2, TYPE_SUFFERING) == -1) {
-				continue;
+				return true;
 			}
 		}
 
@@ -510,7 +514,8 @@ void point_update(void) {
 				check_idling(player);
 			}
 		}
-	}
+		return true;
+	});
 
 	/* objects */
 	for(auto& obj_reference : object_list) {
@@ -552,5 +557,5 @@ void point_update(void) {
 				extract_obj(j);
 			}
 		}
-	}
+	}//end for object_list
 }

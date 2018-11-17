@@ -31,6 +31,7 @@
 #include "mods/lmdb.hpp"
 #include "mods/hell.hpp"
 #include "mods/meta_utils.hpp"
+#include "mods/flags.hpp"
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 
 /**************************************************************************
@@ -2347,8 +2348,17 @@ bool parse_sql_player(std::shared_ptr<mods::player> player_ptr){
 				player_ptr->cd()->player.chclass = mods::util::stoi<int>(row["player_class"]);
 				player_ptr->cd()->player.title.assign((row["player_title"]));
 				player_ptr->cd()->player.hometown = mods::util::stoi<int>(row["player_hometown"]);
-				player_ptr->set_affect_by_serialized(row["player_affection_bitvector"]);
-				player_ptr->set_affect_plr_by_serialized(row["player_affection_plr_bitvector"]);
+				player_ptr->clear_all_affected();
+				player_ptr->clear_all_affected_plr();
+				mods::flags::load<
+					std::shared_ptr<mods::player>,
+					mods::flags::aff>(
+					player_ptr,row["player_affection_bitvector"]
+				);
+				mods::flags::load<std::shared_ptr<mods::player>,
+					mods::flags::plr>(
+					player_ptr,row["player_affection_plr_bitvector"]
+				);
 				/** FIXME: if points aren't sane values, reset the character via the new points reset code */
 		}else{
 			std::cout << "info: no values returned for parse_sql_player by name: '" << player_ptr->name().c_str() << "'\n";

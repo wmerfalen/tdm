@@ -690,8 +690,8 @@ void game_loop(socket_t mother_desc) {
 	// add fd to reactor
 	epoll_ev.events = EPOLLIN; // new connection is a read event
 	epoll_ev.data.fd = mother_desc; // user data
-	int r = epoll_ctl (epoll_fd, EPOLL_CTL_ADD, mother_desc, &epoll_ev);
-	if (r == -1) {
+	int epoll_ctl_r = epoll_ctl (epoll_fd, EPOLL_CTL_ADD, mother_desc, &epoll_ev);
+	if (epoll_ctl_r == -1) {
 		log((std::string("SYSERR: [epoll] epoll_ctl failed: ")+strerror(errno)).c_str());
 					/** !fixme: do proper shutdown here */
 		close (epoll_fd);
@@ -704,8 +704,9 @@ void game_loop(socket_t mother_desc) {
 
 		epoll_event events[size];
 		constexpr int epoll_timeout = 5;	/* miliseconds */
-		int r = epoll_wait (epoll_fd, events, size, epoll_timeout);
-		if (r == -1) {
+
+		int epoll_wait_status = epoll_wait (epoll_fd, events, size, epoll_timeout);
+		if (epoll_wait_status == -1) {
 			std::cerr << "game_loop::epoll_wait[-1]->'" << strerror(errno) << "'\n";
 			continue;
 		}
@@ -713,7 +714,7 @@ void game_loop(socket_t mother_desc) {
 		int i = 0;
 		int new_desc = 0;
 		gettimeofday(&last_time, (struct timezone *) 0);
-		while (i < r) {
+		while (i < epoll_wait_status) {
 			new_desc = 0;
 			auto operating_socket = events[i].data.fd;
 			if (events[i].data.fd == mother_desc) {
@@ -721,8 +722,8 @@ void game_loop(socket_t mother_desc) {
 				operating_socket = new_desc;
 				epoll_ev.events = EPOLLIN; // new connection is a read event
 				epoll_ev.data.fd = new_desc; // user data
-				int r = epoll_ctl (epoll_fd, EPOLL_CTL_ADD, new_desc, &epoll_ev);
-				if (r == -1) {
+				int epoll_ctl_add_new = epoll_ctl (epoll_fd, EPOLL_CTL_ADD, new_desc, &epoll_ev);
+				if (epoll_ctl_add_new == -1) {
 					/** !fixme: de-reg and de-alloc player obj here -- remove from socket_map*/
 					log((std::string("SYSERR:[epoll] epoll_ctl failed: ") + strerror(errno)).c_str());
 					/** !fixme: do proper shutdown here */
@@ -733,13 +734,17 @@ void game_loop(socket_t mother_desc) {
 			}
 			auto it = mods::globals::socket_map.find(operating_socket);
 			if(it == mods::globals::socket_map.end()){
+				log(std::string("socket_map didn't have operating socket: "),std::to_string(operating_socket));
 				++i;
 				continue;
 			}
 			auto player = it->second;
+			mods::globals::current_player = player;
 
 			if(process_input(player->desc()) < 0){
+				log(std::string("process_input failed for player "), player->name().c_str()); 
 				mods::globals::socket_map.erase(it);
+				mods::globals::current_player.reset();
 				deregister_player(player);
 				++i;
 				continue;
@@ -828,7 +833,7 @@ void game_loop(socket_t mother_desc) {
 		/* Print prompts for other descriptors who had no other output */
 		for(auto & p : mods::globals::player_list) {
 			if(!p->desc().has_output && !p->desc().has_prompt){
-				write_to_descriptor(p->desc().descriptor, make_prompt(p->desc()));
+				*p << make_prompt(p->desc());
 				p->desc().has_prompt = true;
 			}
 		}
@@ -1432,37 +1437,6 @@ int process_output(mods::descriptor_data &in_t) {
  * and one for all other platforms.
  */
 
-#if defined(CIRCLE_WINDOWS)
-
-ssize_t perform_socket_write(socket_t desc, const char *txt, size_t length) {
-	ssize_t result;
-
-	result = send(desc, txt, length, 0);
-
-	if(result > 0) {
-		/* Write was sucessful */
-		return (result);
-	}
-
-	if(result == 0) {
-		/* This should never happen! */
-		log("SYSERR: Huh??  write() returned 0???  Please report this!");
-		return (-1);
-	}
-
-	/* result < 0: An error was encountered. */
-
-	/* Transient error? */
-	if(WSAGetLastError() == WSAEWOULDBLOCK || WSAGetLastError() == WSAEINTR) {
-		return (0);
-	}
-
-	/* Must be a fatal error. */
-	return (-1);
-}
-
-#else
-
 #if defined(CIRCLE_ACORN)
 #define write	socketwrite
 #endif
@@ -1506,19 +1480,10 @@ ssize_t perform_socket_write(socket_t desc, const char *txt, size_t length) {
 
 #endif
 
-#ifdef EDEADLK		/* Macintosh */
-
-	if(errno == EDEADLK) {
-		return (0);
-	}
-
-#endif
-
 	/* Looks like the error was fatal.  Too bad. */
 	return (-1);
 }
 
-#endif /* CIRCLE_WINDOWS */
 
 
 /*
@@ -1586,29 +1551,16 @@ ssize_t perform_socket_read(socket_t desc, char *read_point, size_t space_left) 
 	 * read returned a value < 0: there was an error
 	 */
 
-#if defined(CIRCLE_WINDOWS)	/* Windows */
-
-	if(WSAGetLastError() == WSAEWOULDBLOCK || WSAGetLastError() == WSAEINTR) {
-		return (0);
-	}
-
-#else
-
-#ifdef EINTR		/* Interrupted system call - various platforms */
 
 	if(errno == EINTR) {
 		return (0);
 	}
 
-#endif
-
-#ifdef EAGAIN		/* POSIX */
 
 	if(errno == EAGAIN) {
 		return (0);
 	}
 
-#endif
 
 #ifdef EWOULDBLOCK	/* BSD */
 
@@ -1618,23 +1570,10 @@ ssize_t perform_socket_read(socket_t desc, char *read_point, size_t space_left) 
 
 #endif /* EWOULDBLOCK */
 
-#ifdef EDEADLK		/* Macintosh */
-
-	if(errno == EDEADLK) {
-		return (0);
-	}
-
-#endif
-
-#ifdef ECONNRESET
 
 	if(errno == ECONNRESET) {
 		return (-1);
 	}
-
-#endif
-
-#endif /* CIRCLE_WINDOWS */
 
 	/*
 	 * We don't know what happened, cut them off. This qualifies for
@@ -2537,17 +2476,7 @@ int open_logfile(const char *filename, FILE *stderr_fp) {
 /*
  * This may not be pretty but it keeps game_loop() neater than if it was inline.
  */
-#if defined(CIRCLE_WINDOWS)
-
-void circle_sleep(struct timeval *timeout) {
-	Sleep(timeout->tv_sec * 1000 + timeout->tv_usec / 1000);
-}
-
-#else
-
 void circle_sleep(struct timeval *timeout) {
 	sleep(timeout->tv_sec);
 	usleep(timeout->tv_usec);
 }
-
-#endif /* CIRCLE_WINDOWS */

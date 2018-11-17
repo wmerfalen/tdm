@@ -24,6 +24,14 @@ namespace mods::loops {
 		}
 		return nullptr;
 	}
+	static inline void foreach_all(all_function_t func){
+		for(auto mob_ptr : mob_list){
+			if(!func(&mob_ptr)){ return; }
+		}
+		for(auto player_ptr : mods::globals::player_list){
+			if(!func(player_ptr->cd())){ return; }
+		}
+	}
 	void foreach_all_chars(all_function_t);
 };
 

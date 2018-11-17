@@ -16,6 +16,7 @@
 #include "mods/behaviour_tree_impl.hpp"
 #include "mods/util.hpp"
 #include "mods/pregame.hpp"
+#include "mods/loops.hpp"
 #include "mods/testing_index.hpp"
 
 extern int errno;
@@ -251,18 +252,24 @@ namespace mods {
 			}
 		}
 		void refresh_player_states() {
-			if(character_list) {
-				for(auto ptr = character_list; ptr->next; ptr = ptr->next) {
+			mods::loops::foreach_all([&](char_data* ptr) -> bool {
+					std::cerr << "[r";
+					if(!ptr){
+						return true;
+					}
 					if(states.find(ptr) == states.end()) {
 						states[ptr] = std::make_unique<mods::ai_state>(ptr,0,0);
 					}
-				}
-			}
+					return true;
+				});
+			std::cerr << "refreshed\n";
 		}
 		void pre_game_loop() {
 			std::cerr << "[event] Pre game loop\n";
 			refresh_player_states();
+			std::cerr << "[event] refreshed player states\n";
 			if(bootup_test_suite.length() > 0){
+				std::cerr << "booting suite: " << bootup_test_suite << "\n";
 				mods::pregame::boot_suite(bootup_test_suite);
 			}
 		}

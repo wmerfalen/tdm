@@ -11,6 +11,7 @@
 #include <chrono>
 #include <bitset>
 #include <algorithm>
+#include "util.hpp"
 /**
  * TODO: All these stc* functions need to be altered to accomodate
  * the new player_type_enum_t values. If output is to be muted, then
@@ -22,39 +23,6 @@
 extern void do_auto_exits(struct char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
 namespace mods {
-	constexpr static int64_t PLR_FLAG_COUNT = plr::__LAST + 1;
-	constexpr static int64_t AFF_FLAG_COUNT = aff::__LAST + 1;
-				const std::array<std::pair<mods::player::plr,int64_t>,PLR_FLAG_COUNT> all_plr_flags = {
-					{plr::KILLER,PLR_KILLER},{plr::THIEF,PLR_THIEF},{plr::FROZEN,PLR_FROZEN},{plr::DONTSET,PLR_DONTSET},
-					{plr::WRITING,PLR_WRITING},{plr::MAILING,PLR_MAILING},{plr::CRASH,PLR_CRASH},{plr::SITEOK,PLR_SITEOK},
-					{plr::NOSHOUT,PLR_NOSHOUT},{plr::NOTITLE,PLR_NOTITLE},{plr::DELETED,PLR_DELETED},{plr::LOADROOM,PLR_LOADROOM},
-					{plr::NOWIZLIST,PLR_NOWIZLIST},{plr::INVSTART,PLR_INVSTART},{plr::CRYO,PLR_CRYO},
-					{plr::NOTDEADYET,PLR_NOTDEADYET}
-				};
-				const std::array<int64_t,AFF_FLAG_COUNT> all_aff_flags = {
-{aff::BLIND,AFF_BLIND},
- {aff::INVISIBLE,AFF_INVISIBLE},
- {aff::DETECT_ALIGN,AFF_DETECT_ALIGN},
- {aff::DETECT_INVIS,AFF_DETECT_INVIS},
- {aff::DETECT_MAGIC,AFF_DETECT_MAGIC},
- {aff::SENSE_LIFE,AFF_SENSE_LIFE},
- {aff::WATERWALK,AFF_WATERWALK},
-{aff::SANCTUARY,AFF_SANCTUARY},
- {aff::GROUP,AFF_GROUP},
- {aff::CURSE,AFF_CURSE},
- {aff::INFRAVISION,AFF_INFRAVISION},
- {aff::POISON,AFF_POISON},
- {aff::PROTECT_EVIL,AFF_PROTECT_EVIL},
- {aff::PROTECT_GOOD,AFF_PROTECT_GOOD},
-{aff::SLEEP,AFF_SLEEP},
- {aff::NOTRACK,AFF_NOTRACK},
- {aff::UNUSED16,AFF_UNUSED16},
- {aff::UNUSED17,AFF_UNUSED17},
- {aff::SNEAK,AFF_SNEAK},
- {aff::HIDE,AFF_HIDE},
-{aff::UNUSED20,AFF_UNUSED20},
-{aff::CHARM,AFF_CHARM}
-				};
 	std::string just_color_evaluation(std::string final_buffer) {
 		final_buffer = mods::globals::replace_all(final_buffer,"{grn}","\033[32m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{red}","\033[31m");
@@ -656,75 +624,141 @@ namespace mods {
 					return *m_desc;
 				}
 			}
-			void player::affect(int64_t flag){
-				SET_BIT(AFF_FLAGS(cd()), flag);
-			}
 
-			void player::remove_affect(int64_t flag){
+
+			/**
+			 * =========================
+			 * =========================
+			 * =========================
+			 * Affect flag manipulation
+			 * =========================
+			 * =========================
+			 * =========================
+			 *
+			 */
+			void player::affect(uint64_t flag){
+				SET_BIT(AFF_FLAGS(cd()), flag);
+				m_affected[mods::util::legacy2aff(flag)] = true;
+			}
+			void player::affect(mods::flags::aff flag){
+				SET_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
+				m_affected[flag] = true;
+			}
+			void player::remove_affect(uint64_t flag){
 				REMOVE_BIT(AFF_FLAGS(cd()), flag);
+				m_affected[mods::util::legacy2aff(flag)] = false;
+			}
+			void player::remove_affect(mods::flags::aff flag){
+				REMOVE_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
+				m_affected[flag] = false;
 			}
 			void player::clear_all_affected(){
 				for(auto &pair : this->get_affected()){
 					this->remove_affect(pair.first);
 				}
 			}
-			std::map<aff,bool> player::get_affected(){
-m_affected[aff::BLIND] = IS_SET(AFF_FLAGS(cd()),AFF_BLIND);
-m_affected[aff::INVISIBLE] = IS_SET(AFF_FLAGS(cd()),AFF_INVISIBLE);
-m_affected[aff::DETECT_ALIGN] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_ALIGN);
-m_affected[aff::DETECT_INVIS] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_INVIS);
-m_affected[aff::DETECT_MAGIC] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_MAGIC);
-m_affected[aff::SENSE_LIFE] = IS_SET(AFF_FLAGS(cd()),AFF_SENSE_LIFE);
-m_affected[aff::WATERWALK] = IS_SET(AFF_FLAGS(cd()),AFF_WATERWALK);
-m_affected[aff::SANCTUARY] = IS_SET(AFF_FLAGS(cd()),AFF_SANCTUARY);
-m_affected[aff::GROUP] = IS_SET(AFF_FLAGS(cd()),AFF_GROUP);
-m_affected[aff::CURSE] = IS_SET(AFF_FLAGS(cd()),AFF_CURSE);
-m_affected[aff::INFRAVISION] = IS_SET(AFF_FLAGS(cd()),AFF_INFRAVISION);
-m_affected[aff::POISON] = IS_SET(AFF_FLAGS(cd()),AFF_POISON);
-m_affected[aff::PROTECT_EVIL] = IS_SET(AFF_FLAGS(cd()),AFF_PROTECT_EVIL);
-m_affected[aff::PROTECT_GOOD] = IS_SET(AFF_FLAGS(cd()),AFF_PROTECT_GOOD);
-m_affected[aff::SLEEP] = IS_SET(AFF_FLAGS(cd()),AFF_SLEEP);
-m_affected[aff::NOTRACK] = IS_SET(AFF_FLAGS(cd()),AFF_NOTRACK);
-m_affected[aff::UNUSED16] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED16);
-m_affected[aff::UNUSED17] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED17);
-m_affected[aff::SNEAK] = IS_SET(AFF_FLAGS(cd()),AFF_SNEAK);
-m_affected[aff::HIDE] = IS_SET(AFF_FLAGS(cd()),AFF_HIDE);
-m_affected[aff::UNUSED20] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED20);
-m_affected[aff::CHARM] = IS_SET(AFF_FLAGS(cd()),AFF_CHARM);
+			const std::map<mods::flags::aff,bool>& player::get_affected(){
+m_affected[mods::flags::aff::BLIND] = IS_SET(AFF_FLAGS(cd()),AFF_BLIND);
+m_affected[mods::flags::aff::INVISIBLE] = IS_SET(AFF_FLAGS(cd()),AFF_INVISIBLE);
+m_affected[mods::flags::aff::DETECT_ALIGN] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_ALIGN);
+m_affected[mods::flags::aff::DETECT_INVIS] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_INVIS);
+m_affected[mods::flags::aff::DETECT_MAGIC] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_MAGIC);
+m_affected[mods::flags::aff::SENSE_LIFE] = IS_SET(AFF_FLAGS(cd()),AFF_SENSE_LIFE);
+m_affected[mods::flags::aff::WATERWALK] = IS_SET(AFF_FLAGS(cd()),AFF_WATERWALK);
+m_affected[mods::flags::aff::SANCTUARY] = IS_SET(AFF_FLAGS(cd()),AFF_SANCTUARY);
+m_affected[mods::flags::aff::GROUP] = IS_SET(AFF_FLAGS(cd()),AFF_GROUP);
+m_affected[mods::flags::aff::CURSE] = IS_SET(AFF_FLAGS(cd()),AFF_CURSE);
+m_affected[mods::flags::aff::INFRAVISION] = IS_SET(AFF_FLAGS(cd()),AFF_INFRAVISION);
+m_affected[mods::flags::aff::POISON] = IS_SET(AFF_FLAGS(cd()),AFF_POISON);
+m_affected[mods::flags::aff::PROTECT_EVIL] = IS_SET(AFF_FLAGS(cd()),AFF_PROTECT_EVIL);
+m_affected[mods::flags::aff::PROTECT_GOOD] = IS_SET(AFF_FLAGS(cd()),AFF_PROTECT_GOOD);
+m_affected[mods::flags::aff::SLEEP] = IS_SET(AFF_FLAGS(cd()),AFF_SLEEP);
+m_affected[mods::flags::aff::NOTRACK] = IS_SET(AFF_FLAGS(cd()),AFF_NOTRACK);
+m_affected[mods::flags::aff::UNUSED16] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED16);
+m_affected[mods::flags::aff::UNUSED17] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED17);
+m_affected[mods::flags::aff::SNEAK] = IS_SET(AFF_FLAGS(cd()),AFF_SNEAK);
+m_affected[mods::flags::aff::HIDE] = IS_SET(AFF_FLAGS(cd()),AFF_HIDE);
+m_affected[mods::flags::aff::CHARM] = IS_SET(AFF_FLAGS(cd()),AFF_CHARM);
 return m_affected;
 			}
-			void player::affect_plr(int64_t flag){
+			/**
+			 * =============================
+			 * =============================
+			 * =============================
+			 * PLR Affect flag manipulation
+			 * =============================
+			 * =============================
+			 * =============================
+			 *
+			 */
+			void player::affect_plr(uint64_t flag){
 				SET_BIT(PLR_FLAGS(cd()), flag);
+				m_affected_plr[mods::util::legacy2plr(flag)] = true;
 			}
-
-			void player::remove_affect_plr(int64_t flag){
+			void player::affect_plr(mods::flags::plr flag){
+				SET_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
+				m_affected_plr[flag] = true;
+			}
+			void player::remove_affect_plr(uint64_t flag){
 				REMOVE_BIT(PLR_FLAGS(cd()), flag);
+				m_affected_plr[mods::util::legacy2plr(flag)] = false;
+			}
+			void player::remove_affect_plr(mods::flags::plr flag){
+				REMOVE_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
+				m_affected_plr[flag] = false;
 			}
 			void player::clear_all_affected_plr(){
 				for(auto &pair : this->get_affected_plr()){
 					this->remove_affect_plr(pair.first);
 				}
 			}
-			std::map<int64_t,bool> player::get_affected_plr(){
-m_affected_plr[plr::KILLER] = IS_SET(PLR_FLAGS(cd()),PLR_KILLER);
-m_affected_plr[plr::THIEF] = IS_SET(PLR_FLAGS(cd()),PLR_THIEF);
-m_affected_plr[plr::FROZEN] = IS_SET(PLR_FLAGS(cd()),PLR_FROZEN);
-m_affected_plr[plr::DONTSET] = IS_SET(PLR_FLAGS(cd()),PLR_DONTSET);
-m_affected_plr[plr::WRITING] = IS_SET(PLR_FLAGS(cd()),PLR_WRITING);
-m_affected_plr[plr::MAILING] = IS_SET(PLR_FLAGS(cd()),PLR_MAILING);
-m_affected_plr[plr::CRASH] = IS_SET(PLR_FLAGS(cd()),PLR_CRASH);
-m_affected_plr[plr::SITEOK] = IS_SET(PLR_FLAGS(cd()),PLR_SITEOK);
-m_affected_plr[plr::NOSHOUT] = IS_SET(PLR_FLAGS(cd()),PLR_NOSHOUT);
-m_affected_plr[plr::NOTITLE] = IS_SET(PLR_FLAGS(cd()),PLR_NOTITLE);
-m_affected_plr[plr::DELETED] = IS_SET(PLR_FLAGS(cd()),PLR_DELETED);
-m_affected_plr[plr::LOADROOM] = IS_SET(PLR_FLAGS(cd()),PLR_LOADROOM);
-m_affected_plr[plr::NOWIZLIST] = IS_SET(PLR_FLAGS(cd()),PLR_NOWIZLIST);
-m_affected_plr[plr::NODELETE] = IS_SET(PLR_FLAGS(cd()),PLR_NODELETE);
-m_affected_plr[plr::INVSTART] = IS_SET(PLR_FLAGS(cd()),PLR_INVSTART);
-m_affected_plr[plr::CRYO] = IS_SET(PLR_FLAGS(cd()),PLR_CRYO);
-m_affected_plr[plr::NOTDEADYET] = IS_SET(PLR_FLAGS(cd()),PLR_NOTDEADYET);
+			const std::map<mods::flags::plr,bool>& player::get_affected_plr(){
+m_affected_plr[mods::flags::plr::KILLER] = IS_SET(PLR_FLAGS(cd()),PLR_KILLER);
+m_affected_plr[mods::flags::plr::THIEF] = IS_SET(PLR_FLAGS(cd()),PLR_THIEF);
+m_affected_plr[mods::flags::plr::FROZEN] = IS_SET(PLR_FLAGS(cd()),PLR_FROZEN);
+m_affected_plr[mods::flags::plr::DONTSET] = IS_SET(PLR_FLAGS(cd()),PLR_DONTSET);
+m_affected_plr[mods::flags::plr::WRITING] = IS_SET(PLR_FLAGS(cd()),PLR_WRITING);
+m_affected_plr[mods::flags::plr::MAILING] = IS_SET(PLR_FLAGS(cd()),PLR_MAILING);
+m_affected_plr[mods::flags::plr::CRASH] = IS_SET(PLR_FLAGS(cd()),PLR_CRASH);
+m_affected_plr[mods::flags::plr::SITEOK] = IS_SET(PLR_FLAGS(cd()),PLR_SITEOK);
+m_affected_plr[mods::flags::plr::NOSHOUT] = IS_SET(PLR_FLAGS(cd()),PLR_NOSHOUT);
+m_affected_plr[mods::flags::plr::NOTITLE] = IS_SET(PLR_FLAGS(cd()),PLR_NOTITLE);
+m_affected_plr[mods::flags::plr::DELETED] = IS_SET(PLR_FLAGS(cd()),PLR_DELETED);
+m_affected_plr[mods::flags::plr::LOADROOM] = IS_SET(PLR_FLAGS(cd()),PLR_LOADROOM);
+m_affected_plr[mods::flags::plr::NOWIZLIST] = IS_SET(PLR_FLAGS(cd()),PLR_NOWIZLIST);
+m_affected_plr[mods::flags::plr::NODELETE] = IS_SET(PLR_FLAGS(cd()),PLR_NODELETE);
+m_affected_plr[mods::flags::plr::INVSTART] = IS_SET(PLR_FLAGS(cd()),PLR_INVSTART);
+m_affected_plr[mods::flags::plr::CRYO] = IS_SET(PLR_FLAGS(cd()),PLR_CRYO);
+m_affected_plr[mods::flags::plr::NOTDEADYET] = IS_SET(PLR_FLAGS(cd()),PLR_NOTDEADYET);
 				return m_affected_plr;
 			}
+
+			bool player::has_affect(uint64_t flag){
+				return m_affected[mods::util::legacy2aff(flag)];
+			}
+			bool player::has_affect(mods::flags::aff flag){
+				return m_affected[flag];
+			}
+			bool player::has_affect_plr(uint64_t flag) {
+				return m_affected_plr[mods::util::legacy2plr(flag)];
+			}
+			bool player::has_affect_plr(mods::flags::plr flag) {
+				return m_affected_plr[flag];
+			}
+
+			/**
+			 * ======================
+			 * ======================
+			 * ======================
+			 * END FLAG MANIPULATIONS
+			 * ======================
+			 * ======================
+			 * ======================
+			 *
+			 */
+
+
+
 
 			bool player::god_mode() const{
 				return m_god_mode;
@@ -862,70 +896,7 @@ m_affected_plr[plr::NOTDEADYET] = IS_SET(PLR_FLAGS(cd()),PLR_NOTDEADYET);
 				return this->cd()->player.time.played;
 			}
 
-			/** PLR_* Affects */
-			void player::set_affect_by_serialized(std::string data){
-				std::vector<aligned_int_t> buffer;
-				std::copy(data.begin(),data.end(),buffer.begin());
-				this->clear_all_affected();
-				for(unsigned i =0; i < buffer.size(); ++i){
-					for(auto &[flag,legacy_flag] : mods::all_aff_flags){
-						if(std::find(buffer.begin(),buffer.end(),flag) != buffer.end()){
-							this->affect(legacy_flag);
-						}else{
-							this->remove_affect(legacy_flag);
-						}
-					}
-				}
-			}
-			std::string player::generic_serialize(std::map<uint64_t,bool>* vals){
-				std::vector<uint64_t> buffer;
-				for(auto &[flag,status] : *vals){
-					if(status){
-						buffer.emplace_back(flag);
-					}
-				}
-				if(buffer.size() == 0){
-					return "";
-				}
-				std::string serialized;
-				serialized.resize(buffer.size() * sizeof(uint64_t));
-				std::fill(serialized.begin(),serialize.end(),0);
-				std::copy(buffer.begin(),buffer.end(),serialized.begin());
-				return serialized;
-			}
-
-			/** PLR_* Affects */
-			std::string player::serialize_affect(){
-				auto f= this->get_affected();
-				return this->generic_serialize(static_cast<std::map<uint64_t,bool>*>(&f));
-			}
-			std::string player::serialize_affect_plr(){
-				auto f= this->get_affected_plr();
-				return this->generic_serialize(static_cast<std::map<uint64_t,bool>*>(&f));
-			}
-
-			/** PLR_* Affects */
-			void player::set_affect_plr_by_serialized(std::string data){
-				std::vector<aligned_int_t> buffer;
-				std::copy(data.begin(),data.end(),buffer.begin());
-				this->clear_all_affected_plr();
-				for(unsigned i =0; i < buffer.size(); ++i){
-					for(auto &[flag,legacy_flag] : mods::all_plr_flags){
-						if(std::find(buffer.begin(),buffer.end(),flag) != buffer.end()){
-							this->affect_plr(legacy_flag);
-						}else{
-							this->remove_affect_plr(legacy_flag);
-						}
-					}
-				}
-			}
-
-			bool player::has_affect(uint64_t flag){
-				return get_affected()[flag];
-			}
-			bool player::has_affect_plr(uint64_t flag) {
-				return get_affected_plr()[flag];
-			}
+			/**  Affects */
 			void player::set_socket(socket_t d){
 				this->desc().descriptor = d;
 				this->cd()->desc->descriptor = d;
