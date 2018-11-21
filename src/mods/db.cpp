@@ -20,6 +20,7 @@ aligned_int_t save_record_get_id(
 aligned_int_t initialize_row(
 		const std::string& table){
 	auto ptr_db = mods::globals::db.get();
+	ptr_db->renew_txn();
 	std::string id_list = "";
 	id_list = db_get(db_key({table,"id_list"}));
 	std::cout << "id_list: '" << id_list << "' .size(): " << id_list.length() << "\n";
@@ -67,6 +68,7 @@ tuple_status_t new_record(const std::string& table,mutable_map_t* values){
 }
 
 tuple_status_t save_record(const std::string& table,mutable_map_t* values,std::string pk_id){
+	mods::globals::db->renew_txn();
 	for(auto & meta_key : mods::meta_utils::get_all_meta_values(table,values)){
 		std::cout << "debug: save_record. Putting: '" << meta_key << " as '" << pk_id << "'\n";
 		db_put(meta_key,pk_id);
@@ -102,6 +104,7 @@ tuple_status_t save_new_char(
 tuple_status_t lmdb_write_values(
 		const std::string& table,
 		mutable_map_t* values,std::string pk_id){
+	mods::globals::db->renew_txn();
 	for(auto & [key,value] : *values){
 		 db_put(db_key({table,key,pk_id}),value);
 	}

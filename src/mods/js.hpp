@@ -30,6 +30,7 @@ namespace mods {
 		void contextual_eval_string(char_data * player,duk_context* ctx,const std::string& str);
 		void load_base_functions(duk_context *ctx);
 		void load_c_require_functions(duk_context *ctx);
+		void load_scaffolding_functions();
 		void run_profile_scripts(std::string_view);
 		bool run_test_suite(mods::player& player,std::string_view suite);
 		struct include {

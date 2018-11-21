@@ -241,28 +241,6 @@ void deregister_player(std::shared_ptr<mods::player> & player_obj){
  *  main game loop and related stuff                                    *
  ***********************************************************************/
 
-#if defined(CIRCLE_WINDOWS) || defined(CIRCLE_MACINTOSH)
-
-/*
- * Windows doesn't have gettimeofday, so we'll simulate it.
- * The Mac doesn't have gettimeofday either.
- * Borland C++ warns: "Undefined structure 'timezone'"
- */
-void gettimeofday(struct timeval *t, struct timezone *dummy) {
-#if defined(CIRCLE_WINDOWS)
-	DWORD millisec = GetTickCount();
-#elif defined(CIRCLE_MACINTOSH)
-	unsigned long int millisec;
-	millisec = (int)((float)TickCount() * 1000.0 / 60.0);
-#endif
-
-	t->tv_sec = (int)(millisec / 1000);
-	t->tv_usec = (millisec % 1000) * 1000;
-}
-
-#endif	/* CIRCLE_WINDOWS || CIRCLE_MACINTOSH */
-
-
 int main(int argc, char **argv) {
 	mods::globals::init(argc,argv);
 	ush_int port;
@@ -271,16 +249,6 @@ int main(int argc, char **argv) {
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 	mtrace();	/* This must come before any use of malloc(). */
-#endif
-
-#ifdef CIRCLE_MACINTOSH
-	/*
-	 * ccommand() calls the command line/io redirection dialog box from
-	 * Codewarriors's SIOUX library
-	 */
-	argc = ccommand(&argv);
-	/* Initialize the GUSI library calls.  */
-	GUSIDefaultSetup();
 #endif
 
 	port = DFLT_PORT;
@@ -718,6 +686,7 @@ void game_loop(socket_t mother_desc) {
 			new_desc = 0;
 			auto operating_socket = events[i].data.fd;
 			if (events[i].data.fd == mother_desc) {
+				d("new descriptor");
 				new_desc = new_descriptor(mother_desc);
 				operating_socket = new_desc;
 				epoll_ev.events = EPOLLIN; // new connection is a read event
@@ -1336,6 +1305,7 @@ int new_descriptor(socket_t s) {
 	}
 
 	/* keep it from blocking */
+	d("Setting nonblocking");
 	nonblock(desc);
 
 	/* set the send buffer size */
@@ -1352,6 +1322,7 @@ int new_descriptor(socket_t s) {
 		return (0);
 	}
 
+	d("creating new player");
 	auto player = mods::globals::player_list.emplace_back(std::make_shared<mods::player>());
 	player->set_socket(desc);
 	/* find the sitename */
@@ -1367,13 +1338,16 @@ int new_descriptor(socket_t s) {
 		player->set_host(from->h_name);
 	}
 
+	d("player host:" << player->host().c_str());
 	/* determine if the site is banned */
 	if(isbanned(player->host().c_str())) {
+		d("player is banned");
 		destroy_socket(desc);
 		mudlog(CMP, LVL_GOD, TRUE, "Connection attempt denied from [%s]", player->desc().host.c_str());
 		deregister_player(player);
 		return (0);
 	}else{
+		d("new connection");
 		log("new connection");
 
 		/* initialize descriptor data */
