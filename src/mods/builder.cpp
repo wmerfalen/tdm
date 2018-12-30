@@ -12,7 +12,7 @@
 #include "../db.h"
 #include "../globals.hpp"
 #include "jx.hpp"
-
+namespace mods {  struct player; };
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
 #define MENTOC_OBI2(i,a) obj->i = get_intval(#a).value_or(obj->i);
 #define MENTOC_OBS(i) obj->i = get_strval(#i).value_or(obj->i);
@@ -197,20 +197,20 @@ namespace mods::builder {
 			{ITEM_WEAR_HOLD,"HOLD"}
 		}
 	};
-	std::optional<object_data*> instantiate_object_by_index(int index) {
+	std::optional<obj_data*> instantiate_object_by_index(int index) {
 		std::size_t i = index;
 
-		if(i >= object_proto.size()) {
+		if(i >= obj_proto.size()) {
 			return std::nullopt;
 		}
 
-		object_list.push_back(object_proto[index]);
+		object_list.push_back(obj_proto[index]);
 		return &(*(object_list.end()-1));
 	}
-	std::optional<object_data*> instantiate_object_by_vnum(object_vnum vnum) {
-		object_data* obj;
+	std::optional<obj_data*> instantiate_object_by_vnum(obj_vnum vnum) {
+		obj_data* obj;
 
-		for(auto& object_reference : object_proto) {
+		for(auto& object_reference : obj_proto) {
 			if(object_reference.item_number == vnum) {
 				obj = &object_reference;
 				object_list.push_back(object_reference);
@@ -221,36 +221,35 @@ namespace mods::builder {
 		return std::nullopt;
 	}
 
-	inline void initialize_builder(char_data* player){
+	inline void initialize_builder(std::shared_ptr<mods::player> player){
 		if(!player->builder_data){
 			player->builder_data = std::make_shared<builder_data_t>();
 		}
 	}
-	void pave_to(char_data* ch,room_data * current_room,int direction) {
-		MENTOC_PREAMBLE();
-		initialize_builder(ch);
+	void pave_to(std::shared_ptr<mods::player> player,room_data * current_room,int direction) {
+		initialize_builder(player);
 		mods::builder::report_status<shrd_ptr_player_t>(player,std::string("start_room: ") + std::to_string(
-		                                                    ch->builder_data->room_pavements.start_room)
+		                                                    player->builder_data->room_pavements.start_room)
 		                                               );
-		mods::builder::new_room(ch,direction);
-		ch->builder_data->room_pavements.rooms.push_back(world.size()-1);
+		mods::builder::new_room(*player,direction);
+		player->builder_data->room_pavements.rooms.push_back(world.size()-1);
 		auto created_room = world.end()- 1;
-		created_room->number = ch->builder_data->room_pavements.start_room + ch->builder_data->room_pavements.current_room_number;
-		created_room->zone = ch->builder_data->room_pavements.zone_id;
+		created_room->number = player->builder_data->room_pavements.start_room + player->builder_data->room_pavements.current_room_number;
+		created_room->zone = player->builder_data->room_pavements.zone_id;
 
-		if(!create_direction(IN_ROOM(ch),direction,world.size() -1)) {
+		if(!create_direction(player->room(),direction,world.size() -1)) {
 			mods::builder::report_error<shrd_ptr_player_t>(player,"Couldn't create direction to that room!");
 			return;
 		}
 
-		if(!create_direction(world.size()-1,OPPOSITE_DIR(direction),IN_ROOM(ch))) {
+		if(!create_direction(world.size()-1,OPPOSITE_DIR(direction),player->room())) {
 			mods::builder::report_error<shrd_ptr_player_t>(player,"Couldn't create bind-back direction to that room!");
 			return;
 		}
 
-		world[world.size()-1].dir_option[OPPOSITE_DIR(direction)]->general_description = strdup(world[IN_ROOM(ch)].name);
+		world[world.size()-1].dir_option[OPPOSITE_DIR(direction)]->general_description = strdup(world[player->room()].name);
 		world[world.size()-1].dir_option[OPPOSITE_DIR(direction)]->keyword = strdup("door");
-		ch->builder_data->room_pavements.current_room_number++;
+		player->builder_data->room_pavements.current_room_number++;
 		mods::builder::report_status<shrd_ptr_player_t>(player,"Paved room to that direction");
 	}
 
@@ -262,9 +261,9 @@ namespace mods::builder {
 		}
 
 		try {
-			auto txn = txn();
-			mods::pq::exec(txn,std::string("DELETE FROM zone_data where zone_id=") + txn.quote(zone_table[zone_id].number));
-			mods::pq::commit(txn);
+			auto t = txn();
+			mods::pq::exec(t,std::string("DELETE FROM zone_data where zone_id=") + t.quote(zone_table[zone_id].number));
+			mods::pq::commit(t);
 
 			for(unsigned i = 0; i < zone_table[zone_id].cmd.size(); i++) {
 				auto txn2 = txn();
@@ -290,13 +289,26 @@ namespace mods::builder {
 		return {true,"Saved all zone commands successfully"};
 	}
 	bool save_zone_to_db(std::string_view name,int room_start,int room_end,int lifespan,int reset_mode) {
-		return db_insert("zone", {
-				{"zone_start",std::to_string(room_start)},
-				{"zone_end",std::to_string(room_end)},
-				{"zone_name",name.data()},
-				{"lifespan",std::to_string(lifespan)},
-				{"reset_mode",std::to_string(reset_mode)}
-			});
+		try{
+		auto txn2 = txn();
+		sql_compositor comp("room_direction_data",&txn2);
+		auto sql = comp
+			.insert()
+			.into("zone")
+			.values({
+					{"zone_start",std::to_string(room_start)},
+					{"zone_end",std::to_string(room_end)},
+					{"zone_name",name.data()},
+					{"lifespan",std::to_string(lifespan)},
+					{"reset_mode",std::to_string(reset_mode)}})
+		.sql();
+		mods::pq::exec(txn2,sql);
+		mods::pq::commit(txn2);
+		}catch(std::exception& e){
+			std::cerr << "Exception with save_zone_to_db: " << e.what() << "\n";
+			return false;
+		}
+		return true;
 	}
 	int save_to_db(room_rnum in_room) {
 		auto world_top = mods::globals::room_list.size();
@@ -314,99 +326,123 @@ namespace mods::builder {
 			return mods::builder::ROOM_DESC_EMPTY;
 		}
 
-			values["zone"] = std::to_string(world[in_room].zone);
-			values["sector_type"] = std::to_string(world[in_room].sector_type);
-			values["name"] = world[in_room].name.c_str();
-			values["description"] = world[in_room].description.c_str();
-			values["room_number"] = std::to_string(world[in_room].number);
+		std::map<std::string,std::string> values;
+		values["zone"] = std::to_string(world[in_room].zone);
+		values["sector_type"] = std::to_string(world[in_room].sector_type);
+		values["name"] = world[in_room].name.c_str();
+		values["description"] = world[in_room].description.c_str();
+		values["room_number"] = std::to_string(world[in_room].number);
 
-			if(world[in_room].ex_description && world[in_room].ex_description->keyword) {
-				values["ex_keyword"] = (world[in_room].ex_description->keyword);
+		if(world[in_room].ex_description && world[in_room].ex_description->keyword) {
+			values["ex_keyword"] = (world[in_room].ex_description->keyword);
+		}
+
+		if(world[in_room].ex_description && world[in_room].ex_description->description) {
+			values["ex_description"] = (world[in_room].ex_description->description);
+		}
+
+		std::array<char,16> num;
+		std::fill(num.begin(),num.end(),0);
+		sprintf(&num[0],"%d",world[in_room].light);
+		values["light"] = &num[0];
+		std::fill(num.begin(),num.end(),0);
+		sprintf(&num[0],"%d",world[in_room].room_flags);
+		values["room_flag"] = &num[0];
+		pqxx::result room_record;
+
+		try{
+			auto up_txn = txn();
+			sql_compositor comp("room",&up_txn);
+			auto room_sql = comp.select("room_number")
+				.from("room")
+				.where("room_number","=",std::to_string(world[in_room].number))
+				.sql();
+			room_record = mods::pq::exec(up_txn,room_sql);
+		}catch(std::exception& e){
+			std::cerr << "error selecting room from db: '" << e.what() << "'\n";
+			return -4;
+		}
+		if(room_record.size()){
+			/* update the record */
+			try{
+				auto up_txn = txn();
+				sql_compositor comp("room",&up_txn);
+				auto up_sql = comp
+					.update("room")
+					.set(values)
+					.where("id","=",room_record[0]["id"].c_str())
+					.sql();
+				mods::pq::exec(up_txn,up_sql);
+				mods::pq::commit(up_txn);
+			}catch(std::exception& e){
+				std::cerr << "error updating room in db: '" << e.what() << "'\n";
+				return -3;
 			}
+		} else {
+			auto txn2 = txn();
+			sql_compositor comp("room",&txn2);
+			auto sql = comp
+				.insert()
+				.into("room")
+				.values(values).sql();
+			mods::pq::exec(txn2,sql);
+			mods::pq::commit(txn2);
+		}
 
-			if(world[in_room].ex_description && world[in_room].ex_description->description) {
-				values["ex_description"] = (world[in_room].ex_description->description);
-			}
+		auto del_txn = txn();
+		mods::pq::exec(del_txn,std::string("DELETE FROM room_direction_data where room_number=") + std::to_string(world[in_room].number));
+		mods::pq::commit(del_txn);
 
-			std::array<char,16> num;
-			std::fill(num.begin(),num.end(),0);
-			sprintf(&num[0],"%d",world[in_room].light);
-			values["light"] = &num[0];
-			std::fill(num.begin(),num.end(),0);
-			sprintf(&num[0],"%d",world[in_room].room_flags);
-			values["room_flag"] = &num[0];
+		for(auto direction = 0; direction < NUM_OF_DIRS; direction++) {
+			if(world[in_room].dir_option[direction] &&
+					world[in_room].dir_option[direction]->general_description) {
+				auto check_txn = txn();
+				sql_compositor comp("room_direction_data",&check_txn);
+				std::string check_sql = comp.
+					select("room_number")
+					.from("room_direction_data")
+					.where("room_number","=",std::to_string(world[in_room].number))
+					.op_and("exit_direction","=",std::to_string(direction))
+					.sql().data();
+				check_sql += " AND exit_direction=";
+				check_sql += check_txn.quote(direction);
+				auto check_result = mods::pq::exec(check_txn,check_sql);
+				auto real_room_num = world[world[in_room].dir_option[direction]->to_room].number;
+				std::map<std::string,std::string> values = {
+					{"general_description",static_cast<std::string>(world[in_room].dir_option[direction]->general_description)},
+					{"keyword",static_cast<std::string>(world[in_room].dir_option[direction]->keyword)},
+					{"exit_info",std::to_string(world[in_room].dir_option[direction]->exit_info)},
+					{"exit_key",std::to_string(world[in_room].dir_option[direction]->key)},
+					{"to_room",std::to_string(real_room_num)},
+					{"room_number",std::to_string(world[in_room].number)},
+					{"exit_direction",std::to_string(direction)}
+				};
 
-			auto room_record = db_get_by_meta("room","room_number",
-				std::to_string(world[ir].number));
-			if(room_record.size()){
-				/* update the record */
-				auto ret = db_update("room",values,room_record[0]["id"]);
-				if(!std::get<0>(ret)){
-					std::cerr << "error updating room: '" << std::get<1> << "\n";
-					return -3;
+				if(check_result.size()) {
+					/* update the row instead of inserting it */
+					auto up_txn = txn();
+					sql_compositor comp("room_direction_data",&up_txn);
+					auto up_sql = comp
+						.update("room_direction_data")
+						.set(values)
+						.where("exit_direction","=",std::to_string(direction))
+						.op_and("room_number","=",std::to_string(world[in_room].number))
+						.sql();
+					mods::pq::exec(up_txn,up_sql);
+					mods::pq::commit(up_txn);
+				} else {
+					auto txn2 = txn();
+					sql_compositor comp("room_direction_data",&txn2);
+					auto sql = comp
+						.insert()
+						.into("room_direction_data")
+						.values(values)
+						.sql();
+					mods::pq::exec(txn2,sql);
+					mods::pq::commit(txn2);
 				}
-			} else {
-				auto ret = db_insert("room",values);
-				if(!std::get<0>(ret)){
-					std::cerr << "error inserting room to db: '" << std::get<1> << "\n";
-					return -2;
-				}
 			}
-
-			auto del_txn = txn();
-			mods::pq::exec(del_txn,std::string("DELETE FROM room_direction_data where room_number=") + std::to_string(world[in_room].number));
-			mods::pq::commit(del_txn);
-
-			for(auto direction = 0; direction < NUM_OF_DIRS; direction++) {
-				if(world[in_room].dir_option[direction] &&
-				        world[in_room].dir_option[direction]->general_description) {
-					auto check_txn = txn();
-					sql_compositor comp("room_direction_data",&check_txn);
-					std::string check_sql = comp.
-					                        select("room_number")
-					                        .from("room_direction_data")
-					                        .where("room_number","=",std::to_string(world[in_room].number))
-					                        .op_and("exit_direction","=",std::to_string(direction))
-					                        .sql();
-					check_sql += " AND exit_direction=";
-					check_sql += check_txn.quote(direction);
-					auto check_result = mods::pq::exec(check_txn,check_sql);
-					auto real_room_num = world[world[in_room].dir_option[direction]->to_room].number;
-					std::map<std::string,std::string> values = {
-						{"general_description",static_cast<std::string>(world[in_room].dir_option[direction]->general_description)},
-						{"keyword",static_cast<std::string>(world[in_room].dir_option[direction]->keyword)},
-						{"exit_info",std::to_string(world[in_room].dir_option[direction]->exit_info)},
-						{"exit_key",std::to_string(world[in_room].dir_option[direction]->key)},
-						{"to_room",std::to_string(real_room_num)},
-						{"room_number",std::to_string(world[in_room].number)},
-						{"exit_direction",std::to_string(direction)}
-					};
-
-					if(check_result.size()) {
-						/* update the row instead of inserting it */
-						auto up_txn = txn();
-						sql_compositor comp("room_direction_data",&up_txn);
-						auto up_sql = comp
-						              .update("room_direction_data")
-						              .set(values)
-						              .where("exit_direction","=",std::to_string(direction))
-						              .op_and("room_number","=",std::to_string(world[in_room].number))
-						              .sql();
-						mods::pq::exec(up_txn,up_sql);
-						mods::pq::commit(up_txn);
-					} else {
-						auto txn2 = txn();
-						sql_compositor comp("room_direction_data",&txn2);
-						auto sql = comp
-						           .insert()
-						           .into("room_direction_data")
-						           .values(values)
-						           .sql();
-						mods::pq::exec(txn2,sql);
-						mods::pq::commit(txn2);
-					}
-				}
-			}
+		}
 
 		return 0;
 	}
@@ -490,11 +526,11 @@ namespace mods::builder {
 		return true;
 	}
 	std::optional<std::string> dir_option(room_rnum room_id,int direction,std::optional<std::string_view> description,
-	                                      std::optional<std::string_view> keywords,
-	                                      std::optional<int> exit_info,
-	                                      std::optional<int> key,
-	                                      std::optional<room_rnum> to_room
-	                                     ) {
+			std::optional<std::string_view> keywords,
+			std::optional<int> exit_info,
+			std::optional<int> key,
+			std::optional<room_rnum> to_room
+			) {
 		std::size_t rid = room_id;
 
 		if(rid > mods::globals::room_list.size()) {
@@ -555,30 +591,30 @@ namespace mods::builder {
 		return true;
 	}
 	bool delete_zone(int id) {
-		auto txn = mods::pq::transaction(*mods::globals::pq_con);
-		std::string delete_sql = std::string("DELETE FROM zone where id=") + txn.quote(id);
-		mods::pq::exec(txn,delete_sql);
-		mods::pq::commit(txn);
+		auto t = mods::pq::transaction(*mods::globals::pq_con);
+		std::string delete_sql = std::string("DELETE FROM zone where id=") + t.quote(id);
+		mods::pq::exec(t,delete_sql);
+		mods::pq::commit(t);
 		return true;
 	}
 	std::pair<bool,std::string> zone_place(int zone_id,std::string_view zone_command,std::string_view if_flag,std::string_view arg1,std::string_view arg2,std::string_view arg3) {
 		try{
-			auto txn = txn();
-			sql_compositor comp("zone_data",&txn);
+			auto t = txn();
+			sql_compositor comp("zone_data",&t);
 			auto sql = comp
-					   .insert()
-					   .into("zone_data")
-			.values({
-				{"zone_id",std::to_string(zone_table[zone_id].number)},
-				{"zone_command",zone_command.data()},
-				{"zone_if_flag",if_flag.data()},
-				{"zone_arg1",arg1.data()},
-				{"zone_arg2",arg2.data()},
-				{"zone_arg3",arg3.data()},
-			})
+				.insert()
+				.into("zone_data")
+				.values({
+						{"zone_id",std::to_string(zone_table[zone_id].number)},
+						{"zone_command",zone_command.data()},
+						{"zone_if_flag",if_flag.data()},
+						{"zone_arg1",arg1.data()},
+						{"zone_arg2",arg2.data()},
+						{"zone_arg3",arg3.data()},
+						})
 			.sql();
-			mods::pq::exec(txn,sql);
-			mods::pq::commit(txn);
+			mods::pq::exec(t,sql);
+			mods::pq::commit(t);
 		} catch(std::exception& e) {
 			return {false,std::string("Exception occurred: ") + e.what()};
 		}
@@ -616,11 +652,11 @@ namespace mods::builder {
 		try {
 			auto txn_01 = txn();
 			auto result_01 = mods::pq::exec(txn_01,sql_compositor("mobile",&txn_01)
-			                                .select("mob_id")
-			                                .from("mobile")
-			                                .where("mob_virtual_number","=",mods::util::itoa(obj->nr))
-			                                .sql()
-			                               );
+					.select("mob_id")
+					.from("mobile")
+					.where("mob_virtual_number","=",mods::util::itoa(obj->nr))
+					.sql()
+					);
 			mods::pq::commit(txn_01);
 #define MENTOC_PLAYER_NULL_CHECK(item)\
 			if(!obj->item){\
@@ -674,17 +710,17 @@ namespace mods::builder {
 			if(result_01.size()) {
 				//Update
 				sql = sql_compositor("mobile",&txn_02)
-				      .update("mobile")
-				      .set(p_map)
-				      .where("mob_virtual_number","=",mods::util::itoa(obj->nr))
-				      .sql();
+					.update("mobile")
+					.set(p_map)
+					.where("mob_virtual_number","=",mods::util::itoa(obj->nr))
+					.sql();
 			} else {
 				//Insert
 				sql = sql_compositor("mobile",&txn_02)
-				      .insert()
-				      .into("mobile")
-				      .values(p_map)
-				      .sql();
+					.insert()
+					.into("mobile")
+					.values(p_map)
+					.sql();
 			}
 
 			mods::pq::exec(txn_02,sql);
@@ -695,19 +731,19 @@ namespace mods::builder {
 
 		return {true,"Successfully saved player."};
 	}
-	std::pair<bool,std::string> save_object(object_data* obj) {
+	std::pair<bool,std::string> save_object(obj_data* obj) {
 		try {
 			auto txn_01 = txn();
 			sql_compositor comp3("object",&txn_01);
 			auto sql = comp3.select("id").from("object").
-			           where("object_item_number","=",std::to_string(obj->item_number))
-			           .sql();
+				where("object_item_number","=",std::to_string(obj->item_number))
+				.sql();
 			auto check_result_01 = mods::pq::exec(txn_01,sql);
 			mods::pq::commit(txn_01);
 			auto check_i = 0;
 			sql_compositor::value_map my_map;
 			my_map["object_item_number"] = std::to_string(obj->item_number);
-			my_map["object_flags"] = "0";
+			my_map["obj_flags"] = "0";
 #define MENTOC_CHK_OBJ(item) if(!obj->item){ return {false,std::string(#item) + " is empty"}; }
 			MENTOC_CHK_OBJ(name);
 			MENTOC_CHK_OBJ(description);
@@ -740,30 +776,30 @@ namespace mods::builder {
 			if(check_result_01.size()) {
 				check_i = mods::pq::as_int(check_result_01,0,0);
 				/* update the fields */
-				auto txn = txn();
-				sql_compositor comp("object",&txn);
+				auto t = txn();
+				sql_compositor comp("object",&t);
 				auto update_sql = comp
-				                  .update("object")
-				                  .set(my_map)
-				                  .where("object_item_number","=",std::to_string(obj->item_number))
-				                  .sql();
-				auto result = mods::pq::exec(txn,update_sql);
-				mods::pq::commit(txn);
+					.update("object")
+					.set(my_map)
+					.where("object_item_number","=",std::to_string(obj->item_number))
+					.sql();
+				auto result = mods::pq::exec(t,update_sql);
+				mods::pq::commit(t);
 			} else {
 				/* insert into the db */
 				auto txn0 = txn();
 				sql_compositor comp("object",&txn0);
 				auto sql = comp.insert().into("object")
-				           .values(my_map).sql();
+					.values(my_map).sql();
 				mods::pq::exec(txn0,sql);
 				mods::pq::commit(txn0);
 				auto txn4 = txn();
 				sql_compositor comp2("object",&txn4);
 				sql = comp2
-				      .select("id")
-				      .from("object")
-				      .where("object_item_number","=",std::to_string(obj->item_number))
-				      .sql();
+					.select("id")
+					.from("object")
+					.where("object_item_number","=",std::to_string(obj->item_number))
+					.sql();
 				auto res = mods::pq::exec(txn4,sql);
 				mods::pq::commit(txn4);
 
@@ -772,13 +808,13 @@ namespace mods::builder {
 				}
 			}
 
-			switch(obj->object_flags.type_flag) {
+			switch(obj->obj_flags.type_flag) {
 				case ITEM_WEAPON:
 					auto txn3 = txn();
 					sql_compositor comp3("object_weapon",&txn3);
 					auto sql = comp3.select("id").from("object_weapon").
-					           where("object_number","=",std::to_string(check_i))
-					           .sql();
+						where("object_number","=",std::to_string(check_i))
+						.sql();
 					auto check_result = mods::pq::exec(txn3,sql);
 					mods::pq::commit(txn3);
 
@@ -786,12 +822,12 @@ namespace mods::builder {
 						auto txn5 = txn();
 						sql_compositor comp("object_weapon",&txn5);
 						auto sql = comp.update("object_weapon")
-						.set({
-							{"object_ammo_type",std::to_string(obj->weapon_type)},
-							{"object_ammo_max",std::to_string(obj->ammo_max)},
-							{"object_cooldown","0"},
-							{"object_can_snipe","0"}
-						}).where("object_number","=",std::to_string(check_i))
+							.set({
+									{"object_ammo_type",std::to_string(obj->weapon_type)},
+									{"object_ammo_max",std::to_string(obj->ammo_max)},
+									{"object_cooldown","0"},
+									{"object_can_snipe","0"}
+									}).where("object_number","=",std::to_string(check_i))
 						.sql();
 						mods::pq::exec(txn5,sql);
 						mods::pq::commit(txn5);
@@ -799,13 +835,13 @@ namespace mods::builder {
 						auto txn6 = txn();
 						sql_compositor comp("object_weapon",&txn6);
 						auto sql = comp.insert().into("object_weapon")
-						.values({
-							{"object_number",std::to_string(check_i)},
-							{"object_ammo_max",std::to_string(obj->ammo_max)},
-							{"object_ammo_type",std::to_string(obj->weapon_type)},
-							{"object_cooldown","0"},
-							{"object_can_snipe","0"}
-						})
+							.values({
+									{"object_number",std::to_string(check_i)},
+									{"object_ammo_max",std::to_string(obj->ammo_max)},
+									{"object_ammo_type",std::to_string(obj->weapon_type)},
+									{"object_cooldown","0"},
+									{"object_can_snipe","0"}
+									})
 						.sql();
 						mods::pq::exec(txn6,sql);
 						mods::pq::commit(txn6);
@@ -816,47 +852,47 @@ namespace mods::builder {
 
 			auto txn6 = mods::pq::transaction(*mods::globals::pq_con);
 			std::string sel_weapon_sql =
-			    std::string(
-			        "select id from affected_type where object_number="	//TODO: !mundane use new shit
-			    ) + txn6.quote(check_i);
+				std::string(
+						"select id from affected_type where object_number="	//TODO: !mundane use new shit
+						) + txn6.quote(check_i);
 			auto check_result = mods::pq::exec(txn6,sel_weapon_sql);
 			mods::pq::commit(txn6);
 
 			if(check_result.size()) {
 				auto txn8 = txn();
 				std::string sql = std::string(
-				                      "DELETE FROM affected_type where object_number=") 	//TODO: !mundane use new shit
-				                  + txn8.quote(check_i);
+						"DELETE FROM affected_type where object_number=") 	//TODO: !mundane use new shit
+					+ txn8.quote(check_i);
 				mods::pq::exec(txn8,sql);
 				mods::pq::commit(txn8);
 			}
 
 			auto txn9 = txn();
 			auto sql9 = std::string(
-			                "DELETE FROM object_flags where object_number=")
-			            + txn9.quote(check_i)
-			            ;
+					"DELETE FROM obj_flags where object_number=")
+				+ txn9.quote(check_i)
+				;
 			mods::pq::exec(txn9,sql9);
 			mods::pq::commit(txn9);
 			auto txn10 = txn();
-			auto sql10 = sql_compositor("object_flags",&txn10)
-			             .insert()
-			             .into("object_flags")
-			.values({
-				{"object_number",std::to_string(check_i)},
-				{"value_0",mods::util::itoa(obj->object_flags.value[0])},
-				{"value_1",mods::util::itoa(obj->object_flags.value[1])},
-				{"value_2",mods::util::itoa(obj->object_flags.value[2])},
-				{"value_3",mods::util::itoa(obj->object_flags.value[3])},
-				{"type_flag",mods::util::itoa(obj->object_flags.type_flag)},
-				{"wear_flags",mods::util::itoa(obj->object_flags.wear_flags)},
-				{"extra_flags",mods::util::itoa(obj->object_flags.extra_flags)},
-				{"weight",mods::util::itoa(obj->object_flags.weight)},
-				{"cost",mods::util::itoa(obj->object_flags.cost)},
-				{"cost_per_day",mods::util::itoa(obj->object_flags.cost_per_day)},
-				{"timer",mods::util::itoa(obj->object_flags.timer)},
-				{"bitvector",mods::util::itoa(obj->object_flags.bitvector)}
-			})
+			auto sql10 = sql_compositor("obj_flags",&txn10)
+				.insert()
+				.into("obj_flags")
+				.values({
+						{"object_number",std::to_string(check_i)},
+						{"value_0",mods::util::itoa(obj->obj_flags.value[0])},
+						{"value_1",mods::util::itoa(obj->obj_flags.value[1])},
+						{"value_2",mods::util::itoa(obj->obj_flags.value[2])},
+						{"value_3",mods::util::itoa(obj->obj_flags.value[3])},
+						{"type_flag",mods::util::itoa(obj->obj_flags.type_flag)},
+						{"wear_flags",mods::util::itoa(obj->obj_flags.wear_flags)},
+						{"extra_flags",mods::util::itoa(obj->obj_flags.extra_flags)},
+						{"weight",mods::util::itoa(obj->obj_flags.weight)},
+						{"cost",mods::util::itoa(obj->obj_flags.cost)},
+						{"cost_per_day",mods::util::itoa(obj->obj_flags.cost_per_day)},
+						{"timer",mods::util::itoa(obj->obj_flags.timer)},
+						{"bitvector",mods::util::itoa(obj->obj_flags.bitvector)}
+						})
 			.sql();
 			mods::pq::exec(txn10,sql10);
 			mods::pq::commit(txn10);
@@ -867,12 +903,12 @@ namespace mods::builder {
 
 				if(obj->affected[i].location && obj->affected[i].modifier) {
 					auto sql = sql_compositor("affected_type",&txn7).insert()
-					           .into("affected_type")
-					.values({
-						{"object_number",std::to_string(check_i)},
-						{"aff_location",mods::util::itoa(obj->affected[i].location)},
-						{"aff_modifier", mods::util::itoa(obj->affected[i].modifier)}
-					})
+						.into("affected_type")
+						.values({
+								{"object_number",std::to_string(check_i)},
+								{"aff_location",mods::util::itoa(obj->affected[i].location)},
+								{"aff_modifier", mods::util::itoa(obj->affected[i].modifier)}
+								})
 					.sql();
 					mods::pq::exec(txn7,sql);
 					mods::pq::commit(txn7);
@@ -887,15 +923,15 @@ namespace mods::builder {
 
 				auto txn8 = txn();
 				mods::pq::exec(txn8,sql_compositor("extra_description",&txn8)
-				               .insert()
-				               .into("extra_description")
-				.values({
-					{"object_number",std::to_string(check_i)},
-					{"extra_keyword",ex_desc->keyword},
-					{"extra_description",ex_desc->description}
-				})
-				.sql()
-				              );
+						.insert()
+						.into("extra_description")
+						.values({
+							{"object_number",std::to_string(check_i)},
+							{"extra_keyword",ex_desc->keyword},
+							{"extra_description",ex_desc->description}
+							})
+						.sql()
+						);
 			}
 		} catch(std::exception& e) {
 			return {false,std::string("Exception occurred: ") + e.what()};
@@ -908,69 +944,69 @@ namespace mods::builder {
 using args_t = std::vector<std::string>;
 ACMD(do_sbuild) {
 	MENTOC_PREAMBLE();
-	mods::builder::initialize_builder(player->cd());
+	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 		player->pager_start();
 		*player << "usage: \r\n" <<
-		        " sbuild help\r\n" <<
-		        "  |--> this help menu\r\n" <<
-		        "  |____[example]\r\n" <<
-		        "  |:: sbuild help\r\n" <<
-		        "  |:: (this help menu will show up)\r\n" <<
-		        " sbuild new\r\n" <<
-		        " sbuild list\r\n" <<
-		        " sbuild attr <shop_id> <attr> <value>\r\n" <<
-		        "  |:: -:[attributes]:-\r\n" <<
-		        "  |:: vnum\r\n" <<
-		        "  |:: profit_buy\r\n" <<
-		        "  |:: profit_sell\r\n" <<
-		        "  |:: type\r\n" <<
-		        "  |:: no_such_item1\r\n" <<
-		        "  |:: no_such_item2\r\n" <<
-		        "  |:: missing_cash1\r\n" <<
-		        "  |:: missing_cash2\r\n" <<
-		        "  |:: do_not_buy\r\n" <<
-		        "  |:: message_buy\r\n" <<
-		        "  |:: message_sell\r\n" <<
-		        "  |:: temper1\r\n" <<
-		        "  |:: bitvector\r\n" <<
-		        "  |:: keeper\r\n" <<
-		        "  |:: with_who\r\n" <<
-		        "  |:: in_room\r\n" <<
-		        "  |:: open1\r\n" <<
-		        "  |:: open22r\n" <<
-		        "  |:: close1\r\n" <<
-		        "  |:: close2\r\n" <<
-		        "  |:: bankAccount\r\n" <<
-		        "  |:: lastsort\r\n" <<
-		        " sbuild save <shop_id>\r\n" <<
-		        " sbuild show <shop_id>\r\n" <<
-		        "\r\n"
-		        ;
+			" sbuild help\r\n" <<
+			"  |--> this help menu\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: sbuild help\r\n" <<
+			"  |:: (this help menu will show up)\r\n" <<
+			" sbuild new\r\n" <<
+			" sbuild list\r\n" <<
+			" sbuild attr <shop_id> <attr> <value>\r\n" <<
+			"  |:: -:[attributes]:-\r\n" <<
+			"  |:: vnum\r\n" <<
+			"  |:: profit_buy\r\n" <<
+			"  |:: profit_sell\r\n" <<
+			"  |:: type\r\n" <<
+			"  |:: no_such_item1\r\n" <<
+			"  |:: no_such_item2\r\n" <<
+			"  |:: missing_cash1\r\n" <<
+			"  |:: missing_cash2\r\n" <<
+			"  |:: do_not_buy\r\n" <<
+			"  |:: message_buy\r\n" <<
+			"  |:: message_sell\r\n" <<
+			"  |:: temper1\r\n" <<
+			"  |:: bitvector\r\n" <<
+			"  |:: keeper\r\n" <<
+			"  |:: with_who\r\n" <<
+			"  |:: in_room\r\n" <<
+			"  |:: open1\r\n" <<
+			"  |:: open22r\n" <<
+			"  |:: close1\r\n" <<
+			"  |:: close2\r\n" <<
+			"  |:: bankAccount\r\n" <<
+			"  |:: lastsort\r\n" <<
+			" sbuild save <shop_id>\r\n" <<
+			" sbuild show <shop_id>\r\n" <<
+			"\r\n"
+			;
 		player->pager_end();
 		player->page(0);
 	}
 
 	mods::builder_util::list_object_vector<std::vector<shop_data>,std::string>(
-	    player,
-	    std::string(argument),
-	    shop_index,
-	[](shop_data & shop) -> std::string {
-		return std::string(mods::util::itoa(shop.vnum));
-	}
-	);
+			player,
+			std::string(argument),
+			shop_index,
+			[](shop_data & shop) -> std::string {
+			return std::string(mods::util::itoa(shop.vnum));
+			}
+			);
 
 	mods::builder_util::save_object_vector<std::vector<shop_data>>(
-	                                                                player,
-	                                                                std::string(argument),
-	                                                                shop_index,
-	[](shop_data & shop) -> std::pair<bool,std::string> {
-		mods::builder_util::post_modify_callback pm_callback = []() -> std::pair<bool,std::string> {
+			player,
+			std::string(argument),
+			shop_index,
+			[](shop_data & shop) -> std::pair<bool,std::string> {
+			mods::builder_util::post_modify_callback pm_callback = []() -> std::pair<bool,std::string> {
 			return {true,""};
-		};
-		mods::builder_util::value_callback value_setter = [&](sql_compositor::value_map & s_map) {
+			};
+			mods::builder_util::value_callback value_setter = [&](sql_compositor::value_map & s_map) {
 			s_map["shop_vnum"] = mods::util::itoa(shop.vnum);
 			s_map["shop_profit_buy"] = mods::util::itoa(shop.profit_buy);
 			s_map["shop_profit_sell"] = mods::util::itoa(shop.profit_sell);
@@ -993,32 +1029,32 @@ ACMD(do_sbuild) {
 			s_map["shop_close2"] = mods::util::itoa(shop.close2);
 			s_map["shop_bankAccount"] = mods::util::itoa(shop.bankAccount);
 			s_map["shop_lastsort"] = mods::util::itoa(shop.lastsort);
-		};
-		return mods::builder_util::save_to_db<std::string>(
-		           "shops",
-		           "shop_id",
-		           std::string(mods::util::itoa(shop.vnum)),
-		           value_setter,
-		           pm_callback
-		       );
-	}
-	                                                            );
+			};
+			return mods::builder_util::save_to_db<std::string>(
+					"shops",
+					"shop_id",
+					std::string(mods::util::itoa(shop.vnum)),
+					value_setter,
+					pm_callback
+					);
+			}
+	);
 	mods::builder_util::show_object_vector<std::vector<shop_data>>(
-	                                                                player,
-	                                                                std::string(argument),
-	                                                                shop_index,
-	[](shop_data & shop) -> void {
+			player,
+			std::string(argument),
+			shop_index,
+			[](shop_data & shop) -> void {
 
-	}
-	                                                            );
+			}
+			);
 }
 ACMD(do_mbuild) {
 	MENTOC_PREAMBLE();
-	mods::builder::initialize_builder(player->cd());
+	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0
-	        && vec_args[1].compare("action") == 0) {
+			&& vec_args[1].compare("action") == 0) {
 		player->pager_start();
 		*player << "possible flags:\r\n";
 
@@ -1033,7 +1069,7 @@ ACMD(do_mbuild) {
 	}
 
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0
-	        && vec_args[1].compare("sex") == 0) {
+			&& vec_args[1].compare("sex") == 0) {
 		player->pager_start();
 		*player << "possible flags:\r\n";
 
@@ -1048,7 +1084,7 @@ ACMD(do_mbuild) {
 	}
 
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0
-	        && vec_args[1].compare("default_position") == 0) {
+			&& vec_args[1].compare("default_position") == 0) {
 		player->pager_start();
 		*player << "possible flags:\r\n";
 
@@ -1065,50 +1101,50 @@ ACMD(do_mbuild) {
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 		player->pager_start();
 		*player << "usage: \r\n" <<
-		        " mbuild help\r\n" <<
-		        "  |--> this help menu\r\n" <<
-		        "  |____[example]\r\n" <<
-		        "  |:: mbuild help\r\n" <<
-		        "  |:: (this help menu will show up)\r\n" <<
-		        " mbuild new\r\n" <<
-		        " mbuild list\r\n" <<
-		        " mbuild attr <mob_id> <attr> <value>\r\n" <<
-		        "  |:: -:[attributes]:-\r\n" <<
-		        "  |:: name\r\n" <<
-		        "  |:: short_description\r\n" <<
-		        "  |:: long_description\r\n" <<
-		        "  |:: description\r\n" <<
-		        "  |:: mana\r\n" <<
-		        "  |:: max_mana\r\n" <<
-		        "  |:: hit\r\n" <<
-		        "  |:: max_hit\r\n" <<
-		        "  |:: move\r\n" <<
-		        "  |:: max_move\r\n" <<
-		        "  |:: armor\r\n" <<
-		        "  |:: gold\r\n" <<
-		        "  |:: exp\r\n" <<
-		        "  |:: hitroll\r\n" <<
-		        "  |:: damroll\r\n" <<
-		        "  |:: level\r\n" <<
-		        "  |:: weight\r\n" <<
-		        "  |:: height\r\n" <<
-		        "  |:: strength\r\n" <<
-		        "  |:: strength_add\r\n" <<
-		        "  |:: intelligence\r\n" <<
-		        "  |:: wisdom\r\n" <<
-		        "  |:: dexterity\r\n" <<
-		        "  |:: constitution\r\n" <<
-		        "  |:: charisma\r\n" <<
-		        "  |:: damnodice\r\n" <<
-		        "  |:: damsizedice\r\n" <<
-		        "  |:: sex {red}see mbuild help sex{/red}\r\n" <<
-		        "  |:: default_position {red}see mbuild help default_position{/red}\r\n" <<
-		        "  |:: action {red}see mbuild help action{/red}\r\n" <<
-		        " mbuild save <mob_id>\r\n" <<
-		        " mbuild show <mob_id>\r\n" <<
-		        " mbuild instantiate <mob_id>\r\n" <<
-		        "\r\n"
-		        ;
+			" mbuild help\r\n" <<
+			"  |--> this help menu\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: mbuild help\r\n" <<
+			"  |:: (this help menu will show up)\r\n" <<
+			" mbuild new\r\n" <<
+			" mbuild list\r\n" <<
+			" mbuild attr <mob_id> <attr> <value>\r\n" <<
+			"  |:: -:[attributes]:-\r\n" <<
+			"  |:: name\r\n" <<
+			"  |:: short_description\r\n" <<
+			"  |:: long_description\r\n" <<
+			"  |:: description\r\n" <<
+			"  |:: mana\r\n" <<
+			"  |:: max_mana\r\n" <<
+			"  |:: hit\r\n" <<
+			"  |:: max_hit\r\n" <<
+			"  |:: move\r\n" <<
+			"  |:: max_move\r\n" <<
+			"  |:: armor\r\n" <<
+			"  |:: gold\r\n" <<
+			"  |:: exp\r\n" <<
+			"  |:: hitroll\r\n" <<
+			"  |:: damroll\r\n" <<
+			"  |:: level\r\n" <<
+			"  |:: weight\r\n" <<
+			"  |:: height\r\n" <<
+			"  |:: strength\r\n" <<
+			"  |:: strength_add\r\n" <<
+			"  |:: intelligence\r\n" <<
+			"  |:: wisdom\r\n" <<
+			"  |:: dexterity\r\n" <<
+			"  |:: constitution\r\n" <<
+			"  |:: charisma\r\n" <<
+			"  |:: damnodice\r\n" <<
+			"  |:: damsizedice\r\n" <<
+			"  |:: sex {red}see mbuild help sex{/red}\r\n" <<
+			"  |:: default_position {red}see mbuild help default_position{/red}\r\n" <<
+			"  |:: action {red}see mbuild help action{/red}\r\n" <<
+			" mbuild save <mob_id>\r\n" <<
+			" mbuild show <mob_id>\r\n" <<
+			" mbuild instantiate <mob_id>\r\n" <<
+			"\r\n"
+			;
 		player->pager_end();
 		player->page(0);
 		return;
@@ -1165,7 +1201,7 @@ ACMD(do_mbuild) {
 		for(auto& mob_reference : mob_proto) {
 			auto mob = &mob_reference;
 			*player << "{gld}[" << mob_id++ << "]{/gld} :->{red} [" <<
-			        mob->player.short_descr.c_str() << "]{/red}\r\n";
+				mob->player.short_descr.c_str() << "]{/red}\r\n";
 		}
 
 		player->pager_end();
@@ -1240,7 +1276,7 @@ ACMD(do_mbuild) {
 		for(auto & object_flag : flag_structure){\
 			if(object_flag.first == obj->struct_member){\
 				*player << "{red}" << #display_name << "{/red}: " <<\
-					object_flag.second << "\r\n";\
+				object_flag.second << "\r\n";\
 				break;\
 			}\
 		}
@@ -1429,22 +1465,22 @@ ACMD(do_mbuild) {
 
 ACMD(do_obuild) {
 	MENTOC_PREAMBLE();
-	mods::builder::initialize_builder(player->cd());
+	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("weapon_type") == 0) {
 		player->pager_start();
 		*player <<
-		        "{red}Weapon Type{/red} A hash value of the weapon type.  It must be one of\r\n" <<
-		        "the following numbers:</P>\r\n" <<
-		        " SMG                sub machine gun\r\n" <<
-		        " SHOTGUN            shot gun\r\n" <<
-		        " SNIPE              sniper rifle\r\n" <<
-		        " GRENADE            type of frag grenade (not a grenade launcher)\r\n" <<
-		        "example: obuild attr 1 weapon_type SMG\r\n" <<
-		        "(this will set the affected slot number 3 on object zero to modify \r\n" <<
-		        "the character's weight by 15)\r\n" <<
-		        "\r\n";
+			"{red}Weapon Type{/red} A hash value of the weapon type.  It must be one of\r\n" <<
+			"the following numbers:</P>\r\n" <<
+			" SMG                sub machine gun\r\n" <<
+			" SHOTGUN            shot gun\r\n" <<
+			" SNIPE              sniper rifle\r\n" <<
+			" GRENADE            type of frag grenade (not a grenade launcher)\r\n" <<
+			"example: obuild attr 1 weapon_type SMG\r\n" <<
+			"(this will set the affected slot number 3 on object zero to modify \r\n" <<
+			"the character's weight by 15)\r\n" <<
+			"\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
@@ -1453,38 +1489,38 @@ ACMD(do_obuild) {
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("affected") == 0) {
 		player->pager_start();
 		*player <<
-		        "{red}Location{/red}The aspect of the character affected by the object.  It must be one of\r\n" <<
-		        "the following numbers:</P>\r\n" <<
-		        "0    NONE           No effect (typically not used).\r\n" <<
-		        "1    STR            Apply to strength.\r\n" <<
-		        "2    DEX            Apply to dexterity.\r\n" <<
-		        "3    INT            Apply to intelligence.\r\n" <<
-		        "4    WIS            Apply to wisdom.\r\n" <<
-		        "5    CON            Apply to constitution.\r\n" <<
-		        "6    CHA            Apply to charisma.\r\n" <<
-		        "7    CLASS          Unimplemented.  Do not use.\r\n" <<
-		        "8    LEVEL          Unimplemented.  Do not use.\r\n" <<
-		        "9    AGE            Apply to character's MUD age, in MUD-years.\r\n" <<
-		        "10   CHAR_WEIGHT    Apply to weight.\r\n" <<
-		        "11   CHAR_HEIGHT    Apply to height.\r\n" <<
-		        "12   MANA           Apply to MAX mana points.\r\n" <<
-		        "13   HIT            Apply to MAX hit points.\r\n" <<
-		        "14   MOVE           Apply to MAX movement points.\r\n" <<
-		        "15   GOLD           Unimplemented.  Do not use.\r\n" <<
-		        "16   EXP            Unimplemented.  Do not use.\r\n" <<
-		        "17   AC             Apply to armor class (AC).\r\n" <<
-		        "18   HITROLL        Apply to hitroll.\r\n" <<
-		        "19   DAMROLL        Apply to damage roll bonus.\r\n" <<
-		        "20   SAVING_PARA    Apply to save throw: paralyze\r\n" <<
-		        "21   SAVING_ROD     Apply to save throw: rods\r\n" <<
-		        "22   SAVING_PETRI   Apply to save throw: petrif\r\n" <<
-		        "23   SAVING_BREATH  Apply to save throw: breath\r\n" <<
-		        "24   SAVING_SPELL   Apply to save throw: spells\r\n" <<
-		        "usage: obuild affected <object_id> <affected_slot> <location> <modifier>\r\n" <<
-		        "example: obuild affected 0 3 CHAR_WEIGHT 15\r\n" <<
-		        "(this will set the affected slot number 3 on object zero to modify \r\n" <<
-		        "the character's weight by 15)\r\n" <<
-		        "\r\n";
+			"{red}Location{/red}The aspect of the character affected by the object.  It must be one of\r\n" <<
+			"the following numbers:</P>\r\n" <<
+			"0    NONE           No effect (typically not used).\r\n" <<
+			"1    STR            Apply to strength.\r\n" <<
+			"2    DEX            Apply to dexterity.\r\n" <<
+			"3    INT            Apply to intelligence.\r\n" <<
+			"4    WIS            Apply to wisdom.\r\n" <<
+			"5    CON            Apply to constitution.\r\n" <<
+			"6    CHA            Apply to charisma.\r\n" <<
+			"7    CLASS          Unimplemented.  Do not use.\r\n" <<
+			"8    LEVEL          Unimplemented.  Do not use.\r\n" <<
+			"9    AGE            Apply to character's MUD age, in MUD-years.\r\n" <<
+			"10   CHAR_WEIGHT    Apply to weight.\r\n" <<
+			"11   CHAR_HEIGHT    Apply to height.\r\n" <<
+			"12   MANA           Apply to MAX mana points.\r\n" <<
+			"13   HIT            Apply to MAX hit points.\r\n" <<
+			"14   MOVE           Apply to MAX movement points.\r\n" <<
+			"15   GOLD           Unimplemented.  Do not use.\r\n" <<
+			"16   EXP            Unimplemented.  Do not use.\r\n" <<
+			"17   AC             Apply to armor class (AC).\r\n" <<
+			"18   HITROLL        Apply to hitroll.\r\n" <<
+			"19   DAMROLL        Apply to damage roll bonus.\r\n" <<
+			"20   SAVING_PARA    Apply to save throw: paralyze\r\n" <<
+			"21   SAVING_ROD     Apply to save throw: rods\r\n" <<
+			"22   SAVING_PETRI   Apply to save throw: petrif\r\n" <<
+			"23   SAVING_BREATH  Apply to save throw: breath\r\n" <<
+			"24   SAVING_SPELL   Apply to save throw: spells\r\n" <<
+			"usage: obuild affected <object_id> <affected_slot> <location> <modifier>\r\n" <<
+			"example: obuild affected 0 3 CHAR_WEIGHT 15\r\n" <<
+			"(this will set the affected slot number 3 on object zero to modify \r\n" <<
+			"the character's weight by 15)\r\n" <<
+			"\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
@@ -1493,24 +1529,24 @@ ACMD(do_obuild) {
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("extra_flags") == 0) {
 		player->pager_start();
 		*player <<
-		        "1     a   GLOW           Item is glowing (cosmetic).\r\n" <<
-		        "2     b   HUM            Item is humming (cosmetic).\r\n" <<
-		        "4     c   NORENT         Item cannot be rented.\r\n" <<
-		        "8     d   NODONATE       Item cannot be donated.\r\n" <<
-		        "16    e   NOINVIS        Item cannot be made invisible.\r\n" <<
-		        "32    f   INVISIBLE      Item is invisible.\r\n" <<
-		        "64    g   MAGIC          Item has a magical aura and can't be enchanted.\r\n" <<
-		        "128   h   NODROP         Item is cursed and cannot be dropped.\r\n" <<
-		        "256   i   BLESS          Item is blessed (cosmetic).\r\n" <<
-		        "512   j   ANTI_GOOD      Item can't be used by good-aligned characters.\r\n" <<
-		        "1024  k   ANTI_EVIL      Item can't be used by evil-aligned characters.\r\n" <<
-		        "2048  l   ANTI_NEUTRAL   Item can't be used by neutral align characters.\r\n" <<
-		        "4096  m   ANTI_MAGIC_USER Item can't be used by the Mage class.\r\n" <<
-		        "8192  n   ANTI_CLERIC    Item can't be used by the Cleric class.\r\n" <<
-		        "16384 o   ANTI_THIEF     Item can't be used by the Thief class.\r\n" <<
-		        "32768 p   ANTI_WARRIOR   Item can't be used by the Warrior class.\r\n" <<
-		        "65536 q   NOSELL         Shopkeepers will not buy or sell the item.\r\n" <<
-		        "\r\n";
+			"1     a   GLOW           Item is glowing (cosmetic).\r\n" <<
+			"2     b   HUM            Item is humming (cosmetic).\r\n" <<
+			"4     c   NORENT         Item cannot be rented.\r\n" <<
+			"8     d   NODONATE       Item cannot be donated.\r\n" <<
+			"16    e   NOINVIS        Item cannot be made invisible.\r\n" <<
+			"32    f   INVISIBLE      Item is invisible.\r\n" <<
+			"64    g   MAGIC          Item has a magical aura and can't be enchanted.\r\n" <<
+			"128   h   NODROP         Item is cursed and cannot be dropped.\r\n" <<
+			"256   i   BLESS          Item is blessed (cosmetic).\r\n" <<
+			"512   j   ANTI_GOOD      Item can't be used by good-aligned characters.\r\n" <<
+			"1024  k   ANTI_EVIL      Item can't be used by evil-aligned characters.\r\n" <<
+			"2048  l   ANTI_NEUTRAL   Item can't be used by neutral align characters.\r\n" <<
+			"4096  m   ANTI_MAGIC_USER Item can't be used by the Mage class.\r\n" <<
+			"8192  n   ANTI_CLERIC    Item can't be used by the Cleric class.\r\n" <<
+			"16384 o   ANTI_THIEF     Item can't be used by the Thief class.\r\n" <<
+			"32768 p   ANTI_WARRIOR   Item can't be used by the Warrior class.\r\n" <<
+			"65536 q   NOSELL         Shopkeepers will not buy or sell the item.\r\n" <<
+			"\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
@@ -1519,22 +1555,22 @@ ACMD(do_obuild) {
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("wear_flags") == 0) {
 		player->pager_start();
 		*player <<
-		        "1     a   WEAR_TAKE      Item can be taken (picked up off the ground).\r\n" <<
-		        "2     b   WEAR_FINGER    Item can be worn on the fingers.\r\n" <<
-		        "4     c   WEAR_NECK      Item can be worn around the neck.\r\n" <<
-		        "8     d   WEAR_BODY      Item can be worn on the body.\r\n" <<
-		        "16    e   WEAR_HEAD      Item can be worn on the head.\r\n" <<
-		        "32    f   WEAR_LEGS      Item can be worn on the legs.\r\n" <<
-		        "64    g   WEAR_FEET      Item can be worn on the feet.\r\n" <<
-		        "128   h   WEAR_HANDS     Item can be worn on the hands.\r\n" <<
-		        "256   i   WEAR_ARMS      Item can be worn on the arms.\r\n" <<
-		        "512   j   WEAR_SHIELD    Item can be used as a shield.\r\n" <<
-		        "1024  k   WEAR_ABOUT     Item can be worn about the body.\r\n" <<
-		        "2048  l   WEAR_WAIST     Item can be worn around the waist.\r\n" <<
-		        "4096  m   WEAR_WRIST     Item can be worn around the wrist.\r\n" <<
-		        "8192  n   WEAR_WIELD     Item can be wielded; e.g. weapons.\r\n" <<
-		        "16384 o   WEAR_HOLD      Item can be held (the ``hold'' command).\r\n" <<
-		        "\r\n";
+			"1     a   WEAR_TAKE      Item can be taken (picked up off the ground).\r\n" <<
+			"2     b   WEAR_FINGER    Item can be worn on the fingers.\r\n" <<
+			"4     c   WEAR_NECK      Item can be worn around the neck.\r\n" <<
+			"8     d   WEAR_BODY      Item can be worn on the body.\r\n" <<
+			"16    e   WEAR_HEAD      Item can be worn on the head.\r\n" <<
+			"32    f   WEAR_LEGS      Item can be worn on the legs.\r\n" <<
+			"64    g   WEAR_FEET      Item can be worn on the feet.\r\n" <<
+			"128   h   WEAR_HANDS     Item can be worn on the hands.\r\n" <<
+			"256   i   WEAR_ARMS      Item can be worn on the arms.\r\n" <<
+			"512   j   WEAR_SHIELD    Item can be used as a shield.\r\n" <<
+			"1024  k   WEAR_ABOUT     Item can be worn about the body.\r\n" <<
+			"2048  l   WEAR_WAIST     Item can be worn around the waist.\r\n" <<
+			"4096  m   WEAR_WRIST     Item can be worn around the wrist.\r\n" <<
+			"8192  n   WEAR_WIELD     Item can be wielded; e.g. weapons.\r\n" <<
+			"16384 o   WEAR_HOLD      Item can be held (the ``hold'' command).\r\n" <<
+			"\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
@@ -1543,30 +1579,30 @@ ACMD(do_obuild) {
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("type_flags") == 0) {
 		player->pager_start();
 		*player <<
-		        "1    LIGHT          Item is a light source.\r\n" <<
-		        "2    SCROLL         Item is a magical scroll.\r\n" <<
-		        "3    WAND           Item is a magical wand.\r\n" <<
-		        "4    STAFF          Item is a magical staff.\r\n" <<
-		        "5    WEAPON         Item is a weapon.\r\n" <<
-		        "6    FIREWEAPON     Currently not implemented.  Do not use.\r\n" <<
-		        "7    MISSILE        Currently not implemented.  Do not use.\r\n" <<
-		        "8    TREASURE       Item is treasure other than gold coins (e.g. gems)\r\n" <<
-		        "9    ARMOR          Item is armor.\r\n" <<
-		        "10   POTION         Item is a magical potion.\r\n" <<
-		        "11   WORN           Currently not implemented.  Do not use.\r\n" <<
-		        "12   OTHER          Miscellaneous object with no special properties.\r\n" <<
-		        "13   TRASH          Trash -- junked by cleaners, not bought by shopkeepers.\r\n" <<
-		        "14   TRAP           Currently not implemented.  Do not use.\r\n" <<
-		        "15   CONTAINER      Item is a container.\r\n" <<
-		        "16   NOTE           Item is a note (can be written on).\r\n" <<
-		        "17   DRINKCON       Item is a drink container.\r\n" <<
-		        "18   KEY            Item is a key.\r\n" <<
-		        "19   FOOD           Item is food.\r\n" <<
-		        "20   MONEY          Item is money (gold coins).\r\n" <<
-		        "21   PEN            Item is a pen.\r\n" <<
-		        "22   BOAT           Item is a boat; allows you to traverse SECT_WATER_NOSWIM.\r\n" <<
-		        "23   FOUNTAIN       Item is a fountain.\r\n" <<
-		        "\r\n";
+			"1    LIGHT          Item is a light source.\r\n" <<
+			"2    SCROLL         Item is a magical scroll.\r\n" <<
+			"3    WAND           Item is a magical wand.\r\n" <<
+			"4    STAFF          Item is a magical staff.\r\n" <<
+			"5    WEAPON         Item is a weapon.\r\n" <<
+			"6    FIREWEAPON     Currently not implemented.  Do not use.\r\n" <<
+			"7    MISSILE        Currently not implemented.  Do not use.\r\n" <<
+			"8    TREASURE       Item is treasure other than gold coins (e.g. gems)\r\n" <<
+			"9    ARMOR          Item is armor.\r\n" <<
+			"10   POTION         Item is a magical potion.\r\n" <<
+			"11   WORN           Currently not implemented.  Do not use.\r\n" <<
+			"12   OTHER          Miscellaneous object with no special properties.\r\n" <<
+			"13   TRASH          Trash -- junked by cleaners, not bought by shopkeepers.\r\n" <<
+			"14   TRAP           Currently not implemented.  Do not use.\r\n" <<
+			"15   CONTAINER      Item is a container.\r\n" <<
+			"16   NOTE           Item is a note (can be written on).\r\n" <<
+			"17   DRINKCON       Item is a drink container.\r\n" <<
+			"18   KEY            Item is a key.\r\n" <<
+			"19   FOOD           Item is food.\r\n" <<
+			"20   MONEY          Item is money (gold coins).\r\n" <<
+			"21   PEN            Item is a pen.\r\n" <<
+			"22   BOAT           Item is a boat; allows you to traverse SECT_WATER_NOSWIM.\r\n" <<
+			"23   FOUNTAIN       Item is a fountain.\r\n" <<
+			"\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
@@ -1575,128 +1611,128 @@ ACMD(do_obuild) {
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("flags") == 0) {
 		player->pager_start();
 		*player <<
-		        "{red}LIGHT (Type Flag 1){/red}\r\n" <<
-		        "     value 0: unused\r\n" <<
-		        "     value 1: unused\r\n" <<
-		        "     value 2: Capacity of light in hours.\r\n" <<
-		        "                0: Burned out light.\r\n" <<
-		        "               -1: Eternal light source.\r\n" <<
-		        "     value 3: unused\r\n" <<
-		        "{red}SCROLL (Type Flag 2){/red}\r\n" <<
-		        "     value 0: Level at which scroll's spells are cast.\r\n" <<
-		        "     value 1: Spell number 1\r\n" <<
-		        "     value 2: Spell number 2\r\n" <<
-		        "     value 3: Spell number 3\r\n" <<
-		        "          If less than 3 spells are desired, set unused values to -1.\r\n" <<
-		        "{red}WAND (Type Flag 3){/red}\r\n" <<
-		        "     value 0: Level at which wand's spell is cast.\r\n" <<
-		        "     value 1: Charge capacity of wand (&gt;= 1)\r\n" <<
-		        "     value 2: Current number of charges remaining\r\n" <<
-		        "     value 3: Spell number\r\n" <<
-		        "{red}STAFF (Type Flag 4){/red}\r\n" <<
-		        "     value 0: Level at which staff's spell is cast.\r\n" <<
-		        "     value 1: Charge capacity of staff (&gt;= 1)\r\n" <<
-		        "     value 2: Current number of charges remaining\r\n" <<
-		        "     value 3: Spell number\r\n" <<
-		        "{red}WEAPON (Type Flag 5){/red}\r\n" <<
-		        "     value 0: unused\r\n" <<
-		        "     value 1: Number of damage dice\r\n" <<
-		        "     value 2: Size of damage dice\r\n" <<
-		        "     value 3: Weapon type for damage messages, one of:\r\n" <<
-		        "               0    hit/hits\r\n" <<
-		        "               1    sting/stings\r\n" <<
-		        "               2    whip/whips\r\n" <<
-		        "               3    slash/slashes\r\n" <<
-		        "               4    bite/bites\r\n" <<
-		        "               5    bludgeon/bludgeons\r\n" <<
-		        "               6    crush/crushes\r\n" <<
-		        "               7    pound/pounds\r\n" <<
-		        "               8    claw/claws\r\n" <<
-		        "               9    maul/mauls\r\n" <<
-		        "               10   thrash/thrashes\r\n" <<
-		        "               11   pierce/pierces\r\n" <<
-		        "               12   blast/blasts\r\n" <<
-		        "               13   punch/punches\r\n" <<
-		        "               14   stab/stabs\r\n" <<
-		        "{red}FIREWEAPON (Type Flag 6){/red}unimplemented (do not use)\r\n" <<
-		        "{red}MISSILE (Type Flag 7){/red}unimplemented (do not use)\r\n" <<
-		        "{red}TREASURE (Type Flag 8){/red}\r\n" <<
-		        "     value 0: unused\r\n" <<
-		        "     value 1: unused\r\n" <<
-		        "     value 2: unused\r\n" <<
-		        "     value 3: unused\r\n" <<
-		        "{red}ARMOR (Type Flag 9){/red}\r\n" <<
-		        "     value 0: AC-apply of the armor.  Note that the effective change\r\n" <<
-		        "               to AC is this value times a multiplier based on where\r\n" <<
-		        "               the armor is worn.  Values &gt;0 enhance the armor class;\r\n" <<
-		        "               values &lt;0 damage the armor class (cursed armor, for\r\n" <<
-		        "               example).\r\n" <<
-		        "     value 1: unused\r\n" <<
-		        "     value 2: unused\r\n" <<
-		        "     value 3: unused\r\n" <<
-		        "{red}POTION (Type Flag 10){/red}\r\n" <<
-		        "     value 0: Level at which the potion's spells are cast.\r\n" <<
-		        "     value 1: Spell number 1\r\n" <<
-		        "     value 2: Spell number 2\r\n" <<
-		        "     value 3: Spell number 3\r\n" <<
-		        "          If less than 3 spells are desired, set unused values to -1.\r\n" <<
-		        "{red}WORN (Type Flag 11){/red}unimplemented (do not use)\r\n" <<
-		        "{red}OTHER (Type Flag 12){/red}\r\n" <<
-		        "     value 0: unused\r\n" <<
-		        "     value 1: unused\r\n" <<
-		        "     value 2: unused\r\n" <<
-		        "     value 3: unused\r\n" <<
-		        "{red}TRASH (Type Flag 13){/red}\r\n" <<
-		        "     value 0: unused\r\n" <<
-		        "     value 1: unused\r\n" <<
-		        "     value 2: unused\r\n" <<
-		        "     value 3: unused\r\n" <<
-		        "{red}TRAP (Type Flag 14){/red}unimplemented (do not use)\r\n" <<
-		        "{red}CONTAINER (Type Flag 15){/red}\r\n" <<
-		        "     value 0: Capacity (max containable weight) of container\r\n" <<
-		        "     value 1: Container flag bitvector (MUST be a numeric bitvector)\r\n" <<
-		        "          1    CLOSEABLE      Container can be closed and locked.\r\n" <<
-		        "          2    PICKPROOF      Lock on container can't be picked.\r\n" <<
-		        "          4    CLOSED         Container is closed when created.\r\n" <<
-		        "          8    LOCKED         Container is locked when created.\r\n" <<
-		        "     value 2: The vnum of the key object that opens this container.\r\n" <<
-		        "               -1 if it has no key.\r\n" <<
-		        "     value 3: Reserved for internal use -- always set as 0.\r\n" <<
-		        "{red}NOTE (Type Flag 16){/red}\r\n" <<
-		        "     value 0: Language of writing (unimplemented).\r\n" <<
-		        "     value 1: unused\r\n" <<
-		        "     value 2: unused\r\n" <<
-		        "     value 3: unused\r\n" <<
-		        "{red}DRINKCON (Type Flag 17){/red}See Appendix \r\n" <<
-		        "Item Values for Drink Containers.\r\n" <<
-		        "{red}KEY (Type Flag 18){/red}\r\n" <<
-		        "     value 0: unused\r\n" <<
-		        "     value 1: unused\r\n" <<
-		        "     value 2: unused\r\n" <<
-		        "     value 3: unused\r\n" <<
-		        "{red}FOOD (Type Flag 19){/red}\r\n" <<
-		        "     value 0: The number of hours of hunger satisfied by this food.\r\n" <<
-		        "     value 1: unused\r\n" <<
-		        "     value 2: unused\r\n" <<
-		        "     value 3: Non-zero if the food is poisoned, 0 otherwise.\r\n" <<
-		        "{red}MONEY (Type Flag 20){/red}\r\n" <<
-		        "     value 0: The number of gold coins in the pile.\r\n" <<
-		        "     value 1: unused\r\n" <<
-		        "     value 2: unused\r\n" <<
-		        "     value 3: unused\r\n" <<
-		        "{red}PEN (Type Flag 21){/red}\r\n" <<
-		        "     value 0: unused\r\n" <<
-		        "     value 1: unused\r\n" <<
-		        "     value 2: unused\r\n" <<
-		        "     value 3: unused\r\n" <<
-		        "{red}BOAT (Type Flag 22){/red}\r\n" <<
-		        "     value 0: unused\r\n" <<
-		        "     value 1: unused\r\n" <<
-		        "     value 2: unused\r\n" <<
-		        "     value 3: unused\r\n" <<
-		        "{red}FOUNTAIN (Type Flag 23){/red}See Appendix \r\n" <<
-		        "Item Values for Drink Containers.\r\n" <<
-		        "\r\n";
+			"{red}LIGHT (Type Flag 1){/red}\r\n" <<
+			"     value 0: unused\r\n" <<
+			"     value 1: unused\r\n" <<
+			"     value 2: Capacity of light in hours.\r\n" <<
+			"                0: Burned out light.\r\n" <<
+			"               -1: Eternal light source.\r\n" <<
+			"     value 3: unused\r\n" <<
+			"{red}SCROLL (Type Flag 2){/red}\r\n" <<
+			"     value 0: Level at which scroll's spells are cast.\r\n" <<
+			"     value 1: Spell number 1\r\n" <<
+			"     value 2: Spell number 2\r\n" <<
+			"     value 3: Spell number 3\r\n" <<
+			"          If less than 3 spells are desired, set unused values to -1.\r\n" <<
+			"{red}WAND (Type Flag 3){/red}\r\n" <<
+			"     value 0: Level at which wand's spell is cast.\r\n" <<
+			"     value 1: Charge capacity of wand (&gt;= 1)\r\n" <<
+			"     value 2: Current number of charges remaining\r\n" <<
+			"     value 3: Spell number\r\n" <<
+			"{red}STAFF (Type Flag 4){/red}\r\n" <<
+			"     value 0: Level at which staff's spell is cast.\r\n" <<
+			"     value 1: Charge capacity of staff (&gt;= 1)\r\n" <<
+			"     value 2: Current number of charges remaining\r\n" <<
+			"     value 3: Spell number\r\n" <<
+			"{red}WEAPON (Type Flag 5){/red}\r\n" <<
+			"     value 0: unused\r\n" <<
+			"     value 1: Number of damage dice\r\n" <<
+			"     value 2: Size of damage dice\r\n" <<
+			"     value 3: Weapon type for damage messages, one of:\r\n" <<
+			"               0    hit/hits\r\n" <<
+			"               1    sting/stings\r\n" <<
+			"               2    whip/whips\r\n" <<
+			"               3    slash/slashes\r\n" <<
+			"               4    bite/bites\r\n" <<
+			"               5    bludgeon/bludgeons\r\n" <<
+			"               6    crush/crushes\r\n" <<
+			"               7    pound/pounds\r\n" <<
+			"               8    claw/claws\r\n" <<
+			"               9    maul/mauls\r\n" <<
+			"               10   thrash/thrashes\r\n" <<
+			"               11   pierce/pierces\r\n" <<
+			"               12   blast/blasts\r\n" <<
+			"               13   punch/punches\r\n" <<
+			"               14   stab/stabs\r\n" <<
+			"{red}FIREWEAPON (Type Flag 6){/red}unimplemented (do not use)\r\n" <<
+			"{red}MISSILE (Type Flag 7){/red}unimplemented (do not use)\r\n" <<
+			"{red}TREASURE (Type Flag 8){/red}\r\n" <<
+			"     value 0: unused\r\n" <<
+			"     value 1: unused\r\n" <<
+			"     value 2: unused\r\n" <<
+			"     value 3: unused\r\n" <<
+			"{red}ARMOR (Type Flag 9){/red}\r\n" <<
+			"     value 0: AC-apply of the armor.  Note that the effective change\r\n" <<
+			"               to AC is this value times a multiplier based on where\r\n" <<
+			"               the armor is worn.  Values &gt;0 enhance the armor class;\r\n" <<
+			"               values &lt;0 damage the armor class (cursed armor, for\r\n" <<
+			"               example).\r\n" <<
+			"     value 1: unused\r\n" <<
+			"     value 2: unused\r\n" <<
+			"     value 3: unused\r\n" <<
+			"{red}POTION (Type Flag 10){/red}\r\n" <<
+			"     value 0: Level at which the potion's spells are cast.\r\n" <<
+			"     value 1: Spell number 1\r\n" <<
+			"     value 2: Spell number 2\r\n" <<
+			"     value 3: Spell number 3\r\n" <<
+			"          If less than 3 spells are desired, set unused values to -1.\r\n" <<
+			"{red}WORN (Type Flag 11){/red}unimplemented (do not use)\r\n" <<
+			"{red}OTHER (Type Flag 12){/red}\r\n" <<
+			"     value 0: unused\r\n" <<
+			"     value 1: unused\r\n" <<
+			"     value 2: unused\r\n" <<
+			"     value 3: unused\r\n" <<
+			"{red}TRASH (Type Flag 13){/red}\r\n" <<
+			"     value 0: unused\r\n" <<
+			"     value 1: unused\r\n" <<
+			"     value 2: unused\r\n" <<
+			"     value 3: unused\r\n" <<
+			"{red}TRAP (Type Flag 14){/red}unimplemented (do not use)\r\n" <<
+			"{red}CONTAINER (Type Flag 15){/red}\r\n" <<
+			"     value 0: Capacity (max containable weight) of container\r\n" <<
+			"     value 1: Container flag bitvector (MUST be a numeric bitvector)\r\n" <<
+			"          1    CLOSEABLE      Container can be closed and locked.\r\n" <<
+			"          2    PICKPROOF      Lock on container can't be picked.\r\n" <<
+			"          4    CLOSED         Container is closed when created.\r\n" <<
+			"          8    LOCKED         Container is locked when created.\r\n" <<
+			"     value 2: The vnum of the key object that opens this container.\r\n" <<
+			"               -1 if it has no key.\r\n" <<
+			"     value 3: Reserved for internal use -- always set as 0.\r\n" <<
+			"{red}NOTE (Type Flag 16){/red}\r\n" <<
+			"     value 0: Language of writing (unimplemented).\r\n" <<
+			"     value 1: unused\r\n" <<
+			"     value 2: unused\r\n" <<
+			"     value 3: unused\r\n" <<
+			"{red}DRINKCON (Type Flag 17){/red}See Appendix \r\n" <<
+			"Item Values for Drink Containers.\r\n" <<
+			"{red}KEY (Type Flag 18){/red}\r\n" <<
+			"     value 0: unused\r\n" <<
+			"     value 1: unused\r\n" <<
+			"     value 2: unused\r\n" <<
+			"     value 3: unused\r\n" <<
+			"{red}FOOD (Type Flag 19){/red}\r\n" <<
+			"     value 0: The number of hours of hunger satisfied by this food.\r\n" <<
+			"     value 1: unused\r\n" <<
+			"     value 2: unused\r\n" <<
+			"     value 3: Non-zero if the food is poisoned, 0 otherwise.\r\n" <<
+			"{red}MONEY (Type Flag 20){/red}\r\n" <<
+			"     value 0: The number of gold coins in the pile.\r\n" <<
+			"     value 1: unused\r\n" <<
+			"     value 2: unused\r\n" <<
+			"     value 3: unused\r\n" <<
+			"{red}PEN (Type Flag 21){/red}\r\n" <<
+			"     value 0: unused\r\n" <<
+			"     value 1: unused\r\n" <<
+			"     value 2: unused\r\n" <<
+			"     value 3: unused\r\n" <<
+			"{red}BOAT (Type Flag 22){/red}\r\n" <<
+			"     value 0: unused\r\n" <<
+			"     value 1: unused\r\n" <<
+			"     value 2: unused\r\n" <<
+			"     value 3: unused\r\n" <<
+			"{red}FOUNTAIN (Type Flag 23){/red}See Appendix \r\n" <<
+			"Item Values for Drink Containers.\r\n" <<
+			"\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
@@ -1705,59 +1741,59 @@ ACMD(do_obuild) {
 	if(!vec_args.size() || vec_args[0].compare("help") == 0) {
 		player->pager_start();
 		*player << "usage: \r\n" <<
-		        " obuild help\r\n" <<
-		        "  |--> this help menu\r\n" <<
-		        "  |____[example]\r\n" <<
-		        "  |:: obuild help\r\n" <<
-		        "  |:: (this help menu will show up)\r\n" <<
-		        " obuild new\r\n" <<
-		        " obuild list\r\n" <<
-		        " obuild attr <object_id> <attr> <value>\r\n" <<
-		        "  |:: -:[attributes]:-\r\n" <<
-		        "  |:: item_number\r\n" <<
-		        "  |:: name\r\n" <<
-		        "  |:: desc\r\n" <<
-		        "  |:: short_desc\r\n" <<
-		        "  |:: action_desc\r\n" <<
-		        "  |:: worn_on\r\n" <<
-		        "  |:: weapon_type {red}see: obuild help weapon_type{/red}\r\n" <<
-		        "  |:: weapon_ammo\r\n" <<
-		        "  |:: weapon_ammo_max\r\n" <<
-		        "  |:: weapon_holds_ammo\r\n" <<
-		        "  |:: flags\r\n" <<
-		        " obuild ex <object_id> create <index>\r\n" <<
-		        " obuild ex <object_id> set <index> <keyword> <description>\r\n" <<
-		        " obuild ex <object_id> del <index>\r\n" <<
-		        "  |____[example]\r\n" <<
-		        "  |:: obuild ex 6 set 0 \"keyword\" \"my description\"\r\n" <<
-		        "  |:: obuild ex 6 del 0\r\n" <<
-		        " obuild affected <object_id> set <affected_slot> <location> <modifier>\r\n" <<
-		        " obuild affected <object_id> del <affected_slot>\r\n" <<
-		        "  |____[example]\r\n" <<
-		        "  |:: obuild affected 6 3 STR 25\r\n" <<
-		        "  |:: (this will set the affected slot number 3 on object 6 \r\n" <<
-		        "      to modify strength by 25)\r\n" <<
-		        "  |:: {red}see obuild help affected{/red}\r\n" <<
-		        " obuild flag <object_id> extra_flags <value>\r\n"<<
-		        " {red}see obuild help extra_flags{/red}\r\n" <<
-		        " obuild flag <object_id> <attr> <value>\r\n"<<
-		        " {red}see obuild help flags{/red}\r\n" <<
-		        "  |:: -:[attributes]:-\r\n" <<
-		        "  |:: value_0\r\n" <<
-		        "  |:: value_1\r\n" <<
-		        "  |:: value_2\r\n" <<
-		        "  |:: value_3\r\n" <<
-		        "  |:: type_flags {red}see: obuild help type_flags{/red}\r\n" <<
-		        "  |:: wear_flags {red}see: obuild help wear_flags{/red}\r\n" <<
-		        "  |:: extra_flags\r\n" <<
-		        "  |:: weight\r\n" <<
-		        "  |:: cost\r\n" <<
-		        "  |:: cost_per_day\r\n" <<
-		        "  |:: timer\r\n" <<
-		        "  |:: bitvector {red}see: obuild help bitvector{/red}\r\n" <<
-		        " obuild save <object_id>\r\n" <<
-		        " obuild show <object_id>\r\n" <<
-		        "\r\n";
+			" obuild help\r\n" <<
+			"  |--> this help menu\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: obuild help\r\n" <<
+			"  |:: (this help menu will show up)\r\n" <<
+			" obuild new\r\n" <<
+			" obuild list\r\n" <<
+			" obuild attr <object_id> <attr> <value>\r\n" <<
+			"  |:: -:[attributes]:-\r\n" <<
+			"  |:: item_number\r\n" <<
+			"  |:: name\r\n" <<
+			"  |:: desc\r\n" <<
+			"  |:: short_desc\r\n" <<
+			"  |:: action_desc\r\n" <<
+			"  |:: worn_on\r\n" <<
+			"  |:: weapon_type {red}see: obuild help weapon_type{/red}\r\n" <<
+			"  |:: weapon_ammo\r\n" <<
+			"  |:: weapon_ammo_max\r\n" <<
+			"  |:: weapon_holds_ammo\r\n" <<
+			"  |:: flags\r\n" <<
+			" obuild ex <object_id> create <index>\r\n" <<
+			" obuild ex <object_id> set <index> <keyword> <description>\r\n" <<
+			" obuild ex <object_id> del <index>\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: obuild ex 6 set 0 \"keyword\" \"my description\"\r\n" <<
+			"  |:: obuild ex 6 del 0\r\n" <<
+			" obuild affected <object_id> set <affected_slot> <location> <modifier>\r\n" <<
+			" obuild affected <object_id> del <affected_slot>\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: obuild affected 6 3 STR 25\r\n" <<
+			"  |:: (this will set the affected slot number 3 on object 6 \r\n" <<
+			"      to modify strength by 25)\r\n" <<
+			"  |:: {red}see obuild help affected{/red}\r\n" <<
+			" obuild flag <object_id> extra_flags <value>\r\n"<<
+			" {red}see obuild help extra_flags{/red}\r\n" <<
+			" obuild flag <object_id> <attr> <value>\r\n"<<
+			" {red}see obuild help flags{/red}\r\n" <<
+			"  |:: -:[attributes]:-\r\n" <<
+			"  |:: value_0\r\n" <<
+			"  |:: value_1\r\n" <<
+			"  |:: value_2\r\n" <<
+			"  |:: value_3\r\n" <<
+			"  |:: type_flags {red}see: obuild help type_flags{/red}\r\n" <<
+			"  |:: wear_flags {red}see: obuild help wear_flags{/red}\r\n" <<
+			"  |:: extra_flags\r\n" <<
+			"  |:: weight\r\n" <<
+			"  |:: cost\r\n" <<
+			"  |:: cost_per_day\r\n" <<
+			"  |:: timer\r\n" <<
+			"  |:: bitvector {red}see: obuild help bitvector{/red}\r\n" <<
+			" obuild save <object_id>\r\n" <<
+			" obuild show <object_id>\r\n" <<
+			"\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
@@ -1767,9 +1803,9 @@ ACMD(do_obuild) {
 
 	if(args.has_value()) {
 		mods::builder::report_status<shrd_ptr_player_t>(player,"Creating new object");
-		object_proto.push_back({});
+		obj_proto.push_back({});
 		if(player->is_executing_js()){
-			*player << "{index: " << object_proto.size() - 1 << "}";
+			*player << "{index: " << obj_proto.size() - 1 << "}";
 		}
 		mods::builder::report_success<shrd_ptr_player_t>(player,"Object created");
 		return;
@@ -1787,17 +1823,17 @@ ACMD(do_obuild) {
 		}
 
 		auto index = mods::util::stoi(arg_vec[1]);
-		object_data * obj = nullptr;
+		obj_data * obj = nullptr;
 
 		if(index.has_value()) {
 			std::size_t i = index.value();
 
-			if(i >= object_proto.size()) {
+			if(i >= obj_proto.size()) {
 				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
 				return;
 			}
 
-			obj = &object_proto[index.value()];
+			obj = &obj_proto[index.value()];
 		} else {
 			mods::builder::report_error<shrd_ptr_player_t>(player,std::string(args.value()[1]) + " is not a valid number");
 			return;
@@ -1825,7 +1861,7 @@ ACMD(do_obuild) {
 	if(args.has_value()) {
 		auto arg_vec = args.value();
 		auto i_value = mods::util::stoi(arg_vec[1]);
-		struct object_data* obj = nullptr;
+		struct obj_data* obj = nullptr;
 
 		if(!i_value.has_value()) {
 			mods::builder::report_error<shrd_ptr_player_t>(player,"Please use a valid numeric value");
@@ -1834,12 +1870,12 @@ ACMD(do_obuild) {
 			auto index = i_value.value();
 			std::size_t i = i_value.value();
 
-			if(i >= object_proto.size()) {
+			if(i >= obj_proto.size()) {
 				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
 				return;
 			}
 
-			obj = &object_proto[index];
+			obj = &obj_proto[index];
 		}
 
 		if(arg_vec.size() < 3) {
@@ -1969,15 +2005,15 @@ ACMD(do_obuild) {
 			auto index = i_value.value();
 			std::size_t i = index;
 
-			if(i >= object_proto.size()) {
+			if(i >= obj_proto.size()) {
 				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
 				return;
 			}
 
-			object_list.push_back(object_proto[index]);
+			object_list.push_back(obj_proto[index]);
 			auto obj = &(*(object_list.end() -1));
 			obj->carried_by = obj->worn_by = nullptr;
-			object_to_room(obj,IN_ROOM(player->cd()));
+			obj_to_room(obj,IN_ROOM(player->cd()));
 			mods::builder::report_success<shrd_ptr_player_t>(player,"Object created, look on the floor");
 		}
 
@@ -1995,7 +2031,7 @@ ACMD(do_obuild) {
 
 		jxcomp jx; 
 		jx.array_start("objects");
-		for(auto& object_reference : object_proto) {
+		for(auto& object_reference : obj_proto) {
 			auto obj = &object_reference;
 			if(player->is_executing_js()){
 				jx.object_start("")
@@ -2003,10 +2039,10 @@ ACMD(do_obuild) {
 					.push("item_number",obj->item_number)
 					.push("name",obj->name)
 					.push("short_description",obj->short_description)
-				.object_end();
+					.object_end();
 			}else{
 				*player << "{gld}[" << object_id << "]{/gld} :->{red} [" <<
-						obj->short_description << "]{/red}";
+					obj->short_description << "]{/red}";
 			}
 			object_id++;
 		}
@@ -2039,17 +2075,17 @@ ACMD(do_obuild) {
 			return std::nullopt;
 		};
 		auto index = mods::util::stoi(arg_vec[1]);
-		object_data * obj = nullptr;
+		obj_data * obj = nullptr;
 
 		if(index.has_value()) {
 			std::size_t i = index.value();
 
-			if(i >= object_proto.size()) {
+			if(i >= obj_proto.size()) {
 				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
 				return;
 			}
 
-			obj = &object_proto[index.value()];
+			obj = &obj_proto[index.value()];
 		} else {
 			mods::builder::report_error<shrd_ptr_player_t>(player,"not a valid number");
 			return;
@@ -2060,15 +2096,15 @@ ACMD(do_obuild) {
 			return;
 		}
 
-		MENTOC_OBI2(object_flags.value[0],value_0);
-		MENTOC_OBI2(object_flags.value[1],value_1);
-		MENTOC_OBI2(object_flags.value[2],value_2);
-		MENTOC_OBI2(object_flags.value[3],value_3);
-		MENTOC_OBI2(object_flags.weight,weight);
-		MENTOC_OBI2(object_flags.cost,cost);
-		MENTOC_OBI2(object_flags.cost_per_day,cost_per_day);
-		MENTOC_OBI2(object_flags.timer,timer);
-		MENTOC_OBI2(object_flags.bitvector,bitvector);
+		MENTOC_OBI2(obj_flags.value[0],value_0);
+		MENTOC_OBI2(obj_flags.value[1],value_1);
+		MENTOC_OBI2(obj_flags.value[2],value_2);
+		MENTOC_OBI2(obj_flags.value[3],value_3);
+		MENTOC_OBI2(obj_flags.weight,weight);
+		MENTOC_OBI2(obj_flags.cost,cost);
+		MENTOC_OBI2(obj_flags.cost_per_day,cost_per_day);
+		MENTOC_OBI2(obj_flags.timer,timer);
+		MENTOC_OBI2(obj_flags.bitvector,bitvector);
 
 		//TODO !mundane make these flag code fragments into a function
 		if(arg_vec[2].compare("extra_flags") == 0) {
@@ -2078,14 +2114,14 @@ ACMD(do_obuild) {
 			}
 
 			auto flag = arg_vec.begin() + 3;
-			obj->object_flags.bitvector = 0;
+			obj->obj_flags.bitvector = 0;
 
 			for(; flag != arg_vec.end(); ++flag) {
 				bool found = false;
 
 				for(auto& ex_flag : mods::builder::extra_flags) {
 					if(ex_flag.second.compare(*flag) == 0) {
-						obj->object_flags.bitvector |= ex_flag.first;
+						obj->obj_flags.bitvector |= ex_flag.first;
 						found = true;
 						break;
 					}
@@ -2105,12 +2141,12 @@ ACMD(do_obuild) {
 			}
 
 			auto flag = arg_vec.begin() + 3;
-			obj->object_flags.type_flag = 0;
+			obj->obj_flags.type_flag = 0;
 			bool found = false;
 
 			for(auto& type_flag : mods::builder::type_flags) {
 				if(type_flag.second.compare(*flag) == 0) {
-					obj->object_flags.type_flag = type_flag.first;
+					obj->obj_flags.type_flag = type_flag.first;
 					found = true;
 					break;
 				}
@@ -2128,14 +2164,14 @@ ACMD(do_obuild) {
 			}
 
 			auto flag = arg_vec.begin() + 3;
-			obj->object_flags.wear_flags = 0;
+			obj->obj_flags.wear_flags = 0;
 
 			for(; flag != arg_vec.end(); ++flag) {
 				bool found = false;
 
 				for(auto& wear_flag : mods::builder::wear_flags) {
 					if(wear_flag.second.compare(*flag) == 0) {
-						obj->object_flags.wear_flags |= wear_flag.first;
+						obj->obj_flags.wear_flags |= wear_flag.first;
 						found = true;
 						break;
 					}
@@ -2166,17 +2202,17 @@ ACMD(do_obuild) {
 			}
 
 			auto index = mods::util::stoi(arg_vec[1]);
-			object_data * obj = nullptr;
+			obj_data * obj = nullptr;
 
 			if(index.has_value()) {
 				std::size_t i = index.value();
 
-				if(i >= object_proto.size()) {
+				if(i >= obj_proto.size()) {
 					mods::builder::report_error<shrd_ptr_player_t>(player,"Object index Out of bounds");
 					return;
 				}
 
-				obj = &object_proto[index.value()];
+				obj = &obj_proto[index.value()];
 			} else {
 				mods::builder::report_error<shrd_ptr_player_t>(player,"not a valid number");
 				return;
@@ -2195,17 +2231,17 @@ ACMD(do_obuild) {
 
 		if(arg_vec[2].compare("set") == 0) {
 			auto index = mods::util::stoi(arg_vec[1]);
-			object_data * obj = nullptr;
+			obj_data * obj = nullptr;
 
 			if(index.has_value()) {
 				std::size_t i = index.value();
 
-				if(i >= object_proto.size()) {
+				if(i >= obj_proto.size()) {
 					mods::builder::report_error<shrd_ptr_player_t>(player," Out of bounds");
 					return;
 				}
 
-				obj = &object_proto[index.value()];
+				obj = &obj_proto[index.value()];
 			} else {
 				mods::builder::report_error<shrd_ptr_player_t>(player,"not a valid number");
 				return;
@@ -2221,7 +2257,7 @@ ACMD(do_obuild) {
 			auto modifier = mods::util::stoi(arg_vec[5]);
 
 			if(aff_index.has_value() &&
-			        location.has_value() && modifier.has_value()) {
+					location.has_value() && modifier.has_value()) {
 				if(aff_index.value() >= MAX_OBJ_AFFECT) {
 					mods::builder::report_error<shrd_ptr_player_t>(player,std::string("aff_index must be less than ") + std::to_string(MAX_OBJ_AFFECT));
 					return;
@@ -2253,17 +2289,17 @@ ACMD(do_obuild) {
 		}
 
 		auto index = mods::util::stoi(arg_vec[1]);
-		object_data * obj = nullptr;
+		obj_data * obj = nullptr;
 
 		if(index.has_value()) {
 			std::size_t i = index.value();
 
-			if(i >= object_proto.size()) {
+			if(i >= obj_proto.size()) {
 				mods::builder::report_error<shrd_ptr_player_t>(player," Out of bounds");
 				return;
 			}
 
-			obj = &object_proto[index.value()];
+			obj = &obj_proto[index.value()];
 		} else {
 			mods::builder::report_error<shrd_ptr_player_t>(player,"Not a valid number");
 			return;
@@ -2276,12 +2312,12 @@ ACMD(do_obuild) {
 
 		player->pager_start();
 		*player <<
-		        "{gld}::Object data::{/gld}\r\n" <<
-		        "{red}name: {/red}" << obj->name <<  "\r\n" <<
-		        "{red}description: {/red}" << obj->description << "\r\n" <<
-		        "{red}short_description: {/red}" << obj->short_description << "\r\n" <<
-		        "{red}action_description: {/red}" << obj->action_description << "\r\n" <<
-		        "{red}ex_descriptions: {/red}";
+			"{gld}::Object data::{/gld}\r\n" <<
+			"{red}name: {/red}" << obj->name <<  "\r\n" <<
+			"{red}description: {/red}" << obj->description << "\r\n" <<
+			"{red}short_description: {/red}" << obj->short_description << "\r\n" <<
+			"{red}action_description: {/red}" << obj->action_description << "\r\n" <<
+			"{red}ex_descriptions: {/red}";
 		auto ex_desc = obj->ex_description;
 		unsigned ex_ctr = 0;
 
@@ -2296,14 +2332,14 @@ ACMD(do_obuild) {
 		}
 
 		*player << "{red}item_number: {/red}" << obj->item_number << "\r\n" <<
-		        "{red}weapon_type: {/red}" << obj->weapon_type << "\r\n" <<
-		        "{red}worn_on: {/red}" << obj->worn_on << "\r\n" <<
-		        "{red}weapon_ammo: {/red}" << obj->ammo << "\r\n" <<
-		        "{red}weapon_ammo_max: {/red} " << obj->ammo_max << "\r\n" <<
-		        "{red}weapon_holds_ammo: {/red}: " << obj->holds_ammo << "\r\n" <<
-		        "{gld}::Wear Flags::{/gld}\r\n" <<
-		        "{red}value: {/red}" << std::to_string(obj->object_flags.wear_flags) <<  "\r\n";
-#define MENTOC_WEAR(a){ if(obj->object_flags.wear_flags & a){*player << #a << ", ";} }
+			"{red}weapon_type: {/red}" << obj->weapon_type << "\r\n" <<
+			"{red}worn_on: {/red}" << obj->worn_on << "\r\n" <<
+			"{red}weapon_ammo: {/red}" << obj->ammo << "\r\n" <<
+			"{red}weapon_ammo_max: {/red} " << obj->ammo_max << "\r\n" <<
+			"{red}weapon_holds_ammo: {/red}: " << obj->holds_ammo << "\r\n" <<
+			"{gld}::Wear Flags::{/gld}\r\n" <<
+			"{red}value: {/red}" << std::to_string(obj->obj_flags.wear_flags) <<  "\r\n";
+#define MENTOC_WEAR(a){ if(obj->obj_flags.wear_flags & a){*player << #a << ", ";} }
 		MENTOC_WEAR(ITEM_WEAR_TAKE);
 		MENTOC_WEAR(ITEM_WEAR_FINGER);
 		MENTOC_WEAR(ITEM_WEAR_NECK);
@@ -2320,7 +2356,7 @@ ACMD(do_obuild) {
 		MENTOC_WEAR(ITEM_WEAR_WIELD);
 		MENTOC_WEAR(ITEM_WEAR_HOLD);
 		*player << "{gld}::Type::{/gld}\r\n";
-#define MENTOC_TYPE(a){ if(obj->object_flags.type_flag == a){*player << #a << "\r\n"; } }
+#define MENTOC_TYPE(a){ if(obj->obj_flags.type_flag == a){*player << #a << "\r\n"; } }
 		MENTOC_TYPE(ITEM_LIGHT);
 		MENTOC_TYPE(ITEM_SCROLL);
 		MENTOC_TYPE(ITEM_WAND);
@@ -2345,7 +2381,7 @@ ACMD(do_obuild) {
 		MENTOC_TYPE(ITEM_BOAT);
 		MENTOC_TYPE(ITEM_FOUNTAIN);
 		*player << "{gld}::Bitvector::{/gld}\r\n";
-#define MENTOC_BITVECTOR(a){ if(obj->object_flags.bitvector & a){*player << #a << "\r\n"; } }
+#define MENTOC_BITVECTOR(a){ if(obj->obj_flags.bitvector & a){*player << #a << "\r\n"; } }
 		MENTOC_BITVECTOR(ITEM_GLOW);
 		MENTOC_BITVECTOR(ITEM_HUM);
 		MENTOC_BITVECTOR(ITEM_NORENT);
@@ -2365,10 +2401,10 @@ ACMD(do_obuild) {
 		MENTOC_BITVECTOR(ITEM_NOSELL);
 
 		for(unsigned index = 0;
-		        index < MAX_OBJ_AFFECT; index++) {
+				index < MAX_OBJ_AFFECT; index++) {
 			*player << "affected[" << index << "]->location: {/red} " <<
-			        obj->affected[index].location <<
-			        " {red}modifier: {/red} ";
+				obj->affected[index].location <<
+				" {red}modifier: {/red} ";
 
 			for(auto& flag : mods::builder::affected_flags) {
 				if(flag.first == obj->affected[index].modifier) {
@@ -2381,15 +2417,15 @@ ACMD(do_obuild) {
 		}
 
 #define MENTOC_SHOW_FLAG(member,display) *player << "{red}" << #display << "{/red}: " << obj->member << "\r\n";
-		MENTOC_SHOW_FLAG(object_flags.value[0],value_0);
-		MENTOC_SHOW_FLAG(object_flags.value[1],value_1);
-		MENTOC_SHOW_FLAG(object_flags.value[2],value_2);
-		MENTOC_SHOW_FLAG(object_flags.value[3],value_3);
-		MENTOC_SHOW_FLAG(object_flags.weight,weight);
-		MENTOC_SHOW_FLAG(object_flags.cost,cost);
-		MENTOC_SHOW_FLAG(object_flags.cost_per_day,cost_per_day);
-		MENTOC_SHOW_FLAG(object_flags.timer,timer);
-		MENTOC_SHOW_FLAG(object_flags.bitvector,bitvector);
+		MENTOC_SHOW_FLAG(obj_flags.value[0],value_0);
+		MENTOC_SHOW_FLAG(obj_flags.value[1],value_1);
+		MENTOC_SHOW_FLAG(obj_flags.value[2],value_2);
+		MENTOC_SHOW_FLAG(obj_flags.value[3],value_3);
+		MENTOC_SHOW_FLAG(obj_flags.weight,weight);
+		MENTOC_SHOW_FLAG(obj_flags.cost,cost);
+		MENTOC_SHOW_FLAG(obj_flags.cost_per_day,cost_per_day);
+		MENTOC_SHOW_FLAG(obj_flags.timer,timer);
+		MENTOC_SHOW_FLAG(obj_flags.bitvector,bitvector);
 		//TODO !mundane make these flag code fragments into a function
 		player->pager_end();
 		player->page(0);
@@ -2423,17 +2459,17 @@ ACMD(do_obuild) {
 			return std::nullopt;
 		};
 		auto index = mods::util::stoi(args.value()[1]);
-		object_data * obj = nullptr;
+		obj_data * obj = nullptr;
 
 		if(index.has_value()) {
 			std::size_t i = index.value();
 
-			if(i >= object_proto.size()) {
+			if(i >= obj_proto.size()) {
 				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
 				return;
 			}
 
-			obj = &object_proto[index.value()];
+			obj = &obj_proto[index.value()];
 		}
 
 		if(!obj) {
@@ -2492,7 +2528,7 @@ ACMD(do_obuild) {
 			} else {
 				if(index.value() > MAX_OBJ_AFFECT) {
 					mods::builder::report_error<shrd_ptr_player_t>(player,std::string(
-					                                                   "index cannot be larger than ") + std::to_string(MAX_OBJ_AFFECT));
+								"index cannot be larger than ") + std::to_string(MAX_OBJ_AFFECT));
 					return;
 				}
 			}
@@ -2523,104 +2559,104 @@ ACMD(do_obuild) {
 
 ACMD(do_zbuild) {
 	MENTOC_PREAMBLE();
-	mods::builder::initialize_builder(player->cd());
+	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("place") == 0) {
 		player->pager_start();
 		*player <<
-		        "Each command consists of a letter, identifying the command-type,\r\n"<<
-		        "followed by three or four arguments.  The first argument, common to all the\r\n"<<
-		        "commands, is called the ``if-flag.''  If the if-flag for a command is 1, that\r\n"<<
-		        "command is only executed if the command immediately before it was executed\r\n"<<
-		        "as well.  If the if-flag is 0, the command is always executed.  If-flags are\r\n"<<
-		        "useful for things like equipping mobiles--you don't want to try to equip\r\n"<<
-		        "a mobile that has not been loaded.\r\n"<<
-		        "Commands that load mobiles and objects also include a ``max existing''\r\n"<<
-		        "argument.  This specifies the maximum number of copies of the mobile or\r\n"<<
-		        "object that are allowed to exist in the entire world at once.  If the number\r\n"<<
-		        "currently existing is greater than or equal to the ``max existing'' limit, the\r\n"<<
-		        "command is not executed.\r\n"<<
-		        "The valid zone-reset commands are M, O, G, E, P, D, and R.\r\n"<<
-		        "\r\n"<<
-		        "{gld}M: load a mobile{/gld}Format: M <if-flag> <mob vnum> <max existing> <room vnum>\r\n"<<
-		        "Mob vnum is the vnum of the mob to be loaded.  Room vnum is the vnum of\r\n"<<
-		        "the room in which the mob should be placed.  The mob will be loaded\r\n"<<
-		        "into the room.\r\n"<<
-		        "\r\n"<<
-		        "{gld}O: load an object{/gld}Format: O <if-flag> <obj vnum> <max existing> <room vnum>\r\n"<<
-		        "Obj vnum is the vnum of the obj to be loaded.  Room vnum is the vnum of\r\n"<<
-		        "the room in which the obj should be placed.  The object will be loaded\r\n"<<
-		        "and left lying on the ground.\r\n"<<
-		        "\r\n"<<
-		        "{gld}G: give object to mobile{/gld}Format: G <if-flag> <obj vnum> <max existing>\r\n"<<
-		        "Obj vnum is the vnum of the obj to be given.  The object will be loaded\r\n"<<
-		        "and placed in the inventory of the last mobile loaded with an ``M''\r\n"<<
-		        "command.\r\n"<<
-		        "This command will usually be used with an if-flag of 1, since\r\n"<<
-		        "attempting to give an object to a non-existing mobile will result in an\r\n"<<
-		        "error.\r\n"<<
-		        "\r\n"<<
-		        "{gld}E: equip mobile with object{/gld}Format: E <if-flag> <obj vnum> <max existing> <equipment position>\r\n"<<
-		        "Obj vnum is the vnum of the obj to be equipped.  The object will be\r\n"<<
-		        "loaded and added to the equipment list of the last mobile loaded with\r\n"<<
-		        "an ``M'' command.  Equipment Position should be one of the following:\r\n"<<
-		        "\r\n"<<
-		        "          0    Used as light\r\n"<<
-		        "          1    Worn on right finger\r\n"<<
-		        "          2    Worn on left finger\r\n"<<
-		        "          3    First object worn around neck\r\n"<<
-		        "          4    Second object worn around neck\r\n"<<
-		        "          5    Worn on body\r\n"<<
-		        "          6    Worn on head\r\n"<<
-		        "          7    Worn on legs\r\n"<<
-		        "          8    Worn on feet\r\n"<<
-		        "          9    Worn on hands\r\n"<<
-		        "          10   Worn on arms\r\n"<<
-		        "          11   Worn as shield\r\n"<<
-		        "          12   Worn about body\r\n"<<
-		        "          13   Worn around waist\r\n"<<
-		        "          14   Worn around right wrist\r\n"<<
-		        "          15   Worn around left wrist\r\n"<<
-		        "          16   Wielded as a weapon\r\n"<<
-		        "          17   Held\r\n"<<
-		        "\r\n"<<
-		        "This command will usually be used with an if-flag of 1, since\r\n"<<
-		        "attempting to give an object to a non-existing mobile will result in an\r\n"<<
-		        "error.\r\n"<<
-		        "\r\n"<<
-		        "{gld}P: put object in object{/gld}Format: P <if-flag> <obj vnum 1> <max existing> <obj vnum 2>\r\n"<<
-		        "An object with Obj Vnum 1 will be loaded, and placed inside of the copy\r\n"<<
-		        "of Obj Vnum 2 most recently loaded.\r\n"<<
-		        "This command will usually be used with an if-flag of 1, since\r\n"<<
-		        "attempting to put an object inside of a non-existing object will result\r\n"<<
-		        "in an error.\r\n"<<
-		        "\r\n"<<
-		        "{gld}D: set the state of a door{/gld}Format: D <if-flag> <room vnum> <exit num> <state>\r\n"<<
-		        "Room vnum is the virtual number of the room with the door to be set.\r\n"<<
-		        "Exit num being one of:\r\n"<<
-		        "\r\n"<<
-		        "          0    North\r\n"<<
-		        "          1    East\r\n"<<
-		        "          2    South\r\n"<<
-		        "          3    West\r\n"<<
-		        "          4    Up\r\n"<<
-		        "          5    Down \r\n"<<
-		        "\r\n"<<
-		        "State being one of:\r\n"<<
-		        "\r\n"<<
-		        "          0    Open\r\n"<<
-		        "          1    Closed\r\n"<<
-		        "          2    Closed and locked\r\n"<<
-		        "\r\n"<<
-		        "Care should be taken to set both sides of a door correctly.  Closing\r\n"<<
-		        "the north exit of one room does not automatically close the south exit\r\n"<<
-		        "of the room on the other side of the door.\r\n"<<
-		        "\r\n"<<
-		        "{gld}R: remove object from room{/gld}Format: R <if-flag> <room vnum> <obj vnum>\r\n"<<
-		        "If an object with vnum Obj Vnum exists in the room with vnum Room Vnum,\r\n"<<
-		        "it will be removed from the room and purged.\r\n"<<
-		        "\r\n";
+			"Each command consists of a letter, identifying the command-type,\r\n"<<
+			"followed by three or four arguments.  The first argument, common to all the\r\n"<<
+			"commands, is called the ``if-flag.''  If the if-flag for a command is 1, that\r\n"<<
+			"command is only executed if the command immediately before it was executed\r\n"<<
+			"as well.  If the if-flag is 0, the command is always executed.  If-flags are\r\n"<<
+			"useful for things like equipping mobiles--you don't want to try to equip\r\n"<<
+			"a mobile that has not been loaded.\r\n"<<
+			"Commands that load mobiles and objects also include a ``max existing''\r\n"<<
+			"argument.  This specifies the maximum number of copies of the mobile or\r\n"<<
+			"object that are allowed to exist in the entire world at once.  If the number\r\n"<<
+			"currently existing is greater than or equal to the ``max existing'' limit, the\r\n"<<
+			"command is not executed.\r\n"<<
+			"The valid zone-reset commands are M, O, G, E, P, D, and R.\r\n"<<
+			"\r\n"<<
+			"{gld}M: load a mobile{/gld}Format: M <if-flag> <mob vnum> <max existing> <room vnum>\r\n"<<
+			"Mob vnum is the vnum of the mob to be loaded.  Room vnum is the vnum of\r\n"<<
+			"the room in which the mob should be placed.  The mob will be loaded\r\n"<<
+			"into the room.\r\n"<<
+			"\r\n"<<
+			"{gld}O: load an object{/gld}Format: O <if-flag> <obj vnum> <max existing> <room vnum>\r\n"<<
+			"Obj vnum is the vnum of the obj to be loaded.  Room vnum is the vnum of\r\n"<<
+			"the room in which the obj should be placed.  The object will be loaded\r\n"<<
+			"and left lying on the ground.\r\n"<<
+			"\r\n"<<
+			"{gld}G: give object to mobile{/gld}Format: G <if-flag> <obj vnum> <max existing>\r\n"<<
+			"Obj vnum is the vnum of the obj to be given.  The object will be loaded\r\n"<<
+			"and placed in the inventory of the last mobile loaded with an ``M''\r\n"<<
+			"command.\r\n"<<
+			"This command will usually be used with an if-flag of 1, since\r\n"<<
+			"attempting to give an object to a non-existing mobile will result in an\r\n"<<
+			"error.\r\n"<<
+			"\r\n"<<
+			"{gld}E: equip mobile with object{/gld}Format: E <if-flag> <obj vnum> <max existing> <equipment position>\r\n"<<
+			"Obj vnum is the vnum of the obj to be equipped.  The object will be\r\n"<<
+			"loaded and added to the equipment list of the last mobile loaded with\r\n"<<
+			"an ``M'' command.  Equipment Position should be one of the following:\r\n"<<
+			"\r\n"<<
+			"          0    Used as light\r\n"<<
+			"          1    Worn on right finger\r\n"<<
+			"          2    Worn on left finger\r\n"<<
+			"          3    First object worn around neck\r\n"<<
+			"          4    Second object worn around neck\r\n"<<
+			"          5    Worn on body\r\n"<<
+			"          6    Worn on head\r\n"<<
+			"          7    Worn on legs\r\n"<<
+			"          8    Worn on feet\r\n"<<
+			"          9    Worn on hands\r\n"<<
+			"          10   Worn on arms\r\n"<<
+			"          11   Worn as shield\r\n"<<
+			"          12   Worn about body\r\n"<<
+			"          13   Worn around waist\r\n"<<
+			"          14   Worn around right wrist\r\n"<<
+			"          15   Worn around left wrist\r\n"<<
+			"          16   Wielded as a weapon\r\n"<<
+			"          17   Held\r\n"<<
+			"\r\n"<<
+			"This command will usually be used with an if-flag of 1, since\r\n"<<
+			"attempting to give an object to a non-existing mobile will result in an\r\n"<<
+			"error.\r\n"<<
+			"\r\n"<<
+			"{gld}P: put object in object{/gld}Format: P <if-flag> <obj vnum 1> <max existing> <obj vnum 2>\r\n"<<
+			"An object with Obj Vnum 1 will be loaded, and placed inside of the copy\r\n"<<
+			"of Obj Vnum 2 most recently loaded.\r\n"<<
+			"This command will usually be used with an if-flag of 1, since\r\n"<<
+			"attempting to put an object inside of a non-existing object will result\r\n"<<
+			"in an error.\r\n"<<
+			"\r\n"<<
+			"{gld}D: set the state of a door{/gld}Format: D <if-flag> <room vnum> <exit num> <state>\r\n"<<
+			"Room vnum is the virtual number of the room with the door to be set.\r\n"<<
+			"Exit num being one of:\r\n"<<
+			"\r\n"<<
+			"          0    North\r\n"<<
+			"          1    East\r\n"<<
+			"          2    South\r\n"<<
+			"          3    West\r\n"<<
+			"          4    Up\r\n"<<
+			"          5    Down \r\n"<<
+			"\r\n"<<
+			"State being one of:\r\n"<<
+			"\r\n"<<
+			"          0    Open\r\n"<<
+			"          1    Closed\r\n"<<
+			"          2    Closed and locked\r\n"<<
+			"\r\n"<<
+			"Care should be taken to set both sides of a door correctly.  Closing\r\n"<<
+			"the north exit of one room does not automatically close the south exit\r\n"<<
+			"of the room on the other side of the door.\r\n"<<
+			"\r\n"<<
+			"{gld}R: remove object from room{/gld}Format: R <if-flag> <room vnum> <obj vnum>\r\n"<<
+			"If an object with vnum Obj Vnum exists in the room with vnum Room Vnum,\r\n"<<
+			"it will be removed from the room and purged.\r\n"<<
+			"\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
@@ -2629,86 +2665,86 @@ ACMD(do_zbuild) {
 	if(std::string(argument).length() == 0 || std::string(argument).compare("help") == 0) {
 		player->pager_start();
 		*player << "usage: \r\n" <<
-		        " zbuild help\r\n" <<
-		        "  |--> this help menu\r\n" <<
-		        "  |____[example]\r\n" <<
-		        "  |:: zbuild help\r\n" <<
-		        "  |:: (this help menu will show up)\r\n" <<
-		        " zbuild new <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>\r\n" <<
-		        "  |--> Creates a new zone and maps the parameters to each field in the database.\r\n" <<
-		        "  |____[example]\r\n" <<
-		        "  |:: zbuild new 1200 1299 \"The never ending frost\" 90 2\r\n" <<
-		        "  |:: (creates a new zone which starts at rnum 1200 and ends on 1209\r\n" <<
-		        "  |:: \"The never ending frost\" will be the name of the zone. Quotes must be \r\n" <<
-		        "  |:: used here. 90 is the lifespan and 2 is the most common reset \r\n" <<
-		        "  |:: mode so leave it at that for now.)\r\n" <<
-		        " zbuild list\r\n" <<
-		        "  |--> lists the current zones saved to the db\r\n" <<
-		        "  |____[example]\r\n" <<
-		        "  |:: zbuild list\r\n"<<
-		        " zbuild delete <id>...<N>\r\n" <<
-		        "  |--> deletes the zone from the db with the id <id>. Multiple IDs can be specified\r\n" <<
-		        "  |____[example]\r\n" <<
-		        "  |:: zbuild delete 1\r\n" <<
-				" zbuild mob <zone_id> <mob_vnum> <room_vnum> <max> <if_flag>\r\n" <<
-				"  |--> places the mob identified by mob_vnum in the room room_vnum\r\n" <<
-				" zbuild obj <zone_id> <object_vnum> <room_vnum> <max> <if_flag>\r\n" <<
-				"  |--> places object object_vnum in room room_vnum\r\n" <<
-				" zbuild obj2mob <zone_id> <object_vnum> <mob_vnum> <max> <if_flag>\r\n" <<
-				"  |--> gives object object_vnum to mob mob_vnum\r\n" <<
-				" zbuild obj2obj <zone_id> <object_vnum> <object_vnum2> <max> <if_flag>\r\n" <<
-				"  |--> places object object_vnum into object object_vnum2\r\n" <<
-				"\r\n" <<
-				" /-------------------------------------------------------------\\\r\n" <<
-				" | P A V E M E N T S  S Y S T E M                   version 0.1|\r\n" <<
-				" |_____________________________________________________________/\r\n" <<
-				" zbuild pave <mob|obj> <mob_vnum|object_vnum>\r\n" <<
-				"  |____[example]\r\n" <<
-				"  |:: zbuild pave mob 1050\r\n" <<
-				"  |:: (remembers the mob with vnum of 1050. You can then type 'zbuild here'\r\n" <<
-				"  |:: to place a mob in the room you are currently in.)\r\n"<<
-				"  |____[example]\r\n" <<
-				"  |:: zbuild pave obj 90\r\n" <<
-				"  |:: (remembers the obj with vnum of 90. You can then type 'zbuild here <obj>'\r\n" <<
-				"  |:: to place the object in the specified object. If you don't specify <obj>\r\n" <<
-				"  |:: then it will default to placing the object within the room you are currently\r\n" <<
-				"  |:: standing in.)\r\n" <<
-				" zbuild here [obj]\r\n" <<
-				"  |___[example]\r\n" <<
-				"  |:: (places the object or mob in the current room (if no arguments are given).\r\n" <<
-				"  |:: if [obj] is specified then this command will place the current object in [obj]\r\n" <<
-				"  |:: Obviously, you can't place a mob in an object so [obj] is only honoured for objects)\r\n" <<
-				" zbuild pave list\r\n" <<
-				"  |:: (lists all the pavements currently in your session)\r\n" <<
-				" zbuild switch <id>\r\n" <<
-				"  |:: (switches to the pavement with and id of <id>. To see current\r\n" <<
-				"  |:: pavements use 'zbuild pave list')\r\n" <<
-				"\r\n" <<
-				" /-------------------------------------------------------------\\\r\n" <<
-				" | M A N U A L  P L A C E M E N T S                            |\r\n" <<
-				" |_____________________________________________________________/\r\n" <<
-		        " zbuild place <zone_id> <command> <if_flag> <arg1> <arg2> <arg3>\r\n" <<
-		        "  |--> creates a reset command for the zone 'zone_id'.\r\n" <<
-		        "  |____[example]\r\n" <<
-		        "  |:: zbuild place 5 M 0 1500 500 300\r\n" <<
-		        "  |:: (creates a reset command that grabs the mobile (specified by M) and uses \r\n" <<
-		        "  |:: the three arguments 1500, 500, and 300 as the arguments to the reset zone\r\n" <<
-		        "  |:: function\r\n" <<
-		        "  |::  Commands:\r\n" <<
-		        "  |:: 'M': Read a mobile\r\n" <<
-		        "  |:: 'O': Read an object\r\n" <<
-		        "  |:: 'G': Give obj to mob\r\n" <<
-		        "  |:: 'P': Put obj in obj\r\n" <<
-		        "  |:: 'G': Obj to char\r\n" <<
-		        "  |:: 'E': Obj to char equip\r\n" <<
-		        "  |:: 'D': Set state of door\r\n" <<
-		        "  |:: )\r\n" <<
-		        " {red}see: zbuild help place{/red}\r\n" <<
-		        " zbuild place-list <zone_id>\r\n" <<
-		        "  |--> lists all place commands for 'zone_id'.\r\n" <<
-		        " zbuild place-remove <zone_id> <place_id>\r\n" <<
-		        "  |--> removes the place command 'place_id' in zone 'zone_id'\r\n" <<
-		        "\r\n";
+			" zbuild help\r\n" <<
+			"  |--> this help menu\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: zbuild help\r\n" <<
+			"  |:: (this help menu will show up)\r\n" <<
+			" zbuild new <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>\r\n" <<
+			"  |--> Creates a new zone and maps the parameters to each field in the database.\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: zbuild new 1200 1299 \"The never ending frost\" 90 2\r\n" <<
+			"  |:: (creates a new zone which starts at rnum 1200 and ends on 1209\r\n" <<
+			"  |:: \"The never ending frost\" will be the name of the zone. Quotes must be \r\n" <<
+			"  |:: used here. 90 is the lifespan and 2 is the most common reset \r\n" <<
+			"  |:: mode so leave it at that for now.)\r\n" <<
+			" zbuild list\r\n" <<
+			"  |--> lists the current zones saved to the db\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: zbuild list\r\n"<<
+			" zbuild delete <id>...<N>\r\n" <<
+			"  |--> deletes the zone from the db with the id <id>. Multiple IDs can be specified\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: zbuild delete 1\r\n" <<
+			" zbuild mob <zone_id> <mob_vnum> <room_vnum> <max> <if_flag>\r\n" <<
+			"  |--> places the mob identified by mob_vnum in the room room_vnum\r\n" <<
+			" zbuild obj <zone_id> <obj_vnum> <room_vnum> <max> <if_flag>\r\n" <<
+			"  |--> places object obj_vnum in room room_vnum\r\n" <<
+			" zbuild obj2mob <zone_id> <obj_vnum> <mob_vnum> <max> <if_flag>\r\n" <<
+			"  |--> gives object obj_vnum to mob mob_vnum\r\n" <<
+			" zbuild obj2obj <zone_id> <obj_vnum> <obj_vnum2> <max> <if_flag>\r\n" <<
+			"  |--> places object obj_vnum into object obj_vnum2\r\n" <<
+			"\r\n" <<
+			" /-------------------------------------------------------------\\\r\n" <<
+			" | P A V E M E N T S  S Y S T E M                   version 0.1|\r\n" <<
+			" |_____________________________________________________________/\r\n" <<
+			" zbuild pave <mob|obj> <mob_vnum|obj_vnum>\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: zbuild pave mob 1050\r\n" <<
+			"  |:: (remembers the mob with vnum of 1050. You can then type 'zbuild here'\r\n" <<
+			"  |:: to place a mob in the room you are currently in.)\r\n"<<
+			"  |____[example]\r\n" <<
+			"  |:: zbuild pave obj 90\r\n" <<
+			"  |:: (remembers the obj with vnum of 90. You can then type 'zbuild here <obj>'\r\n" <<
+			"  |:: to place the object in the specified object. If you don't specify <obj>\r\n" <<
+			"  |:: then it will default to placing the object within the room you are currently\r\n" <<
+			"  |:: standing in.)\r\n" <<
+			" zbuild here [obj]\r\n" <<
+			"  |___[example]\r\n" <<
+			"  |:: (places the object or mob in the current room (if no arguments are given).\r\n" <<
+			"  |:: if [obj] is specified then this command will place the current object in [obj]\r\n" <<
+			"  |:: Obviously, you can't place a mob in an object so [obj] is only honoured for objects)\r\n" <<
+			" zbuild pave list\r\n" <<
+			"  |:: (lists all the pavements currently in your session)\r\n" <<
+			" zbuild switch <id>\r\n" <<
+			"  |:: (switches to the pavement with and id of <id>. To see current\r\n" <<
+			"  |:: pavements use 'zbuild pave list')\r\n" <<
+			"\r\n" <<
+			" /-------------------------------------------------------------\\\r\n" <<
+			" | M A N U A L  P L A C E M E N T S                            |\r\n" <<
+			" |_____________________________________________________________/\r\n" <<
+			" zbuild place <zone_id> <command> <if_flag> <arg1> <arg2> <arg3>\r\n" <<
+			"  |--> creates a reset command for the zone 'zone_id'.\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: zbuild place 5 M 0 1500 500 300\r\n" <<
+			"  |:: (creates a reset command that grabs the mobile (specified by M) and uses \r\n" <<
+			"  |:: the three arguments 1500, 500, and 300 as the arguments to the reset zone\r\n" <<
+			"  |:: function\r\n" <<
+			"  |::  Commands:\r\n" <<
+			"  |:: 'M': Read a mobile\r\n" <<
+			"  |:: 'O': Read an object\r\n" <<
+			"  |:: 'G': Give obj to mob\r\n" <<
+			"  |:: 'P': Put obj in obj\r\n" <<
+			"  |:: 'G': Obj to char\r\n" <<
+			"  |:: 'E': Obj to char equip\r\n" <<
+			"  |:: 'D': Set state of door\r\n" <<
+			"  |:: )\r\n" <<
+			" {red}see: zbuild help place{/red}\r\n" <<
+			" zbuild place-list <zone_id>\r\n" <<
+			"  |--> lists all place commands for 'zone_id'.\r\n" <<
+			" zbuild place-remove <zone_id> <place_id>\r\n" <<
+			"  |--> removes the place command 'place_id' in zone 'zone_id'\r\n" <<
+			"\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
@@ -2753,12 +2789,12 @@ ACMD(do_zbuild) {
 			return {true,""};
 		};
 		auto status = mods::builder_util::save_to_db<std::string>(
-		                  "zone",
-		                  "id",
-		                  std::to_string(zone_table[zone_id.value()].number),
-		                  value_callback,
-		                  post_modify_callback
-		              );
+				"zone",
+				"id",
+				std::to_string(zone_table[zone_id.value()].number),
+				value_callback,
+				post_modify_callback
+				);
 
 		if(status.first) {
 			mods::builder::report_success<shrd_ptr_player_t>(player,"Saved zone");
@@ -2817,7 +2853,7 @@ ACMD(do_zbuild) {
 			mods::builder::report_error<shrd_ptr_player_t>(player," Invalid zone id");
 			return;
 		}
-		 
+
 		if(args.size() < 6){
 			mods::builder::report_error<shrd_ptr_player_t>(player,"Not enough arguments");
 			return;
@@ -2909,10 +2945,10 @@ ACMD(do_zbuild) {
 		if(!player->is_executing_js()){
 			mods::builder::report_status<shrd_ptr_player_t>(player,"listing...");
 		}
-		auto txn = mods::pq::transaction(*mods::globals::pq_con);
+		auto t = mods::pq::transaction(*mods::globals::pq_con);
 		std::string check_sql = "SELECT id,zone_start,zone_end,zone_name,lifespan,reset_mode FROM zone";
-		auto check_result = mods::pq::exec(txn,check_sql);
-		mods::pq::commit(txn);
+		auto check_result = mods::pq::exec(t,check_sql);
+		mods::pq::commit(t);
 
 		if(!player->is_executing_js()){
 			player->pager_start();
@@ -2945,7 +2981,7 @@ ACMD(do_zbuild) {
 					.push("name",row["zone_name"].c_str())
 					.push("lifespan",row["lifespan"].as<int>())
 					.push("reset_mode",row["reset_mode"].as<int>())
-				.object_end();
+					.object_end();
 			}
 		}
 
@@ -3072,8 +3108,8 @@ ACMD(do_zbuild) {
 		}
 
 		zone_table[index.value()].cmd.erase(
-		    zone_table[index.value()].cmd.begin() + command_index.value()
-		);
+				zone_table[index.value()].cmd.begin() + command_index.value()
+				);
 		mods::builder::report_status<shrd_ptr_player_t>(player,"Index removed");
 		return;
 	}
@@ -3081,108 +3117,108 @@ ACMD(do_zbuild) {
 
 ACMD(do_rbuild) {
 	MENTOC_PREAMBLE();
-	mods::builder::initialize_builder(player->cd());
+	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
 	if(std::string(argument).length() == 0 || std::string(argument).compare("help") == 0) {
 		player->pager_start() << "usage: \r\n" <<
-		                      " rbuild help\r\n" <<
-		                      "  |--> this help menu\r\n" <<
-		                      "  |____[example]\r\n" <<
-		                      "  |:: rbuild help\r\n" <<
-		                      "  |:: (this help menu will show up)\r\n" <<
-		                      " rbuild <set> <rnum> <number>\r\n" <<
-		                      "  |--> Set the real room number of the current room\r\n" <<
-		                      "  |____[example]\r\n" <<
-		                      "  |:: rbuild set rnum 1204\r\n" <<
-		                      "  |:: (next time you do 'rbuild room' it will display 1204)\r\n" <<
+			" rbuild help\r\n" <<
+			"  |--> this help menu\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: rbuild help\r\n" <<
+			"  |:: (this help menu will show up)\r\n" <<
+			" rbuild <set> <rnum> <number>\r\n" <<
+			"  |--> Set the real room number of the current room\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: rbuild set rnum 1204\r\n" <<
+			"  |:: (next time you do 'rbuild room' it will display 1204)\r\n" <<
 
-		                      " rbuild <room>\r\n" <<
-		                      "  |--> get the real room number of the room\r\n" <<
-		                      "  |____[example]\r\n" <<
-		                      "  |:: rbuild room\r\n"<<
+			" rbuild <room>\r\n" <<
+			"  |--> get the real room number of the room\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: rbuild room\r\n"<<
 
-		                      " rbuild <save>\r\n" <<
-		                      "  |--> save the current room you are standing in\r\n" <<
-		                      "  |____[example]\r\n" <<
-		                      "  |:: rbuild save\r\n"<<
+			" rbuild <save>\r\n" <<
+			"  |--> save the current room you are standing in\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: rbuild save\r\n"<<
 
-		                      " rbuild <create> <direction>\r\n" <<
-		                      "  |--> creates a room to the direction you choose (neswud)\r\n" <<
-		                      "  |____[example]\r\n" <<
-		                      "  |:: rbuild create north\r\n" <<
-		                      "  |:: (the room to the north will be a brand new defaulted room)\r\n" <<
+			" rbuild <create> <direction>\r\n" <<
+			"  |--> creates a room to the direction you choose (neswud)\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: rbuild create north\r\n" <<
+			"  |:: (the room to the north will be a brand new defaulted room)\r\n" <<
 
-		                      " rbuild <bind> <direction> <room_rnum>\r\n" <<
-		                      "  |--> bind a room to a direction\r\n" <<
-		                      "  |____[example]\r\n"<<
-		                      "  |:: rbuild bind north 27\r\n"<<
-		                      "  |:: (the room to the north will lead to room 27)\r\n" <<
+			" rbuild <bind> <direction> <room_rnum>\r\n" <<
+			"  |--> bind a room to a direction\r\n" <<
+			"  |____[example]\r\n"<<
+			"  |:: rbuild bind north 27\r\n"<<
+			"  |:: (the room to the north will lead to room 27)\r\n" <<
 
-		                      " rbuild <title> <string>\r\n" <<
-		                      "  |--> set the current room title to string\r\n" <<
-		                      "  |____[example]\r\n" <<
-		                      "  |:: rbuild title Taco Bell Employee Lounge\r\n" <<
-		                      "  |:: (the room's title will be the above title)\r\n" <<
+			" rbuild <title> <string>\r\n" <<
+			"  |--> set the current room title to string\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: rbuild title Taco Bell Employee Lounge\r\n" <<
+			"  |:: (the room's title will be the above title)\r\n" <<
 
-		                      " rbuild <description> <string>\r\n" <<
-		                      "  |--> set the current room description to string\r\n" <<
-		                      "  |____[example]\r\n" <<
-		                      "  |:: rbuild description The room is filled with boxes of taco bell...\r\n" <<
-		                      "  |:: (the room's description will be the above description)\r\n" <<
+			" rbuild <description> <string>\r\n" <<
+			"  |--> set the current room description to string\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: rbuild description The room is filled with boxes of taco bell...\r\n" <<
+			"  |:: (the room's description will be the above description)\r\n" <<
 
-		                      " rbuild <destroy> <direction>\r\n" <<
-		                      "  |--> destroy a room direction\r\n" <<
-		                      "  |____[examples]\r\n" <<
-		                      "  |:: rbuild destroy north\r\n" <<
-		                      "  |:: (north will no longer be an exit)\r\n" <<
+			" rbuild <destroy> <direction>\r\n" <<
+			"  |--> destroy a room direction\r\n" <<
+			"  |____[examples]\r\n" <<
+			"  |:: rbuild destroy north\r\n" <<
+			"  |:: (north will no longer be an exit)\r\n" <<
 
-		                      " rbuild <dopt> <direction> <item> <value>\r\n" <<
-		                      "  |--> set dir_option item to value\r\n" <<
-		                      "  |____[possible items]\r\n" <<
-		                      "  |:: gen                 -> The general description of the room\r\n" <<
-		                      "  |:: keyword             -> The keyword of the room direction\r\n" <<
-		                      "  |:: einfo               -> Currently only accepts ISDOOR\r\n" << //TODO Accept more than just ISDOOR
-		                      "  |:: key                 -> Integer key that is accepted for this exit\r\n" <<
-		                      "  |:: to_room             -> The room number that this exit leads to\r\n" <<
-		                      "  |____[examples]\r\n" <<
-		                      "  |:: rbuild dopt north gen To the north you see the Taco Bell bathroom.\r\n" <<
-		                      "  |:: (When you do 'look north' you will see the above description)\r\n" <<
-		                      "  |:: rbuild dopt north keyword bathroom\r\n" <<
-		                      "  |:: (when you do 'open bathroom' it will open the door to the north)\r\n" <<
-		                      "  |:: rbuild dopt north einfo ISDOOR\r\n" <<
-		                      "  |:: (the north exit will be a door)\r\n" <<
-		                      "  |:: rbuild dopt north key 123\r\n" <<
-		                      "  |:: (the north exit will require a key numbered 123)\r\n" <<
-		                      "  |:: rbuild dopt north to_room 27\r\n" <<
-		                      "  |:: (the north room will lead to room number 27)\r\n" <<
-		                      " rbuild pave <on|off> <room_number_start> <zone_id>\r\n" <<
-		                      "  |--> starts the pave mode where any direction you go to will automatically \r\n" <<
-		                      "  |    create and bind rooms. Helpful for when you want to carve out a ton of\r\n" <<
-		                      "  |    different rooms and fill in the descriptions for them later\r\n" <<
-		                      "  |    You must supply the room_number_start argument as this will be the virtual room \r\n" <<
-		                      "  |    number that the paved rooms will start at.\r\n" <<
-		                      "  |    When you are done paving type 'rbuild pave off')\r\n"<<
-		                      "  |____[examples]\r\n" <<
-		                      "  |:: rbuild pave on 100 5\r\n" <<
-		                      "  |   (starts pave mode. The first room will have a virtual room number of 100, and the next \r\n" <<
-		                      "  |   subsequent rooms will be 101, 102, etc. until you type 'rbuild pave off'. Once in pave mode, \r\n" <<
-		                      "  |   walk to a bunch of different rooms and pave out a walkway. When you type 'rbuild pave off' it will \r\n" <<
-		                      "  |   give you a transaction id number. Remember this transaction ID number because that is how you refer to the set\r\n" <<
-		                      "  |   of paved rooms when you want to save. To save a set of paved rooms type 'rbuild save-paved <transaction_id_number>'\r\n" <<
-		                      "  |   where transaction_id_number is the transaction id returned when you typed 'rbuild pave off'. If you forget \r\n" <<
-		                      "  |   your transaction id number, you can type 'rbuild list-paved' and it will show you a list of paved walkways\r\n" <<
-		                      "  |   that you currently have)\r\n" <<
-		                      "  |:: rbuild pave off\r\n" <<
-		                      "  |--> (stops the pave mode)\r\n" <<
-		                      " rbuild save-paved <transaction_id_number>\r\n" <<
-		                      "  |--> saves all of the paved rooms that were created for the transaction id number specified.\r\n" <<
-		                      " rbuild clear-paved <transaction_id_number>\r\n" <<
-		                      "  |--> clears all of the paved rooms that were created\r\n" <<
-		                      " rbuild list-paved\r\n" <<
-		                      "  |--> lists all the currently paved transaction id numbers\r\n" <<
-		                      "[documentation written on 2018-01-19]\r\n" <<
-		                      "\r\n";
+			" rbuild <dopt> <direction> <item> <value>\r\n" <<
+			"  |--> set dir_option item to value\r\n" <<
+			"  |____[possible items]\r\n" <<
+			"  |:: gen                 -> The general description of the room\r\n" <<
+			"  |:: keyword             -> The keyword of the room direction\r\n" <<
+			"  |:: einfo               -> Currently only accepts ISDOOR\r\n" << //TODO Accept more than just ISDOOR
+			"  |:: key                 -> Integer key that is accepted for this exit\r\n" <<
+			"  |:: to_room             -> The room number that this exit leads to\r\n" <<
+			"  |____[examples]\r\n" <<
+			"  |:: rbuild dopt north gen To the north you see the Taco Bell bathroom.\r\n" <<
+			"  |:: (When you do 'look north' you will see the above description)\r\n" <<
+			"  |:: rbuild dopt north keyword bathroom\r\n" <<
+			"  |:: (when you do 'open bathroom' it will open the door to the north)\r\n" <<
+			"  |:: rbuild dopt north einfo ISDOOR\r\n" <<
+			"  |:: (the north exit will be a door)\r\n" <<
+			"  |:: rbuild dopt north key 123\r\n" <<
+			"  |:: (the north exit will require a key numbered 123)\r\n" <<
+			"  |:: rbuild dopt north to_room 27\r\n" <<
+			"  |:: (the north room will lead to room number 27)\r\n" <<
+			" rbuild pave <on|off> <room_number_start> <zone_id>\r\n" <<
+			"  |--> starts the pave mode where any direction you go to will automatically \r\n" <<
+			"  |    create and bind rooms. Helpful for when you want to carve out a ton of\r\n" <<
+			"  |    different rooms and fill in the descriptions for them later\r\n" <<
+			"  |    You must supply the room_number_start argument as this will be the virtual room \r\n" <<
+			"  |    number that the paved rooms will start at.\r\n" <<
+			"  |    When you are done paving type 'rbuild pave off')\r\n"<<
+			"  |____[examples]\r\n" <<
+			"  |:: rbuild pave on 100 5\r\n" <<
+			"  |   (starts pave mode. The first room will have a virtual room number of 100, and the next \r\n" <<
+			"  |   subsequent rooms will be 101, 102, etc. until you type 'rbuild pave off'. Once in pave mode, \r\n" <<
+			"  |   walk to a bunch of different rooms and pave out a walkway. When you type 'rbuild pave off' it will \r\n" <<
+			"  |   give you a transaction id number. Remember this transaction ID number because that is how you refer to the set\r\n" <<
+			"  |   of paved rooms when you want to save. To save a set of paved rooms type 'rbuild save-paved <transaction_id_number>'\r\n" <<
+			"  |   where transaction_id_number is the transaction id returned when you typed 'rbuild pave off'. If you forget \r\n" <<
+			"  |   your transaction id number, you can type 'rbuild list-paved' and it will show you a list of paved walkways\r\n" <<
+			"  |   that you currently have)\r\n" <<
+			"  |:: rbuild pave off\r\n" <<
+			"  |--> (stops the pave mode)\r\n" <<
+			" rbuild save-paved <transaction_id_number>\r\n" <<
+			"  |--> saves all of the paved rooms that were created for the transaction id number specified.\r\n" <<
+			" rbuild clear-paved <transaction_id_number>\r\n" <<
+			"  |--> clears all of the paved rooms that were created\r\n" <<
+			" rbuild list-paved\r\n" <<
+			"  |--> lists all the currently paved transaction id numbers\r\n" <<
+			"[documentation written on 2018-01-19]\r\n" <<
+			"\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
@@ -3321,7 +3357,7 @@ ACMD(do_rbuild) {
 		if(str_item.compare("gen") == 0) {
 			description = description.substr(description.find("gen ") + 4);
 			auto ret = mods::builder::dir_option(IN_ROOM(ch),mods::globals::dir_int(direction[0]),description,
-			                                     std::nullopt,std::nullopt,std::nullopt,std::nullopt).value_or("success");
+					std::nullopt,std::nullopt,std::nullopt,std::nullopt).value_or("success");
 
 			if(ret.compare("success") == 0) {
 				mods::builder::report_success<shrd_ptr_player_t>(player,"General Description changed");
@@ -3335,7 +3371,7 @@ ACMD(do_rbuild) {
 		if(str_item.compare("keyword") == 0) {
 			description = description.substr(description.find("keyword ") + 8);
 			auto ret = mods::builder::dir_option(IN_ROOM(ch),mods::globals::dir_int(direction[0]),std::nullopt,
-			                                     description,std::nullopt,std::nullopt,std::nullopt).value_or("success");
+					description,std::nullopt,std::nullopt,std::nullopt).value_or("success");
 
 			if(ret.compare("success") == 0) {
 				mods::builder::report_success<shrd_ptr_player_t>(player,"Keyword changed");
@@ -3356,7 +3392,7 @@ ACMD(do_rbuild) {
 			}
 
 			auto ret = mods::builder::dir_option(IN_ROOM(ch),mods::globals::dir_int(direction[0]),std::nullopt,
-			                                     std::nullopt,exit_info.value(),std::nullopt,std::nullopt).value_or("success");
+					std::nullopt,exit_info.value(),std::nullopt,std::nullopt).value_or("success");
 
 			if(ret.compare("success") == 0) {
 				mods::builder::report_success<shrd_ptr_player_t>(player,"exit_info changed to: EX_ISDOOR");
@@ -3377,7 +3413,7 @@ ACMD(do_rbuild) {
 			}
 
 			auto ret = mods::builder::dir_option(IN_ROOM(ch),mods::globals::dir_int(direction[0]),std::nullopt,
-			                                     std::nullopt,std::nullopt,key.value(),std::nullopt).value_or("success");
+					std::nullopt,std::nullopt,key.value(),std::nullopt).value_or("success");
 
 			if(ret.compare("success") == 0) {
 				mods::builder::report_success<shrd_ptr_player_t>(player,"key changed");
@@ -3398,7 +3434,7 @@ ACMD(do_rbuild) {
 			}
 
 			auto ret = mods::builder::dir_option(IN_ROOM(ch),mods::globals::dir_int(direction[0]),std::nullopt,
-			                                     std::nullopt,std::nullopt,std::nullopt,to_room.value()).value_or("success");
+					std::nullopt,std::nullopt,std::nullopt,to_room.value()).value_or("success");
 
 			if(ret.compare("success") == 0) {
 				mods::builder::report_success<shrd_ptr_player_t>(player,"to_room changed");

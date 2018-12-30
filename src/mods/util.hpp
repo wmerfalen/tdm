@@ -24,8 +24,22 @@ static inline std::string operator "" _s(const char* s,long unsigned int i) {
 }
 #endif
 
+
 namespace mods::util {
 	using directory_list_t = std::vector<std::string>;
+
+namespace detail{ 
+template<typename... Args>
+std::ostream& log(std::ostream& out, Args... args);/*{
+    (out << ... << args) << "\n";
+    return out;
+}*/
+};
+
+template<typename... Args>
+std::ostream& log(Args... args); /*{
+    return detail::log(std::cout, args...);
+}*/
 
 	/**========================================*/
 	/** affected/plr flag conversion utilities */

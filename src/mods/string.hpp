@@ -12,7 +12,7 @@ namespace mods {
 		~string();
 		operator bool() const { return m_str.length(); }
 		operator char*() const { return const_cast<char*>(c_str()); }
-		operator const char*() const { return m_str.length() == 0 ? nullptr : m_str.c_str(); }
+		explicit operator const char*() const { return m_str.length() == 0 ? nullptr : m_str.c_str(); }
 		explicit operator std::string() const { return m_str; }
 		string& operator=(const char* other);
 		string& operator=(char* other);

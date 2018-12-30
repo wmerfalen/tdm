@@ -1,52 +1,20 @@
 #ifndef __MENTOC_MODS_CRYPTO_HEADER__
-#define  __MENTOC_MODS_CRYPTO_HEADER__
-
+#define __MENTOC_MODS_CRYPTO_HEADER__
+#include "crypto.hpp"
+#include <openssl/conf.h>
+#include <openssl/evp.h>
+#include <openssl/err.h>
+#include <string>
 #include <iostream>
-#include "../conf.h"
-#include "../sysdep.h"
-#include "../structs.h"
-#include "../types.hpp"
-#include "../globals.hpp"
-#include "extern.hpp"
-#include <libscrypt.h>
+#include <vector>
+#include <string.h>
+#include <string_view>
 
-namespace mods {
-	class crypto {
-		public:
-			constexpr static const char* salt = "tmnt1`9*$$jzz8N++";
-			static int encrypt(const std::string & data,std::vector<char>& outbuf){
-/**
- * crypto_scrypt(passwd, passwdlen, salt, saltlen, N, r, p, buf, buflen):
- * Compute scrypt(passwd[0 .. passwdlen - 1], salt[0 .. saltlen - 1], N, r,
- * p, buflen) and write the result into buf.  The parameters r, p, and buflen
- * must satisfy r * p < 2^30 and buflen <= (2^32 - 1) * 32.  The parameter N
- * must be a power of 2 greater than 1.
- *
- * libscrypt_scrypt(passwd, passwdlen, salt, saltlen, N, r, p, buf, buflen):
- * password; duh
- * N: CPU AND RAM cost (first modifier)
- * r: RAM Cost
- * p: CPU cost (parallelisation)
- * In short, N is your main performance modifier. Values of r = 8, p = 1 are
- * standard unless you want to modify the CPU/RAM ratio.
- * Return 0 on success; or -1 on error.
-//int libscrypt_scrypt(const uint8_t *, size_t, const uint8_t *, size_t, uint64_t,
-//    uint32_t, uint32_t, uint8_t *, size_t);
- */
-
-				/* TODO: this is a guess at how much space we need */
-				outbuf.reserve(data.length() * 2);
-				return libscrypt_scrypt(reinterpret_cast<const uint8_t*>(data.c_str()),
-						data.length(),
-						reinterpret_cast<const uint8_t*>(salt),
-						std::string(salt).length(),
-						16,/* N - must be power of 2 greater than 1 */
-						16,
-						4,
-						reinterpret_cast<uint8_t*>(&outbuf[0]),
-						outbuf.size());
-			}
-	};
+namespace mods::crypto {
+	constexpr std::string_view hardcoded_key = "1218749!-Z0*$7611218749!-Z0*$761";
+	constexpr std::string_view hardcoded_iv = "1218749!-Z0*$761";
+	std::string encrypt_buffer(std::string_view in_key,std::string_view in_iv,std::string_view buffer);
+	std::string decrypt_buffer(std::string_view in_ciphertext,std::string_view in_key,std::string in_iv,std::string buffer);
 };
 
 #endif

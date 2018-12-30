@@ -12,7 +12,14 @@ typedef int socket_t;
 #include <array>
 #include "../mods/util.hpp"
 #include "../globals.hpp"
+#include <map>
 
 namespace mods::conf {
+	constexpr static std::string_view postgres_user = "postgres";
+	constexpr static std::string_view postgres_dbname = "postgres_mud";
+	constexpr static std::string_view postgres_password = "postgresmudpassword";
+	constexpr static std::string_view postgres_host = "localhost";
+	constexpr static std::string_view postgres_port = "5432";
+	std::string pq_connection(std::map<std::string,std::string>);
 };
 #endif

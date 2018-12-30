@@ -1,0 +1,6 @@
+[CRASH] - Input validation fails when typing '!pos=1'
+{FIXED} -- [FREEZE] - When a new user calls 'save' the lmdb transactions get messed up and things fail
+{FIXED} -- [logic-error] - The following message is printed out when a new user's data is commited to lmdb:
+	"debug: db_handle::commit -- m_good is good
+error: db_handle::commit -- failed:MDB_BAD_TXN: Transaction must abort, has a child, or is invalid"
+

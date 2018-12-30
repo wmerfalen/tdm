@@ -37,24 +37,24 @@ namespace mods::builder_util {
 
 			if(check_result.size()) {
 				/* update the record */
-				auto txn = txn();
-				auto sql = sql_compositor(table_name,&txn)
+				auto t = txn();
+				auto sql = sql_compositor(table_name,&t)
 				           .update(table_name)
 				           .set(values)
 				           .where(primary_key,"=",pk_value)
 				           .sql();
-				mods::pq::exec(txn,sql);
-				mods::pq::commit(txn);
+				mods::pq::exec(t,sql);
+				mods::pq::commit(t);
 			} else {
 				/* insert the record */
-				auto txn = txn();
-				auto sql = sql_compositor(table_name,&txn)
+				auto t = txn();
+				auto sql = sql_compositor(table_name,&t)
 				           .insert()
 				           .into(table_name)
 				           .values(values)
 				           .sql();
-				mods::pq::exec(txn,sql);
-				mods::pq::commit(txn);
+				mods::pq::exec(t,sql);
+				mods::pq::commit(t);
 			}
 
 			return post_modify_values_function();

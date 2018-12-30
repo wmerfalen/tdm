@@ -1,8 +1,10 @@
 #include "conf.hpp"
 
 namespace mods::conf {
-	std::string postgres_user = "postgres";
-	std::string postgres_db = "postgres_mud";
-	std::string postgres_password = "postgresmudpassword";
-	short postgres_port = 0;
+	std::string pq_connection(std::map<std::string,std::string> values){
+		return "user=" + values["user"] + " " +
+			"host=" + values["host"] +  " " + 
+			"password=" + values["password"] + " " +
+			"dbname=" + values["dbname"];
+	}
 };

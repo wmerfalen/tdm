@@ -19,11 +19,13 @@
 //#include "extern.hpp"
 #include "loops.hpp"
 //#include "../spells.h"
+#include "js.hpp"
 #include "db.hpp"
 namespace mods::js::player {
-	struct scaffold {
-		duk_context* m_context;
-	};
-	duk_context* new_context();
+	//static duk_ret_t require_js(duk_context *ctx);
+	//struct scaffolding {
+	//	duk_context* m_context;
+	//};
+	//duk_context* new_context();
 };
 #endif

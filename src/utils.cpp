@@ -22,10 +22,35 @@
 #include "interpreter.h"
 #include <random>	//C++ library
 #include <stdio.h>	/** for STDERR descriptor */
+#include "mods/util.hpp"
 
 
 /* external globals */
 extern struct time_data time_info;
+
+void log(std::string n,...) {
+       va_list args;
+       va_start(args, n);
+       std::string msg,tmp;
+       do{
+               tmp.clear();
+               tmp = va_arg(args,std::string);
+               if(tmp.length()){
+                       msg += tmp;
+               }
+       }while(tmp.length());
+       va_end(args);
+}
+
+
+void log(const char* format,...) {
+       va_list args;
+
+       va_start(args, format);
+       basic_mud_vlog(format, args);
+       va_end(args);
+}
+
 
 /**
  * STATE macro overload - temporary while we refactor
@@ -53,29 +78,6 @@ int& STATE(std::deque<mods::descriptor_data>::iterator d){
 struct time_info_data *real_time_passed(time_t t2, time_t t1);
 struct time_info_data *mud_time_passed(time_t t2, time_t t1);
 void prune_crlf(char *txt);
-
-void log(std::string n,...) {
-	va_list args;
-	va_start(args, n);
-	std::string msg,tmp;
-	do{
-		tmp.clear();
-		tmp = va_arg(args,std::string);
-		if(tmp.length()){
-			msg += tmp;
-		}
-	}while(tmp.length());
-	va_end(args);
-}
-
-
-void log(const char* format,...) {
-	va_list args;
-
-	va_start(args, format);
-	basic_mud_vlog(format, args);
-	va_end(args);
-}
 
 /* creates a random number in interval [from;to] */
 int rand_number(int from, int to) {

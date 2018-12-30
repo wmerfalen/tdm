@@ -2,6 +2,7 @@
 #include "lmdb.hpp"
 #include "meta_utils.hpp"
 #include "player.hpp"
+#include "pq.hpp"
 
 namespace mods::db {
 

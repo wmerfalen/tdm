@@ -72,6 +72,7 @@ int load_record(const std::string& table, aligned_int_t pk, mutable_map_t& value
 int load_record(const std::string& table, const std::string& pk, mutable_map_t& values);
 int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_map_t& out_record);
 
+bool db_insert(const std::string& table, mutable_map_t* values);
 };//End namespace
 
 #endif

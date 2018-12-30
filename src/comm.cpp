@@ -703,7 +703,7 @@ void game_loop(socket_t mother_desc) {
 			}
 			auto it = mods::globals::socket_map.find(operating_socket);
 			if(it == mods::globals::socket_map.end()){
-				log(std::string("socket_map didn't have operating socket: "),std::to_string(operating_socket));
+				log("socket_map didn't have operating socket: ",operating_socket);
 				++i;
 				continue;
 			}

@@ -21,6 +21,7 @@
 #include "mods/scan.hpp"
 #include "mods/weapon.hpp"
 #include "globals.hpp"
+#include "mods/util.hpp"
 #include "mods/prefs.hpp"
 
 /* extern variables */

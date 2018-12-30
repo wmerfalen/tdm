@@ -46,7 +46,6 @@ int	room_is_dark(room_rnum room);
 void log(const char* format, ...);
 void log(std::string n,...);
 
-
 #define core_dump()		core_dump_real(__FILE__, __LINE__)
 
 /*
@@ -160,7 +159,7 @@ void	update_pos(struct char_data *victim);
 
 #define CREATE(result, type, number)  do {\
 	if ((number) * sizeof(type) <= 0)	\
-		log("SYSERR: Zero bytes or less requested at %s:%d.", __FILE__, __LINE__);	\
+		std::cerr << "SYSERR: Zero bytes or less requested at " <<  __FILE__ << ":" << __LINE__ << "\n";	\
 	if (!((result) = (type *) calloc ((number), sizeof(type))))	\
 		{ perror("SYSERR: malloc failure"); abort(); } } while(0)
 
@@ -206,7 +205,7 @@ void	update_pos(struct char_data *victim);
 #if 1
 /* Subtle bug in the '#var', but works well for now. */
 #define CHECK_PLAYER_SPECIAL(ch, var) \
-	(*(((ch)->player_specials.get() == nullptr) ? (log("SYSERR: Mob using '"#var"' at %s:%d.", __FILE__, __LINE__), &(var)) : &(var)))
+	(*(((ch)->player_specials.get() == nullptr) ? (std::cerr << "SYSERR: Mob using '" << #var << "' at " << __FILE__ << ":" << __LINE__ << "\n", &(var)) : &(var)))
 #else
 #define CHECK_PLAYER_SPECIAL(ch, var)	(var)
 #endif
@@ -536,6 +535,5 @@ void	update_pos(struct char_data *victim);
 #if defined(NOCRYPT) || !defined(CIRCLE_CRYPT)
 #define CRYPT(a,b) (a)
 #else
-#define CRYPT(a,b) ((char *) crypt((a),(b)))
+#define CRYPT(a,b) ((char*)(std::string(a) + std::string(b)).c_str())
 #endif
-

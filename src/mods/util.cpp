@@ -3,6 +3,8 @@
 
 #include "util.hpp"
 #include "flags.hpp"
+
+
 namespace mods {
 	namespace util {
 			uint64_t aff2legacy(mods::flags::aff f){

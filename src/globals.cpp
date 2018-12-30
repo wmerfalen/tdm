@@ -52,6 +52,9 @@ namespace mods {
 		bool f_import_rooms;
 		std::shared_ptr<mods::player> current_player;
 		std::string bootup_test_suite;
+		std::unique_ptr<pqxx::connection> pq_con;
+		//builder_data_map_t builder_data;
+
 		/* Maps */
 		map_object_list obj_map;
 		template <typename I>
@@ -140,18 +143,32 @@ namespace mods {
 				f_test_suite;
 			f_import_rooms = false;
 			boot_type = BOOT_DB;
+			std::string postgres_user = mods::conf::postgres_user.data();
+			std::string postgres_dbname = mods::conf::postgres_dbname.data();
+			std::string postgres_password = mods::conf::postgres_password.data();
+			std::string postgres_host = mods::conf::postgres_host.data();
+			std::string postgres_port = mods::conf::postgres_port.data();
+
 			while(++pos < argc){
 				if(argv[pos]){
 					argument = argv[pos];
 				}else{
 					argument = "";
 				}
-				/*
-				if(strncmp(argv[pos],"--sql-port",10) == 0){
-					exit(port_main(argc -1,static_cast<char**>(&argv[1])));
-					continue;
+				if(strncmp(argv[pos],"--help",6) == 0 || strncmp(argv[pos],"-h",2) == 0){
+					std::cerr << "usage: <circle> --postgres-pw-file=<file> [options]\n"
+				 	<< "--testing=<suite>	Launch test suite\n"
+					<< "--import-rooms 	Run the import rooms routine\n"
+					<< "--hell 	Start the mud in HELL mode\n"
+					<< "--lmdb-name=<name> use name as lmdb db name\n"
+					<< "--lmdb-dir=<dir> use dir as directory to store lmdb data\n"
+					<< "--postgres-user=<user> use user as postgres user. default: postgres\n"
+					<< "--postgres-host=<host> use host as postgres host. default: localhost\n"
+					<< "--postgres-port=<port> use port as postgres port. default: 5432\n"
+					<< "--postgres-pw-file=<file> read postgres password from file. no default. required.\n"
+					;
 				}
-				*/
+
 				if(strncmp(argv[pos],"--testing=",10) == 0){
 					f_test_suite = argument.substr(10,argument.length()-10);
 					continue;
@@ -168,33 +185,87 @@ namespace mods {
 					lmdb_name = argument.substr(12,argument.length()-12);
 					continue;
 				}
-				if(strncmp(argv[pos],"--lmdb-dir=",11) == 0){
-					if(argument.length() < 12){
-						std::cerr << "--lmdb-dir expects an argument, none found: " << argv[pos] <<"\n"
-							<< "Exiting...\n";
+				/** TODO: passing password on commandline is very insecure. For development purposes, this is fine, but this cannot pass for production */
+				if(strncmp(argv[pos],"--postgres-pw-file=",19) == 0){
+					if(argument.length()  < 19){
+						log("SYSERR: --postgres-pw-file expects an argument, none found: '",argv[pos],"'.Exiting...");
 						mods::globals::shutdown();
 					}
-					lmdb_dir = argument.substr(11,argument.length()-11);
-					continue;
+					std::string pw_file = argument.substr(19,argument.length()-19);
+					std::cout << "pw_file: '" << pw_file << "'\n";
+					std::ifstream in_file(pw_file.c_str(),std::ios::in | std::ios::binary);
+					if(!in_file.good() || !in_file.is_open()){
+						log("SYSERR: unable to open password file. Exiting...");
+						mods::globals::shutdown();
+					}else{
+						struct stat statbuf;
+						if(stat(pw_file.c_str(), &statbuf) == -1) {
+							log("SYSERR:  cannot stat password file. Exiting...");
+							mods::globals::shutdown();
+						}
+						std::vector<char> buffer;
+						buffer.reserve(statbuf.st_size + 1);
+						std::fill(buffer.begin(),buffer.end(),0);
+						in_file.read((char*)&buffer[0],statbuf.st_size);
+						postgres_password.assign(buffer.begin(),buffer.end());
+						in_file.close();
+						std::cout << "Successfully read password from file\n";
+						continue;
+					}
+				}
+				if(strncmp(argv[pos],"--postgres-host=",16) == 0){
+					if(argument.length()  < 16){
+						log("SYSERR: --postgres-host expects an argument, none found: '",argv[pos],"'. Exiting...");
+						mods::globals::shutdown();
+					}else{
+						postgres_host = argument.substr(16,argument.length()-16);
+						continue;
+					}
+				}
+				if(strncmp(argv[pos],"--postgres-user=",16) == 0){
+					if(argument.length()  < 16){
+						log("SYSERR: --postgres-user expects an argument, none found: '",argv[pos],"'. Exiting...");
+						mods::globals::shutdown();
+					}else{
+						postgres_user = argument.substr(16,argument.length()-16);
+						continue;
+					}
+				}
+				if(strncmp(argv[pos],"--postgres-port=",16) == 0){
+					if(argument.length() < 16){
+						log("SYSERR: --postgres-port expects an argument, none found: '" ,argv[pos],"'.Exiting...");
+						mods::globals::shutdown();
+					}else{
+						postgres_port = argument.substr(16,argument.length()-16);
+						continue;
+					}
+				}
+				if(strncmp(argv[pos],"--lmdb-dir=",11) == 0){
+					if(argument.length() < 12){
+						log("SYSERR: --lmdb-dir expects an argument, none found: '",argv[pos],"'. Exiting...");
+						mods::globals::shutdown();
+					}else{
+						lmdb_dir = argument.substr(11,argument.length()-11);
+						continue;
+					}
 				}
 			}
 
 			if(!mods::util::dir_exists(lmdb_dir.c_str())){
 				auto err = mkdir(lmdb_dir.c_str(),0700);
 				if(err == -1){
-					log(
-							(std::string("SYSERR: The lmdb database directory couldn't be created: ") + mods::util::err::get_string(errno)).c_str()
-						 );
+					log("SYSERR: The lmdb database directory couldn't be created: ", mods::util::err::get_string(errno));
 					mods::globals::shutdown();
 				}
 			}
 			db = std::make_unique<lmdb_db>(lmdb_dir,lmdb_name,MDB_WRITEMAP,0600,true);
-					/** TODO: I want to use duplicate sort. Uncomment once lmdb is stable: MDB_INTEGERKEY | MDB_DUPSORT | MDB_WRITEMAP,0600,true); */
+			/** TODO: I want to use duplicate sort. Uncomment once lmdb is stable: MDB_INTEGERKEY | MDB_DUPSORT | MDB_WRITEMAP,0600,true); */
 			player_nobody = nullptr;
 			defer_queue = std::make_unique<mods::deferred>(mods::deferred::TICK_RESOLUTION);
 			duktape_context = mods::js::new_context();
 			mods::js::load_c_functions();
-			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js");
+			/** TODO: make configurable */
+			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js"); 
 			mods::behaviour_tree_impl::load_trees();
 			if(f_test_suite.length()){
 				if(!f_test_suite.compare("db")){
@@ -205,6 +276,19 @@ namespace mods {
 				}
 				mods::globals::shutdown();
 			}
+			try{
+				pq_con = std::make_unique<pqxx::connection>(mods::conf::pq_connection(
+							{{"port",postgres_port},
+							{"user",postgres_user},
+							{"password",postgres_password},
+							{"host",postgres_host},
+							{"dbname",postgres_dbname}}
+						).c_str());
+			}catch(const std::exception &e){
+				log("SYSERR: Couldn't connect to the postgres database. Exception: '",e.what(),"'. Is it running?");
+				mods::globals::shutdown();
+			}
+			std::cout << "[success] connected to postgres :)\n";
 			config::init(argc,argv);
 		}
 		void post_boot_db() {
@@ -253,23 +337,21 @@ namespace mods {
 		}
 		void refresh_player_states() {
 			mods::loops::foreach_all([&](char_data* ptr) -> bool {
-					std::cerr << "[r";
 					if(!ptr){
-						return true;
+					return true;
 					}
 					if(states.find(ptr) == states.end()) {
-						states[ptr] = std::make_unique<mods::ai_state>(ptr,0,0);
+					states[ptr] = std::make_unique<mods::ai_state>(ptr,0,0);
 					}
 					return true;
-				});
-			std::cerr << "refreshed\n";
+					});
 		}
 		void pre_game_loop() {
-			std::cerr << "[event] Pre game loop\n";
+			std::cout << "[event] Pre game loop\n";
 			refresh_player_states();
-			std::cerr << "[event] refreshed player states\n";
+			std::cout << "[event] refreshed player states\n";
 			if(bootup_test_suite.length() > 0){
-				std::cerr << "booting suite: " << bootup_test_suite << "\n";
+				std::cout << "booting suite: " << bootup_test_suite << "\n";
 				mods::pregame::boot_suite(bootup_test_suite);
 			}
 		}
@@ -278,20 +360,20 @@ namespace mods {
 
 			if(type == VIRTUAL) {
 				if((i = real_mobile(nr)) == NOBODY) {
-					log("WARNING: Mobile vnum %d does not exist in database.", nr);
+					log("WARNING: Mobile vnum ",nr," does not exist in database.");
 					return nullptr;
 				}
 			} else {
 				i = nr;
 			}
 			if(mob_proto.size() <= std::size_t(i)){
-				std::cerr << "[mods::globals::read_mobile]: requested mob_proto index is invalid: " << i << ". mob_proto.size() is currently: " << mob_proto.size() << "\nIgnoring...\n";
+				log("SYSERR: requested mob_proto index is invalid: ", i ,". mob_proto.size() is currently: ", mob_proto.size(), ". Ignoring...");
 				return nullptr;
 			}
 
 			mob_list.emplace_back(mob_proto[i]);
 			(mob_list.end()-1)->next = character_list;
-			auto mob = character_list = &(*(mob_list.end()-1));
+			auto mob = character_list = &mob_list.back();
 
 			if(!mob->points.max_hit) {
 				mob->points.max_hit = dice(mob->points.hit, mob->points.mana) + mob->points.move;
@@ -413,27 +495,27 @@ namespace mods {
 					return false;
 				}
 				if(argument.substr(0,4).compare("-imp") == 0){
-				mods::acl_list::set_access_rights(player,"implementors",false);
+					mods::acl_list::set_access_rights(player,"implementors",false);
 					player->done();
 					return false;
 				}
 				if(argument.substr(0,4).compare("+god") == 0){
-				mods::acl_list::set_access_rights(player,"gods",true);
+					mods::acl_list::set_access_rights(player,"gods",true);
 					player->done();
 					return false;
 				}
 				if(argument.substr(0,4).compare("-god") == 0){
-				mods::acl_list::set_access_rights(player,"gods",false);
+					mods::acl_list::set_access_rights(player,"gods",false);
 					player->done();
 					return false;
 				}
 				if(argument.substr(0,6).compare("+build") == 0){
-				mods::acl_list::set_access_rights(player,"builders",true);
+					mods::acl_list::set_access_rights(player,"builders",true);
 					player->done();
 					return false;
 				}
 				if(argument.substr(0,6).compare("-build") == 0){
-				mods::acl_list::set_access_rights(player,"builders",false);
+					mods::acl_list::set_access_rights(player,"builders",false);
 					player->done();
 					return false;
 				}
@@ -489,59 +571,59 @@ namespace mods {
 				return false;
 			}
 
-if(player->has_builder_data() && player->room_pave_mode()) {
-	//If is a direction and that direction is not an exit,
-	//then pave a way to that exit
-	int door = 0;
+			if(player->has_builder_data() && player->room_pave_mode()) {
+				//If is a direction and that direction is not an exit,
+				//then pave a way to that exit
+				int door = 0;
 
-	if(argument.length() == 1){
-		switch(argument[0]) {
-			case 'u':
-			case 'U':
-				door = UP;
-				break;
+				if(argument.length() == 1){
+					switch(argument[0]) {
+						case 'u':
+						case 'U':
+							door = UP;
+							break;
 
-			case 's':
-			case 'S':
-				door = SOUTH;
-				break;
+						case 's':
+						case 'S':
+							door = SOUTH;
+							break;
 
-			case 'w':
-			case 'W':
-				door = WEST;
-				break;
+						case 'w':
+						case 'W':
+							door = WEST;
+							break;
 
-			case 'e':
-			case 'E':
-				door = EAST;
-				break;
+						case 'e':
+						case 'E':
+							door = EAST;
+							break;
 
-			case 'n':
-			case 'N':
-				door = NORTH;
-				break;
+						case 'n':
+						case 'N':
+							door = NORTH;
+							break;
 
-			case 'd':
-			case 'D':
-				door = DOWN;
-				break;
-		}
+						case 'd':
+						case 'D':
+							door = DOWN;
+							break;
+					}
 
-		if(!CAN_GO(player->cd(),door)) {
-			if(player->room() < 0){
-				std::cerr << "error: player's room is less than zero. Not paving.\n";
-				return false;
+					if(!CAN_GO(player->cd(),door)) {
+						if(player->room() < 0){
+							log("SYSERR: error: player's room is less than zero. Not paving.");
+							return false;
+						}
+						if(player->room() >= 0 && std::size_t(player->room()) >= world.size()){
+							log("SYSERR: error: player's room is outside of world.size().");
+							return false;
+						}
+						player->stc("[stub] pave_to\n");
+						mods::builder::pave_to(player,&world[player->room()],door);
+						return true;
+					}
+				}
 			}
-			if(player->room() >= 0 && std::size_t(player->room()) >= world.size()){
-				std::cerr << "error: player's room is outside of world.size()\n";
-				return false;
-			}
-			player->stc("[stub] pave_to\n");
-			//mods::builder::pave_to(*player,&world[player->room()],door);
-			return true;
-		}
-	}
-}
 			return true;
 		}
 
@@ -608,7 +690,7 @@ if(player->has_builder_data() && player->room_pave_mode()) {
 				if(boot_type == boot_type_t::BOOT_HELL){
 					target_room = 0;
 				}else if(target_room >= 0 && std::size_t(target_room) >= room_list.size()){
-					std::cerr << "[char_to_room]: WARNING. Requested room is out of bounds: " << target_room << "\n";
+					log("SYSERR: [char_to_room]: WARNING. Requested room is out of bounds: ",target_room);
 					return;
 				}
 				auto place = std::find(room_list[target_room].begin(),room_list[target_room].end(),ch);

@@ -220,7 +220,8 @@ namespace mods {
 		int quests_file_to_lmdb(struct char_data* ch,const std::string& quests_file,const std::string& lmdb_key) {
 			std::ifstream include_file(quests_file,std::ios::in);
 
-			if(!include_file.is_open()) {
+			if(!include_file.good() || !include_file.is_open()) {
+				dbg_print("not opening quests file" << quests_file);
 				return -1;
 			} else {
 				std::vector<char> buffer;

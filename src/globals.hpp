@@ -22,8 +22,10 @@
 #include "mods/drone.hpp"
 #include "mods/conf.hpp"
 #include "mods/chat.hpp"
+#include "mods/crypto.hpp"
 #include <deque>
 #include "db.h"
+#include <pqxx/pqxx>
 
 #define MENTOC_PREAMBLE() auto player = mods::globals::socket_map[ch->desc->descriptor]; player->set_cd(ch);
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
@@ -53,6 +55,7 @@ namespace mods {
 			using player_list_t = std::vector<player_ptr_t>;
 		using lmdb_db = mods::lmdb::db_handle;
 		using socket_map_t = std::map<int,player_ptr_t>;
+		//using builder_data_map_t = std::map<player_ptr_t,std::shared_ptr<builder_data_t>>;
 		enum boot_type_t { BOOT_DB,BOOT_HELL };
 		bool acl_allowed(struct char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd);
 		void init(int,char**);
@@ -75,6 +78,8 @@ namespace mods {
 		extern bool f_import_rooms;
 		extern std::shared_ptr<mods::player> current_player;
 		extern std::string bootup_test_suite;
+		extern std::unique_ptr<pqxx::connection> pq_con;
+		//extern builder_data_map_t builder_data;
 		void init_player(char_data*);
 		std::unique_ptr<ai_state>& state_fetch(struct char_data* ch);
 		int mobile_activity(char_data*);

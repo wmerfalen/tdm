@@ -3,10 +3,8 @@
 
 #include "lmdb.hpp"
 
-namespace pq {
-	inline void transaction(void){}
-
-#if 0
+//inline void transaction(void){}
+#include <pqxx/pqxx>
 #include <time.h>
 #include <netdb.h>
 #include <sys/socket.h>
@@ -21,7 +19,6 @@ typedef int socket_t;
 #include "../globals.hpp"
 #include <optional>
 
-#define txn() mods::pq::transaction(*mods::globals::pq_con);
 
 namespace mods::pq {
 	using transaction = pqxx::work;
@@ -31,6 +28,7 @@ namespace mods::pq {
 	void commit(transaction&);
 	int count(std::string_view query);
 };
-#endif
+
+inline mods::pq::transaction txn() { return mods::pq::transaction(*mods::globals::pq_con); }
 
 #endif

@@ -377,6 +377,7 @@ namespace mods {
 			player_type_enum_t type(){
 				return m_type;
 			}
+			std::shared_ptr<builder_data_t> builder_data;
 
 			/** TODO: call a CRM function. In fact, maybe don't even
 			 * store this deactivate_account() function on this 
@@ -384,6 +385,7 @@ namespace mods {
 			 */
 			void deactivate_account();
 		private: 
+			std::shared_ptr<builder_data_t> m_builder_data;
 			std::string m_password;
 			aligned_int_t m_db_id;
 			void m_set_time();

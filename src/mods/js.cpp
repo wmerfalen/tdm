@@ -628,7 +628,7 @@ __set_points_cleanup:
 
 			std::ifstream include_file(path,std::ios::in);
 
-			if(!include_file.is_open()) {
+			if(!include_file.good() || !include_file.is_open()) {
 				return false;
 			} else {
 				std::vector<char> buffer;

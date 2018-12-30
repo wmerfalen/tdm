@@ -1,4 +1,3 @@
-#if 0
 #include "pq.hpp"
 
 namespace mods::pq {
@@ -20,4 +19,3 @@ namespace mods::pq {
 	}
 
 };
-#endif

@@ -1,4 +1,3 @@
-#pragma once
 /**
 * The purpose of this small compositor library is to be a simple sql
 * generator. It doesn't support complex queries or advanced concepts.
@@ -12,6 +11,7 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <string>
 #if defined(__cpp_lib_string_view) && __cpp_lib_string_view==201603
 #include <string_view>
 typedef std::string_view str_object;
