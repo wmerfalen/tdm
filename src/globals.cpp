@@ -87,6 +87,7 @@ namespace mods {
 				return select_randomly(start, end, gen);
 			}
 
+		/** This function sucks */
 		std::string replace_all(std::string str, const std::string& from, const std::string& to) {
 			size_t start_pos = 0;
 
@@ -185,14 +186,12 @@ namespace mods {
 					lmdb_name = argument.substr(12,argument.length()-12);
 					continue;
 				}
-				/** TODO: passing password on commandline is very insecure. For development purposes, this is fine, but this cannot pass for production */
 				if(strncmp(argv[pos],"--postgres-pw-file=",19) == 0){
-					if(argument.length()  < 19){
-						log("SYSERR: --postgres-pw-file expects an argument, none found: '",argv[pos],"'.Exiting...");
+					if(argument.length()  < 20){
+						log("SYSERR: --postgres-pw-file expects an argument, none found: '",argument,"'.Exiting...");
 						mods::globals::shutdown();
 					}
 					std::string pw_file = argument.substr(19,argument.length()-19);
-					std::cout << "pw_file: '" << pw_file << "'\n";
 					std::ifstream in_file(pw_file.c_str(),std::ios::in | std::ios::binary);
 					if(!in_file.good() || !in_file.is_open()){
 						log("SYSERR: unable to open password file. Exiting...");
@@ -204,12 +203,13 @@ namespace mods {
 							mods::globals::shutdown();
 						}
 						std::vector<char> buffer;
-						buffer.reserve(statbuf.st_size + 1);
+						buffer.resize(statbuf.st_size + 1);
 						std::fill(buffer.begin(),buffer.end(),0);
 						in_file.read((char*)&buffer[0],statbuf.st_size);
-						postgres_password.assign(buffer.begin(),buffer.end());
 						in_file.close();
-						std::cout << "Successfully read password from file\n";
+						postgres_password.assign(buffer.begin(),buffer.end());
+						std::size_t i = postgres_password.length() -1;
+						postgres_password = postgres_password.substr(0,i);
 						continue;
 					}
 				}
