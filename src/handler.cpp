@@ -416,6 +416,11 @@ void char_from_room(struct char_data *ch) {
 
 /* place a character in a room */
 void char_to_room(struct char_data *ch, room_rnum room) {
+	log("char->player.name: %s char_to_room: room: %d",ch->player.name.c_str(),room);
+	if(ch == nullptr){
+		log("SYSERR: char_to_room given a nullptr");
+		return;
+	}
 	MENTOC_PREAMBLE();
 	/*TODO: Insert logic here !movement !globals */
 	std::size_t r = room;

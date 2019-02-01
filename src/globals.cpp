@@ -674,6 +674,12 @@ namespace mods {
 		}
 
 		namespace rooms {
+			/*! \brief takes a character from a room. Moving a character from room to room is a
+			 * two step process. This function is the former of said process, the latter being
+			 * char_to_room(room_rnum&,char_data*);
+			 * \param char_data* the character's player pointer
+			 * \return void
+			 */
 			void char_from_room(struct char_data* ch) {
 				auto room_id = IN_ROOM(ch);
 				auto place = std::find(room_list[room_id].begin(),room_list[room_id].end(),ch);
@@ -685,6 +691,15 @@ namespace mods {
 				}
 			}
 
+			/*! \brief moves a character to the room identified by the first parameter. If the mud 
+			 * is booted in HELL MODE, the character is merely moved to the only room available
+			 * in the mud (zero), otherwise the character is moved to the specified room (if it 
+			 * can be found). Moving from one room to another is a two function process. This function
+			 * is the latter of that process, the former being char_from_room. 
+			 * \param room room id. of type room_rnum
+			 * \param char_data* character pointer
+			 * \return void will log a SYSERR if the resolved room id (param 1) is out of bounds
+			 */
 			void char_to_room(const room_rnum& room,struct char_data* ch) {
 				auto target_room = room;
 				if(boot_type == boot_type_t::BOOT_HELL){

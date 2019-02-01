@@ -1184,7 +1184,7 @@ ACMD(do_mbuild) {
 			}
 
 			obj->carrying = nullptr;
-			char_to_room(obj,IN_ROOM(player->cd()));
+			mods::globals::rooms::char_to_room(player->room(),obj);
 			mods::builder::report_success<shrd_ptr_player_t>(player,"Object created, look on the floor");
 		}
 

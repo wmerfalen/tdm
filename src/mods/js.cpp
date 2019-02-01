@@ -54,6 +54,11 @@ namespace mods {
 				return 1;	/* number of return values */
 			}
 		};
+
+		/*! \brief requires the javascript library by using the internal mods::js::load_library method
+		 * \param string to be appended to mods::js::JS_PATH
+		 * \return integer
+		 */
 		static duk_ret_t require_js(duk_context *ctx) {
 			/* First parameter is character name */
 			auto fname = duk_to_string(ctx,0);
@@ -66,6 +71,11 @@ namespace mods {
 		static duk_ret_t list_mobiles(duk_context *ctx){
 			return 0;
 		}*/
+		/*! \brief internally calls read_mobile. parameter 1 is the mob's id as REAL (not VIRTUAL). Places the mob into the second parameter (REAL room id). 
+		 * \param 1 integer mob's ID (REAL)
+		 * \param 2 integer room ID (REAL)
+		 * \return integer returns -1 if there were incorrect number of parameters, returns -2 if we could not find the mobile, returns -3 if we couldn't find the room, returns 1 if we successfully found the mob, the room, and placed the mob inside the room.
+		 */
 		static duk_ret_t read_mobile(duk_context *ctx){
 			if(duk_get_top(ctx) < 2){
 				duk_push_number(ctx,1);
@@ -87,6 +97,11 @@ namespace mods {
 			duk_push_number(ctx,1);
 			return 1;
 		}
+		/*! \brief deals damage from the player identified (by uuid) to the player identified (by uuid).
+		 * \param unsigned integer uuid of the player dealing damage
+		 * \param unsigned integer uuid of the player to receive damage
+		 * \return integer always return 1
+		 */
 		static duk_ret_t hit(duk_context *ctx) {
 			/* First parameter is character name */
 			auto char_uuid = duk_to_number(ctx,0);
@@ -95,6 +110,10 @@ namespace mods {
 			duk_push_number(ctx,1);
 			return 1;	/* number of return values */
 		}
+
+		/*! \brief gets the player's uuid and player.name data and returns it as a duktape.js object with keys 'uuid' and 'name'
+		 * \return object the duktape.js javascript object with keys: 'uuid' and 'name'
+		 */
 		static duk_ret_t get_current_player(duk_context *ctx) {
 			/* First parameter is character name */
 			duk_idx_t obj_idx;
@@ -106,6 +125,10 @@ namespace mods {
 			duk_put_prop_string(ctx, obj_idx, "name");
 			return 1;
 		}
+		/*! \brief sends a string to the current player. The method for which this function finds the current player is by utilizing mods::globals::current_player
+		 * \param string the string to send
+		 * \return nothing
+		 */
 		static duk_ret_t send(duk_context *ctx) {
 			/* First parameter is character name */
 			std::string message = duk_to_string(ctx,0);
@@ -115,6 +138,11 @@ namespace mods {
 			duk_push_number(ctx,0);
 			return 0;
 		}
+		/*! \brief clears the player's affected flags. Internally, this function calls mods::player::clear_all_affected_plr.
+		 * The method for which it finds the player is utils::find_player_by_name(name,&found)
+		 * \param player's name
+		 * \return integer -1 if player couldn't be found by the method above, 0 if found and cleared.
+		 */
 		static duk_ret_t clear_all_plr_flags(duk_context *ctx) {
 			/** TODO: get array from duktape */
 			std::string name = duk_to_string(ctx,0);
@@ -128,6 +156,11 @@ namespace mods {
 				duk_push_number(ctx,0);
 				return 1;
 		}
+		/*! \brief clears the player's affected flags. Internally calls
+		 * player::clear_all_affected on the found player. 
+		 * \param string player's name as found by utils::find_player_by_name
+		 * \return integer returns -1 if player couldn't be found, 0 if player found and clear_all_affected called on player's object
+		 */
 		static duk_ret_t clear_all_affected_flags(duk_context *ctx) {
 			/** TODO: get array from duktape */
 			std::string name = duk_to_string(ctx,0);
@@ -142,6 +175,12 @@ namespace mods {
 				return 1;
 		}
 
+		/*! \brief modifies the player's affected flags. 
+		 * \param user's name
+		 * \param the flag to toggle
+		 * \param boolean toggle state. (1 or 0)
+		 * \return integer
+		 */
 		static duk_ret_t modify_plr_flags(duk_context *ctx) {
 			/** TODO: get array from duktape */
 			std::string name = duk_to_string(ctx,0);
@@ -173,6 +212,14 @@ else if(key.compare("NOTDEADYET")==0){ if(on){ player_ptr->affect_plr(PLR_NOTDEA
 				duk_push_number(ctx,0);
 				return 1;
 		}
+		/*! \brief toggles player affected flags. Internally calls player::affect
+		 * and player::remove_affect for toggling on or off, respectively.
+		 * \example js modify_affected_flags('far','INVISIBLE',1);
+		 * \param player name
+		 * \param string constant of the affected player flag
+		 * \param boolean on or off (1|0)
+		 * \return int
+		 */
 		static duk_ret_t modify_affected_flags(duk_context *ctx) {
 			/** TODO: get array from duktape */
 			std::string name = duk_to_string(ctx,0);
@@ -322,7 +369,7 @@ if(key.compare("WATERWALK") == 0){ ::affect_from_char(*player_ptr,SPELL_WATERWAL
 		}
 		static duk_ret_t room(duk_context *ctx){
 			duk_push_number(ctx,1);
-			return mods::globals::current_player->cd()->in_room;
+			return mods::globals::current_player->room();
 		}
 
 		static duk_ret_t cmd(duk_context *ctx) {

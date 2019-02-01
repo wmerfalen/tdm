@@ -4,3 +4,43 @@
 	"debug: db_handle::commit -- m_good is good
 error: db_handle::commit -- failed:MDB_BAD_TXN: Transaction must abort, has a child, or is invalid"
 
+---------------------------------------------------------------------------------------------------------------------------
+command -> mbuild instantiate <mob_id>
+segfault? -> yes
+date -> 2019-01-31
+source ->  mods/builder.cpp:1187 
+does it stop there? -> no
+
+<MENTOC_GDB_DUMP>
+strlen of other: 20
+[debug]: Player pointer good. Getting from q
+[debug]: if(aliased)
+[debug]: calling command_interpreter...
+debug: db_handle::get(key,value) called
+debug: db_handle::get(key,value) m_good okay
+
+Program received signal SIGSEGV, Segmentation fault.
+0x000055555568d5fe in std::_Rb_tree<int, std::pair<int const, std::shared_ptr<mods::player> >, std::_Select1st<std::pair<int const, std::shared_ptr<mods::player> > >, std::less<int>, std::allocator<std::pair<int const, std::shared_ptr<mods::player> > > >::_M_lower_bound (this=<optimized out>, __k=<error reading variable>, __y=0x5555559d1cc8 <mods::globals::socket_map+8>,
+    __x=0x555555b2c000) at /usr/include/c++/7/bits/stl_tree.h:1872
+1872            if (!_M_impl._M_key_compare(_S_key(__x), __k))
+(gdb) bt
+#0  0x000055555568d5fe in std::_Rb_tree<int, std::pair<int const, std::shared_ptr<mods::player> >, std::_Select1st<std::pair<int const, std::shared_ptr<mods::player> > >, std::less<int>, std::allocator<std::pair<int const, std::shared_ptr<mods::player> > > >::_M_lower_bound (this=<optimized out>, __k=<error reading variable>,
+    __y=0x5555559d1cc8 <mods::globals::socket_map+8>, __x=0x555555b2c000) at /usr/include/c++/7/bits/stl_tree.h:1872
+#1  std::_Rb_tree<int, std::pair<int const, std::shared_ptr<mods::player> >, std::_Select1st<std::pair<int const, std::shared_ptr<mods::player> > >, std::less<int>, std::allocator<std::pair<int const, std::shared_ptr<mods::player> > > >::lower_bound (__k=<error reading variable>, this=<optimized out>) at /usr/include/c++/7/bits/stl_tree.h:1187
+#2  std::map<int, std::shared_ptr<mods::player>, std::less<int>, std::allocator<std::pair<int const, std::shared_ptr<mods::player> > > >::lower_bound (__x=<error reading variable>,
+    this=<optimized out>) at /usr/include/c++/7/bits/stl_map.h:1234
+#3  std::map<int, std::shared_ptr<mods::player>, std::less<int>, std::allocator<std::pair<int const, std::shared_ptr<mods::player> > > >::operator[] (__k=<error reading variable>,
+    this=<optimized out>) at /usr/include/c++/7/bits/stl_map.h:489
+#4  char_to_room (ch=0x555555a39fe0, room=1) at handler.cpp:419
+#5  0x0000555555714806 in do_mbuild (ch=<optimized out>, argument=0x7fffffffca26 " instantiate 0", cmd=<optimized out>, subcmd=<optimized out>) at mods/builder.cpp:1187
+#6  0x00005555556912ed in command_interpreter (ch=0x555555b2ace0, argument=<optimized out>) at interpreter.cpp:695
+#7  0x00005555556548d3 in game_loop (mother_desc=6) at comm.cpp:754
+#8  0x0000555555655b26 in init_game (port=<optimized out>) at comm.cpp:438
+#9  0x000055555558b10b in main (argc=7, argv=<optimized out>) at comm.cpp:377
+(gdb)
+
+</MENTOC_GDB_DUMP>
+hints -> It might be trying to instantiate the npc as a player and assign it a socket as per the references in the backtrace to 'mods::globals::socket_map'
+---------------------------------------------------------------------------------------------------------------------------
+
+
