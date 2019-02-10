@@ -163,6 +163,7 @@ namespace mods {
 					<< "--hell 	Start the mud in HELL mode\n"
 					<< "--lmdb-name=<name> use name as lmdb db name\n"
 					<< "--lmdb-dir=<dir> use dir as directory to store lmdb data\n"
+					<< "--postgres-dbname=<db> use db as postgres db. default: mud\n"
 					<< "--postgres-user=<user> use user as postgres user. default: postgres\n"
 					<< "--postgres-host=<host> use host as postgres host. default: localhost\n"
 					<< "--postgres-port=<port> use port as postgres port. default: 5432\n"
@@ -209,7 +210,19 @@ namespace mods {
 						in_file.close();
 						postgres_password.assign(buffer.begin(),buffer.end());
 						std::size_t i = postgres_password.length() -1;
+						if(i == 1){
+							log("SYSERR: the postgres password is one character long. Please check the postgres password file");
+							mods::globals::shutdown();
+							return;
+						}
+						while(isspace(postgres_password[i--]) && i > 0){}
+						if(i == 0){
+							log("SYSERR: while trying to trim the end of the postgres password of spaces (using isspace()), the resulting postgres password is zero length. Exiting...");
+							mods::globals::shutdown();
+							return;
+						}
 						postgres_password = postgres_password.substr(0,i);
+						std::cerr << "postgres password: '" << postgres_password << "'\n";
 						continue;
 					}
 				}
@@ -228,6 +241,15 @@ namespace mods {
 						mods::globals::shutdown();
 					}else{
 						postgres_user = argument.substr(16,argument.length()-16);
+						continue;
+					}
+				}
+				if(strncmp(argv[pos],"--postgres-dbname=",18) == 0){
+					if(argument.length() < 18){
+						log("SYSERR: --postgres-port expects an argument, none found: '" ,argv[pos],"'.Exiting...");
+						mods::globals::shutdown();
+					}else{
+						postgres_dbname = argument.substr(18,argument.length()-14);
 						continue;
 					}
 				}
@@ -277,13 +299,15 @@ namespace mods {
 				mods::globals::shutdown();
 			}
 			try{
-				pq_con = std::make_unique<pqxx::connection>(mods::conf::pq_connection(
+				std::string connection_string = mods::conf::pq_connection(
 							{{"port",postgres_port},
 							{"user",postgres_user},
 							{"password",postgres_password},
 							{"host",postgres_host},
 							{"dbname",postgres_dbname}}
-						).c_str());
+						).c_str();
+				std::cerr << "postgres connection string: '" << connection_string << "'\n";
+				pq_con = std::make_unique<pqxx::connection>(connection_string.c_str());
 			}catch(const std::exception &e){
 				log("SYSERR: Couldn't connect to the postgres database. Exception: '",e.what(),"'. Is it running?");
 				mods::globals::shutdown();

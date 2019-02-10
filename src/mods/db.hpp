@@ -19,9 +19,17 @@ namespace mods::lmdb::error {
 
 using aligned_int_t = uint64_t; 
 using int_status_t = mods::lmdb::error::int_status_t;
+#ifndef __MENTOC_USE_LMDB_INSTEAD_OF_POSTGRES__
+namespace mods::lmdb {
+	struct _db_handle;
+};
+using db_handle = mods::lmdb::_db_handle;
+using mutable_map_t = std::map<std::string,std::string>;
+#else
 using db_handle = mods::lmdb::db_handle;
-using tuple_status_t  = std::tuple<bool,std::string,aligned_int_t>;
 using mutable_map_t = ::mods::lmdb::mutable_map_t;
+#endif
+using tuple_status_t  = std::tuple<bool,std::string,aligned_int_t>;
 
 static inline int_status_t initialize_table_schema(std::string table){
 	std::cerr << "deprecated: initialize_table_schema\n";
@@ -36,7 +44,7 @@ namespace mods::db{
 
 void lmdb_export_char(
 		std::shared_ptr<mods::player> player_ptr,
-		mods::lmdb::mutable_map_t &
+		mutable_map_t &
 );
 
 aligned_int_t initialize_row(
@@ -49,7 +57,7 @@ aligned_int_t lmdb_load_by_meta(
 
 tuple_status_t lmdb_write_values(
 		const std::string & table,
-		mods::lmdb::mutable_map_t* values,
+		mutable_map_t* values,
 		std::string pk_id);
 
 aligned_int_t save_record_get_id(
@@ -57,11 +65,11 @@ aligned_int_t save_record_get_id(
 		mutable_map_t* values);
 tuple_status_t new_record(
 		const std::string& table,
-		mods::lmdb::mutable_map_t* values);
+		mutable_map_t* values);
 
 tuple_status_t save_record(
 		const std::string& table,
-		mods::lmdb::mutable_map_t* values,
+		mutable_map_t* values,
 		std::string pk_id);
 
 tuple_status_t save_char(

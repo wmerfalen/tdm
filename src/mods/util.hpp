@@ -113,6 +113,14 @@ std::ostream& log(Args... args); /*{
 			return m;
 		}
 	template <typename T>
+		T stoi(const pqxx::tuple::reference & i){
+			T m;
+			std::stringstream ss;
+			ss.str(i.c_str());
+			ss >> m;
+			return m;
+		}
+	template <typename T>
 		std::optional<T> stoi_optional(std::string_view str){
 			T i;
 			std::stringstream ss;

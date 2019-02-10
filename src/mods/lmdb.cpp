@@ -2,6 +2,11 @@
 #include "db.hpp"
 #include <sstream>
 #include "util.hpp"
+#ifndef __MENTOC_USE_LMDB_INSTEAD_OF_POSTGRES__
+#include "sql.hpp"
+#include "pq.hpp"
+using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
+#endif
 namespace mods::lmdb {
 	using aligned_int_t = uint64_t;
 	selector_type_t transaction_t::selector(const key_type_t & column,const uint64_t & row_id){
@@ -458,26 +463,120 @@ std::string db_get(std::string key){
 void db_put(std::string key,std::string value){
 	mods::globals::db->put(key,value);
 }
-result_container_t db_get_all(std::string table){
+mods::pq::result db_get_all(std::string table){
+#ifndef __MENTOC_USE_LMDB_INSTEAD_OF_POSTGRES__
+		try{
+			auto up_txn = txn();
+			sql_compositor comp(table,&up_txn);
+			auto room_sql = comp.select("*")
+				.from(table)
+				.sql();
+			return mods::pq::exec(up_txn,room_sql.data());
+			//auto result = mods::pq::exec(up_txn,room_sql.data());
+			////result_container_t r;
+			//std::map<std::string,std::string> row;
+			//std::size_t i_ctr = 0;
+			//return result;
+			////for(auto i : result){
+			//	//std::cerr << "pqxx::to_string(" << pqxx::to_string(i).as<int>() << "\n";
+			//	row[std::to_string(i_ctr++)] = result[0]["id"].c_str();
+			////}
+			//r.emplace_back(row);
+			////row.clear();
+			//return r;
+		}catch(std::exception& e){
+			std::cerr << "error selecting room from db: '" << e.what() << "'\n";
+			return mods::pq::result(); //result_container_t();
+		}
+#else
 	mods::lmdb::transaction_t t(table,mods::lmdb::transact_type_t::EXEC);
 	return t.get_all<mods::lmdb::db_handle*>(mods::globals::db.get());
+#endif
 }
 
-result_container_t db_get_all_pluck(std::string table,const std::vector<std::string>& pluck){
+auto db_get_all_pluck(std::string table,const std::vector<std::string>& pluck){
 	mods::globals::db->set_pluck_filter(pluck);
 	auto r = db_get_all(table);
 	mods::globals::db->clear_pluck_filter();
 	return r;
 }
 
-result_container_t db_get_by_meta(std::string table, std::string col,std::string value){
-	result_container_t r;
-	mutable_map_t where,out;
-	where[col] = value;
-	mods::db::load_record_by_meta(table,&where,out);
-	r.emplace_back(out);
-	return r;
+pqxx::result db_get_by_meta(std::string table, std::string col,const std::string & value){
+		try{
+			auto up_txn = txn();
+			sql_compositor comp(table,&up_txn);
+			auto room_sql = comp.select("*")
+				.from(table)
+				.where(col,"=",value.c_str())
+				.sql();
+			return mods::pq::exec(up_txn,room_sql.data());
+		}catch(std::exception& e){
+			std::cerr << "error selecting room from db: '" << e.what() << "'\n";
+			return mods::pq::result();
+		}
 }
+pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::tuple::reference & value){
+		try{
+			auto up_txn = txn();
+			sql_compositor comp(table,&up_txn);
+			auto room_sql = comp.select("*")
+				.from(table)
+				.where(col,"=",value.c_str())
+				.sql();
+			return mods::pq::exec(up_txn,room_sql.data());
+			//auto result = mods::pq::exec(up_txn,room_sql.data());
+			////result_container_t r;
+			//std::map<std::string,std::string> row;
+			//std::size_t i_ctr = 0;
+			//return result;
+			////for(auto i : result){
+			//	//std::cerr << "pqxx::to_string(" << pqxx::to_string(i).as<int>() << "\n";
+			//	row[std::to_string(i_ctr++)] = result[0]["id"].c_str();
+			////}
+			//r.emplace_back(row);
+			////row.clear();
+			//return r;
+		}catch(std::exception& e){
+			std::cerr << "error selecting room from db: '" << e.what() << "'\n";
+			return mods::pq::result();
+		}
+}
+
+//result_container_t db_get_by_meta(std::string table, std::string col,std::string value){
+//#ifndef __MENTOC_USE_LMDB_INSTEAD_OF_POSTGRES__
+//		try{
+//			auto up_txn = txn();
+//			sql_compositor comp(table,&up_txn);
+//			auto room_sql = comp.select("*")
+//				.from(table)
+//				.where(col,"=",value)
+//				.sql();
+//			return mods::pq::exec(up_txn,room_sql.data());
+//			//auto result = mods::pq::exec(up_txn,room_sql.data());
+//			////result_container_t r;
+//			//std::map<std::string,std::string> row;
+//			//std::size_t i_ctr = 0;
+//			//return result;
+//			////for(auto i : result){
+//			//	//std::cerr << "pqxx::to_string(" << pqxx::to_string(i).as<int>() << "\n";
+//			//	row[std::to_string(i_ctr++)] = result[0]["id"].c_str();
+//			////}
+//			//r.emplace_back(row);
+//			////row.clear();
+//			//return r;
+//		}catch(std::exception& e){
+//			std::cerr << "error selecting room from db: '" << e.what() << "'\n";
+//			return result_container_t();
+//		}
+//#else
+//	result_container_t r;
+//	mutable_map_t where,out;
+//	where[col] = value;
+//	mods::db::load_record_by_meta(table,&where,out);
+//	r.emplace_back(out);
+//	return r;
+//#endif 
+//}
 /*
 
 mods::lmdb::result_container_t db_get_by_id(std::string table,std::string id){

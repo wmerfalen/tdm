@@ -50,10 +50,13 @@ extern std::deque<char_data> mob_list;
 	(ch)->next = character_list;\
 	character_list = ch;
 namespace mods {
+	namespace lmdb { 
+		struct _db_handle;
+	};
     namespace globals {
 			using player_ptr_t = std::shared_ptr<mods::player>;
 			using player_list_t = std::vector<player_ptr_t>;
-		using lmdb_db = mods::lmdb::db_handle;
+		using lmdb_db = mods::lmdb::_db_handle;
 		using socket_map_t = std::map<int,player_ptr_t>;
 		//using builder_data_map_t = std::map<player_ptr_t,std::shared_ptr<builder_data_t>>;
 		enum boot_type_t { BOOT_DB,BOOT_HELL };

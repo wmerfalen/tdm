@@ -2,6 +2,15 @@
 #include <string.h>
 //#define m_debug(a) ;; /* do{ std::cerr << "[m_debug]: " << a << "\n"; }while(0); */
 namespace mods {
+	string::string(const pqxx::tuple::reference & str){
+		m_mallocd = false;
+		m_cptr = nullptr;
+		m_str = "";
+		std::string other = str.c_str();
+		if(other.length()){
+			assign(other.c_str());
+		}
+	}
 	string::string(){
 		m_mallocd = false;
 		m_cptr = nullptr;
@@ -64,6 +73,9 @@ namespace mods {
 			m_str = "";
 		}
 		return *this;
+	}
+	void string::assign(const pqxx::tuple::reference & other){
+		assign(std::string(other.c_str()));
 	}
 	void string::assign(const std::string & other){
 		m_debug("assign std::string\n");

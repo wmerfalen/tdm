@@ -11,6 +11,7 @@
 #include "../liblmdb/lmdb.h"
 #include <tuple>
 #include "schema.hpp"
+#include "pq.hpp"
 using aligned_int_t = uint64_t;
 using tuple_status_t = std::tuple<bool,std::string,aligned_int_t>;
 	using mutable_map_t = std::map<std::string,std::string>;
@@ -217,9 +218,9 @@ namespace mods::lmdb {
 
 };
 
-namespace mods::globals {
-	extern std::unique_ptr<mods::lmdb::db_handle> db;
-};
+//namespace mods::globals {
+//	extern std::unique_ptr<mods::lmdb::db_handle> db;
+//};
 
 void db_renew_txn();
 std::string db_key(const std::vector<std::string> & parts);
@@ -227,8 +228,11 @@ std::string db_get(std::string key);
 void db_put(std::string key,std::string value);
 //mods::lmdb::result_container_t db_get_by_id(std::string table,std::string id);
 //mods::lmdb::result_container_t db_get_by_meta(std::string table,std::string col,std::string equals);
-result_container_t db_get_all(std::string table);
-result_container_t db_get_by_meta(std::string table, std::string col,std::string value);
+pqxx::result db_get_all(std::string table);
+//result_container_t db_get_by_meta(std::string table, std::string col,std::string value);
+//result_container_t db_get_by_meta(std::string table, std::string col,const pqxx::tuple::reference& value);
+pqxx::result db_get_by_meta(std::string table, std::string col,const std::string & value);
+pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::tuple::reference& value);
 //mods::lmdb::result_container_t db_get_all_pluck(std::string table,const std::vector<const std::string&>& pluck);
 //bool db_update(mods::lmdb::table_type_t table,
 //		mods::lmdb::mutable_map_t & values,
