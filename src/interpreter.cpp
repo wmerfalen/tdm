@@ -1762,7 +1762,7 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 												 if(world.size() == 0){
 													 std::cerr << "error: world.size is empty!\n";
 												 }
-												 //p->set_room(config::rooms::mortal_start());
+												 p->set_room(config::rooms::real_mortal_start());
 												 char_to_room(p->cd(),p->room());
 												 act("$n has entered the game.", TRUE, p->cd(), 0, 0, TO_ROOM);
 												 p->set_state(CON_PLAYING);

@@ -418,14 +418,14 @@ void check_idling(std::shared_ptr<mods::player> player) {
 				mods::db::save_char(player);
 				Crash_crashsave(ch);
 				char_from_room(ch);
-				char_to_room(ch, config::rooms::idle());
+				char_to_room(ch, config::rooms::real_idle());
 			}
 		} else if(ch->char_specials.timer > idle_rent_time) {
 			if(IN_ROOM(ch) != NOWHERE) {
 				char_from_room(ch);
 			}
 
-			char_to_room(ch, config::rooms::idle());
+			char_to_room(ch, config::rooms::real_idle());
 
 			if(ch->has_desc) {
 				ch->desc->set_state(CON_DISCONNECT);

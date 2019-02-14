@@ -2308,12 +2308,12 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
 #define SENDOK(ch)	((ch)->has_desc && (to_sleeping || AWAKE(ch)) && \
 		(IS_NPC(ch) || !PLR_FLAGGED((ch), PLR_WRITING)))
 
-void act(const char *str, int hide_invisible, char_data *ch,
-		struct obj_data *obj, void *vict_obj, int type) {
+void act(const std::string & str, int hide_invisible, char_data *ch,
+		obj_data *obj, void *vict_obj, int type) {
 	char_data *to;
 	int to_sleeping;
 
-	if(!str || !*str) {
+	if(str.length() == 0){
 		return;
 	}
 
@@ -2335,7 +2335,7 @@ void act(const char *str, int hide_invisible, char_data *ch,
 
 	if(type == TO_CHAR) {
 		if(ch && SENDOK(ch)) {
-			perform_act(str, ch, obj, vict_obj, ch);
+			perform_act(str.c_str(), ch, obj, vict_obj, ch);
 		}
 
 		return;
@@ -2344,8 +2344,7 @@ void act(const char *str, int hide_invisible, char_data *ch,
 	if(type == TO_VICT) {
 		auto vict = static_cast<char_data*>(vict_obj);
 		if(vict != nullptr && SENDOK(vict)) {
-			d("perform_act");
-			perform_act(str, ch, obj, vict_obj, vict);
+			perform_act(str.c_str(), ch, obj, vict_obj, vict);
 		}
 
 		return;
@@ -2355,7 +2354,7 @@ void act(const char *str, int hide_invisible, char_data *ch,
 
 	if(ch && IN_ROOM(ch) != NOWHERE) {
 		to = world[IN_ROOM(ch)].people;
-	} else if(obj && IN_ROOM(obj) != NOWHERE) {
+	} else if(obj != 0 && IN_ROOM(obj) != NOWHERE) {
 		to = world[IN_ROOM(obj)].people;
 	} else {
 		log("SYSERR: no valid target to act()!");
@@ -2375,7 +2374,7 @@ void act(const char *str, int hide_invisible, char_data *ch,
 			continue;
 		}
 
-		perform_act(str, ch, obj, vict_obj, to);
+		perform_act(str.c_str(), ch, obj, vict_obj, to);
 	}
 }
 

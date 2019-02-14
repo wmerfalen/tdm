@@ -161,8 +161,8 @@ namespace mods {
 				 	<< "--testing=<suite>	Launch test suite\n"
 					<< "--import-rooms 	Run the import rooms routine\n"
 					<< "--hell 	Start the mud in HELL mode\n"
-					<< "--lmdb-name=<name> use name as lmdb db name\n"
-					<< "--lmdb-dir=<dir> use dir as directory to store lmdb data\n"
+					//<< "--lmdb-name=<name> use name as lmdb db name\n"
+					//<< "--lmdb-dir=<dir> use dir as directory to store lmdb data\n"
 					<< "--postgres-dbname=<db> use db as postgres db. default: mud\n"
 					<< "--postgres-user=<user> use user as postgres user. default: postgres\n"
 					<< "--postgres-host=<host> use host as postgres host. default: localhost\n"
@@ -183,10 +183,10 @@ namespace mods {
 					boot_type = BOOT_HELL;
 					continue;
 				}
-				if(strncmp(argv[pos],"--lmdb-name=",12) == 0){
-					lmdb_name = argument.substr(12,argument.length()-12);
-					continue;
-				}
+				//if(strncmp(argv[pos],"--lmdb-name=",12) == 0){
+				//	lmdb_name = argument.substr(12,argument.length()-12);
+				//	continue;
+				//}
 				if(strncmp(argv[pos],"--postgres-pw-file=",19) == 0){
 					if(argument.length()  < 20){
 						log("SYSERR: --postgres-pw-file expects an argument, none found: '",argument,"'.Exiting...");
@@ -262,15 +262,15 @@ namespace mods {
 						continue;
 					}
 				}
-				if(strncmp(argv[pos],"--lmdb-dir=",11) == 0){
-					if(argument.length() < 12){
-						log("SYSERR: --lmdb-dir expects an argument, none found: '",argv[pos],"'. Exiting...");
-						mods::globals::shutdown();
-					}else{
-						lmdb_dir = argument.substr(11,argument.length()-11);
-						continue;
-					}
-				}
+				//if(strncmp(argv[pos],"--lmdb-dir=",11) == 0){
+				//	if(argument.length() < 12){
+				//		log("SYSERR: --lmdb-dir expects an argument, none found: '",argv[pos],"'. Exiting...");
+				//		mods::globals::shutdown();
+				//	}else{
+				//		lmdb_dir = argument.substr(11,argument.length()-11);
+				//		continue;
+				//	}
+				//}
 			}
 
 			if(!mods::util::dir_exists(lmdb_dir.c_str())){
@@ -281,7 +281,6 @@ namespace mods {
 				}
 			}
 			db = std::make_unique<lmdb_db>(lmdb_dir,lmdb_name,MDB_WRITEMAP,0600,true);
-			/** TODO: I want to use duplicate sort. Uncomment once lmdb is stable: MDB_INTEGERKEY | MDB_DUPSORT | MDB_WRITEMAP,0600,true); */
 			player_nobody = nullptr;
 			defer_queue = std::make_unique<mods::deferred>(mods::deferred::TICK_RESOLUTION);
 			duktape_context = mods::js::new_context();
@@ -290,12 +289,12 @@ namespace mods {
 			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js"); 
 			mods::behaviour_tree_impl::load_trees();
 			if(f_test_suite.length()){
-				if(!f_test_suite.compare("db")){
-					mods::testing::lmdb::db test(argc,argv);
-				}
-				if(!f_test_suite.compare("player_syncing")){
-					mods::testing::lmdb::player_syncing test(argc,argv);
-				}
+				//if(!f_test_suite.compare("db")){
+				//	mods::testing::lmdb::db test(argc,argv);
+				//}
+				//if(!f_test_suite.compare("player_syncing")){
+				//	mods::testing::lmdb::player_syncing test(argc,argv);
+				//}
 				mods::globals::shutdown();
 			}
 			try{
@@ -306,7 +305,7 @@ namespace mods {
 							{"host",postgres_host},
 							{"dbname",postgres_dbname}}
 						).c_str();
-				std::cerr << "postgres connection string: '" << connection_string << "'\n";
+				//std::cerr << "postgres connection string: '" << connection_string << "'\n";
 				pq_con = std::make_unique<pqxx::connection>(connection_string.c_str());
 			}catch(const std::exception &e){
 				log("SYSERR: Couldn't connect to the postgres database. Exception: '",e.what(),"'. Is it running?");

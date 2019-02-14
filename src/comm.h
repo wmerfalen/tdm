@@ -54,7 +54,7 @@ void	close_socket(mods::descriptor_data d);
 void	perform_act(const char *orig, struct char_data *ch,
                     struct obj_data *obj, const void *vict_obj, struct char_data *to);
 
-void	act(const char *str, int hide_invisible, char_data *ch,
+void	act(const std::string & str, int hide_invisible, char_data *ch,
             obj_data *obj, void *vict_obj, int type);
 
 #define TO_ROOM		1

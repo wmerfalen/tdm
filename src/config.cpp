@@ -167,13 +167,13 @@ int rent_file_timeout = 30;
 /* ROOM NUMBERS */
 
 /* virtual number of room that mortals should enter at */
-config::rooms::room_type_t mortal_start_room = 27089;
+room_vnum mortal_start_room = 27089;
 
 /* virtual number of room that immorts should enter at by default */
-config::rooms::room_type_t immort_start_room = 27089;
+room_vnum immort_start_room = 27089;
 
 /* virtual number of room that frozen players should enter at */
-config::rooms::room_type_t frozen_start_room = 27089;
+room_vnum frozen_start_room = 27089;
 
 /*
  * virtual numbers of donation rooms.  note: you must change code in
@@ -307,12 +307,19 @@ int use_autowiz = YES;
    immort levels below the level you specify will go on the immlist instead.) */
 int min_wizlist_lev = LVL_GOD;
 
+extern room_rnum real_room(room_vnum);
 namespace config {
 	namespace rooms {
-		room_type_t idle(){
+		room_rnum real_idle(){
+			return real_room(config::rooms::IDLE);
+		}
+		room_rnum real_mortal_start(){
+			return real_room(config::rooms::MORTAL_START);
+		}
+		room_vnum virtual_idle(){
 			return config::rooms::IDLE;
 		}
-		room_type_t mortal_start(){
+		room_vnum virtual_mortal_start(){
 			return config::rooms::MORTAL_START;
 		}
 	};

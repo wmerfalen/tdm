@@ -69,12 +69,12 @@ using aligned_int_t = uint64_t;
 #define CIRCLE_UNSIGNED_INDEX	0	/* 0 = signed, 1 = unsigned */
 
 #if CIRCLE_UNSIGNED_INDEX
-# define IDXTYPE	ush_int
+#define IDXTYPE  ush_int
 # define NOWHERE	((IDXTYPE)~0)
 # define NOTHING	((IDXTYPE)~0)
 # define NOBODY		((IDXTYPE)~0)
 #else
-# define IDXTYPE	sh_int
+#define IDXTYPE  sh_int
 # define NOWHERE	(-1)	/* nil reference for rooms	*/
 # define NOTHING	(-1)	/* nil reference for objects	*/
 # define NOBODY		(-1)	/* nil reference for mobiles	*/
@@ -565,8 +565,10 @@ using aligned_int_t = uint64_t;
 
 	typedef signed char		sbyte;
 	typedef unsigned char		ubyte;
-	typedef signed short int	sh_int;
-	typedef unsigned short int	ush_int;
+	//typedef signed short int	sh_int;
+	//typedef unsigned short int	ush_int;
+	using sh_int = int32_t;
+	using ush_int = uint32_t;
 #if !defined(__cplusplus)	/* Anyone know a portable method? */
 	typedef char			bool;
 #endif

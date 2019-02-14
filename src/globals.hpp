@@ -32,8 +32,9 @@
 #define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \
 strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(a,"down") == 0)
 #define OPPOSITE_DIR(a) mods::globals::opposite_dir(a)
-#define DBSET(key,value) mods::globals::db->put(key,value);
-#define DBGET(key,value) mods::globals::db->get(key,value);
+#define DBSET(key,value) { std::cerr << "[DEPRECATED::DBSET]: " << __FILE__ << " line: " << __LINE__ << " " << key << "\n"; } /*mods::globals::db->put(key,value);*/
+#define DBGET(key,value) { std::cerr << "[DEPRECATED::DBGET]: " << __FILE__ << " line: " << __LINE__ << " " << key << "\n"; } /*mods::globals::db->put(key,value);*/
+//#define DBGET(key,value) mods::globals::db->get(key,value);
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
 #define d(a) std::cerr << "[debug]: " << a << "\n" << std::flush;
 
