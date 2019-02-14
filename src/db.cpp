@@ -1154,7 +1154,7 @@ void parse_sql_zones() {
 	zone_table.clear();
 	log("[status] Loading sql zones");
 
-	for(auto row: db_get_all("zone")) {
+	for(auto && row: db_get_all("zone")) {
 		//mods::meta_utils::write_meta("zone",&row);
 		struct zone_data z;
 		//struct zone_data {
@@ -1226,15 +1226,15 @@ void parse_sql_zones() {
 		//
 		//siege=#
 
-		for(auto row : db_get_by_meta("zone_data","zone_number",std::to_string(z.number))) {
-			//mods::meta_utils::write_meta("zone_data",&row);
+		for(auto && zone_data_row : db_get_by_meta("zone_data","zone_id",std::to_string(z.number))) {
+			//mods::meta_utils::write_meta("zone_data",&zone_data_row);
 			struct reset_com res;
-			res.command =mods::util::stoi<int>(row["zone_command"]);
-			res.if_flag =mods::util::stoi<int>(row["zone_if_flag"]);
-			res.arg1 =mods::util::stoi<int>(row["zone_arg1"]);
-			res.arg2 =mods::util::stoi<int>(row["zone_arg2"]);
-			res.arg3 =mods::util::stoi<int>(row["zone_arg3"]);
-			res.line =mods::util::stoi<int>(row["line"]);
+			res.command =mods::util::stoi<int>(zone_data_row["zone_command"]);
+			res.if_flag =mods::util::stoi<int>(zone_data_row["zone_if_flag"]);
+			res.arg1 =mods::util::stoi<int>(zone_data_row["zone_arg1"]);
+			res.arg2 =mods::util::stoi<int>(zone_data_row["zone_arg2"]);
+			res.arg3 =mods::util::stoi<int>(zone_data_row["zone_arg3"]);
+			res.line = 0; //TODO: mods::util::stoi<int>(zone_data_row["line"]);
 			z.cmd.push_back(res);
 		}
 
@@ -1263,7 +1263,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 		//
 		//siege=#
 		auto room_records = db_get_all("room");
-		log(std::string("parse_sql_rooms[result.size()]->") + std::to_string(room_records.size()));
+		log("parse_sql_rooms[result.size()]->%d",room_records.size());
 		if(room_records.size() == 0){
 			world.reserve(0);
 			return {0,"warning: no room_records fetched from postgres"};
@@ -1275,31 +1275,27 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 		}
 		world.reserve(room_records.size());
 		//auto rdd_txn = txn();
-		for(auto row: room_records) {
-			std::cout << "parse_sql_rooms[room]->'" << row["number"].as<int>() << "'\n";
-			struct room_data room;
-			room.number = row["number"].as<int>();
-			room.zone = row["zone"].as<int>();
-			room.name =(row["name"]).c_str();
-			room.description =(row["description"]).c_str();
-			room.room_flags = row["room_flags"].as<int>();
-			room.sector_type = row["sector_type"].as<int>();
+		for(auto && room_records_row: room_records) {
+			std::cout << "parse_sql_rooms[room]->'" << room_records_row["room_number"].as<int>() << "'\n";
+			room_data room;
+			room.number = room_records_row["room_number"].as<int>();
+			room.zone = room_records_row["zone"].as<int>();
+			room.name =(room_records_row["name"]).c_str();
+			room.description =(room_records_row["description"]).c_str();
+			room.room_flags = room_records_row["room_flag"].as<int>();
+			room.sector_type = room_records_row["sector_type"].as<int>();
 			room.ex_description = nullptr;
 			room.func = nullptr;
 			room.contents = nullptr;
 			room.people = nullptr;
-			room.light = (row["light"]).as<int>();
-
-			//TODO: setup directions to work properly here (dir_option)
-			for(unsigned i = 0; i < NUM_OF_DIRS; i++) {
-				room.dir_option[i] = nullptr;
-			}
+			room.light = (room_records_row["light"]).as<int>();
 
 			world.push_back(room);
 			mods::globals::register_room(world.size());
 			top_of_world = world.size();
+		}
 
-			for(auto row2: db_get_by_meta("room_direction_data","room_number",row["number"].c_str())){
+			for(auto && row2: db_get_all("room_direction_data")){
 				//siege=# \d room_direction_data
 				// id                  | integer                |           | not null | nextval('room_direction_data_id_seq'::regclass)
 				// room_number         | integer                |           | not null |
@@ -1311,43 +1307,43 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				// to_room             | integer                |           | not null |
 				//
 				//siege=#
-				auto direction = (row2["exit_direction"]).as<int>();
-				auto real_room_number = real_room((row2["room_number"]).as<int>());
-
+				auto direction = row2["exit_direction"].as<int>();
+				if(direction >= NUM_OF_DIRS){
+					log("SYSERR: Invalid direction: (%d) Max number of Directions: (%d)",direction,NUM_OF_DIRS);
+					continue;
+				}
+				room_rnum real_room_number = real_room((row2["room_number"]).as<int>());
 				if(real_room_number == NOWHERE) {
 					log("Invalid real_room_number: %d",(row2["room_number"]).as<int>());
 					continue;
 				}
+				std::string gen_desc = row2["general_description"].c_str();
+				std::string keyword = row2["keyword"].c_str();
+				auto db_exit_info = (row2["exit_info"]).as<int>();
+				int exit_info = 0;
 
-				world[real_room_number].dir_option[direction] = (room_direction_data*) calloc(sizeof(room_direction_data),1);
-				world[real_room_number].dir_option[direction]->general_description = strdup((row2["general_description"]).c_str());
-				world[real_room_number].dir_option[direction]->keyword = strdup((row2["keyword"]).c_str());
-				auto exit_info = (row2["exit_info"]).as<int>();
-
-				switch(exit_info) {
+				switch(db_exit_info) {
 					case 1:
 					default:
-						world[real_room_number].dir_option[direction]->exit_info = EX_ISDOOR;
-						REMOVE_BIT(world[real_room_number].dir_option[direction]->exit_info,EX_CLOSED);
+						exit_info = EX_ISDOOR;
+						REMOVE_BIT(exit_info,EX_CLOSED);
 						break;
 
 					case 2:
-						world[real_room_number].dir_option[direction]->exit_info = EX_ISDOOR | EX_PICKPROOF;
-						SET_BIT(world[real_room_number].dir_option[direction]->exit_info,EX_CLOSED);
+						exit_info = EX_ISDOOR | EX_PICKPROOF;
+						SET_BIT(exit_info,EX_CLOSED);
 						break;
 
 					case 3:
-						world[real_room_number].dir_option[direction]->exit_info = EX_ISDOOR | EX_REINFORCED;
-						SET_BIT(world[real_room_number].dir_option[direction]->exit_info,EX_CLOSED);
+						exit_info = EX_ISDOOR | EX_REINFORCED;
+						SET_BIT(exit_info,EX_CLOSED);
 						break;
 				}
 
-				world[real_room_number].dir_option[direction]->key = (row2["exit_key"]).as<int>();
-				world[real_room_number].dir_option[direction]->to_room = real_room((row2["to_room"]).as<int>());
+				int key = (row2["exit_key"]).as<int>();
+				room_rnum to_room = real_room(row2["to_room"].as<int>());
+				world[real_room_number].set_dir_option(direction,gen_desc,keyword,exit_info,key,to_room);
 			}
-		}//end for(auto row: room_records)
-
-		top_of_world = world.size();
 	}catch(std::exception& e){
 		std::cerr << "error selecting room from db: '" << e.what() << "'\n";
 		return {-1,std::string("An exception occured: ") + e.what()};

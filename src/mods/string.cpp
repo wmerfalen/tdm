@@ -16,13 +16,13 @@ namespace mods {
 		m_cptr = nullptr;
 		//assign(std::string(""));
 		m_str = "";
-		std::cerr << "mods::string::string constructor\n";
+		//std::cerr << "mods::string::string constructor\n";
 	}
 	string::string(const char* str){
 		m_mallocd = false;
 		m_cptr = nullptr;
 		assign(str);
-		std::cerr << "mods::string::string(const char*) constructor\n";
+		//std::cerr << "mods::string::string(const char*) constructor\n";
 	}
 	string::~string(){
 		if(m_mallocd){
@@ -81,7 +81,7 @@ namespace mods {
 		m_debug("assign std::string\n");
 		m_debug(other.c_str());
 		m_debug("end of other.c_str()");
-		std::cerr << "strlen of other: " << strlen(other.c_str()) << "\n";
+		//std::cerr << "strlen of other: " << strlen(other.c_str()) << "\n";
 		if(other.length()){
 			m_str.assign(std::string(other.c_str()));
 		}else{

@@ -11,6 +11,7 @@
 #include <cstdio>
 #include <deque>
 #include "structs.h"
+#include "mods/macro_impl.hpp"
 /* external declarations and prototypes **********************************/
 namespace mods{
 	struct descriptor_data;

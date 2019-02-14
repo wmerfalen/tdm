@@ -36,7 +36,7 @@ buildobj = act.comm act.informative act.item act.medic \
 					 mods/hell mods/db mods/testing/lmdb/player-syncing\
 					 mods/testing/lmdb/db mods/player-scaffolding sql/port\
 					 mods/meta_utils mods/acl_list mods/flags mods/js-player-scaffolding \
-					 mods/builder mods/pq mods/crypto utils
+					 mods/builder mods/pq mods/crypto utils mods/macro_impl
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

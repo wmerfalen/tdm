@@ -723,22 +723,57 @@ using aligned_int_t = uint64_t;
 	/* ================== Memory Structure for room ======================= */
 	struct room_data {
 		room_data() : number(0),zone(0),sector_type(0),
-		room_flags(0),light(0),func(nullptr){ }
-		~room_data() = default;
+		room_flags(0),light(0),func(nullptr){
+			for(unsigned i = 0; i < NUM_OF_DIRS;i++){ 
+				dir_option[i] = nullptr;
+			}
+		}
+		~room_data(){
+			for(unsigned i = 0; i < NUM_OF_DIRS; i++){
+				if(dir_option[i] != nullptr){
+					if(dir_option[i]->general_description != nullptr){
+						free(dir_option[i]->general_description);
+					}
+					if(dir_option[i]->keyword != nullptr){
+						free(dir_option[i]->keyword);
+					}
+					free(dir_option[i]);
+				}
+			}
+		}
+		void set_dir_option(byte i,std::string_view gen_desc,
+				std::string_view keyword,
+				const int ex_info,
+				const int key,
+				const room_rnum to_room){
+			if(i >= NUM_OF_DIRS){
+				std::cerr << "SYSERR: dir_option >= NUM_OF_DIRS\n";
+				return;
+			}
+			if(!dir_option[i]){
+				dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
+			}
+			/** FIXME: replace strdup'd members with mods::string */
+			dir_option[i]->general_description = strdup(gen_desc.data());
+			dir_option[i]->keyword = strdup(keyword.data());
+			dir_option[i]->exit_info = ex_info;
+			dir_option[i]->key = key;
+			dir_option[i]->to_room = to_room;
+		}
 		room_vnum number;		/* Rooms number	(vnum)		      */
 		zone_rnum zone;              /* Room zone (for resetting)          */
 		int	sector_type;            /* sector type (move/hide)            */
 		mods::string	name;                  /* Rooms name 'You are ...'           */
 		mods::string	description;           /* Shown when entered                 */
-		struct extra_descr_data *ex_description; /* for examine/look       */
-		struct room_direction_data *dir_option[NUM_OF_DIRS]; /* Directions */
+		extra_descr_data *ex_description; /* for examine/look       */
+		room_direction_data *dir_option[NUM_OF_DIRS]; /* Directions */
 		int /*bitvector_t*/ room_flags;		/* DEATH,DARK ... etc */
 
 		byte light;                  /* Number of lightsources in room     */
 		SPECIAL(*func);
 
-		struct obj_data *contents;   /* List of items in room              */
-		struct char_data *people;    /* List of NPC / PC in room           */
+		obj_data *contents;   /* List of items in room              */
+		char_data *people;    /* List of NPC / PC in room           */
 	};
 	/* ====================================================================== */
 
