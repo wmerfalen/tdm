@@ -1431,36 +1431,15 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 				}
 
 				p->set_name(arg);
-				aligned_int_t user_id = 0;
-				//auto id = mods::db::initialize_row("player");
-				//db_put("player",db_key({"meta","player_name",p->name()}),std::to_string(id));
-				//mods::globals::db->commit();
-				auto pk_id = db_get(db_key({"player","meta","player_name",p->name()}));
-				if(pk_id.length() == 0 || pk_id.compare("0") == 0 ||
-						mods::util::stoi_optional<aligned_int_t>(pk_id).has_value() == false ||
-						mods::util::stoi_optional<aligned_int_t>(pk_id).value_or(0) == 0){
-					p->set_db_id(0);
+				p->set_db_id(0);
+				if(player_exists(p) == false){
 					write_to_output(d, "Did I get that right, %s (Y/N)? ", p->name().c_str());
 					p->set_state(CON_NAME_CNFRM);
 				} else {
-					std::cout << "info: player '" << arg << "' user_id: '" << user_id << "'\n";
-					p->set_db_id(mods::util::stoi_optional<aligned_int_t>(pk_id).value_or(0));
-					if(p->get_db_id() == 0){
-						std::cerr << "error: existing user has an invalid pk\n";
-					}else{
-						if(parse_sql_player(p)){
-							p->clear_all_affected();
-							p->clear_all_affected_plr();
-							write_to_output(d, "Password: ");
-							echo_off(d);
-							d.idle_tics = 0;
-							p->set_state(CON_PASSWORD);
-						}else{
-							p->set_db_id(0);
-							write_to_output(d, "Did I get that right, %s (Y/N)? ", p->name().c_str());
-							p->set_state(CON_NAME_CNFRM);
-						}
-					}
+					write_to_output(d, "Password: ");
+					echo_off(d);
+					d.idle_tics = 0;
+					p->set_state(CON_PASSWORD);
 				}
 			}
 			break;
@@ -1514,23 +1493,27 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 
 			if(arg.length() == 0) {
 				p->set_state(CON_CLOSE);
+				return;
 			} else {
-				constexpr static int outbuf_size = 1024 * 3;
-				std::vector<char> outbuf;
-				outbuf.reserve(outbuf_size);
-				std::fill(outbuf.begin(),outbuf.end(),0);
-				std::string compare;
-				/** FIXME: this entire if statement is broken. it always lets the user in */
-				std::copy(outbuf.begin(),outbuf.end(),std::back_inserter(compare));
-				mods::globals::db->set_pluck_filter({"player_password"});
-				std::cout << "info: " << p->name().c_str() << "'s pk_id: '" << p->get_db_id() << "'\n";
-				mods::db::load_record("player",p->get_db_id(),row);
-				mods::globals::db->clear_pluck_filter();
-				if(row.size()){
-					std::cout << "info: found 'player_password' as: '" << row["player_password"] << "'\n" 
-						<< "comparing to: '" << compare << "'\n";
-				}
-				if(row["player_password"].compare(compare) != 0){
+				//constexpr static int outbuf_size = 1024 * 3;
+				//std::vector<char> outbuf;
+				//outbuf.reserve(outbuf_size);
+				//std::fill(outbuf.begin(),outbuf.end(),0);
+				//std::string compare;
+
+				///** FIXME: this entire if statement is broken. it always lets the user in */
+				//std::copy(outbuf.begin(),outbuf.end(),std::back_inserter(compare));
+				//mods::globals::db->set_pluck_filter({"player_password"});
+				//std::cout << "info: " << p->name().c_str() << "'s pk_id: '" << p->get_db_id() << "'\n";
+				//mods::db::load_record("player",p->get_db_id(),row);
+				//mods::globals::db->clear_pluck_filter();
+				//if(row.size()){
+				//	std::cout << "info: found 'player_password' as: '" << row["player_password"] << "'\n" 
+				//		<< "comparing to: '" << compare << "'\n";
+				//}
+
+				/** FIXME: log user IP and all this stuff into postgres */
+				if(login(p->name(),arg) == false){
 					mudlog(BRF, LVL_GOD, TRUE, "Bad PW: %s [%s]", p->name().c_str(), p->host().c_str());
 					p->increment_bad_password_count();
 
@@ -1542,6 +1525,8 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 						echo_off(d);
 					}
 					return;
+				}else{
+					parse_sql_player(p);
 				}
 
 				/* Password was correct. */

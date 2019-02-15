@@ -376,7 +376,7 @@ void boot_hell(void){
 	room.description = "-void-";
 	room.room_flags = 0;
 	room.sector_type = 0;
-	room.ex_description = nullptr;
+	//room.ex_description = nullptr;
 	room.func = nullptr;
 	room.contents = nullptr;
 	room.people = nullptr;
@@ -408,6 +408,12 @@ void boot_world(void) {
 
 	log("Parsing sql rooms.");
 	auto tuple_status_rooms = parse_sql_rooms();
+	log("parse_sql_rooms return: %s",(std::get<1>(tuple_status_rooms)).c_str());
+	if(std::get<0>(tuple_status_rooms)  == 0){
+		log("parse_sql_rooms didn't find any rooms");
+	}else{
+		log("Found %d rooms",std::get<0>(tuple_status_rooms));
+	}
 
 	log("Checking start rooms.");
 	check_start_rooms();
@@ -1261,7 +1267,6 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 		// light          | integer                |           |          |
 		// room_flag      | integer                |           | not null |
 		//
-		//siege=#
 		auto room_records = db_get_all("room");
 		log("parse_sql_rooms[result.size()]->%d",room_records.size());
 		if(room_records.size() == 0){
@@ -1274,26 +1279,38 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 			return {0,"warning: no room_records fetched from postgres"};
 		}
 		world.reserve(room_records.size());
-		//auto rdd_txn = txn();
+		unsigned record_iterations= 0;
 		for(auto && room_records_row: room_records) {
-			std::cout << "parse_sql_rooms[room]->'" << room_records_row["room_number"].as<int>() << "'\n";
+			try{
+			log("DEBUG: record_iterations: %d",++record_iterations);
+			log("DEBUG: room: %d",mods::util::stoi<int>(room_records_row["id"].c_str()));
 			room_data room;
-			room.number = room_records_row["room_number"].as<int>();
-			room.zone = room_records_row["zone"].as<int>();
-			room.name =(room_records_row["name"]).c_str();
-			room.description =(room_records_row["description"]).c_str();
-			room.room_flags = room_records_row["room_flag"].as<int>();
-			room.sector_type = room_records_row["sector_type"].as<int>();
-			room.ex_description = nullptr;
-			room.func = nullptr;
-			room.contents = nullptr;
-			room.people = nullptr;
-			room.light = (room_records_row["light"]).as<int>();
+			const char* name = room_records_row["name"].c_str();
+			const char* description = room_records_row["description"].c_str();
+			if(name == nullptr){ 
+				room.name = strdup("<default>");
+			}else{
+				room.name = strdup(name);
+			}
+			if(description == nullptr){
+				room.description = strdup("A room");
+			}else{
+				room.description = strdup(description);
+			}
+			room.number = room_records_row["room_number"].as<int>(0);
+			room.zone = room_records_row["zone"].as<int>(0);
+			room.room_flags = room_records_row["room_flag"].as<int>(0);
+			room.sector_type = room_records_row["sector_type"].as<int>(0);
+			room.light = (room_records_row["light"]).as<int>(0);
 
 			world.push_back(room);
 			mods::globals::register_room(world.size());
 			top_of_world = world.size();
+			}catch(std::exception& e){
+				std::cerr << "SYSERR: exception select from rooms db: " << e.what() << "\n";
+			}
 		}
+		log("parse_sql_rooms: world.size(): %d",world.size());
 
 			for(auto && row2: db_get_all("room_direction_data")){
 				//siege=# \d room_direction_data
@@ -1343,12 +1360,13 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				int key = (row2["exit_key"]).as<int>();
 				room_rnum to_room = real_room(row2["to_room"].as<int>());
 				world[real_room_number].set_dir_option(direction,gen_desc,keyword,exit_info,key,to_room);
+				log("DEBUG: set dir option: direction %d gen_desc: '%s' keyword: '%s'",direction,gen_desc.c_str(),keyword.c_str());
 			}
 	}catch(std::exception& e){
 		std::cerr << "error selecting room from db: '" << e.what() << "'\n";
 		return {-1,std::string("An exception occured: ") + e.what()};
 	}
-	return {0,"okay"};
+	return {world.size(),"okay"};
 }
 void parse_room(FILE *fl, int virtual_nr) {
 	log("[DEPRECATED] parse_room");
@@ -2372,70 +2390,79 @@ bool char_exists(const std::string& name){
  */
 
 
+bool player_exists(std::shared_ptr<mods::player> player_ptr){
+	return db_get_by_meta("player","player_name",player_ptr->name().c_str()).size();
+}
+bool login(std::string_view user_name,std::string_view password){
+		try{
+			auto up_txn = txn();
+			sql_compositor comp("player",&up_txn);
+			auto room_sql = comp.select("player_password")
+				.from("player")
+				.where("player_name","=",user_name.data())
+				.where("player_password","=",password.data())
+				.sql();
+			auto row = mods::pq::exec(up_txn,room_sql.data());
+			return row.size() > 0;
+		}catch(std::exception& e){
+			std::cerr << __FILE__ << ": " << __LINE__ << " login() exception: " << e.what() << "\n";
+			return false;
+		}
+}
 bool parse_sql_player(std::shared_ptr<mods::player> player_ptr){
-	mutable_map_t values;
-	values["player_name"] = player_ptr->name().c_str();
-	mutable_map_t row;
-	std::cout << "info: name: '" <<player_ptr->name().c_str() << "'\n";
-	int items_fetched = mods::db::load_record_by_meta("player",&values,row);
-	if(items_fetched > 0){
-		std::cout << "parse_sql_player fetched " << items_fetched << "\n";
-		row["id"] = std::to_string(player_ptr->get_db_id());
-		row["player_name"] = player_ptr->name().c_str();
-		mods::util::maps::dump<std::string,std::string>(row);
-		mods::meta_utils::write_meta("player",&row);
-		player_ptr->cd()->player.short_descr.assign((row["player_short_description"]));
-		player_ptr->cd()->player.long_descr.assign((row["player_long_description"]));
-		player_ptr->cd()->char_specials.saved.act = mods::util::stoi<int>(row["player_action_bitvector"]);
-		player_ptr->cd()->real_abils.str = mods::util::stoi<int>(row["player_ability_strength"]);
-		player_ptr->cd()->real_abils.str_add = mods::util::stoi<int>(row["player_ability_strength_add"]);
-		player_ptr->cd()->real_abils.intel = mods::util::stoi<int>(row["player_ability_intelligence"]);
-		player_ptr->cd()->real_abils.wis = mods::util::stoi<int>(row["player_ability_wisdom"]);
-		player_ptr->cd()->real_abils.dex = mods::util::stoi<int>(row["player_ability_dexterity"]);
-		player_ptr->cd()->real_abils.con = mods::util::stoi<int>(row["player_ability_constitution"]);
-		player_ptr->cd()->real_abils.cha = mods::util::stoi<int>(row["player_ability_charisma"]);
-		player_ptr->cd()->char_specials.saved.alignment = mods::util::stoi<int>(row["player_ability_alignment"]);
-		player_ptr->cd()->points.max_hit = mods::util::stoi<int>(row["player_max_hitpoints"]);
-		player_ptr->cd()->points.max_mana = mods::util::stoi<int>(row["player_max_mana"]);
-		player_ptr->cd()->points.max_move = mods::util::stoi<int>(row["player_max_move"]);
-		player_ptr->cd()->points.gold = mods::util::stoi<int>(row["player_gold"]);
-		player_ptr->cd()->points.exp = mods::util::stoi<int>(row["player_exp"]);
-		player_ptr->cd()->player.sex = mods::util::stoi<byte>(row["player_sex"]);
-		player_ptr->cd()->points.max_hit = mods::util::stoi<int>(row["player_hitpoints"]);
-		player_ptr->cd()->points.mana = mods::util::stoi<int>(row["player_mana"]);
-		player_ptr->cd()->points.move = mods::util::stoi<int>(row["player_move"]);
-		player_ptr->cd()->points.damroll = mods::util::stoi<int>(row["player_damroll"]);
-		player_ptr->cd()->points.hitroll = mods::util::stoi<int>(row["player_hitroll"]);
-		player_ptr->cd()->player.weight = mods::util::stoi<int>(row["player_weight"]);
-		player_ptr->cd()->player.height = mods::util::stoi<int>(row["player_height"]);
-		player_ptr->cd()->player.chclass = mods::util::stoi<int>(row["player_class"]);
-		player_ptr->cd()->player.title.assign((row["player_title"]));
-		player_ptr->cd()->player.hometown = mods::util::stoi<int>(row["player_hometown"]);
+	/** TODO: make sure sql injection is not possible here */
+	for(auto && row: db_get_by_meta("player","player_name",player_ptr->name().c_str())){
+		player_ptr->set_db_id(row["id"].as<int>());
 		player_ptr->clear_all_affected();
 		player_ptr->clear_all_affected_plr();
+		player_ptr->short_descr().assign((row["player_short_description"]));
+		player_ptr->long_descr().assign((row["player_long_description"]));
+		player_ptr->saved().act = mods::util::stoi<int>(row["player_action_bitvector"]);
+		player_ptr->real_abils().str = mods::util::stoi<int>(row["player_ability_strength"]);
+		player_ptr->real_abils().str_add = mods::util::stoi<int>(row["player_ability_strength_add"]);
+		player_ptr->real_abils().intel = mods::util::stoi<int>(row["player_ability_intelligence"]);
+		player_ptr->real_abils().wis = mods::util::stoi<int>(row["player_ability_wisdom"]);
+		player_ptr->real_abils().dex = mods::util::stoi<int>(row["player_ability_dexterity"]);
+		player_ptr->real_abils().con = mods::util::stoi<int>(row["player_ability_constitution"]);
+		player_ptr->real_abils().cha = mods::util::stoi<int>(row["player_ability_charisma"]);
+		player_ptr->saved().alignment = mods::util::stoi<int>(row["player_ability_alignment"]);
+
+		/** hp, mana, move */
+		player_ptr->max_hp() = mods::util::stoi<int>(row["player_max_hitpoints"]);
+		player_ptr->max_mana() = mods::util::stoi<int>(row["player_max_mana"]);
+		player_ptr->max_move() = mods::util::stoi<int>(row["player_max_move"]);
+		player_ptr->hp() = mods::util::stoi<int>(row["player_hitpoints"]);
+		player_ptr->mana() = mods::util::stoi<int>(row["player_mana"]);
+		player_ptr->move() = mods::util::stoi<int>(row["player_move"]);
+
+		/** gold, exp, sex */
+		player_ptr->gold() = mods::util::stoi<int>(row["player_gold"]);
+		player_ptr->exp() = mods::util::stoi<int>(row["player_exp"]);
+		player_ptr->sex() = mods::util::stoi<byte>(row["player_sex"]);
+
+		/** damroll, hitroll, weight, height */
+		player_ptr->damroll() = mods::util::stoi<int>(row["player_damroll"]);
+		player_ptr->hitroll() = mods::util::stoi<int>(row["player_hitroll"]);
+		player_ptr->weight() = mods::util::stoi<int>(row["player_weight"]);
+		player_ptr->height() = mods::util::stoi<int>(row["player_height"]);
+		player_ptr->chclass() = mods::util::stoi<int>(row["player_class"]);
+		player_ptr->title().assign((row["player_title"]));
+		player_ptr->hometown() = mods::util::stoi<int>(row["player_hometown"]);
 		mods::flags::load<
 			std::shared_ptr<mods::player>,
 			mods::flags::aff>(
-					player_ptr,row["player_affection_bitvector"]
+					player_ptr,row["player_affection_bitvector"].c_str()
 					);
 		mods::flags::load<std::shared_ptr<mods::player>,
 			mods::flags::plr>(
-					player_ptr,row["player_affection_plr_bitvector"]
+					player_ptr,row["player_affection_plr_bitvector"].c_str()
 					);
-		/** FIXME: if points aren't sane values, reset the character via the new points reset code */
-	}else{
-		std::cout << "info: no values returned for parse_sql_player by name: '" << player_ptr->name().c_str() << "'\n";
-		return false;
+		player_ptr->set_time_birth(mods::util::stoi<int>(row["player_birth"]));
+		player_ptr->set_time_played(mods::util::stoi<int>(row["player_time_played"]));
+		player_ptr->set_time_logon(time(0));
+		return true;
 	}
-	player_ptr->set_time_birth(0);
-	player_ptr->set_time_played(0);
-	player_ptr->set_time_logon(time(0));
-
-
-	auto ch = player_ptr->cd();
-	ch->char_specials.carry_weight = 0;
-	ch->char_specials.carry_items = 0;
-	ch->points.armor = 100;
+	return false;
 
 	/*
 	 * If you're not poisioned and you've been away for more than an hour of
@@ -2454,8 +2481,6 @@ bool parse_sql_player(std::shared_ptr<mods::player> player_ptr){
 void store_to_char(struct char_file_u *st, struct char_data *ch) {
 	std::cerr << "DEPRECATED -- Store_to_char\n";
 	return;
-	MENTOC_PREAMBLE();
-	mods::db::save_char(player);
 }
 
 

@@ -232,7 +232,7 @@ namespace mods::sql {
 					m_sql += m_query[i];
 				}
 
-				std::cerr << m_sql << "\n";
+				//std::cerr << m_sql << "\n";
 				return m_sql;
 			}
 		private:

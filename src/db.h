@@ -101,7 +101,9 @@
 /* public procedures in db.c */
 using aligned_int_t = uint64_t;
 using tuple_status_t  = std::tuple<bool,std::string,aligned_int_t>;
+bool player_exists(std::shared_ptr<mods::player> player_ptr);
 bool parse_sql_player(std::shared_ptr<mods::player>);
+bool login(std::string_view user_name,std::string_view password);
 void  boot_hell(void);
 void	boot_db(void);
 void	destroy_db(void);

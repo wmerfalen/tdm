@@ -24,8 +24,8 @@ aligned_int_t initialize_row(
 	ptr_db->renew_txn();
 	std::string id_list = "";
 	id_list = db_get(db_key({table,"id_list"}));
-	std::cout << "id_list: '" << id_list << "' .size(): " << id_list.length() << "\n";
-	std::cout << "debug: id_list buffer: '" << id_list << "'\n";
+	//std::cout << "id_list: '" << id_list << "' .size(): " << id_list.length() << "\n";
+	//std::cout << "debug: id_list buffer: '" << id_list << "'\n";
 	aligned_int_t next_id = 0;
 	std::vector<aligned_int_t> deserialized_id_list;
 	if(id_list.length() == 0){
@@ -64,14 +64,14 @@ aligned_int_t initialize_row(
 
 tuple_status_t new_record(const std::string& table,mutable_map_t* values){
 	auto pk_id = mods::db::initialize_row(table);
-	std::cout << "debug: new pk_id: '" << pk_id << "'\n";
+	//std::cout << "debug: new pk_id: '" << pk_id << "'\n";
 	return save_record(table,values,std::to_string(pk_id));
 }
 
 tuple_status_t save_record(const std::string& table,mutable_map_t* values,std::string pk_id){
 	mods::globals::db->renew_txn();
 	for(auto & meta_key : mods::meta_utils::get_all_meta_values(table,values)){
-		std::cout << "debug: save_record. Putting: '" << meta_key << " as '" << pk_id << "'\n";
+		//std::cout << "debug: save_record. Putting: '" << meta_key << " as '" << pk_id << "'\n";
 		db_put(meta_key,pk_id);
 	}
 		auto write_status =  lmdb_write_values(
@@ -169,7 +169,7 @@ int load_record(const std::string& table, const std::string& pk, mutable_map_t& 
 	int count = 0;
 	for(auto & key : mods::globals::db->fields_to_grab(table)){
 		value = db_get(db_key({table,key,pk}));
-		std::cout << "debug: load_record key: '" << key << "' value: '" << value << "'\n";
+		//std::cout << "debug: load_record key: '" << key << "' value: '" << value << "'\n";
 		values[key] = value;
 		++count;
 	}
@@ -189,7 +189,7 @@ int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_
 		auto opt_pk = mods::util::stoi_optional<aligned_int_t>(pk_id);
 		if(opt_pk.has_value() && opt_pk.value() != 0){
 			count = 0;
-			std::cout << "debug: found pk: '" << opt_pk.value() << "'\n";
+			//std::cout << "debug: found pk: '" << opt_pk.value() << "'\n";
 			out_record["id"] = pk_id;
 			std::vector<std::string> fields_to_grab = mods::schema::db[table];
 			if(mods::globals::db->is_using_pluck_filter()){
@@ -197,7 +197,7 @@ int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_
 			}
 			for(auto & key : fields_to_grab){
 				std::string fetched = db_get(db_key({table,key,pk_id}));
-				std::cout << "debug: load_record key: '" << key << "' value: '" << fetched << "'\n";
+				//std::cout << "debug: load_record key: '" << key << "' value: '" << fetched << "'\n";
 				out_record[key] = fetched;
 				count++;
 			}

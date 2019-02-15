@@ -639,23 +639,23 @@ using aligned_int_t = uint64_t;
 		obj_vnum item_number;	/* Where in data-base			*/
 		room_rnum in_room;		/* In what room -1 when conta/carr	*/
 
-		struct obj_flag_data obj_flags;/* Object information               */
-		struct obj_affected_type affected[MAX_OBJ_AFFECT];  /* affects */
+		obj_flag_data obj_flags;/* Object information               */
+		obj_affected_type affected[MAX_OBJ_AFFECT];  /* affects */
 
 		char	*name;                    /* Title of object :get etc.        */
 		char	*description;		  /* When in room                     */
 		char	*short_description;       /* when worn/carry/in cont.         */
 		char	*action_description;      /* What to write when used          */
-		struct extra_descr_data *ex_description; /* extra descriptions     */
-		struct char_data *carried_by;  /* Carried by :NULL in room/conta   */
-		struct char_data *worn_by;	  /* Worn by?			      */
+		extra_descr_data *ex_description; /* extra descriptions     */
+		char_data *carried_by;  /* Carried by :NULL in room/conta   */
+		char_data *worn_by;	  /* Worn by?			      */
 		sh_int worn_on;		  /* Worn where?		      */
 
-		struct obj_data *in_obj;       /* In what object NULL when none    */
-		struct obj_data *contains;     /* Contains objects                 */
+		obj_data *in_obj;       /* In what object NULL when none    */
+		obj_data *contains;     /* Contains objects                 */
 
-		struct obj_data *next_content; /* For 'contains' lists             */
-		struct obj_data *next;         /* For the object list              */
+		obj_data *next_content; /* For 'contains' lists             */
+		obj_data *next;         /* For the object list              */
 		uint8_t ai_state;
 
 		uuid_t uuid;
@@ -722,11 +722,17 @@ using aligned_int_t = uint64_t;
 
 	/* ================== Memory Structure for room ======================= */
 	struct room_data {
-		room_data() : number(0),zone(0),sector_type(0),
-		room_flags(0),light(0),func(nullptr){
+		room_data() : 
+		number(0), zone(0), sector_type(0), 
+		room_flags(0), light(0), func(nullptr),
+			contents(nullptr), people(nullptr){
 			for(unsigned i = 0; i < NUM_OF_DIRS;i++){ 
 				dir_option[i] = nullptr;
 			}
+			ex_description = (extra_descr_data*)calloc(sizeof(extra_descr_data),1);
+			ex_description->keyword = strdup("keyword_1234");
+			ex_description->description = strdup("description_1234");
+			ex_description->next = nullptr;
 		}
 		~room_data(){
 			for(unsigned i = 0; i < NUM_OF_DIRS; i++){
@@ -740,22 +746,35 @@ using aligned_int_t = uint64_t;
 					free(dir_option[i]);
 				}
 			}
+			free(ex_description);
 		}
-		void set_dir_option(byte i,std::string_view gen_desc,
-				std::string_view keyword,
-				const int ex_info,
-				const int key,
+		void set_dir_option(byte i,
+				const std::string& gen_desc,
+				const std::string& keyword,
+				const int & ex_info,
+				const int & key,
 				const room_rnum to_room){
 			if(i >= NUM_OF_DIRS){
 				std::cerr << "SYSERR: dir_option >= NUM_OF_DIRS\n";
 				return;
 			}
-			if(!dir_option[i]){
+			if(dir_option[i] == nullptr){
+				//dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
+				dir_option[i] = (room_direction_data*)calloc(sizeof(room_direction_data),1);
+			}/*else{
+				if(dir_option[i]->general_description != nullptr){
+					free(dir_option[i]->general_description);
+				}
+				if(dir_option[i]->keyword != nullptr){
+					free(dir_option[i]->keyword);
+				}
+				free(dir_option[i]);
 				dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
 			}
+			*/
 			/** FIXME: replace strdup'd members with mods::string */
-			dir_option[i]->general_description = strdup(gen_desc.data());
-			dir_option[i]->keyword = strdup(keyword.data());
+			dir_option[i]->general_description = strdup(gen_desc.c_str());
+			dir_option[i]->keyword = strdup(keyword.c_str());
 			dir_option[i]->exit_info = ex_info;
 			dir_option[i]->key = key;
 			dir_option[i]->to_room = to_room;
@@ -767,7 +786,7 @@ using aligned_int_t = uint64_t;
 		mods::string	description;           /* Shown when entered                 */
 		extra_descr_data *ex_description; /* for examine/look       */
 		room_direction_data *dir_option[NUM_OF_DIRS]; /* Directions */
-		int /*bitvector_t*/ room_flags;		/* DEATH,DARK ... etc */
+		int room_flags;		/* DEATH,DARK ... etc */
 
 		byte light;                  /* Number of lightsources in room     */
 		SPECIAL(*func);
