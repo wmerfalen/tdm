@@ -11,6 +11,7 @@ namespace mods {
 		string();
 		string(const char* str);
 		string(const pqxx::tuple::reference & str);
+		string(const string&);
 		~string();
 		operator bool() const { return m_str.length(); }
 		operator char*() const { return const_cast<char*>(c_str()); }

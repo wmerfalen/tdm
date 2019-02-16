@@ -1772,6 +1772,9 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 #endif
 
 												 p->desc().has_prompt = 0;
+#ifndef __MENTOC_DONT_RUN_PROFILE_SCRIPTS__
+												 mods::js::run_profile_scripts(p->name());
+#endif
 												 break;
 
 											 case '2':

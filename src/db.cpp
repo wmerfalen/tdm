@@ -909,6 +909,19 @@ bitvector_t asciiflag_conv(char *flag) {
 }
 
 void parse_sql_mobiles() {
+	/** Function status
+	 * This function will load a mobile prototype from
+	 * the database. A prototype is a template for what
+	 * a mob is supposed to be. It has the base values
+	 * that are more like suggestions for the inheriting
+	 * mobile. Cool idea: have values that are set in stone
+	 *
+	 * !needs-testing: I have not verified that all of the columns
+	 * loaded from postgres are in fact loading into each prototype correctly.
+	 * I can assume that they are since the code doesn't crash when a prototype
+	 * is loaded, but that's a very superficial assumption. Edge cases here
+	 * will likely cause weird behaviour down the road if not caught now. [2019-02-15]
+	 */
 	top_of_mobt = 0;
 
 		for(auto && row : db_get_all("mobile")) {

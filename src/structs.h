@@ -933,7 +933,9 @@ using aligned_int_t = uint64_t;
 
 		char_special_data_saved saved; /* constants saved in plrfile	*/
 		char_special_data() : fighting(nullptr), hunting(nullptr), position(POS_STANDING),
-		carry_weight(0), carry_items(0),timer(time(0)){}
+		carry_weight(0), carry_items(0),timer(time(0)){
+
+		}
 		~char_special_data() = default;
 	};
 

@@ -76,7 +76,7 @@ namespace mods {
 		extern std::unique_ptr<lmdb_db> db;
 		extern ai_state_map states;
 		extern duk_context* duktape_context;
-		extern std::vector<std::vector<struct char_data*>> room_list;
+		extern std::vector<std::vector<char_data*>> room_list;
 		extern player_list_t player_list;
 		extern std::vector<mods::chat::channel> chan;
 		extern std::vector<std::string> chan_verbs;

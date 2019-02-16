@@ -2,7 +2,8 @@ src = .
 builddir = build
 CC = g++-7
 BINDIR = ../bin
-DATA_DIR = $(CURDIR)/../lib/
+DATA_DIR = "$(CURDIR)/../lib/"
+JS_PROFILES_PATH = "$(CURDIR)/../lib/js/profiles/"
 LMDBNAME = bnull
 
 lmdbdir = $(CURDIR)/liblmdb
@@ -17,11 +18,12 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-Wno-format-zero-length -Wno-format-security\
 	-A -da -std=c++17 -fpermissive -MMD \
 	-Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
-	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__ 
+	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \
+	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\" 
 #	-Lboost-cpp/build/lib\ -Ipqxx 
 #	-Imods/include -Iboost-cpp -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" 
 LIBS = -lpqxx $(openssl)
-buildobj = act.comm act.informative act.item act.medic \
+buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
 					 act.wizard alias ban boards bsd-snprintf castle \
 					 class comm config constants db fight globals graph\
@@ -36,11 +38,11 @@ buildobj = act.comm act.informative act.item act.medic \
 					 mods/hell mods/db mods/testing/lmdb/player-syncing\
 					 mods/testing/lmdb/db mods/player-scaffolding sql/port\
 					 mods/meta_utils mods/acl_list mods/flags mods/js-player-scaffolding \
-					 mods/builder mods/pq mods/crypto utils mods/macro_impl
+					 mods/builder mods/pq mods/crypto utils mods/macro_impl act.comm
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
-all: $(builddir) $(objects) $(thirdparty) $(DATA_DIR)
+all: $(builddir) $(objects) $(thirdparty) #$(DATA_DIR)
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS)
 clean:
 	make -f $(lmdbdir)/Makefile clean ; \

@@ -2,6 +2,17 @@
 #include <string.h>
 //#define m_debug(a) ;; /* do{ std::cerr << "[m_debug]: " << a << "\n"; }while(0); */
 namespace mods {
+	string::string(const string& str){
+		m_mallocd = false;
+		m_cptr = nullptr;
+		m_str = "";
+		std::string other = str.c_str();
+		if(other.length()){
+			assign(other.c_str());
+		}else{
+			assign("");
+		}
+	}
 	string::string(const pqxx::tuple::reference & str){
 		m_mallocd = false;
 		m_cptr = nullptr;
@@ -9,14 +20,16 @@ namespace mods {
 		std::string other = str.c_str();
 		if(other.length()){
 			assign(other.c_str());
+		}else{
+			assign("");
 		}
 	}
 	string::string(){
 		m_mallocd = false;
 		m_cptr = nullptr;
-		//assign(std::string(""));
 		m_str = "";
-		//std::cerr << "mods::string::string constructor\n";
+		std::cerr << "mods::string::string constructor\n";
+		assign(std::string(""));
 	}
 	string::string(const char* str){
 		m_mallocd = false;
@@ -38,31 +51,33 @@ namespace mods {
 	}
 	void string::clear(){
 		///std::cerr <<"m_str: " << m_str.c_str() << "\n";
+		assign("");
+		/*
 		m_str = "";
 		if(m_mallocd){
 			free(m_cptr);
 		}
 		m_cptr = nullptr;
 		m_mallocd = false;
+		*/
 	}
 	string& string::operator=(const char* other){
-		m_str = "";
-		this->assign(other);
+		assign(other);
 		return *this;
 	}
 	string& string::operator=(char* other){
 		if(other){
-			m_str = std::string(other);
+			assign(std::string(other));
 		}else{
-			m_str = "";
+			assign("");
 		}
 		return *this;
 	}
 	string& string::operator=(string other){
 		if(other.m_str.length()){
-			m_str = other.m_str;
+			assign(other.m_str);
 		}else{
-			m_str = "";
+			assign("");
 		}
 		return *this;
 	}
@@ -70,7 +85,7 @@ namespace mods {
 		if(other.length()){
 			m_str.assign(std::string(other.c_str()));
 		}else{
-			m_str = "";
+			assign("");
 		}
 		return *this;
 	}
@@ -91,14 +106,19 @@ namespace mods {
 		m_realloc();
 	}
 	const char* string::c_str() const {
-		m_debug("returning c_str of m_str:");
-		m_debug(m_str.c_str());
-		return m_str.c_str();
+		//std::cerr << "returning c_str of m_str: << " << m_str.c_str() << "\n";
+		if(m_str.length()){
+			return m_str.c_str();
+		}else{
+			return "";
+		}
 	}
 	void string::concat(const std::string & str){
 		if(str.length()){
 			m_str.append(str);
 			m_realloc();
+		}else{
+			assign(str);
 		}
 	}
 	void string::concat(int ch){

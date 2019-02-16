@@ -1169,6 +1169,26 @@ ACMD(do_mbuild) {
 			mods::builder::report_error<shrd_ptr_player_t>(player,"Please use a valid numeric value.");
 			return;
 		} else {
+			/**
+			 * TODO: The plan from 2019-02-15 is to build this code out below
+			 * so that it properly loads the mobile into the game without issues.
+			 * Main issue with the code below is that when the mobile is read
+			 * from ram, the npc's name is printing malformed characters to 
+			 * the players. This is related to the act() and subsequently, the
+			 * perform_act() function which gets called by act. These are fairly
+			 * lame functions as they basically are parsers for a simplistic 
+			 * dollar based system that interpolates but is likely prone to 
+			 * massive amounts of abuse. 
+			 *
+			 *
+			 * Consensus: 
+			 * The stability of the code that loads the mobile from a prototype
+			 * from within mob_proto is very questionable, though it is no longer
+			 * the code that crashes the binary. Loading a mobile from a prototype
+			 * should be tested using some sort of js test suites. TODO
+			 *
+			 *
+			 */
 			auto index = i_value.value();
 			std::size_t i = index;
 

@@ -764,3 +764,14 @@ int room_is_dark(room_rnum room) {
 
 	return (FALSE);
 }
+
+/*
+mods::string& GET_NAME(char_data* ch){
+	if(IS_NPC(ch)){
+		std::cerr << "[DEBUG]: GET_NAME(FOR NPC): short_descr: '" << ch->player.short_descr << "'\n";
+		return ch->player.short_descr;
+	}else{
+		return GET_PC_NAME(ch);
+	}
+}
+*/

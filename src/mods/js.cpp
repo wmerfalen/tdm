@@ -9,6 +9,7 @@
 extern void command_interpreter(struct char_data* ch,char* argument);
 extern void hit(struct char_data* ch,struct char_data* vict,int type);
 extern void affect_from_char(struct char_data *ch, int type);
+extern void mobile_activity();
 namespace mods {
 	namespace js {
 		namespace utils {
@@ -43,7 +44,7 @@ namespace mods {
 		int load_library(duk_context*,std::string_view);
 		constexpr static const char * JS_PATH = "../lib/js/";
 		constexpr static const char * JS_TEST_PATH = "../lib/js/tests/";
-		constexpr static const char * JS_PROFILES_PATH = "../lib/js/profiles/";
+		//constexpr static const char * JS_PROFILES_PATH = "../lib/js/profiles/";
 		namespace test {
 			static duk_ret_t require_test(duk_context *ctx) {
 				/* First parameter is character name */
@@ -432,6 +433,11 @@ if(key.compare("WATERWALK") == 0){ ::affect_from_char(*player_ptr,SPELL_WATERWAL
 				}
 			return 0;	/* number of return values */
 		}
+		static duk_ret_t mobile_activity(duk_context *ctx){
+			::mobile_activity();
+			duk_push_number(ctx,0);
+			return 1;
+		}
 		static duk_ret_t db_seti(duk_context *ctx) {
 			std::string key = duk_to_string(ctx,0);
 			auto value = duk_to_number(ctx,1);
@@ -505,6 +511,8 @@ if(key.compare("WATERWALK") == 0){ ::affect_from_char(*player_ptr,SPELL_WATERWAL
 		void load_c_test_functions(duk_context *ctx) {
 			duk_push_c_function(ctx,mods::js::test::require_test,1);
 			duk_put_global_string(ctx,"require_test");
+			duk_push_c_function(ctx,mods::js::mobile_activity,0);
+			duk_put_global_string(ctx,"mobile_activity");
 		}
 		void load_base_functions(duk_context *ctx) {
 			duk_push_c_function(ctx,mods::js::room,0);
@@ -656,10 +664,9 @@ __set_points_cleanup:
 			duk_put_global_string(ctx,"set_char_pk_id");
 		}
 
-		void run_profile_scripts(std::string_view player_name){
-			/** 
-			 * load_library(mods::globals::duktape_context,(std::string(JS_PROFILES_PATH) + player_name.data()) + ".js");
-			 */
+		void run_profile_scripts(const std::string& player_name){
+			std::cerr << "path to user script: '" << (std::string(JS_PROFILES_PATH) + player_name + ".js").c_str() << "'\n";
+			 load_library(mods::globals::duktape_context,(std::string(JS_PROFILES_PATH) + player_name + ".js").c_str());
 		}
 
 		duk_context* new_context() {
@@ -701,9 +708,11 @@ __set_points_cleanup:
 			auto m = std::make_unique<include>(ctx,file);
 
 			if(m->good()) {
+				std::cerr << "[DEBUG]: included js file: '" << file.data() << "'\n";
 				return 0;
 			}
 
+			std::cerr << "SYSERR: couldn't include js file! '" << file.data() << "'\n";
 			return -1;
 		}
 		void load_c_functions(duk_context *ctx) {

@@ -31,7 +31,7 @@ namespace mods {
 		void load_base_functions(duk_context *ctx);
 		void load_c_require_functions(duk_context *ctx);
 		void load_scaffolding_functions();
-		void run_profile_scripts(std::string_view);
+		void run_profile_scripts(const std::string&);
 		bool run_test_suite(mods::player& player,std::string_view suite);
 		struct include {
 				include() = delete;

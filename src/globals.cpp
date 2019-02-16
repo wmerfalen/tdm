@@ -397,7 +397,10 @@ namespace mods {
 				return nullptr;
 			}
 
+			SET_BIT(mob_proto[i].char_specials.saved.act, MOB_ISNPC);
 			mob_list.emplace_back(&mob_proto[i]);
+			std::cerr << "[DEBUG]: mob_proto short_descr: '" << 
+				mob_proto[i].player.short_descr.c_str() << "'\n";
 			auto mob = mob_list.back();
 			mob.next = character_list = &mob_list.back();
 
@@ -417,6 +420,10 @@ namespace mods {
 
 			mob_index[i].number++;
 			SET_BIT(mob.char_specials.saved.act, MOB_ISNPC);
+			mob.uuid = mob_list.size() - 1;
+			if(IS_NPC((&mob))){
+				log("DEBUG: the read mobile is an NPC");
+			}
 			return &mob_list.back();
 		}
 		uuid_t get_uuid() {

@@ -75,6 +75,7 @@
 
 #include "mods/acl/config-parser.hpp" 		/** Access Control List */
 #include "mods/behaviour_tree_impl.hpp"
+#include "globals.hpp"
 
 /* externs */
 extern struct ban_list_element *ban_list;
@@ -94,6 +95,9 @@ extern int nameserver_is_slow;	/* see config.c */
 extern int auto_save;		/* see config.c */
 extern int autosave_time;	/* see config.c */
 extern int *cmd_sort_info;
+namespace mods::globals { 
+extern std::vector<std::vector<char_data*>> room_list;
+};
 
 extern struct time_info_data time_info;		/* In db.c */
 extern char *help;
@@ -2187,59 +2191,73 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 		if(*orig == '$') {
 			switch(*(++orig)) {
 				case 'n':
-					i = PERS(ch, to);
+					/**
+					 * Notes: 
+					 *  'to'-> this is the player in the room
+					 *  'ch' -> this is the mob or player that performed the action
+					 *  PERS(ch,to) will resolve to something like: 
+					 *  	"$n leaves north."
+					 *
+					 */
+					std::cerr << "from within perform_act: '" << mods::string(PERS(ch,to).c_str()).c_str() << "'\n";
+					if(IS_NPC(ch)){
+						log("DEBUG: the read mobile is an NPC (perform_act)");
+					}else{
+						log("DEBUG: the read mobile is __NOT__ !!!! an NPC (perform_act)");
+					}
+					i = strdup(mods::string(PERS(ch, to)).c_str());
 					break;
 
 				case 'N':
-					CHECK_NULL(vict_obj, PERS((const struct char_data *) vict_obj, to));
+					CHECK_NULL(vict_obj, strdup(mods::string(PERS((const struct char_data *) vict_obj, to).c_str())));
 					break;
 
 				case 'm':
-					i = HMHR(ch);
+					i = strdup(mods::string(HMHR(ch)).c_str());
 					break;
 
 				case 'M':
-					CHECK_NULL(vict_obj, HMHR((const struct char_data *) vict_obj));
+					CHECK_NULL(vict_obj, strdup(mods::string(HMHR((const struct char_data *) vict_obj)).c_str()));
 					break;
 
 				case 's':
-					i = HSHR(ch);
+					i = strdup(mods::string(HSHR(ch)).c_str());
 					break;
 
 				case 'S':
-					CHECK_NULL(vict_obj, HSHR((const struct char_data *) vict_obj));
+					CHECK_NULL(vict_obj, strdup(mods::string(HSHR((const struct char_data *) vict_obj)).c_str()));
 					break;
 
 				case 'e':
-					i = HSSH(ch);
+					i = strdup(mods::string(HSSH(ch)).c_str());
 					break;
 
 				case 'E':
-					CHECK_NULL(vict_obj, HSSH((const struct char_data *) vict_obj));
+					CHECK_NULL(vict_obj, strdup(mods::string(HSSH((const struct char_data *) vict_obj)).c_str()));
 					break;
 
 				case 'o':
-					CHECK_NULL(obj, OBJN(obj, to));
+					CHECK_NULL(obj, strdup(mods::string(OBJN(obj, to)).c_str()));
 					break;
 
 				case 'O':
-					CHECK_NULL(vict_obj, OBJN((const struct obj_data *) vict_obj, to));
+					CHECK_NULL(vict_obj, strdup(mods::string(OBJN((const struct obj_data *) vict_obj, to)).c_str()));
 					break;
 
 				case 'p':
-					CHECK_NULL(obj, OBJS(obj, to));
+					CHECK_NULL(obj, strdup(mods::string(OBJS(obj, to)).c_str()));
 					break;
 
 				case 'P':
-					CHECK_NULL(vict_obj, OBJS((const struct obj_data *) vict_obj, to));
+					CHECK_NULL(vict_obj, strdup(mods::string(OBJS((const struct obj_data *) vict_obj, to)).c_str()));
 					break;
 
 				case 'a':
-					CHECK_NULL(obj, SANA(obj));
+					CHECK_NULL(obj, strdup(mods::string(SANA(obj)).c_str()));
 					break;
 
 				case 'A':
-					CHECK_NULL(vict_obj, SANA((const struct obj_data *) vict_obj));
+					CHECK_NULL(vict_obj, strdup(mods::string(SANA((const struct obj_data *) vict_obj)).c_str()));
 					break;
 
 				case 'T':
@@ -2247,7 +2265,7 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 					break;
 
 				case 'F':
-					CHECK_NULL(vict_obj, fname((const char *) vict_obj));
+					CHECK_NULL(vict_obj, strdup(mods::string(fname((const char *) vict_obj)).c_str()));
 					break;
 
 					/* uppercase previous word */
@@ -2310,7 +2328,6 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 
 void act(const std::string & str, int hide_invisible, char_data *ch,
 		obj_data *obj, void *vict_obj, int type) {
-	char_data *to;
 	int to_sleeping;
 
 	if(str.length() == 0){
@@ -2353,15 +2370,15 @@ void act(const std::string & str, int hide_invisible, char_data *ch,
 	/* ASSUMPTION: at this point we know type must be TO_NOTVICT or TO_ROOM */
 
 	if(ch && IN_ROOM(ch) != NOWHERE) {
-		to = world[IN_ROOM(ch)].people;
+		//to = world[IN_ROOM(ch)].people;
 	} else if(obj != 0 && IN_ROOM(obj) != NOWHERE) {
-		to = world[IN_ROOM(obj)].people;
+		//to = world[IN_ROOM(obj)].people;
 	} else {
 		log("SYSERR: no valid target to act()!");
 		return;
 	}
 
-	for(; to; to = to->next_in_room) {
+	for(auto & to : mods::globals::room_list[IN_ROOM(ch)]){
 		if(!SENDOK(to) || (to == ch)) {
 			continue;
 		}
@@ -2374,6 +2391,9 @@ void act(const std::string & str, int hide_invisible, char_data *ch,
 			continue;
 		}
 
+		std::cerr << "[DEBUG]: perform_act " << __LINE__ << " " <<
+			"str.c_str(): '" << str.c_str() << "' " << 
+			"to: '" << GET_NAME(to).c_str() << "'\n";
 		perform_act(str.c_str(), ch, obj, vict_obj, to);
 	}
 }
