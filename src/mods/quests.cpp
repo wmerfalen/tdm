@@ -10,7 +10,7 @@
 //#define Q_PLAYER_TRIGGER_INDEX_KEY "{player_name}:quest_trigger_index"
 #define Q_COMPLETE_KEY "{player_name}:quest_complete"
 #define Q_TRIGGER_CODE_KEY "quest_trigger_code:{room_id}:{N}:{T}"
-extern struct char_data* character_list;
+extern char_data* character_list;
 namespace mods {
 	namespace quests {
 		static duk_ret_t quest_abort(duk_context *ctx) {
@@ -122,7 +122,7 @@ namespace mods {
 		/* TODO: load triggers from disk on startup */
 
 		/* Currently executing quest goes here */
-		std::string current_key(struct char_data* ch) {
+		std::string current_key(char_data* ch) {
 			return mods::globals::replace_all(Q_CURRENT_KEY,"{player_name}",std::string(ch->player.name));
 		}
 
@@ -135,19 +135,19 @@ namespace mods {
 		}
 
 		/* Whether or not the quest has been completed */
-		std::string complete_key(struct char_data *ch,room_rnum room,int n_index) {
+		std::string complete_key(char_data *ch,room_rnum room,int n_index) {
 			auto m = mods::globals::replace_all(Q_COMPLETE_KEY,"{room_id}",std::to_string(room));
 			m = mods::globals::replace_all(m,"{player_name}",ch->player.name.c_str());
 			return mods::globals::replace_all(m,"{N}",std::to_string(n_index));
 		}
 
-		std::string trigger_key(struct char_data *ch,room_rnum room,int n_index) {
+		std::string trigger_key(char_data *ch,room_rnum room,int n_index) {
 			auto m = mods::globals::replace_all(Q_TRIGGER_KEY,"{room_id}",std::to_string(room));
 			m = mods::globals::replace_all(m,"{player_name}",ch->player.name.c_str());
 			return mods::globals::replace_all(m,"{N}",std::to_string(n_index));
 		}
 
-//		std::string trigger_index_key(struct char_data *ch){
+//		std::string trigger_index_key(char_data *ch){
 //			return mods::globals::replace_all(Q_PLAYER_TRIGGER_INDEX_KEY,"{player_name}",ch->player.name);
 //		}
 //
@@ -168,18 +168,22 @@ namespace mods {
 //			return mods::globals::replace_all(m,"{T}",std::to_string(t_index));
 //		}
 //
-		std::string current_quest(struct char_data *ch) {
+		std::string current_quest(char_data *ch) {
 			std::string current_quest_id = "";
+			/** TODO: this needs to be a fast structure in RAM that we check. 
+			 * Since we've ripped out lmdb as a fast key/value pair system, 
+			 * our next available option will be the speedy RAM structures.
+			 */
 			DBGET(current_key(ch),current_quest_id);
 			dbg_print("current quest: " << current_quest_id);
 			return current_quest_id;
 		}
 
-		bool has_quest(struct char_data * ch) {
+		bool has_quest(char_data * ch) {
 			return current_quest(ch).length() > 0;
 		}
 
-//		void load_quest_code(struct char_data* ch,room_rnum room,int quest_id){
+//		void load_quest_code(char_data* ch,room_rnum room,int quest_id){
 //			/* load code from file into Q_TRIGGER_CODE_KEY if not already loaded */
 //			std::string value;
 //			std::string code_key;
@@ -208,7 +212,7 @@ namespace mods {
 //			/* run first trigger */
 //		}
 
-		void load_quest_code(struct char_data* ch) {
+		void load_quest_code(char_data* ch) {
 			char temp[MAXPATHLEN];
 			std::string pwd = getcwd(temp, MAXPATHLEN) ? std::string(temp) : std::string("");
 			std::string quest_file = pwd + std::string("/quests/") + current_quest(ch) + ".js";
@@ -217,7 +221,7 @@ namespace mods {
 			quests_file_to_lmdb(ch,quest_file,trigger_key(ch,IN_ROOM(ch),0));
 		}
 
-		int quests_file_to_lmdb(struct char_data* ch,const std::string& quests_file,const std::string& lmdb_key) {
+		int quests_file_to_lmdb(char_data* ch,const std::string& quests_file,const std::string& lmdb_key) {
 			std::ifstream include_file(quests_file,std::ios::in);
 
 			if(!include_file.good() || !include_file.is_open()) {
@@ -242,7 +246,7 @@ namespace mods {
 			}
 		}
 
-		int run_trigger(struct char_data* ch) {
+		int run_trigger(char_data* ch) {
 			std::string js_code;
 			//TODO: this has to run ALL quests code, not just zero
 			DBGET(trigger_key(ch,0,0),js_code);
@@ -251,19 +255,19 @@ namespace mods {
 			return 0;	//TODO: make use of return value to signify something?
 		}
 
-		bool trigger_exists(struct char_data *ch,int quest_id) {
+		bool trigger_exists(char_data *ch,int quest_id) {
 			std::string value;
 			DBGET(current_quest(ch) + std::string(":") + std::to_string(quest_id), value);
 			return value.length() > 0;
 		}
 
-		void award_quest(struct char_data* ch,int quest_id) {
+		void award_quest(char_data* ch,int quest_id) {
 			MENTOC_PREAMBLE();
 			//TODO: Calculate quest reward tiers
 			ch->points.gold += 50000;
 			ch->points.exp += 500000;
 		}
-		void leave_quest(struct char_data* ch,int quest_id) {
+		void leave_quest(char_data* ch,int quest_id) {
 			MENTOC_PREAMBLE();
 			std::string formatter = Q_FORMAT;
 			auto key = mods::globals::replace_all(formatter,"{room_id}",std::to_string(IN_ROOM(ch)));
@@ -271,7 +275,7 @@ namespace mods {
 			DBSET(key,"");
 		}
 
-		void start_quest(struct char_data* ch,int quest_id) {
+		void start_quest(char_data* ch,int quest_id) {
 			MENTOC_PREAMBLE();
 			std::string formatter = Q_FORMAT;
 			auto key = mods::globals::replace_all(formatter,"{room_id}",std::to_string(IN_ROOM(ch)));

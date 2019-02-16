@@ -133,13 +133,16 @@ namespace mods::lmdb {
 	_db_handle::_db_handle(std::string directory,std::string db_name,const uint64_t & flags,const uint16_t & mode,bool unused) 
 		: m_use_pluck(false), m_good(false), m_closed(true), 
 		m_dir(directory), m_name(db_name), m_flags(flags), m_mode(mode) {
+#ifdef __MENTOC_USE_LMDB__
 			m_transaction_open = false;
 			m_transaction_good = false;
 			m_dbi_opened = false;
 			open();
+#endif
 		}
 	bool _db_handle::open(){
 		//std::cout << "debug: [lmdb]::open()\n";
+#ifdef __MENTOC_USE_LMDB__
 		m_closed = true;
 		m_good = false;
 		m_clear_status();
@@ -185,8 +188,12 @@ namespace mods::lmdb {
 
 		m_good = true;
 		return true;
+#else
+		return true;
+#endif
 	}
 	_db_handle::tuple_return_type_t _db_handle::abort_txn(){
+#ifdef __MENTOC_USE_LMDB__
 		//std::cout << "info: db_handle::abort_txn called\n";
 		if(m_transaction_open){
 			mdb_txn_abort(m_txn);
@@ -195,8 +202,12 @@ namespace mods::lmdb {
 			return {true,""};
 		}
 		return {false,"A transaction wasn't open to begin with."};
+#else
+		return {true,"abort_txn stub"};
+#endif
 	}
 	_db_handle::tuple_return_type_t _db_handle::new_txn(){
+#ifdef __MENTOC_USE_LMDB__
 		//std::cout << "debug: db_handle::new_txn() entry\n";
 		int r = 0;
 		if((r = mdb_txn_begin(m_env,0,0,&m_txn)) != 0){
@@ -220,8 +231,12 @@ namespace mods::lmdb {
 		//std::cout << "debug: db_handle::new_txn() okay\n";
 		m_transaction_good = m_transaction_open = true;
 		return {true,""};
+#else
+		return {true,""};
+#endif
 	}
 	_db_handle::tuple_return_type_t _db_handle::open_dbi(){
+#ifdef __MENTOC_USE_LMDB__
 		//std::cout << "debug: db_handle::open_dbi() called\n";
 		int r = 0;
 		if((r = mdb_dbi_open(m_txn,0,0,&m_dbi)) != 0){
@@ -245,14 +260,22 @@ namespace mods::lmdb {
 		m_dbi_opened = true;
 		//std::cout << "debug: db_handle::open_dbi() okay\n";
 		return {true,""};
+#else
+		return {true,""};
+#endif
 	}
 	std::string _db_handle::get(std::string key){
+#ifdef __MENTOC_USE_LMDB__
 		//std::cout << "debug: db_handle::get(str) called\n";
 		std::string value;
 		this->get(key,value);
 		return value;
+#else
+		return mods::globals::ram_db[key];
+#endif
 	}
 	int _db_handle::get(std::string key,std::string & in_value){
+#ifdef __MENTOC_USE_LMDB__
 		//std::cout << "debug: db_handle::get(key,value) called\n";
 		static int recursion_count = 0;
 		if(!m_good){
@@ -294,8 +317,13 @@ namespace mods::lmdb {
 			//std::cerr << "error: [lmdb]get::m_good NOT okay\n";
 			return -2;
 		}
+#else
+		in_value = mods::globals::ram_db[key];
+		return _db_handle::KEY_FETCHED_OKAY;
+#endif
 	}
 	_db_handle::tuple_return_type_t _db_handle::renew_txn(){
+#ifdef __MENTOC_USE_LMDB__
 		//std::cout << "debug: db_handle::renew_txn() called\n";
 		clear_pluck_filter();
 		if(m_transaction_good || m_transaction_open){
@@ -313,14 +341,23 @@ namespace mods::lmdb {
 		}
 		//std::cout << "debug: db_handle::renew_txn() okay\n";
 		return {true,""};
+#else
+		return {true,""};
+#endif
 	}
 	int _db_handle::del(std::string key){
+#ifdef __MENTOC_USE_LMDB__
 		MDB_val k;
 		k.mv_data = (void*)key.c_str();
 		k.mv_size = key.length();
 		return mdb_del(m_txn,m_dbi,&k,nullptr);
+#else
+		mods::globals::ram_db[key] = "";
+		return 0;
+#endif
 	}
 	int _db_handle::put(std::string key,std::string value,bool renew){
+#ifdef __MENTOC_USE_LMDB__
 		//std::cout << "debug: db_handle::put(key,value,renew) called\n";
 		if(renew){
 			if(m_transaction_good || m_transaction_open){
@@ -330,8 +367,13 @@ namespace mods::lmdb {
 			renew_txn();
 		}
 		return put(std::string(key),value);
+#else
+		mods::globals::ram_db[key] = value;
+		return 0;
+#endif
 	}
 	int _db_handle::put(std::string key,std::string value){
+#ifdef __MENTOC_USE_LMDB__
 		if(!m_good){
 			//std::cout << "debug: db_handle::put -- renewing transaction\n";
 			this->renew_txn();
@@ -373,8 +415,13 @@ namespace mods::lmdb {
 			return -2;
 		}
 		return 0;
+#else
+		mods::globals::ram_db[key] = value;
+		return 0;
+#endif
 	}
 	_db_handle::tuple_return_type_t _db_handle::commit(){
+#ifdef __MENTOC_USE_LMDB__
 		if(m_good){
 			//std::cout << "debug: db_handle::commit -- m_good is good\n";
 			auto ret = mdb_txn_commit(m_txn);
@@ -390,8 +437,12 @@ namespace mods::lmdb {
 		}else{
 			return {false,"[lmdb]::commit [m_good is not true]-> Will not commit due to this invalid state."};
 		}
+#else
+		return {true,"stub commit"};
+#endif
 	}
 	_db_handle::~_db_handle(){
+#ifdef __MENTOC_USE_LMDB__
 		//std::cout << "debug: [~_db_handle]: destructor yo\n";
 		m_good = false;
 		if(m_transaction_open){
@@ -401,8 +452,12 @@ namespace mods::lmdb {
 			mdb_env_close(m_env);
 		}
 		this->close();
+#else
+		;;
+#endif
 	}
 	void _db_handle::close(){
+#ifdef __MENTOC_USE_LMDB__
 		if(m_closed){
 			//std::cerr << "[_db_handle]::close already closed\n";
 			return;
@@ -420,8 +475,10 @@ namespace mods::lmdb {
 		m_transaction_good = false;
 		m_good = false;
 		m_closed = true;
+#endif
 	}
 	void _db_handle::dump_status() const {
+#ifdef __MENTOC_USE_LMDB__
 		for(unsigned i=0; i < status_step_count;++i){
 			//std::cerr << "[" << i << "]: " ;
 			if(std::get<0>(m_status[i])){
@@ -431,6 +488,7 @@ namespace mods::lmdb {
 			}
 			//std::cerr << "\n";
 		}
+#endif
 	}
 
 

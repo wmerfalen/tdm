@@ -38,6 +38,7 @@ namespace config {
 namespace mods {
 	namespace globals {
 		using player = mods::player;
+		std::unordered_map<std::string,std::string> ram_db;
 		boot_type_t boot_type;
 		socket_map_t socket_map;
 		std::unique_ptr<lmdb_db> db;

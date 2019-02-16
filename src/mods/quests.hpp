@@ -33,32 +33,32 @@ namespace mods {
 		 */
 
 		/* informative functions */
-		bool has_quest(struct char_data *ch);
-		void award_quest(struct char_data*ch,int quest_id);
+		bool has_quest(char_data *ch);
+		void award_quest(char_data*ch,int quest_id);
 
 		/* player actions for questing */
-		void start_quest(struct char_data* ch,int quest_num);
-		void leave_quest(struct char_data* ch,int quest_num);
+		void start_quest(char_data* ch,int quest_num);
+		void leave_quest(char_data* ch,int quest_num);
 		std::vector<std::string> list_quests(room_rnum room_id);
 		void load_c_functions(duk_context * ctx);
-		int quests_file_to_lmdb(struct char_data* ch,const std::string& quests_file,const std::string& lmdb_key);
+		int quests_file_to_lmdb(char_data* ch,const std::string& quests_file,const std::string& lmdb_key);
 
 		/* lmdb keys for quest tracking */
-		std::string current_key(struct char_data* ch);
+		std::string current_key(char_data* ch);
 		std::string current_value(room_rnum room,int t_index);
-		std::string complete_key(struct char_data *ch,room_rnum room,int n_index);
-		std::string trigger_key(struct char_data *ch,room_rnum room,int n_index);
+		std::string complete_key(char_data *ch,room_rnum room,int n_index);
+		std::string trigger_key(char_data *ch,room_rnum room,int n_index);
 
 		/* Code storage */
 		std::string trigger_code_key(room_rnum room,int n_index,int t_index);
-		void load_quest_code(struct char_data* ch,room_rnum room,int quest_id);
+		void load_quest_code(char_data* ch,room_rnum room,int quest_id);
 
 		/* helpers */
-		bool trigger_exists(struct char_data *ch,int quest_id);
-		std::string current_quest(struct char_data *ch);
+		bool trigger_exists(char_data *ch,int quest_id);
+		std::string current_quest(char_data *ch);
 
 		/* trigger running */
-		int run_trigger(struct char_data *ch);
+		int run_trigger(char_data *ch);
 	};
 };
 #endif
