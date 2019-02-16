@@ -90,7 +90,7 @@ int has_boat(struct char_data *ch) {
  *   1 : If succes.
  *   0 : If fail
  */
-int do_simple_move(struct char_data *ch, int dir, int need_specials_check) {
+int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 	char throwaway[MAX_INPUT_LENGTH] = ""; /* Functions assume writable. */
 	room_rnum was_in;
 	int need_movement;

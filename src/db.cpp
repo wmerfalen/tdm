@@ -42,7 +42,7 @@ using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
  **************************************************************************/
 bool db_has_been_booted = false;
 std::tuple<int16_t,std::string> parse_sql_rooms();
-void parse_sql_zones();
+std::tuple<int16_t,std::string> parse_sql_zones();
 int parse_sql_objects();
 void parse_sql_mobiles();
 std::vector<room_data> world;	/* array of rooms		 */
@@ -103,7 +103,6 @@ struct reset_q_type reset_q;	/* queue of zones to be reset	 */
 int check_bitvector_names(bitvector_t bits, size_t namecount, const char *whatami, const char *whatbits);
 int check_object_spell_number(struct obj_data *obj, int val);
 int check_object_level(struct obj_data *obj, int val);
-void setup_dir(FILE *fl, int room, int dir);
 void index_boot(int mode);
 void discrete_load(FILE *fl, int mode, char *filename);
 int check_object(struct obj_data *);
@@ -397,14 +396,14 @@ void boot_hell(void){
 }
 
 void boot_world(void) {
-	//log("Loading zone table.");
+	log("Loading zone table.");
 	//index_boot(DB_BOOT_ZON);
 	log("Parsing sql zones.");
-	parse_sql_zones();
-
-	//log("Loading rooms.");
-	//index_boot(DB_BOOT_WLD);
-
+	auto zone_status = parse_sql_zones();
+	log("Parsed %d zones",std::get<0>(zone_status));
+	if(std::get<0>(zone_status) < 0){
+		log("SYSERR: parse_sql_zones: '%s'",std::get<1>(zone_status).c_str());
+	}
 
 	log("Parsing sql rooms.");
 	auto tuple_status_rooms = parse_sql_rooms();
@@ -911,24 +910,22 @@ bitvector_t asciiflag_conv(char *flag) {
 
 void parse_sql_mobiles() {
 	top_of_mobt = 0;
-	char_data proto;
-	auto result = db_get_all("mobile");
 
-	if(result.size()) {
-
-		for(auto row : result) {
-			//mods::meta_utils::write_meta("mobile",&row);
-
+		for(auto && row : db_get_all("mobile")) {
+			char_data proto;
 			proto.player.name.assign(row["mob_name"]);
-			proto.player.short_descr.assign(row["mob_short_description"]);
-			proto.player.long_descr.assign(row["mob_long_description"]);
+			std::cout << "DEBUG: mob proto name: '" << row["mob_name"].c_str() << "'\n";
+			proto.player.short_descr.assign(row["mob_short_description"].c_str());
+			proto.player.long_descr.assign(row["mob_long_description"].c_str());
 
-			proto.player.description.assign(row["mob_description"]);
+			proto.player.description.assign(row["mob_description"].c_str());
 
-			proto.char_specials.saved.act = mods::util::stoi<int>(row["mob_action_bitvector"]);
+			//TODO: we may want to uncomment this out in the future, but no saving of bitvectors for now... 
+			//proto.char_specials.saved.act = mods::util::stoi<int>(row["mob_action_bitvector"]);
+			//proto.char_specials.saved.act = 0;
 			SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
 			REMOVE_BIT(proto.char_specials.saved.act, MOB_NOTDEADYET);
-			proto.char_specials.saved.affected_by = 0;
+			//proto.char_specials.saved.affected_by = 0;
 			proto.char_specials.saved.alignment = mods::util::stoi<int>(row["mob_alignment"]);
 
 			/* AGGR_TO_ALIGN is ignored if the mob is AGGRESSIVE. */
@@ -993,7 +990,6 @@ void parse_sql_mobiles() {
 			m_index.func = nullptr;
 			mob_index.push_back(m_index);
 		}
-	}
 }
 
 int parse_sql_objects() {
@@ -1155,14 +1151,13 @@ int parse_sql_objects() {
 	return 0;
 }
 /* load the zones */
-void parse_sql_zones() {
+std::tuple<int16_t,std::string> parse_sql_zones() {
 	top_of_zone_table = 0;
 	zone_table.clear();
 	log("[status] Loading sql zones");
 
 	for(auto && row: db_get_all("zone")) {
-		//mods::meta_utils::write_meta("zone",&row);
-		struct zone_data z;
+		zone_data z;
 		//struct zone_data {
 		//  1    char *name;          /* name of this zone                  */
 		//  2    int  lifespan;           /* how long between resets (minutes)  */
@@ -1198,6 +1193,8 @@ void parse_sql_zones() {
 		z.top =mods::util::stoi<int>(row["zone_end"]);
 		z.reset_mode =mods::util::stoi<int>(row["reset_mode"]);
 		z.number =mods::util::stoi<int>(row["id"]);
+		zone_table.emplace_back(z);
+		top_of_zone_table = zone_table.size();
 		//struct reset_com {
 		//  1    char command;   /* current command                      */
 		//  2
@@ -1233,8 +1230,7 @@ void parse_sql_zones() {
 		//siege=#
 
 		for(auto && zone_data_row : db_get_by_meta("zone_data","zone_id",std::to_string(z.number))) {
-			//mods::meta_utils::write_meta("zone_data",&zone_data_row);
-			struct reset_com res;
+			reset_com res;
 			res.command =mods::util::stoi<int>(zone_data_row["zone_command"]);
 			res.if_flag =mods::util::stoi<int>(zone_data_row["zone_if_flag"]);
 			res.arg1 =mods::util::stoi<int>(zone_data_row["zone_arg1"]);
@@ -1244,11 +1240,10 @@ void parse_sql_zones() {
 			z.cmd.push_back(res);
 		}
 
-		zone_table.emplace_back(z);
-		log((std::string("zone ") + std::to_string(z.number) + " loaded").c_str());
+		log("DEBUG: parse_sql_zones: '%s' loaded",z.name);
 	}
 
-	top_of_zone_table = zone_table.size();
+	return {zone_table.size(),"ok"};
 }
 /* load the rooms */
 std::tuple<int16_t,std::string> parse_sql_rooms() {
@@ -1279,11 +1274,9 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 			return {0,"warning: no room_records fetched from postgres"};
 		}
 		world.reserve(room_records.size());
-		unsigned record_iterations= 0;
 		for(auto && room_records_row: room_records) {
 			try{
-			log("DEBUG: record_iterations: %d",++record_iterations);
-			log("DEBUG: room: %d",mods::util::stoi<int>(room_records_row["id"].c_str()));
+			//log("DEBUG: room: %d",mods::util::stoi<int>(room_records_row["id"].c_str()));
 			room_data room;
 			const char* name = room_records_row["name"].c_str();
 			const char* description = room_records_row["description"].c_str();
@@ -1310,7 +1303,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				std::cerr << "SYSERR: exception select from rooms db: " << e.what() << "\n";
 			}
 		}
-		log("parse_sql_rooms: world.size(): %d",world.size());
+		//log("parse_sql_rooms: world.size(): %d",world.size());
 
 			for(auto && row2: db_get_all("room_direction_data")){
 				//siege=# \d room_direction_data
@@ -1360,7 +1353,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				int key = (row2["exit_key"]).as<int>();
 				room_rnum to_room = real_room(row2["to_room"].as<int>());
 				world[real_room_number].set_dir_option(direction,gen_desc,keyword,exit_info,key,to_room);
-				log("DEBUG: set dir option: direction %d gen_desc: '%s' keyword: '%s'",direction,gen_desc.c_str(),keyword.c_str());
+				//log("DEBUG: set dir option: direction %d gen_desc: '%s' keyword: '%s'",direction,gen_desc.c_str(),keyword.c_str());
 			}
 	}catch(std::exception& e){
 		std::cerr << "error selecting room from db: '" << e.what() << "'\n";
@@ -1370,58 +1363,6 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 }
 void parse_room(FILE *fl, int virtual_nr) {
 	log("[DEPRECATED] parse_room");
-}
-
-
-/* read direction data */
-void setup_dir(FILE *fl, int room, int dir) {
-	if(room < 0){
-		log("SYSERR: setup_dir was given a negative number for the room!");
-		return;
-	}
-	if(std::size_t(room) >= world.size()){
-		std::string msg = "SYSERR: setup_dir was given a room that is greater than or equal to world.size()";
-		msg += ". Room value: " + std::to_string(room) + ", world.size(): "  + std::to_string(world.size());
-		log(msg);
-		return;
-	}
-	log("[DEPRECATED]: setup_dir is being called. Letting code run for now as it contains non-legacy dynamics (Reinforced doors)");
-	int t[5];
-	char line[READ_SIZE], buf2[128];
-
-	snprintf(buf2, sizeof(buf2), "room #%d, direction D%d", GET_ROOM_VNUM(room), dir);
-
-	
-	CREATE(world[room].dir_option[dir], struct room_direction_data, 1);
-	world[room].dir_option[dir]->general_description = fread_string(fl, buf2);
-	world[room].dir_option[dir]->keyword = fread_string(fl, buf2);
-
-	if(!get_line(fl, line)) {
-		log("SYSERR: Format error, %s", buf2);
-		exit(1);
-	}
-
-	if(sscanf(line, " %d %d %d ", t, t + 1, t + 2) != 3) {
-		log("SYSERR: Format error, %s", buf2);
-		exit(1);
-	}
-
-	if(t[0] == 1) {
-		world[room].dir_option[dir]->exit_info = EX_ISDOOR;
-		SET_BIT(world[room].dir_option[dir]->exit_info,EX_CLOSED);
-	} else if(t[0] == 2) {
-		world[room].dir_option[dir]->exit_info = EX_ISDOOR | EX_PICKPROOF;
-		SET_BIT(world[room].dir_option[dir]->exit_info,EX_CLOSED);
-		/* !mods */
-	} else if(t[0] == 3) {
-		world[room].dir_option[dir]->exit_info = EX_ISDOOR | EX_REINFORCED;
-		SET_BIT(world[room].dir_option[dir]->exit_info,EX_CLOSED);
-	} else {
-		world[room].dir_option[dir]->exit_info = 0;
-	}
-
-	world[room].dir_option[dir]->key = t[1];
-	world[room].dir_option[dir]->to_room = t[2];
 }
 
 

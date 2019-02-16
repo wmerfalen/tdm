@@ -2175,8 +2175,8 @@ const char *ACTNULL = "<NULL>";
 
 
 /* higher-level communication: the act() function */
-void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
-		const void *vict_obj, struct char_data *to) {
+void perform_act(const char *orig, char_data *ch, obj_data *obj,
+		const void *vict_obj, char_data *to) {
 	const char *i = NULL;
 	char lbuf[MAX_STRING_LENGTH], *buf, *j;
 	bool uppercasenext = FALSE;
@@ -2300,7 +2300,7 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
 	*(++buf) = '\n';
 	*(++buf) = '\0';
 
-	d("write to output from perfor_act: " << CAP(lbuf));
+	d("write to output from perform_act: " << CAP(lbuf));
 	write_to_output(*to->desc, "%s", CAP(lbuf));
 }
 

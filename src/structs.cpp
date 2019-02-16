@@ -4,17 +4,17 @@
 #include <array>
 
 char_player_data::char_player_data(){
-  name.clear();         /* PC / NPC s name (kill ...  )         */
-  short_descr.clear();  /* for NPC 'actions'                    */
-  long_descr.clear();   /* for 'look'             */
-  description.clear();  /* Extra descriptions                   */
-  title.clear();        /* PC / NPC's title                     */
+  name.assign("");         /* PC / NPC s name (kill ...  )         */
+  short_descr.assign("");  /* for NPC 'actions'                    */
+  long_descr.assign("");   /* for 'look'             */
+  description.assign("");  /* Extra descriptions                   */
+  title.assign("");        /* PC / NPC's title                     */
   sex =  chclass = level = 0;
   hometown = 0;
   memset(&time,0,sizeof(time));
   weight = height = 0;
   /** TODO: phase this out */
-  passwd.clear();
+  passwd.assign("");
 	std::fill(m_passwd.begin(),m_passwd.end(),0);
 }
 char_data::char_data(char_data* o){
@@ -57,7 +57,8 @@ char_data::char_data(char_data* o){
 	}
 	void char_data::init(){
 		has_desc = false;
-		desc = nullptr;
+		desc.reset();
+		//desc = nullptr;
 		pfilepos = 0;
 		uuid = 0;
 		last_fight_timestamp = 0;
@@ -80,7 +81,6 @@ char_data::char_data(char_data* o){
 			equipment[i] = nullptr;
 		}
 		carrying = nullptr;
-		desc.reset();
 		next_in_room = 0;
 		next = nullptr;
 		next_fighting = nullptr;
@@ -91,8 +91,8 @@ char_data::char_data(char_data* o){
 		disorient = 0;
 		state = 0;
 		builder_data.reset();
-		has_desc = false;
-		desc.reset();
+		//has_desc = false;
+		//desc.reset();
 		player_specials = std::make_shared<player_special_data>();
 	}
 namespace mods{

@@ -27,6 +27,7 @@
 #include "db.h"
 #include <pqxx/pqxx>
 
+//#define MENTOC_PREAMBLE() auto player = mods::globals::socket_map[ch->desc->descriptor]; player->set_cd(ch);
 #define MENTOC_PREAMBLE() auto player = mods::globals::socket_map[ch->desc->descriptor]; player->set_cd(ch);
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
 #define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \

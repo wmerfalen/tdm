@@ -379,41 +379,45 @@ namespace mods {
 			}
 		}
 		char_data* read_mobile(const mob_vnum & nr,const int & type){
+			log("DEBUG: mods::globals::read_mobile. vnum: %d",nr);
 			mob_rnum i;
 
 			if(type == VIRTUAL) {
+				log("DEBUG: mods::globals::read_mobile %d VIRTUAL",nr);
 				if((i = real_mobile(nr)) == NOBODY) {
 					log("WARNING: Mobile vnum ",nr," does not exist in database.");
 					return nullptr;
 				}
 			} else {
+				log("DEBUG: mods::globals::read_mobile %d REAL",nr);
 				i = nr;
 			}
-			if(mob_proto.size() <= std::size_t(i)){
+			if(std::size_t(i) >= mob_proto.size()){
 				log("SYSERR: requested mob_proto index is invalid: ", i ,". mob_proto.size() is currently: ", mob_proto.size(), ". Ignoring...");
 				return nullptr;
 			}
 
-			mob_list.emplace_back(mob_proto[i]);
-			(mob_list.end()-1)->next = character_list;
-			auto mob = character_list = &mob_list.back();
+			mob_list.emplace_back(&mob_proto[i]);
+			auto mob = mob_list.back();
+			mob.next = character_list = &mob_list.back();
 
-			if(!mob->points.max_hit) {
-				mob->points.max_hit = dice(mob->points.hit, mob->points.mana) + mob->points.move;
+			if(mob.points.max_hit) {
+				mob.points.max_hit = dice(mob.points.hit, mob.points.mana) + mob.points.move;
 			} else {
-				mob->points.max_hit = rand_number(mob->points.hit, mob->points.mana);
+				mob.points.max_hit = rand_number(mob.points.hit, mob.points.mana);
 			}
 
-			mob->points.hit = mob->points.max_hit;
-			mob->points.mana = mob->points.max_mana;
-			mob->points.move = mob->points.max_move;
+			mob.points.hit = mob.points.max_hit;
+			mob.points.mana = mob.points.max_mana;
+			mob.points.move = mob.points.max_move;
 
-			mob->player.time.birth = time(0);
-			mob->player.time.played = 0;
-			mob->player.time.logon = time(0);
+			mob.player.time.birth = time(0);
+			mob.player.time.played = 0;
+			mob.player.time.logon = time(0);
 
 			mob_index[i].number++;
-			return (mob);
+			SET_BIT(mob.char_specials.saved.act, MOB_ISNPC);
+			return &mob_list.back();
 		}
 		uuid_t get_uuid() {
 			static uuid_t u = 0;

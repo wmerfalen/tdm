@@ -1514,7 +1514,7 @@ int snipe_hit(struct char_data *ch, struct char_data *victim, int type,uint16_t 
 
 
 
-void hit(struct char_data *ch, struct char_data *victim, int type) {
+void hit(char_data *ch, char_data *victim, int type) {
 	MENTOC_PREAMBLE();
 	ch->last_fight_timestamp = time(NULL);
 
@@ -1634,8 +1634,8 @@ void hit(struct char_data *ch, struct char_data *victim, int type) {
 
 
 /* control the fights going on.  Called every 2 seconds from comm.c. */
-void perform_violence(void) {
-	struct char_data *ch;
+void perform_violence() {
+	char_data *ch;
 
 	for(ch = combat_list; ch; ch = next_combat_list) {
 		next_combat_list = ch->next_fighting;

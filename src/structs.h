@@ -903,6 +903,13 @@ using aligned_int_t = uint64_t;
 	 * in player_special_data.
 	 */
 	struct char_special_data_saved {
+		char_special_data_saved() : 
+			alignment(0), idnum(0), act(0),
+			affected_by(0){ 
+				memset((void*)&apply_saving_throw[0],0,sizeof(sh_int) * 5);
+				
+			}
+		~char_special_data_saved() = default;
 		int	alignment;		/* +-1000 for alignments                */
 		long	idnum;			/* player's idnum; -1 for mobiles	*/
 		long /*bitvector_t*/ act;	/* act flag for NPC's; player flag for PC's */
@@ -1137,7 +1144,6 @@ using aligned_int_t = uint64_t;
 	};
 	struct char_data {
 		char_data(){
-			std::cout << "debug: [char_data] constructor\n";
 			init();	
 		};
 		~char_data() = default;

@@ -152,6 +152,12 @@ typedef enum { \
 
 /* structure for the reset commands */
 struct reset_com {
+	reset_com() : command('X'),
+	if_flag(0), arg1(0), arg2(0),
+	arg3(0),line(0){
+
+	}
+	~reset_com() = default;
 	char	command;   /* current command                      */
 
 	bool if_flag;	/* if TRUE: exe only if preceding exe'd */
@@ -176,6 +182,14 @@ struct reset_com {
 
 /* zone definition structure. for the 'zone-table'   */
 struct zone_data {
+	zone_data() : name(nullptr),
+		lifespan(0),age(1),
+		bot(0),top(1),
+		reset_mode(0),
+		number(0){
+		
+	}
+	~zone_data() = default;
 	char	*name;		    /* name of this zone                  */
 	int	lifespan;           /* how long between resets (minutes)  */
 	int	age;                /* current age of this zone (minutes) */

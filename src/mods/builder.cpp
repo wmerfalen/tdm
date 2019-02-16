@@ -12,6 +12,7 @@
 #include "../db.h"
 #include "../globals.hpp"
 #include "jx.hpp"
+#include <tuple>
 namespace mods {  struct player; };
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
 #define MENTOC_OBI2(i,a) obj->i = get_intval(#a).value_or(obj->i);
@@ -21,7 +22,7 @@ using objtype = mods::object::type;
 using shrd_ptr_player_t = std::shared_ptr<mods::player>;
 using jxcomp = mods::jx::compositor;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
-extern void parse_sql_zones();
+extern std::tuple<int16_t,std::string> parse_sql_zones();
 namespace mods::builder {
 	std::array<std::pair<int,std::string>,4> weapon_type_flags = { {
 			{mods::weapon::SMG,"SMG"},
@@ -1184,6 +1185,8 @@ ACMD(do_mbuild) {
 			}
 
 			obj->carrying = nullptr;
+			IN_ROOM(obj) = player->room();
+			mods::globals::rooms::char_from_room(obj);
 			mods::globals::rooms::char_to_room(player->room(),obj);
 			mods::builder::report_success<shrd_ptr_player_t>(player,"Object created, look on the floor");
 		}

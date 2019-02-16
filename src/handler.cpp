@@ -421,7 +421,6 @@ void char_to_room(struct char_data *ch, room_rnum room) {
 		log("SYSERR: char_to_room given a nullptr");
 		return;
 	}
-	MENTOC_PREAMBLE();
 	/*TODO: Insert logic here !movement !globals */
 	std::size_t r = room;
 
@@ -443,7 +442,7 @@ void char_to_room(struct char_data *ch, room_rnum room) {
 
 		/* Stop fighting now, if we left. */
 		std::cerr << "char_to_room[room]->'" << room << "'\n";
-		if(player->fighting()){
+		if(FIGHTING(ch)){
 			if(IN_ROOM(ch) != IN_ROOM(FIGHTING(ch))) {
 				stop_fighting(FIGHTING(ch));
 				stop_fighting(ch);
@@ -1081,8 +1080,8 @@ void extract_char(struct char_data *ch) {
  *
  * NOTE: This doesn't handle recursive extractions.
  */
-void extract_pending_chars(void) {
-	struct char_data *vict, *next_vict, *prev_vict;
+void extract_pending_chars() {
+	char_data *vict, *next_vict, *prev_vict;
 
 	if(extractions_pending < 0) {
 		log("SYSERR: Negative (%d) extractions pending.", extractions_pending);
