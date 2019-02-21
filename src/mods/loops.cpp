@@ -7,6 +7,7 @@ namespace mods::loops {
 	}
 	void foreach_player(player_function_t func){
 		for(auto player_ptr : mods::globals::player_list){
+			if(!player_ptr->authenticated()){ return; }
 			if(!func(player_ptr->cd())){ return; }
 		}
 	}

@@ -385,7 +385,10 @@ namespace mods {
 			 * object
 			 */
 			void deactivate_account();
+			bool authenticated() const { return m_authenticated; }
+			void set_authenticated(bool b) { m_authenticated = b; }
 		private: 
+			bool m_authenticated;
 			std::shared_ptr<builder_data_t> m_builder_data;
 			std::string m_password;
 			aligned_int_t m_db_id;

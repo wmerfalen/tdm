@@ -20,6 +20,7 @@ namespace mods::loops {
 	template <typename PointerType>
 	static inline PointerType* foreach_player(mods_player_function_t<PointerType> func,PointerType* param){
 		for(auto player_ptr : mods::globals::player_list){
+			if(!player_ptr->authenticated()){ return nullptr; }
 			if(!func(player_ptr,param)){ return param; }
 		}
 		return nullptr;
@@ -29,6 +30,7 @@ namespace mods::loops {
 			if(!func(&mob_ptr)){ return; }
 		}
 		for(auto player_ptr : mods::globals::player_list){
+			if(player_ptr->authenticated()){ return ; }
 			if(!func(player_ptr->cd())){ return; }
 		}
 	}

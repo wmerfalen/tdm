@@ -576,6 +576,7 @@ namespace mods {
 		it->character->has_desc = true;
 	}
 	void player::init(){
+		m_authenticated = false;
 		set_god_mode(false);
 		set_imp_mode(false);
 		set_bui_mode(false);

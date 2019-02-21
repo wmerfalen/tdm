@@ -278,24 +278,25 @@ using aligned_int_t = uint64_t;
 
 
 	/* Modes of connectedness: used by descriptor_data.state */
-#define CON_PLAYING	 0	/* Playing - Nominal state		*/
-#define CON_CLOSE	 1	/* User disconnect, remove character.	*/
-#define CON_GET_NAME	 2	/* By what name ..?			*/
-#define CON_NAME_CNFRM	 3	/* Did I get that right, x?		*/
-#define CON_PASSWORD	 4	/* Password:				*/
-#define CON_NEWPASSWD	 5	/* Give me a password for x		*/
-#define CON_CNFPASSWD	 6	/* Please retype password:		*/
-#define CON_QSEX	 7	/* Sex?					*/
-#define CON_QCLASS	 8	/* Class?				*/
-#define CON_RMOTD	 9	/* PRESS RETURN after MOTD		*/
-#define CON_MENU	 10	/* Your choice: (main menu)		*/
-#define CON_EXDESC	 11	/* Enter a new description:		*/
-#define CON_CHPWD_GETOLD 12	/* Changing passwd: get old		*/
-#define CON_CHPWD_GETNEW 13	/* Changing passwd: get new		*/
-#define CON_CHPWD_VRFY   14	/* Verify new password			*/
-#define CON_DELCNF1	 15	/* Delete confirmation 1		*/
-#define CON_DELCNF2	 16	/* Delete confirmation 2		*/
-#define CON_DISCONNECT	 17	/* In-game link loss (leave character)	*/
+#define CON_NEEDS_AUTHENTICATION 0
+#define CON_PLAYING	 1	/* Playing - Nominal state		*/
+#define CON_CLOSE	 2	/* User disconnect, remove character.	*/
+#define CON_GET_NAME	 3	/* By what name ..?			*/
+#define CON_NAME_CNFRM	 4	/* Did I get that right, x?		*/
+#define CON_PASSWORD	 5	/* Password:				*/
+#define CON_NEWPASSWD	 6	/* Give me a password for x		*/
+#define CON_CNFPASSWD	 7	/* Please retype password:		*/
+#define CON_QSEX	 8	/* Sex?					*/
+#define CON_QCLASS	 9	/* Class?				*/
+#define CON_RMOTD	 10	/* PRESS RETURN after MOTD		*/
+#define CON_MENU	 11	/* Your choice: (main menu)		*/
+#define CON_EXDESC	 12	/* Enter a new description:		*/
+#define CON_CHPWD_GETOLD 13	/* Changing passwd: get old		*/
+#define CON_CHPWD_GETNEW 14	/* Changing passwd: get new		*/
+#define CON_CHPWD_VRFY   15	/* Verify new password			*/
+#define CON_DELCNF1	 16	/* Delete confirmation 1		*/
+#define CON_DELCNF2	 17	/* Delete confirmation 2		*/
+#define CON_DISCONNECT	 18	/* In-game link loss (leave character)	*/
 
 	/* Character equipment positions: used as index for char_data.equipment[] */
 	/* NOTE: Don't confuse these constants with the ITEM_ bitvectors

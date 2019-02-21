@@ -730,8 +730,8 @@ void game_loop(socket_t mother_desc) {
 				}
 				// Reset the idle timer & pull char back from void if necessary 
 				player->cd()->char_specials.timer = 0;
-				if(STATE(player->desc()) == CON_PLAYING && GET_WAS_IN(player->cd()) != NOWHERE) {
-					if(IN_ROOM(player->cd()) != NOWHERE) {
+				if(player->state() == CON_PLAYING && GET_WAS_IN(player->cd()) != NOWHERE) {
+					if(player->room() != NOWHERE) {
 						char_from_room(player->cd());
 					}
 					char_to_room(player->cd(), GET_WAS_IN(player->cd()));
@@ -741,7 +741,7 @@ void game_loop(socket_t mother_desc) {
 				GET_WAIT_STATE(player->cd()) = 1;
 			}
 			player->desc().has_prompt = false;
-			if(STATE(player->desc()) != CON_PLAYING) { // In menus, etc. 
+			if(player->state() != CON_PLAYING) { // In menus, etc. 
 				d("nanny");
 				nanny(player, comm);
 				d("after nanny");
@@ -805,7 +805,7 @@ void game_loop(socket_t mother_desc) {
 
 		/* Print prompts for other descriptors who had no other output */
 		for(auto & p : mods::globals::player_list) {
-			if(!p->desc().has_output && !p->desc().has_prompt){
+			if(!p->desc().has_output && !p->desc().has_prompt && p->state() == CON_PLAYING){
 				*p << make_prompt(p->desc());
 				p->desc().has_prompt = true;
 			}
@@ -1027,7 +1027,7 @@ char *make_prompt(mods::descriptor_data &d) {
 		snprintf(prompt, sizeof(prompt),
 				"\r\n[ Return to continue, (q)uit, (r)efresh, (b)ack, or page number (%d/%d]",
 				d.showstr_page, d.showstr_count);
-	} else if(STATE(d)== CON_PLAYING && !IS_NPC(d.character)) {
+	} else if(!IS_NPC(d.character)) {
 		int count;
 		size_t len = 0;
 
@@ -1068,7 +1068,7 @@ char *make_prompt(mods::descriptor_data &d) {
 		if(len < sizeof(prompt)) {
 			strncat(prompt, "> ", sizeof(prompt) - len - 1);    /* strncat: OK */
 		}
-	} else if(STATE(d) == CON_PLAYING && IS_NPC(d.character)) {
+	} else if(IS_NPC(d.character)) {
 		snprintf(prompt, sizeof(prompt), "%s> ", GET_NAME(d.character).c_str());
 	} else {
 		*prompt = '\0';

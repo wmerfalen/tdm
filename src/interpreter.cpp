@@ -1300,9 +1300,20 @@ int _parse_name(char *arg, char *name) {
 /* This function seems a bit over-extended. */
 int64_t perform_dupe_check(std::shared_ptr<mods::player> p){
 	std::string name = p->name();
-	p->desc().set_state(CON_PLAYING);
+	/** No idea why this is here, but it will cause the
+	 * entire program to segfault. 
+	 *
+	 * p->desc().set_state(CON_PLAYING);
+	 *
+	 * If this truly is needed, then there needs to be a check 
+	 * so that the player object's state doesn't get set to CON_PLAYING
+	 * if the user hasn't fully authenticated (gotten past CON_NEEDS_AUTHENTICATION).
+	 * Otherwise, this causes invalid accesses to the player's data which 
+	 * simply isn't there because the user hasn't authenticated.
+	 */
 	int64_t kicked = 0;
 	for(auto& player_ptr : mods::globals::player_list){
+		if(!p->authenticated()){ continue; }
 		if(p->uuid() != player_ptr->uuid() && 
 				name.compare(player_ptr->name().c_str()) == 0 &&
 				(p->time()) > (player_ptr->time())){
@@ -1742,6 +1753,7 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 													* if(is_immortal(p)){ ... load player into immortal room .. }
 													*/
 												 //std::cout << "sending welcom message\n";
+												 p->set_authenticated(true);
 												 p->stc("welcome");//WELC_MESSG);
 												 p->set_room(0);
 												 if(world.size() == 0){

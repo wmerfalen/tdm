@@ -1050,6 +1050,16 @@ ACMD(do_sbuild) {
 			);
 }
 ACMD(do_mbuild) {
+	/**
+	 * Function status
+	 * ---------------[ as of: 2019-02-16 ]
+	 *  With the addition of being able to specify the obj->nr, we are
+	 *  now able to create mobs properly. I have no idea how the code worked
+	 *  before this change to the source. 
+	 *  
+	 *  > mbuild attr <mob_id> virt <virtual_number>
+	 *
+	 */
 	MENTOC_PREAMBLE();
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
@@ -1111,6 +1121,7 @@ ACMD(do_mbuild) {
 			" mbuild list\r\n" <<
 			" mbuild attr <mob_id> <attr> <value>\r\n" <<
 			"  |:: -:[attributes]:-\r\n" <<
+			"  |:: virtual_number\r\n" <<
 			"  |:: name\r\n" <<
 			"  |:: short_description\r\n" <<
 			"  |:: long_description\r\n" <<
@@ -1413,6 +1424,18 @@ ACMD(do_mbuild) {
 			MENTOC_OBI2(mob_specials.damsizedice,damsizedice);
 			MENTOC_OBI2(mob_specials.attack_type,attack_type);
 			MENTOC_OBI2(mob_specials.damsizedice,damsizedice);
+
+			if(arg_vec[2].compare("virt") == 0) {
+				if(arg_vec.end() <= arg_vec.begin() + 3) {
+					mods::builder::report_error<shrd_ptr_player_t>(player,"Please supply a virtual number");
+					return;
+				}
+				auto opt_vr_number = mods::util::stoi(arg_vec[3]);
+				obj->nr = opt_vr_number.value();
+				mods::builder::report_success<shrd_ptr_player_t>(player,"Saved");
+				return;
+			}
+
 
 			if(arg_vec[2].compare("sex") == 0) {
 				if(arg_vec.end() <= arg_vec.begin() + 3) {
