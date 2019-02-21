@@ -368,23 +368,9 @@ void boot_hell(void){
 
 	log("Creating hell hole");
 
-	struct room_data room;
-	room.number = 0;
-	room.zone = 0;
+	room_data room;
 	room.name = "hell hole";
 	room.description = "-void-";
-	room.room_flags = 0;
-	room.sector_type = 0;
-	//room.ex_description = nullptr;
-	room.func = nullptr;
-	room.contents = nullptr;
-	room.people = nullptr;
-	room.light = 0;
-
-	//TODO: setup directions to work properly here (dir_option)
-	for(unsigned i = 0; i < NUM_OF_DIRS; i++) {
-		room.dir_option[i] = nullptr;
-	}
 
 	world.push_back(room);
 	mods::globals::register_room(world.size());
@@ -1014,12 +1000,13 @@ int parse_sql_objects() {
 		obj_proto.reserve(result.size());
 		for(auto  row : result) {
 			//mods::meta_utils::write_meta("object",&row);
-			struct index_data index;
+			/** FIXME: this function has some issues. */
+			index_data index;
 			index.vnum = mods::util::stoi<int>(row["obj_item_number"]);
 			index.number = 0;
 			index.func = nullptr;
 			obj_index.push_back(index);
-			struct obj_data proto;
+			obj_data proto;
 			//!proposed lmdb code:
 			auto aff_rows = db_get_by_meta("affected_type","aff_fk_id",row["obj_item_number"]);
 			for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
@@ -1366,7 +1353,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				int key = (row2["exit_key"]).as<int>();
 				room_rnum to_room = real_room(row2["to_room"].as<int>());
 				world[real_room_number].set_dir_option(direction,gen_desc,keyword,exit_info,key,to_room);
-				//log("DEBUG: set dir option: direction %d gen_desc: '%s' keyword: '%s'",direction,gen_desc.c_str(),keyword.c_str());
+				log("DEBUG: set dir option: direction %d gen_desc: '%s' keyword: '%s'",direction,gen_desc.c_str(),keyword.c_str());
 			}
 	}catch(std::exception& e){
 		std::cerr << "error selecting room from db: '" << e.what() << "'\n";

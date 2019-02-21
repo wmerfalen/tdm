@@ -730,7 +730,7 @@ using aligned_int_t = uint64_t;
 			for(unsigned i = 0; i < NUM_OF_DIRS;i++){ 
 				dir_option[i] = nullptr;
 			}
-			ex_description = (extra_descr_data*)calloc(sizeof(extra_descr_data),1);
+			ex_description = reinterpret_cast<extra_descr_data*>(calloc(sizeof(extra_descr_data),1));
 			ex_description->keyword = strdup("keyword_1234");
 			ex_description->description = strdup("description_1234");
 			ex_description->next = nullptr;
@@ -760,9 +760,8 @@ using aligned_int_t = uint64_t;
 				return;
 			}
 			if(dir_option[i] == nullptr){
-				//dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
-				dir_option[i] = (room_direction_data*)calloc(sizeof(room_direction_data),1);
-			}/*else{
+				dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
+			}else{
 				if(dir_option[i]->general_description != nullptr){
 					free(dir_option[i]->general_description);
 				}
@@ -772,7 +771,6 @@ using aligned_int_t = uint64_t;
 				free(dir_option[i]);
 				dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
 			}
-			*/
 			/** FIXME: replace strdup'd members with mods::string */
 			dir_option[i]->general_description = strdup(gen_desc.c_str());
 			dir_option[i]->keyword = strdup(keyword.c_str());

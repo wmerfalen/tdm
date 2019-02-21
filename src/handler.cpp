@@ -63,6 +63,10 @@ int isname(const char *str, const char *namelist) {
 
 	for(;;) {
 		for(curstr = str;; curstr++, curname++) {
+			std::cerr << "curstr: '" << curstr << "'\n";
+			if(!curname){
+				return 0;
+			}
 			if(!*curstr && !isalpha(*curname)) {
 				return (1);
 			}
@@ -90,6 +94,7 @@ int isname(const char *str, const char *namelist) {
 
 		curname++;			/* first char of new name */
 	}
+	return 0;
 }
 
 
