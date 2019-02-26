@@ -1276,85 +1276,85 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 		world.reserve(room_records.size());
 		for(auto && room_records_row: room_records) {
 			try{
-			//log("DEBUG: room: %d",mods::util::stoi<int>(room_records_row["id"].c_str()));
-			room_data room;
-			const char* name = room_records_row["name"].c_str();
-			const char* description = room_records_row["description"].c_str();
-			if(name == nullptr){ 
-				room.name = strdup("<default>");
-			}else{
-				room.name = strdup(name);
-			}
-			if(description == nullptr){
-				room.description = strdup("A room");
-			}else{
-				room.description = strdup(description);
-			}
-			room.number = room_records_row["room_number"].as<int>(0);
-			room.zone = room_records_row["zone"].as<int>(0);
-			room.room_flags = room_records_row["room_flag"].as<int>(0);
-			room.sector_type = room_records_row["sector_type"].as<int>(0);
-			room.light = (room_records_row["light"]).as<int>(0);
+				//log("DEBUG: room: %d",mods::util::stoi<int>(room_records_row["id"].c_str()));
+				room_data room;
+				const char* name = room_records_row["name"].c_str();
+				const char* description = room_records_row["description"].c_str();
+				if(name == nullptr){ 
+					room.name = strdup("<default>");
+				}else{
+					room.name = strdup(name);
+				}
+				if(description == nullptr){
+					room.description = strdup("A room");
+				}else{
+					room.description = strdup(description);
+				}
+				room.number = room_records_row["room_number"].as<int>(0);
+				room.zone = room_records_row["zone"].as<int>(0);
+				room.room_flags = room_records_row["room_flag"].as<int>(0);
+				room.sector_type = room_records_row["sector_type"].as<int>(0);
+				room.light = (room_records_row["light"]).as<int>(0);
 
-			world.push_back(room);
-			mods::globals::register_room(world.size());
-			top_of_world = world.size();
+				world.push_back(room);
+				mods::globals::register_room(world.size());
+				top_of_world = world.size();
 			}catch(std::exception& e){
 				std::cerr << "SYSERR: exception select from rooms db: " << e.what() << "\n";
 			}
 		}
 		//log("parse_sql_rooms: world.size(): %d",world.size());
 
-			for(auto && row2: db_get_all("room_direction_data")){
-				//siege=# \d room_direction_data
-				// id                  | integer                |           | not null | nextval('room_direction_data_id_seq'::regclass)
-				// room_number         | integer                |           | not null |
-				// exit_direction      | integer                |           | not null |
-				// general_description | character varying(256) |           | not null |
-				// keyword             | character varying(16)  |           |          |
-				// exit_info           | integer                |           |          |
-				// exit_key            | integer                |           |          |
-				// to_room             | integer                |           | not null |
-				//
-				//siege=#
-				auto direction = row2["exit_direction"].as<int>();
-				if(direction >= NUM_OF_DIRS){
-					log("SYSERR: Invalid direction: (%d) Max number of Directions: (%d)",direction,NUM_OF_DIRS);
-					continue;
-				}
-				room_rnum real_room_number = real_room((row2["room_number"]).as<int>());
-				if(real_room_number == NOWHERE) {
-					log("Invalid real_room_number: %d",(row2["room_number"]).as<int>());
-					continue;
-				}
-				std::string gen_desc = row2["general_description"].c_str();
-				std::string keyword = row2["keyword"].c_str();
-				auto db_exit_info = (row2["exit_info"]).as<int>();
-				int exit_info = 0;
-
-				switch(db_exit_info) {
-					case 1:
-					default:
-						exit_info = EX_ISDOOR;
-						REMOVE_BIT(exit_info,EX_CLOSED);
-						break;
-
-					case 2:
-						exit_info = EX_ISDOOR | EX_PICKPROOF;
-						SET_BIT(exit_info,EX_CLOSED);
-						break;
-
-					case 3:
-						exit_info = EX_ISDOOR | EX_REINFORCED;
-						SET_BIT(exit_info,EX_CLOSED);
-						break;
-				}
-
-				int key = (row2["exit_key"]).as<int>();
-				room_rnum to_room = real_room(row2["to_room"].as<int>());
-				world[real_room_number].set_dir_option(direction,gen_desc,keyword,exit_info,key,to_room);
-				log("DEBUG: set dir option: direction %d gen_desc: '%s' keyword: '%s'",direction,gen_desc.c_str(),keyword.c_str());
+		for(auto && row2: db_get_all("room_direction_data")){
+			//siege=# \d room_direction_data
+			// id                  | integer                |           | not null | nextval('room_direction_data_id_seq'::regclass)
+			// room_number         | integer                |           | not null |
+			// exit_direction      | integer                |           | not null |
+			// general_description | character varying(256) |           | not null |
+			// keyword             | character varying(16)  |           |          |
+			// exit_info           | integer                |           |          |
+			// exit_key            | integer                |           |          |
+			// to_room             | integer                |           | not null |
+			//
+			//siege=#
+			auto direction = row2["exit_direction"].as<int>();
+			if(direction >= NUM_OF_DIRS){
+				log("SYSERR: Invalid direction: (%d) Max number of Directions: (%d)",direction,NUM_OF_DIRS);
+				continue;
 			}
+			room_rnum real_room_number = real_room((row2["room_number"]).as<int>());
+			if(real_room_number == NOWHERE) {
+				log("Invalid real_room_number: %d",(row2["room_number"]).as<int>());
+				continue;
+			}
+			std::string gen_desc = row2["general_description"].c_str();
+			std::string keyword = row2["keyword"].c_str();
+			auto db_exit_info = (row2["exit_info"]).as<int>();
+			int exit_info = 0;
+
+			switch(db_exit_info) {
+				case 1:
+				default:
+					exit_info = EX_ISDOOR;
+					REMOVE_BIT(exit_info,EX_CLOSED);
+					break;
+
+				case 2:
+					exit_info = EX_ISDOOR | EX_PICKPROOF;
+					SET_BIT(exit_info,EX_CLOSED);
+					break;
+
+				case 3:
+					exit_info = EX_ISDOOR | EX_REINFORCED;
+					SET_BIT(exit_info,EX_CLOSED);
+					break;
+			}
+
+			int key = (row2["exit_key"]).as<int>();
+			room_rnum to_room = real_room(row2["to_room"].as<int>());
+			world[real_room_number].set_dir_option(direction,gen_desc,keyword,exit_info,key,to_room);
+			//log("DEBUG: set dir option: direction %d gen_desc: '%s' keyword: '%s'",direction,gen_desc.c_str(),keyword.c_str());
+		}
 	}catch(std::exception& e){
 		std::cerr << "error selecting room from db: '" << e.what() << "'\n";
 		return {-1,std::string("An exception occured: ") + e.what()};
@@ -2335,20 +2335,20 @@ bool player_exists(std::shared_ptr<mods::player> player_ptr){
 	return db_get_by_meta("player","player_name",player_ptr->name().c_str()).size();
 }
 bool login(std::string_view user_name,std::string_view password){
-		try{
-			auto up_txn = txn();
-			sql_compositor comp("player",&up_txn);
-			auto room_sql = comp.select("player_password")
-				.from("player")
-				.where("player_name","=",user_name.data())
-				.where("player_password","=",password.data())
-				.sql();
-			auto row = mods::pq::exec(up_txn,room_sql.data());
-			return row.size() > 0;
-		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << " login() exception: " << e.what() << "\n";
-			return false;
-		}
+	try{
+		auto up_txn = txn();
+		sql_compositor comp("player",&up_txn);
+		auto room_sql = comp.select("player_password")
+			.from("player")
+			.where("player_name","=",user_name.data())
+			.where("player_password","=",password.data())
+			.sql();
+		auto row = mods::pq::exec(up_txn,room_sql.data());
+		return row.size() > 0;
+	}catch(std::exception& e){
+		std::cerr << __FILE__ << ": " << __LINE__ << " login() exception: " << e.what() << "\n";
+		return false;
+	}
 }
 bool parse_sql_player(std::shared_ptr<mods::player> player_ptr){
 	/** TODO: make sure sql injection is not possible here */

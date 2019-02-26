@@ -28,7 +28,7 @@ namespace mods {
 		m_mallocd = false;
 		m_cptr = nullptr;
 		m_str = "";
-		std::cerr << "mods::string::string constructor\n";
+		//std::cerr << "mods::string::string constructor\n";
 		assign(std::string(""));
 	}
 	string::string(const char* str){
