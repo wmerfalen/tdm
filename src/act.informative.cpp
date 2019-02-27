@@ -96,7 +96,7 @@ void do_auto_exits(struct char_data *ch);
 ACMD(do_exits);
 void look_in_direction(struct char_data *ch, int dir);
 void look_in_obj(struct char_data *ch, char *arg);
-char *find_exdesc(char *word, struct extra_descr_data *list);
+char *find_exdesc(char *word, extra_descr_data *list);
 void look_at_target(struct char_data *ch, char *arg);
 
 /* local globals */
@@ -736,9 +736,23 @@ void look_in_obj(struct char_data *ch, char *arg) {
 }
 
 
+char *find_exdesc(char *word,room_data& r){
+	std::cerr << "(before for) find_exdesc word: '" << word << "'\n";
+	for(const auto & i: r.ex_descriptions()){
+		std::cerr << "find_exdesc word: '" << word << "' " <<
+			"keyword: '" << i.keyword.c_str() << "' " <<
+			"description: '" << i.description.c_str() << "'\n";
+		if(isname(word, i.keyword.c_str())) {
+			std::cerr << "YES: " << i.keyword.c_str() << "\n";
+			return (i.description.c_str());
+		}
+	}
+	return (NULL);
+}
 
-char *find_exdesc(char *word, struct extra_descr_data *list) {
-	struct extra_descr_data *i;
+
+char *find_exdesc(char *word,extra_descr_data *list) {
+	extra_descr_data *i;
 
 	for(i = list; i; i = i->next)
 		if(isname(word, i->keyword)) {
@@ -757,10 +771,10 @@ char *find_exdesc(char *word, struct extra_descr_data *list) {
  * Thanks to Angus Mezick <angus@EDGIL.CCMAIL.COMPUSERVE.COM> for the
  * suggested fix to this problem.
  */
-void look_at_target(struct char_data *ch, char *arg) {
+void look_at_target(char_data *ch, char *arg) {
 	int bits, found = FALSE, j, fnum, i = 0;
-	struct char_data *found_char = NULL;
-	struct obj_data *obj, *found_obj = NULL;
+	char_data *found_char = NULL;
+	obj_data *obj, *found_obj = NULL;
 	char *desc;
 
 	if(!ch->has_desc) {
@@ -797,7 +811,8 @@ void look_at_target(struct char_data *ch, char *arg) {
 	}
 
 	/* Does the argument match an extra desc in the room? */
-	if((desc = find_exdesc(arg, world[IN_ROOM(ch)].ex_description)) != NULL && ++i == fnum) {
+	std::cerr << "find_exdesc arg: '" << arg << "'\n";
+	if((desc = find_exdesc(arg, world[IN_ROOM(ch)])) != NULL) {
 		page_string(*ch->desc, desc, FALSE);
 		return;
 	}

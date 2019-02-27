@@ -2329,8 +2329,6 @@ bool char_exists(const std::string& name){
 /*
  * write the vital data of a player to sql
  */
-
-
 bool player_exists(std::shared_ptr<mods::player> player_ptr){
 	return db_get_by_meta("player","player_name",player_ptr->name().c_str()).size();
 }
@@ -2420,7 +2418,7 @@ bool parse_sql_player(std::shared_ptr<mods::player> player_ptr){
 }
 /* copy data from the file structure to a char struct */
 void store_to_char(struct char_file_u *st, struct char_data *ch) {
-	std::cerr << "DEPRECATED -- Store_to_char\n";
+	log("DEPRECATED -- Store_to_char");
 	return;
 }
 
@@ -2618,7 +2616,8 @@ char *fread_string(FILE *fl, const char *error) {
 
 /* release memory allocated for a char struct */
 void free_char(struct char_data *ch) {
-	struct alias_data *a;
+	log("DEPRECATED: free_char");
+	alias_data *a;
 
 	if(ch->player_specials) {
 		while((a = GET_ALIASES(ch)) != NULL) {

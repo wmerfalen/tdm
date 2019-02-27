@@ -20,9 +20,11 @@
 #include "mods/ai_state.hpp"
 #include <functional>
 #include <array>
+#include "mods/extra_desc_data.hpp"
 namespace mods {
 	class player;
 	struct descriptor_data;
+	struct extra_desc_data;
 };
 extern std::deque<mods::descriptor_data> descriptor_list;
 typedef std::size_t weapon_type_t;
@@ -730,10 +732,6 @@ using aligned_int_t = uint64_t;
 			for(unsigned i = 0; i < NUM_OF_DIRS;i++){ 
 				dir_option[i] = nullptr;
 			}
-			ex_description = reinterpret_cast<extra_descr_data*>(calloc(sizeof(extra_descr_data),1));
-			ex_description->keyword = strdup("keyword_1234");
-			ex_description->description = strdup("description_1234");
-			ex_description->next = nullptr;
 		}
 		~room_data(){
 			for(unsigned i = 0; i < NUM_OF_DIRS; i++){
@@ -747,7 +745,6 @@ using aligned_int_t = uint64_t;
 					free(dir_option[i]);
 				}
 			}
-			free(ex_description);
 		}
 		void set_dir_option(byte i,
 				const std::string& gen_desc,
@@ -783,15 +780,23 @@ using aligned_int_t = uint64_t;
 		int	sector_type;            /* sector type (move/hide)            */
 		mods::string	name;                  /* Rooms name 'You are ...'           */
 		mods::string	description;           /* Shown when entered                 */
-		extra_descr_data *ex_description; /* for examine/look       */
+		//extra_descr_data *ex_description; /* for examine/look       */
 		room_direction_data *dir_option[NUM_OF_DIRS]; /* Directions */
 		int room_flags;		/* DEATH,DARK ... etc */
 
 		byte light;                  /* Number of lightsources in room     */
 		SPECIAL(*func);
 
+		std::vector<mods::extra_desc_data>& ex_descriptions();
+		//std::vector<mods::extra_desc_data>& ex_descriptions();
+		//void ex_descriptions(const mods::extra_desc_data&& other);
+		//void ex_descriptions(const std::vector<mods::extra_desc_data>& other);
+		//void ex_descriptions_append(mods::extra_desc_data&& other);
+
 		obj_data *contents;   /* List of items in room              */
 		char_data *people;    /* List of NPC / PC in room           */
+		protected:
+			std::vector<mods::extra_desc_data> m_ex_descriptions;
 	};
 	/* ====================================================================== */
 

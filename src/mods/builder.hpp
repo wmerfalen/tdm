@@ -1,5 +1,6 @@
 #ifndef __MENTOC_MODS_BUILDER_HEADER__
 #define __MENTOC_MODS_BUILDER_HEADER__
+#define __MENTOC_BUILDER_UTILS_ACCEPT_ZERO_INDEX__
 #include <time.h>
 #include <netdb.h>
 #include <sys/socket.h>

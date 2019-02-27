@@ -391,7 +391,6 @@ ACMD(do_vnum) {
 
 void do_stat_room(struct char_data *ch) {
 	char buf2[MAX_STRING_LENGTH];
-	struct extra_descr_data *desc;
 	struct room_data *rm = &world[IN_ROOM(ch)];
 	int i, found, column;
 	struct obj_data *j;
@@ -409,11 +408,9 @@ void do_stat_room(struct char_data *ch) {
 
 	send_to_char(ch, "Description:\r\n%s", rm->description.c_str() ? rm->description.c_str() : "  None.\r\n");
 
-	if(rm->ex_description) {
-		send_to_char(ch, "Extra descs:%s", CCCYN(ch, C_NRM));
-
-		for(desc = rm->ex_description; desc; desc = desc->next) {
-			send_to_char(ch, " %s", desc->keyword);
+	if(rm->ex_descriptions().size()){
+		for(const auto & k : rm->ex_descriptions()){
+			send_to_char(ch, " %s", k.keyword.c_str());
 		}
 
 		send_to_char(ch, "%s\r\n", CCNRM(ch, C_NRM));

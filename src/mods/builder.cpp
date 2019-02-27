@@ -14,6 +14,7 @@
 #include "jx.hpp"
 #include <tuple>
 namespace mods {  struct player; };
+namespace mods { struct extra_desc_data; }; 
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
 #define MENTOC_OBI2(i,a) obj->i = get_intval(#a).value_or(obj->i);
 #define MENTOC_OBS(i) obj->i = get_strval(#i).value_or(obj->i);
@@ -334,13 +335,6 @@ namespace mods::builder {
 		values["description"] = world[in_room].description.c_str();
 		values["room_number"] = std::to_string(world[in_room].number);
 
-		if(world[in_room].ex_description && world[in_room].ex_description->keyword) {
-			values["ex_keyword"] = (world[in_room].ex_description->keyword);
-		}
-
-		if(world[in_room].ex_description && world[in_room].ex_description->description) {
-			values["ex_description"] = (world[in_room].ex_description->description);
-		}
 
 		std::array<char,16> num;
 		std::fill(num.begin(),num.end(),0);
@@ -445,6 +439,33 @@ namespace mods::builder {
 			}
 		}
 
+		if(world[in_room].ex_descriptions().size()){
+			try{
+				auto del_txn = txn();
+				mods::pq::exec(del_txn,std::string("DELETE FROM room_extra_desc_data where room_number=") 
+						+ std::to_string(world[in_room].number));
+			}catch(std::exception &e){ }
+			mods::pq::commit(del_txn);
+			for(const auto & ex_desc : world[in_room].ex_descriptions()){
+				values.clear();
+				values["ex_keyword"] = ex_desc.keyword.c_str();
+				values["ex_description"] = ex_desc.description.c_str();
+				values["room_number"] = std::to_string(world[in_room].number);
+				try{
+					auto txn2 = txn();
+					sql_compositor comp("room_extra_desc_data",&txn2);
+					auto sql = comp
+						.insert()
+						.into("room_extra_desc_data")
+						.values(values).sql();
+					mods::pq::exec(txn2,sql);
+					mods::pq::commit(txn2);
+				}catch(std::exception& e){
+					std::cerr << "[room_extra_desc_data]-> error: '" << e.what() << "'\n";
+				}
+			}
+		}
+
 		return 0;
 	}
 	int import_room(struct room_data* room) {
@@ -456,7 +477,7 @@ namespace mods::builder {
 		world[world_top].sector_type = room->sector_type;
 		world[world_top].name = room->name;
 		world[world_top].description = room->description;
-		world[world_top].ex_description = room->ex_description;
+		world[world_top].ex_descriptions() = room->ex_descriptions();
 
 		for(unsigned i =0; i < NUM_OF_DIRS; i++) {
 			world[world_top].dir_option[i] = room->dir_option[i];
@@ -477,7 +498,7 @@ namespace mods::builder {
 		room.sector_type = world[IN_ROOM(ch)].sector_type;
 		room.name = strdup("title");
 		room.description = strdup("description");
-		room.ex_description = (struct extra_descr_data*) calloc(1,sizeof(struct extra_descr_data));
+		room.ex_descriptions().emplace_back("","");
 
 		for(unsigned i =0; i < NUM_OF_DIRS; i++) {
 			room.dir_option[i] = nullptr;
@@ -3189,6 +3210,45 @@ ACMD(do_rbuild) {
 			"  |____[example]\r\n" <<
 			"  |:: rbuild save\r\n"<<
 
+			" rbuild <extra_desc> <delete> <N>\n" <<  /** TODO: needs impl */
+			"  |--> deletes the extra_desc number N with this room\r\n" << 
+			"  |____[example]\r\n" <<
+			"  |:: rbuild extra_desc delete 3\r\n" <<
+
+			" rbuild <extra_desc> <list>\r\n" << 	/** TODO needs impl */
+			"  |--> lists the current extra_desc structures currently associated with this room\r\n" << 
+			"  |____[example]\r\n" <<
+			"  |:: rbuild extra_desc list\r\n" <<
+			  
+
+			" rbuild <extra_desc> <save-all>\r\n" << /** TODO: needs impl */
+			"  |--> saves all extra_desc entries\r\n" << 
+			"  |____[example]\r\n" <<
+
+
+			" rbuild <extra_desc> <show> <N>\r\n" <<  /** TODO: needs impl */
+			"  |--> lists the current extra_desc structures currently associated with this room\r\n" << 
+			"  |____[example]\r\n" <<
+
+
+			" rbuild <extra_desc> <new>\r\n" <<  /** TODO: needs impl */
+			"  |--> creates an extra_desc for this room\r\n" << 
+			"  |____[example]\r\n" <<
+			"  |:: rbuild extra_desc new\r\n" <<
+
+
+			" rbuild <extra_desc> <N> <keyword> <value>\r\n" <<  /** TODO: needs impl */
+			"  |--> sets the Nth keyword to <value>\r\n" << 
+			"  |____[example]\r\n" <<
+			"  |:: rbuild extra_desc 3 keyword \"sign gold wall\"\r\n" <<
+
+
+			" rbuild <extra_desc> <N> <description> <value>\r\n" <<  /** TODO: needs impl */
+			"  |--> sets the Nth description to <value>\r\n" << 
+			"  |____[example]\r\n" <<
+			"  |:: rbuild extra_desc 3 description \"A very long passage about newbie rules, etc, etc, ...\"\r\n" <<
+
+
 			" rbuild <create> <direction>\r\n" <<
 			"  |--> creates a room to the direction you choose (neswud)\r\n" <<
 			"  |____[example]\r\n" <<
@@ -3270,7 +3330,7 @@ ACMD(do_rbuild) {
 		return;
 	}
 
-	constexpr unsigned int max_char = 11;
+	constexpr unsigned int max_char = 2048;
 	std::array<char,max_char> command;
 	std::array<char,max_char> direction;
 	one_argument(one_argument(argument,&command[0],max_char),&direction[0],max_char);
@@ -3326,6 +3386,106 @@ ACMD(do_rbuild) {
 
 		return;
 	}
+
+			//" rbuild <extra_desc> <list>\r\n" << 	/** TODO needs impl */
+			//" rbuild <extra_desc> <save-all>\r\n" << /** TODO: needs impl */
+			//" rbuild <extra_desc> <show> <N>\r\n" <<  /** TODO: needs impl */
+			//" rbuild <extra_desc> <N> <keyword> <value>\r\n" <<  /** TODO: needs impl */
+			//" rbuild <extra_desc> <N> <description> <value>\r\n" <<  /** TODO: needs impl */
+			//
+
+	/** HOw positional parameters are parsed: */
+	/* On the command: 
+	 *
+		>	rbuild extra_desc foo bar 1 
+		vec_args[0] == 'extra_desc'
+		vec_args[1] == 'foo'
+		vec_args[2] == 'bar'
+		vec_args[3] == '1'
+	*/
+
+	/**
+	 *  Command line: rbuild extra_desc [...] 
+	 */
+	if(std::string(&command[0]).compare("extra_desc") == 0) {
+		/**
+		 *  Command line: rbuild extra_desc new [N]
+		 * ------------------------------------------
+		 *  the N is for optionally how many new ones to create
+		 */
+		if(vec_args.size() >= 2 && vec_args[1].compare("new") == 0){
+			// rbuild <extra_desc> <new>\r\n" <<  /** TODO: needs impl */
+			/** TODO: add mutex lock so that other builders cant lock this room */
+			
+			auto size_before = world[IN_ROOM(ch)].ex_descriptions().size();
+			world[IN_ROOM(ch)].ex_descriptions().emplace_back();
+			auto size_after = world[IN_ROOM(ch)].ex_descriptions().size();
+			std::cerr << "before: " << size_before << " after: " << size_after << "\n";
+			if(size_after > size_before){
+				mods::builder::report_success<shrd_ptr_player_t>(player,"Room extra_desc saved");
+				return;
+			}else { mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Error creating extra_desc: ")); }
+			return;
+		}
+		/**
+		 *  Command line: rbuild extra_desc list [N]
+		 * --------------------------------------------------
+		 *  the N is for which page to list. 25 to a page
+		 */
+		if(vec_args.size() >= 3 && vec_args[1].compare("list") == 0){
+			mods::builder::report_status<shrd_ptr_player_t>(player,"listing...");
+			unsigned ex_id = 0;
+			player->pager_start();
+
+			for(const auto& ex : world[IN_ROOM(ch)].ex_descriptions()) {
+				*player << "{gld}[" << ex_id++ << "]{/gld} :->{red} [" <<
+					ex.keyword.c_str() <<  "]->'" << 
+					ex.description.c_str() << "'{/red}\r\n";
+			}
+			player->pager_end();
+			player->page(0);
+			return;
+		}
+		if(vec_args.size() >= 3 && vec_args[1].compare("delete") == 0){
+			/** Accepts: rbuild extra_desc delete N */
+			// rbuild <extra_desc> <delete> <N>\n" <<  /** TODO: needs impl */
+		/**
+		 *  Command line: rbuild extra_desc delte N
+		 * --------------------------------------------------
+		 *  where N is the index you want to delete. accepts csv (TODO)
+		 */
+			int32_t target = mods::util::stoi<int>(vec_args[2]);
+			int32_t i = target;
+			if(i < 0){
+				mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Value must be greater than zero"));
+				return;
+			}
+			else{
+				auto temp = world[IN_ROOM(ch)].ex_descriptions();
+				auto size_temp = temp.size();
+				if(temp.size()){
+					mods::builder::report_error<shrd_ptr_player_t>(player,std::string(
+								"Nothing to delete"));
+					return;
+				}
+				world[IN_ROOM(ch)].ex_descriptions().clear();
+				int32_t ctr = 0; 
+				for(auto && m : temp){
+					if(ctr == target){
+						continue;
+					}else{
+						world[IN_ROOM(ch)].ex_descriptions().emplace_back(std::move(m));
+					}
+				}
+				std::string before = std::string("Before: [") + std::to_string(size_temp) + "] items.";
+				std::string items = std::string("Now: [") + std::to_string(world[IN_ROOM(ch)].ex_descriptions().size() ) + "] items."; 
+				mods::builder::report_success<shrd_ptr_player_t>(player,before + items);
+			}
+		}
+
+
+	}/** All code that handles extra_desc should be in above statement */
+
 
 	if(std::string(&command[0]).compare("save") == 0) {
 		auto ret = mods::builder::save_to_db(IN_ROOM(ch));

@@ -3,6 +3,25 @@
 #include "comm.h"
 #include <array>
 
+namespace mods {
+	struct extra_desc_data;
+};
+
+//void room_data::ex_descriptions_append(mods::extra_desc_data&& other){
+//	m_ex_descriptions.emplace_back(std::move(other));
+//}
+//void room_data::ex_descriptions(mods::extra_desc_data&& other){
+//	m_ex_descriptions = std::move(other);
+//}
+//void room_data::ex_descriptions(const std::vector<mods::extra_desc_data>& other){
+//	m_ex_descriptions = other;
+//}
+//std::vector<mods::extra_desc_data> room_data::ex_descriptions() const {
+//	return m_ex_descriptions;
+//}
+std::vector<mods::extra_desc_data>& room_data::ex_descriptions(){
+	return m_ex_descriptions;
+}
 char_player_data::char_player_data(){
   name.assign("");         /* PC / NPC s name (kill ...  )         */
   short_descr.assign("");  /* for NPC 'actions'                    */

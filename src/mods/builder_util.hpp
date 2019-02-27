@@ -149,6 +149,38 @@ namespace mods::builder_util {
 	}
 
 	template <typename VectorObjectType>
+	void show_nonconst_vector(
+	    std::shared_ptr<mods::player>& player,
+	    const std::string& argument,
+	    VectorObjectType vector_objects,
+	    std::function<void(typename VectorObjectType::value_type&)> show_function
+	) {
+		auto args = mods::util::subcmd_args<5,args_t>(argument,"show");
+
+		if(args.has_value()) {
+			auto arg_vec = args.value();
+
+			if(arg_vec.size() < 2) {
+				mods::builder::report_error<std::shared_ptr<mods::player>>(player,"Invalid number of arguments");
+				return;
+			}
+
+			auto index = mods::util::stoi(arg_vec[1]);
+
+			if(!index.has_value() || index.value() < 0 || 
+					static_cast<std::size_t>(index.value()) >= vector_objects.size()) {
+				mods::builder::report_error<std::shared_ptr<mods::player>>(player,"Invalid index");
+				return;
+			}
+
+			show_function(vector_objects[index.value()]);
+		}
+
+		return;
+	}
+
+
+	template <typename VectorObjectType>
 	void show_object_vector(
 	    std::shared_ptr<mods::player>& player,
 	    const std::string& argument,
