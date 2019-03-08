@@ -1085,41 +1085,67 @@ void extract_char(struct char_data *ch) {
  *
  * NOTE: This doesn't handle recursive extractions.
  */
-void extract_pending_chars() {
-	char_data *vict, *next_vict, *prev_vict;
+//void extract_pending_chars() {
+//	char_data *vict, *next_vict, *prev_vict;
+//
+//	if(extractions_pending < 0) {
+//		log("SYSERR: Negative (%d) extractions pending.", extractions_pending);
+//	}
+//
+//	for(vict = character_list, prev_vict = NULL; vict && extractions_pending; vict = next_vict) {
+//		next_vict = vict->next;
+//
+//		if(MOB_FLAGGED(vict, MOB_NOTDEADYET)) {
+//			REMOVE_BIT(MOB_FLAGS(vict), MOB_NOTDEADYET);
+//		} else if(PLR_FLAGGED(vict, PLR_NOTDEADYET)) {
+//			REMOVE_BIT(PLR_FLAGS(vict), PLR_NOTDEADYET);
+//		} else {
+//			/* Last non-free'd character to continue chain from. */
+//			prev_vict = vict;
+//			continue;
+//		}
+//
+//		extract_char_final(vict);
+//		extractions_pending--;
+//
+//		if(prev_vict) {
+//			prev_vict->next = next_vict;
+//		} else {
+//			character_list = next_vict;
+//		}
+//	}
+//
+//	if(extractions_pending > 0) {
+//		log("SYSERR: Couldn't find %d extractions as counted.", extractions_pending);
+//	}
+//
+//	extractions_pending = 0;
+//}
+//
 
-	if(extractions_pending < 0) {
-		log("SYSERR: Negative (%d) extractions pending.", extractions_pending);
+void extract_pending_chars(){
+	if(extractions_pending < 0){
+		log("SYSERR: Negative (%d) extractions pending. Resetting to zero.", extractions_pending);
+		extractions_pending = 0;
+		return;
 	}
-
-	for(vict = character_list, prev_vict = NULL; vict && extractions_pending; vict = next_vict) {
-		next_vict = vict->next;
-
-		if(MOB_FLAGGED(vict, MOB_NOTDEADYET)) {
-			REMOVE_BIT(MOB_FLAGS(vict), MOB_NOTDEADYET);
-		} else if(PLR_FLAGGED(vict, PLR_NOTDEADYET)) {
-			REMOVE_BIT(PLR_FLAGS(vict), PLR_NOTDEADYET);
+	mods::loops::foreach_player([&](char_data* ch) -> bool {
+		if(MOB_FLAGGED(ch, MOB_NOTDEADYET)) {
+			REMOVE_BIT(MOB_FLAGS(ch), MOB_NOTDEADYET);
+			log("debug: removing MOB_NOTDEADYET bit from mob");
+		} else if(PLR_FLAGGED(ch, PLR_NOTDEADYET)) {
+			REMOVE_BIT(PLR_FLAGS(ch), PLR_NOTDEADYET);
+			log("debug: removing PLR_NOTDEADYET bit from player %s",GET_NAME(ch).c_str());
 		} else {
-			/* Last non-free'd character to continue chain from. */
-			prev_vict = vict;
-			continue;
+			return true;
 		}
-
-		extract_char_final(vict);
+		extract_char_final(ch);
 		extractions_pending--;
-
-		if(prev_vict) {
-			prev_vict->next = next_vict;
-		} else {
-			character_list = next_vict;
+		if(extractions_pending == 0){
+			return false;
 		}
-	}
-
-	if(extractions_pending > 0) {
-		log("SYSERR: Couldn't find %d extractions as counted.", extractions_pending);
-	}
-
-	extractions_pending = 0;
+		return true;
+	});
 }
 
 

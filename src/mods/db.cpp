@@ -96,7 +96,8 @@ tuple_status_t save_char(
 }
 tuple_status_t save_new_char(
 		std::shared_ptr<mods::player> player_ptr){
-	player_ptr->set_db_id(initialize_row("player"));
+	std::cerr << "[DEPRECATED]: calls to mods::lmdb::save_new_char will be ignored!\n";
+	//player_ptr->set_db_id(initialize_row("player"));
 	mutable_map_t values;
 	lmdb_export_char(player_ptr,values);
 	return save_record("player",&values,values["id"]);
@@ -115,10 +116,17 @@ tuple_status_t lmdb_write_values(
 void lmdb_export_char(std::shared_ptr<mods::player> player_ptr, mutable_map_t &values){
 	/** TODO: instead of using the char_data accesses, create functions(or use existing ones) on mods::player object */
 	auto ch = player_ptr->cd();
-		values["id"] = std::to_string(player_ptr->get_db_id());
 		values["player_password"] = player_ptr->password();
 		values["player_affection_plr_bitvector"] = mods::flags::serialize<mods::flags::plr>(player_ptr->get_affected_plr());
 		values["player_affection_bitvector"] = mods::flags::serialize<mods::flags::aff>(player_ptr->get_affected());
+
+		if(values["player_affection_plr_bitvector"].length() == 0){
+			values.erase("player_affection_plr_bitvector");
+		}
+		if(values["player_affection_bitvector"].length() == 0){
+			values.erase("player_affection_bitvector");
+		}
+
 		values["player_name"] = player_ptr->name().c_str();
 		values["player_short_description"] = std::to_string(ch->player.short_descr);
 		values["player_long_description"] = std::to_string(ch->player.long_descr);
@@ -157,6 +165,11 @@ void lmdb_export_char(std::shared_ptr<mods::player> player_ptr, mutable_map_t &v
 		values["player_level"] = std::to_string(player_ptr->level());
 		values["player_hitroll"] = std::to_string(player_ptr->cd()->points.hitroll);
 		values["player_armor"] = std::to_string(player_ptr->cd()->points.armor);
+		if(player_ptr->get_prefs() == 0){
+			values["player_preferences"] = "0";
+		}else{
+			values["player_preferences"] = std::to_string(player_ptr->get_prefs());
+		}
 		return;
 }
 

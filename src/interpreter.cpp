@@ -172,6 +172,7 @@ ACMD(do_newjs);
 ACMD(do_jstest);
 ACMD(do_mbuild);
 ACMD(do_obuild);
+ACMD(do_sbuild);
 ACMD(do_chanmgr);
 ACMD(do_zbuild);
 ACMD(do_rnumlist);
@@ -509,8 +510,9 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "jstest"  , POS_RESTING , do_jstest   , LVL_GOD, 0 },
 	{ "mbuild"  , POS_RESTING , do_mbuild   , LVL_GOD, 0 },
 	{ "obuild"  , POS_RESTING , do_obuild   , LVL_GOD, 0 },
-	{ "chanmgr"  , POS_RESTING , do_chanmgr   , LVL_IMMORT, 0 },
+	{ "sbuild"  , POS_RESTING , do_sbuild   , LVL_GOD, 0 },
 	{ "zbuild"  , POS_RESTING , do_zbuild   , LVL_IMMORT, 0 },
+	{ "chanmgr"  , POS_RESTING , do_chanmgr   , LVL_IMMORT, 0 },
 	{ "rnumtele"  , POS_RESTING , do_rnumtele   , LVL_IMMORT, 0 },
 	{ "rnumlist"  , POS_RESTING , do_rnumlist   , LVL_IMMORT, 0 },
 	{ "pref"  , POS_RESTING , do_pref   , 0, 0 },
@@ -1670,19 +1672,25 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 			d("set CON_RMOTD");
 			p->set_state(CON_RMOTD);
 			p->set_db_id(0);
-			status = mods::db::save_new_char(p);
-			if(std::get<0>(status)){
-				std::cout << "debug: new character '" << p->name() << "' pk: " << std::get<2>(status) << "\n";
-				p->set_db_id(std::get<2>(status));
+			if(db::save_new_char(p) == 0){
+				std::cout << "debug: new character '" << p->name() << "'\n";
+				if(db::load_char_pkid(p) < 0){
+					log("SYSERR: couldn't load character's pkid: '%s'",p->name());
+				}else{
+
+				}
 				if(parse_sql_player(p) == false){
-					std::cerr << "error: after saving to the db, we couldn't parse the player's info\n";
+					log("SYSERR: after saving to the db, we couldn't parse the player's info");
 				}else{
 					std::cout << "info: player created and initialized successfully\n";
 					mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player.", p->name().c_str(), p->host().c_str());
 				}
 			}else{
-				std::cerr << "error: save_new_char failed: '" << std::get<1>(status) << "'\n";
-				mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player creation failed: '%s'.", p->name().c_str(), p->host().c_str(),std::get<1>(status).c_str());
+				log("SYSERR: save_new_char failed");
+				mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player creation failed.", p->name().c_str(), p->host().c_str());
+				p->stc("Unfortunately, something is broken in the MUD right now that is preventing you from signing in. Please report this to an admin.");
+				p->set_state(CON_CLOSE);
+				return;
 			}
 			write_to_output(d, "%s\r\n*** PRESS RETURN: ", motd);
 

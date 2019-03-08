@@ -216,18 +216,6 @@ void Board_clear_all(void);
 void free_social_messages(void);
 void Free_Invalid_List(void);
 
-#ifdef __CXREF__
-#undef FD_ZERO
-#undef FD_SET
-#undef FD_ISSET
-#undef FD_CLR
-#define FD_ZERO(x)
-#define FD_SET(x, y) 0
-#define FD_ISSET(x, y) 0
-#define FD_CLR(x, y)
-#endif
-
-
 void deregister_player(std::shared_ptr<mods::player> & player_obj){
 	std::set<mods::globals::player_list_t::iterator> players_to_destroy;
 	for(auto it = mods::globals::player_list.begin();it != mods::globals::player_list.end();++it){

@@ -24,6 +24,15 @@ using shrd_ptr_player_t = std::shared_ptr<mods::player>;
 using jxcomp = mods::jx::compositor;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 extern std::tuple<int16_t,std::string> parse_sql_zones();
+void r_error(const shrd_ptr_player_t & player,std::string_view msg){
+	mods::builder::report_error<shrd_ptr_player_t>(player,msg.data());
+}
+void r_success(const shrd_ptr_player_t & player,std::string_view msg){
+	mods::builder::report_success<shrd_ptr_player_t>(player,msg.data());
+}
+void r_status(const shrd_ptr_player_t & player,std::string_view msg){
+	mods::builder::report_status<shrd_ptr_player_t>(player,msg.data());
+}
 namespace mods::builder {
 	std::array<std::pair<int,std::string>,4> weapon_type_flags = { {
 			{mods::weapon::SMG,"SMG"},
@@ -230,7 +239,7 @@ namespace mods::builder {
 	}
 	void pave_to(std::shared_ptr<mods::player> player,room_data * current_room,int direction) {
 		initialize_builder(player);
-		mods::builder::report_status<shrd_ptr_player_t>(player,std::string("start_room: ") + std::to_string(
+		r_status(player,std::string("start_room: ") + std::to_string(
 		                                                    player->builder_data->room_pavements.start_room)
 		                                               );
 		mods::builder::new_room(*player,direction);
@@ -240,19 +249,19 @@ namespace mods::builder {
 		created_room->zone = player->builder_data->room_pavements.zone_id;
 
 		if(!create_direction(player->room(),direction,world.size() -1)) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Couldn't create direction to that room!");
+			r_error(player,"Couldn't create direction to that room!");
 			return;
 		}
 
 		if(!create_direction(world.size()-1,OPPOSITE_DIR(direction),player->room())) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Couldn't create bind-back direction to that room!");
+			r_error(player,"Couldn't create bind-back direction to that room!");
 			return;
 		}
 
 		world[world.size()-1].dir_option[OPPOSITE_DIR(direction)]->general_description = strdup(world[player->room()].name);
 		world[world.size()-1].dir_option[OPPOSITE_DIR(direction)]->keyword = strdup("door");
 		player->builder_data->room_pavements.current_room_number++;
-		mods::builder::report_status<shrd_ptr_player_t>(player,"Paved room to that direction");
+		r_status(player,"Paved room to that direction");
 	}
 
 	std::pair<bool,std::string> update_zone_commands(int zone_id) {
@@ -972,14 +981,14 @@ ACMD(do_sbuild) {
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 		player->pager_start();
 		*player << "usage: \r\n" <<
-			" sbuild help\r\n" <<
+			" {red}sbuild{/red} {grn}help{/grn}\r\n" <<
 			"  |--> this help menu\r\n" <<
 			"  |____[example]\r\n" <<
-			"  |:: sbuild help\r\n" <<
+			"  |:: {red}sbuild{/red} help\r\n" <<
 			"  |:: (this help menu will show up)\r\n" <<
-			" sbuild new\r\n" <<
-			" sbuild list\r\n" <<
-			" sbuild attr <shop_id> <attr> <value>\r\n" <<
+			" {red}sbuild{/red} {grn}new{/grn}\r\n" <<
+			" {red}sbuild{/red} {grn}list{/grn}\r\n" <<
+			" {red}sbuild{/red} {grn}attr{/grn} <shop_id> <attr> <value>\r\n" <<
 			"  |:: -:[attributes]:-\r\n" <<
 			"  |:: vnum\r\n" <<
 			"  |:: profit_buy\r\n" <<
@@ -1003,8 +1012,8 @@ ACMD(do_sbuild) {
 			"  |:: close2\r\n" <<
 			"  |:: bankAccount\r\n" <<
 			"  |:: lastsort\r\n" <<
-			" sbuild save <shop_id>\r\n" <<
-			" sbuild show <shop_id>\r\n" <<
+			" {red}sbuild{/red} {grn}save{/grn} <shop_id>\r\n" <<
+			" {red}sbuild{/red} {grn}show{/grn} <shop_id>\r\n" <<
 			"\r\n"
 			;
 		player->pager_end();
@@ -1187,7 +1196,7 @@ ACMD(do_mbuild) {
 
 	if(args.has_value()) {
 		mob_proto.push_back(mods::builder::new_npc());
-		mods::builder::report_success<shrd_ptr_player_t>(player,"Mobile created");
+		r_success(player,"Mobile created");
 		return;
 	}
 
@@ -1198,7 +1207,7 @@ ACMD(do_mbuild) {
 		auto i_value = mods::util::stoi(arg_vec[1]);
 
 		if(!i_value.has_value()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Please use a valid numeric value.");
+			r_error(player,"Please use a valid numeric value.");
 			return;
 		} else {
 			/**
@@ -1225,7 +1234,7 @@ ACMD(do_mbuild) {
 			std::size_t i = index;
 
 			if(i >= mob_proto.size()) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
+				r_error(player,"Out of bounds");
 				return;
 			}
 
@@ -1240,7 +1249,7 @@ ACMD(do_mbuild) {
 			IN_ROOM(obj) = player->room();
 			mods::globals::rooms::char_from_room(obj);
 			mods::globals::rooms::char_to_room(player->room(),obj);
-			mods::builder::report_success<shrd_ptr_player_t>(player,"Object created, look on the floor");
+			r_success(player,"Object created, look on the floor");
 		}
 
 		return;
@@ -1249,7 +1258,7 @@ ACMD(do_mbuild) {
 	args = mods::util::subcmd_args<5,args_t>(argument,"list");
 
 	if(args.has_value()) {
-		mods::builder::report_status<shrd_ptr_player_t>(player,"listing...");
+		r_status(player,"listing...");
 		unsigned mob_id = 0;
 		player->pager_start();
 
@@ -1270,21 +1279,21 @@ ACMD(do_mbuild) {
 		auto arg_vec = args.value();
 
 		if(arg_vec.size() < 2) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid number of arguments");
+			r_error(player,"Invalid number of arguments");
 			return;
 		}
 
 		auto index = mods::util::stoi(arg_vec[1]);
 
 		if(!index.has_value()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid index");
+			r_error(player,"Invalid index");
 			return;
 		}
 
 		std::size_t i = index.value();
 
 		if(i  >= mob_proto.size()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid index");
+			r_error(player,"Invalid index");
 			return;
 		}
 
@@ -1292,11 +1301,11 @@ ACMD(do_mbuild) {
 		auto return_pair = mods::builder::save_player(obj);
 
 		if(!return_pair.first) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,return_pair.second);
+			r_error(player,return_pair.second);
 			return;
 		}
 
-		mods::builder::report_success<shrd_ptr_player_t>(player,"Object saved.");
+		r_success(player,"Object saved.");
 		return;
 	}
 
@@ -1306,21 +1315,21 @@ ACMD(do_mbuild) {
 		auto arg_vec = args.value();
 
 		if(arg_vec.size() < 2) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid number of arguments");
+			r_error(player,"Invalid number of arguments");
 			return;
 		}
 
 		auto index = mods::util::stoi(arg_vec[1]);
 
 		if(!index.has_value()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid index");
+			r_error(player,"Invalid index");
 			return;
 		}
 
 		std::size_t i = index.value();
 
 		if(i >= mob_proto.size()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid index");
+			r_error(player,"Invalid index");
 			return;
 		}
 
@@ -1386,7 +1395,7 @@ ACMD(do_mbuild) {
 		auto arg_vec = args.value();
 
 		if(arg_vec.size() < 4) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid number of arguments");
+			r_error(player,"Invalid number of arguments");
 			return;
 		}
 
@@ -1395,7 +1404,7 @@ ACMD(do_mbuild) {
 				auto i_value = mods::util::stoi(arg_vec[3]);
 
 				if(!i_value.has_value()) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,"Please use a valid numeric value.");
+					r_error(player,"Please use a valid numeric value.");
 					return std::nullopt;
 				}
 
@@ -1448,19 +1457,19 @@ ACMD(do_mbuild) {
 
 			if(arg_vec[2].compare("virt") == 0) {
 				if(arg_vec.end() <= arg_vec.begin() + 3) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,"Please supply a virtual number");
+					r_error(player,"Please supply a virtual number");
 					return;
 				}
 				auto opt_vr_number = mods::util::stoi(arg_vec[3]);
 				obj->nr = opt_vr_number.value();
-				mods::builder::report_success<shrd_ptr_player_t>(player,"Saved");
+				r_success(player,"Saved");
 				return;
 			}
 
 
 			if(arg_vec[2].compare("sex") == 0) {
 				if(arg_vec.end() <= arg_vec.begin() + 3) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,"Please supply a flag");
+					r_error(player,"Please supply a flag");
 					return;
 				}
 
@@ -1476,13 +1485,13 @@ ACMD(do_mbuild) {
 				}
 
 				if(!found) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Unrecognized flag: ") + *flag);
+					r_error(player,std::string("Unrecognized flag: ") + *flag);
 				}
 			}
 
 			if(arg_vec[2].compare("action") == 0) {
 				if(arg_vec.end() <= arg_vec.begin() + 3) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,"Please supply action flags");
+					r_error(player,"Please supply action flags");
 					return;
 				}
 
@@ -1499,13 +1508,13 @@ ACMD(do_mbuild) {
 				}
 
 				if(!found) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Unrecognized flag: ") + *flag);
+					r_error(player,std::string("Unrecognized flag: ") + *flag);
 				}
 			}
 
 			if(arg_vec[2].compare("default_position") == 0) {
 				if(arg_vec.end() <= arg_vec.begin() + 3) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,"Please supply a flag");
+					r_error(player,"Please supply a flag");
 					return;
 				}
 
@@ -1521,7 +1530,7 @@ ACMD(do_mbuild) {
 				}
 
 				if(!found) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Unrecognized flag: ") + *flag);
+					r_error(player,std::string("Unrecognized flag: ") + *flag);
 				}
 			}
 		}
@@ -1869,12 +1878,12 @@ ACMD(do_obuild) {
 	auto args = mods::util::subcmd_args<4,args_t>(argument,"new");
 
 	if(args.has_value()) {
-		mods::builder::report_status<shrd_ptr_player_t>(player,"Creating new object");
+		r_status(player,"Creating new object");
 		obj_proto.push_back({});
 		if(player->is_executing_js()){
 			*player << "{index: " << obj_proto.size() - 1 << "}";
 		}
-		mods::builder::report_success<shrd_ptr_player_t>(player,"Object created");
+		r_success(player,"Object created");
 		return;
 	}
 
@@ -1885,7 +1894,7 @@ ACMD(do_obuild) {
 		auto arg_vec = args.value();
 
 		if(arg_vec.size() == 1) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Please supply an object id");
+			r_error(player,"Please supply an object id");
 			return;
 		}
 
@@ -1896,30 +1905,30 @@ ACMD(do_obuild) {
 			std::size_t i = index.value();
 
 			if(i >= obj_proto.size()) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
+				r_error(player,"Out of bounds");
 				return;
 			}
 
 			obj = &obj_proto[index.value()];
 		} else {
-			mods::builder::report_error<shrd_ptr_player_t>(player,std::string(args.value()[1]) + " is not a valid number");
+			r_error(player,std::string(args.value()[1]) + " is not a valid number");
 			return;
 		}
 
 		if(!obj) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Index not found.");
+			r_error(player,"Index not found.");
 			return;
 		}
 
-		mods::builder::report_status<shrd_ptr_player_t>(player,"Saving object");
+		r_status(player,"Saving object");
 		auto return_status = mods::builder::save_object(obj);
 
 		if(!return_status.first) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,return_status.second);
+			r_error(player,return_status.second);
 			return;
 		}
 
-		mods::builder::report_success<shrd_ptr_player_t>(player,"Object saved");
+		r_success(player,"Object saved");
 		return;
 	}
 
@@ -1931,14 +1940,14 @@ ACMD(do_obuild) {
 		struct obj_data* obj = nullptr;
 
 		if(!i_value.has_value()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Please use a valid numeric value");
+			r_error(player,"Please use a valid numeric value");
 			return;
 		} else {
 			auto index = i_value.value();
 			std::size_t i = i_value.value();
 
 			if(i >= obj_proto.size()) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
+				r_error(player,"Out of bounds");
 				return;
 			}
 
@@ -1946,7 +1955,7 @@ ACMD(do_obuild) {
 		}
 
 		if(arg_vec.size() < 3) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid number of arguments");
+			r_error(player,"Invalid number of arguments");
 			return;
 		}
 
@@ -1956,7 +1965,7 @@ ACMD(do_obuild) {
 			auto size = mods::util::stoi(arg_vec[3]);
 
 			if(!size.has_value()) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid size");
+				r_error(player,"Invalid size");
 				return;
 			}
 
@@ -1966,7 +1975,7 @@ ACMD(do_obuild) {
 				*head = (extra_descr_data*)calloc(1,sizeof(extra_descr_data));
 				(*head)->keyword = (*head)->description = strdup("<default>");
 				(*head)->next = nullptr;
-				mods::builder::report_status<shrd_ptr_player_t>(player,"Built node.");
+				r_status(player,"Built node.");
 			}
 
 			auto new_node = (extra_descr_data*)calloc(1,sizeof(extra_descr_data));
@@ -1981,13 +1990,13 @@ ACMD(do_obuild) {
 					new_node->keyword = new_node->description = strdup("<default>");
 					new_node->next = nullptr;
 					current->next = new_node;
-					mods::builder::report_status<shrd_ptr_player_t>(player,"Built node.");
+					r_status(player,"Built node.");
 				}
 
 				current = current->next;
 			}
 
-			mods::builder::report_status<shrd_ptr_player_t>(player,"Done.");
+			r_status(player,"Done.");
 			return;
 		}
 
@@ -1995,7 +2004,7 @@ ACMD(do_obuild) {
 			//obuild ex <object_id> set <index> <keyword> <description>
 			//       0    1          2   3         4         5
 			if(arg_vec.size() < 6) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Not enough arguments supplied");
+				r_error(player,"Not enough arguments supplied");
 				return;
 			}
 
@@ -2006,7 +2015,7 @@ ACMD(do_obuild) {
 				auto head = obj->ex_description;
 
 				if(!head) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,"ex_description index is out of bounds (no ex_descriptions exist)");
+					r_error(player,"ex_description index is out of bounds (no ex_descriptions exist)");
 					return;
 				}
 
@@ -2014,7 +2023,7 @@ ACMD(do_obuild) {
 
 				while(iterations++ < index.value()) {
 					if(!ex_desc) {
-						mods::builder::report_error<shrd_ptr_player_t>(player,"ex_description index out of bounds");
+						r_error(player,"ex_description index out of bounds");
 						return;
 					}
 
@@ -2024,11 +2033,11 @@ ACMD(do_obuild) {
 				ex_desc->keyword = strdup(arg_vec[4].c_str());
 				ex_desc->description = strdup(arg_vec[5].c_str());
 			} else {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid index supplied");
+				r_error(player,"Invalid index supplied");
 				return;
 			}
 
-			mods::builder::report_success<shrd_ptr_player_t>(player,"ex_description set");
+			r_success(player,"ex_description set");
 		}
 
 		if(arg_vec[2].compare("del") == 0 && arg_vec.size() == 4) {
@@ -2042,7 +2051,7 @@ ACMD(do_obuild) {
 
 				for(; iterations < index.value(); iterations++) {
 					if(!ex_desc) {
-						mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
+						r_error(player,"Out of bounds");
 						return;
 					}
 
@@ -2050,11 +2059,11 @@ ACMD(do_obuild) {
 				}
 
 				mods::util::linked_list_remove<extra_descr_data*>(ex_desc,obj->ex_description);
-				mods::builder::report_success<shrd_ptr_player_t>(player,"ex_description removed");
+				r_success(player,"ex_description removed");
 				return;
 			}
 
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid index");
+			r_error(player,"Invalid index");
 			return;
 		}
 	}
@@ -2066,14 +2075,14 @@ ACMD(do_obuild) {
 		auto i_value = mods::util::stoi(arg_vec[1]);
 
 		if(!i_value.has_value()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Please use a valid numeric value.");
+			r_error(player,"Please use a valid numeric value.");
 			return;
 		} else {
 			auto index = i_value.value();
 			std::size_t i = index;
 
 			if(i >= obj_proto.size()) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
+				r_error(player,"Out of bounds");
 				return;
 			}
 
@@ -2081,7 +2090,7 @@ ACMD(do_obuild) {
 			auto obj = &(*(object_list.end() -1));
 			obj->carried_by = obj->worn_by = nullptr;
 			obj_to_room(obj,IN_ROOM(player->cd()));
-			mods::builder::report_success<shrd_ptr_player_t>(player,"Object created, look on the floor");
+			r_success(player,"Object created, look on the floor");
 		}
 
 		return;
@@ -2090,7 +2099,7 @@ ACMD(do_obuild) {
 	args = mods::util::subcmd_args<5,args_t>(argument,"list");
 
 	if(args.has_value()) {
-		mods::builder::report_status<shrd_ptr_player_t>(player,"listing...");
+		r_status(player,"listing...");
 		unsigned object_id = 0;
 		if(!player->is_executing_js()){
 			player->pager_start();
@@ -2132,7 +2141,7 @@ ACMD(do_obuild) {
 				auto i_value = mods::util::stoi(arg_vec[3]);
 
 				if(!i_value.has_value()) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,"Please use a valid numeric value.");
+					r_error(player,"Please use a valid numeric value.");
 					return std::nullopt;
 				}
 
@@ -2148,18 +2157,18 @@ ACMD(do_obuild) {
 			std::size_t i = index.value();
 
 			if(i >= obj_proto.size()) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
+				r_error(player,"Out of bounds");
 				return;
 			}
 
 			obj = &obj_proto[index.value()];
 		} else {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"not a valid number");
+			r_error(player,"not a valid number");
 			return;
 		}
 
 		if(!obj) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Index not found.");
+			r_error(player,"Index not found.");
 			return;
 		}
 
@@ -2176,7 +2185,7 @@ ACMD(do_obuild) {
 		//TODO !mundane make these flag code fragments into a function
 		if(arg_vec[2].compare("extra_flags") == 0) {
 			if(arg_vec.end() <= arg_vec.begin() + 3) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Please supply one or more flags");
+				r_error(player,"Please supply one or more flags");
 				return;
 			}
 
@@ -2195,7 +2204,7 @@ ACMD(do_obuild) {
 				}
 
 				if(!found) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Unrecognized flag: ") + *flag);
+					r_error(player,std::string("Unrecognized flag: ") + *flag);
 				}
 			}
 
@@ -2203,7 +2212,7 @@ ACMD(do_obuild) {
 
 		if(arg_vec[2].compare("type_flags") == 0) {
 			if(arg_vec.end() <= arg_vec.begin() + 3) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Please supply a type flag");
+				r_error(player,"Please supply a type flag");
 				return;
 			}
 
@@ -2220,13 +2229,13 @@ ACMD(do_obuild) {
 			}
 
 			if(!found) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Unrecognized type flag: ") + *flag);
+				r_error(player,std::string("Unrecognized type flag: ") + *flag);
 			}
 		}
 
 		if(arg_vec[2].compare("wear_flags") == 0) {
 			if(arg_vec.end() <= arg_vec.begin() + 3) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Please supply wear flags");
+				r_error(player,"Please supply wear flags");
 				return;
 			}
 
@@ -2245,12 +2254,12 @@ ACMD(do_obuild) {
 				}
 
 				if(!found) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Unrecognized wear flag:") + *flag);
+					r_error(player,std::string("Unrecognized wear flag:") + *flag);
 				}
 			}
 		}
 
-		mods::builder::report_success<shrd_ptr_player_t>(player,"Object updated");
+		r_success(player,"Object updated");
 		return;
 	}
 
@@ -2264,7 +2273,7 @@ ACMD(do_obuild) {
 			auto slot = mods::util::stoi(arg_vec[3]);
 
 			if(!slot.has_value() || slot.value() > MAX_OBJ_AFFECT) {
-				mods::builder::report_error<shrd_ptr_player_t>(player," Invalid slot index");
+				r_error(player," Invalid slot index");
 				return;
 			}
 
@@ -2275,24 +2284,24 @@ ACMD(do_obuild) {
 				std::size_t i = index.value();
 
 				if(i >= obj_proto.size()) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,"Object index Out of bounds");
+					r_error(player,"Object index Out of bounds");
 					return;
 				}
 
 				obj = &obj_proto[index.value()];
 			} else {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"not a valid number");
+				r_error(player,"not a valid number");
 				return;
 			}
 
 			obj->affected[slot.value()].location = 0;
 			obj->affected[slot.value()].modifier = 0;
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Slot cleared");
+			r_error(player,"Slot cleared");
 			return;
 		}
 
 		if(arg_vec.size() < 6) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Not enough arguments. See: obuild help affected");
+			r_error(player,"Not enough arguments. See: obuild help affected");
 			return;
 		}
 
@@ -2304,18 +2313,18 @@ ACMD(do_obuild) {
 				std::size_t i = index.value();
 
 				if(i >= obj_proto.size()) {
-					mods::builder::report_error<shrd_ptr_player_t>(player," Out of bounds");
+					r_error(player," Out of bounds");
 					return;
 				}
 
 				obj = &obj_proto[index.value()];
 			} else {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"not a valid number");
+				r_error(player,"not a valid number");
 				return;
 			}
 
 			if(!obj) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Index not found.");
+				r_error(player,"Index not found.");
 				return;
 			}
 
@@ -2326,21 +2335,21 @@ ACMD(do_obuild) {
 			if(aff_index.has_value() &&
 					location.has_value() && modifier.has_value()) {
 				if(aff_index.value() >= MAX_OBJ_AFFECT) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,std::string("aff_index must be less than ") + std::to_string(MAX_OBJ_AFFECT));
+					r_error(player,std::string("aff_index must be less than ") + std::to_string(MAX_OBJ_AFFECT));
 					return;
 				}
 
 				obj->affected[aff_index.value()].location = location.value();
 				obj->affected[aff_index.value()].modifier = modifier.value();
-				mods::builder::report_success<shrd_ptr_player_t>(player,"Object updated");
+				r_success(player,"Object updated");
 				return;
 			} else {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"location and modifier are required");
+				r_error(player,"location and modifier are required");
 				return;
 			}
 		}
 
-		mods::builder::report_error<shrd_ptr_player_t>(player,"Unknown mode");
+		r_error(player,"Unknown mode");
 		return;
 	}
 
@@ -2351,7 +2360,7 @@ ACMD(do_obuild) {
 		auto arg_vec = args.value();
 
 		if(arg_vec.size() == 1) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Please supply an object id");
+			r_error(player,"Please supply an object id");
 			return;
 		}
 
@@ -2362,18 +2371,18 @@ ACMD(do_obuild) {
 			std::size_t i = index.value();
 
 			if(i >= obj_proto.size()) {
-				mods::builder::report_error<shrd_ptr_player_t>(player," Out of bounds");
+				r_error(player," Out of bounds");
 				return;
 			}
 
 			obj = &obj_proto[index.value()];
 		} else {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Not a valid number");
+			r_error(player,"Not a valid number");
 			return;
 		}
 
 		if(!obj) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Index not found.");
+			r_error(player,"Index not found.");
 			return;
 		}
 
@@ -2509,7 +2518,7 @@ ACMD(do_obuild) {
 				auto i_value = mods::util::stoi(arg_vec[3]);
 
 				if(!i_value.has_value()) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,"Please use a valid numeric value.");
+					r_error(player,"Please use a valid numeric value.");
 					return std::nullopt;
 				}
 
@@ -2532,7 +2541,7 @@ ACMD(do_obuild) {
 			std::size_t i = index.value();
 
 			if(i >= obj_proto.size()) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
+				r_error(player,"Out of bounds");
 				return;
 			}
 
@@ -2540,7 +2549,7 @@ ACMD(do_obuild) {
 		}
 
 		if(!obj) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid index");
+			r_error(player,"Invalid index");
 			return;
 		}
 
@@ -2548,7 +2557,7 @@ ACMD(do_obuild) {
 
 		if(arg_vec[2].compare("weapon_type") == 0) {
 			if(arg_vec.end() <= arg_vec.begin() + 3) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Please supply a flag");
+				r_error(player,"Please supply a flag");
 				return;
 			}
 
@@ -2564,10 +2573,10 @@ ACMD(do_obuild) {
 			}
 
 			if(!found) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Unrecognized flag: ") + *flag);
+				r_error(player,std::string("Unrecognized flag: ") + *flag);
 			}
 
-			mods::builder::report_success<shrd_ptr_player_t>(player,"Set weapon type");
+			r_success(player,"Set weapon type");
 			return;
 		}
 
@@ -2583,18 +2592,18 @@ ACMD(do_obuild) {
 
 		if(arg_vec[2].compare("affected") == 0) {
 			if(arg_vec.size() < 6) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Not enough arguments");
+				r_error(player,"Not enough arguments");
 				return;
 			}
 
 			auto index = mods::util::stoi(arg_vec[3]);
 
 			if(!index.has_value()) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid index");
+				r_error(player,"Invalid index");
 				return;
 			} else {
 				if(index.value() > MAX_OBJ_AFFECT) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,std::string(
+					r_error(player,std::string(
 								"index cannot be larger than ") + std::to_string(MAX_OBJ_AFFECT));
 					return;
 				}
@@ -2603,14 +2612,14 @@ ACMD(do_obuild) {
 			auto location = mods::util::stoi(arg_vec[4]);
 
 			if(!location.has_value()) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid location");
+				r_error(player,"Invalid location");
 				return;
 			}
 
 			auto modifier = mods::util::stoi(arg_vec[5]);
 
 			if(!modifier.has_value()) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid modifier");
+				r_error(player,"Invalid modifier");
 				return;
 			}
 
@@ -2618,7 +2627,7 @@ ACMD(do_obuild) {
 			obj->affected[index.value()].modifier = modifier.value();
 		}
 
-		mods::builder::report_success<shrd_ptr_player_t>(player,"Set attribute");
+		r_success(player,"Set attribute");
 	}
 
 	return;
@@ -2827,21 +2836,21 @@ ACMD(do_zbuild) {
 		auto arg_vec = args.value();
 
 		if(arg_vec.size() < 2) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Please provide a zone id");
+			r_error(player,"Please provide a zone id");
 			return;
 		}
 
 		auto zone_id = mods::util::stoi(arg_vec[1]);
 
 		if(!zone_id.has_value()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid zone id");
+			r_error(player,"Invalid zone id");
 			return;
 		}
 
 		std::size_t z = zone_id.value();
 
 		if(z >= zone_table.size()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
+			r_error(player,"Out of bounds");
 			return;
 		}
 
@@ -2864,17 +2873,17 @@ ACMD(do_zbuild) {
 				);
 
 		if(status.first) {
-			mods::builder::report_success<shrd_ptr_player_t>(player,"Saved zone");
+			r_success(player,"Saved zone");
 		} else {
-			mods::builder::report_error<shrd_ptr_player_t>(player,status.second);
+			r_error(player,status.second);
 		}
 
 		auto status2 = mods::builder::update_zone_commands(zone_id.value());
 
 		if(status2.first) {
-			mods::builder::report_success<shrd_ptr_player_t>(player,"Saved zone commands");
+			r_success(player,"Saved zone commands");
 		} else {
-			mods::builder::report_error<shrd_ptr_player_t>(player,status2.second);
+			r_error(player,status2.second);
 		}
 
 		return;
@@ -2887,12 +2896,12 @@ ACMD(do_zbuild) {
 		auto zone_id = mods::util::stoi(args[0]);
 
 		if(!zone_id.has_value() || static_cast<unsigned>(zone_id.value()) >= zone_table.size()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player," Invalid zone id");
+			r_error(player," Invalid zone id");
 			return;
 		}
 
 		if(args.size() < 6){
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Not enough arguments");
+			r_error(player,"Not enough arguments");
 			return;
 		}
 
@@ -2903,9 +2912,9 @@ ACMD(do_zbuild) {
 		auto room_vnum = args[3];
 		auto result = mods::builder::zone_place(zone_id.value(),zone_command,if_flag,mob_vnum,max_existing,room_vnum);
 		if(!result.first){
-			mods::builder::report_error<shrd_ptr_player_t>(player,result.second);
+			r_error(player,result.second);
 		}else{
-			mods::builder::report_success<shrd_ptr_player_t>(player,"Placed mob in zone successfully");
+			r_success(player,"Placed mob in zone successfully");
 		}
 		return;
 	}
@@ -2917,12 +2926,12 @@ ACMD(do_zbuild) {
 		auto zone_id = mods::util::stoi(args[0]);
 
 		if(!zone_id.has_value() || static_cast<unsigned>(zone_id.value()) >= zone_table.size()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player," Invalid zone id");
+			r_error(player," Invalid zone id");
 			return;
 		}
 
 		if(args.size() < 6){
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Not enough arguments");
+			r_error(player,"Not enough arguments");
 			return;
 		}
 
@@ -2932,7 +2941,7 @@ ACMD(do_zbuild) {
 		auto arg2 = args[4];
 		auto arg3 = args[5];
 		mods::builder::zone_place(zone_id.value(),zone_command,if_flag,arg1,arg2,arg3);
-		mods::builder::report_success<shrd_ptr_player_t>(player,"Placed object in zone");
+		r_success(player,"Placed object in zone");
 		return;
 	}
 
@@ -2944,12 +2953,12 @@ ACMD(do_zbuild) {
 			auto zone = mods::util::stoi(id);
 
 			if(zone.value_or(-1) == -1) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Unable to delete id");
+				r_error(player,"Unable to delete id");
 				return;
 			}
 
 			mods::builder::delete_zone(zone.value());
-			mods::builder::report_success<shrd_ptr_player_t>(player,"Deleted zone");
+			r_success(player,"Deleted zone");
 		}
 
 		return;
@@ -2962,7 +2971,7 @@ ACMD(do_zbuild) {
 		auto arglist = mods::util::arglist<std::vector<std::string>>(past);
 
 		if(arglist.size() != 5) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Argument list is invalid, please use the correct number of arguments");
+			r_error(player,"Argument list is invalid, please use the correct number of arguments");
 
 			for(auto vstr: arglist) {
 				*player << vstr << "\r\n";
@@ -2972,36 +2981,36 @@ ACMD(do_zbuild) {
 			auto arg_0 = mods::util::stoi(arglist[0]);
 
 			if(arg_0.value_or(-1) == -1) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid parameter 1");
+				r_error(player,"Invalid parameter 1");
 				return;
 			}
 
 			auto arg_1 = mods::util::stoi(arglist[1]);
 
 			if(arg_1.value_or(-1) == -1) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid parameter 2");
+				r_error(player,"Invalid parameter 2");
 				return;
 			}
 
 			auto arg_3 = mods::util::stoi(arglist[3]);
 
 			if(arg_3.value_or(-1) == -1) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid parameter 4");
+				r_error(player,"Invalid parameter 4");
 				return;
 			}
 
 			auto arg_4 = mods::util::stoi(arglist[4]);
 
 			if(arg_4.value_or(-1) == -1) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid parameter 5");
+				r_error(player,"Invalid parameter 5");
 				return;
 			}
 
 			if(!mods::builder::save_zone_to_db(arglist[2],arg_0.value(),arg_1.value(),arg_3.value(),arg_4.value())) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Unable to save new zone");
+				r_error(player,"Unable to save new zone");
 			} else {
 				parse_sql_zones();
-				mods::builder::report_success<shrd_ptr_player_t>(player,"New zone created");
+				r_success(player,"New zone created");
 			}
 		}
 
@@ -3010,7 +3019,7 @@ ACMD(do_zbuild) {
 
 	if(std::string(&command[0]).compare("list") == 0) {
 		if(!player->is_executing_js()){
-			mods::builder::report_status<shrd_ptr_player_t>(player,"listing...");
+			r_status(player,"listing...");
 		}
 		auto t = mods::pq::transaction(*mods::globals::pq_con);
 		std::string check_sql = "SELECT id,zone_start,zone_end,zone_name,lifespan,reset_mode FROM zone";
@@ -3070,21 +3079,21 @@ ACMD(do_zbuild) {
 		//place-list <zone_id>
 		// 0            1
 		if(arg_vec.size() < 2) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid number of arguments");
+			r_error(player,"Invalid number of arguments");
 			return;
 		}
 
 		auto index = mods::util::stoi(arg_vec[1]);
 
 		if(!index.has_value()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid index");
+			r_error(player,"Invalid index");
 			return;
 		}
 
 		std::size_t i = index.value();
 
 		if(i >= zone_table.size()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
+			r_error(player,"Out of bounds");
 			return;
 		}
 
@@ -3139,7 +3148,7 @@ ACMD(do_zbuild) {
 		auto arg_vec = args.value();
 
 		if(arg_vec.size() < 3) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Not enough arguments");
+			r_error(player,"Not enough arguments");
 			return;
 		}
 
@@ -3148,21 +3157,21 @@ ACMD(do_zbuild) {
 		auto index = mods::util::stoi(arg_vec[1]);
 
 		if(!index.has_value()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid index");
+			r_error(player,"Invalid index");
 			return;
 		}
 
 		std::size_t i = index.value();
 
 		if(i >= zone_table.size()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Out of bounds");
+			r_error(player,"Out of bounds");
 			return;
 		}
 
 		auto command_index = mods::util::stoi(arg_vec[2]);
 
 		if(!command_index.has_value()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid command index");
+			r_error(player,"Invalid command index");
 			return;
 		}
 
@@ -3170,14 +3179,14 @@ ACMD(do_zbuild) {
 		std::size_t c = command_index.value();
 
 		if(c >= command_vec.size()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Command index out of bounds");
+			r_error(player,"Command index out of bounds");
 			return;
 		}
 
 		zone_table[index.value()].cmd.erase(
 				zone_table[index.value()].cmd.begin() + command_index.value()
 				);
-		mods::builder::report_status<shrd_ptr_player_t>(player,"Index removed");
+		r_status(player,"Index removed");
 		return;
 	}
 };
@@ -3194,6 +3203,15 @@ ACMD(do_rbuild) {
 			"  |____[example]\r\n" <<
 			"  |:: rbuild help\r\n" <<
 			"  |:: (this help menu will show up)\r\n" <<
+
+			" rbuild <list> {yel}[page]\r\n" <<
+			"  |--> list " << std::to_string(mods::builder::RNUMLIST_MAX_PER_CALL) << " rooms per page. The page argument is zero-indexed\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: rbuild list\r\n" << 
+			"  |:: (list the first " << std::to_string(mods::builder::RNUMLIST_MAX_PER_CALL) << " rooms)\r\n" <<
+			"  |:: rbuild list 2\r\n" << 
+			"  |:: (list the third page)\r\n" <<
+
 			" rbuild <set> <rnum> <number>\r\n" <<
 			"  |--> Set the real room number of the current room\r\n" <<
 			"  |____[example]\r\n" <<
@@ -3210,43 +3228,43 @@ ACMD(do_rbuild) {
 			"  |____[example]\r\n" <<
 			"  |:: rbuild save\r\n"<<
 
-			" rbuild <extra_desc> <delete> <N>\n" <<  /** TODO: needs impl */
-			"  |--> deletes the extra_desc number N with this room\r\n" << 
+			" rbuild ed <delete> <N>\n" <<  /** TODO: needs impl */
+			"  |--> deletes the ed number N with this room\r\n" << 
 			"  |____[example]\r\n" <<
-			"  |:: rbuild extra_desc delete 3\r\n" <<
+			"  |:: rbuild ed delete 3\r\n" <<
 
-			" rbuild <extra_desc> <list>\r\n" << 	/** TODO needs impl */
-			"  |--> lists the current extra_desc structures currently associated with this room\r\n" << 
+			" rbuild ed <list>\r\n" << 	/** TODO needs impl */
+			"  |--> lists the current ed structures currently associated with this room\r\n" << 
 			"  |____[example]\r\n" <<
-			"  |:: rbuild extra_desc list\r\n" <<
+			"  |:: rbuild ed list\r\n" <<
 			  
 
-			" rbuild <extra_desc> <save-all>\r\n" << /** TODO: needs impl */
-			"  |--> saves all extra_desc entries\r\n" << 
+			" rbuild ed <save-all>\r\n" << /** TODO: needs impl */
+			"  |--> saves all ed entries\r\n" << 
 			"  |____[example]\r\n" <<
 
 
-			" rbuild <extra_desc> <show> <N>\r\n" <<  /** TODO: needs impl */
-			"  |--> lists the current extra_desc structures currently associated with this room\r\n" << 
+			" rbuild ed <show> <N>\r\n" <<  /** TODO: needs impl */
+			"  |--> lists the current ed structures currently associated with this room\r\n" << 
 			"  |____[example]\r\n" <<
 
 
-			" rbuild <extra_desc> <new>\r\n" <<  /** TODO: needs impl */
-			"  |--> creates an extra_desc for this room\r\n" << 
+			" rbuild ed <new>\r\n" <<  /** TODO: needs impl */
+			"  |--> creates an ed for this room\r\n" << 
 			"  |____[example]\r\n" <<
-			"  |:: rbuild extra_desc new\r\n" <<
+			"  |:: rbuild ed new\r\n" <<
 
 
-			" rbuild <extra_desc> <N> <keyword> <value>\r\n" <<  /** TODO: needs impl */
+			" rbuild ed <N> <keyword> <value>\r\n" <<  /** TODO: needs impl */
 			"  |--> sets the Nth keyword to <value>\r\n" << 
 			"  |____[example]\r\n" <<
-			"  |:: rbuild extra_desc 3 keyword \"sign gold wall\"\r\n" <<
+			"  |:: rbuild ed 3 keyword \"sign gold wall\"\r\n" <<
 
 
-			" rbuild <extra_desc> <N> <description> <value>\r\n" <<  /** TODO: needs impl */
+			" rbuild ed <N> <description> <value>\r\n" <<  /** TODO: needs impl */
 			"  |--> sets the Nth description to <value>\r\n" << 
 			"  |____[example]\r\n" <<
-			"  |:: rbuild extra_desc 3 description \"A very long passage about newbie rules, etc, etc, ...\"\r\n" <<
+			"  |:: rbuild ed 3 description \"A very long passage about newbie rules, etc, etc, ...\"\r\n" <<
 
 
 			" rbuild <create> <direction>\r\n" <<
@@ -3337,7 +3355,7 @@ ACMD(do_rbuild) {
 
 	if(std::string(&command[0]).compare("create") == 0 && IS_DIRECTION(&direction[0])) {
 		mods::builder::new_room(ch,mods::globals::dir_int(direction[0]));
-		mods::builder::report_error<shrd_ptr_player_t>(player,"Room created");
+		r_error(player,"Room created");
 		return;
 	}
 
@@ -3352,12 +3370,12 @@ ACMD(do_rbuild) {
 		auto number = mods::util::stoi(set);
 
 		if(number.value_or(-1) == -1) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid number");
+			r_error(player,"Invalid number");
 			return;
 		}
 
 		world[IN_ROOM(ch)].number = number.value();
-		mods::builder::report_success<shrd_ptr_player_t>(player,std::string("real room number set to ") + std::to_string(number.value()));
+		r_success(player,std::string("real room number set to ") + std::to_string(number.value()));
 		return;
 	}
 
@@ -3366,9 +3384,9 @@ ACMD(do_rbuild) {
 		title = title.substr(title.find("title ") + 6);
 
 		if(mods::builder::title(IN_ROOM(ch),title)) {
-			mods::builder::report_success<shrd_ptr_player_t>(player,"Title changed");
+			r_success(player,"Title changed");
 		} else {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Error");
+			r_error(player,"Error");
 		}
 
 		return;
@@ -3379,42 +3397,40 @@ ACMD(do_rbuild) {
 		description = description.substr(description.find("description ") + 12);
 
 		if(mods::builder::description(IN_ROOM(ch),description + "\r\n")) {
-			mods::builder::report_success<shrd_ptr_player_t>(player,"Description changed");
+			r_success(player,"Description changed");
 		} else {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Error");
+			r_error(player,"Error");
 		}
 
 		return;
 	}
 
-			//" rbuild <extra_desc> <list>\r\n" << 	/** TODO needs impl */
-			//" rbuild <extra_desc> <save-all>\r\n" << /** TODO: needs impl */
-			//" rbuild <extra_desc> <show> <N>\r\n" <<  /** TODO: needs impl */
-			//" rbuild <extra_desc> <N> <keyword> <value>\r\n" <<  /** TODO: needs impl */
-			//" rbuild <extra_desc> <N> <description> <value>\r\n" <<  /** TODO: needs impl */
+			//" rbuild ed <list>\r\n" << 	/** TODO needs impl */
+			//" rbuild ed <save-all>\r\n" << /** TODO: needs impl */
+			//" rbuild ed <show> <N>\r\n" <<  /** TODO: needs impl */
+			//" rbuild ed <N> <keyword> <value>\r\n" <<  /** TODO: needs impl */
+			//" rbuild ed <N> <description> <value>\r\n" <<  /** TODO: needs impl */
 			//
 
 	/** HOw positional parameters are parsed: */
-	/* On the command: 
-	 *
-		>	rbuild extra_desc foo bar 1 
-		vec_args[0] == 'extra_desc'
+	/* On the command: rbuild ed foo bar 1 
+		vec_args[0] == 'ed'
 		vec_args[1] == 'foo'
 		vec_args[2] == 'bar'
 		vec_args[3] == '1'
 	*/
 
 	/**
-	 *  Command line: rbuild extra_desc [...] 
+	 *  Command line: rbuild ed [...] 
 	 */
-	if(std::string(&command[0]).compare("extra_desc") == 0) {
+	if(std::string(&command[0]).compare("ed") == 0) {
 		/**
-		 *  Command line: rbuild extra_desc new [N]
+		 *  Command line: rbuild ed new [N]
 		 * ------------------------------------------
 		 *  the N is for optionally how many new ones to create
 		 */
 		if(vec_args.size() >= 2 && vec_args[1].compare("new") == 0){
-			// rbuild <extra_desc> <new>\r\n" <<  /** TODO: needs impl */
+			// rbuild ed <new>\r\n" <<  /** TODO: needs impl */
 			/** TODO: add mutex lock so that other builders cant lock this room */
 			
 			auto size_before = world[IN_ROOM(ch)].ex_descriptions().size();
@@ -3422,18 +3438,18 @@ ACMD(do_rbuild) {
 			auto size_after = world[IN_ROOM(ch)].ex_descriptions().size();
 			std::cerr << "before: " << size_before << " after: " << size_after << "\n";
 			if(size_after > size_before){
-				mods::builder::report_success<shrd_ptr_player_t>(player,"Room extra_desc saved");
+				r_success(player,"Room ed saved");
 				return;
-			}else { mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Error creating extra_desc: ")); }
+			}else { r_error(player,std::string("Error creating ed: ")); }
 			return;
 		}
 		/**
-		 *  Command line: rbuild extra_desc list [N]
+		 *  Command line: rbuild ed list [N]
 		 * --------------------------------------------------
 		 *  the N is for which page to list. 25 to a page
 		 */
 		if(vec_args.size() >= 3 && vec_args[1].compare("list") == 0){
-			mods::builder::report_status<shrd_ptr_player_t>(player,"listing...");
+			r_status(player,"listing...");
 			unsigned ex_id = 0;
 			player->pager_start();
 
@@ -3447,24 +3463,24 @@ ACMD(do_rbuild) {
 			return;
 		}
 		if(vec_args.size() >= 3 && vec_args[1].compare("delete") == 0){
-			/** Accepts: rbuild extra_desc delete N */
-			// rbuild <extra_desc> <delete> <N>\n" <<  /** TODO: needs impl */
+			/** Accepts: rbuild ed delete N */
+			// rbuild ed <delete> <N>\n" <<  /** TODO: needs impl */
 		/**
-		 *  Command line: rbuild extra_desc delte N
+		 *  Command line: rbuild ed delte N
 		 * --------------------------------------------------
 		 *  where N is the index you want to delete. accepts csv (TODO)
 		 */
 			int32_t target = mods::util::stoi<int>(vec_args[2]);
 			int32_t i = target;
 			if(i < 0){
-				mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Value must be greater than zero"));
+				r_error(player,std::string("Value must be greater than zero"));
 				return;
 			}
 			else{
 				auto temp = world[IN_ROOM(ch)].ex_descriptions();
 				auto size_temp = temp.size();
 				if(temp.size()){
-					mods::builder::report_error<shrd_ptr_player_t>(player,std::string(
+					r_error(player,std::string(
 								"Nothing to delete"));
 					return;
 				}
@@ -3479,21 +3495,21 @@ ACMD(do_rbuild) {
 				}
 				std::string before = std::string("Before: [") + std::to_string(size_temp) + "] items.";
 				std::string items = std::string("Now: [") + std::to_string(world[IN_ROOM(ch)].ex_descriptions().size() ) + "] items."; 
-				mods::builder::report_success<shrd_ptr_player_t>(player,before + items);
+				r_success(player,before + items);
 			}
 		}
 
 
-	}/** All code that handles extra_desc should be in above statement */
+	}/** All code that handles ed should be in above statement */
 
 
 	if(std::string(&command[0]).compare("save") == 0) {
 		auto ret = mods::builder::save_to_db(IN_ROOM(ch));
 
 		if(ret != 0) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Error saving room: ") + std::to_string(ret));
+			r_error(player,std::string("Error saving room: ") + std::to_string(ret));
 		} else {
-			mods::builder::report_success<shrd_ptr_player_t>(player,"Room saved");
+			r_success(player,"Room saved");
 		}
 
 		return;
@@ -3509,7 +3525,7 @@ ACMD(do_rbuild) {
 
 		/* command = bind, direction = neswud, room_id = int */
 		if(!IS_DIRECTION(&direction[0])) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid direction");
+			r_error(player,"Invalid direction");
 			return;
 		}
 
@@ -3517,14 +3533,14 @@ ACMD(do_rbuild) {
 		std::size_t r = room.value();
 
 		if(room.value_or(-1) == -1 || r > mods::globals::room_list.size()) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid room number");
+			r_error(player,"Invalid room number");
 			return;
 		}
 
 		if(mods::builder::create_direction(IN_ROOM(ch),mods::globals::dir_int(direction[0]),room.value())) {
-			mods::builder::report_success<shrd_ptr_player_t>(player,"Direction created");
+			r_success(player,"Direction created");
 		} else {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Error");
+			r_error(player,"Error");
 		}
 
 		return;
@@ -3539,14 +3555,14 @@ ACMD(do_rbuild) {
 		std::string str_item = &item[0];
 
 		if(!IS_DIRECTION(&direction[0])) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid direction");
+			r_error(player,"Invalid direction");
 			return;
 		}
 
 		if(!mods::builder::destroy_direction(IN_ROOM(ch),mods::globals::dir_int(direction[0]))) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Unable to destroy direction");
+			r_error(player,"Unable to destroy direction");
 		} else {
-			mods::builder::report_success<shrd_ptr_player_t>(player,"Direction destroyed");
+			r_success(player,"Direction destroyed");
 		}
 
 		return;
@@ -3566,9 +3582,9 @@ ACMD(do_rbuild) {
 					std::nullopt,std::nullopt,std::nullopt,std::nullopt).value_or("success");
 
 			if(ret.compare("success") == 0) {
-				mods::builder::report_success<shrd_ptr_player_t>(player,"General Description changed");
+				r_success(player,"General Description changed");
 			} else {
-				mods::builder::report_error<shrd_ptr_player_t>(player,ret);
+				r_error(player,ret);
 			}
 
 			return;
@@ -3580,9 +3596,9 @@ ACMD(do_rbuild) {
 					description,std::nullopt,std::nullopt,std::nullopt).value_or("success");
 
 			if(ret.compare("success") == 0) {
-				mods::builder::report_success<shrd_ptr_player_t>(player,"Keyword changed");
+				r_success(player,"Keyword changed");
 			} else {
-				mods::builder::report_error<shrd_ptr_player_t>(player,ret);
+				r_error(player,ret);
 			}
 
 			return;
@@ -3593,7 +3609,7 @@ ACMD(do_rbuild) {
 			auto exit_info = mods::util::stoi(description);
 
 			if(!exit_info.has_value()) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid exit info. Must be 0-3");
+				r_error(player,"Invalid exit info. Must be 0-3");
 				return;
 			}
 
@@ -3601,9 +3617,9 @@ ACMD(do_rbuild) {
 					std::nullopt,exit_info.value(),std::nullopt,std::nullopt).value_or("success");
 
 			if(ret.compare("success") == 0) {
-				mods::builder::report_success<shrd_ptr_player_t>(player,"exit_info changed to: EX_ISDOOR");
+				r_success(player,"exit_info changed to: EX_ISDOOR");
 			} else {
-				mods::builder::report_error<shrd_ptr_player_t>(player,ret);
+				r_error(player,ret);
 			}
 
 			return;
@@ -3614,7 +3630,7 @@ ACMD(do_rbuild) {
 			auto key = mods::util::stoi(description);
 
 			if(key.value_or(-1) == -1) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid key");
+				r_error(player,"Invalid key");
 				return;
 			}
 
@@ -3622,9 +3638,9 @@ ACMD(do_rbuild) {
 					std::nullopt,std::nullopt,key.value(),std::nullopt).value_or("success");
 
 			if(ret.compare("success") == 0) {
-				mods::builder::report_success<shrd_ptr_player_t>(player,"key changed");
+				r_success(player,"key changed");
 			} else {
-				mods::builder::report_error<shrd_ptr_player_t>(player,ret);
+				r_error(player,ret);
 			}
 
 			return;
@@ -3635,7 +3651,7 @@ ACMD(do_rbuild) {
 			auto to_room = mods::util::stoi(description);
 
 			if(to_room.value_or(-1) == -1) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid room number");
+				r_error(player,"Invalid room number");
 				return;
 			}
 
@@ -3643,9 +3659,9 @@ ACMD(do_rbuild) {
 					std::nullopt,std::nullopt,std::nullopt,to_room.value()).value_or("success");
 
 			if(ret.compare("success") == 0) {
-				mods::builder::report_success<shrd_ptr_player_t>(player,"to_room changed");
+				r_success(player,"to_room changed");
 			} else {
-				mods::builder::report_error<shrd_ptr_player_t>(player,ret);
+				r_error(player,ret);
 			}
 
 			return;
@@ -3656,7 +3672,7 @@ ACMD(do_rbuild) {
 
 	if(args.has_value()) {
 		for(auto room_id : player->cd()->builder_data->room_pavements.rooms) {
-			mods::builder::report_status<shrd_ptr_player_t>(player,std::to_string(room_id));
+			r_status(player,std::to_string(room_id));
 		}
 
 		return;
@@ -3671,11 +3687,11 @@ ACMD(do_rbuild) {
 			std::size_t rid = room_id;
 
 			if(rid >= world.size()) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Cannot save room id#: ") + std::to_string(room_id));
+				r_error(player,std::string("Cannot save room id#: ") + std::to_string(room_id));
 				continue;
 			} else {
 				if(mods::builder::save_to_db(room_id) < 0) {
-					mods::builder::report_error<shrd_ptr_player_t>(player,std::string("Unable to save room id#: ") + std::to_string(world[room_id].number));
+					r_error(player,std::string("Unable to save room id#: ") + std::to_string(world[room_id].number));
 					break;
 				} else {
 					saved_room_counter++;
@@ -3683,7 +3699,7 @@ ACMD(do_rbuild) {
 			}
 		}
 
-		mods::builder::report_success<shrd_ptr_player_t>(player,std::string("Saved ") + std::to_string(saved_room_counter) + " rooms");
+		r_success(player,std::string("Saved ") + std::to_string(saved_room_counter) + " rooms");
 		return;
 	}
 
@@ -3695,13 +3711,13 @@ ACMD(do_rbuild) {
 		//pave on|off <starting_room_number> <zone_id>
 		// 0    1        2                     3
 		if(arg_vec.size() < 2) {
-			mods::builder::report_error<shrd_ptr_player_t>(player,"Please specify on or off as the second argument");
+			r_error(player,"Please specify on or off as the second argument");
 			return;
 		}
 
 		if(arg_vec[1].compare("on") == 0) {
 			if(arg_vec.size() < 4) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Please specify a starting room number");
+				r_error(player,"Please specify a starting room number");
 				return;
 			}
 
@@ -3709,17 +3725,17 @@ ACMD(do_rbuild) {
 			auto zone_id = mods::util::stoi(arg_vec[3]);
 
 			if(!zone_id.has_value()) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid zone id");
+				r_error(player,"Invalid zone id");
 				return;
 			}
 
 			if(real_zone(zone_id.value()) == NOWHERE) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Couldn't find a zone id with the virtual number you specified.");
+				r_error(player,"Couldn't find a zone id with the virtual number you specified.");
 				return;
 			}
 
 			if(!starting_room_number.has_value()) {
-				mods::builder::report_error<shrd_ptr_player_t>(player,"Invalid starting room number");
+				r_error(player,"Invalid starting room number");
 				return;
 			} else {
 				player->cd()->builder_data->room_pave_mode = true;
@@ -3727,14 +3743,14 @@ ACMD(do_rbuild) {
 				player->cd()->builder_data->room_pavements.zone_id = zone_id.value();
 			}
 
-			mods::builder::report_status<shrd_ptr_player_t>(player,"Starting pave mode. You can start moving around now. To stop, type 'rbuild pave off'");
+			r_status(player,"Starting pave mode. You can start moving around now. To stop, type 'rbuild pave off'");
 			return;
 		}
 
 		if(arg_vec[1].compare("off") == 0) {
 			player->cd()->builder_data->room_pave_mode = false;
-			mods::builder::report_status<shrd_ptr_player_t>(player,"Stopped pave mode.");
-			mods::builder::report_status<shrd_ptr_player_t>(player,"Transaction ID: 0");
+			r_status(player,"Stopped pave mode.");
+			r_status(player,"Transaction ID: 0");
 			return;
 		}
 

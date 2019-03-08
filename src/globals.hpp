@@ -29,7 +29,7 @@
 #include <unordered_map>
 
 //#define MENTOC_PREAMBLE() auto player = mods::globals::socket_map[ch->desc->descriptor]; player->set_cd(ch);
-#define MENTOC_PREAMBLE() auto player = mods::globals::socket_map[ch->desc->descriptor]; player->set_cd(ch);
+#define MENTOC_PREAMBLE() auto player = IS_NPC(ch) ? std::make_shared<mods::player>(ch) : mods::globals::socket_map[ch->desc->descriptor]; player->set_cd(ch);
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
 #define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \
 strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(a,"down") == 0)
@@ -39,15 +39,15 @@ strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
 #define d(a) std::cerr << "[debug]: " << a << "\n" << std::flush;
 
-extern void clear_char(struct char_data*);
-extern struct char_data* character_list;
+extern void clear_char(char_data*);
+extern char_data* character_list;
 extern std::deque<char_data> mob_list;
 #define CREATE_CHAR(ch) \
-	CREATE(ch,struct char_data,1);\
+	CREATE(ch,char_data,1);\
 	clear_char(ch);\
 	ch->player_specials = std::make_unique<player_special_data>();\
 	(ch)->player_specials->saved.pref = 0;\
-	CREATE((ch)->affected, struct affected_type, 1);\
+	CREATE((ch)->affected, affected_type, 1);\
 	memset(&((ch)->affected),0,sizeof((ch)->affected));\
 	(ch)->next = character_list;\
 	character_list = ch;
@@ -62,7 +62,7 @@ namespace mods {
 		using socket_map_t = std::map<int,player_ptr_t>;
 		//using builder_data_map_t = std::map<player_ptr_t,std::shared_ptr<builder_data_t>>;
 		enum boot_type_t { BOOT_DB,BOOT_HELL };
-		bool acl_allowed(struct char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd);
+		bool acl_allowed(char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd);
 		void init(int,char**);
 		void pre_game_loop();
 		void load_player_map();
@@ -87,7 +87,7 @@ namespace mods {
 		extern std::unordered_map<std::string,std::string> ram_db;
 		//extern builder_data_map_t builder_data;
 		void init_player(char_data*);
-		std::unique_ptr<ai_state>& state_fetch(struct char_data* ch);
+		std::unique_ptr<ai_state>& state_fetch(char_data* ch);
 		int mobile_activity(char_data*);
 		char_data* read_mobile(const mob_vnum &,const int & type);
 		void register_object(obj_data&);
@@ -95,21 +95,21 @@ namespace mods {
 		void register_room(const room_rnum&);
 		void shutdown();
 		void refresh_player_states();
-		void room_event(struct char_data*,mods::ai_state::event_type_t);
+		void room_event(char_data*,mods::ai_state::event_type_t);
 		void room_event(room_vnum,mods::ai_state::event_type_t);
 		void post_boot_db();
-		struct char_data* create_char();
+		char_data* create_char();
 		int file_to_lmdb(const std::string& file,const std::string& key);
 		int opposite_dir(int);
     	std::string color_eval(std::string final_buffer);
 		std::string replace_all(std::string str, const std::string& from, const std::string& to);
 		const char* say_random(const mods::ai_state::event_type_t&);
 		bool command_interpreter(std::shared_ptr<mods::player>,const std::string& argument);
-		void post_command_interpreter(struct char_data *ch, char* argument);
+		void post_command_interpreter(char_data *ch, char* argument);
 		int dir_int(char);
 		namespace rooms {
-			void char_from_room(struct char_data*);
-			void char_to_room(const room_rnum &,struct char_data*);
+			void char_from_room(char_data*);
+			void char_to_room(const room_rnum &,char_data*);
 		};
 		/*
 		namespace players {

@@ -114,51 +114,113 @@ char_data::char_data(char_data* o){
 		//desc.reset();
 		player_specials = std::make_shared<player_special_data>();
 	}
+	
+	std::string_view room_data::overhead(const lense_type_t& lense){
+		switch(lense){
+			case NORMAL_SIGHT:
+				if(std::find(m_textures.begin(),m_textures.end(),texture_type_t::GRASS) != m_textures.end()){
+					return "{grn}==={/grn}";
+				}
+				if(std::find(m_textures.begin(),m_textures.end(),texture_type_t::CEMENT) != m_textures.end()){
+					return "{grey}[ ]{/grey}";
+				}
+				if(std::find(m_textures.begin(),m_textures.end(),texture_type_t::OUTSIDE) != m_textures.end()){
+					return "{blu}[ ]{/blu}";
+				}
+				if(std::find(m_textures.begin(),m_textures.end(),texture_type_t::INSIDE) != m_textures.end()){
+					return "{wht}[ ]{/wht}";
+				}
+				return "[ ]";
+				break;
+
+			case THERMAL_GOGGLES:
+				if(std::find(m_textures.begin(),m_textures.end(),texture_type_t::GRASS) != m_textures.end()){
+					return "{blu}...{/blu}";
+				}
+				if(std::find(m_textures.begin(),m_textures.end(),texture_type_t::CEMENT) != m_textures.end()){
+					return "{blu}...{/blu}";
+				}
+				if(std::find(m_textures.begin(),m_textures.end(),texture_type_t::OUTSIDE) != m_textures.end()){
+					return "{red}...{/red}";
+				}
+				/** TODO: if we have mobs in this room, mark it with a red indicator to simulate heat signatures */
+				break;
+
+			case NIGHT_VISION_GOGGLES:
+				break;
+
+
+			case AERIAL_DRONE:
+				break;
+
+			case AERIAL_DRONE_THERMAL:
+				break;
+
+			case AERIAL_DRONE_NIGHT_VISION:
+				break;
+
+
+			case RC_DRONE:
+				break;
+
+			case RC_DRONE_THERMAL:
+				break;
+
+			case RC_DRONE_NIGHT_VISION:
+				break;
+
+			default:
+				return "[ ]";
+		}
+	}
+	const std::vector<room_data::texture_type_t>& room_data::textures() const { 
+		return m_textures;
+	}
 namespace mods{
-		size_t descriptor_data::queue_output(const std::string &s){
-			switch(m_queue_behaviour){
-				case queue_behaviour_enum_t::NORMAL:
-					output += s;
-					has_output = true;
-					return s.length();
-					break;
-				case queue_behaviour_enum_t::IGNORE_ALL:
-					has_output = false;
-					return 0;
-				case queue_behaviour_enum_t::REDIRECT_TO_PLAYER:
-				case queue_behaviour_enum_t::REDIRECT_TO_FILESYSTEM:
-				case queue_behaviour_enum_t::REDIRECT_TO_DB:
-				default:
-					return 0;
-			}
+	size_t descriptor_data::queue_output(const std::string &s){
+		switch(m_queue_behaviour){
+			case queue_behaviour_enum_t::NORMAL:
+				output += s;
+				has_output = true;
+				return s.length();
+				break;
+			case queue_behaviour_enum_t::IGNORE_ALL:
+				has_output = false;
+				return 0;
+			case queue_behaviour_enum_t::REDIRECT_TO_PLAYER:
+			case queue_behaviour_enum_t::REDIRECT_TO_FILESYSTEM:
+			case queue_behaviour_enum_t::REDIRECT_TO_DB:
+			default:
+				return 0;
 		}
-		size_t mods::descriptor_data::flush_output(){
+	}
+	size_t mods::descriptor_data::flush_output(){
 		std::size_t result; 
-			switch(m_queue_behaviour){
-				case queue_behaviour_enum_t::NORMAL:
-					if(output.size() == 0){ 
-						has_output = false; 
-						return 0; 
-					}
+		switch(m_queue_behaviour){
+			case queue_behaviour_enum_t::NORMAL:
+				if(output.size() == 0){ 
+					has_output = false; 
+					return 0; 
+				}
 
-					result = write_to_descriptor(descriptor,output.c_str());
+				result = write_to_descriptor(descriptor,output.c_str());
 
-					/* Handle snooping: prepend "% " and send to snooper. */
-					if(snoop_by) {
-						write_to_output(*snoop_by, "%% %*s%%%%", static_cast<int>(result), output.c_str());
-					}
-					output.clear();
-					has_output = false;
-					return (result);
-					break;
-				case queue_behaviour_enum_t::IGNORE_ALL:
-					has_output = false;
-					return 0;
-				case queue_behaviour_enum_t::REDIRECT_TO_PLAYER:
-				case queue_behaviour_enum_t::REDIRECT_TO_FILESYSTEM:
-				case queue_behaviour_enum_t::REDIRECT_TO_DB:
-				default:
-					return 0;
-			}
+				/* Handle snooping: prepend "% " and send to snooper. */
+				if(snoop_by) {
+					write_to_output(*snoop_by, "%% %*s%%%%", static_cast<int>(result), output.c_str());
+				}
+				output.clear();
+				has_output = false;
+				return (result);
+				break;
+			case queue_behaviour_enum_t::IGNORE_ALL:
+				has_output = false;
+				return 0;
+			case queue_behaviour_enum_t::REDIRECT_TO_PLAYER:
+			case queue_behaviour_enum_t::REDIRECT_TO_FILESYSTEM:
+			case queue_behaviour_enum_t::REDIRECT_TO_DB:
+			default:
+				return 0;
 		}
+	}
 };

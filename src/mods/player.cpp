@@ -28,6 +28,8 @@ namespace mods {
 		final_buffer = mods::globals::replace_all(final_buffer,"{red}","\033[31m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{blu}","\033[34m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{wht}","\033[37m");
+		final_buffer = mods::globals::replace_all(final_buffer,"{grey}","\033[90m");
+		final_buffer = mods::globals::replace_all(final_buffer,"{/grey}","\033[0m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{/grn}","\033[0m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{/wht}","\033[0m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{/red}","\033[0m");
@@ -350,6 +352,9 @@ namespace mods {
 		return cts >= m_weapon_cooldown[set];
 	}
 	bool player::carrying_ammo_of_type(const weapon_type_t& type) {
+		if(m_char_data->carrying == 0){
+			return false;
+		}
 		for(auto item = m_char_data->carrying; item->next; item = item->next) {
 			if(std::string(item->name).find("[ammo]") != std::string::npos
 			        &&

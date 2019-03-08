@@ -38,6 +38,7 @@ namespace mods::builder {
 	constexpr static int ROOM_NUMBER_OUT_OF_RANGE = -1;
 	constexpr static int ROOM_NAME_EMPTY = -2;
 	constexpr static int ROOM_DESC_EMPTY = -3;
+	constexpr static unsigned int RNUMLIST_MAX_PER_CALL = 10000;
 	extern std::array<std::pair<int,std::string>,17> extra_flags;
 	extern std::array<std::pair<int,std::string>,15> wear_flags;
 	extern std::array<std::pair<int,std::string>,25> affected_flags;
@@ -80,6 +81,9 @@ namespace mods::builder {
 	}
 };
 
+void r_error(const std::shared_ptr<mods::player> & player,std::string_view msg);
+void r_success(const std::shared_ptr<mods::player>& player,std::string_view msg);
+void r_status(const std::shared_ptr<mods::player> & player,std::string_view msg);
 ACMD(do_rbuild);
 ACMD(do_zbuild);
 #endif

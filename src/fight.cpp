@@ -292,19 +292,19 @@ void stop_fighting(struct char_data *ch) {
 
 void make_corpse(struct char_data *ch) {
 	char buf2[MAX_NAME_LENGTH + 64];
-	struct obj_data *corpse, *o;
-	struct obj_data *money;
+	obj_data *corpse, *o;
+	obj_data *money;
 	int i;
 
 	corpse = create_obj();
 
-	corpse->item_number = NOTHING;
-	IN_ROOM(corpse) = NOWHERE;
 	corpse->name = strdup("corpse");
 
+	memset(buf2,0,sizeof(buf2));
 	snprintf(buf2, sizeof(buf2), "The corpse of %s is lying here.", GET_NAME(ch).c_str());
 	corpse->description = strdup(buf2);
 
+	memset(buf2,0,sizeof(buf2));
 	snprintf(buf2, sizeof(buf2), "the corpse of %s", GET_NAME(ch).c_str());
 	corpse->short_description = strdup(buf2);
 

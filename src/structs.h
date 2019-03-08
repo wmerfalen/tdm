@@ -21,6 +21,7 @@
 #include <functional>
 #include <array>
 #include "mods/extra_desc_data.hpp"
+#include <unordered_map>
 namespace mods {
 	class player;
 	struct descriptor_data;
@@ -35,6 +36,23 @@ typedef short goal_t;
 struct obj_data;
 typedef uint64_t uuid_t;
 using aligned_int_t = uint64_t;
+enum lense_type_t {
+	FIRST,
+
+	NORMAL_SIGHT,
+	THERMAL_GOGGLES,
+	NIGHT_VISION_GOGGLES,
+
+	AERIAL_DRONE,
+	AERIAL_DRONE_THERMAL,
+	AERIAL_DRONE_NIGHT_VISION,
+
+	RC_DRONE,
+	RC_DRONE_THERMAL,
+	RC_DRONE_NIGHT_VISION,
+
+	LAST
+};
 
 /*
  * Intended use of this macro is to allow external packages to work with
@@ -725,6 +743,15 @@ using aligned_int_t = uint64_t;
 
 	/* ================== Memory Structure for room ======================= */
 	struct room_data {
+		enum texture_type_t { 
+			FIRST,
+			GRASS,
+			CEMENT,
+			OUTSIDE,
+			INSIDE,
+			LAST
+		};
+		
 		room_data() : 
 		number(0), zone(0), sector_type(0), 
 		room_flags(0), light(0), func(nullptr),
@@ -795,8 +822,12 @@ using aligned_int_t = uint64_t;
 
 		obj_data *contents;   /* List of items in room              */
 		char_data *people;    /* List of NPC / PC in room           */
+		
+		std::string_view overhead(const lense_type_t& );
+		const std::vector<texture_type_t>& textures() const;
 		protected:
 			std::vector<mods::extra_desc_data> m_ex_descriptions;
+			std::vector<texture_type_t> m_textures;
 	};
 	/* ====================================================================== */
 
@@ -976,7 +1007,7 @@ using aligned_int_t = uint64_t;
 	 * player_special_data_saved will corrupt the playerfile.
 	 */
 	struct player_special_data {
-		struct player_special_data_saved saved;
+		player_special_data_saved saved;
 		std::string	poofin;		/* Description on arrival of a god.     */
 		std::string poofout;		/* Description upon a god's exit.       */
 		struct alias_data *aliases;	/* Character's aliases			*/

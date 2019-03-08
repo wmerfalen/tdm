@@ -166,6 +166,102 @@ extern room_vnum frozen_start_room;
 extern std::deque<mods::descriptor_data>  descriptor_list;
 extern const char *unused_spellname;	/* spell_parser.c */
 
+//void lmdb_export_char(std::shared_ptr<mods::player> player_ptr, mutable_map_t &values){
+
+namespace db {
+	int16_t save_char_data(std::shared_ptr<mods::player> player,std::map<std::string,std::string> values){
+		try{
+			auto up_txn = txn();
+			sql_compositor comp("player",&up_txn);
+			auto up_sql = comp
+				.update("player")
+				.set(values)
+				.where("id","=",std::to_string(player->get_db_id()))
+				.sql();
+			std::cerr << "[debug]: sql: " << up_sql << "\n";
+			mods::pq::exec(up_txn,up_sql);
+			mods::pq::commit(up_txn);
+			return 0;
+		}catch(std::exception& e){
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error updating character by pkid: '" << e.what() << "'\n";
+			return -1;
+		}
+	}
+
+	int16_t save_new_char(std::shared_ptr<mods::player> player){
+		try{
+			std::map<std::string,std::string> values;
+			mods::db::lmdb_export_char(player,values);
+			auto insert_transaction = txn();
+			sql_compositor comp("player",&insert_transaction);
+			auto up_sql = comp
+				.insert()
+				.into("player")
+				.values(values)
+				.sql();
+			std::cerr << "[debug]: sql: " << up_sql << "\n";
+			mods::pq::exec(insert_transaction,up_sql);
+			mods::pq::commit(insert_transaction);
+			return 0;
+		}catch(std::exception& e){
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting new character: '" << e.what() << "'\n";
+			return -1;
+		}
+	}
+
+	int16_t load_char_pkid(std::shared_ptr<mods::player> player){
+		try{
+			auto select_transaction = txn();
+			sql_compositor comp("player",&select_transaction);
+			auto player_sql = comp.select("id")
+				.from("player")
+				.where("player_name","=",player->name())
+				.sql();
+			std::cerr << "[debug]: sql: " << player_sql << "\n";
+			auto player_record = mods::pq::exec(select_transaction,player_sql);
+				for(auto && row : player_record){
+					player->set_db_id(row["id"].as<int>(0));
+					return 0;
+				}
+				log("SYSERR: couldn't grab player's pkid: '%s'",player->name());
+				return -1;
+		}catch(std::exception& e){
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
+			return -2;
+		}
+	}
+
+	int16_t load_char_prefs(std::shared_ptr<mods::player> player){
+		try{
+			auto select_transaction = txn();
+			sql_compositor comp("player",&select_transaction);
+			auto player_sql = comp.select("player_preferences")
+				.from("player")
+				.where("id","=",std::to_string(player->get_db_id()))
+				.sql();
+			std::cerr << "[debug]: sql: " << player_sql << "\n";
+			auto player_record = mods::pq::exec(select_transaction,player_sql);
+				for(auto && row : player_record){
+					player->set_prefs(row["player_preferences"].as<long>(0));
+					return 0;
+				}
+				log("SYSERR: player's prefs don't exist in db: ");
+				player->set_prefs(0);
+				return -1;
+		}catch(std::exception& e){
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character preferences by pkid: '" << e.what() << "'\n";
+			return -2;
+		}
+	}
+	int16_t save_char_prefs(std::shared_ptr<mods::player> player){
+		auto prefs_value = player->get_prefs();
+		std::map<std::string,std::string> values;
+		values["player_preferences"] = std::to_string(prefs_value);
+		return db::save_char_data(player,values);
+	}
+
+};
+
 /*************************************************************************
  *  routines for booting the system                                       *
  *************************************************************************/
@@ -1914,7 +2010,7 @@ struct obj_data *create_obj(void) {
 	struct obj_data tmp;
 	clear_object(&tmp);
 	object_list.push_back(tmp);
-	obj = &(object_list.at(object_list.size()-1));
+	obj = &(object_list.back());
 	return obj;
 }
 
@@ -1943,9 +2039,9 @@ struct obj_data *read_object(obj_vnum nr, int type) { /* and obj_rnum */
 #define ZO_DEAD  999
 
 /* update zone ages, queue for reset if necessary, and dequeue when possible */
-void zone_update(void) {
+void zone_update() {
 	unsigned int i;
-	struct reset_q_element *update_u, *temp;
+	reset_q_element *update_u, *temp;
 	static int timer = 0;
 
 	/* jelson 10/22/92 */
@@ -1969,7 +2065,7 @@ void zone_update(void) {
 					zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode) {
 				/* enqueue zone */
 
-				CREATE(update_u, struct reset_q_element, 1);
+				CREATE(update_u, reset_q_element, 1);
 
 				update_u->zone_to_reset = i;
 				update_u->next = 0;
@@ -1989,7 +2085,7 @@ void zone_update(void) {
 
 	/* dequeue zones (if possible) and reset */
 	/* this code is executed every 10 seconds (i.e. PULSE_ZONE) */
-	for(update_u = reset_q.head; update_u; update_u = update_u->next)
+	for(update_u = reset_q.head; update_u; update_u = update_u->next){
 		if(zone_table[update_u->zone_to_reset].reset_mode == 2 ||
 				is_empty(update_u->zone_to_reset)) {
 			reset_zone(update_u->zone_to_reset);
@@ -2012,6 +2108,7 @@ void zone_update(void) {
 			free(update_u);
 			break;
 		}
+	}
 }
 
 void log_zone_error(zone_rnum zone, int cmd_no, const char *message) {
@@ -2399,6 +2496,7 @@ bool parse_sql_player(std::shared_ptr<mods::player> player_ptr){
 		player_ptr->set_time_birth(mods::util::stoi<int>(row["player_birth"]));
 		player_ptr->set_time_played(mods::util::stoi<int>(row["player_time_played"]));
 		player_ptr->set_time_logon(time(0));
+		player_ptr->set_prefs(mods::util::stoi<long>(row["player_preferences"]));
 		return true;
 	}
 	return false;

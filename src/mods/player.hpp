@@ -387,6 +387,9 @@ namespace mods {
 			void deactivate_account();
 			bool authenticated() const { return m_authenticated; }
 			void set_authenticated(bool b) { m_authenticated = b; }
+			void set_prefs(long prefs){ cd()->player_specials->saved.pref = prefs; }
+			auto get_prefs(){ return cd()->player_specials->saved.pref; }
+
 		private: 
 			bool m_authenticated;
 			std::shared_ptr<builder_data_t> m_builder_data;

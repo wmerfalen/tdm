@@ -213,7 +213,7 @@ struct zone_data {
 /* for queueing zones for update   */
 struct reset_q_element {
 	zone_rnum zone_to_reset;            /* ref to zone_data */
-	struct reset_q_element *next;
+	reset_q_element *next;
 };
 
 
@@ -285,6 +285,10 @@ extern char	*NOEFFECT;
  */
 namespace db {
 	int16_t save_char(std::shared_ptr<mods::player>);
+	int16_t save_new_char(std::shared_ptr<mods::player>);
+	int16_t save_char_prefs(std::shared_ptr<mods::player>);
+	int16_t load_char_prefs(std::shared_ptr<mods::player>);
+	int16_t load_char_pkid(std::shared_ptr<mods::player>);
 };
 
 #endif	//header inclusion protection

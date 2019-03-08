@@ -744,7 +744,7 @@ char *find_exdesc(char *word,room_data& r){
 			"description: '" << i.description.c_str() << "'\n";
 		if(isname(word, i.keyword.c_str())) {
 			std::cerr << "YES: " << i.keyword.c_str() << "\n";
-			return (i.description.c_str());
+			return (const_cast<char*>(i.description.c_str()));
 		}
 	}
 	return (NULL);

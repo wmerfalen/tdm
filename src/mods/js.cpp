@@ -42,7 +42,7 @@ namespace mods {
 
 		};//end utils namespace
 		int load_library(duk_context*,std::string_view);
-		constexpr static const char * JS_PATH = "../lib/js/";
+		constexpr static const char * JS_PATH = "/lib/js/";
 		constexpr static const char * JS_TEST_PATH = "../lib/js/tests/";
 		//constexpr static const char * JS_PROFILES_PATH = "../lib/js/profiles/";
 		namespace test {
@@ -63,9 +63,9 @@ namespace mods {
 		static duk_ret_t require_js(duk_context *ctx) {
 			/* First parameter is character name */
 			auto fname = duk_to_string(ctx,0);
-			std::string path = mods::js::JS_PATH;
-			path += fname;
-			duk_push_number(ctx,mods::js::load_library(ctx,path));
+			//std::string path = mods::js::JS_PATH;
+			//path += fname;
+			duk_push_number(ctx,mods::js::load_library(ctx,fname));
 			return 1;	/* number of return values */
 		}
 		/*
