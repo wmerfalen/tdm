@@ -28,18 +28,34 @@
 /* external globals */
 extern struct time_data time_info;
 
+void log(mods::string n,...) {
+       va_list args;
+       va_start(args, n);
+       std::string msg,tmp;
+       do{
+               tmp.clear();
+               tmp = va_arg(args,const char*);
+               if(tmp.length()){
+                       msg += tmp;
+               }
+       }while(tmp.length());
+       va_end(args);
+			 std::cerr << "[log]: " << msg.c_str() << "\n";
+}
+
 void log(std::string n,...) {
        va_list args;
        va_start(args, n);
        std::string msg,tmp;
        do{
                tmp.clear();
-               tmp = va_arg(args,std::string);
+               tmp = va_arg(args,const char*);
                if(tmp.length()){
                        msg += tmp;
                }
        }while(tmp.length());
        va_end(args);
+			 std::cerr << "[log]: " << msg.c_str() << "\n";
 }
 
 

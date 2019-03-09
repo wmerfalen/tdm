@@ -36,7 +36,7 @@ namespace mods {
 	namespace weapon {
 		enum mask_type { SMG, SNIPE, SHOTGUN, GRENADE };
 	};
-	class player {
+	struct player {
 		public:
 			using   class_type = mods::classes::types;
 			using 	descriptor_data_t = std::deque<descriptor_data>;

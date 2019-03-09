@@ -33,7 +33,7 @@ void write_aliases(struct char_data *ch) {
 	}
 
 	if((file = fopen(fn, "w")) == NULL) {
-		log("SYSERR: Couldn't save aliases for %s in '%s'.", GET_NAME(ch), fn);
+		log("SYSERR: Couldn't save aliases for %s in '%s'.", GET_NAME(ch).c_str(), fn);
 		perror("SYSERR: write_aliases");
 		return;
 	}
@@ -69,7 +69,7 @@ void read_aliases(struct char_data *ch) {
 
 	if((file = fopen(xbuf, "r")) == NULL) {
 		if(errno != ENOENT) {
-			log("SYSERR: Couldn't open alias file '%s' for %s.", xbuf, GET_NAME(ch));
+			log("SYSERR: Couldn't open alias file '%s' for %s.", xbuf, GET_NAME(ch).c_str());
 			perror("SYSERR: read_aliases");
 		}
 

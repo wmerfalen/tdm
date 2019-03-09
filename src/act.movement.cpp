@@ -229,7 +229,7 @@ int perform_move(struct char_data *ch, int dir, int need_specials_check) {
 		for(k = ch->followers; k; k = next) {
 			next = k->next;
 
-			if((IN_ROOM(k->follower) == was_in)){
+			if(IN_ROOM(k->follower) == was_in){
 				if(GET_POS(k->follower) >= POS_STANDING) {
 					act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
 					perform_move(k->follower, dir, 1);

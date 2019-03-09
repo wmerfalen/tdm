@@ -1675,7 +1675,7 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 			if(db::save_new_char(p) == 0){
 				std::cout << "debug: new character '" << p->name() << "'\n";
 				if(db::load_char_pkid(p) < 0){
-					log("SYSERR: couldn't load character's pkid: '%s'",p->name());
+					log("SYSERR: couldn't load character's pkid: '%s'",p->name().c_str());
 				}else{
 
 				}

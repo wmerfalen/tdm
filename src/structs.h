@@ -23,7 +23,7 @@
 #include "mods/extra_desc_data.hpp"
 #include <unordered_map>
 namespace mods {
-	class player;
+	struct player;
 	struct descriptor_data;
 	struct extra_desc_data;
 };
@@ -745,10 +745,20 @@ enum lense_type_t {
 	struct room_data {
 		enum texture_type_t { 
 			FIRST,
-			GRASS,
-			CEMENT,
-			OUTSIDE,
-			INSIDE,
+			GRASS,			/** typically grass that isn't flammable (i.e. not dried out) */
+			CEMENT,			/** asphault, nearly indestructible */
+			OUTSIDE,		/** Outside where anyone can see you */
+			INSIDE,			/** Example: inside a home */
+			SEWER,			/** Underground sewer tunnel */
+			RADIOACTIVE, /** actively emitting radioactivity */
+			VOLATILE,		/** Volatile means any slight spark will ignite an explosion */
+			RUBBLE,			/** decimation of buildings resulting in lots of ruble */
+			DIRT,				/** think about outside+cement but except no cement */
+			SHATTERED_GLASS, /** results of breaking glass objects */
+			LOW_ATMOSPHERE,	/** atmosphere too thin for helicopter to fly */
+			ON_FIRE,		/** actively burning */
+			NON_HAZARDOUS_SMOKE, /** think: burning car */
+			HAZARDOUS_SMOKE, /** think: gas attacks */
 			LAST
 		};
 		

@@ -103,9 +103,7 @@ namespace mods::flags {
 			player->affect_plr(f);
 		}
 	template <typename PlayerPointerType,typename FlagType>
-		static inline void load(
-				PlayerPointerType player,
-				const std::string& data){
+		static inline void load(PlayerPointerType player,const std::string& data){
 			std::vector<uint64_t> buffer;
 			std::copy(data.begin(),data.end(),buffer.begin());
 			for(unsigned i =0; i < buffer.size(); ++i){

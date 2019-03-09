@@ -53,7 +53,7 @@ void mobile_activity(void) {
 		if(MOB_FLAGGED(ch, MOB_SPEC) && !no_specials) {
 			if(mob_index[GET_MOB_RNUM(ch)].func == NULL) {
 				log("SYSERR: %s (#%d): Attempting to call non-existing mob function.",
-				    GET_NAME(ch), GET_MOB_VNUM(ch));
+				    GET_NAME(ch).c_str(), GET_MOB_VNUM(ch));
 				REMOVE_BIT(MOB_FLAGS(ch), MOB_SPEC);
 			} else {
 				char actbuf[MAX_INPUT_LENGTH] = "";

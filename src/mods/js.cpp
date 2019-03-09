@@ -42,7 +42,7 @@ namespace mods {
 
 		};//end utils namespace
 		int load_library(duk_context*,std::string_view);
-		constexpr static const char * JS_PATH = "/lib/js/";
+		//constexpr static const char * JS_PATH = "/lib/js/";
 		constexpr static const char * JS_TEST_PATH = "../lib/js/tests/";
 		//constexpr static const char * JS_PROFILES_PATH = "../lib/js/profiles/";
 		namespace test {

@@ -190,7 +190,7 @@ namespace mods {
 				//}
 				if(strncmp(argv[pos],"--postgres-pw-file=",19) == 0){
 					if(argument.length()  < 20){
-						log("SYSERR: --postgres-pw-file expects an argument, none found: '",argument,"'.Exiting...");
+						log("SYSERR: --postgres-pw-file expects an argument, none found: '",argument.c_str(),"'.Exiting...");
 						mods::globals::shutdown();
 					}
 					std::string pw_file = argument.substr(19,argument.length()-19);
@@ -277,7 +277,7 @@ namespace mods {
 			if(!mods::util::dir_exists(lmdb_dir.c_str())){
 				auto err = mkdir(lmdb_dir.c_str(),0700);
 				if(err == -1){
-					log("SYSERR: The lmdb database directory couldn't be created: ", mods::util::err::get_string(errno));
+					log("SYSERR: The lmdb database directory couldn't be created: ", mods::util::err::get_string(errno).c_str());
 					mods::globals::shutdown();
 				}
 			}

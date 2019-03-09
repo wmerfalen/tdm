@@ -46,6 +46,7 @@ int	room_is_dark(room_rnum room);
 
 void log(const char* format, ...);
 void log(std::string n,...);
+void log(mods::string n,...);
 
 #define core_dump()		core_dump_real(__FILE__, __LINE__)
 

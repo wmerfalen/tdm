@@ -765,7 +765,7 @@ int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int 
 		}
 
 		log("SYSERR: Attempt to damage corpse '%s' in room #%d by '%s'.",
-		    GET_NAME(victim), GET_ROOM_VNUM(IN_ROOM(victim)), GET_NAME(ch));
+		    GET_NAME(victim).c_str(), GET_ROOM_VNUM(IN_ROOM(victim)), GET_NAME(ch).c_str());
 		die(ch,victim);
 		return (-1);            /* -je, 7/7/92 */
 	}
@@ -977,7 +977,7 @@ int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int at
 		}
 
 		log("SYSERR: Attempt to damage corpse '%s' in room #%d by '%s'.",
-		    GET_NAME(victim), GET_ROOM_VNUM(IN_ROOM(victim)), GET_NAME(ch));
+		    GET_NAME(victim).c_str(), GET_ROOM_VNUM(IN_ROOM(victim)), GET_NAME(ch).c_str());
 		die(ch,victim);
 		return (-1);			/* -je, 7/7/92 */
 	}
@@ -1204,7 +1204,7 @@ int damage(struct char_data *ch, struct char_data *victim, int dam, int attackty
 		}
 
 		log("SYSERR: Attempt to damage corpse '%s' in room #%d by '%s'.",
-		    GET_NAME(victim), GET_ROOM_VNUM(IN_ROOM(victim)), GET_NAME(ch));
+		    GET_NAME(victim).c_str(), GET_ROOM_VNUM(IN_ROOM(victim)), GET_NAME(ch).c_str());
 		die(ch,victim);
 		return (-1);			/* -je, 7/7/92 */
 	}

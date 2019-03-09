@@ -3212,6 +3212,31 @@ ACMD(do_rbuild) {
 			"  |:: rbuild list 2\r\n" << 
 			"  |:: (list the third page)\r\n" <<
 
+			" {grn}NEW FEATURE [as of: 2019-03]{/grn}\r\n" <<
+			" {red}FEATURE: Room textures{/red}\r\n" <<
+			" rbuild <texture> <type1> ... <typeN>\r\n" <<
+			"  |--> Set the room's texture type. A room can have multiple texture types.\r\n" <<
+			"  |:: {yel}-:[{/yel}{grn}types{/grn}{yel}]:-{/yel}\r\n" <<
+			"  |:: \r\n" <<
+			"  |:: GRASS\r\n" <<
+			"  |:: CEMENT\r\n" <<
+			"  |:: OUTSIDE\r\n" <<
+			"  |:: INSIDE\r\n" <<
+			"  |:: SEWER\r\n" << 
+			"  |:: VOLATILE\r\n" << 
+			"  |____[example]\r\n" <<
+			"  |:: rbuild texture GRASS OUTSIDE\r\n" <<
+
+			" rbuild <texture> <delete> <type1> ... <typeN>\r\n" <<
+			"  |--> Delete the textures listed after the delete keyword.\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: rbuild texture delete GRASS OUTSIDE\r\n" <<
+			
+			" rbuild <texture> <clear>\r\n" <<
+			"  |--> Deletes all textures in the current room. WARNING: This does not prompt for confirmation!\r\n" <<
+			"  |____[example]\r\n" <<
+			"  |:: rbuild texture clear\r\n" <<
+
 			" rbuild <set> <rnum> <number>\r\n" <<
 			"  |--> Set the real room number of the current room\r\n" <<
 			"  |____[example]\r\n" <<
@@ -3316,6 +3341,8 @@ ACMD(do_rbuild) {
 			"  |:: (the north exit will require a key numbered 123)\r\n" <<
 			"  |:: rbuild dopt north to_room 27\r\n" <<
 			"  |:: (the north room will lead to room number 27)\r\n" <<
+
+
 			" rbuild pave <on|off> <room_number_start> <zone_id>\r\n" <<
 			"  |--> starts the pave mode where any direction you go to will automatically \r\n" <<
 			"  |    create and bind rooms. Helpful for when you want to carve out a ton of\r\n" <<

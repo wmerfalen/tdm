@@ -248,17 +248,17 @@ int main(int argc, char **argv) {
 
 	while((pos < argc) && (*(argv[pos]) == '-')) {
 		switch(*(argv[pos] + 1)) {
-			case 'o':
-				if(*(argv[pos] + 2)) {
-					LOGNAME = argv[pos] + 2;
-				} else if(++pos < argc) {
-					LOGNAME = argv[pos];
-				} else {
-					log("SYSERR: File name to log to expected after option -o.");
-					exit(1);
-				}
+			//case 'o':
+			//	if(*(argv[pos] + 2)) {
+			//		LOGNAME = argv[pos] + 2;
+			//	} else if(++pos < argc) {
+			//		LOGNAME = argv[pos];
+			//	} else {
+			//		log("SYSERR: File name to log to expected after option -o.");
+			//		exit(1);
+			//	}
 
-				break;
+			//	break;
 			case 'T':
 				if(argc > pos +1){
 					mods::globals::bootup_test_suite = argv[pos+1];
@@ -270,56 +270,57 @@ int main(int argc, char **argv) {
 				}
 				std::cerr << "[break] test suite\n";
 				break;
-			case 'd':
-				if(*(argv[pos] + 2)) {
-					dir = argv[pos] + 2;
-				} else if(++pos < argc) {
-					dir = argv[pos];
-				} else {
-					log("SYSERR: Directory arg expected after option -d.");
-					exit(1);
-				}
+			//case 'd':
+			//	if(*(argv[pos] + 2)) {
+			//		dir = argv[pos] + 2;
+			//	} else if(++pos < argc) {
+			//		dir = argv[pos];
+			//	} else {
+			//		log("SYSERR: Directory arg expected after option -d.");
+			//		exit(1);
+			//	}
 
-				break;
+			//	break;
 
-			case 'm':
-				mini_mud = 1;
-				no_rent_check = 1;
-				log("Running in minimized mode & with no rent check.");
-				break;
+			//case 'm':
+			//	mini_mud = 1;
+			//	no_rent_check = 1;
+			//	log("Running in minimized mode & with no rent check.");
+			//	break;
 
-			case 'c':
-				scheck = 1;
-				log("Syntax check mode enabled.");
-				break;
+			//case 'c':
+			//	scheck = 1;
+			//	log("Syntax check mode enabled.");
+			//	break;
 
-			case 'q':
-				no_rent_check = 1;
-				log("Quick boot mode -- rent check supressed.");
-				break;
+			//case 'q':
+			//	no_rent_check = 1;
+			//	log("Quick boot mode -- rent check supressed.");
+			//	break;
 
-			case 'r':
-				circle_restrict = 1;
-				log("Restricting game -- no new players allowed.");
-				break;
+			//case 'r':
+			//	circle_restrict = 1;
+			//	log("Restricting game -- no new players allowed.");
+			//	break;
 
-			case 's':
-				no_specials = 1;
-				log("Suppressing assignment of special routines.");
-				break;
+			//case 's':
+			//	no_specials = 1;
+			//	log("Suppressing assignment of special routines.");
+			//	break;
 
 			case 'h':
 				/* From: Anil Mahajan <amahajan@proxicom.com> */
 				std::cerr << "Usage: " << argv[0] << " [-c] [-m] [-q] [-r] [-s] [-d pathname] [port #]\n"
-						"  -c             Enable syntax check mode.\n"
-						"  -d <directory> Specify library directory (defaults to 'lib').\n"
-						"  -h             This screen.\n"
-						"  -m             Start in mini-MUD mode.\n"
-						"  -o <file>      Write log to <file> instead of stderr.\n"
-						"  -q             Quick boot (doesn't scan rent for object limits).\n"
-						"  -r             Restrict MUD -- no new players allowed.\n"
-						"  -s             Suppress special procedure assignments.\n"
-						"  -T <test_suite>Run test suite as implementor.\n"
+					/** TODO: when we know that we need these cmdline opts, un-comment. For now, they are not supported - 2019-03-08 */
+						//"  -c             Enable syntax check mode.\n"
+						//"  -d <directory> Specify library directory (defaults to 'lib').\n"
+						//"  -h             This screen.\n"
+						//"  -m             Start in mini-MUD mode.\n"
+						//"  -o <file>      Write log to <file> instead of stderr.\n"
+						//"  -q             Quick boot (doesn't scan rent for object limits).\n"
+						//"  -r             Restrict MUD -- no new players allowed.\n"
+						//"  -s             Suppress special procedure assignments.\n"
+						//"  -T <test_suite>Run test suite as implementor.\n"
 						"  --sql-port     Run the 'postgres to lmdb' port command.\n"
 						"  --testing=<N>  Run the test suite labeled N.\n"
 						"  --lmdb-dir=N   Save lmdb to the directory at N.\n"
@@ -338,11 +339,11 @@ int main(int argc, char **argv) {
 
 	if(pos < argc) {
 		if(!isdigit(*argv[pos])) {
-			std::cerr << "Usage: " << argv[0] << " [-c] [-m] [-q] [-r] [-s] [-d pathname] [port #]\n";
-			mods::globals::shutdown();
+			std::cerr << "Usage: " << argv[0] << " [--sql-port] [--testing=T] [--lmdb-dir=D] [--lmdb-name=N] [--hell] [--import-rooms] [port #]\n";
+			exit(0);
 		} else if((port = atoi(argv[pos])) <= 1024) {
 			std::cerr << "SYSERR: Illegal port number " << port << ".\n";
-			mods::globals::shutdown();
+			exit(-1);
 		}
 	}
 

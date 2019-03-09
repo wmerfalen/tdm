@@ -223,7 +223,7 @@ namespace db {
 					player->set_db_id(row["id"].as<int>(0));
 					return 0;
 				}
-				log("SYSERR: couldn't grab player's pkid: '%s'",player->name());
+				log("SYSERR: couldn't grab player's pkid: '%s'",player->name().c_str());
 				return -1;
 		}catch(std::exception& e){
 			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
@@ -2484,15 +2484,17 @@ bool parse_sql_player(std::shared_ptr<mods::player> player_ptr){
 		player_ptr->chclass() = mods::util::stoi<int>(row["player_class"]);
 		player_ptr->title().assign((row["player_title"]));
 		player_ptr->hometown() = mods::util::stoi<int>(row["player_hometown"]);
-		mods::flags::load<
-			std::shared_ptr<mods::player>,
-			mods::flags::aff>(
-					player_ptr,row["player_affection_bitvector"].c_str()
-					);
-		mods::flags::load<std::shared_ptr<mods::player>,
-			mods::flags::plr>(
-					player_ptr,row["player_affection_plr_bitvector"].c_str()
-					);
+		if(strlen(row["player_affection_bitvector"].c_str()) > 0){
+			std::cerr << "player_affection_bitvector: " << row["player_affection_bitvector"].c_str() << "\n";
+			mods::flags::load<std::shared_ptr<mods::player>,mods::flags::aff>(
+				player_ptr,row["player_affection_bitvector"].c_str()
+			);
+		}
+		if(strlen(row["player_affection_plr_bitvector"].c_str()) > 0){
+			mods::flags::load<std::shared_ptr<mods::player>,mods::flags::plr>(
+				player_ptr,row["player_affection_plr_bitvector"].c_str()
+			);
+		}
 		player_ptr->set_time_birth(mods::util::stoi<int>(row["player_birth"]));
 		player_ptr->set_time_played(mods::util::stoi<int>(row["player_time_played"]));
 		player_ptr->set_time_logon(time(0));
@@ -2602,7 +2604,7 @@ void char_to_store(struct char_data *ch, struct char_file_u *st) {
 	if(ch->player.description) {
 		if(strlen(ch->player.description) >= sizeof(st->description)) {
 			log("SYSERR: char_to_store: %s's description length: %d, max: %d! "
-					"Truncated.", GET_PC_NAME(ch), strlen(ch->player.description),
+					"Truncated.", GET_PC_NAME(ch).c_str(), strlen(ch->player.description),
 					(st->description.length()));
 			ch->player.description.concat("\r\n");
 		}
@@ -2612,7 +2614,7 @@ void char_to_store(struct char_data *ch, struct char_file_u *st) {
 		st->description.clear();
 	}
 
-	st->name = GET_NAME(ch);
+	st->name = GET_NAME(ch).c_str();
 
 	/* add spell and eq affections back in now */
 	for(i = 0; i < MAX_AFFECT; i++) {

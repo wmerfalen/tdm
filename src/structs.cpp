@@ -172,6 +172,7 @@ char_data::char_data(char_data* o){
 			default:
 				return "[ ]";
 		}
+		return "[ ]";
 	}
 	const std::vector<room_data::texture_type_t>& room_data::textures() const { 
 		return m_textures;

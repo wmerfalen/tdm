@@ -1932,7 +1932,7 @@ ACMD(do_color) {
 		return;
 	}
 
-	if(((tp = search_block(arg, ctypes, FALSE)) == -1)) {
+	if((tp = search_block(arg, ctypes, FALSE)) == -1) {
 		send_to_char(ch, "Usage: color { Off | Sparse | Normal | Complete }\r\n");
 		return;
 	}

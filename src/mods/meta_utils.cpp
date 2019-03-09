@@ -5,9 +5,9 @@
 #include "util-map.hpp"
 
 namespace mods::meta_utils {
-	constexpr static const char* meta = "meta";
-	constexpr static const char* delim = "|";
-	constexpr static std::size_t reference_field_index = 1;
+	//constexpr static const char* meta = "meta";
+	//constexpr static const char* delim = "|";
+	//constexpr static std::size_t reference_field_index = 1;
 	using mutable_map_t = mods::lmdb::mutable_map_t;
 	enum return_codes {
 		COULDNT_FIND_USER_ID = -1

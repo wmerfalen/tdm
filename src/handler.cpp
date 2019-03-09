@@ -561,7 +561,7 @@ void equip_char(struct char_data *ch, struct obj_data *obj, int pos) {
 	}
 
 	if(GET_EQ(ch, pos)) {
-		log("SYSERR: Char is already equipped: %s, %s", GET_NAME(ch),
+		log("SYSERR: Char is already equipped: %s, %s", GET_NAME(ch).c_str(),
 		    obj->short_description);
 		return;
 	}
@@ -598,7 +598,7 @@ void equip_char(struct char_data *ch, struct obj_data *obj, int pos) {
 				world[IN_ROOM(ch)].light++;
 			}
 	} else {
-		log("SYSERR: IN_ROOM(ch) = NOWHERE when equipping char %s.", GET_NAME(ch));
+		log("SYSERR: IN_ROOM(ch) = NOWHERE when equipping char %s.", GET_NAME(ch).c_str());
 	}
 
 	for(j = 0; j < MAX_OBJ_AFFECT; j++)
@@ -634,7 +634,7 @@ struct obj_data *unequip_char(struct char_data *ch, int pos) {
 				world[IN_ROOM(ch)].light--;
 			}
 	} else {
-		log("SYSERR: IN_ROOM(ch) = NOWHERE when unequipping char %s.", GET_NAME(ch));
+		log("SYSERR: IN_ROOM(ch) = NOWHERE when unequipping char %s.", GET_NAME(ch).c_str());
 	}
 
 	GET_EQ(ch, pos) = NULL;
@@ -942,7 +942,7 @@ void extract_char_final(struct char_data *ch) {
 
 	if(IN_ROOM(ch) == NOWHERE) {
 		log("SYSERR: NOWHERE extracting char %s. (%s, extract_char_final)",
-		    GET_NAME(ch), __FILE__);
+		    GET_NAME(ch).c_str(), __FILE__);
 	}
 
 	/*
