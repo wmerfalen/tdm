@@ -548,11 +548,12 @@ namespace mods {
 				if(i_value.has_value()) {
 					stc(word_wrap(colored,i_value.value()) + "\r\n");
 				}
-
-				return;
 			} else {
 				stc(word_wrap(colored,80) + "\r\n");
 			}
+		}
+		if(((get_prefs()) & PRF_OVERHEAD_MAP)){
+			stc(mods::overhead_map::generate<mods::player*>(this,room()).data());
 		}
 	}
 	obj_data* player::weapon() {
@@ -606,6 +607,7 @@ namespace mods {
 		if(m_shared_ptr){
 			m_shared_ptr.reset();
 		}
+		m_lense_type = NORMAL_SIGHT;
 	}
 			void player::set_cd(char_data* ch) {
 				m_char_data = ch;
@@ -644,48 +646,26 @@ namespace mods {
 			 */
 			void player::affect(uint64_t flag){
 				SET_BIT(AFF_FLAGS(cd()), flag);
-				m_affected[mods::util::legacy2aff(flag)] = true;
+				set_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
 			}
-			void player::affect(mods::flags::aff flag){
-				SET_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
-				m_affected[flag] = true;
-			}
+			//void player::affect(mods::flags::aff flag){
+			//	SET_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
+			//	set_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
+			//}
 			void player::remove_affect(uint64_t flag){
 				REMOVE_BIT(AFF_FLAGS(cd()), flag);
-				m_affected[mods::util::legacy2aff(flag)] = false;
+				remove_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
 			}
-			void player::remove_affect(mods::flags::aff flag){
-				REMOVE_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
-				m_affected[flag] = false;
-			}
+			//void player::remove_affect(mods::flags::aff flag){
+			//	REMOVE_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
+			//	remove_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
+			//}
 			void player::clear_all_affected(){
-				for(auto &pair : this->get_affected()){
-					this->remove_affect(pair.first);
-				}
+				m_flags[mods::flags::chunk_type_t::LEGACY_AFF] = 0;
+				AFF_FLAGS(cd()) = 0;
 			}
-			const std::map<mods::flags::aff,bool>& player::get_affected(){
-m_affected[mods::flags::aff::BLIND] = IS_SET(AFF_FLAGS(cd()),AFF_BLIND);
-m_affected[mods::flags::aff::INVISIBLE] = IS_SET(AFF_FLAGS(cd()),AFF_INVISIBLE);
-m_affected[mods::flags::aff::DETECT_ALIGN] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_ALIGN);
-m_affected[mods::flags::aff::DETECT_INVIS] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_INVIS);
-m_affected[mods::flags::aff::DETECT_MAGIC] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_MAGIC);
-m_affected[mods::flags::aff::SENSE_LIFE] = IS_SET(AFF_FLAGS(cd()),AFF_SENSE_LIFE);
-m_affected[mods::flags::aff::WATERWALK] = IS_SET(AFF_FLAGS(cd()),AFF_WATERWALK);
-m_affected[mods::flags::aff::SANCTUARY] = IS_SET(AFF_FLAGS(cd()),AFF_SANCTUARY);
-m_affected[mods::flags::aff::GROUP] = IS_SET(AFF_FLAGS(cd()),AFF_GROUP);
-m_affected[mods::flags::aff::CURSE] = IS_SET(AFF_FLAGS(cd()),AFF_CURSE);
-m_affected[mods::flags::aff::INFRAVISION] = IS_SET(AFF_FLAGS(cd()),AFF_INFRAVISION);
-m_affected[mods::flags::aff::POISON] = IS_SET(AFF_FLAGS(cd()),AFF_POISON);
-m_affected[mods::flags::aff::PROTECT_EVIL] = IS_SET(AFF_FLAGS(cd()),AFF_PROTECT_EVIL);
-m_affected[mods::flags::aff::PROTECT_GOOD] = IS_SET(AFF_FLAGS(cd()),AFF_PROTECT_GOOD);
-m_affected[mods::flags::aff::SLEEP] = IS_SET(AFF_FLAGS(cd()),AFF_SLEEP);
-m_affected[mods::flags::aff::NOTRACK] = IS_SET(AFF_FLAGS(cd()),AFF_NOTRACK);
-m_affected[mods::flags::aff::UNUSED16] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED16);
-m_affected[mods::flags::aff::UNUSED17] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED17);
-m_affected[mods::flags::aff::SNEAK] = IS_SET(AFF_FLAGS(cd()),AFF_SNEAK);
-m_affected[mods::flags::aff::HIDE] = IS_SET(AFF_FLAGS(cd()),AFF_HIDE);
-m_affected[mods::flags::aff::CHARM] = IS_SET(AFF_FLAGS(cd()),AFF_CHARM);
-return m_affected;
+			aligned_int_t player::get_affected(){
+				return get_chunk(mods::flags::chunk_type_t::LEGACY_AFF);
 			}
 			/**
 			 * =============================
@@ -699,57 +679,38 @@ return m_affected;
 			 */
 			void player::affect_plr(uint64_t flag){
 				SET_BIT(PLR_FLAGS(cd()), flag);
-				m_affected_plr[mods::util::legacy2plr(flag)] = true;
+				set_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
 			}
-			void player::affect_plr(mods::flags::plr flag){
-				SET_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
-				m_affected_plr[flag] = true;
-			}
+			//void player::affect_plr(mods::flags::plr flag){
+			//	SET_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
+			//	set_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
+			//}
 			void player::remove_affect_plr(uint64_t flag){
 				REMOVE_BIT(PLR_FLAGS(cd()), flag);
-				m_affected_plr[mods::util::legacy2plr(flag)] = false;
+				remove_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
 			}
-			void player::remove_affect_plr(mods::flags::plr flag){
-				REMOVE_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
-				m_affected_plr[flag] = false;
-			}
+			//void player::remove_affect_plr(mods::flags::plr flag){
+			//	REMOVE_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
+			//	remove_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
+			//}
 			void player::clear_all_affected_plr(){
-				for(auto &pair : this->get_affected_plr()){
-					this->remove_affect_plr(pair.first);
-				}
+				PLR_FLAGS(cd()) = 0;
 			}
-			const std::map<mods::flags::plr,bool>& player::get_affected_plr(){
-m_affected_plr[mods::flags::plr::KILLER] = IS_SET(PLR_FLAGS(cd()),PLR_KILLER);
-m_affected_plr[mods::flags::plr::THIEF] = IS_SET(PLR_FLAGS(cd()),PLR_THIEF);
-m_affected_plr[mods::flags::plr::FROZEN] = IS_SET(PLR_FLAGS(cd()),PLR_FROZEN);
-m_affected_plr[mods::flags::plr::DONTSET] = IS_SET(PLR_FLAGS(cd()),PLR_DONTSET);
-m_affected_plr[mods::flags::plr::WRITING] = IS_SET(PLR_FLAGS(cd()),PLR_WRITING);
-m_affected_plr[mods::flags::plr::MAILING] = IS_SET(PLR_FLAGS(cd()),PLR_MAILING);
-m_affected_plr[mods::flags::plr::CRASH] = IS_SET(PLR_FLAGS(cd()),PLR_CRASH);
-m_affected_plr[mods::flags::plr::SITEOK] = IS_SET(PLR_FLAGS(cd()),PLR_SITEOK);
-m_affected_plr[mods::flags::plr::NOSHOUT] = IS_SET(PLR_FLAGS(cd()),PLR_NOSHOUT);
-m_affected_plr[mods::flags::plr::NOTITLE] = IS_SET(PLR_FLAGS(cd()),PLR_NOTITLE);
-m_affected_plr[mods::flags::plr::DELETED] = IS_SET(PLR_FLAGS(cd()),PLR_DELETED);
-m_affected_plr[mods::flags::plr::LOADROOM] = IS_SET(PLR_FLAGS(cd()),PLR_LOADROOM);
-m_affected_plr[mods::flags::plr::NOWIZLIST] = IS_SET(PLR_FLAGS(cd()),PLR_NOWIZLIST);
-m_affected_plr[mods::flags::plr::NODELETE] = IS_SET(PLR_FLAGS(cd()),PLR_NODELETE);
-m_affected_plr[mods::flags::plr::INVSTART] = IS_SET(PLR_FLAGS(cd()),PLR_INVSTART);
-m_affected_plr[mods::flags::plr::CRYO] = IS_SET(PLR_FLAGS(cd()),PLR_CRYO);
-m_affected_plr[mods::flags::plr::NOTDEADYET] = IS_SET(PLR_FLAGS(cd()),PLR_NOTDEADYET);
-				return m_affected_plr;
+			aligned_int_t player::get_affected_plr(){
+				return get_chunk(mods::flags::chunk_type_t::LEGACY_PLR);
 			}
 
 			bool player::has_affect(uint64_t flag){
-				return m_affected[mods::util::legacy2aff(flag)];
+				return has_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
 			}
 			bool player::has_affect(mods::flags::aff flag){
-				return m_affected[flag];
+				return has_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
 			}
 			bool player::has_affect_plr(uint64_t flag) {
-				return m_affected_plr[mods::util::legacy2plr(flag)];
+				return has_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
 			}
 			bool player::has_affect_plr(mods::flags::plr flag) {
-				return m_affected_plr[flag];
+				return has_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
 			}
 
 			/**

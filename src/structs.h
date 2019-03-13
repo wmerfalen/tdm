@@ -270,6 +270,7 @@ enum lense_type_t {
 #define PRF_NOGRATZ	(1 << 20) /* Can't hear grats channel		*/
 #define PRF_ROOMFLAGS	(1 << 21) /* Can see room flags (ROOM_x)	*/
 #define PRF_DISPAUTO	(1 << 22) /* Show prompt HP, MP, MV when < 30%.	*/
+#define PRF_OVERHEAD_MAP (1 << 23) /* show overhead map */
 
 	/* Affect bits: used in char_data.char_specials.saved.affected_by */
 	/* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
@@ -295,6 +296,7 @@ enum lense_type_t {
 #define AFF_HIDE              (1 << 19)	   /* Char is hidden		*/
 #define AFF_UNUSED20	      (1 << 20)	   /* Room for future expansion	*/
 #define AFF_CHARM             (1 << 21)	   /* Char is charmed		*/
+
 
 
 	/* Modes of connectedness: used by descriptor_data.state */

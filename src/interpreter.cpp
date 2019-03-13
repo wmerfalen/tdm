@@ -501,6 +501,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "recall"  , POS_RESTING , do_recall   , 0, 0 },
 	{ "givemegold"  , POS_RESTING , do_givemegold   , 0, 0 },
 	{ "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
+	{ "automap"  , POS_RESTING , do_gen_tog   , 0, SCMD_AUTOMAP },
 	/** !NOTE: this is for simulating the 'pulled into a void' 
 	 * behaviour. It's useful for testing.
 	 */

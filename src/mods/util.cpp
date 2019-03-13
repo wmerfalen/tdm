@@ -7,41 +7,41 @@
 
 namespace mods {
 	namespace util {
-			uint64_t aff2legacy(mods::flags::aff f){
-				for(unsigned i=0; i < mods::flags::aff_flags.size();i++){
-					if(mods::flags::aff_flags[i].first == f){
-						return mods::flags::aff_flags[i].second;
-					}
-				}
-				return 0;
-			}
-			mods::flags::aff legacy2aff(uint64_t f){
-				for(unsigned i=0; i < mods::flags::aff_flags.size();i++){
-					if(mods::flags::aff_flags[i].second == f){
-						return mods::flags::aff_flags[i].first;
-					}
-				}
-				return mods::flags::aff::__AFF_FIRST;
-			}
-			/**
-			 * @return returns the legacy PLR_ flag given the modern plr flag
-			 */
-			uint64_t plr2legacy(mods::flags::plr f){
-				for(unsigned i=0; i < mods::flags::plr_flags.size();i++){
-					if(mods::flags::plr_flags[i].first == f){
-						return mods::flags::plr_flags[i].second;
-					}
-				}
-				return 0;
-			}
-			mods::flags::plr legacy2plr(uint64_t f){
-				for(unsigned i=0; i < mods::flags::plr_flags.size();i++){
-					if(mods::flags::plr_flags[i].second == f){
-						return mods::flags::plr_flags[i].first;
-					}
-				}
-				return mods::flags::plr::__PLR_FIRST;
-			}
+			//uint64_t aff2legacy(mods::flags::aff f){
+			//	for(unsigned i=0; i < mods::flags::aff_flags.size();i++){
+			//		if(mods::flags::aff_flags[i].first == f){
+			//			return mods::flags::aff_flags[i].second;
+			//		}
+			//	}
+			//	return 0;
+			//}
+			//mods::flags::aff legacy2aff(uint64_t f){
+			//	for(unsigned i=0; i < mods::flags::aff_flags.size();i++){
+			//		if(mods::flags::aff_flags[i].second == f){
+			//			return mods::flags::aff_flags[i].first;
+			//		}
+			//	}
+			//	return mods::flags::aff::__AFF_FIRST;
+			//}
+			///**
+			// * @return returns the legacy PLR_ flag given the modern plr flag
+			// */
+			//uint64_t plr2legacy(mods::flags::plr f){
+			//	for(unsigned i=0; i < mods::flags::plr_flags.size();i++){
+			//		if(mods::flags::plr_flags[i].first == f){
+			//			return mods::flags::plr_flags[i].second;
+			//		}
+			//	}
+			//	return 0;
+			//}
+			//mods::flags::plr legacy2plr(uint64_t f){
+			//	for(unsigned i=0; i < mods::flags::plr_flags.size();i++){
+			//		if(mods::flags::plr_flags[i].second == f){
+			//			return mods::flags::plr_flags[i].first;
+			//		}
+			//	}
+			//	return mods::flags::plr::__PLR_FIRST;
+			//}
 		bool preg_match(std::string_view regex,std::string_view haystack) {
 			using namespace std::regex_constants;
 			return std::regex_search(haystack.data(), std::regex(regex.data()), match_not_null);

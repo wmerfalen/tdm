@@ -41,7 +41,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/hell mods/db mods/testing/lmdb/player-syncing\
 					 mods/testing/lmdb/db mods/player-scaffolding sql/port\
 					 mods/meta_utils mods/acl_list mods/flags mods/js-player-scaffolding \
-					 mods/builder mods/pq mods/crypto utils mods/macro_impl act.comm mods/extra_desc_data
+					 mods/builder mods/pq mods/crypto utils mods/macro_impl \
+					 act.comm mods/extra_desc_data mods/overhead_map
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

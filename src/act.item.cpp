@@ -1475,6 +1475,7 @@ int find_eq_pos(struct char_data *ch, struct obj_data *obj, char *arg) {
 
 
 ACMD(do_wear) {
+	MENTOC_PREAMBLE();
 	char arg1[MAX_INPUT_LENGTH];
 	char arg2[MAX_INPUT_LENGTH];
 	struct obj_data *obj, *next_obj;
@@ -1538,6 +1539,7 @@ ACMD(do_wear) {
 			}
 		}
 	}
+	
 }
 
 

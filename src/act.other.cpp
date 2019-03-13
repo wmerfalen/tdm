@@ -984,6 +984,10 @@ ACMD(do_gen_tog) {
 		{
 			"Will no longer track through doors.\r\n",
 			"Will now track through doors.\r\n"
+		},
+		{
+			"Overhead map disabled.\r\n",
+			"Overhead map enabled.\r\n"
 		}
 	};
 
@@ -1059,6 +1063,10 @@ ACMD(do_gen_tog) {
 
 		case SCMD_TRACK:
 			result = (track_through_doors = !track_through_doors);
+			break;
+
+		case SCMD_AUTOMAP:
+			result = PRF_TOG_CHK(ch,PRF_OVERHEAD_MAP);
 			break;
 
 		default:

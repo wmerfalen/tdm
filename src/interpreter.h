@@ -119,6 +119,7 @@ struct alias_data {
 #define SCMD_SLOWNS	14
 #define SCMD_AUTOEXIT	15
 #define SCMD_TRACK	16
+#define SCMD_AUTOMAP 17
 
 /* do_wizutil */
 #define SCMD_REROLL	0

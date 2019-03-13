@@ -6,6 +6,14 @@
 #include <functional>
 #include <type_traits>
 namespace mods::flags {
+	enum chunk_type_t {
+		LEGACY_AFF = 0,
+		LEGACY_PLR,
+		VISION,
+		FIRST = LEGACY_AFF,
+		LAST = VISION
+	};
+	constexpr static uint64_t NOT_IMPL = (1 << 22);
 	constexpr static uint64_t LEGACY_PLR_KILLER = (1 << 0);
 	constexpr static uint64_t LEGACY_PLR_THIEF = (1 << 1);
 	constexpr static uint64_t LEGACY_PLR_FROZEN = (1 << 2);
@@ -46,7 +54,7 @@ namespace mods::flags {
 	constexpr static uint64_t LEGACY_AFF_UNUSED20 = (1 << 20);
 	constexpr static uint64_t LEGACY_AFF_CHARM = (1 << 21);
 	enum plr {
-		KILLER = 0,THIEF,FROZEN,DONTSET,
+		KILLER = 1,THIEF,FROZEN,DONTSET,
 		WRITING,MAILING,CRASH,SITEOK,
 		NOTDEADYET,NOSHOUT,NOTITLE,DELETED,LOADROOM,
 		NOWIZLIST,INVSTART,CRYO,NODELETE,
@@ -54,11 +62,12 @@ namespace mods::flags {
 		__PLR_LAST = CRYO
 	};
 	enum aff {
-		BLIND = 0, INVISIBLE, DETECT_ALIGN, DETECT_INVIS, DETECT_MAGIC, SENSE_LIFE, WATERWALK,
+		BLIND = 1, INVISIBLE, DETECT_ALIGN, DETECT_INVIS, DETECT_MAGIC, SENSE_LIFE, WATERWALK,
 		SANCTUARY, GROUP, CURSE, INFRAVISION, POISON, PROTECT_EVIL, PROTECT_GOOD,
 		SLEEP, NOTRACK, UNUSED16,CHARM, UNUSED17, SNEAK, HIDE,
+		THERMAL_VISION, NIGHT_VISION, NORMAL_SIGHT,
 		__AFF_FIRST = BLIND,
-		__AFF_LAST = HIDE
+		__AFF_LAST = NORMAL_SIGHT
 	};
 	constexpr static uint64_t PLR_FLAG_COUNT = plr::__PLR_LAST + 1;
 	constexpr static uint64_t AFF_FLAG_COUNT = aff::__AFF_LAST + 1;
@@ -70,7 +79,7 @@ namespace mods::flags {
 	extern plr_container_t plr_flags;
 	extern aff_container_t aff_flags;
 	template <typename T>
-		static inline std::string serialize(const std::map<T,bool>& vals){
+		static inline std::string serialize(const T& vals){
 			std::vector<uint64_t> buffer;
 			for(auto &[flag,status] : vals){
 				if(status){

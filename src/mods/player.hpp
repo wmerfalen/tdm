@@ -24,6 +24,7 @@ namespace mods {
 #include "drone.hpp"
 #include <chrono>
 #include "acl_list.hpp"
+#include "overhead_map.hpp"
 
 #define WEAPON_SET_NUM 1
 extern size_t send_to_char(char_data *ch, const char *messg, ...);
@@ -55,7 +56,6 @@ namespace mods {
 				MOB_MUTED_DESCRIPTOR,
 				DRONE_MUTED_DESCRIPTOR
 			};
-
 
 			/* constructors and destructors */
 			player();
@@ -136,7 +136,7 @@ namespace mods {
 			void affect(mods::flags::aff flag);
 			void remove_affect(uint64_t flag);
 			void remove_affect(mods::flags::aff flag);
-			const std::map<mods::flags::aff,bool>& get_affected();
+			aligned_int_t get_affected();
 			void clear_all_affected();
 
 			/** PLR_* Affects */
@@ -146,7 +146,7 @@ namespace mods {
 			void affect_plr(mods::flags::plr flag);
 			void remove_affect_plr(uint64_t flag);
 			void remove_affect_plr(mods::flags::plr flag);
-			const std::map<mods::flags::plr,bool>& get_affected_plr();
+			aligned_int_t get_affected_plr();
 			void clear_all_affected_plr();
 
 			/** char_special_data_saved */
@@ -389,7 +389,54 @@ namespace mods {
 			void set_authenticated(bool b) { m_authenticated = b; }
 			void set_prefs(long prefs){ cd()->player_specials->saved.pref = prefs; }
 			auto get_prefs(){ return cd()->player_specials->saved.pref; }
+			auto get_lense(){ return m_lense_type; }
+			void set_lense(const lense_type_t& lense){ m_lense_type = lense; }
 
+			/**
+			 * The m_flag structure is the better design choice for any flag or preference
+			 * saving mechanism. The affect/plr affect function interface on this object
+			 * wastes a lot of space by using enums which are 64 bits in size. For that size
+			 * we could have 64 flags instead of one enum that's 64 bits long. 
+			 *
+			 *
+			 * The m_flag interface philosophy is that you can essentially fill the std::array
+			 * that is m_flags with "chunks" of data. Each chunk corresponds to the set of 
+			 * flags that the user is interested in. If we want to dedicate 64 bits to a user's
+			 * preferences, all we'd have to do is agree on the index for which "chunk" that
+			 * the flags will be stored in. 
+			 *
+			 * If we wanted to store legacy values, we could dedicate the first chunk (0, zero)
+			 * to the m_flags chunk as follows:
+			 * m_flags[0] |= AFF_BLIND;
+			 * ...
+			 *
+			 * Of course, we have helper functions below that will do the job for us:
+			 *
+			 * player->set_flag(LEGACY_AFF_CHUNK,AFF_BLIND);
+			 *
+			 */
+			using chunk_type_t = mods::flags::chunk_type_t;
+			aligned_int_t set_flag(chunk_type_t chunk,aligned_int_t bit){
+				m_flags[chunk] |= bit;
+				return m_flags[chunk];
+			}
+			aligned_int_t toggle_flag(chunk_type_t chunk,aligned_int_t bit){
+				m_flags[chunk] ^= bit; 
+				return m_flags[chunk];
+			}
+			aligned_int_t remove_flag(chunk_type_t chunk,aligned_int_t bit){
+				m_flags[chunk] &= ~(bit);
+				return m_flags[chunk];
+			}
+			aligned_int_t get_chunk(chunk_type_t chunk) const {
+				return m_flags[chunk];
+			}
+			bool has_flag(chunk_type_t chunk,aligned_int_t bit) const {
+				return m_flags[chunk] & bit;
+			}
+
+		protected:
+			lense_type_t m_lense_type;
 		private: 
 			bool m_authenticated;
 			std::shared_ptr<builder_data_t> m_builder_data;
@@ -399,8 +446,7 @@ namespace mods {
 			bool m_god_mode;
 			bool m_imp_mode;
 			bool m_bui_mode;
-			std::map<mods::flags::aff,bool> m_affected;
-			std::map<mods::flags::plr,bool> m_affected_plr;
+			std::array<aligned_int_t,mods::flags::chunk_type_t::LAST + 1> m_flags;
 			std::shared_ptr<mods::descriptor_data> m_desc;
 			std::string	m_name;
 			class_capability_t m_class_capability;

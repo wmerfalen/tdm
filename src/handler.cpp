@@ -226,7 +226,7 @@ void affect_modify(struct char_data *ch, byte loc, sbyte mod,
 /* This updates a character by subtracting everything he is affected by */
 /* restoring original abilities, and then affecting all again           */
 void affect_total(struct char_data *ch) {
-	struct affected_type *af;
+	affected_type *af;
 	int i, j;
 
 	for(i = 0; i < NUM_WEARS; i++) {
@@ -283,8 +283,8 @@ void affect_total(struct char_data *ch) {
 
 /* Insert an affect_type in a char_data structure
    Automatically sets apropriate bits and apply's */
-void affect_to_char(struct char_data *ch, struct affected_type *af) {
-	struct affected_type *affected_alloc;
+void affect_to_char(char_data *ch,affected_type *af) {
+	affected_type *affected_alloc;
 
 	CREATE(affected_alloc, struct affected_type, 1);
 
