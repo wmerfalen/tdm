@@ -5,6 +5,8 @@
 #include <utility>
 #include <functional>
 #include <type_traits>
+#include <vector>
+#include <string>
 namespace mods::flags {
 	enum chunk_type_t {
 		LEGACY_AFF = 0,

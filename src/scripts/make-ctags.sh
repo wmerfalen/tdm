@@ -2,12 +2,12 @@
 #DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 #cd $DIR/../
 #rm tags 2>/dev/null
-cd /home/fud/code/siege-mud/src
-ctags -R -f /home/fud/code/siege-mud/src/tags  --links=no --totals=yes \
+cd $HOME/code/siege-mud/src
+~/bin/ctags -R -f $HOME/code/siege-mud/src/tags  --links=no --totals=yes \
 	--exclude='*.php' --exclude=boost_1_66_0 \
 	--exclude=liblmdb \
 	--exclude=sqlightning \
-	--exclude=/home/fud/code/siege-mud/src/util/ \
+	--exclude=$HOME/code/siege-mud/src/util/ \
 	--exclude=boost-cpp --exclude=mods/lib \
 	--exclude=mods/lmdb --exclude=mods/php \
 	--exclude='*.py' --exclude=Makefile* \

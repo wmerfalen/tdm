@@ -232,7 +232,7 @@ pqxx::result db_get_all(std::string table);
 //result_container_t db_get_by_meta(std::string table, std::string col,std::string value);
 //result_container_t db_get_by_meta(std::string table, std::string col,const pqxx::tuple::reference& value);
 pqxx::result db_get_by_meta(std::string table, std::string col,const std::string & value);
-pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::tuple::reference& value);
+pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::row::reference& value);
 //mods::lmdb::result_container_t db_get_all_pluck(std::string table,const std::vector<const std::string&>& pluck);
 //bool db_update(mods::lmdb::table_type_t table,
 //		mods::lmdb::mutable_map_t & values,

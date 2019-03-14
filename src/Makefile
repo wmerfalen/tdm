@@ -1,7 +1,6 @@
 src = .
 builddir = build
-#CC = g++-7
-CC = /usr/bin/clang
+CC = /usr/bin/clang++-8
 BINDIR = ../bin
 DATA_DIR = "$(CURDIR)/../lib/"
 JS_PROFILES_PATH = "$(CURDIR)/../lib/js/profiles/"
@@ -21,11 +20,8 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \
 	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\" \
-	-stdlib=libstdc++ 
-#-A -da \
-#	-Lboost-cpp/build/lib\ -Ipqxx 
-#	-Imods/include -Iboost-cpp -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" 
-LIBS = -lpqxx $(openssl) -lstdc++ -lm 
+	-stdlib=libc++ 
+LIBS = $(openssl) -lc++ -lm -lpqxx -lpq
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
 					 act.wizard alias ban boards bsd-snprintf castle \
