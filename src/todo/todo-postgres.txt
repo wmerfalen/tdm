@@ -1,0 +1,7 @@
+[ ]-> wrap the calls to most common sql routines
+	[ ]-> wrap select sql string building
+		[ ]-> wrap select sql string building (for explicitly defined columns)
+	[ ]-> wrap update sql string building
+	[ ]-> wrap insert sql string building
+		[ ]-> get the last inserted id on demand (not automatically,unless specified)
+

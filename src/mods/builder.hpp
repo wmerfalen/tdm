@@ -45,7 +45,7 @@ namespace mods::builder {
 	extern std::array<std::pair<int,std::string>,23> type_flags;
 	extern std::array<std::pair<int,std::string>,3> type2_flags;
 	/* Factory method to generate a room for us */
-	struct room_data new_room(struct char_data* ch,int direction);
+	room_data new_room(std::shared_ptr<mods::player> player,int direction);
 	bool flush_to_db(struct char_data *ch,room_vnum room);
 	bool title(room_rnum room,std::string_view str_title);
 	bool description(room_rnum room,std::string_view str_description);

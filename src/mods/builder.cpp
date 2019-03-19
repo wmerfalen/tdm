@@ -234,15 +234,19 @@ namespace mods::builder {
 
 	inline void initialize_builder(std::shared_ptr<mods::player> player){
 		if(!player->builder_data){
+			std::cerr << "initialize_builder: creating shared_ptr\n";
 			player->builder_data = std::make_shared<builder_data_t>();
+		}else{
+			std::cerr << "initialize_builder: shared_ptr already built\n";
 		}
 	}
 	void pave_to(std::shared_ptr<mods::player> player,room_data * current_room,int direction) {
 		initialize_builder(player);
-		r_status(player,std::string("start_room: ") + std::to_string(
-		                                                    player->builder_data->room_pavements.start_room)
-		                                               );
-		mods::builder::new_room(*player,direction);
+		r_status(player,
+				std::string("start_room: ") + 
+				std::to_string(player->builder_data->room_pavements.start_room)
+		);
+		mods::builder::new_room(player,direction);
 		player->builder_data->room_pavements.rooms.push_back(world.size()-1);
 		auto created_room = world.end()- 1;
 		created_room->number = player->builder_data->room_pavements.start_room + player->builder_data->room_pavements.current_room_number;
@@ -500,36 +504,22 @@ namespace mods::builder {
 		mods::globals::register_room(world_top);
 		return 0;
 	}
-	struct room_data new_room(struct char_data* ch,int direction) {
-		struct room_data room;
-		room.number = world.size();
-		room.zone = world[IN_ROOM(ch)].zone;
-		room.sector_type = world[IN_ROOM(ch)].sector_type;
-		room.name = strdup("title");
-		room.description = strdup("description");
-		room.ex_descriptions().emplace_back("","");
-
-		for(unsigned i =0; i < NUM_OF_DIRS; i++) {
-			room.dir_option[i] = nullptr;
-		}
-
-		world[IN_ROOM(ch)].dir_option[direction] = (struct room_direction_data*) calloc(1,sizeof(room_direction_data));
-		world[IN_ROOM(ch)].dir_option[direction]->general_description = strdup("<default>");
-		world[IN_ROOM(ch)].dir_option[direction]->keyword = strdup("door");
-		world[IN_ROOM(ch)].dir_option[direction]->exit_info = EX_ISDOOR;
-		world[IN_ROOM(ch)].dir_option[direction]->key = -1;
-		world[IN_ROOM(ch)].dir_option[direction]->to_room = world.size();
-		room.room_flags = 0;
-		room.light = 0;
-		room.func = nullptr;
-		room.contents = nullptr;
-		room.people = nullptr;
-		world.push_back(room);
+	room_data new_room(std::shared_ptr<mods::player> player,int direction) {
+		world.emplace_back(room_data());
 		mods::globals::register_room(world.size());
+		/*
+		world.back().dir_option[direction] = (room_direction_data*) calloc(1,sizeof(room_direction_data));
+		world.back().dir_option[direction]->general_description = strdup("<default>");
+		world.back().dir_option[direction]->keyword = strdup("door");
+		world.back().dir_option[direction]->exit_info = EX_ISDOOR;
+		world.back().dir_option[direction]->key = -1;
+		world.back().dir_option[direction]->to_room = world.size();
+		*/
 		//char_from_room(ch);
 		//char_to_room(ch,world_top);
+		//std::cerr << "foobar\n";
 
-		return room;
+		return world.back();
 	}
 	bool title(room_rnum room_id,std::string_view str_title) {
 		std::size_t rid = room_id;
@@ -3381,7 +3371,7 @@ ACMD(do_rbuild) {
 	one_argument(one_argument(argument,&command[0],max_char),&direction[0],max_char);
 
 	if(std::string(&command[0]).compare("create") == 0 && IS_DIRECTION(&direction[0])) {
-		mods::builder::new_room(ch,mods::globals::dir_int(direction[0]));
+		mods::builder::new_room(player,mods::globals::dir_int(direction[0]));
 		r_error(player,"Room created");
 		return;
 	}
@@ -3698,10 +3688,11 @@ ACMD(do_rbuild) {
 	auto args = mods::util::subcmd_args<11,args_t>(argument,"list-paved");
 
 	if(args.has_value()) {
-		for(auto room_id : player->cd()->builder_data->room_pavements.rooms) {
-			r_status(player,std::to_string(room_id));
+		if(player->builder_data){
+			for(auto room_id : player->builder_data->room_pavements.rooms) {
+				r_status(player,std::to_string(room_id));
+			}
 		}
-
 		return;
 	}
 
@@ -3710,7 +3701,8 @@ ACMD(do_rbuild) {
 	if(args.has_value()) {
 		unsigned saved_room_counter = 0;
 
-		for(auto room_id : player->cd()->builder_data->room_pavements.rooms) {
+		if(player->builder_data){
+		for(auto room_id : player->builder_data->room_pavements.rooms) {
 			std::size_t rid = room_id;
 
 			if(rid >= world.size()) {
@@ -3724,6 +3716,7 @@ ACMD(do_rbuild) {
 					saved_room_counter++;
 				}
 			}
+		}
 		}
 
 		r_success(player,std::string("Saved ") + std::to_string(saved_room_counter) + " rooms");
@@ -3765,9 +3758,9 @@ ACMD(do_rbuild) {
 				r_error(player,"Invalid starting room number");
 				return;
 			} else {
-				player->cd()->builder_data->room_pave_mode = true;
-				player->cd()->builder_data->room_pavements.start_room = starting_room_number.value();
-				player->cd()->builder_data->room_pavements.zone_id = zone_id.value();
+				player->builder_data->room_pave_mode = true;
+				player->builder_data->room_pavements.start_room = starting_room_number.value();
+				player->builder_data->room_pavements.zone_id = zone_id.value();
 			}
 
 			r_status(player,"Starting pave mode. You can start moving around now. To stop, type 'rbuild pave off'");
@@ -3775,9 +3768,11 @@ ACMD(do_rbuild) {
 		}
 
 		if(arg_vec[1].compare("off") == 0) {
-			player->cd()->builder_data->room_pave_mode = false;
+			if(player->builder_data){
+			player->builder_data->room_pave_mode = false;
 			r_status(player,"Stopped pave mode.");
 			r_status(player,"Transaction ID: 0");
+			}
 			return;
 		}
 

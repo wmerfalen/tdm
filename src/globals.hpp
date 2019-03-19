@@ -111,16 +111,7 @@ namespace mods {
 			void char_from_room(char_data*);
 			void char_to_room(const room_rnum &,char_data*);
 		};
-		/*
-		namespace players {
-        	template <typename T> std::shared_ptr<mods::player>& get(T ch);
-			std::shared_ptr<mods::player>& name(const std::string & n);
-		};
-		*/
     };
-	namespace utils {
-		int stoi(const std::string & str,int & in_int);
-	};
 };
 
 

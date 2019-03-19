@@ -696,15 +696,18 @@ void game_loop(socket_t mother_desc) {
 			}
 			auto it = mods::globals::socket_map.find(operating_socket);
 			if(it == mods::globals::socket_map.end()){
-				log("socket_map didn't have operating socket: ",operating_socket);
+				//log("socket_map didn't have operating socket: %d",operating_socket);
+				epoll_ctl (epoll_fd, EPOLL_CTL_DEL, operating_socket, &epoll_ev);
+				CLOSE_SOCKET(operating_socket);
 				++i;
+				//std::cerr << "i: " << i << "\n";
 				continue;
 			}
 			auto player = it->second;
 			mods::globals::current_player = player;
 
 			if(process_input(player->desc()) < 0){
-				log(std::string("process_input failed for player "), player->name().c_str()); 
+				//log(std::string("process_input failed for player "), player->name().c_str()); 
 				mods::globals::socket_map.erase(it);
 				mods::globals::current_player.reset();
 				deregister_player(player);

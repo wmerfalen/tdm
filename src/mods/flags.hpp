@@ -80,54 +80,20 @@ namespace mods::flags {
 	using aff_container_t = std::vector<std::pair<aff,uint64_t>>;
 	extern plr_container_t plr_flags;
 	extern aff_container_t aff_flags;
-	template <typename T>
-		static inline std::string serialize(const T& vals){
-			std::vector<uint64_t> buffer;
-			for(auto &[flag,status] : vals){
-				if(status){
-					buffer.emplace_back(flag);
-				}
-			}
-			if(buffer.size() == 0){
-				return "";
-			}
-			std::string serialized;
-			serialized.resize(buffer.size() * sizeof(uint64_t));
-			std::fill(serialized.begin(),serialized.end(),0);
-			std::copy(buffer.begin(),buffer.end(),serialized.begin());
-			return serialized;
-		}
-	static inline aff_container_t get_flags(mods::flags::aff a){
-		return aff_flags;
-	}
-	static inline plr_container_t get_flags(mods::flags::plr p){
-		return plr_flags;
-	}
-	template <typename PlayerPointerType>
-		static inline void setter_function(PlayerPointerType player,
-				mods::flags::aff f){
-			player->affect(f);
-		}
-	template <typename PlayerPointerType>
-		static inline void setter_function(PlayerPointerType player,
-				mods::flags::plr f){
-			player->affect_plr(f);
-		}
-	template <typename PlayerPointerType,typename FlagType>
-		static inline void load(PlayerPointerType player,const std::string& data){
-			std::vector<uint64_t> buffer;
-			std::copy(data.begin(),data.end(),buffer.begin());
-			for(unsigned i =0; i < buffer.size(); ++i){
-				for(auto flag : mods::flags::get_flags(
-							static_cast<FlagType>(0))){
-					if(std::find(buffer.begin(),buffer.end(),flag.first) != buffer.end()){
-						setter_function<PlayerPointerType>(
-								player,flag.first
-								);
-					}
-				}
-			}
-		}
-
+	//template <typename PlayerPointerType>
+	//	static inline void setter_function(PlayerPointerType player,
+	//			mods::flags::aff f){
+	//		player->affect(f);
+	//	}
+	//template <typename PlayerPointerType>
+	//	static inline void setter_function(PlayerPointerType player,
+	//			mods::flags::plr f){
+	//		player->affect_plr(f);
+	//	}
+//	template <typename PlayerPointerType,typename FlagType>
+//		static inline void load(PlayerPointerType player,const std::string& data){
+//
+//		}
+//
 };
 #endif

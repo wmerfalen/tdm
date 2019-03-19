@@ -200,7 +200,7 @@ int perform_move(struct char_data *ch, int dir, int need_specials_check) {
 	if(ch == NULL || dir < 0 || dir >= NUM_OF_DIRS || FIGHTING(ch)) {
 		return (0);
 	} else if(!EXIT(ch, dir) || EXIT(ch, dir)->to_room == NOWHERE) {
-		send_to_char(ch, "Alas, you cannot go that way...\r\n");
+			send_to_char(ch, "Alas, you cannot go that way...\r\n");
 	} else if(EXIT_FLAGGED(EXIT(ch, dir), EX_CLOSED) /* !mods */
 			&& !EXIT_FLAGGED(EXIT(ch,dir),EX_BREACHED) &&
 			!IS_SET(world[EXIT(ch,dir)->to_room].dir_option[OPPOSITE_DIR(dir)]->exit_info,EX_BREACHED)
