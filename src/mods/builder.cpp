@@ -973,35 +973,35 @@ ACMD(do_sbuild) {
 		*player << "usage: \r\n" <<
 			" {red}sbuild{/red} {grn}help{/grn}\r\n" <<
 			"  |--> this help menu\r\n" <<
-			"  |____[example]\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {red}sbuild{/red} help\r\n" <<
 			"  |:: (this help menu will show up)\r\n" <<
 			" {red}sbuild{/red} {grn}new{/grn}\r\n" <<
 			" {red}sbuild{/red} {grn}list{/grn}\r\n" <<
 			" {red}sbuild{/red} {grn}attr{/grn} <shop_id> <attr> <value>\r\n" <<
-			"  |:: -:[attributes]:-\r\n" <<
-			"  |:: vnum\r\n" <<
-			"  |:: profit_buy\r\n" <<
-			"  |:: profit_sell\r\n" <<
-			"  |:: type\r\n" <<
-			"  |:: no_such_item1\r\n" <<
-			"  |:: no_such_item2\r\n" <<
-			"  |:: missing_cash1\r\n" <<
-			"  |:: missing_cash2\r\n" <<
-			"  |:: do_not_buy\r\n" <<
-			"  |:: message_buy\r\n" <<
-			"  |:: message_sell\r\n" <<
-			"  |:: temper1\r\n" <<
-			"  |:: bitvector\r\n" <<
-			"  |:: keeper\r\n" <<
-			"  |:: with_who\r\n" <<
-			"  |:: in_room\r\n" <<
-			"  |:: open1\r\n" <<
-			"  |:: open22r\n" <<
-			"  |:: close1\r\n" <<
-			"  |:: close2\r\n" <<
-			"  |:: bankAccount\r\n" <<
-			"  |:: lastsort\r\n" <<
+			"  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
+			"  {gld}|:: vnum{/gld}\r\n" <<
+			"  {gld}|:: profit_buy{/gld}\r\n" <<
+			"  {gld}|:: profit_sell{/gld}\r\n" <<
+			"  {gld}|:: type{/gld}\r\n" <<
+			"  {gld}|:: no_such_item1{/gld}\r\n" <<
+			"  {gld}|:: no_such_item2{/gld}\r\n" <<
+			"  {gld}|:: missing_cash1{/gld}\r\n" <<
+			"  {gld}|:: missing_cash2{/gld}\r\n" <<
+			"  {gld}|:: do_not_buy{/gld}\r\n" <<
+			"  {gld}|:: message_buy{/gld}\r\n" <<
+			"  {gld}|:: message_sell{/gld}\r\n" <<
+			"  {gld}|:: temper1{/gld}\r\n" <<
+			"  {gld}|:: bitvector{/gld}\r\n" <<
+			"  {gld}|:: keeper{/gld}\r\n" <<
+			"  {gld}|:: with_who{/gld}\r\n" <<
+			"  {gld}|:: in_room{/gld}\r\n" <<
+			"  {gld}|:: open1{/gld}\r\n" <<
+			"  {gld}|:: open22r\n" <<
+			"  {gld}|:: close1{/gld}\r\n" <<
+			"  {gld}|:: close2{/gld}\r\n" <<
+			"  {gld}|:: bankAccount{/gld}\r\n" <<
+			"  {gld}|:: lastsort{/gld}\r\n" <<
 			" {red}sbuild{/red} {grn}save{/grn} <shop_id>\r\n" <<
 			" {red}sbuild{/red} {grn}show{/grn} <shop_id>\r\n" <<
 			"\r\n"
@@ -1132,49 +1132,49 @@ ACMD(do_mbuild) {
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 		player->pager_start();
 		*player << "usage: \r\n" <<
-			" mbuild help\r\n" <<
+			" {grn}mbuild{/grn} {red}help{/red}\r\n" <<
 			"  |--> this help menu\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: mbuild help\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}mbuild{/wht} {gld}help{/gld}\r\n" <<
 			"  |:: (this help menu will show up)\r\n" <<
-			" mbuild new\r\n" <<
-			" mbuild list\r\n" <<
-			" mbuild attr <mob_id> <attr> <value>\r\n" <<
-			"  |:: -:[attributes]:-\r\n" <<
-			"  |:: virtual_number\r\n" <<
-			"  |:: name\r\n" <<
-			"  |:: short_description\r\n" <<
-			"  |:: long_description\r\n" <<
-			"  |:: description\r\n" <<
-			"  |:: mana\r\n" <<
-			"  |:: max_mana\r\n" <<
-			"  |:: hit\r\n" <<
-			"  |:: max_hit\r\n" <<
-			"  |:: move\r\n" <<
-			"  |:: max_move\r\n" <<
-			"  |:: armor\r\n" <<
-			"  |:: gold\r\n" <<
-			"  |:: exp\r\n" <<
-			"  |:: hitroll\r\n" <<
-			"  |:: damroll\r\n" <<
-			"  |:: level\r\n" <<
-			"  |:: weight\r\n" <<
-			"  |:: height\r\n" <<
-			"  |:: strength\r\n" <<
-			"  |:: strength_add\r\n" <<
-			"  |:: intelligence\r\n" <<
-			"  |:: wisdom\r\n" <<
-			"  |:: dexterity\r\n" <<
-			"  |:: constitution\r\n" <<
-			"  |:: charisma\r\n" <<
-			"  |:: damnodice\r\n" <<
-			"  |:: damsizedice\r\n" <<
-			"  |:: sex {red}see mbuild help sex{/red}\r\n" <<
-			"  |:: default_position {red}see mbuild help default_position{/red}\r\n" <<
-			"  |:: action {red}see mbuild help action{/red}\r\n" <<
-			" mbuild save <mob_id>\r\n" <<
-			" mbuild show <mob_id>\r\n" <<
-			" mbuild instantiate <mob_id>\r\n" <<
+			" {grn}mbuild{/grn} {red}new{/red}\r\n" <<
+			" {grn}mbuild{/grn} {red}list{/red}\r\n" <<
+			" {grn}mbuild{/grn} {red}attr <mob_id> <attr> <value>{/red}\r\n" <<
+			"  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
+			"  {gld}|:: virtual_number{/gld}\r\n" <<
+			"  {gld}|:: name{/gld}\r\n" <<
+			"  {gld}|:: short_description{/gld}\r\n" <<
+			"  {gld}|:: long_description{/gld}\r\n" <<
+			"  {gld}|:: description{/gld}\r\n" <<
+			"  {gld}|:: mana{/gld}\r\n" <<
+			"  {gld}|:: max_mana{/gld}\r\n" <<
+			"  {gld}|:: hit{/gld}\r\n" <<
+			"  {gld}|:: max_hit{/gld}\r\n" <<
+			"  {gld}|:: move{/gld}\r\n" <<
+			"  {gld}|:: max_move{/gld}\r\n" <<
+			"  {gld}|:: armor{/gld}\r\n" <<
+			"  {gld}|:: gold{/gld}\r\n" <<
+			"  {gld}|:: exp{/gld}\r\n" <<
+			"  {gld}|:: hitroll{/gld}\r\n" <<
+			"  {gld}|:: damroll{/gld}\r\n" <<
+			"  {gld}|:: level{/gld}\r\n" <<
+			"  {gld}|:: weight{/gld}\r\n" <<
+			"  {gld}|:: height{/gld}\r\n" <<
+			"  {gld}|:: strength{/gld}\r\n" <<
+			"  {gld}|:: strength_add{/gld}\r\n" <<
+			"  {gld}|:: intelligence{/gld}\r\n" <<
+			"  {gld}|:: wisdom{/gld}\r\n" <<
+			"  {gld}|:: dexterity{/gld}\r\n" <<
+			"  {gld}|:: constitution{/gld}\r\n" <<
+			"  {gld}|:: charisma{/gld}\r\n" <<
+			"  {gld}|:: damnodice{/gld}\r\n" <<
+			"  {gld}|:: damsizedice{/gld}\r\n" <<
+			"  {gld}|:: sex {red}see mbuild help sex{/red}{/gld}\r\n" <<
+			"  {gld}|:: default_position {red}see mbuild help default_position{/red}{/gld}\r\n" <<
+			"  {gld}|:: action {red}see mbuild help action{/red}{/gld}\r\n" <<
+			" {grn}mbuild{/grn} {red}save <mob_id>{/red}\r\n" <<
+			" {grn}mbuild{/grn} {red}show <mob_id>{/red}\r\n" <<
+			" {grn}mbuild{/grn} {red}instantiate <mob_id>{/red}\r\n" <<
 			"\r\n"
 			;
 		player->pager_end();
@@ -1807,58 +1807,58 @@ ACMD(do_obuild) {
 	if(!vec_args.size() || vec_args[0].compare("help") == 0) {
 		player->pager_start();
 		*player << "usage: \r\n" <<
-			" obuild help\r\n" <<
+			" {grn}obuild{/grn} {red}help{/red}\r\n" <<
 			"  |--> this help menu\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: obuild help\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}obuild{/wht} {gld}help{/gld}\r\n" <<
 			"  |:: (this help menu will show up)\r\n" <<
-			" obuild new\r\n" <<
-			" obuild list\r\n" <<
-			" obuild attr <object_id> <attr> <value>\r\n" <<
-			"  |:: -:[attributes]:-\r\n" <<
-			"  |:: item_number\r\n" <<
-			"  |:: name\r\n" <<
-			"  |:: desc\r\n" <<
-			"  |:: short_desc\r\n" <<
-			"  |:: action_desc\r\n" <<
-			"  |:: worn_on\r\n" <<
-			"  |:: weapon_type {red}see: obuild help weapon_type{/red}\r\n" <<
-			"  |:: weapon_ammo\r\n" <<
-			"  |:: weapon_ammo_max\r\n" <<
-			"  |:: weapon_holds_ammo\r\n" <<
-			"  |:: flags\r\n" <<
-			" obuild ex <object_id> create <index>\r\n" <<
-			" obuild ex <object_id> set <index> <keyword> <description>\r\n" <<
-			" obuild ex <object_id> del <index>\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: obuild ex 6 set 0 \"keyword\" \"my description\"\r\n" <<
-			"  |:: obuild ex 6 del 0\r\n" <<
-			" obuild affected <object_id> set <affected_slot> <location> <modifier>\r\n" <<
-			" obuild affected <object_id> del <affected_slot>\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: obuild affected 6 3 STR 25\r\n" <<
+			" {grn}obuild{/grn} {red}new{/red}\r\n" <<
+			" {grn}obuild{/grn} {red}list{/red}\r\n" <<
+			" {grn}obuild{/grn} {red}attr <object_id> <attr> <value>{/red}\r\n" <<
+			"  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
+			"  {gld}|:: item_number{/gld}\r\n" <<
+			"  {gld}|:: name{/gld}\r\n" <<
+			"  {gld}|:: desc{/gld}\r\n" <<
+			"  {gld}|:: short_desc{/gld}\r\n" <<
+			"  {gld}|:: action_desc{/gld}\r\n" <<
+			"  {gld}|:: worn_on{/gld}\r\n" <<
+			"  {gld}|:: weapon_type {red}see: obuild help weapon_type{/red}{/gld}\r\n" <<
+			"  {gld}|:: weapon_ammo{/gld}\r\n" <<
+			"  {gld}|:: weapon_ammo_max{/gld}\r\n" <<
+			"  {gld}|:: weapon_holds_ammo{/gld}\r\n" <<
+			"  {gld}|:: flags{/gld}\r\n" <<
+			" {grn}obuild{/grn} {red}ex <object_id> create <index>{/red}\r\n" <<
+			" {grn}obuild{/grn} {red}ex <object_id> set <index> <keyword> <description>{/red}\r\n" <<
+			" {grn}obuild{/grn} {red}ex <object_id> del <index>{/red}\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}obuild{/wht} {gld}ex 6 set 0 {/gld}\"keyword\" \"my description\"\r\n" <<
+			"  |:: {wht}obuild{/wht} {gld}ex 6 del 0{/gld}\r\n" <<
+			" {grn}obuild{/grn} {red}affected <object_id> set <affected_slot> <location> <modifier>{/red}\r\n" <<
+			" {grn}obuild{/grn} {red}affected <object_id> del <affected_slot>{/red}\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}obuild{/wht} {gld}affected 6 3 STR 25{/gld}\r\n" <<
 			"  |:: (this will set the affected slot number 3 on object 6 \r\n" <<
 			"      to modify strength by 25)\r\n" <<
 			"  |:: {red}see obuild help affected{/red}\r\n" <<
-			" obuild flag <object_id> extra_flags <value>\r\n"<<
+			" {grn}obuild{/grn} {red}flag <object_id> extra_flags <value>{/red}\r\n"<<
 			" {red}see obuild help extra_flags{/red}\r\n" <<
-			" obuild flag <object_id> <attr> <value>\r\n"<<
+			" {grn}obuild{/grn} {red}flag <object_id> <attr> <value>{/red}\r\n"<<
 			" {red}see obuild help flags{/red}\r\n" <<
-			"  |:: -:[attributes]:-\r\n" <<
-			"  |:: value_0\r\n" <<
-			"  |:: value_1\r\n" <<
-			"  |:: value_2\r\n" <<
-			"  |:: value_3\r\n" <<
-			"  |:: type_flags {red}see: obuild help type_flags{/red}\r\n" <<
-			"  |:: wear_flags {red}see: obuild help wear_flags{/red}\r\n" <<
-			"  |:: extra_flags\r\n" <<
-			"  |:: weight\r\n" <<
-			"  |:: cost\r\n" <<
-			"  |:: cost_per_day\r\n" <<
-			"  |:: timer\r\n" <<
-			"  |:: bitvector {red}see: obuild help bitvector{/red}\r\n" <<
-			" obuild save <object_id>\r\n" <<
-			" obuild show <object_id>\r\n" <<
+			"  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
+			"  {gld}|:: value_0{/gld}\r\n" <<
+			"  {gld}|:: value_1{/gld}\r\n" <<
+			"  {gld}|:: value_2{/gld}\r\n" <<
+			"  {gld}|:: value_3{/gld}\r\n" <<
+			"  {gld}|:: type_flags {red}see: obuild help type_flags{/red}{/gld}\r\n" <<
+			"  {gld}|:: wear_flags {red}see: obuild help wear_flags{/red}{/gld}\r\n" <<
+			"  {gld}|:: extra_flags{/gld}\r\n" <<
+			"  {gld}|:: weight{/gld}\r\n" <<
+			"  {gld}|:: cost{/gld}\r\n" <<
+			"  {gld}|:: cost_per_day{/gld}\r\n" <<
+			"  {gld}|:: timer{/gld}\r\n" <<
+			"  {gld}|:: bitvector {red}see: obuild help bitvector{/red}{/gld}\r\n" <<
+			" {grn}obuild{/grn} {red}save <object_id>{/red}\r\n" <<
+			" {grn}obuild{/grn} {red}show <object_id>{/red}\r\n" <<
 			"\r\n";
 		player->pager_end();
 		player->page(0);
@@ -2731,68 +2731,68 @@ ACMD(do_zbuild) {
 	if(std::string(argument).length() == 0 || std::string(argument).compare("help") == 0) {
 		player->pager_start();
 		*player << "usage: \r\n" <<
-			" zbuild help\r\n" <<
+			" {grn}zbuild{/grn} {red}help{/red}\r\n" <<
 			"  |--> this help menu\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: zbuild help\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}zbuild{/wht} {gld}help{/gld}\r\n" <<
 			"  |:: (this help menu will show up)\r\n" <<
-			" zbuild new <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>\r\n" <<
+			" {grn}zbuild{/grn} {red}new <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>{/red}\r\n" <<
 			"  |--> Creates a new zone and maps the parameters to each field in the database.\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: zbuild new 1200 1299 \"The never ending frost\" 90 2\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}zbuild{/wht} {gld}new 1200 1299 {/gld}\"The never ending frost\" 90 2\r\n" <<
 			"  |:: (creates a new zone which starts at rnum 1200 and ends on 1209\r\n" <<
 			"  |:: \"The never ending frost\" will be the name of the zone. Quotes must be \r\n" <<
 			"  |:: used here. 90 is the lifespan and 2 is the most common reset \r\n" <<
 			"  |:: mode so leave it at that for now.)\r\n" <<
-			" zbuild list\r\n" <<
+			" {grn}zbuild{/grn} {red}list{/red}\r\n" <<
 			"  |--> lists the current zones saved to the db\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: zbuild list\r\n"<<
-			" zbuild delete <id>...<N>\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}zbuild{/wht} {gld}list{/gld}\r\n"<<
+			" {grn}zbuild{/grn} {red}delete <id>...<N>{/red}\r\n" <<
 			"  |--> deletes the zone from the db with the id <id>. Multiple IDs can be specified\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: zbuild delete 1\r\n" <<
-			" zbuild mob <zone_id> <mob_vnum> <room_vnum> <max> <if_flag>\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}zbuild{/wht} {gld}delete 1{/gld}\r\n" <<
+			" {grn}zbuild{/grn} {red}mob <zone_id> <mob_vnum> <room_vnum> <max> <if_flag>{/red}\r\n" <<
 			"  |--> places the mob identified by mob_vnum in the room room_vnum\r\n" <<
-			" zbuild obj <zone_id> <obj_vnum> <room_vnum> <max> <if_flag>\r\n" <<
+			" {grn}zbuild{/grn} {red}obj <zone_id> <obj_vnum> <room_vnum> <max> <if_flag>{/red}\r\n" <<
 			"  |--> places object obj_vnum in room room_vnum\r\n" <<
-			" zbuild obj2mob <zone_id> <obj_vnum> <mob_vnum> <max> <if_flag>\r\n" <<
+			" {grn}zbuild{/grn} {red}obj2mob <zone_id> <obj_vnum> <mob_vnum> <max> <if_flag>{/red}\r\n" <<
 			"  |--> gives object obj_vnum to mob mob_vnum\r\n" <<
-			" zbuild obj2obj <zone_id> <obj_vnum> <obj_vnum2> <max> <if_flag>\r\n" <<
+			" {grn}zbuild{/grn} {red}obj2obj <zone_id> <obj_vnum> <obj_vnum2> <max> <if_flag>{/red}\r\n" <<
 			"  |--> places object obj_vnum into object obj_vnum2\r\n" <<
 			"\r\n" <<
 			" /-------------------------------------------------------------\\\r\n" <<
 			" | P A V E M E N T S  S Y S T E M                   version 0.1|\r\n" <<
 			" |_____________________________________________________________/\r\n" <<
-			" zbuild pave <mob|obj> <mob_vnum|obj_vnum>\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: zbuild pave mob 1050\r\n" <<
+			" {grn}zbuild{/grn} {red}pave <mob|obj> <mob_vnum|obj_vnum>{/red}\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}zbuild{/wht} {gld}pave mob 1050{/gld}\r\n" <<
 			"  |:: (remembers the mob with vnum of 1050. You can then type 'zbuild here'\r\n" <<
 			"  |:: to place a mob in the room you are currently in.)\r\n"<<
-			"  |____[example]\r\n" <<
-			"  |:: zbuild pave obj 90\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}zbuild{/wht} {gld}pave obj 90{/gld}\r\n" <<
 			"  |:: (remembers the obj with vnum of 90. You can then type 'zbuild here <obj>'\r\n" <<
 			"  |:: to place the object in the specified object. If you don't specify <obj>\r\n" <<
 			"  |:: then it will default to placing the object within the room you are currently\r\n" <<
 			"  |:: standing in.)\r\n" <<
-			" zbuild here [obj]\r\n" <<
+			" {grn}zbuild{/grn} {red}here [obj]{/red}\r\n" <<
 			"  |___[example]\r\n" <<
 			"  |:: (places the object or mob in the current room (if no arguments are given).\r\n" <<
 			"  |:: if [obj] is specified then this command will place the current object in [obj]\r\n" <<
 			"  |:: Obviously, you can't place a mob in an object so [obj] is only honoured for objects)\r\n" <<
-			" zbuild pave list\r\n" <<
+			" {grn}zbuild{/grn} {red}pave list{/red}\r\n" <<
 			"  |:: (lists all the pavements currently in your session)\r\n" <<
-			" zbuild switch <id>\r\n" <<
+			" {grn}zbuild{/grn} {red}switch <id>{/red}\r\n" <<
 			"  |:: (switches to the pavement with and id of <id>. To see current\r\n" <<
 			"  |:: pavements use 'zbuild pave list')\r\n" <<
 			"\r\n" <<
 			" /-------------------------------------------------------------\\\r\n" <<
 			" | M A N U A L  P L A C E M E N T S                            |\r\n" <<
 			" |_____________________________________________________________/\r\n" <<
-			" zbuild place <zone_id> <command> <if_flag> <arg1> <arg2> <arg3>\r\n" <<
+			" {grn}zbuild{/grn} {red}place <zone_id> <command> <if_flag> <arg1> <arg2> <arg3>{/red}\r\n" <<
 			"  |--> creates a reset command for the zone 'zone_id'.\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: zbuild place 5 M 0 1500 500 300\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}zbuild{/wht} {gld}place 5 M 0 1500 500 300{/gld}\r\n" <<
 			"  |:: (creates a reset command that grabs the mobile (specified by M) and uses \r\n" <<
 			"  |:: the three arguments 1500, 500, and 300 as the arguments to the reset zone\r\n" <<
 			"  |:: function\r\n" <<
@@ -2806,9 +2806,9 @@ ACMD(do_zbuild) {
 			"  |:: 'D': Set state of door\r\n" <<
 			"  |:: )\r\n" <<
 			" {red}see: zbuild help place{/red}\r\n" <<
-			" zbuild place-list <zone_id>\r\n" <<
+			" {grn}zbuild{/grn} {red}place-list <zone_id>{/red}\r\n" <<
 			"  |--> lists all place commands for 'zone_id'.\r\n" <<
-			" zbuild place-remove <zone_id> <place_id>\r\n" <<
+			" {grn}zbuild{/grn} {red}place-remove <zone_id> <place_id>{/red}\r\n" <<
 			"  |--> removes the place command 'place_id' in zone 'zone_id'\r\n" <<
 			"\r\n";
 		player->pager_end();
@@ -3188,160 +3188,160 @@ ACMD(do_rbuild) {
 
 	if(std::string(argument).length() == 0 || std::string(argument).compare("help") == 0) {
 		player->pager_start() << "usage: \r\n" <<
-			" rbuild help\r\n" <<
+			" {grn}rbuild{/grn} {red}help{/red}\r\n" <<
 			"  |--> this help menu\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: rbuild help\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}help{/gld}\r\n" <<
 			"  |:: (this help menu will show up)\r\n" <<
 
-			" rbuild <list> {yel}[page]\r\n" <<
+			" {grn}rbuild{/grn} {red}<list> {yel}[page]{/red}\r\n" <<
 			"  |--> list " << std::to_string(mods::builder::RNUMLIST_MAX_PER_CALL) << " rooms per page. The page argument is zero-indexed\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: rbuild list\r\n" << 
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}list{/gld}\r\n" << 
 			"  |:: (list the first " << std::to_string(mods::builder::RNUMLIST_MAX_PER_CALL) << " rooms)\r\n" <<
-			"  |:: rbuild list 2\r\n" << 
+			"  |:: {wht}rbuild{/wht} {gld}list 2{/gld}\r\n" << 
 			"  |:: (list the third page)\r\n" <<
 
 			" {grn}NEW FEATURE [as of: 2019-03]{/grn}\r\n" <<
 			" {red}FEATURE: Room textures{/red}\r\n" <<
-			" rbuild <texture> <type1> ... <typeN>\r\n" <<
+			" {grn}rbuild{/grn} {red}<texture> <type1> ... <typeN>{/red}\r\n" <<
 			"  |--> Set the room's texture type. A room can have multiple texture types.\r\n" <<
 			"  |:: {yel}-:[{/yel}{grn}types{/grn}{yel}]:-{/yel}\r\n" <<
 			"  |:: \r\n" <<
-			"  |:: GRASS\r\n" <<
-			"  |:: CEMENT\r\n" <<
-			"  |:: OUTSIDE\r\n" <<
-			"  |:: INSIDE\r\n" <<
-			"  |:: SEWER\r\n" << 
-			"  |:: VOLATILE\r\n" << 
-			"  |____[example]\r\n" <<
-			"  |:: rbuild texture GRASS OUTSIDE\r\n" <<
+			"  {gld}|:: GRASS{/gld}\r\n" <<
+			"  {gld}|:: CEMENT{/gld}\r\n" <<
+			"  {gld}|:: OUTSIDE{/gld}\r\n" <<
+			"  {gld}|:: INSIDE{/gld}\r\n" <<
+			"  {gld}|:: SEWER{/gld}\r\n" << 
+			"  {gld}|:: VOLATILE{/gld}\r\n" << 
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}texture GRASS OUTSIDE{/gld}\r\n" <<
 
-			" rbuild <texture> <delete> <type1> ... <typeN>\r\n" <<
+			" {grn}rbuild{/grn} {red}<texture> <delete> <type1> ... <typeN>{/red}\r\n" <<
 			"  |--> Delete the textures listed after the delete keyword.\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: rbuild texture delete GRASS OUTSIDE\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}texture delete GRASS OUTSIDE{/gld}\r\n" <<
 			
-			" rbuild <texture> <clear>\r\n" <<
+			" {grn}rbuild{/grn} {red}<texture> <clear>{/red}\r\n" <<
 			"  |--> Deletes all textures in the current room. WARNING: This does not prompt for confirmation!\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: rbuild texture clear\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}texture clear{/gld}\r\n" <<
 
-			" rbuild <set> <rnum> <number>\r\n" <<
+			" {grn}rbuild{/grn} {red}<set> <rnum> <number>{/red}\r\n" <<
 			"  |--> Set the real room number of the current room\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: rbuild set rnum 1204\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}set rnum 1204{/gld}\r\n" <<
 			"  |:: (next time you do 'rbuild room' it will display 1204)\r\n" <<
 
-			" rbuild <room>\r\n" <<
+			" {grn}rbuild{/grn} {red}<room>{/red}\r\n" <<
 			"  |--> get the real room number of the room\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: rbuild room\r\n"<<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}room{/gld}\r\n"<<
 
-			" rbuild <save>\r\n" <<
+			" {grn}rbuild{/grn} {red}<save>{/red}\r\n" <<
 			"  |--> save the current room you are standing in\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: rbuild save\r\n"<<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}save{/gld}\r\n"<<
 
-			" rbuild ed <delete> <N>\n" <<  /** TODO: needs impl */
+			" {grn}rbuild{/grn} {red}ed <delete> <N>{/red}\n" <<  /** TODO: needs impl */
 			"  |--> deletes the ed number N with this room\r\n" << 
-			"  |____[example]\r\n" <<
-			"  |:: rbuild ed delete 3\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}ed delete 3{/gld}\r\n" <<
 
-			" rbuild ed <list>\r\n" << 	/** TODO needs impl */
+			" {grn}rbuild{/grn} {red}ed <list>{/red}\r\n" << 	/** TODO needs impl */
 			"  |--> lists the current ed structures currently associated with this room\r\n" << 
-			"  |____[example]\r\n" <<
-			"  |:: rbuild ed list\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}ed list{/gld}\r\n" <<
 			  
 
-			" rbuild ed <save-all>\r\n" << /** TODO: needs impl */
+			" {grn}rbuild{/grn} {red}ed <save-all>{/red}\r\n" << /** TODO: needs impl */
 			"  |--> saves all ed entries\r\n" << 
-			"  |____[example]\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
 
 
-			" rbuild ed <show> <N>\r\n" <<  /** TODO: needs impl */
+			" {grn}rbuild{/grn} {red}ed <show> <N>{/red}\r\n" <<  /** TODO: needs impl */
 			"  |--> lists the current ed structures currently associated with this room\r\n" << 
-			"  |____[example]\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
 
 
-			" rbuild ed <new>\r\n" <<  /** TODO: needs impl */
+			" {grn}rbuild{/grn} {red}ed <new>{/red}\r\n" <<  /** TODO: needs impl */
 			"  |--> creates an ed for this room\r\n" << 
-			"  |____[example]\r\n" <<
-			"  |:: rbuild ed new\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}ed new{/gld}\r\n" <<
 
 
-			" rbuild ed <N> <keyword> <value>\r\n" <<  /** TODO: needs impl */
+			" {grn}rbuild{/grn} {red}ed <N> <keyword> <value>{/red}\r\n" <<  /** TODO: needs impl */
 			"  |--> sets the Nth keyword to <value>\r\n" << 
-			"  |____[example]\r\n" <<
-			"  |:: rbuild ed 3 keyword \"sign gold wall\"\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}ed 3 keyword {/gld}\"sign gold wall\"\r\n" <<
 
 
-			" rbuild ed <N> <description> <value>\r\n" <<  /** TODO: needs impl */
+			" {grn}rbuild{/grn} {red}ed <N> <description> <value>{/red}\r\n" <<  /** TODO: needs impl */
 			"  |--> sets the Nth description to <value>\r\n" << 
-			"  |____[example]\r\n" <<
-			"  |:: rbuild ed 3 description \"A very long passage about newbie rules, etc, etc, ...\"\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}ed 3 description {/gld}\"A very long passage about newbie rules, etc, etc, ...\"\r\n" <<
 
 
-			" rbuild <create> <direction>\r\n" <<
+			" {grn}rbuild{/grn} {red}<create> <direction>{/red}\r\n" <<
 			"  |--> creates a room to the direction you choose (neswud)\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: rbuild create north\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}create north{/gld}\r\n" <<
 			"  |:: (the room to the north will be a brand new defaulted room)\r\n" <<
 
-			" rbuild <bind> <direction> <room_rnum>\r\n" <<
+			" {grn}rbuild{/grn} {red}<bind> <direction> <room_rnum>{/red}\r\n" <<
 			"  |--> bind a room to a direction\r\n" <<
-			"  |____[example]\r\n"<<
-			"  |:: rbuild bind north 27\r\n"<<
+			"  {grn}|____[example]{/grn}\r\n"<<
+			"  |:: {wht}rbuild{/wht} {gld}bind north 27{/gld}\r\n"<<
 			"  |:: (the room to the north will lead to room 27)\r\n" <<
 
-			" rbuild <title> <string>\r\n" <<
+			" {grn}rbuild{/grn} {red}<title> <string>{/red}\r\n" <<
 			"  |--> set the current room title to string\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: rbuild title Taco Bell Employee Lounge\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}title Taco Bell Employee Lounge{/gld}\r\n" <<
 			"  |:: (the room's title will be the above title)\r\n" <<
 
-			" rbuild <description> <string>\r\n" <<
+			" {grn}rbuild{/grn} {red}<description> <string>{/red}\r\n" <<
 			"  |--> set the current room description to string\r\n" <<
-			"  |____[example]\r\n" <<
-			"  |:: rbuild description The room is filled with boxes of taco bell...\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}description The room is filled with boxes of taco bell...{/gld}\r\n" <<
 			"  |:: (the room's description will be the above description)\r\n" <<
 
-			" rbuild <destroy> <direction>\r\n" <<
+			" {grn}rbuild{/grn} {red}<destroy> <direction>{/red}\r\n" <<
 			"  |--> destroy a room direction\r\n" <<
-			"  |____[examples]\r\n" <<
-			"  |:: rbuild destroy north\r\n" <<
+			"  {grn}|____[examples]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}destroy north{/gld}\r\n" <<
 			"  |:: (north will no longer be an exit)\r\n" <<
 
-			" rbuild <dopt> <direction> <item> <value>\r\n" <<
+			" {grn}rbuild{/grn} {red}<dopt> <direction> <item> <value>{/red}\r\n" <<
 			"  |--> set dir_option item to value\r\n" <<
-			"  |____[possible items]\r\n" <<
+			"  {grn}|____[possible items]{/grn}\r\n" <<
 			"  |:: gen                 -> The general description of the room\r\n" <<
 			"  |:: keyword             -> The keyword of the room direction\r\n" <<
 			"  |:: einfo               -> Currently only accepts ISDOOR\r\n" << //TODO Accept more than just ISDOOR
 			"  |:: key                 -> Integer key that is accepted for this exit\r\n" <<
 			"  |:: to_room             -> The room number that this exit leads to\r\n" <<
-			"  |____[examples]\r\n" <<
-			"  |:: rbuild dopt north gen To the north you see the Taco Bell bathroom.\r\n" <<
+			"  {grn}|____[examples]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}dopt north gen To the north you see the Taco Bell bathroom.{/gld}\r\n" <<
 			"  |:: (When you do 'look north' you will see the above description)\r\n" <<
-			"  |:: rbuild dopt north keyword bathroom\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}dopt north keyword bathroom{/gld}\r\n" <<
 			"  |:: (when you do 'open bathroom' it will open the door to the north)\r\n" <<
-			"  |:: rbuild dopt north einfo ISDOOR\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}dopt north einfo ISDOOR{/gld}\r\n" <<
 			"  |:: (the north exit will be a door)\r\n" <<
-			"  |:: rbuild dopt north key 123\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}dopt north key 123{/gld}\r\n" <<
 			"  |:: (the north exit will require a key numbered 123)\r\n" <<
-			"  |:: rbuild dopt north to_room 27\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}dopt north to_room 27{/gld}\r\n" <<
 			"  |:: (the north room will lead to room number 27)\r\n" <<
 
 
-			" rbuild pave <on|off> <room_number_start> <zone_id>\r\n" <<
+			" {grn}rbuild{/grn} {red}pave <on|off> <room_number_start> <zone_id>{/red}\r\n" <<
 			"  |--> starts the pave mode where any direction you go to will automatically \r\n" <<
 			"  |    create and bind rooms. Helpful for when you want to carve out a ton of\r\n" <<
 			"  |    different rooms and fill in the descriptions for them later\r\n" <<
 			"  |    You must supply the room_number_start argument as this will be the virtual room \r\n" <<
 			"  |    number that the paved rooms will start at.\r\n" <<
 			"  |    When you are done paving type 'rbuild pave off')\r\n"<<
-			"  |____[examples]\r\n" <<
-			"  |:: rbuild pave on 100 5\r\n" <<
+			"  {grn}|____[examples]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}pave on 100 5{/gld}\r\n" <<
 			"  |   (starts pave mode. The first room will have a virtual room number of 100, and the next \r\n" <<
 			"  |   subsequent rooms will be 101, 102, etc. until you type 'rbuild pave off'. Once in pave mode, \r\n" <<
 			"  |   walk to a bunch of different rooms and pave out a walkway. When you type 'rbuild pave off' it will \r\n" <<
@@ -3350,13 +3350,13 @@ ACMD(do_rbuild) {
 			"  |   where transaction_id_number is the transaction id returned when you typed 'rbuild pave off'. If you forget \r\n" <<
 			"  |   your transaction id number, you can type 'rbuild list-paved' and it will show you a list of paved walkways\r\n" <<
 			"  |   that you currently have)\r\n" <<
-			"  |:: rbuild pave off\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}pave off{/gld}\r\n" <<
 			"  |--> (stops the pave mode)\r\n" <<
-			" rbuild save-paved <transaction_id_number>\r\n" <<
+			" {grn}rbuild{/grn} {red}save-paved <transaction_id_number>{/red}\r\n" <<
 			"  |--> saves all of the paved rooms that were created for the transaction id number specified.\r\n" <<
-			" rbuild clear-paved <transaction_id_number>\r\n" <<
+			" {grn}rbuild{/grn} {red}clear-paved <transaction_id_number>{/red}\r\n" <<
 			"  |--> clears all of the paved rooms that were created\r\n" <<
-			" rbuild list-paved\r\n" <<
+			" {grn}rbuild{/grn} {red}list-paved{/red}\r\n" <<
 			"  |--> lists all the currently paved transaction id numbers\r\n" <<
 			"[documentation written on 2018-01-19]\r\n" <<
 			"\r\n";
@@ -3422,11 +3422,11 @@ ACMD(do_rbuild) {
 		return;
 	}
 
-			//" rbuild ed <list>\r\n" << 	/** TODO needs impl */
-			//" rbuild ed <save-all>\r\n" << /** TODO: needs impl */
-			//" rbuild ed <show> <N>\r\n" <<  /** TODO: needs impl */
-			//" rbuild ed <N> <keyword> <value>\r\n" <<  /** TODO: needs impl */
-			//" rbuild ed <N> <description> <value>\r\n" <<  /** TODO: needs impl */
+			//" {grn}rbuild{/grn} {red}ed <list>{/red}\r\n" << 	/** TODO needs impl */
+			//" {grn}rbuild{/grn} {red}ed <save-all>{/red}\r\n" << /** TODO: needs impl */
+			//" {grn}rbuild{/grn} {red}ed <show> <N>{/red}\r\n" <<  /** TODO: needs impl */
+			//" {grn}rbuild{/grn} {red}ed <N> <keyword> <value>{/red}\r\n" <<  /** TODO: needs impl */
+			//" {grn}rbuild{/grn} {red}ed <N> <description> <value>{/red}\r\n" <<  /** TODO: needs impl */
 			//
 
 	/** HOw positional parameters are parsed: */

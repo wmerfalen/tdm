@@ -24,12 +24,14 @@ extern void do_auto_exits(struct char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
 namespace mods {
 	std::string just_color_evaluation(std::string final_buffer) {
+		final_buffer = mods::globals::replace_all(final_buffer,"{yel}","\033[93m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{gld}","\033[33m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{grn}","\033[32m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{red}","\033[31m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{blu}","\033[34m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{wht}","\033[37m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{grey}","\033[90m");
+		final_buffer = mods::globals::replace_all(final_buffer,"{/yel}","\033[0m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{/gld}","\033[0m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{/grey}","\033[0m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{/grn}","\033[0m");
