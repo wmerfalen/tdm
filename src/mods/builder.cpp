@@ -34,6 +34,9 @@ void r_status(const shrd_ptr_player_t & player,std::string_view msg){
 	mods::builder::report_status<shrd_ptr_player_t>(player,msg.data());
 }
 namespace mods::builder {
+	bool has_flag(std::shared_ptr<mods::player> player,uint64_t flag){
+		return player->has_flag(mods::flags::chunk_type_t::BUILDER,flag);
+	}
 	std::array<std::pair<int,std::string>,4> weapon_type_flags = { {
 			{mods::weapon::SMG,"SMG"},
 			{mods::weapon::SHOTGUN,"SHOTGUN"},
@@ -208,27 +211,55 @@ namespace mods::builder {
 			{ITEM_WEAR_HOLD,"HOLD"}
 		}
 	};
+	sandbox_list_t sandboxes;
 	sandbox_data_t::sandbox_data_t(
+				std::shared_ptr<mods::player> player,
+				std::string_view name,
+				room_vnum starting_room_number){
+		 new_sandbox(player,name,starting_room_number);
+	}
+	sandbox_data_t::sandbox_data_t() : m_name("") {}
+	void sandbox_data_t::set_name(std::string_view n){
+		m_name = n;
+	}
+	std::string_view sandbox_data_t::name() const {
+		return m_name;
+	}
+	int8_t sandbox_data_t::new_sandbox(
 				std::shared_ptr<mods::player> player,
 				std::string_view name,
 				int starting_room_number){
 		m_player = player;
 			m_builder_data = std::make_shared<builder_data_t>();
-			++sandbox_data_t::counter;
 			m_name = name;
-			bool status = save_zone_to_db(name,
+			bool status = save_zone_to_db(
+					starting_room_number,
+					name,
 					starting_room_number,
 					starting_room_number + 100,
 					100,
 					2
 			);
-			if(!status){
-				
-			}
-			
 			m_builder_data->room_pave_mode = true;
 			m_builder_data->room_pavements.start_room = starting_room_number;
-			m_builder_data->room_pavements.zone_id = zone_id.value();
+			m_builder_data->room_pavements.zone_id = 0;
+			if(!status){
+				r_error(player,"Unable to create new zone!");
+				m_builder_data->room_pavements.zone_id = 0;
+				return -1;
+			}else{
+				for(auto && row : db_get_by_meta("zone","zone_name",name.data())){
+					m_builder_data->room_pavements.zone_id = row["id"].as<int>(0);
+					break;
+				}
+			}
+			mods::builder::new_room(player,NORTH);
+			auto & room = world.back();
+			room.number = starting_room_number;
+			room.zone = m_builder_data->room_pavements.zone_id;
+			room.name.assign("new room");
+			room.description.assign("description goes here");
+			return 0;
 		}
 	/* Factory method to generate a room for us */
 	room_data new_room(std::shared_ptr<mods::player> player,int direction);
@@ -273,10 +304,15 @@ namespace mods::builder {
 				std::to_string(player->builder_data->room_pavements.start_room)
 		);
 		mods::builder::new_room(player,direction);
-		player->builder_data->room_pavements.rooms.push_back(world.size()-1);
+		
+		auto & builder_data = player->builder_data;
+		if(has_flag(player,mods::builder::HAS_SANDBOX)){
+			builder_data = mods::builder::sandboxes[player->name().c_str()].begin()->builder_data();
+		}
+		builder_data->room_pavements.rooms.push_back(world.size()-1);
 		auto created_room = world.back();
-		created_room.number = player->builder_data->room_pavements.start_room + player->builder_data->room_pavements.current_room_number;
-		created_room.zone = player->builder_data->room_pavements.zone_id;
+		created_room.number = builder_data->room_pavements.start_room + builder_data->room_pavements.current_room_number;
+		created_room.zone = builder_data->room_pavements.zone_id;
 
 		if(!create_direction(player->room(),direction,world.size() -1)) {
 			r_error(player,"Couldn't create direction to that room!");
@@ -288,9 +324,8 @@ namespace mods::builder {
 			return;
 		}
 
-		world[world.size()-1].dir_option[OPPOSITE_DIR(direction)]->general_description = strdup(world[player->room()].name);
-		world[world.size()-1].dir_option[OPPOSITE_DIR(direction)]->keyword = strdup("door");
-		player->builder_data->room_pavements.current_room_number++;
+		world.back().dir_option[OPPOSITE_DIR(direction)]->general_description = world[player->room()].name;
+		world.back().dir_option[OPPOSITE_DIR(direction)]->keyword = "door";
 		r_status(player,"Paved room to that direction");
 	}
 
@@ -329,7 +364,7 @@ namespace mods::builder {
 
 		return {true,"Saved all zone commands successfully"};
 	}
-	bool save_zone_to_db(std::string_view name,int room_start,int room_end,int lifespan,int reset_mode) {
+	bool save_zone_to_db(int64_t virtual_number,std::string_view name,int room_start,int room_end,int lifespan,int reset_mode) {
 		try{
 		auto txn2 = txn();
 		sql_compositor comp("room_direction_data",&txn2);
@@ -337,6 +372,7 @@ namespace mods::builder {
 			.insert()
 			.into("zone")
 			.values({
+					{"zone_virtual_number",std::to_string(virtual_number)},
 					{"zone_start",std::to_string(room_start)},
 					{"zone_end",std::to_string(room_end)},
 					{"zone_name",name.data()},
@@ -531,20 +567,9 @@ namespace mods::builder {
 		return 0;
 	}
 	room_data new_room(std::shared_ptr<mods::player> player,int direction) {
-		world.emplace_back(room_data());
+		world.emplace_back();
 		mods::globals::register_room(world.size());
-		/*
-		world.back().dir_option[direction] = (room_direction_data*) calloc(1,sizeof(room_direction_data));
-		world.back().dir_option[direction]->general_description = strdup("<default>");
-		world.back().dir_option[direction]->keyword = strdup("door");
-		world.back().dir_option[direction]->exit_info = EX_ISDOOR;
-		world.back().dir_option[direction]->key = -1;
-		world.back().dir_option[direction]->to_room = world.size();
-		*/
-		//char_from_room(ch);
-		//char_to_room(ch,world_top);
-		//std::cerr << "foobar\n";
-
+		world.back().init();
 		return world.back();
 	}
 	bool title(room_rnum room_id,std::string_view str_title) {
@@ -998,12 +1023,69 @@ ACMD(do_rbuild_sandbox) {
 			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {wht}rbuild_sandbox{/wht} {grn}help{/grn}\r\n" <<
 			"  |:: (this help menu will show up)\r\n" <<
-			" {grn}rbuild_sandbox{/grn} {red}new{/red}\r\n" <<
+			" {grn}rbuild_sandbox{/grn} {red}new <name> <room_number_start>{/red}\r\n" <<
 			" {grn}rbuild_sandbox{/grn} {red}list{/red}\r\n" <<
 			" {grn}rbuild_sandbox{/grn} {red}delete <id>{/red}\r\n" <<
 			"\r\n";
 		player->pager_end();
 		player->page(0);
+	}
+
+	{
+	auto args = mods::util::subcmd_args<4,args_t>(argument,"new");
+
+	if(args.has_value()) {
+		auto cmd_args = args.value();
+		if(cmd_args.size() == 3){
+			/**
+			 * cmd_args will be: [0] => new, [1] => <name>, [2] => <starting_room_number>
+			 */
+			mods::builder::sandbox_data_t sandbox;
+			auto status = sandbox.new_sandbox(player,cmd_args[1],mods::util::stoi<int>(cmd_args[2]));
+			if(status < 0){
+				r_error(player,std::string("Failed to create sandbox! Error: #") + std::to_string(status));
+				return;
+			}else{
+				mods::builder::sandboxes[player->name().c_str()].emplace_back(std::move(sandbox));
+				player->set_flag(mods::flags::chunk_type_t::BUILDER,mods::builder::HAS_SANDBOX);
+				r_success(player,"Sandbox created");
+				return;
+			}
+		}else{
+			r_error(player,"Invalid arguments. Arguments should be: new <name> <starting_room_number>");
+			return;
+		}
+	}
+	}
+
+	mods::builder_util::list_object_vector<std::deque<mods::builder::sandbox_data_t>,std::string>(
+			player,
+			std::string(argument),
+			mods::builder::sandboxes[player->name().c_str()],
+			[](mods::builder::sandbox_data_t sandbox) -> std::string {
+			return std::string(sandbox.name());
+			}
+		);
+
+	{
+		auto args = mods::util::subcmd_args<7,args_t>(argument,"delete");
+		if(args.has_value()){
+			auto cmd_args = args.value();
+			if(cmd_args.size() == 2){
+				std::size_t sandbox_count = mods::builder::sandboxes[player->name().c_str()].size();
+				std::size_t index = mods::util::stoi<std::size_t>(cmd_args[1]);
+				if(index >= sandbox_count){
+					r_error(player,"Index is too large");
+					return;
+				}else{
+					auto it = mods::builder::sandboxes[player->name().c_str()].begin() + index;
+					mods::builder::sandboxes[player->name().c_str()].erase(it);
+					player->remove_flag(mods::flags::chunk_type_t::BUILDER,mods::builder::HAS_SANDBOX);
+					r_success(player,"Index erased");
+					return;
+				}
+			}
+		}
 	}
 
 }
@@ -2667,6 +2749,15 @@ ACMD(do_obuild) {
 	return;
 }
 
+/**
+ * Notice: 2019-03-19
+ * For some reason, I neglected to add zone virtual numbers to the
+ * zone schema. In order for a room to be assigned a zone, it has to know
+ * the zone's primary key in the table (which is broken because pk's are not
+ * controlled by the builder). We *need* to incorporate virtual zone
+ * numbers. 
+ *
+ */
 ACMD(do_zbuild) {
 	MENTOC_PREAMBLE();
 	mods::builder::initialize_builder(player);
@@ -2780,20 +2871,22 @@ ACMD(do_zbuild) {
 			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {wht}zbuild{/wht} {gld}help{/gld}\r\n" <<
 			"  |:: (this help menu will show up)\r\n" <<
-			" {grn}zbuild{/grn} {red}new <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>{/red}\r\n" <<
+			" {grn}zbuild{/grn} {red}new <virtual_number> <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>{/red}\r\n" <<
 			"  |--> Creates a new zone and maps the parameters to each field in the database.\r\n" <<
 			"  {grn}|____[example]{/grn}\r\n" <<
-			"  |:: {wht}zbuild{/wht} {gld}new 1200 1299 {/gld}\"The never ending frost\" 90 2\r\n" <<
+			"  |:: {wht}zbuild{/wht} {gld}new 15 1200 1299 {/gld}\"The never ending frost\" 90 2\r\n" <<
 			"  |:: (creates a new zone which starts at rnum 1200 and ends on 1209\r\n" <<
 			"  |:: \"The never ending frost\" will be the name of the zone. Quotes must be \r\n" <<
 			"  |:: used here. 90 is the lifespan and 2 is the most common reset \r\n" <<
-			"  |:: mode so leave it at that for now.)\r\n" <<
+			"  |:: mode so leave it at that for now. The 15 represents the virtual number \r\n" <<
+			"  |:: which will be assigned to this zone.)\r\n" <<
 			" {grn}zbuild{/grn} {red}list{/red}\r\n" <<
 			"  |--> lists the current zones saved to the db\r\n" <<
 			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {wht}zbuild{/wht} {gld}list{/gld}\r\n"<<
 			" {grn}zbuild{/grn} {red}delete <id>...<N>{/red}\r\n" <<
-			"  |--> deletes the zone from the db with the id <id>. Multiple IDs can be specified\r\n" <<
+			"  |--> deletes the zone from the db with the id <id>. Multiple IDs can be specified.\r\n" <<
+			"  |--> Please note that this command accepts the zone's id and NOT the virtual number for the zone.\r\n" <<
 			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {wht}zbuild{/wht} {gld}delete 1{/gld}\r\n" <<
 			" {grn}zbuild{/grn} {red}mob <zone_id> <mob_vnum> <room_vnum> <max> <if_flag>{/red}\r\n" <<
@@ -2889,6 +2982,7 @@ ACMD(do_zbuild) {
 		}
 
 		mods::builder_util::value_callback value_callback = [&](sql_compositor::value_map & values) {
+			values["zone_virtual_number"] = mods::util::itoa(zone_table[zone_id.value()].number);
 			values["zone_start"] = mods::util::itoa(zone_table[zone_id.value()].bot);
 			values["zone_end"] = mods::util::itoa(zone_table[zone_id.value()].top);
 			values["zone_name"] = zone_table[zone_id.value()].name;
@@ -2901,7 +2995,7 @@ ACMD(do_zbuild) {
 		auto status = mods::builder_util::save_to_db<std::string>(
 				"zone",
 				"id",
-				std::to_string(zone_table[zone_id.value()].number),
+				std::to_string(zone_table[zone_id.value()].get_id()),
 				value_callback,
 				post_modify_callback
 				);
@@ -3004,43 +3098,23 @@ ACMD(do_zbuild) {
 		//TODO: take this logic and store it in interpreter.cpp so we can reuse it
 		auto arglist = mods::util::arglist<std::vector<std::string>>(past);
 
-		if(arglist.size() != 5) {
+		if(arglist.size() != 6) {
 			r_error(player,"Argument list is invalid, please use the correct number of arguments");
 
 			for(auto vstr: arglist) {
 				*player << vstr << "\r\n";
 			}
 		} else {
-			// " rbuildzone <new> <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>\r\n" <<
-			auto arg_0 = mods::util::stoi(arglist[0]);
+			// " rbuildzone <new> <virtual_number> <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>\r\n" <<
 
-			if(arg_0.value_or(-1) == -1) {
-				r_error(player,"Invalid parameter 1");
-				return;
-			}
-
-			auto arg_1 = mods::util::stoi(arglist[1]);
-
-			if(arg_1.value_or(-1) == -1) {
-				r_error(player,"Invalid parameter 2");
-				return;
-			}
-
-			auto arg_3 = mods::util::stoi(arglist[3]);
-
-			if(arg_3.value_or(-1) == -1) {
-				r_error(player,"Invalid parameter 4");
-				return;
-			}
-
-			auto arg_4 = mods::util::stoi(arglist[4]);
-
-			if(arg_4.value_or(-1) == -1) {
-				r_error(player,"Invalid parameter 5");
-				return;
-			}
-
-			if(!mods::builder::save_zone_to_db(arglist[2],arg_0.value(),arg_1.value(),arg_3.value(),arg_4.value())) {
+			if(!mods::builder::save_zone_to_db(
+						mods::util::stoi<int64_t>(arglist[0]),
+						arglist[3],
+						mods::util::stoi<int>(arglist[1]),
+						mods::util::stoi<int>(arglist[2]),
+						mods::util::stoi<int>(arglist[4]),
+						mods::util::stoi<int>(arglist[5]))
+			){
 				r_error(player,"Unable to save new zone");
 			} else {
 				parse_sql_zones();
@@ -3265,7 +3339,7 @@ ACMD(do_rbuild) {
 			"  |--> Delete the textures listed after the delete keyword.\r\n" <<
 			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {wht}rbuild{/wht} {gld}texture delete GRASS OUTSIDE{/gld}\r\n" <<
-			
+
 			" {grn}rbuild{/grn} {red}<texture> <clear>{/red}\r\n" <<
 			"  |--> Deletes all textures in the current room. WARNING: This does not prompt for confirmation!\r\n" <<
 			"  {grn}|____[example]{/grn}\r\n" <<
@@ -3296,7 +3370,7 @@ ACMD(do_rbuild) {
 			"  |--> lists the current ed structures currently associated with this room\r\n" << 
 			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {wht}rbuild{/wht} {gld}ed list{/gld}\r\n" <<
-			  
+
 
 			" {grn}rbuild{/grn} {red}ed <save-all>{/red}\r\n" << /** TODO: needs impl */
 			"  |--> saves all ed entries\r\n" << 
@@ -3466,20 +3540,20 @@ ACMD(do_rbuild) {
 		return;
 	}
 
-			//" {grn}rbuild{/grn} {red}ed <list>{/red}\r\n" << 	/** TODO needs impl */
-			//" {grn}rbuild{/grn} {red}ed <save-all>{/red}\r\n" << /** TODO: needs impl */
-			//" {grn}rbuild{/grn} {red}ed <show> <N>{/red}\r\n" <<  /** TODO: needs impl */
-			//" {grn}rbuild{/grn} {red}ed <N> <keyword> <value>{/red}\r\n" <<  /** TODO: needs impl */
-			//" {grn}rbuild{/grn} {red}ed <N> <description> <value>{/red}\r\n" <<  /** TODO: needs impl */
-			//
+	//" {grn}rbuild{/grn} {red}ed <list>{/red}\r\n" << 	/** TODO needs impl */
+	//" {grn}rbuild{/grn} {red}ed <save-all>{/red}\r\n" << /** TODO: needs impl */
+	//" {grn}rbuild{/grn} {red}ed <show> <N>{/red}\r\n" <<  /** TODO: needs impl */
+	//" {grn}rbuild{/grn} {red}ed <N> <keyword> <value>{/red}\r\n" <<  /** TODO: needs impl */
+	//" {grn}rbuild{/grn} {red}ed <N> <description> <value>{/red}\r\n" <<  /** TODO: needs impl */
+	//
 
 	/** HOw positional parameters are parsed: */
 	/* On the command: rbuild ed foo bar 1 
-		vec_args[0] == 'ed'
-		vec_args[1] == 'foo'
-		vec_args[2] == 'bar'
-		vec_args[3] == '1'
-	*/
+		 vec_args[0] == 'ed'
+		 vec_args[1] == 'foo'
+		 vec_args[2] == 'bar'
+		 vec_args[3] == '1'
+		 */
 
 	/**
 	 *  Command line: rbuild ed [...] 
@@ -3493,7 +3567,7 @@ ACMD(do_rbuild) {
 		if(vec_args.size() >= 2 && vec_args[1].compare("new") == 0){
 			// rbuild ed <new>\r\n" <<  /** TODO: needs impl */
 			/** TODO: add mutex lock so that other builders cant lock this room */
-			
+
 			auto size_before = world[IN_ROOM(ch)].ex_descriptions().size();
 			world[IN_ROOM(ch)].ex_descriptions().emplace_back();
 			auto size_after = world[IN_ROOM(ch)].ex_descriptions().size();
@@ -3526,11 +3600,11 @@ ACMD(do_rbuild) {
 		if(vec_args.size() >= 3 && vec_args[1].compare("delete") == 0){
 			/** Accepts: rbuild ed delete N */
 			// rbuild ed <delete> <N>\n" <<  /** TODO: needs impl */
-		/**
-		 *  Command line: rbuild ed delte N
-		 * --------------------------------------------------
-		 *  where N is the index you want to delete. accepts csv (TODO)
-		 */
+			/**
+			 *  Command line: rbuild ed delte N
+			 * --------------------------------------------------
+			 *  where N is the index you want to delete. accepts csv (TODO)
+			 */
 			int32_t target = mods::util::stoi<int>(vec_args[2]);
 			int32_t i = target;
 			if(i < 0){
@@ -3746,21 +3820,21 @@ ACMD(do_rbuild) {
 		unsigned saved_room_counter = 0;
 
 		if(player->builder_data){
-		for(auto room_id : player->builder_data->room_pavements.rooms) {
-			std::size_t rid = room_id;
+			for(auto room_id : player->builder_data->room_pavements.rooms) {
+				std::size_t rid = room_id;
 
-			if(rid >= world.size()) {
-				r_error(player,std::string("Cannot save room id#: ") + std::to_string(room_id));
-				continue;
-			} else {
-				if(mods::builder::save_to_db(room_id) < 0) {
-					r_error(player,std::string("Unable to save room id#: ") + std::to_string(world[room_id].number));
-					break;
+				if(rid >= world.size()) {
+					r_error(player,std::string("Cannot save room id#: ") + std::to_string(room_id));
+					continue;
 				} else {
-					saved_room_counter++;
+					if(mods::builder::save_to_db(room_id) < 0) {
+						r_error(player,std::string("Unable to save room id#: ") + std::to_string(world[room_id].number));
+						break;
+					} else {
+						saved_room_counter++;
+					}
 				}
 			}
-		}
 		}
 
 		r_success(player,std::string("Saved ") + std::to_string(saved_room_counter) + " rooms");
@@ -3813,9 +3887,9 @@ ACMD(do_rbuild) {
 
 		if(arg_vec[1].compare("off") == 0) {
 			if(player->builder_data){
-			player->builder_data->room_pave_mode = false;
-			r_status(player,"Stopped pave mode.");
-			r_status(player,"Transaction ID: 0");
+				player->builder_data->room_pave_mode = false;
+				r_status(player,"Stopped pave mode.");
+				r_status(player,"Transaction ID: 0");
 			}
 			return;
 		}

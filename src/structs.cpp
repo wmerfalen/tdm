@@ -202,12 +202,6 @@ room_data::room_data(const room_data& r){
 room_data::~room_data() {
 		for(unsigned i = 0; i < NUM_OF_DIRS; i++){
 			if(dir_option[i] != nullptr){
-				if(dir_option[i]->general_description != nullptr){
-					free(dir_option[i]->general_description);
-				}
-				if(dir_option[i]->keyword != nullptr){
-					free(dir_option[i]->keyword);
-				}
 				free(dir_option[i]);
 			}
 		}
@@ -226,12 +220,6 @@ room_data::~room_data() {
 		if(dir_option[i] == nullptr){
 			dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
 		}else{
-			if(dir_option[i]->general_description != nullptr){
-				free(dir_option[i]->general_description);
-			}
-			if(dir_option[i]->keyword != nullptr){
-				free(dir_option[i]->keyword);
-			}
 			free(dir_option[i]);
 			dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
 		}

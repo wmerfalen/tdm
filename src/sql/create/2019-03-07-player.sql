@@ -1,3 +1,4 @@
+DROP TABLE player;
 CREATE TABLE player (
 		id SERIAL PRIMARY KEY,
 		player_password VARCHAR(1024) NOT NULL,

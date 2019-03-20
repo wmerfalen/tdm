@@ -393,6 +393,7 @@ ALTER TABLE public.tasks_notes OWNER TO llvm;
 --
 CREATE TABLE public.zone (
     id integer NOT NULL,
+    zone_virtual_number integer NOT NULL,
     zone_start integer NOT NULL,
     zone_end integer NOT NULL,
     zone_name character varying(64) NOT NULL,
@@ -660,9 +661,9 @@ INSERT INTO public.tasks_notes VALUES (2, 1, 'bazbar');
 --
 -- Data for Name: zone; Type: TABLE DATA; Schema: public; Owner: llvm
 --
-INSERT INTO public.zone VALUES (7, 100, 120, 'D.O. Internals', 15, 2);
-INSERT INTO public.zone VALUES (6, 27088, 30000, 'SLC', 1, 2);
-INSERT INTO public.zone VALUES (10, 121, 200, 'Downtown Lawton', 10, 2);
+INSERT INTO public.zone VALUES (7, 1,100, 120, 'D.O. Internals', 15, 2);
+INSERT INTO public.zone VALUES (6, 2,27088, 30000, 'SLC', 1, 2);
+INSERT INTO public.zone VALUES (10,3, 121, 200, 'Downtown Lawton', 10, 2);
 --
 -- Data for Name: zone_data; Type: TABLE DATA; Schema: public; Owner: llvm
 --

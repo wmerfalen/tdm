@@ -1288,7 +1288,9 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 		z.bot =mods::util::stoi<int>(row["zone_start"]);
 		z.top =mods::util::stoi<int>(row["zone_end"]);
 		z.reset_mode =mods::util::stoi<int>(row["reset_mode"]);
-		z.number =mods::util::stoi<int>(row["id"]);
+		/** WRONG */
+		z.number =mods::util::stoi<int>(row["zone_virtual_number"]);
+		z.set_id(mods::util::stoi<int>(row["id"]));
 		zone_table.emplace_back(z);
 		top_of_zone_table = zone_table.size();
 		//struct reset_com {

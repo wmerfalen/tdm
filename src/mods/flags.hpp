@@ -12,8 +12,9 @@ namespace mods::flags {
 		LEGACY_AFF = 0,
 		LEGACY_PLR,
 		VISION,
+		BUILDER,
 		FIRST = LEGACY_AFF,
-		LAST = VISION
+		LAST = BUILDER
 	};
 	constexpr static uint64_t NOT_IMPL = (1 << 22);
 	constexpr static uint64_t LEGACY_PLR_KILLER = (1 << 0);

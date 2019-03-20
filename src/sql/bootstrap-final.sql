@@ -35,7 +35,7 @@ CREATE TABLE public.affected_type (
     aff_location integer NOT NULL,
     aff_modifier integer NOT NULL
 );
-ALTER TABLE public.affected_type OWNER TO llvm;
+ALTER TABLE public.affected_type OWNER TO postgres;
 --
 -- Name: affected_type_id_seq; Type: SEQUENCE; Schema: public; Owner: llvm
 --
@@ -46,7 +46,7 @@ CREATE SEQUENCE public.affected_type_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.affected_type_id_seq OWNER TO llvm;
+ALTER TABLE public.affected_type_id_seq OWNER TO postgres;
 --
 -- Name: affected_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: llvm
 --
@@ -60,7 +60,7 @@ CREATE TABLE public.extra_description (
     extra_keyword character varying(64),
     extra_description character varying(1024)
 );
-ALTER TABLE public.extra_description OWNER TO llvm;
+ALTER TABLE public.extra_description OWNER TO postgres;
 --
 -- Name: extra_description_id_seq; Type: SEQUENCE; Schema: public; Owner: llvm
 --
@@ -71,7 +71,7 @@ CREATE SEQUENCE public.extra_description_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.extra_description_id_seq OWNER TO llvm;
+ALTER TABLE public.extra_description_id_seq OWNER TO postgres;
 --
 -- Name: extra_description_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: llvm
 --
@@ -86,7 +86,7 @@ CREATE TABLE public.mob_zone (
     room_id integer NOT NULL,
     max_existing integer
 );
-ALTER TABLE public.mob_zone OWNER TO llvm;
+ALTER TABLE public.mob_zone OWNER TO postgres;
 --
 -- Name: mob_zone_id_seq; Type: SEQUENCE; Schema: public; Owner: llvm
 --
@@ -97,7 +97,7 @@ CREATE SEQUENCE public.mob_zone_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.mob_zone_id_seq OWNER TO llvm;
+ALTER TABLE public.mob_zone_id_seq OWNER TO postgres;
 --
 -- Name: mob_zone_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: llvm
 --
@@ -144,7 +144,7 @@ CREATE TABLE public.mobile (
     mob_height integer NOT NULL,
     mob_class integer NOT NULL
 );
-ALTER TABLE public.mobile OWNER TO llvm;
+ALTER TABLE public.mobile OWNER TO postgres;
 --
 -- Name: mobile_mob_id_seq; Type: SEQUENCE; Schema: public; Owner: llvm
 --
@@ -155,7 +155,7 @@ CREATE SEQUENCE public.mobile_mob_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.mobile_mob_id_seq OWNER TO llvm;
+ALTER TABLE public.mobile_mob_id_seq OWNER TO postgres;
 --
 -- Name: mobile_mob_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: llvm
 --
@@ -177,7 +177,7 @@ CREATE TABLE public.object (
     obj_extra_keyword character varying(64),
     obj_extra_description character varying(1024)
 );
-ALTER TABLE public.object OWNER TO llvm;
+ALTER TABLE public.object OWNER TO postgres;
 --
 -- Name: object_flags; Type: TABLE; Schema: public; Owner: llvm
 --
@@ -197,7 +197,7 @@ CREATE TABLE public.object_flags (
     timer integer NOT NULL,
     bitvector integer NOT NULL
 );
-ALTER TABLE public.object_flags OWNER TO llvm;
+ALTER TABLE public.object_flags OWNER TO postgres;
 --
 -- Name: object_flags_id_seq; Type: SEQUENCE; Schema: public; Owner: llvm
 --
@@ -208,7 +208,7 @@ CREATE SEQUENCE public.object_flags_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.object_flags_id_seq OWNER TO llvm;
+ALTER TABLE public.object_flags_id_seq OWNER TO postgres;
 --
 -- Name: object_flags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: llvm
 --
@@ -223,7 +223,7 @@ CREATE SEQUENCE public.object_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.object_id_seq OWNER TO llvm;
+ALTER TABLE public.object_id_seq OWNER TO postgres;
 --
 -- Name: object_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: llvm
 --
@@ -239,7 +239,7 @@ CREATE TABLE public.object_weapon (
     obj_cooldown integer NOT NULL,
     obj_can_snipe boolean NOT NULL
 );
-ALTER TABLE public.object_weapon OWNER TO llvm;
+ALTER TABLE public.object_weapon OWNER TO postgres;
 --
 -- Name: object_weapon_id_seq; Type: SEQUENCE; Schema: public; Owner: llvm
 --
@@ -250,7 +250,7 @@ CREATE SEQUENCE public.object_weapon_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.object_weapon_id_seq OWNER TO llvm;
+ALTER TABLE public.object_weapon_id_seq OWNER TO postgres;
 --
 -- Name: object_weapon_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: llvm
 --
@@ -299,7 +299,7 @@ CREATE TABLE public.player (
     player_password character varying(512),
     player_type character varying(3) NOT NULL
 );
-ALTER TABLE public.player OWNER TO llvm;
+ALTER TABLE public.player OWNER TO postgres;
 --
 -- Name: player_player_id_seq; Type: SEQUENCE; Schema: public; Owner: llvm
 --
@@ -310,7 +310,7 @@ CREATE SEQUENCE public.player_player_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.player_player_id_seq OWNER TO llvm;
+ALTER TABLE public.player_player_id_seq OWNER TO postgres;
 --
 -- Name: player_player_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: llvm
 --
@@ -330,7 +330,7 @@ CREATE TABLE public.room (
     light integer,
     room_flag integer NOT NULL
 );
-ALTER TABLE public.room OWNER TO llvm;
+ALTER TABLE public.room OWNER TO postgres;
 --
 -- Name: room_direction_data; Type: TABLE; Schema: public; Owner: llvm
 --
@@ -344,7 +344,7 @@ CREATE TABLE public.room_direction_data (
     exit_key integer,
     to_room integer NOT NULL
 );
-ALTER TABLE public.room_direction_data OWNER TO llvm;
+ALTER TABLE public.room_direction_data OWNER TO postgres;
 --
 -- Name: room_direction_data_id_seq; Type: SEQUENCE; Schema: public; Owner: llvm
 --
@@ -355,7 +355,7 @@ CREATE SEQUENCE public.room_direction_data_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.room_direction_data_id_seq OWNER TO llvm;
+ALTER TABLE public.room_direction_data_id_seq OWNER TO postgres;
 --
 -- Name: room_direction_data_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: llvm
 --
@@ -370,7 +370,7 @@ CREATE SEQUENCE public.room_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.room_id_seq OWNER TO llvm;
+ALTER TABLE public.room_id_seq OWNER TO postgres;
 --
 -- Name: room_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: llvm
 --
@@ -382,7 +382,7 @@ CREATE TABLE public.tasks (
     id integer,
     t_name character varying(256)
 );
-ALTER TABLE public.tasks OWNER TO llvm;
+ALTER TABLE public.tasks OWNER TO postgres;
 --
 -- Name: tasks_notes; Type: TABLE; Schema: public; Owner: llvm
 --
@@ -391,19 +391,20 @@ CREATE TABLE public.tasks_notes (
     task_id integer,
     t_notes character varying(256)
 );
-ALTER TABLE public.tasks_notes OWNER TO llvm;
+ALTER TABLE public.tasks_notes OWNER TO postgres;
 --
 -- Name: zone; Type: TABLE; Schema: public; Owner: llvm
 --
 CREATE TABLE public.zone (
     id integer NOT NULL,
+    zone_virtual_number integer NOT NULL,
     zone_start integer NOT NULL,
     zone_end integer NOT NULL,
     zone_name character varying(64) NOT NULL,
     lifespan integer NOT NULL,
     reset_mode integer NOT NULL
 );
-ALTER TABLE public.zone OWNER TO llvm;
+ALTER TABLE public.zone OWNER TO postgres;
 --
 -- Name: zone_data; Type: TABLE; Schema: public; Owner: llvm
 --
@@ -416,7 +417,7 @@ CREATE TABLE public.zone_data (
     zone_arg2 integer NOT NULL,
     zone_arg3 integer NOT NULL
 );
-ALTER TABLE public.zone_data OWNER TO llvm;
+ALTER TABLE public.zone_data OWNER TO postgres;
 --
 -- Name: zone_data_id_seq; Type: SEQUENCE; Schema: public; Owner: llvm
 --
@@ -427,7 +428,7 @@ CREATE SEQUENCE public.zone_data_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.zone_data_id_seq OWNER TO llvm;
+ALTER TABLE public.zone_data_id_seq OWNER TO postgres;
 --
 -- Name: zone_data_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: llvm
 --
@@ -442,7 +443,7 @@ CREATE SEQUENCE public.zone_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.zone_id_seq OWNER TO llvm;
+ALTER TABLE public.zone_id_seq OWNER TO postgres;
 --
 -- Name: zone_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: llvm
 --
@@ -664,9 +665,9 @@ INSERT INTO public.tasks_notes VALUES (2, 1, 'bazbar');
 --
 -- Data for Name: zone; Type: TABLE DATA; Schema: public; Owner: llvm
 --
-INSERT INTO public.zone VALUES (7, 100, 120, 'D.O. Internals', 15, 2);
-INSERT INTO public.zone VALUES (6, 27088, 30000, 'SLC', 1, 2);
-INSERT INTO public.zone VALUES (10, 121, 200, 'Downtown Lawton', 10, 2);
+INSERT INTO public.zone VALUES (7, 1,100, 120, 'D.O. Internals', 15, 2);
+INSERT INTO public.zone VALUES (6, 2, 27088, 30000, 'SLC', 1, 2);
+INSERT INTO public.zone VALUES (10,3, 121, 200, 'Downtown Lawton', 10, 2);
 --
 -- Data for Name: zone_data; Type: TABLE DATA; Schema: public; Owner: llvm
 --

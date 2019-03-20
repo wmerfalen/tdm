@@ -17,6 +17,9 @@ typedef int socket_t;
 #include <sys/stat.h>
 #include <string_view>
 #include "../interpreter.h"
+#include <unordered_map>
+#include "flags.hpp"
+
 namespace mods::builder {
 //struct room_data {
 //   1    room_vnum number;        /* Rooms number (vnum)            */
@@ -45,18 +48,30 @@ namespace mods::builder {
 	extern std::array<std::pair<int,std::string>,23> type_flags;
 	extern std::array<std::pair<int,std::string>,3> type2_flags;
 
+	constexpr static uint64_t HAS_SANDBOX = (1 << 0);
+
 	struct sandbox_data_t {
-		static uint32_t counter;
-		sandbox_data_t() = delete;
-		~sandbox_data_t() = delete;
+		sandbox_data_t();
+		~sandbox_data_t() = default;
 		sandbox_data_t(
 				std::shared_ptr<mods::player> player,
-				std::string_view name);
+				std::string_view name,
+				room_vnum start);
+		int8_t new_sandbox(
+				std::shared_ptr<mods::player> player,
+				std::string_view name,
+				room_vnum start);
+		std::string_view name() const;
+		void set_name(std::string_view n);
+		std::shared_ptr<builder_data_t> builder_data(){ return m_builder_data; }
 		protected:
 		std::shared_ptr<builder_data_t> m_builder_data;
 		std::string m_name;
 		std::shared_ptr<mods::player> m_player;
 	};
+
+	using sandbox_list_t = std::unordered_map<std::string,std::deque<sandbox_data_t>> ;
+	extern sandbox_list_t sandboxes;
 	/* Factory method to generate a room for us */
 	room_data new_room(std::shared_ptr<mods::player> player,int direction);
 	bool flush_to_db(struct char_data *ch,room_vnum room);
@@ -72,7 +87,7 @@ namespace mods::builder {
 	bool destroy_direction(room_rnum,int direction);
 	int save_to_db(room_rnum in_room);
 	int import_room(struct room_data*);
-	bool save_zone_to_db(std::string_view name,int room_start,int room_end,int lifespan,int reset_mode);
+	bool save_zone_to_db(int64_t virtual_number,std::string_view name,int room_start,int room_end,int lifespan,int reset_mode);
 	std::pair<bool,std::string> zone_place(int zone_id,std::string_view command, std::string_view if_flag,std::string_view arg1, std::string_view arg2,std::string_view arg3);
 	void pave_to(std::shared_ptr<mods::player> ch,room_data* room,int direction);
 	std::optional<obj_data*> instantiate_object_by_index(int index);
