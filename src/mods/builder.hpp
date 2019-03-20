@@ -44,6 +44,19 @@ namespace mods::builder {
 	extern std::array<std::pair<int,std::string>,25> affected_flags;
 	extern std::array<std::pair<int,std::string>,23> type_flags;
 	extern std::array<std::pair<int,std::string>,3> type2_flags;
+
+	struct sandbox_data_t {
+		static uint32_t counter;
+		sandbox_data_t() = delete;
+		~sandbox_data_t() = delete;
+		sandbox_data_t(
+				std::shared_ptr<mods::player> player,
+				std::string_view name);
+		protected:
+		std::shared_ptr<builder_data_t> m_builder_data;
+		std::string m_name;
+		std::shared_ptr<mods::player> m_player;
+	};
 	/* Factory method to generate a room for us */
 	room_data new_room(std::shared_ptr<mods::player> player,int direction);
 	bool flush_to_db(struct char_data *ch,room_vnum room);
@@ -55,7 +68,7 @@ namespace mods::builder {
 	                                      std::optional<int> key,
 	                                      std::optional<room_rnum> to_room
 	                                     );
-	bool create_direction(room_rnum room_id,int direction,room_rnum room);
+	bool create_direction(room_rnum room_id,byte direction,room_rnum room);
 	bool destroy_direction(room_rnum,int direction);
 	int save_to_db(room_rnum in_room);
 	int import_room(struct room_data*);
@@ -85,5 +98,6 @@ void r_error(const std::shared_ptr<mods::player> & player,std::string_view msg);
 void r_success(const std::shared_ptr<mods::player>& player,std::string_view msg);
 void r_status(const std::shared_ptr<mods::player> & player,std::string_view msg);
 ACMD(do_rbuild);
+ACMD(do_rbuild_sandbox);
 ACMD(do_zbuild);
 #endif

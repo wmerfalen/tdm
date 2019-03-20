@@ -18,6 +18,7 @@
 #include "mods/pregame.hpp"
 #include "mods/loops.hpp"
 #include "mods/testing_index.hpp"
+#include "mods/auto-login.hpp"
 
 extern int errno;
 #define MODS_BREACH_DISORIENT 50
@@ -158,7 +159,9 @@ namespace mods {
 					argument = "";
 				}
 				if(strncmp(argv[pos],"--help",6) == 0 || strncmp(argv[pos],"-h",2) == 0){
-					std::cerr << "usage: <circle> --postgres-pw-file=<file> [options]\n"
+					std::cerr << "usage: <circle> --postgres-pw-file=<file> [options]\n" 
+						<< "--auto-login=user Automatically login as user on connection [use only for development]\n" 
+						<< "--auto-password=password Automatically login and use password on connection [use only for development]\n" 
 				 	<< "--testing=<suite>	Launch test suite\n"
 					<< "--import-rooms 	Run the import rooms routine\n"
 					<< "--hell 	Start the mud in HELL mode\n"
@@ -172,6 +175,14 @@ namespace mods {
 					;
 				}
 
+				if(strncmp(argv[pos],"--auto-login=",13) == 0){
+					mods::auto_login::set_user(argument.substr(13,argument.length()-13));
+					continue;
+				}
+				if(strncmp(argv[pos],"--auto-password=",16) == 0){
+					mods::auto_login::set_password(argument.substr(16,argument.length()-16));
+					continue;
+				}
 				if(strncmp(argv[pos],"--testing=",10) == 0){
 					f_test_suite = argument.substr(10,argument.length()-10);
 					continue;

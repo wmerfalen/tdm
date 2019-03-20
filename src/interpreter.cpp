@@ -29,6 +29,7 @@
 
 #include "mods/js.hpp"
 #include "mods/crypto.hpp"
+#include "mods/auto-login.hpp"
 
 /* external variables */
 extern int destroy_socket(socket_t&);
@@ -179,6 +180,7 @@ ACMD(do_rnumlist);
 ACMD(do_rnumtele);
 ACMD(do_pref);
 ACMD(do_rbuild);
+ACMD(do_rbuild_sandbox);
 ACMD(do_drone);
 ACMD(do_quest);
 ACMD(do_js);
@@ -518,6 +520,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "rnumlist"  , POS_RESTING , do_rnumlist   , LVL_IMMORT, 0 },
 	{ "pref"  , POS_RESTING , do_pref   , 0, 0 },
 	{ "rbuild"  , POS_RESTING , do_rbuild   , LVL_IMMORT, 0 },
+	{ "rbuild_sandbox"  , POS_RESTING , do_rbuild_sandbox   , LVL_IMMORT, 0 },
 	{ "drone"  , POS_RESTING , do_drone   , 0, 0 },
 	{ "throw"  , POS_RESTING , do_throw   , 0, 0 },
 	{ "ammo"  , POS_RESTING , do_ammo   , 0, 0 },
@@ -1430,6 +1433,24 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 	std::string arg = in_arg;
 	tuple_status_t status;
 
+	if(mods::auto_login::get_user().length()){
+		switch(p->state()){
+			case CON_GET_NAME:
+				arg = mods::auto_login::get_user();
+				p->set_name(arg);
+				p->set_db_id(0);
+				arg = mods::auto_login::get_password();
+				if(login(mods::auto_login::get_user(),arg) == false){
+					log("SYSERR: user/password combination for auto_login failed");
+					exit(1);
+				}else{
+					parse_sql_player(p);
+				}
+				p->set_state(CON_MENU);
+				arg = "1";
+				break;
+		}
+	}
 	switch(p->state()) {
 		case CON_GET_NAME:		/* wait for input of name */
 			if(arg.length() == 0) {

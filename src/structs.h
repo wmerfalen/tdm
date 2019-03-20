@@ -1049,9 +1049,10 @@ enum lense_type_t {
 		bool zone_pave_mode;
 		room_pavement_t room_pavements;
 		zone_pavement_t zone_pavements;
-		builder_data_t() : room_pave_mode(false),zone_pave_mode(false) {}
+		builder_data_t() : room_pave_mode(false),zone_pave_mode(false){ }
 		~builder_data_t() = default;
 	};
+
 
 	/* ================== Structure for player/non-player ===================== */
 	struct txt_block {

@@ -752,6 +752,12 @@ namespace mods {
 			}
 			void player::set_bui_mode(bool b){
 				m_bui_mode = b;
+				if(m_bui_mode){
+					if(!builder_data){
+						std::cerr << "builder data created for player\n";
+						builder_data = std::make_shared<builder_data_t>();
+					}
+				}
 			}
 			void player::done() {
 				this->stc("It has been done.\n");

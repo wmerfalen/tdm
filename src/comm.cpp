@@ -1362,13 +1362,13 @@ int new_descriptor(socket_t s) {
 			last_desc = 1;
 		}
 		player->desc().desc_num = last_desc;
-		GREETINGS = "Username:";
-		write_to_output(player->desc(), "%s",GREETINGS.c_str());
 		mods::globals::socket_map.insert (
 				std::pair<int,mods::globals::player_ptr_t>(
 					desc,player
 				)
 		);
+		GREETINGS = "Username:";
+		write_to_output(player->desc(), "%s",GREETINGS.c_str());
 		return (desc);
 	}
 }

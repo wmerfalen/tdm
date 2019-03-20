@@ -208,6 +208,31 @@ namespace mods::builder {
 			{ITEM_WEAR_HOLD,"HOLD"}
 		}
 	};
+	sandbox_data_t::sandbox_data_t(
+				std::shared_ptr<mods::player> player,
+				std::string_view name,
+				int starting_room_number){
+		m_player = player;
+			m_builder_data = std::make_shared<builder_data_t>();
+			++sandbox_data_t::counter;
+			m_name = name;
+			bool status = save_zone_to_db(name,
+					starting_room_number,
+					starting_room_number + 100,
+					100,
+					2
+			);
+			if(!status){
+				
+			}
+			
+			m_builder_data->room_pave_mode = true;
+			m_builder_data->room_pavements.start_room = starting_room_number;
+			m_builder_data->room_pavements.zone_id = zone_id.value();
+		}
+	/* Factory method to generate a room for us */
+	room_data new_room(std::shared_ptr<mods::player> player,int direction);
+	bool flush_to_db(struct char_data *ch,room_vnum room);
 	std::optional<obj_data*> instantiate_object_by_index(int index) {
 		std::size_t i = index;
 
@@ -233,12 +258,13 @@ namespace mods::builder {
 	}
 
 	inline void initialize_builder(std::shared_ptr<mods::player> player){
-		if(!player->builder_data){
-			std::cerr << "initialize_builder: creating shared_ptr\n";
-			player->builder_data = std::make_shared<builder_data_t>();
-		}else{
-			std::cerr << "initialize_builder: shared_ptr already built\n";
-		}
+		//if(!player->has_builder_data()){
+		//	std::cerr << "initialize_builder: creating shared_ptr\n";
+		//	player->builder_data = std::make_shared<builder_data_t>();
+		//}else{
+		//	std::cerr << "initialize_builder: shared_ptr already built\n";
+		//}
+		player->set_bui_mode(true);
 	}
 	void pave_to(std::shared_ptr<mods::player> player,room_data * current_room,int direction) {
 		initialize_builder(player);
@@ -248,9 +274,9 @@ namespace mods::builder {
 		);
 		mods::builder::new_room(player,direction);
 		player->builder_data->room_pavements.rooms.push_back(world.size()-1);
-		auto created_room = world.end()- 1;
-		created_room->number = player->builder_data->room_pavements.start_room + player->builder_data->room_pavements.current_room_number;
-		created_room->zone = player->builder_data->room_pavements.zone_id;
+		auto created_room = world.back();
+		created_room.number = player->builder_data->room_pavements.start_room + player->builder_data->room_pavements.current_room_number;
+		created_room.zone = player->builder_data->room_pavements.zone_id;
 
 		if(!create_direction(player->room(),direction,world.size() -1)) {
 			r_error(player,"Couldn't create direction to that room!");
@@ -575,21 +601,17 @@ namespace mods::builder {
 		world[room_id].dir_option[direction]->to_room = to_room.value_or(world[room_id].dir_option[direction]->to_room);
 		return std::nullopt;
 	}
-	bool create_direction(room_rnum room_id,int direction,room_rnum to_room) {
+	bool create_direction(room_rnum room_id,byte direction,room_rnum to_room) {
 		if(direction > NUM_OF_DIRS) {
 			return false;
 		}
 
-		if(world[room_id].dir_option[direction]) {
-			free(world[room_id].dir_option[direction]);
-		}
-
-		world[room_id].dir_option[direction] = (struct room_direction_data*) calloc(1,sizeof(room_direction_data));
-		world[room_id].dir_option[direction]->general_description = strdup("general description");
-		world[room_id].dir_option[direction]->keyword = strdup("keyword");
-		world[room_id].dir_option[direction]->exit_info = EX_ISDOOR;
-		world[room_id].dir_option[direction]->key = -1;
-		world[room_id].dir_option[direction]->to_room = to_room;
+		world[room_id].set_dir_option(direction,
+				"general description",
+				"keyword",
+				EX_ISDOOR,
+				-1,
+				to_room);
 		return true;
 	}
 	bool destroy_direction(room_rnum room_id,int direction) {
@@ -963,6 +985,28 @@ namespace mods::builder {
 };
 
 using args_t = std::vector<std::string>;
+
+ACMD(do_rbuild_sandbox) {
+	MENTOC_PREAMBLE();
+	mods::builder::initialize_builder(player);
+	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
+	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
+		player->pager_start();
+		*player << "usage: \r\n" <<
+			" {grn}bbuild_sandbox{/grn} {red}help{/red}\r\n" <<
+			"  |--> this help menu\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild_sandbox{/wht} {grn}help{/grn}\r\n" <<
+			"  |:: (this help menu will show up)\r\n" <<
+			" {grn}rbuild_sandbox{/grn} {red}new{/red}\r\n" <<
+			" {grn}rbuild_sandbox{/grn} {red}list{/red}\r\n" <<
+			" {grn}rbuild_sandbox{/grn} {red}delete <id>{/red}\r\n" <<
+			"\r\n";
+		player->pager_end();
+		player->page(0);
+	}
+
+}
 ACMD(do_sbuild) {
 	MENTOC_PREAMBLE();
 	mods::builder::initialize_builder(player);
