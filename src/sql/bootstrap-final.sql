@@ -259,46 +259,64 @@ ALTER SEQUENCE public.object_weapon_id_seq OWNED BY public.object_weapon.id;
 -- Name: player; Type: TABLE; Schema: public; Owner: llvm
 --
 CREATE TABLE public.player (
-    player_id integer NOT NULL,
-    player_virtual_number integer NOT NULL,
-    player_name character varying(256) NOT NULL,
-    player_short_description character varying(64) NOT NULL,
-    player_long_description character varying(512) NOT NULL,
-    player_description text,
-    player_action_bitvector character varying(2) NOT NULL,
-    player_affection_bitvector character varying(2) NOT NULL,
-    player_ability_strength integer NOT NULL,
-    player_ability_strength_add integer NOT NULL,
-    player_ability_intelligence integer NOT NULL,
-    player_ability_wisdom integer NOT NULL,
-    player_ability_dexterity integer NOT NULL,
-    player_ability_constitution integer NOT NULL,
-    player_ability_charisma integer NOT NULL,
-    player_alignment integer NOT NULL,
-    player_attack_type integer NOT NULL,
-    player_level integer NOT NULL,
-    player_hitroll integer NOT NULL,
-    player_armor integer NOT NULL,
-    player_max_hitpoints integer NOT NULL,
-    player_max_mana integer NOT NULL,
-    player_max_move integer NOT NULL,
-    player_gold integer NOT NULL,
-    player_exp integer NOT NULL,
-    player_sex integer NOT NULL,
-    player_hitpoints integer,
-    player_mana integer NOT NULL,
-    player_move integer NOT NULL,
-    player_damnodice integer NOT NULL,
-    player_damsizedice integer NOT NULL,
-    player_damroll integer NOT NULL,
-    player_weight integer NOT NULL,
-    player_height integer NOT NULL,
-    player_class integer NOT NULL,
-    player_title character varying(256) NOT NULL,
-    player_hometown character varying(16) NOT NULL,
-    player_password character varying(512),
-    player_type character varying(3) NOT NULL
-);
+		id SERIAL PRIMARY KEY,
+		player_password VARCHAR(1024) NOT NULL,
+		player_affection_plr_bitvector INTEGER NOT NULL DEFAULT 0,
+		player_affection_bitvector INTEGER NOT NULL DEFAULT 0,
+		player_name VARCHAR(24) NOT NULL DEFAULT 'recruit',
+		player_short_description VARCHAR(512) NOT NULL default 'A lonely recruit',
+		player_long_description TEXT,
+		player_action_bitvector INTEGER NOT NULL DEFAULT 0,
+		player_ability_strength INTEGER NOT NULL DEFAULT 1,
+		player_ability_strength_add INTEGER NOT NULL DEFAULT 1,
+		player_ability_intelligence INTEGER NOT NULL DEFAULT 1,
+		player_ability_wisdom INTEGER NOT NULL DEFAULT 1,
+		player_ability_dexterity INTEGER NOT NULL DEFAULT 1,
+		player_ability_constitution INTEGER NOT NULL DEFAULT 1,
+		player_ability_charisma INTEGER NOT NULL DEFAULT 1,
+		player_ability_alignment INTEGER NOT NULL DEFAULT 0,
+		player_attack_type INTEGER NOT NULL DEFAULT 0,
+		player_max_hitpoints INTEGER NOT NULL DEFAULT 100,
+		player_max_mana INTEGER NOT NULL DEFAULT 100,
+		player_max_move INTEGER NOT NULL DEFAULT 100,
+		player_gold INTEGER NOT NULL DEFAULT 0,
+		player_exp INTEGER NOT NULL DEFAULT 0,
+		player_sex VARCHAR(1) NOT NULL DEFAULT 'M',
+		player_hitpoints INTEGER NOT NULL DEFAULT 100,
+		player_mana INTEGER NOT NULL DEFAULT 100,
+		player_move INTEGER NOT NULL DEFAULT 100,
+		player_damroll INTEGER NOT NULL DEFAULT 6,
+		player_weight INTEGER NOT NULL DEFAULT 10,
+		player_height INTEGER NOT NULL DEFAULT 60,
+		player_class VARCHAR(16) NOT NULL DEFAULT 'x',
+		player_title VARCHAR(24) DEFAULT 'recruit',
+		player_hometown VARCHAR(24) DEFAULT 'SLC',
+		player_damnodice INTEGER NOT NULL DEFAULT 3,
+		player_damsizedice INTEGER NOT NULL DEFAULT 6,
+		player_type VARCHAR(6) NOT NULL DEFAULT 'x',
+		player_alignment INTEGER NOT NULL DEFAULT 0,
+		player_level INTEGER NOT NULL DEFAULT 1,
+		player_hitroll INTEGER NOT NULL DEFAULT 3,
+		player_armor INTEGER NOT NULL DEFAULT 3,
+		player_birth TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		player_time_played INTEGER NOT NULL DEFAULT 0,
+		player_logon TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		player_preferences INTEGER NOT NULL DEFAULT 0
+	);
+
+ALTER TABLE public.player ALTER COLUMN player_affection_bitvector DROP NOT NULL;
+ALTER TABLE public.player ALTER COLUMN player_affection_plr_bitvector DROP NOT NULL;
+ALTER TABLE public.player ALTER COLUMN player_preferences DROP NOT NULL;
+
+ALTER TABLE public.player ALTER COLUMN player_affection_bitvector DROP DEFAULT;
+ALTER TABLE public.player ALTER COLUMN player_affection_plr_bitvector DROP DEFAULT;
+ALTER TABLE public.player ALTER COLUMN player_preferences DROP DEFAULT;
+
+ALTER TABLE public.player ALTER COLUMN player_affection_bitvector TYPE varchar(2048); 
+ALTER TABLE public.player ALTER COLUMN player_affection_plr_bitvector TYPE varchar(2048); 
+ALTER TABLE public.player ALTER COLUMN player_preferences TYPE varchar(2048);
+
+
 ALTER TABLE public.player OWNER TO postgres;
 --
 -- Name: player_player_id_seq; Type: SEQUENCE; Schema: public; Owner: llvm
