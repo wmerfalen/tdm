@@ -876,7 +876,6 @@ void heartbeat(int pulse) {
 		weather_and_time(1);
 		affect_update();
 		point_update();
-
 	}
 
 	if(auto_save && !(pulse % PULSE_AUTOSAVE)) {	/* 1 minute */

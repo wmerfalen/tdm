@@ -21,6 +21,7 @@
 #include "interpreter.h"
 #include "constants.h"
 #include "globals.hpp"
+#include "mods/loops.hpp"
 
 
 /* external variables */
@@ -77,13 +78,14 @@ int mag_savingthrow(struct char_data *ch, int type, int modifier) {
 
 /* affect_update: called from comm.c (causes spells to wear off) */
 void affect_update(void) {
-	struct affected_type *af, *next;
-	struct char_data *i;
-
-	for(i = character_list; i; i = i->next)
-		for(af = i->affected; af; af = next) {
+	std::cerr << "affect_update\n";
+	mods::loops::foreach_all_chars([](char_data* ch) -> bool {
+		affected_type *af =nullptr,*next =nullptr;
+		for(af = ch->affected; af; af = next){
 			next = af->next;
-
+			if(!af){
+				return true;
+			}
 			if(af->duration >= 1) {
 				af->duration--;
 			} else if(af->duration == -1) {	/* No action */
@@ -92,13 +94,35 @@ void affect_update(void) {
 				if((af->type > 0) && (af->type <= MAX_SPELLS))
 					if(!af->next || (af->next->type != af->type) ||
 					        (af->next->duration > 0))
-						if(spell_info[af->type].wear_off_msg) {
-							send_to_char(i, "%s\r\n", spell_info[af->type].wear_off_msg);
-						}
+					if(spell_info[af->type].wear_off_msg) {
+						send_to_char(ch, "%s\r\n", spell_info[af->type].wear_off_msg);
+					}
 
-				affect_remove(i, af);
+				affect_remove(ch, af);
 			}
 		}
+		return true;
+	});
+	
+	//for(i = character_list; i; i = i->next)
+	//	for(af = i->affected; af; af = next) {
+	//		next = af->next;
+
+	//		if(af->duration >= 1) {
+	//			af->duration--;
+	//		} else if(af->duration == -1) {	/* No action */
+	//			af->duration = -1;    /* GODs only! unlimited */
+	//		} else {
+	//			if((af->type > 0) && (af->type <= MAX_SPELLS))
+	//				if(!af->next || (af->next->type != af->type) ||
+	//				        (af->next->duration > 0))
+	//					if(spell_info[af->type].wear_off_msg) {
+	//						send_to_char(i, "%s\r\n", spell_info[af->type].wear_off_msg);
+	//					}
+
+	//			affect_remove(i, af);
+	//		}
+	//	}
 }
 
 
