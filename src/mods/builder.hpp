@@ -56,11 +56,11 @@ namespace mods::builder {
 		sandbox_data_t(
 				std::shared_ptr<mods::player> player,
 				std::string_view name,
-				room_vnum start);
+				room_vnum start,room_vnum end);
 		int8_t new_sandbox(
 				std::shared_ptr<mods::player> player,
 				std::string_view name,
-				room_vnum start);
+				room_vnum start,room_vnum end);
 		std::string_view name() const;
 		void set_name(std::string_view n);
 		std::shared_ptr<builder_data_t> builder_data(){ return m_builder_data; }
@@ -68,6 +68,8 @@ namespace mods::builder {
 		std::shared_ptr<builder_data_t> m_builder_data;
 		std::string m_name;
 		std::shared_ptr<mods::player> m_player;
+		room_vnum m_start;
+		room_vnum m_end;
 	};
 
 	using sandbox_list_t = std::unordered_map<std::string,std::deque<sandbox_data_t>> ;

@@ -215,8 +215,9 @@ namespace mods::builder {
 	sandbox_data_t::sandbox_data_t(
 				std::shared_ptr<mods::player> player,
 				std::string_view name,
-				room_vnum starting_room_number){
-		 new_sandbox(player,name,starting_room_number);
+				room_vnum starting_room_number,
+				room_vnum end_room_number){
+		 new_sandbox(player,name,starting_room_number,end_room_number);
 	}
 	sandbox_data_t::sandbox_data_t() : m_name("") {}
 	void sandbox_data_t::set_name(std::string_view n){
@@ -228,15 +229,18 @@ namespace mods::builder {
 	int8_t sandbox_data_t::new_sandbox(
 				std::shared_ptr<mods::player> player,
 				std::string_view name,
-				int starting_room_number){
+				 room_vnum starting_room_number,
+				 room_vnum end_room_number){
 		m_player = player;
 			m_builder_data = std::make_shared<builder_data_t>();
 			m_name = name;
+			m_start = starting_room_number;
+			m_end = end_room_number;
 			bool status = save_zone_to_db(
 					starting_room_number,
 					name,
 					starting_room_number,
-					starting_room_number + 100,
+					end_room_number,
 					100,
 					2
 			);
@@ -1023,7 +1027,7 @@ ACMD(do_rbuild_sandbox) {
 			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {wht}rbuild_sandbox{/wht} {grn}help{/grn}\r\n" <<
 			"  |:: (this help menu will show up)\r\n" <<
-			" {grn}rbuild_sandbox{/grn} {red}new <name> <room_number_start>{/red}\r\n" <<
+			" {grn}rbuild_sandbox{/grn} {red}new <name> <start_room_vnum> <end_room_vnum>{/red}\r\n" <<
 			" {grn}rbuild_sandbox{/grn} {red}list{/red}\r\n" <<
 			" {grn}rbuild_sandbox{/grn} {red}delete <id>{/red}\r\n" <<
 			"\r\n";
@@ -1036,12 +1040,14 @@ ACMD(do_rbuild_sandbox) {
 
 	if(args.has_value()) {
 		auto cmd_args = args.value();
-		if(cmd_args.size() == 3){
+		if(cmd_args.size() == 4){
 			/**
-			 * cmd_args will be: [0] => new, [1] => <name>, [2] => <starting_room_number>
+			 * cmd_args will be: [0] => new, [1] => <name>, [2] => <starting_room_number>, [3] => <ending_room_number>
 			 */
 			mods::builder::sandbox_data_t sandbox;
-			auto status = sandbox.new_sandbox(player,cmd_args[1],mods::util::stoi<int>(cmd_args[2]));
+			auto status = sandbox.new_sandbox(player,cmd_args[1],
+					mods::util::stoi<room_vnum>(cmd_args[2]),
+					mods::util::stoi<room_vnum>(cmd_args[3]));
 			if(status < 0){
 				r_error(player,std::string("Failed to create sandbox! Error: #") + std::to_string(status));
 				return;

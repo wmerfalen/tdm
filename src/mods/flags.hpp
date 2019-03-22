@@ -7,6 +7,9 @@
 #include <type_traits>
 #include <vector>
 #include <string>
+namespace mods {
+	struct player;
+};
 namespace mods::flags {
 	enum chunk_type_t {
 		LEGACY_AFF = 0,
@@ -81,6 +84,7 @@ namespace mods::flags {
 	using aff_container_t = std::vector<std::pair<aff,uint64_t>>;
 	extern plr_container_t plr_flags;
 	extern aff_container_t aff_flags;
+	bool save_player_flags(std::shared_ptr<mods::player> player);
 	//template <typename PlayerPointerType>
 	//	static inline void setter_function(PlayerPointerType player,
 	//			mods::flags::aff f){
