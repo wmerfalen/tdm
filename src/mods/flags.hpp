@@ -85,6 +85,8 @@ namespace mods::flags {
 	extern plr_container_t plr_flags;
 	extern aff_container_t aff_flags;
 	bool save_player_flags(std::shared_ptr<mods::player> player);
+	bool save_player_flags_by_chunk(std::shared_ptr<mods::player> player,
+			const std::vector<chunk_type_t>& chunks);
 	//template <typename PlayerPointerType>
 	//	static inline void setter_function(PlayerPointerType player,
 	//			mods::flags::aff f){
