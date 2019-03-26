@@ -12,6 +12,17 @@ namespace mods {
 		public:
 			enum object_type_enum_t { 
 				OBJECT = 0,
+				/** These are for the constants that the mods/builder class
+				 * is referencing. I'm not 100% happy with these values, so
+				 * for the time being we will have this here, but in the future
+				 * I'm likely to remove them in favor of our other enumerated
+				 * values.
+				 */
+				__BROAD_CATEGORY_START__,
+				WEAPON,
+				CONTAINER,
+				SENTINEL,
+				__BROAD_CATEGORY_END__,
 				__WEAPON_START__,
 				/** Types of melee weapons */
 				__MELEE_WEAPON_START__,
@@ -64,6 +75,7 @@ namespace mods {
 				FIRST = OBJECT,
 				LAST = __ARMOR_BRANDS_END__
 			};
+			using type = object_type_enum_t;
 
 			/* constructors and destructors */
 			~object();
