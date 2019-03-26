@@ -504,7 +504,6 @@ namespace mods {
             m20();
             SKIP_WHITESPACE();
             m20();
-            std::tuple<int,bool> ret;
             std::vector<std::string> matches;
             if(m_accept_regex("(allow)",matches)){
                 dbg("Allow rule detected");
