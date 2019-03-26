@@ -1288,7 +1288,9 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 		z.bot =mods::util::stoi<int>(row["zone_start"]);
 		z.top =mods::util::stoi<int>(row["zone_end"]);
 		z.reset_mode =mods::util::stoi<int>(row["reset_mode"]);
-		z.number =mods::util::stoi<int>(row["id"]);
+		/** WRONG */
+		z.number =mods::util::stoi<int>(row["zone_virtual_number"]);
+		z.set_id(mods::util::stoi<int>(row["id"]));
 		zone_table.emplace_back(z);
 		top_of_zone_table = zone_table.size();
 		//struct reset_com {
@@ -2484,17 +2486,76 @@ bool parse_sql_player(std::shared_ptr<mods::player> player_ptr){
 		player_ptr->chclass() = mods::util::stoi<int>(row["player_class"]);
 		player_ptr->title().assign((row["player_title"]));
 		player_ptr->hometown() = mods::util::stoi<int>(row["player_hometown"]);
+		player_ptr->clear_all_affected();
+		player_ptr->clear_all_affected_plr();
+#define __MENTOC_PLR(a) case a: std::cerr << "flag: " << #a << " is set\n"; break;
 		if(strlen(row["player_affection_bitvector"].c_str()) > 0){
 			std::cerr << "player_affection_bitvector: " << row["player_affection_bitvector"].c_str() << "\n";
-			mods::flags::load<std::shared_ptr<mods::player>,mods::flags::aff>(
-				player_ptr,row["player_affection_bitvector"].c_str()
-			);
+			uint64_t aff = row["player_affection_bitvector"].as<uint64_t>(0);
+			uint64_t shift = 1;
+			for(unsigned i=0; i < 64; i++){
+				if(aff & shift){
+					std::cerr << "affected: " << i << "\n";
+					switch(shift){
+__MENTOC_PLR(AFF_BLIND);
+__MENTOC_PLR(AFF_INVISIBLE);
+__MENTOC_PLR(AFF_DETECT_ALIGN);
+__MENTOC_PLR(AFF_DETECT_INVIS);
+__MENTOC_PLR(AFF_DETECT_MAGIC);
+__MENTOC_PLR(AFF_SENSE_LIFE);
+__MENTOC_PLR(AFF_WATERWALK);
+__MENTOC_PLR(AFF_SANCTUARY);
+__MENTOC_PLR(AFF_GROUP);
+__MENTOC_PLR(AFF_CURSE);
+__MENTOC_PLR(AFF_INFRAVISION);
+__MENTOC_PLR(AFF_POISON);
+__MENTOC_PLR(AFF_PROTECT_EVIL);
+__MENTOC_PLR(AFF_PROTECT_GOOD);
+__MENTOC_PLR(AFF_SLEEP);
+__MENTOC_PLR(AFF_NOTRACK);
+__MENTOC_PLR(AFF_SNEAK);
+__MENTOC_PLR(AFF_HIDE);
+__MENTOC_PLR(AFF_CHARM);
+						default: std::cerr << "unknown affected flag: " << shift << "\n";
+					}
+					player_ptr->affect(shift);
+				}
+				shift <<= 1;
+			}
 		}
 		if(strlen(row["player_affection_plr_bitvector"].c_str()) > 0){
-			mods::flags::load<std::shared_ptr<mods::player>,mods::flags::plr>(
-				player_ptr,row["player_affection_plr_bitvector"].c_str()
-			);
+			uint64_t aff = row["player_affection_plr_bitvector"].as<uint64_t>(0);
+			std::cerr << "has affection plr bitvector\n";
+			uint64_t shift = 1;
+			for(unsigned i=0; i < 64; i++){
+				if(aff & shift){
+					std::cerr << "affected_plr: " << shift << "\n";
+					switch(shift){
+__MENTOC_PLR(PLR_KILLER);
+__MENTOC_PLR(PLR_THIEF);
+__MENTOC_PLR(PLR_FROZEN);
+__MENTOC_PLR(PLR_DONTSET);
+__MENTOC_PLR(PLR_WRITING);
+__MENTOC_PLR(PLR_MAILING);
+__MENTOC_PLR(PLR_CRASH);
+__MENTOC_PLR(PLR_SITEOK);
+__MENTOC_PLR(PLR_NOSHOUT);
+__MENTOC_PLR(PLR_NOTITLE);
+__MENTOC_PLR(PLR_DELETED);
+__MENTOC_PLR(PLR_LOADROOM);
+__MENTOC_PLR(PLR_NOWIZLIST);
+__MENTOC_PLR(PLR_NODELETE);
+__MENTOC_PLR(PLR_INVSTART);
+__MENTOC_PLR(PLR_CRYO);
+__MENTOC_PLR(PLR_NOTDEADYET);
+						default: std::cerr << "unknown affected_plr flag: " << shift << "\n";break;
+					}
+					player_ptr->affect(shift);
+				}
+				shift <<= 1;
+			}
 		}
+		
 		player_ptr->set_time_birth(mods::util::stoi<int>(row["player_birth"]));
 		player_ptr->set_time_played(mods::util::stoi<int>(row["player_time_played"]));
 		player_ptr->set_time_logon(time(0));

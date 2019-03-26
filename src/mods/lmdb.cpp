@@ -573,7 +573,7 @@ pqxx::result db_get_by_meta(std::string table, std::string col,const std::string
 			return mods::pq::result();
 		}
 }
-pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::tuple::reference & value){
+pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::row::reference & value){
 		try{
 			auto up_txn = txn();
 			sql_compositor comp(table,&up_txn);

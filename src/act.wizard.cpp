@@ -2172,7 +2172,7 @@ ACMD(do_show) {
 			             "  %5d players in game  %5d connected\r\n"
 			             "  %5d registered\r\n"
 			             "  %5d mobiles          %5d prototypes\r\n"
-			             "  %lu objects          %5d prototypes\r\n"
+			             "  %5d objects          %5d prototypes\r\n"
 			             "  %5d rooms            %5d zones\r\n"
 			             "  %5d large bufs\r\n"
 			             "  %5d buf switches     %5d overflows\r\n",

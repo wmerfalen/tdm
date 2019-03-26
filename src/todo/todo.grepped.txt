@@ -1,0 +1,111 @@
+../act.informative.cpp:	//TODO: combat cooldown should prevent recall for 20 seconds
+../act.informative.cpp://TODO: when multiple quests are allowed, this hard-coded zero needs to change
+../act.informative.cpp:	/* TODO: show map */
+../act.informative.cpp:			/* TODO !test !integrity */
+../act.movement.cpp:			/* TODO: !mods Add thermite and regularly breached doors */
+../act.movement.cpp:			/* TODO: Thermite door */
+../act.offensive.cpp:/* TODO: Implement weapon tags in the obj_data data structure */
+../act.offensive.cpp:	/* TODO get wielded equipment tag */
+../act.wizard.cpp:			/** TODO: !needs-testing - Removed CREATE/clear_char() combo. */
+../act.wizard.cpp:		/** TODO: create temporary character function that is global and we can call. */
+../comm.cpp:					/** TODO: when we know that we need these cmdline opts, un-comment. For now, they are not supported - 2019-03-08 */
+../comm.cpp:		destroy_socket(desc);//TODO: merge destroy_socket functionality into deregister_player process
+../comm.cpp:	/** !TODO: do we use deregister_player here? */
+../db.cpp:	//			/** TODO: make dir_option elements not crappy malloc'd :) */
+../db.cpp:			//TODO: we may want to uncomment this out in the future, but no saving of bitvectors for now... 
+../db.cpp:			//TODO: !small do obj->flags fetching from db
+../db.cpp:		//TODO: SELECT COUNT(*) FROM zone_data where zone_id = z.number
+../db.cpp:			res.line = 0; //TODO: mods::util::stoi<int>(zone_data_row["line"]);
+../db.cpp:	/** TODO: make sure sql injection is not possible here */
+../db.cpp: * TODO: Add checks for unknown bitvectors.
+../fight.cpp:		functor += "0);";	//TODO: Make this the zone where the player is killed at
+../fight.cpp:	//TODO Modify this code to allow NPCs to follow the attacker
+../fight.cpp:		//TODO Modify this code to allow NPCs to follow the attacker
+../fight.cpp:	/*TODO: Modify this code to allow sniping */
+../fight.cpp:	/* TODO: if ch and victim are in the same room, the dice rolls should be *terrible*.
+../globals.cpp:			/** TODO: make configurable */
+../handler.cpp:	/*TODO: Insert logic here !movement !globals */
+../interpreter.cpp:		//TODO: change PLR_FLAGGED call to player->member method call
+../interpreter.cpp:	return 0;	/** TODO: fix this function */
+../interpreter.cpp:	//TODO: decide if we need this
+../interpreter.cpp:												 /** !TODO: create an is_immortal() function and call it like this:
+../spec_procs.cpp:	/** TODO: Devise practice system !medium */
+../spec_procs.cpp:	/** TODO: Once practice system in place, list them here */
+../spec_procs.cpp:	/** TODO: decrement practice session here */
+../spells.cpp:		/*TODO !test !integrity */
+../structs.cpp:  /** TODO: phase this out */
+../structs.cpp:		/** TODO: do something smart with this.. maybe call .init() on them 
+../structs.cpp:				/** TODO: if we have mobs in this room, mark it with a red indicator to simulate heat signatures */
+../structs.h:		/* TODO: replace this with std::vector<char_data*> */
+../structs.h:	/** TODO place this is the db */
+../structs.h:		/** TODO: phase this out */
+../structs.h:	/** TODO place this in the db */
+../structs.h:	/** TODO: construct this using a "player template" identifier
+../mods/ai_state.hpp:			/* TODO: Operator << for sending to the character */
+../mods/builder.cpp:			p_map["mob_level"] = "0";	//TODO: find this
+../mods/builder.cpp:			p_map["mob_sex"] = "0"; //TODO: find this
+../mods/builder.cpp:			p_map["mob_damsizedice"] = "0"; //TODO: find this
+../mods/builder.cpp:			p_map["mob_damroll"] = "0"; //TODO: find this
+../mods/builder.cpp:			p_map["mob_class"] = "0"; //TODO: find this
+../mods/builder.cpp:						"select id from affected_type where object_number="	//TODO: !mundane use new shit
+../mods/builder.cpp:						"DELETE FROM affected_type where object_number=") 	//TODO: !mundane use new shit
+../mods/builder.cpp:			 * TODO: The plan from 2019-02-15 is to build this code out below
+../mods/builder.cpp:			 * should be tested using some sort of js test suites. TODO
+../mods/builder.cpp:		//TODO: !mundane make this a function
+../mods/builder.cpp:		//TODO !mundane make these flag code fragments into a function
+../mods/builder.cpp:		//TODO: !mundane make this a function
+../mods/builder.cpp:		//TODO !mundane make these flag code fragments into a function
+../mods/builder.cpp:		//TODO: take this logic and store it in interpreter.cpp so we can reuse it
+../mods/builder.cpp:			" rbuild ed <delete> <N>\n" <<  /** TODO: needs impl */
+../mods/builder.cpp:			" rbuild ed <list>\r\n" << 	/** TODO needs impl */
+../mods/builder.cpp:			" rbuild ed <save-all>\r\n" << /** TODO: needs impl */
+../mods/builder.cpp:			" rbuild ed <show> <N>\r\n" <<  /** TODO: needs impl */
+../mods/builder.cpp:			" rbuild ed <new>\r\n" <<  /** TODO: needs impl */
+../mods/builder.cpp:			" rbuild ed <N> <keyword> <value>\r\n" <<  /** TODO: needs impl */
+../mods/builder.cpp:			" rbuild ed <N> <description> <value>\r\n" <<  /** TODO: needs impl */
+../mods/builder.cpp:			"  |:: einfo               -> Currently only accepts ISDOOR\r\n" << //TODO Accept more than just ISDOOR
+../mods/builder.cpp:			//" rbuild ed <list>\r\n" << 	/** TODO needs impl */
+../mods/builder.cpp:			//" rbuild ed <save-all>\r\n" << /** TODO: needs impl */
+../mods/builder.cpp:			//" rbuild ed <show> <N>\r\n" <<  /** TODO: needs impl */
+../mods/builder.cpp:			//" rbuild ed <N> <keyword> <value>\r\n" <<  /** TODO: needs impl */
+../mods/builder.cpp:			//" rbuild ed <N> <description> <value>\r\n" <<  /** TODO: needs impl */
+../mods/builder.cpp:			// rbuild ed <new>\r\n" <<  /** TODO: needs impl */
+../mods/builder.cpp:			/** TODO: add mutex lock so that other builders cant lock this room */
+../mods/builder.cpp:			// rbuild ed <delete> <N>\n" <<  /** TODO: needs impl */
+../mods/builder.cpp:		 *  where N is the index you want to delete. accepts csv (TODO)
+../mods/catch.hpp:		// TODO: Check testGroupStats.aborting and act accordingly.
+../mods/cron.hpp:			/* TODO: Operator << for sending to the character */
+../mods/db.cpp:	/** TODO: instead of using the char_data accesses, create functions(or use existing ones) on mods::player object */
+../mods/deferred.hpp:			/* TODO: Operator << for sending to the character */
+../mods/drone.cpp:	/** TODO: !uncertainty! -> question: "Does this need to be uncommented?" */
+../mods/drone.hpp:			/* TODO: Operator << for sending to the character */
+../mods/js.cpp:			/** TODO: get array from duktape */
+../mods/js.cpp:			/** TODO: get array from duktape */
+../mods/js.cpp:			/** TODO: get array from duktape */
+../mods/js.cpp:			/** TODO: get array from duktape */
+../mods/js.cpp:			/** TODO: get array from duktape */
+../mods/js.cpp:			/** TODO: get array from duktape */
+../mods/player-scaffolding.cpp:		/* TODO: create a function that loads an initializes an entire player
+../mods/player-scaffolding.cpp:		/* TODO: create a function that loads and initializes an entire player
+../mods/player-scaffolding.cpp:		/** TODO: !uncertainty! -> question: "Does this need to be uncommented?" */
+../mods/player-scaffolding.cpp:		/** TODO: Check if we need to manually assign ch->desc */
+../mods/player-scaffolding.hpp:			//TODO: player_scaffolding(std::string_view player_name);
+../mods/player.cpp: * TODO: All these stc* functions need to be altered to accomodate
+../mods/player.cpp:		 * TODO: If it's a drone, then the appropriate drone flags need to be set
+../mods/player.cpp:		 * TODO: if it's a mob, then it needs to have IS_NPC return true.. so, set that flag
+../mods/player.cpp:		 * TODO: if it's a player, set the IS_NPC flag to false. Also, figure out how to handle descriptor_data
+../mods/player.cpp:		/**TODO: should we set the queue_behaviour flags on the descriptor data items on *this? */
+../mods/player.cpp:		/** TODO: investigate this function. I have a feeling that m_desc needs to be updated here */
+../mods/player.cpp:		/** TODO: figure out why this function was created. */
+../mods/player.cpp:		/* TODO: find a better way to do this. this loops through all objects in the game and checks if the person carrying it is the current player */
+../mods/player.cpp:			/* TODO: get status of outside world, if EMP, then replace phrase with emp phrase */
+../mods/player.cpp:				/** TODO: what do we need to do to deactivate the account? 
+../mods/player.hpp:			/** TODO: all these queueing functions and overloaded operators need to accomodate
+../mods/player.hpp:			/** TODO: call a CRM function. In fact, maybe don't even
+../mods/quests.cpp:		/* TODO: load triggers from disk on startup */
+../mods/quests.cpp:			/** TODO: this needs to be a fast structure in RAM that we check. 
+../mods/quests.cpp://					//TODO: report error (no mud triggers loaded)
+../mods/quests.cpp:			//TODO: this has to run ALL quests code, not just zero
+../mods/quests.cpp:			return 0;	//TODO: make use of return value to signify something?
+../mods/quests.cpp:			//TODO: Calculate quest reward tiers
+../mods/schema.hpp:/*!TODO: Implement boost::hana into this class.*/

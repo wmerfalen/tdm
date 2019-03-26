@@ -186,7 +186,7 @@ struct zone_data {
 		lifespan(0),age(1),
 		bot(0),top(1),
 		reset_mode(0),
-		number(0){
+		number(0),m_id(0){
 		
 	}
 	~zone_data() = default;
@@ -199,6 +199,10 @@ struct zone_data {
 	int	reset_mode;         /* conditions for reset (see below)   */
 	zone_vnum number;	    /* virtual number of this zone	  */
 	std::vector<reset_com> cmd;   /* command table for reset	          */
+	int64_t get_id() const { return m_id; }
+	void set_id(int64_t i){ m_id = i; }
+	private:
+		int64_t m_id;
 
 	/*
 	 * Reset mode:

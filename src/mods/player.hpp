@@ -130,22 +130,26 @@ namespace mods {
 			/**
 			 * @return returns the legacy AFF_ flag given the modern aff flag
 			 */
-			bool has_affect(uint64_t f);
-			bool has_affect(mods::flags::aff f);
-			void affect(uint64_t flag);
-			void affect(mods::flags::aff flag);
-			void remove_affect(uint64_t flag);
-			void remove_affect(mods::flags::aff flag);
+			bool has_affect(aligned_int_t f);
+			void affect(aligned_int_t flag);
+			void remove_affect(aligned_int_t flag);
 			aligned_int_t get_affected();
 			void clear_all_affected();
 
-			/** PLR_* Affects */
-			bool has_affect_plr(uint64_t flag);
+
+			/** TODO these need to go */
+			void affect(mods::flags::aff flag);
+			void remove_affect(mods::flags::aff flag);
+			bool has_affect(mods::flags::aff f);
 			bool has_affect_plr(mods::flags::plr flag);
-			void affect_plr(uint64_t flag);
 			void affect_plr(mods::flags::plr flag);
-			void remove_affect_plr(uint64_t flag);
 			void remove_affect_plr(mods::flags::plr flag);
+			/** END got to go */
+
+			/** PLR_* Affects */
+			bool has_affect_plr(aligned_int_t flag);
+			void affect_plr(aligned_int_t flag);
+			void remove_affect_plr(aligned_int_t flag);
 			aligned_int_t get_affected_plr();
 			void clear_all_affected_plr();
 
@@ -435,8 +439,18 @@ namespace mods {
 				return m_flags[chunk] & bit;
 			}
 
+			/**
+			 * Overhead map functions
+			 */
+			uint8_t get_overhead_map_width() const { return m_overhead_map_width; }
+			void set_overhead_map_width(uint8_t w){ m_overhead_map_width = w; }
+			uint8_t get_overhead_map_height() const { return m_overhead_map_height; }
+			void set_overhead_map_height(uint8_t h){ m_overhead_map_height = h; }
+
 		protected:
 			lense_type_t m_lense_type;
+			uint8_t m_overhead_map_width;
+			uint8_t m_overhead_map_height;
 		private: 
 			bool m_authenticated;
 			std::shared_ptr<builder_data_t> m_builder_data;

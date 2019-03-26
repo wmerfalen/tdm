@@ -16,7 +16,7 @@ namespace mods {
 			/* setters */
 			void set_cd(char_data* ch);
 			void set_shared_ptr(std::shared_ptr<mods::npc>&);
-
+			std::shared_ptr<char_data> get_shared_ptr();
 		private: 
 			char_data*   m_char_data;
 			std::shared_ptr<char_data> m_shared_ptr;

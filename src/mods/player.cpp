@@ -24,11 +24,15 @@ extern void do_auto_exits(struct char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
 namespace mods {
 	std::string just_color_evaluation(std::string final_buffer) {
+		final_buffer = mods::globals::replace_all(final_buffer,"{yel}","\033[93m");
+		final_buffer = mods::globals::replace_all(final_buffer,"{gld}","\033[33m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{grn}","\033[32m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{red}","\033[31m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{blu}","\033[34m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{wht}","\033[37m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{grey}","\033[90m");
+		final_buffer = mods::globals::replace_all(final_buffer,"{/yel}","\033[0m");
+		final_buffer = mods::globals::replace_all(final_buffer,"{/gld}","\033[0m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{/grey}","\033[0m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{/grn}","\033[0m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{/wht}","\033[0m");
@@ -239,6 +243,8 @@ namespace mods {
 		m_capture_output = false;
 		m_executing_js = false;
 		set_type(player_type_enum_t::PLAYER);
+		this->set_overhead_map_width(16);
+		this->set_overhead_map_height(10);
 	}
 	player::player(mods::player* ptr) {
 		/**TODO: should we set the queue_behaviour flags on the descriptor data items on *this? */
@@ -665,6 +671,7 @@ namespace mods {
 				AFF_FLAGS(cd()) = 0;
 			}
 			aligned_int_t player::get_affected(){
+				return AFF_FLAGS(cd());
 				return get_chunk(mods::flags::chunk_type_t::LEGACY_AFF);
 			}
 			/**
@@ -697,6 +704,7 @@ namespace mods {
 				PLR_FLAGS(cd()) = 0;
 			}
 			aligned_int_t player::get_affected_plr(){
+				return PLR_FLAGS(cd());
 				return get_chunk(mods::flags::chunk_type_t::LEGACY_PLR);
 			}
 
@@ -744,26 +752,36 @@ namespace mods {
 			}
 			void player::set_bui_mode(bool b){
 				m_bui_mode = b;
+				if(m_bui_mode){
+					if(!builder_data){
+						std::cerr << "builder data created for player\n";
+						builder_data = std::make_shared<builder_data_t>();
+					}
+				}
 			}
 			void player::done() {
 				this->stc("It has been done.\n");
 			}
 			bool player::has_builder_data(){
-				if(cd()->builder_data){
+				if(builder_data){
 					return true;
 				}
 				return false;
 			}
 			bool player::room_pave_mode(){
 				if(this->has_builder_data()){
-					return cd()->builder_data->room_pave_mode;
+					std::cerr << "checking user's pave mode status\n";
+					return builder_data->room_pave_mode;
 				}
+				std::cerr << "user doesn't have pave mode\n";
 				return false;
 			}
 			bool player::zone_pave_mode(){
 				if(this->has_builder_data()){
-					return cd()->builder_data->zone_pave_mode;
+					std::cerr << "checking user's zone_pave mode status\n";
+					return builder_data->zone_pave_mode;
 				}
+				std::cerr << "user doesn't have zone_pave mode\n";
 				return false;
 			}
 			void player::set_db_id(aligned_int_t id){

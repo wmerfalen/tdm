@@ -764,56 +764,18 @@ enum lense_type_t {
 			LAST
 		};
 		
-		room_data() : 
-		number(0), zone(0), sector_type(0), 
-		room_flags(0), light(0), func(nullptr),
-			contents(nullptr), people(nullptr){
-			for(unsigned i = 0; i < NUM_OF_DIRS;i++){ 
-				dir_option[i] = nullptr;
-			}
-		}
-		~room_data(){
-			for(unsigned i = 0; i < NUM_OF_DIRS; i++){
-				if(dir_option[i] != nullptr){
-					if(dir_option[i]->general_description != nullptr){
-						free(dir_option[i]->general_description);
-					}
-					if(dir_option[i]->keyword != nullptr){
-						free(dir_option[i]->keyword);
-					}
-					free(dir_option[i]);
-				}
-			}
-		}
+		void init();
+
+		room_data();
+		room_data(const room_data& r);
+		~room_data();
+		
 		void set_dir_option(byte i,
 				const std::string& gen_desc,
 				const std::string& keyword,
 				const int & ex_info,
 				const int & key,
-				const room_rnum to_room){
-			if(i >= NUM_OF_DIRS){
-				std::cerr << "SYSERR: dir_option >= NUM_OF_DIRS\n";
-				return;
-			}
-			if(dir_option[i] == nullptr){
-				dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
-			}else{
-				if(dir_option[i]->general_description != nullptr){
-					free(dir_option[i]->general_description);
-				}
-				if(dir_option[i]->keyword != nullptr){
-					free(dir_option[i]->keyword);
-				}
-				free(dir_option[i]);
-				dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
-			}
-			/** FIXME: replace strdup'd members with mods::string */
-			dir_option[i]->general_description = strdup(gen_desc.c_str());
-			dir_option[i]->keyword = strdup(keyword.c_str());
-			dir_option[i]->exit_info = ex_info;
-			dir_option[i]->key = key;
-			dir_option[i]->to_room = to_room;
-		}
+				const room_rnum to_room);
 		room_vnum number;		/* Rooms number	(vnum)		      */
 		zone_rnum zone;              /* Room zone (for resetting)          */
 		int	sector_type;            /* sector type (move/hide)            */
@@ -827,16 +789,11 @@ enum lense_type_t {
 		SPECIAL(*func);
 
 		std::vector<mods::extra_desc_data>& ex_descriptions();
-		//std::vector<mods::extra_desc_data>& ex_descriptions();
-		//void ex_descriptions(const mods::extra_desc_data&& other);
-		//void ex_descriptions(const std::vector<mods::extra_desc_data>& other);
-		//void ex_descriptions_append(mods::extra_desc_data&& other);
-
 		obj_data *contents;   /* List of items in room              */
 		char_data *people;    /* List of NPC / PC in room           */
-		
 		std::string_view overhead(const lense_type_t& );
 		const std::vector<texture_type_t>& textures() const;
+
 		protected:
 			std::vector<mods::extra_desc_data> m_ex_descriptions;
 			std::vector<texture_type_t> m_textures;
@@ -1092,9 +1049,10 @@ enum lense_type_t {
 		bool zone_pave_mode;
 		room_pavement_t room_pavements;
 		zone_pavement_t zone_pavements;
-		builder_data_t() : room_pave_mode(false),zone_pave_mode(false) {}
+		builder_data_t() : room_pave_mode(false),zone_pave_mode(false){ }
 		~builder_data_t() = default;
 	};
+
 
 	/* ================== Structure for player/non-player ===================== */
 	struct txt_block {

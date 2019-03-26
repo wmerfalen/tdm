@@ -37,5 +37,7 @@ namespace mods {
 		m_char_data = m_shared_ptr.get();
 	}
 
-
+	std::shared_ptr<char_data> npc::get_shared_ptr(){
+		return m_shared_ptr;
+	}
 };

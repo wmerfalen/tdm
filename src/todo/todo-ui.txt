@@ -1,0 +1,3 @@
+[ ] -> Index all available commands for a user's type dynamically by scraping the interpretter.cpp array that holds all available commands
+[ ] -> Use the index from the previous todo item to ask the user "Did you mean X?" where X is a similar command to what they typed.
+[ ] -> AFF_ and PLR_ flags need to be serialized. 
