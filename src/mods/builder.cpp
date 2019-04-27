@@ -13,6 +13,7 @@
 #include "../globals.hpp"
 #include "jx.hpp"
 #include <tuple>
+#include "npc.hpp"
 namespace mods {  struct player; };
 namespace mods { struct extra_desc_data; }; 
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
@@ -38,21 +39,21 @@ namespace mods::builder {
 		return player->has_flag(mods::flags::chunk_type_t::BUILDER,flag);
 	}
 	std::array<std::pair<int,std::string>,4> weapon_type_flags = { {
-			{mods::weapon::SMG,"SMG"},
+		{mods::weapon::SMG,"SMG"},
 			{mods::weapon::SHOTGUN,"SHOTGUN"},
 			{mods::weapon::SNIPE,"SNIPE"},
 			{mods::weapon::GRENADE,"GRENADE"}
-		}
+	}
 	};
 	std::array<std::pair<int,std::string>,3> sex_flags = { {
-			{SEX_NEUTRAL,"NEUTRAL"},
+		{SEX_NEUTRAL,"NEUTRAL"},
 			{SEX_MALE,"MALE"},
 			{SEX_FEMALE,"FEMALE"}
-		}
+	}
 	};
 
 	std::array<std::pair<int,std::string>,19> mob_act_flags = { {
-			{MOB_SPEC,"SPEC"},
+		{MOB_SPEC,"SPEC"},
 			{MOB_SENTINEL,"SENTINEL"},
 			{MOB_SCAVENGER,"SCAVENGER"},
 			{MOB_ISNPC,"ISNPC"},
@@ -71,11 +72,11 @@ namespace mods::builder {
 			{MOB_NOBASH,"NOBASH"},
 			{MOB_NOBLIND,"NOBLIND"},
 			{MOB_NOTDEADYET,"NOTDEADYET"}
-		}
+	}
 	};
 
 	std::array<std::pair<int,std::string>,22> aff_flags = { {
-			{AFF_BLIND,"BLIND"},
+		{AFF_BLIND,"BLIND"},
 			{AFF_INVISIBLE,"INVISIBLE"},
 			{AFF_DETECT_ALIGN,"DETECT_ALIGN"},
 			{AFF_DETECT_INVIS,"DETECT_INVIS"},
@@ -97,10 +98,10 @@ namespace mods::builder {
 			{AFF_HIDE,"HIDE"},
 			{AFF_UNUSED20,"UNUSED20"},
 			{AFF_CHARM,"CHARM"},
-		}
+	}
 	};
 	std::array<std::pair<int,std::string>,9> position_flags = { {
-			{POS_DEAD,"DEAD"},
+		{POS_DEAD,"DEAD"},
 			{POS_MORTALLYW,"MORTALLYW"},
 			{POS_INCAP,"INCAP"},
 			{POS_STUNNED,"STUNNED"},
@@ -109,17 +110,17 @@ namespace mods::builder {
 			{POS_SITTING,"SITTING"},
 			{POS_FIGHTING,"FIGHTING"},
 			{POS_STANDING,"STANDING"}
-		}
+	}
 	};
 
 	std::array<std::pair<int,std::string>,3> type2_flags = { {
-			{objtype::WEAPON,"WEAPON"},
+		{objtype::WEAPON,"WEAPON"},
 			{objtype::CONTAINER,"CONTAINER"},
 			{objtype::SENTINEL,"SENTINEL"}
-		}
+	}
 	};
 	std::array<std::pair<int,std::string>,23> type_flags = { {
-			{ITEM_LIGHT,"LIGHT"},
+		{ITEM_LIGHT,"LIGHT"},
 			{ITEM_SCROLL,"SCROLL"},
 			{ITEM_WAND,"WAND"},
 			{ITEM_STAFF,"STAFF"},
@@ -142,11 +143,11 @@ namespace mods::builder {
 			{ITEM_PEN,"PEN"},
 			{ITEM_BOAT,"BOAT"},
 			{ITEM_FOUNTAIN,"FOUNTAIN"}
-		}
+	}
 	};
 
 	std::array<std::pair<int,std::string>,17> extra_flags = { {
-			{ITEM_GLOW,"GLOW"},
+		{ITEM_GLOW,"GLOW"},
 			{ITEM_HUM,"HUM"},
 			{ITEM_NORENT,"NORENT"},
 			{ITEM_NODONATE,"NODONATE"},
@@ -163,10 +164,10 @@ namespace mods::builder {
 			{ITEM_ANTI_THIEF,"ANTI_THIEF"},
 			{ITEM_ANTI_WARRIOR,"ANTI_WARRIOR"},
 			{ITEM_NOSELL,"NOSELL"}
-		}
+	}
 	};
 	std::array<std::pair<int,std::string>,25> affected_flags = { {
-			{APPLY_NONE,"NONE"},
+		{APPLY_NONE,"NONE"},
 			{APPLY_STR,"STR"},
 			{APPLY_DEX,"DEX"},
 			{APPLY_INT,"INT"},
@@ -191,10 +192,10 @@ namespace mods::builder {
 			{APPLY_SAVING_PETRI,"SAVING_PETRI"},
 			{APPLY_SAVING_BREATH,"SAVING_BREATH"},
 			{APPLY_SAVING_SPELL,"SAVING_SPELL"}
-		}
+	}
 	};
 	std::array<std::pair<int,std::string>,15> wear_flags = { {
-			{ITEM_WEAR_TAKE,"TAKE"},
+		{ITEM_WEAR_TAKE,"TAKE"},
 			{ITEM_WEAR_FINGER,"FINGER"},
 			{ITEM_WEAR_NECK,"NECK"},
 			{ITEM_WEAR_BODY,"BODY"},
@@ -209,14 +210,14 @@ namespace mods::builder {
 			{ITEM_WEAR_WRIST,"WRIST"},
 			{ITEM_WEAR_WIELD,"WIELD"},
 			{ITEM_WEAR_HOLD,"HOLD"}
-		}
+	}
 	};
 	sandbox_list_t sandboxes;
 	sandbox_data_t::sandbox_data_t(
-				std::shared_ptr<mods::player> player,
-				std::string_view name,
-				room_vnum starting_room_number){
-		 new_sandbox(player,name,starting_room_number);
+			std::shared_ptr<mods::player> player,
+			std::string_view name,
+			room_vnum starting_room_number){
+		new_sandbox(player,name,starting_room_number);
 	}
 	sandbox_data_t::sandbox_data_t() : m_name("") {}
 	void sandbox_data_t::set_name(std::string_view n){
@@ -226,41 +227,41 @@ namespace mods::builder {
 		return m_name;
 	}
 	int8_t sandbox_data_t::new_sandbox(
-				std::shared_ptr<mods::player> player,
-				std::string_view name,
-				int starting_room_number){
+			std::shared_ptr<mods::player> player,
+			std::string_view name,
+			int starting_room_number){
 		m_player = player;
-			m_builder_data = std::make_shared<builder_data_t>();
-			m_name = name;
-			bool status = save_zone_to_db(
-					starting_room_number,
-					name,
-					starting_room_number,
-					starting_room_number + 100,
-					100,
-					2
-			);
-			m_builder_data->room_pave_mode = true;
-			m_builder_data->room_pavements.start_room = starting_room_number;
+		m_builder_data = std::make_shared<builder_data_t>();
+		m_name = name;
+		bool status = save_zone_to_db(
+				starting_room_number,
+				name,
+				starting_room_number,
+				starting_room_number + 100,
+				100,
+				2
+				);
+		m_builder_data->room_pave_mode = true;
+		m_builder_data->room_pavements.start_room = starting_room_number;
+		m_builder_data->room_pavements.zone_id = 0;
+		if(!status){
+			r_error(player,"Unable to create new zone!");
 			m_builder_data->room_pavements.zone_id = 0;
-			if(!status){
-				r_error(player,"Unable to create new zone!");
-				m_builder_data->room_pavements.zone_id = 0;
-				return -1;
-			}else{
-				for(auto && row : db_get_by_meta("zone","zone_name",name.data())){
-					m_builder_data->room_pavements.zone_id = row["id"].as<int>(0);
-					break;
-				}
+			return -1;
+		}else{
+			for(auto && row : db_get_by_meta("zone","zone_name",name.data())){
+				m_builder_data->room_pavements.zone_id = row["id"].as<int>(0);
+				break;
 			}
-			mods::builder::new_room(player,NORTH);
-			auto & room = world.back();
-			room.number = starting_room_number;
-			room.zone = m_builder_data->room_pavements.zone_id;
-			room.name.assign("new room");
-			room.description.assign("description goes here");
-			return 0;
 		}
+		mods::builder::new_room(player,NORTH);
+		auto & room = world.back();
+		room.number = starting_room_number;
+		room.zone = m_builder_data->room_pavements.zone_id;
+		room.name.assign("new room");
+		room.description.assign("description goes here");
+		return 0;
+	}
 	/* Factory method to generate a room for us */
 	room_data new_room(std::shared_ptr<mods::player> player,int direction);
 	bool flush_to_db(struct char_data *ch,room_vnum room);
@@ -302,9 +303,9 @@ namespace mods::builder {
 		r_status(player,
 				std::string("start_room: ") + 
 				std::to_string(player->builder_data->room_pavements.start_room)
-		);
+				);
 		mods::builder::new_room(player,direction);
-		
+
 		auto & builder_data = player->builder_data;
 		if(has_flag(player,mods::builder::HAS_SANDBOX)){
 			builder_data = mods::builder::sandboxes[player->name().c_str()].begin()->builder_data();
@@ -344,16 +345,16 @@ namespace mods::builder {
 			for(unsigned i = 0; i < zone_table[zone_id].cmd.size(); i++) {
 				auto txn2 = txn();
 				auto sql = sql_compositor("zone_data",&txn2)
-				           .insert()
-				           .into("zone_data")
-				.values({
-					{"zone_id",std::to_string(zone_table[zone_id].number)},
-					{"zone_command",std::to_string(zone_table[zone_id].cmd[i].command)},
-					{"zone_if_flag",std::to_string(zone_table[zone_id].cmd[i].if_flag)},
-					{"zone_arg1",std::to_string(zone_table[zone_id].cmd[i].arg1)},
-					{"zone_arg2",std::to_string(zone_table[zone_id].cmd[i].arg2)},
-					{"zone_arg3",std::to_string(zone_table[zone_id].cmd[i].arg3)}
-				})
+					.insert()
+					.into("zone_data")
+					.values({
+							{"zone_id",std::to_string(zone_table[zone_id].number)},
+							{"zone_command",std::to_string(zone_table[zone_id].cmd[i].command)},
+							{"zone_if_flag",std::to_string(zone_table[zone_id].cmd[i].if_flag)},
+							{"zone_arg1",std::to_string(zone_table[zone_id].cmd[i].arg1)},
+							{"zone_arg2",std::to_string(zone_table[zone_id].cmd[i].arg2)},
+							{"zone_arg3",std::to_string(zone_table[zone_id].cmd[i].arg3)}
+							})
 				.sql();
 				mods::pq::exec(txn2,sql);
 				mods::pq::commit(txn2);
@@ -366,21 +367,21 @@ namespace mods::builder {
 	}
 	bool save_zone_to_db(int64_t virtual_number,std::string_view name,int room_start,int room_end,int lifespan,int reset_mode) {
 		try{
-		auto txn2 = txn();
-		sql_compositor comp("room_direction_data",&txn2);
-		auto sql = comp
-			.insert()
-			.into("zone")
-			.values({
-					{"zone_virtual_number",std::to_string(virtual_number)},
-					{"zone_start",std::to_string(room_start)},
-					{"zone_end",std::to_string(room_end)},
-					{"zone_name",name.data()},
-					{"lifespan",std::to_string(lifespan)},
-					{"reset_mode",std::to_string(reset_mode)}})
-		.sql();
-		mods::pq::exec(txn2,sql);
-		mods::pq::commit(txn2);
+			auto txn2 = txn();
+			sql_compositor comp("room_direction_data",&txn2);
+			auto sql = comp
+				.insert()
+				.into("zone")
+				.values({
+						{"zone_virtual_number",std::to_string(virtual_number)},
+						{"zone_start",std::to_string(room_start)},
+						{"zone_end",std::to_string(room_end)},
+						{"zone_name",name.data()},
+						{"lifespan",std::to_string(lifespan)},
+						{"reset_mode",std::to_string(reset_mode)}})
+			.sql();
+			mods::pq::exec(txn2,sql);
+			mods::pq::commit(txn2);
 		}catch(std::exception& e){
 			std::cerr << "Exception with save_zone_to_db: " << e.what() << "\n";
 			return false;
@@ -1023,30 +1024,30 @@ ACMD(do_rbuild_sandbox) {
 	}
 
 	{
-	auto args = mods::util::subcmd_args<4,args_t>(argument,"new");
+		auto args = mods::util::subcmd_args<4,args_t>(argument,"new");
 
-	if(args.has_value()) {
-		auto cmd_args = args.value();
-		if(cmd_args.size() == 3){
-			/**
-			 * cmd_args will be: [0] => new, [1] => <name>, [2] => <starting_room_number>
-			 */
-			mods::builder::sandbox_data_t sandbox;
-			auto status = sandbox.new_sandbox(player,cmd_args[1],mods::util::stoi<int>(cmd_args[2]));
-			if(status < 0){
-				r_error(player,std::string("Failed to create sandbox! Error: #") + std::to_string(status));
-				return;
+		if(args.has_value()) {
+			auto cmd_args = args.value();
+			if(cmd_args.size() == 3){
+				/**
+				 * cmd_args will be: [0] => new, [1] => <name>, [2] => <starting_room_number>
+				 */
+				mods::builder::sandbox_data_t sandbox;
+				auto status = sandbox.new_sandbox(player,cmd_args[1],mods::util::stoi<int>(cmd_args[2]));
+				if(status < 0){
+					r_error(player,std::string("Failed to create sandbox! Error: #") + std::to_string(status));
+					return;
+				}else{
+					mods::builder::sandboxes[player->name().c_str()].emplace_back(std::move(sandbox));
+					player->set_flag(mods::flags::chunk_type_t::BUILDER,mods::builder::HAS_SANDBOX);
+					r_success(player,"Sandbox created");
+					return;
+				}
 			}else{
-				mods::builder::sandboxes[player->name().c_str()].emplace_back(std::move(sandbox));
-				player->set_flag(mods::flags::chunk_type_t::BUILDER,mods::builder::HAS_SANDBOX);
-				r_success(player,"Sandbox created");
+				r_error(player,"Invalid arguments. Arguments should be: new <name> <starting_room_number>");
 				return;
 			}
-		}else{
-			r_error(player,"Invalid arguments. Arguments should be: new <name> <starting_room_number>");
-			return;
 		}
-	}
 	}
 
 	mods::builder_util::list_object_vector<std::deque<mods::builder::sandbox_data_t>,std::string>(
@@ -1056,7 +1057,7 @@ ACMD(do_rbuild_sandbox) {
 			[](mods::builder::sandbox_data_t sandbox) -> std::string {
 			return std::string(sandbox.name());
 			}
-		);
+			);
 
 	{
 		auto args = mods::util::subcmd_args<7,args_t>(argument,"delete");
@@ -1186,6 +1187,18 @@ ACMD(do_sbuild) {
 			}
 			);
 }
+
+char_data* grab_mobile(std::size_t index,bool &fetched){
+	if(index >= mob_proto.size()){
+		auto obj = mods::globals::read_mobile(index,VIRTUAL - 1);
+		fetched = obj == nullptr;
+		return obj;
+	}else{
+		fetched = true;
+		return &mob_proto[index];
+	}
+}
+		
 ACMD(do_mbuild) {
 	/**
 	 * Function status
@@ -1298,8 +1311,113 @@ ACMD(do_mbuild) {
 		player->page(0);
 		return;
 	}
+	auto args = mods::util::subcmd_args<11,args_t>(argument,"action:add");
+	if(args.has_value()){
+		//[ -  ] [ 0        ] [ 1    ] [ 2  ]
+		//mbuild <action:add> <mob_id> <flag>
+		auto arg_vec = args.value();
+		auto i_value = mods::util::stoi(arg_vec[1]);
 
-	auto args = mods::util::subcmd_args<4,args_t>(argument,"new");
+		if(!i_value.has_value()) {
+			r_error(player,"Please use a valid numeric value.");
+			return;
+		}
+		if(arg_vec.end() <= arg_vec.begin() + 2) {
+			r_error(player,"Please supply action flags");
+			return;
+		}
+
+		auto flag = arg_vec.begin() + 2;
+		bool found = false;
+		auto index = i_value.value();
+		auto obj = grab_mobile(index,found);
+		if(!found){
+			r_error(player,"Invalid mob number");
+			return;
+		}
+
+		for(auto& ex_flag : mods::builder::mob_act_flags) {
+			if(ex_flag.second.compare(*flag) == 0) {
+				obj->char_specials.saved.act |= ex_flag.first;
+				found = true;
+				r_success(player,"Added flag");
+				break;
+			}
+		}
+
+		if(!found) {
+			r_error(player,std::string("Unrecognized flag: ") + *flag);
+		}
+	}
+	args = mods::util::subcmd_args<14,args_t>(argument,"action:remove");
+	if(args.has_value()){
+		//[ -  ] [ 0           ] [ 1    ] [ 2  ]
+		//mbuild <action:remove> <mob_id> <flag>
+		auto arg_vec = args.value();
+		auto i_value = mods::util::stoi(arg_vec[1]);
+
+		if(!i_value.has_value()) {
+			r_error(player,"Please use a valid numeric value.");
+			return;
+		}
+		if(arg_vec.end() <= arg_vec.begin() + 2) {
+			r_error(player,"Please supply action flags");
+			return;
+		}
+
+		auto flag = arg_vec.begin() + 2;
+		bool found = false;
+		auto index = i_value.value();
+		auto obj = grab_mobile(index,found);
+		if(!found){
+			r_error(player,"Invalid mob number");
+			return;
+		}
+
+		for(auto& ex_flag : mods::builder::mob_act_flags) {
+			if(ex_flag.second.compare(*flag) == 0) {
+				obj->char_specials.saved.act &= ~ex_flag.first;
+				found = true;
+				r_success(player,"Removed flag");
+				break;
+			}
+		}
+
+		if(!found) {
+			r_error(player,std::string("Unrecognized flag: ") + *flag);
+		}
+	}
+
+	args = mods::util::subcmd_args<12,args_t>(argument,"action:list");
+	if(args.has_value()){
+		//[ -  ] [ 0         ] [ 1    ] [ 2  ]
+		//mbuild <action:list> <mob_id> <flag>
+		auto arg_vec = args.value();
+		auto i_value = mods::util::stoi(arg_vec[1]);
+
+		if(!i_value.has_value()) {
+			r_error(player,"Please use a valid numeric value.");
+			return;
+		}
+		std::string flag_values;
+		auto index = i_value.value();
+		bool found = false;
+		auto obj = grab_mobile(index,found);
+		if(!found){
+			r_error(player,"Invalid mob number");
+			return;
+		}
+		for(auto& ex_flag : mods::builder::mob_act_flags) {
+			if(obj->char_specials.saved.act & ex_flag.first){
+				flag_values += ex_flag.second;
+				flag_values += ",";
+			}
+		}
+		r_success(player,flag_values);
+		return;
+	}
+
+	args = mods::util::subcmd_args<4,args_t>(argument,"new");
 
 	if(args.has_value()) {
 		mob_proto.push_back(mods::builder::new_npc());
@@ -1490,6 +1608,7 @@ ACMD(do_mbuild) {
 
 	args = mods::util::subcmd_args<5,args_t>(argument,"attr");
 
+
 	if(args.has_value()) {
 		auto arg_vec = args.value();
 
@@ -1554,6 +1673,7 @@ ACMD(do_mbuild) {
 			MENTOC_OBI2(mob_specials.attack_type,attack_type);
 			MENTOC_OBI2(mob_specials.damsizedice,damsizedice);
 
+
 			if(arg_vec[2].compare("virt") == 0) {
 				if(arg_vec.end() <= arg_vec.begin() + 3) {
 					r_error(player,"Please supply a virtual number");
@@ -1578,29 +1698,6 @@ ACMD(do_mbuild) {
 				for(auto& ex_flag : mods::builder::sex_flags) {
 					if(ex_flag.second.compare(*flag) == 0) {
 						obj->player.sex = ex_flag.first;
-						found = true;
-						break;
-					}
-				}
-
-				if(!found) {
-					r_error(player,std::string("Unrecognized flag: ") + *flag);
-				}
-			}
-
-			if(arg_vec[2].compare("action") == 0) {
-				if(arg_vec.end() <= arg_vec.begin() + 3) {
-					r_error(player,"Please supply action flags");
-					return;
-				}
-
-				auto flag = arg_vec.begin() + 3;
-				bool found = false;
-				obj->char_specials.saved.act = 0;
-
-				for(auto& ex_flag : mods::builder::mob_act_flags) {
-					if(ex_flag.second.compare(*flag) == 0) {
-						obj->char_specials.saved.act |= ex_flag.first;
 						found = true;
 						break;
 					}
@@ -3101,7 +3198,7 @@ ACMD(do_zbuild) {
 						mods::util::stoi<int>(arglist[2]),
 						mods::util::stoi<int>(arglist[4]),
 						mods::util::stoi<int>(arglist[5]))
-			){
+				){
 				r_error(player,"Unable to save new zone");
 			} else {
 				parse_sql_zones();

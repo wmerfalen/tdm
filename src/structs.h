@@ -245,7 +245,6 @@ enum lense_type_t {
 #define MOB_NOBASH	 (1 << 16) /* Mob can't be bashed (e.g. trees)	*/
 #define MOB_NOBLIND	 (1 << 17) /* Mob can't be blinded		*/
 #define MOB_NOTDEADYET   (1 << 18) /* (R) Mob being extracted.		*/
-#define MOB_HAS_TREE (1 << 19) /* If the mob has a behaviour tree */
 
 
 	/* Preference flags: used by char_data.player_specials.pref */
