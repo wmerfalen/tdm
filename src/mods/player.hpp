@@ -101,7 +101,7 @@ namespace mods {
 			bool has_equipment_tag(const std::string&);
 			bool has_inventory_capability(int);
 			bool has_thermite();
-			bool has_weapon_capability(int);
+			bool has_weapon_capability(uint64_t);
 			bool has_builder_data();
 			bool room_pave_mode();
 			bool zone_pave_mode();
@@ -116,6 +116,8 @@ namespace mods {
 			bool can_snipe(char_data *target);
 			bool is_weapon_loaded();
 			bool carrying_ammo_of_type(const weapon_type_t&);
+			obj_data* carrying();
+			obj_data* carry(obj_data*);
 			void ammo_adjustment(int);
 			int  ammo_type_adjustment(int,const weapon_type_t&);
 
@@ -451,7 +453,11 @@ namespace mods {
 			lense_type_t m_lense_type;
 			uint8_t m_overhead_map_width;
 			uint8_t m_overhead_map_height;
+			char_data*   m_char_data;
+			std::shared_ptr<char_data> m_shared_ptr;
+			std::deque<std::shared_ptr<obj_data>> m_carrying;
 		private: 
+			bool         m_executing_js;
 			bool m_authenticated;
 			std::shared_ptr<builder_data_t> m_builder_data;
 			std::string m_password;
@@ -464,8 +470,6 @@ namespace mods {
 			std::shared_ptr<mods::descriptor_data> m_desc;
 			std::string	m_name;
 			class_capability_t m_class_capability;
-			bool         m_executing_js;
-			char_data*   m_char_data;
 			std::array<unsigned long,WEAPON_SET_NUM> m_weapon_cooldown;
 			weapon_set   m_weapon_set;
 			bool         m_do_paging;
@@ -476,7 +480,6 @@ namespace mods {
 			std::string  m_current_page_fragment;
 			std::vector<std::string> m_pages;
 			class_info_t m_class_info;
-			std::shared_ptr<char_data> m_shared_ptr;
 			std::shared_ptr<player_special_data> m_player_specials;
 			time_type_t	m_time;
 			player_type_enum_t m_type;

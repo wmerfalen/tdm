@@ -858,9 +858,6 @@ void heartbeat(int pulse) {
 		check_idle_passwords();
 	}
 
-	if(!(pulse % PULSE_BTREE)) {
-		mods::behaviour_tree_impl::run_trees();
-	}
 	if(!(pulse % PULSE_MOBILE)) {
 		mobile_activity();
 	}

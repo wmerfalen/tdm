@@ -34,6 +34,7 @@
 #include "mods/flags.hpp"
 #include "mods/pq.hpp"
 #include "mods/sql.hpp"
+#include "mods/npc.hpp"
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
@@ -55,7 +56,7 @@ std::vector<char_data> mob_proto;	/* prototypes for mobs		 */
 mob_rnum top_of_mobt = 0;	/* top of mobile index table	 */
 
 std::deque<obj_data> object_list;	/* list of objs	 */
-std::deque<char_data> mob_list;		/* list of mobs */
+std::deque<mods::npc> mob_list;		/* list of mobs */
 std::vector<index_data> obj_index;	/* index table for object file	 */
 std::vector<obj_data> obj_proto;	/* prototypes for objs		 */
 obj_rnum top_of_objt = 0;	/* top of object index table	 */
@@ -1173,64 +1174,22 @@ int parse_sql_objects() {
 			proto.worn_on = 0; //FIXME: this is what it used to be: mods::util::stoi<int>(row["object_worn_on"]);
 			proto.type = 0; //FIXME: this is what it used to be: mods::util::stoi<int>(row["object_type"]);
 			proto.ammo = 0;
-			memset(&proto.obj_flags,0,sizeof(obj_flag_data));
+			//memset(&proto.obj_flags,0,sizeof(obj_flag_data));
 			//TODO: !small do obj->flags fetching from db
 			auto flag_rows = db_get_by_meta("object_flags","obj_fk_id",(row["id"]));
-
-			for(auto row : flag_rows){
-				auto & flag_row = row;
-
-				if(mods::string(flag_row["value_0"]).length()) {
-					proto.obj_flags.value[0] = mods::util::stoi<int>(row["value_0"]);
-				}
-
-				if(mods::string(flag_row["value_1"]).length()) {
-					proto.obj_flags.value[1] = mods::util::stoi<int>(row["value_1"]);
-				}
-
-				if(mods::string(flag_row["value_2"]).length()) {
-					proto.obj_flags.value[2] = mods::util::stoi<int>(row["value_2"]);
-				}
-
-				if(mods::string(flag_row["value_3"]).length()) {
-					proto.obj_flags.value[3] = mods::util::stoi<int>(row["value_3"]);
-				}
-
-				proto.obj_flags.type_flag =mods::util::stoi<int>(row["type_flag"]);
-				proto.obj_flags.wear_flags = mods::util::stoi<int>(row["wear_flags"]);
-				proto.obj_flags.extra_flags =mods::util::stoi<int>(row["extra_flags"]);
-				proto.obj_flags.weight = mods::util::stoi<int>(row["weight"]);
-				proto.obj_flags.cost = mods::util::stoi<int>(row["cost"]);
-				proto.obj_flags.cost_per_day =mods::util::stoi<int>(row["cost_per_day"]);
-				proto.obj_flags.timer = mods::util::stoi<int>(row["timer"]);
-				proto.obj_flags.bitvector = mods::util::stoi<int>(row["bitvector"]);
+			if(flag_rows.size() > 0){
+				std::cerr << "[DEBUG]: db.cpp flag_rows.size(): " << flag_rows.size() << "\n";
+				proto.obj_flags.feed(flag_rows[0]);
 			}
 
-			/** FIXME: This field doesn't exist. "object_ammo_max". */
-#if 0
-			if(mods::string(row["object_ammo_max"]).length()) {
-				proto.ammo_max = mods::util::stoi<int>(row["object_ammo_max"]);
-			} else {
-				proto.ammo_max = 0;
+			/** TODO: this needs to be filled in by postgres. We need to
+			 * check if it's a weapon, if so, load the fields in proto with
+			 * whatever is in the database.
+			 */
+			if(proto.obj_flags.weapon_flags != 0){
+				proto.holds_ammo = 1;
+				proto.weapon_type = proto.obj_flags.weapon_flags;
 			}
-#endif
-			proto.ammo_max = 32; /** FIXME: needs to load from db */
-
-			proto.holds_ammo = 0;
-
-			/** FIXME: this field doesn't exist: "object_type_data" */
-#if 0
-			if(mods::string(row["object_type_data"]).length()) {
-				proto.weapon_type = std::hash<std::string> {}
-				(
-				 mods::string(row["object_type_data"]).c_str()
-				);
-			} else {
-				proto.weapon_type = 0;
-			}
-#else
-			proto.weapon_type = 0;
-#endif
 
 			proto.carried_by = proto.worn_by = nullptr;
 			proto.next_content = nullptr;
@@ -2148,6 +2107,7 @@ void reset_zone(zone_rnum zone) {
 
 			case 'M':			/* read a mobile */
 				if(mob_index[ZCMD.arg1].number < ZCMD.arg2) {
+					std::cerr << "reset_zone: reading mobile: " << ZCMD.arg2 << "\n";
 					mob = read_mobile(ZCMD.arg2, REAL);
 					char_to_room(mob, real_room(ZCMD.arg3));
 					last_cmd = 1;

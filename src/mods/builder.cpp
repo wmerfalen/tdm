@@ -688,33 +688,23 @@ namespace mods::builder {
 		}
 		return {true,"Saved zone successfully."};
 	}
-	char_data new_blank_character(bool npc = false) {
+	char_data new_npc(){
 		char_data proto;
-		memset(&proto,0,sizeof(proto));
 		const char* foo = "foo";
 		proto.player.name = strdup(foo);
 		proto.player.short_descr = strdup(foo);
 		proto.player.long_descr = strdup(foo);
 		proto.player.description = strdup(foo);
 
-		if(npc) {
-			SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
-		} else {
-			REMOVE_BIT(proto.char_specials.saved.act, MOB_ISNPC);
-		}
-
+		SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
 		REMOVE_BIT(proto.char_specials.saved.act, MOB_NOTDEADYET);
-		unsigned j = 0;
 
-		for(; j < 5; j++) {
+		for(unsigned j=0; j < 5; j++) {
 			GET_SAVE(&proto, j) = 0;
 		}
 
 		proto.aff_abils = proto.real_abils;
 		return proto;
-	}
-	char_data new_npc() {
-		return new_blank_character(true);
 	}
 	std::pair<bool,std::string> save_player(char_data* obj) {
 		try {
@@ -959,7 +949,8 @@ namespace mods::builder {
 						{"cost",mods::util::itoa(obj->obj_flags.cost)},
 						{"cost_per_day",mods::util::itoa(obj->obj_flags.cost_per_day)},
 						{"timer",mods::util::itoa(obj->obj_flags.timer)},
-						{"bitvector",mods::util::itoa(obj->obj_flags.bitvector)}
+						{"bitvector",mods::util::itoa(obj->obj_flags.bitvector)},
+						{"weapon_flags",mods::util::itoa(obj->obj_flags.weapon_flags)}
 						})
 			.sql();
 			mods::pq::exec(txn10,sql10);
@@ -1354,17 +1345,9 @@ ACMD(do_mbuild) {
 				return;
 			}
 
-			auto obj = read_mobile(index,VIRTUAL - 1);
-			GET_POS(obj) = POS_STANDING;
-
-			for(i = 0; i < NUM_WEARS; i++) {
-				GET_EQ(obj, i) = nullptr;
-			}
-
-			obj->carrying = nullptr;
-			IN_ROOM(obj) = player->room();
-			mods::globals::rooms::char_from_room(obj);
-			mods::globals::rooms::char_to_room(player->room(),obj);
+			auto obj = mods::globals::read_mobile(index,VIRTUAL - 1);
+			player->stc(std::to_string(player->room()));
+			char_to_room(obj,player->room());
 			r_success(player,"Object created, look on the floor");
 		}
 
@@ -2514,8 +2497,12 @@ ACMD(do_obuild) {
 		unsigned ex_ctr = 0;
 
 		for(; ex_desc ; ex_desc = ex_desc->next) {
-			*player << "{red}[" << ex_ctr << "]keyword: {/red}" << ex_desc->keyword << "\r\n";
-			*player << "{red}[" << ex_ctr << "]description: {/red}" << ex_desc->description << "\r\n";
+			if(ex_desc->keyword){
+				*player << "{red}[" << ex_ctr << "]keyword: {/red}" << ex_desc->keyword << "\r\n";
+			}
+			if(ex_desc->description){
+				*player << "{red}[" << ex_ctr << "]description: {/red}" << ex_desc->description << "\r\n";
+			}
 			++ex_ctr;
 		}
 

@@ -389,9 +389,7 @@ void affect_join(struct char_data *ch, struct affected_type *af,
 
 
 /* move a player out of a room */
-void char_from_room(struct char_data *ch) {
-	struct char_data *temp;
-	mods::globals::rooms::char_from_room(ch);
+void char_from_room(char_data *ch) {
 
 	if(ch == NULL){
 		log("char_from_room[SYSERR]->'NULL character'");
@@ -413,14 +411,13 @@ void char_from_room(struct char_data *ch) {
 				world[IN_ROOM(ch)].light--;
 			}
 
-	REMOVE_FROM_LIST(ch, world[IN_ROOM(ch)].people, next_in_room);
-	IN_ROOM(ch) = NOWHERE;
-	ch->next_in_room = NULL;
+	mods::globals::rooms::char_from_room(ch);
 }
 
 
 /* place a character in a room */
-void char_to_room(struct char_data *ch, room_rnum room) {
+void char_to_room(char_data *ch, room_rnum room) {
+	IN_ROOM(ch) = room;
 	log("char->player.name: %s char_to_room: room: %d",ch->player.name.c_str(),room);
 	if(ch == nullptr){
 		log("SYSERR: char_to_room given a nullptr");
@@ -434,10 +431,8 @@ void char_to_room(struct char_data *ch, room_rnum room) {
 		    room, mods::globals::room_list.size(), ch);
 		return;
 	}else {
+		std::cerr << "char_to_room[legacy]: " << room << " " << ch->player.name.c_str() << "\n";
 		mods::globals::rooms::char_to_room(room,ch);
-		ch->next_in_room = world[room].people;
-		world[room].people = ch;
-		IN_ROOM(ch) = room;
 
 		if(GET_EQ(ch, WEAR_LIGHT))
 			if(GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT)
@@ -707,8 +702,8 @@ struct obj_data *get_obj_num(obj_rnum nr) {
 
 
 /* search a room for a char, and return a pointer if found..  */
-struct char_data *get_char_room(char *name, int *number, room_rnum room) {
-	struct char_data *i;
+char_data *get_char_room(char *name, int *number, room_rnum room) {
+	std::cerr << "log: get_char_room called. " << name << " room: " << room << "\n";
 	int num;
 
 	if(!number) {
@@ -720,13 +715,18 @@ struct char_data *get_char_room(char *name, int *number, room_rnum room) {
 		return (NULL);
 	}
 
-	for(i = world[room].people; i && *number; i = i->next_in_room)
-		if(isname(name, i->player.name))
+	char_data* found = nullptr;
+	mods::loops::foreach_in_room(room,[&](char_data* i) -> bool {//i = world[room].people; i && *number; i = i->next_in_room)
+		if(isname(name, i->player.name)){
 			if(--(*number) == 0) {
-				return (i);
+				found = i;
+				return false;//stop looping, we found him and number is zero
 			}
+		}
+		return true;//continue looping, we didn't find our guy
+	});
 
-	return (NULL);
+	return found;
 }
 
 

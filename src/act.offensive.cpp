@@ -421,9 +421,8 @@ ACMD(do_scan) { /* !mods */
 
 			line += "\r\n";
 			send_to_char(ch,line.c_str());
-			return true;	/** true means keep iterating */
 		}
-		return false;
+		return true;	/** true means keep iterating */
 	});
 
 }

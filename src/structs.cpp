@@ -19,6 +19,36 @@ namespace mods {
 //std::vector<mods::extra_desc_data> room_data::ex_descriptions() const {
 //	return m_ex_descriptions;
 //}
+
+#include "mods/util.hpp"
+void obj_flag_data::feed(pqxx::row row){
+		if(mods::string(row["value_0"]).length()) {
+			value[0] = mods::util::stoi<int>(row["value_0"]);
+		}
+
+		if(mods::string(row["value_1"]).length()) {
+			value[1] = mods::util::stoi<int>(row["value_1"]);
+		}
+
+		if(mods::string(row["value_2"]).length()) {
+			value[2] = mods::util::stoi<int>(row["value_2"]);
+		}
+
+		if(mods::string(row["value_3"]).length()) {
+			value[3] = mods::util::stoi<int>(row["value_3"]);
+		}
+		ammo_max = mods::util::stoi<int>(row["ammo_max"]);
+		clip_size = mods::util::stoi<int>(row["clip_size"]);
+		weapon_flags =mods::util::stoi<int>(row["weapon_flags"]);
+		bitvector = mods::util::stoi<int>(row["bitvector"]);
+		type_flag =mods::util::stoi<int>(row["type_flag"]);
+		wear_flags = mods::util::stoi<int>(row["wear_flags"]);
+		extra_flags =mods::util::stoi<int>(row["extra_flags"]);
+		weight = mods::util::stoi<int>(row["weight"]);
+		cost = mods::util::stoi<int>(row["cost"]);
+		cost_per_day =mods::util::stoi<int>(row["cost_per_day"]);
+		timer = mods::util::stoi<int>(row["timer"]);
+}
 std::vector<mods::extra_desc_data>& room_data::ex_descriptions(){
 	return m_ex_descriptions;
 }
@@ -100,6 +130,7 @@ void char_data::init(){
 		equipment[i] = nullptr;
 	}
 	carrying = nullptr;
+	/** TODO: m_carrying */
 	next_in_room = 0;
 	next = nullptr;
 	next_fighting = nullptr;

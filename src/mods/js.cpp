@@ -5,6 +5,8 @@
 #include "loops.hpp"
 #include "../spells.h"
 #include "db.hpp"
+
+#include <unistd.h>	//for getcwd()
 #define DT_FORMAT "{player_name}:mob_death_trigger"
 extern void command_interpreter(struct char_data* ch,char* argument);
 extern void hit(struct char_data* ch,struct char_data* vict,int type);
@@ -12,6 +14,12 @@ extern void affect_from_char(struct char_data *ch, int type);
 extern void mobile_activity();
 namespace mods {
 	namespace js {
+			std::string current_working_dir(){
+				char* cwd = ::get_current_dir_name();
+				std::string path = cwd == nullptr ? "" : cwd;
+				if(cwd){ free(cwd); }
+				return path;
+			}
 		namespace utils {
 			struct find_player_payload_t {
 				find_player_payload_t(std::string_view name) : player_name(name.data()), found(false){
@@ -42,15 +50,11 @@ namespace mods {
 
 		};//end utils namespace
 		int load_library(duk_context*,std::string_view);
-		//constexpr static const char * JS_PATH = "/lib/js/";
-		constexpr static const char * JS_TEST_PATH = "../lib/js/tests/";
-		//constexpr static const char * JS_PROFILES_PATH = "../lib/js/profiles/";
 		namespace test {
 			static duk_ret_t require_test(duk_context *ctx) {
 				/* First parameter is character name */
 				auto fname = duk_to_string(ctx,0);
-				std::string path = mods::js::JS_TEST_PATH;
-				path += fname;
+				std::string path = mods::js::current_working_dir() + std::string("/js/tests/") + fname;
 				duk_push_number(ctx,mods::js::load_library(ctx,path));
 				return 1;	/* number of return values */
 			}
@@ -63,9 +67,8 @@ namespace mods {
 		static duk_ret_t require_js(duk_context *ctx) {
 			/* First parameter is character name */
 			auto fname = duk_to_string(ctx,0);
-			//std::string path = mods::js::JS_PATH;
-			//path += fname;
-			duk_push_number(ctx,mods::js::load_library(ctx,fname));
+			std::string path = mods::js::current_working_dir() + std::string("/js/") + fname;
+			duk_push_number(ctx,mods::js::load_library(ctx,path));
 			return 1;	/* number of return values */
 		}
 		/*
@@ -624,26 +627,18 @@ __set_points_cleanup:
 
 		bool run_test_suite(mods::player& player,std::string_view suite) {
 			auto ctx = mods::js::new_context();
-			std::string path = mods::js::JS_TEST_PATH;
-			std::string file = suite.data();
-
-			for(auto& ch: file) {
-				if(!std::isalpha(ch)) {
-					continue;
-				} else {
-					path += ch;
-				}
-			}
-
+			std::string path = mods::js::current_working_dir() + "/js/tests/" + suite.data();
 			mods::js::load_c_functions(ctx);
 
 			if(mods::js::load_library(ctx,path) == -1) {
+				player << "{red}[js]{/red} Unable to load library: '" << path.c_str() << "'\r\n";
 				return false;
 			}
 
 			eval_string(ctx,std::string("test_main(") +
 					std::string(mods::util::itoa(player.cd()->uuid)) + ");"
 					);
+				player << "{grn}[js]{/grn} Loaded and evaluated library: '" << path.c_str() << "'\r\n";
 			return true;
 		}
 
@@ -665,8 +660,8 @@ __set_points_cleanup:
 		}
 
 		void run_profile_scripts(const std::string& player_name){
-			std::cerr << "path to user script: '" << (std::string(JS_PROFILES_PATH) + player_name + ".js").c_str() << "'\n";
-			 load_library(mods::globals::duktape_context,(std::string(JS_PROFILES_PATH) + player_name + ".js").c_str());
+			 load_library(mods::globals::duktape_context,
+					 std::string(mods::js::current_working_dir() + "/js/profiles/" + player_name + ".js").c_str());
 		}
 
 		duk_context* new_context() {
@@ -705,7 +700,7 @@ __set_points_cleanup:
 			return true;
 		}
 		int load_library(duk_context *ctx,std::string_view file) {
-			auto m = std::make_unique<include>(ctx,file);
+			auto m = std::make_unique<include>(ctx,file.data());
 
 			if(m->good()) {
 				std::cerr << "[DEBUG]: included js file: '" << file.data() << "'\n";

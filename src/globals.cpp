@@ -298,7 +298,7 @@ namespace mods {
 			duktape_context = mods::js::new_context();
 			mods::js::load_c_functions();
 			/** TODO: make configurable */
-			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js"); 
+			mods::js::load_library(mods::globals::duktape_context,"/lib/quests/quests.js"); 
 			mods::behaviour_tree_impl::load_trees();
 			if(f_test_suite.length()){
 				//if(!f_test_suite.compare("db")){
@@ -410,33 +410,32 @@ namespace mods {
 			}
 
 			SET_BIT(mob_proto[i].char_specials.saved.act, MOB_ISNPC);
-			mob_list.emplace_back(&mob_proto[i]);
+			/** !TODO: fix this. We need to copy the mob_proto to the mob_list.back() */
+			std::cerr << "read_Mobile[mob_rnum]: " << i << "\n";
+			mob_list.emplace_back(i);
+			auto mob = mob_list.end() -1;
 			std::cerr << "[DEBUG]: mob_proto short_descr: '" << 
 				mob_proto[i].player.short_descr.c_str() << "'\n";
-			auto mob = mob_list.back();
-			mob.next = character_list = &mob_list.back();
-
-			if(mob.points.max_hit) {
-				mob.points.max_hit = dice(mob.points.hit, mob.points.mana) + mob.points.move;
-			} else {
-				mob.points.max_hit = rand_number(mob.points.hit, mob.points.mana);
+			mob->position() = POS_STANDING;
+			for(i = 0; i < NUM_WEARS; i++) {
+				GET_EQ(mob->cd(), i) = nullptr;
 			}
+			mob->cd()->carrying = nullptr;
+			mob->max_hp() = rand_number(mob->hp(), mob->mana());
+			mob->hp() = mob->max_hp();
+			mob->mana() = mob->max_mana();
+			mob->move() = mob->max_move();
 
-			mob.points.hit = mob.points.max_hit;
-			mob.points.mana = mob.points.max_mana;
-			mob.points.move = mob.points.max_move;
-
-			mob.player.time.birth = time(0);
-			mob.player.time.played = 0;
-			mob.player.time.logon = time(0);
+			std::cerr << "mob stats: max_hp:" << mob->max_hp() << " hp:" << mob->hp() << 
+				" mana:" << mob->mana() << " move:" << mob->move() << "\n";
+			mob->set_time_birth(time(0));
+			mob->set_time_played(0);
+			mob->set_time_logon(time(0));
 
 			mob_index[i].number++;
-			SET_BIT(mob.char_specials.saved.act, MOB_ISNPC);
-			mob.uuid = mob_list.size() - 1;
-			if(IS_NPC((&mob))){
-				log("DEBUG: the read mobile is an NPC");
-			}
-			return &mob_list.back();
+			SET_BIT(mob->char_specials().saved.act, MOB_ISNPC);
+			mob->uuid() = mob_list.size() - 1;
+			return mob->cd();
 		}
 		uuid_t get_uuid() {
 			static uuid_t u = 0;
@@ -730,7 +729,7 @@ namespace mods {
 			 * \param char_data* the character's player pointer
 			 * \return void
 			 */
-			void char_from_room(struct char_data* ch) {
+			void char_from_room(char_data* ch) {
 				if(ch){
 					auto room_id = IN_ROOM(ch);
 					if(std::size_t(room_id) >= room_list.size()){
@@ -739,10 +738,7 @@ namespace mods {
 					}
 					auto place = std::find(room_list[room_id].begin(),room_list[room_id].end(),ch);
 
-					if(place == room_list[room_id].end()) {
-						log("SYSERR: char_from_room failed. Tried to extract ch, but it's not in the room");
-						return;
-					} else {
+					if(place != room_list[room_id].end()) {
 						room_list[room_id].erase(place);
 					}
 				}else{
@@ -760,20 +756,24 @@ namespace mods {
 			 * \param char_data* character pointer
 			 * \return void will log a SYSERR if the resolved room id (param 1) is out of bounds
 			 */
-			void char_to_room(const room_rnum& room,struct char_data* ch) {
+			void char_to_room(const room_rnum& room,char_data* ch) {
 				if(ch){
 					auto target_room = room;
 					if(boot_type == boot_type_t::BOOT_HELL){
+						std::cerr << "boot type hell. NOT sending to requested room of: " << room << "\n";
 						target_room = 0;
-					}else if(target_room >= 0 && std::size_t(target_room) >= room_list.size()){
+					}
+					if(target_room >= room_list.size()){
 						log("SYSERR: char_to_room failed for ch. Requested room is out of bounds: ",target_room);
 						return;
 					}
-					auto place = std::find(room_list[target_room].begin(),room_list[target_room].end(),ch);
-
-					if(place == room_list[target_room].end()) {
+					//auto place = std::find(room_list[target_room].begin(),room_list[target_room].end(),ch);
+					//if(place == room_list[target_room].end()) {
 						room_list[target_room].push_back(ch);
-					}
+					//}
+					IN_ROOM(ch) = target_room;
+					std::cerr << "in_room(ch): " << IN_ROOM(ch) << " -- requested: " << room << "\n";
+					return;
 				}else{
 					log("SYSERR: char_to_room failed for ch. null ch");
 				}

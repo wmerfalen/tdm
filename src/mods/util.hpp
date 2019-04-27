@@ -19,7 +19,7 @@
 	
 #ifndef __MENTOC_STRING_LIT__
 #define __MENTOC_STRING_LIT__
-static inline std::string operator "" _s(const char* s,unsigned int i) {
+static inline std::string operator "" _s(const char* s,uint64_t i) {
 	return std::string(s);
 }
 #endif

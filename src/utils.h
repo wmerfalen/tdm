@@ -484,8 +484,8 @@ void	update_pos(struct char_data *victim);
 
 #define EXIT(ch, door)  (world[IN_ROOM(ch)].dir_option[door])
 
-#define CAN_GO(ch, door) (EXIT(ch,door) && \
-			 (EXIT(ch,door)->to_room != NOWHERE) && \
+#define CAN_GO(ch, door) (world.size() > IN_ROOM(ch) && EXIT(ch,door) && \
+			 (EXIT(ch,door)->to_room < world.size() && EXIT(ch,door)->to_room != NOWHERE) && \
 			 !IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED))
 
 

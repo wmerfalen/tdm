@@ -19,6 +19,7 @@ typedef int socket_t;
 #define DT_FORMAT "{player_name}:mob_death_trigger"
 namespace mods {
 	namespace js {
+		std::string current_working_dir();
 		void eval_file(std::string_view str);
 		void eval_file(duk_context *ctx,std::string_view str);
 		void eval_string(std::string_view str);

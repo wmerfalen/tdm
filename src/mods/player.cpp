@@ -275,7 +275,7 @@ namespace mods {
 	}
 
 	using mask_t = mods::weapon::mask_type;
-	player::player(char_data* ch) : m_executing_js(false), m_char_data(ch),m_do_paging(false),
+	player::player(char_data* ch) : m_char_data(ch), m_executing_js(false), m_do_paging(false),
 		m_page(0),m_current_page(0),m_current_page_fragment("") {
 			m_set_time();
 	};
@@ -329,23 +329,20 @@ namespace mods {
 
 		page(m_current_page +1);
 	}
-	bool player::has_weapon_capability(int type) {
+	bool player::has_weapon_capability(uint64_t type) {
 		auto w = weapon();
 
 		if(!w) {
 			return false;
 		}
+		/** TODO: scan through all items and affects and check if any of the items
+		 * or affects allow sniping on the current weapon that is being 
+		 * wielded.
+		 */
 
-		switch(type) {
-			case mods::weapon::mask::snipe:
-				return !!(std::string(w->name).find("snipe") != std::string::npos);
-				break;
+		return w->obj_flags.weapon_flags  & type;
 
-			default:
-				return false;
-		}
 
-		return false;
 	}
 	bool player::has_inventory_capability(int type) {
 		return true; //FIXME:
@@ -373,6 +370,13 @@ namespace mods {
 		}
 
 		return false;
+	}
+	/** TODO: do this */
+	obj_data* player::carry(obj_data* obj){
+		return new obj_data;
+	}
+	obj_data* player::carrying(){
+		return cd()->carrying;
 	}
 	std::string player::js_object() {
 		std::string obj = std::string("{ 'name': '") + std::string(cd()->player.name) + std::string("','uuid':");

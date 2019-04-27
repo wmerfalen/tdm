@@ -71,7 +71,12 @@ void perform_complex_alias(struct txt_q *input_q, char *orig, struct alias_data 
 int perform_alias(mods::descriptor_data d, char *orig, size_t maxlen);
 int reserved_word(char *argument);
 int _parse_name(char *arg, char *name);
-
+ACMD(do_room_list){
+	MENTOC_PREAMBLE();
+	for(auto & p : mods::globals::room_list[player->room()]){
+		player->stc(p->player.name.c_str());
+	}
+}
 
 /* prototypes for all do_x functions. */
 ACMD(do_action);
@@ -181,6 +186,7 @@ ACMD(do_rnumtele);
 ACMD(do_pref);
 ACMD(do_rbuild);
 ACMD(do_rbuild_sandbox);
+ACMD(do_room_list);
 ACMD(do_drone);
 ACMD(do_quest);
 ACMD(do_js);
@@ -521,6 +527,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "pref"  , POS_RESTING , do_pref   , 0, 0 },
 	{ "rbuild"  , POS_RESTING , do_rbuild   , LVL_IMMORT, 0 },
 	{ "rbuild_sandbox"  , POS_RESTING , do_rbuild_sandbox   , LVL_IMMORT, 0 },
+	{ "room_list"  , POS_RESTING , do_room_list   , LVL_IMMORT, 0 },
 	{ "drone"  , POS_RESTING , do_drone   , 0, 0 },
 	{ "throw"  , POS_RESTING , do_throw   , 0, 0 },
 	{ "ammo"  , POS_RESTING , do_ammo   , 0, 0 },

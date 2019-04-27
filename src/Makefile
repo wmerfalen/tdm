@@ -21,7 +21,7 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \
 	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\" \
 	-stdlib=libc++ 
-LIBS = $(openssl) -lc++ -lm -lpqxx -lpq
+LIBS = $(opnssl) -lc -lm -lpqxx -lpq -lssl -lcrypto
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
 					 act.wizard alias ban boards bsd-snprintf castle \

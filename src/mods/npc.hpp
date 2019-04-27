@@ -3,23 +3,19 @@
 
 #include <iostream>
 #include "../structs.h"
+#include "player.hpp"
 
 namespace mods {
-	struct npc{
-		public:
+	struct npc : public player{
 			/* constructors and destructors */
 			npc();
 			npc(char_data*);
 			npc(mods::npc*);
+			npc(const mob_rnum&);
 			~npc();
-			void init();
-			/* setters */
-			void set_cd(char_data* ch);
-			void set_shared_ptr(std::shared_ptr<mods::npc>&);
-			std::shared_ptr<char_data> get_shared_ptr();
-		private: 
-			char_data*   m_char_data;
-			std::shared_ptr<char_data> m_shared_ptr;
+
+			mob_special_data& mob_specials();
+			bool has_tree() ;
 	};
 };
 

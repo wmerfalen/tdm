@@ -92,6 +92,7 @@ namespace mods::scan {
 			auto in_room = IN_ROOM(ch);
 
 			if(in_room == NOWHERE || in_room < 0) {
+				std::cerr << "los_scan_foreach: in_room failure: " << in_room << "- continuing\n";
 				continue;
 			}
 
@@ -110,12 +111,11 @@ namespace mods::scan {
 
 			for(auto recursive_depth = depth; recursive_depth > -1; --recursive_depth) {
 				auto room_id = 0;
-
-				if(world[next_room].people) {
 					if(room_dir) {
 						if(EXIT_FLAGGED(room_dir, EX_CLOSED)
 								||
 								EXIT_FLAGGED(room_dir,EX_REINFORCED)) {
+							std::cerr << "los_scan_foreach::EXIT_FLAGGED closed|reinforced\n";
 							break;
 						}
 
@@ -138,6 +138,7 @@ namespace mods::scan {
 						 * If the lambda returns false, that means it wants to stop looping
 						 */
 						if(!lambda_cb(room_id,i_d,list)){
+							std::cerr << "los_scan_foreach::lambda_cb!\n";
 							return;
 						}
 						/*
@@ -147,22 +148,23 @@ namespace mods::scan {
 							 }
 							 }*/
 					}
-				}
 
 				room_dir = world[next_room].dir_option[i_d];
 
 				if(!room_dir) {
+					std::cerr << "los_scan_foreach::room_dir == nullptr\n";
 					break;
 				}
 
 				next_room = room_dir->to_room;
 
 				if(next_room == NOWHERE) {
+					std::cerr << "los_scan_foreach::next_room == NOWHERE\n";
 					break;
 				}
 
 				ctr++;
-			}
-		}
-	}
-};
+			}//end for() recursive depth
+		}//end outer for() on directions
+	}//end function
+};//end namespace

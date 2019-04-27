@@ -88,16 +88,16 @@ ACMD(do_color);
 ACMD(do_toggle);
 void sort_commands(void);
 ACMD(do_commands);
-void diag_char_to_char(struct char_data *i, struct char_data *ch);
-void look_at_char(struct char_data *i, struct char_data *ch);
-void list_one_char(struct char_data *i, struct char_data *ch);
-void list_char_to_char(struct char_data *list, struct char_data *ch);
-void do_auto_exits(struct char_data *ch);
+void diag_char_to_char(char_data *i, char_data *ch);
+void look_at_char(char_data *i, char_data *ch);
+void list_one_char(char_data *i, char_data *ch);
+void list_char_to_char(char_data *ch);
+void do_auto_exits(char_data *ch);
 ACMD(do_exits);
-void look_in_direction(struct char_data *ch, int dir);
-void look_in_obj(struct char_data *ch, char *arg);
+void look_in_direction(char_data *ch, int dir);
+void look_in_obj(char_data *ch, char *arg);
 char *find_exdesc(char *word, extra_descr_data *list);
-void look_at_target(struct char_data *ch, char *arg);
+void look_at_target(char_data *ch, char *arg);
 
 /* local globals */
 int *cmd_sort_info;
@@ -503,11 +503,12 @@ void list_one_char(struct char_data *i, struct char_data *ch) {
 
 
 
-void list_char_to_char(struct char_data *list, struct char_data *ch) {
-	struct char_data *i;
-
-	for(i = list; i; i = i->next_in_room)
+void list_char_to_char(char_data *ch) {
+	std::cerr << "listing char to char\n";
+	for(auto & i : mods::globals::room_list[IN_ROOM(ch)]){
 		if(ch != i) {
+			std::cerr << "list_char_to_char: ch:" << ch->player.name.c_str() << "\n";
+			std::cerr << "list_char_to_char: i:" << i->player.name.c_str() << "\n";
 			if(CAN_SEE(ch, i)) {
 				list_one_char(i, ch);
 			} else if(IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch) &&
@@ -515,6 +516,7 @@ void list_char_to_char(struct char_data *list, struct char_data *ch) {
 				send_to_char(ch, "You see a pair of glowing red eyes looking your way.\r\n");
 			}
 		}
+	}
 }
 
 
@@ -593,7 +595,7 @@ void look_at_room(struct char_data *ch, int ignore_brief) {
 
 	d("look at room in_room(ch): " << IN_ROOM(ch));
 	if(IN_ROOM(ch) < 0){
-		d("look_at_room[IN_ROOM(ch)]->'is -1'");
+		d("negative value: look_at_room[IN_ROOM(ch)]->'is " << IN_ROOM(ch));
 		return;
 	}
 
@@ -646,7 +648,7 @@ void look_at_room(struct char_data *ch, int ignore_brief) {
 	send_to_char(ch, "%s", CCGRN(ch, C_NRM));
 	list_obj_to_char(world[IN_ROOM(ch)].contents, ch, SHOW_OBJ_LONG, FALSE);
 	send_to_char(ch, "%s", CCYEL(ch, C_NRM));
-	list_char_to_char(world[IN_ROOM(ch)].people, ch);
+	list_char_to_char(ch);
 	send_to_char(ch, "%s", CCNRM(ch, C_NRM));
 }
 
@@ -860,12 +862,15 @@ ACMD(do_look) {
 	int look_type;
 
 	if(GET_POS(ch) < POS_SLEEPING) {
+		std::cerr << "POS < SLEEPING\n";
 		send_to_char(ch, "You can't see anything but stars!\r\n");
 	} else if(AFF_FLAGGED(ch, AFF_BLIND)) {
+		std::cerr << "you're blind\n";
 		send_to_char(ch, "You can't see a damned thing, you're blind!\r\n");
 	} else if(IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch)) {
+		std::cerr << "dark room and can't see anything\n";
 		send_to_char(ch, "It is pitch black...\r\n");
-		list_char_to_char(world[IN_ROOM(ch)].people, ch);	/* glowing red eyes */
+		list_char_to_char(ch);	/* glowing red eyes */
 	} else {
 		char arg[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
 

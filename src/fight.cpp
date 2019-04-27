@@ -957,234 +957,41 @@ int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int 
 
 
 
-/*
- * Alert: As of bpl14, this function returns the following codes:
- *	< 0	Victim died.
- *	= 0	No damage.
- *	> 0	How much damage done.
+/** Performs snipe damage. Snipe damage is done from parameter 1 to parameter 2 (victim).
+ * @param ch Attacker (can be PC or NPC)
+ * @param victim Receiver of damage (can be PC or NPC)
+ * @param dam Integer value of how much damage to attempt to deal
+ * @param attacktype the type of attack
+ * @return	< 0	Victim died, == 0 No damage,> 0	How much damage done.
  */
-int snipe_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype) {
+int snipe_damage(char_data *ch, 
+		char_data *victim, 
+		int dam, 
+		int attacktype) {
 	ch->last_fight_timestamp = time(NULL);
 
+	int dmg_dealt = 0;
 	if(GET_POS(victim) <= POS_DEAD) {
+		dmg_dealt = damage(ch,victim,dam,attacktype);
 		if(IS_NPC(victim)){
-			REMOVE_BIT(MOB_FLAGS(victim),MOB_HAS_TREE);
-			victim->mob_specials.behaviour_tree = mods::behaviour_tree_impl::NONE;
-		}
-		/* This is "normal"-ish now with delayed extraction. -gg 3/15/2001 */
-		if(PLR_FLAGGED(victim, PLR_NOTDEADYET) || MOB_FLAGGED(victim, MOB_NOTDEADYET)) {
-			return (-1);
-		}
-
-		log("SYSERR: Attempt to damage corpse '%s' in room #%d by '%s'.",
-		    GET_NAME(victim).c_str(), GET_ROOM_VNUM(IN_ROOM(victim)), GET_NAME(ch).c_str());
-		die(ch,victim);
-		return (-1);			/* -je, 7/7/92 */
-	}
-
-	/* peaceful rooms */
-	if(ch != victim && ROOM_FLAGGED(IN_ROOM(ch), ROOM_PEACEFUL)) {
-		send_to_char(ch, "This room just has such a peaceful, easy feeling...\r\n");
-		return (0);
-	}
-
-	/* shopkeeper protection */
-	if(!ok_damage_shopkeeper(ch, victim)) {
-		return (0);
-	}
-
-	/* You can't damage an immortal! */
-	if(!IS_NPC(victim) && (GET_LEVEL(victim) >= LVL_IMMORT)) {
-		dam = 0;
-	}
-
-	if(victim != ch) {
-		/* Start the attacker fighting the victim */
-		/*
-		if (GET_POS(ch) > POS_STUNNED && (FIGHTING(ch) == NULL))
-		  set_fighting(ch, victim);
-		*/
-		/* Start the victim fighting the attacker */
-		//TODO Modify this code to allow NPCs to follow the attacker
-		if(GET_POS(victim) > POS_STUNNED && (FIGHTING(victim) == NULL)) {
-			set_fighting(victim, ch);
-
-			if(MOB_FLAGGED(victim, MOB_MEMORY) && !IS_NPC(ch)) {
-				remember(victim, ch);
-			}
-		}
-	}
-
-	/* If you attack a pet, it hates your guts */
-	if(victim->master == ch) {
-		stop_follower(victim);
-	}
-
-	/* If the attacker is invisible, he becomes visible */
-	if(AFF_FLAGGED(ch, AFF_INVISIBLE | AFF_HIDE)) {
-		appear(ch);
-	}
-
-	/* Cut damage in half if victim has sanct, to a minimum 1 */
-	if(AFF_FLAGGED(victim, AFF_SANCTUARY) && dam >= 2) {
-		dam /= 2;
-	}
-
-	/* Check for PK if this is not a PK MUD */
-	if(!pk_allowed) {
-		check_killer(ch, victim);
-
-		if(PLR_FLAGGED(ch, PLR_KILLER) && (ch != victim)) {
-			dam = 0;
-		}
-	}
-
-	/* Set the maximum damage per round and subtract the hit points */
-	//dam = MAX(MIN(dam, 100), 0);
-	GET_HIT(victim) -= dam;
-	send_to_char(ch,(std::string("{grn}[") + std::to_string(dam) + "] ").c_str());
-
-	/* Gain exp for the hit */
-	if(ch != victim) {
-		gain_exp(ch, GET_LEVEL(victim) * dam);
-	}
-
-	//mods::globals::states[victim]->event(ch,mods::ai_state::AI_EVENT_SNIPED);
-	update_pos(victim);
-
-	/*
-	 * skill_message sends a message from the messages file in lib/misc.
-	 * dam_message just sends a generic "You hit $n extremely hard.".
-	 * skill_message is preferable to dam_message because it is more
-	 * descriptive.
-	 *
-	 * If we are _not_ attacking with a weapon (i.e. a spell), always use
-	 * skill_message. If we are attacking with a weapon: If this is a miss or a
-	 * death blow, send a skill_message if one exists; if not, default to a
-	 * dam_message. Otherwise, always send a dam_message.
-	 */
-	if(!IS_WEAPON(attacktype)) {
-		skill_message(dam, ch, victim, attacktype);
-	} else {
-		if(GET_POS(victim) == POS_DEAD || dam == 0) {
-			if(!skill_message(dam, ch, victim, attacktype)) {
-				dam_message(dam, ch, victim, attacktype);
-			}
-		} else {
-			dam_message(dam, ch, victim, attacktype);
-		}
-	}
-
-	send_to_char(ch,"{/grn}");
-
-	/* Use send_to_char -- act() doesn't send message if you are DEAD. */
-	switch(GET_POS(victim)) {
-		case POS_MORTALLYW:
-			act("{red}$n is mortally wounded, and will die soon, if not aided.{/red}", TRUE, victim, 0, 0, TO_ROOM);
-			send_to_char(victim, "{red}You are mortally wounded, and will die soon, if not aided.{/red}\r\n");
-			break;
-
-		case POS_INCAP:
-			act("{red}$n is incapacitated and will slowly die, if not aided.{/red}", TRUE, victim, 0, 0, TO_ROOM);
-			send_to_char(victim, "{red}You are incapacitated an will slowly die, if not aided.{/red}\r\n");
-			break;
-
-		case POS_STUNNED:
-			act("{red}$n is stunned, but will probably regain consciousness again.{/red}", TRUE, victim, 0, 0, TO_ROOM);
-			send_to_char(victim, "{red}You're stunned, but will probably regain consciousness again.{/red}\r\n");
-			break;
-
-		case POS_DEAD:
-			act("{red}$n is dead!  R.I.P.{/red}", FALSE, victim, 0, 0, TO_ROOM);
-			send_to_char(victim, "{red}You are dead!  Sorry...{/red}\r\n");
-			break;
-
-		default:			/* >= POSITION SLEEPING */
-			if(dam > (GET_MAX_HIT(victim) / 4)) {
-				send_to_char(victim, "{red}That really did HURT!{/red}\r\n");
-			}
-
-			if(GET_HIT(victim) < (GET_MAX_HIT(victim) / 4)) {
-				send_to_char(victim, "{red}%sYou wish that your wounds would stop BLEEDING so much!%s{/red}\r\n",
-				             CCRED(victim, C_SPR), CCNRM(victim, C_SPR));
-
-				if(ch != victim && MOB_FLAGGED(victim, MOB_WIMPY)) {
-					do_flee(victim, NULL, 0, 0);
+			if(dmg_dealt == -1){
+					victim->mob_specials.snipe_tracking = nullptr;
+					victim->mob_specials.behaviour_tree = 0;
+					return -1;
+			}else if(dmg_dealt == 0){
+				/** No damage dealt */
+			}else if(dmg_dealt > 0){
+					if(MOB_FLAGGED(victim,MOB_SENTINEL)){
+						victim->mob_specials.behaviour_tree = mods::behaviour_tree_impl::grab_tree_by_name("sentinel_snipe_tracking");
+					}else{
+						victim->mob_specials.behaviour_tree = mods::behaviour_tree_impl::grab_tree_by_name("snipe_tracking");
+					}
 				}
-			}
-
-			if(!IS_NPC(victim) && GET_WIMP_LEV(victim) && (victim != ch) &&
-			        GET_HIT(victim) < GET_WIMP_LEV(victim) && GET_HIT(victim) > 0) {
-				send_to_char(victim, "You wimp out, and attempt to flee!\r\n");
-				do_flee(victim, NULL, 0, 0);
-			}
-
-			break;
-	}
-
-	/* Help out poor linkless people who are attacked */
-	if(!IS_NPC(victim) && !(victim->has_desc) && GET_POS(victim) > POS_STUNNED) {
-		do_flee(victim, NULL, 0, 0);
-
-		if(!FIGHTING(victim)) {
-			act("$n is rescued by divine forces.", FALSE, victim, 0, 0, TO_ROOM);
-			GET_WAS_IN(victim) = IN_ROOM(victim);
-			char_from_room(victim);
-			char_to_room(victim, 0);
 		}
 	}
 
-	/* stop someone from fighting if they're stunned or worse */
-	if(GET_POS(victim) <= POS_STUNNED && FIGHTING(victim) != NULL) {
-		stop_fighting(victim);
-	}
-
-	/* Uh oh.  Victim died. */
-	if(GET_POS(victim) == POS_DEAD) {
-		if(ch != victim && (IS_NPC(victim) || victim->has_desc)) {
-			if(AFF_FLAGGED(ch, AFF_GROUP)) {
-				group_gain(ch, victim);
-			} else {
-				solo_gain(ch, victim);
-			}
-		}
-
-		if(!IS_NPC(victim)) {
-			mudlog(BRF, LVL_IMMORT, TRUE, "%s killed by %s at %s", GET_NAME(victim).c_str(), GET_NAME(ch).c_str(), world[IN_ROOM(victim)].name.c_str());
-
-			if(MOB_FLAGGED(ch, MOB_MEMORY)) {
-				forget(ch, victim);
-			}
-		}
-
-		die(ch,victim);
-		if(IS_NPC(victim)){
-			mods::behaviour_tree_impl::unregister_mob(victim);
-			/**
-			 * "forget" the player pointer that sniped us
-			 */
-			victim->mob_specials.snipe_tracking = nullptr;
-		}
-		return (-1);
-	}
-
-	/** Add behaviour tree if it's a mob */
-	{
-		using namespace mods::behaviour_tree_impl;
-		if(IS_NPC(victim) && !flagged(victim,type::snipe_tracking)){
-			/**
-			 * This will register the mob as having a behaviour tree.
-			 */
-			register_mob(victim,type::snipe_tracking);
-			/**
-			 * We need to remember the character that sniped us, so
-			 * place their char_data pointer in memory.
-			 */
-			victim->mob_specials.snipe_tracking = ch;
-		}
-	}
-
-	return (dam);
+	remember(victim,ch);
+	return (dmg_dealt);
 }
 
 /*

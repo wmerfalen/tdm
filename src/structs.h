@@ -24,17 +24,19 @@
 #include <unordered_map>
 namespace mods {
 	struct player;
+	struct npc;
 	struct descriptor_data;
 	struct extra_desc_data;
 };
+struct char_data;
 extern std::deque<mods::descriptor_data> descriptor_list;
-typedef std::size_t weapon_type_t;
-typedef std::map<struct char_data*,std::unique_ptr<mods::ai_state>> ai_state_map;
-typedef std::set<char_data*> memory_rec_t;
-typedef short ai_state_t;
-typedef short goal_t;
+using weapon_type_t = std::size_t;
+using ai_state_map = std::map<char_data*,std::unique_ptr<mods::ai_state>>;
+using memory_rec_t = std::set<char_data*>;
+using ai_state_t = short;
+using goal_t = short;
 struct obj_data;
-typedef uint64_t uuid_t;
+using uuid_t = uint64_t;
 using aligned_int_t = uint64_t;
 enum lense_type_t {
 	FIRST,
@@ -638,8 +640,19 @@ enum lense_type_t {
 
 	/* object flags; used in obj_data */
 	struct obj_flag_data {
+		obj_flag_data() : type_flag(0),weapon_flags(0),
+			ammo_max(0),ammo(0),clip_size(0),wear_flags(0),extra_flags(0),
+			weight(0), cost(0), cost_per_day(0),timer(0),bitvector(0){
+				memset(value,0,sizeof(value));
+			}
+		void feed(pqxx::row);
+		~obj_flag_data() = default;
 		int	value[4];	/* Values of the item (see list)    */
 		byte type_flag;	/* Type of item			    */
+		uint64_t weapon_flags;
+		uint16_t ammo_max;
+		uint16_t ammo;
+		uint16_t clip_size;
 		int /*bitvector_t*/	wear_flags;	/* Where you can wear it	    */
 		int /*bitvector_t*/	extra_flags;	/* If it hums, glows, etc.	    */
 		int	weight;		/* Weigt what else                  */
@@ -648,6 +661,23 @@ enum lense_type_t {
 		int	timer;		/* Timer for object                 */
 		long /*bitvector_t*/	bitvector;	/* To set chars bits                */
 	};
+
+
+/** TODO: I'd like to uncomment his at some point and utilize it. For now,
+ * we'll place weapon specific fields into either obj_flag_data or obj_data
+ */
+//	struct obj_weapon_data {
+//		obj_weapon_data() : weapon_flags(0),
+//			ammo_max(0),ammo(0),clip_size(0){
+//		}
+//		void feed(pqxx::row);
+//		~obj_weapon_data() = default;
+//		uint64_t weapon_flags;
+//		uint16_t ammo_max;
+//		uint16_t ammo;
+//		uint16_t clip_size;
+//	};
+
 
 
 	/* Used in obj_file_elem *DO*NOT*CHANGE* */
@@ -659,6 +689,7 @@ enum lense_type_t {
 
 	/* ================== Memory Structure for Objects ================== */
 	struct obj_data {
+		/**TODO: create constructor and destructor */
 		obj_vnum item_number;	/* Where in data-base			*/
 		room_rnum in_room;		/* In what room -1 when conta/carr	*/
 
@@ -689,6 +720,17 @@ enum lense_type_t {
 		weapon_type_t weapon_type;
 		int16_t type;
 	};
+struct obj_data_weapon : public obj_data {
+	/**TODO: call parent constructor/destructor */
+	/**TODO: eventually, these fields will be specific to this struct and not
+	 * the parent structure
+	 */
+		//int16_t ammo;
+		//int16_t ammo_max;
+		//short loaded;
+		//short holds_ammo;
+		//weapon_type_t weapon_type;
+};
 	/* ======================================================================= */
 
 
@@ -999,7 +1041,16 @@ enum lense_type_t {
 		byte damnodice;          /* The number of damage dice's	       */
 		byte damsizedice;        /* The size of the damage dice's           */
 		char_data* snipe_tracking;
-		int16_t behaviour_tree;
+		uint16_t behaviour_tree;
+		uint64_t behaviour_tree_flags;
+		mob_special_data() : memory({}),
+		attack_type(0),default_pos(POS_STANDING),
+		damnodice(0),damsizedice(0),snipe_tracking(nullptr),
+		behaviour_tree(0),behaviour_tree_flags(0)
+		{
+
+		}
+		~mob_special_data() = default;
 	};
 
 
@@ -1176,12 +1227,16 @@ enum lense_type_t {
 		mob_special_data mob_specials;	/* NPC specials		  */
 
 		affected_type *affected;       /* affected by what spells       */
+		/** TODO: convert to std::vector */
 		obj_data *equipment[NUM_WEARS];/* Equipment array               */
 
+		/** TODO: convert to forward list or std::vector */
 		obj_data *carrying;            /* Head of list                  */
+		std::deque<std::shared_ptr<obj_data>> m_carrying;
 		bool has_desc;
 		std::shared_ptr<mods::descriptor_data> desc;         /* NULL for mobiles              */
 
+		/** TODO: our ultimate goal is to completely get rid of these linked list members */
 		char_data *next_in_room;     /* For room->people - list         */
 		char_data *next;             /* For either monster or ppl-list  */
 		char_data *next_fighting;    /* For fighting list               */
@@ -1195,8 +1250,13 @@ enum lense_type_t {
 		 */
 		goal_t goal;
 		short disorient;
+		/** TODO: this needs to go into a different structure. Preferably mob_specials. */
 		ai_state_t state;
 
+		/** TODO: this needs to go elsewhere. There is no reason why this should
+		 * be in this structure, especially since NPC characters and non-builder
+		 * players will share this structure.
+		 */
 		std::shared_ptr<builder_data_t> builder_data;
 	};
 	/* ====================================================================== */

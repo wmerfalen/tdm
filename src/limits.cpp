@@ -488,6 +488,7 @@ void point_update(void) {
 			GET_MOVE(i) = MIN(GET_MOVE(i) + move_gain(i), GET_MAX_MOVE(i));
 			if(AFF_FLAGGED(i, AFF_POISON)){
 				if(damage(i, i, 2, SPELL_POISON) == -1) {
+					log("player died of poison");
 					return true;    /* Oops, they died. -gg 6/24/98 */
 				}
 			}

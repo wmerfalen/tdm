@@ -41,7 +41,7 @@ strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(
 
 extern void clear_char(char_data*);
 extern char_data* character_list;
-extern std::deque<char_data> mob_list;
+//extern std::deque<mods::npc> mob_list;
 #define CREATE_CHAR(ch) \
 	CREATE(ch,char_data,1);\
 	clear_char(ch);\

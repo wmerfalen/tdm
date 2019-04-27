@@ -44,3 +44,24 @@ hints -> It might be trying to instantiate the npc as a player and assign it a s
 ---------------------------------------------------------------------------------------------------------------------------
 
 
+-- Logged back in after logging out
+<MENTOC_GDB_DUMP>
+Program received signal SIGABRT, Aborted.
+0xf7fd7c89 in __kernel_vsyscall ()
+(gdb) bt
+#0  0xf7fd7c89 in __kernel_vsyscall ()
+#1  0xf79a6dd0 in __libc_signal_restore_set (set=0xffffb230) at ../sysdeps/unix/sysv/linux/nptl-signals.h:79
+#2  __GI_raise (sig=6) at ../sysdeps/unix/sysv/linux/raise.c:48
+#3  0xf79a8297 in __GI_abort () at abort.c:89
+#4  0xf79e238f in __libc_message (do_abort=<optimized out>, fmt=<optimized out>) at ../sysdeps/posix/libc_fatal.c:175
+#5  0xf79e8fc7 in malloc_printerr (action=<optimized out>, str=0xf7ad9800 "free(): invalid pointer",
+    ptr=<optimized out>, ar_ptr=0xf7b2f780 <main_arena>) at malloc.c:5049
+		#6  0xf79e9806 in _int_free (av=0xf7b2f780 <main_arena>, p=0xf7b2f6f8, have_lock=0) at malloc.c:3905
+		#7  0x083b995e in affect_remove (ch=<optimized out>, af=<optimized out>) at handler.cpp:316
+		#8  0x083c720d in affect_update () at magic.cpp:99
+		#9  0x08385845 in heartbeat (pulse=750) at comm.cpp:874
+		#10 0x08382fd9 in game_loop (mother_desc=<optimized out>) at comm.cpp:824
+		#11 0x08381d6c in init_game (port=4000) at comm.cpp:431
+		#12 0x08381ad7 in main (argc=8, argv=0xffffcf64) at comm.cpp:370
+		(gdb)
+		</MENTOC_GDB_DUMP>
