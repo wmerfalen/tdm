@@ -3,6 +3,7 @@
 #include <string>
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
+extern void hit(char_data *ch, char_data *victim, int type);
 
 namespace mods::behaviour_tree_impl {
 	container_t trees;
@@ -66,10 +67,27 @@ namespace mods::behaviour_tree_impl {
 					}
 				}
 		);
+		/**
+		 * We are a sentinel npc. We do not move from the room which we are
+		 * stationed in. Instead, we remember who sniped us for
+		 * N seconds. If anyone on that list of snipers enters the
+		 * room where we are stationed, we attack them with the same
+		 * 'remember' string ("Hey! You're the <> that attacked me!")
+		 */
 		sentinel_snipe_tracking.append_child(node::create_sequence({
+				node_mob_has_snipe_capability,
 				node::create_leaf(
 						[](argument_type mob) -> status {
-						return status::SUCCESS;
+						/** If we've made it to this node, that means the mob does
+						 * indeed have the snipe capability. Let's attempt to snipe
+						 * the player who last sniped us.
+						 */
+						for(auto & remembered_snipers : mob.mob_specials().memory){
+							if(mob.can_snipe(remembered_snipers)){
+								snipe_damage(mob.cd(),remembered_snipers,mob.
+								return status::SUCCESS;
+							}
+						}
 					}
 				)
 			})
@@ -123,6 +141,7 @@ namespace mods::behaviour_tree_impl {
 		);// end append_child
 		add_tree("do_nothing",do_nothing);
 		add_tree("snipe_tracking",snipe_tracking);
+		add_tree("sentinel_snipe_tracking",sentinel_snipe_tracking);
 
 		/**
 		 * Suspicious roaming tree. 

@@ -158,6 +158,7 @@ ACMD(do_snipe) {
 
 	if(!victim[0]) {
 		send_to_char(ch, "Whom do you wish to snipe?\r\n");
+		return;
 	}
 
 	/* HOWTO: perform line of sight scans */

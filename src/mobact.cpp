@@ -154,22 +154,24 @@ void mobile_activity(void) {
 			std::cerr << "mobile_activity: mob memory\n";
 
 			found = FALSE;
-			/**TODO: replace this with foreach_in_room */
-			for(vict = world[IN_ROOM(ch)].people; vict && !found; vict = vict->next_in_room) {
+			mods::loops::foreach_in_room(IN_ROOM(ch),[&](char_data* vict) -> bool {
 				if(IS_NPC(vict) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE)) {
-					continue;
+					return true;
 				}
 
 				if(ch->mob_specials.memory.end() != 
 						ch->mob_specials.memory.find(vict)){
 					/* Can a master successfully control the charmed monster? */
 					if(aggressive_mob_on_a_leash(ch, ch->master, vict)) {
-						continue;
+						return true;
 					}
-			std::cerr << "mobile_activity: mob memory -- HITTING\n";
+					std::cerr << "mobile_activity: mob memory -- HITTING\n";
+					act("$n screams at $N, \"Hey! You're the fiend that attacked me!\"", FALSE, ch, 0, vict, TO_ROOM);
 					hit(ch, vict, TYPE_UNDEFINED);
+					return false;
 				}
-			}
+				return true;
+			});
 		}
 
 		/*

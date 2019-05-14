@@ -964,7 +964,8 @@ int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int 
  * @param attacktype the type of attack
  * @return	< 0	Victim died, == 0 No damage,> 0	How much damage done.
  */
-int snipe_damage(char_data *ch, 
+int snipe_damage(
+		char_data *ch, 
 		char_data *victim, 
 		int dam, 
 		int attacktype) {
@@ -972,7 +973,7 @@ int snipe_damage(char_data *ch,
 
 	int dmg_dealt = 0;
 	if(GET_POS(victim) <= POS_DEAD) {
-		dmg_dealt = damage(ch,victim,dam,attacktype);
+		dmg_dealt = damage(ch,victim,dam,TYPE_SNIPE);
 		if(IS_NPC(victim)){
 			if(dmg_dealt == -1){
 					victim->mob_specials.snipe_tracking = nullptr;
@@ -1218,6 +1219,7 @@ int compute_thaco(struct char_data *ch, struct char_data *victim) {
 	return calc_thaco;
 }
 
+using vpd = mods::scan::vec_player_data;
 
 int snipe_hit(struct char_data *ch, struct char_data *victim, int type,uint16_t distance) {
 	struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
@@ -1247,12 +1249,15 @@ int snipe_hit(struct char_data *ch, struct char_data *victim, int type,uint16_t 
 		calc_thaco += distance * MOD_SNIPE_DISTANCE_THACO;
 	}
 
-	send_to_char(ch,(std::to_string(calc_thaco) + "\r\n").c_str());
 	/* Calculate the raw armor including magic armor.  Lower AC is better for defender. */
 	victim_ac = compute_armor_class(victim) / 10;
 
 	/* roll the die and take your chances... */
 	diceroll = rand_number(1, 20);
+
+	send_to_char(ch,(std::string("Computed thaco:") + std::to_string(calc_thaco) + "\r\n"\
+				+ "victim_ac (computed armor class): " + std::to_string(victim_ac) + "\r\n" \
+				+ "diceroll:" + std::to_string(diceroll) + "\r\n").c_str());
 
 	/*
 	 * Decide whether this is a hit or a miss.

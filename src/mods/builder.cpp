@@ -100,6 +100,15 @@ namespace mods::builder {
 			{AFF_CHARM,"CHARM"},
 	}
 	};
+
+	/**
+	 * !introspection It's questionable why this is here within the builder.cpp file...
+	 * If there is a reason that we're setting position flags on a mob,
+	 * then this is fine, but it smells of bad design. A position flag
+	 * is set throughout battle and not as a mob's prototype. In rare
+	 * cases this may make sense, i.e.: necromancers will have a default
+	 * position of DEAD.
+	 */
 	std::array<std::pair<int,std::string>,9> position_flags = { {
 		{POS_DEAD,"DEAD"},
 			{POS_MORTALLYW,"MORTALLYW"},
@@ -212,6 +221,15 @@ namespace mods::builder {
 			{ITEM_WEAR_HOLD,"HOLD"}
 	}
 	};
+	/**
+	 * Sandboxes
+	 * --
+	 *  Sandboxes enable the builder to start creating an area without having
+	 *  to worry about overwriting or destroying the current area. Hence it's
+	 *  name.
+	 *
+	 *  To use this feature, use rbuild_sandbox
+	 */
 	sandbox_list_t sandboxes;
 	sandbox_data_t::sandbox_data_t(
 			std::shared_ptr<mods::player> player,
@@ -1271,7 +1289,7 @@ ACMD(do_mbuild) {
 			" {grn}mbuild{/grn} {red}list{/red}\r\n" <<
 			" {grn}mbuild{/grn} {red}attr <mob_id> <attr> <value>{/red}\r\n" <<
 			"  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
-			"  {gld}|:: virtual_number{/gld}\r\n" <<
+			"  {gld}|:: virt{/gld}\r\n" <<
 			"  {gld}|:: name{/gld}\r\n" <<
 			"  {gld}|:: short_description{/gld}\r\n" <<
 			"  {gld}|:: long_description{/gld}\r\n" <<
@@ -1305,6 +1323,9 @@ ACMD(do_mbuild) {
 			" {grn}mbuild{/grn} {red}save <mob_id>{/red}\r\n" <<
 			" {grn}mbuild{/grn} {red}show <mob_id>{/red}\r\n" <<
 			" {grn}mbuild{/grn} {red}instantiate <mob_id>{/red}\r\n" <<
+			" {grn}mbuild{/grn} {red}action:add <mob_id> <flag>{/red}\r\n" <<
+			" {grn}mbuild{/grn} {red}action:remove <mob_id> <flag>{/red}\r\n" <<
+			" {grn}mbuild{/grn} {red}action:list <mob_id>{/red}\r\n" <<
 			"\r\n"
 			;
 		player->pager_end();
@@ -1390,8 +1411,8 @@ ACMD(do_mbuild) {
 
 	args = mods::util::subcmd_args<12,args_t>(argument,"action:list");
 	if(args.has_value()){
-		//[ -  ] [ 0         ] [ 1    ] [ 2  ]
-		//mbuild <action:list> <mob_id> <flag>
+		//[ -  ] [ 0         ] [ 1    ] 
+		//mbuild <action:list> <mob_id>
 		auto arg_vec = args.value();
 		auto i_value = mods::util::stoi(arg_vec[1]);
 
@@ -1469,6 +1490,33 @@ ACMD(do_mbuild) {
 			r_success(player,"Object created, look on the floor");
 		}
 
+		return;
+	}
+
+	/** TODO: create copy command */
+	args = mods::util::subcmd_args<5,args_t>(argument,"copy");
+	if(args.has_value()) {
+		//r_status(player,"...");
+		auto arg_vec = args.value();
+		auto i_value = mods::util::stoi(arg_vec[1]);
+
+		if(!i_value.has_value()) {
+			r_error(player,"Please use a valid numeric value.");
+			return;
+		} 
+		if(i_value.value() >= mob_proto.size()){
+			r_error(player,"Out of bounds");
+			return;
+		}
+		mob_proto.push_back(mob_proto[i_value.value()]);
+		auto return_pair = mods::builder::save_player(&mob_proto[i_value.value()]);
+
+		if(!return_pair.first) {
+			r_error(player,return_pair.second);
+			return;
+		}
+
+		r_success(player,"Mobile created and saved");
 		return;
 	}
 

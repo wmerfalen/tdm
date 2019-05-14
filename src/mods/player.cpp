@@ -280,8 +280,7 @@ namespace mods {
 			m_set_time();
 	};
 	bool player::can_snipe(char_data *target) {
-		/** TODO: figure out why this function was created. */
-		return true;
+		return mods::scan::los_find(cd(),target).found;
 	}
 	std::shared_ptr<mods::classes::base>& player::get_class(class_type c_type) {
 		for(auto& ptr : m_class_info) {
