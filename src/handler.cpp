@@ -548,6 +548,7 @@ int invalid_align(struct char_data *ch, struct obj_data *obj) {
 }
 
 void equip_char(struct char_data *ch, struct obj_data *obj, int pos) {
+	MENTOC_PREAMBLE();
 	int j;
 
 	if(pos < 0 || pos >= NUM_WEARS) {
@@ -602,11 +603,13 @@ void equip_char(struct char_data *ch, struct obj_data *obj, int pos) {
 		              GET_OBJ_AFFECT(obj), TRUE);
 
 	affect_total(ch);
+	player->equip(obj,pos);
 }
 
 
 
 struct obj_data *unequip_char(struct char_data *ch, int pos) {
+	MENTOC_PREAMBLE();
 	int j;
 	struct obj_data *obj;
 
@@ -640,6 +643,7 @@ struct obj_data *unequip_char(struct char_data *ch, int pos) {
 		              GET_OBJ_AFFECT(obj), FALSE);
 
 	affect_total(ch);
+	player->unequip(obj,pos);
 
 	return (obj);
 }

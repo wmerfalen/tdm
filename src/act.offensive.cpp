@@ -139,14 +139,14 @@ ACMD(do_snipe) {
 	}
 	*/
 
-	if(!player->has_weapon_capability(mods::weapon::mask::snipe)) {
+	if(!player->has_weapon_capability(mods::weapon::SNIPE)) {
 		send_to_char(ch,"You must be wielding a sniper rifle to do that!");
 		return;
 	}
 
 	/* Check ammo */
 	if(player->weapon()->ammo <= 0) {
-		*player << "Out of ammo!\r\n";
+		*player << "{gld}*CLICK*{/gld} Your weapon is out of ammo!\r\n";
 		return;
 	}
 

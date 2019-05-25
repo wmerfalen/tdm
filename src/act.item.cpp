@@ -1545,6 +1545,7 @@ ACMD(do_wear) {
 
 
 ACMD(do_wield) {
+	MENTOC_PREAMBLE();
 	char arg[MAX_INPUT_LENGTH];
 	struct obj_data *obj;
 

@@ -45,9 +45,6 @@ namespace mods {
 		uint8_t grab_tree_by_name(const std::string&);
 
 		constexpr int mob_has_tree = ((1 << 19));
-#ifndef TYPE_UNDEFINED
-		#define TYPE_UNDEFINED -1
-#endif
 #ifdef __MENTOC_NO_DEPS__
 		bool inline flagged(argument_type &);
 		bool inline flagged(argument_type &,const type&);

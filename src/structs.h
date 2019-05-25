@@ -30,7 +30,7 @@ namespace mods {
 };
 struct char_data;
 extern std::deque<mods::descriptor_data> descriptor_list;
-using weapon_type_t = std::size_t;
+using weapon_type_t = uint64_t;
 using ai_state_map = std::map<char_data*,std::unique_ptr<mods::ai_state>>;
 using memory_rec_t = std::set<char_data*>;
 using ai_state_t = short;

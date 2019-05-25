@@ -39,7 +39,7 @@ void obj_flag_data::feed(pqxx::row row){
 		}
 		ammo_max = mods::util::stoi<int>(row["ammo_max"]);
 		clip_size = mods::util::stoi<int>(row["clip_size"]);
-		weapon_flags =mods::util::stoi<int>(row["weapon_flags"]);
+		weapon_flags =mods::util::stoi<weapon_type_t>(row["weapon_flags"]);
 		bitvector = mods::util::stoi<int>(row["bitvector"]);
 		type_flag =mods::util::stoi<int>(row["type_flag"]);
 		wear_flags = mods::util::stoi<int>(row["wear_flags"]);

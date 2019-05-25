@@ -38,13 +38,21 @@ namespace mods::builder {
 	bool has_flag(std::shared_ptr<mods::player> player,uint64_t flag){
 		return player->has_flag(mods::flags::chunk_type_t::BUILDER,flag);
 	}
-	std::array<std::pair<int,std::string>,4> weapon_type_flags = { {
-		{mods::weapon::SMG,"SMG"},
-			{mods::weapon::SHOTGUN,"SHOTGUN"},
-			{mods::weapon::SNIPE,"SNIPE"},
-			{mods::weapon::GRENADE,"GRENADE"}
-	}
-	};
+#define MENTOC_WEAPON(name) {mods::weapon::name,#name}
+	std::array<std::pair<int,std::string>,10> weapon_type_flags = { {
+		MENTOC_WEAPON(SMG),
+			MENTOC_WEAPON(SHOTGUN),
+			MENTOC_WEAPON(SNIPE),
+			MENTOC_WEAPON(GRENADE),
+			MENTOC_WEAPON(ASSAULT_RIFLE),
+			MENTOC_WEAPON(PISTOL),
+			MENTOC_WEAPON(MACHINE_PISTOL),
+			MENTOC_WEAPON(ENERGY),
+			MENTOC_WEAPON(FUMES),
+			MENTOC_WEAPON(FLAME)
+	}};
+#undef MENTOC_WEAPON
+
 	std::array<std::pair<int,std::string>,3> sex_flags = { {
 		{SEX_NEUTRAL,"NEUTRAL"},
 			{SEX_MALE,"MALE"},
@@ -813,41 +821,41 @@ namespace mods::builder {
 			auto txn_01 = txn();
 			sql_compositor comp3("object",&txn_01);
 			auto sql = comp3.select("id").from("object").
-				where("object_item_number","=",std::to_string(obj->item_number))
+				where("obj_item_number","=",std::to_string(obj->item_number))
 				.sql();
 			auto check_result_01 = mods::pq::exec(txn_01,sql);
 			mods::pq::commit(txn_01);
 			auto check_i = 0;
 			sql_compositor::value_map my_map;
-			my_map["object_item_number"] = std::to_string(obj->item_number);
+			my_map["obj_item_number"] = std::to_string(obj->item_number);
 			my_map["obj_flags"] = "0";
 #define MENTOC_CHK_OBJ(item) if(!obj->item){ return {false,std::string(#item) + " is empty"}; }
 			MENTOC_CHK_OBJ(name);
 			MENTOC_CHK_OBJ(description);
 			MENTOC_CHK_OBJ(short_description);
 			MENTOC_CHK_OBJ(action_description);
-			my_map["object_name"] = obj->name;
-			my_map["object_description"] = obj->description;
-			my_map["object_short_description"] = obj->short_description;
+			my_map["obj_name"] = obj->name;
+			my_map["obj_description"] = obj->description;
+			my_map["obj_short_description"] = obj->short_description;
 
 			if(obj->action_description) {
-				my_map["object_action_description"] = obj->action_description;
+				my_map["obj_action_description"] = obj->action_description;
 			}
 
-			my_map["object_type"] = std::to_string(obj->type);
-			my_map["object_worn_on"] = std::to_string(obj->worn_on);
-			my_map["object_type_data"] = "0";
+			my_map["obj_type"] = std::to_string(obj->type);
+			my_map["obj_worn_on"] = std::to_string(obj->worn_on);
+			my_map["obj_type_data"] = "0";
 
 			if(obj->ex_description && obj->ex_description->keyword) {
-				my_map["object_extra_keyword"] = obj->ex_description->keyword;
+				my_map["obj_extra_keyword"] = obj->ex_description->keyword;
 			} else {
-				return {false,"atleast one ex_description->keyword is required"};
+				my_map["obj_extra_keyword"] = "<obj.ex_description->keyword>";
 			}
 
 			if(obj->ex_description && obj->ex_description->description) {
-				my_map["object_extra_description"] = obj->ex_description->description;
+				my_map["obj_extra_description"] = obj->ex_description->description;
 			} else {
-				return {false,"atleast one ex_description->description is required"};
+				my_map["obj_extra_description"] = "<obj.ex_description->description>";
 			}
 
 			if(check_result_01.size()) {
@@ -858,7 +866,7 @@ namespace mods::builder {
 				auto update_sql = comp
 					.update("object")
 					.set(my_map)
-					.where("object_item_number","=",std::to_string(obj->item_number))
+					.where("obj_item_number","=",std::to_string(obj->item_number))
 					.sql();
 				auto result = mods::pq::exec(t,update_sql);
 				mods::pq::commit(t);
@@ -875,7 +883,7 @@ namespace mods::builder {
 				sql = comp2
 					.select("id")
 					.from("object")
-					.where("object_item_number","=",std::to_string(obj->item_number))
+					.where("obj_item_number","=",std::to_string(obj->item_number))
 					.sql();
 				auto res = mods::pq::exec(txn4,sql);
 				mods::pq::commit(txn4);
@@ -890,7 +898,7 @@ namespace mods::builder {
 					auto txn3 = txn();
 					sql_compositor comp3("object_weapon",&txn3);
 					auto sql = comp3.select("id").from("object_weapon").
-						where("object_number","=",std::to_string(check_i))
+						where("obj_fk_id","=",std::to_string(check_i))
 						.sql();
 					auto check_result = mods::pq::exec(txn3,sql);
 					mods::pq::commit(txn3);
@@ -900,11 +908,11 @@ namespace mods::builder {
 						sql_compositor comp("object_weapon",&txn5);
 						auto sql = comp.update("object_weapon")
 							.set({
-									{"object_ammo_type",std::to_string(obj->weapon_type)},
-									{"object_ammo_max",std::to_string(obj->ammo_max)},
-									{"object_cooldown","0"},
-									{"object_can_snipe","0"}
-									}).where("object_number","=",std::to_string(check_i))
+									{"obj_ammo_type",std::to_string(obj->weapon_type)},
+									{"obj_ammo_max",std::to_string(obj->ammo_max)},
+									{"obj_cooldown","0"},
+									{"obj_can_snipe","0"}
+									}).where("obj_fk_id","=",std::to_string(check_i))
 						.sql();
 						mods::pq::exec(txn5,sql);
 						mods::pq::commit(txn5);
@@ -913,11 +921,11 @@ namespace mods::builder {
 						sql_compositor comp("object_weapon",&txn6);
 						auto sql = comp.insert().into("object_weapon")
 							.values({
-									{"object_number",std::to_string(check_i)},
-									{"object_ammo_max",std::to_string(obj->ammo_max)},
-									{"object_ammo_type",std::to_string(obj->weapon_type)},
-									{"object_cooldown","0"},
-									{"object_can_snipe","0"}
+									{"obj_fk_id",std::to_string(check_i)},
+									{"obj_ammo_max",std::to_string(obj->ammo_max)},
+									{"obj_ammo_type",std::to_string(obj->weapon_type)},
+									{"obj_cooldown","0"},
+									{"obj_can_snipe","0"}
 									})
 						.sql();
 						mods::pq::exec(txn6,sql);
@@ -930,7 +938,7 @@ namespace mods::builder {
 			auto txn6 = mods::pq::transaction(*mods::globals::pq_con);
 			std::string sel_weapon_sql =
 				std::string(
-						"select id from affected_type where object_number="	//TODO: !mundane use new shit
+						"select id from affected_type where aff_fk_id="	//TODO: !mundane use new shit
 						) + txn6.quote(check_i);
 			auto check_result = mods::pq::exec(txn6,sel_weapon_sql);
 			mods::pq::commit(txn6);
@@ -938,7 +946,7 @@ namespace mods::builder {
 			if(check_result.size()) {
 				auto txn8 = txn();
 				std::string sql = std::string(
-						"DELETE FROM affected_type where object_number=") 	//TODO: !mundane use new shit
+						"DELETE FROM affected_type where aff_fk_id=") 	//TODO: !mundane use new shit
 					+ txn8.quote(check_i);
 				mods::pq::exec(txn8,sql);
 				mods::pq::commit(txn8);
@@ -946,17 +954,17 @@ namespace mods::builder {
 
 			auto txn9 = txn();
 			auto sql9 = std::string(
-					"DELETE FROM obj_flags where object_number=")
+					"DELETE FROM object_flags where obj_fk_id=")
 				+ txn9.quote(check_i)
 				;
 			mods::pq::exec(txn9,sql9);
 			mods::pq::commit(txn9);
 			auto txn10 = txn();
-			auto sql10 = sql_compositor("obj_flags",&txn10)
+			auto sql10 = sql_compositor("object_flags",&txn10)
 				.insert()
-				.into("obj_flags")
+				.into("object_flags")
 				.values({
-						{"object_number",std::to_string(check_i)},
+						{"obj_fk_id",std::to_string(check_i)},
 						{"value_0",mods::util::itoa(obj->obj_flags.value[0])},
 						{"value_1",mods::util::itoa(obj->obj_flags.value[1])},
 						{"value_2",mods::util::itoa(obj->obj_flags.value[2])},
@@ -983,7 +991,7 @@ namespace mods::builder {
 					auto sql = sql_compositor("affected_type",&txn7).insert()
 						.into("affected_type")
 						.values({
-								{"object_number",std::to_string(check_i)},
+								{"obj_number",std::to_string(check_i)},
 								{"aff_location",mods::util::itoa(obj->affected[i].location)},
 								{"aff_modifier", mods::util::itoa(obj->affected[i].modifier)}
 								})
@@ -1004,7 +1012,7 @@ namespace mods::builder {
 						.insert()
 						.into("extra_description")
 						.values({
-							{"object_number",std::to_string(check_i)},
+							{"obj_number",std::to_string(check_i)},
 							{"extra_keyword",ex_desc->keyword},
 							{"extra_description",ex_desc->description}
 							})
@@ -1792,14 +1800,18 @@ ACMD(do_obuild) {
 		player->pager_start();
 		*player <<
 			"{red}Weapon Type{/red} A hash value of the weapon type.  It must be one of\r\n" <<
-			"the following numbers:</P>\r\n" <<
-			" SMG                sub machine gun\r\n" <<
-			" SHOTGUN            shot gun\r\n" <<
-			" SNIPE              sniper rifle\r\n" <<
-			" GRENADE            type of frag grenade (not a grenade launcher)\r\n" <<
-			"example: obuild attr 1 weapon_type SMG\r\n" <<
+			"the following numbers:</P>\r\n";
+		
+		for(auto pairedData : mods::builder::weapon_type_flags){
+			*player << " " << pairedData.second << "\r\n";
+		}
+		*player << "example: obuild attr 1 weapon_type:add SMG\r\n" <<
 			"(this will set the affected slot number 3 on object zero to modify \r\n" <<
 			"the character's weight by 15)\r\n" <<
+			"example: obuild attr 1 weapon_type:list\r\n" <<
+			"(this will list all weapon flags on the object)\r\n" <<
+		 	"example: obuild attr 1 weapon_type:remove SMG\r\n" <<
+			"(this will remove the SMG flag from the weapon)\r\n" << 
 			"\r\n";
 		player->pager_end();
 		player->page(0);
@@ -2073,8 +2085,10 @@ ACMD(do_obuild) {
 			"  {gld}|:: item_number{/gld}\r\n" <<
 			"  {gld}|:: name{/gld}\r\n" <<
 			"  {gld}|:: desc{/gld}\r\n" <<
-			"  {gld}|:: short_desc{/gld}\r\n" <<
-			"  {gld}|:: action_desc{/gld}\r\n" <<
+			"  {red}Short Description{/red}\r\n"
+			"  {gld}|:: short_description{/gld}\r\n" <<
+			"  {grn}|IN-GAME: get xm\r\nYou get <Short Description>\r\n" << 
+			"  {gld}|:: action_description{/gld}\r\n" <<
 			"  {gld}|:: worn_on{/gld}\r\n" <<
 			"  {gld}|:: weapon_type {red}see: obuild help weapon_type{/red}{/gld}\r\n" <<
 			"  {gld}|:: weapon_ammo{/gld}\r\n" <<
@@ -2217,13 +2231,15 @@ ACMD(do_obuild) {
 
 			if(!*head) {
 				*head = (extra_descr_data*)calloc(1,sizeof(extra_descr_data));
-				(*head)->keyword = (*head)->description = strdup("<default>");
+				(*head)->keyword = strdup("<extra_descr_data.keyword>");
+				(*head)->description = strdup("<extra_descr_data.description>");
 				(*head)->next = nullptr;
 				r_status(player,"Built node.");
 			}
 
 			auto new_node = (extra_descr_data*)calloc(1,sizeof(extra_descr_data));
-			new_node->keyword = new_node->description = strdup("<default>");
+			new_node->keyword = strdup("<extra_descr_data.keyword>");
+			new_node->description = strdup("<extra_descr_data.description>");
 			new_node->next = nullptr;
 			auto current = *head;
 			unsigned max_iter = size.value()  < 1 ? 0 : size.value() -1;
@@ -2231,7 +2247,8 @@ ACMD(do_obuild) {
 			while(max_iter--) {
 				if(current->next == nullptr) {
 					new_node = (extra_descr_data*)calloc(1,sizeof(extra_descr_data));
-					new_node->keyword = new_node->description = strdup("<default>");
+					new_node->keyword = strdup("<extra_descr_data.keyword>");
+					new_node->description = strdup("<extra_descr_data.description>");
 					new_node->next = nullptr;
 					current->next = new_node;
 					r_status(player,"Built node.");
@@ -2803,7 +2820,19 @@ ACMD(do_obuild) {
 
 		MENTOC_OBI(item_number);
 
-		if(arg_vec[2].compare("weapon_type") == 0) {
+		if(arg_vec[2].compare("weapon_type:list") == 0) {
+			std::string report = "";
+			for(auto& ex_flag : mods::builder::weapon_type_flags) {
+					if(obj->weapon_type & ex_flag.first || obj->obj_flags.weapon_flags & ex_flag.first){
+						report += ex_flag.second + ",";
+					}
+			}
+
+			r_success(player,report);
+			return;
+		}
+
+		if(arg_vec[2].compare("weapon_type:remove") == 0) {
 			if(arg_vec.end() <= arg_vec.begin() + 3) {
 				r_error(player,"Please supply a flag");
 				return;
@@ -2814,7 +2843,31 @@ ACMD(do_obuild) {
 
 			for(auto& ex_flag : mods::builder::weapon_type_flags) {
 				if(ex_flag.second.compare(*flag) == 0) {
-					obj->weapon_type = ex_flag.first;
+					obj->obj_flags.weapon_flags = obj->weapon_type &= ~ex_flag.first;
+					found = true;
+					break;
+				}
+			}
+
+			if(!found) {
+				r_error(player,std::string("Unrecognized flag: ") + *flag);
+			}
+
+			r_success(player,"Cleared weapon flag");
+			return;
+		}
+		if(arg_vec[2].compare("weapon_type:add") == 0) {
+			if(arg_vec.end() <= arg_vec.begin() + 3) {
+				r_error(player,"Please supply a flag");
+				return;
+			}
+
+			auto flag = arg_vec.begin() + 3;
+			bool found = false;
+
+			for(auto& ex_flag : mods::builder::weapon_type_flags) {
+				if(ex_flag.second.compare(*flag) == 0) {
+					obj->obj_flags.weapon_flags = obj->weapon_type ^= ex_flag.first;
 					found = true;
 					break;
 				}

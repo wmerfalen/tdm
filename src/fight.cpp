@@ -969,7 +969,8 @@ int snipe_damage(
 		char_data *victim, 
 		int dam, 
 		int attacktype) {
-	ch->last_fight_timestamp = time(NULL);
+	MENTOC_PREAMBLE();
+	player->cd()->last_fight_timestamp = time(NULL);
 
 	int dmg_dealt = 0;
 	if(GET_POS(victim) <= POS_DEAD) {
@@ -989,6 +990,8 @@ int snipe_damage(
 					}
 				}
 		}
+	}else{
+		stc("It appears that your target is dead\r\n");
 	}
 
 	remember(victim,ch);

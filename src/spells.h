@@ -1,3 +1,5 @@
+#ifndef __SPELL_HEADER__
+#define __SPELL_HEADER__
 /* ************************************************************************
 *   File: spells.h                                      Part of CircleMUD *
 *  Usage: header file: constants and fn prototypes for spell system       *
@@ -300,3 +302,4 @@ int	cast_spell(struct char_data *ch, struct char_data *tch,
 void spell_level(int spell, int chclass, int level);
 void init_spell_levels(void);
 const char *skill_name(int num);
+#endif

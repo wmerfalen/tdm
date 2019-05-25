@@ -12,6 +12,7 @@
 #include <bitset>
 #include <algorithm>
 #include "util.hpp"
+#include "scan.hpp"
 /**
  * TODO: All these stc* functions need to be altered to accomodate
  * the new player_type_enum_t values. If output is to be muted, then
@@ -22,6 +23,7 @@
 
 extern void do_auto_exits(struct char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
+extern mods::scan::find_results_t mods::scan::los_find(chptr hunter,chptr hunted);
 namespace mods {
 	std::string just_color_evaluation(std::string final_buffer) {
 		final_buffer = mods::globals::replace_all(final_buffer,"{yel}","\033[93m");
@@ -328,6 +330,20 @@ namespace mods {
 
 		page(m_current_page +1);
 	}
+	void player::equip(obj_data* obj,int pos) {
+		if(pos == WEAR_WIELD){
+			m_weapon_flags = obj->obj_flags.weapon_flags;
+			if(m_weapon_flags & mods::weapon::SNIPE){
+				stc("[+] equipped sniper rifle\r\n");
+			}
+		}
+	}
+	void player::unequip(obj_data* obj,int pos) {
+		if(pos == WEAR_WIELD){
+			m_weapon_flags = obj->obj_flags.weapon_flags;
+			stc("[-] unequipped\r\n");
+		}
+	}
 	bool player::has_weapon_capability(uint64_t type) {
 		auto w = weapon();
 
@@ -339,9 +355,7 @@ namespace mods {
 		 * wielded.
 		 */
 
-		return w->obj_flags.weapon_flags  & type;
-
-
+		return w->obj_flags.weapon_flags  & type || m_weapon_flags & type;
 	}
 	bool player::has_inventory_capability(int type) {
 		return true; //FIXME:
@@ -591,6 +605,8 @@ namespace mods {
 		it->character->has_desc = true;
 	}
 	void player::init(){
+		m_weapon_type = 0;
+		m_weapon_flags = 0;
 		m_authenticated = false;
 		set_god_mode(false);
 		set_imp_mode(false);

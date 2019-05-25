@@ -1,4 +1,5 @@
 #include "scan.hpp"
+#include <tuple>
 
 namespace mods::scan {
 	int directions[] = { NORTH,EAST,SOUTH,WEST,UP,DOWN };
@@ -13,6 +14,32 @@ namespace mods::scan {
 				}
 				);
 	}
+	static std::map<std::pair<room_rnum,room_rnum>,distance_t> distance_cache;
+	std::tuple<bool,distance_t> cached_room_distance(const room_rnum& hunters_room,
+			const room_rnum& hunted_room) {
+		auto search = distance_cache.find({hunters_room,hunted_room});
+		if(search != distance_cache.end()){
+			return {true,search->second};
+		}
+		return {false,0};
+	}
+	void save_room_distance_to_cache(const room_rnum& hunters_room,
+			const room_rnum& hunted_room,const distance_t& in_distance){
+		std::pair<room_rnum,room_rnum> dataset{hunters_room,hunted_room};
+		distance_cache[dataset] = in_distance;
+	}
+	std::tuple<bool,distance_t> distance_to(chptr hunter,chptr hunted){
+		auto hunters_room = IN_ROOM(hunter);
+		auto hunted_room = IN_ROOM(hunted);
+		auto cached_distance = cached_room_distance(hunters_room,hunted_room);
+		if(std::get<0>(cached_distance)){
+			return cached_distance;
+		}
+		auto results = los_find(hunter,hunted);
+		save_room_distance_to_cache(hunters_room,hunted_room,results.distance);
+		return {results.found,results.distance};
+	}
+
 	find_results_t los_find(chptr hunter,chptr hunted){
 		room_list_t scan_results;
 		los_list_rooms(hunter,scan_results,2);

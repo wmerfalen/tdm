@@ -12,6 +12,7 @@ typedef int socket_t;
 #include <array>
 #include "../mods/util.hpp"
 #include "../globals.hpp"
+#include <tuple>
 
 namespace mods {
 	namespace scan {
@@ -22,6 +23,7 @@ namespace mods {
 		using chptr = char_data*;
 		using vec_player_data = std::vector<vec_player_data_element>;
 		using los_scan_foreach_callback = std::function<bool (room_rnum,int,vec_player_data)>;
+		using distance_t = uint16_t;
 		struct find_results_t{
 			bool found;
 			int direction;

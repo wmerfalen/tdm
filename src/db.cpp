@@ -1137,7 +1137,7 @@ int parse_sql_objects() {
 				proto.obj_name = \
 				strdup((row[#sql_name]).c_str());\
 			}else{\
-				proto.obj_name = strdup("<default>");\
+				proto.obj_name = strdup("<proto.obj_name>");\
 			}
 			MENTOC_STR(obj_short_description,short_description);
 			MENTOC_STR(obj_action_description,action_description);
@@ -1338,12 +1338,12 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				const char* name = room_records_row["name"].c_str();
 				const char* description = room_records_row["description"].c_str();
 				if(name == nullptr){ 
-					room.name = strdup("<default>");
+					room.name = strdup("<room.name>");
 				}else{
 					room.name = strdup(name);
 				}
 				if(description == nullptr){
-					room.description = strdup("A room");
+					room.description = strdup("<room.description>");
 				}else{
 					room.description = strdup(description);
 				}

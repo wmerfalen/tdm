@@ -1,9 +1,11 @@
 #include "behaviour_tree_impl.hpp"
 #include "weapon.hpp"
 #include <string>
+#include "../spells.h"
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
 extern void hit(char_data *ch, char_data *victim, int type);
+extern int snipe_hit(char_data *ch,char_data *victim, int type,uint16_t distance);
 
 namespace mods::behaviour_tree_impl {
 	container_t trees;
@@ -82,12 +84,20 @@ namespace mods::behaviour_tree_impl {
 						 * indeed have the snipe capability. Let's attempt to snipe
 						 * the player who last sniped us.
 						 */
-						for(auto & remembered_snipers : mob.mob_specials().memory){
-							if(mob.can_snipe(remembered_snipers)){
-								snipe_damage(mob.cd(),remembered_snipers,mob.
+						for(auto & remembered_sniper : mob.mob_specials().memory){
+							if(mob.can_snipe(remembered_sniper)){
+							/*
+int snipe_hit(*ch, struct char_data *victim, int type,uint16_t distance) {
+	struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
+	*/
+							/** TODO: if no ammo, search for ammo */
+							/** TODO: */
+								auto find_results = mods::scan::los_find(mob,remembered_sniper);
+								snipe_hit(mob,remembered_sniper,TYPE_SNIPE,find_results.distance);
 								return status::SUCCESS;
 							}
 						}
+						return status::FAILURE;
 					}
 				)
 			})

@@ -35,7 +35,11 @@ extern void set_access_rights(
 };
 namespace mods {
 	namespace weapon {
-		enum mask_type { SMG, SNIPE, SHOTGUN, GRENADE };
+		enum mask_type { SMG = 1, SNIPE = (1 << 2), SHOTGUN = (1 << 3), 
+			GRENADE = (1 << 4), ASSAULT_RIFLE = (1 << 5), PISTOL = (1 << 6),
+			MACHINE_PISTOL = (1 << 7), ENERGY = (1 << 8), FUMES = (1 << 9),
+			FLAME = (1 << 10)
+		};
 	};
 	struct player {
 		public:
@@ -448,6 +452,8 @@ namespace mods {
 			void set_overhead_map_width(uint8_t w){ m_overhead_map_width = w; }
 			uint8_t get_overhead_map_height() const { return m_overhead_map_height; }
 			void set_overhead_map_height(uint8_t h){ m_overhead_map_height = h; }
+			void equip(obj_data* obj,int pos);
+			void unequip(obj_data* obj,int pos);
 
 		protected:
 			lense_type_t m_lense_type;
@@ -483,6 +489,8 @@ namespace mods {
 			std::shared_ptr<player_special_data> m_player_specials;
 			time_type_t	m_time;
 			player_type_enum_t m_type;
+			weapon_type_t m_weapon_type;
+			weapon_type_t m_weapon_flags;
 	};
 };
 
