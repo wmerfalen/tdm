@@ -991,7 +991,7 @@ int snipe_damage(
 				}
 		}
 	}else{
-		stc("It appears that your target is dead\r\n");
+		player->stc("It appears that your target is dead\r\n");
 	}
 
 	remember(victim,ch);

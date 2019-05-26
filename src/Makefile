@@ -39,7 +39,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/meta_utils mods/acl_list mods/flags mods/js-player-scaffolding \
 					 mods/builder mods/pq mods/crypto utils mods/macro_impl \
 					 act.comm mods/extra_desc_data mods/overhead_map mods/npc \
-					 mods/randomized-items mods/auto-login
+					 mods/randomized-items mods/auto-login mods/date-time
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

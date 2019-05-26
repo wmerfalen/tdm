@@ -5,6 +5,7 @@
 #include "loops.hpp"
 #include "../spells.h"
 #include "db.hpp"
+#include "date-time.hpp"
 
 #include <unistd.h>	//for getcwd()
 #define DT_FORMAT "{player_name}:mob_death_trigger"
@@ -59,6 +60,62 @@ namespace mods {
 				return 1;	/* number of return values */
 			}
 		};
+		/*! \brief returns the current month as a string within the game
+		 * \return integer
+		 */
+		static duk_ret_t get_month(duk_context *ctx) {
+			/* First parameter is character name */
+			duk_push_string(ctx,mods::date_time::get_month().c_str());
+			return 1;	/* number of return values */
+		}
+		/*! \brief returns the current day as a string within the game
+		 * \return integer
+		 */
+		static duk_ret_t get_day(duk_context *ctx) {
+			/* First parameter is character name */
+			duk_push_string(ctx,mods::date_time::get_day().c_str());
+			return 1;	/* number of return values */
+		}
+		/*! \brief returns the current moon phase as a string
+		 * \return integer
+		 */
+		static duk_ret_t get_moon_phase(duk_context *ctx) {
+			/* First parameter is character name */
+			duk_push_string(ctx,mods::date_time::get_moon_phase().c_str());
+			return 1;	/* number of return values */
+		}
+		/*! \brief returns the current hour within the game
+		 * \return integer
+		 */
+		static duk_ret_t get_ihour(duk_context *ctx) {
+			/* First parameter is character name */
+			duk_push_number(ctx,mods::date_time::get_ihour());
+			return 1;	/* number of return values */
+		}
+		/*! \brief returns the current month as integer within the game
+		 * \return integer
+		 */
+		static duk_ret_t get_imonth(duk_context *ctx) {
+			/* First parameter is character name */
+			duk_push_number(ctx,mods::date_time::get_imonth());
+			return 1;	/* number of return values */
+		}
+		/*! \brief returns the current day as an integer within the game
+		 * \return integer
+		 */
+		static duk_ret_t get_iday(duk_context *ctx) {
+			/* First parameter is character name */
+			duk_push_number(ctx,mods::date_time::get_iday());
+			return 1;	/* number of return values */
+		}
+		/*! \brief returns the current year as an integer within the game
+		 * \return integer
+		 */
+		static duk_ret_t get_iyear(duk_context *ctx) {
+			/* First parameter is character name */
+			duk_push_number(ctx,mods::date_time::get_iyear());
+			return 1;	/* number of return values */
+		}
 
 		/*! \brief requires the javascript library by using the internal mods::js::load_library method
 		 * \param string to be appended to mods::js::JS_PATH
@@ -518,6 +575,21 @@ if(key.compare("WATERWALK") == 0){ ::affect_from_char(*player_ptr,SPELL_WATERWAL
 			duk_put_global_string(ctx,"mobile_activity");
 		}
 		void load_base_functions(duk_context *ctx) {
+			duk_push_c_function(ctx,mods::js::get_month,0);
+			duk_put_global_string(ctx,"get_month");
+			duk_push_c_function(ctx,mods::js::get_day,0);
+			duk_put_global_string(ctx,"get_day");
+			duk_push_c_function(ctx,mods::js::get_moon_phase,0);
+			duk_put_global_string(ctx,"get_moon_phase");
+			duk_push_c_function(ctx,mods::js::get_ihour,0);
+			duk_put_global_string(ctx,"get_ihour");
+			duk_push_c_function(ctx,mods::js::get_imonth,0);
+			duk_put_global_string(ctx,"get_imonth");
+			duk_push_c_function(ctx,mods::js::get_iday,0);
+			duk_put_global_string(ctx,"get_iday");
+			duk_push_c_function(ctx,mods::js::get_iyear,0);
+			duk_put_global_string(ctx,"get_iyear");
+
 			duk_push_c_function(ctx,mods::js::room,0);
 			duk_put_global_string(ctx,"room");
 			duk_push_c_function(ctx,mods::js::read_mobile,2);

@@ -333,15 +333,11 @@ namespace mods {
 	void player::equip(obj_data* obj,int pos) {
 		if(pos == WEAR_WIELD){
 			m_weapon_flags = obj->obj_flags.weapon_flags;
-			if(m_weapon_flags & mods::weapon::SNIPE){
-				stc("[+] equipped sniper rifle\r\n");
-			}
 		}
 	}
 	void player::unequip(obj_data* obj,int pos) {
 		if(pos == WEAR_WIELD){
 			m_weapon_flags = obj->obj_flags.weapon_flags;
-			stc("[-] unequipped\r\n");
 		}
 	}
 	bool player::has_weapon_capability(uint64_t type) {
