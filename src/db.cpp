@@ -2001,7 +2001,7 @@ struct obj_data *read_object(obj_vnum nr, int type) { /* and obj_rnum */
 
 /* update zone ages, queue for reset if necessary, and dequeue when possible */
 void zone_update() {
-	unsigned int i;
+	unsigned i;
 	reset_q_element *update_u, *temp;
 	static int timer = 0;
 

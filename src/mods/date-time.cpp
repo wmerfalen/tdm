@@ -1,4 +1,6 @@
 #include "date-time.hpp"
+#include <sstream>
+#include <cstdio>
 
 namespace mods::date_time {
 	static moon_phase_t moon;
@@ -12,6 +14,9 @@ namespace mods::date_time {
 	static uint8_t day;
 	static uint8_t month;
 	static uint8_t year;
+	static uint64_t heartbeat_counter;
+	constexpr const char* TIME_LOG_FILE_NAME = "/tmp/cm++-time.log";
+	static FILE* time_log_file_handle = nullptr;
 
 	void initialize_all(uint8_t month,uint8_t day,uint8_t year,uint8_t hour,uint8_t moon_phase_index) {
 		mods::date_time::month = month;
@@ -34,6 +39,9 @@ namespace mods::date_time {
 	}
 	uint8_t get_iday() {
 		return mods::date_time::day;
+	}
+	uint8_t get_imonth() {
+		return mods::date_time::month;
 	}
 	uint8_t get_iyear(){
 		return mods::date_time::year;
@@ -70,7 +78,30 @@ namespace mods::date_time {
 	std::string get_hour() {
 		return std::to_string(mods::date_time::hour);
 	}
+	void timelog(const std::string& msg) {
+		if(time_log_file_handle == nullptr){
+			time_log_file_handle = fopen(TIME_LOG_FILE_NAME,"a");
+		}
+		fwrite(msg.c_str(),sizeof(char),msg.length(),time_log_file_handle);
+		fflush(time_log_file_handle);
+	}
+
+	void heartbeat(){
+		static bool heartbeat_set = false;
+		if(!heartbeat_set){
+			heartbeat_counter = 0;
+			heartbeat_set = true;
+		}
+		++heartbeat_counter;
+		if((heartbeat_counter % 10) == 0){
+			timelog(std::string("10 beats: ") + std::to_string(time(0)) + "\n");
+			heartbeat_counter = 0;
+		}
+	}
 	void increment_hour() {
+		static time_t last_call = time(0);
+		timelog(std::string("[+] diff = ") + std::to_string(last_call - time(0)) + "\n");
+		last_call = time(0);
 		mods::date_time::hour += 1;
 		if(mods::date_time::hour == 25){
 			mods::date_time::hour = 0;

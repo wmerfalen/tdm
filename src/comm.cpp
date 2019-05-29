@@ -15,6 +15,7 @@
 #include "conf.h"
 #include "sysdep.h"
 #include "mods/extern.hpp"
+#include "mods/date-time.hpp"
 #include <sys/epoll.h>
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
@@ -848,6 +849,7 @@ void game_loop(socket_t mother_desc) {
 
 void heartbeat(int pulse) {
 	//d("heartbeat");
+	mods::date_time::heartbeat();
 	static int mins_since_crashsave = 0;
 
 	if(!(pulse % PULSE_ZONE)) {

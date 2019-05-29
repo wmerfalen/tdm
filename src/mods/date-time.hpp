@@ -19,14 +19,15 @@ namespace mods::date_time {
 		__LAST = WANING_CRESCENT
 	};
 	using moon_phase_t = moon_phase;
-	uint8_t get_imonth() ;
-	uint8_t get_iday() ;
-	uint8_t get_ihour() ;
-	uint8_t get_iyear() ;
-	std::string get_month() ;
-	std::string get_day() ;
-	std::string get_hour() ;
-	std::string get_moon_phase() ;
+	uint8_t get_imonth();
+	uint8_t get_iday();
+	uint8_t get_ihour();
+	uint8_t get_iyear();
+	std::string get_month();
+	std::string get_day();
+	std::string get_hour();
+	std::string get_moon_phase();
+	void heartbeat();
 	void increment_hour();
 	/**
 	 * ! \brief initializes all date/time integers
