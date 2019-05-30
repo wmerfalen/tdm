@@ -525,6 +525,12 @@ namespace mods {
 			std::string title = static_cast<const char*>(world[rnum].name);
 			stc_color_evaluation(std::string("{grn}") + title + "{/grn}",this);
 		}
+		if(builder_mode()){
+			stc(std::string("[room_id:") + std::to_string(room()) + "|number:" + 
+					std::to_string(world[room()].number) + "|zone:" + 
+					std::to_string(world[room()].zone)
+		 );
+		}
 	}
 	void player::stc(const char* m) {
 		if(m) {

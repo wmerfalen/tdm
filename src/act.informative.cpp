@@ -587,15 +587,12 @@ ACMD(do_exits) {
 void look_at_room(struct char_data *ch, int ignore_brief) {
 	MENTOC_PREAMBLE();
 
-	d("look at room entry");
 	if(!ch->has_desc) {
 		d("look_at_room: char doesnt have a desc! WTF");
 		return;
 	}
 
-	d("look at room in_room(ch): " << IN_ROOM(ch));
 	if(IN_ROOM(ch) < 0){
-		d("negative value: look_at_room[IN_ROOM(ch)]->'is " << IN_ROOM(ch));
 		return;
 	}
 
@@ -605,20 +602,9 @@ void look_at_room(struct char_data *ch, int ignore_brief) {
 		return;
 	}
 
-	/*
-	if (IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch)) {
-	  send_to_char(ch, "It is pitch black...\r\n");
-	  return;
-	} else if (AFF_FLAGGED(ch, AFF_BLIND)) {
-	  send_to_char(ch, "You see nothing but infinite darkness...\r\n");
-	  return;
-	}*/
-	d("world.size:" << world.size());
-	d("1");
 	send_to_char(ch, "%s", CCCYN(ch, C_NRM));
 
 	if(!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_ROOMFLAGS)) {
-		d("2");
 		char buf[MAX_STRING_LENGTH];
 
 		sprintbit(ROOM_FLAGS(IN_ROOM(ch)), room_bits, buf, sizeof(buf));
@@ -628,14 +614,11 @@ void look_at_room(struct char_data *ch, int ignore_brief) {
 	}
 
 	send_to_char(ch, "%s\r\n", CCNRM(ch, C_NRM));
-	//player->stc_ccnrm(CCNRM(ch,C_NRM));
 
 	if((!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_BRIEF)) || ignore_brief ||
 	        ROOM_FLAGGED(IN_ROOM(ch), ROOM_DEATH)) {
 		player->stc_room_desc(IN_ROOM(ch));
 	}
-
-	//send_to_char(ch, "%s", world[IN_ROOM(ch)].description);
 
 	/* autoexits */
 	if(!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_AUTOEXIT)) {
@@ -862,13 +845,10 @@ ACMD(do_look) {
 	int look_type;
 
 	if(GET_POS(ch) < POS_SLEEPING) {
-		std::cerr << "POS < SLEEPING\n";
 		send_to_char(ch, "You can't see anything but stars!\r\n");
 	} else if(AFF_FLAGGED(ch, AFF_BLIND)) {
-		std::cerr << "you're blind\n";
 		send_to_char(ch, "You can't see a damned thing, you're blind!\r\n");
 	} else if(IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch)) {
-		std::cerr << "dark room and can't see anything\n";
 		send_to_char(ch, "It is pitch black...\r\n");
 		list_char_to_char(ch);	/* glowing red eyes */
 	} else {
@@ -886,21 +866,16 @@ ACMD(do_look) {
 		}
 
 		if(!*arg) {		/* "look" alone, without an argument at all */
-			d("looking at room");
 			look_at_room(ch, 1);
 		} else if(is_abbrev(arg, "in")) {
-			d("looking in obj");
 			look_in_obj(ch, arg2);
 		}
 		/* did the char type 'look <direction>?' */
 		else if((look_type = search_block(arg, dirs, FALSE)) >= 0) {
-			d("looking in dir");
 			look_in_direction(ch, look_type);
 		} else if(is_abbrev(arg, "at")) {
-			d("looking at target");
 			look_at_target(ch, arg2);
 		} else {
-			d("looking at targe2");
 			look_at_target(ch, arg);
 		}
 	}
