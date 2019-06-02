@@ -698,15 +698,25 @@ int get_filename(char *filename, size_t fbufsize, int mode, const char *orig_nam
 }
 
 
-int num_pc_in_room(struct room_data *room) {
-	int i = 0;
-	struct char_data *ch;
+int num_pc_in_room(room_data *room) {
+	if(room == nullptr){
+		log(std::string("SYSERR: num_pc_in_room room is null!"));
+		return 0;
+	}
+	unsigned int i = 0;
 
-	for(ch = room->people; ch != NULL; ch = ch->next_in_room)
-		if(!IS_NPC(ch)) {
-			i++;
+	auto real_room_number = real_room(room->number);
+	if(real_room_number == NOWHERE){
+		log(std::string("SYSERR: num_pc_in_room cannot find real room number: ") + room->number);
+		return 0;
+	}
+
+	for(auto &ch : mods::globals::room_list[real_room_number]){
+		if(!IS_NPC(ch)){
+			++i;
 		}
-
+	}
+	
 	return (i);
 }
 

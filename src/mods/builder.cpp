@@ -14,6 +14,7 @@
 #include "jx.hpp"
 #include <tuple>
 #include "npc.hpp"
+#include "world-configuration.hpp"
 namespace mods {  struct player; };
 namespace mods { struct extra_desc_data; }; 
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
@@ -3497,6 +3498,15 @@ ACMD(do_rbuild) {
 			"  |:: {wht}rbuild{/wht} {gld}help{/gld}\r\n" <<
 			"  |:: (this help menu will show up)\r\n" <<
 
+			" {grn}rbuild{/grn} {red}set-recall{/red} {red}<mortal|immortal>{/red}\r\n" <<
+			"  |--> set the current room as recall\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}set-recall mortal{/gld}\r\n" <<
+			"  |:: (set mortal recall to current room)\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}set-recall immortal{/gld}\r\n" <<
+			"  |:: (set immortal recall to current room)\r\n" <<
+
 			" {grn}rbuild{/grn} {red}<list> {yel}[page]{/red}\r\n" <<
 			"  |--> list " << std::to_string(mods::builder::RNUMLIST_MAX_PER_CALL) << " rooms per page. The page argument is zero-indexed\r\n" <<
 			"  {grn}|____[example]{/grn}\r\n" <<
@@ -3676,6 +3686,79 @@ ACMD(do_rbuild) {
 	if(std::string(&command[0]).compare("create") == 0 && IS_DIRECTION(&direction[0])) {
 		mods::builder::new_room(player,mods::globals::dir_int(direction[0]));
 		r_error(player,"Room created");
+		return;
+	}
+
+	
+	auto args = mods::util::subcmd_args<11,args_t>(argument,"set-recall");
+	if(args.has_value() && args.value().size() > 1 && args.value()[0].compare("set-recall") == 0){
+		auto arg_vec = args.value();
+		if(arg_vec[1].compare("mortal") == 0){
+			auto set_status = mods::world_conf::set_mortal_start_room(player->room());
+			if(set_status.first == false){
+				r_error(player,std::string("An error occurred: '") + set_status.second + "'");
+				return;
+			}
+			r_success(player,set_status.second);
+			return;
+		}else if(arg_vec[1].compare("immortal") == 0){
+			auto set_status = mods::world_conf::set_immortal_start_room(player->room());
+			if(set_status.first == false){
+				r_error(player,std::string("An error occurred: '") + set_status.second + "'");
+				return;
+			}
+			r_success(player,set_status.second);
+			return;
+		}else {
+			r_error(player,"Second argument wasn't recognized. Please use either 'mortal' or 'immortal'");
+			return;
+		}
+	}
+
+	/**
+	 * rbuild list <page>
+	 */
+	if(std::string(&command[0]).compare("list") == 0) {
+		auto set = std::string(argument);
+		set = set.substr(set.find("list ") + 5);
+		auto number = mods::util::stoi(set);
+
+		if(number.value_or(-1) == -1) {
+			r_error(player,"Invalid page number");
+			return;
+		}
+		player->pager_start();
+		auto max_per_call = mods::builder::RNUMLIST_MAX_PER_CALL;
+		jxcomp jx; 
+		jx.array_start("roomss");
+		if(std::distance(world.begin(),world.end()) > max_per_call * number.value()){
+			auto it = world.begin() + max_per_call * number.value();
+			auto end_range = world.end();
+			if(it + max_per_call < world.end()){
+				end_range = it + max_per_call;
+			}
+			unsigned real_room_number = max_per_call * number.value();
+			for(;it != end_range;++it){
+				if(player->is_executing_js()){
+					jx.object_start("")
+						.push("rnum",real_room_number)
+						.push("vnum",it->number)
+						.object_end();
+				}else{
+					*player << "{gld}[" << real_room_number << "]{/gld} :->{red} [" <<
+						it->number << "]\"" << it->name.c_str() << "\"{/red}";
+				}
+				real_room_number++;
+			}
+			if(player->is_executing_js()){
+				jx.array_end();
+				*player << jx.get();
+			}else{
+				player->pager_end();
+				player->page(0);
+			}
+			return;
+		}
 		return;
 	}
 
@@ -3988,7 +4071,7 @@ ACMD(do_rbuild) {
 		}
 	}
 
-	auto args = mods::util::subcmd_args<11,args_t>(argument,"list-paved");
+	args = mods::util::subcmd_args<11,args_t>(argument,"list-paved");
 
 	if(args.has_value()) {
 		if(player->builder_data){

@@ -40,7 +40,7 @@ int	get_line(FILE *fl, char *buf);
 int	get_filename(char *filename, size_t fbufsize, int mode, const char *orig_name);
 time_t	mud_time_to_secs(struct time_info_data *now);
 struct time_info_data *age(struct char_data *ch);
-int	num_pc_in_room(struct room_data *room);
+int	num_pc_in_room(room_data *room);
 void	core_dump_real(const char *, int);
 int	room_is_dark(room_rnum room);
 

@@ -93,8 +93,8 @@ namespace mods::date_time {
 			heartbeat_set = true;
 		}
 		++heartbeat_counter;
-		if((heartbeat_counter % 10) == 0){
-			timelog(std::string("10 beats: ") + std::to_string(time(0)) + "\n");
+		if((heartbeat_counter % 1000) == 0){
+			timelog(std::string("1000 beats: ") + std::to_string(time(0)) + "\n");
 			heartbeat_counter = 0;
 		}
 	}
