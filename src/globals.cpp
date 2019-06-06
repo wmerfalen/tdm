@@ -772,7 +772,6 @@ namespace mods {
 						room_list[target_room].push_back(ch);
 					//}
 					IN_ROOM(ch) = target_room;
-					std::cerr << "in_room(ch): " << IN_ROOM(ch) << " -- requested: " << room << "\n";
 					return;
 				}else{
 					log("SYSERR: char_to_room failed for ch. null ch");

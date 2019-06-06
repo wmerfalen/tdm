@@ -63,7 +63,6 @@ int isname(const char *str, const char *namelist) {
 
 	for(;;) {
 		for(curstr = str;; curstr++, curname++) {
-			std::cerr << "curstr: '" << curstr << "'\n";
 			if(!curname){
 				return 0;
 			}
@@ -418,7 +417,6 @@ void char_from_room(char_data *ch) {
 /* place a character in a room */
 void char_to_room(char_data *ch, room_rnum room) {
 	IN_ROOM(ch) = room;
-	log("char->player.name: %s char_to_room: room: %d",ch->player.name.c_str(),room);
 	if(ch == nullptr){
 		log("SYSERR: char_to_room given a nullptr");
 		return;
@@ -431,7 +429,6 @@ void char_to_room(char_data *ch, room_rnum room) {
 		    room, mods::globals::room_list.size(), ch);
 		return;
 	}else {
-		std::cerr << "char_to_room[legacy]: " << room << " " << ch->player.name.c_str() << "\n";
 		mods::globals::rooms::char_to_room(room,ch);
 
 		if(GET_EQ(ch, WEAR_LIGHT))
@@ -441,7 +438,6 @@ void char_to_room(char_data *ch, room_rnum room) {
 				}
 
 		/* Stop fighting now, if we left. */
-		std::cerr << "char_to_room[room]->'" << room << "'\n";
 		if(FIGHTING(ch)){
 			if(IN_ROOM(ch) != IN_ROOM(FIGHTING(ch))) {
 				stop_fighting(FIGHTING(ch));
@@ -707,7 +703,6 @@ struct obj_data *get_obj_num(obj_rnum nr) {
 
 /* search a room for a char, and return a pointer if found..  */
 char_data *get_char_room(char *name, int *number, room_rnum room) {
-	std::cerr << "log: get_char_room called. " << name << " room: " << room << "\n";
 	int num;
 
 	if(!number) {

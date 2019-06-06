@@ -194,21 +194,17 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 
 
 int perform_move(char_data *ch, int dir, int need_specials_check) {
-	std::cerr << "perform_move entry " << ch->player.name.c_str() << "\n";
 	room_rnum was_in;
 	follow_type *k, *next;
 
 	if(ch == NULL || dir < 0 || dir >= NUM_OF_DIRS || FIGHTING(ch)) {
-		std::cerr << "perform_move: ch/dir/>/fight\n";
 		return (0);
 	} else if((!EXIT(ch, dir) || EXIT(ch, dir)->to_room == NOWHERE)) {
-		std::cerr << "cant go that way\n";
 			send_to_char(ch, "Alas, you cannot go that way...\r\n");
 	} else if(EXIT_FLAGGED(EXIT(ch, dir), EX_CLOSED) /* !mods */
 			&& !EXIT_FLAGGED(EXIT(ch,dir),EX_BREACHED) &&
 			!IS_SET(world[EXIT(ch,dir)->to_room].dir_option[OPPOSITE_DIR(dir)]->exit_info,EX_BREACHED)
 			) {
-		std::cerr << "breached\n";
 		if(EXIT(ch, dir)->keyword) {
 			send_to_char(ch, "The %s seems to be closed.\r\n", fname(EXIT(ch, dir)->keyword));
 		} else {
@@ -217,24 +213,20 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 	}
 	/* !mods */
 	else if(EXIT_FLAGGED(EXIT(ch,dir),EX_REINFORCED)) {
-		std::cerr << "reinforced door\n";
 		send_to_char(ch,"Door is reinforced. You must use {red}thermite{/red} to breach\r\n");
 		return 0;
 	} else {
 		if(!ch->followers) {
-			std::cerr << "no followers, do simple move " << ch->player.name.c_str() << "\n";
 			return (do_simple_move(ch, dir, need_specials_check));
 		}
 
 		was_in = IN_ROOM(ch);
 
-			std::cerr << "do_simple_move 2\n";
 		if(!do_simple_move(ch, dir, need_specials_check)) {
 			return (0);
 		}
 
 		for(k = ch->followers; k; k = next) {
-			std::cerr << "followers loop\n";
 			next = k->next;
 
 			if(IN_ROOM(k->follower) == was_in){

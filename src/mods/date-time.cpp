@@ -94,13 +94,13 @@ namespace mods::date_time {
 		}
 		++heartbeat_counter;
 		if((heartbeat_counter % 1000) == 0){
-			timelog(std::string("1000 beats: ") + std::to_string(time(0)) + "\n");
+			timelog("1000 beats: " + std::to_string(time(0)) + "\n");
 			heartbeat_counter = 0;
 		}
 	}
 	void increment_hour() {
 		static time_t last_call = time(0);
-		timelog(std::string("[+] diff = ") + std::to_string(last_call - time(0)) + "\n");
+		timelog("[+] diff = " + std::to_string(last_call - time(0)) + "\n");
 		last_call = time(0);
 		mods::date_time::hour += 1;
 		if(mods::date_time::hour == 25){

@@ -179,7 +179,6 @@ namespace db {
 				.set(values)
 				.where("id","=",std::to_string(player->get_db_id()))
 				.sql();
-			std::cerr << "[debug]: sql: " << up_sql << "\n";
 			mods::pq::exec(up_txn,up_sql);
 			mods::pq::commit(up_txn);
 			return 0;
@@ -200,7 +199,6 @@ namespace db {
 				.into("player")
 				.values(values)
 				.sql();
-			std::cerr << "[debug]: sql: " << up_sql << "\n";
 			mods::pq::exec(insert_transaction,up_sql);
 			mods::pq::commit(insert_transaction);
 			return 0;
@@ -218,7 +216,6 @@ namespace db {
 				.from("player")
 				.where("player_name","=",player->name())
 				.sql();
-			std::cerr << "[debug]: sql: " << player_sql << "\n";
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
 				for(auto && row : player_record){
 					player->set_db_id(row["id"].as<int>(0));
@@ -240,7 +237,6 @@ namespace db {
 				.from("player")
 				.where("id","=",std::to_string(player->get_db_id()))
 				.sql();
-			std::cerr << "[debug]: sql: " << player_sql << "\n";
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
 				for(auto && row : player_record){
 					player->set_prefs(row["player_preferences"].as<long>(0));
@@ -1178,7 +1174,6 @@ int parse_sql_objects() {
 			//TODO: !small do obj->flags fetching from db
 			auto flag_rows = db_get_by_meta("object_flags","obj_fk_id",(row["id"]));
 			if(flag_rows.size() > 0){
-				std::cerr << "[DEBUG]: db.cpp flag_rows.size(): " << flag_rows.size() << "\n";
 				proto.obj_flags.feed(flag_rows[0]);
 			}
 
@@ -2087,8 +2082,6 @@ void reset_zone(zone_rnum zone) {
 	struct char_data *mob = NULL;
 	struct obj_data *obj, *obj_to;
 
-	log("Resetting zone: %d",zone);
-
 	for(auto ZCMD : zone_table[zone].cmd) {
 
 		if(ZCMD.if_flag && !last_cmd) {
@@ -2107,7 +2100,6 @@ void reset_zone(zone_rnum zone) {
 
 			case 'M':			/* read a mobile */
 				if(mob_index[ZCMD.arg1].number < ZCMD.arg2) {
-					std::cerr << "reset_zone: reading mobile: " << ZCMD.arg2 << "\n";
 					mob = read_mobile(ZCMD.arg2, REAL);
 					char_to_room(mob, real_room(ZCMD.arg3));
 					last_cmd = 1;
@@ -2450,12 +2442,10 @@ bool parse_sql_player(std::shared_ptr<mods::player> player_ptr){
 		player_ptr->clear_all_affected_plr();
 #define __MENTOC_PLR(a) case a: std::cerr << "flag: " << #a << " is set\n"; break;
 		if(strlen(row["player_affection_bitvector"].c_str()) > 0){
-			std::cerr << "player_affection_bitvector: " << row["player_affection_bitvector"].c_str() << "\n";
 			uint64_t aff = row["player_affection_bitvector"].as<uint64_t>(0);
 			uint64_t shift = 1;
 			for(unsigned i=0; i < 64; i++){
 				if(aff & shift){
-					std::cerr << "affected: " << i << "\n";
 					switch(shift){
 __MENTOC_PLR(AFF_BLIND);
 __MENTOC_PLR(AFF_INVISIBLE);
@@ -2485,11 +2475,9 @@ __MENTOC_PLR(AFF_CHARM);
 		}
 		if(strlen(row["player_affection_plr_bitvector"].c_str()) > 0){
 			uint64_t aff = row["player_affection_plr_bitvector"].as<uint64_t>(0);
-			std::cerr << "has affection plr bitvector\n";
 			uint64_t shift = 1;
 			for(unsigned i=0; i < 64; i++){
 				if(aff & shift){
-					std::cerr << "affected_plr: " << shift << "\n";
 					switch(shift){
 __MENTOC_PLR(PLR_KILLER);
 __MENTOC_PLR(PLR_THIEF);

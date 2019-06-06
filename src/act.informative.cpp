@@ -504,11 +504,8 @@ void list_one_char(struct char_data *i, struct char_data *ch) {
 
 
 void list_char_to_char(char_data *ch) {
-	std::cerr << "listing char to char\n";
 	for(auto & i : mods::globals::room_list[IN_ROOM(ch)]){
 		if(ch != i) {
-			std::cerr << "list_char_to_char: ch:" << ch->player.name.c_str() << "\n";
-			std::cerr << "list_char_to_char: i:" << i->player.name.c_str() << "\n";
 			if(CAN_SEE(ch, i)) {
 				list_one_char(i, ch);
 			} else if(IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch) &&
@@ -722,13 +719,8 @@ void look_in_obj(struct char_data *ch, char *arg) {
 
 
 char *find_exdesc(char *word,room_data& r){
-	std::cerr << "(before for) find_exdesc word: '" << word << "'\n";
 	for(const auto & i: r.ex_descriptions()){
-		std::cerr << "find_exdesc word: '" << word << "' " <<
-			"keyword: '" << i.keyword.c_str() << "' " <<
-			"description: '" << i.description.c_str() << "'\n";
 		if(isname(word, i.keyword.c_str())) {
-			std::cerr << "YES: " << i.keyword.c_str() << "\n";
 			return (const_cast<char*>(i.description.c_str()));
 		}
 	}
@@ -796,7 +788,6 @@ void look_at_target(char_data *ch, char *arg) {
 	}
 
 	/* Does the argument match an extra desc in the room? */
-	std::cerr << "find_exdesc arg: '" << arg << "'\n";
 	if((desc = find_exdesc(arg, world[IN_ROOM(ch)])) != NULL) {
 		page_string(*ch->desc, desc, FALSE);
 		return;

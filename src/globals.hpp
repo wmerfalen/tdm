@@ -37,7 +37,11 @@ strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(
 #define DBSET(key,value){ mods::globals::ram_db[key] = value; }
 #define DBGET(key,value) { value = mods::globals::ram_db[key]; }
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
+#ifdef __MENTOC_DEBUG__
 #define d(a) std::cerr << "[debug]: " << a << "\n" << std::flush;
+#else
+#define d(a) /** */
+#endif
 
 extern void clear_char(char_data*);
 extern char_data* character_list;

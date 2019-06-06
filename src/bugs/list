@@ -1,3 +1,36 @@
+---------------------------------------------------------------------------------------------------------------------------
+command -> auxiliary
+auxiliary-data -> Fails on broken pipe (ssh -R .. 'rlwrap telnet localhost 4000')
+segfault? -> yes
+date -> 2019-06-04
+source -> utils.cpp:52
+does it stop there? -> yes
+
+
+<MENTOC_GDB_DUMP>
+Jun  4 19:14:30 :: Resetting zone: 1
+Jun  4 19:15:05 :: WARNING: EOF on socket read (connection broken by peer)
+
+Program received signal SIGSEGV, Segmentation fault.
+strlen () at ../sysdeps/x86_64/strlen.S:106
+106     ../sysdeps/x86_64/strlen.S: No such file or directory.
+(gdb) bt
+#0  strlen () at ../sysdeps/x86_64/strlen.S:106
+#1  0x00007ffff69a7082 in std::__1::char_traits<char>::length (__s=0x3 <error: Cannot access memory at address 0x3>)
+    at ./libcxx/include/__string:218
+#2  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::assign (this=0x7fffffffc1b0,
+    __s=0x3 <error: Cannot access memory at address 0x3>) at ./libcxx/include/string:2396
+#3  0x00000000007a01c9 in std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::operator= (
+    this=0x7fffffffc1b0, __s=0x3 <error: Cannot access memory at address 0x3>) at /usr/lib/llvm-8/bin/../include/c++/v1/string:897
+#4  log (n=...) at utils.cpp:52
+#5  0x00000000006ca506 in game_loop (mother_desc=4) at comm.cpp:708
+#6  0x00000000006c9a60 in init_game (port=<optimized out>) at comm.cpp:432
+#7  0x00000000006c9832 in main (argc=8, argv=0x7fffffffde18) at comm.cpp:371
+(gdb)
+</MENTOC_GDB_DUMP>
+--------------------------------------------------------------
+
+
 [CRASH] - Input validation fails when typing '!pos=1'
 {FIXED} -- [FREEZE] - When a new user calls 'save' the lmdb transactions get messed up and things fail
 {FIXED} -- [logic-error] - The following message is printed out when a new user's data is commited to lmdb:

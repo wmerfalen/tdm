@@ -124,6 +124,9 @@ const char *text_overflow = "**OVERFLOW**\r\n";
 int epoll_fd = -1;
 epoll_event epoll_ev;
 
+std::string sverror(int _errno){
+	return std::string(strerror(_errno));
+}
 int64_t destroy_socket(socket_t & sock_fd){
 	/** It's completely normal to specify nullptr as the last parameter
 	 * since we are specifying EPOLL_CTL_DEL. In other words, we are 
@@ -132,7 +135,7 @@ int64_t destroy_socket(socket_t & sock_fd){
 	auto r = epoll_ctl (epoll_fd, EPOLL_CTL_DEL, sock_fd, nullptr);
 	close(sock_fd);
 	if(r == -1){
-		std::cerr << "destroy_socket::epoll_ctl[error]->'" << strerror(errno) << "'\n";
+		log("SYSERR: destroy_socket::epoll_ctl[error]->'", strerror(errno));
 		return -1;
 	}
 	return 0;
@@ -144,7 +147,7 @@ std::size_t handle_disconnects(){
 				it != mods::globals::player_list.end(); ++it ) {
 			auto desc = (*it)->desc();
 			if(STATE(desc) == CON_CLOSE || STATE(desc) == CON_DISCONNECT) {
-				std::cerr << "[debug] -- found one descriptor with CON_CLOSE || CON_DISCONNECT\n";
+				d("found one descriptor with CON_CLOSE || CON_DISCONNECT");
 				players_to_destroy.push_back(it);
 			}
 		}
@@ -217,6 +220,7 @@ void Board_clear_all(void);
 void free_social_messages(void);
 void Free_Invalid_List(void);
 
+
 void deregister_player(std::shared_ptr<mods::player> & player_obj){
 	std::set<mods::globals::player_list_t::iterator> players_to_destroy;
 	for(auto it = mods::globals::player_list.begin();it != mods::globals::player_list.end();++it){
@@ -264,12 +268,10 @@ int main(int argc, char **argv) {
 				if(argc > pos +1){
 					mods::globals::bootup_test_suite = argv[pos+1];
 					++pos;
-					std::cerr << "parsed test suite\n";
 				}else{
-					std::cerr << "SYSERR: Invalid test suite\n";
+					log("SYSERR: Invalid test suite");
 					exit(1);
 				}
-				std::cerr << "[break] test suite\n";
 				break;
 			//case 'd':
 			//	if(*(argv[pos] + 2)) {
@@ -646,7 +648,7 @@ void game_loop(socket_t mother_desc) {
 	const int size = 10; // hint
 	epoll_fd = epoll_create (size);
 	if (epoll_fd == -1) {
-		log((std::string("SYSERR: [epoll] epoll_create failed: ")+strerror (errno)).c_str());
+		log("SYSERR: [epoll] epoll_create failed: " +  sverror (errno));
 		return;
 	}
 	// add fd to reactor
@@ -654,7 +656,7 @@ void game_loop(socket_t mother_desc) {
 	epoll_ev.data.fd = mother_desc; // user data
 	int epoll_ctl_r = epoll_ctl (epoll_fd, EPOLL_CTL_ADD, mother_desc, &epoll_ev);
 	if (epoll_ctl_r == -1) {
-		log((std::string("SYSERR: [epoll] epoll_ctl failed: ")+strerror(errno)).c_str());
+		log("SYSERR: [epoll] epoll_ctl failed: " + sverror(errno));
 					/** !fixme: do proper shutdown here */
 		close (epoll_fd);
 		close (mother_desc);
@@ -669,7 +671,7 @@ void game_loop(socket_t mother_desc) {
 
 		int epoll_wait_status = epoll_wait (epoll_fd, events, size, epoll_timeout);
 		if (epoll_wait_status == -1) {
-			std::cerr << "game_loop::epoll_wait[-1]->'" << strerror(errno) << "'\n";
+			log("SYSERR: game_loop::epoll_wait[-1]->" + sverror(errno));
 			continue;
 		}
 
@@ -688,7 +690,7 @@ void game_loop(socket_t mother_desc) {
 				int epoll_ctl_add_new = epoll_ctl (epoll_fd, EPOLL_CTL_ADD, new_desc, &epoll_ev);
 				if (epoll_ctl_add_new == -1) {
 					/** !fixme: de-reg and de-alloc player obj here -- remove from socket_map*/
-					log((std::string("SYSERR:[epoll] epoll_ctl failed: ") + strerror(errno)).c_str());
+					log("SYSERR:[epoll] epoll_ctl failed: " + std::string(strerror(errno)));
 					/** !fixme: do proper shutdown here */
 					close (epoll_fd);
 					close (mother_desc);
@@ -697,7 +699,9 @@ void game_loop(socket_t mother_desc) {
 			}
 			auto it = mods::globals::socket_map.find(operating_socket);
 			if(it == mods::globals::socket_map.end()){
-				log("socket_map didn't have operating socket: ",operating_socket);
+				if(-1 == epoll_ctl (epoll_fd, EPOLL_CTL_DEL, operating_socket, &epoll_ev)){
+					log("SYSERR:[epoll] epoll_ctl EPOLL_CTL_DEL removal of socket failed");
+				}
 				++i;
 				continue;
 			}
@@ -705,7 +709,7 @@ void game_loop(socket_t mother_desc) {
 			mods::globals::current_player = player;
 
 			if(process_input(player->desc()) < 0){
-				log(std::string("process_input failed for player "), player->name().c_str()); 
+				log("process_input failed for player " + std::to_string(player->desc())); 
 				mods::globals::socket_map.erase(it);
 				mods::globals::current_player.reset();
 				deregister_player(player);
@@ -713,7 +717,6 @@ void game_loop(socket_t mother_desc) {
 				continue;
 			}
 			{
-				d("Player pointer good. Getting from q");
 				if(!get_from_q(&player->desc().input, comm, &aliased)) {
 					++i;
 					continue;
@@ -732,19 +735,14 @@ void game_loop(socket_t mother_desc) {
 			}
 			player->desc().has_prompt = false;
 			if(player->state() != CON_PLAYING) { // In menus, etc. 
-				d("nanny");
 				nanny(player, comm);
-				d("after nanny");
 			} else {			// else: we're playing normally. 
-				d("if(aliased)");
 				if(aliased) {	// To prevent recursive aliases. 
 					d("aliased... has_prompt = TRUE");
 					player->desc().has_prompt = TRUE;    // To get newline before next cmd output. 
 				} else if(perform_alias(player->desc(), comm, sizeof(comm))) { // Run it through aliasing system 
-					//d("get_from_q");
 					get_from_q(&player->desc().input, comm, &aliased);
 				}
-				d("calling command_interpreter...");
 				command_interpreter(player->cd(), comm); // Send it to interpreter 
 			}
 			++i;
@@ -839,9 +837,10 @@ void game_loop(socket_t mother_desc) {
 			circle_restrict = 0;
 			num_invalid = 0;
 		}
-		if(tics + 1 == UINT_MAX){
-			tics = 0;
+		if(tics + 1 == std::numeric_limits<decltype(tics)>::max()){
+			tics = 1;
 		}
+		std::cerr << ".";
 		++tics;
 	}
 
@@ -1600,7 +1599,6 @@ int process_input(mods::descriptor_data & t) {
 		/* at this point, we know we got some data from the read */
 		*(read_point + bytes_read) = '\0';	/* terminate the string */
 
-		std::cerr << "[debug]: read_buff after perform_socket_read:\n'" << &tmp[0] << "'\n";
 		/* search for a newline in the data we just read */
 		for(ptr = read_point; *ptr && !nl_pos; ptr++)
 			if(ISNEWL(*ptr)) {
@@ -2024,8 +2022,8 @@ sigfunc *my_signal(int signo, sigfunc *func) {
 
 void signal_setup(void) {
 #ifndef CIRCLE_MACINTOSH
-	struct itimerval itime;
-	struct timeval interval;
+	itimerval itime;
+	timeval interval;
 
 	/* user signal 1: reread wizlists.  Used by autowiz system. */
 	my_signal(SIGUSR1, reread_wizlists);
@@ -2187,10 +2185,7 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 					 *  	"$n leaves north."
 					 *
 					 */
-					std::cerr << "from within perform_act: '" << mods::string(PERS(ch,to).c_str()).c_str() << "'\n";
-					if(IS_NPC(ch)){
-						log("DEBUG: the read mobile is an NPC (perform_act)");
-					}else{
+					if(!IS_NPC(ch)){
 						log("DEBUG: the read mobile is __NOT__ !!!! an NPC (perform_act)");
 					}
 					i = strdup(mods::string(PERS(ch, to)).c_str());
@@ -2379,9 +2374,6 @@ void act(const std::string & str, int hide_invisible, char_data *ch,
 			continue;
 		}
 
-		std::cerr << "[DEBUG]: perform_act " << __LINE__ << " " <<
-			"str.c_str(): '" << str.c_str() << "' " << 
-			"to: '" << GET_NAME(to).c_str() << "'\n";
 		perform_act(str.c_str(), ch, obj, vict_obj, to);
 	}
 }
@@ -2450,7 +2442,7 @@ int open_logfile(const char *filename, FILE *stderr_fp) {
 		return (TRUE);
 	}
 
-	printf("SYSERR: Error opening file '%s': %s\n", filename, strerror(errno));
+	std::cerr << "SYSERR: Error opening file '" << filename << "': " << strerror(errno) << "\n";
 	return (FALSE);
 }
 

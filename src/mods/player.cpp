@@ -775,7 +775,6 @@ namespace mods {
 				m_bui_mode = b;
 				if(m_bui_mode){
 					if(!builder_data){
-						std::cerr << "builder data created for player\n";
 						builder_data = std::make_shared<builder_data_t>();
 					}
 				}
@@ -791,18 +790,14 @@ namespace mods {
 			}
 			bool player::room_pave_mode(){
 				if(this->has_builder_data()){
-					std::cerr << "checking user's pave mode status\n";
 					return builder_data->room_pave_mode;
 				}
-				std::cerr << "user doesn't have pave mode\n";
 				return false;
 			}
 			bool player::zone_pave_mode(){
 				if(this->has_builder_data()){
-					std::cerr << "checking user's zone_pave mode status\n";
 					return builder_data->zone_pave_mode;
 				}
-				std::cerr << "user doesn't have zone_pave mode\n";
 				return false;
 			}
 			void player::set_db_id(aligned_int_t id){
@@ -822,14 +817,14 @@ namespace mods {
 				if(m_desc){
 					m_desc->bad_pws = i;
 				}else{
-					std::cerr << "warning: ncrement_bad_password_count called but m_desc is null\n";
+					std::cerr << "warning: set_bad_password_count called but m_desc is null\n";
 				}
 			}
 			void player::increment_bad_password_count(){
 				if(m_desc){
 					++m_desc->bad_pws;
 				}else{
-					std::cerr << "warning: ncrement_bad_password_count called but m_desc is null\n";
+					std::cerr << "warning: increment_bad_password_count called but m_desc is null\n";
 				}
 			}
 			int player::get_bad_password_count(){
@@ -854,7 +849,6 @@ namespace mods {
 				}else{
 					std::cerr << "warning: state called but m_desc is null\n";
 					if(cd()->desc){
-						std::cout << "info: char_data ptr has a desc, so we're returning that\n";
 						return cd()->desc->connected;
 					}
 					return 0;
@@ -876,7 +870,6 @@ namespace mods {
 				return "unknown";
 			}
 			void player::deactivate_account(){
-				
 				/** TODO: what do we need to do to deactivate the account? 
 				 * for now, I think just setting an active flag for the player would be enough
 				 */

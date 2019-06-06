@@ -31,31 +31,33 @@ extern struct time_data time_info;
 void log(mods::string n,...) {
        va_list args;
        va_start(args, n);
-       std::string msg,tmp;
+       std::string tmp;
+			 std::cerr << "[log]: ";
        do{
                tmp.clear();
                tmp = va_arg(args,const char*);
                if(tmp.length()){
-                       msg += tmp;
+								 std::cerr << tmp << "|";
                }
        }while(tmp.length());
        va_end(args);
-			 std::cerr << "[log]: " << msg.c_str() << "\n";
+			 std::cerr << "\n";
 }
 
 void log(std::string n,...) {
        va_list args;
        va_start(args, n);
-       std::string msg,tmp;
+       std::string tmp;
+			 std::cerr << "[log]: ";
        do{
                tmp.clear();
                tmp = va_arg(args,const char*);
                if(tmp.length()){
-                       msg += tmp;
+								 std::cerr << tmp << "|";
                }
        }while(tmp.length());
        va_end(args);
-			 std::cerr << "[log]: " << msg.c_str() << "\n";
+			 std::cerr << "\n";
 }
 
 
@@ -707,7 +709,10 @@ int num_pc_in_room(room_data *room) {
 
 	auto real_room_number = real_room(room->number);
 	if(real_room_number == NOWHERE){
-		log(std::string("SYSERR: num_pc_in_room cannot find real room number: ") + room->number);
+		log(
+			"SYSERR: num_pc_in_room cannot find real room number: "
+			+ std::to_string(room->number)
+		);
 		return 0;
 	}
 
@@ -716,7 +721,7 @@ int num_pc_in_room(room_data *room) {
 			++i;
 		}
 	}
-	
+
 	return (i);
 }
 
@@ -790,14 +795,3 @@ int room_is_dark(room_rnum room) {
 
 	return (FALSE);
 }
-
-/*
-mods::string& GET_NAME(char_data* ch){
-	if(IS_NPC(ch)){
-		std::cerr << "[DEBUG]: GET_NAME(FOR NPC): short_descr: '" << ch->player.short_descr << "'\n";
-		return ch->player.short_descr;
-	}else{
-		return GET_PC_NAME(ch);
-	}
-}
-*/
