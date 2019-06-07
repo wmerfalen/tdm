@@ -40,7 +40,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/builder mods/pq mods/crypto utils mods/macro_impl \
 					 act.comm mods/extra_desc_data mods/overhead_map mods/npc \
 					 mods/randomized-items mods/auto-login mods/date-time \
-					 mods/world-configuration
+					 mods/world-configuration mods/debug
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

@@ -82,8 +82,12 @@ namespace mods::date_time {
 		if(time_log_file_handle == nullptr){
 			time_log_file_handle = fopen(TIME_LOG_FILE_NAME,"a");
 		}
-		fwrite(msg.c_str(),sizeof(char),msg.length(),time_log_file_handle);
-		fflush(time_log_file_handle);
+		if(time_log_file_handle != nullptr){
+			fwrite(msg.c_str(),sizeof(char),msg.length(),time_log_file_handle);
+			fflush(time_log_file_handle);
+		}else{
+			std::cout << "timelog: " << msg << "\n";
+		}
 	}
 
 	void heartbeat(){

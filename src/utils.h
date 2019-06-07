@@ -15,7 +15,9 @@
 /* external declarations and prototypes **********************************/
 namespace mods{
 	struct descriptor_data;
+	struct player;
 };
+#include <memory> //for shared_ptr
 extern struct weather_data weather_info;
 extern FILE *logfile;
 
@@ -266,7 +268,17 @@ void	update_pos(struct char_data *victim);
 
 
 #define IN_ROOM(ch)	((ch)->in_room)
-#define GET_WAS_IN(ch)	((ch)->was_in_room)
+
+room_rnum& GET_WAS_IN(std::shared_ptr<mods::player>& player);
+room_rnum& GET_WAS_IN(char_data* player);
+
+/*
+template <>
+inline room_rnum& GET_WAS_IN<char_data*>(char_data* ch){
+	return ch->was_in_room;
+}*/
+
+//#define GET_WAS_IN(ch)	((ch)->was_in_room)
 #define GET_AGE(ch)     (age(ch)->year)
 
 #define GET_PC_NAME(ch)	((ch)->player.name)

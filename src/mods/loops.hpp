@@ -7,11 +7,6 @@
 
 #include "../structs.h"
 #include "npc.hpp"
-/*
-namespace mods {
-	struct npc;
-};
-*/
 extern std::deque<mods::npc> mob_list;
 namespace mods::loops {
 	using mob_function_t = std::function<bool(char_data*)>;

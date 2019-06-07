@@ -17,6 +17,7 @@
 #include "mods/extern.hpp"
 #include "mods/date-time.hpp"
 #include <sys/epoll.h>
+#include "mods/debug.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -124,8 +125,8 @@ const char *text_overflow = "**OVERFLOW**\r\n";
 int epoll_fd = -1;
 epoll_event epoll_ev;
 
-std::string sverror(int _errno){
-	return std::string(strerror(_errno));
+void logstrerror(std::string_view prefix,int _errno){
+	log(std::string(prefix.data()) + strerror(_errno));
 }
 int64_t destroy_socket(socket_t & sock_fd){
 	/** It's completely normal to specify nullptr as the last parameter
@@ -135,7 +136,7 @@ int64_t destroy_socket(socket_t & sock_fd){
 	auto r = epoll_ctl (epoll_fd, EPOLL_CTL_DEL, sock_fd, nullptr);
 	close(sock_fd);
 	if(r == -1){
-		log("SYSERR: destroy_socket::epoll_ctl[error]->'", strerror(errno));
+		logstrerror("SYSERR: destroy_socket::epoll_ctl[error]->'", errno);
 		return -1;
 	}
 	return 0;
@@ -253,17 +254,6 @@ int main(int argc, char **argv) {
 
 	while((pos < argc) && (*(argv[pos]) == '-')) {
 		switch(*(argv[pos] + 1)) {
-			//case 'o':
-			//	if(*(argv[pos] + 2)) {
-			//		LOGNAME = argv[pos] + 2;
-			//	} else if(++pos < argc) {
-			//		LOGNAME = argv[pos];
-			//	} else {
-			//		log("SYSERR: File name to log to expected after option -o.");
-			//		exit(1);
-			//	}
-
-			//	break;
 			case 'T':
 				if(argc > pos +1){
 					mods::globals::bootup_test_suite = argv[pos+1];
@@ -273,64 +263,17 @@ int main(int argc, char **argv) {
 					exit(1);
 				}
 				break;
-			//case 'd':
-			//	if(*(argv[pos] + 2)) {
-			//		dir = argv[pos] + 2;
-			//	} else if(++pos < argc) {
-			//		dir = argv[pos];
-			//	} else {
-			//		log("SYSERR: Directory arg expected after option -d.");
-			//		exit(1);
-			//	}
-
-			//	break;
-
-			//case 'm':
-			//	mini_mud = 1;
-			//	no_rent_check = 1;
-			//	log("Running in minimized mode & with no rent check.");
-			//	break;
-
-			//case 'c':
-			//	scheck = 1;
-			//	log("Syntax check mode enabled.");
-			//	break;
-
-			//case 'q':
-			//	no_rent_check = 1;
-			//	log("Quick boot mode -- rent check supressed.");
-			//	break;
-
-			//case 'r':
-			//	circle_restrict = 1;
-			//	log("Restricting game -- no new players allowed.");
-			//	break;
-
-			//case 's':
-			//	no_specials = 1;
-			//	log("Suppressing assignment of special routines.");
-			//	break;
-
 			case 'h':
 				/* From: Anil Mahajan <amahajan@proxicom.com> */
 				std::cerr << "Usage: " << argv[0] << " [-c] [-m] [-q] [-r] [-s] [-d pathname] [port #]\n"
 					/** TODO: when we know that we need these cmdline opts, un-comment. For now, they are not supported - 2019-03-08 */
-						//"  -c             Enable syntax check mode.\n"
-						//"  -d <directory> Specify library directory (defaults to 'lib').\n"
-						//"  -h             This screen.\n"
-						//"  -m             Start in mini-MUD mode.\n"
-						//"  -o <file>      Write log to <file> instead of stderr.\n"
-						//"  -q             Quick boot (doesn't scan rent for object limits).\n"
-						//"  -r             Restrict MUD -- no new players allowed.\n"
-						//"  -s             Suppress special procedure assignments.\n"
-						//"  -T <test_suite>Run test suite as implementor.\n"
 						"  --sql-port     Run the 'postgres to lmdb' port command.\n"
 						"  --testing=<N>  Run the test suite labeled N.\n"
 						"  --lmdb-dir=N   Save lmdb to the directory at N.\n"
 						"  --lmdb-name=N  Name the lmdb database N.\n"
 						"  --hell         Minimalist mode. Useful for testing.\n"
 						"  --import-rooms Import rooms\n"
-						;
+				;
 				exit(0);
 			default:
 				std::cerr << "SYSERR: Unknown option -" << *(argv[pos]+1) << " in argument string.\n";
@@ -648,7 +591,7 @@ void game_loop(socket_t mother_desc) {
 	const int size = 10; // hint
 	epoll_fd = epoll_create (size);
 	if (epoll_fd == -1) {
-		log("SYSERR: [epoll] epoll_create failed: " +  sverror (errno));
+		logstrerror("SYSERR: [epoll] epoll_create failed: ",errno);
 		return;
 	}
 	// add fd to reactor
@@ -656,7 +599,7 @@ void game_loop(socket_t mother_desc) {
 	epoll_ev.data.fd = mother_desc; // user data
 	int epoll_ctl_r = epoll_ctl (epoll_fd, EPOLL_CTL_ADD, mother_desc, &epoll_ev);
 	if (epoll_ctl_r == -1) {
-		log("SYSERR: [epoll] epoll_ctl failed: " + sverror(errno));
+		logstrerror("SYSERR: [epoll] epoll_ctl failed: ", errno);
 					/** !fixme: do proper shutdown here */
 		close (epoll_fd);
 		close (mother_desc);
@@ -671,7 +614,7 @@ void game_loop(socket_t mother_desc) {
 
 		int epoll_wait_status = epoll_wait (epoll_fd, events, size, epoll_timeout);
 		if (epoll_wait_status == -1) {
-			log("SYSERR: game_loop::epoll_wait[-1]->" + sverror(errno));
+			logstrerror("SYSERR: game_loop::epoll_wait[-1]->", errno);
 			continue;
 		}
 
@@ -690,7 +633,7 @@ void game_loop(socket_t mother_desc) {
 				int epoll_ctl_add_new = epoll_ctl (epoll_fd, EPOLL_CTL_ADD, new_desc, &epoll_ev);
 				if (epoll_ctl_add_new == -1) {
 					/** !fixme: de-reg and de-alloc player obj here -- remove from socket_map*/
-					log("SYSERR:[epoll] epoll_ctl failed: " + std::string(strerror(errno)));
+					logstrerror("SYSERR:[epoll] epoll_ctl failed: ", errno);
 					/** !fixme: do proper shutdown here */
 					close (epoll_fd);
 					close (mother_desc);
@@ -725,9 +668,9 @@ void game_loop(socket_t mother_desc) {
 				player->cd()->char_specials.timer = 0;
 				if(player->state() == CON_PLAYING && GET_WAS_IN(player->cd()) != NOWHERE) {
 					if(player->room() != NOWHERE) {
-						char_from_room(player->cd());
+						char_from_room(player);
 					}
-					char_to_room(player->cd(), GET_WAS_IN(player->cd()));
+					char_to_room(player, GET_WAS_IN(player->cd()));
 					GET_WAS_IN(player->cd()) = NOWHERE;
 					act("$n has returned.", TRUE, player->cd(), 0, 0, TO_ROOM);
 				}
@@ -840,7 +783,10 @@ void game_loop(socket_t mother_desc) {
 		if(tics + 1 == std::numeric_limits<decltype(tics)>::max()){
 			tics = 1;
 		}
-		std::cerr << ".";
+
+		if(mods::debug::debug_state->show_tics()){
+			std::cerr << ".";
+		}
 		++tics;
 	}
 

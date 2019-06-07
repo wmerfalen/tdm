@@ -19,6 +19,7 @@
 #include "mods/loops.hpp"
 #include "mods/testing_index.hpp"
 #include "mods/auto-login.hpp"
+#include "mods/debug.hpp"
 
 extern int errno;
 #define MODS_BREACH_DISORIENT 50
@@ -146,6 +147,7 @@ namespace mods {
 				f_test_suite;
 			f_import_rooms = false;
 			boot_type = BOOT_DB;
+			bool show_tics = false;
 			std::string postgres_user = mods::conf::postgres_user.data();
 			std::string postgres_dbname = mods::conf::postgres_dbname.data();
 			std::string postgres_password = mods::conf::postgres_password.data();
@@ -172,7 +174,13 @@ namespace mods {
 					<< "--postgres-host=<host> use host as postgres host. default: localhost\n"
 					<< "--postgres-port=<port> use port as postgres port. default: 5432\n"
 					<< "--postgres-pw-file=<file> read postgres password from file. no default. required.\n"
+					<< "--show-tics show a dot for every game tic\n"
 					;
+				}
+
+				if(strncmp(argv[pos],"--show-tics",11) == 0){
+					show_tics = true;
+					continue;
 				}
 
 				if(strncmp(argv[pos],"--auto-login=",13) == 0){
@@ -325,6 +333,7 @@ namespace mods {
 			}
 			std::cout << "[success] connected to postgres :)\n";
 			config::init(argc,argv);
+			mods::debug::init(show_tics);
 		}
 		void post_boot_db() {
 		}
@@ -333,53 +342,46 @@ namespace mods {
 			return "woof";
 		}
 		void room_event(room_vnum room,mods::ai_state::event_type_t event) {
-			for(auto ptr = character_list; ptr->next; ptr = ptr->next) {
-				if(IN_ROOM(ptr) == room) {
-					if(event == mods::ai_state::BREACHED_NORTH  ||
-							event == mods::ai_state::BREACHED_SOUTH  ||
-							event == mods::ai_state::BREACHED_EAST ||
-							event == mods::ai_state::BREACHED_WEST
-						) {
-						ptr->disorient += MODS_BREACH_DISORIENT;
-						{
-							if(event == mods::ai_state::BREACHED_NORTH) {
-								send_to_char(ptr,"The {red}north{/red} door was breached.\r\n");
-							}
-
-							if(event == mods::ai_state::BREACHED_SOUTH) {
-								send_to_char(ptr,"The {red}south{/red} door was breached.\r\n");
-							}
-
-							if(event == mods::ai_state::BREACHED_EAST) {
-								send_to_char(ptr,"The {red}east{/red} door was breached.\r\n");
-							}
-
-							if(event == mods::ai_state::BREACHED_WEST) {
-								send_to_char(ptr,"The {red}west{/red} door was breached.\r\n");
-							}
-						}
-					}
-
-					if(event == mods::ai_state::GRENADE_FLIES_BY) {
-						send_to_char(ptr,"A {grn}grenade{/grn} flies by\r\n");
-					}
-
-					if(event == mods::ai_state::GRENADE_EXPLOSION) {
-						send_to_char(ptr,"A {grn}grenade{/grn} explodes!\r\n");
-					}
+			mods::loops::foreach_in_room(room,[&](char_data* ptr) -> bool {
+				std::string text;
+				switch(event){
+					case mods::ai_state::BREACHED_NORTH:
+						text = "The {red}north{/red} door was breached.";
+						break;
+					case mods::ai_state::BREACHED_SOUTH: 
+						text = "The {red}south{/red} door was breached.";
+						break;
+					case mods::ai_state::BREACHED_EAST: 
+						text = "The {red}east{/red} door was breached.";
+						break;
+					case mods::ai_state::BREACHED_WEST:
+						text = "The {red}west{/red} door was breached.";
+						break;
+					case mods::ai_state::GRENADE_FLIES_BY:
+						text = "A {grn}grenade{/grn} flies by!";
+						break;
+					case mods::ai_state::GRENADE_EXPLOSION:
+						text = "A {grn}grenade{/grn} explodes!";
+						break;
+						default: break;
 				}
-			}
+				if(text.length()){
+					text += "\r\n";
+					send_to_char(ptr,text.c_str());
+				}
+				return true;
+			});
 		}
 		void refresh_player_states() {
 			mods::loops::foreach_all([&](char_data* ptr) -> bool {
-					if(!ptr){
+				if(!ptr){
 					return true;
-					}
-					if(states.find(ptr) == states.end()) {
+				}
+				if(states.find(ptr) == states.end()) {
 					states[ptr] = std::make_unique<mods::ai_state>(ptr,0,0);
-					}
-					return true;
-					});
+				}
+				return true;
+			});
 		}
 		void pre_game_loop() {
 			std::cout << "[event] Pre game loop\n";
