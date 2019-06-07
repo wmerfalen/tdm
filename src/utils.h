@@ -272,13 +272,6 @@ void	update_pos(struct char_data *victim);
 room_rnum& GET_WAS_IN(std::shared_ptr<mods::player>& player);
 room_rnum& GET_WAS_IN(char_data* player);
 
-/*
-template <>
-inline room_rnum& GET_WAS_IN<char_data*>(char_data* ch){
-	return ch->was_in_room;
-}*/
-
-//#define GET_WAS_IN(ch)	((ch)->was_in_room)
 #define GET_AGE(ch)     (age(ch)->year)
 
 #define GET_PC_NAME(ch)	((ch)->player.name)
