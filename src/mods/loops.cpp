@@ -12,22 +12,24 @@ namespace mods::loops {
 		
 	void foreach_mob(mods_npc_function_t func){
 		for(auto & mob : mob_list){
-			std::cerr << mob.name().c_str() << " "
-				<< mob.room() << "\n";
+			std::cerr << mob->name().c_str() << " "
+				<< mob->room() << "\n";
 			if(!func(mob)){ return; }
 		}
 	}
 	void foreach_mob(mob_function_t func){
 		for(auto & mob : mob_list){
-			std::cerr << mob.name().c_str() << " "
-				<< mob.room() << "\n";
-			if(!func(mob.cd())){ return; }
+			std::cerr << mob->name().c_str() << " "
+				<< mob->room() << "\n";
+			if(!func(mob->cd())){ return; }
 		}
 	}
 	void foreach_player(player_function_t func){
 		for(auto player_ptr : mods::globals::player_list){
-			if(!player_ptr->authenticated()){ return; }
-			if(!func(player_ptr->cd())){ return; }
+			if(!player_ptr->authenticated()){
+				continue;
+			}
+			if(!func(player_ptr)){ return; }
 		}
 	}
 	//template <typename PointerType,typename ReturnType>

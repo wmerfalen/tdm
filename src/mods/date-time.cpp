@@ -15,8 +15,10 @@ namespace mods::date_time {
 	static uint8_t month;
 	static uint8_t year;
 	static uint64_t heartbeat_counter;
+#ifdef __MENTOC_TIMELOG__
 	constexpr const char* TIME_LOG_FILE_NAME = "/tmp/cm++-time.log";
 	static FILE* time_log_file_handle = nullptr;
+#endif
 
 	void initialize_all(uint8_t month,uint8_t day,uint8_t year,uint8_t hour,uint8_t moon_phase_index) {
 		mods::date_time::month = month;
@@ -79,6 +81,7 @@ namespace mods::date_time {
 		return std::to_string(mods::date_time::hour);
 	}
 	void timelog(const std::string& msg) {
+#ifdef __MENTOC_TIMELOG__
 		if(time_log_file_handle == nullptr){
 			time_log_file_handle = fopen(TIME_LOG_FILE_NAME,"a");
 		}
@@ -88,6 +91,7 @@ namespace mods::date_time {
 		}else{
 			std::cout << "timelog: " << msg << "\n";
 		}
+#endif
 	}
 
 	void heartbeat(){
@@ -98,13 +102,17 @@ namespace mods::date_time {
 		}
 		++heartbeat_counter;
 		if((heartbeat_counter % 1000) == 0){
+#ifdef __MENTOC_TIMELOG__
 			timelog("1000 beats: " + std::to_string(time(0)) + "\n");
+#endif
 			heartbeat_counter = 0;
 		}
 	}
 	void increment_hour() {
 		static time_t last_call = time(0);
+#ifdef __MENTOC_TIMELOG__
 		timelog("[+] diff = " + std::to_string(last_call - time(0)) + "\n");
+#endif
 		last_call = time(0);
 		mods::date_time::hour += 1;
 		if(mods::date_time::hour == 25){

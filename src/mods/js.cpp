@@ -746,28 +746,36 @@ __set_points_cleanup:
 			if(m_dir.length()) {
 				path = m_dir + "/" + m_file;
 			}
+			if(access(path.c_str(),F_OK) == -1){
+				/** File doesn't exist */
+				return false;
+			}
 
 			std::ifstream include_file(path,std::ios::in);
 
-			if(!include_file.good() || !include_file.is_open()) {
+			if(!include_file.is_open()) {
 				return false;
-			} else {
-				std::vector<char> buffer;
-				struct stat statbuf;
-
-				if(stat(path.c_str(), &statbuf) == -1) {
-					return false;
-				}
-
-				buffer.reserve(statbuf.st_size);
-				std::fill(buffer.begin(),buffer.end(),0);
-
-				while(!include_file.eof()) {
-					include_file.read((char*)&buffer[0],statbuf.st_size);
-				}
-
-				eval_string(m_context,std::string((char*)&buffer[0]));
 			}
+			if(!include_file.good()){
+				return false;
+			}
+			std::vector<char> buffer;
+			struct stat statbuf;
+
+			if(stat(path.c_str(), &statbuf) == -1) {
+				return false;
+			}
+
+			buffer.reserve(statbuf.st_size);
+			std::fill(buffer.begin(),buffer.end(),0);
+
+			unsigned buffer_length = statbuf.st_size;
+			while(!include_file.eof() && buffer_length != 0) {
+				include_file.read((char*)&buffer[0],statbuf.st_size);
+				--buffer_length;
+			}
+
+			eval_string(m_context,std::string((char*)&buffer[0]));
 
 			return true;
 		}

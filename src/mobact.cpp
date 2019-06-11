@@ -41,16 +41,16 @@ bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *att
 
 
 void mobile_activity(void) {
-	mods::loops::foreach_mob([](mods::npc& npc){
-			auto ch = npc.cd();
+	mods::loops::shptr::foreach_mob([](std::shared_ptr<mods::npc> npc) -> bool{
+			auto ch = npc->cd();
 			std::cerr << "foreach_mob (mobile_activity)\n";
 		char_data *vict;
 		struct obj_data *obj, *best_obj;
 		int door, found, max;
 
-		if(npc.mob_specials().behaviour_tree){
-		std::cerr << "mob has behaviour_tree: " << npc.mob_specials().behaviour_tree << "\n";
-			switch(mods::behaviour_tree_impl::dispatch(npc)){
+		if(npc->mob_specials().behaviour_tree){
+		std::cerr << "mob has behaviour_tree: " << npc->mob_specials().behaviour_tree << "\n";
+			switch(mods::behaviour_tree_impl::dispatch(*npc)){
 				case mods::behaviour_tree_impl::dispatch_status_t::RETURN_IMMEDIATELY:
 				//std::cerr << "return immediately\n";
 					return true;
@@ -154,7 +154,8 @@ void mobile_activity(void) {
 			std::cerr << "mobile_activity: mob memory\n";
 
 			found = FALSE;
-			mods::loops::foreach_in_room(IN_ROOM(ch),[&](char_data* vict) -> bool {
+			mods::loops::foreach_in_room(IN_ROOM(ch),[&](std::shared_ptr<mods::player> player_vict) -> bool {
+				auto vict = player_vict->cd();
 				if(IS_NPC(vict) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE)) {
 					return true;
 				}
@@ -216,8 +217,7 @@ void mobile_activity(void) {
 			//std::cerr << "mobile_activity: checkpoint 4\n";
 
 		return true;
-	}/* end for() */
-	);
+	});
 }
 
 

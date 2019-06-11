@@ -64,6 +64,7 @@ namespace mods {
 			using player_list_t = std::vector<player_ptr_t>;
 		using lmdb_db = mods::lmdb::_db_handle;
 		using socket_map_t = std::map<int,player_ptr_t>;
+		using room_list_t = std::vector<std::vector<std::shared_ptr<mods::player>>>;
 		//using builder_data_map_t = std::map<player_ptr_t,std::shared_ptr<builder_data_t>>;
 		enum boot_type_t { BOOT_DB,BOOT_HELL };
 		bool acl_allowed(char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd);
@@ -80,7 +81,8 @@ namespace mods {
 		extern std::unique_ptr<lmdb_db> db;
 		extern ai_state_map states;
 		extern duk_context* duktape_context;
-		extern std::vector<std::vector<char_data*>> room_list;
+		//extern std::vector<std::vector<char_data*>> room_list;
+		extern room_list_t room_list;
 		extern player_list_t player_list;
 		extern std::vector<mods::chat::channel> chan;
 		extern std::vector<std::string> chan_verbs;

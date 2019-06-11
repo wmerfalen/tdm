@@ -74,7 +74,7 @@ int _parse_name(char *arg, char *name);
 ACMD(do_room_list){
 	MENTOC_PREAMBLE();
 	for(auto & p : mods::globals::room_list[player->room()]){
-		player->stc(p->player.name.c_str());
+		player->stc(p->name());
 	}
 }
 

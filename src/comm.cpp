@@ -98,7 +98,7 @@ extern int auto_save;		/* see config.c */
 extern int autosave_time;	/* see config.c */
 extern int *cmd_sort_info;
 namespace mods::globals { 
-extern std::vector<std::vector<char_data*>> room_list;
+extern std::vector<std::vector<std::shared_ptr<mods::player>>> room_list;
 };
 
 extern struct time_info_data time_info;		/* In db.c */
@@ -126,7 +126,7 @@ int epoll_fd = -1;
 epoll_event epoll_ev;
 
 void logstrerror(std::string_view prefix,int _errno){
-	log(std::string(prefix.data()) + strerror(_errno));
+	log(mods::string(prefix.data()) + strerror(_errno));
 }
 int64_t destroy_socket(socket_t & sock_fd){
 	/** It's completely normal to specify nullptr as the last parameter
@@ -652,7 +652,7 @@ void game_loop(socket_t mother_desc) {
 			mods::globals::current_player = player;
 
 			if(process_input(player->desc()) < 0){
-				log("process_input failed for player " + std::to_string(player->desc())); 
+				log("process_input failed for player %s",player->name().c_str()); 
 				mods::globals::socket_map.erase(it);
 				mods::globals::current_player.reset();
 				deregister_player(player);
@@ -670,8 +670,8 @@ void game_loop(socket_t mother_desc) {
 					if(player->room() != NOWHERE) {
 						char_from_room(player);
 					}
-					char_to_room(player, GET_WAS_IN(player->cd()));
-					GET_WAS_IN(player->cd()) = NOWHERE;
+					char_to_room(player, GET_WAS_IN(player));
+					GET_WAS_IN(player) = NOWHERE;
 					act("$n has returned.", TRUE, player->cd(), 0, 0, TO_ROOM);
 				}
 				GET_WAIT_STATE(player->cd()) = 1;
@@ -2307,7 +2307,8 @@ void act(const std::string & str, int hide_invisible, char_data *ch,
 		return;
 	}
 
-	for(auto & to : mods::globals::room_list[IN_ROOM(ch)]){
+	for(auto & to_player : mods::globals::room_list[IN_ROOM(ch)]){
+		auto to = to_player->cd();
 		if(!SENDOK(to) || (to == ch)) {
 			continue;
 		}

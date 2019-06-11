@@ -28,14 +28,16 @@ namespace mods::scan {
 		std::pair<room_rnum,room_rnum> dataset{hunters_room,hunted_room};
 		distance_cache[dataset] = in_distance;
 	}
-	std::tuple<bool,distance_t> distance_to(chptr hunter,chptr hunted){
+	std::tuple<bool,distance_t> distance_to(chptr player_hunter,chptr player_hunted){
+		auto hunter = player_hunter->cd();
+		auto hunted = player_hunted->cd();
 		auto hunters_room = IN_ROOM(hunter);
 		auto hunted_room = IN_ROOM(hunted);
 		auto cached_distance = cached_room_distance(hunters_room,hunted_room);
 		if(std::get<0>(cached_distance)){
 			return cached_distance;
 		}
-		auto results = los_find(hunter,hunted);
+		auto results = los_find(player_hunter,player_hunted);
 		save_room_distance_to_cache(hunters_room,hunted_room,results.distance);
 		return {results.found,results.distance};
 	}
@@ -65,7 +67,8 @@ namespace mods::scan {
 		return find_results;
 	}
 
-	void los_list_rooms(chptr hunter,room_list_t & room_list,unsigned depth){
+	void los_list_rooms(chptr player_hunter,room_list_t & room_list,unsigned depth){
+		auto hunter = player_hunter->cd();
 		for(auto i_d : { NORTH,EAST,SOUTH,WEST,UP,DOWN }) {
 			auto in_room = IN_ROOM(hunter);
 
@@ -156,7 +159,7 @@ namespace mods::scan {
 
 						for(auto character : mods::globals::room_list[room_id]) {
 							vec_player_data_element item;
-							item.ch = character;
+							item.ch = character->cd();
 							item.distance = ctr;
 							list.push_back(item);
 						}

@@ -54,6 +54,7 @@ namespace mods {
 			using		descriptor_t = mods::descriptor_data;
 			using		descriptor_iterator_t = std::deque<mods::descriptor_data>::iterator;
 			using		time_type_t = unsigned long;//std::chrono::system_clock::time_point;
+			operator chdata_ptr(){ return cd(); }
 			enum player_type_enum_t { 
 				PLAYER, MOB, DRONE,
 				PLAYER_MUTED_DESCRIPTOR,
@@ -454,6 +455,23 @@ namespace mods {
 			void set_overhead_map_height(uint8_t h){ m_overhead_map_height = h; }
 			void equip(obj_data* obj,int pos);
 			void unequip(obj_data* obj,int pos);
+			std::vector<affected_type>& get_affected_by() { return m_affected_by; }
+			std::vector<affected_type>& add_affected_by(affected_type&& add_this){
+				add_this.index = m_affected_by.size();
+				m_affected_by.emplace_back(std::move(add_this));
+				return m_affected_by;
+			}
+			//void set_affected_by(std::vector<affected_type>& affect_list) { m_affected_by = affect_list; }
+			void clr_affected_by(){ m_affected_by.clear(); }
+			std::vector<affected_type>& del_affected_by(const std::size_t& idx){
+				if(idx < m_affected_by.size()){
+					m_affected_by.erase(m_affected_by.begin()+idx);
+				}
+				return m_affected_by;
+			}
+			std::vector<affected_type>& del_affected_by(const affected_type& af){
+				return del_affected_by(af.index);
+			}
 
 		protected:
 			lense_type_t m_lense_type;
@@ -462,6 +480,7 @@ namespace mods {
 			char_data*   m_char_data;
 			std::shared_ptr<char_data> m_shared_ptr;
 			std::deque<std::shared_ptr<obj_data>> m_carrying;
+			std::vector<affected_type> m_affected_by;
 		private: 
 			bool         m_executing_js;
 			bool m_authenticated;

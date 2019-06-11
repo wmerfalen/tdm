@@ -1055,11 +1055,20 @@ struct obj_data_weapon : public obj_data {
 
 	/* An affect structure.  Used in char_file_u *DO*NOT*CHANGE* */
 	struct affected_type {
+		std::size_t index;
 		sh_int type;          /* The type of spell that caused this      */
 		sh_int duration;      /* For how long its effects will last      */
 		sbyte modifier;       /* This is added to apropriate ability     */
 		byte location;        /* Tells which ability to change(APPLY_XXX)*/
 		long /*bitvector_t*/	bitvector; /* Tells which bits to set (AFF_XXX) */
+		affected_type() : index(0), type(0),duration(0),
+		modifier(0),location(0),bitvector(0),next(0){
+		}
+		affected_type(const affected_type& t) : 
+		 index(t.index), type(t.type),duration(t.duration),
+		modifier(t.modifier),location(t.location),bitvector(t.bitvector),next(0){
+		}
+		~affected_type() = default;
 
 		struct affected_type *next;
 	};
@@ -1225,6 +1234,12 @@ struct obj_data_weapon : public obj_data {
 		std::shared_ptr<player_special_data> player_specials; /* PC specials		  */
 		mob_special_data mob_specials;	/* NPC specials		  */
 
+		/** Design philosophy:
+		 * It's going to take a very long time to remove all linked list
+		 * implementation code to loop through affected. Instead, we will 
+		 * build a vector and have our own affection implementation surrounded
+		 * by that. 
+		 */
 		affected_type *affected;       /* affected by what spells       */
 		/** TODO: convert to std::vector */
 		obj_data *equipment[NUM_WEARS];/* Equipment array               */

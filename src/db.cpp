@@ -56,7 +56,7 @@ std::vector<char_data> mob_proto;	/* prototypes for mobs		 */
 mob_rnum top_of_mobt = 0;	/* top of mobile index table	 */
 
 std::deque<obj_data> object_list;	/* list of objs	 */
-std::deque<mods::npc> mob_list;		/* list of mobs */
+std::deque<std::shared_ptr<mods::npc>> mob_list;
 std::vector<index_data> obj_index;	/* index table for object file	 */
 std::vector<obj_data> obj_proto;	/* prototypes for objs		 */
 obj_rnum top_of_objt = 0;	/* top of object index table	 */
@@ -251,10 +251,7 @@ namespace db {
 		}
 	}
 	int16_t save_char_prefs(std::shared_ptr<mods::player> player){
-		auto prefs_value = player->get_prefs();
-		std::map<std::string,std::string> values;
-		values["player_preferences"] = std::to_string(prefs_value);
-		return db::save_char_data(player,values);
+		return db::save_char_data(player,{{"player_preferences",std::to_string(player->get_prefs())}});
 	}
 
 };
@@ -1012,12 +1009,10 @@ void parse_sql_mobiles() {
 
 			proto.player.description.assign(row["mob_description"].c_str());
 
-			//TODO: we may want to uncomment this out in the future, but no saving of bitvectors for now... 
-			//proto.char_specials.saved.act = mods::util::stoi<int>(row["mob_action_bitvector"]);
-			//proto.char_specials.saved.act = 0;
+			proto.char_specials.saved.act = mods::util::stoi<int>(row["mob_action_bitvector"]);
 			SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
 			REMOVE_BIT(proto.char_specials.saved.act, MOB_NOTDEADYET);
-			//proto.char_specials.saved.affected_by = 0;
+			proto.char_specials.saved.affected_by = mods::util::stoi<int>(row["mob_affection_bitvector"]);
 			proto.char_specials.saved.alignment = mods::util::stoi<int>(row["mob_alignment"]);
 
 			/* AGGR_TO_ALIGN is ignored if the mob is AGGRESSIVE. */
@@ -1167,11 +1162,9 @@ int parse_sql_objects() {
 			}
 
 			proto.ex_description->next = nullptr;
-			proto.worn_on = 0; //FIXME: this is what it used to be: mods::util::stoi<int>(row["object_worn_on"]);
-			proto.type = 0; //FIXME: this is what it used to be: mods::util::stoi<int>(row["object_type"]);
+			proto.worn_on = mods::util::stoi<int>(row["obj_worn_on"]);
+			proto.type = mods::util::stoi<int>(row["obj_type"]);
 			proto.ammo = 0;
-			//memset(&proto.obj_flags,0,sizeof(obj_flag_data));
-			//TODO: !small do obj->flags fetching from db
 			auto flag_rows = db_get_by_meta("object_flags","obj_fk_id",(row["id"]));
 			if(flag_rows.size() > 0){
 				proto.obj_flags.feed(flag_rows[0]);

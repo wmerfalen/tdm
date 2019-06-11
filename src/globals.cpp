@@ -48,7 +48,8 @@ namespace mods {
 		std::unique_ptr<mods::deferred> defer_queue;
 		duk_context* duktape_context;
 		ai_state_map states;
-		std::vector<std::vector<char_data*>> room_list;
+		//std::vector<std::vector<char_data*>> room_list; /**!TODO turn this into std::shared_ptr<...> */
+		room_list_t room_list;
 		player_list_t player_list;
 		std::vector<mods::chat::channel> chan;
 		std::vector<std::string> chan_verbs;
@@ -342,7 +343,8 @@ namespace mods {
 			return "woof";
 		}
 		void room_event(room_vnum room,mods::ai_state::event_type_t event) {
-			mods::loops::foreach_in_room(room,[&](char_data* ptr) -> bool {
+			mods::loops::foreach_in_room(room,[&](std::shared_ptr<mods::player> player_ptr) -> bool {
+				auto ptr = player_ptr->cd();
 				std::string text;
 				switch(event){
 					case mods::ai_state::BREACHED_NORTH:
@@ -373,7 +375,8 @@ namespace mods {
 			});
 		}
 		void refresh_player_states() {
-			mods::loops::foreach_all([&](char_data* ptr) -> bool {
+			mods::loops::foreach_all([&](std::shared_ptr<mods::player> player_ptr) -> bool {
+			auto ptr = player_ptr->cd();
 				if(!ptr){
 					return true;
 				}
@@ -414,8 +417,8 @@ namespace mods {
 			SET_BIT(mob_proto[i].char_specials.saved.act, MOB_ISNPC);
 			/** !TODO: fix this. We need to copy the mob_proto to the mob_list.back() */
 			std::cerr << "read_Mobile[mob_rnum]: " << i << "\n";
-			mob_list.emplace_back(i);
-			auto mob = mob_list.end() -1;
+			mob_list.emplace_back(std::make_shared<mods::npc>(i));
+			auto mob = mob_list.back();
 			std::cerr << "[DEBUG]: mob_proto short_descr: '" << 
 				mob_proto[i].player.short_descr.c_str() << "'\n";
 			mob->position() = POS_STANDING;
@@ -428,7 +431,7 @@ namespace mods {
 			mob->mana() = mob->max_mana();
 			mob->move() = mob->max_move();
 
-			std::cerr << "mob stats: max_hp:" << mob->max_hp() << " hp:" << mob->hp() << 
+			std::cerr << "mob->stats: max_hp:" << mob->max_hp() << " hp:" << mob->hp() << 
 				" mana:" << mob->mana() << " move:" << mob->move() << "\n";
 			mob->set_time_birth(time(0));
 			mob->set_time_played(0);
@@ -732,20 +735,15 @@ namespace mods {
 			 * \return void
 			 */
 			void char_from_room(char_data* ch) {
-				if(ch){
-					auto room_id = IN_ROOM(ch);
-					if(std::size_t(room_id) >= room_list.size()){
-						log("SYSERR: char_from_room failed. room_id >= room_list.size()");
-						return;
-					}
-					auto place = std::find(room_list[room_id].begin(),room_list[room_id].end(),ch);
-
-					if(place != room_list[room_id].end()) {
-						room_list[room_id].erase(place);
-					}
-				}else{
-					log("SYSERR: char_from_room failed for ch. null ch");
+				MENTOC_PREAMBLE();
+				auto room_id = IN_ROOM(ch);
+				if(std::size_t(room_id) >= room_list.size()){
+					log("SYSERR: char_from_room failed. room_id >= room_list.size()");
 					return;
+				}
+				auto place = std::find(room_list[room_id].begin(),room_list[room_id].end(),player);
+				if(place != room_list[room_id].end()){
+					room_list[room_id].erase(place);
 				}
 			}
 
@@ -759,6 +757,7 @@ namespace mods {
 			 * \return void will log a SYSERR if the resolved room id (param 1) is out of bounds
 			 */
 			void char_to_room(const room_rnum& room,char_data* ch) {
+				MENTOC_PREAMBLE();
 				if(ch){
 					auto target_room = room;
 					if(boot_type == boot_type_t::BOOT_HELL){
@@ -769,10 +768,7 @@ namespace mods {
 						log("SYSERR: char_to_room failed for ch. Requested room is out of bounds: ",target_room);
 						return;
 					}
-					//auto place = std::find(room_list[target_room].begin(),room_list[target_room].end(),ch);
-					//if(place == room_list[target_room].end()) {
-						room_list[target_room].push_back(ch);
-					//}
+					room_list[target_room].push_back(player);
 					IN_ROOM(ch) = target_room;
 					return;
 				}else{

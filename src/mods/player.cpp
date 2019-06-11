@@ -282,7 +282,7 @@ namespace mods {
 			m_set_time();
 	};
 	bool player::can_snipe(char_data *target) {
-		return mods::scan::los_find(cd(),target).found;
+		return mods::scan::los_find(std::make_shared<mods::player>(cd()),std::make_shared<mods::player>(target)).found;
 	}
 	std::shared_ptr<mods::classes::base>& player::get_class(class_type c_type) {
 		for(auto& ptr : m_class_info) {

@@ -58,7 +58,7 @@ namespace mods::overhead_map {
 		){
 #if 0
 			/** 
-			 * THis code is so close to being done. Just needs some
+			 * This code is so close to being done. Just needs some
 			 * more work and it'll look good. for now, this commit
 			 * doesn't get to have this code in it. 
 			 */

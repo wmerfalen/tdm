@@ -715,7 +715,8 @@ char_data *get_char_room(char *name, int *number, room_rnum room) {
 	}
 
 	char_data* found = nullptr;
-	mods::loops::foreach_in_room(room,[&](char_data* i) -> bool {//i = world[room].people; i && *number; i = i->next_in_room)
+	mods::loops::foreach_in_room(room,[&](std::shared_ptr<mods::player> player) -> bool {//i = world[room].people; i && *number; i = i->next_in_room)
+		auto i = player->cd();
 		if(isname(name, i->player.name)){
 			if(--(*number) == 0) {
 				found = i;
@@ -1128,7 +1129,8 @@ void extract_pending_chars(){
 		extractions_pending = 0;
 		return;
 	}
-	mods::loops::foreach_player([&](char_data* ch) -> bool {
+	mods::loops::foreach_player([&](std::shared_ptr<mods::player> player) -> bool {
+		auto ch = player->cd();
 		if(MOB_FLAGGED(ch, MOB_NOTDEADYET)) {
 			REMOVE_BIT(MOB_FLAGS(ch), MOB_NOTDEADYET);
 			log("debug: removing MOB_NOTDEADYET bit from mob");
@@ -1164,7 +1166,8 @@ struct char_data *get_player_vis(struct char_data *ch, char *name, int *number, 
 	}
 	char_data* char_return = nullptr;
 
-	mods::loops::foreach_player([ch,&char_return,inroom,name,number](char_data* i){
+	mods::loops::foreach_player([ch,&char_return,inroom,name,number](std::shared_ptr<mods::player> player){
+		auto i = player->cd();
 		if(inroom == FIND_CHAR_ROOM && IN_ROOM(i) != IN_ROOM(ch)) {
 			return true;
 		}

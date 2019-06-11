@@ -20,7 +20,7 @@ namespace mods {
 			char_data* ch;
 			uint16_t distance;
 		} vec_player_data_element;
-		using chptr = char_data*;
+		using chptr = std::shared_ptr<mods::player>;
 		using vec_player_data = std::vector<vec_player_data_element>;
 		using los_scan_foreach_callback = std::function<bool (room_rnum,int,vec_player_data)>;
 		using distance_t = uint16_t;

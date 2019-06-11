@@ -28,38 +28,9 @@
 /* external globals */
 extern struct time_data time_info;
 
-void log(mods::string n,...) {
-       va_list args;
-       va_start(args, n);
-       std::string tmp;
-			 std::cerr << "[log]: ";
-       do{
-               tmp.clear();
-               tmp = va_arg(args,const char*);
-               if(tmp.length()){
-								 std::cerr << tmp << "|";
-               }
-       }while(tmp.length());
-       va_end(args);
-			 std::cerr << "\n";
+void log(mods::string n) {
+			 std::cerr << "[log]: " << n.c_str() << "\n";
 }
-
-void log(std::string n,...) {
-       va_list args;
-       va_start(args, n);
-       std::string tmp;
-			 std::cerr << "[log]: ";
-       do{
-               tmp.clear();
-               tmp = va_arg(args,const char*);
-               if(tmp.length()){
-								 std::cerr << tmp << "|";
-               }
-       }while(tmp.length());
-       va_end(args);
-			 std::cerr << "\n";
-}
-
 
 void log(const char* format,...) {
        va_list args;
@@ -702,21 +673,22 @@ int get_filename(char *filename, size_t fbufsize, int mode, const char *orig_nam
 
 int num_pc_in_room(room_data *room) {
 	if(room == nullptr){
-		log(std::string("SYSERR: num_pc_in_room room is null!"));
+		log("SYSERR: num_pc_in_room room is null!");
 		return 0;
 	}
-	unsigned int i = 0;
+	unsigned i = 0;
 
 	auto real_room_number = real_room(room->number);
 	if(real_room_number == NOWHERE){
 		log(
-			"SYSERR: num_pc_in_room cannot find real room number: "
-			+ std::to_string(room->number)
+			"SYSERR: num_pc_in_room cannot find real room number: %d",
+			room->number
 		);
 		return 0;
 	}
 
-	for(auto &ch : mods::globals::room_list[real_room_number]){
+	for(auto & player_ptr : mods::globals::room_list[real_room_number]){
+		auto ch = player_ptr->cd();
 		if(!IS_NPC(ch)){
 			++i;
 		}

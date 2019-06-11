@@ -107,7 +107,6 @@ char_data::char_data(char_data* o){
 void char_data::init(){
 	has_desc = false;
 	desc.reset();
-	//desc = nullptr;
 	pfilepos = 0;
 	uuid = 0;
 	last_fight_timestamp = 0;

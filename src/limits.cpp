@@ -467,10 +467,11 @@ void point_update(void) {
 	struct obj_data *j, *jj, *next_thing2;
 
 	/* characters */
-	mods::loops::foreach_all([&](char_data* ch) -> bool {
+	mods::loops::foreach_all([&](std::shared_ptr<mods::player> player) -> bool {
+			auto ch = player->cd();
 			std::cerr << "foreach_all point update\n";
 			if(!ch){
-				log(std::string("foreach_all recieved null char_data ptr"));
+				log("foreach_all recieved null char_data ptr");
 				return true;
 			}
 			auto i = ch;
