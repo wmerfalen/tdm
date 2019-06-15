@@ -1200,7 +1200,6 @@ ACMD(do_help) {
 #define WHO_FORMAT \
 "format: who [minlev[-maxlev]] [-n name] [-c classlist] [-s] [-o] [-q] [-r] [-z]\r\n"
 
-/* FIXME: This whole thing just needs rewritten. */
 ACMD(do_who) {
 	struct char_data *tch;
 	char name_search[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
@@ -1278,7 +1277,8 @@ ACMD(do_who) {
 
 	send_to_char(ch, "Players\r\n-------\r\n");
 
-	for(auto & d : descriptor_list) {
+	for(auto & player : mods::globals::player_list) {
+		auto d = player->desc();
 		if(STATE(d) != CON_PLAYING) {
 			continue;
 		}
