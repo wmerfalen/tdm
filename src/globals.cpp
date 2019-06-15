@@ -736,7 +736,7 @@ namespace mods {
 			 */
 			void char_from_room(char_data* ch) {
 				MENTOC_PREAMBLE();
-				auto room_id = IN_ROOM(ch);
+				auto room_id = player->room();
 				if(std::size_t(room_id) >= room_list.size()){
 					log("SYSERR: char_from_room failed. room_id >= room_list.size()");
 					return;
@@ -769,7 +769,7 @@ namespace mods {
 						return;
 					}
 					room_list[target_room].push_back(player);
-					IN_ROOM(ch) = target_room;
+					player->room() = target_room;
 					return;
 				}else{
 					log("SYSERR: char_to_room failed for ch. null ch");

@@ -86,7 +86,7 @@ namespace mods::loops {
 		for(auto & mob_ptr : mob_list){
 			if(!func(mob_ptr)){ return; }
 		}
-		for(auto player_ptr : mods::globals::player_list){
+		for(auto & player_ptr : mods::globals::player_list){
 			if(!player_ptr->authenticated()){ 
 				continue;
 			}

@@ -191,6 +191,10 @@ ACMD(do_drone);
 ACMD(do_quest);
 ACMD(do_js);
 ACMD(do_ammo);
+
+/** debug mods */
+ACMD(do_point_update);
+/** -- end debug mods */
 ACMD(do_snoop);
 ACMD(do_spec_comm);
 ACMD(do_split);
@@ -531,6 +535,9 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "drone"  , POS_RESTING , do_drone   , 0, 0 },
 	{ "throw"  , POS_RESTING , do_throw   , 0, 0 },
 	{ "ammo"  , POS_RESTING , do_ammo   , 0, 0 },
+	/** debug mods */
+	{ "point_update"  , POS_RESTING , do_point_update   , 0, 0 },
+	/** -- end debug mods */
 	/** -- end mods */
 	{ "snap"     , POS_RESTING , do_action   , 0, 0 },
 	{ "snarl"    , POS_RESTING , do_action   , 0, 0 },

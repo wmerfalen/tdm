@@ -414,7 +414,7 @@ void check_idling(std::shared_ptr<mods::player> player) {
 			/*!mods*/
 			if(!ch->drone) {
 				act("$n disappears into the void.", TRUE, ch, 0, 0, TO_ROOM);
-				send_to_char(ch, "You have been idle, and are pulled into a void.\r\n");
+				player->stc("You have been idle, and are pulled into a void.\r\n");
 				mods::db::save_char(player);
 				Crash_crashsave(ch);
 				char_from_room(ch);
