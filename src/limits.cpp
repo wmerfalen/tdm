@@ -458,7 +458,7 @@ void check_idling(std::shared_ptr<mods::player> player) {
 
 ACMD(do_idle){
 	MENTOC_PREAMBLE();
-	player->cd()->char_specials.timer = idle_void + 1;
+	player->char_specials().timer = idle_void + 1;
 	check_idling(player);
 }
 
@@ -511,8 +511,6 @@ void point_update(void) {
 			update_char_objects(i);
 
 			if(GET_LEVEL(i) < idle_max_level) {
-				auto ch = i;
-				MENTOC_PREAMBLE();
 				check_idling(player);
 			}
 		}

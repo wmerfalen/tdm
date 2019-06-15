@@ -1026,8 +1026,9 @@ struct obj_data_weapon : public obj_data {
 		int last_olc_mode;		/* olc control				*/
 		bool js_profile_initialized;
 		player_special_data() :  poofin(""),
-		poofout(""),aliases(nullptr),last_tell(0),last_olc_targ(nullptr),
-		last_olc_mode(-1),js_profile_initialized(false){}
+			poofout(""),aliases(nullptr),last_tell(0),last_olc_targ(nullptr),
+			last_olc_mode(-1),js_profile_initialized(false){
+		}
 		~player_special_data() = default;
 	};
 
