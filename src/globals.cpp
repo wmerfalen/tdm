@@ -736,7 +736,7 @@ namespace mods {
 			 */
 			void char_from_room(char_data* ch) {
 				MENTOC_PREAMBLE();
-				auto room_id = player->room();
+				auto room_id = IN_ROOM(ch);
 				if(std::size_t(room_id) >= room_list.size()){
 					log("SYSERR: char_from_room failed. room_id >= room_list.size()");
 					return;
@@ -758,22 +758,18 @@ namespace mods {
 			 */
 			void char_to_room(const room_rnum& room,char_data* ch) {
 				MENTOC_PREAMBLE();
-				if(ch){
-					auto target_room = room;
-					if(boot_type == boot_type_t::BOOT_HELL){
-						std::cerr << "boot type hell. NOT sending to requested room of: " << room << "\n";
-						target_room = 0;
-					}
-					if(target_room >= room_list.size()){
-						log("SYSERR: char_to_room failed for ch. Requested room is out of bounds: ",target_room);
-						return;
-					}
-					room_list[target_room].push_back(player);
-					player->room() = target_room;
-					return;
-				}else{
-					log("SYSERR: char_to_room failed for ch. null ch");
+				auto target_room = room;
+				if(boot_type == boot_type_t::BOOT_HELL){
+					std::cerr << "boot type hell. NOT sending to requested room of: " << room << "\n";
+					target_room = 0;
 				}
+				if(target_room >= room_list.size()){
+					log("SYSERR: char_to_room failed for ch. Requested room is out of bounds: ",target_room);
+					return;
+				}
+				room_list[target_room].push_back(player);
+				IN_ROOM(ch) = target_room;
+				return;
 			}
 		};
 

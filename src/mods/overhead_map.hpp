@@ -13,8 +13,8 @@ namespace mods::overhead_map {
 			int direction,int in_x,int in_y,int original_x,int original_y,int room);
 	
 	template <typename OutputDevice>
-		std::string_view generate(OutputDevice out,const room_rnum& room_number){
-			std::string overhead_map;
+		std::string generate(OutputDevice out,const room_rnum& room_number){
+			std::string overhead_map = "";
 			std::string horizontal_border = std::string("{grn}+{/grn}{red}") + 
 				std::string(mods::overhead_map::width,'=') + "{/red}{grn}+{/grn}";
 			overhead_map = horizontal_border + "\r\n";

@@ -280,6 +280,7 @@ room_data::~room_data() {
 		}
 		size_t mods::descriptor_data::flush_output(){
 			std::size_t result; 
+			std::cerr << "output: " << output << "\n";
 			switch(m_queue_behaviour){
 				case queue_behaviour_enum_t::NORMAL:
 					if(output.size() == 0){ 

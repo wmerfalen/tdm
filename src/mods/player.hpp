@@ -67,7 +67,7 @@ namespace mods {
 			player(char_data*);
 			player(mods::player*);
 			player(player_type_enum_t);
-			~player();
+			~player() = default;
 			void init();
 			friend void mods::acl_list::set_access_rights(
 					std::shared_ptr<mods::player>,const std::string&,bool);
@@ -319,6 +319,7 @@ namespace mods {
 			void stc(const char* m);
 			void stc(const std::string m);
 			void stc(int m);
+			void stc(std::string_view);
 			void done();
 
 			/* pager functions */
@@ -449,9 +450,15 @@ namespace mods {
 			/**
 			 * Overhead map functions
 			 */
-			uint8_t get_overhead_map_width() const { return m_overhead_map_width; }
+			uint8_t get_overhead_map_width() const { 
+				printf("map-width: %d\n",m_overhead_map_width);
+				return m_overhead_map_width;
+			}
 			void set_overhead_map_width(uint8_t w){ m_overhead_map_width = w; }
-			uint8_t get_overhead_map_height() const { return m_overhead_map_height; }
+			uint8_t get_overhead_map_height() const {
+				printf("map-height: %d\n",m_overhead_map_height);
+				return m_overhead_map_height;
+			}
 			void set_overhead_map_height(uint8_t h){ m_overhead_map_height = h; }
 			void equip(obj_data* obj,int pos);
 			void unequip(obj_data* obj,int pos);

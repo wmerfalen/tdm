@@ -88,7 +88,7 @@ enum lense_type_t {
  *
  * NOTE: This will likely be unconditionally unsigned later.
  */
-#define CIRCLE_UNSIGNED_INDEX	0	/* 0 = signed, 1 = unsigned */
+#define CIRCLE_UNSIGNED_INDEX	1	/* 0 = signed, 1 = unsigned */
 
 #if CIRCLE_UNSIGNED_INDEX
 #define IDXTYPE  ush_int

@@ -171,11 +171,6 @@ namespace mods {
 		m_time = ::time(nullptr);
 	}
 
-	player::~player(){
-		if(IN_ROOM(cd()) != NOWHERE){
-			char_from_room(cd());
-		}
-	}
 	player::player(player_type_enum_t type){
 		set_god_mode(false);
 		set_bui_mode(false);
@@ -541,6 +536,9 @@ namespace mods {
 			send_to_char(m_char_data,m);
 		}
 	}
+	void player::stc(std::string_view sview) {
+		send_to_char(m_char_data,sview.data());
+	}
 	void player::stc(const std::string m) {
 		if(m.length()) {
 			if(m_capture_output) {
@@ -578,7 +576,8 @@ namespace mods {
 			}
 		}
 		if(((get_prefs()) & PRF_OVERHEAD_MAP)){
-			stc(mods::overhead_map::generate<mods::player*>(this,room()).data());
+			std::string map_string(mods::overhead_map::generate<mods::player*>(this,room()).data());
+			stc(map_string.c_str());
 		}
 	}
 	obj_data* player::weapon() {

@@ -63,7 +63,6 @@ void read_aliases(struct char_data *ch);
 void delete_aliases(const char *charname);
 
 /* local functions */
-int64_t perform_dupe_check(mods::descriptor_data& d);
 int64_t perform_dupe_check(std::shared_ptr<mods::player>);
 struct alias_data *find_alias(struct alias_data *alias_list, char *str);
 void free_alias(struct alias_data *a);
@@ -1320,122 +1319,23 @@ int _parse_name(char *arg, char *name) {
 /* This function seems a bit over-extended. */
 int64_t perform_dupe_check(std::shared_ptr<mods::player> p){
 	std::string name = p->name();
-	/** No idea why this is here, but it will cause the
-	 * entire program to segfault. 
-	 *
-	 * p->desc().set_state(CON_PLAYING);
-	 *
-	 * If this truly is needed, then there needs to be a check 
-	 * so that the player object's state doesn't get set to CON_PLAYING
-	 * if the user hasn't fully authenticated (gotten past CON_NEEDS_AUTHENTICATION).
-	 * Otherwise, this causes invalid accesses to the player's data which 
-	 * simply isn't there because the user hasn't authenticated.
-	 */
 	int64_t kicked = 0;
 	for(auto& player_ptr : mods::globals::player_list){
-		if(!p->authenticated()){ continue; }
-		if(p->uuid() != player_ptr->uuid() && 
-				name.compare(player_ptr->name().c_str()) == 0 &&
-				(p->time()) > (player_ptr->time())){
-			player_ptr->desc().set_state(CON_CLOSE);
-			++kicked;
+		if(!player_ptr->authenticated()){
+			std::cerr << "player_ptr not authenticated\n"; 
+			continue;
+		}
+		if(p->socket() != player_ptr->socket() && 
+				name.compare(player_ptr->name().c_str()) == 0){
+			if(p->time() > player_ptr->time()){
+				char_from_room(player_ptr);
+				player_ptr->set_state(CON_CLOSE);
+				++kicked;
+			}
 		}
 	}
-	handle_disconnects();
 	return kicked;
 }
-
-int64_t perform_dupe_check(mods::descriptor_data& d) {
-	log("Warning: perform_dupe_check called on the wrong function!");
-	/*
-	 * now, go through the character list, deleting all characters that
-	 * are not already marked for deletion from the above step (i.e., in the
-	 * CON_HANGUP state), and have not already been selected as a target for
-	 * switching into.  In addition, if we haven't already found a target,
-	 * choose one if one is available (while still deleting the other
-	 * duplicates, though theoretically none should be able to exist).
-	 */
-
-	/*
-		 for(ch = character_list; ch; ch = next_ch) {
-		 next_ch = ch->next;
-
-		 if(IS_NPC(ch)) {
-		 continue;
-		 }
-
-		 if(ch->uuid != id) {
-		 continue;
-		 }
-
-	// ignore chars with descriptors (already handled by above step) 
-	if(ch->has_desc) {
-	continue;
-	}
-
-	// don't extract the target char we've found one already 
-	if(ch == target) {
-	continue;
-	}
-
-	// we don't already have a target and found a candidate for switching 
-	if(!target) {
-	target = ch;
-	mode = RECON;
-	continue;
-	}
-
-	// we've found a duplicate - blow him away, dumping his eq in limbo. 
-	if(IN_ROOM(ch) != NOWHERE) {
-	char_from_room(ch);
-	}
-
-	char_to_room(ch, 1);
-	extract_char(ch);
-	}
-
-	// no target for switching into was found - allow login to continue 
-	if(!target) {
-	return (0);
-	}
-
-	// Okay, we've found a target.  Connect d to target. 
-	//free_char(d.character); // get rid of the old char 
-	d.character = target;
-	 *d.character->desc = d;
-	 d.original = NULL;
-	 d.character->char_specials.timer = 0;
-	 REMOVE_BIT(PLR_FLAGS(d.character), PLR_MAILING | PLR_WRITING);
-	 REMOVE_BIT(AFF_FLAGS(d.character), AFF_GROUP);
-	 p->set_state(CON_PLAYING);
-
-	 switch(mode) {
-	 case RECON:
-	 write_to_output(d, "Reconnecting.\r\n");
-	 act("$n has reconnected.", TRUE, d.character, 0, 0, TO_ROOM);
-	 mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d.character)), TRUE, "%s [%s] has reconnected.", GET_NAME(d.character).c_str(), d.host.c_str());
-	 break;
-
-	 case USURP:
-	 write_to_output(d, "You take over your own body, already in use!\r\n");
-	 act("$n suddenly keels over in pain, surrounded by a white aura...\r\n"
-	 "$n's body has been taken over by a new spirit!",
-	 TRUE, d.character, 0, 0, TO_ROOM);
-	 mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d.character)), TRUE,
-	 "%s has re-logged in ... disconnecting old socket.", GET_NAME(d.character).c_str());
-	 break;
-
-	 case UNSWITCH:
-	 write_to_output(d, "Reconnecting to unswitched char.");
-	mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d.character)), TRUE, "%s [%s] has reconnected.", GET_NAME(d.character).c_str(), d.host.c_str());
-	break;
-}
-*/
-
-return (1);
-}
-
-
 
 /* deal with newcomers and other non-playing sockets */
 void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
@@ -1597,8 +1497,6 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 					return;
 				}
 
-				/* check and make sure no other copies of this player are logged in */
-				perform_dupe_check(p);
 
 				if(p->level() >= LVL_IMMORT) {
 					write_to_output(d, "%s", imotd);
@@ -1796,8 +1694,11 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 												 /** !TODO: create an is_immortal() function and call it like this:
 													* if(is_immortal(p)){ ... load player into immortal room .. }
 													*/
-												 //std::cout << "sending welcom message\n";
 												 p->set_authenticated(true);
+
+												 /* check and make sure no other copies of this player are logged in */
+												 perform_dupe_check(p);
+
 												 p->stc("welcome");//WELC_MESSG);
 												 p->set_room(0);
 												 if(world.size() == 0){

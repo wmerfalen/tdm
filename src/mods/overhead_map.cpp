@@ -12,27 +12,34 @@ namespace mods::overhead_map {
 	//	return mods::overhead_map::generate<mods::player>(*out,room_number);
 	//}
 	template <>
-		std::string_view generate(mods::player* out,const room_rnum& room_number){
+		std::string generate(mods::player* out,const room_rnum& room_number){
+			uint8_t player_width = out->get_overhead_map_width(), player_height = out->get_overhead_map_height();
+			if(width == 0 || height == 0){
+				player_width = mods::overhead_map::width;
+				player_height = mods::overhead_map::height;
+			}
+			printf("width: %d, height: %d\n",player_width,player_height);
+			
 			std::string horizontal_border = std::string("+") + 
-				std::string(out->get_overhead_map_width(),'=') + "+\r\n";
+				std::string(player_width,'=') + "+\r\n";
 			std::vector<std::vector<std::string>> map_coordinates;
-			map_coordinates.resize(out->get_overhead_map_height());
+			map_coordinates.resize(player_height);
 			for(auto & row : map_coordinates){
-				row.resize(out->get_overhead_map_width());
+				row.resize(player_width);
 				std::fill(row.begin(),row.end(),"   ");
 			}
-			uint8_t middle_x = out->get_overhead_map_width() / 2;
-			uint8_t middle_y = out->get_overhead_map_height() / 2;
+			uint8_t middle_x = player_width / 2;
+			uint8_t middle_y = player_height / 2;
 			map_coordinates[middle_y][middle_x] = "[x]";
 			for(auto direction : {NORTH,EAST,SOUTH,WEST}){
 				if(world[out->room()].dir_option[direction] == nullptr){ continue; }
 				crawl_lambda(map_coordinates,map_coordinates,direction,
 						middle_x,middle_y,
-						out->get_overhead_map_width(),out->get_overhead_map_height(),
+						player_width,player_height,
 						out->room());
 			}
 
-			std::string overhead_map;
+			std::string overhead_map = "";
 			for(auto & row : map_coordinates){
 				overhead_map += "===";
 				for(auto & column : row){
@@ -272,7 +279,7 @@ namespace mods::overhead_map {
 		}
 	}
 	template <>
-		std::string_view generate(std::shared_ptr<mods::player> out,const room_rnum& room_number){
+		std::string generate(std::shared_ptr<mods::player> out,const room_rnum& room_number){
 			return generate(out.get(),room_number);
 		}
 };

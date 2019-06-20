@@ -128,42 +128,26 @@ epoll_event epoll_ev;
 void logstrerror(std::string_view prefix,int _errno){
 	log(mods::string(prefix.data()) + strerror(_errno));
 }
-int64_t destroy_socket(socket_t & sock_fd){
-	/** It's completely normal to specify nullptr as the last parameter
-	 * since we are specifying EPOLL_CTL_DEL. In other words, we are 
-	 * not using epoll_ctl as a way to register a socket to be watched.
-	 */
-	auto r = epoll_ctl (epoll_fd, EPOLL_CTL_DEL, sock_fd, nullptr);
-	close(sock_fd);
-	if(r == -1){
-		logstrerror("SYSERR: destroy_socket::epoll_ctl[error]->'", errno);
-		return -1;
-	}
-	return 0;
-}
-std::size_t handle_disconnects(){
-		/* Kick out folks in the CON_CLOSE or CON_DISCONNECT state */
-		std::vector<typename mods::globals::player_list_t::iterator> players_to_destroy;
-		for(auto it = mods::globals::player_list.begin(); 
-				it != mods::globals::player_list.end(); ++it ) {
-			auto desc = (*it)->desc();
-			if(STATE(desc) == CON_CLOSE || STATE(desc) == CON_DISCONNECT) {
-				d("found one descriptor with CON_CLOSE || CON_DISCONNECT");
-				players_to_destroy.push_back(it);
-			}
-		}
 
-		for(auto player_iterator : players_to_destroy){
-			auto socket_iterator = mods::globals::socket_map.find((*player_iterator)->desc().descriptor);
-			if(socket_iterator != mods::globals::socket_map.end()){
-				CLOSE_SOCKET((*player_iterator)->desc().descriptor);
-				mods::globals::socket_map.erase(socket_iterator);
-			}
-			mods::globals::player_list.erase(player_iterator);
+int destroy_player(std::shared_ptr<mods::player> player);
+std::size_t handle_disconnects(){
+	/* Kick out folks in the CON_CLOSE or CON_DISCONNECT state */
+	std::vector<typename mods::globals::player_list_t::iterator> players_to_destroy;
+	for(auto it = mods::globals::player_list.begin(); 
+			it != mods::globals::player_list.end(); ++it ) {
+		auto desc = (*it)->desc();
+		if(STATE(desc) == CON_CLOSE || STATE(desc) == CON_DISCONNECT) {
+			d("found one descriptor with CON_CLOSE || CON_DISCONNECT");
+			players_to_destroy.push_back(it);
 		}
-		auto ret = players_to_destroy.size();
-		players_to_destroy.clear();
-		return ret;
+	}
+
+	for(auto player_iterator : players_to_destroy){
+		destroy_player(*player_iterator);
+	}
+	auto ret = players_to_destroy.size();
+	players_to_destroy.clear();
+	return ret;
 }
 
 
@@ -267,13 +251,13 @@ int main(int argc, char **argv) {
 				/* From: Anil Mahajan <amahajan@proxicom.com> */
 				std::cerr << "Usage: " << argv[0] << " [-c] [-m] [-q] [-r] [-s] [-d pathname] [port #]\n"
 					/** TODO: when we know that we need these cmdline opts, un-comment. For now, they are not supported - 2019-03-08 */
-						"  --sql-port     Run the 'postgres to lmdb' port command.\n"
-						"  --testing=<N>  Run the test suite labeled N.\n"
-						"  --lmdb-dir=N   Save lmdb to the directory at N.\n"
-						"  --lmdb-name=N  Name the lmdb database N.\n"
-						"  --hell         Minimalist mode. Useful for testing.\n"
-						"  --import-rooms Import rooms\n"
-				;
+					"  --sql-port     Run the 'postgres to lmdb' port command.\n"
+					"  --testing=<N>  Run the test suite labeled N.\n"
+					"  --lmdb-dir=N   Save lmdb to the directory at N.\n"
+					"  --lmdb-name=N  Name the lmdb database N.\n"
+					"  --hell         Minimalist mode. Useful for testing.\n"
+					"  --import-rooms Import rooms\n"
+					;
 				exit(0);
 			default:
 				std::cerr << "SYSERR: Unknown option -" << *(argv[pos]+1) << " in argument string.\n";
@@ -600,7 +584,7 @@ void game_loop(socket_t mother_desc) {
 	int epoll_ctl_r = epoll_ctl (epoll_fd, EPOLL_CTL_ADD, mother_desc, &epoll_ev);
 	if (epoll_ctl_r == -1) {
 		logstrerror("SYSERR: [epoll] epoll_ctl failed: ", errno);
-					/** !fixme: do proper shutdown here */
+		/** !fixme: do proper shutdown here */
 		close (epoll_fd);
 		close (mother_desc);
 		return;
@@ -653,29 +637,26 @@ void game_loop(socket_t mother_desc) {
 
 			if(process_input(player->desc()) < 0){
 				log("process_input failed for player %s",player->name().c_str()); 
-				mods::globals::socket_map.erase(it);
-				mods::globals::current_player.reset();
-				deregister_player(player);
+				destroy_player(player);
 				++i;
 				continue;
 			}
-			{
-				if(!get_from_q(&player->desc().input, comm, &aliased)) {
-					++i;
-					continue;
-				}
-				// Reset the idle timer & pull char back from void if necessary 
-				player->cd()->char_specials.timer = 0;
-				if(player->state() == CON_PLAYING && GET_WAS_IN(player->cd()) != NOWHERE) {
-					if(player->room() != NOWHERE) {
-						char_from_room(player);
-					}
-					char_to_room(player, GET_WAS_IN(player));
-					GET_WAS_IN(player) = NOWHERE;
-					act("$n has returned.", TRUE, player->cd(), 0, 0, TO_ROOM);
-				}
-				GET_WAIT_STATE(player->cd()) = 1;
+			aliased = 0;
+			if(!get_from_q(&player->desc().input, comm, &aliased)) {
+				++i;
+				continue;
 			}
+			// Reset the idle timer & pull char back from void if necessary 
+			player->cd()->char_specials.timer = 0;
+			if(player->state() == CON_PLAYING && GET_WAS_IN(player->cd()) != NOWHERE) {
+				if(player->room() != NOWHERE) {
+					char_from_room(player);
+				}
+				char_to_room(player, GET_WAS_IN(player));
+				GET_WAS_IN(player) = NOWHERE;
+				act("$n has returned.", TRUE, player->cd(), 0, 0, TO_ROOM);
+			}
+			GET_WAIT_STATE(player->cd()) = 1;
 			player->desc().has_prompt = false;
 			if(player->state() != CON_PLAYING) { // In menus, etc. 
 				nanny(player, comm);
@@ -731,6 +712,7 @@ void game_loop(socket_t mother_desc) {
 		for(auto & p : mods::globals::player_list) {
 			if(p->desc().has_output) {
 				p->desc().flush_output();
+				p->desc().has_output = false;
 			}
 		}
 
@@ -1087,7 +1069,7 @@ size_t _old_unused_vwrite_to_output_unused_(mods::descriptor_data &t, const char
 	wantsize = size = vsnprintf(&txt[0], MAX_STRING_LENGTH-1, format, args);
 
 	/* If exceeding the size of the buffer, truncate it for the overflow message */
-	
+
 	if(size < 0 || wantsize >= MAX_STRING_LENGTH -1) {
 		size = MAX_STRING_LENGTH - 1;
 		strcpy(&txt[0] + size - strlen(text_overflow), text_overflow);	/* strcpy: OK */
@@ -1222,6 +1204,30 @@ int set_sendbuf(socket_t s) {
 	return (0);
 }
 
+void destroy_socket(socket_t sock_fd){
+	auto r = epoll_ctl (epoll_fd, EPOLL_CTL_DEL, sock_fd, nullptr);
+	close(sock_fd);
+	if(r == -1){
+		logstrerror("SYSERR: destroy_player::epoll_ctl[error]->'", errno);
+	}
+}
+
+int destroy_player(std::shared_ptr<mods::player> player){
+	char_from_room(player);
+	auto pl_iterator = std::find(mods::globals::player_list.begin(),
+			mods::globals::player_list.end(),
+			player);
+	destroy_socket(player->socket());
+	mods::globals::socket_map.erase(player->socket());
+	if(pl_iterator == mods::globals::player_list.end()){
+		log("SYSERR: WARNING! destroy_player cannot find player pointer in player_list!");
+	}else{
+		pl_iterator->reset();
+		mods::globals::player_list.erase(pl_iterator);
+	}
+
+	return 0;
+}
 
 int new_descriptor(socket_t s) {
 	socket_t desc;
@@ -1308,8 +1314,8 @@ int new_descriptor(socket_t s) {
 		mods::globals::socket_map.insert (
 				std::pair<int,mods::globals::player_ptr_t>(
 					desc,player
-				)
-		);
+					)
+				);
 		return (desc);
 	}
 }
@@ -1550,7 +1556,7 @@ int process_input(mods::descriptor_data & t) {
 			if(ISNEWL(*ptr)) {
 				nl_pos = ptr;
 			}
-			
+
 
 		read_point += bytes_read;
 		space_left -= bytes_read;
@@ -2248,7 +2254,7 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 	*(++buf) = '\0';
 
 	d("write to output from perform_act: " << CAP(lbuf));
-	write_to_output(*to->desc, "%s", CAP(lbuf));
+	to->desc->queue_output(CAP(lbuf));
 }
 
 

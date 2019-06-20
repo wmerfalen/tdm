@@ -401,8 +401,9 @@ void gain_condition(struct char_data *ch, int condition, int value) {
 
 
 void check_idling(std::shared_ptr<mods::player> player) {
+	std::cerr << "NOWHERE: " << NOWHERE << "\n";
 	auto ch = player->cd();
-	if(++(ch->char_specials.timer) > idle_void) {
+	if(++(player->char_specials().timer) > idle_void) {
 		if(GET_WAS_IN(ch) == NOWHERE && IN_ROOM(ch) != NOWHERE) {
 			GET_WAS_IN(ch) = IN_ROOM(ch);
 
@@ -416,7 +417,6 @@ void check_idling(std::shared_ptr<mods::player> player) {
 				act("$n disappears into the void.", TRUE, ch, 0, 0, TO_ROOM);
 				player->stc("You have been idle, and are pulled into a void.\r\n");
 				mods::db::save_char(player);
-				Crash_crashsave(ch);
 				char_from_room(ch);
 				char_to_room(ch, config::rooms::real_idle());
 			}

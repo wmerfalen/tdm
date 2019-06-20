@@ -505,8 +505,9 @@ void list_one_char(struct char_data *i, struct char_data *ch) {
 
 void list_char_to_char(char_data *ch) {
 	for(auto & player_ptr : mods::globals::room_list[IN_ROOM(ch)]){
+		std::cerr << "[debug]: list_char_to_char: " << player_ptr->name().c_str() << "\n";
 		auto i = player_ptr->cd();
-		if(ch != i) {
+		if(player_ptr->name().compare(ch->player.name.c_str()) != 0) {
 			if(CAN_SEE(ch, i)) {
 				list_one_char(i, ch);
 			} else if(IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch) &&
@@ -615,7 +616,7 @@ void look_at_room(struct char_data *ch, int ignore_brief) {
 
 	if((!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_BRIEF)) || ignore_brief ||
 	        ROOM_FLAGGED(IN_ROOM(ch), ROOM_DEATH)) {
-		player->stc_room_desc(IN_ROOM(ch));
+		player->stc_room_desc(player->room());
 	}
 
 	/* autoexits */

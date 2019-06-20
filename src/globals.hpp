@@ -28,8 +28,7 @@
 #include <pqxx/pqxx>
 #include <unordered_map>
 
-//#define MENTOC_PREAMBLE() auto player = mods::globals::socket_map[ch->desc->descriptor]; player->set_cd(ch);
-#define MENTOC_PREAMBLE() auto player = IS_NPC(ch) ? std::make_shared<mods::player>(ch) : mods::globals::socket_map[ch->desc->descriptor]; player->set_cd(ch);
+#define MENTOC_PREAMBLE() auto player = IS_NPC(ch) ? std::make_shared<mods::player>(ch) : mods::globals::socket_map[ch->desc->descriptor];
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
 #define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \
 strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(a,"down") == 0)

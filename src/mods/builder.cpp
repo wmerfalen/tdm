@@ -256,7 +256,7 @@ namespace mods::builder {
 	int8_t sandbox_data_t::new_sandbox(
 			std::shared_ptr<mods::player> player,
 			std::string_view name,
-			int starting_room_number){
+			room_vnum starting_room_number){
 		m_player = player;
 		m_builder_data = std::make_shared<builder_data_t>();
 		m_name = name;
