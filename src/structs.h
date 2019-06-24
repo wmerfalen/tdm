@@ -499,6 +499,15 @@ enum lense_type_t {
 #define RENT_TIMEDOUT   5
 
 
+/** New enum 2019-06 */
+enum player_level {
+	LVL_MORTAL = 0,
+	LVL_IMMORT = 31,
+	LVL_GOD = 32,
+	LVL_GRGOD = 33,
+	LVL_BUILDER = 34,
+	LVL_IMPL = 35
+};
 	/* other #defined constants **********************************************/
 
 	/*
@@ -511,10 +520,12 @@ enum lense_type_t {
 	 * LVL_IMMORT should always be the LOWEST immortal level.  The number of
 	 * mortal levels will always be LVL_IMMORT - 1.
 	 */
-#define LVL_IMPL	34
+#define LVL_IMPL	35
+#define LVL_BUILDER 34
 #define LVL_GRGOD	33
 #define LVL_GOD		32
 #define LVL_IMMORT	31
+#define LVL_MORTAL 0
 
 	/* Level of the 'freeze' command */
 #define LVL_FREEZE	LVL_GRGOD

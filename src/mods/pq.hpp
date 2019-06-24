@@ -32,6 +32,8 @@ namespace mods::pq {
 namespace mods::globals {
 		extern std::unique_ptr<pqxx::connection> pq_con;
 };
-inline mods::pq::transaction txn() { return mods::pq::transaction(*mods::globals::pq_con); }
+inline mods::pq::transaction txn() { 
+	return mods::pq::transaction(*mods::globals::pq_con);
+}
 
 #endif

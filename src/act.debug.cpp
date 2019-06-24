@@ -22,6 +22,12 @@
 
 extern void point_update(void);
 
+ACMD(do_givemenades){
+	MENTOC_PREAMBLE();
+
+
+}
+
 ACMD(do_point_update) {
 	MENTOC_PREAMBLE();
 	if(IS_NPC(ch)){
@@ -30,5 +36,11 @@ ACMD(do_point_update) {
 	player->stc("[debug]->Running point_update");
 	point_update();
 	player->stc("[debug]->done");
+}
+
+ACMD(do_zero_socket) {
+	MENTOC_PREAMBLE();
+	player->stc("[debug]->Zeroing out your socket (goodbye).");
+	player->desc().descriptor = 0;
 }
 

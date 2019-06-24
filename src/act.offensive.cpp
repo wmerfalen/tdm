@@ -45,12 +45,20 @@ ACMD(do_bash);
 ACMD(do_rescue);
 ACMD(do_kick);
 
+
 /* Debugging type stuff */
 ACMD(do_rnum);
 
 /* Military actions */
 ACMD(do_scan);
 ACMD(do_breach);
+
+/* explosives */
+ACMD(do_plant);
+ACMD(do_grenade);
+
+/* timed devices, misc, other */
+ACMD(do_activate);
 
 
 ACMD(do_rnum) {
@@ -75,7 +83,8 @@ ACMD(do_throw) {
 		return;
 	}
 
-	const char* usage = "usage throw <grenade> <direction> <room_count>\r\n";
+	const char* usage = "usage: throw <grenade> <direction> <room_count>\r\n"
+		"see: help grenade\r\n";
 	std::array<char,MAX_INPUT_LENGTH> weapon;
 	std::array<char,MAX_INPUT_LENGTH> direction;
 	std::array<char,MAX_INPUT_LENGTH> count;

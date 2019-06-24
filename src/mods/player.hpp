@@ -38,11 +38,13 @@ namespace mods {
 		enum mask_type { SMG = 1, SNIPE = (1 << 2), SHOTGUN = (1 << 3), 
 			GRENADE = (1 << 4), ASSAULT_RIFLE = (1 << 5), PISTOL = (1 << 6),
 			MACHINE_PISTOL = (1 << 7), ENERGY = (1 << 8), FUMES = (1 << 9),
-			FLAME = (1 << 10)
+			FLAME = (1 << 10), CLAYMORE = (1 << 11), REMOTE_EXPLOSIVE = (1 << 12),
+			ATTACK_DRONE = (1 << 13)
 		};
 	};
 	struct player {
 		public:
+			using 	access_level_t = player_level;
 			using   class_type = mods::classes::types;
 			using 	descriptor_data_t = std::deque<descriptor_data>;
 			using 	descriptor_data_iterator_t = descriptor_data_t::iterator;

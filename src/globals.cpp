@@ -48,6 +48,7 @@ namespace mods {
 		std::unique_ptr<mods::deferred> defer_queue;
 		duk_context* duktape_context;
 		ai_state_map states;
+		std::map<const char*,player_ptr_t> player_name_map;
 		//std::vector<std::vector<char_data*>> room_list; /**!TODO turn this into std::shared_ptr<...> */
 		room_list_t room_list;
 		player_list_t player_list;
@@ -318,6 +319,7 @@ namespace mods {
 				//}
 				mods::globals::shutdown();
 			}
+			bool connected_to_postgres = false;
 			try{
 				std::string connection_string = mods::conf::pq_connection(
 							{{"port",postgres_port},
@@ -328,11 +330,17 @@ namespace mods {
 						).c_str();
 				//std::cerr << "postgres connection string: '" << connection_string << "'\n";
 				pq_con = std::make_unique<pqxx::connection>(connection_string.c_str());
+				connected_to_postgres = true;
 			}catch(const std::exception &e){
-				log("SYSERR: Couldn't connect to the postgres database. Exception: '",e.what(),"'. Is it running?");
 				mods::globals::shutdown();
 			}
-			std::cout << "[success] connected to postgres :)\n";
+			if(connected_to_postgres){
+				log("[postgres] connected :)");
+			}else{
+				log("SYSERR: Couldn't connect to postgres");
+				mods::globals::shutdown();
+				return;
+			}
 			config::init(argc,argv);
 			mods::debug::init(show_tics);
 		}

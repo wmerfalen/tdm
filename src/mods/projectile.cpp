@@ -16,7 +16,6 @@ namespace mods {
 				}
 
 				previous = room_id;
-				send_to_char(source_char,"%s",std::to_string(room_id).c_str());
 				mods::globals::room_event(room_id,mods::ai_state::GRENADE_FLIES_BY);
 			}
 
@@ -24,7 +23,7 @@ namespace mods {
 		}
 
 		room_rnum resolve_room(room_rnum source_room,int direction,int depth) {
-			auto room_dir = world[source_room].dir_option[direction];//EXIT(ch,i_d);
+			auto room_dir = world[source_room].dir_option[direction];
 			room_rnum room_id = 0;
 
 			for(auto recursive_depth = depth; recursive_depth > -1; --recursive_depth) {

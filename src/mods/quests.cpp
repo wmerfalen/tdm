@@ -1,4 +1,5 @@
 #include "quests.hpp"
+#include "pfind.hpp"
 #define dbg_print(a) { /*std::cerr << a << "\n";*/ }
 //#define MAX_QUEST_TRIGGERS 32
 #define Q_FORMAT "quest:{room_id}:{N}"
@@ -18,20 +19,14 @@ namespace mods {
 			std::string quest_major = duk_to_string(ctx,1);
 			std::string quest_minor = duk_to_string(ctx,2);
 
-			for(auto ch = character_list; ch->next; ch = ch->next) {
-				MENTOC_PREAMBLE();
-
-				if(pname.compare(ch->player.name) == 0) {
-					auto i_quest_major = mods::util::stoi(quest_major);
-
-					if(i_quest_major.has_value()) {
-						leave_quest(ch,i_quest_major.value());
-					}
-
-					return 0;
-				}
+			auto player = mods::pfind::by_name(pname.c_str());
+			if(player == mods::globals::player_nobody){
+				return 0;
 			}
-
+			auto i_quest_major = mods::util::stoi(quest_major);
+			if(i_quest_major.has_value()) {
+				leave_quest(player->cd(),i_quest_major.value());
+			}
 			return 0;
 		}
 		static duk_ret_t quest_complete(duk_context *ctx) {
@@ -39,41 +34,29 @@ namespace mods {
 			std::string quest_major = duk_to_string(ctx,1);
 			std::string quest_minor = duk_to_string(ctx,2);
 
-			for(auto ch = character_list; ch->next; ch = ch->next) {
-				MENTOC_PREAMBLE();
-
-				if(pname.compare(ch->player.name) == 0) {
-					auto i_quest_major = mods::util::stoi(quest_major);
-
-					if(i_quest_major.has_value()) {
-						leave_quest(ch,i_quest_major.value());
-						award_quest(ch,i_quest_major.value());
-					}
-
-					return 0;
-				}
+			auto player = mods::pfind::by_name(pname.c_str());
+			if(player == mods::globals::player_nobody){
+				return 0;
 			}
-
+			auto i_quest_major = mods::util::stoi(quest_major);
+			if(i_quest_major.has_value()) {
+				leave_quest(player->cd(),i_quest_major.value());
+				award_quest(player->cd(),i_quest_major.value());
+			}
 			return 0;
 		}
 		static duk_ret_t list_quests(duk_context *ctx) {
 			std::string pname = duk_to_string(ctx,0);
 
-			for(auto ch = character_list; ch->next; ch = ch->next) {
-				MENTOC_PREAMBLE();
-
-				if(pname.compare(ch->player.name) == 0) {
-					auto quests = list_quests(IN_ROOM(ch));
-
-					for(auto qname : quests) {
-						dbg_print(qname);
-						*player << "{grn}[ QUEST ]{/grn} " << qname << "\r\n";
-					}
-
-					return 0;
-				}
+			auto player = mods::pfind::by_name(pname.c_str());
+			if(player == mods::globals::player_nobody){
+				return 0;
 			}
-
+			auto quests = list_quests(player->room());
+			for(auto qname : quests) {
+				dbg_print(qname);
+				*player << "{grn}[ QUEST ]{/grn} " << qname << "\r\n";
+			}
 			return 0;
 		}
 		void load_c_functions(duk_context *ctx) {
@@ -147,27 +130,27 @@ namespace mods {
 			return mods::globals::replace_all(m,"{N}",std::to_string(n_index));
 		}
 
-//		std::string trigger_index_key(char_data *ch){
-//			return mods::globals::replace_all(Q_PLAYER_TRIGGER_INDEX_KEY,"{player_name}",ch->player.name);
-//		}
-//
-//		std::string trigger_value(const std::string & type, const std::string & value){
-//			auto m = mods::globals::replace_all(Q_PLAYER_TRIGGER_VALUE,"{type}",type);
-//			return mods::globals::replace_all(m,"{N}",value);
-//		}
-//
-//		std::string trigger_code_key(room_rnum room,int n_index,int t_index){
-//			auto m = mods::globals::replace_all(Q_TRIGGER_CODE_KEY,"{room_id}",std::to_string(room));
-//			m = mods::globals::replace_all(m,"{N}",std::to_string(n_index));
-//			return mods::globals::replace_all(m,"{T}",std::to_string(t_index));
-//		}
-//
-//		std::string trigger_code_path(room_rnum room,int n_index,int t_index){
-//			auto m = mods::globals::replace_all("../../lib/quests/{room_id}:{N}:{T}.js","{room_id}",std::to_string(room));
-//			m = mods::globals::replace_all(m,"{N}",std::to_string(n_index));
-//			return mods::globals::replace_all(m,"{T}",std::to_string(t_index));
-//		}
-//
+		//		std::string trigger_index_key(char_data *ch){
+		//			return mods::globals::replace_all(Q_PLAYER_TRIGGER_INDEX_KEY,"{player_name}",ch->player.name);
+		//		}
+		//
+		//		std::string trigger_value(const std::string & type, const std::string & value){
+		//			auto m = mods::globals::replace_all(Q_PLAYER_TRIGGER_VALUE,"{type}",type);
+		//			return mods::globals::replace_all(m,"{N}",value);
+		//		}
+		//
+		//		std::string trigger_code_key(room_rnum room,int n_index,int t_index){
+		//			auto m = mods::globals::replace_all(Q_TRIGGER_CODE_KEY,"{room_id}",std::to_string(room));
+		//			m = mods::globals::replace_all(m,"{N}",std::to_string(n_index));
+		//			return mods::globals::replace_all(m,"{T}",std::to_string(t_index));
+		//		}
+		//
+		//		std::string trigger_code_path(room_rnum room,int n_index,int t_index){
+		//			auto m = mods::globals::replace_all("../../lib/quests/{room_id}:{N}:{T}.js","{room_id}",std::to_string(room));
+		//			m = mods::globals::replace_all(m,"{N}",std::to_string(n_index));
+		//			return mods::globals::replace_all(m,"{T}",std::to_string(t_index));
+		//		}
+		//
 		std::string current_quest(char_data *ch) {
 			std::string current_quest_id = "";
 			/** TODO: this needs to be a fast structure in RAM that we check. 
@@ -183,34 +166,34 @@ namespace mods {
 			return current_quest(ch).length() > 0;
 		}
 
-//		void load_quest_code(char_data* ch,room_rnum room,int quest_id){
-//			/* load code from file into Q_TRIGGER_CODE_KEY if not already loaded */
-//			std::string value;
-//			std::string code_key;
-//
-//			if(value.length() == 0){
-//				/* open up the quest file at pwd/../../lib/quests/{room_id}:{N}:{T}.js */
-//				int ctr=0;
-//				while(ctr < MAX_QUEST_TRIGGERS){
-//					/* If a quest trigger file doesn't exist, it's not the end of the world. But if there were
-//					 * zero trigger files loaded then that should atleast be reported
-//					 */
-//					if(mods::globals::file_to_lmdb(trigger_code_path,trigger_code_key(room,quest_id,ctr)) < 0){
-//						break;
-//					}else{
-//						/* set Q_PLAYER_TRIGGER_KEY to key:{Q_TRIGGER_CODE_KEY} */
-//						DBSET(trigger_key(ch,room,quest_id),std::string("key:")+trigger_code_key(room,quest_id,ctr));
-//					}
-//					ctr++;
-//				}
-//				if(ctr == 0){
-//					//TODO: report error (no mud triggers loaded)
-//				}
-//			}
-//			/* set Q_PLAY_TRIGGER_INDEX_KEY to zero */
-//			DBSET(trigger_index_key(ch),"0");
-//			/* run first trigger */
-//		}
+		//		void load_quest_code(char_data* ch,room_rnum room,int quest_id){
+		//			/* load code from file into Q_TRIGGER_CODE_KEY if not already loaded */
+		//			std::string value;
+		//			std::string code_key;
+		//
+		//			if(value.length() == 0){
+		//				/* open up the quest file at pwd/../../lib/quests/{room_id}:{N}:{T}.js */
+		//				int ctr=0;
+		//				while(ctr < MAX_QUEST_TRIGGERS){
+		//					/* If a quest trigger file doesn't exist, it's not the end of the world. But if there were
+		//					 * zero trigger files loaded then that should atleast be reported
+		//					 */
+		//					if(mods::globals::file_to_lmdb(trigger_code_path,trigger_code_key(room,quest_id,ctr)) < 0){
+		//						break;
+		//					}else{
+		//						/* set Q_PLAYER_TRIGGER_KEY to key:{Q_TRIGGER_CODE_KEY} */
+		//						DBSET(trigger_key(ch,room,quest_id),std::string("key:")+trigger_code_key(room,quest_id,ctr));
+		//					}
+		//					ctr++;
+		//				}
+		//				if(ctr == 0){
+		//					//TODO: report error (no mud triggers loaded)
+		//				}
+		//			}
+		//			/* set Q_PLAY_TRIGGER_INDEX_KEY to zero */
+		//			DBSET(trigger_index_key(ch),"0");
+		//			/* run first trigger */
+		//		}
 
 		void load_quest_code(char_data* ch) {
 			char temp[MAXPATHLEN];

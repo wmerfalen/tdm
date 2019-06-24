@@ -122,7 +122,6 @@ namespace mods::scan {
 			auto in_room = IN_ROOM(ch);
 
 			if(in_room == NOWHERE || in_room < 0) {
-				std::cerr << "los_scan_foreach: in_room failure: " << in_room << "- continuing\n";
 				continue;
 			}
 
@@ -145,7 +144,6 @@ namespace mods::scan {
 						if(EXIT_FLAGGED(room_dir, EX_CLOSED)
 								||
 								EXIT_FLAGGED(room_dir,EX_REINFORCED)) {
-							std::cerr << "los_scan_foreach::EXIT_FLAGGED closed|reinforced\n";
 							break;
 						}
 
@@ -153,7 +151,6 @@ namespace mods::scan {
 						vec_player_data list;
 
 						if(room_id == -1 || static_cast<std::size_t>(room_id) > mods::globals::room_list.size()) {
-							std::cerr << "requested room_id: " << room_id << " but room_list.size() is " << mods::globals::room_list.size() << "\n";
 							continue;
 						}
 
@@ -168,7 +165,6 @@ namespace mods::scan {
 						 * If the lambda returns false, that means it wants to stop looping
 						 */
 						if(!lambda_cb(room_id,i_d,list)){
-							std::cerr << "los_scan_foreach::lambda_cb!\n";
 							return;
 						}
 						/*
@@ -182,14 +178,12 @@ namespace mods::scan {
 				room_dir = world[next_room].dir_option[i_d];
 
 				if(!room_dir) {
-					std::cerr << "los_scan_foreach::room_dir == nullptr\n";
 					break;
 				}
 
 				next_room = room_dir->to_room;
 
 				if(next_room == NOWHERE) {
-					std::cerr << "los_scan_foreach::next_room == NOWHERE\n";
 					break;
 				}
 

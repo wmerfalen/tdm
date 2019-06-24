@@ -76,6 +76,26 @@ ACMD(do_room_list){
 		player->stc(p->name());
 	}
 }
+ACMD(do_builder_help){
+	MENTOC_PREAMBLE();
+	if(IS_NPC(ch)){
+		/** nice try */
+		return;
+	}
+	if(player->implementor_mode() || player->builder_mode()){
+		for(auto & cmd : {
+			"js", "givemegold", "idle", "heal", "newjs", "jstest", "mbuild",
+			"obuild", "sbuild", "zbuild", "chanmgr", "rnumtele", "rnumlist",
+			"pref", "rbuild", "rbuild_sandbox", "room_list", "drone",
+			"throw", "ammo", "point_update"
+	 	}){
+			player->stc(cmd);
+		}
+	}else{
+		player->stc("Huh?!?");
+		return;
+	}
+}
 
 /* prototypes for all do_x functions. */
 ACMD(do_action);
@@ -171,6 +191,7 @@ ACMD(do_sleep);
 ACMD(do_sneak);
 ACMD(do_recall);
 ACMD(do_givemegold);
+ACMD(do_givemenades);
 ACMD(do_snipe);
 ACMD(do_heal);
 ACMD(do_newjs);
@@ -193,6 +214,7 @@ ACMD(do_ammo);
 
 /** debug mods */
 ACMD(do_point_update);
+ACMD(do_zero_socket);
 /** -- end debug mods */
 ACMD(do_snoop);
 ACMD(do_spec_comm);
@@ -508,18 +530,58 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "snicker"  , POS_RESTING , do_action   , 0, 0 },
 	/** mods */
 	{ "js"  , POS_RESTING , do_js   , 0, 0 },
-	{ "quest"  , POS_RESTING , do_quest   , 0, 0 },
-	{ "recall"  , POS_RESTING , do_recall   , 0, 0 },
+	/** ------------------- */
+	/** DEBUGGING + TESTING */
+	/** ------------------- */
 	{ "givemegold"  , POS_RESTING , do_givemegold   , 0, 0 },
-	{ "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
-	{ "automap"  , POS_RESTING , do_gen_tog   , 0, SCMD_AUTOMAP },
-	/** !NOTE: this is for simulating the 'pulled into a void' 
-	 * behaviour. It's useful for testing.
-	 */
+	{ "givemenades" , POS_RESTING , do_givemenades , 0, 0 },
 	{ "idle"  , POS_RESTING , do_idle   , 0, 0 },
 	{ "heal"  , POS_RESTING , do_heal   , 0, 0 },
 	{ "newjs"  , POS_RESTING , do_newjs   , LVL_GOD, 0 },
 	{ "jstest"  , POS_RESTING , do_jstest   , LVL_GOD, 0 },
+	{ "point_update"  , POS_RESTING , do_point_update   , 0, 0 },
+	{ "zero_socket"  , POS_RESTING , do_zero_socket  , 0, 0 },
+	/** ----------------------- */
+	/** END DEBUGGING + TESTING */
+	/** ----------------------- */
+
+	/** ------------- */
+	/** INFORMATIONAL */
+	/** ------------- */
+		/** ------ */
+		/** QUESTS */
+		/** ------ */
+	{ "quest"  , POS_RESTING , do_quest   , 0, 0 },
+		/** ------- */
+		/** DISPLAY */
+		/** ------- */
+	{ "automap"  , POS_RESTING , do_gen_tog   , 0, SCMD_AUTOMAP },
+	/** ----------------- */
+	/** END INFORMATIONAL */
+	/** ----------------- */
+
+	/** -------- */
+	/** MOVEMENT */
+	/** -------- */
+	{ "recall"  , POS_RESTING , do_recall   , 0, 0 },
+
+	/** ---------------- */
+	/** COMBAT MECHANICS */
+	/** ---------------- */
+	{ "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
+	//TODO code me{ "plant" , POS_RESTING , do_plant , 0, 0},
+	//TODO code me { "activate" , POS_RESTING , do_activate , 0, 0},
+	{ "drone"  , POS_RESTING , do_drone   , 0, 0 },
+	{ "throw"  , POS_RESTING , do_throw   , 0, 0 },
+	{ "ammo"  , POS_RESTING , do_ammo   , 0, 0 },
+	/** --------------------- */
+	/** END COMBAT MECHANICS  */
+	/** --------------------- */
+
+	/** ------------- */
+	/** BUILDER UTILS */
+	/** ------------- */
+	{ "builder_help"  , POS_RESTING , do_builder_help   , LVL_GOD, 0 },
 	{ "mbuild"  , POS_RESTING , do_mbuild   , LVL_GOD, 0 },
 	{ "obuild"  , POS_RESTING , do_obuild   , LVL_GOD, 0 },
 	{ "sbuild"  , POS_RESTING , do_sbuild   , LVL_GOD, 0 },
@@ -531,13 +593,10 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "rbuild"  , POS_RESTING , do_rbuild   , LVL_IMMORT, 0 },
 	{ "rbuild_sandbox"  , POS_RESTING , do_rbuild_sandbox   , LVL_IMMORT, 0 },
 	{ "room_list"  , POS_RESTING , do_room_list   , LVL_IMMORT, 0 },
-	{ "drone"  , POS_RESTING , do_drone   , 0, 0 },
-	{ "throw"  , POS_RESTING , do_throw   , 0, 0 },
-	{ "ammo"  , POS_RESTING , do_ammo   , 0, 0 },
-	/** debug mods */
-	{ "point_update"  , POS_RESTING , do_point_update   , 0, 0 },
-	/** -- end debug mods */
-	/** -- end mods */
+	/** ----------------- */
+	/** END BUILDER UTILS */
+	/** ----------------- */
+
 	{ "snap"     , POS_RESTING , do_action   , 0, 0 },
 	{ "snarl"    , POS_RESTING , do_action   , 0, 0 },
 	{ "sneeze"   , POS_RESTING , do_action   , 0, 0 },

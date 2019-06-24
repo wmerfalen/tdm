@@ -280,8 +280,8 @@ room_data::~room_data() {
 		}
 		size_t mods::descriptor_data::flush_output(){
 			std::size_t result; 
-			std::cerr << "output: " << output << "\n";
 			switch(m_queue_behaviour){
+				default:
 				case queue_behaviour_enum_t::NORMAL:
 					if(output.size() == 0){ 
 						has_output = false; 
@@ -304,7 +304,6 @@ room_data::~room_data() {
 				case queue_behaviour_enum_t::REDIRECT_TO_PLAYER:
 				case queue_behaviour_enum_t::REDIRECT_TO_FILESYSTEM:
 				case queue_behaviour_enum_t::REDIRECT_TO_DB:
-				default:
 					return 0;
 			}
 		}

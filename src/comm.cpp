@@ -348,10 +348,8 @@ void init_game(ush_int port) {
 			break;
 	}
 
-#if defined(CIRCLE_UNIX) || defined(CIRCLE_MACINTOSH)
 	log("Signal trapping.");
 	signal_setup();
-#endif
 
 	/* If we made it this far, we will be able to restart without problem. */
 	remove(KILLSCRIPT_FILE);
@@ -632,12 +630,26 @@ void game_loop(socket_t mother_desc) {
 				++i;
 				continue;
 			}
+
 			auto player = it->second;
 			mods::globals::current_player = player;
 
-			if(process_input(player->desc()) < 0){
-				log("process_input failed for player %s",player->name().c_str()); 
-				destroy_player(player);
+			auto input_status = process_input(player->desc());
+			if(input_status < 0){
+				switch(input_status){
+					case -2:
+						log("WARNING! player has zero as socket descriptor! Destroying player [%s]",player->name().c_str());
+						break;
+					case -1:
+						log("process_input failed for player %s",player->name().c_str()); 
+						break;
+					default:
+						log("process_input unknown error return: %d player [%s]",input_status,player->name().c_str());
+						break;
+				}
+				mods::globals::current_player = nullptr;
+				player->set_socket(operating_socket);
+				destroy_player(std::move(player));
 				++i;
 				continue;
 			}
@@ -1204,7 +1216,14 @@ int set_sendbuf(socket_t s) {
 	return (0);
 }
 
+/** TODO: in order to fix the zero-socket issue, we
+ * need to get a list of all the sockets that epoll_ctl is
+ * monitoring. We then need to cross-reference those with
+ * the currently active sockets and remove the ones
+ * that aren't active
+ */
 void destroy_socket(socket_t sock_fd){
+	log("[%d] removing socket from epoll",sock_fd);
 	auto r = epoll_ctl (epoll_fd, EPOLL_CTL_DEL, sock_fd, nullptr);
 	close(sock_fd);
 	if(r == -1){
@@ -1218,10 +1237,50 @@ int destroy_player(std::shared_ptr<mods::player> player){
 			mods::globals::player_list.end(),
 			player);
 	destroy_socket(player->socket());
-	mods::globals::socket_map.erase(player->socket());
+	bool removed = false;
+	do {
+		removed = false;
+		for(auto it = mods::globals::socket_map.begin() ; 
+				it != mods::globals::socket_map.end(); ++it){
+			auto name = player->name();
+			log("[%d] socket via destroy_player",it->first);
+			if(it->first == 0){
+				mods::globals::socket_map.erase(it->first);
+				removed = true;
+				break;
+			}
+			if(!it->second){
+				log("Removing player from socket_map it->second invalid");
+				mods::globals::socket_map.erase(it->first);
+				removed = true;
+				break;
+			}
+			if(it->second.get() == nullptr){
+				log("Removing player from socket_map it->second.get() == nullptr");
+				mods::globals::socket_map.erase(it->first);
+				removed = true;
+				break;
+			}
+			auto it_name = it->second->name().c_str();
+			if(name.compare(it_name) == 0){
+				log("Removing player from socket_map name match");
+				mods::globals::socket_map.erase(it->first);
+				removed = true;
+				break;
+			}
+			if(it->second == player){
+				log("Removing player from socket_map pointer match");
+				mods::globals::socket_map.erase(it->first);
+				removed = true;
+				break;
+			}
+		}
+	} while(removed);
+
 	if(pl_iterator == mods::globals::player_list.end()){
 		log("SYSERR: WARNING! destroy_player cannot find player pointer in player_list!");
 	}else{
+		log("Freeing player [%s]",player->name().c_str());
 		pl_iterator->reset();
 		mods::globals::player_list.erase(pl_iterator);
 	}
@@ -1445,6 +1504,10 @@ int write_to_descriptor(socket_t desc, const char *txt) {
 ssize_t perform_socket_read(socket_t desc, char *read_point, size_t space_left) {
 	ssize_t ret;
 
+	if(desc == 0){
+		log("WARNING: perform_socket_read was fed socket_t value of zero!");
+		return 0;
+	}
 #if defined(CIRCLE_ACORN)
 	ret = recv(desc, read_point, space_left, MSG_DONTWAIT);
 #elif defined(CIRCLE_WINDOWS)
@@ -1540,6 +1603,9 @@ int process_input(mods::descriptor_data & t) {
 			return (-1);
 		}
 
+		if(t.descriptor == 0){
+			return -2;
+		}
 		bytes_read = perform_socket_read(t.descriptor, read_point, space_left);
 
 		if(bytes_read < 0) {	/* Error, disconnect them. */

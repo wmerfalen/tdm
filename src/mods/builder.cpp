@@ -40,7 +40,7 @@ namespace mods::builder {
 		return player->has_flag(mods::flags::chunk_type_t::BUILDER,flag);
 	}
 #define MENTOC_WEAPON(name) {mods::weapon::name,#name}
-	std::array<std::pair<int,std::string>,10> weapon_type_flags = { {
+	std::array<std::pair<int,std::string>,13> weapon_type_flags = { {
 		MENTOC_WEAPON(SMG),
 			MENTOC_WEAPON(SHOTGUN),
 			MENTOC_WEAPON(SNIPE),
@@ -50,7 +50,10 @@ namespace mods::builder {
 			MENTOC_WEAPON(MACHINE_PISTOL),
 			MENTOC_WEAPON(ENERGY),
 			MENTOC_WEAPON(FUMES),
-			MENTOC_WEAPON(FLAME)
+			MENTOC_WEAPON(FLAME),
+			MENTOC_WEAPON(CLAYMORE),
+			MENTOC_WEAPON(REMOTE_EXPLOSIVE),
+			MENTOC_WEAPON(ATTACK_DRONE)
 	}};
 #undef MENTOC_WEAPON
 
