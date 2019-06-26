@@ -1644,7 +1644,7 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 					return;
 			}
 
-			write_to_output(d, "%s\r\nClass: ", class_menu);
+			write_to_output(d, "%s\r\nSelect Unit: ", class_menu);
 			p->set_state(CON_QCLASS);
 			break;
 

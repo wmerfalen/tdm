@@ -2380,6 +2380,9 @@ void act(const std::string & str, int hide_invisible, char_data *ch,
 	}
 
 	for(auto & to_player : mods::globals::room_list[IN_ROOM(ch)]){
+		if(!to_player || to_player->authenticated() == false){ 
+			continue;
+		}
 		auto to = to_player->cd();
 		if(!SENDOK(to) || (to == ch)) {
 			continue;

@@ -4,20 +4,27 @@
 #include <iostream>
 #include <vector>
 #include "../player.hpp"
-
+#include "../../structs.h"
+#include "../pq.hpp"
+#include "../sql.hpp"
 
 namespace mods::orm {
+	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 	struct player_classes {
-			uint64_t id;
-			std::string pclass_name;
-			std::string pclass_description;
+		void set_class(player_class_t pclass);
+		uint64_t id;
+		std::string pclass_name;
+		std::string pclass_description;
 	};
+	void seed_player_classes();
+
 	struct player_races {
-			uint64_t id;
-			std::string prace_name;
-			std::string prace_description;
+		uint64_t id;
+		std::string prace_name;
+		std::string prace_description;
 	};
-	std::string base_attributes[] = {"STR","INT","DEX","WIS","CHA","CON","LCK"};
+	void seed_player_races();
+	const std::string base_attributes[] = {"STR","INT","DEX","WIS","CHA","CON","LCK"};
 	struct player_race_perks {
 		uint64_t id;
 		uint64_t prperk_id;// INTEGER NOT NULL REFERENCES player_races(id),

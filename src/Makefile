@@ -40,7 +40,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/builder mods/pq mods/crypto utils mods/macro_impl \
 					 act.comm mods/extra_desc_data mods/overhead_map mods/npc \
 					 mods/randomized-items mods/auto-login mods/date-time \
-					 mods/world-configuration mods/debug act.debug mods/pfind
+					 mods/world-configuration mods/debug act.debug mods/pfind \
+					 mods/orm/chargen
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
@@ -49,12 +50,13 @@ all: $(builddir) $(objects) $(thirdparty) #$(DATA_DIR)
 clean:
 	make -f $(lmdbdir)/Makefile clean ; \
 		rm -f $(addprefix $(builddir)/,*.o *.d  mods/*.o \
-		mods/*.d mods/classes/*.o mods/classes/*.d) \
+		mods/*.d mods/orm/*.o mods/orm/*.d \
+		mods/classes/*.o mods/classes/*.d) \
 		rm -f $(builddir)/mods/testing/lmdb/*.o \
 		rm -f $(builddir)/mods/testing/lmdb/*.d 
 
 $(builddir):
-	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/acl/ $(builddir)/mods/testing/lmdb $(builddir)/sql
+	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/acl/ $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/orm/
 
 $(builddir)/%.o: %.cpp
 	$(CC) -c $(FLAGS) -o $@ $<

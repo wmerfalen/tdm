@@ -164,19 +164,18 @@ enum lense_type_t {
 
 
 /* PC classes */
-#define CLASS_UNDEFINED	  (-1)
-#define CLASS_MAGIC_USER  0
-#define CLASS_CLERIC      1
-#define CLASS_SNIPER      2
-#define CLASS_WARRIOR     3
+enum player_class_t {
+CLASS_UNDEFINED	 =  0 ,
+CLASS_ENGINEER   =  1 ,
+CLASS_MEDIC      =  2 ,
+CLASS_MARKSMAN	 =  3 ,
+CLASS_PSYOP			 =  4 ,
+CLASS_SUPPORT	   =  5 ,
+CLASS_MARINE		 =  6
+};
 
-#define CLASS_ENGINEER    0
-#define CLASS_MEDIC       1
-#define CLASS_SNIPER      2
-#define CLASS_MARINE      3
-#define CLASS_SUPPORT	  4
-
-#define NUM_CLASSES	  5  /* This must be the number of classes!! */
+#define CLASS_SNIPER player_class_t::CLASS_MARKSMAN
+#define NUM_CLASSES	  6  /* This must be the number of classes!! */
 
 /* NPC classes (currently unused - feel free to implement!) */
 #define CLASS_OTHER       0

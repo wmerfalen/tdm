@@ -20,6 +20,8 @@
 #include "mods/testing_index.hpp"
 #include "mods/auto-login.hpp"
 #include "mods/debug.hpp"
+#include "mods/orm/chargen.hpp"
+
 
 extern int errno;
 #define MODS_BREACH_DISORIENT 50
@@ -177,6 +179,9 @@ namespace mods {
 					<< "--postgres-port=<port> use port as postgres port. default: 5432\n"
 					<< "--postgres-pw-file=<file> read postgres password from file. no default. required.\n"
 					<< "--show-tics show a dot for every game tic\n"
+					<< "--seed=<what> seed the database with one of the following:\n"
+					<< "     'player_classes': character generation\n"
+					<< "     '': ''\n"
 					;
 				}
 

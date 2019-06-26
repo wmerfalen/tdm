@@ -497,13 +497,14 @@ room_rnum& GET_WAS_IN(char_data* player);
 #define CLASS_ABBR(ch) (IS_NPC(ch) ? "--" : class_abbrevs[(int)GET_CLASS(ch)])
 
 #define IS_MAGIC_USER(ch)	(!IS_NPC(ch) && \
-				(GET_CLASS(ch) == CLASS_MAGIC_USER))
+				(GET_CLASS(ch) == CLASS_PSYOP))
 #define IS_CLERIC(ch)		(!IS_NPC(ch) && \
-				(GET_CLASS(ch) == CLASS_CLERIC))
+				(GET_CLASS(ch) == CLASS_MEDIC))
 #define IS_THIEF(ch)		(!IS_NPC(ch) && \
-				(GET_CLASS(ch) == CLASS_SNIPER))
-#define IS_WARRIOR(ch)		(!IS_NPC(ch) && \
-				(GET_CLASS(ch) == CLASS_WARRIOR))
+				(GET_CLASS(ch) == CLASS_MARKSMAN))
+#define IS_MARINE(ch)		(!IS_NPC(ch) && \
+				(GET_CLASS(ch) == CLASS_SUPPORT))
+#define IS_WARRIOR(ch) IS_MARINE(ch)
 #define IS_SUPPORT(ch)		(!IS_NPC(ch) && \
 				(GET_CLASS(ch) == CLASS_SUPPORT))
 
