@@ -58,11 +58,11 @@ namespace mods::orm {
 				},
 				{
 					{"name","Joint Task Force 2"},
-					{"description",""},
+					{"description","The J.T.F. 2 is an extremely capable and precise special forces unit designed to combat terrorism and threats to Canadians at home and abroad."},
 				},
 				{
 					{"name","French GIGN"},
-					{"description",""},
+					{"description","The French GIGN is an elite counter-terrorism unit that doubles as an elite Police unit comparable to the United States's S.W.A.T."},
 				},
 			}){
 				try{
