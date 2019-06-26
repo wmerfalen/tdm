@@ -10,20 +10,21 @@
 
 namespace mods::orm {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
+	void seed_player_classes();
+	void seed_player_races();
+	void seed_player_race_perks();
 	struct player_classes {
 		void set_class(player_class_t pclass);
 		uint64_t id;
 		std::string pclass_name;
 		std::string pclass_description;
 	};
-	void seed_player_classes();
 
 	struct player_races {
 		uint64_t id;
 		std::string prace_name;
 		std::string prace_description;
 	};
-	void seed_player_races();
 	const std::string base_attributes[] = {"STR","INT","DEX","WIS","CHA","CON","LCK"};
 	struct player_race_perks {
 		uint64_t id;

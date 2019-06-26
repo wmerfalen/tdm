@@ -33,28 +33,28 @@ namespace mods::orm {
 	void seed_player_races() {
 			for(auto mapped_values : std::vector<std::map<std::string,std::string>>{
 				{
-					{"name","British Special Air Service"},
-					{"description",""},
+					{"name","British S.A.S."},
+					{"description","Formed during World War 2, the British Special Air Service is the British's most renowned special forces unit in operation today. It operates as a beacon of light and ultimate template for the ideal special forces orgranization. "}
 				},
 				{
 					{"name","Navy Seals"},
-					{"description",""},
+					{"description","Characterized by it's use of unconventional warfare and operations under extreme conditions, the Seals are superbly trained in all aspects of warfare."},
 				},
 				{
 					{"name","Russian Spetsnaz"},
-					{"description",""},
+					{"description","Covertly and silently operates in the dead of night. Highly specialized as the eyes and ears of the Russian Military Complex."},
 				},
 				{
 					{"name","Polish GROM"},
-					{"description",""},
+					{"description","Poland's most well-known military unit. It's name chosen in homage to the battle-tested Polish soldiers of World War 2. The phrase \"GROM\" means thunder in the Polish language"}
 				},
 				{
-					{"name","USMC Reconnaissance"},
-					{"description",""},
+					{"name","U.S.M.C. Recon"},
+					{"description","The United States Marine Core FORCE Recon's mission is to train, recruit, and deploy scalable counter insurgency operations around the globe."},
 				},
 				{
-					{"name","German GSG 9"},
-					{"description",""},
+					{"name","German G.S.G. 9"},
+					{"description","The G.S.G. 9 is the elite tactical unit of the German Federal Police. It is deployed in cases of hostage-taking, kidnapping, terrorism, and extortion."},
 				},
 				{
 					{"name","Joint Task Force 2"},
