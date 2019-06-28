@@ -13,6 +13,9 @@ namespace mods::orm {
 	void seed_player_classes();
 	void seed_player_races();
 	void seed_player_race_perks();
+	void seed_skill_trees();
+	void seed_specialty_skills();
+	
 	struct player_classes {
 		void set_class(player_class_t pclass);
 		uint64_t id;

@@ -123,5 +123,47 @@ namespace mods::orm {
 			}//end for
 	}
 
+	void seed_player_classes() {
+			for(auto mapped_values : std::vector<std::map<std::string,std::string>>{
+				{
+					{"name","ENGINEER"},
+					{"description","Natural affinity towards gadgets, demolitions, and unconventional warfare"}
+				},
+				{
+					{"name","MEDIC"},
+					{"description","Battlefield suture expert. Capable of absorbing high amounts of damage. Can revive and heal downed teammates."}
+				},
+				{
+					{"name","MARKSMAN"},
+					{"description","Ranged weapons expert. Spawns with a sniper rifle that only you can use."}
+				},
+				{
+					{"name","PSYOP"},
+					{"description","Psychological warfare and advanced technology expert. Gifted at technomancy and occult tactics."},
+				},
+				{
+					{"name","SUPPORT"},
+					{"description","Capable of hauling and supplying intense levels of L.M.G. suppressing fire. Can craft weaponry and ammo from equipment found on the battlefield."},
+				},
+				{
+					{"name","MARINE"},
+					{"description","Well-rounded and battle-tested direct-action counter insurgency. Very high Sub Machine Gun and close-range melee damage."}
+				}
+			}){
+				try{
+					auto insert_transaction = txn();
+					sql_compositor comp("player_classes",&insert_transaction);
+					auto up_sql = comp
+						.insert()
+						.into("player_classes")
+						.values(mapped_values)
+						.sql();
+					mods::pq::exec(insert_transaction,up_sql);
+					mods::pq::commit(insert_transaction);
+				}catch(std::exception& e){
+					std::cerr << __FILE__ << ": " << __LINE__ << ": error seeding player_classes: '" << e.what() << "'\n";
+				}
+			}//end for
+	}
 };
 
