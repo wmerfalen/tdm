@@ -15,11 +15,19 @@ typedef int socket_t;
 #include <map>
 
 namespace mods::conf {
+#ifdef MENTOC_NO_CONSTEXPR_CONF
+	static std::string postgres_user = "postgres";
+	static std::string postgres_dbname = "postgres_mud";
+	static std::string postgres_password = "postgresmudpassword";
+	static std::string postgres_host = "localhost";
+	static std::string postgres_port = "5432";
+#else
 	constexpr static std::string_view postgres_user = "postgres";
 	constexpr static std::string_view postgres_dbname = "postgres_mud";
 	constexpr static std::string_view postgres_password = "postgresmudpassword";
 	constexpr static std::string_view postgres_host = "localhost";
 	constexpr static std::string_view postgres_port = "5432";
+#endif
 	std::string pq_connection(std::map<std::string,std::string>);
 };
 #endif
