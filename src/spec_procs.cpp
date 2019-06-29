@@ -134,7 +134,7 @@ extern int prac_params[4][NUM_CLASSES];
 #define MAXGAIN(ch) (prac_params[MAX_PER_PRAC][(int)GET_CLASS(ch)])
 #define SPLSKL(ch) (prac_types[prac_params[PRAC_TYPE][(int)GET_CLASS(ch)]])
 
-void list_skills(struct char_data *ch) {
+void list_skills(char_data *ch) {
 	const char *overflow = "\r\n**OVERFLOW**\r\n";
 	int i, sortpos, nlen;
 	size_t len = 0;

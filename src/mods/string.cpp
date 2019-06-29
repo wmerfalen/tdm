@@ -13,7 +13,7 @@ namespace mods {
 			assign("");
 		}
 	}
-	string::string(const pqxx::tuple::reference & str){
+	string::string(const pqxx::row::reference & str){
 		m_mallocd = false;
 		m_cptr = nullptr;
 		m_str = "";
@@ -89,7 +89,7 @@ namespace mods {
 		}
 		return *this;
 	}
-	void string::assign(const pqxx::tuple::reference & other){
+	void string::assign(const pqxx::row::reference & other){
 		assign(std::string(other.c_str()));
 	}
 	void string::assign(const std::string & other){

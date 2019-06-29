@@ -31,7 +31,7 @@ extern int siteok_everyone;
 
 /* local functions */
 void snoop_check(struct char_data *ch);
-int parse_class(char arg);
+player_class_t parse_class(char arg);
 bitvector_t find_class_bitvector(const char *arg);
 byte saving_throws(int class_num, int type, int level);
 int thaco(int class_num, int level);
@@ -68,41 +68,52 @@ const char *pc_class_types[] = {
 /* The menu for choosing a class in interpreter.c: */
 const char *class_menu =
     "\r\n"
-    "Select a class:\r\n"
-    "  [E]ngineer\r\n"
-    "  [M]edic\r\n"
-    "  [S]niper\r\n"
-    "  M[A]rine\r\n"
-    "  S[U]pport\r\n";
+    "Select Unit:\r\n"
+		"  [1] British Special Air Service\r\n"
+		"  [2] Navy Seals\r\n" 
+		"  [3] Russian Spetsnaz\r\n" 
+		"  [4] Polish GROM\r\n" 
+		"  [5] USMC Reconnaissance\r\n" 
+		"  [6] German GSG 9\r\n" 
+		"  [7] Joint Task Force 2\r\n" 
+		"  [8] French GIGN\r\n"
+		;
 
-
+const char* position_menu =
+    "  [1] Engineer\r\n"
+    "  [2] Medic\r\n"
+    "  [3] Marksman\r\n"
+    "  [4] PSYOP\r\n"
+    "  [5] Support\r\n"
+		"  [6] Marine [*]\r\n"
+		"\r\n"
+		" [*] Marines are well-rounded\r\n"
+		;
 
 /*
  * The code to interpret a class letter -- used in interpreter.c when a
  * new character is selecting a class and by 'set class' in act.wizard.c.
  */
 
-int parse_class(char arg) {
+player_class_t parse_class(char arg) {
 	switch(arg) {
-		case 'e':
-		case 'E':
+		case '1':
 			return CLASS_ENGINEER;
 
-		case 'm':
-		case 'M':
+		case '2':
 			return CLASS_MEDIC;
 
-		case 'a':
-		case 'A':
-			return CLASS_MARINE;
+		case '3':
+			return CLASS_MARKSMAN;
 
-		case 's':
-		case 'S':
-			return CLASS_SNIPER;
+		case '4':
+			return CLASS_PSYOP;
 
-		case 'u':
-		case 'U' :
+		case '5' :
 			return CLASS_SUPPORT;
+
+		case '6' :
+			return CLASS_MARINE;
 
 		default:
 			return CLASS_UNDEFINED;
@@ -183,8 +194,9 @@ struct guild_info_type guild_info[] = {
 	/* Midgaard */
 	{ CLASS_ENGINEER,	3017,	SCMD_SOUTH	},
 	{ CLASS_MEDIC,	3004,	SCMD_NORTH	},
-	{ CLASS_SNIPER,	3027,	SCMD_EAST	},
-	{ CLASS_MARINE,	3021,	SCMD_EAST	},
+	{ CLASS_MARKSMAN,	3027,	SCMD_EAST	},
+	{ CLASS_PSYOP,	3027,	SCMD_DOWN	},
+	{ CLASS_SUPPORT,	3021,	SCMD_UP	},
 
 	/* Brass Dragon */
 	{ -999 /* all */ ,	5065,	SCMD_WEST	},
@@ -1524,7 +1536,7 @@ byte saving_throws(int class_num, int type, int level) {
 
 			break;
 
-		case CLASS_SNIPER:
+		case CLASS_MARKSMAN:
 			switch(type) {
 				case SAVING_PARA:	/* Paralyzation */
 					switch(level) {
@@ -3684,7 +3696,7 @@ int invalid_class(struct char_data *ch, struct obj_data *obj) {
 		return TRUE;
 	}
 
-	if(OBJ_FLAGGED(obj, ITEM_ANTI_WARRIOR) && IS_WARRIOR(ch)) {
+	if(OBJ_FLAGGED(obj, ITEM_ANTI_WARRIOR) && IS_MARINE(ch)) {
 		return TRUE;
 	}
 

@@ -4,13 +4,14 @@
 #include <strings.h>
 #include <iostream>
 #include <string>
+#undef PQXX_TR1_HEADERS
 #include <pqxx/pqxx>
 #define m_debug(a){;;} /* do{ std::cerr << "[m_debug]: " << a << "\n"; }while(0); */
 namespace mods {
 	struct string {
 		string();
 		string(const char* str);
-		string(const pqxx::tuple::reference & str);
+		string(const pqxx::row::reference & str);
 		string(const string&);
 		~string();
 		operator bool() const { return m_str.length(); }
@@ -23,7 +24,7 @@ namespace mods {
 		string& operator=(const std::string & other);
 		const char* operator*(){ return m_str.c_str(); }
 		void assign(const std::string & other);
-		void assign(const pqxx::tuple::reference & other);
+		void assign(const pqxx::row::reference & other);
 		const char* c_str() const;
 		unsigned int length() const;
 		void clear();

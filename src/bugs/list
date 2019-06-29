@@ -1,3 +1,53 @@
+Program received signal SIGSEGV, Segmentation fault.                                                                                                                         mods::player::set_cd (this=0x0, ch=0xc34068) at mods/player.cpp:640                                                                                                          640                                     m_char_data = ch;                                                                                                                    (gdb) bt
+#0  mods::player::set_cd (this=0x0, ch=0xc34068) at mods/player.cpp:640
+#1  0x0000000000709600 in mods::globals::rooms::char_from_room (ch=0xc34068) at globals.cpp:738
+#2  0x000000000071c440 in check_idling (player=...) at limits.cpp:425
+#3  0x000000000071d099 in point_update()::$_0::operator()(std::__1::shared_ptr<mods::player>) const (this=<optimized out>, player=...) at limits.cpp:514
+#4  std::__1::__invoke<point_update()::$_0&, std::__1::shared_ptr<mods::player> > (__f=..., __args=<optimized out>)                                                              at /usr/lib/llvm-8/bin/../include/c++/v1/type_traits:4353
+#5  std::__1::__invoke_void_return_wrapper<bool>::__call<point_update()::$_0&, std::__1::shared_ptr<mods::player> >(point_update()::$_0&, std::__1::shared_ptr<mods::player>&&) (__args=<optimized out>, __args=<optimized out>) at /usr/lib/llvm-8/bin/../include/c++/v1/__functional_base:318
+#6  std::__1::__function::__alloc_func<point_update()::$_0, std::__1::allocator<point_update()::$_0>, bool (std::__1::shared_ptr<mods::player>)>::operator()(std::__1::shared_ptr<mods::player>&&) (this=<optimized out>, __arg=<optimized out>) at /usr/lib/llvm-8/bin/../include/c++/v1/functional:1527
+#7  std::__1::__function::__func<point_update()::$_0, std::__1::allocator<point_update()::$_0>, bool (std::__1::shared_ptr<mods::player>)>::operator()(std::__1::shared_ptr<mods::player>&&) (this=<optimized out>, __arg=<optimized out>) at /usr/lib/llvm-8/bin/../include/c++/v1/functional:1651
+#8  0x000000000071cabd in std::__1::__function::__value_func<bool (std::__1::shared_ptr<mods::player>)>::operator()(std::__1::shared_ptr<mods::player>&&) const (                this=<optimized out>, __args=<unknown type in /home/xkold/code/code/siege-mud/bin/circle, CU 0x88f7dc, DIE 0x8bbc46>)                                                        at /usr/lib/llvm-8/bin/../include/c++/v1/functional:1799
+#9  std::__1::function<bool (std::__1::shared_ptr<mods::player>)>::operator()(std::__1::shared_ptr<mods::player>) const (this=<optimized out>, __arg=...)                        at /usr/lib/llvm-8/bin/../include/c++/v1/functional:2347
+#10 mods::loops::foreach_all(std::__1::function<bool (std::__1::shared_ptr<mods::player>)>) (func=...) at ./mods/loops.hpp:93
+#11 point_update () at limits.cpp:470
+#12 0x00000000006d5c33 in heartbeat (pulse=29250) at comm.cpp:819
+#13 0x00000000006d3a0a in game_loop (mother_desc=<optimized out>) at comm.cpp:766
+#14 0x00000000006d29e0 in init_game (port=<optimized out>) at comm.cpp:377
+#15 0x00000000006d27a9 in main (argc=8, argv=0x7fffffffde28) at comm.cpp:316                                                                                                 (gdb) ch                                                                                                                                                                     checkpoint 1: fork returned pid 20099.                                                                                                                                       (gdb) print ch                                                                                                                                                               $1 = (char_data *) 0xc34068                                                                                                                                                  (
+---------------------------------------------------------------------------------------------------------------------------
+command -> auxiliary
+auxiliary-data -> Fails on broken pipe (ssh -R .. 'rlwrap telnet localhost 4000')
+segfault? -> yes
+date -> 2019-06-04
+source -> utils.cpp:52
+does it stop there? -> yes
+
+
+<MENTOC_GDB_DUMP>
+Jun  4 19:14:30 :: Resetting zone: 1
+Jun  4 19:15:05 :: WARNING: EOF on socket read (connection broken by peer)
+
+Program received signal SIGSEGV, Segmentation fault.
+strlen () at ../sysdeps/x86_64/strlen.S:106
+106     ../sysdeps/x86_64/strlen.S: No such file or directory.
+(gdb) bt
+#0  strlen () at ../sysdeps/x86_64/strlen.S:106
+#1  0x00007ffff69a7082 in std::__1::char_traits<char>::length (__s=0x3 <error: Cannot access memory at address 0x3>)
+    at ./libcxx/include/__string:218
+#2  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::assign (this=0x7fffffffc1b0,
+    __s=0x3 <error: Cannot access memory at address 0x3>) at ./libcxx/include/string:2396
+#3  0x00000000007a01c9 in std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::operator= (
+    this=0x7fffffffc1b0, __s=0x3 <error: Cannot access memory at address 0x3>) at /usr/lib/llvm-8/bin/../include/c++/v1/string:897
+#4  log (n=...) at utils.cpp:52
+#5  0x00000000006ca506 in game_loop (mother_desc=4) at comm.cpp:708
+#6  0x00000000006c9a60 in init_game (port=<optimized out>) at comm.cpp:432
+#7  0x00000000006c9832 in main (argc=8, argv=0x7fffffffde18) at comm.cpp:371
+(gdb)
+</MENTOC_GDB_DUMP>
+--------------------------------------------------------------
+
+
 [CRASH] - Input validation fails when typing '!pos=1'
 {FIXED} -- [FREEZE] - When a new user calls 'save' the lmdb transactions get messed up and things fail
 {FIXED} -- [logic-error] - The following message is printed out when a new user's data is commited to lmdb:
@@ -44,3 +94,24 @@ hints -> It might be trying to instantiate the npc as a player and assign it a s
 ---------------------------------------------------------------------------------------------------------------------------
 
 
+-- Logged back in after logging out
+<MENTOC_GDB_DUMP>
+Program received signal SIGABRT, Aborted.
+0xf7fd7c89 in __kernel_vsyscall ()
+(gdb) bt
+#0  0xf7fd7c89 in __kernel_vsyscall ()
+#1  0xf79a6dd0 in __libc_signal_restore_set (set=0xffffb230) at ../sysdeps/unix/sysv/linux/nptl-signals.h:79
+#2  __GI_raise (sig=6) at ../sysdeps/unix/sysv/linux/raise.c:48
+#3  0xf79a8297 in __GI_abort () at abort.c:89
+#4  0xf79e238f in __libc_message (do_abort=<optimized out>, fmt=<optimized out>) at ../sysdeps/posix/libc_fatal.c:175
+#5  0xf79e8fc7 in malloc_printerr (action=<optimized out>, str=0xf7ad9800 "free(): invalid pointer",
+    ptr=<optimized out>, ar_ptr=0xf7b2f780 <main_arena>) at malloc.c:5049
+		#6  0xf79e9806 in _int_free (av=0xf7b2f780 <main_arena>, p=0xf7b2f6f8, have_lock=0) at malloc.c:3905
+		#7  0x083b995e in affect_remove (ch=<optimized out>, af=<optimized out>) at handler.cpp:316
+		#8  0x083c720d in affect_update () at magic.cpp:99
+		#9  0x08385845 in heartbeat (pulse=750) at comm.cpp:874
+		#10 0x08382fd9 in game_loop (mother_desc=<optimized out>) at comm.cpp:824
+		#11 0x08381d6c in init_game (port=4000) at comm.cpp:431
+		#12 0x08381ad7 in main (argc=8, argv=0xffffcf64) at comm.cpp:370
+		(gdb)
+		</MENTOC_GDB_DUMP>

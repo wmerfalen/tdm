@@ -19,10 +19,10 @@
 namespace mods {
 	template <typename LambdaArgument>
 	struct behaviour_tree_node {
-		enum node_type_t { SELECTOR, SEQUENCE, LEAF };
-		typedef std::function<behaviour_tree_status(LambdaArgument)> callback_t;
-		typedef std::shared_ptr<behaviour_tree_node<LambdaArgument>> child_node_t;
-		typedef std::vector<child_node_t> children_t;
+		enum node_type_t { DO_NOTHING, SELECTOR, SEQUENCE, LEAF };
+		using callback_t = std::function<behaviour_tree_status(LambdaArgument)>;
+		using child_node_t = std::shared_ptr<behaviour_tree_node<LambdaArgument>>;
+		using children_t = std::vector<child_node_t>;
 		typedef struct { \
 			behaviour_tree_status status;\
 			uint64_t id;\

@@ -9,7 +9,7 @@
 #include "extern.hpp"
 #include <functional>
 
-using objtype = mods::object::type;
+//using objtype = mods::object::type;
 using args_t = std::vector<std::string>;
 typedef mods::sql::compositor<mods::pq::transaction> sql_compositor;
 namespace mods::builder_util {

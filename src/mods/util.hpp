@@ -19,7 +19,7 @@
 	
 #ifndef __MENTOC_STRING_LIT__
 #define __MENTOC_STRING_LIT__
-static inline std::string operator "" _s(const char* s,long unsigned int i) {
+static inline std::string operator "" _s(const char* s,uint64_t i) {
 	return std::string(s);
 }
 #endif
@@ -113,7 +113,7 @@ std::ostream& log(Args... args); /*{
 			return m;
 		}
 	template <typename T>
-		T stoi(const pqxx::tuple::reference & i){
+		T stoi(const pqxx::row::reference & i){
 			T m;
 			std::stringstream ss;
 			ss.str(i.c_str());

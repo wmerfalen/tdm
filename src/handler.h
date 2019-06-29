@@ -8,6 +8,10 @@
 *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
 ************************************************************************ */
 
+namespace mods {
+	struct player;
+};
+#include "mods/player.hpp"
 /* handling the affected-structures */
 void	affect_total(struct char_data *ch);
 void	affect_modify(struct char_data *ch, byte loc, sbyte mod, bitvector_t bitv, bool add);
@@ -48,8 +52,14 @@ void	extract_obj(struct obj_data *obj);
 struct char_data *get_char_room(char *name, int *num, room_rnum room);
 struct char_data *get_char_num(mob_rnum nr);
 
-void	char_from_room(struct char_data *ch);
-void	char_to_room(struct char_data *ch, room_rnum room);
+void	char_from_room(char_data *ch);
+void	char_to_room(char_data *ch, room_rnum room);
+static inline void	char_from_room(std::shared_ptr<mods::player> player){
+	char_from_room(player->cd());
+}
+static inline void	char_to_room(std::shared_ptr<mods::player> player, room_rnum room) {
+	char_to_room(player->cd(),room);
+}
 void	extract_char(struct char_data *ch);
 void	extract_char_final(struct char_data *ch);
 void	extract_pending_chars(void);

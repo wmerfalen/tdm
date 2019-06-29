@@ -108,11 +108,15 @@ ACMD(do_quit) {
 ACMD(do_save) {
 	MENTOC_PREAMBLE();
 	if(IS_NPC(ch) || !ch->has_desc) {
+		log("SYSERR: do_save() called but is an npc or doesn't have a descriptor");
 		return;
 	}
 
 	/* Only tell the char we're saving if they actually typed "save" */
 	if(cmd) {
+		log("Saving player %s",GET_NAME(ch).c_str());
+		mods::db::save_char(player);
+		log("Saved");
 		/*
 		 * This prevents item duplication by two PC's using coordinated saves
 		 * (or one PC with a house) and system crashes. Note that houses are
@@ -130,7 +134,6 @@ ACMD(do_save) {
 	}
 
 	write_aliases(ch);
-	mods::db::save_char(player);
 	Crash_crashsave(ch);
 
 	if(ROOM_FLAGGED(IN_ROOM(ch), ROOM_HOUSE_CRASH)) {
@@ -910,6 +913,7 @@ ACMD(do_gen_write) {
 #define PRF_TOG_CHK(ch,flag) ((TOGGLE_BIT(PRF_FLAGS(ch), (flag))) & (flag))
 
 ACMD(do_gen_tog) {
+	MENTOC_PREAMBLE();
 	long /* bitvector_t */ result;
 
 	const char *tog_messages[][2] = {
@@ -980,6 +984,10 @@ ACMD(do_gen_tog) {
 		{
 			"Will no longer track through doors.\r\n",
 			"Will now track through doors.\r\n"
+		},
+		{
+			"Overhead map disabled.\r\n",
+			"Overhead map enabled.\r\n"
 		}
 	};
 
@@ -1057,6 +1065,10 @@ ACMD(do_gen_tog) {
 			result = (track_through_doors = !track_through_doors);
 			break;
 
+		case SCMD_AUTOMAP:
+			result = PRF_TOG_CHK(ch,PRF_OVERHEAD_MAP);
+			break;
+
 		default:
 			log("SYSERR: Unknown subcmd %d in do_gen_toggle.", subcmd);
 			return;
@@ -1068,5 +1080,11 @@ ACMD(do_gen_tog) {
 		send_to_char(ch, "%s", tog_messages[subcmd][TOG_OFF]);
 	}
 
+	/** Save the player's prefs in postgres */
+	if(db::save_char_prefs(player) < 0){
+		log("SYSERR: Couldn't save user's prefs: ");
+	}else{
+		log("Saved user's prefs: ");
+	}
 	return;
 }

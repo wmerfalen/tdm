@@ -1,9 +1,9 @@
 src = .
 builddir = build
-CC = g++-7
+CC = /usr/bin/clang++-8
 BINDIR = ../bin
 DATA_DIR = "$(CURDIR)/../lib/"
-JS_PROFILES_PATH = "$(CURDIR)/../lib/js/profiles/"
+JS_PROFILES_PATH = "$(HOME)/code/siege-mud/lib/js/profiles/"
 LMDBNAME = bnull
 
 lmdbdir = $(CURDIR)/liblmdb
@@ -16,13 +16,12 @@ thirdparty = $(duktape) $(lmdb)
 FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-Wno-char-subscripts -Wcomment \
 	-Wno-format-zero-length -Wno-format-security\
-	-A -da -std=c++17 -fpermissive -MMD \
+	-std=c++17 -fpermissive -MMD \
 	-Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \
-	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\" 
-#	-Lboost-cpp/build/lib\ -Ipqxx 
-#	-Imods/include -Iboost-cpp -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" 
-LIBS = -lpqxx $(openssl)
+	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\" \
+	-stdlib=libc++ 
+LIBS = $(opnssl) -lc -lm -lpqxx -lpq -lssl -lcrypto
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
 					 act.wizard alias ban boards bsd-snprintf castle \
@@ -38,7 +37,11 @@ buildobj = act.informative act.item act.medic \
 					 mods/hell mods/db mods/testing/lmdb/player-syncing\
 					 mods/testing/lmdb/db mods/player-scaffolding sql/port\
 					 mods/meta_utils mods/acl_list mods/flags mods/js-player-scaffolding \
-					 mods/builder mods/pq mods/crypto utils mods/macro_impl act.comm mods/extra_desc_data
+					 mods/builder mods/pq mods/crypto utils mods/macro_impl \
+					 act.comm mods/extra_desc_data mods/overhead_map mods/npc \
+					 mods/randomized-items mods/auto-login mods/date-time \
+					 mods/world-configuration mods/debug act.debug mods/pfind \
+					 mods/orm/chargen
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
@@ -47,12 +50,13 @@ all: $(builddir) $(objects) $(thirdparty) #$(DATA_DIR)
 clean:
 	make -f $(lmdbdir)/Makefile clean ; \
 		rm -f $(addprefix $(builddir)/,*.o *.d  mods/*.o \
-		mods/*.d mods/classes/*.o mods/classes/*.d) \
+		mods/*.d mods/orm/*.o mods/orm/*.d \
+		mods/classes/*.o mods/classes/*.d) \
 		rm -f $(builddir)/mods/testing/lmdb/*.o \
 		rm -f $(builddir)/mods/testing/lmdb/*.d 
 
 $(builddir):
-	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/acl/ $(builddir)/mods/testing/lmdb $(builddir)/sql
+	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/acl/ $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/orm/
 
 $(builddir)/%.o: %.cpp
 	$(CC) -c $(FLAGS) -o $@ $<
@@ -60,7 +64,7 @@ $(builddir)/%.o: %.cpp
 -include $(objects:.o=.d)
 
 $(duktape): duktape-2.2.0/src/duktape.h duktape-2.2.0/src/duktape.c
-	$(CC) -c $(FLAGS) duktape-2.2.0/src/duktape.c -o $(duktape)
+	$(CC) -c $(FLAGS) duktape-2.2.0/src/duktape.c  -o $(duktape)
 
 $(lmdb):
 	cd $(lmdbdir) && make clean ; make liblmdb.so && cd $(src)

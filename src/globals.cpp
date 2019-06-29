@@ -18,6 +18,10 @@
 #include "mods/pregame.hpp"
 #include "mods/loops.hpp"
 #include "mods/testing_index.hpp"
+#include "mods/auto-login.hpp"
+#include "mods/debug.hpp"
+#include "mods/orm/chargen.hpp"
+
 
 extern int errno;
 #define MODS_BREACH_DISORIENT 50
@@ -46,7 +50,9 @@ namespace mods {
 		std::unique_ptr<mods::deferred> defer_queue;
 		duk_context* duktape_context;
 		ai_state_map states;
-		std::vector<std::vector<char_data*>> room_list;
+		std::map<const char*,player_ptr_t> player_name_map;
+		//std::vector<std::vector<char_data*>> room_list; /**!TODO turn this into std::shared_ptr<...> */
+		room_list_t room_list;
 		player_list_t player_list;
 		std::vector<mods::chat::channel> chan;
 		std::vector<std::string> chan_verbs;
@@ -145,6 +151,7 @@ namespace mods {
 				f_test_suite;
 			f_import_rooms = false;
 			boot_type = BOOT_DB;
+			bool show_tics = false;
 			std::string postgres_user = mods::conf::postgres_user.data();
 			std::string postgres_dbname = mods::conf::postgres_dbname.data();
 			std::string postgres_password = mods::conf::postgres_password.data();
@@ -158,7 +165,9 @@ namespace mods {
 					argument = "";
 				}
 				if(strncmp(argv[pos],"--help",6) == 0 || strncmp(argv[pos],"-h",2) == 0){
-					std::cerr << "usage: <circle> --postgres-pw-file=<file> [options]\n"
+					std::cerr << "usage: <circle> --postgres-pw-file=<file> [options]\n" 
+						<< "--auto-login=user Automatically login as user on connection [use only for development]\n" 
+						<< "--auto-password=password Automatically login and use password on connection [use only for development]\n" 
 				 	<< "--testing=<suite>	Launch test suite\n"
 					<< "--import-rooms 	Run the import rooms routine\n"
 					<< "--hell 	Start the mud in HELL mode\n"
@@ -169,9 +178,26 @@ namespace mods {
 					<< "--postgres-host=<host> use host as postgres host. default: localhost\n"
 					<< "--postgres-port=<port> use port as postgres port. default: 5432\n"
 					<< "--postgres-pw-file=<file> read postgres password from file. no default. required.\n"
+					<< "--show-tics show a dot for every game tic\n"
+					<< "--seed=<what> seed the database with one of the following:\n"
+					<< "     'player_classes': character generation\n"
+					<< "     '': ''\n"
 					;
 				}
 
+				if(strncmp(argv[pos],"--show-tics",11) == 0){
+					show_tics = true;
+					continue;
+				}
+
+				if(strncmp(argv[pos],"--auto-login=",13) == 0){
+					mods::auto_login::set_user(argument.substr(13,argument.length()-13));
+					continue;
+				}
+				if(strncmp(argv[pos],"--auto-password=",16) == 0){
+					mods::auto_login::set_password(argument.substr(16,argument.length()-16));
+					continue;
+				}
 				if(strncmp(argv[pos],"--testing=",10) == 0){
 					f_test_suite = argument.substr(10,argument.length()-10);
 					continue;
@@ -190,7 +216,7 @@ namespace mods {
 				//}
 				if(strncmp(argv[pos],"--postgres-pw-file=",19) == 0){
 					if(argument.length()  < 20){
-						log("SYSERR: --postgres-pw-file expects an argument, none found: '",argument,"'.Exiting...");
+						log("SYSERR: --postgres-pw-file expects an argument, none found: '",argument.c_str(),"'.Exiting...");
 						mods::globals::shutdown();
 					}
 					std::string pw_file = argument.substr(19,argument.length()-19);
@@ -277,7 +303,7 @@ namespace mods {
 			if(!mods::util::dir_exists(lmdb_dir.c_str())){
 				auto err = mkdir(lmdb_dir.c_str(),0700);
 				if(err == -1){
-					log("SYSERR: The lmdb database directory couldn't be created: ", mods::util::err::get_string(errno));
+					log("SYSERR: The lmdb database directory couldn't be created: ", mods::util::err::get_string(errno).c_str());
 					mods::globals::shutdown();
 				}
 			}
@@ -287,7 +313,7 @@ namespace mods {
 			duktape_context = mods::js::new_context();
 			mods::js::load_c_functions();
 			/** TODO: make configurable */
-			mods::js::load_library(mods::globals::duktape_context,"../../lib/quests/quests.js"); 
+			mods::js::load_library(mods::globals::duktape_context,"/lib/quests/quests.js"); 
 			mods::behaviour_tree_impl::load_trees();
 			if(f_test_suite.length()){
 				//if(!f_test_suite.compare("db")){
@@ -298,6 +324,7 @@ namespace mods {
 				//}
 				mods::globals::shutdown();
 			}
+			bool connected_to_postgres = false;
 			try{
 				std::string connection_string = mods::conf::pq_connection(
 							{{"port",postgres_port},
@@ -308,12 +335,19 @@ namespace mods {
 						).c_str();
 				//std::cerr << "postgres connection string: '" << connection_string << "'\n";
 				pq_con = std::make_unique<pqxx::connection>(connection_string.c_str());
+				connected_to_postgres = true;
 			}catch(const std::exception &e){
-				log("SYSERR: Couldn't connect to the postgres database. Exception: '",e.what(),"'. Is it running?");
 				mods::globals::shutdown();
 			}
-			std::cout << "[success] connected to postgres :)\n";
+			if(connected_to_postgres){
+				log("[postgres] connected :)");
+			}else{
+				log("SYSERR: Couldn't connect to postgres");
+				mods::globals::shutdown();
+				return;
+			}
 			config::init(argc,argv);
+			mods::debug::init(show_tics);
 		}
 		void post_boot_db() {
 		}
@@ -322,53 +356,48 @@ namespace mods {
 			return "woof";
 		}
 		void room_event(room_vnum room,mods::ai_state::event_type_t event) {
-			for(auto ptr = character_list; ptr->next; ptr = ptr->next) {
-				if(IN_ROOM(ptr) == room) {
-					if(event == mods::ai_state::BREACHED_NORTH  ||
-							event == mods::ai_state::BREACHED_SOUTH  ||
-							event == mods::ai_state::BREACHED_EAST ||
-							event == mods::ai_state::BREACHED_WEST
-						) {
-						ptr->disorient += MODS_BREACH_DISORIENT;
-						{
-							if(event == mods::ai_state::BREACHED_NORTH) {
-								send_to_char(ptr,"The {red}north{/red} door was breached.\r\n");
-							}
-
-							if(event == mods::ai_state::BREACHED_SOUTH) {
-								send_to_char(ptr,"The {red}south{/red} door was breached.\r\n");
-							}
-
-							if(event == mods::ai_state::BREACHED_EAST) {
-								send_to_char(ptr,"The {red}east{/red} door was breached.\r\n");
-							}
-
-							if(event == mods::ai_state::BREACHED_WEST) {
-								send_to_char(ptr,"The {red}west{/red} door was breached.\r\n");
-							}
-						}
-					}
-
-					if(event == mods::ai_state::GRENADE_FLIES_BY) {
-						send_to_char(ptr,"A {grn}grenade{/grn} flies by\r\n");
-					}
-
-					if(event == mods::ai_state::GRENADE_EXPLOSION) {
-						send_to_char(ptr,"A {grn}grenade{/grn} explodes!\r\n");
-					}
+			mods::loops::foreach_in_room(room,[&](std::shared_ptr<mods::player> player_ptr) -> bool {
+				auto ptr = player_ptr->cd();
+				std::string text;
+				switch(event){
+					case mods::ai_state::BREACHED_NORTH:
+						text = "The {red}north{/red} door was breached.";
+						break;
+					case mods::ai_state::BREACHED_SOUTH: 
+						text = "The {red}south{/red} door was breached.";
+						break;
+					case mods::ai_state::BREACHED_EAST: 
+						text = "The {red}east{/red} door was breached.";
+						break;
+					case mods::ai_state::BREACHED_WEST:
+						text = "The {red}west{/red} door was breached.";
+						break;
+					case mods::ai_state::GRENADE_FLIES_BY:
+						text = "A {grn}grenade{/grn} flies by!";
+						break;
+					case mods::ai_state::GRENADE_EXPLOSION:
+						text = "A {grn}grenade{/grn} explodes!";
+						break;
+						default: break;
 				}
-			}
+				if(text.length()){
+					text += "\r\n";
+					send_to_char(ptr,text.c_str());
+				}
+				return true;
+			});
 		}
 		void refresh_player_states() {
-			mods::loops::foreach_all([&](char_data* ptr) -> bool {
-					if(!ptr){
+			mods::loops::foreach_all([&](std::shared_ptr<mods::player> player_ptr) -> bool {
+			auto ptr = player_ptr->cd();
+				if(!ptr){
 					return true;
-					}
-					if(states.find(ptr) == states.end()) {
+				}
+				if(states.find(ptr) == states.end()) {
 					states[ptr] = std::make_unique<mods::ai_state>(ptr,0,0);
-					}
-					return true;
-					});
+				}
+				return true;
+			});
 		}
 		void pre_game_loop() {
 			std::cout << "[event] Pre game loop\n";
@@ -399,33 +428,32 @@ namespace mods {
 			}
 
 			SET_BIT(mob_proto[i].char_specials.saved.act, MOB_ISNPC);
-			mob_list.emplace_back(&mob_proto[i]);
+			/** !TODO: fix this. We need to copy the mob_proto to the mob_list.back() */
+			std::cerr << "read_Mobile[mob_rnum]: " << i << "\n";
+			mob_list.emplace_back(std::make_shared<mods::npc>(i));
+			auto mob = mob_list.back();
 			std::cerr << "[DEBUG]: mob_proto short_descr: '" << 
 				mob_proto[i].player.short_descr.c_str() << "'\n";
-			auto mob = mob_list.back();
-			mob.next = character_list = &mob_list.back();
-
-			if(mob.points.max_hit) {
-				mob.points.max_hit = dice(mob.points.hit, mob.points.mana) + mob.points.move;
-			} else {
-				mob.points.max_hit = rand_number(mob.points.hit, mob.points.mana);
+			mob->position() = POS_STANDING;
+			for(i = 0; i < NUM_WEARS; i++) {
+				GET_EQ(mob->cd(), i) = nullptr;
 			}
+			mob->cd()->carrying = nullptr;
+			mob->max_hp() = rand_number(mob->hp(), mob->mana());
+			mob->hp() = mob->max_hp();
+			mob->mana() = mob->max_mana();
+			mob->move() = mob->max_move();
 
-			mob.points.hit = mob.points.max_hit;
-			mob.points.mana = mob.points.max_mana;
-			mob.points.move = mob.points.max_move;
-
-			mob.player.time.birth = time(0);
-			mob.player.time.played = 0;
-			mob.player.time.logon = time(0);
+			std::cerr << "mob->stats: max_hp:" << mob->max_hp() << " hp:" << mob->hp() << 
+				" mana:" << mob->mana() << " move:" << mob->move() << "\n";
+			mob->set_time_birth(time(0));
+			mob->set_time_played(0);
+			mob->set_time_logon(time(0));
 
 			mob_index[i].number++;
-			SET_BIT(mob.char_specials.saved.act, MOB_ISNPC);
-			mob.uuid = mob_list.size() - 1;
-			if(IS_NPC((&mob))){
-				log("DEBUG: the read mobile is an NPC");
-			}
-			return &mob_list.back();
+			SET_BIT(mob->char_specials().saved.act, MOB_ISNPC);
+			mob->uuid() = mob_list.size() - 1;
+			return mob->cd();
 		}
 		uuid_t get_uuid() {
 			static uuid_t u = 0;
@@ -606,9 +634,10 @@ namespace mods {
 				return false;
 			}
 
-			if(player->has_builder_data() && player->room_pave_mode()) {
+			if(player->room_pave_mode()) {
 				//If is a direction and that direction is not an exit,
 				//then pave a way to that exit
+				std::cerr << "[[[Room pave mode]]]\n";
 				int door = 0;
 
 				if(argument.length() == 1){
@@ -642,9 +671,12 @@ namespace mods {
 						case 'D':
 							door = DOWN;
 							break;
+						default: return true;
 					}
 
-					if(!CAN_GO(player->cd(),door)) {
+					std::cerr << "checking CAN_GO...";
+					if(world[player->room()].dir_option[door] == nullptr){
+						std::cerr << "can't. Checking other parameters...";
 						if(player->room() < 0){
 							log("SYSERR: error: player's room is less than zero. Not paving.");
 							return false;
@@ -655,7 +687,7 @@ namespace mods {
 						}
 						player->stc("[stub] pave_to\n");
 						mods::builder::pave_to(player,&world[player->room()],door);
-						return true;
+						return false;
 					}
 				}
 			}
@@ -715,24 +747,16 @@ namespace mods {
 			 * \param char_data* the character's player pointer
 			 * \return void
 			 */
-			void char_from_room(struct char_data* ch) {
-				if(ch){
-					auto room_id = IN_ROOM(ch);
-					if(std::size_t(room_id) >= room_list.size()){
-						log("SYSERR: char_from_room failed. room_id >= room_list.size()");
-						return;
-					}
-					auto place = std::find(room_list[room_id].begin(),room_list[room_id].end(),ch);
-
-					if(place == room_list[room_id].end()) {
-						log("SYSERR: char_from_room failed. Tried to extract ch, but it's not in the room");
-						return;
-					} else {
-						room_list[room_id].erase(place);
-					}
-				}else{
-					log("SYSERR: char_from_room failed for ch. null ch");
+			void char_from_room(char_data* ch) {
+				MENTOC_PREAMBLE();
+				auto room_id = IN_ROOM(ch);
+				if(std::size_t(room_id) >= room_list.size()){
+					log("SYSERR: char_from_room failed. room_id >= room_list.size()");
 					return;
+				}
+				auto place = std::find(room_list[room_id].begin(),room_list[room_id].end(),player);
+				if(place != room_list[room_id].end()){
+					room_list[room_id].erase(place);
 				}
 			}
 
@@ -745,23 +769,20 @@ namespace mods {
 			 * \param char_data* character pointer
 			 * \return void will log a SYSERR if the resolved room id (param 1) is out of bounds
 			 */
-			void char_to_room(const room_rnum& room,struct char_data* ch) {
-				if(ch){
-					auto target_room = room;
-					if(boot_type == boot_type_t::BOOT_HELL){
-						target_room = 0;
-					}else if(target_room >= 0 && std::size_t(target_room) >= room_list.size()){
-						log("SYSERR: char_to_room failed for ch. Requested room is out of bounds: ",target_room);
-						return;
-					}
-					auto place = std::find(room_list[target_room].begin(),room_list[target_room].end(),ch);
-
-					if(place == room_list[target_room].end()) {
-						room_list[target_room].push_back(ch);
-					}
-				}else{
-					log("SYSERR: char_to_room failed for ch. null ch");
+			void char_to_room(const room_rnum& room,char_data* ch) {
+				MENTOC_PREAMBLE();
+				auto target_room = room;
+				if(boot_type == boot_type_t::BOOT_HELL){
+					std::cerr << "boot type hell. NOT sending to requested room of: " << room << "\n";
+					target_room = 0;
 				}
+				if(target_room >= room_list.size()){
+					log("SYSERR: char_to_room failed for ch. Requested room is out of bounds: ",target_room);
+					return;
+				}
+				room_list[target_room].push_back(player);
+				IN_ROOM(ch) = target_room;
+				return;
 			}
 		};
 

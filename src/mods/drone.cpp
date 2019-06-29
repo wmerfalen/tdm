@@ -95,8 +95,8 @@ namespace mods {
 		}
 
 		if(argument.compare("scan") == 0) {
-			for(auto & ch : mods::globals::room_list[drone->cd()->in_room]){
-				mods::player(ch) << "You have been spotted.\r\n";
+			for(auto & player_ptr : mods::globals::room_list[drone->cd()->in_room]){
+				*player_ptr << "You have been spotted.\r\n";
 			}
 			return false;
 		}

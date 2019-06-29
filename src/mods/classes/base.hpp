@@ -4,7 +4,7 @@
 #include "types.hpp"
 #include <memory>
 namespace mods {
-	class player;
+	struct player;
 };
 namespace mods::classes {
 	struct base {

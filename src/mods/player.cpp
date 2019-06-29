@@ -12,6 +12,7 @@
 #include <bitset>
 #include <algorithm>
 #include "util.hpp"
+#include "scan.hpp"
 /**
  * TODO: All these stc* functions need to be altered to accomodate
  * the new player_type_enum_t values. If output is to be muted, then
@@ -22,12 +23,19 @@
 
 extern void do_auto_exits(struct char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
+extern mods::scan::find_results_t mods::scan::los_find(chptr hunter,chptr hunted);
 namespace mods {
 	std::string just_color_evaluation(std::string final_buffer) {
+		final_buffer = mods::globals::replace_all(final_buffer,"{yel}","\033[93m");
+		final_buffer = mods::globals::replace_all(final_buffer,"{gld}","\033[33m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{grn}","\033[32m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{red}","\033[31m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{blu}","\033[34m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{wht}","\033[37m");
+		final_buffer = mods::globals::replace_all(final_buffer,"{grey}","\033[90m");
+		final_buffer = mods::globals::replace_all(final_buffer,"{/yel}","\033[0m");
+		final_buffer = mods::globals::replace_all(final_buffer,"{/gld}","\033[0m");
+		final_buffer = mods::globals::replace_all(final_buffer,"{/grey}","\033[0m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{/grn}","\033[0m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{/wht}","\033[0m");
 		final_buffer = mods::globals::replace_all(final_buffer,"{/red}","\033[0m");
@@ -163,11 +171,6 @@ namespace mods {
 		m_time = ::time(nullptr);
 	}
 
-	player::~player(){
-		if(IN_ROOM(cd()) != NOWHERE){
-			char_from_room(cd());
-		}
-	}
 	player::player(player_type_enum_t type){
 		set_god_mode(false);
 		set_bui_mode(false);
@@ -237,6 +240,8 @@ namespace mods {
 		m_capture_output = false;
 		m_executing_js = false;
 		set_type(player_type_enum_t::PLAYER);
+		this->set_overhead_map_width(16);
+		this->set_overhead_map_height(10);
 	}
 	player::player(mods::player* ptr) {
 		/**TODO: should we set the queue_behaviour flags on the descriptor data items on *this? */
@@ -267,13 +272,12 @@ namespace mods {
 	}
 
 	using mask_t = mods::weapon::mask_type;
-	player::player(char_data* ch) : m_executing_js(false), m_char_data(ch),m_do_paging(false),
+	player::player(char_data* ch) : m_char_data(ch), m_executing_js(false), m_do_paging(false),
 		m_page(0),m_current_page(0),m_current_page_fragment("") {
 			m_set_time();
 	};
 	bool player::can_snipe(char_data *target) {
-		/** TODO: figure out why this function was created. */
-		return true;
+		return mods::scan::los_find(std::make_shared<mods::player>(cd()),std::make_shared<mods::player>(target)).found;
 	}
 	std::shared_ptr<mods::classes::base>& player::get_class(class_type c_type) {
 		for(auto& ptr : m_class_info) {
@@ -321,23 +325,28 @@ namespace mods {
 
 		page(m_current_page +1);
 	}
-	bool player::has_weapon_capability(int type) {
+	void player::equip(obj_data* obj,int pos) {
+		if(pos == WEAR_WIELD){
+			m_weapon_flags = obj->obj_flags.weapon_flags;
+		}
+	}
+	void player::unequip(obj_data* obj,int pos) {
+		if(pos == WEAR_WIELD){
+			m_weapon_flags = obj->obj_flags.weapon_flags;
+		}
+	}
+	bool player::has_weapon_capability(uint64_t type) {
 		auto w = weapon();
 
 		if(!w) {
 			return false;
 		}
+		/** TODO: scan through all items and affects and check if any of the items
+		 * or affects allow sniping on the current weapon that is being 
+		 * wielded.
+		 */
 
-		switch(type) {
-			case mods::weapon::mask::snipe:
-				return !!(std::string(w->name).find("snipe") != std::string::npos);
-				break;
-
-			default:
-				return false;
-		}
-
-		return false;
+		return w->obj_flags.weapon_flags  & type || m_weapon_flags & type;
 	}
 	bool player::has_inventory_capability(int type) {
 		return true; //FIXME:
@@ -350,6 +359,9 @@ namespace mods {
 		return cts >= m_weapon_cooldown[set];
 	}
 	bool player::carrying_ammo_of_type(const weapon_type_t& type) {
+		if(m_char_data->carrying == 0){
+			return false;
+		}
 		for(auto item = m_char_data->carrying; item->next; item = item->next) {
 			if(std::string(item->name).find("[ammo]") != std::string::npos
 			        &&
@@ -362,6 +374,13 @@ namespace mods {
 		}
 
 		return false;
+	}
+	/** TODO: do this */
+	obj_data* player::carry(obj_data* obj){
+		return new obj_data;
+	}
+	obj_data* player::carrying(){
+		return cd()->carrying;
 	}
 	std::string player::js_object() {
 		std::string obj = std::string("{ 'name': '") + std::string(cd()->player.name) + std::string("','uuid':");
@@ -501,6 +520,12 @@ namespace mods {
 			std::string title = static_cast<const char*>(world[rnum].name);
 			stc_color_evaluation(std::string("{grn}") + title + "{/grn}",this);
 		}
+		if(builder_mode()){
+			stc(std::string("[room_id:") + std::to_string(room()) + "|number:" + 
+					std::to_string(world[room()].number) + "|zone:" + 
+					std::to_string(world[room()].zone)
+		 );
+		}
 	}
 	void player::stc(const char* m) {
 		if(m) {
@@ -510,6 +535,9 @@ namespace mods {
 
 			send_to_char(m_char_data,m);
 		}
+	}
+	void player::stc(std::string_view sview) {
+		send_to_char(m_char_data,sview.data());
 	}
 	void player::stc(const std::string m) {
 		if(m.length()) {
@@ -543,11 +571,13 @@ namespace mods {
 				if(i_value.has_value()) {
 					stc(word_wrap(colored,i_value.value()) + "\r\n");
 				}
-
-				return;
 			} else {
 				stc(word_wrap(colored,80) + "\r\n");
 			}
+		}
+		if(((get_prefs()) & PRF_OVERHEAD_MAP)){
+			std::string map_string(mods::overhead_map::generate<mods::player*>(this,room()).data());
+			stc(map_string.c_str());
 		}
 	}
 	obj_data* player::weapon() {
@@ -576,6 +606,8 @@ namespace mods {
 		it->character->has_desc = true;
 	}
 	void player::init(){
+		m_weapon_type = 0;
+		m_weapon_flags = 0;
 		m_authenticated = false;
 		set_god_mode(false);
 		set_imp_mode(false);
@@ -601,6 +633,7 @@ namespace mods {
 		if(m_shared_ptr){
 			m_shared_ptr.reset();
 		}
+		m_lense_type = NORMAL_SIGHT;
 	}
 			void player::set_cd(char_data* ch) {
 				m_char_data = ch;
@@ -639,48 +672,27 @@ namespace mods {
 			 */
 			void player::affect(uint64_t flag){
 				SET_BIT(AFF_FLAGS(cd()), flag);
-				m_affected[mods::util::legacy2aff(flag)] = true;
+				set_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
 			}
-			void player::affect(mods::flags::aff flag){
-				SET_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
-				m_affected[flag] = true;
-			}
+			//void player::affect(mods::flags::aff flag){
+			//	SET_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
+			//	set_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
+			//}
 			void player::remove_affect(uint64_t flag){
 				REMOVE_BIT(AFF_FLAGS(cd()), flag);
-				m_affected[mods::util::legacy2aff(flag)] = false;
+				remove_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
 			}
-			void player::remove_affect(mods::flags::aff flag){
-				REMOVE_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
-				m_affected[flag] = false;
-			}
+			//void player::remove_affect(mods::flags::aff flag){
+			//	REMOVE_BIT(AFF_FLAGS(cd()), mods::util::aff2legacy(flag));
+			//	remove_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
+			//}
 			void player::clear_all_affected(){
-				for(auto &pair : this->get_affected()){
-					this->remove_affect(pair.first);
-				}
+				m_flags[mods::flags::chunk_type_t::LEGACY_AFF] = 0;
+				AFF_FLAGS(cd()) = 0;
 			}
-			const std::map<mods::flags::aff,bool>& player::get_affected(){
-m_affected[mods::flags::aff::BLIND] = IS_SET(AFF_FLAGS(cd()),AFF_BLIND);
-m_affected[mods::flags::aff::INVISIBLE] = IS_SET(AFF_FLAGS(cd()),AFF_INVISIBLE);
-m_affected[mods::flags::aff::DETECT_ALIGN] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_ALIGN);
-m_affected[mods::flags::aff::DETECT_INVIS] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_INVIS);
-m_affected[mods::flags::aff::DETECT_MAGIC] = IS_SET(AFF_FLAGS(cd()),AFF_DETECT_MAGIC);
-m_affected[mods::flags::aff::SENSE_LIFE] = IS_SET(AFF_FLAGS(cd()),AFF_SENSE_LIFE);
-m_affected[mods::flags::aff::WATERWALK] = IS_SET(AFF_FLAGS(cd()),AFF_WATERWALK);
-m_affected[mods::flags::aff::SANCTUARY] = IS_SET(AFF_FLAGS(cd()),AFF_SANCTUARY);
-m_affected[mods::flags::aff::GROUP] = IS_SET(AFF_FLAGS(cd()),AFF_GROUP);
-m_affected[mods::flags::aff::CURSE] = IS_SET(AFF_FLAGS(cd()),AFF_CURSE);
-m_affected[mods::flags::aff::INFRAVISION] = IS_SET(AFF_FLAGS(cd()),AFF_INFRAVISION);
-m_affected[mods::flags::aff::POISON] = IS_SET(AFF_FLAGS(cd()),AFF_POISON);
-m_affected[mods::flags::aff::PROTECT_EVIL] = IS_SET(AFF_FLAGS(cd()),AFF_PROTECT_EVIL);
-m_affected[mods::flags::aff::PROTECT_GOOD] = IS_SET(AFF_FLAGS(cd()),AFF_PROTECT_GOOD);
-m_affected[mods::flags::aff::SLEEP] = IS_SET(AFF_FLAGS(cd()),AFF_SLEEP);
-m_affected[mods::flags::aff::NOTRACK] = IS_SET(AFF_FLAGS(cd()),AFF_NOTRACK);
-m_affected[mods::flags::aff::UNUSED16] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED16);
-m_affected[mods::flags::aff::UNUSED17] = IS_SET(AFF_FLAGS(cd()),AFF_UNUSED17);
-m_affected[mods::flags::aff::SNEAK] = IS_SET(AFF_FLAGS(cd()),AFF_SNEAK);
-m_affected[mods::flags::aff::HIDE] = IS_SET(AFF_FLAGS(cd()),AFF_HIDE);
-m_affected[mods::flags::aff::CHARM] = IS_SET(AFF_FLAGS(cd()),AFF_CHARM);
-return m_affected;
+			aligned_int_t player::get_affected(){
+				return AFF_FLAGS(cd());
+				return get_chunk(mods::flags::chunk_type_t::LEGACY_AFF);
 			}
 			/**
 			 * =============================
@@ -694,57 +706,39 @@ return m_affected;
 			 */
 			void player::affect_plr(uint64_t flag){
 				SET_BIT(PLR_FLAGS(cd()), flag);
-				m_affected_plr[mods::util::legacy2plr(flag)] = true;
+				set_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
 			}
-			void player::affect_plr(mods::flags::plr flag){
-				SET_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
-				m_affected_plr[flag] = true;
-			}
+			//void player::affect_plr(mods::flags::plr flag){
+			//	SET_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
+			//	set_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
+			//}
 			void player::remove_affect_plr(uint64_t flag){
 				REMOVE_BIT(PLR_FLAGS(cd()), flag);
-				m_affected_plr[mods::util::legacy2plr(flag)] = false;
+				remove_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
 			}
-			void player::remove_affect_plr(mods::flags::plr flag){
-				REMOVE_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
-				m_affected_plr[flag] = false;
-			}
+			//void player::remove_affect_plr(mods::flags::plr flag){
+			//	REMOVE_BIT(PLR_FLAGS(cd()), mods::util::plr2legacy(flag));
+			//	remove_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
+			//}
 			void player::clear_all_affected_plr(){
-				for(auto &pair : this->get_affected_plr()){
-					this->remove_affect_plr(pair.first);
-				}
+				PLR_FLAGS(cd()) = 0;
 			}
-			const std::map<mods::flags::plr,bool>& player::get_affected_plr(){
-m_affected_plr[mods::flags::plr::KILLER] = IS_SET(PLR_FLAGS(cd()),PLR_KILLER);
-m_affected_plr[mods::flags::plr::THIEF] = IS_SET(PLR_FLAGS(cd()),PLR_THIEF);
-m_affected_plr[mods::flags::plr::FROZEN] = IS_SET(PLR_FLAGS(cd()),PLR_FROZEN);
-m_affected_plr[mods::flags::plr::DONTSET] = IS_SET(PLR_FLAGS(cd()),PLR_DONTSET);
-m_affected_plr[mods::flags::plr::WRITING] = IS_SET(PLR_FLAGS(cd()),PLR_WRITING);
-m_affected_plr[mods::flags::plr::MAILING] = IS_SET(PLR_FLAGS(cd()),PLR_MAILING);
-m_affected_plr[mods::flags::plr::CRASH] = IS_SET(PLR_FLAGS(cd()),PLR_CRASH);
-m_affected_plr[mods::flags::plr::SITEOK] = IS_SET(PLR_FLAGS(cd()),PLR_SITEOK);
-m_affected_plr[mods::flags::plr::NOSHOUT] = IS_SET(PLR_FLAGS(cd()),PLR_NOSHOUT);
-m_affected_plr[mods::flags::plr::NOTITLE] = IS_SET(PLR_FLAGS(cd()),PLR_NOTITLE);
-m_affected_plr[mods::flags::plr::DELETED] = IS_SET(PLR_FLAGS(cd()),PLR_DELETED);
-m_affected_plr[mods::flags::plr::LOADROOM] = IS_SET(PLR_FLAGS(cd()),PLR_LOADROOM);
-m_affected_plr[mods::flags::plr::NOWIZLIST] = IS_SET(PLR_FLAGS(cd()),PLR_NOWIZLIST);
-m_affected_plr[mods::flags::plr::NODELETE] = IS_SET(PLR_FLAGS(cd()),PLR_NODELETE);
-m_affected_plr[mods::flags::plr::INVSTART] = IS_SET(PLR_FLAGS(cd()),PLR_INVSTART);
-m_affected_plr[mods::flags::plr::CRYO] = IS_SET(PLR_FLAGS(cd()),PLR_CRYO);
-m_affected_plr[mods::flags::plr::NOTDEADYET] = IS_SET(PLR_FLAGS(cd()),PLR_NOTDEADYET);
-				return m_affected_plr;
+			aligned_int_t player::get_affected_plr(){
+				return PLR_FLAGS(cd());
+				return get_chunk(mods::flags::chunk_type_t::LEGACY_PLR);
 			}
 
 			bool player::has_affect(uint64_t flag){
-				return m_affected[mods::util::legacy2aff(flag)];
+				return has_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
 			}
 			bool player::has_affect(mods::flags::aff flag){
-				return m_affected[flag];
+				return has_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
 			}
 			bool player::has_affect_plr(uint64_t flag) {
-				return m_affected_plr[mods::util::legacy2plr(flag)];
+				return has_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
 			}
 			bool player::has_affect_plr(mods::flags::plr flag) {
-				return m_affected_plr[flag];
+				return has_flag(mods::flags::chunk_type_t::LEGACY_PLR,flag);
 			}
 
 			/**
@@ -778,25 +772,30 @@ m_affected_plr[mods::flags::plr::NOTDEADYET] = IS_SET(PLR_FLAGS(cd()),PLR_NOTDEA
 			}
 			void player::set_bui_mode(bool b){
 				m_bui_mode = b;
+				if(m_bui_mode){
+					if(!builder_data){
+						builder_data = std::make_shared<builder_data_t>();
+					}
+				}
 			}
 			void player::done() {
 				this->stc("It has been done.\n");
 			}
 			bool player::has_builder_data(){
-				if(cd()->builder_data){
+				if(builder_data){
 					return true;
 				}
 				return false;
 			}
 			bool player::room_pave_mode(){
 				if(this->has_builder_data()){
-					return cd()->builder_data->room_pave_mode;
+					return builder_data->room_pave_mode;
 				}
 				return false;
 			}
 			bool player::zone_pave_mode(){
 				if(this->has_builder_data()){
-					return cd()->builder_data->zone_pave_mode;
+					return builder_data->zone_pave_mode;
 				}
 				return false;
 			}
@@ -817,14 +816,14 @@ m_affected_plr[mods::flags::plr::NOTDEADYET] = IS_SET(PLR_FLAGS(cd()),PLR_NOTDEA
 				if(m_desc){
 					m_desc->bad_pws = i;
 				}else{
-					std::cerr << "warning: ncrement_bad_password_count called but m_desc is null\n";
+					std::cerr << "warning: set_bad_password_count called but m_desc is null\n";
 				}
 			}
 			void player::increment_bad_password_count(){
 				if(m_desc){
 					++m_desc->bad_pws;
 				}else{
-					std::cerr << "warning: ncrement_bad_password_count called but m_desc is null\n";
+					std::cerr << "warning: increment_bad_password_count called but m_desc is null\n";
 				}
 			}
 			int player::get_bad_password_count(){
@@ -849,7 +848,6 @@ m_affected_plr[mods::flags::plr::NOTDEADYET] = IS_SET(PLR_FLAGS(cd()),PLR_NOTDEA
 				}else{
 					std::cerr << "warning: state called but m_desc is null\n";
 					if(cd()->desc){
-						std::cout << "info: char_data ptr has a desc, so we're returning that\n";
 						return cd()->desc->connected;
 					}
 					return 0;
@@ -871,7 +869,6 @@ m_affected_plr[mods::flags::plr::NOTDEADYET] = IS_SET(PLR_FLAGS(cd()),PLR_NOTDEA
 				return "unknown";
 			}
 			void player::deactivate_account(){
-				
 				/** TODO: what do we need to do to deactivate the account? 
 				 * for now, I think just setting an active flag for the player would be enough
 				 */

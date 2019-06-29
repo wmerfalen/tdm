@@ -88,16 +88,16 @@ ACMD(do_color);
 ACMD(do_toggle);
 void sort_commands(void);
 ACMD(do_commands);
-void diag_char_to_char(struct char_data *i, struct char_data *ch);
-void look_at_char(struct char_data *i, struct char_data *ch);
-void list_one_char(struct char_data *i, struct char_data *ch);
-void list_char_to_char(struct char_data *list, struct char_data *ch);
-void do_auto_exits(struct char_data *ch);
+void diag_char_to_char(char_data *i, char_data *ch);
+void look_at_char(char_data *i, char_data *ch);
+void list_one_char(char_data *i, char_data *ch);
+void list_char_to_char(char_data *ch);
+void do_auto_exits(char_data *ch);
 ACMD(do_exits);
-void look_in_direction(struct char_data *ch, int dir);
-void look_in_obj(struct char_data *ch, char *arg);
+void look_in_direction(char_data *ch, int dir);
+void look_in_obj(char_data *ch, char *arg);
 char *find_exdesc(char *word, extra_descr_data *list);
-void look_at_target(struct char_data *ch, char *arg);
+void look_at_target(char_data *ch, char *arg);
 
 /* local globals */
 int *cmd_sort_info;
@@ -503,11 +503,11 @@ void list_one_char(struct char_data *i, struct char_data *ch) {
 
 
 
-void list_char_to_char(struct char_data *list, struct char_data *ch) {
-	struct char_data *i;
-
-	for(i = list; i; i = i->next_in_room)
-		if(ch != i) {
+void list_char_to_char(char_data *ch) {
+	for(auto & player_ptr : mods::globals::room_list[IN_ROOM(ch)]){
+		std::cerr << "[debug]: list_char_to_char: " << player_ptr->name().c_str() << "\n";
+		auto i = player_ptr->cd();
+		if(player_ptr->name().compare(ch->player.name.c_str()) != 0) {
 			if(CAN_SEE(ch, i)) {
 				list_one_char(i, ch);
 			} else if(IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch) &&
@@ -515,6 +515,7 @@ void list_char_to_char(struct char_data *list, struct char_data *ch) {
 				send_to_char(ch, "You see a pair of glowing red eyes looking your way.\r\n");
 			}
 		}
+	}
 }
 
 
@@ -585,15 +586,12 @@ ACMD(do_exits) {
 void look_at_room(struct char_data *ch, int ignore_brief) {
 	MENTOC_PREAMBLE();
 
-	d("look at room entry");
 	if(!ch->has_desc) {
 		d("look_at_room: char doesnt have a desc! WTF");
 		return;
 	}
 
-	d("look at room in_room(ch): " << IN_ROOM(ch));
 	if(IN_ROOM(ch) < 0){
-		d("look_at_room[IN_ROOM(ch)]->'is -1'");
 		return;
 	}
 
@@ -603,20 +601,9 @@ void look_at_room(struct char_data *ch, int ignore_brief) {
 		return;
 	}
 
-	/*
-	if (IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch)) {
-	  send_to_char(ch, "It is pitch black...\r\n");
-	  return;
-	} else if (AFF_FLAGGED(ch, AFF_BLIND)) {
-	  send_to_char(ch, "You see nothing but infinite darkness...\r\n");
-	  return;
-	}*/
-	d("world.size:" << world.size());
-	d("1");
 	send_to_char(ch, "%s", CCCYN(ch, C_NRM));
 
 	if(!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_ROOMFLAGS)) {
-		d("2");
 		char buf[MAX_STRING_LENGTH];
 
 		sprintbit(ROOM_FLAGS(IN_ROOM(ch)), room_bits, buf, sizeof(buf));
@@ -626,14 +613,11 @@ void look_at_room(struct char_data *ch, int ignore_brief) {
 	}
 
 	send_to_char(ch, "%s\r\n", CCNRM(ch, C_NRM));
-	//player->stc_ccnrm(CCNRM(ch,C_NRM));
 
 	if((!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_BRIEF)) || ignore_brief ||
 	        ROOM_FLAGGED(IN_ROOM(ch), ROOM_DEATH)) {
-		player->stc_room_desc(IN_ROOM(ch));
+		player->stc_room_desc(player->room());
 	}
-
-	//send_to_char(ch, "%s", world[IN_ROOM(ch)].description);
 
 	/* autoexits */
 	if(!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_AUTOEXIT)) {
@@ -646,7 +630,7 @@ void look_at_room(struct char_data *ch, int ignore_brief) {
 	send_to_char(ch, "%s", CCGRN(ch, C_NRM));
 	list_obj_to_char(world[IN_ROOM(ch)].contents, ch, SHOW_OBJ_LONG, FALSE);
 	send_to_char(ch, "%s", CCYEL(ch, C_NRM));
-	list_char_to_char(world[IN_ROOM(ch)].people, ch);
+	list_char_to_char(ch);
 	send_to_char(ch, "%s", CCNRM(ch, C_NRM));
 }
 
@@ -737,14 +721,9 @@ void look_in_obj(struct char_data *ch, char *arg) {
 
 
 char *find_exdesc(char *word,room_data& r){
-	std::cerr << "(before for) find_exdesc word: '" << word << "'\n";
 	for(const auto & i: r.ex_descriptions()){
-		std::cerr << "find_exdesc word: '" << word << "' " <<
-			"keyword: '" << i.keyword.c_str() << "' " <<
-			"description: '" << i.description.c_str() << "'\n";
 		if(isname(word, i.keyword.c_str())) {
-			std::cerr << "YES: " << i.keyword.c_str() << "\n";
-			return (i.description.c_str());
+			return (const_cast<char*>(i.description.c_str()));
 		}
 	}
 	return (NULL);
@@ -811,7 +790,6 @@ void look_at_target(char_data *ch, char *arg) {
 	}
 
 	/* Does the argument match an extra desc in the room? */
-	std::cerr << "find_exdesc arg: '" << arg << "'\n";
 	if((desc = find_exdesc(arg, world[IN_ROOM(ch)])) != NULL) {
 		page_string(*ch->desc, desc, FALSE);
 		return;
@@ -865,7 +843,7 @@ ACMD(do_look) {
 		send_to_char(ch, "You can't see a damned thing, you're blind!\r\n");
 	} else if(IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch)) {
 		send_to_char(ch, "It is pitch black...\r\n");
-		list_char_to_char(world[IN_ROOM(ch)].people, ch);	/* glowing red eyes */
+		list_char_to_char(ch);	/* glowing red eyes */
 	} else {
 		char arg[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
 
@@ -881,21 +859,16 @@ ACMD(do_look) {
 		}
 
 		if(!*arg) {		/* "look" alone, without an argument at all */
-			d("looking at room");
 			look_at_room(ch, 1);
 		} else if(is_abbrev(arg, "in")) {
-			d("looking in obj");
 			look_in_obj(ch, arg2);
 		}
 		/* did the char type 'look <direction>?' */
 		else if((look_type = search_block(arg, dirs, FALSE)) >= 0) {
-			d("looking in dir");
 			look_in_direction(ch, look_type);
 		} else if(is_abbrev(arg, "at")) {
-			d("looking at target");
 			look_at_target(ch, arg2);
 		} else {
-			d("looking at targe2");
 			look_at_target(ch, arg);
 		}
 	}
@@ -1228,7 +1201,6 @@ ACMD(do_help) {
 #define WHO_FORMAT \
 "format: who [minlev[-maxlev]] [-n name] [-c classlist] [-s] [-o] [-q] [-r] [-z]\r\n"
 
-/* FIXME: This whole thing just needs rewritten. */
 ACMD(do_who) {
 	struct char_data *tch;
 	char name_search[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
@@ -1306,7 +1278,8 @@ ACMD(do_who) {
 
 	send_to_char(ch, "Players\r\n-------\r\n");
 
-	for(auto & d : descriptor_list) {
+	for(auto & player : mods::globals::player_list) {
+		auto d = player->desc();
 		if(STATE(d) != CON_PLAYING) {
 			continue;
 		}
@@ -1932,7 +1905,7 @@ ACMD(do_color) {
 		return;
 	}
 
-	if(((tp = search_block(arg, ctypes, FALSE)) == -1)) {
+	if((tp = search_block(arg, ctypes, FALSE)) == -1) {
 		send_to_char(ch, "Usage: color { Off | Sparse | Normal | Complete }\r\n");
 		return;
 	}

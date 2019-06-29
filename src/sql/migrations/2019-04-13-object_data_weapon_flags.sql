@@ -1,0 +1,1 @@
+ALTER TABLE object_flags ADD COLUMN weapon_flags INTEGER NOT NULL DEFAULT 0;

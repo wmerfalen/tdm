@@ -502,7 +502,7 @@ struct obj_data *get_purchase_obj(struct char_data *ch, char *arg,
 			if(msg) {
 				char buf[MAX_INPUT_LENGTH];
 
-				snprintf(buf, sizeof(buf), shop_index[shop_nr].no_such_item1, GET_NAME(ch));
+				snprintf(buf, sizeof(buf), shop_index[shop_nr].no_such_item1, GET_NAME(ch).c_str());
 				do_tell(keeper, buf, cmd_tell, 0);
 			}
 
@@ -598,12 +598,12 @@ void shopping_buy(char *arg, struct char_data *ch, struct char_data *keeper, int
 	if(buy_price(obj, shop_nr, keeper, ch) > GET_GOLD(ch) && !IS_GOD(ch)) {
 		char actbuf[MAX_INPUT_LENGTH];
 
-		snprintf(actbuf, sizeof(actbuf), shop_index[shop_nr].missing_cash2, GET_NAME(ch));
+		snprintf(actbuf, sizeof(actbuf), shop_index[shop_nr].missing_cash2, GET_NAME(ch).c_str());
 		do_tell(keeper, actbuf, cmd_tell, 0);
 
 		switch(SHOP_BROKE_TEMPER(shop_nr)) {
 			case 0:
-				do_action(keeper, strcpy(actbuf, GET_NAME(ch)), cmd_puke, 0);	/* strcpy: OK (MAX_NAME_LENGTH < MAX_INPUT_LENGTH) */
+				do_action(keeper, strcpy(actbuf, GET_NAME(ch).c_str()), cmd_puke, 0);	/* strcpy: OK (MAX_NAME_LENGTH < MAX_INPUT_LENGTH) */
 				return;
 
 			case 1:
@@ -684,7 +684,7 @@ void shopping_buy(char *arg, struct char_data *ch, struct char_data *keeper, int
 	snprintf(tempbuf, sizeof(tempbuf), "$n buys %s.", tempstr);
 	act(tempbuf, FALSE, ch, obj, 0, TO_ROOM);
 
-	snprintf(tempbuf, sizeof(tempbuf), shop_index[shop_nr].message_buy, GET_NAME(ch), goldamt);
+	snprintf(tempbuf, sizeof(tempbuf), shop_index[shop_nr].message_buy, GET_NAME(ch).c_str(), goldamt);
 	do_tell(keeper, tempbuf, cmd_tell, 0);
 
 	send_to_char(ch, "You now have %s.\r\n", tempstr);
@@ -706,7 +706,7 @@ struct obj_data *get_selling_obj(struct char_data *ch, char *name, struct char_d
 		if(msg) {
 			char tbuf[MAX_INPUT_LENGTH];
 
-			snprintf(tbuf, sizeof(tbuf), shop_index[shop_nr].no_such_item2, GET_NAME(ch));
+			snprintf(tbuf, sizeof(tbuf), shop_index[shop_nr].no_such_item2, GET_NAME(ch).c_str());
 			do_tell(keeper, tbuf, cmd_tell, 0);
 		}
 
@@ -849,7 +849,7 @@ void shopping_sell(char *arg, struct char_data *ch, struct char_data *keeper, in
 	if(GET_GOLD(keeper) + SHOP_BANK(shop_nr) < sell_price(obj, shop_nr, keeper, ch)) {
 		char buf[MAX_INPUT_LENGTH];
 
-		snprintf(buf, sizeof(buf), shop_index[shop_nr].missing_cash1, GET_NAME(ch));
+		snprintf(buf, sizeof(buf), shop_index[shop_nr].missing_cash1, GET_NAME(ch).c_str());
 		do_tell(keeper, buf, cmd_tell, 0);
 		return;
 	}
@@ -886,7 +886,7 @@ void shopping_sell(char *arg, struct char_data *ch, struct char_data *keeper, in
 	snprintf(tempbuf, sizeof(tempbuf), "$n sells %s.", tempstr);
 	act(tempbuf, FALSE, ch, obj, 0, TO_ROOM);
 
-	snprintf(tempbuf, sizeof(tempbuf), shop_index[shop_nr].message_sell, GET_NAME(ch), goldamt);
+	snprintf(tempbuf, sizeof(tempbuf), shop_index[shop_nr].message_sell, GET_NAME(ch).c_str(), goldamt);
 	do_tell(keeper, tempbuf, cmd_tell, 0);
 
 	send_to_char(ch, "The shopkeeper now has %s.\r\n", tempstr);

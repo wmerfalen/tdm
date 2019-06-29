@@ -15,7 +15,9 @@
 /* external declarations and prototypes **********************************/
 namespace mods{
 	struct descriptor_data;
+	struct player;
 };
+#include <memory> //for shared_ptr
 extern struct weather_data weather_info;
 extern FILE *logfile;
 
@@ -40,12 +42,13 @@ int	get_line(FILE *fl, char *buf);
 int	get_filename(char *filename, size_t fbufsize, int mode, const char *orig_name);
 time_t	mud_time_to_secs(struct time_info_data *now);
 struct time_info_data *age(struct char_data *ch);
-int	num_pc_in_room(struct room_data *room);
+int	num_pc_in_room(room_data *room);
 void	core_dump_real(const char *, int);
 int	room_is_dark(room_rnum room);
 
 void log(const char* format, ...);
 void log(std::string n,...);
+void log(mods::string n,...);
 
 #define core_dump()		core_dump_real(__FILE__, __LINE__)
 
@@ -265,7 +268,10 @@ void	update_pos(struct char_data *victim);
 
 
 #define IN_ROOM(ch)	((ch)->in_room)
-#define GET_WAS_IN(ch)	((ch)->was_in_room)
+
+room_rnum& GET_WAS_IN(std::shared_ptr<mods::player>& player);
+room_rnum& GET_WAS_IN(char_data* player);
+
 #define GET_AGE(ch)     (age(ch)->year)
 
 #define GET_PC_NAME(ch)	((ch)->player.name)
@@ -483,21 +489,22 @@ void	update_pos(struct char_data *victim);
 
 #define EXIT(ch, door)  (world[IN_ROOM(ch)].dir_option[door])
 
-#define CAN_GO(ch, door) (EXIT(ch,door) && \
-			 (EXIT(ch,door)->to_room != NOWHERE) && \
+#define CAN_GO(ch, door) (world.size() > IN_ROOM(ch) && EXIT(ch,door) && \
+			 (EXIT(ch,door)->to_room < world.size() && EXIT(ch,door)->to_room != NOWHERE) && \
 			 !IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED))
 
 
 #define CLASS_ABBR(ch) (IS_NPC(ch) ? "--" : class_abbrevs[(int)GET_CLASS(ch)])
 
 #define IS_MAGIC_USER(ch)	(!IS_NPC(ch) && \
-				(GET_CLASS(ch) == CLASS_MAGIC_USER))
+				(GET_CLASS(ch) == CLASS_PSYOP))
 #define IS_CLERIC(ch)		(!IS_NPC(ch) && \
-				(GET_CLASS(ch) == CLASS_CLERIC))
+				(GET_CLASS(ch) == CLASS_MEDIC))
 #define IS_THIEF(ch)		(!IS_NPC(ch) && \
-				(GET_CLASS(ch) == CLASS_SNIPER))
-#define IS_WARRIOR(ch)		(!IS_NPC(ch) && \
-				(GET_CLASS(ch) == CLASS_WARRIOR))
+				(GET_CLASS(ch) == CLASS_MARKSMAN))
+#define IS_MARINE(ch)		(!IS_NPC(ch) && \
+				(GET_CLASS(ch) == CLASS_SUPPORT))
+#define IS_WARRIOR(ch) IS_MARINE(ch)
 #define IS_SUPPORT(ch)		(!IS_NPC(ch) && \
 				(GET_CLASS(ch) == CLASS_SUPPORT))
 

@@ -29,6 +29,7 @@
 
 #include "mods/js.hpp"
 #include "mods/crypto.hpp"
+#include "mods/auto-login.hpp"
 
 /* external variables */
 extern int destroy_socket(socket_t&);
@@ -62,7 +63,6 @@ void read_aliases(struct char_data *ch);
 void delete_aliases(const char *charname);
 
 /* local functions */
-int64_t perform_dupe_check(mods::descriptor_data& d);
 int64_t perform_dupe_check(std::shared_ptr<mods::player>);
 struct alias_data *find_alias(struct alias_data *alias_list, char *str);
 void free_alias(struct alias_data *a);
@@ -70,7 +70,32 @@ void perform_complex_alias(struct txt_q *input_q, char *orig, struct alias_data 
 int perform_alias(mods::descriptor_data d, char *orig, size_t maxlen);
 int reserved_word(char *argument);
 int _parse_name(char *arg, char *name);
-
+ACMD(do_room_list){
+	MENTOC_PREAMBLE();
+	for(auto & p : mods::globals::room_list[player->room()]){
+		player->stc(p->name());
+	}
+}
+ACMD(do_builder_help){
+	MENTOC_PREAMBLE();
+	if(IS_NPC(ch)){
+		/** nice try */
+		return;
+	}
+	if(player->implementor_mode() || player->builder_mode()){
+		for(auto & cmd : {
+			"js", "givemegold", "idle", "heal", "newjs", "jstest", "mbuild",
+			"obuild", "sbuild", "zbuild", "chanmgr", "rnumtele", "rnumlist",
+			"pref", "rbuild", "rbuild_sandbox", "room_list", "drone",
+			"throw", "ammo", "point_update"
+	 	}){
+			player->stc(cmd);
+		}
+	}else{
+		player->stc("Huh?!?");
+		return;
+	}
+}
 
 /* prototypes for all do_x functions. */
 ACMD(do_action);
@@ -166,22 +191,31 @@ ACMD(do_sleep);
 ACMD(do_sneak);
 ACMD(do_recall);
 ACMD(do_givemegold);
+ACMD(do_givemenades);
 ACMD(do_snipe);
 ACMD(do_heal);
 ACMD(do_newjs);
 ACMD(do_jstest);
 ACMD(do_mbuild);
 ACMD(do_obuild);
+ACMD(do_sbuild);
 ACMD(do_chanmgr);
 ACMD(do_zbuild);
 ACMD(do_rnumlist);
 ACMD(do_rnumtele);
 ACMD(do_pref);
 ACMD(do_rbuild);
+ACMD(do_rbuild_sandbox);
+ACMD(do_room_list);
 ACMD(do_drone);
 ACMD(do_quest);
 ACMD(do_js);
 ACMD(do_ammo);
+
+/** debug mods */
+ACMD(do_point_update);
+ACMD(do_zero_socket);
+/** -- end debug mods */
 ACMD(do_snoop);
 ACMD(do_spec_comm);
 ACMD(do_split);
@@ -496,29 +530,73 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "snicker"  , POS_RESTING , do_action   , 0, 0 },
 	/** mods */
 	{ "js"  , POS_RESTING , do_js   , 0, 0 },
-	{ "quest"  , POS_RESTING , do_quest   , 0, 0 },
-	{ "recall"  , POS_RESTING , do_recall   , 0, 0 },
+	/** ------------------- */
+	/** DEBUGGING + TESTING */
+	/** ------------------- */
 	{ "givemegold"  , POS_RESTING , do_givemegold   , 0, 0 },
-	{ "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
-	/** !NOTE: this is for simulating the 'pulled into a void' 
-	 * behaviour. It's useful for testing.
-	 */
+	{ "givemenades" , POS_RESTING , do_givemenades , 0, 0 },
 	{ "idle"  , POS_RESTING , do_idle   , 0, 0 },
 	{ "heal"  , POS_RESTING , do_heal   , 0, 0 },
 	{ "newjs"  , POS_RESTING , do_newjs   , LVL_GOD, 0 },
 	{ "jstest"  , POS_RESTING , do_jstest   , LVL_GOD, 0 },
+	{ "point_update"  , POS_RESTING , do_point_update   , 0, 0 },
+	{ "zero_socket"  , POS_RESTING , do_zero_socket  , 0, 0 },
+	/** ----------------------- */
+	/** END DEBUGGING + TESTING */
+	/** ----------------------- */
+
+	/** ------------- */
+	/** INFORMATIONAL */
+	/** ------------- */
+		/** ------ */
+		/** QUESTS */
+		/** ------ */
+	{ "quest"  , POS_RESTING , do_quest   , 0, 0 },
+		/** ------- */
+		/** DISPLAY */
+		/** ------- */
+	{ "automap"  , POS_RESTING , do_gen_tog   , 0, SCMD_AUTOMAP },
+	/** ----------------- */
+	/** END INFORMATIONAL */
+	/** ----------------- */
+
+	/** -------- */
+	/** MOVEMENT */
+	/** -------- */
+	{ "recall"  , POS_RESTING , do_recall   , 0, 0 },
+
+	/** ---------------- */
+	/** COMBAT MECHANICS */
+	/** ---------------- */
+	{ "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
+	//TODO code me{ "plant" , POS_RESTING , do_plant , 0, 0},
+	//TODO code me { "activate" , POS_RESTING , do_activate , 0, 0},
+	{ "drone"  , POS_RESTING , do_drone   , 0, 0 },
+	{ "throw"  , POS_RESTING , do_throw   , 0, 0 },
+	{ "ammo"  , POS_RESTING , do_ammo   , 0, 0 },
+	/** --------------------- */
+	/** END COMBAT MECHANICS  */
+	/** --------------------- */
+
+	/** ------------- */
+	/** BUILDER UTILS */
+	/** ------------- */
+	{ "builder_help"  , POS_RESTING , do_builder_help   , LVL_GOD, 0 },
 	{ "mbuild"  , POS_RESTING , do_mbuild   , LVL_GOD, 0 },
 	{ "obuild"  , POS_RESTING , do_obuild   , LVL_GOD, 0 },
-	{ "chanmgr"  , POS_RESTING , do_chanmgr   , LVL_IMMORT, 0 },
+	{ "sbuild"  , POS_RESTING , do_sbuild   , LVL_GOD, 0 },
 	{ "zbuild"  , POS_RESTING , do_zbuild   , LVL_IMMORT, 0 },
+	{ "chanmgr"  , POS_RESTING , do_chanmgr   , LVL_IMMORT, 0 },
 	{ "rnumtele"  , POS_RESTING , do_rnumtele   , LVL_IMMORT, 0 },
 	{ "rnumlist"  , POS_RESTING , do_rnumlist   , LVL_IMMORT, 0 },
 	{ "pref"  , POS_RESTING , do_pref   , 0, 0 },
 	{ "rbuild"  , POS_RESTING , do_rbuild   , LVL_IMMORT, 0 },
-	{ "drone"  , POS_RESTING , do_drone   , 0, 0 },
-	{ "throw"  , POS_RESTING , do_throw   , 0, 0 },
-	{ "ammo"  , POS_RESTING , do_ammo   , 0, 0 },
-	/** -- end mods */
+	{ "rbuild_sandbox"  , POS_RESTING , do_rbuild_sandbox   , LVL_IMMORT, 0 },
+	{ "room_list"  , POS_RESTING , do_room_list   , LVL_IMMORT, 0 },
+	/** ----------------- */
+	/** END BUILDER UTILS */
+	/** ----------------- */
+
 	{ "snap"     , POS_RESTING , do_action   , 0, 0 },
 	{ "snarl"    , POS_RESTING , do_action   , 0, 0 },
 	{ "sneeze"   , POS_RESTING , do_action   , 0, 0 },
@@ -1300,122 +1378,23 @@ int _parse_name(char *arg, char *name) {
 /* This function seems a bit over-extended. */
 int64_t perform_dupe_check(std::shared_ptr<mods::player> p){
 	std::string name = p->name();
-	/** No idea why this is here, but it will cause the
-	 * entire program to segfault. 
-	 *
-	 * p->desc().set_state(CON_PLAYING);
-	 *
-	 * If this truly is needed, then there needs to be a check 
-	 * so that the player object's state doesn't get set to CON_PLAYING
-	 * if the user hasn't fully authenticated (gotten past CON_NEEDS_AUTHENTICATION).
-	 * Otherwise, this causes invalid accesses to the player's data which 
-	 * simply isn't there because the user hasn't authenticated.
-	 */
 	int64_t kicked = 0;
 	for(auto& player_ptr : mods::globals::player_list){
-		if(!p->authenticated()){ continue; }
-		if(p->uuid() != player_ptr->uuid() && 
-				name.compare(player_ptr->name().c_str()) == 0 &&
-				(p->time()) > (player_ptr->time())){
-			player_ptr->desc().set_state(CON_CLOSE);
-			++kicked;
+		if(!player_ptr->authenticated()){
+			std::cerr << "player_ptr not authenticated\n"; 
+			continue;
+		}
+		if(p->socket() != player_ptr->socket() && 
+				name.compare(player_ptr->name().c_str()) == 0){
+			if(p->time() > player_ptr->time()){
+				char_from_room(player_ptr);
+				player_ptr->set_state(CON_CLOSE);
+				++kicked;
+			}
 		}
 	}
-	handle_disconnects();
 	return kicked;
 }
-
-int64_t perform_dupe_check(mods::descriptor_data& d) {
-	log("Warning: perform_dupe_check called on the wrong function!");
-	/*
-	 * now, go through the character list, deleting all characters that
-	 * are not already marked for deletion from the above step (i.e., in the
-	 * CON_HANGUP state), and have not already been selected as a target for
-	 * switching into.  In addition, if we haven't already found a target,
-	 * choose one if one is available (while still deleting the other
-	 * duplicates, though theoretically none should be able to exist).
-	 */
-
-	/*
-		 for(ch = character_list; ch; ch = next_ch) {
-		 next_ch = ch->next;
-
-		 if(IS_NPC(ch)) {
-		 continue;
-		 }
-
-		 if(ch->uuid != id) {
-		 continue;
-		 }
-
-	// ignore chars with descriptors (already handled by above step) 
-	if(ch->has_desc) {
-	continue;
-	}
-
-	// don't extract the target char we've found one already 
-	if(ch == target) {
-	continue;
-	}
-
-	// we don't already have a target and found a candidate for switching 
-	if(!target) {
-	target = ch;
-	mode = RECON;
-	continue;
-	}
-
-	// we've found a duplicate - blow him away, dumping his eq in limbo. 
-	if(IN_ROOM(ch) != NOWHERE) {
-	char_from_room(ch);
-	}
-
-	char_to_room(ch, 1);
-	extract_char(ch);
-	}
-
-	// no target for switching into was found - allow login to continue 
-	if(!target) {
-	return (0);
-	}
-
-	// Okay, we've found a target.  Connect d to target. 
-	//free_char(d.character); // get rid of the old char 
-	d.character = target;
-	 *d.character->desc = d;
-	 d.original = NULL;
-	 d.character->char_specials.timer = 0;
-	 REMOVE_BIT(PLR_FLAGS(d.character), PLR_MAILING | PLR_WRITING);
-	 REMOVE_BIT(AFF_FLAGS(d.character), AFF_GROUP);
-	 p->set_state(CON_PLAYING);
-
-	 switch(mode) {
-	 case RECON:
-	 write_to_output(d, "Reconnecting.\r\n");
-	 act("$n has reconnected.", TRUE, d.character, 0, 0, TO_ROOM);
-	 mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d.character)), TRUE, "%s [%s] has reconnected.", GET_NAME(d.character).c_str(), d.host.c_str());
-	 break;
-
-	 case USURP:
-	 write_to_output(d, "You take over your own body, already in use!\r\n");
-	 act("$n suddenly keels over in pain, surrounded by a white aura...\r\n"
-	 "$n's body has been taken over by a new spirit!",
-	 TRUE, d.character, 0, 0, TO_ROOM);
-	 mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d.character)), TRUE,
-	 "%s has re-logged in ... disconnecting old socket.", GET_NAME(d.character).c_str());
-	 break;
-
-	 case UNSWITCH:
-	 write_to_output(d, "Reconnecting to unswitched char.");
-	mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(d.character)), TRUE, "%s [%s] has reconnected.", GET_NAME(d.character).c_str(), d.host.c_str());
-	break;
-}
-*/
-
-return (1);
-}
-
-
 
 /* deal with newcomers and other non-playing sockets */
 void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
@@ -1427,6 +1406,24 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 	std::string arg = in_arg;
 	tuple_status_t status;
 
+	if(mods::auto_login::get_user().length()){
+		switch(p->state()){
+			case CON_GET_NAME:
+				arg = mods::auto_login::get_user();
+				p->set_name(arg);
+				p->set_db_id(0);
+				arg = mods::auto_login::get_password();
+				if(login(mods::auto_login::get_user(),arg) == false){
+					log("SYSERR: user/password combination for auto_login failed");
+					exit(1);
+				}else{
+					parse_sql_player(p);
+				}
+				p->set_state(CON_MENU);
+				arg = "1";
+				break;
+		}
+	}
 	switch(p->state()) {
 		case CON_GET_NAME:		/* wait for input of name */
 			if(arg.length() == 0) {
@@ -1559,8 +1556,6 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 					return;
 				}
 
-				/* check and make sure no other copies of this player are logged in */
-				perform_dupe_check(p);
 
 				if(p->level() >= LVL_IMMORT) {
 					write_to_output(d, "%s", imotd);
@@ -1649,7 +1644,7 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 					return;
 			}
 
-			write_to_output(d, "%s\r\nClass: ", class_menu);
+			write_to_output(d, "%s\r\nSelect Unit: ", class_menu);
 			p->set_state(CON_QCLASS);
 			break;
 
@@ -1670,19 +1665,25 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 			d("set CON_RMOTD");
 			p->set_state(CON_RMOTD);
 			p->set_db_id(0);
-			status = mods::db::save_new_char(p);
-			if(std::get<0>(status)){
-				std::cout << "debug: new character '" << p->name() << "' pk: " << std::get<2>(status) << "\n";
-				p->set_db_id(std::get<2>(status));
+			if(db::save_new_char(p) == 0){
+				std::cout << "debug: new character '" << p->name() << "'\n";
+				if(db::load_char_pkid(p) < 0){
+					log("SYSERR: couldn't load character's pkid: '%s'",p->name().c_str());
+				}else{
+
+				}
 				if(parse_sql_player(p) == false){
-					std::cerr << "error: after saving to the db, we couldn't parse the player's info\n";
+					log("SYSERR: after saving to the db, we couldn't parse the player's info");
 				}else{
 					std::cout << "info: player created and initialized successfully\n";
 					mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player.", p->name().c_str(), p->host().c_str());
 				}
 			}else{
-				std::cerr << "error: save_new_char failed: '" << std::get<1>(status) << "'\n";
-				mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player creation failed: '%s'.", p->name().c_str(), p->host().c_str(),std::get<1>(status).c_str());
+				log("SYSERR: save_new_char failed");
+				mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player creation failed.", p->name().c_str(), p->host().c_str());
+				p->stc("Unfortunately, something is broken in the MUD right now that is preventing you from signing in. Please report this to an admin.");
+				p->set_state(CON_CLOSE);
+				return;
 			}
 			write_to_output(d, "%s\r\n*** PRESS RETURN: ", motd);
 
@@ -1752,8 +1753,11 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 												 /** !TODO: create an is_immortal() function and call it like this:
 													* if(is_immortal(p)){ ... load player into immortal room .. }
 													*/
-												 //std::cout << "sending welcom message\n";
 												 p->set_authenticated(true);
+
+												 /* check and make sure no other copies of this player are logged in */
+												 perform_dupe_check(p);
+
 												 p->stc("welcome");//WELC_MESSG);
 												 p->set_room(0);
 												 if(world.size() == 0){

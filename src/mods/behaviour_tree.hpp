@@ -22,7 +22,7 @@
 namespace mods {
 	template <typename LambdaArgument>
 	struct behaviour_tree {
-		static constexpr int NONE = -1;
+		static constexpr int NONE = 0;
 		using node = behaviour_tree_node<LambdaArgument>;
 		using run_status = typename node::run_status_t;
 		/** constructors */

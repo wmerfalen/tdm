@@ -186,7 +186,7 @@ struct zone_data {
 		lifespan(0),age(1),
 		bot(0),top(1),
 		reset_mode(0),
-		number(0){
+		number(0),m_id(0){
 		
 	}
 	~zone_data() = default;
@@ -199,6 +199,10 @@ struct zone_data {
 	int	reset_mode;         /* conditions for reset (see below)   */
 	zone_vnum number;	    /* virtual number of this zone	  */
 	std::vector<reset_com> cmd;   /* command table for reset	          */
+	int64_t get_id() const { return m_id; }
+	void set_id(int64_t i){ m_id = i; }
+	private:
+		int64_t m_id;
 
 	/*
 	 * Reset mode:
@@ -213,7 +217,7 @@ struct zone_data {
 /* for queueing zones for update   */
 struct reset_q_element {
 	zone_rnum zone_to_reset;            /* ref to zone_data */
-	struct reset_q_element *next;
+	reset_q_element *next;
 };
 
 
@@ -285,6 +289,10 @@ extern char	*NOEFFECT;
  */
 namespace db {
 	int16_t save_char(std::shared_ptr<mods::player>);
+	int16_t save_new_char(std::shared_ptr<mods::player>);
+	int16_t save_char_prefs(std::shared_ptr<mods::player>);
+	int16_t load_char_prefs(std::shared_ptr<mods::player>);
+	int16_t load_char_pkid(std::shared_ptr<mods::player>);
 };
 
 #endif	//header inclusion protection

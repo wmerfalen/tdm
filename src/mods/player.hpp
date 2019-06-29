@@ -24,6 +24,7 @@ namespace mods {
 #include "drone.hpp"
 #include <chrono>
 #include "acl_list.hpp"
+#include "overhead_map.hpp"
 
 #define WEAPON_SET_NUM 1
 extern size_t send_to_char(char_data *ch, const char *messg, ...);
@@ -34,10 +35,16 @@ extern void set_access_rights(
 };
 namespace mods {
 	namespace weapon {
-		enum mask_type { SMG, SNIPE, SHOTGUN, GRENADE };
+		enum mask_type { SMG = 1, SNIPE = (1 << 2), SHOTGUN = (1 << 3), 
+			GRENADE = (1 << 4), ASSAULT_RIFLE = (1 << 5), PISTOL = (1 << 6),
+			MACHINE_PISTOL = (1 << 7), ENERGY = (1 << 8), FUMES = (1 << 9),
+			FLAME = (1 << 10), CLAYMORE = (1 << 11), REMOTE_EXPLOSIVE = (1 << 12),
+			ATTACK_DRONE = (1 << 13)
+		};
 	};
-	class player {
+	struct player {
 		public:
+			using 	access_level_t = player_level;
 			using   class_type = mods::classes::types;
 			using 	descriptor_data_t = std::deque<descriptor_data>;
 			using 	descriptor_data_iterator_t = descriptor_data_t::iterator;
@@ -49,6 +56,7 @@ namespace mods {
 			using		descriptor_t = mods::descriptor_data;
 			using		descriptor_iterator_t = std::deque<mods::descriptor_data>::iterator;
 			using		time_type_t = unsigned long;//std::chrono::system_clock::time_point;
+			operator chdata_ptr(){ return cd(); }
 			enum player_type_enum_t { 
 				PLAYER, MOB, DRONE,
 				PLAYER_MUTED_DESCRIPTOR,
@@ -56,13 +64,12 @@ namespace mods {
 				DRONE_MUTED_DESCRIPTOR
 			};
 
-
 			/* constructors and destructors */
 			player();
 			player(char_data*);
 			player(mods::player*);
 			player(player_type_enum_t);
-			~player();
+			~player() = default;
 			void init();
 			friend void mods::acl_list::set_access_rights(
 					std::shared_ptr<mods::player>,const std::string&,bool);
@@ -101,7 +108,7 @@ namespace mods {
 			bool has_equipment_tag(const std::string&);
 			bool has_inventory_capability(int);
 			bool has_thermite();
-			bool has_weapon_capability(int);
+			bool has_weapon_capability(uint64_t);
 			bool has_builder_data();
 			bool room_pave_mode();
 			bool zone_pave_mode();
@@ -116,6 +123,8 @@ namespace mods {
 			bool can_snipe(char_data *target);
 			bool is_weapon_loaded();
 			bool carrying_ammo_of_type(const weapon_type_t&);
+			obj_data* carrying();
+			obj_data* carry(obj_data*);
 			void ammo_adjustment(int);
 			int  ammo_type_adjustment(int,const weapon_type_t&);
 
@@ -130,23 +139,27 @@ namespace mods {
 			/**
 			 * @return returns the legacy AFF_ flag given the modern aff flag
 			 */
-			bool has_affect(uint64_t f);
-			bool has_affect(mods::flags::aff f);
-			void affect(uint64_t flag);
-			void affect(mods::flags::aff flag);
-			void remove_affect(uint64_t flag);
-			void remove_affect(mods::flags::aff flag);
-			const std::map<mods::flags::aff,bool>& get_affected();
+			bool has_affect(aligned_int_t f);
+			void affect(aligned_int_t flag);
+			void remove_affect(aligned_int_t flag);
+			aligned_int_t get_affected();
 			void clear_all_affected();
 
-			/** PLR_* Affects */
-			bool has_affect_plr(uint64_t flag);
+
+			/** TODO these need to go */
+			void affect(mods::flags::aff flag);
+			void remove_affect(mods::flags::aff flag);
+			bool has_affect(mods::flags::aff f);
 			bool has_affect_plr(mods::flags::plr flag);
-			void affect_plr(uint64_t flag);
 			void affect_plr(mods::flags::plr flag);
-			void remove_affect_plr(uint64_t flag);
 			void remove_affect_plr(mods::flags::plr flag);
-			const std::map<mods::flags::plr,bool>& get_affected_plr();
+			/** END got to go */
+
+			/** PLR_* Affects */
+			bool has_affect_plr(aligned_int_t flag);
+			void affect_plr(aligned_int_t flag);
+			void remove_affect_plr(aligned_int_t flag);
+			aligned_int_t get_affected_plr();
 			void clear_all_affected_plr();
 
 			/** char_special_data_saved */
@@ -308,6 +321,7 @@ namespace mods {
 			void stc(const char* m);
 			void stc(const std::string m);
 			void stc(int m);
+			void stc(std::string_view);
 			void done();
 
 			/* pager functions */
@@ -387,7 +401,97 @@ namespace mods {
 			void deactivate_account();
 			bool authenticated() const { return m_authenticated; }
 			void set_authenticated(bool b) { m_authenticated = b; }
+			void set_prefs(long prefs){ cd()->player_specials->saved.pref = prefs; }
+			auto get_prefs(){ return cd()->player_specials->saved.pref; }
+			auto get_lense(){ return m_lense_type; }
+			void set_lense(const lense_type_t& lense){ m_lense_type = lense; }
+
+			/**
+			 * The m_flag structure is the better design choice for any flag or preference
+			 * saving mechanism. The affect/plr affect function interface on this object
+			 * wastes a lot of space by using enums which are 64 bits in size. For that size
+			 * we could have 64 flags instead of one enum that's 64 bits long. 
+			 *
+			 *
+			 * The m_flag interface philosophy is that you can essentially fill the std::array
+			 * that is m_flags with "chunks" of data. Each chunk corresponds to the set of 
+			 * flags that the user is interested in. If we want to dedicate 64 bits to a user's
+			 * preferences, all we'd have to do is agree on the index for which "chunk" that
+			 * the flags will be stored in. 
+			 *
+			 * If we wanted to store legacy values, we could dedicate the first chunk (0, zero)
+			 * to the m_flags chunk as follows:
+			 * m_flags[0] |= AFF_BLIND;
+			 * ...
+			 *
+			 * Of course, we have helper functions below that will do the job for us:
+			 *
+			 * player->set_flag(LEGACY_AFF_CHUNK,AFF_BLIND);
+			 *
+			 */
+			using chunk_type_t = mods::flags::chunk_type_t;
+			aligned_int_t set_flag(chunk_type_t chunk,aligned_int_t bit){
+				m_flags[chunk] |= bit;
+				return m_flags[chunk];
+			}
+			aligned_int_t toggle_flag(chunk_type_t chunk,aligned_int_t bit){
+				m_flags[chunk] ^= bit; 
+				return m_flags[chunk];
+			}
+			aligned_int_t remove_flag(chunk_type_t chunk,aligned_int_t bit){
+				m_flags[chunk] &= ~(bit);
+				return m_flags[chunk];
+			}
+			aligned_int_t get_chunk(chunk_type_t chunk) const {
+				return m_flags[chunk];
+			}
+			bool has_flag(chunk_type_t chunk,aligned_int_t bit) const {
+				return m_flags[chunk] & bit;
+			}
+
+			/**
+			 * Overhead map functions
+			 */
+			uint8_t get_overhead_map_width() const { 
+				printf("map-width: %d\n",m_overhead_map_width);
+				return m_overhead_map_width;
+			}
+			void set_overhead_map_width(uint8_t w){ m_overhead_map_width = w; }
+			uint8_t get_overhead_map_height() const {
+				printf("map-height: %d\n",m_overhead_map_height);
+				return m_overhead_map_height;
+			}
+			void set_overhead_map_height(uint8_t h){ m_overhead_map_height = h; }
+			void equip(obj_data* obj,int pos);
+			void unequip(obj_data* obj,int pos);
+			std::vector<affected_type>& get_affected_by() { return m_affected_by; }
+			std::vector<affected_type>& add_affected_by(affected_type&& add_this){
+				add_this.index = m_affected_by.size();
+				m_affected_by.emplace_back(std::move(add_this));
+				return m_affected_by;
+			}
+			//void set_affected_by(std::vector<affected_type>& affect_list) { m_affected_by = affect_list; }
+			void clr_affected_by(){ m_affected_by.clear(); }
+			std::vector<affected_type>& del_affected_by(const std::size_t& idx){
+				if(idx < m_affected_by.size()){
+					m_affected_by.erase(m_affected_by.begin()+idx);
+				}
+				return m_affected_by;
+			}
+			std::vector<affected_type>& del_affected_by(const affected_type& af){
+				return del_affected_by(af.index);
+			}
+
+		protected:
+			lense_type_t m_lense_type;
+			uint8_t m_overhead_map_width;
+			uint8_t m_overhead_map_height;
+			char_data*   m_char_data;
+			std::shared_ptr<char_data> m_shared_ptr;
+			std::deque<std::shared_ptr<obj_data>> m_carrying;
+			std::vector<affected_type> m_affected_by;
 		private: 
+			bool         m_executing_js;
 			bool m_authenticated;
 			std::shared_ptr<builder_data_t> m_builder_data;
 			std::string m_password;
@@ -396,13 +500,10 @@ namespace mods {
 			bool m_god_mode;
 			bool m_imp_mode;
 			bool m_bui_mode;
-			std::map<mods::flags::aff,bool> m_affected;
-			std::map<mods::flags::plr,bool> m_affected_plr;
+			std::array<aligned_int_t,mods::flags::chunk_type_t::LAST + 1> m_flags;
 			std::shared_ptr<mods::descriptor_data> m_desc;
 			std::string	m_name;
 			class_capability_t m_class_capability;
-			bool         m_executing_js;
-			char_data*   m_char_data;
 			std::array<unsigned long,WEAPON_SET_NUM> m_weapon_cooldown;
 			weapon_set   m_weapon_set;
 			bool         m_do_paging;
@@ -413,10 +514,11 @@ namespace mods {
 			std::string  m_current_page_fragment;
 			std::vector<std::string> m_pages;
 			class_info_t m_class_info;
-			std::shared_ptr<char_data> m_shared_ptr;
 			std::shared_ptr<player_special_data> m_player_specials;
 			time_type_t	m_time;
 			player_type_enum_t m_type;
+			weapon_type_t m_weapon_type;
+			weapon_type_t m_weapon_flags;
 	};
 };
 

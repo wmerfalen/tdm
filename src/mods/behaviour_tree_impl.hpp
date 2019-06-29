@@ -3,7 +3,9 @@
 
 #include <iterator>
 #include <vector>
+#include <map>
 #include "behaviour_tree.hpp"
+#include "npc.hpp"
 #ifdef __MENTOC_NO_DEPS__
 #else
 #include "scan.hpp"
@@ -14,40 +16,45 @@ namespace mods {
 	namespace behaviour_tree_impl { 
 #ifdef __MENTOC_NO_DEPS__
 		template <typename T> 
-		typedef T argument_type;
+		using argument_type = T;
 #else
-		typedef char_data* argument_type;
+		using argument_type = mods::npc;
 #endif
-		typedef std::vector<behaviour_tree<argument_type>> container_t;
-		typedef std::vector<argument_type> mob_list_t;
+		using container_t = std::vector<behaviour_tree<argument_type>>;
+		using container_mapping_t = std::map<std::string,container_t::iterator>;
+		using mob_list_t = std::vector<argument_type>;
 		using node = mods::behaviour_tree_node<argument_type>;
 		using node_wrapper = mods::behaviour_tree<argument_type>;
 		using status_t = node::run_status_t;
 		using status = mods::behaviour_tree_status;
+		enum dispatch_status_t {
+			RETURN_IMMEDIATELY,
+			RETURN_FALSE_IMMEDIATELY,
+			AS_YOU_WERE
+		};
 		enum type { 
-			NONE = node_wrapper::NONE,
-			snipe_tracking = 0,
+			NONE = 0,
+			snipe_tracking = 1,
 			suspicious_roaming,
 		};
-		void dispatch(argument_type ch);
+		int8_t dispatch(argument_type ch);
 		void load_trees();
 		void run_trees();
-		void register_mob(const argument_type &,const type &);
-		void unregister_mob(const argument_type &);
+		int8_t register_mob(argument_type,std::string);
+		int8_t unregister_mob(argument_type);
+		uint8_t grab_tree_by_name(const std::string&);
+
 		constexpr int mob_has_tree = ((1 << 19));
-#ifndef TYPE_UNDEFINED
-		#define TYPE_UNDEFINED -1
-#endif
 #ifdef __MENTOC_NO_DEPS__
-		bool inline flagged(const argument_type &);
-		bool inline flagged(const argument_type &,const type&);
+		bool inline flagged(argument_type &);
+		bool inline flagged(argument_type &,const type&);
 #else
-		bool inline flagged(const argument_type & mob){
-			return mob->char_specials.saved.act & mob_has_tree;
+		bool inline flagged(argument_type & mob){
+			return mob.mob_specials().behaviour_tree != 0;
 		}
-		bool inline flagged(const argument_type & mob,const type & type){
-			return mob->char_specials.saved.act & mob_has_tree && 
-				mob->mob_specials.behaviour_tree == type;
+		bool inline flagged(argument_type & mob,const type & type){
+			return mob.mob_specials().behaviour_tree != 0 &&
+				mob.mob_specials().behaviour_tree == type;
 		}
 #endif
 	};

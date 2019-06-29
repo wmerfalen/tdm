@@ -14,6 +14,7 @@
 #include "../util-map.hpp"
 #include <cstdarg>  //for variadic function m_expect_chain(int ...)
 #include <assert.h>
+#include <array>
 
 constexpr static bool print_debug = false;
 #define dbg(f) if(print_debug){  std::cout << Color::fg::green <<\

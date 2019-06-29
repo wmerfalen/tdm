@@ -257,13 +257,13 @@ int Valid_Name(const char *newname) {
 	 * prompt won't have characters yet.
 	 */
 	for(auto & p : mods::globals::player_list){
-		if(p->cd() && GET_NAME(p->cd()).length() && !str_cmp(GET_NAME(p->cd()).c_str(), newname)) {
-			return (STATE(p->desc())== CON_PLAYING);
+		if(p->cd() && p->name().length() && !str_cmp(p->name().c_str(), newname)) {
+			return (p->state() == CON_PLAYING);
 		}
 	}
 
 	/* return valid if list doesn't exist */
-	if(!invalid_list || num_invalid < 1) {
+	if(num_invalid < 1) {
 		return (1);
 	}
 

@@ -45,12 +45,20 @@ ACMD(do_bash);
 ACMD(do_rescue);
 ACMD(do_kick);
 
+
 /* Debugging type stuff */
 ACMD(do_rnum);
 
 /* Military actions */
 ACMD(do_scan);
 ACMD(do_breach);
+
+/* explosives */
+ACMD(do_plant);
+ACMD(do_grenade);
+
+/* timed devices, misc, other */
+ACMD(do_activate);
 
 
 ACMD(do_rnum) {
@@ -75,7 +83,8 @@ ACMD(do_throw) {
 		return;
 	}
 
-	const char* usage = "usage throw <grenade> <direction> <room_count>\r\n";
+	const char* usage = "usage: throw <grenade> <direction> <room_count>\r\n"
+		"see: help grenade\r\n";
 	std::array<char,MAX_INPUT_LENGTH> weapon;
 	std::array<char,MAX_INPUT_LENGTH> direction;
 	std::array<char,MAX_INPUT_LENGTH> count;
@@ -139,14 +148,14 @@ ACMD(do_snipe) {
 	}
 	*/
 
-	if(!player->has_weapon_capability(mods::weapon::mask::snipe)) {
+	if(!player->has_weapon_capability(mods::weapon::SNIPE)) {
 		send_to_char(ch,"You must be wielding a sniper rifle to do that!");
 		return;
 	}
 
 	/* Check ammo */
 	if(player->weapon()->ammo <= 0) {
-		*player << "Out of ammo!\r\n";
+		*player << "{gld}*CLICK*{/gld} Your weapon is out of ammo!\r\n";
 		return;
 	}
 
@@ -158,6 +167,7 @@ ACMD(do_snipe) {
 
 	if(!victim[0]) {
 		send_to_char(ch, "Whom do you wish to snipe?\r\n");
+		return;
 	}
 
 	/* HOWTO: perform line of sight scans */
@@ -421,9 +431,8 @@ ACMD(do_scan) { /* !mods */
 
 			line += "\r\n";
 			send_to_char(ch,line.c_str());
-			return true;	/** true means keep iterating */
 		}
-		return false;
+		return true;	/** true means keep iterating */
 	});
 
 }

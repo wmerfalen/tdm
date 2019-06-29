@@ -21,6 +21,7 @@
 #include "interpreter.h"
 #include "constants.h"
 #include "globals.hpp"
+#include "mods/loops.hpp"
 
 
 /* external variables */
@@ -54,7 +55,7 @@ void affect_update(void);
  */
 int mag_savingthrow(struct char_data *ch, int type, int modifier) {
 	/* NPCs use warrior tables according to some book */
-	int class_sav = CLASS_WARRIOR;
+	int class_sav = CLASS_SUPPORT;
 	int save;
 
 	if(!IS_NPC(ch)) {
@@ -74,31 +75,29 @@ int mag_savingthrow(struct char_data *ch, int type, int modifier) {
 	return (FALSE);
 }
 
+void update_player_affected_by(std::shared_ptr<mods::player>& player){
+	for(auto &af : player->get_affected_by()){
+		if(af.duration >= 1) {
+			af.duration--;
+		} else if(af.duration == -1) {	/* No action */
+			af.duration = -1;    /* GODs only! unlimited */
+		} else {
+			if((af.type > 0) && (af.type <= MAX_SPELLS))
+				if(spell_info[af.type].wear_off_msg) {
+					player->stc(spell_info[af.type].wear_off_msg);
+				}
+
+			player->del_affected_by(af);
+		}
+	}
+}
 
 /* affect_update: called from comm.c (causes spells to wear off) */
 void affect_update(void) {
-	struct affected_type *af, *next;
-	struct char_data *i;
-
-	for(i = character_list; i; i = i->next)
-		for(af = i->affected; af; af = next) {
-			next = af->next;
-
-			if(af->duration >= 1) {
-				af->duration--;
-			} else if(af->duration == -1) {	/* No action */
-				af->duration = -1;    /* GODs only! unlimited */
-			} else {
-				if((af->type > 0) && (af->type <= MAX_SPELLS))
-					if(!af->next || (af->next->type != af->type) ||
-					        (af->next->duration > 0))
-						if(spell_info[af->type].wear_off_msg) {
-							send_to_char(i, "%s\r\n", spell_info[af->type].wear_off_msg);
-						}
-
-				affect_remove(i, af);
-			}
-		}
+	mods::loops::shptr::foreach_all([&](std::shared_ptr<mods::player> player) -> bool {
+		update_player_affected_by(player);
+		return true;
+	});
 }
 
 

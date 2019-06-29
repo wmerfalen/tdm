@@ -1,3 +1,5 @@
+#ifndef __SPELL_HEADER__
+#define __SPELL_HEADER__
 /* ************************************************************************
 *   File: spells.h                                      Part of CircleMUD *
 *  Usage: header file: constants and fn prototypes for spell system       *
@@ -125,24 +127,54 @@
 
 /* WEAPON ATTACK TYPES */
 
-#define TYPE_HIT                     300
-#define TYPE_STING                   301
-#define TYPE_WHIP                    302
-#define TYPE_SLASH                   303
-#define TYPE_BITE                    304
-#define TYPE_BLUDGEON                305
-#define TYPE_CRUSH                   306
-#define TYPE_POUND                   307
-#define TYPE_CLAW                    308
-#define TYPE_MAUL                    309
-#define TYPE_THRASH                  310
-#define TYPE_PIERCE                  311
-#define TYPE_BLAST		     312
-#define TYPE_PUNCH		     313
-#define TYPE_STAB		     314
-#define TYPE_SNIPE			315	/* !mods */
+enum weapon_attack_types_t {
+	TYPE_HIT = 300,
+TYPE_STING,
+TYPE_WHIP,
+TYPE_SLASH,
+TYPE_BITE,
+TYPE_BLUDGEON,
+TYPE_CRUSH,
+TYPE_POUND,
+TYPE_CLAW,
+TYPE_MAUL,
+TYPE_THRASH,
+TYPE_PIERCE,
+TYPE_BLAST,
+TYPE_PUNCH,
+TYPE_STAB,
+TYPE_SNIPE,
+TYPE_SHOTGUN,
+TYPE_SUB_MACHINE_GUN,
+TYPE_SMG,
+TYPE_GRENADE,
+TYPE_SUFFERING
+};
+using weapon_attack_types = weapon_attack_types_t;
+/** TODO: phase out the defined constants and use the enum instead */
+#define TYPE_HIT weapon_attack_types::TYPE_HIT
+#define TYPE_STING weapon_attack_types::TYPE_STING
+#define TYPE_WHIP weapon_attack_types::TYPE_WHIP
+#define TYPE_SLASH weapon_attack_types::TYPE_SLASH
+#define TYPE_BITE weapon_attack_types::TYPE_BITE
+#define TYPE_BLUDGEON weapon_attack_types::TYPE_BLUDGEON
+#define TYPE_CRUSH weapon_attack_types::TYPE_CRUSH
+#define TYPE_POUND weapon_attack_types::TYPE_POUND
+#define TYPE_CLAW weapon_attack_types::TYPE_CLAW
+#define TYPE_MAUL weapon_attack_types::TYPE_MAUL
+#define TYPE_THRASH weapon_attack_types::TYPE_THRASH
+#define TYPE_PIERCE weapon_attack_types::TYPE_PIERCE
+#define TYPE_BLAST weapon_attack_types::TYPE_BLAST
+#define TYPE_PUNCH weapon_attack_types::TYPE_PUNCH
+#define TYPE_STAB weapon_attack_types::TYPE_STAB
+#define TYPE_SNIPE weapon_attack_types::TYPE_SNIPE
+#define TYPE_SHOTGUN weapon_attack_types::TYPE_SHOTGUN
+#define TYPE_SUB_MACHINE_GUN weapon_attack_types::TYPE_SUB_MACHINE_GUN
+#define TYPE_SMG weapon_attack_types::TYPE_SMG
+#define TYPE_GRENADE weapon_attack_types::TYPE_GRENADE
+#define TYPE_SUFFER weapon_attack_types::TYPE_SUFFERING
+
 /* new attack types can be added here - up to TYPE_SUFFERING */
-#define TYPE_SUFFERING		     399
 
 
 
@@ -270,3 +302,4 @@ int	cast_spell(struct char_data *ch, struct char_data *tch,
 void spell_level(int spell, int chclass, int level);
 void init_spell_levels(void);
 const char *skill_name(int num);
+#endif

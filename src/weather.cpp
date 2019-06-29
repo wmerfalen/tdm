@@ -18,6 +18,7 @@
 #include "handler.h"
 #include "interpreter.h"
 #include "db.h"
+#include "mods/date-time.hpp"
 
 extern struct time_info_data time_info;
 
@@ -37,6 +38,8 @@ void weather_and_time(int mode) {
 
 void another_hour(int mode) {
 	time_info.hours++;
+	mods::date_time::increment_hour();
+	send_to_outdoor(".");
 
 	if(mode) {
 		switch(time_info.hours) {

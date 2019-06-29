@@ -5,6 +5,9 @@
 #include "loops.hpp"
 #include "../spells.h"
 #include "db.hpp"
+#include "date-time.hpp"
+
+#include <unistd.h>	//for getcwd()
 #define DT_FORMAT "{player_name}:mob_death_trigger"
 extern void command_interpreter(struct char_data* ch,char* argument);
 extern void hit(struct char_data* ch,struct char_data* vict,int type);
@@ -12,6 +15,12 @@ extern void affect_from_char(struct char_data *ch, int type);
 extern void mobile_activity();
 namespace mods {
 	namespace js {
+			std::string current_working_dir(){
+				char* cwd = ::get_current_dir_name();
+				std::string path = cwd == nullptr ? "" : cwd;
+				if(cwd){ free(cwd); }
+				return path;
+			}
 		namespace utils {
 			struct find_player_payload_t {
 				find_player_payload_t(std::string_view name) : player_name(name.data()), found(false){
@@ -42,19 +51,71 @@ namespace mods {
 
 		};//end utils namespace
 		int load_library(duk_context*,std::string_view);
-		constexpr static const char * JS_PATH = "../lib/js/";
-		constexpr static const char * JS_TEST_PATH = "../lib/js/tests/";
-		//constexpr static const char * JS_PROFILES_PATH = "../lib/js/profiles/";
 		namespace test {
 			static duk_ret_t require_test(duk_context *ctx) {
 				/* First parameter is character name */
 				auto fname = duk_to_string(ctx,0);
-				std::string path = mods::js::JS_TEST_PATH;
-				path += fname;
+				std::string path = mods::js::current_working_dir() + std::string("/js/tests/") + fname;
 				duk_push_number(ctx,mods::js::load_library(ctx,path));
 				return 1;	/* number of return values */
 			}
 		};
+		/*! \brief returns the current month as a string within the game
+		 * \return integer
+		 */
+		static duk_ret_t get_month(duk_context *ctx) {
+			/* First parameter is character name */
+			duk_push_string(ctx,mods::date_time::get_month().c_str());
+			return 1;	/* number of return values */
+		}
+		/*! \brief returns the current day as a string within the game
+		 * \return integer
+		 */
+		static duk_ret_t get_day(duk_context *ctx) {
+			/* First parameter is character name */
+			duk_push_string(ctx,mods::date_time::get_day().c_str());
+			return 1;	/* number of return values */
+		}
+		/*! \brief returns the current moon phase as a string
+		 * \return integer
+		 */
+		static duk_ret_t get_moon_phase(duk_context *ctx) {
+			/* First parameter is character name */
+			duk_push_string(ctx,mods::date_time::get_moon_phase().c_str());
+			return 1;	/* number of return values */
+		}
+		/*! \brief returns the current hour within the game
+		 * \return integer
+		 */
+		static duk_ret_t get_ihour(duk_context *ctx) {
+			/* First parameter is character name */
+			duk_push_number(ctx,mods::date_time::get_ihour());
+			return 1;	/* number of return values */
+		}
+		/*! \brief returns the current month as integer within the game
+		 * \return integer
+		 */
+		static duk_ret_t get_imonth(duk_context *ctx) {
+			/* First parameter is character name */
+			duk_push_number(ctx,mods::date_time::get_imonth());
+			return 1;	/* number of return values */
+		}
+		/*! \brief returns the current day as an integer within the game
+		 * \return integer
+		 */
+		static duk_ret_t get_iday(duk_context *ctx) {
+			/* First parameter is character name */
+			duk_push_number(ctx,mods::date_time::get_iday());
+			return 1;	/* number of return values */
+		}
+		/*! \brief returns the current year as an integer within the game
+		 * \return integer
+		 */
+		static duk_ret_t get_iyear(duk_context *ctx) {
+			/* First parameter is character name */
+			duk_push_number(ctx,mods::date_time::get_iyear());
+			return 1;	/* number of return values */
+		}
 
 		/*! \brief requires the javascript library by using the internal mods::js::load_library method
 		 * \param string to be appended to mods::js::JS_PATH
@@ -63,8 +124,7 @@ namespace mods {
 		static duk_ret_t require_js(duk_context *ctx) {
 			/* First parameter is character name */
 			auto fname = duk_to_string(ctx,0);
-			std::string path = mods::js::JS_PATH;
-			path += fname;
+			std::string path = mods::js::current_working_dir() + std::string("/js/") + fname;
 			duk_push_number(ctx,mods::js::load_library(ctx,path));
 			return 1;	/* number of return values */
 		}
@@ -515,6 +575,21 @@ if(key.compare("WATERWALK") == 0){ ::affect_from_char(*player_ptr,SPELL_WATERWAL
 			duk_put_global_string(ctx,"mobile_activity");
 		}
 		void load_base_functions(duk_context *ctx) {
+			duk_push_c_function(ctx,mods::js::get_month,0);
+			duk_put_global_string(ctx,"get_month");
+			duk_push_c_function(ctx,mods::js::get_day,0);
+			duk_put_global_string(ctx,"get_day");
+			duk_push_c_function(ctx,mods::js::get_moon_phase,0);
+			duk_put_global_string(ctx,"get_moon_phase");
+			duk_push_c_function(ctx,mods::js::get_ihour,0);
+			duk_put_global_string(ctx,"get_ihour");
+			duk_push_c_function(ctx,mods::js::get_imonth,0);
+			duk_put_global_string(ctx,"get_imonth");
+			duk_push_c_function(ctx,mods::js::get_iday,0);
+			duk_put_global_string(ctx,"get_iday");
+			duk_push_c_function(ctx,mods::js::get_iyear,0);
+			duk_put_global_string(ctx,"get_iyear");
+
 			duk_push_c_function(ctx,mods::js::room,0);
 			duk_put_global_string(ctx,"room");
 			duk_push_c_function(ctx,mods::js::read_mobile,2);
@@ -624,26 +699,18 @@ __set_points_cleanup:
 
 		bool run_test_suite(mods::player& player,std::string_view suite) {
 			auto ctx = mods::js::new_context();
-			std::string path = mods::js::JS_TEST_PATH;
-			std::string file = suite.data();
-
-			for(auto& ch: file) {
-				if(!std::isalpha(ch)) {
-					continue;
-				} else {
-					path += ch;
-				}
-			}
-
+			std::string path = mods::js::current_working_dir() + "/js/tests/" + suite.data();
 			mods::js::load_c_functions(ctx);
 
 			if(mods::js::load_library(ctx,path) == -1) {
+				player << "{red}[js]{/red} Unable to load library: '" << path.c_str() << "'\r\n";
 				return false;
 			}
 
 			eval_string(ctx,std::string("test_main(") +
 					std::string(mods::util::itoa(player.cd()->uuid)) + ");"
 					);
+				player << "{grn}[js]{/grn} Loaded and evaluated library: '" << path.c_str() << "'\r\n";
 			return true;
 		}
 
@@ -665,8 +732,8 @@ __set_points_cleanup:
 		}
 
 		void run_profile_scripts(const std::string& player_name){
-			std::cerr << "path to user script: '" << (std::string(JS_PROFILES_PATH) + player_name + ".js").c_str() << "'\n";
-			 load_library(mods::globals::duktape_context,(std::string(JS_PROFILES_PATH) + player_name + ".js").c_str());
+			 load_library(mods::globals::duktape_context,
+					 std::string(mods::js::current_working_dir() + "/js/profiles/" + player_name + ".js").c_str());
 		}
 
 		duk_context* new_context() {
@@ -679,33 +746,41 @@ __set_points_cleanup:
 			if(m_dir.length()) {
 				path = m_dir + "/" + m_file;
 			}
+			if(access(path.c_str(),F_OK) == -1){
+				/** File doesn't exist */
+				return false;
+			}
 
 			std::ifstream include_file(path,std::ios::in);
 
-			if(!include_file.good() || !include_file.is_open()) {
+			if(!include_file.is_open()) {
 				return false;
-			} else {
-				std::vector<char> buffer;
-				struct stat statbuf;
-
-				if(stat(path.c_str(), &statbuf) == -1) {
-					return false;
-				}
-
-				buffer.reserve(statbuf.st_size);
-				std::fill(buffer.begin(),buffer.end(),0);
-
-				while(!include_file.eof()) {
-					include_file.read((char*)&buffer[0],statbuf.st_size);
-				}
-
-				eval_string(m_context,std::string((char*)&buffer[0]));
 			}
+			if(!include_file.good()){
+				return false;
+			}
+			std::vector<char> buffer;
+			struct stat statbuf;
+
+			if(stat(path.c_str(), &statbuf) == -1) {
+				return false;
+			}
+
+			buffer.reserve(statbuf.st_size);
+			std::fill(buffer.begin(),buffer.end(),0);
+
+			unsigned buffer_length = statbuf.st_size;
+			while(!include_file.eof() && buffer_length != 0) {
+				include_file.read((char*)&buffer[0],statbuf.st_size);
+				--buffer_length;
+			}
+
+			eval_string(m_context,std::string((char*)&buffer[0]));
 
 			return true;
 		}
 		int load_library(duk_context *ctx,std::string_view file) {
-			auto m = std::make_unique<include>(ctx,file);
+			auto m = std::make_unique<include>(ctx,file.data());
 
 			if(m->good()) {
 				std::cerr << "[DEBUG]: included js file: '" << file.data() << "'\n";

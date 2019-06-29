@@ -21,20 +21,40 @@
 #include <functional>
 #include <array>
 #include "mods/extra_desc_data.hpp"
+#include <unordered_map>
 namespace mods {
-	class player;
+	struct player;
+	struct npc;
 	struct descriptor_data;
 	struct extra_desc_data;
 };
+struct char_data;
 extern std::deque<mods::descriptor_data> descriptor_list;
-typedef std::size_t weapon_type_t;
-typedef std::map<struct char_data*,std::unique_ptr<mods::ai_state>> ai_state_map;
-typedef std::set<char_data*> memory_rec_t;
-typedef short ai_state_t;
-typedef short goal_t;
+using weapon_type_t = uint64_t;
+using ai_state_map = std::map<char_data*,std::unique_ptr<mods::ai_state>>;
+using memory_rec_t = std::set<char_data*>;
+using ai_state_t = short;
+using goal_t = short;
 struct obj_data;
-typedef uint64_t uuid_t;
+using uuid_t = uint64_t;
 using aligned_int_t = uint64_t;
+enum lense_type_t {
+	FIRST,
+
+	NORMAL_SIGHT,
+	THERMAL_GOGGLES,
+	NIGHT_VISION_GOGGLES,
+
+	AERIAL_DRONE,
+	AERIAL_DRONE_THERMAL,
+	AERIAL_DRONE_NIGHT_VISION,
+
+	RC_DRONE,
+	RC_DRONE_THERMAL,
+	RC_DRONE_NIGHT_VISION,
+
+	LAST
+};
 
 /*
  * Intended use of this macro is to allow external packages to work with
@@ -68,7 +88,7 @@ using aligned_int_t = uint64_t;
  *
  * NOTE: This will likely be unconditionally unsigned later.
  */
-#define CIRCLE_UNSIGNED_INDEX	0	/* 0 = signed, 1 = unsigned */
+#define CIRCLE_UNSIGNED_INDEX	1	/* 0 = signed, 1 = unsigned */
 
 #if CIRCLE_UNSIGNED_INDEX
 #define IDXTYPE  ush_int
@@ -144,19 +164,18 @@ using aligned_int_t = uint64_t;
 
 
 /* PC classes */
-#define CLASS_UNDEFINED	  (-1)
-#define CLASS_MAGIC_USER  0
-#define CLASS_CLERIC      1
-#define CLASS_SNIPER      2
-#define CLASS_WARRIOR     3
+enum player_class_t {
+CLASS_UNDEFINED	 =  0 ,
+CLASS_ENGINEER   =  1 ,
+CLASS_MEDIC      =  2 ,
+CLASS_MARKSMAN	 =  3 ,
+CLASS_PSYOP			 =  4 ,
+CLASS_SUPPORT	   =  5 ,
+CLASS_MARINE		 =  6
+};
 
-#define CLASS_ENGINEER    0
-#define CLASS_MEDIC       1
-#define CLASS_SNIPER      2
-#define CLASS_MARINE      3
-#define CLASS_SUPPORT	  4
-
-#define NUM_CLASSES	  5  /* This must be the number of classes!! */
+#define CLASS_SNIPER player_class_t::CLASS_MARKSMAN
+#define NUM_CLASSES	  6  /* This must be the number of classes!! */
 
 /* NPC classes (currently unused - feel free to implement!) */
 #define CLASS_OTHER       0
@@ -225,7 +244,6 @@ using aligned_int_t = uint64_t;
 #define MOB_NOBASH	 (1 << 16) /* Mob can't be bashed (e.g. trees)	*/
 #define MOB_NOBLIND	 (1 << 17) /* Mob can't be blinded		*/
 #define MOB_NOTDEADYET   (1 << 18) /* (R) Mob being extracted.		*/
-#define MOB_HAS_TREE (1 << 19) /* If the mob has a behaviour tree */
 
 
 	/* Preference flags: used by char_data.player_specials.pref */
@@ -252,6 +270,7 @@ using aligned_int_t = uint64_t;
 #define PRF_NOGRATZ	(1 << 20) /* Can't hear grats channel		*/
 #define PRF_ROOMFLAGS	(1 << 21) /* Can see room flags (ROOM_x)	*/
 #define PRF_DISPAUTO	(1 << 22) /* Show prompt HP, MP, MV when < 30%.	*/
+#define PRF_OVERHEAD_MAP (1 << 23) /* show overhead map */
 
 	/* Affect bits: used in char_data.char_specials.saved.affected_by */
 	/* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
@@ -277,6 +296,7 @@ using aligned_int_t = uint64_t;
 #define AFF_HIDE              (1 << 19)	   /* Char is hidden		*/
 #define AFF_UNUSED20	      (1 << 20)	   /* Room for future expansion	*/
 #define AFF_CHARM             (1 << 21)	   /* Char is charmed		*/
+
 
 
 	/* Modes of connectedness: used by descriptor_data.state */
@@ -478,6 +498,15 @@ using aligned_int_t = uint64_t;
 #define RENT_TIMEDOUT   5
 
 
+/** New enum 2019-06 */
+enum player_level {
+	LVL_MORTAL = 0,
+	LVL_IMMORT = 31,
+	LVL_GOD = 32,
+	LVL_GRGOD = 33,
+	LVL_BUILDER = 34,
+	LVL_IMPL = 35
+};
 	/* other #defined constants **********************************************/
 
 	/*
@@ -490,10 +519,12 @@ using aligned_int_t = uint64_t;
 	 * LVL_IMMORT should always be the LOWEST immortal level.  The number of
 	 * mortal levels will always be LVL_IMMORT - 1.
 	 */
-#define LVL_IMPL	34
+#define LVL_IMPL	35
+#define LVL_BUILDER 34
 #define LVL_GRGOD	33
 #define LVL_GOD		32
 #define LVL_IMMORT	31
+#define LVL_MORTAL 0
 
 	/* Level of the 'freeze' command */
 #define LVL_FREEZE	LVL_GRGOD
@@ -618,8 +649,19 @@ using aligned_int_t = uint64_t;
 
 	/* object flags; used in obj_data */
 	struct obj_flag_data {
+		obj_flag_data() : type_flag(0),weapon_flags(0),
+			ammo_max(0),ammo(0),clip_size(0),wear_flags(0),extra_flags(0),
+			weight(0), cost(0), cost_per_day(0),timer(0),bitvector(0){
+				memset(value,0,sizeof(value));
+			}
+		void feed(pqxx::row);
+		~obj_flag_data() = default;
 		int	value[4];	/* Values of the item (see list)    */
 		byte type_flag;	/* Type of item			    */
+		uint64_t weapon_flags;
+		uint16_t ammo_max;
+		uint16_t ammo;
+		uint16_t clip_size;
 		int /*bitvector_t*/	wear_flags;	/* Where you can wear it	    */
 		int /*bitvector_t*/	extra_flags;	/* If it hums, glows, etc.	    */
 		int	weight;		/* Weigt what else                  */
@@ -628,6 +670,23 @@ using aligned_int_t = uint64_t;
 		int	timer;		/* Timer for object                 */
 		long /*bitvector_t*/	bitvector;	/* To set chars bits                */
 	};
+
+
+/** TODO: I'd like to uncomment his at some point and utilize it. For now,
+ * we'll place weapon specific fields into either obj_flag_data or obj_data
+ */
+//	struct obj_weapon_data {
+//		obj_weapon_data() : weapon_flags(0),
+//			ammo_max(0),ammo(0),clip_size(0){
+//		}
+//		void feed(pqxx::row);
+//		~obj_weapon_data() = default;
+//		uint64_t weapon_flags;
+//		uint16_t ammo_max;
+//		uint16_t ammo;
+//		uint16_t clip_size;
+//	};
+
 
 
 	/* Used in obj_file_elem *DO*NOT*CHANGE* */
@@ -639,6 +698,7 @@ using aligned_int_t = uint64_t;
 
 	/* ================== Memory Structure for Objects ================== */
 	struct obj_data {
+		/**TODO: create constructor and destructor */
 		obj_vnum item_number;	/* Where in data-base			*/
 		room_rnum in_room;		/* In what room -1 when conta/carr	*/
 
@@ -669,6 +729,17 @@ using aligned_int_t = uint64_t;
 		weapon_type_t weapon_type;
 		int16_t type;
 	};
+struct obj_data_weapon : public obj_data {
+	/**TODO: call parent constructor/destructor */
+	/**TODO: eventually, these fields will be specific to this struct and not
+	 * the parent structure
+	 */
+		//int16_t ammo;
+		//int16_t ammo_max;
+		//short loaded;
+		//short holds_ammo;
+		//weapon_type_t weapon_type;
+};
 	/* ======================================================================= */
 
 
@@ -725,56 +796,37 @@ using aligned_int_t = uint64_t;
 
 	/* ================== Memory Structure for room ======================= */
 	struct room_data {
-		room_data() : 
-		number(0), zone(0), sector_type(0), 
-		room_flags(0), light(0), func(nullptr),
-			contents(nullptr), people(nullptr){
-			for(unsigned i = 0; i < NUM_OF_DIRS;i++){ 
-				dir_option[i] = nullptr;
-			}
-		}
-		~room_data(){
-			for(unsigned i = 0; i < NUM_OF_DIRS; i++){
-				if(dir_option[i] != nullptr){
-					if(dir_option[i]->general_description != nullptr){
-						free(dir_option[i]->general_description);
-					}
-					if(dir_option[i]->keyword != nullptr){
-						free(dir_option[i]->keyword);
-					}
-					free(dir_option[i]);
-				}
-			}
-		}
+		enum texture_type_t { 
+			FIRST,
+			GRASS,			/** typically grass that isn't flammable (i.e. not dried out) */
+			CEMENT,			/** asphault, nearly indestructible */
+			OUTSIDE,		/** Outside where anyone can see you */
+			INSIDE,			/** Example: inside a home */
+			SEWER,			/** Underground sewer tunnel */
+			RADIOACTIVE, /** actively emitting radioactivity */
+			VOLATILE,		/** Volatile means any slight spark will ignite an explosion */
+			RUBBLE,			/** decimation of buildings resulting in lots of ruble */
+			DIRT,				/** think about outside+cement but except no cement */
+			SHATTERED_GLASS, /** results of breaking glass objects */
+			LOW_ATMOSPHERE,	/** atmosphere too thin for helicopter to fly */
+			ON_FIRE,		/** actively burning */
+			NON_HAZARDOUS_SMOKE, /** think: burning car */
+			HAZARDOUS_SMOKE, /** think: gas attacks */
+			LAST
+		};
+		
+		void init();
+
+		room_data();
+		room_data(const room_data& r);
+		~room_data();
+		
 		void set_dir_option(byte i,
 				const std::string& gen_desc,
 				const std::string& keyword,
 				const int & ex_info,
 				const int & key,
-				const room_rnum to_room){
-			if(i >= NUM_OF_DIRS){
-				std::cerr << "SYSERR: dir_option >= NUM_OF_DIRS\n";
-				return;
-			}
-			if(dir_option[i] == nullptr){
-				dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
-			}else{
-				if(dir_option[i]->general_description != nullptr){
-					free(dir_option[i]->general_description);
-				}
-				if(dir_option[i]->keyword != nullptr){
-					free(dir_option[i]->keyword);
-				}
-				free(dir_option[i]);
-				dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
-			}
-			/** FIXME: replace strdup'd members with mods::string */
-			dir_option[i]->general_description = strdup(gen_desc.c_str());
-			dir_option[i]->keyword = strdup(keyword.c_str());
-			dir_option[i]->exit_info = ex_info;
-			dir_option[i]->key = key;
-			dir_option[i]->to_room = to_room;
-		}
+				const room_rnum to_room);
 		room_vnum number;		/* Rooms number	(vnum)		      */
 		zone_rnum zone;              /* Room zone (for resetting)          */
 		int	sector_type;            /* sector type (move/hide)            */
@@ -788,15 +840,14 @@ using aligned_int_t = uint64_t;
 		SPECIAL(*func);
 
 		std::vector<mods::extra_desc_data>& ex_descriptions();
-		//std::vector<mods::extra_desc_data>& ex_descriptions();
-		//void ex_descriptions(const mods::extra_desc_data&& other);
-		//void ex_descriptions(const std::vector<mods::extra_desc_data>& other);
-		//void ex_descriptions_append(mods::extra_desc_data&& other);
-
 		obj_data *contents;   /* List of items in room              */
 		char_data *people;    /* List of NPC / PC in room           */
+		std::string_view overhead(const lense_type_t& );
+		const std::vector<texture_type_t>& textures() const;
+
 		protected:
 			std::vector<mods::extra_desc_data> m_ex_descriptions;
+			std::vector<texture_type_t> m_textures;
 	};
 	/* ====================================================================== */
 
@@ -976,7 +1027,7 @@ using aligned_int_t = uint64_t;
 	 * player_special_data_saved will corrupt the playerfile.
 	 */
 	struct player_special_data {
-		struct player_special_data_saved saved;
+		player_special_data_saved saved;
 		std::string	poofin;		/* Description on arrival of a god.     */
 		std::string poofout;		/* Description upon a god's exit.       */
 		struct alias_data *aliases;	/* Character's aliases			*/
@@ -985,8 +1036,9 @@ using aligned_int_t = uint64_t;
 		int last_olc_mode;		/* olc control				*/
 		bool js_profile_initialized;
 		player_special_data() :  poofin(""),
-		poofout(""),aliases(nullptr),last_tell(0),last_olc_targ(nullptr),
-		last_olc_mode(-1),js_profile_initialized(false){}
+			poofout(""),aliases(nullptr),last_tell(0),last_olc_targ(nullptr),
+			last_olc_mode(-1),js_profile_initialized(false){
+		}
 		~player_special_data() = default;
 	};
 
@@ -999,17 +1051,35 @@ using aligned_int_t = uint64_t;
 		byte damnodice;          /* The number of damage dice's	       */
 		byte damsizedice;        /* The size of the damage dice's           */
 		char_data* snipe_tracking;
-		int16_t behaviour_tree;
+		uint16_t behaviour_tree;
+		uint64_t behaviour_tree_flags;
+		mob_special_data() : memory({}),
+		attack_type(0),default_pos(POS_STANDING),
+		damnodice(0),damsizedice(0),snipe_tracking(nullptr),
+		behaviour_tree(0),behaviour_tree_flags(0)
+		{
+
+		}
+		~mob_special_data() = default;
 	};
 
 
 	/* An affect structure.  Used in char_file_u *DO*NOT*CHANGE* */
 	struct affected_type {
+		std::size_t index;
 		sh_int type;          /* The type of spell that caused this      */
 		sh_int duration;      /* For how long its effects will last      */
 		sbyte modifier;       /* This is added to apropriate ability     */
 		byte location;        /* Tells which ability to change(APPLY_XXX)*/
 		long /*bitvector_t*/	bitvector; /* Tells which bits to set (AFF_XXX) */
+		affected_type() : index(0), type(0),duration(0),
+		modifier(0),location(0),bitvector(0),next(0){
+		}
+		affected_type(const affected_type& t) : 
+		 index(t.index), type(t.type),duration(t.duration),
+		modifier(t.modifier),location(t.location),bitvector(t.bitvector),next(0){
+		}
+		~affected_type() = default;
 
 		struct affected_type *next;
 	};
@@ -1049,9 +1119,10 @@ using aligned_int_t = uint64_t;
 		bool zone_pave_mode;
 		room_pavement_t room_pavements;
 		zone_pavement_t zone_pavements;
-		builder_data_t() : room_pave_mode(false),zone_pave_mode(false) {}
+		builder_data_t() : room_pave_mode(false),zone_pave_mode(false){ }
 		~builder_data_t() = default;
 	};
+
 
 	/* ================== Structure for player/non-player ===================== */
 	struct txt_block {
@@ -1174,13 +1245,23 @@ using aligned_int_t = uint64_t;
 		std::shared_ptr<player_special_data> player_specials; /* PC specials		  */
 		mob_special_data mob_specials;	/* NPC specials		  */
 
+		/** Design philosophy:
+		 * It's going to take a very long time to remove all linked list
+		 * implementation code to loop through affected. Instead, we will 
+		 * build a vector and have our own affection implementation surrounded
+		 * by that. 
+		 */
 		affected_type *affected;       /* affected by what spells       */
+		/** TODO: convert to std::vector */
 		obj_data *equipment[NUM_WEARS];/* Equipment array               */
 
+		/** TODO: convert to forward list or std::vector */
 		obj_data *carrying;            /* Head of list                  */
+		std::deque<std::shared_ptr<obj_data>> m_carrying;
 		bool has_desc;
 		std::shared_ptr<mods::descriptor_data> desc;         /* NULL for mobiles              */
 
+		/** TODO: our ultimate goal is to completely get rid of these linked list members */
 		char_data *next_in_room;     /* For room->people - list         */
 		char_data *next;             /* For either monster or ppl-list  */
 		char_data *next_fighting;    /* For fighting list               */
@@ -1194,8 +1275,13 @@ using aligned_int_t = uint64_t;
 		 */
 		goal_t goal;
 		short disorient;
+		/** TODO: this needs to go into a different structure. Preferably mob_specials. */
 		ai_state_t state;
 
+		/** TODO: this needs to go elsewhere. There is no reason why this should
+		 * be in this structure, especially since NPC characters and non-builder
+		 * players will share this structure.
+		 */
 		std::shared_ptr<builder_data_t> builder_data;
 	};
 	/* ====================================================================== */

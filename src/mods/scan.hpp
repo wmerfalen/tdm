@@ -12,6 +12,7 @@ typedef int socket_t;
 #include <array>
 #include "../mods/util.hpp"
 #include "../globals.hpp"
+#include <tuple>
 
 namespace mods {
 	namespace scan {
@@ -19,17 +20,18 @@ namespace mods {
 			char_data* ch;
 			uint16_t distance;
 		} vec_player_data_element;
-		typedef char_data* chptr;
-		typedef std::vector<vec_player_data_element> vec_player_data;
-		typedef std::function<bool (room_rnum,int,vec_player_data)> los_scan_foreach_callback;
-		typedef struct {
+		using chptr = std::shared_ptr<mods::player>;
+		using vec_player_data = std::vector<vec_player_data_element>;
+		using los_scan_foreach_callback = std::function<bool (room_rnum,int,vec_player_data)>;
+		using distance_t = uint16_t;
+		struct find_results_t{
 			bool found;
 			int direction;
 			uint16_t distance;
-		} find_results_t;
+		};
 		extern int directions[];
 		constexpr unsigned num_directions = 6;
-		typedef std::array<std::vector<room_rnum>,num_directions> room_list_t;
+		using room_list_t = std::array<std::vector<room_rnum>,num_directions>;
 
 		void los_scan(char_data* ch,int depth,vec_player_data* vec_room_list);
 		void los_scan_foreach(char_data* ch,int depth,los_scan_foreach_callback lambda_cb);

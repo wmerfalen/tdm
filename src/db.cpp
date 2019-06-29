@@ -34,6 +34,7 @@
 #include "mods/flags.hpp"
 #include "mods/pq.hpp"
 #include "mods/sql.hpp"
+#include "mods/npc.hpp"
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
@@ -55,7 +56,7 @@ std::vector<char_data> mob_proto;	/* prototypes for mobs		 */
 mob_rnum top_of_mobt = 0;	/* top of mobile index table	 */
 
 std::deque<obj_data> object_list;	/* list of objs	 */
-std::deque<char_data> mob_list;		/* list of mobs */
+std::deque<std::shared_ptr<mods::npc>> mob_list;
 std::vector<index_data> obj_index;	/* index table for object file	 */
 std::vector<obj_data> obj_proto;	/* prototypes for objs		 */
 obj_rnum top_of_objt = 0;	/* top of object index table	 */
@@ -165,6 +166,95 @@ extern room_vnum immort_start_room;
 extern room_vnum frozen_start_room;
 extern std::deque<mods::descriptor_data>  descriptor_list;
 extern const char *unused_spellname;	/* spell_parser.c */
+
+//void lmdb_export_char(std::shared_ptr<mods::player> player_ptr, mutable_map_t &values){
+
+namespace db {
+	int16_t save_char_data(std::shared_ptr<mods::player> player,std::map<std::string,std::string> values){
+		try{
+			auto up_txn = txn();
+			sql_compositor comp("player",&up_txn);
+			auto up_sql = comp
+				.update("player")
+				.set(values)
+				.where("id","=",std::to_string(player->get_db_id()))
+				.sql();
+			mods::pq::exec(up_txn,up_sql);
+			mods::pq::commit(up_txn);
+			return 0;
+		}catch(std::exception& e){
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error updating character by pkid: '" << e.what() << "'\n";
+			return -1;
+		}
+	}
+
+	int16_t save_new_char(std::shared_ptr<mods::player> player){
+		try{
+			std::map<std::string,std::string> values;
+			mods::db::lmdb_export_char(player,values);
+			auto insert_transaction = txn();
+			sql_compositor comp("player",&insert_transaction);
+			auto up_sql = comp
+				.insert()
+				.into("player")
+				.values(values)
+				.sql();
+			mods::pq::exec(insert_transaction,up_sql);
+			mods::pq::commit(insert_transaction);
+			return 0;
+		}catch(std::exception& e){
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting new character: '" << e.what() << "'\n";
+			return -1;
+		}
+	}
+
+	int16_t load_char_pkid(std::shared_ptr<mods::player> player){
+		try{
+			auto select_transaction = txn();
+			sql_compositor comp("player",&select_transaction);
+			auto player_sql = comp.select("id")
+				.from("player")
+				.where("player_name","=",player->name())
+				.sql();
+			auto player_record = mods::pq::exec(select_transaction,player_sql);
+				for(auto && row : player_record){
+					player->set_db_id(row["id"].as<int>(0));
+					return 0;
+				}
+				log("SYSERR: couldn't grab player's pkid: '%s'",player->name().c_str());
+				return -1;
+		}catch(std::exception& e){
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
+			return -2;
+		}
+	}
+
+	int16_t load_char_prefs(std::shared_ptr<mods::player> player){
+		try{
+			auto select_transaction = txn();
+			sql_compositor comp("player",&select_transaction);
+			auto player_sql = comp.select("player_preferences")
+				.from("player")
+				.where("id","=",std::to_string(player->get_db_id()))
+				.sql();
+			auto player_record = mods::pq::exec(select_transaction,player_sql);
+				for(auto && row : player_record){
+					player->set_prefs(row["player_preferences"].as<long>(0));
+					return 0;
+				}
+				log("SYSERR: player's prefs don't exist in db: ");
+				player->set_prefs(0);
+				return -1;
+		}catch(std::exception& e){
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character preferences by pkid: '" << e.what() << "'\n";
+			return -2;
+		}
+	}
+	int16_t save_char_prefs(std::shared_ptr<mods::player> player){
+		return db::save_char_data(player,{{"player_preferences",std::to_string(player->get_prefs())}});
+	}
+
+};
 
 /*************************************************************************
  *  routines for booting the system                                       *
@@ -919,12 +1009,10 @@ void parse_sql_mobiles() {
 
 			proto.player.description.assign(row["mob_description"].c_str());
 
-			//TODO: we may want to uncomment this out in the future, but no saving of bitvectors for now... 
-			//proto.char_specials.saved.act = mods::util::stoi<int>(row["mob_action_bitvector"]);
-			//proto.char_specials.saved.act = 0;
+			proto.char_specials.saved.act = mods::util::stoi<int>(row["mob_action_bitvector"]);
 			SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
 			REMOVE_BIT(proto.char_specials.saved.act, MOB_NOTDEADYET);
-			//proto.char_specials.saved.affected_by = 0;
+			proto.char_specials.saved.affected_by = mods::util::stoi<int>(row["mob_affection_bitvector"]);
 			proto.char_specials.saved.alignment = mods::util::stoi<int>(row["mob_alignment"]);
 
 			/* AGGR_TO_ALIGN is ignored if the mob is AGGRESSIVE. */
@@ -1040,7 +1128,7 @@ int parse_sql_objects() {
 				proto.obj_name = \
 				strdup((row[#sql_name]).c_str());\
 			}else{\
-				proto.obj_name = strdup("<default>");\
+				proto.obj_name = strdup("<proto.obj_name>");\
 			}
 			MENTOC_STR(obj_short_description,short_description);
 			MENTOC_STR(obj_action_description,action_description);
@@ -1074,67 +1162,22 @@ int parse_sql_objects() {
 			}
 
 			proto.ex_description->next = nullptr;
-			proto.worn_on = 0; //FIXME: this is what it used to be: mods::util::stoi<int>(row["object_worn_on"]);
-			proto.type = 0; //FIXME: this is what it used to be: mods::util::stoi<int>(row["object_type"]);
+			proto.worn_on = mods::util::stoi<int>(row["obj_worn_on"]);
+			proto.type = mods::util::stoi<int>(row["obj_type"]);
 			proto.ammo = 0;
-			memset(&proto.obj_flags,0,sizeof(obj_flag_data));
-			//TODO: !small do obj->flags fetching from db
 			auto flag_rows = db_get_by_meta("object_flags","obj_fk_id",(row["id"]));
-
-			for(auto row : flag_rows){
-				auto & flag_row = row;
-
-				if(mods::string(flag_row["value_0"]).length()) {
-					proto.obj_flags.value[0] = mods::util::stoi<int>(row["value_0"]);
-				}
-
-				if(mods::string(flag_row["value_1"]).length()) {
-					proto.obj_flags.value[1] = mods::util::stoi<int>(row["value_1"]);
-				}
-
-				if(mods::string(flag_row["value_2"]).length()) {
-					proto.obj_flags.value[2] = mods::util::stoi<int>(row["value_2"]);
-				}
-
-				if(mods::string(flag_row["value_3"]).length()) {
-					proto.obj_flags.value[3] = mods::util::stoi<int>(row["value_3"]);
-				}
-
-				proto.obj_flags.type_flag =mods::util::stoi<int>(row["type_flag"]);
-				proto.obj_flags.wear_flags = mods::util::stoi<int>(row["wear_flags"]);
-				proto.obj_flags.extra_flags =mods::util::stoi<int>(row["extra_flags"]);
-				proto.obj_flags.weight = mods::util::stoi<int>(row["weight"]);
-				proto.obj_flags.cost = mods::util::stoi<int>(row["cost"]);
-				proto.obj_flags.cost_per_day =mods::util::stoi<int>(row["cost_per_day"]);
-				proto.obj_flags.timer = mods::util::stoi<int>(row["timer"]);
-				proto.obj_flags.bitvector = mods::util::stoi<int>(row["bitvector"]);
+			if(flag_rows.size() > 0){
+				proto.obj_flags.feed(flag_rows[0]);
 			}
 
-			/** FIXME: This field doesn't exist. "object_ammo_max". */
-#if 0
-			if(mods::string(row["object_ammo_max"]).length()) {
-				proto.ammo_max = mods::util::stoi<int>(row["object_ammo_max"]);
-			} else {
-				proto.ammo_max = 0;
+			/** TODO: this needs to be filled in by postgres. We need to
+			 * check if it's a weapon, if so, load the fields in proto with
+			 * whatever is in the database.
+			 */
+			if(proto.obj_flags.weapon_flags != 0){
+				proto.holds_ammo = 1;
+				proto.weapon_type = proto.obj_flags.weapon_flags;
 			}
-#endif
-			proto.ammo_max = 32; /** FIXME: needs to load from db */
-
-			proto.holds_ammo = 0;
-
-			/** FIXME: this field doesn't exist: "object_type_data" */
-#if 0
-			if(mods::string(row["object_type_data"]).length()) {
-				proto.weapon_type = std::hash<std::string> {}
-				(
-				 mods::string(row["object_type_data"]).c_str()
-				);
-			} else {
-				proto.weapon_type = 0;
-			}
-#else
-			proto.weapon_type = 0;
-#endif
 
 			proto.carried_by = proto.worn_by = nullptr;
 			proto.next_content = nullptr;
@@ -1192,7 +1235,9 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 		z.bot =mods::util::stoi<int>(row["zone_start"]);
 		z.top =mods::util::stoi<int>(row["zone_end"]);
 		z.reset_mode =mods::util::stoi<int>(row["reset_mode"]);
-		z.number =mods::util::stoi<int>(row["id"]);
+		/** WRONG */
+		z.number =mods::util::stoi<int>(row["zone_virtual_number"]);
+		z.set_id(mods::util::stoi<int>(row["id"]));
 		zone_table.emplace_back(z);
 		top_of_zone_table = zone_table.size();
 		//struct reset_com {
@@ -1281,12 +1326,12 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				const char* name = room_records_row["name"].c_str();
 				const char* description = room_records_row["description"].c_str();
 				if(name == nullptr){ 
-					room.name = strdup("<default>");
+					room.name = strdup("<room.name>");
 				}else{
 					room.name = strdup(name);
 				}
 				if(description == nullptr){
-					room.description = strdup("A room");
+					room.description = strdup("<room.description>");
 				}else{
 					room.description = strdup(description);
 				}
@@ -1914,7 +1959,7 @@ struct obj_data *create_obj(void) {
 	struct obj_data tmp;
 	clear_object(&tmp);
 	object_list.push_back(tmp);
-	obj = &(object_list.at(object_list.size()-1));
+	obj = &(object_list.back());
 	return obj;
 }
 
@@ -1943,9 +1988,9 @@ struct obj_data *read_object(obj_vnum nr, int type) { /* and obj_rnum */
 #define ZO_DEAD  999
 
 /* update zone ages, queue for reset if necessary, and dequeue when possible */
-void zone_update(void) {
-	unsigned int i;
-	struct reset_q_element *update_u, *temp;
+void zone_update() {
+	unsigned i;
+	reset_q_element *update_u, *temp;
 	static int timer = 0;
 
 	/* jelson 10/22/92 */
@@ -1969,7 +2014,7 @@ void zone_update(void) {
 					zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode) {
 				/* enqueue zone */
 
-				CREATE(update_u, struct reset_q_element, 1);
+				CREATE(update_u, reset_q_element, 1);
 
 				update_u->zone_to_reset = i;
 				update_u->next = 0;
@@ -1989,7 +2034,7 @@ void zone_update(void) {
 
 	/* dequeue zones (if possible) and reset */
 	/* this code is executed every 10 seconds (i.e. PULSE_ZONE) */
-	for(update_u = reset_q.head; update_u; update_u = update_u->next)
+	for(update_u = reset_q.head; update_u; update_u = update_u->next){
 		if(zone_table[update_u->zone_to_reset].reset_mode == 2 ||
 				is_empty(update_u->zone_to_reset)) {
 			reset_zone(update_u->zone_to_reset);
@@ -2012,6 +2057,7 @@ void zone_update(void) {
 			free(update_u);
 			break;
 		}
+	}
 }
 
 void log_zone_error(zone_rnum zone, int cmd_no, const char *message) {
@@ -2028,8 +2074,6 @@ void reset_zone(zone_rnum zone) {
 	int cmd_no = 0, last_cmd = 0;
 	struct char_data *mob = NULL;
 	struct obj_data *obj, *obj_to;
-
-	log("Resetting zone: %d",zone);
 
 	for(auto ZCMD : zone_table[zone].cmd) {
 
@@ -2387,18 +2431,76 @@ bool parse_sql_player(std::shared_ptr<mods::player> player_ptr){
 		player_ptr->chclass() = mods::util::stoi<int>(row["player_class"]);
 		player_ptr->title().assign((row["player_title"]));
 		player_ptr->hometown() = mods::util::stoi<int>(row["player_hometown"]);
-		mods::flags::load<
-			std::shared_ptr<mods::player>,
-			mods::flags::aff>(
-					player_ptr,row["player_affection_bitvector"].c_str()
-					);
-		mods::flags::load<std::shared_ptr<mods::player>,
-			mods::flags::plr>(
-					player_ptr,row["player_affection_plr_bitvector"].c_str()
-					);
+		player_ptr->clear_all_affected();
+		player_ptr->clear_all_affected_plr();
+#define __MENTOC_PLR(a) case a: std::cerr << "flag: " << #a << " is set\n"; break;
+		if(strlen(row["player_affection_bitvector"].c_str()) > 0){
+			uint64_t aff = row["player_affection_bitvector"].as<uint64_t>(0);
+			uint64_t shift = 1;
+			for(unsigned i=0; i < 64; i++){
+				if(aff & shift){
+					switch(shift){
+__MENTOC_PLR(AFF_BLIND);
+__MENTOC_PLR(AFF_INVISIBLE);
+__MENTOC_PLR(AFF_DETECT_ALIGN);
+__MENTOC_PLR(AFF_DETECT_INVIS);
+__MENTOC_PLR(AFF_DETECT_MAGIC);
+__MENTOC_PLR(AFF_SENSE_LIFE);
+__MENTOC_PLR(AFF_WATERWALK);
+__MENTOC_PLR(AFF_SANCTUARY);
+__MENTOC_PLR(AFF_GROUP);
+__MENTOC_PLR(AFF_CURSE);
+__MENTOC_PLR(AFF_INFRAVISION);
+__MENTOC_PLR(AFF_POISON);
+__MENTOC_PLR(AFF_PROTECT_EVIL);
+__MENTOC_PLR(AFF_PROTECT_GOOD);
+__MENTOC_PLR(AFF_SLEEP);
+__MENTOC_PLR(AFF_NOTRACK);
+__MENTOC_PLR(AFF_SNEAK);
+__MENTOC_PLR(AFF_HIDE);
+__MENTOC_PLR(AFF_CHARM);
+						default: std::cerr << "unknown affected flag: " << shift << "\n";
+					}
+					player_ptr->affect(shift);
+				}
+				shift <<= 1;
+			}
+		}
+		if(strlen(row["player_affection_plr_bitvector"].c_str()) > 0){
+			uint64_t aff = row["player_affection_plr_bitvector"].as<uint64_t>(0);
+			uint64_t shift = 1;
+			for(unsigned i=0; i < 64; i++){
+				if(aff & shift){
+					switch(shift){
+__MENTOC_PLR(PLR_KILLER);
+__MENTOC_PLR(PLR_THIEF);
+__MENTOC_PLR(PLR_FROZEN);
+__MENTOC_PLR(PLR_DONTSET);
+__MENTOC_PLR(PLR_WRITING);
+__MENTOC_PLR(PLR_MAILING);
+__MENTOC_PLR(PLR_CRASH);
+__MENTOC_PLR(PLR_SITEOK);
+__MENTOC_PLR(PLR_NOSHOUT);
+__MENTOC_PLR(PLR_NOTITLE);
+__MENTOC_PLR(PLR_DELETED);
+__MENTOC_PLR(PLR_LOADROOM);
+__MENTOC_PLR(PLR_NOWIZLIST);
+__MENTOC_PLR(PLR_NODELETE);
+__MENTOC_PLR(PLR_INVSTART);
+__MENTOC_PLR(PLR_CRYO);
+__MENTOC_PLR(PLR_NOTDEADYET);
+						default: std::cerr << "unknown affected_plr flag: " << shift << "\n";break;
+					}
+					player_ptr->affect(shift);
+				}
+				shift <<= 1;
+			}
+		}
+		
 		player_ptr->set_time_birth(mods::util::stoi<int>(row["player_birth"]));
 		player_ptr->set_time_played(mods::util::stoi<int>(row["player_time_played"]));
 		player_ptr->set_time_logon(time(0));
+		player_ptr->set_prefs(mods::util::stoi<long>(row["player_preferences"]));
 		return true;
 	}
 	return false;
@@ -2504,7 +2606,7 @@ void char_to_store(struct char_data *ch, struct char_file_u *st) {
 	if(ch->player.description) {
 		if(strlen(ch->player.description) >= sizeof(st->description)) {
 			log("SYSERR: char_to_store: %s's description length: %d, max: %d! "
-					"Truncated.", GET_PC_NAME(ch), strlen(ch->player.description),
+					"Truncated.", GET_PC_NAME(ch).c_str(), strlen(ch->player.description),
 					(st->description.length()));
 			ch->player.description.concat("\r\n");
 		}
@@ -2514,7 +2616,7 @@ void char_to_store(struct char_data *ch, struct char_file_u *st) {
 		st->description.clear();
 	}
 
-	st->name = GET_NAME(ch);
+	st->name = GET_NAME(ch).c_str();
 
 	/* add spell and eq affections back in now */
 	for(i = 0; i < MAX_AFFECT; i++) {

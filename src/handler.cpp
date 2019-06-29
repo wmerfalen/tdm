@@ -63,7 +63,6 @@ int isname(const char *str, const char *namelist) {
 
 	for(;;) {
 		for(curstr = str;; curstr++, curname++) {
-			std::cerr << "curstr: '" << curstr << "'\n";
 			if(!curname){
 				return 0;
 			}
@@ -226,7 +225,7 @@ void affect_modify(struct char_data *ch, byte loc, sbyte mod,
 /* This updates a character by subtracting everything he is affected by */
 /* restoring original abilities, and then affecting all again           */
 void affect_total(struct char_data *ch) {
-	struct affected_type *af;
+	affected_type *af;
 	int i, j;
 
 	for(i = 0; i < NUM_WEARS; i++) {
@@ -283,8 +282,8 @@ void affect_total(struct char_data *ch) {
 
 /* Insert an affect_type in a char_data structure
    Automatically sets apropriate bits and apply's */
-void affect_to_char(struct char_data *ch, struct affected_type *af) {
-	struct affected_type *affected_alloc;
+void affect_to_char(char_data *ch,affected_type *af) {
+	affected_type *affected_alloc;
 
 	CREATE(affected_alloc, struct affected_type, 1);
 
@@ -389,9 +388,7 @@ void affect_join(struct char_data *ch, struct affected_type *af,
 
 
 /* move a player out of a room */
-void char_from_room(struct char_data *ch) {
-	struct char_data *temp;
-	mods::globals::rooms::char_from_room(ch);
+void char_from_room(char_data *ch) {
 
 	if(ch == NULL){
 		log("char_from_room[SYSERR]->'NULL character'");
@@ -413,15 +410,13 @@ void char_from_room(struct char_data *ch) {
 				world[IN_ROOM(ch)].light--;
 			}
 
-	REMOVE_FROM_LIST(ch, world[IN_ROOM(ch)].people, next_in_room);
-	IN_ROOM(ch) = NOWHERE;
-	ch->next_in_room = NULL;
+	mods::globals::rooms::char_from_room(ch);
 }
 
 
 /* place a character in a room */
-void char_to_room(struct char_data *ch, room_rnum room) {
-	log("char->player.name: %s char_to_room: room: %d",ch->player.name.c_str(),room);
+void char_to_room(char_data *ch, room_rnum room) {
+	IN_ROOM(ch) = room;
 	if(ch == nullptr){
 		log("SYSERR: char_to_room given a nullptr");
 		return;
@@ -435,9 +430,6 @@ void char_to_room(struct char_data *ch, room_rnum room) {
 		return;
 	}else {
 		mods::globals::rooms::char_to_room(room,ch);
-		ch->next_in_room = world[room].people;
-		world[room].people = ch;
-		IN_ROOM(ch) = room;
 
 		if(GET_EQ(ch, WEAR_LIGHT))
 			if(GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT)
@@ -446,7 +438,6 @@ void char_to_room(struct char_data *ch, room_rnum room) {
 				}
 
 		/* Stop fighting now, if we left. */
-		std::cerr << "char_to_room[room]->'" << room << "'\n";
 		if(FIGHTING(ch)){
 			if(IN_ROOM(ch) != IN_ROOM(FIGHTING(ch))) {
 				stop_fighting(FIGHTING(ch));
@@ -553,6 +544,7 @@ int invalid_align(struct char_data *ch, struct obj_data *obj) {
 }
 
 void equip_char(struct char_data *ch, struct obj_data *obj, int pos) {
+	MENTOC_PREAMBLE();
 	int j;
 
 	if(pos < 0 || pos >= NUM_WEARS) {
@@ -561,7 +553,7 @@ void equip_char(struct char_data *ch, struct obj_data *obj, int pos) {
 	}
 
 	if(GET_EQ(ch, pos)) {
-		log("SYSERR: Char is already equipped: %s, %s", GET_NAME(ch),
+		log("SYSERR: Char is already equipped: %s, %s", GET_NAME(ch).c_str(),
 		    obj->short_description);
 		return;
 	}
@@ -598,7 +590,7 @@ void equip_char(struct char_data *ch, struct obj_data *obj, int pos) {
 				world[IN_ROOM(ch)].light++;
 			}
 	} else {
-		log("SYSERR: IN_ROOM(ch) = NOWHERE when equipping char %s.", GET_NAME(ch));
+		log("SYSERR: IN_ROOM(ch) = NOWHERE when equipping char %s.", GET_NAME(ch).c_str());
 	}
 
 	for(j = 0; j < MAX_OBJ_AFFECT; j++)
@@ -607,11 +599,13 @@ void equip_char(struct char_data *ch, struct obj_data *obj, int pos) {
 		              GET_OBJ_AFFECT(obj), TRUE);
 
 	affect_total(ch);
+	player->equip(obj,pos);
 }
 
 
 
 struct obj_data *unequip_char(struct char_data *ch, int pos) {
+	MENTOC_PREAMBLE();
 	int j;
 	struct obj_data *obj;
 
@@ -634,7 +628,7 @@ struct obj_data *unequip_char(struct char_data *ch, int pos) {
 				world[IN_ROOM(ch)].light--;
 			}
 	} else {
-		log("SYSERR: IN_ROOM(ch) = NOWHERE when unequipping char %s.", GET_NAME(ch));
+		log("SYSERR: IN_ROOM(ch) = NOWHERE when unequipping char %s.", GET_NAME(ch).c_str());
 	}
 
 	GET_EQ(ch, pos) = NULL;
@@ -645,6 +639,7 @@ struct obj_data *unequip_char(struct char_data *ch, int pos) {
 		              GET_OBJ_AFFECT(obj), FALSE);
 
 	affect_total(ch);
+	player->unequip(obj,pos);
 
 	return (obj);
 }
@@ -707,8 +702,7 @@ struct obj_data *get_obj_num(obj_rnum nr) {
 
 
 /* search a room for a char, and return a pointer if found..  */
-struct char_data *get_char_room(char *name, int *number, room_rnum room) {
-	struct char_data *i;
+char_data *get_char_room(char *name, int *number, room_rnum room) {
 	int num;
 
 	if(!number) {
@@ -720,13 +714,19 @@ struct char_data *get_char_room(char *name, int *number, room_rnum room) {
 		return (NULL);
 	}
 
-	for(i = world[room].people; i && *number; i = i->next_in_room)
-		if(isname(name, i->player.name))
+	char_data* found = nullptr;
+	mods::loops::foreach_in_room(room,[&](std::shared_ptr<mods::player> player) -> bool {//i = world[room].people; i && *number; i = i->next_in_room)
+		auto i = player->cd();
+		if(isname(name, i->player.name)){
 			if(--(*number) == 0) {
-				return (i);
+				found = i;
+				return false;//stop looping, we found him and number is zero
 			}
+		}
+		return true;//continue looping, we didn't find our guy
+	});
 
-	return (NULL);
+	return found;
 }
 
 
@@ -942,7 +942,7 @@ void extract_char_final(struct char_data *ch) {
 
 	if(IN_ROOM(ch) == NOWHERE) {
 		log("SYSERR: NOWHERE extracting char %s. (%s, extract_char_final)",
-		    GET_NAME(ch), __FILE__);
+		    GET_NAME(ch).c_str(), __FILE__);
 	}
 
 	/*
@@ -1085,41 +1085,68 @@ void extract_char(struct char_data *ch) {
  *
  * NOTE: This doesn't handle recursive extractions.
  */
-void extract_pending_chars() {
-	char_data *vict, *next_vict, *prev_vict;
+//void extract_pending_chars() {
+//	char_data *vict, *next_vict, *prev_vict;
+//
+//	if(extractions_pending < 0) {
+//		log("SYSERR: Negative (%d) extractions pending.", extractions_pending);
+//	}
+//
+//	for(vict = character_list, prev_vict = NULL; vict && extractions_pending; vict = next_vict) {
+//		next_vict = vict->next;
+//
+//		if(MOB_FLAGGED(vict, MOB_NOTDEADYET)) {
+//			REMOVE_BIT(MOB_FLAGS(vict), MOB_NOTDEADYET);
+//		} else if(PLR_FLAGGED(vict, PLR_NOTDEADYET)) {
+//			REMOVE_BIT(PLR_FLAGS(vict), PLR_NOTDEADYET);
+//		} else {
+//			/* Last non-free'd character to continue chain from. */
+//			prev_vict = vict;
+//			continue;
+//		}
+//
+//		extract_char_final(vict);
+//		extractions_pending--;
+//
+//		if(prev_vict) {
+//			prev_vict->next = next_vict;
+//		} else {
+//			character_list = next_vict;
+//		}
+//	}
+//
+//	if(extractions_pending > 0) {
+//		log("SYSERR: Couldn't find %d extractions as counted.", extractions_pending);
+//	}
+//
+//	extractions_pending = 0;
+//}
+//
 
-	if(extractions_pending < 0) {
-		log("SYSERR: Negative (%d) extractions pending.", extractions_pending);
+void extract_pending_chars(){
+	if(extractions_pending < 0){
+		log("SYSERR: Negative (%d) extractions pending. Resetting to zero.", extractions_pending);
+		extractions_pending = 0;
+		return;
 	}
-
-	for(vict = character_list, prev_vict = NULL; vict && extractions_pending; vict = next_vict) {
-		next_vict = vict->next;
-
-		if(MOB_FLAGGED(vict, MOB_NOTDEADYET)) {
-			REMOVE_BIT(MOB_FLAGS(vict), MOB_NOTDEADYET);
-		} else if(PLR_FLAGGED(vict, PLR_NOTDEADYET)) {
-			REMOVE_BIT(PLR_FLAGS(vict), PLR_NOTDEADYET);
+	mods::loops::foreach_player([&](std::shared_ptr<mods::player> player) -> bool {
+		auto ch = player->cd();
+		if(MOB_FLAGGED(ch, MOB_NOTDEADYET)) {
+			REMOVE_BIT(MOB_FLAGS(ch), MOB_NOTDEADYET);
+			log("debug: removing MOB_NOTDEADYET bit from mob");
+		} else if(PLR_FLAGGED(ch, PLR_NOTDEADYET)) {
+			REMOVE_BIT(PLR_FLAGS(ch), PLR_NOTDEADYET);
+			log("debug: removing PLR_NOTDEADYET bit from player %s",GET_NAME(ch).c_str());
 		} else {
-			/* Last non-free'd character to continue chain from. */
-			prev_vict = vict;
-			continue;
+			return true;
 		}
-
-		extract_char_final(vict);
+		extract_char_final(ch);
 		extractions_pending--;
-
-		if(prev_vict) {
-			prev_vict->next = next_vict;
-		} else {
-			character_list = next_vict;
+		if(extractions_pending == 0){
+			return false;
 		}
-	}
-
-	if(extractions_pending > 0) {
-		log("SYSERR: Couldn't find %d extractions as counted.", extractions_pending);
-	}
-
-	extractions_pending = 0;
+		return true;
+	});
 }
 
 
@@ -1139,7 +1166,8 @@ struct char_data *get_player_vis(struct char_data *ch, char *name, int *number, 
 	}
 	char_data* char_return = nullptr;
 
-	mods::loops::foreach_player([ch,&char_return,inroom,name,number](char_data* i){
+	mods::loops::foreach_player([ch,&char_return,inroom,name,number](std::shared_ptr<mods::player> player){
+		auto i = player->cd();
 		if(inroom == FIND_CHAR_ROOM && IN_ROOM(i) != IN_ROOM(ch)) {
 			return true;
 		}

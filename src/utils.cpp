@@ -28,20 +28,9 @@
 /* external globals */
 extern struct time_data time_info;
 
-void log(std::string n,...) {
-       va_list args;
-       va_start(args, n);
-       std::string msg,tmp;
-       do{
-               tmp.clear();
-               tmp = va_arg(args,std::string);
-               if(tmp.length()){
-                       msg += tmp;
-               }
-       }while(tmp.length());
-       va_end(args);
+void log(mods::string n) {
+			 std::cerr << "[log]: " << n.c_str() << "\n";
 }
-
 
 void log(const char* format,...) {
        va_list args;
@@ -682,14 +671,28 @@ int get_filename(char *filename, size_t fbufsize, int mode, const char *orig_nam
 }
 
 
-int num_pc_in_room(struct room_data *room) {
-	int i = 0;
-	struct char_data *ch;
+int num_pc_in_room(room_data *room) {
+	if(room == nullptr){
+		log("SYSERR: num_pc_in_room room is null!");
+		return 0;
+	}
+	unsigned i = 0;
 
-	for(ch = room->people; ch != NULL; ch = ch->next_in_room)
-		if(!IS_NPC(ch)) {
-			i++;
+	auto real_room_number = real_room(room->number);
+	if(real_room_number == NOWHERE){
+		log(
+			"SYSERR: num_pc_in_room cannot find real room number: %d",
+			room->number
+		);
+		return 0;
+	}
+
+	for(auto & player_ptr : mods::globals::room_list[real_room_number]){
+		auto ch = player_ptr->cd();
+		if(!IS_NPC(ch)){
+			++i;
 		}
+	}
 
 	return (i);
 }
@@ -765,13 +768,10 @@ int room_is_dark(room_rnum room) {
 	return (FALSE);
 }
 
-/*
-mods::string& GET_NAME(char_data* ch){
-	if(IS_NPC(ch)){
-		std::cerr << "[DEBUG]: GET_NAME(FOR NPC): short_descr: '" << ch->player.short_descr << "'\n";
-		return ch->player.short_descr;
-	}else{
-		return GET_PC_NAME(ch);
-	}
+
+room_rnum& GET_WAS_IN(std::shared_ptr<mods::player>& player){
+	return player->cd()->was_in_room;
 }
-*/
+room_rnum& GET_WAS_IN(char_data* ch){
+	return ch->was_in_room;
+}

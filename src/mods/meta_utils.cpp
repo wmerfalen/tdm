@@ -5,9 +5,9 @@
 #include "util-map.hpp"
 
 namespace mods::meta_utils {
-	constexpr static const char* meta = "meta";
-	constexpr static const char* delim = "|";
-	constexpr static std::size_t reference_field_index = 1;
+	//constexpr static const char* meta = "meta";
+	//constexpr static const char* delim = "|";
+	//constexpr static std::size_t reference_field_index = 1;
 	using mutable_map_t = mods::lmdb::mutable_map_t;
 	enum return_codes {
 		COULDNT_FIND_USER_ID = -1
@@ -59,18 +59,14 @@ namespace mods::meta_utils {
 	}
 	std::vector<std::string> get_all_meta_values(
 			const std::string& table,mutable_map_t* mapped_values_ptr){
-		std::cout << "debug: get_all_meta_values has received: \n";
 		mods::util::maps::dump<std::string,std::string>(*mapped_values_ptr);
-		std::cout << "debug: end dump\n";
 		std::vector<std::string> result;
 		for(std::string & str_meta_key : mods::schema::db_meta_values[table]){
 			std::string field = extract_reference_field_from_meta_key(str_meta_key);
 			std::string field_value = (*mapped_values_ptr)[field];
 			if(field_value.length() == 0){
-				std::cerr << "warning: meta field_value empty for field: '" << field << "'\n";
 				continue;
 			}
-			std::cout << "debug: get_all_meta_values field:'" << field << "' value: '" << field_value << "'\n";
 			result.emplace_back(db_key({table,"meta",field,field_value}));
 		}
 		return result;

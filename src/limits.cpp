@@ -401,8 +401,9 @@ void gain_condition(struct char_data *ch, int condition, int value) {
 
 
 void check_idling(std::shared_ptr<mods::player> player) {
+	std::cerr << "NOWHERE: " << NOWHERE << "\n";
 	auto ch = player->cd();
-	if(++(ch->char_specials.timer) > idle_void) {
+	if(++(player->char_specials().timer) > idle_void) {
 		if(GET_WAS_IN(ch) == NOWHERE && IN_ROOM(ch) != NOWHERE) {
 			GET_WAS_IN(ch) = IN_ROOM(ch);
 
@@ -414,9 +415,8 @@ void check_idling(std::shared_ptr<mods::player> player) {
 			/*!mods*/
 			if(!ch->drone) {
 				act("$n disappears into the void.", TRUE, ch, 0, 0, TO_ROOM);
-				send_to_char(ch, "You have been idle, and are pulled into a void.\r\n");
+				player->stc("You have been idle, and are pulled into a void.\r\n");
 				mods::db::save_char(player);
-				Crash_crashsave(ch);
 				char_from_room(ch);
 				char_to_room(ch, config::rooms::real_idle());
 			}
@@ -458,7 +458,7 @@ void check_idling(std::shared_ptr<mods::player> player) {
 
 ACMD(do_idle){
 	MENTOC_PREAMBLE();
-	player->cd()->char_specials.timer = idle_void + 1;
+	player->char_specials().timer = idle_void + 1;
 	check_idling(player);
 }
 
@@ -467,10 +467,11 @@ void point_update(void) {
 	struct obj_data *j, *jj, *next_thing2;
 
 	/* characters */
-	mods::loops::foreach_all([&](char_data* ch) -> bool {
+	mods::loops::foreach_all([&](std::shared_ptr<mods::player> player) -> bool {
+			auto ch = player->cd();
 			std::cerr << "foreach_all point update\n";
 			if(!ch){
-				log(std::string("foreach_all recieved null char_data ptr"));
+				log("foreach_all recieved null char_data ptr");
 				return true;
 			}
 			auto i = ch;
@@ -488,6 +489,7 @@ void point_update(void) {
 			GET_MOVE(i) = MIN(GET_MOVE(i) + move_gain(i), GET_MAX_MOVE(i));
 			if(AFF_FLAGGED(i, AFF_POISON)){
 				if(damage(i, i, 2, SPELL_POISON) == -1) {
+					log("player died of poison");
 					return true;    /* Oops, they died. -gg 6/24/98 */
 				}
 			}
@@ -509,8 +511,6 @@ void point_update(void) {
 			update_char_objects(i);
 
 			if(GET_LEVEL(i) < idle_max_level) {
-				auto ch = i;
-				MENTOC_PREAMBLE();
 				check_idling(player);
 			}
 		}
