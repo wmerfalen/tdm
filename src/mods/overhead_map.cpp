@@ -49,12 +49,6 @@ namespace mods::overhead_map {
 			}
 			return overhead_map;
 		}
-//#define _dc(d_y,d_x,msg){\
-//	std::cerr << "msg: " << msg << \
-//	"| draw_coords[" << #d_y << "][" << #d_x << "]: '" << \
-//	draw_coordinates[d_y][d_x] << "'\n" \
-//	<< "room: " << in_room << " in_x:" << in_x << " in_y:" << in_y << \
-//	"in_width: " << in_width << " in_height: " << original_y << "\n"; }
 	void crawl_lambda(std::vector<std::vector<std::string>>& map_coordinates,
 		std::vector<std::vector<std::string>>& draw_coordinates,
 		int direction,int in_x,int in_y,int in_width,int in_height,int room){

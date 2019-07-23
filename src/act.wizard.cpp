@@ -23,6 +23,7 @@
 #include "screen.h"
 #include "constants.h"
 #include "mods/acl/lambda.hpp"
+#include "mods/orm/fetcher.hpp"
 
 
 /*   external vars  */
@@ -1897,6 +1898,17 @@ ACMD(do_zreset) {
 	}
 }
 
+/** 
+ * Command for adding/removing quotes from the database
+ *
+ * example: wiz_quote list
+ * example: wiz_quote add "title goes here" @@@description goes here @@@
+ * example: wiz_quote delete <id>
+ * example: wiz_quote ammend <title|content> <id> <title|@@@content@@@>
+ */
+ACMD(do_wiz_quote) {
+	std::cerr << "wiz_quote: " << argument << "\n";
+}
 
 /*
  *  General fn for wizcommands of the sort: cmd <player>
@@ -2027,7 +2039,7 @@ size_t print_zone_to_buf(char *bufptr, size_t left, zone_rnum zone) {
 
 ACMD(do_show) {
 	struct char_file_u vbuf;
-	int i, j, k, l, con, nlen;		/* i, j, k to specifics? */
+	unsigned i, j, l, con, nlen;		/* i, j, k to specifics? */
 	size_t len;
 	zone_rnum zrn;
 	zone_vnum zvn;
@@ -2152,7 +2164,6 @@ ACMD(do_show) {
 		case 4:
 			i = 0;
 			j = 0;
-			k = 0;
 			con = 0;
 
 			for(vict = character_list; vict; vict = vict->next) {
@@ -2179,7 +2190,7 @@ ACMD(do_show) {
 			             i, con,
 			             top_of_p_table + 1,
 			             j, top_of_mobt + 1,
-			             object_list.size(), top_of_objt + 1,
+			             obj_list.size(), top_of_objt + 1,
 			             top_of_world + 1, top_of_zone_table + 1,
 			             buf_largecount,
 			             buf_switches, buf_overflows
@@ -2190,7 +2201,7 @@ ACMD(do_show) {
 		case 5:
 			len = strlcpy(buf, "Errant Rooms\r\n------------\r\n", sizeof(buf));
 
-			for(i = 0, k = 0; i <= top_of_world; i++)
+			for(unsigned i = 0, k = 0; i <= top_of_world; i++)
 				for(j = 0; j < NUM_OF_DIRS; j++)
 					if(world[i].dir_option[j] && world[i].dir_option[j]->to_room == 0) {
 						nlen = snprintf(buf + len, sizeof(buf) - len, "%2d: [%5d] %s\r\n", ++k, GET_ROOM_VNUM(i), world[i].name.c_str());

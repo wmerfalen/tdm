@@ -28,6 +28,10 @@
 /* external globals */
 extern struct time_data time_info;
 
+bool boot_type_hell(){
+	return mods::globals::boot_type == mods::globals::boot_type_t::BOOT_HELL;
+}
+
 void log(mods::string n) {
 			 std::cerr << "[log]: " << n.c_str() << "\n";
 }

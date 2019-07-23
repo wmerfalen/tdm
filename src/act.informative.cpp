@@ -316,8 +316,8 @@ void list_obj_to_char(struct obj_data *list, struct char_data *ch, int mode, int
 
 	for(i = list; i; i = i->next_content) {
 		if(i) {
-			for(unsigned o = 0; o < object_list.size(); o++) {
-				if(&object_list[o] == i) {
+			for(unsigned o = 0; o < obj_list.size(); o++) {
+				if(obj_list[o].get() == i) {
 					break;
 				}
 			}
@@ -1731,9 +1731,9 @@ void perform_immort_where(struct char_data *ch, char *arg) {
 
 		num = 0;
 
-		for(auto& obj_reference : object_list) {
+		for(auto& obj_reference : obj_list) {
 			/* TODO !test !integrity */
-			k = &obj_reference;
+			k = obj_reference.get();
 
 			if(CAN_SEE_OBJ(ch, k) && isname(arg, k->name)) {
 				found = 1;

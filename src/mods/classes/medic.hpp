@@ -4,8 +4,8 @@
 #include "base.hpp"
 #include "../../comm.h"
 namespace mods::classes {
+	using player_ptr = std::shared_ptr<mods::player>;
 	struct medic : base {
-		typedef std::shared_ptr<mods::player> player_ptr;
 		types kind() {
 			return types::MEDIC;
 		}
@@ -14,15 +14,19 @@ namespace mods::classes {
 		uint16_t stim_pistol_ammo_max;
 		player_ptr player_obj;
 
-		void heal_player(player_ptr& target);
 
 		/* constructors and destructors */
-		medic() = delete;
+		medic() : stim_pistol_ammo(3),
+			stim_pistol_ammo_max(3),
+			player_obj(nullptr) {
+
+		}
 		medic(player_ptr& plyr_ptr) : stim_pistol_ammo(3),
 			stim_pistol_ammo_max(3),
 			player_obj(plyr_ptr) {
 		}
 		~medic() = default;
+		static void heal_player(player_ptr&,player_ptr&);
 	};
 };
 

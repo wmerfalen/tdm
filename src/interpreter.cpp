@@ -30,6 +30,7 @@
 #include "mods/js.hpp"
 #include "mods/crypto.hpp"
 #include "mods/auto-login.hpp"
+#include "act.debug.hpp"
 
 /* external variables */
 extern int destroy_socket(socket_t&);
@@ -76,6 +77,62 @@ ACMD(do_room_list){
 		player->stc(p->name());
 	}
 }
+ACMD(do_js_help){
+	MENTOC_PREAMBLE();
+	if(IS_NPC(ch)){
+		/** nice try */
+		return;
+	}
+	if(player->implementor_mode() || player->builder_mode()){
+		for(std::string_view cmd : {
+		"{gld}affect_from_char{/gld} -- {grn}1: player_name,2: affect_string{/grn}",
+		"{gld}clear_all_affected_flags{/gld} -- ",
+		"{gld}clear_all_plr_flags{/gld} -- ",
+		"{gld}char_from_room{/gld}",
+		"{gld}cmd{/gld} -- ",
+		"{gld}cmd_exec{/gld} -- ",
+		"{gld}db_get{/gld} -- ",
+		"{gld}db_geti{/gld} -- ",
+		"{gld}db_set{/gld} -- ",
+		"{gld}db_seti{/gld} -- ",
+		"{gld}get_current_player{/gld} -- ",
+		"{gld}get_day{/gld} -- ",
+		"{gld}get_month{/gld} -- ",
+		"{gld}get_moon_phase{/gld} -- ",
+		"{gld}get_iday{/gld} -- ",
+		"{gld}get_ihour{/gld} -- ",
+		"{gld}get_imonth{/gld} -- ",
+		"{gld}get_iyear{/gld} -- ",
+		"{gld}hit{/gld} -- i.e.: hit(uuid_atk,uuid_vict)",
+		"{gld}in_room{/gld} -- ",
+		"{gld}list_mobiles{/gld} -- ",
+		"{gld}mob_death_trigger{/gld} -- ",
+		"{gld}mobile_activity{/gld} -- manually call it",
+		"{gld}modify_affected_flags{/gld} -- i.e.: maf('far','INVISIBLE',1)",
+		"{gld}modify_plr_flags{/gld} -- ",
+		"{gld}read_mobile{/gld} -- ",
+		"{gld}require_js{/gld} -- include from /lib/js/",
+		"{gld}require_test{/gld} -- include from /lib/js/tests",
+		"{gld}room{/gld} -- ",
+		"{gld}send{/gld} -- ",
+		"{gld}send_to_char{/gld} -- ",
+		"{gld}send_to_uuid{/gld} -- ",
+		"{gld}set_char_pk_id{/gld} -- ",
+		"{gld}set_points{/gld} -- i.e.:  set_points(player_name,key,value)",
+"{gld}set_points keys{/gld}",
+"mana max_mana hp max_hp move max_move armor",
+"gold bank_gold exp hitroll damroll level",
+"sex room uuid",
+		"{gld}uuid{/gld} -- ",
+		}){
+			player->sendln(cmd);
+		}
+	}else{
+		player->stc("Huh?!?");
+		return;
+	}
+}
+
 ACMD(do_builder_help){
 	MENTOC_PREAMBLE();
 	if(IS_NPC(ch)){
@@ -83,13 +140,31 @@ ACMD(do_builder_help){
 		return;
 	}
 	if(player->implementor_mode() || player->builder_mode()){
-		for(auto & cmd : {
-			"js", "givemegold", "idle", "heal", "newjs", "jstest", "mbuild",
-			"obuild", "sbuild", "zbuild", "chanmgr", "rnumtele", "rnumlist",
-			"pref", "rbuild", "rbuild_sandbox", "room_list", "drone",
-			"throw", "ammo", "point_update"
+		for(std::string_view cmd : {
+			"{gld}ammo{/gld} -- {grn}give yourself ammo [feature-debug]{/grn}", 
+			"{gld}chanmgr{/gld} -- {grn}channel manager utility [staging-feature]{/grn}",
+			"{gld}drone{/gld} -- {grn}start or stop your drone [staging-feature]{/grn}",
+			"{gld}givemegold{/gld} -- {grn}give me gold [feature-debug]{/grn}", 
+			"{gld}heal{/gld} -- {grn}heal yourself [feature-debug][staging-feature][class-medic]{/grn}", 
+			"{gld}idle{/gld} -- {grn}force your character into idle state [feature-debug]{/grn}", 
+			"{gld}js{/gld} -- {grn}Run javascript [feature-debug][admin-utils]{/grn}", 
+			"{gld}js_help{/gld} -- {grn}Show useful js commands [builder-utils][admin-utils]{/grn}", 
+			"{gld}jstest{/gld} -- {grn}run a javascript test [builder-utils][admin-tools]{/grn}",
+			"{gld}mbuild{/gld} -- {grn}mob builder [builder-utils]{/grn}",
+			"{gld}newjs{/gld} -- {grn}create a new javascript context [admin-tools][feature-debug]{/grn}", 
+			"{gld}obuild{/gld} -- {grn}object builder [builder-utils]{/grn}",
+			"{gld}point_update{/gld} -- {grn}manually call point update [feature-debug]{/grn}",
+			"{gld}pref{/gld} -- {grn}preferences utility [staging-feature]{/grn}",
+			"{gld}rbuild{/gld} -- {grn}room builder [builder-utils]{/grn}",
+			"{gld}rbuild_sandbox{/gld} -- {grn}room builder sandbox utility [builder-utils]{/grn}",
+			"{gld}rnumlist{/gld} -- {grn}list rooms [feature-debug]{/grn}",
+			"{gld}rnumtele{/gld} -- {grn}teleport to a room [feature-debug]{/grn}",
+			"{gld}room_list{/gld} -- {grn}lists rooms [builder-utils][admin-utils]{/grn}",
+			"{gld}sbuild{/gld} -- {grn}shop builder [builder-utils]{/grn}",
+			"{gld}throw{/gld} -- {grn}throw a grenade [staging-feature]{/grn}",
+			"{gld}zbuild{/gld} -- {grn}zone builder [builder-utils]{/grn}"
 	 	}){
-			player->stc(cmd);
+			player->sendln(cmd);
 		}
 	}else{
 		player->stc("Huh?!?");
@@ -215,7 +290,12 @@ ACMD(do_ammo);
 /** debug mods */
 ACMD(do_point_update);
 ACMD(do_zero_socket);
+ACMD(do_uuid);
 /** -- end debug mods */
+
+/** wizard commands */
+ACMD(do_wiz_quote);
+/** end wizard commands */
 ACMD(do_snoop);
 ACMD(do_spec_comm);
 ACMD(do_split);
@@ -541,6 +621,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "jstest"  , POS_RESTING , do_jstest   , LVL_GOD, 0 },
 	{ "point_update"  , POS_RESTING , do_point_update   , 0, 0 },
 	{ "zero_socket"  , POS_RESTING , do_zero_socket  , 0, 0 },
+	{ "uuid"  , POS_RESTING , do_uuid  , 0, 0 },
 	/** ----------------------- */
 	/** END DEBUGGING + TESTING */
 	/** ----------------------- */
@@ -582,6 +663,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** BUILDER UTILS */
 	/** ------------- */
 	{ "builder_help"  , POS_RESTING , do_builder_help   , LVL_GOD, 0 },
+	{ "js_help"  , POS_RESTING , do_js_help   , LVL_GOD, 0 },
 	{ "mbuild"  , POS_RESTING , do_mbuild   , LVL_GOD, 0 },
 	{ "obuild"  , POS_RESTING , do_obuild   , LVL_GOD, 0 },
 	{ "sbuild"  , POS_RESTING , do_sbuild   , LVL_GOD, 0 },
@@ -596,6 +678,14 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** ----------------- */
 	/** END BUILDER UTILS */
 	/** ----------------- */
+
+	/** ------------------ */
+	/** ADMIN/WIZARD UTILS */
+	/** ------------------ */
+	{ "wiz_quote"  , POS_RESTING , do_wiz_quote  , LVL_GOD, 0 },
+	/** ---------------------- */
+	/** END ADMIN/WIZARD UTILS */
+	/** ---------------------- */
 
 	{ "snap"     , POS_RESTING , do_action   , 0, 0 },
 	{ "snarl"    , POS_RESTING , do_action   , 0, 0 },
@@ -1758,12 +1848,16 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 												 /* check and make sure no other copies of this player are logged in */
 												 perform_dupe_check(p);
 
-												 p->stc("welcome");//WELC_MESSG);
-												 p->set_room(0);
+												 //p->stc("welcome");//WELC_MESSG);
+												 if(boot_type_hell()){
+												 	p->set_room(0);
+												 }else{
+												 	p->set_room(config::rooms::real_mortal_start());
+												 }
 												 if(world.size() == 0){
 													 std::cerr << "error: world.size is empty!\n";
 												 }
-												 p->set_room(config::rooms::real_mortal_start());
+
 												 char_to_room(p->cd(),p->room());
 												 act("$n has entered the game.", TRUE, p->cd(), 0, 0, TO_ROOM);
 												 p->set_state(CON_PLAYING);

@@ -33,6 +33,10 @@ namespace mods::acl_list {
 extern void set_access_rights(
 					std::shared_ptr<mods::player>,const std::string&,bool);
 };
+namespace mods::classes {
+	struct medic;
+	struct sniper;
+};
 namespace mods {
 	namespace weapon {
 		enum mask_type { SMG = 1, SNIPE = (1 << 2), SHOTGUN = (1 << 3), 
@@ -48,9 +52,9 @@ namespace mods {
 			using   class_type = mods::classes::types;
 			using 	descriptor_data_t = std::deque<descriptor_data>;
 			using 	descriptor_data_iterator_t = descriptor_data_t::iterator;
-			typedef short weapon_set;
-			typedef std::vector<class_type> class_capability_t;
-			typedef std::vector<std::shared_ptr<mods::classes::base>> class_info_t;
+			using 	weapon_set = short;
+			using 	class_capability_t = std::vector<class_type>;
+			using		class_info_t = std::vector<std::shared_ptr<mods::classes::base>>;
 			using   chdata = char_data;
 			using   chdata_ptr = char_data *;
 			using		descriptor_t = mods::descriptor_data;
@@ -113,8 +117,10 @@ namespace mods {
 			bool room_pave_mode();
 			bool zone_pave_mode();
 
+			
 			/* class info */
-			std::shared_ptr<mods::classes::base>& get_class(class_type);
+			player_class_t get_class() const { return m_class; }
+			void set_class(player_class_t c);
 
 			/* ammo gettters */
 			obj_data* get_first_ammo_of_type(const weapon_type_t&) const;
@@ -129,7 +135,6 @@ namespace mods {
 			int  ammo_type_adjustment(int,const weapon_type_t&);
 
 			/* setters */
-			void set_class_capability(const class_capability_t& caps);
 			void set_cd(char_data* ch);
 			void set_shared_ptr(std::shared_ptr<mods::player>&);
 
@@ -322,6 +327,7 @@ namespace mods {
 			void stc(const std::string m);
 			void stc(int m);
 			void stc(std::string_view);
+			void sendln(std::string_view str);
 			void done();
 
 			/* pager functions */
@@ -481,6 +487,8 @@ namespace mods {
 			std::vector<affected_type>& del_affected_by(const affected_type& af){
 				return del_affected_by(af.index);
 			}
+			std::shared_ptr<mods::classes::sniper> 	cl_sniper();
+			std::shared_ptr<mods::classes::medic> 	cl_medic();
 
 		protected:
 			lense_type_t m_lense_type;
@@ -503,6 +511,7 @@ namespace mods {
 			std::array<aligned_int_t,mods::flags::chunk_type_t::LAST + 1> m_flags;
 			std::shared_ptr<mods::descriptor_data> m_desc;
 			std::string	m_name;
+			player_class_t m_class;
 			class_capability_t m_class_capability;
 			std::array<unsigned long,WEAPON_SET_NUM> m_weapon_cooldown;
 			weapon_set   m_weapon_set;
@@ -519,6 +528,8 @@ namespace mods {
 			player_type_enum_t m_type;
 			weapon_type_t m_weapon_type;
 			weapon_type_t m_weapon_flags;
+			std::shared_ptr<mods::classes::sniper> m_class_sniper;
+			std::shared_ptr<mods::classes::medic> m_class_medic;
 	};
 };
 

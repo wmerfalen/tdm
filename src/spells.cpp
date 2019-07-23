@@ -170,9 +170,9 @@ ASPELL(spell_locate_object) {
 	strlcpy(name, fname(obj->name), sizeof(name));
 	j = level / 2;
 
-	for(auto& obj_reference : object_list) {
+	for(auto& obj_reference : obj_list) {
 		/*TODO !test !integrity */
-		auto i = &obj_reference;
+		auto i = obj_reference.get();
 
 		if(!isname(name, i->name)) {
 			continue;

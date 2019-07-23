@@ -323,19 +323,5 @@ namespace config {
 			return config::rooms::MORTAL_START;
 		}
 	};
-	void init(int argc,char** argv){
-		int pos = 0;
-		while(++pos < argc){
-			std::string arg = argv[pos];
-			std::regex re("\\-\\-conf\\-([a-zA-Z_0-9]+)=(.*)");
-			std::smatch matches;
-			if(std::regex_search(arg,matches,re)){
-				//update_db(matches.str(1),matches.str(2));
-			}
-		}
-	}
-	void update_db(std::string option,std::string value){
-		std::string key = std::string("config:") + option.data();
-		mods::globals::db->put(key,value);
-	}
+	bool run_profile_scripts;
 };

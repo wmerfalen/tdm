@@ -21,7 +21,8 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \
 	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\"  \
 	-Imods/include -Iboost-cpp -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
-	-DMENTOC_NO_CONSTEXPR_CONF=1
+	-DMENTOC_NO_CONSTEXPR_CONF=1 -D__MENTOC_USE_PQXX_RESULT__=1 \
+	-Wno-sign-compare
 #	-Lboost-cpp/build/lib\ -Ipqxx 
 LIBS = -lpqxx $(openssl)
 buildobj = act.informative act.item act.medic \
@@ -39,21 +40,30 @@ buildobj = act.informative act.item act.medic \
 					 mods/hell mods/db mods/testing/lmdb/player-syncing\
 					 mods/testing/lmdb/db mods/player-scaffolding sql/port\
 					 mods/meta_utils mods/acl_list mods/flags mods/js-player-scaffolding \
-					 mods/builder mods/pq mods/crypto utils mods/macro_impl act.comm mods/extra_desc_data
+					 mods/builder mods/pq mods/crypto utils mods/macro_impl \
+					 act.comm mods/extra_desc_data mods/world-configuration mods/debug \
+					 mods/date-time mods/npc mods/pfind mods/auto-login \
+					 mods/overhead_map mods/orm/quotes mods/weapons/sniper-rifle\
+					 act.debug mods/classes/sniper
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
 all: $(builddir) $(objects) $(thirdparty) #$(DATA_DIR)
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS)
 clean:
-	make -f $(lmdbdir)/Makefile clean ; \
+	make -f $(lmdbdir)/Makefile-llvm clean ; \
 		rm -f $(addprefix $(builddir)/,*.o *.d  mods/*.o \
-		mods/*.d mods/classes/*.o mods/classes/*.d) \
+		mods/*.d mods/classes/*.o mods/classes/*.d, \
+		mods/orm/*.o,mods/orm/*.d, \
+		mods/weapons/*.o,mods/weapons/*.d) \
 		rm -f $(builddir)/mods/testing/lmdb/*.o \
 		rm -f $(builddir)/mods/testing/lmdb/*.d 
 
 $(builddir):
-	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/acl/ $(builddir)/mods/testing/lmdb $(builddir)/sql
+	mkdir -p $(builddir)/mods/classes $(duktapeout) \
+		$(builddir)/mods/acl/ $(builddir)/mods/testing/lmdb\
+		$(builddir)/sql $(builddir)/mods/orm/ \
+		$(builddir)/weapons/
 
 $(builddir)/%.o: %.cpp
 	$(CC) -c $(FLAGS) -o $@ $<

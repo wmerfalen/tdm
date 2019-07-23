@@ -56,6 +56,7 @@ std::vector<char_data> mob_proto;	/* prototypes for mobs		 */
 mob_rnum top_of_mobt = 0;	/* top of mobile index table	 */
 
 std::deque<obj_data> object_list;	/* list of objs	 */
+std::deque<std::shared_ptr<obj_data>> obj_list;
 std::deque<std::shared_ptr<mods::npc>> mob_list;
 std::vector<index_data> obj_index;	/* index table for object file	 */
 std::vector<obj_data> obj_proto;	/* prototypes for objs		 */
@@ -167,7 +168,6 @@ extern room_vnum frozen_start_room;
 extern std::deque<mods::descriptor_data>  descriptor_list;
 extern const char *unused_spellname;	/* spell_parser.c */
 
-//void lmdb_export_char(std::shared_ptr<mods::player> player_ptr, mutable_map_t &values){
 
 namespace db {
 	int16_t save_char_data(std::shared_ptr<mods::player> player,std::map<std::string,std::string> values){
@@ -219,6 +219,7 @@ namespace db {
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
 				for(auto && row : player_record){
 					player->set_db_id(row["id"].as<int>(0));
+					player->set_class(static_cast<player_class_t>(row["player_class"].as<int>()));
 					return 0;
 				}
 				log("SYSERR: couldn't grab player's pkid: '%s'",player->name().c_str());
@@ -1447,7 +1448,7 @@ void check_start_rooms(void) {
 
 /* resolve all vnums into rnums in the world */
 void renum_world(void) {
-	int room, door;
+	unsigned room, door;
 
 	for(room = 0; room < top_of_world; room++)
 		for(door = 0; door < NUM_OF_DIRS; door++)
@@ -1491,7 +1492,7 @@ void renum_zone_table(void) {
 				case 'O':
 					a = ZCMD.arg1 = real_object(ZCMD.arg1);
 
-					if(ZCMD.arg3 != NOWHERE) {
+					if(ZCMD.arg3 != static_cast<int>(NOWHERE)) {
 						c = ZCMD.arg3 = real_room(ZCMD.arg3);
 					}
 
@@ -1878,7 +1879,7 @@ int hsort(const void *a, const void *b) {
 
 
 int vnum_mobile(char *searchname, struct char_data *ch) {
-	int nr, found = 0;
+	unsigned int nr, found = 0;
 
 	for(nr = 0; nr <= top_of_mobt; nr++)
 		if(isname(searchname, mob_proto[nr].player.name)) {
@@ -1891,7 +1892,7 @@ int vnum_mobile(char *searchname, struct char_data *ch) {
 
 
 int vnum_object(char *searchname, struct char_data *ch) {
-	int nr, found = 0;
+	unsigned int nr, found = 0;
 
 	for(nr = 0; nr <= top_of_objt; nr++)
 		if(isname(searchname, obj_proto[nr].name)) {
@@ -1948,19 +1949,17 @@ struct char_data *read_mobile(mob_vnum nr, int type) { /* and mob_rnum */
 
 /* create an object, and add it to the object list */
 struct obj_data *create_obj(void) {
-	struct obj_data *obj;
+	obj_list.push_back(std::make_shared<obj_data>());
 
-	/*
-		 CREATE(obj, struct obj_data, 1);
-		 clear_object(obj);
-		 obj->next = object_list;
-		 object_list = obj;
-		 */
-	struct obj_data tmp;
-	clear_object(&tmp);
-	object_list.push_back(tmp);
-	obj = &(object_list.back());
-	return obj;
+	clear_object(obj_list.back().get());
+	return obj_list.back().get();
+}
+
+std::shared_ptr<obj_data> blank_object() {
+	obj_list.push_back(std::make_shared<obj_data>());
+	auto ptr = obj_list.back();
+	clear_object(ptr.get());
+	return std::move(ptr);
 }
 
 
@@ -1976,11 +1975,12 @@ struct obj_data *read_object(obj_vnum nr, int type) { /* and obj_rnum */
 		return (NULL);
 	}
 
-	clear_object(&obj);
-	obj = obj_proto[i];
-	object_list.push_back(obj);
+	obj_list.push_back(std::make_shared<obj_data>());
+	auto ptr = obj_list.back();
+	clear_object(ptr.get());
+	*ptr = obj_proto[i];
 	obj_index[i].number++;
-	return &object_list.at(object_list.size()-1);
+	return ptr.get();
 }
 
 
@@ -2104,7 +2104,7 @@ void reset_zone(zone_rnum zone) {
 
 			case 'O':			/* read an object */
 				if(obj_index[ZCMD.arg1].number < ZCMD.arg2) {
-					if(ZCMD.arg3 != NOWHERE) {
+					if(ZCMD.arg3 != static_cast<int>(NOWHERE)) {
 						obj = read_object(ZCMD.arg1, REAL);
 						obj_to_room(obj, ZCMD.arg3);
 						last_cmd = 1;
@@ -2428,7 +2428,7 @@ bool parse_sql_player(std::shared_ptr<mods::player> player_ptr){
 		player_ptr->hitroll() = mods::util::stoi<int>(row["player_hitroll"]);
 		player_ptr->weight() = mods::util::stoi<int>(row["player_weight"]);
 		player_ptr->height() = mods::util::stoi<int>(row["player_height"]);
-		player_ptr->chclass() = mods::util::stoi<int>(row["player_class"]);
+		player_ptr->set_class(static_cast<player_class_t>(row["player_class"].as<int>()));
 		player_ptr->title().assign((row["player_title"]));
 		player_ptr->hometown() = mods::util::stoi<int>(row["player_hometown"]);
 		player_ptr->clear_all_affected();
@@ -2743,7 +2743,7 @@ void free_char(struct char_data *ch) {
 
 /* release memory allocated for an obj struct */
 void free_obj(struct obj_data *obj) {
-	int nr;
+	unsigned int nr;
 
 	if((nr = GET_OBJ_RNUM(obj)) == NOTHING) {
 		if(obj->name) {

@@ -671,11 +671,11 @@ int get_number(char **name) {
 
 
 /* Search a given list for an object number, and return a ptr to that obj */
-struct obj_data *get_obj_in_list_num(int num, struct obj_data *list) {
-	struct obj_data *i;
+obj_data *get_obj_in_list_num(int num, struct obj_data *list) {
+	obj_data *i = nullptr;
 
 	for(i = list; i; i = i->next_content)
-		if(GET_OBJ_RNUM(i) == num) {
+		if(GET_OBJ_RNUM(i) == static_cast<obj_vnum>(num)) {
 			return (i);
 		}
 
@@ -688,8 +688,8 @@ struct obj_data *get_obj_in_list_num(int num, struct obj_data *list) {
 struct obj_data *get_obj_num(obj_rnum nr) {
 	struct obj_data *i;
 
-	for(auto& obj_reference :  object_list) {
-		i = &obj_reference;
+	for(auto& obj_reference :  obj_list) {
+		i = obj_reference.get();
 
 		if(GET_OBJ_RNUM(i) == nr) {
 			return (i);
@@ -874,11 +874,11 @@ void extract_obj(struct obj_data *obj) {
 		(obj_index[GET_OBJ_RNUM(obj)].number)--;
 	}
 
-	for(auto iterator = object_list.begin();
-	        iterator != object_list.end();
+	for(auto iterator = obj_list.begin();
+	        iterator != obj_list.end();
 	        ++iterator) {
-		if(&(*iterator) == obj) {
-			object_list.erase(iterator);
+		if(iterator->get() == obj) {
+			obj_list.erase(iterator);
 			break;
 		}
 	}
@@ -1322,8 +1322,8 @@ struct obj_data *get_obj_vis(struct char_data *ch, char *name, int *number) {
 	}
 
 	/* ok.. no luck yet. scan the entire obj list   */
-	for(auto& obj_reference : object_list) {
-		i = &obj_reference;
+	for(auto& obj_reference : obj_list) {
+		i = obj_reference.get();
 
 		if(isname(name, i->name))
 			if(CAN_SEE_OBJ(ch, i))

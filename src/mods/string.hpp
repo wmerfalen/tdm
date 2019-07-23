@@ -11,7 +11,12 @@ namespace mods {
 	struct string {
 		string();
 		string(const char* str);
+		string(const pqxx::tuple::reference & str);
+#ifdef __MENTOC_USE_PQXX_RESULT__
+		string(const pqxx::result::reference & str);
+#else
 		string(const pqxx::row::reference & str);
+#endif
 		string(const string&);
 		~string();
 		operator bool() const { return m_str.length(); }
@@ -24,7 +29,12 @@ namespace mods {
 		string& operator=(const std::string & other);
 		const char* operator*(){ return m_str.c_str(); }
 		void assign(const std::string & other);
+		void assign(const pqxx::tuple::reference & other);
+#ifdef __MENTOC_USE_PQXX_RESULT__
+		void assign(const pqxx::result::reference & other);
+#else
 		void assign(const pqxx::row::reference & other);
+#endif
 		const char* c_str() const;
 		unsigned int length() const;
 		void clear();

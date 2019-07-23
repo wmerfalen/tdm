@@ -104,6 +104,7 @@ std::ostream& log(Args... args); /*{
 
 			return arglist;
 		}
+	std::optional<unsigned> stoul(std::string_view str);
 	template <typename T>
 		T stoi(const std::string& i){
 			T m;
@@ -113,10 +114,22 @@ std::ostream& log(Args... args); /*{
 			return m;
 		}
 	template <typename T>
-		T stoi(const pqxx::row::reference & i){
+		T stoi(const pqxx::tuple::reference & i){
 			T m;
 			std::stringstream ss;
-			ss.str(i.c_str());
+			ss.str(pqxx::to_string(i));
+			ss >> m;
+			return m;
+		}
+	template <typename T>
+#ifdef __MENTOC_USE_PQXX_RESULT__
+		T stoi(const pqxx::result::reference & i){
+#else
+		T stoi(const pqxx::row::reference & i){
+#endif
+			T m;
+			std::stringstream ss;
+			ss.str(pqxx::to_string(i));
 			ss >> m;
 			return m;
 		}

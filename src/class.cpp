@@ -61,34 +61,169 @@ const char *pc_class_types[] = {
 	"Sniper",//"Thief",
 	"Marine",//"Warrior",
 	"Support",
+	"PSYOPS"
 	"\n"
 };
 
 
 /* The menu for choosing a class in interpreter.c: */
-const char *class_menu =
-    "\r\n"
-    "Select Unit:\r\n"
-		"  [1] British Special Air Service\r\n"
-		"  [2] Navy Seals\r\n" 
-		"  [3] Russian Spetsnaz\r\n" 
-		"  [4] Polish GROM\r\n" 
-		"  [5] USMC Reconnaissance\r\n" 
-		"  [6] German GSG 9\r\n" 
-		"  [7] Joint Task Force 2\r\n" 
-		"  [8] French GIGN\r\n"
-		;
+//const char *unit_menu =
+//    "\r\n"
+//    "Select Unit:\r\n"
+//		"  [1] British Special Air Service\r\n"
+//		"  [2] Navy Seals\r\n" 
+//		"  [3] Russian Spetsnaz\r\n" 
+//		"  [4] Polish GROM\r\n" 
+//		"  [5] USMC Reconnaissance\r\n" 
+//		"  [6] German GSG 9\r\n" 
+//		"  [7] Joint Task Force 2\r\n" 
+//		"  [8] French GIGN\r\n"
+//		;
 
-const char* position_menu =
+const char* class_menu =
     "  [1] Engineer\r\n"
     "  [2] Medic\r\n"
-    "  [3] Marksman\r\n"
+    "  [3] Sniper\r\n"
     "  [4] PSYOP\r\n"
     "  [5] Support\r\n"
 		"  [6] Marine [*]\r\n"
 		"\r\n"
 		" [*] Marines are well-rounded\r\n"
 		;
+std::string common_weaponry_skill_tree() {
+	std::string tree = ""
+		"                   [*] --[ Weaponry Skills ]-- [*]                           \r\n"
+		" [ ] Sub Machine Guns                                                        \r\n"
+		" [ ] Assault Rifles                                                          \r\n"
+		" [ ] Sniper Rifles                                                           \r\n"
+		" [ ] Light Machine Guns                                                      \r\n"
+		" [ ] Shotguns                                                                \r\n"
+		" [ ] Pistols                                                                 \r\n"
+		" [ ] Machine Pistols                                                         \r\n"
+		"                   [*] --[ Demolition Skills]-- [*]                          \r\n"
+		" [ ] Remote detonation                                                       \r\n"
+		" [ ] Claymore mines                                                          \r\n"
+		" [ ] Break charge                                                            \r\n"
+		" [ ] Door attached trip mine                                                 \r\n"
+		"                   [*] --[ Grenade Skills ]-- [*]                            \r\n"
+		" [ ] Fragmentation grenades                                                  \r\n"
+		" [ ] Incendiary grenades                                                     \r\n"
+		" [ ] Smoke grenades                                                          \r\n"
+		" [ ] Flash grenades                                                          \r\n"
+		"                   [*] --[ Gadgets ]-- [*]                                   \r\n"
+		" [ ] Ground drone                                                            \r\n"
+		"  +-[ ] Custom ammunition                                                    \r\n"
+		"  +-[ ] Surveilance                                                          \r\n"
+		"  +-[ ] Assisted scanning device                                             \r\n"
+		"  +-[ ] Sedative Hypnotic                                                    \r\n"
+		"  +-[ ] Tazer                                                                \r\n"
+		"  +-[ ] EMP                                                                  \r\n"
+		" [ ] Aerial drone                                                            \r\n"
+		"  +-[ ] Custom ammunition                                                    \r\n"
+		"  +-[ ] Assisted scanning device                                             \r\n"
+		"  +-[ ] EMP                                                                  \r\n"
+}
+
+std::string engineer_skill_tree() {
+
+	std::string tree = ""
+		"                   [*] --[ Gadget deployment ]-- [*]                         \r\n"
+		" [ ]                                                                         \r\n"
+		"  +-[ ]                                                                      \r\n"
+		"                                                                             \r\n"
+		"                   [*] -- [ Offensive PSYOPS ] -- [*]                        \r\n"
+		"                                                                             \r\n"
+		"                                                                             \r\n"
+	;
+	return tree;
+}
+
+std::string psyop_skill_tree() {
+
+	std::string tree = ""
+		"                   [*] --[ Control and manipulation ]-- [*]                  \r\n"
+		" [ ] Pyromancy                                                               \r\n"
+		"  +-[ ] Incendiary ammunition                                                \r\n"
+		"                                                                             \r\n"
+		" [ ] Intercept Communications                                                \r\n"
+		"  +-[ ] Predict enemy position                                               \r\n"
+		"  +-[ ] Predict air strike location                                          \r\n"
+		"  +-[ ] Predict path of least resistance                                     \r\n"
+		"                                                                             \r\n"
+		" [ ] Remote Viewing                                                          \r\n"
+		"  +-[ ] Eye of Osiris                                                        \r\n"
+		"  +-[ ] Pineal Gland Hijack                                                  \r\n"
+		"                                                                             \r\n"
+		" [ ] Holographic decoy                                                       \r\n"
+		"  +-[ ] Call for help                                                        \r\n"
+		"                                                                             \r\n"
+		" [ ] Interrogate                                                             \r\n"
+		"  +-[ ] Seeds of doubt                                                       \r\n"
+		"  +-[ ] Disinform                                                            \r\n"
+		"                                                                             \r\n"
+		" [ ] Alter state of mind                                                     \r\n"
+		"  +-[ ] Innebriate                                                           \r\n"
+		"      +-[ ] Depressant                                                       \r\n"
+		"      +-[ ] Stimulant                                                        \r\n"
+		"                                                                             \r\n"
+		" [ ] Detect position                                                         \r\n"
+		" [ ] Lure                                                                    \r\n"
+		"                   [*] -- [ Offensive PSYOPS ] -- [*]                        \r\n"
+		" [ ] Cardiac Arrest                                                          \r\n"
+		"                                                                             \r\n"
+		" [ ] Poison                                                                  \r\n"
+		"                                                                             \r\n"
+		" [ ] Intimidate                                                              \r\n"
+		"                                                                             \r\n"
+	;
+	return tree;
+}
+
+std::string sniper_skill_tree() {
+
+	std::string tree = ""
+		"                       [*] -- [ Weaponry Skills ] -- [*]                    \r\n"
+		"[ ] - Sniper Rifle Skills                                                   \r\n"
+		"	+                                                                          \r\n"
+		" +-[ ] Decapitate                                                           \r\n"
+		" +-[ ] Disarm                                                               \r\n"
+		" +-[ ] Limb Damage                                                          \r\n"
+		" +-[ ] Tracking Ammunition                                                  \r\n"
+		" +-[ ] Crafting Exotic Bullets                                              \r\n"
+		" +-[ ] Exploding Corpse Shot                                                \r\n"
+		/*
+		 * Let's double back around on this in the future. Seems too overboard      
+		 * for a single feature.
+		"  +                                                                         \r\n"
+		"  +-[ ] Chained Combos                                                      \r\n"
+		"     +                                                                      \r\n"
+		"     +-[ ] Acid Bath                                                        \r\n"
+		"     +-[ ] Stained And Marked                                               \r\n"
+		"     +-[ ] EMP                                                              \r\n"
+		"     +-[ ] Concussion                                                       \r\n"
+		"     +-[ ] Scan Grenade                                                     \r\n"
+		"     +-[ ]                                                                  \r\n"
+		*/
+		"[ ] - Double Shot                                                           \r\n"
+		" +-> Chance to score a second shot at 50% the damage of the first.          \r\n"
+		"          Second shot consumes no ammo.                                     \r\n"
+		"[ ] - Crippling Shot                                                        \r\n"
+		" +-> Chance to cripple enemy. Useful for interrogations.                    \r\n"
+		"[ ] - Fast Draw Secondary                                                   \r\n"
+		" +-> Decreases time to switch to secondary weapon                           \r\n"
+		"[ ] - Interrogate                                                           \r\n"
+		" +-> Pressure enemy NPC's into divulging information.                       \r\n"
+		" -- [ Medical Skills ] --                                                   \r\n"
+		"[ ] - Lite Bandaging                                                        \r\n"
+		" +-> Requires Medkit                                                        \r\n"
+		"[ ] - Live off the elements                                                 \r\n"
+		" +-> Ability to survive in nature for long periods of time.                 \r\n"
+		" -- [ Tracking Enemies ] --                                                 \r\n"
+		"[ ] - Nano Bot Tracking Ammo                                                \r\n"
+		" +-> Ammo that allows you to track NPC's.                                   \r\n"
+	;
+	return tree;
+}
 
 /*
  * The code to interpret a class letter -- used in interpreter.c when a

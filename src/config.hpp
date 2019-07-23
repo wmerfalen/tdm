@@ -4,8 +4,9 @@
 #include "mods/db.hpp"
 #include <memory>
 #include <variant>
+#include <unordered_map>
 namespace mods::globals {
-	//extern std::unique_ptr<mods::lmdb::_db_handle> db;
+	extern std::unordered_map<std::string,std::string> ram_db;
 };
 namespace config {
 	namespace rooms {
@@ -18,26 +19,6 @@ namespace config {
 		room_rnum real_idle();
 		room_rnum real_mortal_start();
 	};
-	void init(int argc,char** argv);
-	static std::map<std::string,std::string> mapped;
-
-	template <typename T>
-	static inline T get(std::string_view option){
-		T ignored;
-		return ignored;
-		/*
-		std::string key = std::string("config:") + option.data();
-		std::string data;
-		mods::globals::db->get(key,data); return std::get<T>(data);
-		*/
-	}
-	template <typename T>
-	static inline void set(std::string_view option,T value){
-		/*
-		std::string key = std::string("config:") + option.data();
-		mods::globals::db->put(key,std::to_string(value));	
-		*/
-	}
-	void update_db(std::string_view option,std::string_view value);
+	extern bool run_profile_scripts;
 }
 #endif

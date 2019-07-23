@@ -518,8 +518,8 @@ void point_update(void) {
 	});
 
 	/* objects */
-	for(auto& obj_reference : object_list) {
-		j = &obj_reference;
+	for(auto& obj_reference : obj_list) {
+		j = obj_reference.get();
 
 		/* If this is a corpse */
 		if(IS_CORPSE(j)) {

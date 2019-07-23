@@ -142,7 +142,8 @@ void	free_char(struct char_data *ch);
 struct obj_data *create_obj(void);
 void	clear_object(struct obj_data *obj);
 void	free_obj(struct obj_data *obj);
-struct obj_data *read_object(obj_vnum nr, int type);
+obj_data *read_object(obj_vnum nr, int type);
+std::shared_ptr<obj_data> blank_object();
 int	vnum_object(char *searchname, struct char_data *ch);
 
 typedef enum { \

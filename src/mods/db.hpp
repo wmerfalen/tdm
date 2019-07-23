@@ -58,26 +58,41 @@ aligned_int_t lmdb_load_by_meta(
 tuple_status_t lmdb_write_values(
 		const std::string & table,
 		mutable_map_t* values,
-		std::string pk_id);
+		std::string pk_id
+);
 
 aligned_int_t save_record_get_id(
 		const std::string& table,
-		mutable_map_t* values);
+		mutable_map_t* values
+);
 tuple_status_t new_record(
 		const std::string& table,
-		mutable_map_t* values);
+		mutable_map_t* values
+);
 
 tuple_status_t save_record(
 		const std::string& table,
 		mutable_map_t* values,
-		std::string pk_id);
+		std::string pk_id
+);
 
 tuple_status_t save_char(
-		std::shared_ptr<mods::player> player_ptr);
+		std::shared_ptr<mods::player> player_ptr
+);
 tuple_status_t save_new_char(
-		std::shared_ptr<mods::player> player_ptr);
+		std::shared_ptr<mods::player> player_ptr
+);
+/**
+ * @return int number of rows loaded 
+ */
 int load_record(const std::string& table, aligned_int_t pk, mutable_map_t& values);
+/**
+ * @return int number of rows loaded 
+ */
 int load_record(const std::string& table, const std::string& pk, mutable_map_t& values);
+/**
+ * @return int number of rows loaded 
+ */
 int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_map_t& out_record);
 
 bool db_insert(const std::string& table, mutable_map_t* values);

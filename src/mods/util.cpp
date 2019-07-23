@@ -93,6 +93,13 @@ namespace mods {
 			final_buffer = mods::globals::replace_all(final_buffer,"{/blu}","\033[0m");
 			return final_buffer;
 		}
+		std::optional<unsigned> stoul(std::string_view str) {
+			try {
+				return std::stoul(str.data());
+			} catch(...) {
+				return std::nullopt;
+			}
+		}
 		std::optional<int> stoi(std::string_view str) {
 			try {
 				return std::stoi(str.data());

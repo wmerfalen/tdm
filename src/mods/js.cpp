@@ -6,6 +6,7 @@
 #include "../spells.h"
 #include "db.hpp"
 #include "date-time.hpp"
+#include "../config.hpp"
 
 #include <unistd.h>	//for getcwd()
 #define DT_FORMAT "{player_name}:mob_death_trigger"
@@ -429,8 +430,9 @@ if(key.compare("WATERWALK") == 0){ ::affect_from_char(*player_ptr,SPELL_WATERWAL
 					return 1;
 		}
 		static duk_ret_t room(duk_context *ctx){
-			duk_push_number(ctx,1);
-			return mods::globals::current_player->room();
+			auto room = mods::globals::current_player->room();
+			duk_push_number(ctx,room);
+			return 1;
 		}
 
 		static duk_ret_t cmd(duk_context *ctx) {
@@ -732,8 +734,10 @@ __set_points_cleanup:
 		}
 
 		void run_profile_scripts(const std::string& player_name){
+			if(config::run_profile_scripts){
 			 load_library(mods::globals::duktape_context,
 					 std::string(mods::js::current_working_dir() + "/js/profiles/" + player_name + ".js").c_str());
+			}
 		}
 
 		duk_context* new_context() {

@@ -12,12 +12,11 @@ using class_type = mods::player::class_type;
 ACMD(do_heal) {
 	MENTOC_PREAMBLE();
 
-	if(!player->has_class_capability(class_type::MEDIC)) {
+	if(player->get_class() != player_class_t::CLASS_MEDIC){
 		*player << "You are not a medic\r\n";
 		return;
 	}
 
-	auto ptr = dynamic_cast<mods::classes::medic*>(player->get_class(class_type::MEDIC).get());
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
 	bool healed = false;
@@ -26,7 +25,7 @@ ACMD(do_heal) {
 		if(mods::globals::room_list.size() > room){
 			for(auto & person : mods::globals::room_list[room]){
 				if(mods::util::fuzzy_match(v,person->name().c_str())) {
-					ptr->heal_player(person);
+					mods::classes::medic::heal_player(player,person);
 					healed = true;
 					break;
 				}

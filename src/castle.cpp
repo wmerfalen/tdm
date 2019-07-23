@@ -161,7 +161,7 @@ void assign_kings_castle(void) {
  * Used mainly by BANZAI:ng NPC:s.
  */
 int member_of_staff(struct char_data *chChar) {
-	int ch_num;
+	unsigned ch_num;
 
 	if(!IS_NPC(chChar)) {
 		return (FALSE);
@@ -196,7 +196,7 @@ int member_of_staff(struct char_data *chChar) {
  * Used by Peter the captain of the royal guard.
  */
 int member_of_royal_guard(struct char_data *chChar) {
-	int ch_num;
+	unsigned ch_num;
 
 	if(!chChar || !IS_NPC(chChar)) {
 		return (FALSE);

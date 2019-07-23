@@ -153,7 +153,7 @@ void lmdb_export_char(std::shared_ptr<mods::player> player_ptr, mutable_map_t &v
 		values["player_damroll"] = (std::to_string(player_ptr->damroll()));
 		values["player_weight"] = (std::to_string(player_ptr->weight()));
 		values["player_height"] = (std::to_string(player_ptr->height()));
-		values["player_class"] = (std::to_string(player_ptr->cd()->player.chclass));
+		values["player_class"] = std::to_string(player_ptr->get_class());
 		values["player_title"] = std::to_string(player_ptr->title());
 		values["player_hometown"] = (std::to_string(player_ptr->hometown()));
 		values["player_damnodice"] = std::string("0");

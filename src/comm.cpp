@@ -338,14 +338,10 @@ void init_game(ush_int port) {
 	log("Opening mother connection.");
 	mother_desc = init_socket(port);
 
-	switch(mods::globals::boot_type){
-		case mods::globals::boot_type_t::BOOT_HELL:
+	if(boot_type_hell()){
 			boot_hell();
-			break;
-		case mods::globals::boot_type_t::BOOT_DB:
-		default:
+	}else{
 			boot_db();
-			break;
 	}
 
 	log("Signal trapping.");

@@ -232,7 +232,33 @@ pqxx::result db_get_all(std::string table);
 //result_container_t db_get_by_meta(std::string table, std::string col,std::string value);
 //result_container_t db_get_by_meta(std::string table, std::string col,const pqxx::tuple::reference& value);
 pqxx::result db_get_by_meta(std::string table, std::string col,const std::string & value);
+namespace mods::pq {
+	using transaction = pqxx::work;
+	using result = pqxx::result;
+	extern pqxx::result exec(transaction& txn,std::string_view query);
+};
+template <typename TSqlCompositor,typename TIDListContainer>
+pqxx::result db_get_by_meta_multi(std::string table, std::string col,const TIDListContainer& values){
+	using txn = mods::pq::transaction;
+	try{
+		auto select_txn = txn();
+		TSqlCompositor comp(table,&select_txn);
+		auto sql_string = comp.select("*")
+			.from(table)
+			.where_in(col,values)
+			.sql();
+		return mods::pq::exec(select_txn,sql_string.data());
+	}catch(std::exception& e){
+		return {};
+	}
+}
+pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::tuple::reference& value);
+pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::field& value);
+#ifdef __MENTOC_USE_PQXX_RESULT__
+pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::result::reference& value);
+#else
 pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::row::reference& value);
+#endif
 //mods::lmdb::result_container_t db_get_all_pluck(std::string table,const std::vector<const std::string&>& pluck);
 //bool db_update(mods::lmdb::table_type_t table,
 //		mods::lmdb::mutable_map_t & values,

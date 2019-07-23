@@ -302,17 +302,17 @@ namespace mods::builder {
 			return std::nullopt;
 		}
 
-		object_list.push_back(obj_proto[index]);
-		return &(*(object_list.end()-1));
+		obj_list.push_back(std::make_shared<obj_data>());
+		*obj_list.back() = obj_proto[index];
+		return obj_list.back().get();
 	}
 	std::optional<obj_data*> instantiate_object_by_vnum(obj_vnum vnum) {
-		obj_data* obj;
 
 		for(auto& object_reference : obj_proto) {
 			if(object_reference.item_number == vnum) {
-				obj = &object_reference;
-				object_list.push_back(object_reference);
-				return obj;
+				obj_list.push_back(std::make_shared<obj_data>());
+				*obj_list.back() = object_reference;
+				return obj_list.back().get();
 			}
 		}
 
@@ -1510,7 +1510,7 @@ ACMD(do_mbuild) {
 	if(args.has_value()) {
 		//r_status(player,"...");
 		auto arg_vec = args.value();
-		auto i_value = mods::util::stoi(arg_vec[1]);
+		auto i_value = mods::util::stoul(arg_vec[1]);
 
 		if(!i_value.has_value()) {
 			r_error(player,"Please use a valid numeric value.");
@@ -2351,10 +2351,10 @@ ACMD(do_obuild) {
 				return;
 			}
 
-			object_list.push_back(obj_proto[index]);
-			auto obj = &(*(object_list.end() -1));
-			obj->carried_by = obj->worn_by = nullptr;
-			obj_to_room(obj,IN_ROOM(player->cd()));
+			obj_list.push_back(std::make_shared<obj_data>());
+			*obj_list.back() = obj_proto[index];
+			obj_list.back()->carried_by = obj_list.back()->worn_by = nullptr;
+			obj_to_room(obj_list.back().get(),IN_ROOM(player->cd()));
 			r_success(player,"Object created, look on the floor");
 		}
 

@@ -11,6 +11,7 @@ extern void command_interpreter(struct char_data* ch,char* argument);
 extern void command_interpreter(struct char_data* ch,const char* argument);
 extern void hit(struct char_data* ch,struct char_data* vict,int type);
 extern std::deque<obj_data> object_list;
+extern std::deque<std::shared_ptr<obj_data>> obj_list;
 extern void do_auto_exits(struct char_data *ch);
 extern std::vector<room_data> world;
 extern int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype);

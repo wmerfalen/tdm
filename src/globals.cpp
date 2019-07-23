@@ -107,9 +107,6 @@ namespace mods {
 		}
 
 		void register_object_list() {
-			for(auto& i : object_list) {
-				obj_map.insert({i.item_number,&i});
-			}
 		}
 		void register_object(obj_data& obj) {
 			if(obj.name) {
@@ -130,7 +127,6 @@ namespace mods {
 				}
 			}
 
-			obj_map.insert({obj.item_number,&obj});
 		}
 
 		void shutdown(void){
@@ -151,6 +147,7 @@ namespace mods {
 				f_test_suite;
 			f_import_rooms = false;
 			boot_type = BOOT_DB;
+			config::run_profile_scripts = false;
 			bool show_tics = false;
 			std::string postgres_user = mods::conf::postgres_user.data();
 			std::string postgres_dbname = mods::conf::postgres_dbname.data();
@@ -178,11 +175,14 @@ namespace mods {
 					<< "--postgres-host=<host> use host as postgres host. default: localhost\n"
 					<< "--postgres-port=<port> use port as postgres port. default: 5432\n"
 					<< "--postgres-pw-file=<file> read postgres password from file. no default. required.\n"
+					<< "--run-profile-scripts=<0|1> set to 1 to run profile scripts. default: 0\n"
 					<< "--show-tics show a dot for every game tic\n"
 					<< "--seed=<what> seed the database with one of the following:\n"
 					<< "     'player_classes': character generation\n"
 					<< "     '': ''\n"
 					;
+					mods::globals::shutdown();
+					exit(0);
 				}
 
 				if(strncmp(argv[pos],"--show-tics",11) == 0){
@@ -192,6 +192,17 @@ namespace mods {
 
 				if(strncmp(argv[pos],"--auto-login=",13) == 0){
 					mods::auto_login::set_user(argument.substr(13,argument.length()-13));
+					continue;
+				}
+				if(strncmp(argv[pos],"--run-profile-scripts=",22) == 0){
+					if(argument.length() != 23){
+						std::cerr << "Please specify 1 or 0(zero) for --run-profile-scripts\n";
+						exit(-1);
+					}
+					if(argument[23] == '1'){
+						std::cerr << "[cli conf]: enabling profile scripts\n";
+						config::run_profile_scripts = true;
+					}
 					continue;
 				}
 				if(strncmp(argv[pos],"--auto-password=",16) == 0){
@@ -346,7 +357,6 @@ namespace mods {
 				mods::globals::shutdown();
 				return;
 			}
-			config::init(argc,argv);
 			mods::debug::init(show_tics);
 		}
 		void post_boot_db() {
@@ -736,8 +746,7 @@ namespace mods {
 			}
 		}
 		void init_player(char_data* ch) {
-			MENTOC_PREAMBLE();
-			player->set_class_capability({mods::classes::types(ch->player.chclass)});
+			//TODO: if this is used, correct it
 		}
 
 		namespace rooms {

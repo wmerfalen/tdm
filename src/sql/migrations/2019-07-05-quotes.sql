@@ -1,0 +1,6 @@
+CREATE TABLE quotes (
+		id SERIAL PRIMARY KEY,
+		quote_title VARCHAR(255),
+		quote_content TEXT NOT NULL,
+		quote_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

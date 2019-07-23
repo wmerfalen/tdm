@@ -21,6 +21,8 @@ namespace mods{
 extern struct weather_data weather_info;
 extern FILE *logfile;
 
+bool boot_type_hell();
+
 #define READ_SIZE	256
 #ifndef __STATE_GUARD__
 #define __STATE_GUARD__

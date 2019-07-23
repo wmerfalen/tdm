@@ -21,7 +21,11 @@ namespace mods {
 //}
 
 #include "mods/util.hpp"
+#ifdef __MENTOC_USE_PQXX_RESULT__
+void obj_flag_data::feed(const pqxx::result::reference & row){
+#else
 void obj_flag_data::feed(pqxx::row row){
+#endif
 		if(mods::string(row["value_0"]).length()) {
 			value[0] = mods::util::stoi<int>(row["value_0"]);
 		}

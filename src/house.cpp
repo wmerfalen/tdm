@@ -136,7 +136,7 @@ void House_restore_weight(struct obj_data *obj) {
 
 /* Save all objects in a house */
 void House_crashsave(room_vnum vnum) {
-	int rnum;
+	unsigned rnum;
 	char buf[MAX_STRING_LENGTH];
 	FILE *fp;
 

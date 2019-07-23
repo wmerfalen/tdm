@@ -124,40 +124,6 @@ namespace mods {
 		return buffer;
 	}
 
-	void player::set_class_capability(const class_capability_t& caps) {
-		m_class_info.clear();
-
-		/*
-		for(auto& capability : caps) {
-			switch(capability) {
-				case class_type::MEDIC:
-					m_class_info.push_back(std::make_shared<classes::medic>(m_self_ptr));
-					break;
-
-				case class_type::SNIPER:
-					m_class_info.push_back(std::make_shared<classes::sniper>(m_self_ptr));
-					break;
-
-				case class_type::MARINE:
-					m_class_info.push_back(std::make_shared<classes::marine>(m_self_ptr));
-					break;
-
-				case class_type::SUPPORT:
-					m_class_info.push_back(std::make_shared<classes::support>(m_self_ptr));
-					break;
-
-				case class_type::ENGINEER:
-					m_class_info.push_back(std::make_shared<classes::engineer>(m_self_ptr));
-					break;
-				case class_type::UNDEFINED:
-				default:
-					break;
-			}
-
-			m_class_capability.push_back(capability);
-		}
-		*/
-	}
 	void player::set_shared_ptr(std::shared_ptr<mods::player>& self_ptr) {
 		std::cerr << "[deprecated] set_shared_ptr\n";
 		return;
@@ -224,7 +190,6 @@ namespace mods {
 		set_desc(descriptor);
 		set_char_on_descriptor(descriptor);
 		/** I don't like this class call FIXME */
-		//set_class_capability({mods::classes::types(0)});
 		m_player_specials = std::make_shared<player_special_data>();
 		m_char_data->player_specials = m_player_specials;
 		/** Need a better uuid generator than this */
@@ -278,15 +243,6 @@ namespace mods {
 	};
 	bool player::can_snipe(char_data *target) {
 		return mods::scan::los_find(std::make_shared<mods::player>(cd()),std::make_shared<mods::player>(target)).found;
-	}
-	std::shared_ptr<mods::classes::base>& player::get_class(class_type c_type) {
-		for(auto& ptr : m_class_info) {
-			if(ptr->kind() == c_type) {
-				return ptr;
-			}
-		}
-
-		return *m_class_info.begin();
 	}
 	void player::page(int pg) {
 		assert(pg >= 0);
@@ -421,6 +377,29 @@ namespace mods {
 
 		return false;
 	}
+	std::shared_ptr<mods::classes::sniper> 	player::cl_sniper(){
+		return m_class_sniper;
+	}
+	std::shared_ptr<mods::classes::medic> 	player::cl_medic(){
+		return m_class_medic;
+	}
+	void player::set_class(player_class_t pclass){
+		m_class = pclass;
+		switch(pclass){
+			case CLASS_SNIPER:
+				std::cerr << "[mods::player::set_class] player is sniper\n";
+				m_class_sniper = std::make_shared<mods::classes::sniper>();
+				cl_sniper()->rifle()->bound_to = uuid();
+				break;
+			case CLASS_MEDIC:
+				std::cerr << "[mods::player::set_class] player is medic\n";
+				m_class_medic = std::make_shared<mods::classes::medic>();
+				break;
+			default:
+				break;
+		}
+	}
+				
 	bool player::has_class_capability(class_type type) {
 		return !(std::find(m_class_capability.begin(),m_class_capability.end(),type) == m_class_capability.end());
 	}
@@ -511,6 +490,10 @@ namespace mods {
 			}
 		}
 		return 0;
+	}
+	void player::sendln(std::string_view str) {
+		stc(str.data());
+		stc("\r\n");
 	}
 	void player::stc_room(const room_rnum& rnum) {
 		if(rnum < 0 || std::size_t(rnum) >= world.size()){
@@ -616,6 +599,7 @@ namespace mods {
 			m_desc.reset();
 		}
 		m_name.clear();
+		m_class = CLASS_UNDEFINED;
 		m_class_capability = {};
 		m_executing_js = false;
 		if(m_char_data){

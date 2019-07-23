@@ -1,5 +1,6 @@
 #include "string.hpp"
 #include <string.h>
+#include <pqxx/pqxx>
 //#define m_debug(a) ;; /* do{ std::cerr << "[m_debug]: " << a << "\n"; }while(0); */
 namespace mods {
 	string::string(const string& str){
@@ -13,11 +14,30 @@ namespace mods {
 			assign("");
 		}
 	}
-	string::string(const pqxx::row::reference & str){
+	string::string(const pqxx::tuple::reference & str){
 		m_mallocd = false;
 		m_cptr = nullptr;
 		m_str = "";
-		std::string other = str.c_str();
+		std::string other = pqxx::to_string(str).c_str();
+		if(other.length()){
+			assign(other.c_str());
+		}else{
+			assign("");
+		}
+	}
+
+	void string::assign(const pqxx::tuple::reference & other){
+		assign(pqxx::to_string(other));
+	}
+#ifdef __MENTOC_USE_PQXX_RESULT__
+	string::string(const pqxx::result::reference & str){
+#else
+	string::string(const pqxx::row::reference & str){
+#endif
+		m_mallocd = false;
+		m_cptr = nullptr;
+		m_str = "";
+		std::string other = str[0].c_str();
 		if(other.length()){
 			assign(other.c_str());
 		}else{
@@ -89,8 +109,12 @@ namespace mods {
 		}
 		return *this;
 	}
+#ifdef __MENTOC_USE_PQXX_RESULT__
+	void string::assign(const pqxx::result::reference & other){
+#else
 	void string::assign(const pqxx::row::reference & other){
-		assign(std::string(other.c_str()));
+#endif
+		assign(other[0].c_str());
 	}
 	void string::assign(const std::string & other){
 		m_debug("assign std::string\n");

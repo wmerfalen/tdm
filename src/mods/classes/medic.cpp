@@ -4,7 +4,8 @@ namespace mods::classes {
 	int scaled_heal(std::shared_ptr<mods::player>& target){
 		return (33 * (target->level() * 0.5));
 	}
-	void medic::heal_player(std::shared_ptr<mods::player>& target) {
+	void medic::heal_player(std::shared_ptr<mods::player>& player_obj,std::shared_ptr<mods::player>& target) {
+		/*
 		if(target->cd()->in_room != player_obj->cd()->in_room) {
 			*player_obj << "You can't find your target.\r\n";
 			return;
@@ -56,5 +57,6 @@ namespace mods::classes {
 		auto amount = scaled_heal(target); 
 		target->hp() += amount;
 		*target << "You gain " << amount << " hit points.\r\n";
+		*/
 	}
 };

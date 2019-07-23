@@ -188,6 +188,24 @@ namespace mods::sql {
 				return *this;
 			}
 
+			template <typename TIterable>
+			compositor<T>& where_in(str_object lhs,
+			                     TIterable id_list) {
+				std::string sql = " WHERE ";
+				sql += lhs.data();
+				sql += " IN(";
+				for(auto it = id_list.begin(); it != id_list.end(); ++it){
+					sql += m_txn_ptr->quote(std::string(*it));
+					if((it + 1) != id_list.end()){ 
+						sql += ", ";
+					}
+				}
+				sql += ") ";
+				m_query[4] = sql;
+				return *this;
+			}
+
+
 			compositor<T>& op_or(str_object lhs,
 			                     str_object op,
 			                     str_object rhs) {

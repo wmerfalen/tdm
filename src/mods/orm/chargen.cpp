@@ -5,6 +5,77 @@
 
 namespace mods::orm {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
+	int16_t player_classes::feed(const pqxx::result::reference & result){
+			id = static_cast<uint64_t>(result.as<uint64_t>["id"]);
+			MENTOC_ORM_STR(pclass_name);
+			MENTOC_ORM_STR(pclass_description);
+			return 0;
+	}
+	int16_t player_races::feed(const pqxx::result::reference & result){
+			id = static_cast<uint64_t>(result["id"]);
+			MENTOC_ORM_STR(prace_name);
+			MENTOC_ORM_STR(prace_description);
+			return 0;
+	}
+	int16_t player_races::feed(const pqxx::result::reference & result){
+			id = static_cast<uint64_t>(result["id"]);
+			MENTOC_ORM_STR(prace_name);
+			MENTOC_ORM_STR(prace_description);
+			return 0;
+	}
+	int16_t player_race_perks::feed(const pqxx::result::reference & result){
+			id = static_cast<uint64_t>(result["id"]);
+			prperk_id = static_cast<uint64_t>(result["prperk_id"]);
+			MENTOC_ORM_STR(prperk_name);
+			MENTOC_ORM_STR(prperk_description);
+			MENTOC_ORM_STR(prperk_base_attribute_mutate);
+			MENTOC_ORM_STR(prperk_base_attribute_amount_add);
+			return 0;
+	}
+	int16_t skill_trees::feed(const pqxx::result::reference & result){
+		id = static_cast<uint64_t>(result["id"]);
+		sktree_class = static_cast<uint64_t>(result["sktree_class"]);
+		/** TODO: FIXME: std::shared_ptr<player_classes> sktree_class_ptr; */
+		std::string sktree_skill_name;//VARCHAR(32) NOT NULL,
+		MENTOC_ORM_STR(sktree_skill_name);
+		MENTOC_ORM_STR(sktree_skill_description);
+		MENTOC_ORM_UINT(sktree_skill_level_unlock);//INTEGER NOT NULL,
+		MENTOC_ORM_UINT(sktree_skill_parent_id);//INTEGER REFERENCES skill_trees(id),
+		MENTOC_ORM_UINT(sktree_skill_order);//INTEGER NOT NULL DEFAULT 0
+		/** TODO: FIXME: std::shared_ptr<skill_trees> sktree_skill_parent_id_ptr;//INTEGER REFERENCES skill_trees(id), */
+		return 0;
+	}
+	int16_t specialty_skills::feed(const pqxx::result::reference & result){
+		MENTOC_ORM_UINT(id);
+		MENTOC_ORM_STR(spskill_name);//VARCHAR(64) NOT NULL,
+		MENTOC_ORM_STR(spskill_description);//TEXT
+	};
+	int16_t player_generated_data::feed(const pqxx::result::reference & result){
+		MENTOC_ORM_UINT(id);
+		MENTOC_ORM_UINT(pgdata_player_id);//INTEGER NOT NULL REFERENCES player(id),
+		MENTOC_ORM_UINT(pgdata_class);//INTEGER NOT NULL REFERENCES player_classes(id),
+		MENTOC_ORM_UINT(pgdata_race);//INTEGER NOT NULL REFERENCES player_races(id),
+		MENTOC_ORM_UINT(pgdata_race_perks);//INTEGER NOT NULL REFERENCES player_race_perks(id),
+		MENTOC_ORM_UINT(pgdata_specialty_skill);//INTEGER REFERENCES specialty_skills(id)
+		/** TODO FIXME 
+		std::shared_ptr<mods::player> pgdata_player_id_ptr;//INTEGER NOT NULL REFERENCES player(id),
+		std::shared_ptr<player_classes> pgdata_class_ptr;//INTEGER NOT NULL REFERENCES player_classes(id),
+		std::shared_ptr<player_races> pgdata_race_ptr;// INTEGER NOT NULL REFERENCES player_races(id),
+		std::shared_ptr<player_race_perks> pgdata_race_perks_ptr;//INTEGER NOT NULL REFERENCES player_race_perks(id),
+		std::shared_ptr<specialty_skills> pgdata_specialty_skill_ptr;// INTEGER REFERENCES specialty_skills(id)
+		*/
+		return 0;
+	}
+	int16_t player_skill_trees_unlocked::feed(const pqxx::result::reference & result){
+		MENTOC_ORM_UINT(id);//SERIAL PRIMARY KEY,
+		MENTOC_ORM_UINT(pstun_player_id);//INTEGER NOT NULL REFERENCES player(id),
+		MENTOC_ORM_UINT(pstun_skill_tree_id);//INTEGER NOT NULL REFERENCES skill_trees(id)
+		/** TODO FIXME 
+		std::shared_ptr<mods::player> stun_player_id_ptr;//INTEGER NOT NULL REFERENCES player(id),
+		std::shared_ptr<skill_trees> pstun_skill_tree_id_ptr;// INTEGER NOT NULL REFERENCES skill_trees(id)
+		*/
+		return 0;
+	}
 		void player_classes::set_class(player_class_t pclass){
 			switch(pclass){
 				case CLASS_ENGINEER:

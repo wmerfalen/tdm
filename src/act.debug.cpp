@@ -38,6 +38,10 @@ ACMD(do_point_update) {
 	player->stc("[debug]->done");
 }
 
+ACMD(do_uuid) {
+	MENTOC_PREAMBLE();
+	player->stc(std::to_string(player->uuid()));
+}
 ACMD(do_zero_socket) {
 	MENTOC_PREAMBLE();
 	player->stc("[debug]->Zeroing out your socket (goodbye).");

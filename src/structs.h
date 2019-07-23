@@ -30,7 +30,8 @@ namespace mods {
 };
 struct char_data;
 extern std::deque<mods::descriptor_data> descriptor_list;
-using weapon_type_t = uint64_t;
+/** BASE weapon type. */
+using weapon_type_t = uint16_t;
 using ai_state_map = std::map<char_data*,std::unique_ptr<mods::ai_state>>;
 using memory_rec_t = std::set<char_data*>;
 using ai_state_t = short;
@@ -90,6 +91,8 @@ enum lense_type_t {
  */
 #define CIRCLE_UNSIGNED_INDEX	1	/* 0 = signed, 1 = unsigned */
 
+using sh_int = int32_t;
+using ush_int = uint32_t;
 #if CIRCLE_UNSIGNED_INDEX
 #define IDXTYPE  ush_int
 # define NOWHERE	((IDXTYPE)~0)
@@ -171,10 +174,10 @@ CLASS_MEDIC      =  2 ,
 CLASS_MARKSMAN	 =  3 ,
 CLASS_PSYOP			 =  4 ,
 CLASS_SUPPORT	   =  5 ,
-CLASS_MARINE		 =  6
+CLASS_MARINE		 =  6 ,
+CLASS_SNIPER     = CLASS_MARKSMAN
 };
 
-#define CLASS_SNIPER player_class_t::CLASS_MARKSMAN
 #define NUM_CLASSES	  6  /* This must be the number of classes!! */
 
 /* NPC classes (currently unused - feel free to implement!) */
@@ -601,8 +604,8 @@ enum player_level {
 	typedef unsigned char		ubyte;
 	//typedef signed short int	sh_int;
 	//typedef unsigned short int	ush_int;
-	using sh_int = int32_t;
-	using ush_int = uint32_t;
+	//using sh_int = int32_t;
+	//using ush_int = uint32_t;
 #if !defined(__cplusplus)	/* Anyone know a portable method? */
 	typedef char			bool;
 #endif
@@ -654,10 +657,16 @@ enum player_level {
 			weight(0), cost(0), cost_per_day(0),timer(0),bitvector(0){
 				memset(value,0,sizeof(value));
 			}
+		//void feed(pqxx::tuple);
+#ifdef __MENTOC_USE_PQXX_RESULT__
+		void feed(const pqxx::result::reference&);
+#else
 		void feed(pqxx::row);
+#endif
 		~obj_flag_data() = default;
 		int	value[4];	/* Values of the item (see list)    */
 		byte type_flag;	/* Type of item			    */
+		/** TODO: need to phase this out and use new weapon flags */
 		uint64_t weapon_flags;
 		uint16_t ammo_max;
 		uint16_t ammo;
@@ -727,6 +736,8 @@ enum player_level {
 		short loaded;
 		short holds_ammo;
 		weapon_type_t weapon_type;
+		uint8_t wpn_type;
+		uint8_t wpn_base;
 		int16_t type;
 	};
 struct obj_data_weapon : public obj_data {
@@ -739,6 +750,7 @@ struct obj_data_weapon : public obj_data {
 		//short loaded;
 		//short holds_ammo;
 		//weapon_type_t weapon_type;
+
 };
 	/* ======================================================================= */
 
@@ -1415,7 +1427,7 @@ struct obj_data_weapon : public obj_data {
 		int direction;
 	};
 
-	typedef std::map<obj_vnum,obj_data*> map_object_list;
+using map_object_list = std::map<obj_vnum,std::shared_ptr<obj_data>>;
 
 #endif
 
