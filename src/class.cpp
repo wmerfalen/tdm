@@ -90,26 +90,45 @@ const char* class_menu =
 		"\r\n"
 		" [*] Marines are well-rounded\r\n"
 		;
-std::string common_weaponry_skill_tree() {
-	std::string tree = ""
+std::string common_weaponry_skillset() {
+	std::string skillset = ""
 		"                   [*] --[ Weaponry Skills ]-- [*]                           \r\n"
+		"                                                                             \r\n"
 		" [ ] Sub Machine Guns                                                        \r\n"
+		"  +-[ ] Breach and clear                                                     \r\n"
 		" [ ] Assault Rifles                                                          \r\n"
+		"  +-[ ] Surpressing fire                                                     \r\n"
 		" [ ] Sniper Rifles                                                           \r\n"
 		" [ ] Light Machine Guns                                                      \r\n"
-		" [ ] Shotguns                                                                \r\n"
+		"  +-[ ] Surpressing fire                                                     \r\n"
 		" [ ] Pistols                                                                 \r\n"
+		"  +-[ ] Quickdraw                                                            \r\n"
+		"  +-[ ] Dual wield                                                           \r\n"
 		" [ ] Machine Pistols                                                         \r\n"
+		"  +-[ ] Dual wield                                                           \r\n"
+		" [ ] Shotguns                                                                \r\n"
+		"  +-[ ] Limb shot                                                            \r\n"
+		"                                                                             \r\n"
+		"                   [*] --[ Scope recipes ]-- [*]                             \r\n"
+		" [ ] ACOG Scope                                                              \r\n"
+		" [ ] Red dot sight                                                           \r\n"
+		" [ ] Rifle scope 6X                                                          \r\n"
+		" [ ] Rifle scope 12X                                                         \r\n"
+		" [ ] Rifle scope 6X/12X                                                      \r\n"
+		"                                                                             \r\n"
+		"                   [*] --[ Barrel attachments ]-- [*]                        \r\n"
+		" [ ] Surpressor                                                              \r\n"
+		" [ ] Compensator                                                             \r\n"
+		" [ ] Muzzle brake                                                            \r\n"
+		" [ ] Compensator                                                             \r\n"
+		" [ ] Remote detonation                                                       \r\n"
+		"                                                                             \r\n"
 		"                   [*] --[ Demolition Skills]-- [*]                          \r\n"
 		" [ ] Remote detonation                                                       \r\n"
 		" [ ] Claymore mines                                                          \r\n"
 		" [ ] Break charge                                                            \r\n"
 		" [ ] Door attached trip mine                                                 \r\n"
-		"                   [*] --[ Grenade Skills ]-- [*]                            \r\n"
-		" [ ] Fragmentation grenades                                                  \r\n"
-		" [ ] Incendiary grenades                                                     \r\n"
-		" [ ] Smoke grenades                                                          \r\n"
-		" [ ] Flash grenades                                                          \r\n"
+		"                                                                             \r\n"
 		"                   [*] --[ Gadgets ]-- [*]                                   \r\n"
 		" [ ] Ground drone                                                            \r\n"
 		"  +-[ ] Custom ammunition                                                    \r\n"
@@ -118,32 +137,57 @@ std::string common_weaponry_skill_tree() {
 		"  +-[ ] Sedative Hypnotic                                                    \r\n"
 		"  +-[ ] Tazer                                                                \r\n"
 		"  +-[ ] EMP                                                                  \r\n"
+		"                                                                             \r\n"
 		" [ ] Aerial drone                                                            \r\n"
 		"  +-[ ] Custom ammunition                                                    \r\n"
 		"  +-[ ] Assisted scanning device                                             \r\n"
 		"  +-[ ] EMP                                                                  \r\n"
+		"                                                                             \r\n"
+		;
+		return skillset;
 }
 
-std::string engineer_skill_tree() {
+std::string engineer_skillset() {
 
-	std::string tree = ""
-		"                   [*] --[ Gadget deployment ]-- [*]                         \r\n"
+	std::string skillset = ""
+		"                   [*] --[ Crafting ]-- [*]                                  \r\n"
+		" [ ] Explosives                                                              \r\n"
+		"  +-[ ] Incendiary grenade                                                   \r\n"
+		"  +-[ ] C4                                                                   \r\n"
+		"  +-[ ] Incendiary ammunition                                                \r\n"
+		"  +-[ ] Explosive ammunition                                                 \r\n"
+		"                                                                             \r\n"
+		" [ ] Weapon attachments                                                      \r\n"
+		"  +-[ ] Extended magazine                                                    \r\n"
+		"  +-[ ] ACOG scope                                                           \r\n"
+		"  +-[ ] Laser sight                                                          \r\n"
+		"  +-[ ] Suppressor                                                           \r\n"
+		"                                                                             \r\n"
+		" [ ] Intel                                                                   \r\n"
+		"  +-[ ] Sensor grenade                                                       \r\n"
+		"  +-[ ] EMP grenade                                                          \r\n"
+		"  +-[ ] Thermal scan                                                         \r\n"
+		"  +-[ ] Camera                                                               \r\n"
+		"  +-[ ] RC Drone                                                             \r\n"
+		"  +-[ ] Aerial drone                                                         \r\n"
+		"                                                                             \r\n"
+		"                   [*] --[ Offensive Tech ]-- [*]                            \r\n"
 		" [ ]                                                                         \r\n"
-		"  +-[ ]                                                                      \r\n"
-		"                                                                             \r\n"
-		"                   [*] -- [ Offensive PSYOPS ] -- [*]                        \r\n"
-		"                                                                             \r\n"
 		"                                                                             \r\n"
 	;
-	return tree;
+	return skillset;
 }
 
-std::string psyop_skill_tree() {
+std::string psyop_skillset() {
 
-	std::string tree = ""
+	std::string skillset = ""
 		"                   [*] --[ Control and manipulation ]-- [*]                  \r\n"
 		" [ ] Pyromancy                                                               \r\n"
-		"  +-[ ] Incendiary ammunition                                                \r\n"
+		"  +-[ ] Ignite ammunition                                                    \r\n"
+		"  +-[ ] Craft ammunition clip                                                \r\n"
+		"  +-[ ] Napalm explosive ordinance                                           \r\n"
+		"  +-[ ] Firewall                                                             \r\n"
+		"  +-[ ] Napalm trap                                                          \r\n"
 		"                                                                             \r\n"
 		" [ ] Intercept Communications                                                \r\n"
 		"  +-[ ] Predict enemy position                                               \r\n"
@@ -167,21 +211,30 @@ std::string psyop_skill_tree() {
 		"      +-[ ] Stimulant                                                        \r\n"
 		"                                                                             \r\n"
 		" [ ] Detect position                                                         \r\n"
+		"  +-[ ] Sense heartbeat                                                      \r\n"
+		"  +-[ ] Trace gun powder                                                     \r\n"
+		"  +-[ ] Trace footsteps                                                      \r\n"
+		"                                                                             \r\n"
 		" [ ] Lure                                                                    \r\n"
 		"                   [*] -- [ Offensive PSYOPS ] -- [*]                        \r\n"
 		" [ ] Cardiac Arrest                                                          \r\n"
+		"                                                                             \r\n"
+		" [ ] Ignite                                                                  \r\n"
 		"                                                                             \r\n"
 		" [ ] Poison                                                                  \r\n"
 		"                                                                             \r\n"
 		" [ ] Intimidate                                                              \r\n"
 		"                                                                             \r\n"
+		" [ ] Blind                                                                   \r\n"
+		"                                                                             \r\n"
+		"                                                                             \r\n"
 	;
-	return tree;
+	return skillset;
 }
 
-std::string sniper_skill_tree() {
+std::string sniper_skillset() {
 
-	std::string tree = ""
+	std::string skillset = ""
 		"                       [*] -- [ Weaponry Skills ] -- [*]                    \r\n"
 		"[ ] - Sniper Rifle Skills                                                   \r\n"
 		"	+                                                                          \r\n"
@@ -205,24 +258,13 @@ std::string sniper_skill_tree() {
 		"     +-[ ]                                                                  \r\n"
 		*/
 		"[ ] - Double Shot                                                           \r\n"
-		" +-> Chance to score a second shot at 50% the damage of the first.          \r\n"
-		"          Second shot consumes no ammo.                                     \r\n"
 		"[ ] - Crippling Shot                                                        \r\n"
-		" +-> Chance to cripple enemy. Useful for interrogations.                    \r\n"
 		"[ ] - Fast Draw Secondary                                                   \r\n"
-		" +-> Decreases time to switch to secondary weapon                           \r\n"
 		"[ ] - Interrogate                                                           \r\n"
-		" +-> Pressure enemy NPC's into divulging information.                       \r\n"
-		" -- [ Medical Skills ] --                                                   \r\n"
-		"[ ] - Lite Bandaging                                                        \r\n"
-		" +-> Requires Medkit                                                        \r\n"
 		"[ ] - Live off the elements                                                 \r\n"
-		" +-> Ability to survive in nature for long periods of time.                 \r\n"
-		" -- [ Tracking Enemies ] --                                                 \r\n"
 		"[ ] - Nano Bot Tracking Ammo                                                \r\n"
-		" +-> Ammo that allows you to track NPC's.                                   \r\n"
 	;
-	return tree;
+	return skillset;
 }
 
 /*

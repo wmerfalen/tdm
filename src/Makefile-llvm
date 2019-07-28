@@ -44,7 +44,7 @@ buildobj = act.informative act.item act.medic \
 					 act.comm mods/extra_desc_data mods/world-configuration mods/debug \
 					 mods/date-time mods/npc mods/pfind mods/auto-login \
 					 mods/overhead_map mods/orm/quotes mods/weapons/sniper-rifle\
-					 act.debug mods/classes/sniper
+					 act.debug mods/classes/sniper act.builder
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

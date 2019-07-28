@@ -20,6 +20,7 @@
 #include "globals.hpp"
 #include "mods/scan.hpp"
 #include "mods/weapon.hpp"
+#include "mods/weapons/sniper-rifle.hpp"
 #include "globals.hpp"
 #include "mods/util.hpp"
 #include "mods/prefs.hpp"
@@ -139,14 +140,19 @@ ACMD(do_throw) {
 	});
 
 }
+ACMD(do_giveme_sniper_rifle) {
+	MENTOC_PREAMBLE();
+	if(player->cl_sniper() == nullptr) {
+		player->set_class(CLASS_SNIPER);
+	}
+	obj_to_char(player->sniper_rifle().get(),player->cd());
+
+}
 ACMD(do_snipe) {
-	/* HOWTO: start an "Action Command" function declaration */
 	MENTOC_PREAMBLE();	/* !mods */
-	/*
 	if(!player->weapon_cooldown_expired(0)){
 		return;
 	}
-	*/
 
 	if(!player->has_weapon_capability(mods::weapon::SNIPE)) {
 		send_to_char(ch,"You must be wielding a sniper rifle to do that!");

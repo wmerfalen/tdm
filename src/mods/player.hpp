@@ -25,6 +25,7 @@ namespace mods {
 #include <chrono>
 #include "acl_list.hpp"
 #include "overhead_map.hpp"
+#include "weapon.hpp"
 
 #define WEAPON_SET_NUM 1
 extern size_t send_to_char(char_data *ch, const char *messg, ...);
@@ -316,7 +317,8 @@ namespace mods {
 			}
 
 			/* weapon cooldown functions */
-			void weapon_cooldown_start(unsigned long duration,weapon_set set);
+
+			void weapon_cooldown_start(uint16_t duration,weapon_set set);
 			bool weapon_cooldown_expired(weapon_set);
 
 			/* communication functions */
@@ -489,6 +491,7 @@ namespace mods {
 			}
 			std::shared_ptr<mods::classes::sniper> 	cl_sniper();
 			std::shared_ptr<mods::classes::medic> 	cl_medic();
+			obj_data_ptr_t sniper_rifle();
 
 		protected:
 			lense_type_t m_lense_type;
@@ -513,7 +516,7 @@ namespace mods {
 			std::string	m_name;
 			player_class_t m_class;
 			class_capability_t m_class_capability;
-			std::array<unsigned long,WEAPON_SET_NUM> m_weapon_cooldown;
+			std::array<uint16_t,WEAPON_SET_NUM> m_weapon_cooldown;
 			weapon_set   m_weapon_set;
 			bool         m_do_paging;
 			bool         m_capture_output;

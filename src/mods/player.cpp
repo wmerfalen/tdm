@@ -307,7 +307,7 @@ namespace mods {
 	bool player::has_inventory_capability(int type) {
 		return true; //FIXME:
 	}
-	void player::weapon_cooldown_start(unsigned long duration,weapon_set set) {
+	void player::weapon_cooldown_start(uint16_t duration,weapon_set set) {
 		m_weapon_cooldown[set] = static_cast<unsigned long>(::time(NULL)) + duration;
 	}
 	bool player::weapon_cooldown_expired(weapon_set set) {
@@ -887,6 +887,9 @@ namespace mods {
 				return this->desc().descriptor;
 			}
 			/* Javascript functions */
+			obj_data_ptr_t player::sniper_rifle(){
+				return cl_sniper()->rifle()->obj();
+			}
 };
 
 #endif

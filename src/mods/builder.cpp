@@ -140,7 +140,7 @@ namespace mods::builder {
 			{objtype::SENTINEL,"SENTINEL"}
 	}
 	};
-	std::array<std::pair<int,std::string>,23> type_flags = { {
+	std::array<std::pair<int,std::string>,24> type_flags = { {
 		{ITEM_LIGHT,"LIGHT"},
 			{ITEM_SCROLL,"SCROLL"},
 			{ITEM_WAND,"WAND"},
@@ -163,7 +163,8 @@ namespace mods::builder {
 			{ITEM_MONEY,"MONEY"},
 			{ITEM_PEN,"PEN"},
 			{ITEM_BOAT,"BOAT"},
-			{ITEM_FOUNTAIN,"FOUNTAIN"}
+			{ITEM_FOUNTAIN,"FOUNTAIN"},
+			{ITEM_WEAPON_ATTACHMENT,"WEAPON_ATTACHMENT"}
 	}
 	};
 
@@ -187,7 +188,7 @@ namespace mods::builder {
 			{ITEM_NOSELL,"NOSELL"}
 	}
 	};
-	std::array<std::pair<int,std::string>,25> affected_flags = { {
+	std::array<std::pair<int,std::string>,38> affected_flags = { {
 		{APPLY_NONE,"NONE"},
 			{APPLY_STR,"STR"},
 			{APPLY_DEX,"DEX"},
@@ -212,7 +213,21 @@ namespace mods::builder {
 			{APPLY_SAVING_ROD,"SAVING_ROD"},
 			{APPLY_SAVING_PETRI,"SAVING_PETRI"},
 			{APPLY_SAVING_BREATH,"SAVING_BREATH"},
-			{APPLY_SAVING_SPELL,"SAVING_SPELL"}
+			{APPLY_SAVING_SPELL,"SAVING_SPELL"},
+			{APPLY_SCOPE,"SCOPE"},
+			{APPLY_RECOIL,"RECOIL"},
+			{APPLY_BARREL,"BARREL"},
+			{APPLY_MAGAZINE_SIZE,"MAGAZINE_SIZE"},
+			{APPLY_INCENDIARY,"INCENDIARY"},
+			{APPLY_SIDERAIL,"SIDERAIL"},
+			{APPLY_UNDER_BARREL,"UNDER_BARREL"},
+			{APPLY_PENETRATION,"PENETRATION"},
+			{APPLY_RANGE,"RANGE"},
+			{APPLY_CRITICAL_RANGE,"CRITICAL_RANGE"},
+			{APPLY_OPTIMAL_RANGE,"OPTIMAL_RANGE"},
+			{APPLY_VISION,"VISION"},
+			{APPLY_STEALTH,"STEALTH"}
+
 	}
 	};
 	std::array<std::pair<int,std::string>,15> wear_flags = { {
@@ -1852,6 +1867,20 @@ ACMD(do_obuild) {
 			"22   SAVING_PETRI   Apply to save throw: petrif\r\n" <<
 			"23   SAVING_BREATH  Apply to save throw: breath\r\n" <<
 			"24   SAVING_SPELL   Apply to save throw: spells\r\n" <<
+			"25   SCOPE          \r\n" << 
+			"26   RECOIL         \r\n" << 
+			"27   BARREL         \r\n" << 
+			"28   MAGAZINE_SIZE  \r\n" <<
+			"29   INCENDIARY     \r\n" <<
+			"30   SIDERAIL       \r\n" << 
+			"31   UNDER_BARREL   \r\n" <<
+			"32   PENETRATION    \r\n" <<
+			"33   RANGE          \r\n" <<
+			"34   CRITICAL_RANGE \r\n" <<
+			"35   OPTIMAL_RANGE  \r\n" <<
+			"36   VISION         \r\n" <<
+			"37   STEALTH        \r\n" <<
+
 			"usage: obuild affected <object_id> <affected_slot> <location> <modifier>\r\n" <<
 			"example: obuild affected 0 3 CHAR_WEIGHT 15\r\n" <<
 			"(this will set the affected slot number 3 on object zero to modify \r\n" <<
@@ -2087,12 +2116,14 @@ ACMD(do_obuild) {
 			" {grn}obuild{/grn} {red}attr <object_id> <attr> <value>{/red}\r\n" <<
 			"  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
 			"  {gld}|:: item_number{/gld}\r\n" <<
-			"  {gld}|:: name{/gld}\r\n" <<
-			"  {gld}|:: desc{/gld}\r\n" <<
+			"  {gld}|:: name{/gld} {red}APPEARS: {/red}\r\n" <<
+			"  {gld}|:: desc{/gld} {red}APPEARS: lying on ground{/red}\r\n" <<
 			"  {red}Short Description{/red}\r\n"
-			"  {gld}|:: short_description{/gld}\r\n" <<
+			"  {gld}|:: short_description{/gld} {red}APPEARS: when you type inv{/red}\r\n" <<
+			"  {red}APPEARS: when you wield it{/red}\r\n" <<
+			"  {red}APPEARS: when you look at yourself or someone wielding it{/red}\r\n" <<
 			"  {grn}|IN-GAME: get xm\r\nYou get <Short Description>\r\n" << 
-			"  {gld}|:: action_description{/gld}\r\n" <<
+			"  {gld}|:: action_description{/gld} {red}APPEARS: when you examine{/red}\r\n" <<
 			"  {gld}|:: worn_on{/gld}\r\n" <<
 			"  {gld}|:: weapon_type {red}see: obuild help weapon_type{/red}{/gld}\r\n" <<
 			"  {gld}|:: weapon_ammo{/gld}\r\n" <<
@@ -2725,6 +2756,7 @@ ACMD(do_obuild) {
 		MENTOC_TYPE(ITEM_PEN);
 		MENTOC_TYPE(ITEM_BOAT);
 		MENTOC_TYPE(ITEM_FOUNTAIN);
+		MENTOC_TYPE(ITEM_WEAPON_ATTACHMENT);
 		*player << "{gld}::Bitvector::{/gld}\r\n";
 #define MENTOC_BITVECTOR(a){ if(obj->obj_flags.bitvector & a){*player << #a << "\r\n"; } }
 		MENTOC_BITVECTOR(ITEM_GLOW);

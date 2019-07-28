@@ -344,8 +344,9 @@ CLASS_SNIPER     = CLASS_MARKSMAN
 #define WEAR_WRIST_L   15
 #define WEAR_WIELD     16
 #define WEAR_HOLD      17
+#define WEAR_WEAPON_ATTACHMENT      18
 
-#define NUM_WEARS      18	/* This must be the # of eq positions!! */
+#define NUM_WEARS      19	/* This must be the # of eq positions!! */
 
 
 	/* object-related defines ********************************************/
@@ -375,10 +376,11 @@ CLASS_SNIPER     = CLASS_MARKSMAN
 #define ITEM_PEN       21		/* Item is a pen		*/
 #define ITEM_BOAT      22		/* Item is a boat		*/
 #define ITEM_FOUNTAIN  23		/* Item is a fountain		*/
+#define ITEM_WEAPON_ATTACHMENT 24 /* item is a weapon attachment */
 
 
 	/* Take/Wear flags: used by obj_data.obj_flags.wear_flags */
-#define ITEM_WEAR_TAKE		(1 << 0)  /* Item can be takes		*/
+#define ITEM_WEAR_TAKE		(1 << 0)  /* Item can be taken		*/
 #define ITEM_WEAR_FINGER	(1 << 1)  /* Can be worn on finger	*/
 #define ITEM_WEAR_NECK		(1 << 2)  /* Can be worn around neck 	*/
 #define ITEM_WEAR_BODY		(1 << 3)  /* Can be worn on body 	*/
@@ -414,6 +416,10 @@ CLASS_SNIPER     = CLASS_MARKSMAN
 #define ITEM_ANTI_WARRIOR  (1 << 15)	/* Not usable by warriors	*/
 #define ITEM_NOSELL	   (1 << 16)	/* Shopkeepers won't touch it	*/
 
+/* custom extra object flags as an enum */
+enum extra_flags_t {
+
+};
 
 	/* Modifier constants used with obj affects ('A' fields) */
 #define APPLY_NONE              0	/* No effect			*/
@@ -441,7 +447,19 @@ CLASS_SNIPER     = CLASS_MARKSMAN
 #define APPLY_SAVING_PETRI     22	/* Apply to save throw: petrif	*/
 #define APPLY_SAVING_BREATH    23	/* Apply to save throw: breath	*/
 #define APPLY_SAVING_SPELL     24	/* Apply to save throw: spells	*/
-
+#define APPLY_SCOPE            25	/* scopes */
+#define APPLY_RECOIL           26	/* grip/tripod */
+#define APPLY_BARREL           27	/* muzzle brake, compensator, suppressor */
+#define APPLY_MAGAZINE_SIZE    28	/* ammunition size */
+#define APPLY_INCENDIARY       29 /* add fire effect to something */
+#define APPLY_SIDERAIL         30 /* laser sight, light, bipod */
+#define APPLY_UNDER_BARREL     31 /* shotgun/grenade launcher */
+#define APPLY_PENETRATION      32 /* shooting through destructible objects */
+#define APPLY_RANGE            33 /* further or shortened */
+#define APPLY_CRITICAL_RANGE   34 /* range where crits occur */
+#define APPLY_OPTIMAL_RANGE    35 /* optimal range for weapon */
+#define APPLY_VISION           36 /* normal, thermal, night visions */
+#define APPLY_STEALTH          37 /* char's ability to sneak */
 
 	/* Container flags - value[1] */
 #define CONT_CLOSEABLE      (1 << 0)	/* Container can be closed	*/
@@ -698,10 +716,9 @@ enum player_level {
 
 
 
-	/* Used in obj_file_elem *DO*NOT*CHANGE* */
 	struct obj_affected_type {
 		byte location;      /* Which ability to change (APPLY_XXX) */
-		sbyte modifier;     /* How much it changes by              */
+		int16_t modifier;     /* How much it changes by              */
 	};
 
 
@@ -715,8 +732,18 @@ enum player_level {
 		obj_affected_type affected[MAX_OBJ_AFFECT];  /* affects */
 
 		char	*name;                    /* Title of object :get etc.        */
+		/** [ APPEARS ]: when looking at item and mode is LONG  @act.informative.cpp
+		 * SHOW_OBJ_LONG
+		 */
 		char	*description;		  /* When in room                     */
+		/** [ APPEARS ]: when looking at item and mode is SHORT @act.informative.cpp
+		 * SHOW_OBJ_SHORT
+		 */
 		char	*short_description;       /* when worn/carry/in cont.         */
+		/** [ APPEARS ]: when looking at item (item note or weapon -- currently)
+		 * SHOW_OBJ_ACTION
+		 * @act.informative.cpp
+		 */
 		char	*action_description;      /* What to write when used          */
 		extra_descr_data *ex_description; /* extra descriptions     */
 		char_data *carried_by;  /* Carried by :NULL in room/conta   */

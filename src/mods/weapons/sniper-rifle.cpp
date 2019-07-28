@@ -1,56 +1,51 @@
 #include "sniper-rifle.hpp"
 /** db.h for read_object() */
 #include "../../db.h"
-#include "../weapon.hpp"
 
 namespace mods::weapons {
 
 	constexpr static mods::weapon::type_t RIFLE_TYPE = mods::weapon::type_t::RIFLE;
 	constexpr static mods::weapon::base::rifle SNIPER_TYPE = mods::weapon::base::rifle::SNIPER;
-	void sniper_rifle::feed(const mods::pq::row_type & row){
-		bound_to = row["bound_to"].as<uint64_t>();
-		id = row["id"].as<uint64_t>();
-	}
-	std::shared_ptr<obj_data> new_rifle_object(){
-		auto obj = blank_object();
-		obj->holds_ammo = 1;
+	obj_data_ptr_t psg1(obj_data_ptr_t obj) {
+		/** TODO: fill the uuid in */
+		obj->uuid = mods::globals::get_uuid();
+
+		/** TODO: determine clip size */
 		obj->ammo = 12;
+		/** TODO: needs to be whatever the rifle's max is */
 		obj->ammo_max = 75;
-		obj->item_number;	/* Where in data-base			*/
-		obj->in_room;		/* In what room -1 when conta/carr	*/
-
-		obj->obj_flags;/* Object information               */
-		obj->affected[MAX_OBJ_AFFECT];  /* affects */
-
-		obj->name = strdup("Your very own sniper rifle");
-		obj->description = strdup("When in room");		  /* When in room                     */
-		obj->short_description = strdup("Your very own sniper rifle short");
+		obj->obj_flags.weapon_flags = mods::weapon::SNIPE;
+		obj->obj_flags.clip_size = 8;
+		obj->name = strdup("PSG-1 sniper rifle");
+		/** [ APPEARS ]: when you drop it and it's laying on the floor */
+		obj->description = strdup("A debilitating PSG-1 sniper rifle is lying here.");
+		/** [ APPEARS ]: when you type inv */
+		obj->short_description = strdup("PSG-1 sniper rifle");
 		obj->action_description = strdup("action desc");      /* What to write when used          */
-		obj->ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
+		obj->ex_description = static_cast<extra_descr_data*>(calloc(1,sizeof(extra_descr_data)));
 		obj->ex_description->next = nullptr;
-		obj->ex_description->keyword =  nullptr;
-		obj->carried_by = nullptr;
-		obj->worn_by = nullptr;
-		obj->worn_on = WEAR_WIELD;
-		obj->in_obj = nullptr;
-		obj->contains = nullptr;     /* Contains objects                 */
-		obj->next_content = nullptr; /* For 'contains' lists             */
-		obj->next = nullptr;         /* For the object list              */
-		obj->ai_state = 0;
-		obj->uuid = 0;
-		obj->loaded = 0;
-		obj->weapon_type = 0;
-		obj->wpn_type = RIFLE_TYPE;
-		obj->wpn_base = SNIPER_TYPE;
-		obj->type = 0;
+		obj->ex_description->keyword =  strdup("keyword");
+		obj->wpn_base = mods::weapon::type_t::RIFLE;
+		obj->wpn_type = mods::weapon::base::rifle::SNIPER;
 		return std::move(obj);
 	}
+	void sniper_rifle::feed(const mods::pq::row_type & row){
+		bound_to = row["bound_to"].as<uint16_t>();
+		id = row["id"].as<uint16_t>();
+		if(std::string(row["model"].c_str()).compare("psg1") == 0){
+			m_obj = psg1(m_obj);
+		}
+	}
+	obj_data_ptr_t sniper_rifle::obj(){
+		return m_obj;
+	}
 	sniper_rifle::~sniper_rifle(){
-		obj.reset();
+		m_obj.reset();
 	}
 
 	sniper_rifle::sniper_rifle(){
 		bound_to = 0;
 		id = 0;
+		m_obj = std::move(mods::weapon::new_sniper_rifle_object());
 	}
 };

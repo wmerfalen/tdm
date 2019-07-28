@@ -448,6 +448,8 @@ void char_to_room(char_data *ch, room_rnum room) {
 }
 
 
+//void obj_to_char(std::shared_ptr<obj_data*> object, std::shared_ptr<mods::player> player){
+//	player->equip(object.get(),
 /* give an object to a char   */
 void obj_to_char(struct obj_data *object, struct char_data *ch) {
 	if(object && ch) {

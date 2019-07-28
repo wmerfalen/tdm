@@ -9,11 +9,14 @@ namespace mods::weapons {
 			sniper_rifle();
 			~sniper_rifle();
 
-			uint64_t bound_to;
-			uint64_t id;
+			uint16_t bound_to;
+			uint16_t id;
 			void feed(const mods::pq::row_type &);
-			std::shared_ptr<obj_data> obj;
+			obj_data_ptr_t obj();
 
+			protected:
+			attachment_list_t m_attachments;
+			obj_data_ptr_t m_obj;
 		};
 };
 #endif

@@ -44,8 +44,8 @@ namespace mods::builder {
 	constexpr static unsigned int RNUMLIST_MAX_PER_CALL = 10000;
 	extern std::array<std::pair<int,std::string>,17> extra_flags;
 	extern std::array<std::pair<int,std::string>,15> wear_flags;
-	extern std::array<std::pair<int,std::string>,25> affected_flags;
-	extern std::array<std::pair<int,std::string>,23> type_flags;
+	extern std::array<std::pair<int,std::string>,38> affected_flags;
+	extern std::array<std::pair<int,std::string>,24> type_flags;
 	extern std::array<std::pair<int,std::string>,3> type2_flags;
 
 	constexpr static uint64_t HAS_SANDBOX = (1 << 0);

@@ -110,6 +110,9 @@ ACMD(do_js_help){
 		"{gld}mobile_activity{/gld} -- manually call it",
 		"{gld}modify_affected_flags{/gld} -- i.e.: maf('far','INVISIBLE',1)",
 		"{gld}modify_plr_flags{/gld} -- ",
+		"{gld}next_object_number{/gld} -- gives you the next item number for objects",
+		"{gld}next_room_number{/gld} -- gives you the next item number for rooms",
+		"{gld}next_mob_number{/gld} -- gives you the next item number for mobs",
 		"{gld}read_mobile{/gld} -- ",
 		"{gld}require_js{/gld} -- include from /lib/js/",
 		"{gld}require_test{/gld} -- include from /lib/js/tests",
@@ -268,6 +271,17 @@ ACMD(do_recall);
 ACMD(do_givemegold);
 ACMD(do_givemenades);
 ACMD(do_snipe);
+ACMD(do_next_object_number);
+ACMD(do_next_mob_number);
+ACMD(do_next_room_number);
+/** ------------------------ */
+/** GIVE ME combat mechanics */
+/** ------------------------ */
+ACMD(do_giveme_sniper_rifle);
+/** ------------------------ */
+/** ------------------------ */
+/** ------------------------ */
+
 ACMD(do_heal);
 ACMD(do_newjs);
 ACMD(do_jstest);
@@ -655,6 +669,15 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "drone"  , POS_RESTING , do_drone   , 0, 0 },
 	{ "throw"  , POS_RESTING , do_throw   , 0, 0 },
 	{ "ammo"  , POS_RESTING , do_ammo   , 0, 0 },
+	/** -------------------------- */
+	/** "GIVE ME" COMBAT MECHANICS */
+	/** -------------------------- */
+	{ "giveme_sniper_rifle"  , POS_RESTING , do_giveme_sniper_rifle   , LVL_GOD, 0 },
+
+	/** ------------------------------ */
+	/** END "GIVE ME" COMBAT MECHANICS */
+	/** ------------------------------ */
+	{ "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
 	/** --------------------- */
 	/** END COMBAT MECHANICS  */
 	/** --------------------- */
@@ -663,6 +686,9 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** BUILDER UTILS */
 	/** ------------- */
 	{ "builder_help"  , POS_RESTING , do_builder_help   , LVL_GOD, 0 },
+	{ "next_object_number"  , POS_RESTING , do_next_object_number   , LVL_GOD, 0 },
+	{ "next_room_number"  , POS_RESTING , do_next_room_number   , LVL_GOD, 0 },
+	{ "next_mob_number"  , POS_RESTING , do_next_mob_number   , LVL_GOD, 0 },
 	{ "js_help"  , POS_RESTING , do_js_help   , LVL_GOD, 0 },
 	{ "mbuild"  , POS_RESTING , do_mbuild   , LVL_GOD, 0 },
 	{ "obuild"  , POS_RESTING , do_obuild   , LVL_GOD, 0 },

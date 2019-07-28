@@ -270,6 +270,12 @@ void show_obj_to_char(struct obj_data *obj, struct char_data *ch, int mode) {
 					send_to_char(ch, "It looks like a drink container.");
 					break;
 
+				case ITEM_WEAPON:
+					if(obj->action_description) {
+						send_to_char(ch, obj->action_description);
+						break;
+					}
+					/** Purposeful fall-through to display ".. nothing special.." */
 				default:
 					send_to_char(ch, "You see nothing special..");
 					break;
