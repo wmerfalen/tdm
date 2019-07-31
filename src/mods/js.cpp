@@ -763,25 +763,29 @@ __set_points_cleanup:
 			if(!include_file.good()){
 				return false;
 			}
-			std::vector<char> buffer;
 			struct stat statbuf;
 
 			if(stat(path.c_str(), &statbuf) == -1) {
 				return false;
 			}
 
-			buffer.reserve(statbuf.st_size);
-			std::fill(buffer.begin(),buffer.end(),0);
-
-			unsigned buffer_length = statbuf.st_size;
-			while(!include_file.eof() && buffer_length != 0) {
-				include_file.read((char*)&buffer[0],statbuf.st_size);
-				--buffer_length;
+			include_file.seekg(0,include_file.end);
+			int length = include_file.tellg();
+			include_file.seekg(0,include_file.beg);
+			char * buffer = new char [length+1];
+			memset(buffer,0,length+1);
+			include_file.read(buffer,length);
+			bool status = false;
+			if(include_file){
+				eval_string(m_context,std::string((char*)&buffer[0]));
+				status = true;
+			}else{
+				std::cerr << "couldn't read entire file: " << 
+					include_file.gcount() << "/" << length << "\n";
 			}
-
-			eval_string(m_context,std::string((char*)&buffer[0]));
-
-			return true;
+			delete [] buffer;
+			include_file.close();
+			return status;
 		}
 		int load_library(duk_context *ctx,std::string_view file) {
 			auto m = std::make_unique<include>(ctx,file.data());

@@ -109,23 +109,6 @@ namespace mods {
 		void register_object_list() {
 		}
 		void register_object(obj_data& obj) {
-			if(obj.name) {
-				/** !fixme: this is lame. Don't search within the name to find out it's type. That's slow af. */
-				if(std::string(obj.name).find("[ammo]") !=std::string::npos) {
-					obj.holds_ammo = 1;
-				}
-
-				/** !fixme: see above fixme */
-				if(std::string(obj.name).find("snipe") != std::string::npos) {
-					obj.holds_ammo = 1;
-					obj.ammo = 12;
-					obj.ammo_max = 12;
-				} else {
-					obj.holds_ammo = 0;
-					obj.ammo = 0;
-					obj.ammo_max = 0;
-				}
-			}
 
 		}
 
@@ -199,7 +182,7 @@ namespace mods {
 						std::cerr << "Please specify 1 or 0(zero) for --run-profile-scripts\n";
 						exit(-1);
 					}
-					if(argument[23] == '1'){
+					if(argument[22] == '1'){
 						std::cerr << "[cli conf]: enabling profile scripts\n";
 						config::run_profile_scripts = true;
 					}

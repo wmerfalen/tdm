@@ -22,6 +22,18 @@ namespace mods {
 
 #include "mods/util.hpp"
 #ifdef __MENTOC_USE_PQXX_RESULT__
+void obj_data::feed(const pqxx::result::reference & row){
+#else
+void obj_data::feed(pqxx::row row){
+#endif
+		if(obj_flags.weapon_flags != 0){
+			m_weapon = std::make_unique<weapon_data_t>();
+			weapon()->holds_ammo = 1;
+			weapon()->type = obj_flags.weapon_flags;
+		}
+}
+
+#ifdef __MENTOC_USE_PQXX_RESULT__
 void obj_flag_data::feed(const pqxx::result::reference & row){
 #else
 void obj_flag_data::feed(pqxx::row row){

@@ -113,7 +113,7 @@ namespace mods {
 			bool has_equipment_tag(const std::string&);
 			bool has_inventory_capability(int);
 			bool has_thermite();
-			bool has_weapon_capability(uint64_t);
+			bool has_weapon_capability(uint8_t);
 			bool has_builder_data();
 			bool room_pave_mode();
 			bool zone_pave_mode();
@@ -308,8 +308,9 @@ namespace mods {
 			char_data* cd() const {
 				return m_char_data;
 			}
-			obj_data*      weapon();
+			weapon_data_t* weapon();
 			obj_data*      get_ammo(const weapon_type_t&);
+			mods::string weapon_name();
 
 			/* conversion operator to char_data* */
 			operator chdata_ptr() const {
@@ -327,6 +328,7 @@ namespace mods {
 			void exits();
 			void stc(const char* m);
 			void stc(const std::string m);
+			void stc(const mods::string& m);
 			void stc(int m);
 			void stc(std::string_view);
 			void sendln(std::string_view str);
@@ -349,6 +351,14 @@ namespace mods {
 					}
 				}
 			}
+			player& operator<<(const mods::string& m) {
+				if(m_do_paging) {
+					queue_page_fragment(m.c_str());
+				} else {
+					stc(m);
+				} return *this;
+			}
+
 			player& operator<<(const char* m) {
 				if(m_do_paging) {
 					queue_page_fragment(m);

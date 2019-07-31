@@ -1165,7 +1165,7 @@ int parse_sql_objects() {
 			proto.ex_description->next = nullptr;
 			proto.worn_on = mods::util::stoi<int>(row["obj_worn_on"]);
 			proto.type = mods::util::stoi<int>(row["obj_type"]);
-			proto.ammo = 0;
+			//proto.ammo = 0;
 			auto flag_rows = db_get_by_meta("object_flags","obj_fk_id",(row["id"]));
 			if(flag_rows.size() > 0){
 				proto.obj_flags.feed(flag_rows[0]);
@@ -1175,10 +1175,6 @@ int parse_sql_objects() {
 			 * check if it's a weapon, if so, load the fields in proto with
 			 * whatever is in the database.
 			 */
-			if(proto.obj_flags.weapon_flags != 0){
-				proto.holds_ammo = 1;
-				proto.weapon_type = proto.obj_flags.weapon_flags;
-			}
 
 			proto.carried_by = proto.worn_by = nullptr;
 			proto.next_content = nullptr;
@@ -1186,6 +1182,7 @@ int parse_sql_objects() {
 			proto.in_obj = nullptr;
 			proto.worn_by = nullptr;
 			proto.carried_by = nullptr;
+			proto.feed(row);
 			obj_proto.push_back(proto);
 		}
 	} else {

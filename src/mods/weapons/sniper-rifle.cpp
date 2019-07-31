@@ -9,11 +9,12 @@ namespace mods::weapons {
 	obj_data_ptr_t psg1(obj_data_ptr_t obj) {
 		/** TODO: fill the uuid in */
 		obj->uuid = mods::globals::get_uuid();
+		obj->weapon(1);
 
 		/** TODO: determine clip size */
-		obj->ammo = 12;
+		obj->weapon()->ammo = 12;
 		/** TODO: needs to be whatever the rifle's max is */
-		obj->ammo_max = 75;
+		obj->weapon()->ammo_max = 75;
 		obj->obj_flags.weapon_flags = mods::weapon::SNIPE;
 		obj->obj_flags.clip_size = 8;
 		obj->name = strdup("PSG-1 sniper rifle");
@@ -25,8 +26,8 @@ namespace mods::weapons {
 		obj->ex_description = static_cast<extra_descr_data*>(calloc(1,sizeof(extra_descr_data)));
 		obj->ex_description->next = nullptr;
 		obj->ex_description->keyword =  strdup("keyword");
-		obj->wpn_base = mods::weapon::type_t::RIFLE;
-		obj->wpn_type = mods::weapon::base::rifle::SNIPER;
+		obj->weapon()->base = mods::weapon::type_t::RIFLE;
+		obj->weapon()->type = mods::weapon::base::rifle::SNIPER;
 		return std::move(obj);
 	}
 	void sniper_rifle::feed(const mods::pq::row_type & row){

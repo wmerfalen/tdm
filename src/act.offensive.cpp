@@ -342,33 +342,29 @@ ACMD(do_reload) {
 		return;
 	}
 
-	//*player << player->weapon()->weapon_type << "\r\n";
-
-	if(!player->carrying_ammo_of_type(player->weapon()->weapon_type)) {
+	if(!player->carrying_ammo_of_type(player->weapon()->type)) {
 		*player << "{1} You don't have any ammo.\r\n";
 		return;
 	}
 
-	auto ammo = player->get_ammo(player->weapon()->weapon_type);
-
-	if(ammo->ammo -12 < 0) {
-		auto difference = ammo->ammo -12;
+	if(player->weapon()->ammo -12 < 0) {
+		auto difference = player->weapon()->ammo -12;
 		auto rounds = difference + 12;
 
 		if(rounds <= 0) {
 			*player << "Out of ammo.\r\n";
-			ammo->ammo = 0;
+			player->weapon()->ammo = 0;
 			return;
 		}
 
-		*player << "You load " << rounds << " rounds into " << player->weapon()->name << "\r\n";
-		ammo->ammo = 0;
+		*player << "You load " << rounds << " rounds into " << player->weapon_name() << "\r\n";
+		player->weapon()->ammo = 0;
 		player->weapon()->ammo = rounds;
 		return;
 	} else {
-		ammo->ammo -= 12;
+		player->weapon()->ammo -= 12;
 		player->weapon()->ammo = 12;
-		*player << "You load 12 rounds into " << player->weapon()->name << "\r\n";
+		*player << "You load 12 rounds into " << player->weapon_name() << "\r\n";
 		return;
 	}
 }

@@ -927,8 +927,8 @@ namespace mods::builder {
 						sql_compositor comp("object_weapon",&txn5);
 						auto sql = comp.update("object_weapon")
 							.set({
-									{"obj_ammo_type",std::to_string(obj->weapon_type)},
-									{"obj_ammo_max",std::to_string(obj->ammo_max)},
+									{"obj_ammo_type",std::to_string(obj->weapon()->type)},
+									{"obj_ammo_max",std::to_string(obj->weapon()->ammo_max)},
 									{"obj_cooldown","0"},
 									{"obj_can_snipe","0"}
 									}).where("obj_fk_id","=",std::to_string(check_i))
@@ -941,8 +941,8 @@ namespace mods::builder {
 						auto sql = comp.insert().into("object_weapon")
 							.values({
 									{"obj_fk_id",std::to_string(check_i)},
-									{"obj_ammo_max",std::to_string(obj->ammo_max)},
-									{"obj_ammo_type",std::to_string(obj->weapon_type)},
+									{"obj_ammo_max",std::to_string(obj->weapon()->ammo_max)},
+									{"obj_ammo_type",std::to_string(obj->weapon()->type)},
 									{"obj_cooldown","0"},
 									{"obj_can_snipe","0"}
 									})
@@ -2707,12 +2707,15 @@ ACMD(do_obuild) {
 			*player << "\r\n";
 		}
 
-		*player << "{red}item_number: {/red}" << obj->item_number << "\r\n" <<
-			"{red}weapon_type: {/red}" << obj->weapon_type << "\r\n" <<
-			"{red}worn_on: {/red}" << obj->worn_on << "\r\n" <<
-			"{red}weapon_ammo: {/red}" << obj->ammo << "\r\n" <<
-			"{red}weapon_ammo_max: {/red} " << obj->ammo_max << "\r\n" <<
-			"{red}weapon_holds_ammo: {/red}: " << obj->holds_ammo << "\r\n" <<
+		*player << "{red}item_number: {/red}" << obj->item_number << "\r\n"
+			"{red}worn_on: {/red}" << obj->worn_on << "\r\n";
+		if(obj->weapon()){
+			*player << "{red}weapon_type: {/red}" << obj->weapon()->type << "\r\n" <<
+			"{red}weapon_ammo: {/red}" << obj->weapon()->ammo << "\r\n" <<
+			"{red}weapon_ammo_max: {/red} " << obj->weapon()->ammo_max << "\r\n" <<
+			"{red}weapon_holds_ammo: {/red}: " << obj->weapon()->holds_ammo << "\r\n";
+		}
+			*player <<
 			"{gld}::Wear Flags::{/gld}\r\n" <<
 			"{red}value: {/red}" << std::to_string(obj->obj_flags.wear_flags) <<  "\r\n";
 #define MENTOC_WEAR(a){ if(obj->obj_flags.wear_flags & a){*player << #a << ", ";} }
@@ -2859,7 +2862,9 @@ ACMD(do_obuild) {
 		if(arg_vec[2].compare("weapon_type:list") == 0) {
 			std::string report = "";
 			for(auto& ex_flag : mods::builder::weapon_type_flags) {
-					if(obj->weapon_type & ex_flag.first || obj->obj_flags.weapon_flags & ex_flag.first){
+				if(!obj->weapon()){ continue; }
+					if(obj->weapon()->type & ex_flag.first || 
+							obj->obj_flags.weapon_flags & ex_flag.first){
 						report += ex_flag.second + ",";
 					}
 			}
@@ -2879,7 +2884,7 @@ ACMD(do_obuild) {
 
 			for(auto& ex_flag : mods::builder::weapon_type_flags) {
 				if(ex_flag.second.compare(*flag) == 0) {
-					obj->obj_flags.weapon_flags = obj->weapon_type &= ~ex_flag.first;
+					obj->obj_flags.weapon_flags = obj->weapon()->type &= ~ex_flag.first;
 					found = true;
 					break;
 				}
@@ -2903,7 +2908,10 @@ ACMD(do_obuild) {
 
 			for(auto& ex_flag : mods::builder::weapon_type_flags) {
 				if(ex_flag.second.compare(*flag) == 0) {
-					obj->obj_flags.weapon_flags = obj->weapon_type ^= ex_flag.first;
+					if(!obj->weapon()){
+						obj->weapon(1);
+					}
+					obj->obj_flags.weapon_flags = obj->weapon()->type ^= ex_flag.first;
 					found = true;
 					break;
 				}
@@ -2917,11 +2925,14 @@ ACMD(do_obuild) {
 			return;
 		}
 
+		if(!obj->weapon()){
+			obj->weapon(1);
+		}
 		MENTOC_OBI(worn_on);
-		MENTOC_OBI2(ammo,weapon_ammo);
-		MENTOC_OBI2(ammo_max,weapon_ammo_max);
-		MENTOC_OBI2(holds_ammo,weapon_holds_ammo);
-		MENTOC_OBI2(ammo,weapon_ammo);
+		MENTOC_OBI2(weapon()->ammo,weapon_ammo);
+		MENTOC_OBI2(weapon()->ammo_max,weapon_ammo_max);
+		MENTOC_OBI2(weapon()->holds_ammo,weapon_holds_ammo);
+		MENTOC_OBI2(weapon()->ammo,weapon_ammo);
 		MENTOC_OBS(name);
 		MENTOC_OBS(description);
 		MENTOC_OBS(short_description);

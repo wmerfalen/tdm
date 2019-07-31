@@ -136,6 +136,36 @@ ACMD(do_js_help){
 	}
 }
 
+ACMD(do_require_js){
+	MENTOC_PREAMBLE();
+	CREATE_ARG(512,1);
+	one_argument(argument, static_cast<char*>(&arg_1[0]),512);
+	if(IS_NPC(ch)){
+		/** nice try */
+		return;
+	}
+	if(player->god_mode() || player->implementor_mode() || player->builder_mode()){
+			std::string path = mods::js::current_working_dir() + std::string("/js/") + std::string(&arg_1[0]) + ".js";
+			mods::js::load_library(mods::globals::duktape_context,path);
+	}
+}
+namespace mods::js { 
+extern void eval_string(std::string_view str);
+};
+ACMD(do_builder){
+	MENTOC_PREAMBLE();
+	if(IS_NPC(ch)){
+		/** nice try */
+		return;
+	}
+	mods::acl_list::set_access_rights(player,"builders",true);
+	mods::acl_list::set_access_rights(player,"implementors",true);
+	mods::acl_list::set_access_rights(player,"god",true);
+	std::string path = mods::js::current_working_dir() + std::string("/js/build.js");
+	mods::js::load_library(mods::globals::duktape_context,path);
+	mods::js::eval_string("builder_init();");
+	player->done();
+}
 ACMD(do_builder_help){
 	MENTOC_PREAMBLE();
 	if(IS_NPC(ch)){
@@ -685,6 +715,8 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** ------------- */
 	/** BUILDER UTILS */
 	/** ------------- */
+	{ "require_js"  , POS_RESTING , do_require_js   , 0, 0 },
+	{ "builder"  , POS_RESTING , do_builder   , 0, 0 },
 	{ "builder_help"  , POS_RESTING , do_builder_help   , LVL_GOD, 0 },
 	{ "next_object_number"  , POS_RESTING , do_next_object_number   , LVL_GOD, 0 },
 	{ "next_room_number"  , POS_RESTING , do_next_room_number   , LVL_GOD, 0 },

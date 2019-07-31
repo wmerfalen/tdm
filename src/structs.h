@@ -39,6 +39,9 @@ using goal_t = short;
 struct obj_data;
 using uuid_t = uint64_t;
 using aligned_int_t = uint64_t;
+namespace mods::globals {
+extern uuid_t get_uuid();
+};
 enum lense_type_t {
 	FIRST,
 
@@ -721,9 +724,83 @@ enum player_level {
 		int16_t modifier;     /* How much it changes by              */
 	};
 
+	struct weapon_data_t {
+		weapon_data_t() : 
+			ammo(0),ammo_max(0),loaded(0),holds_ammo(0),
+			type(0),base(0),is_ammo(0)
+		{ }
+		~weapon_data_t() = default;
+		int16_t ammo;
+		int16_t ammo_max;
+		short loaded;
+		short holds_ammo;
+		uint8_t type;
+		uint8_t base;
+		bool is_ammo;
+	};
 
 	/* ================== Memory Structure for Objects ================== */
 	struct obj_data {
+#ifdef __MENTOC_USE_PQXX_RESULT__
+		void feed(const pqxx::result::reference&);
+#else
+		void feed(pqxx::row);
+#endif
+		obj_data(const obj_data& other){
+			item_number = other.item_number;
+			in_room = other.in_room;
+			name = other.name;
+			description = other.description;
+			short_description = other.short_description;
+			action_description = other.action_description;
+			ex_description = other.ex_description;
+			carried_by = other.carried_by;
+			worn_by = other.worn_by; 
+			worn_on = other.worn_on;
+			in_obj = other.in_obj;
+			contains = other.contains; 
+			next_content = other.next_content;
+			next = other.next;
+			ai_state = other.ai_state;
+			uuid = mods::globals::get_uuid();
+			/** Philsophy: 
+			 * We never want to copy the weapon because
+			 * each instance should have it's own weapon.
+			 * Theoretically, the copy constructor shouldn't even
+			 * be a thing. We shouldn't need to copy an object.
+			 * The only time this copy constructor should be called
+			 * is when we are coping a object proto to a 
+			 * real obj_data instantiation
+			 */
+		}
+		obj_data& operator=(const obj_data& other){ 
+			item_number = other.item_number;
+			in_room = other.in_room;
+			name = other.name;
+			description = other.description;
+			short_description = other.short_description;
+			action_description = other.action_description;
+			ex_description = other.ex_description;
+			carried_by = other.carried_by;
+			worn_by = other.worn_by; 
+			worn_on = other.worn_on;
+			in_obj = other.in_obj;
+			contains = other.contains; 
+			next_content = other.next_content;
+			next = other.next;
+			ai_state = other.ai_state;
+			uuid = mods::globals::get_uuid();
+			return *this;
+		}
+		obj_data() : 
+			item_number(0),in_room(-1),name(nullptr),
+			description(nullptr),short_description(nullptr),
+			action_description(nullptr),ex_description(nullptr),
+			carried_by(nullptr),worn_by(nullptr),worn_on(0),
+			in_obj(nullptr),contains(nullptr),next_content(nullptr),
+			next(nullptr),ai_state(0),uuid(0),m_weapon(nullptr)
+		{}
+		~obj_data() = default;
 		/**TODO: create constructor and destructor */
 		obj_vnum item_number;	/* Where in data-base			*/
 		room_rnum in_room;		/* In what room -1 when conta/carr	*/
@@ -758,6 +835,14 @@ enum player_level {
 		uint8_t ai_state;
 
 		uuid_t uuid;
+
+		weapon_data_t* weapon(uint8_t mode){
+			m_weapon = std::make_unique<weapon_data_t>();
+			return m_weapon.get();
+		} 
+		weapon_data_t* weapon(){ return m_weapon.get(); }
+		/** FIXME: remove these members and instead use the weapon pointer */
+		/*
 		int16_t ammo;
 		int16_t ammo_max;
 		short loaded;
@@ -765,7 +850,10 @@ enum player_level {
 		weapon_type_t weapon_type;
 		uint8_t wpn_type;
 		uint8_t wpn_base;
+		*/
 		int16_t type;
+		protected:
+		std::unique_ptr<weapon_data_t> m_weapon;
 	};
 struct obj_data_weapon : public obj_data {
 	/**TODO: call parent constructor/destructor */
