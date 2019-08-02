@@ -1,6 +1,7 @@
 src = .
 builddir = build
-CC = /usr/bin/clang++-8
+#CC = /usr/bin/clang++-8
+CC = /usr/bin/g++-8
 BINDIR = ../bin
 DATA_DIR = "$(CURDIR)/../lib/"
 JS_PROFILES_PATH = "$(HOME)/code/siege-mud/lib/js/profiles/"
@@ -19,8 +20,9 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-std=c++17 -fpermissive -MMD \
 	-Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \
-	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\" \
-	-stdlib=libc++ 
+	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\"  \
+	-DMENTOC_NO_CONSTEXPR_CONF=1 -D__MENTOC_USE_PQXX_RESULT__=1 \
+	-fPIC
 LIBS = $(opnssl) -lc -lm -lpqxx -lpq -lssl -lcrypto
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
@@ -29,7 +31,7 @@ buildobj = act.informative act.item act.medic \
 					 handler house interpreter limits magic mail mobact\
 					 modify objsave olc random shop spec_assign spec_procs\
 					 spell_parser spells structs weather mods/ai_state\
-					 mods/behaviour_tree_impl mods/acl/config-parser mods/lmdb\
+					 mods/behaviour_tree_impl mods/lmdb\
 					 mods/chat mods/conf mods/deferred mods/drone mods/immortal\
 					 mods/js mods/player mods/prefs mods/pregame\
 					 mods/projectile mods/quests mods/scan mods/sql mods/util\
@@ -41,7 +43,8 @@ buildobj = act.informative act.item act.medic \
 					 act.comm mods/extra_desc_data mods/overhead_map mods/npc \
 					 mods/randomized-items mods/auto-login mods/date-time \
 					 mods/world-configuration mods/debug act.debug mods/pfind \
-					 mods/orm/chargen
+					 mods/orm/chargen mods/weapons/sniper-rifle mods/classes/sniper \
+					 act.builder mods/orm/quotes mods/orm/base
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
@@ -56,7 +59,7 @@ clean:
 		rm -f $(builddir)/mods/testing/lmdb/*.d 
 
 $(builddir):
-	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/acl/ $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/orm/
+	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/orm/
 
 $(builddir)/%.o: %.cpp
 	$(CC) -c $(FLAGS) -o $@ $<

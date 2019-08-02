@@ -114,7 +114,7 @@ std::ostream& log(Args... args); /*{
 			return m;
 		}
 	template <typename T>
-		T stoi(const pqxx::tuple::reference & i){
+		T stoi(const pqxx::row::reference & i){
 			T m;
 			std::stringstream ss;
 			ss.str(pqxx::to_string(i));

@@ -764,7 +764,7 @@ void do_stat_character(struct char_data *ch, struct char_data *k) {
 		send_to_char(ch, " <none>\r\n");
 	} else {
 		for(fol = k->followers; fol; fol = fol->next) {
-			column += send_to_char(ch, "%s %s", found++ ? "," : "", PERS(fol->follower, ch).c_str());
+			column += send_to_char(ch, "%s %s", found++ ? "," : "", std::string(PERS(fol->follower, ch)).c_str());
 
 			if(column >= 62) {
 				send_to_char(ch, "%s\r\n", fol->next ? "," : "");

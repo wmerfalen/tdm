@@ -8,8 +8,8 @@
 #include "../pq.hpp"
 #include "../sql.hpp"
 
-#define MENTOC_ORM_STR(key) key = result[##key];
-#define MENTOC_ORM_UINT(key) key = static_cast<uint64_t>(result[##key]);
+//#define MENTOC_ORM_STR(key) key = result[ ##key ];
+//#define MENTOC_ORM_UINT(key) key = static_cast<uint64_t>(result[ ##key ]);
 namespace mods::orm {
 	struct base {
 		virtual int16_t feed(const pqxx::result::reference &);

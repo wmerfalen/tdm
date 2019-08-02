@@ -1010,7 +1010,7 @@ void parse_sql_mobiles() {
 
 			proto.player.description.assign(row["mob_description"].c_str());
 
-			proto.char_specials.saved.act = mods::util::stoi<int>(row["mob_action_bitvector"]);
+			proto.char_specials.saved.act = mods::util::stoi<int>(row["mob_action_bitvector"].c_str());
 			SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
 			REMOVE_BIT(proto.char_specials.saved.act, MOB_NOTDEADYET);
 			proto.char_specials.saved.affected_by = mods::util::stoi<int>(row["mob_affection_bitvector"]);

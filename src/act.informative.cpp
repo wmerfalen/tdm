@@ -481,7 +481,7 @@ void list_one_char(struct char_data *i, struct char_data *ch) {
 					send_to_char(ch, "YOU!");
 				} else {
 					if(IN_ROOM(i) == IN_ROOM(FIGHTING(i))) {
-						send_to_char(ch, "%s!", PERS(FIGHTING(i), ch).c_str());
+						send_to_char(ch, "%s!", std::string(PERS(FIGHTING(i), ch)).c_str());
 					} else {
 						send_to_char(ch,  "someone who has already left!");
 					}
@@ -988,7 +988,7 @@ ACMD(do_score) {
 			break;
 
 		case POS_FIGHTING:
-			send_to_char(ch, "You are fighting %s.\r\n", FIGHTING(ch) ? PERS(FIGHTING(ch), ch).c_str() : "thin air");
+			send_to_char(ch, "You are fighting %s.\r\n", FIGHTING(ch) ? std::string(PERS(FIGHTING(ch), ch)).c_str() : "thin air");
 			break;
 
 		case POS_STANDING:
@@ -1685,9 +1685,9 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
 	if(IN_ROOM(obj) != NOWHERE) {
 		send_to_char(ch, "[%5d] %s\r\n", GET_ROOM_VNUM(IN_ROOM(obj)), world[IN_ROOM(obj)].name.c_str());
 	} else if(obj->carried_by) {
-		send_to_char(ch, "carried by %s\r\n", PERS(obj->carried_by, ch).c_str());
+		send_to_char(ch, "carried by %s\r\n", std::string(PERS(obj->carried_by, ch)).c_str());
 	} else if(obj->worn_by) {
-		send_to_char(ch, "worn by %s\r\n", PERS(obj->worn_by, ch).c_str());
+		send_to_char(ch, "worn by %s\r\n", std::string(PERS(obj->worn_by, ch)).c_str());
 	} else if(obj->in_obj) {
 		send_to_char(ch, "inside %s%s\r\n", obj->in_obj->short_description, (recur ? ", which is" : " "));
 

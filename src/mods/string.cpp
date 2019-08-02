@@ -14,7 +14,7 @@ namespace mods {
 			assign("");
 		}
 	}
-	string::string(const pqxx::tuple::reference & str){
+	string::string(const pqxx::row::reference & str){
 		m_mallocd = false;
 		m_cptr = nullptr;
 		m_str = "";
@@ -26,9 +26,15 @@ namespace mods {
 		}
 	}
 
+	/*
 	void string::assign(const pqxx::tuple::reference & other){
 		assign(pqxx::to_string(other));
 	}
+	*/
+	void string::assign(const pqxx::row::reference & str){
+		assign(pqxx::to_string(str));
+	}
+
 #ifdef __MENTOC_USE_PQXX_RESULT__
 	string::string(const pqxx::result::reference & str){
 #else
