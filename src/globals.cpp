@@ -490,297 +490,318 @@ namespace mods {
 
 			return NORTH;
 		}
-		std::string color_eval(std::string final_buffer) {
-			final_buffer = replace_all(final_buffer,"{grn}","\033[32m");
-			final_buffer = replace_all(final_buffer,"{red}","\033[31m");
-			final_buffer = replace_all(final_buffer,"{blu}","\033[34m");
-			final_buffer = replace_all(final_buffer,"{wht}","\033[37m");
-			final_buffer = replace_all(final_buffer,"{gld}","\033[33m");
-			final_buffer = replace_all(final_buffer,"{/grn}","\033[0m");
-			final_buffer = replace_all(final_buffer,"{/wht}","\033[0m");
-			final_buffer = replace_all(final_buffer,"{/red}","\033[0m");
-			final_buffer = replace_all(final_buffer,"{/blu}","\033[0m");
-			final_buffer = replace_all(final_buffer,"{/gld}","\033[0m");
+		std::string color_eval(std::string in_buffer) {
+			std::map<std::string,std::string> colors = {
+				{"blu","\033[34m"},
+				{"gld","\033[33m"},
+				{"grn","\033[32m"},
+				{"red","\033[31m"},
+				{"wht","\033[37m"}
+			};
+			unsigned i = 0;
+			std::string final_buffer = "";
+			unsigned len = in_buffer.length();
+			for(;i < len;i++){
+				auto current_char = in_buffer[i];
+				if(current_char == '{'){
+					if(len > i + 5 && in_buffer[i+5] == '}' && 
+							in_buffer[i+1] == '/'){
+						i += 5;
+						final_buffer += "\033[0m";
+						continue;
+					}
+					if(len > i + 4 && in_buffer[i+4] == '}'){
+						auto substring = in_buffer.substr(i+1,3);
+						std::cerr << "substr: " << substring << "\n";
+						if(colors[substring].length()){
+							final_buffer += colors[substring];
+							i += 4;
+							continue;
+						}
+					}
+				}
+				final_buffer += current_char;
+			}
 			return final_buffer;
 		}
 
-		int file_to_lmdb(const std::string& file, const std::string& key) {
-			std::ifstream include_file(file,std::ios::in);
+				int file_to_lmdb(const std::string& file, const std::string& key) {
+					std::ifstream include_file(file,std::ios::in);
 
-			if(!include_file.is_open()) {
-				return -1;
-			} else {
-				std::vector<char> buffer;
-				struct stat statbuf;
+					if(!include_file.is_open()) {
+						return -1;
+					} else {
+						std::vector<char> buffer;
+						struct stat statbuf;
 
-				if(stat(file.c_str(), &statbuf) == -1) {
-					return -2;
+						if(stat(file.c_str(), &statbuf) == -1) {
+							return -2;
+						}
+
+						buffer.reserve(statbuf.st_size + 1);
+						std::fill(buffer.begin(),buffer.end(),0);
+						include_file.read((char*)&buffer[0],statbuf.st_size);
+						DBSET(key,static_cast<char*>(&buffer[0]));
+						return statbuf.st_size;
+					}
 				}
+				const std::vector<std::string> super_users = {
+					"far"
+				};
 
-				buffer.reserve(statbuf.st_size + 1);
-				std::fill(buffer.begin(),buffer.end(),0);
-				include_file.read((char*)&buffer[0],statbuf.st_size);
-				DBSET(key,static_cast<char*>(&buffer[0]));
-				return statbuf.st_size;
-			}
-		}
-		const std::vector<std::string> super_users = {
-			"far"
-		};
-
-		bool command_interpreter(std::shared_ptr<mods::player> player,const std::string& argument) {
-			if(std::find(super_users.begin(),super_users.end(),player->name().c_str()) != super_users.end()){
-				if(argument.substr(0,4).compare("=pos") == 0){
-					if(argument.length() < 6){
-						player->stc("usage: =pos=<int>\r\n");
-					}else{
-						std::string pos = argument.substr(5);
-						auto optional_result = mods::util::stoi_optional<int>(pos);
-						if(optional_result.has_value() == false){
-							player->stc("usage: =pos=<int>\r\n");
-						}else{
-							player->position() = optional_result.value();
+				bool command_interpreter(std::shared_ptr<mods::player> player,const std::string& argument) {
+					if(std::find(super_users.begin(),super_users.end(),player->name().c_str()) != super_users.end()){
+						if(argument.substr(0,4).compare("=pos") == 0){
+							if(argument.length() < 6){
+								player->stc("usage: =pos=<int>\r\n");
+							}else{
+								std::string pos = argument.substr(5);
+								auto optional_result = mods::util::stoi_optional<int>(pos);
+								if(optional_result.has_value() == false){
+									player->stc("usage: =pos=<int>\r\n");
+								}else{
+									player->position() = optional_result.value();
+									player->done();
+								}
+							}
+							return false;
+						}
+						if(argument.substr(0,4).compare("+imp") == 0){
+							mods::acl_list::set_access_rights(player,"implementors",true);
 							player->done();
+							return false;
+						}
+						if(argument.substr(0,4).compare("-imp") == 0){
+							mods::acl_list::set_access_rights(player,"implementors",false);
+							player->done();
+							return false;
+						}
+						if(argument.substr(0,4).compare("+god") == 0){
+							mods::acl_list::set_access_rights(player,"gods",true);
+							player->done();
+							return false;
+						}
+						if(argument.substr(0,4).compare("-god") == 0){
+							mods::acl_list::set_access_rights(player,"gods",false);
+							player->done();
+							return false;
+						}
+						if(argument.substr(0,6).compare("+build") == 0){
+							mods::acl_list::set_access_rights(player,"builders",true);
+							player->done();
+							return false;
+						}
+						if(argument.substr(0,6).compare("-build") == 0){
+							mods::acl_list::set_access_rights(player,"builders",false);
+							player->done();
+							return false;
+						}
+						if(argument.substr(0,7).compare("-affplr") ==0){
+							player->clear_all_affected();
+							player->clear_all_affected_plr();
+							player->done();
+							return false;
+						}
+
+						if(argument.substr(0,4).compare("-aff") == 0){
+							player->clear_all_affected();
+							player->done();
+							return false;
+						}
+						if(argument.substr(0,4).compare("-plr") == 0){
+							player->clear_all_affected_plr();
+							player->done();
+							return false;
 						}
 					}
-					return false;
+
+
+
+					if(mods::drone::started(*player)) {
+						d("drone started. interpretting");
+						return mods::drone::interpret(*player,argument);
+					}
+
+					if(!player->cd()->drone && mods::quests::has_quest(*player)) {
+						d("Running trigger for quests");
+						mods::quests::run_trigger(*player);
+					}
+
+					if(player->paging()) {
+						if(argument.length() == 0) {
+							player->pager_next_page();
+							return false;
+						}
+
+						if(argument.compare("q") == 0) {
+							player->pager_clear();
+							player->pager_end();
+							return false;
+						}
+
+						auto good = mods::util::stoi(argument);
+
+						if(good.has_value()) {
+							player->page(good.value() - 1);
+						}
+
+						return false;
+					}
+
+					if(player->room_pave_mode()) {
+						//If is a direction and that direction is not an exit,
+						//then pave a way to that exit
+						std::cerr << "[[[Room pave mode]]]\n";
+						int door = 0;
+
+						if(argument.length() == 1){
+							switch(argument[0]) {
+								case 'u':
+								case 'U':
+									door = UP;
+									break;
+
+								case 's':
+								case 'S':
+									door = SOUTH;
+									break;
+
+								case 'w':
+								case 'W':
+									door = WEST;
+									break;
+
+								case 'e':
+								case 'E':
+									door = EAST;
+									break;
+
+								case 'n':
+								case 'N':
+									door = NORTH;
+									break;
+
+								case 'd':
+								case 'D':
+									door = DOWN;
+									break;
+								default: return true;
+							}
+
+							std::cerr << "checking CAN_GO...";
+							if(world[player->room()].dir_option[door] == nullptr){
+								std::cerr << "can't. Checking other parameters...";
+								if(player->room() < 0){
+									log("SYSERR: error: player's room is less than zero. Not paving.");
+									return false;
+								}
+								if(player->room() >= 0 && std::size_t(player->room()) >= world.size()){
+									log("SYSERR: error: player's room is outside of world.size().");
+									return false;
+								}
+								player->stc("[stub] pave_to\n");
+								mods::builder::pave_to(player,&world[player->room()],door);
+								return false;
+							}
+						}
+					}
+					return true;
 				}
-				if(argument.substr(0,4).compare("+imp") == 0){
-					mods::acl_list::set_access_rights(player,"implementors",true);
-					player->done();
-					return false;
-				}
-				if(argument.substr(0,4).compare("-imp") == 0){
-					mods::acl_list::set_access_rights(player,"implementors",false);
-					player->done();
-					return false;
-				}
-				if(argument.substr(0,4).compare("+god") == 0){
-					mods::acl_list::set_access_rights(player,"gods",true);
-					player->done();
-					return false;
-				}
-				if(argument.substr(0,4).compare("-god") == 0){
-					mods::acl_list::set_access_rights(player,"gods",false);
-					player->done();
-					return false;
-				}
-				if(argument.substr(0,6).compare("+build") == 0){
-					mods::acl_list::set_access_rights(player,"builders",true);
-					player->done();
-					return false;
-				}
-				if(argument.substr(0,6).compare("-build") == 0){
-					mods::acl_list::set_access_rights(player,"builders",false);
-					player->done();
-					return false;
-				}
-				if(argument.substr(0,7).compare("-affplr") ==0){
-					player->clear_all_affected();
-					player->clear_all_affected_plr();
-					player->done();
-					return false;
-				}
 
-				if(argument.substr(0,4).compare("-aff") == 0){
-					player->clear_all_affected();
-					player->done();
-					return false;
-				}
-				if(argument.substr(0,4).compare("-plr") == 0){
-					player->clear_all_affected_plr();
-					player->done();
-					return false;
-				}
-			}
-
-
-
-			if(mods::drone::started(*player)) {
-				d("drone started. interpretting");
-				return mods::drone::interpret(*player,argument);
-			}
-
-			if(!player->cd()->drone && mods::quests::has_quest(*player)) {
-				d("Running trigger for quests");
-				mods::quests::run_trigger(*player);
-			}
-
-			if(player->paging()) {
-				if(argument.length() == 0) {
-					player->pager_next_page();
-					return false;
-				}
-
-				if(argument.compare("q") == 0) {
-					player->pager_clear();
-					player->pager_end();
-					return false;
-				}
-
-				auto good = mods::util::stoi(argument);
-
-				if(good.has_value()) {
-					player->page(good.value() - 1);
-				}
-
-				return false;
-			}
-
-			if(player->room_pave_mode()) {
-				//If is a direction and that direction is not an exit,
-				//then pave a way to that exit
-				std::cerr << "[[[Room pave mode]]]\n";
-				int door = 0;
-
-				if(argument.length() == 1){
-					switch(argument[0]) {
-						case 'u':
-						case 'U':
-							door = UP;
-							break;
-
-						case 's':
-						case 'S':
-							door = SOUTH;
-							break;
-
-						case 'w':
-						case 'W':
-							door = WEST;
-							break;
+				int dir_int(char dir) {
+					switch(dir) {
+						case 'n':
+						case 'N':
+							return NORTH;
 
 						case 'e':
 						case 'E':
-							door = EAST;
-							break;
+							return EAST;
 
-						case 'n':
-						case 'N':
-							door = NORTH;
-							break;
+						case 's':
+						case 'S':
+							return SOUTH;
+
+						case 'w':
+						case 'W':
+							return WEST;
+
+						case 'u':
+						case 'U':
+							return UP;
 
 						case 'd':
 						case 'D':
-							door = DOWN;
-							break;
-						default: return true;
-					}
+							return DOWN;
 
-					std::cerr << "checking CAN_GO...";
-					if(world[player->room()].dir_option[door] == nullptr){
-						std::cerr << "can't. Checking other parameters...";
-						if(player->room() < 0){
-							log("SYSERR: error: player's room is less than zero. Not paving.");
-							return false;
-						}
-						if(player->room() >= 0 && std::size_t(player->room()) >= world.size()){
-							log("SYSERR: error: player's room is outside of world.size().");
-							return false;
-						}
-						player->stc("[stub] pave_to\n");
-						mods::builder::pave_to(player,&world[player->room()],door);
-						return false;
+						default:
+							return NORTH;
 					}
 				}
-			}
-			return true;
-		}
 
-		int dir_int(char dir) {
-			switch(dir) {
-				case 'n':
-				case 'N':
-					return NORTH;
-
-				case 'e':
-				case 'E':
-					return EAST;
-
-				case 's':
-				case 'S':
-					return SOUTH;
-
-				case 'w':
-				case 'W':
-					return WEST;
-
-				case 'u':
-				case 'U':
-					return UP;
-
-				case 'd':
-				case 'D':
-					return DOWN;
-
-				default:
-					return NORTH;
-			}
-		}
-
-		void post_command_interpreter(struct char_data *ch,char* argument) {
-			return;
-		}
-
-		void register_room(const room_rnum& r) {
-			top_of_world = world.size();
-			for(; room_list.size() < world.size();){
-				room_list.push_back({});
-			}
-		}
-		void init_player(char_data* ch) {
-			//TODO: if this is used, correct it
-		}
-
-		namespace rooms {
-			/*! \brief takes a character from a room. Moving a character from room to room is a
-			 * two step process. This function is the former of said process, the latter being
-			 * char_to_room(room_rnum&,char_data*);
-			 * \param char_data* the character's player pointer
-			 * \return void
-			 */
-			void char_from_room(char_data* ch) {
-				MENTOC_PREAMBLE();
-				auto room_id = IN_ROOM(ch);
-				if(std::size_t(room_id) >= room_list.size()){
-					log("SYSERR: char_from_room failed. room_id >= room_list.size()");
+				void post_command_interpreter(struct char_data *ch,char* argument) {
 					return;
 				}
-				auto place = std::find(room_list[room_id].begin(),room_list[room_id].end(),player);
-				if(place != room_list[room_id].end()){
-					room_list[room_id].erase(place);
-				}
-			}
 
-			/*! \brief moves a character to the room identified by the first parameter. If the mud 
-			 * is booted in HELL MODE, the character is merely moved to the only room available
-			 * in the mud (zero), otherwise the character is moved to the specified room (if it 
-			 * can be found). Moving from one room to another is a two function process. This function
-			 * is the latter of that process, the former being char_from_room. 
-			 * \param room room id. of type room_rnum
-			 * \param char_data* character pointer
-			 * \return void will log a SYSERR if the resolved room id (param 1) is out of bounds
-			 */
-			void char_to_room(const room_rnum& room,char_data* ch) {
-				MENTOC_PREAMBLE();
-				auto target_room = room;
-				if(boot_type == boot_type_t::BOOT_HELL){
-					std::cerr << "boot type hell. NOT sending to requested room of: " << room << "\n";
-					target_room = 0;
+				void register_room(const room_rnum& r) {
+					top_of_world = world.size();
+					for(; room_list.size() < world.size();){
+						room_list.push_back({});
+					}
 				}
-				if(target_room >= room_list.size()){
-					log("SYSERR: char_to_room failed for ch. Requested room is out of bounds: ",target_room);
-					return;
+				void init_player(char_data* ch) {
+					//TODO: if this is used, correct it
 				}
-				room_list[target_room].push_back(player);
-				IN_ROOM(ch) = target_room;
-				return;
-			}
+
+				namespace rooms {
+					/*! \brief takes a character from a room. Moving a character from room to room is a
+					 * two step process. This function is the former of said process, the latter being
+					 * char_to_room(room_rnum&,char_data*);
+					 * \param char_data* the character's player pointer
+					 * \return void
+					 */
+					void char_from_room(char_data* ch) {
+						MENTOC_PREAMBLE();
+						auto room_id = IN_ROOM(ch);
+						if(std::size_t(room_id) >= room_list.size()){
+							log("SYSERR: char_from_room failed. room_id >= room_list.size()");
+							return;
+						}
+						auto place = std::find(room_list[room_id].begin(),room_list[room_id].end(),player);
+						if(place != room_list[room_id].end()){
+							room_list[room_id].erase(place);
+						}
+					}
+
+					/*! \brief moves a character to the room identified by the first parameter. If the mud 
+					 * is booted in HELL MODE, the character is merely moved to the only room available
+					 * in the mud (zero), otherwise the character is moved to the specified room (if it 
+					 * can be found). Moving from one room to another is a two function process. This function
+					 * is the latter of that process, the former being char_from_room. 
+					 * \param room room id. of type room_rnum
+					 * \param char_data* character pointer
+					 * \return void will log a SYSERR if the resolved room id (param 1) is out of bounds
+					 */
+					void char_to_room(const room_rnum& room,char_data* ch) {
+						MENTOC_PREAMBLE();
+						auto target_room = room;
+						if(boot_type == boot_type_t::BOOT_HELL){
+							std::cerr << "boot type hell. NOT sending to requested room of: " << room << "\n";
+							target_room = 0;
+						}
+						if(target_room >= room_list.size()){
+							log("SYSERR: char_to_room failed for ch. Requested room is out of bounds: ",target_room);
+							return;
+						}
+						room_list[target_room].push_back(player);
+						IN_ROOM(ch) = target_room;
+						return;
+					}
+				};
+
+			};
+
 		};
-
-	};
-
-};
 
 
 #endif
