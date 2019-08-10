@@ -79,6 +79,44 @@ namespace mods::weapon {
 	};
 	obj_data_ptr_t attachment(attachment_t type);
 	obj_data_ptr_t new_sniper_rifle_object();
+
+	namespace yaml {
+		constexpr static uint8_t MAX_ROOM_DISTANCE = 10;
+		struct rifle_description_t {
+			rifle_description_t() : 
+				ammo_max(0),
+			chance_to_injure(0),
+			clip_size(0),
+			cooldown_between_shots(0),
+			critical_chance(0),
+			critical_range(0),
+			range_multiplier(0),
+			damage_per_second(0),
+			disorient_amount(0),
+			headshot_bonus(0),
+			max_range(0),
+			reload_time(0),
+			ammo_type("")
+			{
+				std::fill(damage_map.begin(),damage_map.end(),0);
+			}
+			base::rifle type;
+			int ammo_max;
+			int chance_to_injure;
+			int clip_size;
+			float cooldown_between_shots;
+			float critical_chance;
+			int critical_range;
+			float range_multiplier;
+			std::array<float,MAX_ROOM_DISTANCE> damage_map;
+			int damage_per_second;
+			int disorient_amount;
+			int headshot_bonus;
+			int max_range;
+			int reload_time;
+			std::string ammo_type;
+		};
+	};
 };
 #endif
 
