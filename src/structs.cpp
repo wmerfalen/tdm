@@ -26,10 +26,40 @@ void obj_data::feed(const pqxx::result::reference & row){
 #else
 void obj_data::feed(pqxx::row row){
 #endif
+	/**
+	 * Weapon flow
+	 * --------------
+		- Prototype Phase
+			- Item has basic features
+			- Item describes the object and can be used in game
+
+		- Creation phase
+			- [CONDITIONAL]
+				- CONDITION: Item placed in container via zone command
+				- OR CONDITION: Item awarded by quest
+					- Unique item number placed on item
+					- Save in db
+
+		- [CONDITIONAL] Decoration phase
+			- CONDITION: Item belongs to user
+				- Decorate item and load sub-structures (i.e.: weapon())
+
+		- Item is used
+			- FOREACH item below, save()
+				- Item is attached
+				- Item gets attachments
+				- Item has properties modified
+				- Item gets put in user's inventory
+
+		- [CONDITIONAL] User drops item
+			- Save room and/or container
+		
+	 */
 		if(obj_flags.weapon_flags != 0){
 			m_weapon = std::make_unique<weapon_data_t>();
 			weapon()->holds_ammo = 1;
 			weapon()->type = obj_flags.weapon_flags;
+			weapon()->id = 0;/** FIXME: fill this in with object_weapon.id */
 		}
 }
 

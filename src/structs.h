@@ -726,17 +726,20 @@ enum player_level {
 
 	struct weapon_data_t {
 		weapon_data_t() : 
-			ammo(0),ammo_max(0),loaded(0),holds_ammo(0),
-			type(0),base(0),is_ammo(0)
+			ammo(0),ammo_max(0),clip_size(0),
+			loaded(0),holds_ammo(0),
+			type(0),base(0),is_ammo(0),id(0)
 		{ }
 		~weapon_data_t() = default;
 		int16_t ammo;
 		int16_t ammo_max;
+		uint8_t clip_size;
 		short loaded;
 		short holds_ammo;
 		uint8_t type;
 		uint8_t base;
 		bool is_ammo;
+		uint32_t id;
 	};
 
 	/* ================== Memory Structure for Objects ================== */
