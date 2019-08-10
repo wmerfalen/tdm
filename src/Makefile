@@ -12,6 +12,9 @@ lmdb = $(lmdbdir)/liblmdb.so
 duktapeout = $(builddir)/duktape
 duktape = $(duktapeout)/duktape.o
 openssl = -lssl -lcrypto
+yamlcpp = $(CURDIR)/yaml-cpp/include
+yamllib = $(CURDIR)/yaml-cpp/build
+yamlcpp_object = yaml-cpp
 
 thirdparty = $(duktape) $(lmdb)
 FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
@@ -22,6 +25,7 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \
 	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\"  \
 	-DMENTOC_NO_CONSTEXPR_CONF=1 -D__MENTOC_USE_PQXX_RESULT__=1 \
+	-Wno-sign-compare -I$(yamlcpp) -L$(yamllib) \
 	-fPIC
 LIBS = $(opnssl) -lc -lm -lpqxx -lpq -lssl -lcrypto
 buildobj = act.informative act.item act.medic \
@@ -44,7 +48,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/randomized-items mods/auto-login mods/date-time \
 					 mods/world-configuration mods/debug act.debug mods/pfind \
 					 mods/orm/chargen mods/weapons/sniper-rifle mods/classes/sniper \
-					 act.builder mods/orm/quotes mods/orm/base
+					 mods/orm/quotes act.builder mods/orm/base 
+
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
