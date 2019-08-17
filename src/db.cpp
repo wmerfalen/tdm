@@ -1960,6 +1960,8 @@ std::shared_ptr<obj_data> blank_object() {
 }
 
 
+
+
 /* create a new object from a prototype */
 struct obj_data *read_object(obj_vnum nr, int type) { /* and obj_rnum */
 	struct obj_data obj;

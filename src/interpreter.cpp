@@ -195,6 +195,8 @@ ACMD(do_builder_help){
 			"{gld}room_list{/gld} -- {grn}lists rooms [builder-utils][admin-utils]{/grn}",
 			"{gld}sbuild{/gld} -- {grn}shop builder [builder-utils]{/grn}",
 			"{gld}throw{/gld} -- {grn}throw a grenade [staging-feature]{/grn}",
+			"{gld}yaml_example{/gld} -- {grn}type 'yaml_example list' for a list of yaml files{/grn}",
+			"{gld}yaml_import{/gld} -- {grn}type 'yaml_import <filename>' to import a yaml file{/grn}",
 			"{gld}zbuild{/gld} -- {grn}zone builder [builder-utils]{/grn}"
 	 	}){
 			player->sendln(cmd);
@@ -205,6 +207,8 @@ ACMD(do_builder_help){
 	}
 }
 
+ACMD(do_yaml_import);
+ACMD(do_yaml_example);
 /* prototypes for all do_x functions. */
 ACMD(do_action);
 ACMD(do_advance);
@@ -718,6 +722,8 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "require_js"  , POS_RESTING , do_require_js   , 0, 0 },
 	{ "builder"  , POS_RESTING , do_builder   , 0, 0 },
 	{ "builder_help"  , POS_RESTING , do_builder_help   , LVL_GOD, 0 },
+	{ "yaml_import"  , POS_RESTING , do_yaml_import   , LVL_GOD, 0 },
+	{ "yaml_example"  , POS_RESTING , do_yaml_example   , LVL_GOD, 0 },
 	{ "next_object_number"  , POS_RESTING , do_next_object_number   , LVL_GOD, 0 },
 	{ "next_room_number"  , POS_RESTING , do_next_room_number   , LVL_GOD, 0 },
 	{ "next_mob_number"  , POS_RESTING , do_next_mob_number   , LVL_GOD, 0 },
@@ -1554,23 +1560,19 @@ void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
 	std::string arg = in_arg;
 	tuple_status_t status;
 
-	if(mods::auto_login::get_user().length()){
-		switch(p->state()){
-			case CON_GET_NAME:
-				arg = mods::auto_login::get_user();
-				p->set_name(arg);
-				p->set_db_id(0);
-				arg = mods::auto_login::get_password();
-				if(login(mods::auto_login::get_user(),arg) == false){
-					log("SYSERR: user/password combination for auto_login failed");
-					exit(1);
-				}else{
-					parse_sql_player(p);
-				}
-				p->set_state(CON_MENU);
-				arg = "1";
-				break;
-		}
+	if(mods::auto_login::get_user().length() && p->state() == CON_GET_NAME){
+			arg = mods::auto_login::get_user();
+			p->set_name(arg);
+			p->set_db_id(0);
+			arg = mods::auto_login::get_password();
+			if(login(mods::auto_login::get_user(),arg) == false){
+				log("SYSERR: user/password combination for auto_login failed");
+				exit(1);
+			}else{
+				parse_sql_player(p);
+			}
+			p->set_state(CON_MENU);
+			arg = "1";
 	}
 	switch(p->state()) {
 		case CON_GET_NAME:		/* wait for input of name */

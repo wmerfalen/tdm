@@ -22,6 +22,7 @@
 #include <array>
 #include "mods/extra_desc_data.hpp"
 #include <unordered_map>
+#include "mods/yaml.hpp"
 namespace mods {
 	struct player;
 	struct npc;
@@ -731,6 +732,7 @@ enum player_level {
 			type(0),base(0),is_ammo(0),id(0)
 		{ }
 		~weapon_data_t() = default;
+		std::unique_ptr<mods::yaml::rifle_description_t> rifle_attributes;
 		int16_t ammo;
 		int16_t ammo_max;
 		uint8_t clip_size;
