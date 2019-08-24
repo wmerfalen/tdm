@@ -14,24 +14,19 @@ namespace mods {
 			assign("");
 		}
 	}
-	string::string(const pqxx::row::reference & str){
+
+	string::string(const pqxx::result::reference & str){
 		m_mallocd = false;
 		m_cptr = nullptr;
 		m_str = "";
-		std::string other = pqxx::to_string(str).c_str();
-		if(other.length()){
-			assign(other.c_str());
-		}else{
-			assign("");
-		}
+		assign(str[0].c_str());
 	}
 
 	/*
 	void string::assign(const pqxx::tuple::reference & other){
 		assign(pqxx::to_string(other));
 	}
-	*/
-	void string::assign(const pqxx::row::reference & str){
+	void string::assign(const pqxx::tuple::reference & str){
 		assign(pqxx::to_string(str));
 	}
 
@@ -40,16 +35,23 @@ namespace mods {
 #else
 	string::string(const pqxx::row::reference & str){
 #endif
+*/
+	string::string(const pqxx::tuple::reference & str){
 		m_mallocd = false;
 		m_cptr = nullptr;
 		m_str = "";
+		auto other = str.c_str();
+		assign(other);
+		/*
 		std::string other = str[0].c_str();
 		if(other.length()){
 			assign(other.c_str());
 		}else{
 			assign("");
 		}
+		*/
 	}
+
 	string::string(){
 		m_mallocd = false;
 		m_cptr = nullptr;
@@ -121,6 +123,9 @@ namespace mods {
 	void string::assign(const pqxx::row::reference & other){
 #endif
 		assign(other[0].c_str());
+	}
+	void string::assign(const pqxx::tuple::reference & other){
+		assign(other.c_str());
 	}
 	void string::assign(const std::string & other){
 		m_debug("assign std::string\n");

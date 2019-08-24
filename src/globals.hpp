@@ -35,6 +35,8 @@ strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(
 #define OPPOSITE_DIR(a) mods::globals::opposite_dir(a)
 #define DBSET(key,value){ mods::globals::ram_db[key] = value; }
 #define DBGET(key,value) { value = mods::globals::ram_db[key]; }
+#define LMDBSET(key,value) db_put(key,value);
+#define LMDBGET(key) db_get(key)
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
 #ifdef __MENTOC_DEBUG__
 #define d(a) std::cerr << "[debug]: " << a << "\n" << std::flush;

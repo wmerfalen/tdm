@@ -14,8 +14,7 @@
 #include "mods/sql.hpp"
 #include "mods/lmdb.hpp"
 #include "mods/yaml.hpp"
-
-
+#include "mods/date-time.hpp"
 namespace mods::fs {
 	void ls(std::shared_ptr<mods::player> player,std::string_view _path) {
 		std::string path = _path.data();
@@ -187,5 +186,28 @@ ACMD(do_yaml_example){
 		rifle.write_example_file("rifle.yml");
 	}
 	player->sendln("[+] done");
+}
+
+ACMD(do_histfile){
+	MENTOC_PREAMBLE();
+	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
+	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
+		*player << "usage: \r\n" <<
+			" {red}histfile{/red} {grn}start{/grn}\r\n" <<
+			"  |--> create new histfile.\r\n" <<
+			" {red}histfile{/red} {grn}stop{/grn}\r\n" <<
+			"  |--> stop recording and write histfile.\r\n" <<
+			"\r\n"
+			;
+		return;
+	}
+	if(std::string(vec_args[0]).compare("start") == 0){
+		player->start_histfile();
+		return;
+	}
+	if(std::string(vec_args[0]).compare("stop") == 0){
+		player->stop_histfile();
+		return;
+	}
 }
 

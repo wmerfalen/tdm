@@ -47,5 +47,10 @@ namespace mods::date_time {
 	 *  \return void
 	 */
 	void initialize_date(uint8_t month,uint8_t day,uint8_t year);
+
+	namespace irl {
+		std::string date_to_string();
+		std::string epoch_string();
+	};
 };
 #endif

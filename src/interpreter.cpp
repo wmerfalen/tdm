@@ -71,6 +71,7 @@ void perform_complex_alias(struct txt_q *input_q, char *orig, struct alias_data 
 int perform_alias(mods::descriptor_data d, char *orig, size_t maxlen);
 int reserved_word(char *argument);
 int _parse_name(char *arg, char *name);
+
 ACMD(do_room_list){
 	MENTOC_PREAMBLE();
 	for(auto & p : mods::globals::room_list[player->room()]){
@@ -179,6 +180,7 @@ ACMD(do_builder_help){
 			"{gld}drone{/gld} -- {grn}start or stop your drone [staging-feature]{/grn}",
 			"{gld}givemegold{/gld} -- {grn}give me gold [feature-debug]{/grn}", 
 			"{gld}heal{/gld} -- {grn}heal yourself [feature-debug][staging-feature][class-medic]{/grn}", 
+			"{gld}histfile{/gld} -- {grn}start recording all commands. stop with 'histfile stop' [builder-utils][feature-debug]{/grn}", 
 			"{gld}idle{/gld} -- {grn}force your character into idle state [feature-debug]{/grn}", 
 			"{gld}js{/gld} -- {grn}Run javascript [feature-debug][admin-utils]{/grn}", 
 			"{gld}js_help{/gld} -- {grn}Show useful js commands [builder-utils][admin-utils]{/grn}", 
@@ -209,6 +211,7 @@ ACMD(do_builder_help){
 
 ACMD(do_yaml_import);
 ACMD(do_yaml_example);
+ACMD(do_histfile);
 /* prototypes for all do_x functions. */
 ACMD(do_action);
 ACMD(do_advance);
@@ -739,6 +742,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "rbuild"  , POS_RESTING , do_rbuild   , LVL_IMMORT, 0 },
 	{ "rbuild_sandbox"  , POS_RESTING , do_rbuild_sandbox   , LVL_IMMORT, 0 },
 	{ "room_list"  , POS_RESTING , do_room_list   , LVL_IMMORT, 0 },
+	{ "histfile"  , POS_RESTING , do_histfile   , LVL_IMMORT, 0 },
 	/** ----------------- */
 	/** END BUILDER UTILS */
 	/** ----------------- */
@@ -884,6 +888,9 @@ void command_interpreter(struct char_data *ch, char *argument) {
 	/* just drop to next line for hitting CR */
 	skip_spaces(&argument);
 
+	if(player->histfile()) {
+		player->histfile(argument);
+	}
 	if(!mods::globals::command_interpreter(player,argument)) {
 		mods::globals::post_command_interpreter(ch,argument);
 		return;
