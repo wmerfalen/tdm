@@ -4,7 +4,7 @@
 #include "base.hpp"
 #include "../../comm.h"
 namespace mods::classes {
-	using player_ptr = std::shared_ptr<mods::player>;
+	using player_ptr = player_ptr_t;
 	struct medic : base {
 		types kind() {
 			return types::MEDIC;

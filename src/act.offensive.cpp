@@ -148,20 +148,39 @@ ACMD(do_giveme_sniper_rifle) {
 	obj_to_char(player->sniper_rifle().get(),player->cd());
 
 }
-ACMD(do_snipe) {
-	MENTOC_PREAMBLE();	/* !mods */
+
+
+enum weapon_status_t {
+	COOLDOWN_IN_EFFECT = -1,
+	OUT_OF_AMMO = -2,
+	INVALID_WEAPON_TYPE = -3,
+	NOT_WIELDING_WEAPON = -4,
+	OKAY = 0
+};
+weapon_status_t weapon_preamble(
+		player_ptr_t player,
+		weapon_rifle_t rifle_type){
+	if(!player->weapon()){
+		player->sendln("You must be wielding a " + mods::weapon::to_string(rifle_type) + " to do that!");
+		return NOT_WIELDING_WEAPON;
+	}
 	if(!player->weapon_cooldown_expired(0)){
-		return;
+		return COOLDOWN_IN_EFFECT;
 	}
-
-	if(!player->has_weapon_capability(mods::weapon::SNIPE)) {
-		send_to_char(ch,"You must be wielding a sniper rifle to do that!");
-		return;
-	}
-
 	/* Check ammo */
-	if(player->weapon()->ammo <= 0) {
+	if(mods::weapon::has_clip(player->weapon()) && player->weapon()->ammo <= 0) {
 		*player << "{gld}*CLICK*{/gld} Your weapon is out of ammo!\r\n";
+		return OUT_OF_AMMO;
+	}
+	if(!player->has_weapon_capability(rifle_type)){
+		return INVALID_WEAPON_TYPE;
+	}
+	return OKAY;
+}
+
+ACMD(do_snipe) {
+	MENTOC_PREAMBLE();
+	if(OKAY != weapon_preamble(player,weapon_rifle_t::SNIPER)){
 		return;
 	}
 

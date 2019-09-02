@@ -43,7 +43,7 @@ static inline int_status_t initialize_table_schema(std::string table){
 namespace mods::db{
 
 void lmdb_export_char(
-		std::shared_ptr<mods::player> player_ptr,
+		player_ptr_t player_ptr,
 		mutable_map_t &
 );
 
@@ -77,10 +77,10 @@ tuple_status_t save_record(
 );
 
 tuple_status_t save_char(
-		std::shared_ptr<mods::player> player_ptr
+		player_ptr_t player_ptr
 );
 tuple_status_t save_new_char(
-		std::shared_ptr<mods::player> player_ptr
+		player_ptr_t player_ptr
 );
 /**
  * @return int number of rows loaded 

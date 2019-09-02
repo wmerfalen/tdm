@@ -33,7 +33,7 @@ extern size_t send_to_char(char_data *ch, const char *messg, ...);
 extern room_rnum real_room(room_vnum);
 namespace mods::acl_list {
 extern void set_access_rights(
-					std::shared_ptr<mods::player>,const std::string&,bool);
+					player_ptr_t,const std::string&,bool);
 };
 namespace mods::classes {
 	struct medic;
@@ -78,7 +78,7 @@ namespace mods {
 			~player();
 			void init();
 			friend void mods::acl_list::set_access_rights(
-					std::shared_ptr<mods::player>,const std::string&,bool);
+					player_ptr_t,const std::string&,bool);
 
 			void set_db_id(aligned_int_t id);
 			aligned_int_t get_db_id() const;
@@ -138,7 +138,7 @@ namespace mods {
 
 			/* setters */
 			void set_cd(char_data* ch);
-			void set_shared_ptr(std::shared_ptr<mods::player>&);
+			void set_shared_ptr(player_ptr_t&);
 
 			time_type_t time() const;
 

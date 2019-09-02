@@ -82,7 +82,7 @@ namespace mods::orm {
 		~player_generated_data() = default;
 		uint64_t id;//SERIAL PRIMARY KEY,
 		uint64_t pgdata_player_id;//INTEGER NOT NULL REFERENCES player(id),
-		std::shared_ptr<mods::player> pgdata_player_id_ptr;//INTEGER NOT NULL REFERENCES player(id),
+		player_ptr_t pgdata_player_id_ptr;//INTEGER NOT NULL REFERENCES player(id),
 		uint64_t pgdata_class;//INTEGER NOT NULL REFERENCES player_classes(id),
 		std::shared_ptr<player_classes> pgdata_class_ptr;//INTEGER NOT NULL REFERENCES player_classes(id),
 		uint64_t pgdata_race;//INTEGER NOT NULL REFERENCES player_races(id),
@@ -99,7 +99,7 @@ namespace mods::orm {
 		~player_skill_trees_unlocked() = default;
 		uint64_t id;//SERIAL PRIMARY KEY,
 		uint64_t pstun_player_id;//INTEGER NOT NULL REFERENCES player(id),
-		std::shared_ptr<mods::player> stun_player_id_ptr;//INTEGER NOT NULL REFERENCES player(id),
+		player_ptr_t stun_player_id_ptr;//INTEGER NOT NULL REFERENCES player(id),
 		uint64_t pstun_skill_tree_id;//INTEGER NOT NULL REFERENCES skill_trees(id)
 		std::shared_ptr<skill_trees> pstun_skill_tree_id_ptr;// INTEGER NOT NULL REFERENCES skill_trees(id)
 	};

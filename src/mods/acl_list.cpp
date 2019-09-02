@@ -9,16 +9,16 @@ namespace mods::acl_list {
 		static player_acl_list_t builders;
 	};
 
-	void set_access_rights(std::shared_ptr<mods::player> player,
+	void set_access_rights(player_ptr_t player,
 			const std::string& group,bool on_or_off){
 		struct _list_{
 			list_container::player_acl_list_t* ptr;
 			const char* name;
-			std::function<void(std::shared_ptr<mods::player>,bool)> setter;
+			std::function<void(player_ptr_t,bool)> setter;
 		} mappings[] ={
-			{&list_container::implementors,"implementors",[](std::shared_ptr<mods::player> player,bool on){ player->set_imp_mode(on); } },
-			{&list_container::gods,"gods", [](std::shared_ptr<mods::player> player,bool on){ player->set_god_mode(on); } },
-			{&list_container::builders,"builders",[](std::shared_ptr<mods::player> player,bool on){ player->set_bui_mode(on); } },
+			{&list_container::implementors,"implementors",[](player_ptr_t player,bool on){ player->set_imp_mode(on); } },
+			{&list_container::gods,"gods", [](player_ptr_t player,bool on){ player->set_god_mode(on); } },
+			{&list_container::builders,"builders",[](player_ptr_t player,bool on){ player->set_bui_mode(on); } },
 			{nullptr,nullptr}
 		};
 		unsigned i = 0;

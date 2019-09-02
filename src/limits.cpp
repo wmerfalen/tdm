@@ -221,7 +221,7 @@ void set_title(char_data* ch, const char* title) {
 	MENTOC_PREAMBLE();
 	set_title(player,title);
 }
-void set_title(std::shared_ptr<mods::player> player, const char* title) {
+void set_title(player_ptr_t player, const char* title) {
 	if(!title){
 		auto ch = player->cd();
 		std::string final_title;
@@ -400,7 +400,7 @@ void gain_condition(struct char_data *ch, int condition, int value) {
 
 
 
-void check_idling(std::shared_ptr<mods::player> player) {
+void check_idling(player_ptr_t player) {
 	std::cerr << "NOWHERE: " << NOWHERE << "\n";
 	auto ch = player->cd();
 	if(++(player->char_specials().timer) > idle_void) {
@@ -467,7 +467,7 @@ void point_update(void) {
 	struct obj_data *j, *jj, *next_thing2;
 
 	/* characters */
-	mods::loops::foreach_all([&](std::shared_ptr<mods::player> player) -> bool {
+	mods::loops::foreach_all([&](player_ptr_t player) -> bool {
 			auto ch = player->cd();
 			std::cerr << "foreach_all point update\n";
 			if(!ch){

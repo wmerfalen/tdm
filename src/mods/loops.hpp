@@ -12,18 +12,18 @@ extern std::deque<std::shared_ptr<mods::npc>> mob_list;
 namespace mods::loops {
 	using mob_function_t = std::function<bool(char_data*)>;
 	using mods_npc_function_t = std::function<bool(std::shared_ptr<mods::npc>)>;
-	using player_function_t = std::function<bool(std::shared_ptr<mods::player>)>;
+	using player_function_t = std::function<bool(player_ptr_t)>;
 	template <typename PointerType>
-	using mods_player_function_t = std::function<bool(std::shared_ptr<mods::player>,PointerType*)>;
-	using all_function_t = std::function<bool(std::shared_ptr<mods::player>)>;
+	using mods_player_function_t = std::function<bool(player_ptr_t,PointerType*)>;
+	using all_function_t = std::function<bool(player_ptr_t)>;
 	void foreach_mob(mob_function_t);
 	void foreach_mob(mods_npc_function_t);
 	void foreach_player(player_function_t);
 	namespace shptr {
 		template <typename PointerType>
-		using function_with_return_t = std::function<bool(std::shared_ptr<mods::player>,PointerType*)>;
+		using function_with_return_t = std::function<bool(player_ptr_t,PointerType*)>;
 
-		using function_t = std::function<bool(std::shared_ptr<mods::player>)>;
+		using function_t = std::function<bool(player_ptr_t)>;
 		using npc_function_t = std::function<bool(std::shared_ptr<mods::npc>)>;
 
 		template <typename PointerType>

@@ -87,7 +87,7 @@ namespace mods {
 			void set_cd(char_data* ch) {
 				m_char_data = ch;
 			}
-			void set_shared_ptr(std::shared_ptr<mods::player>&);
+			void set_shared_ptr(player_ptr_t&);
 
 			time_type_t time() const {
 				return m_time;

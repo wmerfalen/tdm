@@ -125,7 +125,7 @@ namespace mods {
 		return buffer;
 	}
 
-	void player::set_shared_ptr(std::shared_ptr<mods::player>& self_ptr) {
+	void player::set_shared_ptr(player_ptr_t& self_ptr) {
 		std::cerr << "[deprecated] set_shared_ptr\n";
 		return;
 		/*

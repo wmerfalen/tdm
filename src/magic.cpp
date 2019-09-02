@@ -75,7 +75,7 @@ int mag_savingthrow(struct char_data *ch, int type, int modifier) {
 	return (FALSE);
 }
 
-void update_player_affected_by(std::shared_ptr<mods::player>& player){
+void update_player_affected_by(player_ptr_t& player){
 	for(auto &af : player->get_affected_by()){
 		if(af.duration >= 1) {
 			af.duration--;
@@ -94,7 +94,7 @@ void update_player_affected_by(std::shared_ptr<mods::player>& player){
 
 /* affect_update: called from comm.c (causes spells to wear off) */
 void affect_update(void) {
-	mods::loops::shptr::foreach_all([&](std::shared_ptr<mods::player> player) -> bool {
+	mods::loops::shptr::foreach_all([&](player_ptr_t player) -> bool {
 		update_player_affected_by(player);
 		return true;
 	});

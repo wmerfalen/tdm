@@ -154,7 +154,7 @@ void mobile_activity(void) {
 			std::cerr << "mobile_activity: mob memory\n";
 
 			found = FALSE;
-			mods::loops::foreach_in_room(IN_ROOM(ch),[&](std::shared_ptr<mods::player> player_vict) -> bool {
+			mods::loops::foreach_in_room(IN_ROOM(ch),[&](player_ptr_t player_vict) -> bool {
 				auto vict = player_vict->cd();
 				if(IS_NPC(vict) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE)) {
 					return true;

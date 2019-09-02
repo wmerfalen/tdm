@@ -29,9 +29,9 @@ namespace mods {
 				}
 				std::string player_name;
 				bool found;
-				std::shared_ptr<mods::player> player;
+				player_ptr_t player;
 			};
-			static inline bool __find_player_by_name(std::shared_ptr<mods::player> player_ptr,find_player_payload_t* param){
+			static inline bool __find_player_by_name(player_ptr_t player_ptr,find_player_payload_t* param){
 				param->found = false;
 				std::cerr << "current-player(find):'" << player_ptr->name().c_str() << "'\nLooking for: '" << param->player_name.c_str() << "'\n";
 					if(std::string(player_ptr->name().c_str()).compare(param->player_name.c_str()) == 0){
@@ -42,7 +42,7 @@ namespace mods {
 						return true;//True means keep looping, we're not done
 					}
 			}
-			std::shared_ptr<mods::player> find_player_by_name(std::string_view name,bool& found){
+			player_ptr_t find_player_by_name(std::string_view name,bool& found){
 				find_player_payload_t payload(name);
 				mods::loops::foreach_player<mods::js::utils::find_player_payload_t>(
 						__find_player_by_name, &payload);

@@ -1,10 +1,10 @@
 #include "medic.hpp"
 
 namespace mods::classes {
-	int scaled_heal(std::shared_ptr<mods::player>& target){
+	int scaled_heal(player_ptr_t& target){
 		return (33 * (target->level() * 0.5));
 	}
-	void medic::heal_player(std::shared_ptr<mods::player>& player_obj,std::shared_ptr<mods::player>& target) {
+	void medic::heal_player(player_ptr_t& player_obj,player_ptr_t& target) {
 		/*
 		if(target->cd()->in_room != player_obj->cd()->in_room) {
 			*player_obj << "You can't find your target.\r\n";

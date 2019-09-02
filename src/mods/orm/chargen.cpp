@@ -61,7 +61,7 @@ namespace mods::orm {
 		//MENTOC_ORM_UINT(pgdata_race_perks);//INTEGER NOT NULL REFERENCES player_race_perks(id),
 		//MENTOC_ORM_UINT(pgdata_specialty_skill);//INTEGER REFERENCES specialty_skills(id)
 		/** TODO FIXME 
-		std::shared_ptr<mods::player> pgdata_player_id_ptr;//INTEGER NOT NULL REFERENCES player(id),
+		player_ptr_t pgdata_player_id_ptr;//INTEGER NOT NULL REFERENCES player(id),
 		std::shared_ptr<player_classes> pgdata_class_ptr;//INTEGER NOT NULL REFERENCES player_classes(id),
 		std::shared_ptr<player_races> pgdata_race_ptr;// INTEGER NOT NULL REFERENCES player_races(id),
 		std::shared_ptr<player_race_perks> pgdata_race_perks_ptr;//INTEGER NOT NULL REFERENCES player_race_perks(id),
@@ -74,7 +74,7 @@ namespace mods::orm {
 		//MENTOC_ORM_UINT(pstun_player_id);//INTEGER NOT NULL REFERENCES player(id),
 		//MENTOC_ORM_UINT(pstun_skill_tree_id);//INTEGER NOT NULL REFERENCES skill_trees(id)
 		/** TODO FIXME 
-		std::shared_ptr<mods::player> stun_player_id_ptr;//INTEGER NOT NULL REFERENCES player(id),
+		player_ptr_t stun_player_id_ptr;//INTEGER NOT NULL REFERENCES player(id),
 		std::shared_ptr<skill_trees> pstun_skill_tree_id_ptr;// INTEGER NOT NULL REFERENCES skill_trees(id)
 		*/
 		return 0;

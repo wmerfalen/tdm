@@ -37,6 +37,7 @@ using ai_state_map = std::map<char_data*,std::unique_ptr<mods::ai_state>>;
 using memory_rec_t = std::set<char_data*>;
 using ai_state_t = short;
 using goal_t = short;
+using player_ptr_t = std::shared_ptr<mods::player>;
 struct obj_data;
 using uuid_t = uint64_t;
 using aligned_int_t = uint64_t;
@@ -725,6 +726,7 @@ enum player_level {
 		int16_t modifier;     /* How much it changes by              */
 	};
 
+/*
 	struct weapon_data_t {
 		weapon_data_t() : 
 			ammo(0),ammo_max(0),clip_size(0),
@@ -743,6 +745,7 @@ enum player_level {
 		bool is_ammo;
 		uint32_t id;
 	};
+	*/
 
 	/* ================== Memory Structure for Objects ================== */
 	struct obj_data {
@@ -1401,7 +1404,7 @@ struct obj_data_weapon : public obj_data {
 		follow_type *followers;        /* List of chars followers       */
 		char_data *master;             /* Who is char following?        */
 
-		std::shared_ptr<mods::player> player_ptr;
+		player_ptr_t player_ptr;
 		/**
 		 * The following will be deprecated
 		 */

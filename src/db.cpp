@@ -170,7 +170,7 @@ extern const char *unused_spellname;	/* spell_parser.c */
 
 
 namespace db {
-	int16_t save_char_data(std::shared_ptr<mods::player> player,std::map<std::string,std::string> values){
+	int16_t save_char_data(player_ptr_t player,std::map<std::string,std::string> values){
 		try{
 			auto up_txn = txn();
 			sql_compositor comp("player",&up_txn);
@@ -188,7 +188,7 @@ namespace db {
 		}
 	}
 
-	int16_t save_new_char(std::shared_ptr<mods::player> player){
+	int16_t save_new_char(player_ptr_t player){
 		try{
 			std::map<std::string,std::string> values;
 			mods::db::lmdb_export_char(player,values);
@@ -208,7 +208,7 @@ namespace db {
 		}
 	}
 
-	int16_t load_char_pkid(std::shared_ptr<mods::player> player){
+	int16_t load_char_pkid(player_ptr_t player){
 		try{
 			auto select_transaction = txn();
 			sql_compositor comp("player",&select_transaction);
@@ -230,7 +230,7 @@ namespace db {
 		}
 	}
 
-	int16_t load_char_prefs(std::shared_ptr<mods::player> player){
+	int16_t load_char_prefs(player_ptr_t player){
 		try{
 			auto select_transaction = txn();
 			sql_compositor comp("player",&select_transaction);
@@ -251,7 +251,7 @@ namespace db {
 			return -2;
 		}
 	}
-	int16_t save_char_prefs(std::shared_ptr<mods::player> player){
+	int16_t save_char_prefs(player_ptr_t player){
 		return db::save_char_data(player,{{"player_preferences",std::to_string(player->get_prefs())}});
 	}
 
@@ -2331,7 +2331,7 @@ bool char_exists(const std::string& name, aligned_int_t & meta_int_id){
 	return false;
 }	
 
-bool char_exists(std::shared_ptr<mods::player> player_ptr){
+bool char_exists(player_ptr_t player_ptr){
 	return char_exists(player_ptr->name().c_str());
 }
 bool char_exists(const std::string& name){
@@ -2372,7 +2372,7 @@ bool char_exists(const std::string& name){
 /*
  * write the vital data of a player to sql
  */
-bool player_exists(std::shared_ptr<mods::player> player_ptr){
+bool player_exists(player_ptr_t player_ptr){
 	return db_get_by_meta("player","player_name",player_ptr->name().c_str()).size();
 }
 bool login(std::string_view user_name,std::string_view password){
@@ -2391,7 +2391,7 @@ bool login(std::string_view user_name,std::string_view password){
 		return false;
 	}
 }
-bool parse_sql_player(std::shared_ptr<mods::player> player_ptr){
+bool parse_sql_player(player_ptr_t player_ptr){
 	/** TODO: make sure sql injection is not possible here */
 	for(auto && row: db_get_by_meta("player","player_name",player_ptr->name().c_str())){
 		player_ptr->set_db_id(row["id"].as<int>());
@@ -2909,7 +2909,7 @@ void clear_object(struct obj_data *obj) {
  * Called during character creation after picking character class
  * (and then never again for that character).
  */
-void init_char(std::shared_ptr<mods::player> player) {
+void init_char(player_ptr_t player) {
 	int i;
 
 	/* *** if this is our first player --- he be God *** */

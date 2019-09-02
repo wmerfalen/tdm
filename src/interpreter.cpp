@@ -64,7 +64,7 @@ void read_aliases(struct char_data *ch);
 void delete_aliases(const char *charname);
 
 /* local functions */
-int64_t perform_dupe_check(std::shared_ptr<mods::player>);
+int64_t perform_dupe_check(player_ptr_t);
 struct alias_data *find_alias(struct alias_data *alias_list, char *str);
 void free_alias(struct alias_data *a);
 void perform_complex_alias(struct txt_q *input_q, char *orig, struct alias_data *a);
@@ -111,9 +111,10 @@ ACMD(do_js_help){
 		"{gld}mobile_activity{/gld} -- manually call it",
 		"{gld}modify_affected_flags{/gld} -- i.e.: maf('far','INVISIBLE',1)",
 		"{gld}modify_plr_flags{/gld} -- ",
+		"{gld}next_mob_number{/gld} -- gives you the next item number for mobs",
 		"{gld}next_object_number{/gld} -- gives you the next item number for objects",
 		"{gld}next_room_number{/gld} -- gives you the next item number for rooms",
-		"{gld}next_mob_number{/gld} -- gives you the next item number for mobs",
+		"{gld}next_zone_number{/gld} -- gives you the next zone number",
 		"{gld}read_mobile{/gld} -- ",
 		"{gld}require_js{/gld} -- include from /lib/js/",
 		"{gld}require_test{/gld} -- include from /lib/js/tests",
@@ -1537,7 +1538,7 @@ int _parse_name(char *arg, char *name) {
 
 
 /* This function seems a bit over-extended. */
-int64_t perform_dupe_check(std::shared_ptr<mods::player> p){
+int64_t perform_dupe_check(player_ptr_t p){
 	std::string name = p->name();
 	int64_t kicked = 0;
 	for(auto& player_ptr : mods::globals::player_list){
@@ -1558,7 +1559,7 @@ int64_t perform_dupe_check(std::shared_ptr<mods::player> p){
 }
 
 /* deal with newcomers and other non-playing sockets */
-void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
+void nanny(player_ptr_t p, char * in_arg) {
 	int load_result;	/* Overloaded variable */
 
 	skip_spaces(&in_arg);

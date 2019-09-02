@@ -98,7 +98,7 @@ extern int auto_save;		/* see config.c */
 extern int autosave_time;	/* see config.c */
 extern int *cmd_sort_info;
 namespace mods::globals { 
-extern std::vector<std::vector<std::shared_ptr<mods::player>>> room_list;
+extern std::vector<std::vector<player_ptr_t>> room_list;
 };
 
 extern struct time_info_data time_info;		/* In db.c */
@@ -129,7 +129,7 @@ void logstrerror(std::string_view prefix,int _errno){
 	log(mods::string(prefix.data()) + strerror(_errno));
 }
 
-int destroy_player(std::shared_ptr<mods::player> player);
+int destroy_player(player_ptr_t player);
 std::size_t handle_disconnects(){
 	/* Kick out folks in the CON_CLOSE or CON_DISCONNECT state */
 	std::vector<typename mods::globals::player_list_t::iterator> players_to_destroy;
@@ -205,7 +205,7 @@ void free_social_messages(void);
 void Free_Invalid_List(void);
 
 
-void deregister_player(std::shared_ptr<mods::player> & player_obj){
+void deregister_player(player_ptr_t & player_obj){
 	std::set<mods::globals::player_list_t::iterator> players_to_destroy;
 	for(auto it = mods::globals::player_list.begin();it != mods::globals::player_list.end();++it){
 		if((*it)->desc().descriptor == player_obj->desc().descriptor){
@@ -1218,7 +1218,7 @@ void destroy_socket(socket_t sock_fd){
 	}
 }
 
-int destroy_player(std::shared_ptr<mods::player> player){
+int destroy_player(player_ptr_t player){
 	char_from_room(player);
 	auto pl_iterator = std::find(mods::globals::player_list.begin(),
 			mods::globals::player_list.end(),
@@ -1352,7 +1352,7 @@ int new_descriptor(socket_t s) {
 		GREETINGS = "Username:";
 		write_to_output(player->desc(), "%s",GREETINGS.c_str());
 		mods::globals::socket_map.insert (
-				std::pair<int,mods::globals::player_ptr_t>(
+				std::pair<int,player_ptr_t>(
 					desc,player
 					)
 				);

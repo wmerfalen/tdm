@@ -102,7 +102,7 @@ int	hit_gain(struct char_data *ch);
 int	move_gain(struct char_data *ch);
 void	advance_level(struct char_data *ch);
 void	set_title(char_data*, const char* title);
-void	set_title(std::shared_ptr<mods::player>, const char* title);
+void	set_title(player_ptr_t, const char* title);
 void	gain_exp(struct char_data *ch, int gain);
 void	gain_exp_regardless(struct char_data *ch, int gain);
 void	gain_condition(struct char_data *ch, int condition, int value);
@@ -271,7 +271,7 @@ void	update_pos(struct char_data *victim);
 
 #define IN_ROOM(ch)	((ch)->in_room)
 
-room_rnum& GET_WAS_IN(std::shared_ptr<mods::player>& player);
+room_rnum& GET_WAS_IN(player_ptr_t& player);
 room_rnum& GET_WAS_IN(char_data* player);
 
 #define GET_AGE(ch)     (age(ch)->year)

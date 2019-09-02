@@ -6,13 +6,13 @@
 namespace mods {
 	struct player;
 };
+using player_ptr_t = std::shared_ptr<mods::player>;
 namespace mods::classes {
 	struct base {
 		virtual types kind() {
 			return types::UNDEFINED;
 		}
-		typedef std::shared_ptr<mods::player> player_ptr;
-		player_ptr player_obj;
+		player_ptr_t player_obj;
 		/* constructors and destructors */
 		base() = default;
 		virtual ~base() = default;

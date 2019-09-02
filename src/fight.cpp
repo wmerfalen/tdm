@@ -962,7 +962,7 @@ int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int 
  * @param victim Receiver of damage (can be PC or NPC)
  * @param dam Integer value of how much damage to attempt to deal
  * @param attacktype the type of attack
- * @return	< 0	Victim died, == 0 No damage,> 0	How much damage done.
+ * @return < 0 Victim died, == 0 No damage,> 0 How much damage done.
  */
 int snipe_damage(
 		char_data *ch, 

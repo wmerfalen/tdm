@@ -7,13 +7,13 @@
 namespace mods::yaml {
 	struct rifle_description_t;
 };
+#include "weapon.hpp"
 #include "../structs.h"
 #include "pqxx-types.hpp"
-#include "weapon.hpp"
 #include <fstream>
 
 namespace mods::yaml {
-	constexpr static uint8_t MAX_ROOM_DISTANCE = 10;
+	constexpr static uint8_t MAX_ROOM_DISTANCE = 4;
 			static inline std::string current_working_dir(){
 				char* cwd = ::get_current_dir_name();
 				std::string path = cwd == nullptr ? "" : cwd;
