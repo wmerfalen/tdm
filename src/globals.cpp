@@ -46,7 +46,8 @@ namespace mods {
 		boot_type_t boot_type;
 		socket_map_t socket_map;
 		std::unique_ptr<lmdb_db> db;
-		std::shared_ptr<player> player_nobody;
+		//std::shared_ptr<player> player_nobody;
+		player_ptr_t player_nobody;
 		std::unique_ptr<mods::deferred> defer_queue;
 		duk_context* duktape_context;
 		ai_state_map states;
@@ -423,7 +424,7 @@ namespace mods {
 			SET_BIT(mob_proto[i].char_specials.saved.act, MOB_ISNPC);
 			/** !TODO: fix this. We need to copy the mob_proto to the mob_list.back() */
 			std::cerr << "read_Mobile[mob_rnum]: " << i << "\n";
-			mob_list.emplace_back(std::make_shared<mods::npc>(i));
+			mob_list.emplace_back(i);
 			auto mob = mob_list.back();
 			std::cerr << "[DEBUG]: mob_proto short_descr: '" << 
 				mob_proto[i].player.short_descr.c_str() << "'\n";

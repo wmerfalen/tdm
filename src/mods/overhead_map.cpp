@@ -272,8 +272,10 @@ namespace mods::overhead_map {
 			}
 		}
 	}
+	/*
 	template <>
 		std::string generate(player_ptr_t out,const room_rnum& room_number){
 			return generate(out.get(),room_number);
 		}
+		*/
 };

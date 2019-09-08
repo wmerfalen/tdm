@@ -28,7 +28,9 @@
 #include <pqxx/pqxx>
 #include <unordered_map>
 
-#define MENTOC_PREAMBLE() auto player = IS_NPC(ch) ? std::make_shared<mods::player>(ch) : mods::globals::socket_map[ch->desc->descriptor];
+//#define MENTOC_PREAMBLE() auto player = IS_NPC(ch) ? std::make_shared<mods::player>(ch) : mods::globals::socket_map[ch->desc->descriptor];
+#define MENTOC_PREAMBLE() auto player = IS_NPC(ch) ? std::make_shared<mods::player>(ch).get() \
+																				: mods::globals::socket_map[ch->desc->descriptor].get();
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
 #define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \
 strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(a,"down") == 0)
@@ -57,15 +59,17 @@ extern char_data* character_list;
 	(ch)->next = character_list;\
 	character_list = ch;
 
-using player_ptr_t = std::shared_ptr<mods::player>;
+//using player_ptr_t = std::shared_ptr<mods::player>;
+using player_ptr_t = mods::player*;
 namespace mods {
 	namespace lmdb { 
 		struct _db_handle;
 	};
     namespace globals {
-			using player_list_t = std::vector<player_ptr_t>;
+		using player_t = std::unique_ptr<mods::player>;
+		using player_list_t = std::vector<player_ptr_t>;
 		using lmdb_db = mods::lmdb::_db_handle;
-		using socket_map_t = std::map<int,player_ptr_t>;
+		using socket_map_t = std::map<int,player_t>;
 		using room_list_t = std::vector<std::vector<player_ptr_t>>;
 		enum boot_type_t { BOOT_DB,BOOT_HELL };
 		bool acl_allowed(char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd);

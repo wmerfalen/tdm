@@ -41,7 +41,7 @@ bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *att
 
 
 void mobile_activity(void) {
-	mods::loops::shptr::foreach_mob([](std::shared_ptr<mods::npc> npc) -> bool{
+	mods::loops::shptr::foreach_mob([](mods::npc* npc) -> bool{
 			auto ch = npc->cd();
 			std::cerr << "foreach_mob (mobile_activity)\n";
 		char_data *vict;

@@ -625,7 +625,7 @@ void game_loop(socket_t mother_desc) {
 				continue;
 			}
 
-			auto player = it->second;
+			auto player = it->second.get();
 			mods::globals::current_player = player;
 
 			auto input_status = process_input(player->desc());
@@ -1255,7 +1255,7 @@ int destroy_player(player_ptr_t player){
 				removed = true;
 				break;
 			}
-			if(it->second == player){
+			if(it->second.get() == player){
 				log("Removing player from socket_map pointer match");
 				mods::globals::socket_map.erase(it->first);
 				removed = true;
@@ -1267,7 +1267,7 @@ int destroy_player(player_ptr_t player){
 	if(pl_iterator == mods::globals::player_list.end()){
 		log("SYSERR: WARNING! destroy_player cannot find player pointer in player_list!");
 	}else{
-		log("Freeing player [%s] use_count[%d]",player->name().c_str(),pl_iterator->use_count());
+		//log("Freeing player [%s] use_count[%d]",player->name().c_str(),pl_iteratoruse_count());
 		mods::globals::player_list.erase(pl_iterator);
 	}
 
@@ -1309,7 +1309,7 @@ int new_descriptor(socket_t s) {
 		return (0);
 	}
 
-	auto player = mods::globals::player_list.emplace_back(std::make_shared<mods::player>());
+	auto player = mods::globals::player_list.emplace_back();
 	player->set_socket(desc);
 	/* find the sitename */
 	if(nameserver_is_slow || !(from = gethostbyaddr((char *) &peer.sin_addr,
@@ -1833,7 +1833,7 @@ void close_socket(mods::descriptor_data d) {
 
 			/* We are guaranteed to have a person. */
 			act("$n has lost $s link.", TRUE, link_challenged, 0, 0, TO_ROOM);
-			mods::db::save_char(std::make_shared<mods::player>(link_challenged));
+			mods::db::save_char(std::make_shared<mods::player>(link_challenged).get());
 			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(link_challenged)), TRUE, "Closing link to: %s.", GET_NAME(link_challenged).c_str());
 		} else {
 			mudlog(CMP, LVL_IMMORT, TRUE, "Losing player: %s.", GET_NAME(d.character) ? GET_NAME(d.character).c_str() : "<null>");

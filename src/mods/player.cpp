@@ -243,7 +243,10 @@ namespace mods {
 			m_set_time();
 	};
 	bool player::can_snipe(char_data *target) {
-		return mods::scan::los_find(std::make_shared<mods::player>(cd()),std::make_shared<mods::player>(target)).found;
+		return mods::scan::los_find(
+				std::make_shared<mods::player>(cd()).get(),
+				std::make_shared<mods::player>(target).get()
+				).found;
 	}
 	void player::page(int pg) {
 		assert(pg >= 0);
