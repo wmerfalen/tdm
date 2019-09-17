@@ -34,9 +34,11 @@ namespace mods {
 
 	player_ptr_t player_scaffolding::create_muted_player_target() {
 		/** FIXME: this entire function is broken 2019-09-07 */
-		//auto player = std::make_unique<mods::player>(mods::player::player_type_enum_t::PLAYER_MUTED_DESCRIPTOR);
-		auto player_reference = mods::globals::player_list.emplace_back();
-		return player_reference;
+		auto player = std::make_shared<mods::player>(mods::player::player_type_enum_t::PLAYER_MUTED_DESCRIPTOR);
+		mods::globals::player_list.emplace_back(
+				player
+		);
+		return player;
 	}
 
 	void player_scaffolding::reset_points(player_ptr_t player,std::map<std::string_view,int> * points_map){
@@ -75,12 +77,12 @@ namespace mods {
 	player_ptr_t player_scaffolding::create_player() {
 		/** FIXME: this entire function is broken */
 		/*
-		auto player = std::make_unique<mods::player>(mods::player::player_type_enum_t::PLAYER);
-		auto real_pointer = player.get();
-		mods::globals::player_list.emplace_back(
-				std::move(player)
-				);
-				*/
+			 auto player = std::make_unique<mods::player>(mods::player::player_type_enum_t::PLAYER);
+			 auto real_pointer = player.get();
+			 mods::globals::player_list.emplace_back(
+			 std::move(player)
+			 );
+			 */
 		return mods::globals::player_list.emplace_back();
 	}
 

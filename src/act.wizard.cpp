@@ -1380,7 +1380,7 @@ ACMD(do_advance) {
 
 	gain_exp_regardless(victim,
 	                    level_exp(GET_CLASS(victim), newlevel) - GET_EXP(victim));
-	mods::db::save_char(std::make_shared<mods::player>(victim).get());
+	mods::db::save_char(std::make_shared<mods::player>(victim));
 }
 
 ACMD(do_restore) {
@@ -2023,7 +2023,7 @@ ACMD(do_wizutil) {
 				break;
 		}
 
-		mods::db::save_char(std::make_shared<mods::player>(vict).get());
+		mods::db::save_char(std::make_shared<mods::player>(vict));
 	}
 }
 
@@ -2849,7 +2849,7 @@ ACMD(do_set) {
 	/* save the character if a change was made */
 	if(retval) {
 		if(!is_file && !IS_NPC(vict)) {
-			mods::db::save_char(std::make_shared<mods::player>(vict).get());
+			mods::db::save_char(std::make_shared<mods::player>(vict));
 		}
 
 		if(is_file) {

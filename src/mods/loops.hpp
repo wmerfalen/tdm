@@ -8,10 +8,10 @@
 #include "../structs.h"
 #include "npc.hpp"
 #include <memory>
-extern std::deque<mods::npc*> mob_list;
+extern std::deque<std::shared_ptr<mods::npc>> mob_list;
 namespace mods::loops {
 	using mob_function_t = std::function<bool(char_data*)>;
-	using mods_npc_function_t = std::function<bool(mods::npc*)>;
+	using mods_npc_function_t = std::function<bool(std::shared_ptr<mods::npc>)>;
 	using player_function_t = std::function<bool(player_ptr_t)>;
 	template <typename PointerType>
 	using mods_player_function_t = std::function<bool(player_ptr_t,PointerType*)>;
@@ -24,7 +24,7 @@ namespace mods::loops {
 		using function_with_return_t = std::function<bool(player_ptr_t,PointerType*)>;
 
 		using function_t = std::function<bool(player_ptr_t)>;
-		using npc_function_t = std::function<bool(mods::npc*)>;
+		using npc_function_t = std::function<bool(std::shared_ptr<mods::npc>)>;
 
 		template <typename PointerType>
 		static inline PointerType* foreach_player(function_with_return_t<PointerType> func,PointerType* param){

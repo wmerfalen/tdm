@@ -6,8 +6,7 @@
 namespace mods {
 	struct player;
 };
-//using player_ptr_t = std::shared_ptr<mods::player>;
-using player_ptr_t = mods::player*;
+using player_ptr_t = std::shared_ptr<mods::player>;
 namespace mods::classes {
 	struct base {
 		virtual types kind() {

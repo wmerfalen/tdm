@@ -92,7 +92,7 @@ int snipe_hit(*ch, struct char_data *victim, int type,uint16_t distance) {
 	*/
 							/** TODO: if no ammo, search for ammo */
 							/** TODO: */
-								auto find_results = mods::scan::los_find(std::make_shared<mods::player>(mob).get(),std::make_shared<mods::player>(remembered_sniper).get());
+								auto find_results = mods::scan::los_find(std::make_shared<mods::player>(mob),std::make_shared<mods::player>(remembered_sniper));
 								snipe_hit(mob,remembered_sniper,TYPE_SNIPE,find_results.distance);
 								return status::SUCCESS;
 							}
@@ -106,8 +106,8 @@ int snipe_hit(*ch, struct char_data *victim, int type,uint16_t distance) {
 			node::create_leaf(
 				[](argument_type mob) -> status{
 				auto find_results = mods::scan::los_find(
-						std::make_shared<mods::player>(mob).get(),
-						std::make_shared<mods::player>(mob.mob_specials().snipe_tracking).get()
+						std::make_shared<mods::player>(mob),
+						std::make_shared<mods::player>(mob.mob_specials().snipe_tracking)
 						);
 				if(find_results.found){
 				/**

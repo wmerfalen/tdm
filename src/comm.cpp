@@ -103,6 +103,11 @@ extern std::vector<std::vector<player_ptr_t>> room_list;
 
 extern struct time_info_data time_info;		/* In db.c */
 extern char *help;
+/*
+player_ptr_t new_player(){
+	return mods::globals::player_list.emplace_back(mods::player::player_type_enum_t::PLAYER);
+}
+*/
 
 using descriptor_list_t = std::deque<mods::descriptor_data>;
 descriptor_list_t descriptor_list;		/* master desc list */
@@ -205,7 +210,7 @@ void free_social_messages(void);
 void Free_Invalid_List(void);
 
 
-void deregister_player(player_ptr_t & player_obj){
+void deregister_player(player_ptr_t player_obj){
 	std::set<mods::globals::player_list_t::iterator> players_to_destroy;
 	for(auto it = mods::globals::player_list.begin();it != mods::globals::player_list.end();++it){
 		if((*it)->desc().descriptor == player_obj->desc().descriptor){
@@ -446,7 +451,7 @@ socket_t init_socket(ush_int port) {
 	}
 
 	nonblock(s);
-	listen(s, 5);
+	listen(s, 64);
 	return (s);
 }
 
@@ -618,6 +623,7 @@ void game_loop(socket_t mother_desc) {
 			}
 			auto it = mods::globals::socket_map.find(operating_socket);
 			if(it == mods::globals::socket_map.end()){
+				log("WARNING: socket_map index not found for socket %d",operating_socket);
 				if(-1 == epoll_ctl (epoll_fd, EPOLL_CTL_DEL, operating_socket, &epoll_ev)){
 					log("SYSERR:[epoll] epoll_ctl EPOLL_CTL_DEL removal of socket failed");
 				}
@@ -625,7 +631,7 @@ void game_loop(socket_t mother_desc) {
 				continue;
 			}
 
-			auto player = it->second.get();
+			auto player = it->second;
 			mods::globals::current_player = player;
 
 			auto input_status = process_input(player->desc());
@@ -649,6 +655,7 @@ void game_loop(socket_t mother_desc) {
 			}
 			aliased = 0;
 			if(!get_from_q(&player->desc().input, comm, &aliased)) {
+				std::cerr << "get_from_q failed\n";
 				++i;
 				continue;
 			}
@@ -1242,7 +1249,7 @@ int destroy_player(player_ptr_t player){
 				removed = true;
 				break;
 			}
-			if(it->second.get() == nullptr){
+			if(it->second == nullptr){
 				log("Removing player from socket_map it->second.get() == nullptr");
 				mods::globals::socket_map.erase(it->first);
 				removed = true;
@@ -1255,7 +1262,7 @@ int destroy_player(player_ptr_t player){
 				removed = true;
 				break;
 			}
-			if(it->second.get() == player){
+			if(it->second == player){
 				log("Removing player from socket_map pointer match");
 				mods::globals::socket_map.erase(it->first);
 				removed = true;
@@ -1309,7 +1316,7 @@ int new_descriptor(socket_t s) {
 		return (0);
 	}
 
-	auto player = mods::globals::player_list.emplace_back();
+	auto player = std::make_shared<mods::player>();
 	player->set_socket(desc);
 	/* find the sitename */
 	if(nameserver_is_slow || !(from = gethostbyaddr((char *) &peer.sin_addr,
@@ -1325,12 +1332,14 @@ int new_descriptor(socket_t s) {
 	}
 
 	/* determine if the site is banned */
+	/*
 	if(isbanned(player->host().c_str())) {
 		destroy_socket(desc);
 		mudlog(CMP, LVL_GOD, TRUE, "Connection attempt denied from [%s]", player->desc().host.c_str());
-		deregister_player(player);
+		deregister_player(player.get());
 		return (0);
 	}else{
+	*/
 		log("new connection");
 
 		/* initialize descriptor data */
@@ -1353,11 +1362,11 @@ int new_descriptor(socket_t s) {
 		write_to_output(player->desc(), "%s",GREETINGS.c_str());
 		mods::globals::socket_map.insert (
 				std::pair<int,player_ptr_t>(
-					desc,player
+					desc,std::move(player)
 					)
 				);
 		return (desc);
-	}
+	//}
 }
 
 
@@ -1833,7 +1842,7 @@ void close_socket(mods::descriptor_data d) {
 
 			/* We are guaranteed to have a person. */
 			act("$n has lost $s link.", TRUE, link_challenged, 0, 0, TO_ROOM);
-			mods::db::save_char(std::make_shared<mods::player>(link_challenged).get());
+			mods::db::save_char(std::make_shared<mods::player>(link_challenged));
 			mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(link_challenged)), TRUE, "Closing link to: %s.", GET_NAME(link_challenged).c_str());
 		} else {
 			mudlog(CMP, LVL_IMMORT, TRUE, "Losing player: %s.", GET_NAME(d.character) ? GET_NAME(d.character).c_str() : "<null>");

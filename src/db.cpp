@@ -57,7 +57,7 @@ mob_rnum top_of_mobt = 0;	/* top of mobile index table	 */
 
 std::deque<obj_data> object_list;	/* list of objs	 */
 std::deque<std::shared_ptr<obj_data>> obj_list;
-std::deque<mods::npc*> mob_list;
+std::deque<std::shared_ptr<mods::npc>> mob_list;
 std::vector<index_data> obj_index;	/* index table for object file	 */
 std::vector<obj_data> obj_proto;	/* prototypes for objs		 */
 obj_rnum top_of_objt = 0;	/* top of object index table	 */

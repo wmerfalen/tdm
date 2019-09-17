@@ -22,7 +22,7 @@ namespace mods { struct extra_desc_data; };
 #define MENTOC_OBS(i) obj->i = get_strval(#i).value_or(obj->i);
 #define MENTOC_OBS2(i,a) obj->i = get_strval(#a).value_or(obj->i.c_str());
 using objtype = mods::object::type;
-using player_ptr_t = mods::player*;
+using player_ptr_t = std::shared_ptr<mods::player>;
 using jxcomp = mods::jx::compositor;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
