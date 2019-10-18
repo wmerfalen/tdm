@@ -10,7 +10,7 @@ namespace mods {
 		 */
 		return 0;
 	}
-	std::vector<std::shared_ptr<mods::player>>& player_scaffolding::set_players(std::string_view main_player,
+	std::vector<player_ptr_t>& player_scaffolding::set_players(std::string_view main_player,
 			std::string_view target_player,const std::vector<std::string_view>& optional_other_players){
 		/* TODO: create a function that loads and initializes an entire player
 		 * object just by giving the function the player's name
@@ -21,8 +21,8 @@ namespace mods {
 	std::vector<std::string>* player_scaffolding::get_last_error(){
 		return &m_errors;
 	}
-	int player_scaffolding::set_players(std::shared_ptr<mods::player> ch,
-			std::shared_ptr<mods::player> target_player){
+	int player_scaffolding::set_players(player_ptr_t ch,
+			player_ptr_t target_player){
 		if(m_players.size() < 2){
 			m_players.resize(2);
 		}
@@ -32,7 +32,8 @@ namespace mods {
 	};
 
 
-	std::shared_ptr<mods::player> player_scaffolding::create_muted_player_target() {
+	player_ptr_t player_scaffolding::create_muted_player_target() {
+		/** FIXME: this entire function is broken 2019-09-07 */
 		auto player = std::make_shared<mods::player>(mods::player::player_type_enum_t::PLAYER_MUTED_DESCRIPTOR);
 		mods::globals::player_list.emplace_back(
 				player
@@ -40,7 +41,7 @@ namespace mods {
 		return player;
 	}
 
-	void player_scaffolding::reset_points(std::shared_ptr<mods::player> player,std::map<std::string_view,int> * points_map){
+	void player_scaffolding::reset_points(player_ptr_t player,std::map<std::string_view,int> * points_map){
 		if(points_map != nullptr){
 			for(auto & pair : *points_map){
 				if(pair.first.compare("mana") == 0){ player->mana() = static_cast<sh_int>(pair.second); continue; }
@@ -73,15 +74,19 @@ namespace mods {
 	}
 
 
-	std::shared_ptr<mods::player> player_scaffolding::create_player() {
-		auto player = std::make_shared<mods::player>(mods::player::player_type_enum_t::PLAYER);
-		mods::globals::player_list.emplace_back(
-				player
-				);
-		return player;
+	player_ptr_t player_scaffolding::create_player() {
+		/** FIXME: this entire function is broken */
+		/*
+			 auto player = std::make_unique<mods::player>(mods::player::player_type_enum_t::PLAYER);
+			 auto real_pointer = player.get();
+			 mods::globals::player_list.emplace_back(
+			 std::move(player)
+			 );
+			 */
+		return mods::globals::player_list.emplace_back();
 	}
 
-	int player_scaffolding::initialize_player(std::shared_ptr<mods::player> player,int to_room){
+	int player_scaffolding::initialize_player(player_ptr_t player,int to_room){
 		descriptor_list.emplace_back();
 		auto descriptor = descriptor_list.end() -1;
 		player->set_desc(descriptor);

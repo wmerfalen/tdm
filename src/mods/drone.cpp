@@ -15,9 +15,7 @@
 namespace mods {
 	drone::drone(char_data* ch) : m_char_data(ch) { };
 	 struct char_data* drone::create(char_data* owner) {
-	auto player = mods::globals::player_list.emplace_back(
-			std::make_shared<mods::player>()
-	);
+	auto player = mods::globals::player_list.emplace_back();
 	player->set_desc(owner->desc);
 	player->desc().character = player->cd();
 	/** TODO: !uncertainty! -> question: "Does this need to be uncommented?" */

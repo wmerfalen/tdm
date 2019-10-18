@@ -14,10 +14,9 @@
 #include "mods/sql.hpp"
 #include "mods/lmdb.hpp"
 #include "mods/yaml.hpp"
-
-
+#include "mods/date-time.hpp"
 namespace mods::fs {
-	void ls(std::shared_ptr<mods::player> player,std::string_view _path) {
+	void ls(player_ptr_t player,std::string_view _path) {
 		std::string path = _path.data();
 		DIR *dir;
 		struct dirent *ent;
@@ -56,8 +55,26 @@ ACMD(do_next_object_number){
 	}
 }
 
-ACMD(do_next_room_number){
-	MENTOC_PREAMBLE();
+zone_vnum next_zone_number() {
+	try{
+		auto select_transaction = txn();
+		sql_compositor comp("zone",&select_transaction);
+		auto zone_sql = comp.select("currval(zone_virtual_number) + 1 as zone_number")
+			.from("zone")
+			.sql();
+		auto zone_record = mods::pq::exec(select_transaction,zone_sql);
+		if(zone_record.size() == 0){
+			return 1;
+		}else{
+			return mods::util::stoi<zone_vnum>(zone_record[0]["zone_number"]);
+		}
+	}catch(std::exception& e){
+		std::cerr << __FILE__ << ": " << __LINE__ << ": error in next_zone_number(): '" << e.what() << "'\n";
+		return 1;
+	}
+}
+
+room_vnum next_room_number() {
 	try{
 		auto select_transaction = txn();
 		sql_compositor comp("room",&select_transaction);
@@ -66,16 +83,16 @@ ACMD(do_next_room_number){
 			.sql();
 		auto room_record = mods::pq::exec(select_transaction,room_sql);
 		if(room_record.size() == 0){
-			player->stc("1");
+			return 1;
 		}else{
-			player->stc(room_record[0]["room_number"].c_str());
+			return mods::util::stoi<room_vnum>(room_record[0]["room_number"]);
 		}
 	}catch(std::exception& e){
-		std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
+		std::cerr << __FILE__ << ": " << __LINE__ << ": error in next_room_number(): '" << e.what() << "'\n";
+		return 1;
 	}
 }
-ACMD(do_next_mob_number){
-	MENTOC_PREAMBLE();
+mob_vnum next_mob_number(){
 	try{
 		auto select_transaction = txn();
 		sql_compositor comp("mobile",&select_transaction);
@@ -84,14 +101,30 @@ ACMD(do_next_mob_number){
 			.sql();
 		auto mob_record = mods::pq::exec(select_transaction,mob_sql);
 		if(mob_record.size() == 0){
-			player->stc("1");
+			return 1;
 		}else{
-			player->stc(mob_record[0]["mob_number"].c_str());
+			return mods::util::stoi<mob_vnum>(mob_record[0]["mob_number"]);
 		}
 	}catch(std::exception& e){
-		std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
+		std::cerr << __FILE__ << ": " << __LINE__ << ": error in next_mob_number(): '" << e.what() << "'\n";
+		return 1;
 	}
+}
 
+ACMD(do_next_zone_number){
+	MENTOC_PREAMBLE();
+	auto zone_number = next_zone_number();
+	player->stc(std::to_string(zone_number));
+}
+ACMD(do_next_room_number){
+	MENTOC_PREAMBLE();
+	auto room_number = next_room_number();
+	player->stc(std::to_string(room_number));
+}
+ACMD(do_next_mob_number){
+	MENTOC_PREAMBLE();
+	auto mob_number = next_mob_number();
+	player->stc(std::to_string(mob_number));
 }
 
 void fill_rifle_object(std::shared_ptr<obj_data>& obj) {
@@ -201,6 +234,7 @@ ACMD(do_yaml_example){
 		for(auto type : {"rifle","explosive"}) {
 			player->sendln(type);
 		}
+		return;
 	}
 	if(std::string(vec_args[0]).compare("rifle") == 0){
 		mods::yaml::rifle_description_t rifle;
@@ -215,3 +249,28 @@ ACMD(do_yaml_example){
 	player->sendln("[+] done");
 }
 
+ACMD(do_histfile){
+	MENTOC_PREAMBLE();
+	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
+	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
+		*player << "usage: \r\n" <<
+			" {red}histfile{/red} {grn}start{/grn}\r\n" <<
+			"  |--> create new histfile.\r\n" <<
+			" {red}histfile{/red} {grn}stop{/grn}\r\n" <<
+			"  |--> stop recording and write histfile.\r\n" <<
+			"\r\n"
+			;
+		return;
+	}
+	if(vec_args.size() == 0){
+		return;
+	}
+	if(std::string(vec_args[0]).compare("start") == 0){
+		player->start_histfile();
+		return;
+	}
+	if(std::string(vec_args[0]).compare("stop") == 0){
+		player->stop_histfile();
+		return;
+	}
+}

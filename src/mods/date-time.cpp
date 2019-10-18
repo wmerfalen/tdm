@@ -1,8 +1,50 @@
 #include "date-time.hpp"
 #include <sstream>
 #include <cstdio>
+#include <iostream>
+#include <chrono>
+#include <ctime>
 
 namespace mods::date_time {
+	namespace irl {
+		std::string epoch_string(){
+			return std::to_string(time(0));
+		}
+		std::string date_to_string(){
+			time_t now = time(0);
+			tm *ltm = localtime(&now);
+			std::string dateString = "", tmp = "";
+			tmp = std::to_string(ltm->tm_mday);
+			if (tmp.length() == 1)
+				tmp.insert(0, "0");
+			dateString += tmp;
+			dateString += "-";
+			tmp = std::to_string(1 + ltm->tm_mon);
+			if (tmp.length() == 1)
+				tmp.insert(0, "0");
+			dateString += tmp;
+			dateString += "-";
+			tmp = std::to_string(1900 + ltm->tm_year);
+			dateString += tmp;
+			dateString += " ";
+			tmp = std::to_string(ltm->tm_hour);
+			if (tmp.length() == 1)
+				tmp.insert(0, "0");
+			dateString += tmp;
+			dateString += ":";
+			tmp = std::to_string(1 + ltm->tm_min);
+			if (tmp.length() == 1)
+				tmp.insert(0, "0");
+			dateString += tmp;
+			dateString += ":";
+			tmp = std::to_string(1 + ltm->tm_sec);
+			if (tmp.length() == 1)
+				tmp.insert(0, "0");
+			dateString += tmp;
+
+			return dateString;
+		}
+	};//end irl namespace
 	static moon_phase_t moon;
 	std::array<moon_phase_t,12> phase_ring_buffer = {
 		NEW_MOON, WANING_CRESCENT,THIRD_QUARTER,
@@ -109,11 +151,11 @@ namespace mods::date_time {
 		}
 	}
 	void increment_hour() {
-		static time_t last_call = time(0);
 #ifdef __MENTOC_TIMELOG__
+		static time_t last_call = time(0);
 		timelog("[+] diff = " + std::to_string(last_call - time(0)) + "\n");
-#endif
 		last_call = time(0);
+#endif
 		mods::date_time::hour += 1;
 		if(mods::date_time::hour == 25){
 			mods::date_time::hour = 0;
@@ -137,7 +179,7 @@ namespace mods::date_time {
 			CASE_MOON(THIRD_QUARTER);
 			CASE_MOON(WANING_CRESCENT);
 			default:
-				return "UNKNOWN";
+			return "UNKNOWN";
 		}
 	}
 };

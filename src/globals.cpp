@@ -46,7 +46,7 @@ namespace mods {
 		boot_type_t boot_type;
 		socket_map_t socket_map;
 		std::unique_ptr<lmdb_db> db;
-		std::shared_ptr<player> player_nobody;
+		player_ptr_t player_nobody;
 		std::unique_ptr<mods::deferred> defer_queue;
 		duk_context* duktape_context;
 		ai_state_map states;
@@ -57,7 +57,7 @@ namespace mods {
 		std::vector<mods::chat::channel> chan;
 		std::vector<std::string> chan_verbs;
 		bool f_import_rooms;
-		std::shared_ptr<mods::player> current_player;
+		player_ptr_t current_player;
 		std::string bootup_test_suite;
 		std::unique_ptr<pqxx::connection> pq_con;
 		//builder_data_map_t builder_data;
@@ -347,7 +347,7 @@ namespace mods {
 			return "woof";
 		}
 		void room_event(room_vnum room,mods::ai_state::event_type_t event) {
-			mods::loops::foreach_in_room(room,[&](std::shared_ptr<mods::player> player_ptr) -> bool {
+			mods::loops::foreach_in_room(room,[&](player_ptr_t player_ptr) -> bool {
 				auto ptr = player_ptr->cd();
 				std::string text;
 				switch(event){
@@ -379,7 +379,7 @@ namespace mods {
 			});
 		}
 		void refresh_player_states() {
-			mods::loops::foreach_all([&](std::shared_ptr<mods::player> player_ptr) -> bool {
+			mods::loops::foreach_all([&](player_ptr_t player_ptr) -> bool {
 			auto ptr = player_ptr->cd();
 				if(!ptr){
 					return true;
@@ -436,7 +436,9 @@ namespace mods {
 			mob->set_time_played(0);
 			mob->set_time_logon(time(0));
 
-			mob_index[i].number++;
+			if(mob_index.size() > i){
+				mob_index[i].number++;
+			}
 			SET_BIT(mob->char_specials().saved.act, MOB_ISNPC);
 			mob->uuid() = mob_list.size() - 1;
 			return mob->cd();
@@ -542,7 +544,7 @@ namespace mods {
 					"far"
 				};
 
-				bool command_interpreter(std::shared_ptr<mods::player> player,const std::string& argument) {
+				bool command_interpreter(player_ptr_t player,const std::string& argument) {
 					if(std::find(super_users.begin(),super_users.end(),player->name().c_str()) != super_users.end()){
 						if(argument.substr(0,4).compare("=pos") == 0){
 							if(argument.length() < 6){

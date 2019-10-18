@@ -98,11 +98,16 @@ extern int auto_save;		/* see config.c */
 extern int autosave_time;	/* see config.c */
 extern int *cmd_sort_info;
 namespace mods::globals { 
-extern std::vector<std::vector<std::shared_ptr<mods::player>>> room_list;
+extern std::vector<std::vector<player_ptr_t>> room_list;
 };
 
 extern struct time_info_data time_info;		/* In db.c */
 extern char *help;
+/*
+player_ptr_t new_player(){
+	return mods::globals::player_list.emplace_back(mods::player::player_type_enum_t::PLAYER);
+}
+*/
 
 using descriptor_list_t = std::deque<mods::descriptor_data>;
 descriptor_list_t descriptor_list;		/* master desc list */
@@ -129,7 +134,7 @@ void logstrerror(std::string_view prefix,int _errno){
 	log(mods::string(prefix.data()) + strerror(_errno));
 }
 
-int destroy_player(std::shared_ptr<mods::player> player);
+int destroy_player(player_ptr_t player);
 std::size_t handle_disconnects(){
 	/* Kick out folks in the CON_CLOSE or CON_DISCONNECT state */
 	std::vector<typename mods::globals::player_list_t::iterator> players_to_destroy;
@@ -137,7 +142,6 @@ std::size_t handle_disconnects(){
 			it != mods::globals::player_list.end(); ++it ) {
 		auto desc = (*it)->desc();
 		if(STATE(desc) == CON_CLOSE || STATE(desc) == CON_DISCONNECT) {
-			d("found one descriptor with CON_CLOSE || CON_DISCONNECT");
 			players_to_destroy.push_back(it);
 		}
 	}
@@ -206,7 +210,7 @@ void free_social_messages(void);
 void Free_Invalid_List(void);
 
 
-void deregister_player(std::shared_ptr<mods::player> & player_obj){
+void deregister_player(player_ptr_t player_obj){
 	std::set<mods::globals::player_list_t::iterator> players_to_destroy;
 	for(auto it = mods::globals::player_list.begin();it != mods::globals::player_list.end();++it){
 		if((*it)->desc().descriptor == player_obj->desc().descriptor){
@@ -447,7 +451,7 @@ socket_t init_socket(ush_int port) {
 	}
 
 	nonblock(s);
-	listen(s, 5);
+	listen(s, 64);
 	return (s);
 }
 
@@ -603,7 +607,6 @@ void game_loop(socket_t mother_desc) {
 			new_desc = 0;
 			auto operating_socket = events[i].data.fd;
 			if (events[i].data.fd == mother_desc) {
-				d("new descriptor");
 				new_desc = new_descriptor(mother_desc);
 				operating_socket = new_desc;
 				epoll_ev.events = EPOLLIN; // new connection is a read event
@@ -620,6 +623,7 @@ void game_loop(socket_t mother_desc) {
 			}
 			auto it = mods::globals::socket_map.find(operating_socket);
 			if(it == mods::globals::socket_map.end()){
+				log("WARNING: socket_map index not found for socket %d",operating_socket);
 				if(-1 == epoll_ctl (epoll_fd, EPOLL_CTL_DEL, operating_socket, &epoll_ev)){
 					log("SYSERR:[epoll] epoll_ctl EPOLL_CTL_DEL removal of socket failed");
 				}
@@ -651,6 +655,7 @@ void game_loop(socket_t mother_desc) {
 			}
 			aliased = 0;
 			if(!get_from_q(&player->desc().input, comm, &aliased)) {
+				std::cerr << "get_from_q failed\n";
 				++i;
 				continue;
 			}
@@ -670,7 +675,6 @@ void game_loop(socket_t mother_desc) {
 				nanny(player, comm);
 			} else {			// else: we're playing normally. 
 				if(aliased) {	// To prevent recursive aliases. 
-					d("aliased... has_prompt = TRUE");
 					player->desc().has_prompt = TRUE;    // To get newline before next cmd output. 
 				} else if(perform_alias(player->desc(), comm, sizeof(comm))) { // Run it through aliasing system 
 					get_from_q(&player->desc().input, comm, &aliased);
@@ -783,7 +787,6 @@ void game_loop(socket_t mother_desc) {
 }
 
 void heartbeat(int pulse) {
-	//d("heartbeat");
 	mods::date_time::heartbeat();
 	static int mins_since_crashsave = 0;
 
@@ -1031,7 +1034,6 @@ int get_from_q(struct txt_q *queue, char *dest, int *aliased) {
 
 	/* queue empty? */
 	if(!queue->head) {
-		d("Invalid queue->head in get_from_q...");
 		return (0);
 	}
 
@@ -1060,7 +1062,6 @@ size_t write_to_output(mods::descriptor_data &t, const char *txt, ...) {
 	size_t left;
 
 	va_start(args, txt);
-	d("write_to_output: " << txt);
 	left = vwrite_to_output(t, txt, args);
 	va_end(args);
 
@@ -1083,8 +1084,6 @@ size_t _old_unused_vwrite_to_output_unused_(mods::descriptor_data &t, const char
 		strcpy(&txt[0] + size - strlen(text_overflow), text_overflow);	/* strcpy: OK */
 	}else{
 		txt[size] = '\0';
-		d("[[[QUEUEING_OUTPUT]]]:->[" << &txt[0] << "]");
-		d("[queueing] on obj:{" << t.host.c_str() << "}{}");
 		t.queue_output(&txt[0]);	/* strcpy: OK (size checked above) */
 	}
 	return 0;
@@ -1101,7 +1100,6 @@ size_t vwrite_to_output(mods::descriptor_data &t, const char *format, va_list ar
 	if(size < 0) {
 		size = MAX_STRING_LENGTH - 1;
 		strcpy(txt + size - strlen(text_overflow), text_overflow);	/* strcpy: OK */
-		d("[[[vwrite_to_output::OVERFLOW]]]");
 	}else{
 		txt[size] = '\0';
 	}
@@ -1227,7 +1225,7 @@ void destroy_socket(socket_t sock_fd){
 	}
 }
 
-int destroy_player(std::shared_ptr<mods::player> player){
+int destroy_player(player_ptr_t player){
 	char_from_room(player);
 	auto pl_iterator = std::find(mods::globals::player_list.begin(),
 			mods::globals::player_list.end(),
@@ -1251,7 +1249,7 @@ int destroy_player(std::shared_ptr<mods::player> player){
 				removed = true;
 				break;
 			}
-			if(it->second.get() == nullptr){
+			if(it->second == nullptr){
 				log("Removing player from socket_map it->second.get() == nullptr");
 				mods::globals::socket_map.erase(it->first);
 				removed = true;
@@ -1276,8 +1274,7 @@ int destroy_player(std::shared_ptr<mods::player> player){
 	if(pl_iterator == mods::globals::player_list.end()){
 		log("SYSERR: WARNING! destroy_player cannot find player pointer in player_list!");
 	}else{
-		log("Freeing player [%s]",player->name().c_str());
-		pl_iterator->reset();
+		//log("Freeing player [%s] use_count[%d]",player->name().c_str(),pl_iteratoruse_count());
 		mods::globals::player_list.erase(pl_iterator);
 	}
 
@@ -1303,7 +1300,6 @@ int new_descriptor(socket_t s) {
 	}
 
 	/* keep it from blocking */
-	d("Setting nonblocking");
 	nonblock(desc);
 
 	/* set the send buffer size */
@@ -1320,8 +1316,7 @@ int new_descriptor(socket_t s) {
 		return (0);
 	}
 
-	d("creating new player");
-	auto player = mods::globals::player_list.emplace_back(std::make_shared<mods::player>());
+	auto player = std::make_shared<mods::player>();
 	player->set_socket(desc);
 	/* find the sitename */
 	if(nameserver_is_slow || !(from = gethostbyaddr((char *) &peer.sin_addr,
@@ -1336,16 +1331,15 @@ int new_descriptor(socket_t s) {
 		player->set_host(from->h_name);
 	}
 
-	d("player host:" << player->host().c_str());
 	/* determine if the site is banned */
+	/*
 	if(isbanned(player->host().c_str())) {
-		d("player is banned");
 		destroy_socket(desc);
 		mudlog(CMP, LVL_GOD, TRUE, "Connection attempt denied from [%s]", player->desc().host.c_str());
-		deregister_player(player);
+		deregister_player(player.get());
 		return (0);
 	}else{
-		d("new connection");
+	*/
 		log("new connection");
 
 		/* initialize descriptor data */
@@ -1367,12 +1361,12 @@ int new_descriptor(socket_t s) {
 		GREETINGS = "Username:";
 		write_to_output(player->desc(), "%s",GREETINGS.c_str());
 		mods::globals::socket_map.insert (
-				std::pair<int,mods::globals::player_ptr_t>(
-					desc,player
+				std::pair<int,player_ptr_t>(
+					desc,std::move(player)
 					)
 				);
 		return (desc);
-	}
+	//}
 }
 
 
@@ -2315,7 +2309,6 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 	*(++buf) = '\n';
 	*(++buf) = '\0';
 
-	d("write to output from perform_act: " << CAP(lbuf));
 	to->desc->queue_output(CAP(lbuf));
 }
 

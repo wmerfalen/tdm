@@ -105,7 +105,10 @@ int snipe_hit(*ch, struct char_data *victim, int type,uint16_t distance) {
 		snipe_tracking.append_child(node::create_sequence({
 			node::create_leaf(
 				[](argument_type mob) -> status{
-				auto find_results = mods::scan::los_find(std::make_shared<mods::player>(mob),std::make_shared<mods::player>(mob.mob_specials().snipe_tracking));
+				auto find_results = mods::scan::los_find(
+						std::make_shared<mods::player>(mob),
+						std::make_shared<mods::player>(mob.mob_specials().snipe_tracking)
+						);
 				if(find_results.found){
 				/**
 				 * Move find_results.dinstance steps toward the player

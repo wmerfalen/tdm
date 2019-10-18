@@ -70,16 +70,16 @@ debug: db_handle::get(key,value) called
 debug: db_handle::get(key,value) m_good okay
 
 Program received signal SIGSEGV, Segmentation fault.
-0x000055555568d5fe in std::_Rb_tree<int, std::pair<int const, std::shared_ptr<mods::player> >, std::_Select1st<std::pair<int const, std::shared_ptr<mods::player> > >, std::less<int>, std::allocator<std::pair<int const, std::shared_ptr<mods::player> > > >::_M_lower_bound (this=<optimized out>, __k=<error reading variable>, __y=0x5555559d1cc8 <mods::globals::socket_map+8>,
+0x000055555568d5fe in std::_Rb_tree<int, std::pair<int const, player_ptr_t >, std::_Select1st<std::pair<int const, player_ptr_t > >, std::less<int>, std::allocator<std::pair<int const, player_ptr_t > > >::_M_lower_bound (this=<optimized out>, __k=<error reading variable>, __y=0x5555559d1cc8 <mods::globals::socket_map+8>,
     __x=0x555555b2c000) at /usr/include/c++/7/bits/stl_tree.h:1872
 1872            if (!_M_impl._M_key_compare(_S_key(__x), __k))
 (gdb) bt
-#0  0x000055555568d5fe in std::_Rb_tree<int, std::pair<int const, std::shared_ptr<mods::player> >, std::_Select1st<std::pair<int const, std::shared_ptr<mods::player> > >, std::less<int>, std::allocator<std::pair<int const, std::shared_ptr<mods::player> > > >::_M_lower_bound (this=<optimized out>, __k=<error reading variable>,
+#0  0x000055555568d5fe in std::_Rb_tree<int, std::pair<int const, player_ptr_t >, std::_Select1st<std::pair<int const, player_ptr_t > >, std::less<int>, std::allocator<std::pair<int const, player_ptr_t > > >::_M_lower_bound (this=<optimized out>, __k=<error reading variable>,
     __y=0x5555559d1cc8 <mods::globals::socket_map+8>, __x=0x555555b2c000) at /usr/include/c++/7/bits/stl_tree.h:1872
-#1  std::_Rb_tree<int, std::pair<int const, std::shared_ptr<mods::player> >, std::_Select1st<std::pair<int const, std::shared_ptr<mods::player> > >, std::less<int>, std::allocator<std::pair<int const, std::shared_ptr<mods::player> > > >::lower_bound (__k=<error reading variable>, this=<optimized out>) at /usr/include/c++/7/bits/stl_tree.h:1187
-#2  std::map<int, std::shared_ptr<mods::player>, std::less<int>, std::allocator<std::pair<int const, std::shared_ptr<mods::player> > > >::lower_bound (__x=<error reading variable>,
+#1  std::_Rb_tree<int, std::pair<int const, player_ptr_t >, std::_Select1st<std::pair<int const, player_ptr_t > >, std::less<int>, std::allocator<std::pair<int const, player_ptr_t > > >::lower_bound (__k=<error reading variable>, this=<optimized out>) at /usr/include/c++/7/bits/stl_tree.h:1187
+#2  std::map<int, player_ptr_t, std::less<int>, std::allocator<std::pair<int const, player_ptr_t > > >::lower_bound (__x=<error reading variable>,
     this=<optimized out>) at /usr/include/c++/7/bits/stl_map.h:1234
-#3  std::map<int, std::shared_ptr<mods::player>, std::less<int>, std::allocator<std::pair<int const, std::shared_ptr<mods::player> > > >::operator[] (__k=<error reading variable>,
+#3  std::map<int, player_ptr_t, std::less<int>, std::allocator<std::pair<int const, player_ptr_t > > >::operator[] (__k=<error reading variable>,
     this=<optimized out>) at /usr/include/c++/7/bits/stl_map.h:489
 #4  char_to_room (ch=0x555555a39fe0, room=1) at handler.cpp:419
 #5  0x0000555555714806 in do_mbuild (ch=<optimized out>, argument=0x7fffffffca26 " instantiate 0", cmd=<optimized out>, subcmd=<optimized out>) at mods/builder.cpp:1187

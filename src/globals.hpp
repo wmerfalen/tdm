@@ -28,13 +28,17 @@
 #include <pqxx/pqxx>
 #include <unordered_map>
 
-#define MENTOC_PREAMBLE() auto player = IS_NPC(ch) ? std::make_shared<mods::player>(ch) : mods::globals::socket_map[ch->desc->descriptor];
+//#define MENTOC_PREAMBLE() auto player = IS_NPC(ch) ? std::make_shared<mods::player>(ch) : mods::globals::socket_map[ch->desc->descriptor];
+#define MENTOC_PREAMBLE() auto player = IS_NPC(ch) ? std::make_shared<mods::player>(ch) \
+																				: mods::globals::socket_map[ch->desc->descriptor];
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
 #define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \
 strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(a,"down") == 0)
 #define OPPOSITE_DIR(a) mods::globals::opposite_dir(a)
 #define DBSET(key,value){ mods::globals::ram_db[key] = value; }
 #define DBGET(key,value) { value = mods::globals::ram_db[key]; }
+#define LMDBSET(key,value) db_put(key,value);
+#define LMDBGET(key) db_get(key)
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
 #ifdef __MENTOC_DEBUG__
 #define d(a) std::cerr << "[debug]: " << a << "\n" << std::flush;
@@ -54,17 +58,17 @@ extern char_data* character_list;
 	memset(&((ch)->affected),0,sizeof((ch)->affected));\
 	(ch)->next = character_list;\
 	character_list = ch;
+
+using player_ptr_t = std::shared_ptr<mods::player>;
 namespace mods {
 	namespace lmdb { 
 		struct _db_handle;
 	};
     namespace globals {
-			using player_ptr_t = std::shared_ptr<mods::player>;
-			using player_list_t = std::vector<player_ptr_t>;
+		using player_list_t = std::vector<player_ptr_t>;
 		using lmdb_db = mods::lmdb::_db_handle;
 		using socket_map_t = std::map<int,player_ptr_t>;
-		using room_list_t = std::vector<std::vector<std::shared_ptr<mods::player>>>;
-		//using builder_data_map_t = std::map<player_ptr_t,std::shared_ptr<builder_data_t>>;
+		using room_list_t = std::vector<std::vector<player_ptr_t>>;
 		enum boot_type_t { BOOT_DB,BOOT_HELL };
 		bool acl_allowed(char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd);
 		void init(int,char**);
@@ -75,7 +79,7 @@ namespace mods {
 		extern boot_type_t boot_type;
 		extern map_object_list obj_map;
 		extern socket_map_t socket_map;
-		extern std::shared_ptr<mods::player> player_nobody;
+		extern player_ptr_t player_nobody;
 		extern std::unique_ptr<mods::deferred> defer_queue;
 		extern std::unique_ptr<lmdb_db> db;
 		extern std::map<const char*,player_ptr_t> player_name_map;
@@ -87,7 +91,7 @@ namespace mods {
 		extern std::vector<mods::chat::channel> chan;
 		extern std::vector<std::string> chan_verbs;
 		extern bool f_import_rooms;
-		extern std::shared_ptr<mods::player> current_player;
+		extern player_ptr_t current_player;
 		extern std::string bootup_test_suite;
 		extern std::unique_ptr<pqxx::connection> pq_con;
 		extern std::unordered_map<std::string,std::string> ram_db;
@@ -110,7 +114,7 @@ namespace mods {
     	std::string color_eval(std::string final_buffer);
 		std::string replace_all(std::string str, const std::string& from, const std::string& to);
 		const char* say_random(const mods::ai_state::event_type_t&);
-		bool command_interpreter(std::shared_ptr<mods::player>,const std::string& argument);
+		bool command_interpreter(player_ptr_t,const std::string& argument);
 		void post_command_interpreter(char_data *ch, char* argument);
 		int dir_int(char);
 		namespace rooms {

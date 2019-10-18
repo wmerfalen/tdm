@@ -8,13 +8,13 @@
 namespace mods::classes {
 	struct sniper : base {
 		/*
-		static std::shared_ptr<sniper> create(std::shared_ptr<mods::player> &player);
-		static int16_t destroy(std::shared_ptr<mods::player>& player);
+		static std::shared_ptr<sniper> create(player_ptr_t &player);
+		static int16_t destroy(player_ptr_t& player);
 		*/
 		types kind() {
 			return types::SNIPER;
 		}
-		using player_ptr = std::shared_ptr<mods::player>;
+		using player_ptr = player_ptr_t;
 		player_ptr player_obj;
 
 		/* constructors and destructors */

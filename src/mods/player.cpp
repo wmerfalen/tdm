@@ -13,6 +13,7 @@
 #include <algorithm>
 #include "util.hpp"
 #include "scan.hpp"
+#include "date-time.hpp"
 /**
  * TODO: All these stc* functions need to be altered to accomodate
  * the new player_type_enum_t values. If output is to be muted, then
@@ -108,7 +109,7 @@ namespace mods {
 		return buffer;
 	}
 
-	void player::set_shared_ptr(std::shared_ptr<mods::player>& self_ptr) {
+	void player::set_shared_ptr(player_ptr_t& self_ptr) {
 		std::cerr << "[deprecated] set_shared_ptr\n";
 		return;
 		/*
@@ -225,7 +226,10 @@ namespace mods {
 			m_set_time();
 	};
 	bool player::can_snipe(char_data *target) {
-		return mods::scan::los_find(std::make_shared<mods::player>(cd()),std::make_shared<mods::player>(target)).found;
+		return mods::scan::los_find(
+				std::make_shared<mods::player>(cd()),
+				std::make_shared<mods::player>(target)
+				).found;
 	}
 	void player::page(int pg) {
 		assert(pg >= 0);
@@ -552,6 +556,8 @@ namespace mods {
 		it->character->has_desc = true;
 	}
 	void player::init(){
+		m_histfile_on = false;
+		m_histfile_key.clear();
 		m_weapon_type = 0;
 		m_weapon_flags = 0;
 		m_authenticated = false;
@@ -852,6 +858,53 @@ namespace mods {
 	/* Javascript functions */
 	obj_data_ptr_t player::sniper_rifle(){
 		return cl_sniper()->rifle()->obj();
+	}
+	void player::start_histfile() {
+		m_histfile_key = std::to_string(get_db_id()) + "|histfile|" + mods::date_time::irl::epoch_string() + "|";
+		m_histfile_on = true;
+	}
+
+	void player::histfile(std::string_view line) {
+		if(m_histfile_on){
+			LMDBSET(m_histfile_key + std::to_string(m_histfile_index++),line.data());
+		}
+	}
+	void player::stop_histfile() {
+		m_histfile_on = false;
+		m_histfile_key = "";
+	}
+	player::~player() {
+		std::cerr << "[~player] " << m_name.c_str() << "\n";
+		stop_histfile();
+		m_weapon_type = 0;
+		m_weapon_flags = 0;
+		m_authenticated = false;
+		set_god_mode(false);
+		set_imp_mode(false);
+		set_bui_mode(false);
+		if(m_desc){
+			m_desc.reset();
+		}
+		m_name.clear();
+		m_class = CLASS_UNDEFINED;
+		m_class_capability = {};
+		m_executing_js = false;
+		if(m_char_data){
+			m_char_data = nullptr;
+		}
+		std::fill(m_weapon_cooldown.begin(),m_weapon_cooldown.end(),0);
+		m_weapon_set = {};
+		m_do_paging = m_capture_output = false;
+		m_captured_output.clear();
+		m_page = 0;
+		m_current_page = 0;
+		m_current_page_fragment.clear();
+		m_pages.clear();
+		m_class_info = {};
+		if(m_shared_ptr){
+			m_shared_ptr.reset();
+		}
+		m_lense_type = NORMAL_SIGHT;
 	}
 };
 

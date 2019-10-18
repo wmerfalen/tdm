@@ -5,7 +5,7 @@
 #include "player.hpp"
 
 namespace mods::pfind {
-	mods::globals::player_ptr_t by_name(const char* player_name);
+	player_ptr_t by_name(const char* player_name);
 };
 
 #endif

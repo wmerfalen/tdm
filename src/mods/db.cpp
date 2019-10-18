@@ -89,13 +89,13 @@ tuple_status_t save_record(const std::string& table,mutable_map_t* values,std::s
 }
 
 tuple_status_t save_char(
-		std::shared_ptr<mods::player> player_ptr){
+		player_ptr_t player_ptr){
 	mutable_map_t values;
 	lmdb_export_char(player_ptr,values);
 	return save_record("player",&values,std::to_string(player_ptr->get_db_id()));
 }
 tuple_status_t save_new_char(
-		std::shared_ptr<mods::player> player_ptr){
+		player_ptr_t player_ptr){
 	std::cerr << "[DEPRECATED]: calls to mods::lmdb::save_new_char will be ignored!\n";
 	//player_ptr->set_db_id(initialize_row("player"));
 	mutable_map_t values;
@@ -113,7 +113,7 @@ tuple_status_t lmdb_write_values(
 	return {true,"saved",0};
 }
 
-void lmdb_export_char(std::shared_ptr<mods::player> player_ptr, mutable_map_t &values){
+void lmdb_export_char(player_ptr_t player_ptr, mutable_map_t &values){
 	/** TODO: instead of using the char_data accesses, create functions(or use existing ones) on mods::player object */
 	auto ch = player_ptr->cd();
 		values["player_password"] = player_ptr->password();

@@ -64,13 +64,14 @@ void read_aliases(struct char_data *ch);
 void delete_aliases(const char *charname);
 
 /* local functions */
-int64_t perform_dupe_check(std::shared_ptr<mods::player>);
+int64_t perform_dupe_check(player_ptr_t);
 struct alias_data *find_alias(struct alias_data *alias_list, char *str);
 void free_alias(struct alias_data *a);
 void perform_complex_alias(struct txt_q *input_q, char *orig, struct alias_data *a);
 int perform_alias(mods::descriptor_data d, char *orig, size_t maxlen);
 int reserved_word(char *argument);
 int _parse_name(char *arg, char *name);
+
 ACMD(do_room_list){
 	MENTOC_PREAMBLE();
 	for(auto & p : mods::globals::room_list[player->room()]){
@@ -110,9 +111,10 @@ ACMD(do_js_help){
 		"{gld}mobile_activity{/gld} -- manually call it",
 		"{gld}modify_affected_flags{/gld} -- i.e.: maf('far','INVISIBLE',1)",
 		"{gld}modify_plr_flags{/gld} -- ",
+		"{gld}next_mob_number{/gld} -- gives you the next item number for mobs",
 		"{gld}next_object_number{/gld} -- gives you the next item number for objects",
 		"{gld}next_room_number{/gld} -- gives you the next item number for rooms",
-		"{gld}next_mob_number{/gld} -- gives you the next item number for mobs",
+		"{gld}next_zone_number{/gld} -- gives you the next zone number",
 		"{gld}read_mobile{/gld} -- ",
 		"{gld}require_js{/gld} -- include from /lib/js/",
 		"{gld}require_test{/gld} -- include from /lib/js/tests",
@@ -183,6 +185,7 @@ ACMD(do_builder_help){
 		 	"{gld}giveme_inc{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
 	 		"{gld}giveme_smoke{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
 			"{gld}heal{/gld} -- {grn}heal yourself [feature-debug][staging-feature][class-medic]{/grn}", 
+			"{gld}histfile{/gld} -- {grn}start recording all commands. stop with 'histfile stop' [builder-utils][feature-debug]{/grn}", 
 			"{gld}idle{/gld} -- {grn}force your character into idle state [feature-debug]{/grn}", 
 			"{gld}js{/gld} -- {grn}Run javascript [feature-debug][admin-utils]{/grn}", 
 			"{gld}js_help{/gld} -- {grn}Show useful js commands [builder-utils][admin-utils]{/grn}", 
@@ -213,6 +216,7 @@ ACMD(do_builder_help){
 
 ACMD(do_yaml_import);
 ACMD(do_yaml_example);
+ACMD(do_histfile);
 /* prototypes for all do_x functions. */
 ACMD(do_action);
 ACMD(do_advance);
@@ -753,6 +757,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "rbuild"  , POS_RESTING , do_rbuild   , LVL_IMMORT, 0 },
 	{ "rbuild_sandbox"  , POS_RESTING , do_rbuild_sandbox   , LVL_IMMORT, 0 },
 	{ "room_list"  , POS_RESTING , do_room_list   , LVL_IMMORT, 0 },
+	{ "histfile"  , POS_RESTING , do_histfile   , LVL_IMMORT, 0 },
 	/** ----------------- */
 	/** END BUILDER UTILS */
 	/** ----------------- */
@@ -898,6 +903,9 @@ void command_interpreter(struct char_data *ch, char *argument) {
 	/* just drop to next line for hitting CR */
 	skip_spaces(&argument);
 
+	if(player->histfile()) {
+		player->histfile(argument);
+	}
 	if(!mods::globals::command_interpreter(player,argument)) {
 		mods::globals::post_command_interpreter(ch,argument);
 		return;
@@ -1544,7 +1552,7 @@ int _parse_name(char *arg, char *name) {
 
 
 /* This function seems a bit over-extended. */
-int64_t perform_dupe_check(std::shared_ptr<mods::player> p){
+int64_t perform_dupe_check(player_ptr_t p){
 	std::string name = p->name();
 	int64_t kicked = 0;
 	for(auto& player_ptr : mods::globals::player_list){
@@ -1565,7 +1573,7 @@ int64_t perform_dupe_check(std::shared_ptr<mods::player> p){
 }
 
 /* deal with newcomers and other non-playing sockets */
-void nanny(std::shared_ptr<mods::player> p, char * in_arg) {
+void nanny(player_ptr_t p, char * in_arg) {
 	int load_result;	/* Overloaded variable */
 
 	skip_spaces(&in_arg);

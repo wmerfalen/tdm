@@ -22,21 +22,25 @@ namespace mods { struct extra_desc_data; };
 #define MENTOC_OBS(i) obj->i = get_strval(#i).value_or(obj->i);
 #define MENTOC_OBS2(i,a) obj->i = get_strval(#a).value_or(obj->i.c_str());
 using objtype = mods::object::type;
-using shrd_ptr_player_t = std::shared_ptr<mods::player>;
+using player_ptr_t = std::shared_ptr<mods::player>;
 using jxcomp = mods::jx::compositor;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
+
+extern mob_vnum next_mob_number();
+extern room_vnum next_room_number();
+extern zone_vnum next_zone_number();
 extern std::tuple<int16_t,std::string> parse_sql_zones();
-void r_error(const shrd_ptr_player_t & player,std::string_view msg){
-	mods::builder::report_error<shrd_ptr_player_t>(player,msg.data());
+void r_error(const player_ptr_t & player,std::string_view msg){
+	mods::builder::report_error<player_ptr_t>(player,msg.data());
 }
-void r_success(const shrd_ptr_player_t & player,std::string_view msg){
-	mods::builder::report_success<shrd_ptr_player_t>(player,msg.data());
+void r_success(const player_ptr_t & player,std::string_view msg){
+	mods::builder::report_success<player_ptr_t>(player,msg.data());
 }
-void r_status(const shrd_ptr_player_t & player,std::string_view msg){
-	mods::builder::report_status<shrd_ptr_player_t>(player,msg.data());
+void r_status(const player_ptr_t & player,std::string_view msg){
+	mods::builder::report_status<player_ptr_t>(player,msg.data());
 }
 namespace mods::builder {
-	bool has_flag(std::shared_ptr<mods::player> player,uint64_t flag){
+	bool has_flag(player_ptr_t player,uint64_t flag){
 		return player->has_flag(mods::flags::chunk_type_t::BUILDER,flag);
 	}
 #define MENTOC_WEAPON(name) {mods::weapon::name,#name}
@@ -259,10 +263,11 @@ namespace mods::builder {
 	 */
 	sandbox_list_t sandboxes;
 	sandbox_data_t::sandbox_data_t(
-			std::shared_ptr<mods::player> player,
+			player_ptr_t player,
 			std::string_view name,
-			room_vnum starting_room_number){
-		new_sandbox(player,name,starting_room_number);
+			room_vnum starting_room_number,
+			zone_vnum zone_virtual_number){
+		new_sandbox(player,name,starting_room_number,zone_virtual_number);
 	}
 	sandbox_data_t::sandbox_data_t() : m_name("") {}
 	void sandbox_data_t::set_name(std::string_view n){
@@ -272,14 +277,15 @@ namespace mods::builder {
 		return m_name;
 	}
 	int8_t sandbox_data_t::new_sandbox(
-			std::shared_ptr<mods::player> player,
+			player_ptr_t player,
 			std::string_view name,
-			room_vnum starting_room_number){
+			room_vnum starting_room_number,
+			zone_vnum zone_virtual_number){
 		m_player = player;
 		m_builder_data = std::make_shared<builder_data_t>();
 		m_name = name;
 		bool status = save_zone_to_db(
-				starting_room_number,
+				zone_virtual_number,
 				name,
 				starting_room_number,
 				starting_room_number + 100,
@@ -308,7 +314,7 @@ namespace mods::builder {
 		return 0;
 	}
 	/* Factory method to generate a room for us */
-	room_data new_room(std::shared_ptr<mods::player> player,int direction);
+	room_data new_room(player_ptr_t player,int direction);
 	bool flush_to_db(struct char_data *ch,room_vnum room);
 	std::optional<obj_data*> instantiate_object_by_index(int index) {
 		std::size_t i = index;
@@ -334,7 +340,7 @@ namespace mods::builder {
 		return std::nullopt;
 	}
 
-	inline void initialize_builder(std::shared_ptr<mods::player> player){
+	inline void initialize_builder(player_ptr_t player){
 		//if(!player->has_builder_data()){
 		//	std::cerr << "initialize_builder: creating shared_ptr\n";
 		//	player->builder_data = std::make_shared<builder_data_t>();
@@ -343,7 +349,7 @@ namespace mods::builder {
 		//}
 		player->set_bui_mode(true);
 	}
-	void pave_to(std::shared_ptr<mods::player> player,room_data * current_room,int direction) {
+	void pave_to(player_ptr_t player,room_data * current_room,int direction) {
 		initialize_builder(player);
 		r_status(player,
 				std::string("start_room: ") + 
@@ -410,7 +416,7 @@ namespace mods::builder {
 
 		return {true,"Saved all zone commands successfully"};
 	}
-	bool save_zone_to_db(int64_t virtual_number,std::string_view name,int room_start,int room_end,int lifespan,int reset_mode) {
+	bool save_zone_to_db(zone_vnum virtual_number,std::string_view name,int room_start,int room_end,int lifespan,int reset_mode) {
 		try{
 			auto txn2 = txn();
 			sql_compositor comp("room_direction_data",&txn2);
@@ -612,7 +618,7 @@ namespace mods::builder {
 		mods::globals::register_room(world_top);
 		return 0;
 	}
-	room_data new_room(std::shared_ptr<mods::player> player,int direction) {
+	room_data new_room(player_ptr_t player,int direction) {
 		world.emplace_back();
 		mods::globals::register_room(world.size());
 		world.back().init();
@@ -1060,7 +1066,9 @@ ACMD(do_rbuild_sandbox) {
 			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {wht}rbuild_sandbox{/wht} {grn}help{/grn}\r\n" <<
 			"  |:: (this help menu will show up)\r\n" <<
-			" {grn}rbuild_sandbox{/grn} {red}new <name> <room_number_start>{/red}\r\n" <<
+			" {grn}rbuild_sandbox{/grn} {red}new <name> <room_number_start> <zone_virtual_number>{/red}\r\n" <<
+			" {grn}rbuild_sandbox{/grn} {red}pave on <name>{/red}\r\n" <<
+			" {grn}rbuild_sandbox{/grn} {red}pave off{/red}\r\n" <<
 			" {grn}rbuild_sandbox{/grn} {red}list{/red}\r\n" <<
 			" {grn}rbuild_sandbox{/grn} {red}delete <id>{/red}\r\n" <<
 			"\r\n";
@@ -1069,16 +1077,67 @@ ACMD(do_rbuild_sandbox) {
 	}
 
 	{
+		auto args = mods::util::subcmd_args<5,args_t>(argument,"pave");
+
+		if(args.has_value()) {
+			auto cmd_args = args.value();
+			if(cmd_args.size() == 3 && cmd_args[1].compare("on") == 0){
+				/**
+				 * cmd_args will be: [0] => pave, [1] => <on|off> <name>
+				 */
+				mods::builder::sandbox_data_t sandbox;
+				auto zone_id = next_zone_number();
+				auto room_id = next_room_number();
+				auto status = sandbox.new_sandbox(player,
+						cmd_args[2],
+						room_id,
+						zone_id
+				);
+				if(status < 0){
+					r_error(player,std::string("Failed to create sandbox! Error: #") + std::to_string(status));
+					return;
+				}
+				mods::builder::sandboxes[player->name().c_str()].emplace_back(std::move(sandbox));
+				player->set_flag(mods::flags::chunk_type_t::BUILDER,mods::builder::HAS_SANDBOX);
+				player->builder_data->room_pave_mode = true;
+				player->builder_data->room_pavements.start_room = room_id;
+				player->builder_data->room_pavements.zone_id = zone_id;
+				if(!mods::builder::save_zone_to_db(
+							zone_id,
+							("zone_" + std::to_string(zone_id)).data(),
+							room_id,
+							room_id + 100,
+							100,
+							2)){
+						r_error(player,"Couldn't find zone, nor could we create one automatically.");
+						/** TODO: transactional behaviour wanted here. (rollback) */
+						return;
+				}
+				r_success(player,"Sandbox created");
+				return;
+			}//end pave on
+			if(cmd_args.size() == 2 && cmd_args[1].compare("off") == 0){
+				player->builder_data->room_pave_mode = false;
+				r_success(player,"Turned off pave mode. Don't forget to run rbuild_sandbox save <id>.");
+			}
+		}
+	}//end pave block
+	{
 		auto args = mods::util::subcmd_args<4,args_t>(argument,"new");
 
 		if(args.has_value()) {
 			auto cmd_args = args.value();
-			if(cmd_args.size() == 3){
+			if(cmd_args.size() == 4){
 				/**
-				 * cmd_args will be: [0] => new, [1] => <name>, [2] => <starting_room_number>
+				 * cmd_args will be: [0] => new, [1] => <name>, 
+				 * [2] => <starting_room_number>, [3] => <zone_virtual_number>
 				 */
 				mods::builder::sandbox_data_t sandbox;
-				auto status = sandbox.new_sandbox(player,cmd_args[1],mods::util::stoi<int>(cmd_args[2]));
+				auto status = sandbox.new_sandbox(player,
+						cmd_args[1],
+						mods::util::stoi<int>(cmd_args[2]),
+						mods::util::stoi<int>(cmd_args[3])
+				);
 				if(status < 0){
 					r_error(player,std::string("Failed to create sandbox! Error: #") + std::to_string(status));
 					return;
@@ -1089,18 +1148,18 @@ ACMD(do_rbuild_sandbox) {
 					return;
 				}
 			}else{
-				r_error(player,"Invalid arguments. Arguments should be: new <name> <starting_room_number>");
+				r_error(player,"Invalid arguments. Arguments should be: new <name> <starting_room_number> <zone_virtual_number>");
 				return;
 			}
 		}
-	}
+	}//end new block
 
 	mods::builder_util::list_object_vector<std::deque<mods::builder::sandbox_data_t>,std::string>(
 			player,
 			std::string(argument),
 			mods::builder::sandboxes[player->name().c_str()],
 			[](mods::builder::sandbox_data_t sandbox) -> std::string {
-			return std::string(sandbox.name());
+				return std::string(sandbox.name());
 			}
 			);
 
@@ -1124,8 +1183,8 @@ ACMD(do_rbuild_sandbox) {
 			}
 		}
 	}
-
 }
+
 ACMD(do_sbuild) {
 	MENTOC_PREAMBLE();
 	mods::builder::initialize_builder(player);
@@ -3340,7 +3399,7 @@ ACMD(do_zbuild) {
 			// " rbuildzone <new> <virtual_number> <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>\r\n" <<
 
 			if(!mods::builder::save_zone_to_db(
-						mods::util::stoi<int64_t>(arglist[0]),
+						mods::util::stoi<zone_vnum>(arglist[0]),
 						arglist[3],
 						mods::util::stoi<int>(arglist[1]),
 						mods::util::stoi<int>(arglist[2]),
@@ -4181,11 +4240,6 @@ ACMD(do_rbuild) {
 				return;
 			}
 
-			if(real_zone(zone_id.value()) == NOWHERE) {
-				r_error(player,"Couldn't find a zone id with the virtual number you specified.");
-				return;
-			}
-
 			if(!starting_room_number.has_value()) {
 				r_error(player,"Invalid starting room number");
 				return;
@@ -4193,6 +4247,22 @@ ACMD(do_rbuild) {
 				player->builder_data->room_pave_mode = true;
 				player->builder_data->room_pavements.start_room = starting_room_number.value();
 				player->builder_data->room_pavements.zone_id = zone_id.value();
+			}
+
+			if(real_zone(zone_id.value()) == NOWHERE) {
+					if(!mods::builder::save_zone_to_db(
+							zone_id.value(),
+							("zone_" + arg_vec[3]).data(),
+							starting_room_number.value(),
+							starting_room_number.value() + 100,
+							100,
+							2)){
+						r_error(player,"Couldn't find zone, nor could we create one automatically.");
+						return;
+					}else{
+						/** TODO: transactional behaviour wanted here. (rollback) */
+						r_success(player,"Zone automatically created");
+					}
 			}
 
 			r_status(player,"Starting pave mode. You can start moving around now. To stop, type 'rbuild pave off'");

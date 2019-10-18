@@ -112,5 +112,68 @@ namespace mods::weapon {
 //		type::explosive type;
 //	};
 };
+using weapon_rifle_t = mods::weapon::base::rifle;
+using weapon_explosive_t = mods::weapon::base::explosive;
+using weapon_drone_t = mods::weapon::base::drone;
+namespace mods::weapon {
+	static inline std::string to_string(weapon_rifle_t rifle_type){
+#define MENTOC_TO_STR(a){ case weapon_rifle_t::a: return #a; }
+		switch(rifle_type){
+			MENTOC_TO_STR(SHOTGUN);
+			MENTOC_TO_STR(ASSAULT_RIFLE);
+			MENTOC_TO_STR(SUB_MACHINE_GUN);
+			case weapon_rifle_t::SNIPER: return "SNIPER RIFLE";
+			MENTOC_TO_STR(HANDGUN);
+			MENTOC_TO_STR(MACHINE_PISTOL);
+			MENTOC_TO_STR(LIGHT_MACHINE_GUN);
+			default: return "<unknown>";
+#undef MENTOC_TO_STR
+		}
+	}
+	static inline std::string to_string(weapon_explosive_t explosive_type){
+#define MENTOC_TO_STR(a){ case weapon_explosive_t::a: return #a; }
+		switch(explosive_type){
+			MENTOC_TO_STR(FRAG_GRENADE);
+			MENTOC_TO_STR(INCENDIARY_GRENADE);
+			MENTOC_TO_STR(REMOTE_EXPLOSIVE);
+			MENTOC_TO_STR(REMOTE_CHEMICAL);
+			MENTOC_TO_STR(EMP_GRENADE);
+			MENTOC_TO_STR(CLAYMORE_MINE);
+			MENTOC_TO_STR(SMOKE_GRENADE);
+			MENTOC_TO_STR(FLASH_BANG);
+			default: return "<unknown>";
+#undef MENTOC_TO_STR
+		}
+	}
+	static inline std::string to_string(weapon_drone_t drone_type){
+#define MENTOC_TO_STR(a){ case weapon_drone_t::a: return #a; }
+		switch(drone_type){
+			MENTOC_TO_STR(GROUND_DRONE);
+			MENTOC_TO_STR(AERIAL_DRONE);
+			MENTOC_TO_STR(AQUATIC_DRONE);
+			default: return "<unknown>";
+#undef MENTOC_TO_STR
+		}
+	}
+	static inline bool has_clip(weapon_data_t* weapon){
+		if(!weapon){ return false; }
+		if(weapon->type == type_t::RIFLE){
+			switch(weapon->base){
+				case weapon_rifle_t::SHOTGUN:
+				case weapon_rifle_t::ASSAULT_RIFLE:
+				case weapon_rifle_t::SUB_MACHINE_GUN:
+				case weapon_rifle_t::SNIPER:
+				case weapon_rifle_t::HANDGUN:
+				case weapon_rifle_t::MACHINE_PISTOL:
+				case weapon_rifle_t::LIGHT_MACHINE_GUN:
+					return true;
+				default:
+					return false;
+			}
+		}
+		return false;
+	}
+
+};
 #endif
 

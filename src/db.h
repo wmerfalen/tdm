@@ -101,13 +101,13 @@
 /* public procedures in db.c */
 using aligned_int_t = uint64_t;
 using tuple_status_t  = std::tuple<bool,std::string,aligned_int_t>;
-bool player_exists(std::shared_ptr<mods::player> player_ptr);
-bool parse_sql_player(std::shared_ptr<mods::player>);
+bool player_exists(player_ptr_t player_ptr);
+bool parse_sql_player(player_ptr_t);
 bool login(std::string_view user_name,std::string_view password);
 void  boot_hell(void);
 void	boot_db(void);
 void	destroy_db(void);
-bool char_exists(std::shared_ptr<mods::player>);
+bool char_exists(player_ptr_t);
 bool char_exists(const std::string&);
 bool char_exists(const std::string&,aligned_int_t&);
 int	create_entry(const char *name);
@@ -130,9 +130,9 @@ void	char_to_store(struct char_data *ch, struct char_file_u *st);
 void	store_to_char(struct char_file_u *st, struct char_data *ch);
 bool	load_char(const std::string& name);
 namespace mods::db { 
-extern tuple_status_t	save_char(std::shared_ptr<mods::player>);
+extern tuple_status_t	save_char(player_ptr_t);
 };
-void	init_char(std::shared_ptr<mods::player>);
+void	init_char(player_ptr_t);
 struct char_data* create_char(void);
 struct char_data *read_mobile(mob_vnum nr, int type);
 int	vnum_mobile(char *searchname, struct char_data *ch);
@@ -289,11 +289,11 @@ extern char	*NOEFFECT;
  * inside this db namespace.
  */
 namespace db {
-	int16_t save_char(std::shared_ptr<mods::player>);
-	int16_t save_new_char(std::shared_ptr<mods::player>);
-	int16_t save_char_prefs(std::shared_ptr<mods::player>);
-	int16_t load_char_prefs(std::shared_ptr<mods::player>);
-	int16_t load_char_pkid(std::shared_ptr<mods::player>);
+	int16_t save_char(player_ptr_t);
+	int16_t save_new_char(player_ptr_t);
+	int16_t save_char_prefs(player_ptr_t);
+	int16_t load_char_prefs(player_ptr_t);
+	int16_t load_char_pkid(player_ptr_t);
 };
 
 #endif	//header inclusion protection

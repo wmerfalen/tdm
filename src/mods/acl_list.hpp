@@ -8,7 +8,7 @@
 #include "player.hpp"
 
 namespace mods::acl_list {
-		void set_access_rights(std::shared_ptr<mods::player>,const std::string& group,bool status);
+		void set_access_rights(player_ptr_t,const std::string& group,bool status);
 };
 
 

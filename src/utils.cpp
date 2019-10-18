@@ -773,7 +773,7 @@ int room_is_dark(room_rnum room) {
 }
 
 
-room_rnum& GET_WAS_IN(std::shared_ptr<mods::player>& player){
+room_rnum& GET_WAS_IN(player_ptr_t& player){
 	return player->cd()->was_in_room;
 }
 room_rnum& GET_WAS_IN(char_data* ch){

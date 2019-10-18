@@ -8,7 +8,7 @@ namespace mods::classes {
 		types kind() {
 			return types::MARINE;
 		}
-		typedef std::shared_ptr<mods::player> player_ptr;
+		typedef player_ptr_t player_ptr;
 		player_ptr player_obj;
 		/* constructors and destructors */
 		marine() = delete;

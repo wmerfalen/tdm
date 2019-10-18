@@ -26,13 +26,14 @@ namespace mods {
 #include "acl_list.hpp"
 #include "overhead_map.hpp"
 #include "weapon.hpp"
+#include <cstdio> // for FILE*
 
 #define WEAPON_SET_NUM 1
 extern size_t send_to_char(char_data *ch, const char *messg, ...);
 extern room_rnum real_room(room_vnum);
 namespace mods::acl_list {
 extern void set_access_rights(
-					std::shared_ptr<mods::player>,const std::string&,bool);
+					player_ptr_t,const std::string&,bool);
 };
 namespace mods::classes {
 	struct medic;
@@ -66,10 +67,10 @@ namespace mods {
 			player(char_data*);
 			player(mods::player*);
 			player(player_type_enum_t);
-			~player() = default;
+			~player();
 			void init();
 			friend void mods::acl_list::set_access_rights(
-					std::shared_ptr<mods::player>,const std::string&,bool);
+					player_ptr_t,const std::string&,bool);
 
 			void set_db_id(aligned_int_t id);
 			aligned_int_t get_db_id() const;
@@ -129,7 +130,7 @@ namespace mods {
 
 			/* setters */
 			void set_cd(char_data* ch);
-			void set_shared_ptr(std::shared_ptr<mods::player>&);
+			void set_shared_ptr(player_ptr_t&);
 
 			time_type_t time() const;
 
@@ -495,6 +496,10 @@ namespace mods {
 			std::shared_ptr<mods::classes::sniper> 	cl_sniper();
 			std::shared_ptr<mods::classes::medic> 	cl_medic();
 			obj_data_ptr_t sniper_rifle();
+			void start_histfile();
+			bool histfile() const { return m_histfile_on; }
+			void histfile(std::string_view);
+			void stop_histfile();
 
 		protected:
 			lense_type_t m_lense_type;
@@ -536,6 +541,9 @@ namespace mods {
 			weapon_type_t m_weapon_flags;
 			std::shared_ptr<mods::classes::sniper> m_class_sniper;
 			std::shared_ptr<mods::classes::medic> m_class_medic;
+			std::string m_histfile_key;
+			bool m_histfile_on;
+			uint32_t m_histfile_index;
 	};
 };
 

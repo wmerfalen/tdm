@@ -55,10 +55,10 @@ struct char_data *get_char_num(mob_rnum nr);
 
 void	char_from_room(char_data *ch);
 void	char_to_room(char_data *ch, room_rnum room);
-static inline void	char_from_room(std::shared_ptr<mods::player> player){
+static inline void	char_from_room(player_ptr_t player){
 	char_from_room(player->cd());
 }
-static inline void	char_to_room(std::shared_ptr<mods::player> player, room_rnum room) {
+static inline void	char_to_room(player_ptr_t player, room_rnum room) {
 	char_to_room(player->cd(),room);
 }
 void	extract_char(struct char_data *ch);
