@@ -27,7 +27,7 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-DMENTOC_NO_CONSTEXPR_CONF=1 -D__MENTOC_USE_PQXX_RESULT__=1 \
 	-Wno-sign-compare -I$(yamlcpp) -L$(yamllib) \
 	-fPIC
-LIBS = $(opnssl) -lc -lm -lpqxx -lpq -lssl -lcrypto
+LIBS = $(opnssl) -lc -lm -lpqxx -lpq -lssl -lcrypto -l$(yamlcpp_object)
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
 					 act.wizard alias ban boards bsd-snprintf castle \
@@ -48,7 +48,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/randomized-items mods/auto-login mods/date-time \
 					 mods/world-configuration mods/debug act.debug mods/pfind \
 					 mods/orm/chargen mods/weapons/sniper-rifle mods/classes/sniper \
-					 mods/orm/quotes act.builder mods/orm/base 
+					 mods/orm/quotes act.builder mods/orm/base mods/yaml
 
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
@@ -64,7 +64,9 @@ clean:
 		rm -f $(builddir)/mods/testing/lmdb/*.d 
 
 $(builddir):
-	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/orm/
+	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb \
+		$(builddir)/sql $(builddir)/mods/orm/ \
+		$(builddir)/mods/weapons/
 
 $(builddir)/%.o: %.cpp
 	$(CC) -c $(FLAGS) -o $@ $<

@@ -243,7 +243,6 @@ namespace mods {
 							return;
 						}
 						postgres_password = postgres_password.substr(0,i);
-						std::cerr << "postgres password: '" << postgres_password << "'\n";
 						continue;
 					}
 				}
@@ -327,7 +326,6 @@ namespace mods {
 							{"host",postgres_host},
 							{"dbname",postgres_dbname}}
 						).c_str();
-				//std::cerr << "postgres connection string: '" << connection_string << "'\n";
 				pq_con = std::make_unique<pqxx::connection>(connection_string.c_str());
 				connected_to_postgres = true;
 			}catch(const std::exception &e){
@@ -422,11 +420,8 @@ namespace mods {
 
 			SET_BIT(mob_proto[i].char_specials.saved.act, MOB_ISNPC);
 			/** !TODO: fix this. We need to copy the mob_proto to the mob_list.back() */
-			std::cerr << "read_Mobile[mob_rnum]: " << i << "\n";
 			mob_list.emplace_back(std::make_shared<mods::npc>(i));
 			auto mob = mob_list.back();
-			std::cerr << "[DEBUG]: mob_proto short_descr: '" << 
-				mob_proto[i].player.short_descr.c_str() << "'\n";
 			mob->position() = POS_STANDING;
 			for(i = 0; i < NUM_WEARS; i++) {
 				GET_EQ(mob->cd(), i) = nullptr;
@@ -437,8 +432,6 @@ namespace mods {
 			mob->mana() = mob->max_mana();
 			mob->move() = mob->max_move();
 
-			std::cerr << "mob->stats: max_hp:" << mob->max_hp() << " hp:" << mob->hp() << 
-				" mana:" << mob->mana() << " move:" << mob->move() << "\n";
 			mob->set_time_birth(time(0));
 			mob->set_time_played(0);
 			mob->set_time_logon(time(0));
@@ -496,7 +489,8 @@ namespace mods {
 				{"gld","\033[33m"},
 				{"grn","\033[32m"},
 				{"red","\033[31m"},
-				{"wht","\033[37m"}
+				{"wht","\033[37m"},
+				{"yel","\033[93m"}
 			};
 			unsigned i = 0;
 			std::string final_buffer = "";
@@ -512,7 +506,6 @@ namespace mods {
 					}
 					if(len > i + 4 && in_buffer[i+4] == '}'){
 						auto substring = in_buffer.substr(i+1,3);
-						std::cerr << "substr: " << substring << "\n";
 						if(colors[substring].length()){
 							final_buffer += colors[substring];
 							i += 4;
@@ -651,7 +644,6 @@ namespace mods {
 					if(player->room_pave_mode()) {
 						//If is a direction and that direction is not an exit,
 						//then pave a way to that exit
-						std::cerr << "[[[Room pave mode]]]\n";
 						int door = 0;
 
 						if(argument.length() == 1){
@@ -688,9 +680,7 @@ namespace mods {
 								default: return true;
 							}
 
-							std::cerr << "checking CAN_GO...";
 							if(world[player->room()].dir_option[door] == nullptr){
-								std::cerr << "can't. Checking other parameters...";
 								if(player->room() < 0){
 									log("SYSERR: error: player's room is less than zero. Not paving.");
 									return false;

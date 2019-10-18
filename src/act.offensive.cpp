@@ -35,6 +35,11 @@ void check_killer(struct char_data *ch, struct char_data *vict);
 int compute_armor_class(struct char_data *ch);
 int snipe_hit(struct char_data*,struct char_data*,int,uint16_t);
 
+/* using directives */
+using mw_explosive = mods::weapon::base::explosive;
+using mw_rifle = mods::weapon::base::rifle;
+using mw_drone = mods::weapon::base::drone;
+
 /* local functions */
 ACMD(do_assist);
 ACMD(do_hit);
@@ -74,72 +79,162 @@ ACMD(do_ammo) {
 
 using vpd = mods::scan::vec_player_data;
 /* Arguments:
- * throw <gren|grenade> <direction> <count>
+ * throw <direction> <count>
  */
 ACMD(do_throw) {
 	MENTOC_PREAMBLE();
 
 	if(!player->has_inventory_capability(mods::weapon::mask::grenade)) {
-		send_to_char(ch,"You must have a grenade to do that!");
+		player->stc("You must be holding a grenade to do that!");
 		return;
 	}
 
-	const char* usage = "usage: throw <grenade> <direction> <room_count>\r\n"
-		"see: help grenade\r\n";
-	std::array<char,MAX_INPUT_LENGTH> weapon;
+	const char* usage = "usage: throw <direction> <room_count>\r\n"
+		"example: \r\n"
+		" $ get frag backpack\r\n"
+		" $ hold frag\r\n"
+		" $ throw frag north 2\r\n"
+		" This will throw a frag 2 rooms away\n"
+		" NOTE:\r\n"
+		"All grenades are thrown as far as they can up to a maximum amount of 4 rooms away\r\n"
+		"or however many rooms before it reaches a dead-end\r\n"
+		"see: help grenade\r\n\r\n";
+	std::array<char,MAX_INPUT_LENGTH> item;
 	std::array<char,MAX_INPUT_LENGTH> direction;
 	std::array<char,MAX_INPUT_LENGTH> count;
-	std::fill(weapon.begin(),weapon.end(),0);
+	std::fill(item.begin(),item.end(),0);
 	std::fill(direction.begin(),direction.end(),0);
 	std::fill(count.begin(),count.end(),0);
-	three_arguments(argument,static_cast<char*>(&weapon[0]),static_cast<char*>(&direction[0]),static_cast<char*>(&count[0]));
+		struct obj_data *obj = NULL;
+
+		skip_spaces(&argument);
+
+		if(!*argument) {
+			player->stc("Command not recognized. see: type 'throw usage' or 'help grenade'\r\n");
+			return;
+		}
+
+		three_arguments(argument, &item[0], &direction[0], &count[0]);
+
 	int cnt = atoi(static_cast<const char*>(&count[0]));
 
-	if(!mods::util::fuzzy_match(static_cast<const char*>(&weapon[0]),"grenade") || !IS_DIRECTION(static_cast<const char*>(&direction[0])) || cnt <= 0) {
-		send_to_char(ch,usage);
+	if(!IS_DIRECTION(static_cast<const char*>(&direction[0])) || cnt <= 0) {
+		player->stc(usage);
 		return;
 	}
 
-	if(cnt > 3) {
-		send_to_char(ch,"But you can only throw up to 3 rooms away!\r\n");
+	if(cnt > 4) {
+		player->stc("But you can only throw up to 4 rooms away!\r\n");
 		return;
 	}
 
 	auto dir = NORTH;
+	const char* str_dir = " to the north ";
 
-	if(strcmp(static_cast<const char*>(&direction[0]),"north") == 0) {
+	if(strncmp(static_cast<const char*>(&direction[0]),"north",5) == 0) {
 		dir = NORTH;
 	}
 
-	if(strcmp(static_cast<const char*>(&direction[0]),"south") == 0) {
+	if(strncmp(static_cast<const char*>(&direction[0]),"south",5) == 0) {
+		str_dir = " to the south ";
 		dir = SOUTH;
 	}
 
-	if(strcmp(static_cast<const char*>(&direction[0]),"east") == 0) {
+	if(strncmp(static_cast<const char*>(&direction[0]),"east",4) == 0) {
+		str_dir = " to the east ";
 		dir = EAST;
 	}
 
-	if(strcmp(static_cast<const char*>(&direction[0]),"west") == 0) {
+	if(strncmp(static_cast<const char*>(&direction[0]),"west",4) == 0) {
+		str_dir = " to the west ";
 		dir = WEST;
 	}
 
-	if(strcmp(static_cast<const char*>(&direction[0]),"up") == 0) {
+	if(strncmp(static_cast<const char*>(&direction[0]),"up",2) == 0) {
+		str_dir = " above you ";
 		dir = UP;
 	}
 
-	if(strcmp(static_cast<const char*>(&direction[0]),"down") == 0) {
+	if(strncmp(static_cast<const char*>(&direction[0]),"down",4) == 0) {
+		str_dir = " below you ";
 		dir = DOWN;
 	}
 
+	auto held_object = player->equipment(WEAR_HOLD);
+	if(!held_object) {
+		player->stc("You're not holding anything!");
+		return;
+	}
+
+	/** If the grenade is a flashbang, we have a shorter timer on it */
+	//std::array<bool,>
+	int ticks = 0;
+	switch(held_object->explosive()->type) {
+		default:
+		case mw_explosive::REMOTE_EXPLOSIVE:
+		case mw_explosive::REMOTE_CHEMICAL:
+		case mw_explosive::CLAYMORE_MINE:
+		case mw_explosive::EXPLOSIVE_NONE:
+			player->stc("This type of explosive is not throwable!");
+			return;
+			break;
+		case mw_explosive::FRAG_GRENADE:
+			ticks = 3;
+			break;
+		case mw_explosive::INCENDIARY_GRENADE:
+			ticks = 3;
+			break;
+		case mw_explosive::EMP_GRENADE:
+			ticks = 3;
+			break;
+		case mw_explosive::SMOKE_GRENADE:
+			ticks = 4;
+			break;
+		case mw_explosive::FLASHBANG_GRENADE:
+			ticks = 2;
+			break;
+	}
 	/* Resolve cnt rooms in direction.*/
 	auto room_id = mods::projectile::cast_finite(ch,IN_ROOM(ch),dir,cnt);
-	mods::globals::defer_queue->push_secs(3,[room_id,ch]() {
-		for(auto person = world[room_id].people; person; person = person->next_in_room) {
+	player->unequip(WEAR_HOLD);
+	player->stc("You lob a " + held_object->explosive()->name + str_dir);
+	mods::globals::defer_queue->push(ticks, [room_id,ch](&player) {
+			for(auto person = world[room_id].people; person; person = person->next_in_room) {
 			mods::projectile::grenade_damage(ch,person,66,0);
-		}
-	});
+			}
+			});
 
 }
+
+ACMD(do_giveme_frag_grenades) {
+	MENTOC_PREAMBLE();
+	auto obj = mods::weapon::new_frag_grenade_object();
+	obj_to_char(obj,player);
+}
+ACMD(do_giveme_incendiary_grenades) {
+	MENTOC_PREAMBLE();
+	auto obj = mods::weapon::new_incendiary_grenade_object();
+	obj_to_char(obj,player);
+}
+
+ACMD(do_giveme_emp_grenades) {
+	MENTOC_PREAMBLE();
+	auto obj = mods::weapon::new_emp_grenade_object();
+	obj_to_char(obj,player);
+}
+
+ACMD(do_giveme_smoke_grenades) {
+	MENTOC_PREAMBLE();
+	auto obj = mods::weapon::new_smoke_grenade_object();
+	obj_to_char(obj,player);
+}
+
+ACMD(do_giveme_flashbang_grenades) {
+	MENTOC_PREAMBLE();
+	auto obj = mods::weapon::new_flashbang_grenade_object();
+	obj_to_char(obj,player);
+}
+
 ACMD(do_giveme_sniper_rifle) {
 	MENTOC_PREAMBLE();
 	if(player->cl_sniper() == nullptr) {
@@ -191,14 +286,51 @@ ACMD(do_snipe) {
 			//mods::globals::room_event(ch,mods::ai_state::AI_WITNESS_ATTACK);
 			/*
 			 * HOWTO: defer an action N seconds in the future
-			mods::globals::defer_queue->push_secs(3,[&](){
-			});
-			*/
+			 mods::globals::defer_queue->push_secs(3,[&](){
+			 });
+			 */
 			return;
 		} else {
 			*player << "You can't find your target!\r\n";
 		}
 	}
+}
+
+ACMD(do_silencers_on) {
+
+}
+
+ACMD(do_silencers_off) {
+
+}
+
+/** Alias of silencers off */
+ACMD(do_go_loud) {
+
+}
+
+ACMD(do_engagement_mode) {
+
+}
+
+ACMD(do_regroup) {
+
+}
+
+/** 
+ *
+ */
+ACMD(do_command_sequence) {
+	MENTOC_PREAMBLE();
+	//constexpr unsigned int max_char = 5;
+	//std::array<char,max_char> direction;
+	//one_argument(argument,&direction[0],max_char);
+
+	/** breach and clear */
+	/** frag and clear */
+	/** flash and clear */
+	/** smoke and clear */
+	/** thermals on */
 }
 
 ACMD(do_breach) {
@@ -239,25 +371,25 @@ ACMD(do_breach) {
 	auto room = IN_ROOM(ch);
 
 	mods::globals::defer_queue->push_secs(3,[room,dir,door]() {
-		mods::globals::room_event(room,dir);
-		SET_BIT(world[room].dir_option[door]->exit_info,EX_BREACHED);
+			mods::globals::room_event(room,dir);
+			SET_BIT(world[room].dir_option[door]->exit_info,EX_BREACHED);
 
-		if(dir == NORTH) {
+			if(dir == NORTH) {
 			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[SOUTH]->exit_info,EX_BREACHED);
-		}
+			}
 
-		if(dir == SOUTH) {
+			if(dir == SOUTH) {
 			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[NORTH]->exit_info,EX_BREACHED);
-		}
+			}
 
-		if(dir == EAST) {
+			if(dir == EAST) {
 			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[WEST]->exit_info,EX_BREACHED);
-		}
+			}
 
-		if(dir == WEST) {
+			if(dir == WEST) {
 			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[EAST]->exit_info,EX_BREACHED);
-		}
-	});
+			}
+			});
 
 }
 
@@ -305,25 +437,25 @@ ACMD(do_thermite) {
 	auto room = IN_ROOM(ch);
 
 	mods::globals::defer_queue->push_secs(3,[room,dir,door]() {
-		mods::globals::room_event(room,dir);
-		SET_BIT(world[room].dir_option[door]->exit_info,EX_BREACHED);
+			mods::globals::room_event(room,dir);
+			SET_BIT(world[room].dir_option[door]->exit_info,EX_BREACHED);
 
-		if(dir == NORTH) {
+			if(dir == NORTH) {
 			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[SOUTH]->exit_info,EX_BREACHED);
-		}
+			}
 
-		if(dir == SOUTH) {
+			if(dir == SOUTH) {
 			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[NORTH]->exit_info,EX_BREACHED);
-		}
+			}
 
-		if(dir == EAST) {
+			if(dir == EAST) {
 			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[WEST]->exit_info,EX_BREACHED);
-		}
+			}
 
-		if(dir == WEST) {
+			if(dir == WEST) {
 			SET_BIT(world[world[room].dir_option[door]->to_room].dir_option[EAST]->exit_info,EX_BREACHED);
-		}
-	});
+			}
+			});
 
 }
 
@@ -372,33 +504,33 @@ ACMD(do_reload) {
 ACMD(do_scan) { /* !mods */
 	vpd scan;
 	mods::scan::los_scan_foreach(ch,3,[ch](room_rnum _room_id,int _dir,vpd _ele) -> bool {
-		for(auto e : _ele) {
+			for(auto e : _ele) {
 			std::string line;
 			line += "You see {grn}";
 
 			if(IS_NPC(e.ch)) {
-				line += e.ch->player.short_descr.c_str();
+			line += e.ch->player.short_descr.c_str();
 			} else {
-				line += e.ch->player.name.c_str();
+			line += e.ch->player.name.c_str();
 			}
 
 			line += "{/grn}";
 
 			switch(e.distance) {
-				case 0:
-					line += " close by";
-					break;
+			case 0:
+			line += " close by";
+			break;
 
-				case 1:
-					break;
+			case 1:
+			break;
 
-				case 2:
-					line += " far off";
-					break;
+			case 2:
+			line += " far off";
+			break;
 
-				default:
-					line += "<>";
-					break;
+			default:
+			line += "<>";
+			break;
 			}
 
 			if(_dir != UP && _dir != DOWN) {
@@ -433,8 +565,8 @@ ACMD(do_scan) { /* !mods */
 
 			line += "\r\n";
 			send_to_char(ch,line.c_str());
-		}
-		return true;	/** true means keep iterating */
+			}
+			return true;	/** true means keep iterating */
 	});
 
 }
@@ -465,8 +597,8 @@ ACMD(do_assist) {
 			opponent = FIGHTING(helpee);
 		} else
 			for(opponent = world[IN_ROOM(ch)].people;
-			        opponent && (FIGHTING(opponent) != helpee);
-			        opponent = opponent->next_in_room)
+					opponent && (FIGHTING(opponent) != helpee);
+					opponent = opponent->next_in_room)
 				;
 
 		if(!opponent) {
@@ -475,7 +607,7 @@ ACMD(do_assist) {
 			act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
 		} else if(!pk_allowed && !IS_NPC(opponent))	/* prevent accidental pkill */
 			act("Use 'murder' if you really want to attack $N.", FALSE,
-			    ch, 0, opponent, TO_CHAR);
+					ch, 0, opponent, TO_CHAR);
 		else {
 			send_to_char(ch, "You join the fight!\r\n");
 			act("$N assists you!", 0, helpee, 0, ch, TO_CHAR);
@@ -516,7 +648,7 @@ ACMD(do_hit) {
 				return;
 			}			/* you can't order a charmed pet to attack a
 
-				 * player */
+						 * player */
 		}
 
 		if((GET_POS(ch) == POS_STANDING) && (vict != FIGHTING(ch))) {
@@ -689,7 +821,7 @@ ACMD(do_flee) {
 		attempt = rand_number(0, NUM_OF_DIRS - 1);	/* Select a random direction */
 
 		if(CAN_GO(ch, attempt) &&
-		        !ROOM_FLAGGED(EXIT(ch, attempt)->to_room, ROOM_DEATH)) {
+				!ROOM_FLAGGED(EXIT(ch, attempt)->to_room, ROOM_DEATH)) {
 			act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
 			was_fighting = FIGHTING(ch);
 
@@ -807,7 +939,7 @@ ACMD(do_rescue) {
 	}
 
 	for(tmp_ch = world[IN_ROOM(ch)].people; tmp_ch &&
-	        (FIGHTING(tmp_ch) != vict); tmp_ch = tmp_ch->next_in_room);
+			(FIGHTING(tmp_ch) != vict); tmp_ch = tmp_ch->next_in_room);
 
 	if(!tmp_ch) {
 		act("But nobody is fighting $M!", FALSE, ch, 0, vict, TO_CHAR);
@@ -883,5 +1015,35 @@ ACMD(do_kick) {
 	}
 
 	WAIT_STATE(ch, PULSE_VIOLENCE * 3);
+}
+
+/**
+ * +----------+
+ * C-4 Brain  |  
+ * +----------+
+ *
+ * Triggers an explosion the size of one room
+ *
+ * Levels: 
+ * 	[ 10 ] -> One room away
+ * 	[ 25 ] -> Two rooms away
+ * 		|
+ * 		+----> [ decision point ]
+ * 		               |
+ * 		               |
+ * 		  -------------+----------   [ A ] -> Extrasensory instinct 
+ * 		  |         |            |   [ B ] -> Chance to injure
+ * 		  |         |            |   [ C ] -> Siphon life force from victim
+ * 		[ A ]     [ B ]        [ C ]
+ *
+ * 	[ 45 ]--> [ decision point ]
+ *    |+-- [ A2 ] -> Custom shrapnel
+ * 	  |+-- [ B2 ] -> Chance to disarm victim
+ * 	  |+-- [ C2 ] -> 
+ * 	    
+ */
+ACMD(c4_brain) {
+	MENTOC_PREAMBLE();
+
 }
 

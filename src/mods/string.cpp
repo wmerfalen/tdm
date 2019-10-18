@@ -128,7 +128,7 @@ namespace mods {
 		m_debug("end of other.c_str()");
 		//std::cerr << "strlen of other: " << strlen(other.c_str()) << "\n";
 		if(other.length()){
-			m_str.assign(std::string(other.c_str()));
+			m_str.assign(other.c_str());
 		}else{
 			m_str = "";
 		}

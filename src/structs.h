@@ -744,6 +744,17 @@ enum player_level {
 		uint32_t id;
 	};
 
+	struct explosive_data_t {
+		explosive_data_t() : 
+			type(0),base(0),id(0)
+		{ }
+		~explosive_data_t() = default;
+		std::unique_ptr<mods::yaml::explosive_description_t> explosive_attributes;
+		uint8_t type;
+		uint8_t base;
+		uint32_t id;
+	};
+
 	/* ================== Memory Structure for Objects ================== */
 	struct obj_data {
 #ifdef __MENTOC_USE_PQXX_RESULT__
@@ -846,6 +857,11 @@ enum player_level {
 			return m_weapon.get();
 		} 
 		weapon_data_t* weapon(){ return m_weapon.get(); }
+		explosive_data_t* explosive(uint8_t mode){
+			m_explosive = std::make_unique<explosive_data_t>();
+			return m_explosive.get();
+		} 
+		explosive_data_t* explosive(){ return m_explosive.get(); }
 		/** FIXME: remove these members and instead use the weapon pointer */
 		/*
 		int16_t ammo;
@@ -859,6 +875,7 @@ enum player_level {
 		int16_t type;
 		protected:
 		std::unique_ptr<weapon_data_t> m_weapon;
+		std::unique_ptr<explosive_data_t> m_explosive;
 	};
 struct obj_data_weapon : public obj_data {
 	/**TODO: call parent constructor/destructor */

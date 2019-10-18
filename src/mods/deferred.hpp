@@ -15,7 +15,7 @@ namespace mods {
 	class deferred {
 		public:
 			constexpr static uint64_t TICK_RESOLUTION = 20;
-			typedef unsigned long seconds;
+			using seconds = uint16_t;
 			deferred() = delete;
 			deferred(uint64_t tick_resolution) : m_tres(tick_resolution),
 				m_tick(0), m_iterations(0) {

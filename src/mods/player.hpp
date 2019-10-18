@@ -39,14 +39,6 @@ namespace mods::classes {
 	struct sniper;
 };
 namespace mods {
-	namespace weapon {
-		enum mask_type { SMG = 1, SNIPE = (1 << 2), SHOTGUN = (1 << 3), 
-			GRENADE = (1 << 4), ASSAULT_RIFLE = (1 << 5), PISTOL = (1 << 6),
-			MACHINE_PISTOL = (1 << 7), ENERGY = (1 << 8), FUMES = (1 << 9),
-			FLAME = (1 << 10), CLAYMORE = (1 << 11), REMOTE_EXPLOSIVE = (1 << 12),
-			ATTACK_DRONE = (1 << 13)
-		};
-	};
 	struct player {
 		public:
 			using 	access_level_t = player_level;
@@ -482,6 +474,7 @@ namespace mods {
 			void set_overhead_map_height(uint8_t h){ m_overhead_map_height = h; }
 			void equip(obj_data* obj,int pos);
 			void unequip(obj_data* obj,int pos);
+			obj_data* equipment(int pos);
 			std::vector<affected_type>& get_affected_by() { return m_affected_by; }
 			std::vector<affected_type>& add_affected_by(affected_type&& add_this){
 				add_this.index = m_affected_by.size();

@@ -447,6 +447,9 @@ void char_to_room(char_data *ch, room_rnum room) {
 	}
 }
 
+void obj_to_char(std::shared_ptr<obj_data> object, std::shared_ptr<mods::player> player) {
+	obj_to_char(object.get(), player->cd());
+}
 
 //void obj_to_char(std::shared_ptr<obj_data*> object, std::shared_ptr<mods::player> player){
 //	player->equip(object.get(),

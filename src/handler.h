@@ -32,6 +32,7 @@ int	get_number(char **name);
 
 /* ******** objects *********** */
 
+void obj_to_char(std::shared_ptr<obj_data> object, std::shared_ptr<mods::player> player);
 void	obj_to_char(struct obj_data *object, struct char_data *ch);
 void	obj_from_char(struct obj_data *object);
 

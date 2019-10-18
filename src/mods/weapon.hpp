@@ -38,9 +38,9 @@ namespace mods::weapon {
 			EMP_GRENADE,
 			CLAYMORE_MINE,
 			SMOKE_GRENADE,
-			FLASH_BANG,
+			FLASHBANG_GRENADE,
 			__EXPLOSIVE_FIRST=FRAG_GRENADE,
-			__EXPLOSIVE_LAST=FLASH_BANG
+			__EXPLOSIVE_LAST=FLASHBANG_GRENADE
 		};
 		enum drone {
 			DRONE_NONE = 0,
@@ -54,6 +54,12 @@ namespace mods::weapon {
 	struct mask {
 		static constexpr uint64_t snipe = (1 << 0);
 		static constexpr uint64_t grenade = (1 << 1);
+	};
+	enum mask_type { SMG = 1, SNIPE = (1 << 2), SHOTGUN = (1 << 3), 
+		GRENADE = (1 << 4), ASSAULT_RIFLE = (1 << 5), PISTOL = (1 << 6),
+		MACHINE_PISTOL = (1 << 7), ENERGY = (1 << 8), FUMES = (1 << 9),
+		FLAME = (1 << 10), CLAYMORE = (1 << 11), REMOTE_EXPLOSIVE = (1 << 12),
+		ATTACK_DRONE = (1 << 13)
 	};
 	enum type_t { 
 		TYPE_NONE = 0,
@@ -77,8 +83,18 @@ namespace mods::weapon {
 		SIDERAIL = 4,
 		UNDER_BARREL = 5
 	};
+	/** Generic attachment methods */
 	obj_data_ptr_t attachment(attachment_t type);
+
+	/** Rifle factory methods */
 	obj_data_ptr_t new_sniper_rifle_object();
+
+	/** Grenade factory methods */
+	obj_data_ptr_t new_frag_grenade_object();
+	obj_data_ptr_t new_incendiary_grenade_object();
+	obj_data_ptr_t new_emp_grenade_object();
+	obj_data_ptr_t new_smoke_grenade_object();
+	obj_data_ptr_t new_flashbang_grenade_object();
 
 	namespace yaml {
 		constexpr static uint8_t MAX_ROOM_DISTANCE = 10;
@@ -102,7 +118,7 @@ namespace mods::weapon {
 			}
 			base::rifle type;
 			int ammo_max;
-			int chance_to_injure;
+			float chance_to_injure;
 			int clip_size;
 			float cooldown_between_shots;
 			float critical_chance;
@@ -116,6 +132,25 @@ namespace mods::weapon {
 			int reload_time;
 			std::string ammo_type;
 		};
+	};
+	struct explosive_description_t {
+		~explosive_description_t() = default;
+		explosive_description_t() :
+			chance_to_injure(0.0),	 /** Percent */
+			critical_chance(0.0), /** Percent */
+			critical_range(0), /** Rooms */
+			blast_radius(1),	/** 1 will only affect room it detonates in */
+			damage_per_second(0.0), /** static amount of damage done per second after detonation */
+			disorient_amount(0.0) /** percent */
+		{}
+		float chance_to_injure;
+		float critical_chance;
+		int critical_range;
+		int blast_radius;	/** In rooms */
+		float damage_per_second;
+		float disorient_amount;
+		std::string manufacturer;
+		base::explosive type;
 	};
 };
 #endif

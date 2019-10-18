@@ -25,25 +25,9 @@ extern void do_auto_exits(struct char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
 extern mods::scan::find_results_t mods::scan::los_find(chptr hunter,chptr hunted);
 namespace mods {
-	std::string just_color_evaluation(std::string final_buffer) {
-		final_buffer = mods::globals::replace_all(final_buffer,"{yel}","\033[93m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{gld}","\033[33m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{grn}","\033[32m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{red}","\033[31m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{blu}","\033[34m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{wht}","\033[37m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{grey}","\033[90m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{/yel}","\033[0m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{/gld}","\033[0m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{/grey}","\033[0m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{/grn}","\033[0m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{/wht}","\033[0m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{/red}","\033[0m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{/blu}","\033[0m");
-		return final_buffer;
-	}
+	using mask_t = mods::weapon::mask_type;
 	void stc_color_evaluation(const std::string& title,player* p) {
-		*p << just_color_evaluation(title) << "\r\n";
+		*p << mods::globals::color_eval(title) << "\r\n";
 	}
 
 	std::string word_wrap(std::string_view paragraph,int width) {
@@ -236,7 +220,6 @@ namespace mods {
 		m_captured_output = "";
 	}
 
-	using mask_t = mods::weapon::mask_type;
 	player::player(char_data* ch) : m_char_data(ch), m_executing_js(false), m_do_paging(false),
 		m_page(0),m_current_page(0),m_current_page_fragment("") {
 			m_set_time();
@@ -281,15 +264,21 @@ namespace mods {
 
 		page(m_current_page +1);
 	}
+	obj_data* player::equipment(int pos) {
+		return m_char_data->equipment[pos];
+	}
 	void player::equip(obj_data* obj,int pos) {
 		if(pos == WEAR_WIELD){
 			m_weapon_flags = obj->obj_flags.weapon_flags;
 		}
+		m_char_data->equipment[pos] = obj;
 	}
-	void player::unequip(obj_data* obj,int pos) {
+	void player::unequip(int pos) {
 		if(pos == WEAR_WIELD){
-			m_weapon_flags = obj->obj_flags.weapon_flags;
+			/** FIXME: this needs to negate the bit */
+			m_weapon_flags = m_char_data->equipment[pos]->obj_flags.weapon_flags;
 		}
+		m_char_data->equipment[pos] = nullptr;
 	}
 	bool player::has_weapon_capability(uint8_t type) {
 		auto w = weapon();
@@ -516,7 +505,7 @@ namespace mods {
 			return;
 		}
 		if(world[rnum].description) {
-			std::string colored = just_color_evaluation(static_cast<const char*>(world[rnum].description));
+			std::string colored = mods::globals::color_eval(static_cast<const char*>(world[rnum].description));
 			/* TODO: get status of outside world, if EMP, then replace phrase with emp phrase */
 			auto player = this;
 			auto value = PLAYER_GET("screen_width");

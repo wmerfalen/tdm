@@ -89,6 +89,48 @@ namespace mods::weapon {
 		return std::move(obj);
 	}
 
+	obj_data_ptr_t base_explosive_object(){
+		auto obj = blank_object();
+		//obj->holds_ammo = 1;
+
+		obj->item_number = 0;	/* Where in data-base			*/
+		obj->in_room = 0;		/* In what room -1 when conta/carr	*/
+		obj->obj_flags;/* Object information               */
+		memset(obj->obj_flags.value,0,sizeof(obj->obj_flags.value));
+		obj->obj_flags.type_flag = ITEM_WEAPON; /* Type of item			    */
+		obj->obj_flags.ammo_max = 0;//FIXME load me
+		obj->obj_flags.ammo = 0; //FIXME load me 
+		obj->obj_flags.wear_flags = ITEM_WEAR_HOLD | ITEM_WEAR_TAKE;
+		obj->obj_flags.extra_flags = 0;
+		obj->obj_flags.weight = 0;
+		obj->obj_flags.cost = 0;
+		obj->obj_flags.cost_per_day = 0;
+		obj->obj_flags.timer = 0;
+		obj->obj_flags.bitvector = 0;
+		obj->affected[MAX_OBJ_AFFECT];  /* affects */
+		memset(obj->affected,0,sizeof(obj->affected));
+		obj->carried_by = nullptr;
+		obj->worn_by = nullptr;
+		obj->worn_on = WEAR_HOLD;
+		obj->in_obj = nullptr;
+		obj->contains = nullptr;     /* Contains objects                 */
+		obj->next_content = nullptr; /* For 'contains' lists             */
+		obj->next = nullptr;         /* For the object list              */
+		obj->ai_state = 0;
+
+		obj->weapon(1);
+		/** TODO: fill the uuid in */
+		obj->uuid = mods::globals::get_uuid();
+		obj->weapon()->ammo = 0;
+		obj->weapon()->ammo_max = 0;
+		obj->weapon()->type = obj->obj_flags.weapon_flags = 0;
+		obj->obj_flags.clip_size = 0;
+		obj->ex_description = static_cast<extra_descr_data*>(calloc(1,sizeof(extra_descr_data)));
+		obj->ex_description->next = nullptr;
+		obj->ex_description->keyword =  strdup("keyword");
+		obj->weapon()->base = mods::weapon::type_t::EXPLOSIVE;
+		return std::move(obj);
+	}
 	obj_data_ptr_t psg1(){
 		auto obj = base_rifle_object();
 		/** TODO: fill the uuid in */
@@ -115,6 +157,74 @@ namespace mods::weapon {
 		obj->weapon()->type = mods::weapon::base::rifle::SNIPER;
 
 		/** damage/hit roll modifications */
+		return std::move(obj);
+	}
+
+	obj_data_ptr_t new_frag_grenade_object(){
+		auto obj = base_explosive_object();
+		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
+		obj->name = strdup("a frag grenade");
+		/** [ APPEARS ]: when you drop it and it's laying on the floor */
+		obj->description = strdup("A fragmentation grenade is lying here.");
+		/** [ APPEARS ]: when you type inv */
+		/** [ USED_WHEN ]: when you "hold frag", it will say "You hold frag grenade <short>" */
+		/**   |------------> obj->short_description = strdup("frag grenade <short>");        */
+		obj->short_description = strdup("an ACME Industries Frag grenade");
+		/** [ APPEARS ]: when you "examine frag", it will say exactly this  */
+		obj->action_description = strdup("frag fragmentation grenade nade");
+		obj->weapon()->type = mods::weapon::base::explosive::FRAG_GRENADE;
+		return std::move(obj);
+	}
+
+	obj_data_ptr_t new_incendiary_grenade_object(){
+		auto obj = base_explosive_object();
+		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
+		obj->name = strdup("An incendiary grenade");
+		/** [ APPEARS ]: when you drop it and it's laying on the floor */
+		obj->description = strdup("An incendiary grenade is lying here.");
+		/** [ APPEARS ]: when you type inv */
+		obj->short_description = strdup("incendiary grenade <short>");
+		obj->action_description = strdup("incendiary grenade <action>");      /* What to write when used          */
+		obj->weapon()->type = mods::weapon::base::explosive::INCENDIARY_GRENADE;
+		return std::move(obj);
+	}
+
+	obj_data_ptr_t new_emp_grenade_object(){
+		auto obj = base_explosive_object();
+		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
+		obj->name = strdup("An E.M.P. grenade");
+		/** [ APPEARS ]: when you drop it and it's laying on the floor */
+		obj->description = strdup("An E.M.P. grenade is lying here.");
+		/** [ APPEARS ]: when you type inv */
+		obj->short_description = strdup("emp e.m.p. electro magnetic pulse grenade <short>");
+		obj->action_description = strdup("emp e.m.p. electro magnetic pulse grenade <action>");      /* What to write when used          */
+		obj->weapon()->type = mods::weapon::base::explosive::EMP_GRENADE;
+		return std::move(obj);
+	}
+
+	obj_data_ptr_t new_smoke_grenade_object(){
+		auto obj = base_explosive_object();
+		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
+		obj->name = strdup("A smoke grenade");
+		/** [ APPEARS ]: when you drop it and it's laying on the floor */
+		obj->description = strdup("A smoke grenade is lying here.");
+		/** [ APPEARS ]: when you type inv */
+		obj->short_description = strdup("smoke grenade <short>");
+		obj->action_description = strdup("smoke grenade <action>");      /* What to write when used          */
+		obj->weapon()->type = mods::weapon::base::explosive::SMOKE_GRENADE;
+		return std::move(obj);
+	}
+
+	obj_data_ptr_t new_flashbang_grenade_object(){
+		auto obj = base_explosive_object();
+		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
+		obj->name = strdup("A flashbang grenade");
+		/** [ APPEARS ]: when you drop it and it's laying on the floor */
+		obj->description = strdup("A flashbang grenade is lying here.");
+		/** [ APPEARS ]: when you type inv */
+		obj->short_description = strdup("flash grenade <short>");
+		obj->action_description = strdup("flash grenade <action>");      /* What to write when used          */
+		obj->weapon()->type = mods::weapon::base::explosive::FLASHBANG_GRENADE;
 		return std::move(obj);
 	}
 

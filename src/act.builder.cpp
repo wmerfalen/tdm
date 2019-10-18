@@ -141,7 +141,19 @@ std::shared_ptr<obj_data> rifle_object(std::string_view file){
 	fill_rifle_object(obj);
 	return std::move(obj);
 }
+std::shared_ptr<obj_data> explosive_object(std::string_view file){
+	auto obj = blank_object();
+	obj->explosive(0);
+	obj->explosive()->explosive_attributes = std::make_unique<mods::yaml::explosive_description_t>();
+	obj->explosive()->explosive_attributes->feed(file);
+	return std::move(obj);
+}
 
+//obj_data_ptr_t new_frag_grenade_object();
+//obj_data_ptr_t new_incendiary_grenade_object();
+//obj_data_ptr_t new_emp_grenade_object();
+//obj_data_ptr_t new_smoke_grenade_object();
+//obj_data_ptr_t new_flashbang_grenade_object();
 /**
  * yaml_import <rifle> <file>		#imports said file in current dir
  * yaml_import ls 			#lists files in current dir
@@ -158,12 +170,21 @@ ACMD(do_yaml_import){
 		return;
 	}
 
-	mods::yaml::rifle_description_t rifle;
 	if(vec_args.size() == 2){
 		if(std::string(vec_args[0]).compare("rifle") == 0){
+			mods::yaml::rifle_description_t rifle;
 			player->sendln("importing...");
 			player->sendln(vec_args[1]);
 			auto obj = rifle_object(vec_args[1]);
+			obj_to_room(obj.get(),IN_ROOM(player->cd()));
+			player->sendln("done importing...");
+			return;
+		}
+		if(std::string(vec_args[0]).compare("explosive") == 0){
+			mods::yaml::explosive_description_t explosive;
+			player->sendln("importing...");
+			player->sendln(vec_args[1]);
+			auto obj = explosive_object(vec_args[1]);
 			obj_to_room(obj.get(),IN_ROOM(player->cd()));
 			player->sendln("done importing...");
 			return;
@@ -177,14 +198,19 @@ ACMD(do_yaml_example){
 	MENTOC_PREAMBLE();
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("list") == 0) {
-		for(auto type : {"rifle"}) {
+		for(auto type : {"rifle","explosive"}) {
 			player->sendln(type);
 		}
 	}
-	mods::yaml::rifle_description_t rifle;
 	if(std::string(vec_args[0]).compare("rifle") == 0){
+		mods::yaml::rifle_description_t rifle;
 		player->sendln("rifle.yml");
 		rifle.write_example_file("rifle.yml");
+	}
+	if(std::string(vec_args[0]).compare("explosive") == 0){
+		mods::yaml::explosive_description_t explosive;
+		player->sendln("explosive.yml");
+		explosive.write_example_file("explosive.yml");
 	}
 	player->sendln("[+] done");
 }

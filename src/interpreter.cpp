@@ -177,7 +177,11 @@ ACMD(do_builder_help){
 			"{gld}ammo{/gld} -- {grn}give yourself ammo [feature-debug]{/grn}", 
 			"{gld}chanmgr{/gld} -- {grn}channel manager utility [staging-feature]{/grn}",
 			"{gld}drone{/gld} -- {grn}start or stop your drone [staging-feature]{/grn}",
+		 	"{gld}giveme_flash{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
+		 	"{gld}giveme_frag{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
 			"{gld}givemegold{/gld} -- {grn}give me gold [feature-debug]{/grn}", 
+		 	"{gld}giveme_inc{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
+	 		"{gld}giveme_smoke{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
 			"{gld}heal{/gld} -- {grn}heal yourself [feature-debug][staging-feature][class-medic]{/grn}", 
 			"{gld}idle{/gld} -- {grn}force your character into idle state [feature-debug]{/grn}", 
 			"{gld}js{/gld} -- {grn}Run javascript [feature-debug][admin-utils]{/grn}", 
@@ -305,6 +309,11 @@ ACMD(do_recall);
 ACMD(do_givemegold);
 ACMD(do_givemenades);
 ACMD(do_snipe);
+ACMD(do_giveme_frag_grenades);
+ACMD(do_giveme_flashbang_grenades);
+ACMD(do_giveme_incendiary_grenades);
+ACMD(do_giveme_smoke_grenades);
+ACMD(do_giveme_emp_grenades);
 ACMD(do_next_object_number);
 ACMD(do_next_mob_number);
 ACMD(do_next_room_number);
@@ -707,6 +716,11 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** "GIVE ME" COMBAT MECHANICS */
 	/** -------------------------- */
 	{ "giveme_sniper_rifle"  , POS_RESTING , do_giveme_sniper_rifle   , LVL_GOD, 0 },
+	{ "giveme_frag"  , POS_RESTING , do_giveme_frag_grenades  , LVL_GOD, 0 },
+	{ "giveme_flash"  , POS_RESTING , do_giveme_flashbang_grenades  , LVL_GOD, 0 },
+	{ "giveme_inc"  , POS_RESTING , do_giveme_incendiary_grenades , LVL_GOD, 0 },
+	{ "giveme_smoke"  , POS_RESTING , do_giveme_smoke_grenades  , LVL_GOD, 0 },
+	{ "giveme_emp"  , POS_RESTING , do_giveme_emp_grenades  , LVL_GOD, 0 },
 
 	/** ------------------------------ */
 	/** END "GIVE ME" COMBAT MECHANICS */

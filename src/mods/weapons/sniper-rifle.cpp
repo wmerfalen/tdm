@@ -3,7 +3,6 @@
 #include "../../db.h"
 
 namespace mods::weapons {
-
 	constexpr static mods::weapon::type_t RIFLE_TYPE = mods::weapon::type_t::RIFLE;
 	constexpr static mods::weapon::base::rifle SNIPER_TYPE = mods::weapon::base::rifle::SNIPER;
 	obj_data_ptr_t psg1(obj_data_ptr_t obj) {

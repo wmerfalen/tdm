@@ -2,17 +2,17 @@
 namespace mods::yaml {
 
 		/** TODO: write to file, instead of to cout */
-	void rifle_description_t::write_example_file(std::string_view file){
+	int16_t rifle_description_t::write_example_file(std::string_view file){
 		std::string file_name = current_working_dir() + "/" + file.data();
 		//std::cerr << "write_example_file: filename: '" << file_name.c_str() << "'\n";
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
 			std::cerr << "can't open output yaml file, not open!\n";
-			return;
+			return -1;
 		}
 		if(!out_file.good()){
 			std::cerr << "can't open output yaml file, not good!\n";
-			return;
+			return -2;
 		}
 		out_file << "# accuracy map\n" <<
 			"accuracy_map: [\n";
@@ -49,8 +49,36 @@ namespace mods::yaml {
 			;
 		out_file.flush();
 		out_file.close();
+		return 0;
 	};
 
+
+	int16_t explosive_description_t::write_example_file(std::string_view file){
+		std::string file_name = current_working_dir() + "/" + file.data();
+		std::ofstream out_file(file_name);
+		if(!out_file.is_open()){
+			std::cerr << "can't open output yaml file, not open!\n";
+			return -1;
+		}
+		if(!out_file.good()){
+			std::cerr << "can't open output yaml file, not good!\n";
+			return -2;
+		}
+		out_file << "\n]\n" <<
+			"type: 'FRAG_GRENADE' #string, constant enum\n" <<
+			"chance_to_injure: 4.23 #float, out of 100\n" <<
+			"critical_chance: 0.10 #float, out of 100\n" <<
+			"critical_range: 4 #integer, measured in rooms\n" <<
+		 	"damage_per_second: 4.53 #float\n" <<
+			"disorient_amount: 3.14 #float\n" <<
+			"manufacturer: 'DX Standard' #string. company that made item\n" <<
+			"model_name: 'Nade 0x10'\n" <<
+			"name: 'A fragmentation grenade' #string\n"
+			;
+		out_file.flush();
+		out_file.close();
+		return 0;
+	};
 
 	int16_t rifle_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();
@@ -73,6 +101,34 @@ namespace mods::yaml {
 		reload_time = weapon["reload_time"].as<float>();
 		ammo_type = weapon["ammo_type"].as<std::string>();
 		name = weapon["name"].as<std::string>();
+		return 0;
+	}
+
+	int16_t explosive_description_t::feed(std::string_view in_file){
+		std::string file = current_working_dir() + "/" + in_file.data();
+		YAML::Node explosive = YAML::LoadFile(std::string(file.data()));
+		auto type_string = explosive["type"].as<std::string>();
+		if(type_string.compare("FRAG_GRENADE") == 0){
+			type = mods::weapon::base::explosive::FRAG_GRENADE;
+		}
+		if(type_string.compare("EMP_GRENADE") == 0){
+			type = mods::weapon::base::explosive::EMP_GRENADE;
+		}
+		if(type_string.compare("INCENDIARY_GRENADE") == 0){
+			type = mods::weapon::base::explosive::INCENDIARY_GRENADE;
+		}
+		if(type_string.compare("SMOKE_GRENADE") == 0){
+			type = mods::weapon::base::explosive::SMOKE_GRENADE;
+		}
+		if(type_string.compare("FLASHBANG_GRENADE") == 0){
+			type = mods::weapon::base::explosive::FLASHBANG_GRENADE;
+		}
+		chance_to_injure = explosive["chance_to_injure"].as<float>();
+		critical_chance = explosive["critical_chance"].as<float>();
+		critical_range = explosive["critical_range"].as<int>();
+		damage_per_second = explosive["damage_per_second"].as<float>();
+		disorient_amount = explosive["disorient_amount"].as<float>();
+		name = explosive["name"].as<std::string>();
 		return 0;
 	}
 
