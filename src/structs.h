@@ -23,6 +23,7 @@
 #include "mods/extra_desc_data.hpp"
 #include <unordered_map>
 #include "mods/yaml.hpp"
+#include "mods/weapon-types.hpp"
 namespace mods {
 	struct player;
 	struct npc;
@@ -729,7 +730,7 @@ enum player_level {
 		weapon_data_t() : 
 			ammo(0),ammo_max(0),clip_size(0),
 			loaded(0),holds_ammo(0),
-			type(0),base(0),is_ammo(0),id(0)
+			type(0),is_ammo(0),id(0)
 		{ }
 		~weapon_data_t() = default;
 		std::unique_ptr<mods::yaml::rifle_description_t> rifle_attributes;
@@ -739,19 +740,21 @@ enum player_level {
 		short loaded;
 		short holds_ammo;
 		uint8_t type;
-		uint8_t base;
 		bool is_ammo;
 		uint32_t id;
 	};
 
 	struct explosive_data_t {
+		using mw_explosive = mods::weapon::type::explosive;
 		explosive_data_t() : 
-			type(0),base(0),id(0)
+			name(""),
+			type(mw_explosive::EXPLOSIVE_NONE),
+			id(0)
 		{ }
 		~explosive_data_t() = default;
 		std::unique_ptr<mods::yaml::explosive_description_t> explosive_attributes;
-		uint8_t type;
-		uint8_t base;
+		std::string name;
+		mw_explosive type;
 		uint32_t id;
 	};
 
@@ -818,7 +821,7 @@ enum player_level {
 		{}
 		~obj_data() = default;
 		/**TODO: create constructor and destructor */
-		obj_vnum item_number;	/* Where in data-base			*/
+		obj_vnum item_number;	/* Where in data-type			*/
 		room_rnum in_room;		/* In what room -1 when conta/carr	*/
 
 		obj_flag_data obj_flags;/* Object information               */

@@ -3,8 +3,8 @@
 #include "../../db.h"
 
 namespace mods::weapons {
-	constexpr static mods::weapon::type_t RIFLE_TYPE = mods::weapon::type_t::RIFLE;
-	constexpr static mods::weapon::base::rifle SNIPER_TYPE = mods::weapon::base::rifle::SNIPER;
+	//constexpr static int RIFLE_TYPE = mods::weapon::type_t::RIFLE;
+	//constexpr static mw_rifle SNIPER_TYPE = mw_rifle::SNIPER;
 	obj_data_ptr_t psg1(obj_data_ptr_t obj) {
 		/** TODO: fill the uuid in */
 		obj->uuid = mods::globals::get_uuid();
@@ -25,8 +25,7 @@ namespace mods::weapons {
 		obj->ex_description = static_cast<extra_descr_data*>(calloc(1,sizeof(extra_descr_data)));
 		obj->ex_description->next = nullptr;
 		obj->ex_description->keyword =  strdup("keyword");
-		obj->weapon()->base = mods::weapon::type_t::RIFLE;
-		obj->weapon()->type = mods::weapon::base::rifle::SNIPER;
+		obj->weapon()->type = mw_rifle::SNIPER;
 		return std::move(obj);
 	}
 	void sniper_rifle::feed(const mods::pq::row_type & row){

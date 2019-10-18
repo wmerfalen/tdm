@@ -85,7 +85,7 @@ namespace mods::yaml {
 		YAML::Node weapon = YAML::LoadFile(std::string(file.data()));
 		auto type_string = weapon["type"].as<std::string>();
 		if(type_string.compare("SNIPER") == 0){
-			type = mods::weapon::base::rifle::SNIPER;
+			type = mw_rifle::SNIPER;
 		}
 		ammo_max = weapon["ammo_max"].as<int>();
 		chance_to_injure = weapon["chance_to_injure"].as<float>();
@@ -109,19 +109,19 @@ namespace mods::yaml {
 		YAML::Node explosive = YAML::LoadFile(std::string(file.data()));
 		auto type_string = explosive["type"].as<std::string>();
 		if(type_string.compare("FRAG_GRENADE") == 0){
-			type = mods::weapon::base::explosive::FRAG_GRENADE;
+			type = mw_explosive::FRAG_GRENADE;
 		}
 		if(type_string.compare("EMP_GRENADE") == 0){
-			type = mods::weapon::base::explosive::EMP_GRENADE;
+			type = mw_explosive::EMP_GRENADE;
 		}
 		if(type_string.compare("INCENDIARY_GRENADE") == 0){
-			type = mods::weapon::base::explosive::INCENDIARY_GRENADE;
+			type = mw_explosive::INCENDIARY_GRENADE;
 		}
 		if(type_string.compare("SMOKE_GRENADE") == 0){
-			type = mods::weapon::base::explosive::SMOKE_GRENADE;
+			type = mw_explosive::SMOKE_GRENADE;
 		}
 		if(type_string.compare("FLASHBANG_GRENADE") == 0){
-			type = mods::weapon::base::explosive::FLASHBANG_GRENADE;
+			type = mw_explosive::FLASHBANG_GRENADE;
 		}
 		chance_to_injure = explosive["chance_to_injure"].as<float>();
 		critical_chance = explosive["critical_chance"].as<float>();

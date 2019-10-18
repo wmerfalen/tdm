@@ -473,7 +473,7 @@ namespace mods {
 			}
 			void set_overhead_map_height(uint8_t h){ m_overhead_map_height = h; }
 			void equip(obj_data* obj,int pos);
-			void unequip(obj_data* obj,int pos);
+			void unequip(int pos);
 			obj_data* equipment(int pos);
 			std::vector<affected_type>& get_affected_by() { return m_affected_by; }
 			std::vector<affected_type>& add_affected_by(affected_type&& add_this){

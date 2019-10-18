@@ -342,7 +342,7 @@ namespace mods {
 		}
 		void post_boot_db() {
 		}
-		void room_event(struct char_data* ch,mods::ai_state::event_type_t event) { }
+		//void room_event(struct char_data* ch,mods::ai_state::event_type_t event) { }
 		const char* say_random(const mods::ai_state::event_type_t& event) {
 			return "woof";
 		}

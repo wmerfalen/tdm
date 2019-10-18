@@ -644,7 +644,7 @@ struct obj_data *unequip_char(struct char_data *ch, int pos) {
 		              GET_OBJ_AFFECT(obj), FALSE);
 
 	affect_total(ch);
-	player->unequip(obj,pos);
+	player->unequip(pos);
 
 	return (obj);
 }

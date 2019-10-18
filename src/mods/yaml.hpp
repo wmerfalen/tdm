@@ -87,7 +87,9 @@ namespace mods::yaml {
 			manufacturer("ACME Industries"), /** Fictional entity that creates this */
 			name("Generic Explosive"), /** Name of item */
 			type(0)	/** Explosive enum */
-		{}
+		{
+			std::fill(aoe_triggers.begin(),aoe_triggers.end(),0);
+		}
 		int damage;
 		std::array<aoe_type_t,MAX_AOE_TRIGGERS> aoe_triggers;
 		float chance_to_injure;

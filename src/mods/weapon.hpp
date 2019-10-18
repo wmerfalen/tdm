@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <variant>
+#include "weapon-types.hpp"
 #include "../structs.h"
 #include "pqxx-types.hpp"
 
@@ -16,41 +17,6 @@ struct obj_data;
 using obj_data_ptr_t = std::shared_ptr<obj_data>;
 using attachment_list_t = std::array<obj_data_ptr_t,6>;
 namespace mods::weapon {
-	namespace base { 
-		enum rifle {
-			RIFLE_NONE = 0,
-			SHOTGUN,
-			ASSAULT_RIFLE,
-			SUB_MACHINE_GUN,
-			SNIPER,
-			HANDGUN,
-			MACHINE_PISTOL,
-			LIGHT_MACHINE_GUN,
-			__RIFLE_FIRST = SHOTGUN,
-			__RIFLE_LAST = LIGHT_MACHINE_GUN
-		};
-		enum explosive {
-			EXPLOSIVE_NONE = 0,
-			FRAG_GRENADE,
-			INCENDIARY_GRENADE,
-			REMOTE_EXPLOSIVE,
-			REMOTE_CHEMICAL,
-			EMP_GRENADE,
-			CLAYMORE_MINE,
-			SMOKE_GRENADE,
-			FLASHBANG_GRENADE,
-			__EXPLOSIVE_FIRST=FRAG_GRENADE,
-			__EXPLOSIVE_LAST=FLASHBANG_GRENADE
-		};
-		enum drone {
-			DRONE_NONE = 0,
-			GROUND_DRONE,
-			AERIAL_DRONE,
-			AQUATIC_DRONE,
-			__DRONE_FIRST = GROUND_DRONE,
-			__DRONE_LAST = AQUATIC_DRONE
-		};
-	};/** end namespace mods::weapon::base */
 	struct mask {
 		static constexpr uint64_t snipe = (1 << 0);
 		static constexpr uint64_t grenade = (1 << 1);
@@ -61,19 +27,11 @@ namespace mods::weapon {
 		FLAME = (1 << 10), CLAYMORE = (1 << 11), REMOTE_EXPLOSIVE = (1 << 12),
 		ATTACK_DRONE = (1 << 13)
 	};
-	enum type_t { 
-		TYPE_NONE = 0,
-		RIFLE,
-		EXPLOSIVE,
-		DRONE,
-		__TYPE_FIRST = RIFLE,
-		__TYPE_LAST = DRONE
-	};
-
-	base::rifle rifle(std::shared_ptr<obj_data>& object);
-	base::explosive explosive(std::shared_ptr<obj_data>& object);
-	base::drone drone(std::shared_ptr<obj_data>& object);
-	std::variant<base::rifle,base::explosive,base::drone> type(
+	
+	mw_rifle rifle(std::shared_ptr<obj_data>& object);
+	mw_explosive explosive(std::shared_ptr<obj_data>& object);
+	mw_drone drone(std::shared_ptr<obj_data>& object);
+	std::variant<mw_rifle,mw_explosive,mw_drone> get_type(
 			std::shared_ptr<obj_data>&);
 	enum attachment_t {
 		SCOPE = 0,
@@ -116,7 +74,7 @@ namespace mods::weapon {
 			{
 				std::fill(damage_map.begin(),damage_map.end(),0);
 			}
-			base::rifle type;
+			mw_rifle type;
 			int ammo_max;
 			float chance_to_injure;
 			int clip_size;
@@ -133,25 +91,26 @@ namespace mods::weapon {
 			std::string ammo_type;
 		};
 	};
-	struct explosive_description_t {
-		~explosive_description_t() = default;
-		explosive_description_t() :
-			chance_to_injure(0.0),	 /** Percent */
-			critical_chance(0.0), /** Percent */
-			critical_range(0), /** Rooms */
-			blast_radius(1),	/** 1 will only affect room it detonates in */
-			damage_per_second(0.0), /** static amount of damage done per second after detonation */
-			disorient_amount(0.0) /** percent */
-		{}
-		float chance_to_injure;
-		float critical_chance;
-		int critical_range;
-		int blast_radius;	/** In rooms */
-		float damage_per_second;
-		float disorient_amount;
-		std::string manufacturer;
-		base::explosive type;
-	};
+	using explosive_description_t = mods::yaml::explosive_description_t;
+	
+//		~explosive_description_t() = default;
+//		explosive_description_t() :
+//			chance_to_injure(0.0),	 /** Percent */
+//			critical_chance(0.0), /** Percent */
+//			critical_range(0), /** Rooms */
+//			blast_radius(1),	/** 1 will only affect room it detonates in */
+//			damage_per_second(0.0), /** static amount of damage done per second after detonation */
+//			disorient_amount(0.0) /** percent */
+//		{}
+//		float chance_to_injure;
+//		float critical_chance;
+//		int critical_range;
+//		int blast_radius;	/** In rooms */
+//		float damage_per_second;
+//		float disorient_amount;
+//		std::string manufacturer;
+//		type::explosive type;
+//	};
 };
 #endif
 

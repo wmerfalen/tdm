@@ -29,6 +29,7 @@
 extern int pk_allowed;
 extern void three_arguments(char*,char*,char*,char*);
 extern void die(struct char_data*,struct char_data*);
+extern mods::globals::room_list_t mods::globals::room_list;
 /* extern functions */
 void raw_kill(struct char_data *ch);
 void check_killer(struct char_data *ch, struct char_data *vict);
@@ -36,9 +37,9 @@ int compute_armor_class(struct char_data *ch);
 int snipe_hit(struct char_data*,struct char_data*,int,uint16_t);
 
 /* using directives */
-using mw_explosive = mods::weapon::base::explosive;
-using mw_rifle = mods::weapon::base::rifle;
-using mw_drone = mods::weapon::base::drone;
+using mw_explosive = mods::weapon::type::explosive;
+using mw_rifle = mods::weapon::type::rifle;
+using mw_drone = mods::weapon::type::drone;
 
 /* local functions */
 ACMD(do_assist);
@@ -105,7 +106,6 @@ ACMD(do_throw) {
 	std::fill(item.begin(),item.end(),0);
 	std::fill(direction.begin(),direction.end(),0);
 	std::fill(count.begin(),count.end(),0);
-		struct obj_data *obj = NULL;
 
 		skip_spaces(&argument);
 
@@ -118,6 +118,7 @@ ACMD(do_throw) {
 
 	int cnt = atoi(static_cast<const char*>(&count[0]));
 
+	player->stc(std::to_string(cnt));
 	if(!IS_DIRECTION(static_cast<const char*>(&direction[0])) || cnt <= 0) {
 		player->stc(usage);
 		return;
@@ -129,36 +130,7 @@ ACMD(do_throw) {
 	}
 
 	auto dir = NORTH;
-	const char* str_dir = " to the north ";
-
-	if(strncmp(static_cast<const char*>(&direction[0]),"north",5) == 0) {
-		dir = NORTH;
-	}
-
-	if(strncmp(static_cast<const char*>(&direction[0]),"south",5) == 0) {
-		str_dir = " to the south ";
-		dir = SOUTH;
-	}
-
-	if(strncmp(static_cast<const char*>(&direction[0]),"east",4) == 0) {
-		str_dir = " to the east ";
-		dir = EAST;
-	}
-
-	if(strncmp(static_cast<const char*>(&direction[0]),"west",4) == 0) {
-		str_dir = " to the west ";
-		dir = WEST;
-	}
-
-	if(strncmp(static_cast<const char*>(&direction[0]),"up",2) == 0) {
-		str_dir = " above you ";
-		dir = UP;
-	}
-
-	if(strncmp(static_cast<const char*>(&direction[0]),"down",4) == 0) {
-		str_dir = " below you ";
-		dir = DOWN;
-	}
+	auto str_dir = mods::projectile::todirstr(static_cast<const char*>(&direction[0]),1,0);
 
 	auto held_object = player->equipment(WEAR_HOLD);
 	if(!held_object) {
@@ -169,6 +141,8 @@ ACMD(do_throw) {
 	/** If the grenade is a flashbang, we have a shorter timer on it */
 	//std::array<bool,>
 	int ticks = 0;
+	/** temporarily do this just for debugging FIXME */
+	std::string object_name = "";
 	switch(held_object->explosive()->type) {
 		default:
 		case mw_explosive::REMOTE_EXPLOSIVE:
@@ -179,30 +153,38 @@ ACMD(do_throw) {
 			return;
 			break;
 		case mw_explosive::FRAG_GRENADE:
-			ticks = 3;
+			ticks = 2;
+			object_name = "frag grenade";
 			break;
 		case mw_explosive::INCENDIARY_GRENADE:
-			ticks = 3;
+			object_name = "incendiary grenade";
+			ticks = 2;
 			break;
 		case mw_explosive::EMP_GRENADE:
-			ticks = 3;
+			object_name = "emp grenade";
+			ticks = 2;
 			break;
 		case mw_explosive::SMOKE_GRENADE:
-			ticks = 4;
+			object_name = "smoke grenade";
+			ticks = 3;
 			break;
 		case mw_explosive::FLASHBANG_GRENADE:
-			ticks = 2;
+			object_name = "flashbang grenade";
+			ticks = 1;
 			break;
 	}
 	/* Resolve cnt rooms in direction.*/
-	auto room_id = mods::projectile::cast_finite(ch,IN_ROOM(ch),dir,cnt);
 	player->unequip(WEAR_HOLD);
+	if(held_object->explosive()->name.length() == 0) {
+		held_object->explosive()->name = object_name;
+	}
 	player->stc("You lob a " + held_object->explosive()->name + str_dir);
-	mods::globals::defer_queue->push(ticks, [room_id,ch](&player) {
-			for(auto person = world[room_id].people; person; person = person->next_in_room) {
-			mods::projectile::grenade_damage(ch,person,66,0);
-			}
-			});
+	auto room_id = mods::projectile::cast_finite(ch,IN_ROOM(ch),dir,cnt,held_object);
+	mods::globals::defer_queue->push(ticks, [room_id,&held_object]() {
+		for(auto & person : mods::globals::room_list[room_id]) {
+			mods::projectile::grenade_damage(person, held_object);
+		}
+	});
 
 }
 
