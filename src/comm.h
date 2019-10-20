@@ -48,6 +48,8 @@ size_t	send_to_char(struct char_data *ch, const char *messg, ...) __attribute__(
 void	send_to_all(const char *messg, ...) __attribute__((format(printf, 1, 2)));
 void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
 void send_to_room_except(room_rnum, const std::vector<char_data*>&, const char *, ...);
+void send_to_room_except(room_rnum room, player_ptr_t except_me, const char *messg, ...);
+void send_to_room_except(room_rnum room, const std::vector<player_ptr_t>& except_me, const char *messg, ...);
 void	send_to_outdoor(const char *messg, ...) __attribute__((format(printf, 1, 2)));
 void	close_socket(mods::descriptor_data d);
 

@@ -371,6 +371,25 @@ namespace mods {
 		}
 	}
 
+	void player::set_name(std::string n){
+		cd()->player.name.assign(n);
+		m_name = n;
+		m_ucname = m_name;
+		if(m_name[0] > 96){
+			m_ucname[0] = (char)(m_name[0] - 32);
+		}
+		for(std::size_t i=1; i < m_name.length();i++){
+			if(m_name[i] > 96){
+				m_ucname[i] = m_name[i];
+				continue;
+			}
+			if(m_name[i] > 64 && m_name[i] < 91){
+				m_ucname[i] = (char)(m_name[i] + 32);
+				continue;
+			}
+			m_ucname[i] = m_name[i];
+		}
+	}
 	bool player::has_class_capability(class_type type) {
 		return !(std::find(m_class_capability.begin(),m_class_capability.end(),type) == m_class_capability.end());
 	}

@@ -2125,14 +2125,14 @@ void send_to_outdoor(const char *messg, ...) {
 
 
 void send_to_room_except(room_rnum room, const std::vector<char_data*>& except, const char *messg, ...) {
-	struct char_data *i;
 	va_list args;
 
 	if(messg == NULL) {
 		return;
 	}
 
-	for(i = world[room].people; i; i = i->next_in_room) {
+	for(auto & p : mods::globals::room_list[room]){
+		auto i = p->cd();
 		if(!i->has_desc || std::find(except.begin(),except.end(),i) != except.end()) {
 			continue;
 		}
@@ -2143,21 +2143,42 @@ void send_to_room_except(room_rnum room, const std::vector<char_data*>& except, 
 	}
 }
 
-void send_to_room(room_rnum room, const char *messg, ...) {
-	struct char_data *i;
+void send_to_room_except(room_rnum room, player_ptr_t except_me, const char *messg, ...) {
 	va_list args;
 
 	if(messg == NULL) {
 		return;
 	}
 
-	for(i = world[room].people; i; i = i->next_in_room) {
-		if(!i->has_desc) {
+	for(auto & p : mods::globals::room_list[room]){
+		if(!p->cd()->has_desc) {
+			continue;
+		}
+		if (except_me->cd() == p->cd()) { /** FIXME: confirm that this works in ALL cases */
 			continue;
 		}
 
 		va_start(args, messg);
-		vwrite_to_output(*i->desc, messg, args);
+		vwrite_to_output(p->desc(), messg, args);
+		va_end(args);
+	}
+}
+
+
+void send_to_room(room_rnum room, const char *messg, ...) {
+	va_list args;
+
+	if(messg == NULL) {
+		return;
+	}
+
+	for(auto & p : mods::globals::room_list[room]){
+		if(!p->cd()->has_desc) {
+			continue;
+		}
+
+		va_start(args, messg);
+		vwrite_to_output(p->desc(), messg, args);
 		va_end(args);
 	}
 }

@@ -80,7 +80,7 @@ ACMD(do_ammo) {
 
 using vpd = mods::scan::vec_player_data;
 /* Arguments:
- * throw <direction> <count>
+ * throw <object> <direction> <count>
  */
 ACMD(do_throw) {
 	MENTOC_PREAMBLE();
@@ -90,7 +90,7 @@ ACMD(do_throw) {
 		return;
 	}
 
-	const char* usage = "usage: throw <direction> <room_count>\r\n"
+	const char* usage = "usage: throw <grenade> <direction> <room_count>\r\n"
 		"example: \r\n"
 		" $ get frag backpack\r\n"
 		" $ hold frag\r\n"
@@ -110,7 +110,7 @@ ACMD(do_throw) {
 		skip_spaces(&argument);
 
 		if(!*argument) {
-			player->stc("Command not recognized. see: type 'throw usage' or 'help grenade'\r\n");
+			player->sendln("Command not recognized. see: type 'throw usage' or 'help grenade'");
 			return;
 		}
 
@@ -118,28 +118,26 @@ ACMD(do_throw) {
 
 	int cnt = atoi(static_cast<const char*>(&count[0]));
 
-	player->stc(std::to_string(cnt));
 	if(!IS_DIRECTION(static_cast<const char*>(&direction[0])) || cnt <= 0) {
 		player->stc(usage);
 		return;
 	}
 
 	if(cnt > 4) {
-		player->stc("But you can only throw up to 4 rooms away!\r\n");
+		player->sendln("But you can only throw up to 4 rooms away!");
 		return;
 	}
 
 	auto dir = NORTH;
-	auto str_dir = mods::projectile::todirstr(static_cast<const char*>(&direction[0]),1,0);
+	std::string str_dir = mods::projectile::todirstr(static_cast<const char*>(&direction[0]),1,0);
 
 	auto held_object = player->equipment(WEAR_HOLD);
 	if(!held_object) {
-		player->stc("You're not holding anything!");
+		player->sendln("You're not holding anything!");
 		return;
 	}
 
 	/** If the grenade is a flashbang, we have a shorter timer on it */
-	//std::array<bool,>
 	int ticks = 0;
 	/** temporarily do this just for debugging FIXME */
 	std::string object_name = "";
@@ -149,7 +147,7 @@ ACMD(do_throw) {
 		case mw_explosive::REMOTE_CHEMICAL:
 		case mw_explosive::CLAYMORE_MINE:
 		case mw_explosive::EXPLOSIVE_NONE:
-			player->stc("This type of explosive is not throwable!");
+			player->sendln("This type of explosive is not throwable!");
 			return;
 			break;
 		case mw_explosive::FRAG_GRENADE:
@@ -178,7 +176,12 @@ ACMD(do_throw) {
 	if(held_object->explosive()->name.length() == 0) {
 		held_object->explosive()->name = object_name;
 	}
-	player->stc("You lob a " + held_object->explosive()->name + str_dir);
+	send_to_room_except(player->room(), player, "%s lobs a %s%s!\r\n",
+				player->ucname().c_str(), 
+				object_name.c_str(),
+				str_dir.c_str());
+	player->sendln("You lob a " + held_object->explosive()->name + str_dir);
+	
 	auto room_id = mods::projectile::cast_finite(ch,IN_ROOM(ch),dir,cnt,held_object);
 	mods::globals::defer_queue->push(ticks, [room_id,&held_object]() {
 		for(auto & person : mods::globals::room_list[room_id]) {

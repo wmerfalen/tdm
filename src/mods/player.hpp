@@ -275,12 +275,12 @@ namespace mods {
 			time_data& ch_time(){
 				return m_char_data->player.time;
 			}
-			void set_name(std::string n){
-				this->cd()->player.name.assign(n);
-				m_name = n;
+			void set_name(std::string n);
+
+			std::string ucname(){
+				return m_ucname;
 			}
 			std::string& name() {
-				m_name = this->cd()->player.name.c_str();
 				return m_name;
 			}
 			void set_sex(byte s){
@@ -522,6 +522,7 @@ namespace mods {
 			std::array<aligned_int_t,mods::flags::chunk_type_t::LAST + 1> m_flags;
 			std::shared_ptr<mods::descriptor_data> m_desc;
 			std::string	m_name;
+			std::string m_ucname;
 			player_class_t m_class;
 			class_capability_t m_class_capability;
 			std::array<uint16_t,WEAPON_SET_NUM> m_weapon_cooldown;

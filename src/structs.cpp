@@ -290,7 +290,6 @@ room_data::~room_data() {
 			const int & key,
 			const room_rnum to_room){
 		if(i >= NUM_OF_DIRS){
-			std::cerr << "SYSERR: dir_option >= NUM_OF_DIRS\n";
 			return;
 		}
 		if(dir_option[i] == nullptr){
@@ -308,28 +307,23 @@ room_data::~room_data() {
 	}
 	namespace mods{
 		size_t descriptor_data::queue_output(const std::string &s){
-			std::cerr << "queue_output: " << s << "\n";
 			switch(m_queue_behaviour){
 				case queue_behaviour_enum_t::NORMAL:
-					std::cerr << "qbehaviour NORMAL\n";
 					output += s;
 					has_output = true;
 					return s.length();
 					break;
 				case queue_behaviour_enum_t::IGNORE_ALL:
-					std::cerr << "qbehaviour IGNORE_ALL\n";
 					has_output = false;
 					return 0;
 				case queue_behaviour_enum_t::REDIRECT_TO_PLAYER:
 				case queue_behaviour_enum_t::REDIRECT_TO_FILESYSTEM:
 				case queue_behaviour_enum_t::REDIRECT_TO_DB:
 				default:
-					std::cerr << "qbehaviour REDIRECT_TO_*\n";
 					return 0;
 			}
 		}
 		size_t mods::descriptor_data::flush_output(){
-			std::cerr << "flush_output!!!: '" << output << "'\n";
 			std::size_t result; 
 			switch(m_queue_behaviour){
 				default:
