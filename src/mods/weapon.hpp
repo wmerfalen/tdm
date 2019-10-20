@@ -112,12 +112,12 @@ namespace mods::weapon {
 //		type::explosive type;
 //	};
 };
-using weapon_rifle_t = mods::weapon::base::rifle;
-using weapon_explosive_t = mods::weapon::base::explosive;
-using weapon_drone_t = mods::weapon::base::drone;
+using weapon_rifle_t = mods::weapon::type::rifle;
+using weapon_explosive_t = mods::weapon::type::explosive;
+using weapon_drone_t = mods::weapon::type::drone;
 namespace mods::weapon {
 	static inline std::string to_string(weapon_rifle_t rifle_type){
-#define MENTOC_TO_STR(a){ case weapon_rifle_t::a: return #a; }
+#define MENTOC_TO_STR(a){ case mw_rifle::a: return #a; }
 		switch(rifle_type){
 			MENTOC_TO_STR(SHOTGUN);
 			MENTOC_TO_STR(ASSAULT_RIFLE);
@@ -131,7 +131,7 @@ namespace mods::weapon {
 		}
 	}
 	static inline std::string to_string(weapon_explosive_t explosive_type){
-#define MENTOC_TO_STR(a){ case weapon_explosive_t::a: return #a; }
+#define MENTOC_TO_STR(a){ case mw_explosive::a: return #a; }
 		switch(explosive_type){
 			MENTOC_TO_STR(FRAG_GRENADE);
 			MENTOC_TO_STR(INCENDIARY_GRENADE);
@@ -140,13 +140,13 @@ namespace mods::weapon {
 			MENTOC_TO_STR(EMP_GRENADE);
 			MENTOC_TO_STR(CLAYMORE_MINE);
 			MENTOC_TO_STR(SMOKE_GRENADE);
-			MENTOC_TO_STR(FLASH_BANG);
+			MENTOC_TO_STR(FLASHBANG_GRENADE);
 			default: return "<unknown>";
 #undef MENTOC_TO_STR
 		}
 	}
 	static inline std::string to_string(weapon_drone_t drone_type){
-#define MENTOC_TO_STR(a){ case weapon_drone_t::a: return #a; }
+#define MENTOC_TO_STR(a){ case mw_drone::a: return #a; }
 		switch(drone_type){
 			MENTOC_TO_STR(GROUND_DRONE);
 			MENTOC_TO_STR(AERIAL_DRONE);
@@ -157,20 +157,18 @@ namespace mods::weapon {
 	}
 	static inline bool has_clip(weapon_data_t* weapon){
 		if(!weapon){ return false; }
-		if(weapon->type == type_t::RIFLE){
-			switch(weapon->base){
-				case weapon_rifle_t::SHOTGUN:
-				case weapon_rifle_t::ASSAULT_RIFLE:
-				case weapon_rifle_t::SUB_MACHINE_GUN:
-				case weapon_rifle_t::SNIPER:
-				case weapon_rifle_t::HANDGUN:
-				case weapon_rifle_t::MACHINE_PISTOL:
-				case weapon_rifle_t::LIGHT_MACHINE_GUN:
+			switch(weapon->type){
+				case mw_rifle::SHOTGUN:
+				case mw_rifle::ASSAULT_RIFLE:
+				case mw_rifle::SUB_MACHINE_GUN:
+				case mw_rifle::SNIPER:
+				case mw_rifle::HANDGUN:
+				case mw_rifle::MACHINE_PISTOL:
+				case mw_rifle::LIGHT_MACHINE_GUN:
 					return true;
 				default:
 					return false;
 			}
-		}
 		return false;
 	}
 

@@ -103,11 +103,9 @@ extern std::vector<std::vector<player_ptr_t>> room_list;
 
 extern struct time_info_data time_info;		/* In db.c */
 extern char *help;
-/*
 player_ptr_t new_player(){
-	return mods::globals::player_list.emplace_back(mods::player::player_type_enum_t::PLAYER);
+	return mods::globals::player_list.emplace_back(std::make_shared<mods::player>());
 }
-*/
 
 using descriptor_list_t = std::deque<mods::descriptor_data>;
 descriptor_list_t descriptor_list;		/* master desc list */
@@ -655,7 +653,6 @@ void game_loop(socket_t mother_desc) {
 			}
 			aliased = 0;
 			if(!get_from_q(&player->desc().input, comm, &aliased)) {
-				std::cerr << "get_from_q failed\n";
 				++i;
 				continue;
 			}
@@ -725,6 +722,7 @@ void game_loop(socket_t mother_desc) {
 			if(p->desc().has_output) {
 				p->desc().flush_output();
 				p->desc().has_output = false;
+				continue;
 			}
 		}
 
@@ -733,6 +731,7 @@ void game_loop(socket_t mother_desc) {
 			if(!p->desc().has_output && !p->desc().has_prompt && p->state() == CON_PLAYING){
 				*p << make_prompt(p->desc());
 				p->desc().has_prompt = true;
+				continue;
 			}
 		}
 
@@ -779,7 +778,6 @@ void game_loop(socket_t mother_desc) {
 		}
 
 		if(mods::debug::debug_state->show_tics()){
-			std::cerr << ".";
 		}
 		++tics;
 	}
@@ -1316,7 +1314,7 @@ int new_descriptor(socket_t s) {
 		return (0);
 	}
 
-	auto player = std::make_shared<mods::player>();
+	auto player = new_player();
 	player->set_socket(desc);
 	/* find the sitename */
 	if(nameserver_is_slow || !(from = gethostbyaddr((char *) &peer.sin_addr,
@@ -1705,9 +1703,9 @@ while(nl_pos != nullptr) {
 			}
 		}
 	} else if(tmp[0] == '^') {
-		//if(!(failed_subst = perform_subst(t, t.last_input.data(), &tmp[0]))) {
-		//	t.last_input = &tmp[0];    /* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
-		//}
+		if(!(failed_subst = perform_subst(t, t.last_input.data(), &tmp[0]))) {
+			t.last_input = &tmp[0];    /* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
+		}
 	} else {
 		t.last_input =  &tmp[0];	/* strcpy: OK (by mutual MAX_INPUT_LENGTH) */
 

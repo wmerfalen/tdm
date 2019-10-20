@@ -9,27 +9,27 @@ namespace mods {
 		std::string todirstr(const char* direction,bool prefix,bool suffix) {
 			std::string pre = prefix ? " " : "";
 			std::string suf = suffix ? " " : "";
-			if(strncmp(direction,"north",5) == 0) {
+			if(strncmp(direction,"north",5) == 0 || direction[0] == 'n' || direction[0] == 'N') {
 				return pre + "to the north" + suf;
 			}
 
-			if(strncmp(direction,"south",5) == 0) {
+			if(strncmp(direction,"south",5) == 0 || direction[0] == 's' || direction[0] == 'S') {
 				return pre + "to the south" + suf;
 			}
 
-			if(strncmp(direction,"east",4) == 0) {
+			if(strncmp(direction,"east",4) == 0 || direction[0] == 'e' || direction[0] == 'E') {
 				return pre + "to the east" + suf;
 			}
 
-			if(strncmp(direction,"west",4) == 0) {
+			if(strncmp(direction,"west",4) == 0 || direction[0] == 'w' || direction[0] == 'W') {
 				return pre + "to the west" + suf;
 			}
 
-			if(strncmp(direction,"up",2) == 0) {
+			if(strncmp(direction,"up",2) == 0 || direction[0] == 'u' || direction[0] == 'U') {
 				return pre + "above you" + suf;
 			}
 
-			if(strncmp(direction,"down",4) == 0) {
+			if(strncmp(direction,"down",4) == 0 || direction[0] == 'd' || direction[0] == 'D') {
 				return pre + "below you" + suf;
 			}
 			return pre + "??" + suf;
@@ -54,6 +54,12 @@ namespace mods {
 			return f + "??" + (suffix ? " " : "");
 		}
 
+		void projectile_lands(room_rnum room_id,obj_data* object,int from_direction) {
+			for(auto & player : mods::globals::room_list[room_id]) {
+				player->stc(std::string("A ") + object->name + " tumbles to the ground" + fromdirstr(from_direction,1,0) + "! Take cover!");
+			}
+		}
+
 		void projectile_flies_by(room_rnum room, obj_data* object, int from_direction, int to_direction) {
 			for(auto & player : mods::globals::room_list[room]) {
 				player->stc(std::string("A ") + object->name + " flies by" + fromdirstr(from_direction,1,0) + ", narrowly missing you!");
@@ -73,6 +79,10 @@ namespace mods {
 				}
 
 				previous = room_id;
+				if (room_depth + 1 == depth) {
+					projectile_lands(room_id,object,opposite);
+					return;
+				}
 				projectile_flies_by(room_id,object,opposite,direction);
 			}
 

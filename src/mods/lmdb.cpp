@@ -469,9 +469,11 @@ pqxx::result db_get_by_meta(std::string table, std::string col,const std::string
 			return mods::pq::result();
 		}
 }
+/*
 pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::field & value){
 	return db_get_by_meta(table,col,value.c_str());
 }
+*/
 #ifdef __MENTOC_USE_PQXX_RESULT__
 pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::result::reference & value){
 #else
@@ -482,7 +484,11 @@ pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::row::
 			sql_compositor comp(table,&up_txn);
 			auto room_sql = comp.select("*")
 				.from(table)
+#ifdef __MENTOC_USE_PQXX_RESULT__
 				.where(col,"=",value[0].c_str())
+#else
+				.where(col,"=",value.c_str())
+#endif
 				.sql();
 			return mods::pq::exec(up_txn,room_sql.data());
 		}catch(std::exception& e){

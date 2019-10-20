@@ -15,12 +15,14 @@ namespace mods {
 		}
 	}
 
+	/*
 	string::string(const pqxx::result::reference & str){
 		m_mallocd = false;
 		m_cptr = nullptr;
 		m_str = "";
 		assign(str[0].c_str());
 	}
+	*/
 
 	/*
 	void string::assign(const pqxx::tuple::reference & other){
@@ -36,7 +38,12 @@ namespace mods {
 	string::string(const pqxx::row::reference & str){
 #endif
 */
+#ifdef __MENTOC_USE_PQXX_RESULT__
 	string::string(const pqxx::tuple::reference & str){
+#else
+	string::string(const pqxx::row::reference & str){
+#endif
+
 		m_mallocd = false;
 		m_cptr = nullptr;
 		m_str = "";
@@ -119,14 +126,17 @@ namespace mods {
 	}
 #ifdef __MENTOC_USE_PQXX_RESULT__
 	void string::assign(const pqxx::result::reference & other){
+		assign(other[0].c_str());
 #else
 	void string::assign(const pqxx::row::reference & other){
+		assign(other.c_str());
 #endif
-		assign(other[0].c_str());
 	}
+	/*
 	void string::assign(const pqxx::tuple::reference & other){
 		assign(other.c_str());
 	}
+	*/
 	void string::assign(const std::string & other){
 		m_debug("assign std::string\n");
 		m_debug(other.c_str());

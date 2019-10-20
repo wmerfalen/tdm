@@ -30,6 +30,8 @@ namespace mods {
 	struct descriptor_data;
 	struct extra_desc_data;
 };
+struct weapon_data_t;
+struct explosive_data_t;
 struct char_data;
 extern std::deque<mods::descriptor_data> descriptor_list;
 /** BASE weapon type. */
@@ -725,40 +727,6 @@ enum player_level {
 	struct obj_affected_type {
 		byte location;      /* Which ability to change (APPLY_XXX) */
 		int16_t modifier;     /* How much it changes by              */
-	};
-
-/*
-	struct weapon_data_t {
-		weapon_data_t() : 
-			ammo(0),ammo_max(0),clip_size(0),
-			loaded(0),holds_ammo(0),
-			type(0),is_ammo(0),id(0)
-		{ }
-		~weapon_data_t() = default;
-		std::unique_ptr<mods::yaml::rifle_description_t> rifle_attributes;
-		int16_t ammo;
-		int16_t ammo_max;
-		uint8_t clip_size;
-		short loaded;
-		short holds_ammo;
-		uint8_t type;
-		bool is_ammo;
-		uint32_t id;
-	};
-	*/
-
-	struct explosive_data_t {
-		using mw_explosive = mods::weapon::type::explosive;
-		explosive_data_t() : 
-			name(""),
-			type(mw_explosive::EXPLOSIVE_NONE),
-			id(0)
-		{ }
-		~explosive_data_t() = default;
-		std::unique_ptr<mods::yaml::explosive_description_t> explosive_attributes;
-		std::string name;
-		mw_explosive type;
-		uint32_t id;
 	};
 
 	/* ================== Memory Structure for Objects ================== */

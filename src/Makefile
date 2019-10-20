@@ -24,9 +24,11 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \
 	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\"  \
-	-DMENTOC_NO_CONSTEXPR_CONF=1 -D__MENTOC_USE_PQXX_RESULT__=1 \
+	-DMENTOC_NO_CONSTEXPR_CONF=1 \
 	-Wno-sign-compare -I$(yamlcpp) -L$(yamllib) \
 	-fPIC
+
+	#-DMENTOC_NO_CONSTEXPR_CONF=1 \ #-D__MENTOC_USE_PQXX_RESULT__=1 
 LIBS = $(opnssl) -lc -lm -lpqxx -lpq -lssl -lcrypto -l$(yamlcpp_object)
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\

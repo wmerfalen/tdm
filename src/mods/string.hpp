@@ -11,7 +11,7 @@ namespace mods {
 	struct string {
 		string();
 		string(const char* str);
-		string(const pqxx::tuple::reference & str);
+		//string(const pqxx::tuple::reference & str);
 		//string(const pqxx::result::reference & str);
 #ifdef __MENTOC_USE_PQXX_RESULT__
 		string(const pqxx::result::reference & str);
@@ -30,7 +30,7 @@ namespace mods {
 		string& operator=(const std::string & other);
 		const char* operator*(){ return m_str.c_str(); }
 		void assign(const std::string & other);
-		void assign(const pqxx::tuple::reference & other);
+		//void assign(const pqxx::tuple::reference & other);
 #ifdef __MENTOC_USE_PQXX_RESULT__
 		void assign(const pqxx::result::reference & other);
 #else

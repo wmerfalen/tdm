@@ -88,22 +88,22 @@ namespace mods::yaml {
 			type = mw_rifle::SNIPER;
 		}
 		if(type_string.compare("ASSAULT_RIFLE") == 0){
-			type = mods::weapon::base::rifle::ASSAULT_RIFLE;
+			type = mods::weapon::type::rifle::ASSAULT_RIFLE;
 		}
 		if(type_string.compare("SHOTGUN") == 0){
-			type = mods::weapon::base::rifle::SHOTGUN;
+			type = mods::weapon::type::rifle::SHOTGUN;
 		}
 		if(type_string.compare("SUB_MACHINE_GUN") == 0){
-			type = mods::weapon::base::rifle::SUB_MACHINE_GUN;
+			type = mods::weapon::type::rifle::SUB_MACHINE_GUN;
 		}
 		if(type_string.compare("HANDGUN") == 0){
-			type = mods::weapon::base::rifle::HANDGUN;
+			type = mods::weapon::type::rifle::HANDGUN;
 		}
 		if(type_string.compare("MACHINE_PISTOL") == 0){
-			type = mods::weapon::base::rifle::MACHINE_PISTOL;
+			type = mods::weapon::type::rifle::MACHINE_PISTOL;
 		}
 		if(type_string.compare("LIGHT_MACHINE_GUN") == 0){
-			type = mods::weapon::base::rifle::LIGHT_MACHINE_GUN;
+			type = mods::weapon::type::rifle::LIGHT_MACHINE_GUN;
 		}
 		ammo_max = weapon["ammo_max"].as<int>();
 		chance_to_injure = weapon["chance_to_injure"].as<float>();

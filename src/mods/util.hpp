@@ -113,6 +113,7 @@ std::ostream& log(Args... args); /*{
 			ss >> m;
 			return m;
 		}
+/*
 	template <typename T>
 		T stoi(const pqxx::tuple::reference & i){
 			T m;
@@ -121,6 +122,7 @@ std::ostream& log(Args... args); /*{
 			ss >> m;
 			return m;
 		}
+		*/
 
 	template <typename T>
 #ifdef __MENTOC_USE_PQXX_RESULT__
