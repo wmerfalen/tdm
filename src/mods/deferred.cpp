@@ -1,4 +1,5 @@
 #include "deferred.hpp"
+extern std::vector<room_data> world;
 namespace mods {
 	void deferred::push(uint64_t ticks_in_future,std::function<void()> lambda) {
 		m_q.insert(std::make_pair(ticks_in_future + m_tick,lambda));
@@ -29,6 +30,12 @@ namespace mods {
 
 			m_iterations = 0;
 		}
+	}
+	void deferred::detexturize_room(uint64_t ticks_in_future,room_rnum& room_id,room_data::texture_type_t texture){
+		m_q.insert(std::make_pair(ticks_in_future + m_tick,[&](){
+				world[room_id].remove_texture(texture);
+			})
+		);
 	}
 };
 

@@ -482,6 +482,11 @@ void obj_from_char(struct obj_data *object) {
 		return;
 	}
 
+	if(!object->carried_by){
+		log("SYSERR: NULL object->carried_by passed to obj_from_char.");
+		return;
+	}
+
 	REMOVE_FROM_LIST(object, object->carried_by->carrying, next_content);
 
 	/* set flag for crash-save system, but not on mobs! */
@@ -752,10 +757,19 @@ struct char_data *get_char_num(mob_rnum nr) {
 
 /* put an object in a room */
 void obj_to_room(struct obj_data *object, room_rnum room) {
-	if(!object || room == NOWHERE || room > top_of_world)
+	if(room == NOWHERE){
+		log("SYSERR: Illegal value passed to obj_to_room. (Room is NOWHERE)");
+		return;
+	}
+	if(room > top_of_world){
+		log("SYSERR: Illegal value passed to obj_to_room. (Room is GREATER than top of world!)");
+		return;
+	}
+	if(!object) {
 		log("SYSERR: Illegal value(s) passed to obj_to_room. (Room #%d/%d, obj %p)",
 		    room, top_of_world, object);
-	else {
+		return;
+	} else {
 		object->next_content = world[room].contents;
 		world[room].contents = object;
 		IN_ROOM(object) = room;

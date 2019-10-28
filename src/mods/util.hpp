@@ -24,9 +24,17 @@ static inline std::string operator "" _s(const char* s,uint64_t i) {
 }
 #endif
 
+extern std::vector<room_data> world;
 
 namespace mods::util {
 	using directory_list_t = std::vector<std::string>;
+
+	static inline void texturize_room(room_rnum room_id, room_data::texture_type_t texture_type){
+		world[room_id].add_texture(texture_type);
+	}
+	static inline void detexturize_room(room_rnum room_id, room_data::texture_type_t texture_type){
+		world[room_id].remove_texture(texture_type);
+	}
 
 namespace detail{ 
 template<typename... Args>

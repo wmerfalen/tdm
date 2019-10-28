@@ -11,6 +11,10 @@
 #include "../structs.h"
 #include "../types.hpp"
 
+namespace mods::util {
+	extern void texturize_room(room_rnum room_id, room_data::texture_type_t& texture_type);
+	extern void detexturize_room(room_rnum room_id, room_data::texture_type_t& texture_type);
+};
 namespace mods {
 	class deferred {
 		public:
@@ -35,6 +39,43 @@ namespace mods {
 			void push(uint64_t ticks_in_future,std::function<void()> lambda);
 			void push_secs(seconds secs,std::function<void()> lambda);
 			void iteration();
+			template <typename TContainerOfPlayers,typename TContainerOfAffects>
+			void affect_remove(uint64_t ticks_in_future,
+					TContainerOfPlayers & players,
+					TContainerOfAffects affected_by) {
+				m_q.insert(std::make_pair(ticks_in_future + m_tick,[&players,&affected_by]() {
+						for(auto & player : players){
+							for(auto & affect : affected_by){
+								player->remove_affect(affect);
+							}
+						}
+					})
+				);	// end insert
+			}
+			template <typename TContainerOfPlayers,typename TContainerOfAffectLambdas>
+			void affect_remove_via_callback(uint64_t ticks_in_future,
+					TContainerOfPlayers & players,
+					TContainerOfAffectLambdas affected_by) {
+				m_q.insert(std::make_pair(ticks_in_future + m_tick,[&players,&affected_by]() {
+						for(auto & player : players){
+							for(auto & affect : affected_by){
+								affect(player);
+							}
+						}
+					})
+				);	// end insert
+			}
+			void detexturize_room(uint64_t ticks_in_future,room_rnum& room_id,room_data::texture_type_t texture);
+			template <typename TTextureList>
+			void texturize_room(uint64_t ticks_in_future,room_rnum& room_id,TTextureList& textures){
+				m_q.insert(std::make_pair(ticks_in_future + m_tick,[&](){
+					for(auto & texture : textures){
+						mods::util::texturize_room(room_id,texture);
+					}
+				})
+				);//end insert
+			}
+
 		protected:
 			std::multimap<uint64_t,std::function<void()>> m_q;
 			std::multimap<seconds,std::function<void()>> m_secs;

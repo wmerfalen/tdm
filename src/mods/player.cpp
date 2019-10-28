@@ -371,6 +371,8 @@ namespace mods {
 		}
 	}
 
+	std::string& player::name(){ return m_name; }
+	std::string player::ucname(){ return m_ucname; }
 	void player::set_name(std::string n){
 		cd()->player.name.assign(n);
 		m_name = n;

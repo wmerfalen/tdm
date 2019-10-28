@@ -1,12 +1,12 @@
 /* ************************************************************************
-*   File: act.offensive.c                               Part of CircleMUD *
-*  Usage: player-level commands of an offensive nature                    *
-*                                                                         *
-*  All rights reserved.  See license.doc for complete information.        *
-*                                                                         *
-*  Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University *
-*  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
-************************************************************************ */
+ *   File: act.offensive.c                               Part of CircleMUD *
+ *  Usage: player-level commands of an offensive nature                    *
+ *                                                                         *
+ *  All rights reserved.  See license.doc for complete information.        *
+ *                                                                         *
+ *  Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University *
+ *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
+ ************************************************************************ */
 
 #include "types.hpp"
 #include "utils.h"
@@ -107,14 +107,14 @@ ACMD(do_throw) {
 	std::fill(direction.begin(),direction.end(),0);
 	std::fill(count.begin(),count.end(),0);
 
-		skip_spaces(&argument);
+	skip_spaces(&argument);
 
-		if(!*argument) {
-			player->sendln("Command not recognized. see: type 'throw usage' or 'help grenade'");
-			return;
-		}
+	if(!*argument) {
+		player->sendln("Command not recognized. see: type 'throw usage' or 'help grenade'");
+		return;
+	}
 
-		three_arguments(argument, &item[0], &direction[0], &count[0]);
+	three_arguments(argument, &item[0], &direction[0], &count[0]);
 
 	int cnt = atoi(static_cast<const char*>(&count[0]));
 
@@ -128,8 +128,12 @@ ACMD(do_throw) {
 		return;
 	}
 
-	auto dir = NORTH;
 	std::string str_dir = mods::projectile::todirstr(static_cast<const char*>(&direction[0]),1,0);
+	int8_t dir = mods::projectile::to_direction(&direction[0]);
+	if(dir < 0){
+		player->sendln("Use a valid direction!");
+		return;
+	}
 
 	auto held_object = player->equipment(WEAR_HOLD);
 	if(!held_object) {
@@ -173,22 +177,25 @@ ACMD(do_throw) {
 	}
 	/* Resolve cnt rooms in direction.*/
 	player->unequip(WEAR_HOLD);
+	/**
+	 * If the object name doesn't have a name, we'll assign it a generic one
+	 */
 	if(held_object->explosive()->name.length() == 0) {
 		held_object->explosive()->name = object_name;
 	}
+	obj_from_char(held_object);
 	send_to_room_except(player->room(), player, "%s lobs a %s%s!\r\n",
-				player->ucname().c_str(), 
-				object_name.c_str(),
-				str_dir.c_str());
+			player->ucname().c_str(), 
+			object_name.c_str(),
+			str_dir.c_str());
 	player->sendln("You lob a " + held_object->explosive()->name + str_dir);
-	
 	auto room_id = mods::projectile::cast_finite(ch,IN_ROOM(ch),dir,cnt,held_object);
-	mods::globals::defer_queue->push(ticks, [room_id,&held_object]() {
-		for(auto & person : mods::globals::room_list[room_id]) {
-			mods::projectile::grenade_damage(person, held_object);
-		}
-	});
-
+	mods::projectile::travel_to(player->room(), dir, cnt, held_object);
+	obj_to_room(held_object,room_id);
+	auto frag = [room_id,&held_object]() {
+		mods::projectile::explode(room_id,held_object);
+	};
+	mods::globals::defer_queue->push(ticks, frag);
 }
 
 ACMD(do_giveme_frag_grenades) {

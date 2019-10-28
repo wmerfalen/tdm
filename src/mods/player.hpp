@@ -277,12 +277,8 @@ namespace mods {
 			}
 			void set_name(std::string n);
 
-			std::string ucname(){
-				return m_ucname;
-			}
-			std::string& name() {
-				return m_name;
-			}
+			std::string ucname();
+			std::string& name();
 			void set_sex(byte s){
 				m_char_data->player.sex = s;
 			}

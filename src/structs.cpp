@@ -21,6 +21,9 @@ namespace mods {
 //}
 
 #include "mods/util.hpp"
+void obj_data::init(){
+	CREATE(next_content,struct obj_data,1);
+}
 #ifdef __MENTOC_USE_PQXX_RESULT__
 void obj_data::feed(const pqxx::result::reference & row){
 #else

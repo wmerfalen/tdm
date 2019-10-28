@@ -42,7 +42,7 @@ namespace mods::weapon {
 		obj->next = nullptr;         /* For the object list              */
 		obj->ai_state = 0;
 		obj->type = 0;
-		obj->uuid = mods::globals::get_uuid();
+		obj->uuid = mods::globals::obj_uuid();
 
 		return std::move(obj);
 
@@ -111,7 +111,7 @@ namespace mods::weapon {
 		obj->ai_state = 0;
 
 		/** TODO: fill the uuid in */
-		obj->uuid = mods::globals::get_uuid();
+		obj->uuid = mods::globals::obj_uuid();
 		//obj->weapon(1);
 		//obj->weapon()->ammo = 0;
 		//obj->weapon()->ammo_max = 0;
@@ -126,7 +126,7 @@ namespace mods::weapon {
 	obj_data_ptr_t psg1(){
 		auto obj = base_rifle_object();
 		/** TODO: fill the uuid in */
-		obj->uuid = mods::globals::get_uuid();
+		obj->uuid = mods::globals::obj_uuid();
 		obj->weapon(1);
 
 		/** TODO: determine clip size */
@@ -178,12 +178,14 @@ namespace mods::weapon {
 		/** [ APPEARS ]: when you type inv */
 		obj->short_description = strdup("incendiary grenade <short>");
 		obj->action_description = strdup("incendiary grenade <action>");      /* What to write when used          */
+		obj->explosive()->type = mw_explosive::INCENDIARY_GRENADE;
 		return std::move(obj);
 	}
 
 	obj_data_ptr_t new_emp_grenade_object(){
 		auto obj = base_explosive_object();
 		obj->explosive(mw_explosive::EMP_GRENADE);
+		obj->explosive()->type = mw_explosive::EMP_GRENADE;
 		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
 		obj->name = strdup("An E.M.P. grenade");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
@@ -197,6 +199,7 @@ namespace mods::weapon {
 	obj_data_ptr_t new_smoke_grenade_object(){
 		auto obj = base_explosive_object();
 		obj->explosive(mw_explosive::SMOKE_GRENADE);
+		obj->explosive()->type = mw_explosive::SMOKE_GRENADE;
 		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
 		obj->name = strdup("A smoke grenade");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
@@ -210,6 +213,7 @@ namespace mods::weapon {
 	obj_data_ptr_t new_flashbang_grenade_object(){
 		auto obj = base_explosive_object();
 		obj->explosive(mw_explosive::FLASHBANG_GRENADE);
+		obj->explosive()->type = mw_explosive::FLASHBANG_GRENADE;
 		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
 		obj->name = strdup("A flashbang grenade");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
@@ -224,7 +228,7 @@ namespace mods::weapon {
 		auto obj = base_rifle_object();
 		obj->weapon(1);
 		/** TODO: fill the uuid in */
-		obj->uuid = mods::globals::get_uuid();
+		obj->uuid = mods::globals::obj_uuid();
 
 		/** TODO: determine clip size */
 		obj->weapon()->ammo = 12;

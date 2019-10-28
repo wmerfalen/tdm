@@ -470,8 +470,8 @@ struct obj_data *get_hash_obj_vis(struct char_data *ch, char *name,
 		return (NULL);
 	}
 
-	for(loop = list; loop; loop = loop->next_content)
-		if(CAN_SEE_OBJ(ch, loop) && GET_OBJ_COST(loop) > 0)
+	for(loop = list; loop; loop = loop->next_content){
+		if(CAN_SEE_OBJ(ch, loop) && GET_OBJ_COST(loop) > 0){
 			if(!same_obj(last_obj, loop)) {
 				if(--qindex == 0) {
 					return (loop);
@@ -479,6 +479,8 @@ struct obj_data *get_hash_obj_vis(struct char_data *ch, char *name,
 
 				last_obj = loop;
 			}
+		}
+	}
 
 	return (NULL);
 }

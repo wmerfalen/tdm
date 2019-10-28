@@ -399,6 +399,10 @@ namespace mods {
 				mods::pregame::boot_suite(bootup_test_suite);
 			}
 		}
+		uuid_t mob_uuid() {
+			static uuid_t u = 0;
+			return ++u;
+		}
 		char_data* read_mobile(const mob_vnum & nr,const int & type){
 			log("DEBUG: mods::globals::read_mobile. vnum: %d",nr);
 			mob_rnum i;
@@ -440,7 +444,7 @@ namespace mods {
 				mob_index[i].number++;
 			}
 			SET_BIT(mob->char_specials().saved.act, MOB_ISNPC);
-			mob->uuid() = mob_list.size() - 1;
+			mob->uuid() = mob_uuid();
 			return mob->cd();
 		}
 		uuid_t get_uuid() {

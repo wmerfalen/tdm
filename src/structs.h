@@ -24,6 +24,7 @@
 #include <unordered_map>
 #include "mods/yaml.hpp"
 #include "mods/weapon-types.hpp"
+constexpr static std::size_t MAX_EXPLOSION_FADE_OUT = 5;
 namespace mods {
 	struct player;
 	struct npc;
@@ -46,6 +47,8 @@ using uuid_t = uint64_t;
 using aligned_int_t = uint64_t;
 namespace mods::globals {
 extern uuid_t get_uuid();
+extern uuid_t obj_uuid();
+extern uuid_t mob_uuid();
 };
 enum lense_type_t {
 	FIRST,
@@ -307,6 +310,7 @@ CLASS_SNIPER     = CLASS_MARKSMAN
 #define AFF_HIDE              (1 << 19)	   /* Char is hidden		*/
 #define AFF_UNUSED20	      (1 << 20)	   /* Room for future expansion	*/
 #define AFF_CHARM             (1 << 21)	   /* Char is charmed		*/
+#define AFF_DISORIENT					(1 << 22)		/* User is disoriented */
 
 
 
@@ -736,6 +740,7 @@ enum player_level {
 #else
 		void feed(pqxx::row);
 #endif
+		void init();
 		obj_data(const obj_data& other){
 			item_number = other.item_number;
 			in_room = other.in_room;
@@ -752,7 +757,7 @@ enum player_level {
 			next_content = other.next_content;
 			next = other.next;
 			ai_state = other.ai_state;
-			uuid = mods::globals::get_uuid();
+			uuid = mods::globals::obj_uuid();
 			/** Philsophy: 
 			 * We never want to copy the weapon because
 			 * each instance should have it's own weapon.
@@ -779,7 +784,7 @@ enum player_level {
 			next_content = other.next_content;
 			next = other.next;
 			ai_state = other.ai_state;
-			uuid = mods::globals::get_uuid();
+			uuid = mods::globals::obj_uuid();
 			return *this;
 		}
 		obj_data() : 
@@ -789,7 +794,9 @@ enum player_level {
 			carried_by(nullptr),worn_by(nullptr),worn_on(0),
 			in_obj(nullptr),contains(nullptr),next_content(nullptr),
 			next(nullptr),ai_state(0),uuid(0),m_weapon(nullptr)
-		{}
+		{
+			init();
+		}
 		~obj_data() = default;
 		/**TODO: create constructor and destructor */
 		obj_vnum item_number;	/* Where in data-type			*/
@@ -831,7 +838,7 @@ enum player_level {
 			return m_weapon.get();
 		} 
 		weapon_data_t* weapon(){ return m_weapon.get(); }
-		explosive_data_t* explosive(uint8_t mode){
+		explosive_data_t* explosive(uint8_t type){
 			m_explosive = std::make_unique<explosive_data_t>();
 			return m_explosive.get();
 		} 
@@ -935,6 +942,7 @@ struct obj_data_weapon : public obj_data {
 			ON_FIRE,		/** actively burning */
 			NON_HAZARDOUS_SMOKE, /** think: burning car */
 			HAZARDOUS_SMOKE, /** think: gas attacks */
+			EMP, /** chaff or emp has been detonated */
 			LAST
 		};
 		
@@ -967,6 +975,16 @@ struct obj_data_weapon : public obj_data {
 		char_data *people;    /* List of NPC / PC in room           */
 		std::string_view overhead(const lense_type_t& );
 		const std::vector<texture_type_t>& textures() const;
+		void add_texture(texture_type_t& t){
+			m_textures.emplace_back(t);
+		}
+		void remove_texture(texture_type_t& t){
+			decltype(m_textures) final_textures;
+			for(auto && texture : m_textures){
+				if(texture == t){ continue; }
+				final_textures.emplace_back(t);
+			}
+		}
 
 		protected:
 			std::vector<mods::extra_desc_data> m_ex_descriptions;

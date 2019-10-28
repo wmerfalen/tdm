@@ -811,51 +811,53 @@ void weight_change_object(struct obj_data *obj, int weight) {
 
 
 void name_from_drinkcon(struct obj_data *obj) {
-	char *new_name, *cur_name, *next;
-	const char *liqname;
-	int liqlen, cpylen;
-
-	if(!obj || (GET_OBJ_TYPE(obj) != ITEM_DRINKCON && GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN)) {
-		return;
-	}
-
-	liqname = drinknames[GET_OBJ_VAL(obj, 2)];
-
-	if(!isname(liqname, obj->name)) {
-		log("SYSERR: Can't remove liquid '%s' from '%s' (%d) item.", liqname, obj->name, obj->item_number);
-		return;
-	}
-
-	liqlen = strlen(liqname);
-	CREATE(new_name, char, strlen(obj->name) - strlen(liqname)); /* +1 for NUL, -1 for space */
-
-	for(cur_name = obj->name; cur_name; cur_name = next) {
-		if(*cur_name == ' ') {
-			cur_name++;
-		}
-
-		if((next = strchr(cur_name, ' '))) {
-			cpylen = next - cur_name;
-		} else {
-			cpylen = strlen(cur_name);
-		}
-
-		if(!strn_cmp(cur_name, liqname, liqlen)) {
-			continue;
-		}
-
-		if(*new_name) {
-			strcat(new_name, " ");    /* strcat: OK (size precalculated) */
-		}
-
-		strncat(new_name, cur_name, cpylen);	/* strncat: OK (size precalculated) */
-	}
-
-	if(GET_OBJ_RNUM(obj) == NOTHING || obj->name != obj_proto[GET_OBJ_RNUM(obj)].name) {
-		free(obj->name);
-	}
-
-	obj->name = new_name;
+	log("[disabled]: name_from_drinkcon disabled due to possible buffer overflow");
+	return;
+//	char *new_name, *cur_name, *next;
+//	const char *liqname;
+//	int liqlen, cpylen;
+//
+//	if(!obj || (GET_OBJ_TYPE(obj) != ITEM_DRINKCON && GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN)) {
+//		return;
+//	}
+//
+//	liqname = drinknames[GET_OBJ_VAL(obj, 2)];
+//
+//	if(!isname(liqname, obj->name)) {
+//		log("SYSERR: Can't remove liquid '%s' from '%s' (%d) item.", liqname, obj->name, obj->item_number);
+//		return;
+//	}
+//
+//	liqlen = strlen(liqname);
+//	CREATE(new_name, char, strlen(obj->name) - strlen(liqname)); /* +1 for NUL, -1 for space */
+//
+//	for(cur_name = obj->name; cur_name; cur_name = next) {
+//		if(*cur_name == ' ') {
+//			cur_name++;
+//		}
+//
+//		if((next = strchr(cur_name, ' '))) {
+//			cpylen = next - cur_name;
+//		} else {
+//			cpylen = strlen(cur_name);
+//		}
+//
+//		if(!strn_cmp(cur_name, liqname, liqlen)) {
+//			continue;
+//		}
+//
+//		if(*new_name) {
+//			strcat(new_name, " ");    /* strcat: OK (size precalculated) */
+//		}
+//
+//		strncat(new_name, cur_name, cpylen);	/* strncat: OK (size precalculated) */
+//	}
+//
+//	if(GET_OBJ_RNUM(obj) == NOTHING || obj->name != obj_proto[GET_OBJ_RNUM(obj)].name) {
+//		free(obj->name);
+//	}
+//
+//	obj->name = new_name;
 }
 
 
