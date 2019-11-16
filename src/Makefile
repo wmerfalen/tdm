@@ -18,6 +18,7 @@ yamlcpp_object = yaml-cpp
 
 thirdparty = $(duktape) $(lmdb)
 FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
+	-D__MENTOC_DEBUG__=1 \
 	-Wno-char-subscripts -Wcomment \
 	-Wno-format-zero-length -Wno-format-security\
 	-std=c++17 -fpermissive -MMD \
@@ -25,6 +26,7 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \
 	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\"  \
 	-DMENTOC_NO_CONSTEXPR_CONF=1 \
+	-D__MENTOC_USE_LMDB=1 \
 	-Wno-sign-compare -I$(yamlcpp) -L$(yamllib) \
 	-fPIC
 

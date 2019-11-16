@@ -71,7 +71,7 @@ tuple_status_t new_record(const std::string& table,mutable_map_t* values){
 tuple_status_t save_record(const std::string& table,mutable_map_t* values,std::string pk_id){
 	mods::globals::db->renew_txn();
 	for(auto & meta_key : mods::meta_utils::get_all_meta_values(table,values)){
-		//std::cout << "debug: save_record. Putting: '" << meta_key << " as '" << pk_id << "'\n";
+		std::cout << "debug: save_record. Putting: '" << meta_key << " as '" << pk_id << "'\n";
 		db_put(meta_key,pk_id);
 	}
 		auto write_status =  lmdb_write_values(
@@ -86,6 +86,16 @@ tuple_status_t save_record(const std::string& table,mutable_map_t* values,std::s
 	}else{
 		return {false,std::get<1>(tuple_status),0};
 	}
+}
+
+void lmdb_renew() {
+	mods::globals::db->renew_txn();
+}
+void lmdb_put(std::string key,std::string value){
+	mods::globals::db->put(key,value);
+}
+void lmdb_commit(){
+	mods::globals::db->commit();
 }
 
 tuple_status_t save_char(

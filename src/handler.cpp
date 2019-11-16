@@ -448,7 +448,25 @@ void char_to_room(char_data *ch, room_rnum room) {
 }
 
 void obj_to_char(std::shared_ptr<obj_data> object, std::shared_ptr<mods::player> player) {
-	obj_to_char(object.get(), player->cd());
+	d("obj_to_char shrd_ptr version called");
+	auto ch = player->cd();
+	//obj_to_char(object.get(), player->cd());
+	if(object && ch) {
+		d("giving object to ch (obj_to_char new)");
+		object->next_content = ch->carrying;
+		ch->carrying = object.get();
+		object->carried_by = ch;
+		IN_ROOM(object) = NOWHERE;
+		IS_CARRYING_W(ch) += GET_OBJ_WEIGHT(object.get());
+		IS_CARRYING_N(ch)++;
+
+		///* set flag for crash-save system, but not on mobs! */
+		//if(!IS_NPC(ch)) {
+		//	SET_BIT(PLR_FLAGS(ch), PLR_CRASH);
+		//}
+	} else {
+		log("SYSERR: NULL obj (%p) or char (%p) passed to obj_to_char.", object, ch);
+	}
 }
 
 //void obj_to_char(std::shared_ptr<obj_data*> object, player_ptr_t player){
@@ -456,6 +474,7 @@ void obj_to_char(std::shared_ptr<obj_data> object, std::shared_ptr<mods::player>
 /* give an object to a char   */
 void obj_to_char(struct obj_data *object, struct char_data *ch) {
 	if(object && ch) {
+		d("giving object to ch (obj_to_char legacy)");
 		object->next_content = ch->carrying;
 		ch->carrying = object;
 		object->carried_by = ch;

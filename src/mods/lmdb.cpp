@@ -7,6 +7,7 @@
 #include "pq.hpp"
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 #endif
+#define __MENTOC_USE_LMDB__ 1
 namespace mods::lmdb {
 	using aligned_int_t = uint64_t;
 	selector_type_t transaction_t::selector(const key_type_t & column,const uint64_t & row_id){
@@ -76,6 +77,8 @@ namespace mods::lmdb {
 		}
 	}
 
+	void lmdb_debug(std::string f){ std::cerr << "[lmdb_debug]:'" << f << "'\n"; }
+
 	void _db_handle::set_pluck_filter(const std::vector<std::string> & cols){
 		m_pluck = cols;
 		m_use_pluck = true;
@@ -97,10 +100,16 @@ namespace mods::lmdb {
 		: m_use_pluck(false), m_good(false), m_closed(true), 
 		m_dir(directory), m_name(db_name), m_flags(flags), m_mode(mode) {
 #ifdef __MENTOC_USE_LMDB__
+			lmdb_debug("using lmdb. opening..");
 			m_transaction_open = false;
 			m_transaction_good = false;
 			m_dbi_opened = false;
-			open();
+			auto status = open();
+			if(status){
+				lmdb_debug("open successfully");
+			}else{
+				lmdb_debug("Not opened successfully!");
+			}
 #endif
 		}
 	bool _db_handle::open(){
@@ -113,10 +122,13 @@ namespace mods::lmdb {
 			m_status[0] = {false,"There was an error in mdb_env_create(): "_s + std::to_string(r) + \
 				"|mdb_strerror: " + mdb_strerror(r) + "[via:mdb_env_create]"};
 			close();
+			lmdb_debug(std::string("env_create failed"));
+			lmdb_debug(std::get<1>(m_status[0]));
 			m_good = false;
 			return false;
 		}
 		m_status[1] = {true,"Environment created successfully."};
+			lmdb_debug("env_create good!");
 		if((r = mdb_env_open(m_env,m_dir.c_str(),m_flags,m_mode)) != 0){
 			std::string reason = "An unknown error occured: "_s + std::to_string(r);
 			switch(r){
@@ -296,8 +308,11 @@ namespace mods::lmdb {
 #endif
 	}
 	int _db_handle::put(std::string key,std::string value,bool renew){
+		lmdb_debug("put function entry");
 #ifdef __MENTOC_USE_LMDB__
+		lmdb_debug("put function entry got the okay to proceed");
 		if(renew){
+			lmdb_debug("renewing...");
 			if(m_transaction_good || m_transaction_open){
 				mdb_txn_commit(m_txn);
 				m_transaction_good = m_transaction_open = false;
@@ -311,11 +326,13 @@ namespace mods::lmdb {
 #endif
 	}
 	int _db_handle::put(std::string key,std::string value){
+		lmdb_debug("put function entry (no renew)");
 #ifdef __MENTOC_USE_LMDB__
 		if(!m_good){
 			this->renew_txn();
 		}
 		if(m_good){
+			lmdb_debug("m_good");
 			MDB_val k;
 			k.mv_size = key.length();
 			k.mv_data = (void*)key.c_str();
@@ -325,19 +342,25 @@ namespace mods::lmdb {
 			int ret = mdb_put(m_txn,m_dbi,&k,&v,0);
 			switch(ret){
 				case MDB_MAP_FULL:
+						lmdb_debug("put full");
 					return ret;
 				case EINVAL:
+						lmdb_debug("put einval");
 					return ret;
 				case EACCES:
+						lmdb_debug("put eaccess");
 					return ret;
 				case MDB_TXN_FULL:
+						lmdb_debug("put txn full");
 					return ret;
 				default:
 					if(std::string("Successful").compare(mdb_strerror(ret)) == 0){
+						lmdb_debug("put success");
 						return 0;
 					}
 			}
 		}else{
+			lmdb_debug("not good");
 			return -2;
 		}
 		return 0;

@@ -13,6 +13,9 @@ typedef int socket_t;
 #include "../mods/util.hpp"
 #include "../globals.hpp"
 
+namespace mods::globals {
+	extern std::unique_ptr<mods::deferred> defer_queue;
+};
 namespace mods {
 	namespace projectile {
 		enum projectile_event_t {
@@ -56,6 +59,63 @@ namespace mods {
 		void blindness_clears_up(player_ptr_t victim);
 		void disorient_clears_up(player_ptr_t victim);
 		void propagate_chemical_blast(room_rnum& room_id,obj_data* device);
+
+		template <typename TObjectPtr>
+		void throw_object(player_ptr_t player, int direction, std::size_t depth,
+				TObjectPtr object, std::string_view verb){
+			std::array<char,MAX_INPUT_LENGTH> str_dir_buffer;
+			std::string str_dir = mods::projectile::todirstr(static_cast<const char*>(&str_dir_buffer[0]),1,0);
+			int8_t dir = mods::projectile::to_direction(&str_dir_buffer[0]);
+			if(dir < 0){
+				player->sendln("Use a valid direction!");
+				return;
+			}
+			std::string object_name = "";
+			int ticks = 0;
+			switch(object->explosive()->type) {
+				default:
+				case mw_explosive::REMOTE_EXPLOSIVE:
+				case mw_explosive::REMOTE_CHEMICAL:
+				case mw_explosive::CLAYMORE_MINE:
+				case mw_explosive::EXPLOSIVE_NONE:
+					player->sendln("This type of explosive is not throwable!");
+					return;
+					break;
+				case mw_explosive::FRAG_GRENADE:
+					ticks = 2;
+					object_name = "frag grenade";
+					break;
+				case mw_explosive::INCENDIARY_GRENADE:
+					object_name = "incendiary grenade";
+					ticks = 2;
+					break;
+				case mw_explosive::EMP_GRENADE:
+					object_name = "emp grenade";
+					ticks = 2;
+					break;
+				case mw_explosive::SMOKE_GRENADE:
+					object_name = "smoke grenade";
+					ticks = 3;
+					break;
+				case mw_explosive::FLASHBANG_GRENADE:
+					object_name = "flashbang grenade";
+					ticks = 1;
+					break;
+			}
+			obj_from_char(object);
+			send_to_room_except(player->room(), player, "%s %ss a %s%s!\r\n",
+					player->ucname().c_str(), 
+					verb.data(),
+					object_name.c_str(),
+					str_dir.c_str());
+			player->sendln("You " + std::string(verb.data()) + " a " + object->explosive()->name + str_dir);
+			auto room_id = mods::projectile::cast_finite(player->cd(),player->room(),direction,depth,object);
+			mods::projectile::travel_to(player->room(), direction, depth, object);
+			obj_to_room(object,room_id);
+			mods::globals::defer_queue->push(ticks, [room_id,&object]() {
+				mods::projectile::explode(room_id,object);
+			});
+		}
 	};
 };
 #endif

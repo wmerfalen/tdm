@@ -19,7 +19,7 @@ namespace mods {
 						mods::projectile::disorient_clears_up}
 				);
 		}
-#define REMOVE_TEXTURE_QUEUE(t_texture,r_room_id) queue_remove_texture(40,r_room_id,room_data::texture_type_t::t_texture);
+#define QUEUE_TEXTURE_REMOVAL(t_texture,r_room_id) queue_remove_texture(40,r_room_id,room_data::texture_type_t::t_texture);
 		void queue_remove_texture(uint64_t ticks_in_future,room_rnum& room_id,room_data::texture_type_t texture){
 			/** TODO: calculate blast radius to remove smoke textures from those rooms */
 				mods::globals::defer_queue->detexturize_room(
@@ -29,17 +29,17 @@ namespace mods {
 				);
 		}
 		void propagate_chemical_blast(room_rnum& room_id,obj_data* device){
-			REMOVE_TEXTURE_QUEUE(HAZARDOUS_SMOKE,room_id);
+			QUEUE_TEXTURE_REMOVAL(HAZARDOUS_SMOKE,room_id);
 		}
 		void propagate_chemical_blast(room_rnum& room_id,obj_data* device,std::size_t depth){
-			REMOVE_TEXTURE_QUEUE(HAZARDOUS_SMOKE,room_id);
+			QUEUE_TEXTURE_REMOVAL(HAZARDOUS_SMOKE,room_id);
 			for(auto &player : mods::globals::room_list[room_id]){
 				player->sendln("Propagating chemblast " + std::to_string((1.0) * (depth / 3.0)));
 			}
 		}
 		void emp_damage(room_rnum& room_id,obj_data* object){
 			send_to_room(room_id,"Your electronics sizzle and malfunction into uselessness.");
-			REMOVE_TEXTURE_QUEUE(EMP,room_id);
+			QUEUE_TEXTURE_REMOVAL(EMP,room_id);
 		}
 		/*
 		void damage_room(room_rnum& room_id,obj_data* object){
@@ -105,16 +105,16 @@ namespace mods {
 							log("SYSERR: EXPLOSIVE_NONE specified in perform_blast_radius");
 							return;
 						case mw_explosive::REMOTE_CHEMICAL:
-							REMOVE_TEXTURE_QUEUE(HAZARDOUS_SMOKE,current_room);
+							QUEUE_TEXTURE_REMOVAL(HAZARDOUS_SMOKE,current_room);
 							break;
 						case mw_explosive::INCENDIARY_GRENADE:
-							REMOVE_TEXTURE_QUEUE(ON_FIRE,current_room);
+							QUEUE_TEXTURE_REMOVAL(ON_FIRE,current_room);
 							break;
 						case mw_explosive::EMP_GRENADE:
-							REMOVE_TEXTURE_QUEUE(EMP,current_room);
+							QUEUE_TEXTURE_REMOVAL(EMP,current_room);
 							break;
 						case mw_explosive::SMOKE_GRENADE:
-							REMOVE_TEXTURE_QUEUE(NON_HAZARDOUS_SMOKE,current_room);
+							QUEUE_TEXTURE_REMOVAL(NON_HAZARDOUS_SMOKE,current_room);
 							break;
 					}
 					for(auto & person : mods::globals::room_list[current_room]){
@@ -195,6 +195,14 @@ namespace mods {
 			player->sendln("You become extremely disoriented!");
 		}
 		void explode(room_rnum room_id,obj_data* object) {
+			if(room_id >= world.size()){
+				log("[error]: mods::projectile::explode received room_id greater than world.size()");
+				return;
+			}
+			if(!object){
+				log("[error]: mods::projectile::explode received invalid object to blow up");
+				return;
+			}
 			if(object->explosive()->type == mw_explosive::EXPLOSIVE_NONE){
 				log("[error]: mods::projectile::explode received EXPLOSIVE_NONE");
 				return;
@@ -211,7 +219,7 @@ namespace mods {
 					break;
 				case mw_explosive::REMOTE_CHEMICAL:
 					send_to_room(room_id,"A %s explodes! A noxious chemical is released!",object->name);
-					REMOVE_TEXTURE_QUEUE(HAZARDOUS_SMOKE,room_id);
+					QUEUE_TEXTURE_REMOVAL(HAZARDOUS_SMOKE,room_id);
 					break;
 				case mw_explosive::CLAYMORE_MINE:
 					send_to_room(room_id,"You trip over a %s! An explosion catches you off guard!",object->name);
@@ -221,15 +229,15 @@ namespace mods {
 					break;
 				case mw_explosive::INCENDIARY_GRENADE:
 					send_to_room(room_id,"A %s explodes! The room turns into a fiery blaze!",object->name);
-					REMOVE_TEXTURE_QUEUE(ON_FIRE,room_id);
+					QUEUE_TEXTURE_REMOVAL(ON_FIRE,room_id);
 					break;
 				case mw_explosive::EMP_GRENADE:
 					send_to_room(room_id,"A %s explodes!",object->name);
-					REMOVE_TEXTURE_QUEUE(EMP,room_id);
+					QUEUE_TEXTURE_REMOVAL(EMP,room_id);
 					break;
 				case mw_explosive::SMOKE_GRENADE:
 					send_to_room(room_id,"A cloud of sight limiting gas fills the room.");
-					REMOVE_TEXTURE_QUEUE(NON_HAZARDOUS_SMOKE,room_id);
+					QUEUE_TEXTURE_REMOVAL(NON_HAZARDOUS_SMOKE,room_id);
 					break;
 				case mw_explosive::FLASHBANG_GRENADE:
 					/** TODO: grab cooldown ticks from explosive() */

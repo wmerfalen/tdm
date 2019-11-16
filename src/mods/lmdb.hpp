@@ -218,9 +218,9 @@ namespace mods::lmdb {
 
 };
 
-//namespace mods::globals {
-//	extern std::unique_ptr<mods::lmdb::db_handle> db;
-//};
+namespace mods::globals {
+	extern std::unique_ptr<mods::lmdb::db_handle> db;
+};
 
 void db_renew_txn();
 std::string db_key(const std::vector<std::string> & parts);

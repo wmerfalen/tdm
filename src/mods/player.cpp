@@ -25,6 +25,10 @@
 extern void do_auto_exits(struct char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
 extern mods::scan::find_results_t mods::scan::los_find(chptr hunter,chptr hunted);
+enum histfile_type_t {
+	HISTFILE_FILE = 1, HISTFILE_LMDB = 2, HISTFILE_DUAL = 3
+};
+static constexpr histfile_type_t HISTFILE_STRATEGY = histfile_type_t::HISTFILE_FILE;
 namespace mods {
 	using mask_t = mods::weapon::mask_type;
 	void stc_color_evaluation(const std::string& title,player* p) {
@@ -881,18 +885,22 @@ namespace mods {
 		return cl_sniper()->rifle()->obj();
 	}
 	void player::start_histfile() {
-		m_histfile_key = std::to_string(get_db_id()) + "|histfile|" + mods::date_time::irl::epoch_string() + "|";
 		m_histfile_on = true;
+		m_histfile_index = 0;
 	}
 
 	void player::histfile(std::string_view line) {
 		if(m_histfile_on){
-			LMDBSET(m_histfile_key + std::to_string(m_histfile_index++),line.data());
+			std::cerr << "[histfile]+='" << line << "'\n";
+			LMDBSET(name() + "|histfile|" + std::to_string(m_histfile_index++) + "|" + mods::date_time::irl::epoch_string() + "|",
+					line.data()
+			);
 		}
 	}
 	void player::stop_histfile() {
 		m_histfile_on = false;
-		m_histfile_key = "";
+		m_histfile_index = 0;
+		std::cerr << "[histfile]->Stopping...\n";
 	}
 	player::~player() {
 		std::cerr << "[~player] " << m_name.c_str() << "\n";

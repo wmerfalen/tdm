@@ -142,60 +142,28 @@ ACMD(do_throw) {
 	}
 
 	/** If the grenade is a flashbang, we have a shorter timer on it */
-	int ticks = 0;
+	//int ticks = 4;
 	/** temporarily do this just for debugging FIXME */
-	std::string object_name = "";
-	switch(held_object->explosive()->type) {
-		default:
-		case mw_explosive::REMOTE_EXPLOSIVE:
-		case mw_explosive::REMOTE_CHEMICAL:
-		case mw_explosive::CLAYMORE_MINE:
-		case mw_explosive::EXPLOSIVE_NONE:
-			player->sendln("This type of explosive is not throwable!");
-			return;
-			break;
-		case mw_explosive::FRAG_GRENADE:
-			ticks = 2;
-			object_name = "frag grenade";
-			break;
-		case mw_explosive::INCENDIARY_GRENADE:
-			object_name = "incendiary grenade";
-			ticks = 2;
-			break;
-		case mw_explosive::EMP_GRENADE:
-			object_name = "emp grenade";
-			ticks = 2;
-			break;
-		case mw_explosive::SMOKE_GRENADE:
-			object_name = "smoke grenade";
-			ticks = 3;
-			break;
-		case mw_explosive::FLASHBANG_GRENADE:
-			object_name = "flashbang grenade";
-			ticks = 1;
-			break;
-	}
 	/* Resolve cnt rooms in direction.*/
-	player->unequip(WEAR_HOLD);
+	//player->unequip(WEAR_HOLD);
 	/**
 	 * If the object name doesn't have a name, we'll assign it a generic one
 	 */
-	if(held_object->explosive()->name.length() == 0) {
-		held_object->explosive()->name = object_name;
-	}
-	obj_from_char(held_object);
-	send_to_room_except(player->room(), player, "%s lobs a %s%s!\r\n",
-			player->ucname().c_str(), 
-			object_name.c_str(),
-			str_dir.c_str());
-	player->sendln("You lob a " + held_object->explosive()->name + str_dir);
-	auto room_id = mods::projectile::cast_finite(ch,IN_ROOM(ch),dir,cnt,held_object);
-	mods::projectile::travel_to(player->room(), dir, cnt, held_object);
-	obj_to_room(held_object,room_id);
-	auto frag = [room_id,&held_object]() {
-		mods::projectile::explode(room_id,held_object);
-	};
-	mods::globals::defer_queue->push(ticks, frag);
+	//if(held_object->explosive()->name.length() == 0) {
+	//	held_object->explosive()->name = object_name;
+	//}
+
+	//obj_from_char(held_object);
+	//send_to_room_except(player->room(), player, "%s lobs a %s%s!\r\n",
+	//		player->ucname().c_str(), 
+	//		object_name.c_str(),
+	//		str_dir.c_str());
+	//player->sendln("You lob a " + held_object->explosive()->name + str_dir);
+	//auto room_id = mods::projectile::cast_finite(ch,IN_ROOM(ch),dir,cnt,held_object);
+	//mods::projectile::travel_to(player->room(), dir, cnt, held_object);
+	//obj_to_room(held_object,room_id);
+
+	mods::projectile::throw_object<obj_data*>(player, dir, cnt, held_object, "lob");
 }
 
 ACMD(do_giveme_frag_grenades) {
@@ -204,27 +172,23 @@ ACMD(do_giveme_frag_grenades) {
 	obj_to_char(obj,player);
 }
 ACMD(do_giveme_incendiary_grenades) {
-	MENTOC_PREAMBLE();
 	auto obj = mods::weapon::new_incendiary_grenade_object();
-	obj_to_char(obj,player);
+	obj_to_char(obj.get(),ch);
 }
 
 ACMD(do_giveme_emp_grenades) {
-	MENTOC_PREAMBLE();
 	auto obj = mods::weapon::new_emp_grenade_object();
-	obj_to_char(obj,player);
+	obj_to_char(obj.get(),ch);
 }
 
 ACMD(do_giveme_smoke_grenades) {
-	MENTOC_PREAMBLE();
 	auto obj = mods::weapon::new_smoke_grenade_object();
-	obj_to_char(obj,player);
+	obj_to_char(obj.get(),ch);
 }
 
 ACMD(do_giveme_flashbang_grenades) {
-	MENTOC_PREAMBLE();
 	auto obj = mods::weapon::new_flashbang_grenade_object();
-	obj_to_char(obj,player);
+	obj_to_char(obj.get(),ch);
 }
 
 ACMD(do_giveme_sniper_rifle) {

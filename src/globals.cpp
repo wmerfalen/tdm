@@ -151,8 +151,8 @@ namespace mods {
 				 	<< "--testing=<suite>	Launch test suite\n"
 					<< "--import-rooms 	Run the import rooms routine\n"
 					<< "--hell 	Start the mud in HELL mode\n"
-					//<< "--lmdb-name=<name> use name as lmdb db name\n"
-					//<< "--lmdb-dir=<dir> use dir as directory to store lmdb data\n"
+					<< "--lmdb-name=<name> use name as lmdb db name\n"
+					<< "--lmdb-dir=<dir> use dir as directory to store lmdb data\n"
 					<< "--postgres-dbname=<db> use db as postgres db. default: mud\n"
 					<< "--postgres-user=<user> use user as postgres user. default: postgres\n"
 					<< "--postgres-host=<host> use host as postgres host. default: localhost\n"
@@ -204,10 +204,11 @@ namespace mods {
 					boot_type = BOOT_HELL;
 					continue;
 				}
-				//if(strncmp(argv[pos],"--lmdb-name=",12) == 0){
-				//	lmdb_name = argument.substr(12,argument.length()-12);
-				//	continue;
-				//}
+				if(strncmp(argv[pos],"--lmdb-name=",12) == 0){
+					lmdb_name = argument.substr(12,argument.length()-12);
+					log((std::string("DEBUG: found lmdb db name: ") + lmdb_name).c_str());
+					continue;
+				}
 				if(strncmp(argv[pos],"--postgres-pw-file=",19) == 0){
 					if(argument.length()  < 20){
 						log("SYSERR: --postgres-pw-file expects an argument, none found: '",argument.c_str(),"'.Exiting...");
@@ -282,15 +283,16 @@ namespace mods {
 						continue;
 					}
 				}
-				//if(strncmp(argv[pos],"--lmdb-dir=",11) == 0){
-				//	if(argument.length() < 12){
-				//		log("SYSERR: --lmdb-dir expects an argument, none found: '",argv[pos],"'. Exiting...");
-				//		mods::globals::shutdown();
-				//	}else{
-				//		lmdb_dir = argument.substr(11,argument.length()-11);
-				//		continue;
-				//	}
-				//}
+				if(strncmp(argv[pos],"--lmdb-dir=",11) == 0){
+					if(argument.length() < 12){
+						log("SYSERR: --lmdb-dir expects an argument, none found: '",argv[pos],"'. Exiting...");
+						mods::globals::shutdown();
+					}else{
+						lmdb_dir = argument.substr(11,argument.length()-11);
+						log((std::string("DEBUG: found lmdb directory: ")+ lmdb_dir).c_str());
+						continue;
+					}
+				}
 			}
 
 			if(!mods::util::dir_exists(lmdb_dir.c_str())){

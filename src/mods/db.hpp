@@ -37,11 +37,16 @@ static inline int_status_t initialize_table_schema(std::string table){
 }
 
 
+namespace mods::globals {
+	extern std::unique_ptr<db_handle> db;
+};
 /**
  * initliaze_row
  */
 namespace mods::db{
-
+	void lmdb_renew();
+	void lmdb_commit();
+void lmdb_put(std::string key,std::string value);
 void lmdb_export_char(
 		player_ptr_t player_ptr,
 		mutable_map_t &

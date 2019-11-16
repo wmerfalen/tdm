@@ -276,6 +276,11 @@ namespace mods::builder {
 	std::string_view sandbox_data_t::name() const {
 		return m_name;
 	}
+	/**
+	 * New Sandbox
+	 * -----------
+	 * new_sandbox(player,name,room_vnum,zone_vnum);
+	 */
 	int8_t sandbox_data_t::new_sandbox(
 			player_ptr_t player,
 			std::string_view name,
@@ -313,6 +318,15 @@ namespace mods::builder {
 		room.description.assign("description goes here");
 		return 0;
 	}
+
+
+	/**
+	 * New Room
+	 * --------
+	 *  new_room(playaer,direction);
+	 *  
+	 *  Create a room to the 'direction'.
+	 */
 	/* Factory method to generate a room for us */
 	room_data new_room(player_ptr_t player,int direction);
 	bool flush_to_db(struct char_data *ch,room_vnum room);
@@ -349,6 +363,15 @@ namespace mods::builder {
 		//}
 		player->set_bui_mode(true);
 	}
+
+	/**
+	 * Pave to
+	 * -------
+	 *  Pave from the current room to 'direction'.
+	 *
+	 *  pave_to(player,room_data* current_room,int direction);
+	 *
+	 */
 	void pave_to(player_ptr_t player,room_data * current_room,int direction) {
 		initialize_builder(player);
 		r_status(player,
@@ -381,7 +404,15 @@ namespace mods::builder {
 		r_status(player,"Paved room to that direction");
 	}
 
-	std::pair<bool,std::string> update_zone_commands(int zone_id) {
+	/**
+	 * Update zone commands
+	 * --------------------
+	 *  Flush currently zone_id's currently loaded data to the db
+	 *
+	 *  update_zone_commands(zone_rnum zone_id);
+	 *
+	 */
+	std::pair<bool,std::string> update_zone_commands(zone_rnum zone_id) {
 		std::size_t zid = zone_id;
 
 		if(zid >= zone_table.size()) {
@@ -416,6 +447,9 @@ namespace mods::builder {
 
 		return {true,"Saved all zone commands successfully"};
 	}
+
+
+
 	bool save_zone_to_db(zone_vnum virtual_number,std::string_view name,int room_start,int room_end,int lifespan,int reset_mode) {
 		try{
 			auto txn2 = txn();
