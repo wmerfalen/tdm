@@ -903,9 +903,7 @@ void command_interpreter(struct char_data *ch, char *argument) {
 	/* just drop to next line for hitting CR */
 	skip_spaces(&argument);
 
-	if(player->histfile()) {
-		player->histfile(argument);
-	}
+
 	if(!mods::globals::command_interpreter(player,argument)) {
 		mods::globals::post_command_interpreter(ch,argument);
 		return;
@@ -940,12 +938,12 @@ void command_interpreter(struct char_data *ch, char *argument) {
 		}
 	}
 
-
 	if(*cmd_info[cmd].command == '\n') {
 		send_to_char(ch, "Huh?!?\r\n");
 		//TODO: change PLR_FLAGGED call to player->member method call
 	} else{
 		if(player->god_mode()){
+			assert(ch != nullptr);
 			((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd));
 			mods::globals::post_command_interpreter(ch,argument);
 			return;
@@ -1955,6 +1953,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 												 if(has_mail(GET_IDNUM(p->cd()))) {
 													 p->stc("You have mail waiting.\r\n");
 												 }
+												 p->start_histfile();
 
 #ifdef __MENTOC_RENT_DYNAMICS__
 												 if(load_result == 2) {	/* rented items lost */

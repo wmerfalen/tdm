@@ -37,12 +37,14 @@ strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(
 #define OPPOSITE_DIR(a) mods::globals::opposite_dir(a)
 #define DBSET(key,value){ mods::globals::ram_db[key] = value; }
 #define DBGET(key,value) { value = mods::globals::ram_db[key]; }
-/*
-#define LMDBSET(key,value) db_put(key,value);
-#define LMDBGET(key) db_get(key)
-*/
+
+#define LMDBNSET(_lmdb_n_set_key,_lmdb_n_set_k_size,_lmdb_n_set_value,_lmdb_n_set_v_size) mods::db::lmdb_nput(_lmdb_n_set_key,_lmdb_n_set_k_size,_lmdb_n_set_value,_lmdb_n_set_v_size)
+
 #define LMDBSET(key,value) mods::db::lmdb_put(key,value)
-#define LMDBGET(key) mods::globals::db->get(key)
+#define LMDBNGET(key,k_size,value_buffer) mods::db::lmdb_nget(key,k_size,value_buffer)
+#define LMDBGET(key) mods::db::lmdb_get(key)
+#define LMDBCOMMIT() mods::db::lmdb_commit()
+#define LMDBRENEW() mods::db::lmdb_renew()
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
 #ifdef __MENTOC_DEBUG__
 #define d(a) std::cerr << "[debug]: " << a << "\n" << std::flush;

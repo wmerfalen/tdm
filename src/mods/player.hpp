@@ -493,9 +493,21 @@ namespace mods {
 			std::shared_ptr<mods::classes::medic> 	cl_medic();
 			obj_data_ptr_t sniper_rifle();
 			void start_histfile();
-			bool histfile() const { return m_histfile_on; }
-			void histfile(std::string_view);
+			void write_histfile(std::string_view);
 			void stop_histfile();
+			std::string hf_pack(uint32_t index,uint8_t op,unsigned long time_stamp);
+	int pack_get(
+			uint32_t index,
+			uint8_t op,
+			unsigned long time_stamp,
+			std::string& got);
+
+	int pack_set(
+			uint32_t index,
+			uint8_t op,
+			unsigned long time_stamp,
+			void* value,
+			std::size_t v_size);
 
 		protected:
 			lense_type_t m_lense_type;
@@ -538,9 +550,9 @@ namespace mods {
 			weapon_type_t m_weapon_flags;
 			std::shared_ptr<mods::classes::sniper> m_class_sniper;
 			std::shared_ptr<mods::classes::medic> m_class_medic;
-			std::string m_histfile_key;
 			bool m_histfile_on;
 			uint32_t m_histfile_index;
+			std::string m_histfile_key;
 	};
 };
 

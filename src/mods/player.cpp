@@ -14,6 +14,7 @@
 #include "util.hpp"
 #include "scan.hpp"
 #include "date-time.hpp"
+#include <chrono>
 /**
  * TODO: All these stc* functions need to be altered to accomodate
  * the new player_type_enum_t values. If output is to be muted, then
@@ -29,6 +30,7 @@ enum histfile_type_t {
 	HISTFILE_FILE = 1, HISTFILE_LMDB = 2, HISTFILE_DUAL = 3
 };
 static constexpr histfile_type_t HISTFILE_STRATEGY = histfile_type_t::HISTFILE_FILE;
+
 namespace mods {
 	using mask_t = mods::weapon::mask_type;
 	void stc_color_evaluation(const std::string& title,player* p) {
@@ -51,8 +53,8 @@ namespace mods {
 			 */
 			if(paragraph[cint] == '{') {
 				while(paragraph[cint] != '}'
-				        && cint < paragraph.length()
-				     ) {
+						&& cint < paragraph.length()
+						) {
 					buffer += paragraph[cint++];
 					--position;
 				}
@@ -75,7 +77,7 @@ namespace mods {
 				 * up on spaces if we didn't 'continue' here.
 				 */
 				if(buffer.begin() != buffer.end() &&
-				        isspace(*(buffer.end() - 1))) {
+						isspace(*(buffer.end() - 1))) {
 					continue;
 				} else {
 					/* the most recent character was *not* a space so we
@@ -117,9 +119,9 @@ namespace mods {
 		std::cerr << "[deprecated] set_shared_ptr\n";
 		return;
 		/*
-		m_self_ptr = self_ptr;
-		cd()->player_ptr = self_ptr;
-		*/
+			 m_self_ptr = self_ptr;
+			 cd()->player_ptr = self_ptr;
+			 */
 	}
 	void player::m_set_time(){
 		//m_time = std::chrono::system_clock::now();
@@ -226,8 +228,8 @@ namespace mods {
 	}
 
 	player::player(char_data* ch) : m_char_data(ch), m_executing_js(false), m_do_paging(false),
-		m_page(0),m_current_page(0),m_current_page_fragment("") {
-			m_set_time();
+	m_page(0),m_current_page(0),m_current_page_fragment("") {
+		m_set_time();
 	};
 	bool player::can_snipe(char_data *target) {
 		return mods::scan::los_find(
@@ -251,7 +253,7 @@ namespace mods {
 		if(i < m_pages.size()) {
 			acc += std::string("--[ page number ") + std::to_string(pg +1)  + "/";
 			acc += std::to_string((m_pages.size() / mods::player::PAGE_SIZE) + 1) + \
-			       ":: press (q) to quit or page number ]--";
+						 ":: press (q) to quit or page number ]--";
 		} else {
 			pager_clear();
 			pager_end();
@@ -582,7 +584,6 @@ namespace mods {
 	}
 	void player::init(){
 		m_histfile_on = false;
-		m_histfile_key.clear();
 		m_weapon_type = 0;
 		m_weapon_flags = 0;
 		m_authenticated = false;
@@ -884,27 +885,117 @@ namespace mods {
 	obj_data_ptr_t player::sniper_rifle(){
 		return cl_sniper()->rifle()->obj();
 	}
-	void player::start_histfile() {
-		m_histfile_on = true;
-		m_histfile_index = 0;
+
+
+	std::string grab_raw_histfile_seconds(){
+		time_t seconds;
+		seconds = time(nullptr);
+		char buffer[sizeof(seconds)+1];
+		bcopy(&seconds,buffer,sizeof(seconds));
+		buffer[sizeof(seconds)] = 0;
+		std::string data(sizeof(buffer),0);
+		std::copy(buffer,buffer+sizeof(buffer), data.begin());
+		return data;
 	}
 
-	void player::histfile(std::string_view line) {
-		if(m_histfile_on){
-			std::cerr << "[histfile]+='" << line << "'\n";
-			LMDBSET(name() + "|histfile|" + std::to_string(m_histfile_index++) + "|" + mods::date_time::irl::epoch_string() + "|",
-					line.data()
-			);
+	enum histfile_opcode_t {
+		HFO_INDEX =1,HFO_START=2,HFO_STOP=3,HFO_LOG=4
+	};
+	std::string player::hf_pack(uint32_t index,
+			uint8_t op,
+			unsigned long time_stamp){
+		std::size_t amount = sizeof(m_db_id) +
+			sizeof(op) +
+			sizeof(index) +
+			1 +
+			sizeof(time_stamp);
+		std::string data(amount,0);
+		char* db_id = reinterpret_cast<char*>(&m_db_id);
+		char* op_id = reinterpret_cast<char*>(&op);
+		char* index_id = reinterpret_cast<char*>(&index);
+		char* time_id = reinterpret_cast<char*>(&time_stamp);
+		std::copy(db_id,db_id + sizeof(m_db_id),data.begin());
+		std::copy(op_id,op_id + sizeof(op),data.begin() + sizeof(m_db_id));
+		std::copy(index_id,index_id + sizeof(index),data.begin() + sizeof(m_db_id) + sizeof(op));
+		data[sizeof(op) + sizeof(m_db_id) + sizeof(index)] = '|';
+		std::copy(time_id,time_id + sizeof(time_id),
+				data.begin() + sizeof(m_db_id) + sizeof(op) + sizeof(index));
+		std::cerr << "hf_pack()======================================\n";
+		std::cerr << "hf_pack()======================================\n";
+		std::cerr << "length: " << data.length() << "size: " << data.size() << "\n";
+		for(auto ch : data) {
+			std::cerr << (uint8_t)ch << " ";
 		}
+		std::cerr << "hf_pack()======================================\n";
+		std::cerr << "hf_pack()======================================\n";
+		return data;
+	}
+	int player::pack_get(
+			uint32_t index,
+			uint8_t op,
+			unsigned long time_stamp,
+			std::string& got){
+		auto packed_index = hf_pack(index,op,time_stamp);
+		return LMDBNGET(packed_index.data(),packed_index.size(),got);
+	}
+
+	void got_dbg(std::string got){
+		std::cerr << "[got]: ";
+		for(unsigned i=0; i < got.size();i++){
+			std::cerr << std::hex << got[i] << " ";
+		}
+		std::cerr << "\n";
+	}
+	int player::pack_set(
+			uint32_t index,
+			uint8_t op,
+			unsigned long time_stamp,
+			void* value,
+			std::size_t v_size){
+		auto key = this->hf_pack(index,op,time_stamp);
+		LMDBNSET(key.data(),key.size(),value,v_size);
+		return 0;
+	}
+
+
+	void player::start_histfile() {
+		std::cerr << "[start_histfile]\n";
+		std::cerr << "[start_histfile]\n";
+		std::cerr << "[histfile hf_index]: -- FETCHING --\n";
+
+
+		std::string got = "";
+		auto status = this->pack_get(-1,HFO_INDEX,-1,got);
+		std::cerr << "start_histfile status (nget): " << status << "\n";
+
+		auto hf_index = m_histfile_index = 0;
+		hf_index = (std::size_t)*((std::size_t*)(got.data()));
+		m_histfile_index = ++hf_index;
+		this->sendln(std::to_string(m_histfile_index));
+		char* hf_ptr = reinterpret_cast<char*>(&m_histfile_index);
+		std::string value = "";
+		std::copy(hf_ptr,hf_ptr + sizeof(m_histfile_index),value.begin());
+
+		this->pack_set(-1,HFO_INDEX,-1,&m_histfile_index,sizeof(m_histfile_index));
+		this->pack_set(m_histfile_index,HFO_START,-1,value.data(),value.size());
+	}
+
+	void player::write_histfile(std::string_view line) {
+		std::cerr << "histfile entry...\n";
+		std::cerr << "[histfile]+='" << line << "'\n";
+		auto packed = hf_pack(m_histfile_index,HFO_LOG,(unsigned long)std::time(nullptr));
+		LMDBNSET((void*)packed.data(),packed.size(),(void*)line.data(),line.size());
 	}
 	void player::stop_histfile() {
-		m_histfile_on = false;
-		m_histfile_index = 0;
 		std::cerr << "[histfile]->Stopping...\n";
+		auto packed = hf_pack(m_histfile_index,HFO_STOP,0);
+		auto value = grab_raw_histfile_seconds();
+		LMDBNSET(packed.data(),packed.size(),value.data(),value.size());
+		m_histfile_on = false;
 	}
 	player::~player() {
 		std::cerr << "[~player] " << m_name.c_str() << "\n";
-		stop_histfile();
+		if(m_histfile_on){ stop_histfile(); }
 		m_weapon_type = 0;
 		m_weapon_flags = 0;
 		m_authenticated = false;

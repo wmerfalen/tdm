@@ -973,7 +973,7 @@ void update_char_objects(struct char_data *ch) {
 
 /* Extract a ch completely from the world, and leave his stuff behind */
 void extract_char_final(struct char_data *ch) {
-	MENTOC_PREAMBLE();
+	//MENTOC_PREAMBLE();
 	struct char_data *k, *temp;
 	struct obj_data *obj;
 	int i;
@@ -1064,6 +1064,19 @@ void extract_char_final(struct char_data *ch) {
 
 	/* we can't forget the hunters either... */
 	for(temp = character_list; temp; temp = temp->next){
+		/** !FIXME: a temporary fix to a nasty problem. 
+		 * 2019-11-16 -- 
+		 * bug report
+		 * -----------
+		 *  steps to reproduce:
+		 *  1) login
+		 *  2) quit, type 0 to exit fully
+		 *  3) login as same user again
+		 *  4) quit, type 0 to exit fully
+		 *  5) code segfaults on HUNTING(temp) == ch
+		 */
+		if(!temp){ continue; }
+		if(!ch){ continue; }
 		if(HUNTING(temp) == ch) {
 			HUNTING(temp) = NULL;
 		}
@@ -1078,7 +1091,10 @@ void extract_char_final(struct char_data *ch) {
 
 		clearMemory(ch);
 	} else {
-		mods::db::save_char(player);
+		{
+			MENTOC_PREAMBLE();
+			mods::db::save_char(player);
+		}
 		Crash_delete_crashfile(ch);
 	}
 

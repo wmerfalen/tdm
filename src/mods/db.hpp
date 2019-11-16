@@ -47,6 +47,9 @@ namespace mods::db{
 	void lmdb_renew();
 	void lmdb_commit();
 void lmdb_put(std::string key,std::string value);
+int lmdb_nput(void* key,std::size_t k_size,void* value,std::size_t v_size);
+std::string lmdb_get(std::string_view key);
+int lmdb_nget(void* key,std::size_t k_size,std::string& got);
 void lmdb_export_char(
 		player_ptr_t player_ptr,
 		mutable_map_t &

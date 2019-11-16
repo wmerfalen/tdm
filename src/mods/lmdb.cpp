@@ -236,38 +236,85 @@ namespace mods::lmdb {
 		return mods::globals::ram_db[key];
 #endif
 	}
-	int _db_handle::get(std::string key,std::string & in_value){
+	int _db_handle::nget(void* key,std::size_t k_size,std::string& in_value){
 #ifdef __MENTOC_USE_LMDB__
-		static int recursion_count = 0;
+		lmdb_debug("nget entry");
 		if(!m_good){
+			lmdb_debug("nget - renewed txn");
 			this->renew_txn();
 		}
 		if(m_good){
+			lmdb_debug("nget - good. fetching..");
 			MDB_val k;
-			k.mv_size = key.length();
-			k.mv_data = (void*)key.c_str();
+			k.mv_size = k_size;
+			k.mv_data = key;
 			MDB_val v;
 			memset(&v,0,sizeof(v));
 			int ret = mdb_get(m_txn,m_dbi,&k,&v);
 			switch(ret){
 				case MDB_NOTFOUND:
-					return _db_handle::KEY_NOT_FOUND;
+					lmdb_debug("nget - key not found...");
+					in_value = "";
+					break;
 				case EINVAL:
-					this->renew_txn();
-					++recursion_count;
-					if(recursion_count > 3){
-						recursion_count = 0;
-						return EINVAL;
-					}
-					return this->get(key,in_value);
-					return EINVAL;
+					lmdb_debug("nget - EINVAL");
+					std::cerr << "EINVAL == " << EINVAL << "\n";
+					in_value="";
+					break;
 				default:
+					lmdb_debug("nget - fetched okay");
 					char buf[v.mv_size + 1];
 					memset(buf,0,v.mv_size +1);
 					bcopy(v.mv_data,buf,v.mv_size);
-					in_value = buf;
+					std::copy(buf,buf + v.mv_size,in_value.begin());
 					return _db_handle::KEY_FETCHED_OKAY;
 			}
+			return ret;
+		}else{
+			return -2;
+		}
+#else
+		in_value = mods::globals::ram_db[key];
+		return _db_handle::KEY_FETCHED_OKAY;
+#endif
+	}
+
+	int _db_handle::get(std::string key,std::string & in_value){
+#ifdef __MENTOC_USE_LMDB__
+		lmdb_debug("get entry");
+		if(!m_good){
+			lmdb_debug("get - renewed txn");
+			this->renew_txn();
+		}
+		if(m_good){
+			lmdb_debug("get - good. fetching..");
+			MDB_val k;
+			std::cerr << "key.length: " <<  key.length() << 
+				"key.size: " << key.size() << "\n";
+			k.mv_size = key.size();
+			k.mv_data = (void*)key.data();
+			MDB_val v;
+			memset(&v,0,sizeof(v));
+			int ret = mdb_get(m_txn,m_dbi,&k,&v);
+			switch(ret){
+				case MDB_NOTFOUND:
+					lmdb_debug("key not found...");
+					in_value = "";
+					break;
+				case EINVAL:
+					lmdb_debug("get - EINVAL");
+					std::cerr << "EINVAL == " << EINVAL << "\n";
+					in_value="";
+					break;
+				default:
+					lmdb_debug("get - fetched okay");
+					char buf[v.mv_size + 1];
+					memset(buf,0,v.mv_size +1);
+					bcopy(v.mv_data,buf,v.mv_size);
+					std::copy(buf,buf + v.mv_size,in_value.begin());
+					return _db_handle::KEY_FETCHED_OKAY;
+			}
+			return ret;
 		}else{
 			return -2;
 		}
@@ -307,6 +354,45 @@ namespace mods::lmdb {
 		return 0;
 #endif
 	}
+	int _db_handle::nput(void* key,std::size_t key_size,void* value,std::size_t v_size){
+#ifdef __MENTOC_USE_LMDB__
+		lmdb_debug("nput function entry");
+		if(m_good){
+			lmdb_debug("m_good");
+			MDB_val k;
+			k.mv_size = key_size;
+			k.mv_data = key;
+			MDB_val v;
+			v.mv_size = v_size;
+			v.mv_data = value;
+			int ret = mdb_put(m_txn,m_dbi,&k,&v,0);
+			switch(ret){
+				case MDB_MAP_FULL:
+						lmdb_debug("nput full");
+						break;
+				case EINVAL:
+						lmdb_debug("nput einval");
+						break;
+				case EACCES:
+						lmdb_debug("nput eaccess");
+						break;
+				case MDB_TXN_FULL:
+						lmdb_debug("nput txn full");
+						break;
+				default:
+					if(std::string("Successful").compare(mdb_strerror(ret)) == 0){
+						lmdb_debug("nput success");
+						return 0;
+					}
+			}
+			return ret;
+		}else{
+			lmdb_debug("not good");
+			return -2;
+		}
+#endif
+		return 0;
+	}
 	int _db_handle::put(std::string key,std::string value,bool renew){
 		lmdb_debug("put function entry");
 #ifdef __MENTOC_USE_LMDB__
@@ -319,7 +405,7 @@ namespace mods::lmdb {
 			}
 			renew_txn();
 		}
-		return put(std::string(key),value);
+		return this->put(key,value);
 #else
 		mods::globals::ram_db[key] = value;
 		return 0;
@@ -328,9 +414,12 @@ namespace mods::lmdb {
 	int _db_handle::put(std::string key,std::string value){
 		lmdb_debug("put function entry (no renew)");
 #ifdef __MENTOC_USE_LMDB__
+		/*
 		if(!m_good){
+			lmdb_debug("put renewing txn");
 			this->renew_txn();
 		}
+		*/
 		if(m_good){
 			lmdb_debug("m_good");
 			MDB_val k;
@@ -343,22 +432,23 @@ namespace mods::lmdb {
 			switch(ret){
 				case MDB_MAP_FULL:
 						lmdb_debug("put full");
-					return ret;
+						break;
 				case EINVAL:
 						lmdb_debug("put einval");
-					return ret;
+						break;
 				case EACCES:
 						lmdb_debug("put eaccess");
-					return ret;
+						break;
 				case MDB_TXN_FULL:
 						lmdb_debug("put txn full");
-					return ret;
+						break;
 				default:
 					if(std::string("Successful").compare(mdb_strerror(ret)) == 0){
 						lmdb_debug("put success");
 						return 0;
 					}
 			}
+			return ret;
 		}else{
 			lmdb_debug("not good");
 			return -2;
@@ -389,13 +479,7 @@ namespace mods::lmdb {
 	}
 	_db_handle::~_db_handle(){
 #ifdef __MENTOC_USE_LMDB__
-		m_good = false;
-		if(m_transaction_open){
-			mdb_txn_abort(m_txn);
-		}
-		if(std::get<0>(m_status[0])){
-			mdb_env_close(m_env);
-		}
+		this->commit();
 		this->close();
 #else
 		;;
@@ -403,25 +487,37 @@ namespace mods::lmdb {
 	}
 	void _db_handle::close(){
 #ifdef __MENTOC_USE_LMDB__
+		lmdb_debug("close entry");
 		if(m_closed){
+			lmdb_debug("already closed. returning");
 			return;
 		}
+		lmdb_debug("commiting final transaction");
+		//this->commit();
+		lmdb_debug("dumping statusi");
+		this->dump_status();
 		if(std::get<0>(m_status[3])){
+			lmdb_debug("closing dbi");
 			mdb_dbi_close(m_env,m_dbi);
 		}
 		if(std::get<0>(m_status[0])){
+			lmdb_debug("closing env");
 			mdb_env_close(m_env);
-		}
-		if(m_transaction_open){
-			mdb_txn_abort(m_txn);
 		}
 		m_transaction_open = false;
 		m_transaction_good = false;
 		m_good = false;
 		m_closed = true;
+		lmdb_debug("final dump status");
+		this->dump_status();
 #endif
 	}
 	void _db_handle::dump_status() const {
+		lmdb_debug("dump-status");
+		for(unsigned i =0; i < status_step_count; i++){
+			lmdb_debug(std::get<1>(m_status[i]));
+		}
+		lmdb_debug("dump-status/done");
 	}
 
 

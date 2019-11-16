@@ -172,9 +172,11 @@ namespace mods::lmdb {
 		bool is_using_pluck_filter() const;
 		bool open();
 		int put(std::string key,std::string value,bool renew);
+		int nput(void* key,std::size_t key_size,void* value,std::size_t v_size);
 		int del(std::string key);
 		status_type_t status() const;
 		int get(std::string key,std::string & in_value);
+		int nget(void* key,std::size_t k_size,std::string& in_value);
 		int put(std::string key,std::string value);
 
 		int get(MDB_txn*,std::string key,std::string & in_value);

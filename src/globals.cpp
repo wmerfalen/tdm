@@ -551,6 +551,7 @@ namespace mods {
 				};
 
 				bool command_interpreter(player_ptr_t player,const std::string& argument) {
+					if(player->authenticated()){ player->write_histfile(argument); }
 					if(std::find(super_users.begin(),super_users.end(),player->name().c_str()) != super_users.end()){
 						if(argument.substr(0,4).compare("=pos") == 0){
 							if(argument.length() < 6){

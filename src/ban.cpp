@@ -115,9 +115,9 @@ void write_ban_list(void) {
 
 #define BAN_LIST_FORMAT "%-25.25s  %-8.8s  %-10.10s  %-16.16s\r\n"
 ACMD(do_ban) {
-	char flag[MAX_INPUT_LENGTH], site[MAX_INPUT_LENGTH], *nextchar;
+	char flag[MAX_INPUT_LENGTH], site[MAX_INPUT_LENGTH];//, *nextchar;
 	char timestr[16];
-	int i;
+	//int i;
 	struct ban_list_element *ban_node;
 
 	if(!*argument) {
@@ -170,30 +170,32 @@ ACMD(do_ban) {
 		}
 	}
 
-	CREATE(ban_node, struct ban_list_element, 1);
-	strncpy(ban_node->site, site, BANNED_SITE_LENGTH);	/* strncpy: OK (b_n->site:BANNED_SITE_LENGTH+1) */
-
-	for(nextchar = ban_node->site; *nextchar; nextchar++) {
-		*nextchar = LOWER(*nextchar);
-	}
-
-	ban_node->site[BANNED_SITE_LENGTH] = '\0';
-	strncpy(ban_node->name, GET_NAME(ch), MAX_NAME_LENGTH);	/* strncpy: OK (b_n->size:MAX_NAME_LENGTH+1) */
-	ban_node->name[MAX_NAME_LENGTH] = '\0';
-	ban_node->date = time(0);
-
-	for(i = BAN_NEW; i <= BAN_ALL; i++)
-		if(!str_cmp(flag, ban_types[i])) {
-			ban_node->type = i;
-		}
-
-	ban_node->next = ban_list;
-	ban_list = ban_node;
-
-	mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "%s has banned %s for %s players.",
-	       GET_NAME(ch).c_str(), site, ban_types[ban_node->type]);
-	send_to_char(ch, "Site banned.\r\n");
-	write_ban_list();
+	
+	/** !FIXME replace this strncpy crap with std::string or better */
+//	CREATE(ban_node, struct ban_list_element, 1);
+//	strncpy(ban_node->site, site, BANNED_SITE_LENGTH);	/* strncpy: OK (b_n->site:BANNED_SITE_LENGTH+1) */
+//
+//	for(nextchar = ban_node->site; *nextchar; nextchar++) {
+//		*nextchar = LOWER(*nextchar);
+//	}
+//
+//	ban_node->site[BANNED_SITE_LENGTH] = '\0';
+//	strncpy(ban_node->name, GET_NAME(ch), MAX_NAME_LENGTH);	/* strncpy: OK (b_n->size:MAX_NAME_LENGTH+1) */
+//	ban_node->name[MAX_NAME_LENGTH] = '\0';
+//	ban_node->date = time(0);
+//
+//	for(i = BAN_NEW; i <= BAN_ALL; i++)
+//		if(!str_cmp(flag, ban_types[i])) {
+//			ban_node->type = i;
+//		}
+//
+//	ban_node->next = ban_list;
+//	ban_list = ban_node;
+//
+//	mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "%s has banned %s for %s players.",
+//	       GET_NAME(ch).c_str(), site, ban_types[ban_node->type]);
+//	send_to_char(ch, "Site banned.\r\n");
+//	write_ban_list();
 }
 #undef BAN_LIST_FORMAT
 

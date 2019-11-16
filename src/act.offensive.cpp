@@ -163,7 +163,7 @@ ACMD(do_throw) {
 	//mods::projectile::travel_to(player->room(), dir, cnt, held_object);
 	//obj_to_room(held_object,room_id);
 
-	mods::projectile::throw_object<obj_data*>(player, dir, cnt, held_object, "lob");
+	mods::projectile::throw_object(player, dir, cnt, held_object, "lob");
 }
 
 ACMD(do_giveme_frag_grenades) {
