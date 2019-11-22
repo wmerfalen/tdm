@@ -56,13 +56,13 @@ namespace mods::builder {
 		sandbox_data_t(
 				player_ptr_t player,
 				std::string_view name,
-				room_vnum start,
-				zone_vnum zone_virtual_number);
+				int start,
+				int zone_virtual_number);
 		int8_t new_sandbox(
 				player_ptr_t player,
 				std::string_view name,
-				room_vnum start,
-				zone_vnum zone_virtual_number);
+				int start,
+				int zone_virtual_number);
 		std::string_view name() const;
 		void set_name(std::string_view n);
 		std::shared_ptr<builder_data_t> builder_data(){ return m_builder_data; }
@@ -76,7 +76,7 @@ namespace mods::builder {
 	extern sandbox_list_t sandboxes;
 	/* Factory method to generate a room for us */
 	room_data new_room(player_ptr_t player,int direction);
-	bool flush_to_db(struct char_data *ch,room_vnum room);
+	bool flush_to_db(struct char_data *ch,int room);
 	bool title(room_rnum room,std::string_view str_title);
 	bool description(room_rnum room,std::string_view str_description);
 	std::optional<std::string> dir_option(room_rnum,int direction,std::optional<std::string_view> description,
@@ -89,8 +89,9 @@ namespace mods::builder {
 	bool destroy_direction(room_rnum,int direction);
 	int save_to_db(room_rnum in_room);
 	int import_room(struct room_data*);
-	bool save_zone_to_db(
-			zone_vnum virtual_number,
+	using zone_pkid_t = int;
+	std::tuple<bool,zone_pkid_t> save_zone_to_db(
+			int virtual_number,
 			std::string_view name,
 			int room_start,
 			int room_end,
@@ -98,9 +99,9 @@ namespace mods::builder {
 			int reset_mode
 			);
 	std::pair<bool,std::string> zone_place(int zone_id,std::string_view command, std::string_view if_flag,std::string_view arg1, std::string_view arg2,std::string_view arg3);
-	void pave_to(player_ptr_t ch,room_data* room,int direction);
+	void pave_to(player_ptr_t ch,room_data* room,int direction,int to_room);
 	std::optional<obj_data*> instantiate_object_by_index(int index);
-	std::optional<obj_data*> instantiate_object_by_vnum(obj_vnum vnum);
+	std::optional<obj_data*> instantiate_object_by_vnum(int vnum);
 	void report_error(mods::player* player,std::string_view message);
 	void report_status(mods::player* player,std::string_view message);
 	void report_success(mods::player* player,std::string_view message);

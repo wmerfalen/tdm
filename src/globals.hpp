@@ -127,6 +127,7 @@ namespace mods {
 			void char_from_room(char_data*);
 			void char_to_room(const room_rnum &,char_data*);
 		};
+		void pad_room(int room,char_data* ch,int door);
     };
 };
 

@@ -41,7 +41,9 @@ using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 /**************************************************************************
  *  declarations of most of the 'global' variables                         *
  **************************************************************************/
+std::vector<int> zone_id_blacklist;
 bool db_has_been_booted = false;
+bool disable_all_zone_resets = false;
 std::tuple<int16_t,std::string> parse_sql_rooms();
 std::tuple<int16_t,std::string> parse_sql_zones();
 int parse_sql_objects();
@@ -1334,6 +1336,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 					room.description = strdup(description);
 				}
 				room.number = room_records_row["room_number"].as<int>(0);
+				log("parse_sql_rooms: room.number (%d)",room.number);
 				room.zone = room_records_row["zone"].as<int>(0);
 				room.room_flags = room_records_row["room_flag"].as<int>(0);
 				room.sector_type = room_records_row["sector_type"].as<int>(0);
@@ -1346,7 +1349,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				std::cerr << "SYSERR: exception select from rooms db: " << e.what() << "\n";
 			}
 		}
-		//log("parse_sql_rooms: world.size(): %d",world.size());
+		log("parse_sql_rooms: world.size(): %d",world.size());
 
 		for(auto && row2: db_get_all("room_direction_data")){
 			//siege=# \d room_direction_data
@@ -2070,6 +2073,11 @@ void log_zone_error(zone_rnum zone, int cmd_no, const char *message) {
 
 /* execute the reset command table of a given zone */
 void reset_zone(zone_rnum zone) {
+	auto is_blacklisted = std::find(zone_id_blacklist.begin(),zone_id_blacklist.end(),zone);
+	if(disable_all_zone_resets || is_blacklisted != zone_id_blacklist.end()){
+		log("[reset_zone]->[is_blacklisted] Skipping Zone ID due to blacklist rule: %d",zone);
+		return;
+	}
 	int cmd_no = 0, last_cmd = 0;
 	struct char_data *mob = NULL;
 	struct obj_data *obj, *obj_to;

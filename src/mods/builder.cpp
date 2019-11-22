@@ -26,10 +26,85 @@ using player_ptr_t = std::shared_ptr<mods::player>;
 using jxcomp = mods::jx::compositor;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
-extern mob_vnum next_mob_number();
-extern room_vnum next_room_number();
-extern zone_vnum next_zone_number();
+extern int next_mob_number();
+extern int next_room_number();
+extern int next_zone_number();
 extern std::tuple<int16_t,std::string> parse_sql_zones();
+extern std::vector<int> zone_id_blacklist;
+extern bool disable_all_zone_resets;
+
+int next_zone_vnum(){
+		static int next_zone_vnum = 0;
+		if(next_zone_vnum == 0){
+			try{
+				auto up_txn = txn();
+				auto record = mods::pq::exec(up_txn,"SELECT max(zone_virtual_number) as z from zone;");
+				if(record.size()){
+					std::cerr << ("Max room number: " + std::string(record[0]["z"].c_str()));
+					next_zone_vnum = mods::util::stoi<int>(record[0]["z"].c_str());
+				}else{
+					next_zone_vnum = 1;
+				}
+			}catch(std::exception& e){
+				std::cerr << "error grabbing next max room number '" << e.what() << "'\n";
+				next_zone_vnum = 1;
+			}
+		}
+		std::cerr << "next_zone_vnum: " << next_zone_vnum + 1 << "\n";
+		return ++next_zone_vnum;
+}
+int next_room_vnum(){
+		static int next_room_number = 0;
+		if(next_room_number == 0){
+			try{
+				auto up_txn = txn();
+				auto record = mods::pq::exec(up_txn,"SELECT max(room_number) as r from room;");
+				if(record.size()){
+					std::cerr << ("Max room number: " + std::string(record[0]["r"].c_str()));
+					next_room_number = mods::util::stoi<int>(record[0]["r"].c_str());
+				}else{
+					next_room_number = 1;
+				}
+			}catch(std::exception& e){
+				std::cerr << "error grabbing next max room number '" << e.what() << "'\n";
+				next_room_number = 1;
+			}
+		}
+		std::cerr << "next_room_number: " << next_room_number + 1 << "\n";
+		return ++next_room_number;
+}
+
+void disable_zone_resets(){
+	disable_all_zone_resets = true;
+}
+void enable_zone_resets(){
+	disable_all_zone_resets = false;
+}
+void blacklist_zone(int zone){
+	auto it = std::find(zone_id_blacklist.begin(),
+			zone_id_blacklist.end(),
+			zone);
+	if(it == zone_id_blacklist.end()){
+		zone_id_blacklist.emplace_back(zone);
+	}
+}
+
+void release_zone(int zone){
+	auto copy = zone_id_blacklist;
+	copy.clear();
+	for(auto &zone_id : zone_id_blacklist){
+		if(zone_id == zone){
+			continue;
+		}
+		copy.emplace_back(zone_id);
+	}
+	zone_id_blacklist.clear();
+	zone_id_blacklist.assign(
+		copy.begin(),
+		copy.end()
+	);
+
+}
 void r_error(const player_ptr_t & player,std::string_view msg){
 	mods::builder::report_error<player_ptr_t>(player,msg.data());
 }
@@ -265,8 +340,8 @@ namespace mods::builder {
 	sandbox_data_t::sandbox_data_t(
 			player_ptr_t player,
 			std::string_view name,
-			room_vnum starting_room_number,
-			zone_vnum zone_virtual_number){
+			int starting_room_number,
+			int zone_virtual_number){
 		new_sandbox(player,name,starting_room_number,zone_virtual_number);
 	}
 	sandbox_data_t::sandbox_data_t() : m_name("") {}
@@ -284,38 +359,11 @@ namespace mods::builder {
 	int8_t sandbox_data_t::new_sandbox(
 			player_ptr_t player,
 			std::string_view name,
-			room_vnum starting_room_number,
-			zone_vnum zone_virtual_number){
+			int starting_room_number,
+			int zone_virtual_number){
 		m_player = player;
-		m_builder_data = std::make_shared<builder_data_t>();
+		m_builder_data = std::make_shared<builder_data_t>(0,starting_room_number,zone_virtual_number);
 		m_name = name;
-		bool status = save_zone_to_db(
-				zone_virtual_number,
-				name,
-				starting_room_number,
-				starting_room_number + 100,
-				100,
-				2
-				);
-		m_builder_data->room_pave_mode = true;
-		m_builder_data->room_pavements.start_room = starting_room_number;
-		m_builder_data->room_pavements.zone_id = 0;
-		if(!status){
-			r_error(player,"Unable to create new zone!");
-			m_builder_data->room_pavements.zone_id = 0;
-			return -1;
-		}else{
-			for(auto && row : db_get_by_meta("zone","zone_name",name.data())){
-				m_builder_data->room_pavements.zone_id = row["id"].as<int>(0);
-				break;
-			}
-		}
-		mods::builder::new_room(player,NORTH);
-		auto & room = world.back();
-		room.number = starting_room_number;
-		room.zone = m_builder_data->room_pavements.zone_id;
-		room.name.assign("new room");
-		room.description.assign("description goes here");
 		return 0;
 	}
 
@@ -329,7 +377,7 @@ namespace mods::builder {
 	 */
 	/* Factory method to generate a room for us */
 	room_data new_room(player_ptr_t player,int direction);
-	bool flush_to_db(struct char_data *ch,room_vnum room);
+	bool flush_to_db(struct char_data *ch,int room);
 	std::optional<obj_data*> instantiate_object_by_index(int index) {
 		std::size_t i = index;
 
@@ -341,7 +389,7 @@ namespace mods::builder {
 		*obj_list.back() = obj_proto[index];
 		return obj_list.back().get();
 	}
-	std::optional<obj_data*> instantiate_object_by_vnum(obj_vnum vnum) {
+	std::optional<obj_data*> instantiate_object_by_vnum(int vnum) {
 
 		for(auto& object_reference : obj_proto) {
 			if(object_reference.item_number == vnum) {
@@ -355,12 +403,12 @@ namespace mods::builder {
 	}
 
 	inline void initialize_builder(player_ptr_t player){
-		//if(!player->has_builder_data()){
-		//	std::cerr << "initialize_builder: creating shared_ptr\n";
-		//	player->builder_data = std::make_shared<builder_data_t>();
-		//}else{
-		//	std::cerr << "initialize_builder: shared_ptr already built\n";
-		//}
+		if(!player->has_builder_data()){
+			std::cerr << "initialize_builder: creating shared_ptr\n";
+			player->builder_data = std::make_shared<builder_data_t>();
+		}else{
+			std::cerr << "initialize_builder: shared_ptr already built\n";
+		}
 		player->set_bui_mode(true);
 	}
 
@@ -372,35 +420,27 @@ namespace mods::builder {
 	 *  pave_to(player,room_data* current_room,int direction);
 	 *
 	 */
-	void pave_to(player_ptr_t player,room_data * current_room,int direction) {
-		initialize_builder(player);
-		r_status(player,
-				std::string("start_room: ") + 
-				std::to_string(player->builder_data->room_pavements.start_room)
-				);
-		mods::builder::new_room(player,direction);
+	void pave_to(player_ptr_t player,room_data * current_room,int direction,int to_room) {
+		//builder_data = mods::builder::sandboxes[player->name().c_str()].begin()->builder_data();
+		std::cerr << "player's builder data zone_id: " << player->builder_data->room_pavements.zone_id << "\n";
+		player->builder_data->room_pavements.rooms.push_back(to_room);
+		std::cerr << "room_pavements.rooms.push_back(to_room) -> " << to_room << " <-- should be the same as world.size() and new_room_id\n";
+		current_room->zone = world[player->room()].zone = player->builder_data->room_pavements.zone_id;
 
-		auto & builder_data = player->builder_data;
-		if(has_flag(player,mods::builder::HAS_SANDBOX)){
-			builder_data = mods::builder::sandboxes[player->name().c_str()].begin()->builder_data();
-		}
-		builder_data->room_pavements.rooms.push_back(world.size()-1);
-		auto created_room = world.back();
-		created_room.number = builder_data->room_pavements.start_room + builder_data->room_pavements.current_room_number;
-		created_room.zone = builder_data->room_pavements.zone_id;
-
-		if(!create_direction(player->room(),direction,world.size() -1)) {
-			r_error(player,"Couldn't create direction to that room!");
-			return;
-		}
-
-		if(!create_direction(world.size()-1,OPPOSITE_DIR(direction),player->room())) {
-			r_error(player,"Couldn't create bind-back direction to that room!");
-			return;
-		}
-
-		world.back().dir_option[OPPOSITE_DIR(direction)]->general_description = world[player->room()].name;
-		world.back().dir_option[OPPOSITE_DIR(direction)]->keyword = "door";
+		world[player->room()].set_dir_option(direction,
+				"general description",
+				"keyword",
+				EX_ISDOOR,
+				0,
+				to_room
+		);
+		current_room->set_dir_option(OPPOSITE_DIR(direction),
+				"general desc",
+				"keyword",
+				EX_ISDOOR,
+				0,
+				player->room()
+		);
 		r_status(player,"Paved room to that direction");
 	}
 
@@ -430,7 +470,7 @@ namespace mods::builder {
 					.insert()
 					.into("zone_data")
 					.values({
-							{"zone_id",std::to_string(zone_table[zone_id].number)},
+							{"id",std::to_string(zone_table[zone_id].number)},
 							{"zone_command",std::to_string(zone_table[zone_id].cmd[i].command)},
 							{"zone_if_flag",std::to_string(zone_table[zone_id].cmd[i].if_flag)},
 							{"zone_arg1",std::to_string(zone_table[zone_id].cmd[i].arg1)},
@@ -449,44 +489,95 @@ namespace mods::builder {
 	}
 
 
-
-	bool save_zone_to_db(zone_vnum virtual_number,std::string_view name,int room_start,int room_end,int lifespan,int reset_mode) {
-		try{
-			auto txn2 = txn();
-			sql_compositor comp("room_direction_data",&txn2);
-			auto sql = comp
-				.insert()
-				.into("zone")
-				.values({
-						{"zone_virtual_number",std::to_string(virtual_number)},
-						{"zone_start",std::to_string(room_start)},
-						{"zone_end",std::to_string(room_end)},
-						{"zone_name",name.data()},
-						{"lifespan",std::to_string(lifespan)},
-						{"reset_mode",std::to_string(reset_mode)}})
-			.sql();
-			mods::pq::exec(txn2,sql);
-			mods::pq::commit(txn2);
-		}catch(std::exception& e){
-			std::cerr << "Exception with save_zone_to_db: " << e.what() << "\n";
-			return false;
-		}
-		return true;
+	template <typename T>
+	void rb_debug(T s){
+		std::cerr << "[builder-debug]: " << s << "\n";
 	}
-	int save_to_db(room_rnum in_room) {
+	template <typename T>
+	void rb_map_debug(T & t){
+		rb_debug("dumping map");
+		for(auto & pair: t){
+			rb_debug(std::string("values[") + pair.first + "]=" + pair.second);
+		}
+		rb_debug("Done dumping map");
+	}
+
+	std::tuple<bool,zone_pkid_t> save_zone_to_db(int virtual_number,std::string_view zone_name,int zone_start,int zone_end,int lifespan,int reset_mode) {
+		{
+			std::map<std::string,std::string> values = {
+							{"zone_virtual_number",std::to_string(virtual_number)},
+							{"zone_start",std::to_string(zone_start)},
+							{"zone_end",std::to_string(zone_end)},
+							{"zone_name",zone_name.data()},
+							{"lifespan",std::to_string(lifespan)},
+							{"reset_mode",std::to_string(reset_mode)}
+			};
+			try{
+				auto txn2 = txn();
+				sql_compositor comp("zone",&txn2);
+				auto sql = comp
+					.insert()
+					.insert()
+					.into("zone")
+					.values(values)
+					.sql();
+				rb_map_debug(values);
+				rb_debug(std::string("save_zone_to_db: ") + std::string(sql.data()));
+				mods::pq::exec(txn2,sql);
+				mods::pq::commit(txn2);
+				rb_debug("Done comitting");
+			}catch(std::exception &e){
+				rb_debug("EXCEPTION");
+				rb_debug(e.what());
+				return {false,-1};
+			}
+		}
+		{
+			try{
+				auto grab_zone_pk_id_txn = txn();
+				sql_compositor comp("zone",&grab_zone_pk_id_txn);
+				auto zone_select_sql = comp.select("id")
+					.from("zone")
+					.where("zone_virtual_number","=",std::to_string(virtual_number))
+					.sql();
+				rb_debug(zone_select_sql);
+				auto zone_record = mods::pq::exec(grab_zone_pk_id_txn,zone_select_sql);
+				return {true,mods::util::stoi<zone_pkid_t>(zone_record[0]["id"].c_str())};
+			}catch(std::exception& e){
+				std::cerr << "error selecting zone from db: '" << e.what() << "'\n";
+				rb_debug("EXCEPTION");
+				rb_debug(e.what());
+				return {false,-2};
+			}
+
+		}
+		return {false,-3};
+	}
+
+
+	static std::map<int,int> room_mappings;
+
+	/** SAVE ROOM TO DB */
+	/** SAVE ROOM TO DB */
+	/** SAVE ROOM TO DB */
+	/** SAVE ROOM TO DB */
+	int save_to_db(room_rnum in_room,std::string & error_string) {
 		auto world_top = mods::globals::room_list.size();
 		std::size_t ir = in_room;
 
 		if(ir >= world_top) {
+			error_string = "room number out of range";
 			return mods::builder::ROOM_NUMBER_OUT_OF_RANGE;
 		}
 
 		if(!world[in_room].name) {
-			return mods::builder::ROOM_NAME_EMPTY;
+			world[in_room].name = "<default room name>";
+			//return mods::builder::ROOM_NAME_EMPTY;
 		}
 
 		if(!world[in_room].description) {
-			return mods::builder::ROOM_DESC_EMPTY;
+			world[in_room].description = "<default description>";
+			//return mods::builder::ROOM_DESC_EMPTY;
 		}
 
 		std::map<std::string,std::string> values;
@@ -506,64 +597,95 @@ namespace mods::builder {
 		values["room_flag"] = &num[0];
 		pqxx::result room_record;
 
-		try{
-			auto up_txn = txn();
-			sql_compositor comp("room",&up_txn);
-			auto room_sql = comp.select("room_number")
-				.from("room")
-				.where("room_number","=",std::to_string(world[in_room].number))
-				.sql();
-			room_record = mods::pq::exec(up_txn,room_sql);
-		}catch(std::exception& e){
-			std::cerr << "error selecting room from db: '" << e.what() << "'\n";
-			return -4;
+
+		{
+			try{
+				auto up_txn = txn();
+				sql_compositor comp("room",&up_txn);
+				auto room_sql = comp.select("room_number")
+					.from("room")
+					.where("room_number","=",std::to_string(world[in_room].number))
+					.sql();
+				rb_debug(room_sql);
+				room_record = mods::pq::exec(up_txn,room_sql);
+				rb_debug("done");
+				rb_debug(room_record.size());
+			}catch(std::exception& e){
+				std::cerr << "error selecting room from db: '" << e.what() << "'\n";
+				error_string = "error selecting room from db: '";
+				error_string += e.what();
+				rb_debug("EXCEPTION");
+				rb_debug(e.what());
+				return -4;
+			}
 		}
 		if(room_record.size()){
 			/* update the record */
+			rb_debug("Attempting to update record");
 			try{
 				auto up_txn = txn();
 				sql_compositor comp("room",&up_txn);
 				auto up_sql = comp
 					.update("room")
 					.set(values)
-					.where("id","=",room_record[0]["id"].c_str())
+					.where("room_number","=",room_record[0]["room_number"].c_str())
 					.sql();
 				mods::pq::exec(up_txn,up_sql);
 				mods::pq::commit(up_txn);
 			}catch(std::exception& e){
 				std::cerr << "error updating room in db: '" << e.what() << "'\n";
+				error_string = "error updating room in db: '";
+				error_string += e.what();
+				rb_debug("EXCEPTION (UPDATE)");
+				rb_debug(e.what());
+				rb_debug(error_string);
 				return -3;
 			}
 		} else {
+			rb_debug("need to insert instead of update");
+			values["id"] = std::to_string(world[in_room].number);
+			values["room_number"] = std::to_string(world[in_room].number);
 			auto txn2 = txn();
 			sql_compositor comp("room",&txn2);
 			auto sql = comp
 				.insert()
 				.into("room")
 				.values(values).sql();
+			rb_debug("calling exec");
+			rb_debug(sql);
+			rb_map_debug<decltype(values)>(values);
 			mods::pq::exec(txn2,sql);
 			mods::pq::commit(txn2);
+			rb_debug("committing (didnt update, inserted instead)");
+			values.erase("id");
 		}
 
-		auto del_txn = txn();
-		mods::pq::exec(del_txn,std::string("DELETE FROM room_direction_data where room_number=") + std::to_string(world[in_room].number));
-		mods::pq::commit(del_txn);
+		rb_debug("delete transaction");
+		{
+			auto del_txn = txn();
+			mods::pq::exec(del_txn,std::string("DELETE FROM room_direction_data where room_number=") + std::to_string(world[in_room].number));
+			mods::pq::commit(del_txn);
+		}
 
+		rb_debug("Deleted room_direction-data... now, insert some");
 		for(auto direction = 0; direction < NUM_OF_DIRS; direction++) {
 			if(world[in_room].dir_option[direction] &&
 					world[in_room].dir_option[direction]->general_description) {
-				auto check_txn = txn();
-				sql_compositor comp("room_direction_data",&check_txn);
-				std::string check_sql = comp.
-					select("room_number")
-					.from("room_direction_data")
-					.where("room_number","=",std::to_string(world[in_room].number))
-					.op_and("exit_direction","=",std::to_string(direction))
-					.sql().data();
-				check_sql += " AND exit_direction=";
-				check_sql += check_txn.quote(direction);
-				auto check_result = mods::pq::exec(check_txn,check_sql);
+
+				//rb_debug("Saving general description");
+				//auto check_txn = txn();
+				//sql_compositor comp("room_direction_data",&check_txn);
+				//std::string check_sql = comp.
+				//	select("room_number")
+				//	.from("room_direction_data")
+				//	.where("room_number","=",std::to_string(world[in_room].number))
+				//	.op_and("exit_direction","=",std::to_string(direction))
+				//	.sql().data();
+				//check_sql += " AND exit_direction=";
+				//check_sql += check_txn.quote(direction);
+				//auto check_result = mods::pq::exec(check_txn,check_sql);
 				auto real_room_num = world[world[in_room].dir_option[direction]->to_room].number;
+				rb_debug("real room num:" + std::to_string(real_room_num));
 				std::map<std::string,std::string> values = {
 					{"general_description",static_cast<std::string>(world[in_room].dir_option[direction]->general_description)},
 					{"keyword",static_cast<std::string>(world[in_room].dir_option[direction]->keyword)},
@@ -574,61 +696,86 @@ namespace mods::builder {
 					{"exit_direction",std::to_string(direction)}
 				};
 
-				if(check_result.size()) {
-					/* update the row instead of inserting it */
-					auto up_txn = txn();
-					sql_compositor comp("room_direction_data",&up_txn);
-					auto up_sql = comp
-						.update("room_direction_data")
-						.set(values)
-						.where("exit_direction","=",std::to_string(direction))
-						.op_and("room_number","=",std::to_string(world[in_room].number))
-						.sql();
-					mods::pq::exec(up_txn,up_sql);
-					mods::pq::commit(up_txn);
-				} else {
-					auto txn2 = txn();
-					sql_compositor comp("room_direction_data",&txn2);
-					auto sql = comp
-						.insert()
-						.into("room_direction_data")
-						.values(values)
-						.sql();
-					mods::pq::exec(txn2,sql);
-					mods::pq::commit(txn2);
+				//if(check_result.size()) {
+				//	/* update the row instead of inserting it */
+				//	auto up_txn = txn();
+				//	sql_compositor comp("room_direction_data",&up_txn);
+				//	auto up_sql = comp
+				//		.update("room_direction_data")
+				//		.set(values)
+				//		.where("exit_direction","=",std::to_string(direction))
+				//		.op_and("room_number","=",std::to_string(world[in_room].number))
+				//		.sql();
+				//	mods::pq::exec(up_txn,up_sql);
+				//	mods::pq::commit(up_txn);
+				//} else {
+				{
+					rb_debug("Inserting room dir data");
+					rb_map_debug(values);
+					try{
+						auto txn2 = txn();
+						sql_compositor comp("room_direction_data",&txn2);
+						auto sql = comp
+							.insert()
+							.into("room_direction_data")
+							.values(values)
+							.sql();
+						mods::pq::exec(txn2,sql);
+						mods::pq::commit(txn2);
+					}catch(std::exception& e){
+						std::cerr << "[room dir data]-> error: " << e.what() << "\n";
+					}
 				}
+				//}
 			}
 		}
 
 		if(world[in_room].ex_descriptions().size()){
+			rb_debug("ex desc delete..");
 			try{
-				auto del_txn = txn();
-				mods::pq::exec(del_txn,std::string("DELETE FROM room_extra_desc_data where room_number=") 
+				auto room_ex_desc_d_del_txn = txn();
+				mods::pq::exec(room_ex_desc_d_del_txn,std::string("DELETE FROM room_extra_desc_data where room_number=") 
 						+ std::to_string(world[in_room].number));
+				mods::pq::commit(room_ex_desc_d_del_txn);
+				rb_debug("deleted..");
 			}catch(std::exception &e){ }
-			mods::pq::commit(del_txn);
 			for(const auto & ex_desc : world[in_room].ex_descriptions()){
 				values.clear();
 				values["ex_keyword"] = ex_desc.keyword.c_str();
 				values["ex_description"] = ex_desc.description.c_str();
 				values["room_number"] = std::to_string(world[in_room].number);
-				try{
-					auto txn2 = txn();
-					sql_compositor comp("room_extra_desc_data",&txn2);
-					auto sql = comp
-						.insert()
-						.into("room_extra_desc_data")
-						.values(values).sql();
-					mods::pq::exec(txn2,sql);
-					mods::pq::commit(txn2);
-				}catch(std::exception& e){
-					std::cerr << "[room_extra_desc_data]-> error: '" << e.what() << "'\n";
+				{
+					rb_debug("inserting room ex desc data...");
+					try{
+						auto room_ex_desc_data_txn = txn();
+						sql_compositor comp("room_extra_desc_data",&room_ex_desc_data_txn);
+						auto sql = comp
+							.insert()
+							.into("room_extra_desc_data")
+							.values(values).sql();
+						mods::pq::exec(room_ex_desc_data_txn,sql);
+						mods::pq::commit(room_ex_desc_data_txn);
+					}catch(std::exception& e){
+						std::cerr << "[room_extra_desc_data]-> error: '" << e.what() << "'\n";
+						error_string = "[room_extra_desc_data]->error: '";
+						error_string += e.what();
+						rb_debug(error_string);
+						return -5;
+					}
 				}
 			}
 		}
 
+		error_string = "";
 		return 0;
 	}
+	/** SAVE ROOM TO DB */
+	/** SAVE ROOM TO DB */
+	/** SAVE ROOM TO DB */
+	/** SAVE ROOM TO DB */
+
+
+
 	int import_room(struct room_data* room) {
 		auto world_top = mods::globals::room_list.size();
 		auto old_world = world;
@@ -678,7 +825,7 @@ namespace mods::builder {
 
 		return false;
 	}
-	bool flush_to_db(struct char_data *ch,room_vnum room) {
+	bool flush_to_db(struct char_data *ch,int room) {
 		MENTOC_PREAMBLE();
 		*player << "flush_to_db[stub]\r\n";
 		return true;
@@ -714,6 +861,10 @@ namespace mods::builder {
 	}
 	bool create_direction(room_rnum room_id,byte direction,room_rnum to_room) {
 		if(direction > NUM_OF_DIRS) {
+			std::cerr << "[DIRECTION BIGGER THAN NUM_DIRS\n";
+			std::cerr << "[DIRECTION BIGGER THAN NUM_DIRS\n";
+			std::cerr << "[DIRECTION BIGGER THAN NUM_DIRS\n";
+			std::cerr << "[DIRECTION BIGGER THAN NUM_DIRS\n";
 			return false;
 		}
 
@@ -1088,6 +1239,10 @@ namespace mods::builder {
 
 using args_t = std::vector<std::string>;
 
+int next_room_pavement_transaction_id(){
+	static int transaction_id = 0;
+	return ++transaction_id;
+}
 ACMD(do_rbuild_sandbox) {
 	MENTOC_PREAMBLE();
 	mods::builder::initialize_builder(player);
@@ -1103,11 +1258,52 @@ ACMD(do_rbuild_sandbox) {
 			" {grn}rbuild_sandbox{/grn} {red}new <name> <room_number_start> <zone_virtual_number>{/red}\r\n" <<
 			" {grn}rbuild_sandbox{/grn} {red}pave on <name>{/red}\r\n" <<
 			" {grn}rbuild_sandbox{/grn} {red}pave off{/red}\r\n" <<
+			" {grn}rbuild_sandbox{/grn} {red}save <transaction_id>{/red}\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild_sandbox{/wht} {grn}save 3{/grn}\r\n" <<
+			"  |:: (save randbox with transaction_id of 3)\r\n" <<
 			" {grn}rbuild_sandbox{/grn} {red}list{/red}\r\n" <<
 			" {grn}rbuild_sandbox{/grn} {red}delete <id>{/red}\r\n" <<
 			"\r\n";
 		player->pager_end();
 		player->page(0);
+	}
+	{
+		auto args = mods::util::subcmd_args<5,args_t>(argument,"save");
+		if(args.has_value()){
+			auto cmd_args = args.value();
+			if(cmd_args.size() > 0 && cmd_args[0].compare("save") == 0){
+
+				//auto zone_placement = mods::builder::save_zone_to_db(
+				//			player->builder_data->room_pavements.zone_id,	// Zone virtual number
+				//			("zone_" + std::to_string(player->builder_data->room_pavements.zone_id)).data(),	// Zone name
+				//			player->builder_data->room_pavements.start_room,	// Start room
+				//			player->builder_data->room_pavements.start_room + player->builder_data->room_pavements.rooms.size(), // End room
+				//			100,	// Lifetime
+				//			2);
+				//if(!std::get<0>(zone_placement)){	// Reset mode
+				//	r_error(player,"Couldn't save zone from sandbox");
+				//	/** TODO: transactional behaviour wanted here. (rollback) */
+				//	return;
+				//}
+				//r_success(player, "Zone save. Saving rooms...");
+				std::string error_string = "";
+				for(auto & room : player->builder_data->room_pavements.rooms){
+					error_string = "";
+					auto status = mods::builder::save_to_db(
+							room,
+							error_string
+							);
+					if(status != 0){
+						r_error(player, std::string("Couldn't save room ") + std::to_string(room) + " ->" + error_string);
+						continue;
+					}
+					r_success(player, "Saved room " + std::to_string(room));
+				}
+				r_success(player,"Sandbox saved");
+				return;
+			}//end command is save
+		}
 	}
 
 	{
@@ -1117,36 +1313,40 @@ ACMD(do_rbuild_sandbox) {
 			auto cmd_args = args.value();
 			if(cmd_args.size() == 3 && cmd_args[1].compare("on") == 0){
 				/**
-				 * cmd_args will be: [0] => pave, [1] => <on|off> <name>
+				 * cmd_args will be: [0] => pave, [1] => <on|off> [2] => <name>
 				 */
 				mods::builder::sandbox_data_t sandbox;
-				auto zone_id = next_zone_number();
-				auto room_id = next_room_number();
-				auto status = sandbox.new_sandbox(player,
+				auto zone_vnum = next_zone_vnum();
+				std::cerr << ("zone_vnum:" + std::to_string(zone_vnum));
+				auto room_id = next_room_vnum();
+				sandbox.new_sandbox(player,
 						cmd_args[2],
 						room_id,
-						zone_id
+						zone_vnum
 				);
-				if(status < 0){
-					r_error(player,std::string("Failed to create sandbox! Error: #") + std::to_string(status));
+				sandbox.set_name(cmd_args[2]);
+				auto status = mods::builder::save_zone_to_db(
+						zone_vnum,
+						cmd_args[2],
+						room_id,
+						room_id + 100,
+						100,
+						2
+						);
+				if(!std::get<0>(status)){
+					r_error(player,std::string("Failed to create sandbox!"));
 					return;
 				}
 				mods::builder::sandboxes[player->name().c_str()].emplace_back(std::move(sandbox));
 				player->set_flag(mods::flags::chunk_type_t::BUILDER,mods::builder::HAS_SANDBOX);
+				player->builder_data->room_pavements.rooms.clear();
 				player->builder_data->room_pave_mode = true;
 				player->builder_data->room_pavements.start_room = room_id;
-				player->builder_data->room_pavements.zone_id = zone_id;
-				if(!mods::builder::save_zone_to_db(
-							zone_id,
-							("zone_" + std::to_string(zone_id)).data(),
-							room_id,
-							room_id + 100,
-							100,
-							2)){
-						r_error(player,"Couldn't find zone, nor could we create one automatically.");
-						/** TODO: transactional behaviour wanted here. (rollback) */
-						return;
+				player->builder_data->room_pavements.zone_id = zone_vnum;
+				if(player->builder_data->room_pavements.zone_id == -1){
+					r_error(player, "Zone id is -1");
 				}
+				player->builder_data->room_pavements.transact_id = next_room_pavement_transaction_id();
 				r_success(player,"Sandbox created");
 				return;
 			}//end pave on
@@ -1171,7 +1371,7 @@ ACMD(do_rbuild_sandbox) {
 						cmd_args[1],
 						mods::util::stoi<int>(cmd_args[2]),
 						mods::util::stoi<int>(cmd_args[3])
-				);
+						);
 				if(status < 0){
 					r_error(player,std::string("Failed to create sandbox! Error: #") + std::to_string(status));
 					return;
@@ -1193,7 +1393,7 @@ ACMD(do_rbuild_sandbox) {
 			std::string(argument),
 			mods::builder::sandboxes[player->name().c_str()],
 			[](mods::builder::sandbox_data_t sandbox) -> std::string {
-				return std::string(sandbox.name());
+			return std::string(sandbox.name());
 			}
 			);
 
@@ -1336,7 +1536,7 @@ char_data* grab_mobile(std::size_t index,bool &fetched){
 		return &mob_proto[index];
 	}
 }
-		
+
 ACMD(do_mbuild) {
 	/**
 	 * Function status
@@ -1913,7 +2113,7 @@ ACMD(do_obuild) {
 		*player <<
 			"{red}Weapon Type{/red} A hash value of the weapon type.  It must be one of\r\n" <<
 			"the following numbers:</P>\r\n";
-		
+
 		for(auto pairedData : mods::builder::weapon_type_flags){
 			*player << " " << pairedData.second << "\r\n";
 		}
@@ -1922,7 +2122,7 @@ ACMD(do_obuild) {
 			"the character's weight by 15)\r\n" <<
 			"example: obuild attr 1 weapon_type:list\r\n" <<
 			"(this will list all weapon flags on the object)\r\n" <<
-		 	"example: obuild attr 1 weapon_type:remove SMG\r\n" <<
+			"example: obuild attr 1 weapon_type:remove SMG\r\n" <<
 			"(this will remove the SMG flag from the weapon)\r\n" << 
 			"\r\n";
 		player->pager_end();
@@ -2804,11 +3004,11 @@ ACMD(do_obuild) {
 			"{red}worn_on: {/red}" << obj->worn_on << "\r\n";
 		if(obj->weapon()){
 			*player << "{red}weapon_type: {/red}" << obj->weapon()->type << "\r\n" <<
-			"{red}weapon_ammo: {/red}" << obj->weapon()->ammo << "\r\n" <<
-			"{red}weapon_ammo_max: {/red} " << obj->weapon()->ammo_max << "\r\n" <<
-			"{red}weapon_holds_ammo: {/red}: " << obj->weapon()->holds_ammo << "\r\n";
+				"{red}weapon_ammo: {/red}" << obj->weapon()->ammo << "\r\n" <<
+				"{red}weapon_ammo_max: {/red} " << obj->weapon()->ammo_max << "\r\n" <<
+				"{red}weapon_holds_ammo: {/red}: " << obj->weapon()->holds_ammo << "\r\n";
 		}
-			*player <<
+		*player <<
 			"{gld}::Wear Flags::{/gld}\r\n" <<
 			"{red}value: {/red}" << std::to_string(obj->obj_flags.wear_flags) <<  "\r\n";
 #define MENTOC_WEAR(a){ if(obj->obj_flags.wear_flags & a){*player << #a << ", ";} }
@@ -2956,10 +3156,10 @@ ACMD(do_obuild) {
 			std::string report = "";
 			for(auto& ex_flag : mods::builder::weapon_type_flags) {
 				if(!obj->weapon()){ continue; }
-					if(obj->weapon()->type & ex_flag.first || 
-							obj->obj_flags.weapon_flags & ex_flag.first){
-						report += ex_flag.second + ",";
-					}
+				if(obj->weapon()->type & ex_flag.first || 
+						obj->obj_flags.weapon_flags & ex_flag.first){
+					report += ex_flag.second + ",";
+				}
 			}
 
 			r_success(player,report);
@@ -3432,14 +3632,14 @@ ACMD(do_zbuild) {
 		} else {
 			// " rbuildzone <new> <virtual_number> <zone start> <zone end> <zone name> <zone lifespan> <zone reset mode>\r\n" <<
 
-			if(!mods::builder::save_zone_to_db(
-						mods::util::stoi<zone_vnum>(arglist[0]),
-						arglist[3],
-						mods::util::stoi<int>(arglist[1]),
-						mods::util::stoi<int>(arglist[2]),
-						mods::util::stoi<int>(arglist[4]),
-						mods::util::stoi<int>(arglist[5]))
-				){
+			if(!std::get<0>(mods::builder::save_zone_to_db(
+							mods::util::stoi<int>(arglist[0]),
+							arglist[3],
+							mods::util::stoi<int>(arglist[1]),
+							mods::util::stoi<int>(arglist[2]),
+							mods::util::stoi<int>(arglist[4]),
+							mods::util::stoi<int>(arglist[5]))
+						)){
 				r_error(player,"Unable to save new zone");
 			} else {
 				parse_sql_zones();
@@ -3828,12 +4028,12 @@ ACMD(do_rbuild) {
 		return;
 	}
 
-	
+
 	auto args = mods::util::subcmd_args<11,args_t>(argument,"set-recall");
 	if(args.has_value() && args.value().size() > 1 && args.value()[0].compare("set-recall") == 0){
 		auto arg_vec = args.value();
 		if(arg_vec[1].compare("mortal") == 0){
-			auto set_status = mods::world_conf::set_mortal_start_room(player->room());
+			auto set_status = mods::world_conf::set_mortal_start_room(world[player->room()].number);
 			if(set_status.first == false){
 				r_error(player,std::string("An error occurred: '") + set_status.second + "'");
 				return;
@@ -3841,7 +4041,7 @@ ACMD(do_rbuild) {
 			r_success(player,set_status.second);
 			return;
 		}else if(arg_vec[1].compare("immortal") == 0){
-			auto set_status = mods::world_conf::set_immortal_start_room(player->room());
+			auto set_status = mods::world_conf::set_immortal_start_room(world[player->room()].number);
 			if(set_status.first == false){
 				r_error(player,std::string("An error occurred: '") + set_status.second + "'");
 				return;
@@ -4046,10 +4246,11 @@ ACMD(do_rbuild) {
 
 
 	if(std::string(&command[0]).compare("save") == 0) {
-		auto ret = mods::builder::save_to_db(IN_ROOM(ch));
+		std::string error;
+		auto ret = mods::builder::save_to_db(IN_ROOM(ch),error);
 
 		if(ret != 0) {
-			r_error(player,std::string("Error saving room: ") + std::to_string(ret));
+			r_error(player,std::string("Error saving room: ") + std::to_string(ret) + "->" + error);
 		} else {
 			r_success(player,"Room saved");
 		}
@@ -4214,39 +4415,59 @@ ACMD(do_rbuild) {
 
 	if(args.has_value()) {
 		if(player->builder_data){
-			for(auto room_id : player->builder_data->room_pavements.rooms) {
-				r_status(player,std::to_string(room_id));
-			}
-		}
-		return;
-	}
-
-	args = mods::util::subcmd_args<11,args_t>(argument,"save-paved");
-
-	if(args.has_value()) {
-		unsigned saved_room_counter = 0;
-
-		if(player->builder_data){
-			for(auto room_id : player->builder_data->room_pavements.rooms) {
-				std::size_t rid = room_id;
-
-				if(rid >= world.size()) {
-					r_error(player,std::string("Cannot save room id#: ") + std::to_string(room_id));
-					continue;
-				} else {
-					if(mods::builder::save_to_db(room_id) < 0) {
-						r_error(player,std::string("Unable to save room id#: ") + std::to_string(world[room_id].number));
-						break;
-					} else {
-						saved_room_counter++;
-					}
+			/** TODO: multi room pavements per character
+				for(auto room_pavement : player->builder_data->room_pavements) {
+				r_status(player,std::to_string(room_pavement.transact_id));
 				}
-			}
+				*/
+			r_status(player, "Transaction id: " + std::to_string(player->builder_data->room_pavements.transact_id));
 		}
-
-		r_success(player,std::string("Saved ") + std::to_string(saved_room_counter) + " rooms");
 		return;
 	}
+
+	//args = mods::util::subcmd_args<11,args_t>(argument,"save-paved");
+
+	//if(args.has_value() && args.value().size() > 1 && args.value()[0].compare("save-paved") == 0 ) {
+	//	/** Start **/
+	//	auto arg_vec = args.value();
+	//	/** TODO: multi room pavements */
+	//	//for(unsigned i=1; i < arg_vec.size();i++){
+	//	//
+	//	//	auto transaction_id = mods::util::stoi(arg_vec[i]);
+	//	//	if(!transaction_id.has_value()){
+	//	//		r_error(player,"Invalid transaction id: '" + arg_vec[i] + "'");
+	//	//		return;
+	//	//	}
+	//	//}
+	//	/** End **/
+	//	unsigned saved_room_counter = 0;
+
+	//	if(!player->builder_data){
+	//		r_error(player, "You do not have any builder data");
+	//		return;
+	//	}
+	//		/** FIXME: save by transaction id */
+	//		/* TODO: multi room pavements by tid
+	//		//for(auto room_transactions : player->builder_data->room_pavements) {
+	//		//	if(room_transactions.transact_id == args[1].value()){
+	//		//		/** FIXME save room id */
+	//		//		std::string error;
+	//		//		if(mods::builder::save_to_db(room_id,error) < 0) {
+	//		//			r_error(player,std::string("Unable to save room id#: ") + std::to_string(world[room_id].number) + " ->" + error);
+	//		//			break;
+	//		//		}
+	//		//	}
+	//		//}
+	//		
+	//				if(mods::builder::save_to_db(room_id,error) < 0) {
+	//					r_error(player,std::string("Unable to save room id#: ") + std::to_string(world[room_id].number) + " ->" + error);
+	//					return;
+	//				}
+
+
+	//	r_success(player,std::string("Saved ") + std::to_string(saved_room_counter) + " rooms");
+	//	return;
+	//}
 
 	args = mods::util::subcmd_args<5,args_t>(argument,"pave");
 
@@ -4284,19 +4505,19 @@ ACMD(do_rbuild) {
 			}
 
 			if(real_zone(zone_id.value()) == NOWHERE) {
-					if(!mods::builder::save_zone_to_db(
-							zone_id.value(),
-							("zone_" + arg_vec[3]).data(),
-							starting_room_number.value(),
-							starting_room_number.value() + 100,
-							100,
-							2)){
-						r_error(player,"Couldn't find zone, nor could we create one automatically.");
-						return;
-					}else{
-						/** TODO: transactional behaviour wanted here. (rollback) */
-						r_success(player,"Zone automatically created");
-					}
+				if(!std::get<0>(mods::builder::save_zone_to_db(
+								zone_id.value(),
+								("zone_" + arg_vec[3]).data(),
+								starting_room_number.value(),
+								starting_room_number.value() + 100,
+								100,
+								2))){
+					r_error(player,"Couldn't find zone, nor could we create one automatically.");
+					return;
+				}else{
+					/** TODO: transactional behaviour wanted here. (rollback) */
+					r_success(player,"Zone automatically created");
+				}
 			}
 
 			r_status(player,"Starting pave mode. You can start moving around now. To stop, type 'rbuild pave off'");

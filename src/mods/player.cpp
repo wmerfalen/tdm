@@ -33,6 +33,7 @@ static constexpr histfile_type_t HISTFILE_STRATEGY = histfile_type_t::HISTFILE_F
 
 namespace mods {
 	using mask_t = mods::weapon::mask_type;
+	using lmdb_db = db_handle;
 	void stc_color_evaluation(const std::string& title,player* p) {
 		*p << mods::globals::color_eval(title) << "\r\n";
 	}
@@ -584,6 +585,7 @@ namespace mods {
 	}
 	void player::init(){
 		m_histfile_on = false;
+		m_histfile_fp = nullptr;
 		m_weapon_type = 0;
 		m_weapon_flags = 0;
 		m_authenticated = false;
@@ -920,14 +922,6 @@ namespace mods {
 		data[sizeof(op) + sizeof(m_db_id) + sizeof(index)] = '|';
 		std::copy(time_id,time_id + sizeof(time_id),
 				data.begin() + sizeof(m_db_id) + sizeof(op) + sizeof(index));
-		std::cerr << "hf_pack()======================================\n";
-		std::cerr << "hf_pack()======================================\n";
-		std::cerr << "length: " << data.length() << "size: " << data.size() << "\n";
-		for(auto ch : data) {
-			std::cerr << (uint8_t)ch << " ";
-		}
-		std::cerr << "hf_pack()======================================\n";
-		std::cerr << "hf_pack()======================================\n";
 		return data;
 	}
 	int player::pack_get(
@@ -936,16 +930,14 @@ namespace mods {
 			unsigned long time_stamp,
 			std::string& got){
 		auto packed_index = hf_pack(index,op,time_stamp);
-		return LMDBNGET(packed_index.data(),packed_index.size(),got);
+		auto status = LMDBNGET(packed_index.data(),packed_index.size(),got);
+		if(status == EINVAL){
+			LMDBRENEW();
+			return this->pack_get(index,op,time_stamp,got);
+		}
+		return status;
 	}
 
-	void got_dbg(std::string got){
-		std::cerr << "[got]: ";
-		for(unsigned i=0; i < got.size();i++){
-			std::cerr << std::hex << got[i] << " ";
-		}
-		std::cerr << "\n";
-	}
 	int player::pack_set(
 			uint32_t index,
 			uint8_t op,
@@ -953,46 +945,90 @@ namespace mods {
 			void* value,
 			std::size_t v_size){
 		auto key = this->hf_pack(index,op,time_stamp);
-		LMDBNSET(key.data(),key.size(),value,v_size);
-		return 0;
+
+		auto status = LMDBNSET(key.data(),key.size(),value,v_size);
+		if(status == EINVAL){
+			LMDBRENEW();
+			return LMDBNSET(key.data(),key.size(),value,v_size);
+		}
+		return status;
+	}
+	void player::start_histfile(){
+		auto lib_dir = mods::js::current_working_dir();
+		lib_dir += "/../log/";
+		lib_dir += name();
+		lib_dir += "-" + std::to_string(std::time(nullptr));
+		lib_dir += ".log";
+		std::cerr << lib_dir << "\n";
+		m_histfile_fp = (FILE*)fopen(lib_dir.c_str(),"a+");
+		if(!m_histfile_fp){
+			std::cerr << "can't open log file '" << lib_dir.c_str() << "'\n";
+		}
+	}
+	void player::write_histfile(std::string_view line){
+		if(!m_histfile_fp){ return; }
+		std::string prefix = "[";
+		prefix += std::to_string(std::time(nullptr));
+		prefix += "]->";
+		fwrite(prefix.c_str(),sizeof(char),prefix.length(),m_histfile_fp);
+		fwrite(line.data(),sizeof(char),line.length(),m_histfile_fp);
+		fwrite("\n",sizeof(char),sizeof("\n"),m_histfile_fp);
+		fflush(m_histfile_fp);
 	}
 
-
-	void player::start_histfile() {
-		std::cerr << "[start_histfile]\n";
-		std::cerr << "[start_histfile]\n";
-		std::cerr << "[histfile hf_index]: -- FETCHING --\n";
-
-
-		std::string got = "";
-		auto status = this->pack_get(-1,HFO_INDEX,-1,got);
-		std::cerr << "start_histfile status (nget): " << status << "\n";
-
-		auto hf_index = m_histfile_index = 0;
-		hf_index = (std::size_t)*((std::size_t*)(got.data()));
-		m_histfile_index = ++hf_index;
-		this->sendln(std::to_string(m_histfile_index));
-		char* hf_ptr = reinterpret_cast<char*>(&m_histfile_index);
-		std::string value = "";
-		std::copy(hf_ptr,hf_ptr + sizeof(m_histfile_index),value.begin());
-
-		this->pack_set(-1,HFO_INDEX,-1,&m_histfile_index,sizeof(m_histfile_index));
-		this->pack_set(m_histfile_index,HFO_START,-1,value.data(),value.size());
+	void player::stop_histfile(){
+		if(!m_histfile_fp){ return; }
+		fflush(m_histfile_fp);
+		fclose(m_histfile_fp);
 	}
 
-	void player::write_histfile(std::string_view line) {
-		std::cerr << "histfile entry...\n";
-		std::cerr << "[histfile]+='" << line << "'\n";
-		auto packed = hf_pack(m_histfile_index,HFO_LOG,(unsigned long)std::time(nullptr));
-		LMDBNSET((void*)packed.data(),packed.size(),(void*)line.data(),line.size());
-	}
-	void player::stop_histfile() {
-		std::cerr << "[histfile]->Stopping...\n";
-		auto packed = hf_pack(m_histfile_index,HFO_STOP,0);
-		auto value = grab_raw_histfile_seconds();
-		LMDBNSET(packed.data(),packed.size(),value.data(),value.size());
-		m_histfile_on = false;
-	}
+	//void player::start_histfile() {
+	//	std::string got = "";
+	//	auto status = this->pack_get(-1,HFO_INDEX,-1,got);
+	//	m_histfile_index = 0;
+	//	if(status == lmdb_db::KEY_FETCHED_OKAY){
+	//		m_histfile_index = (uint32_t)*((uint32_t*)(got.data()));
+	//	}
+	//	++m_histfile_index;
+	//	this->sendln("pack_get index: " + std::to_string(status) + 
+	//			"|m_histfile_index|" + std::to_string(m_histfile_index)
+	//	);
+
+	//	char* hf_ptr = reinterpret_cast<char*>(&m_histfile_index);
+	//	std::string value(sizeof(m_histfile_index),0);
+	//	std::copy(hf_ptr,hf_ptr + sizeof(m_histfile_index),value.begin());
+	//	status = this->pack_set(-1,HFO_INDEX,-1,value.data(),value.size());
+	//	if(status == 0){
+	//		std::cerr << "start_histfile --- pack_set success\n";
+	//	}
+
+	//	std::cerr << "start_histfile put 1 (index): " << status << "\n";
+	//	value = grab_raw_histfile_seconds();
+	//	status = this->pack_set(m_histfile_index,
+	//		HFO_START,
+	//		-1,
+	//		value.data(),
+	//		value.size()
+	//	);
+	//	std::cerr << "start_histfile put 2 (start): " << status << "\n";
+
+	//}
+
+	//void player::write_histfile(std::string_view line) {
+	//	auto status = this->pack_set(m_histfile_index,
+	//			HFO_LOG,
+	//			(unsigned long)std::time(nullptr),
+	//			(void*)line.data(),
+	//			line.size()
+	//	);
+	//}
+	//void player::stop_histfile() {
+	//	auto packed = hf_pack(m_histfile_index,HFO_STOP,-1);
+	//	auto value = grab_raw_histfile_seconds();
+	//	LMDBNSET(packed.data(),packed.size(),value.data(),value.size());
+	//	m_histfile_on = false;
+	//}
+
 	player::~player() {
 		std::cerr << "[~player] " << m_name.c_str() << "\n";
 		if(m_histfile_on){ stop_histfile(); }

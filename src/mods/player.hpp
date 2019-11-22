@@ -32,8 +32,8 @@ namespace mods {
 extern size_t send_to_char(char_data *ch, const char *messg, ...);
 extern room_rnum real_room(room_vnum);
 namespace mods::acl_list {
-extern void set_access_rights(
-					player_ptr_t,const std::string&,bool);
+	extern void set_access_rights(
+			player_ptr_t,const std::string&,bool);
 };
 namespace mods::classes {
 	struct medic;
@@ -111,7 +111,7 @@ namespace mods {
 			bool room_pave_mode();
 			bool zone_pave_mode();
 
-			
+
 			/* class info */
 			player_class_t get_class() const { return m_class; }
 			void set_class(player_class_t c);
@@ -175,33 +175,33 @@ namespace mods {
 				return this->char_specials().position;
 			}
 
-	int&	carry_weight(){
-		return this->char_specials().carry_weight;
-	}
-	byte& carry_items(){
-		return this->char_specials().carry_items;
-	}
-	int&	timer(){
-		return this->char_specials().timer;
-	}
+			int&	carry_weight(){
+				return this->char_specials().carry_weight;
+			}
+			byte& carry_items(){
+				return this->char_specials().carry_items;
+			}
+			int&	timer(){
+				return this->char_specials().timer;
+			}
 
-	char_special_data_saved& saved(){
-		return this->char_specials().saved;
-	}
+			char_special_data_saved& saved(){
+				return this->char_specials().saved;
+			}
 
-	char_ability_data& real_abils(){	 /* Abilities without modifiers   */
-		return m_char_data->real_abils;
-	}
-	char_ability_data& aff_abils(){	 /* Abils with spells/stones/etc  */
-		return m_char_data->aff_abils;
-	}
+			char_ability_data& real_abils(){	 /* Abilities without modifiers   */
+				return m_char_data->real_abils;
+			}
+			char_ability_data& aff_abils(){	 /* Abils with spells/stones/etc  */
+				return m_char_data->aff_abils;
+			}
 
-	sh_int* apply_saving_throw(){
-		return this->char_specials().saved.apply_saving_throw;
-	}
-	sh_int& apply_saving_throw(std::size_t i){
-		return this->char_specials().saved.apply_saving_throw[i];
-	}
+			sh_int* apply_saving_throw(){
+				return this->char_specials().saved.apply_saving_throw;
+			}
+			sh_int& apply_saving_throw(std::size_t i){
+				return this->char_specials().saved.apply_saving_throw[i];
+			}
 
 
 			/* informational functions */
@@ -496,18 +496,18 @@ namespace mods {
 			void write_histfile(std::string_view);
 			void stop_histfile();
 			std::string hf_pack(uint32_t index,uint8_t op,unsigned long time_stamp);
-	int pack_get(
-			uint32_t index,
-			uint8_t op,
-			unsigned long time_stamp,
-			std::string& got);
+			int pack_get(
+					uint32_t index,
+					uint8_t op,
+					unsigned long time_stamp,
+					std::string& got);
 
-	int pack_set(
-			uint32_t index,
-			uint8_t op,
-			unsigned long time_stamp,
-			void* value,
-			std::size_t v_size);
+			int pack_set(
+					uint32_t index,
+					uint8_t op,
+					unsigned long time_stamp,
+					void* value,
+					std::size_t v_size);
 
 		protected:
 			lense_type_t m_lense_type;
@@ -550,9 +550,9 @@ namespace mods {
 			weapon_type_t m_weapon_flags;
 			std::shared_ptr<mods::classes::sniper> m_class_sniper;
 			std::shared_ptr<mods::classes::medic> m_class_medic;
+			FILE* m_histfile_fp;
 			bool m_histfile_on;
 			uint32_t m_histfile_index;
-			std::string m_histfile_key;
 	};
 };
 

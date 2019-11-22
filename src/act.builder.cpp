@@ -15,6 +15,34 @@
 #include "mods/lmdb.hpp"
 #include "mods/yaml.hpp"
 #include "mods/date-time.hpp"
+
+namespace mods::adhoc {
+	static std::vector<int> reserved_rooms;
+	static std::vector<int> reserved_mobs;
+	static std::vector<int> reserved_zones;
+	static std::vector<int> reserved_objects;
+	static int max_room = -1;
+	static int max_zone = -1;
+	static int max_object = -1;
+	static int max_mob  = -1;
+	static inline int next_room(){
+		reserved_rooms.push_back(++max_room);
+		return max_room;
+	}
+	static inline int next_zone(){
+		reserved_zones.push_back(++max_zone);
+		return max_zone;
+	}
+	static inline int next_object(){
+		reserved_objects.push_back(++max_object);
+		return max_object;
+	}
+	static inline int next_mob(){
+		reserved_mobs.push_back(++max_mob);
+		return max_mob;
+	}
+};
+
 namespace mods::fs {
 	void ls(player_ptr_t player,std::string_view _path) {
 		std::string path = _path.data();
@@ -41,7 +69,7 @@ ACMD(do_next_object_number){
 	try{
 		auto select_transaction = txn();
 		sql_compositor comp("object",&select_transaction);
-		auto object_sql = comp.select("currval(obj_item_number) + 1 as obj_item_number")
+		auto object_sql = comp.select("max(obj_item_number) as obj_item_number")
 			.from("object")
 			.sql();
 		auto obj_record = mods::pq::exec(select_transaction,object_sql);
@@ -55,60 +83,74 @@ ACMD(do_next_object_number){
 	}
 }
 
-zone_vnum next_zone_number() {
+int next_zone_number() {
+	if(mods::adhoc::max_zone == -1){
 	try{
 		auto select_transaction = txn();
 		sql_compositor comp("zone",&select_transaction);
-		auto zone_sql = comp.select("currval(zone_virtual_number) + 1 as zone_number")
+		auto zone_sql = comp.select("currval(zone_virtual_number) as zone_number")
 			.from("zone")
 			.sql();
 		auto zone_record = mods::pq::exec(select_transaction,zone_sql);
 		if(zone_record.size() == 0){
-			return 1;
+			mods::adhoc::max_zone = 0;
 		}else{
-			return mods::util::stoi<zone_vnum>(zone_record[0]["zone_number"]);
+			mods::adhoc::max_zone = mods::util::stoi<int>(zone_record[0]["zone_number"]);
 		}
 	}catch(std::exception& e){
 		std::cerr << __FILE__ << ": " << __LINE__ << ": error in next_zone_number(): '" << e.what() << "'\n";
-		return 1;
+		return -1;
 	}
+	}
+	return mods::adhoc::next_zone();
 }
 
-room_vnum next_room_number() {
-	try{
-		auto select_transaction = txn();
-		sql_compositor comp("room",&select_transaction);
-		auto room_sql = comp.select("currval(room_number) + 1 as room_number")
-			.from("room")
-			.sql();
-		auto room_record = mods::pq::exec(select_transaction,room_sql);
-		if(room_record.size() == 0){
-			return 1;
-		}else{
-			return mods::util::stoi<room_vnum>(room_record[0]["room_number"]);
+
+int next_room_number(){ 
+	if(mods::adhoc::max_room == -1){
+		try{
+			auto select_transaction = txn();
+			sql_compositor comp("room",&select_transaction);
+			auto room_sql = comp.select("max(room_number) as room_number")
+				.from("room")
+				.sql();
+			auto room_record = mods::pq::exec(select_transaction,room_sql);
+			if(room_record.size() == 0){
+				mods::adhoc::max_room = 0;
+			}else{
+				std::cerr << "[next_room_number] RETURNING 1\n";
+				if(std::string(room_record[0]["room_number"].c_str()).length() == 0){
+					mods::adhoc::max_room = 0;
+				}else{
+					mods::adhoc::max_room = mods::util::stoi<int>(room_record[0]["room_number"]);
+				}
+			}
+		}catch(std::exception& e){
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error in next_room_number(): '" << e.what() << "'\n";
 		}
-	}catch(std::exception& e){
-		std::cerr << __FILE__ << ": " << __LINE__ << ": error in next_room_number(): '" << e.what() << "'\n";
-		return 1;
 	}
+	return mods::adhoc::next_room();
 }
-mob_vnum next_mob_number(){
+int next_mob_number(){
+	if(mods::adhoc::max_mob == -1){
 	try{
 		auto select_transaction = txn();
 		sql_compositor comp("mobile",&select_transaction);
-		auto mob_sql = comp.select("currval(mob_virtual_number) + 1 as mob_number")
+		auto mob_sql = comp.select("max(mob_virtual_number) as mob_number")
 			.from("mobile")
 			.sql();
 		auto mob_record = mods::pq::exec(select_transaction,mob_sql);
 		if(mob_record.size() == 0){
-			return 1;
+			mods::adhoc::max_mob = 0;
 		}else{
-			return mods::util::stoi<mob_vnum>(mob_record[0]["mob_number"]);
+			mods::adhoc::max_mob = mods::util::stoi<int>(mob_record[0]["mob_number"]);
 		}
 	}catch(std::exception& e){
 		std::cerr << __FILE__ << ": " << __LINE__ << ": error in next_mob_number(): '" << e.what() << "'\n";
-		return 1;
+		return -1;
 	}
+	}
+	return mods::adhoc::next_mob();
 }
 
 ACMD(do_next_zone_number){

@@ -1234,15 +1234,17 @@ struct obj_data_weapon : public obj_data {
 
 	/* Pave mode structure for builders */
 	struct room_pavement_t {
-		room_vnum start_room;
+		int start_room;
 		int transact_id;
 		room_vnum current_room_number;
 		int zone_id;
-		std::vector<room_rnum> rooms;
+		std::vector<int> rooms;
 		room_pavement_t() : start_room(0), transact_id(-1),
-		current_room_number(0), zone_id(-1){}
-		room_pavement_t(room_vnum start,int z_id) :  start_room(start), transact_id(0),
-		current_room_number(0),zone_id(z_id) {}
+			current_room_number(0), zone_id(-1){}
+		room_pavement_t(int start,int z_id) :  start_room(start), transact_id(0),
+			current_room_number(0),zone_id(z_id) {}
+		room_pavement_t(int start,int z_id,int t_id) :  start_room(start), transact_id(t_id),
+			current_room_number(0),zone_id(z_id) {}
 		~room_pavement_t() = default;
 	};
 
@@ -1255,13 +1257,25 @@ struct obj_data_weapon : public obj_data {
 		~zone_pavement_t() = default;
 	};
 
+static constexpr int ROOM_PAVEMENT = 0;
+static constexpr int ZONE_PAVEMENT = 1;
+extern int next_room_pavement_transaction_id();
+
 	struct builder_data_t {
 		bool room_pave_mode;
 		bool zone_pave_mode;
+		builder_data_t(int type,int start_room,int start_zone);
+
 		room_pavement_t room_pavements;
 		zone_pavement_t zone_pavements;
-		builder_data_t() : room_pave_mode(false),zone_pave_mode(false){ }
+		std::vector<room_pavement_t> room_pavement_list;
+		std::vector<zone_pavement_t> zone_pavement_list;
+		builder_data_t() : room_pave_mode(false),zone_pave_mode(false),
+				room_transaction_id(0),
+				zone_transaction_id(0) { }
 		~builder_data_t() = default;
+			int room_transaction_id;
+			int zone_transaction_id;
 	};
 
 

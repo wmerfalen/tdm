@@ -94,44 +94,49 @@ void lmdb_renew() {
 int lmdb_nget(void* key,std::size_t k_size,std::string& value){
 	value = "";
 	auto status = mods::globals::db->nget(key,k_size,value);
-	if(status == EINVAL){
-		std::cerr << "[lmdb_nget] got EINVAL -- retrying...\n";
-		lmdb_renew();
-		status = mods::globals::db->nget(key,k_size,value);
-		std::cerr << "[lmdb_nget] retry status: " << status << "\n";
-	}
 	return status;
+	//if(status == EINVAL){
+	//	std::cerr << "[lmdb_nget] got EINVAL -- retrying...\n";
+	//	lmdb_renew();
+	//	value = "";
+	//	status = mods::globals::db->nget(key,k_size,value);
+	//	std::cerr << "[lmdb_nget] retry status: " << status << "\n";
+	//}
+	//return status;
 }
 std::string lmdb_get(std::string_view key){
 	std::string value = "";
 	auto status = mods::globals::db->get(key.data(),value);
-	if(status == EINVAL){
-		std::cerr << "[lmdb_put] got EINVAL -- retrying...\n";
-		lmdb_renew();
-		status = mods::globals::db->get(key.data(),value);
-		std::cerr << "retry status: " << status << "\n";
-	}
 	return value;
+	//if(status == EINVAL){
+	//	std::cerr << "[lmdb_put] got EINVAL -- retrying...\n";
+	//	lmdb_renew();
+	//	status = mods::globals::db->get(key.data(),value);
+	//	std::cerr << "retry status: " << status << "\n";
+	//}
+	//return value;
 }
 int lmdb_nput(void* key,std::size_t key_size,
 		void* value,std::size_t v_size){
 	auto status = mods::globals::db->nput(key,key_size,value,v_size);
-	if(status == EINVAL){
-		std::cerr << "[lmdb_put] got EINVAL -- retrying...\n";
-		lmdb_renew();
-		status = mods::globals::db->nput(key,key_size,value,v_size);
-		std::cerr << "retry status: " << status << "\n";
-	}
 	return status;
+	//if(status == EINVAL){
+	//	std::cerr << "[lmdb_put] got EINVAL -- retrying...\n";
+	//	lmdb_renew();
+	//	status = mods::globals::db->nput(key,key_size,value,v_size);
+	//	std::cerr << "retry status: " << status << "\n";
+	//}
+	//return status;
 }
 void lmdb_put(std::string key,std::string value){
 	auto status = mods::globals::db->put(key,value);
-	if(status == EINVAL){
-		std::cerr << "[lmdb_put] got EINVAL -- retrying...\n";
-		lmdb_renew();
-		status = mods::globals::db->put(key,value);
-		std::cerr << "retry status: " << status << "\n";
-	}
+	return status;
+	//jif(status == EINVAL){
+	//j	std::cerr << "[lmdb_put] got EINVAL -- retrying...\n";
+	//j	lmdb_renew();
+	//j	status = mods::globals::db->put(key,value);
+	//j	std::cerr << "retry status: " << status << "\n";
+	//j}
 }
 void lmdb_commit(){
 	mods::globals::db->commit();

@@ -1932,12 +1932,13 @@ void nanny(player_ptr_t p, char * in_arg) {
 												 if(boot_type_hell()){
 												 	p->set_room(0);
 												 }else{
-												 	p->set_room(config::rooms::real_mortal_start());
+												 	//p->set_room(config::rooms::real_mortal_start());
 												 }
 												 if(world.size() == 0){
 													 std::cerr << "error: world.size is empty!\n";
+													 exit(0);
 												 }
-
+												 p->set_room(world.size()-1);
 												 char_to_room(p->cd(),p->room());
 												 act("$n has entered the game.", TRUE, p->cd(), 0, 0, TO_ROOM);
 												 p->set_state(CON_PLAYING);

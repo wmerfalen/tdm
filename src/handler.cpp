@@ -421,10 +421,27 @@ void char_to_room(char_data *ch, room_rnum room) {
 		log("SYSERR: char_to_room given a nullptr");
 		return;
 	}
-	/*TODO: Insert logic here !movement !globals */
-	std::size_t r = room;
+	//std::size_t r = room;
 
-	if(ch == NULL || room == NOWHERE || r >= mods::globals::room_list.size()){
+	if(ch == NULL){
+		log("SYSERR: ch ptr passed to char_to_room is null!");
+		return;
+	}
+
+	if(room == NOWHERE){
+		log("SYSERR: Illegal value (room == NOWHERE) passed to char_to_room. (Room: %d/%d Ch: %p",
+		    room, mods::globals::room_list.size(), ch);
+		return;
+	}
+		
+	if(room >= mods::globals::room_list.size()){
+		//MENTOC_PREAMBLE();
+		//if(player->builder_mode()){
+		//	player->sendln("Okay you got me");
+		//	mods::globals::pad_room(room,ch,NORTH);
+		//	mods::globals::rooms::char_to_room(room,ch);
+		//	return;
+		//}
 		log("SYSERR: Illegal value(s) passed to char_to_room. (Room: %d/%d Ch: %p",
 		    room, mods::globals::room_list.size(), ch);
 		return;
@@ -764,6 +781,7 @@ char_data *get_char_room(char *name, int *number, room_rnum room) {
 struct char_data *get_char_num(mob_rnum nr) {
 	struct char_data *i;
 
+	/** !FIXME: use mods::loops */
 	for(i = character_list; i; i = i->next)
 		if(GET_MOB_RNUM(i) == nr) {
 			return (i);
@@ -1062,25 +1080,13 @@ void extract_char_final(struct char_data *ch) {
 		}
 	}
 
-	/* we can't forget the hunters either... */
-	for(temp = character_list; temp; temp = temp->next){
-		/** !FIXME: a temporary fix to a nasty problem. 
-		 * 2019-11-16 -- 
-		 * bug report
-		 * -----------
-		 *  steps to reproduce:
-		 *  1) login
-		 *  2) quit, type 0 to exit fully
-		 *  3) login as same user again
-		 *  4) quit, type 0 to exit fully
-		 *  5) code segfaults on HUNTING(temp) == ch
-		 */
-		if(!temp){ continue; }
-		if(!ch){ continue; }
-		if(HUNTING(temp) == ch) {
-			HUNTING(temp) = NULL;
-		}
-	}
+	mods::loops::foreach_all_chars([&ch](player_ptr_t _player_ptr) -> bool {
+			if(HUNTING(_player_ptr->cd()) == ch){
+				HUNTING(_player_ptr->cd()) = nullptr;
+			}
+			return true;
+	});
+
 
 	char_from_room(ch);
 
@@ -1292,6 +1298,7 @@ struct char_data *get_char_world_vis(struct char_data *ch, char *name, int *numb
 		return get_player_vis(ch, name, NULL, 0);
 	}
 
+	/** !FIXME: use mods::loops */
 	for(i = character_list; i && *number; i = i->next) {
 		if(IN_ROOM(ch) == IN_ROOM(i)) {
 			continue;
