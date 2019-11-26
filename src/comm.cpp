@@ -658,6 +658,8 @@ void game_loop(socket_t mother_desc) {
 			}
 			// Reset the idle timer & pull char back from void if necessary 
 			player->cd()->char_specials.timer = 0;
+			/*
+			 * TODO: this is breaking mortal start room and recall
 			if(player->state() == CON_PLAYING && GET_WAS_IN(player->cd()) != NOWHERE) {
 				if(player->room() != NOWHERE) {
 					char_from_room(player);
@@ -666,6 +668,7 @@ void game_loop(socket_t mother_desc) {
 				GET_WAS_IN(player) = NOWHERE;
 				act("$n has returned.", TRUE, player->cd(), 0, 0, TO_ROOM);
 			}
+			*/
 			GET_WAIT_STATE(player->cd()) = 1;
 			player->desc().has_prompt = false;
 			if(player->state() != CON_PLAYING) { // In menus, etc. 

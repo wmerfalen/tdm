@@ -30,6 +30,105 @@ namespace mods::world_conf {
 			return {false,e.what()};
 		}
 	}
+	extern rooms_t rooms;
+	rooms_t load_all() {
+		rooms[WC_FROZEN] = real_room(get_frozen_room_vnum());
+		rooms[WC_IDLE] = real_room(get_idle_room_vnum());
+		rooms[WC_IMM] = real_room(get_immortal_start_room_vnum());
+		rooms[WC_MOR] = real_room(get_mortal_start_room_vnum());
+		std::cerr << "Mortal room: " << rooms[WC_MOR] << "\n";
+		return rooms;
+	}
+		int real_frozen(){
+			return rooms[0];
+		}
+		int real_idle(){
+			return rooms[1];
+		}
+		int real_immortal_start(){
+			return rooms[2];
+		}
+		int real_mortal_start(){
+			return rooms[3];
+		}
+	/**
+	 * frozen room
+	 */
+	int get_frozen_room_vnum(){
+		auto record = select_value(mods::world_conf::START_ROOM_TABLE,
+				"frozen_room","is_active","1");
+		std::string frozen_room = "";
+		if(record.first){
+			frozen_room = record.second;
+		}
+		return mods::util::stoi(frozen_room).value_or(-1);
+	}
+	/**
+	 * immortal start
+	 */
+	int get_immortal_start_room_vnum(){
+		auto record = select_value(mods::world_conf::START_ROOM_TABLE,
+				"immortal_start_room","is_active","1");
+		std::string immortal_start_room = "";
+		if(record.first){
+			immortal_start_room = record.second;
+		}
+		return mods::util::stoi(immortal_start_room).value_or(-1);
+	}
+	/**
+	 * mortal start
+	 */
+	int get_mortal_start_room_vnum(){
+		auto record = select_value(mods::world_conf::START_ROOM_TABLE,
+				"mortal_start_room","is_active","1");
+		std::string mortal_start_room = "";
+		if(record.first){
+			mortal_start_room = record.second;
+		}
+		return mods::util::stoi(mortal_start_room).value_or(-1);
+	}
+
+	/** 
+	 * idle room 
+	 */
+	int get_idle_room_vnum(){
+		auto record = select_value(mods::world_conf::START_ROOM_TABLE,
+				"idle_room","is_active","1");
+		std::string mortal_start_room = "";
+		if(record.first){
+			mortal_start_room = record.second;
+		}
+		return mods::util::stoi(mortal_start_room).value_or(-1);
+	}
+
+	std::pair<bool,std::string> set_value(std::string_view column, room_vnum room_id){
+		{
+			std::map<std::string,std::string> values;
+			values[column.data()] = std::to_string(room_id);
+			try{
+				auto up_txn = txn();
+				sql_compositor comp("world_configuration_start_rooms",&up_txn);
+				auto up_sql = comp
+					.update("world_configuration_start_rooms")
+					.set(values)
+					.where("is_active","=","1")
+					.sql();
+				mods::pq::exec(up_txn,up_sql);
+				mods::pq::commit(up_txn);
+				return {true,"Updated record"};
+			}catch(std::exception& e){
+				return {false,e.what()};
+			}
+		}
+	}
+
+	std::pair<bool,std::string> set_frozen_room(room_vnum room_id){
+		return set_value("frozen_room",room_id);
+	}
+	std::pair<bool,std::string> set_idle_room(room_vnum room_id){
+		return set_value("idle_room",room_id);
+	}
+
 	std::pair<bool,std::string> set_immortal_start_room(room_vnum room_id){
 		auto record = select_value(mods::world_conf::START_ROOM_TABLE,
 				"mortal_start_room","is_active","1");
@@ -48,9 +147,10 @@ namespace mods::world_conf {
 				},
 				"is_active","1");
 	}
+
 	std::pair<bool,std::string> set_mortal_start_room(room_vnum room_id){
 		auto record = select_value(mods::world_conf::START_ROOM_TABLE,
-				"immortal_start_room","is_active","1");
+				"mortal_start_room","is_active","1");
 		std::string immortal_start_room = "";
 		if(record.first){
 			immortal_start_room = record.second;

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "yaml-cpp/yaml.h"
+#include "rarity.hpp"
 namespace mods::yaml {
 	struct rifle_description_t;
 	struct explosive_description_t;
@@ -46,7 +47,10 @@ namespace mods::yaml {
 			headshot_bonus(0),
 			max_range(0),
 			range_multiplier(0),
-			reload_time(0)
+			reload_time(0),
+			object_type("rifle"),
+			vnum(0),
+			rarity(mods::rarity::DEFAULT)
 		{
 			std::fill(accuracy_map.begin(),accuracy_map.end(),0);
 			std::fill(damage_map.begin(),damage_map.end(),0);
@@ -72,6 +76,9 @@ namespace mods::yaml {
 			float reload_time;
 			int type;
 			std::string name;
+		std::string object_type;
+		int vnum;
+		float rarity;
 	};
 	struct explosive_description_t : public yaml_description_t {
 		virtual int16_t feed(std::string_view file);
@@ -87,7 +94,10 @@ namespace mods::yaml {
 			disorient_amount(0.0), /** percent */
 			manufacturer("ACME Industries"), /** Fictional entity that creates this */
 			name("Generic Explosive"), /** Name of item */
-			type(0)	/** Explosive enum */
+			type(0),	/** Explosive enum */
+			object_type("explosive"),
+			vnum(0),
+			rarity(mods::rarity::DEFAULT)
 		{
 			std::fill(aoe_triggers.begin(),aoe_triggers.end(),0);
 		}
@@ -102,6 +112,9 @@ namespace mods::yaml {
 		std::string manufacturer;
 		std::string name;
 		int type;
+		std::string object_type;
+		int vnum;
+		float rarity;
 	};
 };
 #endif

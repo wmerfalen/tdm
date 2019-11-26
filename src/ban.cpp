@@ -259,7 +259,7 @@ int Valid_Name(const char *newname) {
 	 * prompt won't have characters yet.
 	 */
 	for(auto & p : mods::globals::player_list){
-		if(p->cd() && p->name().length() && !str_cmp(p->name().c_str(), newname)) {
+		if(!p->name().compare(newname)) {
 			return (p->state() == CON_PLAYING);
 		}
 	}

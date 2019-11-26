@@ -20,6 +20,7 @@
 #include "handler.h"
 #include "mods/loops.hpp"
 #include "interpreter.h"
+#include "mods/world-configuration.hpp"
 
 
 /* external variables */
@@ -418,14 +419,14 @@ void check_idling(player_ptr_t player) {
 				player->stc("You have been idle, and are pulled into a void.\r\n");
 				mods::db::save_char(player);
 				char_from_room(ch);
-				char_to_room(ch, config::rooms::real_idle());
+				char_to_room(ch, mods::world_conf::real_idle());
 			}
 		} else if(ch->char_specials.timer > idle_rent_time) {
 			if(IN_ROOM(ch) != NOWHERE) {
 				char_from_room(ch);
 			}
 
-			char_to_room(ch, config::rooms::real_idle());
+			char_to_room(ch, mods::world_conf::real_idle());
 
 			if(ch->has_desc) {
 				ch->desc->set_state(CON_DISCONNECT);

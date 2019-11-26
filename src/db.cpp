@@ -35,6 +35,7 @@
 #include "mods/pq.hpp"
 #include "mods/sql.hpp"
 #include "mods/npc.hpp"
+#include "mods/world-configuration.hpp"
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
@@ -81,6 +82,7 @@ int circle_restrict = 0;	/* level of game restriction	 */
 room_rnum r_mortal_start_room;	/* rnum of mortal start room	 */
 room_rnum r_immort_start_room;	/* rnum of immort start room	 */
 room_rnum r_frozen_start_room;	/* rnum of frozen start room	 */
+room_rnum r_idle_room;
 
 char *credits = NULL;		/* game credits			 */
 char *news = NULL;		/* mud news			 */
@@ -1414,7 +1416,19 @@ void parse_room(FILE *fl, int virtual_nr) {
 
 /* make sure the start rooms exist & resolve their vnums to rnums */
 void check_start_rooms(void) {
-	if((r_mortal_start_room = real_room(mortal_start_room)) == NOWHERE) {
+	auto real_rooms = mods::world_conf::load_all();
+
+	if((r_idle_room = real_rooms[1]) == NOWHERE) {
+		log("SYSERR:  Warning: IDLE room does not exist.  Change in config.c.");
+		if(world.size() > 0){
+			log("defaulting to 0");
+			r_frozen_start_room = 0;
+		}else{
+			log("defaulting to r_mortal_start_room");
+			r_frozen_start_room = r_mortal_start_room;
+		}
+	}
+	if((r_mortal_start_room = real_rooms[3] ) == NOWHERE) {
 		log("SYSERR:  Mortal start room does not exist.  Change in config.c.");
 		if(world.size() > 0){
 			log("defaulting to 0");
@@ -1422,7 +1436,7 @@ void check_start_rooms(void) {
 		}
 	}
 
-	if((r_immort_start_room = real_room(immort_start_room)) == NOWHERE) {
+	if((r_immort_start_room = real_rooms[2]) == NOWHERE) {
 		log("SYSERR:  Warning: Immort start room does not exist.  Change in config.c.");
 		if(world.size() > 0){
 			log("defaulting to 0");
@@ -1433,7 +1447,7 @@ void check_start_rooms(void) {
 		}
 	}
 
-	if((r_frozen_start_room = real_room(frozen_start_room)) == NOWHERE) {
+	if((r_frozen_start_room = real_rooms[0]) == NOWHERE) {
 		log("SYSERR:  Warning: Frozen start room does not exist.  Change in config.c.");
 		if(world.size() > 0){
 			log("defaulting to 0");

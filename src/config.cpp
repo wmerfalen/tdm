@@ -309,19 +309,5 @@ int min_wizlist_lev = LVL_GOD;
 
 extern room_rnum real_room(room_vnum);
 namespace config {
-	namespace rooms {
-		room_rnum real_idle(){
-			return real_room(config::rooms::IDLE);
-		}
-		room_rnum real_mortal_start(){
-			return real_room(config::rooms::MORTAL_START);
-		}
-		room_vnum virtual_idle(){
-			return config::rooms::IDLE;
-		}
-		room_vnum virtual_mortal_start(){
-			return config::rooms::MORTAL_START;
-		}
-	};
 	bool run_profile_scripts;
 };

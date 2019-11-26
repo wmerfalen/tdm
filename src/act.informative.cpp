@@ -25,6 +25,7 @@
 #include "mods/quests.hpp"
 #include "mods/drone.hpp"
 #include "mods/util.hpp"
+#include "mods/world-configuration.hpp"
 
 extern struct char_data* character_list;
 /* extern variables */
@@ -147,7 +148,7 @@ ACMD(do_recall) {
 		*player << "Cannot recall this soon after combat.";
 	} else {
 		char_from_room(ch);
-		char_to_room(ch,real_room(mortal_start_room));
+		char_to_room(ch,mods::world_conf::real_mortal_start());
 		command_interpreter(ch, "l");
 	}
 }

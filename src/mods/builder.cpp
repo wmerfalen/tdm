@@ -502,6 +502,40 @@ namespace mods::builder {
 		rb_debug("Done dumping map");
 	}
 
+	using values_t = std::map<std::string,std::string>;
+	std::tuple<bool,zone_pkid_t> update_zone_with_placements(int virtual_number,player_ptr_t player) {
+		auto zone_start = player->builder_data->room_pavements.start_room;
+		auto zone_end = zone_start;
+		for(auto & room : player->builder_data->room_pavements.rooms){
+			if(zone_end < room){
+				zone_end = room;
+			}
+		}
+		player->sendln("Zone start: " + std::to_string(zone_start));
+		player->sendln("Zone end: " + std::to_string(zone_end));
+		{
+			try{
+				values_t values;
+				values["zone_start"] = std::to_string(zone_start);
+				values["zone_end"] = std::to_string(zone_end);
+				auto up_txn = txn();
+				sql_compositor comp("zone",&up_txn);
+				auto up_sql = comp
+					.update("zone")
+					.set(values)
+					.where("zone_virtual_number","=",std::to_string(virtual_number))
+					.sql();
+				mods::pq::exec(up_txn,up_sql);
+				mods::pq::commit(up_txn);
+				return {true, 0};
+			}catch(std::exception& e){
+				std::cerr << "error updating zone in db: '" << e.what() << "'\n";
+				rb_debug("EXCEPTION (UPDATE)");
+				rb_debug(e.what());
+				return {false,-1};
+			}
+		}
+	}
 	std::tuple<bool,zone_pkid_t> save_zone_to_db(int virtual_number,std::string_view zone_name,int zone_start,int zone_end,int lifespan,int reset_mode) {
 		{
 			std::map<std::string,std::string> values = {
@@ -516,7 +550,6 @@ namespace mods::builder {
 				auto txn2 = txn();
 				sql_compositor comp("zone",&txn2);
 				auto sql = comp
-					.insert()
 					.insert()
 					.into("zone")
 					.values(values)
@@ -1300,6 +1333,10 @@ ACMD(do_rbuild_sandbox) {
 					}
 					r_success(player, "Saved room " + std::to_string(room));
 				}
+				auto status = mods::builder::update_zone_with_placements(
+						player->builder_data->room_pavements.zone_id,
+						player
+				);
 				r_success(player,"Sandbox saved");
 				return;
 			}//end command is save
@@ -3866,6 +3903,16 @@ ACMD(do_rbuild) {
 			"  {gld}|:: INSIDE{/gld}\r\n" <<
 			"  {gld}|:: SEWER{/gld}\r\n" << 
 			"  {gld}|:: VOLATILE{/gld}\r\n" << 
+			"  {gld}|:: TUNNEL{/gld}\r\n" <<
+			"  {gld}|:: RADIOACTIVE{/gld}\r\n" <<
+			"  {gld}|:: RUBBLE{/gld}\r\n" <<
+			"  {gld}|:: DIRT{/gld}\r\n" <<
+			"  {gld}|:: SHATTERED_GLASS{/gld}\r\n" <<
+			"  {gld}|:: LOW_ATMOSPHERE{/gld}\r\n" <<
+			"  {gld}|:: ON_FIRE{/gld}\r\n" <<
+			"  {gld}|:: NON_HAZARDOUS_SMOKE{/gld}\r\n" <<
+			"  {gld}|:: HAZARDOUS_SMOKE{/gld}\r\n" <<
+			"  {gld}|:: EMP{/gld}\r\n" <<
 			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {wht}rbuild{/wht} {gld}texture GRASS OUTSIDE{/gld}\r\n" <<
 

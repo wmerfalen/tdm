@@ -31,6 +31,7 @@
 #include "mods/crypto.hpp"
 #include "mods/auto-login.hpp"
 #include "act.debug.hpp"
+#include "mods/world-configuration.hpp"
 
 /* external variables */
 extern int destroy_socket(socket_t&);
@@ -1878,9 +1879,9 @@ void nanny(player_ptr_t p, char * in_arg) {
 												 //reset_char(p->cd());
 												 //read_aliases(p->cd());
 
-												 if(p->has_affect_plr(PLR_INVSTART)){
-													 GET_INVIS_LEV(p->cd()) = p->level();
-												 }
+												 //if(p->has_affect_plr(PLR_INVSTART)){
+												 //  GET_INVIS_LEV(p->cd()) = p->level();
+												 //}
 
 												 /*
 													* We have to place the character in a room before equipping them
@@ -1928,18 +1929,22 @@ void nanny(player_ptr_t p, char * in_arg) {
 												 /* check and make sure no other copies of this player are logged in */
 												 perform_dupe_check(p);
 
-												 //p->stc("welcome");//WELC_MESSG);
-												 if(boot_type_hell()){
-												 	p->set_room(0);
-												 }else{
-												 	//p->set_room(config::rooms::real_mortal_start());
+												 p->stc(WELC_MESSG);
+												 {
+												 int start_room = 0;
+												 if(!boot_type_hell()){
+												 	start_room = mods::world_conf::real_mortal_start();
 												 }
+												 std::cerr << "resolved mortal start: " << start_room << "\n";
+												 std::cerr << "resolved mortal start: " << start_room << "\n";
+												 std::cerr << "resolved mortal start: " << start_room << "\n";
 												 if(world.size() == 0){
 													 std::cerr << "error: world.size is empty!\n";
 													 exit(0);
 												 }
-												 p->set_room(world.size()-1);
-												 char_to_room(p->cd(),p->room());
+												 p->set_room(start_room);
+												 char_to_room(p->cd(),start_room);
+												 }
 												 act("$n has entered the game.", TRUE, p->cd(), 0, 0, TO_ROOM);
 												 p->set_state(CON_PLAYING);
 
@@ -1955,13 +1960,6 @@ void nanny(player_ptr_t p, char * in_arg) {
 													 p->stc("You have mail waiting.\r\n");
 												 }
 												 p->start_histfile();
-
-#ifdef __MENTOC_RENT_DYNAMICS__
-												 if(load_result == 2) {	/* rented items lost */
-													 send_to_char(p->cd(), "\r\n\007You could not afford your rent!\r\n"
-															 "Your possesions have been donated to the Salvation Army!\r\n");
-												 }
-#endif
 
 												 p->desc().has_prompt = 0;
 #ifndef __MENTOC_DONT_RUN_PROFILE_SCRIPTS__

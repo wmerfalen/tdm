@@ -1,6 +1,38 @@
 #include "yaml.hpp"
 namespace mods::yaml {
 
+	std::vector<std::pair<std::string,float>> rarity_strings() {
+			return {
+				{"COMMON",mods::rarity::COMMON},
+				{"UNCOMMON",mods::rarity::UNCOMMON},
+				{"RARE",mods::rarity::RARE},
+				{"LEGENDARY",mods::rarity::LEGENDARY},
+				{"GOD_TIER",mods::rarity::GOD_TIER},
+				{"DEFAULT",mods::rarity::DEFAULT}
+			};
+	}
+	std::string rarity_segment(){
+		std::string comment = "#rarity types\n";
+		for(auto & rarity_pair : rarity_strings()){
+			comment += "# " + rarity_pair.first + "\n";
+		}
+		comment += "rarity: COMMON\n";
+		return comment;
+	}
+	std::string base_class_items(std::string obj_type){
+		std::string items = rarity_segment();
+		items += "vnum: 101 #virtual number\n";
+		items += "object_type: " + obj_type + "\n";
+		return items;
+	}
+	float parse_rarity(const std::string& rarity_string) {
+		for(auto & rarity_pair : rarity_strings()){
+			if(!rarity_pair.first.compare(rarity_string)){
+				return rarity_pair.second;
+			}
+		}
+		return mods::rarity::DEFAULT;
+	}
 		/** TODO: write to file, instead of to cout */
 	int16_t rifle_description_t::write_example_file(std::string_view file){
 		std::string file_name = current_working_dir() + "/" + file.data();
@@ -45,7 +77,8 @@ namespace mods::yaml {
 			"range_multiplier: 4.3 #float, multiplied by \n" <<
 			"reload_time: 3.0 #float, measured in seconds\n" <<
 			"type: 'SNIPER' #string, type of weapon\n" <<
-			"name: 'A <adjectively> <horrific> PSG-1 Sniper Rifle' #string\n"
+			"name: 'A <adjectively> <horrific> PSG-1 Sniper Rifle' #string\n" <<
+			base_class_items("rifle")
 			;
 		out_file.flush();
 		out_file.close();
@@ -73,7 +106,8 @@ namespace mods::yaml {
 			"disorient_amount: 3.14 #float\n" <<
 			"manufacturer: 'DX Standard' #string. company that made item\n" <<
 			"model_name: 'Nade 0x10'\n" <<
-			"name: 'A fragmentation grenade' #string\n"
+			"name: 'A fragmentation grenade' #string\n" <<
+			base_class_items("explosive")
 			;
 		out_file.flush();
 		out_file.close();
@@ -119,6 +153,8 @@ namespace mods::yaml {
 		reload_time = weapon["reload_time"].as<float>();
 		ammo_type = weapon["ammo_type"].as<std::string>();
 		name = weapon["name"].as<std::string>();
+		vnum = weapon["vnum"].as<int>();
+		rarity = parse_rarity(weapon["rarity"].as<std::string>());
 		return 0;
 	}
 
@@ -147,6 +183,9 @@ namespace mods::yaml {
 		damage_per_second = explosive["damage_per_second"].as<float>();
 		disorient_amount = explosive["disorient_amount"].as<float>();
 		name = explosive["name"].as<std::string>();
+		vnum = explosive["vnum"].as<int>();
+		object_type = "explosive";
+		rarity = parse_rarity(explosive["rarity"].as<std::string>());
 		return 0;
 	}
 

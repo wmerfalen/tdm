@@ -943,6 +943,10 @@ struct obj_data_weapon : public obj_data {
 			NON_HAZARDOUS_SMOKE, /** think: burning car */
 			HAZARDOUS_SMOKE, /** think: gas attacks */
 			EMP, /** chaff or emp has been detonated */
+			TUNNEL, /** a tunnel made of any material */
+			LADDER, /** a ladder leading up or down */
+			ELEVATOR,
+			GLASS_WINDOWS,
 			LAST
 		};
 		
