@@ -57,6 +57,7 @@ namespace mods {
 		//std::vector<std::vector<char_data*>> room_list; /**!TODO turn this into std::shared_ptr<...> */
 		room_list_t room_list;
 		player_list_t player_list;
+		std::set<player_ptr_t> dissolver_queue;
 		std::vector<mods::chat::channel> chan;
 		std::vector<std::string> chan_verbs;
 		bool f_import_rooms;

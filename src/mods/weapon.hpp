@@ -144,6 +144,9 @@ Italic
 			int max_range;
 			int reload_time;
 			std::string ammo_type;
+			int rounds_per_minute;
+			int muzzle_velocity;	// Feet per second
+			int effective_firing_range; // feet
 		};
 	};
 	using explosive_description_t = mods::yaml::explosive_description_t;

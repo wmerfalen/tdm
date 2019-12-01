@@ -106,7 +106,7 @@ int lmdb_nget(void* key,std::size_t k_size,std::string& value){
 }
 std::string lmdb_get(std::string_view key){
 	std::string value = "";
-	auto status = mods::globals::db->get(key.data(),value);
+	mods::globals::db->get(key.data(),value);
 	return value;
 	//if(status == EINVAL){
 	//	std::cerr << "[lmdb_put] got EINVAL -- retrying...\n";
@@ -129,8 +129,8 @@ int lmdb_nput(void* key,std::size_t key_size,
 	//return status;
 }
 void lmdb_put(std::string key,std::string value){
-	auto status = mods::globals::db->put(key,value);
-	return status;
+	mods::globals::db->put(key,value);
+	return;
 	//jif(status == EINVAL){
 	//j	std::cerr << "[lmdb_put] got EINVAL -- retrying...\n";
 	//j	lmdb_renew();

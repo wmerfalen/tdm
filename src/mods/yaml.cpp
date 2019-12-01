@@ -55,6 +55,9 @@ namespace mods::yaml {
 			}
 		}
 		out_file << "\n]\n" <<
+			"rounds_per_minute: 750\n" <<
+			"muzzle_velocity: 3018 # Feet per second\n" <<
+			"effective_firing_range: 1500 # feet\n" << 
 			"ammo_max: 520 #integer\n" <<
 			"ammo_type: 'SNIPER' #string, constant enum\n" <<
 			"chance_to_injure: 4.23 #float, out of 100\n" <<
@@ -76,8 +79,17 @@ namespace mods::yaml {
 			"max_range: 3 #integer,measured in rooms\n" <<
 			"range_multiplier: 4.3 #float, multiplied by \n" <<
 			"reload_time: 3.0 #float, measured in seconds\n" <<
-			"type: 'SNIPER' #string, type of weapon\n" <<
-			"name: 'A <adjectively> <horrific> PSG-1 Sniper Rifle' #string\n" <<
+		"# types\n" <<
+		"#######\n" <<
+		"# SNIPER\n" << 
+		"# ASSAULT_RIFLE\n" << 
+		"# SHOTGUN\n" << 
+		"# SUB_MACHINE_GUN\n" << 
+		"# HANDGUN\n" << 
+		"# MACHINE_PISTOL\n" << 
+		"# LIGHT_MACHINE_GUN\n" << 
+		"type: 'SNIPER' #string, type of weapon\n" <<
+		"name: 'A <adjectively> <horrific> PSG-1 Sniper Rifle' #string\n" <<
 			base_class_items("rifle")
 			;
 		out_file.flush();
@@ -155,6 +167,9 @@ namespace mods::yaml {
 		name = weapon["name"].as<std::string>();
 		vnum = weapon["vnum"].as<int>();
 		rarity = parse_rarity(weapon["rarity"].as<std::string>());
+		rounds_per_minute = weapon["rounds_per_minute"].as<int>();
+		muzzle_velocity = weapon["muzzle_velocity"].as<int>();
+		effective_firing_range = weapon["effective_firing_range"].as<int>();
 		return 0;
 	}
 

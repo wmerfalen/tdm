@@ -15,10 +15,13 @@ namespace mods::util {
 	extern void texturize_room(room_rnum room_id, room_data::texture_type_t& texture_type);
 	extern void detexturize_room(room_rnum room_id, room_data::texture_type_t& texture_type);
 };
+namespace mods::globals {
+	extern std::vector<std::vector<std::shared_ptr<mods::player>>> room_list;
+};
 namespace mods {
 	class deferred {
 		public:
-			constexpr static uint64_t TICK_RESOLUTION = 20;
+			constexpr static uint64_t TICK_RESOLUTION = 3;
 			using seconds = uint16_t;
 			deferred() = delete;
 			deferred(uint64_t tick_resolution) : m_tres(tick_resolution),
@@ -39,32 +42,6 @@ namespace mods {
 			void push(uint64_t ticks_in_future,std::function<void()> lambda);
 			void push_secs(seconds secs,std::function<void()> lambda);
 			void iteration();
-			template <typename TContainerOfPlayers,typename TContainerOfAffects>
-			void affect_remove(uint64_t ticks_in_future,
-					TContainerOfPlayers & players,
-					TContainerOfAffects affected_by) {
-				m_q.insert(std::make_pair(ticks_in_future + m_tick,[&players,&affected_by]() {
-						for(auto & player : players){
-							for(auto & affect : affected_by){
-								player->remove_affect(affect);
-							}
-						}
-					})
-				);	// end insert
-			}
-			template <typename TContainerOfPlayers,typename TContainerOfAffectLambdas>
-			void affect_remove_via_callback(uint64_t ticks_in_future,
-					TContainerOfPlayers & players,
-					TContainerOfAffectLambdas affected_by) {
-				m_q.insert(std::make_pair(ticks_in_future + m_tick,[&players,&affected_by]() {
-						for(auto & player : players){
-							for(auto & affect : affected_by){
-								affect(player);
-							}
-						}
-					})
-				);	// end insert
-			}
 			void detexturize_room(uint64_t ticks_in_future,room_rnum& room_id,room_data::texture_type_t texture);
 			template <typename TTextureList>
 			void texturize_room(uint64_t ticks_in_future,room_rnum& room_id,TTextureList& textures){

@@ -39,7 +39,14 @@ namespace mods::classes {
 	struct medic;
 	struct sniper;
 };
+
 namespace mods {
+constexpr static std::size_t AFFECT_DISSOLVE_COUNT = 2;
+const static int dissolvers[] = {
+	AFF_BLIND,
+	AFF_DISORIENT
+};
+using affect_dissolve_t = std::array<uint64_t,AFFECT_DISSOLVE_COUNT>;
 	struct player {
 		public:
 			using 	access_level_t = player_level;
@@ -141,6 +148,12 @@ namespace mods {
 			bool has_affect(aligned_int_t f);
 			void affect(aligned_int_t flag);
 			void remove_affect(aligned_int_t flag);
+			template <typename AffectListType>
+				void remove_multi_affect(AffectListType list){
+					for(auto & affect : list){
+						this->remove_affect(affect);
+					}
+				}
 			aligned_int_t get_affected();
 			void clear_all_affected();
 
@@ -509,6 +522,8 @@ namespace mods {
 					void* value,
 					std::size_t v_size);
 
+			int dissolve_update();
+
 		protected:
 			lense_type_t m_lense_type;
 			uint8_t m_overhead_map_width;
@@ -553,6 +568,8 @@ namespace mods {
 			FILE* m_histfile_fp;
 			bool m_histfile_on;
 			uint32_t m_histfile_index;
+			affect_dissolve_t m_affect_dissolve;
+			bool m_has_dissolvers;
 	};
 };
 

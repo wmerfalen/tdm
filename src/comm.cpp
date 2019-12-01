@@ -18,6 +18,7 @@
 #include "mods/date-time.hpp"
 #include <sys/epoll.h>
 #include "mods/debug.hpp"
+#include "mods/loops.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -790,6 +791,17 @@ void game_loop(socket_t mother_desc) {
 void heartbeat(int pulse) {
 	mods::date_time::heartbeat();
 	static int mins_since_crashsave = 0;
+
+	if(!(pulse % mods::deferred::TICK_RESOLUTION)){
+		if(mods::globals::dissolver_queue.size()){
+			for(auto & player : mods::globals::dissolver_queue){
+				if(player->dissolve_update() == 0){
+					mods::globals::dissolver_queue.erase(player);
+				}
+			}
+		}
+	}
+
 
 	if(!(pulse % PULSE_ZONE)) {
 		zone_update();

@@ -18,6 +18,7 @@ namespace mods::globals {
 };
 namespace mods {
 	namespace projectile {
+		constexpr static int FLASHBANG_COOLDOWN_TICKS = 4; /** FIXME: a wild guess */
 		enum projectile_event_t {
 			EV_TRAVEL,
 			EV_SHRAPNEL,
@@ -50,7 +51,7 @@ namespace mods {
 		std::string todirstr(const char* direction,bool prefix,bool suffix);
 		std::string fromdirstr(int direction,bool prefix, bool suffix);
 		rooms_away_t calculate_shrapnel_rooms(room_rnum room, obj_data* held_object,std::size_t blast_radius);
-		int8_t to_direction(const std::string&);
+		int to_direction(const std::string&);
 		void explode(room_rnum room,obj_data* object);
 		void disable_electronics(room_rnum room);
 		void smoke_room(room_rnum room);

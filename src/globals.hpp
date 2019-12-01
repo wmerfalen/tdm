@@ -6,6 +6,7 @@
 #include <string>
 #include <memory>
 #include <map>
+#include <set>
 #include "types.hpp"
 #include "mods/acl/config-parser.hpp"
 #include "conf.h"
@@ -101,6 +102,7 @@ namespace mods {
 		extern std::string bootup_test_suite;
 		extern std::unique_ptr<pqxx::connection> pq_con;
 		extern std::unordered_map<std::string,std::string> ram_db;
+		extern std::set<player_ptr_t> dissolver_queue;
 		//extern builder_data_map_t builder_data;
 		void init_player(char_data*);
 		std::unique_ptr<ai_state>& state_fetch(char_data* ch);

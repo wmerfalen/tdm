@@ -206,6 +206,22 @@ std::ostream& log(Args... args); /*{
 	extern std::function<void(const std::string&,std::string&)> sanitize;
 	bool dir_exists(const char*);
 
+	template <typename TStringObject>
+		int to_direction(TStringObject str){
+			if(str.length() == 0){
+				return -1;
+			}
+			switch(std::tolower(str[0])){
+				case 'n': return NORTH;
+				case 'e': return EAST;
+				case 's': return SOUTH;
+				case 'w': return WEST;
+				case 'u': return UP;
+				case 'd': return DOWN;
+				default: return -1;
+			}
+			return -1;
+		}
 };
 
 namespace mods::util::err {

@@ -9,14 +9,27 @@ using mw_drone = mods::weapon::type::drone;
 namespace mods {
 	namespace projectile {
 		using texture_type_t = room_data::texture_type_t;
-		void queue_affect_remove_flashbang(uint64_t cooldown_ticks,room_rnum room_id){
+		/** we simply give the user the affect, and in the point update we remove that when it needs to be removed */
+		template <typename T>
+		void queue_affect_remove(int cooldown_ticks,T affects,room_rnum room_id){
 				auto people = mods::globals::room_list[room_id];
-				mods::globals::defer_queue->affect_remove_via_callback<
-					std::vector<player_ptr_t>,std::array<std::function<void(player_ptr_t)>,2>>(
-						cooldown_ticks,
-						people,
-						{mods::projectile::blindness_clears_up,
-						mods::projectile::disorient_clears_up}
+				std::cerr << "[queue_affect_remove]-> people in " << room_id << ": " << people.size() << "\n";
+				if(people.size() == 0){
+					std::cerr << "[queue_affect_remove]-> not gonna defer lambda\n";
+					return;
+				}
+				for(auto & player : people){
+					mods::globals::dissolver_queue.insert(player);
+					for(auto & affect : affects){
+						player->affect(affect);
+					}
+				}
+		}
+		void queue_affect_remove_flashbang(room_rnum room_id){
+				queue_affect_remove<std::array<int,2>>(
+						FLASHBANG_COOLDOWN_TICKS,
+						{AFF_BLIND,AFF_DISORIENT},
+						room_id
 				);
 		}
 #define QUEUE_TEXTURE_REMOVAL(t_texture,r_room_id) queue_remove_texture(40,r_room_id,room_data::texture_type_t::t_texture);
@@ -241,7 +254,7 @@ namespace mods {
 					break;
 				case mw_explosive::FLASHBANG_GRENADE:
 					/** TODO: grab cooldown ticks from explosive() */
-					send_to_room(room_id,"A bright flash of light has filled the room!");
+					send_to_room(room_id,"Your senses become scattered as a bright flash of light fills the room!");
 					break;
 			}
 			for(auto & person : mods::globals::room_list[room_id]) {
@@ -274,11 +287,13 @@ namespace mods {
 						mods::projectile::smoke_room(room_id);
 						break;
 					case mw_explosive::FLASHBANG_GRENADE:
-						/** TODO: grab cooldown ticks from explosive() */
 						mods::projectile::blind_target(person);
 						mods::projectile::disorient_target(person);
 						break;
 				}
+			}
+			if(object->explosive()->type == mw_explosive::FLASHBANG_GRENADE){
+				queue_affect_remove_flashbang(room_id);
 			}
 			mods::projectile::perform_blast_radius(room_id,blast_radius,object);
 			obj_from_room(object);
@@ -287,36 +302,8 @@ namespace mods {
 		 * TODO: place the grenade on the floor so that some crazy bastards can potentially throw it back, 
 		 * but moreso that the user can atleast see it and do something about it
 		 */
-		int8_t to_direction(const std::string & str){
-			std::string direction = "";
-			for(unsigned i = 0; i < 5 && i < str.length();i++){
-				if(!isalpha(str[i])){
-					return -1;
-				}
-				direction += std::tolower(str[i]);
-			}
-			if(direction.length() == 0){
-				return -1;
-			}
-			if(direction.compare("north") == 0 || direction[0] == 'n'){
-				return NORTH;
-			}
-			if(direction.compare("south") == 0 || direction[0] == 's'){
-				return SOUTH;
-			}
-			if(direction.compare("east") == 0 || direction[0] == 'e'){
-				return EAST;
-			}
-			if(direction.compare("west") == 0 || direction[0] == 'w'){
-				return WEST;
-			}
-			if(direction.compare("up") == 0 || direction[0] == 'u'){
-				return UP;
-			}
-			if(direction.compare("down") == 0 || direction[0] == 'd'){
-				return DOWN;
-			}
-			return -1;
+		int to_direction(const std::string & str){
+			return mods::util::to_direction<const std::string&>(str);
 		}
 		rooms_away_t calculate_shrapnel_rooms(room_rnum room, obj_data* held_object,std::size_t blast_radius){
 			rooms_away_t rooms;
@@ -483,11 +470,6 @@ namespace mods {
 				obj_data* object, std::string_view verb) {
 			std::array<char,MAX_INPUT_LENGTH> str_dir_buffer;
 			std::string str_dir = mods::projectile::todirstr(static_cast<const char*>(&str_dir_buffer[0]),1,0);
-			int8_t dir = mods::projectile::to_direction(&str_dir_buffer[0]);
-			if(dir < 0){
-				player->sendln("Use a valid direction!");
-				return;
-			}
 			std::string object_name = "";
 			int ticks = 0;
 			switch(object->explosive()->type) {
