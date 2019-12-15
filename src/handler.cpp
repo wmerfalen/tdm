@@ -466,23 +466,24 @@ void char_to_room(char_data *ch, room_rnum room) {
 
 void obj_to_char(std::shared_ptr<obj_data> object, std::shared_ptr<mods::player> player) {
 	d("obj_to_char shrd_ptr version called");
-	auto ch = player->cd();
+	//auto ch = player->cd();
 	//obj_to_char(object.get(), player->cd());
-	if(object && ch) {
+	if(object.get()) {
 		d("giving object to ch (obj_to_char new)");
-		object->next_content = ch->carrying;
-		ch->carrying = object.get();
-		object->carried_by = ch;
+		object->next_content = player->cd()->carrying;
+		player->cd()->carrying = object.get();
+		object->carried_by = player->cd();
+		d("object->carried_by is: " << (int)object->carried_by << "(ch): " << player->cd());
 		IN_ROOM(object) = NOWHERE;
-		IS_CARRYING_W(ch) += GET_OBJ_WEIGHT(object.get());
-		IS_CARRYING_N(ch)++;
+		IS_CARRYING_W(player->cd()) += GET_OBJ_WEIGHT(object.get());
+		IS_CARRYING_N(player->cd())++;
 
 		///* set flag for crash-save system, but not on mobs! */
 		//if(!IS_NPC(ch)) {
 		//	SET_BIT(PLR_FLAGS(ch), PLR_CRASH);
 		//}
 	} else {
-		log("SYSERR: NULL obj (%p) or char (%p) passed to obj_to_char.", object, ch);
+		log("SYSERR: NULL obj (%p) or char (%p) passed to obj_to_char.", object, player->cd());
 	}
 }
 
@@ -908,6 +909,7 @@ void object_list_new_owner(struct obj_data *list, struct char_data *ch) {
 
 /* Extract an object from the world */
 void extract_obj(struct obj_data *obj) {
+	std::cerr << "[extract_obj]";
 	if(obj->worn_by != NULL)
 		if(unequip_char(obj->worn_by, obj->worn_on) != obj) {
 			log("SYSERR: Inconsistent worn_by and worn_on pointers!!");

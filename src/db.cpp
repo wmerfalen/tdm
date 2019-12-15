@@ -1337,6 +1337,8 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				}else{
 					room.description = strdup(description);
 				}
+				room.name = mods::globals::color_eval(std::string("{grn}") + std::string(room.name) + "{/grn}");
+				room.description = mods::globals::color_eval(static_cast<const char*>(room.description));
 				room.number = room_records_row["room_number"].as<int>(0);
 				log("parse_sql_rooms: room.number (%d)",room.number);
 				room.zone = room_records_row["zone"].as<int>(0);
@@ -1963,10 +1965,8 @@ struct char_data *read_mobile(mob_vnum nr, int type) { /* and mob_rnum */
 
 /* create an object, and add it to the object list */
 struct obj_data *create_obj(void) {
-	obj_list.push_back(std::make_shared<obj_data>());
-
-	clear_object(obj_list.back().get());
-	return obj_list.back().get();
+	auto obj = blank_object();
+	return obj.get();
 }
 
 std::shared_ptr<obj_data> blank_object() {
@@ -1975,7 +1975,6 @@ std::shared_ptr<obj_data> blank_object() {
 	clear_object(ptr.get());
 	return std::move(ptr);
 }
-
 
 
 

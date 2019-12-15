@@ -19,6 +19,7 @@
 #include <sys/epoll.h>
 #include "mods/debug.hpp"
 #include "mods/loops.hpp"
+#include "mods/affects.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -793,13 +794,8 @@ void heartbeat(int pulse) {
 	static int mins_since_crashsave = 0;
 
 	if(!(pulse % mods::deferred::TICK_RESOLUTION)){
-		if(mods::globals::dissolver_queue.size()){
-			for(auto & player : mods::globals::dissolver_queue){
-				if(player->dissolve_update() == 0){
-					mods::globals::dissolver_queue.erase(player);
-				}
-			}
-		}
+		/** Process affect dissolver ticks */
+		mods::affects::process();
 	}
 
 

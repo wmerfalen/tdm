@@ -47,12 +47,16 @@ namespace mods {
 		int chemical_damage(player_ptr_t victim, obj_data* item);
 		int grenade_damage(player_ptr_t victim,obj_data* projectile);
 		int fire_damage(player_ptr_t victim,obj_data* projectile);
-		void travel_to(room_rnum from, int direction, std::size_t depth, obj_data* object);
+		int legacy_travel_to(room_rnum from, int direction, std::size_t depth, obj_data* object);
+		int travel_to(room_rnum from, int direction, std::size_t depth, obj_data* object);
+		void legacy_explode_in_future(int room_id, int ticks, obj_data* object);
+		void explode_in_future(int room_id, int ticks, std::shared_ptr<obj_data> object);
 		std::string todirstr(const char* direction,bool prefix,bool suffix);
 		std::string fromdirstr(int direction,bool prefix, bool suffix);
 		rooms_away_t calculate_shrapnel_rooms(room_rnum room, obj_data* held_object,std::size_t blast_radius);
 		int to_direction(const std::string&);
-		void explode(room_rnum room,obj_data* object);
+		void explode(room_rnum room,std::shared_ptr<obj_data> object);
+		void legacy_explode(room_rnum room,obj_data* object);
 		void disable_electronics(room_rnum room);
 		void smoke_room(room_rnum room);
 		void blind_target(player_ptr_t victim);
@@ -62,6 +66,8 @@ namespace mods {
 		void propagate_chemical_blast(room_rnum& room_id,obj_data* device);
 
 		void throw_object(player_ptr_t player, int direction, std::size_t depth,
+				std::shared_ptr<obj_data> object, std::string_view verb);
+		void legacy_throw_object(player_ptr_t player, int direction, std::size_t depth,
 				obj_data* object, std::string_view verb);
 	};
 };

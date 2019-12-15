@@ -103,8 +103,6 @@ Focus:CLASSES
 			- Alignment: Evil
 	
 
-	- Sub Focus: 
-
 Focus:GRENADE LAUNCHER
 	- Demon
 

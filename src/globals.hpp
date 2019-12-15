@@ -24,6 +24,7 @@
 #include "mods/conf.hpp"
 #include "mods/chat.hpp"
 #include "mods/crypto.hpp"
+#include "mods/affects.hpp"
 #include <deque>
 #include "db.h"
 #include <pqxx/pqxx>
@@ -34,7 +35,7 @@
 																				: mods::globals::socket_map[ch->desc->descriptor];
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
 #define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \
-strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(a,"down") == 0)
+		strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(a,"down") == 0)
 #define OPPOSITE_DIR(a) mods::globals::opposite_dir(a)
 #define DBSET(key,value){ mods::globals::ram_db[key] = value; }
 #define DBGET(key,value) { value = mods::globals::ram_db[key]; }
@@ -52,26 +53,36 @@ strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(
 #else
 #define d(a) /** */
 #endif
+/*
+	template<typename... Args>
+		std::string str(Args const&... args)
+		{
+			std::string result;
+			int unpack[]{0, (result += std::to_string(args), 0)...};
+			static_cast<void>(unpack);
+			return result;
+		}
+		*/
 
 extern void clear_char(char_data*);
 extern char_data* character_list;
 //extern std::deque<mods::npc> mob_list;
 #define CREATE_CHAR(ch) \
 	CREATE(ch,char_data,1);\
-	clear_char(ch);\
-	ch->player_specials = std::make_unique<player_special_data>();\
-	(ch)->player_specials->saved.pref = 0;\
-	CREATE((ch)->affected, affected_type, 1);\
-	memset(&((ch)->affected),0,sizeof((ch)->affected));\
-	(ch)->next = character_list;\
-	character_list = ch;
+clear_char(ch);\
+ch->player_specials = std::make_unique<player_special_data>();\
+(ch)->player_specials->saved.pref = 0;\
+CREATE((ch)->affected, affected_type, 1);\
+memset(&((ch)->affected),0,sizeof((ch)->affected));\
+(ch)->next = character_list;\
+character_list = ch;
 
 using player_ptr_t = std::shared_ptr<mods::player>;
 namespace mods {
 	namespace lmdb { 
 		struct _db_handle;
 	};
-    namespace globals {
+	namespace globals {
 		using player_list_t = std::vector<player_ptr_t>;
 		using lmdb_db = mods::lmdb::_db_handle;
 		using socket_map_t = std::map<int,player_ptr_t>;
@@ -92,7 +103,6 @@ namespace mods {
 		extern std::map<const char*,player_ptr_t> player_name_map;
 		extern ai_state_map states;
 		extern duk_context* duktape_context;
-		//extern std::vector<std::vector<char_data*>> room_list;
 		extern room_list_t room_list;
 		extern player_list_t player_list;
 		extern std::vector<mods::chat::channel> chan;
@@ -102,8 +112,7 @@ namespace mods {
 		extern std::string bootup_test_suite;
 		extern std::unique_ptr<pqxx::connection> pq_con;
 		extern std::unordered_map<std::string,std::string> ram_db;
-		extern std::set<player_ptr_t> dissolver_queue;
-		//extern builder_data_map_t builder_data;
+		extern std::set<player_ptr_t> needs_dissolve;
 		void init_player(char_data*);
 		std::unique_ptr<ai_state>& state_fetch(char_data* ch);
 		int mobile_activity(char_data*);
@@ -119,7 +128,7 @@ namespace mods {
 		char_data* create_char();
 		int file_to_lmdb(const std::string& file,const std::string& key);
 		int opposite_dir(int);
-    	std::string color_eval(std::string final_buffer);
+		std::string color_eval(std::string final_buffer);
 		std::string replace_all(std::string str, const std::string& from, const std::string& to);
 		const char* say_random(const mods::ai_state::event_type_t&);
 		bool command_interpreter(player_ptr_t,const std::string& argument);
@@ -130,7 +139,7 @@ namespace mods {
 			void char_to_room(const room_rnum &,char_data*);
 		};
 		void pad_room(int room,char_data* ch,int door);
-    };
+	};
 };
 
 

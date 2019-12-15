@@ -356,6 +356,8 @@ room_data::~room_data() {
 					return 0;
 			}
 		}
+
+	};
 		builder_data_t::builder_data_t(int type,int start_room,int start_zone) {
 			//switch(type){
 			//	default:
@@ -374,5 +376,3 @@ room_data::~room_data() {
 		//			break;
 		//	}
 		}
-
-	};

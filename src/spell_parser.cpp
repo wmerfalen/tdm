@@ -31,6 +31,7 @@ struct spell_info_type spell_info[TOP_SPELL_DEFINE + 1];
 void say_spell(struct char_data *ch, int spellnum, struct char_data *tch, struct obj_data *tobj);
 void spello(int spl, const char *name, int max_mana, int min_mana, int mana_change, int minpos, int targets, int violent, int routines, const char *wearoff);
 int mag_manacost(struct char_data *ch, int spellnum);
+/** FIXME: do_cast is commented out in interpreter.cpp, so NO spells will work */
 ACMD(do_cast);
 void unused_spell(int spl);
 void mag_assign_spells(void);
@@ -101,7 +102,8 @@ void say_spell(struct char_data *ch, int spellnum, struct char_data *tch,
 	int j, ofs = 0;
 
 	*buf = '\0';
-	strlcpy(lbuf, skill_name(spellnum), sizeof(lbuf));
+	std::string skill_name_value = skill_name(spellnum);
+	strlcpy(lbuf, skill_name_value.c_str(), sizeof(lbuf));
 
 	while(lbuf[ofs]) {
 		for(j = 0; *(syls[j].org); j++) {
@@ -132,8 +134,8 @@ void say_spell(struct char_data *ch, int spellnum, struct char_data *tch,
 		format = "$n utters the words, '%s'.";
 	}
 
-	snprintf(buf1, sizeof(buf1), format, skill_name(spellnum));
-	snprintf(buf2, sizeof(buf2), format, buf);
+	snprintf(buf1, std::min(strlen(format) + skill_name_value.length(),sizeof(buf1)),format,skill_name_value.c_str());
+	snprintf(buf2, std::min(strlen(format),sizeof(buf2)), format, buf);
 
 	for(i = world[IN_ROOM(ch)].people; i; i = i->next_in_room) {
 		if(i == ch || i == tch || !i->has_desc || !AWAKE(i)) {
@@ -149,7 +151,7 @@ void say_spell(struct char_data *ch, int spellnum, struct char_data *tch,
 
 	if(tch != NULL && tch != ch && IN_ROOM(tch) == IN_ROOM(ch)) {
 		snprintf(buf1, sizeof(buf1), "$n stares at you and utters the words, '%s'.",
-		         GET_CLASS(ch) == GET_CLASS(tch) ? skill_name(spellnum) : buf);
+		         GET_CLASS(ch) == GET_CLASS(tch) ? skill_name_value.c_str() : buf);
 		act(buf1, FALSE, ch, NULL, tch, TO_VICT);
 	}
 }

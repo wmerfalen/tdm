@@ -496,6 +496,7 @@ namespace mods {
 			return NORTH;
 		}
 		std::string color_eval(std::string in_buffer) {
+			std::cerr << "[color-eval]";
 			std::map<std::string,std::string> colors = {
 				{"blu","\033[34m"},
 				{"gld","\033[33m"},
@@ -504,10 +505,9 @@ namespace mods {
 				{"wht","\033[37m"},
 				{"yel","\033[93m"}
 			};
-			unsigned i = 0;
 			std::string final_buffer = "";
 			unsigned len = in_buffer.length();
-			for(;i < len;i++){
+			for(unsigned i=0;i < len;i++){
 				auto current_char = in_buffer[i];
 				if(current_char == '{'){
 					if(len > i + 5 && in_buffer[i+5] == '}' && 
@@ -765,6 +765,7 @@ namespace mods {
 			//TODO: if this is used, correct it
 		}
 
+
 		namespace rooms {
 			/*! \brief takes a character from a room. Moving a character from room to room is a
 			 * two step process. This function is the former of said process, the latter being
@@ -809,7 +810,7 @@ namespace mods {
 				IN_ROOM(ch) = target_room;
 				return;
 			}
-		};
+		};//end namespace rooms
 
 	};
 

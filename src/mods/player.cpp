@@ -33,9 +33,6 @@ static constexpr histfile_type_t HISTFILE_STRATEGY = histfile_type_t::HISTFILE_F
 namespace mods {
 	using mask_t = mods::weapon::mask_type;
 	using lmdb_db = db_handle;
-	void stc_color_evaluation(const std::string& title,player* p) {
-		*p << mods::globals::color_eval(title) << "\r\n";
-	}
 
 	std::string word_wrap(std::string_view paragraph,int width) {
 		std::string buffer;
@@ -198,8 +195,6 @@ namespace mods {
 		set_type(player_type_enum_t::PLAYER);
 		this->set_overhead_map_width(16);
 		this->set_overhead_map_height(10);
-		std::fill(m_affect_dissolve.begin(),m_affect_dissolve.end(),0);
-		m_has_dissolvers = false;
 	}
 	player::player(mods::player* ptr) {
 		/**TODO: should we set the queue_behaviour flags on the descriptor data items on *this? */
@@ -215,8 +210,6 @@ namespace mods {
 		set_god_mode(ptr->god_mode());
 		set_bui_mode(ptr->builder_mode());
 		set_imp_mode(ptr->implementor_mode());
-		m_affect_dissolve = ptr->m_affect_dissolve;
-		m_has_dissolvers = ptr->m_has_dissolvers;
 		/** TODO: investigate this function. I have a feeling that m_desc needs to be updated here */
 	}
 	void player::capture_output(bool capture_status) {
@@ -278,8 +271,11 @@ namespace mods {
 
 		page(m_current_page +1);
 	}
-	obj_data* player::equipment(int pos) {
+	obj_data* player::legacy_equipment(int pos) {
 		return m_char_data->equipment[pos];
+	}
+	std::shared_ptr<obj_data> player::equipment(int pos) {
+		return std::make_shared<obj_data>(*m_char_data->equipment[pos]);
 	}
 	void player::equip(obj_data* obj,int pos) {
 		if(pos == WEAR_WIELD){
@@ -485,6 +481,10 @@ namespace mods {
 		}
 		return 0;
 	}
+	void player::sendln(mods::string& str) {
+		stc(str.c_str());
+		stc("\r\n");
+	}
 	void player::sendln(std::string_view str) {
 		stc(str.data());
 		stc("\r\n");
@@ -494,8 +494,7 @@ namespace mods {
 			return;
 		}
 		if(world[rnum].name) {
-			std::string title = static_cast<const char*>(world[rnum].name);
-			stc_color_evaluation(std::string("{grn}") + title + "{/grn}",this);
+			sendln(world[rnum].name);
 		}
 		if(builder_mode()){
 			stc(std::string("[room_id:") + std::to_string(room()) + "|number:" + 
@@ -655,12 +654,6 @@ namespace mods {
 	 *
 	 */
 	void player::affect(uint64_t flag){
-		if(flag == AFF_BLIND){
-			m_affect_dissolve[0] += 3;
-		}
-		if(flag == AFF_DISORIENT){
-			m_affect_dissolve[1] += 3;
-		}
 		SET_BIT(AFF_FLAGS(cd()), flag);
 		set_flag(mods::flags::chunk_type_t::LEGACY_AFF,flag);
 	}
@@ -1071,20 +1064,9 @@ namespace mods {
 		}
 		m_lense_type = NORMAL_SIGHT;
 	}
-	int player::dissolve_update(){
-		if(!m_has_dissolvers){ return 0; }
-		unsigned active_affect_count = 0;
-		for(unsigned i=0; i < AFFECT_DISSOLVE_COUNT;i++){
-			if(m_affect_dissolve[i] == 0){ continue; }
-			if(--m_affect_dissolve[i]){
-				++active_affect_count;
-				continue;
-			}
-			/** affect dissolved and now we can remove it */
-			this->remove_affect(dissolvers[i]);
-		}
-		m_has_dissolvers = active_affect_count;
-		return active_affect_count;
+
+	mods::affects::dissolver& player::get_affect_dissolver() {
+		return m_affects;
 	}
 
 };

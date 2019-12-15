@@ -26,6 +26,7 @@ namespace mods {
 #include "acl_list.hpp"
 #include "overhead_map.hpp"
 #include "weapon.hpp"
+#include "affects.hpp"
 #include <cstdio> // for FILE*
 
 #define WEAPON_SET_NUM 1
@@ -41,12 +42,6 @@ namespace mods::classes {
 };
 
 namespace mods {
-constexpr static std::size_t AFFECT_DISSOLVE_COUNT = 2;
-const static int dissolvers[] = {
-	AFF_BLIND,
-	AFF_DISORIENT
-};
-using affect_dissolve_t = std::array<uint64_t,AFFECT_DISSOLVE_COUNT>;
 	struct player {
 		public:
 			using 	access_level_t = player_level;
@@ -148,12 +143,6 @@ using affect_dissolve_t = std::array<uint64_t,AFFECT_DISSOLVE_COUNT>;
 			bool has_affect(aligned_int_t f);
 			void affect(aligned_int_t flag);
 			void remove_affect(aligned_int_t flag);
-			template <typename AffectListType>
-				void remove_multi_affect(AffectListType list){
-					for(auto & affect : list){
-						this->remove_affect(affect);
-					}
-				}
 			aligned_int_t get_affected();
 			void clear_all_affected();
 
@@ -334,6 +323,7 @@ using affect_dissolve_t = std::array<uint64_t,AFFECT_DISSOLVE_COUNT>;
 			void stc(int m);
 			void stc(std::string_view);
 			void sendln(std::string_view str);
+			void sendln(mods::string& str);
 			void done();
 
 			/* pager functions */
@@ -484,7 +474,8 @@ using affect_dissolve_t = std::array<uint64_t,AFFECT_DISSOLVE_COUNT>;
 			void set_overhead_map_height(uint8_t h){ m_overhead_map_height = h; }
 			void equip(obj_data* obj,int pos);
 			void unequip(int pos);
-			obj_data* equipment(int pos);
+			obj_data* legacy_equipment(int pos);
+			std::shared_ptr<obj_data> equipment(int pos);
 			std::vector<affected_type>& get_affected_by() { return m_affected_by; }
 			std::vector<affected_type>& add_affected_by(affected_type&& add_this){
 				add_this.index = m_affected_by.size();
@@ -522,8 +513,10 @@ using affect_dissolve_t = std::array<uint64_t,AFFECT_DISSOLVE_COUNT>;
 					void* value,
 					std::size_t v_size);
 
-			int dissolve_update();
-
+			bool is_npc() const {
+				return IS_NPC(cd());
+			}
+			mods::affects::dissolver& get_affect_dissolver();
 		protected:
 			lense_type_t m_lense_type;
 			uint8_t m_overhead_map_width;
@@ -568,8 +561,7 @@ using affect_dissolve_t = std::array<uint64_t,AFFECT_DISSOLVE_COUNT>;
 			FILE* m_histfile_fp;
 			bool m_histfile_on;
 			uint32_t m_histfile_index;
-			affect_dissolve_t m_affect_dissolve;
-			bool m_has_dissolvers;
+			mods::affects::dissolver m_affects;
 	};
 };
 

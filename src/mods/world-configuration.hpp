@@ -31,7 +31,7 @@ namespace mods::world_conf {
 	int real_mortal_start();
 	int real_immortal_start();
 	using rooms_t = std::array<int,4>;
-	static rooms_t rooms;
+	extern rooms_t rooms;
 	rooms_t load_all();
 };
 

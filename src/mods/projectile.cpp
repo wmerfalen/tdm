@@ -1,4 +1,5 @@
 #include "projectile.hpp"
+#include "affects.hpp"
 #include "../handler.h"
 
 #include <cctype>	/* for std::tolower */
@@ -6,12 +7,15 @@
 using mw_explosive = mods::weapon::type::explosive;
 using mw_rifle = mods::weapon::type::rifle;
 using mw_drone = mods::weapon::type::drone;
+using affect_t = mods::affects::affect_t;
 namespace mods {
 	namespace projectile {
+		using affect_vector_t = mods::affects::affect_vector_t;
+		using affect_t = mods::affects::affect_t;
 		using texture_type_t = room_data::texture_type_t;
 		/** we simply give the user the affect, and in the point update we remove that when it needs to be removed */
 		template <typename T>
-		void queue_affect_remove(int cooldown_ticks,T affects,room_rnum room_id){
+		void queue_affect_on_room(T affects,room_rnum room_id){
 				auto people = mods::globals::room_list[room_id];
 				std::cerr << "[queue_affect_remove]-> people in " << room_id << ": " << people.size() << "\n";
 				if(people.size() == 0){
@@ -19,18 +23,8 @@ namespace mods {
 					return;
 				}
 				for(auto & player : people){
-					mods::globals::dissolver_queue.insert(player);
-					for(auto & affect : affects){
-						player->affect(affect);
-					}
+					mods::affects::affect_player({affect_t::BLIND,affect_t::DISORIENT},player);
 				}
-		}
-		void queue_affect_remove_flashbang(room_rnum room_id){
-				queue_affect_remove<std::array<int,2>>(
-						FLASHBANG_COOLDOWN_TICKS,
-						{AFF_BLIND,AFF_DISORIENT},
-						room_id
-				);
 		}
 #define QUEUE_TEXTURE_REMOVAL(t_texture,r_room_id) queue_remove_texture(40,r_room_id,room_data::texture_type_t::t_texture);
 		void queue_remove_texture(uint64_t ticks_in_future,room_rnum& room_id,room_data::texture_type_t texture){
@@ -207,61 +201,67 @@ namespace mods {
 		void disorient_target(player_ptr_t player){
 			player->sendln("You become extremely disoriented!");
 		}
-		void explode(room_rnum room_id,obj_data* object) {
+		void explode(room_rnum room_id,std::shared_ptr<obj_data> object) {
+			legacy_explode(room_id,object.get());
+		}
+		void legacy_explode(room_rnum room_id,obj_data* object) {
 			if(room_id >= world.size()){
+				d("invalid room id leg explode");
 				log("[error]: mods::projectile::explode received room_id greater than world.size()");
 				return;
 			}
 			if(!object){
+				d("invalid object leg explode");
 				log("[error]: mods::projectile::explode received invalid object to blow up");
 				return;
 			}
 			if(object->explosive()->type == mw_explosive::EXPLOSIVE_NONE){
+				d("invalid explosive type leg explode");
 				log("[error]: mods::projectile::explode received EXPLOSIVE_NONE");
 				return;
 			}
 			//uint16_t cooldown_ticks = 5;
-			std::size_t blast_radius = 2;	/** TODO: grab from explosive()->blast_radius */
+			//std::size_t blast_radius = 2;	/** TODO: grab from explosive()->blast_radius */
 			switch(object->explosive()->type){
 				default: 
-				case mw_explosive::EXPLOSIVE_NONE:
-					log("SYSERR: Was given an EXPLOSIVE_NONE in explode()");
+					d("invalid explosive type in switch");
+					log("SYSERR: Invalid explosive type(%d) in %s:%d",object->explosive()->type,__FILE__,__LINE__);
 					return;
 				case mw_explosive::REMOTE_EXPLOSIVE:
-					send_to_room(room_id,"A %s explodes!",object->name);
+					send_to_room(room_id,"A %s explodes!\r\n",object->name);
 					break;
 				case mw_explosive::REMOTE_CHEMICAL:
-					send_to_room(room_id,"A %s explodes! A noxious chemical is released!",object->name);
+					send_to_room(room_id,"A %s explodes! A noxious chemical is released!\r\n",object->name);
 					QUEUE_TEXTURE_REMOVAL(HAZARDOUS_SMOKE,room_id);
 					break;
 				case mw_explosive::CLAYMORE_MINE:
-					send_to_room(room_id,"You trip over a %s! An explosion catches you off guard!",object->name);
+					send_to_room(room_id,"You trip over a %s! An explosion catches you off guard!\r\n",object->name);
 					break;
 				case mw_explosive::FRAG_GRENADE:
-					send_to_room(room_id,"A %s explodes!",object->name);
+					send_to_room(room_id,"A %s explodes!\r\n",object->name);
 					break;
 				case mw_explosive::INCENDIARY_GRENADE:
-					send_to_room(room_id,"A %s explodes! The room turns into a fiery blaze!",object->name);
+					send_to_room(room_id,"A %s explodes! The room turns into a fiery blaze!\r\n",object->name);
 					QUEUE_TEXTURE_REMOVAL(ON_FIRE,room_id);
 					break;
 				case mw_explosive::EMP_GRENADE:
-					send_to_room(room_id,"A %s explodes!",object->name);
+					send_to_room(room_id,"A %s explodes!\r\n",object->name);
 					QUEUE_TEXTURE_REMOVAL(EMP,room_id);
 					break;
 				case mw_explosive::SMOKE_GRENADE:
-					send_to_room(room_id,"A cloud of sight limiting gas fills the room.");
+					send_to_room(room_id,"A cloud of sight limiting gas fills the room.\r\n");
 					QUEUE_TEXTURE_REMOVAL(NON_HAZARDOUS_SMOKE,room_id);
 					break;
 				case mw_explosive::FLASHBANG_GRENADE:
-					/** TODO: grab cooldown ticks from explosive() */
-					send_to_room(room_id,"Your senses become scattered as a bright flash of light fills the room!");
+					send_to_room(room_id,"Your senses become scattered as a bright flash of light fills the room!\r\n");
+					d("flashbang explode");
 					break;
 			}
+			d("processed sending of message of grenade type explosion");
 			for(auto & person : mods::globals::room_list[room_id]) {
 				switch(object->explosive()->type){
 					default: 
-					case mw_explosive::EXPLOSIVE_NONE:
-						log("SYSERR: Was given an EXPLOSIVE_NONE in explode()");
+						log("SYSERR: Invalid explosive type(%d) in %s:%d",object->explosive()->type,__FILE__,__LINE__);
 						return;
 					case mw_explosive::REMOTE_EXPLOSIVE:
 						mods::projectile::explosive_damage(person,object);
@@ -287,16 +287,18 @@ namespace mods {
 						mods::projectile::smoke_room(room_id);
 						break;
 					case mw_explosive::FLASHBANG_GRENADE:
-						mods::projectile::blind_target(person);
-						mods::projectile::disorient_target(person);
+						d("flashbang explode (not using helper)");
 						break;
 				}
 			}
 			if(object->explosive()->type == mw_explosive::FLASHBANG_GRENADE){
-				queue_affect_remove_flashbang(room_id);
+				d("queueing blind and disorient on room" << room_id);
+				queue_on_room( {AFF(BLIND),AFF(DISORIENT)}, room_id);
 			}
-			mods::projectile::perform_blast_radius(room_id,blast_radius,object);
-			obj_from_room(object);
+			if(object->explosive()->type == mw_explosive::REMOTE_CHEMICAL){
+				queue_on_room( {AFF(DISORIENT),AFF(POISON)}, room_id);
+			}
+			//mods::projectile::perform_blast_radius(room_id,blast_radius,object);
 		}
 		/**
 		 * TODO: place the grenade on the floor so that some crazy bastards can potentially throw it back, 
@@ -368,57 +370,19 @@ namespace mods {
 		}
 
 		void projectile_lands(room_rnum room_id,obj_data* object,int from_direction) {
-			for(auto & player : mods::globals::room_list[room_id]) {
-				player->stc(std::string("A ") + object->name + " tumbles to the ground" + fromdirstr(from_direction,1,0) + "! Take cover!");
-			}
+			
+			//for(auto & player : mods::globals::room_list[room_id]) {
+			//	player->stc(std::string("A ") + object->name + " tumbles to the ground" + fromdirstr(from_direction,1,0) + "! Take cover!");
+			//}
 		}
 
-		void projectile_flies_by(room_rnum room, obj_data* object, int from_direction, int to_direction) {
-			for(auto & player : mods::globals::room_list[room]) {
-				player->stc(std::string("A ") + object->name + " flies by" + fromdirstr(from_direction,1,0) + ", narrowly missing you!");
-			}
+		int travel_to(room_rnum from, int direction, std::size_t depth, std::shared_ptr<obj_data> object){
+			return legacy_travel_to(from, direction, depth, object.get());
 		}
-
-		void travel_to(room_rnum from, int direction, std::size_t depth, obj_data* object){
-			room_rnum room_id = 0;
-			room_rnum previous = 0;
-
-			auto opposite = OPPOSITE_DIR(direction);
-			for(unsigned room_depth = 1; room_depth < depth; ++room_depth) {
-				room_id = resolve_room(from,direction,room_depth);
-
-				if(previous == room_id) {
-					return;
-				}
-
-				previous = room_id;
-				if (room_depth + 1 == depth) {
-					projectile_lands(room_id,object,opposite);
-					return;
-				}
-				projectile_flies_by(room_id,object,opposite,direction);
-			}
-
-			return;
-		}
-
-		room_rnum cast_finite(struct char_data* source_char,room_rnum source_room,int direction,std::size_t depth,obj_data* object) {
-			room_rnum room_id = 0;
-			room_rnum previous = 0;
-
-			auto opposite = OPPOSITE_DIR(direction);
-			for(std::size_t room_depth = 1; room_depth <= depth +1; ++room_depth) {
-				room_id = resolve_room(source_room,direction,room_depth);
-				projectile_flies_by(room_id,object,opposite,direction);
-
-				if(previous == room_id) {
-					projectile_lands(room_id,object,direction);
-					return room_id;
-				}
-
-				previous = room_id;
-			}
-
+		int legacy_travel_to(room_rnum from, int direction, std::size_t depth, obj_data* object){
+			room_rnum room_id = resolve_room(from,direction,depth);
+			d("legacy_travel_to: obj_to_room " << room_id << "|room_depth:" << depth);
+			obj_to_room(object,room_id);
 			return room_id;
 		}
 
@@ -429,28 +393,25 @@ namespace mods {
 			auto room_dir = world[source_room].dir_option[direction];
 			for(std::size_t recursive_depth =0; recursive_depth <= depth; recursive_depth++) {
 				room_dir = world[room_id].dir_option[direction];
-				std::cerr << "resolve-room recursive_depth: " << recursive_depth << "\n";
 				if(!room_dir) {
-					std::cerr << "invalid room_dir, returning: " << room_id << "\n";
+					d("invalid room_dir in resolve_room..");
 					return room_id;
 				}
 				if((EXIT_FLAGGED(room_dir, EX_CLOSED) || EXIT_FLAGGED(room_dir,EX_REINFORCED))
 						&& !(EXIT_FLAGGED(room_dir,EX_BREACHED))) {
-					std::cerr << "breaking on recursive_depth: " << recursive_depth << "\n";
+					d("reached dead end via close/reinforced");
 					break;
 				}
 
+				auto previous_room_id = room_id;
 				room_id = room_dir->to_room;
 
-				if(room_id == NOWHERE || !room_dir) {
-					std::cerr << "nowhere or !room_dir returning room_id: " << room_id << "\n";
-					return room_id;
+				if(room_id == NOWHERE){
+					return previous_room_id;
 				}
 				room_dir = world[room_id].dir_option[direction];
-				std::cerr << "end for, looping\n";
 			}
 
-			std::cerr << "returning room_id [final]: " << room_id << "\n";
 			return room_id;
 		}
 
@@ -461,12 +422,39 @@ namespace mods {
 		 *  > 0 How much damage done.
 		 */
 		//int grenade_damage(player_ptr_t victim, obj_data* projectile) {
-		//	victim->stc(std::string("You are hit by a ") + projectile->explosive()->name);
-		//	return 0;
+			//	victim->stc(std::string("You are hit by a ") + projectile->explosive()->name);
+			//	return 0;
 		//}
 
+		void explode_in_future(int room_id, int ticks, std::shared_ptr<obj_data> object) {
+			mods::globals::defer_queue->push(ticks, [room_id,object]() {
+				explode(room_id,object);
+			});
+		}
+		void legacy_explode_in_future(int room_id, int ticks, obj_data* object) {
+			mods::globals::defer_queue->push(ticks, [room_id,object]() {
+				legacy_explode(room_id,object);
+			});
+		}
+		/*
+		void explode_in_future(int room_id, int ticks, obj_data* _object) {
+			auto object = std::make_shared<obj_data>(*_object);
+			mods::globals::defer_queue->push(ticks, [room_id,&object]() {
+				explode(room_id,object);
+			});
 
+		}
+		*/
+
+		//void throw_object(player_ptr_t player, int direction, std::size_t depth,
+		//		std::shared_ptr<obj_data> object, std::string_view verb) {
+		//	throw_object(player,direction,depth,object.get(),verb);
+		//}
 		void throw_object(player_ptr_t player, int direction, std::size_t depth,
+				std::shared_ptr<obj_data> object, std::string_view verb) {
+			legacy_throw_object(player,direction, depth, object.get(), verb);
+		}
+		void legacy_throw_object(player_ptr_t player, int direction, std::size_t depth,
 				obj_data* object, std::string_view verb) {
 			std::array<char,MAX_INPUT_LENGTH> str_dir_buffer;
 			std::string str_dir = mods::projectile::todirstr(static_cast<const char*>(&str_dir_buffer[0]),1,0);
@@ -499,22 +487,18 @@ namespace mods {
 					break;
 				case mw_explosive::FLASHBANG_GRENADE:
 					object_name = "flashbang grenade";
-					ticks = 1;
+					ticks = 6;
 					break;
 			}
-			obj_from_char(object);
 			send_to_room_except(player->room(), player, "%s %ss a %s%s!\r\n",
 					player->ucname().c_str(), 
 					verb.data(),
 					object_name.c_str(),
 					str_dir.c_str());
 			player->sendln("You " + std::string(verb.data()) + " a " + object->explosive()->name + str_dir);
-			auto room_id = mods::projectile::cast_finite(player->cd(),player->room(),direction,depth,object);
-			mods::projectile::travel_to(player->room(), direction, depth, object);
-			obj_to_room(object,room_id);
-			mods::globals::defer_queue->push(ticks, [room_id,&object]() {
-				mods::projectile::explode(room_id,object);
-			});
+			obj_from_char(object);
+			auto room_id = legacy_travel_to(player->room(), direction, depth, object);
+			legacy_explode_in_future(room_id, ticks, object);
 		}
 	};
 };

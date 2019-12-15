@@ -62,7 +62,6 @@ std::ostream& log(Args... args); /*{
 
 	directory_list_t glob(std::string_view);
 	bool fuzzy_match(const std::string& _needle,const std::string& _haystack);
-	std::string color_eval(std::string final_buffer);
 	template <typename T>
 		T arglist(const std::string& argument) {
 			T arglist;

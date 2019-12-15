@@ -77,7 +77,11 @@ namespace mods::lmdb {
 		}
 	}
 
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 	void lmdb_debug(std::string f){ std::cerr << "[lmdb_debug]:'" << f << "'\n"; }
+#else
+	#define lmdb_debug(a) /** */
+#endif
 
 	void _db_handle::set_pluck_filter(const std::vector<std::string> & cols){
 		m_pluck = cols;

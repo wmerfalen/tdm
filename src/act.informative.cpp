@@ -1153,11 +1153,13 @@ ACMD(do_weather) {
 
 
 ACMD(do_help) {
+	MENTOC_PREAMBLE();
 	int chk, bot, top, mid, minlen;
 
 	if(!ch->has_desc) {
 		return;
 	}
+	if(IS_NPC(ch)){ return; }
 
 	skip_spaces(&argument);
 
@@ -1165,6 +1167,31 @@ ACMD(do_help) {
 		page_string(*ch->desc, help, 0);
 		return;
 	}
+
+	std::array<char,50> topic;
+	std::fill(topic.begin(),topic.end(),0);
+	one_argument(argument,&topic[0]);
+	if(!topic[0]){
+		player->sendln("Please specify a topic. i.e.: help grenades");
+		return;
+	}
+
+#define IS_TOPIC(a) (strncmp((char*)&topic[0],a,sizeof(topic)) == 0)
+	if(IS_TOPIC("grenade") || IS_TOPIC("nade")) {
+		const char* usage = "usage: throw <direction> <room_count>\r\n"
+			"example: \r\n"
+			" $ get frag backpack\r\n"
+			" $ hold frag\r\n"
+			" $ throw north 2\r\n"
+			" This will throw a frag 2 rooms away\n"
+			" NOTE:\r\n"
+			"All grenades are thrown as far as they can up to a maximum amount of 4 rooms away\r\n"
+			"or however many rooms before it reaches a dead-end\r\n"
+			"see: help grenade";
+		player->sendln(usage);
+		return;
+	}
+
 
 	if(!help_table) {
 		send_to_char(ch, "No help available.\r\n");

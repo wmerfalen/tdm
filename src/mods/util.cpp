@@ -82,17 +82,6 @@ namespace mods {
 
 			return false;
 		}
-		std::string color_eval(std::string final_buffer) {
-			final_buffer = mods::globals::replace_all(final_buffer,"{grn}","\033[32m");
-			final_buffer = mods::globals::replace_all(final_buffer,"{red}","\033[31m");
-			final_buffer = mods::globals::replace_all(final_buffer,"{blu}","\033[34m");
-			final_buffer = mods::globals::replace_all(final_buffer,"{wht}","\033[37m");
-			final_buffer = mods::globals::replace_all(final_buffer,"{/grn}","\033[0m");
-			final_buffer = mods::globals::replace_all(final_buffer,"{/wht}","\033[0m");
-			final_buffer = mods::globals::replace_all(final_buffer,"{/red}","\033[0m");
-			final_buffer = mods::globals::replace_all(final_buffer,"{/blu}","\033[0m");
-			return final_buffer;
-		}
 		std::optional<unsigned> stoul(std::string_view str) {
 			try {
 				return std::stoul(str.data());

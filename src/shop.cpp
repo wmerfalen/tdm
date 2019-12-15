@@ -564,6 +564,9 @@ int sell_price(struct obj_data *obj, int shop_nr, struct char_data *keeper, stru
 
 
 void shopping_buy(char *arg, struct char_data *ch, struct char_data *keeper, int shop_nr) {
+	log("DEPRECATED: shopping_buy. Reason: vuln+cba");
+	return;
+#if 0
 	char tempstr[MAX_INPUT_LENGTH], tempbuf[MAX_INPUT_LENGTH];
 	struct obj_data *obj, *last_obj = NULL;
 	int goldamt = 0, buynum, bought = 0;
@@ -696,6 +699,7 @@ void shopping_buy(char *arg, struct char_data *ch, struct char_data *keeper, int
 			SHOP_BANK(shop_nr) += (GET_GOLD(keeper) - MAX_OUTSIDE_BANK);
 			GET_GOLD(keeper) = MAX_OUTSIDE_BANK;
 		}
+#endif
 }
 
 
@@ -818,7 +822,7 @@ void sort_keeper_objs(struct char_data *keeper, int shop_nr) {
 
 
 void shopping_sell(char *arg, struct char_data *ch, struct char_data *keeper, int shop_nr) {
-	char tempstr[MAX_INPUT_LENGTH], name[MAX_INPUT_LENGTH], tempbuf[MAX_INPUT_LENGTH];
+	char tempstr[MAX_INPUT_LENGTH], name[MAX_INPUT_LENGTH];//FIXME related to vulnerable code below, tempbuf[MAX_INPUT_LENGTH];
 	struct obj_data *obj;
 	int sellnum, sold = 0, goldamt = 0;
 
@@ -885,13 +889,15 @@ void shopping_sell(char *arg, struct char_data *ch, struct char_data *keeper, in
 	GET_GOLD(ch) += goldamt;
 
 	strlcpy(tempstr, times_message(0, name, sold), sizeof(tempstr));
-	snprintf(tempbuf, sizeof(tempbuf), "$n sells %s.", tempstr);
-	act(tempbuf, FALSE, ch, obj, 0, TO_ROOM);
+	/** FIXME crappy vulnerable code
+	 */
+	//snprintf(tempbuf, sizeof(tempbuf) -10 , "$n sells %s.", tempstr);
+	//act(tempbuf, FALSE, ch, obj, 0, TO_ROOM);
 
-	snprintf(tempbuf, sizeof(tempbuf), shop_index[shop_nr].message_sell, GET_NAME(ch).c_str(), goldamt);
-	do_tell(keeper, tempbuf, cmd_tell, 0);
+	//snprintf(tempbuf, sizeof(tempbuf) - 10, shop_index[shop_nr].message_sell, GET_NAME(ch).c_str(), goldamt);
+	//do_tell(keeper, tempbuf, cmd_tell, 0);
 
-	send_to_char(ch, "The shopkeeper now has %s.\r\n", tempstr);
+	//send_to_char(ch, "The shopkeeper now has %s.\r\n", tempstr);
 
 	if(GET_GOLD(keeper) < MIN_OUTSIDE_BANK) {
 		goldamt = MIN(MAX_OUTSIDE_BANK - GET_GOLD(keeper), SHOP_BANK(shop_nr));
@@ -1207,6 +1213,9 @@ int read_list(FILE *shop_f, struct shop_buy_data *list, int new_format,
 /* END_OF inefficient. */
 int read_type_list(FILE *shop_f, struct shop_buy_data *list,
                    int new_format, int max) {
+	log("DEPRECATED: read_type_list. REASON: vulnerable+cantbarsed");
+	return 0;
+#if 0
 	int tindex, num, len = 0, error = 0;
 	char *ptr;
 	char buf[MAX_STRING_LENGTH];
@@ -1230,7 +1239,11 @@ int read_type_list(FILE *shop_f, struct shop_buy_data *list,
 			for(tindex = 0; *item_types[tindex] != '\n'; tindex++)
 				if(!strn_cmp(item_types[tindex], buf, strlen(item_types[tindex]))) {
 					num = tindex;
-					strcpy(buf, buf + strlen(item_types[tindex]));	/* strcpy: OK (always smaller) */
+					std::size_t len = strlen(item_types[tindex]);
+					if(len > sizeof(buf) -1){
+						len = sizeof(buf) -2;
+					}
+					strncpy(buf, buf + len,len);	/* strcpy: OK (always smaller) */
 					break;
 				}
 
@@ -1264,6 +1277,7 @@ int read_type_list(FILE *shop_f, struct shop_buy_data *list,
 	} while(num >= 0);
 
 	return (end_read_list(list, len, error));
+#endif
 }
 
 

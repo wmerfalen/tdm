@@ -24,6 +24,7 @@
 #include "globals.hpp"
 #include "mods/util.hpp"
 #include "mods/prefs.hpp"
+#include "mods/affects.hpp"
 
 /* extern variables */
 extern int pk_allowed;
@@ -90,16 +91,6 @@ ACMD(do_throw) {
 		return;
 	}
 
-	const char* usage = "usage: throw <grenade> <direction> <room_count>\r\n"
-		"example: \r\n"
-		" $ get frag backpack\r\n"
-		" $ hold frag\r\n"
-		" $ throw frag north 2\r\n"
-		" This will throw a frag 2 rooms away\n"
-		" NOTE:\r\n"
-		"All grenades are thrown as far as they can up to a maximum amount of 4 rooms away\r\n"
-		"or however many rooms before it reaches a dead-end\r\n"
-		"see: help grenade\r\n\r\n";
 	std::array<char,MAX_INPUT_LENGTH> item;
 	std::array<char,MAX_INPUT_LENGTH> direction;
 	std::array<char,MAX_INPUT_LENGTH> count;
@@ -114,15 +105,11 @@ ACMD(do_throw) {
 		return;
 	}
 
-	three_arguments(argument, &item[0], &direction[0], &count[0]);
+	two_arguments(argument, &direction[0], &count[0]);
+	std::cerr << (char*)&direction[0] << "|" << (char*)&count[0] << "\n";
 
 	int cnt = atoi(static_cast<const char*>(&count[0]));
 	player->sendln("Throwing " + std::to_string(cnt) + " rooms away");
-
-	if(!IS_DIRECTION(static_cast<const char*>(&direction[0])) || cnt <= 0) {
-		player->stc(usage);
-		return;
-	}
 
 	if(cnt > 4) {
 		player->sendln("But you can only throw up to 4 rooms away!");
@@ -135,19 +122,20 @@ ACMD(do_throw) {
 		return;
 	}
 
-	auto held_object = player->equipment(WEAR_HOLD);
+	/* TODO: change to equipment() */
+	auto held_object = player->legacy_equipment(WEAR_HOLD);
 	if(!held_object) {
 		player->sendln("You're not holding anything!");
 		return;
 	}
+	d("got equipment (legacy)");
 
-	mods::projectile::throw_object(player, dir, cnt, held_object, "lob");
+	mods::projectile::legacy_throw_object(player, dir, cnt, held_object, "lob");
 }
 
 ACMD(do_giveme_frag_grenades) {
-	MENTOC_PREAMBLE();
 	auto obj = mods::weapon::new_frag_grenade_object();
-	obj_to_char(obj,player);
+	obj_to_char(obj.get(),ch);
 }
 ACMD(do_giveme_incendiary_grenades) {
 	auto obj = mods::weapon::new_incendiary_grenade_object();
@@ -179,6 +167,35 @@ ACMD(do_giveme_sniper_rifle) {
 }
 
 
+ACMD(do_affect_me) {
+	MENTOC_PREAMBLE();
+	constexpr unsigned int max_char = 16;
+	static bool usage_set = false;
+	static std::string usage;
+	std::array<char,max_char> affect_type;
+	std::fill(affect_type.begin(),affect_type.end(),0);
+	one_argument(argument,(char*)&affect_type[0],max_char);
+
+	if(!usage_set){
+		usage = "{gld}Usage: affect_me <";
+		auto affect_names = affect_string_list();
+		for(unsigned i=0; i < affect_names.size();i++){
+			usage += affect_names[i];
+			if(i+1 < affect_names.size()){
+				usage += "|";
+			}
+		}
+		usage += ">{/gld}";
+		usage_set = true;
+	}
+	std::string affect_type_str = (char*)&affect_type[0];
+	if(!affect_type[0] || affect_type_str.compare("help") == 0){
+		player->sendln(usage);
+		return;
+	}
+	str_queue_on_player({affect_type_str},player);
+	player->sendln("It is done.");
+};
 enum weapon_status_t {
 	COOLDOWN_IN_EFFECT = -1,
 	OUT_OF_AMMO = -2,

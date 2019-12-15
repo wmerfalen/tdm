@@ -503,7 +503,7 @@ namespace mods::builder {
 	}
 
 	using values_t = std::map<std::string,std::string>;
-	std::tuple<bool,zone_pkid_t> update_zone_with_placements(int virtual_number,player_ptr_t player) {
+	std::tuple<bool,zone_pkid_t,std::string> update_zone_with_placements(int virtual_number,player_ptr_t player) {
 		auto zone_start = player->builder_data->room_pavements.start_room;
 		auto zone_end = zone_start;
 		for(auto & room : player->builder_data->room_pavements.rooms){
@@ -527,12 +527,12 @@ namespace mods::builder {
 					.sql();
 				mods::pq::exec(up_txn,up_sql);
 				mods::pq::commit(up_txn);
-				return {true, 0};
+				return {true, 0,"success"};
 			}catch(std::exception& e){
 				std::cerr << "error updating zone in db: '" << e.what() << "'\n";
 				rb_debug("EXCEPTION (UPDATE)");
 				rb_debug(e.what());
-				return {false,-1};
+				return {false,-1,e.what()};
 			}
 		}
 	}
@@ -1337,7 +1337,11 @@ ACMD(do_rbuild_sandbox) {
 						player->builder_data->room_pavements.zone_id,
 						player
 				);
-				r_success(player,"Sandbox saved");
+				if(std::get<0>(status)){
+					r_success(player,std::string("Sandbox saved. Message: ") + std::get<2>(status));
+				}else{
+					r_error(player, std::string("Sandbox creation failed. Message: ") + std::get<2>(status));
+				}
 				return;
 			}//end command is save
 		}

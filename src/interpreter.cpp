@@ -177,6 +177,7 @@ ACMD(do_builder_help){
 	}
 	if(player->implementor_mode() || player->builder_mode()){
 		for(std::string_view cmd : {
+			"{gld}affect_me{/gld} -- {grn}give yourself an affect <BLIND|DISORIENT|POISON> [feature-debug]{/grn}", 
 			"{gld}ammo{/gld} -- {grn}give yourself ammo [feature-debug]{/grn}", 
 			"{gld}chanmgr{/gld} -- {grn}channel manager utility [staging-feature]{/grn}",
 			"{gld}drone{/gld} -- {grn}start or stop your drone [staging-feature]{/grn}",
@@ -311,6 +312,7 @@ ACMD(do_skillset);
 ACMD(do_sleep);
 ACMD(do_sneak);
 ACMD(do_recall);
+ACMD(do_affect_me);
 ACMD(do_givemegold);
 ACMD(do_givemenades);
 ACMD(do_snipe);
@@ -373,6 +375,7 @@ ACMD(do_title);
 ACMD(do_toggle);
 ACMD(do_track);
 ACMD(do_trans);
+ACMD(do_help_throw);
 ACMD(do_throw);
 ACMD(do_unban);
 ACMD(do_ungroup);
@@ -726,6 +729,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "giveme_inc"  , POS_RESTING , do_giveme_incendiary_grenades , LVL_GOD, 0 },
 	{ "giveme_smoke"  , POS_RESTING , do_giveme_smoke_grenades  , LVL_GOD, 0 },
 	{ "giveme_emp"  , POS_RESTING , do_giveme_emp_grenades  , LVL_GOD, 0 },
+	{ "affect_me"  , POS_RESTING , do_affect_me , LVL_GOD, 0 },
 
 	/** ------------------------------ */
 	/** END "GIVE ME" COMBAT MECHANICS */

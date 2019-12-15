@@ -13,20 +13,6 @@
 extern void do_auto_exits(struct char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
 namespace mods {
-	std::string just_color_evaluation(std::string final_buffer) {
-		final_buffer = mods::globals::replace_all(final_buffer,"{grn}","\033[32m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{red}","\033[31m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{blu}","\033[34m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{wht}","\033[37m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{/grn}","\033[0m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{/wht}","\033[0m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{/red}","\033[0m");
-		final_buffer = mods::globals::replace_all(final_buffer,"{/blu}","\033[0m");
-		return final_buffer;
-	}
-	void stc_color_evaluation(const std::string& title,player* p) {
-		*p << just_color_evaluation(title) << "\r\n";
-	}
 
 	std::string word_wrap(std::string_view paragraph,int width) {
 		std::string buffer;
@@ -442,8 +428,7 @@ namespace mods {
 			return;
 		}
 		if(world[rnum].name) {
-			std::string title = static_cast<const char*>(world[rnum].name);
-			stc_color_evaluation(std::string("{grn}") + title + "{/grn}",this);
+			sendln(world[rnum].name);
 		}
 	}
 	void player::stc(const char* m) {
@@ -476,7 +461,7 @@ namespace mods {
 			return;
 		}
 		if(world[rnum].description) {
-			std::string colored = just_color_evaluation(static_cast<const char*>(world[rnum].description));
+			std::string colored = static_cast<const char*>(world[rnum].description);
 			/* TODO: get status of outside world, if EMP, then replace phrase with emp phrase */
 			auto player = this;
 			auto value = PLAYER_GET("screen_width");

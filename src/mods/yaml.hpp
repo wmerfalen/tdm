@@ -76,6 +76,9 @@ namespace mods::yaml {
 			float reload_time;
 			int type;
 			std::string name;
+			int rounds_per_minute;
+			int muzzle_velocity;
+			int effective_firing_range;
 		std::string object_type;
 		int vnum;
 		float rarity;

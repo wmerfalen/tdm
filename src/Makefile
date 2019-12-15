@@ -29,7 +29,7 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-D__MENTOC_USE_LMDB=1 \
 	-Wno-sign-compare -I$(yamlcpp) -L$(yamllib) \
 	-fPIC
-
+#-D__MENTOC_SHOW_LMDB_DEBUG__=1 
 	#-DMENTOC_NO_CONSTEXPR_CONF=1 \ #-D__MENTOC_USE_PQXX_RESULT__=1 
 LIBS = $(opnssl) -lc -lm -lpqxx -lpq -lssl -lcrypto -l$(yamlcpp_object)
 buildobj = act.informative act.item act.medic \
@@ -52,7 +52,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/randomized-items mods/auto-login mods/date-time \
 					 mods/world-configuration mods/debug act.debug mods/pfind \
 					 mods/orm/chargen mods/weapons/sniper-rifle mods/classes/sniper \
-					 mods/orm/quotes act.builder mods/orm/base mods/yaml
+					 mods/orm/quotes act.builder mods/orm/base mods/yaml \
+					 mods/affects
 
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))

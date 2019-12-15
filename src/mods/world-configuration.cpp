@@ -11,6 +11,7 @@
 
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 namespace mods::world_conf {
+	rooms_t rooms;
 	std::pair<bool,std::string> select_value(std::string_view table,
 			std::string_view column,
 			std::string_view where_column,std::string_view where_value){
@@ -30,7 +31,6 @@ namespace mods::world_conf {
 			return {false,e.what()};
 		}
 	}
-	extern rooms_t rooms;
 	rooms_t load_all() {
 		rooms[WC_FROZEN] = real_room(get_frozen_room_vnum());
 		rooms[WC_IDLE] = real_room(get_idle_room_vnum());

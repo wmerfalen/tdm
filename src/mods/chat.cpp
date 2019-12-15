@@ -51,7 +51,7 @@ namespace mods::chat {
 		msg += ": ";
 		msg += message;
 		msg += "{/gld}";
-		msg = mods::util::color_eval(msg);
+		msg = mods::globals::color_eval(msg);
 
 		for(auto descriptor : m_subscribers) {
 			auto write_value = write(descriptor,msg.c_str(),msg.length());

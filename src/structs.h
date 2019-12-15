@@ -1412,7 +1412,7 @@ extern int next_room_pavement_transaction_id();
 		 */
 		affected_type *affected;       /* affected by what spells       */
 		/** TODO: convert to std::vector */
-		obj_data *equipment[NUM_WEARS];/* Equipment array               */
+		obj_data* equipment[NUM_WEARS];/* Equipment array               */
 
 		/** TODO: convert to forward list or std::vector */
 		obj_data *carrying;            /* Head of list                  */
