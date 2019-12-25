@@ -1338,7 +1338,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 					room.description = strdup(description);
 				}
 				room.name = mods::globals::color_eval(std::string("{grn}") + std::string(room.name) + "{/grn}");
-				room.description = mods::globals::color_eval(static_cast<const char*>(room.description));
+				room.description.assign(mods::util::word_wrap(mods::globals::color_eval(static_cast<const char*>(room.description)),80));
 				room.number = room_records_row["room_number"].as<int>(0);
 				log("parse_sql_rooms: room.number (%d)",room.number);
 				room.zone = room_records_row["zone"].as<int>(0);

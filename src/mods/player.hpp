@@ -324,6 +324,7 @@ namespace mods {
 			void stc(std::string_view);
 			void sendln(std::string_view str);
 			void sendln(mods::string& str);
+			void raw_send(const mods::string&);
 			void done();
 
 			/* pager functions */

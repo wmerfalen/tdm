@@ -14,6 +14,9 @@ namespace mods {
 			assign("");
 		}
 	}
+	std::string_view string::view(){
+		return m_str;
+	}
 
 	/*
 	string::string(const pqxx::result::reference & str){

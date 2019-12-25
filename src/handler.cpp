@@ -473,15 +473,16 @@ void obj_to_char(std::shared_ptr<obj_data> object, std::shared_ptr<mods::player>
 		object->next_content = player->cd()->carrying;
 		player->cd()->carrying = object.get();
 		object->carried_by = player->cd();
-		d("object->carried_by is: " << (int)object->carried_by << "(ch): " << player->cd());
 		IN_ROOM(object) = NOWHERE;
 		IS_CARRYING_W(player->cd()) += GET_OBJ_WEIGHT(object.get());
 		IS_CARRYING_N(player->cd())++;
 
-		///* set flag for crash-save system, but not on mobs! */
-		//if(!IS_NPC(ch)) {
-		//	SET_BIT(PLR_FLAGS(ch), PLR_CRASH);
-		//}
+#ifdef __MENTOC_USE_PLR_CRASH__
+		/* set flag for crash-save system, but not on mobs! */
+		if(!IS_NPC(ch)) {
+			SET_BIT(PLR_FLAGS(ch), PLR_CRASH);
+		}
+#endif
 	} else {
 		log("SYSERR: NULL obj (%p) or char (%p) passed to obj_to_char.", object, player->cd());
 	}
@@ -500,10 +501,12 @@ void obj_to_char(struct obj_data *object, struct char_data *ch) {
 		IS_CARRYING_W(ch) += GET_OBJ_WEIGHT(object);
 		IS_CARRYING_N(ch)++;
 
+#ifdef __MENTOC_USE_PLR_CRASH__
 		/* set flag for crash-save system, but not on mobs! */
 		if(!IS_NPC(ch)) {
 			SET_BIT(PLR_FLAGS(ch), PLR_CRASH);
 		}
+#endif
 	} else {
 		log("SYSERR: NULL obj (%p) or char (%p) passed to obj_to_char.", object, ch);
 	}
@@ -526,10 +529,12 @@ void obj_from_char(struct obj_data *object) {
 
 	REMOVE_FROM_LIST(object, object->carried_by->carrying, next_content);
 
+#ifdef __MENTOC_USE_PLR_CRASH__
 	/* set flag for crash-save system, but not on mobs! */
 	if(!IS_NPC(object->carried_by)) {
 		SET_BIT(PLR_FLAGS(object->carried_by), PLR_CRASH);
 	}
+#endif
 
 	IS_CARRYING_W(object->carried_by) -= GET_OBJ_WEIGHT(object);
 	IS_CARRYING_N(object->carried_by)--;
@@ -813,9 +818,11 @@ void obj_to_room(struct obj_data *object, room_rnum room) {
 		IN_ROOM(object) = room;
 		object->carried_by = NULL;
 
+#ifdef __MENTOC_USE_ROOM_HOUSE_CRASH__
 		if(ROOM_FLAGGED(room, ROOM_HOUSE)) {
 			SET_BIT(ROOM_FLAGS(room), ROOM_HOUSE_CRASH);
 		}
+#endif
 	}
 }
 
@@ -832,9 +839,11 @@ void obj_from_room(struct obj_data *object) {
 
 	REMOVE_FROM_LIST(object, world[IN_ROOM(object)].contents, next_content);
 
+#ifdef __MENTOC_USE_ROOM_HOUSE_CRASH__
 	if(ROOM_FLAGGED(IN_ROOM(object), ROOM_HOUSE)) {
 		SET_BIT(ROOM_FLAGS(IN_ROOM(object)), ROOM_HOUSE_CRASH);
 	}
+#endif
 
 	IN_ROOM(object) = NOWHERE;
 	object->next_content = NULL;

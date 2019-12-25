@@ -805,18 +805,20 @@ enum player_level {
 		obj_flag_data obj_flags;/* Object information               */
 		obj_affected_type affected[MAX_OBJ_AFFECT];  /* affects */
 
+		/** [ 'name' APPEARS ]:  */
 		char	*name;                    /* Title of object :get etc.        */
 		/** [ APPEARS ]: when looking at item and mode is LONG  @act.informative.cpp
+		 * 		It will show up when you look at a room and it's lying on the floor
 		 * SHOW_OBJ_LONG
 		 */
 		char	*description;		  /* When in room                     */
-		/** [ APPEARS ]: when looking at item and mode is SHORT @act.informative.cpp
+		/** [ 'short_description' APPEARS ]: when looking at item and mode is SHORT @act.informative.cpp
+		 *  	It will show up when you look in your inventory 
 		 * SHOW_OBJ_SHORT
 		 */
 		char	*short_description;       /* when worn/carry/in cont.         */
-		/** [ APPEARS ]: when looking at item (item note or weapon -- currently)
-		 * SHOW_OBJ_ACTION
-		 * @act.informative.cpp
+		/** [ 'action_description' APPEARS ]: 
+		 * "JohnDoe123 throws a <action_description> to the north!"
 		 */
 		char	*action_description;      /* What to write when used          */
 		extra_descr_data *ex_description; /* extra descriptions     */

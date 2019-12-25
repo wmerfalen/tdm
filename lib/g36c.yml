@@ -1,0 +1,38 @@
+# accuracy map
+accuracy_map: [
+10.00,
+10.00,
+10.00,
+10.00
+]
+ammo_max: 220 #integer
+ammo_type: '' #string, constant enum
+chance_to_injure: 4.23 #float, out of 100
+clip_size: 8 #integer
+cooldown_between_shots: 0.413 #float, in seconds
+critical_chance: 0.14 #float, out of 100
+critical_range: 4 #integer, measured in rooms
+damage_map: [
+10.00,
+10.00,
+10.00,
+10.00
+]
+damage_per_second: 4.53 #float
+disorient_amount: 3.14 #float
+headshot_bonus: 3.0 #float
+max_range: 3 #integer,measured in rooms
+range_multiplier: 4.3 #float, multiplied by 
+reload_time: 3.0 #float, measured in seconds
+type: 'SNIPER' #string, type of weapon
+name: 'A <adjectively> <horrific> PSG-1 Sniper Rifle' #string
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: COMMON
+vnum: 101 #virtual number
+object_type: rifle

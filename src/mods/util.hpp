@@ -27,6 +27,7 @@ static inline std::string operator "" _s(const char* s,uint64_t i) {
 extern std::vector<room_data> world;
 
 namespace mods::util {
+	std::string&& word_wrap(std::string_view paragraph,int width);
 	using directory_list_t = std::vector<std::string>;
 
 	static inline void texturize_room(room_rnum room_id, room_data::texture_type_t texture_type){

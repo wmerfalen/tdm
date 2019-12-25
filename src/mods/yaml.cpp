@@ -145,6 +145,9 @@ namespace mods::yaml {
 		if(type_string.compare("HANDGUN") == 0){
 			type = mods::weapon::type::rifle::HANDGUN;
 		}
+		if(type_string.compare("PISTOL") == 0){
+			type = mods::weapon::type::rifle::PISTOL;
+		}
 		if(type_string.compare("MACHINE_PISTOL") == 0){
 			type = mods::weapon::type::rifle::MACHINE_PISTOL;
 		}

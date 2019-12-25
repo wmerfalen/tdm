@@ -1,16 +1,7 @@
 #include "overhead_map.hpp"
 #include "player.hpp"
 
-//extern std::vector<room_data> world;
 namespace mods::overhead_map {
-	//template <>
-	//std::string_view generate(mods::player out,const room_rnum& room_number){
-	//	return world[room_number].overhead(out.get_lense());
-	//}
-	//template <>
-	//std::string_view generate(mods::player* out,const room_rnum& room_number){
-	//	return mods::overhead_map::generate<mods::player>(*out,room_number);
-	//}
 	template <>
 		std::string generate(mods::player* out,const room_rnum& room_number){
 			uint8_t player_width = out->get_overhead_map_width(), player_height = out->get_overhead_map_height();
@@ -18,7 +9,6 @@ namespace mods::overhead_map {
 				player_width = mods::overhead_map::width;
 				player_height = mods::overhead_map::height;
 			}
-			printf("width: %d, height: %d\n",player_width,player_height);
 			
 			std::string horizontal_border = std::string("+") + 
 				std::string(player_width,'=') + "+\r\n";
@@ -57,172 +47,9 @@ namespace mods::overhead_map {
 				in_x < in_width && in_x >= 0 &&
 				world.size() > room
 		){
-#if 0
-			/** 
-			 * This code is so close to being done. Just needs some
-			 * more work and it'll look good. for now, this commit
-			 * doesn't get to have this code in it. 
-			 */
-			/*
-				 char* f = "┌┉┉┉┐";
-				 char* g = "│   │";
-				 char* m = "└┉┉┉┘";
-				 */
-
-			int draw_y = (in_y - original_y) * 2;
-			int draw_x = (in_x - original_x) * 2;
-
-			draw_y += in_y;
-			draw_x += in_x;
-
-			/*
-			 * top left (north west)
-			 */
-			if(draw_y -1 >= 0 && 
-					draw_y -1 < mods::overhead_map::height &&
-					draw_x - 1 >= 0 &&
-					draw_x -1 < mods::overhead_map::width
-				){
-				//draw_coordinates[draw_y - 1][draw_x - 1] = "┼┉┼"; "┉";
-				if(draw_x - 3 >= 0 && draw_x -3 < mods::overhead_map::width &&
-						draw_y -1 >= 0 && draw_y -1 < mods::overhead_map::height ){
-					if(draw_coordinates[draw_y - 1][draw_x -3].compare("──") == 0){
-						if(world[room].dir_option[WEST] != nullptr){
-							draw_coordinates[draw_y - 1][draw_x - 1] = "──"; 
-						}
-					}
-				}
-				if(world[room].dir_option[NORTH] == nullptr &&
-						world[room].dir_option[WEST] == nullptr){
-					draw_coordinates[draw_y - 1][draw_x - 1] = "┌─"; 
-				}else if(world[room].dir_option[NORTH] != nullptr &&
-						world[room].dir_option[WEST] == nullptr){
-					draw_coordinates[draw_y - 1][draw_x - 1] = "│░"; 
-				}else if(world[room].dir_option[NORTH] == nullptr &&
-						world[room].dir_option[WEST] != nullptr){
-					draw_coordinates[draw_y - 1][draw_x - 1] = "──"; 
-				}
-			}
-			/*
-			 * top middle (north)
-			 */
-			if(draw_y -1 >= 0 && 
-					draw_y -1 < mods::overhead_map::height &&
-					draw_x  < mods::overhead_map::width &&
-					draw_x >= 0){
-				if(world[room].dir_option[NORTH] == nullptr){
-					draw_coordinates[draw_y -1][draw_x] = "{blu}─{/blu}";
-				}else{
-					draw_coordinates[draw_y -1][draw_x] = "░";
-				}
-			}
-			/*
-			 * top right (north east)
-			 */
-			if(draw_y -1 >= 0 && 
-					draw_y -1 < mods::overhead_map::height &&
-					draw_x + 1 < mods::overhead_map::width && 
-					draw_x + 1 >= 0){
-				if(world[room].dir_option[NORTH] == nullptr &&
-						world[room].dir_option[EAST] == nullptr){
-					draw_coordinates[draw_y -1][draw_x +1] = "─┐";
-				}else if(world[room].dir_option[NORTH] != nullptr &&
-						world[room].dir_option[EAST] == nullptr){
-					draw_coordinates[draw_y -1][draw_x +1] = "░│";
-				}else if(world[room].dir_option[NORTH] == nullptr &&
-						world[room].dir_option[EAST] != nullptr){
-					room_rnum go_east = world[room].dir_option[EAST]->to_room;
-					if(world[go_east].dir_option[NORTH] != nullptr){
-						draw_coordinates[draw_y -1][draw_x +1] = "{grn}┘░{/grn}";
-					//	draw_coordinates[draw_y -1][draw_x +1] = "{grn}┕─{/grn}";
-					}else{
-							draw_coordinates[draw_y -1][draw_x +1] = "{grn}──{/grn}";
-					}
-				}
-			}
-			/**
-			 * Bottom left (south west)
-			 */
-			if(draw_y + 1 < mods::overhead_map::height && 
-					draw_y + 1 >= 0 &&
-					draw_x -1 >= 0 &&
-					draw_x - 1 < mods::overhead_map::width){
-				if(world[room].dir_option[WEST] == nullptr &&
-						world[room].dir_option[SOUTH] == nullptr){
-					draw_coordinates[draw_y +1][draw_x -1] = "└─";
-				}else if(world[room].dir_option[WEST] == nullptr &&
-						world[room].dir_option[SOUTH] != nullptr){
-					draw_coordinates[draw_y +1][draw_x -1] = "│░";
-				}else if(world[room].dir_option[WEST] != nullptr &&
-						world[room].dir_option[SOUTH] == nullptr){
-					draw_coordinates[draw_y +1][draw_x -1] = "──";
-				}
-			}
-			/**
-			 * Bottom middle (south)
-			 */
-			if(draw_y + 1 < mods::overhead_map::height && 
-					draw_y + 1 >= 0 &&
-					draw_x < mods::overhead_map::width &&
-					draw_x >= 0){
-				if(world[room].dir_option[SOUTH] == nullptr){
-					draw_coordinates[draw_y + 1][draw_x] ="{red}─{/red}"; //"┉";
-				}else{
-					draw_coordinates[draw_y + 1][draw_x] ="{red}░{/red}"; //"┉";
-				}
-
-			}
-			/*
-			 * right middle (east)
-			 */
-			if(draw_x + 1 < mods::overhead_map::width &&
-					draw_y < mods::overhead_map::height &&
-					draw_y >= 0){
-				if(world[room].dir_option[EAST] == nullptr){
-					draw_coordinates[draw_y][draw_x + 1] = "░│";
-				}else{
-					draw_coordinates[draw_y][draw_x + 1] = "░░";
-				}
-			}
-
-			/*
-			 * left middle (west)
-			 */
-			if(draw_x - 1 >= 0 &&
-					draw_x -1 < mods::overhead_map::width &&
-					draw_y >= 0 &&
-					draw_y < mods::overhead_map::height){
-				if(world[room].dir_option[WEST] == nullptr){
-					draw_coordinates[draw_y][draw_x - 1] = "│░";
-				}else{
-					draw_coordinates[draw_y][draw_x - 1] = "░░";
-				}
-			}
-			/*
-			 * 
-			 * bottom right (south east)
-			 */
-			if(draw_y + 1 >= 0 &&
-					draw_y + 1 < mods::overhead_map::height && 
-					draw_x +1 >= 0 &&
-					draw_x + 1 < mods::overhead_map::width){
-				if(world[room].dir_option[SOUTH] == nullptr &&
-						world[room].dir_option[EAST] == nullptr){
-					draw_coordinates[draw_y + 1][draw_x + 1] = "─┘";
-				}else if(world[room].dir_option[SOUTH] != nullptr &&
-						world[room].dir_option[EAST] == nullptr){
-					draw_coordinates[draw_y + 1][draw_x + 1] = "░│";
-				}else if(world[room].dir_option[SOUTH] == nullptr &&
-						world[room].dir_option[EAST] != nullptr){
-					//draw_coordinates[draw_y + 1][draw_x + 1] = "──";
-				}
-			}
-#else
 			if(map_coordinates[in_y][in_x].compare("[x]") != 0){
 				map_coordinates[in_y][in_x] = "[ ]";
 			}
-#endif
-
 
 			switch(direction){
 				case NORTH: 
@@ -272,10 +99,4 @@ namespace mods::overhead_map {
 			}
 		}
 	}
-	/*
-	template <>
-		std::string generate(player_ptr_t out,const room_rnum& room_number){
-			return generate(out.get(),room_number);
-		}
-		*/
 };

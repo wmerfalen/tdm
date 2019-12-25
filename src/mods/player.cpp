@@ -34,83 +34,6 @@ namespace mods {
 	using mask_t = mods::weapon::mask_type;
 	using lmdb_db = db_handle;
 
-	std::string word_wrap(std::string_view paragraph,int width) {
-		std::string buffer;
-
-		if(width <= 0) {
-			return std::string(paragraph);
-		}
-
-		int position = 1;
-
-		for(unsigned cint = 0; cint < paragraph.length(); cint++) {
-			/* if we run into an open brace then that means it's a color code.
-			 * Push past the color code and decrement the position counter as
-			 * we go.
-			 */
-			if(paragraph[cint] == '{') {
-				while(paragraph[cint] != '}'
-						&& cint < paragraph.length()
-						) {
-					buffer += paragraph[cint++];
-					--position;
-				}
-
-				buffer += '}';
-				continue;
-			}
-
-			/* Edge case where the first character in the paragraph is
-			 * a color code. The position needs to be 1 since after pushing
-			 * past the color code, the position would be a negative value
-			 */
-			if(position < 1) {
-				position = 1;
-			}
-
-			if(isspace(paragraph[cint])) {
-				/* if the buffer is non-empty and that most recent character
-				 * pushed is a space then we would be essentially doubling
-				 * up on spaces if we didn't 'continue' here.
-				 */
-				if(buffer.begin() != buffer.end() &&
-						isspace(*(buffer.end() - 1))) {
-					continue;
-				} else {
-					/* the most recent character was *not* a space so we
-					 * can safely append a space without fear of doubling
-					 * down on spaces
-					 */
-					buffer += ' ';
-					++position;
-				}
-			} else {
-				buffer += paragraph[cint];
-				++position;
-			}
-
-			/* we have pushed past the desired screen width. For this,
-			 * back track to the last space and insert a newline
-			 */
-			if(position >= width) {
-				if(!isspace(paragraph[cint])) {
-					//Perform backtracking
-					//====================
-					for(int k = buffer.size(); k > 0; k--) {
-						if(isspace(buffer[k])) {
-							buffer[k] = '\n';
-							break;
-						}
-					}
-
-					/* reset the position back to 1 */
-					position = 1;
-				}
-			}
-		}
-
-		return buffer;
-	}
 
 	void player::set_shared_ptr(player_ptr_t& self_ptr) {
 		std::cerr << "[deprecated] set_shared_ptr\n";
@@ -538,26 +461,13 @@ namespace mods {
 		if(rnum < 0 || std::size_t(rnum) >= world.size()){
 			return;
 		}
-		if(world[rnum].description) {
-			std::string colored = mods::globals::color_eval(static_cast<const char*>(world[rnum].description));
-			/* TODO: get status of outside world, if EMP, then replace phrase with emp phrase */
-			auto player = this;
-			auto value = PLAYER_GET("screen_width");
-
-			if(value.length()) {
-				auto i_value = mods::util::stoi(value);
-
-				if(i_value.has_value()) {
-					stc(word_wrap(colored,i_value.value()) + "\r\n");
-				}
-			} else {
-				stc(word_wrap(colored,80) + "\r\n");
-			}
-		}
+		raw_send(world[rnum].description);
 		if(((get_prefs()) & PRF_OVERHEAD_MAP)){
-			std::string map_string(mods::overhead_map::generate<mods::player*>(this,room()).data());
-			stc(map_string.c_str());
+			stc(mods::overhead_map::generate<mods::player*>(this,room()));
 		}
+	}
+	void player::raw_send(const mods::string& str){
+		 write_to_descriptor(m_desc->descriptor,str.c_str());
 	}
 	mods::string player::weapon_name(){
 		return GET_EQ(m_char_data, WEAR_WIELD)->name;

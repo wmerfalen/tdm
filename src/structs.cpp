@@ -337,7 +337,7 @@ room_data::~room_data() {
 						return 0; 
 					}
 
-					result = write_to_descriptor(descriptor,output.c_str());
+					result = write_to_descriptor(descriptor,mods::globals::color_eval(output).c_str());
 
 					/* Handle snooping: prepend "% " and send to snooper. */
 					if(snoop_by) {

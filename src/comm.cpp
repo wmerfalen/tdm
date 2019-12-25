@@ -2084,7 +2084,7 @@ size_t send_to_char(struct char_data *ch, const char *messg, ...) {
 		va_list args;
 
 		va_start(args, messg);
-		left = vwrite_to_output(*ch->desc, mods::globals::color_eval(messg).c_str(), args);
+		left = vwrite_to_output(*ch->desc, messg, args);
 		va_end(args);
 		return left;
 	}

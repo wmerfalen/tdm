@@ -12,6 +12,7 @@ namespace mods::weapon::type {
 		SUB_MACHINE_GUN,
 		SNIPER,
 		HANDGUN,
+		PISTOL = rifle::HANDGUN,
 		MACHINE_PISTOL,
 		LIGHT_MACHINE_GUN,
 		__RIFLE_FIRST = SHOTGUN,

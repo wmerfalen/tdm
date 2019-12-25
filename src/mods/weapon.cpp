@@ -200,13 +200,13 @@ namespace mods::weapon {
 		auto obj = base_explosive_object();
 		obj->explosive(mw_explosive::SMOKE_GRENADE);
 		obj->explosive()->type = mw_explosive::SMOKE_GRENADE;
-		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
-		obj->name = strdup("A smoke grenade");
+		/** [ APPEARS ]: when you 'look smoke' or 'examine smoke' @act.informative.cpp */
+		obj->name = strdup("Smoke grenade");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
 		obj->description = strdup("A smoke grenade is lying here.");
 		/** [ APPEARS ]: when you type inv */
-		obj->short_description = strdup("smoke grenade <short>");
-		obj->action_description = strdup("smoke grenade <action>");      /* What to write when used          */
+		obj->short_description = strdup("Smoke grenade");
+		obj->action_description = strdup("smoke grenade");      /* What to write when used          */
 		return std::move(obj);
 	}
 
@@ -214,13 +214,14 @@ namespace mods::weapon {
 		auto obj = base_explosive_object();
 		obj->explosive(mw_explosive::FLASHBANG_GRENADE);
 		obj->explosive()->type = mw_explosive::FLASHBANG_GRENADE;
-		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
-		obj->name = strdup("A flashbang grenade");
+		/** [ APPEARS ]: when you 'look flashbang' or 'examine flashbang' @act.informative.cpp */
+		obj->name = strdup("flashbang grenade flash");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
 		obj->description = strdup("A flashbang grenade is lying here.");
 		/** [ APPEARS ]: when you type inv */
-		obj->short_description = strdup("flash grenade <short>");
-		obj->action_description = strdup("flash grenade <action>");      /* What to write when used          */
+		/** [ APPEARS ]: when you type remove "flash" */
+		obj->short_description = strdup("a flashbang grenade");
+		obj->action_description = strdup("a flashbang grenade <action>");      /* What to write when used          */
 		return std::move(obj);
 	}
 
@@ -250,5 +251,50 @@ namespace mods::weapon {
 		return std::move(obj);
 	}
 
+	obj_data_ptr_t new_pistol_object(){
+		auto obj = base_rifle_object();
+		obj->weapon(1);
+		/** TODO: fill the uuid in */
+		obj->uuid = mods::globals::obj_uuid();
+
+		/** TODO: determine clip size */
+		obj->weapon()->ammo = 7;
+		/** TODO: needs to be whatever the rifle's max is */
+		obj->weapon()->ammo_max = 90;
+		obj->weapon()->type = obj->obj_flags.weapon_flags = mods::weapon::PISTOL;
+		obj->obj_flags.clip_size = 7;
+		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
+		obj->name = strdup("Pistol");
+		/** [ APPEARS ]: when you drop it and it's laying on the floor */
+		obj->description = strdup("A pistol is lying here.");
+		/** [ APPEARS ]: when you type inv */
+		obj->short_description = strdup("Pistol <short_description>");
+		obj->action_description = strdup("Pistol action_description");      /* What to write when used          */
+		obj->ex_description = static_cast<extra_descr_data*>(calloc(1,sizeof(extra_descr_data)));
+		obj->ex_description->next = nullptr;
+		obj->ex_description->keyword =  strdup("pistol");
+		obj->weapon()->type = mw_rifle::PISTOL;
+		return std::move(obj);
+	}
+
+	obj_data_ptr_t desert_eagle(){
+		auto obj = new_pistol_object();
+		obj->weapon()->ammo = 7;
+		obj->weapon()->ammo_max = 63; /** 9 clips */
+		obj->weapon()->type = obj->obj_flags.weapon_flags = mods::weapon::PISTOL;
+		obj->obj_flags.clip_size = 7;
+		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
+		obj->name = strdup("A Desert Eagle");
+		/** [ APPEARS ]: when you drop it and it's laying on the floor */
+		obj->description = strdup("A Desert Eagle is lying here.");
+		/** [ APPEARS ]: when you type inv */
+		obj->short_description = strdup("A Desert Eagle");
+		obj->action_description = strdup("deagle desert eagle pistol action_description");      /* What to write when used          */
+		obj->ex_description = static_cast<extra_descr_data*>(calloc(1,sizeof(extra_descr_data)));
+		obj->ex_description->next = nullptr;
+		obj->ex_description->keyword =  strdup("deagle");
+		obj->weapon()->type = mw_rifle::PISTOL;
+		return std::move(obj);
+	}
 
 };

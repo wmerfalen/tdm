@@ -4,6 +4,7 @@
 #include <strings.h>
 #include <iostream>
 #include <string>
+#include <string_view>
 #undef PQXX_TR1_HEADERS
 #include <pqxx/pqxx>
 #define m_debug(a){;;} /* do{ std::cerr << "[m_debug]: " << a << "\n"; }while(0); */
@@ -11,6 +12,7 @@ namespace mods {
 	struct string {
 		string();
 		string(const char* str);
+		std::string_view view();
 		//string(const pqxx::tuple::reference & str);
 		//string(const pqxx::result::reference & str);
 #ifdef __MENTOC_USE_PQXX_RESULT__

@@ -7,6 +7,83 @@
 
 namespace mods {
 	namespace util {
+	std::string&& word_wrap(std::string_view paragraph,int width) {
+		std::string buffer;
+
+		if(width <= 0) {
+			return std::move(std::string(paragraph));
+		}
+
+		int position = 1;
+
+		for(unsigned cint = 0; cint < paragraph.length(); cint++) {
+			/* if we run into an open brace then that means it's a color code.
+			 * Push past the color code and decrement the position counter as
+			 * we go.
+			 */
+			if(paragraph[cint] == '{') {
+				while(paragraph[cint] != '}'
+						&& cint < paragraph.length()
+						) {
+					buffer += paragraph[cint++];
+					--position;
+				}
+
+				buffer += '}';
+				continue;
+			}
+
+			/* Edge case where the first character in the paragraph is
+			 * a color code. The position needs to be 1 since after pushing
+			 * past the color code, the position would be a negative value
+			 */
+			if(position < 1) {
+				position = 1;
+			}
+
+			if(isspace(paragraph[cint])) {
+				/* if the buffer is non-empty and that most recent character
+				 * pushed is a space then we would be essentially doubling
+				 * up on spaces if we didn't 'continue' here.
+				 */
+				if(buffer.begin() != buffer.end() &&
+						isspace(*(buffer.end() - 1))) {
+					continue;
+				} else {
+					/* the most recent character was *not* a space so we
+					 * can safely append a space without fear of doubling
+					 * down on spaces
+					 */
+					buffer += ' ';
+					++position;
+				}
+			} else {
+				buffer += paragraph[cint];
+				++position;
+			}
+
+			/* we have pushed past the desired screen width. For this,
+			 * back track to the last space and insert a newline
+			 */
+			if(position >= width) {
+				if(!isspace(paragraph[cint])) {
+					//Perform backtracking
+					//====================
+					for(int k = buffer.size(); k > 0; k--) {
+						if(isspace(buffer[k])) {
+							buffer[k] = '\n';
+							break;
+						}
+					}
+
+					/* reset the position back to 1 */
+					position = 1;
+				}
+			}
+		}
+
+		return std::move(buffer);
+	}
 			//uint64_t aff2legacy(mods::flags::aff f){
 			//	for(unsigned i=0; i < mods::flags::aff_flags.size();i++){
 			//		if(mods::flags::aff_flags[i].first == f){
