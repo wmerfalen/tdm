@@ -20,6 +20,7 @@
 #include "mods/debug.hpp"
 #include "mods/loops.hpp"
 #include "mods/affects.hpp"
+#include <algorithm>
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -1093,26 +1094,37 @@ size_t _old_unused_vwrite_to_output_unused_(mods::descriptor_data &t, const char
 		strcpy(&txt[0] + size - strlen(text_overflow), text_overflow);	/* strcpy: OK */
 	}else{
 		txt[size] = '\0';
-		t.queue_output(&txt[0]);	/* strcpy: OK (size checked above) */
+		t.queue_output(&txt[0],0,0);	/* strcpy: OK (size checked above) */
 	}
 	return 0;
 }
 
 size_t vwrite_to_output(mods::descriptor_data &t, const char *format, va_list args) {
-	char txt[MAX_STRING_LENGTH];
-	memset(txt,0,MAX_STRING_LENGTH);
+	if(!format || format[0] == '\0'){
+		std::cerr << "[vwrite_to_output] format is null\n";
+	}
+	static constexpr int txt_buffer_size_total = MAX_STRING_LENGTH;
+	static constexpr int txt_buffer_size_allowable = txt_buffer_size_total - 12;
+	std::array<char,txt_buffer_size_total> txt;
+	std::fill(txt.begin(),txt.end(),0);
+
 	int size;
 
-	size = vsnprintf(txt, MAX_STRING_LENGTH-1, format, args);
+	size = vsnprintf(&txt[0], txt_buffer_size_allowable, format, args);
+	if(size == 0){
+		std::cerr << "zero-sized vsnprintf return val: '" << &txt[0] << "'\n";
+		return 0;
+	}
+	std::cerr << "[size:total] " << size << ":" << txt_buffer_size_allowable << "\n";
 
 	/* If exceeding the size of the buffer, truncate it for the overflow message */
 	if(size < 0) {
-		size = MAX_STRING_LENGTH - 1;
-		strcpy(txt + size - strlen(text_overflow), text_overflow);	/* strcpy: OK */
+		size = txt_buffer_size_allowable;
+		strncpy(&txt[0] + size - strlen(text_overflow), text_overflow,txt_buffer_size_allowable);
 	}else{
-		txt[size] = '\0';
+		txt[std::min(size,txt_buffer_size_allowable)] = '\0';
 	}
-	t.queue_output(&txt[0]);	/* strcpy: OK (size checked above) */
+	t.queue_output(&txt[0],0,0);
 	return 0;
 }
 
@@ -1458,7 +1470,6 @@ ssize_t perform_socket_write(socket_t desc, const char *txt, size_t length) {
 	/* Looks like the error was fatal.  Too bad. */
 	return (-1);
 }
-
 
 
 /*
@@ -2092,6 +2103,11 @@ size_t send_to_char(struct char_data *ch, const char *messg, ...) {
 	return 0;
 }
 
+void write_to_char(char_data *ch, std::string_view msg, bool newline,bool plain) {
+	if(ch->desc) {
+		ch->desc->queue_output(msg,newline,plain);
+	}
+}
 
 void send_to_all(const char *messg, ...) {
 	va_list args;
@@ -2339,7 +2355,7 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 	*(++buf) = '\n';
 	*(++buf) = '\0';
 
-	to->desc->queue_output(CAP(lbuf));
+	to->desc->queue_output(CAP(lbuf),0,0);
 }
 
 

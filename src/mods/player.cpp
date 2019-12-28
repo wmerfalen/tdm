@@ -273,8 +273,8 @@ namespace mods {
 		}
 	}
 	bool player::has_thermite() {
-		stc("[stub] FIXME\r\n");
 		/** TODO: FIXME */
+		write_to_char(m_char_data, "[stub] FIXME",1,1);
 		return false;
 	}
 	std::shared_ptr<mods::classes::sniper> 	player::cl_sniper(){
@@ -404,58 +404,61 @@ namespace mods {
 		}
 		return 0;
 	}
+	void player::psendln(std::string_view str) {
+		write_to_char(m_char_data, str,1,1);
+	}
+	void player::psendln(mods::string& str) {
+		write_to_char(m_char_data, str.view(),1,1);
+	}
 	void player::sendln(mods::string& str) {
-		stc(str.c_str());
-		stc("\r\n");
+		write_to_char(m_char_data, str.view(), 1,0);
 	}
 	void player::sendln(std::string_view str) {
-		stc(str.data());
-		stc("\r\n");
+		write_to_char(m_char_data, str, 1,0);
 	}
 	void player::stc_room(const room_rnum& rnum) {
 		if(rnum < 0 || std::size_t(rnum) >= world.size()){
 			return;
 		}
 		if(world[rnum].name) {
-			sendln(world[rnum].name);
+			/** note: using 1 for the plain parameter since colr eval is done on room load from postgres */
+			write_to_char(m_char_data, world[rnum].name.view(),1,1);
 		}
 		if(builder_mode()){
-			stc(std::string("[room_id:") + std::to_string(room()) + "|number:" + 
-					std::to_string(world[room()].number) + "|zone:" + 
-					std::to_string(world[room()].zone)
-				 );
+			write_to_char(m_char_data,(std::string("[room_id:") + std::to_string(room()) + "|number:" + 
+						std::to_string(world[room()].number) + "|zone:" + 
+						std::to_string(world[room()].zone)
+					),1,1
+			);
 		}
 	}
 	void player::stc(const char* m) {
-		if(m) {
-			if(m_capture_output) {
-				m_captured_output += m;
-			}
-
-			send_to_char(m_char_data,m);
+		/* FIXME: this does not scale */
+		if(m_capture_output) {
+			m_captured_output += m;
 		}
+		write_to_char(m_char_data,m,0,0);
 	}
 	void player::stc(const mods::string& m){
-		stc(m.c_str());
+		write_to_char(m_char_data,m.view(),0,0);
 	}
 	void player::stc(std::string_view sview) {
-		send_to_char(m_char_data,sview.data());
+		write_to_char(m_char_data,sview,0,0);
 	}
 	void player::stc(const std::string m) {
-		if(m.length()) {
-			if(m_capture_output) {
-				m_captured_output += m;
-			}
-
-			send_to_char(m_char_data,m.c_str());
+		/* FIXME: this does not scale */
+		if(m_capture_output) {
+			m_captured_output += m;
 		}
+		write_to_char(m_char_data,m,0,0);
 	}
 	void player::stc(int m) {
 		if(m_capture_output) {
 			m_captured_output += std::to_string(m);
 		}
 
-		send_to_char(m_char_data,std::to_string(m).c_str());
+		/** note, using 1 for plain parameter */
+		write_to_char(m_char_data,std::to_string(m).c_str(),0,1);
 	}
 	void player::stc_room_desc(const room_rnum& rnum) {
 		if(rnum < 0 || std::size_t(rnum) >= world.size()){
@@ -486,9 +489,6 @@ namespace mods {
 		}
 
 		return nullptr;
-	}
-	void player::exits() {
-		do_auto_exits(m_char_data);
 	}
 	void player::set_char_on_descriptor(std::deque<descriptor_data>::iterator it){
 		it->character = this->cd();
@@ -672,7 +672,7 @@ namespace mods {
 		}
 	}
 	void player::done() {
-		this->stc("It has been done.\n");
+		psendln("It has been done.");
 	}
 	bool player::has_builder_data(){
 		if(builder_data){

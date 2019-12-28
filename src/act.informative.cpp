@@ -628,7 +628,7 @@ void look_at_room(struct char_data *ch, int ignore_brief) {
 
 	/* autoexits */
 	if(!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_AUTOEXIT)) {
-		player->exits();    //do_auto_exits(ch);
+		do_auto_exits(ch);
 	}
 
 	/* TODO: show map */

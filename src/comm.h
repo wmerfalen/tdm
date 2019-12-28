@@ -45,6 +45,7 @@ int set_sendbuf(socket_t s);
 void setup_log(const char *filename, int fd);
 int open_logfile(const char *filename, FILE *stderr_fp);
 size_t	send_to_char(struct char_data *ch, const char *messg, ...) __attribute__((format(printf, 2, 3)));
+void write_to_char(char_data* ch, std::string_view msg,bool newline, bool plain);
 void	send_to_all(const char *messg, ...) __attribute__((format(printf, 1, 2)));
 void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
 void send_to_room_except(room_rnum, const std::vector<char_data*>&, const char *, ...);

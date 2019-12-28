@@ -13,6 +13,7 @@ namespace mods {
 		string();
 		string(const char* str);
 		std::string_view view();
+		std::string_view view() const;
 		//string(const pqxx::tuple::reference & str);
 		//string(const pqxx::result::reference & str);
 #ifdef __MENTOC_USE_PQXX_RESULT__

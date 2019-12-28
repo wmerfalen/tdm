@@ -17,6 +17,9 @@ namespace mods {
 	std::string_view string::view(){
 		return m_str;
 	}
+	std::string_view string::view() const {
+		return m_str;
+	}
 
 	/*
 	string::string(const pqxx::result::reference & str){

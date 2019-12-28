@@ -47,9 +47,9 @@ ACMD(do_say) {
 	if(!*argument) {
 		send_to_char(ch, "Yes, but WHAT do you want to say?\r\n");
 	} else {
-		char buf[MAX_INPUT_LENGTH + 12];
+		char buf[1024 + 12];
 
-		snprintf(buf, sizeof(buf), "$n says, '%s'", argument);
+		snprintf(buf, sizeof(buf) - 12, "$n says, '%s'", argument);
 		act(buf, FALSE, ch, 0, 0, TO_ROOM);
 
 		if(!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_NOREPEAT)) {

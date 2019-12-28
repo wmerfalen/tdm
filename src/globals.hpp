@@ -128,7 +128,7 @@ namespace mods {
 		char_data* create_char();
 		int file_to_lmdb(const std::string& file,const std::string& key);
 		int opposite_dir(int);
-		std::string color_eval(std::string final_buffer);
+		std::string color_eval(std::string_view buffer);
 		std::string replace_all(std::string str, const std::string& from, const std::string& to);
 		const char* say_random(const mods::ai_state::event_type_t&);
 		bool command_interpreter(player_ptr_t,const std::string& argument);

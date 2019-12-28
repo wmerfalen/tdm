@@ -1373,7 +1373,7 @@ extern int next_room_pavement_transaction_id();
 			std::shared_ptr<mods::descriptor_data> snooping; /* Who is this char snooping	*/
 			std::shared_ptr<mods::descriptor_data> snoop_by; /* And who is snooping this char	*/
 			bool has_output;
-			size_t queue_output(const std::string &s);
+			void queue_output(std::string_view msg,bool newline,bool plain);
 			size_t flush_output();
 			private:
 			queue_behaviour_enum_t m_queue_behaviour;

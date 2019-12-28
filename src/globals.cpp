@@ -495,9 +495,9 @@ namespace mods {
 
 			return NORTH;
 		}
-		std::string color_eval(std::string in_buffer) {
+		std::string color_eval(std::string_view buffer) {
 			std::cerr << "[color-eval]";
-			std::map<std::string,std::string> colors = {
+			std::map<std::string_view,std::string_view> colors = {
 				{"blu","\033[34m"},
 				{"gld","\033[33m"},
 				{"grn","\033[32m"},
@@ -506,18 +506,18 @@ namespace mods {
 				{"yel","\033[93m"}
 			};
 			std::string final_buffer = "";
-			unsigned len = in_buffer.length();
-			for(unsigned i=0;i < len;i++){
-				auto current_char = in_buffer[i];
+			const std::size_t len = buffer.length();
+			for(std::size_t i=0;i < len;i++){
+				auto current_char = buffer[i];
 				if(current_char == '{'){
-					if(len > i + 5 && in_buffer[i+5] == '}' && 
-							in_buffer[i+1] == '/'){
+					if(len > i + 5 && buffer[i+5] == '}' && 
+							buffer[i+1] == '/'){
 						i += 5;
 						final_buffer += "\033[0m";
 						continue;
 					}
-					if(len > i + 4 && in_buffer[i+4] == '}'){
-						auto substring = in_buffer.substr(i+1,3);
+					if(len > i + 4 && buffer[i+4] == '}'){
+						const std::string_view substring = buffer.substr(i+1,3);
 						if(colors[substring].length()){
 							final_buffer += colors[substring];
 							i += 4;

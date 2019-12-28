@@ -316,7 +316,6 @@ namespace mods {
 			/* communication functions */
 			void stc_room(const room_rnum&);
 			void stc_room_desc(const room_rnum&);
-			void exits();
 			void stc(const char* m);
 			void stc(const std::string m);
 			void stc(const mods::string& m);
@@ -324,6 +323,9 @@ namespace mods {
 			void stc(std::string_view);
 			void sendln(std::string_view str);
 			void sendln(mods::string& str);
+			/** 'plain' sendln (no color eval needed) */
+			void psendln(std::string_view str);
+			void psendln(mods::string& str);
 			void raw_send(const mods::string&);
 			void done();
 

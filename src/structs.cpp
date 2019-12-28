@@ -310,21 +310,25 @@ room_data::~room_data() {
 		dir_option[i]->to_room = to_room;
 	}
 	namespace mods{
-		size_t descriptor_data::queue_output(const std::string &s){
+		void descriptor_data::queue_output(std::string_view msg, bool newline, bool plain) {
 			switch(m_queue_behaviour){
 				case queue_behaviour_enum_t::NORMAL:
-					output += s;
+					if(plain){
+						output += msg;
+					} else {
+						output += mods::globals::color_eval(msg);
+					}
+					if(newline){ output += "\r\n"; }
 					has_output = true;
-					return s.length();
-					break;
+					return;
 				case queue_behaviour_enum_t::IGNORE_ALL:
 					has_output = false;
-					return 0;
+					return;
 				case queue_behaviour_enum_t::REDIRECT_TO_PLAYER:
 				case queue_behaviour_enum_t::REDIRECT_TO_FILESYSTEM:
 				case queue_behaviour_enum_t::REDIRECT_TO_DB:
 				default:
-					return 0;
+					return;
 			}
 		}
 		size_t mods::descriptor_data::flush_output(){
@@ -337,7 +341,7 @@ room_data::~room_data() {
 						return 0; 
 					}
 
-					result = write_to_descriptor(descriptor,mods::globals::color_eval(output).c_str());
+					result = write_to_descriptor(descriptor,output.c_str());
 
 					/* Handle snooping: prepend "% " and send to snooper. */
 					if(snoop_by) {
