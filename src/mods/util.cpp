@@ -219,6 +219,49 @@ namespace mods {
 		return true;
 		}
 	}
+	obj_data* parse_object(std::shared_ptr<mods::player>& player,std::string_view arg, int start_at, int* last_index) {
+		auto ch = player->cd();
+		int i, number;
+		static constexpr int max_len = MAX_INPUT_LENGTH;
+		std::string buffer;
+		int ctr = start_at;
+		while(isspace(arg[ctr]) && ++ctr < max_len && ctr < arg.length()){}
+		while(!isspace(arg[ctr]) && ctr < max_len && ctr < arg.length()){
+			buffer += arg[ctr++];
+		}
+		std::cerr << "object name: '" << buffer << "'\n";
+		if(last_index){
+			*last_index = ctr;
+		}
+		char* tmp_name = buffer.data();
+		if(!(number = get_number(&tmp_name))) {
+			return nullptr;
+		}
+		for(i = 0; i < NUM_WEARS; i++){
+			if(GET_EQ(ch, i) && isname(buffer.data(), GET_EQ(ch, i)->name) && --number == 0) {
+				return GET_EQ(ch, i);
+			}
+		}
+		return get_obj_in_list_vis(ch, buffer.data(), &number, ch->carrying);
+	}
+
+	int parse_direction(std::string_view arg, int start_at, int* last_index) {
+		static constexpr int max_len = MAX_INPUT_LENGTH;
+		std::string buffer;
+		int ctr = start_at;
+		static constexpr int max_dir_length = 5;
+		int dir_len = 0;
+		while(isspace(arg[ctr]) && ++ctr < max_len && ctr < arg.length()){}
+		while(!isspace(arg[ctr]) && ctr < max_len && ctr < arg.length()){
+			buffer += arg[ctr++];
+			if(++dir_len >= max_dir_length){ break; }
+		}
+		std::cerr << "direction: '" << buffer << "'\n";
+		if(last_index){
+			*last_index = ctr;
+		}
+		return NORTH;
+	}
 
 	};
 };
@@ -231,5 +274,9 @@ namespace mods::util::err {
 		return std::string(static_cast<const char*>(&buf[0]));
 	}
 };
+	objdir_t parse_objdir(std::shared_ptr<mods::player>& player,std::string_view arg){
+		int last_index = 0;
+		return { mods::util::parse_object(player, arg, 0,&last_index), mods::util::parse_direction(arg, last_index+1, nullptr)};
+	}
 
 #endif

@@ -42,44 +42,8 @@ using mw_explosive = mods::weapon::type::explosive;
 using mw_rifle = mods::weapon::type::rifle;
 using mw_drone = mods::weapon::type::drone;
 
-/* local functions */
-ACMD(do_assist);
-ACMD(do_hit);
-ACMD(do_kill);
-ACMD(do_backstab);
-ACMD(do_order);
-ACMD(do_flee);
-ACMD(do_bash);
-ACMD(do_rescue);
-ACMD(do_kick);
-
-
-/* Debugging type stuff */
-ACMD(do_rnum);
-
-/* Military actions */
-ACMD(do_scan);
-ACMD(do_breach);
-
-/* explosives */
-ACMD(do_plant);
-ACMD(do_grenade);
-
-/* timed devices, misc, other */
-ACMD(do_activate);
-
-
-ACMD(do_rnum) {
-	send_to_char(ch, std::to_string(ch->in_room).c_str());
-}
-ACMD(do_ammo) {
-	MENTOC_PREAMBLE();
-	if(player->weapon()){
-		player->weapon()->ammo += 12;
-	}
-}
-
 using vpd = mods::scan::vec_player_data;
+
 /* Arguments:
  * throw <object> <direction> <count>
  */
@@ -106,10 +70,8 @@ ACMD(do_throw) {
 	}
 
 	two_arguments(argument, &direction[0], &count[0]);
-	std::cerr << (char*)&direction[0] << "|" << (char*)&count[0] << "\n";
 
 	int cnt = atoi(static_cast<const char*>(&count[0]));
-	player->sendln("Throwing " + std::to_string(cnt) + " rooms away");
 
 	if(cnt > 4) {
 		player->sendln("But you can only throw up to 4 rooms away!");
@@ -128,8 +90,6 @@ ACMD(do_throw) {
 		player->sendln("You're not holding anything!");
 		return;
 	}
-	d("got equipment (legacy)");
-
 	mods::projectile::legacy_throw_object(player, dir, cnt, held_object, "lob");
 }
 

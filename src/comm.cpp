@@ -784,6 +784,7 @@ void game_loop(socket_t mother_desc) {
 		}
 
 		if(mods::debug::debug_state->show_tics()){
+			std::cerr << "tic|";
 		}
 		++tics;
 	}
@@ -1101,7 +1102,7 @@ size_t _old_unused_vwrite_to_output_unused_(mods::descriptor_data &t, const char
 
 size_t vwrite_to_output(mods::descriptor_data &t, const char *format, va_list args) {
 	if(!format || format[0] == '\0'){
-		std::cerr << "[vwrite_to_output] format is null\n";
+		return 0;
 	}
 	static constexpr int txt_buffer_size_total = MAX_STRING_LENGTH;
 	static constexpr int txt_buffer_size_allowable = txt_buffer_size_total - 12;
@@ -1112,10 +1113,8 @@ size_t vwrite_to_output(mods::descriptor_data &t, const char *format, va_list ar
 
 	size = vsnprintf(&txt[0], txt_buffer_size_allowable, format, args);
 	if(size == 0){
-		std::cerr << "zero-sized vsnprintf return val: '" << &txt[0] << "'\n";
 		return 0;
 	}
-	std::cerr << "[size:total] " << size << ":" << txt_buffer_size_allowable << "\n";
 
 	/* If exceeding the size of the buffer, truncate it for the overflow message */
 	if(size < 0) {

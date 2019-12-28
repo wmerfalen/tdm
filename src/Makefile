@@ -34,7 +34,7 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 LIBS = $(opnssl) -lc -lm -lpqxx -lpq -lssl -lcrypto -l$(yamlcpp_object)
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
-					 act.wizard alias ban boards bsd-snprintf castle \
+					 act.wizard act.demolitions alias ban boards bsd-snprintf castle \
 					 class comm config constants db fight globals graph\
 					 handler house interpreter limits magic mail mobact\
 					 modify objsave olc random shop spec_assign spec_procs\

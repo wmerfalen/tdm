@@ -496,7 +496,6 @@ namespace mods {
 			return NORTH;
 		}
 		std::string color_eval(std::string_view buffer) {
-			std::cerr << "[color-eval]";
 			std::map<std::string_view,std::string_view> colors = {
 				{"blu","\033[34m"},
 				{"gld","\033[33m"},
@@ -705,7 +704,6 @@ namespace mods {
 							}while(new_room_id >= world.size());
 							register_room(0);
 							world[new_room_id].number = next_room_vnum();
-							std::cerr << "[globals] new_room_id: " << new_room_id << " | world.size(): " << world.size() << "\n";
 						mods::builder::pave_to(player,&world[new_room_id],door,new_room_id);
 						player->set_room(new_room_id);
 						mods::globals::rooms::char_to_room(player->room(),player->cd());
@@ -799,7 +797,6 @@ namespace mods {
 				MENTOC_PREAMBLE();
 				auto target_room = room;
 				if(boot_type == boot_type_t::BOOT_HELL){
-					std::cerr << "boot type hell. NOT sending to requested room of: " << room << "\n";
 					target_room = 0;
 				}
 				if(target_room >= room_list.size()){

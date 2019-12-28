@@ -25,7 +25,9 @@ static inline std::string operator "" _s(const char* s,uint64_t i) {
 #endif
 
 extern std::vector<room_data> world;
-
+extern int get_number(char **name);
+extern int isname(const char *str, const char *namelist);
+extern struct obj_data *get_obj_in_list_vis(struct char_data *ch, char *name, int *number, struct obj_data *list);
 namespace mods::util {
 	std::string&& word_wrap(std::string_view paragraph,int width);
 	using directory_list_t = std::vector<std::string>;
@@ -36,6 +38,7 @@ namespace mods::util {
 	static inline void detexturize_room(room_rnum room_id, room_data::texture_type_t texture_type){
 		world[room_id].remove_texture(texture_type);
 	}
+
 
 namespace detail{ 
 template<typename... Args>
@@ -222,10 +225,18 @@ std::ostream& log(Args... args); /*{
 			}
 			return -1;
 		}
+	obj_data* parse_object(std::shared_ptr<mods::player>& player,std::string_view arg, int start_at, int* last_index); 
+	int parse_direction(std::string_view arg, int start_at, int* last_index); 
 };
 
 namespace mods::util::err {
 	std::string get_string(int);
 };
+	struct objdir_struct {
+		obj_data* obj;
+		int dir;
+	};
+	using objdir_t = objdir_struct;
+	objdir_t parse_objdir(std::shared_ptr<mods::player>& player,std::string_view arg);
 
 #endif

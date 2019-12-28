@@ -316,6 +316,7 @@ ACMD(do_affect_me);
 ACMD(do_givemegold);
 ACMD(do_givemenades);
 ACMD(do_snipe);
+ACMD(do_install);
 ACMD(do_giveme_frag_grenades);
 ACMD(do_giveme_flashbang_grenades);
 ACMD(do_giveme_incendiary_grenades);
@@ -349,7 +350,7 @@ ACMD(do_room_list);
 ACMD(do_drone);
 ACMD(do_quest);
 ACMD(do_js);
-ACMD(do_ammo);
+//ACMD(do_ammo);
 
 /** debug mods */
 ACMD(do_point_update);
@@ -397,7 +398,7 @@ ACMD(do_wizutil);
 ACMD(do_write);
 ACMD(do_zreset);
 
-ACMD(do_rnum);
+//ACMD(do_rnum);
 
 /* Military actions */
 ACMD(do_scan);
@@ -641,7 +642,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "rescue"   , POS_FIGHTING, do_rescue   , 1, 0 },
 	{ "restore"  , POS_DEAD    , do_restore  , LVL_GOD, 0 },
 	{ "return"   , POS_DEAD    , do_return   , 0, 0 },
-	{ "rnum"    , POS_STANDING, do_rnum     , 0, 0 },
+	//{ "rnum"    , POS_STANDING, do_rnum     , 0, 0 },
 	{ "roll"     , POS_RESTING , do_action   , 0, 0 },
 	{ "roomflags", POS_DEAD    , do_gen_tog  , LVL_IMMORT, SCMD_ROOMFLAGS },
 	{ "ruffle"   , POS_STANDING, do_action   , 0, 0 },
@@ -715,11 +716,12 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** COMBAT MECHANICS */
 	/** ---------------- */
 	{ "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
+	{ "install"  , POS_RESTING , do_install   , 0, 0 },	/** i.e.: claymore mine */
 	//TODO code me{ "plant" , POS_RESTING , do_plant , 0, 0},
 	//TODO code me { "activate" , POS_RESTING , do_activate , 0, 0},
 	{ "drone"  , POS_RESTING , do_drone   , 0, 0 },
 	{ "throw"  , POS_RESTING , do_throw   , 0, 0 },
-	{ "ammo"  , POS_RESTING , do_ammo   , 0, 0 },
+	//{ "ammo"  , POS_RESTING , do_ammo   , 0, 0 },
 	/** -------------------------- */
 	/** "GIVE ME" COMBAT MECHANICS */
 	/** -------------------------- */
@@ -734,7 +736,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** ------------------------------ */
 	/** END "GIVE ME" COMBAT MECHANICS */
 	/** ------------------------------ */
-	{ "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
 	/** --------------------- */
 	/** END COMBAT MECHANICS  */
 	/** --------------------- */

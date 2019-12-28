@@ -17,9 +17,7 @@ namespace mods {
 		template <typename T>
 		void queue_affect_on_room(T affects,room_rnum room_id){
 				auto people = mods::globals::room_list[room_id];
-				std::cerr << "[queue_affect_remove]-> people in " << room_id << ": " << people.size() << "\n";
 				if(people.size() == 0){
-					std::cerr << "[queue_affect_remove]-> not gonna defer lambda\n";
 					return;
 				}
 				for(auto & player : people){
@@ -157,6 +155,7 @@ namespace mods {
 					}
 				}
 			}
+			obj_from_room(device);
 		}
 		int grenade_damage(player_ptr_t victim,obj_data* projectile){
 			mods::projectile::explosive_damage(victim,projectile);
@@ -206,25 +205,20 @@ namespace mods {
 		}
 		void legacy_explode(room_rnum room_id,obj_data* object) {
 			if(room_id >= world.size()){
-				d("invalid room id leg explode");
 				log("[error]: mods::projectile::explode received room_id greater than world.size()");
 				return;
 			}
 			if(!object){
-				d("invalid object leg explode");
 				log("[error]: mods::projectile::explode received invalid object to blow up");
 				return;
 			}
 			if(object->explosive()->type == mw_explosive::EXPLOSIVE_NONE){
-				d("invalid explosive type leg explode");
 				log("[error]: mods::projectile::explode received EXPLOSIVE_NONE");
 				return;
 			}
-			//uint16_t cooldown_ticks = 5;
-			//std::size_t blast_radius = 2;	/** TODO: grab from explosive()->blast_radius */
+			std::size_t blast_radius = 2;	/** TODO: grab from explosive()->blast_radius */
 			switch(object->explosive()->type){
 				default: 
-					d("invalid explosive type in switch");
 					log("SYSERR: Invalid explosive type(%d) in %s:%d",object->explosive()->type,__FILE__,__LINE__);
 					return;
 				case mw_explosive::REMOTE_EXPLOSIVE:
@@ -254,10 +248,8 @@ namespace mods {
 					break;
 				case mw_explosive::FLASHBANG_GRENADE:
 					send_to_room(room_id,"Your senses become scattered as a bright flash of light fills the room!\r\n");
-					d("flashbang explode");
 					break;
 			}
-			d("processed sending of message of grenade type explosion");
 			for(auto & person : mods::globals::room_list[room_id]) {
 				switch(object->explosive()->type){
 					default: 
@@ -287,18 +279,16 @@ namespace mods {
 						mods::projectile::smoke_room(room_id);
 						break;
 					case mw_explosive::FLASHBANG_GRENADE:
-						d("flashbang explode (not using helper)");
 						break;
 				}
 			}
 			if(object->explosive()->type == mw_explosive::FLASHBANG_GRENADE){
-				d("queueing blind and disorient on room" << room_id);
 				queue_on_room( {AFF(BLIND),AFF(DISORIENT)}, room_id);
 			}
 			if(object->explosive()->type == mw_explosive::REMOTE_CHEMICAL){
 				queue_on_room( {AFF(DISORIENT),AFF(POISON)}, room_id);
 			}
-			//mods::projectile::perform_blast_radius(room_id,blast_radius,object);
+			mods::projectile::perform_blast_radius(room_id,blast_radius,object);
 		}
 		/**
 		 * TODO: place the grenade on the floor so that some crazy bastards can potentially throw it back, 
@@ -381,25 +371,21 @@ namespace mods {
 		}
 		int legacy_travel_to(room_rnum from, int direction, std::size_t depth, obj_data* object){
 			room_rnum room_id = resolve_room(from,direction,depth);
-			d("legacy_travel_to: obj_to_room " << room_id << "|room_depth:" << depth);
 			obj_to_room(object,room_id);
 			return room_id;
 		}
 
 		room_rnum resolve_room(room_rnum source_room,int direction,std::size_t depth) {
 			room_rnum room_id = source_room;
-			std::cerr << "resolve_room got source-rrom: " << source_room << "\n";
 
 			auto room_dir = world[source_room].dir_option[direction];
 			for(std::size_t recursive_depth =0; recursive_depth <= depth; recursive_depth++) {
 				room_dir = world[room_id].dir_option[direction];
 				if(!room_dir) {
-					d("invalid room_dir in resolve_room..");
 					return room_id;
 				}
 				if((EXIT_FLAGGED(room_dir, EX_CLOSED) || EXIT_FLAGGED(room_dir,EX_REINFORCED))
 						&& !(EXIT_FLAGGED(room_dir,EX_BREACHED))) {
-					d("reached dead end via close/reinforced");
 					break;
 				}
 
