@@ -773,6 +773,20 @@ enum player_level {
 #else
 		void feed(pqxx::row);
 #endif
+		void feed(std::string in_type,std::string_view feed_file){
+			std::string type = in_type;
+			std::transform(type.begin(),type.end(),type.begin(),
+					[](unsigned char c){ return std::tolower(c); });
+			type = type.substr(strlen("ITEM_"));
+			std::cerr << "[parsed type]:'" << type << "'\n";
+#define MENTOC_OBJ_DATA_FEED_DUAL(r,data,CLASS_TYPE) \
+			if(type.compare( BOOST_PP_STRINGIZE(CLASS_TYPE) ) == 0){\
+				this->CLASS_TYPE(feed_file);\
+			}
+
+			BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_DUAL, ~, MENTOC_ITEM_TYPES_SEQ)
+
+		}
 		void init();
 		obj_data(const obj_data& other){
 			item_number = other.item_number;

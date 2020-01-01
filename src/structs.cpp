@@ -67,6 +67,7 @@ void obj_data::feed(pqxx::row row){
 		std::string obj_file = row["obj_file"].c_str();
 
 		switch(type){
+			MENTOC_OBJ_DATA_FEED_SWITCH
 			default:
 				std::cerr << "[obj_data::feed] WARNING! Unknown 'type' value: " << type << "\n";
 				break;
