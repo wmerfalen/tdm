@@ -27,6 +27,8 @@ headshot_bonus: 3.0 #float
 max_range: 3 #integer,measured in rooms
 range_multiplier: 4.3 #float, multiplied by 
 reload_time: 3.0 #float, measured in seconds
+rounds_per_minute: 120 #integer, measured in bullets
+effective_firing_range: 2 #integer, measured in rooms
 # types
 #######
 # type: SNIPER

@@ -64,19 +64,9 @@ namespace mods::yaml {
 		feed_file = file;
 		YAML::Node node_file = YAML::LoadFile(std::string(file.data()));
 		auto type_string = node_file["type"].as<std::string>();
-#define MENTOC_MWA mw_gadget
-#define MENTOC_FEED(TYPE)\
-		if(type_string.compare(#TYPE) == 0){\
-			type = MENTOC_MWA::TYPE;\
-		}
-		MENTOC_FEED(SENSOR_GRENADE);
-		MENTOC_FEED(GRAPPLING_HOOK);
-		MENTOC_FEED(BARBED_WIRE);
-		MENTOC_FEED(CAMERA);
-		MENTOC_FEED(MOTION_SENSOR);
-		MENTOC_FEED(DEPLOYABLE_SHIELD);
-#undef MENTOC_FEED
-#undef MENTOC_MWA
+
+		MENTOC_FEED_GADGETS
+
 		manufacturer = node_file["manufacturer"].as<std::string>();
 		name = node_file["name"].as<std::string>();
 		vnum = node_file["vnum"].as<int>();
@@ -117,26 +107,9 @@ namespace mods::yaml {
 		feed_file = file;
 		YAML::Node node_file = YAML::LoadFile(std::string(file.data()));
 		auto type_string = node_file["type"].as<std::string>();
-#define MENTOC_MWA mw_armor
-#define MENTOC_FEED(TYPE)\
-		if(type_string.compare(#TYPE) == 0){\
-			type = MENTOC_MWA::TYPE;\
-		}
-		MENTOC_FEED(VEST);
-		MENTOC_FEED(LEGS);
-		MENTOC_FEED(GAUNTLETS);
-		MENTOC_FEED(SHOULDER_PADS);
-		MENTOC_FEED(HELMET);
-		MENTOC_FEED(HAT);
-		MENTOC_FEED(EYEWEAR);
-		MENTOC_FEED(GOGGLES);
-		MENTOC_FEED(BACKPACK);
-		MENTOC_FEED(WAIST_PACK);
-		MENTOC_FEED(VEST_PACK);
-		MENTOC_FEED(ELBOW_GUARDS);
-		MENTOC_FEED(GLOVES);
-#undef MENTOC_FEED
-#undef MENTOC_MWA
+
+		MENTOC_FEED_ARMORS
+
 		manufacturer = node_file["manufacturer"].as<std::string>();
 		name = node_file["name"].as<std::string>();
 		vnum = node_file["vnum"].as<int>();
@@ -168,16 +141,9 @@ namespace mods::yaml {
 		feed_file = file;
 		YAML::Node node_file = YAML::LoadFile(std::string(file.data()));
 		auto type_string = node_file["type"].as<std::string>();
-#define MENTOC_MWA mw_attachment
-#define MENTOC_FEED(TYPE)\
-		if(type_string.compare(#TYPE) == 0){\
-			type = MENTOC_MWA::TYPE;\
-		}
-		MENTOC_FEED(SIGHT);
-		MENTOC_FEED(MUZZLE);
-		MENTOC_FEED(MAGAZINE);
-#undef MENTOC_FEED
-#undef MENTOC_MWA
+
+		MENTOC_FEED_ATTACHMENTS
+
 		manufacturer = node_file["manufacturer"].as<std::string>();
 		name = node_file["name"].as<std::string>();
 		vnum = node_file["vnum"].as<int>();
@@ -214,16 +180,9 @@ namespace mods::yaml {
 		feed_file = file;
 		YAML::Node drone = YAML::LoadFile(std::string(file.data()));
 		auto type_string = drone["type"].as<std::string>();
-#define MENTOC_MWA mw_drone
-#define MENTOC_FEED(TYPE)\
-		if(type_string.compare(#TYPE) == 0){\
-			type = MENTOC_MWA::TYPE;\
-		}
-		MENTOC_FEED(GROUND_DRONE);
-		MENTOC_FEED(AERIAL_DRONE);
-		MENTOC_FEED(AQUATIC_DRONE);
-#undef MENTOC_FEED
-#undef MENTOC_MWA
+
+		MENTOC_FEED_DRONES
+
 		manufacturer = drone["manufacturer"].as<std::string>();
 		name = drone["name"].as<std::string>();
 		vnum = drone["vnum"].as<int>();
@@ -276,6 +235,8 @@ namespace mods::yaml {
 			"max_range: 3 #integer,measured in rooms\n" <<
 			"range_multiplier: 4.3 #float, multiplied by \n" <<
 			"reload_time: 3.0 #float, measured in seconds\n" <<
+			"rounds_per_minute: 120 #integer, measured in bullets\n" <<
+			"effective_firing_range: 2 #integer, measured in rooms\n" <<
 			"# types\n" <<
 			"#######\n" <<
 			"# type: SNIPER\n" << 
@@ -335,21 +296,9 @@ namespace mods::yaml {
 		feed_file = file;
 		YAML::Node weapon = YAML::LoadFile(std::string(file.data()));
 		auto type_string = weapon["type"].as<std::string>();
-#define MENTOC_MWA mw_rifle
-#define MENTOC_FEED(TYPE)\
-		if(type_string.compare(#TYPE) == 0){\
-			type = MENTOC_MWA::TYPE;\
-		}
-		MENTOC_FEED(SNIPER);
-		MENTOC_FEED(ASSAULT_RIFLE);
-		MENTOC_FEED(SHOTGUN);
-		MENTOC_FEED(SUB_MACHINE_GUN);
-		MENTOC_FEED(HANDGUN);
-		MENTOC_FEED(PISTOL);
-		MENTOC_FEED(MACHINE_PISTOL);
-		MENTOC_FEED(LIGHT_MACHINE_GUN);
-#undef MENTOC_FEED
-#undef MENTOC_MWA
+
+		MENTOC_FEED_RIFLES
+
 		ammo_max = weapon["ammo_max"].as<int>();
 		chance_to_injure = weapon["chance_to_injure"].as<float>();
 		clip_size = weapon["clip_size"].as<int>();
@@ -366,7 +315,6 @@ namespace mods::yaml {
 		rounds_per_minute = weapon["rounds_per_minute"].as<int>();
 		muzzle_velocity = weapon["muzzle_velocity"].as<int>();
 		effective_firing_range = weapon["effective_firing_range"].as<int>();
-
 		manufacturer = weapon["manufacturer"].as<std::string>();
 		name = weapon["name"].as<std::string>();
 		vnum = weapon["vnum"].as<int>();
@@ -379,18 +327,9 @@ namespace mods::yaml {
 		feed_file = file;
 		YAML::Node explosive = YAML::LoadFile(std::string(file.data()));
 		auto type_string = explosive["type"].as<std::string>();
-#define MENTOC_MWA mw_explosive
-#define MENTOC_FEED(TYPE)\
-		if(type_string.compare(#TYPE) == 0){\
-			type = MENTOC_MWA::TYPE;\
-		}
-		MENTOC_FEED(FRAG_GRENADE);
-		MENTOC_FEED(EMP_GRENADE);
-		MENTOC_FEED(INCENDIARY_GRENADE);
-		MENTOC_FEED(SMOKE_GRENADE);
-		MENTOC_FEED(FLASHBANG_GRENADE);
-#undef MENTOC_FEED
-#undef MENTOC_MWA
+
+		MENTOC_FEED_EXPLOSIVES
+
 		chance_to_injure = explosive["chance_to_injure"].as<float>();
 		critical_chance = explosive["critical_chance"].as<float>();
 		critical_range = explosive["critical_range"].as<int>();

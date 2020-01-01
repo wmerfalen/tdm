@@ -24,3 +24,6 @@ libcryptopp.a
 ../data.mdb
 ../lock.mdb
 run.txt
+duktape-2.2.0/duk
+duktape-2.2.0/libduktape.so.*
+duktape-2.2.0/libduktaped.so.*
