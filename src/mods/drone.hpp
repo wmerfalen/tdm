@@ -95,7 +95,7 @@ namespace mods {
 				stc(m);
 				return *this;
 			}
-			obj_data* weapon();
+			obj_data* rifle();
 			obj_data* get_ammo(const weapon_type_t&);
 		protected:
 			char_data* m_char_data;

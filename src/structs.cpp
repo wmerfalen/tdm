@@ -7,6 +7,10 @@ namespace mods {
 	struct extra_desc_data;
 };
 
+static inline std::string default_yaml_file(std::string type){
+	return type + ".yml";
+}
+
 //void room_data::ex_descriptions_append(mods::extra_desc_data&& other){
 //	m_ex_descriptions.emplace_back(std::move(other));
 //}
@@ -23,6 +27,7 @@ namespace mods {
 #include "mods/util.hpp"
 void obj_data::init(){
 	CREATE(next_content,struct obj_data,1);
+	std::fill(m_capabilities.begin(),m_capabilities.end(),0);
 }
 #ifdef __MENTOC_USE_PQXX_RESULT__
 void obj_data::feed(const pqxx::result::reference & row){
@@ -58,11 +63,13 @@ void obj_data::feed(pqxx::row row){
 			- Save room and/or container
 		
 	 */
-		if(obj_flags.weapon_flags != 0){
-			m_weapon = std::make_unique<weapon_data_t>();
-			weapon()->holds_ammo = 1;
-			weapon()->type = obj_flags.weapon_flags;
-			weapon()->id = 0;/** FIXME: fill this in with object_weapon.id */
+		type = mods::util::stoi<int>(row["obj_type"]);
+		std::string obj_file = row["obj_file"].c_str();
+
+		switch(type){
+			default:
+				std::cerr << "[obj_data::feed] WARNING! Unknown 'type' value: " << type << "\n";
+				break;
 		}
 }
 

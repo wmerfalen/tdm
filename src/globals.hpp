@@ -78,6 +78,7 @@ memset(&((ch)->affected),0,sizeof((ch)->affected));\
 character_list = ch;
 
 using player_ptr_t = std::shared_ptr<mods::player>;
+using obj_ptr_t = std::shared_ptr<obj_data>;
 namespace mods {
 	namespace lmdb { 
 		struct _db_handle;

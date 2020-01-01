@@ -169,7 +169,7 @@ ACMD(do_next_mob_number){
 	player->stc(std::to_string(mob_number));
 }
 
-void fill_rifle_object(std::shared_ptr<obj_data>& obj) {
+void fill_rifle(std::shared_ptr<obj_data>& obj) {
 	obj_data &proto = *obj;
 	for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
 		proto.affected[i].location = 0;
@@ -177,7 +177,7 @@ void fill_rifle_object(std::shared_ptr<obj_data>& obj) {
 	}
 
 	proto.item_number = 1;
-	proto.name = strdup(obj->weapon()->rifle_attributes->name.c_str());
+	proto.name = strdup(obj->rifle()->attributes->name.c_str());
 	proto.description = proto.name;
 	proto.short_description = proto.name;
 	proto.action_description = proto.name;
@@ -207,28 +207,210 @@ void fill_rifle_object(std::shared_ptr<obj_data>& obj) {
 	proto.obj_flags.timer = 0;
 }
 
-/* load the zones */
-std::shared_ptr<obj_data> rifle_object(std::string_view file){
-	auto obj = blank_object();
-	obj->weapon(0);
-	obj->weapon()->rifle_attributes = std::make_unique<mods::yaml::rifle_description_t>();
-	obj->weapon()->rifle_attributes->feed(file);
-	fill_rifle_object(obj);
-	return std::move(obj);
-}
-std::shared_ptr<obj_data> explosive_object(std::string_view file){
-	auto obj = blank_object();
-	obj->explosive(0);
-	obj->explosive()->explosive_attributes = std::make_unique<mods::yaml::explosive_description_t>();
-	obj->explosive()->explosive_attributes->feed(file);
-	return std::move(obj);
+void fill_drone(std::shared_ptr<obj_data>& obj) {
+	obj_data &proto = *obj;
+	for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
+		proto.affected[i].location = 0;
+		proto.affected[i].modifier = 0;
+	}
+
+	proto.item_number = 1;
+	proto.name = strdup(obj->drone()->attributes->name.c_str());
+	proto.description = proto.name;
+	proto.short_description = proto.name;
+	proto.action_description = proto.name;
+	proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
+	proto.ex_description->next = nullptr;
+	proto.ex_description->keyword = proto.ex_description->description = nullptr;
+	proto.ex_description->next = nullptr;
+	proto.worn_on = WEAR_WIELD;
+	proto.type = 0;
+	proto.carried_by = proto.worn_by = nullptr;
+	proto.next_content = nullptr;
+	proto.contains = nullptr;
+	proto.in_obj = nullptr;
+	proto.worn_by = nullptr;
+	proto.carried_by = nullptr;
+	memset(&proto.obj_flags.value[0],0,sizeof(proto.obj_flags.value));
+	proto.obj_flags.ammo_max = 99;
+	proto.obj_flags.clip_size = 20;
+	proto.obj_flags.weapon_flags =0;
+	proto.obj_flags.bitvector = 0;
+	proto.obj_flags.type_flag = 0;
+	proto.obj_flags.wear_flags = ITEM_WEAR_TAKE | ITEM_WEAR_WIELD;
+	proto.obj_flags.extra_flags = 0;
+	proto.obj_flags.weight = 0;
+	proto.obj_flags.cost = 0;
+	proto.obj_flags.cost_per_day = 0;
+	proto.obj_flags.timer = 0;
 }
 
-//obj_data_ptr_t new_frag_grenade_object();
-//obj_data_ptr_t new_incendiary_grenade_object();
-//obj_data_ptr_t new_emp_grenade_object();
-//obj_data_ptr_t new_smoke_grenade_object();
-//obj_data_ptr_t new_flashbang_grenade_object();
+
+void fill_attachment(std::shared_ptr<obj_data>& obj) {
+	obj_data &proto = *obj;
+	for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
+		proto.affected[i].location = 0;
+		proto.affected[i].modifier = 0;
+	}
+
+	proto.item_number = 1;
+	proto.name = strdup(obj->attachment()->attributes->name.c_str());
+	proto.description = proto.name;
+	proto.short_description = proto.name;
+	proto.action_description = proto.name;
+	proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
+	proto.ex_description->next = nullptr;
+	proto.ex_description->keyword = proto.ex_description->description = nullptr;
+	proto.ex_description->next = nullptr;
+	proto.worn_on = WEAR_WIELD;
+	proto.type = 0;
+	proto.carried_by = proto.worn_by = nullptr;
+	proto.next_content = nullptr;
+	proto.contains = nullptr;
+	proto.in_obj = nullptr;
+	proto.worn_by = nullptr;
+	proto.carried_by = nullptr;
+	memset(&proto.obj_flags.value[0],0,sizeof(proto.obj_flags.value));
+	proto.obj_flags.ammo_max = 99;
+	proto.obj_flags.clip_size = 20;
+	proto.obj_flags.weapon_flags =0;
+	proto.obj_flags.bitvector = 0;
+	proto.obj_flags.type_flag = 0;
+	proto.obj_flags.wear_flags = ITEM_WEAR_TAKE | ITEM_WEAR_WIELD;
+	proto.obj_flags.extra_flags = 0;
+	proto.obj_flags.weight = 0;
+	proto.obj_flags.cost = 0;
+	proto.obj_flags.cost_per_day = 0;
+	proto.obj_flags.timer = 0;
+}
+
+void fill_gadget(std::shared_ptr<obj_data>& obj) {
+	obj_data &proto = *obj;
+	for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
+		proto.affected[i].location = 0;
+		proto.affected[i].modifier = 0;
+	}
+
+	proto.item_number = 1;
+	proto.name = strdup(obj->gadget()->attributes->name.c_str());
+	proto.description = proto.name;
+	proto.short_description = proto.name;
+	proto.action_description = proto.name;
+	proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
+	proto.ex_description->next = nullptr;
+	proto.ex_description->keyword = proto.ex_description->description = nullptr;
+	proto.ex_description->next = nullptr;
+	proto.worn_on = WEAR_WIELD;
+	proto.type = 0;
+	proto.carried_by = proto.worn_by = nullptr;
+	proto.next_content = nullptr;
+	proto.contains = nullptr;
+	proto.in_obj = nullptr;
+	proto.worn_by = nullptr;
+	proto.carried_by = nullptr;
+	memset(&proto.obj_flags.value[0],0,sizeof(proto.obj_flags.value));
+	proto.obj_flags.ammo_max = 0;
+	proto.obj_flags.clip_size = 0;
+	proto.obj_flags.weapon_flags =0;
+	proto.obj_flags.bitvector = 0;
+	proto.obj_flags.type_flag = 0;
+	proto.obj_flags.wear_flags = ITEM_WEAR_TAKE | ITEM_WEAR_WIELD;
+	proto.obj_flags.extra_flags = 0;
+	proto.obj_flags.weight = 0;
+	proto.obj_flags.cost = 0;
+	proto.obj_flags.cost_per_day = 0;
+	proto.obj_flags.timer = 0;
+}
+
+void fill_explosive(std::shared_ptr<obj_data>& obj) {
+	obj_data &proto = *obj;
+	for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
+		proto.affected[i].location = 0;
+		proto.affected[i].modifier = 0;
+	}
+
+	proto.item_number = 1;
+	proto.name = strdup(obj->explosive()->attributes->name.c_str());
+	proto.description = proto.name;
+	proto.short_description = proto.name;
+	proto.action_description = proto.name;
+	proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
+	proto.ex_description->next = nullptr;
+	proto.ex_description->keyword = proto.ex_description->description = nullptr;
+	proto.ex_description->next = nullptr;
+	proto.worn_on = WEAR_WIELD;
+	proto.type = 0;
+	proto.carried_by = proto.worn_by = nullptr;
+	proto.next_content = nullptr;
+	proto.contains = nullptr;
+	proto.in_obj = nullptr;
+	proto.worn_by = nullptr;
+	proto.carried_by = nullptr;
+	memset(&proto.obj_flags.value[0],0,sizeof(proto.obj_flags.value));
+	proto.obj_flags.ammo_max = 99;
+	proto.obj_flags.clip_size = 20;
+	proto.obj_flags.weapon_flags =0;
+	proto.obj_flags.bitvector = 0;
+	proto.obj_flags.type_flag = 0;
+	proto.obj_flags.wear_flags = ITEM_WEAR_TAKE | ITEM_WEAR_WIELD;
+	proto.obj_flags.extra_flags = 0;
+	proto.obj_flags.weight = 0;
+	proto.obj_flags.cost = 0;
+	proto.obj_flags.cost_per_day = 0;
+	proto.obj_flags.timer = 0;
+}
+
+void fill_armor(std::shared_ptr<obj_data>& obj) {
+	log("Warning: fill_armor_object not optimized. obj values may be buggy");
+	obj_data &proto = *obj;
+	for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
+		proto.affected[i].location = 0;
+		proto.affected[i].modifier = 0;
+	}
+
+	proto.item_number = 1;
+	proto.name = strdup(obj->armor()->attributes->name.c_str());
+	proto.description = proto.name;
+	proto.short_description = proto.name;
+	proto.action_description = proto.name;
+	proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
+	proto.ex_description->next = nullptr;
+	proto.ex_description->keyword = proto.ex_description->description = nullptr;
+	proto.ex_description->next = nullptr;
+	proto.worn_on = WEAR_WIELD;
+	proto.type = 0;
+	proto.carried_by = proto.worn_by = nullptr;
+	proto.next_content = nullptr;
+	proto.contains = nullptr;
+	proto.in_obj = nullptr;
+	proto.worn_by = nullptr;
+	proto.carried_by = nullptr;
+	memset(&proto.obj_flags.value[0],0,sizeof(proto.obj_flags.value));
+	proto.obj_flags.ammo_max = 0;
+	proto.obj_flags.clip_size = 0;
+	proto.obj_flags.weapon_flags =0;
+	proto.obj_flags.bitvector = 0;
+	proto.obj_flags.type_flag = 0;
+	proto.obj_flags.extra_flags = 0;
+	proto.obj_flags.weight = 0;
+	proto.obj_flags.cost = 0;
+	proto.obj_flags.cost_per_day = 0;
+	proto.obj_flags.timer = 0;
+
+	proto.obj_flags.wear_flags = ITEM_WEAR_TAKE;
+}
+
+
+#define MENTOC_OBJ_FUNC(r,data,TYPE)\
+std::shared_ptr<obj_data> BOOST_PP_CAT(TYPE,_object)(std::string_view file){\
+	auto obj = blank_object();\
+	obj->TYPE(file);\
+	BOOST_PP_CAT(fill_,TYPE)(obj);\
+	return std::move(obj);\
+}
+BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_FUNC, ~, MENTOC_ITEM_TYPES_SEQ)
+#undef MENTOC_OBJ_FUNC
+
 /**
  * yaml_import <rifle> <file>		#imports said file in current dir
  * yaml_import ls 			#lists files in current dir
@@ -246,24 +428,24 @@ ACMD(do_yaml_import){
 	}
 
 	if(vec_args.size() == 2){
-		if(std::string(vec_args[0]).compare("rifle") == 0){
-			mods::yaml::rifle_description_t rifle;
-			player->sendln("importing...");
-			player->sendln(vec_args[1]);
-			auto obj = rifle_object(vec_args[1]);
-			obj_to_room(obj.get(),IN_ROOM(player->cd()));
-			player->sendln("done importing...");
-			return;
+
+#define MENTOC_F_IMPORT(CLASS_TYPE)\
+		if(std::string(vec_args[0]).compare( #CLASS_TYPE ) == 0){\
+			mods::yaml::CLASS_TYPE ## _description_t CLASS_TYPE;\
+			d(vec_args[1]); player->sendln("importing..."); player->sendln(vec_args[1]);\
+			auto obj = CLASS_TYPE ## _object(vec_args[1]);\
+			obj_to_room(obj.get(),IN_ROOM(player->cd()));\
+			player->sendln("done importing...");\
+			return;\
 		}
-		if(std::string(vec_args[0]).compare("explosive") == 0){
-			mods::yaml::explosive_description_t explosive;
-			player->sendln("importing...");
-			player->sendln(vec_args[1]);
-			auto obj = explosive_object(vec_args[1]);
-			obj_to_room(obj.get(),IN_ROOM(player->cd()));
-			player->sendln("done importing...");
-			return;
-		}
+		MENTOC_F_IMPORT(rifle);
+		MENTOC_F_IMPORT(explosive);
+		MENTOC_F_IMPORT(drone);
+		MENTOC_F_IMPORT(attachment);
+		MENTOC_F_IMPORT(gadget);
+		MENTOC_F_IMPORT(armor);
+#undef MENTOC_F_IMPORT
+
 	}
 	player->sendln("Unknown type/file combination. Nothing imported.");
 
@@ -273,21 +455,24 @@ ACMD(do_yaml_example){
 	MENTOC_PREAMBLE();
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("list") == 0) {
-		for(auto type : {"rifle","explosive"}) {
+		for(auto type : {"rifle","explosive","drone","gadget","attachment","armor"}) {
 			player->sendln(type);
 		}
 		return;
 	}
-	if(std::string(vec_args[0]).compare("rifle") == 0){
-		mods::yaml::rifle_description_t rifle;
-		player->sendln("rifle.yml");
-		rifle.write_example_file("rifle.yml");
+#define MENTOC_F_EXA(CLASS_TYPE,CT_FILE)\
+	if(std::string(vec_args[0]).compare(#CLASS_TYPE) == 0){\
+		mods::yaml::CLASS_TYPE ## _description_t CLASS_TYPE;\
+		player->sendln(CT_FILE);\
+		CLASS_TYPE.write_example_file(CT_FILE);\
 	}
-	if(std::string(vec_args[0]).compare("explosive") == 0){
-		mods::yaml::explosive_description_t explosive;
-		player->sendln("explosive.yml");
-		explosive.write_example_file("explosive.yml");
-	}
+	MENTOC_F_EXA(rifle,"rifle.yml");
+	MENTOC_F_EXA(explosive,"explosive.yml");
+	MENTOC_F_EXA(gadget,"gadget.yml");
+	MENTOC_F_EXA(drone,"drone.yml");
+	MENTOC_F_EXA(attachment,"attachment.yml");
+	MENTOC_F_EXA(armor,"armor.yml");
+#undef MENTOC_F_EXA
 	player->sendln("[+] done");
 }
 

@@ -150,7 +150,7 @@ namespace mods {
 			char_data* cd() const {
 				return m_char_data;
 			}
-			obj_data*      weapon();
+			obj_data*      rifle();
 			obj_data*      get_ammo(const weapon_type_t&);
 
 			/* conversion operator to char_data* */

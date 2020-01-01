@@ -677,8 +677,8 @@ void look_in_obj(struct char_data *ch, char *arg) {
 	} else if(!(bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM |
 	                                FIND_OBJ_EQUIP, ch, &dummy, &obj))) {
 		send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(arg), arg);
-	} else if(obj->weapon() && obj->weapon()->holds_ammo){
-		send_to_char(ch,std::string(std::to_string(obj->weapon()->ammo) + " rounds.").c_str());
+	} else if(obj->rifle() && obj->obj_flags.holds_ammo){
+		send_to_char(ch,std::string(std::to_string(obj->obj_flags.ammo) + " rounds.").c_str());
 	} else if((GET_OBJ_TYPE(obj) != ITEM_DRINKCON) &&
 	          (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN) &&
 	          (GET_OBJ_TYPE(obj) != ITEM_CONTAINER)) {

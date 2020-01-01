@@ -214,7 +214,7 @@ namespace mods {
 		m_char_data->equipment[pos] = nullptr;
 	}
 	bool player::has_weapon_capability(uint8_t type) {
-		auto w = weapon();
+		auto w = rifle();
 
 		if(w &&  w->type == type){
 			return true;
@@ -236,7 +236,7 @@ namespace mods {
 			return false;
 		}
 		for(auto item = m_char_data->carrying; item->next; item = item->next) {
-			if(item->weapon() && item->weapon()->is_ammo && type == item->weapon()->type){
+			if(item->obj_flags.is_ammo && type == item->obj_flags.type){
 				return true;
 			}
 		}
@@ -255,7 +255,7 @@ namespace mods {
 		return obj + std::to_string(cd()->uuid) + "}";
 	}
 	bool player::is_weapon_loaded() {
-		auto w = weapon();
+		auto w = rifle();
 
 		if(!w) {
 			return false;
@@ -264,13 +264,7 @@ namespace mods {
 		return true;
 	}
 	bool player::has_ammo() {
-		auto w = weapon();
-
-		if(w->ammo > 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return true; //FIXME
 	}
 	bool player::has_thermite() {
 		/** TODO: FIXME */
@@ -343,7 +337,7 @@ namespace mods {
 		return false;
 	}
 	void player::ammo_adjustment(int increment) {
-		weapon()->ammo += increment;
+		this->ammo() += increment;
 	}
 	player& player::pager_start() {
 		m_do_paging = true;
@@ -377,8 +371,8 @@ namespace mods {
 	}
 	obj_data* player::get_first_ammo_of_type(const weapon_type_t& type) const {
 		for(auto item = m_char_data->carrying; item->next; item = item->next) {
-			if(item->weapon() && item->weapon()->is_ammo && 
-					item->weapon()->type == type && m_char_data == item->carried_by) {
+			if(item->obj_flags.is_ammo && 
+					item->obj_flags.type == type && m_char_data == item->carried_by) {
 				return item;
 			}
 		}
@@ -396,10 +390,10 @@ namespace mods {
 		}
 
 		for(auto item = m_char_data->carrying; item->next; item = item->next) {
-			if(item->weapon() && item->weapon()->is_ammo && 
-					item->weapon()->type == type && m_char_data == item->carried_by) {
-				item->weapon()->ammo += increment;
-				return item->weapon()->ammo;
+			if(item->obj_flags.is_ammo && 
+					item->obj_flags.type == type && m_char_data == item->carried_by) {
+				item->obj_flags.ammo += increment;
+				return item->obj_flags.ammo;
 			}
 		}
 		return 0;
@@ -475,14 +469,14 @@ namespace mods {
 	mods::string player::weapon_name(){
 		return GET_EQ(m_char_data, WEAR_WIELD)->name;
 	}
-	weapon_data_t* player::weapon() {
-		return GET_EQ(m_char_data, WEAR_WIELD)->weapon();
+	rifle_data_t* player::rifle() {
+		return GET_EQ(m_char_data, WEAR_WIELD)->rifle();
 	}
 	obj_data* player::get_ammo(const weapon_type_t& type) {
 		for(auto item = m_char_data->carrying; item->next; item = item->next) {
-			if(item->weapon() && item->weapon()->is_ammo &&
+			if(item->obj_flags.is_ammo &&
 					m_char_data == item->carried_by &&
-					type == item->weapon()->type
+					type == item->obj_flags.type
 				) {
 				return item;
 			}

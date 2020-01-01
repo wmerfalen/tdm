@@ -15,6 +15,7 @@ openssl = -lssl -lcrypto
 yamlcpp = $(CURDIR)/yaml-cpp/include
 yamllib = $(CURDIR)/yaml-cpp/build
 yamlcpp_object = yaml-cpp
+boostdir = $(CURDIR)/boost
 
 thirdparty = $(duktape) $(lmdb)
 FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
@@ -22,7 +23,7 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-Wno-char-subscripts -Wcomment \
 	-Wno-format-zero-length -Wno-format-security\
 	-std=c++17 -fpermissive -MMD \
-	-Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
+	-I$(boostdir) -Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \
 	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\"  \
 	-DMENTOC_NO_CONSTEXPR_CONF=1 \
@@ -53,7 +54,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/world-configuration mods/debug act.debug mods/pfind \
 					 mods/orm/chargen mods/weapons/sniper-rifle mods/classes/sniper \
 					 mods/orm/quotes act.builder mods/orm/base mods/yaml \
-					 mods/affects
+					 mods/affects mods/item mods/weapon-types
 
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))

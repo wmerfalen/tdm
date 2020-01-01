@@ -1,0 +1,15 @@
+# type: SIGHT
+# type: MUZZLE
+# type: MAGAZINE
+type: 'SIGHT' # enum, object type
+manufacturer: 'ACME Industries' # string, anything 
+name: 'ACOG Scope' # string, anything name of object 
+vnum: 1000 # integer, unique identifier
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'

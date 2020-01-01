@@ -5,16 +5,30 @@
 #include <string>
 #include "yaml-cpp/yaml.h"
 #include "rarity.hpp"
+#include "item-types.hpp"
+
+
 namespace mods::yaml {
-	struct rifle_description_t;
-	struct explosive_description_t;
+	MENTOC_YAML_DESC
 };
-#include "weapon.hpp"
 #include "../structs.h"
 #include "pqxx-types.hpp"
 #include "weapon.hpp"
 #include "aoe.hpp"
 #include <fstream>
+
+#define MENTOC_BASE_MEMBERS \
+		std::string manufacturer;\
+		std::string name;\
+		int type;\
+		std::string object_type;\
+		int vnum;\
+		float rarity;\
+		std::string feed_file;
+#define MENTOC_BASE_MEMBERS_SET(NAME)\
+			manufacturer("ACME Industries"),\
+			name(NAME), type(0), object_type(NAME),\
+			vnum(0),rarity(mods::rarity::DEFAULT)
 
 namespace mods::yaml {
 	constexpr static uint8_t MAX_ROOM_DISTANCE = 4;
@@ -48,13 +62,10 @@ namespace mods::yaml {
 			max_range(0),
 			range_multiplier(0),
 			reload_time(0),
-			object_type("rifle"),
-			vnum(0),
-			rarity(mods::rarity::DEFAULT)
+			MENTOC_BASE_MEMBERS_SET("rifle")
 		{
 			std::fill(accuracy_map.begin(),accuracy_map.end(),0);
 			std::fill(damage_map.begin(),damage_map.end(),0);
-			name = "";
 		}
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
@@ -74,15 +85,12 @@ namespace mods::yaml {
 			int max_range;
 			float range_multiplier;
 			float reload_time;
-			int type;
-			std::string name;
 			int rounds_per_minute;
 			int muzzle_velocity;
 			int effective_firing_range;
-		std::string object_type;
-		int vnum;
-		float rarity;
+			MENTOC_BASE_MEMBERS
 	};
+
 	struct explosive_description_t : public yaml_description_t {
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
@@ -95,12 +103,7 @@ namespace mods::yaml {
 			blast_radius(1),	/** 1 will only affect room it detonates in */
 			damage_per_second(0.0), /** static amount of damage done per second after detonation */
 			disorient_amount(0.0), /** percent */
-			manufacturer("ACME Industries"), /** Fictional entity that creates this */
-			name("Generic Explosive"), /** Name of item */
-			type(0),	/** Explosive enum */
-			object_type("explosive"),
-			vnum(0),
-			rarity(mods::rarity::DEFAULT)
+			MENTOC_BASE_MEMBERS_SET("explosive")
 		{
 			std::fill(aoe_triggers.begin(),aoe_triggers.end(),0);
 		}
@@ -112,12 +115,51 @@ namespace mods::yaml {
 		int blast_radius;	/** In rooms */
 		float damage_per_second;
 		float disorient_amount;
-		std::string manufacturer;
-		std::string name;
-		int type;
-		std::string object_type;
-		int vnum;
-		float rarity;
+		MENTOC_BASE_MEMBERS
+	};
+
+	struct drone_description_t : public yaml_description_t {
+		virtual int16_t feed(std::string_view file);
+		virtual int16_t write_example_file(std::string_view file);
+		virtual ~drone_description_t() = default;
+		drone_description_t() :
+			damage(0),
+			MENTOC_BASE_MEMBERS_SET("drone")
+		{
+		}
+		int damage;
+		MENTOC_BASE_MEMBERS
+	};
+
+	struct gadget_description_t : public yaml_description_t {
+		virtual int16_t feed(std::string_view file);
+		virtual int16_t write_example_file(std::string_view file);
+		virtual ~gadget_description_t() = default;
+		gadget_description_t() :
+			MENTOC_BASE_MEMBERS_SET("gadget")
+		{
+		}
+		MENTOC_BASE_MEMBERS
+	};
+	struct attachment_description_t : public yaml_description_t {
+		virtual int16_t feed(std::string_view file);
+		virtual int16_t write_example_file(std::string_view file);
+		virtual ~attachment_description_t() = default;
+		attachment_description_t() :
+			MENTOC_BASE_MEMBERS_SET("attachment")
+		{
+		}
+		MENTOC_BASE_MEMBERS
+	};
+	struct armor_description_t : public yaml_description_t {
+		virtual int16_t feed(std::string_view file);
+		virtual int16_t write_example_file(std::string_view file);
+		virtual ~armor_description_t() = default;
+		armor_description_t() :
+			MENTOC_BASE_MEMBERS_SET("armor")
+		{
+		}
+		MENTOC_BASE_MEMBERS
 	};
 };
 #endif

@@ -24,6 +24,7 @@
 #include <unordered_map>
 #include "mods/yaml.hpp"
 #include "mods/weapon-types.hpp"
+#include "mods/item-types.hpp"
 constexpr static std::size_t MAX_EXPLOSION_FADE_OUT = 5;
 namespace mods {
 	struct player;
@@ -31,8 +32,8 @@ namespace mods {
 	struct descriptor_data;
 	struct extra_desc_data;
 };
-struct weapon_data_t;
-struct explosive_data_t;
+MENTOC_DECLARE_DATA_STRUCTS
+
 struct char_data;
 extern std::deque<mods::descriptor_data> descriptor_list;
 /** BASE weapon type. */
@@ -150,6 +151,28 @@ using ush_int = uint32_t;
 #define ROOM_ATRIUM		(1 << 13)  /* (R) The door to a house	*/
 #define ROOM_OLC		(1 << 14)  /* (R) Modifyable/!compress	*/
 #define ROOM_BFS_MARK		(1 << 15)  /* (R) breath-first srch mrk	*/
+
+enum cap_t {
+		INSTALL = 0,
+		THROW,
+		BURN,
+		DETONATE,
+		BREACH,
+		EXPLODE,
+		REMOTE,
+		DOUSE,
+		ARM,
+		SNIPE,
+		RANGED_ATTACK,
+		SPRAY_BULLETS,
+		HIP_FIRE,
+		AIM,
+		BLIND,
+		DISORIENT,
+		FIRE,
+		SHOOT,
+		CQC /** close quarters combat */
+};
 
 
 /* Exit info: used in room_data.dir_option.exit_info */
@@ -369,11 +392,10 @@ CLASS_SNIPER     = CLASS_MARKSMAN
 #define ITEM_SCROLL     2		/* Item is a scroll		*/
 #define ITEM_WAND       3		/* Item is a wand		*/
 #define ITEM_STAFF      4		/* Item is a staff		*/
-#define ITEM_WEAPON     5		/* Item is a weapon		*/
 #define ITEM_FIREWEAPON 6		/* Unimplemented		*/
 #define ITEM_MISSILE    7		/* Unimplemented		*/
 #define ITEM_TREASURE   8		/* Item is a treasure, not gold	*/
-#define ITEM_ARMOR      9		/* Item is armor		*/
+#define ITEM_ARMOR      7		/* Item is armor		*/
 #define ITEM_POTION    10 		/* Item is a potion		*/
 #define ITEM_WORN      11		/* Unimplemented		*/
 #define ITEM_OTHER     12		/* Misc object			*/
@@ -388,7 +410,14 @@ CLASS_SNIPER     = CLASS_MARKSMAN
 #define ITEM_PEN       21		/* Item is a pen		*/
 #define ITEM_BOAT      22		/* Item is a boat		*/
 #define ITEM_FOUNTAIN  23		/* Item is a fountain		*/
-#define ITEM_WEAPON_ATTACHMENT 24 /* item is a weapon attachment */
+#define ITEM_RIFLE     1
+#define ITEM_EXPLOSIVE 2
+#define ITEM_GADGET    3
+#define ITEM_DRONE     4
+#define ITEM_WEAPON    5		/* Item is a weapon		*/
+#define ITEM_WEAPON_ATTACHMENT 6 /* item is a weapon attachment */
+#define ITEM_ATTACHMENT 6
+#define __MENTOC_ITEM_CONSTANTS_DEFINED__
 
 
 	/* Take/Wear flags: used by obj_data.obj_flags.wear_flags */
@@ -682,7 +711,7 @@ enum player_level {
 
 	/* object flags; used in obj_data */
 	struct obj_flag_data {
-		obj_flag_data() : type_flag(0),weapon_flags(0),
+		obj_flag_data() : type(0), is_ammo(0), holds_ammo(0), type_flag(0),weapon_flags(0),
 			ammo_max(0),ammo(0),clip_size(0),wear_flags(0),extra_flags(0),
 			weight(0), cost(0), cost_per_day(0),timer(0),bitvector(0){
 				memset(value,0,sizeof(value));
@@ -694,8 +723,12 @@ enum player_level {
 		void feed(pqxx::row);
 #endif
 		~obj_flag_data() = default;
+		int type;
+		bool is_ammo;
+		bool holds_ammo;
 		int	value[4];	/* Values of the item (see list)    */
-		byte type_flag;	/* Type of item			    */
+		/** The SUB-TYPE. i.e.: mw_rifle::PISTOL */
+		int type_flag;	/* Type of item			    */
 		/** TODO: need to phase this out and use new weapon flags */
 		uint64_t weapon_flags;
 		uint16_t ammo_max;
@@ -758,15 +791,16 @@ enum player_level {
 			next = other.next;
 			ai_state = other.ai_state;
 			uuid = mods::globals::obj_uuid();
-			/** Philsophy: 
-			 * We never want to copy the weapon because
-			 * each instance should have it's own weapon.
-			 * Theoretically, the copy constructor shouldn't even
-			 * be a thing. We shouldn't need to copy an object.
-			 * The only time this copy constructor should be called
-			 * is when we are coping a object proto to a 
-			 * real obj_data instantiation
-			 */
+			m_capabilities = other.m_capabilities;
+			obj_flags = other.obj_flags;
+
+			/*
+#define MENTOC_OBJ_COPY_CONSTRUCTOR(r,data,CLASS_TYPE) \
+			if(other.BOOST_PP_CAT(m_,CLASS_TYPE)){\
+				this->CLASS_TYPE()->feed(other->feed_file()); }
+BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
+*/
+			/** FIXME: copy constructor is broken right now */
 		}
 		obj_data& operator=(const obj_data& other){ 
 			item_number = other.item_number;
@@ -785,6 +819,10 @@ enum player_level {
 			next = other.next;
 			ai_state = other.ai_state;
 			uuid = mods::globals::obj_uuid();
+			m_capabilities = other.m_capabilities;
+			obj_flags = other.obj_flags;
+			/** FIXME: copy constructor is broken right now */
+//BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 			return *this;
 		}
 		obj_data() : 
@@ -793,8 +831,11 @@ enum player_level {
 			action_description(nullptr),ex_description(nullptr),
 			carried_by(nullptr),worn_by(nullptr),worn_on(0),
 			in_obj(nullptr),contains(nullptr),next_content(nullptr),
-			next(nullptr),ai_state(0),uuid(0),m_weapon(nullptr)
+			next(nullptr),ai_state(0),uuid(0)
 		{
+#define MENTOC_OBJ_INITIALIZE_CONSTRUCTOR(r,data,CLASS_TYPE) \
+			this->BOOST_PP_CAT(m_,CLASS_TYPE) = nullptr;
+BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 			init();
 		}
 		~obj_data() = default;
@@ -835,30 +876,26 @@ enum player_level {
 
 		uuid_t uuid;
 
-		weapon_data_t* weapon(uint8_t mode){
-			m_weapon = std::make_unique<weapon_data_t>();
-			return m_weapon.get();
-		} 
-		weapon_data_t* weapon(){ return m_weapon.get(); }
-		explosive_data_t* explosive(uint8_t type){
-			m_explosive = std::make_unique<explosive_data_t>();
-			return m_explosive.get();
-		} 
-		explosive_data_t* explosive(){ return m_explosive.get(); }
-		/** FIXME: remove these members and instead use the weapon pointer */
-		/*
-		int16_t ammo;
-		int16_t ammo_max;
-		short loaded;
-		short holds_ammo;
-		weapon_type_t weapon_type;
-		uint8_t wpn_type;
-		uint8_t wpn_base;
-		*/
+#define MENTOC_DATA_OBJ(r,data,CLASS_TYPE) BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(std::string_view feed_file){\
+	BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(feed_file); return BOOST_PP_CAT(m_,CLASS_TYPE).get();\
+}\
+		BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(uint8_t mode){ BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(); return BOOST_PP_CAT(m_, CLASS_TYPE).get(); }\
+		BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(){ return BOOST_PP_CAT(m_,CLASS_TYPE).get(); }
+
+BOOST_PP_SEQ_FOR_EACH(MENTOC_DATA_OBJ, ~, MENTOC_ITEM_TYPES_SEQ)
+#undef MENTOC_DATA_OBJ
 		int16_t type;
+		using capability_list_t = std::array<bool,128>;
+		bool can(std::size_t val){
+			return m_capabilities[val];
+		}
+		capability_list_t& capabilities(){ return m_capabilities; }
+
 		protected:
-		std::unique_ptr<weapon_data_t> m_weapon;
-		std::unique_ptr<explosive_data_t> m_explosive;
+#define MENTOC_UPTR(r,data,CLASS_TYPE) std::unique_ptr<BOOST_PP_CAT(CLASS_TYPE,_data_t)> BOOST_PP_CAT(m_, CLASS_TYPE);
+BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
+#undef MENTOC_UPTR
+		capability_list_t m_capabilities;
 	};
 struct obj_data_weapon : public obj_data {
 	/**TODO: call parent constructor/destructor */

@@ -58,7 +58,6 @@ std::vector<index_data> mob_index;	/* index table for mobile file	 */
 std::vector<char_data> mob_proto;	/* prototypes for mobs		 */
 mob_rnum top_of_mobt = 0;	/* top of mobile index table	 */
 
-std::deque<obj_data> object_list;	/* list of objs	 */
 std::deque<std::shared_ptr<obj_data>> obj_list;
 std::deque<std::shared_ptr<mods::npc>> mob_list;
 std::vector<index_data> obj_index;	/* index table for object file	 */
@@ -1964,7 +1963,7 @@ struct char_data *read_mobile(mob_vnum nr, int type) { /* and mob_rnum */
 
 
 /* create an object, and add it to the object list */
-struct obj_data *create_obj(void) {
+obj_data *create_obj(void) {
 	auto obj = blank_object();
 	return obj.get();
 }

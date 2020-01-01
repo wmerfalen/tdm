@@ -1,0 +1,25 @@
+# type: VEST
+# type: LEGS
+# type: GAUNTLETS
+# type: SHOULDER_PADS
+# type: HELMET
+# type: HAT
+# type: EYEWEAR
+# type: GOGGLES
+# type: BACKPACK
+# type: WAIST_PACK
+# type: VEST_PACK
+# type: ELBOW_GUARDS
+# type: GLOVES
+type: 'VEST' # enum, object type
+manufacturer: 'ACME Industries' # string, anything 
+name: 'MK-71X Ballistic Vest' # string, anything name of object 
+vnum: 1000 # integer, unique identifier
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'

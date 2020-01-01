@@ -5,8 +5,11 @@ accuracy_map: [
 10.00,
 10.00
 ]
-ammo_max: 220 #integer
-ammo_type: '' #string, constant enum
+rounds_per_minute: 750
+muzzle_velocity: 3018 # Feet per second
+effective_firing_range: 1500 # feet
+ammo_max: 520 #integer
+ammo_type: 'SNIPER' #string, constant enum
 chance_to_injure: 4.23 #float, out of 100
 clip_size: 8 #integer
 cooldown_between_shots: 0.413 #float, in seconds
@@ -24,8 +27,19 @@ headshot_bonus: 3.0 #float
 max_range: 3 #integer,measured in rooms
 range_multiplier: 4.3 #float, multiplied by 
 reload_time: 3.0 #float, measured in seconds
-type: 'SNIPER' #string, type of weapon
-name: 'A <adjectively> <horrific> PSG-1 Sniper Rifle' #string
+# types
+#######
+# type: SNIPER
+# type: ASSAULT_RIFLE
+# type: SHOTGUN
+# type: SUB_MACHINE_GUN
+# type: HANDGUN
+# type: MACHINE_PISTOL
+# type: LIGHT_MACHINE_GUN
+type: 'SNIPER' # enum, object type
+manufacturer: 'ACME Industries' # string, anything 
+name: 'A <adjectively> <horrific> PSG-1 Sniper Rifle' # string, anything name of object 
+vnum: 1000 # integer, unique identifier
 #rarity types
 # COMMON
 # UNCOMMON
@@ -33,6 +47,4 @@ name: 'A <adjectively> <horrific> PSG-1 Sniper Rifle' #string
 # LEGENDARY
 # GOD_TIER
 # DEFAULT
-rarity: COMMON
-vnum: 101 #virtual number
-object_type: rifle
+rarity: 'COMMON'

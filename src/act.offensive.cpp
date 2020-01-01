@@ -166,7 +166,7 @@ enum weapon_status_t {
 weapon_status_t weapon_preamble(
 		player_ptr_t player,
 		weapon_rifle_t rifle_type){
-	if(!player->weapon()){
+	if(!player->rifle()){
 		player->sendln("You must be wielding a " + mods::weapon::to_string(rifle_type) + " to do that!");
 		return NOT_WIELDING_WEAPON;
 	}
@@ -174,7 +174,7 @@ weapon_status_t weapon_preamble(
 		return COOLDOWN_IN_EFFECT;
 	}
 	/* Check ammo */
-	if(mods::weapon::has_clip(player->weapon()) && player->weapon()->ammo <= 0) {
+	if(mods::weapon::has_clip(player->rifle()) && player->ammo() <= 0) {
 		*player << "{gld}*CLICK*{/gld} Your weapon is out of ammo!\r\n";
 		return OUT_OF_AMMO;
 	}
@@ -394,38 +394,38 @@ ACMD(do_reload) {
 	MENTOC_PREAMBLE(); /* !mods */
 
 	/* TODO get wielded equipment tag */
-	if(!player->weapon()) {
+	if(!player->rifle()) {
 		*player << "Invalid weapon to reload.\r\n";
 		return;
 	}
 
-	if(player->weapon()->ammo > 0) {
+	if(player->ammo() > 0) {
 		*player << "Weapon already loaded.\r\n";
 		return;
 	}
 
-	if(!player->carrying_ammo_of_type(player->weapon()->type)) {
+	if(!player->carrying_ammo_of_type(player->rifle()->type)) {
 		*player << "{1} You don't have any ammo.\r\n";
 		return;
 	}
 
-	if(player->weapon()->ammo -12 < 0) {
-		auto difference = player->weapon()->ammo -12;
+	if(player->ammo() -12 < 0) {
+		auto difference = player->ammo() -12;
 		auto rounds = difference + 12;
 
 		if(rounds <= 0) {
 			*player << "Out of ammo.\r\n";
-			player->weapon()->ammo = 0;
+			player->ammo() = 0;
 			return;
 		}
 
 		*player << "You load " << rounds << " rounds into " << player->weapon_name() << "\r\n";
-		player->weapon()->ammo = 0;
-		player->weapon()->ammo = rounds;
+		player->ammo() = 0;
+		player->ammo() = rounds;
 		return;
 	} else {
-		player->weapon()->ammo -= 12;
-		player->weapon()->ammo = 12;
+		player->ammo() -= 12;
+		player->ammo() = 12;
 		*player << "You load 12 rounds into " << player->weapon_name() << "\r\n";
 		return;
 	}

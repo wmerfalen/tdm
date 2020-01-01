@@ -1,0 +1,1 @@
+ALTER TABLE object ADD COLUMN obj_file VARCHAR(32);

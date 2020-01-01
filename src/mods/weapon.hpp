@@ -213,7 +213,7 @@ namespace mods::weapon {
 #undef MENTOC_TO_STR
 		}
 	}
-	static inline bool has_clip(weapon_data_t* weapon){
+	static inline bool has_clip(rifle_data_t* weapon){
 		if(!weapon){ return false; }
 			switch(weapon->type){
 				case mw_rifle::SHOTGUN:

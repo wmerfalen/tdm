@@ -299,7 +299,9 @@ namespace mods {
 			char_data* cd() const {
 				return m_char_data;
 			}
-			weapon_data_t* weapon();
+			rifle_data_t* rifle();
+			uint16_t& ammo(){ return m_char_data->equipment[WEAR_WIELD]->obj_flags.ammo; }
+
 			obj_data*      get_ammo(const weapon_type_t&);
 			mods::string weapon_name();
 

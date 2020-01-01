@@ -1,0 +1,16 @@
+# type: GROUND_DRONE
+# type: AERIAL_DRONE
+# type: AQUATIC_DRONE
+# todo: stub
+type: 'GROUND_DRONE' # enum, object type
+manufacturer: 'ACME Industries' # string, anything 
+name: 'TN Land Drone' # string, anything name of object 
+vnum: 1000 # integer, unique identifier
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'

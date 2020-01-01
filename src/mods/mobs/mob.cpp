@@ -252,7 +252,7 @@ namespace mods {
 		page(m_current_page +1);
 	}
 	bool player::has_weapon_capability(int type) {
-		auto w = weapon();
+		auto w = rifle();
 
 		if(!w) {
 			return false;
@@ -298,7 +298,7 @@ namespace mods {
 		return obj + std::to_string(cd()->uuid) + "}";
 	}
 	bool player::is_weapon_loaded() {
-		auto w = weapon();
+		auto w = rifle();
 
 		if(!w) {
 			return false;
@@ -307,7 +307,7 @@ namespace mods {
 		return true;
 	}
 	bool player::has_ammo() {
-		auto w = weapon();
+		auto w = rifle();
 
 		if(w->ammo > 0) {
 			return true;
@@ -354,7 +354,7 @@ namespace mods {
 		return false;
 	}
 	void player::ammo_adjustment(int increment) {
-		weapon()->ammo += increment;
+		rifle()->ammo += increment;
 	}
 	player& player::pager_start() {
 		m_do_paging = true;
@@ -479,7 +479,7 @@ namespace mods {
 			}
 		}
 	}
-	obj_data* player::weapon() {
+	obj_data* player::rifle() {
 		return GET_EQ(m_char_data, WEAR_WIELD);
 	}
 	obj_data* player::get_ammo(const weapon_type_t& type) {

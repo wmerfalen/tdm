@@ -5,8 +5,7 @@
 #include "flags.hpp"
 
 
-namespace mods {
-	namespace util {
+namespace mods::util {
 	std::string&& word_wrap(std::string_view paragraph,int width) {
 		std::string buffer;
 
@@ -219,7 +218,7 @@ namespace mods {
 		return true;
 		}
 	}
-	obj_data* parse_object(std::shared_ptr<mods::player>& player,std::string_view arg, int start_at, int* last_index) {
+	obj_ptr_t parse_object(player_ptr_t& player,std::string_view arg, int start_at, int* last_index) {
 		auto ch = player->cd();
 		int i, number;
 		static constexpr int max_len = MAX_INPUT_LENGTH;
@@ -229,7 +228,6 @@ namespace mods {
 		while(!isspace(arg[ctr]) && ctr < max_len && ctr < arg.length()){
 			buffer += arg[ctr++];
 		}
-		std::cerr << "object name: '" << buffer << "'\n";
 		if(last_index){
 			*last_index = ctr;
 		}
@@ -238,11 +236,12 @@ namespace mods {
 			return nullptr;
 		}
 		for(i = 0; i < NUM_WEARS; i++){
-			if(GET_EQ(ch, i) && isname(buffer.data(), GET_EQ(ch, i)->name) && --number == 0) {
-				return GET_EQ(ch, i);
+			auto eq = GET_EQ(ch, i);
+			if(eq && isname(buffer.data(), eq->name) && --number == 0) {
+				return make_from(eq);
 			}
 		}
-		return get_obj_in_list_vis(ch, buffer.data(), &number, ch->carrying);
+		return make_from(get_obj_in_list_vis(ch, buffer.data(), &number, ch->carrying));
 	}
 
 	int parse_direction(std::string_view arg, int start_at, int* last_index) {
@@ -256,15 +255,110 @@ namespace mods {
 			buffer += arg[ctr++];
 			if(++dir_len >= max_dir_length){ break; }
 		}
-		std::cerr << "direction: '" << buffer << "'\n";
 		if(last_index){
 			*last_index = ctr;
 		}
 		return NORTH;
 	}
 
-	};
-};
+	obj_ptr_t parse_object_with_capability(player_ptr_t& player,std::string_view arg, int start_at, int* last_index, mods::weapon::type::type_list type, std::vector<int>& types) {
+		auto ch = player->cd();
+		int i, number;
+		static constexpr int max_len = MAX_INPUT_LENGTH;
+		std::string buffer;
+		int ctr = start_at;
+		while(isspace(arg[ctr]) && ++ctr < max_len && ctr < arg.length()){}
+		while(!isspace(arg[ctr]) && ctr < max_len && ctr < arg.length()){
+			buffer += arg[ctr++];
+		}
+		if(last_index){
+			*last_index = ctr;
+		}
+		char* tmp_name = buffer.data();
+		if(!(number = get_number(&tmp_name))) {
+			return nullptr;
+		}
+		for(i = 0; i < NUM_WEARS; i++){
+			auto eq = GET_EQ(ch, i);
+			if(eq && isname(buffer.data(), eq->name) && --number == 0) {
+				if(eq->type == type && std::find(types.begin(),types.end(),eq->obj_flags.type_flag) != types.end()){
+					return make_from(eq);
+				}
+			}
+		}
+		return make_from(get_obj_in_list_vis(ch, buffer.data(), &number, ch->carrying));
+	}
+
+	objdir_t parse_objdir(player_ptr_t& player,std::string_view arg){
+		int last_index = 0;
+		return { parse_object(player, arg, 0,&last_index), mods::util::parse_direction(arg, last_index+1, nullptr)};
+	}
+/*
+	objdir_t expect_explosive_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_explosive>& types){
+
+	}
+	objdir_t expect_rifle_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_rifle>& types){
+
+	}
+	objdir_t expect_gadget_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_gadget>& types){
+
+	}
+	objdir_t expect_drone_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_drone>& types){
+
+	}
+	*/
+
+	obj_ptr_t make_from(obj_data* o){
+		if(!o){ return nullptr; }
+		for(auto & obj : obj_list){
+			if(o == obj.get()){
+				return obj;
+			}
+		}
+		obj_list.push_back(std::make_shared<obj_data>(*o));
+		return obj_list.back();
+	}
+	/*
+	objdir_t parse_objdir_capable(player_ptr_t& player,std::string_view arg, uint8_t query_type, cap_list_t& capabilities){
+		auto ch = player->cd();
+		int i, number;
+		static constexpr int max_len = MAX_INPUT_LENGTH;
+		std::string buffer;
+		int ctr = start_at;
+		while(isspace(arg[ctr]) && ++ctr < max_len && ctr < arg.length()){}
+		while(!isspace(arg[ctr]) && ctr < max_len && ctr < arg.length()){
+			buffer += arg[ctr++];
+		}
+		if(last_index){
+			*last_index = ctr;
+		}
+		char* tmp_name = buffer.data();
+		if(!(number = get_number(&tmp_name))) {
+			return nullptr;
+		}
+		for(i = 0; i < NUM_WEARS; i++){
+			auto eq = GET_EQ(ch, i);
+			if(eq && isname(buffer.data(), eq->name) && --number == 0) {
+				if(eq->type == type && std::find(types.begin(),types.end(),eq->obj_flags.type_flag) != types.end()){
+					return make_from(eq);
+				}
+			}
+		}
+		return make_from(get_obj_in_list_vis(ch, buffer.data(), &number, ch->carrying));
+	}
+
+
+	objdir_t parse_objdir_cap_single(player_ptr_t& player,std::string_view arg, cap_list_t& capabilities){
+		return parse_objdir_capable(player,arg, CAP_SINGLE, capabilities);
+	}
+	objdir_t parse_objdir_cap_any(player_ptr_t& player,std::string_view arg, cap_list_t& capabilities){
+		return parse_objdir_capable(player,arg, CAP_ANY, capabilities);
+	}
+	objdir_t parse_objdir_cap_all(player_ptr_t& player,std::string_view arg, cap_list_t& capabilities){
+		return parse_objdir_capable(player,arg, CAP_ALL, capabilities);
+	}
+	*/
+};/** end mods::util */
 
 namespace mods::util::err {
 	std::string get_string(int _errno){
@@ -274,9 +368,5 @@ namespace mods::util::err {
 		return std::string(static_cast<const char*>(&buf[0]));
 	}
 };
-	objdir_t parse_objdir(std::shared_ptr<mods::player>& player,std::string_view arg){
-		int last_index = 0;
-		return { mods::util::parse_object(player, arg, 0,&last_index), mods::util::parse_direction(arg, last_index+1, nullptr)};
-	}
 
 #endif

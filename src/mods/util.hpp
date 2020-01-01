@@ -23,14 +23,23 @@ static inline std::string operator "" _s(const char* s,uint64_t i) {
 	return std::string(s);
 }
 #endif
+#include "weapon-types.hpp"
 
 extern std::vector<room_data> world;
 extern int get_number(char **name);
 extern int isname(const char *str, const char *namelist);
 extern struct obj_data *get_obj_in_list_vis(struct char_data *ch, char *name, int *number, struct obj_data *list);
+extern std::deque<std::shared_ptr<obj_data>> obj_list;
+
 namespace mods::util {
 	std::string&& word_wrap(std::string_view paragraph,int width);
 	using directory_list_t = std::vector<std::string>;
+	using obj_ptr_t = std::shared_ptr<obj_data>;
+	struct objdir_struct {
+		obj_ptr_t obj;
+		int dir;
+	};
+	using objdir_t = objdir_struct;
 
 	static inline void texturize_room(room_rnum room_id, room_data::texture_type_t texture_type){
 		world[room_id].add_texture(texture_type);
@@ -225,18 +234,27 @@ std::ostream& log(Args... args); /*{
 			}
 			return -1;
 		}
-	obj_data* parse_object(std::shared_ptr<mods::player>& player,std::string_view arg, int start_at, int* last_index); 
+	obj_ptr_t parse_object(player_ptr_t& player,std::string_view arg, int start_at, int* last_index); 
 	int parse_direction(std::string_view arg, int start_at, int* last_index); 
+	objdir_t parse_objdir(player_ptr_t& player,std::string_view arg);
+	static constexpr uint8_t CAP_SINGLE = 0;
+	static constexpr uint8_t CAP_ANY = 0;
+	static constexpr uint8_t CAP_ALL = 0;
+	/*
+	objdir_t parse_objdir_capable(player_ptr_t& player,std::string_view arg, uint8_t query_type, cap_list_t& capabilities);
+	objdir_t parse_objdir_cap_single(player_ptr_t& player,std::string_view arg, cap_list_t& capabilities);
+	objdir_t parse_objdir_cap_any(player_ptr_t& player,std::string_view arg, cap_list_t& capabilities);
+	objdir_t parse_objdir_cap_all(player_ptr_t& player,std::string_view arg, cap_list_t& capabilities);
+	objdir_t expect_explosive_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_explosive>& types);
+	objdir_t expect_rifle_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_rifle>& types);
+	objdir_t expect_gadget_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_gadget>& types);
+	objdir_t expect_drone_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_drone>& types);
+	*/
+	obj_ptr_t make_from(obj_data* o);
 };
 
 namespace mods::util::err {
 	std::string get_string(int);
 };
-	struct objdir_struct {
-		obj_data* obj;
-		int dir;
-	};
-	using objdir_t = objdir_struct;
-	objdir_t parse_objdir(std::shared_ptr<mods::player>& player,std::string_view arg);
 
 #endif
