@@ -29,13 +29,13 @@
 /* extern variables */
 extern int pk_allowed;
 extern void three_arguments(char*,char*,char*,char*);
-extern void die(struct char_data*,struct char_data*);
+extern void die(char_data*,char_data*);
 extern mods::globals::room_list_t mods::globals::room_list;
 /* extern functions */
-void raw_kill(struct char_data *ch);
-void check_killer(struct char_data *ch, struct char_data *vict);
-int compute_armor_class(struct char_data *ch);
-int snipe_hit(struct char_data*,struct char_data*,int,uint16_t);
+void raw_kill(char_data *ch);
+void check_killer(char_data *ch, char_data *vict);
+int compute_armor_class(char_data *ch);
+int snipe_hit(char_data*,char_data*,int,uint16_t);
 
 /* using directives */
 using mw_explosive = mods::weapon::type::explosive;
@@ -85,36 +85,41 @@ ACMD(do_throw) {
 	}
 
 	/* TODO: change to equipment() */
-	auto held_object = player->legacy_equipment(WEAR_HOLD);
+	auto held_object = player->equipment(WEAR_HOLD);
 	if(!held_object) {
 		player->sendln("You're not holding anything!");
 		return;
 	}
-	mods::projectile::legacy_throw_object(player, dir, cnt, held_object, "lob");
+	mods::projectile::throw_object(player, dir, cnt, held_object, "lob");
 }
 
 ACMD(do_giveme_frag_grenades) {
+	MENTOC_PREAMBLE();
 	auto obj = mods::weapon::new_frag_grenade_object();
-	obj_to_char(obj.get(),ch);
+	obj_to_char(obj,player);
 }
 ACMD(do_giveme_incendiary_grenades) {
+	MENTOC_PREAMBLE();
 	auto obj = mods::weapon::new_incendiary_grenade_object();
-	obj_to_char(obj.get(),ch);
+	obj_to_char(obj,player);
 }
 
 ACMD(do_giveme_emp_grenades) {
+	MENTOC_PREAMBLE();
 	auto obj = mods::weapon::new_emp_grenade_object();
-	obj_to_char(obj.get(),ch);
+	obj_to_char(obj,player);
 }
 
 ACMD(do_giveme_smoke_grenades) {
+	MENTOC_PREAMBLE();
 	auto obj = mods::weapon::new_smoke_grenade_object();
-	obj_to_char(obj.get(),ch);
+	obj_to_char(obj,player);
 }
 
 ACMD(do_giveme_flashbang_grenades) {
+	MENTOC_PREAMBLE();
 	auto obj = mods::weapon::new_flashbang_grenade_object();
-	obj_to_char(obj.get(),ch);
+	obj_to_char(obj,player);
 }
 
 ACMD(do_giveme_sniper_rifle) {
@@ -122,8 +127,7 @@ ACMD(do_giveme_sniper_rifle) {
 	if(player->cl_sniper() == nullptr) {
 		player->set_class(CLASS_SNIPER);
 	}
-	obj_to_char(player->sniper_rifle().get(),player->cd());
-
+	obj_to_char(player->sniper_rifle(),player);
 }
 
 
@@ -415,17 +419,15 @@ ACMD(do_reload) {
 
 		if(rounds <= 0) {
 			*player << "Out of ammo.\r\n";
-			player->ammo() = 0;
+			player->set_ammo(0);
 			return;
 		}
 
 		*player << "You load " << rounds << " rounds into " << player->weapon_name() << "\r\n";
-		player->ammo() = 0;
-		player->ammo() = rounds;
+		player->set_ammo(rounds);
 		return;
 	} else {
-		player->ammo() -= 12;
-		player->ammo() = 12;
+		player->set_ammo(12);
 		*player << "You load 12 rounds into " << player->weapon_name() << "\r\n";
 		return;
 	}
@@ -503,46 +505,50 @@ ACMD(do_scan) { /* !mods */
 
 
 ACMD(do_assist) {
+	MENTOC_PREAMBLE();
 	char arg[MAX_INPUT_LENGTH];
-	struct char_data *helpee, *opponent;
+	player_ptr_t helpee,opponent;
 
-	if(FIGHTING(ch)) {
-		send_to_char(ch, "You're already fighting!  How can you assist someone else?\r\n");
+	if(player->fighting()){
+		player->psendln("You're already fighting!  How can you assist someone else?");
 		return;
 	}
 
 	one_argument(argument, arg);
 
 	if(!*arg) {
-		send_to_char(ch, "Whom do you wish to assist?\r\n");
-	} else if(!(helpee = get_char_vis(ch, arg, NULL, FIND_CHAR_ROOM))) {
-		send_to_char(ch, "%s", NOPERSON);
-	} else if(helpee == ch) {
-		send_to_char(ch, "You can't help yourself any more than this!\r\n");
+		player->psendln( "Whom do you wish to assist?");
+	} else if(!(helpee = get_char_vis(player, arg, NULL, FIND_CHAR_ROOM))) {
+		player->send(NOPERSON);
+	} else if(helpee->is(ch)) {
+		player->psendln("You can't help yourself any more than this!");
 	} else {
 		/*
 		 * Hit the same enemy the person you're helping is.
 		 */
-		if(FIGHTING(helpee)) {
-			opponent = FIGHTING(helpee);
-		} else
-			for(opponent = world[IN_ROOM(ch)].people;
-					opponent && (FIGHTING(opponent) != helpee);
-					opponent = opponent->next_in_room)
-				;
+		opponent = nullptr;
+		if(helpee->fighting()) {
+			opponent = helpee->fighting();
+		} else {
+			for(auto & plr : mods::globals::get_room_list(player->room())){
+				if(plr->fighting() == helpee){
+					opponent = plr; break;
+				}
+			}
+		}
 
 		if(!opponent) {
-			act("But nobody is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
-		} else if(!CAN_SEE(ch, opponent)) {
-			act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
-		} else if(!pk_allowed && !IS_NPC(opponent))	/* prevent accidental pkill */
+			act("But nobody is fighting $M!", FALSE, *player, 0, *helpee, TO_CHAR);
+		} else if(!CAN_SEE(player->cd(), opponent->cd())) {
+			act("You can't see who is fighting $M!", FALSE, *player, 0, *helpee, TO_CHAR);
+		} else if(!pk_allowed && !opponent->is_npc())	/* prevent accidental pkill */
 			act("Use 'murder' if you really want to attack $N.", FALSE,
-					ch, 0, opponent, TO_CHAR);
+					ch, 0, *opponent, TO_CHAR);
 		else {
-			send_to_char(ch, "You join the fight!\r\n");
-			act("$N assists you!", 0, helpee, 0, ch, TO_CHAR);
-			act("$n assists $N.", FALSE, ch, 0, helpee, TO_NOTVICT);
-			hit(ch, opponent, TYPE_UNDEFINED);
+			player->psendln("You join the fight!");
+			act("$N assists you!", 0, *helpee, 0, *player, TO_CHAR);
+			act("$n assists $N.", FALSE, ch, 0, *helpee, TO_NOTVICT);
+			hit(*player, *opponent, TYPE_UNDEFINED);
 		}
 	}
 }
@@ -550,7 +556,7 @@ ACMD(do_assist) {
 
 ACMD(do_hit) {
 	char arg[MAX_INPUT_LENGTH];
-	struct char_data *vict;
+	char_data *vict;
 
 	one_argument(argument, arg);
 
@@ -594,7 +600,7 @@ ACMD(do_hit) {
 
 ACMD(do_kill) {
 	char arg[MAX_INPUT_LENGTH];
-	struct char_data *vict;
+	char_data *vict;
 
 	if(GET_LEVEL(ch) < LVL_IMPL || IS_NPC(ch)) {
 		do_hit(ch, argument, cmd, subcmd);
@@ -624,7 +630,7 @@ ACMD(do_kill) {
 
 ACMD(do_backstab) {
 	char buf[MAX_INPUT_LENGTH];
-	struct char_data *vict;
+	char_data *vict;
 	int percent, prob;
 
 	if(IS_NPC(ch) || !GET_SKILL(ch, SKILL_BACKSTAB)) {
@@ -683,7 +689,7 @@ ACMD(do_backstab) {
 ACMD(do_order) {
 	char name[MAX_INPUT_LENGTH], message[MAX_INPUT_LENGTH];
 	bool found = FALSE;
-	struct char_data *vict;
+	char_data *vict;
 	struct follow_type *k;
 
 	half_chop(argument, name, message);
@@ -711,7 +717,7 @@ ACMD(do_order) {
 				act("$n has an indifferent look.", FALSE, vict, 0, 0, TO_ROOM);
 			} else {
 				send_to_char(ch, "%s", OK);
-				command_interpreter(vict, message);
+				command_interpreter(vict, message,0);
 			}
 		} else {			/* This is order "followers" */
 			char buf[MAX_STRING_LENGTH];
@@ -723,7 +729,7 @@ ACMD(do_order) {
 				if(IN_ROOM(ch) == IN_ROOM(k->follower))
 					if(AFF_FLAGGED(k->follower, AFF_CHARM)) {
 						found = TRUE;
-						command_interpreter(k->follower, message);
+						command_interpreter(k->follower, message,0);
 					}
 			}
 
@@ -740,7 +746,7 @@ ACMD(do_order) {
 
 ACMD(do_flee) {
 	int i, attempt, loss;
-	struct char_data *was_fighting;
+	char_data *was_fighting;
 
 	if(GET_POS(ch) < POS_FIGHTING) {
 		send_to_char(ch, "You are in pretty bad shape, unable to flee!\r\n");
@@ -777,7 +783,7 @@ ACMD(do_flee) {
 
 ACMD(do_bash) {
 	char arg[MAX_INPUT_LENGTH];
-	struct char_data *vict;
+	char_data *vict;
 	int percent, prob;
 
 	one_argument(argument, arg);
@@ -842,37 +848,44 @@ ACMD(do_bash) {
 
 
 ACMD(do_rescue) {
+	MENTOC_PREAMBLE();
 	char arg[MAX_INPUT_LENGTH];
-	struct char_data *vict, *tmp_ch;
+	//char_data *vict, *tmp_ch;
 	int percent, prob;
+	player_ptr_t vict,tmp_ch;
 
-	if(IS_NPC(ch) || !GET_SKILL(ch, SKILL_RESCUE)) {
-		send_to_char(ch, "You have no idea how to do that.\r\n");
+	if(player->is_npc() || !GET_SKILL(ch, SKILL_RESCUE)) {
+		player->psendln("You have no idea how to do that.");
 		return;
 	}
 
 	one_argument(argument, arg);
 
-	if(!(vict = get_char_vis(ch, arg, NULL, FIND_CHAR_ROOM))) {
-		send_to_char(ch, "Whom do you want to rescue?\r\n");
+	if(!(vict = get_char_vis(player, arg, NULL, FIND_CHAR_ROOM))) {
+		player->psendln("Whom do you want to rescue?");
 		return;
 	}
 
-	if(vict == ch) {
-		send_to_char(ch, "What about fleeing instead?\r\n");
+	if(vict->is(player)) {
+		player->psendln("What about fleeing instead?");
 		return;
 	}
 
-	if(FIGHTING(ch) == vict) {
-		send_to_char(ch, "How can you rescue someone you are trying to kill?\r\n");
+	if(player->fighting() == vict) {
+		player->psendln("How can you rescue someone you are trying to kill?");
 		return;
 	}
 
-	for(tmp_ch = world[IN_ROOM(ch)].people; tmp_ch &&
-			(FIGHTING(tmp_ch) != vict); tmp_ch = tmp_ch->next_in_room);
+	tmp_ch = nullptr;
+	for(auto & plr : mods::globals::get_room_list(player->room())){
+		auto f = plr->fighting();
+		if(f && f->is(vict)){
+			tmp_ch = f; break;
+		}
+	}
 
 	if(!tmp_ch) {
-		act("But nobody is fighting $M!", FALSE, ch, 0, vict, TO_CHAR);
+		act("But nobody is fighting $M!", FALSE, ch, 0, *vict, TO_CHAR);
 		return;
 	}
 
@@ -880,37 +893,37 @@ ACMD(do_rescue) {
 	prob = GET_SKILL(ch, SKILL_RESCUE);
 
 	if(percent > prob) {
-		send_to_char(ch, "You fail the rescue!\r\n");
+		player->psendln("You fail the rescue!");
 		return;
 	}
 
-	send_to_char(ch, "Banzai!  To the rescue...\r\n");
-	act("You are rescued by $N, you are confused!", FALSE, vict, 0, ch, TO_CHAR);
-	act("$n heroically rescues $N!", FALSE, ch, 0, vict, TO_NOTVICT);
+	player->psendln("Banzai!  To the rescue...");
+	act("You are rescued by $N, you are confused!", FALSE, *vict, 0, ch, TO_CHAR);
+	act("$n heroically rescues $N!", FALSE, ch, 0, *vict, TO_NOTVICT);
 
-	if(FIGHTING(vict) == tmp_ch) {
-		stop_fighting(vict);
+	if(vict->fighting() == tmp_ch) {
+		stop_fighting(*vict);
 	}
 
-	if(FIGHTING(tmp_ch)) {
-		stop_fighting(tmp_ch);
+	if(tmp_ch->fighting()) {
+		stop_fighting(*tmp_ch);
 	}
 
-	if(FIGHTING(ch)) {
-		stop_fighting(ch);
+	if(player->fighting()) {
+		stop_fighting(*player);
 	}
 
-	set_fighting(ch, tmp_ch);
-	set_fighting(tmp_ch, ch);
+	set_fighting(*player, *tmp_ch);
+	set_fighting(*tmp_ch, *player);
 
-	WAIT_STATE(vict, 2 * PULSE_VIOLENCE);
+	WAIT_STATE(vict->cd(), 2 * PULSE_VIOLENCE);
 }
 
 
 
 ACMD(do_kick) {
 	char arg[MAX_INPUT_LENGTH];
-	struct char_data *vict;
+	char_data *vict;
 	int percent, prob;
 
 	if(IS_NPC(ch) || !GET_SKILL(ch, SKILL_KICK)) {

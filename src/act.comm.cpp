@@ -24,12 +24,12 @@
 /* extern variables */
 extern int level_can_shout;
 extern int holler_move_cost;
-extern struct char_data* character_list;
+extern char_data* character_list;
 extern std::deque<mods::descriptor_data> descriptor_list;
 
 /* local functions */
-void perform_tell(struct char_data *ch, struct char_data *vict, char *arg);
-int is_tell_ok(struct char_data *ch, struct char_data *vict);
+void perform_tell(char_data *ch, char_data *vict, char *arg);
+int is_tell_ok(char_data *ch, char_data *vict);
 ACMD(do_say);
 ACMD(do_gsay);
 ACMD(do_tell);
@@ -63,7 +63,7 @@ ACMD(do_say) {
 
 
 ACMD(do_gsay) {
-	struct char_data *k;
+	char_data *k;
 	struct follow_type *f;
 
 	skip_spaces(&argument);
@@ -104,7 +104,7 @@ ACMD(do_gsay) {
 }
 
 
-void perform_tell(struct char_data *ch, struct char_data *vict, char *arg) {
+void perform_tell(char_data *ch, char_data *vict, char *arg) {
 	char buf[MAX_STRING_LENGTH];
 
 	send_to_char(vict, "%s", CCRED(vict, C_NRM));
@@ -126,7 +126,7 @@ void perform_tell(struct char_data *ch, struct char_data *vict, char *arg) {
 	}
 }
 
-int is_tell_ok(struct char_data *ch, struct char_data *vict) {
+int is_tell_ok(char_data *ch, char_data *vict) {
 	if(ch == vict) {
 		send_to_char(ch, "You try to tell yourself something.\r\n");
 	} else if(!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_NOTELL)) {
@@ -151,7 +151,7 @@ int is_tell_ok(struct char_data *ch, struct char_data *vict) {
  * called frequently, and should IMHO be kept as tight as possible.
  */
 ACMD(do_tell) {
-	struct char_data *vict = NULL;
+	char_data *vict = NULL;
 	char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
 
 	half_chop(argument, buf, buf2);
@@ -169,7 +169,7 @@ ACMD(do_tell) {
 
 
 ACMD(do_reply) {
-	struct char_data *tch = character_list;
+	char_data *tch = character_list;
 
 	if(IS_NPC(ch)) {
 		return;
@@ -209,7 +209,7 @@ ACMD(do_reply) {
 
 ACMD(do_spec_comm) {
 	char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
-	struct char_data *vict;
+	char_data *vict;
 	const char *action_sing, *action_plur, *action_others;
 
 	switch(subcmd) {

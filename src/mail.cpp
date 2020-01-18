@@ -38,9 +38,9 @@ position_list_type *free_list = NULL;	/* list of free positions in file */
 long file_end_pos = 0;			/* length of file */
 
 /* local functions */
-void postmaster_send_mail(struct char_data *ch, struct char_data *mailman, int cmd, char *arg);
-void postmaster_check_mail(struct char_data *ch, struct char_data *mailman, int cmd, char *arg);
-void postmaster_receive_mail(struct char_data *ch, struct char_data *mailman, int cmd, char *arg);
+void postmaster_send_mail(char_data *ch, char_data *mailman, int cmd, char *arg);
+void postmaster_check_mail(char_data *ch, char_data *mailman, int cmd, char *arg);
+void postmaster_receive_mail(char_data *ch, char_data *mailman, int cmd, char *arg);
 void push_free_list(long pos);
 long pop_free_list(void);
 void clear_free_list(void);
@@ -514,13 +514,13 @@ SPECIAL(postmaster) {
 	}
 
 	if(CMD_IS("mail")) {
-		postmaster_send_mail(ch, (struct char_data *)me, cmd, argument);
+		postmaster_send_mail(ch, (char_data *)me, cmd, argument);
 		return (1);
 	} else if(CMD_IS("check")) {
-		postmaster_check_mail(ch, (struct char_data *)me, cmd, argument);
+		postmaster_check_mail(ch, (char_data *)me, cmd, argument);
 		return (1);
 	} else if(CMD_IS("receive")) {
-		postmaster_receive_mail(ch, (struct char_data *)me, cmd, argument);
+		postmaster_receive_mail(ch, (char_data *)me, cmd, argument);
 		return (1);
 	} else {
 		return (0);
@@ -528,7 +528,7 @@ SPECIAL(postmaster) {
 }
 
 
-void postmaster_send_mail(struct char_data *ch, struct char_data *mailman,
+void postmaster_send_mail(char_data *ch, char_data *mailman,
                           int cmd, char *arg) {
 	long recipient;
 	char buf[MAX_INPUT_LENGTH], **mailwrite;
@@ -576,7 +576,7 @@ void postmaster_send_mail(struct char_data *ch, struct char_data *mailman,
 }
 
 
-void postmaster_check_mail(struct char_data *ch, struct char_data *mailman,
+void postmaster_check_mail(char_data *ch, char_data *mailman,
                            int cmd, char *arg) {
 	if(has_mail(GET_IDNUM(ch))) {
 		act("$n tells you, 'You have mail waiting.'", FALSE, mailman, 0, ch, TO_VICT);
@@ -586,8 +586,9 @@ void postmaster_check_mail(struct char_data *ch, struct char_data *mailman,
 }
 
 
-void postmaster_receive_mail(struct char_data *ch, struct char_data *mailman,
+void postmaster_receive_mail(char_data *ch, char_data *mailman,
                              int cmd, char *arg) {
+	MENTOC_PREAMBLE();
 	char buf[256];
 	struct obj_data *obj;
 
@@ -598,7 +599,8 @@ void postmaster_receive_mail(struct char_data *ch, struct char_data *mailman,
 	}
 
 	while(has_mail(GET_IDNUM(ch))) {
-		obj = create_obj();
+		auto ptr_obj = blank_object();
+		obj = ptr_obj.get();
 		obj->item_number = NOTHING;
 		obj->name = strdup("mail paper letter");
 		obj->short_description = strdup("a piece of mail");
@@ -611,11 +613,10 @@ void postmaster_receive_mail(struct char_data *ch, struct char_data *mailman,
 		GET_OBJ_RENT(obj) = 10;
 		obj->action_description = read_delete(GET_IDNUM(ch));
 
-		if(obj->action_description == NULL)
-			obj->action_description =
-			    strdup("Mail system error - please report.  Error #11.\r\n");
+		if(obj->action_description.length() == 0)
+			obj->action_description.assign("Mail system error - please report.  Error #11.\r\n");
 
-		obj_to_char(obj, ch);
+		obj_to_char(ptr_obj, player);
 
 		act("$n gives you a piece of mail.", FALSE, mailman, 0, ch, TO_VICT);
 		act("$N gives $n a piece of mail.", FALSE, ch, 0, mailman, TO_ROOM);

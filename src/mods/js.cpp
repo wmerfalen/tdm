@@ -10,9 +10,9 @@
 
 #include <unistd.h>	//for getcwd()
 #define DT_FORMAT "{player_name}:mob_death_trigger"
-extern void command_interpreter(struct char_data* ch,char* argument);
-extern void hit(struct char_data* ch,struct char_data* vict,int type);
-extern void affect_from_char(struct char_data *ch, int type);
+extern void command_interpreter(char_data* ch,char* argument);
+extern void hit(char_data* ch,char_data* vict,int type);
+extern void affect_from_char(char_data *ch, int type);
 extern void mobile_activity();
 namespace mods {
 	namespace js {
@@ -439,7 +439,7 @@ if(key.compare("WATERWALK") == 0){ ::affect_from_char(*player_ptr,SPELL_WATERWAL
 			/* First parameter is character name */
 			std::string cmd =  duk_to_string(ctx,0);
 			mods::globals::current_player->executing_js(true);
-			command_interpreter(mods::globals::current_player->cd(),cmd.c_str());
+			command_interpreter(mods::globals::current_player,cmd);
 			mods::globals::current_player->executing_js(false);
 			return 0;	/* number of return values */
 		}
@@ -449,7 +449,7 @@ if(key.compare("WATERWALK") == 0){ ::affect_from_char(*player_ptr,SPELL_WATERWAL
 			auto player = mods::globals::current_player;
 			mods::globals::current_player->executing_js(true);
 			player->capture_output(true);
-			command_interpreter(player->cd(),cmd.c_str());
+			command_interpreter(player,cmd);
 			player->capture_output(false);
 			mods::globals::current_player->executing_js(false);
 			duk_push_string(ctx,player->get_captured_output().data());

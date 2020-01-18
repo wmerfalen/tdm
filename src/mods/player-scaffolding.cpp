@@ -129,7 +129,7 @@ namespace mods {
 		return 0;
 	}
 	/*
-		 void player_scaffolding::start(struct char_data* owner) {
+		 void player_scaffolding::start(char_data* owner) {
 		 auto player_scaffolding = mods::player_scaffolding::get_existing(owner);
 
 		 if(player_scaffolding == nullptr) {
@@ -143,16 +143,16 @@ namespace mods {
 		 char_to_room(player_scaffolding,IN_ROOM(owner));
 		 owner->player_scaffolding_simulate = true;
 		 }
-		 void player_scaffolding::stop(struct char_data* owner) {
+		 void player_scaffolding::stop(char_data* owner) {
 		 owner->player_scaffolding_simulate = false;
 		 }
-		 bool player_scaffolding::started(struct char_data* owner) {
+		 bool player_scaffolding::started(char_data* owner) {
 		 return owner->player_scaffolding_simulate;
 		 }
-		 void player_scaffolding::simulate(struct char_data* owner,bool value) {
+		 void player_scaffolding::simulate(char_data* owner,bool value) {
 		 owner->player_scaffolding_simulate = value;
 		 }
-		 void player_scaffolding::get_player_scaffolding(struct char_data* owner) {
+		 void player_scaffolding::get_player_scaffolding(char_data* owner) {
 		 auto player_scaffolding = mods::globals::player_list[owner->player_scaffolding_uuid]->cd();
 
 		 if(IN_ROOM(owner) == IN_ROOM(player_scaffolding)) {
@@ -165,7 +165,7 @@ namespace mods {
 		 send_to_char(owner,"Must be in the same room as your player_scaffolding\r\n");
 		 }
 		 }
-		 struct char_data * player_scaffolding::get_existing(struct char_data* owner) {
+		 char_data * player_scaffolding::get_existing(char_data* owner) {
 		 if(owner->player_scaffolding_uuid == 0 || owner->player_scaffolding_uuid > mods::globals::player_list.size() -1) {
 		 return nullptr;
 		 }
@@ -173,7 +173,7 @@ namespace mods {
 		 return mods::globals::player_list[owner->player_scaffolding_uuid]->cd();
 		 }
 
-		 bool player_scaffolding::interpret(struct char_data *owner,const std::string& argument) {
+		 bool player_scaffolding::interpret(char_data *owner,const std::string& argument) {
 		 auto player_scaffolding = mods::globals::player_list[owner->player_scaffolding_uuid];
 
 		 if(argument.compare("player_scaffolding stop") == 0) {
@@ -182,7 +182,7 @@ namespace mods {
 		 }
 
 		 if(argument.compare("scan") == 0) {
-		 for(auto & ch : mods::globals::room_list[player_scaffolding->cd()->in_room]){
+		 for(auto & ch : mods::globals::get_room_list(player_scaffolding->cd()->in_room)){
 		 mods::player(ch) << "You have been spotted.\r\n";
 		 }
 		 return false;

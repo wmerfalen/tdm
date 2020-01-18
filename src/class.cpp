@@ -30,15 +30,15 @@
 extern int siteok_everyone;
 
 /* local functions */
-void snoop_check(struct char_data *ch);
+void snoop_check(char_data *ch);
 player_class_t parse_class(char arg);
 bitvector_t find_class_bitvector(const char *arg);
 byte saving_throws(int class_num, int type, int level);
 int thaco(int class_num, int level);
-void roll_real_abils(struct char_data *ch);
-void do_start(struct char_data *ch);
+void roll_real_abils(char_data *ch);
+void do_start(char_data *ch);
 int backstab_mult(int level);
-int invalid_class(struct char_data *ch, struct obj_data *obj);
+int invalid_class(char_data *ch, struct obj_data *obj);
 int level_exp(int chclass, int level);
 const char *title_male(int chclass, int level);
 const char *title_female(int chclass, int level);
@@ -3649,7 +3649,7 @@ int thaco(int class_num, int level) {
  * the best 3 out of 4 rolls of a 6-sided die.  Each class then decides
  * which priority will be given for the best to worst stats.
  */
-void roll_real_abils(struct char_data *ch) {
+void roll_real_abils(char_data *ch) {
 	int i, j, k, temp;
 	ubyte table[6];
 	ubyte rolls[4];
@@ -3725,7 +3725,7 @@ void roll_real_abils(struct char_data *ch) {
 
 
 /* Some initializations for characters, including initial skills */
-void do_start(struct char_data *ch) {
+void do_start(char_data *ch) {
 	MENTOC_PREAMBLE();
 	player->level() = 1;
 	player->exp() = 1;
@@ -3780,7 +3780,7 @@ void do_start(struct char_data *ch) {
  * This function controls the change to maxmove, maxmana, and maxhp for
  * each class every time they gain a level.
  */
-void advance_level(struct char_data *ch) {
+void advance_level(char_data *ch) {
 	MENTOC_PREAMBLE();
 	int add_hp, add_mana = 0, add_move = 0, i;
 
@@ -3864,7 +3864,7 @@ int backstab_mult(int level) {
  * invalid_class is used by handler.c to determine if a piece of equipment is
  * usable by a particular class, based on the ITEM_ANTI_{class} bitvectors.
  */
-int invalid_class(struct char_data *ch, struct obj_data *obj) {
+int invalid_class(char_data *ch, struct obj_data *obj) {
 	if(OBJ_FLAGGED(obj, ITEM_ANTI_MAGIC_USER) && IS_MAGIC_USER(ch)) {
 		return TRUE;
 	}

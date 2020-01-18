@@ -30,9 +30,9 @@ struct house_control_rec {
 #define TOROOM(room, dir) (world[room].dir_option[dir] ? \
 			    world[room].dir_option[dir]->to_room : NOWHERE)
 
-void	House_listrent(struct char_data *ch, room_vnum vnum);
+void	House_listrent(char_data *ch, room_vnum vnum);
 void	House_boot(void);
 void	House_save_all(void);
-int	House_can_enter(struct char_data *ch, room_vnum house);
+int	House_can_enter(char_data *ch, room_vnum house);
 void	House_crashsave(room_vnum vnum);
-void	House_list_guests(struct char_data *ch, int i, int quiet);
+void	House_list_guests(char_data *ch, int i, int quiet);

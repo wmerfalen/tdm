@@ -400,6 +400,9 @@ void fill_armor(std::shared_ptr<obj_data>& obj) {
 	proto.obj_flags.wear_flags = ITEM_WEAR_TAKE;
 }
 
+void fill_consumable(std::shared_ptr<obj_data>& obj) {
+	/** TODO: this */
+}
 
 #define MENTOC_OBJ_FUNC(r,data,TYPE)\
 std::shared_ptr<obj_data> BOOST_PP_CAT(TYPE,_object)(std::string_view file){\

@@ -30,7 +30,6 @@
 #include <pqxx/pqxx>
 #include <unordered_map>
 
-//#define MENTOC_PREAMBLE() auto player = IS_NPC(ch) ? std::make_shared<mods::player>(ch) : mods::globals::socket_map[ch->desc->descriptor];
 #define MENTOC_PREAMBLE() auto player = IS_NPC(ch) ? std::make_shared<mods::player>(ch) \
 																				: mods::globals::socket_map[ch->desc->descriptor];
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
@@ -93,15 +92,21 @@ namespace mods {
 		void init(int,char**);
 		void pre_game_loop();
 		void load_player_map();
-		uuid_t get_uuid();
+		uuid_t player_uuid();
+		uuid_t mob_uuid();
 		uuid_t obj_uuid();
 		extern boot_type_t boot_type;
 		extern map_object_list obj_map;
 		extern socket_map_t socket_map;
 		extern player_ptr_t player_nobody;
+		extern std::map<obj_data*,obj_ptr_t> obj_odmap;
+		extern std::map<uuid_t,std::shared_ptr<mods::npc>> mob_map;
+		extern std::map<char_data*,std::shared_ptr<mods::npc>> mob_chmap;
+		extern std::map<char_data*,std::shared_ptr<mods::player>> player_chmap;
 		extern std::unique_ptr<mods::deferred> defer_queue;
 		extern std::unique_ptr<lmdb_db> db;
 		extern std::map<const char*,player_ptr_t> player_name_map;
+		extern std::map<uuid_t,player_ptr_t> player_map;
 		extern ai_state_map states;
 		extern duk_context* duktape_context;
 		extern room_list_t room_list;
@@ -118,7 +123,8 @@ namespace mods {
 		std::unique_ptr<ai_state>& state_fetch(char_data* ch);
 		int mobile_activity(char_data*);
 		char_data* read_mobile(const mob_vnum &,const int & type);
-		void register_object(obj_data&);
+		void register_player(player_ptr_t);
+		void register_object(obj_ptr_t);
 		void register_object_list();
 		void register_room(const room_rnum&);
 		void shutdown();
@@ -135,13 +141,22 @@ namespace mods {
 		bool command_interpreter(player_ptr_t,const std::string& argument);
 		void post_command_interpreter(char_data *ch, char* argument);
 		int dir_int(char);
+		void affect_room_light(int room,int offset);
 		namespace rooms {
 			void char_from_room(char_data*);
 			void char_to_room(const room_rnum &,char_data*);
 		};
 		void pad_room(int room,char_data* ch,int door);
+		player_list_t& get_room_list(room_rnum);
+		player_list_t& get_room_list(player_ptr_t&);
 	};
 };
+extern std::deque<std::shared_ptr<obj_data>> obj_list;
+extern std::deque<std::shared_ptr<mods::npc>> mob_list;
 
+player_ptr_t ptr(char_data*);
+obj_ptr_t optr(obj_data*);
+std::optional<obj_ptr_t> optr_opt(uuid_t);
+std::optional<player_ptr_t> ptr_opt(uuid_t);
 
 #endif

@@ -16,11 +16,11 @@
 #include "interpreter.h"
 #include "db.h"
 
-void write_aliases(struct char_data *ch);
-void read_aliases(struct char_data *ch);
+void write_aliases(char_data *ch);
+void read_aliases(char_data *ch);
 void delete_aliases(const char *charname);
 
-void write_aliases(struct char_data *ch) {
+void write_aliases(char_data *ch) {
 	FILE *file;
 	char fn[MAX_STRING_LENGTH];
 	struct alias_data *temp;
@@ -53,7 +53,7 @@ void write_aliases(struct char_data *ch) {
 	fclose(file);
 }
 
-void read_aliases(struct char_data *ch) {
+void read_aliases(char_data *ch) {
 	std::cerr << "read_aliases[deprecation-notice]->'" <<
 		"Please don't use read_aliases until it has been" <<
 		" usurped by lmdb! -wm 2018-10-15\n";

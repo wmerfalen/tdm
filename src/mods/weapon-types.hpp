@@ -6,14 +6,15 @@
 
 #include "yaml.hpp"
 #ifndef __MENTOC_ITEM_CONSTANTS_DEFINED__
-#define ITEM_RIFLE     1
-#define ITEM_EXPLOSIVE 2
-#define ITEM_GADGET    3
-#define ITEM_DRONE     4
-#define ITEM_WEAPON    5		/* Item is a weapon		*/
+#define ITEM_RIFLE             1
+#define ITEM_EXPLOSIVE         2
+#define ITEM_GADGET            3
+#define ITEM_DRONE             4
+#define ITEM_WEAPON            5		/* Item is a weapon		*/
 #define ITEM_WEAPON_ATTACHMENT 6 /* item is a weapon attachment */
-#define ITEM_ATTACHMENT 6
-#define ITEM_ARMOR     7
+#define ITEM_ATTACHMENT        6
+#define ITEM_ARMOR             7
+#define ITEM_CONSUMABLE        8
 #endif
 #include "item-types.hpp"
 
@@ -46,6 +47,11 @@ namespace mods::weapon::type {
 		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ARMOR_TYPES_SEQUENCE)
 	};
 
+	enum consumable {
+		CONSUMABLE_NONE = 0,
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_CONSUMABLE_TYPES_SEQUENCE)
+	};
+
 #define MENTOC_TYPE_LIST_IMPL(r,data,ITEM_TYPE) \
 	ITEM_TYPE = BOOST_PP_CAT(ITEM_,ITEM_TYPE) BOOST_PP_COMMA()
 
@@ -69,7 +75,11 @@ namespace mods::weapon_types {
 };
 #define MENTOC_DATA_CLASS(r,data,CLASS_TYPE)\
 struct BOOST_PP_CAT(CLASS_TYPE,_data_t) {\
-	BOOST_PP_CAT(CLASS_TYPE, _data_t)() = default;\
+	BOOST_PP_CAT(CLASS_TYPE, _data_t)(){\
+		attributes = nullptr; feed_file = ""; id=0;vnum=0;rarity=0;\
+		manufacturer = ""; name=""; type = (decltype(type))0;\
+		\
+	}\
 	BOOST_PP_CAT(CLASS_TYPE, _data_t)(std::string_view in_feed_file) :\
 		manufacturer("ACME Industries"), name(""), type(static_cast<BOOST_PP_CAT(mw_,CLASS_TYPE)>(0)), id(0), vnum(0), rarity(mods::rarity::DEFAULT)\
 	{\
@@ -82,6 +92,7 @@ struct BOOST_PP_CAT(CLASS_TYPE,_data_t) {\
 	std::string feed_file;\
 	~BOOST_PP_CAT(CLASS_TYPE,_data_t)() = default;\
 	std::unique_ptr<mods::yaml::BOOST_PP_CAT(CLASS_TYPE,_description_t)> attributes;\
+	bool has_attr(){ return this->attributes != nullptr; }\
 	std::string manufacturer;\
 	std::string name;\
 	BOOST_PP_CAT(mw_,CLASS_TYPE) type;\

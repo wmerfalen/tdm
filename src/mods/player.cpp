@@ -23,9 +23,12 @@
  * output.
  */
 
-extern void do_auto_exits(struct char_data *ch);
+extern void do_auto_exits(char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
 extern mods::scan::find_results_t mods::scan::los_find(chptr hunter,chptr hunted);
+extern void affect_modify(char_data *ch, 
+		byte loc, sbyte mod, bitvector_t bitv, bool add);
+extern void affect_total(char_data *ch);
 enum histfile_type_t {
 	HISTFILE_FILE = 1, HISTFILE_LMDB = 2, HISTFILE_DUAL = 3
 };
@@ -105,7 +108,7 @@ namespace mods {
 		m_char_data->player_specials = m_player_specials;
 		/** Need a better uuid generator than this */
 		/** FIXME: this is not how uuid's should be generated */
-		m_char_data->uuid = mods::globals::player_list.size();
+		m_char_data->uuid = mods::globals::player_uuid();
 		m_char_data->next = character_list;
 		character_list = m_char_data;
 		/** FIXME: need to set the m_char_data->desc */
@@ -194,24 +197,83 @@ namespace mods {
 
 		page(m_current_page +1);
 	}
-	obj_data* player::legacy_equipment(int pos) {
-		return m_char_data->equipment[pos];
-	}
-	std::shared_ptr<obj_data> player::equipment(int pos) {
-		return std::make_shared<obj_data>(*m_char_data->equipment[pos]);
-	}
-	void player::equip(obj_data* obj,int pos) {
-		if(pos == WEAR_WIELD){
-			m_weapon_flags = obj->obj_flags.weapon_flags;
+	obj_ptr_t player::equipment(int pos) {
+		if(pos >= NUM_WEARS || pos < 0){
+			std::cerr << "[ERROR]: player::equipment received invalid pos: " << pos << "\n";
+			return nullptr;
 		}
-		m_char_data->equipment[pos] = obj;
+		return m_equipment[pos];
+	}
+	void player::equip(obj_ptr_t in_object,int pos) {
+		if(pos < NUM_WEARS){
+			if(pos == WEAR_WIELD){
+				m_weapon_flags = in_object->obj_flags.weapon_flags;
+			}
+			in_object->worn_by = cd();
+			in_object->worn_on = WEAR_WIELD;
+			m_equipment[pos] = in_object;
+			perform_equip_calculations(pos,true);
+		}
 	}
 	void player::unequip(int pos) {
-		if(pos == WEAR_WIELD){
-			/** FIXME: this needs to negate the bit */
-			m_weapon_flags = m_char_data->equipment[pos]->obj_flags.weapon_flags;
+		if(pos < NUM_WEARS && m_equipment[pos]){
+			if(pos == WEAR_WIELD){
+				/** FIXME: this needs to negate the bit */
+				m_weapon_flags = 0;//m_equipment[pos]->obj_flags.weapon_flags;
+			}
+			perform_equip_calculations(pos,false);
+			m_equipment[pos]->worn_by = nullptr;
+			m_equipment[pos]->worn_on = -1;
+			m_equipment[pos] = nullptr;
 		}
-		m_char_data->equipment[pos] = nullptr;
+	}
+	void player::perform_equip_calculations(int pos,bool equip){
+	if(m_equipment[pos]->obj_flags.type_flag == ITEM_ARMOR) {
+		int factor = 1;
+		switch(pos) {
+			case WEAR_BODY:
+				factor = 3;
+				break;			/* 30% */
+
+			case WEAR_HEAD:
+				factor = 2;
+				break;			/* 20% */
+
+			case WEAR_LEGS:
+				factor = 2;
+				break;			/* 20% */
+
+			default:
+				factor = 1;
+				break;			/* all others 10% */
+		}
+		armor() += factor * m_equipment[pos]->obj_flags.value[0];
+	}
+	int8_t light = 0;
+	//TODO: FIXME: perform updated modern logic of the below code
+	if(pos == WEAR_LIGHT && m_equipment[pos]->obj_flags.type_flag == ITEM_LIGHT){
+		if(equip){
+			if(m_equipment[pos]->obj_flags.value[2]) {	/* if light is ON */
+				light = 1;
+			}
+		}
+		if(!equip){
+			if(m_equipment[pos]->obj_flags.value[2]) {	/* if light is ON */
+				light = -1;
+			}
+		}
+		if(light != 0){
+			mods::globals::affect_room_light(room(),light);
+		}
+	}
+	for(unsigned j = 0; j < MAX_OBJ_AFFECT; j++){
+		affect_modify(m_char_data, m_equipment[pos]->affected[j].location,
+		              m_equipment[pos]->affected[j].modifier,
+		              m_equipment[pos]->obj_flags.bitvector, equip);
+	}
+
+	affect_total(m_char_data);
+
 	}
 	bool player::has_weapon_capability(uint8_t type) {
 		auto w = rifle();
@@ -244,11 +306,17 @@ namespace mods {
 		return false;
 	}
 	/** TODO: do this */
-	obj_data* player::carry(obj_data* obj){
-		return new obj_data;
+	void player::carry(obj_ptr_t obj){
+		if(obj == nullptr){
+			m_char_data->m_carrying.clear();
+			m_char_data->carrying = nullptr;
+			return;
+		}
+		m_char_data->m_carrying.emplace_back(obj);
+		m_char_data->carrying = obj.get();
 	}
 	obj_data* player::carrying(){
-		return cd()->carrying;
+		return m_char_data->carrying;
 	}
 	std::string player::js_object() {
 		std::string obj = std::string("{ 'name': '") + std::string(cd()->player.name) + std::string("','uuid':");
@@ -337,7 +405,7 @@ namespace mods {
 		return false;
 	}
 	void player::ammo_adjustment(int increment) {
-		this->ammo() += increment;
+		set_ammo(ammo() + increment);
 	}
 	player& player::pager_start() {
 		m_do_paging = true;
@@ -521,6 +589,7 @@ namespace mods {
 			m_shared_ptr.reset();
 		}
 		m_lense_type = NORMAL_SIGHT;
+		for(unsigned i=0;i < NUM_WEARS;i++){ m_equipment[i] = nullptr; }
 	}
 	void player::set_cd(char_data* ch) {
 		m_char_data = ch;
@@ -968,6 +1037,20 @@ namespace mods {
 		}
 		m_lense_type = NORMAL_SIGHT;
 	}
+	size_t player::send(const char *messg, ...) {
+		if(messg && *messg) {
+			size_t left;
+			va_list args;
+
+			va_start(args, messg);
+			left = vwrite_to_output(*(cd()->desc), messg, args);
+			va_end(args);
+			return left;
+		}
+
+		return 0;
+	}
+
 
 	mods::affects::dissolver& player::get_affect_dissolver() {
 		return m_affects;

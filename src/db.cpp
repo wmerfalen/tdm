@@ -52,7 +52,7 @@ void parse_sql_mobiles();
 std::vector<room_data> world;	/* array of rooms		 */
 room_rnum top_of_world = 0;	/* ref to top element of world	 */
 
-extern struct char_data *character_list;	/* global linked list of
+extern char_data *character_list;	/* global linked list of
 																					 * chars	 */
 std::vector<index_data> mob_index;	/* index table for mobile file	 */
 std::vector<char_data> mob_proto;	/* prototypes for mobs		 */
@@ -136,7 +136,7 @@ void interpret_espec(const char *keyword, const char *value, int i, int nr);
 void parse_espec(char *buf, int i, int nr);
 void parse_enhanced_mob(FILE *mob_f, int i, int nr);
 void get_one_line(FILE *fl, char *buf);
-void save_etext(struct char_data *ch);
+void save_etext(char_data *ch);
 void check_start_rooms(void);
 void renum_world(void);
 void renum_zone_table(void);
@@ -533,7 +533,7 @@ void destroy_db(void) {
 	//mods::globals::db->commit();
 	//mods::globals::db->close();
 	//	ssize_t cnt, itr;
-	//	struct char_data *chtmp;
+	//	char_data *chtmp;
 	//
 	/* Active Mobiles & Players */
 	//	
@@ -1006,14 +1006,16 @@ void parse_sql_mobiles() {
 
 		for(auto && row : db_get_all("mobile")) {
 			char_data proto;
+			d("name");
 			proto.player.name.assign(row["mob_name"]);
 			std::cout << "DEBUG: mob proto name: '" << row["mob_name"].c_str() << "'\n";
-			proto.player.short_descr.assign(row["mob_short_description"].c_str());
-			proto.player.long_descr.assign(row["mob_long_description"].c_str());
+			proto.player.short_descr.assign(row["mob_short_description"]);
+			proto.player.long_descr.assign(row["mob_long_description"]);
 
-			proto.player.description.assign(row["mob_description"].c_str());
+			proto.player.description.assign(row["mob_description"]);
+			d("mob desc");
 
-			proto.char_specials.saved.act = mods::util::stoi<int>(row["mob_action_bitvector"].c_str());
+			proto.char_specials.saved.act = mods::util::stoi<int>(row["mob_action_bitvector"]);
 			SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
 			REMOVE_BIT(proto.char_specials.saved.act, MOB_NOTDEADYET);
 			proto.char_specials.saved.affected_by = mods::util::stoi<int>(row["mob_affection_bitvector"]);
@@ -1072,7 +1074,7 @@ void parse_sql_mobiles() {
 			}
 
 			proto.nr = 0;
-			proto.uuid = mods::globals::get_uuid();
+			proto.uuid = mods::globals::mob_uuid();
 			mob_proto.push_back(proto);
 			top_of_mobt = mob_proto.size();
 			index_data m_index;
@@ -1094,12 +1096,18 @@ int parse_sql_objects() {
 			//mods::meta_utils::write_meta("object",&row);
 			/** FIXME: this function has some issues. */
 			index_data index;
+			d("obj_item_number");
 			index.vnum = mods::util::stoi<int>(row["obj_item_number"]);
+			d("obj_item_number");
 			index.number = 0;
 			index.func = nullptr;
+			d("obj_index pushback");
 			obj_index.push_back(index);
+			d("obj_index pushback");
 			obj_data proto;
+			d("proto declared");
 			//!proposed lmdb code:
+			d("grabbing affected type by item_number" << row["obj_item_number"].c_str());
 			auto aff_rows = db_get_by_meta("affected_type","aff_fk_id",row["obj_item_number"]);
 			for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
 				proto.affected[i].location = 0;
@@ -1108,9 +1116,12 @@ int parse_sql_objects() {
 
 			unsigned aff_index = 0;
 
+			d("looping aff_rows");
 			for(auto aff_row : aff_rows) {
+				d("INSIDE looping aff_rows");
 				//mods::meta_utils::write_meta("affected_type",&aff_row);
 				if(aff_index >= MAX_OBJ_AFFECT) {
+				d("aff_index is invalid");
 					log(
 							(std::string(
 													 "WARNING: sql has more affected rows than allowed on object #")
@@ -1119,14 +1130,18 @@ int parse_sql_objects() {
 						 );
 					break;
 				}
+				d("setting aff_*");
 				proto.affected[aff_index].location = mods::util::stoi<int>(row["aff_location"]);
 				proto.affected[aff_index].modifier = mods::util::stoi<int>(row["aff_modifier"]);
 				++aff_index;
+				d("set aff_*");
 			}
 
+			d("item_number");
 			proto.item_number = mods::util::stoi<int>(row["obj_item_number"]);
-			proto.name = strdup((row["obj_name"]).c_str());
-			proto.description = strdup((row["obj_description"]).c_str());
+			d("item_number");
+			proto.name.assign(row["obj_name"]);
+			proto.description.assign(row["obj_description"]);
 #define MENTOC_STR(sql_name,obj_name) \
 			if(mods::string(row[#sql_name]).length()){\
 				proto.obj_name = \
@@ -1134,14 +1149,16 @@ int parse_sql_objects() {
 			}else{\
 				proto.obj_name = strdup("<proto.obj_name>");\
 			}
-			MENTOC_STR(obj_short_description,short_description);
-			MENTOC_STR(obj_action_description,action_description);
+			proto.short_description.assign(row["obj_short_description"]);
+			proto.action_description.assign(row["obj_action_description"]);
 			auto ed_rows = db_get_by_meta("extra_description","obj_fk_id",row["id"]);
 			proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
 			proto.ex_description->next = nullptr;
 			proto.ex_description->keyword = proto.ex_description->description = nullptr;
 
+			d("ed rows.size()");
 			if(ed_rows.size()) {
+				d("INSIDE ed rows.size()");
 				auto ex_desc = proto.ex_description;
 				auto previous = ex_desc;
 				int ctr = 0;
@@ -1166,11 +1183,14 @@ int parse_sql_objects() {
 			}
 
 			proto.ex_description->next = nullptr;
+			d("worn_on");
 			proto.worn_on = mods::util::stoi<int>(row["obj_worn_on"]);
+			d("type");
 			proto.type = mods::util::stoi<int>(row["obj_type"]);
 			//proto.ammo = 0;
 			auto flag_rows = db_get_by_meta("object_flags","obj_fk_id",(row["id"]));
 			if(flag_rows.size() > 0){
+				d("feeding flags row");
 				proto.obj_flags.feed(flag_rows[0]);
 			}
 
@@ -1185,8 +1205,11 @@ int parse_sql_objects() {
 			proto.in_obj = nullptr;
 			proto.worn_by = nullptr;
 			proto.carried_by = nullptr;
+			d("feeding proto row");
 			proto.feed(row);
+			d("feeding proto row - DONE");
 			obj_proto.push_back(proto);
+			d("added proto to proto obj_proto");
 		}
 	} else {
 		log("[notice] no objects from sql");
@@ -1893,7 +1916,7 @@ int hsort(const void *a, const void *b) {
  *************************************************************************/
 
 
-int vnum_mobile(char *searchname, struct char_data *ch) {
+int vnum_mobile(char *searchname, char_data *ch) {
 	unsigned int nr, found = 0;
 
 	for(nr = 0; nr <= top_of_mobt; nr++)
@@ -1906,12 +1929,13 @@ int vnum_mobile(char *searchname, struct char_data *ch) {
 
 
 
-int vnum_object(char *searchname, struct char_data *ch) {
+int vnum_object(char *searchname, char_data *ch) {
+	MENTOC_PREAMBLE();
 	unsigned int nr, found = 0;
 
 	for(nr = 0; nr <= top_of_objt; nr++)
 		if(isname(searchname, obj_proto[nr].name)) {
-			send_to_char(ch, "%3d. [%5d] %s\r\n", ++found, obj_index[nr].vnum, obj_proto[nr].short_description);
+			player->send("%3d. [%5d] %s\r\n", ++found, obj_index[nr].vnum, obj_proto[nr].short_description.c_str());
 		}
 
 	return (found);
@@ -1919,7 +1943,7 @@ int vnum_object(char *searchname, struct char_data *ch) {
 
 
 /* create a new mobile from a prototype */
-struct char_data *read_mobile(mob_vnum nr, int type) { /* and mob_rnum */
+char_data *read_mobile(mob_vnum nr, int type) { /* and mob_rnum */
 	return mods::globals::read_mobile(nr,type);
 	/*
 		 mob_rnum i;
@@ -1934,7 +1958,7 @@ struct char_data *read_mobile(mob_vnum nr, int type) { /* and mob_rnum */
 		 i = nr;
 		 }
 
-		 CREATE(mob, struct char_data, 1);
+		 CREATE(mob, char_data, 1);
 		 clear_char(mob);	//commented out
 	 *mob = mob_proto[i];
 	 mob->next = character_list;
@@ -1962,17 +1986,10 @@ struct char_data *read_mobile(mob_vnum nr, int type) { /* and mob_rnum */
 }
 
 
-/* create an object, and add it to the object list */
-obj_data *create_obj(void) {
-	auto obj = blank_object();
-	return obj.get();
-}
-
-std::shared_ptr<obj_data> blank_object() {
+obj_ptr_t blank_object() {
 	obj_list.push_back(std::make_shared<obj_data>());
-	auto ptr = obj_list.back();
-	clear_object(ptr.get());
-	return std::move(ptr);
+	mods::globals::register_object(obj_list.back());
+	return obj_list.back();
 }
 
 
@@ -1994,6 +2011,7 @@ struct obj_data *read_object(obj_vnum nr, int type) { /* and obj_rnum */
 	clear_object(ptr.get());
 	*ptr = obj_proto[i];
 	obj_index[i].number++;
+	mods::globals::register_object(obj_list.back());
 	return ptr.get();
 }
 
@@ -2091,7 +2109,7 @@ void reset_zone(zone_rnum zone) {
 		return;
 	}
 	int cmd_no = 0, last_cmd = 0;
-	struct char_data *mob = NULL;
+	char_data *mob = NULL;
 	struct obj_data *obj, *obj_to;
 
 	for(auto ZCMD : zone_table[zone].cmd) {
@@ -2148,7 +2166,7 @@ void reset_zone(zone_rnum zone) {
 						break;
 					}
 
-					obj_to_obj(obj, obj_to);
+					obj_to_obj(TO_OBJ_PTR(obj), TO_OBJ_PTR(obj_to));
 					last_cmd = 1;
 				} else {
 					last_cmd = 0;
@@ -2185,7 +2203,7 @@ void reset_zone(zone_rnum zone) {
 						ZONE_ERROR("invalid equipment pos number");
 					} else {
 						obj = read_object(ZCMD.arg1, REAL);
-						equip_char(mob, obj, ZCMD.arg3);
+						equip_char(ptr(mob), optr(obj), ZCMD.arg3);
 						last_cmd = 1;
 					}
 				} else {
@@ -2538,7 +2556,7 @@ __MENTOC_PLR(PLR_NOTDEADYET);
 	return true;
 }
 /* copy data from the file structure to a char struct */
-void store_to_char(struct char_file_u *st, struct char_data *ch) {
+void store_to_char(struct char_file_u *st, char_data *ch) {
 	log("DEPRECATED -- Store_to_char");
 	return;
 }
@@ -2547,7 +2565,10 @@ void store_to_char(struct char_file_u *st, struct char_data *ch) {
 
 
 /* copy vital data from a players char-structure to the file structure */
-void char_to_store(struct char_data *ch, struct char_file_u *st) {
+void char_to_store(char_data *ch, struct char_file_u *st) {
+	log("DEPRECATED: char_to_store");
+	return;
+#if 0
 	int i;
 	struct affected_type *af;
 	struct obj_data *char_eq[NUM_WEARS];
@@ -2646,16 +2667,17 @@ void char_to_store(struct char_data *ch, struct char_file_u *st) {
 
 	for(i = 0; i < NUM_WEARS; i++) {
 		if(char_eq[i]) {
-			equip_char(ch, char_eq[i], i);
+			legacy_equip_char(ch, char_eq[i], i);
 		}
 	}
 
 	/*   affect_total(ch); unnecessary, I think !?! */
+#endif
 }				/* Char to store */
 
 
 
-void save_etext(struct char_data *ch) {
+void save_etext(char_data *ch) {
 	/* this will be really cool soon */
 }
 
@@ -2736,7 +2758,7 @@ char *fread_string(FILE *fl, const char *error) {
 
 
 /* release memory allocated for a char struct */
-void free_char(struct char_data *ch) {
+void free_char(char_data *ch) {
 	log("DEPRECATED: free_char");
 	alias_data *a;
 
@@ -2766,47 +2788,48 @@ void free_obj(struct obj_data *obj) {
 
 	if((nr = GET_OBJ_RNUM(obj)) == NOTHING) {
 		if(obj->name) {
-			free(obj->name);
+			obj->name.assign("");
 		}
 
 		if(obj->description) {
-			free(obj->description);
+			obj->description.assign("");
 		}
 
 		if(obj->short_description) {
-			free(obj->short_description);
+			obj->short_description.assign("");
 		}
 
 		if(obj->action_description) {
-			free(obj->action_description);
+			obj->action_description.assign("");
 		}
 
 		if(obj->ex_description) {
 			free_extra_descriptions(obj->ex_description);
 		}
 	} else {
-		if(obj->name && obj->name != obj_proto[nr].name) {
-			free(obj->name);
+		if(obj->name.length() && strcmp(obj->name.c_str(),obj_proto[nr].name.c_str()) != 0) {
+			obj->name.assign("");
 		}
 
-		if(obj->description && obj->description != obj_proto[nr].description) {
-			free(obj->description);
+		if(obj->description.length() && strcmp(obj->description.c_str(),obj_proto[nr].description.c_str()) != 0) {
+			obj->description.assign("");
 		}
 
-		if(obj->short_description && obj->short_description != obj_proto[nr].short_description) {
-			free(obj->short_description);
+		if(obj->short_description.length() && strcmp(obj->short_description.c_str(),obj_proto[nr].short_description.c_str()) != 0){
+			obj->short_description.assign("");
 		}
 
-		if(obj->action_description && obj->action_description != obj_proto[nr].action_description) {
-			free(obj->action_description);
+		if(obj->action_description.length() && strcmp(obj->action_description.c_str(),obj_proto[nr].action_description.c_str()) != 0){
+			obj->action_description.assign("");
 		}
 
-		if(obj->ex_description && obj->ex_description != obj_proto[nr].ex_description) {
+		/** FIXME decipher and refactor */
+		/**
+		if(obj->ex_description  && strcmp(obj->ex_descriptionc_str(),obj_proto[nr].ex_description.c_str()) != 0){
 			free_extra_descriptions(obj->ex_description);
 		}
+		*/
 	}
-
-	free(obj);
 }
 
 
@@ -2889,7 +2912,6 @@ void reset_char(char_data *ch) {
 	ch->carrying = nullptr;
 	ch->next = nullptr;
 	ch->next_fighting = nullptr;
-	ch->next_in_room = nullptr;
 	FIGHTING(ch) = nullptr;
 	ch->char_specials.position = POS_STANDING;
 	ch->mob_specials.default_pos = POS_STANDING;
@@ -3151,7 +3173,7 @@ int check_object(struct obj_data *obj) {
 		log("SYSERR: Object #%d (%s) has negative cost/day (%d).",
 				GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_RENT(obj));
 
-	snprintf(objname, sizeof(objname), "Object #%d (%s)", GET_OBJ_VNUM(obj), obj->short_description);
+	snprintf(objname, sizeof(objname), "Object #%d (%s)", GET_OBJ_VNUM(obj), obj->short_description.c_str());
 	error |= check_bitvector_names(GET_OBJ_WEAR(obj), wear_bits_count, objname, "object wear");
 	error |= check_bitvector_names(GET_OBJ_EXTRA(obj), extra_bits_count, objname, "object extra");
 	error |= check_bitvector_names(GET_OBJ_AFFECT(obj), affected_bits_count, objname, "object affect");
@@ -3160,18 +3182,18 @@ int check_object(struct obj_data *obj) {
 		case ITEM_DRINKCON: {
 													char onealias[MAX_INPUT_LENGTH], *space = strrchr(obj->name, ' ');
 
-													strlcpy(onealias, space ? space + 1 : obj->name, sizeof(onealias));
+													strlcpy(onealias, space ? space + 1 : obj->name.c_str(), sizeof(onealias));
 
 													if(search_block(onealias, drinknames, TRUE) < 0 && (error = TRUE))
 														log("SYSERR: Object #%d (%s) doesn't have drink type as last alias. (%s)",
-																GET_OBJ_VNUM(obj), obj->short_description, obj->name);
+																GET_OBJ_VNUM(obj), obj->short_description.c_str(), obj->name.c_str());
 												}
 
 												/* Fall through. */
 		case ITEM_FOUNTAIN:
 												if(GET_OBJ_VAL(obj, 1) > GET_OBJ_VAL(obj, 0) && (error = TRUE))
 													log("SYSERR: Object #%d (%s) contains (%d) more than maximum (%d).",
-															GET_OBJ_VNUM(obj), obj->short_description,
+															GET_OBJ_VNUM(obj), obj->short_description.c_str(),
 															GET_OBJ_VAL(obj, 1), GET_OBJ_VAL(obj, 0));
 
 												break;

@@ -27,19 +27,19 @@
 int extractions_pending = 0;
 
 /* external vars */
-extern struct char_data *combat_list;
+extern char_data *combat_list;
 extern const char *MENU;
-extern struct char_data* character_list;
+extern char_data* character_list;
 
 /* local functions */
-int apply_ac(struct char_data *ch, int eq_pos);
+int apply_ac(char_data *ch, int eq_pos);
 void update_object(struct obj_data *obj, int use);
-void update_char_objects(struct char_data *ch);
+void update_char_objects(char_data *ch);
 
 /* external functions */
-int invalid_class(struct char_data *ch, struct obj_data *obj);
-void remove_follower(struct char_data *ch);
-void clearMemory(struct char_data *ch);
+int invalid_class(char_data *ch, struct obj_data *obj);
+void remove_follower(char_data *ch);
+void clearMemory(char_data *ch);
 ACMD(do_return);
 
 char *fname(const char *namelist) {
@@ -98,7 +98,7 @@ int isname(const char *str, const char *namelist) {
 
 
 
-void affect_modify(struct char_data *ch, byte loc, sbyte mod,
+void affect_modify(char_data *ch, byte loc, sbyte mod,
                    bitvector_t bitv, bool add) {
 	if(add) {
 		SET_BIT(AFF_FLAGS(ch), bitv);
@@ -224,7 +224,7 @@ void affect_modify(struct char_data *ch, byte loc, sbyte mod,
 
 /* This updates a character by subtracting everything he is affected by */
 /* restoring original abilities, and then affecting all again           */
-void affect_total(struct char_data *ch) {
+void affect_total(char_data *ch) {
 	affected_type *af;
 	int i, j;
 
@@ -302,7 +302,7 @@ void affect_to_char(char_data *ch,affected_type *af) {
  * reaches zero). Pointer *af must never be NIL!  Frees mem and calls
  * affect_location_apply
  */
-void affect_remove(struct char_data *ch, struct affected_type *af) {
+void affect_remove(char_data *ch, struct affected_type *af) {
 	struct affected_type *temp;
 
 	if(ch->affected == NULL) {
@@ -319,7 +319,7 @@ void affect_remove(struct char_data *ch, struct affected_type *af) {
 
 
 /* Call affect_remove with every spell of spelltype "skill" */
-void affect_from_char(struct char_data *ch, int type) {
+void affect_from_char(char_data *ch, int type) {
 	struct affected_type *hjp, *next;
 
 	for(hjp = ch->affected; hjp; hjp = next) {
@@ -337,7 +337,7 @@ void affect_from_char(struct char_data *ch, int type) {
  * Return TRUE if a char is affected by a spell (SPELL_XXX),
  * FALSE indicates not affected.
  */
-bool affected_by_spell(struct char_data *ch, int type) {
+bool affected_by_spell(char_data *ch, int type) {
 	struct affected_type *hjp;
 
 	for(hjp = ch->affected; hjp; hjp = hjp->next)
@@ -350,7 +350,7 @@ bool affected_by_spell(struct char_data *ch, int type) {
 
 
 
-void affect_join(struct char_data *ch, struct affected_type *af,
+void affect_join(char_data *ch, struct affected_type *af,
                  bool add_dur, bool avg_dur, bool add_mod, bool avg_mod) {
 	struct affected_type *hjp, *next;
 	bool found = FALSE;
@@ -464,18 +464,14 @@ void char_to_room(char_data *ch, room_rnum room) {
 	}
 }
 
-void obj_to_char(std::shared_ptr<obj_data> object, std::shared_ptr<mods::player> player) {
-	d("obj_to_char shrd_ptr version called");
-	//auto ch = player->cd();
-	//obj_to_char(object.get(), player->cd());
+void obj_to_char(obj_ptr_t  object, player_ptr_t player) {
 	if(object.get()) {
-		d("giving object to ch (obj_to_char new)");
-		object->next_content = player->cd()->carrying;
-		player->cd()->carrying = object.get();
+		object->next_content = player->carrying();
+		player->carry(object);
 		object->carried_by = player->cd();
 		IN_ROOM(object) = NOWHERE;
-		IS_CARRYING_W(player->cd()) += GET_OBJ_WEIGHT(object.get());
-		IS_CARRYING_N(player->cd())++;
+		player->carry_weight() += GET_OBJ_WEIGHT(object.get());
+		player->carry_items()++;
 
 #ifdef __MENTOC_USE_PLR_CRASH__
 		/* set flag for crash-save system, but not on mobs! */
@@ -491,7 +487,8 @@ void obj_to_char(std::shared_ptr<obj_data> object, std::shared_ptr<mods::player>
 //void obj_to_char(std::shared_ptr<obj_data*> object, player_ptr_t player){
 //	player->equip(object.get(),
 /* give an object to a char   */
-void obj_to_char(struct obj_data *object, struct char_data *ch) {
+void obj_to_char(struct obj_data *object, char_data *ch) {
+	log("DEPRECATED: obj_to_char(obj_data*,char_data*)");
 	if(object && ch) {
 		d("giving object to ch (obj_to_char legacy)");
 		object->next_content = ch->carrying;
@@ -512,9 +509,41 @@ void obj_to_char(struct obj_data *object, struct char_data *ch) {
 	}
 }
 
+/* take an object from a char */
+void obj_from_char(obj_ptr_t in_object){
+	log("good: using non-deprecated obj_from_char");
+	struct obj_data *temp;
+
+	auto object = in_object.get();
+	if(object == NULL) {
+		log("SYSERR: NULL object passed to obj_from_char.");
+		return;
+	}
+
+	if(!object->carried_by){
+		log("SYSERR: NULL object->carried_by passed to obj_from_char.");
+		return;
+	}
+
+	REMOVE_FROM_LIST(object, object->carried_by->carrying, next_content);
+
+#ifdef __MENTOC_USE_PLR_CRASH__
+	/* set flag for crash-save system, but not on mobs! */
+	if(!IS_NPC(object->carried_by)) {
+		SET_BIT(PLR_FLAGS(object->carried_by), PLR_CRASH);
+	}
+#endif
+
+	IS_CARRYING_W(object->carried_by) -= GET_OBJ_WEIGHT(object);
+	IS_CARRYING_N(object->carried_by)--;
+	object->carried_by = NULL;
+	object->next_content = NULL;
+}
+
 
 /* take an object from a char */
 void obj_from_char(struct obj_data *object) {
+	log("DEPRECATED: obj_from_char obj_data*");
 	struct obj_data *temp;
 
 	if(object == NULL) {
@@ -545,7 +574,7 @@ void obj_from_char(struct obj_data *object) {
 
 
 /* Return the effect of a piece of armor in position eq_pos */
-int apply_ac(struct char_data *ch, int eq_pos) {
+int apply_ac(char_data *ch, int eq_pos) {
 	int factor;
 
 	if(GET_EQ(ch, eq_pos) == NULL) {
@@ -579,7 +608,7 @@ int apply_ac(struct char_data *ch, int eq_pos) {
 	return (factor * GET_OBJ_VAL(GET_EQ(ch, eq_pos), 0));
 }
 
-int invalid_align(struct char_data *ch, struct obj_data *obj) {
+int invalid_align(char_data *ch, struct obj_data *obj) {
 	if(OBJ_FLAGGED(obj, ITEM_ANTI_EVIL) && IS_EVIL(ch)) {
 		return TRUE;
 	}
@@ -595,107 +624,56 @@ int invalid_align(struct char_data *ch, struct obj_data *obj) {
 	return FALSE;
 }
 
-void equip_char(struct char_data *ch, struct obj_data *obj, int pos) {
-	MENTOC_PREAMBLE();
-	int j;
-
-	if(pos < 0 || pos >= NUM_WEARS) {
-		core_dump();
-		return;
-	}
-
-	if(GET_EQ(ch, pos)) {
-		log("SYSERR: Char is already equipped: %s, %s", GET_NAME(ch).c_str(),
-		    obj->short_description);
-		return;
-	}
-
-	if(obj->carried_by) {
-		log("SYSERR: EQUIP: Obj is carried_by when equip.");
-		return;
-	}
-
-	if(IN_ROOM(obj) != NOWHERE) {
-		log("SYSERR: EQUIP: Obj is in_room when equip.");
-		return;
-	}
-
-	if(invalid_align(ch, obj) || invalid_class(ch, obj)) {
-		act("You are zapped by $p and instantly let go of it.", FALSE, ch, obj, 0, TO_CHAR);
-		act("$n is zapped by $p and instantly lets go of it.", FALSE, ch, obj, 0, TO_ROOM);
-		/* Changed to drop in inventory instead of the ground. */
-		obj_to_char(obj, ch);
-		return;
-	}
-
-	GET_EQ(ch, pos) = obj;
-	obj->worn_by = ch;
-	obj->worn_on = pos;
-
-	if(GET_OBJ_TYPE(obj) == ITEM_ARMOR) {
-		GET_AC(ch) -= apply_ac(ch, pos);
-	}
-
-	if(IN_ROOM(ch) != NOWHERE) {
-		if(pos == WEAR_LIGHT && GET_OBJ_TYPE(obj) == ITEM_LIGHT)
-			if(GET_OBJ_VAL(obj, 2)) {	/* if light is ON */
-				world[IN_ROOM(ch)].light++;
-			}
-	} else {
-		log("SYSERR: IN_ROOM(ch) = NOWHERE when equipping char %s.", GET_NAME(ch).c_str());
-	}
-
-	for(j = 0; j < MAX_OBJ_AFFECT; j++)
-		affect_modify(ch, obj->affected[j].location,
-		              obj->affected[j].modifier,
-		              GET_OBJ_AFFECT(obj), TRUE);
-
-	affect_total(ch);
-	player->equip(obj,pos);
+void equip_char(player_ptr_t player,obj_ptr_t in_object,int pos){
+	player->equip(in_object,pos);
 }
 
-
-
-struct obj_data *unequip_char(struct char_data *ch, int pos) {
-	MENTOC_PREAMBLE();
-	int j;
-	struct obj_data *obj;
-
-	if((pos < 0 || pos >= NUM_WEARS) || GET_EQ(ch, pos) == NULL) {
-		core_dump();
-		return (NULL);
-	}
-
-	obj = GET_EQ(ch, pos);
-	obj->worn_by = NULL;
-	obj->worn_on = -1;
-
-	if(GET_OBJ_TYPE(obj) == ITEM_ARMOR) {
-		GET_AC(ch) += apply_ac(ch, pos);
-	}
-
-	if(IN_ROOM(ch) != NOWHERE) {
-		if(pos == WEAR_LIGHT && GET_OBJ_TYPE(obj) == ITEM_LIGHT)
-			if(GET_OBJ_VAL(obj, 2)) {	/* if light is ON */
-				world[IN_ROOM(ch)].light--;
-			}
-	} else {
-		log("SYSERR: IN_ROOM(ch) = NOWHERE when unequipping char %s.", GET_NAME(ch).c_str());
-	}
-
-	GET_EQ(ch, pos) = NULL;
-
-	for(j = 0; j < MAX_OBJ_AFFECT; j++)
-		affect_modify(ch, obj->affected[j].location,
-		              obj->affected[j].modifier,
-		              GET_OBJ_AFFECT(obj), FALSE);
-
-	affect_total(ch);
+obj_ptr_t unequip_char(player_ptr_t player, int pos){
+	auto obj = player->equipment(pos);
 	player->unequip(pos);
-
 	return (obj);
 }
 
+
+
+//obj_ptr_t unequip_char(player_ptr_t player, int pos) {
+//	int j;
+//	//struct obj_data *obj = nullptr;
+//
+//	//if((pos < 0 || pos >= NUM_WEARS) || GET_EQ(ch, pos) == NULL) {
+//	//	core_dump();
+//	//	return (NULL);
+//	//}
+//
+//	//obj = GET_EQ(ch, pos);
+//	//obj->worn_by = NULL;
+//	//obj->worn_on = -1;
+//
+//	//if(GET_OBJ_TYPE(obj) == ITEM_ARMOR) {
+//	//	GET_AC(ch) += apply_ac(ch, pos);
+//	//}
+//
+//	//if(IN_ROOM(ch) != NOWHERE) {
+//	//	if(pos == WEAR_LIGHT && GET_OBJ_TYPE(obj) == ITEM_LIGHT)
+//	//		if(GET_OBJ_VAL(obj, 2)) {	/* if light is ON */
+//	//			world[IN_ROOM(ch)].light--;
+//	//		}
+//	//} else {
+//	//	log("SYSERR: IN_ROOM(ch) = NOWHERE when unequipping char %s.", GET_NAME(ch).c_str());
+//	//}
+//
+//	//GET_EQ(ch, pos) = NULL;
+//
+//	//for(j = 0; j < MAX_OBJ_AFFECT; j++)
+//	//	affect_modify(ch, obj->affected[j].location,
+//	//	              obj->affected[j].modifier,
+//	//	              GET_OBJ_AFFECT(obj), FALSE);
+//
+//	//affect_total(ch);
+//	player->unequip(pos);
+//
+//	return (obj);
+//}
 
 int get_number(char **name) {
 	int i;
@@ -784,8 +762,8 @@ char_data *get_char_room(char *name, int *number, room_rnum room) {
 
 
 /* search all over the world for a char num, and return a pointer if found */
-struct char_data *get_char_num(mob_rnum nr) {
-	struct char_data *i;
+char_data *get_char_num(mob_rnum nr) {
+	char_data *i;
 
 	/** !FIXME: use mods::loops */
 	for(i = character_list; i; i = i->next)
@@ -796,6 +774,35 @@ struct char_data *get_char_num(mob_rnum nr) {
 	return (NULL);
 }
 
+
+/* put an object in a room */
+void obj_to_room(obj_ptr_t in_object, room_rnum room) {
+	if(room == NOWHERE){
+		log("SYSERR: Illegal value passed to obj_to_room. (Room is NOWHERE)");
+		return;
+	}
+	if(room > top_of_world){
+		log("SYSERR: Illegal value passed to obj_to_room. (Room is GREATER than top of world!)");
+		return;
+	}
+	auto object = in_object.get();
+	if(!object) {
+		log("SYSERR: Illegal value(s) passed to obj_to_room. (Room #%d/%d, obj %p)",
+		    room, top_of_world, object);
+		return;
+	} else {
+		object->next_content = world[room].contents;
+		world[room].contents = object;
+		IN_ROOM(object) = room;
+		object->carried_by = NULL;
+
+#ifdef __MENTOC_USE_ROOM_HOUSE_CRASH__
+		if(ROOM_FLAGGED(room, ROOM_HOUSE)) {
+			SET_BIT(ROOM_FLAGS(room), ROOM_HOUSE_CRASH);
+		}
+#endif
+	}
+}
 
 
 /* put an object in a room */
@@ -826,6 +833,27 @@ void obj_to_room(struct obj_data *object, room_rnum room) {
 	}
 }
 
+void obj_from_room(obj_ptr_t in_object) {
+	struct obj_data *temp;
+	auto object = in_object.get();
+
+	if(!object || IN_ROOM(object) == NOWHERE) {
+		log("SYSERR: NULL object (%p) or obj not in a room (%d) passed to obj_from_room",
+		    object, IN_ROOM(object));
+		return;
+	}
+
+	REMOVE_FROM_LIST(object, world[IN_ROOM(object)].contents, next_content);
+
+#ifdef __MENTOC_USE_ROOM_HOUSE_CRASH__
+	if(ROOM_FLAGGED(IN_ROOM(object), ROOM_HOUSE)) {
+		SET_BIT(ROOM_FLAGS(IN_ROOM(object)), ROOM_HOUSE_CRASH);
+	}
+#endif
+
+	IN_ROOM(object) = NOWHERE;
+	object->next_content = NULL;
+}
 
 /* Take an object from a room */
 void obj_from_room(struct obj_data *object) {
@@ -851,28 +879,27 @@ void obj_from_room(struct obj_data *object) {
 
 
 /* put an object in an object (quaint)  */
-void obj_to_obj(struct obj_data *obj, struct obj_data *obj_to) {
+void	obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object){
 	struct obj_data *tmp_obj;
 
-	if(!obj || !obj_to || obj == obj_to) {
-		log("SYSERR: NULL object (%p) or same source (%p) and target (%p) obj passed to obj_to_obj.",
-		    obj, obj, obj_to);
+	if(!to_object || !from_object || from_object == to_object){
+		log("SYSERR: NULL object or same source and target obj passed to obj_to_obj.");
 		return;
 	}
 
-	obj->next_content = obj_to->contains;
-	obj_to->contains = obj;
-	obj->in_obj = obj_to;
+	from_object->next_content = to_object->contains;
+	to_object->contains = from_object.get();
+	from_object->in_obj = to_object.get();
 
-	for(tmp_obj = obj->in_obj; tmp_obj->in_obj; tmp_obj = tmp_obj->in_obj) {
-		GET_OBJ_WEIGHT(tmp_obj) += GET_OBJ_WEIGHT(obj);
+	for(tmp_obj = from_object->in_obj; tmp_obj->in_obj; tmp_obj = tmp_obj->in_obj) {
+		GET_OBJ_WEIGHT(tmp_obj) += GET_OBJ_WEIGHT(from_object);
 	}
 
 	/* top level object.  Subtract weight from inventory if necessary. */
-	GET_OBJ_WEIGHT(tmp_obj) += GET_OBJ_WEIGHT(obj);
+	GET_OBJ_WEIGHT(tmp_obj) += from_object->obj_flags.weight;
 
 	if(tmp_obj->carried_by) {
-		IS_CARRYING_W(tmp_obj->carried_by) += GET_OBJ_WEIGHT(obj);
+		IS_CARRYING_W(tmp_obj->carried_by) += from_object->obj_flags.weight;
 	}
 }
 
@@ -907,7 +934,7 @@ void obj_from_obj(struct obj_data *obj) {
 
 
 /* Set all carried_by to point to new owner */
-void object_list_new_owner(struct obj_data *list, struct char_data *ch) {
+void object_list_new_owner(struct obj_data *list, char_data *ch) {
 	if(list) {
 		object_list_new_owner(list->contains, ch);
 		object_list_new_owner(list->next_content, ch);
@@ -919,10 +946,9 @@ void object_list_new_owner(struct obj_data *list, struct char_data *ch) {
 /* Extract an object from the world */
 void extract_obj(struct obj_data *obj) {
 	std::cerr << "[extract_obj]";
-	if(obj->worn_by != NULL)
-		if(unequip_char(obj->worn_by, obj->worn_on) != obj) {
-			log("SYSERR: Inconsistent worn_by and worn_on pointers!!");
-		}
+	if(obj->worn_by){
+		unequip_char(ptr(obj->worn_by), obj->worn_on);
+	}
 
 	if(IN_ROOM(obj) != NOWHERE) {
 		obj_from_room(obj);
@@ -968,7 +994,7 @@ void update_object(struct obj_data *obj, int use) {
 }
 
 
-void update_char_objects(struct char_data *ch) {
+void update_char_objects(char_data *ch) {
 	int i;
 
 	if(GET_EQ(ch, WEAR_LIGHT) != nullptr){
@@ -1001,9 +1027,9 @@ void update_char_objects(struct char_data *ch) {
 
 
 /* Extract a ch completely from the world, and leave his stuff behind */
-void extract_char_final(struct char_data *ch) {
+void extract_char_final(char_data *ch) {
 	//MENTOC_PREAMBLE();
-	struct char_data *k, *temp;
+	char_data *k, *temp;
 	struct obj_data *obj;
 	int i;
 
@@ -1076,7 +1102,9 @@ void extract_char_final(struct char_data *ch) {
 	/* transfer equipment to room, if any */
 	for(i = 0; i < NUM_WEARS; i++)
 		if(GET_EQ(ch, i)) {
-			obj_to_room(unequip_char(ch, i), IN_ROOM(ch));
+			auto tmp_eq = GET_EQ(ch, i);
+			unequip_char(ptr(ch), i);
+			obj_to_room(tmp_eq, IN_ROOM(ch));
 		}
 
 	if(FIGHTING(ch)) {
@@ -1135,7 +1163,7 @@ void extract_char_final(struct char_data *ch) {
  * A: Because code doing 'vict = vict->next' would
  *    get really confused otherwise.
  */
-void extract_char(struct char_data *ch) {
+void extract_char(char_data *ch) {
 	if(IS_NPC(ch)) {
 		SET_BIT(MOB_FLAGS(ch), MOB_NOTDEADYET);
 	} else {
@@ -1227,7 +1255,7 @@ void extract_pending_chars(){
 *********************************************************************** */
 
 
-struct char_data *get_player_vis(struct char_data *ch, char *name, int *number, int inroom) {
+char_data *get_player_vis(char_data *ch, char *name, int *number, int inroom) {
 	MENTOC_PREAMBLE();
 	int num;
 
@@ -1263,8 +1291,8 @@ struct char_data *get_player_vis(struct char_data *ch, char *name, int *number, 
 }
 
 
-struct char_data *get_char_room_vis(struct char_data *ch, char *name, int *number) {
-	struct char_data *i;
+char_data * get_char_room_vis( char_data *ch, char *name, int *number) {
+	MENTOC_PREAMBLE();
 	int num;
 
 	if(!number) {
@@ -1282,18 +1310,22 @@ struct char_data *get_char_room_vis(struct char_data *ch, char *name, int *numbe
 		return (get_player_vis(ch, name, NULL, FIND_CHAR_ROOM));
 	}
 
-	for(i = world[IN_ROOM(ch)].people; i && *number; i = i->next_in_room)
-		if(isname(name, i->player.name))
-			if(CAN_SEE(ch, i))
+	//for(i = world[IN_ROOM(ch)].people; i && *number; i = i->next_in_room)
+	for(auto & i : mods::globals::get_room_list(player->room())){
+		if(isname(name, i->name().c_str())){
+			if(CAN_SEE(ch, i->cd())){
 				if(--(*number) == 0) {
-					return (i);
+					return (*i);
 				}
+			}
+		}
+	}
 
 	return (NULL);
 }
 
-struct char_data *get_char_world_vis(struct char_data *ch, char *name, int *number) {
-	struct char_data *i;
+ char_data *get_char_world_vis( char_data *ch, char *name, int *number) {
+	 char_data *i;
 	int num;
 
 	if(!number) {
@@ -1334,7 +1366,17 @@ struct char_data *get_char_world_vis(struct char_data *ch, char *name, int *numb
 }
 
 
-struct char_data *get_char_vis(struct char_data *ch, char *name, int *number, int where) {
+player_ptr_t get_char_vis(player_ptr_t player, char *name, int *number, int where) {
+	if(where == FIND_CHAR_ROOM) {
+		return ptr(get_char_room_vis(*player, name, number));
+	} else if(where == FIND_CHAR_WORLD) {
+		return ptr(get_char_world_vis(*player, name, number));
+	} else {
+		return (NULL);
+	}
+}
+
+char_data *get_char_vis(char_data *ch, char *name, int *number, int where) {
 	if(where == FIND_CHAR_ROOM) {
 		return get_char_room_vis(ch, name, number);
 	} else if(where == FIND_CHAR_WORLD) {
@@ -1345,7 +1387,7 @@ struct char_data *get_char_vis(struct char_data *ch, char *name, int *number, in
 }
 
 
-struct obj_data *get_obj_in_list_vis(struct char_data *ch, char *name, int *number, struct obj_data *list) {
+struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *number, struct obj_data *list) {
 	struct obj_data *i;
 	int num;
 
@@ -1370,7 +1412,7 @@ struct obj_data *get_obj_in_list_vis(struct char_data *ch, char *name, int *numb
 
 
 /* search the entire world for an object, and return a pointer  */
-struct obj_data *get_obj_vis(struct char_data *ch, char *name, int *number) {
+struct obj_data *get_obj_vis(char_data *ch, char *name, int *number) {
 	struct obj_data *i;
 	int num;
 
@@ -1408,7 +1450,7 @@ struct obj_data *get_obj_vis(struct char_data *ch, char *name, int *number) {
 }
 
 
-struct obj_data *get_obj_in_equip_vis(struct char_data *ch, char *arg, int *number, struct obj_data *equipment[]) {
+struct obj_data *get_obj_in_equip_vis(char_data *ch, char *arg, int *number, struct obj_data *equipment[]) {
 	int j, num;
 
 	if(!number) {
@@ -1430,7 +1472,7 @@ struct obj_data *get_obj_in_equip_vis(struct char_data *ch, char *arg, int *numb
 }
 
 
-int get_obj_pos_in_equip_vis(struct char_data *ch, char *arg, int *number, struct obj_data *equipment[]) {
+int get_obj_pos_in_equip_vis(char_data *ch, char *arg, int *number, struct obj_data *equipment[]) {
 	int j, num;
 
 	if(!number) {
@@ -1489,8 +1531,7 @@ const char *money_desc(int amount) {
 }
 
 
-struct obj_data *create_money(int amount) {
-	struct obj_data *obj;
+obj_ptr_t create_money(int amount) {
 	struct extra_descr_data *new_descr;
 	char buf[200];
 
@@ -1499,7 +1540,7 @@ struct obj_data *create_money(int amount) {
 		return (NULL);
 	}
 
-	obj = create_obj();
+	auto obj = blank_object();
 	CREATE(new_descr, struct extra_descr_data, 1);
 
 	if(amount == 1) {
@@ -1524,7 +1565,7 @@ struct obj_data *create_money(int amount) {
 			snprintf(buf, sizeof(buf), "It looks to be about %d coins.", 100 * (amount / 100));
 		} else if(amount < 100000)
 			snprintf(buf, sizeof(buf), "You guess there are, maybe, %d coins.",
-			         1000 * ((amount / 1000) + rand_number(0, (amount / 1000))));
+					1000 * ((amount / 1000) + rand_number(0, (amount / 1000))));
 		else {
 			strcpy(buf, "There are a LOT of coins.");    /* strcpy: OK (is < 200) */
 		}
@@ -1561,8 +1602,8 @@ struct obj_data *create_money(int amount) {
  * like the one_argument routine), but now it returns an integer that
  * describes what it filled in.
  */
-int generic_find(char *arg, bitvector_t bitvector, struct char_data *ch,
-                 struct char_data **tar_ch, struct obj_data **tar_obj) {
+int generic_find(char *arg, bitvector_t bitvector, char_data *ch,
+		char_data **tar_ch, struct obj_data **tar_obj) {
 	int i, found, number;
 	char name_val[MAX_INPUT_LENGTH];
 	char *name = name_val;

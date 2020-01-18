@@ -28,8 +28,8 @@
 #define MOD_SNIPE_DISTANCE_THACO 5
 
 /* Structures */
-struct char_data *combat_list = NULL;	/* head of l-list of fighting chars */
-struct char_data *next_combat_list = NULL;
+char_data *combat_list = NULL;	/* head of l-list of fighting chars */
+char_data *next_combat_list = NULL;
 
 /* External structures */
 extern struct message_list fight_messages[MAX_MESSAGES];
@@ -43,28 +43,28 @@ char *fread_action(FILE *fl, int nr);
 ACMD(do_flee);
 int backstab_mult(int level);
 int thaco(int ch_class, int level);
-int ok_damage_shopkeeper(struct char_data *ch, struct char_data *victim);
+int ok_damage_shopkeeper(char_data *ch, char_data *victim);
 
 /* local functions */
-void perform_group_gain(struct char_data *ch, int base, struct char_data *victim);
-void dam_message(int dam, struct char_data *ch, struct char_data *victim, int w_type);
-void appear(struct char_data *ch);
+void perform_group_gain(char_data *ch, int base, char_data *victim);
+void dam_message(int dam, char_data *ch, char_data *victim, int w_type);
+void appear(char_data *ch);
 void load_messages(void);
 void free_messages(void);
 void free_messages_type(struct msg_type *msg);
-void check_killer(struct char_data *ch, struct char_data *vict);
-void make_corpse(struct char_data *ch);
-void change_alignment(struct char_data *ch, struct char_data *victim);
-void death_cry(struct char_data *ch);
-void raw_kill(struct char_data *ch);
-void die(struct char_data *killer,struct char_data *victim); /* !mods */
-void die(struct char_data *ch);
-void group_gain(struct char_data *ch, struct char_data *victim);
-void solo_gain(struct char_data *ch, struct char_data *victim);
+void check_killer(char_data *ch, char_data *vict);
+void make_corpse(char_data *ch);
+void change_alignment(char_data *ch, char_data *victim);
+void death_cry(char_data *ch);
+void raw_kill(char_data *ch);
+void die(char_data *killer,char_data *victim); /* !mods */
+void die(char_data *ch);
+void group_gain(char_data *ch, char_data *victim);
+void solo_gain(char_data *ch, char_data *victim);
 char *replace_string(const char *str, const char *weapon_singular, const char *weapon_plural);
 void perform_violence(void);
-int compute_armor_class(struct char_data *ch);
-int compute_thaco(struct char_data *ch, struct char_data *vict);
+int compute_armor_class(char_data *ch);
+int compute_thaco(char_data *ch, char_data *vict);
 
 /* Weapon attack texts */
 struct attack_hit_type attack_hit_text[] = {
@@ -89,7 +89,7 @@ struct attack_hit_type attack_hit_text[] = {
 
 /* The Fight related routines */
 
-void appear(struct char_data *ch) {
+void appear(char_data *ch) {
 	if(affected_by_spell(ch, SPELL_INVISIBLE)) {
 		affect_from_char(ch, SPELL_INVISIBLE);
 	}
@@ -104,7 +104,7 @@ void appear(struct char_data *ch) {
 }
 
 
-int compute_armor_class(struct char_data *ch) {
+int compute_armor_class(char_data *ch) {
 	int armorclass = GET_AC(ch);
 
 	if(AWAKE(ch)) {
@@ -212,7 +212,7 @@ void load_messages(void) {
 }
 
 
-void update_pos(struct char_data *victim) {
+void update_pos(char_data *victim) {
 	if((GET_HIT(victim) > 0) && (GET_POS(victim) > POS_STUNNED)) {
 		return;
 	} else if(GET_HIT(victim) > 0) {
@@ -229,7 +229,7 @@ void update_pos(struct char_data *victim) {
 }
 
 
-void check_killer(struct char_data *ch, struct char_data *vict) {
+void check_killer(char_data *ch, char_data *vict) {
 	if(PLR_FLAGGED(vict, PLR_KILLER) || PLR_FLAGGED(vict, PLR_THIEF)) {
 		return;
 	}
@@ -246,7 +246,7 @@ void check_killer(struct char_data *ch, struct char_data *vict) {
 
 
 /* start one char fighting another (yes, it is horrible, I know... )  */
-void set_fighting(struct char_data *ch, struct char_data *vict) {
+void set_fighting(char_data *ch, char_data *vict) {
 	if(ch == vict) {
 		return;
 	}
@@ -274,8 +274,8 @@ void set_fighting(struct char_data *ch, struct char_data *vict) {
 
 
 /* remove a char from the list of fighting chars */
-void stop_fighting(struct char_data *ch) {
-	struct char_data *temp;
+void stop_fighting(char_data *ch) {
+	char_data *temp;
 
 	if(ch == next_combat_list) {
 		next_combat_list = ch->next_fighting;
@@ -290,22 +290,22 @@ void stop_fighting(struct char_data *ch) {
 
 
 
-void make_corpse(struct char_data *ch) {
+void make_corpse(char_data *ch) {
+	MENTOC_PREAMBLE();
 	char buf2[MAX_NAME_LENGTH + 64];
-	obj_data *corpse, *o;
-	obj_data *money;
+	obj_data *o;
 	int i;
 
-	corpse = create_obj();
+	auto corpse = blank_object();
 
 	corpse->name = strdup("corpse");
 
 	memset(buf2,0,sizeof(buf2));
-	snprintf(buf2, sizeof(buf2), "The corpse of %s is lying here.", GET_NAME(ch).c_str());
+	snprintf(buf2, sizeof(buf2), "The corpse of %s is lying here.", player->name().c_str());
 	corpse->description = strdup(buf2);
 
 	memset(buf2,0,sizeof(buf2));
-	snprintf(buf2, sizeof(buf2), "the corpse of %s", GET_NAME(ch).c_str());
+	snprintf(buf2, sizeof(buf2), "the corpse of %s", player->name().c_str());
 	corpse->short_description = strdup(buf2);
 
 	GET_OBJ_TYPE(corpse) = ITEM_CONTAINER;
@@ -313,7 +313,7 @@ void make_corpse(struct char_data *ch) {
 	GET_OBJ_EXTRA(corpse) = ITEM_NODONATE;
 	GET_OBJ_VAL(corpse, 0) = 0;	/* You can't store stuff in a corpse */
 	GET_OBJ_VAL(corpse, 3) = 1;	/* corpse identifier */
-	GET_OBJ_WEIGHT(corpse) = GET_WEIGHT(ch) + IS_CARRYING_W(ch);
+	GET_OBJ_WEIGHT(corpse) = player->weight() + player->carry_weight();
 	GET_OBJ_RENT(corpse) = 100000;
 
 	if(IS_NPC(ch)) {
@@ -323,47 +323,39 @@ void make_corpse(struct char_data *ch) {
 	}
 
 	/* transfer character's inventory to the corpse */
-	corpse->contains = ch->carrying;
+	corpse->contains = player->carrying();
 
 	for(o = corpse->contains; o != NULL; o = o->next_content) {
-		o->in_obj = corpse;
+		o->in_obj = corpse.get();	/** FIXME legacy */
 	}
 
-	object_list_new_owner(corpse, NULL);
+	object_list_new_owner(corpse.get(), NULL);/** FIXME legacy */
 
 	/* transfer character's equipment to the corpse */
-	for(i = 0; i < NUM_WEARS; i++)
-		if(GET_EQ(ch, i)) {
-			obj_to_obj(unequip_char(ch, i), corpse);
+	for(i = 0; i < NUM_WEARS; i++) {
+		auto obj = player->equipment(i);
+		if(obj){
+			player->unequip(i);
+			obj_to_obj(obj, corpse);
 		}
-
-	/* transfer gold */
-	if(GET_GOLD(ch) > 0) {
-		/*
-		 * following 'if' clause added to fix gold duplication loophole
-		 * The above line apparently refers to the old "partially log in,
-		 * kill the game character, then finish login sequence" duping
-		 * bug. The duplication has been fixed (knock on wood) but the
-		 * test below shall live on, for a while. -gg 3/3/2002
-		 */
-		if(IS_NPC(ch) || ch->has_desc) {
-			money = create_money(GET_GOLD(ch));
-			obj_to_obj(money, corpse);
-		}
-
-		GET_GOLD(ch) = 0;
 	}
 
-	ch->carrying = NULL;
-	IS_CARRYING_N(ch) = 0;
-	IS_CARRYING_W(ch) = 0;
+	/* transfer gold */
+	if(player->gold() > 0) {
+		obj_to_obj(create_money(player->gold()), corpse);
+		player->gold() = 0;
+	}
 
-	obj_to_room(corpse, IN_ROOM(ch));
+	player->carry(nullptr);
+	player->carry_items() = 0;
+	player->carry_weight() = 0;
+
+	obj_to_room(corpse, player->room());
 }
 
 
 /* When ch kills victim */
-void change_alignment(struct char_data *ch, struct char_data *victim) {
+void change_alignment(char_data *ch, char_data *victim) {
 	/*
 	 * new alignment change algorithm: if you kill a monster with alignment A,
 	 * you move 1/16th of the way to having alignment -A.  Simple and fast.
@@ -373,7 +365,7 @@ void change_alignment(struct char_data *ch, struct char_data *victim) {
 
 
 
-void death_cry(struct char_data *ch) {
+void death_cry(char_data *ch) {
 	int door;
 
 	act("Your blood freezes as you hear $n's death cry.", FALSE, ch, 0, 0, TO_ROOM);
@@ -386,7 +378,7 @@ void death_cry(struct char_data *ch) {
 
 
 
-void raw_kill(struct char_data *ch) {
+void raw_kill(char_data *ch) {
 	if(FIGHTING(ch)) {
 		stop_fighting(ch);
 	}
@@ -402,7 +394,7 @@ void raw_kill(struct char_data *ch) {
 }
 
 
-void die(struct char_data* killer,struct char_data *victim) {
+void die(char_data* killer,char_data *victim) {
 	/* check if mob death trigger is active */
 	std::string functor;
 	DBGET(mods::globals::replace_all(DT_FORMAT,"{player_name}",killer->player.name.c_str()),functor);
@@ -430,7 +422,7 @@ void die(struct char_data* killer,struct char_data *victim) {
 }
 
 
-void die(struct char_data *ch) {
+void die(char_data *ch) {
 	gain_exp(ch, -(GET_EXP(ch) / 2));
 
 	if(!IS_NPC(ch)) {
@@ -442,8 +434,8 @@ void die(struct char_data *ch) {
 
 
 
-void perform_group_gain(struct char_data *ch, int base,
-                        struct char_data *victim) {
+void perform_group_gain(char_data *ch, int base,
+                        char_data *victim) {
 	int share;
 
 	share = MIN(max_exp_gain, MAX(1, base));
@@ -459,9 +451,9 @@ void perform_group_gain(struct char_data *ch, int base,
 }
 
 
-void group_gain(struct char_data *ch, struct char_data *victim) {
+void group_gain(char_data *ch, char_data *victim) {
 	int tot_members, base, tot_gain;
-	struct char_data *k;
+	char_data *k;
 	struct follow_type *f;
 
 	if(!(k = ch->master)) {
@@ -504,7 +496,7 @@ void group_gain(struct char_data *ch, struct char_data *victim) {
 }
 
 
-void solo_gain(struct char_data *ch, struct char_data *victim) {
+void solo_gain(char_data *ch, char_data *victim) {
 	int exp;
 
 	exp = MIN(max_exp_gain, GET_EXP(victim) / 3);
@@ -562,7 +554,7 @@ char *replace_string(const char *str, const char *weapon_singular, const char *w
 
 
 /* message for doing damage with a weapon */
-void dam_message(int dam, struct char_data *ch, struct char_data *victim,
+void dam_message(int dam, char_data *ch, char_data *victim,
                  int w_type) {
 	char *buf;
 	int msgnum;
@@ -678,7 +670,7 @@ void dam_message(int dam, struct char_data *ch, struct char_data *victim,
  *  message for doing damage with a spell or skill
  *  C3.0: Also used for weapon damage on miss and death blows
  */
-int skill_message(int dam, struct char_data *ch, struct char_data *vict,
+int skill_message(int dam, char_data *ch, char_data *vict,
                   int attacktype) {
 	int i, j, nr;
 	struct message_type *msg;
@@ -755,7 +747,7 @@ int skill_message(int dam, struct char_data *ch, struct char_data *vict,
  *  = 0 No damage.
  *  > 0 How much damage done.
  */
-int grenade_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype) {
+int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 	ch->last_fight_timestamp = time(NULL);
 
 	if(GET_POS(victim) <= POS_DEAD) {
@@ -1004,7 +996,7 @@ int snipe_damage(
  *	= 0	No damage.
  *	> 0	How much damage done.
  */
-int damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype) {
+int damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 	ch->last_fight_timestamp = time(NULL);
 
 	/*TODO: Modify this code to allow sniping */
@@ -1205,7 +1197,7 @@ int damage(struct char_data *ch, struct char_data *victim, int dam, int attackty
  * weapons that hit evil creatures easier or a weapon that always misses
  * attacking an animal.
  */
-int compute_thaco(struct char_data *ch, struct char_data *victim) {
+int compute_thaco(char_data *ch, char_data *victim) {
 	int calc_thaco;
 
 	if(!IS_NPC(ch)) {
@@ -1224,7 +1216,7 @@ int compute_thaco(struct char_data *ch, struct char_data *victim) {
 
 using vpd = mods::scan::vec_player_data;
 
-int snipe_hit(struct char_data *ch, struct char_data *victim, int type,uint16_t distance) {
+int snipe_hit(char_data *ch, char_data *victim, int type,uint16_t distance) {
 	struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
 	int w_type, victim_ac, calc_thaco, dam, diceroll;
 

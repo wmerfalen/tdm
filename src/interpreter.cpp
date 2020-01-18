@@ -51,31 +51,31 @@ extern int top_of_p_table;
 extern int circle_restrict;
 extern int no_specials;
 extern int max_bad_pws;
-extern struct char_data* character_list;
+extern char_data* character_list;
 
 /* external functions */
 /** FIXME: these function defs need to go in a file */
 void echo_on(mods::descriptor_data &d);
 void echo_off(mods::descriptor_data &d);
-void do_start(struct char_data *ch);
+void do_start(char_data *ch);
 int parse_class(char arg);
-int special(struct char_data *ch, int cmd, char *arg);
+int special(char_data *ch, int cmd, char *arg);
 int Valid_Name(const char *newname);
-void read_aliases(struct char_data *ch);
+void read_aliases(char_data *ch);
 void delete_aliases(const char *charname);
 
 /* local functions */
 int64_t perform_dupe_check(player_ptr_t);
 struct alias_data *find_alias(struct alias_data *alias_list, char *str);
 void free_alias(struct alias_data *a);
-void perform_complex_alias(struct txt_q *input_q, char *orig, struct alias_data *a);
-int perform_alias(mods::descriptor_data d, char *orig, size_t maxlen);
+//void perform_complex_alias(mods::descriptor_data& d, char *orig, struct alias_data *a);
+int perform_alias(mods::descriptor_data& d, char *orig, size_t maxlen);
 int reserved_word(char *argument);
 int _parse_name(char *arg, char *name);
 
 ACMD(do_room_list){
 	MENTOC_PREAMBLE();
-	for(auto & p : mods::globals::room_list[player->room()]){
+	for(auto & p : mods::globals::get_room_list(player->room())){
 		player->stc(p->name());
 	}
 }
@@ -895,17 +895,26 @@ const char *reserved[] = {
  * It makes sure you are the proper level and position to execute the command,
  * then calls the appropriate function.
  */
-void command_interpreter(struct char_data *ch, const char *argument) {
-	command_interpreter(ch,const_cast<char*>(argument));
+void command_interpreter(char_data *ch, char *argument, bool legacy) {
+	auto p = ptr(ch);
+	command_interpreter(p,argument);
 }
-void command_interpreter(struct char_data *ch, char *argument) {
-	MENTOC_PREAMBLE();
+void command_interpreter(char_data *ch, const char *argument, bool legacy) {
+	auto p = ptr(ch);
+	command_interpreter(p,argument);
+}
+void command_interpreter(player_ptr_t & player, std::string_view in_argument){
+	auto ch = player->cd();
 	int cmd, length;
 	char *line;
 	char arg[MAX_INPUT_LENGTH];
 
 	REMOVE_BIT(AFF_FLAGS(ch), AFF_HIDE);
 
+	std::array<char,MAX_INPUT_LENGTH> data;
+	std::copy(in_argument.begin(),in_argument.end(),data.begin());
+	data[in_argument.length()-1] = '\0';
+	char* argument = &data[0];
 	/* just drop to next line for hitting CR */
 	skip_spaces(&argument);
 
@@ -945,7 +954,7 @@ void command_interpreter(struct char_data *ch, char *argument) {
 	}
 
 	if(*cmd_info[cmd].command == '\n') {
-		send_to_char(ch, "Huh?!?\r\n");
+		send_to_char(ch, "<cmd_interpretr>Huh?!?\r\n");
 		//TODO: change PLR_FLAGGED call to player->member method call
 	} else{
 		if(player->god_mode()){
@@ -1103,61 +1112,6 @@ ACMD(do_alias) {
  */
 #define NUM_TOKENS       9
 
-void perform_complex_alias(struct txt_q *input_q, char *orig, struct alias_data *a) {
-	struct txt_q temp_queue;
-	char *tokens[NUM_TOKENS], *temp, *write_point;
-	char buf2[MAX_RAW_INPUT_LENGTH], buf[MAX_RAW_INPUT_LENGTH];	/* raw? */
-	int num_of_tokens = 0, num;
-
-	/* First, parse the original string */
-	strcpy(buf2, orig);	/* strcpy: OK (orig:MAX_INPUT_LENGTH < buf2:MAX_RAW_INPUT_LENGTH) */
-	temp = strtok(buf2, " ");
-
-	while(temp != NULL && num_of_tokens < NUM_TOKENS) {
-		tokens[num_of_tokens++] = temp;
-		temp = strtok(NULL, " ");
-	}
-
-	/* initialize */
-	write_point = buf;
-	temp_queue.head = temp_queue.tail = NULL;
-
-	/* now parse the alias */
-	for(temp = a->replacement; *temp; temp++) {
-		if(*temp == ALIAS_SEP_CHAR) {
-			*write_point = '\0';
-			buf[MAX_INPUT_LENGTH - 1] = '\0';
-			write_to_q(buf, &temp_queue, 1);
-			write_point = buf;
-		} else if(*temp == ALIAS_VAR_CHAR) {
-			temp++;
-
-			if((num = *temp - '1') < num_of_tokens && num >= 0) {
-				strcpy(write_point, tokens[num]);	/* strcpy: OK */
-				write_point += strlen(tokens[num]);
-			} else if(*temp == ALIAS_GLOB_CHAR) {
-				strcpy(write_point, orig);		/* strcpy: OK */
-				write_point += strlen(orig);
-			} else if((*(write_point++) = *temp) == '$') {	/* redouble $ for act safety */
-				*(write_point++) = '$';
-			}
-		} else {
-			*(write_point++) = *temp;
-		}
-	}
-
-	*write_point = '\0';
-	buf[MAX_INPUT_LENGTH - 1] = '\0';
-	write_to_q(buf, &temp_queue, 1);
-
-	/* push our temp_queue on to the _front_ of the input queue */
-	if(input_q->head == NULL) {
-		*input_q = temp_queue;
-	} else {
-		temp_queue.tail->next = input_q->head;
-		input_q->head = temp_queue.head;
-	}
-}
 
 
 /*
@@ -1168,8 +1122,7 @@ void perform_complex_alias(struct txt_q *input_q, char *orig, struct alias_data 
  *   1: String was _not_ modified in place; rather, the expanded aliases
  *      have been placed at the front of the character's input queue.
  */
-int perform_alias(mods::descriptor_data d, char *orig, size_t maxlen) {
-	return 0;	/** TODO: fix this function */
+int perform_alias(mods::descriptor_data& d, char *orig, size_t maxlen) {
 	char first_arg[MAX_INPUT_LENGTH], *ptr;
 	struct alias_data *a, *tmp;
 
@@ -1200,8 +1153,61 @@ int perform_alias(mods::descriptor_data d, char *orig, size_t maxlen) {
 		strlcpy(orig, a->replacement, maxlen);
 		return (0);
 	} else {
-		perform_complex_alias(&d.input, ptr, a);
-		return (1);
+		//perform_complex_alias(d, ptr, a);
+		std::list<txt_block> temp_queue;
+		char *tokens[NUM_TOKENS], *temp, *write_point;
+		char buf2[MAX_RAW_INPUT_LENGTH], buf[MAX_RAW_INPUT_LENGTH];	/* raw? */
+		int num_of_tokens = 0, num;
+
+		/* First, parse the original string */
+		strcpy(buf2, ptr);	/* strcpy: OK (orig:MAX_INPUT_LENGTH < buf2:MAX_RAW_INPUT_LENGTH) */
+		temp = strtok(buf2, " ");
+
+		while(temp != NULL && num_of_tokens < NUM_TOKENS) {
+			tokens[num_of_tokens++] = temp;
+			temp = strtok(NULL, " ");
+		}
+
+		/* initialize */
+		write_point = buf;
+		//temp_queue.head = temp_queue.tail = NULL;
+
+		/* now parse the alias */
+		for(temp = a->replacement; *temp; temp++) {
+			if(*temp == ALIAS_SEP_CHAR) {
+				*write_point = '\0';
+				buf[MAX_INPUT_LENGTH - 1] = '\0';
+				//write_to_q(buf, &temp_queue, 1);
+				temp_queue.emplace_back(buf,1);
+				write_point = buf;
+			} else if(*temp == ALIAS_VAR_CHAR) {
+				temp++;
+
+				if((num = *temp - '1') < num_of_tokens && num >= 0) {
+					strcpy(write_point, tokens[num]);	/* strcpy: OK */
+					write_point += strlen(tokens[num]);
+				} else if(*temp == ALIAS_GLOB_CHAR) {
+					strcpy(write_point, ptr);		/* strcpy: OK */
+					write_point += strlen(ptr);
+				} else if((*(write_point++) = *temp) == '$') {	/* redouble $ for act safety */
+					*(write_point++) = '$';
+				}
+			} else {
+				*(write_point++) = *temp;
+			}
+		}
+
+		*write_point = '\0';
+		buf[MAX_INPUT_LENGTH - 1] = '\0';
+		//write_to_q(buf, &temp_queue, 1);
+		temp_queue.emplace_back(buf,1);
+
+		if(d.input.size() == 0){
+			d.input = std::move(temp_queue);
+		} else {
+			std::copy(temp_queue.begin(),temp_queue.end(),d.input.end());
+		}
+		return 1;
 	}
 }
 
@@ -1480,11 +1486,11 @@ int find_command(const char *command) {
 }
 
 
-int special(struct char_data *ch, int cmd, char *arg) {
-	//TODO: decide if we need this
-	return 0;
+int special(char_data *ch, int cmd, char *arg) {
+	////TODO: decide if we need this
+	//return 0;
+	MENTOC_PREAMBLE();
 	struct obj_data *i;
-	struct char_data *k;
 	int j;
 
 	/* special in room? */
@@ -1508,11 +1514,14 @@ int special(struct char_data *ch, int cmd, char *arg) {
 			}
 
 	/* special in mobile present? */
-	for(k = world[IN_ROOM(ch)].people; k; k = k->next_in_room)
-		if(!MOB_FLAGGED(k, MOB_NOTDEADYET))
-			if(GET_MOB_SPEC(k) && GET_MOB_SPEC(k)(ch, k, cmd, arg)) {
+	//for(k = world[IN_ROOM(ch)].people; k; k = k->next_in_room)
+	for(auto & k : mods::globals::get_room_list(player->room())){
+		if(!MOB_FLAGGED(k->cd(), MOB_NOTDEADYET)){
+			if(GET_MOB_SPEC(k->cd()) && GET_MOB_SPEC(k->cd())(ch, k->cd(), cmd, arg)) {
 				return (1);
 			}
+		}
+	}
 
 	/* special in object present? */
 	for(i = world[IN_ROOM(ch)].contents; i; i = i->next_content)
@@ -1587,18 +1596,18 @@ void nanny(player_ptr_t p, char * in_arg) {
 	tuple_status_t status;
 
 	if(mods::auto_login::get_user().length() && p->state() == CON_GET_NAME){
-			arg = mods::auto_login::get_user();
-			p->set_name(arg);
-			p->set_db_id(0);
-			arg = mods::auto_login::get_password();
-			if(login(mods::auto_login::get_user(),arg) == false){
-				log("SYSERR: user/password combination for auto_login failed");
-				exit(1);
-			}else{
-				parse_sql_player(p);
-			}
-			p->set_state(CON_MENU);
-			arg = "1";
+		arg = mods::auto_login::get_user();
+		p->set_name(arg);
+		p->set_db_id(0);
+		arg = mods::auto_login::get_password();
+		if(login(mods::auto_login::get_user(),arg) == false){
+			log("SYSERR: user/password combination for auto_login failed");
+			exit(1);
+		}else{
+			parse_sql_player(p);
+		}
+		p->set_state(CON_MENU);
+		arg = "1";
 	}
 	switch(p->state()) {
 		case CON_GET_NAME:		/* wait for input of name */
@@ -1890,7 +1899,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 
 												 /*
 													* We have to place the character in a room before equipping them
-													* or equip_char() will gripe about the person in NOWHERE.
+													* or legacy_equip_char() will gripe about the person in NOWHERE.
 													*/
 												 //		 d("load_room");
 												 //		 if((load_room = GET_LOADROOM(p->cd())) != NOWHERE) {
@@ -1936,19 +1945,19 @@ void nanny(player_ptr_t p, char * in_arg) {
 
 												 p->stc(WELC_MESSG);
 												 {
-												 int start_room = 0;
-												 if(!boot_type_hell()){
-												 	start_room = mods::world_conf::real_mortal_start();
-												 }
-												 std::cerr << "resolved mortal start: " << start_room << "\n";
-												 std::cerr << "resolved mortal start: " << start_room << "\n";
-												 std::cerr << "resolved mortal start: " << start_room << "\n";
-												 if(world.size() == 0){
-													 std::cerr << "error: world.size is empty!\n";
-													 exit(0);
-												 }
-												 p->set_room(start_room);
-												 char_to_room(p->cd(),start_room);
+													 int start_room = 0;
+													 if(!boot_type_hell()){
+														 start_room = mods::world_conf::real_mortal_start();
+													 }
+													 std::cerr << "resolved mortal start: " << start_room << "\n";
+													 std::cerr << "resolved mortal start: " << start_room << "\n";
+													 std::cerr << "resolved mortal start: " << start_room << "\n";
+													 if(world.size() == 0){
+														 std::cerr << "error: world.size is empty!\n";
+														 exit(0);
+													 }
+													 p->set_room(start_room);
+													 char_to_room(p->cd(),start_room);
 												 }
 												 act("$n has entered the game.", TRUE, p->cd(), 0, 0, TO_ROOM);
 												 p->set_state(CON_PLAYING);

@@ -41,22 +41,23 @@ bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *att
 
 
 void mobile_activity(void) {
-	mods::loops::shptr::foreach_mob([](std::shared_ptr<mods::npc> npc) -> bool{
-			auto ch = npc->cd();
-			std::cerr << "foreach_mob (mobile_activity)\n";
+	auto player = mods::globals::current_player;
+	FOREACH_MOB(npc) {
+		auto ch = npc->cd();
+		std::cerr << "foreach_mob (mobile_activity)\n";
 		char_data *vict;
 		struct obj_data *obj, *best_obj;
 		int door, found, max;
 
 		if(npc->mob_specials().behaviour_tree){
-		std::cerr << "mob has behaviour_tree: " << npc->mob_specials().behaviour_tree << "\n";
+			std::cerr << "mob has behaviour_tree: " << npc->mob_specials().behaviour_tree << "\n";
 			switch(mods::behaviour_tree_impl::dispatch(*npc)){
 				case mods::behaviour_tree_impl::dispatch_status_t::RETURN_IMMEDIATELY:
-				//std::cerr << "return immediately\n";
-					return true;
+					//std::cerr << "return immediately\n";
+					continue;
 				case mods::behaviour_tree_impl::dispatch_status_t::RETURN_FALSE_IMMEDIATELY:
-				//std::cerr << "return FALSE immediately\n";
-					return false;
+					//std::cerr << "return FALSE immediately\n";
+					continue;
 				case mods::behaviour_tree_impl::dispatch_status_t::AS_YOU_WERE:
 				default:
 					std::cerr << "as you were...\n";
@@ -68,16 +69,15 @@ void mobile_activity(void) {
 		if(MOB_FLAGGED(ch, MOB_SPEC) && !no_specials) {
 			std::cerr << "mobile_activity: mob_flagged\n";
 			if(mob_index[GET_MOB_RNUM(ch)].func == NULL) {
-			std::cerr << "mobile_activity: mob_flagged func is null\n";
+				std::cerr << "mobile_activity: mob_flagged func is null\n";
 				log("SYSERR: %s (#%d): Attempting to call non-existing mob function.",
-				    GET_NAME(ch).c_str(), GET_MOB_VNUM(ch));
+						GET_NAME(ch).c_str(), GET_MOB_VNUM(ch));
 				REMOVE_BIT(MOB_FLAGS(ch), MOB_SPEC);
 			} else {
 				char actbuf[MAX_INPUT_LENGTH] = "";
 
 				if((mob_index[GET_MOB_RNUM(ch)].func)(ch, ch, 0, actbuf)) {
 					std::cerr << "called special func on mob\n";
-					return true;
 				}
 			}
 		}
@@ -85,7 +85,7 @@ void mobile_activity(void) {
 		/* If the mob has no specproc, do the default actions */
 		if(FIGHTING(ch) || !AWAKE(ch)) {
 			std::cerr << "mobact- do default (fight|awake)\n";
-			return true;
+			continue;
 		}
 
 		/* Scavenger (picking up objects) */
@@ -111,10 +111,10 @@ void mobile_activity(void) {
 
 		/* Mob Movement */
 		if(!MOB_FLAGGED(ch, MOB_SENTINEL) && (GET_POS(ch) == POS_STANDING) &&
-		        ((door = rand_number(0, 18)) < NUM_OF_DIRS) && CAN_GO(ch, door) &&
-		        !ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_NOMOB | ROOM_DEATH) &&
-		        (!MOB_FLAGGED(ch, MOB_STAY_ZONE) ||
-		         (world[EXIT(ch, door)->to_room].zone == world[IN_ROOM(ch)].zone))) {
+				((door = rand_number(0, 18)) < NUM_OF_DIRS) && CAN_GO(ch, door) &&
+				!ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_NOMOB | ROOM_DEATH) &&
+				(!MOB_FLAGGED(ch, MOB_STAY_ZONE) ||
+				 (world[EXIT(ch, door)->to_room].zone == world[IN_ROOM(ch)].zone))) {
 			std::cerr << "perform_move from mobile activity\n";
 			perform_move(ch, door, 1);
 		}
@@ -123,7 +123,8 @@ void mobile_activity(void) {
 		if(MOB_FLAGGED(ch, MOB_AGGRESSIVE | MOB_AGGR_TO_ALIGN)) {
 			found = FALSE;
 
-			for(vict = world[IN_ROOM(ch)].people; vict && !found; vict = vict->next_in_room) {
+			for(auto & plr : mods::globals::get_room_list(npc->room())){
+				vict = plr->cd();
 				if(IS_NPC(vict) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE)) {
 					continue;
 				}
@@ -133,9 +134,9 @@ void mobile_activity(void) {
 				}
 
 				if(MOB_FLAGGED(ch, MOB_AGGRESSIVE) ||
-				        (MOB_FLAGGED(ch, MOB_AGGR_EVIL) && IS_EVIL(vict)) ||
-				        (MOB_FLAGGED(ch, MOB_AGGR_NEUTRAL) && IS_NEUTRAL(vict)) ||
-				        (MOB_FLAGGED(ch, MOB_AGGR_GOOD) && IS_GOOD(vict))) {
+						(MOB_FLAGGED(ch, MOB_AGGR_EVIL) && IS_EVIL(vict)) ||
+						(MOB_FLAGGED(ch, MOB_AGGR_NEUTRAL) && IS_NEUTRAL(vict)) ||
+						(MOB_FLAGGED(ch, MOB_AGGR_GOOD) && IS_GOOD(vict))) {
 
 					/* Can a master successfully control the charmed monster? */
 					if(aggressive_mob_on_a_leash(ch, ch->master, vict)) {
@@ -145,34 +146,35 @@ void mobile_activity(void) {
 					hit(ch, vict, TYPE_UNDEFINED);
 					found = TRUE;
 				}
+				if(found){ break; }
 			}
-		}
-			//std::cerr << "mobile_activity: mob flagged checkpoint 1\n";
+		}// end if mob flagged aggro
 
 		/* Mob Memory */
 		if(MOB_FLAGGED(ch, MOB_MEMORY) && MEMORY(ch).size()) {
 			std::cerr << "mobile_activity: mob memory\n";
 
 			found = FALSE;
-			mods::loops::foreach_in_room(IN_ROOM(ch),[&](player_ptr_t player_vict) -> bool {
+			//mods::loops::foreach_in_room(
+			for(auto & player_vict : mods::globals::get_room_list(IN_ROOM(ch))) {
 				auto vict = player_vict->cd();
 				if(IS_NPC(vict) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE)) {
-					return true;
+					continue;
 				}
 
 				if(ch->mob_specials.memory.end() != 
 						ch->mob_specials.memory.find(vict)){
 					/* Can a master successfully control the charmed monster? */
 					if(aggressive_mob_on_a_leash(ch, ch->master, vict)) {
-						return true;
+						continue;
 					}
 					std::cerr << "mobile_activity: mob memory -- HITTING\n";
 					act("$n screams at $N, \"Hey! You're the fiend that attacked me!\"", FALSE, ch, 0, vict, TO_ROOM);
 					hit(ch, vict, TYPE_UNDEFINED);
-					return false;
+					break;
 				}
-				return true;
-			});
+				continue;
+			}
 		}
 
 		/*
@@ -184,7 +186,7 @@ void mobile_activity(void) {
 		 *
 		 * 1-4 = 0, 5-7 = 1, 8-10 = 2, 11-13 = 3, 14-16 = 4, 17-19 = 5, etc.
 		 */
-			//std::cerr << "mobile_activity: checkpoint 2\n";
+		//std::cerr << "mobile_activity: checkpoint 2\n";
 		if(AFF_FLAGGED(ch, AFF_CHARM) && ch->master && num_followers_charmed(ch->master) > (GET_CHA(ch->master) - 2) / 3) {
 			if(!aggressive_mob_on_a_leash(ch, ch->master, ch->master)) {
 				if(CAN_SEE(ch, ch->master) && !PRF_FLAGGED(ch->master, PRF_NOHASSLE)) {
@@ -194,30 +196,26 @@ void mobile_activity(void) {
 				stop_follower(ch);
 			}
 		}
-			//std::cerr << "mobile_activity: checkpoint 3\n";
 
 		/* Helper Mobs */
 		if(MOB_FLAGGED(ch, MOB_HELPER) && !AFF_FLAGGED(ch, AFF_BLIND | AFF_CHARM)) {
 			found = FALSE;
 
-			for(vict = world[IN_ROOM(ch)].people; vict && !found; vict = vict->next_in_room) {
-				if(ch == vict || !IS_NPC(vict) || !FIGHTING(vict)) {
+			FOR_ROOM(vict) {
+				if(vict->is(ch) || !IS_NPC(vict->cd()) || !FIGHTING(vict->cd())) {
 					continue;
 				}
 
-				if(IS_NPC(FIGHTING(vict)) || ch == FIGHTING(vict)) {
+				if(IS_NPC(FIGHTING(vict->cd())) || ch == FIGHTING(vict->cd())) {
 					continue;
 				}
 
-				act("$n jumps to the aid of $N!", FALSE, ch, 0, vict, TO_ROOM);
-				hit(ch, FIGHTING(vict), TYPE_UNDEFINED);
+				act("$n jumps to the aid of $N!", FALSE, ch, 0, vict->cd(), TO_ROOM);
+				hit(ch, FIGHTING(vict->cd()), TYPE_UNDEFINED);
 				found = TRUE;
 			}
 		}
-			//std::cerr << "mobile_activity: checkpoint 4\n";
-
-		return true;
-	});
+	} // END FOREACH_MOB
 }
 
 

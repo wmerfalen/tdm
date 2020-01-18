@@ -20,17 +20,17 @@
 #define NO_ATTACK_TYPE -1
 EXTERN_ACT(do_say);
 EXTERN_ACT(do_tell);
-extern void perform_tell(struct char_data *ch, struct char_data *vict, char *arg);
-extern size_t send_to_char(struct char_data *ch, const char *messg, ...);
-extern void hit(struct char_data *ch, struct char_data *victim, int type);
+extern void perform_tell(char_data *ch, char_data *vict, char *arg);
+extern size_t send_to_char(char_data *ch, const char *messg, ...);
+extern void hit(char_data *ch, char_data *victim, int type);
 namespace mods {
 	void seed() {
 		/** deprecated */
 	}
-	uint32_t ai_state::dispatch(struct char_data* ch) {
+	uint32_t ai_state::dispatch(char_data* ch) {
 		return 0;
 	}
-	uint32_t ai_state::event(struct char_data* ch,event_type_t ev) {
+	uint32_t ai_state::event(char_data* ch,event_type_t ev) {
 		static int divisor = 6;
 
 		switch(ev) {

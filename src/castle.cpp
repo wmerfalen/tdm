@@ -38,19 +38,19 @@ extern int mini_mud;
 /* local functions */
 mob_vnum castle_virtual(mob_vnum offset);
 room_rnum castle_real_room(room_vnum roomoffset);
-struct char_data *find_npc_by_name(struct char_data *chAtChar, const char *pszName, int iLen);
-int block_way(struct char_data *ch, int cmd, char *arg, room_vnum iIn_room, int iProhibited_direction);
+char_data *find_npc_by_name(char_data *chAtChar, const char *pszName, int iLen);
+int block_way(char_data *ch, int cmd, char *arg, room_vnum iIn_room, int iProhibited_direction);
 void assign_kings_castle(void);
-int member_of_staff(struct char_data *chChar);
-int member_of_royal_guard(struct char_data *chChar);
-struct char_data *find_guard(struct char_data *chAtChar);
-struct char_data *get_victim(struct char_data *chAtChar);
-int banzaii(struct char_data *ch);
-int do_npc_rescue(struct char_data *ch_hero, struct char_data *ch_victim);
+int member_of_staff(char_data *chChar);
+int member_of_royal_guard(char_data *chChar);
+char_data *find_guard(char_data *chAtChar);
+char_data *get_victim(char_data *chAtChar);
+int banzaii(char_data *ch);
+int do_npc_rescue(char_data *ch_hero, char_data *ch_victim);
 int is_trash(struct obj_data *i);
-void fry_victim(struct char_data *ch);
-int castle_cleaner(struct char_data *ch, int cmd, int gripe);
-int castle_twin_proc(struct char_data *ch, int cmd, char *arg, int ctlnum, const char *twinname);
+void fry_victim(char_data *ch);
+int castle_cleaner(char_data *ch, int cmd, int gripe);
+int castle_twin_proc(char_data *ch, int cmd, char *arg, int ctlnum, const char *twinname);
 void castle_mob_spec(mob_vnum mobnum, SPECIAL(*specproc));
 
 
@@ -160,7 +160,7 @@ void assign_kings_castle(void) {
  * Used to see if a character is a member of the castle staff.
  * Used mainly by BANZAI:ng NPC:s.
  */
-int member_of_staff(struct char_data *chChar) {
+int member_of_staff(char_data *chChar) {
 	unsigned ch_num;
 
 	if(!IS_NPC(chChar)) {
@@ -195,7 +195,7 @@ int member_of_staff(struct char_data *chChar) {
  * Returns TRUE if the character is a guard on duty, otherwise FALSE.
  * Used by Peter the captain of the royal guard.
  */
-int member_of_royal_guard(struct char_data *chChar) {
+int member_of_royal_guard(char_data *chChar) {
 	unsigned ch_num;
 
 	if(!chChar || !IS_NPC(chChar)) {
@@ -226,16 +226,17 @@ int member_of_royal_guard(struct char_data *chChar) {
  * Returns a pointer to an npc by the given name.
  * Used by Tim and Tom
  */
-struct char_data *find_npc_by_name(struct char_data *chAtChar,
+char_data *find_npc_by_name(char_data *ch,
                                    const char *pszName, int iLen) {
-	struct char_data *ch;
+	MENTOC_PREAMBLE();
 
-	for(ch = world[IN_ROOM(chAtChar)].people; ch; ch = ch->next_in_room)
-		if(IS_NPC(ch) && !strncmp(pszName, ch->player.short_descr, iLen)) {
-			return (ch);
+	for(auto & plr : mods::globals::get_room_list(player->room())){
+		if(plr->is_npc() && !strncmp(pszName, plr->short_descr().c_str(), iLen)) {
+			return (plr->cd());
 		}
+	}
 
-	return (NULL);
+	return nullptr;
 }
 
 
@@ -245,13 +246,14 @@ struct char_data *find_npc_by_name(struct char_data *chAtChar,
  * Returns the pointer to a guard on duty.
  * Used by Peter the Captain of the Royal Guard
  */
-struct char_data *find_guard(struct char_data *chAtChar) {
-	struct char_data *ch;
+char_data * find_guard(char_data *ch) {
+	MENTOC_PREAMBLE();
 
-	for(ch = world[IN_ROOM(chAtChar)].people; ch; ch = ch->next_in_room)
-		if(!FIGHTING(ch) && member_of_royal_guard(ch)) {
-			return (ch);
+	for(auto & plr : mods::globals::get_room_list(player->room())){
+		if(!plr->fighting() && member_of_royal_guard(ch)) {
+			return (*plr);
 		}
+	}
 
 	return (NULL);
 }
@@ -264,14 +266,15 @@ struct char_data *find_guard(struct char_data *chAtChar) {
  * fighting someone in the castle staff...
  * Used by BANZAII-ing characters and King Welmar...
  */
-struct char_data *get_victim(struct char_data *chAtChar) {
-	struct char_data *ch;
+char_data *get_victim( char_data *ch) {
+	MENTOC_PREAMBLE();
 	int iNum_bad_guys = 0, iVictim;
 
-	for(ch = world[IN_ROOM(chAtChar)].people; ch; ch = ch->next_in_room)
-		if(FIGHTING(ch) && member_of_staff(FIGHTING(ch))) {
+	for(auto & plr : mods::globals::get_room_list(player->room())){
+		if(plr->fighting() && member_of_staff(*plr->fighting())) {
 			iNum_bad_guys++;
 		}
+	}
 
 	if(!iNum_bad_guys) {
 		return (NULL);
@@ -285,12 +288,12 @@ struct char_data *get_victim(struct char_data *chAtChar) {
 
 	iNum_bad_guys = 0;
 
-	for(ch = world[IN_ROOM(chAtChar)].people; ch; ch = ch->next_in_room) {
-		if(FIGHTING(ch) == NULL) {
+	for(auto & plr : mods::globals::get_room_list(player->room())){
+		if(!plr->fighting()) {
 			continue;
 		}
 
-		if(!member_of_staff(FIGHTING(ch))) {
+		if(!member_of_staff(*plr->fighting())) {
 			continue;
 		}
 
@@ -298,7 +301,7 @@ struct char_data *get_victim(struct char_data *chAtChar) {
 			continue;
 		}
 
-		return (ch);
+		return *plr;
 	}
 
 	return (NULL);
@@ -311,8 +314,8 @@ struct char_data *get_victim(struct char_data *chAtChar) {
  * Makes a character banzaii on attackers of the castle staff.
  * Used by Guards, Tim, Tom, Dick, David, Peter, Master, King and Guards.
  */
-int banzaii(struct char_data *ch) {
-	struct char_data *chOpponent;
+int banzaii(char_data *ch) {
+	char_data *chOpponent;
 
 	if(!AWAKE(ch) || GET_POS(ch) == POS_FIGHTING || !(chOpponent = get_victim(ch))) {
 		return (FALSE);
@@ -331,33 +334,40 @@ int banzaii(struct char_data *ch) {
  * Makes ch_hero rescue ch_victim.
  * Used by Tim and Tom
  */
-int do_npc_rescue(struct char_data *ch_hero, struct char_data *ch_victim) {
-	struct char_data *ch_bad_guy;
-
-	for(ch_bad_guy = world[IN_ROOM(ch_hero)].people;
-	        ch_bad_guy && (FIGHTING(ch_bad_guy) != ch_victim);
-	        ch_bad_guy = ch_bad_guy->next_in_room);
+int do_npc_rescue( char_data *ch,  char_data *ch_victim) {
+	MENTOC_PREAMBLE();
+	player_ptr_t ch_bad_guy = nullptr;
+	
+	// Legacy code:
+	//for(ch_bad_guy = world[IN_ROOM(ch_hero)].people;
+	//        ch_bad_guy && (FIGHTING(ch_bad_guy) != ch_victim);
+	//        ch_bad_guy = ch_bad_guy->next_in_room);
+	for(auto & plr : mods::globals::get_room_list(player->room())){
+		if(plr->fighting() && plr->fighting()->is(ch_victim)){
+			ch_bad_guy = plr->fighting(); break;
+		}
+	}
 
 	/* NO WAY I'll rescue the one I'm fighting! */
-	if(!ch_bad_guy || ch_bad_guy == ch_hero) {
+	if(!ch_bad_guy || ch_bad_guy->is(player)) {
 		return (FALSE);
 	}
 
-	act("You bravely rescue $N.\r\n", FALSE, ch_hero, 0, ch_victim, TO_CHAR);
+	act("You bravely rescue $N.\r\n", FALSE, *player, 0, ch_victim, TO_CHAR);
 	act("You are rescued by $N, your loyal friend!\r\n",
-	    FALSE, ch_victim, 0, ch_hero, TO_CHAR);
-	act("$n heroically rescues $N.", FALSE, ch_hero, 0, ch_victim, TO_NOTVICT);
+	    FALSE, ch_victim, 0, *player, TO_CHAR);
+	act("$n heroically rescues $N.", FALSE, *player, 0, ch_victim, TO_NOTVICT);
 
-	if(FIGHTING(ch_bad_guy)) {
-		stop_fighting(ch_bad_guy);
+	if(ch_bad_guy->fighting()) {
+		stop_fighting(ch_bad_guy->cd());
 	}
 
-	if(FIGHTING(ch_hero)) {
-		stop_fighting(ch_hero);
+	if(player->fighting()) {
+		stop_fighting(player->cd());
 	}
 
-	set_fighting(ch_hero, ch_bad_guy);
-	set_fighting(ch_bad_guy, ch_hero);
+	set_fighting(*player, *ch_bad_guy);
+	set_fighting(*ch_bad_guy, *player);
 	return (TRUE);
 }
 
@@ -366,7 +376,7 @@ int do_npc_rescue(struct char_data *ch_hero, struct char_data *ch_victim) {
  * Procedure to block a person trying to enter a room.
  * Used by Tim/Tom at Kings bedroom and Dick/David at treasury.
  */
-int block_way(struct char_data *ch, int cmd, char *arg, room_vnum iIn_room,
+int block_way(char_data *ch, int cmd, char *arg, room_vnum iIn_room,
               int iProhibited_direction) {
 	if(cmd != ++iProhibited_direction) {
 		return (FALSE);
@@ -412,8 +422,8 @@ int is_trash(struct obj_data *i) {
  * Finds a suitabe victim, and cast some _NASTY_ spell on him.
  * Used by King Welmar
  */
-void fry_victim(struct char_data *ch) {
-	struct char_data *tch;
+void fry_victim(char_data *ch) {
+	char_data *tch;
 
 	if(ch->points.mana < 10) {
 		return;
@@ -594,7 +604,7 @@ SPECIAL(king_welmar) {
  * Used by the Training Master.
  */
 SPECIAL(training_master) {
-	struct char_data *pupil1, *pupil2 = NULL, *tch;
+	char_data *pupil1, *pupil2 = NULL, *tch;
 
 	if(!AWAKE(ch) || (GET_POS(ch) == POS_FIGHTING)) {
 		return (FALSE);
@@ -695,8 +705,8 @@ SPECIAL(tim) {
 /*
  * Common routine for the Castle Twins.
  */
-int castle_twin_proc(struct char_data *ch, int cmd, char *arg, int ctlnum, const char *twinname) {
-	struct char_data *king, *twin;
+int castle_twin_proc(char_data *ch, int cmd, char *arg, int ctlnum, const char *twinname) {
+	char_data *king, *twin;
 
 	if(!AWAKE(ch)) {
 		return (FALSE);
@@ -744,7 +754,7 @@ SPECIAL(James) {
 /*
  * Common code for James and the Cleaning Woman.
  */
-int castle_cleaner(struct char_data *ch, int cmd, int gripe) {
+int castle_cleaner(char_data *ch, int cmd, int gripe) {
 	struct obj_data *i;
 
 	if(cmd || !AWAKE(ch) || GET_POS(ch) == POS_FIGHTING) {
@@ -817,7 +827,7 @@ SPECIAL(DicknDavid) {
  * Routine for Captain of the Guards.
  */
 SPECIAL(peter) {
-	struct char_data *ch_guard = NULL;
+	char_data *ch_guard = NULL;
 
 	if(cmd || !AWAKE(ch) || GET_POS(ch) == POS_FIGHTING) {
 		return (FALSE);
@@ -890,7 +900,7 @@ SPECIAL(peter) {
  * Code by Sapowox modified by Pjotr.(Original code from Master)
  */
 SPECIAL(jerry) {
-	struct char_data *gambler1, *gambler2 = NULL, *tch;
+	char_data *gambler1, *gambler2 = NULL, *tch;
 
 	if(!AWAKE(ch) || (GET_POS(ch) == POS_FIGHTING)) {
 		return (FALSE);

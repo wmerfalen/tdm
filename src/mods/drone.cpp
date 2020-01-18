@@ -14,7 +14,7 @@
 
 namespace mods {
 	drone::drone(char_data* ch) : m_char_data(ch) { };
-	 struct char_data* drone::create(char_data* owner) {
+	 char_data* drone::create(char_data* owner) {
 	auto player = mods::globals::player_list.emplace_back();
 	player->set_desc(owner->desc);
 	player->desc().character = player->cd();
@@ -40,7 +40,7 @@ namespace mods {
 		SET_BIT(ch->player_specials->saved.pref, PRF_AUTOEXIT);
 		return player->cd();
 	}
-	 void drone::start(struct char_data* owner) {
+	 void drone::start(char_data* owner) {
 		auto drone = mods::drone::get_existing(owner);
 
 		if(drone == nullptr) {
@@ -54,16 +54,16 @@ namespace mods {
 		char_to_room(drone,IN_ROOM(owner));
 		owner->drone_simulate = true;
 	}
-	 void drone::stop(struct char_data* owner) {
+	 void drone::stop(char_data* owner) {
 		owner->drone_simulate = false;
 	}
-	 bool drone::started(struct char_data* owner) {
+	 bool drone::started(char_data* owner) {
 		return owner->drone_simulate;
 	}
-	 void drone::simulate(struct char_data* owner,bool value) {
+	 void drone::simulate(char_data* owner,bool value) {
 		owner->drone_simulate = value;
 	}
-	 void drone::get_drone(struct char_data* owner) {
+	 void drone::get_drone(char_data* owner) {
 		auto drone = mods::globals::player_list[owner->drone_uuid]->cd();
 
 		if(IN_ROOM(owner) == IN_ROOM(drone)) {
@@ -76,7 +76,7 @@ namespace mods {
 			send_to_char(owner,"Must be in the same room as your drone\r\n");
 		}
 	}
-	 struct char_data * drone::get_existing(struct char_data* owner) {
+	 char_data * drone::get_existing(char_data* owner) {
 		if(owner->drone_uuid == 0 || owner->drone_uuid > mods::globals::player_list.size() -1) {
 			return nullptr;
 		}
@@ -84,7 +84,7 @@ namespace mods {
 		return mods::globals::player_list[owner->drone_uuid]->cd();
 	}
 
-	 bool drone::interpret(struct char_data *owner,const std::string& argument) {
+	 bool drone::interpret(char_data *owner,const std::string& argument) {
 		auto drone = mods::globals::player_list[owner->drone_uuid];
 
 		if(argument.compare("drone stop") == 0) {
@@ -93,7 +93,7 @@ namespace mods {
 		}
 
 		if(argument.compare("scan") == 0) {
-			for(auto & player_ptr : mods::globals::room_list[drone->cd()->in_room]){
+			for(auto & player_ptr : mods::globals::get_room_list(drone->cd()->in_room)){
 				*player_ptr << "You have been spotted.\r\n";
 			}
 			return false;
@@ -109,7 +109,7 @@ namespace mods {
 			case 'S':
 			case 'W':
 			case 'l':
-				command_interpreter(drone->cd(),argument.substr(0,1).c_str());
+				command_interpreter(drone,argument.substr(0,1).c_str());
 				return false;
 
 			default:

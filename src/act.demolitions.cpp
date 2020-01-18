@@ -13,6 +13,7 @@
 #include "globals.hpp"
 #include "mods/util.hpp"
 #include "mods/item.hpp"
+#include "mods/sensor-grenade.hpp"
 
 
 /**

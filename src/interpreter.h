@@ -11,7 +11,7 @@
 ************************************************************************ */
 #include "globals.hpp"
 
-#define ACMD(name) void name(struct char_data *ch, char *argument, int cmd, int subcmd)
+#define ACMD(name) void name(char_data *ch, char *argument, int cmd, int subcmd)
 
 
 ACMD(do_move);
@@ -20,8 +20,9 @@ ACMD(do_move);
 #define CMD_IS(cmd_name) (!strcmp(cmd_name, cmd_info[cmd].command))
 #define IS_MOVE(cmdnum) (cmd_info[cmdnum].command_pointer == do_move)
 
-void	command_interpreter(struct char_data *ch, char *argument);
-void	command_interpreter(struct char_data *ch, const char *argument);
+void	command_interpreter(char_data *ch, char *argument,bool legacy);
+void	command_interpreter(char_data *ch, const char *argument, bool legacy);
+void	command_interpreter(player_ptr_t & player, std::string_view argument);
 int	search_block(char *arg, const char **list, int exact);
 char	lower(char c);
 char	*one_argument(char *argument, char *first_arg);
@@ -46,7 +47,7 @@ struct command_info {
 	const char *command;
 	byte minimum_position;
 	void	(*command_pointer)
-	(struct char_data *ch, char *argument, int cmd, int subcmd);
+	(char_data *ch, char *argument, int cmd, int subcmd);
 	sh_int minimum_level;
 	int	subcmd;
 };

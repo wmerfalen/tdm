@@ -23,9 +23,9 @@ ACMD(do_heal) {
 	unsigned room = static_cast<unsigned>(player->room());
 	for(auto& v : vec_args) {
 		if(mods::globals::room_list.size() > room){
-			for(auto & person : mods::globals::room_list[room]){
-				if(mods::util::fuzzy_match(v,person->name().c_str())) {
-					mods::classes::medic::heal_player(player,person);
+			for(auto & plr : mods::globals::get_room_list(room)){
+				if(mods::util::fuzzy_match(v,plr->name().c_str())) {
+					mods::classes::medic::heal_player(player,plr);
 					healed = true;
 					break;
 				}

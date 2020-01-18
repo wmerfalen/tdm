@@ -73,7 +73,7 @@ struct board_info_type board_info[NUM_OF_BOARDS] = {
 /* local functions */
 SPECIAL(gen_board);
 int find_slot(void);
-int find_board(struct char_data *ch);
+int find_board(char_data *ch);
 void init_boards(void);
 
 char *msg_storage[INDEX_SIZE];
@@ -97,7 +97,7 @@ int find_slot(void) {
 
 
 /* search the room ch is standing in to find which board he's looking at */
-int find_board(struct char_data *ch) {
+int find_board(char_data *ch) {
 	struct obj_data *obj;
 	int i;
 
@@ -193,7 +193,7 @@ SPECIAL(gen_board) {
 }
 
 
-int Board_write_message(int board_type, struct char_data *ch, char *arg, struct obj_data *board) {
+int Board_write_message(int board_type, char_data *ch, char *arg, struct obj_data *board) {
 	char *tmstr;
 	time_t ct;
 	char buf[MAX_INPUT_LENGTH], buf2[MAX_NAME_LENGTH + 3];
@@ -246,7 +246,7 @@ int Board_write_message(int board_type, struct char_data *ch, char *arg, struct 
 }
 
 
-int Board_show_board(int board_type, struct char_data *ch, char *arg, struct obj_data *board) {
+int Board_show_board(int board_type, char_data *ch, char *arg, struct obj_data *board) {
 	int i;
 	char tmp[MAX_STRING_LENGTH], buf[MAX_STRING_LENGTH];
 
@@ -323,7 +323,7 @@ fubar:
 }
 
 
-int Board_display_msg(int board_type, struct char_data *ch, char *arg, struct obj_data *board) {
+int Board_display_msg(int board_type, char_data *ch, char *arg, struct obj_data *board) {
 	char number[MAX_INPUT_LENGTH], buffer[MAX_STRING_LENGTH];
 	int msg, ind;
 
@@ -393,7 +393,7 @@ int Board_display_msg(int board_type, struct char_data *ch, char *arg, struct ob
 }
 
 
-int Board_remove_msg(int board_type, struct char_data *ch, char *arg, struct obj_data *board) {
+int Board_remove_msg(int board_type, char_data *ch, char *arg, struct obj_data *board) {
 	int ind, msg, slot_num;
 	char number[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
 

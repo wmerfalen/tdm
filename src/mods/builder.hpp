@@ -35,7 +35,7 @@ namespace mods::builder {
 //  11    SPECIAL(*func);
 //  12
 //  13    struct obj_data *contents;   /* List of items in room              */
-//  14    struct char_data *people;    /* List of NPC / PC in room           */
+//  14    char_data *people;    /* List of NPC / PC in room           */
 //  15 };
 //  16
 	constexpr static int ROOM_NUMBER_OUT_OF_RANGE = -1;
@@ -76,7 +76,7 @@ namespace mods::builder {
 	extern sandbox_list_t sandboxes;
 	/* Factory method to generate a room for us */
 	room_data new_room(player_ptr_t player,int direction);
-	bool flush_to_db(struct char_data *ch,int room);
+	bool flush_to_db(char_data *ch,int room);
 	bool title(room_rnum room,std::string_view str_title);
 	bool description(room_rnum room,std::string_view str_description);
 	std::optional<std::string> dir_option(room_rnum,int direction,std::optional<std::string_view> description,

@@ -21,7 +21,8 @@ ssize_t perform_socket_write(socket_t desc, const char *txt,size_t length);
 void echo_off(mods::descriptor_data &d);
 void echo_on(mods::descriptor_data &d);
 void circle_sleep(struct timeval *timeout);
-int get_from_q(struct txt_q *queue, char *dest, int *aliased);
+//int get_from_q(struct txt_q *queue, char *dest, int *aliased);
+int get_from_q(mods::descriptor_data& d, char *dest, int *aliased);
 void init_game(ush_int port);
 void signal_setup(void);
 void game_loop(socket_t mother_desc);
@@ -44,7 +45,7 @@ int parse_ip(const char *addr, struct in_addr *inaddr);
 int set_sendbuf(socket_t s);
 void setup_log(const char *filename, int fd);
 int open_logfile(const char *filename, FILE *stderr_fp);
-size_t	send_to_char(struct char_data *ch, const char *messg, ...) __attribute__((format(printf, 2, 3)));
+size_t	send_to_char(char_data *ch, const char *messg, ...) __attribute__((format(printf, 2, 3)));
 void write_to_char(char_data* ch, std::string_view msg,bool newline, bool plain);
 void	send_to_all(const char *messg, ...) __attribute__((format(printf, 1, 2)));
 void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
@@ -54,8 +55,8 @@ void send_to_room_except(room_rnum room, const std::vector<player_ptr_t>& except
 void	send_to_outdoor(const char *messg, ...) __attribute__((format(printf, 1, 2)));
 void	close_socket(mods::descriptor_data d);
 
-void	perform_act(const char *orig, struct char_data *ch,
-                    struct obj_data *obj, const void *vict_obj, struct char_data *to);
+void	perform_act(const char *orig, char_data *ch,
+                    struct obj_data *obj, const void *vict_obj, char_data *to);
 
 void	act(const std::string & str, int hide_invisible, char_data *ch,
             obj_data *obj, void *vict_obj, int type);
@@ -67,7 +68,7 @@ void	act(const std::string & str, int hide_invisible, char_data *ch,
 #define TO_SLEEP	128	/* to char, even if sleeping */
 
 /* I/O functions */
-void	write_to_q(const char *txt, struct txt_q *queue, int aliased);
+void	write_to_q(std::string_view txt, mods::descriptor_data&, int aliased);
 int	write_to_descriptor(socket_t desc, const char *txt);
 size_t write_to_output(mods::descriptor_data &t, const char *txt, ...) __attribute__((format(printf, 2, 3)));
 size_t	vwrite_to_output(mods::descriptor_data &d, const char *format, va_list args);

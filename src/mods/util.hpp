@@ -28,7 +28,7 @@ static inline std::string operator "" _s(const char* s,uint64_t i) {
 extern std::vector<room_data> world;
 extern int get_number(char **name);
 extern int isname(const char *str, const char *namelist);
-extern struct obj_data *get_obj_in_list_vis(struct char_data *ch, char *name, int *number, struct obj_data *list);
+extern struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *number, struct obj_data *list);
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 
 namespace mods::util {

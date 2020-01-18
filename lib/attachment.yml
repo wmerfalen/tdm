@@ -1,7 +1,21 @@
 # type: SIGHT
 # type: MUZZLE
 # type: MAGAZINE
-type: 'SIGHT' # enum, object type
+zoom_multiplier: 2.0#float
+ammunition_amount: 32#int
+silence_percent: 10.0#float, percentage
+durability_points: 100#int, static amount of durability points, no limit
+incendiary_damage: 10#int, static amount of incendiary damage, no limit
+radiation_damage: 10#int, static amount of radiation damage, no limit
+poison_damage: 10#int, static amount of poison damage, no limit
+electric_damage: 10#int, static amount of electric damage, no limit
+armor_penetration_amount: 10#int, static amount of armor penetration done, no limit
+disorient_amount: 10#int, static amount of disorientation done, no limit
+emp_amount: 10#int, static amount of EMP done, no limit
+emp_radius: 1#int, radius size in rooms
+attach_to: 'TBA'#csv, strings attach to various kinds of items TBA
+str_type: 'SIGHT' # enum, object type
+type: 0 # integer enum 
 manufacturer: 'ACME Industries' # string, anything 
 name: 'ACOG Scope' # string, anything name of object 
 vnum: 1000 # integer, unique identifier

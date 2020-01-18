@@ -126,25 +126,25 @@ room_rnum real_room(room_vnum vnum);
 mob_rnum real_mobile(mob_vnum vnum);
 obj_rnum real_object(obj_vnum vnum);
 
-void	char_to_store(struct char_data *ch, struct char_file_u *st);
-void	store_to_char(struct char_file_u *st, struct char_data *ch);
+void	char_to_store(char_data *ch, struct char_file_u *st);
+void	store_to_char(struct char_file_u *st, char_data *ch);
 bool	load_char(const std::string& name);
 namespace mods::db { 
 extern tuple_status_t	save_char(player_ptr_t);
 };
 void	init_char(player_ptr_t);
-struct char_data* create_char(void);
-struct char_data *read_mobile(mob_vnum nr, int type);
-int	vnum_mobile(char *searchname, struct char_data *ch);
-void	reset_char(struct char_data *ch);
-void	free_char(struct char_data *ch);
+char_data* create_char(void);
+char_data *read_mobile(mob_vnum nr, int type);
+int	vnum_mobile(char *searchname, char_data *ch);
+void	reset_char(char_data *ch);
+void	free_char(char_data *ch);
 
-struct obj_data *create_obj(void);
+using obj_ptr_t = std::shared_ptr<obj_data>;
 void	clear_object(struct obj_data *obj);
 void	free_obj(struct obj_data *obj);
 obj_data *read_object(obj_vnum nr, int type);
-std::shared_ptr<obj_data> blank_object();
-int	vnum_object(char *searchname, struct char_data *ch);
+obj_ptr_t blank_object();
+int	vnum_object(char *searchname, char_data *ch);
 
 typedef enum { \
 	REAL=0,\
@@ -272,6 +272,7 @@ extern std::deque<mods::descriptor_data> descriptor_list;
 extern struct player_special_data dummy_mob;
 
 extern std::vector<index_data> mob_index;
+extern std::deque<std::shared_ptr<mods::npc>> mob_list;
 extern mob_rnum top_of_mobt;
 
 extern struct index_data *obj_index;

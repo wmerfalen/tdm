@@ -12,7 +12,7 @@
 #include "extern.hpp"
 
 #define DRONE_WEAPON_SET_NUM 2
-extern size_t send_to_char(struct char_data *ch, const char *messg, ...);
+extern size_t send_to_char(char_data *ch, const char *messg, ...);
 
 namespace mods {
 	class drone {
@@ -20,14 +20,14 @@ namespace mods {
 			typedef short weapon_set;
 			drone();
 			drone(char_data* ch);
-			static struct char_data* create(struct char_data* owner);
-			static void start(struct char_data * owner);
-			static void stop(struct char_data * owner);
-			static bool started(struct char_data *owner);
-			static void simulate(struct char_data *owner,bool value);
-			static bool interpret(struct char_data *owner,const std::string& argument);
-			static struct char_data * get_existing(struct char_data* owner);
-			static void get_drone(struct char_data* owner);
+			static char_data* create(char_data* owner);
+			static void start(char_data * owner);
+			static void stop(char_data * owner);
+			static bool started(char_data *owner);
+			static void simulate(char_data *owner,bool value);
+			static bool interpret(char_data *owner,const std::string& argument);
+			static char_data * get_existing(char_data* owner);
+			static void get_drone(char_data* owner);
 			/*
 			bool has_weapon_capability(int);
 			bool has_inventory_capability(int);

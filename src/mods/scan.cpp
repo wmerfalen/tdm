@@ -3,7 +3,7 @@
 
 namespace mods::scan {
 	int directions[] = { NORTH,EAST,SOUTH,WEST,UP,DOWN };
-	void los_scan(struct char_data* ch,int depth,vec_player_data* vec_room_list) {
+	void los_scan(char_data* ch,int depth,vec_player_data* vec_room_list) {
 		los_scan_foreach(
 				ch,depth,
 				[&](room_rnum room_id,int direction,vec_player_data _char_data) -> bool {
@@ -55,10 +55,10 @@ namespace mods::scan {
 			for(auto & room_id : scan_results[direction]){
 				++find_results.distance;
 				if(std::find(
-							mods::globals::room_list[room_id].begin(),
-							mods::globals::room_list[room_id].end(),
+							mods::globals::get_room_list(room_id).begin(),
+							mods::globals::get_room_list(room_id).end(),
 							hunted) != 
-						mods::globals::room_list[room_id].end()){
+						mods::globals::get_room_list(room_id).end()){
 					find_results.found = true;
 					return find_results;
 				}
@@ -109,12 +109,13 @@ namespace mods::scan {
 					break;
 				}
 			}
+			//mods::globals::get_room_list(i_d) = rooms_found;
 			room_list[i_d] = rooms_found;
 			rooms_found.clear();
 		}
 	}
 
-	void los_scan_foreach(struct char_data* ch,int depth,los_scan_foreach_callback lambda_cb) {
+	void los_scan_foreach(char_data* ch,int depth,los_scan_foreach_callback lambda_cb) {
 		/* Check if enemy is within 'depth' rooms n,e,s,w,u,d */
 		std::string s_dir;
 
@@ -154,7 +155,7 @@ namespace mods::scan {
 							continue;
 						}
 
-						for(auto character : mods::globals::room_list[room_id]) {
+						for(auto character : mods::globals::get_room_list(room_id)) {
 							vec_player_data_element item;
 							item.ch = character->cd();
 							item.distance = ctr;

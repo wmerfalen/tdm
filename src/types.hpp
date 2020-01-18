@@ -6,7 +6,7 @@
 #include <map>
 #include "mods/ai_state.hpp"
 
-#define EXTERN_ACT(a) extern void a(struct char_data*, char* argument,int,int);
+#define EXTERN_ACT(a) extern void a(char_data*, char* argument,int,int);
 #include "structs.h"
 
 #endif

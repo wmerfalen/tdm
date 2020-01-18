@@ -28,9 +28,9 @@
 struct spell_info_type spell_info[TOP_SPELL_DEFINE + 1];
 
 /* local functions */
-void say_spell(struct char_data *ch, int spellnum, struct char_data *tch, struct obj_data *tobj);
+void say_spell(char_data *ch, int spellnum, char_data *tch, struct obj_data *tobj);
 void spello(int spl, const char *name, int max_mana, int min_mana, int mana_change, int minpos, int targets, int violent, int routines, const char *wearoff);
-int mag_manacost(struct char_data *ch, int spellnum);
+int mag_manacost(char_data *ch, int spellnum);
 /** FIXME: do_cast is commented out in interpreter.cpp, so NO spells will work */
 ACMD(do_cast);
 void unused_spell(int spl);
@@ -86,19 +86,19 @@ struct syllable syls[] = {
 
 const char *unused_spellname = "!UNUSED!"; /* So we can get &unused_spellname */
 
-int mag_manacost(struct char_data *ch, int spellnum) {
+int mag_manacost(char_data *ch, int spellnum) {
 	return MAX(SINFO.mana_max - (SINFO.mana_change *
 	                             (GET_LEVEL(ch) - SINFO.min_level[(int) GET_CLASS(ch)])),
 	           SINFO.mana_min);
 }
 
 
-void say_spell(struct char_data *ch, int spellnum, struct char_data *tch,
-               struct obj_data *tobj) {
+void say_spell(char_data *ch, int spellnum, char_data *tch,
+               obj_data *tobj) {
+	MENTOC_PREAMBLE();
 	char lbuf[256], buf[256], buf1[256], buf2[256];	/* FIXME */
 	const char *format;
 
-	struct char_data *i;
 	int j, ofs = 0;
 
 	*buf = '\0';
@@ -137,15 +137,15 @@ void say_spell(struct char_data *ch, int spellnum, struct char_data *tch,
 	snprintf(buf1, std::min(strlen(format) + skill_name_value.length(),sizeof(buf1)),format,skill_name_value.c_str());
 	snprintf(buf2, std::min(strlen(format),sizeof(buf2)), format, buf);
 
-	for(i = world[IN_ROOM(ch)].people; i; i = i->next_in_room) {
-		if(i == ch || i == tch || !i->has_desc || !AWAKE(i)) {
+	//for(i = world[IN_ROOM(ch)].people; i; i = i->next_in_room) {
+	for(auto & plr : mods::globals::get_room_list(player->room())) {
+		if(plr->is(ch) || plr->is(tch) || !plr->cd()->has_desc || !AWAKE(plr->cd())) {
 			continue;
 		}
-
-		if(GET_CLASS(ch) == GET_CLASS(i)) {
-			perform_act(buf1, ch, tobj, tch, i);
+		if(GET_CLASS(ch) == GET_CLASS(plr->cd())) {
+			perform_act(buf1, ch, tobj, tch, plr->cd());
 		} else {
-			perform_act(buf2, ch, tobj, tch, i);
+			perform_act(buf2, ch, tobj, tch, plr->cd());
 		}
 	}
 
@@ -213,7 +213,7 @@ int find_skill_num(char *name) {
  * This is also the entry point for non-spoken or unrestricted spells.
  * Spellnum 0 is legal but silently ignored here, to make callers simpler.
  */
-int call_magic(struct char_data *caster, struct char_data *cvict,
+int call_magic(char_data *caster, char_data *cvict,
                struct obj_data *ovict, int spellnum, int level, int casttype) {
 	int savetype;
 
@@ -350,11 +350,12 @@ int call_magic(struct char_data *caster, struct char_data *cvict,
  * the DikuMUD format did not specify staff and wand levels in the world
  * files (this is a CircleMUD enhancement).
  */
-void mag_objectmagic(struct char_data *ch, struct obj_data *obj,
+void mag_objectmagic(char_data *ch, struct obj_data *obj,
                      char *argument) {
+	MENTOC_PREAMBLE();
 	char arg[MAX_INPUT_LENGTH];
 	int i, k;
-	struct char_data *tch = NULL, *next_tch;
+	char_data *tch = NULL;
 	struct obj_data *tobj = NULL;
 
 	one_argument(argument, arg);
@@ -367,7 +368,7 @@ void mag_objectmagic(struct char_data *ch, struct obj_data *obj,
 			act("You tap $p three times on the ground.", FALSE, ch, obj, 0, TO_CHAR);
 
 			if(obj->action_description) {
-				act(obj->action_description, FALSE, ch, obj, 0, TO_ROOM);
+				act(obj->action_description.c_str(), FALSE, ch, obj, 0, TO_ROOM);
 			} else {
 				act("$n taps $p three times on the ground.", FALSE, ch, obj, 0, TO_ROOM);
 			}
@@ -388,7 +389,10 @@ void mag_objectmagic(struct char_data *ch, struct obj_data *obj,
 				 * Solution: We special case the area/mass spells here.
 				 */
 				if(HAS_SPELL_ROUTINE(GET_OBJ_VAL(obj, 3), MAG_MASSES | MAG_AREAS)) {
-					for(i = 0, tch = world[IN_ROOM(ch)].people; tch; tch = tch->next_in_room) {
+					//for(i = 0, tch = world[IN_ROOM(ch)].people; tch; tch = tch->next_in_room) {
+					i = 0;
+					FOR_ROOM(plr){
+						tch = plr->cd();
 						i++;
 					}
 
@@ -396,11 +400,11 @@ void mag_objectmagic(struct char_data *ch, struct obj_data *obj,
 						call_magic(ch, NULL, NULL, GET_OBJ_VAL(obj, 3), k, CAST_STAFF);
 					}
 				} else {
-					for(tch = world[IN_ROOM(ch)].people; tch; tch = next_tch) {
-						next_tch = tch->next_in_room;
-
-						if(ch != tch) {
-							call_magic(ch, tch, NULL, GET_OBJ_VAL(obj, 3), k, CAST_STAFF);
+					//for(tch = world[IN_ROOM(ch)].people; tch; tch = next_tch) {
+				//		next_tch = tch->next_in_room;
+					FOR_ROOM(plr){
+						if(!plr->is(ch)) {
+							call_magic(ch, plr->cd(), NULL, GET_OBJ_VAL(obj, 3), k, CAST_STAFF);
 						}
 					}
 				}
@@ -417,7 +421,7 @@ void mag_objectmagic(struct char_data *ch, struct obj_data *obj,
 					act("You point $p at $N.", FALSE, ch, obj, tch, TO_CHAR);
 
 					if(obj->action_description) {
-						act(obj->action_description, FALSE, ch, obj, tch, TO_ROOM);
+						act(obj->action_description.c_str(), FALSE, ch, obj, tch, TO_ROOM);
 					} else {
 						act("$n points $p at $N.", TRUE, ch, obj, tch, TO_ROOM);
 					}
@@ -426,7 +430,7 @@ void mag_objectmagic(struct char_data *ch, struct obj_data *obj,
 				act("You point $p at $P.", FALSE, ch, obj, tobj, TO_CHAR);
 
 				if(obj->action_description) {
-					act(obj->action_description, FALSE, ch, obj, tobj, TO_ROOM);
+					act(obj->action_description.c_str(), FALSE, ch, obj, tobj, TO_ROOM);
 				} else {
 					act("$n points $p at $P.", TRUE, ch, obj, tobj, TO_ROOM);
 				}
@@ -470,8 +474,8 @@ void mag_objectmagic(struct char_data *ch, struct obj_data *obj,
 
 			act("You recite $p which dissolves.", TRUE, ch, obj, 0, TO_CHAR);
 
-			if(obj->action_description) {
-				act(obj->action_description, FALSE, ch, obj, NULL, TO_ROOM);
+			if(obj->action_description.length()) {
+				act(obj->action_description.c_str(), FALSE, ch, obj, NULL, TO_ROOM);
 			} else {
 				act("$n recites $p.", FALSE, ch, obj, NULL, TO_ROOM);
 			}
@@ -494,8 +498,8 @@ void mag_objectmagic(struct char_data *ch, struct obj_data *obj,
 			tch = ch;
 			act("You quaff $p.", FALSE, ch, obj, NULL, TO_CHAR);
 
-			if(obj->action_description) {
-				act(obj->action_description, FALSE, ch, obj, NULL, TO_ROOM);
+			if(obj->action_description.length()) {
+				act(obj->action_description.c_str(), FALSE, ch, obj, NULL, TO_ROOM);
 			} else {
 				act("$n quaffs $p.", TRUE, ch, obj, NULL, TO_ROOM);
 			}
@@ -530,7 +534,7 @@ void mag_objectmagic(struct char_data *ch, struct obj_data *obj,
  * Entry point for NPC casts.  Recommended entry point for spells cast
  * by NPCs via specprocs.
  */
-int cast_spell(struct char_data *ch, struct char_data *tch,
+int cast_spell(char_data *ch, char_data *tch,
                struct obj_data *tobj, int spellnum) {
 	if(spellnum < 0 || spellnum > TOP_SPELL_DEFINE) {
 		log("SYSERR: cast_spell trying to call spellnum %d/%d.", spellnum,
@@ -598,7 +602,7 @@ int cast_spell(struct char_data *ch, struct char_data *tch,
  * passes control to cast_spell().
  */
 ACMD(do_cast) {
-	struct char_data *tch = NULL;
+	char_data *tch = NULL;
 	struct obj_data *tobj = NULL;
 	char *s, *t;
 	int mana, spellnum, i, target = 0;

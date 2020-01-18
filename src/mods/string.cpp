@@ -143,6 +143,10 @@ namespace mods {
 		assign(other.c_str());
 	}
 	*/
+	void string::assign(nullptr_t a){
+		m_debug("assign (nullptr_t)");
+		assign(std::string(""));
+	}
 	void string::assign(const std::string & other){
 		m_debug("assign std::string\n");
 		m_debug(other.c_str());
@@ -164,6 +168,20 @@ namespace mods {
 			return "";
 		}
 	}
+	std::string string::str() const {
+		if(m_str.length()){
+			return m_str;
+		}else{
+			return "";
+		}
+	}
+	std::string string::str_or(std::string f) const {
+		if(m_str.length()){
+			return m_str;
+		}
+		return f;
+	}
+
 	void string::concat(const std::string & str){
 		if(str.length()){
 			m_str.append(str);

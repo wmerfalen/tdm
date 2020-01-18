@@ -36,10 +36,10 @@ void House_restore_weight(struct obj_data *obj);
 void House_delete_file(room_vnum vnum);
 int find_house(room_vnum vnum);
 void House_save_control(void);
-void hcontrol_list_houses(struct char_data *ch);
-void hcontrol_build_house(struct char_data *ch, char *arg);
-void hcontrol_destroy_house(struct char_data *ch, char *arg);
-void hcontrol_pay_house(struct char_data *ch, char *arg);
+void hcontrol_list_houses(char_data *ch);
+void hcontrol_build_house(char_data *ch, char *arg);
+void hcontrol_destroy_house(char_data *ch, char *arg);
+void hcontrol_pay_house(char_data *ch, char *arg);
 ACMD(do_hcontrol);
 ACMD(do_house);
 
@@ -190,7 +190,8 @@ void House_delete_file(room_vnum vnum) {
 
 
 /* List all objects in a house file */
-void House_listrent(struct char_data *ch, room_vnum vnum) {
+void House_listrent(char_data *ch, room_vnum vnum) {
+	MENTOC_PREAMBLE();
 	FILE *fl;
 	char filename[MAX_STRING_LENGTH];
 	char buf[MAX_STRING_LENGTH];
@@ -218,7 +219,7 @@ void House_listrent(struct char_data *ch, room_vnum vnum) {
 		}
 
 		if(!feof(fl) && (obj = Obj_from_store(object, &i)) != NULL) {
-			send_to_char(ch, " [%5d] (%5dau) %s\r\n", GET_OBJ_VNUM(obj), GET_OBJ_RENT(obj), obj->short_description);
+			player->send(" [%5d] (%5dau) %s\r\n", GET_OBJ_VNUM(obj), GET_OBJ_RENT(obj), obj->short_description);
 			free_obj(obj);
 		}
 	}
@@ -333,7 +334,7 @@ const char *HCONTROL_FORMAT =
     "       hcontrol pay <house vnum>\r\n"
     "       hcontrol show\r\n";
 
-void hcontrol_list_houses(struct char_data *ch) {
+void hcontrol_list_houses(char_data *ch) {
 	int i;
 	char *timestr, *temp;
 	char built_on[128], last_pay[128], own_name[MAX_NAME_LENGTH + 1];
@@ -381,7 +382,7 @@ void hcontrol_list_houses(struct char_data *ch) {
 
 
 
-void hcontrol_build_house(struct char_data *ch, char *arg) {
+void hcontrol_build_house(char_data *ch, char *arg) {
 	char arg1[MAX_INPUT_LENGTH];
 	struct house_control_rec temp_house;
 	room_vnum virt_house, virt_atrium;
@@ -474,7 +475,7 @@ void hcontrol_build_house(struct char_data *ch, char *arg) {
 
 
 
-void hcontrol_destroy_house(struct char_data *ch, char *arg) {
+void hcontrol_destroy_house(char_data *ch, char *arg) {
 	int i, j;
 	room_rnum real_atrium, real_house;
 
@@ -523,7 +524,7 @@ void hcontrol_destroy_house(struct char_data *ch, char *arg) {
 }
 
 
-void hcontrol_pay_house(struct char_data *ch, char *arg) {
+void hcontrol_pay_house(char_data *ch, char *arg) {
 	int i;
 
 	if(!*arg) {
@@ -623,7 +624,7 @@ void House_save_all(void) {
 
 
 /* note: arg passed must be house vnum, so there. */
-int House_can_enter(struct char_data *ch, room_vnum house) {
+int House_can_enter(char_data *ch, room_vnum house) {
 	int i, j;
 
 	if(GET_LEVEL(ch) >= LVL_GRGOD || (i = find_house(house)) == NOWHERE) {
@@ -645,7 +646,7 @@ int House_can_enter(struct char_data *ch, room_vnum house) {
 	return (0);
 }
 
-void House_list_guests(struct char_data *ch, int i, int quiet) {
+void House_list_guests(char_data *ch, int i, int quiet) {
 	int j, num_printed;
 	char *temp;
 

@@ -26,16 +26,16 @@
 extern int tunnel_size;
 
 /* external functions */
-int special(struct char_data *ch, int cmd, char *arg);
-void death_cry(struct char_data *ch);
-int find_eq_pos(struct char_data *ch, struct obj_data *obj, char *arg);
+int special(char_data *ch, int cmd, char *arg);
+void death_cry(char_data *ch);
+int find_eq_pos(char_data *ch, struct obj_data *obj, char *arg);
 
 /* local functions */
-int has_boat(struct char_data *ch);
-int find_door(struct char_data *ch, const char *type, char *dir, const char *cmdname);
-int has_key(struct char_data *ch, obj_vnum key);
-void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd);
-int ok_pick(struct char_data *ch, obj_vnum keynum, int pickproof, int scmd);
+int has_boat(char_data *ch);
+int find_door(char_data *ch, const char *type, char *dir, const char *cmdname);
+int has_key(char_data *ch, obj_vnum key);
+void do_doorcmd(char_data *ch, struct obj_data *obj, int door, int scmd);
+int ok_pick(char_data *ch, obj_vnum keynum, int pickproof, int scmd);
 ACMD(do_gen_door);
 ACMD(do_enter);
 ACMD(do_leave);
@@ -48,7 +48,7 @@ ACMD(do_follow);
 
 
 /* simple function to determine if char can walk on water */
-int has_boat(struct char_data *ch) {
+int has_boat(char_data *ch) {
 	struct obj_data *obj;
 	int i;
 
@@ -198,6 +198,7 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 	follow_type *k, *next;
 
 	if(ch == NULL || dir < 0 || dir >= NUM_OF_DIRS || FIGHTING(ch)) {
+		log("SYSERR: perform_move received invalid parameters");
 		return (0);
 	} else if((!EXIT(ch, dir) || EXIT(ch, dir)->to_room == NOWHERE)) {
 			send_to_char(ch, "Alas, you cannot go that way...\r\n");
@@ -255,7 +256,7 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 	}
 
 
-	int find_door(struct char_data *ch, const char *type, char *dir, const char *cmdname) {
+	int find_door(char_data *ch, const char *type, char *dir, const char *cmdname) {
 		int door;
 
 		if(*dir) {			/* a direction was specified */
@@ -298,7 +299,7 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 	}
 
 
-	int has_key(struct char_data *ch, obj_vnum key) {
+	int has_key(char_data *ch, obj_vnum key) {
 		struct obj_data *o;
 
 		for(o = ch->carrying; o; o = o->next_content)
@@ -355,7 +356,7 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 		(TOGGLE_BIT(GET_OBJ_VAL(obj, 1), CONT_LOCKED)) :\
 		(TOGGLE_BIT(EXITN(room, door)->exit_info, EX_LOCKED)))
 
-	void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd) {
+	void do_doorcmd(char_data *ch, struct obj_data *obj, int door, int scmd) {
 		char buf[MAX_STRING_LENGTH];
 		size_t len;
 		room_rnum other_room = NOWHERE;
@@ -440,7 +441,7 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 	}
 
 
-	int ok_pick(struct char_data *ch, obj_vnum keynum, int pickproof, int scmd) {
+	int ok_pick(char_data *ch, obj_vnum keynum, int pickproof, int scmd) {
 		int percent, skill_lvl;
 
 		if(scmd != SCMD_PICK) {
@@ -491,7 +492,7 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 		obj_vnum keynum;
 		char type[MAX_INPUT_LENGTH], dir[MAX_INPUT_LENGTH];
 		struct obj_data *obj = NULL;
-		struct char_data *victim = NULL;
+		char_data *victim = NULL;
 
 		skip_spaces(&argument);
 
@@ -739,7 +740,7 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 
 	ACMD(do_wake) {
 		char arg[MAX_INPUT_LENGTH];
-		struct char_data *vict;
+		char_data *vict;
 		int self = 0;
 
 		one_argument(argument, arg);
@@ -782,7 +783,7 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 
 	ACMD(do_follow) {
 		char buf[MAX_INPUT_LENGTH];
-		struct char_data *leader;
+		char_data *leader;
 
 		one_argument(argument, buf);
 

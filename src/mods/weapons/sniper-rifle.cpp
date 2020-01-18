@@ -7,7 +7,7 @@ namespace mods::weapons {
 	//constexpr static mw_rifle SNIPER_TYPE = mw_rifle::SNIPER;
 	obj_data_ptr_t psg1(obj_data_ptr_t obj) {
 		/** TODO: fill the uuid in */
-		obj->uuid = mods::globals::get_uuid();
+		obj->uuid = mods::globals::obj_uuid();
 		obj->rifle(1);
 
 		/** TODO: determine clip size */

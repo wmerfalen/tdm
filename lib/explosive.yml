@@ -1,11 +1,3 @@
-chance_to_injure: 4.23 #float, out of 100
-critical_chance: 0.10 #float, out of 100
-critical_range: 4 #integer, measured in rooms
-damage_per_second: 4.53 #float
-disorient_amount: 3.14 #float
-model_name: 'Nade 0x10'
-# types
-#######
 # type: FRAG_GRENADE
 # type: INCENDIARY_GRENADE
 # type: REMOTE_EXPLOSIVE
@@ -16,8 +8,9 @@ model_name: 'Nade 0x10'
 # type: C4
 # type: BREACH_CHARGE
 # type: FLASHBANG_GRENADE
-# type: IMPACT_GRENADE
-type: 'FRAG_GRENADE' # enum, object type
+# type: SENSOR_GRENADE
+str_type: 'FRAG_GRENADE' # enum, object type
+type: 0 # integer enum 
 manufacturer: 'ACME Industries' # string, anything 
 name: 'FS12 Fragmentation grenade' # string, anything name of object 
 vnum: 1000 # integer, unique identifier

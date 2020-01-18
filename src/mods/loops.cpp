@@ -2,7 +2,7 @@
 namespace mods::loops {
 	void foreach_in_room(std::size_t room,player_function_t func){
 		if(world.size() > room){
-			for(auto &ch : mods::globals::room_list[room]){
+			for(auto &ch : mods::globals::get_room_list(room)){
 				if(!func(ch)){
 					return;
 				}

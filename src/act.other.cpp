@@ -35,14 +35,14 @@ extern int auto_save;
 extern int track_through_doors;
 
 /* extern procedures */
-void list_skills(struct char_data *ch);
-void appear(struct char_data *ch);
-void write_aliases(struct char_data *ch);
-void perform_immort_vis(struct char_data *ch);
+void list_skills(char_data *ch);
+void appear(char_data *ch);
+void write_aliases(char_data *ch);
+void perform_immort_vis(char_data *ch);
 SPECIAL(shop_keeper);
 ACMD(do_gen_comm);
-void die(struct char_data *ch);
-void Crash_rentsave(struct char_data *ch, int cost);
+void die(char_data *ch);
+void Crash_rentsave(char_data *ch, int cost);
 
 /* local functions */
 ACMD(do_quit);
@@ -54,8 +54,8 @@ ACMD(do_steal);
 ACMD(do_practice);
 ACMD(do_visible);
 ACMD(do_title);
-int perform_group(struct char_data *ch, struct char_data *vict);
-void print_group(struct char_data *ch);
+int perform_group(char_data *ch, char_data *vict);
+void print_group(char_data *ch);
 ACMD(do_group);
 ACMD(do_ungroup);
 ACMD(do_report);
@@ -208,127 +208,128 @@ ACMD(do_hide) {
 
 
 ACMD(do_steal) {
-	struct char_data *vict;
-	struct obj_data *obj;
-	char vict_name[MAX_INPUT_LENGTH], obj_name[MAX_INPUT_LENGTH];
-	int percent, gold, eq_pos, pcsteal = 0, ohoh = 0;
-
-	if(IS_NPC(ch) || !GET_SKILL(ch, SKILL_STEAL)) {
-		send_to_char(ch, "You have no idea how to do that.\r\n");
-		return;
-	}
-
-	if(ROOM_FLAGGED(IN_ROOM(ch), ROOM_PEACEFUL)) {
-		send_to_char(ch, "This room just has such a peaceful, easy feeling...\r\n");
-		return;
-	}
-
-	two_arguments(argument, obj_name, vict_name);
-
-	if(!(vict = get_char_vis(ch, vict_name, NULL, FIND_CHAR_ROOM))) {
-		send_to_char(ch, "Steal what from who?\r\n");
-		return;
-	} else if(vict == ch) {
-		send_to_char(ch, "Come on now, that's rather stupid!\r\n");
-		return;
-	}
-
-	/* 101% is a complete failure */
-	percent = rand_number(1, 101) - dex_app_skill[GET_DEX(ch)].p_pocket;
-
-	if(GET_POS(vict) < POS_SLEEPING) {
-		percent = -1;    /* ALWAYS SUCCESS, unless heavy object. */
-	}
-
-	if(!pt_allowed && !IS_NPC(vict)) {
-		pcsteal = 1;
-	}
-
-	if(!AWAKE(vict)) {	/* Easier to steal from sleeping people. */
-		percent -= 50;
-	}
-
-	/* NO NO With Imp's and Shopkeepers, and if player thieving is not allowed */
-	if(GET_LEVEL(vict) >= LVL_IMMORT || pcsteal ||
-	        GET_MOB_SPEC(vict) == shop_keeper) {
-		percent = 101;    /* Failure */
-	}
-
-	if(str_cmp(obj_name, "coins") && str_cmp(obj_name, "gold")) {
-
-		if(!(obj = get_obj_in_list_vis(ch, obj_name, NULL, vict->carrying))) {
-
-			for(eq_pos = 0; eq_pos < NUM_WEARS; eq_pos++)
-				if(GET_EQ(vict, eq_pos) &&
-				        (isname(obj_name, GET_EQ(vict, eq_pos)->name)) &&
-				        CAN_SEE_OBJ(ch, GET_EQ(vict, eq_pos))) {
-					obj = GET_EQ(vict, eq_pos);
-					break;
-				}
-
-			if(!obj) {
-				act("$E hasn't got that item.", FALSE, ch, 0, vict, TO_CHAR);
-				return;
-			} else {			/* It is equipment */
-				if((GET_POS(vict) > POS_STUNNED)) {
-					send_to_char(ch, "Steal the equipment now?  Impossible!\r\n");
-					return;
-				} else {
-					act("You unequip $p and steal it.", FALSE, ch, obj, 0, TO_CHAR);
-					act("$n steals $p from $N.", FALSE, ch, obj, vict, TO_NOTVICT);
-					obj_to_char(unequip_char(vict, eq_pos), ch);
-				}
-			}
-		} else {			/* obj found in inventory */
-
-			percent += GET_OBJ_WEIGHT(obj);	/* Make heavy harder */
-
-			if(percent > GET_SKILL(ch, SKILL_STEAL)) {
-				ohoh = TRUE;
-				send_to_char(ch, "Oops..\r\n");
-				act("$n tried to steal something from you!", FALSE, ch, 0, vict, TO_VICT);
-				act("$n tries to steal something from $N.", TRUE, ch, 0, vict, TO_NOTVICT);
-			} else {			/* Steal the item */
-				if(IS_CARRYING_N(ch) + 1 < CAN_CARRY_N(ch)) {
-					if(IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) < CAN_CARRY_W(ch)) {
-						obj_from_char(obj);
-						obj_to_char(obj, ch);
-						send_to_char(ch, "Got it!\r\n");
-					}
-				} else {
-					send_to_char(ch, "You cannot carry that much.\r\n");
-				}
-			}
-		}
-	} else {			/* Steal some coins */
-		if(AWAKE(vict) && (percent > GET_SKILL(ch, SKILL_STEAL))) {
-			ohoh = TRUE;
-			send_to_char(ch, "Oops..\r\n");
-			act("You discover that $n has $s hands in your wallet.", FALSE, ch, 0, vict, TO_VICT);
-			act("$n tries to steal gold from $N.", TRUE, ch, 0, vict, TO_NOTVICT);
-		} else {
-			/* Steal some gold coins */
-			gold = (GET_GOLD(vict) * rand_number(1, 10)) / 100;
-			gold = MIN(1782, gold);
-
-			if(gold > 0) {
-				GET_GOLD(ch) += gold;
-				GET_GOLD(vict) -= gold;
-
-				if(gold > 1) {
-					send_to_char(ch, "Bingo!  You got %d gold coins.\r\n", gold);
-				} else {
-					send_to_char(ch, "You manage to swipe a solitary gold coin.\r\n");
-				}
-			} else {
-				send_to_char(ch, "You couldn't get any gold...\r\n");
-			}
-		}
-	}
-
-	if(ohoh && IS_NPC(vict) && AWAKE(vict)) {
-		hit(vict, ch, TYPE_UNDEFINED);
-	}
+	/** FIXME: commented this out. no stealing for you! */
+//	char_data *vict;
+//	struct obj_data *obj;
+//	char vict_name[MAX_INPUT_LENGTH], obj_name[MAX_INPUT_LENGTH];
+//	int percent, gold, eq_pos, pcsteal = 0, ohoh = 0;
+//
+//	if(IS_NPC(ch) || !GET_SKILL(ch, SKILL_STEAL)) {
+//		send_to_char(ch, "You have no idea how to do that.\r\n");
+//		return;
+//	}
+//
+//	if(ROOM_FLAGGED(IN_ROOM(ch), ROOM_PEACEFUL)) {
+//		send_to_char(ch, "This room just has such a peaceful, easy feeling...\r\n");
+//		return;
+//	}
+//
+//	two_arguments(argument, obj_name, vict_name);
+//
+//	if(!(vict = get_char_vis(ch, vict_name, NULL, FIND_CHAR_ROOM))) {
+//		send_to_char(ch, "Steal what from who?\r\n");
+//		return;
+//	} else if(vict == ch) {
+//		send_to_char(ch, "Come on now, that's rather stupid!\r\n");
+//		return;
+//	}
+//
+//	/* 101% is a complete failure */
+//	percent = rand_number(1, 101) - dex_app_skill[GET_DEX(ch)].p_pocket;
+//
+//	if(GET_POS(vict) < POS_SLEEPING) {
+//		percent = -1;    /* ALWAYS SUCCESS, unless heavy object. */
+//	}
+//
+//	if(!pt_allowed && !IS_NPC(vict)) {
+//		pcsteal = 1;
+//	}
+//
+//	if(!AWAKE(vict)) {	/* Easier to steal from sleeping people. */
+//		percent -= 50;
+//	}
+//
+//	/* NO NO With Imp's and Shopkeepers, and if player thieving is not allowed */
+//	if(GET_LEVEL(vict) >= LVL_IMMORT || pcsteal ||
+//	        GET_MOB_SPEC(vict) == shop_keeper) {
+//		percent = 101;    /* Failure */
+//	}
+//
+//	if(str_cmp(obj_name, "coins") && str_cmp(obj_name, "gold")) {
+//
+//		if(!(obj = get_obj_in_list_vis(ch, obj_name, NULL, vict->carrying))) {
+//
+//			for(eq_pos = 0; eq_pos < NUM_WEARS; eq_pos++)
+//				if(GET_EQ(vict, eq_pos) &&
+//				        (isname(obj_name, GET_EQ(vict, eq_pos)->name)) &&
+//				        CAN_SEE_OBJ(ch, GET_EQ(vict, eq_pos))) {
+//					obj = GET_EQ(vict, eq_pos);
+//					break;
+//				}
+//
+//			if(!obj) {
+//				act("$E hasn't got that item.", FALSE, ch, 0, vict, TO_CHAR);
+//				return;
+//			} else {			/* It is equipment */
+//				if((GET_POS(vict) > POS_STUNNED)) {
+//					send_to_char(ch, "Steal the equipment now?  Impossible!\r\n");
+//					return;
+//				} else {
+//					act("You unequip $p and steal it.", FALSE, ch, obj, 0, TO_CHAR);
+//					act("$n steals $p from $N.", FALSE, ch, obj, vict, TO_NOTVICT);
+//					obj_to_char(unequip_char(vict, eq_pos), ch);
+//				}
+//			}
+//		} else {			/* obj found in inventory */
+//
+//			percent += GET_OBJ_WEIGHT(obj);	/* Make heavy harder */
+//
+//			if(percent > GET_SKILL(ch, SKILL_STEAL)) {
+//				ohoh = TRUE;
+//				send_to_char(ch, "Oops..\r\n");
+//				act("$n tried to steal something from you!", FALSE, ch, 0, vict, TO_VICT);
+//				act("$n tries to steal something from $N.", TRUE, ch, 0, vict, TO_NOTVICT);
+//			} else {			/* Steal the item */
+//				if(IS_CARRYING_N(ch) + 1 < CAN_CARRY_N(ch)) {
+//					if(IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) < CAN_CARRY_W(ch)) {
+//						obj_from_char(obj);
+//						obj_to_char(obj, ch);
+//						send_to_char(ch, "Got it!\r\n");
+//					}
+//				} else {
+//					send_to_char(ch, "You cannot carry that much.\r\n");
+//				}
+//			}
+//		}
+//	} else {			/* Steal some coins */
+//		if(AWAKE(vict) && (percent > GET_SKILL(ch, SKILL_STEAL))) {
+//			ohoh = TRUE;
+//			send_to_char(ch, "Oops..\r\n");
+//			act("You discover that $n has $s hands in your wallet.", FALSE, ch, 0, vict, TO_VICT);
+//			act("$n tries to steal gold from $N.", TRUE, ch, 0, vict, TO_NOTVICT);
+//		} else {
+//			/* Steal some gold coins */
+//			gold = (GET_GOLD(vict) * rand_number(1, 10)) / 100;
+//			gold = MIN(1782, gold);
+//
+//			if(gold > 0) {
+//				GET_GOLD(ch) += gold;
+//				GET_GOLD(vict) -= gold;
+//
+//				if(gold > 1) {
+//					send_to_char(ch, "Bingo!  You got %d gold coins.\r\n", gold);
+//				} else {
+//					send_to_char(ch, "You manage to swipe a solitary gold coin.\r\n");
+//				}
+//			} else {
+//				send_to_char(ch, "You couldn't get any gold...\r\n");
+//			}
+//		}
+//	}
+//
+//	if(ohoh && IS_NPC(vict) && AWAKE(vict)) {
+//		hit(vict, ch, TYPE_UNDEFINED);
+//	}
 }
 
 
@@ -388,7 +389,7 @@ ACMD(do_title) {
 }
 
 
-int perform_group(struct char_data *ch, struct char_data *vict) {
+int perform_group(char_data *ch, char_data *vict) {
 	if(AFF_FLAGGED(vict, AFF_GROUP) || !CAN_SEE(ch, vict)) {
 		return (0);
 	}
@@ -405,8 +406,8 @@ int perform_group(struct char_data *ch, struct char_data *vict) {
 }
 
 
-void print_group(struct char_data *ch) {
-	struct char_data *k;
+void print_group(char_data *ch) {
+	char_data *k;
 	struct follow_type *f;
 
 	if(!AFF_FLAGGED(ch, AFF_GROUP)) {
@@ -441,7 +442,7 @@ void print_group(struct char_data *ch) {
 
 ACMD(do_group) {
 	char buf[MAX_STRING_LENGTH];
-	struct char_data *vict;
+	char_data *vict;
 	struct follow_type *f;
 	int found;
 
@@ -496,7 +497,7 @@ ACMD(do_group) {
 ACMD(do_ungroup) {
 	char buf[MAX_INPUT_LENGTH];
 	struct follow_type *f, *next_fol;
-	struct char_data *tch;
+	char_data *tch;
 
 	one_argument(argument, buf);
 
@@ -555,7 +556,7 @@ ACMD(do_ungroup) {
 
 ACMD(do_report) {
 	char buf[MAX_STRING_LENGTH];
-	struct char_data *k;
+	char_data *k;
 	struct follow_type *f;
 
 	if(!AFF_FLAGGED(ch, AFF_GROUP)) {
@@ -588,7 +589,7 @@ ACMD(do_split) {
 	char buf[MAX_INPUT_LENGTH];
 	int amount, num, share, rest;
 	size_t len;
-	struct char_data *k;
+	char_data *k;
 	struct follow_type *f;
 
 	if(IS_NPC(ch)) {

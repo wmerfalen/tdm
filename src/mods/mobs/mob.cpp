@@ -10,7 +10,7 @@
 #include "prefs.hpp"
 #include <chrono>
 
-extern void do_auto_exits(struct char_data *ch);
+extern void do_auto_exits(char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
 namespace mods {
 

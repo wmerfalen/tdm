@@ -203,7 +203,7 @@ void perform_violence(void);
 void show_string(mods::descriptor_data d, char *input);
 int isbanned(const char *hostname);
 void weather_and_time(int mode);
-int perform_alias(mods::descriptor_data d, char *orig, size_t maxlen);
+int perform_alias(mods::descriptor_data& d, char *orig, size_t maxlen);
 void clear_free_list(void);
 void free_messages(void);
 void Board_clear_all(void);
@@ -650,12 +650,13 @@ void game_loop(socket_t mother_desc) {
 				}
 				mods::globals::current_player = nullptr;
 				player->set_socket(operating_socket);
+				/** TODO: destroy_player needs to properly remove from all the player refs in mods::globals */
 				destroy_player(std::move(player));
 				++i;
 				continue;
 			}
 			aliased = 0;
-			if(!get_from_q(&player->desc().input, comm, &aliased)) {
+			if(!get_from_q(player->desc(), comm, &aliased)) {
 				++i;
 				continue;
 			}
@@ -680,9 +681,9 @@ void game_loop(socket_t mother_desc) {
 				if(aliased) {	// To prevent recursive aliases. 
 					player->desc().has_prompt = TRUE;    // To get newline before next cmd output. 
 				} else if(perform_alias(player->desc(), comm, sizeof(comm))) { // Run it through aliasing system 
-					get_from_q(&player->desc().input, comm, &aliased);
+					get_from_q(player->desc(), comm, &aliased);
 				}
-				command_interpreter(player->cd(), comm); // Send it to interpreter 
+				command_interpreter(player, comm); // Send it to interpreter 
 			}
 			++i;
 		}//end while(i < r)
@@ -1018,44 +1019,33 @@ char *make_prompt(mods::descriptor_data &d) {
 /*
  * NOTE: 'txt' must be at most MAX_INPUT_LENGTH big.
  */
-void write_to_q(const char *txt, struct txt_q *queue, int aliased) {
-	struct txt_block *newt;
+//LEGACY: void write_to_q(const char *txt, struct txt_q *queue, int aliased)
+	//struct txt_block *newt;
 
-	CREATE(newt, struct txt_block, 1);
-	newt->text = strdup(txt);
-	newt->aliased = aliased;
+	//CREATE(newt, struct txt_block, 1);
+	//newt->text = strdup(txt);
+	//newt->aliased = aliased;
 
-	/* queue empty? */
-	if(!queue->head) {
-		newt->next = NULL;
-		queue->head = queue->tail = newt;
-	} else {
-		queue->tail->next = newt;
-		queue->tail = newt;
-		newt->next = NULL;
-	}
+	///* queue empty? */
+	//if(!queue->head) {
+	//	newt->next = NULL;
+	//	queue->head = queue->tail = newt;
+	//} else {
+	//	queue->tail->next = newt;
+	//	queue->tail = newt;
+	//	newt->next = NULL;
+	//}
+void	write_to_q(std::string_view txt, mods::descriptor_data& d, int aliased){
+	d.input.emplace_back(txt,aliased);
 }
 
-
-/*
- * NOTE: 'dest' must be at least MAX_INPUT_LENGTH big.
- */
-int get_from_q(struct txt_q *queue, char *dest, int *aliased) {
-	struct txt_block *tmp;
-
-	/* queue empty? */
-	if(!queue->head) {
-		return (0);
+int get_from_q(mods::descriptor_data& d, char *dest, int *aliased) {
+	if(d.input.size() == 0){
+		return 0;
 	}
-
-	strcpy(dest, queue->head->text);	/* strcpy: OK (mutual MAX_INPUT_LENGTH) */
-	*aliased = queue->head->aliased;
-
-	tmp = queue->head;
-	queue->head = queue->head->next;
-	free(tmp->text);
-	free(tmp);
-
+	strncpy(dest, d.input.begin()->text.c_str(), MAX_INPUT_LENGTH -1);
+	*aliased = d.input.begin()->aliased;
+	d.input.pop_front();
 	return (1);
 }
 
@@ -1252,6 +1242,19 @@ int destroy_player(player_ptr_t player){
 			player);
 	destroy_socket(player->socket());
 	bool removed = false;
+	{
+		auto pmap_it = mods::globals::player_map.find(player->uuid());
+		if(pmap_it != mods::globals::player_map.end()){
+			mods::globals::player_map.erase(pmap_it->first);
+		}
+	}
+	{
+		auto chmap_it = mods::globals::player_chmap.find(player->cd());
+		if(chmap_it != mods::globals::player_chmap.end()){
+			mods::globals::player_chmap.erase(chmap_it->first);
+		}
+	}
+
 	do {
 		removed = false;
 		for(auto it = mods::globals::socket_map.begin() ; 
@@ -1336,6 +1339,7 @@ int new_descriptor(socket_t s) {
 		return (0);
 	}
 
+	/** player_uuid() called in constructor */
 	auto player = new_player();
 	player->set_socket(desc);
 	/* find the sitename */
@@ -1353,39 +1357,40 @@ int new_descriptor(socket_t s) {
 
 	/* determine if the site is banned */
 	/*
-	if(isbanned(player->host().c_str())) {
-		destroy_socket(desc);
-		mudlog(CMP, LVL_GOD, TRUE, "Connection attempt denied from [%s]", player->desc().host.c_str());
-		deregister_player(player.get());
-		return (0);
-	}else{
-	*/
-		log("new connection");
-
-		/* initialize descriptor data */
-		player->desc().login_time = time(0);
-		player->desc().has_prompt = 1;  /* prompt is part of greetings */
-		player->set_state(CON_GET_NAME);
-		player->set_socket(desc);
-
-		/*
-		 * This isn't exactly optimal but allows us to make a design choice.
-		 * Do we embed the history in mods::descriptor_data or keep it dynamically
-		 * allocated and allow a user defined history size?
+		 if(isbanned(player->host().c_str())) {
+		 destroy_socket(desc);
+		 mudlog(CMP, LVL_GOD, TRUE, "Connection attempt denied from [%s]", player->desc().host.c_str());
+		 deregister_player(player.get());
+		 return (0);
+		 }else{
 		 */
-		if(++last_desc == 1000) {
-			/* Ring buffer logic, it seems */
-			last_desc = 1;
-		}
-		player->desc().desc_num = last_desc;
-		GREETINGS = "Username:";
-		write_to_output(player->desc(), "%s",GREETINGS.c_str());
-		mods::globals::socket_map.insert (
-				std::pair<int,player_ptr_t>(
-					desc,std::move(player)
-					)
-				);
-		return (desc);
+	log("new connection");
+
+	/* initialize descriptor data */
+	player->desc().login_time = time(0);
+	player->desc().has_prompt = 1;  /* prompt is part of greetings */
+	player->set_state(CON_GET_NAME);
+	player->set_socket(desc);
+
+	/*
+	 * This isn't exactly optimal but allows us to make a design choice.
+	 * Do we embed the history in mods::descriptor_data or keep it dynamically
+	 * allocated and allow a user defined history size?
+	 */
+	if(++last_desc == 1000) {
+		/* Ring buffer logic, it seems */
+		last_desc = 1;
+	}
+	player->desc().desc_num = last_desc;
+	GREETINGS = "Username:";
+	write_to_output(player->desc(), "%s",GREETINGS.c_str());
+	mods::globals::register_player(player);
+	mods::globals::socket_map.insert (
+			std::pair<int,player_ptr_t>(
+				desc,std::move(player)
+				)
+			);
+	return (desc);
 	//}
 }
 
@@ -1745,7 +1750,7 @@ while(nl_pos != nullptr) {
 	}
 
 	if(!failed_subst) {
-		write_to_q(&tmp[0], &t.input, 0);
+		write_to_q(&tmp[0], t, 0);
 	}
 
 	/* find the end of this line */
@@ -1857,7 +1862,7 @@ void close_socket(mods::descriptor_data d) {
 		}
 
 		if(STATE(d)== CON_PLAYING || STATE(d)== CON_CLOSE ||  STATE(d)== CON_DISCONNECT) {
-			struct char_data *link_challenged = d.original ? d.original : d.character;
+			char_data *link_challenged = d.original ? d.original : d.character;
 
 			/* We are guaranteed to have a person. */
 			act("$n has lost $s link.", TRUE, link_challenged, 0, 0, TO_ROOM);
@@ -2088,7 +2093,7 @@ void signal_setup(void) {
  *       Public routines for system-to-player-communication        *
  **************************************************************** */
 
-size_t send_to_char(struct char_data *ch, const char *messg, ...) {
+size_t send_to_char(char_data *ch, const char *messg, ...) {
 	if(ch->has_desc && messg && *messg) {
 		size_t left;
 		va_list args;
@@ -2157,7 +2162,7 @@ void send_to_room_except(room_rnum room, const std::vector<char_data*>& except, 
 		return;
 	}
 
-	for(auto & p : mods::globals::room_list[room]){
+	for(auto & p : mods::globals::get_room_list(room)){
 		auto i = p->cd();
 		if(!i->has_desc || std::find(except.begin(),except.end(),i) != except.end()) {
 			continue;
@@ -2176,7 +2181,7 @@ void send_to_room_except(room_rnum room, player_ptr_t except_me, const char *mes
 		return;
 	}
 
-	for(auto & p : mods::globals::room_list[room]){
+	for(auto & p : mods::globals::get_room_list(room)){
 		if(!p->cd()->has_desc) {
 			continue;
 		}
@@ -2198,7 +2203,7 @@ void send_to_room(room_rnum room, const char *messg, ...) {
 		return;
 	}
 
-	for(auto & p : mods::globals::room_list[room]){
+	for(auto & p : mods::globals::get_room_list(room)){
 		if(!p->cd()->has_desc) {
 			continue;
 		}
@@ -2245,7 +2250,7 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 					break;
 
 				case 'N':
-					CHECK_NULL(vict_obj, strdup(mods::string(PERS((const struct char_data *) vict_obj, to).c_str())));
+					CHECK_NULL(vict_obj, strdup(mods::string(PERS((const char_data *) vict_obj, to).c_str())));
 					break;
 
 				case 'm':
@@ -2253,7 +2258,7 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 					break;
 
 				case 'M':
-					CHECK_NULL(vict_obj, strdup(mods::string(HMHR((const struct char_data *) vict_obj)).c_str()));
+					CHECK_NULL(vict_obj, strdup(mods::string(HMHR((const char_data *) vict_obj)).c_str()));
 					break;
 
 				case 's':
@@ -2261,7 +2266,7 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 					break;
 
 				case 'S':
-					CHECK_NULL(vict_obj, strdup(mods::string(HSHR((const struct char_data *) vict_obj)).c_str()));
+					CHECK_NULL(vict_obj, strdup(mods::string(HSHR((const char_data *) vict_obj)).c_str()));
 					break;
 
 				case 'e':
@@ -2269,7 +2274,7 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 					break;
 
 				case 'E':
-					CHECK_NULL(vict_obj, strdup(mods::string(HSSH((const struct char_data *) vict_obj)).c_str()));
+					CHECK_NULL(vict_obj, strdup(mods::string(HSSH((const char_data *) vict_obj)).c_str()));
 					break;
 
 				case 'o':
@@ -2413,7 +2418,7 @@ void act(const std::string & str, int hide_invisible, char_data *ch,
 		return;
 	}
 
-	for(auto & to_player : mods::globals::room_list[IN_ROOM(ch)]){
+	for(auto & to_player : mods::globals::get_room_list(IN_ROOM(ch))){
 		if(!to_player || to_player->authenticated() == false){ 
 			continue;
 		}

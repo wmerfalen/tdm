@@ -41,29 +41,29 @@ ACMD(do_action);
 ACMD(do_tell);
 SPECIAL(receptionist);
 SPECIAL(cryogenicist);
-int invalid_class(struct char_data *ch, struct obj_data *obj);
+int invalid_class(char_data *ch, struct obj_data *obj);
 
 /* local functions */
-void Crash_extract_norent_eq(struct char_data *ch);
-void auto_equip(struct char_data *ch, struct obj_data *obj, int location);
-int Crash_offer_rent(struct char_data *ch, struct char_data *recep, int display, int factor);
-int Crash_report_unrentables(struct char_data *ch, struct char_data *recep, struct obj_data *obj);
-void Crash_report_rent(struct char_data *ch, struct char_data *recep, struct obj_data *obj, long *cost, long *nitems, int display, int factor);
+void Crash_extract_norent_eq(char_data *ch);
+void auto_equip(char_data *ch, struct obj_data *obj, int location);
+int Crash_offer_rent(char_data *ch, char_data *recep, int display, int factor);
+int Crash_report_unrentables(char_data *ch, char_data *recep, struct obj_data *obj);
+void Crash_report_rent(char_data *ch, char_data *recep, struct obj_data *obj, long *cost, long *nitems, int display, int factor);
 struct obj_data *Obj_from_store(struct obj_file_elem object, int *location);
 int Obj_to_store(struct obj_data *obj, FILE *fl, int location);
 void update_obj_file(void);
-int Crash_write_rentcode(struct char_data *ch, FILE *fl, struct rent_info *rent);
-int gen_receptionist(struct char_data *ch, struct char_data *recep, int cmd, char *arg, int mode);
+int Crash_write_rentcode(char_data *ch, FILE *fl, struct rent_info *rent);
+int gen_receptionist(char_data *ch, char_data *recep, int cmd, char *arg, int mode);
 int Crash_save(struct obj_data *obj, FILE *fp, int location);
-void Crash_rent_deadline(struct char_data *ch, struct char_data *recep, long cost);
+void Crash_rent_deadline(char_data *ch, char_data *recep, long cost);
 void Crash_restore_weight(struct obj_data *obj);
 void Crash_extract_objs(struct obj_data *obj);
 int Crash_is_unrentable(struct obj_data *obj);
 void Crash_extract_norents(struct obj_data *obj);
 void Crash_extract_expensive(struct obj_data *obj);
 void Crash_calculate_rent(struct obj_data *obj, int *cost);
-void Crash_rentsave(struct char_data *ch, int cost);
-void Crash_cryosave(struct char_data *ch, int cost);
+void Crash_rentsave(char_data *ch, int cost);
+void Crash_cryosave(char_data *ch, int cost);
 
 
 struct obj_data *Obj_from_store(struct obj_file_elem object, int *location) {
@@ -131,7 +131,7 @@ int Obj_to_store(struct obj_data *obj, FILE *fl, int location) {
 /*
  * AutoEQ by Burkhard Knopf <burkhard.knopf@informatik.tu-clausthal.de>
  */
-void auto_equip(struct char_data *ch, struct obj_data *obj, int location) {
+void auto_equip(char_data *ch, struct obj_data *obj, int location) {
 	int j;
 
 	/* Lots of checks... */
@@ -259,7 +259,7 @@ void auto_equip(struct char_data *ch, struct obj_data *obj, int location) {
 				if(invalid_align(ch, obj) || invalid_class(ch, obj)) {
 					location = LOC_INVENTORY;
 				} else {
-					equip_char(ch, obj, j);
+					equip_char(ptr(ch), optr(obj), j);
 				}
 			} else {	/* Oops, saved a player with double equipment? */
 				mudlog(BRF, LVL_IMMORT, TRUE, "SYSERR: autoeq: '%s' already equipped in position %d.", GET_NAME(ch).c_str(), location);
@@ -301,7 +301,7 @@ int Crash_delete_file(char *name) {
 }
 
 
-int Crash_delete_crashfile(struct char_data *ch) {
+int Crash_delete_crashfile(char_data *ch) {
 	char filename[MAX_INPUT_LENGTH];
 	struct rent_info rent;
 	int numread;
@@ -343,11 +343,11 @@ void update_obj_file(void) {
 }
 
 
-void Crash_listrent(struct char_data *ch, char *name) {
+void Crash_listrent(char_data *ch, char *name) {
 }
 
 
-int Crash_write_rentcode(struct char_data *ch, FILE *fl, struct rent_info *rent) {
+int Crash_write_rentcode(char_data *ch, FILE *fl, struct rent_info *rent) {
 	return 1;
 }
 
@@ -358,7 +358,7 @@ int Crash_write_rentcode(struct char_data *ch, FILE *fl, struct rent_info *rent)
  *  1 - load failure or load of crash items -- put char in temple.
  *  2 - rented equipment lost (no $)
  */
-int Crash_load(struct char_data *ch) {
+int Crash_load(char_data *ch) {
 	return 2;
 }
 
@@ -376,7 +376,7 @@ void Crash_restore_weight(struct obj_data *obj) {
  * Get !RENT items from equipment to inventory and
  * extract !RENT out of worn containers.
  */
-void Crash_extract_norent_eq(struct char_data *ch) {
+void Crash_extract_norent_eq(char_data *ch) {
 }
 
 void Crash_extract_objs(struct obj_data *obj) {
@@ -401,19 +401,19 @@ void Crash_calculate_rent(struct obj_data *obj, int *cost) {
 }
 
 
-void Crash_crashsave(struct char_data *ch) {
+void Crash_crashsave(char_data *ch) {
 }
 
 
-void Crash_idlesave(struct char_data *ch) {
+void Crash_idlesave(char_data *ch) {
 }
 
 
-void Crash_rentsave(struct char_data *ch, int cost) {
+void Crash_rentsave(char_data *ch, int cost) {
 }
 
 
-void Crash_cryosave(struct char_data *ch, int cost) {
+void Crash_cryosave(char_data *ch, int cost) {
 }
 
 
@@ -421,43 +421,43 @@ void Crash_cryosave(struct char_data *ch, int cost) {
 * Routines used for the receptionist					  *
 ************************************************************************* */
 
-void Crash_rent_deadline(struct char_data *ch, struct char_data *recep,
+void Crash_rent_deadline(char_data *ch, char_data *recep,
                          long cost) {
 }
 
-int Crash_report_unrentables(struct char_data *ch, struct char_data *recep,
+int Crash_report_unrentables(char_data *ch, char_data *recep,
                              struct obj_data *obj) {
 	return 0;
 }
 
 
 
-void Crash_report_rent(struct char_data *ch, struct char_data *recep,
+void Crash_report_rent(char_data *ch, char_data *recep,
                        struct obj_data *obj, long *cost, long *nitems, int display, int factor) {
 }
 
 
 
-int Crash_offer_rent(struct char_data *ch, struct char_data *recep,
+int Crash_offer_rent(char_data *ch, char_data *recep,
                      int display, int factor) {
 	return 0;
 }
 
 
 
-int gen_receptionist(struct char_data *ch, struct char_data *recep,
+int gen_receptionist(char_data *ch, char_data *recep,
                      int cmd, char *arg, int mode) {
 	return 0;
 }
 
 
 SPECIAL(receptionist) {
-	return (gen_receptionist(ch, (struct char_data *)me, cmd, argument, RENT_FACTOR));
+	return (gen_receptionist(ch, (char_data *)me, cmd, argument, RENT_FACTOR));
 }
 
 
 SPECIAL(cryogenicist) {
-	return (gen_receptionist(ch, (struct char_data *)me, cmd, argument, CRYO_FACTOR));
+	return (gen_receptionist(ch, (char_data *)me, cmd, argument, CRYO_FACTOR));
 }
 
 

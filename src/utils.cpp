@@ -250,7 +250,7 @@ int strn_cmp(const char *arg1, const char *arg2, int n) {
 
 
 /* log a death trap hit */
-void log_death_trap(struct char_data *ch) {
+void log_death_trap(char_data *ch) {
 	mudlog(BRF, LVL_IMMORT, TRUE, "%s hit death trap #%d (%s)", GET_NAME(ch).c_str(), GET_ROOM_VNUM(IN_ROOM(ch)), world[IN_ROOM(ch)].name.c_str());
 }
 
@@ -463,7 +463,7 @@ time_t mud_time_to_secs(struct time_info_data *now) {
 }
 
 
-struct time_info_data *age(struct char_data *ch) {
+struct time_info_data *age(char_data *ch) {
 	static struct time_info_data player_age;
 
 	player_age = *mud_time_passed(time(0), ch->player.time.birth);
@@ -476,8 +476,8 @@ struct time_info_data *age(struct char_data *ch) {
 
 /* Check if making CH follow VICTIM will create an illegal */
 /* Follow "Loop/circle"                                    */
-bool circle_follow(struct char_data *ch, struct char_data *victim) {
-	struct char_data *k;
+bool circle_follow(char_data *ch, char_data *victim) {
+	char_data *k;
 
 	for(k = victim; k; k = k->master) {
 		if(k == ch) {
@@ -492,7 +492,7 @@ bool circle_follow(struct char_data *ch, struct char_data *victim) {
 
 /* Called when stop following persons, or stopping charm */
 /* This will NOT do if a character quits/dies!!          */
-void stop_follower(struct char_data *ch) {
+void stop_follower(char_data *ch) {
 	struct follow_type *j, *k;
 
 	if(ch->master == NULL) {
@@ -531,7 +531,7 @@ void stop_follower(struct char_data *ch) {
 }
 
 
-int num_followers_charmed(struct char_data *ch) {
+int num_followers_charmed(char_data *ch) {
 	struct follow_type *lackey;
 	int total = 0;
 
@@ -545,7 +545,7 @@ int num_followers_charmed(struct char_data *ch) {
 
 
 /* Called when a character that follows/is followed dies */
-void die_follower(struct char_data *ch) {
+void die_follower(char_data *ch) {
 	struct follow_type *j, *k;
 
 	if(ch->master) {
@@ -562,7 +562,7 @@ void die_follower(struct char_data *ch) {
 
 /* Do NOT call this before having checked if a circle of followers */
 /* will arise. CH will follow leader                               */
-void add_follower(struct char_data *ch, struct char_data *leader) {
+void add_follower(char_data *ch, char_data *leader) {
 	struct follow_type *k;
 
 	if(ch->master) {
@@ -725,7 +725,7 @@ int num_pc_in_room(room_data *room) {
 		return 0;
 	}
 
-	for(auto & player_ptr : mods::globals::room_list[real_room_number]){
+	for(auto & player_ptr : mods::globals::get_room_list(real_room_number)){
 		auto ch = player_ptr->cd();
 		if(!IS_NPC(ch)){
 			++i;
@@ -813,3 +813,10 @@ room_rnum& GET_WAS_IN(player_ptr_t& player){
 room_rnum& GET_WAS_IN(char_data* ch){
 	return ch->was_in_room;
 }
+std::string TOSTR(std::string a){
+	return a;
+}
+std::string TOSTR(int a){
+	return std::to_string(a);
+}
+std::string TOSTR(nullptr_t a){ return ""; }

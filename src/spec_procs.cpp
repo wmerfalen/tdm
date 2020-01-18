@@ -35,11 +35,11 @@ ACMD(do_action);
 void sort_spells(void);
 int compare_spells(const void *x, const void *y);
 const char *how_good(int percent);
-void list_skills(struct char_data *ch);
+void list_skills(char_data *ch);
 SPECIAL(guild);
 SPECIAL(dump);
 SPECIAL(mayor);
-void npc_steal(struct char_data *ch, struct char_data *victim);
+void npc_steal(char_data *ch, char_data *victim);
 SPECIAL(snake);
 SPECIAL(thief);
 SPECIAL(magic_user);
@@ -348,7 +348,7 @@ SPECIAL(mayor) {
 ******************************************************************** */
 
 
-void npc_steal(struct char_data *ch, struct char_data *victim) {
+void npc_steal(char_data *ch, char_data *victim) {
 	int gold;
 
 	if(IS_NPC(victim)) {
@@ -398,38 +398,43 @@ SPECIAL(snake) {
 
 
 SPECIAL(thief) {
-	struct char_data *cons;
+	MENTOC_PREAMBLE();
 
 	if(cmd || GET_POS(ch) != POS_STANDING) {
 		return (FALSE);
 	}
 
-	for(cons = world[IN_ROOM(ch)].people; cons; cons = cons->next_in_room)
-		if(!IS_NPC(cons) && GET_LEVEL(cons) < LVL_IMMORT && !rand_number(0, 4)) {
-			npc_steal(ch, cons);
+	//for(cons = world[IN_ROOM(ch)].people; cons; cons = cons->next_in_room)
+	for(auto & cons : mods::globals::get_room_list(player)){
+		if(!IS_NPC(cons->cd()) && GET_LEVEL(cons->cd()) < LVL_IMMORT && !rand_number(0, 4)) {
+			npc_steal(ch, cons->cd());
 			return (TRUE);
 		}
+	}
 
 	return (FALSE);
 }
 
 
 SPECIAL(magic_user) {
-	struct char_data *vict;
+	MENTOC_PREAMBLE();
+	char_data *vict;
 
 	if(cmd || GET_POS(ch) != POS_FIGHTING) {
 		return (FALSE);
 	}
 
 	/* pseudo-randomly choose someone in the room who is fighting me */
-	for(vict = world[IN_ROOM(ch)].people; vict; vict = vict->next_in_room)
-		if(FIGHTING(vict) == ch && !rand_number(0, 4)) {
+	FOR_ROOM(plr){
+		if(FIGHTING(plr->cd()) == ch && !rand_number(0, 4)) {
+			vict = plr->cd();
 			break;
 		}
+	}
 
 	/* if I didn't pick any of those, then just slam the guy I'm fighting */
-	if(vict == NULL && IN_ROOM(FIGHTING(ch)) == IN_ROOM(ch)) {
-		vict = FIGHTING(ch);
+	if(IN_ROOM(FIGHTING(ch)) == IN_ROOM(ch)) {
+		*vict = FIGHTING(ch);
 	}
 
 	/* Hm...didn't pick anyone...I'll wait a round. */
@@ -506,7 +511,7 @@ SPECIAL(magic_user) {
 
 SPECIAL(guild_guard) {
 	int i;
-	struct char_data *guard = (struct char_data *)me;
+	char_data *guard = (char_data *)me;
 	const char *buf = "The guard humiliates you, and blocks your way.\r\n";
 	const char *buf2 = "The guard humiliates $n, and blocks $s way.";
 
@@ -626,7 +631,8 @@ SPECIAL(janitor) {
 
 
 SPECIAL(cityguard) {
-	struct char_data *tch, *evil, *spittle;
+	MENTOC_PREAMBLE();
+	char_data *tch, *evil, *spittle;
 	int max_evil, min_cha;
 
 	if(cmd || !AWAKE(ch) || FIGHTING(ch)) {
@@ -637,7 +643,9 @@ SPECIAL(cityguard) {
 	min_cha = 6;
 	spittle = evil = NULL;
 
-	for(tch = world[IN_ROOM(ch)].people; tch; tch = tch->next_in_room) {
+	//for(tch = world[IN_ROOM(ch)].people; tch; tch = tch->next_in_room) {
+	FOR_ROOM(plr) {
+		tch = plr->cd();
 		if(!CAN_SEE(ch, tch)) {
 			continue;
 		}
@@ -697,9 +705,10 @@ SPECIAL(cityguard) {
 #define PET_PRICE(pet) (GET_LEVEL(pet) * 300)
 
 SPECIAL(pet_shops) {
+	MENTOC_PREAMBLE();
 	char buf[MAX_STRING_LENGTH], pet_name[256];
 	room_rnum pet_room;
-	struct char_data *pet;
+	char_data *pet;
 
 	/* Gross. */
 	pet_room = IN_ROOM(ch) + 1;
@@ -707,7 +716,9 @@ SPECIAL(pet_shops) {
 	if(CMD_IS("list")) {
 		send_to_char(ch, "Available pets are:\r\n");
 
-		for(pet = world[pet_room].people; pet; pet = pet->next_in_room) {
+		//for(pet = world[pet_room].people; pet; pet = pet->next_in_room) {
+		FOR_ROOM(plr) {
+			pet = plr->cd();
 			/* No, you can't have the Implementor as a pet if he's in there. */
 			if(!IS_NPC(pet)) {
 				continue;

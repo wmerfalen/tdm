@@ -3,10 +3,13 @@
 # type: CAMERA
 # type: MOTION_SENSOR
 # type: DEPLOYABLE_SHIELD
-# type: SENSOR_GRENADE
-type: 'SENSOR_GRENADE' # enum, object type
+# type: TRIPWIRE
+csv_capabilities: 'TBA'#csv, strings free-form TBA
+csv_attach_to: 'TBA'#csv, strings attach to various kinds of items TBA
+str_type: 'TRIPWIRE' # enum, object type
+type: 0 # integer enum 
 manufacturer: 'ACME Industries' # string, anything 
-name: 'XUN15-SP Sensor Grenade' # string, anything name of object 
+name: 'XMC Trip Wire' # string, anything name of object 
 vnum: 1000 # integer, unique identifier
 #rarity types
 # COMMON

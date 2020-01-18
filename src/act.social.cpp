@@ -91,7 +91,7 @@ ACMD(do_action) {
 	char buf[MAX_INPUT_LENGTH];
 	int act_nr;
 	struct social_messg *action;
-	struct char_data *vict;
+	char_data *vict;
 
 	if((act_nr = find_action(cmd)) < 0) {
 		send_to_char(ch, "That action is not supported.\r\n");
@@ -132,7 +132,7 @@ ACMD(do_action) {
 
 ACMD(do_insult) {
 	char arg[MAX_INPUT_LENGTH];
-	struct char_data *victim;
+	char_data *victim;
 
 	one_argument(argument, arg);
 

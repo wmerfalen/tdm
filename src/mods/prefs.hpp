@@ -25,12 +25,12 @@ namespace mods {
 		public:
 			prefs() = default;
 			~prefs() = default;
-			static void set(const std::string& key,const std::string& value,struct char_data*);
-			static std::string get(const std::string& key,struct char_data*);
-			static std::string namify(const std::string&,struct char_data*);
-			static void dynamic_set(const std::string& key,const std::string& value,const std::string& section,struct char_data*);
-			static std::string dynamic_get(const std::string& key,const std::string& section,struct char_data*);
-			static std::string dynamic_namify(const std::string& key,const std::string& section,struct char_data* c);
+			static void set(const std::string& key,const std::string& value,char_data*);
+			static std::string get(const std::string& key,char_data*);
+			static std::string namify(const std::string&,char_data*);
+			static void dynamic_set(const std::string& key,const std::string& value,const std::string& section,char_data*);
+			static std::string dynamic_get(const std::string& key,const std::string& section,char_data*);
+			static std::string dynamic_namify(const std::string& key,const std::string& section,char_data* c);
 		protected:
 	};
 };

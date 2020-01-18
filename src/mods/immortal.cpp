@@ -24,7 +24,7 @@ ACMD(do_rnumtele) {
 
 	char_from_room(player->cd());
 	char_to_room(player->cd(),r.value());
-	command_interpreter(player->cd(),"l");
+	command_interpreter(player,"l");
 }
 
 /**

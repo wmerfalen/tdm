@@ -15,6 +15,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <list>
 #include <set>
 #include "mods/string.hpp"
 #include "mods/ai_state.hpp"
@@ -47,7 +48,7 @@ struct obj_data;
 using uuid_t = uint64_t;
 using aligned_int_t = uint64_t;
 namespace mods::globals {
-extern uuid_t get_uuid();
+extern uuid_t player_uuid();
 extern uuid_t obj_uuid();
 extern uuid_t mob_uuid();
 };
@@ -118,7 +119,7 @@ using ush_int = uint32_t;
 #endif
 
 #define SPECIAL(name) \
-	int (name)(struct char_data *ch, void *me, int cmd, char *argument)
+	int (name)(char_data *ch, void *me, int cmd, char *argument)
 
 
 /* room-related defines *************************************************/
@@ -156,22 +157,29 @@ enum cap_t {
 		INSTALL = 0,
 		THROW,
 		BURN,
-		DETONATE,
-		BREACH,
+		REMOTELY_DETONATE,
+		BREACH_DOORS,
 		EXPLODE,
-		REMOTE,
-		DOUSE,
-		ARM,
 		SNIPE,
+		ZOOM,
 		RANGED_ATTACK,
 		SPRAY_BULLETS,
 		HIP_FIRE,
 		AIM,
 		BLIND,
 		DISORIENT,
-		FIRE,
 		SHOOT,
-		CQC /** close quarters combat */
+		CQC,
+		THERMAL_VISION,
+		NIGHT_VISION,
+		EMIT_SUBSTANCE,
+		ALTERNATE_EXPLOSION,
+		SCAN,
+		HAS_CLIP,
+		EXTENDS_CLIP,
+		COUNTDOWN_EXPLOSION,
+		RELOAD,
+		__LAST = RELOAD
 };
 
 
@@ -357,6 +365,7 @@ CLASS_SNIPER     = CLASS_MARKSMAN
 #define CON_DELCNF1	 16	/* Delete confirmation 1		*/
 #define CON_DELCNF2	 17	/* Delete confirmation 2		*/
 #define CON_DISCONNECT	 18	/* In-game link loss (leave character)	*/
+#define CON_IDLE         19 /* user is idle. not playing but also not disconnected */
 
 	/* Character equipment positions: used as index for char_data.equipment[] */
 	/* NOTE: Don't confuse these constants with the ITEM_ bitvectors
@@ -395,7 +404,6 @@ CLASS_SNIPER     = CLASS_MARKSMAN
 #define ITEM_FIREWEAPON 6		/* Unimplemented		*/
 #define ITEM_MISSILE    7		/* Unimplemented		*/
 #define ITEM_TREASURE   8		/* Item is a treasure, not gold	*/
-#define ITEM_ARMOR      7		/* Item is armor		*/
 #define ITEM_POTION    10 		/* Item is a potion		*/
 #define ITEM_WORN      11		/* Unimplemented		*/
 #define ITEM_OTHER     12		/* Misc object			*/
@@ -417,6 +425,8 @@ CLASS_SNIPER     = CLASS_MARKSMAN
 #define ITEM_WEAPON    5		/* Item is a weapon		*/
 #define ITEM_WEAPON_ATTACHMENT 6 /* item is a weapon attachment */
 #define ITEM_ATTACHMENT 6
+#define ITEM_ARMOR      7		/* Item is armor		*/
+#define ITEM_CONSUMABLE 8
 #define __MENTOC_ITEM_CONSTANTS_DEFINED__
 
 
@@ -483,11 +493,15 @@ enum extra_flags_t {
 #define APPLY_AC               17	/* Apply to Armor Class		*/
 #define APPLY_HITROLL          18	/* Apply to hitroll		*/
 #define APPLY_DAMROLL          19	/* Apply to damage roll		*/
+
+/** TODO: phase out */
 #define APPLY_SAVING_PARA      20	/* Apply to save throw: paralz	*/
 #define APPLY_SAVING_ROD       21	/* Apply to save throw: rods	*/
 #define APPLY_SAVING_PETRI     22	/* Apply to save throw: petrif	*/
 #define APPLY_SAVING_BREATH    23	/* Apply to save throw: breath	*/
 #define APPLY_SAVING_SPELL     24	/* Apply to save throw: spells	*/
+/** END - phase out */
+
 #define APPLY_SCOPE            25	/* scopes */
 #define APPLY_RECOIL           26	/* grip/tripod */
 #define APPLY_BARREL           27	/* muzzle brake, compensator, suppressor */
@@ -723,6 +737,7 @@ enum player_level {
 		void feed(pqxx::row);
 #endif
 		~obj_flag_data() = default;
+		void init();
 		int type;
 		bool is_ammo;
 		bool holds_ammo;
@@ -744,23 +759,6 @@ enum player_level {
 	};
 
 
-/** TODO: I'd like to uncomment his at some point and utilize it. For now,
- * we'll place weapon specific fields into either obj_flag_data or obj_data
- */
-//	struct obj_weapon_data {
-//		obj_weapon_data() : weapon_flags(0),
-//			ammo_max(0),ammo(0),clip_size(0){
-//		}
-//		void feed(pqxx::row);
-//		~obj_weapon_data() = default;
-//		uint64_t weapon_flags;
-//		uint16_t ammo_max;
-//		uint16_t ammo;
-//		uint16_t clip_size;
-//	};
-
-
-
 	struct obj_affected_type {
 		byte location;      /* Which ability to change (APPLY_XXX) */
 		int16_t modifier;     /* How much it changes by              */
@@ -773,28 +771,18 @@ enum player_level {
 #else
 		void feed(pqxx::row);
 #endif
-		void feed(std::string in_type,std::string_view feed_file){
-			std::string type = in_type;
-			std::transform(type.begin(),type.end(),type.begin(),
-					[](unsigned char c){ return std::tolower(c); });
-			type = type.substr(strlen("ITEM_"));
-			std::cerr << "[parsed type]:'" << type << "'\n";
-#define MENTOC_OBJ_DATA_FEED_DUAL(r,data,CLASS_TYPE) \
-			if(type.compare( BOOST_PP_STRINGIZE(CLASS_TYPE) ) == 0){\
-				this->CLASS_TYPE(feed_file);\
-			}
-
-			BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_DUAL, ~, MENTOC_ITEM_TYPES_SEQ)
-
-		}
+		void feed(std::string in_type,std::string_view feed_file);
 		void init();
 		obj_data(const obj_data& other){
+			std::cerr << "[WARNING] obj_data copy constructor is broken!!!\n";
+			std::cerr << "[WARNING] obj_data copy constructor is broken!!!\n";
+			std::cerr << "[WARNING] obj_data copy constructor is broken!!!\n";
 			item_number = other.item_number;
 			in_room = other.in_room;
-			name = other.name;
-			description = other.description;
-			short_description = other.short_description;
-			action_description = other.action_description;
+			name.assign(other.name.str_or(""));
+			description.assign(other.description.str_or(""));
+			short_description.assign(other.short_description.str_or(""));
+			action_description.assign(other.action_description.str_or(""));
 			ex_description = other.ex_description;
 			carried_by = other.carried_by;
 			worn_by = other.worn_by; 
@@ -817,12 +805,15 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 			/** FIXME: copy constructor is broken right now */
 		}
 		obj_data& operator=(const obj_data& other){ 
+			std::cerr << "[WARNING] obj_data assign operator is broken!!!\n";
+			std::cerr << "[WARNING] obj_data assign operator is broken!!!\n";
+			std::cerr << "[WARNING] obj_data assign operator is broken!!!\n";
 			item_number = other.item_number;
 			in_room = other.in_room;
-			name = other.name;
-			description = other.description;
-			short_description = other.short_description;
-			action_description = other.action_description;
+			name.assign(other.name.str_or(""));
+			description.assign(other.description.str_or(""));
+			short_description.assign(other.short_description.str_or(""));
+			action_description.assign(other.action_description.str_or(""));
 			ex_description = other.ex_description;
 			carried_by = other.carried_by;
 			worn_by = other.worn_by; 
@@ -840,20 +831,18 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 			return *this;
 		}
 		obj_data() : 
-			item_number(0),in_room(-1),name(nullptr),
-			description(nullptr),short_description(nullptr),
-			action_description(nullptr),ex_description(nullptr),
+			item_number(0),in_room(-1),name(""),
+			description(""),short_description(""),
+			action_description(""),ex_description(nullptr),
 			carried_by(nullptr),worn_by(nullptr),worn_on(0),
 			in_obj(nullptr),contains(nullptr),next_content(nullptr),
 			next(nullptr),ai_state(0),uuid(0)
 		{
-#define MENTOC_OBJ_INITIALIZE_CONSTRUCTOR(r,data,CLASS_TYPE) \
-			this->BOOST_PP_CAT(m_,CLASS_TYPE) = nullptr;
-BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
-			init();
+			std::cerr << "[obj_data] constructor. calling init...\n";
+			this->init();
+			std::cerr << "[obj_data] constructor. init called\n";
 		}
 		~obj_data() = default;
-		/**TODO: create constructor and destructor */
 		obj_vnum item_number;	/* Where in data-type			*/
 		room_rnum in_room;		/* In what room -1 when conta/carr	*/
 
@@ -861,21 +850,21 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SE
 		obj_affected_type affected[MAX_OBJ_AFFECT];  /* affects */
 
 		/** [ 'name' APPEARS ]:  */
-		char	*name;                    /* Title of object :get etc.        */
+		mods::string name;                    /* Title of object :get etc.        */
 		/** [ APPEARS ]: when looking at item and mode is LONG  @act.informative.cpp
 		 * 		It will show up when you look at a room and it's lying on the floor
 		 * SHOW_OBJ_LONG
 		 */
-		char	*description;		  /* When in room                     */
+		mods::string description;		  /* When in room                     */
 		/** [ 'short_description' APPEARS ]: when looking at item and mode is SHORT @act.informative.cpp
 		 *  	It will show up when you look in your inventory 
 		 * SHOW_OBJ_SHORT
 		 */
-		char	*short_description;       /* when worn/carry/in cont.         */
+		mods::string short_description;       /* when worn/carry/in cont.         */
 		/** [ 'action_description' APPEARS ]: 
 		 * "JohnDoe123 throws a <action_description> to the north!"
 		 */
-		char	*action_description;      /* What to write when used          */
+		mods::string action_description;      /* What to write when used          */
 		extra_descr_data *ex_description; /* extra descriptions     */
 		char_data *carried_by;  /* Carried by :NULL in room/conta   */
 		char_data *worn_by;	  /* Worn by?			      */
@@ -887,19 +876,26 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SE
 		obj_data *next_content; /* For 'contains' lists             */
 		obj_data *next;         /* For the object list              */
 		uint8_t ai_state;
+		bool flagged(int value);
 
 		uuid_t uuid;
 
 #define MENTOC_DATA_OBJ(r,data,CLASS_TYPE) BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(std::string_view feed_file){\
-	BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(feed_file); return BOOST_PP_CAT(m_,CLASS_TYPE).get();\
+	this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(feed_file); return this->BOOST_PP_CAT(m_,CLASS_TYPE).get();\
 }\
-		BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(uint8_t mode){ BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(); return BOOST_PP_CAT(m_, CLASS_TYPE).get(); }\
-		BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(){ return BOOST_PP_CAT(m_,CLASS_TYPE).get(); }
+		BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(uint8_t mode){ this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(); return this->BOOST_PP_CAT(m_, CLASS_TYPE).get(); }\
+		BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(){ return this->BOOST_PP_CAT(m_,CLASS_TYPE).get(); } \
+		bool BOOST_PP_CAT(has_,CLASS_TYPE)(){ \
+			std::cerr << "checking if has: " << #CLASS_TYPE << "\n";\
+			bool has_it = this->BOOST_PP_CAT(m_,CLASS_TYPE) != nullptr;\
+			std::cerr << "has_it: " << has_it << "\n"; return has_it; \
+		}
 
 BOOST_PP_SEQ_FOR_EACH(MENTOC_DATA_OBJ, ~, MENTOC_ITEM_TYPES_SEQ)
 #undef MENTOC_DATA_OBJ
 		int16_t type;
-		using capability_list_t = std::array<bool,128>;
+		static constexpr std::size_t CAPABILITY_LIST_LENGTH = cap_t::__LAST;
+		using capability_list_t = std::array<bool,CAPABILITY_LIST_LENGTH>;
 		bool can(std::size_t val){
 			return m_capabilities[val];
 		}
@@ -1285,7 +1281,7 @@ struct obj_data_weapon : public obj_data {
 
 	/* Structure used for chars following other chars */
 	struct follow_type {
-		struct char_data *follower;
+		char_data *follower;
 		struct follow_type *next;
 	};
 
@@ -1338,16 +1334,21 @@ extern int next_room_pavement_transaction_id();
 
 	/* ================== Structure for player/non-player ===================== */
 	struct txt_block {
-		char	*text;
+		txt_block() = default;
+		~txt_block() = default;
+		txt_block(std::string_view t,int a) :
+			 aliased(a) {
+			text.assign(t.data());
+		}
+		mods::string text;
 		int aliased;
-		struct txt_block *next;
 	};
 
 
-	struct txt_q {
-		struct txt_block *head;
-		struct txt_block *tail;
-	};
+	//struct txt_q {
+	//	//struct txt_block *head;
+	//	//struct txt_block *tail;
+	//};
 	/** FIXME This use of namespace mods is random and out of place */
 	namespace mods {
 		struct descriptor_data {
@@ -1402,7 +1403,7 @@ extern int next_room_pavement_transaction_id();
 			int bufptr;
 			int bufspace;
 			struct txt_block *large_outbuf; /* ptr to large buffer, if we need it */
-			struct txt_q input;             /* q of unprocessed input               */
+			std::list<txt_block> input;   /* q of unprocessed input               */
 			char_data *character;    /** FIXME: turn to mods::player */
 			char_data *original;    /** FIXME: turn to mods::player */
 			int	connected;		/* mode of 'connectedness'		*/
@@ -1474,7 +1475,7 @@ extern int next_room_pavement_transaction_id();
 		std::shared_ptr<mods::descriptor_data> desc;         /* NULL for mobiles              */
 
 		/** TODO: our ultimate goal is to completely get rid of these linked list members */
-		char_data *next_in_room;     /* For room->people - list         */
+		//char_data *next_in_room;     /* For room->people - list         */
 		char_data *next;             /* For either monster or ppl-list  */
 		char_data *next_fighting;    /* For fighting list               */
 
@@ -1627,7 +1628,7 @@ extern int next_room_pavement_transaction_id();
 		int direction;
 	};
 
-using map_object_list = std::map<obj_vnum,std::shared_ptr<obj_data>>;
+using map_object_list = std::map<uuid_t,std::shared_ptr<obj_data>>;
 
 #endif
 

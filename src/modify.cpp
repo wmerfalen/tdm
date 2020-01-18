@@ -180,7 +180,7 @@ void string_add(mods::descriptor_data d, char *str) {
 ********************************************************************** */
 
 ACMD(do_skillset) {
-	struct char_data *vict;
+	char_data *vict;
 	char name[MAX_INPUT_LENGTH];
 	char buf[MAX_INPUT_LENGTH], help[MAX_STRING_LENGTH];
 	int skill, value, i, qend;

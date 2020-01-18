@@ -26,12 +26,12 @@
 extern int errno;
 #define MODS_BREACH_DISORIENT 50
 #define MODS_GRENADE_BASE_DAMAGE 66
-struct char_data* character_list = NULL;
-extern void do_look(struct char_data *ch, char *argument, int cmd, int subcmd);
-extern void char_from_room(struct char_data*);
-extern void char_to_room(struct char_data*,room_rnum);
-extern void clear_char(struct char_data*);
-extern void do_look(struct char_data*,char *argument, int cmd, int subcmd);
+char_data* character_list = NULL;
+extern void do_look(char_data *ch, char *argument, int cmd, int subcmd);
+extern void char_from_room(char_data*);
+extern void char_to_room(char_data*,room_rnum);
+extern void clear_char(char_data*);
+extern void do_look(char_data*,char *argument, int cmd, int subcmd);
 extern void parse_sql_rooms();
 extern struct player_special_data dummy_mob;
 extern int circle_shutdown;
@@ -68,6 +68,13 @@ namespace mods {
 
 		/* Maps */
 		map_object_list obj_map;
+		std::map<uuid_t,std::shared_ptr<mods::npc>> mob_map;
+		std::map<uuid_t,player_ptr_t> player_map;
+
+		std::map<obj_data*,obj_ptr_t> obj_odmap;
+		std::map<char_data*,std::shared_ptr<mods::npc>> mob_chmap;
+		std::map<char_data*,std::shared_ptr<mods::player>> player_chmap;
+
 		template <typename I>
 			I random_element(I begin, I end) {
 				const unsigned long n = std::distance(begin, end);
@@ -112,15 +119,22 @@ namespace mods {
 
 		void register_object_list() {
 		}
-		void register_object(obj_data& obj) {
-
+		void register_object(obj_ptr_t obj) {
+			std::cerr << "register_object: uuid: " << obj->uuid << "\n";
+			obj->uuid = obj_uuid();
+			obj_map[obj->uuid] = obj;
+			obj_odmap[obj.get()] = obj;
+		}
+		void register_player(player_ptr_t player){
+			player_chmap[player->cd()] = player;
+			player_map[player->uuid()] = player;
 		}
 
 		void shutdown(void){
 			circle_shutdown = 1;
 		}
 		/** !todo: phase this function out */
-		bool acl_allowed(struct char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd) {
+		bool acl_allowed(char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd) {
 			return false;
 		}
 		int mobile_activity(char_data* ch) {
@@ -348,7 +362,7 @@ namespace mods {
 		}
 		void post_boot_db() {
 		}
-		//void room_event(struct char_data* ch,mods::ai_state::event_type_t event) { }
+		//void room_event(char_data* ch,mods::ai_state::event_type_t event) { }
 		const char* say_random(const mods::ai_state::event_type_t& event) {
 			return "woof";
 		}
@@ -405,6 +419,10 @@ namespace mods {
 				mods::pregame::boot_suite(bootup_test_suite);
 			}
 		}
+		uuid_t player_uuid() {
+			static uuid_t u = 0;
+			return ++u;
+		}
 		uuid_t mob_uuid() {
 			static uuid_t u = 0;
 			return ++u;
@@ -451,17 +469,15 @@ namespace mods {
 			}
 			SET_BIT(mob->char_specials().saved.act, MOB_ISNPC);
 			mob->uuid() = mob_uuid();
+			mob_map[mob->uuid()] = mob;
+			mob_chmap[mob->cd()] = mob;
 			return mob->cd();
-		}
-		uuid_t get_uuid() {
-			static uuid_t u = 0;
-			return ++u;
 		}
 		uuid_t obj_uuid() {
 			static uuid_t u = 0;
 			return ++u;
 		}
-		std::unique_ptr<ai_state>& state_fetch(struct char_data* ch) {
+		std::unique_ptr<ai_state>& state_fetch(char_data* ch) {
 			if(states.find(ch) == states.end()) {
 				return states[ch] = std::make_unique<ai_state>(ch,0,0);
 			}
@@ -697,13 +713,13 @@ namespace mods {
 					int new_room_id = 0;
 					if(world[cached_room].dir_option[door] == nullptr){
 						player->sendln("Creating room in that direction");
-							new_room_id = next_room_number();
-							do{
-								world.emplace_back();
-								world.back().init();
-							}while(new_room_id >= world.size());
-							register_room(0);
-							world[new_room_id].number = next_room_vnum();
+						new_room_id = next_room_number();
+						do{
+							world.emplace_back();
+							world.back().init();
+						}while(new_room_id >= world.size());
+						register_room(0);
+						world[new_room_id].number = next_room_vnum();
 						mods::builder::pave_to(player,&world[new_room_id],door,new_room_id);
 						player->set_room(new_room_id);
 						mods::globals::rooms::char_to_room(player->room(),player->cd());
@@ -749,7 +765,7 @@ namespace mods {
 			}
 		}
 
-		void post_command_interpreter(struct char_data *ch,char* argument) {
+		void post_command_interpreter(char_data *ch,char* argument) {
 			return;
 		}
 
@@ -773,14 +789,22 @@ namespace mods {
 			 */
 			void char_from_room(char_data* ch) {
 				MENTOC_PREAMBLE();
+				std::cerr << "[globals::rooms::char_from_room]: character: " << player->name().c_str() 
+					<< " uuid:" << player->uuid() << " " 
+					<< "is npc: " << IS_NPC(ch) << " room:" << player->room()
+					<< " IN_ROOM(ch): " << IN_ROOM(ch) 
+					<< "\n";
+				
 				int room_id = player->room();//IN_ROOM(ch);
 				if(room_id >= room_list.size()){
 					log("SYSERR: char_from_room failed. room_id >= room_list.size()");
 					return;
 				}
-				auto place = std::find(room_list[room_id].begin(),room_list[room_id].end(),player);
-				if(place != room_list[room_id].end()){
-					room_list[room_id].erase(place);
+				auto place = std::find(mods::globals::get_room_list(room_id).begin(),
+						mods::globals::get_room_list(room_id).end(),player);
+				if(place != get_room_list(room_id).end()){
+					std::cerr << "[globals::rooms::char_from_room] found char in room_list. removing...\n";
+					get_room_list(room_id).erase(place);
 				}
 			}
 
@@ -803,15 +827,55 @@ namespace mods {
 					log("SYSERR: char_to_room failed for ch. Requested room is out of bounds: ",target_room);
 					return;
 				}
-				room_list[target_room].push_back(player);
+				get_room_list(target_room).push_back(player);
 				IN_ROOM(ch) = target_room;
 				return;
 			}
 		};//end namespace rooms
 
-	};
-
+		void affect_room_light(int room,int offset){
+			if(room < world.size() && room >= 0){
+				world[room].light -= offset;
+			}
+		}
+		static mods::globals::player_list_t blank_room;
+		player_list_t& get_room_list(room_rnum room){
+			if(room == NOWHERE || room >= mods::globals::room_list.size()){
+				return blank_room;
+			}
+			return mods::globals::room_list[room];
+		}
+		player_list_t& get_room_list(player_ptr_t& player){
+			return mods::globals::get_room_list(player->room());
+		}
+	};//end globals
 };
+player_ptr_t ptr(char_data* in_ch){
+	if(IS_NPC(in_ch)){
+		return mods::globals::mob_chmap[in_ch];
+	}
+	return mods::globals::player_chmap[in_ch];
+}
+obj_ptr_t optr(obj_data* in_obj){
+	return mods::globals::obj_odmap[in_obj];
+}
 
+std::optional<obj_ptr_t> optr_opt(uuid_t obj_uuid){
+	auto it = mods::globals::obj_map.find(obj_uuid);
+	if(it != mods::globals::obj_map.end()){
+		std::cerr << "[debug]: found obj_uuid (optr) " << obj_uuid << \
+			" name:" << (it->second)->name.c_str() << "\n";
+		return it->second;
+	}
+	std::cerr << "[debug]: DID NOT find obj_uuid (optr) " << obj_uuid << "\n";
+	return std::nullopt;
+}
+std::optional<player_ptr_t> ptr_opt(uuid_t plr_uuid){
+	auto it = mods::globals::player_map.find(plr_uuid);
+	if(it != mods::globals::player_map.end()){
+		return it->second;
+	}
+	return std::nullopt;
+}
 
 #endif

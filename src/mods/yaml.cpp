@@ -1,6 +1,14 @@
 #include "yaml.hpp"
 namespace mods::yaml {
 
+#define MENTOC_FEED_BASE_MEMBERS \
+		manufacturer = yaml_file["manufacturer"].as<std::string>();\
+		name = yaml_file["name"].as<std::string>();\
+		str_type = yaml_file["str_type"].as<std::string>();\
+		vnum = yaml_file["vnum"].as<int>();\
+		rarity = parse_rarity(yaml_file["rarity"].as<std::string>());\
+		feed_file = yaml_file["feed_file"].as<std::string>();
+
 	std::vector<std::pair<std::string,float>> rarity_strings() {
 		return {
 			{"COMMON",mods::rarity::COMMON},
@@ -20,7 +28,8 @@ namespace mods::yaml {
 		return comment;
 	}
 	void base_items(std::ofstream* out_file,std::string_view name,std::string_view obj_type){
-		*out_file	<< "type: '" << obj_type << "' # enum, object type\n"
+		*out_file	<< "str_type: '" << obj_type << "' # enum, object type\n"
+			<< "type: 0 # integer enum \n"
 			<< "manufacturer: 'ACME Industries' # string, anything \n"
 			<< "name: '" << name << "' # string, anything name of object \n"
 			<< "vnum: 1000 # integer, unique identifier\n"
@@ -35,44 +44,10 @@ namespace mods::yaml {
 		}
 		return mods::rarity::DEFAULT;
 	}
-	int16_t gadget_description_t::write_example_file(std::string_view file){
-		/** TODO: */
-		std::string file_name = current_working_dir() + "/" + file.data();
-		std::ofstream out_file(file_name);
-		if(!out_file.is_open()){
-			std::cerr << "can't open output yaml file, not open!\n";
-			return -1;
-		}
-		if(!out_file.good()){
-			std::cerr << "can't open output yaml file, not good!\n";
-			return -2;
-		}
-		out_file << "# type: GRAPPLING_HOOK\n";
-		out_file << "# type: BARBED_WIRE\n";
-		out_file << "# type: CAMERA\n";
-		out_file << "# type: MOTION_SENSOR\n";
-		out_file << "# type: DEPLOYABLE_SHIELD\n";
-		out_file << "# type: SENSOR_GRENADE\n";
-		base_items(&out_file, "XUN15-SP Sensor Grenade","SENSOR_GRENADE");
-
-		out_file.flush();
-		out_file.close();
-		return 0;
-	};
-	int16_t gadget_description_t::feed(std::string_view in_file){
-		std::string file = current_working_dir() + "/" + in_file.data();
-		feed_file = file;
-		YAML::Node node_file = YAML::LoadFile(std::string(file.data()));
-		auto type_string = node_file["type"].as<std::string>();
-
-		MENTOC_FEED_GADGETS
-
-		manufacturer = node_file["manufacturer"].as<std::string>();
-		name = node_file["name"].as<std::string>();
-		vnum = node_file["vnum"].as<int>();
-		rarity = parse_rarity(node_file["rarity"].as<std::string>());
-		return 0;
-	}
+/*********************************************************/
+/** HOWTO: Add new item and subcategories                */
+/* Step 6: Define the write_example_file function:       */
+/*********************************************************/
 	int16_t armor_description_t::write_example_file(std::string_view file){
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
@@ -84,38 +59,32 @@ namespace mods::yaml {
 			std::cerr << "can't open output yaml file, not good!\n";
 			return -2;
 		}
-		out_file << "# type: VEST\n";
-		out_file << "# type: LEGS\n";
-		out_file << "# type: GAUNTLETS\n";
-		out_file << "# type: SHOULDER_PADS\n";
-		out_file << "# type: HELMET\n";
-		out_file << "# type: HAT\n";
-		out_file << "# type: EYEWEAR\n";
-		out_file << "# type: GOGGLES\n";
-		out_file << "# type: BACKPACK\n";
-		out_file << "# type: WAIST_PACK\n";
-		out_file << "# type: VEST_PACK\n";
-		out_file << "# type: ELBOW_GUARDS\n";
-		out_file << "# type: GLOVES\n";
+		MENTOC_EXAMPLE_ARMORS
+		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
 		base_items(&out_file,"MK-71X Ballistic Vest","VEST");
 		out_file.flush();
 		out_file.close();
 		return 0;
 	};
-	int16_t armor_description_t::feed(std::string_view in_file){
-		std::string file = current_working_dir() + "/" + in_file.data();
-		feed_file = file;
-		YAML::Node node_file = YAML::LoadFile(std::string(file.data()));
-		auto type_string = node_file["type"].as<std::string>();
 
-		MENTOC_FEED_ARMORS
-
-		manufacturer = node_file["manufacturer"].as<std::string>();
-		name = node_file["name"].as<std::string>();
-		vnum = node_file["vnum"].as<int>();
-		rarity = parse_rarity(node_file["rarity"].as<std::string>());
+	int16_t gadget_description_t::write_example_file(std::string_view file){
+		std::string file_name = current_working_dir() + "/" + file.data();
+		std::ofstream out_file(file_name);
+		if(!out_file.is_open()){
+			std::cerr << "can't open output yaml file, not open!\n";
+			return -1;
+		}
+		if(!out_file.good()){
+			std::cerr << "can't open output yaml file, not good!\n";
+			return -2;
+		}
+		MENTOC_EXAMPLE_GADGETS
+		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_GADGET_MEMBERS_TUPLE)
+		base_items(&out_file,"XMC Trip Wire","TRIPWIRE");
+		out_file.flush();
+		out_file.close();
 		return 0;
-	}
+	};
 
 
 	int16_t attachment_description_t::write_example_file(std::string_view file){
@@ -129,27 +98,13 @@ namespace mods::yaml {
 			std::cerr << "can't open output yaml file, not good!\n";
 			return -2;
 		}
-		out_file << "# type: SIGHT\n";
-		out_file << "# type: MUZZLE\n";
-		out_file << "# type: MAGAZINE\n";
+		MENTOC_EXAMPLE_ATTACHMENTS
+		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
 		base_items(&out_file, "ACOG Scope","SIGHT");
+		out_file.flush();
 		out_file.close();
 		return 0;
 	};
-	int16_t attachment_description_t::feed(std::string_view in_file){
-		std::string file = current_working_dir() + "/" + in_file.data();
-		feed_file = file;
-		YAML::Node node_file = YAML::LoadFile(std::string(file.data()));
-		auto type_string = node_file["type"].as<std::string>();
-
-		MENTOC_FEED_ATTACHMENTS
-
-		manufacturer = node_file["manufacturer"].as<std::string>();
-		name = node_file["name"].as<std::string>();
-		vnum = node_file["vnum"].as<int>();
-		rarity = parse_rarity(node_file["rarity"].as<std::string>());
-		return 0;
-	}
 
 
 	int16_t drone_description_t::write_example_file(std::string_view file){
@@ -164,31 +119,13 @@ namespace mods::yaml {
 			std::cerr << "can't open output yaml file, not good!\n";
 			return -2;
 		}
-		out_file << "# type: GROUND_DRONE\n";
-		out_file << "# type: AERIAL_DRONE\n";
-		out_file << "# type: AQUATIC_DRONE\n";
-		out_file << "# todo: stub\n";
+		MENTOC_EXAMPLE_DRONES
+		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_DRONE_MEMBERS_TUPLE)
 		base_items(&out_file, "TN Land Drone","GROUND_DRONE");
-
 		out_file.flush();
 		out_file.close();
 		return 0;
 	};
-	int16_t drone_description_t::feed(std::string_view in_file){
-		/** TODO */
-		std::string file = current_working_dir() + "/" + in_file.data();
-		feed_file = file;
-		YAML::Node drone = YAML::LoadFile(std::string(file.data()));
-		auto type_string = drone["type"].as<std::string>();
-
-		MENTOC_FEED_DRONES
-
-		manufacturer = drone["manufacturer"].as<std::string>();
-		name = drone["name"].as<std::string>();
-		vnum = drone["vnum"].as<int>();
-		rarity = parse_rarity(drone["rarity"].as<std::string>());
-		return 0;
-	}
 
 	int16_t rifle_description_t::write_example_file(std::string_view file){
 		std::string file_name = current_working_dir() + "/" + file.data();
@@ -211,16 +148,6 @@ namespace mods::yaml {
 			}
 		}
 		out_file << "\n]\n" <<
-			"rounds_per_minute: 750\n" <<
-			"muzzle_velocity: 3018 # Feet per second\n" <<
-			"effective_firing_range: 1500 # feet\n" << 
-			"ammo_max: 520 #integer\n" <<
-			"ammo_type: 'SNIPER' #string, constant enum\n" <<
-			"chance_to_injure: 4.23 #float, out of 100\n" <<
-			"clip_size: 8 #integer\n"  <<
-			"cooldown_between_shots: 0.413 #float, in seconds\n" <<
-			"critical_chance: 0.14 #float, out of 100\n" << 
-			"critical_range: 4 #integer, measured in rooms\n" <<
 			"damage_map: [\n";
 		for(auto i=0; i < MAX_ROOM_DISTANCE;++i) {
 			out_file << "10.00";
@@ -228,25 +155,9 @@ namespace mods::yaml {
 				out_file << ",\n";
 			}
 		}
-		out_file << "\n]\n" <<
-			"damage_per_second: 4.53 #float\n" <<
-			"disorient_amount: 3.14 #float\n" <<
-			"headshot_bonus: 3.0 #float\n" <<
-			"max_range: 3 #integer,measured in rooms\n" <<
-			"range_multiplier: 4.3 #float, multiplied by \n" <<
-			"reload_time: 3.0 #float, measured in seconds\n" <<
-			"rounds_per_minute: 120 #integer, measured in bullets\n" <<
-			"effective_firing_range: 2 #integer, measured in rooms\n" <<
-			"# types\n" <<
-			"#######\n" <<
-			"# type: SNIPER\n" << 
-			"# type: ASSAULT_RIFLE\n" << 
-			"# type: SHOTGUN\n" << 
-			"# type: SUB_MACHINE_GUN\n" << 
-			"# type: HANDGUN\n" << 
-			"# type: MACHINE_PISTOL\n" << 
-			"# type: LIGHT_MACHINE_GUN\n"
-			;
+		out_file << "\n]\n";
+		MENTOC_EXAMPLE_RIFLES
+		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
 		base_items(&out_file,"A <adjectively> <horrific> PSG-1 Sniper Rifle","SNIPER");
 		out_file.flush();
 		out_file.close();
@@ -265,83 +176,101 @@ namespace mods::yaml {
 			std::cerr << "can't open output yaml file, not good!\n";
 			return -2;
 		}
-		out_file <<
-			"chance_to_injure: 4.23 #float, out of 100\n" <<
-			"critical_chance: 0.10 #float, out of 100\n" <<
-			"critical_range: 4 #integer, measured in rooms\n" <<
-			"damage_per_second: 4.53 #float\n" <<
-			"disorient_amount: 3.14 #float\n" <<
-			"model_name: 'Nade 0x10'\n"
-			"# types\n" <<
-			"#######\n" <<
-			"# type: FRAG_GRENADE\n" << 
-			"# type: INCENDIARY_GRENADE\n" << 
-			"# type: REMOTE_EXPLOSIVE\n" << 
-			"# type: REMOTE_CHEMICAL\n" << 
-			"# type: EMP_GRENADE\n" << 
-			"# type: CLAYMORE_MINE\n" << 
-			"# type: SMOKE_GRENADE\n" << 
-			"# type: C4\n" << 
-			"# type: BREACH_CHARGE\n" << 
-			"# type: FLASHBANG_GRENADE\n" << 
-			"# type: IMPACT_GRENADE\n";
-			base_items(&out_file, "FS12 Fragmentation grenade","FRAG_GRENADE");
+		MENTOC_EXAMPLE_EXPLOSIVES
+		base_items(&out_file, "FS12 Fragmentation grenade","FRAG_GRENADE");
 		out_file.flush();
 		out_file.close();
 		return 0;
 	};
 
-	int16_t rifle_description_t::feed(std::string_view in_file){
+
+
+	int16_t consumable_description_t::write_example_file(std::string_view file){
+		std::string file_name = current_working_dir() + "/" + file.data();
+		std::ofstream out_file(file_name);
+		if(!out_file.is_open()){
+			std::cerr << "can't open output yaml file, not open!\n";
+			return -1;
+		}
+		if(!out_file.good()){
+			std::cerr << "can't open output yaml file, not good!\n";
+			return -2;
+		}
+		MENTOC_EXAMPLE_CONSUMABLE
+		base_items(&out_file, "N7RCX Human Growth Hormone ","PED");
+		out_file.flush();
+		out_file.close();
+		return 0;
+	};
+
+/*******************************************/
+/** HOWTO: Add new item and subcategories  */
+/* Step 7: Define the feed function:       */
+/*******************************************/
+	int16_t gadget_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();
 		feed_file = file;
-		YAML::Node weapon = YAML::LoadFile(std::string(file.data()));
-		auto type_string = weapon["type"].as<std::string>();
-
-		MENTOC_FEED_RIFLES
-
-		ammo_max = weapon["ammo_max"].as<int>();
-		chance_to_injure = weapon["chance_to_injure"].as<float>();
-		clip_size = weapon["clip_size"].as<int>();
-		cooldown_between_shots = weapon["cooldown_between_shots"].as<float>();
-		critical_chance = weapon["critical_chance"].as<float>();
-		critical_range = weapon["critical_range"].as<float>();
-		range_multiplier = weapon["range_multiplier"].as<float>();
-		damage_per_second = weapon["damage_per_second"].as<float>();
-		disorient_amount = weapon["disorient_amount"].as<float>();
-		headshot_bonus = weapon["headshot_bonus"].as<float>();
-		max_range = weapon["max_range"].as<int>();
-		reload_time = weapon["reload_time"].as<float>();
-		ammo_type = weapon["ammo_type"].as<std::string>();
-		rounds_per_minute = weapon["rounds_per_minute"].as<int>();
-		muzzle_velocity = weapon["muzzle_velocity"].as<int>();
-		effective_firing_range = weapon["effective_firing_range"].as<int>();
-		manufacturer = weapon["manufacturer"].as<std::string>();
-		name = weapon["name"].as<std::string>();
-		vnum = weapon["vnum"].as<int>();
-		rarity = parse_rarity(weapon["rarity"].as<std::string>());
+		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
+		auto type_string = yaml_file["str_type"].as<std::string>();
+		MENTOC_FEED_GADGET
+		MENTOC_FEED_BASE_MEMBERS
 		return 0;
 	}
-
 	int16_t explosive_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();
 		feed_file = file;
-		YAML::Node explosive = YAML::LoadFile(std::string(file.data()));
-		auto type_string = explosive["type"].as<std::string>();
-
-		MENTOC_FEED_EXPLOSIVES
-
-		chance_to_injure = explosive["chance_to_injure"].as<float>();
-		critical_chance = explosive["critical_chance"].as<float>();
-		critical_range = explosive["critical_range"].as<int>();
-		damage_per_second = explosive["damage_per_second"].as<float>();
-		disorient_amount = explosive["disorient_amount"].as<float>();
-		object_type = "explosive";
-
-		manufacturer = explosive["manufacturer"].as<std::string>();
-		name = explosive["name"].as<std::string>();
-		vnum = explosive["vnum"].as<int>();
-		rarity = parse_rarity(explosive["rarity"].as<std::string>());
+		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
+		auto type_string = yaml_file["str_type"].as<std::string>();
+		MENTOC_FEED_EXPLOSIVE
+		MENTOC_FEED_BASE_MEMBERS
 		return 0;
 	}
+	int16_t rifle_description_t::feed(std::string_view in_file){
+		std::string file = current_working_dir() + "/" + in_file.data();
+		feed_file = file;
+		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
+		auto type_string = yaml_file["str_type"].as<std::string>();
+		MENTOC_FEED_RIFLE
+		MENTOC_FEED_BASE_MEMBERS
+		return 0;
+	}
+	int16_t drone_description_t::feed(std::string_view in_file){
+		std::string file = current_working_dir() + "/" + in_file.data();
+		feed_file = file;
+		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
+		auto type_string = yaml_file["str_type"].as<std::string>();
+		MENTOC_FEED_DRONE
+		MENTOC_FEED_BASE_MEMBERS
+		return 0;
+	}
+	int16_t attachment_description_t::feed(std::string_view in_file){
+		std::string file = current_working_dir() + "/" + in_file.data();
+		feed_file = file;
+		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
+		auto type_string = yaml_file["str_type"].as<std::string>();
+		MENTOC_FEED_ATTACHMENT
+		MENTOC_FEED_BASE_MEMBERS
+		return 0;
+	}
+	int16_t armor_description_t::feed(std::string_view in_file){
+		std::string file = current_working_dir() + "/" + in_file.data();
+		feed_file = file;
+		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
+		auto type_string = yaml_file["str_type"].as<std::string>();
+		MENTOC_FEED_ARMOR
+		MENTOC_FEED_BASE_MEMBERS
+		return 0;
+	}
+
+	int16_t consumable_description_t::feed(std::string_view in_file){
+		std::string file = current_working_dir() + "/" + in_file.data();
+		feed_file = file;
+		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
+		auto type_string = yaml_file["str_type"].as<std::string>();
+		MENTOC_FEED_CONSUMABLE
+		MENTOC_FEED_BASE_MEMBERS
+		return 0;
+	}
+
 
 };

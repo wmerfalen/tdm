@@ -49,7 +49,7 @@ namespace mods::weapon {
 		obj->next = nullptr;         /* For the object list              */
 		obj->ai_state = 0;
 		obj->type = 0;
-		obj->uuid = mods::globals::obj_uuid();
+		obj->attachment(0);
 
 		return std::move(obj);
 
@@ -84,13 +84,12 @@ namespace mods::weapon {
 		//obj->loaded = 0;
 		//obj->weapon_type = 0;
 		obj->type = 0;
-		obj->uuid = 0;
+		obj->rifle(0);
 		return std::move(obj);
 	}
 
 	obj_data_ptr_t base_explosive_object(){
 		auto obj = blank_object();
-		//obj->holds_ammo = 1;
 
 		obj->item_number = 0;	/* Where in data-base			*/
 		obj->in_room = 0;		/* In what room -1 when conta/carr	*/
@@ -117,17 +116,11 @@ namespace mods::weapon {
 		obj->next = nullptr;         /* For the object list              */
 		obj->ai_state = 0;
 
-		/** TODO: fill the uuid in */
-		obj->uuid = mods::globals::obj_uuid();
-		//obj->rifle();
-		//obj->obj_flags.ammo = 0;
-		//obj->obj_flags.ammo_max = 0;
-		//obj->rifle()->type = obj->obj_flags.weapon_flags = 0;
-
 		obj->obj_flags.clip_size = 0;
 		obj->ex_description = static_cast<extra_descr_data*>(calloc(1,sizeof(extra_descr_data)));
 		obj->ex_description->next = nullptr;
 		obj->ex_description->keyword =  strdup("keyword");
+		obj->explosive(0);
 		return std::move(obj);
 	}
 
@@ -135,7 +128,6 @@ namespace mods::weapon {
 	/** This function is a prime example of how to populate a obj_ptr_t */
 	obj_data_ptr_t psg1(){
 		auto obj = base_rifle_object();
-		obj->uuid = mods::globals::obj_uuid();
 		obj->rifle("base_sniper.yml");
 
 		/** TODO: determine clip size */
@@ -155,7 +147,7 @@ namespace mods::weapon {
 		obj->ex_description->next = nullptr;
 		obj->ex_description->keyword =  strdup("keyword");
 		obj->rifle()->type = mw_rifle::SNIPER;
-		feed_caps(obj, { cap_t::SNIPE, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::FIRE, cap_t::SHOOT });
+		feed_caps(obj, { cap_t::ZOOM, cap_t::RELOAD, cap_t::SNIPE, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT });
 
 		/** damage/hit roll modifications */
 		return std::move(obj);
@@ -175,8 +167,33 @@ namespace mods::weapon {
 		/** [ APPEARS ]: when you "examine frag", it will say exactly this  */
 		obj->action_description = strdup("frag fragmentation grenade nade");
 		obj->explosive()->type = mw_explosive::FRAG_GRENADE;
-		feed_caps(obj, { cap_t::BURN, cap_t::DETONATE, cap_t::EXPLODE, 
-				cap_t::THROW });
+		feed_caps(obj, { cap_t::EXPLODE, cap_t::THROW });
+		return std::move(obj);
+	}
+
+	obj_data_ptr_t new_sensor_grenade_object(){
+		auto obj = base_explosive_object();
+		obj->explosive(mw_explosive::SENSOR_GRENADE);
+		/** [ APPEARS ]: when you 'look sensor' or 'examine sensor' @act.informative.cpp */
+		obj->name = strdup("a sensor grenade");
+		/** [ APPEARS ]: when you drop it and it's laying on the floor */
+		obj->description = strdup("A sensor grenade is lying here.");
+		/** [ APPEARS ]: when you type inv */
+		/** [ USED_WHEN ]: when you "hold sensor", it will say "You hold sensor grenade <short>" */
+		/**   |------------> obj->short_description = strdup("sensor grenade <short>");        */
+		obj->short_description = strdup("a X10 sensor grenade");
+		/** [ APPEARS ]: when you "examine sensor", it will say exactly this  */
+		obj->action_description = strdup("sensor grenade nade");
+		obj->explosive()->type = mw_explosive::SENSOR_GRENADE;
+		obj->explosive()->attributes = std::make_unique<mods::yaml::explosive_description_t>();
+		obj->explosive()->attributes->chance_to_injure = 0.0;
+		obj->explosive()->attributes->critical_chance = 0.0;
+		obj->explosive()->attributes->critical_range = 0;
+		obj->explosive()->attributes->blast_radius = 2;
+		obj->explosive()->attributes->damage_per_second = 0;
+		obj->explosive()->attributes->disorient_amount = 0.0;
+		obj->explosive()->attributes->alternate_explosion_type = ALTEX_SCAN;
+		feed_caps(obj, { cap_t::COUNTDOWN_EXPLOSION, cap_t::ALTERNATE_EXPLOSION, cap_t::SCAN, cap_t::THROW });
 		return std::move(obj);
 	}
 
@@ -191,7 +208,7 @@ namespace mods::weapon {
 		obj->short_description = strdup("incendiary grenade <short>");
 		obj->action_description = strdup("incendiary grenade <action>");      /* What to write when used          */
 		obj->explosive()->type = mw_explosive::INCENDIARY_GRENADE;
-		feed_caps(obj, { cap_t::BURN, cap_t::DETONATE, cap_t::EXPLODE, cap_t::THROW });
+		feed_caps(obj, { cap_t::COUNTDOWN_EXPLOSION, cap_t::BURN, cap_t::EXPLODE, cap_t::THROW });
 		return std::move(obj);
 	}
 
@@ -206,7 +223,7 @@ namespace mods::weapon {
 		/** [ APPEARS ]: when you type inv */
 		obj->short_description = strdup("emp e.m.p. electro magnetic pulse grenade <short>");
 		obj->action_description = strdup("emp e.m.p. electro magnetic pulse grenade <action>");      /* What to write when used          */
-		feed_caps(obj, { cap_t::DETONATE, cap_t::EXPLODE, cap_t::THROW });
+		feed_caps(obj, { cap_t::EXPLODE, cap_t::THROW });
 		return std::move(obj);
 	}
 
@@ -221,7 +238,7 @@ namespace mods::weapon {
 		/** [ APPEARS ]: when you type inv */
 		obj->short_description = strdup("Smoke grenade");
 		obj->action_description = strdup("smoke grenade");      /* What to write when used          */
-		feed_caps(obj, { cap_t::DETONATE, cap_t::EXPLODE, cap_t::THROW });
+		feed_caps(obj, { cap_t::EXPLODE, cap_t::THROW });
 		return std::move(obj);
 	}
 
@@ -237,15 +254,13 @@ namespace mods::weapon {
 		/** [ APPEARS ]: when you type remove "flash" */
 		obj->short_description = strdup("a flashbang grenade");
 		obj->action_description = strdup("a flashbang grenade <action>");      /* What to write when used          */
-		feed_caps(obj, { cap_t::EXPLODE, cap_t::THROW, cap_t::BLIND });
+		feed_caps(obj, { cap_t::COUNTDOWN_EXPLOSION, cap_t::DISORIENT, cap_t::ALTERNATE_EXPLOSION, cap_t::EXPLODE, cap_t::THROW, cap_t::BLIND });
 		return std::move(obj);
 	}
 
 	obj_data_ptr_t new_sniper_rifle_object(){
 		auto obj = base_rifle_object();
 		obj->rifle("base_sniper.yml");
-		/** TODO: fill the uuid in */
-		obj->uuid = mods::globals::obj_uuid();
 
 		/** TODO: determine clip size */
 		obj->obj_flags.ammo = 12;
@@ -264,15 +279,13 @@ namespace mods::weapon {
 		obj->ex_description = static_cast<extra_descr_data*>(calloc(1,sizeof(extra_descr_data)));
 		obj->ex_description->next = nullptr;
 		obj->ex_description->keyword =  strdup("keyword");
-		feed_caps(obj, { cap_t::SNIPE, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::FIRE, cap_t::SHOOT });
+		feed_caps(obj, { cap_t::HAS_CLIP, cap_t::ZOOM, cap_t::RELOAD, cap_t::SNIPE, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT });
 		return std::move(obj);
 	}
 
 	obj_data_ptr_t new_pistol_object(){
 		auto obj = base_rifle_object();
 		obj->rifle("base_pistol.yml");
-		/** TODO: fill the uuid in */
-		obj->uuid = mods::globals::obj_uuid();
 
 		/** TODO: determine clip size */
 		obj->obj_flags.ammo = 7;
@@ -280,7 +293,7 @@ namespace mods::weapon {
 		obj->obj_flags.ammo_max = 90;
 		obj->obj_flags.weapon_flags = mods::weapon::PISTOL;
 		obj->obj_flags.clip_size = 7;
-		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
+		/** [ APPEARS ]: when you 'look pistol' or 'examine pistol' @act.informative.cpp */
 		obj->name = strdup("Pistol");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
 		obj->description = strdup("A pistol is lying here.");
@@ -291,7 +304,7 @@ namespace mods::weapon {
 		obj->ex_description->next = nullptr;
 		obj->ex_description->keyword =  strdup("pistol");
 		obj->rifle()->type = mw_rifle::PISTOL;
-		feed_caps(obj, { cap_t::CQC, cap_t::AIM, cap_t::FIRE, cap_t::SHOOT, cap_t::HIP_FIRE});
+		feed_caps(obj, { cap_t::HAS_CLIP, cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE});
 
 		return std::move(obj);
 	}
@@ -313,7 +326,7 @@ namespace mods::weapon {
 		obj->ex_description->next = nullptr;
 		obj->ex_description->keyword =  strdup("deagle");
 		obj->rifle()->type = mw_rifle::PISTOL;
-		feed_caps(obj, { cap_t::CQC, cap_t::AIM, cap_t::FIRE, cap_t::SHOOT, cap_t::HIP_FIRE});
+		feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE, cap_t::HAS_CLIP });
 		return std::move(obj);
 	}
 

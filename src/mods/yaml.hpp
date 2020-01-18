@@ -21,16 +21,25 @@ namespace mods::yaml {
 		std::string manufacturer;\
 		std::string name;\
 		int type;\
-		std::string object_type;\
+		std::string str_type;\
 		int vnum;\
 		float rarity;\
 		std::string feed_file;
+
 #define MENTOC_BASE_MEMBERS_SET(NAME)\
 			manufacturer("ACME Industries"),\
-			name(NAME), type(0), object_type(NAME),\
+			name(NAME), type(0), str_type(NAME),\
 			vnum(0),rarity(mods::rarity::DEFAULT)
 
+enum alternate_explosion_t {
+	ALTEX_NONE = 0,
+	ALTEX_SCAN
+};
+
 namespace mods::yaml {
+	using percent_t = float;
+	using rooms_t = int;
+	using static_amount_t = int;
 	constexpr static uint8_t MAX_ROOM_DISTANCE = 4;
 			static inline std::string current_working_dir(){
 				char* cwd = ::get_current_dir_name();
@@ -69,25 +78,11 @@ namespace mods::yaml {
 		}
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
-
 			std::array<float,MAX_ROOM_DISTANCE> accuracy_map;
-			int ammo_max;
-			std::string ammo_type;
-			float chance_to_injure;	/** Percent */
-			int clip_size;	/** Flat int */
-			float cooldown_between_shots;	/** Seconds */
-			float critical_chance;	/** Percent */
-			int critical_range;	/** Rooms */
 			std::array<float,MAX_ROOM_DISTANCE> damage_map;	/** Percent per room */
-			float damage_per_second;
-			float disorient_amount;
-			float headshot_bonus;
-			int max_range;
-			float range_multiplier;
-			float reload_time;
-			int rounds_per_minute;
-			int muzzle_velocity;
-			int effective_firing_range;
+
+MENTOC_MEMBER_VARS_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
+
 			MENTOC_BASE_MEMBERS
 	};
 
@@ -97,24 +92,20 @@ namespace mods::yaml {
 		virtual ~explosive_description_t() = default;
 		explosive_description_t() :
 			damage(0),
-			chance_to_injure(0.0),	 /** Percent */
-			critical_chance(0.0), /** Percent */
-			critical_range(0), /** Rooms */
-			blast_radius(1),	/** 1 will only affect room it detonates in */
-			damage_per_second(0.0), /** static amount of damage done per second after detonation */
-			disorient_amount(0.0), /** percent */
+			chance_to_injure(0.0),
+			critical_chance(0.0),
+			critical_range(0),
+			damage_per_second(0.0),
+			disorient_amount(0.0),
 			MENTOC_BASE_MEMBERS_SET("explosive")
 		{
 			std::fill(aoe_triggers.begin(),aoe_triggers.end(),0);
 		}
 		int damage;
 		std::array<aoe_type_t,MAX_AOE_TRIGGERS> aoe_triggers;
-		float chance_to_injure;
-		float critical_chance;
-		int critical_range;
-		int blast_radius;	/** In rooms */
-		float damage_per_second;
-		float disorient_amount;
+
+MENTOC_MEMBER_VARS_FOR(MENTOC_EXPLOSIVE_MEMBERS_TUPLE)
+
 		MENTOC_BASE_MEMBERS
 	};
 
@@ -127,6 +118,9 @@ namespace mods::yaml {
 			MENTOC_BASE_MEMBERS_SET("drone")
 		{
 		}
+
+MENTOC_MEMBER_VARS_FOR(MENTOC_DRONE_MEMBERS_TUPLE)
+
 		int damage;
 		MENTOC_BASE_MEMBERS
 	};
@@ -139,8 +133,13 @@ namespace mods::yaml {
 			MENTOC_BASE_MEMBERS_SET("gadget")
 		{
 		}
+
+MENTOC_MEMBER_VARS_FOR(MENTOC_GADGET_MEMBERS_TUPLE)
+
 		MENTOC_BASE_MEMBERS
 	};
+
+
 	struct attachment_description_t : public yaml_description_t {
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
@@ -149,8 +148,13 @@ namespace mods::yaml {
 			MENTOC_BASE_MEMBERS_SET("attachment")
 		{
 		}
+MENTOC_MEMBER_VARS_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
+
 		MENTOC_BASE_MEMBERS
 	};
+
+
+
 	struct armor_description_t : public yaml_description_t {
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
@@ -159,8 +163,31 @@ namespace mods::yaml {
 			MENTOC_BASE_MEMBERS_SET("armor")
 		{
 		}
+MENTOC_MEMBER_VARS_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
+
 		MENTOC_BASE_MEMBERS
 	};
+
+	struct consumable_description_t : public yaml_description_t {
+		virtual int16_t feed(std::string_view file);
+		virtual int16_t write_example_file(std::string_view file);
+		virtual ~consumable_description_t() = default;
+		consumable_description_t() :
+			MENTOC_BASE_MEMBERS_SET("consumable")
+		{
+
+		}
+
+MENTOC_MEMBER_VARS_FOR(MENTOC_CONSUMABLE_MEMBERS_TUPLE)
+
+		MENTOC_BASE_MEMBERS
+
+	};
+
+/*********************************************************/
+/** HOWTO: Add new item and subcategories                */
+/* Step 5: Add a new _description_t struct               */
+/*********************************************************/
 };
 #endif
 

@@ -10,6 +10,7 @@
 
 #include <cstdio>
 #include <deque>
+#include <string>
 #include "structs.h"
 #include "mods/macro_impl.hpp"
 /* external declarations and prototypes **********************************/
@@ -35,7 +36,7 @@ void	basic_mud_log(const char *format, ...) __attribute__((format(printf, 1, 2))
 void	basic_mud_vlog(const char *format, va_list args);
 int	touch(const char *path);
 void	mudlog(int type, int level, int file, const char *str, ...) __attribute__((format(printf, 4, 5)));
-void	log_death_trap(struct char_data *ch);
+void	log_death_trap(char_data *ch);
 int	rand_number(int from, int to);
 int	dice(int number, int size);
 size_t	sprintbit(bitvector_t vektor, const char *names[], char *result, size_t reslen);
@@ -43,7 +44,7 @@ size_t	sprinttype(int type, const char *names[], char *result, size_t reslen);
 int	get_line(FILE *fl, char *buf);
 int	get_filename(char *filename, size_t fbufsize, int mode, const char *orig_name);
 time_t	mud_time_to_secs(struct time_info_data *now);
-struct time_info_data *age(struct char_data *ch);
+struct time_info_data *age(char_data *ch);
 int	num_pc_in_room(room_data *room);
 void	core_dump_real(const char *, int);
 int	room_is_dark(room_rnum room);
@@ -83,32 +84,32 @@ int MIN(int a, int b);
 char *CAP(char *txt);
 
 /* Followers */
-int	num_followers_charmed(struct char_data *ch);
-void	die_follower(struct char_data *ch);
-void	add_follower(struct char_data *ch, struct char_data *leader);
-void	stop_follower(struct char_data *ch);
-bool	circle_follow(struct char_data *ch, struct char_data *victim);
+int	num_followers_charmed(char_data *ch);
+void	die_follower(char_data *ch);
+void	add_follower(char_data *ch, char_data *leader);
+void	stop_follower(char_data *ch);
+bool	circle_follow(char_data *ch, char_data *victim);
 
 /* in act.informative.c */
-void	look_at_room(struct char_data *ch, int mode);
+void	look_at_room(char_data *ch, int mode);
 
 /* in act.movmement.c */
-int	do_simple_move(struct char_data *ch, int dir, int following);
-int	perform_move(struct char_data *ch, int dir, int following);
+int	do_simple_move(char_data *ch, int dir, int following);
+int	perform_move(char_data *ch, int dir, int following);
 
 /* in limits.c */
-int	mana_gain(struct char_data *ch);
-int	hit_gain(struct char_data *ch);
-int	move_gain(struct char_data *ch);
-void	advance_level(struct char_data *ch);
+int	mana_gain(char_data *ch);
+int	hit_gain(char_data *ch);
+int	move_gain(char_data *ch);
+void	advance_level(char_data *ch);
 void	set_title(char_data*, const char* title);
 void	set_title(player_ptr_t, const char* title);
-void	gain_exp(struct char_data *ch, int gain);
-void	gain_exp_regardless(struct char_data *ch, int gain);
-void	gain_condition(struct char_data *ch, int condition, int value);
-void	check_idling(struct char_data *ch);
+void	gain_exp(char_data *ch, int gain);
+void	gain_exp_regardless(char_data *ch, int gain);
+void	gain_condition(char_data *ch, int condition, int value);
+void	check_idling(char_data *ch);
 void	point_update(void);
-void	update_pos(struct char_data *victim);
+void	update_pos(char_data *victim);
 
 /* various constants *****************************************************/
 
@@ -430,8 +431,8 @@ room_rnum& GET_WAS_IN(char_data* player);
 #define HSSH(ch) (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "he" :"she") : "it")
 #define HMHR(ch) (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "him":"her") : "it")
 
-#define ANA(obj) (strchr("aeiouAEIOU", *(obj)->name) ? "An" : "A")
-#define SANA(obj) (strchr("aeiouAEIOU", *(obj)->name) ? "an" : "a")
+#define ANA(obj) (strchr("aeiouAEIOU", *(obj)->name.c_str()) ? "An" : "A")
+#define SANA(obj) (strchr("aeiouAEIOU", *(obj)->name.c_str()) ? "an" : "a")
 
 
 /* Various macros building up to CAN_SEE */
@@ -547,3 +548,11 @@ room_rnum& GET_WAS_IN(char_data* player);
 #else
 #define CRYPT(a,b) ((char*)(std::string(a) + std::string(b)).c_str())
 #endif
+
+/** mods - my own little macros */
+#define TO_OBJ_PTR(obj) (mods::globals::obj_map[obj->uuid])
+
+std::string TOSTR(std::string a);
+std::string TOSTR(int);
+#define FOR_ROOM(plr) for(auto & plr : mods::globals::get_room_list(player))
+#define FOREACH_MOB(name) for(auto & name : mob_list)

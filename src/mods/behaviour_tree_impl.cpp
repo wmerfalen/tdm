@@ -87,7 +87,7 @@ namespace mods::behaviour_tree_impl {
 						for(auto & remembered_sniper : mob.mob_specials().memory){
 							if(mob.can_snipe(remembered_sniper)){
 							/*
-int snipe_hit(*ch, struct char_data *victim, int type,uint16_t distance) {
+int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 	struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
 	*/
 							/** TODO: if no ammo, search for ammo */

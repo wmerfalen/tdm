@@ -122,7 +122,7 @@ std::vector<std::string>& affect_string_list_impl() {
 };
 std::vector<std::string>& affect_string_list() { return mods::affects::affect_string_list_impl(); }
 		void str_queue_on_room(std::vector<std::string> affects,int room_id){
-			for(auto & player : mods::globals::room_list[room_id]){
+			for(auto & player : mods::globals::get_room_list(room_id)){
 				mods::affects::str_affect_player(affects,player);
 			}
 		}
@@ -130,7 +130,7 @@ std::vector<std::string>& affect_string_list() { return mods::affects::affect_st
 			mods::affects::str_affect_player(affects,player);
 		}
 		void queue_on_room(std::vector<mods::affects::affect_t> affects,int room_id){
-			for(auto & player : mods::globals::room_list[room_id]){
+			for(auto & player : mods::globals::get_room_list(room_id)){
 				mods::affects::affect_player(affects,player);
 			}
 		}

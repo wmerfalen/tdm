@@ -34,13 +34,13 @@
 #define OLC_USAGE "Usage: olc { . | set | show | obj | mob | room} [args]\r\n"
 
 /* local globals */
-struct char_data *olc_ch;
+char_data *olc_ch;
 
 /* local functions */
 void olc_interpreter(void *targ, int mode, char *arg);
-void olc_set_show(struct char_data *ch, int olc_mode, char *arg);
+void olc_set_show(char_data *ch, int olc_mode, char *arg);
 void olc_string(char **string, size_t maxlen, char *arg);
-int can_modify(struct char_data *ch, int vnum);
+int can_modify(char_data *ch, int vnum);
 ACMD(do_olc);
 void olc_bitvector(int *bv, const char **names, char *arg);
 
@@ -195,7 +195,7 @@ ACMD(do_olc) {
 void olc_interpreter(void *targ, int mode, char *arg) {
 	int command;
 	char command_string[MAX_INPUT_LENGTH];
-	struct char_data *olc_mob = nullptr;
+	char_data *olc_mob = nullptr;
 	struct obj_data *olc_obj = nullptr;
 
 	half_chop(arg, command_string, arg);
@@ -211,7 +211,7 @@ void olc_interpreter(void *targ, int mode, char *arg) {
 			break;
 
 		case OLC_MOB:
-			olc_mob = (struct char_data *) targ;
+			olc_mob = (char_data *) targ;
 			break;
 
 		case OLC_OBJ:
@@ -253,7 +253,7 @@ void olc_interpreter(void *targ, int mode, char *arg) {
 					break;
 
 				case OLC_OBJ:
-					olc_string(&olc_obj->short_description, MAX_OBJ_NAME, arg);
+					olc_string(olc_obj->short_description.ptrptr(), MAX_OBJ_NAME, arg);
 					break;
 
 				default:
@@ -273,7 +273,7 @@ void olc_interpreter(void *targ, int mode, char *arg) {
 					break;
 
 				case OLC_OBJ:
-					olc_string(&olc_obj->description, MAX_OBJ_DESC, arg);
+					olc_string(olc_obj->description.ptrptr(), MAX_OBJ_DESC, arg);
 					break;
 
 				default:
@@ -302,7 +302,7 @@ void olc_interpreter(void *targ, int mode, char *arg) {
 
 
 /* can_modify: determine if a particular char can modify a vnum */
-int can_modify(struct char_data *ch, int vnum) {
+int can_modify(char_data *ch, int vnum) {
 	return (1);
 }
 
@@ -389,5 +389,5 @@ void olc_bitvector(int *bv, const char **names, char *arg) {
 	send_to_char(olc_ch, "Flags now set to: %s\r\n", buf);
 }
 
-void olc_set_show(struct char_data *ch, int olc_mode, char *arg) {
+void olc_set_show(char_data *ch, int olc_mode, char *arg) {
 }

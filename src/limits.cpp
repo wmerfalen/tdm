@@ -33,17 +33,17 @@ extern int immort_level_ok;
 extern int use_autowiz;
 extern int min_wizlist_lev;
 extern int free_rent;
-extern struct char_data* character_list;
+extern char_data* character_list;
 
 /* local functions */
 int graf(int grafage, int p0, int p1, int p2, int p3, int p4, int p5, int p6);
 void run_autowiz(void);
 
-void Crash_rentsave(struct char_data *ch, int cost);
+void Crash_rentsave(char_data *ch, int cost);
 int level_exp(int chclass, int level);
 char *title_male(int chclass, int level);
 char *title_female(int chclass, int level);
-void update_char_objects(struct char_data *ch);	/* handler.c */
+void update_char_objects(char_data *ch);	/* handler.c */
 void reboot_wizlists(void);
 
 /* When age < 15 return the value p0 */
@@ -80,7 +80,7 @@ int graf(int grafage, int p0, int p1, int p2, int p3, int p4, int p5, int p6) {
  */
 
 /* manapoint gain pr. game hour */
-int mana_gain(struct char_data *ch) {
+int mana_gain(char_data *ch) {
 	int gain;
 
 	if(IS_NPC(ch)) {
@@ -126,7 +126,7 @@ int mana_gain(struct char_data *ch) {
 
 
 /* Hitpoint gain pr. game hour */
-int hit_gain(struct char_data *ch) {
+int hit_gain(char_data *ch) {
 	int gain;
 
 	if(IS_NPC(ch)) {
@@ -175,7 +175,7 @@ int hit_gain(struct char_data *ch) {
 
 
 /* move gain pr. game hour */
-int move_gain(struct char_data *ch) {
+int move_gain(char_data *ch) {
 	int gain;
 
 	if(IS_NPC(ch)) {
@@ -268,7 +268,7 @@ void run_autowiz(void) {
 
 
 
-void gain_exp(struct char_data *ch, int gain) {
+void gain_exp(char_data *ch, int gain) {
 	int is_altered = FALSE;
 	int num_levels = 0;
 
@@ -320,7 +320,7 @@ void gain_exp(struct char_data *ch, int gain) {
 }
 
 
-void gain_exp_regardless(struct char_data *ch, int gain) {
+void gain_exp_regardless(char_data *ch, int gain) {
 	int is_altered = FALSE;
 	int num_levels = 0;
 
@@ -359,7 +359,7 @@ void gain_exp_regardless(struct char_data *ch, int gain) {
 }
 
 
-void gain_condition(struct char_data *ch, int condition, int value) {
+void gain_condition(char_data *ch, int condition, int value) {
 	bool intoxicated;
 
 	if(IS_NPC(ch) || GET_COND(ch, condition) == -1) {	/* No change */
@@ -402,7 +402,6 @@ void gain_condition(struct char_data *ch, int condition, int value) {
 
 
 void check_idling(player_ptr_t player) {
-	std::cerr << "NOWHERE: " << NOWHERE << "\n";
 	auto ch = player->cd();
 	if(++(player->char_specials().timer) > idle_void) {
 		if(GET_WAS_IN(ch) == NOWHERE && IN_ROOM(ch) != NOWHERE) {
@@ -429,13 +428,11 @@ void check_idling(player_ptr_t player) {
 			char_to_room(ch, mods::world_conf::real_idle());
 
 			if(ch->has_desc) {
-				ch->desc->set_state(CON_DISCONNECT);
+				ch->desc->set_state(CON_IDLE);
 				/*
 				 * For the 'if (d.character)' test in close_socket().
 				 * -gg 3/1/98 (Happy anniversary.)
 				 */
-				ch->desc->character = NULL;
-				ch->desc->clear();
 			}
 
 #ifdef __MENTOC_RENT_DYNAMICS__
@@ -470,7 +467,6 @@ void point_update(void) {
 	/* characters */
 	mods::loops::foreach_all([&](player_ptr_t player) -> bool {
 			auto ch = player->cd();
-			std::cerr << "foreach_all point update\n";
 			if(!ch){
 				log("foreach_all recieved null char_data ptr");
 				return true;
@@ -545,7 +541,7 @@ void point_update(void) {
 					obj_from_obj(jj);
 
 					if(j->in_obj) {
-						obj_to_obj(jj, j->in_obj);
+						obj_to_obj(optr(jj), optr(j->in_obj));
 					} else if(j->carried_by) {
 						obj_to_room(jj, IN_ROOM(j->carried_by));
 					} else if(IN_ROOM(j) != NOWHERE) {

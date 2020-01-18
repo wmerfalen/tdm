@@ -28,17 +28,17 @@
 extern int mini_mud;
 extern int pk_allowed;
 extern struct spell_info_type spell_info[];
-extern struct char_data* character_list;
+extern char_data* character_list;
 
 /* external functions */
 byte saving_throws(int class_num, int type, int level); /* class.c */
-void clearMemory(struct char_data *ch);
+void clearMemory(char_data *ch);
 void weight_change_object(struct obj_data *obj, int weight);
 
 /* local functions */
-int mag_materials(struct char_data *ch, int item0, int item1, int item2, int extract, int verbose);
-void perform_mag_groups(int level, struct char_data *ch, struct char_data *tch, int spellnum, int savetype);
-int mag_savingthrow(struct char_data *ch, int type, int modifier);
+int mag_materials(char_data *ch, int item0, int item1, int item2, int extract, int verbose);
+void perform_mag_groups(int level, char_data *ch, char_data *tch, int spellnum, int savetype);
+int mag_savingthrow(char_data *ch, int type, int modifier);
 void affect_update(void);
 
 /*
@@ -53,7 +53,7 @@ void affect_update(void);
  * saving throw instead of the random number of the character as
  * in some other systems.
  */
-int mag_savingthrow(struct char_data *ch, int type, int modifier) {
+int mag_savingthrow(char_data *ch, int type, int modifier) {
 	/* NPCs use warrior tables according to some book */
 	int class_sav = CLASS_SUPPORT;
 	int save;
@@ -109,7 +109,7 @@ void affect_update(void) {
  * it to implement your own spells which require ingredients (i.e., some
  * heal spell which requires a rare herb or some such.)
  */
-int mag_materials(struct char_data *ch, int item0, int item1, int item2,
+int mag_materials(char_data *ch, int item0, int item1, int item2,
                   int extract, int verbose) {
 	struct obj_data *tobj;
 	struct obj_data *obj0 = NULL, *obj1 = NULL, *obj2 = NULL;
@@ -179,7 +179,7 @@ int mag_materials(struct char_data *ch, int item0, int item1, int item2,
  *
  * -1 = dead, otherwise the amount of damage done.
  */
-int mag_damage(int level, struct char_data *ch, struct char_data *victim,
+int mag_damage(int level, char_data *ch, char_data *victim,
                int spellnum, int savetype) {
 	int dam = 0;
 
@@ -317,7 +317,7 @@ int mag_damage(int level, struct char_data *ch, struct char_data *victim,
 
 #define MAX_SPELL_AFFECTS 5	/* change if more needed */
 
-void mag_affects(int level, struct char_data *ch, struct char_data *victim,
+void mag_affects(int level, char_data *ch, char_data *victim,
                  int spellnum, int savetype) {
 	struct affected_type af[MAX_SPELL_AFFECTS];
 	bool accum_affect = FALSE, accum_duration = FALSE;
@@ -580,8 +580,8 @@ void mag_affects(int level, struct char_data *ch, struct char_data *victim,
  * This function is used to provide services to mag_groups.  This function
  * is the one you should change to add new group spells.
  */
-void perform_mag_groups(int level, struct char_data *ch,
-                        struct char_data *tch, int spellnum, int savetype) {
+void perform_mag_groups(int level, char_data *ch,
+                        char_data *tch, int spellnum, int savetype) {
 	switch(spellnum) {
 		case SPELL_GROUP_HEAL:
 			mag_points(level, ch, tch, SPELL_HEAL, savetype);
@@ -609,8 +609,8 @@ void perform_mag_groups(int level, struct char_data *ch,
  * To add new group spells, you shouldn't have to change anything in
  * mag_groups -- just add a new case to perform_mag_groups.
  */
-void mag_groups(int level, struct char_data *ch, int spellnum, int savetype) {
-	struct char_data *tch, *k;
+void mag_groups(int level, char_data *ch, int spellnum, int savetype) {
+	char_data *tch, *k;
 	struct follow_type *f, *f_next;
 
 	if(ch == NULL) {
@@ -659,19 +659,9 @@ void mag_groups(int level, struct char_data *ch, int spellnum, int savetype) {
  *
  * No spells of this class currently implemented.
  */
-void mag_masses(int level, struct char_data *ch, int spellnum, int savetype) {
-	struct char_data *tch, *tch_next;
-
-	for(tch = world[IN_ROOM(ch)].people; tch; tch = tch_next) {
-		tch_next = tch->next_in_room;
-
-		if(tch == ch) {
-			continue;
-		}
-
-		switch(spellnum) {
-		}
-	}
+void mag_masses(int level, char_data *ch, int spellnum, int savetype) {
+	log("DEPRECATED: mag_masses (not our theme)");
+	return;
 }
 
 
@@ -683,8 +673,9 @@ void mag_masses(int level, struct char_data *ch, int spellnum, int savetype) {
  *
  *  area spells have limited targets within the room.
  */
-void mag_areas(int level, struct char_data *ch, int spellnum, int savetype) {
-	struct char_data *tch, *next_tch;
+void mag_areas(int level, char_data *ch, int spellnum, int savetype) {
+	MENTOC_PREAMBLE();
+	char_data *tch;
 	const char *to_char = NULL, *to_room = NULL;
 
 	if(ch == NULL) {
@@ -711,9 +702,11 @@ void mag_areas(int level, struct char_data *ch, int spellnum, int savetype) {
 	}
 
 
-	for(tch = world[IN_ROOM(ch)].people; tch; tch = next_tch) {
-		next_tch = tch->next_in_room;
+	//for(tch = world[IN_ROOM(ch)].people; tch; tch = next_tch) {
+	//	next_tch = tch->next_in_room;
+	for(auto & plr : mods::globals::get_room_list(player)){
 
+		tch = plr->cd();
 		/*
 		 * The skips: 1: the caster
 		 *            2: immortals
@@ -801,9 +794,9 @@ const char *mag_summon_fail_msgs[] = {
 #define MOB_AERIALSERVANT	19
 
 
-void mag_summons(int level, struct char_data *ch, struct obj_data *obj,
+void mag_summons(int level, char_data *ch, struct obj_data *obj,
                  int spellnum, int savetype) {
-	struct char_data *mob = NULL;
+	char_data *mob = NULL;
 	struct obj_data *tobj, *next_obj;
 	int pfail = 0, msg = 0, fmsg = 0, num = 1, handle_corpse = FALSE, i;
 	mob_vnum mob_num;
@@ -880,7 +873,7 @@ void mag_summons(int level, struct char_data *ch, struct obj_data *obj,
 }
 
 
-void mag_points(int level, struct char_data *ch, struct char_data *victim,
+void mag_points(int level, char_data *ch, char_data *victim,
                 int spellnum, int savetype) {
 	int healing = 0, move = 0;
 
@@ -911,7 +904,7 @@ void mag_points(int level, struct char_data *ch, struct char_data *victim,
 }
 
 
-void mag_unaffects(int level, struct char_data *ch, struct char_data *victim,
+void mag_unaffects(int level, char_data *ch, char_data *victim,
                    int spellnum, int type) {
 	int spell = 0, msg_not_affected = TRUE;
 	const char *to_vict = NULL, *to_room = NULL;
@@ -972,7 +965,7 @@ void mag_unaffects(int level, struct char_data *ch, struct char_data *victim,
 }
 
 
-void mag_alter_objs(int level, struct char_data *ch, struct obj_data *obj,
+void mag_alter_objs(int level, char_data *ch, struct obj_data *obj,
                     int spellnum, int savetype) {
 	const char *to_char = NULL, *to_room = NULL;
 
@@ -1061,7 +1054,7 @@ void mag_alter_objs(int level, struct char_data *ch, struct obj_data *obj,
 
 
 
-void mag_creations(int level, struct char_data *ch, int spellnum) {
+void mag_creations(int level, char_data *ch, int spellnum) {
 	struct obj_data *tobj;
 	obj_vnum z;
 

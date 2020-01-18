@@ -33,6 +33,7 @@ namespace mods {
 		string& operator=(const std::string & other);
 		const char* operator*(){ return m_str.c_str(); }
 		void assign(const std::string & other);
+		void assign(nullptr_t a);
 		//void assign(const pqxx::tuple::reference & other);
 #ifdef __MENTOC_USE_PQXX_RESULT__
 		void assign(const pqxx::result::reference & other);
@@ -40,6 +41,8 @@ namespace mods {
 		void assign(const pqxx::row::reference & other);
 #endif
 		const char* c_str() const;
+		std::string str() const;
+		std::string str_or(std::string f) const;
 		unsigned int length() const;
 		void clear();
 		char* ptr() {

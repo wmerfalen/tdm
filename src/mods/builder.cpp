@@ -377,7 +377,7 @@ namespace mods::builder {
 	 */
 	/* Factory method to generate a room for us */
 	room_data new_room(player_ptr_t player,int direction);
-	bool flush_to_db(struct char_data *ch,int room);
+	bool flush_to_db(char_data *ch,int room);
 	std::optional<obj_data*> instantiate_object_by_index(int index) {
 		std::size_t i = index;
 
@@ -858,7 +858,7 @@ namespace mods::builder {
 
 		return false;
 	}
-	bool flush_to_db(struct char_data *ch,int room) {
+	bool flush_to_db(char_data *ch,int room) {
 		MENTOC_PREAMBLE();
 		*player << "flush_to_db[stub]\r\n";
 		return true;
@@ -1072,17 +1072,17 @@ namespace mods::builder {
 			sql_compositor::value_map my_map;
 			my_map["obj_item_number"] = std::to_string(obj->item_number);
 			my_map["obj_flags"] = "0";
-#define MENTOC_CHK_OBJ(item) if(!obj->item){ return {false,std::string(#item) + " is empty"}; }
+#define MENTOC_CHK_OBJ(item) if(!obj->item){ return {false,TOSTR(#item) + " is empty"}; }
 			MENTOC_CHK_OBJ(name);
 			MENTOC_CHK_OBJ(description);
 			MENTOC_CHK_OBJ(short_description);
 			MENTOC_CHK_OBJ(action_description);
-			my_map["obj_name"] = obj->name;
-			my_map["obj_description"] = obj->description;
-			my_map["obj_short_description"] = obj->short_description;
+			my_map["obj_name"] = obj->name.str();
+			my_map["obj_description"] = obj->description.str();
+			my_map["obj_short_description"] = obj->short_description.str();
 
-			if(obj->action_description) {
-				my_map["obj_action_description"] = obj->action_description;
+			if(obj->action_description.length()) {
+				my_map["obj_action_description"] = obj->action_description.str();
 			}
 
 			my_map["obj_type"] = std::to_string(obj->type);

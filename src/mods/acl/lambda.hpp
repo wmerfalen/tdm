@@ -11,9 +11,9 @@ namespace mods {
         class Lambda {
             public:
 				Lambda()= default;
-				Lambda(std::function<void (struct char_data*,char*,int,int)> func,const char* file,const char* command_name) : 
+				Lambda(std::function<void (char_data*,char*,int,int)> func,const char* file,const char* command_name) : 
 					m_func(func),m_file(file),m_command_name(command_name) {}
-				void operator() (struct char_data *ch, char *argument, int cmd, int subcmd){
+				void operator() (char_data *ch, char *argument, int cmd, int subcmd){
 					if(action_allowed(ch,m_command_name.c_str(),m_file.c_str(),cmd,argument,subcmd)) return m_func(ch,argument,cmd,subcmd);
 					else 
 					return;
@@ -23,7 +23,7 @@ namespace mods {
 					return mods::globals::acl_allowed(ch,command_name,file_name,cmd,arg,subcmd);
 				};
 			private:
-				std::function<void (struct char_data*,char*,int,int)> m_func;
+				std::function<void (char_data*,char*,int,int)> m_func;
 				std::string m_file;
 				std::string m_command_name;
         };

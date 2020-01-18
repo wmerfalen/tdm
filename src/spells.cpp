@@ -28,12 +28,12 @@ extern int mini_mud;
 extern int pk_allowed;
 
 /* external functions */
-void clearMemory(struct char_data *ch);
+void clearMemory(char_data *ch);
 void weight_change_object(struct obj_data *obj, int weight);
-int mag_savingthrow(struct char_data *ch, int type, int modifier);
+int mag_savingthrow(char_data *ch, int type, int modifier);
 void name_to_drinkcon(struct obj_data *obj, int type);
 void name_from_drinkcon(struct obj_data *obj);
-int compute_armor_class(struct char_data *ch);
+int compute_armor_class(char_data *ch);
 
 /*
  * Special spells appear below.
@@ -178,14 +178,14 @@ ASPELL(spell_locate_object) {
 			continue;
 		}
 
-		send_to_char(ch, "%c%s", UPPER(*i->short_description), i->short_description);
+		send_to_char(ch, "%c%s", UPPER(i->short_description.str()[0]), i->short_description.c_str());
 
 		if(i->carried_by) {
 			send_to_char(ch, " is being carried by %s.\r\n", PERS(i->carried_by, ch).c_str());
 		} else if(IN_ROOM(i) != NOWHERE) {
 			send_to_char(ch, " is in %s.\r\n", world[IN_ROOM(i)].name.c_str());
 		} else if(i->in_obj) {
-			send_to_char(ch, " is in %s.\r\n", i->in_obj->short_description);
+			send_to_char(ch, " is in %s.\r\n", i->in_obj->short_description.c_str());
 		} else if(i->worn_by) {
 			send_to_char(ch, " is being worn by %s.\r\n", PERS(i->worn_by, ch).c_str());
 		} else {
@@ -270,7 +270,7 @@ ASPELL(spell_identify) {
 		char bitbuf[MAX_STRING_LENGTH];
 
 		sprinttype(GET_OBJ_TYPE(obj), item_types, bitbuf, sizeof(bitbuf));
-		send_to_char(ch, "You feel informed:\r\nObject '%s', Item type: %s\r\n", obj->short_description, bitbuf);
+		send_to_char(ch, "You feel informed:\r\nObject '%s', Item type: %s\r\n", obj->short_description.c_str(), bitbuf);
 
 		if(GET_OBJ_AFFECT(obj)) {
 			sprintbit(GET_OBJ_AFFECT(obj), affected_bits, bitbuf, sizeof(bitbuf));

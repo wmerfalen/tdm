@@ -36,6 +36,7 @@ namespace mods::acl_list {
 	extern void set_access_rights(
 			player_ptr_t,const std::string&,bool);
 };
+extern player_ptr_t ptr(char_data*);
 namespace mods::classes {
 	struct medic;
 	struct sniper;
@@ -43,6 +44,7 @@ namespace mods::classes {
 
 namespace mods {
 	struct player {
+		using obj_ptr_t = std::shared_ptr<obj_data>;
 		public:
 			using 	access_level_t = player_level;
 			using   class_type = mods::classes::types;
@@ -126,7 +128,7 @@ namespace mods {
 			bool is_weapon_loaded();
 			bool carrying_ammo_of_type(const weapon_type_t&);
 			obj_data* carrying();
-			obj_data* carry(obj_data*);
+			void carry(obj_ptr_t);
 			void ammo_adjustment(int);
 			int  ammo_type_adjustment(int,const weapon_type_t&);
 
@@ -167,8 +169,14 @@ namespace mods {
 			char_special_data& char_specials(){
 				return m_char_data->char_specials;
 			}
-			char_data* fighting(){
-				return this->char_specials().fighting;
+			player_ptr_t fighting(){
+				return ptr(this->char_specials().fighting);
+			}
+			bool is_fighting(char_data* ch){
+				return this->char_specials().fighting == ch;
+			}
+			bool is_fighting(player_ptr_t p){
+				return this->char_specials().fighting == p->cd();
 			}
 			char_data* hunting(){
 				return this->char_specials().hunting;
@@ -300,7 +308,12 @@ namespace mods {
 				return m_char_data;
 			}
 			rifle_data_t* rifle();
-			uint16_t& ammo(){ return m_char_data->equipment[WEAR_WIELD]->obj_flags.ammo; }
+			uint16_t ammo(){ auto eq = m_equipment[WEAR_WIELD]; return eq ? eq->obj_flags.ammo : 0 ; }
+			uint16_t set_ammo(uint16_t value){
+				auto eq = m_equipment[WEAR_WIELD]; 
+				if(eq){ return eq->obj_flags.ammo += value; }
+				return 0;
+			}
 
 			obj_data*      get_ammo(const weapon_type_t&);
 			mods::string weapon_name();
@@ -330,6 +343,7 @@ namespace mods {
 			void psendln(mods::string& str);
 			void raw_send(const mods::string&);
 			void done();
+			size_t send(const char *messg, ...);
 
 			/* pager functions */
 			player&             pager_start();
@@ -477,10 +491,9 @@ namespace mods {
 				return m_overhead_map_height;
 			}
 			void set_overhead_map_height(uint8_t h){ m_overhead_map_height = h; }
-			void equip(obj_data* obj,int pos);
+			void equip(obj_ptr_t obj,int pos);
 			void unequip(int pos);
-			obj_data* legacy_equipment(int pos);
-			std::shared_ptr<obj_data> equipment(int pos);
+			obj_ptr_t equipment(int pos);
 			std::vector<affected_type>& get_affected_by() { return m_affected_by; }
 			std::vector<affected_type>& add_affected_by(affected_type&& add_this){
 				add_this.index = m_affected_by.size();
@@ -517,12 +530,15 @@ namespace mods {
 					unsigned long time_stamp,
 					void* value,
 					std::size_t v_size);
+			bool is(char_data* ch) const { return ch == m_char_data; }
+			bool is(player_ptr_t p) const { return m_char_data == p->cd(); }
 
 			bool is_npc() const {
 				return IS_NPC(cd());
 			}
 			mods::affects::dissolver& get_affect_dissolver();
 		protected:
+			void perform_equip_calculations(int pos,bool equip);
 			lense_type_t m_lense_type;
 			uint8_t m_overhead_map_width;
 			uint8_t m_overhead_map_height;
@@ -567,6 +583,7 @@ namespace mods {
 			bool m_histfile_on;
 			uint32_t m_histfile_index;
 			mods::affects::dissolver m_affects;
+			std::array<obj_ptr_t,NUM_WEARS> m_equipment;
 	};
 };
 
