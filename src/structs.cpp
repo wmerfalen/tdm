@@ -128,7 +128,7 @@ void obj_data::feed(const pqxx::result::reference & row){
 		switch(type){
 			MENTOC_OBJ_DATA_FEED_SWITCH
 			default:
-				std::cerr << "[obj_data::feed] WARNING! Unknown 'type' value: " << type << "\n";
+				log("[obj_data::feed] WARNING! Unknown 'type' value (%d)",type);
 				break;
 		}
 	}
@@ -402,15 +402,11 @@ void obj_data::feed(const pqxx::result::reference & row){
 				switch(m_queue_behaviour){
 					default:
 					case queue_behaviour_enum_t::NORMAL:
-						std::cerr << "mods::descriptor_data::flush_output:: NORMAL\n";
 						if(output.size() == 0){ 
-							std::cerr << "mods::descriptor_data::flush_output:: no output NORMAL\n";
 							has_output = false; 
 							return 0; 
 						}
 
-						std::cerr << "mods::descriptor_data::flush_output:: write to desc: '" <<
-							output << "' NORMAL\n";
 						result = write_to_descriptor(descriptor,output.c_str());
 
 						/* Handle snooping: prepend "% " and send to snooper. */
