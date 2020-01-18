@@ -26,6 +26,13 @@
 #include "mods/yaml.hpp"
 #include "mods/weapon-types.hpp"
 #include "mods/item-types.hpp"
+
+#ifdef __MENTOC_USE_PQXX_RESULT__
+#define mentoc_pqxx_result_t const pqxx::result::reference&
+#else
+#define mentoc_pqxx_result_t pqxx::row
+#endif
+
 constexpr static std::size_t MAX_EXPLOSION_FADE_OUT = 5;
 namespace mods {
 	struct player;
@@ -714,9 +721,16 @@ enum player_level {
 
 	/* Extra description: used in objects, mobiles, and rooms */
 	struct extra_descr_data {
-		char	*keyword;                 /* Keyword in look/examine          */
-		char	*description;             /* What to see                      */
-		struct extra_descr_data *next; /* Next in list                     */
+		extra_descr_data() : keyword(""), description("") {}
+		extra_descr_data(std::string_view k,std::string_view d) :
+			keyword(k.data()), description(d.data()) {}
+		extra_descr_data(mentoc_pqxx_result_t k,mentoc_pqxx_result_t d) :
+			keyword(k), description(d) {}
+		extra_descr_data(pqxx::field k,pqxx::field d) :
+			keyword(k.c_str()), description(d.c_str()) {}
+		~extra_descr_data() = default;
+		mods::string keyword;                 /* Keyword in look/examine          */
+		mods::string description;             /* What to see                      */
 	};
 
 
@@ -730,12 +744,7 @@ enum player_level {
 			weight(0), cost(0), cost_per_day(0),timer(0),bitvector(0){
 				memset(value,0,sizeof(value));
 			}
-		//void feed(pqxx::tuple);
-#ifdef __MENTOC_USE_PQXX_RESULT__
-		void feed(const pqxx::result::reference&);
-#else
-		void feed(pqxx::row);
-#endif
+		void feed(mentoc_pqxx_result_t);
 		~obj_flag_data() = default;
 		void init();
 		int type;
@@ -766,11 +775,7 @@ enum player_level {
 
 	/* ================== Memory Structure for Objects ================== */
 	struct obj_data {
-#ifdef __MENTOC_USE_PQXX_RESULT__
-		void feed(const pqxx::result::reference&);
-#else
-		void feed(pqxx::row);
-#endif
+		void feed(mentoc_pqxx_result_t);
 		void feed(std::string in_type,std::string_view feed_file);
 		void init();
 		obj_data(const obj_data& other){
@@ -833,7 +838,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 		obj_data() : 
 			item_number(0),in_room(-1),name(""),
 			description(""),short_description(""),
-			action_description(""),ex_description(nullptr),
+			action_description(""),
 			carried_by(nullptr),worn_by(nullptr),worn_on(0),
 			in_obj(nullptr),contains(nullptr),next_content(nullptr),
 			next(nullptr),ai_state(0),uuid(0)
@@ -865,7 +870,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 		 * "JohnDoe123 throws a <action_description> to the north!"
 		 */
 		mods::string action_description;      /* What to write when used          */
-		extra_descr_data *ex_description; /* extra descriptions     */
+		std::vector<extra_descr_data> ex_description; /* extra descriptions     */
 		char_data *carried_by;  /* Carried by :NULL in room/conta   */
 		char_data *worn_by;	  /* Worn by?			      */
 		sh_int worn_on;		  /* Worn where?		      */

@@ -7,21 +7,22 @@
 #include <string_view>
 #undef PQXX_TR1_HEADERS
 #include <pqxx/pqxx>
-#define m_debug(a){;;} /* do{ std::cerr << "[m_debug]: " << a << "\n"; }while(0); */
+
+#ifdef __MENTOC_USE_PQXX_RESULT__
+	#define mentoc_pqxx_result_t pqxx::result::reference
+#else
+	#define mentoc_pqxx_result_t pqxx::row
+#endif
+
 namespace mods {
 	struct string {
 		string();
 		string(const char* str);
 		std::string_view view();
 		std::string_view view() const;
-		//string(const pqxx::tuple::reference & str);
-		//string(const pqxx::result::reference & str);
-#ifdef __MENTOC_USE_PQXX_RESULT__
-		string(const pqxx::result::reference & str);
-#else
-		string(const pqxx::row::reference & str);
-#endif
+		string(mentoc_pqxx_result_t);
 		string(const string&);
+		string(mentoc_pqxx_result_t::reference);
 		~string();
 		operator bool() const { return m_str.length(); }
 		operator char*() const { return const_cast<char*>(c_str()); }
@@ -34,12 +35,8 @@ namespace mods {
 		const char* operator*(){ return m_str.c_str(); }
 		void assign(const std::string & other);
 		void assign(nullptr_t a);
-		//void assign(const pqxx::tuple::reference & other);
-#ifdef __MENTOC_USE_PQXX_RESULT__
-		void assign(const pqxx::result::reference & other);
-#else
-		void assign(const pqxx::row::reference & other);
-#endif
+		void assign(mentoc_pqxx_result_t);
+		void assign(mentoc_pqxx_result_t::reference);
 		const char* c_str() const;
 		std::string str() const;
 		std::string str_or(std::string f) const;

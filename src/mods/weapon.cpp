@@ -50,6 +50,7 @@ namespace mods::weapon {
 		obj->ai_state = 0;
 		obj->type = 0;
 		obj->attachment(0);
+		obj->ex_description.emplace_back("attachment",obj->description.c_str());
 
 		return std::move(obj);
 
@@ -85,6 +86,7 @@ namespace mods::weapon {
 		//obj->weapon_type = 0;
 		obj->type = 0;
 		obj->rifle(0);
+		obj->ex_description.emplace_back("rifle",obj->description.c_str());
 		return std::move(obj);
 	}
 
@@ -117,10 +119,8 @@ namespace mods::weapon {
 		obj->ai_state = 0;
 
 		obj->obj_flags.clip_size = 0;
-		obj->ex_description = static_cast<extra_descr_data*>(calloc(1,sizeof(extra_descr_data)));
-		obj->ex_description->next = nullptr;
-		obj->ex_description->keyword =  strdup("keyword");
 		obj->explosive(0);
+		obj->ex_description.emplace_back("explosive",obj->description.c_str());
 		return std::move(obj);
 	}
 
@@ -137,16 +137,14 @@ namespace mods::weapon {
 		obj->obj_flags.weapon_flags = mods::weapon::SNIPE;
 		obj->obj_flags.clip_size = 8;
 		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
-		obj->name = strdup("PSG-1 sniper rifle");
+		obj->name.assign("PSG-1 sniper rifle");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description = strdup("A debilitating PSG-1 sniper rifle is lying here.");
+		obj->description.assign("A debilitating PSG-1 sniper rifle is lying here.");
 		/** [ APPEARS ]: when you type inv */
-		obj->short_description = strdup("PSG-1 sniper rifle <short>");
-		obj->action_description = strdup("action desc");      /* What to write when used          */
-		obj->ex_description = static_cast<extra_descr_data*>(calloc(1,sizeof(extra_descr_data)));
-		obj->ex_description->next = nullptr;
-		obj->ex_description->keyword =  strdup("keyword");
+		obj->short_description.assign("PSG-1 sniper rifle <short>");
+		obj->action_description.assign("action desc");      /* What to write when used          */
 		obj->rifle()->type = mw_rifle::SNIPER;
+		obj->ex_description.emplace_back("sniper rifle psg1",obj->description.c_str());
 		feed_caps(obj, { cap_t::ZOOM, cap_t::RELOAD, cap_t::SNIPE, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT });
 
 		/** damage/hit roll modifications */
@@ -157,16 +155,17 @@ namespace mods::weapon {
 		auto obj = base_explosive_object();
 		obj->explosive(mw_explosive::FRAG_GRENADE);
 		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
-		obj->name = strdup("a frag grenade");
+		obj->name.assign("a frag grenade");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description = strdup("A fragmentation grenade is lying here.");
+		obj->description.assign("A fragmentation grenade is lying here.");
 		/** [ APPEARS ]: when you type inv */
 		/** [ USED_WHEN ]: when you "hold frag", it will say "You hold frag grenade <short>" */
-		/**   |------------> obj->short_description = strdup("frag grenade <short>");        */
-		obj->short_description = strdup("an ACME Industries Frag grenade");
+		/**   |------------> obj->short_description.assign("frag grenade <short>");        */
+		obj->short_description.assign("an ACME Industries Frag grenade");
 		/** [ APPEARS ]: when you "examine frag", it will say exactly this  */
-		obj->action_description = strdup("frag fragmentation grenade nade");
+		obj->action_description.assign("frag fragmentation grenade nade");
 		obj->explosive()->type = mw_explosive::FRAG_GRENADE;
+		obj->ex_description.emplace_back("frag grenade",obj->description.c_str());
 		feed_caps(obj, { cap_t::EXPLODE, cap_t::THROW });
 		return std::move(obj);
 	}
@@ -175,15 +174,15 @@ namespace mods::weapon {
 		auto obj = base_explosive_object();
 		obj->explosive(mw_explosive::SENSOR_GRENADE);
 		/** [ APPEARS ]: when you 'look sensor' or 'examine sensor' @act.informative.cpp */
-		obj->name = strdup("a sensor grenade");
+		obj->name.assign("a sensor grenade");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description = strdup("A sensor grenade is lying here.");
+		obj->description.assign("A sensor grenade is lying here.");
 		/** [ APPEARS ]: when you type inv */
 		/** [ USED_WHEN ]: when you "hold sensor", it will say "You hold sensor grenade <short>" */
-		/**   |------------> obj->short_description = strdup("sensor grenade <short>");        */
-		obj->short_description = strdup("a X10 sensor grenade");
+		/**   |------------> obj->short_description.assign("sensor grenade <short>");        */
+		obj->short_description.assign("a X10 sensor grenade");
 		/** [ APPEARS ]: when you "examine sensor", it will say exactly this  */
-		obj->action_description = strdup("sensor grenade nade");
+		obj->action_description.assign("sensor grenade nade");
 		obj->explosive()->type = mw_explosive::SENSOR_GRENADE;
 		obj->explosive()->attributes = std::make_unique<mods::yaml::explosive_description_t>();
 		obj->explosive()->attributes->chance_to_injure = 0.0;
@@ -193,6 +192,7 @@ namespace mods::weapon {
 		obj->explosive()->attributes->damage_per_second = 0;
 		obj->explosive()->attributes->disorient_amount = 0.0;
 		obj->explosive()->attributes->alternate_explosion_type = ALTEX_SCAN;
+		obj->ex_description.emplace_back("sensor grenade",obj->description.c_str());
 		feed_caps(obj, { cap_t::COUNTDOWN_EXPLOSION, cap_t::ALTERNATE_EXPLOSION, cap_t::SCAN, cap_t::THROW });
 		return std::move(obj);
 	}
@@ -201,13 +201,14 @@ namespace mods::weapon {
 		auto obj = base_explosive_object();
 		obj->explosive(mw_explosive::INCENDIARY_GRENADE);
 		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
-		obj->name = strdup("An incendiary grenade");
+		obj->name.assign("An incendiary grenade");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description = strdup("An incendiary grenade is lying here.");
+		obj->description.assign("An incendiary grenade is lying here.");
 		/** [ APPEARS ]: when you type inv */
-		obj->short_description = strdup("incendiary grenade <short>");
-		obj->action_description = strdup("incendiary grenade <action>");      /* What to write when used          */
+		obj->short_description.assign("incendiary grenade <short>");
+		obj->action_description.assign("incendiary grenade <action>");      /* What to write when used          */
 		obj->explosive()->type = mw_explosive::INCENDIARY_GRENADE;
+		obj->ex_description.emplace_back("incendiary grenade",obj->description.c_str());
 		feed_caps(obj, { cap_t::COUNTDOWN_EXPLOSION, cap_t::BURN, cap_t::EXPLODE, cap_t::THROW });
 		return std::move(obj);
 	}
@@ -217,12 +218,13 @@ namespace mods::weapon {
 		obj->explosive(mw_explosive::EMP_GRENADE);
 		obj->explosive()->type = mw_explosive::EMP_GRENADE;
 		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
-		obj->name = strdup("An E.M.P. grenade");
+		obj->name.assign("An E.M.P. grenade");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description = strdup("An E.M.P. grenade is lying here.");
+		obj->description.assign("An E.M.P. grenade is lying here.");
 		/** [ APPEARS ]: when you type inv */
-		obj->short_description = strdup("emp e.m.p. electro magnetic pulse grenade <short>");
-		obj->action_description = strdup("emp e.m.p. electro magnetic pulse grenade <action>");      /* What to write when used          */
+		obj->short_description.assign("emp e.m.p. electro magnetic pulse grenade <short>");
+		obj->action_description.assign("emp e.m.p. electro magnetic pulse grenade <action>");      /* What to write when used          */
+		obj->ex_description.emplace_back("emp grenade",obj->description.c_str());
 		feed_caps(obj, { cap_t::EXPLODE, cap_t::THROW });
 		return std::move(obj);
 	}
@@ -232,12 +234,13 @@ namespace mods::weapon {
 		obj->explosive(mw_explosive::SMOKE_GRENADE);
 		obj->explosive()->type = mw_explosive::SMOKE_GRENADE;
 		/** [ APPEARS ]: when you 'look smoke' or 'examine smoke' @act.informative.cpp */
-		obj->name = strdup("Smoke grenade");
+		obj->name.assign("Smoke grenade");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description = strdup("A smoke grenade is lying here.");
+		obj->description.assign("A smoke grenade is lying here.");
 		/** [ APPEARS ]: when you type inv */
-		obj->short_description = strdup("Smoke grenade");
-		obj->action_description = strdup("smoke grenade");      /* What to write when used          */
+		obj->short_description.assign("Smoke grenade");
+		obj->action_description.assign("smoke grenade");      /* What to write when used          */
+		obj->ex_description.emplace_back("smoke grenade",obj->description.c_str());
 		feed_caps(obj, { cap_t::EXPLODE, cap_t::THROW });
 		return std::move(obj);
 	}
@@ -247,13 +250,13 @@ namespace mods::weapon {
 		obj->explosive(mw_explosive::FLASHBANG_GRENADE);
 		obj->explosive()->type = mw_explosive::FLASHBANG_GRENADE;
 		/** [ APPEARS ]: when you 'look flashbang' or 'examine flashbang' @act.informative.cpp */
-		obj->name = strdup("flashbang grenade flash");
+		obj->name.assign("flashbang grenade flash");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description = strdup("A flashbang grenade is lying here.");
+		obj->description.assign("A flashbang grenade is lying here.");
 		/** [ APPEARS ]: when you type inv */
 		/** [ APPEARS ]: when you type remove "flash" */
-		obj->short_description = strdup("a flashbang grenade");
-		obj->action_description = strdup("a flashbang grenade <action>");      /* What to write when used          */
+		obj->short_description.assign("a flashbang grenade");
+		obj->action_description.assign("a flashbang grenade <action>");      /* What to write when used          */
 		feed_caps(obj, { cap_t::COUNTDOWN_EXPLOSION, cap_t::DISORIENT, cap_t::ALTERNATE_EXPLOSION, cap_t::EXPLODE, cap_t::THROW, cap_t::BLIND });
 		return std::move(obj);
 	}
@@ -270,15 +273,13 @@ namespace mods::weapon {
 		obj->rifle()->type = mw_rifle::SNIPER;
 		obj->obj_flags.clip_size = 8;
 		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
-		obj->name = strdup("PSG-1 sniper rifle");
+		obj->name.assign("PSG-1 sniper rifle");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description = strdup("A debilitating PSG-1 sniper rifle is lying here.");
+		obj->description.assign("A debilitating PSG-1 sniper rifle is lying here.");
 		/** [ APPEARS ]: when you type inv */
-		obj->short_description = strdup("PSG-1 sniper rifle <short>");
-		obj->action_description = strdup("action desc");      /* What to write when used          */
-		obj->ex_description = static_cast<extra_descr_data*>(calloc(1,sizeof(extra_descr_data)));
-		obj->ex_description->next = nullptr;
-		obj->ex_description->keyword =  strdup("keyword");
+		obj->short_description.assign("PSG-1 sniper rifle <short>");
+		obj->action_description.assign("action desc");      /* What to write when used          */
+		obj->ex_description.emplace_back("sniper",obj->description.c_str());
 		feed_caps(obj, { cap_t::HAS_CLIP, cap_t::ZOOM, cap_t::RELOAD, cap_t::SNIPE, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT });
 		return std::move(obj);
 	}
@@ -294,15 +295,13 @@ namespace mods::weapon {
 		obj->obj_flags.weapon_flags = mods::weapon::PISTOL;
 		obj->obj_flags.clip_size = 7;
 		/** [ APPEARS ]: when you 'look pistol' or 'examine pistol' @act.informative.cpp */
-		obj->name = strdup("Pistol");
+		obj->name.assign("Pistol");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description = strdup("A pistol is lying here.");
+		obj->description.assign("A pistol is lying here.");
 		/** [ APPEARS ]: when you type inv */
-		obj->short_description = strdup("Pistol <short_description>");
-		obj->action_description = strdup("Pistol action_description");      /* What to write when used          */
-		obj->ex_description = static_cast<extra_descr_data*>(calloc(1,sizeof(extra_descr_data)));
-		obj->ex_description->next = nullptr;
-		obj->ex_description->keyword =  strdup("pistol");
+		obj->short_description.assign("Pistol <short_description>");
+		obj->action_description.assign("Pistol action_description");      /* What to write when used          */
+		obj->ex_description.emplace_back("pistol",obj->description.c_str());
 		obj->rifle()->type = mw_rifle::PISTOL;
 		feed_caps(obj, { cap_t::HAS_CLIP, cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE});
 
@@ -316,15 +315,13 @@ namespace mods::weapon {
 		obj->obj_flags.weapon_flags = mods::weapon::PISTOL;
 		obj->obj_flags.clip_size = 7;
 		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
-		obj->name = strdup("A Desert Eagle");
+		obj->name.assign("A Desert Eagle");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description = strdup("A Desert Eagle is lying here.");
+		obj->description.assign("A Desert Eagle is lying here.");
 		/** [ APPEARS ]: when you type inv */
-		obj->short_description = strdup("A Desert Eagle");
-		obj->action_description = strdup("deagle desert eagle pistol action_description");      /* What to write when used          */
-		obj->ex_description = static_cast<extra_descr_data*>(calloc(1,sizeof(extra_descr_data)));
-		obj->ex_description->next = nullptr;
-		obj->ex_description->keyword =  strdup("deagle");
+		obj->short_description.assign("A Desert Eagle");
+		obj->action_description.assign("deagle desert eagle pistol action_description");      /* What to write when used          */
+		obj->ex_description.emplace_back("deagle","A devastating Desert Eagle lays here");
 		obj->rifle()->type = mw_rifle::PISTOL;
 		feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE, cap_t::HAS_CLIP });
 		return std::move(obj);

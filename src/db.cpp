@@ -1152,37 +1152,15 @@ int parse_sql_objects() {
 			proto.short_description.assign(row["obj_short_description"]);
 			proto.action_description.assign(row["obj_action_description"]);
 			auto ed_rows = db_get_by_meta("extra_description","obj_fk_id",row["id"]);
-			proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
-			proto.ex_description->next = nullptr;
-			proto.ex_description->keyword = proto.ex_description->description = nullptr;
 
 			d("ed rows.size()");
 			if(ed_rows.size()) {
 				d("INSIDE ed rows.size()");
-				auto ex_desc = proto.ex_description;
-				auto previous = ex_desc;
-				int ctr = 0;
-
-				for(auto ed_row : ed_rows) {
-					if(!ex_desc) {
-						ex_desc = (extra_descr_data*)
-							calloc(1,sizeof(extra_descr_data));
-					}
-
-					ex_desc->keyword = strdup((row["extra_keyword"]).c_str());
-					ex_desc->description = strdup(row["extra_description"].c_str());
-					ex_desc->next = nullptr;
-
-					if(ctr) {
-						previous->next = ex_desc;
-					}
-
-					previous = ex_desc;
-					ex_desc = ex_desc->next;
+				for(auto ed_row : ed_rows){
+					proto.ex_description.emplace_back(row["extra_keyword"], row["extra_description"]);
 				}
 			}
 
-			proto.ex_description->next = nullptr;
 			d("worn_on");
 			proto.worn_on = mods::util::stoi<int>(row["obj_worn_on"]);
 			d("type");
@@ -1992,27 +1970,30 @@ obj_ptr_t blank_object() {
 	return obj_list.back();
 }
 
+obj_ptr_t create_object_from_index(std::size_t proto_index){
+	if (proto_index >= obj_proto.size()){
+		log("SYSERR: requesting to read object number(%d) out of obj_proto.size(): (%d)",
+				proto_index, obj_proto.size());
+		return nullptr;
+	}
+	obj_list.push_back(std::make_shared<obj_data>(obj_proto[proto_index]));
+	mods::globals::register_object(obj_list.back());
+	obj_index[proto_index].number++;
+	return obj_list.back();
+}
 
 
 /* create a new object from a prototype */
 struct obj_data *read_object(obj_vnum nr, int type) { /* and obj_rnum */
-	struct obj_data obj;
 	obj_rnum i = type == VIRTUAL ? real_object(nr) : nr;
 
 	std::size_t ii = i;
 
-	if(i == NOTHING || ii > obj_proto.size()) {
+	if(i == NOTHING || ii >= obj_proto.size()) {
 		log("Object (%c) %d does not exist in database.", type == VIRTUAL ? 'V' : 'R', nr);
 		return (NULL);
 	}
-
-	obj_list.push_back(std::make_shared<obj_data>());
-	auto ptr = obj_list.back();
-	clear_object(ptr.get());
-	*ptr = obj_proto[i];
-	obj_index[i].number++;
-	mods::globals::register_object(obj_list.back());
-	return ptr.get();
+	return create_object_from_index(i).get();
 }
 
 
@@ -2435,6 +2416,7 @@ bool parse_sql_player(player_ptr_t player_ptr){
 		player_ptr->set_db_id(row["id"].as<int>());
 		player_ptr->clear_all_affected();
 		player_ptr->clear_all_affected_plr();
+		player_ptr->set_name(row["player_name"].c_str());
 		player_ptr->short_descr().assign((row["player_short_description"]));
 		player_ptr->long_descr().assign((row["player_long_description"]));
 		player_ptr->saved().act = mods::util::stoi<int>(row["player_action_bitvector"]);
@@ -2803,8 +2785,8 @@ void free_obj(struct obj_data *obj) {
 			obj->action_description.assign("");
 		}
 
-		if(obj->ex_description) {
-			free_extra_descriptions(obj->ex_description);
+		if(obj->ex_description.size()) {
+			obj->ex_description.clear();
 		}
 	} else {
 		if(obj->name.length() && strcmp(obj->name.c_str(),obj_proto[nr].name.c_str()) != 0) {

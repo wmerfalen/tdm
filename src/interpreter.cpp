@@ -911,20 +911,26 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 
 	REMOVE_BIT(AFF_FLAGS(ch), AFF_HIDE);
 
-	std::array<char,MAX_INPUT_LENGTH> data;
-	std::copy(in_argument.begin(),in_argument.end(),data.begin());
-	data[in_argument.length()-1] = '\0';
-	char* argument = &data[0];
+	std::vector<char> data;
+	std::size_t size = in_argument.length();
+	if(MAX_INPUT_LENGTH - 1 <= size){
+		size = MAX_INPUT_LENGTH - 1;
+	}
+	char* argument = nullptr;
+	if(size == 0){
+		return;
+	}
+	data.resize(size+1);
+	std::copy(in_argument.begin(),in_argument.begin() + size,data.begin());
+	data[size] = '\0';
+	argument = &data[0];
+	std::cerr << "argument: '" << argument << "'\n";
+
 	/* just drop to next line for hitting CR */
 	skip_spaces(&argument);
 
-
 	if(!mods::globals::command_interpreter(player,argument)) {
 		mods::globals::post_command_interpreter(ch,argument);
-		return;
-	}
-
-	if(!*argument) {
 		return;
 	}
 
@@ -933,13 +939,15 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 	 * requested by many people so "'hi" or ";godnet test" is possible.
 	 * Patch sent by Eric Green and Stefan Wasilewski.
 	 */
-	if(!isalpha(*argument)) {
-		arg[0] = argument[0];
-		arg[1] = '\0';
-		line = argument + 1;
-	} else {
+	//if(!isalpha(*argument)) {
+	//	arg[0] = argument[0];
+	//	arg[1] = '\0';
+	//	line = argument + 1;
+	//	std::cerr << "isnt alpha, arg\n";
+	//} else {
 		line = any_one_arg(argument, arg);
-	}
+		std::cerr << "anyonearg: " << argument << "|arg:" << arg << "\n";
+	//}
 
 	/* otherwise, find the command */
 	for(length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++){
@@ -953,6 +961,7 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 		}
 	}
 
+	std::cerr << "cmd: '" << cmd << "'\n";
 	if(*cmd_info[cmd].command == '\n') {
 		send_to_char(ch, "<cmd_interpretr>Huh?!?\r\n");
 		//TODO: change PLR_FLAGGED call to player->member method call
@@ -966,6 +975,7 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 		if(!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_FROZEN) && GET_LEVEL(ch) < LVL_IMPL) {
 			send_to_char(ch, "You try, but the mind-numbing cold prevents you...\r\n");
 		} else if(cmd_info[cmd].command_pointer == NULL) {
+			std::cerr << "cmd: '" << cmd << "'\n";
 			send_to_char(ch, "Sorry, that command hasn't been implemented yet.\r\n");
 		} else if(IS_NPC(ch) && cmd_info[cmd].minimum_level >= LVL_IMMORT) {
 			send_to_char(ch, "You can't use immortal commands while switched.\r\n");

@@ -500,7 +500,6 @@ void do_stat_object(char_data *ch, struct obj_data *j) {
 	int i, found;
 	obj_vnum vnum;
 	struct obj_data *j2;
-	struct extra_descr_data *desc;
 	char buf[MAX_STRING_LENGTH];
 
 	vnum = GET_OBJ_VNUM(j);
@@ -513,11 +512,11 @@ void do_stat_object(char_data *ch, struct obj_data *j) {
 	             CCGRN(ch, C_NRM), vnum, CCNRM(ch, C_NRM), GET_OBJ_RNUM(j), buf,
 	             GET_OBJ_SPEC(j) ? "Exists" : "None");
 
-	if(j->ex_description) {
+	if(j->ex_description.size()) {
 		player->send("Extra descs:%s", CCCYN(ch, C_NRM));
 
-		for(desc = j->ex_description; desc; desc = desc->next) {
-			player->send(" %s", desc->keyword);
+		for(auto & desc : j->ex_description) {
+			player->send(" %s", desc.keyword);
 		}
 
 		player->sendln(CCNRM(ch, C_NRM));

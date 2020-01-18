@@ -181,10 +181,6 @@ void fill_rifle(std::shared_ptr<obj_data>& obj) {
 	proto.description = proto.name;
 	proto.short_description = proto.name;
 	proto.action_description = proto.name;
-	proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
-	proto.ex_description->next = nullptr;
-	proto.ex_description->keyword = proto.ex_description->description = nullptr;
-	proto.ex_description->next = nullptr;
 	proto.worn_on = WEAR_WIELD;
 	proto.type = 0;
 	proto.carried_by = proto.worn_by = nullptr;
@@ -219,10 +215,6 @@ void fill_drone(std::shared_ptr<obj_data>& obj) {
 	proto.description = proto.name;
 	proto.short_description = proto.name;
 	proto.action_description = proto.name;
-	proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
-	proto.ex_description->next = nullptr;
-	proto.ex_description->keyword = proto.ex_description->description = nullptr;
-	proto.ex_description->next = nullptr;
 	proto.worn_on = WEAR_WIELD;
 	proto.type = 0;
 	proto.carried_by = proto.worn_by = nullptr;
@@ -258,10 +250,6 @@ void fill_attachment(std::shared_ptr<obj_data>& obj) {
 	proto.description = proto.name;
 	proto.short_description = proto.name;
 	proto.action_description = proto.name;
-	proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
-	proto.ex_description->next = nullptr;
-	proto.ex_description->keyword = proto.ex_description->description = nullptr;
-	proto.ex_description->next = nullptr;
 	proto.worn_on = WEAR_WIELD;
 	proto.type = 0;
 	proto.carried_by = proto.worn_by = nullptr;
@@ -296,10 +284,6 @@ void fill_gadget(std::shared_ptr<obj_data>& obj) {
 	proto.description = proto.name;
 	proto.short_description = proto.name;
 	proto.action_description = proto.name;
-	proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
-	proto.ex_description->next = nullptr;
-	proto.ex_description->keyword = proto.ex_description->description = nullptr;
-	proto.ex_description->next = nullptr;
 	proto.worn_on = WEAR_WIELD;
 	proto.type = 0;
 	proto.carried_by = proto.worn_by = nullptr;
@@ -334,10 +318,6 @@ void fill_explosive(std::shared_ptr<obj_data>& obj) {
 	proto.description = proto.name;
 	proto.short_description = proto.name;
 	proto.action_description = proto.name;
-	proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
-	proto.ex_description->next = nullptr;
-	proto.ex_description->keyword = proto.ex_description->description = nullptr;
-	proto.ex_description->next = nullptr;
 	proto.worn_on = WEAR_WIELD;
 	proto.type = 0;
 	proto.carried_by = proto.worn_by = nullptr;
@@ -373,10 +353,6 @@ void fill_armor(std::shared_ptr<obj_data>& obj) {
 	proto.description = proto.name;
 	proto.short_description = proto.name;
 	proto.action_description = proto.name;
-	proto.ex_description = (extra_descr_data*) calloc(1,sizeof(extra_descr_data));
-	proto.ex_description->next = nullptr;
-	proto.ex_description->keyword = proto.ex_description->description = nullptr;
-	proto.ex_description->next = nullptr;
 	proto.worn_on = WEAR_WIELD;
 	proto.type = 0;
 	proto.carried_by = proto.worn_by = nullptr;

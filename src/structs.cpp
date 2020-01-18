@@ -33,7 +33,7 @@ void obj_data::init(){
 	description = name;
 	short_description = name;
 	action_description = name;
-	ex_description = nullptr;
+	ex_description.clear();
 	carried_by = nullptr;
 	worn_by = nullptr;
 	worn_on = -1;
@@ -166,6 +166,7 @@ void obj_data::feed(const pqxx::result::reference & row){
 			timer = mods::util::stoi<int>(row["timer"]);
 		}
 		std::vector<mods::extra_desc_data>& room_data::ex_descriptions(){
+			log("DEPRECATED: implement room_data::ex_descriptions or stop calling it");
 			return m_ex_descriptions;
 		}
 		char_player_data::char_player_data(){
@@ -401,11 +402,15 @@ void obj_data::feed(const pqxx::result::reference & row){
 				switch(m_queue_behaviour){
 					default:
 					case queue_behaviour_enum_t::NORMAL:
+						std::cerr << "mods::descriptor_data::flush_output:: NORMAL\n";
 						if(output.size() == 0){ 
+							std::cerr << "mods::descriptor_data::flush_output:: no output NORMAL\n";
 							has_output = false; 
 							return 0; 
 						}
 
+						std::cerr << "mods::descriptor_data::flush_output:: write to desc: '" <<
+							output << "' NORMAL\n";
 						result = write_to_descriptor(descriptor,output.c_str());
 
 						/* Handle snooping: prepend "% " and send to snooper. */

@@ -16,15 +16,13 @@ namespace mods::weapons {
 		obj->obj_flags.ammo_max = 75;
 		obj->obj_flags.weapon_flags = mods::weapon::SNIPE;
 		obj->obj_flags.clip_size = 8;
-		obj->name = strdup("PSG-1 sniper rifle");
+		obj->name.assign("PSG-1 sniper rifle");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description = strdup("A debilitating PSG-1 sniper rifle is lying here.");
+		obj->description.assign("A debilitating PSG-1 sniper rifle is lying here.");
 		/** [ APPEARS ]: when you type inv */
-		obj->short_description = strdup("PSG-1 sniper rifle");
-		obj->action_description = strdup("action desc");      /* What to write when used          */
-		obj->ex_description = static_cast<extra_descr_data*>(calloc(1,sizeof(extra_descr_data)));
-		obj->ex_description->next = nullptr;
-		obj->ex_description->keyword =  strdup("keyword");
+		obj->short_description.assign("PSG-1 sniper rifle");
+		obj->action_description.assign("action desc");      /* What to write when used          */
+		obj->ex_description.emplace_back("psg1 sniper rifle",obj->description.view());
 		obj->obj_flags.type = mw_rifle::SNIPER;
 		return std::move(obj);
 	}

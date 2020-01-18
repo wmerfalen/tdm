@@ -1256,7 +1256,6 @@ void extract_pending_chars(){
 
 
 char_data *get_player_vis(char_data *ch, char *name, int *number, int inroom) {
-	MENTOC_PREAMBLE();
 	int num;
 
 	if(!number) {
@@ -1265,29 +1264,36 @@ char_data *get_player_vis(char_data *ch, char *name, int *number, int inroom) {
 	}
 	char_data* char_return = nullptr;
 
-	mods::loops::foreach_player([ch,&char_return,inroom,name,number](player_ptr_t player){
+	//mods::loops::foreach_player([ch,&char_return,inroom,name,number](player_ptr_t player){
+	for(auto & player : mods::globals::player_list){
 		auto i = player->cd();
 		if(inroom == FIND_CHAR_ROOM && IN_ROOM(i) != IN_ROOM(ch)) {
-			return true;
+			d("continuing due to in room != ch in room");
+			continue;
 		}
 
-		if(str_cmp(i->player.name, name)) { /* If not same, continue */
-			return true;
+		if(str_cmp(player->name().c_str(), name)) { /* If not same, continue */
+			d("continuing due to name str != name '" << 
+					player->name().c_str() << "' !== '" << name << "'");
+			continue;
 		}
 
 		if(!CAN_SEE(ch, i)) {
-			return true;
+			d("continuing due to cant see char");
+			continue;
 		}
 
 		if(--(*number) != 0) {
-			return true;
+			d("continuing due to number");
+			continue;
 		}
 
 		char_return = i;
-		return false;
-	});
+		d("found char_return " << char_return->player.name.c_str());
+		break;
+	};
 
-	return nullptr;
+	return char_return;
 }
 
 
@@ -1532,7 +1538,6 @@ const char *money_desc(int amount) {
 
 
 obj_ptr_t create_money(int amount) {
-	struct extra_descr_data *new_descr;
 	char buf[200];
 
 	if(amount <= 0) {
@@ -1541,22 +1546,17 @@ obj_ptr_t create_money(int amount) {
 	}
 
 	auto obj = blank_object();
-	CREATE(new_descr, struct extra_descr_data, 1);
 
 	if(amount == 1) {
-		obj->name = strdup("coin gold");
-		obj->short_description = strdup("a gold coin");
-		obj->description = strdup("One miserable gold coin is lying here.");
-		new_descr->keyword = strdup("coin gold");
-		new_descr->description = strdup("It's just one miserable little gold coin.");
+		obj->name.assign("coin gold");
+		obj->short_description.assign("a gold coin");
+		obj->description.assign("One miserable gold coin is lying here.");
+		obj->ex_description.emplace_back("coin gold","It's just one miserable little gold coin.");
 	} else {
-		obj->name = strdup("coins gold");
-		obj->short_description = strdup(money_desc(amount));
+		obj->name.assign("coins gold");
+		obj->short_description.assign(money_desc(amount));
 		snprintf(buf, sizeof(buf), "%s is lying here.", money_desc(amount));
-		obj->description = strdup(CAP(buf));
-
-		new_descr->keyword = strdup("coins gold");
-
+		obj->description.assign(CAP(buf));
 		if(amount < 10) {
 			snprintf(buf, sizeof(buf), "There are %d coins.", amount);
 		} else if(amount < 100) {
@@ -1569,12 +1569,9 @@ obj_ptr_t create_money(int amount) {
 		else {
 			strcpy(buf, "There are a LOT of coins.");    /* strcpy: OK (is < 200) */
 		}
-
-		new_descr->description = strdup(buf);
+		obj->ex_description.emplace_back("coin gold",buf);
 	}
 
-	new_descr->next = NULL;
-	obj->ex_description = new_descr;
 
 	GET_OBJ_TYPE(obj) = ITEM_MONEY;
 	GET_OBJ_WEAR(obj) = ITEM_WEAR_TAKE;

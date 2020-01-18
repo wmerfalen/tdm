@@ -167,7 +167,7 @@ ssize_t perform_socket_write(socket_t desc, const char *txt,size_t length);
 void echo_off(mods::descriptor_data &d);
 void echo_on(mods::descriptor_data &d);
 void circle_sleep(struct timeval *timeout);
-int get_from_q(struct txt_q *queue, char *dest, int *aliased);
+int get_from_q(mods::descriptor_data& d, char *dest, int *aliased);
 void init_game(ush_int port);
 void signal_setup(void);
 void game_loop(socket_t mother_desc);
@@ -1041,11 +1041,14 @@ void	write_to_q(std::string_view txt, mods::descriptor_data& d, int aliased){
 
 int get_from_q(mods::descriptor_data& d, char *dest, int *aliased) {
 	if(d.input.size() == 0){
+		std::cerr << "d.input.size is zero\n";
 		return 0;
 	}
 	strncpy(dest, d.input.begin()->text.c_str(), MAX_INPUT_LENGTH -1);
+	std::cerr << "d.input dest: '" << dest << "'\n";
 	*aliased = d.input.begin()->aliased;
 	d.input.pop_front();
+	std::cerr << "d.input pop front\n";
 	return (1);
 }
 

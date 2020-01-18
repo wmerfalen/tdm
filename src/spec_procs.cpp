@@ -418,7 +418,7 @@ SPECIAL(thief) {
 
 SPECIAL(magic_user) {
 	MENTOC_PREAMBLE();
-	char_data *vict;
+	char_data *vict = nullptr;
 
 	if(cmd || GET_POS(ch) != POS_FIGHTING) {
 		return (FALSE);

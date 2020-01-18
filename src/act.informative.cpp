@@ -97,7 +97,7 @@ void do_auto_exits(char_data *ch);
 ACMD(do_exits);
 void look_in_direction(char_data *ch, int dir);
 void look_in_obj(char_data *ch, char *arg);
-char *find_exdesc(char *word, extra_descr_data *list);
+char *find_exdesc(std::string_view word,const std::vector<extra_descr_data>& in_list);
 void look_at_target(char_data *ch, char *arg);
 
 /* local globals */
@@ -732,26 +732,25 @@ void look_in_obj(char_data *ch, char *arg) {
 	}
 }
 
-
-char *find_exdesc(char *word,room_data& r){
-	for(const auto & i: r.ex_descriptions()){
-		if(isname(word, i.keyword.c_str())) {
-			return (const_cast<char*>(i.description.c_str()));
+char *find_exdesc(std::string_view word,std::vector<extra_descr_data>& in_list) {
+	log("find_exdesc, word: %s (vector)",word);
+	for(auto & i : in_list){
+		if(isname(word.data(), i.keyword.c_str())) {
+			return (i.description.ptr());
 		}
 	}
+
 	return (NULL);
 }
 
-
-char *find_exdesc(char *word,extra_descr_data *list) {
-	extra_descr_data *i;
-
-	for(i = list; i; i = i->next)
-		if(isname(word, i->keyword)) {
-			return (i->description);
+char *find_exdesc(char *word,room_data& r){
+	log("find_exdesc, word: %s (room_data)",word);
+	for(auto & i : r.ex_descriptions()){
+		if(isname(word, i.keyword.c_str())) {
+			return (i.description.ptr());
 		}
-
-	return (NULL);
+	}
+	return nullptr;
 }
 
 
@@ -850,6 +849,7 @@ void look_at_target(char_data *ch, char *arg) {
 
 ACMD(do_look) {
 	MENTOC_PREAMBLE();
+	d("do look");
 	int look_type;
 
 	if(GET_POS(ch) < POS_SLEEPING) {

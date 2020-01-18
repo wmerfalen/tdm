@@ -1089,14 +1089,14 @@ namespace mods::builder {
 			my_map["obj_worn_on"] = std::to_string(obj->worn_on);
 			my_map["obj_type_data"] = "0";
 
-			if(obj->ex_description && obj->ex_description->keyword) {
-				my_map["obj_extra_keyword"] = obj->ex_description->keyword;
+			if(obj->ex_description.size() && obj->ex_description[0].keyword.length()){
+				my_map["obj_extra_keyword"] = obj->ex_description[0].keyword.str();
 			} else {
 				my_map["obj_extra_keyword"] = "<obj.ex_description->keyword>";
 			}
 
-			if(obj->ex_description && obj->ex_description->description) {
-				my_map["obj_extra_description"] = obj->ex_description->description;
+			if(obj->ex_description.size() && obj->ex_description[0].description.length()){
+				my_map["obj_extra_description"] = obj->ex_description[0].description.str();
 			} else {
 				my_map["obj_extra_description"] = "<obj.ex_description->description>";
 			}
@@ -1245,19 +1245,16 @@ namespace mods::builder {
 			}
 
 			/* save ex_description linked lists */
-			for(auto ex_desc = obj->ex_description; ex_desc; ex_desc = ex_desc->next) {
-				if(!ex_desc->keyword || !ex_desc->description) {
-					break;
-				}
-
+			//for(auto ex_desc = obj->ex_description; ex_desc; ex_desc = ex_desc->next) {
+			for(auto ex_desc : obj->ex_description){
 				auto txn8 = txn();
 				mods::pq::exec(txn8,sql_compositor("extra_description",&txn8)
 						.insert()
 						.into("extra_description")
 						.values({
 							{"obj_number",std::to_string(check_i)},
-							{"extra_keyword",ex_desc->keyword},
-							{"extra_description",ex_desc->description}
+							{"extra_keyword",ex_desc.keyword.str()},
+							{"extra_description",ex_desc.description.str()}
 							})
 						.sql()
 						);
@@ -2595,37 +2592,15 @@ ACMD(do_obuild) {
 				r_error(player,"Invalid size");
 				return;
 			}
-
-			auto head = &obj->ex_description;
-
-			if(!*head) {
-				*head = (extra_descr_data*)calloc(1,sizeof(extra_descr_data));
-				(*head)->keyword = strdup("<extra_descr_data.keyword>");
-				(*head)->description = strdup("<extra_descr_data.description>");
-				(*head)->next = nullptr;
-				r_status(player,"Built node.");
-			}
-
-			auto new_node = (extra_descr_data*)calloc(1,sizeof(extra_descr_data));
-			new_node->keyword = strdup("<extra_descr_data.keyword>");
-			new_node->description = strdup("<extra_descr_data.description>");
-			new_node->next = nullptr;
-			auto current = *head;
-			unsigned max_iter = size.value()  < 1 ? 0 : size.value() -1;
-
-			while(max_iter--) {
-				if(current->next == nullptr) {
-					new_node = (extra_descr_data*)calloc(1,sizeof(extra_descr_data));
-					new_node->keyword = strdup("<extra_descr_data.keyword>");
-					new_node->description = strdup("<extra_descr_data.description>");
-					new_node->next = nullptr;
-					current->next = new_node;
-					r_status(player,"Built node.");
+			if(size.value() > obj->ex_description.size()){
+				for(unsigned i=0; i < size.value();i++){
+					obj->ex_description.emplace_back("<default>keyword","<default>description");
 				}
-
-				current = current->next;
 			}
-
+			obj->ex_description.emplace_back(
+				"<extra_descr_data.keyword>",
+				"<extra_descr_data.description>"
+			);
 			r_status(player,"Done.");
 			return;
 		}
@@ -2641,27 +2616,12 @@ ACMD(do_obuild) {
 			auto index = mods::util::stoi(arg_vec[3]);
 
 			if(index.has_value()) {
-				int iterations = 0;
-				auto head = obj->ex_description;
-
-				if(!head) {
-					r_error(player,"ex_description index is out of bounds (no ex_descriptions exist)");
+				if(index.value() >= obj->ex_description.size()){
+					r_error(player,"index is too large");
 					return;
 				}
-
-				extra_descr_data* ex_desc = obj->ex_description;
-
-				while(iterations++ < index.value()) {
-					if(!ex_desc) {
-						r_error(player,"ex_description index out of bounds");
-						return;
-					}
-
-					ex_desc = ex_desc->next;
-				}
-
-				ex_desc->keyword = strdup(arg_vec[4].c_str());
-				ex_desc->description = strdup(arg_vec[5].c_str());
+				obj->ex_description[index.value()].keyword.assign(arg_vec[4].c_str());
+				obj->ex_description[index.value()].description.assign(arg_vec[5].c_str());
 			} else {
 				r_error(player,"Invalid index supplied");
 				return;
@@ -2676,19 +2636,14 @@ ACMD(do_obuild) {
 			auto index = mods::util::stoi(arg_vec[3]);
 
 			if(index.has_value()) {
-				int iterations = 0;
-				auto ex_desc = obj->ex_description;
-
-				for(; iterations < index.value(); iterations++) {
-					if(!ex_desc) {
-						r_error(player,"Out of bounds");
-						return;
-					}
-
-					ex_desc = ex_desc->next;
+				if(index.value() >= obj->ex_description.size()){
+					r_error(player,"Out of bounds");
+					return;
 				}
 
-				mods::util::linked_list_remove<extra_descr_data*>(ex_desc,obj->ex_description);
+				obj->ex_description.erase(
+					obj->ex_description.begin() + index.value()
+				);
 				r_success(player,"ex_description removed");
 				return;
 			}
@@ -3024,24 +2979,17 @@ ACMD(do_obuild) {
 			"{red}short_description: {/red}" << obj->short_description << "\r\n" <<
 			"{red}action_description: {/red}" << obj->action_description << "\r\n" <<
 			"{red}ex_descriptions: {/red}";
-		auto ex_desc = obj->ex_description;
 		unsigned ex_ctr = 0;
-
-		for(; ex_desc ; ex_desc = ex_desc->next) {
-			if(ex_desc->keyword){
-				*player << "{red}[" << ex_ctr << "]keyword: {/red}" << ex_desc->keyword << "\r\n";
+		for(auto & ex_desc : obj->ex_description){
+			if(ex_desc.keyword.length()){
+				*player << "{red}[" << ex_ctr << "]keyword: {/red}" << ex_desc.keyword.c_str() << "\r\n";
 			}
-			if(ex_desc->description){
-				*player << "{red}[" << ex_ctr << "]description: {/red}" << ex_desc->description << "\r\n";
+			if(ex_desc.description.length()){
+				*player << "{red}[" << ex_ctr << "]description: {/red}" << ex_desc.description.c_str() << "\r\n";
 			}
 			++ex_ctr;
 		}
-
-		if(!ex_ctr) {
-			*player << "\r\n";
-		}
-
-		*player << "{red}item_number: {/red}" << obj->item_number << "\r\n"
+		*player << "\r\n{red}item_number: {/red}" << obj->item_number << "\r\n"
 			"{red}worn_on: {/red}" << obj->worn_on << "\r\n";
 		if(obj->rifle()){
 			*player << "{red}weapon_type: {/red}" << obj->rifle()->type << "\r\n" <<
