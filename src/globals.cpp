@@ -789,22 +789,28 @@ namespace mods {
 			 */
 			void char_from_room(char_data* ch) {
 				MENTOC_PREAMBLE();
-				std::cerr << "[globals::rooms::char_from_room]: character: " << player->name().c_str() 
-					<< " uuid:" << player->uuid() << " " 
-					<< "is npc: " << IS_NPC(ch) << " room:" << player->room()
-					<< " IN_ROOM(ch): " << IN_ROOM(ch) 
-					<< "\n";
-				
-				int room_id = player->room();//IN_ROOM(ch);
+				int room_id = player->room();
 				if(room_id >= room_list.size()){
 					log("SYSERR: char_from_room failed. room_id >= room_list.size()");
 					return;
 				}
-				auto place = std::find(mods::globals::get_room_list(room_id).begin(),
-						mods::globals::get_room_list(room_id).end(),player);
-				if(place != get_room_list(room_id).end()){
-					std::cerr << "[globals::rooms::char_from_room] found char in room_list. removing...\n";
-					get_room_list(room_id).erase(place);
+				auto place = std::find(
+					mods::globals::room_list[room_id].begin(),
+					mods::globals::room_list[room_id].end(),
+					player
+				);
+				if(place != mods::globals::room_list[room_id].end()){
+					mods::globals::room_list[room_id].erase(place);
+				} else {
+					std::cerr << "[globals::rooms::char_from_room] " 
+						<< "Could NOT find char in room_list. " 
+					;
+					std::cerr << "char_data*: " << std::hex << ch << " ";
+					std::cerr << "uuid:" << player->uuid() << " "
+				  	<< "is npc: " << IS_NPC(ch) 
+						<< " room:" << player->room()
+				  	<< " IN_ROOM(ch): " << IN_ROOM(ch) 
+				  	<< "\n";
 				}
 			}
 
@@ -827,7 +833,7 @@ namespace mods {
 					log("SYSERR: char_to_room failed for ch. Requested room is out of bounds: ",target_room);
 					return;
 				}
-				get_room_list(target_room).push_back(player);
+				mods::globals::room_list[target_room].push_back(player);
 				IN_ROOM(ch) = target_room;
 				return;
 			}
