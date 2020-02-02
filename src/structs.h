@@ -882,6 +882,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 		obj_data *next;         /* For the object list              */
 		uint8_t ai_state;
 		bool flagged(int value);
+		uint8_t from_direction;
 
 		uuid_t uuid;
 
@@ -1001,6 +1002,7 @@ struct obj_data_weapon : public obj_data {
 			LADDER, /** a ladder leading up or down */
 			ELEVATOR,
 			GLASS_WINDOWS,
+			SCANNED,
 			LAST
 		};
 		
@@ -1032,8 +1034,8 @@ struct obj_data_weapon : public obj_data {
 		obj_data *contents;   /* List of items in room              */
 		char_data *people;    /* List of NPC / PC in room           */
 		std::string_view overhead(const lense_type_t& );
-		const std::vector<texture_type_t>& textures() const;
-		void add_texture(texture_type_t& t){
+		std::vector<texture_type_t>& textures();
+		void add_texture(texture_type_t t){
 			m_textures.emplace_back(t);
 		}
 		void remove_texture(texture_type_t& t){
@@ -1044,7 +1046,9 @@ struct obj_data_weapon : public obj_data {
 			}
 		}
 
+		const std::vector<uint8_t>& directions() const;
 		protected:
+			std::vector<uint8_t> m_directions;
 			std::vector<mods::extra_desc_data> m_ex_descriptions;
 			std::vector<texture_type_t> m_textures;
 	};

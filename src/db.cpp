@@ -1008,7 +1008,7 @@ void parse_sql_mobiles() {
 			char_data proto;
 			d("name");
 			proto.player.name.assign(row["mob_name"]);
-			std::cout << "DEBUG: mob proto name: '" << row["mob_name"].c_str() << "'\n";
+			d("DEBUG: mob proto name: '" << row["mob_name"].c_str());
 			proto.player.short_descr.assign(row["mob_short_description"]);
 			proto.player.long_descr.assign(row["mob_long_description"]);
 

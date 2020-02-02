@@ -106,6 +106,7 @@ Italic
 	obj_data_ptr_t new_frag_grenade_object();
 	obj_data_ptr_t new_incendiary_grenade_object();
 	obj_data_ptr_t new_emp_grenade_object();
+	obj_data_ptr_t new_sensor_grenade_object();
 	obj_data_ptr_t new_smoke_grenade_object();
 	obj_data_ptr_t new_flashbang_grenade_object();
 

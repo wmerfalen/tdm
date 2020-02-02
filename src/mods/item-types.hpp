@@ -89,7 +89,8 @@
 (rooms_t,critical_range,"#int, rooms",2), \
 (rooms_t,blast_radius,"#int, rooms",2), \
 (static_amount_t,damage_per_second,"#int, static base damage done",44.0), \
-(static_amount_t,disorient_amount,"#int, percent",13.0) \
+(static_amount_t,disorient_amount,"#int, percent",13.0), \
+(int,loudness_type,"#int, 0=SILENT,1=SUSPICIOUS,2=LOUD,3=DEAFENING,4=WORLD_ENDING",2) \
 )
 
 #define MENTOC_DRONE_TYPES_SEQUENCE (GROUND_DRONE) \

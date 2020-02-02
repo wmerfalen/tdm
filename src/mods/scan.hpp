@@ -44,6 +44,8 @@ namespace mods {
 		 * Line of sight scan for hunted starting at hunter's current position
 		 */
 		find_results_t los_find(chptr hunter,chptr hunted);
+		std::tuple<bool,distance_t> room_distance(room_rnum& source,room_rnum& dest);
+		void los_list_by_room(room_rnum& in_room,room_list_t & room_list,unsigned depth);
 	};
 };
 #endif

@@ -10,6 +10,14 @@
 namespace mods {
 	namespace util {
 		namespace maps {
+			template <typename TMapType,typename TKeyType>
+			static inline void remove_if_exists(TMapType* in_map,TKeyType key){
+				auto it = in_map->find(key);
+				if(it != in_map->end()){
+					std::cerr << "removing map entry: " << key << "\n";
+					in_map->erase(it);
+				}
+			}
 			template <typename TKey,typename TVal>
 			static inline void dump(std::map<TKey,TVal> m){
 				for(auto & [k,v]: m){

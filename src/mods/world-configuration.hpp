@@ -33,6 +33,10 @@ namespace mods::world_conf {
 	using rooms_t = std::array<int,4>;
 	extern rooms_t rooms;
 	rooms_t load_all();
+	namespace toggle {
+		bool get_obj_from_room();
+		void set_obj_from_room(bool b);
+	};
 };
 
 #endif

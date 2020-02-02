@@ -42,6 +42,9 @@ namespace mods::classes {
 	struct sniper;
 };
 
+namespace mods::globals {
+	extern player_ptr_t player_nobody;
+};
 namespace mods {
 	struct player {
 		using obj_ptr_t = std::shared_ptr<obj_data>;
@@ -532,6 +535,7 @@ namespace mods {
 					std::size_t v_size);
 			bool is(char_data* ch) const { return ch == m_char_data; }
 			bool is(player_ptr_t p) const { return m_char_data == p->cd(); }
+			bool is_nobody() const { return m_char_data == nullptr; }
 
 			bool is_npc() const {
 				return IS_NPC(cd());

@@ -59,6 +59,15 @@ namespace mods {
 
 		/* trigger running */
 		int run_trigger(char_data *ch);
+
+		/** chainable quests */
+		/** The idea:
+		 * ----------
+		 *  One quest leads to subsequent quests. The ultimate
+		 *  end-goal is to get a high enough level of cohesion
+		 *  with the quest giver so that they may reward the player
+		 *  with extra perks 
+		 */
 	};
 };
 #endif

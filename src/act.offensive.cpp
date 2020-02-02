@@ -116,6 +116,12 @@ ACMD(do_giveme_smoke_grenades) {
 	obj_to_char(obj,player);
 }
 
+ACMD(do_giveme_sensor_grenades) {
+	MENTOC_PREAMBLE();
+	auto obj = mods::weapon::new_sensor_grenade_object();
+	obj_to_char(obj,player);
+}
+
 ACMD(do_giveme_flashbang_grenades) {
 	MENTOC_PREAMBLE();
 	auto obj = mods::weapon::new_flashbang_grenade_object();

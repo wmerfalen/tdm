@@ -15,6 +15,7 @@
 #include "mods/lmdb.hpp"
 #include "mods/yaml.hpp"
 #include "mods/date-time.hpp"
+#include "mods/world-configuration.hpp"
 
 namespace mods::adhoc {
 	static std::vector<int> reserved_rooms;
@@ -479,4 +480,63 @@ ACMD(do_histfile){
 		player->stop_histfile();
 		return;
 	}
+}
+
+ACMD(do_pmw_obj_from_room){
+	MENTOC_PREAMBLE();
+	player->sendln("This function is under construction!");
+	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
+	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
+		*player << "usage: \r\n" <<
+			" {red}pmw_obj_from_room{/red} {grn}start{/grn}\r\n" <<
+			"  |--> the system will prompt you when obj_from_room is called.\r\n" <<
+			" {red}pmw_obj_from_room{/red} {grn}stop{/grn}\r\n" <<
+			"  |--> the system will {red}stop{/red} prompting you when obj_from_room is called.\r\n" <<
+			"\r\n"
+			;
+		return;
+	}
+	if(vec_args.size() == 0){
+		return;
+	}
+	if(std::string(vec_args[0]).compare("start") == 0){
+		/** TODO */
+		return;
+	}
+	if(std::string(vec_args[0]).compare("stop") == 0){
+		/** TODO */
+		return;
+	}
+}
+
+ACMD(do_toggle_obj_from_room){
+	MENTOC_PREAMBLE();
+	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
+	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
+		*player << "usage: \r\n" <<
+			" {red}toggle_obj_from_room{/red} {grn}on{/grn}\r\n" <<
+			"  |--> the system will enable obj_from_room\r\n" <<
+			" {red}toggle_obj_from_room{/red} {grn}off{/grn}\r\n" <<
+			"  |--> the system will not perform obj_from_room\r\n" <<
+			"\r\n"
+			;
+		return;
+	}
+	if(vec_args.size() == 0){
+		player->sendln(mods::world_conf::toggle::get_obj_from_room() ? 
+				"{grn}enabled{/grn}" : 
+				"{grn}disabled{/grn}");
+		return;
+	}
+	if(std::string(vec_args[0]).compare("on") == 0){
+		mods::world_conf::toggle::set_obj_from_room(1);
+		player->sendln("{grn}Toggled on{/grn}");
+		return;
+	}
+	if(std::string(vec_args[0]).compare("off") == 0){
+		mods::world_conf::toggle::set_obj_from_room(0);
+		player->sendln("{grn}Toggled off{/grn}");
+		return;
+	}
+
 }

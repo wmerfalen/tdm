@@ -116,6 +116,7 @@ ACMD(do_js_help){
 		"{gld}next_object_number{/gld} -- gives you the next item number for objects",
 		"{gld}next_room_number{/gld} -- gives you the next item number for rooms",
 		"{gld}next_zone_number{/gld} -- gives you the next zone number",
+		"{gld}pmw_obj_from_room{/gld} -- when called, will toggle prompts for obj_from_room",
 		"{gld}read_mobile{/gld} -- ",
 		"{gld}require_js{/gld} -- include from /lib/js/",
 		"{gld}require_test{/gld} -- include from /lib/js/tests",
@@ -185,6 +186,7 @@ ACMD(do_builder_help){
 		 	"{gld}giveme_frag{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
 			"{gld}givemegold{/gld} -- {grn}give me gold [feature-debug]{/grn}", 
 		 	"{gld}giveme_inc{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
+	 		"{gld}giveme_sensor{/gld} -- {grn}give me sensor grenades [feature-debug]{/grn}",
 	 		"{gld}giveme_smoke{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
 			"{gld}heal{/gld} -- {grn}heal yourself [feature-debug][staging-feature][class-medic]{/grn}", 
 			"{gld}histfile{/gld} -- {grn}start recording all commands. stop with 'histfile stop' [builder-utils][feature-debug]{/grn}", 
@@ -320,11 +322,14 @@ ACMD(do_install);
 ACMD(do_giveme_frag_grenades);
 ACMD(do_giveme_flashbang_grenades);
 ACMD(do_giveme_incendiary_grenades);
+ACMD(do_giveme_sensor_grenades);
 ACMD(do_giveme_smoke_grenades);
 ACMD(do_giveme_emp_grenades);
 ACMD(do_next_object_number);
 ACMD(do_next_mob_number);
 ACMD(do_next_room_number);
+ACMD(do_pmw_obj_from_room);
+ACMD(do_toggle_obj_from_room);
 /** ------------------------ */
 /** GIVE ME combat mechanics */
 /** ------------------------ */
@@ -730,6 +735,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "giveme_flash"  , POS_RESTING , do_giveme_flashbang_grenades  , LVL_GOD, 0 },
 	{ "giveme_inc"  , POS_RESTING , do_giveme_incendiary_grenades , LVL_GOD, 0 },
 	{ "giveme_smoke"  , POS_RESTING , do_giveme_smoke_grenades  , LVL_GOD, 0 },
+	{ "giveme_sensor"  , POS_RESTING , do_giveme_sensor_grenades  , LVL_GOD, 0 },
 	{ "giveme_emp"  , POS_RESTING , do_giveme_emp_grenades  , LVL_GOD, 0 },
 	{ "affect_me"  , POS_RESTING , do_affect_me , LVL_GOD, 0 },
 
@@ -751,6 +757,8 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "next_object_number"  , POS_RESTING , do_next_object_number   , LVL_GOD, 0 },
 	{ "next_room_number"  , POS_RESTING , do_next_room_number   , LVL_GOD, 0 },
 	{ "next_mob_number"  , POS_RESTING , do_next_mob_number   , LVL_GOD, 0 },
+	{ "pmw_obj_from_room"  , POS_RESTING , do_pmw_obj_from_room   , LVL_GOD, 0 },
+	{ "toggle_obj_from_room"  , POS_RESTING , do_toggle_obj_from_room   , LVL_GOD, 0 },
 	{ "js_help"  , POS_RESTING , do_js_help   , LVL_GOD, 0 },
 	{ "mbuild"  , POS_RESTING , do_mbuild   , LVL_GOD, 0 },
 	{ "obuild"  , POS_RESTING , do_obuild   , LVL_GOD, 0 },

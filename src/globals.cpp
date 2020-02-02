@@ -21,6 +21,7 @@
 #include "mods/auto-login.hpp"
 #include "mods/debug.hpp"
 #include "mods/orm/chargen.hpp"
+#include "mods/world-configuration.hpp"
 
 
 extern int errno;
@@ -155,6 +156,7 @@ namespace mods {
 			std::string postgres_password = mods::conf::postgres_password.data();
 			std::string postgres_host = mods::conf::postgres_host.data();
 			std::string postgres_port = mods::conf::postgres_port.data();
+			mods::world_conf::toggle::set_obj_from_room(1);
 
 			while(++pos < argc){
 				if(argv[pos]){
@@ -882,6 +884,12 @@ std::optional<player_ptr_t> ptr_opt(uuid_t plr_uuid){
 		return it->second;
 	}
 	return std::nullopt;
+}
+player_ptr_t ptr_by_uuid(uuid_t id){
+	return mods::globals::player_map[id];
+}
+obj_ptr_t optr_by_uuid(uuid_t id){
+	return mods::globals::obj_map[id];
 }
 
 #endif

@@ -1,6 +1,9 @@
 #include "projectile.hpp"
 #include "affects.hpp"
 #include "../handler.h"
+//#include "calc_visibility.hpp"
+#include "sensor-grenade.hpp"
+#include "pfind.hpp"
 
 #include <cctype>	/* for std::tolower */
 /* using directives */
@@ -84,18 +87,19 @@ namespace mods {
 			}
 		}
 		*/
-		void perform_blast_radius(room_rnum room_id,std::size_t blast_radius,obj_ptr_t device) {
+		void perform_blast_radius(
+				room_rnum room_id,
+				std::size_t blast_radius,
+				obj_ptr_t device,
+				uuid_t player_uuid) {
+			log("perform blast radius entry");
 			auto current_room = room_id;
-			for(auto & dir : {NORTH, SOUTH, EAST, WEST, UP, DOWN}){
+			auto type = device->explosive()->type;
+			for(auto & dir : world[room_id].directions()){
 				current_room = room_id;
-				for(std::size_t blast_count = blast_radius; blast_count > 0;blast_count--){
+				log("direction: (%d) roomid(%d)",dir,room_id);
+				for(std::size_t blast_count = 0; blast_count < blast_radius;blast_count++){
 					auto dir_option = world[current_room].dir_option[dir];
-					if(!dir_option){
-						break;
-					}
-					if(dir_option->to_room == NOWHERE){
-						break;
-					}
 					current_room = dir_option->to_room;
 					float damage_multiplier = 0;
 					auto opposite = OPPOSITE_DIR(dir);
@@ -104,7 +108,7 @@ namespace mods {
 					 * It's okay to not have a defaulted case since the
 					 * following switch deals only with room textures
 					 */
-					switch(device->explosive()->type){
+					switch(type){
 						default: break;
 						case mw_explosive::EXPLOSIVE_NONE:
 							log("SYSERR: EXPLOSIVE_NONE specified in perform_blast_radius");
@@ -123,7 +127,7 @@ namespace mods {
 							break;
 					}
 					for(auto & person : mods::globals::get_room_list(current_room)){
-						switch(device->explosive()->type){
+						switch(type){
 							case mw_explosive::REMOTE_CHEMICAL:
 								mods::projectile::propagate_chemical_blast(current_room,device,blast_count);
 								break;
@@ -200,7 +204,7 @@ namespace mods {
 		void disorient_target(player_ptr_t player){
 			player->sendln("You become extremely disoriented!");
 		}
-		void explode(room_rnum room_id,uuid_t object_uuid){
+		void explode(room_rnum room_id,uuid_t object_uuid,uuid_t player_uuid){
 			if(room_id >= world.size()){
 				log("[error]: mods::projectile::explode received room_id greater than world.size()");
 				return;
@@ -212,16 +216,18 @@ namespace mods {
 				return;
 			}
 			log("opt_object has a value");
-			obj_ptr_t object = std::move(opt_object.value());
+			auto object = std::move(opt_object.value());
 			if(object->has_explosive() == false || object->explosive()->attributes == nullptr ||
 					object->explosive()->type == mw_explosive::EXPLOSIVE_NONE){
 				log("[error]: mods::projectile::explode. explosive integrity check failed");
 				return;
 			}
+			auto type = object->explosive()->type;
 			std::size_t blast_radius = object->explosive()->attributes->blast_radius;	/** TODO: grab from explosive()->blast_radius */
-			switch(object->explosive()->type){
+			log("grabbed blast radius... (%d)",blast_radius);
+			switch(type){
 				default: 
-					log("SYSERR: Invalid explosive type(%d) in %s:%d",object->explosive()->type,__FILE__,__LINE__);
+					log("SYSERR: Invalid explosive type(%d) in %s:%d",type,__FILE__,__LINE__);
 					return;
 				case mw_explosive::REMOTE_EXPLOSIVE:
 					send_to_room(room_id,"A %s explodes!\r\n",object->name.c_str());
@@ -251,11 +257,23 @@ namespace mods {
 				case mw_explosive::FLASHBANG_GRENADE:
 					send_to_room(room_id,"Your senses become scattered as a bright flash of light fills the room!\r\n");
 					break;
+				case mw_explosive::SENSOR_GRENADE:
+					send_to_room(room_id,"A %s scans the room.\r\n", object->name.c_str());
+					break;
 			}
+
+			if(type == mw_explosive::SENSOR_GRENADE){
+				mods::sensor_grenade::gather_room(object_uuid,room_id,object->from_direction);
+				mods::sensor_grenade::send_results(object_uuid,player_uuid);
+				mods::sensor_grenade::consume(object_uuid);
+				obj_from_room(object);
+				return;
+			}
+
 			for(auto & person : mods::globals::get_room_list(room_id)) {
-				switch(object->explosive()->type){
+				switch(type){
 					default: 
-						log("SYSERR: Invalid explosive type(%d) in %s:%d",object->explosive()->type,__FILE__,__LINE__);
+						log("SYSERR: Invalid explosive type(%d) in %s:%d",type,__FILE__,__LINE__);
 						return;
 					case mw_explosive::REMOTE_EXPLOSIVE:
 						mods::projectile::explosive_damage(person,object);
@@ -283,14 +301,16 @@ namespace mods {
 					case mw_explosive::FLASHBANG_GRENADE:
 						break;
 				}
+				log("gt_room_list(%d) for looping through (%d) tenants", room_id, mods::globals::get_room_list(room_id).size());
 			}
-			if(object->explosive()->type == mw_explosive::FLASHBANG_GRENADE){
+			if(type == mw_explosive::FLASHBANG_GRENADE){
 				queue_on_room( {AFF(BLIND),AFF(DISORIENT)}, room_id);
 			}
-			if(object->explosive()->type == mw_explosive::REMOTE_CHEMICAL){
+			if(type == mw_explosive::REMOTE_CHEMICAL){
 				queue_on_room( {AFF(DISORIENT),AFF(POISON)}, room_id);
 			}
-			mods::projectile::perform_blast_radius(room_id,blast_radius,object);
+			log("calling perform blast radius");
+			mods::projectile::perform_blast_radius(room_id,blast_radius,object,player_uuid);
 		}
 		/**
 		 * TODO: place the grenade on the floor so that some crazy bastards can potentially throw it back, 
@@ -371,6 +391,7 @@ namespace mods {
 		int travel_to(room_rnum from, int direction, std::size_t depth, std::shared_ptr<obj_data> object){
 			room_rnum room_id = resolve_room(from,direction,depth);
 			obj_to_room(object,room_id);
+			object->from_direction = OPPOSITE_DIR(direction);
 			return room_id;
 		}
 
@@ -411,11 +432,11 @@ namespace mods {
 			//	return 0;
 		//}
 
-		void explode_in_future(int room_id, int ticks, uuid_t object_uuid) {
+		void explode_in_future(int room_id, int ticks, uuid_t object_uuid,uuid_t player_uuid) {
 			d("explode_in_future uuid: " << object_uuid);
-			mods::globals::defer_queue->push(ticks, [room_id,object_uuid]() {
+			mods::globals::defer_queue->push(ticks, [room_id,object_uuid,player_uuid]() {
 				d("[defer_queue] callback:: explode_in_future uuid: " << object_uuid << " room_id:" << room_id);
-				explode(room_id,object_uuid);
+				explode(room_id,object_uuid,player_uuid);
 			});
 		}
 
@@ -425,7 +446,8 @@ namespace mods {
 			std::string str_dir = mods::projectile::todirstr(static_cast<const char*>(&str_dir_buffer[0]),1,0);
 			std::string object_name = "";
 			int ticks = 0;
-			switch(object->explosive()->type) {
+			auto type = object->explosive()->type;
+			switch(type) {
 				default:
 				case mw_explosive::REMOTE_EXPLOSIVE:
 				case mw_explosive::REMOTE_CHEMICAL:
@@ -454,6 +476,10 @@ namespace mods {
 					object_name = "flashbang grenade";
 					ticks = 6;
 					break;
+				case mw_explosive::SENSOR_GRENADE:
+					object_name = "sensor grenade";
+					ticks = 6;
+					break;
 			}
 			send_to_room_except(player->room(), player, "%s %ss a %s%s!\r\n",
 					player->ucname().c_str(), 
@@ -463,7 +489,7 @@ namespace mods {
 			player->sendln("You " + std::string(verb.data()) + " a " + object->explosive()->name + str_dir);
 			obj_from_char(object);
 			auto room_id = travel_to(player->room(), direction, depth, object);
-			explode_in_future(room_id, ticks, object->uuid);
+			explode_in_future(room_id, ticks, object->uuid,player->uuid());
 		}
 	};
 };

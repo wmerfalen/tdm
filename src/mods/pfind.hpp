@@ -6,6 +6,7 @@
 
 namespace mods::pfind {
 	player_ptr_t by_name(const char* player_name);
+	player_ptr_t by_uuid(uuid_t player_uuid);
 };
 
 #endif

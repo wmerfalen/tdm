@@ -40,16 +40,16 @@ namespace mods::world_conf {
 		return rooms;
 	}
 		int real_frozen(){
-			return rooms[0];
+			return rooms[WC_FROZEN];
 		}
 		int real_idle(){
-			return rooms[1];
+			return rooms[WC_IDLE];
 		}
 		int real_immortal_start(){
-			return rooms[2];
+			return rooms[WC_IMM];
 		}
 		int real_mortal_start(){
-			return rooms[3];
+			return rooms[WC_MOR];
 		}
 	/**
 	 * frozen room
@@ -209,4 +209,9 @@ namespace mods::world_conf {
 			return {false,e.what()};
 		}
 	}
+	namespace toggle {
+		bool status_obj_from_room;
+		bool get_obj_from_room(){ return mods::world_conf::toggle::status_obj_from_room; }
+		void set_obj_from_room(bool b){ mods::world_conf::toggle::status_obj_from_room = b; }
+	};
 };

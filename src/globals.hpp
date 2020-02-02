@@ -156,6 +156,8 @@ extern std::deque<std::shared_ptr<mods::npc>> mob_list;
 
 player_ptr_t ptr(char_data*);
 obj_ptr_t optr(obj_data*);
+player_ptr_t ptr_by_uuid(uuid_t);
+obj_ptr_t optr_by_uuid(uuid_t);
 std::optional<obj_ptr_t> optr_opt(uuid_t);
 std::optional<player_ptr_t> ptr_opt(uuid_t);
 

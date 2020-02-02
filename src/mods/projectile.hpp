@@ -49,12 +49,12 @@ namespace mods {
 		int grenade_damage(player_ptr_t victim,obj_ptr_t projectile);
 		int fire_damage(player_ptr_t victim,obj_ptr_t projectile);
 		int travel_to(room_rnum from, int direction, std::size_t depth, obj_ptr_t object);
-		void explode_in_future(int room_id, int ticks, uuid_t object_uuid);
+		void explode_in_future(int room_id, int ticks, uuid_t object_uuid,uuid_t player_uuid);
 		std::string todirstr(const char* direction,bool prefix,bool suffix);
 		std::string fromdirstr(int direction,bool prefix, bool suffix);
 		rooms_away_t calculate_shrapnel_rooms(room_rnum room, obj_ptr_t held_object,std::size_t blast_radius);
 		int to_direction(const std::string&);
-		void explode(room_rnum room,uuid_t object_uuid);
+		void explode(room_rnum room,uuid_t object_uuid,uuid_t player_uuid);
 		void disable_electronics(room_rnum room);
 		void smoke_room(room_rnum room);
 		void blind_target(player_ptr_t victim);

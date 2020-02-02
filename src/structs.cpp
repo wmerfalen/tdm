@@ -45,6 +45,7 @@ void obj_data::init(){
 	obj_flags.init();
 	type = 0;
 	this->uuid = mods::globals::obj_uuid();
+	from_direction = 0;
 
 #define MENTOC_OBJ_INITIALIZE_CONSTRUCTOR(r,data,CLASS_TYPE) \
 			this->BOOST_PP_CAT(m_,CLASS_TYPE) = nullptr;
@@ -319,7 +320,7 @@ void obj_data::feed(const pqxx::result::reference & row){
 			}
 			return "[ ]";
 		}
-		const std::vector<room_data::texture_type_t>& room_data::textures() const { 
+		std::vector<room_data::texture_type_t>& room_data::textures() { 
 			return m_textures;
 		}
 		void room_data::init(){
@@ -374,6 +375,10 @@ void obj_data::feed(const pqxx::result::reference & row){
 			/** FIXME: make this dynamic when bugs with builder.cpp are cleaned up */
 			dir_option[i]->key = 0;
 			dir_option[i]->to_room = to_room;
+			m_directions.emplace_back(i);
+		}
+		const std::vector<uint8_t>& room_data::directions() const {
+			return m_directions;
 		}
 		namespace mods{
 			void descriptor_data::queue_output(std::string_view msg, bool newline, bool plain) {
