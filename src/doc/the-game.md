@@ -116,6 +116,40 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 			- [Armor]   [ ] [ ] [ ] 
 		[*] -> CLASS_WEAPON: Cannot be junked/dropped/traded. PC can still use other weapons if so chooses.
 
+  ####   ######  #    #   #####     #    #    #  ######  #
+ #       #       ##   #     #       #    ##   #  #       #
+  ####   #####   # #  #     #       #    # #  #  #####   #
+      #  #       #  # #     #       #    #  # #  #       #
+ #    #  #       #   ##     #       #    #   ##  #       #
+  ####   ######  #    #     #       #    #    #  ######  ######
+
+
+  ####   #         ##     ####    ####
+ #    #  #        #  #   #       #
+ #       #       #    #   ####    ####
+ #       #       ######       #       #
+ #    #  #       #    #  #    #  #    #
+  ####   ######  #    #   ####    ####
+	- Sentinel Class
+		- Theme: Anchor class, can take punishment, defensive tank
+		- Loadout:
+			- Primary:
+				- MP5 Sub Machine Gun
+				- Alternate SPAS-12 Shotgun
+			- Secondary:
+				- CZ P-10 C
+				- file: cz-p10-c.html 
+			- Psychic Ability:
+				- Intimidate (very effective form of preventing crits from enemies)
+			- Global Weapon Ability:
+				- Undetermined !TODO
+			- Triad Allocation:
+				- [Weapons] [x] [x] [x]
+				- [Melee]   [x] [x] [ ]
+				- [Intel]   [x] [ ] [ ]
+			- Play style: imagine the heavy and tall looking knights guarding the gates
+			- NOTE: this could be an npc or player class
+
 
 	 #####   ######  #    #   ####   #    #
 	 #    #  #       ##  ##  #    #  ##   #
@@ -355,3 +389,32 @@ Barrel
 -- Short Barrel
 -- Standard Barrel
 
+- MP5
+	- recommended stats (scraped)
+		- Damage
+		- 27 (0-18m)
+	- 18 (28+m)
+		-	Suppressed
+		- 22 (0-18m)
+	- 15 (28+m)
+		- Rate of Fire
+		- 800 RPM
+		- Mobility
+		- 50
+		- Magazine Size
+		- 30+1
+
+- FNP-P9
+	- recommended stats (scraped)
+		- Damage
+		- 45 DPS at (0-12m)
+	- 27 DPS at (22+m)
+		- Suppressed
+		- 38 DPS at (0-12m)
+	- 23 DPS at (22+m)
+		- Rate of Fire
+		- ~550 RPM
+		- Mobility
+		- 50
+		- Magazine Size
+		- 16+1
