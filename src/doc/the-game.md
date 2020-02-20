@@ -30,13 +30,34 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 +++++++++++
 | CLASSES |
 +++++++++++
-	- Demon
+	- Sentinel
+	- Daemon
 	- Pistolita
 		- Excellent pistol handling
 		- Psychic Ability: 
 	- Tank [ TODO: rename this class ]
-		-
+	- [theme:The Good Guy, natural leader] NAME TBA [ TODO ]
+	- Ethereal Zero
+	- Catalyst
+	- Zenith
+	- MK-X
+	- Syndrome
+	- Malady
+	- Contagion
+		- 
+	- 
 
+++++++++++++++++++++
+| TYPES OF POISONS |
+++++++++++++++++++++
+	- Friendly attacks
+		- Poisoned NPC's will attack their own side
+	- Re-animate
+		- Necromancer skill to bring corpse back from the dead
+	- Acidic blood
+		- Poisoned NPC will bleed acid
+	- Explode
+		- Poisoned NPC will combust
 
 	- Triad Allocation
 			1) Each triad has 3 traits
@@ -141,8 +162,11 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 				- file: cz-p10-c.html 
 			- Psychic Ability:
 				- Intimidate (very effective form of preventing crits from enemies)
+				- Bolster Defense
+					- 
+			- Passive Abilities:
+				- Damage resistence for every second guarding a room
 			- Global Weapon Ability:
-				- Undetermined !TODO
 			- Triad Allocation:
 				- [Weapons] [x] [x] [x]
 				- [Melee]   [x] [x] [ ]
@@ -175,6 +199,8 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 				- Machine Pistol: Uzi or Glock (see: Rainbow Six Vegas 2 glock handgun that is rapid fire)
 			- Psychic Ability:
 				- Torture (inflict cruel damage on target)
+			- Passive Abilities:
+				- Kills with Melee weapons gain increased chance of doubling up attacks
 			- Global Weapon Ability:
 				- Turn primary/secondary ammunition into incendiary
 			- Triad Allocation:
@@ -182,6 +208,57 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 				- [Melee]   [x] [x] [ ]
 				- [Intel]   [x] [ ] [ ]
 			- Play style: does lots of damage, can take decent amount of punishment, quickly get aquainted with new weapons
+
+	- SYNDROME CLASS
+		- Theme: High tech user
+		- Loadout:
+			- Primary:
+				- Vector ACP
+			- Secondary:
+				- CZ P-10 C
+				- file: cz-p10-c.html 
+			- Psychic Ability:
+				- Invisibility
+				- Disable gagdets
+			- Passive Abilities:
+				- Damage resistence for every second guarding a room
+			- Global Weapon Ability:
+				- Tracking shot (NPCs hit with tracking shot appear on your radar)
+			- Triad Allocation:
+				- [Weapons] [x] [x] [x]
+				- [Melee]   [x] [x] [ ]
+				- [Intel]   [x] [ ] [ ]
+			- Play style: 
+
+  #################
+	### CONTAGION ###
+  #################
+	- CONTAGION CLASS
+		- Theme: Anchor class, can take punishment, defensive tank
+		- Loadout:
+			- Primary:
+				- MP5 Sub Machine Gun
+				- Alternate SPAS-12 Shotgun
+			- Secondary:
+				- CZ P-10 C
+				- file: cz-p10-c.html 
+			- Psychic Ability:
+				- Intimidate (very effective form of preventing crits from enemies)
+				- Bolster Defense
+					- 
+			- Passive Abilities:
+				- Damage resistence for every second guarding a room
+			- Global Weapon Ability:
+			- Triad Allocation:
+				- [Weapons] [x] [x] [x]
+				- [Melee]   [x] [x] [ ]
+				- [Intel]   [x] [ ] [ ]
+			- Play style: imagine the heavy and tall looking knights guarding the gates
+			- NOTE: this could be an npc or player class
+	### NEW CLASS ##
+	### NEW CLASS ##
+	### NEW CLASS ##
+
 
 	- TANK CLASS [ RENAME THIS ]
 		- Theme: bullet sponge, heavy armour but slow, anchor

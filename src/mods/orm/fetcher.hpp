@@ -30,6 +30,110 @@ namespace mods::orm {
 		return std::move(results);
 	}
 
+namespace generator {
+	/**
+	 * fetch_by_meta<TRowType,TIterable>(std::string_view column,std::string_view value);
+	 * @param std::string_view table_name
+	 * @param std::string_view column name
+	 * @param std::string_view  value of the column
+	 * @return std::vector<TRowType>
+	 */
+	template <typename TRowType,typename TFunctionCallback>
+	uint64_t fetch_by_meta(std::string_view table_name,
+			std::string_view column,std::string_view value,
+			TFunctionCallback callback) {
+		auto result_container = db_get_by_meta(
+				svtostr(table_name),svtostr(column),svtostr(value));
+		uint64_t ctr = 0;
+		for(auto && record : result_container){
+			++ctr;
+			if(!callback(record)){
+				break;
+			}
+		}
+		return ctr;
+	}
+	/**
+	 * find<TRowType,TIterable>(id)
+	 * @return TRowType struct
+	 */
+	template <typename TRowType,typename TFunctionCallback>
+	uint64_t find(std::string_view table_name,const uint64_t& id,TFunctionCallback callback){
+		auto result_container = db_get_by_meta(
+				table_name.data(), "id",std::to_string(id));
+		uint64_t ctr =0;
+		for(auto && record : result_container){
+			++ctr;
+			if(!callback(record)){
+				break;
+			}
+		}
+		return ctr;
+	}
+	template <typename TRowType,typename TFunctionCallback>
+	uint64_t find_by_column(std::string_view table_name,const uint64_t& id,TFunctionCallback callback,std::string_view column){
+		auto result_container = db_get_by_meta(
+				table_name.data(), column.data(),std::to_string(id));
+		uint64_t ctr =0;
+		for(auto && record : result_container){
+			++ctr;
+			if(!callback(record)){
+				break;
+			}
+		}
+		return ctr;
+	}
+
+
+	/**
+	 * find<TFunctionaCallback>(std::string_view table,std::iterator id_list,callback);
+	 * @param std::string_view table name
+	 * @param std::iterator id_list iterable container of ids to fetch
+	 * @param TFunctionCallback function callack
+	 * @return std::vector<TRowType>
+	 */
+	template <typename TIdList,typename TFunctionCallback>
+	uint64_t find_multi(std::string_view table_name,TIdList id_list, TFunctionCallback callback){
+		auto result_container = db_get_by_meta_multi(
+				svtostr(table_name), "id",id_list
+		);
+		uint64_t ctr = 0;
+		for(auto && record : result_container){
+			++ctr;
+			if(!callback(record)){
+				break;
+			}
+		}
+		return ctr;
+	}
+	/**
+	 * find<TFunctionaCallback>(std::string_view table,std::iterator id_list,callback);
+	 * @param std::string_view table name
+	 * @param std::iterator id_list iterable container of ids to fetch
+	 * @param TFunctionCallback function callack
+	 * @return std::vector<TRowType>
+	 */
+	template <typename TIdList,typename TFunctionCallback>
+	uint64_t find_multi_by_column(
+			std::string_view table_name,
+			TIdList id_list,
+			TFunctionCallback callback,
+			std::string_view column){
+		auto result_container = db_get_by_meta_multi(
+				table_name.data(), column.data(),id_list
+		);
+		uint64_t ctr = 0;
+		for(auto && record : result_container){
+			++ctr;
+			if(!callback(record)){
+				break;
+			}
+		}
+		return ctr;
+	}
+};
+
+
 	/**
 	 * find<TRowType,TIterable>(id)
 	 * @return TRowType struct

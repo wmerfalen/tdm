@@ -2,7 +2,7 @@
 #define  __MENTOC_MODS_CLASSES_SNIPER_HEADER__
 #include "base.hpp"
 #include <memory>
-#include "../weapons/sniper-rifle.hpp"
+#include "../weapons/sniper-rifle-psg1.hpp"
 #include <deque>
 #include <memory>
 namespace mods::classes {
@@ -21,10 +21,10 @@ namespace mods::classes {
 		sniper();
 		~sniper() = default;
 
-		std::shared_ptr<mods::weapons::sniper_rifle> rifle();
+		std::shared_ptr<mods::weapons::sniper_rifle::psg1> rifle();
 
 		private:
-			std::shared_ptr<mods::weapons::sniper_rifle> m_rifle;	
+			std::shared_ptr<mods::weapons::sniper_rifle::psg1> m_rifle;	
 	};
 	/*
 	static std::deque<std::shared_ptr<mods::classes::sniper>> sniper_players;

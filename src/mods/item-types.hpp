@@ -16,7 +16,8 @@
 (gadget) \
 (attachment) \
 (armor) \
-(consumable) /**!MENTOC_TEMPLATE_ITEM_SEQ*/
+(consumable) \
+(trap) 
 
 /*************************************************/
 /** HOWTO: Add new item and subcategories        */
@@ -29,7 +30,8 @@
 (ITEM_GADGET) \
 (ITEM_ATTACHMENT) \
 (ITEM_ARMOR) \
-(ITEM_CONSUMABLE) 
+(ITEM_CONSUMABLE) \
+(ITEM_TRAP)
 
 
 
@@ -176,12 +178,41 @@
 (std::string,csv_attach_to,"#csv, strings attach to various kinds of items TBA","'TBA'") \
 )
 
+
+#define MENTOC_TRAP_TYPES_SEQUENCE (BEAR_TRAP) \
+	(POSITION_AMPLIFIER)
+
+#define MENTOC_TRAP_MEMBERS_TUPLE ( \
+(int,explosion_type,"#int, enum 0 = NONE, 1 = SCAN",0), \
+(percent_t,chance_to_injure,"#float, percent",3.0), \
+(percent_t,critical_chance,"#float, percent",14.3), \
+(rooms_t,blast_radius,"#int, rooms",2), \
+(static_amount_t,damage_per_second,"#int, static base damage done",44.0), \
+(static_amount_t,disorient_amount,"#int, percent",13.0), \
+(int,loudness_type,"#int, 0=SILENT,1=SUSPICIOUS,2=LOUD,3=DEAFENING,4=WORLD_ENDING",2) \
+)
+
+
+#define MENTOC_EXPLOSIVE_MEMBERS_TUPLE ( \
+(int,alternate_explosion_type,"#int, enum 0 = NONE, 1 = SCAN",0), \
+(percent_t,chance_to_injure,"#float, percent",3.0), \
+(percent_t,critical_chance,"#float, percent",14.3), \
+(rooms_t,critical_range,"#int, rooms",2), \
+(rooms_t,blast_radius,"#int, rooms",2), \
+(static_amount_t,damage_per_second,"#int, static base damage done",44.0), \
+(static_amount_t,disorient_amount,"#int, percent",13.0), \
+(int,loudness_type,"#int, 0=SILENT,1=SUSPICIOUS,2=LOUD,3=DEAFENING,4=WORLD_ENDING",2) \
+)
+
+
 #define MENTOC_ITEM_TYPE_LIST_SEQUENCE (RIFLE) \
 (EXPLOSIVE) \
 (DRONE) \
 (GADGET) \
 (ATTACHMENT) \
-(ARMOR) 
+(ARMOR)  \
+(CONSUMABLE) \
+(TRAP)
 
 
 
@@ -333,21 +364,30 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 #define MENTOC_EXAMPLE_ARMORS \
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_EXAMPLE_IMPL,mw_armor,MENTOC_ARMOR_TYPES_SEQUENCE)
 
-
 /**************************************************************************/
 /** CONSUMABLES                                                               */
 /**************************************************************************/
-
-/*********************************************************/
-/** HOWTO: Add new item and subcategories                */
-/* Step 4: Add a new FEED_* and EXAMPLE_* constants      */
-/*********************************************************/
 #define MENTOC_FEED_CONSUMABLE \
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_FEED_TYPE_IMPL,mw_consumable,MENTOC_CONSUMABLE_TYPES_SEQUENCE) \
 	MENTOC_FEED_PARSE_ALL_IMPL(MENTOC_CONSUMABLE_MEMBERS_TUPLE)
 
 #define MENTOC_EXAMPLE_CONSUMABLE \
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_EXAMPLE_IMPL,mw_consumable,MENTOC_CONSUMABLE_TYPES_SEQUENCE)
+
+/**************************************************************************/
+/** TRAPS                                                                 */
+/**************************************************************************/
+#define MENTOC_FEED_TRAP \
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_FEED_TYPE_IMPL,mw_trap,MENTOC_TRAP_TYPES_SEQUENCE) \
+	MENTOC_FEED_PARSE_ALL_IMPL(MENTOC_TRAP_MEMBERS_TUPLE)
+
+#define MENTOC_EXAMPLE_TRAP \
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_EXAMPLE_IMPL,mw_trap,MENTOC_TRAP_TYPES_SEQUENCE)
+
+/*********************************************************/
+/** HOWTO: Add new item and subcategories                */
+/* Step 4: Add a new FEED_* and EXAMPLE_* constants      */
+/*********************************************************/
 
 
 

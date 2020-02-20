@@ -4,12 +4,10 @@
 #include "../weapon.hpp"
 #include "../pqxx-types.hpp"
 
-namespace mods::weapons {
-	/* commented out because this is turned into
-	 * a namespace now. 
-		struct sniper_rifle {
-			sniper_rifle();
-			~sniper_rifle();
+namespace mods::weapons::sniper_rifle {
+		struct psg1 {
+			psg1();
+			~psg1();
 
 			uint16_t bound_to;
 			uint16_t id;
@@ -20,7 +18,6 @@ namespace mods::weapons {
 			attachment_list_t m_attachments;
 			obj_data_ptr_t m_obj;
 		};
-		*/
 };
 #endif
 

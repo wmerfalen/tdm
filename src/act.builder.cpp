@@ -377,6 +377,45 @@ void fill_armor(std::shared_ptr<obj_data>& obj) {
 	proto.obj_flags.wear_flags = ITEM_WEAR_TAKE;
 }
 
+void fill_trap(std::shared_ptr<obj_data>& obj) {
+	log("Warning: fill_trap is not optimized. obj values may be buggy");
+	obj_data &proto = *obj;
+	for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
+		proto.affected[i].location = 0;
+		proto.affected[i].modifier = 0;
+	}
+
+	proto.item_number = 1;
+	proto.name = obj->armor()->attributes->name;
+	proto.description = proto.name;
+	proto.short_description = proto.name;
+	proto.action_description = proto.name;
+	proto.worn_on = WEAR_WIELD;
+	proto.type = 0;
+	proto.carried_by = proto.worn_by = nullptr;
+	proto.next_content = nullptr;
+	proto.contains = nullptr;
+	proto.in_obj = nullptr;
+	proto.worn_by = nullptr;
+	proto.carried_by = nullptr;
+	memset(&proto.obj_flags.value[0],0,sizeof(proto.obj_flags.value));
+	proto.obj_flags.ammo_max = 0;
+	proto.obj_flags.clip_size = 0;
+	proto.obj_flags.weapon_flags =0;
+	proto.obj_flags.bitvector = 0;
+	proto.obj_flags.type_flag = 0;
+	proto.obj_flags.extra_flags = 0;
+	proto.obj_flags.weight = 0;
+	proto.obj_flags.cost = 0;
+	proto.obj_flags.cost_per_day = 0;
+	proto.obj_flags.timer = 0;
+
+	proto.obj_flags.wear_flags = ITEM_WEAR_TAKE;
+
+	proto.trap("base_trap.yml");
+}
+
+
 void fill_consumable(std::shared_ptr<obj_data>& obj) {
 	/** TODO: this */
 }

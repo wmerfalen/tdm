@@ -61,10 +61,6 @@ int has_boat(char_data *ch) {
 		return (1);
 	}
 
-	if(AFF_FLAGGED(ch, AFF_WATERWALK)) {
-		return (1);
-	}
-
 	/* non-wearable boats in inventory will do it */
 	for(obj = ch->carrying; obj; obj = obj->next_content)
 		if(GET_OBJ_TYPE(obj) == ITEM_BOAT && (find_eq_pos(ch, obj, NULL) < 0)) {

@@ -5,6 +5,8 @@
 #include "../pqxx-types.hpp"
 
 namespace mods::weapons {
+	/*
+	 * commented out because this is turned into a namespace now
 		struct smg {
 			smg();
 			~smg();
@@ -15,6 +17,7 @@ namespace mods::weapons {
 			obj_data_ptr_t obj;
 
 		};
+		*/
 };
 #endif
 

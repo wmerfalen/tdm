@@ -19,6 +19,16 @@ namespace mods::globals {
 	extern std::vector<std::vector<std::shared_ptr<mods::player>>> room_list;
 };
 namespace mods {
+	struct chunk_affect_t {
+		uuid_t player_uuid;
+		std::size_t chunk;
+		uint64_t bit;
+		int64_t amount;
+		std::size_t number_of_times;
+		bool until_zero;
+		uint64_t next_event_tick;
+		uint64_t add;
+	};
 	class deferred {
 		public:
 			constexpr static uint64_t TICK_RESOLUTION = 3;
@@ -41,6 +51,20 @@ namespace mods {
 			}
 			void push(uint64_t ticks_in_future,std::function<void()> lambda);
 			void push_secs(seconds secs,std::function<void()> lambda);
+			void push_chunk_affect(
+		uuid_t player_uuid,
+		std::size_t chunk,
+		uint64_t bit,
+		int64_t amount,
+		std::size_t number_of_times,
+		bool until_zero,
+		uint64_t next_event_tick,
+		uint64_t add);
+			/*
+			void push_chunk_affect(uint64_t ticks_in_future,uuid_t player,std::size chunk, uint64_t bit,int64_t amount, std::size_t number_of_times);
+			void push_interval_chunk_affect(uint64_t every_tick,uuid_t player,std::size chunk, uint64_t bit,int64_t amount, bool until_zero);
+			*/
+			void tick();
 			void iteration();
 			void detexturize_room(uint64_t ticks_in_future,room_rnum& room_id,room_data::texture_type_t texture);
 			template <typename TTextureList>
@@ -59,6 +83,7 @@ namespace mods {
 			uint64_t m_tres;
 			uint64_t m_tick;
 			uint64_t m_iterations;
+			std::vector<chunk_affect_t> m_chunk_affect;
 	};
 };
 

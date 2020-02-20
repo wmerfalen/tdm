@@ -300,7 +300,7 @@ else if(key.compare("DETECT_ALIGN") == 0){ if(on){ player_ptr->affect(AFF_DETECT
 else if(key.compare("DETECT_INVIS") == 0){ if(on){ player_ptr->affect(AFF_DETECT_INVIS); }else{ player_ptr->remove_affect(AFF_DETECT_INVIS); }}
 else if(key.compare("DETECT_MAGIC") == 0){ if(on){ player_ptr->affect(AFF_DETECT_MAGIC); }else{ player_ptr->remove_affect(AFF_DETECT_MAGIC); }}
 else if(key.compare("SENSE_LIFE") == 0){ if(on){ player_ptr->affect(AFF_SENSE_LIFE); }else{ player_ptr->remove_affect(AFF_SENSE_LIFE); }}
-else if(key.compare("WATERWALK") == 0){ if(on){ player_ptr->affect(AFF_WATERWALK); }else{ player_ptr->remove_affect(AFF_WATERWALK); }}
+else if(key.compare("INTIMIDATED") == 0){ if(on){ player_ptr->affect(AFF_INTIMIDATED); }else{ player_ptr->remove_affect(AFF_INTIMIDATED); }}
 else if(key.compare("SANCTUARY") == 0){ if(on){ player_ptr->affect(AFF_SANCTUARY); }else{ player_ptr->remove_affect(AFF_SANCTUARY); }}
 else if(key.compare("GROUP") == 0){ if(on){ player_ptr->affect(AFF_GROUP); }else{ player_ptr->remove_affect(AFF_GROUP); }}
 else if(key.compare("CURSE") == 0){ if(on){ player_ptr->affect(AFF_CURSE); }else{ player_ptr->remove_affect(AFF_CURSE); }}
@@ -379,7 +379,7 @@ if(key.compare("GROUP_ARMOR") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_
 if(key.compare("GROUP_HEAL") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_HEAL); }
 if(key.compare("GROUP_RECALL") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_RECALL); }
 if(key.compare("INFRAVISION") == 0){ ::affect_from_char(*player_ptr,SPELL_INFRAVISION); }
-if(key.compare("WATERWALK") == 0){ ::affect_from_char(*player_ptr,SPELL_WATERWALK); }
+if(key.compare("INTIMIDATED") == 0){ ::affect_from_char(*player_ptr,SPELL_INTIMIDATED); }
 			duk_push_number(ctx,0);
 			return 1;
 		}

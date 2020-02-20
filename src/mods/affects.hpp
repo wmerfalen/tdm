@@ -21,19 +21,22 @@ enum affect_t {
 	BLIND = 0,
 	DISORIENT = 1,
 	POISON = 2,
-	__AFFECT_SIZE = 3
+	INTIMIDATED = 3,
+	__AFFECT_SIZE = 4
 };
 constexpr static std::size_t AFFECT_DISSOLVE_COUNT = affect_t::__AFFECT_SIZE;
 /** i.e.: AFFECT_MAP[affect_t::BLIND] will give us AFF_BLIND */
 constexpr static int AFFECT_MAP[] = {
 	(1 << 0),		/** AFF_BLIND */
 	(1 << 22),	/** AFF_POISON */
-	(1 << 11)		/** AFF_DISORIENT */
+	(1 << 11),		/** AFF_DISORIENT */
+	(1 << 6 ),   /** AFF_INTIMIDATED */
 };
 const static std::map<std::string,affect_t> string_map = {
 	{"blind",affect_t::BLIND},
 	{"disorient",affect_t::DISORIENT},
-	{"poison",affect_t::POISON}
+	{"poison",affect_t::POISON},
+	{"intimidated",affect_t::INTIMIDATED}
 };
 using affect_dissolve_t = std::array<uint64_t,AFFECT_DISSOLVE_COUNT>;
 using affect_map_t = std::map<affect_t,amount_t>;

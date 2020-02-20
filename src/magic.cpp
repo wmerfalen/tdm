@@ -532,12 +532,6 @@ void mag_affects(int level, char_data *ch, char_data *victim,
 			accum_duration = TRUE;
 			break;
 
-		case SPELL_WATERWALK:
-			af[0].duration = 24;
-			af[0].bitvector = AFF_WATERWALK;
-			accum_duration = TRUE;
-			to_vict = "You feel webbing between your toes.";
-			break;
 	}
 
 	/*

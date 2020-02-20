@@ -8,6 +8,7 @@ namespace mods::classes {
 		SNIPER,
 		MARINE,
 		SUPPORT,
+		SENTINEL,
 		UNDEFINED
 	};
 };

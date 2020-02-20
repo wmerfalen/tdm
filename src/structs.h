@@ -160,35 +160,6 @@ using ush_int = uint32_t;
 #define ROOM_OLC		(1 << 14)  /* (R) Modifyable/!compress	*/
 #define ROOM_BFS_MARK		(1 << 15)  /* (R) breath-first srch mrk	*/
 
-enum cap_t {
-		INSTALL = 0,
-		THROW,
-		BURN,
-		REMOTELY_DETONATE,
-		BREACH_DOORS,
-		EXPLODE,
-		SNIPE,
-		ZOOM,
-		RANGED_ATTACK,
-		SPRAY_BULLETS,
-		HIP_FIRE,
-		AIM,
-		BLIND,
-		DISORIENT,
-		SHOOT,
-		CQC,
-		THERMAL_VISION,
-		NIGHT_VISION,
-		EMIT_SUBSTANCE,
-		ALTERNATE_EXPLOSION,
-		SCAN,
-		HAS_CLIP,
-		EXTENDS_CLIP,
-		COUNTDOWN_EXPLOSION,
-		RELOAD,
-		__LAST = RELOAD
-};
-
 
 /* Exit info: used in room_data.dir_option.exit_info */
 #define EX_ISDOOR		(1 << 0)   /* Exit is a door		*/
@@ -332,7 +303,7 @@ CLASS_SNIPER     = CLASS_MARKSMAN
 #define AFF_DETECT_INVIS      (1 << 3)	   /* Char can see invis chars  */
 #define AFF_DETECT_MAGIC      (1 << 4)	   /* Char is sensitive to magic*/
 #define AFF_SENSE_LIFE        (1 << 5)	   /* Char can sense hidden life*/
-#define AFF_WATERWALK	      (1 << 6)	   /* Char can walk on water	*/
+#define AFF_INTIMIDATED				(1 << 6)		 /* char is scared */
 #define AFF_SANCTUARY         (1 << 7)	   /* Char protected by sanct.	*/
 #define AFF_GROUP             (1 << 8)	   /* (R) Char is grouped	*/
 #define AFF_CURSE             (1 << 9)	   /* Char is cursed		*/
@@ -415,7 +386,6 @@ CLASS_SNIPER     = CLASS_MARKSMAN
 #define ITEM_WORN      11		/* Unimplemented		*/
 #define ITEM_OTHER     12		/* Misc object			*/
 #define ITEM_TRASH     13		/* Trash - shopkeeps won't buy	*/
-#define ITEM_TRAP      14		/* Unimplemented		*/
 #define ITEM_CONTAINER 15		/* Item is a container		*/
 #define ITEM_NOTE      16		/* Item is note 		*/
 #define ITEM_DRINKCON  17		/* Item is a drink container	*/
@@ -434,6 +404,7 @@ CLASS_SNIPER     = CLASS_MARKSMAN
 #define ITEM_ATTACHMENT 6
 #define ITEM_ARMOR      7		/* Item is armor		*/
 #define ITEM_CONSUMABLE 8
+#define ITEM_TRAP      9		
 #define __MENTOC_ITEM_CONSTANTS_DEFINED__
 
 
@@ -886,21 +857,45 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 
 		uuid_t uuid;
 
+		/**
+		 * Translating this boost pp cruft:
+		 *
+		 * The following example is done for each
+		 * item in the MENTOC_ITEM_TYPES_SEQ 
+		 * which is defined in item_types.hpp
+		 *
+		 * example:
+		 * -- function definition --
+		 * rifle_data_t* rifle(std::string_view feed_file); 
+		 *  |--> does: makes unique ptr through feed_file constructor
+		 *  |--> does: returns rifle_data_t*
+		 *
+		 * -- function definition --
+		 *  rifle_data_t* rifle(uint8_t mode);
+		 *  |--> does: creates unique ptr through empty constructor
+		 *  |--> does: returns rifle_data_t*
+		 *
+		 * -- function definition --
+		 * rifle_data_t* rifle()
+		 *  |--> does: returns rifle_data_t* 
+		 *
+		 * -- function definition --
+		 * bool has_rifle()
+		 *  |--> does: returns true if rifle_data_t unique ptr made
+		 */
 #define MENTOC_DATA_OBJ(r,data,CLASS_TYPE) BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(std::string_view feed_file){\
 	this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(feed_file); return this->BOOST_PP_CAT(m_,CLASS_TYPE).get();\
 }\
 		BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(uint8_t mode){ this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(); return this->BOOST_PP_CAT(m_, CLASS_TYPE).get(); }\
 		BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(){ return this->BOOST_PP_CAT(m_,CLASS_TYPE).get(); } \
 		bool BOOST_PP_CAT(has_,CLASS_TYPE)(){ \
-			std::cerr << "checking if has: " << #CLASS_TYPE << "\n";\
-			bool has_it = this->BOOST_PP_CAT(m_,CLASS_TYPE) != nullptr;\
-			std::cerr << "has_it: " << has_it << "\n"; return has_it; \
+			return this->BOOST_PP_CAT(m_,CLASS_TYPE) != nullptr;\
 		}
 
 BOOST_PP_SEQ_FOR_EACH(MENTOC_DATA_OBJ, ~, MENTOC_ITEM_TYPES_SEQ)
 #undef MENTOC_DATA_OBJ
 		int16_t type;
-		static constexpr std::size_t CAPABILITY_LIST_LENGTH = cap_t::__LAST;
+		static constexpr std::size_t CAPABILITY_LIST_LENGTH = mods::weapon::capabilities::cap_t::__LAST;
 		using capability_list_t = std::array<bool,CAPABILITY_LIST_LENGTH>;
 		bool can(std::size_t val){
 			return m_capabilities[val];

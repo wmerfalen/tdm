@@ -237,6 +237,12 @@ namespace mods::sql {
 				m_joins.clear();
 				return *this;
 			}
+			compositor<T>& returning(str_object column) {
+				std::string sql = " RETURNING ";
+				sql += m_txn_ptr->quote(std::string(column.data()));
+				m_query[4] += sql;
+				return *this;
+			}
 
 			str_object sql() {
 				m_sql = "";

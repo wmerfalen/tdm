@@ -78,6 +78,7 @@ namespace mods::yaml {
 		}
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
+		uint64_t flush_to_db();
 			std::array<float,MAX_ROOM_DISTANCE> accuracy_map;
 			std::array<float,MAX_ROOM_DISTANCE> damage_map;	/** Percent per room */
 
@@ -183,6 +184,20 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_CONSUMABLE_MEMBERS_TUPLE)
 		MENTOC_BASE_MEMBERS
 
 	};
+
+	struct trap_description_t : public yaml_description_t {
+		virtual int16_t feed(std::string_view file);
+		virtual int16_t write_example_file(std::string_view file);
+		virtual ~trap_description_t() = default;
+		trap_description_t() :
+			MENTOC_BASE_MEMBERS_SET("trap"){ }
+
+MENTOC_MEMBER_VARS_FOR(MENTOC_TRAP_MEMBERS_TUPLE)
+
+		MENTOC_BASE_MEMBERS
+
+	};
+
 
 /*********************************************************/
 /** HOWTO: Add new item and subcategories                */

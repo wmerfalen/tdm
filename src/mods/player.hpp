@@ -81,6 +81,7 @@ namespace mods {
 
 			void set_db_id(aligned_int_t id);
 			aligned_int_t get_db_id() const;
+			aligned_int_t db_id() const { return m_db_id; }
 			void set_password(std::string pw);
 			std::string get_password();
 			std::string password(){
@@ -218,6 +219,7 @@ namespace mods {
 
 
 			/* informational functions */
+
 			sh_int& mana() {
 				return m_char_data->points.mana;
 			}

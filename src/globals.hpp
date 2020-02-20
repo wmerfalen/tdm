@@ -52,6 +52,9 @@
 #else
 #define d(a) /** */
 #endif
+#include <string>
+#define tostr(a) std::to_string(a)
+#define svtostr(a) std::string(a.data())
 /*
 	template<typename... Args>
 		std::string str(Args const&... args)

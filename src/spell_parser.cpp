@@ -1075,10 +1075,6 @@ void mag_assign_spells(void) {
 	       TAR_CHAR_ROOM, FALSE, MAG_MANUAL,
 	       NULL);
 
-	spello(SPELL_WATERWALK, "waterwalk", 40, 20, 2, POS_STANDING,
-	       TAR_CHAR_ROOM, FALSE, MAG_AFFECTS,
-	       "Your feet seem less buoyant.");
-
 	spello(SPELL_WORD_OF_RECALL, "word of recall", 20, 10, 2, POS_FIGHTING,
 	       TAR_CHAR_ROOM, FALSE, MAG_MANUAL,
 	       NULL);

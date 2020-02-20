@@ -1,4 +1,10 @@
 #include "yaml.hpp"
+#include "sql.hpp"
+#include "pq.hpp"
+#ifndef tostr
+	#define tostr(a) std::to_string(a)
+#endif
+using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 namespace mods::yaml {
 
 #define MENTOC_FEED_BASE_MEMBERS \
@@ -163,6 +169,57 @@ namespace mods::yaml {
 		out_file.close();
 		return 0;
 	};
+	uint64_t rifle_description_t::flush_to_db(){
+		try{
+			std::map<std::string,std::string> values;
+			std::string rifm = "rifle_accuracy_map_",
+			dam = "rifle_damage_map_";
+			for(unsigned i = 0; i < MAX_ROOM_DISTANCE;i++) {
+				values[rifm + std::to_string(i)] = accuracy_map[i];
+				values[dam + std::to_string(i)] = damage_map[i];
+			}
+			values["rifle_ammo_max"] = ammo_max;
+			values["rifle_ammo_type"] = ammo_type;
+			values["rifle_chance_to_injure"] = chance_to_injure;
+			values["rifle_clip_size"] = clip_size;
+			values["rifle_cooldown_between_shots"] = cooldown_between_shots;
+			values["rifle_critical_chance"] = critical_chance;
+			values["rifle_critical_range"] = critical_range;
+			values["rifle_damage_per_second"] = damage_per_second;
+			values["rifle_disorient_amount"] = disorient_amount;
+			values["rifle_headshot_bonus"] = headshot_bonus;
+			values["rifle_max_range"] = max_range;
+			values["rifle_range_multiplier"] = range_multiplier;
+			values["rifle_reload_time"] = reload_time;
+			values["rifle_rounds_per_minute"] = rounds_per_minute;
+			values["rifle_muzzle_velocity"] = muzzle_velocity;
+			values["rifle_effective_firing_range"] = effective_firing_range;
+			values["rifle_str_type"] = str_type;
+			values["rifle_type"] = type;
+			values["rifle_manufacturer"] = manufacturer;
+			values["rifle_name"] = name;
+			values["rifle_vnum"] = vnum;
+			values["rifle_rarity"] = rarity;
+			values["rifle_file"] = feed_file;
+			auto insert_transaction = txn();
+			sql_compositor comp("object_rifle",&insert_transaction);
+			auto up_sql = comp
+				.insert()
+				.into("object_rifle")
+				.values(values)
+				.returning("rifle_id")
+				.sql();
+			auto row = mods::pq::exec(insert_transaction,up_sql);
+			mods::pq::commit(insert_transaction);
+			for(auto && record : row){
+				return record["rifle_id"].as<uint64_t>();
+			}
+			return 0;
+		}catch(std::exception& e){
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting new object_rifle record: '" << e.what() << "'\n";
+			return 0;
+		}
+	}
 
 
 	int16_t explosive_description_t::write_example_file(std::string_view file){
@@ -177,7 +234,7 @@ namespace mods::yaml {
 			return -2;
 		}
 		MENTOC_EXAMPLE_EXPLOSIVES
-		base_items(&out_file, "FS12 Fragmentation grenade","FRAG_GRENADE");
+			base_items(&out_file, "FS12 Fragmentation grenade","FRAG_GRENADE");
 		out_file.flush();
 		out_file.close();
 		return 0;
@@ -197,24 +254,43 @@ namespace mods::yaml {
 			return -2;
 		}
 		MENTOC_EXAMPLE_CONSUMABLE
-		base_items(&out_file, "N7RCX Human Growth Hormone ","PED");
+			base_items(&out_file, "N7RCX Human Growth Hormone ","PED");
 		out_file.flush();
 		out_file.close();
 		return 0;
 	};
 
-/*******************************************/
-/** HOWTO: Add new item and subcategories  */
-/* Step 7: Define the feed function:       */
-/*******************************************/
+	int16_t trap_description_t::write_example_file(std::string_view file){
+		std::string file_name = current_working_dir() + "/" + file.data();
+		std::ofstream out_file(file_name);
+		if(!out_file.is_open()){
+			std::cerr << "can't open output yaml file, not open!\n";
+			return -1;
+		}
+		if(!out_file.good()){
+			std::cerr << "can't open output yaml file, not good!\n";
+			return -2;
+		}
+		MENTOC_EXAMPLE_TRAP
+			base_items(&out_file, "Bear Trap ","BEAR_TRAP");
+		out_file.flush();
+		out_file.close();
+		return 0;
+	};
+
+
+	/*******************************************/
+	/** HOWTO: Add new item and subcategories  */
+	/* Step 7: Define the feed function:       */
+	/*******************************************/
 	int16_t gadget_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();
 		feed_file = file;
 		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
 		auto type_string = yaml_file["str_type"].as<std::string>();
 		MENTOC_FEED_GADGET
-		MENTOC_FEED_BASE_MEMBERS
-		return 0;
+			MENTOC_FEED_BASE_MEMBERS
+			return 0;
 	}
 	int16_t explosive_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();
@@ -222,8 +298,8 @@ namespace mods::yaml {
 		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
 		auto type_string = yaml_file["str_type"].as<std::string>();
 		MENTOC_FEED_EXPLOSIVE
-		MENTOC_FEED_BASE_MEMBERS
-		return 0;
+			MENTOC_FEED_BASE_MEMBERS
+			return 0;
 	}
 	int16_t rifle_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();
@@ -231,8 +307,8 @@ namespace mods::yaml {
 		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
 		auto type_string = yaml_file["str_type"].as<std::string>();
 		MENTOC_FEED_RIFLE
-		MENTOC_FEED_BASE_MEMBERS
-		return 0;
+			MENTOC_FEED_BASE_MEMBERS
+			return 0;
 	}
 	int16_t drone_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();
@@ -240,8 +316,8 @@ namespace mods::yaml {
 		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
 		auto type_string = yaml_file["str_type"].as<std::string>();
 		MENTOC_FEED_DRONE
-		MENTOC_FEED_BASE_MEMBERS
-		return 0;
+			MENTOC_FEED_BASE_MEMBERS
+			return 0;
 	}
 	int16_t attachment_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();
@@ -249,8 +325,8 @@ namespace mods::yaml {
 		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
 		auto type_string = yaml_file["str_type"].as<std::string>();
 		MENTOC_FEED_ATTACHMENT
-		MENTOC_FEED_BASE_MEMBERS
-		return 0;
+			MENTOC_FEED_BASE_MEMBERS
+			return 0;
 	}
 	int16_t armor_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();
@@ -258,8 +334,8 @@ namespace mods::yaml {
 		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
 		auto type_string = yaml_file["str_type"].as<std::string>();
 		MENTOC_FEED_ARMOR
-		MENTOC_FEED_BASE_MEMBERS
-		return 0;
+			MENTOC_FEED_BASE_MEMBERS
+			return 0;
 	}
 
 	int16_t consumable_description_t::feed(std::string_view in_file){
@@ -268,8 +344,18 @@ namespace mods::yaml {
 		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
 		auto type_string = yaml_file["str_type"].as<std::string>();
 		MENTOC_FEED_CONSUMABLE
-		MENTOC_FEED_BASE_MEMBERS
-		return 0;
+			MENTOC_FEED_BASE_MEMBERS
+			return 0;
+	}
+
+	int16_t trap_description_t::feed(std::string_view in_file){
+		std::string file = current_working_dir() + "/" + in_file.data();
+		feed_file = file;
+		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
+		auto type_string = yaml_file["str_type"].as<std::string>();
+		MENTOC_FEED_TRAP
+			MENTOC_FEED_BASE_MEMBERS
+			return 0;
 	}
 
 

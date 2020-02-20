@@ -1086,7 +1086,7 @@ void parse_sql_mobiles() {
 }
 
 int parse_sql_objects() {
-	auto result = db_get_all("object");
+	auto result = db_get_by_meta("object","obj_is_player_object","0");
 
 	if(result.size()) {
 
@@ -2465,7 +2465,7 @@ __MENTOC_PLR(AFF_DETECT_ALIGN);
 __MENTOC_PLR(AFF_DETECT_INVIS);
 __MENTOC_PLR(AFF_DETECT_MAGIC);
 __MENTOC_PLR(AFF_SENSE_LIFE);
-__MENTOC_PLR(AFF_WATERWALK);
+__MENTOC_PLR(AFF_INTIMIDATED);
 __MENTOC_PLR(AFF_SANCTUARY);
 __MENTOC_PLR(AFF_GROUP);
 __MENTOC_PLR(AFF_CURSE);

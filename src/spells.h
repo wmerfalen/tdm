@@ -88,7 +88,7 @@
 #define SPELL_GROUP_HEAL	     48 /* Reserved Skill[] DO NOT CHANGE */
 #define SPELL_GROUP_RECALL	     49 /* Reserved Skill[] DO NOT CHANGE */
 #define SPELL_INFRAVISION	     50 /* Reserved Skill[] DO NOT CHANGE */
-#define SPELL_WATERWALK		     51 /* Reserved Skill[] DO NOT CHANGE */
+#define SPELL_INTIMIDATED		     51 
 /* Insert new spells here, up to MAX_SPELLS */
 #define MAX_SPELLS		    130
 
