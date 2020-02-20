@@ -1041,14 +1041,11 @@ void	write_to_q(std::string_view txt, mods::descriptor_data& d, int aliased){
 
 int get_from_q(mods::descriptor_data& d, char *dest, int *aliased) {
 	if(d.input.size() == 0){
-		std::cerr << "d.input.size is zero\n";
 		return 0;
 	}
 	strncpy(dest, d.input.begin()->text.c_str(), MAX_INPUT_LENGTH -1);
-	std::cerr << "d.input dest: '" << dest << "'\n";
 	*aliased = d.input.begin()->aliased;
 	d.input.pop_front();
-	std::cerr << "d.input pop front\n";
 	return (1);
 }
 
@@ -2506,7 +2503,6 @@ int open_logfile(const char *filename, FILE *stderr_fp) {
 		return (TRUE);
 	}
 
-	std::cerr << "SYSERR: Error opening file '" << filename << "': " << strerror(errno) << "\n";
 	return (FALSE);
 }
 

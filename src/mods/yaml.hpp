@@ -167,6 +167,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
 MENTOC_MEMBER_VARS_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
 
 		MENTOC_BASE_MEMBERS
+		uint64_t flush_to_db();
 	};
 
 	struct consumable_description_t : public yaml_description_t {

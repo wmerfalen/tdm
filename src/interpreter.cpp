@@ -932,7 +932,6 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 	std::copy(in_argument.begin(),in_argument.begin() + size,data.begin());
 	data[size] = '\0';
 	argument = &data[0];
-	std::cerr << "argument: '" << argument << "'\n";
 
 	/* just drop to next line for hitting CR */
 	skip_spaces(&argument);
@@ -941,21 +940,7 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 		mods::globals::post_command_interpreter(ch,argument);
 		return;
 	}
-
-	/*
-	 * special case to handle one-character, non-alphanumeric commands;
-	 * requested by many people so "'hi" or ";godnet test" is possible.
-	 * Patch sent by Eric Green and Stefan Wasilewski.
-	 */
-	//if(!isalpha(*argument)) {
-	//	arg[0] = argument[0];
-	//	arg[1] = '\0';
-	//	line = argument + 1;
-	//	std::cerr << "isnt alpha, arg\n";
-	//} else {
-		line = any_one_arg(argument, arg);
-		std::cerr << "anyonearg: " << argument << "|arg:" << arg << "\n";
-	//}
+	line = any_one_arg(argument, arg);
 
 	/* otherwise, find the command */
 	for(length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++){
@@ -969,7 +954,6 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 		}
 	}
 
-	std::cerr << "cmd: '" << cmd << "'\n";
 	if(*cmd_info[cmd].command == '\n') {
 		send_to_char(ch, "<cmd_interpretr>Huh?!?\r\n");
 		//TODO: change PLR_FLAGGED call to player->member method call
@@ -983,7 +967,6 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 		if(!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_FROZEN) && GET_LEVEL(ch) < LVL_IMPL) {
 			send_to_char(ch, "You try, but the mind-numbing cold prevents you...\r\n");
 		} else if(cmd_info[cmd].command_pointer == NULL) {
-			std::cerr << "cmd: '" << cmd << "'\n";
 			send_to_char(ch, "Sorry, that command hasn't been implemented yet.\r\n");
 		} else if(IS_NPC(ch) && cmd_info[cmd].minimum_level >= LVL_IMMORT) {
 			send_to_char(ch, "You can't use immortal commands while switched.\r\n");
@@ -1588,7 +1571,6 @@ int64_t perform_dupe_check(player_ptr_t p){
 	int64_t kicked = 0;
 	for(auto& player_ptr : mods::globals::player_list){
 		if(!player_ptr->authenticated()){
-			std::cerr << "player_ptr not authenticated\n"; 
 			continue;
 		}
 		if(p->socket() != player_ptr->socket() && 
@@ -1706,23 +1688,6 @@ void nanny(player_ptr_t p, char * in_arg) {
 				p->set_state(CON_CLOSE);
 				return;
 			} else {
-				//constexpr static int outbuf_size = 1024 * 3;
-				//std::vector<char> outbuf;
-				//outbuf.reserve(outbuf_size);
-				//std::fill(outbuf.begin(),outbuf.end(),0);
-				//std::string compare;
-
-				///** FIXME: this entire if statement is broken. it always lets the user in */
-				//std::copy(outbuf.begin(),outbuf.end(),std::back_inserter(compare));
-				//mods::globals::db->set_pluck_filter({"player_password"});
-				//std::cout << "info: " << p->name().c_str() << "'s pk_id: '" << p->get_db_id() << "'\n";
-				//mods::db::load_record("player",p->get_db_id(),row);
-				//mods::globals::db->clear_pluck_filter();
-				//if(row.size()){
-				//	std::cout << "info: found 'player_password' as: '" << row["player_password"] << "'\n" 
-				//		<< "comparing to: '" << compare << "'\n";
-				//}
-
 				/** FIXME: log user IP and all this stuff into postgres */
 				if(login(p->name(),arg) == false){
 					mudlog(BRF, LVL_GOD, TRUE, "Bad PW: %s [%s]", p->name().c_str(), p->host().c_str());
@@ -1777,7 +1742,6 @@ void nanny(player_ptr_t p, char * in_arg) {
 				}
 
 				write_to_output(d, "\r\n*** PRESS RETURN: ");
-				d("con-rmotd setting");
 				p->set_state(CON_RMOTD);
 			}
 
@@ -1785,7 +1749,6 @@ void nanny(player_ptr_t p, char * in_arg) {
 
 		case CON_NEWPASSWD:
 		case CON_CHPWD_GETNEW:
-			d("con-chpwd-getnew");
 			if(arg.length() > MAX_PWD_LENGTH || arg.length() < 3 ||
 					arg.compare(p->name()) == 0) {
 				write_to_output(d, "\r\nIllegal password.\r\nPassword: ");
@@ -1829,7 +1792,6 @@ void nanny(player_ptr_t p, char * in_arg) {
 			break;
 
 		case CON_QSEX:		/* query sex of new user         */
-			d("sex");
 			switch(arg[0]) {
 				case 'm':
 				case 'M':
@@ -1847,12 +1809,11 @@ void nanny(player_ptr_t p, char * in_arg) {
 					return;
 			}
 
-			write_to_output(d, "%s\r\nSelect Unit: ", class_menu);
+			write_to_output(d, "%s\r\nSelect class: ", class_menu);
 			p->set_state(CON_QCLASS);
 			break;
 
 		case CON_QCLASS:
-			d("class");
 			load_result = parse_class(arg[0]);
 
 			if(load_result == CLASS_UNDEFINED) {
@@ -1865,26 +1826,27 @@ void nanny(player_ptr_t p, char * in_arg) {
 			/* Now GET_NAME() will work properly. */
 			//init_char(p);
 			REMOVE_BIT(MOB_FLAGS(p->cd()), MOB_ISNPC);
-			d("set CON_RMOTD");
 			p->set_state(CON_RMOTD);
 			p->set_db_id(0);
 			if(db::save_new_char(p) == 0){
-				std::cout << "debug: new character '" << p->name() << "'\n";
 				if(db::load_char_pkid(p) < 0){
 					log("SYSERR: couldn't load character's pkid: '%s'",p->name().c_str());
-				}else{
-
+					write_to_output(d, "\r\nAn error occurred during player creation. Please contact an admin for more help.\r\nError Code 118\r\n");
+					p->set_state(CON_CLOSE);
+					return;
 				}
 				if(parse_sql_player(p) == false){
 					log("SYSERR: after saving to the db, we couldn't parse the player's info");
+					write_to_output(d, "\r\nAn error occurred during player creation. Please contact an admin for more help.\r\nError Code 218\r\n");
+					p->set_state(CON_CLOSE);
+					return;
 				}else{
-					std::cout << "info: player created and initialized successfully\n";
 					mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player.", p->name().c_str(), p->host().c_str());
 				}
 			}else{
 				log("SYSERR: save_new_char failed");
 				mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player creation failed.", p->name().c_str(), p->host().c_str());
-				p->stc("Unfortunately, something is broken in the MUD right now that is preventing you from signing in. Please report this to an admin.");
+				write_to_output(d, "\r\nAn error occurred during player creation. Please contact an admin for more help.\r\nError Code 318\r\n");
 				p->set_state(CON_CLOSE);
 				return;
 			}
@@ -1893,11 +1855,9 @@ void nanny(player_ptr_t p, char * in_arg) {
 			break;
 
 		case CON_RMOTD:		/* read CR after printing motd   */
-			d("rmotd");
 			write_to_output(d, "%s", MENU);
 			p->set_state(CON_MENU);
 			parse_sql_player(p);
-			d("set CON_MENU");
 			break;
 
 		case CON_MENU: {		/* get selection from main menu  */
@@ -1908,54 +1868,6 @@ void nanny(player_ptr_t p, char * in_arg) {
 												 break;
 
 											 case '1':
-												 //reset_char(p->cd());
-												 //read_aliases(p->cd());
-
-												 //if(p->has_affect_plr(PLR_INVSTART)){
-												 //  GET_INVIS_LEV(p->cd()) = p->level();
-												 //}
-
-												 /*
-													* We have to place the character in a room before equipping them
-													* or legacy_equip_char() will gripe about the person in NOWHERE.
-													*/
-												 //		 d("load_room");
-												 //		 if((load_room = GET_LOADROOM(p->cd())) != NOWHERE) {
-												 //			 load_room = real_room(load_room);
-												 //		 }
-												 //		 d("user's load_room: " << load_room);
-												 //
-												 //		 /* If char was saved with NOWHERE, or real_room above failed... */
-												 //		 if(load_room == NOWHERE) {
-												 //			 if(p->level() >= LVL_IMMORT) {
-												 //				 d("placing in immor room");
-												 //				 load_room = r_immort_start_room;
-												 //			 } else {
-												 //				 d("placing char i mortal_start_room: " << r_mortal_start_room);
-												 //				 load_room = r_mortal_start_room;
-												 //			 }
-												 //		 }
-												 //
-												 //		 if(PLR_FLAGGED(p->cd(), PLR_FROZEN)) {
-												 //			 d("player being placed in frozen start room");
-												 //			 load_room = r_frozen_start_room;
-												 //		 }
-												 //
-												 //		 send_to_char(p->cd(), "%s", WELC_MESSG);
-												 //		 char_to_room(p->cd(), load_room);
-#ifdef __MENTOC_RENT_DYNAMICS__
-												 //		 load_result = Crash_load(p->cd());
-#endif
-												 //
-												 //		 /* Clear their load room if it's not persistant. */
-												 //		 if(!PLR_FLAGGED(p->cd(), PLR_LOADROOM)) {
-												 //			 GET_LOADROOM(p->cd()) = NOWHERE;
-												 //		 }
-												 //
-												 //save_char(p->cd());
-												 /** !TODO: create an is_immortal() function and call it like this:
-													* if(is_immortal(p)){ ... load player into immortal room .. }
-													*/
 												 p->set_authenticated(true);
 
 												 /* check and make sure no other copies of this player are logged in */
@@ -1967,11 +1879,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 													 if(!boot_type_hell()){
 														 start_room = mods::world_conf::real_mortal_start();
 													 }
-													 std::cerr << "resolved mortal start: " << start_room << "\n";
-													 std::cerr << "resolved mortal start: " << start_room << "\n";
-													 std::cerr << "resolved mortal start: " << start_room << "\n";
 													 if(world.size() == 0){
-														 std::cerr << "error: world.size is empty!\n";
 														 exit(0);
 													 }
 													 p->set_room(start_room);
@@ -1985,7 +1893,6 @@ void nanny(player_ptr_t p, char * in_arg) {
 													 p->stc(START_MESSG);
 												 }
 
-												 d("looking at room");
 												 look_at_room(p->cd(), 0);
 
 												 if(has_mail(GET_IDNUM(p->cd()))) {
@@ -2106,5 +2013,4 @@ void nanny(player_ptr_t p, char * in_arg) {
 									 p->set_state(CON_DISCONNECT);	/* Safest to do. */
 									 break;
 	}
-	d("outside nanny switch");
 }

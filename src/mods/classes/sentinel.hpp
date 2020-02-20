@@ -18,15 +18,26 @@ namespace mods::classes {
 		using primary_choice_t = mods::weapon::sentinel::primary_choice_t;
 		enum cure_levels_t {
 				SENTINEL_CURE_NONE = 0,
-				SENTINEL_CURE_LIGHT,
-				SENTINEL_CURE_CRITIC,
-				SENTINEL_HEAL
+				SENTINEL_CURE_LIGHT,	/** light [ 15 hp] */
+				SENTINEL_CURE_CRITIC, /** critical [ 50 hp ] */
+				SENTINEL_HEAL	/** advanced [ 80 hp ] */
 		};
 		enum intimidate_levels_t {
 			SENTINEL_INTIMIDATE_NONE = 0,
-			SENTINEL_INTIMIDATE_LIGHT,
-			SENTINEL_INTIMIDATE_CRITIC,
+			SENTINEL_INTIMIDATE_LIGHT,	/** Adrenal dump */
+			SENTINEL_INTIMIDATE_CRITIC, /** flee */
 			SENTINEL_INTIMIDATE_HEART_ATTACK
+		};
+		enum human_shield_levels_t {
+			SENTINEL_HUMAN_SHIELD_NONE = 0,
+			SENTINEL_HUMAN_SHIELD_ABSORB,
+			SENTINEL_HUMAN_SHIELD_ON_FIRE,
+			SENTINEL_HUMAN_SHIELD_ON_COMBUST
+		};
+		enum shield_proficiency_levels_t {
+			SENTINEL_SHIELD_PROFICIENCY_NONE = 0,
+			SENTINEL_SHIELD_PROFICIENCY_DEFLECT,
+			SENTINEL_SHIELD_PROFICIENCY_DEFLECT_AND_IGNITE
 		};
 		static std::shared_ptr<sentinel> create(player_ptr_t &player);
 		static int16_t destroy(player_ptr_t& player);
@@ -49,6 +60,7 @@ namespace mods::classes {
 		sasg12_ptr_t 	sasg12();
 		czp10_ptr_t 	czp10();
 		player_ptr_t 	player();
+
 		void 					set_player(player_ptr_t);
 		void					heal(player_ptr_t& target);
 		void					intimidate(player_ptr_t& target);

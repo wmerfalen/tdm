@@ -71,7 +71,39 @@ namespace mods::yaml {
 		out_file.flush();
 		out_file.close();
 		return 0;
-	};
+	}
+
+	uint64_t armor_description_t::flush_to_db(){
+		try{
+			std::map<std::string,std::string> values;
+			values["armor_csv_capabilities"] = this->csv_capabilities; //VARCHAR(2048),
+			values["armor_csv_attach_to"] = this->csv_attach_to; //VARCHAR(2048),
+			values["armor_thac0"] = this->thac0; //INTEGER NOT NULL,
+			values["armor_weight_in_lbs"] = this->weight_in_lbs; //FLOAT NOT NULL,
+			values["armor_fire_resistance_percent"] = this->fire_resistance_percent; //FLOAT NOT NULL DEFAULT 0.0,
+			values["armor_balistic_resistance_percent"] = this->balistic_resistance_percent; //FLOAT NOT NULL DEFAULT 0.0,
+			values["armor_speed_profile"] = this->speed_profile; //speed_profile_type_t NOT NULL DEFAULT 'HINDERED',
+			values["armor_offensive_damage_amount"] = this->offensive_damage_amount; //INTEGER NOT NULL DEFAULT 0,
+			values["armor_durability_profile"] = this->durability_profile; //durability_profile_type_t NOT NULL DEFAULT 'DURABLE',
+			auto insert_transaction = txn();
+			sql_compositor comp("object_rifle",&insert_transaction);
+			auto up_sql = comp
+				.insert()
+				.into("object_armor")
+				.values(values)
+				.returning("armor_id")
+				.sql();
+			auto row = mods::pq::exec(insert_transaction,up_sql);
+			mods::pq::commit(insert_transaction);
+			for(auto && record : row){
+				return record["armor_id"].as<uint64_t>();
+			}
+			return 0;
+		}catch(std::exception& e){
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting new object_rifle record: '" << e.what() << "'\n";
+			return 0;
+		}
+	}
 
 	int16_t gadget_description_t::write_example_file(std::string_view file){
 		std::string file_name = current_working_dir() + "/" + file.data();
@@ -85,8 +117,8 @@ namespace mods::yaml {
 			return -2;
 		}
 		MENTOC_EXAMPLE_GADGETS
-		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_GADGET_MEMBERS_TUPLE)
-		base_items(&out_file,"XMC Trip Wire","TRIPWIRE");
+			MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_GADGET_MEMBERS_TUPLE)
+			base_items(&out_file,"XMC Trip Wire","TRIPWIRE");
 		out_file.flush();
 		out_file.close();
 		return 0;
@@ -105,8 +137,8 @@ namespace mods::yaml {
 			return -2;
 		}
 		MENTOC_EXAMPLE_ATTACHMENTS
-		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
-		base_items(&out_file, "ACOG Scope","SIGHT");
+			MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
+			base_items(&out_file, "ACOG Scope","SIGHT");
 		out_file.flush();
 		out_file.close();
 		return 0;
@@ -126,8 +158,8 @@ namespace mods::yaml {
 			return -2;
 		}
 		MENTOC_EXAMPLE_DRONES
-		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_DRONE_MEMBERS_TUPLE)
-		base_items(&out_file, "TN Land Drone","GROUND_DRONE");
+			MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_DRONE_MEMBERS_TUPLE)
+			base_items(&out_file, "TN Land Drone","GROUND_DRONE");
 		out_file.flush();
 		out_file.close();
 		return 0;
@@ -163,8 +195,8 @@ namespace mods::yaml {
 		}
 		out_file << "\n]\n";
 		MENTOC_EXAMPLE_RIFLES
-		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
-		base_items(&out_file,"A <adjectively> <horrific> PSG-1 Sniper Rifle","SNIPER");
+			MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
+			base_items(&out_file,"A <adjectively> <horrific> PSG-1 Sniper Rifle","SNIPER");
 		out_file.flush();
 		out_file.close();
 		return 0;
@@ -173,7 +205,7 @@ namespace mods::yaml {
 		try{
 			std::map<std::string,std::string> values;
 			std::string rifm = "rifle_accuracy_map_",
-			dam = "rifle_damage_map_";
+				dam = "rifle_damage_map_";
 			for(unsigned i = 0; i < MAX_ROOM_DISTANCE;i++) {
 				values[rifm + std::to_string(i)] = accuracy_map[i];
 				values[dam + std::to_string(i)] = damage_map[i];

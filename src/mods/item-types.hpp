@@ -158,11 +158,20 @@
 (WAIST_PACK) \
 (VEST_PACK) \
 (ELBOW_GUARDS) \
-(GLOVES) 
+(GLOVES) \
+(SHIELD)
 
 #define MENTOC_ARMOR_MEMBERS_TUPLE ( \
 (std::string,csv_capabilities,"#csv, strings free-form TBA","'TBA'"), \
-(std::string,csv_attach_to,"#csv, strings attach to various kinds of items TBA","'TBA'") \
+(std::string,csv_attach_to,"#csv, strings attach to various kinds of items TBA","'TBA'"), \
+(int,thac0,"#int",50), \
+(float,weight_in_lbs,"#float, weight in lbs",5.0), \
+(percent_t,fire_resistance_percent,"#percent",15.0), \
+(percent_t,balistic_resistance_percent,"#percent",15.0), \
+(int,speed_profile,"#int, ENUM 0=UNHINDERED,1=FAST,2=HINDERED,3=SLOW,4=SLUGGISH",0), \
+(static_amount_t,offensive_damage_amount,"#int, static amount of offensive damage",0), \
+(int,durability_profile,"#int, ENUM 0=FLIMSY,1=DECENT,2=DURABLE,3=HARDENED,4=INDUSTRIAL_STRENGTH,5=GODLIKE,6=INDESTRUCTIBLE",1), \
+(int,repair_cost_profile,"#int, ENUM 0=CHEAP,1=DECENT,2=COSTLY,3=VERY_EXPENSIVE",1) \
 )
 
 #define MENTOC_CONSUMABLE_TYPES_SEQUENCE (AMMUNITION) \

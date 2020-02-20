@@ -46,22 +46,19 @@ const char *title_female(int chclass, int level);
 /* Names first */
 
 const char *class_abbrevs[] = {
-	"Eng",
-	"Med",
-	"Spr",
+	"Snp",
 	"Mrn",
-	"Sup",
+	"Sen",
+	"Con"
 	"\n"
 };
 
 
 const char *pc_class_types[] = {
-	"Engineer",//"Magic User",
-	"Medic",//"Cleric",
-	"Sniper",//"Thief",
-	"Marine",//"Warrior",
-	"Support",
-	"PSYOPS"
+	"Sniper",
+	"Marine",
+	"Sentinel",
+	"Contagion"
 	"\n"
 };
 
@@ -81,12 +78,10 @@ const char *pc_class_types[] = {
 //		;
 
 const char* class_menu =
-    "  [1] Engineer\r\n"
-    "  [2] Medic\r\n"
-    "  [3] Sniper\r\n"
-    "  [4] PSYOP\r\n"
-    "  [5] Support\r\n"
-		"  [6] Marine [*]\r\n"
+    "  [1] Sniper\r\n"
+		"  [2] Marine [*]\r\n"
+		"  [3] Sentinel\r\n"  
+		"  [3] Contagion\r\n"  
 		"\r\n"
 		" [*] Marines are well-rounded\r\n"
 		;
@@ -231,7 +226,49 @@ std::string psyop_skillset() {
 	;
 	return skillset;
 }
+std::string sentinel_skillset() {
 
+	std::string skillset = ""
+		"                   [*] --[ Control and manipulation ]-- [*]                  \r\n"
+		" [ ] Intimidate                                                              \r\n"
+		"  +-[ ] Adrenal dump                                                         \r\n"
+		"  +-[ ] Flee                                                                 \r\n"
+		"  +-[ ] Heart attack                                                         \r\n"
+		"\r\n"
+		" [ ] Heal                                                                    \r\n"
+		"  +-[ ] Light [ 15 hp ]                                                      \r\n"
+		"  +-[ ] Critical [ 50 hp ]                                                   \r\n"
+		"  +-[ ] Advanced [ 80 hp ]                                                   \r\n"
+		"                                                                             \r\n"
+		" [ ] Human shield                                                            \r\n"
+		"  +-[ ] Absorb\r\n"
+		"    +-[ ] Gather ammunition\r\n"
+		"    +-[ ] Chance to gain hp\r\n"
+		"  +-[ ] Ignite\r\n"
+		"  +-[ ] Explosive decompression\r\n"
+		"  +-[ ] Toxicity\r\n"
+		"\r\n"
+		" [ ] Deny entry                                                              \r\n"
+		"  +-[ ] Firewall                                                             \r\n"
+		"  +-[ ] Expell                                                               \r\n"
+		"  +-[ ] Barricade                                                            \r\n"
+		"\r\n"
+		"                   [*] --[ Gadgets ]-- [*]                                   \r\n"
+		" [ ] Shield                                                                  \r\n"
+		"  +-[ ] Deflect\r\n"
+		"  +-[ ] Deflect and ignite\r\n"
+		"  +-[ ] Firewall\r\n"
+		"                                                                             \r\n"
+		"                   [*] --[ Melee ]-- [*]                                     \r\n"
+		" [ ] Shield                                                                  \r\n"
+		"  +-[ ] Deflect\r\n"
+		"  +-[ ] Deflect and ignite\r\n"
+		"  +-[ ] Firewall\r\n"
+		"                                                                             \r\n"
+		"                                                                             \r\n"
+	;
+	return skillset;
+}
 std::string sniper_skillset() {
 
 	std::string skillset = ""
