@@ -32,6 +32,7 @@
 #include "mods/auto-login.hpp"
 #include "act.debug.hpp"
 #include "mods/world-configuration.hpp"
+#include "mods/chargen.hpp"
 
 /* external variables */
 extern int destroy_socket(socket_t&);
@@ -1594,6 +1595,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 	mutable_map_t row;
 	std::string arg = in_arg;
 	tuple_status_t status;
+	std::tuple<bool,std::string> make_char_status;
 
 	if(mods::auto_login::get_user().length() && p->state() == CON_GET_NAME){
 		arg = mods::auto_login::get_user();
@@ -1821,37 +1823,31 @@ void nanny(player_ptr_t p, char * in_arg) {
 				return;
 			} else {
 				GET_CLASS(p->cd()) = load_result;
+				p->set_class(static_cast<player_class_t>(load_result));
 			}
-
-			/* Now GET_NAME() will work properly. */
-			//init_char(p);
-			REMOVE_BIT(MOB_FLAGS(p->cd()), MOB_ISNPC);
-			p->set_state(CON_RMOTD);
-			p->set_db_id(0);
-			if(db::save_new_char(p) == 0){
-				if(db::load_char_pkid(p) < 0){
-					log("SYSERR: couldn't load character's pkid: '%s'",p->name().c_str());
-					write_to_output(d, "\r\nAn error occurred during player creation. Please contact an admin for more help.\r\nError Code 118\r\n");
-					p->set_state(CON_CLOSE);
-					return;
-				}
-				if(parse_sql_player(p) == false){
-					log("SYSERR: after saving to the db, we couldn't parse the player's info");
-					write_to_output(d, "\r\nAn error occurred during player creation. Please contact an admin for more help.\r\nError Code 218\r\n");
-					p->set_state(CON_CLOSE);
-					return;
-				}else{
-					mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player.", p->name().c_str(), p->host().c_str());
-				}
-			}else{
-				log("SYSERR: save_new_char failed");
-				mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player creation failed.", p->name().c_str(), p->host().c_str());
-				write_to_output(d, "\r\nAn error occurred during player creation. Please contact an admin for more help.\r\nError Code 318\r\n");
+			make_char_status = mods::chargen::make_char(p);
+			if(!std::get<0>(make_char_status)){
+				write_to_output(d,"\r\n%s\r\n",std::get<1>(make_char_status).data());
 				p->set_state(CON_CLOSE);
+				/** TODO: undo the transaction */
 				return;
 			}
+			switch(load_result){
+				case CLASS_SENTINEL:
+					write_to_output(d, "%s\r\nSelect primary weapon: ", mods::chargen::primary_weapon_menu(static_cast<player_class_t>(load_result)).data());
+					p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
+					break;
+				default:
+					p->set_state(CON_CHARGEN_FINALIZE);
+					break;
+			}
+			return;
+		case CON_CHARGEN_PRIMARY_CHOICE:
+			mods::chargen::handle_primary_choice(p,arg[0],p->get_class());
+			return;
+		case CON_CHARGEN_FINALIZE:
+			p->set_state(CON_RMOTD);
 			write_to_output(d, "%s\r\n*** PRESS RETURN: ", motd);
-
 			break;
 
 		case CON_RMOTD:		/* read CR after printing motd   */

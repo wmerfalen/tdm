@@ -8,6 +8,9 @@
 
 namespace mods {
 	struct player;
+	namespace classes {
+		struct sentinel;
+	};
 };
 #include "flags.hpp"
 #include "classes/types.hpp"
@@ -40,6 +43,7 @@ extern player_ptr_t ptr(char_data*);
 namespace mods::classes {
 	struct medic;
 	struct sniper;
+	struct sentinel;
 };
 
 namespace mods::globals {
@@ -518,6 +522,10 @@ namespace mods {
 			}
 			std::shared_ptr<mods::classes::sniper> 	cl_sniper();
 			std::shared_ptr<mods::classes::medic> 	cl_medic();
+			std::shared_ptr<mods::classes::sentinel> cl_sentinel(){ return m_class_sentinel; }
+			void set_sentinel(std::shared_ptr<mods::classes::sentinel> s){
+				m_class_sentinel = s;
+			}
 			obj_data_ptr_t sniper_rifle();
 			void start_histfile();
 			void write_histfile(std::string_view);
@@ -583,6 +591,7 @@ namespace mods {
 			player_type_enum_t m_type;
 			weapon_type_t m_weapon_type;
 			weapon_type_t m_weapon_flags;
+			std::shared_ptr<mods::classes::sentinel> m_class_sentinel;
 			std::shared_ptr<mods::classes::sniper> m_class_sniper;
 			std::shared_ptr<mods::classes::medic> m_class_medic;
 			FILE* m_histfile_fp;

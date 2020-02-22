@@ -3,9 +3,6 @@
 #include "../affects.hpp"
 
 namespace mods::classes {
-		std::shared_ptr<sentinel> sentinel::create(player_ptr_t &in_player){
-			return std::move(std::make_shared<sentinel>(in_player));
-		}
 		int16_t destroy(player_ptr_t& player){
 			/** TODO */
 			player = nullptr;
@@ -29,17 +26,14 @@ namespace mods::classes {
 		czp10_ptr_t sentinel::czp10(){
 			return m_czp10;
 		}
-		mp5_ptr_t sentinel::create_mp5(){
-			m_mp5 = std::make_shared<mods::weapons::smg::mp5>();
-			return m_mp5;
+		mp5_ptr_t sentinel::create_mp5(uint64_t id){
+			MAKE_WEAPON(m_mp5,mods::weapons::smg::mp5);
 		}
-		sasg12_ptr_t sentinel::create_sasg12(){
-			m_sasg12 = std::make_shared<mods::weapons::shotgun::sasg12>();
-			return m_sasg12;
+		sasg12_ptr_t sentinel::create_sasg12(uint64_t id){
+			MAKE_WEAPON(m_sasg12,mods::weapons::shotgun::sasg12);
 		}
-		czp10_ptr_t sentinel::create_czp10(){
-			m_czp10 = std::make_shared<mods::weapons::pistol::czp10>();
-			return m_czp10;
+		czp10_ptr_t sentinel::create_czp10(uint64_t id){
+			MAKE_WEAPON(m_czp10,mods::weapons::pistol::czp10);
 		}
 		player_ptr_t 	sentinel::player(){
 			return m_player;
@@ -48,18 +42,54 @@ namespace mods::classes {
 			m_player = p;
 		}
 		int16_t sentinel::new_player(player_ptr_t &player,
-				mods::weapon::sentinel::primary_choice_t primary_choice
+				std::string_view primary_choice
 				){
-			switch(primary_choice){
-				case primary_choice_t::SENTINEL_PRIMARY_MP5:
-				case primary_choice_t::SENTINEL_PRIMARY_SASG12:
-					break;
-				default:
-					std::cerr << "invalid primary weapon choice for sentinel class...\n";
-					return -1;
+			using primary = mods::weapon::sentinel::primary_choice_t;
+			auto pchoice = 0;
+			if(!primary_choice.compare("MP5")){
+				pchoice = primary::SENTINEL_PRIMARY_MP5;
 			}
+			if(!primary_choice.compare("SASG12")){
+				pchoice = primary::SENTINEL_PRIMARY_SASG12;
+			}
+			if(pchoice == 0){
+				std::cerr << "invalid primary weapon choice for sentinel class...\n";
+				return -1;
+			}
+			auto db_id = m_orm.initialize_row(player,static_cast<primary>(pchoice));
+			std::cerr << "m_orm.initialize_row[" << db_id << "]\n";
+			if(db_id == 0){
+				return -2;
+			}
+			load_by_player(player);
+			return 0;
+		}
+		int16_t sentinel::load_by_player(player_ptr_t & player){
+			auto result = m_orm.load_by_player(player->db_id());
+			if(result < 0){
+				std::cerr << "unable to load sentinel class by player id: " << player->db_id() << ".. return status: " << result << "\n";
+				return result;
+			}
+			std::cerr << "[success]: fetched sentinel character row by player id (" << player->db_id() << ")\n";
+			set_player(player);
+			m_heal_level = static_cast<cure_levels_t>(m_orm.sentinel_heal_level);
+			if(std::string(m_orm.sentinel_primary_type).compare("MP5") == 0){
+				create_mp5(m_orm.sentinel_primary_weapon_id);
+				m_primary_choice = primary_choice_t::MP5;
+			}else{
+				create_sasg12(m_orm.sentinel_primary_weapon_id);
+				m_primary_choice = primary_choice_t::SASG12;
+			}
+			create_czp10(m_orm.sentinel_secondary_weapon_id);
+			m_intimidate_level = static_cast<intimidate_levels_t>(m_orm.sentinel_intimidate_level);
+			m_human_shield_level = static_cast<human_shield_levels_t>(m_orm.sentinel_human_shield_level);
+			m_deny_entry_level = static_cast<deny_entry_levels_t>(m_orm.sentinel_deny_entry_level);
+			m_gadget_shield_level = static_cast<gadget_shield_levels_t>(m_orm.sentinel_gadget_shield_level);
 
 			return 0;
+		}
+		int16_t sentinel::save() {
+			return m_orm.save(this);
 		}
 		void sentinel::heal(player_ptr_t& target){
 			int healing = 0;
@@ -116,5 +146,8 @@ namespace mods::classes {
 			m_sasg12 = nullptr;
 			m_czp10 = nullptr;
 			m_player = nullptr;
+		}
+		std::shared_ptr<sentinel> create_sentinel(player_ptr_t &in_player){
+			return std::move(std::make_shared<sentinel>(in_player));
 		}
 };

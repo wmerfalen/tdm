@@ -234,11 +234,11 @@ std::string sentinel_skillset() {
 		"  +-[ ] Adrenal dump                                                         \r\n"
 		"  +-[ ] Flee                                                                 \r\n"
 		"  +-[ ] Heart attack                                                         \r\n"
-		"\r\n"
-		" [ ] Heal                                                                    \r\n"
-		"  +-[ ] Light [ 15 hp ]                                                      \r\n"
-		"  +-[ ] Critical [ 50 hp ]                                                   \r\n"
-		"  +-[ ] Advanced [ 80 hp ]                                                   \r\n"
+		"                                                                             \r\n"
+		" [ ] Heal        [ 10hp ]                                                    \r\n"
+		"  +-[ ] Light    [ 15hp ]                                                    \r\n"
+		"  +-[ ] Critical [ 50hp ]                                                    \r\n"
+		"  +-[ ] Advanced [ 80hp ]                                                    \r\n"
 		"                                                                             \r\n"
 		" [ ] Human shield                                                            \r\n"
 		"  +-[ ] Absorb\r\n"
@@ -247,12 +247,12 @@ std::string sentinel_skillset() {
 		"  +-[ ] Ignite\r\n"
 		"  +-[ ] Explosive decompression\r\n"
 		"  +-[ ] Toxicity\r\n"
-		"\r\n"
+		"                                                                             \r\n"
 		" [ ] Deny entry                                                              \r\n"
 		"  +-[ ] Firewall                                                             \r\n"
 		"  +-[ ] Expell                                                               \r\n"
 		"  +-[ ] Barricade                                                            \r\n"
-		"\r\n"
+		"                                                                             \r\n"
 		"                   [*] --[ Gadgets ]-- [*]                                   \r\n"
 		" [ ] Shield                                                                  \r\n"
 		"  +-[ ] Deflect\r\n"
@@ -260,10 +260,9 @@ std::string sentinel_skillset() {
 		"  +-[ ] Firewall\r\n"
 		"                                                                             \r\n"
 		"                   [*] --[ Melee ]-- [*]                                     \r\n"
-		" [ ] Shield                                                                  \r\n"
-		"  +-[ ] Deflect\r\n"
-		"  +-[ ] Deflect and ignite\r\n"
-		"  +-[ ] Firewall\r\n"
+		" [ ] Oblique kick                                                            \r\n"
+		"  +-[ ] Heavy [ break victim's leg ]\r\n"
+		"  +-[ ] Extreme [ breaks leg and victim loses 2 turns ]\r\n"
 		"                                                                             \r\n"
 		"                                                                             \r\n"
 	;
@@ -312,23 +311,16 @@ std::string sniper_skillset() {
 player_class_t parse_class(char arg) {
 	switch(arg) {
 		case '1':
-			return CLASS_ENGINEER;
+			return CLASS_SNIPER;
 
 		case '2':
-			return CLASS_MEDIC;
-
-		case '3':
-			return CLASS_MARKSMAN;
-
-		case '4':
-			return CLASS_PSYOP;
-
-		case '5' :
-			return CLASS_SUPPORT;
-
-		case '6' :
 			return CLASS_MARINE;
 
+		case '3':
+			return CLASS_SENTINEL;
+
+		case '4':
+			return CLASS_CONTAGION;
 		default:
 			return CLASS_UNDEFINED;
 	}

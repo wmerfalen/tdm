@@ -222,7 +222,6 @@ namespace db {
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
 				for(auto && row : player_record){
 					player->set_db_id(row["id"].as<int>(0));
-					player->set_class(static_cast<player_class_t>(row["player_class"].as<int>()));
 					return 0;
 				}
 				log("SYSERR: couldn't grab player's pkid: '%s'",player->name().c_str());

@@ -18,11 +18,11 @@ namespace mods::yaml {
 	std::vector<std::pair<std::string,float>> rarity_strings() {
 		return {
 			{"COMMON",mods::rarity::COMMON},
-				{"UNCOMMON",mods::rarity::UNCOMMON},
-				{"RARE",mods::rarity::RARE},
-				{"LEGENDARY",mods::rarity::LEGENDARY},
-				{"GOD_TIER",mods::rarity::GOD_TIER},
-				{"DEFAULT",mods::rarity::DEFAULT}
+			{"UNCOMMON",mods::rarity::UNCOMMON},
+			{"RARE",mods::rarity::RARE},
+			{"LEGENDARY",mods::rarity::LEGENDARY},
+			{"GOD_TIER",mods::rarity::GOD_TIER},
+			{"DEFAULT",mods::rarity::DEFAULT}
 		};
 	}
 	std::string rarity_segment(){

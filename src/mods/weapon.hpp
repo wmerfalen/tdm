@@ -16,6 +16,7 @@
 struct obj_data;
 using obj_data_ptr_t = std::shared_ptr<obj_data>;
 using attachment_list_t = std::array<obj_data_ptr_t,6>;
+extern pqxx::result db_get_by_meta(std::string table, std::string col,const std::string & value);
 namespace mods::weapon {
 	using cap_t = mods::weapon::capabilities::cap_t;
 
@@ -264,6 +265,25 @@ namespace mods::weapon {
 	obj_data_ptr_t new_pistol_object();
 
 	void feed_caps(obj_data_ptr_t& obj, std::vector<cap_t> caps);
+	template <typename T>
+		int16_t load_weapon(T& weapon,uint64_t id){
+			auto result = db_get_by_meta("object_rifle","rifle_id",std::to_string(id));
+			for(auto&& row : result){
+				weapon->feed(row);
+				return 0;
+			}
+			return -1;
+		}
+	template <typename T>
+		std::tuple<int16_t,std::shared_ptr<T>> load_make_weapon(uint64_t id){
+			auto result = db_get_by_meta("object_rifle","rifle_id",std::to_string(id));
+			for(auto&& row : result){
+				auto w = std::make_shared<T>();
+				w->feed(row);
+				return {0,w};
+			}
+			return {-1,nullptr};
+		}
 };
 #endif
 

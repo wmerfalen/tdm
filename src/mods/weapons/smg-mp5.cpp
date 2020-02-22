@@ -22,7 +22,7 @@ namespace mods::weapons::smg {
 		/** [ APPEARS ]: when you type inv */
 		obj->short_description.assign("MP5 sub-machine gun <short>");
 		obj->action_description.assign("MP5");      /* What to write when used          */
-		obj->rifle()->type = mw_rifle::SNIPER;
+		obj->rifle()->type = mw_rifle::SUB_MACHINE_GUN;
 		obj->ex_description.emplace_back("mp5 sub-machine gun",obj->description.c_str());
 		mods::weapon::feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT });
 
@@ -31,6 +31,7 @@ namespace mods::weapons::smg {
 	}
 
 	void mp5::feed(const mods::pq::row_type & row){
+		this->make();
 		bound_to = row["bound_to"].as<uint64_t>();
 		id = row["id"].as<uint64_t>();
 	}

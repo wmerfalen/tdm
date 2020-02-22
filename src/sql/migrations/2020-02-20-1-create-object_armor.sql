@@ -14,3 +14,7 @@ CREATE TABLE object_armor (
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+ALTER TABLE class_sentinel ADD COLUMN sentinel_human_shield_level INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE class_sentinel ADD COLUMN sentinel_deny_entry_level INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE class_sentinel ADD COLUMN sentinel_gadget_shield_level INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE class_sentinel ADD COLUMN sentinel_oblique_kick_level INTEGER NOT NULL DEFAULT 0;

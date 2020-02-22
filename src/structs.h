@@ -187,16 +187,30 @@ using ush_int = uint32_t;
 
 
 /* PC classes */
+//enum player_class_t {
+//CLASS_UNDEFINED	 =  0 ,
+//CLASS_ENGINEER   =  1 ,
+//CLASS_MEDIC      =  2 ,
+//CLASS_MARKSMAN	 =  3 ,
+//CLASS_PSYOP			 =  4 ,
+//CLASS_SUPPORT	   =  5 ,
+//CLASS_MARINE		 =  6 ,
+//CLASS_SNIPER     = CLASS_MARKSMAN
+//};
+
 enum player_class_t {
-CLASS_UNDEFINED	 =  0 ,
-CLASS_ENGINEER   =  1 ,
-CLASS_MEDIC      =  2 ,
-CLASS_MARKSMAN	 =  3 ,
-CLASS_PSYOP			 =  4 ,
-CLASS_SUPPORT	   =  5 ,
-CLASS_MARINE		 =  6 ,
-CLASS_SNIPER     = CLASS_MARKSMAN
+	CLASS_UNDEFINED = 0,
+	CLASS_SNIPER = 1,
+	CLASS_MARINE = 2,
+	CLASS_SENTINEL = 3,
+	CLASS_CONTAGION = 4,
+	CLASS_ENGINEER = 5,
+	CLASS_MEDIC = 6,
+	CLASS_MARKSMAN = 7,
+	CLASS_PSYOP = 8,
+	CLASS_SUPPORT = 9
 };
+
 
 #define NUM_CLASSES	  6  /* This must be the number of classes!! */
 
@@ -344,6 +358,8 @@ CLASS_SNIPER     = CLASS_MARKSMAN
 #define CON_DELCNF2	 17	/* Delete confirmation 2		*/
 #define CON_DISCONNECT	 18	/* In-game link loss (leave character)	*/
 #define CON_IDLE         19 /* user is idle. not playing but also not disconnected */
+#define CON_CHARGEN_PRIMARY_CHOICE 30
+#define CON_CHARGEN_FINALIZE 50 
 
 	/* Character equipment positions: used as index for char_data.equipment[] */
 	/* NOTE: Don't confuse these constants with the ITEM_ bitvectors
