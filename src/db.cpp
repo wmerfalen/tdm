@@ -85,7 +85,7 @@ room_rnum r_idle_room;
 
 char *credits = NULL;		/* game credits			 */
 char *news = NULL;		/* mud news			 */
-char *motd = NULL;		/* message of the day - mortals */
+std::string motd = "Welcome to siege mud.";		/* message of the day - mortals */
 char *imotd = NULL;		/* message of the day - immorts */
 std::string GREETINGS = "";		/* opening credits screen	*/
 char *help = NULL;		/* help screen			 */
@@ -272,17 +272,6 @@ void reboot_wizlists(void) {
 
 /* Wipe out all the loaded text files, for shutting down. */
 void free_text_files(void) {
-	char **textfiles[] = {
-		&wizlist, &immlist, &news, &credits, &motd, &imotd, &help, &info,
-		&policies, &handbook, &background, NULL
-	};
-	int rf;
-
-	for(rf = 0; textfiles[rf]; rf++)
-		if(*textfiles[rf]) {
-			free(*textfiles[rf]);
-			*textfiles[rf] = NULL;
-		}
 }
 
 
@@ -307,7 +296,7 @@ ACMD(do_reboot) {
 		file_to_string_alloc(IMMLIST_FILE, &immlist);
 		file_to_string_alloc(NEWS_FILE, &news);
 		file_to_string_alloc(CREDITS_FILE, &credits);
-		file_to_string_alloc(MOTD_FILE, &motd);
+		//file_to_string_alloc(MOTD_FILE, &motd);
 		file_to_string_alloc(IMOTD_FILE, &imotd);
 		file_to_string_alloc(HELP_PAGE_FILE, &help);
 		file_to_string_alloc(INFO_FILE, &info);
@@ -323,7 +312,7 @@ ACMD(do_reboot) {
 	} else if(!str_cmp(arg, "credits")) {
 		file_to_string_alloc(CREDITS_FILE, &credits);
 	} else if(!str_cmp(arg, "motd")) {
-		file_to_string_alloc(MOTD_FILE, &motd);
+		//file_to_string_alloc(MOTD_FILE, &motd);
 	} else if(!str_cmp(arg, "imotd")) {
 		file_to_string_alloc(IMOTD_FILE, &imotd);
 	} else if(!str_cmp(arg, "help")) {

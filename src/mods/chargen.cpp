@@ -5,11 +5,7 @@
 #include <tuple>
 #include <string>
 
-//namespace db {
-//	extern int16_t save_new_char(player_ptr_t player);
-//	extern int16_t load_char_pkid(player_ptr_t player);
-//};
-//extern bool parse_sql_player(player_ptr_t player_ptr);
+extern std::string motd;
 namespace mods::chargen {
 	std::string_view parse_primary_choice(char choice,int class_type){
 		switch(class_type){
@@ -59,6 +55,10 @@ namespace mods::chargen {
 		}
 		return {1,"success"};
 	}
+	void show_finalized_chargen_screen(player_ptr_t p){
+		p->set_state(CON_RMOTD);
+		write_to_output(p->desc(), "%s\r\n*** PRESS RETURN: ", motd.c_str());
+	}
 	void handle_primary_choice(player_ptr_t p,char arg_choice,player_class_t class_type){
 		if(class_type == CLASS_SENTINEL){
 			auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
@@ -70,7 +70,7 @@ namespace mods::chargen {
 					p->set_state(CON_CLOSE);
 					return;
 				}
-				p->set_state(CON_CHARGEN_FINALIZE);
+				show_finalized_chargen_screen(p);
 				return;
 			}
 			if(choice.compare("SASG12") == 0){
@@ -81,13 +81,13 @@ namespace mods::chargen {
 					p->set_state(CON_CLOSE);
 					return;
 				}
-				p->set_state(CON_CHARGEN_FINALIZE);
+				show_finalized_chargen_screen(p);
 				return;
 			}
-			write_to_output(p->desc(), "%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
+			write_to_output(p->desc(), "\r\nI don't get it? Please read the menu and try again...\r\n%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
 			p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
 			return;
 		}
-		p->set_state(CON_CHARGEN_FINALIZE);
+		show_finalized_chargen_screen(p);
 	}
 };

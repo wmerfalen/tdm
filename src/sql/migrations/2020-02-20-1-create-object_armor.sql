@@ -18,3 +18,4 @@ ALTER TABLE class_sentinel ADD COLUMN sentinel_human_shield_level INTEGER NOT NU
 ALTER TABLE class_sentinel ADD COLUMN sentinel_deny_entry_level INTEGER NOT NULL DEFAULT 0;
 ALTER TABLE class_sentinel ADD COLUMN sentinel_gadget_shield_level INTEGER NOT NULL DEFAULT 0;
 ALTER TABLE class_sentinel ADD COLUMN sentinel_oblique_kick_level INTEGER NOT NULL DEFAULT 0;
+ALTER TYPE rifle_type_t ADD VALUE 'PISTOL';

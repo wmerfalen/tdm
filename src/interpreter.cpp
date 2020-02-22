@@ -41,7 +41,7 @@ extern room_rnum r_mortal_start_room;
 extern room_rnum r_immort_start_room;
 extern room_rnum r_frozen_start_room;
 extern const char *class_menu;
-extern char *motd;
+extern std::string motd;
 extern char *imotd;
 extern char *background;
 extern char *MENU;
@@ -1730,7 +1730,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 				if(p->level() >= LVL_IMMORT) {
 					write_to_output(d, "%s", imotd);
 				} else {
-					write_to_output(d, "%s", motd);
+					write_to_output(d, "%s", motd.c_str());
 				}
 
 				mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(p->cd())), TRUE, "%s [%s] has connected.", p->name().c_str(), p->host().c_str());
@@ -1838,18 +1838,12 @@ void nanny(player_ptr_t p, char * in_arg) {
 					p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
 					break;
 				default:
-					p->set_state(CON_CHARGEN_FINALIZE);
 					break;
 			}
 			return;
 		case CON_CHARGEN_PRIMARY_CHOICE:
 			mods::chargen::handle_primary_choice(p,arg[0],p->get_class());
 			return;
-		case CON_CHARGEN_FINALIZE:
-			p->set_state(CON_RMOTD);
-			write_to_output(d, "%s\r\n*** PRESS RETURN: ", motd);
-			break;
-
 		case CON_RMOTD:		/* read CR after printing motd   */
 			write_to_output(d, "%s", MENU);
 			p->set_state(CON_MENU);

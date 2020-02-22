@@ -31,6 +31,7 @@ max_range: 1 #integer,measured in rooms
 range_multiplier: 0.0 #float, multiplied by 
 # reload time must account for high damage output in order to balance the game
 reload_time: 2.0013 #float, measured in seconds
+str_type: 'PISTOL'
 type: 'PISTOL' #string, type of weapon
 manufacturer: 'TN3 SMITH-x Industrial'
 name: 'A USP40' #string
@@ -44,3 +45,4 @@ name: 'A USP40' #string
 rarity: 'RARE'
 vnum: 102 #virtual number
 object_type: rifle
+feed_file: 'base_pistol.yml'

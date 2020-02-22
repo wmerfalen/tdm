@@ -36,10 +36,11 @@ reload_time: 2.1 #float, measured in seconds
 # type: HANDGUN
 # type: MACHINE_PISTOL
 # type: LIGHT_MACHINE_GUN
-type: 'SUB_MACHINE_GUN' # enum, object type
+type: 0  # enum, object type
 manufacturer: 'Heckler and Koch' # string, anything 
 name: 'MP5' # string, anything name of object 
 vnum: 5 # integer, unique identifier
+str_type: 'SUB_MACHINE_GUN'
 #rarity types
 # COMMON
 # UNCOMMON
@@ -48,3 +49,4 @@ vnum: 5 # integer, unique identifier
 # GOD_TIER
 # DEFAULT
 rarity: 'COMMON'
+feed_file: 'base_smg.yml'

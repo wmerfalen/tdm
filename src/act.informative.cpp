@@ -37,7 +37,7 @@ extern struct time_info_data time_info;
 extern char *credits;
 extern char *news;
 extern char *info;
-extern char *motd;
+extern std::string motd;
 extern char *imotd;
 extern char *wizlist;
 extern char *immlist;
@@ -1650,7 +1650,7 @@ ACMD(do_gen_ps) {
 			break;
 
 		case SCMD_MOTD:
-			page_string(*ch->desc, motd, 0);
+			page_string(*ch->desc, motd.data(), 0);
 			break;
 
 		case SCMD_IMOTD:

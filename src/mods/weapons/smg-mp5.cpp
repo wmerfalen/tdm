@@ -32,8 +32,8 @@ namespace mods::weapons::smg {
 
 	void mp5::feed(const mods::pq::row_type & row){
 		this->make();
-		bound_to = row["bound_to"].as<uint64_t>();
-		id = row["id"].as<uint64_t>();
+		bound_to = 0;//row["bound_to"].as<uint64_t>();
+		id = row["rifle_id"].as<uint64_t>();
 	}
 	mp5::~mp5(){
 		obj.reset();

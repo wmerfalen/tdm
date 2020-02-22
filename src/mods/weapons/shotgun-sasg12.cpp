@@ -30,8 +30,8 @@ namespace mods::weapons::shotgun {
 	}
 
 	void sasg12::feed(const mods::pq::row_type & row){
-		bound_to = row["bound_to"].as<uint64_t>();
-		id = row["id"].as<uint64_t>();
+		bound_to = 0;//row["bound_to"].as<uint64_t>();
+		id = row["rifle_id"].as<uint64_t>();
 	}
 	sasg12::~sasg12(){
 		obj.reset();

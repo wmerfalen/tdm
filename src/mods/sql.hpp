@@ -238,9 +238,8 @@ namespace mods::sql {
 				return *this;
 			}
 			compositor<T>& returning(str_object column) {
-				std::string sql = " RETURNING ";
-				sql += m_txn_ptr->quote(std::string(column.data()));
-				m_query[4] += sql;
+				std::cerr << "[sql-compositor--returning]: status of sql: '" << m_sql << "'\n";
+				m_returning = std::string(" RETURNING ") + column.data();
 				return *this;
 			}
 
@@ -255,8 +254,11 @@ namespace mods::sql {
 				for(unsigned i = 0; i < query_parts; i++) {
 					m_sql += m_query[i];
 				}
+				if(m_returning.length()){
+					m_sql += m_returning;
+				}
 
-				//std::cerr << m_sql << "\n";
+				std::cerr << m_sql << "\n";
 				return m_sql;
 			}
 		private:
@@ -265,6 +267,7 @@ namespace mods::sql {
 			std::vector<std::string> m_joins;
 			std::string m_current_join;
 			std::string m_table;
+			std::string m_returning;
 			T* m_txn_ptr;
 	};
 

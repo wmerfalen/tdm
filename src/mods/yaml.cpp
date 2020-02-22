@@ -8,12 +8,21 @@ using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 namespace mods::yaml {
 
 #define MENTOC_FEED_BASE_MEMBERS \
+	try{ \
+	std::cerr << "feeding base members...\nfeeding manufacturer..";\
 		manufacturer = yaml_file["manufacturer"].as<std::string>();\
+	std::cerr << "done\nfeeding name...";\
 		name = yaml_file["name"].as<std::string>();\
+	std::cerr << "done\nfeeding str_type...";\
 		str_type = yaml_file["str_type"].as<std::string>();\
+	std::cerr << "done\nfeeding vnum...";\
 		vnum = yaml_file["vnum"].as<int>();\
+	std::cerr << "done\nfeeding rarity...";\
 		rarity = parse_rarity(yaml_file["rarity"].as<std::string>());\
-		feed_file = yaml_file["feed_file"].as<std::string>();
+	std::cerr << "done\nfeeding feed_file..";\
+		feed_file = yaml_file["feed_file"].as<std::string>();\
+	std::cerr << "done\nCompleted feeding base members\n";\
+	}catch(std::exception &e){ std::cerr << "[yaml-cpp exception]: '" << e.what() << "'\n"; }
 
 	std::vector<std::pair<std::string,float>> rarity_strings() {
 		return {
@@ -50,6 +59,15 @@ namespace mods::yaml {
 		}
 		return mods::rarity::DEFAULT;
 	}
+	std::string rarity_to_string(float val){
+		for(auto & rarity_pair : rarity_strings()){
+			if(rarity_pair.second == val){
+				return rarity_pair.first;
+			}
+		}
+		return "COMMON";
+	}
+/*********************************************************/
 /*********************************************************/
 /** HOWTO: Add new item and subcategories                */
 /* Step 6: Define the write_example_file function:       */
@@ -203,36 +221,38 @@ namespace mods::yaml {
 	};
 	uint64_t rifle_description_t::flush_to_db(){
 		try{
+			std::cerr << "[status] rifle flush_to_db.. flushing...\n";
 			std::map<std::string,std::string> values;
 			std::string rifm = "rifle_accuracy_map_",
 				dam = "rifle_damage_map_";
 			for(unsigned i = 0; i < MAX_ROOM_DISTANCE;i++) {
-				values[rifm + std::to_string(i)] = accuracy_map[i];
-				values[dam + std::to_string(i)] = damage_map[i];
+				values[rifm + std::to_string(i)] = std::to_string(accuracy_map[i]);
+				values[dam + std::to_string(i)] = std::to_string(damage_map[i]);
 			}
-			values["rifle_ammo_max"] = ammo_max;
+			values["rifle_ammo_max"] = std::to_string(ammo_max);
 			values["rifle_ammo_type"] = ammo_type;
-			values["rifle_chance_to_injure"] = chance_to_injure;
-			values["rifle_clip_size"] = clip_size;
-			values["rifle_cooldown_between_shots"] = cooldown_between_shots;
-			values["rifle_critical_chance"] = critical_chance;
-			values["rifle_critical_range"] = critical_range;
-			values["rifle_damage_per_second"] = damage_per_second;
-			values["rifle_disorient_amount"] = disorient_amount;
-			values["rifle_headshot_bonus"] = headshot_bonus;
-			values["rifle_max_range"] = max_range;
-			values["rifle_range_multiplier"] = range_multiplier;
-			values["rifle_reload_time"] = reload_time;
-			values["rifle_rounds_per_minute"] = rounds_per_minute;
-			values["rifle_muzzle_velocity"] = muzzle_velocity;
-			values["rifle_effective_firing_range"] = effective_firing_range;
+			values["rifle_chance_to_injure"] = std::to_string(chance_to_injure);
+			values["rifle_clip_size"] = std::to_string(clip_size);
+			values["rifle_cooldown_between_shots"] = std::to_string(cooldown_between_shots);
+			values["rifle_critical_chance"] = std::to_string(critical_chance);
+			values["rifle_critical_range"] = std::to_string(critical_range);
+			values["rifle_damage_per_second"] = std::to_string(damage_per_second);
+			values["rifle_disorient_amount"] = std::to_string(disorient_amount);
+			values["rifle_headshot_bonus"] = std::to_string(headshot_bonus);
+			values["rifle_max_range"] = std::to_string(max_range);
+			values["rifle_range_multiplier"] = std::to_string(range_multiplier);
+			values["rifle_reload_time"] = std::to_string(reload_time);
+			values["rifle_rounds_per_minute"] = std::to_string(rounds_per_minute);
+			values["rifle_muzzle_velocity"] = std::to_string(muzzle_velocity);
+			values["rifle_effective_firing_range"] = std::to_string(effective_firing_range);
 			values["rifle_str_type"] = str_type;
-			values["rifle_type"] = type;
+			values["rifle_type"] = std::to_string(type);
 			values["rifle_manufacturer"] = manufacturer;
 			values["rifle_name"] = name;
-			values["rifle_vnum"] = vnum;
-			values["rifle_rarity"] = rarity;
+			values["rifle_vnum"] = std::to_string(vnum);
+			values["rifle_rarity"] = rarity_to_string(rarity);
 			values["rifle_file"] = feed_file;
+			mods::util::maps::dump(values);
 			auto insert_transaction = txn();
 			sql_compositor comp("object_rifle",&insert_transaction);
 			auto up_sql = comp
@@ -334,13 +354,37 @@ namespace mods::yaml {
 			return 0;
 	}
 	int16_t rifle_description_t::feed(std::string_view in_file){
-		std::string file = current_working_dir() + "/" + in_file.data();
-		feed_file = file;
-		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
-		auto type_string = yaml_file["str_type"].as<std::string>();
-		MENTOC_FEED_RIFLE
+		try {
+			std::string file = current_working_dir() + "/" + in_file.data();
+			feed_file = file;
+			YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
+			std::cerr << "grabbing accuracy_map (rifle feed func)...\n";
+			auto acmap = yaml_file["accuracy_map"].as<std::vector<float>>();
+			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
+				std::cerr << "[acmap]: " << acmap[i] << "\n";
+				accuracy_map[i] = acmap[i];
+			}
+			std::cerr << "feeding damage_map...\n";
+			auto dmap = yaml_file["damage_map"].as<std::vector<float>>();
+			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
+				std::cerr << "[acmap]: " << dmap[i] << "\n";
+				damage_map[i] = dmap[i];
+			}
+			std::cerr << "done feeding damage_map...\n";
+			std::cerr << "feeding str_type...";
+			auto type_string = yaml_file["str_type"].as<std::string>();
+			std::cerr << "done\n";
+			std::cerr << "feeding all rifle members...";
+			MENTOC_FEED_RIFLE
+				std::cerr << "done\n";
+			std::cerr << "feeding base members...";
 			MENTOC_FEED_BASE_MEMBERS
-			return 0;
+				std::cerr << "done\n";
+		}catch(std::exception &e){
+			std::cerr << "[exception] rifle feed: '" << e.what() << "'\n";
+			return -1;
+		}
+		return 0;
 	}
 	int16_t drone_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();

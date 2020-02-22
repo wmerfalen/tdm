@@ -7,7 +7,7 @@ namespace mods::weapons::pistol {
 	/** This function is a prime example of how to populate a obj_ptr_t */
 	obj_data_ptr_t czp10::make(){
 		auto obj = mods::weapon::new_pistol_object();
-		obj->rifle(".yml");
+		obj->rifle("base_pistol.yml");
 
 		/** TODO: determine clip size */
 		obj->obj_flags.ammo = 9;
@@ -46,6 +46,7 @@ namespace mods::weapons::pistol {
 		obj->rifle()->attributes->range_multiplier=0.0 ;
 ;
 		obj->rifle()->attributes->reload_time=2.0013 ;
+		obj->rifle()->attributes->str_type= "PISTOL";
 		obj->rifle()->attributes->type= mw_rifle::PISTOL;
 		obj->rifle()->attributes->manufacturer="Prophet Industrial";
 		obj->rifle()->attributes->name="A CZP10 pistol" ;
@@ -57,7 +58,7 @@ namespace mods::weapons::pistol {
 	}
 
 	void czp10::feed(const mods::pq::row_type & row){
-		bound_to = row["bound_to"].as<uint64_t>();
-		id = row["id"].as<uint64_t>();
+		bound_to = 0; //row["bound_to"].as<uint64_t>();
+		id = row["rifle_id"].as<uint64_t>();
 	}
 };
