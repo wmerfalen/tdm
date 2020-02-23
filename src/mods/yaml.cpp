@@ -9,29 +9,29 @@ namespace mods::yaml {
 
 #define MENTOC_FEED_BASE_MEMBERS \
 	try{ \
-	std::cerr << "feeding base members...\nfeeding manufacturer..";\
+		std::cerr << "feeding base members...\nfeeding manufacturer..";\
 		manufacturer = yaml_file["manufacturer"].as<std::string>();\
-	std::cerr << "done\nfeeding name...";\
+		std::cerr << "done\nfeeding name...";\
 		name = yaml_file["name"].as<std::string>();\
-	std::cerr << "done\nfeeding str_type...";\
+		std::cerr << "done\nfeeding str_type...";\
 		str_type = yaml_file["str_type"].as<std::string>();\
-	std::cerr << "done\nfeeding vnum...";\
+		std::cerr << "done\nfeeding vnum...";\
 		vnum = yaml_file["vnum"].as<int>();\
-	std::cerr << "done\nfeeding rarity...";\
+		std::cerr << "done\nfeeding rarity...";\
 		rarity = parse_rarity(yaml_file["rarity"].as<std::string>());\
-	std::cerr << "done\nfeeding feed_file..";\
+		std::cerr << "done\nfeeding feed_file..";\
 		feed_file = yaml_file["feed_file"].as<std::string>();\
-	std::cerr << "done\nCompleted feeding base members\n";\
+		std::cerr << "done\nCompleted feeding base members\n";\
 	}catch(std::exception &e){ std::cerr << "[yaml-cpp exception]: '" << e.what() << "'\n"; }
 
 	std::vector<std::pair<std::string,float>> rarity_strings() {
 		return {
 			{"COMMON",mods::rarity::COMMON},
-			{"UNCOMMON",mods::rarity::UNCOMMON},
-			{"RARE",mods::rarity::RARE},
-			{"LEGENDARY",mods::rarity::LEGENDARY},
-			{"GOD_TIER",mods::rarity::GOD_TIER},
-			{"DEFAULT",mods::rarity::DEFAULT}
+				{"UNCOMMON",mods::rarity::UNCOMMON},
+				{"RARE",mods::rarity::RARE},
+				{"LEGENDARY",mods::rarity::LEGENDARY},
+				{"GOD_TIER",mods::rarity::GOD_TIER},
+				{"DEFAULT",mods::rarity::DEFAULT}
 		};
 	}
 	std::string rarity_segment(){
@@ -67,11 +67,11 @@ namespace mods::yaml {
 		}
 		return "COMMON";
 	}
-/*********************************************************/
-/*********************************************************/
-/** HOWTO: Add new item and subcategories                */
-/* Step 6: Define the write_example_file function:       */
-/*********************************************************/
+	/*********************************************************/
+	/*********************************************************/
+	/** HOWTO: Add new item and subcategories                */
+	/* Step 6: Define the write_example_file function:       */
+	/*********************************************************/
 	int16_t armor_description_t::write_example_file(std::string_view file){
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
@@ -84,8 +84,8 @@ namespace mods::yaml {
 			return -2;
 		}
 		MENTOC_EXAMPLE_ARMORS
-		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
-		base_items(&out_file,"MK-71X Ballistic Vest","VEST");
+			MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
+			base_items(&out_file,"MK-71X Ballistic Vest","VEST");
 		out_file.flush();
 		out_file.close();
 		return 0;
