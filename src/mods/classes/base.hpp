@@ -3,6 +3,7 @@
 
 #include "types.hpp"
 #include <memory>
+
 namespace mods {
 	struct player;
 };
@@ -21,9 +22,12 @@ namespace mods::classes {
 			return types::UNDEFINED;
 		}
 		player_ptr_t player_obj;
+		player_ptr_t m_player;
 		/* constructors and destructors */
 		base() = default;
 		virtual ~base() = default;
+void          sendln(std::string_view msg);
+void          psendln(std::string_view msg);
 	};
 };
 #include "../player.hpp"

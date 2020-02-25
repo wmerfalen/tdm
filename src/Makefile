@@ -52,14 +52,14 @@ buildobj = act.informative act.item act.medic \
 					 act.comm mods/extra_desc_data mods/overhead_map mods/npc \
 					 mods/randomized-items mods/auto-login mods/date-time \
 					 mods/world-configuration mods/debug act.debug mods/pfind \
-					 mods/orm/chargen \
+					 mods/orm/chargen mods/orm/inventory \
 					 mods/weapons/pistol-czp10 \
 					 mods/weapons/smg-mp5 mods/weapons/shotgun-sasg12 mods/classes/sentinel \
 					 mods/orm/class-sentinel \
 					 mods/weapons/sniper-rifle-psg1 mods/classes/sniper \
 					 mods/orm/quotes act.builder mods/orm/base mods/yaml \
 					 mods/affects mods/item mods/weapon-types mods/sensor-grenade \
-					 mods/calc_visibility mods/events mods/chargen
+					 mods/calc_visibility mods/events mods/chargen mods/classes/base
 
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))

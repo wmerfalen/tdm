@@ -411,14 +411,14 @@ void look_at_char(char_data *i, char_data *ch) {
 		}
 
 	if(found) {
-		player->sendln( "");	/* act() does capitalization. */
-		act("$n is using:", FALSE, i, 0, ch, TO_VICT);
+		act("\r\n$n is using:", FALSE, i, 0, ch, TO_VICT);
 
-		for(j = 0; j < NUM_WEARS; j++)
+		for(j = 0; j < NUM_WEARS; j++){
 			if(GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j))) {
 				player->send(wear_where[j]);
 				show_obj_to_char(GET_EQ(i, j), ch, SHOW_OBJ_SHORT);
 			}
+		}
 	}
 
 	if(ch != i && (IS_THIEF(ch) || GET_LEVEL(ch) >= LVL_IMMORT)) {
@@ -456,7 +456,7 @@ void list_one_char(char_data *i, char_data *ch) {
 	if(IS_NPC(i)) {
 		player->stc(i->player.short_descr);
 	} else {
-		player->stc(i->player.name + " " +  GET_TITLE(i));
+		player->stc(i->player.name.str() + (GET_TITLE(i).length() ? " " + GET_TITLE(i).str() : ""));
 	}
 
 	if(AFF_FLAGGED(i, AFF_INVISIBLE)) {
@@ -522,7 +522,7 @@ void list_char_to_char(char_data *ch) {
 	FOR_ROOM(player_ptr) {
 		std::cerr << "[debug]: list_char_to_char: " << player_ptr->name().c_str() << "\n";
 		auto i = player_ptr->cd();
-		if(player_ptr->name().compare(ch->player.name.c_str()) != 0) {
+		if(player_ptr->name().compare(ch->player.name.c_str())) {
 			if(CAN_SEE(ch, i)) {
 				list_one_char(i, ch);
 			} else if(IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch) &&

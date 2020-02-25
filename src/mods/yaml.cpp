@@ -386,6 +386,39 @@ namespace mods::yaml {
 		}
 		return 0;
 	}
+
+	int16_t rifle_description_t::feed_from_po_record(mentoc_pqxx_result_t yaml_file){
+		try {
+			std::cerr << "grabbing accuracy_map (rifle feed func)...\n";
+			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
+				float item = yaml_file[std::string("accuracy_map_") + std::to_string(i)].as<float>();
+				std::cerr << "[acmap]: " << item << "\n";
+				accuracy_map[i] = item;
+			}
+			std::cerr << "feeding damage_map...\n";
+			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
+				float item = yaml_file[std::string("damage_map_") + std::to_string(i)].as<float>();
+				std::cerr << "[acmap]: " << item << "\n";
+				damage_map[i] = item;
+			}
+			std::cerr << "done feeding damage_map...\n";
+			std::cerr << "feeding str_type...";
+			auto type_string = yaml_file["str_type"].as<std::string>();
+			std::cerr << "done\n";
+			std::cerr << "feeding all rifle members...";
+			MENTOC_FEED_RIFLE
+				std::cerr << "done\n";
+			std::cerr << "feeding base members...";
+			MENTOC_FEED_BASE_MEMBERS
+				std::cerr << "done\n";
+		}catch(std::exception &e){
+			std::cerr << "[exception] rifle feed: '" << e.what() << "'\n";
+			return -1;
+		}
+		return 0;
+	}
+
+
 	int16_t drone_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();
 		feed_file = file;

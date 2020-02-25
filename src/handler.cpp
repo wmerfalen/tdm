@@ -628,11 +628,100 @@ void equip_char(player_ptr_t player,obj_ptr_t in_object,int pos){
 	player->equip(in_object,pos);
 }
 
+//void equip_char(struct char_data *ch, struct obj_data *obj, int pos)
+//{
+//  int j;
+//
+//  if (pos < 0 || pos >= NUM_WEARS) {
+//    core_dump();
+//    return;
+//  }
+//
+//  if (GET_EQ(ch, pos)) {
+//    log("SYSERR: Char is already equipped: %s, %s", GET_NAME(ch),
+//	    obj->short_description);
+//    return;
+//  }
+//  if (obj->carried_by) {
+//    log("SYSERR: EQUIP: Obj is carried_by when equip.");
+//    return;
+//  }
+//  if (IN_ROOM(obj) != NOWHERE) {
+//    log("SYSERR: EQUIP: Obj is in_room when equip.");
+//    return;
+//  }
+//  if (invalid_align(ch, obj) || invalid_class(ch, obj)) {
+//    act("You are zapped by $p and instantly let go of it.", FALSE, ch, obj, 0, TO_CHAR);
+//    act("$n is zapped by $p and instantly lets go of it.", FALSE, ch, obj, 0, TO_ROOM);
+//    /* Changed to drop in inventory instead of the ground. */
+//    obj_to_char(obj, ch);
+//    return;
+//  }
+//
+//  GET_EQ(ch, pos) = obj;
+//  obj->worn_by = ch;
+//  obj->worn_on = pos;
+//
+//  if (GET_OBJ_TYPE(obj) == ITEM_ARMOR)
+//    GET_AC(ch) -= apply_ac(ch, pos);
+//
+//  if (IN_ROOM(ch) != NOWHERE) {
+//    if (pos == WEAR_LIGHT && GET_OBJ_TYPE(obj) == ITEM_LIGHT)
+//      if (GET_OBJ_VAL(obj, 2))	/* if light is ON */
+//	world[IN_ROOM(ch)].light++;
+//  } else
+//    log("SYSERR: IN_ROOM(ch) = NOWHERE when equipping char %s.", GET_NAME(ch));
+//
+//  for (j = 0; j < MAX_OBJ_AFFECT; j++)
+//    affect_modify(ch, obj->affected[j].location,
+//		  obj->affected[j].modifier,
+//		  GET_OBJ_AFFECT(obj), TRUE);
+//
+//  affect_total(ch);
+//}
+
+
 obj_ptr_t unequip_char(player_ptr_t player, int pos){
 	auto obj = player->equipment(pos);
 	player->unequip(pos);
 	return (obj);
 }
+
+//struct obj_data *unequip_char(struct char_data *ch, int pos)
+//{
+//  int j;
+//  struct obj_data *obj;
+//
+//  if ((pos < 0 || pos >= NUM_WEARS) || GET_EQ(ch, pos) == NULL) {
+//    core_dump();
+//    return (NULL);
+//  }
+//
+//  obj = GET_EQ(ch, pos);
+//  obj->worn_by = NULL;
+//  obj->worn_on = -1;
+//
+//  if (GET_OBJ_TYPE(obj) == ITEM_ARMOR)
+//    GET_AC(ch) += apply_ac(ch, pos);
+//
+//  if (IN_ROOM(ch) != NOWHERE) {
+//    if (pos == WEAR_LIGHT && GET_OBJ_TYPE(obj) == ITEM_LIGHT)
+//      if (GET_OBJ_VAL(obj, 2))	/* if light is ON */
+//	world[IN_ROOM(ch)].light--;
+//  } else
+//    log("SYSERR: IN_ROOM(ch) = NOWHERE when unequipping char %s.", GET_NAME(ch));
+//
+//  GET_EQ(ch, pos) = NULL;
+//
+//  for (j = 0; j < MAX_OBJ_AFFECT; j++)
+//    affect_modify(ch, obj->affected[j].location,
+//		  obj->affected[j].modifier,
+//		  GET_OBJ_AFFECT(obj), FALSE);
+//
+//  affect_total(ch);
+//
+//  return (obj);
+//}
 
 
 

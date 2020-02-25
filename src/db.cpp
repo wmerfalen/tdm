@@ -36,6 +36,8 @@
 #include "mods/sql.hpp"
 #include "mods/npc.hpp"
 #include "mods/world-configuration.hpp"
+#include "mods/classes/sentinel.hpp"
+#include "mods/orm/inventory.hpp"
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
@@ -1984,6 +1986,19 @@ struct obj_data *read_object(obj_vnum nr, int type) { /* and obj_rnum */
 	return create_object_from_index(i).get();
 }
 
+/* create a new object from a prototype */
+obj_ptr_t read_object_ptr(obj_vnum nr, int type) { /* and obj_rnum */
+	obj_rnum i = type == VIRTUAL ? real_object(nr) : nr;
+
+	std::size_t ii = i;
+
+	if(i == NOTHING || ii >= obj_proto.size()) {
+		log("Object (%c) %d does not exist in database.", type == VIRTUAL ? 'V' : 'R', nr);
+		return (NULL);
+	}
+	return create_object_from_index(i);
+}
+
 
 
 #define ZO_DEAD  999
@@ -2508,6 +2523,15 @@ __MENTOC_PLR(PLR_NOTDEADYET);
 		player_ptr->set_time_played(mods::util::stoi<int>(row["player_time_played"]));
 		player_ptr->set_time_logon(time(0));
 		player_ptr->set_prefs(mods::util::stoi<long>(row["player_preferences"]));
+		switch(player_ptr->get_class()){
+			case CLASS_SENTINEL:
+				log("User [%s] is a sentinel. Loading... ", player_ptr->name());
+				player_ptr->set_sentinel(mods::classes::create_sentinel(player_ptr));
+				break;
+			default:
+				break;
+		}
+		mods::orm::inventory::feed_player(player_ptr);
 		return true;
 	}
 	return false;

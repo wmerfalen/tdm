@@ -259,8 +259,9 @@ const char *wear_where[] = {
 	"<worn about waist>   ",
 	"<worn around wrist>  ",
 	"<worn around wrist>  ",
-	"<wielded>            ",
-	"<held>               "
+	"<primary weapon>     ",
+	"<held>               ",
+	"<secondary weapon>   "
 };
 
 
@@ -282,8 +283,9 @@ const char *equipment_types[] = {
 	"Worn around waist",
 	"Worn around right wrist",
 	"Worn around left wrist",
-	"Wielded",
+	"Primary weapon",
 	"Held",
+	"Secondary weapon",
 	"\n"
 };
 
@@ -333,8 +335,9 @@ const char *wear_bits[] = {
 	"ABOUT",
 	"WAIST",
 	"WRIST",
-	"WIELD",
+	"PRIMARY",
 	"HOLD",
+	"SECONDARY",
 	"\n"
 };
 

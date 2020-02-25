@@ -209,8 +209,9 @@ namespace mods {
 			if(pos == WEAR_WIELD){
 				m_weapon_flags = in_object->obj_flags.weapon_flags;
 			}
+  		GET_EQ(m_char_data, pos) = in_object.get();
 			in_object->worn_by = cd();
-			in_object->worn_on = WEAR_WIELD;
+			in_object->worn_on = pos;
 			m_equipment[pos] = in_object;
 			perform_equip_calculations(pos,true);
 		}

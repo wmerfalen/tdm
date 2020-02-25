@@ -77,6 +77,7 @@ namespace mods::yaml {
 			std::fill(damage_map.begin(),damage_map.end(),0);
 		}
 		virtual int16_t feed(std::string_view file);
+		virtual int16_t feed_from_po_record(mentoc_pqxx_result_t);
 		virtual int16_t write_example_file(std::string_view file);
 		uint64_t flush_to_db();
 			std::array<float,MAX_ROOM_DISTANCE> accuracy_map;

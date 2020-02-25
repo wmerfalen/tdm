@@ -95,7 +95,6 @@ namespace mods::classes {
 		int64_t				db_id() const;
 		int16_t       save();
 		private:
-			player_ptr_t 		m_player;
 			mp5_ptr_t 			m_mp5;
 			sasg12_ptr_t  	m_sasg12;
 			czp10_ptr_t 		m_czp10;

@@ -12,7 +12,7 @@ namespace mods::classes {
 			m_mp5 = nullptr;
 			m_sasg12 = nullptr;
 			m_czp10 = nullptr;
-			this->set_player(p);
+			this->load_by_player(p);
 		}
 		mp5_ptr_t sentinel::mp5(){
 			return m_mp5;
@@ -96,7 +96,7 @@ namespace mods::classes {
 			switch(m_heal_level) {
 				default:
 				case SENTINEL_CURE_NONE:
-					m_player->psendln("It looks like you still need to train that skill");
+					psendln("It looks like you still need to train that skill");
 					return;
 				case SENTINEL_CURE_LIGHT:
 					healing = dice(1, 8) + 1 + (m_player->level() / 4);
@@ -110,7 +110,7 @@ namespace mods::classes {
 
 				case SENTINEL_HEAL:
 					healing = 100 + dice(3, 8);
-					target->psendln("A warm feeling floods your body.");
+					target->psendln("Your health increases drastically.");
 					break;
 			}
 			target->hp() += healing;
@@ -120,21 +120,21 @@ namespace mods::classes {
 			switch(m_intimidate_level) {
 				default:
 				case SENTINEL_INTIMIDATE_NONE:
-					m_player->psendln("It looks like you still need to train that skill");
+					psendln("It looks like you still need to train that skill");
 					return;
 				case SENTINEL_INTIMIDATE_LIGHT:
 					intimidate = dice(1, 8) + 1 + (m_player->level() / 4);
-					m_player->psendln("Your stare intimidates the enemy.");
+					m_player->send("%s flees in fear!", target->name());
 					break;
 
 				case SENTINEL_INTIMIDATE_CRITIC:
 					intimidate = dice(3, 8) + 3 + (m_player->level() / 4);
-					m_player->psendln("Your stare forces the enemy to freeze");
+					m_player->send("%s experiences a massive adrenaline dump", target->name());
 					break;
 
 				case SENTINEL_INTIMIDATE_HEART_ATTACK:
 					intimidate = 100 + dice(3, 8);
-					m_player->send("%s is filled with overwhelming amounts of dread. They freeze as adrenaline saturates their reasoning", target->name());
+					m_player->send("%s grips his chest and vomits uncontrollably", target->name());
 					break;
 			}
 			auto & affects = target->get_affect_dissolver();

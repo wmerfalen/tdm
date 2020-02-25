@@ -381,10 +381,12 @@ enum player_class_t {
 #define WEAR_WRIST_R   14
 #define WEAR_WRIST_L   15
 #define WEAR_WIELD     16
+#define WEAR_PRIMARY   WEAR_WIELD
 #define WEAR_HOLD      17
-#define WEAR_WEAPON_ATTACHMENT      18
+#define WEAR_SECONDARY_WEAPON 18
+#define WEAR_WEAPON_ATTACHMENT      19
 
-#define NUM_WEARS      19	/* This must be the # of eq positions!! */
+#define NUM_WEARS      20	/* This must be the # of eq positions!! */
 
 
 	/* object-related defines ********************************************/
@@ -439,7 +441,9 @@ enum player_class_t {
 #define ITEM_WEAR_WAIST 	(1 << 11) /* Can be worn around waist 	*/
 #define ITEM_WEAR_WRIST		(1 << 12) /* Can be worn on wrist 	*/
 #define ITEM_WEAR_WIELD		(1 << 13) /* Can be wielded		*/
+#define ITEM_WEAR_PRIMARY		ITEM_WEAR_WIELD
 #define ITEM_WEAR_HOLD		(1 << 14) /* Can be held		*/
+#define ITEM_WEAR_SECONDARY (1 << 15)
 
 
 	/* Extra object flags: used by obj_data.obj_flags.extra_flags */
