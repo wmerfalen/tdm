@@ -2,6 +2,9 @@
 #include "../weapon.hpp"
 #include "../affects.hpp"
 
+namespace mods::orm::inventory {
+	extern int16_t flush_player(player_ptr_t & player);
+};
 namespace mods::classes {
 		int16_t destroy(player_ptr_t& player){
 			/** TODO */
@@ -94,14 +97,6 @@ namespace mods::classes {
 			std::cerr << "[success]: fetched sentinel character row by player id (" << player->db_id() << ")\n";
 			set_player(player);
 			m_heal_level = static_cast<cure_levels_t>(m_orm.sentinel_heal_level);
-			//if(std::string(m_orm.sentinel_primary_type).compare("MP5") == 0){
-			//	create_mp5(m_orm.sentinel_primary_weapon_id);
-			//	m_primary_choice = primary_choice_t::MP5;
-			//}else{
-			//	create_sasg12(m_orm.sentinel_primary_weapon_id);
-			//	m_primary_choice = primary_choice_t::SASG12;
-			//}
-			//create_czp10(m_orm.sentinel_secondary_weapon_id);
 			m_intimidate_level = static_cast<intimidate_levels_t>(m_orm.sentinel_intimidate_level);
 			m_human_shield_level = static_cast<human_shield_levels_t>(m_orm.sentinel_human_shield_level);
 			m_deny_entry_level = static_cast<deny_entry_levels_t>(m_orm.sentinel_deny_entry_level);
@@ -110,6 +105,7 @@ namespace mods::classes {
 			return 0;
 		}
 		int16_t sentinel::save() {
+			mods::orm::inventory::flush_player(this->m_player);
 			return m_orm.save(this);
 		}
 		void sentinel::heal(player_ptr_t& target){

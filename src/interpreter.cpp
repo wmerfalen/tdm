@@ -1872,7 +1872,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 #ifndef __MENTOC_DONT_RUN_PROFILE_SCRIPTS__
 												 std::cerr << "[con_menu]->run profile scripts\n";
 												 /** FIXME: this breaks everything if the user's profile script doesn't exist */
-												 //mods::js::run_profile_scripts(p->name());
+												 mods::js::run_profile_scripts(p->name());
 												 std::cerr << "[con_menu]->run profile scripts [done]\n";
 #endif
 												 std::cerr << "[con_menu]->RETURNING...\n";
