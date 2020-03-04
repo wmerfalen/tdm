@@ -30,31 +30,25 @@ namespace mods::classes {
 			return m_czp10;
 		}
 		mp5_ptr_t sentinel::create_mp5(uint64_t id){
-			std::cerr << "[sentinel create mp5]...";
 			m_mp5 = std::make_shared<mods::weapons::smg::mp5>();
 			auto result = db_get_by_meta("object_rifle","rifle_id",std::to_string(id));
 			for(auto&& row : result){
-				std::cerr << "[load_make_weapon] for looping\n";
 				m_mp5->feed_by_file(row["rifle_file"].as<std::string>());
 			}
 			return m_mp5;
 		}
 		sasg12_ptr_t sentinel::create_sasg12(uint64_t id){
-			std::cerr << "[sentinel create sasg12]...";
 			m_sasg12 = std::make_shared<mods::weapons::shotgun::sasg12>();
 			auto result = db_get_by_meta("object_rifle","rifle_id",std::to_string(id));
 			for(auto&& row : result){
-				std::cerr << "[load_make_weapon] for looping\n";
 				m_sasg12->feed_by_file(row["rifle_file"].as<std::string>());
 			}
 			return m_sasg12;
 		}
 		czp10_ptr_t sentinel::create_czp10(uint64_t id){
-			std::cerr << "[sentinel create czp10]...";
 			m_czp10 = std::make_shared<mods::weapons::pistol::czp10>();
 			auto result = db_get_by_meta("object_rifle","rifle_id",std::to_string(id));
 			for(auto&& row : result){
-				std::cerr << "[load_make_weapon] for looping\n";
 				m_czp10->feed_by_file(row["rifle_file"].as<std::string>());
 			}
 			return m_czp10;
@@ -81,7 +75,6 @@ namespace mods::classes {
 				return -1;
 			}
 			auto db_id = m_orm.initialize_row(player,static_cast<primary>(pchoice));
-			std::cerr << "m_orm.initialize_row[" << db_id << "]\n";
 			if(db_id == 0){
 				return -2;
 			}
@@ -94,7 +87,6 @@ namespace mods::classes {
 				std::cerr << "unable to load sentinel class by player id: " << player->db_id() << ".. return status: " << result << "\n";
 				return result;
 			}
-			std::cerr << "[success]: fetched sentinel character row by player id (" << player->db_id() << ")\n";
 			set_player(player);
 			m_heal_level = static_cast<cure_levels_t>(m_orm.sentinel_heal_level);
 			m_intimidate_level = static_cast<intimidate_levels_t>(m_orm.sentinel_intimidate_level);

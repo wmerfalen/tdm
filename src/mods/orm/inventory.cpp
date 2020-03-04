@@ -12,7 +12,6 @@ extern void obj_ptr_to_char(obj_ptr_t  object, player_ptr_t player);
 namespace mods::orm::inventory {
 
 	obj_data_ptr_t rifle_fetch(int id){
-		auto obj = blank_object();
 		try{
 			auto select_transaction = txn();
 			sql_compositor comp("object_rifle",&select_transaction);
@@ -40,7 +39,7 @@ namespace mods::orm::inventory {
 		}catch(std::exception& e){
 			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character preferences by pkid: '" << e.what() << "'\n";
 		}
-		return obj;
+		return nullptr;
 	}
 	int16_t feed_player(player_ptr_t & player){
 		{
@@ -70,7 +69,7 @@ namespace mods::orm::inventory {
 					obj = nullptr;
 					//'rifle','explosive','attachment','gadget','drone', 'armor', 'consumable','object';
 					if(row["po_type"].as<std::string>().compare("rifle") == 0){
-						std::cerr << "mods::orm::feed_player we got a rifle...[" << row["po_type_id"].as<int>() << "]\n" ;
+						std::cerr << "mods::orm::feed_player we got a rifle...\n" ;
 						obj = rifle_fetch(row["po_type_id"].as<int>());
 					} else {
 						log("Warning: unhandled po_type from player_object table: '%s'... skipping...",row["po_type"].c_str());
@@ -82,21 +81,21 @@ namespace mods::orm::inventory {
 					}
 					if(row["po_in_inventory"].as<int>()){
 						std::cerr << "[debug][feed_player]: " << player->name().c_str() << " carrying object po_id[" << row["po_id"].c_str() << "]\n";
-						obj_ptr_to_char(std::move(obj),player);
+						obj_ptr_to_char(obj,player);
 						continue;
 					}
 					if(row["po_wear_position"].as<int>()){
-						std::cerr << "[debug][feed_player]: " << player->name().c_str() << " wearing object po_id[" << row["po_id"].c_str() << "]\n" <<
-							"[po_wear_position]: " << row["po_wear_position"].as<int>() << "\n";
-						player->equip(std::move(obj),row["po_wear_position"].as<int>());
+						std::cerr << "[debug][feed_player]: " << player->name().c_str() << " wearing object po_id[" << row["po_id"].c_str() << "]\n";
+						player->equip(obj,row["po_wear_position"].as<int>());
 						continue;
 					}
 				}
+				log("SYSERR: couldn't grab player's pkid: '%s'",player->name().c_str());
+				return -1;
 			}catch(std::exception& e){
 				std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
 				return -2;
 			}
-			return 0;
 		}
 	}//end feed_player
 

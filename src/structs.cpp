@@ -60,8 +60,10 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SE
 			std::transform(type.begin(),type.end(),type.begin(),
 					[](unsigned char c){ return std::tolower(c); });
 			str_type = type = type.substr(strlen("ITEM_"));
-			std::cerr << "[parsed type]:'" << type << "'\n";
+			std::cerr << "[parsed type]:'" << type << "' str_type: '" << str_type << "'\n";
+			std::cerr << "[obj_data][feed_file]:'" << feed_file.data() << "'\n";
 #define MENTOC_OBJ_DATA_FEED_DUAL(r,data,CLASS_TYPE) \
+			std::cerr << "[obj_data CLASS_TYPE: '" << BOOST_PP_STRINGIZE(CLASS_TYPE) << "'\n";\
 			if(type.compare( BOOST_PP_STRINGIZE(CLASS_TYPE) ) == 0){\
 				std::cerr << "[obj_data::feed(str,str) feeding type: " << BOOST_PP_STRINGIZE(CLASS_TYPE) << "\n";\
 				this->CLASS_TYPE(feed_file);\
