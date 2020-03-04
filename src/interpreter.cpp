@@ -1489,50 +1489,8 @@ int find_command(const char *command) {
 
 
 int special(char_data *ch, int cmd, char *arg) {
-	////TODO: decide if we need this
-	//return 0;
-	MENTOC_PREAMBLE();
-	struct obj_data *i;
-	int j;
-
-	/* special in room? */
-	if(GET_ROOM_SPEC(IN_ROOM(ch)) != NULL)
-		if(GET_ROOM_SPEC(IN_ROOM(ch))(ch, static_cast<void*>(&world[IN_ROOM(ch)]), cmd, arg)) {
-			return (1);
-		}
-
-	/* special in equipment list? */
-	for(j = 0; j < NUM_WEARS; j++)
-		if(GET_EQ(ch, j) && GET_OBJ_SPEC(GET_EQ(ch, j)) != NULL)
-			if(GET_OBJ_SPEC(GET_EQ(ch, j))(ch, GET_EQ(ch, j), cmd, arg)) {
-				return (1);
-			}
-
-	/* special in inventory? */
-	for(i = ch->carrying; i; i = i->next_content)
-		if(GET_OBJ_SPEC(i) != NULL)
-			if(GET_OBJ_SPEC(i)(ch, i, cmd, arg)) {
-				return (1);
-			}
-
-	/* special in mobile present? */
-	//for(k = world[IN_ROOM(ch)].people; k; k = k->next_in_room)
-	for(auto & k : mods::globals::get_room_list(player->room())){
-		if(!MOB_FLAGGED(k->cd(), MOB_NOTDEADYET)){
-			if(GET_MOB_SPEC(k->cd()) && GET_MOB_SPEC(k->cd())(ch, k->cd(), cmd, arg)) {
-				return (1);
-			}
-		}
-	}
-
-	/* special in object present? */
-	for(i = world[IN_ROOM(ch)].contents; i; i = i->next_content)
-		if(GET_OBJ_SPEC(i) != NULL)
-			if(GET_OBJ_SPEC(i)(ch, i, cmd, arg)) {
-				return (1);
-			}
-
-	return (0);
+	/** legacy code caused segfault. not needed */
+	return 0;
 }
 
 
@@ -1859,41 +1817,65 @@ void nanny(player_ptr_t p, char * in_arg) {
 
 											 case '1':
 												 p->set_authenticated(true);
+												 decorate_authenticated_player(p);
 
 												 /* check and make sure no other copies of this player are logged in */
 												 perform_dupe_check(p);
 
 												 p->stc(WELC_MESSG);
+												 std::cerr << "[con_menu]->stc\n";
 												 {
 													 int start_room = 0;
+												 std::cerr << "[con_menu]->boot\n";
 													 if(!boot_type_hell()){
+												 std::cerr << "[con_menu]->boot mortal start\n";
 														 start_room = mods::world_conf::real_mortal_start();
 													 }
 													 if(world.size() == 0){
 														 exit(0);
 													 }
+												 std::cerr << "[con_menu]->set room(" << start_room << ")\n";
 													 p->set_room(start_room);
+												 std::cerr << "[con_menu]->char to room (" << start_room << ")\n";
 													 char_to_room(p->cd(),start_room);
+												 std::cerr << "[con_menu]->char to room [done] (" << start_room << ")\n";
 												 }
+												 std::cerr << "[con_menu]->char entered game\n";
 												 act("$n has entered the game.", TRUE, p->cd(), 0, 0, TO_ROOM);
+												 std::cerr << "[con_menu]->char entered game\n";
 												 p->set_state(CON_PLAYING);
+												 std::cerr << "[con_menu]->done setting state\n";
 
 												 if(p->level() == 0) {
+												 std::cerr << "[con_menu]->do_start\n";
 													 do_start(p->cd());
+												 std::cerr << "[con_menu]->do_start [done]\n";
+												 std::cerr << "[con_menu]->send start msg\n";
 													 p->stc(START_MESSG);
+												 std::cerr << "[con_menu]->send start msg [done]\n";
 												 }
 
+												 std::cerr << "[con_menu]->look at room..\n";
 												 look_at_room(p->cd(), 0);
+												 std::cerr << "[con_menu]->look at room.. [done]\n";
 
 												 if(has_mail(GET_IDNUM(p->cd()))) {
-													 p->stc("You have mail waiting.\r\n");
+												   p->stc("You have mail waiting.\r\n");
 												 }
+												 std::cerr << "[con_menu]->start histfile\n";
 												 p->start_histfile();
+												 std::cerr << "[con_menu]->start histfile... [done]\n";
 
+												 std::cerr << "[con_menu]->has prompt\n";
 												 p->desc().has_prompt = 0;
+												 std::cerr << "[con_menu]->has prompt [done]\n";
 #ifndef __MENTOC_DONT_RUN_PROFILE_SCRIPTS__
-												 mods::js::run_profile_scripts(p->name());
+												 std::cerr << "[con_menu]->run profile scripts\n";
+												 /** FIXME: this breaks everything if the user's profile script doesn't exist */
+												 //mods::js::run_profile_scripts(p->name());
+												 std::cerr << "[con_menu]->run profile scripts [done]\n";
 #endif
+												 std::cerr << "[con_menu]->RETURNING...\n";
 												 break;
 
 											 case '2':

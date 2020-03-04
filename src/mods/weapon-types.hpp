@@ -125,8 +125,8 @@ namespace mods::weapon_types {
 			this->feed(in_feed_file);\
 		}\
 		void feed(std::string_view in_feed_file){\
-			feed_file = in_feed_file;\
-			attributes = mods::weapon_types::feed<mods::yaml::BOOST_PP_CAT(CLASS_TYPE,_description_t)>(feed_file);\
+			this->feed_file = in_feed_file;\
+			this->attributes = mods::weapon_types::feed<mods::yaml::BOOST_PP_CAT(CLASS_TYPE,_description_t)>(feed_file);\
 		}\
 		std::string feed_file;\
 		~BOOST_PP_CAT(CLASS_TYPE,_data_t)() = default;\

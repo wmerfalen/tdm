@@ -3,10 +3,12 @@
 
 #include "../weapon.hpp"
 #include "../pqxx-types.hpp"
+#include <string_view>
 
 namespace mods::weapons::pistol {
 		struct czp10 {
 			static obj_data_ptr_t make();
+			static obj_data_ptr_t feed_by_file(std::string_view file);
 			czp10() = default;
 			~czp10() = default;
 

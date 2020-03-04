@@ -357,29 +357,31 @@ namespace mods::yaml {
 		try {
 			std::string file = current_working_dir() + "/" + in_file.data();
 			feed_file = file;
-			YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
-			std::cerr << "grabbing accuracy_map (rifle feed func)...\n";
+			std::cerr << "[rifledesc feed] feed_file: '" << feed_file << "'\n";
+			std::cerr << "[rifledesc file: '" << file << "'\n";
+			auto yaml_file = YAML::LoadFile(file);
+			std::cerr << "[rifledesc feed(in_file)] grabbing accuracy_map (rifle feed func)...\n";
 			auto acmap = yaml_file["accuracy_map"].as<std::vector<float>>();
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
-				std::cerr << "[acmap]: " << acmap[i] << "\n";
+				std::cerr << "[rifledesc feed(in_file)] [acmap]: " << acmap[i] << "\n";
 				accuracy_map[i] = acmap[i];
 			}
-			std::cerr << "feeding damage_map...\n";
+			std::cerr << "[rifledesc feed(in_file)] feeding damage_map...\n";
 			auto dmap = yaml_file["damage_map"].as<std::vector<float>>();
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
-				std::cerr << "[acmap]: " << dmap[i] << "\n";
+				std::cerr << "[rifledesc feed(in_file)] [acmap]: " << dmap[i] << "\n";
 				damage_map[i] = dmap[i];
 			}
-			std::cerr << "done feeding damage_map...\n";
-			std::cerr << "feeding str_type...";
+			std::cerr << "[rifledesc feed(in_file)] done feeding damage_map...\n";
+			std::cerr << "[rifledesc feed(in_file)] feeding str_type...";
 			auto type_string = yaml_file["str_type"].as<std::string>();
-			std::cerr << "done\n";
-			std::cerr << "feeding all rifle members...";
+			std::cerr << "[rifledesc feed(in_file)] done\n";
+			std::cerr << "[rifledesc feed(in_file)] feeding all rifle members...";
 			MENTOC_FEED_RIFLE
-				std::cerr << "done\n";
-			std::cerr << "feeding base members...";
+				std::cerr << "[rifledesc feed(in_file)] done\n";
+			std::cerr << "[rifledesc feed(in_file)] feeding base members...";
 			MENTOC_FEED_BASE_MEMBERS
-				std::cerr << "done\n";
+				std::cerr << "[rifledesc feed(in_file)] done\n";
 		}catch(std::exception &e){
 			std::cerr << "[exception] rifle feed: '" << e.what() << "'\n";
 			return -1;
@@ -389,26 +391,26 @@ namespace mods::yaml {
 
 	int16_t rifle_description_t::feed_from_po_record(mentoc_pqxx_result_t yaml_file){
 		try {
-			std::cerr << "grabbing accuracy_map (rifle feed func)...\n";
+			std::cerr << "[rifledesc ffpr] grabbing accuracy_map (rifle feed func)...\n";
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
 				float item = yaml_file[std::string("accuracy_map_") + std::to_string(i)].as<float>();
-				std::cerr << "[acmap]: " << item << "\n";
+				std::cerr << "[rifledesc ffpr] [acmap]: " << item << "\n";
 				accuracy_map[i] = item;
 			}
-			std::cerr << "feeding damage_map...\n";
+			std::cerr << "[rifledesc ffpr] feeding damage_map...\n";
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
 				float item = yaml_file[std::string("damage_map_") + std::to_string(i)].as<float>();
-				std::cerr << "[acmap]: " << item << "\n";
+				std::cerr << "[rifledesc ffpr] [acmap]: " << item << "\n";
 				damage_map[i] = item;
 			}
-			std::cerr << "done feeding damage_map...\n";
-			std::cerr << "feeding str_type...";
+			std::cerr << "[rifledesc ffpr] done feeding damage_map...\n";
+			std::cerr << "[rifledesc ffpr] feeding str_type...";
 			auto type_string = yaml_file["str_type"].as<std::string>();
-			std::cerr << "done\n";
-			std::cerr << "feeding all rifle members...";
+			std::cerr << "[rifledesc ffpr] done\n";
+			std::cerr << "[rifledesc ffpr] feeding all rifle members...";
 			MENTOC_FEED_RIFLE
-				std::cerr << "done\n";
-			std::cerr << "feeding base members...";
+				std::cerr << "[rifledesc ffpr] done\n";
+			std::cerr << "[rifledesc ffpr] feeding base members...";
 			MENTOC_FEED_BASE_MEMBERS
 				std::cerr << "done\n";
 		}catch(std::exception &e){

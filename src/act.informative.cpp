@@ -405,14 +405,8 @@ void look_at_char(char_data *i, char_data *ch) {
 
 	found = FALSE;
 
-	for(j = 0; !found && j < NUM_WEARS; j++)
-		if(GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j))) {
-			found = TRUE;
-		}
-
-	if(found) {
+	for(j = 0; !found && j < NUM_WEARS; j++){
 		act("\r\n$n is using:", FALSE, i, 0, ch, TO_VICT);
-
 		for(j = 0; j < NUM_WEARS; j++){
 			if(GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j))) {
 				player->send(wear_where[j]);

@@ -8,6 +8,8 @@ namespace mods::weapons::sniper_rifle {
 		struct psg1 {
 			psg1();
 			~psg1();
+			static obj_data_ptr_t make();
+			static obj_data_ptr_t feed_by_file(std::string_view file);
 
 			uint16_t bound_to;
 			uint16_t id;

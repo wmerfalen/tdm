@@ -213,7 +213,8 @@ namespace mods {
 			in_object->worn_by = cd();
 			in_object->worn_on = pos;
 			m_equipment[pos] = in_object;
-			perform_equip_calculations(pos,true);
+			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
+			//perform_equip_calculations(pos,true);
 		}
 	}
 	void player::unequip(int pos) {
@@ -222,7 +223,8 @@ namespace mods {
 				/** FIXME: this needs to negate the bit */
 				m_weapon_flags = 0;//m_equipment[pos]->obj_flags.weapon_flags;
 			}
-			perform_equip_calculations(pos,false);
+			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
+			//perform_equip_calculations(pos,false);
 			m_equipment[pos]->worn_by = nullptr;
 			m_equipment[pos]->worn_on = -1;
 			m_equipment[pos] = nullptr;
@@ -930,7 +932,7 @@ namespace mods {
 		return status;
 	}
 	void player::start_histfile(){
-		auto lib_dir = mods::js::current_working_dir();
+		std::string lib_dir = MENTOC_CURRENT_WORKING_DIR;
 		lib_dir += "/../log/";
 		lib_dir += name();
 		lib_dir += "-" + std::to_string(std::time(nullptr));

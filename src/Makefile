@@ -4,8 +4,9 @@ builddir = build
 CC = /usr/bin/g++-8
 BINDIR = ../bin
 DATA_DIR = "$(CURDIR)/../lib/"
-JS_PROFILES_PATH = "$(HOME)/code/siege-mud/lib/js/profiles/"
+JS_PROFILES_PATH = "$(HOME)/code/code/siege-mud/lib/js/profiles/"
 LMDBNAME = bnull
+LIB_DIR="$(HOME)/code/code/siege-mud/lib"
 
 lmdbdir = $(CURDIR)/liblmdb
 lmdb = $(lmdbdir)/liblmdb.so
@@ -29,7 +30,8 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-DMENTOC_NO_CONSTEXPR_CONF=1 \
 	-D__MENTOC_USE_LMDB=1 \
 	-Wno-sign-compare -I$(yamlcpp) -L$(yamllib) \
-	-fPIC
+	-fPIC -DMENTOC_CURRENT_WORKING_DIR=\"$(LIB_DIR)\"
+
 #-D__MENTOC_SHOW_LMDB_DEBUG__=1 
 	#-DMENTOC_NO_CONSTEXPR_CONF=1 \ #-D__MENTOC_USE_PQXX_RESULT__=1 
 LIBS = $(opnssl) -lc -lm -lpqxx -lpq -lssl -lcrypto -l$(yamlcpp_object)

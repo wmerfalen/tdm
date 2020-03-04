@@ -26,10 +26,12 @@ static inline std::string default_yaml_file(std::string type){
 
 #include "mods/util.hpp"
 void obj_data::init(){
+	std::cerr << "[debug]obj_data::init()\n";
 	std::fill(m_capabilities.begin(),m_capabilities.end(),0);
 	item_number = 0;
 	in_room = 0;
-	name = strdup("<default-1>");
+	name = "<default-1>";
+	str_type = "object";
 	description = name;
 	short_description = name;
 	action_description = name;
@@ -57,7 +59,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SE
 			std::string type = in_type;
 			std::transform(type.begin(),type.end(),type.begin(),
 					[](unsigned char c){ return std::tolower(c); });
-			type = type.substr(strlen("ITEM_"));
+			str_type = type = type.substr(strlen("ITEM_"));
 			std::cerr << "[parsed type]:'" << type << "'\n";
 #define MENTOC_OBJ_DATA_FEED_DUAL(r,data,CLASS_TYPE) \
 			if(type.compare( BOOST_PP_STRINGIZE(CLASS_TYPE) ) == 0){\

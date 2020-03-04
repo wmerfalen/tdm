@@ -27,13 +27,34 @@ namespace mods::classes {
 			return m_czp10;
 		}
 		mp5_ptr_t sentinel::create_mp5(uint64_t id){
-			MAKE_WEAPON(m_mp5,mods::weapons::smg::mp5);
+			std::cerr << "[sentinel create mp5]...";
+			m_mp5 = std::make_shared<mods::weapons::smg::mp5>();
+			auto result = db_get_by_meta("object_rifle","rifle_id",std::to_string(id));
+			for(auto&& row : result){
+				std::cerr << "[load_make_weapon] for looping\n";
+				m_mp5->feed_by_file(row["rifle_file"].as<std::string>());
+			}
+			return m_mp5;
 		}
 		sasg12_ptr_t sentinel::create_sasg12(uint64_t id){
-			MAKE_WEAPON(m_sasg12,mods::weapons::shotgun::sasg12);
+			std::cerr << "[sentinel create sasg12]...";
+			m_sasg12 = std::make_shared<mods::weapons::shotgun::sasg12>();
+			auto result = db_get_by_meta("object_rifle","rifle_id",std::to_string(id));
+			for(auto&& row : result){
+				std::cerr << "[load_make_weapon] for looping\n";
+				m_sasg12->feed_by_file(row["rifle_file"].as<std::string>());
+			}
+			return m_sasg12;
 		}
 		czp10_ptr_t sentinel::create_czp10(uint64_t id){
-			MAKE_WEAPON(m_czp10,mods::weapons::pistol::czp10);
+			std::cerr << "[sentinel create czp10]...";
+			m_czp10 = std::make_shared<mods::weapons::pistol::czp10>();
+			auto result = db_get_by_meta("object_rifle","rifle_id",std::to_string(id));
+			for(auto&& row : result){
+				std::cerr << "[load_make_weapon] for looping\n";
+				m_czp10->feed_by_file(row["rifle_file"].as<std::string>());
+			}
+			return m_czp10;
 		}
 		player_ptr_t 	sentinel::player(){
 			return m_player;
@@ -73,14 +94,14 @@ namespace mods::classes {
 			std::cerr << "[success]: fetched sentinel character row by player id (" << player->db_id() << ")\n";
 			set_player(player);
 			m_heal_level = static_cast<cure_levels_t>(m_orm.sentinel_heal_level);
-			if(std::string(m_orm.sentinel_primary_type).compare("MP5") == 0){
-				create_mp5(m_orm.sentinel_primary_weapon_id);
-				m_primary_choice = primary_choice_t::MP5;
-			}else{
-				create_sasg12(m_orm.sentinel_primary_weapon_id);
-				m_primary_choice = primary_choice_t::SASG12;
-			}
-			create_czp10(m_orm.sentinel_secondary_weapon_id);
+			//if(std::string(m_orm.sentinel_primary_type).compare("MP5") == 0){
+			//	create_mp5(m_orm.sentinel_primary_weapon_id);
+			//	m_primary_choice = primary_choice_t::MP5;
+			//}else{
+			//	create_sasg12(m_orm.sentinel_primary_weapon_id);
+			//	m_primary_choice = primary_choice_t::SASG12;
+			//}
+			//create_czp10(m_orm.sentinel_secondary_weapon_id);
 			m_intimidate_level = static_cast<intimidate_levels_t>(m_orm.sentinel_intimidate_level);
 			m_human_shield_level = static_cast<human_shield_levels_t>(m_orm.sentinel_human_shield_level);
 			m_deny_entry_level = static_cast<deny_entry_levels_t>(m_orm.sentinel_deny_entry_level);

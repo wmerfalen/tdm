@@ -3759,13 +3759,17 @@ void do_start(char_data *ch) {
 	player->level() = 1;
 	player->exp() = 1;
 
+	std::cerr << "ds settitle\n";
 	set_title(player,"");
+	std::cerr << "ds roll real abils\n";
 	roll_real_abils(ch);
 
 	GET_MAX_HIT(ch)  = 10;
 	GET_MAX_MANA(ch) = 100;
 	GET_MAX_MOVE(ch) = 82;
+	std::cerr << "ds get max stuff\n";
 
+	/*
 	switch(GET_CLASS(ch)) {
 
 		case CLASS_ENGINEER:
@@ -3786,8 +3790,11 @@ void do_start(char_data *ch) {
 		case CLASS_MARINE:
 			break;
 	}
+	*/
 
+	std::cerr << "ds advance level\n";
 	advance_level(ch);
+	std::cerr << "ds advance level [done]\n";
 	mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s advanced to level %d", GET_NAME(ch).c_str(), GET_LEVEL(ch));
 
 	GET_HIT(ch) = GET_MAX_HIT(ch);
@@ -3810,6 +3817,9 @@ void do_start(char_data *ch) {
  * each class every time they gain a level.
  */
 void advance_level(char_data *ch) {
+	std::cerr << "[stub][FIXME] advance_level is currently broken [2020-03-03]\n";
+	return;
+	/*
 	MENTOC_PREAMBLE();
 	int add_hp, add_mana = 0, add_move = 0, i;
 
@@ -3861,6 +3871,7 @@ void advance_level(char_data *ch) {
 
 	snoop_check(ch);
 	mods::db::save_char(player);
+	*/
 }
 
 

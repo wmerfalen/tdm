@@ -2389,7 +2389,17 @@ bool char_exists(const std::string& name){
 	 */
 
 
-
+void decorate_authenticated_player(player_ptr_t player_ptr){
+		switch(player_ptr->get_class()){
+			case CLASS_SENTINEL:
+				log("User [%s] is a sentinel. Loading... ", player_ptr->name());
+				player_ptr->set_sentinel(mods::classes::create_sentinel(player_ptr));
+				break;
+			default:
+				break;
+		}
+		mods::orm::inventory::feed_player(player_ptr);
+}
 
 /*
  * write the vital data of a player to sql
@@ -2523,15 +2533,6 @@ __MENTOC_PLR(PLR_NOTDEADYET);
 		player_ptr->set_time_played(mods::util::stoi<int>(row["player_time_played"]));
 		player_ptr->set_time_logon(time(0));
 		player_ptr->set_prefs(mods::util::stoi<long>(row["player_preferences"]));
-		switch(player_ptr->get_class()){
-			case CLASS_SENTINEL:
-				log("User [%s] is a sentinel. Loading... ", player_ptr->name());
-				player_ptr->set_sentinel(mods::classes::create_sentinel(player_ptr));
-				break;
-			default:
-				break;
-		}
-		mods::orm::inventory::feed_player(player_ptr);
 		return true;
 	}
 	return false;

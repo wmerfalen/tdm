@@ -265,25 +265,7 @@ namespace mods::weapon {
 	obj_data_ptr_t new_pistol_object();
 
 	void feed_caps(obj_data_ptr_t& obj, std::vector<cap_t> caps);
-	template <typename T>
-		int16_t load_weapon(T& weapon,uint64_t id){
-			auto result = db_get_by_meta("object_rifle","rifle_id",std::to_string(id));
-			for(auto&& row : result){
-				weapon->feed(row);
-				return 0;
-			}
-			return -1;
-		}
-	template <typename T>
-		std::tuple<int16_t,std::shared_ptr<T>> load_make_weapon(uint64_t id){
-			auto result = db_get_by_meta("object_rifle","rifle_id",std::to_string(id));
-			for(auto&& row : result){
-				auto w = std::make_shared<T>();
-				w->feed(row);
-				return {0,w};
-			}
-			return {-1,nullptr};
-		}
+	
 };
 #endif
 

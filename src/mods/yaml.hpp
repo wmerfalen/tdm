@@ -42,10 +42,13 @@ namespace mods::yaml {
 	using static_amount_t = int;
 	constexpr static uint8_t MAX_ROOM_DISTANCE = 4;
 			static inline std::string current_working_dir(){
+				/*
 				char* cwd = ::get_current_dir_name();
 				std::string path = cwd == nullptr ? "" : cwd;
 				if(cwd){ free(cwd); }
 				return path;
+				*/
+				return MENTOC_CURRENT_WORKING_DIR;
 			}
 	struct yaml_description_t {
 		virtual ~yaml_description_t(){};

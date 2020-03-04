@@ -3,12 +3,14 @@
 
 #include "../weapon.hpp"
 #include "../pqxx-types.hpp"
+#include <string_view>
 
 namespace mods::weapons::smg {
 		struct mp5 {
 			mp5();
 			~mp5();
 			static obj_data_ptr_t make();
+			static obj_data_ptr_t feed_by_file(std::string_view file);
 
 			uint16_t bound_to;
 			uint16_t id;

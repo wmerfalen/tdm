@@ -17,10 +17,12 @@ extern void mobile_activity();
 namespace mods {
 	namespace js {
 			std::string current_working_dir(){
-				char* cwd = ::get_current_dir_name();
-				std::string path = cwd == nullptr ? "" : cwd;
-				if(cwd){ free(cwd); }
-				return path;
+				std::cerr << "current working dir...\n";
+				std::cerr << "current working dir...\n";
+				std::cerr << "current working dir...\n";
+				std::cerr << "current working dir...\n";
+				std::cerr << "current working dir...\n";
+				return MENTOC_CURRENT_WORKING_DIR;
 			}
 		namespace utils {
 			struct find_player_payload_t {
@@ -734,9 +736,10 @@ __set_points_cleanup:
 		}
 
 		void run_profile_scripts(const std::string& player_name){
+			std::cerr << "run_profile_scripts: '" << player_name << "'\n";
 			if(config::run_profile_scripts){
 			 load_library(mods::globals::duktape_context,
-					 std::string(mods::js::current_working_dir() + "/js/profiles/" + player_name + ".js").c_str());
+					 std::string(MENTOC_CURRENT_WORKING_DIR) + std::string("/js/profiles/" + player_name + ".js").c_str());
 			}
 		}
 
@@ -745,13 +748,16 @@ __set_points_cleanup:
 		}
 
 		bool include::include_file() {
+			std::cerr << "m_file: '" << m_file << "'\n";
 			std::string path = m_file;
 
 			if(m_dir.length()) {
 				path = m_dir + "/" + m_file;
 			}
+			std::cerr << "include file path: '" << path << "'\n";
 			if(access(path.c_str(),F_OK) == -1){
 				/** File doesn't exist */
+				std::cerr << "[include_file] file doesnt exist\n";
 				return false;
 			}
 
@@ -772,9 +778,10 @@ __set_points_cleanup:
 			include_file.seekg(0,include_file.end);
 			int length = include_file.tellg();
 			include_file.seekg(0,include_file.beg);
-			char * buffer = new char [length+1];
-			memset(buffer,0,length+1);
-			include_file.read(buffer,length);
+			std::vector<char> buffer;
+			buffer.resize(length+1);
+			std::fill(buffer.begin(),buffer.end(),0);
+			include_file.read((char*)&buffer[0],length);
 			bool status = false;
 			if(include_file){
 				eval_string(m_context,std::string((char*)&buffer[0]));
@@ -783,7 +790,6 @@ __set_points_cleanup:
 				std::cerr << "couldn't read entire file: " << 
 					include_file.gcount() << "/" << length << "\n";
 			}
-			delete [] buffer;
 			include_file.close();
 			return status;
 		}

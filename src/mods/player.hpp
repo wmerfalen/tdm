@@ -136,6 +136,7 @@ namespace mods {
 			bool is_weapon_loaded();
 			bool carrying_ammo_of_type(const weapon_type_t&);
 			obj_data* carrying();
+			std::deque<obj_ptr_t>& real_carrying(){ return cd()->m_carrying; }
 			void carry(obj_ptr_t);
 			void ammo_adjustment(int);
 			int  ammo_type_adjustment(int,const weapon_type_t&);
@@ -558,7 +559,7 @@ namespace mods {
 			uint8_t m_overhead_map_height;
 			char_data*   m_char_data;
 			std::shared_ptr<char_data> m_shared_ptr;
-			std::deque<std::shared_ptr<obj_data>> m_carrying;
+			//std::deque<std::shared_ptr<obj_data>> m_carrying;
 			std::vector<affected_type> m_affected_by;
 		private: 
 			bool         m_executing_js;

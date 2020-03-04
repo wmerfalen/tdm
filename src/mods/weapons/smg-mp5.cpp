@@ -5,8 +5,11 @@
 
 namespace mods::weapons::smg {
 	obj_data_ptr_t mp5::make(){
+		return feed_by_file("mp5.yml");
+	}
+	obj_data_ptr_t mp5::feed_by_file(std::string_view file){
 		auto obj = mods::weapon::base_rifle_object();
-		obj->rifle("mp5.yml");
+		obj->rifle(file.data());
 		obj->obj_flags.ammo = obj->rifle()->attributes->ammo_max;
 		obj->obj_flags.ammo_max = obj->rifle()->attributes->ammo_max;
 		obj->obj_flags.weapon_flags = mw_rifle::SUB_MACHINE_GUN;
@@ -18,6 +21,7 @@ namespace mods::weapons::smg {
 		obj->action_description.assign("MP5");      /* What to write when used          */
 		obj->ex_description.emplace_back("mp5 sub-machine gun",obj->description.c_str());
 		mods::weapon::feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT });
+		obj->extended_item_vnum = obj->rifle()->attributes->vnum;
 		return std::move(obj);
 	}
 

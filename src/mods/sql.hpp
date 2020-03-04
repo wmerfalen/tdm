@@ -36,6 +36,10 @@ namespace mods::sql {
 				m_query[0] = sql;
 				return *this;
 			}
+			compositor<T>& del() {
+				m_query[0] = "DELETE ";
+				return *this;
+			}
 			compositor<T>& from(str_object table) {
 				m_table = table.data();
 				std::string sql = " FROM ";
