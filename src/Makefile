@@ -30,7 +30,8 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-DMENTOC_NO_CONSTEXPR_CONF=1 \
 	-D__MENTOC_USE_LMDB=1 \
 	-Wno-sign-compare -I$(yamlcpp) -L$(yamllib) \
-	-fPIC -DMENTOC_CURRENT_WORKING_DIR=\"$(LIB_DIR)\"
+	-fPIC -DMENTOC_CURRENT_WORKING_DIR=\"$(LIB_DIR)\" \
+	-D__MENTOC_SHOW_LMDB_DEBUG__=1 
 
 #-D__MENTOC_SHOW_LMDB_DEBUG__=1 
 	#-DMENTOC_NO_CONSTEXPR_CONF=1 \ #-D__MENTOC_USE_PQXX_RESULT__=1 

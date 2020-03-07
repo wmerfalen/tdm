@@ -502,6 +502,14 @@ if(key.compare("INTIMIDATED") == 0){ ::affect_from_char(*player_ptr,SPELL_INTIMI
 			duk_push_number(ctx,0);
 			return 1;
 		}
+		static duk_ret_t db_renew_txn(duk_context *ctx) {
+			mods::globals::db->renew_txn();
+			return 0;
+		}
+		static duk_ret_t db_commit(duk_context *ctx) {
+			mods::globals::db->commit();
+			return 0;
+		}
 		static duk_ret_t db_seti(duk_context *ctx) {
 			std::string key = duk_to_string(ctx,0);
 			auto value = duk_to_number(ctx,1);
@@ -516,19 +524,25 @@ if(key.compare("INTIMIDATED") == 0){ ::affect_from_char(*player_ptr,SPELL_INTIMI
 
 			if(i_value.has_value()) {
 				duk_push_number(ctx,i_value.value());
+				return 1;
 			}
+			duk_push_number(ctx,-1);
 			return 1;
 		}
 		static duk_ret_t db_set(duk_context *ctx) {
 			std::string key = duk_to_string(ctx,0);
 			std::string value = duk_to_string(ctx,1);
+			std::cerr << "bruh->db_set ['" << key << "' => '" << value << "'\n";
 			mods::globals::db->put(key,value);
 			return 0;
 		}
+
 		static duk_ret_t db_get(duk_context *ctx) {
 			std::string key = duk_to_string(ctx,0);
+			std::cerr << "bruh-> parameter: '" << key << "'\n";
 			std::string value = "";
 			mods::globals::db->get(key,value);
+			std::cerr << "bruh-> this is our db_get value:'" << value << "'\n";
 			duk_push_string(ctx,value.c_str());
 			return 1;
 		}
@@ -622,6 +636,10 @@ if(key.compare("INTIMIDATED") == 0){ ::affect_from_char(*player_ptr,SPELL_INTIMI
 			duk_put_global_string(ctx,"db_set");
 			duk_push_c_function(ctx,mods::js::db_get,1);
 			duk_put_global_string(ctx,"db_get");
+			duk_push_c_function(ctx,mods::js::db_renew_txn,0);
+			duk_put_global_string(ctx,"db_renew_txn");
+			duk_push_c_function(ctx,mods::js::db_commit,0);
+			duk_put_global_string(ctx,"db_commit");
 			duk_push_c_function(ctx,mods::js::in_room,1);
 			duk_put_global_string(ctx,"in_room");
 			duk_push_c_function(ctx,mods::js::mob_death_trigger,2);

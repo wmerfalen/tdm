@@ -33,6 +33,14 @@ enum histfile_type_t {
 	HISTFILE_FILE = 1, HISTFILE_LMDB = 2, HISTFILE_DUAL = 3
 };
 static constexpr histfile_type_t HISTFILE_STRATEGY = histfile_type_t::HISTFILE_FILE;
+
+namespace mods::orm::inventory::lmdb {
+	extern void add_player_wear(uint64_t player_db_id, uint64_t object_db_id, uint8_t obj_type, uint8_t position);
+	extern void remove_player_wear(uint64_t player_db_id, uint8_t position);
+	extern void add_player_inventory(uint64_t player_db_id, uint64_t object_db_id, uint16_t obj_type);
+	extern void remove_player_inventory(uint64_t player_db_id, uint64_t object_db_id);
+};
+
 namespace mods {
 	using mask_t = mods::weapon::mask_type;
 	using lmdb_db = db_handle;
@@ -209,10 +217,11 @@ namespace mods {
 			if(pos == WEAR_WIELD){
 				m_weapon_flags = in_object->obj_flags.weapon_flags;
 			}
-  		GET_EQ(m_char_data, pos) = in_object.get();
+			GET_EQ(m_char_data, pos) = in_object.get();
 			in_object->worn_by = cd();
 			in_object->worn_on = pos;
 			m_equipment[pos] = in_object;
+			mods::orm::inventory::lmdb::add_player_wear(this->db_id(),in_object->db_id(),in_object->type,pos);
 			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
 			//perform_equip_calculations(pos,true);
 		}
@@ -228,54 +237,55 @@ namespace mods {
 			m_equipment[pos]->worn_by = nullptr;
 			m_equipment[pos]->worn_on = -1;
 			m_equipment[pos] = nullptr;
+			mods::orm::inventory::lmdb::remove_player_wear(this->db_id(),pos);
 		}
 	}
 	void player::perform_equip_calculations(int pos,bool equip){
-	if(m_equipment[pos]->obj_flags.type_flag == ITEM_ARMOR) {
-		int factor = 1;
-		switch(pos) {
-			case WEAR_BODY:
-				factor = 3;
-				break;			/* 30% */
+		if(m_equipment[pos]->obj_flags.type_flag == ITEM_ARMOR) {
+			int factor = 1;
+			switch(pos) {
+				case WEAR_BODY:
+					factor = 3;
+					break;			/* 30% */
 
-			case WEAR_HEAD:
-				factor = 2;
-				break;			/* 20% */
+				case WEAR_HEAD:
+					factor = 2;
+					break;			/* 20% */
 
-			case WEAR_LEGS:
-				factor = 2;
-				break;			/* 20% */
+				case WEAR_LEGS:
+					factor = 2;
+					break;			/* 20% */
 
-			default:
-				factor = 1;
-				break;			/* all others 10% */
+				default:
+					factor = 1;
+					break;			/* all others 10% */
+			}
+			armor() += factor * m_equipment[pos]->obj_flags.value[0];
 		}
-		armor() += factor * m_equipment[pos]->obj_flags.value[0];
-	}
-	int8_t light = 0;
-	//TODO: FIXME: perform updated modern logic of the below code
-	if(pos == WEAR_LIGHT && m_equipment[pos]->obj_flags.type_flag == ITEM_LIGHT){
-		if(equip){
-			if(m_equipment[pos]->obj_flags.value[2]) {	/* if light is ON */
-				light = 1;
+		int8_t light = 0;
+		//TODO: FIXME: perform updated modern logic of the below code
+		if(pos == WEAR_LIGHT && m_equipment[pos]->obj_flags.type_flag == ITEM_LIGHT){
+			if(equip){
+				if(m_equipment[pos]->obj_flags.value[2]) {	/* if light is ON */
+					light = 1;
+				}
+			}
+			if(!equip){
+				if(m_equipment[pos]->obj_flags.value[2]) {	/* if light is ON */
+					light = -1;
+				}
+			}
+			if(light != 0){
+				mods::globals::affect_room_light(room(),light);
 			}
 		}
-		if(!equip){
-			if(m_equipment[pos]->obj_flags.value[2]) {	/* if light is ON */
-				light = -1;
-			}
+		for(unsigned j = 0; j < MAX_OBJ_AFFECT; j++){
+			affect_modify(m_char_data, m_equipment[pos]->affected[j].location,
+					m_equipment[pos]->affected[j].modifier,
+					m_equipment[pos]->obj_flags.bitvector, equip);
 		}
-		if(light != 0){
-			mods::globals::affect_room_light(room(),light);
-		}
-	}
-	for(unsigned j = 0; j < MAX_OBJ_AFFECT; j++){
-		affect_modify(m_char_data, m_equipment[pos]->affected[j].location,
-		              m_equipment[pos]->affected[j].modifier,
-		              m_equipment[pos]->obj_flags.bitvector, equip);
-	}
 
-	affect_total(m_char_data);
+		affect_total(m_char_data);
 
 	}
 	bool player::has_weapon_capability(uint8_t type) {
@@ -317,6 +327,21 @@ namespace mods {
 		}
 		m_char_data->m_carrying.emplace_back(obj);
 		m_char_data->carrying = obj.get();
+		mods::orm::inventory::lmdb::add_player_inventory(this->db_id(), obj->db_id(), obj->type);
+	}
+	void player::uncarry(obj_ptr_t obj){
+		auto it = std::find(m_char_data->m_carrying.begin(),m_char_data->m_carrying.end(),obj);
+		if(it != m_char_data->m_carrying.end()){
+			m_char_data->m_carrying.erase(it);
+			if(m_char_data->carrying == obj.get()){
+				if(m_char_data->m_carrying.size()){
+					m_char_data->carrying = m_char_data->m_carrying[0].get();
+				}else{
+					m_char_data->carrying = nullptr;
+				}
+			}
+		}
+		mods::orm::inventory::lmdb::remove_player_inventory(this->db_id(), obj->db_id());
 	}
 	obj_data* player::carrying(){
 		return m_char_data->carrying;
@@ -493,8 +518,8 @@ namespace mods {
 			write_to_char(m_char_data,(std::string("[room_id:") + std::to_string(room()) + "|number:" + 
 						std::to_string(world[room()].number) + "|zone:" + 
 						std::to_string(world[room()].zone)
-					),1,1
-			);
+						),1,1
+					);
 		}
 	}
 	void player::stc(const char* m) {
@@ -535,7 +560,7 @@ namespace mods {
 		}
 	}
 	void player::raw_send(const mods::string& str){
-		 write_to_descriptor(m_desc->descriptor,str.c_str());
+		write_to_descriptor(m_desc->descriptor,str.c_str());
 	}
 	mods::string player::weapon_name(){
 		return GET_EQ(m_char_data, WEAR_WIELD)->name;

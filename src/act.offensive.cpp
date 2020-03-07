@@ -207,7 +207,7 @@ ACMD(do_snipe) {
 	one_argument(argument,(char*)&victim[0],max_char);
 
 	if(!victim[0]) {
-		send_to_char(ch, "Whom do you wish to snipe?\r\n");
+		player->psendln("Whom do you wish to snipe?");
 		return;
 	}
 
@@ -231,7 +231,7 @@ ACMD(do_snipe) {
 			 */
 			return;
 		} else {
-			*player << "You can't find your target!\r\n";
+			player->psendln("You can't find your target!");
 		}
 	}
 }
@@ -547,10 +547,12 @@ ACMD(do_assist) {
 			act("But nobody is fighting $M!", FALSE, *player, 0, *helpee, TO_CHAR);
 		} else if(!CAN_SEE(player->cd(), opponent->cd())) {
 			act("You can't see who is fighting $M!", FALSE, *player, 0, *helpee, TO_CHAR);
+#ifdef MENTOC_PK_ALLOWED
 		} else if(!pk_allowed && !opponent->is_npc())	/* prevent accidental pkill */
 			act("Use 'murder' if you really want to attack $N.", FALSE,
 					ch, 0, *opponent, TO_CHAR);
-		else {
+#endif
+		} else {
 			player->psendln("You join the fight!");
 			act("$N assists you!", 0, *helpee, 0, *player, TO_CHAR);
 			act("$n assists $N.", FALSE, ch, 0, *helpee, TO_NOTVICT);
@@ -561,6 +563,7 @@ ACMD(do_assist) {
 
 
 ACMD(do_hit) {
+	MENTOC_PREAMBLE();
 	char arg[MAX_INPUT_LENGTH];
 	char_data *vict;
 
@@ -576,6 +579,7 @@ ACMD(do_hit) {
 	} else if(AFF_FLAGGED(ch, AFF_CHARM) && (ch->master == vict)) {
 		act("$N is just such a good friend, you simply can't hit $M.", FALSE, ch, 0, vict, TO_CHAR);
 	} else {
+#ifdef MENTOC_PK_ALLOWED
 		if(!pk_allowed) {
 			if(!IS_NPC(vict) && !IS_NPC(ch)) {
 				if(subcmd != SCMD_MURDER) {
@@ -585,13 +589,11 @@ ACMD(do_hit) {
 					check_killer(ch, vict);
 				}
 			}
-
 			if(AFF_FLAGGED(ch, AFF_CHARM) && !IS_NPC(ch->master) && !IS_NPC(vict)) {
 				return;
-			}			/* you can't order a charmed pet to attack a
-
-						 * player */
+			}
 		}
+#endif
 
 		if((GET_POS(ch) == POS_STANDING) && (vict != FIGHTING(ch))) {
 			hit(ch, vict, TYPE_UNDEFINED);
@@ -605,6 +607,7 @@ ACMD(do_hit) {
 
 
 ACMD(do_kill) {
+	MENTOC_PREAMBLE();
 	char arg[MAX_INPUT_LENGTH];
 	char_data *vict;
 

@@ -904,7 +904,9 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 		 *  |--> does: returns true if rifle_data_t unique ptr made
 		 */
 #define MENTOC_DATA_OBJ(r,data,CLASS_TYPE) BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(std::string_view feed_file){\
-	this->str_type = BOOST_PP_STRINGIZE(CLASS_TYPE); this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(feed_file); return this->BOOST_PP_CAT(m_,CLASS_TYPE).get();\
+	 this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(feed_file); this->set_str_type(BOOST_PP_STRINGIZE(CLASS_TYPE));\
+	this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
+	return this->BOOST_PP_CAT(m_,CLASS_TYPE).get();\
 }\
 		BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(uint8_t mode){ this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(); return this->BOOST_PP_CAT(m_, CLASS_TYPE).get(); }\
 		BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(){ return this->BOOST_PP_CAT(m_,CLASS_TYPE).get(); } \
@@ -923,12 +925,20 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_DATA_OBJ, ~, MENTOC_ITEM_TYPES_SEQ)
 		capability_list_t& capabilities(){ return m_capabilities; }
 		std::string str_type;
 		uint64_t extended_item_vnum;
+		void set_str_type(std::string_view t);
+		void set_db_id(uint64_t i){ this->m_db_id = i; }
+		uint64_t db_id(){ return this->m_db_id; }
+		template <typename T>
+		void post_feed(T fed_object){
+			this->set_db_id(fed_object->attributes->db_id());
+		}
 
 		protected:
 #define MENTOC_UPTR(r,data,CLASS_TYPE) std::unique_ptr<BOOST_PP_CAT(CLASS_TYPE,_data_t)> BOOST_PP_CAT(m_, CLASS_TYPE);
 BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 #undef MENTOC_UPTR
 		capability_list_t m_capabilities;
+		uint64_t m_db_id;
 	};
 struct obj_data_weapon : public obj_data {
 	/**TODO: call parent constructor/destructor */

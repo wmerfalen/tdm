@@ -128,6 +128,7 @@ namespace mods::weapon_types {
 			this->feed_file = in_feed_file;\
 			this->attributes = mods::weapon_types::feed<mods::yaml::BOOST_PP_CAT(CLASS_TYPE,_description_t)>(feed_file);\
 		}\
+		uint64_t db_id();\
 		std::string feed_file;\
 		~BOOST_PP_CAT(CLASS_TYPE,_data_t)() = default;\
 		std::unique_ptr<mods::yaml::BOOST_PP_CAT(CLASS_TYPE,_description_t)> attributes;\
@@ -135,7 +136,7 @@ namespace mods::weapon_types {
 		std::string manufacturer;\
 		std::string name;\
 		BOOST_PP_CAT(mw_,CLASS_TYPE) type;\
-		uint32_t id;\
+		uint64_t id;\
 		int vnum;\
 		float rarity;\
 	};\

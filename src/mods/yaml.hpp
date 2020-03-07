@@ -24,12 +24,14 @@ namespace mods::yaml {
 		std::string str_type;\
 		int vnum;\
 		float rarity;\
-		std::string feed_file;
+		std::string feed_file;\
+		uint64_t id;
 
 #define MENTOC_BASE_MEMBERS_SET(NAME)\
 			manufacturer("ACME Industries"),\
 			name(NAME), type(0), str_type(NAME),\
-			vnum(0),rarity(mods::rarity::DEFAULT)
+			vnum(0),rarity(mods::rarity::DEFAULT),\
+			id(0)
 
 enum alternate_explosion_t {
 	ALTEX_NONE = 0,
@@ -82,6 +84,7 @@ namespace mods::yaml {
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t feed_from_po_record(mentoc_pqxx_result_t);
 		virtual int16_t write_example_file(std::string_view file);
+		uint64_t db_id();
 		uint64_t flush_to_db();
 			std::array<float,MAX_ROOM_DISTANCE> accuracy_map;
 			std::array<float,MAX_ROOM_DISTANCE> damage_map;	/** Percent per room */
@@ -106,6 +109,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
 		{
 			std::fill(aoe_triggers.begin(),aoe_triggers.end(),0);
 		}
+		uint64_t db_id();
 		int damage;
 		std::array<aoe_type_t,MAX_AOE_TRIGGERS> aoe_triggers;
 
@@ -123,6 +127,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_EXPLOSIVE_MEMBERS_TUPLE)
 			MENTOC_BASE_MEMBERS_SET("drone")
 		{
 		}
+		uint64_t db_id();
 
 MENTOC_MEMBER_VARS_FOR(MENTOC_DRONE_MEMBERS_TUPLE)
 
@@ -138,6 +143,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_DRONE_MEMBERS_TUPLE)
 			MENTOC_BASE_MEMBERS_SET("gadget")
 		{
 		}
+		uint64_t db_id();
 
 MENTOC_MEMBER_VARS_FOR(MENTOC_GADGET_MEMBERS_TUPLE)
 
@@ -153,6 +159,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_GADGET_MEMBERS_TUPLE)
 			MENTOC_BASE_MEMBERS_SET("attachment")
 		{
 		}
+		uint64_t db_id();
 MENTOC_MEMBER_VARS_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
 
 		MENTOC_BASE_MEMBERS
@@ -168,6 +175,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
 			MENTOC_BASE_MEMBERS_SET("armor")
 		{
 		}
+		uint64_t db_id();
 MENTOC_MEMBER_VARS_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
 
 		MENTOC_BASE_MEMBERS
@@ -183,6 +191,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
 		{
 
 		}
+		uint64_t db_id();
 
 MENTOC_MEMBER_VARS_FOR(MENTOC_CONSUMABLE_MEMBERS_TUPLE)
 
@@ -196,6 +205,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_CONSUMABLE_MEMBERS_TUPLE)
 		virtual ~trap_description_t() = default;
 		trap_description_t() :
 			MENTOC_BASE_MEMBERS_SET("trap"){ }
+		uint64_t db_id();
 
 MENTOC_MEMBER_VARS_FOR(MENTOC_TRAP_MEMBERS_TUPLE)
 

@@ -136,6 +136,7 @@ namespace mods {
 			bool is_weapon_loaded();
 			bool carrying_ammo_of_type(const weapon_type_t&);
 			obj_data* carrying();
+			void uncarry(obj_ptr_t obj);
 			std::deque<obj_ptr_t>& real_carrying(){ return cd()->m_carrying; }
 			void carry(obj_ptr_t);
 			void ammo_adjustment(int);

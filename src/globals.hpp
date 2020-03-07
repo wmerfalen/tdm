@@ -43,6 +43,8 @@
 
 #define LMDBSET(key,value) mods::db::lmdb_put(key,value)
 #define LMDBNGET(key,k_size,value_buffer) mods::db::lmdb_nget(key,k_size,value_buffer)
+#define LMDBNDEL(key,k_size) mods::db::lmdb_ndel(key,k_size)
+#define LMDBDEL(key) mods::db::lmdb_del(key)
 #define LMDBGET(key) mods::db::lmdb_get(key)
 #define LMDBCOMMIT() mods::db::lmdb_commit()
 #define LMDBRENEW() mods::db::lmdb_renew()

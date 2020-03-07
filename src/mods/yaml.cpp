@@ -183,6 +183,30 @@ namespace mods::yaml {
 		return 0;
 	};
 
+	uint64_t rifle_description_t::db_id(){
+		return this->id;
+	}
+	uint64_t armor_description_t::db_id(){
+		return this->id;
+	}
+	uint64_t explosive_description_t::db_id(){
+		return this->id;
+	}
+	uint64_t drone_description_t::db_id(){
+		return this->id;
+	}
+	uint64_t consumable_description_t::db_id(){
+		return this->id;
+	}
+	uint64_t trap_description_t::db_id(){
+		return this->id;
+	}
+	uint64_t gadget_description_t::db_id(){
+		return this->id;
+	}
+	uint64_t attachment_description_t::db_id(){
+		return this->id;
+	}
 	int16_t rifle_description_t::write_example_file(std::string_view file){
 		std::string file_name = current_working_dir() + "/" + file.data();
 		//std::cerr << "write_example_file: filename: '" << file_name.c_str() << "'\n";
@@ -264,7 +288,8 @@ namespace mods::yaml {
 			auto row = mods::pq::exec(insert_transaction,up_sql);
 			mods::pq::commit(insert_transaction);
 			for(auto && record : row){
-				return record["rifle_id"].as<uint64_t>();
+				this->id = record["rifle_id"].as<uint64_t>();
+				return this->id;
 			}
 			return 0;
 		}catch(std::exception& e){

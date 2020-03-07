@@ -93,6 +93,27 @@ void obj_flag_data::init(){
 bool obj_data::flagged(int value){
 	return ((obj_flags.extra_flags) & (value));
 }
+void obj_data::set_str_type(std::string_view in_type){
+	std::cerr << "[lolz] STR TYPE: '" << in_type.data() << "'\n";
+	std::cerr << "[lolz] STR TYPE: '" << in_type.data() << "'\n";
+	std::cerr << "[lolz] STR TYPE: '" << in_type.data() << "'\n";
+	this->str_type = in_type;
+#define MENTOC_LAZY_COMP(a,b) \
+	if(this->str_type.compare(a) == 0){\
+		this->type = b;\
+	}
+	MENTOC_LAZY_COMP("rifle",ITEM_RIFLE);
+	MENTOC_LAZY_COMP("explosive",ITEM_EXPLOSIVE);
+MENTOC_LAZY_COMP("gadget",ITEM_GADGET);
+MENTOC_LAZY_COMP("drone",ITEM_DRONE);
+MENTOC_LAZY_COMP("weapon",ITEM_WEAPON);
+MENTOC_LAZY_COMP("weapon_attachment",ITEM_WEAPON_ATTACHMENT);
+MENTOC_LAZY_COMP("attachment",ITEM_ATTACHMENT);
+MENTOC_LAZY_COMP("armor",ITEM_ARMOR);
+MENTOC_LAZY_COMP("consumable",ITEM_CONSUMABLE);
+MENTOC_LAZY_COMP("trap",ITEM_TRAP);
+
+}
 #ifdef __MENTOC_USE_PQXX_RESULT__
 void obj_data::feed(const pqxx::result::reference & row){
 #else
@@ -127,6 +148,8 @@ void obj_data::feed(const pqxx::result::reference & row){
 		 - Save room and/or container
 
 */
+		
+
 		type = mods::util::stoi<int>(row["obj_type"]);
 		std::string obj_file = row["obj_file"].c_str();
 

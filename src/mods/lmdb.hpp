@@ -174,6 +174,7 @@ namespace mods::lmdb {
 		int put(std::string key,std::string value,bool renew);
 		int nput(void* key,std::size_t key_size,void* value,std::size_t v_size);
 		int del(std::string key);
+		void ndel(void* key,std::size_t key_size);
 		status_type_t status() const;
 		int get(std::string key,std::string & in_value);
 		int nget(void* key,std::size_t k_size,std::string& in_value);

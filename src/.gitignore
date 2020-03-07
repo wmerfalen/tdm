@@ -27,3 +27,6 @@ run.txt
 duktape-2.2.0/duk
 duktape-2.2.0/libduktape.so.*
 duktape-2.2.0/libduktaped.so.*
+conf/
+cscope.files
+cscope.out

@@ -24,8 +24,8 @@ aligned_int_t initialize_row(
 	ptr_db->renew_txn();
 	std::string id_list = "";
 	id_list = db_get(db_key({table,"id_list"}));
-	//std::cout << "id_list: '" << id_list << "' .size(): " << id_list.length() << "\n";
-	//std::cout << "debug: id_list buffer: '" << id_list << "'\n";
+	std::cout << "id_list: '" << id_list << "' .size(): " << id_list.length() << "\n";
+	std::cout << "debug: id_list buffer: '" << id_list << "'\n";
 	aligned_int_t next_id = 0;
 	std::vector<aligned_int_t> deserialized_id_list;
 	if(id_list.length() == 0){
@@ -64,23 +64,23 @@ aligned_int_t initialize_row(
 
 tuple_status_t new_record(const std::string& table,mutable_map_t* values){
 	auto pk_id = mods::db::initialize_row(table);
-	//std::cout << "debug: new pk_id: '" << pk_id << "'\n";
+	std::cout << "debug: new pk_id: '" << pk_id << "'\n";
 	return save_record(table,values,std::to_string(pk_id));
 }
 
 tuple_status_t save_record(const std::string& table,mutable_map_t* values,std::string pk_id){
 	mods::globals::db->renew_txn();
-	for(auto & meta_key : mods::meta_utils::get_all_meta_values(table,values)){
+	for(const auto & meta_key : mods::meta_utils::get_all_meta_values(table,values)){
 		std::cout << "debug: save_record. Putting: '" << meta_key << "' as '" << pk_id << "'\n";
-		db_put(meta_key,pk_id);
+		lmdb_put(meta_key,pk_id);
 	}
-		auto write_status =  lmdb_write_values(
+		const auto write_status =  lmdb_write_values(
 				table,
 				values,pk_id);
 		if(!std::get<0>(write_status)){
 			std::cerr << "error: lmdb_write_values failed with: '" << std::get<1>(write_status) << "'\n";
 		}
-	auto tuple_status = mods::globals::db->commit();
+	const auto tuple_status = mods::globals::db->commit();
 	if(std::get<0>(tuple_status)){
 		std::cerr << "debug: save_record success\n";
 		return {true,"saved",mods::util::stoi<aligned_int_t>(pk_id)};
@@ -95,7 +95,7 @@ void lmdb_renew() {
 }
 int lmdb_nget(void* key,std::size_t k_size,std::string& value){
 	value = "";
-	auto status = mods::globals::db->nget(key,k_size,value);
+	const auto status = mods::globals::db->nget(key,k_size,value);
 	return status;
 	//if(status == EINVAL){
 	//	std::cerr << "[lmdb_nget] got EINVAL -- retrying...\n";
@@ -120,7 +120,7 @@ std::string lmdb_get(std::string_view key){
 }
 int lmdb_nput(void* key,std::size_t key_size,
 		void* value,std::size_t v_size){
-	auto status = mods::globals::db->nput(key,key_size,value,v_size);
+	const auto status = mods::globals::db->nput(key,key_size,value,v_size);
 	return status;
 	//if(status == EINVAL){
 	//	std::cerr << "[lmdb_put] got EINVAL -- retrying...\n";
@@ -139,6 +139,19 @@ void lmdb_put(std::string key,std::string value){
 	//j	status = mods::globals::db->put(key,value);
 	//j	std::cerr << "retry status: " << status << "\n";
 	//j}
+}
+void lmdb_del(std::string key){
+	mods::globals::db->del(key);
+}
+void lmdb_ndel(void* key,std::size_t key_size){
+	mods::globals::db->ndel(key,key_size);
+	//if(status == EINVAL){
+	//	std::cerr << "[lmdb_put] got EINVAL -- retrying...\n";
+	//	lmdb_renew();
+	//	status = mods::globals::db->nput(key,key_size,value,v_size);
+	//	std::cerr << "retry status: " << status << "\n";
+	//}
+	//return status;
 }
 void lmdb_commit(){
 	mods::globals::db->commit();
@@ -163,8 +176,8 @@ tuple_status_t lmdb_write_values(
 		const std::string& table,
 		mutable_map_t* values,std::string pk_id){
 	mods::globals::db->renew_txn();
-	for(auto & [key,value] : *values){
-		 db_put(db_key({table,key,pk_id}),value);
+	for(const auto & [key,value] : *values){
+		 lmdb_put(db_key({table,key,pk_id}),value);
 	}
 	return {true,"saved",0};
 }
@@ -238,7 +251,7 @@ int load_record(const std::string& table, const std::string& pk, mutable_map_t& 
 	int count = 0;
 	for(auto & key : mods::globals::db->fields_to_grab(table)){
 		value = db_get(db_key({table,key,pk}));
-		//std::cout << "debug: load_record key: '" << key << "' value: '" << value << "'\n";
+		std::cerr << "debug: load_record key: '" << key << "' value: '" << value << "'\n";
 		values[key] = value;
 		++count;
 	}

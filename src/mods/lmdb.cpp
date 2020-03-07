@@ -295,7 +295,7 @@ namespace mods::lmdb {
 			MDB_val k;
 			std::cerr << "key.length: " <<  key.length() << 
 				"key.size: " << key.size() << "\n";
-			k.mv_size = key.size();
+			k.mv_size = key.length()+1;
 			k.mv_data = (void*)key.data();
 			MDB_val v;
 			memset(&v,0,sizeof(v));
@@ -315,6 +315,7 @@ namespace mods::lmdb {
 					char buf[v.mv_size + 1];
 					memset(buf,0,v.mv_size +1);
 					bcopy(v.mv_data,buf,v.mv_size);
+					in_value.resize(v.mv_size);
 					std::copy(buf,buf + v.mv_size,in_value.begin());
 					return _db_handle::KEY_FETCHED_OKAY;
 			}
@@ -347,11 +348,21 @@ namespace mods::lmdb {
 		return {true,""};
 #endif
 	}
+	void _db_handle::ndel(void* key,std::size_t key_size){
+#ifdef __MENTOC_USE_LMDB__
+		MDB_val k;
+		k.mv_data = key;
+		k.mv_size = key_size;
+		mdb_del(m_txn,m_dbi,&k,nullptr);
+#else
+		mods::globals::ram_db[key] = "";
+#endif
+	}
 	int _db_handle::del(std::string key){
 #ifdef __MENTOC_USE_LMDB__
 		MDB_val k;
 		k.mv_data = (void*)key.c_str();
-		k.mv_size = key.length();
+		k.mv_size = key.length()+1;
 		return mdb_del(m_txn,m_dbi,&k,nullptr);
 #else
 		mods::globals::ram_db[key] = "";
@@ -427,10 +438,10 @@ namespace mods::lmdb {
 		if(m_good){
 			lmdb_debug("m_good");
 			MDB_val k;
-			k.mv_size = key.length();
+			k.mv_size = key.length()+1;
 			k.mv_data = (void*)key.c_str();
 			MDB_val v;
-			v.mv_size = value.length();
+			v.mv_size = value.length()+1;
 			v.mv_data = (void*)value.c_str();
 			int ret = mdb_put(m_txn,m_dbi,&k,&v,0);
 			switch(ret){
@@ -447,10 +458,17 @@ namespace mods::lmdb {
 						lmdb_debug("put txn full");
 						break;
 				default:
-					if(std::string("Successful").compare(mdb_strerror(ret)) == 0){
+					const auto e = mdb_strerror(ret);
+					lmdb_debug(std::string("strerror: ") + e);
+					if(std::string("Successful return: 0").compare(mdb_strerror(ret)) == 0){
 						lmdb_debug("put success");
 						return 0;
+					}else{
+						lmdb_debug("error:...");
+						lmdb_debug(mdb_strerror(ret));
+						lmdb_debug("WTF");
 					}
+
 			}
 			return ret;
 		}else{
@@ -533,14 +551,13 @@ namespace mods::globals {
 
 std::string db_key(const std::vector<std::string> & parts){
 	std::string query = "";
-	std::size_t count = 0;
+	std::size_t i = 0,s=parts.size();
 	for(auto & part : parts){
 		query.append(part);
-		if(++count == parts.size()){
-			break;
-		}
+		if(++i == s){ break; }
 		query.append("|");
 	}
+	std::cerr << "[debug][db_key:'" << query << "']\n";
 	return query;
 }
 
