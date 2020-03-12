@@ -21,6 +21,7 @@
 #include "mods/ai_state.hpp"
 #include <functional>
 #include <array>
+#include <forward_list>
 #include "mods/extra_desc_data.hpp"
 #include <unordered_map>
 #include "mods/yaml.hpp"
@@ -58,6 +59,7 @@ namespace mods::globals {
 extern uuid_t player_uuid();
 extern uuid_t obj_uuid();
 extern uuid_t mob_uuid();
+extern void register_object_db_id(uint64_t,uuid_t);
 };
 enum lense_type_t {
 	FIRST,
@@ -791,6 +793,7 @@ enum player_level {
 			uuid = mods::globals::obj_uuid();
 			m_capabilities = other.m_capabilities;
 			obj_flags = other.obj_flags;
+			m_db_id = other.m_db_id;
 
 			/*
 #define MENTOC_OBJ_COPY_CONSTRUCTOR(r,data,CLASS_TYPE) \
@@ -822,6 +825,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 			uuid = mods::globals::obj_uuid();
 			m_capabilities = other.m_capabilities;
 			obj_flags = other.obj_flags;
+			m_db_id = 0;
 			/** FIXME: copy constructor is broken right now */
 //BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 			return *this;
@@ -832,7 +836,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 			action_description(""),
 			carried_by(nullptr),worn_by(nullptr),worn_on(0),
 			in_obj(nullptr),contains(nullptr),next_content(nullptr),
-			next(nullptr),ai_state(0),uuid(0)
+			next(nullptr),ai_state(0),uuid(0),m_db_id(0)
 		{
 			std::cerr << "[obj_data] constructor. calling init...\n";
 			this->init();
@@ -888,29 +892,67 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 		 * -- function definition --
 		 * rifle_data_t* rifle(std::string_view feed_file); 
 		 *  |--> does: makes unique ptr through feed_file constructor
-		 *  |--> does: returns rifle_data_t*
+		 *  |--> does: returns m_rifle.get();
 		 *
 		 * -- function definition --
 		 *  rifle_data_t* rifle(uint8_t mode);
 		 *  |--> does: creates unique ptr through empty constructor
-		 *  |--> does: returns rifle_data_t*
+		 *  |--> does: returns m_rifle.get();
 		 *
 		 * -- function definition --
 		 * rifle_data_t* rifle()
-		 *  |--> does: returns rifle_data_t* 
+		 *  |--> does: returns m_rifle.get();
 		 *
 		 * -- function definition --
 		 * bool has_rifle()
-		 *  |--> does: returns true if rifle_data_t unique ptr made
+		 *  |--> does: returns m_rifle;
 		 */
-#define MENTOC_DATA_OBJ(r,data,CLASS_TYPE) BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(std::string_view feed_file){\
-	 this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(feed_file); this->set_str_type(BOOST_PP_STRINGIZE(CLASS_TYPE));\
-	this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
-	return this->BOOST_PP_CAT(m_,CLASS_TYPE).get();\
-}\
-		BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(uint8_t mode){ this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(); return this->BOOST_PP_CAT(m_, CLASS_TYPE).get(); }\
-		BOOST_PP_CAT(CLASS_TYPE,_data_t*) CLASS_TYPE(){ return this->BOOST_PP_CAT(m_,CLASS_TYPE).get(); } \
-		bool BOOST_PP_CAT(has_,CLASS_TYPE)(){ \
+#define MENTOC_DATA_OBJ(r,data,CLASS_TYPE)\
+		/* rifle_data_t* rifle(std::string_view feed_file) { */\
+		/* rifle_data_t* rifle(std::string_view feed_file) { */\
+		/* rifle_data_t* rifle(std::string_view feed_file) { */\
+		BOOST_PP_CAT(CLASS_TYPE,_data_t*) \
+		CLASS_TYPE(\
+				std::string_view feed_file\
+		){\
+	 		this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(feed_file);\
+			this->set_str_type(BOOST_PP_STRINGIZE(CLASS_TYPE));\
+			this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
+			return this->BOOST_PP_CAT(m_,CLASS_TYPE).get();\
+		}\
+		\
+		\
+		/* rifle_data_t* rifle(uint8_t mode) { */\
+		/* rifle_data_t* rifle(uint8_t mode) { */\
+		/* rifle_data_t* rifle(uint8_t mode) { */\
+		BOOST_PP_CAT(CLASS_TYPE,_data_t*)\
+		CLASS_TYPE(\
+				uint8_t mode\
+		){\
+			this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(); \
+			this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
+			return this->BOOST_PP_CAT(m_, CLASS_TYPE).get();\
+		}\
+		\
+		\
+		/* rifle_data_t rifle(void) { */\
+		/* rifle_data_t rifle(void) { */\
+		/* rifle_data_t rifle(void) { */\
+		BOOST_PP_CAT(CLASS_TYPE,_data_t*)\
+		CLASS_TYPE(\
+				void\
+		){\
+			return this->BOOST_PP_CAT(m_,CLASS_TYPE).get();\
+		}\
+		\
+		\
+		/* bool has_rifle(void) { */\
+		/* bool has_rifle(void) { */\
+		/* bool has_rifle(void) { */\
+		bool BOOST_PP_CAT(has_,CLASS_TYPE)\
+				(\
+				 void\
+		){\
 			return this->BOOST_PP_CAT(m_,CLASS_TYPE) != nullptr;\
 		}
 
@@ -931,6 +973,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_DATA_OBJ, ~, MENTOC_ITEM_TYPES_SEQ)
 		template <typename T>
 		void post_feed(T fed_object){
 			this->set_db_id(fed_object->attributes->db_id());
+			mods::globals::register_object_db_id(fed_object->attributes->db_id(),this->uuid);
 		}
 
 		protected:
@@ -1059,6 +1102,7 @@ struct obj_data_weapon : public obj_data {
 
 		std::vector<mods::extra_desc_data>& ex_descriptions();
 		obj_data *contents;   /* List of items in room              */
+		std::deque<std::shared_ptr<obj_data>>& contents_container(){ return this->m_contents; }
 		char_data *people;    /* List of NPC / PC in room           */
 		std::string_view overhead(const lense_type_t& );
 		std::vector<texture_type_t>& textures();
@@ -1078,6 +1122,7 @@ struct obj_data_weapon : public obj_data {
 			std::vector<uint8_t> m_directions;
 			std::vector<mods::extra_desc_data> m_ex_descriptions;
 			std::vector<texture_type_t> m_textures;
+			std::deque<std::shared_ptr<obj_data>> m_contents;
 	};
 	/* ====================================================================== */
 

@@ -175,7 +175,19 @@ extern const char *unused_spellname;	/* spell_parser.c */
 
 
 namespace db {
-	int16_t save_char_data(player_ptr_t player,std::map<std::string,std::string> values){
+	namespace extraction {
+		void save_player(player_ptr_t& player){
+			if(player->db_id()){
+				log("Saving saved player id:[%d] name:[%s]",player->db_id(), player->name().c_str());
+				db::save_char_prefs(player);
+				mods::db::save_char(player);
+				mods::orm::inventory::flush_player(player);
+				return;
+			}
+			log("_NOT_ Saving player because they do not have a db_id");
+		}
+	};
+	int16_t save_char_data(player_ptr_t& player,std::map<std::string,std::string> values){
 		try{
 			auto up_txn = txn();
 			sql_compositor comp("player",&up_txn);
@@ -193,7 +205,7 @@ namespace db {
 		}
 	}
 
-	int16_t save_new_char(player_ptr_t player){
+	int16_t save_new_char(player_ptr_t& player){
 		try{
 			std::map<std::string,std::string> values;
 			mods::db::lmdb_export_char(player,values);
@@ -213,7 +225,7 @@ namespace db {
 		}
 	}
 
-	int16_t load_char_pkid(player_ptr_t player){
+	int16_t load_char_pkid(player_ptr_t& player){
 		try{
 			auto select_transaction = txn();
 			sql_compositor comp("player",&select_transaction);
@@ -234,7 +246,7 @@ namespace db {
 		}
 	}
 
-	int16_t load_char_prefs(player_ptr_t player){
+	int16_t load_char_prefs(player_ptr_t& player){
 		try{
 			auto select_transaction = txn();
 			sql_compositor comp("player",&select_transaction);
@@ -255,7 +267,7 @@ namespace db {
 			return -2;
 		}
 	}
-	int16_t save_char_prefs(player_ptr_t player){
+	int16_t save_char_prefs(player_ptr_t& player){
 		return db::save_char_data(player,{{"player_preferences",std::to_string(player->get_prefs())}});
 	}
 

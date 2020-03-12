@@ -365,7 +365,7 @@ namespace mods {
 			 * the new player_type_enum_t values when it comes to muting queued output.
 			 */
 			void                queue_page_fragment(std::string_view fragment) {
-				for(auto c : fragment) {
+				for(const auto & c : fragment) {
 					m_current_page_fragment += c;
 					if(c == '\n') {
 						m_pages.push_back(m_current_page_fragment);
@@ -382,8 +382,9 @@ namespace mods {
 			}
 
 			player& operator<<(const char* m) {
+				if(!m){ return *this; }
 				if(m_do_paging) {
-					queue_page_fragment(m);
+					queue_page_fragment(std::string(m));
 				} else {
 					stc(m);
 				} return *this;

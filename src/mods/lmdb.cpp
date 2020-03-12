@@ -240,6 +240,46 @@ namespace mods::lmdb {
 		return mods::globals::ram_db[key];
 #endif
 	}
+	int _db_handle::nget(void* key,std::size_t k_size,void* in_value){
+#ifdef __MENTOC_USE_LMDB__
+		lmdb_debug("nget entry");
+		if(!m_good){
+			lmdb_debug("nget - renewed txn");
+			this->renew_txn();
+		}
+		if(m_good){
+			lmdb_debug("nget - good. fetching..");
+			MDB_val k;
+			k.mv_size = k_size;
+			k.mv_data = key;
+			MDB_val v;
+			memset(&v,0,sizeof(v));
+			int ret = mdb_get(m_txn,m_dbi,&k,&v);
+			switch(ret){
+				case MDB_NOTFOUND:
+					lmdb_debug("nget - key not found...");
+					break;
+				case EINVAL:
+					lmdb_debug("nget - EINVAL");
+					std::cerr << "EINVAL == " << EINVAL << "\n";
+					break;
+				default:
+					lmdb_debug("nget - fetched okay");
+					//char buf[v.mv_size + 1];
+					//memset(buf,0,v.mv_size +1);
+					bcopy(v.mv_data,in_value,v.mv_size);
+					//std::copy(buf,buf + v.mv_size,in_value.begin());
+					return _db_handle::KEY_FETCHED_OKAY;
+			}
+			return ret;
+		}else{
+			return -2;
+		}
+#else
+		in_value = mods::globals::ram_db[key];
+		return _db_handle::KEY_FETCHED_OKAY;
+#endif
+	}
 	int _db_handle::nget(void* key,std::size_t k_size,std::string& in_value){
 #ifdef __MENTOC_USE_LMDB__
 		lmdb_debug("nget entry");
@@ -258,12 +298,10 @@ namespace mods::lmdb {
 			switch(ret){
 				case MDB_NOTFOUND:
 					lmdb_debug("nget - key not found...");
-					in_value = "";
 					break;
 				case EINVAL:
 					lmdb_debug("nget - EINVAL");
 					std::cerr << "EINVAL == " << EINVAL << "\n";
-					in_value="";
 					break;
 				default:
 					lmdb_debug("nget - fetched okay");

@@ -23,6 +23,7 @@
 #include "screen.h"
 #include "house.h"
 #include "constants.h"
+#include "mods/orm/inventory.hpp"
 
 /* extern variables */
 extern struct spell_info_type spell_info[];
@@ -116,6 +117,7 @@ ACMD(do_save) {
 	if(cmd) {
 		log("Saving player %s",GET_NAME(ch).c_str());
 		mods::db::save_char(player);
+		mods::orm::inventory::flush_player(player);
 		log("Saved");
 		/*
 		 * This prevents item duplication by two PC's using coordinated saves

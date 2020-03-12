@@ -51,6 +51,7 @@ int lmdb_nput(void* key,std::size_t k_size,void* value,std::size_t v_size);
 void lmdb_ndel(void* key,std::size_t k_size);
 void lmdb_del(std::string key);
 std::string lmdb_get(std::string_view key);
+int lmdb_nget_void(void* key,std::size_t k_size,void* got);
 int lmdb_nget(void* key,std::size_t k_size,std::string& got);
 void lmdb_export_char(
 		player_ptr_t player_ptr,

@@ -43,6 +43,7 @@
 
 #define LMDBSET(key,value) mods::db::lmdb_put(key,value)
 #define LMDBNGET(key,k_size,value_buffer) mods::db::lmdb_nget(key,k_size,value_buffer)
+#define LMDBVGET(key,k_size,value_buffer) mods::db::lmdb_nget_void(key,k_size,value_buffer)
 #define LMDBNDEL(key,k_size) mods::db::lmdb_ndel(key,k_size)
 #define LMDBDEL(key) mods::db::lmdb_del(key)
 #define LMDBGET(key) mods::db::lmdb_get(key)
@@ -129,9 +130,11 @@ namespace mods {
 		int mobile_activity(char_data*);
 		char_data* read_mobile(const mob_vnum &,const int & type);
 		void register_player(player_ptr_t);
+		//void register_object_db_id(obj_ptr_t);
 		void register_object(obj_ptr_t);
 		void register_object_list();
 		void register_room(const room_rnum&);
+		void register_object_db_id(uint64_t,uuid_t);
 		void shutdown();
 		void refresh_player_states();
 		void room_event(char_data*,mods::ai_state::event_type_t);
@@ -165,5 +168,5 @@ player_ptr_t ptr_by_uuid(uuid_t);
 obj_ptr_t optr_by_uuid(uuid_t);
 std::optional<obj_ptr_t> optr_opt(uuid_t);
 std::optional<player_ptr_t> ptr_opt(uuid_t);
-
+obj_ptr_t ptr_by_dbid(uint64_t);
 #endif

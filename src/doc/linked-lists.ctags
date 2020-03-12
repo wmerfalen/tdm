@@ -1,0 +1,426 @@
+get_obj_in_list_vis
+act.movement.cpp:65:	for(obj = ch->carrying; obj; obj = obj->next_content)
+act.movement.cpp:301:		for(o = ch->carrying; o; o = o->next_content)
+spec_procs.cpp:585:	for(i = world[IN_ROOM(ch)].contents; i; i = i->next_content) {
+spec_procs.cpp:593:			next_obj = temp->next_content;
+spec_procs.cpp:614:	for(i = world[IN_ROOM(ch)].contents; i; i = i->next_content) {
+db.cpp:1183:			proto.next_content = nullptr;
+fight.cpp:328:	for(o = corpse->contains; o != NULL; o = o->next_content) {
+magic.cpp:117:	for(tobj = ch->carrying; tobj; tobj = tobj->next_content) {
+magic.cpp:860:			next_obj = tobj->next_content;
+structs.cpp:31:	CREATE(next_content,struct obj_data,1);
+act.builder.cpp:188:	proto.next_content = nullptr;
+act.builder.cpp:222:	proto.next_content = nullptr;
+act.builder.cpp:257:	proto.next_content = nullptr;
+act.builder.cpp:291:	proto.next_content = nullptr;
+act.builder.cpp:325:	proto.next_content = nullptr;
+act.builder.cpp:360:	proto.next_content = nullptr;
+act.builder.cpp:396:	proto.next_content = nullptr;
+house.cpp:108:		House_save(obj->next_content, fp);
+house.cpp:128:		House_restore_weight(obj->next_content);
+mods/weapon.cpp:48:		obj->next_content = nullptr; /* For 'contains' lists             */
+mods/weapon.cpp:82:		obj->next_content = nullptr; /* For 'contains' lists             */
+mods/weapon.cpp:117:		obj->next_content = nullptr; /* For 'contains' lists             */
+mobact.cpp:98:				for(obj = world[IN_ROOM(ch)].contents; obj; obj = obj->next_content)
+structs.h:790:			next_content = other.next_content;
+structs.h:822:			next_content = other.next_content;
+structs.h:838:			in_obj(nullptr),contains(nullptr),next_content(nullptr),
+structs.h:876:		obj_data *next_content; /* For 'contains' lists             */
+act.informative.cpp:326:	for(i = list; i; i = i->next_content) {
+act.informative.cpp:422:		for(tmp_obj = i->carrying; tmp_obj; tmp_obj = tmp_obj->next_content) {
+act.informative.cpp:868:	for(obj = ch->carrying; obj && !found; obj = obj->next_content) {
+act.informative.cpp:884:	for(obj = world[IN_ROOM(ch)].contents; obj && !found && obj->next_content; obj = obj->next_content){
+act.wizard.cpp:455:		for(j = rm.contents; j; j = j->next_content) {
+act.wizard.cpp:466:				player->stc(j->next_content ? "," : "");
+act.wizard.cpp:633:		for(found = 0, j2 = j->contains; j2; j2 = j2->next_content) {
+act.wizard.cpp:637:				player->sendln(j2->next_content ? "," : "");
+act.wizard.cpp:760:	for(i = 0, j = k->carrying; j; j = j->next_content, i++);
+handler.cpp:469:		object->next_content = player->carrying();
+handler.cpp:489:		object->next_content = player->carrying();
+handler.cpp:514:		object->next_content = ch->carrying;
+handler.cpp:548:	REMOVE_FROM_LIST(object, object->carried_by->carrying, next_content);
+handler.cpp:560:	object->next_content = NULL;
+handler.cpp:579:	REMOVE_FROM_LIST(object, object->carried_by->carrying, next_content);
+handler.cpp:591:	object->next_content = NULL;
+handler.cpp:816:	for(i = list; i; i = i->next_content)
+handler.cpp:903:		object->next_content = world[room].contents;
+handler.cpp:932:		object->next_content = world[room].contents;
+handler.cpp:955:	REMOVE_FROM_LIST(object, world[IN_ROOM(object)].contents, next_content);
+handler.cpp:964:	object->next_content = NULL;
+handler.cpp:977:	REMOVE_FROM_LIST(object, world[IN_ROOM(object)].contents, next_content);
+handler.cpp:986:	object->next_content = NULL;
+handler.cpp:999:	from_object->next_content = to_object->contains;
+handler.cpp:1026:	REMOVE_FROM_LIST(obj, obj_from->contains, next_content);
+handler.cpp:1041:	obj->next_content = NULL;
+handler.cpp:1049:		object_list_new_owner(list->next_content, ch);
+handler.cpp:1100:	if(obj->next_content) {
+handler.cpp:1101:		update_object(obj->next_content, use);
+handler.cpp:1517:	for(i = list; i && *number; i = i->next_content)
+boards.cpp:104:	for(obj = world[IN_ROOM(ch)].contents; obj; obj = obj->next_content)
+boards.cpp:111:		for(obj = ch->carrying; obj; obj = obj->next_content)
+shop.cpp:445:	for(i = list, j = 1; i && (j <= number); i = i->next_content)
+shop.cpp:473:	for(loop = list; loop; loop = loop->next_content){
+shop.cpp:786:			obj->next_content = loop->next_content;
+shop.cpp:787:			loop->next_content = obj;
+shop.cpp:791:		loop = loop->next_content;
+shop.cpp:805:		temp->next_content = list;
+shop.cpp:811:		list = list->next_content;
+shop.cpp:996:		for(obj = keeper->carrying; obj; obj = obj->next_content)
+castle.cpp:764:	for(i = world[IN_ROOM(ch)].contents; i; i = i->next_content) {
+limits.cpp:540:					next_thing2 = jj->next_content;	/* Next in inventory */
+act.item.cpp:144:						next_obj = obj->next_content;
+act.item.cpp:156:					next_obj = obj->next_content;
+act.item.cpp:249:				obj_next = obj->next_content;
+act.item.cpp:261:			next_obj = obj->next_content;
+act.item.cpp:311:				obj_next = obj->next_content;
+act.item.cpp:323:			next_obj = obj->next_content;
+act.item.cpp:392:			for(cont = ch->carrying; cont; cont = cont->next_content)
+act.item.cpp:404:			for(cont = world[IN_ROOM(ch)].contents; cont; cont = cont->next_content)
+act.item.cpp:584:				next_obj = get_obj_in_list_vis(ch, arg, NULL, obj->next_content);
+act.item.cpp:608:					next_obj = obj->next_content;
+act.item.cpp:622:				next_obj = get_obj_in_list_vis(ch, arg, NULL, obj->next_content);
+act.item.cpp:748:				next_obj = get_obj_in_list_vis(ch, arg, NULL, obj->next_content);
+act.item.cpp:780:					next_obj = obj->next_content;
+act.item.cpp:1495:			next_obj = obj->next_content;
+act.item.cpp:1516:				next_obj = get_obj_in_list_vis(ch, arg1, NULL, obj->next_content);
+cscope.out:9600:; obj = obj->next_content){
+cscope.out:290480:->next_content;
+handler.h:51:void	object_list_new_owner(struct obj_data *list, char_data *ch);
+handler.h:79:struct obj_data *get_obj_in_list_num(int num, struct obj_data *list);
+handler.h:81:struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *number, struct obj_data *list);
+db.cpp:63:std::deque<std::shared_ptr<obj_data>> obj_list;
+db.cpp:1970:	obj_list.push_back(std::make_shared<obj_data>());
+db.cpp:1981:	obj_list.push_back(std::make_shared<obj_data>(obj_proto[proto_index]));
+doc/linked-lists.ctags:11:structs.cpp:31:	CREATE(next_content,struct obj_data,1);
+doc/linked-lists.ctags:28:structs.h:876:		obj_data *next_content; /* For 'contains' lists             */
+mods/extern.hpp:13:extern std::deque<obj_data> object_list;
+mods/extern.hpp:14:extern std::deque<std::shared_ptr<obj_data>> obj_list;
+mods/util.hpp:31:extern struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *number, struct obj_data *list);
+mods/util.hpp:32:extern std::deque<std::shared_ptr<obj_data>> obj_list;
+mods/weapon.hpp:18:using attachment_list_t = std::array<obj_data_ptr_t,6>;
+mods/util.cpp:318:		obj_list.push_back(std::make_shared<obj_data>(*o));
+mods/builder.cpp:388:		obj_list.push_back(std::make_shared<obj_data>());
+mods/builder.cpp:396:				obj_list.push_back(std::make_shared<obj_data>());
+mods/builder.cpp:2674:			obj_list.push_back(std::make_shared<obj_data>());
+structs.h:876:		obj_data *next_content; /* For 'contains' lists             */
+structs.h:877:		obj_data *next;         /* For the object list              */
+structs.h:1553:		obj_data *carrying;            /* Head of list                  */
+structs.h:1712:using map_object_list = std::map<uuid_t,std::shared_ptr<obj_data>>;
+act.informative.cpp:62:void list_obj_to_char(struct obj_data *list, char_data *ch, int mode, int show);
+act.informative.cpp:321:void list_obj_to_char(struct obj_data *list, char_data *ch, int mode, int show) {
+handler.cpp:813:obj_data *get_obj_in_list_num(int num, struct obj_data *list) {
+handler.cpp:1046:void object_list_new_owner(struct obj_data *list, char_data *ch) {
+handler.cpp:1504:struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *number, struct obj_data *list) {
+shop.cpp:53:struct obj_data *get_hash_obj_vis(char_data *ch, char *name, struct obj_data *list);
+shop.cpp:54:struct obj_data *get_slide_obj_vis(char_data *ch, char *name, struct obj_data *list);
+shop.cpp:77:char *list_object(struct obj_data *obj, int cnt, int oindex, int shop_nr, char_data *keeper, char_data *seller);
+shop.cpp:432:                                   struct obj_data *list) {
+shop.cpp:461:                                  struct obj_data *list) {
+shop.cpp:800:	struct obj_data *list = NULL, *temp;
+shop.cpp:935:char *list_object(struct obj_data *obj, int cnt, int aindex, int shop_nr, char_data *keeper, char_data *ch) {
+globals.hpp:162:extern std::deque<std::shared_ptr<obj_data>> obj_list;
+act.movement.cpp:227:			next = k->next;
+act.other.cpp:430:		for(f = k->followers; f; f = f->next) {
+act.other.cpp:467:		for(found = 0, f = ch->followers; f; f = f->next) {
+act.other.cpp:513:			next_fol = f->next;
+act.other.cpp:576:	for(f = k->followers; f; f = f->next)
+act.other.cpp:624:		for(f = k->followers; f; f = f->next)
+act.other.cpp:657:		for(f = k->followers; f; f = f->next) {
+utils.cpp:519:		ch->master->followers = k->next;
+utils.cpp:522:		for(k = ch->master->followers; k->next->follower != ch; k = k->next);
+utils.cpp:524:		j = k->next;
+utils.cpp:525:		k->next = j->next;
+utils.cpp:538:	for(lackey = ch->followers; lackey; lackey = lackey->next)
+utils.cpp:556:		j = k->next;
+utils.cpp:578:	k->next = leader->followers;
+spec_procs.cpp:407:	//for(cons = world[IN_ROOM(ch)].people; cons; cons = cons->next_in_room)
+spec_procs.cpp:646:	//for(tch = world[IN_ROOM(ch)].people; tch; tch = tch->next_in_room) {
+spec_procs.cpp:719:		//for(pet = world[pet_room].people; pet; pet = pet->next_in_room) {
+ban.cpp:78:		next_node->next = ban_list;
+ban.cpp:94:		_write_one_node(fp, node->next);
+ban.cpp:140:		for(ban_node = ban_list; ban_node; ban_node = ban_node->next) {
+ban.cpp:166:	for(ban_node = ban_list; ban_node; ban_node = ban_node->next) {
+ban.cpp:221:			ban_node = ban_node->next;
+db.cpp:1944:	 mob->next = character_list;
+db.cpp:2048:				update_u->next = 0;
+db.cpp:2053:					reset_q.tail->next = update_u;
+db.cpp:2065:	for(update_u = reset_q.head; update_u; update_u = update_u->next){
+db.cpp:2073:				reset_q.head = reset_q.head->next;
+db.cpp:2075:				for(temp = reset_q.head; temp->next != update_u;
+db.cpp:2076:						temp = temp->next);
+db.cpp:2078:				if(!update_u->next) {
+db.cpp:2082:				temp->next = update_u->next;
+db.cpp:2597:			af = af->next;
+db.cpp:2618:	if((i >= MAX_AFFECT) && af && af->next) {
+db.cpp:2774:			GET_ALIASES(ch) = (GET_ALIASES(ch))->next;
+db.cpp:2920:	ch->next = nullptr;
+db.cpp:2921:	ch->next_fighting = nullptr;
+fight.cpp:145:			fight_messages[i].msg = fight_messages[i].msg->next;
+fight.cpp:189:		messages->next = fight_messages[i].msg;
+fight.cpp:259:	ch->next_fighting = combat_list;
+fight.cpp:281:		next_combat_list = ch->next_fighting;
+fight.cpp:285:	ch->next_fighting = NULL;
+fight.cpp:469:	for(f = k->followers; f; f = f->next)
+fight.cpp:492:	for(f = k->followers; f; f = f->next)
+fight.cpp:685:				msg = msg->next;
+fight.cpp:1448:		next_combat_list = ch->next_fighting;
+alias.cpp:41:	for(temp = GET_ALIASES(ch); temp; temp = temp->next) {
+alias.cpp:111:		CREATE(t2->next, struct alias_data, 1);
+alias.cpp:113:		t2 = t2->next;
+alias.cpp:128:		prev->next = NULL;
+magic.cpp:625:		f_next = f->next;
+magic.cpp:700:	//	next_tch = tch->next_in_room;
+spell_parser.cpp:140:	//for(i = world[IN_ROOM(ch)].people; i; i = i->next_in_room) {
+spell_parser.cpp:392:					//for(i = 0, tch = world[IN_ROOM(ch)].people; tch; tch = tch->next_in_room) {
+spell_parser.cpp:404:				//		next_tch = tch->next_in_room;
+structs.cpp:230:			next = o->next;             /* For either monster or ppl-list  */
+structs.cpp:231:			next_fighting = o->next_fighting;    /* For fighting list               */
+util/autowiz.c:74:    tmp->next = levels;
+util/autowiz.c:119:  tmp->next = 0;
+util/autowiz.c:123:    curr_level = curr_level->next;
+util/autowiz.c:125:  tmp->next = curr_level->names;
+util/autowiz.c:136:  for (curr_level = levels; curr_level; curr_level = curr_level->next) {
+util/autowiz.c:137:    for (a = curr_level->names; a && a->next; a = a->next) {
+util/autowiz.c:138:      for (b = a->next; b; b = b->next) {
+util/autowiz.c:165:  for (curr_level = levels; curr_level; curr_level = curr_level->next) {
+util/autowiz.c:201:      curr_name = curr_name->next;
+util/wld2html.c:348:      new_descr->next = world[room_nr].ex_description;
+util/delobjs.c:40:    for (tmp = name_list; !found && tmp; tmp = tmp->next)
+util/delobjs.c:88:      tmp->next = name_list;
+mods/util.hpp:191:				head = (item)->next;
+mods/util.hpp:195:				while(temp && (temp->next != (item))) {
+mods/util.hpp:196:					temp = temp->next;
+mods/util.hpp:200:					temp->next = (item)->next;
+mods/player.cpp:120:		m_char_data->next = character_list;
+mods/player.cpp:313:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/player.cpp:424:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/player.cpp:469:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/player.cpp:488:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/player.cpp:572:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/weapon.cpp:49:		obj->next = nullptr;         /* For the object list              */
+mods/weapon.cpp:83:		obj->next = nullptr;         /* For the object list              */
+mods/weapon.cpp:118:		obj->next = nullptr;         /* For the object list              */
+mods/scan.cpp:227:						 for(; people->next_in_room; people = people->next_in_room){
+mods/js.cpp:394:			for(auto ch = character_list; ch; ch = ch->next) {
+mods/js.cpp:473:			for(auto ch = character_list; ch->next; ch = ch->next) {
+mods/mobs/mob.cpp:167:		m_char_data->next = character_list;
+mods/mobs/mob.cpp:283:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/mobs/mob.cpp:323:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/mobs/mob.cpp:345:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/mobs/mob.cpp:390:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/mobs/mob.cpp:413:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/mobs/mob.cpp:486:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/builder.cpp:1248:			//for(auto ex_desc = obj->ex_description; ex_desc; ex_desc = ex_desc->next) {
+mods/lmdb/conf.cpp:65:    }while(t = t->next);
+mods/lmdb/conf.cpp:105:                settings->next = (struct translation*)malloc(sizeof(struct translation));
+mods/lmdb/conf.cpp:106:                settings = settings->next;
+mods/lmdb/conf.cpp:110:            settings->next = NULL;
+mods/lmdb/conf.cpp:117:                list->next = t;
+mods/lmdb/conf.cpp:118:                list = list->next;
+mods/lmdb/conf.cpp:122:            t->next = NULL;
+mods/lmdb/conf.cpp:136:    }while(t = t->next);
+mods/lmdb/conf.cpp:144:    }while(t = t->next);
+mods/lmdb/conf.cpp:204:        t = t->next;
+mods/lmdb/conf.cpp:218:        t = t->next;
+mods/lmdb/conf.cpp:276:        }while(n = n->next);
+mods/lmdb/conf.cpp:293:        }while(n = n->next);
+graph.cpp:81:	curr->next = 0;
+graph.cpp:84:		queue_tail->next = curr;
+graph.cpp:97:	if(!(queue_head = queue_head->next)) {
+graph.cpp:247:	for(found = FALSE, tmp = character_list; tmp && !found; tmp = tmp->next)
+act.informative.cpp:1766:		for(i = character_list; i; i = i->next) {
+act.informative.cpp:1840:		for(i = character_list; i; i = i->next) {
+comm.cpp:1036://	newt->next = NULL;
+comm.cpp:1039://	queue->tail->next = newt;
+comm.cpp:1041://	newt->next = NULL;
+act.wizard.cpp:780:		for(fol = k->followers; fol; fol = fol->next) {
+act.wizard.cpp:784:				player->sendln(fol->next ? "," : "");
+act.wizard.cpp:801:		for(aff = k->affected; aff; aff = aff->next) {
+act.wizard.cpp:1260:		//for(vict = world[IN_ROOM(ch)].people; vict; vict = vict->next_in_room) {
+act.wizard.cpp:1472:	//for(tch = world[IN_ROOM(ch)].people; tch; tch = tch->next_in_room) {
+act.wizard.cpp:1766:	//		next_force = vict->next_in_room;
+act.wizard.cpp:2214:			for(vict = character_list; vict; vict = vict->next) {
+handler.cpp:240:	for(af = ch->affected; af; af = af->next) {
+handler.cpp:255:	for(af = ch->affected; af; af = af->next) {
+handler.cpp:291:	affected_alloc->next = ch->affected;
+handler.cpp:326:		next = hjp->next;
+handler.cpp:343:	for(hjp = ch->affected; hjp; hjp = hjp->next)
+handler.cpp:359:		next = hjp->next;
+handler.cpp:857:	mods::loops::foreach_in_room(room,[&](player_ptr_t player) -> bool {//i = world[room].people; i && *number; i = i->next_in_room)
+handler.cpp:878:	for(i = character_list; i; i = i->next)
+handler.cpp:1224:		temp = k->next_fighting;
+handler.cpp:1265: *    list with 'ch = ch->next' does bad things if
+handler.cpp:1272: * A: Because code doing 'vict = vict->next' would
+handler.cpp:1291: * would change the '->next' pointer, potentially
+handler.cpp:1304://		next_vict = vict->next;
+handler.cpp:1320://			prev_vict->next = next_vict;
+handler.cpp:1428:	//for(i = world[IN_ROOM(ch)].people; i && *number; i = i->next_in_room)
+handler.cpp:1460:	for(i = character_list; i && *number; i = i->next) {
+act.offensive.cpp:737:			for(k = ch->followers; k; k = k->next) {
+utils.h:188:      head = (item)->next;		\
+utils.h:191:      while (temp && (temp->next != (item))) \
+utils.h:192:	 temp = temp->next;		\
+utils.h:194:         temp->next = (item)->next;	\
+globals.hpp:82:(ch)->next = character_list;\
+castle.cpp:344:	//        ch_bad_guy = ch_bad_guy->next_in_room);
+act.comm.cpp:93:		for(f = k->followers; f; f = f->next)
+act.comm.cpp:198:			tch = tch->next;
+mail.cpp:78:	new_pos->next = free_list;
+mail.cpp:104:	free_list = old_pos->next;
+mail.cpp:134:	for(tmp = mail_index; (tmp && tmp->recipient != searchee); tmp = tmp->next);
+mail.cpp:220:		new_index->next = mail_index;
+mail.cpp:227:	new_position->next = new_index->list_start;
+mail.cpp:418:	if(!(position_pointer->next)) {	/* just 1 entry in list. */
+mail.cpp:424:			mail_index = mail_pointer->next;
+mail.cpp:429:			        prev_mail->next != mail_pointer;
+mail.cpp:430:			        prev_mail = prev_mail->next);
+mail.cpp:432:			prev_mail->next = mail_pointer->next;
+mail.cpp:437:		while(position_pointer->next->next) {
+mail.cpp:438:			position_pointer = position_pointer->next;
+mail.cpp:441:		mail_address = position_pointer->next->position;
+mail.cpp:442:		free(position_pointer->next);
+mail.cpp:443:		position_pointer->next = NULL;
+interpreter.cpp:1026:		alias_list = alias_list->next;
+interpreter.cpp:1068:				a = a->next;
+interpreter.cpp:1102:			a->next = GET_ALIASES(ch);
+act.movement.cpp:65:	for(obj = ch->carrying; obj; obj = obj->next_content)
+act.movement.cpp:301:		for(o = ch->carrying; o; o = o->next_content)
+act.other.cpp:262://		if(!(obj = get_obj_in_list_vis(ch, obj_name, NULL, vict->carrying))) {
+act.other.cpp:701:				if(!(mag_item = get_obj_in_list_vis(ch, arg, NULL, ch->carrying))) {
+db.cpp:2919:	ch->carrying = nullptr;
+fight.cpp:326:	corpse->contains = player->carrying();
+magic.cpp:117:	for(tobj = ch->carrying; tobj; tobj = tobj->next_content) {
+spell_parser.cpp:673:			if((tobj = get_obj_in_list_vis(ch, t, NULL, ch->carrying)) != NULL) {
+structs.cpp:228:			carrying = o->carrying;            /* Head of list                  */
+structs.cpp:264:			carrying = nullptr;
+structs.cpp:265:			/** TODO: m_carrying */
+doc/weapons/cz-p10-c.html:81:</p><p>A new P-10 C pistol from CZ comes in a lockable plastic case with a carrying handle, three backstraps, two 15-round magazines, a cable lock, cleaning brush and rod, and the owner's manual. The grips are polymer and come in three different sizes; they slide on a rail and a pin locks the grip to the frame.<sup id="cite_ref-ta_11-0" class="reference"><a href="#cite_note-ta-11">&#91;11&#93;</a></sup>
+todo/todo.grepped.txt:19:structs.cpp:132:	/** TODO: m_carrying */
+todo/todo.grepped.txt:31:mods/player.cpp:438:		/* TODO: find a better way to do this. this loops through all objects in the game and checks if the person carrying it is the current player */
+todo/todo.grepped.txt:66:mods/mobs/mob.cpp:358:		/* TODO: find a better way to do this. this loops through all objects in the game and checks if the person carrying it is the current player */
+mods/drone.hpp:54:			bool carrying_ammo_of_type(const weapon_type_t &);
+mods/player.cpp:309:	bool player::carrying_ammo_of_type(const weapon_type_t& type) {
+mods/player.cpp:310:		if(m_char_data->carrying == 0){
+mods/player.cpp:313:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/player.cpp:324:			m_char_data->m_carrying.clear();
+mods/player.cpp:325:			m_char_data->carrying = nullptr;
+mods/player.cpp:328:		m_char_data->m_carrying.emplace_back(obj);
+mods/player.cpp:329:		m_char_data->carrying = obj.get();
+mods/player.cpp:333:		auto it = std::find(m_char_data->m_carrying.begin(),m_char_data->m_carrying.end(),obj);
+mods/player.cpp:334:		if(it != m_char_data->m_carrying.end()){
+mods/player.cpp:335:			m_char_data->m_carrying.erase(it);
+mods/player.cpp:336:			if(m_char_data->carrying == obj.get()){
+mods/player.cpp:337:				if(m_char_data->m_carrying.size()){
+mods/player.cpp:338:					m_char_data->carrying = m_char_data->m_carrying[0].get();
+mods/player.cpp:340:					m_char_data->carrying = nullptr;
+mods/player.cpp:346:	obj_data* player::carrying(){
+mods/player.cpp:347:		return m_char_data->carrying;
+mods/player.cpp:419:		if(!m_char_data->carrying) {
+mods/player.cpp:423:		/* TODO: find a better way to do this. this loops through all objects in the game and checks if the person carrying it is the current player */
+mods/player.cpp:424:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/player.cpp:469:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/player.cpp:484:		if(!m_char_data->carrying) {
+mods/player.cpp:488:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/player.cpp:572:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/player.hpp:137:			bool carrying_ammo_of_type(const weapon_type_t&);
+mods/player.hpp:138:			obj_data* carrying();
+mods/player.hpp:140:			std::deque<obj_ptr_t>& real_carrying(){ return cd()->m_carrying; }
+mods/player.hpp:564:			//std::deque<std::shared_ptr<obj_data>> m_carrying;
+mods/util.cpp:244:		return make_from(get_obj_in_list_vis(ch, buffer.data(), &number, ch->carrying));
+mods/util.cpp:289:		return make_from(get_obj_in_list_vis(ch, buffer.data(), &number, ch->carrying));
+mods/util.cpp:347:		return make_from(get_obj_in_list_vis(ch, buffer.data(), &number, ch->carrying));
+mods/orm/inventory.cpp:184:			for(auto &eq : player->real_carrying()){
+mods/orm/inventory.cpp:248:			std::vector<uint64_t> carrying;
+mods/orm/inventory.cpp:249:			for(auto &w : player->cd()->m_carrying){
+mods/orm/inventory.cpp:250:				carrying.push_back(w->db_id());
+mods/orm/inventory.cpp:253:			auto ckey ="player|" + std::string(player->name().c_str()) + "|carrying";
+mods/orm/inventory.cpp:256:			std::size_t ckey_size_value = carrying.size();
+mods/orm/inventory.cpp:259:			auto ckey_size="player|" + std::string(player->name().c_str()) + "|carrying|size";
+mods/orm/inventory.cpp:262:			LMDBNSET(ckey.data(),ckey.length()+1, &carrying[0],carrying.size() * sizeof(uint64_t));
+mods/orm/inventory.cpp:269:			std::vector<uint64_t> wearing,carrying;
+mods/orm/inventory.cpp:271:			auto ckey = "player|" + std::string(player->name().c_str()) + "|carrying";
+mods/orm/inventory.cpp:273:			auto ckey_size = "player|" + std::string(player->name().c_str()) + "|carrying|size";
+mods/orm/inventory.cpp:282:			std::cerr << "[carrying.resize]: " << ckey_size << "\n";
+mods/orm/inventory.cpp:283:			carrying.resize(ckey_size_value);
+mods/orm/inventory.cpp:284:			LMDBVGET(ckey.data(),ckey.length()+1,(void*)&carrying[0]);
+mods/orm/inventory.cpp:286:			for(auto && carried_item : carrying){
+mods/orm/inventory.cpp:287:				std::cerr << "[carrying stub]: " << carried_item << "\n";
+mods/js.cpp:678:		//	bool carrying_ammo_of_type(const weapon_type_t&);
+mods/mobs/mob.hpp:81:			bool carrying_ammo_of_type(const weapon_type_t&);
+mods/mobs/mob.cpp:282:	bool player::carrying_ammo_of_type(const weapon_type_t& type) {
+mods/mobs/mob.cpp:283:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/mobs/mob.cpp:319:		if(!m_char_data->carrying) {
+mods/mobs/mob.cpp:323:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/mobs/mob.cpp:340:		if(!m_char_data->carrying) {
+mods/mobs/mob.cpp:344:		/* TODO: find a better way to do this. this loops through all objects in the game and checks if the person carrying it is the current player */
+mods/mobs/mob.cpp:345:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/mobs/mob.cpp:390:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/mobs/mob.cpp:409:		if(!m_char_data->carrying) {
+mods/mobs/mob.cpp:413:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+mods/mobs/mob.cpp:486:		for(auto item = m_char_data->carrying; item->next; item = item->next) {
+structs.h:1553:		obj_data *carrying;            /* Head of list                  */
+structs.h:1554:		std::deque<std::shared_ptr<obj_data>> m_carrying;
+act.informative.cpp:422:		for(tmp_obj = i->carrying; tmp_obj; tmp_obj = tmp_obj->next_content) {
+act.informative.cpp:865:	d("carrying");
+act.informative.cpp:868:	for(obj = ch->carrying; obj && !found; obj = obj->next_content) {
+act.informative.cpp:870:			d("carrying enumeration exdesc");
+act.informative.cpp:1131:	player->sendln( "You are carrying:");
+act.informative.cpp:1132:	list_obj_to_char(ch->carrying, ch, SHOW_OBJ_SHORT, TRUE);
+act.wizard.cpp:760:	for(i = 0, j = k->carrying; j; j = j->next_content, i++);
+act.wizard.cpp:902:		} else if((object = get_obj_in_list_vis(ch, name, &number, ch->carrying)) != NULL) {
+act.wizard.cpp:1267:			while(vict->carrying()) {
+act.wizard.cpp:1268:				extract_obj(vict->carrying());
+handler.cpp:469:		object->next_content = player->carrying();
+handler.cpp:489:		object->next_content = player->carrying();
+handler.cpp:514:		object->next_content = ch->carrying;
+handler.cpp:515:		ch->carrying = object;
+handler.cpp:548:	REMOVE_FROM_LIST(object, object->carried_by->carrying, next_content);
+handler.cpp:579:	REMOVE_FROM_LIST(object, object->carried_by->carrying, next_content);
+handler.cpp:1132:	if(ch->carrying) {
+handler.cpp:1133:		update_object(ch->carrying, 1);
+handler.cpp:1205:	while(ch->carrying) {
+handler.cpp:1206:		obj = ch->carrying;
+handler.cpp:1543:	if((i = get_obj_in_list_vis(ch, name, number, ch->carrying)) != NULL) {
+handler.cpp:1754:		if((*tar_obj = get_obj_in_list_vis(ch, name, &number, ch->carrying)) != NULL) {
+globals.cpp:463:			mob->cd()->carrying = nullptr;
+act.offensive.cpp:417:	if(!player->carrying_ammo_of_type(player->rifle()->type)) {
+utils.h:465:/* Is anyone carrying this object and if so, are they visible? */
+boards.cpp:111:		for(obj = ch->carrying; obj; obj = obj->next_content)
+shop.cpp:498:			obj = get_hash_obj_vis(ch, name, keeper->carrying);
+shop.cpp:500:			obj = get_slide_obj_vis(ch, name, keeper->carrying);
+shop.cpp:687:	strlcpy(tempstr, times_message(ch->carrying, 0, bought), sizeof(tempstr));
+shop.cpp:711:	if(!(obj = get_obj_in_list_vis(ch, name, NULL, ch->carrying))) {
+shop.cpp:780:	loop = keeper->carrying;
+shop.cpp:782:	keeper->carrying = loop;
+shop.cpp:794:	keeper->carrying = obj;
+shop.cpp:803:		temp = keeper->carrying;
+shop.cpp:814:		        !get_obj_in_list_num(GET_OBJ_RNUM(temp), keeper->carrying)) {
+shop.cpp:995:	if(keeper->carrying)
+shop.cpp:996:		for(obj = keeper->carrying; obj; obj = obj->next_content)
+act.comm.cpp:284:		if(!(paper = get_obj_in_list_vis(ch, papername, NULL, ch->carrying))) {
+act.comm.cpp:289:		if(!(pen = get_obj_in_list_vis(ch, penname, NULL, ch->carrying))) {
+act.comm.cpp:294:		if(!(paper = get_obj_in_list_vis(ch, papername, NULL, ch->carrying))) {
+act.item.cpp:138:				if(!(obj = get_obj_in_list_vis(ch, theobj, NULL, ch->carrying))) {
+act.item.cpp:139:					send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(theobj), theobj);
+act.item.cpp:155:				for(obj = ch->carrying; obj; obj = next_obj) {
+act.item.cpp:392:			for(cont = ch->carrying; cont; cont = cont->next_content)
+act.item.cpp:580:		} else if(!(obj = get_obj_in_list_vis(ch, arg, NULL, ch->carrying))) {
+act.item.cpp:604:			if(!ch->carrying) {
+act.item.cpp:605:				send_to_char(ch, "You don't seem to be carrying anything.\r\n");
+act.item.cpp:607:				for(obj = ch->carrying; obj; obj = next_obj) {
+act.item.cpp:617:			if(!(obj = get_obj_in_list_vis(ch, arg, NULL, ch->carrying))) {
+act.item.cpp:627:			if(!(obj = get_obj_in_list_vis(ch, arg, NULL, ch->carrying))) {
+act.item.cpp:744:		} else if(!(obj = get_obj_in_list_vis(ch, arg, NULL, ch->carrying))) {
+act.item.cpp:765:			if(!(obj = get_obj_in_list_vis(ch, arg, NULL, ch->carrying))) {
+act.item.cpp:776:			if(!ch->carrying) {
+act.item.cpp:779:				for(obj = ch->carrying; obj; obj = next_obj) {
+act.item.cpp:894:	if(!(temp = get_obj_in_list_vis(ch, arg, NULL, ch->carrying))) {
+act.item.cpp:1017:	if(!(food = get_obj_in_list_vis(ch, arg, NULL, ch->carrying))) {
+act.item.cpp:1091:		if(!(from_obj = get_obj_in_list_vis(ch, arg1, NULL, ch->carrying))) {
+act.item.cpp:1108:		if(!(to_obj = get_obj_in_list_vis(ch, arg1, NULL, ch->carrying))) {
+act.item.cpp:1159:		if(!(to_obj = get_obj_in_list_vis(ch, arg2, NULL, ch->carrying))) {
+act.item.cpp:1494:		for(obj = ch->carrying; obj; obj = next_obj) {
+act.item.cpp:1512:		if(!(obj = get_obj_in_list_vis(ch, arg1, NULL, ch->carrying))) {
+act.item.cpp:1527:		if(!(obj = get_obj_in_list_vis(ch, arg1, NULL, ch->carrying))) {
+act.item.cpp:1551:	} else if(!(obj = get_obj_in_list_vis(ch, arg, NULL, ch->carrying))) {
+act.item.cpp:1575:	} else if(!(obj = get_obj_in_list_vis(ch, arg, NULL, ch->carrying))) {

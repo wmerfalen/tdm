@@ -93,6 +93,10 @@ tuple_status_t save_record(const std::string& table,mutable_map_t* values,std::s
 void lmdb_renew() {
 	mods::globals::db->renew_txn();
 }
+int lmdb_nget_void(void* key,std::size_t k_size,void* value){
+	const auto status = mods::globals::db->nget(key,k_size,value);
+	return status;
+}
 int lmdb_nget(void* key,std::size_t k_size,std::string& value){
 	value = "";
 	const auto status = mods::globals::db->nget(key,k_size,value);

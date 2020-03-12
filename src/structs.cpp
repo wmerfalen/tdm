@@ -7,22 +7,9 @@ namespace mods {
 	struct extra_desc_data;
 };
 
-static inline std::string default_yaml_file(std::string type){
+static inline std::string default_yaml_file(const std::string& type){
 	return type + ".yml";
 }
-
-//void room_data::ex_descriptions_append(mods::extra_desc_data&& other){
-//	m_ex_descriptions.emplace_back(std::move(other));
-//}
-//void room_data::ex_descriptions(mods::extra_desc_data&& other){
-//	m_ex_descriptions = std::move(other);
-//}
-//void room_data::ex_descriptions(const std::vector<mods::extra_desc_data>& other){
-//	m_ex_descriptions = other;
-//}
-//std::vector<mods::extra_desc_data> room_data::ex_descriptions() const {
-//	return m_ex_descriptions;
-//}
 
 #include "mods/util.hpp"
 void obj_data::init(){
@@ -48,6 +35,7 @@ void obj_data::init(){
 	type = 0;
 	this->uuid = mods::globals::obj_uuid();
 	from_direction = 0;
+	m_db_id = 0;
 
 #define MENTOC_OBJ_INITIALIZE_CONSTRUCTOR(r,data,CLASS_TYPE) \
 			this->BOOST_PP_CAT(m_,CLASS_TYPE) = nullptr;
@@ -56,6 +44,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SE
 	std::cerr << "obj_data() assigned uuid: " << this->uuid << "\n";
 }
 		void obj_data::feed(std::string in_type,std::string_view feed_file){
+			m_db_id = 0;
 			std::string type = in_type;
 			std::transform(type.begin(),type.end(),type.begin(),
 					[](unsigned char c){ return std::tolower(c); });
@@ -66,7 +55,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SE
 			std::cerr << "[obj_data CLASS_TYPE: '" << BOOST_PP_STRINGIZE(CLASS_TYPE) << "'\n";\
 			if(type.compare( BOOST_PP_STRINGIZE(CLASS_TYPE) ) == 0){\
 				std::cerr << "[obj_data::feed(str,str) feeding type: " << BOOST_PP_STRINGIZE(CLASS_TYPE) << "\n";\
-				this->CLASS_TYPE(feed_file);\
+				this->CLASS_TYPE(feed_file); \
 			}
 
 			BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_DUAL, ~, MENTOC_ITEM_TYPES_SEQ)

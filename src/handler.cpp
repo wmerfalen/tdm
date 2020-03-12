@@ -1501,7 +1501,6 @@ char_data *get_char_vis(char_data *ch, char *name, int *number, int where) {
 	}
 }
 
-
 struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *number, struct obj_data *list) {
 	struct obj_data *i;
 	int num;

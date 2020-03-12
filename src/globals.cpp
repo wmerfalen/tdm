@@ -71,6 +71,7 @@ namespace mods {
 		map_object_list obj_map;
 		std::map<uuid_t,std::shared_ptr<mods::npc>> mob_map;
 		std::map<uuid_t,player_ptr_t> player_map;
+		std::map<uint64_t,uuid_t> db_id_to_uuid_map;
 
 		std::map<obj_data*,obj_ptr_t> obj_odmap;
 		std::map<char_data*,std::shared_ptr<mods::npc>> mob_chmap;
@@ -125,6 +126,9 @@ namespace mods {
 			obj->uuid = obj_uuid();
 			obj_map[obj->uuid] = obj;
 			obj_odmap[obj.get()] = obj;
+		}
+		void register_object_db_id(uint64_t db_id,uuid_t uuid){
+			db_id_to_uuid_map[db_id] = uuid;
 		}
 		void register_player(player_ptr_t player){
 			player_chmap[player->cd()] = player;
@@ -892,4 +896,14 @@ obj_ptr_t optr_by_uuid(uuid_t id){
 	return mods::globals::obj_map[id];
 }
 
+obj_ptr_t ptr_by_dbid(uint64_t db_id){
+	auto it = mods::globals::db_id_to_uuid_map.find(db_id);
+	if(it != mods::globals::db_id_to_uuid_map.end()){
+		std::cerr << "[debug]: found obj_ by db_id (optr) " << db_id << "\n";
+		return optr_by_uuid(it->second);
+	}
+	std::cerr << "[debug]: DID NOT find obj by db_id (optr) " << db_id << "\n";
+	return nullptr;
+
+}
 #endif

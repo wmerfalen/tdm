@@ -178,6 +178,7 @@ namespace mods::lmdb {
 		status_type_t status() const;
 		int get(std::string key,std::string & in_value);
 		int nget(void* key,std::size_t k_size,std::string& in_value);
+		int nget(void* key,std::size_t k_size,void* in_value);
 		int put(std::string key,std::string value);
 
 		int get(MDB_txn*,std::string key,std::string & in_value);

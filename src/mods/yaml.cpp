@@ -370,14 +370,29 @@ namespace mods::yaml {
 			return 0;
 	}
 	int16_t explosive_description_t::feed(std::string_view in_file){
-		std::string file = current_working_dir() + "/" + in_file.data();
-		feed_file = file;
-		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
-		auto type_string = yaml_file["str_type"].as<std::string>();
-		MENTOC_FEED_EXPLOSIVE
+		try {
+			std::string file = current_working_dir() + "/" + in_file.data();
+			feed_file = file;
+			std::cerr << "[explosivedesc feed] feed_file: '" << feed_file << "'\n";
+			std::cerr << "[explosivedesc file: '" << file << "'\n";
+			auto yaml_file = YAML::LoadFile(file);
+			std::cerr << "[explosivedesc feed(in_file)] feeding str_type...";
+			auto type_string = yaml_file["str_type"].as<std::string>();
+			std::cerr << "[explosivedesc feed(in_file)] type_string:'" << type_string << "' done\n";
+			std::cerr << "[explosivedesc feed(in_file)] feeding all explosive members...";
+			MENTOC_FEED_EXPLOSIVE
+				std::cerr << "[explosivedesc feed(in_file)] done\n";
+			std::cerr << "[explosivedesc feed(in_file)] feeding base members...";
 			MENTOC_FEED_BASE_MEMBERS
-			return 0;
+				std::cerr << "[explosivedesc feed(in_file)] done\n";
+		}catch(std::exception &e){
+			std::cerr << "[exception] explosive feed: '" << e.what() << "'\n";
+			return -1;
+		}
+		return 0;
 	}
+
+
 	int16_t rifle_description_t::feed(std::string_view in_file){
 		try {
 			std::string file = current_working_dir() + "/" + in_file.data();

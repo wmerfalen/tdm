@@ -147,7 +147,12 @@ std::size_t handle_disconnects(){
 		}
 	}
 
+	std::set<std::string> saved_players;
 	for(auto player_iterator : players_to_destroy){
+		if(saved_players.find((*player_iterator)->name()) == saved_players.end()){
+			db::extraction::save_player(*player_iterator);
+			saved_players.insert((*player_iterator)->name());
+		}
 		destroy_player(*player_iterator);
 	}
 	auto ret = players_to_destroy.size();
@@ -344,9 +349,9 @@ void init_game(ush_int port) {
 	mother_desc = init_socket(port);
 
 	if(boot_type_hell()){
-			boot_hell();
+		boot_hell();
 	}else{
-			boot_db();
+		boot_db();
 	}
 
 	log("Signal trapping.");
@@ -664,15 +669,15 @@ void game_loop(socket_t mother_desc) {
 			player->cd()->char_specials.timer = 0;
 			/*
 			 * TODO: this is breaking mortal start room and recall
-			if(player->state() == CON_PLAYING && GET_WAS_IN(player->cd()) != NOWHERE) {
-				if(player->room() != NOWHERE) {
-					char_from_room(player);
-				}
-				char_to_room(player, GET_WAS_IN(player));
-				GET_WAS_IN(player) = NOWHERE;
-				act("$n has returned.", TRUE, player->cd(), 0, 0, TO_ROOM);
-			}
-			*/
+			 if(player->state() == CON_PLAYING && GET_WAS_IN(player->cd()) != NOWHERE) {
+			 if(player->room() != NOWHERE) {
+			 char_from_room(player);
+			 }
+			 char_to_room(player, GET_WAS_IN(player));
+			 GET_WAS_IN(player) = NOWHERE;
+			 act("$n has returned.", TRUE, player->cd(), 0, 0, TO_ROOM);
+			 }
+			 */
 			GET_WAIT_STATE(player->cd()) = 1;
 			player->desc().has_prompt = false;
 			if(player->state() != CON_PLAYING) { // In menus, etc. 
@@ -1020,21 +1025,21 @@ char *make_prompt(mods::descriptor_data &d) {
  * NOTE: 'txt' must be at most MAX_INPUT_LENGTH big.
  */
 //LEGACY: void write_to_q(const char *txt, struct txt_q *queue, int aliased)
-	//struct txt_block *newt;
+//struct txt_block *newt;
 
-	//CREATE(newt, struct txt_block, 1);
-	//newt->text = strdup(txt);
-	//newt->aliased = aliased;
+//CREATE(newt, struct txt_block, 1);
+//newt->text = strdup(txt);
+//newt->aliased = aliased;
 
-	///* queue empty? */
-	//if(!queue->head) {
-	//	newt->next = NULL;
-	//	queue->head = queue->tail = newt;
-	//} else {
-	//	queue->tail->next = newt;
-	//	queue->tail = newt;
-	//	newt->next = NULL;
-	//}
+///* queue empty? */
+//if(!queue->head) {
+//	newt->next = NULL;
+//	queue->head = queue->tail = newt;
+//} else {
+//	queue->tail->next = newt;
+//	queue->tail = newt;
+//	newt->next = NULL;
+//}
 void	write_to_q(std::string_view txt, mods::descriptor_data& d, int aliased){
 	d.input.emplace_back(txt,aliased);
 }
@@ -1832,34 +1837,40 @@ int perform_subst(mods::descriptor_data &t, char *orig, char *subst) {
 
 
 
-void close_socket(mods::descriptor_data d) {
+void close_socket(mods::descriptor_data& d) {
 	/** !fixme: there are some free() calls here that need to be eliminated but first the mallocs need to be found and the members turned into stl containers. */
+	d("erasing descriptor from socket map");
 	mods::globals::socket_map.erase(d.descriptor);
+	d("flushing queues");
 	flush_queues(d);
+	d("destroying socket desc");
 	destroy_socket(d.descriptor);
 
 	/* Forget snooping */
 	if(d.snooping) {
+		d("unsetting snoop_by");
 		d.snooping->snoop_by = nullptr;
 	}
 
 	if(d.snoop_by) {
+		d("unsetting snooping");
 		write_to_output(*d.snoop_by, "Your victim is no longer among us.\r\n");
 		d.snoop_by->snooping = nullptr;
 	}
 
 	if(d.character) {
+		log("d.character active");
 		/* If we're switched, this resets the mobile taken. */
 		d.character->desc->clear();
 
 		/* Plug memory leak, from Eric Green. */
-		if(!IS_NPC(d.character) && PLR_FLAGGED(d.character, PLR_MAILING) && d.str) {
-			if(*(d.str)) {
-				free(*(d.str));
-			}
+		//if(!IS_NPC(d.character) && PLR_FLAGGED(d.character, PLR_MAILING) && d.str) {
+		//	if(*(d.str)) {
+		//		free(*(d.str));
+		//	}
 
-			free(d.str);
-		}
+		//	free(d.str);
+		//}
 
 		if(STATE(d)== CON_PLAYING || STATE(d)== CON_CLOSE ||  STATE(d)== CON_DISCONNECT) {
 			char_data *link_challenged = d.original ? d.original : d.character;
@@ -1881,10 +1892,12 @@ void close_socket(mods::descriptor_data d) {
 	}
 
 	if(d.showstr_head) {
+		log("freeing showstr_head");
 		free(d.showstr_head);
 	}
 
 	if(d.showstr_count) {
+		log("freeing showstr_vector");
 		free(d.showstr_vector);
 	}
 	/** !TODO: do we use deregister_player here? */

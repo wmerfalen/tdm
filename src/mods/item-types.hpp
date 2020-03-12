@@ -262,7 +262,8 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_DECLARE_DATA_STRUCTS_IMPL,~,MENTOC_ITEM_TYPES_SEQ)
 #define MENTOC_OBJ_DATA_FEED_SWITCH_IMPL(IN_R,data,CLASS_TYPE)\
 	case CLASS_TYPE: if(obj_file.length() == 0){\
 										 obj_file = default_yaml_file( BOOST_PP_STRINGIZE(BOOST_PP_ELEM(IN_R,MENTOC_ITEM_TYPES_SEQ)) );\
-			 }; this->feed(BOOST_PP_STRINGIZE(CLASS_TYPE), row["obj_file"].as<std::string>()); break;
+			 }; this->feed(BOOST_PP_STRINGIZE(CLASS_TYPE), row["obj_file"].as<std::string>());\
+			 break;
 
 #define MENTOC_OBJ_DATA_FEED_SWITCH \
 BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ_CAPS)

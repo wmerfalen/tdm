@@ -105,28 +105,53 @@ MENTOC_USING_CT
 
 namespace mods::weapon_types {
 	template <typename AttributesType>
-		std::unique_ptr<AttributesType> feed(std::string_view file){
+		std::tuple<std::unique_ptr<AttributesType>,uint64_t> feed(std::string_view file){
 			auto attributes = std::make_unique<AttributesType>();
 			attributes->feed(file);
 			attributes->feed_file = file;
-			return std::move(attributes);
+			auto id = attributes->db_id();
+			return {std::move(attributes),id};
+		}
+	template <typename AttributesType>
+		std::unique_ptr<AttributesType> empty_make(){
+			return std::move(std::make_unique<AttributesType>());
 		}
 };
 #define MENTOC_DATA_CLASS(r,data,CLASS_TYPE)\
 	struct BOOST_PP_CAT(CLASS_TYPE,_data_t) {\
+		/** rifle_data_t() */\
+		/** rifle_data_t() */\
+		/** rifle_data_t() */\
 		BOOST_PP_CAT(CLASS_TYPE, _data_t)(){\
-			attributes = nullptr; feed_file = ""; id=0;vnum=0;rarity=0;\
-			manufacturer = ""; name=""; type = (decltype(type))0;\
+			feed_file = "";\
+			id=0;\
+			vnum=0;\
+			rarity=mods::rarity::DEFAULT;\
+			manufacturer = "";\
+			name="";\
+			type = (decltype(type))0;\
+			this->attributes = std::move(mods::weapon_types::empty_make<mods::yaml::BOOST_PP_CAT(CLASS_TYPE,_description_t)>());\
+			id=0;\
 			\
 		}\
+		/** rifle_data_t(std::string_view in_feed_file) */\
+		/** rifle_data_t(std::string_view in_feed_file) */\
+		/** rifle_data_t(std::string_view in_feed_file) */\
 		BOOST_PP_CAT(CLASS_TYPE, _data_t)(std::string_view in_feed_file) :\
-		manufacturer("ACME Industries"), name(""), type(static_cast<BOOST_PP_CAT(mw_,CLASS_TYPE)>(0)), id(0), vnum(0), rarity(mods::rarity::DEFAULT)\
+			manufacturer("ACME Industries"),\
+			name(""),\
+			type(static_cast<BOOST_PP_CAT(mw_,CLASS_TYPE)>(0)),\
+			id(0),\
+			vnum(0),\
+			rarity(mods::rarity::DEFAULT)\
 		{\
 			this->feed(in_feed_file);\
 		}\
 		void feed(std::string_view in_feed_file){\
 			this->feed_file = in_feed_file;\
-			this->attributes = mods::weapon_types::feed<mods::yaml::BOOST_PP_CAT(CLASS_TYPE,_description_t)>(feed_file);\
+			auto tuple_ptr_id = std::move(mods::weapon_types::feed<mods::yaml::BOOST_PP_CAT(CLASS_TYPE,_description_t)>(feed_file));\
+			this->attributes = std::move(std::get<0>(tuple_ptr_id));\
+			this->id = std::get<1>(tuple_ptr_id);\
 		}\
 		uint64_t db_id();\
 		std::string feed_file;\
