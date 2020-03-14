@@ -13,7 +13,6 @@ namespace mods::weapons::sniper_rifle {
 		/** TODO: fill the uuid in */
 		auto obj = mods::weapon::base_rifle_object();
 		obj->uuid = mods::globals::obj_uuid();
-		obj->rifle("psg1.yml");
 		obj->rifle(file.data());
 		obj->obj_flags.ammo = obj->rifle()->attributes->ammo_max;
 		obj->obj_flags.ammo_max = obj->rifle()->attributes->ammo_max;
@@ -27,7 +26,10 @@ namespace mods::weapons::sniper_rifle {
 		obj->extended_item_vnum = obj->rifle()->attributes->vnum;
 		obj->rifle()->type = mw_rifle::SNIPER;
 		obj->obj_flags.type = mw_rifle::SNIPER;
-		mods::weapon::feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT });
+		mods::weapon::feed_caps(obj, { 
+				cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT,
+				cap_t::SNIPE, cap_t::HAS_CLIP 
+		});
 		obj->extended_item_vnum = obj->rifle()->attributes->vnum;
 		return std::move(obj);
 	}

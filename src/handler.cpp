@@ -532,6 +532,17 @@ void obj_to_char(struct obj_data *object, char_data *ch) {
 /* take an object from a char */
 void obj_from_char(obj_ptr_t in_object){
 	log("good: using non-deprecated obj_from_char");
+	if(!in_object){
+		log("SYSERR: nullptr obj_data (obj_from_char)");
+		return;
+	}
+	if(!in_object->carried_by){
+		log("SYSERR: invalid carried_by");
+		return;
+	}
+	auto player = ptr(in_object->carried_by);
+	player->uncarry(in_object);
+#if 0
 	struct obj_data *temp;
 
 	auto object = in_object.get();
@@ -558,12 +569,24 @@ void obj_from_char(obj_ptr_t in_object){
 	IS_CARRYING_N(object->carried_by)--;
 	object->carried_by = NULL;
 	object->next_content = NULL;
+#endif
 }
 
 
 /* take an object from a char */
 void obj_from_char(struct obj_data *object) {
 	log("DEPRECATED: obj_from_char obj_data*");
+	if(!object){
+		log("SYSERR: nullptr obj_data (obj_from_char LEGACY)");
+		return;
+	}
+	if(!object->carried_by){
+		log("SYSERR: invalid carried_by");
+		return;
+	}
+	auto player = ptr(object->carried_by);
+	player->uncarry(optr_by_uuid(object->uuid));
+#if 0
 	struct obj_data *temp;
 
 	if(object == NULL) {
@@ -589,6 +612,7 @@ void obj_from_char(struct obj_data *object) {
 	IS_CARRYING_N(object->carried_by)--;
 	object->carried_by = NULL;
 	object->next_content = NULL;
+#endif
 }
 
 
@@ -1072,9 +1096,10 @@ void extract_obj(struct obj_data *obj) {
 		extract_obj(obj->contains);
 	}
 
-	if(GET_OBJ_RNUM(obj) != NOTHING) {
-		(obj_index[GET_OBJ_RNUM(obj)].number)--;
-	}
+	/** FIXME: PURGE BROKEN */
+	//if(GET_OBJ_RNUM(obj) != NOTHING) {
+	//	(obj_index[GET_OBJ_RNUM(obj)].number)--;
+	//}
 
 	for(auto iterator = obj_list.begin();
 	        iterator != obj_list.end();

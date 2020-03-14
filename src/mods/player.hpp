@@ -145,6 +145,8 @@ namespace mods {
 			/* setters */
 			void set_cd(char_data* ch);
 			void set_shared_ptr(player_ptr_t&);
+			void quitting(bool s){ m_quitting = true; }
+			bool quitting(){ return m_quitting; }
 
 			time_type_t time() const;
 
@@ -555,6 +557,7 @@ namespace mods {
 			}
 			mods::affects::dissolver& get_affect_dissolver();
 		protected:
+			void m_sync_equipment();
 			void perform_equip_calculations(int pos,bool equip);
 			lense_type_t m_lense_type;
 			uint8_t m_overhead_map_width;
@@ -602,6 +605,7 @@ namespace mods {
 			uint32_t m_histfile_index;
 			mods::affects::dissolver m_affects;
 			std::array<obj_ptr_t,NUM_WEARS> m_equipment;
+			bool m_quitting;
 	};
 };
 

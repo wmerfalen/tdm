@@ -9,6 +9,12 @@
 
 namespace mods::orm {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
+
+	/** Handy little script to restore a sentinel's primary and secondary weapons:
+	 * You can pass it space separated primary keys
+	 * run ./sql/restore-sentinel.sh $USER_PK_ID [...$USER_PK_ID_N]
+	 * Then run sql-copy, then \i sql/restore.sql
+	 */
 	/**
 	 * Primary_choice will be either "MP5" or "SASG12"
 	 */
@@ -110,6 +116,9 @@ namespace mods::orm {
 		this->created_at = pg_timestamp_to_long(row["created_at"].c_str());
 		this->updated_at = pg_timestamp_to_long(row["updated_at"].c_str());
 		this->loaded = 1;
+		std::cerr << "[sentinel][feed]\n";
+		std::cerr << "[sentinel][feed]\n";
+		std::cerr << "[sentinel][feed]\n";
 		return 0;
 	}
 	void sentinel::init(){

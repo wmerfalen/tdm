@@ -1,4 +1,5 @@
 #include "sentinel.hpp"
+#include "../orm/inventory.hpp"
 #include "../weapon.hpp"
 #include "../affects.hpp"
 
@@ -94,6 +95,7 @@ namespace mods::classes {
 			m_deny_entry_level = static_cast<deny_entry_levels_t>(m_orm.sentinel_deny_entry_level);
 			m_gadget_shield_level = static_cast<gadget_shield_levels_t>(m_orm.sentinel_gadget_shield_level);
 
+			std::cerr << "[sentinel][load_by_player]\n";
 			return 0;
 		}
 		int16_t sentinel::save() {

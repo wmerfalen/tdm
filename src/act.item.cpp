@@ -1381,8 +1381,10 @@ void perform_wear(char_data *ch, struct obj_data *obj, int where) {
 	}
 
 	wear_message(ch, obj, where);
-	obj_from_char(obj);
-	equip_char(ptr(ch), optr(obj), where);
+	//obj_from_char(obj);
+	//equip_char(ptr(ch), optr(obj), where);
+	player->equip(optr_by_uuid(obj->uuid),where);
+	player->uncarry(optr_by_uuid(obj->uuid));
 }
 
 
@@ -1597,6 +1599,7 @@ int can_carry_n(player_ptr_t player){
 
 void perform_remove(player_ptr_t player, int pos) {
 	auto equipment = player->equipment(pos);
+	player->unequip(pos);
 	if(!equipment){
 		log("SYSERR: perform_remove: bad pos %d passed.", pos);
 		return;
@@ -1606,7 +1609,7 @@ void perform_remove(player_ptr_t player, int pos) {
 	} else if(player->carry_items() >= can_carry_n(player)) {
 		act("$p: you can't carry that many items!", FALSE, player->cd(), equipment.get(), 0, TO_CHAR);
 	} else {
-		player->unequip(pos);
+		player->carry(equipment);
 		act("You stop using $p.", FALSE, player->cd(), equipment.get(), 0, TO_CHAR);
 		act("$n stops using $p.", TRUE, player->cd(), equipment.get(), 0, TO_ROOM);
 	}

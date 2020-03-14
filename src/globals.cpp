@@ -863,6 +863,10 @@ namespace mods {
 	};//end globals
 };
 player_ptr_t ptr(char_data* in_ch){
+	if(!in_ch){
+		log("SYSERR: ptr(nullptr)");
+		return nullptr;
+	}
 	if(IS_NPC(in_ch)){
 		return mods::globals::mob_chmap[in_ch];
 	}

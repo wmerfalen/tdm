@@ -72,7 +72,10 @@ ACMD(do_quit) {
 	if(IS_NPC(ch) || !ch->has_desc) {
 		return;
 	}
+	MENTOC_PREAMBLE();
 
+	player->quitting(true);
+	db::extraction::save_player(player);
 	if(subcmd != SCMD_QUIT && GET_LEVEL(ch) < LVL_IMMORT) {
 		send_to_char(ch, "You have to type quit--no less, to quit!\r\n");
 	} else if(GET_POS(ch) == POS_FIGHTING) {

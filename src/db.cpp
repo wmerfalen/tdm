@@ -2402,15 +2402,19 @@ bool char_exists(const std::string& name){
 
 
 void decorate_authenticated_player(player_ptr_t player_ptr){
+		mods::orm::inventory::feed_player(player_ptr);
 		switch(player_ptr->get_class()){
 			case CLASS_SENTINEL:
 				log("User [%s] is a sentinel. Loading... ", player_ptr->name());
-				player_ptr->set_sentinel(mods::classes::create_sentinel(player_ptr));
+				{
+					auto s = mods::classes::create_sentinel(player_ptr);
+					s->load_by_player(player_ptr);
+					player_ptr->set_sentinel(std::move(s));
+				}
 				break;
 			default:
 				break;
 		}
-		mods::orm::inventory::feed_player(player_ptr);
 }
 
 /*

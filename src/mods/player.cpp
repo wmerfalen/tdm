@@ -73,6 +73,7 @@ namespace mods {
 				break;
 		}
 		set_type(type);
+		m_quitting = 0;
 	}
 	void player::set_type(player_type_enum_t type){
 		/**
@@ -129,6 +130,7 @@ namespace mods {
 		set_type(player_type_enum_t::PLAYER);
 		this->set_overhead_map_width(16);
 		this->set_overhead_map_height(10);
+		m_quitting = 0;
 	}
 	player::player(mods::player* ptr) {
 		/**TODO: should we set the queue_behaviour flags on the descriptor data items on *this? */
@@ -145,6 +147,7 @@ namespace mods {
 		set_bui_mode(ptr->builder_mode());
 		set_imp_mode(ptr->implementor_mode());
 		/** TODO: investigate this function. I have a feeling that m_desc needs to be updated here */
+		m_quitting = 0;
 	}
 	void player::capture_output(bool capture_status) {
 		m_capture_output = capture_status;
@@ -161,6 +164,7 @@ namespace mods {
 	player::player(char_data* ch) : m_char_data(ch), m_executing_js(false), m_do_paging(false),
 	m_page(0),m_current_page(0),m_current_page_fragment("") {
 		m_set_time();
+		m_quitting = 0;
 	};
 	bool player::can_snipe(char_data *target) {
 		return mods::scan::los_find(
@@ -210,6 +214,7 @@ namespace mods {
 			std::cerr << "[ERROR]: player::equipment received invalid pos: " << pos << "\n";
 			return nullptr;
 		}
+		this->m_sync_equipment();
 		return m_equipment[pos];
 	}
 	void player::equip(obj_ptr_t in_object,int pos) {
@@ -224,10 +229,12 @@ namespace mods {
 			mods::orm::inventory::lmdb::add_player_wear(this->db_id(),in_object->db_id(),in_object->type,pos);
 			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
 			//perform_equip_calculations(pos,true);
+			this->m_sync_equipment();
 		}
 	}
 	void player::unequip(int pos) {
 		if(pos < NUM_WEARS && m_equipment[pos]){
+			auto item = m_equipment[pos];
 			if(pos == WEAR_WIELD){
 				/** FIXME: this needs to negate the bit */
 				m_weapon_flags = 0;//m_equipment[pos]->obj_flags.weapon_flags;
@@ -238,6 +245,7 @@ namespace mods {
 			m_equipment[pos]->worn_on = -1;
 			m_equipment[pos] = nullptr;
 			mods::orm::inventory::lmdb::remove_player_wear(this->db_id(),pos);
+			this->m_sync_equipment();
 		}
 	}
 	void player::perform_equip_calculations(int pos,bool equip){
@@ -285,6 +293,7 @@ namespace mods {
 					m_equipment[pos]->obj_flags.bitvector, equip);
 		}
 
+		this->m_sync_equipment();
 		affect_total(m_char_data);
 
 	}
@@ -325,11 +334,18 @@ namespace mods {
 			m_char_data->carrying = nullptr;
 			return;
 		}
+		obj->carried_by = m_char_data;
 		m_char_data->m_carrying.emplace_back(obj);
 		m_char_data->carrying = obj.get();
 		mods::orm::inventory::lmdb::add_player_inventory(this->db_id(), obj->db_id(), obj->type);
 	}
 	void player::uncarry(obj_ptr_t obj){
+		obj_data* temp = 0;
+		REMOVE_FROM_LIST(obj.get(), obj->carried_by->carrying,next_content);
+		IS_CARRYING_W(obj->carried_by) -= GET_OBJ_WEIGHT(obj);
+		IS_CARRYING_N(obj->carried_by)--;
+		obj->carried_by = nullptr;
+		obj->next_content = nullptr;
 		auto it = std::find(m_char_data->m_carrying.begin(),m_char_data->m_carrying.end(),obj);
 		if(it != m_char_data->m_carrying.end()){
 			m_char_data->m_carrying.erase(it);
@@ -586,6 +602,7 @@ namespace mods {
 		it->character->has_desc = true;
 	}
 	void player::init(){
+		m_quitting = false;
 		m_histfile_on = false;
 		m_histfile_fp = nullptr;
 		m_weapon_type = 0;
@@ -618,6 +635,7 @@ namespace mods {
 		}
 		m_lense_type = NORMAL_SIGHT;
 		for(unsigned i=0;i < NUM_WEARS;i++){ m_equipment[i] = nullptr; }
+		this->m_sync_equipment();
 	}
 	void player::set_cd(char_data* ch) {
 		m_char_data = ch;
@@ -1084,6 +1102,15 @@ namespace mods {
 		return m_affects;
 	}
 
+	void player::m_sync_equipment(){
+		for(unsigned i=0; i < NUM_WEARS; i++){
+			if(m_equipment[i]){
+				m_char_data->equipment[i] = m_equipment[i].get();
+			}else{
+				m_char_data->equipment[i] = nullptr;
+			}
+		}
+	}
 };
 
 #endif

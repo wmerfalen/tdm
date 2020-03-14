@@ -557,7 +557,7 @@ CCYEL	screen.h	32;"	d
 CEMENT	structs.h	/^			CEMENT,			\/** asphault, nearly indestructible *\/$/;"	e	enum:room_data::texture_type_t
 CHAOTIC	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 CHARM	mods/flags.hpp	/^		CHARM,$/;"	e	enum:mods::flags::aff
-CHECK_NULL	comm.cpp	2234;"	d	file:
+CHECK_NULL	comm.cpp	2230;"	d	file:
 CHECK_PLAYER_SPECIAL	utils.h	214;"	d
 CHECK_PLAYER_SPECIAL	utils.h	217;"	d
 CHECK_WAIT	utils.h	378;"	d
@@ -1491,9 +1491,9 @@ MENTOC_CHK_OBJ	mods/builder.cpp	1075;"	d	file:
 MENTOC_CONSUMABLE_MEMBERS_TUPLE	mods/item-types.hpp	185;"	d
 MENTOC_CONSUMABLE_TYPES_SEQUENCE	mods/item-types.hpp	177;"	d
 MENTOC_DATA_CLASS	mods/weapon-types.hpp	120;"	d
-MENTOC_DATA_CLASS	mods/weapon-types.hpp	171;"	d
+MENTOC_DATA_CLASS	mods/weapon-types.hpp	173;"	d
 MENTOC_DATA_OBJ	structs.h	910;"	d
-MENTOC_DATA_OBJ	structs.h	960;"	d
+MENTOC_DATA_OBJ	structs.h	962;"	d
 MENTOC_DECLARE_DATA_STRUCTS	mods/item-types.hpp	254;"	d
 MENTOC_DECLARE_DATA_STRUCTS_IMPL	mods/item-types.hpp	246;"	d
 MENTOC_DEFER	globals.hpp	35;"	d
@@ -1571,8 +1571,8 @@ MENTOC_TRAP_MEMBERS_TUPLE	mods/item-types.hpp	194;"	d
 MENTOC_TRAP_TYPES_SEQUENCE	mods/item-types.hpp	191;"	d
 MENTOC_TYPE	mods/builder.cpp	3020;"	d	file:
 MENTOC_TYPE_LIST_IMPL	mods/weapon-types.hpp	94;"	d
-MENTOC_UPTR	structs.h	980;"	d
 MENTOC_UPTR	structs.h	982;"	d
+MENTOC_UPTR	structs.h	984;"	d
 MENTOC_USING_CT	mods/item-types.hpp	234;"	d
 MENTOC_USING_CT_IMPL	mods/item-types.hpp	231;"	d
 MENTOC_WEAPON	mods/builder.cpp	121;"	d	file:
@@ -1794,7 +1794,7 @@ OUTPUT_SIZE	structs.h	/^			constexpr static size_t OUTPUT_SIZE = LARGE_BUFSIZE+1
 OUTSIDE	structs.h	/^			OUTSIDE,		\/** Outside where anyone can see you *\/$/;"	e	enum:room_data::texture_type_t
 OUTSIDE	utils.h	514;"	d
 OUT_OF_AMMO	act.offensive.cpp	/^	OUT_OF_AMMO = -2,$/;"	e	enum:weapon_status_t	file:
-O_NONBLOCK	comm.cpp	1970;"	d	file:
+O_NONBLOCK	comm.cpp	1966;"	d	file:
 Obj_from_store	objsave.cpp	/^struct obj_data *Obj_from_store(struct obj_file_elem object, int *location) {$/;"	f
 Obj_to_store	objsave.cpp	/^int Obj_to_store(struct obj_data *obj, FILE *fl, int location) {$/;"	f
 OfType	mods/catch.hpp	/^		enum OfType {$/;"	g	struct:Catch::ResultWas
@@ -1897,7 +1897,7 @@ PRF_OVERHEAD_MAP	structs.h	312;"	d
 PRF_QUEST	structs.h	298;"	d
 PRF_ROOMFLAGS	structs.h	310;"	d
 PRF_SUMMONABLE	structs.h	299;"	d
-PRF_TOG_CHK	act.other.cpp	916;"	d	file:
+PRF_TOG_CHK	act.other.cpp	919;"	d	file:
 PRF_TOG_CHK	utils.h	251;"	d
 PROTECT	mods/ai_state.hpp	/^				WANDER, SUSPICIOUS, FIGHT,SUSPICIOUS2,PROTECT,AGGRESSIVE_PROTECT,$/;"	e	enum:mods::ai_state::state
 PROTECT_EVIL	mods/flags.hpp	/^		PROTECT_EVIL,		\/\/ useless$/;"	e	enum:mods::flags::aff
@@ -2132,7 +2132,7 @@ SEEK_END	utils.h	537;"	d
 SEEK_SET	utils.h	535;"	d
 SELECTOR	mods/behaviour_tree_node.hpp	/^		enum node_type_t { DO_NOTHING, SELECTOR, SEQUENCE, LEAF };$/;"	e	enum:mods::behaviour_tree_node::node_type_t
 SELF	utils.h	452;"	d
-SENDOK	comm.cpp	2379;"	d	file:
+SENDOK	comm.cpp	2375;"	d	file:
 SENSE_LIFE	mods/flags.hpp	/^		SENSE_LIFE,$/;"	e	enum:mods::flags::aff
 SENSOR	mods/aoe.hpp	/^		SENSOR, \/** senses objects or enemies within blast_radius *\/$/;"	e	enum:mods::aoe::types_t
 SENTINEL	mods/object.hpp	/^				SENTINEL,$/;"	e	enum:mods::object::object_type_enum_t
@@ -2474,8 +2474,8 @@ TIME_WITH_SYS_TIME	conf.h	29;"	d
 TITAN_COMBAT	mods/object.hpp	/^				TITAN_COMBAT,$/;"	e	enum:mods::object::object_type_enum_t
 TOGGLE_BIT	utils.h	203;"	d
 TOGGLE_LOCK	act.movement.cpp	351;"	d	file:
-TOG_OFF	act.other.cpp	913;"	d	file:
-TOG_ON	act.other.cpp	914;"	d	file:
+TOG_OFF	act.other.cpp	916;"	d	file:
+TOG_ON	act.other.cpp	917;"	d	file:
 TOP_SPELL_DEFINE	spells.h	124;"	d
 TOROOM	graph.cpp	56;"	d	file:
 TOROOM	house.h	30;"	d
@@ -2840,7 +2840,7 @@ __MENTOC_MODS_cron_HEADER__	mods/cron.hpp	2;"	d
 __MENTOC_MODS_deferred_HEADER__	mods/deferred.hpp	2;"	d
 __MENTOC_MODS_prefs_HEADER__	mods/prefs.hpp	2;"	d
 __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
-__MENTOC_PLR	db.cpp	2480;"	d	file:
+__MENTOC_PLR	db.cpp	2484;"	d	file:
 __MENTOC_STRING_LIT__	mods/util.hpp	21;"	d
 __MENTOC_TYPES_HEADER__	types.hpp	2;"	d
 __MENTOC_USE_LMDB__	mods/lmdb.cpp	10;"	d	file:
@@ -4739,6 +4739,7 @@ m_q	mods/cron.hpp	/^			std::queue<std::function<void()>> m_q;$/;"	m	class:mods::
 m_q	mods/deferred.hpp	/^			std::multimap<uint64_t,std::function<void()>> m_q;$/;"	m	class:mods::deferred
 m_query	mods/sql.hpp	/^			std::array<std::string, query_parts> m_query;$/;"	m	struct:mods::sql::compositor
 m_queue_behaviour	structs.h	/^			queue_behaviour_enum_t m_queue_behaviour;$/;"	m	struct:mods::descriptor_data
+m_quitting	mods/player.hpp	/^			bool m_quitting;$/;"	m	struct:mods::player
 m_rc	mods/catch.hpp	/^		mutable unsigned int m_rc;$/;"	m	struct:Catch::SharedImpl
 m_realloc	mods/string.cpp	/^	void string::m_realloc(){$/;"	f	class:mods::string
 m_resultData	mods/catch.hpp	/^			AssertionResultData m_resultData;$/;"	m	class:Catch::AssertionResult
@@ -4758,6 +4759,7 @@ m_str	mods/string.hpp	/^			std::string m_str;$/;"	m	struct:mods::string
 m_str_table	mods/lmdb.hpp	/^		std::string m_str_table;$/;"	m	struct:mods::lmdb::transaction_t
 m_stream	mods/catch.hpp	/^			CopyableStream m_stream;$/;"	m	class:Catch::ResultBuilder
 m_subscribers	mods/chat.hpp	/^			std::vector<socket_t> m_subscribers;$/;"	m	struct:mods::mods::chat::channel
+m_sync_equipment	mods/player.cpp	/^	void player::m_sync_equipment(){$/;"	f	class:mods::player
 m_table	mods/lmdb.hpp	/^		table_type_t m_table;$/;"	m	struct:mods::lmdb::transaction_t
 m_table	mods/sql.hpp	/^			std::string m_table;$/;"	m	struct:mods::sql::compositor
 m_textures	structs.h	/^			std::vector<texture_type_t> m_textures;$/;"	m	struct:room_data
@@ -4988,7 +4990,7 @@ mud_time_to_secs	utils.cpp	/^time_t mud_time_to_secs(struct time_info_data *now)
 mudlog	utils.cpp	/^void mudlog(int type, int level, int file, const char *str, ...) {$/;"	f
 muzzle_velocity	mods/weapon.hpp	/^			int muzzle_velocity;	\/\/ Feet per second$/;"	m	struct:mods::weapon::yaml::rifle_description_t
 my_signal	comm.cpp	/^sigfunc *my_signal(int signo, sigfunc *func) {$/;"	f
-my_signal	comm.cpp	2047;"	d	file:
+my_signal	comm.cpp	2043;"	d	file:
 name	db.h	/^	char	*name;		    \/* name of this zone                  *\/$/;"	m	struct:zone_data
 name	db.h	/^	char	name[MAX_NAME_LENGTH+1];$/;"	m	struct:ban_list_element
 name	db.h	/^	mods::string name;$/;"	m	struct:player_index_element
@@ -5461,6 +5463,8 @@ queue_output	structs.cpp	/^			void descriptor_data::queue_output(std::string_vie
 queue_page_fragment	mods/player.hpp	/^			void                queue_page_fragment(std::string_view fragment) {$/;"	f	struct:mods::player
 queue_remove_texture	mods/projectile.cpp	/^		void queue_remove_texture(uint64_t ticks_in_future,room_rnum& room_id,room_data::texture_type_t texture){$/;"	f	namespace:mods::projectile
 queue_tail	graph.cpp	/^static struct bfs_queue_struct *queue_head = 0, *queue_tail = 0;$/;"	v	typeref:struct:	file:
+quitting	mods/player.hpp	/^			bool quitting(){ return m_quitting; }$/;"	f	struct:mods::player
+quitting	mods/player.hpp	/^			void quitting(bool s){ m_quitting = true; }$/;"	f	struct:mods::player
 r	random.cpp	49;"	d	file:
 r_error	mods/builder.cpp	/^void r_error(const player_ptr_t & player,std::string_view msg){$/;"	f
 r_frozen_start_room	db.cpp	/^room_rnum r_frozen_start_room;	\/* rnum of frozen start room	 *\/$/;"	v
@@ -6244,7 +6248,7 @@ world_conf	mods/world-configuration.cpp	/^namespace mods::world_conf {$/;"	n	cla
 world_conf	mods/world-configuration.hpp	/^namespace mods::world_conf {$/;"	n	class:mods
 worn_by	structs.h	/^		char_data *worn_by;	  \/* Worn by?			      *\/$/;"	m	struct:obj_data
 worn_on	structs.h	/^		sh_int worn_on;		  \/* Worn where?		      *\/$/;"	m	struct:obj_data
-write	comm.cpp	1437;"	d	file:
+write	comm.cpp	1433;"	d	file:
 write_aliases	alias.cpp	/^void write_aliases(char_data *ch) {$/;"	f
 write_ban_list	ban.cpp	/^void write_ban_list(void) {$/;"	f
 write_example_file	mods/yaml.cpp	/^	int16_t armor_description_t::write_example_file(std::string_view file){$/;"	f	class:mods::yaml::armor_description_t

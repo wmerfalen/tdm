@@ -1,0 +1,3 @@
+update player_object set po_type='rifle',po_type_id=(SELECT sentinel_primary_weapon_id from class_sentinel where sentinel_player_id=MENTOC_PLAYER_ID),po_type_vnum=(SELECT sentinel_primary_weapon_id from class_sentinel where sentinel_player_id=MENTOC_PLAYER_ID) WHERE po_player_id=MENTOC_PLAYER_ID AND po_wear_position=16;
+
+update player_object set po_type='rifle',po_type_id=(SELECT sentinel_secondary_weapon_id from class_sentinel where sentinel_player_id=MENTOC_PLAYER_ID),po_type_vnum=(SELECT sentinel_secondary_weapon_id from class_sentinel where sentinel_player_id=MENTOC_PLAYER_ID) WHERE po_player_id=MENTOC_PLAYER_ID AND po_wear_position=18;

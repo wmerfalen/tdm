@@ -149,10 +149,6 @@ std::size_t handle_disconnects(){
 
 	std::set<std::string> saved_players;
 	for(auto player_iterator : players_to_destroy){
-		if(saved_players.find((*player_iterator)->name()) == saved_players.end()){
-			db::extraction::save_player(*player_iterator);
-			saved_players.insert((*player_iterator)->name());
-		}
 		destroy_player(*player_iterator);
 	}
 	auto ret = players_to_destroy.size();

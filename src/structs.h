@@ -53,7 +53,7 @@ using ai_state_t = short;
 using goal_t = short;
 using player_ptr_t = std::shared_ptr<mods::player>;
 struct obj_data;
-using uuid_t = uint64_t;
+using uuid_t = uint16_t;
 using aligned_int_t = uint64_t;
 namespace mods::globals {
 extern uuid_t player_uuid();
@@ -802,6 +802,7 @@ enum player_level {
 BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 */
 			/** FIXME: copy constructor is broken right now */
+			std::cerr << "[WARNING] obj_data copy constructor is broken!!! [returning]\n";
 		}
 		obj_data& operator=(const obj_data& other){ 
 			std::cerr << "[WARNING] obj_data assign operator is broken!!!\n";
@@ -828,6 +829,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 			m_db_id = 0;
 			/** FIXME: copy constructor is broken right now */
 //BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
+			std::cerr << "[WARNING] obj_data assign operator is broken [returning]!!!\n";
 			return *this;
 		}
 		obj_data() : 
@@ -838,9 +840,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 			in_obj(nullptr),contains(nullptr),next_content(nullptr),
 			next(nullptr),ai_state(0),uuid(0),m_db_id(0)
 		{
-			std::cerr << "[obj_data] constructor. calling init...\n";
 			this->init();
-			std::cerr << "[obj_data] constructor. init called\n";
 		}
 		~obj_data() = default;
 		obj_vnum item_number;	/* Where in data-type			*/
@@ -911,10 +911,12 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 		/* rifle_data_t* rifle(std::string_view feed_file) { */\
 		/* rifle_data_t* rifle(std::string_view feed_file) { */\
 		/* rifle_data_t* rifle(std::string_view feed_file) { */\
+		/** TODO: mods::weapon::feed_caps(this, { cap_t::CQC, cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT }); */\
 		BOOST_PP_CAT(CLASS_TYPE,_data_t*) \
 		CLASS_TYPE(\
 				std::string_view feed_file\
 		){\
+			std::cerr << "[debug] object class type feed_file: '" << feed_file << "'\n";\
 	 		this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(feed_file);\
 			this->set_str_type(BOOST_PP_STRINGIZE(CLASS_TYPE));\
 			this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\

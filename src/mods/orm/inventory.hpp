@@ -10,6 +10,7 @@
 
 namespace mods::orm::inventory {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
+	obj_data_ptr_t rifle_fetch(int id);
 	namespace sql {
 		int16_t flush_player(player_ptr_t & player);
 		int16_t feed_player(player_ptr_t & player);

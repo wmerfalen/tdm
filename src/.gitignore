@@ -30,3 +30,5 @@ duktape-2.2.0/libduktaped.so.*
 conf/
 cscope.files
 cscope.out
+
+sql/restore.sql

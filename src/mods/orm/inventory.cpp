@@ -77,7 +77,7 @@ namespace mods::orm::inventory {
 							continue;
 						}
 						if(row["po_in_inventory"].as<int>()){
-							obj_ptr_to_char(obj,player);
+							player->carry(obj);
 							continue;
 						}
 						if(row["po_wear_position"].as<int>()){
@@ -85,8 +85,9 @@ namespace mods::orm::inventory {
 							continue;
 						}
 					}
-					log("SYSERR: couldn't grab player's pkid: '%s'",player->name().c_str());
-					return -1;
+					//log("SYSERR: couldn't grab player's pkid: '%s'",player->name().c_str());
+					std::cerr << "[sql][feed_player] size: " << player_record.size() << "\n";
+					return player_record.size();
 				}catch(std::exception& e){
 					std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
 					return -2;
@@ -124,6 +125,7 @@ namespace mods::orm::inventory {
 			}
 			{
 				try{
+					d("Deleting player object rows..");
 					auto del_txn = txn();
 					sql_compositor comp("player_object",&del_txn);
 					auto up_sql = comp
@@ -136,15 +138,19 @@ namespace mods::orm::inventory {
 				}catch(std::exception& e){
 					std::cerr << __FILE__ << ": " << __LINE__ << ": error deleting player's existing player_object row: '" << e.what() << "'\n";
 				}
+				d("done");
 			}
 
 			std::map<std::string,std::string> mapped_values;
-			for(unsigned i=0;i < NUM_WEARS;++i){
+			for(int i=0;i < NUM_WEARS;++i){
+				d("Grabbing equipment");
 				auto eq = player->equipment(i);
 				if(!eq){
+					d("No equipment for position: " << i);
 					blank_wear_row(player, i);
 					continue;
 				}
+				d("Found equipment at position: " << i);
 				//---+-----------------------------+-----------+----------+----------------------------------------------
 				// po_id            | integer                     |           | not null | nextval('player_object_po_id_seq'::regclass)
 				// po_player_id     | integer                     |           | not null |
@@ -159,15 +165,20 @@ namespace mods::orm::inventory {
 				mapped_values.clear();
 				mapped_values["po_player_id"] = std::to_string(player->db_id());
 				mapped_values["po_type"] = eq->str_type;
+				/*
 				if(eq->str_type.compare("object") == 0){
 					mapped_values["po_type_id"] = mapped_values["po_type_vnum"] = std::to_string(eq->item_number);
 				}else{
 					mapped_values["po_type_id"] = mapped_values["po_type_vnum"] = std::to_string(eq->extended_item_vnum);
 				}
+				*/
+				mapped_values["po_type_id"] = std::to_string(eq->db_id());
+				mapped_values["po_type_vnum"] = std::to_string(eq->item_number);
 				mapped_values["po_type_load"] = "id";
 				mapped_values["po_wear_position"] = std::to_string(i);
 				mapped_values["po_in_inventory"] = "0";
 				try{
+					d("Saving position: " << i << " [id:" << eq->db_id() << "][type:'" << eq->str_type << "']");
 					auto insert_transaction = txn();
 					sql_compositor comp("player_object",&insert_transaction);
 					auto up_sql = comp
@@ -178,8 +189,10 @@ namespace mods::orm::inventory {
 					mods::pq::exec(insert_transaction,up_sql);
 					mods::pq::commit(insert_transaction);
 				}catch(std::exception& e){
+					d("ERROR - pq exception");
 					std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting player_object row: '" << e.what() << "'\n";
 				}
+				d("Done [position:" << i << "]");
 			}
 			for(auto &eq : player->real_carrying()){
 				//---+-----------------------------+-----------+----------+----------------------------------------------
@@ -196,11 +209,15 @@ namespace mods::orm::inventory {
 				mapped_values.clear();
 				mapped_values["po_player_id"] = std::to_string(player->db_id());
 				mapped_values["po_type"] = eq->str_type;
+				/*
 				if(eq->str_type.compare("object") == 0){
 					mapped_values["po_type_id"] = mapped_values["po_type_vnum"] = std::to_string(eq->item_number);
 				}else{
 					mapped_values["po_type_id"] = mapped_values["po_type_vnum"] = std::to_string(eq->extended_item_vnum);
 				}
+				*/
+				mapped_values["po_type_id"] = std::to_string(eq->db_id());
+				mapped_values["po_type_vnum"] = std::to_string(eq->item_number);
 				mapped_values["po_type_load"] = "id";
 				mapped_values["po_wear_position"] = "0";
 				mapped_values["po_in_inventory"] = "1";

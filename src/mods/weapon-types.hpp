@@ -145,6 +145,7 @@ namespace mods::weapon_types {
 			vnum(0),\
 			rarity(mods::rarity::DEFAULT)\
 		{\
+			std::cerr << "[rifle_data_t]::constructor with feed_file: '" << in_feed_file << "'\n";\
 			this->feed(in_feed_file);\
 		}\
 		void feed(std::string_view in_feed_file){\
@@ -152,6 +153,7 @@ namespace mods::weapon_types {
 			auto tuple_ptr_id = std::move(mods::weapon_types::feed<mods::yaml::BOOST_PP_CAT(CLASS_TYPE,_description_t)>(feed_file));\
 			this->attributes = std::move(std::get<0>(tuple_ptr_id));\
 			this->id = std::get<1>(tuple_ptr_id);\
+			std::cerr << "[rifle_data_t][feed with filename]\n";\
 		}\
 		uint64_t db_id();\
 		std::string feed_file;\
