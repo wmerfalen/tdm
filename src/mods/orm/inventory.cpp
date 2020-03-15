@@ -12,6 +12,7 @@ extern void obj_ptr_to_char(obj_ptr_t  object, player_ptr_t player);
 namespace mods::orm::inventory {
 
 	obj_data_ptr_t rifle_fetch(int id){
+		auto obj = blank_object();
 		try{
 			auto select_transaction = txn();
 			sql_compositor comp("object_rifle",&select_transaction);
@@ -22,21 +23,25 @@ namespace mods::orm::inventory {
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
 				for(auto && row : player_record){
 					auto file = row["rifle_file"].as<std::string>();
-					
-					if(file.compare("mp5.yml") == 0){
-						return mods::weapons::smg::mp5::feed_by_file(file);
-					}else if(file.compare("sasg12.yml") == 0){
-						return mods::weapons::shotgun::sasg12::feed_by_file(file);
-					}else if(file.compare("czp10.yml") == 0){
-						return mods::weapons::pistol::czp10::feed_by_file(file);
-					}
+					obj->rifle(file);
+					obj->obj_flags.ammo = obj->rifle()->attributes->ammo_max;
+					obj->obj_flags.ammo_max = obj->rifle()->attributes->ammo_max;
+					obj->obj_flags.weapon_flags = obj->rifle()->type;
+					mods::weapon::feed_caps(obj, obj->rifle()->type);
+					obj->obj_flags.clip_size =obj->rifle()->attributes->clip_size;
+					obj->name.assign(obj->rifle()->attributes->name);
+					obj->description.assign(obj->rifle()->attributes->description);
+					obj->short_description.assign(obj->rifle()->attributes->short_description);
+					obj->action_description.assign(obj->rifle()->attributes->action_description);
+					obj->ex_description.emplace_back(obj->name.c_str(),obj->description.c_str());
+					obj->extended_item_vnum = obj->rifle()->attributes->vnum;
 					break;
 				}
-			mods::pq::commit(select_transaction);
+				mods::pq::commit(select_transaction);
 		}catch(std::exception& e){
 			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character preferences by pkid: '" << e.what() << "'\n";
 		}
-		return nullptr;
+		return std::move(obj);
 	}
 	namespace sql {
 		int16_t feed_player(player_ptr_t & player){
@@ -166,12 +171,12 @@ namespace mods::orm::inventory {
 				mapped_values["po_player_id"] = std::to_string(player->db_id());
 				mapped_values["po_type"] = eq->str_type;
 				/*
-				if(eq->str_type.compare("object") == 0){
-					mapped_values["po_type_id"] = mapped_values["po_type_vnum"] = std::to_string(eq->item_number);
-				}else{
-					mapped_values["po_type_id"] = mapped_values["po_type_vnum"] = std::to_string(eq->extended_item_vnum);
-				}
-				*/
+					 if(eq->str_type.compare("object") == 0){
+					 mapped_values["po_type_id"] = mapped_values["po_type_vnum"] = std::to_string(eq->item_number);
+					 }else{
+					 mapped_values["po_type_id"] = mapped_values["po_type_vnum"] = std::to_string(eq->extended_item_vnum);
+					 }
+					 */
 				mapped_values["po_type_id"] = std::to_string(eq->db_id());
 				mapped_values["po_type_vnum"] = std::to_string(eq->item_number);
 				mapped_values["po_type_load"] = "id";
@@ -210,12 +215,12 @@ namespace mods::orm::inventory {
 				mapped_values["po_player_id"] = std::to_string(player->db_id());
 				mapped_values["po_type"] = eq->str_type;
 				/*
-				if(eq->str_type.compare("object") == 0){
-					mapped_values["po_type_id"] = mapped_values["po_type_vnum"] = std::to_string(eq->item_number);
-				}else{
-					mapped_values["po_type_id"] = mapped_values["po_type_vnum"] = std::to_string(eq->extended_item_vnum);
-				}
-				*/
+					 if(eq->str_type.compare("object") == 0){
+					 mapped_values["po_type_id"] = mapped_values["po_type_vnum"] = std::to_string(eq->item_number);
+					 }else{
+					 mapped_values["po_type_id"] = mapped_values["po_type_vnum"] = std::to_string(eq->extended_item_vnum);
+					 }
+					 */
 				mapped_values["po_type_id"] = std::to_string(eq->db_id());
 				mapped_values["po_type_vnum"] = std::to_string(eq->item_number);
 				mapped_values["po_type_load"] = "id";
@@ -328,7 +333,7 @@ namespace mods::orm::inventory {
 			LMDBNDEL((void*)&id,sizeof(id));
 			auto uf = std::string("wear|") + std::to_string(player_db_id) + "|" + std::to_string(position);
 			std::cerr << "[remove_player_wear][uf_key:'" << uf << "']\n";
-		
+
 			LMDBDEL(uf);
 		}
 		void add_player_inventory(uint64_t player_db_id, uint64_t object_db_id, uint16_t obj_type){

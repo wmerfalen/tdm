@@ -19,6 +19,7 @@ namespace mods::weapons::sniper_rifle {
 		obj->obj_flags.weapon_flags = mw_rifle::SUB_MACHINE_GUN;
 		obj->obj_flags.clip_size =obj->rifle()->attributes->clip_size;
 		obj->name.assign(obj->rifle()->attributes->name);
+
 		obj->description.assign("A debilitating PSG-1 sniper rifle is lying here.");
 		obj->short_description.assign("PSG-1 sniper rifle");
 		obj->action_description.assign("action desc");      /* What to write when used          */
@@ -26,10 +27,7 @@ namespace mods::weapons::sniper_rifle {
 		obj->extended_item_vnum = obj->rifle()->attributes->vnum;
 		obj->rifle()->type = mw_rifle::SNIPER;
 		obj->obj_flags.type = mw_rifle::SNIPER;
-		mods::weapon::feed_caps(obj, { 
-				cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT,
-				cap_t::SNIPE, cap_t::HAS_CLIP 
-		});
+		mods::weapon::feed_caps(obj, (mw_rifle) obj->rifle()->type);
 		obj->extended_item_vnum = obj->rifle()->attributes->vnum;
 		return std::move(obj);
 	}

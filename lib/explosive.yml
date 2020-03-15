@@ -22,3 +22,6 @@ vnum: 1000 # integer, unique identifier
 # GOD_TIER
 # DEFAULT
 rarity: 'COMMON'
+description: 'A FS12 Frag Grenade is lying here'
+short_description: 'FS12 Frag Grenade <short>'
+action_description: 'FS12 Frag Grenade <action>'

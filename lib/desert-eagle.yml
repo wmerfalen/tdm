@@ -40,3 +40,6 @@ name: 'A <adjectively> <horrific> Desert Eagle' #string
 rarity: RARE
 vnum: 102 #virtual number
 object_type: rifle
+description: 'A debilitating Desert Eagle is lying here'
+short_description: 'Desert Eagle Pistol <short>'
+action_description: 'Desert Eagle Pistol <action>'

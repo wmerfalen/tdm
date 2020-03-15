@@ -50,3 +50,6 @@ str_type: 'SUB_MACHINE_GUN'
 # DEFAULT
 rarity: 'COMMON'
 feed_file: 'mp5.yml'
+description: 'A debilitating Heckler and Koch MP5 is lying here'
+short_description: 'MP5 <short>'
+action_description: 'MP5 <action>'

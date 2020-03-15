@@ -26,3 +26,6 @@ vnum: 1000 # integer, unique identifier
 # GOD_TIER
 # DEFAULT
 rarity: 'COMMON'
+description: 'A sturdy ACME MK-71X Ballistic Vest is lying here'
+short_description: 'ACME MK-71X Ballistic Vest <short>'
+action_description: 'ACME MK-71X Ballistic Vest <action>'

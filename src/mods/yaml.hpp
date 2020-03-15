@@ -18,6 +18,9 @@ namespace mods::yaml {
 #include <fstream>
 
 #define MENTOC_BASE_MEMBERS \
+		std::string description;\
+		std::string short_description;\
+		std::string action_description;\
 		std::string manufacturer;\
 		std::string name;\
 		int type;\

@@ -48,3 +48,6 @@ vnum: 2 # integer, unique identifier
 # GOD_TIER
 # DEFAULT
 rarity: 'COMMON'
+description: 'A ZDX-Node Sniper Rifle is lying here'
+short_description: 'ZDX-Node Sniper Rifle <short>'
+action_description: 'ZDX-Node Sniper Rifle <action>'

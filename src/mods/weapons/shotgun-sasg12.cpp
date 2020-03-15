@@ -20,7 +20,7 @@ namespace mods::weapons::shotgun {
 		obj->short_description.assign("SASG12 shotgun <short>");
 		obj->action_description.assign("SASG12");      /* What to write when used          */
 		obj->ex_description.emplace_back("SASG12 shotgun",obj->description.c_str());
-		mods::weapon::feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE });
+		mods::weapon::feed_caps(obj, (mw_rifle) obj->rifle()->type);
 		obj->extended_item_vnum = obj->rifle()->attributes->vnum;
 		return std::move(obj);
 	}

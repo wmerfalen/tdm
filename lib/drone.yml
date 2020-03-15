@@ -25,3 +25,6 @@ vnum: 1000 # integer, unique identifier
 # GOD_TIER
 # DEFAULT
 rarity: 'COMMON'
+description: 'A sneaky TN Land Drone is idling here'
+short_description: 'TN Land Drone <short>'
+action_description: 'TN Land Drone <action>'

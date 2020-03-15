@@ -46,3 +46,6 @@ rarity: 'RARE'
 vnum: 7 #virtual number
 object_type: rifle
 feed_file: 'czp10.yml'
+description: 'A CZP10 Pistol is lying here'
+short_description: 'CZP10 Pistol <short>'
+action_description: 'CZP10 Pistol <action>'

@@ -22,7 +22,7 @@ namespace mods::weapons::pistol {
 		obj->short_description.assign("CZP10 pistol <short>");
 		obj->action_description.assign("CZP10");      /* What to write when used          */
 		obj->ex_description.emplace_back("czp10 pistol",obj->description.c_str());
-		mods::weapon::feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE, cap_t::HAS_CLIP });
+		mods::weapon::feed_caps(obj, (mw_rifle) obj->rifle()->type);
 		obj->extended_item_vnum = obj->rifle()->attributes->vnum;
 		std::cerr << "[czp10::feed_by_file] returning\n";
 		return std::move(obj);

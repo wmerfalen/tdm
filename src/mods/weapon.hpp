@@ -265,6 +265,7 @@ namespace mods::weapon {
 	obj_data_ptr_t new_pistol_object();
 
 	void feed_caps(obj_data_ptr_t& obj, std::vector<cap_t> caps);
+	void feed_caps(obj_data_ptr_t& obj, mw_rifle type);
 	
 };
 #endif

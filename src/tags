@@ -1485,7 +1485,7 @@ MENTOC_ARMOR_TYPES_SEQUENCE	mods/item-types.hpp	149;"	d
 MENTOC_ATTACHMENT_MEMBERS_TUPLE	mods/item-types.hpp	133;"	d
 MENTOC_ATTACHMENT_TYPES_SEQUENCE	mods/item-types.hpp	129;"	d
 MENTOC_BASE_MEMBERS	mods/yaml.hpp	20;"	d
-MENTOC_BASE_MEMBERS_SET	mods/yaml.hpp	30;"	d
+MENTOC_BASE_MEMBERS_SET	mods/yaml.hpp	33;"	d
 MENTOC_BITVECTOR	mods/builder.cpp	3046;"	d	file:
 MENTOC_CHK_OBJ	mods/builder.cpp	1075;"	d	file:
 MENTOC_CONSUMABLE_MEMBERS_TUPLE	mods/item-types.hpp	185;"	d
@@ -4020,6 +4020,7 @@ feed	mods/yaml.cpp	/^	int16_t trap_description_t::feed(std::string_view in_file)
 feed	structs.cpp	/^		void obj_data::feed(std::string in_type,std::string_view feed_file){$/;"	f	class:obj_data
 feed	structs.cpp	/^	void obj_flag_data::feed(const pqxx::result::reference & row){$/;"	f	class:obj_flag_data
 feed	structs.cpp	/^void obj_data::feed(const pqxx::result::reference & row){$/;"	f	class:obj_data
+feed_caps	mods/weapon.cpp	/^	void feed_caps(obj_data_ptr_t& obj, mw_rifle type){$/;"	f	namespace:mods::weapon
 feed_caps	mods/weapon.cpp	/^	void feed_caps(obj_data_ptr_t& obj, std::vector<cap_t> caps){$/;"	f	namespace:mods::weapon
 feed_from_po_record	mods/yaml.cpp	/^	int16_t rifle_description_t::feed_from_po_record(mentoc_pqxx_result_t yaml_file){$/;"	f	class:mods::yaml::rifle_description_t
 fido	spec_assign.cpp	/^SPECIAL(fido);$/;"	v

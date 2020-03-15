@@ -20,7 +20,7 @@ namespace mods::weapons::smg {
 		obj->short_description.assign("MP5 sub-machine gun <short>");
 		obj->action_description.assign("MP5");      /* What to write when used          */
 		obj->ex_description.emplace_back("mp5 sub-machine gun",obj->description.c_str());
-		mods::weapon::feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT, cap_t::HAS_CLIP });
+		mods::weapon::feed_caps(obj, (mw_rifle) obj->rifle()->type);
 		obj->extended_item_vnum = obj->rifle()->attributes->vnum;
 		return std::move(obj);
 	}

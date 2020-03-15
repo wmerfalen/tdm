@@ -2,6 +2,38 @@
 #include "../../db.h"
 /** FIXME: need to assign vnum/ids to objects */
 namespace mods::weapon {
+	void feed_caps(obj_data_ptr_t& obj, mw_rifle type){
+		switch(type){
+			case mw_rifle::SNIPER:
+				feed_caps(obj, { cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT,
+				cap_t::SNIPE, cap_t::HAS_CLIP });
+				return;
+
+			case mw_rifle::SUB_MACHINE_GUN:
+				feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT, cap_t::HAS_CLIP });
+				return;
+
+			case mw_rifle::SHOTGUN:
+				feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE });
+				return;
+
+			case mw_rifle::HANDGUN:
+			case mw_rifle::PISTOL:
+				feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE, cap_t::HAS_CLIP });
+				return;
+
+			case mw_rifle::MACHINE_PISTOL:
+				feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE, cap_t::HAS_CLIP, cap_t::SPRAY_BULLETS });
+				return;
+
+			case mw_rifle::ASSAULT_RIFLE:
+				feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::SPRAY_BULLETS, cap_t::HIP_FIRE, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT, cap_t::HAS_CLIP });
+				return;
+
+			default:
+				return;
+		}
+	}
 	void feed_caps(obj_data_ptr_t& obj, std::vector<cap_t> caps){
 		auto & obj_caps = obj->capabilities();
 		for(auto & value : caps){

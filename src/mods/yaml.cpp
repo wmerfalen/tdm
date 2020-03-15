@@ -21,6 +21,10 @@ namespace mods::yaml {
 		rarity = parse_rarity(yaml_file["rarity"].as<std::string>());\
 		std::cerr << "done\nfeeding feed_file..";\
 		feed_file = yaml_file["feed_file"].as<std::string>();\
+		std::cerr << "done\nfeeding feed_file..";\
+		description = yaml_file["description"].as<std::string>();\
+		short_description = yaml_file["short_description"].as<std::string>();\
+		action_description = yaml_file["action_description"].as<std::string>();\
 		std::cerr << "done\nCompleted feeding base members\n";\
 	}catch(std::exception &e){ std::cerr << "[yaml-cpp exception]: '" << e.what() << "'\n"; }
 
@@ -48,6 +52,9 @@ namespace mods::yaml {
 			<< "manufacturer: 'ACME Industries' # string, anything \n"
 			<< "name: '" << name << "' # string, anything name of object \n"
 			<< "vnum: 1000 # integer, unique identifier\n"
+			<< "description: 'Description'\n" 
+			<< "short_description: 'short description'\n"
+			<< "action_description: 'action description'\n"
 			<< rarity_segment() 
 			;
 	}
