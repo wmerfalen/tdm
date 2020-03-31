@@ -31,7 +31,7 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-D__MENTOC_USE_LMDB=1 \
 	-Wno-sign-compare -I$(yamlcpp) -L$(yamllib) \
 	-fPIC -DMENTOC_CURRENT_WORKING_DIR=\"$(LIB_DIR)\" \
-	-D__MENTOC_SHOW_LMDB_DEBUG__=1 
+	-D__MENTOC_SHOW_LMDB_DEBUG__=1 -D__MENTOC_DEBUG__
 
 #-D__MENTOC_SHOW_LMDB_DEBUG__=1 
 	#-DMENTOC_NO_CONSTEXPR_CONF=1 \ #-D__MENTOC_USE_PQXX_RESULT__=1 
@@ -62,7 +62,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/weapons/sniper-rifle-psg1 mods/classes/sniper \
 					 mods/orm/quotes act.builder mods/orm/base mods/yaml \
 					 mods/affects mods/item mods/weapon-types mods/sensor-grenade \
-					 mods/calc_visibility mods/events mods/chargen mods/classes/base
+					 mods/calc_visibility mods/events mods/chargen mods/classes/base \
+					 mods/object-utils mods/camera
 
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))

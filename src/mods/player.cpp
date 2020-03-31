@@ -15,6 +15,7 @@
 #include "scan.hpp"
 #include "date-time.hpp"
 #include <chrono>
+#include "object-utils.hpp"
 /**
  * TODO: All these stc* functions need to be altered to accomodate
  * the new player_type_enum_t values. If output is to be muted, then
@@ -29,6 +30,7 @@ extern mods::scan::find_results_t mods::scan::los_find(chptr hunter,chptr hunted
 extern void affect_modify(char_data *ch, 
 		byte loc, sbyte mod, bitvector_t bitv, bool add);
 extern void affect_total(char_data *ch);
+extern void obj_to_room(obj_ptr_t in_object, room_rnum room);
 enum histfile_type_t {
 	HISTFILE_FILE = 1, HISTFILE_LMDB = 2, HISTFILE_DUAL = 3
 };
@@ -60,6 +62,7 @@ namespace mods {
 	}
 
 	player::player(player_type_enum_t type){
+		this->init();
 		set_god_mode(false);
 		set_bui_mode(false);
 		set_imp_mode(false);
@@ -101,6 +104,7 @@ namespace mods {
 		}
 	}
 	player::player(){
+		this->init();
 		set_god_mode(false);
 		set_bui_mode(false);
 		set_imp_mode(false);
@@ -131,11 +135,16 @@ namespace mods {
 		this->set_overhead_map_width(16);
 		this->set_overhead_map_height(10);
 		m_quitting = 0;
+		std::fill(m_misc_pref.begin(),m_misc_pref.end(),false);
+		m_sync_equipment();
 	}
 	player::player(mods::player* ptr) {
+		this->init();
+		m_char_data = ptr->m_char_data;
 		/**TODO: should we set the queue_behaviour flags on the descriptor data items on *this? */
-		m_shared_ptr = std::make_shared<char_data>(ptr->cd());
-		m_char_data = ptr->cd();
+		std::fill(m_misc_pref.begin(),m_misc_pref.end(),false);
+		m_misc_pref = ptr->m_misc_pref;
+		m_shared_ptr = ptr->m_shared_ptr;
 		m_page = 0;
 		m_current_page = 0;
 		m_do_paging = false;
@@ -148,6 +157,8 @@ namespace mods {
 		set_imp_mode(ptr->implementor_mode());
 		/** TODO: investigate this function. I have a feeling that m_desc needs to be updated here */
 		m_quitting = 0;
+		m_equipment = ptr->m_equipment;
+		m_sync_equipment();
 	}
 	void player::capture_output(bool capture_status) {
 		m_capture_output = capture_status;
@@ -163,6 +174,7 @@ namespace mods {
 
 	player::player(char_data* ch) : m_char_data(ch), m_executing_js(false), m_do_paging(false),
 	m_page(0),m_current_page(0),m_current_page_fragment("") {
+		this->init();
 		m_set_time();
 		m_quitting = 0;
 	};
@@ -214,7 +226,7 @@ namespace mods {
 			std::cerr << "[ERROR]: player::equipment received invalid pos: " << pos << "\n";
 			return nullptr;
 		}
-		this->m_sync_equipment();
+		//this->m_sync_equipment();
 		return m_equipment[pos];
 	}
 	void player::equip(obj_ptr_t in_object,int pos) {
@@ -512,15 +524,19 @@ namespace mods {
 	}
 	void player::psendln(std::string_view str) {
 		write_to_char(m_char_data, str,1,1);
+		desc().has_prompt = 0;
 	}
 	void player::psendln(mods::string& str) {
 		write_to_char(m_char_data, str.view(),1,1);
+		desc().has_prompt = 0;
 	}
 	void player::sendln(mods::string& str) {
 		write_to_char(m_char_data, str.view(), 1,0);
+		desc().has_prompt = 0;
 	}
 	void player::sendln(std::string_view str) {
 		write_to_char(m_char_data, str, 1,0);
+		desc().has_prompt = 0;
 	}
 	void player::stc_room(const room_rnum& rnum) {
 		if(rnum < 0 || std::size_t(rnum) >= world.size()){
@@ -531,12 +547,13 @@ namespace mods {
 			write_to_char(m_char_data, world[rnum].name.view(),1,1);
 		}
 		if(builder_mode()){
-			write_to_char(m_char_data,(std::string("[room_id:") + std::to_string(room()) + "|number:" + 
-						std::to_string(world[room()].number) + "|zone:" + 
-						std::to_string(world[room()].zone)
+			write_to_char(m_char_data,(std::string("[room_id:") + std::to_string(rnum) + "|number:" + 
+						std::to_string(world[rnum].number) + "|zone:" + 
+						std::to_string(world[rnum].zone)
 						),1,1
 					);
 		}
+		desc().has_prompt = 0;
 	}
 	void player::stc(const char* m) {
 		/* FIXME: this does not scale */
@@ -544,12 +561,15 @@ namespace mods {
 			m_captured_output += m;
 		}
 		write_to_char(m_char_data,m,0,0);
+		desc().has_prompt = 0;
 	}
 	void player::stc(const mods::string& m){
 		write_to_char(m_char_data,m.view(),0,0);
+		desc().has_prompt = 0;
 	}
 	void player::stc(std::string_view sview) {
 		write_to_char(m_char_data,sview,0,0);
+		desc().has_prompt = 0;
 	}
 	void player::stc(const std::string m) {
 		/* FIXME: this does not scale */
@@ -557,6 +577,7 @@ namespace mods {
 			m_captured_output += m;
 		}
 		write_to_char(m_char_data,m,0,0);
+		desc().has_prompt = 0;
 	}
 	void player::stc(int m) {
 		if(m_capture_output) {
@@ -565,6 +586,7 @@ namespace mods {
 
 		/** note, using 1 for plain parameter */
 		write_to_char(m_char_data,std::to_string(m).c_str(),0,1);
+		desc().has_prompt = 0;
 	}
 	void player::stc_room_desc(const room_rnum& rnum) {
 		if(rnum < 0 || std::size_t(rnum) >= world.size()){
@@ -572,11 +594,13 @@ namespace mods {
 		}
 		raw_send(world[rnum].description);
 		if(((get_prefs()) & PRF_OVERHEAD_MAP)){
-			stc(mods::overhead_map::generate<mods::player*>(this,room()));
+			stc(mods::overhead_map::generate<mods::player*>(this,rnum));
 		}
+		desc().has_prompt = 0;
 	}
 	void player::raw_send(const mods::string& str){
 		write_to_descriptor(m_desc->descriptor,str.c_str());
+		//desc().has_prompt = 0;
 	}
 	mods::string player::weapon_name(){
 		return GET_EQ(m_char_data, WEAR_WIELD)->name;
@@ -602,6 +626,10 @@ namespace mods {
 		it->character->has_desc = true;
 	}
 	void player::init(){
+		m_blocked_until = 0;
+		m_has_block_event = false;
+		m_camera = nullptr;
+		m_camera_viewing = false;
 		m_quitting = false;
 		m_histfile_on = false;
 		m_histfile_fp = nullptr;
@@ -635,6 +663,7 @@ namespace mods {
 		}
 		m_lense_type = NORMAL_SIGHT;
 		for(unsigned i=0;i < NUM_WEARS;i++){ m_equipment[i] = nullptr; }
+		std::fill(m_misc_pref.begin(),m_misc_pref.end(),false);
 		this->m_sync_equipment();
 	}
 	void player::set_cd(char_data* ch) {
@@ -924,56 +953,7 @@ namespace mods {
 	enum histfile_opcode_t {
 		HFO_INDEX =1,HFO_START=2,HFO_STOP=3,HFO_LOG=4
 	};
-	std::string player::hf_pack(uint32_t index,
-			uint8_t op,
-			unsigned long time_stamp){
-		std::size_t amount = sizeof(m_db_id) +
-			sizeof(op) +
-			sizeof(index) +
-			1 +
-			sizeof(time_stamp);
-		std::string data(amount,0);
-		char* db_id = reinterpret_cast<char*>(&m_db_id);
-		char* op_id = reinterpret_cast<char*>(&op);
-		char* index_id = reinterpret_cast<char*>(&index);
-		char* time_id = reinterpret_cast<char*>(&time_stamp);
-		std::copy(db_id,db_id + sizeof(m_db_id),data.begin());
-		std::copy(op_id,op_id + sizeof(op),data.begin() + sizeof(m_db_id));
-		std::copy(index_id,index_id + sizeof(index),data.begin() + sizeof(m_db_id) + sizeof(op));
-		data[sizeof(op) + sizeof(m_db_id) + sizeof(index)] = '|';
-		std::copy(time_id,time_id + sizeof(time_id),
-				data.begin() + sizeof(m_db_id) + sizeof(op) + sizeof(index));
-		return data;
-	}
-	int player::pack_get(
-			uint32_t index,
-			uint8_t op,
-			unsigned long time_stamp,
-			std::string& got){
-		auto packed_index = hf_pack(index,op,time_stamp);
-		auto status = LMDBNGET(packed_index.data(),packed_index.size(),got);
-		if(status == EINVAL){
-			LMDBRENEW();
-			return this->pack_get(index,op,time_stamp,got);
-		}
-		return status;
-	}
 
-	int player::pack_set(
-			uint32_t index,
-			uint8_t op,
-			unsigned long time_stamp,
-			void* value,
-			std::size_t v_size){
-		auto key = this->hf_pack(index,op,time_stamp);
-
-		auto status = LMDBNSET(key.data(),key.size(),value,v_size);
-		if(status == EINVAL){
-			LMDBRENEW();
-			return LMDBNSET(key.data(),key.size(),value,v_size);
-		}
-		return status;
-	}
 	void player::start_histfile(){
 		std::string lib_dir = MENTOC_CURRENT_WORKING_DIR;
 		lib_dir += "/../log/";
@@ -1002,53 +982,6 @@ namespace mods {
 		fflush(m_histfile_fp);
 		fclose(m_histfile_fp);
 	}
-
-	//void player::start_histfile() {
-	//	std::string got = "";
-	//	auto status = this->pack_get(-1,HFO_INDEX,-1,got);
-	//	m_histfile_index = 0;
-	//	if(status == lmdb_db::KEY_FETCHED_OKAY){
-	//		m_histfile_index = (uint32_t)*((uint32_t*)(got.data()));
-	//	}
-	//	++m_histfile_index;
-	//	this->sendln("pack_get index: " + std::to_string(status) + 
-	//			"|m_histfile_index|" + std::to_string(m_histfile_index)
-	//	);
-
-	//	char* hf_ptr = reinterpret_cast<char*>(&m_histfile_index);
-	//	std::string value(sizeof(m_histfile_index),0);
-	//	std::copy(hf_ptr,hf_ptr + sizeof(m_histfile_index),value.begin());
-	//	status = this->pack_set(-1,HFO_INDEX,-1,value.data(),value.size());
-	//	if(status == 0){
-	//		std::cerr << "start_histfile --- pack_set success\n";
-	//	}
-
-	//	std::cerr << "start_histfile put 1 (index): " << status << "\n";
-	//	value = grab_raw_histfile_seconds();
-	//	status = this->pack_set(m_histfile_index,
-	//		HFO_START,
-	//		-1,
-	//		value.data(),
-	//		value.size()
-	//	);
-	//	std::cerr << "start_histfile put 2 (start): " << status << "\n";
-
-	//}
-
-	//void player::write_histfile(std::string_view line) {
-	//	auto status = this->pack_set(m_histfile_index,
-	//			HFO_LOG,
-	//			(unsigned long)std::time(nullptr),
-	//			(void*)line.data(),
-	//			line.size()
-	//	);
-	//}
-	//void player::stop_histfile() {
-	//	auto packed = hf_pack(m_histfile_index,HFO_STOP,-1);
-	//	auto value = grab_raw_histfile_seconds();
-	//	LMDBNSET(packed.data(),packed.size(),value.data(),value.size());
-	//	m_histfile_on = false;
-	//}
 
 	player::~player() {
 		std::cerr << "[~player] " << m_name.c_str() << "\n";
@@ -1091,9 +1024,11 @@ namespace mods {
 			va_start(args, messg);
 			left = vwrite_to_output(*(cd()->desc), messg, args);
 			va_end(args);
+			desc().has_prompt = 0;
 			return left;
 		}
 
+		desc().has_prompt = 0;
 		return 0;
 	}
 
@@ -1103,6 +1038,7 @@ namespace mods {
 	}
 
 	void player::m_sync_equipment(){
+		if(!m_char_data){ return; }
 		for(unsigned i=0; i < NUM_WEARS; i++){
 			if(m_equipment[i]){
 				m_char_data->equipment[i] = m_equipment[i].get();
@@ -1110,6 +1046,65 @@ namespace mods {
 				m_char_data->equipment[i] = nullptr;
 			}
 		}
+	}
+	void player::set_camera(obj_data_ptr_t obj){
+		m_camera = std::make_shared<mods::camera>(this->uuid(),obj->uuid);
+	}
+	void player::clear_camera(){
+		m_camera = nullptr;
+	}
+	void player::block_for(uint16_t ticks, uint32_t unblock_event,uuid_t optional_uuid){
+		d("player::block_for: " << ticks << " event: " << unblock_event << " optional_uuid:" << optional_uuid);
+		m_block_data[unblock_event] = optional_uuid;
+		m_block_event = mods::globals::defer_queue->push_ticks_event(ticks,{this->uuid(),unblock_event});
+		m_has_block_event = true;
+		m_blocked_until = unblock_event;
+	}
+	void player::cancel_block(){
+		if(m_has_block_event){
+			mods::globals::defer_queue->cancel_event(m_block_event);
+			m_has_block_event = false;
+		}
+		m_blocked_until = 0;
+	}
+	bool player::is_blocked(){ return m_blocked_until != 0; }
+	void player::unblock_event(uint32_t unblock){
+		d("[player::unblock_event]:" << unblock);
+		uuid_t target = 0;
+		target = m_block_data[unblock];
+		switch(unblock){
+			case mods::deferred::EVENT_PLAYER_UNBLOCK_INSTALLATION:
+				{
+					auto obj = optr_by_uuid(target);
+					if(!obj){
+						std::cerr << "[WARNING] got nullptr from EVENT_PLAYER_UNBLOCK_INSTALLATION\n";
+						break;
+					}
+					obj_to_room(obj, obj->in_room);
+					mods::object_utils::set_done_installing(obj);
+					this->send("\r\nYou successfully deploy a %s\r\n", obj->name.c_str());
+					break;
+				}
+			default:
+				std::cerr << "[WARNING] unhandled unblock event: " << unblock << "\n";
+				break;
+		}
+		m_block_data.erase(unblock);
+		m_blocked_until = 0;
+		m_has_block_event = false;
+	}
+	bool player::interrupt(std::tuple<uint32_t,uuid_t,void*> event_data){
+		auto event_id = std::get<0>(event_data);
+		auto uuid = std::get<1>(event_data);
+		void* data = std::get<2>(event_data);
+		bool should_interrupt = false;
+		d("interrupt(): " << event_id << " uuid:" << uuid << " data*:" << data);
+
+		if(should_interrupt){
+			m_blocked_until = 0;
+			return true;
+		}
+		return false;
 	}
 };
 

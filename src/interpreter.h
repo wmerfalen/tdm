@@ -13,13 +13,14 @@
 
 #define ACMD(name) void name(char_data *ch, char *argument, int cmd, int subcmd)
 
-
 ACMD(do_move);
 
 #define CMD_NAME (cmd_info[cmd].command)
 #define CMD_IS(cmd_name) (!strcmp(cmd_name, cmd_info[cmd].command))
 #define IS_MOVE(cmdnum) (cmd_info[cmdnum].command_pointer == do_move)
 
+#define IHBD "[+] It has been done."
+#define HUH "Huh?!?"
 void	command_interpreter(char_data *ch, char *argument,bool legacy);
 void	command_interpreter(char_data *ch, const char *argument, bool legacy);
 void	command_interpreter(player_ptr_t & player, std::string_view argument);

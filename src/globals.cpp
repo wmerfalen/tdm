@@ -860,6 +860,46 @@ namespace mods {
 		player_list_t& get_room_list(player_ptr_t& player){
 			return mods::globals::get_room_list(player->room());
 		}
+		std::string dir_to_str(int dir, bool adjective){
+			if(adjective){
+				switch(dir){
+					case NORTH: return "northern";
+					case SOUTH: return "southern";
+					case EAST: return "eastern";
+					case WEST: return "western";
+					case UP: return "upper";
+					case DOWN: return "below";
+					default: return "?";
+				}
+			}
+			switch(dir){
+				case NORTH: return "north";
+				case SOUTH: return "south";
+				case EAST: return "east";
+				case WEST: return "west";
+				case UP: return "up";
+				case DOWN: return "down";
+				default: return "?";
+			}
+		}
+		void queue_object_destruct(uuid_t obj_uuid, uint16_t ticks){
+			mods::globals::defer_queue->push_ticks_event(ticks, {obj_uuid, mods::deferred::EVENT_OBJECT_DESTRUCT});
+		}
+		void destruct_object(uuid_t uuid){
+			auto obj = optr_by_uuid(uuid);
+			if(!obj){
+				return;
+			}
+			auto omap = obj_map.find(obj->uuid);
+			if(omap != obj_map.end()){
+				obj_map.erase(omap);
+			}
+			auto odmap = obj_odmap.find(obj.get());
+			if(odmap != obj_odmap.end()){
+				obj_odmap.erase(odmap);
+			}
+			d("use count for destructed object: " << obj.use_count());
+		}
 	};//end globals
 };
 player_ptr_t ptr(char_data* in_ch){

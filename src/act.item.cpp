@@ -20,6 +20,7 @@
 #include "db.h"
 #include "spells.h"
 #include "constants.h"
+#include "mods/object-utils.hpp"
 
 /* extern variables */
 extern room_rnum donation_room_1;
@@ -177,7 +178,13 @@ ACMD(do_put) {
 
 
 int can_take_obj(char_data *ch, struct obj_data *obj) {
-	if(IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) {
+  if(mods::object_utils::is_installed(obj)){
+		act("$p: you must use the uninstall command to remove this device.", FALSE, ch, obj, 0, TO_CHAR);
+		return 0;
+	}else if(mods::object_utils::is_installing(obj)){
+		act("$p: you can't! You're currently installing it", FALSE, ch, obj, 0, TO_CHAR);
+		return 0;
+	}else if(IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) {
 		act("$p: you can't carry that many items.", FALSE, ch, obj, 0, TO_CHAR);
 		return (0);
 	} else if((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch)) {
@@ -1339,7 +1346,9 @@ void perform_wear(char_data *ch, struct obj_data *obj, int where) {
 		ITEM_WEAR_NECK, ITEM_WEAR_BODY, ITEM_WEAR_HEAD, ITEM_WEAR_LEGS,
 		ITEM_WEAR_FEET, ITEM_WEAR_HANDS, ITEM_WEAR_ARMS, ITEM_WEAR_SHIELD,
 		ITEM_WEAR_ABOUT, ITEM_WEAR_WAIST, ITEM_WEAR_WRIST, ITEM_WEAR_WRIST,
-		ITEM_WEAR_WIELD, ITEM_WEAR_TAKE
+		ITEM_WEAR_WIELD, ITEM_WEAR_TAKE, ITEM_WEAR_SECONDARY,
+		ITEM_WEAR_SHOULDERS, ITEM_WEAR_VEST_PACK, ITEM_WEAR_ELBOW,
+		ITEM_WEAR_BACKPACK, ITEM_WEAR_GOGGLES
 	};
 
 	std::string already_wearing[] = {
@@ -1360,7 +1369,13 @@ void perform_wear(char_data *ch, struct obj_data *obj, int where) {
 		"YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.",
 		"You're already wearing something around both of your wrists.",
 		"You're already wielding a weapon.",
-		"You're already holding something."
+		"You're already holding something.",
+		"Your secondary weapon spot is already taken.",
+		"You're already wearing something on your shoulders.",
+		"Your vest pack is already occupied.",
+		"You are already wearing something on your elbows.",
+		"You are already wearing something as a backpack.",
+		"You are already wearing something over your eyes."
 	};
 
 	/* first, make sure that the wear position is valid. */
@@ -1381,8 +1396,6 @@ void perform_wear(char_data *ch, struct obj_data *obj, int where) {
 	}
 
 	wear_message(ch, obj, where);
-	//obj_from_char(obj);
-	//equip_char(ptr(ch), optr(obj), where);
 	player->equip(optr_by_uuid(obj->uuid),where);
 	player->uncarry(optr_by_uuid(obj->uuid));
 }
@@ -1462,6 +1475,37 @@ int find_eq_pos(char_data *ch, struct obj_data *obj, char *arg) {
 		if(CAN_WEAR(obj, ITEM_WEAR_WRIST)) {
 			where = WEAR_WRIST_R;
 		}
+		if(CAN_WEAR(obj, ITEM_WEAR_SECONDARY)) {
+			where = WEAR_SECONDARY_WEAPON;
+		}
+
+		if(CAN_WEAR(obj, ITEM_WEAR_SECONDARY)) {
+			where = WEAR_SECONDARY_WEAPON;
+		}
+		if(CAN_WEAR(obj, ITEM_WEAR_WEAPON_ATTACHMENT)) {
+			where = WEAR_WEAPON_ATTACHMENT;
+		}
+		if(CAN_WEAR(obj, ITEM_WEAR_SHOULDERS)) {
+			where = WEAR_SHOULDERS_L;
+		}
+		if(CAN_WEAR(obj, ITEM_WEAR_SHOULDERS)) {
+			where = WEAR_SHOULDERS_R;
+		}
+		if(CAN_WEAR(obj, ITEM_WEAR_BACKPACK)) {
+			where = WEAR_BACKPACK;
+		}
+		if(CAN_WEAR(obj, ITEM_WEAR_GOGGLES)) {
+			where = WEAR_GOGGLES;
+		}
+		if(CAN_WEAR(obj, ITEM_WEAR_VEST_PACK)) {
+			where = WEAR_VEST_PACK;
+		}
+		if(CAN_WEAR(obj, ITEM_WEAR_ELBOW)) {
+			where = WEAR_ELBOW_L;
+		}
+		if(CAN_WEAR(obj, ITEM_WEAR_ELBOW)) {
+			where = WEAR_ELBOW_R;
+		}
 	} else if((where = search_block(arg, keywords, FALSE)) < 0) {
 		send_to_char(ch, "'%s'?  What part of your body is THAT?\r\n", arg);
 	}
@@ -1536,7 +1580,7 @@ ACMD(do_wear) {
 			}
 		}
 	}
-	
+
 }
 
 
@@ -1567,13 +1611,17 @@ ACMD(do_wield) {
 
 ACMD(do_grab) {
 	MENTOC_PREAMBLE();
-	char arg[MAX_INPUT_LENGTH];
+	auto vec_args = PARSE_ARGS();
 	struct obj_data *obj;
-
-	one_argument(argument, arg);
-
-	if(!*arg) {
+	auto obj_ptr = mods::util::parse_object_vec(player,vec_args);
+	if(!obj_ptr){
 		player->sendln("Hold what?");
+		return;
+	}
+	obj = obj_ptr.get();
+	char* arg = vec_args[0].data();
+	if (player->get_imp_mode() && player->get_misc_pref(player->mpref::HOLD_ANYTHING)) {
+		perform_wear(ch, obj, WEAR_HOLD);
 	} else if(!(obj = get_obj_in_list_vis(ch, arg, NULL, ch->carrying))) {
 		send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
 	} else {
@@ -1581,8 +1629,8 @@ ACMD(do_grab) {
 			perform_wear(ch, obj, WEAR_LIGHT);
 		} else {
 			if(!CAN_WEAR(obj, ITEM_WEAR_HOLD) && GET_OBJ_TYPE(obj) != ITEM_WAND &&
-			        GET_OBJ_TYPE(obj) != ITEM_STAFF && GET_OBJ_TYPE(obj) != ITEM_SCROLL &&
-			        GET_OBJ_TYPE(obj) != ITEM_POTION) {
+					GET_OBJ_TYPE(obj) != ITEM_STAFF && GET_OBJ_TYPE(obj) != ITEM_SCROLL &&
+					GET_OBJ_TYPE(obj) != ITEM_POTION) {
 				send_to_char(ch, "You can't hold that.\r\n");
 			} else {
 				perform_wear(ch, obj, WEAR_HOLD);
@@ -1651,7 +1699,7 @@ ACMD(do_remove) {
 
 			for(i = 0; i < NUM_WEARS; i++)
 				if(GET_EQ(ch, i) && CAN_SEE_OBJ(ch, GET_EQ(ch, i)) &&
-				        isname(arg, GET_EQ(ch, i)->name)) {
+						isname(arg, GET_EQ(ch, i)->name)) {
 					perform_remove(player, i);
 					found = 1;
 				}

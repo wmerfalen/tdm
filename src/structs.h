@@ -34,6 +34,12 @@
 #define mentoc_pqxx_result_t pqxx::row
 #endif
 
+#ifdef __MENTOC_DEBUG__
+#ifndef d
+	#define d(a) std::cerr << "[**DEBUG**]->[file:" << __FILE__ << "][line:" << __LINE__ << "][msg]: " << a << "\n" << std::flush;
+#endif
+#endif
+
 constexpr static std::size_t MAX_EXPLOSION_FADE_OUT = 5;
 namespace mods {
 	struct player;
@@ -387,9 +393,15 @@ enum player_class_t {
 #define WEAR_HOLD      17
 #define WEAR_SECONDARY_WEAPON 18
 #define WEAR_WEAPON_ATTACHMENT      19
+#define WEAR_SHOULDERS_L 20
+#define WEAR_SHOULDERS_R 21
+#define WEAR_BACKPACK 22
+#define WEAR_GOGGLES 23
+#define WEAR_VEST_PACK 24
+#define WEAR_ELBOW_L 25
+#define WEAR_ELBOW_R 26
 
-#define NUM_WEARS      20	/* This must be the # of eq positions!! */
-
+#define NUM_WEARS 27
 
 	/* object-related defines ********************************************/
 
@@ -445,7 +457,13 @@ enum player_class_t {
 #define ITEM_WEAR_WIELD		(1 << 13) /* Can be wielded		*/
 #define ITEM_WEAR_PRIMARY		ITEM_WEAR_WIELD
 #define ITEM_WEAR_HOLD		(1 << 14) /* Can be held		*/
-#define ITEM_WEAR_SECONDARY (1 << 15)
+#define ITEM_WEAR_SECONDARY	(1 << 15)
+#define ITEM_WEAR_SHOULDERS	(1 << 16)
+#define ITEM_WEAR_VEST_PACK	(1 << 17)
+#define ITEM_WEAR_ELBOW	(1 << 18)
+#define ITEM_WEAR_BACKPACK (1 << 19)
+#define ITEM_WEAR_GOGGLES (1 << 20)
+#define ITEM_WEAR_WEAPON_ATTACHMENT (1 << 21)
 
 
 	/* Extra object flags: used by obj_data.obj_flags.extra_flags */
@@ -710,7 +728,7 @@ enum player_level {
 	 * the code for "bitvector_t" and change them yourself if you'd like this
 	 * extra flexibility.
 	 */
-	typedef unsigned long int	bitvector_t;
+	using bitvector_t = unsigned long int;
 
 	/* Extra description: used in objects, mobiles, and rooms */
 	struct extra_descr_data {
@@ -769,12 +787,10 @@ enum player_level {
 	/* ================== Memory Structure for Objects ================== */
 	struct obj_data {
 		void feed(mentoc_pqxx_result_t);
-		void feed(std::string in_type,std::string_view feed_file);
+		void feed(std::string_view in_type,std::string_view feed_file);
 		void init();
 		obj_data(const obj_data& other){
-			std::cerr << "[WARNING] obj_data copy constructor is broken!!!\n";
-			std::cerr << "[WARNING] obj_data copy constructor is broken!!!\n";
-			std::cerr << "[WARNING] obj_data copy constructor is broken!!!\n";
+			d("[WARNING] obj_data copy constructor is broken!!!\n");
 			item_number = other.item_number;
 			in_room = other.in_room;
 			name.assign(other.name.str_or(""));
@@ -802,12 +818,12 @@ enum player_level {
 BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 */
 			/** FIXME: copy constructor is broken right now */
-			std::cerr << "[WARNING] obj_data copy constructor is broken!!! [returning]\n";
+			d("[WARNING] obj_data copy constructor is broken!!! [returning]\n");
 		}
 		obj_data& operator=(const obj_data& other){ 
-			std::cerr << "[WARNING] obj_data assign operator is broken!!!\n";
-			std::cerr << "[WARNING] obj_data assign operator is broken!!!\n";
-			std::cerr << "[WARNING] obj_data assign operator is broken!!!\n";
+			d("[WARNING] obj_data assign operator is broken!!!\n");
+			d("[WARNING] obj_data assign operator is broken!!!\n");
+			d("[WARNING] obj_data assign operator is broken!!!\n");
 			item_number = other.item_number;
 			in_room = other.in_room;
 			name.assign(other.name.str_or(""));
@@ -829,7 +845,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 			m_db_id = 0;
 			/** FIXME: copy constructor is broken right now */
 //BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
-			std::cerr << "[WARNING] obj_data assign operator is broken [returning]!!!\n";
+			d("[WARNING] obj_data assign operator is broken [returning]!!!\n");
 			return *this;
 		}
 		obj_data() : 
@@ -916,7 +932,8 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 		CLASS_TYPE(\
 				std::string_view feed_file\
 		){\
-			std::cerr << "[debug] object class type feed_file: '" << feed_file << "'\n";\
+			d("[debug] object class type feed_file: '" << feed_file << "' " << \
+				"class_type: '" << BOOST_PP_STRINGIZE(CLASS_TYPE) << "'\n");\
 	 		this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(feed_file);\
 			this->set_str_type(BOOST_PP_STRINGIZE(CLASS_TYPE));\
 			this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
@@ -931,7 +948,10 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 		CLASS_TYPE(\
 				uint8_t mode\
 		){\
+			auto c_type = BOOST_PP_STRINGIZE(CLASS_TYPE);\
+			d("[debug] " << c_type << "(uint8_t mode)\n");\
 			this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(); \
+			this->set_str_type(BOOST_PP_STRINGIZE(CLASS_TYPE));\
 			this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
 			return this->BOOST_PP_CAT(m_, CLASS_TYPE).get();\
 		}\
@@ -966,37 +986,52 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_DATA_OBJ, ~, MENTOC_ITEM_TYPES_SEQ)
 		bool can(std::size_t val){
 			return m_capabilities[val];
 		}
+		void clear_capabilities() {
+			for(unsigned i=0; i < CAPABILITY_LIST_LENGTH; ++i){
+				m_capabilities[i] = 0;
+			}
+		}
 		capability_list_t& capabilities(){ return m_capabilities; }
-		std::string str_type;
+		std::string str_type;	//i.e.: explosive
+		std::string str_sub_type;	//i.e.: SENSOR_GRENADE
 		uint64_t extended_item_vnum;
 		void set_str_type(std::string_view t);
+		//void set_str_sub_type(std::string_view t);
 		void set_db_id(uint64_t i){ this->m_db_id = i; }
 		uint64_t db_id(){ return this->m_db_id; }
 		template <typename T>
 		void post_feed(T fed_object){
+			d("[post_feed][START]********************************************");
 			this->set_db_id(fed_object->attributes->db_id());
 			mods::globals::register_object_db_id(fed_object->attributes->db_id(),this->uuid);
+			this->clear_capabilities();
+			for(auto & cap_enum : fed_object->attributes->get_caps()){
+				m_capabilities[cap_enum] = true;
+			}
+			fed_object->attributes->fill_flags(&this->obj_flags);
+			this->name.assign(fed_object->attributes->name);
+			this->description.assign(fed_object->attributes->description);
+			this->short_description.assign(fed_object->attributes->short_description);
+			this->action_description.assign(fed_object->attributes->action_description);
+			this->ex_description.emplace_back(this->name.c_str(),this->description.c_str());
+			this->extended_item_vnum = fed_object->attributes->vnum;
+			this->str_sub_type = fed_object->attributes->str_type;
+			d("[post_feed] str_sub_type: '" << str_sub_type << "'");
+			d("[post_feed][END]**********************************************");
 		}
-
+		void set_owner(uuid_t p){ m_owner = p; }
+		uuid_t get_owner(){ return m_owner; }
+		uint8_t location_data(){ return m_location_data; }
+		void set_location_data(uint8_t i){ m_location_data = i; }
 		protected:
 #define MENTOC_UPTR(r,data,CLASS_TYPE) std::unique_ptr<BOOST_PP_CAT(CLASS_TYPE,_data_t)> BOOST_PP_CAT(m_, CLASS_TYPE);
 BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 #undef MENTOC_UPTR
 		capability_list_t m_capabilities;
 		uint64_t m_db_id;
+		uuid_t m_owner;
+		uint8_t m_location_data;
 	};
-struct obj_data_weapon : public obj_data {
-	/**TODO: call parent constructor/destructor */
-	/**TODO: eventually, these fields will be specific to this struct and not
-	 * the parent structure
-	 */
-		//int16_t ammo;
-		//int16_t ammo_max;
-		//short loaded;
-		//short holds_ammo;
-		//weapon_type_t weapon_type;
-
-};
 	/* ======================================================================= */
 
 

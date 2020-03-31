@@ -33,6 +33,7 @@
 #include "act.debug.hpp"
 #include "mods/world-configuration.hpp"
 #include "mods/chargen.hpp"
+#include "mods/player-utils.hpp"
 
 /* external variables */
 extern int destroy_socket(socket_t&);
@@ -189,6 +190,7 @@ ACMD(do_builder_help){
 		 	"{gld}giveme_inc{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
 	 		"{gld}giveme_sensor{/gld} -- {grn}give me sensor grenades [feature-debug]{/grn}",
 	 		"{gld}giveme_smoke{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
+			"{gld}flush_holding{/gld} -- {grn}flush the item you are holding to the db [feature-debug][staging-feature][builder-utils]{/grn}", 
 			"{gld}heal{/gld} -- {grn}heal yourself [feature-debug][staging-feature][class-medic]{/grn}", 
 			"{gld}histfile{/gld} -- {grn}start recording all commands. stop with 'histfile stop' [builder-utils][feature-debug]{/grn}", 
 			"{gld}idle{/gld} -- {grn}force your character into idle state [feature-debug]{/grn}", 
@@ -221,7 +223,10 @@ ACMD(do_builder_help){
 
 ACMD(do_yaml_import);
 ACMD(do_yaml_example);
+ACMD(do_flush_holding);
+ACMD(do_hold_anything);
 ACMD(do_histfile);
+ACMD(do_uuid);
 /* prototypes for all do_x functions. */
 ACMD(do_action);
 ACMD(do_advance);
@@ -282,6 +287,7 @@ ACMD(do_leave);
 ACMD(do_levels);
 ACMD(do_load);
 ACMD(do_look);
+ACMD(do_view);
 /* ACMD(do_move); -- interpreter.h */
 ACMD(do_not_here);
 ACMD(do_olc);
@@ -319,7 +325,12 @@ ACMD(do_affect_me);
 ACMD(do_givemegold);
 ACMD(do_givemenades);
 ACMD(do_snipe);
+/**--[ START ]--  camera/claymore install commands */
+ACMD(do_cancel);
 ACMD(do_install);
+ACMD(do_uninstall);
+/** --[ END ]--   camera/claymore install commands */
+
 ACMD(do_giveme_frag_grenades);
 ACMD(do_giveme_flashbang_grenades);
 ACMD(do_giveme_incendiary_grenades);
@@ -331,6 +342,7 @@ ACMD(do_next_mob_number);
 ACMD(do_next_room_number);
 ACMD(do_pmw_obj_from_room);
 ACMD(do_toggle_obj_from_room);
+ACMD(do_my_uuid);
 /** ------------------------ */
 /** GIVE ME combat mechanics */
 /** ------------------------ */
@@ -361,7 +373,6 @@ ACMD(do_js);
 /** debug mods */
 ACMD(do_point_update);
 ACMD(do_zero_socket);
-ACMD(do_uuid);
 /** -- end debug mods */
 
 /** wizard commands */
@@ -567,6 +578,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "kiss"     , POS_RESTING , do_action   , 0, 0 },
 
 	{ "look"     , POS_RESTING , do_look     , 0, SCMD_LOOK },
+	{ "view"     , POS_RESTING , do_view     , 0, 0 },
 	{ "laugh"    , POS_RESTING , do_action   , 0, 0 },
 	{ "last"     , POS_DEAD    , do_last     , LVL_GOD, 0 },
 	{ "leave"    , POS_STANDING, do_leave    , 0, 0 },
@@ -722,7 +734,10 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** COMBAT MECHANICS */
 	/** ---------------- */
 	{ "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
-	{ "install"  , POS_RESTING , do_install   , 0, 0 },	/** i.e.: claymore mine */
+	/** install/uninstall various gadgets */
+	{ "cancel"  , POS_RESTING , do_cancel, 0, 0 },	/** i.e.: claymore mine, camera */
+	{ "install"  , POS_RESTING , do_install, 0, 0 },	/** i.e.: claymore mine, camera */
+	{ "uninstall"  , POS_RESTING , do_uninstall, 0, 0 },	/** i.e.: claymore mine, camera */
 	//TODO code me{ "plant" , POS_RESTING , do_plant , 0, 0},
 	//TODO code me { "activate" , POS_RESTING , do_activate , 0, 0},
 	{ "drone"  , POS_RESTING , do_drone   , 0, 0 },
@@ -753,6 +768,8 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "require_js"  , POS_RESTING , do_require_js   , 0, 0 },
 	{ "builder"  , POS_RESTING , do_builder   , 0, 0 },
 	{ "builder_help"  , POS_RESTING , do_builder_help   , LVL_GOD, 0 },
+	{ "flush_holding"  , POS_RESTING , do_flush_holding   , LVL_GOD, 0 },
+	{ "hold_anything"  , POS_RESTING , do_hold_anything   , LVL_GOD, 0 },
 	{ "yaml_import"  , POS_RESTING , do_yaml_import   , LVL_GOD, 0 },
 	{ "yaml_example"  , POS_RESTING , do_yaml_example   , LVL_GOD, 0 },
 	{ "next_object_number"  , POS_RESTING , do_next_object_number   , LVL_GOD, 0 },
@@ -773,6 +790,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "rbuild_sandbox"  , POS_RESTING , do_rbuild_sandbox   , LVL_IMMORT, 0 },
 	{ "room_list"  , POS_RESTING , do_room_list   , LVL_IMMORT, 0 },
 	{ "histfile"  , POS_RESTING , do_histfile   , LVL_IMMORT, 0 },
+	{ "my_uuid"  , POS_RESTING , do_my_uuid  , LVL_IMMORT, 0 },
 	/** ----------------- */
 	/** END BUILDER UTILS */
 	/** ----------------- */
@@ -961,7 +979,12 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 	} else{
 		if(player->god_mode()){
 			assert(ch != nullptr);
-			((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd));
+			//d("line: '" << line << "' cmd:'" << cmd_info[cmd].command << "' cmd_info[cmd].subcmd: '" << cmd_info[cmd].subcmd << "'");
+			if(player->is_blocked() && !mods::player_utils::is_cancel_command(cmd_info[cmd].command)) {
+				player->sendln("You can't! You're currently doing something!\r\n");
+			} else {
+				((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd));
+			}
 			mods::globals::post_command_interpreter(ch,argument);
 			return;
 		}
@@ -1004,7 +1027,12 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 			}
 		}
 		else if(no_specials || !special(ch, cmd, line)) {
-			((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd));
+			d("line: '" << line << "' cmd:'" << cmd_info[cmd].command << "' cmd_info[cmd].subcmd: '" << cmd_info[cmd].subcmd << "'");
+			if(player->is_blocked() && !mods::player_utils::is_cancel_command(cmd_info[cmd].command)) {
+				player->sendln("You can't! You're currently doing something!\r\n");
+			} else {
+				((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd));
+			}
 		}
 	}
 
@@ -1955,6 +1983,17 @@ void nanny(player_ptr_t p, char * in_arg) {
 										*/
 		case CON_CLOSE:
 									 break;
+		case CON_IDLE:
+									 /**
+										* User has been put into the idle queue. Place them back into the world.
+										*/
+
+									act("$n has returned.", TRUE, p->cd(), 0, 0, TO_ROOM);
+									p->char_specials().timer = 0;
+									p->set_state(CON_PLAYING);
+									char_from_room(p->cd());
+									char_to_room(p->cd(), mods::world_conf::real_mortal_start());
+									break;
 
 		default:
 									 log("SYSERR: Nanny: illegal state of con'ness (%d) for '%s'; closing connection.",

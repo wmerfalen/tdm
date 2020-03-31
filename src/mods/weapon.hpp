@@ -264,9 +264,22 @@ namespace mods::weapon {
 	obj_data_ptr_t new_sniper_rifle_object();
 	obj_data_ptr_t new_pistol_object();
 
-	void feed_caps(obj_data_ptr_t& obj, std::vector<cap_t> caps);
-	void feed_caps(obj_data_ptr_t& obj, mw_rifle type);
-	
+	std::vector<cap_t> get_caps(mw_rifle);
+	std::vector<cap_t> get_caps(mw_gadget);
+	std::vector<cap_t> get_caps(mw_explosive);
+	std::vector<cap_t> get_caps(mw_armor);
+	std::vector<cap_t> get_caps(mw_attachment);
+	std::vector<cap_t> get_caps(mw_drone);
+	std::vector<cap_t> get_caps(mw_consumable);
+	std::vector<cap_t> get_caps(mw_trap);
+	template <typename TObj,typename T>
+	static inline void feed_caps(TObj& obj, T type){
+		obj->clear_capabilities();
+		auto & obj_caps = obj->capabilities();
+		for(auto && value : get_caps(type)){
+			obj_caps[value] = true;
+		}
+	}
 };
 #endif
 

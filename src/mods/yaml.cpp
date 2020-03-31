@@ -2,30 +2,24 @@
 #include "sql.hpp"
 #include "pq.hpp"
 #ifndef tostr
-	#define tostr(a) std::to_string(a)
+#define tostr(a) std::to_string(a)
 #endif
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 namespace mods::yaml {
 
 #define MENTOC_FEED_BASE_MEMBERS \
 	try{ \
-		std::cerr << "feeding base members...\nfeeding manufacturer..";\
+		d("feeding base members");\
 		manufacturer = yaml_file["manufacturer"].as<std::string>();\
-		std::cerr << "done\nfeeding name...";\
 		name = yaml_file["name"].as<std::string>();\
-		std::cerr << "done\nfeeding str_type...";\
 		str_type = yaml_file["str_type"].as<std::string>();\
-		std::cerr << "done\nfeeding vnum...";\
 		vnum = yaml_file["vnum"].as<int>();\
-		std::cerr << "done\nfeeding rarity...";\
 		rarity = parse_rarity(yaml_file["rarity"].as<std::string>());\
-		std::cerr << "done\nfeeding feed_file..";\
 		feed_file = yaml_file["feed_file"].as<std::string>();\
-		std::cerr << "done\nfeeding feed_file..";\
 		description = yaml_file["description"].as<std::string>();\
 		short_description = yaml_file["short_description"].as<std::string>();\
 		action_description = yaml_file["action_description"].as<std::string>();\
-		std::cerr << "done\nCompleted feeding base members\n";\
+		d("done\nCompleted feeding base members\n");\
 	}catch(std::exception &e){ std::cerr << "[yaml-cpp exception]: '" << e.what() << "'\n"; }
 
 	std::vector<std::pair<std::string,float>> rarity_strings() {
@@ -48,13 +42,14 @@ namespace mods::yaml {
 	}
 	void base_items(std::ofstream* out_file,std::string_view name,std::string_view obj_type){
 		*out_file	<< "str_type: '" << obj_type << "' # enum, object type\n"
-			<< "type: 0 # integer enum \n"
+			<< "type: '" << obj_type << "' # string enum \n"
 			<< "manufacturer: 'ACME Industries' # string, anything \n"
 			<< "name: '" << name << "' # string, anything name of object \n"
 			<< "vnum: 1000 # integer, unique identifier\n"
 			<< "description: 'Description'\n" 
 			<< "short_description: 'short description'\n"
 			<< "action_description: 'action description'\n"
+			<< "feed_file: '" << obj_type.data() << ".yml'\n"
 			<< rarity_segment() 
 			;
 	}
@@ -83,11 +78,11 @@ namespace mods::yaml {
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
-			std::cerr << "can't open output yaml file, not open!\n";
+			d("can't open output yaml file, not open!\n");
 			return -1;
 		}
 		if(!out_file.good()){
-			std::cerr << "can't open output yaml file, not good!\n";
+			d("can't open output yaml file, not good!\n");
 			return -2;
 		}
 		MENTOC_EXAMPLE_ARMORS
@@ -109,9 +104,17 @@ namespace mods::yaml {
 			values["armor_balistic_resistance_percent"] = this->balistic_resistance_percent; //FLOAT NOT NULL DEFAULT 0.0,
 			values["armor_speed_profile"] = this->speed_profile; //speed_profile_type_t NOT NULL DEFAULT 'HINDERED',
 			values["armor_offensive_damage_amount"] = this->offensive_damage_amount; //INTEGER NOT NULL DEFAULT 0,
-			values["armor_durability_profile"] = this->durability_profile; //durability_profile_type_t NOT NULL DEFAULT 'DURABLE',
+			values["armor_durability_profile"] = this->durability_profile = mods::yaml::to_string_from_durability_profile(this->durability_profile_enum); //durability_profile_type_t NOT NULL DEFAULT 'DURABLE',
+			values["armor_str_type"] = str_type;
+			values["armor_type"] = std::to_string(type);
+			values["armor_manufacturer"] = manufacturer;
+			values["armor_name"] = name;
+			values["armor_vnum"] = std::to_string(vnum);
+			values["armor_rarity"] = rarity_to_string(rarity);
+			values["armor_file"] = feed_file;
+			mods::util::maps::dump(values);
 			auto insert_transaction = txn();
-			sql_compositor comp("object_rifle",&insert_transaction);
+			sql_compositor comp("object_armor",&insert_transaction);
 			auto up_sql = comp
 				.insert()
 				.into("object_armor")
@@ -125,40 +128,114 @@ namespace mods::yaml {
 			}
 			return 0;
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting new object_rifle record: '" << e.what() << "'\n";
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting new object_armor record: '" << e.what() << "'\n";
 			return 0;
 		}
 	}
+	uint64_t gadget_description_t::flush_to_db(){
+		try{
+			d("[status] gadget flush_to_db.. flushing...\n");
+			std::map<std::string,std::string> values;
+			values["gadget_csv_capabilities"] = csv_capabilities;
+			values["gadget_csv_attach_to"] = csv_attach_to;
+			values["gadget_health_points"] = std::to_string(health_points);
+			values["gadget_electronic"] = std::to_string(electronic);
+			values["gadget_shield_points"] = std::to_string(shield_points);
+			values["gadget_durability_profile"] = this->durability_profile = mods::yaml::to_string_from_durability_profile(this->durability_profile_enum);
+			values["gadget_move_points"] = std::to_string(move_points);
+			values["gadget_damage_points"] = std::to_string(damage_points);
+			values["gadget_str_type"] = str_type;
+			values["gadget_type"] = std::to_string(type);
+			values["gadget_manufacturer"] = manufacturer;
+			values["gadget_name"] = name;
+			values["gadget_vnum"] = std::to_string(vnum);
+			values["gadget_rarity"] = rarity_to_string(rarity);
+			values["gadget_file"] = feed_file;
+			mods::util::maps::dump(values);
+			auto insert_transaction = txn();
+			sql_compositor comp("object_gadget",&insert_transaction);
+			auto up_sql = comp
+				.insert()
+				.into("object_gadget")
+				.values(values)
+				.returning("gadget_id")
+				.sql();
+			auto row = mods::pq::exec(insert_transaction,up_sql);
+			mods::pq::commit(insert_transaction);
+			for(auto && record : row){
+				this->id = record["gadget_id"].as<uint64_t>();
+				return this->id;
+			}
+			return 0;
+		}catch(std::exception& e){
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting new object_gadget record: '" << e.what() << "'\n";
+			return 0;
+		}
+	}
+
+	int16_t gadget_description_t::feed_from_po_record(mentoc_pqxx_result_t yaml_file){
+		try {
+			d("[gadget-desc ffpr] feeding str_type...");
+			auto type_string = yaml_file["str_type"].as<std::string>();
+			MENTOC_FEED_GADGET
+			d("[gadget-desc ffpr] feeding base members...");
+			MENTOC_FEED_BASE_MEMBERS
+			d("done\n");
+		}catch(std::exception &e){
+			std::cerr << "[exception] rifle feed: '" << e.what() << "'\n";
+			return -1;
+		}
+		return 0;
+	}
+
 
 	int16_t gadget_description_t::write_example_file(std::string_view file){
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
-			std::cerr << "can't open output yaml file, not open!\n";
 			return -1;
 		}
 		if(!out_file.good()){
-			std::cerr << "can't open output yaml file, not good!\n";
 			return -2;
 		}
 		MENTOC_EXAMPLE_GADGETS
-			MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_GADGET_MEMBERS_TUPLE)
-			base_items(&out_file,"XMC Trip Wire","TRIPWIRE");
+		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_GADGET_MEMBERS_TUPLE)
+		base_items(&out_file,"XMC Trip Wire","TRIPWIRE");
 		out_file.flush();
 		out_file.close();
 		return 0;
 	};
+	void gadget_description_t::fill_flags(obj_flag_data* o){
+		d("[gadget_description_t]::[fill_flags]*****\n");
+		auto * w = &o->wear_flags;
+		auto * tf = &o->type_flag;
+		(*tf) = ITEM_GADGET;
+		switch((mw_gadget)this->type){
+			case mw_gadget::GRAPPLING_HOOK:
+			case mw_gadget::BARBED_WIRE:
+			case mw_gadget::CAMERA:
+			case mw_gadget::THERMAL_CAMERA:
+			case mw_gadget::NIGHT_VISION_CAMERA:
+			case mw_gadget::MOTION_SENSOR:
+			case mw_gadget::DEPLOYABLE_SHIELD:
+			case mw_gadget::TRIPWIRE:
+			default:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+				break;
+		}
+		d("[gadget_description_t]::[fill_flags]*****\n");
+	}
 
 
 	int16_t attachment_description_t::write_example_file(std::string_view file){
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
-			std::cerr << "can't open output yaml file, not open!\n";
+			d("can't open output yaml file, not open!\n");
 			return -1;
 		}
 		if(!out_file.good()){
-			std::cerr << "can't open output yaml file, not good!\n";
+			d("can't open output yaml file, not good!\n");
 			return -2;
 		}
 		MENTOC_EXAMPLE_ATTACHMENTS
@@ -175,11 +252,11 @@ namespace mods::yaml {
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
-			std::cerr << "can't open output yaml file, not open!\n";
+			d("can't open output yaml file, not open!\n");
 			return -1;
 		}
 		if(!out_file.good()){
-			std::cerr << "can't open output yaml file, not good!\n";
+			d("can't open output yaml file, not good!\n");
 			return -2;
 		}
 		MENTOC_EXAMPLE_DRONES
@@ -189,14 +266,163 @@ namespace mods::yaml {
 		out_file.close();
 		return 0;
 	};
+	void rifle_description_t::fill_flags(obj_flag_data* o){
+		d("[rifle_description_t]::[fill_flags]*****\n");
+		auto * w = &o->wear_flags;
+		auto * tf = &o->type_flag;
+		o->ammo = this->ammo_max;
+		o->ammo_max = this->ammo_max;
+		o->weapon_flags = this->type;
+		o->clip_size =this->clip_size;
+		(*tf) = ITEM_RIFLE;
+		switch((mw_rifle)this->type){
+			case mw_rifle::PISTOL:
+			case mw_rifle::HANDGUN:
+			case mw_rifle::MACHINE_PISTOL:
+				(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD | ITEM_WEAR_SECONDARY;
+				break;
+			case mw_rifle::SHOTGUN:
+			case mw_rifle::ASSAULT_RIFLE:
+			case mw_rifle::SUB_MACHINE_GUN:
+			case mw_rifle::SNIPER:
+			case mw_rifle::LIGHT_MACHINE_GUN:
+				(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD;
+				break;
+			default: 
+				d("[fill_wear_flags][rifle][WARNING] defaulted..\n");
+				break;
+		}
+		d("[rifle_description_t]::[fill_flags]*****\n");
+	}
+	/** vim sorcery:
+
+		s/(\([A-Z_]\+\)) .*$/\t\tcase mw_gadget::\1:\r\t\t(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;\r\t\t\treturn;\r/g
+
+*/
+	void armor_description_t::fill_flags(obj_flag_data* o){
+		d("[armor_description_t]::[fill_flags]*****\n");
+		auto * w = &o->wear_flags;
+		auto * tf = &o->type_flag;
+		(*tf) = ITEM_ARMOR;
+		switch((mw_armor)this->type){
+			default:
+				d("[fill_wear_flags][armor][WARNING] defaulted..\n");
+				break;
+			case mw_armor::VEST:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_BODY | ITEM_WEAR_HOLD;
+				break;
+
+			case mw_armor::LEGS:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_LEGS;
+				break;
+
+			case mw_armor::GAUNTLETS:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_ARMS;
+				break;
+
+			case mw_armor::SHOULDER_PADS:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_TAKE;
+				break;
+
+			case mw_armor::HELMET:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_HEAD;
+				break;
+
+			case mw_armor::HAT:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_HEAD;
+				break;
+
+			case mw_armor::EYEWEAR:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_GOGGLES;
+				break;
+
+			case mw_armor::GOGGLES:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_GOGGLES;
+				break;
+
+			case mw_armor::BACKPACK:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_BACKPACK;
+				break;
+
+			case mw_armor::WAIST_PACK:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_WAIST;
+				break;
+
+			case mw_armor::VEST_PACK:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_VEST_PACK;
+				break;
+
+			case mw_armor::ELBOW_GUARDS:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_ELBOW;
+				break;
+
+			case mw_armor::GLOVES:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_HANDS;
+				break;
+
+			case mw_armor::SHIELD:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_SHIELD;
+				break;
+		}
+		d("[armor_description_t]::[fill_flags]*****\n");
+	}
+	void drone_description_t::fill_flags(obj_flag_data* o){
+		d("[drone_description_t]::[fill_flags]*****\n");
+		auto * w = &o->wear_flags;
+		auto * tf = &o->type_flag;
+		(*tf) = ITEM_DRONE;
+		switch((mw_drone)this->type){
+			default: 
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+				d("[fill_wear_flags][armor][WARNING] defaulted..\n");
+				break;
+		}
+		d("[drone_description_t]::[fill_flags]*****\n");
+	}
+	void consumable_description_t::fill_flags(obj_flag_data* o){
+		d("[consumable_description_t]::[fill_flags]*****\n");
+		auto * w = &o->wear_flags;
+		auto * tf = &o->type_flag;
+		(*tf) = ITEM_CONSUMABLE;
+		switch((mw_consumable)this->type){
+			default:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+				d("[fill_wear_flags][consumable][WARNING] defaulted..\n");
+				break;
+		}
+		d("[consumable_description_t]::[fill_flags]*****\n");
+	}
+	void trap_description_t::fill_flags(obj_flag_data* o){
+		d("[trap_description_t]::[fill_flags]*****\n");
+		auto * w = &o->wear_flags;
+		auto * tf = &o->type_flag;
+		(*tf) = ITEM_TRAP;
+		switch((mw_trap)this->type){
+			default:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+				d("[fill_wear_flags][trap][WARNING] defaulted..\n");
+				break;
+		}
+		d("[trap_description_t]::[fill_flags]*****\n");
+	}
+	void attachment_description_t::fill_flags(obj_flag_data* o){
+		d("[attachment_description_t]::[fill_flags]*****\n");
+		auto * w = &o->wear_flags;
+		auto * tf = &o->type_flag;
+		(*tf) = ITEM_ATTACHMENT;
+		switch((mw_attachment)this->type){
+			default:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+				d("[fill_wear_flags][attachment][WARNING] defaulted..\n");
+				break;
+		}
+		d("[attachment_description_t]::[fill_flags]*****\n");
+	}
 
 	uint64_t rifle_description_t::db_id(){
 		return this->id;
 	}
 	uint64_t armor_description_t::db_id(){
-		return this->id;
-	}
-	uint64_t explosive_description_t::db_id(){
 		return this->id;
 	}
 	uint64_t drone_description_t::db_id(){
@@ -216,14 +442,14 @@ namespace mods::yaml {
 	}
 	int16_t rifle_description_t::write_example_file(std::string_view file){
 		std::string file_name = current_working_dir() + "/" + file.data();
-		//std::cerr << "write_example_file: filename: '" << file_name.c_str() << "'\n";
+		//d("write_example_file: filename: '" << file_name.c_str() << "'\n");
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
-			std::cerr << "can't open output yaml file, not open!\n";
+			d("can't open output yaml file, not open!\n");
 			return -1;
 		}
 		if(!out_file.good()){
-			std::cerr << "can't open output yaml file, not good!\n";
+			d("can't open output yaml file, not good!\n");
 			return -2;
 		}
 		out_file << "# accuracy map\n" <<
@@ -245,14 +471,14 @@ namespace mods::yaml {
 		out_file << "\n]\n";
 		MENTOC_EXAMPLE_RIFLES
 			MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
-			base_items(&out_file,"A <adjectively> <horrific> PSG-1 Sniper Rifle","SNIPER");
+			base_items(&out_file,"A PSG-1 Sniper Rifle","SNIPER");
 		out_file.flush();
 		out_file.close();
 		return 0;
 	};
 	uint64_t rifle_description_t::flush_to_db(){
 		try{
-			std::cerr << "[status] rifle flush_to_db.. flushing...\n";
+			d("[status] rifle flush_to_db.. flushing...\n");
 			std::map<std::string,std::string> values;
 			std::string rifm = "rifle_accuracy_map_",
 				dam = "rifle_damage_map_";
@@ -306,15 +532,56 @@ namespace mods::yaml {
 	}
 
 
+	/** explosives */
+	/** explosives */
+	/** explosives */
+	void explosive_description_t::fill_flags(obj_flag_data* o){
+		d("[explosive_description_t]::[fill_flags]*****\n");
+		auto * w = &o->wear_flags;
+		auto * tf = &o->type_flag;
+		(*tf) = ITEM_EXPLOSIVE;
+		switch((mw_explosive)this->type){
+			default:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+				d("[fill_wear_flags][explosive][WARNING] defaulted..\n");
+				break;
+		}
+		d("[explosive_description_t]::[fill_flags]*****\n");
+	}
+	uint64_t explosive_description_t::db_id(){
+		return this->id;
+	}
+	int16_t explosive_description_t::feed(std::string_view in_file){
+		try {
+			std::string file = current_working_dir() + "/" + in_file.data();
+			feed_file = file;
+			d("[explosivedesc feed] feed_file: '" << feed_file << "'\n");
+			d("[explosivedesc file: '" << file << "'\n");
+			auto yaml_file = YAML::LoadFile(file);
+			d("[explosivedesc feed(in_file)] feeding str_type...");
+			auto type_string = yaml_file["str_type"].as<std::string>();
+			d("[explosivedesc feed(in_file)] type_string:'" << type_string << "' done\n");
+			d("[explosivedesc feed(in_file)] feeding all explosive members...");
+			MENTOC_FEED_EXPLOSIVE
+				d("[explosivedesc feed(in_file)] done\n");
+			d("[explosivedesc feed(in_file)] feeding base members...");
+			MENTOC_FEED_BASE_MEMBERS
+				d("[explosivedesc feed(in_file)] done\n");
+		}catch(std::exception &e){
+			std::cerr << "[exception] explosive feed: '" << e.what() << "'\n";
+			return -1;
+		}
+		return 0;
+	}
 	int16_t explosive_description_t::write_example_file(std::string_view file){
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
-			std::cerr << "can't open output yaml file, not open!\n";
+			d("can't open output yaml file, not open!\n");
 			return -1;
 		}
 		if(!out_file.good()){
-			std::cerr << "can't open output yaml file, not good!\n";
+			d("can't open output yaml file, not good!\n");
 			return -2;
 		}
 		MENTOC_EXAMPLE_EXPLOSIVES
@@ -323,18 +590,59 @@ namespace mods::yaml {
 		out_file.close();
 		return 0;
 	};
-
-
+	//
+	// vim-sorcery: :555,569s/values\["\([^ ]\+\).*/\t\tvalues["\1"] = std::to_string(this->\1);/
+	//
+	uint64_t explosive_description_t::flush_to_db(){
+		try{
+			std::map<std::string,std::string> values;
+			values["explosive_alternate_explosion_type"] = this->alternate_explosion_type;
+			values["explosive_chance_to_injure"] = std::to_string(this->chance_to_injure);
+			values["explosive_critical_chance"] = std::to_string(this->critical_chance);
+			values["explosive_critical_range"] = std::to_string(this->critical_range);
+			values["explosive_blast_radius"] = std::to_string(this->blast_radius);
+			values["explosive_damage_per_second"] = std::to_string(this->damage_per_second);
+			values["explosive_disorient_amount"] = std::to_string(this->disorient_amount);
+			values["explosive_loudness_type"] = this->loudness_type;
+			values["explosive_str_type"] = this->str_type;
+			values["explosive_type"] = std::to_string(this->type);
+			values["explosive_manufacturer"] = this->manufacturer;
+			values["explosive_name"] = this->name;
+			values["explosive_vnum"] = std::to_string(this->vnum);
+			values["explosive_rarity"] = rarity_to_string(this->rarity);
+			values["explosive_file"] = this->feed_file;
+			auto insert_transaction = txn();
+			sql_compositor comp("object_explosive",&insert_transaction);
+			auto up_sql = comp
+				.insert()
+				.into("object_explosive")
+				.values(values)
+				.returning("explosive_id")
+				.sql();
+			auto row = mods::pq::exec(insert_transaction,up_sql);
+			mods::pq::commit(insert_transaction);
+			for(auto && record : row){
+				return record["explosive_id"].as<uint64_t>();
+			}
+			return 0;
+		}catch(std::exception& e){
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting new object_explosive record: '" << e.what() << "'\n";
+			return 0;
+		}
+	}
+	/** explosives */
+	/** explosives */
+	/** explosives */
 
 	int16_t consumable_description_t::write_example_file(std::string_view file){
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
-			std::cerr << "can't open output yaml file, not open!\n";
+			d("can't open output yaml file, not open!\n");
 			return -1;
 		}
 		if(!out_file.good()){
-			std::cerr << "can't open output yaml file, not good!\n";
+			d("can't open output yaml file, not good!\n");
 			return -2;
 		}
 		MENTOC_EXAMPLE_CONSUMABLE
@@ -348,11 +656,11 @@ namespace mods::yaml {
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
-			std::cerr << "can't open output yaml file, not open!\n";
+			d("can't open output yaml file, not open!\n");
 			return -1;
 		}
 		if(!out_file.good()){
-			std::cerr << "can't open output yaml file, not good!\n";
+			d("can't open output yaml file, not good!\n");
 			return -2;
 		}
 		MENTOC_EXAMPLE_TRAP
@@ -368,32 +676,18 @@ namespace mods::yaml {
 	/* Step 7: Define the feed function:       */
 	/*******************************************/
 	int16_t gadget_description_t::feed(std::string_view in_file){
-		std::string file = current_working_dir() + "/" + in_file.data();
-		feed_file = file;
-		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
-		auto type_string = yaml_file["str_type"].as<std::string>();
-		MENTOC_FEED_GADGET
-			MENTOC_FEED_BASE_MEMBERS
-			return 0;
-	}
-	int16_t explosive_description_t::feed(std::string_view in_file){
 		try {
 			std::string file = current_working_dir() + "/" + in_file.data();
+			d("gadget-desc absolute path to feed file: '" << file << "'\n");
 			feed_file = file;
-			std::cerr << "[explosivedesc feed] feed_file: '" << feed_file << "'\n";
-			std::cerr << "[explosivedesc file: '" << file << "'\n";
 			auto yaml_file = YAML::LoadFile(file);
-			std::cerr << "[explosivedesc feed(in_file)] feeding str_type...";
-			auto type_string = yaml_file["str_type"].as<std::string>();
-			std::cerr << "[explosivedesc feed(in_file)] type_string:'" << type_string << "' done\n";
-			std::cerr << "[explosivedesc feed(in_file)] feeding all explosive members...";
-			MENTOC_FEED_EXPLOSIVE
-				std::cerr << "[explosivedesc feed(in_file)] done\n";
-			std::cerr << "[explosivedesc feed(in_file)] feeding base members...";
+			this->str_type = yaml_file["str_type"].as<std::string>();
+			MENTOC_FEED_GADGET
 			MENTOC_FEED_BASE_MEMBERS
-				std::cerr << "[explosivedesc feed(in_file)] done\n";
+			this->durability_profile_enum = mods::yaml::to_durability_profile(yaml_file["durability_profile"].as<std::string>());
+			this->durability_profile = mods::yaml::to_string_from_durability_profile(this->durability_profile_enum);
 		}catch(std::exception &e){
-			std::cerr << "[exception] explosive feed: '" << e.what() << "'\n";
+			std::cerr << "[exception] gadget feed: '" << e.what() << "'\n";
 			return -1;
 		}
 		return 0;
@@ -404,31 +698,31 @@ namespace mods::yaml {
 		try {
 			std::string file = current_working_dir() + "/" + in_file.data();
 			feed_file = file;
-			std::cerr << "[rifledesc feed] feed_file: '" << feed_file << "'\n";
-			std::cerr << "[rifledesc file: '" << file << "'\n";
+			d("[rifledesc feed] feed_file: '" << feed_file << "'\n");
+			d("[rifledesc file: '" << file << "'\n");
 			auto yaml_file = YAML::LoadFile(file);
-			std::cerr << "[rifledesc feed(in_file)] grabbing accuracy_map (rifle feed func)...\n";
+			d("[rifledesc feed(in_file)] grabbing accuracy_map (rifle feed func)...\n");
 			auto acmap = yaml_file["accuracy_map"].as<std::vector<float>>();
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
-				std::cerr << "[rifledesc feed(in_file)] [acmap]: " << acmap[i] << "\n";
+				d("[rifledesc feed(in_file)] [acmap]: " << acmap[i] << "\n");
 				accuracy_map[i] = acmap[i];
 			}
-			std::cerr << "[rifledesc feed(in_file)] feeding damage_map...\n";
+			d("[rifledesc feed(in_file)] feeding damage_map...\n");
 			auto dmap = yaml_file["damage_map"].as<std::vector<float>>();
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
-				std::cerr << "[rifledesc feed(in_file)] [acmap]: " << dmap[i] << "\n";
+				d("[rifledesc feed(in_file)] [acmap]: " << dmap[i] << "\n");
 				damage_map[i] = dmap[i];
 			}
-			std::cerr << "[rifledesc feed(in_file)] done feeding damage_map...\n";
-			std::cerr << "[rifledesc feed(in_file)] feeding str_type...";
+			d("[rifledesc feed(in_file)] done feeding damage_map...\n");
+			d("[rifledesc feed(in_file)] feeding str_type...");
 			auto type_string = yaml_file["str_type"].as<std::string>();
-			std::cerr << "[rifledesc feed(in_file)] done\n";
-			std::cerr << "[rifledesc feed(in_file)] feeding all rifle members...";
+			d("[rifledesc feed(in_file)] done\n");
+			d("[rifledesc feed(in_file)] feeding all rifle members...");
 			MENTOC_FEED_RIFLE
-				std::cerr << "[rifledesc feed(in_file)] done\n";
-			std::cerr << "[rifledesc feed(in_file)] feeding base members...";
+				d("[rifledesc feed(in_file)] done\n");
+			d("[rifledesc feed(in_file)] feeding base members...");
 			MENTOC_FEED_BASE_MEMBERS
-				std::cerr << "[rifledesc feed(in_file)] done\n";
+				d("[rifledesc feed(in_file)] done\n");
 		}catch(std::exception &e){
 			std::cerr << "[exception] rifle feed: '" << e.what() << "'\n";
 			return -1;
@@ -438,28 +732,20 @@ namespace mods::yaml {
 
 	int16_t rifle_description_t::feed_from_po_record(mentoc_pqxx_result_t yaml_file){
 		try {
-			std::cerr << "[rifledesc ffpr] grabbing accuracy_map (rifle feed func)...\n";
+			d("[rifledesc ffpr] grabbing accuracy_map (rifle feed func)...\n");
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
 				float item = yaml_file[std::string("accuracy_map_") + std::to_string(i)].as<float>();
-				std::cerr << "[rifledesc ffpr] [acmap]: " << item << "\n";
 				accuracy_map[i] = item;
 			}
-			std::cerr << "[rifledesc ffpr] feeding damage_map...\n";
+			d("[rifledesc ffpr] feeding damage_map...\n");
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
 				float item = yaml_file[std::string("damage_map_") + std::to_string(i)].as<float>();
-				std::cerr << "[rifledesc ffpr] [acmap]: " << item << "\n";
 				damage_map[i] = item;
 			}
-			std::cerr << "[rifledesc ffpr] done feeding damage_map...\n";
-			std::cerr << "[rifledesc ffpr] feeding str_type...";
 			auto type_string = yaml_file["str_type"].as<std::string>();
-			std::cerr << "[rifledesc ffpr] done\n";
-			std::cerr << "[rifledesc ffpr] feeding all rifle members...";
 			MENTOC_FEED_RIFLE
-				std::cerr << "[rifledesc ffpr] done\n";
-			std::cerr << "[rifledesc ffpr] feeding base members...";
 			MENTOC_FEED_BASE_MEMBERS
-				std::cerr << "done\n";
+			d("done\n");
 		}catch(std::exception &e){
 			std::cerr << "[exception] rifle feed: '" << e.what() << "'\n";
 			return -1;
@@ -493,7 +779,9 @@ namespace mods::yaml {
 		auto type_string = yaml_file["str_type"].as<std::string>();
 		MENTOC_FEED_ARMOR
 			MENTOC_FEED_BASE_MEMBERS
-			return 0;
+			this->durability_profile_enum = mods::yaml::to_durability_profile(yaml_file["durability_profile"].as<std::string>());
+		this->durability_profile = mods::yaml::to_string_from_durability_profile(this->durability_profile_enum);
+		return 0;
 	}
 
 	int16_t consumable_description_t::feed(std::string_view in_file){

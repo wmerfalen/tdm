@@ -26,6 +26,7 @@
 #include "mods/drone.hpp"
 #include "mods/util.hpp"
 #include "mods/world-configuration.hpp"
+#include "mods/object-utils.hpp"
 
 extern char_data* character_list;
 /* extern variables */
@@ -245,13 +246,31 @@ void show_obj_to_char(struct obj_data *obj, char_data *ch, int mode) {
 		return;
 	}
 
+	if(mods::object_utils::is_camera(obj) && obj->location_data() >= 16) {
+		player->send("A %s is installed on the %s wall.\r\n", obj->name.c_str(), mods::globals::dir_to_str(obj->location_data() - 16, true).c_str());
+		return;
+	}
+
+	if(mods::object_utils::is_claymore(obj) && obj->location_data() >= 16) {
+		player->send("A %s is installed at the foot of the %s entrance.\r\n", obj->name.c_str(), mods::globals::dir_to_str(obj->location_data() - 16, true).c_str());
+		return;
+	}
+
 	switch(mode) {
 		case SHOW_OBJ_LONG:
-			player->sendln(obj->description);
+			if(obj->description.length()){
+				player->sendln(obj->description);
+			}else{
+				player->sendln(obj->name);
+			}
 			break;
 
 		case SHOW_OBJ_SHORT:
-			player->sendln(obj->short_description);
+			if(obj->short_description.length()){
+				player->sendln(obj->short_description);
+			}else{
+				player->sendln(obj->name);
+			}
 			break;
 
 		case SHOW_OBJ_ACTION:
@@ -324,14 +343,9 @@ void list_obj_to_char(struct obj_data *list, char_data *ch, int mode, int show) 
 	bool found = FALSE;
 
 	for(i = list; i; i = i->next_content) {
-		if(i) {
-			for(unsigned o = 0; o < obj_list.size(); o++) {
-				if(obj_list[o].get() == i) {
-					break;
-				}
-			}
+		if(!i){
+			break;
 		}
-
 		if(CAN_SEE_OBJ(ch, i)) {
 			show_obj_to_char(i, ch, mode);
 			found = TRUE;
@@ -388,7 +402,7 @@ void diag_char_to_char(char_data *i, char_data *ch) {
 
 void look_at_char(char_data *i, char_data *ch) {
 	MENTOC_PREAMBLE();
-	int j, found;
+	int j, found = false;
 	struct obj_data *tmp_obj;
 
 	if(!ch->has_desc) {
@@ -405,15 +419,23 @@ void look_at_char(char_data *i, char_data *ch) {
 
 	found = FALSE;
 
-	for(j = 0; !found && j < NUM_WEARS; j++){
+	auto iptr = ptr(i);
 		act("\r\n$n is using:", FALSE, i, 0, ch, TO_VICT);
 		for(j = 0; j < NUM_WEARS; j++){
-			if(GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j))) {
+			auto obj = iptr->equipment(j);
+			if(obj){
 				player->send(wear_where[j]);
-				show_obj_to_char(GET_EQ(i, j), ch, SHOW_OBJ_SHORT);
+				//if(!CAN_SEE_OBJ(ch, obj.get())) {
+				//	player->sendln("<unknown>");
+				//} else {
+					show_obj_to_char(obj.get(), ch, SHOW_OBJ_SHORT);
+				//}
 			}
+			/*else{
+				player->sendln("<nothing>");
+			}
+			*/
 		}
-	}
 
 	if(ch != i && (IS_THIEF(ch) || GET_LEVEL(ch) >= LVL_IMMORT)) {
 		found = FALSE;
@@ -513,13 +535,13 @@ void list_one_char(char_data *i, char_data *ch) {
 
 void list_char_to_char(char_data *ch) {
 	MENTOC_PREAMBLE();
-	FOR_ROOM(player_ptr) {
-		std::cerr << "[debug]: list_char_to_char: " << player_ptr->name().c_str() << "\n";
+	int room = player->viewing_room();
+	for(auto & player_ptr : mods::globals::get_room_list(room)){
 		auto i = player_ptr->cd();
 		if(player_ptr->name().compare(ch->player.name.c_str())) {
 			if(CAN_SEE(ch, i)) {
 				list_one_char(i, ch);
-			} else if(IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch) &&
+			} else if(IS_DARK(room) && !CAN_SEE_IN_DARK(ch) &&
 			          AFF_FLAGGED(i, AFF_INFRAVISION)) {
 				player->sendln( "You see a pair of glowing red eyes looking your way.");
 			}
@@ -534,18 +556,21 @@ void do_auto_exits(char_data *ch) {
 
 	player->stc( "{gld}[ Exits: ");
 
+	char_data* dummy = ch;
+	auto cached_room = IN_ROOM(ch);
+	IN_ROOM(dummy) = player->viewing_room();
 	for(door = 0; door < NUM_OF_DIRS; door++) {
-		if(!EXIT(ch, door)) {
+		if(!EXIT(dummy, door)) {
 			continue;
 		}
 
-		if(EXIT(ch, door)->to_room == NOWHERE) {
+		if(EXIT(dummy, door)->to_room == NOWHERE) {
 			continue;
 		}
 
-		if(EXIT_FLAGGED(EXIT(ch, door), EX_CLOSED) &&
-		        /*! mods */!EXIT_FLAGGED(EXIT(ch,door),EX_BREACHED) &&
-		        /*! mods */!IS_SET(world[EXIT(ch,door)->to_room].dir_option[OPPOSITE_DIR(door)]->exit_info,EX_BREACHED)) {
+		if(EXIT_FLAGGED(EXIT(dummy, door), EX_CLOSED) &&
+		        /*! mods */!EXIT_FLAGGED(EXIT(dummy,door),EX_BREACHED) &&
+		        /*! mods */!IS_SET(world[EXIT(dummy,door)->to_room].dir_option[OPPOSITE_DIR(door)]->exit_info,EX_BREACHED)) {
 			continue;
 		}
 
@@ -554,6 +579,7 @@ void do_auto_exits(char_data *ch) {
 	}
 
 	player->send("%s]{/gld}\r\n", slen ? "" : "None!");
+	IN_ROOM(ch) = cached_room;
 }
 
 
@@ -603,13 +629,16 @@ void look_at_room(char_data *ch, int ignore_brief) {
 		return;
 	}
 
-	if(IN_ROOM(ch) < 0){
+	int room = player->viewing_room();
+
+	if(room < 0){
+		player->sendln("invalid room id");
 		return;
 	}
 
-	if(world.size() <= std::size_t(IN_ROOM(ch))){
+	if(world.size() <= std::size_t(room)){
 		d("look_at_room[world.size()<=IN_ROOM(ch)]->world.size():'" <<
-				world.size() << "'|IN_ROOM(ch):'" << IN_ROOM(ch) << "'");
+				world.size() << "'|IN_ROOM(ch):'" << room << "'");
 		return;
 	}
 
@@ -618,17 +647,17 @@ void look_at_room(char_data *ch, int ignore_brief) {
 	if(!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_ROOMFLAGS)) {
 		char buf[MAX_STRING_LENGTH];
 
-		sprintbit(ROOM_FLAGS(IN_ROOM(ch)), room_bits, buf, sizeof(buf));
-		player->send("[%5d] %s [ %s]", GET_ROOM_VNUM(IN_ROOM(ch)), world[IN_ROOM(ch)].name.c_str(), buf);
+		sprintbit(ROOM_FLAGS(room), room_bits, buf, sizeof(buf));
+		player->send("[%5d] %s [ %s]", GET_ROOM_VNUM(room), world[room].name.c_str(), buf);
 	} else {
-		player->stc_room(IN_ROOM(ch));
+		player->stc_room(room);
 	}
 
 	player->sendln(CCNRM(ch, C_NRM));
 
 	if((!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_BRIEF)) || ignore_brief ||
-			ROOM_FLAGGED(IN_ROOM(ch), ROOM_DEATH)) {
-		player->stc_room_desc(player->room());
+			ROOM_FLAGGED(room, ROOM_DEATH)) {
+		player->stc_room_desc(room);
 	}
 
 	/* autoexits */
@@ -640,7 +669,7 @@ void look_at_room(char_data *ch, int ignore_brief) {
 
 	/* now list characters & objects */
 	player->send(CCGRN(ch, C_NRM));
-	list_obj_to_char(world[IN_ROOM(ch)].contents, ch, SHOW_OBJ_LONG, FALSE);
+	list_obj_to_char(world[room].contents, ch, SHOW_OBJ_LONG, FALSE);
 	player->send(CCYEL(ch, C_NRM));
 	list_char_to_char(ch);
 	player->send(CCNRM(ch, C_NRM));
@@ -865,13 +894,15 @@ void look_at_target(char_data *ch, char *arg) {
 	d("carrying");
 
 	/* Does the argument match an extra desc in the char's inventory? */
-	for(obj = ch->carrying; obj && !found; obj = obj->next_content) {
-		if(CAN_SEE_OBJ(ch, obj)){
-			d("carrying enumeration exdesc");
-			if((desc = find_exdesc(arg, obj->ex_description)) != NULL && ++i == fnum) {
-				player->send( desc);
-				found = TRUE;
+	for(auto & item : player->real_carrying()){
+		if(item && CAN_SEE_OBJ(ch, item.get())){
+			d("carrying enumeration exdesc (new for auto loop)");
+			auto ex = find_exdesc(arg, item->ex_description);
+			if(!ex){
+				d("cont"); continue;
 			}
+			player->send(ex);
+			found = true;break;
 		}
 	}
 
@@ -909,7 +940,6 @@ void look_at_target(char_data *ch, char *arg) {
 
 ACMD(do_look) {
 	MENTOC_PREAMBLE();
-	d("do look");
 	int look_type;
 
 	if(GET_POS(ch) < POS_SLEEPING) {

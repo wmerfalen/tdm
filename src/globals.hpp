@@ -29,9 +29,11 @@
 #include "db.h"
 #include <pqxx/pqxx>
 #include <unordered_map>
+#include "mods/util.hpp"
 
 #define MENTOC_PREAMBLE() auto player = IS_NPC(ch) ? std::make_shared<mods::player>(ch) \
 																				: mods::globals::socket_map[ch->desc->descriptor];
+
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
 #define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \
 		strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(a,"down") == 0)
@@ -50,8 +52,9 @@
 #define LMDBCOMMIT() mods::db::lmdb_commit()
 #define LMDBRENEW() mods::db::lmdb_renew()
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
+/** vim-sorcery: :%s/std::cerr << \(.*\);/d(\1);/ */
 #ifdef __MENTOC_DEBUG__
-#define d(a) std::cerr << "[debug]: " << a << "\n" << std::flush;
+#define d(a) std::cerr << "[**DEBUG**]->[file:" << __FILE__ << "][line:" << __LINE__ << "][msg]: " << a << "\n" << std::flush;
 #else
 #define d(a) /** */
 #endif
@@ -157,6 +160,9 @@ namespace mods {
 		void pad_room(int room,char_data* ch,int door);
 		player_list_t& get_room_list(room_rnum);
 		player_list_t& get_room_list(player_ptr_t&);
+		std::string dir_to_str(int dir, bool adjective);
+		void queue_object_destruct(uuid_t obj_uuid, uint16_t seconds);
+		void destruct_object(uuid_t obj);
 	};
 };
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
@@ -169,4 +175,5 @@ obj_ptr_t optr_by_uuid(uuid_t);
 std::optional<obj_ptr_t> optr_opt(uuid_t);
 std::optional<player_ptr_t> ptr_opt(uuid_t);
 obj_ptr_t ptr_by_dbid(uint64_t);
+#define PARSE_ARGS() mods::util::arglist<std::vector<std::string>>(std::string(argument))
 #endif

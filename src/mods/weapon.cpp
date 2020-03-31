@@ -2,44 +2,80 @@
 #include "../../db.h"
 /** FIXME: need to assign vnum/ids to objects */
 namespace mods::weapon {
-	void feed_caps(obj_data_ptr_t& obj, mw_rifle type){
+	std::vector<cap_t> get_caps(mw_gadget type){
+		switch(type){
+			case mw_gadget::GRAPPLING_HOOK:
+				return { cap_t::SHOOT, cap_t::AIM, cap_t::GRAPPLE };
+
+			case mw_gadget::BARBED_WIRE:
+				return { cap_t::AFFECT_MOVE, cap_t::PREVENT_RUN };
+
+			case mw_gadget::CAMERA:
+				return { cap_t::REMOTELY_VIEW, cap_t::INSTALL, cap_t::SCAN  };
+
+			case mw_gadget::THERMAL_CAMERA:
+				return { cap_t::REMOTELY_VIEW, cap_t::INSTALL, cap_t::THERMAL_VISION, cap_t::SCAN  };
+
+			case mw_gadget::NIGHT_VISION_CAMERA:
+				return { cap_t::REMOTELY_VIEW, cap_t::INSTALL, cap_t::NIGHT_VISION, cap_t::SCAN  };
+
+			case mw_gadget::MOTION_SENSOR:
+				return { cap_t::INSTALL, cap_t::TRIGGER_ALERT, cap_t::NOTIFY_OWNER, cap_t::SENSE_MOTION };
+
+			case mw_gadget::TRIPWIRE:
+				return { cap_t::TRIGGER_EXPLOSION };
+
+			case mw_gadget::DEPLOYABLE_SHIELD:
+				return { cap_t::INSTALL, cap_t::ABSORB_DAMAGE };
+			default:
+				return {};
+		}
+	}
+	std::vector<cap_t> get_caps(mw_rifle type){
 		switch(type){
 			case mw_rifle::SNIPER:
-				feed_caps(obj, { cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT,
-				cap_t::SNIPE, cap_t::HAS_CLIP });
-				return;
+				return { cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT, cap_t::SNIPE, cap_t::HAS_CLIP };
 
 			case mw_rifle::SUB_MACHINE_GUN:
-				feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT, cap_t::HAS_CLIP });
-				return;
+				return { cap_t::CQC, cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT, cap_t::HAS_CLIP };
 
 			case mw_rifle::SHOTGUN:
-				feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE });
-				return;
+				return { cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE };
 
 			case mw_rifle::HANDGUN:
 			case mw_rifle::PISTOL:
-				feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE, cap_t::HAS_CLIP });
-				return;
+				return { cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE, cap_t::HAS_CLIP };
 
 			case mw_rifle::MACHINE_PISTOL:
-				feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE, cap_t::HAS_CLIP, cap_t::SPRAY_BULLETS });
-				return;
+				return { cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE, cap_t::HAS_CLIP, cap_t::SPRAY_BULLETS };
 
 			case mw_rifle::ASSAULT_RIFLE:
-				feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::SPRAY_BULLETS, cap_t::HIP_FIRE, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT, cap_t::HAS_CLIP });
-				return;
+				return { cap_t::CQC, cap_t::RELOAD, cap_t::SPRAY_BULLETS, cap_t::HIP_FIRE, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT, cap_t::HAS_CLIP };
 
 			default:
-				return;
+				return {};
 		}
 	}
-	void feed_caps(obj_data_ptr_t& obj, std::vector<cap_t> caps){
-		auto & obj_caps = obj->capabilities();
-		for(auto & value : caps){
-			obj_caps[value] = true;
-		}
+
+	std::vector<cap_t> get_caps(mw_explosive type){
+		return {};
 	}
+	std::vector<cap_t> get_caps(mw_armor type){
+		return {};
+	}
+	std::vector<cap_t> get_caps(mw_attachment type){
+		return {};
+	}
+	std::vector<cap_t> get_caps(mw_drone type){
+		return {};
+	}
+	std::vector<cap_t> get_caps(mw_consumable type){
+		return {};
+	}
+	std::vector<cap_t> get_caps(mw_trap type){
+		return {};
+	}
+
 	mw_rifle rifle(obj_data_ptr_t& object){
 		return static_cast<type::rifle>(object->rifle()->type);
 	}
@@ -177,7 +213,6 @@ namespace mods::weapon {
 		obj->action_description.assign("action desc");      /* What to write when used          */
 		obj->rifle()->type = mw_rifle::SNIPER;
 		obj->ex_description.emplace_back("sniper rifle psg1",obj->description.c_str());
-		feed_caps(obj, { cap_t::ZOOM, cap_t::RELOAD, cap_t::SNIPE, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT });
 
 		/** damage/hit roll modifications */
 		return std::move(obj);
@@ -198,24 +233,14 @@ namespace mods::weapon {
 		obj->action_description.assign("frag fragmentation grenade nade");
 		obj->explosive()->type = mw_explosive::FRAG_GRENADE;
 		obj->ex_description.emplace_back("frag grenade",obj->description.c_str());
-		feed_caps(obj, { cap_t::EXPLODE, cap_t::THROW });
 		return std::move(obj);
 	}
 
 	obj_data_ptr_t new_sensor_grenade_object(){
 		auto obj = base_explosive_object();
-		obj->explosive(mw_explosive::SENSOR_GRENADE);
-		/** [ APPEARS ]: when you 'look sensor' or 'examine sensor' @act.informative.cpp */
-		obj->name.assign("a sensor grenade");
-		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description.assign("A sensor grenade is lying here.");
-		/** [ APPEARS ]: when you type inv */
-		/** [ USED_WHEN ]: when you "hold sensor", it will say "You hold sensor grenade <short>" */
-		/**   |------------> obj->short_description.assign("sensor grenade <short>");        */
-		obj->short_description.assign("a X10 sensor grenade");
-		/** [ APPEARS ]: when you "examine sensor", it will say exactly this  */
-		obj->action_description.assign("sensor grenade nade");
+		obj->explosive("sensor_grenade.yml");
 		obj->explosive()->type = mw_explosive::SENSOR_GRENADE;
+		obj->explosive()->attributes->type = mw_explosive::SENSOR_GRENADE;
 		obj->explosive()->attributes = std::make_unique<mods::yaml::explosive_description_t>();
 		obj->explosive()->attributes->chance_to_injure = 0.0;
 		obj->explosive()->attributes->critical_chance = 0.0;
@@ -225,7 +250,6 @@ namespace mods::weapon {
 		obj->explosive()->attributes->disorient_amount = 0.0;
 		obj->explosive()->attributes->alternate_explosion_type = ALTEX_SCAN;
 		obj->ex_description.emplace_back("sensor grenade",obj->description.c_str());
-		feed_caps(obj, { cap_t::COUNTDOWN_EXPLOSION, cap_t::ALTERNATE_EXPLOSION, cap_t::SCAN, cap_t::THROW });
 		return std::move(obj);
 	}
 
@@ -241,7 +265,6 @@ namespace mods::weapon {
 		obj->action_description.assign("incendiary grenade <action>");      /* What to write when used          */
 		obj->explosive()->type = mw_explosive::INCENDIARY_GRENADE;
 		obj->ex_description.emplace_back("incendiary grenade",obj->description.c_str());
-		feed_caps(obj, { cap_t::COUNTDOWN_EXPLOSION, cap_t::BURN, cap_t::EXPLODE, cap_t::THROW });
 		return std::move(obj);
 	}
 
@@ -257,7 +280,6 @@ namespace mods::weapon {
 		obj->short_description.assign("emp e.m.p. electro magnetic pulse grenade <short>");
 		obj->action_description.assign("emp e.m.p. electro magnetic pulse grenade <action>");      /* What to write when used          */
 		obj->ex_description.emplace_back("emp grenade",obj->description.c_str());
-		feed_caps(obj, { cap_t::EXPLODE, cap_t::THROW });
 		return std::move(obj);
 	}
 
@@ -273,7 +295,6 @@ namespace mods::weapon {
 		obj->short_description.assign("Smoke grenade");
 		obj->action_description.assign("smoke grenade");      /* What to write when used          */
 		obj->ex_description.emplace_back("smoke grenade",obj->description.c_str());
-		feed_caps(obj, { cap_t::EXPLODE, cap_t::THROW });
 		return std::move(obj);
 	}
 
@@ -289,7 +310,6 @@ namespace mods::weapon {
 		/** [ APPEARS ]: when you type remove "flash" */
 		obj->short_description.assign("a flashbang grenade");
 		obj->action_description.assign("a flashbang grenade <action>");      /* What to write when used          */
-		feed_caps(obj, { cap_t::COUNTDOWN_EXPLOSION, cap_t::DISORIENT, cap_t::ALTERNATE_EXPLOSION, cap_t::EXPLODE, cap_t::THROW, cap_t::BLIND });
 		return std::move(obj);
 	}
 
@@ -312,7 +332,6 @@ namespace mods::weapon {
 		obj->short_description.assign("PSG-1 sniper rifle <short>");
 		obj->action_description.assign("action desc");      /* What to write when used          */
 		obj->ex_description.emplace_back("sniper",obj->description.c_str());
-		feed_caps(obj, { cap_t::HAS_CLIP, cap_t::ZOOM, cap_t::RELOAD, cap_t::SNIPE, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT });
 		return std::move(obj);
 	}
 
@@ -335,7 +354,6 @@ namespace mods::weapon {
 		obj->action_description.assign("Pistol action_description");      /* What to write when used          */
 		obj->ex_description.emplace_back("pistol",obj->description.c_str());
 		obj->rifle()->type = mw_rifle::PISTOL;
-		feed_caps(obj, { cap_t::HAS_CLIP, cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE});
 
 		return std::move(obj);
 	}
@@ -355,7 +373,6 @@ namespace mods::weapon {
 		obj->action_description.assign("deagle desert eagle pistol action_description");      /* What to write when used          */
 		obj->ex_description.emplace_back("deagle","A devastating Desert Eagle lays here");
 		obj->rifle()->type = mw_rifle::PISTOL;
-		feed_caps(obj, { cap_t::CQC, cap_t::RELOAD, cap_t::AIM, cap_t::SHOOT, cap_t::HIP_FIRE, cap_t::HAS_CLIP });
 		return std::move(obj);
 	}
 

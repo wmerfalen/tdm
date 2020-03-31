@@ -4,6 +4,7 @@
 namespace mods::overhead_map {
 	template <>
 		std::string generate(mods::player* out,const room_rnum& room_number){
+			if(out->camera_viewing()){ return ""; }
 			uint8_t player_width = out->get_overhead_map_width(), player_height = out->get_overhead_map_height();
 			if(width == 0 || height == 0){
 				player_width = mods::overhead_map::width;

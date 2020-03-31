@@ -16,6 +16,26 @@ namespace mods::yaml {
 #include "weapon.hpp"
 #include "aoe.hpp"
 #include <fstream>
+#include "weapon-types.hpp"
+using mw_rifle = mods::weapon::type::rifle;
+using mw_gadget = mods::weapon::type::gadget;
+using mw_explosive = mods::weapon::type::explosive;
+using mw_armor = mods::weapon::type::armor;
+using mw_attachment = mods::weapon::type::attachment;
+using mw_drone = mods::weapon::type::drone;
+using mw_consumable = mods::weapon::type::consumable;
+using mw_trap = mods::weapon::type::trap;
+namespace mods::weapon {
+	extern std::vector<cap_t> get_caps(mw_rifle);
+	extern std::vector<cap_t> get_caps(mw_gadget);
+	extern std::vector<cap_t> get_caps(mw_explosive);
+	extern std::vector<cap_t> get_caps(mw_armor);
+	extern std::vector<cap_t> get_caps(mw_attachment);
+	extern std::vector<cap_t> get_caps(mw_drone);
+	extern std::vector<cap_t> get_caps(mw_consumable);
+	extern std::vector<cap_t> get_caps(mw_trap);
+};
+struct obj_flag_data;
 
 #define MENTOC_BASE_MEMBERS \
 		std::string description;\
@@ -34,6 +54,7 @@ namespace mods::yaml {
 			manufacturer("ACME Industries"),\
 			name(NAME), type(0), str_type(NAME),\
 			vnum(0),rarity(mods::rarity::DEFAULT),\
+			feed_file(std::string(NAME) + ".yml"),\
 			id(0)
 
 enum alternate_explosion_t {
@@ -42,6 +63,43 @@ enum alternate_explosion_t {
 };
 
 namespace mods::yaml {
+enum durability_profile_type_t {
+	FLIMSY,
+	DECENT,
+	DURABLE,
+	HARDENED,
+	INDUSTRIAL_STRENGTH,
+	GODLIKE,
+	INDESTRUCTIBLE
+};
+static inline std::string to_string_from_durability_profile(durability_profile_type_t dp){
+#define MENTOC_DP(a) case a: return #a
+
+	switch(dp){
+		MENTOC_DP(FLIMSY);
+		MENTOC_DP(DECENT);
+		MENTOC_DP(DURABLE);
+		MENTOC_DP(HARDENED);
+		MENTOC_DP(INDUSTRIAL_STRENGTH);
+		MENTOC_DP(GODLIKE);
+		MENTOC_DP(INDESTRUCTIBLE);
+		default: return "<unknown>";
+	}
+#undef MENTOC_DP
+}
+
+static inline durability_profile_type_t to_durability_profile(std::string_view dp){
+#define MENTOC_DP(_XDP_) if(dp.compare(#_XDP_) ==0){ return durability_profile_type_t::_XDP_; }
+		MENTOC_DP(FLIMSY);
+		MENTOC_DP(DECENT);
+		MENTOC_DP(DURABLE);
+		MENTOC_DP(HARDENED);
+		MENTOC_DP(INDUSTRIAL_STRENGTH);
+		MENTOC_DP(GODLIKE);
+		MENTOC_DP(INDESTRUCTIBLE);
+		return durability_profile_type_t::FLIMSY;
+#undef MENTOC_DP
+}
 	using percent_t = float;
 	using rooms_t = int;
 	using static_amount_t = int;
@@ -64,6 +122,9 @@ namespace mods::yaml {
 	using aoe_type_t = mods::aoe::types_t;
 	constexpr static std::size_t MAX_AOE_TRIGGERS = 6;
 	struct rifle_description_t : public yaml_description_t {
+		using mw_type = mw_rifle;
+		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_rifle)this->type); }
+		void fill_flags(obj_flag_data*);
 		virtual ~rifle_description_t() = default;
 		rifle_description_t() : 
 			ammo_max(0),
@@ -98,6 +159,9 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
 	};
 
 	struct explosive_description_t : public yaml_description_t {
+		using mw_type = mw_explosive;
+		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_explosive)this->type); }
+		void fill_flags(obj_flag_data*);
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~explosive_description_t() = default;
@@ -113,6 +177,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
 			std::fill(aoe_triggers.begin(),aoe_triggers.end(),0);
 		}
 		uint64_t db_id();
+		uint64_t flush_to_db();
 		int damage;
 		std::array<aoe_type_t,MAX_AOE_TRIGGERS> aoe_triggers;
 
@@ -122,6 +187,9 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_EXPLOSIVE_MEMBERS_TUPLE)
 	};
 
 	struct drone_description_t : public yaml_description_t {
+		using mw_type = mw_drone;
+		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_drone)this->type); }
+		void fill_flags(obj_flag_data*);
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~drone_description_t() = default;
@@ -139,6 +207,9 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_DRONE_MEMBERS_TUPLE)
 	};
 
 	struct gadget_description_t : public yaml_description_t {
+		using mw_type = mw_gadget;
+		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_gadget)this->type); }
+		void fill_flags(obj_flag_data*);
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~gadget_description_t() = default;
@@ -146,8 +217,10 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_DRONE_MEMBERS_TUPLE)
 			MENTOC_BASE_MEMBERS_SET("gadget")
 		{
 		}
+		virtual int16_t feed_from_po_record(mentoc_pqxx_result_t);
 		uint64_t db_id();
-
+		uint64_t flush_to_db();
+		durability_profile_type_t durability_profile_enum;
 MENTOC_MEMBER_VARS_FOR(MENTOC_GADGET_MEMBERS_TUPLE)
 
 		MENTOC_BASE_MEMBERS
@@ -155,6 +228,9 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_GADGET_MEMBERS_TUPLE)
 
 
 	struct attachment_description_t : public yaml_description_t {
+		using mw_type = mw_attachment;
+		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_attachment)this->type); }
+		void fill_flags(obj_flag_data*);
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~attachment_description_t() = default;
@@ -171,6 +247,9 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
 
 
 	struct armor_description_t : public yaml_description_t {
+		using mw_type = mw_armor;
+		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_armor)this->type); }
+		void fill_flags(obj_flag_data*);
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~armor_description_t() = default;
@@ -179,6 +258,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
 		{
 		}
 		uint64_t db_id();
+		durability_profile_type_t durability_profile_enum;
 MENTOC_MEMBER_VARS_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
 
 		MENTOC_BASE_MEMBERS
@@ -186,6 +266,9 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
 	};
 
 	struct consumable_description_t : public yaml_description_t {
+		using mw_type = mw_consumable;
+		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_consumable)this->type); }
+		void fill_flags(obj_flag_data*);
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~consumable_description_t() = default;
@@ -203,6 +286,9 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_CONSUMABLE_MEMBERS_TUPLE)
 	};
 
 	struct trap_description_t : public yaml_description_t {
+		using mw_type = mw_trap;
+		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_trap)this->type); }
+		void fill_flags(obj_flag_data*);
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~trap_description_t() = default;

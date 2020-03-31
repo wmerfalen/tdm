@@ -49,6 +49,7 @@ using vpd = mods::scan::vec_player_data;
  */
 ACMD(do_throw) {
 	MENTOC_PREAMBLE();
+	auto vec_args = PARSE_ARGS();
 
 	if(!player->has_inventory_capability(mods::weapon::mask::grenade)) {
 		player->stc("You must be holding a grenade to do that!");
@@ -90,6 +91,8 @@ ACMD(do_throw) {
 		player->sendln("You're not holding anything!");
 		return;
 	}
+	std::cerr << "[throw_object]->'" << held_object->name.c_str() << "'\n";
+	return;//FIXME
 	mods::projectile::throw_object(player, dir, cnt, held_object, "lob");
 }
 
@@ -222,13 +225,6 @@ ACMD(do_snipe) {
 			/* HOWTO: adjust ammo of player's current weapon */
 			player->ammo_adjustment(-1);
 			player->weapon_cooldown_start(3,0);
-
-			//mods::globals::room_event(ch,mods::ai_state::AI_WITNESS_ATTACK);
-			/*
-			 * HOWTO: defer an action N seconds in the future
-			 mods::globals::defer_queue->push_secs(3,[&](){
-			 });
-			 */
 			return;
 		} else {
 			player->psendln("You can't find your target!");
@@ -310,7 +306,7 @@ ACMD(do_breach) {
 
 	auto room = IN_ROOM(ch);
 
-	mods::globals::defer_queue->push_secs(3,[room,dir,door]() {
+	mods::globals::defer_queue->push(18,[room,dir,door]() {
 			mods::globals::room_event(room,dir);
 			SET_BIT(world[room].dir_option[door]->exit_info,EX_BREACHED);
 
@@ -376,7 +372,7 @@ ACMD(do_thermite) {
 
 	auto room = IN_ROOM(ch);
 
-	mods::globals::defer_queue->push_secs(3,[room,dir,door]() {
+	mods::globals::defer_queue->push(18,[room,dir,door]() {
 			mods::globals::room_event(room,dir);
 			SET_BIT(world[room].dir_option[door]->exit_info,EX_BREACHED);
 

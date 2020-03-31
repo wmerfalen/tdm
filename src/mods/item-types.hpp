@@ -85,14 +85,14 @@
 
 
 #define MENTOC_EXPLOSIVE_MEMBERS_TUPLE ( \
-(int,alternate_explosion_type,"#int, enum 0 = NONE, 1 = SCAN",0), \
-(percent_t,chance_to_injure,"#float, percent",3.0), \
-(percent_t,critical_chance,"#float, percent",14.3), \
-(rooms_t,critical_range,"#int, rooms",2), \
-(rooms_t,blast_radius,"#int, rooms",2), \
-(static_amount_t,damage_per_second,"#int, static base damage done",44.0), \
-(static_amount_t,disorient_amount,"#int, percent",13.0), \
-(int,loudness_type,"#int, 0=SILENT,1=SUSPICIOUS,2=LOUD,3=DEAFENING,4=WORLD_ENDING",2) \
+(std::string,alternate_explosion_type,"#int, ENUM  NONE,SCAN","'NONE'"), \
+(float,chance_to_injure,"#float, percent",3.0), \
+(float,critical_chance,"#float, percent",14.3), \
+(int,critical_range,"#int, rooms",2), \
+(int,blast_radius,"#int, rooms",2), \
+(float,damage_per_second,"#float, static base damage done",44.0), \
+(float,disorient_amount,"#float, percent",13.0), \
+(std::string,loudness_type,"#std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING","'LOUD'") \
 )
 
 #define MENTOC_DRONE_TYPES_SEQUENCE (GROUND_DRONE) \
@@ -117,13 +117,21 @@
 #define MENTOC_GADGET_TYPES_SEQUENCE (GRAPPLING_HOOK) \
 (BARBED_WIRE) \
 (CAMERA) \
+(THERMAL_CAMERA) \
+(NIGHT_VISION_CAMERA) \
 (MOTION_SENSOR) \
 (DEPLOYABLE_SHIELD) \
 (TRIPWIRE) 
 
 #define MENTOC_GADGET_MEMBERS_TUPLE ( \
 (std::string,csv_capabilities,"#csv, strings free-form TBA","'TBA'"), \
-(std::string,csv_attach_to,"#csv, strings attach to various kinds of items TBA","'TBA'") \
+(std::string,csv_attach_to,"#csv, strings attach to various kinds of items TBA","'TBA'"), \
+(int,electronic,"#int, 1 or zero. If item is electronic","0"), \
+(int,health_points,"#int, health points before it dies. -1 is invincible","100"), \
+(int,shield_points,"#int, additional points to decrement before decrementing health points. -1 is invincible","1"), \
+(std::string,durability_profile,"#string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUSTRIAL_STRENGTH,GODLIKE,INDESTRUCTIBLE","'DECENT'"), \
+(int,move_points,"#int, number of move points required to circumvent gadget","0"), \
+(int,damage_points,"#int, number of damage points acrued when tripped/touched","0") \
 )
 
 #define MENTOC_ATTACHMENT_TYPES_SEQUENCE (SIGHT) \
@@ -170,7 +178,7 @@
 (percent_t,balistic_resistance_percent,"#percent",15.0), \
 (int,speed_profile,"#int, ENUM 0=UNHINDERED,1=FAST,2=HINDERED,3=SLOW,4=SLUGGISH",0), \
 (static_amount_t,offensive_damage_amount,"#int, static amount of offensive damage",0), \
-(int,durability_profile,"#int, ENUM 0=FLIMSY,1=DECENT,2=DURABLE,3=HARDENED,4=INDUSTRIAL_STRENGTH,5=GODLIKE,6=INDESTRUCTIBLE",1), \
+(std::string,durability_profile,"#string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUSTRIAL_STRENGTH,GODLIKE,INDESTRUCTIBLE","'DECENT'"), \
 (int,repair_cost_profile,"#int, ENUM 0=CHEAP,1=DECENT,2=COSTLY,3=VERY_EXPENSIVE",1) \
 )
 
@@ -202,16 +210,6 @@
 )
 
 
-#define MENTOC_EXPLOSIVE_MEMBERS_TUPLE ( \
-(int,alternate_explosion_type,"#int, enum 0 = NONE, 1 = SCAN",0), \
-(percent_t,chance_to_injure,"#float, percent",3.0), \
-(percent_t,critical_chance,"#float, percent",14.3), \
-(rooms_t,critical_range,"#int, rooms",2), \
-(rooms_t,blast_radius,"#int, rooms",2), \
-(static_amount_t,damage_per_second,"#int, static base damage done",44.0), \
-(static_amount_t,disorient_amount,"#int, percent",13.0), \
-(int,loudness_type,"#int, 0=SILENT,1=SUSPICIOUS,2=LOUD,3=DEAFENING,4=WORLD_ENDING",2) \
-)
 
 
 #define MENTOC_ITEM_TYPE_LIST_SEQUENCE (RIFLE) \
@@ -278,8 +276,10 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 /** FEED/EXAMPLE FILE MACROS                                              */
 /**************************************************************************/
 #define MENTOC_FEED_TYPE_IMPL(r,data,TYPE) \
-		if(type_string.compare(BOOST_PP_STRINGIZE(TYPE)) == 0){\
-			type = data::TYPE;\
+		if(this->str_type.compare(BOOST_PP_STRINGIZE(TYPE)) == 0){\
+			d("Found type: " << BOOST_PP_STRINGIZE(TYPE) << "\n");\
+			this->type = mw_type::TYPE;\
+			d("actual type: '" << this->type << "'");\
 		}
 
 #define MENTOC_EXAMPLE_IMPL(r,data,TYPE) \
@@ -290,7 +290,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 					BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE)        \
 					) << ": " <<                                       \
 						BOOST_PP_TUPLE_ELEM(4,3,MEMBER_TUPLE)      \
-					  <<                                               \
+					  << " "  <<                                       \
 						BOOST_PP_TUPLE_ELEM(4,2,MEMBER_TUPLE)      \
 						<< "\n";
 
@@ -400,6 +400,66 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 /* Step 4: Add a new FEED_* and EXAMPLE_* constants      */
 /*********************************************************/
 
+
+#ifndef __MENTOC_ITEM_CONSTANTS_DEFINED__
+#define ITEM_RIFLE             1
+#define ITEM_EXPLOSIVE         2
+#define ITEM_GADGET            3
+#define ITEM_DRONE             4
+#define ITEM_WEAPON            5		/* Item is a weapon		*/
+#define ITEM_WEAPON_ATTACHMENT 6 /* item is a weapon attachment */
+#define ITEM_ATTACHMENT        6
+#define ITEM_ARMOR             7
+#define ITEM_CONSUMABLE        8
+#define ITEM_TRAP              9
+#endif
+namespace mods::weapon::type {
+	enum rifle {
+		RIFLE_NONE = 0,
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_RIFLE_TYPES_SEQUENCE)
+	};
+	enum explosive {
+		EXPLOSIVE_NONE = 0,
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_EXPLOSIVE_TYPES_SEQUENCE)
+	};
+	enum drone {
+		DRONE_NONE = 0,
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_DRONE_TYPES_SEQUENCE)
+	};
+	enum gadget {
+		GADGET_NONE = 0,
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_GADGET_TYPES_SEQUENCE)
+	};
+
+	enum attachment {
+		ATTACHMENT_NONE = 0,
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ATTACHMENT_TYPES_SEQUENCE)
+	};
+
+	enum armor {
+		ARMOR_NONE = 0,
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ARMOR_TYPES_SEQUENCE)
+	};
+
+	enum consumable {
+		CONSUMABLE_NONE = 0,
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_CONSUMABLE_TYPES_SEQUENCE)
+	};
+
+	enum trap {
+		TRAP_NONE = 0,
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_TRAP_TYPES_SEQUENCE)
+	};
+
+
+#define MENTOC_TYPE_LIST_IMPL(r,data,ITEM_TYPE) \
+	ITEM_TYPE = BOOST_PP_CAT(ITEM_,ITEM_TYPE) BOOST_PP_COMMA()
+
+	enum type_list {
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_TYPE_LIST_IMPL,~,MENTOC_ITEM_TYPE_LIST_SEQUENCE)
+	};
+
+};
 
 
 #endif

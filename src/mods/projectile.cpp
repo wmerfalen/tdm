@@ -446,8 +446,9 @@ namespace mods {
 			std::string str_dir = mods::projectile::todirstr(static_cast<const char*>(&str_dir_buffer[0]),1,0);
 			std::string object_name = "";
 			int ticks = 0;
-			auto type = object->explosive()->type;
-			switch(type) {
+			assert(object->has_explosive());
+			mw_explosive type = object->explosive()->type;
+			switch((mw_explosive)type) {
 				default:
 				case mw_explosive::REMOTE_EXPLOSIVE:
 				case mw_explosive::REMOTE_CHEMICAL:

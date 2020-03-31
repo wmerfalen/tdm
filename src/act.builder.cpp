@@ -430,6 +430,36 @@ std::shared_ptr<obj_data> BOOST_PP_CAT(TYPE,_object)(std::string_view file){\
 BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_FUNC, ~, MENTOC_ITEM_TYPES_SEQ)
 #undef MENTOC_OBJ_FUNC
 
+ACMD(do_flush_holding){
+	MENTOC_PREAMBLE();
+	player->sendln("Looking at your carrying list...");
+	if(auto obj = player->equipment(WEAR_HOLD)){
+		player->sendln("Found an item");
+		if(obj->has_rifle()){
+			auto i = obj->rifle()->attributes->flush_to_db();
+			obj->set_db_id(i);
+			player->sendln(std::string("Flushed rifle object to db with status: ") + std::to_string(i));
+			return;
+		}
+		if(obj->has_gadget()){
+			auto i = obj->gadget()->attributes->flush_to_db();
+			obj->set_db_id(i);
+			player->sendln(std::string("Flushed gadget object to db with status: ") + std::to_string(i));
+			return;
+		}
+		if(obj->has_armor()){
+			auto i = obj->armor()->attributes->flush_to_db();
+			obj->set_db_id(i);
+			player->sendln(std::string("Flushed armor object to db with status: ") + std::to_string(i));
+			return;
+		}
+		player->sendln("It doesn't look like the item you're holding can be flushed to the db");
+		return;
+	}
+	player->sendln("You don't seem to be holding anything");
+}
+
+
 /**
  * yaml_import <rifle> <file>		#imports said file in current dir
  * yaml_import ls 			#lists files in current dir
@@ -448,13 +478,23 @@ ACMD(do_yaml_import){
 
 	if(vec_args.size() == 2){
 
-#define MENTOC_F_IMPORT(CLASS_TYPE)\
+#define _LAME_MENTOC_F_IMPORT(CLASS_TYPE)\
 		if(std::string(vec_args[0]).compare( #CLASS_TYPE ) == 0){\
 			mods::yaml::CLASS_TYPE ## _description_t CLASS_TYPE;\
 			d(vec_args[1]); player->sendln("importing..."); player->sendln(vec_args[1]);\
 			auto obj = CLASS_TYPE ## _object(vec_args[1]);\
 			obj_to_room(obj.get(),IN_ROOM(player->cd()));\
 			player->sendln("done importing...");\
+			return;\
+		}
+
+#define MENTOC_F_IMPORT(CLASS_TYPE)\
+		if(std::string(vec_args[0]).compare(#CLASS_TYPE) == 0){\
+			auto obj = blank_object();\
+			obj->CLASS_TYPE(vec_args[1]);\
+			obj->obj_flags.wear_flags |= WEAR_HOLD;\
+			obj_to_room(obj.get(),player->room());\
+			player->sendln(std::string("Imported: ") + vec_args[1] + std::string(" of type:") + vec_args[0]);\
 			return;\
 		}
 		MENTOC_F_IMPORT(rifle);
@@ -470,6 +510,30 @@ ACMD(do_yaml_import){
 
 }
 
+ACMD(do_hold_anything){
+	MENTOC_PREAMBLE();
+	auto vec_args = PARSE_ARGS();
+	if(!player->get_imp_mode()){
+		player->sendln(HUH);
+		return;
+	}
+
+	if(vec_args.size() == 0){
+		player->sendln("Please pass in 'on' or 'off'");
+		return;
+	}
+	if(vec_args[0].compare("on") == 0){
+		player->set_misc_pref(player->mpref::HOLD_ANYTHING, true);
+		player->psendln(IHBD);
+		return;
+	}
+	if(vec_args[0].compare("off") == 0){
+		player->set_misc_pref(player->mpref::HOLD_ANYTHING, false);
+		player->psendln(IHBD);
+		return;
+	}
+	player->sendln(HUH);
+}
 ACMD(do_yaml_example){
 	MENTOC_PREAMBLE();
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
@@ -519,6 +583,25 @@ ACMD(do_histfile){
 		player->stop_histfile();
 		return;
 	}
+}
+
+ACMD(do_uuid){
+	MENTOC_PREAMBLE();
+	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
+	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
+		*player << "usage: \r\n" <<
+			" {red}uuid{/red} {grn}camera{/grn}\r\n" <<
+			"  |--> will print the uuid of the camera that you're holding.\r\n" <<
+			"\r\n"
+			;
+		return;
+	}
+	auto obj = mods::util::parse_object_vec(player,vec_args);
+	if(!obj){
+		player->sendln("Couldn't find the object you're referring to.");
+		return;
+	}
+	player->stc(std::to_string(obj->uuid));
 }
 
 ACMD(do_pmw_obj_from_room){

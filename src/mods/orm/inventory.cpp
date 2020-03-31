@@ -11,37 +11,37 @@ extern obj_ptr_t blank_object();
 extern void obj_ptr_to_char(obj_ptr_t  object, player_ptr_t player);
 namespace mods::orm::inventory {
 
-	obj_data_ptr_t rifle_fetch(int id){
-		auto obj = blank_object();
+	obj_data_ptr_t dynamic_fetch(int id, std::string_view in_type){
+#ifdef __MENTOC_FLUSH_PLAIN_OBJECTS__
+#else
+		if(in_type.compare("object") == 0){ return nullptr; }
+#endif
 		try{
 			auto select_transaction = txn();
-			sql_compositor comp("object_rifle",&select_transaction);
-			auto player_sql = comp.select("rifle_file")
-				.from("object_rifle")
-				.where("rifle_id","=",std::to_string(id))
+			std::string table = "object_";
+			table += in_type.data();
+			std::string file_field = in_type.data();
+			file_field += "_file";
+			std::string id_field = in_type.data();
+			id_field += "_id";
+			sql_compositor comp(in_type,&select_transaction);
+			auto player_sql = comp.select(file_field)
+				.from(table)
+				.where(id_field,"=",std::to_string(id))
 				.sql();
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
-				for(auto && row : player_record){
-					auto file = row["rifle_file"].as<std::string>();
-					obj->rifle(file);
-					obj->obj_flags.ammo = obj->rifle()->attributes->ammo_max;
-					obj->obj_flags.ammo_max = obj->rifle()->attributes->ammo_max;
-					obj->obj_flags.weapon_flags = obj->rifle()->type;
-					mods::weapon::feed_caps(obj, obj->rifle()->type);
-					obj->obj_flags.clip_size =obj->rifle()->attributes->clip_size;
-					obj->name.assign(obj->rifle()->attributes->name);
-					obj->description.assign(obj->rifle()->attributes->description);
-					obj->short_description.assign(obj->rifle()->attributes->short_description);
-					obj->action_description.assign(obj->rifle()->attributes->action_description);
-					obj->ex_description.emplace_back(obj->name.c_str(),obj->description.c_str());
-					obj->extended_item_vnum = obj->rifle()->attributes->vnum;
-					break;
-				}
+			for(auto && row : player_record){
+				auto obj = blank_object();
+				obj->feed(in_type,std::string_view(row[file_field].c_str()));
 				mods::pq::commit(select_transaction);
+				return std::move(obj);
+				break;
+			}
+			mods::pq::commit(select_transaction);
 		}catch(std::exception& e){
 			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character preferences by pkid: '" << e.what() << "'\n";
 		}
-		return std::move(obj);
+		return nullptr;
 	}
 	namespace sql {
 		int16_t feed_player(player_ptr_t & player){
@@ -70,28 +70,26 @@ namespace mods::orm::inventory {
 					mods::pq::commit(select_transaction);
 					for(auto && row : player_record){
 						obj = nullptr;
-						//'rifle','explosive','attachment','gadget','drone', 'armor', 'consumable','object';
-						if(row["po_type"].as<std::string>().compare("rifle") == 0){
-							obj = rifle_fetch(row["po_type_id"].as<int>());
-						} else {
-							log("Warning: unhandled po_type from player_object table: '%s'... skipping...",row["po_type"].c_str());
-							continue;
-						}
+#ifdef __MENTOC_FLUSH_PLAIN_OBJECTS__
+#else
+						if(row["po_type"].as<std::string>().compare("object") == 0){ continue; }
+#endif
+						obj = dynamic_fetch(row["po_type_id"].as<int>(), row["po_type"].as<std::string>());
 						if(!obj){
 							log("Failed to load user object: player[%s] po_id[%d]", player->name().c_str(),row["po_id"].as<int>());
 							continue;
 						}
 						if(row["po_in_inventory"].as<int>()){
-							player->carry(obj);
+							player->carry(std::move(obj));
 							continue;
 						}
 						if(row["po_wear_position"].as<int>()){
-							player->equip(obj,row["po_wear_position"].as<int>());
+							player->equip(std::move(obj),row["po_wear_position"].as<int>());
 							continue;
 						}
 					}
 					//log("SYSERR: couldn't grab player's pkid: '%s'",player->name().c_str());
-					std::cerr << "[sql][feed_player] size: " << player_record.size() << "\n";
+					d("[sql][feed_player] size: " << player_record.size() << "\n");
 					return player_record.size();
 				}catch(std::exception& e){
 					std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
@@ -99,29 +97,6 @@ namespace mods::orm::inventory {
 				}
 			}
 		}//end feed_player
-
-		void blank_wear_row(player_ptr_t & player, std::size_t i){
-			std::map<std::string,std::string> mapped_values;
-			mapped_values["po_player_id"] = std::to_string(player->db_id());
-			mapped_values["po_type"] = "object";
-			mapped_values["po_type_id"] = mapped_values["po_type_vnum"] = "0";
-			mapped_values["po_type_load"] = "id";
-			mapped_values["po_wear_position"] = std::to_string(i);
-			mapped_values["po_in_inventory"] = "0";
-			try{
-				auto insert_transaction = txn();
-				sql_compositor comp("player_object",&insert_transaction);
-				auto up_sql = comp
-					.insert()
-					.into("player_object")
-					.values(mapped_values)
-					.sql();
-				mods::pq::exec(insert_transaction,up_sql);
-				mods::pq::commit(insert_transaction);
-			}catch(std::exception& e){
-				std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting player_object row: '" << e.what() << "'\n";
-			}
-		}
 
 		int16_t flush_player(player_ptr_t & player){
 			if(player->db_id() == 0){
@@ -151,11 +126,14 @@ namespace mods::orm::inventory {
 				d("Grabbing equipment");
 				auto eq = player->equipment(i);
 				if(!eq){
-					d("No equipment for position: " << i);
-					blank_wear_row(player, i);
 					continue;
 				}
-				d("Found equipment at position: " << i);
+#ifdef __MENTOC_FLUSH_PLAIN_OBJECTS__
+#else
+				if(eq->str_type.compare("object") == 0){
+					continue;
+				}
+#endif
 				//---+-----------------------------+-----------+----------+----------------------------------------------
 				// po_id            | integer                     |           | not null | nextval('player_object_po_id_seq'::regclass)
 				// po_player_id     | integer                     |           | not null |
@@ -194,7 +172,6 @@ namespace mods::orm::inventory {
 					mods::pq::exec(insert_transaction,up_sql);
 					mods::pq::commit(insert_transaction);
 				}catch(std::exception& e){
-					d("ERROR - pq exception");
 					std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting player_object row: '" << e.what() << "'\n";
 				}
 				d("Done [position:" << i << "]");
@@ -298,15 +275,15 @@ namespace mods::orm::inventory {
 			LMDBRENEW();
 			LMDBVGET(ckey_size.data(),ckey_size.length()+1,(void*)&ckey_size_value);
 			LMDBVGET(wkey_size.data(),wkey_size.length()+1,(void*)&wkey_size_value);
-			std::cerr << "[wearing.resize]: " << wkey_size << "\n";
+			d("[wearing.resize]: " << wkey_size << "\n");
 			wearing.resize(wkey_size_value);
 			LMDBVGET(wkey.data(),wkey.length()+1,(void*)&wearing[0]);
-			std::cerr << "[carrying.resize]: " << ckey_size << "\n";
+			d("[carrying.resize]: " << ckey_size << "\n");
 			carrying.resize(ckey_size_value);
 			LMDBVGET(ckey.data(),ckey.length()+1,(void*)&carrying[0]);
 			LMDBCOMMIT();
 			for(auto && carried_item : carrying){
-				std::cerr << "[carrying stub]: " << carried_item << "\n";
+				d("[carrying stub]: " << carried_item << "\n");
 			}
 			return 0;
 		}
@@ -322,7 +299,7 @@ namespace mods::orm::inventory {
 			LMDBNSET((void*)&id,sizeof(id),(void*)&w,sizeof(w));
 			auto uf_key = std::string("wear|") + std::to_string(player_db_id) + "|" + std::to_string(position);
 			auto uf_val = std::to_string(object_db_id) + "|" + std::to_string(object_type_id);
-			std::cerr << "[add_player_wear][uf_key:'" << uf_key << "'][uf_val:'" << uf_val << "']\n";
+			d("[add_player_wear][uf_key:'" << uf_key << "'][uf_val:'" << uf_val << "']\n");
 			LMDBSET(uf_key,uf_val);
 		}
 		void remove_player_wear(uint64_t player_db_id, uint8_t position){
@@ -332,7 +309,7 @@ namespace mods::orm::inventory {
 			id.position = position;
 			LMDBNDEL((void*)&id,sizeof(id));
 			auto uf = std::string("wear|") + std::to_string(player_db_id) + "|" + std::to_string(position);
-			std::cerr << "[remove_player_wear][uf_key:'" << uf << "']\n";
+			d("[remove_player_wear][uf_key:'" << uf << "']\n");
 
 			LMDBDEL(uf);
 		}
@@ -344,7 +321,7 @@ namespace mods::orm::inventory {
 			LMDBNSET((void*)&key_data,sizeof(key_data),(void*)&obj_type,sizeof(obj_type));
 			auto uf_key = std::string("inv|") + std::to_string(player_db_id) + "|" + std::to_string(object_db_id);
 			auto uf_val = std::to_string(obj_type);
-			std::cerr << "[add_player_inventory][uf_key:'" << uf_key << "'][uf_val:'" << uf_val << "']\n";
+			d("[add_player_inventory][uf_key:'" << uf_key << "'][uf_val:'" << uf_val << "']\n");
 			LMDBSET(uf_key,uf_val);
 		}
 		void remove_player_inventory(uint64_t player_db_id, uint64_t object_db_id){
@@ -356,7 +333,7 @@ namespace mods::orm::inventory {
 			LMDBNDEL((void*)&key_data,sizeof(key_data));
 
 			auto uf_key = std::string("inv|") + std::to_string(player_db_id) + "|" + std::to_string(object_db_id);
-			std::cerr << "[remove_player_inventory][uf_key:'" << uf_key << "']\n";
+			d("[remove_player_inventory][uf_key:'" << uf_key << "']\n");
 			LMDBDEL(uf_key);
 		}
 	};

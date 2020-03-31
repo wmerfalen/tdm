@@ -1,3 +1,5 @@
+#if 1
+#else
 /* ************************************************************************
 *   File: constants.c                                   Part of CircleMUD *
 *  Usage: Numeric and string contants used by the MUD                     *
@@ -246,25 +248,36 @@ const char *connected_types[] = {
  * Not use in sprinttype() so no \n.
  */
 const char *wear_where[] = {
-  "<used as light>      ",
-  "<worn on finger>     ",
-  "<worn on finger>     ",
-  "<worn around neck>   ",
-  "<worn around neck>   ",
-  "<worn on body>       ",
-  "<worn on head>       ",
-  "<worn on legs>       ",
-  "<worn on feet>       ",
-  "<worn on hands>      ",
-  "<worn on arms>       ",
-  "<worn as shield>     ",
-  "<worn about body>    ",
-  "<worn about waist>   ",
-  "<worn around wrist>  ",
-  "<worn around wrist>  ",
-  "<wielded>            ",
-  "<held>               "
+	"<used as light>           ",
+	"<worn on finger>          ",
+	"<worn on finger>          ",
+	"<worn around neck>        ",
+	"<worn around neck>        ",
+	"<worn on body>            ",
+	"<worn on head>            ",
+	"<worn on legs>            ",
+	"<worn on feet>            ",
+	"<worn on hands>           ",
+	"<worn on arms>            ",
+	"<worn as shield>          ",
+	"<worn about body>         ",
+	"<worn about waist>        ",
+	"<worn around wrist>       ",
+	"<worn around wrist>       ",
+	"<primary weapon>          ",
+	"<held>                    ",
+	"<secondary weapon>        ",
+	"<weapon attachment>       ",
+	"<worn on left shoulder>   ",
+	"<worn on right shoulder>  ",
+	"<backpack>                ",
+	"<worn on eyes>            ",
+	"<vest pack>               ",
+	"<worn on left elbow>      ",
+	"<worn on right elbow>     ",
+	"\n",
 };
+
 
 
 /* WEAR_x - for stat */
@@ -287,6 +300,15 @@ const char *equipment_types[] = {
   "Worn around left wrist",
   "Wielded",
   "Held",
+	"Wielded as secondary",
+	"Attached to primary weapon",
+	"Worn on left shoulder",
+	"Worn on right shoulder",
+	"Backpack",
+	"Worn on eyes",
+	"Vest pack",
+	"Worn on left elbow",
+	"Worn on right elbow",
   "\n"
 };
 
@@ -788,3 +810,4 @@ size_t	room_bits_count = sizeof(room_bits) / sizeof(room_bits[0]) - 1,
 	extra_bits_count = sizeof(extra_bits) / sizeof(extra_bits[0]) - 1,
 	wear_bits_count = sizeof(wear_bits) / sizeof(wear_bits[0]) - 1;
 
+#endif

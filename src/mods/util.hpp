@@ -234,6 +234,7 @@ std::ostream& log(Args... args); /*{
 			}
 			return -1;
 		}
+	obj_ptr_t parse_object_vec(player_ptr_t& player,std::vector<std::string>& vec_args);
 	obj_ptr_t parse_object(player_ptr_t& player,std::string_view arg, int start_at, int* last_index); 
 	int parse_direction(std::string_view arg, int start_at, int* last_index); 
 	objdir_t parse_objdir(player_ptr_t& player,std::string_view arg);
@@ -251,6 +252,38 @@ std::ostream& log(Args... args); /*{
 	objdir_t expect_drone_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_drone>& types);
 	*/
 	obj_ptr_t make_from(obj_data* o);
+	bool parse_help(std::string_view argument);
+
+	static inline bool icompare(std::string_view str1,std::string_view str2){
+		unsigned int sz = str1.size();
+		if (str2.size() != sz){
+			return false;
+		}
+	
+		for (unsigned int i = 0; i < sz; ++i){
+			if (std::tolower(str1[i]) != std::tolower(str2[i])){
+				return false;
+			}
+		}
+		return true;
+	}
+	/*
+	template <typename T,typename TT>
+	bool icompare(T str1,TT str2){
+		unsigned int sz = a.size();
+		if (b.size() != sz){
+			return false;
+		}
+	
+		for (unsigned int i = 0; i < sz; ++i){
+			if (std::tolower(a[i]) != std::tolower(b[i])){
+				return false;
+			}
+		}
+		return true;
+	}
+	*/
+
 };
 
 namespace mods::util::err {

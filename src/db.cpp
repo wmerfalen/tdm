@@ -1098,18 +1098,12 @@ int parse_sql_objects() {
 			//mods::meta_utils::write_meta("object",&row);
 			/** FIXME: this function has some issues. */
 			index_data index;
-			d("obj_item_number");
 			index.vnum = mods::util::stoi<int>(row["obj_item_number"]);
-			d("obj_item_number");
 			index.number = 0;
 			index.func = nullptr;
-			d("obj_index pushback");
 			obj_index.push_back(index);
-			d("obj_index pushback");
 			obj_data proto;
-			d("proto declared");
 			//!proposed lmdb code:
-			d("grabbing affected type by item_number" << row["obj_item_number"].c_str());
 			auto aff_rows = db_get_by_meta("affected_type","aff_fk_id",row["obj_item_number"]);
 			for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
 				proto.affected[i].location = 0;
@@ -1118,12 +1112,9 @@ int parse_sql_objects() {
 
 			unsigned aff_index = 0;
 
-			d("looping aff_rows");
 			for(auto aff_row : aff_rows) {
-				d("INSIDE looping aff_rows");
 				//mods::meta_utils::write_meta("affected_type",&aff_row);
 				if(aff_index >= MAX_OBJ_AFFECT) {
-				d("aff_index is invalid");
 					log(
 							(std::string(
 													 "WARNING: sql has more affected rows than allowed on object #")
@@ -1132,16 +1123,12 @@ int parse_sql_objects() {
 						 );
 					break;
 				}
-				d("setting aff_*");
 				proto.affected[aff_index].location = mods::util::stoi<int>(row["aff_location"]);
 				proto.affected[aff_index].modifier = mods::util::stoi<int>(row["aff_modifier"]);
 				++aff_index;
-				d("set aff_*");
 			}
 
-			d("item_number");
 			proto.item_number = mods::util::stoi<int>(row["obj_item_number"]);
-			d("item_number");
 			proto.name.assign(row["obj_name"]);
 			proto.description.assign(row["obj_description"]);
 #define MENTOC_STR(sql_name,obj_name) \
@@ -1155,22 +1142,17 @@ int parse_sql_objects() {
 			proto.action_description.assign(row["obj_action_description"]);
 			auto ed_rows = db_get_by_meta("extra_description","obj_fk_id",row["id"]);
 
-			d("ed rows.size()");
 			if(ed_rows.size()) {
-				d("INSIDE ed rows.size()");
 				for(auto ed_row : ed_rows){
 					proto.ex_description.emplace_back(row["extra_keyword"], row["extra_description"]);
 				}
 			}
 
-			d("worn_on");
 			proto.worn_on = mods::util::stoi<int>(row["obj_worn_on"]);
-			d("type");
 			proto.type = mods::util::stoi<int>(row["obj_type"]);
 			//proto.ammo = 0;
 			auto flag_rows = db_get_by_meta("object_flags","obj_fk_id",(row["id"]));
 			if(flag_rows.size() > 0){
-				d("feeding flags row");
 				proto.obj_flags.feed(flag_rows[0]);
 			}
 
@@ -1185,11 +1167,8 @@ int parse_sql_objects() {
 			proto.in_obj = nullptr;
 			proto.worn_by = nullptr;
 			proto.carried_by = nullptr;
-			d("feeding proto row");
 			proto.feed(row);
-			d("feeding proto row - DONE");
 			obj_proto.push_back(proto);
-			d("added proto to proto obj_proto");
 		}
 	} else {
 		log("[notice] no objects from sql");

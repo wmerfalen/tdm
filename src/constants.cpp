@@ -13,7 +13,7 @@
 
 #include "structs.h"
 #include "interpreter.h"	/* alias_data */
-
+#include "constants.h"
 const char *circlemud_version =
     "CircleMUD, version 4.1";
 
@@ -243,27 +243,34 @@ const char *connected_types[] = {
  * Not use in sprinttype() so no \n.
  */
 const char *wear_where[] = {
-	"<used as light>      ",
-	"<worn on finger>     ",
-	"<worn on finger>     ",
-	"<worn around neck>   ",
-	"<worn around neck>   ",
-	"<worn on body>       ",
-	"<worn on head>       ",
-	"<worn on legs>       ",
-	"<worn on feet>       ",
-	"<worn on hands>      ",
-	"<worn on arms>       ",
-	"<worn as shield>     ",
-	"<worn about body>    ",
-	"<worn about waist>   ",
-	"<worn around wrist>  ",
-	"<worn around wrist>  ",
-	"<primary weapon>     ",
-	"<held>               ",
-	"<secondary weapon>   "
+	"<used as light>           ",
+	"<worn on finger>          ",
+	"<worn on finger>          ",
+	"<worn around neck>        ",
+	"<worn around neck>        ",
+	"<worn on body>            ",
+	"<worn on head>            ",
+	"<worn on legs>            ",
+	"<worn on feet>            ",
+	"<worn on hands>           ",
+	"<worn on arms>            ",
+	"<worn as shield>          ",
+	"<worn about body>         ",
+	"<worn about waist>        ",
+	"<worn around wrist>       ",
+	"<worn around wrist>       ",
+	"<primary weapon>          ",
+	"<held>                    ",
+	"<secondary weapon>        ",
+	"<weapon attachment>       ",
+	"<worn on left shoulder>   ",
+	"<worn on right shoulder>  ",
+	"<backpack>                ",
+	"<worn on eyes>            ",
+	"<vest pack>               ",
+	"<worn on left elbow>      ",
+	"<worn on right elbow>     "
 };
-
 
 /* WEAR_x - for stat */
 const char *equipment_types[] = {
@@ -286,6 +293,14 @@ const char *equipment_types[] = {
 	"Primary weapon",
 	"Held",
 	"Secondary weapon",
+	"Weapon attachment",
+	"Worn on left shoulder",
+	"Worn on right shoulder",
+	"Worn as backpack",
+	"Worn on eyes",
+	"Vest pack",
+	"Worn on left elbow",
+	"Worn on right elbow",
 	"\n"
 };
 
@@ -338,6 +353,14 @@ const char *wear_bits[] = {
 	"PRIMARY",
 	"HOLD",
 	"SECONDARY",
+	"WEAPON_ATTACHMENT",
+	"SHOULDER_LEFT",
+	"SHOULDER_RIGHT",
+	"BACKPACK",
+	"EYES",
+	"VEST",
+	"ELBOW_LEFT",
+	"ELBOW_RIGHT",
 	"\n"
 };
 

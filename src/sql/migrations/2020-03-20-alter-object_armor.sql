@@ -1,0 +1,9 @@
+ALTER TABLE object_armor ADD COLUMN armor_file VARCHAR(2048);
+CREATE TYPE armor_type_t AS ENUM ('VEST', 'LEGS', 'GAUNTLETS', 'SHOULDER_PADS', 'HELMET', 'HAT', 'EYEWEAR', 'GOGGLES', 'BACKPACK', 'WAIST_PACK', 'VEST_PACK', 'ELBOW_GUARDS', 'GLOVES', 'SHIELD');
+
+ALTER TABLE object_armor ADD COLUMN armor_str_type armor_type_t NOT NULL;
+ALTER TABLE object_armor ADD COLUMN armor_type INTEGER NOT NULL;
+ALTER TABLE object_armor ADD COLUMN armor_manufacturer VARCHAR(256) NOT NULL;
+ALTER TABLE object_armor ADD COLUMN armor_name VARCHAR(256) NOT NULL;
+ALTER TABLE object_armor ADD COLUMN armor_vnum INTEGER NOT NULL;
+ALTER TABLE object_armor ADD COLUMN armor_rarity rarity_t NOT NULL DEFAULT 'COMMON';

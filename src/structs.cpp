@@ -13,12 +13,14 @@ static inline std::string default_yaml_file(const std::string& type){
 
 #include "mods/util.hpp"
 void obj_data::init(){
-	std::cerr << "[debug]obj_data::init()\n";
+	d("[debug]obj_data::init()\n");
+	m_location_data = 0;
 	std::fill(m_capabilities.begin(),m_capabilities.end(),0);
 	item_number = 0;
 	in_room = 0;
 	name = "<default-1>";
 	str_type = "object";
+	str_sub_type = "";
 	description = name;
 	short_description = name;
 	action_description = name;
@@ -40,27 +42,24 @@ void obj_data::init(){
 #define MENTOC_OBJ_INITIALIZE_CONSTRUCTOR(r,data,CLASS_TYPE) \
 			this->BOOST_PP_CAT(m_,CLASS_TYPE) = nullptr;
 BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
-
-	std::cerr << "obj_data() assigned uuid: " << this->uuid << "\n";
 }
-		void obj_data::feed(std::string in_type,std::string_view feed_file){
+		void obj_data::feed(std::string_view in_type,std::string_view feed_file){
 			m_db_id = 0;
-			std::string type = in_type;
+			std::string type = in_type.data();
 			std::transform(type.begin(),type.end(),type.begin(),
 					[](unsigned char c){ return std::tolower(c); });
 			str_type = type = type.substr(strlen("ITEM_"));
-			std::cerr << "[parsed type]:'" << type << "' str_type: '" << str_type << "'\n";
-			std::cerr << "[obj_data][feed_file]:'" << feed_file.data() << "'\n";
 #define MENTOC_OBJ_DATA_FEED_DUAL(r,data,CLASS_TYPE) \
-			std::cerr << "[obj_data CLASS_TYPE: '" << BOOST_PP_STRINGIZE(CLASS_TYPE) << "'\n";\
 			if(type.compare( BOOST_PP_STRINGIZE(CLASS_TYPE) ) == 0){\
-				std::cerr << "[obj_data::feed(str,str) feeding type: " << BOOST_PP_STRINGIZE(CLASS_TYPE) << "\n";\
+				d("[obj_data::feed(str,str) [START] feeding type: " << BOOST_PP_STRINGIZE(CLASS_TYPE) << "\n");\
 				this->CLASS_TYPE(feed_file); \
+				d("[obj_data::feed(str,str) [DONE]");\
+				this->set_str_type(BOOST_PP_STRINGIZE(CLASS_TYPE));\
+				this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
 			}
-
 			BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_DUAL, ~, MENTOC_ITEM_TYPES_SEQ)
-
 		}
+
 void obj_flag_data::init(){
 	memset(value,0,sizeof(value));
 	holds_ammo = 0;
@@ -83,9 +82,7 @@ bool obj_data::flagged(int value){
 	return ((obj_flags.extra_flags) & (value));
 }
 void obj_data::set_str_type(std::string_view in_type){
-	std::cerr << "[lolz] STR TYPE: '" << in_type.data() << "'\n";
-	std::cerr << "[lolz] STR TYPE: '" << in_type.data() << "'\n";
-	std::cerr << "[lolz] STR TYPE: '" << in_type.data() << "'\n";
+	d("obj_data::set_str_type: '" << in_type.data());
 	this->str_type = in_type;
 #define MENTOC_LAZY_COMP(a,b) \
 	if(this->str_type.compare(a) == 0){\
@@ -272,8 +269,6 @@ void obj_data::feed(const pqxx::result::reference & row){
 			disorient = 0;
 			state = 0;
 			builder_data.reset();
-			//has_desc = false;
-			//desc.reset();
 			player_specials = std::make_shared<player_special_data>();
 		}
 
@@ -463,7 +458,7 @@ void obj_data::feed(const pqxx::result::reference & row){
 			//			break;
 			//		case ZONE_PAVEMENT:
 			//			/** FIXME: this is incomplete code. fix this */
-			//			std::cerr << "[builder_data_t::create_pavement] WARNING: zone pavements are experimental!\n";
+			//			d("[builder_data_t::create_pavement] WARNING: zone pavements are experimental!\n");
 			//			break;
 			//	}
 		}

@@ -28,7 +28,16 @@ namespace mods::weapon::capabilities {
 		EXTENDS_CLIP,
 		COUNTDOWN_EXPLOSION,
 		RELOAD,
-		__LAST = RELOAD
+		AFFECT_MOVE,
+		REMOTELY_VIEW,
+		TRIGGER_EXPLOSION,
+		PREVENT_RUN,
+		TRIGGER_ALERT,
+		NOTIFY_OWNER,
+		SENSE_MOTION,
+		ABSORB_DAMAGE,
+		GRAPPLE,
+		__LAST = GRAPPLE
 	};
 };
 
@@ -38,67 +47,8 @@ using cap_t = mods::weapon::capabilities::cap_t;
 #include "rarity.hpp"
 
 #include "yaml.hpp"
-#ifndef __MENTOC_ITEM_CONSTANTS_DEFINED__
-#define ITEM_RIFLE             1
-#define ITEM_EXPLOSIVE         2
-#define ITEM_GADGET            3
-#define ITEM_DRONE             4
-#define ITEM_WEAPON            5		/* Item is a weapon		*/
-#define ITEM_WEAPON_ATTACHMENT 6 /* item is a weapon attachment */
-#define ITEM_ATTACHMENT        6
-#define ITEM_ARMOR             7
-#define ITEM_CONSUMABLE        8
-#define ITEM_TRAP              9
-#endif
 #include "item-types.hpp"
 
-namespace mods::weapon::type {
-	enum rifle {
-		RIFLE_NONE = 0,
-		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_RIFLE_TYPES_SEQUENCE)
-	};
-	enum explosive {
-		EXPLOSIVE_NONE = 0,
-		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_EXPLOSIVE_TYPES_SEQUENCE)
-	};
-	enum drone {
-		DRONE_NONE = 0,
-		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_DRONE_TYPES_SEQUENCE)
-	};
-	enum gadget {
-		GADGET_NONE = 0,
-		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_GADGET_TYPES_SEQUENCE)
-	};
-
-	enum attachment {
-		ATTACHMENT_NONE = 0,
-		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ATTACHMENT_TYPES_SEQUENCE)
-	};
-
-	enum armor {
-		ARMOR_NONE = 0,
-		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ARMOR_TYPES_SEQUENCE)
-	};
-
-	enum consumable {
-		CONSUMABLE_NONE = 0,
-		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_CONSUMABLE_TYPES_SEQUENCE)
-	};
-
-	enum trap {
-		TRAP_NONE = 0,
-		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_TRAP_TYPES_SEQUENCE)
-	};
-
-
-#define MENTOC_TYPE_LIST_IMPL(r,data,ITEM_TYPE) \
-	ITEM_TYPE = BOOST_PP_CAT(ITEM_,ITEM_TYPE) BOOST_PP_COMMA()
-
-	enum type_list {
-		BOOST_PP_SEQ_FOR_EACH(MENTOC_TYPE_LIST_IMPL,~,MENTOC_ITEM_TYPE_LIST_SEQUENCE)
-	};
-
-};
 
 /** item-types.hpp */
 MENTOC_USING_CT
@@ -153,7 +103,9 @@ namespace mods::weapon_types {
 			auto tuple_ptr_id = std::move(mods::weapon_types::feed<mods::yaml::BOOST_PP_CAT(CLASS_TYPE,_description_t)>(feed_file));\
 			this->attributes = std::move(std::get<0>(tuple_ptr_id));\
 			this->id = std::get<1>(tuple_ptr_id);\
-			std::cerr << "[rifle_data_t][feed with filename]\n";\
+			std::cerr << "[" << BOOST_PP_STRINGIZE(CLASS_TYPE) << "][feed with filename]\n";\
+			std::cerr << "[" << BOOST_PP_STRINGIZE(CLASS_TYPE) << "][feed with filename]\n";\
+			std::cerr << "[" << BOOST_PP_STRINGIZE(CLASS_TYPE) << "][feed with filename]\n";\
 		}\
 		uint64_t db_id();\
 		std::string feed_file;\

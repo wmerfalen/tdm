@@ -218,8 +218,14 @@ namespace mods::util {
 		return true;
 		}
 	}
+	obj_ptr_t parse_object_vec(player_ptr_t& player,std::vector<std::string>& vec_args){
+		if(vec_args.size() == 0){
+			return nullptr;
+		}
+		int last_index = 0;
+		return parse_object(player,vec_args[0],0,&last_index);
+	}
 	obj_ptr_t parse_object(player_ptr_t& player,std::string_view arg, int start_at, int* last_index) {
-		auto ch = player->cd();
 		int i, number;
 		static constexpr int max_len = MAX_INPUT_LENGTH;
 		std::string buffer;
@@ -236,12 +242,12 @@ namespace mods::util {
 			return nullptr;
 		}
 		for(i = 0; i < NUM_WEARS; i++){
-			auto eq = GET_EQ(ch, i);
-			if(eq && isname(buffer.data(), eq->name) && --number == 0) {
-				return make_from(eq);
+			auto eq = player->equipment(i);
+			if(eq && isname(buffer.data(), eq->name.c_str()) && --number == 0) {
+				return eq;
 			}
 		}
-		return make_from(get_obj_in_list_vis(ch, buffer.data(), &number, ch->carrying));
+		return make_from(get_obj_in_list_vis(player->cd(), buffer.data(), &number, player->carrying()));
 	}
 
 	int parse_direction(std::string_view arg, int start_at, int* last_index) {
@@ -291,7 +297,7 @@ namespace mods::util {
 
 	objdir_t parse_objdir(player_ptr_t& player,std::string_view arg){
 		int last_index = 0;
-		return { parse_object(player, arg, 0,&last_index), mods::util::parse_direction(arg, last_index+1, nullptr)};
+		return { mods::util::parse_object(player, arg, 0,&last_index), mods::util::parse_direction(arg, last_index+1, nullptr)};
 	}
 /*
 	objdir_t expect_explosive_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_explosive>& types){
@@ -317,6 +323,19 @@ namespace mods::util {
 		}
 		obj_list.push_back(std::make_shared<obj_data>(*o));
 		return obj_list.back();
+	}
+	bool parse_help(std::string_view argument){
+		static constexpr int max_len = 64;
+		std::string buffer;
+		int ctr = 0;
+		while(isspace(argument[ctr]) && ++ctr < max_len && ctr < argument.length()){}
+		while(!isspace(argument[ctr]) && ctr < max_len && ctr < argument.length()){
+			buffer += tolower(argument[ctr++]);
+		}
+		if(buffer.compare("help") == 0 || buffer.compare("-h") == 0 || buffer.compare("--help") == 0){
+			return true;
+		}
+		return false;
 	}
 	/*
 	objdir_t parse_objdir_capable(player_ptr_t& player,std::string_view arg, uint8_t query_type, cap_list_t& capabilities){
@@ -358,6 +377,7 @@ namespace mods::util {
 		return parse_objdir_capable(player,arg, CAP_ALL, capabilities);
 	}
 	*/
+
 };/** end mods::util */
 
 namespace mods::util::err {
