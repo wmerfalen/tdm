@@ -4,19 +4,15 @@ extern std::vector<room_data> world;
 extern player_ptr_t ptr_by_uuid(uuid_t);
 namespace mods {
 	deferred::lambda_queue_iterator deferred::push(uint64_t ticks_in_future,std::function<void()> lambda) {
-		d("lambda push");
 		return m_q.insert(std::make_pair(ticks_in_future + m_tick,lambda));
 	}
 	deferred::event_queue_iterator  deferred::push_ticks_event(uint32_t ticks, std::tuple<uuid_t,uint32_t> type){
-		d("ticks event push");
 		return m_ticks_event_type.insert(std::make_pair(m_tick + ticks, type));
 	}
 	void deferred::cancel_lambda(lambda_queue_iterator it){
-		d("cancel lambda");
 		m_q.erase(it);
 	}
 	void deferred::cancel_event(event_queue_iterator it){
-		d("cancel event");
 		m_ticks_event_type.erase(it);
 	}
 	void deferred::push_chunk_affect(
@@ -44,7 +40,6 @@ namespace mods {
 		m_tick++;
 		auto fe = m_ticks_event_type.find(m_tick);
 		if(fe != m_ticks_event_type.end()) {
-			d("found event at tick: " << m_tick);
 			auto fe_tuple = fe->second;
 			std::shared_ptr<mods::player> player = nullptr;
 			switch(std::get<1>(fe_tuple)){
@@ -68,7 +63,6 @@ namespace mods {
 		auto f = m_q.find(m_tick);
 
 		if(f != m_q.end()) {
-			d("found lambda event at tick: " << m_tick);
 			f->second();
 			m_q.erase(m_tick);
 		}
