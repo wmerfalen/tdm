@@ -562,18 +562,18 @@ namespace mods {
 			return m_misc_pref[bit];
 		}
 		void set_camera(obj_data_ptr_t obj);
-		std::shared_ptr<mods::camera> get_camera() const { return m_camera; }
+		std::shared_ptr<mods::camera> get_camera() const ;
 		void clear_camera();
-		bool camera_viewing() { return m_camera_viewing; }
-		void set_camera_viewing(bool b){ m_camera_viewing = b; }
-		int viewing_room(){ return m_camera_viewing ? m_camera->room() : room(); }
+		bool camera_viewing();
+		void set_camera_viewing(bool b);
+		int viewing_room();
 
 		void block_for(uint16_t ticks, uint32_t unblock_event,uuid_t optional_uuid);
 		bool is_blocked();
 		void unblock_event(uint32_t unblock);
 		bool interrupt(std::tuple<uint32_t,uuid_t,void*> event_data);
 		void cancel_block();
-		uint32_t current_block() { return m_blocked_until; }
+		uint32_t current_block();
 
 		protected:
 		std::array<bool,misc_pref_enum_t::SIZE> m_misc_pref;

@@ -9,7 +9,7 @@ namespace mods {
 		m_player(owner), m_object_uuid(obj), m_time(60 * 5)  {
 			auto ptr = optr_by_uuid(obj);
 			m_in_room = ptr->in_room;
-			queue_object_destruct();
+			//queue_object_destruct();
 	}
 	camera::camera(uuid_t  owner, uuid_t  obj, uint16_t time) :
 		m_player(owner), m_object_uuid(obj), m_time(time)  {

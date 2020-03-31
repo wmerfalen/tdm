@@ -153,6 +153,10 @@ ACMD(do_view) {
 		return;
 	}
 	if(mods::util::icompare(vec_args[0], "camera")) {
+		if(!player->get_camera()){
+			player->sendln("You don't have a camera installed!");
+			return;
+		}
 		player->set_camera_viewing(true);
 		look_at_room(ch,0);
 		player->set_camera_viewing(false);
@@ -216,7 +220,6 @@ ACMD(do_uninstall) {
 			player->sendln("You don't own that device.");
 			return;
 		}
-		parsed.obj->in_room = -1;
 		player->send("You begin removing a %s from the %s wall...", obj_name.c_str(), mods::globals::dir_to_str(parsed.dir, true).c_str());
 		player->clear_camera();
 		player->set_camera_viewing(false);

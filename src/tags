@@ -3176,7 +3176,7 @@ callback	mods/projectile.hpp	/^		typedef std::function<void (room_rnum,int)> cal
 camera	mods/camera.cpp	/^	camera::camera(uuid_t  owner, uuid_t  obj) :$/;"	f	class:mods::camera
 camera	mods/camera.cpp	/^	camera::camera(uuid_t  owner, uuid_t  obj, uint16_t time) :$/;"	f	class:mods::camera
 camera	mods/camera.hpp	/^	class camera {$/;"	c	namespace:mods
-camera_viewing	mods/player.hpp	/^		bool camera_viewing() { return m_camera_viewing; }$/;"	f	struct:mods::player
+camera_viewing	mods/player.cpp	/^	bool player::camera_viewing() {$/;"	f	class:mods::player
 can	structs.h	/^		bool can(std::size_t val){$/;"	f	struct:obj_data
 can_carry_n	act.item.cpp	/^int can_carry_n(player_ptr_t player){$/;"	f
 can_modify	olc.cpp	/^int can_modify(char_data *ch, int vnum) {$/;"	f
@@ -3459,7 +3459,7 @@ cryogenicist	spec_assign.cpp	/^SPECIAL(cryogenicist);$/;"	v
 crypto	mods/crypto.cpp	/^namespace mods::crypto {$/;"	n	class:mods	file:
 crypto	mods/crypto.hpp	/^namespace mods::crypto {$/;"	n	class:mods
 ctypes	act.informative.cpp	/^const char *ctypes[] = {$/;"	v
-current_block	mods/player.hpp	/^		uint32_t current_block() { return m_blocked_until; }$/;"	f	struct:mods::player
+current_block	mods/player.cpp	/^	uint32_t player::current_block() {$/;"	f	class:mods::player
 current_key	mods/quests.cpp	/^		std::string current_key(char_data* ch) {$/;"	f	namespace:mods::quests
 current_player	globals.cpp	/^		player_ptr_t current_player;$/;"	m	namespace:mods::globals	file:
 current_quest	mods/quests.cpp	/^		std::string current_quest(char_data *ch) {$/;"	f	namespace:mods::quests
@@ -4254,7 +4254,7 @@ get_ammo	mods/player.cpp	/^	obj_data* player::get_ammo(const weapon_type_t& type
 get_bad_password_count	mods/player.cpp	/^	int player::get_bad_password_count(){$/;"	f	class:mods::player
 get_bind_addr	comm.cpp	/^struct in_addr *get_bind_addr() {$/;"	f
 get_bui_mode	mods/player.hpp	/^		bool get_bui_mode(){ return m_bui_mode; }$/;"	f	struct:mods::player
-get_camera	mods/player.hpp	/^		std::shared_ptr<mods::camera> get_camera() const { return m_camera; }$/;"	f	struct:mods::player
+get_camera	mods/player.cpp	/^	std::shared_ptr<mods::camera> player::get_camera() const {$/;"	f	class:mods::player
 get_caps	mods/weapon.cpp	/^	std::vector<cap_t> get_caps(mw_armor type){$/;"	f	namespace:mods::weapon
 get_caps	mods/weapon.cpp	/^	std::vector<cap_t> get_caps(mw_attachment type){$/;"	f	namespace:mods::weapon
 get_caps	mods/weapon.cpp	/^	std::vector<cap_t> get_caps(mw_consumable type){$/;"	f	namespace:mods::weapon
@@ -5868,7 +5868,7 @@ set_authenticated	mods/player.hpp	/^		void set_authenticated(bool b) { m_authent
 set_bad_password_count	mods/player.cpp	/^	void player::set_bad_password_count(int i){$/;"	f	class:mods::player
 set_bui_mode	mods/player.cpp	/^	void player::set_bui_mode(bool b){$/;"	f	class:mods::player
 set_camera	mods/player.cpp	/^	void player::set_camera(obj_data_ptr_t obj){$/;"	f	class:mods::player
-set_camera_viewing	mods/player.hpp	/^		void set_camera_viewing(bool b){ m_camera_viewing = b; }$/;"	f	struct:mods::player
+set_camera_viewing	mods/player.cpp	/^	void player::set_camera_viewing(bool b){$/;"	f	class:mods::player
 set_cd	mods/drone.hpp	/^			void set_cd(char_data* ch) {$/;"	f	class:mods::drone
 set_cd	mods/player.cpp	/^	void player::set_cd(char_data* ch) {$/;"	f	class:mods::player
 set_char_on_descriptor	mods/player.cpp	/^	void player::set_char_on_descriptor(std::deque<descriptor_data>::iterator it){$/;"	f	class:mods::player
@@ -6336,7 +6336,7 @@ vict_found	act.social.cpp	/^	char *vict_found;$/;"	m	struct:social_messg	file:
 victim_msg	structs.h	/^		char	*victim_msg;    \/* message to victim   *\/$/;"	m	struct:msg_type
 view	mods/string.cpp	/^	std::string_view string::view() const {$/;"	f	class:mods::string
 view	mods/string.cpp	/^	std::string_view string::view(){$/;"	f	class:mods::string
-viewing_room	mods/player.hpp	/^		int viewing_room(){ return m_camera_viewing ? m_camera->room() : room(); }$/;"	f	struct:mods::player
+viewing_room	mods/player.cpp	/^	int player::viewing_room(){$/;"	f	class:mods::player
 violent	spells.h	/^	byte violent;$/;"	m	struct:spell_info_type
 visibility	mods/calc_visibility.cpp	/^namespace mods::calc::visibility {$/;"	n	class:mods::calc	file:
 visibility	mods/calc_visibility.hpp	/^namespace mods::calc::visibility {$/;"	n	class:mods::calc

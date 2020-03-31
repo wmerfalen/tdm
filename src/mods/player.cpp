@@ -1050,9 +1050,6 @@ namespace mods {
 	void player::set_camera(obj_data_ptr_t obj){
 		m_camera = std::make_shared<mods::camera>(this->uuid(),obj->uuid);
 	}
-	void player::clear_camera(){
-		m_camera = nullptr;
-	}
 	void player::block_for(uint16_t ticks, uint32_t unblock_event,uuid_t optional_uuid){
 		d("player::block_for: " << ticks << " event: " << unblock_event << " optional_uuid:" << optional_uuid);
 		m_block_data[unblock_event] = optional_uuid;
@@ -1105,6 +1102,24 @@ namespace mods {
 			return true;
 		}
 		return false;
+	}
+	void player::clear_camera(){
+		m_camera = nullptr;
+	}
+	std::shared_ptr<mods::camera> player::get_camera() const {
+		return m_camera;
+	}
+	bool player::camera_viewing() {
+		return m_camera_viewing;
+	}
+	void player::set_camera_viewing(bool b){
+		m_camera_viewing = b;
+	}
+	int player::viewing_room(){
+		return m_camera_viewing ? m_camera->room() : room();
+	}
+	uint32_t player::current_block() {
+		return m_blocked_until;
 	}
 };
 
