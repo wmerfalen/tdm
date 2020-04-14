@@ -22,4 +22,4 @@ extern void obj_to_room(struct obj_data *object, room_rnum room);
 extern room_vnum mortal_start_room;
 extern room_vnum immort_start_room;
 extern room_vnum frozen_start_room;
-extern std::vector<shop_data> shop_index;
+extern std::vector<shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>> shop_index;

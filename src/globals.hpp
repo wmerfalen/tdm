@@ -135,6 +135,11 @@ namespace mods {
 		void register_player(player_ptr_t);
 		//void register_object_db_id(obj_ptr_t);
 		void register_object(obj_ptr_t);
+		template <typename TShopPtr>
+		void register_shop(TShopPtr shop){
+			static uuid_t my_uuid = 0;
+			shop->uuid = ++my_uuid;
+		}
 		void register_object_list();
 		void register_room(const room_rnum&);
 		void register_object_db_id(uint64_t,uuid_t);

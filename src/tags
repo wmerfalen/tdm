@@ -371,8 +371,8 @@ BLOCK_SIZE	mail.h	29;"	d
 BOARD_MAGIC	boards.h	17;"	d
 BOARD_RNUM	boards.h	41;"	d
 BOARD_VNUM	boards.h	36;"	d
-BOOL_CASE	db.cpp	1637;"	d	file:
-BOOL_CASE	db.cpp	1701;"	d	file:
+BOOL_CASE	db.cpp	1668;"	d	file:
+BOOL_CASE	db.cpp	1732;"	d	file:
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ARMOR_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::armor
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ATTACHMENT_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::attachment
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_CONSUMABLE_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::consumable
@@ -401,8 +401,8 @@ BUG_FILE	db.h	90;"	d
 BUILDER	mods/flags.hpp	/^		BUILDER,$/;"	e	enum:mods::flags::chunk_type_t
 BURN	mods/item.hpp	/^		BURN = (1 << 3),$/;"	e	enum:mods::item::capability_t
 BURN	mods/weapon-types.hpp	/^		BURN,$/;"	e	enum:mods::weapon::capabilities::cap_t
-BUY_TYPE	shop.h	20;"	d
-BUY_WORD	shop.h	21;"	d
+BUY_TYPE	shop.h	24;"	d
+BUY_WORD	shop.h	25;"	d
 Board_clear_all	boards.cpp	/^void Board_clear_all(void) {$/;"	f
 Board_clear_board	boards.cpp	/^void Board_clear_board(int board_type) {$/;"	f
 Board_display_msg	boards.cpp	/^int Board_display_msg(int board_type, char_data *ch, char *arg, struct obj_data *board) {$/;"	f
@@ -428,8 +428,8 @@ CAPABILITY_LIST_LENGTH	structs.h	/^		static constexpr std::size_t CAPABILITY_LIS
 CAP_ALL	mods/util.hpp	/^	static constexpr uint8_t CAP_ALL = 0;$/;"	m	namespace:mods::util
 CAP_ANY	mods/util.hpp	/^	static constexpr uint8_t CAP_ANY = 0;$/;"	m	namespace:mods::util
 CAP_SINGLE	mods/util.hpp	/^	static constexpr uint8_t CAP_SINGLE = 0;$/;"	m	namespace:mods::util
-CASE	db.cpp	1634;"	d	file:
-CASE	db.cpp	1700;"	d	file:
+CASE	db.cpp	1665;"	d	file:
+CASE	db.cpp	1731;"	d	file:
 CASE_MOON	mods/date-time.cpp	172;"	d	file:
 CAST_POTION	spells.h	18;"	d
 CAST_SCROLL	spells.h	21;"	d
@@ -825,7 +825,7 @@ ENCTYPE_DES_CFB64	telnet.h	295;"	d
 ENCTYPE_DES_OFB64	telnet.h	296;"	d
 ENCTYPE_NAME	telnet.h	318;"	d
 ENCTYPE_NAME_OK	telnet.h	317;"	d
-END_OF	shop.h	57;"	d
+END_OF	shop.h	88;"	d
 ENERGY	mods/weapon.hpp	/^		MACHINE_PISTOL = (1 << 7), ENERGY = (1 << 8), FUMES = (1 << 9),$/;"	e	enum:mods::weapon::mask_type
 ENV_ESC	telnet.h	239;"	d
 ENV_USERVAR	telnet.h	240;"	d
@@ -1174,7 +1174,7 @@ IS_CORPSE	utils.h	415;"	d
 IS_DARK	utils.h	260;"	d
 IS_DIRECTION	globals.hpp	38;"	d
 IS_EVIL	utils.h	372;"	d
-IS_GOD	shop.h	56;"	d
+IS_GOD	shop.h	87;"	d
 IS_GOOD	utils.h	371;"	d
 IS_LIGHT	utils.h	261;"	d
 IS_MAGIC_USER	utils.h	502;"	d
@@ -1402,9 +1402,9 @@ LIQ_TEA	structs.h	556;"	d
 LIQ_WATER	structs.h	545;"	d
 LIQ_WHISKY	structs.h	550;"	d
 LIQ_WINE	structs.h	547;"	d
-LIST_PRODUCE	shop.h	68;"	d
-LIST_ROOM	shop.h	70;"	d
-LIST_TRADE	shop.h	69;"	d
+LIST_PRODUCE	shop.h	99;"	d
+LIST_ROOM	shop.h	101;"	d
+LIST_TRADE	shop.h	100;"	d
 LMDBCOMMIT	globals.hpp	52;"	d
 LMDBDEL	globals.hpp	50;"	d
 LMDBGET	globals.hpp	51;"	d
@@ -1486,10 +1486,10 @@ MAX_NOTE_LENGTH	structs.h	673;"	d
 MAX_OBJ_AFFECT	structs.h	672;"	d
 MAX_OBJ_DESC	olc.h	19;"	d
 MAX_OBJ_NAME	olc.h	16;"	d
-MAX_OPER	shop.h	98;"	d
-MAX_OUTSIDE_BANK	shop.h	138;"	d
+MAX_OPER	shop.h	129;"	d
+MAX_OUTSIDE_BANK	shop.h	169;"	d
 MAX_PER_PRAC	spec_procs.cpp	125;"	d	file:
-MAX_PROD	shop.h	50;"	d
+MAX_PROD	shop.h	81;"	d
 MAX_PROMPT_LENGTH	structs.h	653;"	d
 MAX_PWD_LENGTH	structs.h	665;"	d
 MAX_RAW_INPUT_LENGTH	structs.h	662;"	d
@@ -1497,7 +1497,7 @@ MAX_ROOM_DESC	olc.h	17;"	d
 MAX_ROOM_DISTANCE	mods/weapon.hpp	/^		constexpr static uint8_t MAX_ROOM_DISTANCE = 10;$/;"	m	namespace:mods::weapon::yaml
 MAX_ROOM_DISTANCE	mods/yaml.hpp	/^	constexpr static uint8_t MAX_ROOM_DISTANCE = 4;$/;"	m	namespace:mods::yaml
 MAX_ROOM_NAME	olc.h	14;"	d
-MAX_SHOP_OBJ	shop.h	52;"	d
+MAX_SHOP_OBJ	shop.h	83;"	d
 MAX_SKILLS	structs.h	670;"	d
 MAX_SOCK_BUF	structs.h	652;"	d
 MAX_SPELLS	spells.h	93;"	d
@@ -1505,17 +1505,17 @@ MAX_SPELL_AFFECTS	magic.cpp	318;"	d	file:
 MAX_STRING_LENGTH	structs.h	660;"	d
 MAX_TITLE_LENGTH	structs.h	666;"	d
 MAX_TONGUE	structs.h	669;"	d
-MAX_TRADE	shop.h	49;"	d
+MAX_TRADE	shop.h	80;"	d
 MEMORY	utils.h	355;"	d
-MENTOC_ABIL_SET	db.cpp	1031;"	d	file:
+MENTOC_ABIL_SET	db.cpp	1045;"	d	file:
 MENTOC_ARMOR_MEMBERS_TUPLE	mods/item-types.hpp	172;"	d
 MENTOC_ARMOR_TYPES_SEQUENCE	mods/item-types.hpp	157;"	d
 MENTOC_ATTACHMENT_MEMBERS_TUPLE	mods/item-types.hpp	141;"	d
 MENTOC_ATTACHMENT_TYPES_SEQUENCE	mods/item-types.hpp	137;"	d
 MENTOC_BASE_MEMBERS	mods/yaml.hpp	40;"	d
 MENTOC_BASE_MEMBERS_SET	mods/yaml.hpp	53;"	d
-MENTOC_BITVECTOR	mods/builder.cpp	3046;"	d	file:
-MENTOC_CHK_OBJ	mods/builder.cpp	1075;"	d	file:
+MENTOC_BITVECTOR	mods/builder.cpp	3375;"	d	file:
+MENTOC_CHK_OBJ	mods/builder.cpp	1077;"	d	file:
 MENTOC_CONSUMABLE_MEMBERS_TUPLE	mods/item-types.hpp	193;"	d
 MENTOC_CONSUMABLE_TYPES_SEQUENCE	mods/item-types.hpp	185;"	d
 MENTOC_DATA_CLASS	mods/weapon-types.hpp	125;"	d
@@ -1565,29 +1565,35 @@ MENTOC_ITEM_TYPES_SEQ	mods/item-types.hpp	12;"	d
 MENTOC_ITEM_TYPES_SEQ_CAPS	mods/item-types.hpp	26;"	d
 MENTOC_ITEM_TYPE_LIST_SEQUENCE	mods/item-types.hpp	215;"	d
 MENTOC_LAZY_COMP	structs.cpp	87;"	d	file:
+MENTOC_LAZY_INT	mods/builder.cpp	1760;"	d	file:
+MENTOC_LAZY_INT	mods/builder.cpp	1779;"	d	file:
+MENTOC_LAZY_SHOP	mods/builder.cpp	1844;"	d	file:
+MENTOC_LAZY_SHOP	mods/builder.cpp	1869;"	d	file:
+MENTOC_LAZY_STR	mods/builder.cpp	1744;"	d	file:
+MENTOC_LAZY_STR	mods/builder.cpp	1759;"	d	file:
 MENTOC_MEMBER_VARS_EXAMPLE_FOR	mods/item-types.hpp	297;"	d
 MENTOC_MEMBER_VARS_EXAMPLE_IMPL	mods/item-types.hpp	288;"	d
 MENTOC_MEMBER_VARS_FOR	mods/item-types.hpp	300;"	d
 MENTOC_MEMBER_VARS_IMPL	mods/item-types.hpp	303;"	d
-MENTOC_OBI	mods/builder.cpp	20;"	d	file:
-MENTOC_OBI2	mods/builder.cpp	21;"	d	file:
+MENTOC_OBI	mods/builder.cpp	21;"	d	file:
+MENTOC_OBI2	mods/builder.cpp	22;"	d	file:
 MENTOC_OBJ_DATA_FEED_DUAL	structs.cpp	52;"	d	file:
 MENTOC_OBJ_DATA_FEED_SWITCH	mods/item-types.hpp	266;"	d
 MENTOC_OBJ_DATA_FEED_SWITCH_IMPL	mods/item-types.hpp	260;"	d
 MENTOC_OBJ_FUNC	act.builder.cpp	423;"	d	file:
 MENTOC_OBJ_FUNC	act.builder.cpp	431;"	d	file:
 MENTOC_OBJ_INITIALIZE_CONSTRUCTOR	structs.cpp	42;"	d	file:
-MENTOC_OBS	mods/builder.cpp	22;"	d	file:
-MENTOC_OBS2	mods/builder.cpp	23;"	d	file:
-MENTOC_PLAYER_NULL_CHECK	mods/builder.cpp	989;"	d	file:
+MENTOC_OBS	mods/builder.cpp	23;"	d	file:
+MENTOC_OBS2	mods/builder.cpp	24;"	d	file:
+MENTOC_PLAYER_NULL_CHECK	mods/builder.cpp	991;"	d	file:
 MENTOC_PREAMBLE	globals.hpp	34;"	d
 MENTOC_RIFLE_MEMBERS_TUPLE	mods/item-types.hpp	54;"	d
 MENTOC_RIFLE_TYPES_SEQUENCE	mods/item-types.hpp	45;"	d
-MENTOC_SHOW_FLAG	mods/builder.cpp	3081;"	d	file:
-MENTOC_SHOW_OBJ	mods/builder.cpp	1978;"	d	file:
-MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	1970;"	d	file:
-MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	1962;"	d	file:
-MENTOC_STR	db.cpp	1134;"	d	file:
+MENTOC_SHOW_FLAG	mods/builder.cpp	3410;"	d	file:
+MENTOC_SHOW_OBJ	mods/builder.cpp	2307;"	d	file:
+MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	2299;"	d	file:
+MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	2291;"	d	file:
+MENTOC_STR	db.cpp	1148;"	d	file:
 MENTOC_T	mods/aoe.hpp	32;"	d
 MENTOC_T	mods/aoe.hpp	55;"	d
 MENTOC_T	mods/lmdb.hpp	68;"	d
@@ -1600,15 +1606,15 @@ MENTOC_TO_STR	mods/weapon.hpp	211;"	d
 MENTOC_TO_STR	mods/weapon.hpp	217;"	d
 MENTOC_TRAP_MEMBERS_TUPLE	mods/item-types.hpp	202;"	d
 MENTOC_TRAP_TYPES_SEQUENCE	mods/item-types.hpp	199;"	d
-MENTOC_TYPE	mods/builder.cpp	3020;"	d	file:
+MENTOC_TYPE	mods/builder.cpp	3349;"	d	file:
 MENTOC_TYPE_LIST_IMPL	mods/item-types.hpp	455;"	d
 MENTOC_UPTR	structs.h	1027;"	d
 MENTOC_UPTR	structs.h	1029;"	d
 MENTOC_USING_CT	mods/item-types.hpp	232;"	d
 MENTOC_USING_CT_IMPL	mods/item-types.hpp	229;"	d
-MENTOC_WEAPON	mods/builder.cpp	121;"	d	file:
-MENTOC_WEAPON	mods/builder.cpp	137;"	d	file:
-MENTOC_WEAR	mods/builder.cpp	3003;"	d	file:
+MENTOC_WEAPON	mods/builder.cpp	123;"	d	file:
+MENTOC_WEAPON	mods/builder.cpp	139;"	d	file:
+MENTOC_WEAR	mods/builder.cpp	3332;"	d	file:
 MENTOC_YAML_DESC	mods/item-types.hpp	241;"	d
 MENTOC_YAML_DESC_IMPL	mods/item-types.hpp	240;"	d
 MENU	config.cpp	/^const char *MENU =$/;"	v
@@ -1618,7 +1624,7 @@ MIN	utils.h	79;"	d
 MINDEX_FILE	db.h	67;"	d
 MINGAIN	spec_procs.cpp	133;"	d	file:
 MIN_MAIL_LEVEL	mail.h	20;"	d
-MIN_OUTSIDE_BANK	shop.h	137;"	d
+MIN_OUTSIDE_BANK	shop.h	168;"	d
 MIN_PER_PRAC	spec_procs.cpp	126;"	d	file:
 MISC	act.wizard.cpp	2352;"	d	file:
 MOB	mods/player.hpp	/^			PLAYER, MOB, DRONE,$/;"	e	enum:mods::player::player_type_enum_t
@@ -1684,17 +1690,17 @@ MORT_CAN_SEE	utils.h	447;"	d
 MORT_CAN_SEE_OBJ	utils.h	470;"	d
 MOTD_FILE	db.h	77;"	d
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MSG_CANT_KILL_KEEPER	shop.h	148;"	d
-MSG_CLOSED_FOR_DAY	shop.h	142;"	d
+MSG_CANT_KILL_KEEPER	shop.h	179;"	d
+MSG_CLOSED_FOR_DAY	shop.h	173;"	d
 MSG_HEADING	boards.h	44;"	d
 MSG_LEVEL	boards.h	46;"	d
-MSG_NOT_OPEN_YET	shop.h	140;"	d
-MSG_NOT_REOPEN_YET	shop.h	141;"	d
-MSG_NO_SEE_CHAR	shop.h	144;"	d
-MSG_NO_SELL_ALIGN	shop.h	145;"	d
-MSG_NO_SELL_CLASS	shop.h	146;"	d
-MSG_NO_STEAL_HERE	shop.h	143;"	d
-MSG_NO_USED_WANDSTAFF	shop.h	147;"	d
+MSG_NOT_OPEN_YET	shop.h	171;"	d
+MSG_NOT_REOPEN_YET	shop.h	172;"	d
+MSG_NO_SEE_CHAR	shop.h	175;"	d
+MSG_NO_SELL_ALIGN	shop.h	176;"	d
+MSG_NO_SELL_CLASS	shop.h	177;"	d
+MSG_NO_STEAL_HERE	shop.h	174;"	d
+MSG_NO_USED_WANDSTAFF	shop.h	178;"	d
 MSG_SLOTNUM	boards.h	45;"	d
 MUZZLE_BRAKE	mods/weapon.hpp	/^		COMPENSATOR, MUZZLE_BRAKE,EXTENDED,$/;"	e	enum:mods::weapon::barrel_t
 MatchAllOf	mods/catch.hpp	/^			struct MatchAllOf : MatcherBase<ArgT> {$/;"	s	namespace:Catch::Matchers::Impl
@@ -1746,13 +1752,13 @@ NOTHING	structs.h	127;"	d
 NOTIFY_OWNER	mods/weapon-types.hpp	/^		NOTIFY_OWNER,$/;"	e	enum:mods::weapon::capabilities::cap_t
 NOTITLE	mods/flags.hpp	/^		NOTITLE,$/;"	e	enum:mods::flags::plr
 NOTRACK	mods/flags.hpp	/^		NOTRACK,$/;"	e	enum:mods::flags::aff
-NOTRADE_CLERIC	shop.h	124;"	d
-NOTRADE_EVIL	shop.h	121;"	d
-NOTRADE_GOOD	shop.h	120;"	d
-NOTRADE_MAGIC_USER	shop.h	123;"	d
-NOTRADE_NEUTRAL	shop.h	122;"	d
-NOTRADE_THIEF	shop.h	125;"	d
-NOTRADE_WARRIOR	shop.h	126;"	d
+NOTRADE_CLERIC	shop.h	155;"	d
+NOTRADE_EVIL	shop.h	152;"	d
+NOTRADE_GOOD	shop.h	151;"	d
+NOTRADE_MAGIC_USER	shop.h	154;"	d
+NOTRADE_NEUTRAL	shop.h	153;"	d
+NOTRADE_THIEF	shop.h	156;"	d
+NOTRADE_WARRIOR	shop.h	157;"	d
 NOT_IMPL	mods/flags.hpp	/^	constexpr static uint64_t NOT_IMPL = (1 << 22);$/;"	m	namespace:mods::flags
 NOT_WIELDING_WEAPON	act.offensive.cpp	/^	NOT_WIELDING_WEAPON = -4,$/;"	e	enum:weapon_status_t	file:
 NOWHERE	structs.h	126;"	d
@@ -1782,11 +1788,11 @@ NotImplementedException	mods/catch.hpp	/^			NotImplementedException(NotImplement
 NotImplementedException	mods/catch.hpp	/^	class NotImplementedException : public std::exception {$/;"	c	namespace:Catch
 OBJAFF_FLAGGED	utils.h	241;"	d
 OBJECT	mods/object.hpp	/^				OBJECT = 0,$/;"	e	enum:mods::object::object_type_enum_t
-OBJECT_DEAD	shop.h	61;"	d
+OBJECT_DEAD	shop.h	92;"	d
 OBJECT_FROM_ROOM	mods/events.hpp	/^		OBJECT_FROM_ROOM,$/;"	e	enum:mods::events::event_enum
-OBJECT_NOTOK	shop.h	62;"	d
-OBJECT_NOVAL	shop.h	64;"	d
-OBJECT_OK	shop.h	63;"	d
+OBJECT_NOTOK	shop.h	93;"	d
+OBJECT_NOVAL	shop.h	95;"	d
+OBJECT_OK	shop.h	94;"	d
 OBJECT_TO_ROOM	mods/events.hpp	/^		OBJECT_TO_ROOM$/;"	e	enum:mods::events::event_enum
 OBJN	utils.h	489;"	d
 OBJS	utils.h	486;"	d
@@ -1814,11 +1820,11 @@ OLD_ENV_VAR	telnet.h	235;"	d
 ONOFF	utils.h	153;"	d
 ON_FIRE	structs.h	/^			ON_FIRE,		\/** actively burning *\/$/;"	e	enum:room_data::texture_type_t
 OPEN_DOOR	act.movement.cpp	339;"	d	file:
-OPER_AND	shop.h	96;"	d
-OPER_CLOSE_PAREN	shop.h	94;"	d
-OPER_NOT	shop.h	97;"	d
-OPER_OPEN_PAREN	shop.h	93;"	d
-OPER_OR	shop.h	95;"	d
+OPER_AND	shop.h	127;"	d
+OPER_CLOSE_PAREN	shop.h	125;"	d
+OPER_NOT	shop.h	128;"	d
+OPER_OPEN_PAREN	shop.h	124;"	d
+OPER_OR	shop.h	126;"	d
 OPPOSITE_DIR	globals.hpp	40;"	d
 OPT_USEC	structs.h	637;"	d
 OTHER_PLAYER_INDEX_START	mods/player-scaffolding.hpp	/^		constexpr static std::size_t OTHER_PLAYER_INDEX_START = 2;$/;"	m	struct:mods::player_scaffolding
@@ -1843,7 +1849,7 @@ PADDING0	structs.h	/^		byte PADDING0;		\/* used to be spells_to_learn		*\/$/;"	m
 PAGE_LENGTH	comm.h	80;"	d
 PAGE_SIZE	mods/player.hpp	/^		static constexpr int PAGE_SIZE = 40;$/;"	m	struct:mods::player
 PAGE_WIDTH	comm.h	81;"	d
-PARSE_ARGS	globals.hpp	178;"	d
+PARSE_ARGS	globals.hpp	183;"	d
 PASSES_PER_SEC	structs.h	638;"	d
 PATH_MAX	sysdep.h	352;"	d
 PAUSE_FILE	db.h	54;"	d
@@ -1967,8 +1973,8 @@ Q_TRIGGER_KEY	mods/quests.cpp	8;"	d	file:
 RADIATION	mods/aoe.hpp	/^		RADIATION, \/** Radioactive fallout *\/$/;"	e	enum:mods::aoe::types_t
 RADIOACTIVE	structs.h	/^			RADIOACTIVE, \/** actively emitting radioactivity *\/$/;"	e	enum:room_data::texture_type_t
 RANGE	act.wizard.cpp	2360;"	d	file:
-RANGE	db.cpp	1640;"	d	file:
-RANGE	db.cpp	1702;"	d	file:
+RANGE	db.cpp	1671;"	d	file:
+RANGE	db.cpp	1733;"	d	file:
 RANGED_ATTACK	mods/weapon-types.hpp	/^		RANGED_ATTACK,$/;"	e	enum:mods::weapon::capabilities::cap_t
 RARE	mods/randomized-items.hpp	/^	RARE,$/;"	e	enum:mods::rarity_enum_t
 RARE	mods/rarity.hpp	/^		constexpr static float RARE = 0.05034415;$/;"	m	namespace:mods::rarity
@@ -2187,26 +2193,26 @@ SEX_NEUTRAL	structs.h	235;"	d
 SHATTERED_GLASS	structs.h	/^			SHATTERED_GLASS, \/** results of breaking glass objects *\/$/;"	e	enum:room_data::texture_type_t
 SHOCK	mods/object.hpp	/^				SHOCK,$/;"	e	enum:mods::object::object_type_enum_t
 SHOOT	mods/weapon-types.hpp	/^		SHOOT,$/;"	e	enum:mods::weapon::capabilities::cap_t
-SHOP_BANK	shop.h	111;"	d
-SHOP_BITVECTOR	shop.h	113;"	d
-SHOP_BROKE_TEMPER	shop.h	112;"	d
-SHOP_BUYPROFIT	shop.h	116;"	d
-SHOP_BUYTYPE	shop.h	108;"	d
-SHOP_BUYWORD	shop.h	109;"	d
-SHOP_CLOSE1	shop.h	104;"	d
-SHOP_CLOSE2	shop.h	106;"	d
-SHOP_FUNC	shop.h	118;"	d
-SHOP_KEEPER	shop.h	102;"	d
-SHOP_KILL_CHARS	shop.h	133;"	d
-SHOP_NUM	shop.h	101;"	d
-SHOP_OPEN1	shop.h	103;"	d
-SHOP_OPEN2	shop.h	105;"	d
-SHOP_PRODUCT	shop.h	110;"	d
-SHOP_ROOM	shop.h	107;"	d
-SHOP_SELLPROFIT	shop.h	117;"	d
-SHOP_SORT	shop.h	115;"	d
-SHOP_TRADE_WITH	shop.h	114;"	d
-SHOP_USES_BANK	shop.h	134;"	d
+SHOP_BANK	shop.h	142;"	d
+SHOP_BITVECTOR	shop.h	144;"	d
+SHOP_BROKE_TEMPER	shop.h	143;"	d
+SHOP_BUYPROFIT	shop.h	147;"	d
+SHOP_BUYTYPE	shop.h	139;"	d
+SHOP_BUYWORD	shop.h	140;"	d
+SHOP_CLOSE1	shop.h	135;"	d
+SHOP_CLOSE2	shop.h	137;"	d
+SHOP_FUNC	shop.h	149;"	d
+SHOP_KEEPER	shop.h	133;"	d
+SHOP_KILL_CHARS	shop.h	164;"	d
+SHOP_NUM	shop.h	132;"	d
+SHOP_OPEN1	shop.h	134;"	d
+SHOP_OPEN2	shop.h	136;"	d
+SHOP_PRODUCT	shop.h	141;"	d
+SHOP_ROOM	shop.h	138;"	d
+SHOP_SELLPROFIT	shop.h	148;"	d
+SHOP_SORT	shop.h	146;"	d
+SHOP_TRADE_WITH	shop.h	145;"	d
+SHOP_USES_BANK	shop.h	165;"	d
 SHORT_RANGE	mods/object.hpp	/^				SHORT_RANGE,$/;"	e	enum:mods::object::object_type_enum_t
 SHOTGUN	mods/object.hpp	/^				SHOTGUN,$/;"	e	enum:mods::object::object_type_enum_t
 SHOTGUN	mods/weapon.hpp	/^	enum mask_type { SMG = 1, SNIPE = (1 << 2), SHOTGUN = (1 << 3), $/;"	e	enum:mods::weapon::mask_type
@@ -2414,8 +2420,8 @@ SUSP	telnet.h	60;"	d
 SUSPICIOUS	mods/ai_state.hpp	/^				WANDER, SUSPICIOUS, FIGHT,SUSPICIOUS2,PROTECT,AGGRESSIVE_PROTECT,$/;"	e	enum:mods::ai_state::state
 SUSPICIOUS2	mods/ai_state.hpp	/^				WANDER, SUSPICIOUS, FIGHT,SUSPICIOUS2,PROTECT,AGGRESSIVE_PROTECT,$/;"	e	enum:mods::ai_state::state
 SYNCH	telnet.h	63;"	d
-S_DATA	shop.h	88;"	d
-S_LEN	shop.h	89;"	d
+S_DATA	shop.h	119;"	d
+S_LEN	shop.h	120;"	d
 SafeBool	mods/catch.hpp	/^	class SafeBool {$/;"	c	namespace:Catch
 SharedImpl	mods/catch.hpp	/^		SharedImpl() : m_rc(0) {}$/;"	f	struct:Catch::SharedImpl
 SharedImpl	mods/catch.hpp	/^	struct SharedImpl : T {$/;"	s	namespace:Catch
@@ -2528,13 +2534,13 @@ TO_ROOM	comm.h	64;"	d
 TO_SLEEP	comm.h	68;"	d
 TO_VICT	comm.h	65;"	d
 TRACER_AMMUNITION	mods/weapon.hpp	/^		TRACER_AMMUNITION,$/;"	e	enum:mods::weapon::magazine_t
-TRADE_NOCLERIC	shop.h	78;"	d
-TRADE_NOEVIL	shop.h	75;"	d
-TRADE_NOGOOD	shop.h	74;"	d
-TRADE_NOMAGIC_USER	shop.h	77;"	d
-TRADE_NONEUTRAL	shop.h	76;"	d
-TRADE_NOTHIEF	shop.h	79;"	d
-TRADE_NOWARRIOR	shop.h	80;"	d
+TRADE_NOCLERIC	shop.h	109;"	d
+TRADE_NOEVIL	shop.h	106;"	d
+TRADE_NOGOOD	shop.h	105;"	d
+TRADE_NOMAGIC_USER	shop.h	108;"	d
+TRADE_NONEUTRAL	shop.h	107;"	d
+TRADE_NOTHIEF	shop.h	110;"	d
+TRADE_NOWARRIOR	shop.h	111;"	d
 TRAP_NONE	mods/item-types.hpp	/^		TRAP_NONE = 0,$/;"	e	enum:mods::weapon::type::trap
 TRIGGER_ALERT	mods/weapon-types.hpp	/^		TRIGGER_ALERT,$/;"	e	enum:mods::weapon::capabilities::cap_t
 TRIGGER_EXPLOSION	mods/weapon-types.hpp	/^		TRIGGER_EXPLOSION,$/;"	e	enum:mods::weapon::capabilities::cap_t
@@ -2704,7 +2710,7 @@ VALID_EDGE	graph.cpp	/^int VALID_EDGE(room_rnum x, int y) {$/;"	f
 VALID_OBJ_RNUM	utils.h	397;"	d
 VALID_ROOM_RNUM	utils.h	263;"	d
 VANISH	act.item.cpp	477;"	d	file:
-VERSION3_TAG	shop.h	51;"	d
+VERSION3_TAG	shop.h	82;"	d
 VERTICAL_GRIP	mods/weapon.hpp	/^		VERTICAL_GRIP, ANGLED_GRIP$/;"	e	enum:mods::weapon::grip_t
 VEST	mods/object.hpp	/^				VEST,$/;"	e	enum:mods::object::object_type_enum_t
 VIPER_RECON	mods/object.hpp	/^				VIPER_RECON,$/;"	e	enum:mods::object::object_type_enum_t
@@ -2759,8 +2765,8 @@ WEST	structs.h	147;"	d
 WHEN	mods/catch.hpp	12215;"	d
 WHO_FORMAT	act.informative.cpp	1341;"	d	file:
 WILL	telnet.h	46;"	d
-WILL_BANK_MONEY	shop.h	131;"	d
-WILL_START_FIGHT	shop.h	130;"	d
+WILL_BANK_MONEY	shop.h	162;"	d
+WILL_START_FIGHT	shop.h	161;"	d
 WIN32_LEAN_AND_MEAN	mods/catch.hpp	6782;"	d
 WIN32_LEAN_AND_MEAN	mods/catch.hpp	6795;"	d
 WIZLIST_FILE	db.h	82;"	d
@@ -2773,13 +2779,13 @@ XNAME_FILE	db.h	93;"	d
 YES	config.cpp	20;"	d	file:
 YESNO	utils.h	152;"	d
 Yes	mods/catch.hpp	/^			Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
-Z	db.cpp	1755;"	d	file:
-Z	db.cpp	1763;"	d	file:
-ZONE_ERROR	db.cpp	2076;"	d	file:
+Z	db.cpp	1786;"	d	file:
+Z	db.cpp	1794;"	d	file:
+ZONE_ERROR	db.cpp	2121;"	d	file:
 ZONE_PAVEMENT	structs.h	/^static constexpr int ZONE_PAVEMENT = 1;$/;"	v
 ZON_PREFIX	db.h	71;"	d
 ZOOM	mods/weapon-types.hpp	/^		ZOOM,$/;"	e	enum:mods::weapon::capabilities::cap_t
-ZO_DEAD	db.cpp	1995;"	d	file:
+ZO_DEAD	db.cpp	2040;"	d	file:
 Z_KINGS_C	castle.cpp	31;"	d	file:
 _ARPA_TELNET_H	telnet.h	37;"	d
 _BSD_SNPRINTF_H	bsd-snprintf.h	41;"	d
@@ -2840,6 +2846,7 @@ __MENTOC_MODS_CALC_VISIBILITY_HEADER__	mods/calc_visibility.hpp	2;"	d
 __MENTOC_MODS_CAMERA_HEADER__	mods/camera.hpp	2;"	d
 __MENTOC_MODS_CAMERA_SOURCE__	mods/camera.cpp	2;"	d	file:
 __MENTOC_MODS_CHARGEN_HEADER__	mods/chargen.hpp	2;"	d
+__MENTOC_MODS_CHARGEN_HEADER__	mods/shop.hpp	2;"	d
 __MENTOC_MODS_CHAT_HEADER__	mods/chat.hpp	2;"	d
 __MENTOC_MODS_CONF_HEADER__	mods/conf.hpp	2;"	d
 __MENTOC_MODS_CRYPTO_HEADER__	mods/crypto.hpp	2;"	d
@@ -2893,7 +2900,7 @@ __MENTOC_MODS_cron_HEADER__	mods/cron.hpp	2;"	d
 __MENTOC_MODS_deferred_HEADER__	mods/deferred.hpp	2;"	d
 __MENTOC_MODS_prefs_HEADER__	mods/prefs.hpp	2;"	d
 __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
-__MENTOC_PLR	db.cpp	2463;"	d	file:
+__MENTOC_PLR	db.cpp	2508;"	d	file:
 __MENTOC_STRING_LIT__	mods/util.hpp	21;"	d
 __MENTOC_TYPES_HEADER__	types.hpp	2;"	d
 __MENTOC_USE_LMDB__	mods/lmdb.cpp	10;"	d	file:
@@ -3257,6 +3264,8 @@ character	structs.h	/^			char_data *character;    \/** FIXME: turn to mods::play
 character_list	globals.cpp	/^char_data* character_list = NULL;$/;"	v
 chargen	mods/chargen.cpp	/^namespace mods::chargen {$/;"	n	class:mods	file:
 chargen	mods/chargen.hpp	/^namespace mods::chargen {$/;"	n	class:mods
+chargen	mods/shop.cpp	/^namespace mods::chargen {$/;"	n	class:mods	file:
+chargen	mods/shop.hpp	/^namespace mods::chargen {$/;"	n	class:mods
 chat	mods/chat.cpp	/^namespace mods::chat {$/;"	n	class:mods	file:
 chat	mods/chat.hpp	/^namespace mods::chat {$/;"	n	class:mods
 chat	mods/chat.hpp	/^namespace mods::chat {$/;"	n	class:mods::mods
@@ -3449,6 +3458,7 @@ create_object_from_index	db.cpp	/^obj_ptr_t create_object_from_index(std::size_t
 create_player	mods/player-scaffolding.cpp	/^	player_ptr_t player_scaffolding::create_player() {$/;"	f	class:mods::player_scaffolding
 create_selector	mods/behaviour_tree_node.hpp	/^		static child_node_t create_selector(const children_t& ch){$/;"	f	struct:mods::behaviour_tree_node
 create_sequence	mods/behaviour_tree_node.hpp	/^		static child_node_t create_sequence(const children_t& ch){$/;"	f	struct:mods::behaviour_tree_node
+create_shop_from_index	db.cpp	/^shop_ptr_t create_shop_from_index(std::size_t proto_index){$/;"	f
 credits	db.cpp	/^char *credits = NULL;		\/* game credits			 *\/$/;"	v
 critical_chance	mods/weapon.hpp	/^			float critical_chance;$/;"	m	struct:mods::weapon::yaml::rifle_description_t
 critical_range	mods/weapon.hpp	/^			int critical_range;$/;"	m	struct:mods::weapon::yaml::rifle_description_t
@@ -3564,6 +3574,7 @@ description	mods/builder.cpp	/^	bool description(room_rnum room_id,std::string_v
 description	mods/catch.hpp	/^		const char* description;$/;"	m	struct:Catch::NameAndDesc
 description	mods/extra_desc_data.hpp	/^		mods::string description;$/;"	m	struct:mods::extra_desc_data
 description	mods/player.hpp	/^		mods::string& description(){$/;"	f	struct:mods::player
+description	shop.h	/^	mods::string description;$/;"	m	struct:shop_data
 description	structs.h	/^		mods::string	description;           \/* Shown when entered                 *\/$/;"	m	struct:room_data
 description	structs.h	/^		mods::string description;		  \/* When in room                     *\/$/;"	m	struct:obj_data
 description	structs.h	/^		mods::string description;             \/* What to see                      *\/$/;"	m	struct:extra_descr_data
@@ -3787,7 +3798,7 @@ do_newjs	interpreter.cpp	/^ACMD(do_newjs);$/;"	v
 do_next_mob_number	interpreter.cpp	/^ACMD(do_next_mob_number);$/;"	v
 do_next_object_number	interpreter.cpp	/^ACMD(do_next_object_number);$/;"	v
 do_next_room_number	interpreter.cpp	/^ACMD(do_next_room_number);$/;"	v
-do_not_buy	shop.h	/^	char	*do_not_buy;		\/* If keeper dosn't buy such things	*\/$/;"	m	struct:shop_data
+do_not_buy	shop.h	/^	mods::string do_not_buy;		\/* If keeper dosn't buy such things	*\/$/;"	m	struct:shop_data
 do_not_here	act.other.cpp	/^ACMD(do_not_here);$/;"	v
 do_not_here	interpreter.cpp	/^ACMD(do_not_here);$/;"	v
 do_npc_rescue	castle.cpp	/^int do_npc_rescue( char_data *ch,  char_data *ch_victim) {$/;"	f
@@ -4058,6 +4069,7 @@ explosive	mods/weapon.cpp	/^	mw_explosive explosive(obj_data_ptr_t& object){$/;"
 explosive_damage	mods/projectile.cpp	/^		int explosive_damage(player_ptr_t victim, obj_ptr_t item){$/;"	f	namespace:mods::projectile
 explosive_description_t	mods/yaml.hpp	/^		explosive_description_t() :$/;"	f	struct:mods::yaml::explosive_description_t
 explosive_description_t	mods/yaml.hpp	/^	struct explosive_description_t : public yaml_description_t {$/;"	s	namespace:mods::yaml
+export_shop	shop.cpp	/^std::map<std::string,std::string> shop_data<TOrmType,T,R>::export_shop(){$/;"	f	class:shop_data
 extended_item_vnum	structs.h	/^		uint64_t extended_item_vnum;$/;"	m	struct:obj_data
 extra_bits	constants.cpp	/^const char *extra_bits[] = {$/;"	v
 extra_bits	constants.hpp	/^const char *extra_bits[] = {$/;"	v
@@ -4093,6 +4105,7 @@ feed	mods/yaml.cpp	/^	int16_t explosive_description_t::feed(std::string_view in_
 feed	mods/yaml.cpp	/^	int16_t gadget_description_t::feed(std::string_view in_file){$/;"	f	class:mods::yaml::gadget_description_t
 feed	mods/yaml.cpp	/^	int16_t rifle_description_t::feed(std::string_view in_file){$/;"	f	class:mods::yaml::rifle_description_t
 feed	mods/yaml.cpp	/^	int16_t trap_description_t::feed(std::string_view in_file){$/;"	f	class:mods::yaml::trap_description_t
+feed	shop.cpp	/^	void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::feed(const pqxx::result::reference & row)$/;"	f	class:shop_data
 feed	structs.cpp	/^		void obj_data::feed(std::string_view in_type,std::string_view feed_file){$/;"	f	class:obj_data
 feed	structs.cpp	/^	void obj_flag_data::feed(const pqxx::result::reference & row){$/;"	f	class:obj_flag_data
 feed	structs.cpp	/^void obj_data::feed(const pqxx::result::reference & row){$/;"	f	class:obj_data
@@ -4160,6 +4173,7 @@ flagged	mods/behaviour_tree_impl.hpp	/^		bool inline flagged(argument_type & mob
 flagged	mods/behaviour_tree_impl.hpp	/^		bool inline flagged(argument_type & mob,const type & type){$/;"	f	namespace:mods::behaviour_tree_impl
 flagged	structs.cpp	/^bool obj_data::flagged(int value){$/;"	f	class:obj_data
 flags	mods/flags.hpp	/^namespace mods::flags {$/;"	n	class:mods
+flags	shop.h	/^	uint64_t flags;$/;"	m	struct:shop_data
 flags_door	act.movement.cpp	/^	const int flags_door[] = {$/;"	v
 flush_output	structs.cpp	/^			size_t mods::descriptor_data::flush_output(){$/;"	f	class:mods::mods::descriptor_data
 flush_queues	comm.cpp	/^void flush_queues(mods::descriptor_data &d) {$/;"	f
@@ -4406,6 +4420,7 @@ handbook	db.cpp	/^char *handbook = NULL;		\/* handbook for new immortals	 *\/$/;
 handleErrors	mods/crypto.cpp	/^void handleErrors(void)$/;"	f	namespace:mods::crypto
 handle_disconnects	comm.cpp	/^std::size_t handle_disconnects(){$/;"	f
 handle_primary_choice	mods/chargen.cpp	/^	void handle_primary_choice(player_ptr_t p,char arg_choice,player_class_t class_type){$/;"	f	namespace:mods::chargen
+handle_primary_choice	mods/shop.cpp	/^	void handle_primary_choice(player_ptr_t p,char arg_choice,player_class_t class_type){$/;"	f	namespace:mods::chargen
 hardcoded_iv	mods/crypto.hpp	/^	static std::string hardcoded_iv = "1218749!-Z0*$761";$/;"	m	namespace:mods::crypto
 hardcoded_key	mods/crypto.hpp	/^	static std::string hardcoded_key = "1218749!-Z0*$7611218749!-Z0*$761";$/;"	m	namespace:mods::crypto
 has_affect	mods/player.cpp	/^	bool player::has_affect(mods::flags::aff flag){$/;"	f	class:mods::player
@@ -4529,6 +4544,7 @@ init	globals.cpp	/^		void init(int argc,char** argv) {$/;"	f	namespace:mods::glo
 init	mods/debug.hpp	/^	static inline void init(bool tics){ debug_state = std::make_unique<state>(tics); }$/;"	f	namespace:mods::debug
 init	mods/object.cpp	/^	void object::init(){$/;"	f	class:mods::object
 init	mods/player.cpp	/^	void player::init(){$/;"	f	class:mods::player
+init	shop.cpp	/^void shop_data<TOrmType,T,R>::init(){$/;"	f	class:shop_data
 init	structs.cpp	/^		void char_data::init(){$/;"	f	class:char_data
 init	structs.cpp	/^		void room_data::init(){$/;"	f	class:room_data
 init	structs.cpp	/^void obj_data::init(){$/;"	f	class:obj_data
@@ -4671,6 +4687,7 @@ list_all_shops	shop.cpp	/^void list_all_shops(char_data *ch) {$/;"	f
 list_char_to_char	act.informative.cpp	/^void list_char_to_char(char_data *ch) {$/;"	f
 list_container	mods/acl_list.cpp	/^	namespace list_container{$/;"	n	namespace:mods::acl_list	file:
 list_detailed_shop	shop.cpp	/^void list_detailed_shop(char_data *ch, int shop_nr) {$/;"	f
+list_line	mods/builder_util.hpp	/^		void list_line(TPlayer& player, const std::string& key, ObjectType& value){$/;"	f	namespace:mods::builder_util
 list_obj_to_char	act.informative.cpp	/^void list_obj_to_char(struct obj_data *list, char_data *ch, int mode, int show) {$/;"	f
 list_object	shop.cpp	/^char *list_object(struct obj_data *obj, int cnt, int aindex, int shop_nr, char_data *keeper, char_data *ch) {$/;"	f
 list_object_vector	mods/builder_util.hpp	/^	void list_object_vector($/;"	f	namespace:mods::builder_util
@@ -4836,6 +4853,7 @@ m_label	mods/catch.hpp	/^		std::string m_label;$/;"	m	struct:Catch::pluralise
 m_lense_type	mods/player.hpp	/^		lense_type_t m_lense_type;$/;"	m	struct:mods::player
 m_levels	mods/jx.hpp	/^			std::map<uint32_t,uint32_t> m_levels;$/;"	m	struct:mods::jx::compositor
 m_lineInfo	mods/catch.hpp	/^			SourceLineInfo m_lineInfo;$/;"	m	class:Catch::NotImplementedException
+m_loaded	shop.h	/^	bool m_loaded;$/;"	m	struct:shop_data
 m_location_data	structs.h	/^		uint8_t m_location_data;$/;"	m	struct:obj_data
 m_logic	mods/behaviour_tree_node.hpp	/^			callback_t  m_logic;$/;"	m	struct:mods::behaviour_tree_node
 m_mallocd	mods/string.hpp	/^			bool m_mallocd;$/;"	m	struct:mods::string
@@ -4851,6 +4869,8 @@ m_name	mods/player.hpp	/^		std::string	m_name;$/;"	m	struct:mods::player
 m_node	mods/behaviour_tree.hpp	/^		node m_node;$/;"	m	struct:mods::behaviour_tree
 m_node_type	mods/behaviour_tree_node.hpp	/^			node_type_t m_node_type;$/;"	m	struct:mods::behaviour_tree_node
 m_object_uuid	mods/camera.hpp	/^			uuid_t m_object_uuid;$/;"	m	class:mods::camera
+m_objects	shop.h	/^	std::vector<db_id_t> m_objects;$/;"	m	struct:shop_data
+m_orm	shop.h	/^	shop_data_orm_type_t m_orm;$/;"	m	struct:shop_data
 m_overhead_map_height	mods/player.hpp	/^		uint8_t m_overhead_map_height;$/;"	m	struct:mods::player
 m_overhead_map_width	mods/player.hpp	/^		uint8_t m_overhead_map_width;$/;"	m	struct:mods::player
 m_owner	structs.h	/^		uuid_t m_owner;$/;"	m	struct:obj_data
@@ -4951,6 +4971,7 @@ main	bsd-snprintf.cpp	/^main(void) {$/;"	f
 main	comm.cpp	/^int main(int argc, char **argv) {$/;"	f
 makeSafe	mods/catch.hpp	/^			static type makeSafe(bool value) {$/;"	f	class:Catch::SafeBool
 make_char	mods/chargen.cpp	/^	std::tuple<bool,std::string> make_char(player_ptr_t player){$/;"	f	namespace:mods::chargen
+make_char	mods/shop.cpp	/^	std::tuple<bool,std::string> make_char(player_ptr_t player){$/;"	f	namespace:mods::chargen
 make_corpse	fight.cpp	/^void make_corpse(char_data *ch) {$/;"	f
 make_from	mods/util.cpp	/^	obj_ptr_t make_from(obj_data* o){$/;"	f	namespace:mods::util
 make_prompt	comm.cpp	/^char *make_prompt(mods::descriptor_data &d) {$/;"	f
@@ -5001,10 +5022,10 @@ mentoc_pqxx_result_t	mods/string.hpp	14;"	d
 mentoc_pqxx_result_t	structs.h	32;"	d
 mentoc_pqxx_result_t	structs.h	34;"	d
 message	mods/catch.hpp	/^		std::string message;$/;"	m	struct:Catch::AssertionResultData
-message_buy	shop.h	/^	char	*message_buy;		\/* Message when player buys item	*\/$/;"	m	struct:shop_data
+message_buy	shop.h	/^	mods::string message_buy;		\/* Message when player buys item	*\/$/;"	m	struct:shop_data
 message_len	boards.h	/^	int	message_len;  \/* size of message text (for file write) *\/$/;"	m	struct:board_msginfo
 message_list	structs.h	/^	struct message_list {$/;"	s
-message_sell	shop.h	/^	char	*message_sell;		\/* Message when player sells item	*\/$/;"	m	struct:shop_data
+message_sell	shop.h	/^	mods::string message_sell;		\/* Message when player sells item	*\/$/;"	m	struct:shop_data
 message_type	structs.h	/^	struct message_type {$/;"	s
 meta_utils	mods/meta_utils.cpp	/^namespace mods::meta_utils {$/;"	n	class:mods	file:
 meta_utils	mods/meta_utils.hpp	/^namespace mods::meta_utils {$/;"	n	class:mods
@@ -5019,8 +5040,8 @@ minimum_position	interpreter.h	/^	byte minimum_position;$/;"	m	struct:command_in
 misc_pref_enum_t	mods/player.hpp	/^		enum misc_pref_enum_t {$/;"	g	struct:mods::player
 miss_att	structs.h	/^		sh_int miss_att;$/;"	m	struct:dex_app_type
 miss_msg	structs.h	/^		struct msg_type miss_msg;	\/* messages when miss			*\/$/;"	m	struct:message_type	typeref:struct:message_type::msg_type
-missing_cash1	shop.h	/^	char	*missing_cash1;		\/* Message if keeper hasn't got cash	*\/$/;"	m	struct:shop_data
-missing_cash2	shop.h	/^	char	*missing_cash2;		\/* Message if player hasn't got cash	*\/$/;"	m	struct:shop_data
+missing_cash1	shop.h	/^	mods::string missing_cash1;		\/* Message if keeper hasn't got cash	*\/$/;"	m	struct:shop_data
+missing_cash2	shop.h	/^	mods::string missing_cash2;		\/* Message if player hasn't got cash	*\/$/;"	m	struct:shop_data
 mob	structs.h	/^		mob_pavements_t mob;$/;"	m	struct:zone_pavement_t
 mob_act_flags	mods/builder.cpp	/^	std::array<std::pair<int,std::string>,19> mob_act_flags = { {$/;"	m	namespace:mods::builder	file:
 mob_chmap	globals.cpp	/^		std::map<char_data*,std::shared_ptr<mods::npc>> mob_chmap;$/;"	m	namespace:mods::globals	file:
@@ -5202,8 +5223,8 @@ nitems	structs.h	/^		int	nitems;$/;"	m	struct:rent_info
 no_mail	db.cpp	/^int no_mail = 0;		\/* mail disabled?		 *\/$/;"	v
 no_rent_check	db.cpp	/^int no_rent_check = 0;		\/* skip rent check on boot?	 *\/$/;"	v
 no_specials	comm.cpp	/^int no_specials = 0;		\/* Suppress special routines *\/$/;"	v
-no_such_item1	shop.h	/^	char	*no_such_item1;		\/* Message if keeper hasn't got an item	*\/$/;"	m	struct:shop_data
-no_such_item2	shop.h	/^	char	*no_such_item2;		\/* Message if player hasn't got an item	*\/$/;"	m	struct:shop_data
+no_such_item1	shop.h	/^	mods::string no_such_item1;		\/* Message if keeper hasn't got an item	*\/$/;"	m	struct:shop_data
+no_such_item2	shop.h	/^	mods::string no_such_item2;		\/* Message if player hasn't got an item	*\/$/;"	m	struct:shop_data
 node_type_t	mods/behaviour_tree_node.hpp	/^		enum node_type_t { DO_NOTHING, SELECTOR, SEQUENCE, LEAF };$/;"	g	struct:mods::behaviour_tree_node
 nonblock	comm.cpp	/^void nonblock(socket_t s) {$/;"	f
 not_found	act.social.cpp	/^	char *not_found;$/;"	m	struct:social_messg	file:
@@ -5248,7 +5269,6 @@ obj_from_obj	handler.cpp	/^void obj_from_obj(struct obj_data *obj) {$/;"	f
 obj_from_room	handler.cpp	/^void obj_from_room(obj_ptr_t in_object) {$/;"	f
 obj_from_room	handler.cpp	/^void obj_from_room(struct obj_data *object) {$/;"	f
 obj_index	db.cpp	/^std::vector<index_data> obj_index;	\/* index table for object file	 *\/$/;"	v
-obj_list	db.cpp	/^std::deque<std::shared_ptr<obj_data>> obj_list;$/;"	v
 obj_map	globals.cpp	/^		map_object_list obj_map;$/;"	m	namespace:mods::globals	file:
 obj_odmap	globals.cpp	/^		std::map<obj_data*,obj_ptr_t> obj_odmap;$/;"	m	namespace:mods::globals	file:
 obj_pavements_t	structs.h	/^		typedef std::vector<obj_vnum> obj_pavements_t;$/;"	t	struct:zone_pavement_t
@@ -5268,6 +5288,7 @@ object	mods/object.cpp	/^	object::object(mods::object* ptr) {$/;"	f	class:mods::
 object	mods/object.hpp	/^	struct object {$/;"	s	namespace:mods
 object_end	mods/jx.hpp	/^			compositor& object_end() {$/;"	f	struct:mods::jx::compositor
 object_from_room	mods/events.cpp	/^			void object_from_room(uuid_t uuid,room_rnum room){$/;"	f	namespace:mods::events::publish::rooms
+object_info	shop.h	/^	TObjectInfo object_info;$/;"	m	struct:shop_data
 object_list_new_owner	handler.cpp	/^void object_list_new_owner(struct obj_data *list, char_data *ch) {$/;"	f
 object_start	mods/jx.hpp	/^			compositor& object_start(const std::string& key) {$/;"	f	struct:mods::jx::compositor
 object_to_room	mods/events.cpp	/^			void object_to_room(uuid_t uuid,room_rnum room){$/;"	f	namespace:mods::events::publish::rooms
@@ -5347,6 +5368,7 @@ optr_by_uuid	globals.cpp	/^obj_ptr_t optr_by_uuid(uuid_t id){$/;"	f
 optr_opt	globals.cpp	/^std::optional<obj_ptr_t> optr_opt(uuid_t obj_uuid){$/;"	f
 org	spell_parser.cpp	/^	const char *org;$/;"	m	struct:syllable	file:
 original	structs.h	/^			char_data *original;    \/** FIXME: turn to mods::player *\/$/;"	m	struct:mods::descriptor_data
+orm	shop.h	/^namespace mods::orm {$/;"	n	class:mods
 oss	mods/catch.hpp	/^		std::ostringstream oss;$/;"	m	struct:Catch::CopyableStream
 other	mods/catch.hpp	/^		SourceLineInfo(SourceLineInfo const& other)          = default;$/;"	m	struct:Catch::SourceLineInfo
 others_auto	act.social.cpp	/^	char *others_auto;$/;"	m	struct:social_messg	file:
@@ -5383,6 +5405,7 @@ parse_object	mods/util.cpp	/^	obj_ptr_t parse_object(player_ptr_t& player,std::s
 parse_object_vec	mods/util.cpp	/^	obj_ptr_t parse_object_vec(player_ptr_t& player,std::vector<std::string>& vec_args){$/;"	f	namespace:mods::util
 parse_object_with_capability	mods/util.cpp	/^	obj_ptr_t parse_object_with_capability(player_ptr_t& player,std::string_view arg, int start_at, int* last_index, mods::weapon::type::type_list type, std::vector<int>& types) {$/;"	f	namespace:mods::util
 parse_primary_choice	mods/chargen.cpp	/^	std::string_view parse_primary_choice(char choice,int class_type){$/;"	f	namespace:mods::chargen
+parse_primary_choice	mods/shop.cpp	/^	std::string_view parse_primary_choice(char choice,int class_type){$/;"	f	namespace:mods::chargen
 parse_rarity	mods/yaml.cpp	/^	float parse_rarity(const std::string& rarity_string) {$/;"	f	namespace:mods::yaml
 parse_room	db.cpp	/^void parse_room(FILE *fl, int virtual_nr) {$/;"	f
 parse_simple_mob	db.cpp	/^void parse_simple_mob(FILE *mob_f, int i, int nr) {$/;"	f
@@ -5390,6 +5413,7 @@ parse_sql_mobiles	db.cpp	/^void parse_sql_mobiles() {$/;"	f
 parse_sql_objects	db.cpp	/^int parse_sql_objects() {$/;"	f
 parse_sql_player	db.cpp	/^bool parse_sql_player(player_ptr_t player_ptr){$/;"	f
 parse_sql_rooms	db.cpp	/^std::tuple<int16_t,std::string> parse_sql_rooms() {$/;"	f
+parse_sql_shops	db.cpp	/^int parse_sql_shops() {$/;"	f
 parse_sql_zones	db.cpp	/^std::tuple<int16_t,std::string> parse_sql_zones() {$/;"	f
 passwd	structs.h	/^		mods::string passwd;$/;"	m	struct:char_player_data
 password	mods/auto-login.hpp	/^	static std::string password;$/;"	m	namespace:mods::auto_login
@@ -5532,6 +5556,7 @@ pregame	mods/pregame.hpp	/^namespace mods::pregame {$/;"	n	class:mods
 pressure	structs.h	/^		int	pressure;	\/* How is the pressure ( Mb ) *\/$/;"	m	struct:weather_data
 primary_choice_t	mods/weapon.hpp	/^		enum primary_choice_t {$/;"	g	namespace:mods::weapon::sentinel
 primary_weapon_menu	mods/chargen.cpp	/^	std::string_view primary_weapon_menu(player_class_t class_type){$/;"	f	namespace:mods::chargen
+primary_weapon_menu	mods/shop.cpp	/^	std::string_view primary_weapon_menu(player_class_t class_type){$/;"	f	namespace:mods::chargen
 print_group	act.other.cpp	/^void print_group(char_data *ch) {$/;"	f
 print_object_location	act.informative.cpp	/^void print_object_location(int num, struct obj_data *obj, char_data *ch,$/;"	f
 print_zone_to_buf	act.wizard.cpp	/^size_t print_zone_to_buf(char *bufptr, size_t left, zone_rnum zone) {$/;"	f
@@ -5673,6 +5698,7 @@ register_object_db_id	globals.cpp	/^		void register_object_db_id(uint64_t db_id,
 register_object_list	globals.cpp	/^		void register_object_list() {$/;"	f	namespace:mods::globals
 register_player	globals.cpp	/^		void register_player(player_ptr_t player){$/;"	f	namespace:mods::globals
 register_room	globals.cpp	/^		void register_room(const room_rnum& r) {$/;"	f	namespace:mods::globals
+register_shop	globals.hpp	/^		void register_shop(TShopPtr shop){$/;"	f	namespace:mods::globals
 release	mods/catch.hpp	/^		virtual void release() const {$/;"	f	struct:Catch::SharedImpl
 release_zone	mods/builder.cpp	/^void release_zone(int zone){$/;"	f
 reload_time	mods/weapon.hpp	/^			int reload_time;$/;"	m	struct:mods::weapon::yaml::rifle_description_t
@@ -5754,6 +5780,7 @@ room_direction_data	structs.h	/^	struct room_direction_data {$/;"	s
 room_distance	mods/scan.cpp	/^	std::tuple<bool,distance_t> room_distance(room_rnum& source,room_rnum& dest){$/;"	f	namespace:mods::scan
 room_event	globals.cpp	/^		void room_event(room_vnum room,mods::ai_state::event_type_t event) {$/;"	f	namespace:mods::globals
 room_flags	structs.h	/^		int room_flags;		\/* DEATH,DARK ... etc *\/$/;"	m	struct:room_data
+room_info	shop.h	/^	TRoomInfo room_info;$/;"	m	struct:shop_data
 room_is_dark	utils.cpp	/^int room_is_dark(room_rnum room) {$/;"	f
 room_list	globals.cpp	/^		room_list_t room_list;$/;"	m	namespace:mods::globals	file:
 room_mappings	mods/builder.cpp	/^	static std::map<int,int> room_mappings;$/;"	m	namespace:mods::builder	file:
@@ -5796,6 +5823,7 @@ sandbox_data_t	mods/builder.cpp	/^	sandbox_data_t::sandbox_data_t() : m_name("")
 sandbox_data_t	mods/builder.hpp	/^	struct sandbox_data_t {$/;"	s	namespace:mods::builder
 sandboxes	mods/builder.cpp	/^	sandbox_list_t sandboxes;$/;"	m	namespace:mods::builder	file:
 sanitize	mods/util.cpp	/^		std::function<void(const std::string&,std::string&)> sanitize = [](const std::string & command,std::string& sanitized){$/;"	m	namespace:mods::util	file:
+save	shop.cpp	/^std::tuple<bool,uint64_t,std::string> shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::save(){$/;"	f	class:shop_data
 save_char	mods/db.cpp	/^tuple_status_t save_char($/;"	f	namespace:mods::db
 save_char_data	db.cpp	/^	int16_t save_char_data(player_ptr_t& player,std::map<std::string,std::string> values){$/;"	f	namespace:db
 save_char_prefs	db.cpp	/^	int16_t save_char_prefs(player_ptr_t& player){$/;"	f	namespace:db
@@ -5949,12 +5977,15 @@ sex_flags	mods/builder.cpp	/^	std::array<std::pair<int,std::string>,3> sex_flags
 shock	structs.h	/^		sh_int shock;$/;"	m	struct:con_app_type
 shop_bits	shop.cpp	/^const char *shop_bits[] = {$/;"	v
 shop_buy_data	shop.h	/^struct shop_buy_data {$/;"	s
+shop_data	shop.cpp	/^shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::shop_data(){$/;"	f	class:shop_data
 shop_data	shop.h	/^struct shop_data {$/;"	s
-shop_index	shop.cpp	/^std::vector<shop_data> shop_index;$/;"	v
 shop_keeper	act.other.cpp	/^SPECIAL(shop_keeper);$/;"	v
 shop_keeper	shop.cpp	/^SPECIAL(shop_keeper);$/;"	v
+shop_list	db.cpp	/^std::deque<std::shared_ptr<shop_data_t>> shop_list;$/;"	v
 shop_producing	shop.cpp	/^int shop_producing(struct obj_data *item, int shop_nr) {$/;"	f
+shop_proto	db.cpp	/^std::vector<shop_data_t> shop_proto;	\/* prototypes for objs		 *\/$/;"	v
 shop_rnum	structs.h	/^	typedef IDXTYPE shop_rnum;$/;"	t
+shop_type	shop.h	/^	int shop_type;$/;"	m	struct:shop_data
 shop_vnum	structs.h	/^	typedef IDXTYPE shop_vnum;$/;"	t
 shopping_buy	shop.cpp	/^void shopping_buy(char *arg, char_data *ch, char_data *keeper, int shop_nr) {$/;"	f
 shopping_list	shop.cpp	/^void shopping_list(char *arg, char_data *ch, char_data *keeper, int shop_nr) {$/;"	f
@@ -5966,6 +5997,7 @@ short_description	structs.h	/^		mods::string short_description;       \/* when w
 shouldContinueOnFailure	mods/catch.hpp	/^	inline bool shouldContinueOnFailure(int flags)    {$/;"	f	namespace:Catch
 shouldSuppressFailure	mods/catch.hpp	/^	inline bool shouldSuppressFailure(int flags)      {$/;"	f	namespace:Catch
 show_finalized_chargen_screen	mods/chargen.cpp	/^	void show_finalized_chargen_screen(player_ptr_t p){$/;"	f	namespace:mods::chargen
+show_finalized_chargen_screen	mods/shop.cpp	/^	void show_finalized_chargen_screen(player_ptr_t p){$/;"	f	namespace:mods::chargen
 show_nonconst_vector	mods/builder_util.hpp	/^	void show_nonconst_vector($/;"	f	namespace:mods::builder_util
 show_obj_modifiers	act.informative.cpp	/^void show_obj_modifiers(struct obj_data *obj, char_data *ch) {$/;"	f
 show_obj_to_char	act.informative.cpp	/^void show_obj_to_char(struct obj_data *obj, char_data *ch, int mode) {$/;"	f
@@ -6202,6 +6234,7 @@ timer	structs.h	/^		int	timer;$/;"	m	struct:obj_file_elem
 times_message	shop.cpp	/^char *times_message(struct obj_data *obj, char *name, int num) {$/;"	f
 title	mods/builder.cpp	/^	bool title(room_rnum room_id,std::string_view str_title) {$/;"	f	namespace:mods::builder
 title	mods/player.hpp	/^		mods::string& title(){$/;"	f	struct:mods::player
+title	shop.h	/^	mods::string title;$/;"	m	struct:shop_data
 title	structs.h	/^		mods::string title;        \/* PC \/ NPC's title                     *\/$/;"	m	struct:char_player_data
 title	structs.h	/^		mods::string title;$/;"	m	struct:char_file_u
 title_female	class.cpp	/^const char *title_female(int chclass, int level) {$/;"	f
@@ -6323,6 +6356,7 @@ utils	mods/js.cpp	/^		namespace utils {$/;"	n	namespace:mods::js	file:
 uuid	mods/drone.hpp	/^			uuid_t uuid() const {$/;"	f	class:mods::drone
 uuid	mods/js.cpp	/^		static duk_ret_t uuid(duk_context *ctx) {$/;"	f	namespace:mods::js
 uuid	mods/player.hpp	/^		uuid_t& uuid() const {$/;"	f	struct:mods::player
+uuid	shop.h	/^	uint64_t uuid;$/;"	m	struct:shop_data
 uuid	structs.h	/^		uuid_t uuid;$/;"	m	struct:char_data
 uuid	structs.h	/^		uuid_t uuid;$/;"	m	struct:obj_data
 value	mods/catch.hpp	/^			enum { value = sizeof(testStreamable(s << t)) == sizeof(TrueType) };$/;"	e	enum:Catch::Detail::IsStreamInsertable::__anon3

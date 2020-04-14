@@ -269,4 +269,8 @@ namespace mods::builder_util {
 		return;
 	}
 
+	template <typename TPlayer,typename ObjectType>
+		void list_line(TPlayer& player, const std::string& key, ObjectType& value){
+			*player << "{gld}[" << key << "]{/gld} :->{red} [" << value << "]{/red}\r\n";
+		}
 };

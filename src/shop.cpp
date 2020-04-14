@@ -23,6 +23,7 @@
 #include "utils.h"
 #include "shop.h"
 #include "constants.h"
+#include "mods/orm/shop.hpp"
 
 /* External variables */
 extern struct time_info_data time_info;
@@ -34,8 +35,9 @@ ACMD(do_echo);
 ACMD(do_say);
 void sort_keeper_objs(char_data *keeper, int shop_nr);
 
+using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>;
 /* Local variables */
-std::vector<shop_data> shop_index;
+std::vector<shop_data_t> shop_index;
 int top_shop = -1;
 int cmd_say, cmd_tell, cmd_emote, cmd_slap, cmd_puke;
 
@@ -1323,11 +1325,12 @@ char *read_shop_message(int mnum, room_vnum shr, FILE *shop_f, const char *why) 
 }
 
 void boot_sql_shops() {
+	log("Booting shops from sql");
 	return;
 }
 
 void boot_the_shops() {
-	log("deprecated: boot_the_shops");
+	boot_sql_shops();
 	return;
 }
 
@@ -1666,4 +1669,150 @@ void destroy_shops(void) {
 	}
 
 	top_shop = -1;
+}
+
+#ifdef __MENTOC_USE_PQXX_RESULT__
+	template <>
+	void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::feed(const pqxx::result::reference & row)
+#else
+	template <>
+	void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::feed(pqxx::row row)
+#endif
+{
+	db_id = row["shop_id"].as<db_id_t>();
+	vnum = row["shop_vnum"].as<shop_vnum>();
+	profit_buy = row["shop_profit_buy"].as<float>();
+	profit_sell = row["shop_profit_sell"].as<float>();
+	title.assign(row["shop_title"].as<std::string>());
+	description.assign(row["shop_description"].as<std::string>());
+	flags = row["shop_flags"].as<uint64_t>();
+	no_such_item1.assign(row["shop_no_such_item1"].as<std::string>());
+	no_such_item2.assign(row["shop_no_such_item2"].as<std::string>());
+	missing_cash1.assign(row["shop_missing_cash1"].as<std::string>());
+	missing_cash2.assign(row["shop_missing_cash2"].as<std::string>());
+	do_not_buy.assign(row["shop_do_not_buy"].as<std::string>());
+	message_buy.assign(row["shop_message_buy"].as<std::string>());
+	message_sell.assign(row["shop_message_sell"].as<std::string>());
+	temper1 = row["shop_temper1"].as<int>();
+	bitvector = row["shop_bitvector"].as<bitvector_t>();
+	keeper = row["shop_keeper"].as<mob_rnum>();
+	with_who = row["shop_with_who"].as<int>();
+	open1 = row["shop_open1"].as<int>();
+	open2 = row["shop_open2"].as<int>();
+	close1 = row["shop_close1"].as<int>();
+	close2 = row["shop_close2"].as<int>();
+	bankAccount = row["shop_bankAccount"].as<int>();
+	lastsort = row["shop_lastsort"].as<int>();
+	shop_type = row["shop_type"].as<int>();
+	for(auto  s_row : db_get_by_meta("shop_rooms","shop_vnum",std::to_string(vnum).c_str())){
+		this->room_info.rooms.emplace_back(s_row["shop_room_vnum"].as<room_vnum>());
+	}
+	for(auto  s_row : db_get_by_meta("shop_objects","shop_vnum",std::to_string(vnum).c_str())){
+		this->object_info.objects.emplace_back(s_row["shop_room_vnum"].as<obj_vnum>());
+	}
+	m_loaded = true;
+}
+
+template <>
+shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::shop_data(){
+	init();
+}
+template <typename TOrmType,typename T,typename R>
+void shop_data<TOrmType,T,R>::init(){
+	this->func = nullptr;
+	this->title.clear();
+	this->description.clear();
+	this->flags = 0;
+	this->db_id = 0;
+	this->vnum = 0;
+	this->producing = nullptr;
+	this->profit_buy = 0.0;
+	this->profit_sell = 0.0;
+	this->type = nullptr;
+	this->no_such_item1.clear(); 
+	this->no_such_item2.clear();
+	this->missing_cash1.clear();
+	this->missing_cash2.clear();
+	this->do_not_buy.clear();
+	this->message_buy.clear();
+	this->message_sell.clear();
+	this->temper1 = 0;
+	this->bitvector = 0;
+	this->keeper = 0; //rnum
+	this->with_who = 0;
+	this->in_room = nullptr;
+	this->open1 = 0;
+	this->open2 = 0;
+	this->close1 = 0;
+	this->close2 = 0;
+	this->bankAccount = 0;
+	this->lastsort = 0;
+	this->shop_type = 0;
+	this->m_loaded = false;
+	this->m_objects.clear();
+}
+template <typename TOrmType,typename T,typename R>
+std::map<std::string,std::string> shop_data<TOrmType,T,R>::export_shop(){
+	std::map<std::string,std::string> s_map;
+	s_map["shop_vnum"] = mods::util::itoa(vnum);
+	s_map["shop_title"] = title.str();
+	s_map["shop_description"] = description.str();
+	s_map["shop_flags"] = std::to_string(flags);
+	s_map["shop_profit_buy"] = mods::util::itoa(profit_buy);
+	s_map["shop_profit_sell"] = mods::util::itoa(profit_sell);
+	s_map["shop_no_such_item1"] = (no_such_item1.str());
+	s_map["shop_no_such_item2"] = (no_such_item2.str());
+	s_map["shop_missing_cash1"] = (missing_cash1.str());
+	s_map["shop_missing_cash2"] = (missing_cash2.str());
+	s_map["shop_do_not_buy"] =(do_not_buy.str());
+	s_map["shop_message_buy"] = (message_buy.str());
+	s_map["shop_message_sell"] =(message_sell.str());
+	s_map["shop_temper1"] = mods::util::itoa(temper1);
+	s_map["shop_bitvector"] = mods::util::itoa(bitvector);
+	s_map["shop_keeper"] = mods::util::itoa(keeper);
+	s_map["shop_with_who"] = mods::util::itoa(with_who);
+	s_map["shop_open1"] = mods::util::itoa(open1);
+	s_map["shop_open2"] = mods::util::itoa(open2);
+	s_map["shop_close1"] = mods::util::itoa(close1);
+	s_map["shop_close2"] = mods::util::itoa(close2);
+	s_map["shop_bankAccount"] = mods::util::itoa(bankAccount);
+	s_map["shop_lastsort"] = mods::util::itoa(lastsort);
+	s_map["shop_type"] = std::to_string(shop_type);
+	return std::move(s_map);
+}
+
+template <>
+std::tuple<bool,uint64_t,std::string> shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::save(){
+	m_orm.shop_vnum_id = vnum;
+	m_orm.shop_title = title;
+	m_orm.shop_description = description;
+	m_orm.shop_flags = flags;
+	m_orm.shop_profit_buy = profit_buy;
+	m_orm.shop_profit_sell = profit_sell;
+	m_orm.shop_no_such_item1.assign(no_such_item1.str());
+	m_orm.shop_no_such_item2.assign(no_such_item2.str());
+	m_orm.shop_missing_cash1.assign(missing_cash1.str());
+	m_orm.shop_missing_cash2.assign(missing_cash2.str());
+	m_orm.shop_do_not_buy.assign(do_not_buy.str());
+	m_orm.shop_message_buy.assign(message_buy.str());
+	m_orm.shop_message_sell.assign(message_sell.str());
+	m_orm.shop_temper1 = temper1;
+	m_orm.shop_bitvector = bitvector;
+	m_orm.shop_keeper = keeper;
+	m_orm.shop_with_who = with_who;
+	m_orm.shop_open1 = open1;
+	m_orm.shop_open2 = open2;
+	m_orm.shop_close1 = close1;
+	m_orm.shop_close2 = close2;
+	m_orm.shop_bankAccount = bankAccount;
+	m_orm.shop_lastsort = lastsort;
+	m_orm.shop_type = shop_type;
+	m_orm.room_info = room_info;
+	m_orm.object_info = object_info;
+	auto result = m_orm.save();
+	if(std::get<0>(result)){
+		m_loaded = true;
+		db_id = std::get<1>(result);
+	}
+	return result;
 }

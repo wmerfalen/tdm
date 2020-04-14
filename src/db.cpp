@@ -24,6 +24,7 @@
 #include "house.h"
 #include "constants.h"
 #include "globals.hpp"
+#include "shop.h"
 #include <vector>
 #include <deque>
 #include "mods/behaviour_tree_impl.hpp"
@@ -38,6 +39,7 @@
 #include "mods/world-configuration.hpp"
 #include "mods/classes/sentinel.hpp"
 #include "mods/orm/inventory.hpp"
+#include "mods/orm/shop.hpp"
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
@@ -51,6 +53,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms();
 std::tuple<int16_t,std::string> parse_sql_zones();
 int parse_sql_objects();
 void parse_sql_mobiles();
+int parse_sql_shops();
 std::vector<room_data> world;	/* array of rooms		 */
 room_rnum top_of_world = 0;	/* ref to top element of world	 */
 
@@ -60,10 +63,14 @@ std::vector<index_data> mob_index;	/* index table for mobile file	 */
 std::vector<char_data> mob_proto;	/* prototypes for mobs		 */
 mob_rnum top_of_mobt = 0;	/* top of mobile index table	 */
 
+using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>;
+using shop_ptr_t = std::shared_ptr<shop_data_t>;
 std::deque<std::shared_ptr<obj_data>> obj_list;
 std::deque<std::shared_ptr<mods::npc>> mob_list;
+std::deque<std::shared_ptr<shop_data_t>> shop_list;
 std::vector<index_data> obj_index;	/* index table for object file	 */
 std::vector<obj_data> obj_proto;	/* prototypes for objs		 */
+std::vector<shop_data_t> shop_proto;	/* prototypes for objs		 */
 obj_rnum top_of_objt = 0;	/* top of object index table	 */
 
 std::vector<zone_data> zone_table;	/* zone table			 */
@@ -506,8 +513,15 @@ void boot_world(void) {
 	//index_boot(DB_BOOT_OBJ);
 	parse_sql_objects();
 
+	log("Loading sql shops and generating index.");
+	parse_sql_shops();
+
+
 	log("Renumbering zone table.");
 	renum_zone_table();
+
+	log("Booting shops");
+	boot_the_shops();
 
 	if(!no_specials) {
 		log("Loading shops.");
@@ -1088,7 +1102,7 @@ void parse_sql_mobiles() {
 }
 
 int parse_sql_objects() {
-	auto result = db_get_by_meta("object","obj_is_player_object","0");
+	auto result = db_get_all("object");
 
 	if(result.size()) {
 
@@ -1392,6 +1406,23 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 	}
 	return {world.size(),"okay"};
 }
+
+int parse_sql_shops() {
+	auto result = db_get_all("shops");
+
+	if(result.size()) {
+		shop_proto.reserve(result.size());
+		for(auto  row : result) {
+			auto & s = shop_proto.emplace_back();
+			s.feed(row);
+		}
+	} else {
+		log("[notice] no shops from sql");
+	}
+
+	return 0;
+}
+
 void parse_room(FILE *fl, int virtual_nr) {
 	log("[DEPRECATED] parse_room");
 }
@@ -1951,6 +1982,20 @@ obj_ptr_t blank_object() {
 	return obj_list.back();
 }
 
+shop_ptr_t create_shop_from_index(std::size_t proto_index){
+	if (proto_index >= shop_proto.size()){
+		log("SYSERR: requesting to read shop number(%d) out of shop_proto.size(): (%d)",
+				proto_index, shop_proto.size());
+		return nullptr;
+	}
+	shop_list.push_back(std::make_shared<shop_data_t>(shop_proto[proto_index]));
+	mods::globals::register_shop<shop_ptr_t>(shop_list.back());
+	//shop_index[proto_index].number++;
+	return shop_list.back();
+}
+
+
+/* create a new object from a prototype */
 obj_ptr_t create_object_from_index(std::size_t proto_index){
 	if (proto_index >= obj_proto.size()){
 		log("SYSERR: requesting to read object number(%d) out of obj_proto.size(): (%d)",

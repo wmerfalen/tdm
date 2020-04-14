@@ -41,7 +41,7 @@ buildobj = act.informative act.item act.medic \
 					 act.wizard act.demolitions alias ban boards bsd-snprintf castle \
 					 class comm config constants db fight globals graph\
 					 handler house interpreter limits magic mail mobact\
-					 modify objsave olc random shop spec_assign spec_procs\
+					 modify objsave olc random spec_assign spec_procs\
 					 spell_parser spells structs weather mods/ai_state\
 					 mods/behaviour_tree_impl mods/lmdb\
 					 mods/chat mods/conf mods/deferred mods/drone mods/immortal\
@@ -63,7 +63,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/quotes act.builder mods/orm/base mods/yaml \
 					 mods/affects mods/item mods/weapon-types mods/sensor-grenade \
 					 mods/calc_visibility mods/events mods/chargen mods/classes/base \
-					 mods/object-utils mods/camera
+					 mods/object-utils mods/camera mods/orm/shop shop
 
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
