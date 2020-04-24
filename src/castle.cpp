@@ -577,13 +577,13 @@ SPECIAL(king_welmar) {
 			break;
 
 		case 'o':
-			do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_UNLOCK);	/* strcpy: OK */
-			do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_OPEN);	/* strcpy: OK */
+			do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_UNLOCK,player);	/* strcpy: OK */
+			do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_OPEN,player);	/* strcpy: OK */
 			break;
 
 		case 'c':
-			do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_CLOSE);	/* strcpy: OK */
-			do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_LOCK);	/* strcpy: OK */
+			do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_CLOSE,player);	/* strcpy: OK */
+			do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_LOCK,player);	/* strcpy: OK */
 			break;
 
 		case '.':
@@ -706,6 +706,7 @@ SPECIAL(tim) {
  * Common routine for the Castle Twins.
  */
 int castle_twin_proc(char_data *ch, int cmd, char *arg, int ctlnum, const char *twinname) {
+	MENTOC_PREAMBLE();
 	char_data *king, *twin;
 
 	if(!AWAKE(ch)) {
@@ -720,7 +721,7 @@ int castle_twin_proc(char_data *ch, int cmd, char *arg, int ctlnum, const char *
 		char actbuf[MAX_INPUT_LENGTH];
 
 		if(!ch->master) {
-			do_follow(ch, strcpy(actbuf, "King Welmar"), 0, 0);    /* strcpy: OK */
+			do_follow(ch, strcpy(actbuf, "King Welmar"), 0, 0,player);    /* strcpy: OK */
 		}
 
 		if(FIGHTING(king)) {

@@ -122,6 +122,8 @@ static inline durability_profile_type_t to_durability_profile(std::string_view d
 	using aoe_type_t = mods::aoe::types_t;
 	constexpr static std::size_t MAX_AOE_TRIGGERS = 6;
 	struct rifle_description_t : public yaml_description_t {
+		std::map<std::string,std::string> exported;
+		void generate_map();
 		using mw_type = mw_rifle;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_rifle)this->type); }
 		void fill_flags(obj_flag_data*);
@@ -159,6 +161,8 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
 	};
 
 	struct explosive_description_t : public yaml_description_t {
+		std::map<std::string,std::string> exported;
+		void generate_map();
 		using mw_type = mw_explosive;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_explosive)this->type); }
 		void fill_flags(obj_flag_data*);
@@ -187,6 +191,8 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_EXPLOSIVE_MEMBERS_TUPLE)
 	};
 
 	struct drone_description_t : public yaml_description_t {
+		std::map<std::string,std::string> exported;
+		void generate_map();
 		using mw_type = mw_drone;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_drone)this->type); }
 		void fill_flags(obj_flag_data*);
@@ -207,6 +213,8 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_DRONE_MEMBERS_TUPLE)
 	};
 
 	struct gadget_description_t : public yaml_description_t {
+		std::map<std::string,std::string> exported;
+		void generate_map();
 		using mw_type = mw_gadget;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_gadget)this->type); }
 		void fill_flags(obj_flag_data*);
@@ -228,6 +236,8 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_GADGET_MEMBERS_TUPLE)
 
 
 	struct attachment_description_t : public yaml_description_t {
+		std::map<std::string,std::string> exported;
+		void generate_map();
 		using mw_type = mw_attachment;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_attachment)this->type); }
 		void fill_flags(obj_flag_data*);
@@ -247,6 +257,8 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
 
 
 	struct armor_description_t : public yaml_description_t {
+		std::map<std::string,std::string> exported;
+		void generate_map();
 		using mw_type = mw_armor;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_armor)this->type); }
 		void fill_flags(obj_flag_data*);
@@ -266,6 +278,8 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
 	};
 
 	struct consumable_description_t : public yaml_description_t {
+		std::map<std::string,std::string> exported;
+		void generate_map();
 		using mw_type = mw_consumable;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_consumable)this->type); }
 		void fill_flags(obj_flag_data*);
@@ -286,6 +300,8 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_CONSUMABLE_MEMBERS_TUPLE)
 	};
 
 	struct trap_description_t : public yaml_description_t {
+		std::map<std::string,std::string> exported;
+		void generate_map();
 		using mw_type = mw_trap;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_trap)this->type); }
 		void fill_flags(obj_flag_data*);

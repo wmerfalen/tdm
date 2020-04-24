@@ -33,6 +33,7 @@ namespace mods {
 		string& operator=(string other);
 		string& operator=(const std::string & other);
 		const char* operator*(){ return m_str.c_str(); }
+		void assign_m(const mods::string & other);
 		void assign(const std::string & other);
 		void assign(nullptr_t a);
 		void assign(mentoc_pqxx_result_t);

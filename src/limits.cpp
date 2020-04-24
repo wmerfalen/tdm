@@ -455,7 +455,7 @@ void check_idling(player_ptr_t player) {
 
 
 ACMD(do_idle){
-	MENTOC_PREAMBLE();
+	
 	player->char_specials().timer = idle_void + 1;
 	check_idling(player);
 }

@@ -31,8 +31,7 @@
 #include <unordered_map>
 #include "mods/util.hpp"
 
-#define MENTOC_PREAMBLE() auto player = IS_NPC(ch) ? std::make_shared<mods::player>(ch) \
-																				: mods::globals::socket_map[ch->desc->descriptor];
+#define MENTOC_PREAMBLE() auto player = ptr(ch)
 
 #define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
 #define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \
@@ -56,7 +55,7 @@
 #ifdef __MENTOC_DEBUG__
 #define d(a) std::cerr << "[**DEBUG**]->[file:" << __FILE__ << "][line:" << __LINE__ << "][msg]: " << a << "\n" << std::flush;
 #else
-#define d(a) /** */
+#define d(a) ;
 #endif
 #include <string>
 #define tostr(a) std::to_string(a)
@@ -87,6 +86,7 @@ character_list = ch;
 
 using player_ptr_t = std::shared_ptr<mods::player>;
 using obj_ptr_t = std::shared_ptr<obj_data>;
+using mob_ptr_t = std::shared_ptr<mods::npc>;
 namespace mods {
 	namespace lmdb { 
 		struct _db_handle;
@@ -111,6 +111,7 @@ namespace mods {
 		extern std::map<obj_data*,obj_ptr_t> obj_odmap;
 		extern std::map<uuid_t,std::shared_ptr<mods::npc>> mob_map;
 		extern std::map<char_data*,std::shared_ptr<mods::npc>> mob_chmap;
+		extern std::map<char_data*,player_ptr_t> mob_ptrmap;
 		extern std::map<char_data*,std::shared_ptr<mods::player>> player_chmap;
 		extern std::unique_ptr<mods::deferred> defer_queue;
 		extern std::unique_ptr<lmdb_db> db;
@@ -128,13 +129,20 @@ namespace mods {
 		extern std::unique_ptr<pqxx::connection> pq_con;
 		extern std::unordered_map<std::string,std::string> ram_db;
 		extern std::set<player_ptr_t> needs_dissolve;
+		extern std::map<obj_vnum,std::string> obj_stat_pages;
 		void init_player(char_data*);
 		std::unique_ptr<ai_state>& state_fetch(char_data* ch);
 		int mobile_activity(char_data*);
 		char_data* read_mobile(const mob_vnum &,const int & type);
+		std::shared_ptr<mods::npc> read_mobile_ptr(const mob_vnum &,const int & type);
 		void register_player(player_ptr_t);
 		//void register_object_db_id(obj_ptr_t);
 		void register_object(obj_ptr_t);
+		template <typename TShopPtr>
+		void register_shop(TShopPtr shop){
+			static uuid_t my_uuid = 0;
+			shop->uuid = ++my_uuid;
+		}
 		void register_object_list();
 		void register_room(const room_rnum&);
 		void register_object_db_id(uint64_t,uuid_t);
@@ -168,6 +176,7 @@ namespace mods {
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 extern std::deque<std::shared_ptr<mods::npc>> mob_list;
 
+player_ptr_t ptr(const char_data*);
 player_ptr_t ptr(char_data*);
 obj_ptr_t optr(obj_data*);
 player_ptr_t ptr_by_uuid(uuid_t);

@@ -20,7 +20,6 @@ boostdir = $(CURDIR)/boost
 
 thirdparty = $(duktape) $(lmdb)
 FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
-	-D__MENTOC_DEBUG__=1 \
 	-Wno-char-subscripts -Wcomment \
 	-Wno-format-zero-length -Wno-format-security\
 	-std=c++17 -fpermissive -MMD \
@@ -31,7 +30,7 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-D__MENTOC_USE_LMDB=1 \
 	-Wno-sign-compare -I$(yamlcpp) -L$(yamllib) \
 	-fPIC -DMENTOC_CURRENT_WORKING_DIR=\"$(LIB_DIR)\" \
-	-D__MENTOC_SHOW_LMDB_DEBUG__=1 -D__MENTOC_DEBUG__
+	-D__MENTOC_SHOW_LMDB_DEBUG__=1
 
 #-D__MENTOC_SHOW_LMDB_DEBUG__=1 
 	#-DMENTOC_NO_CONSTEXPR_CONF=1 \ #-D__MENTOC_USE_PQXX_RESULT__=1 
@@ -41,7 +40,7 @@ buildobj = act.informative act.item act.medic \
 					 act.wizard act.demolitions alias ban boards bsd-snprintf castle \
 					 class comm config constants db fight globals graph\
 					 handler house interpreter limits magic mail mobact\
-					 modify objsave olc random shop spec_assign spec_procs\
+					 modify objsave olc random spec_assign spec_procs\
 					 spell_parser spells structs weather mods/ai_state\
 					 mods/behaviour_tree_impl mods/lmdb\
 					 mods/chat mods/conf mods/deferred mods/drone mods/immortal\
@@ -63,7 +62,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/quotes act.builder mods/orm/base mods/yaml \
 					 mods/affects mods/item mods/weapon-types mods/sensor-grenade \
 					 mods/calc_visibility mods/events mods/chargen mods/classes/base \
-					 mods/object-utils mods/camera
+					 mods/object-utils mods/camera mods/orm/shop shop mods/shop
 
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))

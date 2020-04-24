@@ -1028,7 +1028,7 @@ ACMD(do_eat) {
 
 	if(subcmd == SCMD_TASTE && ((GET_OBJ_TYPE(food) == ITEM_DRINKCON) ||
 	                            (GET_OBJ_TYPE(food) == ITEM_FOUNTAIN))) {
-		do_drink(ch, argument, 0, SCMD_SIP);
+		do_drink(ch, argument, 0, SCMD_SIP, player);
 		return;
 	}
 
@@ -1516,7 +1516,7 @@ int find_eq_pos(char_data *ch, struct obj_data *obj, char *arg) {
 
 
 ACMD(do_wear) {
-	MENTOC_PREAMBLE();
+	
 	char arg1[MAX_INPUT_LENGTH];
 	char arg2[MAX_INPUT_LENGTH];
 	struct obj_data *obj, *next_obj;
@@ -1586,7 +1586,7 @@ ACMD(do_wear) {
 
 
 ACMD(do_wield) {
-	MENTOC_PREAMBLE();
+	
 	char arg[MAX_INPUT_LENGTH];
 	struct obj_data *obj;
 
@@ -1610,7 +1610,7 @@ ACMD(do_wield) {
 
 
 ACMD(do_grab) {
-	MENTOC_PREAMBLE();
+	
 	auto vec_args = PARSE_ARGS();
 	struct obj_data *obj;
 	auto obj_ptr = mods::util::parse_object_vec(player,vec_args);
@@ -1666,7 +1666,7 @@ void perform_remove(player_ptr_t player, int pos) {
 
 
 ACMD(do_remove) {
-	MENTOC_PREAMBLE();
+	
 	char arg[MAX_INPUT_LENGTH];
 	int i, dotmode, found;
 

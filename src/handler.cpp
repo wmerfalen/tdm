@@ -435,7 +435,7 @@ void char_to_room(char_data *ch, room_rnum room) {
 	}
 		
 	if(room >= mods::globals::room_list.size()){
-		//MENTOC_PREAMBLE();
+		
 		//if(player->builder_mode()){
 		//	player->sendln("Okay you got me");
 		//	mods::globals::pad_room(room,ch,NORTH);
@@ -1162,7 +1162,7 @@ void update_char_objects(char_data *ch) {
 
 /* Extract a ch completely from the world, and leave his stuff behind */
 void extract_char_final(char_data *ch) {
-	//MENTOC_PREAMBLE();
+	MENTOC_PREAMBLE();
 	char_data *k, *temp;
 	struct obj_data *obj;
 	int i;
@@ -1180,7 +1180,7 @@ void extract_char_final(char_data *ch) {
 	if(!IS_NPC(ch) && !ch->has_desc) {
 		for(auto & d : descriptor_list){
 			if(d.original == ch) {
-				do_return(d.character, NULL, 0, 0);
+				do_return(d.character, NULL, 0, 0, player);
 				break;
 			}
 		}
@@ -1196,7 +1196,7 @@ void extract_char_final(char_data *ch) {
 		 * body after the removal so dump them to the main menu.
 		 */
 		if(ch->desc->original) {
-			do_return(ch, NULL, 0, 0);
+			do_return(ch, NULL, 0, 0, player);
 		} else {
 			/*
 			 * Now we boot anybody trying to log in with the same character, to

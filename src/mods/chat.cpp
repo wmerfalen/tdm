@@ -68,7 +68,7 @@ namespace mods::chat {
 };
 
 ACMD(do_chanmgr) {
-	MENTOC_PREAMBLE();
+	
 
 	if(std::string(argument).length() == 0 || std::string(argument).compare("help") == 0) {
 		player->pager_start() << "usage: \r\n" <<

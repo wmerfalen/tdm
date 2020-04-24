@@ -2369,6 +2369,7 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 	*(++buf) = '\0';
 
 	to->desc->queue_output(CAP(lbuf),0,0);
+	to->desc->has_prompt = 0;
 }
 
 

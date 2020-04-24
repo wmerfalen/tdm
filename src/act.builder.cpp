@@ -66,7 +66,7 @@ namespace mods::fs {
 
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 ACMD(do_next_object_number){
-	MENTOC_PREAMBLE();
+	
 	try{
 		auto select_transaction = txn();
 		sql_compositor comp("object",&select_transaction);
@@ -155,17 +155,17 @@ int next_mob_number(){
 }
 
 ACMD(do_next_zone_number){
-	MENTOC_PREAMBLE();
+	
 	auto zone_number = next_zone_number();
 	player->stc(std::to_string(zone_number));
 }
 ACMD(do_next_room_number){
-	MENTOC_PREAMBLE();
+	
 	auto room_number = next_room_number();
 	player->stc(std::to_string(room_number));
 }
 ACMD(do_next_mob_number){
-	MENTOC_PREAMBLE();
+	
 	auto mob_number = next_mob_number();
 	player->stc(std::to_string(mob_number));
 }
@@ -431,7 +431,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_FUNC, ~, MENTOC_ITEM_TYPES_SEQ)
 #undef MENTOC_OBJ_FUNC
 
 ACMD(do_flush_holding){
-	MENTOC_PREAMBLE();
+	
 	player->sendln("Looking at your carrying list...");
 	if(auto obj = player->equipment(WEAR_HOLD)){
 		player->sendln("Found an item");
@@ -466,7 +466,7 @@ ACMD(do_flush_holding){
  */
 /** TODO: generalize this file system ls interface for use with other stuff */
 ACMD(do_yaml_import){
-	MENTOC_PREAMBLE();
+	
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("ls") == 0) {
 		player->pager_start();
@@ -511,7 +511,7 @@ ACMD(do_yaml_import){
 }
 
 ACMD(do_hold_anything){
-	MENTOC_PREAMBLE();
+	
 	auto vec_args = PARSE_ARGS();
 	if(!player->get_imp_mode()){
 		player->sendln(HUH);
@@ -535,7 +535,7 @@ ACMD(do_hold_anything){
 	player->sendln(HUH);
 }
 ACMD(do_yaml_example){
-	MENTOC_PREAMBLE();
+	
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("list") == 0) {
 		for(auto type : {"rifle","explosive","drone","gadget","attachment","armor"}) {
@@ -560,7 +560,7 @@ ACMD(do_yaml_example){
 }
 
 ACMD(do_histfile){
-	MENTOC_PREAMBLE();
+	
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 		*player << "usage: \r\n" <<
@@ -586,7 +586,7 @@ ACMD(do_histfile){
 }
 
 ACMD(do_uuid){
-	MENTOC_PREAMBLE();
+	
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 		*player << "usage: \r\n" <<
@@ -605,7 +605,7 @@ ACMD(do_uuid){
 }
 
 ACMD(do_pmw_obj_from_room){
-	MENTOC_PREAMBLE();
+	
 	player->sendln("This function is under construction!");
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
@@ -632,7 +632,7 @@ ACMD(do_pmw_obj_from_room){
 }
 
 ACMD(do_toggle_obj_from_room){
-	MENTOC_PREAMBLE();
+	
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 		*player << "usage: \r\n" <<

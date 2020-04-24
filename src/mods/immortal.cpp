@@ -10,7 +10,7 @@ namespace mods::immortal {
 
 };
 ACMD(do_rnumtele) {
-	MENTOC_PREAMBLE();
+	
 	constexpr unsigned int max_char = 11;
 	std::array<char,max_char> room_id;
 	std::fill(room_id.begin(),room_id.end(),0);
@@ -32,7 +32,7 @@ ACMD(do_rnumtele) {
  * are interested in. 
  */
 ACMD(do_rnumlist) {
-	MENTOC_PREAMBLE();
+	
 	constexpr unsigned int max_char = 11;
 	std::array<char,max_char> room_id;
 	std::fill(room_id.begin(),room_id.end(),0);

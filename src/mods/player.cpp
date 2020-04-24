@@ -172,9 +172,14 @@ namespace mods {
 		m_captured_output = "";
 	}
 
-	player::player(char_data* ch) : m_char_data(ch), m_executing_js(false), m_do_paging(false),
-	m_page(0),m_current_page(0),m_current_page_fragment("") {
+	player::player(char_data* ch) {
 		this->init();
+		m_char_data = ch;
+		m_executing_js = false;
+		m_do_paging = false;
+		m_page = 0;
+		m_current_page = 0;
+		m_current_page_fragment = "";
 		m_set_time();
 		m_quitting = 0;
 	};
@@ -223,7 +228,6 @@ namespace mods {
 	}
 	obj_ptr_t player::equipment(int pos) {
 		if(pos >= NUM_WEARS || pos < 0){
-			std::cerr << "[ERROR]: player::equipment received invalid pos: " << pos << "\n";
 			return nullptr;
 		}
 		//this->m_sync_equipment();
@@ -405,12 +409,10 @@ namespace mods {
 		m_class = pclass;
 		switch(pclass){
 			case CLASS_SNIPER:
-				std::cerr << "[mods::player::set_class] player is sniper\n";
 				m_class_sniper = std::make_shared<mods::classes::sniper>();
 				cl_sniper()->rifle()->bound_to = uuid();
 				break;
 			case CLASS_MEDIC:
-				std::cerr << "[mods::player::set_class] player is medic\n";
 				m_class_medic = std::make_shared<mods::classes::medic>();
 				break;
 			default:
@@ -539,13 +541,17 @@ namespace mods {
 		desc().has_prompt = 0;
 	}
 	void player::stc_room(const room_rnum& rnum) {
+		std::cerr << __FILE__ << "|" << __LINE__ << " .. checking .. ";
 		if(rnum < 0 || std::size_t(rnum) >= world.size()){
+			std::cerr << __FILE__ << "|" << __LINE__ << " .. invalid ..\n";
 			return;
 		}
-		if(world[rnum].name) {
-			/** note: using 1 for the plain parameter since colr eval is done on room load from postgres */
-			write_to_char(m_char_data, world[rnum].name.view(),1,1);
-		}
+		raw_send(world[rnum].name);
+		//if(world[rnum].name) {
+		//	/** note: using 1 for the plain parameter since colr eval is done on room load from postgres */
+		//	std::cerr << __FILE__ << "|" << __LINE__ << "-> name:'" << world[rnum].name.c_str() << "'\n";
+		//	//write_to_char(m_char_data, world[rnum].name.view(),1,1);
+		//}
 		if(builder_mode()){
 			write_to_char(m_char_data,(std::string("[room_id:") + std::to_string(rnum) + "|number:" + 
 						std::to_string(world[rnum].number) + "|zone:" + 
@@ -590,6 +596,7 @@ namespace mods {
 	}
 	void player::stc_room_desc(const room_rnum& rnum) {
 		if(rnum < 0 || std::size_t(rnum) >= world.size()){
+			std::cerr << "[stc_room_desc] invalid rnum!\n";
 			return;
 		}
 		raw_send(world[rnum].description);
@@ -960,7 +967,6 @@ namespace mods {
 		lib_dir += name();
 		lib_dir += "-" + std::to_string(std::time(nullptr));
 		lib_dir += ".log";
-		std::cerr << lib_dir << "\n";
 		m_histfile_fp = (FILE*)fopen(lib_dir.c_str(),"a+");
 		if(!m_histfile_fp){
 			std::cerr << "can't open log file '" << lib_dir.c_str() << "'\n";
@@ -984,7 +990,7 @@ namespace mods {
 	}
 
 	player::~player() {
-		std::cerr << "[~player] " << m_name.c_str() << "\n";
+		std::cerr << "[~player]\n";
 		if(m_histfile_on){ stop_histfile(); }
 		m_weapon_type = 0;
 		m_weapon_flags = 0;
@@ -1089,37 +1095,6 @@ namespace mods {
 		m_block_data.erase(unblock);
 		m_blocked_until = 0;
 		m_has_block_event = false;
-	}
-	bool player::interrupt(std::tuple<uint32_t,uuid_t,void*> event_data){
-		auto event_id = std::get<0>(event_data);
-		auto uuid = std::get<1>(event_data);
-		void* data = std::get<2>(event_data);
-		bool should_interrupt = false;
-		d("interrupt(): " << event_id << " uuid:" << uuid << " data*:" << data);
-
-		if(should_interrupt){
-			m_blocked_until = 0;
-			return true;
-		}
-		return false;
-	}
-	void player::clear_camera(){
-		m_camera = nullptr;
-	}
-	std::shared_ptr<mods::camera> player::get_camera() const {
-		return m_camera;
-	}
-	bool player::camera_viewing() {
-		return m_camera_viewing;
-	}
-	void player::set_camera_viewing(bool b){
-		m_camera_viewing = b;
-	}
-	int player::viewing_room(){
-		return m_camera_viewing ? m_camera->room() : room();
-	}
-	uint32_t player::current_block() {
-		return m_blocked_until;
 	}
 };
 

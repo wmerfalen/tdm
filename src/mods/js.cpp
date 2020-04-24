@@ -132,9 +132,9 @@ namespace mods {
 			return 1;	/* number of return values */
 		}
 		/*
-		static duk_ret_t list_mobiles(duk_context *ctx){
-			return 0;
-		}*/
+			 static duk_ret_t list_mobiles(duk_context *ctx){
+			 return 0;
+			 }*/
 		/*! \brief internally calls read_mobile. parameter 1 is the mob's id as REAL (not VIRTUAL). Places the mob into the second parameter (REAL room id). 
 		 * \param 1 integer mob's ID (REAL)
 		 * \param 2 integer room ID (REAL)
@@ -159,6 +159,12 @@ namespace mods {
 			}
 			char_to_room(mob,real_room_id);
 			duk_push_number(ctx,1);
+			return 1;
+		}
+		static duk_ret_t real_mobile(duk_context *ctx){
+			uint32_t mob_vnum_id = duk_to_uint32(ctx,0);
+			auto mob_rnum_id = ::real_mobile(mob_vnum_id);
+			duk_push_number(ctx,mob_rnum_id);
 			return 1;
 		}
 		/*! \brief deals damage from the player identified (by uuid) to the player identified (by uuid).
@@ -210,15 +216,15 @@ namespace mods {
 		static duk_ret_t clear_all_plr_flags(duk_context *ctx) {
 			/** TODO: get array from duktape */
 			std::string name = duk_to_string(ctx,0);
-				bool found = false;
-				auto player_ptr = utils::find_player_by_name(name,found);
-				if(!found){
-					duk_push_number(ctx,-1);
-					return 1;
-				}
-				player_ptr->clear_all_affected_plr();
-				duk_push_number(ctx,0);
+			bool found = false;
+			auto player_ptr = utils::find_player_by_name(name,found);
+			if(!found){
+				duk_push_number(ctx,-1);
 				return 1;
+			}
+			player_ptr->clear_all_affected_plr();
+			duk_push_number(ctx,0);
+			return 1;
 		}
 		/*! \brief clears the player's affected flags. Internally calls
 		 * player::clear_all_affected on the found player. 
@@ -228,15 +234,15 @@ namespace mods {
 		static duk_ret_t clear_all_affected_flags(duk_context *ctx) {
 			/** TODO: get array from duktape */
 			std::string name = duk_to_string(ctx,0);
-				bool found = false;
-				auto player_ptr = utils::find_player_by_name(name,found);
-				if(!found){
-					duk_push_number(ctx,-1);
-					return 1;
-				}
-				player_ptr->clear_all_affected();
-				duk_push_number(ctx,0);
+			bool found = false;
+			auto player_ptr = utils::find_player_by_name(name,found);
+			if(!found){
+				duk_push_number(ctx,-1);
 				return 1;
+			}
+			player_ptr->clear_all_affected();
+			duk_push_number(ctx,0);
+			return 1;
 		}
 
 		/*! \brief modifies the player's affected flags. 
@@ -250,31 +256,31 @@ namespace mods {
 			std::string name = duk_to_string(ctx,0);
 			std::string key = duk_to_string(ctx,1);
 			bool on = (bool)duk_to_number(ctx,2);
-				bool found = false;
-				auto player_ptr = utils::find_player_by_name(name,found);
-				if(!found){
-					duk_push_number(ctx,-1);
-					return 1;
-				}
-if(key.compare("KILLER")==0){ if(on){ player_ptr->affect_plr(PLR_KILLER); }else{ player_ptr->remove_affect_plr(PLR_KILLER); }}
-else if(key.compare("THIEF")==0){ if(on){ player_ptr->affect_plr(PLR_THIEF); }else{ player_ptr->remove_affect_plr(PLR_THIEF); }}
-else if(key.compare("FROZEN")==0){ if(on){ player_ptr->affect_plr(PLR_FROZEN); }else{ player_ptr->remove_affect_plr(PLR_FROZEN); }}
-else if(key.compare("DONTSET")==0){ if(on){ player_ptr->affect_plr(PLR_DONTSET); }else{ player_ptr->remove_affect_plr(PLR_DONTSET); }}
-else if(key.compare("WRITING")==0){ if(on){ player_ptr->affect_plr(PLR_WRITING); }else{ player_ptr->remove_affect_plr(PLR_WRITING); }}
-else if(key.compare("MAILING")==0){ if(on){ player_ptr->affect_plr(PLR_MAILING); }else{ player_ptr->remove_affect_plr(PLR_MAILING); }}
-else if(key.compare("CRASH")==0){ if(on){ player_ptr->affect_plr(PLR_CRASH); }else{ player_ptr->remove_affect_plr(PLR_CRASH); }}
-else if(key.compare("SITEOK")==0){ if(on){ player_ptr->affect_plr(PLR_SITEOK); }else{ player_ptr->remove_affect_plr(PLR_SITEOK); }}
-else if(key.compare("NOSHOUT")==0){ if(on){ player_ptr->affect_plr(PLR_NOSHOUT); }else{ player_ptr->remove_affect_plr(PLR_NOSHOUT); }}
-else if(key.compare("NOTITLE")==0){ if(on){ player_ptr->affect_plr(PLR_NOTITLE); }else{ player_ptr->remove_affect_plr(PLR_NOTITLE); }}
-else if(key.compare("DELETED")==0){ if(on){ player_ptr->affect_plr(PLR_DELETED); }else{ player_ptr->remove_affect_plr(PLR_DELETED); }}
-else if(key.compare("LOADROOM")==0){ if(on){ player_ptr->affect_plr(PLR_LOADROOM); }else{ player_ptr->remove_affect_plr(PLR_LOADROOM); }}
-else if(key.compare("NOWIZLIST")==0){ if(on){ player_ptr->affect_plr(PLR_NOWIZLIST); }else{ player_ptr->remove_affect_plr(PLR_NOWIZLIST); }}
-else if(key.compare("NODELETE")==0){ if(on){ player_ptr->affect_plr(PLR_NODELETE); }else{ player_ptr->remove_affect_plr(PLR_NODELETE); }}
-else if(key.compare("INVSTART")==0){ if(on){ player_ptr->affect_plr(PLR_INVSTART); }else{ player_ptr->remove_affect_plr(PLR_INVSTART); }}
-else if(key.compare("CRYO")==0){ if(on){ player_ptr->affect_plr(PLR_CRYO); }else{ player_ptr->remove_affect_plr(PLR_CRYO); }}
-else if(key.compare("NOTDEADYET")==0){ if(on){ player_ptr->affect_plr(PLR_NOTDEADYET); }else{ player_ptr->remove_affect_plr(PLR_NOTDEADYET); }}
-				duk_push_number(ctx,0);
+			bool found = false;
+			auto player_ptr = utils::find_player_by_name(name,found);
+			if(!found){
+				duk_push_number(ctx,-1);
 				return 1;
+			}
+			if(key.compare("KILLER")==0){ if(on){ player_ptr->affect_plr(PLR_KILLER); }else{ player_ptr->remove_affect_plr(PLR_KILLER); }}
+			else if(key.compare("THIEF")==0){ if(on){ player_ptr->affect_plr(PLR_THIEF); }else{ player_ptr->remove_affect_plr(PLR_THIEF); }}
+			else if(key.compare("FROZEN")==0){ if(on){ player_ptr->affect_plr(PLR_FROZEN); }else{ player_ptr->remove_affect_plr(PLR_FROZEN); }}
+			else if(key.compare("DONTSET")==0){ if(on){ player_ptr->affect_plr(PLR_DONTSET); }else{ player_ptr->remove_affect_plr(PLR_DONTSET); }}
+			else if(key.compare("WRITING")==0){ if(on){ player_ptr->affect_plr(PLR_WRITING); }else{ player_ptr->remove_affect_plr(PLR_WRITING); }}
+			else if(key.compare("MAILING")==0){ if(on){ player_ptr->affect_plr(PLR_MAILING); }else{ player_ptr->remove_affect_plr(PLR_MAILING); }}
+			else if(key.compare("CRASH")==0){ if(on){ player_ptr->affect_plr(PLR_CRASH); }else{ player_ptr->remove_affect_plr(PLR_CRASH); }}
+			else if(key.compare("SITEOK")==0){ if(on){ player_ptr->affect_plr(PLR_SITEOK); }else{ player_ptr->remove_affect_plr(PLR_SITEOK); }}
+			else if(key.compare("NOSHOUT")==0){ if(on){ player_ptr->affect_plr(PLR_NOSHOUT); }else{ player_ptr->remove_affect_plr(PLR_NOSHOUT); }}
+			else if(key.compare("NOTITLE")==0){ if(on){ player_ptr->affect_plr(PLR_NOTITLE); }else{ player_ptr->remove_affect_plr(PLR_NOTITLE); }}
+			else if(key.compare("DELETED")==0){ if(on){ player_ptr->affect_plr(PLR_DELETED); }else{ player_ptr->remove_affect_plr(PLR_DELETED); }}
+			else if(key.compare("LOADROOM")==0){ if(on){ player_ptr->affect_plr(PLR_LOADROOM); }else{ player_ptr->remove_affect_plr(PLR_LOADROOM); }}
+			else if(key.compare("NOWIZLIST")==0){ if(on){ player_ptr->affect_plr(PLR_NOWIZLIST); }else{ player_ptr->remove_affect_plr(PLR_NOWIZLIST); }}
+			else if(key.compare("NODELETE")==0){ if(on){ player_ptr->affect_plr(PLR_NODELETE); }else{ player_ptr->remove_affect_plr(PLR_NODELETE); }}
+			else if(key.compare("INVSTART")==0){ if(on){ player_ptr->affect_plr(PLR_INVSTART); }else{ player_ptr->remove_affect_plr(PLR_INVSTART); }}
+			else if(key.compare("CRYO")==0){ if(on){ player_ptr->affect_plr(PLR_CRYO); }else{ player_ptr->remove_affect_plr(PLR_CRYO); }}
+			else if(key.compare("NOTDEADYET")==0){ if(on){ player_ptr->affect_plr(PLR_NOTDEADYET); }else{ player_ptr->remove_affect_plr(PLR_NOTDEADYET); }}
+			duk_push_number(ctx,0);
+			return 1;
 		}
 		/*! \brief toggles player affected flags. Internally calls player::affect
 		 * and player::remove_affect for toggling on or off, respectively.
@@ -289,99 +295,99 @@ else if(key.compare("NOTDEADYET")==0){ if(on){ player_ptr->affect_plr(PLR_NOTDEA
 			std::string name = duk_to_string(ctx,0);
 			std::string key = duk_to_string(ctx,1);
 			bool on = (bool)duk_to_number(ctx,2);
-				bool found = false;
-				auto player_ptr = utils::find_player_by_name(name,found);
-				if(!found){
-					duk_push_number(ctx,-1);
-					return 1;
-				}
+			bool found = false;
+			auto player_ptr = utils::find_player_by_name(name,found);
+			if(!found){
+				duk_push_number(ctx,-1);
+				return 1;
+			}
 
-if(key.compare("BLIND") == 0){ if(on){ player_ptr->affect(AFF_BLIND); }else{ player_ptr->remove_affect(AFF_BLIND); }}
-else if(key.compare("INVISIBLE") == 0){ if(on){ player_ptr->affect(AFF_INVISIBLE); }else{ player_ptr->remove_affect(AFF_INVISIBLE); }}
-else if(key.compare("DETECT_ALIGN") == 0){ if(on){ player_ptr->affect(AFF_DETECT_ALIGN); }else{ player_ptr->remove_affect(AFF_DETECT_ALIGN); }}
-else if(key.compare("DETECT_INVIS") == 0){ if(on){ player_ptr->affect(AFF_DETECT_INVIS); }else{ player_ptr->remove_affect(AFF_DETECT_INVIS); }}
-else if(key.compare("DETECT_MAGIC") == 0){ if(on){ player_ptr->affect(AFF_DETECT_MAGIC); }else{ player_ptr->remove_affect(AFF_DETECT_MAGIC); }}
-else if(key.compare("SENSE_LIFE") == 0){ if(on){ player_ptr->affect(AFF_SENSE_LIFE); }else{ player_ptr->remove_affect(AFF_SENSE_LIFE); }}
-else if(key.compare("INTIMIDATED") == 0){ if(on){ player_ptr->affect(AFF_INTIMIDATED); }else{ player_ptr->remove_affect(AFF_INTIMIDATED); }}
-else if(key.compare("SANCTUARY") == 0){ if(on){ player_ptr->affect(AFF_SANCTUARY); }else{ player_ptr->remove_affect(AFF_SANCTUARY); }}
-else if(key.compare("GROUP") == 0){ if(on){ player_ptr->affect(AFF_GROUP); }else{ player_ptr->remove_affect(AFF_GROUP); }}
-else if(key.compare("CURSE") == 0){ if(on){ player_ptr->affect(AFF_CURSE); }else{ player_ptr->remove_affect(AFF_CURSE); }}
-else if(key.compare("INFRAVISION") == 0){ if(on){ player_ptr->affect(AFF_INFRAVISION); }else{ player_ptr->remove_affect(AFF_INFRAVISION); }}
-else if(key.compare("POISON") == 0){ if(on){ player_ptr->affect(AFF_POISON); }else{ player_ptr->remove_affect(AFF_POISON); }}
-else if(key.compare("PROTECT_EVIL") == 0){ if(on){ player_ptr->affect(AFF_PROTECT_EVIL); }else{ player_ptr->remove_affect(AFF_PROTECT_EVIL); }}
-else if(key.compare("PROTECT_GOOD") == 0){ if(on){ player_ptr->affect(AFF_PROTECT_GOOD); }else{ player_ptr->remove_affect(AFF_PROTECT_GOOD); }}
-else if(key.compare("SLEEP") == 0){ if(on){ player_ptr->affect(AFF_SLEEP); }else{ player_ptr->remove_affect(AFF_SLEEP); }}
-else if(key.compare("NOTRACK") == 0){ if(on){ player_ptr->affect(AFF_NOTRACK); }else{ player_ptr->remove_affect(AFF_NOTRACK); }}
-else if(key.compare("UNUSED16") == 0){ if(on){ player_ptr->affect(AFF_UNUSED16); }else{ player_ptr->remove_affect(AFF_UNUSED16); }}
-else if(key.compare("UNUSED17") == 0){ if(on){ player_ptr->affect(AFF_UNUSED17); }else{ player_ptr->remove_affect(AFF_UNUSED17); }}
-else if(key.compare("SNEAK") == 0){ if(on){ player_ptr->affect(AFF_SNEAK); }else{ player_ptr->remove_affect(AFF_SNEAK); }}
-else if(key.compare("HIDE") == 0){ if(on){ player_ptr->affect(AFF_HIDE); }else{ player_ptr->remove_affect(AFF_HIDE); }}
-else if(key.compare("UNUSED20") == 0){ if(on){ player_ptr->affect(AFF_UNUSED20); }else{ player_ptr->remove_affect(AFF_UNUSED20); }}
-else if(key.compare("CHARM") == 0){ if(on){ player_ptr->affect(AFF_CHARM); }else{ player_ptr->remove_affect(AFF_CHARM); }}
-duk_push_number(ctx,0);
-return 1;
+			if(key.compare("BLIND") == 0){ if(on){ player_ptr->affect(AFF_BLIND); }else{ player_ptr->remove_affect(AFF_BLIND); }}
+			else if(key.compare("INVISIBLE") == 0){ if(on){ player_ptr->affect(AFF_INVISIBLE); }else{ player_ptr->remove_affect(AFF_INVISIBLE); }}
+			else if(key.compare("DETECT_ALIGN") == 0){ if(on){ player_ptr->affect(AFF_DETECT_ALIGN); }else{ player_ptr->remove_affect(AFF_DETECT_ALIGN); }}
+			else if(key.compare("DETECT_INVIS") == 0){ if(on){ player_ptr->affect(AFF_DETECT_INVIS); }else{ player_ptr->remove_affect(AFF_DETECT_INVIS); }}
+			else if(key.compare("DETECT_MAGIC") == 0){ if(on){ player_ptr->affect(AFF_DETECT_MAGIC); }else{ player_ptr->remove_affect(AFF_DETECT_MAGIC); }}
+			else if(key.compare("SENSE_LIFE") == 0){ if(on){ player_ptr->affect(AFF_SENSE_LIFE); }else{ player_ptr->remove_affect(AFF_SENSE_LIFE); }}
+			else if(key.compare("INTIMIDATED") == 0){ if(on){ player_ptr->affect(AFF_INTIMIDATED); }else{ player_ptr->remove_affect(AFF_INTIMIDATED); }}
+			else if(key.compare("SANCTUARY") == 0){ if(on){ player_ptr->affect(AFF_SANCTUARY); }else{ player_ptr->remove_affect(AFF_SANCTUARY); }}
+			else if(key.compare("GROUP") == 0){ if(on){ player_ptr->affect(AFF_GROUP); }else{ player_ptr->remove_affect(AFF_GROUP); }}
+			else if(key.compare("CURSE") == 0){ if(on){ player_ptr->affect(AFF_CURSE); }else{ player_ptr->remove_affect(AFF_CURSE); }}
+			else if(key.compare("INFRAVISION") == 0){ if(on){ player_ptr->affect(AFF_INFRAVISION); }else{ player_ptr->remove_affect(AFF_INFRAVISION); }}
+			else if(key.compare("POISON") == 0){ if(on){ player_ptr->affect(AFF_POISON); }else{ player_ptr->remove_affect(AFF_POISON); }}
+			else if(key.compare("PROTECT_EVIL") == 0){ if(on){ player_ptr->affect(AFF_PROTECT_EVIL); }else{ player_ptr->remove_affect(AFF_PROTECT_EVIL); }}
+			else if(key.compare("PROTECT_GOOD") == 0){ if(on){ player_ptr->affect(AFF_PROTECT_GOOD); }else{ player_ptr->remove_affect(AFF_PROTECT_GOOD); }}
+			else if(key.compare("SLEEP") == 0){ if(on){ player_ptr->affect(AFF_SLEEP); }else{ player_ptr->remove_affect(AFF_SLEEP); }}
+			else if(key.compare("NOTRACK") == 0){ if(on){ player_ptr->affect(AFF_NOTRACK); }else{ player_ptr->remove_affect(AFF_NOTRACK); }}
+			else if(key.compare("UNUSED16") == 0){ if(on){ player_ptr->affect(AFF_UNUSED16); }else{ player_ptr->remove_affect(AFF_UNUSED16); }}
+			else if(key.compare("UNUSED17") == 0){ if(on){ player_ptr->affect(AFF_UNUSED17); }else{ player_ptr->remove_affect(AFF_UNUSED17); }}
+			else if(key.compare("SNEAK") == 0){ if(on){ player_ptr->affect(AFF_SNEAK); }else{ player_ptr->remove_affect(AFF_SNEAK); }}
+			else if(key.compare("HIDE") == 0){ if(on){ player_ptr->affect(AFF_HIDE); }else{ player_ptr->remove_affect(AFF_HIDE); }}
+			else if(key.compare("UNUSED20") == 0){ if(on){ player_ptr->affect(AFF_UNUSED20); }else{ player_ptr->remove_affect(AFF_UNUSED20); }}
+			else if(key.compare("CHARM") == 0){ if(on){ player_ptr->affect(AFF_CHARM); }else{ player_ptr->remove_affect(AFF_CHARM); }}
+			duk_push_number(ctx,0);
+			return 1;
 		}
 		static duk_ret_t affect_from_char(duk_context *ctx) {
 			/** TODO: get array from duktape */
 			std::string name = duk_to_string(ctx,0);
 			std::string key = duk_to_string(ctx,1);
-				bool found = false;
-				auto player_ptr = utils::find_player_by_name(name,found);
-				if(!found){
-					duk_push_number(ctx,-1);
-					return 1;
-				}
-if(key.compare("ARMOR") == 0){ ::affect_from_char(*player_ptr,SPELL_ARMOR); }
-if(key.compare("TELEPORT") == 0){ ::affect_from_char(*player_ptr,SPELL_TELEPORT); }
-if(key.compare("BLESS") == 0){ ::affect_from_char(*player_ptr,SPELL_BLESS); }
-if(key.compare("BLINDNESS") == 0){ ::affect_from_char(*player_ptr,SPELL_BLINDNESS); }
-if(key.compare("BURNING_HANDS") == 0){ ::affect_from_char(*player_ptr,SPELL_BURNING_HANDS); }
-if(key.compare("CALL_LIGHTNING") == 0){ ::affect_from_char(*player_ptr,SPELL_CALL_LIGHTNING); }
-if(key.compare("CHARM") == 0){ ::affect_from_char(*player_ptr,SPELL_CHARM); }
-if(key.compare("CHILL_TOUCH") == 0){ ::affect_from_char(*player_ptr,SPELL_CHILL_TOUCH); }
-if(key.compare("CLONE") == 0){ ::affect_from_char(*player_ptr,SPELL_CLONE); }
-if(key.compare("COLOR_SPRAY") == 0){ ::affect_from_char(*player_ptr,SPELL_COLOR_SPRAY); }
-if(key.compare("CONTROL_WEATHER") == 0){ ::affect_from_char(*player_ptr,SPELL_CONTROL_WEATHER); }
-if(key.compare("CREATE_FOOD") == 0){ ::affect_from_char(*player_ptr,SPELL_CREATE_FOOD); }
-if(key.compare("CREATE_WATER") == 0){ ::affect_from_char(*player_ptr,SPELL_CREATE_WATER); }
-if(key.compare("CURE_BLIND") == 0){ ::affect_from_char(*player_ptr,SPELL_CURE_BLIND); }
-if(key.compare("CURE_CRITIC") == 0){ ::affect_from_char(*player_ptr,SPELL_CURE_CRITIC); }
-if(key.compare("CURE_LIGHT") == 0){ ::affect_from_char(*player_ptr,SPELL_CURE_LIGHT); }
-if(key.compare("CURSE") == 0){ ::affect_from_char(*player_ptr,SPELL_CURSE); }
-if(key.compare("DETECT_ALIGN") == 0){ ::affect_from_char(*player_ptr,SPELL_DETECT_ALIGN); }
-if(key.compare("DETECT_INVIS") == 0){ ::affect_from_char(*player_ptr,SPELL_DETECT_INVIS); }
-if(key.compare("DETECT_MAGIC") == 0){ ::affect_from_char(*player_ptr,SPELL_DETECT_MAGIC); }
-if(key.compare("DETECT_POISON") == 0){ ::affect_from_char(*player_ptr,SPELL_DETECT_POISON); }
-if(key.compare("DISPEL_EVIL") == 0){ ::affect_from_char(*player_ptr,SPELL_DISPEL_EVIL); }
-if(key.compare("EARTHQUAKE") == 0){ ::affect_from_char(*player_ptr,SPELL_EARTHQUAKE); }
-if(key.compare("ENCHANT_WEAPON") == 0){ ::affect_from_char(*player_ptr,SPELL_ENCHANT_WEAPON); }
-if(key.compare("ENERGY_DRAIN") == 0){ ::affect_from_char(*player_ptr,SPELL_ENERGY_DRAIN); }
-if(key.compare("FIREBALL") == 0){ ::affect_from_char(*player_ptr,SPELL_FIREBALL); }
-if(key.compare("HARM") == 0){ ::affect_from_char(*player_ptr,SPELL_HARM); }
-if(key.compare("HEAL") == 0){ ::affect_from_char(*player_ptr,SPELL_HEAL); }
-if(key.compare("INVISIBLE") == 0){ ::affect_from_char(*player_ptr,SPELL_INVISIBLE); }
-if(key.compare("LIGHTNING_BOLT") == 0){ ::affect_from_char(*player_ptr,SPELL_LIGHTNING_BOLT); }
-if(key.compare("LOCATE_OBJECT") == 0){ ::affect_from_char(*player_ptr,SPELL_LOCATE_OBJECT); }
-if(key.compare("MAGIC_MISSILE") == 0){ ::affect_from_char(*player_ptr,SPELL_MAGIC_MISSILE); }
-if(key.compare("POISON") == 0){ ::affect_from_char(*player_ptr,SPELL_POISON); }
-if(key.compare("PROT_FROM_EVIL") == 0){ ::affect_from_char(*player_ptr,SPELL_PROT_FROM_EVIL); }
-if(key.compare("REMOVE_CURSE") == 0){ ::affect_from_char(*player_ptr,SPELL_REMOVE_CURSE); }
-if(key.compare("SANCTUARY") == 0){ ::affect_from_char(*player_ptr,SPELL_SANCTUARY); }
-if(key.compare("SHOCKING_GRASP") == 0){ ::affect_from_char(*player_ptr,SPELL_SHOCKING_GRASP); }
-if(key.compare("SLEEP") == 0){ ::affect_from_char(*player_ptr,SPELL_SLEEP); }
-if(key.compare("STRENGTH") == 0){ ::affect_from_char(*player_ptr,SPELL_STRENGTH); }
-if(key.compare("SUMMON") == 0){ ::affect_from_char(*player_ptr,SPELL_SUMMON); }
-if(key.compare("VENTRILOQUATE") == 0){ ::affect_from_char(*player_ptr,SPELL_VENTRILOQUATE); }
-if(key.compare("WORD_OF_RECALL") == 0){ ::affect_from_char(*player_ptr,SPELL_WORD_OF_RECALL); }
-if(key.compare("REMOVE_POISON") == 0){ ::affect_from_char(*player_ptr,SPELL_REMOVE_POISON); }
-if(key.compare("SENSE_LIFE") == 0){ ::affect_from_char(*player_ptr,SPELL_SENSE_LIFE); }
-if(key.compare("ANIMATE_DEAD") == 0){ ::affect_from_char(*player_ptr,SPELL_ANIMATE_DEAD); }
-if(key.compare("DISPEL_GOOD") == 0){ ::affect_from_char(*player_ptr,SPELL_DISPEL_GOOD); }
-if(key.compare("GROUP_ARMOR") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_ARMOR); }
-if(key.compare("GROUP_HEAL") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_HEAL); }
-if(key.compare("GROUP_RECALL") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_RECALL); }
-if(key.compare("INFRAVISION") == 0){ ::affect_from_char(*player_ptr,SPELL_INFRAVISION); }
-if(key.compare("INTIMIDATED") == 0){ ::affect_from_char(*player_ptr,SPELL_INTIMIDATED); }
+			bool found = false;
+			auto player_ptr = utils::find_player_by_name(name,found);
+			if(!found){
+				duk_push_number(ctx,-1);
+				return 1;
+			}
+			if(key.compare("ARMOR") == 0){ ::affect_from_char(*player_ptr,SPELL_ARMOR); }
+			if(key.compare("TELEPORT") == 0){ ::affect_from_char(*player_ptr,SPELL_TELEPORT); }
+			if(key.compare("BLESS") == 0){ ::affect_from_char(*player_ptr,SPELL_BLESS); }
+			if(key.compare("BLINDNESS") == 0){ ::affect_from_char(*player_ptr,SPELL_BLINDNESS); }
+			if(key.compare("BURNING_HANDS") == 0){ ::affect_from_char(*player_ptr,SPELL_BURNING_HANDS); }
+			if(key.compare("CALL_LIGHTNING") == 0){ ::affect_from_char(*player_ptr,SPELL_CALL_LIGHTNING); }
+			if(key.compare("CHARM") == 0){ ::affect_from_char(*player_ptr,SPELL_CHARM); }
+			if(key.compare("CHILL_TOUCH") == 0){ ::affect_from_char(*player_ptr,SPELL_CHILL_TOUCH); }
+			if(key.compare("CLONE") == 0){ ::affect_from_char(*player_ptr,SPELL_CLONE); }
+			if(key.compare("COLOR_SPRAY") == 0){ ::affect_from_char(*player_ptr,SPELL_COLOR_SPRAY); }
+			if(key.compare("CONTROL_WEATHER") == 0){ ::affect_from_char(*player_ptr,SPELL_CONTROL_WEATHER); }
+			if(key.compare("CREATE_FOOD") == 0){ ::affect_from_char(*player_ptr,SPELL_CREATE_FOOD); }
+			if(key.compare("CREATE_WATER") == 0){ ::affect_from_char(*player_ptr,SPELL_CREATE_WATER); }
+			if(key.compare("CURE_BLIND") == 0){ ::affect_from_char(*player_ptr,SPELL_CURE_BLIND); }
+			if(key.compare("CURE_CRITIC") == 0){ ::affect_from_char(*player_ptr,SPELL_CURE_CRITIC); }
+			if(key.compare("CURE_LIGHT") == 0){ ::affect_from_char(*player_ptr,SPELL_CURE_LIGHT); }
+			if(key.compare("CURSE") == 0){ ::affect_from_char(*player_ptr,SPELL_CURSE); }
+			if(key.compare("DETECT_ALIGN") == 0){ ::affect_from_char(*player_ptr,SPELL_DETECT_ALIGN); }
+			if(key.compare("DETECT_INVIS") == 0){ ::affect_from_char(*player_ptr,SPELL_DETECT_INVIS); }
+			if(key.compare("DETECT_MAGIC") == 0){ ::affect_from_char(*player_ptr,SPELL_DETECT_MAGIC); }
+			if(key.compare("DETECT_POISON") == 0){ ::affect_from_char(*player_ptr,SPELL_DETECT_POISON); }
+			if(key.compare("DISPEL_EVIL") == 0){ ::affect_from_char(*player_ptr,SPELL_DISPEL_EVIL); }
+			if(key.compare("EARTHQUAKE") == 0){ ::affect_from_char(*player_ptr,SPELL_EARTHQUAKE); }
+			if(key.compare("ENCHANT_WEAPON") == 0){ ::affect_from_char(*player_ptr,SPELL_ENCHANT_WEAPON); }
+			if(key.compare("ENERGY_DRAIN") == 0){ ::affect_from_char(*player_ptr,SPELL_ENERGY_DRAIN); }
+			if(key.compare("FIREBALL") == 0){ ::affect_from_char(*player_ptr,SPELL_FIREBALL); }
+			if(key.compare("HARM") == 0){ ::affect_from_char(*player_ptr,SPELL_HARM); }
+			if(key.compare("HEAL") == 0){ ::affect_from_char(*player_ptr,SPELL_HEAL); }
+			if(key.compare("INVISIBLE") == 0){ ::affect_from_char(*player_ptr,SPELL_INVISIBLE); }
+			if(key.compare("LIGHTNING_BOLT") == 0){ ::affect_from_char(*player_ptr,SPELL_LIGHTNING_BOLT); }
+			if(key.compare("LOCATE_OBJECT") == 0){ ::affect_from_char(*player_ptr,SPELL_LOCATE_OBJECT); }
+			if(key.compare("MAGIC_MISSILE") == 0){ ::affect_from_char(*player_ptr,SPELL_MAGIC_MISSILE); }
+			if(key.compare("POISON") == 0){ ::affect_from_char(*player_ptr,SPELL_POISON); }
+			if(key.compare("PROT_FROM_EVIL") == 0){ ::affect_from_char(*player_ptr,SPELL_PROT_FROM_EVIL); }
+			if(key.compare("REMOVE_CURSE") == 0){ ::affect_from_char(*player_ptr,SPELL_REMOVE_CURSE); }
+			if(key.compare("SANCTUARY") == 0){ ::affect_from_char(*player_ptr,SPELL_SANCTUARY); }
+			if(key.compare("SHOCKING_GRASP") == 0){ ::affect_from_char(*player_ptr,SPELL_SHOCKING_GRASP); }
+			if(key.compare("SLEEP") == 0){ ::affect_from_char(*player_ptr,SPELL_SLEEP); }
+			if(key.compare("STRENGTH") == 0){ ::affect_from_char(*player_ptr,SPELL_STRENGTH); }
+			if(key.compare("SUMMON") == 0){ ::affect_from_char(*player_ptr,SPELL_SUMMON); }
+			if(key.compare("VENTRILOQUATE") == 0){ ::affect_from_char(*player_ptr,SPELL_VENTRILOQUATE); }
+			if(key.compare("WORD_OF_RECALL") == 0){ ::affect_from_char(*player_ptr,SPELL_WORD_OF_RECALL); }
+			if(key.compare("REMOVE_POISON") == 0){ ::affect_from_char(*player_ptr,SPELL_REMOVE_POISON); }
+			if(key.compare("SENSE_LIFE") == 0){ ::affect_from_char(*player_ptr,SPELL_SENSE_LIFE); }
+			if(key.compare("ANIMATE_DEAD") == 0){ ::affect_from_char(*player_ptr,SPELL_ANIMATE_DEAD); }
+			if(key.compare("DISPEL_GOOD") == 0){ ::affect_from_char(*player_ptr,SPELL_DISPEL_GOOD); }
+			if(key.compare("GROUP_ARMOR") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_ARMOR); }
+			if(key.compare("GROUP_HEAL") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_HEAL); }
+			if(key.compare("GROUP_RECALL") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_RECALL); }
+			if(key.compare("INFRAVISION") == 0){ ::affect_from_char(*player_ptr,SPELL_INFRAVISION); }
+			if(key.compare("INTIMIDATED") == 0){ ::affect_from_char(*player_ptr,SPELL_INTIMIDATED); }
 			duk_push_number(ctx,0);
 			return 1;
 		}
@@ -420,16 +426,16 @@ if(key.compare("INTIMIDATED") == 0){ ::affect_from_char(*player_ptr,SPELL_INTIMI
 		static duk_ret_t set_char_pk_id(duk_context *ctx){
 			std::string c_name = duk_to_string(ctx,0);
 			aligned_int_t pk = duk_to_number(ctx,1);
-				bool found = false;
-				auto player_ptr = utils::find_player_by_name(c_name,found);
-				if(found){
-					player_ptr->set_db_id(pk);
-					mods::db::save_char(player_ptr);
-					duk_push_number(ctx,0);
-					return 1;
-				}
-					duk_push_number(ctx,-1);
-					return 1;
+			bool found = false;
+			auto player_ptr = utils::find_player_by_name(c_name,found);
+			if(found){
+				player_ptr->set_db_id(pk);
+				mods::db::save_char(player_ptr);
+				duk_push_number(ctx,0);
+				return 1;
+			}
+			duk_push_number(ctx,-1);
+			return 1;
 		}
 		static duk_ret_t room(duk_context *ctx){
 			auto room = mods::globals::current_player->room();
@@ -489,12 +495,12 @@ if(key.compare("INTIMIDATED") == 0){ ::affect_from_char(*player_ptr,SPELL_INTIMI
 		static duk_ret_t send_to_char(duk_context *ctx) {
 			/* First parameter is character name */
 			std::string c_name = duk_to_string(ctx,0);
-				bool found = false;
-				auto player_ptr = utils::find_player_by_name(c_name,found);
-				if(found){
-					::send_to_char(*player_ptr,"%s",duk_to_string(ctx,1));
-					return 0;
-				}
+			bool found = false;
+			auto player_ptr = utils::find_player_by_name(c_name,found);
+			if(found){
+				::send_to_char(*player_ptr,"%s",duk_to_string(ctx,1));
+				return 0;
+			}
 			return 0;	/* number of return values */
 		}
 		static duk_ret_t mobile_activity(duk_context *ctx){
@@ -646,13 +652,15 @@ if(key.compare("INTIMIDATED") == 0){ ::affect_from_char(*player_ptr,SPELL_INTIMI
 			duk_put_global_string(ctx,"mob_death_trigger");
 			duk_push_c_function(ctx,mods::js::char_from_room,1);
 			duk_put_global_string(ctx,"char_from_room");
+			duk_push_c_function(ctx,mods::js::real_mobile,1);
+			duk_put_global_string(ctx,"real_mobile");
 		}
 
 		//enum mask_type { SMG, SNIPE, SHOTGUN, GRENADE };
-			//typedef short weapon_set;
-			//using		time_type_t = unsigned long;//std::chrono::system_clock::time_point;
-			//enum player_type_enum_t { 
-			//	PLAYER, MOB, DRONE,
+		//typedef short weapon_set;
+		//using		time_type_t = unsigned long;//std::chrono::system_clock::time_point;
+		//enum player_type_enum_t { 
+		//	PLAYER, MOB, DRONE,
 		//		PLAYER_MUTED_DESCRIPTOR,
 		//		MOB_MUTED_DESCRIPTOR,
 		//		DRONE_MUTED_DESCRIPTOR
@@ -685,18 +693,18 @@ if(key.compare("INTIMIDATED") == 0){ ::affect_from_char(*player_ptr,SPELL_INTIMI
 			/** TODO: get array from duktape */
 			std::string name = duk_to_string(ctx,0);
 			std::string key = duk_to_string(ctx,1);
-				bool found = false;
-				auto player_ptr = utils::find_player_by_name(name,found);
-				if(!found){
-					duk_push_number(ctx,-1);
-					return 1;
-				}
-				auto value = duk_to_number(ctx,2);
-				if(key.compare("name") == 0){ 
-					std::string str_value = duk_to_string(ctx,2);
-					player_ptr->name() = str_value;
-					goto __set_points_cleanup;
-				}
+			bool found = false;
+			auto player_ptr = utils::find_player_by_name(name,found);
+			if(!found){
+				duk_push_number(ctx,-1);
+				return 1;
+			}
+			auto value = duk_to_number(ctx,2);
+			if(key.compare("name") == 0){ 
+				std::string str_value = duk_to_string(ctx,2);
+				player_ptr->name() = str_value;
+				goto __set_points_cleanup;
+			}
 			if(key.compare("mana") == 0){ player_ptr->mana() = static_cast<sh_int>(value); }
 			else if(key.compare("max_mana") == 0){ player_ptr->max_mana() = static_cast<sh_int>(value); }
 			else if(key.compare("hp") == 0){ player_ptr->hp() = static_cast<sh_int>(value); }
@@ -714,8 +722,8 @@ if(key.compare("INTIMIDATED") == 0){ ::affect_from_char(*player_ptr,SPELL_INTIMI
 			else if(key.compare("room") == 0){ player_ptr->room() = static_cast<room_rnum>(value); }
 			else if(key.compare("uuid") == 0){ player_ptr->uuid() = static_cast<uuid_t>(value); }
 __set_points_cleanup:
-					duk_push_number(ctx,0);
-					return 1;
+			duk_push_number(ctx,0);
+			return 1;
 		}
 
 
@@ -732,7 +740,7 @@ __set_points_cleanup:
 			eval_string(ctx,std::string("test_main(") +
 					std::string(mods::util::itoa(player.cd()->uuid)) + ");"
 					);
-				player << "{grn}[js]{/grn} Loaded and evaluated library: '" << path.c_str() << "'\r\n";
+			player << "{grn}[js]{/grn} Loaded and evaluated library: '" << path.c_str() << "'\r\n";
 			return true;
 		}
 
@@ -756,8 +764,8 @@ __set_points_cleanup:
 		void run_profile_scripts(const std::string& player_name){
 			std::cerr << "run_profile_scripts: '" << player_name << "'\n";
 			if(config::run_profile_scripts){
-			 load_library(mods::globals::duktape_context,
-					 std::string(MENTOC_CURRENT_WORKING_DIR) + std::string("/js/profiles/" + player_name + ".js").c_str());
+				load_library(mods::globals::duktape_context,
+						std::string(MENTOC_CURRENT_WORKING_DIR) + std::string("/js/profiles/" + player_name + ".js").c_str());
 			}
 		}
 

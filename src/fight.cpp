@@ -748,6 +748,7 @@ int skill_message(int dam, char_data *ch, char_data *vict,
  *  > 0 How much damage done.
  */
 int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
+	MENTOC_PREAMBLE();
 	ch->last_fight_timestamp = time(NULL);
 
 	if(GET_POS(victim) <= POS_DEAD) {
@@ -892,14 +893,14 @@ int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 				             CCRED(victim, C_SPR), CCNRM(victim, C_SPR));
 
 				if(ch != victim && MOB_FLAGGED(victim, MOB_WIMPY)) {
-					do_flee(victim, NULL, 0, 0);
+					do_flee(victim, NULL, 0, 0, player);
 				}
 			}
 
 			if(!IS_NPC(victim) && GET_WIMP_LEV(victim) && (victim != ch) &&
 			        GET_HIT(victim) < GET_WIMP_LEV(victim) && GET_HIT(victim) > 0) {
 				send_to_char(victim, "You wimp out, and attempt to flee!\r\n");
-				do_flee(victim, NULL, 0, 0);
+				do_flee(victim, NULL, 0, 0, player);
 			}
 
 			break;
@@ -907,7 +908,7 @@ int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 
 	/* Help out poor linkless people who are attacked */
 	if(!IS_NPC(victim) && !(victim->has_desc) && GET_POS(victim) > POS_STUNNED) {
-		do_flee(victim, NULL, 0, 0);
+		do_flee(victim, NULL, 0, 0,player);
 
 		if(!FIGHTING(victim)) {
 			act("$n is rescued by divine forces.", FALSE, victim, 0, 0, TO_ROOM);
@@ -997,6 +998,7 @@ int snipe_damage(
  *	> 0	How much damage done.
  */
 int damage(char_data *ch, char_data *victim, int dam, int attacktype) {
+	MENTOC_PREAMBLE();
 	ch->last_fight_timestamp = time(NULL);
 
 	/*TODO: Modify this code to allow sniping */
@@ -1134,14 +1136,14 @@ int damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 				             CCRED(victim, C_SPR), CCNRM(victim, C_SPR));
 
 				if(ch != victim && MOB_FLAGGED(victim, MOB_WIMPY)) {
-					do_flee(victim, NULL, 0, 0);
+					do_flee(victim, NULL, 0, 0,player);
 				}
 			}
 
 			if(!IS_NPC(victim) && GET_WIMP_LEV(victim) && (victim != ch) &&
 			        GET_HIT(victim) < GET_WIMP_LEV(victim) && GET_HIT(victim) > 0) {
 				send_to_char(victim, "You wimp out, and attempt to flee!\r\n");
-				do_flee(victim, NULL, 0, 0);
+				do_flee(victim, NULL, 0, 0,player);
 			}
 
 			break;
@@ -1149,7 +1151,7 @@ int damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 
 	/* Help out poor linkless people who are attacked */
 	if(!IS_NPC(victim) && !(victim->has_desc) && GET_POS(victim) > POS_STUNNED) {
-		do_flee(victim, NULL, 0, 0);
+		do_flee(victim, NULL, 0, 0,player);
 
 		if(!FIGHTING(victim)) {
 			act("$n is rescued by divine forces.", FALSE, victim, 0, 0, TO_ROOM);
@@ -1475,7 +1477,8 @@ void perform_violence() {
 
 		if(MOB_FLAGGED(ch, MOB_SPEC) && GET_MOB_SPEC(ch) && !MOB_FLAGGED(ch, MOB_NOTDEADYET)) {
 			char actbuf[MAX_INPUT_LENGTH] = "";
-			(GET_MOB_SPEC(ch))(ch, ch, 0, actbuf);
+			MENTOC_PREAMBLE();
+			(GET_MOB_SPEC(ch))(ch, ch, 0, actbuf,player);
 		}
 	}
 }

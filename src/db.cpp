@@ -24,6 +24,7 @@
 #include "house.h"
 #include "constants.h"
 #include "globals.hpp"
+#include "shop.h"
 #include <vector>
 #include <deque>
 #include "mods/behaviour_tree_impl.hpp"
@@ -38,8 +39,11 @@
 #include "mods/world-configuration.hpp"
 #include "mods/classes/sentinel.hpp"
 #include "mods/orm/inventory.hpp"
+#include "mods/orm/shop.hpp"
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
+using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>;
+using shop_ptr_t = std::shared_ptr<shop_data_t>;
 
 /**************************************************************************
  *  declarations of most of the 'global' variables                         *
@@ -51,6 +55,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms();
 std::tuple<int16_t,std::string> parse_sql_zones();
 int parse_sql_objects();
 void parse_sql_mobiles();
+int parse_sql_shops();
 std::vector<room_data> world;	/* array of rooms		 */
 room_rnum top_of_world = 0;	/* ref to top element of world	 */
 
@@ -62,8 +67,15 @@ mob_rnum top_of_mobt = 0;	/* top of mobile index table	 */
 
 std::deque<std::shared_ptr<obj_data>> obj_list;
 std::deque<std::shared_ptr<mods::npc>> mob_list;
+std::deque<std::shared_ptr<shop_data_t>> shop_list;
+
+extern std::deque<std::shared_ptr<shop_data_t>> shop_list;
+namespace mods::globals {
+	extern std::map<room_rnum,std::shared_ptr<shop_data_t>> room_shopmap;
+};
 std::vector<index_data> obj_index;	/* index table for object file	 */
 std::vector<obj_data> obj_proto;	/* prototypes for objs		 */
+std::vector<shop_data_t> shop_proto;	/* prototypes for objs		 */
 obj_rnum top_of_objt = 0;	/* top of object index table	 */
 
 std::vector<zone_data> zone_table;	/* zone table			 */
@@ -234,12 +246,12 @@ namespace db {
 				.where("player_name","=",player->name())
 				.sql();
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
-				for(auto && row : player_record){
-					player->set_db_id(row["id"].as<int>(0));
-					return 0;
-				}
-				log("SYSERR: couldn't grab player's pkid: '%s'",player->name().c_str());
-				return -1;
+			if(player_record.size()){
+				player->set_db_id(player_record[0]["id"].as<int>(0));
+				return 0;
+			}
+			log("SYSERR: couldn't grab player's pkid: '%s'",player->name().c_str());
+			return -1;
 		}catch(std::exception& e){
 			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
 			return -2;
@@ -255,13 +267,13 @@ namespace db {
 				.where("id","=",std::to_string(player->get_db_id()))
 				.sql();
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
-				for(auto && row : player_record){
-					player->set_prefs(row["player_preferences"].as<long>(0));
-					return 0;
-				}
-				log("SYSERR: player's prefs don't exist in db: ");
-				player->set_prefs(0);
-				return -1;
+			if(player_record.size()){
+				player->set_prefs(player_record[0]["player_preferences"].as<long>(0));
+				return 0;
+			}
+			log("SYSERR: player's prefs don't exist in db: ");
+			player->set_prefs(0);
+			return -1;
 		}catch(std::exception& e){
 			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character preferences by pkid: '" << e.what() << "'\n";
 			return -2;
@@ -506,8 +518,15 @@ void boot_world(void) {
 	//index_boot(DB_BOOT_OBJ);
 	parse_sql_objects();
 
+	log("Loading sql shops and generating index.");
+	parse_sql_shops();
+
+
 	log("Renumbering zone table.");
 	renum_zone_table();
+
+	log("Booting shops");
+	boot_the_shops();
 
 	if(!no_specials) {
 		log("Loading shops.");
@@ -1006,89 +1025,94 @@ void parse_sql_mobiles() {
 	 */
 	top_of_mobt = 0;
 
-		for(auto && row : db_get_all("mobile")) {
-			char_data proto;
-			d("name");
-			proto.player.name.assign(row["mob_name"]);
-			d("DEBUG: mob proto name: '" << row["mob_name"].c_str());
-			proto.player.short_descr.assign(row["mob_short_description"]);
-			proto.player.long_descr.assign(row["mob_long_description"]);
+	for(auto && row : db_get_all("mobile")) {
+		char_data proto;
+		d("name");
+		proto.player.name.assign(row["mob_name"]);
+		d("DEBUG: mob proto name: '" << row["mob_name"].c_str());
+		proto.player.short_descr.assign(row["mob_short_description"]);
+		proto.player.long_descr.assign(row["mob_long_description"]);
 
-			proto.player.description.assign(row["mob_description"]);
-			d("mob desc");
+		proto.player.description.assign(row["mob_description"]);
+		d("mob desc");
 
-			proto.char_specials.saved.act = mods::util::stoi<int>(row["mob_action_bitvector"]);
-			SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
-			REMOVE_BIT(proto.char_specials.saved.act, MOB_NOTDEADYET);
-			proto.char_specials.saved.affected_by = mods::util::stoi<int>(row["mob_affection_bitvector"]);
-			proto.char_specials.saved.alignment = mods::util::stoi<int>(row["mob_alignment"]);
+		proto.char_specials.saved.act = mods::util::stoi<int>(row["mob_action_bitvector"]);
+		SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
+		REMOVE_BIT(proto.char_specials.saved.act, MOB_NOTDEADYET);
+		proto.char_specials.saved.affected_by = mods::util::stoi<int>(row["mob_affection_bitvector"]);
+		proto.char_specials.saved.alignment = mods::util::stoi<int>(row["mob_alignment"]);
 
-			/* AGGR_TO_ALIGN is ignored if the mob is AGGRESSIVE. */
-			if(MOB_FLAGGED(&proto, MOB_AGGRESSIVE) && MOB_FLAGGED(&proto, MOB_AGGR_GOOD | MOB_AGGR_EVIL | MOB_AGGR_NEUTRAL)) {
-				log("SYSERR: Mob both Aggressive and Aggressive_to_Alignment.");
-			}
+		/* AGGR_TO_ALIGN is ignored if the mob is AGGRESSIVE. */
+		if(MOB_FLAGGED(&proto, MOB_AGGRESSIVE) && MOB_FLAGGED(&proto, MOB_AGGR_GOOD | MOB_AGGR_EVIL | MOB_AGGR_NEUTRAL)) {
+			log("SYSERR: Mob both Aggressive and Aggressive_to_Alignment.");
+		}
 
 #define MENTOC_ABIL_SET(struct_name,sql_name) proto.real_abils.struct_name = mods::util::stoi<int>(row[#sql_name]);
-			MENTOC_ABIL_SET(str,mob_ability_strength);
-			MENTOC_ABIL_SET(intel,mob_ability_intelligence);
-			MENTOC_ABIL_SET(wis,mob_ability_wisdom);
-			MENTOC_ABIL_SET(dex,mob_ability_dexterity);
-			MENTOC_ABIL_SET(con,mob_ability_constitution);
-			MENTOC_ABIL_SET(cha,mob_ability_charisma);
+		MENTOC_ABIL_SET(str,mob_ability_strength);
+		MENTOC_ABIL_SET(intel,mob_ability_intelligence);
+		MENTOC_ABIL_SET(wis,mob_ability_wisdom);
+		MENTOC_ABIL_SET(dex,mob_ability_dexterity);
+		MENTOC_ABIL_SET(con,mob_ability_constitution);
+		MENTOC_ABIL_SET(cha,mob_ability_charisma);
 
-			GET_LEVEL(&proto) = mods::util::stoi<int>(row["mob_level"]);
-			GET_HITROLL(&proto) = 20 -mods::util::stoi<int>(row["mob_hitroll"]);
-			GET_AC(&proto) = 10 *mods::util::stoi<int>(row["mob_armor"]);
+		GET_LEVEL(&proto) = mods::util::stoi<int>(row["mob_level"]);
+		GET_HITROLL(&proto) = 20 -mods::util::stoi<int>(row["mob_hitroll"]);
+		GET_AC(&proto) = 10 *mods::util::stoi<int>(row["mob_armor"]);
 
-			/* max hit = 0 is a flag that H, M, V is xdy+z */
-			GET_MAX_HIT(&proto) = mods::util::stoi<int>(row["mob_max_hitpoints"]);
-			GET_HIT(&proto) = mods::util::stoi<int>(row["mob_hitpoints"]);
-			GET_MANA(&proto) = mods::util::stoi<int>(row["mob_mana"]);
-			GET_MOVE(&proto) = mods::util::stoi<int>(row["mob_move"]);
-			GET_MAX_MANA(&proto) = mods::util::stoi<int>(row["mob_max_mana"]);
-			GET_MAX_MOVE(&proto) = mods::util::stoi<int>(row["mob_max_move"]);
-			proto.mob_specials.damnodice = mods::util::stoi<int>(row["mob_damnodice"]);
-			proto.mob_specials.damsizedice = mods::util::stoi<int>(row["mob_damsizedice"]);
-			proto.mob_specials.behaviour_tree = behaviour_tree::NONE;
-			GET_DAMROLL(&proto) = mods::util::stoi<int>(row["mob_damroll"]);
-			GET_GOLD(&proto) = mods::util::stoi<int>(row["mob_gold"]);
-			GET_EXP(&proto) = mods::util::stoi<int>(row["mob_exp"]);
-			GET_POS(&proto) = mods::util::stoi<int>(row["mob_load_position"]);
-			GET_DEFAULT_POS(&proto) = mods::util::stoi<int>(row["mob_load_position"]);
-			GET_SEX(&proto) = mods::util::stoi<int>(row["mob_sex"]);
-			GET_CLASS(&proto) = mods::util::stoi<int>(row["mob_class"]);
-			GET_WEIGHT(&proto) = mods::util::stoi<int>(row["mob_weight"]);
-			GET_HEIGHT(&proto) = mods::util::stoi<int>(row["mob_height"]);
-			/*
-			 * these are now save applies; base save numbers for MOBs are now from
-			 * the warrior save table.
-			 */
-			unsigned j = 0;
+		/* max hit = 0 is a flag that H, M, V is xdy+z */
+		GET_MAX_HIT(&proto) = mods::util::stoi<int>(row["mob_max_hitpoints"]);
+		GET_HIT(&proto) = mods::util::stoi<int>(row["mob_hitpoints"]);
+		GET_MANA(&proto) = mods::util::stoi<int>(row["mob_mana"]);
+		GET_MOVE(&proto) = mods::util::stoi<int>(row["mob_move"]);
+		GET_MAX_MANA(&proto) = mods::util::stoi<int>(row["mob_max_mana"]);
+		GET_MAX_MOVE(&proto) = mods::util::stoi<int>(row["mob_max_move"]);
+		proto.mob_specials.damnodice = mods::util::stoi<int>(row["mob_damnodice"]);
+		proto.mob_specials.damsizedice = mods::util::stoi<int>(row["mob_damsizedice"]);
+		proto.mob_specials.behaviour_tree = behaviour_tree::NONE;
+		GET_DAMROLL(&proto) = mods::util::stoi<int>(row["mob_damroll"]);
+		GET_GOLD(&proto) = mods::util::stoi<int>(row["mob_gold"]);
+		GET_EXP(&proto) = mods::util::stoi<int>(row["mob_exp"]);
+		GET_POS(&proto) = mods::util::stoi<int>(row["mob_load_position"]);
+		GET_DEFAULT_POS(&proto) = mods::util::stoi<int>(row["mob_load_position"]);
+		GET_SEX(&proto) = mods::util::stoi<int>(row["mob_sex"]);
+		GET_CLASS(&proto) = mods::util::stoi<int>(row["mob_class"]);
+		GET_WEIGHT(&proto) = mods::util::stoi<int>(row["mob_weight"]);
+		GET_HEIGHT(&proto) = mods::util::stoi<int>(row["mob_height"]);
+		/*
+		 * these are now save applies; base save numbers for MOBs are now from
+		 * the warrior save table.
+		 */
+		unsigned j = 0;
 
-			for(; j < 5; j++) {
-				GET_SAVE(&proto, j) = 0;
-			}
-
-			proto.aff_abils = proto.real_abils;
-
-			for(; j < NUM_WEARS; j++) {
-				proto.equipment[j] = nullptr;
-			}
-
-			proto.nr = 0;
-			proto.uuid = mods::globals::mob_uuid();
-			mob_proto.push_back(proto);
-			top_of_mobt = mob_proto.size();
-			index_data m_index;
-			m_index.vnum = mods::util::stoi<int>(row["mob_virtual_number"]);
-			m_index.number = 0;
-			m_index.func = nullptr;
-			mob_index.push_back(m_index);
+		for(; j < 5; j++) {
+			GET_SAVE(&proto, j) = 0;
 		}
+
+		proto.aff_abils = proto.real_abils;
+
+		for(; j < NUM_WEARS; j++) {
+			proto.equipment[j] = nullptr;
+		}
+
+		proto.nr = mods::util::stoi<decltype(proto.nr)>(row["mob_virtual_number"]);
+		log("proto.nr: %d", proto.nr);
+		proto.uuid = mods::globals::mob_uuid();
+		mob_proto.push_back(proto);
+		mob_proto.back().nr = proto.nr;
+		log("mob_proto.back().nr: %d", mob_proto.back().nr);
+
+		top_of_mobt = mob_proto.size();
+		index_data m_index;
+		m_index.vnum = mods::util::stoi<int>(row["mob_virtual_number"]);
+		m_index.number = 0;
+		m_index.func = nullptr;
+		assert(real_mobile(m_index.vnum) == mob_proto.size() -1);
+		mob_index.push_back(m_index);
+	}
 }
 
 int parse_sql_objects() {
-	auto result = db_get_by_meta("object","obj_is_player_object","0");
+	auto result = db_get_all("object");
 
 	if(result.size()) {
 
@@ -1168,6 +1192,9 @@ int parse_sql_objects() {
 			proto.worn_by = nullptr;
 			proto.carried_by = nullptr;
 			proto.feed(row);
+			mods::globals::obj_stat_pages[
+				mods::util::stoi<int>(row["obj_item_number"])
+			] = std::move(proto.generate_stat_page());
 			obj_proto.push_back(proto);
 		}
 	} else {
@@ -1392,6 +1419,42 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 	}
 	return {world.size(),"okay"};
 }
+
+int16_t install_shop(shop_ptr_t& shop){
+	for(const auto & s_room_vnum : shop->room_info.rooms) {
+		auto room = real_room(s_room_vnum);
+		if(room == NOWHERE){
+			log("install_shop skipping room vnum: (%d)", s_room_vnum);
+			continue;
+		}
+		log("Installing shop title: %s: %s", shop->title.c_str(), shop->description.c_str());
+		world[room].name.assign(shop->title.c_str());
+		world[room].description.assign(shop->description.c_str());
+		mods::globals::room_shopmap[s_room_vnum] = shop;
+	}
+	return 1;
+}
+
+int parse_sql_shops() {
+	auto result = db_get_all("shops");
+
+	if(result.size()) {
+		shop_proto.reserve(result.size());
+		for(const auto & current_row : result) {
+			shop_proto.emplace_back();
+			shop_proto.back().feed(current_row);
+			auto shop_ptr = std::make_shared<shop_data_t>();
+			shop_ptr->feed(current_row);
+			install_shop(shop_ptr);
+			shop_list.emplace_back(std::move(shop_ptr));
+		}
+	} else {
+		log("[notice] no shops from sql");
+	}
+
+	return 0;
+}
+
 void parse_room(FILE *fl, int virtual_nr) {
 	log("[DEPRECATED] parse_room");
 }
@@ -1951,6 +2014,20 @@ obj_ptr_t blank_object() {
 	return obj_list.back();
 }
 
+shop_ptr_t create_shop_from_index(std::size_t proto_index){
+	if (proto_index >= shop_proto.size()){
+		log("SYSERR: requesting to read shop number(%d) out of shop_proto.size(): (%d)",
+				proto_index, shop_proto.size());
+		return nullptr;
+	}
+	shop_list.push_back(std::make_shared<shop_data_t>(shop_proto[proto_index]));
+	mods::globals::register_shop<shop_ptr_t>(shop_list.back());
+	//shop_index[proto_index].number++;
+	return shop_list.back();
+}
+
+
+/* create a new object from a prototype */
 obj_ptr_t create_object_from_index(std::size_t proto_index){
 	if (proto_index >= obj_proto.size()){
 		log("SYSERR: requesting to read object number(%d) out of obj_proto.size(): (%d)",
@@ -2381,19 +2458,19 @@ bool char_exists(const std::string& name){
 
 
 void decorate_authenticated_player(player_ptr_t player_ptr){
-		mods::orm::inventory::feed_player(player_ptr);
-		switch(player_ptr->get_class()){
-			case CLASS_SENTINEL:
-				log("User [%s] is a sentinel. Loading... ", player_ptr->name());
-				{
-					auto s = mods::classes::create_sentinel(player_ptr);
-					s->load_by_player(player_ptr);
-					player_ptr->set_sentinel(std::move(s));
-				}
-				break;
-			default:
-				break;
-		}
+	mods::orm::inventory::feed_player(player_ptr);
+	switch(player_ptr->get_class()){
+		case CLASS_SENTINEL:
+			log("User [%s] is a sentinel. Loading... ", player_ptr->name());
+			{
+				auto s = mods::classes::create_sentinel(player_ptr);
+				s->load_by_player(player_ptr);
+				player_ptr->set_sentinel(std::move(s));
+			}
+			break;
+		default:
+			break;
+	}
 }
 
 /*
@@ -2412,7 +2489,7 @@ bool login(std::string_view user_name,std::string_view password){
 			.where("player_password","=",password.data())
 			.sql();
 		auto row = mods::pq::exec(up_txn,room_sql.data());
-		return row.size() > 0;
+		return row.size();
 	}catch(std::exception& e){
 		std::cerr << __FILE__ << ": " << __LINE__ << " login() exception: " << e.what() << "\n";
 		return false;
@@ -2467,25 +2544,25 @@ bool parse_sql_player(player_ptr_t player_ptr){
 			for(unsigned i=0; i < 64; i++){
 				if(aff & shift){
 					switch(shift){
-__MENTOC_PLR(AFF_BLIND);
-__MENTOC_PLR(AFF_INVISIBLE);
-__MENTOC_PLR(AFF_DETECT_ALIGN);
-__MENTOC_PLR(AFF_DETECT_INVIS);
-__MENTOC_PLR(AFF_DETECT_MAGIC);
-__MENTOC_PLR(AFF_SENSE_LIFE);
-__MENTOC_PLR(AFF_INTIMIDATED);
-__MENTOC_PLR(AFF_SANCTUARY);
-__MENTOC_PLR(AFF_GROUP);
-__MENTOC_PLR(AFF_CURSE);
-__MENTOC_PLR(AFF_INFRAVISION);
-__MENTOC_PLR(AFF_POISON);
-__MENTOC_PLR(AFF_PROTECT_EVIL);
-__MENTOC_PLR(AFF_PROTECT_GOOD);
-__MENTOC_PLR(AFF_SLEEP);
-__MENTOC_PLR(AFF_NOTRACK);
-__MENTOC_PLR(AFF_SNEAK);
-__MENTOC_PLR(AFF_HIDE);
-__MENTOC_PLR(AFF_CHARM);
+						__MENTOC_PLR(AFF_BLIND);
+						__MENTOC_PLR(AFF_INVISIBLE);
+						__MENTOC_PLR(AFF_DETECT_ALIGN);
+						__MENTOC_PLR(AFF_DETECT_INVIS);
+						__MENTOC_PLR(AFF_DETECT_MAGIC);
+						__MENTOC_PLR(AFF_SENSE_LIFE);
+						__MENTOC_PLR(AFF_INTIMIDATED);
+						__MENTOC_PLR(AFF_SANCTUARY);
+						__MENTOC_PLR(AFF_GROUP);
+						__MENTOC_PLR(AFF_CURSE);
+						__MENTOC_PLR(AFF_INFRAVISION);
+						__MENTOC_PLR(AFF_POISON);
+						__MENTOC_PLR(AFF_PROTECT_EVIL);
+						__MENTOC_PLR(AFF_PROTECT_GOOD);
+						__MENTOC_PLR(AFF_SLEEP);
+						__MENTOC_PLR(AFF_NOTRACK);
+						__MENTOC_PLR(AFF_SNEAK);
+						__MENTOC_PLR(AFF_HIDE);
+						__MENTOC_PLR(AFF_CHARM);
 						default: std::cerr << "unknown affected flag: " << shift << "\n";
 					}
 					player_ptr->affect(shift);
@@ -2499,23 +2576,23 @@ __MENTOC_PLR(AFF_CHARM);
 			for(unsigned i=0; i < 64; i++){
 				if(aff & shift){
 					switch(shift){
-__MENTOC_PLR(PLR_KILLER);
-__MENTOC_PLR(PLR_THIEF);
-__MENTOC_PLR(PLR_FROZEN);
-__MENTOC_PLR(PLR_DONTSET);
-__MENTOC_PLR(PLR_WRITING);
-__MENTOC_PLR(PLR_MAILING);
-__MENTOC_PLR(PLR_CRASH);
-__MENTOC_PLR(PLR_SITEOK);
-__MENTOC_PLR(PLR_NOSHOUT);
-__MENTOC_PLR(PLR_NOTITLE);
-__MENTOC_PLR(PLR_DELETED);
-__MENTOC_PLR(PLR_LOADROOM);
-__MENTOC_PLR(PLR_NOWIZLIST);
-__MENTOC_PLR(PLR_NODELETE);
-__MENTOC_PLR(PLR_INVSTART);
-__MENTOC_PLR(PLR_CRYO);
-__MENTOC_PLR(PLR_NOTDEADYET);
+						__MENTOC_PLR(PLR_KILLER);
+						__MENTOC_PLR(PLR_THIEF);
+						__MENTOC_PLR(PLR_FROZEN);
+						__MENTOC_PLR(PLR_DONTSET);
+						__MENTOC_PLR(PLR_WRITING);
+						__MENTOC_PLR(PLR_MAILING);
+						__MENTOC_PLR(PLR_CRASH);
+						__MENTOC_PLR(PLR_SITEOK);
+						__MENTOC_PLR(PLR_NOSHOUT);
+						__MENTOC_PLR(PLR_NOTITLE);
+						__MENTOC_PLR(PLR_DELETED);
+						__MENTOC_PLR(PLR_LOADROOM);
+						__MENTOC_PLR(PLR_NOWIZLIST);
+						__MENTOC_PLR(PLR_NODELETE);
+						__MENTOC_PLR(PLR_INVSTART);
+						__MENTOC_PLR(PLR_CRYO);
+						__MENTOC_PLR(PLR_NOTDEADYET);
 						default: std::cerr << "unknown affected_plr flag: " << shift << "\n";break;
 					}
 					player_ptr->affect(shift);
@@ -2523,7 +2600,7 @@ __MENTOC_PLR(PLR_NOTDEADYET);
 				shift <<= 1;
 			}
 		}
-		
+
 		player_ptr->set_time_birth(mods::util::stoi<int>(row["player_birth"]));
 		player_ptr->set_time_played(mods::util::stoi<int>(row["player_time_played"]));
 		player_ptr->set_time_logon(time(0));
@@ -2815,10 +2892,10 @@ void free_obj(struct obj_data *obj) {
 
 		/** FIXME decipher and refactor */
 		/**
-		if(obj->ex_description  && strcmp(obj->ex_descriptionc_str(),obj_proto[nr].ex_description.c_str()) != 0){
+			if(obj->ex_description  && strcmp(obj->ex_descriptionc_str(),obj_proto[nr].ex_description.c_str()) != 0){
 			free_extra_descriptions(obj->ex_description);
-		}
-		*/
+			}
+			*/
 	}
 }
 
@@ -3072,61 +3149,31 @@ room_rnum real_room(room_vnum vnum) {
 
 /* returns the real number of the monster with given virtual number */
 mob_rnum real_mobile(mob_vnum vnum) {
-	mob_rnum bot, top, mid;
-
-	bot = 0;
-	top = top_of_mobt;
-
-	if(top == 0) {
-		return NOBODY;
+	static std::map<mob_vnum,mob_rnum> real_mobile_static_map;
+	if(real_mobile_static_map.find(vnum) == real_mobile_static_map.end()){
+		log("real_mobile first lookup for vnum: %d", vnum);
+		for(unsigned i=0; i < mob_proto.size();i++){
+			if(mob_proto[i].nr == vnum){
+				real_mobile_static_map[vnum] = i;
+				return i;
+			}
+		}
+		real_mobile_static_map[vnum] = NOBODY;
 	}
-
-	/* perform binary search on mob-table */
-	for(;;) {
-		mid = (bot + top) / 2;
-
-		if((mob_index[mid]).vnum == vnum) {
-			return (mid);
-		}
-
-		if(bot >= top) {
-			return (NOBODY);
-		}
-
-		if((mob_index[mid]).vnum > vnum) {
-			top = mid - 1;
-		} else {
-			bot = mid + 1;
-		}
-	}
+	return real_mobile_static_map[vnum];
 }
 
 
 /* returns the real number of the object with given virtual number */
 obj_rnum real_object(obj_vnum vnum) {
-	obj_rnum bot, top, mid;
-
-	bot = 0;
-	top = obj_index.size();
-
-	/* perform binary search on obj-table */
-	for(;;) {
-		mid = (bot + top) / 2;
-
-		if((obj_index[mid]).vnum == vnum) {
-			return (mid);
+	obj_rnum real_object_vnum_id = NOTHING;
+	for(const auto & obj : obj_index){
+		if(obj.vnum == vnum) {
+			return real_object_vnum_id;
 		}
-
-		if(bot >= top) {
-			return (NOTHING);
-		}
-
-		if((obj_index[mid]).vnum > vnum) {
-			top = mid - 1;
-		} else {
-			bot = mid + 1;
-		}
+		++real_object_vnum_id;
 	}
+	return NOTHING;
 }
 
 

@@ -76,13 +76,13 @@ int reserved_word(char *argument);
 int _parse_name(char *arg, char *name);
 
 ACMD(do_room_list){
-	MENTOC_PREAMBLE();
+	
 	for(auto & p : mods::globals::get_room_list(player->room())){
 		player->stc(p->name());
 	}
 }
 ACMD(do_js_help){
-	MENTOC_PREAMBLE();
+	
 	if(IS_NPC(ch)){
 		/** nice try */
 		return;
@@ -143,7 +143,7 @@ ACMD(do_js_help){
 }
 
 ACMD(do_require_js){
-	MENTOC_PREAMBLE();
+	
 	CREATE_ARG(512,1);
 	one_argument(argument, static_cast<char*>(&arg_1[0]),512);
 	if(IS_NPC(ch)){
@@ -159,7 +159,7 @@ namespace mods::js {
 extern void eval_string(std::string_view str);
 };
 ACMD(do_builder){
-	MENTOC_PREAMBLE();
+	
 	if(IS_NPC(ch)){
 		/** nice try */
 		return;
@@ -173,7 +173,7 @@ ACMD(do_builder){
 	player->done();
 }
 ACMD(do_builder_help){
-	MENTOC_PREAMBLE();
+	
 	if(IS_NPC(ch)){
 		/** nice try */
 		return;
@@ -285,9 +285,12 @@ ACMD(do_kill);
 ACMD(do_last);
 ACMD(do_leave);
 ACMD(do_levels);
+
+ACMD(do_view);
+ACMD(do_buy);	/** in shop.cpp */
+ACMD(do_list);	/** in shop.cpp */
 ACMD(do_load);
 ACMD(do_look);
-ACMD(do_view);
 /* ACMD(do_move); -- interpreter.h */
 ACMD(do_not_here);
 ACMD(do_olc);
@@ -469,7 +472,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "brb"      , POS_RESTING , do_action   , 0, 0 },
 	{ "brief"    , POS_DEAD    , do_gen_tog  , 0, SCMD_BRIEF },
 	{ "burp"     , POS_RESTING , do_action   , 0, 0 },
-	{ "buy"      , POS_STANDING, do_not_here , 0, 0 },
+	{ "buy"      , POS_STANDING, do_buy      , 0, 0 },
 	{ "bug"      , POS_DEAD    , do_gen_write, 0, SCMD_BUG },
 
 	//{ "cast"     , POS_SITTING , do_cast     , 1, 0 },
@@ -583,7 +586,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "last"     , POS_DEAD    , do_last     , LVL_GOD, 0 },
 	{ "leave"    , POS_STANDING, do_leave    , 0, 0 },
 	{ "levels"   , POS_DEAD    , do_levels   , 0, 0 },
-	{ "list"     , POS_STANDING, do_not_here , 0, 0 },
+	{ "list"     , POS_STANDING, do_list , 0, 0 },
 	{ "lick"     , POS_RESTING , do_action   , 0, 0 },
 	{ "lock"     , POS_SITTING , do_gen_door , 0, SCMD_LOCK },
 	{ "load"     , POS_DEAD    , do_load     , LVL_GOD, 0 },
@@ -922,6 +925,7 @@ const char *reserved[] = {
  * It makes sure you are the proper level and position to execute the command,
  * then calls the appropriate function.
  */
+/*
 void command_interpreter(char_data *ch, char *argument, bool legacy) {
 	auto p = ptr(ch);
 	command_interpreter(p,argument);
@@ -930,6 +934,7 @@ void command_interpreter(char_data *ch, const char *argument, bool legacy) {
 	auto p = ptr(ch);
 	command_interpreter(p,argument);
 }
+*/
 void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 	auto ch = player->cd();
 	int cmd, length;
@@ -983,7 +988,7 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 			if(player->is_blocked() && !mods::player_utils::is_cancel_command(cmd_info[cmd].command)) {
 				player->sendln("You can't! You're currently doing something!\r\n");
 			} else {
-				((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd));
+				((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd, player));
 			}
 			mods::globals::post_command_interpreter(ch,argument);
 			return;
@@ -1031,7 +1036,7 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 			if(player->is_blocked() && !mods::player_utils::is_cancel_command(cmd_info[cmd].command)) {
 				player->sendln("You can't! You're currently doing something!\r\n");
 			} else {
-				((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd));
+				((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd,player));
 			}
 		}
 	}
