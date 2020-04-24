@@ -45,7 +45,7 @@ struct shop_data {
 	mods::string message_sell;		/* Message when player sells item	*/
 	int	 temper1;		/* How does keeper react if no money	*/
 	bitvector_t	 bitvector;	/* Can attack? Use bank? Cast here?	*/
-	mob_rnum	 keeper;	/* The mobile who owns the shop (rnum)	*/
+	mob_vnum	 keeper;	/* The mobile who owns the shop (rnum)	*/
 	int	 with_who;		/* Who does the shop trade with?	*/
 	room_vnum *in_room;		/* Where is the shop?			*/
 	int	 open1, open2;		/* When does the shop open?		*/
@@ -70,12 +70,14 @@ struct shop_data {
 	TRoomInfo room_info;
 	TObjectInfo object_info;
 	std::tuple<bool,db_id_t,std::string> save();
+	void list_to_char(player_ptr_t&);
+
 	private:
 	shop_data_orm_type_t m_orm;
 	bool m_loaded;
 	std::vector<db_id_t> m_objects;
+	std::shared_ptr<mods::npc> m_keeper;
 };
-
 
 #define MAX_TRADE	5	/* List maximums for compatibility	*/
 #define MAX_PROD	5	/*	with shops before v3.0		*/

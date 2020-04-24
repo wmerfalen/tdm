@@ -10,7 +10,6 @@
 using sptr_medic = std::shared_ptr<mods::classes::medic>;
 using class_type = mods::player::class_type;
 ACMD(do_heal) {
-	MENTOC_PREAMBLE();
 
 	if(player->get_class() != player_class_t::CLASS_MEDIC){
 		*player << "You are not a medic\r\n";

@@ -110,7 +110,6 @@ int *cmd_sort_info;
 #define SHOW_OBJ_ACTION		2
 
 ACMD(do_drone) {
-	MENTOC_PREAMBLE();
 	CREATE_ARG(16,1);
 	one_argument(argument, static_cast<char*>(&arg_1[0]),16);
 
@@ -133,12 +132,10 @@ ACMD(do_drone) {
 }
 
 ACMD(do_givemegold) {
-	MENTOC_PREAMBLE();
 	ch->points.gold += 50000;
 }
 
 ACMD(do_recall) {
-	MENTOC_PREAMBLE();
 	if(mods::globals::boot_type == mods::globals::boot_type_t::BOOT_HELL){
 		*player << "Ah Ah Ahh... You didn't say the magic word...";
 		return;
@@ -155,7 +152,6 @@ ACMD(do_recall) {
 }
 
 ACMD(do_quest) {
-	MENTOC_PREAMBLE();
 	CREATE_ARG(16,1);
 	one_argument(argument, static_cast<char*>(&arg_1[0]),16);
 
@@ -213,23 +209,20 @@ ACMD(do_quest) {
 }
 
 ACMD(do_preferences) {
-	MENTOC_PREAMBLE();
 
 }
 
 ACMD(do_js) {
-	MENTOC_PREAMBLE();
 	mods::js::eval_string(std::string(argument) + ";");
 }
 
 ACMD(do_newjs) {
-	MENTOC_PREAMBLE();
 	mods::globals::duktape_context = mods::js::new_context();
 	mods::js::load_base_functions(mods::globals::duktape_context);
 	mods::js::load_c_require_functions(mods::globals::duktape_context);
 }
 ACMD(do_jstest) {
-	MENTOC_PREAMBLE();
+	
 
 	if(!mods::js::run_test_suite(*player,argument)) {
 		*player << "{red}Unable to load test suite{/red}\r\n";
@@ -457,6 +450,15 @@ void look_at_char(char_data *i, char_data *ch) {
 
 void list_one_char(char_data *i, char_data *ch) {
 	MENTOC_PREAMBLE();
+	if(i == nullptr){
+		log("i is nullptr!");
+		return;
+	}
+	if(ch == nullptr){
+		log("ch is nullptr!");
+		return;
+	}
+	
 	const char *positions[] = {
 		" is lying here, dead.",
 		" is lying here, mortally wounded.",
@@ -538,7 +540,7 @@ void list_char_to_char(char_data *ch) {
 	int room = player->viewing_room();
 	for(auto & player_ptr : mods::globals::get_room_list(room)){
 		auto i = player_ptr->cd();
-		if(player_ptr->name().compare(ch->player.name.c_str())) {
+		if(!player_ptr->is(ch)){
 			if(CAN_SEE(ch, i)) {
 				list_one_char(i, ch);
 			} else if(IS_DARK(room) && !CAN_SEE_IN_DARK(ch) &&
@@ -584,7 +586,6 @@ void do_auto_exits(char_data *ch) {
 
 
 ACMD(do_exits) {
-	MENTOC_PREAMBLE();
 	int door, len = 0;
 
 	if(AFF_FLAGGED(ch, AFF_BLIND)) {
@@ -625,7 +626,6 @@ void look_at_room(char_data *ch, int ignore_brief) {
 	MENTOC_PREAMBLE();
 
 	if(!ch->has_desc) {
-		d("look_at_room: char doesnt have a desc! WTF");
 		return;
 	}
 
@@ -637,8 +637,6 @@ void look_at_room(char_data *ch, int ignore_brief) {
 	}
 
 	if(world.size() <= std::size_t(room)){
-		d("look_at_room[world.size()<=IN_ROOM(ch)]->world.size():'" <<
-				world.size() << "'|IN_ROOM(ch):'" << room << "'");
 		return;
 	}
 
@@ -649,15 +647,16 @@ void look_at_room(char_data *ch, int ignore_brief) {
 
 		sprintbit(ROOM_FLAGS(room), room_bits, buf, sizeof(buf));
 		player->send("[%5d] %s [ %s]", GET_ROOM_VNUM(room), world[room].name.c_str(), buf);
-	} else {
-		player->stc_room(room);
 	}
+	player->send("\r\n{grn}%s{/grn}", world[room].name.c_str());
 
 	player->sendln(CCNRM(ch, C_NRM));
-
 	if((!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_BRIEF)) || ignore_brief ||
 			ROOM_FLAGGED(room, ROOM_DEATH)) {
-		player->stc_room_desc(room);
+		player->send("{wht}%s{/wht}\r\n", world[room].description.c_str());
+	}
+	if(((player->get_prefs()) & PRF_OVERHEAD_MAP)){
+		player->stc(mods::overhead_map::generate<mods::player*>(player.get(),room));
 	}
 
 	/* autoexits */
@@ -665,10 +664,6 @@ void look_at_room(char_data *ch, int ignore_brief) {
 		do_auto_exits(ch);
 	}
 
-	/* TODO: show map */
-
-	/* now list characters & objects */
-	player->send(CCGRN(ch, C_NRM));
 	list_obj_to_char(world[room].contents, ch, SHOW_OBJ_LONG, FALSE);
 	player->send(CCYEL(ch, C_NRM));
 	list_char_to_char(ch);
@@ -884,10 +879,10 @@ void look_at_target(char_data *ch, char *arg) {
 			if(!ex){d("cont"); continue; }
 			d("num wears enumeration exdesc");
 			//if(++i == fnum) {
-				d("sending ex");
-				player->send(ex);
-				found = TRUE;
-				break;
+			d("sending ex");
+			player->send(ex);
+			found = TRUE;
+			break;
 			//}
 		}
 	}
@@ -939,7 +934,6 @@ void look_at_target(char_data *ch, char *arg) {
 
 
 ACMD(do_look) {
-	MENTOC_PREAMBLE();
 	int look_type;
 
 	if(GET_POS(ch) < POS_SLEEPING) {
@@ -982,7 +976,6 @@ ACMD(do_look) {
 
 
 ACMD(do_examine) {
-	MENTOC_PREAMBLE();
 	char_data *tmp_char;
 	struct obj_data *tmp_object;
 	char tempsave[MAX_INPUT_LENGTH], arg[MAX_INPUT_LENGTH];
@@ -1013,7 +1006,6 @@ ACMD(do_examine) {
 
 
 ACMD(do_gold) {
-	MENTOC_PREAMBLE();
 	if(GET_GOLD(ch) == 0) {
 		player->sendln( "You're broke!");
 	} else if(GET_GOLD(ch) == 1) {
@@ -1025,7 +1017,6 @@ ACMD(do_gold) {
 
 
 ACMD(do_score) {
-	MENTOC_PREAMBLE();
 	struct time_info_data playing_time;
 
 	if(IS_NPC(ch)) {
@@ -1157,14 +1148,12 @@ ACMD(do_score) {
 
 
 ACMD(do_inventory) {
-	MENTOC_PREAMBLE();
 	player->sendln( "You are carrying:");
 	list_obj_to_char(ch->carrying, ch, SHOW_OBJ_SHORT, TRUE);
 }
 
 
 ACMD(do_equipment) {
-	MENTOC_PREAMBLE();
 	int i, found = 0;
 
 	player->sendln( "You are using:");
@@ -1190,7 +1179,6 @@ ACMD(do_equipment) {
 
 
 ACMD(do_time) {
-	MENTOC_PREAMBLE();
 	const char *suf;
 	int weekday, day;
 
@@ -1236,7 +1224,6 @@ ACMD(do_time) {
 
 
 ACMD(do_weather) {
-	MENTOC_PREAMBLE();
 	const char *sky_look[] = {
 		"cloudless",
 		"cloudy",
@@ -1262,7 +1249,6 @@ ACMD(do_weather) {
 
 
 ACMD(do_help) {
-	MENTOC_PREAMBLE();
 	int chk, bot, top, mid, minlen;
 
 	if(!ch->has_desc) {
@@ -1342,7 +1328,6 @@ ACMD(do_help) {
 	"format: who [minlev[-maxlev]] [-n name] [-c classlist] [-s] [-o] [-q] [-r] [-z]"
 
 ACMD(do_who) {
-	MENTOC_PREAMBLE();
 	char_data *tch;
 	char name_search[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
 	char mode;
@@ -1533,7 +1518,6 @@ ACMD(do_who) {
 
 /* BIG OL' FIXME: Rewrite it all. Similar to do_who(). */
 ACMD(do_users) {
-	MENTOC_PREAMBLE();
 	char line[200], line2[220], idletime[10], classname[20];
 	char state[30], *timeptr, mode;
 	char name_search[MAX_INPUT_LENGTH], host_search[MAX_INPUT_LENGTH];
@@ -1709,7 +1693,6 @@ ACMD(do_users) {
 
 /* Generic page_string function for displaying text */
 ACMD(do_gen_ps) {
-	MENTOC_PREAMBLE();
 	switch(subcmd) {
 		case SCMD_CREDITS:
 			page_string(*ch->desc, credits, 0);
@@ -1896,7 +1879,6 @@ void perform_immort_where(char_data *ch, char *arg) {
 
 
 ACMD(do_where) {
-	MENTOC_PREAMBLE();
 	char arg[MAX_INPUT_LENGTH];
 
 	one_argument(argument, arg);
@@ -1911,7 +1893,6 @@ ACMD(do_where) {
 
 
 ACMD(do_levels) {
-	MENTOC_PREAMBLE();
 	char buf[MAX_STRING_LENGTH];
 	unsigned i = 0, len = 0;
 	int nlen;
@@ -1962,7 +1943,6 @@ ACMD(do_levels) {
 
 
 ACMD(do_consider) {
-	MENTOC_PREAMBLE();
 	char buf[MAX_INPUT_LENGTH];
 	char_data *victim;
 	int diff;
@@ -2014,7 +1994,6 @@ ACMD(do_consider) {
 
 
 ACMD(do_diagnose) {
-	MENTOC_PREAMBLE();
 	char buf[MAX_INPUT_LENGTH];
 	char_data *vict;
 
@@ -2041,7 +2020,6 @@ const char *ctypes[] = {
 };
 
 ACMD(do_color) {
-	MENTOC_PREAMBLE();
 	char arg[MAX_INPUT_LENGTH];
 	int tp;
 
@@ -2069,7 +2047,6 @@ ACMD(do_color) {
 
 
 ACMD(do_toggle) {
-	MENTOC_PREAMBLE();
 	char buf2[4];
 
 	if(IS_NPC(ch)) {
@@ -2166,7 +2143,6 @@ void sort_commands(void) {
 
 
 ACMD(do_commands) {
-	MENTOC_PREAMBLE();
 	int no, i, cmd_num;
 	int wizhelp = 0, socials = 0;
 	char_data *vict;

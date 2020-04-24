@@ -117,6 +117,19 @@ namespace mods {
 		m_debug("assign (pqxx::row::reference)");
 		assign(pqxx::to_string(str).c_str());
 	}
+	void string::assign_m(const mods::string & other){
+		m_debug("assign std::string\n");
+		m_debug(other.c_str());
+		m_debug("end of other.c_str()");
+		//std::cerr << "strlen of other: " << strlen(other.c_str()) << "\n";
+		if(other.length()){
+			m_str.assign(other.c_str());
+		}else{
+			m_str = "";
+		}
+		m_debug("after m_str assignment");
+		m_realloc();
+	}
 	void string::assign(const std::string & other){
 		m_debug("assign std::string\n");
 		m_debug(other.c_str());

@@ -11,7 +11,7 @@
 ************************************************************************ */
 #include "globals.hpp"
 
-#define ACMD(name) void name(char_data *ch, char *argument, int cmd, int subcmd)
+#define ACMD(name) void name(char_data *ch, char *argument, int cmd, int subcmd, player_ptr_t& player)
 
 ACMD(do_move);
 
@@ -48,7 +48,7 @@ struct command_info {
 	const char *command;
 	byte minimum_position;
 	void	(*command_pointer)
-	(char_data *ch, char *argument, int cmd, int subcmd);
+	(char_data *ch, char *argument, int cmd, int subcmd,player_ptr_t&);
 	sh_int minimum_level;
 	int	subcmd;
 };

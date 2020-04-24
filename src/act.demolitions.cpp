@@ -29,7 +29,7 @@ extern void obj_from_room(obj_ptr_t object);
  * 
  */
 ACMD(do_cancel) {
-	MENTOC_PREAMBLE();
+	
 	if(mods::util::parse_help(argument)){
 		player->pager_start();
 		*player << 
@@ -69,7 +69,7 @@ ACMD(do_cancel) {
  * 
  */
 ACMD(do_install) {
-	MENTOC_PREAMBLE();
+	
 	if(mods::util::parse_help(argument)){
 		player->pager_start();
 		*player << 
@@ -130,9 +130,15 @@ ACMD(do_install) {
 }
 
 
+extern void shop_view_item(player_ptr_t& player, int16_t item_number);
 ACMD(do_view) {
-	MENTOC_PREAMBLE();
+	/** If the user is attempting to view an item in a shop */
 	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() && !mods::util::icompare(vec_args[0], "camera")){
+		int16_t item = mods::util::stoi(vec_args[0]).value_or(-1);
+		shop_view_item(player,item);
+		return;
+	}
 	if(vec_args.size() == 0){
 		player->sendln("Usage: 'view camera'. For more information, type 'view help'");
 		return;
@@ -153,6 +159,10 @@ ACMD(do_view) {
 		return;
 	}
 	if(mods::util::icompare(vec_args[0], "camera")) {
+		if(!player->get_camera()){
+			player->sendln("You haven't installed a camera");
+			return;
+		}
 		player->set_camera_viewing(true);
 		look_at_room(ch,0);
 		player->set_camera_viewing(false);
@@ -172,7 +182,7 @@ ACMD(do_view) {
  * 
  */
 ACMD(do_uninstall) {
-	MENTOC_PREAMBLE();
+	
 	if(mods::util::parse_help(argument)){
 		player->pager_start();
 		*player << 

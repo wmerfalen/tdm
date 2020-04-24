@@ -48,7 +48,6 @@ using vpd = mods::scan::vec_player_data;
  * throw <object> <direction> <count>
  */
 ACMD(do_throw) {
-	MENTOC_PREAMBLE();
 	auto vec_args = PARSE_ARGS();
 
 	if(!player->has_inventory_capability(mods::weapon::mask::grenade)) {
@@ -97,42 +96,42 @@ ACMD(do_throw) {
 }
 
 ACMD(do_giveme_frag_grenades) {
-	MENTOC_PREAMBLE();
+	
 	auto obj = mods::weapon::new_frag_grenade_object();
 	obj_to_char(obj,player);
 }
 ACMD(do_giveme_incendiary_grenades) {
-	MENTOC_PREAMBLE();
+	
 	auto obj = mods::weapon::new_incendiary_grenade_object();
 	obj_to_char(obj,player);
 }
 
 ACMD(do_giveme_emp_grenades) {
-	MENTOC_PREAMBLE();
+	
 	auto obj = mods::weapon::new_emp_grenade_object();
 	obj_to_char(obj,player);
 }
 
 ACMD(do_giveme_smoke_grenades) {
-	MENTOC_PREAMBLE();
+	
 	auto obj = mods::weapon::new_smoke_grenade_object();
 	obj_to_char(obj,player);
 }
 
 ACMD(do_giveme_sensor_grenades) {
-	MENTOC_PREAMBLE();
+	
 	auto obj = mods::weapon::new_sensor_grenade_object();
 	obj_to_char(obj,player);
 }
 
 ACMD(do_giveme_flashbang_grenades) {
-	MENTOC_PREAMBLE();
+	
 	auto obj = mods::weapon::new_flashbang_grenade_object();
 	obj_to_char(obj,player);
 }
 
 ACMD(do_giveme_sniper_rifle) {
-	MENTOC_PREAMBLE();
+	
 	if(player->cl_sniper() == nullptr) {
 		player->set_class(CLASS_SNIPER);
 	}
@@ -141,7 +140,7 @@ ACMD(do_giveme_sniper_rifle) {
 
 
 ACMD(do_affect_me) {
-	MENTOC_PREAMBLE();
+	
 	constexpr unsigned int max_char = 16;
 	static bool usage_set = false;
 	static std::string usage;
@@ -198,7 +197,7 @@ weapon_status_t weapon_preamble(
 }
 
 ACMD(do_snipe) {
-	MENTOC_PREAMBLE();
+	
 	if(OKAY != weapon_preamble(player,weapon_rifle_t::SNIPER)){
 		return;
 	}
@@ -257,7 +256,7 @@ ACMD(do_regroup) {
  *
  */
 ACMD(do_command_sequence) {
-	MENTOC_PREAMBLE();
+	
 	//constexpr unsigned int max_char = 5;
 	//std::array<char,max_char> direction;
 	//one_argument(argument,&direction[0],max_char);
@@ -270,7 +269,7 @@ ACMD(do_command_sequence) {
 }
 
 ACMD(do_breach) {
-	MENTOC_PREAMBLE();
+	
 	constexpr unsigned int max_char = 5;
 	std::array<char,max_char> direction;
 	one_argument(argument,&direction[0],max_char);
@@ -330,7 +329,7 @@ ACMD(do_breach) {
 }
 
 ACMD(do_thermite) {
-	MENTOC_PREAMBLE();
+	
 
 	if(!player->has_thermite()) {
 		*player << "You do not have a thermite charge\r\n";
@@ -397,7 +396,7 @@ ACMD(do_thermite) {
 
 /* TODO: Implement weapon tags in the obj_data data structure */
 ACMD(do_reload) {
-	MENTOC_PREAMBLE(); /* !mods */
+	
 
 	/* TODO get wielded equipment tag */
 	if(!player->rifle()) {
@@ -507,7 +506,7 @@ ACMD(do_scan) { /* !mods */
 
 
 ACMD(do_assist) {
-	MENTOC_PREAMBLE();
+	
 	char arg[MAX_INPUT_LENGTH];
 	player_ptr_t helpee,opponent;
 
@@ -559,7 +558,7 @@ ACMD(do_assist) {
 
 
 ACMD(do_hit) {
-	MENTOC_PREAMBLE();
+	
 	char arg[MAX_INPUT_LENGTH];
 	char_data *vict;
 
@@ -603,12 +602,11 @@ ACMD(do_hit) {
 
 
 ACMD(do_kill) {
-	MENTOC_PREAMBLE();
 	char arg[MAX_INPUT_LENGTH];
 	char_data *vict;
 
 	if(GET_LEVEL(ch) < LVL_IMPL || IS_NPC(ch)) {
-		do_hit(ch, argument, cmd, subcmd);
+		do_hit(ch, argument, cmd, subcmd,player);
 		return;
 	}
 
@@ -722,7 +720,8 @@ ACMD(do_order) {
 				act("$n has an indifferent look.", FALSE, vict, 0, 0, TO_ROOM);
 			} else {
 				send_to_char(ch, "%s", OK);
-				command_interpreter(vict, message,0);
+				auto v = ptr(vict);
+				command_interpreter(v, message);
 			}
 		} else {			/* This is order "followers" */
 			char buf[MAX_STRING_LENGTH];
@@ -734,7 +733,8 @@ ACMD(do_order) {
 				if(IN_ROOM(ch) == IN_ROOM(k->follower))
 					if(AFF_FLAGGED(k->follower, AFF_CHARM)) {
 						found = TRUE;
-						command_interpreter(k->follower, message,0);
+						auto kptr = ptr(k->follower);
+						command_interpreter(kptr, message);
 					}
 			}
 
@@ -853,7 +853,7 @@ ACMD(do_bash) {
 
 
 ACMD(do_rescue) {
-	MENTOC_PREAMBLE();
+	
 	char arg[MAX_INPUT_LENGTH];
 	//char_data *vict, *tmp_ch;
 	int percent, prob;
@@ -991,7 +991,7 @@ ACMD(do_kick) {
  * 	    
  */
 ACMD(c4_brain) {
-	MENTOC_PREAMBLE();
+	
 
 }
 

@@ -39,7 +39,7 @@ namespace mods {
 };
 
 ACMD(do_pref) {
-	MENTOC_PREAMBLE();
+	
 	constexpr unsigned int max_char = 11;
 	std::array<char,max_char> item;
 	std::array<char,max_char> value;

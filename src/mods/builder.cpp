@@ -1276,7 +1276,7 @@ int next_room_pavement_transaction_id(){
 	return ++transaction_id;
 }
 ACMD(do_rbuild_sandbox) {
-	MENTOC_PREAMBLE();
+	
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
@@ -1460,7 +1460,7 @@ ACMD(do_rbuild_sandbox) {
 }
 
 ACMD(do_sbuild) {
-	MENTOC_PREAMBLE();
+	
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
@@ -1903,6 +1903,22 @@ char_data* grab_mobile(std::size_t index,bool &fetched){
 		return &mob_proto[index];
 	}
 }
+void present_action(player_ptr_t & player, std::size_t index){
+		std::string flag_values;
+		bool found = false;
+		auto obj = grab_mobile(index,found);
+		if(!found){
+			return;
+		}
+		for(auto& ex_flag : mods::builder::mob_act_flags) {
+			if(obj->char_specials.saved.act & ex_flag.first){
+				flag_values += ex_flag.second;
+				flag_values += ",";
+			}
+		}
+		mods::builder_util::list_line(player, "action", flag_values);
+		return;
+}
 
 ACMD(do_mbuild) {
 	/**
@@ -1915,7 +1931,7 @@ ACMD(do_mbuild) {
 	 *  > mbuild attr <mob_id> virt <virtual_number>
 	 *
 	 */
-	MENTOC_PREAMBLE();
+	
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
@@ -1977,6 +1993,7 @@ ACMD(do_mbuild) {
 			" {grn}mbuild{/grn} {red}attr <mob_id> <attr> <value>{/red}\r\n" <<
 			"  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
 			"  {gld}|:: virt{/gld}\r\n" <<
+			"  {gld}|:: vnum{/gld} {grn}this is an alias of {/grn}{gld}virt{/gld}\r\n" <<
 			"  {gld}|:: name{/gld}\r\n" <<
 			"  {gld}|:: short_description{/gld}\r\n" <<
 			"  {gld}|:: long_description{/gld}\r\n" <<
@@ -2172,8 +2189,7 @@ ACMD(do_mbuild) {
 			}
 
 			auto obj = mods::globals::read_mobile(index,VIRTUAL - 1);
-			player->stc(std::to_string(player->room()));
-			char_to_room(obj,player->room());
+			mods::globals::rooms::char_to_room(player->room(),obj);
 			r_success(player,"Object created, look on the floor");
 		}
 
@@ -2336,6 +2352,7 @@ ACMD(do_mbuild) {
 		MENTOC_SHOW_OBJ(exp,points.exp);
 		MENTOC_SHOW_OBJ(hitroll,points.hitroll);
 		MENTOC_SHOW_OBJ(damroll,points.damroll);
+		present_action(player,i);
 		player->pager_end();
 		player->page(0);
 		return;
@@ -2378,10 +2395,10 @@ ACMD(do_mbuild) {
 
 		if(index.has_value() && i < mob_proto.size()) {
 			auto obj = &mob_proto[index.value()];
-			MENTOC_OBS2(player.name,name);
-			MENTOC_OBS2(player.short_descr,short_description);
-			MENTOC_OBS2(player.long_descr,long_description);
-			MENTOC_OBS2(player.description,description);
+			obj->player.name.assign(get_strval("name").value_or(obj->player.name.c_str()));
+			obj->player.short_descr.assign(get_strval("short_description").value_or(obj->player.short_descr.c_str()));
+			obj->player.long_descr.assign(get_strval("long_description").value_or(obj->player.long_descr.c_str()));
+			obj->player.description.assign(get_strval("description").value_or(obj->player.description.c_str()));
 			MENTOC_OBI2(points.mana,mana);
 			MENTOC_OBI2(points.max_mana,max_mana);
 			MENTOC_OBI2(points.hit,hit);
@@ -2409,7 +2426,7 @@ ACMD(do_mbuild) {
 			MENTOC_OBI2(mob_specials.damsizedice,damsizedice);
 
 
-			if(arg_vec[2].compare("virt") == 0) {
+			if(arg_vec[2].compare("virt") == 0 || arg_vec[2].compare("vnum") == 0) {
 				if(arg_vec.end() <= arg_vec.begin() + 3) {
 					r_error(player,"Please supply a virtual number");
 					return;
@@ -2471,7 +2488,7 @@ ACMD(do_mbuild) {
 }
 
 ACMD(do_obuild) {
-	MENTOC_PREAMBLE();
+	
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
@@ -3602,7 +3619,7 @@ ACMD(do_obuild) {
  *
  */
 ACMD(do_zbuild) {
-	MENTOC_PREAMBLE();
+	
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
@@ -4143,7 +4160,7 @@ ACMD(do_zbuild) {
 };
 
 ACMD(do_rbuild) {
-	MENTOC_PREAMBLE();
+	
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
@@ -4154,7 +4171,8 @@ ACMD(do_rbuild) {
 			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {wht}rbuild{/wht} {gld}help{/gld}\r\n" <<
 			"  |:: (this help menu will show up)\r\n" <<
-
+			" {grn}rbuild{/grn} {red}vnum{/red}\r\n" <<
+			"  |--> print the current room's vnum\r\n" <<
 			" {grn}rbuild{/grn} {red}set-recall{/red} {red}<mortal|immortal>{/red}\r\n" <<
 			"  |--> set the current room as recall\r\n" <<
 			"  {grn}|____[example]{/grn}\r\n" <<
@@ -4429,7 +4447,8 @@ ACMD(do_rbuild) {
 		return;
 	}
 
-	if(std::string(&command[0]).compare("room") == 0) {
+	if(std::string(&command[0]).compare("room") == 0 ||
+		std::string(&command[0]).compare("vnum") == 0) {
 		*player << world[IN_ROOM(ch)].number << "\r\n";
 		return;
 	}

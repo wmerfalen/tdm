@@ -282,9 +282,6 @@ namespace mods::orm::inventory {
 			carrying.resize(ckey_size_value);
 			LMDBVGET(ckey.data(),ckey.length()+1,(void*)&carrying[0]);
 			LMDBCOMMIT();
-			for(auto && carried_item : carrying){
-				d("[carrying stub]: " << carried_item << "\n");
-			}
 			return 0;
 		}
 		void add_player_wear(uint64_t player_db_id, uint64_t object_db_id, uint8_t object_type_id, uint8_t position){

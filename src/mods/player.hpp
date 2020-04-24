@@ -267,6 +267,7 @@ namespace mods {
 		int& gold() {
 			return m_char_data->points.gold;
 		}
+		int& mp() { return this->gold(); }
 		int& bank_gold() {
 			return m_char_data->points.bank_gold;
 		}
@@ -571,7 +572,6 @@ namespace mods {
 		void block_for(uint16_t ticks, uint32_t unblock_event,uuid_t optional_uuid);
 		bool is_blocked();
 		void unblock_event(uint32_t unblock);
-		bool interrupt(std::tuple<uint32_t,uuid_t,void*> event_data);
 		void cancel_block();
 		uint32_t current_block() { return m_blocked_until; }
 

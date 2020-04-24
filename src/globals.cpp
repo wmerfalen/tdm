@@ -46,6 +46,7 @@ namespace config {
 namespace mods {
 	namespace globals {
 		using player = mods::player;
+		std::map<char_data*,player_ptr_t> mob_ptrmap;
 		std::unordered_map<std::string,std::string> ram_db;
 		boot_type_t boot_type;
 		socket_map_t socket_map;
@@ -76,6 +77,7 @@ namespace mods {
 		std::map<obj_data*,obj_ptr_t> obj_odmap;
 		std::map<char_data*,std::shared_ptr<mods::npc>> mob_chmap;
 		std::map<char_data*,std::shared_ptr<mods::player>> player_chmap;
+		std::map<obj_vnum,std::string> obj_stat_pages;
 
 		template <typename I>
 			I random_element(I begin, I end) {
@@ -122,7 +124,6 @@ namespace mods {
 		void register_object_list() {
 		}
 		void register_object(obj_ptr_t obj) {
-			std::cerr << "register_object: uuid: " << obj->uuid << "\n";
 			obj->uuid = obj_uuid();
 			obj_map[obj->uuid] = obj;
 			obj_odmap[obj.get()] = obj;
@@ -434,6 +435,9 @@ namespace mods {
 			return ++u;
 		}
 		char_data* read_mobile(const mob_vnum & nr,const int & type){
+			return read_mobile_ptr(nr,type)->cd();
+		}
+		std::shared_ptr<mods::npc> read_mobile_ptr(const mob_vnum & nr,const int & type){
 			log("DEBUG: mods::globals::read_mobile. vnum: %d",nr);
 			mob_rnum i;
 
@@ -452,10 +456,7 @@ namespace mods {
 				return nullptr;
 			}
 
-			SET_BIT(mob_proto[i].char_specials.saved.act, MOB_ISNPC);
-			/** !TODO: fix this. We need to copy the mob_proto to the mob_list.back() */
-			mob_list.emplace_back(std::make_shared<mods::npc>(i));
-			auto mob = mob_list.back();
+			auto & mob = mob_list.emplace_back(std::make_shared<mods::npc>(i));
 			mob->position() = POS_STANDING;
 			for(i = 0; i < NUM_WEARS; i++) {
 				GET_EQ(mob->cd(), i) = nullptr;
@@ -477,7 +478,9 @@ namespace mods {
 			mob->uuid() = mob_uuid();
 			mob_map[mob->uuid()] = mob;
 			mob_chmap[mob->cd()] = mob;
-			return mob->cd();
+			SET_BIT(mob->cd()->char_specials.saved.act, MOB_ISNPC);
+			mob_ptrmap[mob->cd()] = mob->player_ptr();
+			return mob;
 		}
 		uuid_t obj_uuid() {
 			static uuid_t u = 0;
@@ -794,7 +797,7 @@ namespace mods {
 			 * \return void
 			 */
 			void char_from_room(char_data* ch) {
-				MENTOC_PREAMBLE();
+				auto player = ptr(ch);
 				int room_id = player->room();
 				if(room_id >= room_list.size()){
 					log("SYSERR: char_from_room failed. room_id >= room_list.size()");
@@ -808,15 +811,7 @@ namespace mods {
 				if(place != mods::globals::room_list[room_id].end()){
 					mods::globals::room_list[room_id].erase(place);
 				} else {
-					std::cerr << "[globals::rooms::char_from_room] " 
-						<< "Could NOT find char in room_list. " 
-					;
-					std::cerr << "char_data*: " << std::hex << ch << " ";
-					std::cerr << "uuid:" << player->uuid() << " "
-				  	<< "is npc: " << IS_NPC(ch) 
-						<< " room:" << player->room()
-				  	<< " IN_ROOM(ch): " << IN_ROOM(ch) 
-				  	<< "\n";
+					log("SYSERR: Could NOT find char in room_list");
 				}
 			}
 
@@ -830,7 +825,7 @@ namespace mods {
 			 * \return void will log a SYSERR if the resolved room id (param 1) is out of bounds
 			 */
 			void char_to_room(const room_rnum& room,char_data* ch) {
-				MENTOC_PREAMBLE();
+				auto player = ptr(ch);
 				auto target_room = room;
 				if(boot_type == boot_type_t::BOOT_HELL){
 					target_room = 0;
@@ -839,8 +834,8 @@ namespace mods {
 					log("SYSERR: char_to_room failed for ch. Requested room is out of bounds: ",target_room);
 					return;
 				}
+				player->set_room(target_room);
 				mods::globals::room_list[target_room].push_back(player);
-				IN_ROOM(ch) = target_room;
 				return;
 			}
 		};//end namespace rooms
@@ -903,14 +898,16 @@ namespace mods {
 	};//end globals
 };
 player_ptr_t ptr(char_data* in_ch){
+	return ptr((const char_data*)in_ch);
+}
+player_ptr_t ptr(const char_data* in_ch){
 	if(!in_ch){
-		log("SYSERR: ptr(nullptr)");
 		return nullptr;
 	}
 	if(IS_NPC(in_ch)){
-		return mods::globals::mob_chmap[in_ch];
+		return mods::globals::mob_chmap[const_cast<char_data*>(in_ch)]->player_ptr();
 	}
-	return mods::globals::player_chmap[in_ch];
+	return mods::globals::player_chmap[const_cast<char_data*>(in_ch)];
 }
 obj_ptr_t optr(obj_data* in_obj){
 	return mods::globals::obj_odmap[in_obj];
@@ -919,11 +916,9 @@ obj_ptr_t optr(obj_data* in_obj){
 std::optional<obj_ptr_t> optr_opt(uuid_t obj_uuid){
 	auto it = mods::globals::obj_map.find(obj_uuid);
 	if(it != mods::globals::obj_map.end()){
-		std::cerr << "[debug]: found obj_uuid (optr) " << obj_uuid << \
-			" name:" << (it->second)->name.c_str() << "\n";
 		return it->second;
 	}
-	std::cerr << "[debug]: DID NOT find obj_uuid (optr) " << obj_uuid << "\n";
+	log("SYSERR: DID NOT find obj_uuid (optr) %d ",obj_uuid);
 	return std::nullopt;
 }
 std::optional<player_ptr_t> ptr_opt(uuid_t plr_uuid){
@@ -943,10 +938,9 @@ obj_ptr_t optr_by_uuid(uuid_t id){
 obj_ptr_t ptr_by_dbid(uint64_t db_id){
 	auto it = mods::globals::db_id_to_uuid_map.find(db_id);
 	if(it != mods::globals::db_id_to_uuid_map.end()){
-		std::cerr << "[debug]: found obj_ by db_id (optr) " << db_id << "\n";
 		return optr_by_uuid(it->second);
 	}
-	std::cerr << "[debug]: DID NOT find obj by db_id (optr) " << db_id << "\n";
+	log("SYSERR: DID NOT find obj by db_id (optr) %d",db_id);
 	return nullptr;
 
 }

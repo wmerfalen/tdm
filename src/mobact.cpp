@@ -41,56 +41,47 @@ bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *att
 
 
 void mobile_activity(void) {
-	auto player = mods::globals::current_player;
+	//auto player = mods::globals::current_player;
 	FOREACH_MOB(npc) {
 		auto ch = npc->cd();
-		std::cerr << "foreach_mob (mobile_activity)\n";
+		auto player = npc->player_ptr();
 		char_data *vict;
 		struct obj_data *obj, *best_obj;
 		int door, found, max;
 
 		if(npc->mob_specials().behaviour_tree){
-			std::cerr << "mob has behaviour_tree: " << npc->mob_specials().behaviour_tree << "\n";
 			switch(mods::behaviour_tree_impl::dispatch(*npc)){
 				case mods::behaviour_tree_impl::dispatch_status_t::RETURN_IMMEDIATELY:
-					//std::cerr << "return immediately\n";
 					continue;
 				case mods::behaviour_tree_impl::dispatch_status_t::RETURN_FALSE_IMMEDIATELY:
-					//std::cerr << "return FALSE immediately\n";
 					continue;
 				case mods::behaviour_tree_impl::dispatch_status_t::AS_YOU_WERE:
 				default:
-					std::cerr << "as you were...\n";
 					break;
 			}
 		}
 
 		/* Examine call for special procedure */
 		if(MOB_FLAGGED(ch, MOB_SPEC) && !no_specials) {
-			std::cerr << "mobile_activity: mob_flagged\n";
 			if(mob_index[GET_MOB_RNUM(ch)].func == NULL) {
-				std::cerr << "mobile_activity: mob_flagged func is null\n";
 				log("SYSERR: %s (#%d): Attempting to call non-existing mob function.",
 						GET_NAME(ch).c_str(), GET_MOB_VNUM(ch));
 				REMOVE_BIT(MOB_FLAGS(ch), MOB_SPEC);
-			} else {
+			}/* else {
 				char actbuf[MAX_INPUT_LENGTH] = "";
 
-				if((mob_index[GET_MOB_RNUM(ch)].func)(ch, ch, 0, actbuf)) {
-					std::cerr << "called special func on mob\n";
+				if((mob_index[GET_MOB_RNUM(ch)].func)(ch, ch, 0, actbuf, player)) {
 				}
-			}
+			}*/
 		}
 
 		/* If the mob has no specproc, do the default actions */
 		if(FIGHTING(ch) || !AWAKE(ch)) {
-			std::cerr << "mobact- do default (fight|awake)\n";
 			continue;
 		}
 
 		/* Scavenger (picking up objects) */
 		if(MOB_FLAGGED(ch, MOB_SCAVENGER)){
-			std::cerr << "mobile_activity: scavenger\n";
 			if(world[IN_ROOM(ch)].contents && !rand_number(0, 10)) {
 				max = 1;
 				best_obj = NULL;
@@ -115,7 +106,6 @@ void mobile_activity(void) {
 				!ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_NOMOB | ROOM_DEATH) &&
 				(!MOB_FLAGGED(ch, MOB_STAY_ZONE) ||
 				 (world[EXIT(ch, door)->to_room].zone == world[IN_ROOM(ch)].zone))) {
-			std::cerr << "perform_move from mobile activity\n";
 			perform_move(ch, door, 1);
 		}
 
@@ -155,7 +145,6 @@ void mobile_activity(void) {
 			std::cerr << "mobile_activity: mob memory\n";
 
 			found = FALSE;
-			//mods::loops::foreach_in_room(
 			for(auto & player_vict : mods::globals::get_room_list(IN_ROOM(ch))) {
 				auto vict = player_vict->cd();
 				if(IS_NPC(vict) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE)) {
@@ -168,7 +157,6 @@ void mobile_activity(void) {
 					if(aggressive_mob_on_a_leash(ch, ch->master, vict)) {
 						continue;
 					}
-					std::cerr << "mobile_activity: mob memory -- HITTING\n";
 					act("$n screams at $N, \"Hey! You're the fiend that attacked me!\"", FALSE, ch, 0, vict, TO_ROOM);
 					hit(ch, vict, TYPE_UNDEFINED);
 					break;
@@ -186,7 +174,6 @@ void mobile_activity(void) {
 		 *
 		 * 1-4 = 0, 5-7 = 1, 8-10 = 2, 11-13 = 3, 14-16 = 4, 17-19 = 5, etc.
 		 */
-		//std::cerr << "mobile_activity: checkpoint 2\n";
 		if(AFF_FLAGGED(ch, AFF_CHARM) && ch->master && num_followers_charmed(ch->master) > (GET_CHA(ch->master) - 2) / 3) {
 			if(!aggressive_mob_on_a_leash(ch, ch->master, ch->master)) {
 				if(CAN_SEE(ch, ch->master) && !PRF_FLAGGED(ch->master, PRF_NOHASSLE)) {
@@ -271,7 +258,9 @@ bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *att
 			strncpy(victbuf, GET_NAME(attack), sizeof(victbuf));	/* strncpy: OK */
 			victbuf[sizeof(victbuf) - 1] = '\0';
 
-			do_action(slave, victbuf, snarl_cmd, 0);
+			auto ch = slave;
+			MENTOC_PREAMBLE();
+			do_action(slave, victbuf, snarl_cmd, 0,player);
 		}
 
 		/* Success! But for how long? Hehe. */

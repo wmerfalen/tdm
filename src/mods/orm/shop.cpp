@@ -184,6 +184,7 @@ namespace mods::orm {
 		shop_missing_cash2.assign(row["shop_missing_cash2"].as<std::string>());		/* Message if player hasn't got cash	*/
 		shop_do_not_buy.assign(row["shop_do_not_buy"].as<std::string>());		/* If keeper dosn't buy such things	*/
 		shop_message_buy.assign(row["shop_message_buy"].as<std::string>());		/* Message when player buys item	*/
+
 		shop_message_sell.assign(row["shop_message_sell"].as<std::string>());		/* Message when player sells item	*/
 		shop_temper1 = row["shop_temper1"].as<int>();		/* How does keeper react if no money	*/
 		shop_bitvector = row["shop_bitvector"].as<bitvector_t>();	/* Can attack? Use bank? Cast here?	*/
@@ -196,15 +197,40 @@ namespace mods::orm {
 		shop_bankAccount = row["shop_bankAccount"].as<int>();		/* Store all gold over 15000 (disabled)	*/
 		shop_lastsort = row["shop_lastsort"].as<int>();		/* How many items are sorted in inven?	*/
 		shop_type = row["shop_type"].as<int>();
+		room_info.load_by_shop_vnum(shop_vnum_id);
+		object_info.load_by_shop_vnum(shop_vnum_id);
 		loaded = true;
 		return 1;
 	}
 
+	int16_t shop_rooms::place_keepers_in_rooms(mob_vnum mob_vnum_id){
+#ifdef __MENTOC_SHOPS_HAVE_KEEPERS__
+		int16_t count = 0;
+		for(const auto & room_vnum_id : rooms){
+			auto &keeper_ptr = mods::globals::read_mobile_ptr(mob_vnum_id,VIRTUAL);
+			room_keeper_map[room_vnum_id] = std::move(keeper_ptr);
+			++count;
+		}
+		return count;
+#else
+		return 0;
+#endif
+	}
 	int16_t shop_rooms::load_by_shop_vnum(shop_vnum in_shop_vnum){
 		shop_vnum_id = in_shop_vnum;
 		int16_t count = 0;
 		for(auto && record : db_get_by_meta(shop_rooms::table_name, "shop_vnum", std::to_string(in_shop_vnum))){
 			rooms.emplace_back(record["shop_room_vnum"].as<room_vnum>());
+			++count;
+		}
+		return count;
+	}
+
+	int16_t shop_objects::load_by_shop_vnum(shop_vnum in_shop_vnum){
+		shop_vnum_id = in_shop_vnum;
+		int16_t count = 0;
+		for(auto && record : db_get_by_meta(shop_objects::table_name, "shop_vnum", std::to_string(in_shop_vnum))){
+			objects.emplace_back(record["shop_object_vnum"].as<room_vnum>());
 			++count;
 		}
 		return count;

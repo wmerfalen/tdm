@@ -8,6 +8,8 @@
 #include "../pq.hpp"
 #include "../sql.hpp"
 #include "base.hpp"
+#include <map>
+#include <memory>
 
 namespace mods::orm {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
@@ -22,6 +24,8 @@ namespace mods::orm {
 		int16_t load_by_shop_vnum(shop_vnum in_shop_vnum);
 		shop_vnum shop_vnum_id;
 		room_list_t rooms;
+		int16_t place_keepers_in_rooms(mob_vnum);
+		std::map<room_vnum,std::shared_ptr<mods::npc>> room_keeper_map;
 	};
 
 	struct shop_objects : public base {

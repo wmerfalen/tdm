@@ -23,13 +23,13 @@
 extern void point_update(void);
 
 ACMD(do_givemenades){
-	MENTOC_PREAMBLE();
+	
 
 
 }
 
 ACMD(do_point_update) {
-	MENTOC_PREAMBLE();
+	
 	if(IS_NPC(ch)){
 		return;
 	}
@@ -39,11 +39,11 @@ ACMD(do_point_update) {
 }
 
 ACMD(do_my_uuid) {
-	MENTOC_PREAMBLE();
+	
 	player->stc(std::to_string(player->uuid()));
 }
 ACMD(do_zero_socket) {
-	MENTOC_PREAMBLE();
+	
 	player->stc("[debug]->Zeroing out your socket (goodbye).");
 	player->desc().descriptor = 0;
 }

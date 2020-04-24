@@ -24,6 +24,7 @@
 #include "shop.h"
 #include "constants.h"
 #include "mods/orm/shop.hpp"
+#include "mods/shop.hpp"
 
 /* External variables */
 extern struct time_info_data time_info;
@@ -40,6 +41,10 @@ using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::s
 std::vector<shop_data_t> shop_index;
 int top_shop = -1;
 int cmd_say, cmd_tell, cmd_emote, cmd_slap, cmd_puke;
+
+namespace mods::globals {
+	std::map<room_rnum,std::shared_ptr<shop_data_t>> room_shopmap;
+};
 
 /* local functions */
 char *read_shop_message(int mnum, room_vnum shr, FILE *shop_f, const char *why);
@@ -115,11 +120,12 @@ const char *shop_bits[] = {
 };
 
 int is_ok_char(char_data *keeper, char_data *ch, int shop_nr) {
+	MENTOC_PREAMBLE();
 	char buf[MAX_INPUT_LENGTH];
 
 	if(!CAN_SEE(keeper, ch)) {
 		char actbuf[MAX_INPUT_LENGTH] = MSG_NO_SEE_CHAR;
-		do_say(keeper, actbuf, cmd_say, 0);
+		do_say(keeper, actbuf, cmd_say, 0,player);
 		return (FALSE);
 	}
 
@@ -131,7 +137,7 @@ int is_ok_char(char_data *keeper, char_data *ch, int shop_nr) {
 	        (IS_EVIL(ch) && NOTRADE_EVIL(shop_nr)) ||
 	        (IS_NEUTRAL(ch) && NOTRADE_NEUTRAL(shop_nr))) {
 		snprintf(buf, sizeof(buf), "%s %s", GET_NAME(ch).c_str(), MSG_NO_SELL_ALIGN);
-		do_tell(keeper, buf, cmd_tell, 0);
+		do_tell(keeper, buf, cmd_tell, 0,player);
 		return (FALSE);
 	}
 
@@ -144,7 +150,7 @@ int is_ok_char(char_data *keeper, char_data *ch, int shop_nr) {
 	        (IS_THIEF(ch) && NOTRADE_THIEF(shop_nr)) ||
 	        (IS_WARRIOR(ch) && NOTRADE_WARRIOR(shop_nr))) {
 		snprintf(buf, sizeof(buf), "%s %s", GET_NAME(ch).c_str(), MSG_NO_SELL_CLASS);
-		do_tell(keeper, buf, cmd_tell, 0);
+		do_tell(keeper, buf, cmd_tell, 0,player);
 		return (FALSE);
 	}
 
@@ -172,7 +178,8 @@ int is_open(char_data *keeper, int shop_nr, int msg) {
 	}
 
 	if(msg) {
-		do_say(keeper, buf, cmd_tell, 0);
+		auto player = ptr(keeper);
+		do_say(keeper, buf, cmd_tell, 0,player);
 	}
 
 	return (FALSE);
@@ -490,6 +497,7 @@ struct obj_data *get_hash_obj_vis(char_data *ch, char *name,
 
 struct obj_data *get_purchase_obj(char_data *ch, char *arg,
                                   char_data *keeper, int shop_nr, int msg) {
+	MENTOC_PREAMBLE();
 	char name[MAX_INPUT_LENGTH];
 	struct obj_data *obj;
 
@@ -507,7 +515,7 @@ struct obj_data *get_purchase_obj(char_data *ch, char *arg,
 				char buf[MAX_INPUT_LENGTH];
 
 				snprintf(buf, sizeof(buf), shop_index[shop_nr].no_such_item1, GET_NAME(ch).c_str());
-				do_tell(keeper, buf, cmd_tell, 0);
+				do_tell(keeper, buf, cmd_tell, 0,player);
 			}
 
 			return (NULL);
@@ -706,6 +714,7 @@ void shopping_buy(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
 
 
 struct obj_data *get_selling_obj(char_data *ch, char *name, char_data *keeper, int shop_nr, int msg) {
+			auto player = ptr(ch);
 	char buf[MAX_INPUT_LENGTH];
 	struct obj_data *obj;
 	int result;
@@ -715,7 +724,7 @@ struct obj_data *get_selling_obj(char_data *ch, char *name, char_data *keeper, i
 			char tbuf[MAX_INPUT_LENGTH];
 
 			snprintf(tbuf, sizeof(tbuf), shop_index[shop_nr].no_such_item2, GET_NAME(ch).c_str());
-			do_tell(keeper, tbuf, cmd_tell, 0);
+			do_tell(keeper, tbuf, cmd_tell, 0,player);
 		}
 
 		return (NULL);
@@ -748,7 +757,7 @@ struct obj_data *get_selling_obj(char_data *ch, char *name, char_data *keeper, i
 			break;
 	}
 
-	do_tell(keeper, buf, cmd_tell, 0);
+	do_tell(keeper, buf, cmd_tell, 0,player);
 	return (NULL);
 }
 
@@ -824,6 +833,7 @@ void sort_keeper_objs(char_data *keeper, int shop_nr) {
 
 
 void shopping_sell(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
+	MENTOC_PREAMBLE();
 	char tempstr[MAX_INPUT_LENGTH], name[MAX_INPUT_LENGTH];//FIXME related to vulnerable code below, tempbuf[MAX_INPUT_LENGTH];
 	struct obj_data *obj;
 	int sellnum, sold = 0, goldamt = 0;
@@ -836,7 +846,7 @@ void shopping_sell(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
 		char buf[MAX_INPUT_LENGTH];
 
 		snprintf(buf, sizeof(buf), "%s A negative amount?  Try buying something.", GET_NAME(ch).c_str());
-		do_tell(keeper, buf, cmd_tell, 0);
+		do_tell(keeper, buf, cmd_tell, 0,player);
 		return;
 	}
 
@@ -844,7 +854,7 @@ void shopping_sell(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
 		char buf[MAX_INPUT_LENGTH];
 
 		snprintf(buf, sizeof(buf), "%s What do you want to sell??", GET_NAME(ch).c_str());
-		do_tell(keeper, buf, cmd_tell, 0);
+		do_tell(keeper, buf, cmd_tell, 0,player);
 		return;
 	}
 
@@ -858,7 +868,7 @@ void shopping_sell(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
 		char buf[MAX_INPUT_LENGTH];
 
 		snprintf(buf, sizeof(buf), shop_index[shop_nr].missing_cash1, GET_NAME(ch).c_str());
-		do_tell(keeper, buf, cmd_tell, 0);
+		do_tell(keeper, buf, cmd_tell, 0,player);
 		return;
 	}
 
@@ -885,7 +895,7 @@ void shopping_sell(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
 			snprintf(buf, sizeof(buf), "%s Something really screwy made me buy %d.", GET_NAME(ch).c_str(), sold);
 		}
 
-		do_tell(keeper, buf, cmd_tell, 0);
+		do_tell(keeper, buf, cmd_tell, 0,player);
 	}
 
 	GET_GOLD(ch) += goldamt;
@@ -910,6 +920,7 @@ void shopping_sell(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
 
 
 void shopping_value(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
+	MENTOC_PREAMBLE();
 	char buf[MAX_STRING_LENGTH], name[MAX_INPUT_LENGTH];
 	struct obj_data *obj;
 
@@ -919,7 +930,7 @@ void shopping_value(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
 
 	if(!*arg) {
 		snprintf(buf, sizeof(buf), "%s What do you want me to evaluate??", GET_NAME(ch).c_str());
-		do_tell(keeper, buf, cmd_tell, 0);
+		do_tell(keeper, buf, cmd_tell, 0,player);
 		return;
 	}
 
@@ -930,11 +941,12 @@ void shopping_value(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
 	}
 
 	snprintf(buf, sizeof(buf), "%s I'll give you %d gold coins for that!", GET_NAME(ch).c_str(), sell_price(obj, shop_nr, keeper, ch));
-	do_tell(keeper, buf, cmd_tell, 0);
+	do_tell(keeper, buf, cmd_tell, 0,player);
 }
 
 
 char *list_object(struct obj_data *obj, int cnt, int aindex, int shop_nr, char_data *keeper, char_data *ch) {
+	MENTOC_PREAMBLE();
 	static char result[256];
 	char	itemname[128],
 	        quantity[16];	/* "Unlimited" or "%d" */
@@ -1037,6 +1049,26 @@ void shopping_list(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
 	}
 }
 
+ACMD(do_list){
+	mods::shop::list_shop_items<decltype(mods::globals::room_shopmap)>(
+			player,
+			mods::globals::room_shopmap
+	);
+}
+ACMD(do_buy){
+	mods::shop::buy_item<decltype(mods::globals::room_shopmap)>(
+			player,
+			mods::globals::room_shopmap,
+			argument
+	);
+}
+void shop_view_item(player_ptr_t& player, int16_t item_number){
+	mods::shop::show_item<decltype(mods::globals::room_shopmap)>(
+			player,
+			mods::globals::room_shopmap,
+			item_number
+	);
+}
 
 int ok_shop_room(int shop_nr, room_vnum room) {
 	int mindex;
@@ -1064,7 +1096,7 @@ SPECIAL(shop_keeper) {
 	}
 
 	if(SHOP_FUNC(shop_nr))	/* Check secondary function */
-		if((SHOP_FUNC(shop_nr))(ch, me, cmd, argument)) {
+		if((SHOP_FUNC(shop_nr))(ch, me, cmd, argument,player)) {
 			return (TRUE);
 		}
 
@@ -1090,7 +1122,7 @@ SPECIAL(shop_keeper) {
 		snprintf(argm, sizeof(argm), "$N shouts '%s'", MSG_NO_STEAL_HERE);
 		act(argm, FALSE, ch, 0, keeper, TO_CHAR);
 
-		do_action(keeper, GET_NAME(ch).ptr(), cmd_slap, 0);
+		do_action(keeper, GET_NAME(ch).ptr(), cmd_slap, 0,player);
 		return (TRUE);
 	}
 
@@ -1113,6 +1145,7 @@ SPECIAL(shop_keeper) {
 
 
 int ok_damage_shopkeeper(char_data *ch, char_data *victim) {
+	MENTOC_PREAMBLE();
 	int sindex;
 
 	if(static_cast<std::size_t>(GET_MOB_RNUM(victim)) >= mob_index.size()){
@@ -1132,9 +1165,9 @@ int ok_damage_shopkeeper(char_data *ch, char_data *victim) {
 			char buf[MAX_INPUT_LENGTH];
 
 			snprintf(buf, sizeof(buf), "%s %s", GET_NAME(ch).c_str(), MSG_CANT_KILL_KEEPER);
-			do_tell(victim, buf, cmd_tell, 0);
+			do_tell(victim, buf, cmd_tell, 0,player);
 
-			do_action(victim, GET_NAME(ch).ptr(), cmd_slap, 0);
+			do_action(victim, GET_NAME(ch).ptr(), cmd_slap, 0,player);
 			return (FALSE);
 		}
 
@@ -1673,52 +1706,135 @@ void destroy_shops(void) {
 
 #ifdef __MENTOC_USE_PQXX_RESULT__
 	template <>
-	void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::feed(const pqxx::result::reference & row)
+	void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::feed(const pqxx::result::reference & in_row)
 #else
 	template <>
-	void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::feed(pqxx::row row)
+	void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::feed(pqxx::row in_row)
 #endif
 {
-	db_id = row["shop_id"].as<db_id_t>();
-	vnum = row["shop_vnum"].as<shop_vnum>();
-	profit_buy = row["shop_profit_buy"].as<float>();
-	profit_sell = row["shop_profit_sell"].as<float>();
-	title.assign(row["shop_title"].as<std::string>());
-	description.assign(row["shop_description"].as<std::string>());
-	flags = row["shop_flags"].as<uint64_t>();
-	no_such_item1.assign(row["shop_no_such_item1"].as<std::string>());
-	no_such_item2.assign(row["shop_no_such_item2"].as<std::string>());
-	missing_cash1.assign(row["shop_missing_cash1"].as<std::string>());
-	missing_cash2.assign(row["shop_missing_cash2"].as<std::string>());
-	do_not_buy.assign(row["shop_do_not_buy"].as<std::string>());
-	message_buy.assign(row["shop_message_buy"].as<std::string>());
-	message_sell.assign(row["shop_message_sell"].as<std::string>());
-	temper1 = row["shop_temper1"].as<int>();
-	bitvector = row["shop_bitvector"].as<bitvector_t>();
-	keeper = row["shop_keeper"].as<mob_rnum>();
-	with_who = row["shop_with_who"].as<int>();
-	open1 = row["shop_open1"].as<int>();
-	open2 = row["shop_open2"].as<int>();
-	close1 = row["shop_close1"].as<int>();
-	close2 = row["shop_close2"].as<int>();
-	bankAccount = row["shop_bankAccount"].as<int>();
-	lastsort = row["shop_lastsort"].as<int>();
-	shop_type = row["shop_type"].as<int>();
-	for(auto  s_row : db_get_by_meta("shop_rooms","shop_vnum",std::to_string(vnum).c_str())){
+	std::cerr << "[shop_data::feed] called\n";
+	this->db_id = in_row["shop_id"].as<db_id_t>();
+	this->vnum = in_row["shop_vnum"].as<shop_vnum>();
+	this->profit_buy = in_row["shop_profit_buy"].as<float>();
+	this->profit_sell = in_row["shop_profit_sell"].as<float>();
+	this->title.assign(in_row["shop_title"].c_str());
+	std::cerr << "[shop_data::feed] title from row: '" << in_row["shop_title"].c_str() << "'\n";
+	this->description.assign(in_row["shop_description"].c_str());
+	std::cerr << "[shop_data::feed] description from row: '" << in_row["shop_description"].c_str() << "'\n";
+	this->flags = in_row["shop_flags"].as<uint64_t>();
+	this->no_such_item1.assign(in_row["shop_no_such_item1"].c_str());
+	this->no_such_item2.assign(in_row["shop_no_such_item2"].c_str());
+	this->missing_cash1.assign(in_row["shop_missing_cash1"].c_str());
+	this->missing_cash2.assign(in_row["shop_missing_cash2"].c_str());
+	this->do_not_buy.assign(in_row["shop_do_not_buy"].c_str());
+	this->message_buy.assign(in_row["shop_message_buy"].c_str());
+	this->message_sell.assign(in_row["shop_message_sell"].c_str());
+	this->temper1 = in_row["shop_temper1"].as<int>();
+	this->bitvector = in_row["shop_bitvector"].as<bitvector_t>();
+	this->keeper = in_row["shop_keeper"].as<mob_vnum>();
+	this->with_who = in_row["shop_with_who"].as<int>();
+	this->open1 = in_row["shop_open1"].as<int>();
+	this->open2 = in_row["shop_open2"].as<int>();
+	this->close1 = in_row["shop_close1"].as<int>();
+	this->close2 = in_row["shop_close2"].as<int>();
+	this->bankAccount = in_row["shop_bankAccount"].as<int>();
+	this->lastsort = in_row["shop_lastsort"].as<int>();
+	this->shop_type = in_row["shop_type"].as<int>();
+	
+	for(auto && s_row : db_get_by_meta("shop_rooms","shop_vnum",std::to_string(this->vnum).c_str())){
+		std::cerr << __FILE__ << "|" << __LINE__ << ": found shop_rooms record: " << s_row["shop_room_vnum"].c_str() << "\n";
 		this->room_info.rooms.emplace_back(s_row["shop_room_vnum"].as<room_vnum>());
 	}
-	for(auto  s_row : db_get_by_meta("shop_objects","shop_vnum",std::to_string(vnum).c_str())){
-		this->object_info.objects.emplace_back(s_row["shop_room_vnum"].as<obj_vnum>());
+	int16_t count_placed = this->room_info.place_keepers_in_rooms(this->keeper);
+	log("%d keepers loaded in shop_vnum: %d",count_placed,this->vnum);
+	for(auto &&  s_row : db_get_by_meta("shop_objects","shop_vnum",std::to_string(this->vnum).c_str())){
+		std::cerr << __FILE__ << "|" << __LINE__ << ": found shop_objects record: " << s_row["shop_object_vnum"].c_str() << "\n";
+		this->object_info.objects.emplace_back(s_row["shop_object_vnum"].as<obj_vnum>());
 	}
-	m_loaded = true;
+	this->m_loaded = true;
 }
 
 template <>
 shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::shop_data(){
 	init();
 }
+
+template <>
+void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::list_to_char(player_ptr_t& player){
+	d("stub list_to_char");
+	/** TODO */
+	static bool static_is_loaded = false;
+	static std::string static_item_list = "";
+	std::size_t item_number = 0;
+	if(!static_is_loaded){
+		const std::size_t name_field_len = 36;
+		static_item_list =  "=-------------------------------------------------------=\r\n";
+		static_item_list += "[  id  ]->[            item name                ][  mp  ]\r\n";
+		static_item_list += "=-------------------------------------------------------=\r\n";
+		for(const auto & obj_vnum_id : object_info.objects){
+			auto obj_proto_item = real_object(obj_vnum_id);
+			if(obj_proto_item == NOTHING){
+				continue;
+			}
+			//id
+			static_item_list += "[";
+			auto id_number = std::to_string(++item_number);
+			if(id_number.length() == 1){
+				static_item_list += "   ";
+				static_item_list += id_number;
+				static_item_list += "  ";
+			}
+			if(id_number.length() == 2){
+				static_item_list += "  ";
+				static_item_list += id_number;
+				static_item_list += "  ";
+			}
+			static_item_list += "]->[    ";
+			static_item_list += obj_proto[obj_proto_item].name.str();
+			for(unsigned i=obj_proto[obj_proto_item].name.str().length() + 4; i <= name_field_len;i++){
+				static_item_list += " ";
+			}
+			static_item_list += "][";
+			auto mp_str = std::to_string(mods::shop::object_cost(obj_proto[obj_proto_item]));
+			if(mp_str.length() == 2){
+				static_item_list += "  ";
+				static_item_list += mp_str;
+				static_item_list += "  ";
+			}
+			if(mp_str.length() == 1){
+				static_item_list += "   ";
+				static_item_list += mp_str;
+				static_item_list += "  ";
+			}
+			if(mp_str.length() == 3){
+				static_item_list += " ";
+				static_item_list += mp_str;
+				static_item_list += "  ";
+			}
+			if(mp_str.length() == 4){
+				static_item_list += " ";
+				static_item_list += mp_str;
+				static_item_list += " ";
+			}
+			if(mp_str.length() == 5){
+				static_item_list += mp_str;
+				static_item_list += " ";
+			}
+			if(mp_str.length() == 6){
+				static_item_list += mp_str;
+			}
+			static_item_list += "]\r\n";
+		}
+		static_is_loaded = true;
+	}
+	player->sendln(static_item_list);
+	player->sendln("\r\nTo view an item, simply type {grn}view N{/grn} where N is the id");
+	player->sendln("see: help list, help shop, help view");
+}
+
 template <typename TOrmType,typename T,typename R>
 void shop_data<TOrmType,T,R>::init(){
+	std::cerr << "[shop_data::init] called\n";
 	this->func = nullptr;
 	this->title.clear();
 	this->description.clear();

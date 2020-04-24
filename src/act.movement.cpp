@@ -167,8 +167,8 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 	}
 
 	was_in = IN_ROOM(ch);
-	char_from_room(ch);
-	char_to_room(ch, world[was_in].dir_option[dir]->to_room);
+	mods::globals::rooms::char_from_room(ch);
+	mods::globals::rooms::char_to_room(world[was_in].dir_option[dir]->to_room,ch);
 
 	if(!AFF_FLAGGED(ch, AFF_SNEAK)) {
 		act("$n has arrived.", TRUE, ch, 0, 0, TO_ROOM);
@@ -483,7 +483,7 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 #define DOOR_KEY(ch, obj, door)		((obj) ? (GET_OBJ_VAL(obj, 2)) : \
 		(EXIT(ch, door)->key))
 	ACMD(do_gen_door) {
-		MENTOC_PREAMBLE();
+		
 		int door = -1;
 		obj_vnum keynum;
 		char type[MAX_INPUT_LENGTH], dir[MAX_INPUT_LENGTH];

@@ -97,7 +97,7 @@ void snoop_check(char_data *ch);
 
 
 ACMD(do_echo) {
-	MENTOC_PREAMBLE();
+	
 	skip_spaces(&argument);
 
 	if(!*argument) {
@@ -123,7 +123,7 @@ ACMD(do_echo) {
 
 
 ACMD(do_send) {
-	MENTOC_PREAMBLE();
+	
 	char arg[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
 	char_data *vict;
 
@@ -223,7 +223,6 @@ room_rnum find_target_room(char_data *ch, char *rawroomstr) {
 
 
 ACMD(do_at) {
-	MENTOC_PREAMBLE();
 	char command[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
 	room_rnum location, original_loc;
 
@@ -258,7 +257,6 @@ ACMD(do_at) {
 
 
 ACMD(do_goto) {
-	MENTOC_PREAMBLE();
 	char buf[MAX_STRING_LENGTH];
 	room_rnum location;
 
@@ -289,7 +287,6 @@ ACMD(do_goto) {
 
 
 ACMD(do_trans) {
-	MENTOC_PREAMBLE();
 	char buf[MAX_INPUT_LENGTH];
 	char_data *victim;
 
@@ -344,7 +341,7 @@ ACMD(do_trans) {
 
 
 ACMD(do_teleport) {
-	MENTOC_PREAMBLE();
+	
 	char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
 	char_data *victim;
 	room_rnum target;
@@ -375,7 +372,7 @@ ACMD(do_teleport) {
 
 
 ACMD(do_vnum) {
-	MENTOC_PREAMBLE();
+	
 	char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
 
 	half_chop(argument, buf, buf2);
@@ -821,7 +818,7 @@ void do_stat_character(char_data *ch, char_data *k) {
 
 
 ACMD(do_stat) {
-	MENTOC_PREAMBLE();
+	
 	char buf1[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
 	char_data *victim;
 	struct obj_data *object;
@@ -917,7 +914,7 @@ ACMD(do_stat) {
 
 
 ACMD(do_shutdown){
-	MENTOC_PREAMBLE();
+	
 char arg[MAX_INPUT_LENGTH];
 
 if(subcmd != SCMD_SHUTDOWN) {
@@ -988,7 +985,7 @@ void stop_snooping(char_data *ch) {
 
 
 ACMD(do_snoop) {
-	MENTOC_PREAMBLE();
+	
 	char arg[MAX_INPUT_LENGTH];
 	char_data *victim, *tch;
 
@@ -1036,7 +1033,7 @@ ACMD(do_snoop) {
 
 
 ACMD(do_switch) {
-	MENTOC_PREAMBLE();
+	
 	char arg[MAX_INPUT_LENGTH];
 	char_data *victim;
 
@@ -1073,7 +1070,7 @@ ACMD(do_switch) {
 
 
 ACMD(do_return) {
-	MENTOC_PREAMBLE();
+	
 	if(ch->has_desc && ch->desc->original) {
 		player->sendln("You return to your original body.");
 
@@ -1104,7 +1101,7 @@ ACMD(do_return) {
 
 
 ACMD(do_load) {
-	MENTOC_PREAMBLE();
+	
 	char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
 
 	two_arguments(argument, buf, buf2);
@@ -1163,7 +1160,7 @@ ACMD(do_load) {
 
 
 ACMD(do_vstat) {
-	MENTOC_PREAMBLE();
+	
 	char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
 
 	two_arguments(argument, buf, buf2);
@@ -1213,7 +1210,7 @@ ACMD(do_vstat) {
 
 /* clean a room of all mobiles and objects */
 ACMD(do_purge) {
-	MENTOC_PREAMBLE();
+	
 	char buf[MAX_INPUT_LENGTH];
 	char_data *vict;
 	struct obj_data *obj;
@@ -1292,7 +1289,7 @@ const char *logtypes[] = {
 };
 
 ACMD(do_syslog) {
-	MENTOC_PREAMBLE();
+	
 	char arg[MAX_INPUT_LENGTH];
 	int tp;
 
@@ -1318,7 +1315,7 @@ ACMD(do_syslog) {
 
 
 ACMD(do_advance) {
-	MENTOC_PREAMBLE();
+	
 	char_data *victim;
 	char name[MAX_INPUT_LENGTH], level[MAX_INPUT_LENGTH];
 	int newlevel, oldlevel;
@@ -1410,7 +1407,7 @@ ACMD(do_advance) {
 }
 
 ACMD(do_restore) {
-	MENTOC_PREAMBLE();
+	
 	char buf[MAX_INPUT_LENGTH];
 	char_data *vict;
 	int i;
@@ -1491,7 +1488,7 @@ void perform_immort_invis(char_data *ch, int level) {
 
 
 ACMD(do_invis) {
-	MENTOC_PREAMBLE();
+	
 	char arg[MAX_INPUT_LENGTH];
 	int level;
 
@@ -1523,7 +1520,7 @@ ACMD(do_invis) {
 
 
 ACMD(do_gecho) {
-	MENTOC_PREAMBLE();
+	
 	skip_spaces(&argument);
 	delete_doubledollar(argument);
 
@@ -1546,7 +1543,7 @@ ACMD(do_gecho) {
 
 
 ACMD(do_poofset) {
-	MENTOC_PREAMBLE();
+	
 	skip_spaces(&argument);
 	if(!*argument){
 		send_to_char(ch,"%s","That doesn't seem to be a valid string.");
@@ -1568,7 +1565,7 @@ ACMD(do_poofset) {
 
 
 ACMD(do_dc) {
-	MENTOC_PREAMBLE();
+	
 	char arg[MAX_INPUT_LENGTH];
 	int num_to_dc;
 
@@ -1640,7 +1637,7 @@ ACMD(do_dc) {
 
 
 ACMD(do_wizlock) {
-	MENTOC_PREAMBLE();
+	
 	char arg[MAX_INPUT_LENGTH];
 	int value;
 	const char *when;
@@ -1678,7 +1675,7 @@ ACMD(do_wizlock) {
 
 
 ACMD(do_date) {
-	MENTOC_PREAMBLE();
+	
 	char *tmstr;
 	time_t mytime;
 	int d, h, m;
@@ -1707,7 +1704,7 @@ ACMD(do_date) {
 
 
 ACMD(do_last) {
-	MENTOC_PREAMBLE();
+	
 	char arg[MAX_INPUT_LENGTH];
 	struct char_file_u chdata;
 
@@ -1736,7 +1733,7 @@ ACMD(do_last) {
 
 
 ACMD(do_force) {
-	MENTOC_PREAMBLE();
+	
 	char_data *vict;
 	char arg[MAX_INPUT_LENGTH], to_force[MAX_INPUT_LENGTH], buf1[MAX_INPUT_LENGTH + 32];
 
@@ -1755,7 +1752,8 @@ ACMD(do_force) {
 			player->sendln(OK);
 			act(buf1, TRUE, ch, NULL, vict, TO_VICT);
 			mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s forced %s to %s", GET_NAME(ch).c_str(), GET_NAME(vict).c_str(), to_force);
-			command_interpreter(vict, to_force,0);
+			auto v = ptr(vict);
+			command_interpreter(v, to_force);
 		}
 	} else if(!str_cmp("room", arg)) {
 		player->sendln(OK);
@@ -1792,7 +1790,7 @@ ACMD(do_force) {
 
 
 ACMD(do_wiznet) {
-	MENTOC_PREAMBLE();
+	
 	char buf1[MAX_INPUT_LENGTH + MAX_NAME_LENGTH + 32],
 	     buf2[MAX_INPUT_LENGTH + MAX_NAME_LENGTH + 32];
 	char emote = FALSE;
@@ -1900,7 +1898,7 @@ ACMD(do_wiznet) {
 
 
 ACMD(do_zreset) {
-	MENTOC_PREAMBLE();
+	
 	char arg[MAX_INPUT_LENGTH];
 	zone_rnum i;
 	zone_vnum j;
@@ -1949,7 +1947,7 @@ ACMD(do_zreset) {
  * example: wiz_quote ammend <title|content> <id> <title|@@@content@@@>
  */
 ACMD(do_wiz_quote) {
-	MENTOC_PREAMBLE();
+	
 	std::cerr << "wiz_quote: " << argument << "\n";
 }
 
@@ -1957,7 +1955,7 @@ ACMD(do_wiz_quote) {
  *  General fn for wizcommands of the sort: cmd <player>
  */
 ACMD(do_wizutil) {
-	MENTOC_PREAMBLE();
+	
 	char arg[MAX_INPUT_LENGTH];
 	char_data *vict;
 	long result;
@@ -2082,7 +2080,7 @@ size_t print_zone_to_buf(char *bufptr, size_t left, zone_rnum zone) {
 
 
 ACMD(do_show) {
-	MENTOC_PREAMBLE();
+	
 	struct char_file_u vbuf;
 	unsigned i, j, l, con, nlen;		/* i, j, k to specifics? */
 	size_t len;
@@ -2834,7 +2832,7 @@ int perform_set(char_data *ch, char_data *vict, int mode,
 
 
 ACMD(do_set) {
-	MENTOC_PREAMBLE();
+	
 	char_data *vict = NULL, *cbuf = NULL;
 	struct char_file_u tmp_store;
 	char field[MAX_INPUT_LENGTH], name[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];

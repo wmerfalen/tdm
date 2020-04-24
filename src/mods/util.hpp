@@ -32,6 +32,16 @@ extern struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *numb
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 
 namespace mods::util {
+	template <typename TKey,typename TVal>
+	std::string map2str(std::map<TKey,TVal> in_map){
+		std::string d = "";
+		for(auto && it : in_map){
+			d += it.first + ": ";
+			d += it.second + "\r\n";
+		}
+		return d;
+	}
+
 	std::string&& word_wrap(std::string_view paragraph,int width);
 	using directory_list_t = std::vector<std::string>;
 	using obj_ptr_t = std::shared_ptr<obj_data>;

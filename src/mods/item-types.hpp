@@ -257,10 +257,13 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_DECLARE_DATA_STRUCTS_IMPL,~,MENTOC_ITEM_TYPES_SEQ)
 /**************************************************************************/
 /** obj_data::feed(pqxx::row&) switch+case expansion                      */
 /**************************************************************************/
+/* IMPORTANT:
+ * Right here, CLASS_TYPE will be the numeric value of ITEM_*
+ */
 #define MENTOC_OBJ_DATA_FEED_SWITCH_IMPL(IN_R,data,CLASS_TYPE)\
 	case CLASS_TYPE: if(obj_file.length() == 0){\
 										 obj_file = default_yaml_file( BOOST_PP_STRINGIZE(BOOST_PP_ELEM(IN_R,MENTOC_ITEM_TYPES_SEQ)) );\
-			 }; this->feed(BOOST_PP_STRINGIZE(CLASS_TYPE), row["obj_file"].as<std::string>());\
+			 }; this->feed(/* passed in as int enum (i.e. ITEM_RIFLE) */ CLASS_TYPE, row["obj_file"].as<std::string>());\
 			 break;
 
 #define MENTOC_OBJ_DATA_FEED_SWITCH \

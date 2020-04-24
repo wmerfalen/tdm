@@ -8,14 +8,16 @@
 namespace mods {
 	struct npc : public player{
 			/* constructors and destructors */
-			npc();
-			npc(char_data*);
-			npc(mods::npc*);
+			npc() = delete;
 			npc(const mob_rnum&);
 			~npc();
 
 			mob_special_data& mob_specials();
 			bool has_tree() ;
+			player_ptr_t& player_ptr();
+			const mob_vnum& vnum() const;
+		private:
+			std::shared_ptr<mods::player> m_player_ptr;
 	};
 };
 

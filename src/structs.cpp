@@ -44,8 +44,29 @@ void obj_data::init(){
 BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 }
 		void obj_data::feed(std::string_view in_type,std::string_view feed_file){
+			auto t = mods::util::stoi(in_type.data());
+			if(t.has_value()){
+				this->feed(t.value(), feed_file);
+			}else{
+				std::cerr << "[feed failed] " << __FILE__ << ":" << __LINE__ << " -> in_type is most likely incorrect! ->" << in_type << "\n";
+			}
+		}
+		void obj_data::feed(int in_type,std::string_view feed_file){
+			std::string type = "";
+	switch(in_type){
+#define MENTOC_LAZY_ME(mtype) case mtype: type = #mtype; break;
+MENTOC_LAZY_ME(ITEM_RIFLE);
+MENTOC_LAZY_ME(ITEM_EXPLOSIVE);
+MENTOC_LAZY_ME(ITEM_DRONE);
+MENTOC_LAZY_ME(ITEM_GADGET);
+MENTOC_LAZY_ME(ITEM_ATTACHMENT);
+MENTOC_LAZY_ME(ITEM_ARMOR);
+MENTOC_LAZY_ME(ITEM_CONSUMABLE);
+MENTOC_LAZY_ME(ITEM_TRAP);
+#undef MENTOC_LAZY_ME
+		default: break;
+	}
 			m_db_id = 0;
-			std::string type = in_type.data();
 			std::transform(type.begin(),type.end(),type.begin(),
 					[](unsigned char c){ return std::tolower(c); });
 			str_type = type = type.substr(strlen("ITEM_"));
@@ -58,6 +79,17 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SE
 				this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
 			}
 			BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_DUAL, ~, MENTOC_ITEM_TYPES_SEQ)
+		}
+
+		std::string obj_data::generate_stat_page() {
+#define MENTOC_OBJ_DATA_STAT_GEN(r,data,CLASS_TYPE) \
+			if(BOOST_PP_CAT(m_, CLASS_TYPE)){\
+				BOOST_PP_CAT(m_,CLASS_TYPE)->attributes->generate_map();\
+				return mods::util::map2str(\
+				BOOST_PP_CAT(m_,CLASS_TYPE)->attributes->exported\
+				);\
+			} return "<no stat page>";
+			BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_STAT_GEN, ~, MENTOC_ITEM_TYPES_SEQ)
 		}
 
 void obj_flag_data::init(){

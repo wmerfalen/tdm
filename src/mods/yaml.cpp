@@ -93,38 +93,40 @@ namespace mods::yaml {
 		return 0;
 	}
 
+	void armor_description_t::generate_map(){
+			this->exported["armor_csv_capabilities"] = this->csv_capabilities; //VARCHAR(2048),
+			this->exported["armor_csv_attach_to"] = this->csv_attach_to; //VARCHAR(2048),
+			this->exported["armor_thac0"] = this->thac0; //INTEGER NOT NULL,
+			this->exported["armor_weight_in_lbs"] = this->weight_in_lbs; //FLOAT NOT NULL,
+			this->exported["armor_fire_resistance_percent"] = this->fire_resistance_percent; //FLOAT NOT NULL DEFAULT 0.0,
+			this->exported["armor_balistic_resistance_percent"] = this->balistic_resistance_percent; //FLOAT NOT NULL DEFAULT 0.0,
+			this->exported["armor_speed_profile"] = this->speed_profile; //speed_profile_type_t NOT NULL DEFAULT 'HINDERED',
+			this->exported["armor_offensive_damage_amount"] = this->offensive_damage_amount; //INTEGER NOT NULL DEFAULT 0,
+			this->exported["armor_durability_profile"] = this->durability_profile = mods::yaml::to_string_from_durability_profile(this->durability_profile_enum); //durability_profile_type_t NOT NULL DEFAULT 'DURABLE',
+			this->exported["armor_str_type"] = str_type;
+			this->exported["armor_type"] = std::to_string(type);
+			this->exported["armor_manufacturer"] = manufacturer;
+			this->exported["armor_name"] = name;
+			this->exported["armor_vnum"] = std::to_string(vnum);
+			this->exported["armor_rarity"] = rarity_to_string(rarity);
+			this->exported["armor_file"] = feed_file;
+	}
 	uint64_t armor_description_t::flush_to_db(){
 		try{
-			std::map<std::string,std::string> values;
-			values["armor_csv_capabilities"] = this->csv_capabilities; //VARCHAR(2048),
-			values["armor_csv_attach_to"] = this->csv_attach_to; //VARCHAR(2048),
-			values["armor_thac0"] = this->thac0; //INTEGER NOT NULL,
-			values["armor_weight_in_lbs"] = this->weight_in_lbs; //FLOAT NOT NULL,
-			values["armor_fire_resistance_percent"] = this->fire_resistance_percent; //FLOAT NOT NULL DEFAULT 0.0,
-			values["armor_balistic_resistance_percent"] = this->balistic_resistance_percent; //FLOAT NOT NULL DEFAULT 0.0,
-			values["armor_speed_profile"] = this->speed_profile; //speed_profile_type_t NOT NULL DEFAULT 'HINDERED',
-			values["armor_offensive_damage_amount"] = this->offensive_damage_amount; //INTEGER NOT NULL DEFAULT 0,
-			values["armor_durability_profile"] = this->durability_profile = mods::yaml::to_string_from_durability_profile(this->durability_profile_enum); //durability_profile_type_t NOT NULL DEFAULT 'DURABLE',
-			values["armor_str_type"] = str_type;
-			values["armor_type"] = std::to_string(type);
-			values["armor_manufacturer"] = manufacturer;
-			values["armor_name"] = name;
-			values["armor_vnum"] = std::to_string(vnum);
-			values["armor_rarity"] = rarity_to_string(rarity);
-			values["armor_file"] = feed_file;
-			mods::util::maps::dump(values);
+			this->generate_map();
+			mods::util::maps::dump(this->exported);
 			auto insert_transaction = txn();
 			sql_compositor comp("object_armor",&insert_transaction);
 			auto up_sql = comp
 				.insert()
 				.into("object_armor")
-				.values(values)
+				.values(this->exported)
 				.returning("armor_id")
 				.sql();
 			auto row = mods::pq::exec(insert_transaction,up_sql);
 			mods::pq::commit(insert_transaction);
-			for(auto && record : row){
-				return record["armor_id"].as<uint64_t>();
+			if(row.size()){
+				return row[0]["armor_id"].as<uint64_t>();
 			}
 			return 0;
 		}catch(std::exception& e){
@@ -132,39 +134,40 @@ namespace mods::yaml {
 			return 0;
 		}
 	}
+	void gadget_description_t::generate_map(){
+			this->exported["gadget_csv_capabilities"] = csv_capabilities;
+			this->exported["gadget_csv_attach_to"] = csv_attach_to;
+			this->exported["gadget_health_points"] = std::to_string(health_points);
+			this->exported["gadget_electronic"] = std::to_string(electronic);
+			this->exported["gadget_shield_points"] = std::to_string(shield_points);
+			this->exported["gadget_durability_profile"] = this->durability_profile = mods::yaml::to_string_from_durability_profile(this->durability_profile_enum);
+			this->exported["gadget_move_points"] = std::to_string(move_points);
+			this->exported["gadget_damage_points"] = std::to_string(damage_points);
+			this->exported["gadget_str_type"] = str_type;
+			this->exported["gadget_type"] = std::to_string(type);
+			this->exported["gadget_manufacturer"] = manufacturer;
+			this->exported["gadget_name"] = name;
+			this->exported["gadget_vnum"] = std::to_string(vnum);
+			this->exported["gadget_rarity"] = rarity_to_string(rarity);
+			this->exported["gadget_file"] = feed_file;
+	}
 	uint64_t gadget_description_t::flush_to_db(){
 		try{
 			d("[status] gadget flush_to_db.. flushing...\n");
-			std::map<std::string,std::string> values;
-			values["gadget_csv_capabilities"] = csv_capabilities;
-			values["gadget_csv_attach_to"] = csv_attach_to;
-			values["gadget_health_points"] = std::to_string(health_points);
-			values["gadget_electronic"] = std::to_string(electronic);
-			values["gadget_shield_points"] = std::to_string(shield_points);
-			values["gadget_durability_profile"] = this->durability_profile = mods::yaml::to_string_from_durability_profile(this->durability_profile_enum);
-			values["gadget_move_points"] = std::to_string(move_points);
-			values["gadget_damage_points"] = std::to_string(damage_points);
-			values["gadget_str_type"] = str_type;
-			values["gadget_type"] = std::to_string(type);
-			values["gadget_manufacturer"] = manufacturer;
-			values["gadget_name"] = name;
-			values["gadget_vnum"] = std::to_string(vnum);
-			values["gadget_rarity"] = rarity_to_string(rarity);
-			values["gadget_file"] = feed_file;
-			mods::util::maps::dump(values);
+			this->generate_map();
+			mods::util::maps::dump(this->exported);
 			auto insert_transaction = txn();
 			sql_compositor comp("object_gadget",&insert_transaction);
 			auto up_sql = comp
 				.insert()
 				.into("object_gadget")
-				.values(values)
+				.values(this->exported)
 				.returning("gadget_id")
 				.sql();
 			auto row = mods::pq::exec(insert_transaction,up_sql);
 			mods::pq::commit(insert_transaction);
-			for(auto && record : row){
-				this->id = record["gadget_id"].as<uint64_t>();
-				return this->id;
+			if(row.size()){
+				return this->id = row[0]["gadget_id"].as<uint64_t>();
 			}
 			return 0;
 		}catch(std::exception& e){
@@ -476,53 +479,50 @@ namespace mods::yaml {
 		out_file.close();
 		return 0;
 	};
-	uint64_t rifle_description_t::flush_to_db(){
-		try{
-			d("[status] rifle flush_to_db.. flushing...\n");
-			std::map<std::string,std::string> values;
+	void rifle_description_t::generate_map(){
 			std::string rifm = "rifle_accuracy_map_",
 				dam = "rifle_damage_map_";
 			for(unsigned i = 0; i < MAX_ROOM_DISTANCE;i++) {
-				values[rifm + std::to_string(i)] = std::to_string(accuracy_map[i]);
-				values[dam + std::to_string(i)] = std::to_string(damage_map[i]);
+				this->exported[rifm + std::to_string(i)] = std::to_string(accuracy_map[i]);
+				this->exported[dam + std::to_string(i)] = std::to_string(damage_map[i]);
 			}
-			values["rifle_ammo_max"] = std::to_string(ammo_max);
-			values["rifle_ammo_type"] = ammo_type;
-			values["rifle_chance_to_injure"] = std::to_string(chance_to_injure);
-			values["rifle_clip_size"] = std::to_string(clip_size);
-			values["rifle_cooldown_between_shots"] = std::to_string(cooldown_between_shots);
-			values["rifle_critical_chance"] = std::to_string(critical_chance);
-			values["rifle_critical_range"] = std::to_string(critical_range);
-			values["rifle_damage_per_second"] = std::to_string(damage_per_second);
-			values["rifle_disorient_amount"] = std::to_string(disorient_amount);
-			values["rifle_headshot_bonus"] = std::to_string(headshot_bonus);
-			values["rifle_max_range"] = std::to_string(max_range);
-			values["rifle_range_multiplier"] = std::to_string(range_multiplier);
-			values["rifle_reload_time"] = std::to_string(reload_time);
-			values["rifle_rounds_per_minute"] = std::to_string(rounds_per_minute);
-			values["rifle_muzzle_velocity"] = std::to_string(muzzle_velocity);
-			values["rifle_effective_firing_range"] = std::to_string(effective_firing_range);
-			values["rifle_str_type"] = str_type;
-			values["rifle_type"] = std::to_string(type);
-			values["rifle_manufacturer"] = manufacturer;
-			values["rifle_name"] = name;
-			values["rifle_vnum"] = std::to_string(vnum);
-			values["rifle_rarity"] = rarity_to_string(rarity);
-			values["rifle_file"] = feed_file;
-			mods::util::maps::dump(values);
+			this->exported["rifle_ammo_max"] = std::to_string(ammo_max);
+			this->exported["rifle_ammo_type"] = ammo_type;
+			this->exported["rifle_chance_to_injure"] = std::to_string(chance_to_injure);
+			this->exported["rifle_clip_size"] = std::to_string(clip_size);
+			this->exported["rifle_cooldown_between_shots"] = std::to_string(cooldown_between_shots);
+			this->exported["rifle_critical_chance"] = std::to_string(critical_chance);
+			this->exported["rifle_critical_range"] = std::to_string(critical_range);
+			this->exported["rifle_damage_per_second"] = std::to_string(damage_per_second);
+			this->exported["rifle_disorient_amount"] = std::to_string(disorient_amount);
+			this->exported["rifle_headshot_bonus"] = std::to_string(headshot_bonus);
+			this->exported["rifle_max_range"] = std::to_string(max_range);
+			this->exported["rifle_range_multiplier"] = std::to_string(range_multiplier);
+			this->exported["rifle_reload_time"] = std::to_string(reload_time);
+			this->exported["rifle_rounds_per_minute"] = std::to_string(rounds_per_minute);
+			this->exported["rifle_muzzle_velocity"] = std::to_string(muzzle_velocity);
+			this->exported["rifle_effective_firing_range"] = std::to_string(effective_firing_range);
+			this->exported["rifle_str_type"] = str_type;
+			this->exported["rifle_type"] = std::to_string(type);
+	}
+
+	uint64_t rifle_description_t::flush_to_db(){
+		try{
+			d("[status] rifle flush_to_db.. flushing...\n");
+			this->generate_map();
+			mods::util::maps::dump(this->exported);
 			auto insert_transaction = txn();
 			sql_compositor comp("object_rifle",&insert_transaction);
 			auto up_sql = comp
 				.insert()
 				.into("object_rifle")
-				.values(values)
+				.values(this->exported)
 				.returning("rifle_id")
 				.sql();
 			auto row = mods::pq::exec(insert_transaction,up_sql);
 			mods::pq::commit(insert_transaction);
-			for(auto && record : row){
-				this->id = record["rifle_id"].as<uint64_t>();
-				return this->id;
+			if(row.size()){
+				return this->id = row[0]["rifle_id"].as<uint64_t>();
 			}
 			return 0;
 		}catch(std::exception& e){
@@ -593,8 +593,7 @@ namespace mods::yaml {
 	//
 	// vim-sorcery: :555,569s/values\["\([^ ]\+\).*/\t\tvalues["\1"] = std::to_string(this->\1);/
 	//
-	uint64_t explosive_description_t::flush_to_db(){
-		try{
+	void explosive_description_t::generate_map(){
 			std::map<std::string,std::string> values;
 			values["explosive_alternate_explosion_type"] = this->alternate_explosion_type;
 			values["explosive_chance_to_injure"] = std::to_string(this->chance_to_injure);
@@ -611,18 +610,24 @@ namespace mods::yaml {
 			values["explosive_vnum"] = std::to_string(this->vnum);
 			values["explosive_rarity"] = rarity_to_string(this->rarity);
 			values["explosive_file"] = this->feed_file;
+			this->exported = values;
+		}
+	uint64_t explosive_description_t::flush_to_db(){
+		try{
+			this->generate_map();
+			mods::util::maps::dump(this->exported);
 			auto insert_transaction = txn();
 			sql_compositor comp("object_explosive",&insert_transaction);
 			auto up_sql = comp
 				.insert()
 				.into("object_explosive")
-				.values(values)
+				.values(this->exported)
 				.returning("explosive_id")
 				.sql();
 			auto row = mods::pq::exec(insert_transaction,up_sql);
 			mods::pq::commit(insert_transaction);
-			for(auto && record : row){
-				return record["explosive_id"].as<uint64_t>();
+			if(row.size()){
+				return this->id = row[0]["explosive_id"].as<uint64_t>();
 			}
 			return 0;
 		}catch(std::exception& e){

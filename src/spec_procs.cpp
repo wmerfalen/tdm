@@ -225,7 +225,7 @@ SPECIAL(dump) {
 		return (FALSE);
 	}
 
-	do_drop(ch, argument, cmd, SCMD_DROP);
+	do_drop(ch, argument, cmd, SCMD_DROP, player);
 
 	for(k = world[IN_ROOM(ch)].contents; k; k = world[IN_ROOM(ch)].contents) {
 		act("$p vanishes in a puff of smoke!", FALSE, 0, k, 0, TO_ROOM);
@@ -323,13 +323,13 @@ SPECIAL(mayor) {
 			break;
 
 		case 'O':
-			do_gen_door(ch, strcpy(actbuf, "gate"), 0, SCMD_UNLOCK);	/* strcpy: OK */
-			do_gen_door(ch, strcpy(actbuf, "gate"), 0, SCMD_OPEN);	/* strcpy: OK */
+			do_gen_door(ch, strcpy(actbuf, "gate"), 0, SCMD_UNLOCK,player);	/* strcpy: OK */
+			do_gen_door(ch, strcpy(actbuf, "gate"), 0, SCMD_OPEN,player);	/* strcpy: OK */
 			break;
 
 		case 'C':
-			do_gen_door(ch, strcpy(actbuf, "gate"), 0, SCMD_CLOSE);	/* strcpy: OK */
-			do_gen_door(ch, strcpy(actbuf, "gate"), 0, SCMD_LOCK);	/* strcpy: OK */
+			do_gen_door(ch, strcpy(actbuf, "gate"), 0, SCMD_CLOSE,player);	/* strcpy: OK */
+			do_gen_door(ch, strcpy(actbuf, "gate"), 0, SCMD_LOCK,player);	/* strcpy: OK */
 			break;
 
 		case '.':
@@ -398,7 +398,6 @@ SPECIAL(snake) {
 
 
 SPECIAL(thief) {
-	MENTOC_PREAMBLE();
 
 	if(cmd || GET_POS(ch) != POS_STANDING) {
 		return (FALSE);
@@ -417,7 +416,6 @@ SPECIAL(thief) {
 
 
 SPECIAL(magic_user) {
-	MENTOC_PREAMBLE();
 	char_data *vict = nullptr;
 
 	if(cmd || GET_POS(ch) != POS_FIGHTING) {
@@ -553,19 +551,19 @@ SPECIAL(puff) {
 
 	switch(rand_number(0, 60)) {
 		case 0:
-			do_say(ch, strcpy(actbuf, "My god!  It's full of stars!"), 0, 0);	/* strcpy: OK */
+			do_say(ch, strcpy(actbuf, "My god!  It's full of stars!"), 0, 0, player);	/* strcpy: OK */
 			return (TRUE);
 
 		case 1:
-			do_say(ch, strcpy(actbuf, "How'd all those fish get up here?"), 0, 0);	/* strcpy: OK */
+			do_say(ch, strcpy(actbuf, "How'd all those fish get up here?"), 0, 0,player);	/* strcpy: OK */
 			return (TRUE);
 
 		case 2:
-			do_say(ch, strcpy(actbuf, "I'm a very female dragon."), 0, 0);	/* strcpy: OK */
+			do_say(ch, strcpy(actbuf, "I'm a very female dragon."), 0, 0,player);	/* strcpy: OK */
 			return (TRUE);
 
 		case 3:
-			do_say(ch, strcpy(actbuf, "I've got a peaceful, easy feeling."), 0, 0);	/* strcpy: OK */
+			do_say(ch, strcpy(actbuf, "I've got a peaceful, easy feeling."), 0, 0,player);	/* strcpy: OK */
 			return (TRUE);
 
 		default:
@@ -631,7 +629,6 @@ SPECIAL(janitor) {
 
 
 SPECIAL(cityguard) {
-	MENTOC_PREAMBLE();
 	char_data *tch, *evil, *spittle;
 	int max_evil, min_cha;
 
@@ -693,7 +690,7 @@ SPECIAL(cityguard) {
 			strncpy(spitbuf, GET_NAME(spittle), sizeof(spitbuf));	/* strncpy: OK */
 			spitbuf[sizeof(spitbuf) - 1] = '\0';
 
-			do_action(ch, spitbuf, spit_social, 0);
+			do_action(ch, spitbuf, spit_social, 0,player);
 			return (TRUE);
 		}
 	}
@@ -705,7 +702,6 @@ SPECIAL(cityguard) {
 #define PET_PRICE(pet) (GET_LEVEL(pet) * 300)
 
 SPECIAL(pet_shops) {
-	MENTOC_PREAMBLE();
 	char buf[MAX_STRING_LENGTH], pet_name[256];
 	room_rnum pet_room;
 	char_data *pet;

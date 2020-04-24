@@ -38,6 +38,8 @@
 #ifndef d
 	#define d(a) std::cerr << "[**DEBUG**]->[file:" << __FILE__ << "][line:" << __LINE__ << "][msg]: " << a << "\n" << std::flush;
 #endif
+#else
+	#define d(a) ; 
 #endif
 
 constexpr static std::size_t MAX_EXPLOSION_FADE_OUT = 5;
@@ -134,7 +136,7 @@ using ush_int = uint32_t;
 #endif
 
 #define SPECIAL(name) \
-	int (name)(char_data *ch, void *me, int cmd, char *argument)
+	int (name)(char_data *ch, void *me, int cmd, char *argument,player_ptr_t& player)
 
 
 /* room-related defines *************************************************/
@@ -788,6 +790,7 @@ enum player_level {
 	struct obj_data {
 		void feed(mentoc_pqxx_result_t);
 		void feed(std::string_view in_type,std::string_view feed_file);
+		void feed(int in_type,std::string_view feed_file);
 		void init();
 		obj_data(const obj_data& other){
 			d("[WARNING] obj_data copy constructor is broken!!!\n");
@@ -948,8 +951,6 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 		CLASS_TYPE(\
 				uint8_t mode\
 		){\
-			auto c_type = BOOST_PP_STRINGIZE(CLASS_TYPE);\
-			d("[debug] " << c_type << "(uint8_t mode)\n");\
 			this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(); \
 			this->set_str_type(BOOST_PP_STRINGIZE(CLASS_TYPE));\
 			this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
@@ -1023,6 +1024,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_DATA_OBJ, ~, MENTOC_ITEM_TYPES_SEQ)
 		uuid_t get_owner(){ return m_owner; }
 		uint8_t location_data(){ return m_location_data; }
 		void set_location_data(uint8_t i){ m_location_data = i; }
+		std::string generate_stat_page();
 		protected:
 #define MENTOC_UPTR(r,data,CLASS_TYPE) std::unique_ptr<BOOST_PP_CAT(CLASS_TYPE,_data_t)> BOOST_PP_CAT(m_, CLASS_TYPE);
 BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)

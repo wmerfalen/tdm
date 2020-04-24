@@ -72,7 +72,7 @@ ACMD(do_quit) {
 	if(IS_NPC(ch) || !ch->has_desc) {
 		return;
 	}
-	MENTOC_PREAMBLE();
+	
 
 	player->quitting(true);
 	db::extraction::save_player(player);
@@ -110,7 +110,7 @@ ACMD(do_quit) {
 
 
 ACMD(do_save) {
-	MENTOC_PREAMBLE();
+	
 	if(IS_NPC(ch) || !ch->has_desc) {
 		log("SYSERR: do_save() called but is an npc or doesn't have a descriptor");
 		return;
@@ -386,7 +386,7 @@ ACMD(do_title) {
 	} else if(strlen(argument) > MAX_TITLE_LENGTH) {
 		send_to_char(ch, "Sorry, titles can't be longer than %d characters.\r\n", MAX_TITLE_LENGTH);
 	} else {
-		MENTOC_PREAMBLE();
+		
 		set_title(player, argument);
 		*player << "Okay, you're now " << player->name().c_str() << " " <<
 			player->title().c_str() << "\r\n";
@@ -919,7 +919,7 @@ ACMD(do_gen_write) {
 #define PRF_TOG_CHK(ch,flag) ((TOGGLE_BIT(PRF_FLAGS(ch), (flag))) & (flag))
 
 ACMD(do_gen_tog) {
-	MENTOC_PREAMBLE();
+	
 	long /* bitvector_t */ result;
 
 	const char *tog_messages[][2] = {
