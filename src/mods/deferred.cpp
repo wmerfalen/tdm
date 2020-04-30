@@ -47,15 +47,9 @@ namespace mods {
 					mods::globals::destruct_object(std::get<0>(fe_tuple));
 					break;
 				case deferred::EVENT_PLAYER_UNBLOCK_INSTALLATION:
-					player = ptr_by_uuid(std::get<0>(fe_tuple));
-					if(!player){
-						std::cerr << "[warning] uuid_t invalid for EVENT_PLAYER_UNBLOCK: " << std::get<0>(fe_tuple) << "\n";
-						break;
-					}
-					player->unblock_event(std::get<1>(fe_tuple));
-					break;
 				default:
-					std::cerr << "[warning] unhandled event_type.type " << __FILE__ << ":line[" << __LINE__ << "\n";
+					player = ptr_by_uuid(std::get<0>(fe_tuple));
+					player->unblock_event(std::get<1>(fe_tuple));
 					break;
 			}
 			m_ticks_event_type.erase(m_tick);

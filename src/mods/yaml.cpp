@@ -9,7 +9,6 @@ namespace mods::yaml {
 
 #define MENTOC_FEED_BASE_MEMBERS \
 	try{ \
-		d("feeding base members");\
 		manufacturer = yaml_file["manufacturer"].as<std::string>();\
 		name = yaml_file["name"].as<std::string>();\
 		str_type = yaml_file["str_type"].as<std::string>();\
@@ -19,7 +18,6 @@ namespace mods::yaml {
 		description = yaml_file["description"].as<std::string>();\
 		short_description = yaml_file["short_description"].as<std::string>();\
 		action_description = yaml_file["action_description"].as<std::string>();\
-		d("done\nCompleted feeding base members\n");\
 	}catch(std::exception &e){ std::cerr << "[yaml-cpp exception]: '" << e.what() << "'\n"; }
 
 	std::vector<std::pair<std::string,float>> rarity_strings() {
@@ -78,11 +76,9 @@ namespace mods::yaml {
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
-			d("can't open output yaml file, not open!\n");
 			return -1;
 		}
 		if(!out_file.good()){
-			d("can't open output yaml file, not good!\n");
 			return -2;
 		}
 		MENTOC_EXAMPLE_ARMORS
@@ -114,7 +110,6 @@ namespace mods::yaml {
 	uint64_t armor_description_t::flush_to_db(){
 		try{
 			this->generate_map();
-			mods::util::maps::dump(this->exported);
 			auto insert_transaction = txn();
 			sql_compositor comp("object_armor",&insert_transaction);
 			auto up_sql = comp
@@ -153,9 +148,7 @@ namespace mods::yaml {
 	}
 	uint64_t gadget_description_t::flush_to_db(){
 		try{
-			d("[status] gadget flush_to_db.. flushing...\n");
 			this->generate_map();
-			mods::util::maps::dump(this->exported);
 			auto insert_transaction = txn();
 			sql_compositor comp("object_gadget",&insert_transaction);
 			auto up_sql = comp
@@ -178,12 +171,9 @@ namespace mods::yaml {
 
 	int16_t gadget_description_t::feed_from_po_record(mentoc_pqxx_result_t yaml_file){
 		try {
-			d("[gadget-desc ffpr] feeding str_type...");
 			auto type_string = yaml_file["str_type"].as<std::string>();
 			MENTOC_FEED_GADGET
-			d("[gadget-desc ffpr] feeding base members...");
 			MENTOC_FEED_BASE_MEMBERS
-			d("done\n");
 		}catch(std::exception &e){
 			std::cerr << "[exception] rifle feed: '" << e.what() << "'\n";
 			return -1;
@@ -209,7 +199,6 @@ namespace mods::yaml {
 		return 0;
 	};
 	void gadget_description_t::fill_flags(obj_flag_data* o){
-		d("[gadget_description_t]::[fill_flags]*****\n");
 		auto * w = &o->wear_flags;
 		auto * tf = &o->type_flag;
 		(*tf) = ITEM_GADGET;
@@ -226,7 +215,6 @@ namespace mods::yaml {
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
 				break;
 		}
-		d("[gadget_description_t]::[fill_flags]*****\n");
 	}
 
 
@@ -234,11 +222,9 @@ namespace mods::yaml {
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
-			d("can't open output yaml file, not open!\n");
 			return -1;
 		}
 		if(!out_file.good()){
-			d("can't open output yaml file, not good!\n");
 			return -2;
 		}
 		MENTOC_EXAMPLE_ATTACHMENTS
@@ -255,11 +241,9 @@ namespace mods::yaml {
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
-			d("can't open output yaml file, not open!\n");
 			return -1;
 		}
 		if(!out_file.good()){
-			d("can't open output yaml file, not good!\n");
 			return -2;
 		}
 		MENTOC_EXAMPLE_DRONES
@@ -270,7 +254,6 @@ namespace mods::yaml {
 		return 0;
 	};
 	void rifle_description_t::fill_flags(obj_flag_data* o){
-		d("[rifle_description_t]::[fill_flags]*****\n");
 		auto * w = &o->wear_flags;
 		auto * tf = &o->type_flag;
 		o->ammo = this->ammo_max;
@@ -292,10 +275,8 @@ namespace mods::yaml {
 				(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD;
 				break;
 			default: 
-				d("[fill_wear_flags][rifle][WARNING] defaulted..\n");
 				break;
 		}
-		d("[rifle_description_t]::[fill_flags]*****\n");
 	}
 	/** vim sorcery:
 
@@ -303,13 +284,11 @@ namespace mods::yaml {
 
 */
 	void armor_description_t::fill_flags(obj_flag_data* o){
-		d("[armor_description_t]::[fill_flags]*****\n");
 		auto * w = &o->wear_flags;
 		auto * tf = &o->type_flag;
 		(*tf) = ITEM_ARMOR;
 		switch((mw_armor)this->type){
 			default:
-				d("[fill_wear_flags][armor][WARNING] defaulted..\n");
 				break;
 			case mw_armor::VEST:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_BODY | ITEM_WEAR_HOLD;
@@ -367,59 +346,46 @@ namespace mods::yaml {
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_SHIELD;
 				break;
 		}
-		d("[armor_description_t]::[fill_flags]*****\n");
 	}
 	void drone_description_t::fill_flags(obj_flag_data* o){
-		d("[drone_description_t]::[fill_flags]*****\n");
 		auto * w = &o->wear_flags;
 		auto * tf = &o->type_flag;
 		(*tf) = ITEM_DRONE;
 		switch((mw_drone)this->type){
 			default: 
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
-				d("[fill_wear_flags][armor][WARNING] defaulted..\n");
 				break;
 		}
-		d("[drone_description_t]::[fill_flags]*****\n");
 	}
 	void consumable_description_t::fill_flags(obj_flag_data* o){
-		d("[consumable_description_t]::[fill_flags]*****\n");
 		auto * w = &o->wear_flags;
 		auto * tf = &o->type_flag;
 		(*tf) = ITEM_CONSUMABLE;
 		switch((mw_consumable)this->type){
 			default:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
-				d("[fill_wear_flags][consumable][WARNING] defaulted..\n");
 				break;
 		}
-		d("[consumable_description_t]::[fill_flags]*****\n");
 	}
 	void trap_description_t::fill_flags(obj_flag_data* o){
-		d("[trap_description_t]::[fill_flags]*****\n");
 		auto * w = &o->wear_flags;
 		auto * tf = &o->type_flag;
 		(*tf) = ITEM_TRAP;
 		switch((mw_trap)this->type){
 			default:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
-				d("[fill_wear_flags][trap][WARNING] defaulted..\n");
 				break;
 		}
-		d("[trap_description_t]::[fill_flags]*****\n");
 	}
 	void attachment_description_t::fill_flags(obj_flag_data* o){
-		d("[attachment_description_t]::[fill_flags]*****\n");
 		auto * w = &o->wear_flags;
 		auto * tf = &o->type_flag;
 		(*tf) = ITEM_ATTACHMENT;
 		switch((mw_attachment)this->type){
 			default:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
-				d("[fill_wear_flags][attachment][WARNING] defaulted..\n");
 				break;
 		}
-		d("[attachment_description_t]::[fill_flags]*****\n");
 	}
 
 	uint64_t rifle_description_t::db_id(){
@@ -445,14 +411,11 @@ namespace mods::yaml {
 	}
 	int16_t rifle_description_t::write_example_file(std::string_view file){
 		std::string file_name = current_working_dir() + "/" + file.data();
-		//d("write_example_file: filename: '" << file_name.c_str() << "'\n");
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
-			d("can't open output yaml file, not open!\n");
 			return -1;
 		}
 		if(!out_file.good()){
-			d("can't open output yaml file, not good!\n");
 			return -2;
 		}
 		out_file << "# accuracy map\n" <<
@@ -508,9 +471,7 @@ namespace mods::yaml {
 
 	uint64_t rifle_description_t::flush_to_db(){
 		try{
-			d("[status] rifle flush_to_db.. flushing...\n");
 			this->generate_map();
-			mods::util::maps::dump(this->exported);
 			auto insert_transaction = txn();
 			sql_compositor comp("object_rifle",&insert_transaction);
 			auto up_sql = comp
@@ -536,17 +497,10 @@ namespace mods::yaml {
 	/** explosives */
 	/** explosives */
 	void explosive_description_t::fill_flags(obj_flag_data* o){
-		d("[explosive_description_t]::[fill_flags]*****\n");
 		auto * w = &o->wear_flags;
 		auto * tf = &o->type_flag;
 		(*tf) = ITEM_EXPLOSIVE;
-		switch((mw_explosive)this->type){
-			default:
-				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
-				d("[fill_wear_flags][explosive][WARNING] defaulted..\n");
-				break;
-		}
-		d("[explosive_description_t]::[fill_flags]*****\n");
+		(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
 	}
 	uint64_t explosive_description_t::db_id(){
 		return this->id;
@@ -555,18 +509,10 @@ namespace mods::yaml {
 		try {
 			std::string file = current_working_dir() + "/" + in_file.data();
 			feed_file = file;
-			d("[explosivedesc feed] feed_file: '" << feed_file << "'\n");
-			d("[explosivedesc file: '" << file << "'\n");
 			auto yaml_file = YAML::LoadFile(file);
-			d("[explosivedesc feed(in_file)] feeding str_type...");
 			auto type_string = yaml_file["str_type"].as<std::string>();
-			d("[explosivedesc feed(in_file)] type_string:'" << type_string << "' done\n");
-			d("[explosivedesc feed(in_file)] feeding all explosive members...");
 			MENTOC_FEED_EXPLOSIVE
-				d("[explosivedesc feed(in_file)] done\n");
-			d("[explosivedesc feed(in_file)] feeding base members...");
 			MENTOC_FEED_BASE_MEMBERS
-				d("[explosivedesc feed(in_file)] done\n");
 		}catch(std::exception &e){
 			std::cerr << "[exception] explosive feed: '" << e.what() << "'\n";
 			return -1;
@@ -577,11 +523,9 @@ namespace mods::yaml {
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
-			d("can't open output yaml file, not open!\n");
 			return -1;
 		}
 		if(!out_file.good()){
-			d("can't open output yaml file, not good!\n");
 			return -2;
 		}
 		MENTOC_EXAMPLE_EXPLOSIVES
@@ -594,28 +538,25 @@ namespace mods::yaml {
 	// vim-sorcery: :555,569s/values\["\([^ ]\+\).*/\t\tvalues["\1"] = std::to_string(this->\1);/
 	//
 	void explosive_description_t::generate_map(){
-			std::map<std::string,std::string> values;
-			values["explosive_alternate_explosion_type"] = this->alternate_explosion_type;
-			values["explosive_chance_to_injure"] = std::to_string(this->chance_to_injure);
-			values["explosive_critical_chance"] = std::to_string(this->critical_chance);
-			values["explosive_critical_range"] = std::to_string(this->critical_range);
-			values["explosive_blast_radius"] = std::to_string(this->blast_radius);
-			values["explosive_damage_per_second"] = std::to_string(this->damage_per_second);
-			values["explosive_disorient_amount"] = std::to_string(this->disorient_amount);
-			values["explosive_loudness_type"] = this->loudness_type;
-			values["explosive_str_type"] = this->str_type;
-			values["explosive_type"] = std::to_string(this->type);
-			values["explosive_manufacturer"] = this->manufacturer;
-			values["explosive_name"] = this->name;
-			values["explosive_vnum"] = std::to_string(this->vnum);
-			values["explosive_rarity"] = rarity_to_string(this->rarity);
-			values["explosive_file"] = this->feed_file;
-			this->exported = values;
+			this->exported["explosive_alternate_explosion_type"] = this->alternate_explosion_type;
+			this->exported["explosive_chance_to_injure"] = std::to_string(this->chance_to_injure);
+			this->exported["explosive_critical_chance"] = std::to_string(this->critical_chance);
+			this->exported["explosive_critical_range"] = std::to_string(this->critical_range);
+			this->exported["explosive_blast_radius"] = std::to_string(this->blast_radius);
+			this->exported["explosive_damage_per_second"] = std::to_string(this->damage_per_second);
+			this->exported["explosive_disorient_amount"] = std::to_string(this->disorient_amount);
+			this->exported["explosive_loudness_type"] = this->loudness_type;
+			this->exported["explosive_str_type"] = this->str_type;
+			this->exported["explosive_type"] = std::to_string(this->type);
+			this->exported["explosive_manufacturer"] = this->manufacturer;
+			this->exported["explosive_name"] = this->name;
+			this->exported["explosive_vnum"] = std::to_string(this->vnum);
+			this->exported["explosive_rarity"] = rarity_to_string(this->rarity);
+			this->exported["explosive_file"] = this->feed_file;
 		}
 	uint64_t explosive_description_t::flush_to_db(){
 		try{
 			this->generate_map();
-			mods::util::maps::dump(this->exported);
 			auto insert_transaction = txn();
 			sql_compositor comp("object_explosive",&insert_transaction);
 			auto up_sql = comp
@@ -643,11 +584,9 @@ namespace mods::yaml {
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
-			d("can't open output yaml file, not open!\n");
 			return -1;
 		}
 		if(!out_file.good()){
-			d("can't open output yaml file, not good!\n");
 			return -2;
 		}
 		MENTOC_EXAMPLE_CONSUMABLE
@@ -661,11 +600,9 @@ namespace mods::yaml {
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
-			d("can't open output yaml file, not open!\n");
 			return -1;
 		}
 		if(!out_file.good()){
-			d("can't open output yaml file, not good!\n");
 			return -2;
 		}
 		MENTOC_EXAMPLE_TRAP
@@ -683,7 +620,6 @@ namespace mods::yaml {
 	int16_t gadget_description_t::feed(std::string_view in_file){
 		try {
 			std::string file = current_working_dir() + "/" + in_file.data();
-			d("gadget-desc absolute path to feed file: '" << file << "'\n");
 			feed_file = file;
 			auto yaml_file = YAML::LoadFile(file);
 			this->str_type = yaml_file["str_type"].as<std::string>();
@@ -703,31 +639,18 @@ namespace mods::yaml {
 		try {
 			std::string file = current_working_dir() + "/" + in_file.data();
 			feed_file = file;
-			d("[rifledesc feed] feed_file: '" << feed_file << "'\n");
-			d("[rifledesc file: '" << file << "'\n");
 			auto yaml_file = YAML::LoadFile(file);
-			d("[rifledesc feed(in_file)] grabbing accuracy_map (rifle feed func)...\n");
 			auto acmap = yaml_file["accuracy_map"].as<std::vector<float>>();
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
-				d("[rifledesc feed(in_file)] [acmap]: " << acmap[i] << "\n");
 				accuracy_map[i] = acmap[i];
 			}
-			d("[rifledesc feed(in_file)] feeding damage_map...\n");
 			auto dmap = yaml_file["damage_map"].as<std::vector<float>>();
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
-				d("[rifledesc feed(in_file)] [acmap]: " << dmap[i] << "\n");
 				damage_map[i] = dmap[i];
 			}
-			d("[rifledesc feed(in_file)] done feeding damage_map...\n");
-			d("[rifledesc feed(in_file)] feeding str_type...");
 			auto type_string = yaml_file["str_type"].as<std::string>();
-			d("[rifledesc feed(in_file)] done\n");
-			d("[rifledesc feed(in_file)] feeding all rifle members...");
 			MENTOC_FEED_RIFLE
-				d("[rifledesc feed(in_file)] done\n");
-			d("[rifledesc feed(in_file)] feeding base members...");
 			MENTOC_FEED_BASE_MEMBERS
-				d("[rifledesc feed(in_file)] done\n");
 		}catch(std::exception &e){
 			std::cerr << "[exception] rifle feed: '" << e.what() << "'\n";
 			return -1;
@@ -737,12 +660,10 @@ namespace mods::yaml {
 
 	int16_t rifle_description_t::feed_from_po_record(mentoc_pqxx_result_t yaml_file){
 		try {
-			d("[rifledesc ffpr] grabbing accuracy_map (rifle feed func)...\n");
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
 				float item = yaml_file[std::string("accuracy_map_") + std::to_string(i)].as<float>();
 				accuracy_map[i] = item;
 			}
-			d("[rifledesc ffpr] feeding damage_map...\n");
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
 				float item = yaml_file[std::string("damage_map_") + std::to_string(i)].as<float>();
 				damage_map[i] = item;
@@ -750,7 +671,6 @@ namespace mods::yaml {
 			auto type_string = yaml_file["str_type"].as<std::string>();
 			MENTOC_FEED_RIFLE
 			MENTOC_FEED_BASE_MEMBERS
-			d("done\n");
 		}catch(std::exception &e){
 			std::cerr << "[exception] rifle feed: '" << e.what() << "'\n";
 			return -1;

@@ -86,11 +86,8 @@ std::ostream& log(Args... args); /*{
 	directory_list_t glob(std::string_view);
 	bool fuzzy_match(const std::string& _needle,const std::string& _haystack);
 	template <typename T>
-		T arglist(const std::string& argument) {
+		T arglist(std::string_view argument) {
 			T arglist;
-			auto flush = [&](std::string_view f) {
-				arglist.emplace_back(f.data());
-			};
 			bool escaped = false;
 			std::string current = "";
 			unsigned string_length = argument.length();
@@ -100,7 +97,7 @@ std::ostream& log(Args... args); /*{
 
 				if(c == '"') {
 					if(escaped) {
-						flush(current);
+						arglist.emplace_back(current);
 						escaped = false;
 						current = "";
 					} else {
@@ -112,7 +109,7 @@ std::ostream& log(Args... args); /*{
 
 				if(c == ' ' && !escaped) {
 					if(current.length()) {
-						flush(current);
+						arglist.emplace_back(current);
 						current = "";
 					}
 
@@ -127,7 +124,7 @@ std::ostream& log(Args... args); /*{
 				current += c;
 
 				if(string_length ==0 && current.length()) {
-					flush(current);
+					arglist.emplace_back(current);
 					break;
 				}
 			}

@@ -16,6 +16,7 @@
 #include "npc.hpp"
 #include "world-configuration.hpp"
 #include "orm/shop.hpp"
+#include "doors.hpp"
 namespace mods {  struct player; };
 namespace mods { struct extra_desc_data; }; 
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
@@ -404,7 +405,7 @@ namespace mods::builder {
 		return std::nullopt;
 	}
 
-	inline void initialize_builder(player_ptr_t player){
+	void initialize_builder(player_ptr_t& player){
 		if(!player->has_builder_data()){
 			std::cerr << "initialize_builder: creating shared_ptr\n";
 			player->builder_data = std::make_shared<builder_data_t>();
@@ -1102,6 +1103,7 @@ namespace mods::builder {
 			} else {
 				my_map["obj_extra_description"] = "<obj.ex_description->description>";
 			}
+			my_map["obj_file"] = obj->feed_file();
 
 			if(check_result_01.size()) {
 				check_i = mods::pq::as_int(check_result_01,0,0);
@@ -2490,7 +2492,7 @@ ACMD(do_mbuild) {
 ACMD(do_obuild) {
 	
 	mods::builder::initialize_builder(player);
-	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
+	auto vec_args = PARSE_ARGS();
 
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("weapon_type") == 0) {
 		player->pager_start();
@@ -2839,13 +2841,48 @@ ACMD(do_obuild) {
 			"  {gld}|:: bitvector {red}see: obuild help bitvector{/red}{/gld}\r\n" <<
 			" {grn}obuild{/grn} {red}save <object_id>{/red}\r\n" <<
 			" {grn}obuild{/grn} {red}show <object_id>{/red}\r\n" <<
+			" {grn}obuild{/grn} {red}import <type> <yaml_file>{/red}\r\n" <<
+			" {red}types include: rifle, explosive, gadget, drone, attachment, armor, consumbale, trap{/red}\r\n" <<
 			"\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
 	}
+	auto args = mods::util::subcmd_args<4,args_t>(argument,"import");
 
-	auto args = mods::util::subcmd_args<4,args_t>(argument,"new");
+	if(args.has_value()) {
+		auto r = args.value();
+		if(r.size() < 3){
+			r_error(player, "Invalid number of arguments");
+			return;
+		}
+		std::map<std::string,int> types_map = {
+			{"rifle", ITEM_RIFLE},
+			{"explosive", ITEM_EXPLOSIVE},
+			{"gadget", ITEM_GADGET},
+			{"drone", ITEM_DRONE},
+			{"attachment", ITEM_ATTACHMENT},
+			{"armor", ITEM_ARMOR},
+			{"consumable", ITEM_CONSUMABLE},
+			{"trap", ITEM_TRAP}
+		};
+		if(types_map.find(r[1]) == types_map.end()){
+			r_error(player, "Invalid type");
+			return;
+		}
+		r_status(player,"Creating new object");
+		obj_proto.push_back({});
+		auto & obj = obj_proto.back();
+		obj.feed(types_map[r[1]],r[2]);
+		if(player->is_executing_js()){
+			*player << "{index: " << obj_proto.size() - 1 << "}";
+		}
+		r_success(player,"Object imported and created");
+		return;
+	}
+
+
+	args = mods::util::subcmd_args<4,args_t>(argument,"new");
 
 	if(args.has_value()) {
 		r_status(player,"Creating new object");
@@ -2944,9 +2981,9 @@ ACMD(do_obuild) {
 				}
 			}
 			obj->ex_description.emplace_back(
-				"<extra_descr_data.keyword>",
-				"<extra_descr_data.description>"
-			);
+					"<extra_descr_data.keyword>",
+					"<extra_descr_data.description>"
+					);
 			r_status(player,"Done.");
 			return;
 		}
@@ -2988,8 +3025,8 @@ ACMD(do_obuild) {
 				}
 
 				obj->ex_description.erase(
-					obj->ex_description.begin() + index.value()
-				);
+						obj->ex_description.begin() + index.value()
+						);
 				r_success(player,"ex_description removed");
 				return;
 			}
@@ -3031,6 +3068,10 @@ ACMD(do_obuild) {
 
 	if(args.has_value()) {
 		r_status(player,"listing...");
+		if(obj_proto.size() == 0){
+			r_status(player,"No objects to list");
+			return;
+		}
 		unsigned object_id = 0;
 		if(!player->is_executing_js()){
 			player->pager_start();
@@ -3619,7 +3660,7 @@ ACMD(do_obuild) {
  *
  */
 ACMD(do_zbuild) {
-	
+
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
@@ -4160,7 +4201,6 @@ ACMD(do_zbuild) {
 };
 
 ACMD(do_rbuild) {
-	
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
@@ -4315,7 +4355,6 @@ ACMD(do_rbuild) {
 			"  {grn}|____[possible items]{/grn}\r\n" <<
 			"  |:: gen                 -> The general description of the room\r\n" <<
 			"  |:: keyword             -> The keyword of the room direction\r\n" <<
-			"  |:: einfo               -> Currently only accepts ISDOOR\r\n" << //TODO Accept more than just ISDOOR
 			"  |:: key                 -> Integer key that is accepted for this exit\r\n" <<
 			"  |:: to_room             -> The room number that this exit leads to\r\n" <<
 			"  {grn}|____[examples]{/grn}\r\n" <<
@@ -4323,13 +4362,36 @@ ACMD(do_rbuild) {
 			"  |:: (When you do 'look north' you will see the above description)\r\n" <<
 			"  |:: {wht}rbuild{/wht} {gld}dopt north keyword bathroom{/gld}\r\n" <<
 			"  |:: (when you do 'open bathroom' it will open the door to the north)\r\n" <<
-			"  |:: {wht}rbuild{/wht} {gld}dopt north einfo ISDOOR{/gld}\r\n" <<
-			"  |:: (the north exit will be a door)\r\n" <<
 			"  |:: {wht}rbuild{/wht} {gld}dopt north key 123{/gld}\r\n" <<
 			"  |:: (the north exit will require a key numbered 123)\r\n" <<
 			"  |:: {wht}rbuild{/wht} {gld}dopt north to_room 27{/gld}\r\n" <<
 			"  |:: (the north room will lead to room number 27)\r\n" <<
 
+			" {grn}rbuild{/grn} {red}exit:add <direction> <flag>{/red}\r\n" <<
+			"  |--> add a flag to the specified door\r\n" <<
+			"  {grn}|____[possible items]{/grn}\r\n" <<
+			"  |:: BREACHABLE          -> can be destroyed be breach charges\r\n" <<
+			"  |:: CLOSED              -> default closed\r\n" <<
+			"  |:: ELECTRIFIED         -> door will shock user upon touch\r\n" <<
+			"  |:: HIDDEN              -> door isn't obvious\r\n" << 
+			"  |:: ISDOOR              -> default door type\r\n" <<
+			"  |:: LOCKED              -> locked. set key using dopt\r\n" <<
+			"  |:: PICKPROOF           -> resists lock picking\r\n" <<
+			"  |:: QUEST_LOCKED        -> door remains locked until question condition\r\n" <<
+			"  |:: REINFORCED          -> must be broken by thermite charges\r\n" <<
+
+			"  {grn}|____[examples]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}exit:add north REINFORCED PICPROOF CLOSED{/gld}\r\n" <<
+			"  |:: (Applies multiple values to northern door)\r\n" <<
+
+			" {grn}rbuild{/grn} {red}exit:list <direction>{/red}\r\n" <<
+			"  |--> lists the flags on the specified door\r\n" <<
+
+			" {grn}rbuild{/grn} {red}exit:remove <direction> <flags>{/red}\r\n" <<
+			"  |--> removes flags on the specified door\r\n" <<
+			"  {grn}|____[examples]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}exit:remove north REINFORCED PICPROOF CLOSED{/gld}\r\n" <<
+			"  |:: (removes flags from northern door)\r\n" <<
 
 			" {grn}rbuild{/grn} {red}pave <on|off> <room_number_start> <zone_id>{/red}\r\n" <<
 			"  |--> starts the pave mode where any direction you go to will automatically \r\n" <<
@@ -4448,7 +4510,7 @@ ACMD(do_rbuild) {
 	}
 
 	if(std::string(&command[0]).compare("room") == 0 ||
-		std::string(&command[0]).compare("vnum") == 0) {
+			std::string(&command[0]).compare("vnum") == 0) {
 		*player << world[IN_ROOM(ch)].number << "\r\n";
 		return;
 	}
@@ -4694,27 +4756,6 @@ ACMD(do_rbuild) {
 			return;
 		}
 
-		if(str_item.compare("einfo") == 0) {
-			description = description.substr(description.find("einfo ") + 6);
-			auto exit_info = mods::util::stoi(description);
-
-			if(!exit_info.has_value()) {
-				r_error(player,"Invalid exit info. Must be 0-3");
-				return;
-			}
-
-			auto ret = mods::builder::dir_option(IN_ROOM(ch),mods::globals::dir_int(direction[0]),std::nullopt,
-					std::nullopt,exit_info.value(),std::nullopt,std::nullopt).value_or("success");
-
-			if(ret.compare("success") == 0) {
-				r_success(player,"exit_info changed to: EX_ISDOOR");
-			} else {
-				r_error(player,ret);
-			}
-
-			return;
-		}
-
 		if(str_item.compare("key") == 0) {
 			description = description.substr(description.find("key ") + 4);
 			auto key = mods::util::stoi(description);
@@ -4771,6 +4812,90 @@ ACMD(do_rbuild) {
 		}
 		return;
 	}
+
+	args = mods::util::subcmd_args<9,args_t>(argument,"exit:add");
+
+	if(args.has_value()){
+		if(vec_args.size() <= 2){
+			r_error(player,"Not enough args");
+			return;
+		}
+		auto direction = mods::globals::dir_int(vec_args[1][0]);
+		if(direction == -1){
+			r_error(player, "Unrecognized direction");
+			return;
+		}
+		if(!world[player->room()].dir_option[direction]){
+			r_error(player, "Door doesn't exist there");
+			return;
+		}
+
+		for(unsigned i=2; i < vec_args.size();i++){
+			auto f= mods::doors::from_string(vec_args[i]);
+			if(f == -1){
+				r_error(player, vec_args[i] + " is an Unknown flag");
+				continue;
+			}
+			world[player->room()].dir_option[direction]->exit_info |= mods::doors::from_string(vec_args[i]);
+			r_status(player, vec_args[i] + " added.");
+		}
+		r_success(player, "Set flags on door");
+		return;
+	}
+
+	args = mods::util::subcmd_args<10,args_t>(argument,"exit:list");
+
+	if(args.has_value()){
+		if(vec_args.size() < 2){
+			r_error(player,"Not enough args");
+			return;
+		}
+		auto direction = mods::globals::dir_int(vec_args[1][0]);
+		if(direction == -1){
+			r_error(player, "Unrecognized direction");
+			return;
+		}
+		if(!world[player->room()].dir_option[direction]){
+			r_error(player, "Door doesn't exist there");
+			return;
+		}
+		for(auto & str : mods::doors::all_string_flags(world[player->room()].dir_option[direction]->exit_info)){
+			r_status(player, str);
+		}
+		r_success(player, "Listed.");
+		return;
+	}
+
+	args = mods::util::subcmd_args<11,args_t>(argument,"exit:remove");
+
+	if(args.has_value()){
+		if(vec_args.size() < 2){
+			r_error(player,"Not enough args");
+			return;
+		}
+		auto direction = mods::globals::dir_int(vec_args[1][0]);
+		if(direction == -1){
+			r_error(player, "Unrecognized direction");
+			return;
+		}
+		if(!world[player->room()].dir_option[direction]){
+			r_error(player, "Door doesn't exist there");
+			return;
+		}
+		for(unsigned i = 2;i < vec_args.size();i++){
+			auto f = mods::doors::from_string(vec_args[i]);
+			if(f == -1){
+				r_error(player, vec_args[i] + " is an Unknown flag");
+				continue;
+			}
+			world[player->room()].dir_option[direction]->exit_info ^= static_cast<mods::doors::exit_info_masks_t>(f);
+			r_status(player, vec_args[i] + " removed.");
+		}
+		r_success(player, "Listed.");
+		return;
+	}
+
+
 
 	//args = mods::util::subcmd_args<11,args_t>(argument,"save-paved");
 

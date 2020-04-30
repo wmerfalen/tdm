@@ -60,20 +60,8 @@
 #include <string>
 #define tostr(a) std::to_string(a)
 #define svtostr(a) std::string(a.data())
-/*
-	template<typename... Args>
-		std::string str(Args const&... args)
-		{
-			std::string result;
-			int unpack[]{0, (result += std::to_string(args), 0)...};
-			static_cast<void>(unpack);
-			return result;
-		}
-		*/
-
 extern void clear_char(char_data*);
 extern char_data* character_list;
-//extern std::deque<mods::npc> mob_list;
 #define CREATE_CHAR(ch) \
 	CREATE(ch,char_data,1);\
 clear_char(ch);\
@@ -171,6 +159,8 @@ namespace mods {
 		std::string dir_to_str(int dir, bool adjective);
 		void queue_object_destruct(uuid_t obj_uuid, uint16_t seconds);
 		void destruct_object(uuid_t obj);
+		void dispose_object(uuid_t obj);
+		void dispose_player(uuid_t pl_uuid);
 	};
 };
 extern std::deque<std::shared_ptr<obj_data>> obj_list;

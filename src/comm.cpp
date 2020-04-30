@@ -21,6 +21,8 @@
 #include "mods/loops.hpp"
 #include "mods/affects.hpp"
 #include <algorithm>
+#include "mods/world-configuration.hpp"
+#include "mods/auto-login.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -90,6 +92,7 @@ extern const char *circlemud_version;
 extern int circle_restrict;
 extern int mini_mud;
 extern int no_rent_check;
+extern void do_start(char_data *ch);
 
 extern ush_int DFLT_PORT;
 extern const char *DFLT_DIR;
@@ -549,6 +552,44 @@ int get_max_players(void) {
 }
 
 
+void perform_auto_login(player_ptr_t& player){
+	player->set_name(mods::auto_login::get_user());
+	player->set_db_id(0);
+	auto pw = mods::auto_login::get_password();
+	if(login(mods::auto_login::get_user(),pw) == false){
+		log("SYSERR: user/password combination for auto_login failed");
+		exit(1);
+	}else{
+		parse_sql_player(player);
+	}
+	player->set_authenticated(true);
+	decorate_authenticated_player(player);
+	{
+		int start_room = 0;
+		if(!boot_type_hell()){
+			start_room = mods::world_conf::real_mortal_start();
+		}
+		if(world.size() == 0){
+			exit(0);
+		}
+		player->set_room(start_room);
+		char_to_room(player->cd(),start_room);
+	}
+	act("$n has entered the game.", TRUE, player->cd(), 0, 0, TO_ROOM);
+	player->set_state(CON_PLAYING);
+
+	if(player->level() == 0) {
+		do_start(player->cd());
+	}
+
+	look_at_room(player->cd(), 0);
+
+	player->start_histfile();
+	player->desc().has_prompt = 1;
+#ifndef __MENTOC_DONT_RUN_PROFILE_SCRIPTS__
+	mods::js::run_profile_scripts(player->name());
+#endif
+}
 
 /*
  * game_loop contains the main loop which drives the entire MUD.  It
@@ -636,6 +677,12 @@ void game_loop(socket_t mother_desc) {
 			auto player = it->second;
 			mods::globals::current_player = player;
 
+			/*
+			if(mods::auto_login::auto_login_enabled() && player->state() != CON_PLAYING){
+				perform_auto_login(player);
+				break;
+			}
+			*/
 			auto input_status = process_input(player->desc());
 			if(input_status < 0){
 				switch(input_status){
@@ -1373,6 +1420,8 @@ int new_descriptor(socket_t s) {
 	player->set_state(CON_GET_NAME);
 	player->set_socket(desc);
 
+
+
 	/*
 	 * This isn't exactly optimal but allows us to make a design choice.
 	 * Do we embed the history in mods::descriptor_data or keep it dynamically
@@ -1383,6 +1432,8 @@ int new_descriptor(socket_t s) {
 		last_desc = 1;
 	}
 	player->desc().desc_num = last_desc;
+
+
 	GREETINGS = "Username:";
 	write_to_output(player->desc(), "%s",GREETINGS.c_str());
 	mods::globals::register_player(player);

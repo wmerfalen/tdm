@@ -4,6 +4,12 @@
 
 namespace mods::object_utils {
 	constexpr static bitvector_t STATUS_INSTALLING = (1 << 0);
+	constexpr static bitvector_t STATUS_BREACHING = (1 << 1);
+	constexpr static obj_data::location_data_t INSTALL_MASK = 16;
+	constexpr static obj_data::location_data_t BREACH_MASK = 32;
+	constexpr static uint8_t INSTALL_TICKS_DURATION = 30;
+	constexpr static uint8_t BREACH_TICKS_DURATION = 15;
+	constexpr static uint8_t THERMITE_BREACH_TICKS_DURATION = 35;
 	template <typename T>
 	static inline bool is_claymore(T& obj){
 		if(obj->has_explosive()){
@@ -29,9 +35,21 @@ namespace mods::object_utils {
 		return false;
 	}
 	template <typename T>
+	static inline bool is_breach_charge(T& obj){
+		if(obj->has_explosive()){
+			switch(obj->explosive()->attributes->type){
+				case mw_explosive::BREACH_CHARGE:
+				case mw_explosive::THERMITE_CHARGE:
+					return true;
+				default: break;
+			}
+		}
+		return false;
+	}
+	template <typename T>
 		bool is_installed(T& obj){
 			if(is_claymore(obj) || is_camera(obj)){
-				return obj->location_data() >= 16;
+				return obj->location_data() & INSTALL_MASK;
 			}
 			return false;
 		}
@@ -43,14 +61,25 @@ namespace mods::object_utils {
 			return false;
 		}
 	template <typename T,typename P>
+		void set_is_breaching(T& obj, P& player,int direction){
+			obj->obj_flags.bitvector |= STATUS_BREACHING;
+			obj->in_room = player->room();
+			obj->set_owner(player->uuid());
+			obj->set_location_data(direction + BREACH_MASK);
+		}
+	template <typename T,typename P>
 		void set_is_installing(T& obj, P& player,int direction){
 			obj->obj_flags.bitvector |= STATUS_INSTALLING;
 			obj->in_room = player->room();
 			obj->set_owner(player->uuid());
-			obj->set_location_data(direction + 16);
+			obj->set_location_data(direction + INSTALL_MASK);
 		}
 	template <typename T>
 		void set_done_installing(T& obj){
+			obj->obj_flags.bitvector ^= STATUS_INSTALLING;
+		}
+	template <typename T>
+		void set_done_breaching(T& obj){
 			obj->obj_flags.bitvector ^= STATUS_INSTALLING;
 		}
 	template <typename T,typename PlayerT>

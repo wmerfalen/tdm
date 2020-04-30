@@ -10,7 +10,7 @@
 
 #include <unistd.h>	//for getcwd()
 #define DT_FORMAT "{player_name}:mob_death_trigger"
-extern void command_interpreter(char_data* ch,char* argument);
+extern void command_interpreter(player_ptr_t & player, std::string_view in_argument);
 extern void hit(char_data* ch,char_data* vict,int type);
 extern void affect_from_char(char_data *ch, int type);
 extern void mobile_activity();
@@ -538,17 +538,14 @@ namespace mods {
 		static duk_ret_t db_set(duk_context *ctx) {
 			std::string key = duk_to_string(ctx,0);
 			std::string value = duk_to_string(ctx,1);
-			std::cerr << "bruh->db_set ['" << key << "' => '" << value << "'\n";
 			mods::globals::db->put(key,value);
 			return 0;
 		}
 
 		static duk_ret_t db_get(duk_context *ctx) {
 			std::string key = duk_to_string(ctx,0);
-			std::cerr << "bruh-> parameter: '" << key << "'\n";
 			std::string value = "";
 			mods::globals::db->get(key,value);
-			std::cerr << "bruh-> this is our db_get value:'" << value << "'\n";
 			duk_push_string(ctx,value.c_str());
 			return 1;
 		}

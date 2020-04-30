@@ -1,0 +1,18 @@
+str_type: 'BREACH_CHARGE' # enum, object type
+type: 'BREACH_CHARGE' # string enum 
+manufacturer: 'X-BETA CORP' # string, anything 
+name: 'XBC Breach Charge' # string, anything name of object 
+vnum: 11 # integer, unique identifier
+description: ''
+short_description: ''
+action_description: ''
+feed_file: 'breach-charge.yml'
+alternate_explosion_type: 0
+chance_to_injure: 20.0 #float, percent
+critical_chance: 0.0 #float, percent
+critical_range: 0 #int, rooms
+blast_radius: 0 #int, rooms
+damage_per_second: 10 #float, static base damage done
+disorient_amount: 0.0 #float, percent
+loudness_type: 'LOUD' #std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING
+rarity: 'COMMON'

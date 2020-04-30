@@ -178,7 +178,10 @@ using ush_int = uint32_t;
 #define EX_PICKPROOF		(1 << 3)   /* Lock can't be picked	*/
 #define EX_REINFORCED		(1 << 4) /* Door is re-inforced */
 #define EX_BREACHED			(1 << 5) /* Door has been breached */
-
+#define EX_BREACHABLE		(1 << 6)
+#define EX_QUEST_LOCKED (1 << 7)
+#define EX_HIDDEN (1 << 8)
+#define EX_ELECTRIFIED (1 << 9)
 
 /* Sector types: used in room_data.sector_type */
 #define SECT_INSIDE          0		   /* Indoors			*/
@@ -788,6 +791,7 @@ enum player_level {
 
 	/* ================== Memory Structure for Objects ================== */
 	struct obj_data {
+		using location_data_t = uint16_t;
 		void feed(mentoc_pqxx_result_t);
 		void feed(std::string_view in_type,std::string_view feed_file);
 		void feed(int in_type,std::string_view feed_file);
@@ -1022,9 +1026,10 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_DATA_OBJ, ~, MENTOC_ITEM_TYPES_SEQ)
 		}
 		void set_owner(uuid_t p){ m_owner = p; }
 		uuid_t get_owner(){ return m_owner; }
-		uint8_t location_data(){ return m_location_data; }
-		void set_location_data(uint8_t i){ m_location_data = i; }
+		location_data_t location_data(){ return m_location_data; }
+		void set_location_data(location_data_t i){ m_location_data = i; }
 		std::string generate_stat_page();
+		std::string_view feed_file(){ return m_feed_file; }
 		protected:
 #define MENTOC_UPTR(r,data,CLASS_TYPE) std::unique_ptr<BOOST_PP_CAT(CLASS_TYPE,_data_t)> BOOST_PP_CAT(m_, CLASS_TYPE);
 BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
@@ -1032,7 +1037,8 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		capability_list_t m_capabilities;
 		uint64_t m_db_id;
 		uuid_t m_owner;
-		uint8_t m_location_data;
+		location_data_t m_location_data;
+		std::string m_feed_file;
 	};
 	/* ======================================================================= */
 
@@ -1114,13 +1120,13 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 			SCANNED,
 			LAST
 		};
-		
+
 		void init();
 
 		room_data();
 		room_data(const room_data& r);
 		~room_data();
-		
+
 		void set_dir_option(byte i,
 				const std::string& gen_desc,
 				const std::string& keyword,
@@ -1132,7 +1138,6 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		int	sector_type;            /* sector type (move/hide)            */
 		mods::string	name;                  /* Rooms name 'You are ...'           */
 		mods::string	description;           /* Shown when entered                 */
-		//extra_descr_data *ex_description; /* for examine/look       */
 		room_direction_data *dir_option[NUM_OF_DIRS]; /* Directions */
 		int room_flags;		/* DEATH,DARK ... etc */
 
@@ -1157,11 +1162,24 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		}
 
 		const std::vector<uint8_t>& directions() const;
+		template <typename TContainer>
+			void remove_exit_flags(TContainer  exit_flags, int direction){
+				for(auto & flag : exit_flags){
+					this->dir_option[direction]->exit_info ^= flag;
+				}
+			}
+		template <typename TContainer>
+			void set_exit_flags(TContainer exit_flags, int direction){
+				for(auto & flag : exit_flags){
+					this->dir_option[direction]->exit_info |= flag;
+				}
+			}
+		void clear_exit_flags(int direction);
 		protected:
-			std::vector<uint8_t> m_directions;
-			std::vector<mods::extra_desc_data> m_ex_descriptions;
-			std::vector<texture_type_t> m_textures;
-			std::deque<std::shared_ptr<obj_data>> m_contents;
+		std::vector<uint8_t> m_directions;
+		std::vector<mods::extra_desc_data> m_ex_descriptions;
+		std::vector<texture_type_t> m_textures;
+		std::deque<std::shared_ptr<obj_data>> m_contents;
 	};
 	/* ====================================================================== */
 
@@ -1276,7 +1294,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 			alignment(0), idnum(0), act(0),
 			affected_by(0){ 
 				memset((void*)&apply_saving_throw[0],0,sizeof(sh_int) * 5);
-				
+
 			}
 		~char_special_data_saved() = default;
 		int	alignment;		/* +-1000 for alignments                */
@@ -1350,8 +1368,8 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		int last_olc_mode;		/* olc control				*/
 		bool js_profile_initialized;
 		player_special_data() :  poofin(""),
-			poofout(""),aliases(nullptr),last_tell(0),last_olc_targ(nullptr),
-			last_olc_mode(-1),js_profile_initialized(false){
+		poofout(""),aliases(nullptr),last_tell(0),last_olc_targ(nullptr),
+		last_olc_mode(-1),js_profile_initialized(false){
 		}
 		~player_special_data() = default;
 	};
@@ -1368,12 +1386,12 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		uint16_t behaviour_tree;
 		uint64_t behaviour_tree_flags;
 		mob_special_data() : memory({}),
-		attack_type(0),default_pos(POS_STANDING),
-		damnodice(0),damsizedice(0),snipe_tracking(nullptr),
-		behaviour_tree(0),behaviour_tree_flags(0)
-		{
+			attack_type(0),default_pos(POS_STANDING),
+			damnodice(0),damsizedice(0),snipe_tracking(nullptr),
+			behaviour_tree(0),behaviour_tree_flags(0)
+			{
 
-		}
+			}
 		~mob_special_data() = default;
 	};
 
@@ -1390,9 +1408,9 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		modifier(0),location(0),bitvector(0),next(0){
 		}
 		affected_type(const affected_type& t) : 
-		 index(t.index), type(t.type),duration(t.duration),
-		modifier(t.modifier),location(t.location),bitvector(t.bitvector),next(0){
-		}
+			index(t.index), type(t.type),duration(t.duration),
+			modifier(t.modifier),location(t.location),bitvector(t.bitvector),next(0){
+			}
 		~affected_type() = default;
 
 		struct affected_type *next;
@@ -1413,11 +1431,11 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		int zone_id;
 		std::vector<int> rooms;
 		room_pavement_t() : start_room(0), transact_id(-1),
-			current_room_number(0), zone_id(-1){}
+		current_room_number(0), zone_id(-1){}
 		room_pavement_t(int start,int z_id) :  start_room(start), transact_id(0),
-			current_room_number(0),zone_id(z_id) {}
+		current_room_number(0),zone_id(z_id) {}
 		room_pavement_t(int start,int z_id,int t_id) :  start_room(start), transact_id(t_id),
-			current_room_number(0),zone_id(z_id) {}
+		current_room_number(0),zone_id(z_id) {}
 		~room_pavement_t() = default;
 	};
 
@@ -1430,9 +1448,9 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		~zone_pavement_t() = default;
 	};
 
-static constexpr int ROOM_PAVEMENT = 0;
-static constexpr int ZONE_PAVEMENT = 1;
-extern int next_room_pavement_transaction_id();
+	static constexpr int ROOM_PAVEMENT = 0;
+	static constexpr int ZONE_PAVEMENT = 1;
+	extern int next_room_pavement_transaction_id();
 
 	struct builder_data_t {
 		bool room_pave_mode;
@@ -1444,11 +1462,11 @@ extern int next_room_pavement_transaction_id();
 		std::vector<room_pavement_t> room_pavement_list;
 		std::vector<zone_pavement_t> zone_pavement_list;
 		builder_data_t() : room_pave_mode(false),zone_pave_mode(false),
-				room_transaction_id(0),
-				zone_transaction_id(0) { }
+		room_transaction_id(0),
+		zone_transaction_id(0) { }
 		~builder_data_t() = default;
-			int room_transaction_id;
-			int zone_transaction_id;
+		int room_transaction_id;
+		int zone_transaction_id;
 	};
 
 
@@ -1457,9 +1475,9 @@ extern int next_room_pavement_transaction_id();
 		txt_block() = default;
 		~txt_block() = default;
 		txt_block(std::string_view t,int a) :
-			 aliased(a) {
-			text.assign(t.data());
-		}
+			aliased(a) {
+				text.assign(t.data());
+			}
 		mods::string text;
 		int aliased;
 	};
@@ -1748,7 +1766,7 @@ extern int next_room_pavement_transaction_id();
 		int direction;
 	};
 
-using map_object_list = std::map<uuid_t,std::shared_ptr<obj_data>>;
+	using map_object_list = std::map<uuid_t,std::shared_ptr<obj_data>>;
 
 #endif
 

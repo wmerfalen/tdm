@@ -11,6 +11,7 @@ namespace mods::auto_login {
 	const std::string& get_user();
 	void set_password(std::string_view pass);
 	const std::string& get_password();
+	bool auto_login_enabled();
 };
 
 #endif

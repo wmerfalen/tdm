@@ -16,6 +16,7 @@
 #include "mods/sensor-grenade.hpp"
 #include "mods/object-utils.hpp"
 #include "mods/player-utils.hpp"
+#include "mods/doors.hpp"
 
 
 extern void obj_to_room(obj_ptr_t object, room_rnum room);
@@ -238,4 +239,48 @@ ACMD(do_uninstall) {
 	player->sendln("You're not holding an item that can do that.");
 }
 
+ACMD(do_breach) {
+	
+	constexpr unsigned int max_char = 5;
+	std::array<char,max_char> direction;
+	one_argument(argument,&direction[0],max_char);
 
+	auto door = mods::globals::dir_int(direction[0]);
+	if(!argument || door == -1){
+		*player << "usage: breach <direction>\r\n";
+		return;
+	}
+
+	auto holding = player->equipment(WEAR_HOLD);
+	if(!holding){
+		player->sendln("You must be holding a breach charge to do that.");
+		return;
+	}
+	mods::doors::perform_breach(holding->uuid,player->uuid(),door);
+}
+
+ACMD(do_thermite) {
+	if(!player->has_thermite()) {
+		*player << "You do not have a thermite charge\r\n";
+		return;
+	}
+
+	constexpr unsigned int max_char = 5;
+	std::array<char,max_char> direction;
+	one_argument(argument,&direction[0],max_char);
+
+	auto door = mods::globals::dir_int(direction[0]);
+	if(!argument || door == -1){
+		*player << "usage: thermite <direction>\r\n";
+		return;
+	}
+
+	auto holding = player->equipment(WEAR_HOLD);
+	if(!holding){
+		player->sendln("You must be holding a breach charge to do that.");
+		return;
+	}
+	player->sendln("You place a {red}THERMITE{/red} breach charge on the door...");
+
+	mods::doors::perform_thermite_breach(holding->uuid,player->uuid(),mods::globals::dir_int(direction[0]));
+}

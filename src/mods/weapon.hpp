@@ -177,7 +177,70 @@ namespace mods::weapon {
 using weapon_rifle_t = mods::weapon::type::rifle;
 using weapon_explosive_t = mods::weapon::type::explosive;
 using weapon_drone_t = mods::weapon::type::drone;
+using weapon_gadget_t = mods::weapon::type::gadget;
+using weapon_attachment_t = mods::weapon::type::attachment;
+using weapon_armor_t = mods::weapon::type::armor;
+using weapon_consumable_t = mods::weapon::type::consumable;
+using weapon_trap_t = mods::weapon::type::trap;
 namespace mods::weapon {
+
+	static inline std::string to_string(weapon_trap_t trap_type){
+#define MENTOC_TO_STR(a){ case mw_trap::a: return #a; }
+		switch(trap_type){
+	MENTOC_TO_STR(BEAR_TRAP);
+	MENTOC_TO_STR(POSITION_AMPLIFIER);
+			default: return "<unknown>";
+#undef MENTOC_TO_STR
+		}
+	}
+
+	static inline std::string to_string(weapon_armor_t armor_type){
+#define MENTOC_TO_STR(a){ case mw_armor::a: return #a; }
+		switch(armor_type){
+			MENTOC_TO_STR(VEST);
+			MENTOC_TO_STR(LEGS);
+			MENTOC_TO_STR(GAUNTLETS);
+			MENTOC_TO_STR(SHOULDER_PADS);
+			MENTOC_TO_STR(HELMET);
+			MENTOC_TO_STR(HAT);
+			MENTOC_TO_STR(EYEWEAR);
+			MENTOC_TO_STR(GOGGLES);
+			MENTOC_TO_STR(BACKPACK);
+			MENTOC_TO_STR(WAIST_PACK);
+			MENTOC_TO_STR(VEST_PACK);
+			MENTOC_TO_STR(ELBOW_GUARDS);
+			MENTOC_TO_STR(GLOVES);
+			MENTOC_TO_STR(SHIELD);
+			default: return "<unknown>";
+#undef MENTOC_TO_STR
+		}
+	}
+
+	static inline std::string to_string(weapon_consumable_t consumable_type){
+#define MENTOC_TO_STR(a){ case mw_consumable::a: return #a; }
+		switch(consumable_type){
+			MENTOC_TO_STR(AMMUNITION);
+			MENTOC_TO_STR(FOOD);
+			MENTOC_TO_STR(PILLS);
+			MENTOC_TO_STR(HERBS);
+			MENTOC_TO_STR(HALLUCINOGENS);
+			MENTOC_TO_STR(PEDS);
+			MENTOC_TO_STR(GASOLINE);
+			default: return "<unknown>";
+#undef MENTOC_TO_STR
+		}
+	}
+
+	static inline std::string to_string(weapon_attachment_t attachment_type){
+#define MENTOC_TO_STR(a){ case mw_attachment::a: return #a; }
+		switch(attachment_type){
+			MENTOC_TO_STR(SIGHT);
+			MENTOC_TO_STR(MUZZLE);
+			MENTOC_TO_STR(MAGAZINE);
+			default: return "<unknown>";
+#undef MENTOC_TO_STR
+		}
+	}
 	static inline std::string to_string(weapon_rifle_t rifle_type){
 #define MENTOC_TO_STR(a){ case mw_rifle::a: return #a; }
 		switch(rifle_type){
@@ -185,9 +248,9 @@ namespace mods::weapon {
 			MENTOC_TO_STR(ASSAULT_RIFLE);
 			MENTOC_TO_STR(SUB_MACHINE_GUN);
 			case weapon_rifle_t::SNIPER: return "SNIPER RIFLE";
-																	 MENTOC_TO_STR(HANDGUN);
-																	 MENTOC_TO_STR(MACHINE_PISTOL);
-																	 MENTOC_TO_STR(LIGHT_MACHINE_GUN);
+		 	MENTOC_TO_STR(HANDGUN);
+		 	MENTOC_TO_STR(MACHINE_PISTOL);
+		 	MENTOC_TO_STR(LIGHT_MACHINE_GUN);
 			default: return "<unknown>";
 #undef MENTOC_TO_STR
 		}
@@ -203,6 +266,25 @@ namespace mods::weapon {
 			MENTOC_TO_STR(CLAYMORE_MINE);
 			MENTOC_TO_STR(SMOKE_GRENADE);
 			MENTOC_TO_STR(FLASHBANG_GRENADE);
+			MENTOC_TO_STR(C4);
+			MENTOC_TO_STR(BREACH_CHARGE);
+			MENTOC_TO_STR(THERMITE_CHARGE);
+			MENTOC_TO_STR(SENSOR_GRENADE);
+			default: return "<unknown>";
+#undef MENTOC_TO_STR
+		}
+	}
+	static inline std::string to_string(weapon_gadget_t gadget_type){
+#define MENTOC_TO_STR(a){ case mw_gadget::a: return #a; }
+		switch(gadget_type){
+			MENTOC_TO_STR(GRAPPLING_HOOK);
+			MENTOC_TO_STR(BARBED_WIRE);
+			MENTOC_TO_STR(CAMERA);
+			MENTOC_TO_STR(THERMAL_CAMERA);
+			MENTOC_TO_STR(NIGHT_VISION_CAMERA);
+			MENTOC_TO_STR(MOTION_SENSOR);
+			MENTOC_TO_STR(DEPLOYABLE_SHIELD);
+			MENTOC_TO_STR(TRIPWIRE);
 			default: return "<unknown>";
 #undef MENTOC_TO_STR
 		}

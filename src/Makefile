@@ -7,6 +7,7 @@ DATA_DIR = "$(CURDIR)/../lib/"
 JS_PROFILES_PATH = "$(HOME)/code/code/siege-mud/lib/js/profiles/"
 LMDBNAME = bnull
 LIB_DIR="$(HOME)/code/code/siege-mud/lib"
+POST_BUILD_SCRIPT="$(CURDIR)/scripts/post-build.sh"
 
 lmdbdir = $(CURDIR)/liblmdb
 lmdb = $(lmdbdir)/liblmdb.so
@@ -68,7 +69,7 @@ buildobj = act.informative act.item act.medic \
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
 all: $(builddir) $(objects) $(thirdparty) #$(DATA_DIR)
-	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS)
+	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT)
 clean:
 	make -f $(lmdbdir)/Makefile clean ; \
 		rm -f $(addprefix $(builddir)/,*.o *.d  mods/*.o \

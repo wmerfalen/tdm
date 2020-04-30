@@ -989,8 +989,11 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 				player->sendln("You can't! You're currently doing something!\r\n");
 			} else {
 				((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd, player));
+				std::cerr << "after cm ptr->\n";
 			}
+			std::cerr << "post command interpreter pre...\n";
 			mods::globals::post_command_interpreter(ch,argument);
+			std::cerr << "post command interpreter post...\n";
 			return;
 		}
 		if(!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_FROZEN) && GET_LEVEL(ch) < LVL_IMPL) {
@@ -1588,20 +1591,6 @@ void nanny(player_ptr_t p, char * in_arg) {
 	tuple_status_t status;
 	std::tuple<bool,std::string> make_char_status;
 
-	if(mods::auto_login::get_user().length() && p->state() == CON_GET_NAME){
-		arg = mods::auto_login::get_user();
-		p->set_name(arg);
-		p->set_db_id(0);
-		arg = mods::auto_login::get_password();
-		if(login(mods::auto_login::get_user(),arg) == false){
-			log("SYSERR: user/password combination for auto_login failed");
-			exit(1);
-		}else{
-			parse_sql_player(p);
-		}
-		p->set_state(CON_MENU);
-		arg = "1";
-	}
 	switch(p->state()) {
 		case CON_GET_NAME:		/* wait for input of name */
 			if(arg.length() == 0) {

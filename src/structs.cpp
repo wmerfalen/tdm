@@ -44,6 +44,7 @@ void obj_data::init(){
 BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 }
 		void obj_data::feed(std::string_view in_type,std::string_view feed_file){
+			this->m_feed_file = feed_file;
 			auto t = mods::util::stoi(in_type.data());
 			if(t.has_value()){
 				this->feed(t.value(), feed_file);
@@ -52,6 +53,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SE
 			}
 		}
 		void obj_data::feed(int in_type,std::string_view feed_file){
+			this->m_feed_file = feed_file;
 			std::string type = "";
 	switch(in_type){
 #define MENTOC_LAZY_ME(mtype) case mtype: type = #mtype; break;
@@ -171,6 +173,7 @@ void obj_data::feed(const pqxx::result::reference & row){
 		type = mods::util::stoi<int>(row["obj_type"]);
 		std::string obj_file = row["obj_file"].c_str();
 
+		this->m_feed_file = obj_file;
 		switch(type){
 			MENTOC_OBJ_DATA_FEED_SWITCH
 			default:
@@ -406,8 +409,10 @@ void obj_data::feed(const pqxx::result::reference & row){
 				return;
 			}
 			if(dir_option[i] == nullptr){
+				/** free is handled properly in room_data destructor */
 				dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
 			}else{
+				/** free is handled properly in room_data destructor */
 				free(dir_option[i]);
 				dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
 			}
@@ -493,4 +498,7 @@ void obj_data::feed(const pqxx::result::reference & row){
 			//			d("[builder_data_t::create_pavement] WARNING: zone pavements are experimental!\n");
 			//			break;
 			//	}
+		}
+		void room_data::clear_exit_flags(int direction){
+			this->dir_option[direction] = 0;
 		}

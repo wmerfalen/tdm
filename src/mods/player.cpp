@@ -1053,11 +1053,13 @@ namespace mods {
 			}
 		}
 	}
+	void player::set_camera_viewing(bool b){
+		m_camera_viewing = b;
+	}
 	void player::set_camera(obj_data_ptr_t obj){
 		m_camera = std::make_shared<mods::camera>(this->uuid(),obj->uuid);
 	}
 	void player::block_for(uint16_t ticks, uint32_t unblock_event,uuid_t optional_uuid){
-		d("player::block_for: " << ticks << " event: " << unblock_event << " optional_uuid:" << optional_uuid);
 		m_block_data[unblock_event] = optional_uuid;
 		m_block_event = mods::globals::defer_queue->push_ticks_event(ticks,{this->uuid(),unblock_event});
 		m_has_block_event = true;
@@ -1088,6 +1090,16 @@ namespace mods {
 					this->send("\r\nYou successfully deploy a %s\r\n", obj->name.c_str());
 					break;
 				}
+			case mods::deferred::EVENT_PLAYER_UNBLOCK_BREACH:
+				{
+					auto obj = optr_by_uuid(target);
+					if(!obj){
+						std::cerr << "[WARNING] got nullptr from EVENT_PLAYER_UNBLOCK_INSTALLATION\n";
+						break;
+					}
+					mods::object_utils::set_done_breaching(obj);
+					break;
+				}
 			default:
 				std::cerr << "[WARNING] unhandled unblock event: " << unblock << "\n";
 				break;
@@ -1096,6 +1108,25 @@ namespace mods {
 		m_blocked_until = 0;
 		m_has_block_event = false;
 	}
+	uint32_t player::current_block(){
+		return m_blocked_until;
+	}
+	bool player::camera_viewing(){ return m_camera_viewing; }
+	int player::viewing_room(){
+		if(this->camera_viewing()){
+				return m_camera->room();
+		}
+		return this->room();
+	}
+	std::shared_ptr<mods::camera> player::get_camera() const {
+		return m_camera;
+	}
+	void player::clear_camera(){
+		m_camera_viewing = false;
+		m_camera = nullptr;
+	}
+
+
 };
 
 #endif

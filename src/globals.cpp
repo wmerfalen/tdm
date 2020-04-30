@@ -369,7 +369,6 @@ namespace mods {
 		}
 		void post_boot_db() {
 		}
-		//void room_event(char_data* ch,mods::ai_state::event_type_t event) { }
 		const char* say_random(const mods::ai_state::event_type_t& event) {
 			return "woof";
 		}
@@ -770,7 +769,7 @@ namespace mods {
 					return DOWN;
 
 				default:
-					return NORTH;
+					return -1;
 			}
 		}
 
@@ -894,6 +893,45 @@ namespace mods {
 				obj_odmap.erase(odmap);
 			}
 			d("use count for destructed object: " << obj.use_count());
+		}
+		void dispose_object(uuid_t obj_uuid){
+			auto obj = optr_by_uuid(obj_uuid);
+			obj_odmap.erase(obj.get());
+			obj_map.erase(obj_uuid);
+			auto it = std::find(obj_list.begin(),obj_list.end(),obj);
+			if(it != obj_list.end()){
+				obj_list.erase(it);
+			}
+		}
+		void dispose_player(uuid_t pl_uuid){
+			auto player = ptr_by_uuid(pl_uuid);
+			if(!player){
+				return;
+			}
+			{
+				auto p_room_list = mods::globals::get_room_list(player->room());
+				auto it = std::find(p_room_list.begin(),p_room_list.end(),player);
+				if(it != p_room_list.end()){
+					p_room_list.erase(it);
+				}
+			}
+			/** TODO remove from room_list */
+			if(player->is_npc()){
+				mods::globals::mob_chmap.erase(const_cast<char_data*>(player->cd()));
+			}
+			mods::globals::player_chmap.erase(const_cast<char_data*>(player->cd()));
+			{
+				auto it = player_map.find(pl_uuid);
+				if(it != player_map.end()){
+					player_map.erase(it);
+				}
+			}
+			{
+				auto it = std::find(player_list.begin(), player_list.end(), player);
+				if(it != player_list.end()){
+					player_list.erase(it);
+				}
+			}
 		}
 	};//end globals
 };
