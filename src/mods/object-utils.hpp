@@ -1,6 +1,7 @@
 #ifndef __MENTOC_MODS_OBJECT_UTILS_HEADER__
 #define __MENTOC_MODS_OBJECT_UTILS_HEADER__
-#include "../structs.h"
+#include "../globals.hpp"
+extern obj_ptr_t optr_by_uuid(uuid_t);
 
 namespace mods::object_utils {
 	constexpr static bitvector_t STATUS_INSTALLING = (1 << 0);
@@ -33,6 +34,14 @@ namespace mods::object_utils {
 			}
 		}
 		return false;
+	}
+	template <typename T>
+	static inline mw_explosive get_explosive_type(T& obj){
+		return static_cast<mw_explosive>(obj->explosive()->attributes->type);
+	}
+	template <>
+	inline mw_explosive get_explosive_type<uuid_t>(uuid_t& obj_uuid){
+		return static_cast<mw_explosive>(optr_by_uuid(obj_uuid)->explosive()->attributes->type);
 	}
 	template <typename T>
 	static inline bool is_breach_charge(T& obj){

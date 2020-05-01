@@ -499,6 +499,3 @@ void obj_data::feed(const pqxx::result::reference & row){
 			//			break;
 			//	}
 		}
-		void room_data::clear_exit_flags(int direction){
-			this->dir_option[direction] = 0;
-		}

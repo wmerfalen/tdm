@@ -237,6 +237,7 @@ ACMD(do_backstab);
 ACMD(do_ban);
 ACMD(do_bash);
 ACMD(do_breach);
+ACMD(do_thermite);
 ACMD(do_cast);
 ACMD(do_color);
 ACMD(do_commands);
@@ -464,6 +465,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "ban"      , POS_DEAD    , do_ban      , LVL_GRGOD, 0 },
 	{ "balance"  , POS_STANDING, do_not_here , 1, 0 },
 	{ "breach"     , POS_STANDING, do_breach     , 1, 0 },
+	{ "thermite"     , POS_STANDING, do_thermite     , 1, 0 },
 	//{ "bash"     , POS_FIGHTING, do_bash     , 1, 0 },
 	{ "beg"      , POS_RESTING , do_action   , 0, 0 },
 	{ "bleed"    , POS_RESTING , do_action   , 0, 0 },

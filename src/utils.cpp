@@ -23,6 +23,7 @@
 #include <random>	//C++ library
 #include <stdio.h>	/** for STDERR descriptor */
 #include "mods/util.hpp"
+#include "mods/rand.hpp"
 
 
 /* external globals */
@@ -72,6 +73,7 @@ struct time_info_data *real_time_passed(time_t t2, time_t t1);
 struct time_info_data *mud_time_passed(time_t t2, time_t t1);
 void prune_crlf(char *txt);
 
+#if 0
 namespace mods::rand {
 	static bool initialized = false;
 static std::random_device rd;
@@ -115,28 +117,11 @@ static int roll(int number, int size) {
 	return result;
 }
 };
+#endif
 /* creates a random number in interval [from;to] */
-int rand_number(int from, int to) {
-	/* error checking in case people call this incorrectly */
-	if(from > to) {
-		int tmp = from;
-		from = to;
-		to = tmp;
-		log("SYSERR: rand_number() should be called with lowest, then highest. (%d, %d), not (%d, %d).", from, to, to, from);
-	}
-	std::uniform_int_distribution<> dis(from,to);
-	return dis(mods::rand::lax_generator);
-}
-
-
+extern int rand_number(int from, int to);
 /* simulates dice roll */
-int dice(int num, int size) {
-	if(size <= 0 || num <= 0) {
-		return (-1);
-	}
-
-	return mods::rand::roll(num,size);
-}
+extern int dice(int num, int size);
 
 
 /* Be wary of sign issues with this. */

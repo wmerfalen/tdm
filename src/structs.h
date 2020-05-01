@@ -1162,19 +1162,6 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		}
 
 		const std::vector<uint8_t>& directions() const;
-		template <typename TContainer>
-			void remove_exit_flags(TContainer  exit_flags, int direction){
-				for(auto & flag : exit_flags){
-					this->dir_option[direction]->exit_info ^= flag;
-				}
-			}
-		template <typename TContainer>
-			void set_exit_flags(TContainer exit_flags, int direction){
-				for(auto & flag : exit_flags){
-					this->dir_option[direction]->exit_info |= flag;
-				}
-			}
-		void clear_exit_flags(int direction);
 		protected:
 		std::vector<uint8_t> m_directions;
 		std::vector<mods::extra_desc_data> m_ex_descriptions;

@@ -17,6 +17,7 @@
 #include "mods/object-utils.hpp"
 #include "mods/player-utils.hpp"
 #include "mods/doors.hpp"
+#include "mods/rand.hpp"
 
 
 extern void obj_to_room(obj_ptr_t object, room_rnum room);
@@ -256,15 +257,23 @@ ACMD(do_breach) {
 		player->sendln("You must be holding a breach charge to do that.");
 		return;
 	}
+	auto room = player->room();
+	if(mods::doors::is_open(room,door)){
+		player->sendln("That door is already open.");
+		return;
+	}
+	if(mods::doors::is_dir_electrified(room,door)){
+		player->sendln("You attempt to place the breach charge but notice that the door is {blu}ELECTRIFIED{/blu}!!!");
+		auto dam = mods::rand::roll(16,6); /** TODO: need to calculate resistences and what not */
+		GET_HIT(player->cd()) -= dam; /** FIXME ^ */
+		player->send("{red}[%d]{/red} you are {blu}ELECTROCUTED{/blu} by the door!",dam);
+		return;
+	}
+
 	mods::doors::perform_breach(holding->uuid,player->uuid(),door);
 }
 
 ACMD(do_thermite) {
-	if(!player->has_thermite()) {
-		*player << "You do not have a thermite charge\r\n";
-		return;
-	}
-
 	constexpr unsigned int max_char = 5;
 	std::array<char,max_char> direction;
 	one_argument(argument,&direction[0],max_char);
@@ -280,7 +289,18 @@ ACMD(do_thermite) {
 		player->sendln("You must be holding a breach charge to do that.");
 		return;
 	}
-	player->sendln("You place a {red}THERMITE{/red} breach charge on the door...");
+	auto room = player->room();
+	if(mods::doors::is_open(room,door)){
+		player->sendln("That door is already open.");
+		return;
+	}
+	if(mods::doors::is_dir_electrified(room,door)){
+		player->sendln("You attempt to place the breach charge but notice that the door is {blu}ELECTRIFIED{/blu}!!!");
+		auto dam = mods::rand::roll(16,6); /** TODO: need to calculate resistences and what not */
+		GET_HIT(player->cd()) -= dam; /** FIXME ^ */
+		player->send("{red}[%d]{/red} you are {blu}ELECTROCUTED{/blu} by the door!",dam);
+		return;
+	}
 
-	mods::doors::perform_thermite_breach(holding->uuid,player->uuid(),mods::globals::dir_int(direction[0]));
+	mods::doors::perform_thermite_breach(holding->uuid,player->uuid(),door);
 }
