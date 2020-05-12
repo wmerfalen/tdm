@@ -1223,11 +1223,6 @@ int snipe_hit(player_ptr_t& player, player_ptr_t& victim_ptr, uint16_t* distance
 	auto victim = victim_ptr->cd();
 	struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
 	int w_type, victim_ac, calc_thaco, dam, diceroll;
-	auto stats_ptr = wielded->rifle()->attributes->base_stat_list;
-	if(!(*stats_ptr)[*distance].allow){
-		player->sendln("Target is not within effective range of your weapon!");
-		return -1;
-	}
 
 	/* TODO: if ch and victim are in the same room, the dice rolls should be *terrible*.
 	* sniper rifle accuracy in close range combat should be incredibly terrible

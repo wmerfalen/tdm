@@ -731,7 +731,7 @@ void game_loop(socket_t mother_desc) {
 				} else if(perform_alias(player->desc(), comm, sizeof(comm))) { // Run it through aliasing system 
 					get_from_q(player->desc(), comm, &aliased);
 				}
-				command_interpreter(player, std::string(comm)); // Send it to interpreter 
+				command_interpreter(player, comm); // Send it to interpreter 
 			}
 			++i;
 		}//end while(i < r)

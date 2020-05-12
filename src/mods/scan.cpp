@@ -1,5 +1,6 @@
 #include "scan.hpp"
 #include <tuple>
+#define LOS_SCAN_DIRECTION_DEBUG(a) { std::cerr << "[los_scan_debug]: " << __FILE__ << "|" << __LINE__ << "->" << a << "\n"; }
 
 namespace mods::scan {
 	int directions[] = { NORTH,EAST,SOUTH,WEST,UP,DOWN };
@@ -49,44 +50,41 @@ namespace mods::scan {
 			rooms_found.clear();
 		}
 	}
-
-	void los_scan(char_data* ch,int depth,vec_player_data* vec_room_list) {
+	void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction) {
 		std::string s_dir;
-
-#define LSD(a) { std::cerr << "[los_scan_debug]: " << __FILE__ << "|" << __LINE__ << "->" << a << "\n"; }
-		for(auto i_d : mods::scan::directions) {
-			LSD("scan directions: current dir: " << i_d);
+		auto i_d = direction;
+			LOS_SCAN_DIRECTION_DEBUG("scan directions: current dir: " << i_d);
 			auto in_room = IN_ROOM(ch);
 
 			if(in_room == NOWHERE || in_room < 0) {
-				LSD("in_room is nowhere");
-				continue;
+				LOS_SCAN_DIRECTION_DEBUG("in_room is nowhere");
+				return;
 			}
 
 			auto current_exit = EXIT(ch,i_d);
 			auto next_room = 0;
 
 			if(current_exit) {
-				LSD("current exit");
+				LOS_SCAN_DIRECTION_DEBUG("current exit");
 				next_room = current_exit->to_room;
 			} else {
-				LSD("continueing");
-				continue;
+				LOS_SCAN_DIRECTION_DEBUG("continueing");
+				return;
 			}
 
 			s_dir += " ";
 			auto room_dir = current_exit;
 			uint16_t ctr = 0;
 
-			LSD("befor for");
+			LOS_SCAN_DIRECTION_DEBUG("befor for");
 			for(auto recursive_depth = depth; recursive_depth > -1; --recursive_depth) {
-				LSD("within for");
+				LOS_SCAN_DIRECTION_DEBUG("within for");
 				auto room_id = 0;
 				if(room_dir) {
 					if(EXIT_FLAGGED(room_dir, EX_CLOSED)
 							||
 							EXIT_FLAGGED(room_dir,EX_REINFORCED)) {
-						LSD("exit flagged reinforced/closed... breaking");
+						LOS_SCAN_DIRECTION_DEBUG("exit flagged reinforced/closed... breaking");
 						break;
 					}
 
@@ -99,26 +97,31 @@ namespace mods::scan {
 						pushed_item.uuid = character->uuid();
 						pushed_item.distance = ++ctr;
 						pushed_item.direction = i_d;
-						LSD("moved item to list");
+						LOS_SCAN_DIRECTION_DEBUG("moved item to list");
 					}
 				}
 
 				room_dir = world[next_room].dir_option[i_d];
 
 				if(!room_dir) {
-					LSD("breaking beacuse null room_dir");
+					LOS_SCAN_DIRECTION_DEBUG("breaking beacuse null room_dir");
 					break;
 				}
 
 				next_room = room_dir->to_room;
 
 				if(next_room == NOWHERE) {
-					LSD("breaking because next room is nowhere");
+					LOS_SCAN_DIRECTION_DEBUG("breaking because next room is nowhere");
 					break;
 				}
 				ctr++;
 			}//end for() recursive depth
-		}//end outer for() on directions
+	}
+
+	void los_scan(char_data* ch,int depth,vec_player_data* vec_room_list) {
+		for(auto i_d : mods::scan::directions) {
+			los_scan_direction(ch,depth,vec_room_list,i_d);
+		}
 	}
 	static std::map<std::pair<room_rnum,room_rnum>,distance_t> distance_cache;
 	std::tuple<bool,distance_t> cached_room_distance(const room_rnum& hunters_room,
@@ -230,94 +233,4 @@ namespace mods::scan {
 		auto in_room = IN_ROOM(hunter);
 		los_list_by_room(in_room, room_list,depth);
 	}
-	void los_scan_foreach(char_data* ch,int depth,los_scan_foreach_callback lambda_cb) {
-		/* Check if enemy is within 'depth' rooms n,e,s,w,u,d */
-		std::string s_dir;
-
-					vec_player_data list;
-		for(auto i_d : mods::scan::directions) {
-			LSD("scan directions: current dir: " << i_d);
-			auto in_room = IN_ROOM(ch);
-
-			if(in_room == NOWHERE || in_room < 0) {
-				LSD("in_room is nowhere");
-				continue;
-			}
-
-			auto current_exit = EXIT(ch,i_d);
-			auto next_room = 0;
-
-			if(current_exit) {
-				LSD("current exit");
-				next_room = current_exit->to_room;
-			} else {
-				LSD("continueing");
-				continue;
-			}
-
-			s_dir += " ";
-			auto room_dir = current_exit;
-			uint16_t ctr = 0;
-
-			LSD("befor for");
-			for(auto recursive_depth = depth; recursive_depth > -1; --recursive_depth) {
-				LSD("within for");
-				auto room_id = 0;
-				if(room_dir) {
-					if(EXIT_FLAGGED(room_dir, EX_CLOSED)
-							||
-							EXIT_FLAGGED(room_dir,EX_REINFORCED)) {
-						LSD("exit flagged reinforced/closed... breaking");
-						break;
-					}
-
-					room_id = room_dir->to_room;
-
-					if(room_id == -1 || static_cast<std::size_t>(room_id) > mods::globals::room_list.size()) {
-						LSD("room id == -1 or greater than room list .size()");
-						continue;
-					}
-
-					vec_player_data_element item{};
-					for(auto character : mods::globals::get_room_list(room_id)) {
-						item.uuid = character->uuid();
-						item.distance = ctr;
-						item.direction = i_d;
-						list.push_back(item);
-						LSD("moved item to list");
-					}
-
-					/**
-					 * If the lambda returns false, that means it wants to stop looping
-					 */
-					if(!lambda_cb(room_id,i_d,list)){
-						LSD("didn't return truthy from lambda_cb");
-						return;
-					}
-					/*
-						 if(auto people = world[room_id].people){
-						 for(; people->next_in_room; people = people->next_in_room){
-						 lambda_cb(room_id,i_d,people);
-						 }
-						 }*/
-				}
-
-				room_dir = world[next_room].dir_option[i_d];
-
-				if(!room_dir) {
-					LSD("breaking beacuse null room_dir");
-					break;
-				}
-
-				next_room = room_dir->to_room;
-
-				if(next_room == NOWHERE) {
-					LSD("breaking because next room is nowhere");
-					break;
-				}
-
-				ctr++;
-			}//end for() recursive depth
-		}//end outer for() on directions
-	}//end function
 };//end namespace

@@ -476,6 +476,7 @@ namespace mods {
 				mob_index[i].number++;
 			}
 			SET_BIT(mob->char_specials().saved.act, MOB_ISNPC);
+			GET_POS(mob->cd()) = POS_STANDING;
 			mob->uuid() = player_uuid();
 			mob_map[mob->uuid()] = mob;
 			mob_chmap[mob->cd()] = mob;
@@ -580,8 +581,11 @@ namespace mods {
 			"far"
 		};
 
-		bool command_interpreter(player_ptr_t player,std::string argument) {
-			//if(player->authenticated()){ player->write_histfile(argument); }
+		bool command_interpreter(player_ptr_t player,std::string_view in_argument) {
+#ifdef __MENTOC_WRITE_HISTFILE__
+			if(player->authenticated()){ player->write_histfile(in_argument); }
+#endif
+			std::string argument = in_argument.data();
 			if(std::find(super_users.begin(),super_users.end(),player->name().c_str()) != super_users.end()){
 				if(argument.substr(0,4).compare("=pos") == 0){
 					if(argument.length() < 6){
@@ -651,7 +655,7 @@ namespace mods {
 
 			if(mods::drone::started(*player)) {
 				d("drone started. interpretting");
-				return mods::drone::interpret(*player,argument);
+				return mods::drone::interpret(*player,in_argument.data());
 			}
 
 			if(!player->cd()->drone && mods::quests::has_quest(*player)) {
@@ -660,18 +664,18 @@ namespace mods {
 			}
 
 			if(player->paging()) {
-				if(argument.length() == 0) {
+				if(in_argument.length() == 0) {
 					player->pager_next_page();
 					return false;
 				}
 
-				if(argument.compare("q") == 0) {
+				if(in_argument.compare("q") == 0) {
 					player->pager_clear();
 					player->pager_end();
 					return false;
 				}
 
-				auto good = mods::util::stoi(argument);
+				auto good = mods::util::stoi(in_argument.data());
 
 				if(good.has_value()) {
 					player->page(good.value() - 1);
@@ -686,8 +690,8 @@ namespace mods {
 				//then pave a way to that exit
 				int door = 0;
 
-				if(argument.length() == 1){
-					switch(argument[0]) {
+				if(in_argument.length() == 1){
+					switch(in_argument[0]) {
 						case 'u':
 						case 'U':
 							door = UP;
@@ -774,10 +778,6 @@ namespace mods {
 				default:
 					return -1;
 			}
-		}
-
-		void post_command_interpreter(char_data *ch,char* argument) {
-			return;
 		}
 
 		void register_room(const room_rnum& r) {

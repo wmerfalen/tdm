@@ -36,7 +36,7 @@ namespace mods {
 		using room_list_t = std::array<std::vector<room_rnum>,num_directions>;
 
 		void los_scan(char_data* ch,int depth,vec_player_data* vec_room_list);
-		void los_scan_foreach(char_data* ch,int depth,los_scan_foreach_callback lambda_cb);
+		void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction);
 
 		/**
 		 * Simply list rooms within line of sight for recursive_depth depth

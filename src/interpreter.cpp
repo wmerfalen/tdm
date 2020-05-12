@@ -946,9 +946,6 @@ void command_interpreter(player_ptr_t & player, std::string in_argument){
 	std::vector<char> data;
 	std::size_t size = in_argument.length();
 	char* argument = nullptr;
-	if(size == 0){
-		return;
-	}
 	data.resize(size+1);
 	std::copy(in_argument.begin(),in_argument.begin() + size,data.begin());
 	data[size] = '\0';
@@ -957,12 +954,22 @@ void command_interpreter(player_ptr_t & player, std::string in_argument){
 	/* just drop to next line for hitting CR */
 	skip_spaces(&argument);
 	line = any_one_arg(argument, arg);
+#ifdef __MENTOC_SHOW_COMMAND_INTERPRETER_DEBUG_OUTPUT__
 	std::cerr << "line: '" << line << "'\n";
 	std::cerr << "argument: '" << argument << "'\n";
 	std::cerr << "in_argument: '" << in_argument << "'\n";
+#endif
+
+	REMOVE_BIT(AFF_FLAGS(ch), AFF_HIDE);
 
 	if(!mods::globals::command_interpreter(player,argument)) {
-		mods::globals::post_command_interpreter(ch,argument);
+		return;
+	}
+
+	if(strlen(arg) == 0){
+#ifdef __MENTOC_SHOW_COMMAND_INTERPRETER_DEBUG_OUTPUT__
+		std::cerr << "zero len argument. Returning...\n";
+#endif
 		return;
 	}
 
@@ -979,16 +986,14 @@ void command_interpreter(player_ptr_t & player, std::string in_argument){
 	}
 
 	if(*cmd_info[cmd].command == '\n') {
-		send_to_char(ch, "<cmd_interpretr>Huh?!?\r\n");
-		//TODO: change PLR_FLAGGED call to player->member method call
+		send_to_char(ch, "Huh?!?\r\n");
 	} else{
 		if(player->is_blocked() && !mods::player_utils::is_cancel_command(cmd_info[cmd].command)) {
 			player->sendln("You can't! You're currently doing something!\r\n");
 		}
+		//TODO: change PLR_FLAGGED call to player->member method call
 		if(!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_FROZEN) && GET_LEVEL(ch) < LVL_IMPL) {
 			send_to_char(ch, "You try, but the mind-numbing cold prevents you...\r\n");
-		} else if(cmd_info[cmd].command_pointer == NULL) {
-			send_to_char(ch, "Sorry, that command hasn't been implemented yet.\r\n");
 		} else if(IS_NPC(ch) && cmd_info[cmd].minimum_level >= LVL_IMMORT) {
 			send_to_char(ch, "You can't use immortal commands while switched.\r\n");
 		} else if(GET_POS(ch) < cmd_info[cmd].minimum_position){
@@ -1023,12 +1028,17 @@ void command_interpreter(player_ptr_t & player, std::string in_argument){
 					break;
 			}
 		}
-		else if(no_specials || !special(ch, cmd, line)) {
+#ifdef __MENTOC_CHECK_AND_USE_SPECIALS__
+		else if(no_specials || !special(ch, cmd, argument.data())) {
+			((*cmd_info[cmd].command_pointer)(ch, argument.data(), cmd, cmd_info[cmd].subcmd,player));
+		}
+#else
+		else {
 			((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd,player));
 		}
+#endif
 	}
 
-	mods::globals::post_command_interpreter(ch,argument);
 }
 
 /**************************************************************************
@@ -1851,7 +1861,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 												 look_at_room(p->cd(), 0);
 
 												 if(has_mail(GET_IDNUM(p->cd()))) {
-												   p->stc("You have mail waiting.\r\n");
+													 p->stc("You have mail waiting.\r\n");
 												 }
 												 p->start_histfile();
 
@@ -1966,12 +1976,12 @@ void nanny(player_ptr_t p, char * in_arg) {
 										* User has been put into the idle queue. Place them back into the world.
 										*/
 
-									act("$n has returned.", TRUE, p->cd(), 0, 0, TO_ROOM);
-									p->char_specials().timer = 0;
-									p->set_state(CON_PLAYING);
-									char_from_room(p->cd());
-									char_to_room(p->cd(), mods::world_conf::real_mortal_start());
-									break;
+									 act("$n has returned.", TRUE, p->cd(), 0, 0, TO_ROOM);
+									 p->char_specials().timer = 0;
+									 p->set_state(CON_PLAYING);
+									 char_from_room(p->cd());
+									 char_to_room(p->cd(), mods::world_conf::real_mortal_start());
+									 break;
 
 		default:
 									 log("SYSERR: Nanny: illegal state of con'ness (%d) for '%s'; closing connection.",

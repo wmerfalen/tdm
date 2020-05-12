@@ -245,12 +245,12 @@ AI_EVENT_ATTACKER_FOUND	mods/ai_state.hpp	/^				AI_EVENT_SNIPED,AI_EVENT_ATTACKE
 AI_EVENT_SNIPED	mods/ai_state.hpp	/^				AI_EVENT_SNIPED,AI_EVENT_ATTACKER_FOUND,AI_WITNESS_ATTACK,AI_EVENT_WANDER,$/;"	e	enum:mods::ai_state::event_type_t
 AI_EVENT_WANDER	mods/ai_state.hpp	/^				AI_EVENT_SNIPED,AI_EVENT_ATTACKER_FOUND,AI_WITNESS_ATTACK,AI_EVENT_WANDER,$/;"	e	enum:mods::ai_state::event_type_t
 AI_WITNESS_ATTACK	mods/ai_state.hpp	/^				AI_EVENT_SNIPED,AI_EVENT_ATTACKER_FOUND,AI_WITNESS_ATTACK,AI_EVENT_WANDER,$/;"	e	enum:mods::ai_state::event_type_t
-ALIAS_COMPLEX	interpreter.h	72;"	d
+ALIAS_COMPLEX	interpreter.h	70;"	d
 ALIAS_FILE	utils.h	125;"	d
-ALIAS_GLOB_CHAR	interpreter.h	76;"	d
-ALIAS_SEP_CHAR	interpreter.h	74;"	d
-ALIAS_SIMPLE	interpreter.h	71;"	d
-ALIAS_VAR_CHAR	interpreter.h	75;"	d
+ALIAS_GLOB_CHAR	interpreter.h	74;"	d
+ALIAS_SEP_CHAR	interpreter.h	72;"	d
+ALIAS_SIMPLE	interpreter.h	69;"	d
+ALIAS_VAR_CHAR	interpreter.h	73;"	d
 ALTERNATE_EXPLOSION	mods/weapon-types.hpp	/^		ALTERNATE_EXPLOSION,$/;"	e	enum:mods::weapon::capabilities::cap_t
 ALTEX_NONE	mods/yaml.hpp	/^	ALTEX_NONE = 0,$/;"	e	enum:alternate_explosion_t
 ALTEX_SCAN	mods/yaml.hpp	/^	ALTEX_SCAN$/;"	e	enum:alternate_explosion_t
@@ -1451,9 +1451,9 @@ LOC_INVENTORY	objsave.cpp	28;"	d	file:
 LOGNAME	config.cpp	/^const char *LOGNAME = NULL;$/;"	v
 LONG_RANGE	mods/object.hpp	/^				LONG_RANGE,$/;"	e	enum:mods::object::object_type_enum_t
 LONG_STRING	bsd-snprintf.cpp	815;"	d	file:
+LOS_SCAN_DIRECTION_DEBUG	mods/scan.cpp	3;"	d	file:
 LOWER	utils.h	155;"	d
 LOW_ATMOSPHERE	structs.h	/^			LOW_ATMOSPHERE,	\/** atmosphere too thin for helicopter to fly *\/$/;"	e	enum:room_data::texture_type_t
-LSD	mods/scan.cpp	56;"	d	file:
 LVL_BUILDER	structs.h	/^	LVL_BUILDER = 34,$/;"	e	enum:player_level
 LVL_BUILDER	structs.h	623;"	d
 LVL_FREEZE	structs.h	630;"	d
@@ -1822,7 +1822,7 @@ NUM_CLASSES	structs.h	228;"	d
 NUM_OF_BOARDS	boards.h	11;"	d
 NUM_OF_DIRS	structs.h	632;"	d
 NUM_RESERVED_DESCS	comm.h	11;"	d
-NUM_TOKENS	interpreter.cpp	1135;"	d	file:
+NUM_TOKENS	interpreter.cpp	1145;"	d	file:
 NUM_WEARS	structs.h	410;"	d
 NameAndDesc	mods/catch.hpp	/^		NameAndDesc(const char* _name = "", const char* _description= "")$/;"	f	struct:Catch::NameAndDesc
 NameAndDesc	mods/catch.hpp	/^	struct NameAndDesc {$/;"	s	namespace:Catch
@@ -1896,7 +1896,7 @@ PADDING0	structs.h	/^		byte PADDING0;		\/* used to be spells_to_learn		*\/$/;"	m
 PAGE_LENGTH	comm.h	80;"	d
 PAGE_SIZE	mods/player.hpp	/^		static constexpr int PAGE_SIZE = 40;$/;"	m	struct:mods::player
 PAGE_WIDTH	comm.h	81;"	d
-PARSE_ARGS	globals.hpp	183;"	d
+PARSE_ARGS	globals.hpp	182;"	d
 PASSES_PER_SEC	structs.h	644;"	d
 PATH_MAX	sysdep.h	352;"	d
 PAUSE_FILE	db.h	54;"	d
@@ -2033,7 +2033,7 @@ RC_DRONE_THERMAL	structs.h	/^	RC_DRONE_THERMAL,$/;"	e	enum:lense_type_t
 READ_LVL	boards.h	37;"	d
 READ_SIZE	utils.h	27;"	d
 REAL	db.h	/^	REAL=0,\\$/;"	e	enum:__anon1
-RECON	interpreter.cpp	1542;"	d	file:
+RECON	interpreter.cpp	1552;"	d	file:
 RECREATE	utils.h	173;"	d
 REDIRECT_TO_DB	structs.h	/^				REDIRECT_TO_DB$/;"	e	enum:mods::descriptor_data::queue_behaviour_enum_t
 REDIRECT_TO_FILESYSTEM	structs.h	/^				REDIRECT_TO_FILESYSTEM,$/;"	e	enum:mods::descriptor_data::queue_behaviour_enum_t
@@ -2105,95 +2105,95 @@ SCAN	mods/weapon-types.hpp	/^		SCAN,$/;"	e	enum:mods::weapon::capabilities::cap_
 SCANNED	structs.h	/^			SCANNED,$/;"	e	enum:room_data::texture_type_t
 SCENARIO	mods/catch.hpp	12208;"	d
 SCENARIO_METHOD	mods/catch.hpp	12209;"	d
-SCMD_ASK	interpreter.h	137;"	d
-SCMD_AUCTION	interpreter.h	143;"	d
-SCMD_AUTOEXIT	interpreter.h	122;"	d
-SCMD_AUTOMAP	interpreter.h	124;"	d
-SCMD_BRIEF	interpreter.h	109;"	d
-SCMD_BUG	interpreter.h	169;"	d
-SCMD_CLEAR	interpreter.h	103;"	d
-SCMD_CLOSE	interpreter.h	210;"	d
-SCMD_COMMANDS	interpreter.h	159;"	d
-SCMD_COMPACT	interpreter.h	110;"	d
-SCMD_CREDITS	interpreter.h	95;"	d
-SCMD_DATE	interpreter.h	155;"	d
-SCMD_DEAF	interpreter.h	113;"	d
-SCMD_DONATE	interpreter.h	166;"	d
-SCMD_DOWN	interpreter.h	90;"	d
-SCMD_DRINK	interpreter.h	196;"	d
-SCMD_DROP	interpreter.h	164;"	d
-SCMD_EAST	interpreter.h	86;"	d
-SCMD_EAT	interpreter.h	194;"	d
-SCMD_ECHO	interpreter.h	205;"	d
-SCMD_EMOTE	interpreter.h	206;"	d
-SCMD_FILL	interpreter.h	183;"	d
-SCMD_FREEZE	interpreter.h	131;"	d
-SCMD_GOSSIP	interpreter.h	142;"	d
-SCMD_GRATZ	interpreter.h	144;"	d
-SCMD_HANDBOOK	interpreter.h	94;"	d
-SCMD_HIT	interpreter.h	190;"	d
-SCMD_HOLLER	interpreter.h	140;"	d
-SCMD_HOLYLIGHT	interpreter.h	120;"	d
-SCMD_IDEA	interpreter.h	171;"	d
-SCMD_IMMLIST	interpreter.h	100;"	d
-SCMD_IMOTD	interpreter.h	102;"	d
-SCMD_INFO	interpreter.h	93;"	d
-SCMD_JUNK	interpreter.h	165;"	d
-SCMD_LOCK	interpreter.h	212;"	d
-SCMD_LOOK	interpreter.h	174;"	d
-SCMD_MOTD	interpreter.h	101;"	d
-SCMD_MURDER	interpreter.h	191;"	d
-SCMD_NEWS	interpreter.h	96;"	d
-SCMD_NOAUCTION	interpreter.h	112;"	d
-SCMD_NOGOSSIP	interpreter.h	114;"	d
-SCMD_NOGRATZ	interpreter.h	115;"	d
-SCMD_NOHASSLE	interpreter.h	108;"	d
-SCMD_NOREPEAT	interpreter.h	119;"	d
-SCMD_NORTH	interpreter.h	85;"	d
-SCMD_NOSUMMON	interpreter.h	107;"	d
-SCMD_NOTELL	interpreter.h	111;"	d
-SCMD_NOTITLE	interpreter.h	129;"	d
-SCMD_NOWIZ	interpreter.h	116;"	d
-SCMD_OPEN	interpreter.h	209;"	d
-SCMD_PARDON	interpreter.h	128;"	d
-SCMD_PICK	interpreter.h	213;"	d
-SCMD_POLICIES	interpreter.h	98;"	d
-SCMD_POOFIN	interpreter.h	186;"	d
-SCMD_POOFOUT	interpreter.h	187;"	d
-SCMD_POUR	interpreter.h	182;"	d
-SCMD_QECHO	interpreter.h	179;"	d
-SCMD_QSAY	interpreter.h	178;"	d
-SCMD_QUAFF	interpreter.h	201;"	d
-SCMD_QUEST	interpreter.h	117;"	d
-SCMD_QUI	interpreter.h	151;"	d
-SCMD_QUIT	interpreter.h	152;"	d
-SCMD_READ	interpreter.h	175;"	d
-SCMD_RECITE	interpreter.h	202;"	d
-SCMD_REROLL	interpreter.h	127;"	d
-SCMD_ROOMFLAGS	interpreter.h	118;"	d
-SCMD_SHOUT	interpreter.h	141;"	d
-SCMD_SHUTDOW	interpreter.h	147;"	d
-SCMD_SHUTDOWN	interpreter.h	148;"	d
-SCMD_SIP	interpreter.h	197;"	d
-SCMD_SLOWNS	interpreter.h	121;"	d
-SCMD_SOCIALS	interpreter.h	160;"	d
-SCMD_SOUTH	interpreter.h	87;"	d
-SCMD_SQUELCH	interpreter.h	130;"	d
-SCMD_TASTE	interpreter.h	195;"	d
-SCMD_THAW	interpreter.h	132;"	d
-SCMD_TRACK	interpreter.h	123;"	d
-SCMD_TYPO	interpreter.h	170;"	d
-SCMD_UNAFFECT	interpreter.h	133;"	d
-SCMD_UNLOCK	interpreter.h	211;"	d
-SCMD_UP	interpreter.h	89;"	d
-SCMD_UPTIME	interpreter.h	156;"	d
-SCMD_USE	interpreter.h	200;"	d
-SCMD_VERSION	interpreter.h	99;"	d
-SCMD_WEST	interpreter.h	88;"	d
-SCMD_WHISPER	interpreter.h	136;"	d
-SCMD_WHOAMI	interpreter.h	104;"	d
-SCMD_WIZHELP	interpreter.h	161;"	d
-SCMD_WIZLIST	interpreter.h	97;"	d
+SCMD_ASK	interpreter.h	135;"	d
+SCMD_AUCTION	interpreter.h	141;"	d
+SCMD_AUTOEXIT	interpreter.h	120;"	d
+SCMD_AUTOMAP	interpreter.h	122;"	d
+SCMD_BRIEF	interpreter.h	107;"	d
+SCMD_BUG	interpreter.h	167;"	d
+SCMD_CLEAR	interpreter.h	101;"	d
+SCMD_CLOSE	interpreter.h	208;"	d
+SCMD_COMMANDS	interpreter.h	157;"	d
+SCMD_COMPACT	interpreter.h	108;"	d
+SCMD_CREDITS	interpreter.h	93;"	d
+SCMD_DATE	interpreter.h	153;"	d
+SCMD_DEAF	interpreter.h	111;"	d
+SCMD_DONATE	interpreter.h	164;"	d
+SCMD_DOWN	interpreter.h	88;"	d
+SCMD_DRINK	interpreter.h	194;"	d
+SCMD_DROP	interpreter.h	162;"	d
+SCMD_EAST	interpreter.h	84;"	d
+SCMD_EAT	interpreter.h	192;"	d
+SCMD_ECHO	interpreter.h	203;"	d
+SCMD_EMOTE	interpreter.h	204;"	d
+SCMD_FILL	interpreter.h	181;"	d
+SCMD_FREEZE	interpreter.h	129;"	d
+SCMD_GOSSIP	interpreter.h	140;"	d
+SCMD_GRATZ	interpreter.h	142;"	d
+SCMD_HANDBOOK	interpreter.h	92;"	d
+SCMD_HIT	interpreter.h	188;"	d
+SCMD_HOLLER	interpreter.h	138;"	d
+SCMD_HOLYLIGHT	interpreter.h	118;"	d
+SCMD_IDEA	interpreter.h	169;"	d
+SCMD_IMMLIST	interpreter.h	98;"	d
+SCMD_IMOTD	interpreter.h	100;"	d
+SCMD_INFO	interpreter.h	91;"	d
+SCMD_JUNK	interpreter.h	163;"	d
+SCMD_LOCK	interpreter.h	210;"	d
+SCMD_LOOK	interpreter.h	172;"	d
+SCMD_MOTD	interpreter.h	99;"	d
+SCMD_MURDER	interpreter.h	189;"	d
+SCMD_NEWS	interpreter.h	94;"	d
+SCMD_NOAUCTION	interpreter.h	110;"	d
+SCMD_NOGOSSIP	interpreter.h	112;"	d
+SCMD_NOGRATZ	interpreter.h	113;"	d
+SCMD_NOHASSLE	interpreter.h	106;"	d
+SCMD_NOREPEAT	interpreter.h	117;"	d
+SCMD_NORTH	interpreter.h	83;"	d
+SCMD_NOSUMMON	interpreter.h	105;"	d
+SCMD_NOTELL	interpreter.h	109;"	d
+SCMD_NOTITLE	interpreter.h	127;"	d
+SCMD_NOWIZ	interpreter.h	114;"	d
+SCMD_OPEN	interpreter.h	207;"	d
+SCMD_PARDON	interpreter.h	126;"	d
+SCMD_PICK	interpreter.h	211;"	d
+SCMD_POLICIES	interpreter.h	96;"	d
+SCMD_POOFIN	interpreter.h	184;"	d
+SCMD_POOFOUT	interpreter.h	185;"	d
+SCMD_POUR	interpreter.h	180;"	d
+SCMD_QECHO	interpreter.h	177;"	d
+SCMD_QSAY	interpreter.h	176;"	d
+SCMD_QUAFF	interpreter.h	199;"	d
+SCMD_QUEST	interpreter.h	115;"	d
+SCMD_QUI	interpreter.h	149;"	d
+SCMD_QUIT	interpreter.h	150;"	d
+SCMD_READ	interpreter.h	173;"	d
+SCMD_RECITE	interpreter.h	200;"	d
+SCMD_REROLL	interpreter.h	125;"	d
+SCMD_ROOMFLAGS	interpreter.h	116;"	d
+SCMD_SHOUT	interpreter.h	139;"	d
+SCMD_SHUTDOW	interpreter.h	145;"	d
+SCMD_SHUTDOWN	interpreter.h	146;"	d
+SCMD_SIP	interpreter.h	195;"	d
+SCMD_SLOWNS	interpreter.h	119;"	d
+SCMD_SOCIALS	interpreter.h	158;"	d
+SCMD_SOUTH	interpreter.h	85;"	d
+SCMD_SQUELCH	interpreter.h	128;"	d
+SCMD_TASTE	interpreter.h	193;"	d
+SCMD_THAW	interpreter.h	130;"	d
+SCMD_TRACK	interpreter.h	121;"	d
+SCMD_TYPO	interpreter.h	168;"	d
+SCMD_UNAFFECT	interpreter.h	131;"	d
+SCMD_UNLOCK	interpreter.h	209;"	d
+SCMD_UP	interpreter.h	87;"	d
+SCMD_UPTIME	interpreter.h	154;"	d
+SCMD_USE	interpreter.h	198;"	d
+SCMD_VERSION	interpreter.h	97;"	d
+SCMD_WEST	interpreter.h	86;"	d
+SCMD_WHISPER	interpreter.h	134;"	d
+SCMD_WHOAMI	interpreter.h	102;"	d
+SCMD_WIZHELP	interpreter.h	159;"	d
+SCMD_WIZLIST	interpreter.h	95;"	d
 SCOPE	mods/weapon.hpp	/^		SCOPE,$/;"	e	enum:mods::weapon::attachment_t
 SE	telnet.h	57;"	d
 SECS_PER_MUD_DAY	utils.h	138;"	d
@@ -2745,7 +2745,7 @@ UNCOMMON_DROP_RATE	mods/randomized-items.hpp	/^		constexpr static float UNCOMMON
 UNKNOWN_STATUS	mods/behaviour_tree_status.hpp	/^		UNKNOWN_STATUS$/;"	e	enum:mods::behaviour_tree_status
 UNLOCK_DOOR	act.movement.cpp	348;"	d	file:
 UNMARK	graph.cpp	54;"	d	file:
-UNSWITCH	interpreter.cpp	1544;"	d	file:
+UNSWITCH	interpreter.cpp	1554;"	d	file:
 UNUSED16	mods/flags.hpp	/^		UNUSED16,				\/\/ useless$/;"	e	enum:mods::flags::aff
 UNUSED17	mods/flags.hpp	/^		UNUSED17,				\/\/ useless$/;"	e	enum:mods::flags::aff
 UP	structs.h	150;"	d
@@ -2753,7 +2753,7 @@ UPDATE	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_t
 UPPER	utils.h	156;"	d
 USERS_FORMAT	act.informative.cpp	1518;"	d	file:
 USE_AUTOEQ	structs.h	109;"	d
-USURP	interpreter.cpp	1543;"	d	file:
+USURP	interpreter.cpp	1553;"	d	file:
 Unknown	mods/catch.hpp	/^			Unknown = -1,$/;"	e	enum:Catch::ResultWas::OfType
 VALID_EDGE	graph.cpp	/^int VALID_EDGE(room_rnum x, int y) {$/;"	f
 VALID_OBJ_RNUM	utils.h	397;"	d
@@ -3094,7 +3094,7 @@ arg1	db.h	/^	int	arg1;		\/*                                      *\/$/;"	m	struc
 arg2	db.h	/^	int	arg2;		\/* Arguments to the command             *\/$/;"	m	struct:reset_com
 arg3	db.h	/^	int	arg3;		\/*                                      *\/$/;"	m	struct:reset_com
 arglist	mods/util.hpp	/^		T arglist(std::string in_arglist_argument) {$/;"	f	namespace:mods::util
-argument_interpreter	interpreter.h	44;"	d
+argument_interpreter	interpreter.h	42;"	d
 armor	mods/item-types.hpp	/^	enum armor {$/;"	g	namespace:mods::weapon::type
 armor	mods/player.hpp	/^		sh_int& armor() {$/;"	f	struct:mods::player
 armor	structs.h	/^		sh_int armor;        \/* Internal -100..100, external -10..10 AC *\/$/;"	m	struct:char_point_data
@@ -3408,7 +3408,7 @@ combat_list	fight.cpp	/^char_data *combat_list = NULL;	\/* head of l-list of fig
 command	db.h	/^	char	command;   \/* current command                      *\/$/;"	m	struct:reset_com
 command	interpreter.h	/^	const char *command;$/;"	m	struct:command_info
 command_info	interpreter.h	/^struct command_info {$/;"	s
-command_interpreter	globals.cpp	/^		bool command_interpreter(player_ptr_t player,std::string argument) {$/;"	f	namespace:mods::globals
+command_interpreter	globals.cpp	/^		bool command_interpreter(player_ptr_t player,std::string_view in_argument) {$/;"	f	namespace:mods::globals
 command_interpreter	interpreter.cpp	/^void command_interpreter(player_ptr_t & player, std::string in_argument){$/;"	f
 command_pointer	interpreter.h	/^	void	(*command_pointer)$/;"	m	struct:command_info
 commit	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::commit(){$/;"	f	class:mods::lmdb::_db_handle
@@ -4875,7 +4875,7 @@ los_find	mods/scan.cpp	/^	find_results_t los_find(chptr hunter,chptr hunted){$/;
 los_list_by_room	mods/scan.cpp	/^	void los_list_by_room(room_rnum& in_room,room_list_t & room_list,unsigned depth){$/;"	f	namespace:mods::scan
 los_list_rooms	mods/scan.cpp	/^	void los_list_rooms(chptr player_hunter,room_list_t & room_list,unsigned depth){$/;"	f	namespace:mods::scan
 los_scan	mods/scan.cpp	/^	void los_scan(char_data* ch,int depth,vec_player_data* vec_room_list) {$/;"	f	namespace:mods::scan
-los_scan_foreach	mods/scan.cpp	/^	void los_scan_foreach(char_data* ch,int depth,los_scan_foreach_callback lambda_cb) {$/;"	f	namespace:mods::scan
+los_scan_direction	mods/scan.cpp	/^	void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction) {$/;"	f	namespace:mods::scan
 ls	act.builder.cpp	/^	void ls(player_ptr_t player,std::string_view _path) {$/;"	f	namespace:mods::fs
 m	random.cpp	45;"	d	file:
 m_affected_by	mods/player.hpp	/^		std::vector<affected_type> m_affected_by;$/;"	m	struct:mods::player
@@ -5639,7 +5639,6 @@ position_list_type_d	mail.h	/^struct position_list_type_d {$/;"	s
 position_types	constants.cpp	/^const char *position_types[] = {$/;"	v
 position_types	constants.hpp	/^const char *position_types[] = {$/;"	v
 post_boot_db	globals.cpp	/^		void post_boot_db() {$/;"	f	namespace:mods::globals
-post_command_interpreter	globals.cpp	/^		void post_command_interpreter(char_data *ch,char* argument) {$/;"	f	namespace:mods::globals
 post_feed	structs.h	/^		void post_feed(T fed_object){$/;"	f	struct:obj_data
 post_modify_callback	mods/builder_util.hpp	/^	typedef std::function<std::pair<bool,std::string>()> post_modify_callback;$/;"	t	namespace:mods::builder_util
 postgres_dbname	mods/conf.hpp	/^	static std::string postgres_dbname = "postgres_mud";$/;"	m	namespace:mods::conf

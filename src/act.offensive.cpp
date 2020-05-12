@@ -163,29 +163,25 @@ ACMD(do_snipe) {
 
 	vpd scan;
 	std::string victim = vec_args[0];
-	std::string direction = vec_args[1];
+	int direction = mods::globals::dir_int(vec_args[1][0]);
+	if(direction == -1){
+		player->sendln("Invalid direction");
+		return;
+	}
 
 	auto weapon = player->equipment(WEAR_WIELD);
 	/* HOWTO: perform line of sight scans */
-	mods::scan::los_scan(ch,mods::weapon::MAX_RANGE,&scan);
+	mods::scan::los_scan_direction(ch,mods::weapon::MAX_RANGE,&scan,direction);
 
 	for(auto scanned_target : scan) {
-		std::cerr << "scanned_target.distance: " << scanned_target.distance << "\n";
-		std::cerr << "scanned_target.uuid: " << scanned_target.uuid << "\n";
-		std::cerr << "skipping...\n";
-		continue;
-		/*
 		if(mods::util::fuzzy_match(victim,scanned_target.ch->player.name.c_str())) {
-			player->send("%s: matched\r\n", scanned_target.ch->player.name.c_str());
-			continue;
 			if(scanned_target.distance > mods::weapon::MAX_RANGE){
-				player->send("%s: That target is out of range...\r\n",scanned_target.ch->player.name.c_str());
+				player->sendln("That target is out of range!");
 				return;
 			}
 			auto target_ptr = ptr(scanned_target.ch);
 			if(mods::weapon::hits_target(player,weapon,target_ptr,&scanned_target.distance)) {
-				player->sendln("You hit your target!");
-				//snipe_hit(player, target_ptr, &scanned_target.distance);
+				snipe_hit(player, target_ptr, &scanned_target.distance);
 			}else{
 				player->sendln("You miss your target!");
 			}
@@ -193,7 +189,6 @@ ACMD(do_snipe) {
 			player->weapon_cooldown_start(3,0);
 			return;
 		}
-		*/
 	}
 }
 
@@ -284,11 +279,7 @@ ACMD(do_scan) { /* !mods */
 		line += "You see {grn}";
 
 		auto found_player = ptr(e.ch);
-		//if(found_player->is_npc()){
-		//	line += found_player->short_descr().c_str();
-		//} else {
-			line += found_player->name().c_str();
-		//}
+		line += found_player->name().c_str();
 
 		line += "{/grn}";
 
@@ -303,9 +294,11 @@ ACMD(do_scan) { /* !mods */
 			case 2:
 				line += " far off";
 				break;
-
+			case 3:
+			case 4:
+				line += " quite a ways off";
+				break;
 			default:
-				line += "<>";
 				break;
 		}
 
