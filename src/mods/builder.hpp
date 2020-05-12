@@ -122,7 +122,10 @@ namespace mods::builder {
 void r_error(const player_ptr_t & player,std::string_view msg);
 void r_success(const player_ptr_t& player,std::string_view msg);
 void r_status(const player_ptr_t & player,std::string_view msg);
-ACMD(do_rbuild);
-ACMD(do_rbuild_sandbox);
-ACMD(do_zbuild);
+//ACMD(do_rbuild);
+//ACMD(do_rbuild_sandbox);
+//ACMD(do_zbuild);
+//ACMD(do_obuild);
+//ACMD(do_sbuild);
+//ACMD(do_mbuild);
 #endif

@@ -38,8 +38,8 @@ reload_time: 2.1 #float, measured in seconds
 # type: LIGHT_MACHINE_GUN
 type: 1  # enum, object type
 manufacturer: 'Heckler and Koch' # string, anything 
-name: 'MP5' # string, anything name of object 
-vnum: 5 # integer, unique identifier
+name: 'P90' # string, anything name of object 
+vnum: 21 # integer, unique identifier
 str_type: 'SUB_MACHINE_GUN'
 #rarity types
 # COMMON
@@ -49,7 +49,7 @@ str_type: 'SUB_MACHINE_GUN'
 # GOD_TIER
 # DEFAULT
 rarity: 'COMMON'
-feed_file: 'mp5.yml'
-description: 'A debilitating Heckler and Koch MP5 is lying here'
-short_description: 'MP5 <short>'
-action_description: 'MP5 <action>'
+feed_file: 'p90.yml'
+description: 'A debilitating Heckler and Koch P90 is lying here'
+short_description: 'P90 <short>'
+action_description: 'P90 <action>'

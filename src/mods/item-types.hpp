@@ -281,13 +281,13 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 /**************************************************************************/
 #define MENTOC_FEED_TYPE_IMPL(r,data,TYPE) \
 		if(this->str_type.compare(BOOST_PP_STRINGIZE(TYPE)) == 0){\
-			d("Found type: " << BOOST_PP_STRINGIZE(TYPE) << "\n");\
+			std::cerr << "Found type: " << BOOST_PP_STRINGIZE(TYPE) << "\n";\
 			this->type = mw_type::TYPE;\
-			d("actual type: '" << this->type << "'");\
+			std::cerr << "actual type: '" << this->type << "'";\
 		}
 
 #define MENTOC_EXAMPLE_IMPL(r,data,TYPE) \
-	out_file << "# type: " << BOOST_PP_STRINGIZE(TYPE) << "\n";
+	out_file << "# type: " << BOOST_PP_STRINGIZE(TYPE) << "\n";\
 
 #define MENTOC_MEMBER_VARS_EXAMPLE_IMPL(r,data,MEMBER_TUPLE) \
 			out_file << BOOST_PP_STRINGIZE(                        \

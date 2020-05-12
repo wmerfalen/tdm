@@ -16,6 +16,7 @@
 #include "mods/yaml.hpp"
 #include "mods/date-time.hpp"
 #include "mods/world-configuration.hpp"
+using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
 namespace mods::adhoc {
 	static std::vector<int> reserved_rooms;
@@ -63,25 +64,29 @@ namespace mods::fs {
 	}
 };
 
-
-using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
-ACMD(do_next_object_number){
-	
+int next_obj_number(){
 	try{
 		auto select_transaction = txn();
 		sql_compositor comp("object",&select_transaction);
-		auto object_sql = comp.select("max(obj_item_number) as obj_item_number")
-			.from("object")
+		auto mob_sql = comp.select("max(obj_item_number) + 1 as obj_number")
+			.from("mobile")
 			.sql();
-		auto obj_record = mods::pq::exec(select_transaction,object_sql);
-		if(obj_record.size() == 0){
-			player->stc("1");
+		auto rec = mods::pq::exec(select_transaction,mob_sql);
+		if(rec.size() == 0){
+			return 1;
 		}else{
-			player->stc(obj_record[0]["obj_item_number"].c_str());
+			return mods::util::stoi<int>(rec[0]["obj_number"]);
 		}
 	}catch(std::exception& e){
-		std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
+		std::cerr << __FILE__ << ": " << __LINE__ << ": error in next_obj_number(): '" << e.what() << "'\n";
+		return -1;
 	}
+}
+
+
+
+ACMD(do_next_object_number){
+	player->stc(std::to_string(next_obj_number()));
 }
 
 int next_zone_number() {
@@ -89,7 +94,7 @@ int next_zone_number() {
 	try{
 		auto select_transaction = txn();
 		sql_compositor comp("zone",&select_transaction);
-		auto zone_sql = comp.select("currval(zone_virtual_number) as zone_number")
+		auto zone_sql = comp.select("currval(zone_virtual_number) + 1 as zone_number")
 			.from("zone")
 			.sql();
 		auto zone_record = mods::pq::exec(select_transaction,zone_sql);
@@ -112,7 +117,7 @@ int next_room_number(){
 		try{
 			auto select_transaction = txn();
 			sql_compositor comp("room",&select_transaction);
-			auto room_sql = comp.select("max(room_number) as room_number")
+			auto room_sql = comp.select("max(room_number) + 1 as room_number")
 				.from("room")
 				.sql();
 			auto room_record = mods::pq::exec(select_transaction,room_sql);
@@ -137,7 +142,7 @@ int next_mob_number(){
 	try{
 		auto select_transaction = txn();
 		sql_compositor comp("mobile",&select_transaction);
-		auto mob_sql = comp.select("max(mob_virtual_number) as mob_number")
+		auto mob_sql = comp.select("max(mob_virtual_number) + 1 as mob_number")
 			.from("mobile")
 			.sql();
 		auto mob_record = mods::pq::exec(select_transaction,mob_sql);
@@ -165,10 +170,14 @@ ACMD(do_next_room_number){
 	player->stc(std::to_string(room_number));
 }
 ACMD(do_next_mob_number){
-	
 	auto mob_number = next_mob_number();
 	player->stc(std::to_string(mob_number));
 }
+ACMD(do_next_obj_number){
+	auto obj_number = next_obj_number();
+	player->stc(std::to_string(obj_number));
+}
+
 
 void fill_rifle(std::shared_ptr<obj_data>& obj) {
 	obj_data &proto = *obj;
@@ -478,31 +487,20 @@ ACMD(do_yaml_import){
 
 	if(vec_args.size() == 2){
 
-#define _LAME_MENTOC_F_IMPORT(CLASS_TYPE)\
-		if(std::string(vec_args[0]).compare( #CLASS_TYPE ) == 0){\
-			mods::yaml::CLASS_TYPE ## _description_t CLASS_TYPE;\
-			d(vec_args[1]); player->sendln("importing..."); player->sendln(vec_args[1]);\
-			auto obj = CLASS_TYPE ## _object(vec_args[1]);\
-			obj_to_room(obj.get(),IN_ROOM(player->cd()));\
-			player->sendln("done importing...");\
-			return;\
-		}
-
-#define MENTOC_F_IMPORT(CLASS_TYPE)\
+#define MENTOC_F_IMPORT(CLASS_TYPE,IT_TYPE)\
 		if(std::string(vec_args[0]).compare(#CLASS_TYPE) == 0){\
 			auto obj = blank_object();\
-			obj->CLASS_TYPE(vec_args[1]);\
-			obj->obj_flags.wear_flags |= WEAR_HOLD;\
+			obj->feed(BOOST_PP_CAT(ITEM_,IT_TYPE),vec_args[1]);\
 			obj_to_room(obj.get(),player->room());\
 			player->sendln(std::string("Imported: ") + vec_args[1] + std::string(" of type:") + vec_args[0]);\
 			return;\
 		}
-		MENTOC_F_IMPORT(rifle);
-		MENTOC_F_IMPORT(explosive);
-		MENTOC_F_IMPORT(drone);
-		MENTOC_F_IMPORT(attachment);
-		MENTOC_F_IMPORT(gadget);
-		MENTOC_F_IMPORT(armor);
+		MENTOC_F_IMPORT(rifle,RIFLE);
+		MENTOC_F_IMPORT(explosive,EXPLOSIVE);
+		MENTOC_F_IMPORT(drone,DRONE);
+		MENTOC_F_IMPORT(attachment,ATTACHMENT);
+		MENTOC_F_IMPORT(gadget,GADGET);
+		MENTOC_F_IMPORT(armor,ARMOR);
 #undef MENTOC_F_IMPORT
 
 	}

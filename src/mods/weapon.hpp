@@ -15,8 +15,16 @@
 
 struct obj_data;
 using obj_data_ptr_t = std::shared_ptr<obj_data>;
+using obj_ptr_t = std::shared_ptr<obj_data>;
 using attachment_list_t = std::array<obj_data_ptr_t,6>;
 extern pqxx::result db_get_by_meta(std::string table, std::string col,const std::string & value);
+
+#ifndef FIND_OBJ_INV
+#define FIND_OBJ_INV       (1 << 2)
+#define FIND_OBJ_EQUIP     (1 << 5)
+#endif
+
+
 namespace mods::weapon {
 	using cap_t = mods::weapon::capabilities::cap_t;
 
@@ -64,6 +72,8 @@ namespace mods::weapon {
 		FLAME = (1 << 10), CLAYMORE = (1 << 11), REMOTE_EXPLOSIVE = (1 << 12),
 		ATTACK_DRONE = (1 << 13)
 	};
+	/** TODO: store in db. !DIABLO */
+	static constexpr uint8_t MAX_RANGE = 4;
 
 	mw_rifle rifle(std::shared_ptr<obj_data>& object);
 	mw_explosive explosive(std::shared_ptr<obj_data>& object);
@@ -362,6 +372,85 @@ namespace mods::weapon {
 			obj_caps[value] = true;
 		}
 	}
+
+	static inline const weapon_stat_list_t* weapon_stats(int type){
+		static const weapon_stat_list_t shotgun = {
+			{1,80,0.0},
+			{1,30,0.0},
+			{0,0.0,0.0},
+			{0,0.0,0.0},
+			{0,0.0,0.0}
+		};
+		static const weapon_stat_list_t ar = {
+			{1,40.0,10.0},
+			{1,37.0,9.0},
+			{1,30.0,8.5},
+			{0,0.0,0.0},
+			{0,0.0,0.0}
+		};
+		static const weapon_stat_list_t smg = {
+			{1,50,4},
+			{0,0,0},
+			{0,0,0},
+			{0,0,0},
+			{0,0,0}
+		};
+		static const weapon_stat_list_t machine_pistol = {
+			{1,35,2},
+			{0,0,0},
+			{0,0,0},
+			{0,0,0},
+			{0,0,0}
+		};
+		static const weapon_stat_list_t lmg = {
+			{1,40.0,10},
+			{1,35.0,8},
+			{1,30.0,4},
+			{0,0,0},
+			{0,0,0}
+		};
+		static const weapon_stat_list_t sniper = {
+			{1,10.0,0},
+			{1,35.0,8},
+			{1,60.0,40},
+			{1,55,40},
+			{1,55,40}
+		};
+		static const weapon_stat_list_t empty = {
+			{0,0,0},
+			{0,0,0},
+			{0,0,0},
+			{0,0,0},
+			{0,0,0}
+		};
+		/** !DIABLO */
+		switch(static_cast<weapon_rifle_t>(type)){
+			case weapon_rifle_t::SHOTGUN: 
+				return &shotgun;
+			case weapon_rifle_t::ASSAULT_RIFLE:
+				return &ar;
+			case weapon_rifle_t::SUB_MACHINE_GUN:
+				return &smg;
+			case weapon_rifle_t::MACHINE_PISTOL:
+				return &machine_pistol;
+			case weapon_rifle_t::LIGHT_MACHINE_GUN:
+				return &lmg;
+			case weapon_rifle_t::SNIPER:
+				return &sniper;
+			default:
+				return &empty;
+		}
+	}//end stat list func
+
+	template <typename TPlayer,typename TObject>
+	static inline void list_rounds(TPlayer& player,TObject& obj){
+		if(obj->obj_flags.ammo == 0){
+			player->sendln("{red}Out of ammo!{/red}");
+		}else{
+			player->send("%d rounds.\r\n", obj->obj_flags.ammo);
+		}
+	}
+
 };
 #endif
 

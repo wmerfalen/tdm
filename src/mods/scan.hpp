@@ -19,6 +19,8 @@ namespace mods {
 		typedef struct {
 			char_data* ch;
 			uint16_t distance;
+			uuid_t uuid;
+			uint8_t direction;
 		} vec_player_data_element;
 		using chptr = player_ptr_t;
 		using vec_player_data = std::vector<vec_player_data_element>;

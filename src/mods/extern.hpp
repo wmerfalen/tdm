@@ -7,7 +7,7 @@ extern void perform_tell(char_data *ch, char_data *vict, char *arg);
 extern size_t send_to_char(char_data *ch, const char *messg, ...);
 extern void hit(char_data *ch, char_data *victim, int type);
 extern char_data* character_list;
-extern void command_interpreter(player_ptr_t&, std::string_view argument);
+extern void command_interpreter(player_ptr_t&, std::string argument);
 extern void hit(char_data* ch,char_data* vict,int type);
 extern std::deque<obj_data> object_list;
 extern std::deque<std::shared_ptr<obj_data>> obj_list;

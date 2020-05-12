@@ -19,13 +19,14 @@
 #include "mods/util.hpp"
 #include "globals.hpp"
 #include "mods/scan.hpp"
-#include "mods/weapon.hpp"
 #include "mods/weapons/sniper-rifle.hpp"
 #include "globals.hpp"
 #include "mods/util.hpp"
 #include "mods/prefs.hpp"
 #include "mods/affects.hpp"
 #include "mods/object-utils.hpp"
+#include "mods/player.hpp"
+#include "mods/weapon.hpp"
 
 /* extern variables */
 extern int pk_allowed;
@@ -36,7 +37,7 @@ extern mods::globals::room_list_t mods::globals::room_list;
 void raw_kill(char_data *ch);
 void check_killer(char_data *ch, char_data *vict);
 int compute_armor_class(char_data *ch);
-int snipe_hit(char_data*,char_data*,int,uint16_t);
+int snipe_hit(player_ptr_t& p,player_ptr_t& target,uint16_t*);
 
 /* using directives */
 using mw_explosive = mods::weapon::type::explosive;
@@ -91,52 +92,8 @@ ACMD(do_throw) {
 		player->sendln("You're not holding anything!");
 		return;
 	}
-	std::cerr << "[throw_object]->'" << held_object->name.c_str() << "'\n";
 	return;//FIXME
 	mods::projectile::throw_object(player, dir, cnt, held_object, "lob");
-}
-
-ACMD(do_giveme_frag_grenades) {
-	
-	auto obj = mods::weapon::new_frag_grenade_object();
-	obj_to_char(obj,player);
-}
-ACMD(do_giveme_incendiary_grenades) {
-	
-	auto obj = mods::weapon::new_incendiary_grenade_object();
-	obj_to_char(obj,player);
-}
-
-ACMD(do_giveme_emp_grenades) {
-	
-	auto obj = mods::weapon::new_emp_grenade_object();
-	obj_to_char(obj,player);
-}
-
-ACMD(do_giveme_smoke_grenades) {
-	
-	auto obj = mods::weapon::new_smoke_grenade_object();
-	obj_to_char(obj,player);
-}
-
-ACMD(do_giveme_sensor_grenades) {
-	
-	auto obj = mods::weapon::new_sensor_grenade_object();
-	obj_to_char(obj,player);
-}
-
-ACMD(do_giveme_flashbang_grenades) {
-	
-	auto obj = mods::weapon::new_flashbang_grenade_object();
-	obj_to_char(obj,player);
-}
-
-ACMD(do_giveme_sniper_rifle) {
-	
-	if(player->cl_sniper() == nullptr) {
-		player->set_class(CLASS_SNIPER);
-	}
-	obj_to_char(player->sniper_rifle(),player);
 }
 
 
@@ -177,10 +134,10 @@ enum weapon_status_t {
 	OKAY = 0
 };
 weapon_status_t weapon_preamble(
-		player_ptr_t player,
-		weapon_rifle_t rifle_type){
-	if(!player->rifle()){
-		player->sendln("You must be wielding a " + mods::weapon::to_string(rifle_type) + " to do that!");
+		player_ptr_t& player){
+	auto weapon = player->equipment(WEAR_WIELD);
+	if(!weapon){
+		player->sendln("You aren't wielding any weapon.");
 		return NOT_WIELDING_WEAPON;
 	}
 	if(!player->weapon_cooldown_expired(0)){
@@ -191,44 +148,52 @@ weapon_status_t weapon_preamble(
 		*player << "{gld}*CLICK*{/gld} Your weapon is out of ammo!\r\n";
 		return OUT_OF_AMMO;
 	}
-	if(!player->has_weapon_capability(rifle_type)){
-		return INVALID_WEAPON_TYPE;
-	}
 	return OKAY;
 }
 
 ACMD(do_snipe) {
-	
-	if(OKAY != weapon_preamble(player,weapon_rifle_t::SNIPER)){
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() < 2){
+		player->sendln("usage: snipe <name> <direction>");
+		return;
+	}
+	if(OKAY != weapon_preamble(player)){
 		return;
 	}
 
-	constexpr unsigned int max_char = 16;
-	std::array<char,max_char> victim;
-	std::fill(victim.begin(),victim.end(),0);
 	vpd scan;
-	one_argument(argument,(char*)&victim[0],max_char);
+	std::string victim = vec_args[0];
+	std::string direction = vec_args[1];
 
-	if(!victim[0]) {
-		player->psendln("Whom do you wish to snipe?");
-		return;
-	}
-
+	auto weapon = player->equipment(WEAR_WIELD);
 	/* HOWTO: perform line of sight scans */
-	mods::scan::los_scan(ch,3,&scan);
+	mods::scan::los_scan(ch,mods::weapon::MAX_RANGE,&scan);
 
 	for(auto scanned_target : scan) {
-		/* HOWTO: fuzzy match two strings */
-		if(mods::util::fuzzy_match(static_cast<char*>(&victim[0]),scanned_target.ch->player.name.c_str())) {
-			/* HOWTO: deal damage with a sniper rifle */
-			snipe_hit(ch, scanned_target.ch, TYPE_SNIPE,scanned_target.distance);
-			/* HOWTO: adjust ammo of player's current weapon */
+		std::cerr << "scanned_target.distance: " << scanned_target.distance << "\n";
+		std::cerr << "scanned_target.uuid: " << scanned_target.uuid << "\n";
+		std::cerr << "skipping...\n";
+		continue;
+		/*
+		if(mods::util::fuzzy_match(victim,scanned_target.ch->player.name.c_str())) {
+			player->send("%s: matched\r\n", scanned_target.ch->player.name.c_str());
+			continue;
+			if(scanned_target.distance > mods::weapon::MAX_RANGE){
+				player->send("%s: That target is out of range...\r\n",scanned_target.ch->player.name.c_str());
+				return;
+			}
+			auto target_ptr = ptr(scanned_target.ch);
+			if(mods::weapon::hits_target(player,weapon,target_ptr,&scanned_target.distance)) {
+				player->sendln("You hit your target!");
+				//snipe_hit(player, target_ptr, &scanned_target.distance);
+			}else{
+				player->sendln("You miss your target!");
+			}
 			player->ammo_adjustment(-1);
 			player->weapon_cooldown_start(3,0);
 			return;
-		} else {
-			player->psendln("You can't find your target!");
 		}
+		*/
 	}
 }
 
@@ -313,71 +278,68 @@ ACMD(do_reload) {
 
 ACMD(do_scan) { /* !mods */
 	vpd scan;
-	mods::scan::los_scan_foreach(ch,3,[ch](room_rnum _room_id,int _dir,vpd _ele) -> bool {
-			for(auto e : _ele) {
-			std::string line;
-			line += "You see {grn}";
+	mods::scan::los_scan(ch,mods::weapon::MAX_RANGE,&scan);
+	for(auto e : scan){
+		std::string line;
+		line += "You see {grn}";
 
-			if(IS_NPC(e.ch)) {
-			line += e.ch->player.short_descr.c_str();
-			} else {
-			line += e.ch->player.name.c_str();
-			}
+		auto found_player = ptr(e.ch);
+		//if(found_player->is_npc()){
+		//	line += found_player->short_descr().c_str();
+		//} else {
+			line += found_player->name().c_str();
+		//}
 
-			line += "{/grn}";
+		line += "{/grn}";
 
-			switch(e.distance) {
+		switch(e.distance) {
 			case 0:
-			line += " close by";
-			break;
+				line += " close by";
+				break;
 
 			case 1:
-			break;
+				break;
 
 			case 2:
-			line += " far off";
-			break;
+				line += " far off";
+				break;
 
 			default:
-			line += "<>";
-			break;
-			}
+				line += "<>";
+				break;
+		}
 
-			if(_dir != UP && _dir != DOWN) {
-				line += " to the ";
-			}
+		if(e.direction != UP && e.direction != DOWN) {
+			line += " to the ";
+		}
 
-			switch(_dir) {
-				case NORTH:
-					line += "north";
-					break;
+		switch(e.direction) {
+			case NORTH:
+				line += "north";
+				break;
 
-				case SOUTH:
-					line += "south";
-					break;
+			case SOUTH:
+				line += "south";
+				break;
 
-				case EAST:
-					line += "east";
-					break;
+			case EAST:
+				line += "east";
+				break;
 
-				case WEST:
-					line += "west";
-					break;
+			case WEST:
+				line += "west";
+				break;
 
-				case UP:
-					line += " above you";
-					break;
+			case UP:
+				line += " above you";
+				break;
 
-				case DOWN:
-					line += " below you";
-					break;
-			}
-
-			line += "\r\n";
-			send_to_char(ch,line.c_str());
-			}
-			return true;	/** true means keep iterating */
-	});
+			case DOWN:
+				line += " below you";
+				break;
+		}
+		player->sendln(line);
+	}
 
 }
 
@@ -598,7 +560,7 @@ ACMD(do_order) {
 			} else {
 				send_to_char(ch, "%s", OK);
 				auto v = ptr(vict);
-				command_interpreter(v, message);
+				//FIXME command_interpreter(v, std::string(message));
 			}
 		} else {			/* This is order "followers" */
 			char buf[MAX_STRING_LENGTH];
@@ -611,7 +573,7 @@ ACMD(do_order) {
 					if(AFF_FLAGGED(k->follower, AFF_CHARM)) {
 						found = TRUE;
 						auto kptr = ptr(k->follower);
-						command_interpreter(kptr, message);
+						//FIXME command_interpreter(kptr, message);
 					}
 			}
 

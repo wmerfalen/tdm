@@ -34,6 +34,7 @@ extern int next_zone_number();
 extern std::tuple<int16_t,std::string> parse_sql_zones();
 extern std::vector<int> zone_id_blacklist;
 extern bool disable_all_zone_resets;
+extern obj_ptr_t create_object_from_index(std::size_t proto_index);
 
 using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>;
 int next_zone_vnum(){
@@ -41,7 +42,7 @@ int next_zone_vnum(){
 		if(next_zone_vnum == 0){
 			try{
 				auto up_txn = txn();
-				auto record = mods::pq::exec(up_txn,"SELECT max(zone_virtual_number) as z from zone;");
+				auto record = mods::pq::exec(up_txn,"SELECT max(zone_virtual_number) + 1 as z from zone;");
 				if(record.size()){
 					std::cerr << ("Max room number: " + std::string(record[0]["z"].c_str()));
 					next_zone_vnum = mods::util::stoi<int>(record[0]["z"].c_str());
@@ -61,7 +62,7 @@ int next_room_vnum(){
 		if(next_room_number == 0){
 			try{
 				auto up_txn = txn();
-				auto record = mods::pq::exec(up_txn,"SELECT max(room_number) as r from room;");
+				auto record = mods::pq::exec(up_txn,"SELECT max(room_number) + 1 as r from room;");
 				if(record.size()){
 					std::cerr << ("Max room number: " + std::string(record[0]["r"].c_str()));
 					next_room_number = mods::util::stoi<int>(record[0]["r"].c_str());
@@ -385,21 +386,27 @@ namespace mods::builder {
 		std::size_t i = index;
 
 		if(i >= obj_proto.size()) {
+			exit(4);
 			return std::nullopt;
 		}
-
-		obj_list.push_back(std::make_shared<obj_data>());
-		*obj_list.back() = obj_proto[index];
+		create_object_from_index(index);
 		return obj_list.back().get();
+
+		//obj_list.push_back(std::make_shared<obj_data>());
+		//*obj_list.back() = obj_proto[index];
+		//return obj_list.back().get();
 	}
 	std::optional<obj_data*> instantiate_object_by_vnum(int vnum) {
 
+		int ctr = 0;
 		for(auto& object_reference : obj_proto) {
 			if(object_reference.item_number == vnum) {
-				obj_list.push_back(std::make_shared<obj_data>());
-				*obj_list.back() = object_reference;
-				return obj_list.back().get();
+				//obj_list.push_back(std::make_shared<obj_data>());
+				//*obj_list.back() = object_reference;
+				//return obj_list.back().get();
+				return instantiate_object_by_index(ctr);
 			}
+			++ctr;
 		}
 
 		return std::nullopt;
@@ -1062,58 +1069,29 @@ namespace mods::builder {
 
 		return {true,"Successfully saved player."};
 	}
-	std::pair<bool,std::string> save_object(obj_data* obj) {
+	std::pair<bool,std::string> save_object(int item_number,int obj_type,std::string feed_file) {
 		try {
 			auto txn_01 = txn();
 			sql_compositor comp3("object",&txn_01);
 			auto sql = comp3.select("id").from("object").
-				where("obj_item_number","=",std::to_string(obj->item_number))
+				where("obj_item_number","=",std::to_string(item_number))
 				.sql();
 			auto check_result_01 = mods::pq::exec(txn_01,sql);
+			//auto check_i = 0;
 			mods::pq::commit(txn_01);
-			auto check_i = 0;
 			sql_compositor::value_map my_map;
-			my_map["obj_item_number"] = std::to_string(obj->item_number);
-			my_map["obj_flags"] = "0";
-#define MENTOC_CHK_OBJ(item) if(!obj->item){ return {false,TOSTR(#item) + " is empty"}; }
-			MENTOC_CHK_OBJ(name);
-			MENTOC_CHK_OBJ(description);
-			MENTOC_CHK_OBJ(short_description);
-			MENTOC_CHK_OBJ(action_description);
-			my_map["obj_name"] = obj->name.str();
-			my_map["obj_description"] = obj->description.str();
-			my_map["obj_short_description"] = obj->short_description.str();
-
-			if(obj->action_description.length()) {
-				my_map["obj_action_description"] = obj->action_description.str();
-			}
-
-			my_map["obj_type"] = std::to_string(obj->type);
-			my_map["obj_worn_on"] = std::to_string(obj->worn_on);
-			my_map["obj_type_data"] = "0";
-
-			if(obj->ex_description.size() && obj->ex_description[0].keyword.length()){
-				my_map["obj_extra_keyword"] = obj->ex_description[0].keyword.str();
-			} else {
-				my_map["obj_extra_keyword"] = "<obj.ex_description->keyword>";
-			}
-
-			if(obj->ex_description.size() && obj->ex_description[0].description.length()){
-				my_map["obj_extra_description"] = obj->ex_description[0].description.str();
-			} else {
-				my_map["obj_extra_description"] = "<obj.ex_description->description>";
-			}
-			my_map["obj_file"] = obj->feed_file();
+			my_map["obj_item_number"] = std::to_string(item_number);
+			my_map["obj_type"] = std::to_string(obj_type);
+			my_map["obj_file"] = feed_file;
 
 			if(check_result_01.size()) {
-				check_i = mods::pq::as_int(check_result_01,0,0);
 				/* update the fields */
 				auto t = txn();
 				sql_compositor comp("object",&t);
 				auto update_sql = comp
 					.update("object")
 					.set(my_map)
-					.where("obj_item_number","=",std::to_string(obj->item_number))
+					.where("obj_item_number","=",std::to_string(item_number))
 					.sql();
 				auto result = mods::pq::exec(t,update_sql);
 				mods::pq::commit(t);
@@ -1130,143 +1108,15 @@ namespace mods::builder {
 				sql = comp2
 					.select("id")
 					.from("object")
-					.where("obj_item_number","=",std::to_string(obj->item_number))
+					.where("obj_item_number","=",std::to_string(item_number))
 					.sql();
 				auto res = mods::pq::exec(txn4,sql);
 				mods::pq::commit(txn4);
-
-				if(res.size()) {
-					check_i = mods::pq::as_int(res,0,0);
-				}
 			}
 
-			switch(obj->obj_flags.type_flag) {
-				case ITEM_WEAPON:
-					auto txn3 = txn();
-					sql_compositor comp3("object_weapon",&txn3);
-					auto sql = comp3.select("id").from("object_weapon").
-						where("obj_fk_id","=",std::to_string(check_i))
-						.sql();
-					auto check_result = mods::pq::exec(txn3,sql);
-					mods::pq::commit(txn3);
-
-					if(check_result.size()) {
-						auto txn5 = txn();
-						sql_compositor comp("object_weapon",&txn5);
-						auto sql = comp.update("object_weapon")
-							.set({
-									{"obj_ammo_type",std::to_string(obj->rifle()->type)},
-									{"obj_ammo_max",std::to_string(obj->obj_flags.ammo_max)},
-									{"obj_cooldown","0"},
-									{"obj_can_snipe","0"}
-									}).where("obj_fk_id","=",std::to_string(check_i))
-						.sql();
-						mods::pq::exec(txn5,sql);
-						mods::pq::commit(txn5);
-					} else {
-						auto txn6 = txn();
-						sql_compositor comp("object_weapon",&txn6);
-						auto sql = comp.insert().into("object_weapon")
-							.values({
-									{"obj_fk_id",std::to_string(check_i)},
-									{"obj_ammo_max",std::to_string(obj->obj_flags.ammo_max)},
-									{"obj_ammo_type",std::to_string(obj->rifle()->type)},
-									{"obj_cooldown","0"},
-									{"obj_can_snipe","0"}
-									})
-						.sql();
-						mods::pq::exec(txn6,sql);
-						mods::pq::commit(txn6);
-					}
-
-					break;
-			}
-
-			auto txn6 = mods::pq::transaction(*mods::globals::pq_con);
-			std::string sel_weapon_sql =
-				std::string(
-						"select id from affected_type where aff_fk_id="	//TODO: !mundane use new shit
-						) + txn6.quote(check_i);
-			auto check_result = mods::pq::exec(txn6,sel_weapon_sql);
-			mods::pq::commit(txn6);
-
-			if(check_result.size()) {
-				auto txn8 = txn();
-				std::string sql = std::string(
-						"DELETE FROM affected_type where aff_fk_id=") 	//TODO: !mundane use new shit
-					+ txn8.quote(check_i);
-				mods::pq::exec(txn8,sql);
-				mods::pq::commit(txn8);
-			}
-
-			auto txn9 = txn();
-			auto sql9 = std::string(
-					"DELETE FROM object_flags where obj_fk_id=")
-				+ txn9.quote(check_i)
-				;
-			mods::pq::exec(txn9,sql9);
-			mods::pq::commit(txn9);
-			auto txn10 = txn();
-			auto sql10 = sql_compositor("object_flags",&txn10)
-				.insert()
-				.into("object_flags")
-				.values({
-						{"obj_fk_id",std::to_string(check_i)},
-						{"value_0",mods::util::itoa(obj->obj_flags.value[0])},
-						{"value_1",mods::util::itoa(obj->obj_flags.value[1])},
-						{"value_2",mods::util::itoa(obj->obj_flags.value[2])},
-						{"value_3",mods::util::itoa(obj->obj_flags.value[3])},
-						{"type_flag",mods::util::itoa(obj->obj_flags.type_flag)},
-						{"wear_flags",mods::util::itoa(obj->obj_flags.wear_flags)},
-						{"extra_flags",mods::util::itoa(obj->obj_flags.extra_flags)},
-						{"weight",mods::util::itoa(obj->obj_flags.weight)},
-						{"cost",mods::util::itoa(obj->obj_flags.cost)},
-						{"cost_per_day",mods::util::itoa(obj->obj_flags.cost_per_day)},
-						{"timer",mods::util::itoa(obj->obj_flags.timer)},
-						{"bitvector",mods::util::itoa(obj->obj_flags.bitvector)},
-						{"weapon_flags",mods::util::itoa(obj->obj_flags.weapon_flags)}
-						})
-			.sql();
-			mods::pq::exec(txn10,sql10);
-			mods::pq::commit(txn10);
-
-			for(unsigned i =0; i < MAX_OBJ_AFFECT; i++) {
-				auto txn7 = txn();
-				std::string loc,mod;
-
-				if(obj->affected[i].location && obj->affected[i].modifier) {
-					auto sql = sql_compositor("affected_type",&txn7).insert()
-						.into("affected_type")
-						.values({
-								{"obj_number",std::to_string(check_i)},
-								{"aff_location",mods::util::itoa(obj->affected[i].location)},
-								{"aff_modifier", mods::util::itoa(obj->affected[i].modifier)}
-								})
-					.sql();
-					mods::pq::exec(txn7,sql);
-					mods::pq::commit(txn7);
-				}
-			}
-
-			/* save ex_description linked lists */
-			//for(auto ex_desc = obj->ex_description; ex_desc; ex_desc = ex_desc->next) {
-			for(auto ex_desc : obj->ex_description){
-				auto txn8 = txn();
-				mods::pq::exec(txn8,sql_compositor("extra_description",&txn8)
-						.insert()
-						.into("extra_description")
-						.values({
-							{"obj_number",std::to_string(check_i)},
-							{"extra_keyword",ex_desc.keyword.str()},
-							{"extra_description",ex_desc.description.str()}
-							})
-						.sql()
-						);
-			}
 		} catch(std::exception& e) {
 			return {false,std::string("Exception occurred: ") + e.what()};
 		}
-
 		return {true,"saved successfully"};
 	}
 };
@@ -2492,7 +2342,10 @@ ACMD(do_mbuild) {
 ACMD(do_obuild) {
 	
 	mods::builder::initialize_builder(player);
+	std::cerr << "obuild argument: '" << argument << "'\n";
 	auto vec_args = PARSE_ARGS();
+	std::cerr << "after parse args\n";
+	std::cerr << "[vec_args.size()]->" << vec_args.size() << "\n";
 
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("weapon_type") == 0) {
 		player->pager_start();
@@ -2516,6 +2369,7 @@ ACMD(do_obuild) {
 		return;
 	}
 
+	std::cerr << "checkpoint b\n";
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("affected") == 0) {
 		player->pager_start();
 		*player <<
@@ -2570,6 +2424,7 @@ ACMD(do_obuild) {
 		return;
 	}
 
+	std::cerr << "checkpoint c\n";
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("extra_flags") == 0) {
 		player->pager_start();
 		*player <<
@@ -2596,6 +2451,7 @@ ACMD(do_obuild) {
 		return;
 	}
 
+	std::cerr << "checkpoint d\n";
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("wear_flags") == 0) {
 		player->pager_start();
 		*player <<
@@ -2620,6 +2476,7 @@ ACMD(do_obuild) {
 		return;
 	}
 
+	std::cerr << "checkpoint e\n";
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("type_flags") == 0) {
 		player->pager_start();
 		*player <<
@@ -2652,6 +2509,7 @@ ACMD(do_obuild) {
 		return;
 	}
 
+	std::cerr << "checkpoint F\n";
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("flags") == 0) {
 		player->pager_start();
 		*player <<
@@ -2781,74 +2639,88 @@ ACMD(do_obuild) {
 		player->page(0);
 		return;
 	}
+	std::cerr << "checkpoint G\n";
 
 	if(!vec_args.size() || vec_args[0].compare("help") == 0) {
 		player->pager_start();
 		*player << "usage: \r\n" <<
 			" {grn}obuild{/grn} {red}help{/red}\r\n" <<
-			"  |--> this help menu\r\n" <<
-			"  {grn}|____[example]{/grn}\r\n" <<
-			"  |:: {wht}obuild{/wht} {gld}help{/gld}\r\n" <<
-			"  |:: (this help menu will show up)\r\n" <<
+			//"  |--> this help menu\r\n" <<
+			//"  {grn}|____[example]{/grn}\r\n" <<
+			//"  |:: {wht}obuild{/wht} {gld}help{/gld}\r\n" <<
+			//"  |:: (this help menu will show up)\r\n" <<
 			" {grn}obuild{/grn} {red}new{/red}\r\n" <<
 			" {grn}obuild{/grn} {red}list{/red}\r\n" <<
-			" {grn}obuild{/grn} {red}attr <object_id> <attr> <value>{/red}\r\n" <<
-			"  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
-			"  {gld}|:: item_number{/gld}\r\n" <<
-			"  {gld}|:: name{/gld} {red}APPEARS: {/red}\r\n" <<
-			"  {gld}|:: desc{/gld} {red}APPEARS: lying on ground{/red}\r\n" <<
-			"  {red}Short Description{/red}\r\n"
-			"  {gld}|:: short_description{/gld} {red}APPEARS: when you type inv{/red}\r\n" <<
-			"  {red}APPEARS: when you wield it{/red}\r\n" <<
-			"  {red}APPEARS: when you look at yourself or someone wielding it{/red}\r\n" <<
-			"  {grn}|IN-GAME: get xm\r\nYou get <Short Description>\r\n" << 
-			"  {gld}|:: action_description{/gld} {red}APPEARS: when you examine{/red}\r\n" <<
-			"  {gld}|:: worn_on{/gld}\r\n" <<
-			"  {gld}|:: weapon_type {red}see: obuild help weapon_type{/red}{/gld}\r\n" <<
-			"  {gld}|:: weapon_ammo{/gld}\r\n" <<
-			"  {gld}|:: weapon_ammo_max{/gld}\r\n" <<
-			"  {gld}|:: weapon_holds_ammo{/gld}\r\n" <<
-			"  {gld}|:: flags{/gld}\r\n" <<
-			" {grn}obuild{/grn} {red}ex <object_id> create <index>{/red}\r\n" <<
-			" {grn}obuild{/grn} {red}ex <object_id> set <index> <keyword> <description>{/red}\r\n" <<
-			" {grn}obuild{/grn} {red}ex <object_id> del <index>{/red}\r\n" <<
-			"  {grn}|____[example]{/grn}\r\n" <<
-			"  |:: {wht}obuild{/wht} {gld}ex 6 set 0 {/gld}\"keyword\" \"my description\"\r\n" <<
-			"  |:: {wht}obuild{/wht} {gld}ex 6 del 0{/gld}\r\n" <<
-			" {grn}obuild{/grn} {red}affected <object_id> set <affected_slot> <location> <modifier>{/red}\r\n" <<
-			" {grn}obuild{/grn} {red}affected <object_id> del <affected_slot>{/red}\r\n" <<
-			"  {grn}|____[example]{/grn}\r\n" <<
-			"  |:: {wht}obuild{/wht} {gld}affected 6 3 STR 25{/gld}\r\n" <<
-			"  |:: (this will set the affected slot number 3 on object 6 \r\n" <<
-			"      to modify strength by 25)\r\n" <<
-			"  |:: {red}see obuild help affected{/red}\r\n" <<
-			" {grn}obuild{/grn} {red}flag <object_id> extra_flags <value>{/red}\r\n"<<
-			" {red}see obuild help extra_flags{/red}\r\n" <<
-			" {grn}obuild{/grn} {red}flag <object_id> <attr> <value>{/red}\r\n"<<
-			" {red}see obuild help flags{/red}\r\n" <<
-			"  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
-			"  {gld}|:: value_0{/gld}\r\n" <<
-			"  {gld}|:: value_1{/gld}\r\n" <<
-			"  {gld}|:: value_2{/gld}\r\n" <<
-			"  {gld}|:: value_3{/gld}\r\n" <<
-			"  {gld}|:: type_flags {red}see: obuild help type_flags{/red}{/gld}\r\n" <<
-			"  {gld}|:: wear_flags {red}see: obuild help wear_flags{/red}{/gld}\r\n" <<
-			"  {gld}|:: extra_flags{/gld}\r\n" <<
-			"  {gld}|:: weight{/gld}\r\n" <<
-			"  {gld}|:: cost{/gld}\r\n" <<
-			"  {gld}|:: cost_per_day{/gld}\r\n" <<
-			"  {gld}|:: timer{/gld}\r\n" <<
-			"  {gld}|:: bitvector {red}see: obuild help bitvector{/red}{/gld}\r\n" <<
-			" {grn}obuild{/grn} {red}save <object_id>{/red}\r\n" <<
+			//" {grn}obuild{/grn} {red}attr <object_id> <attr> <value>{/red}\r\n" <<
+			//"  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
+			//"  {gld}|:: item_number{/gld}\r\n" <<
+			//"  {gld}|:: name{/gld} {red}APPEARS: {/red}\r\n" <<
+			//"  {gld}|:: desc{/gld} {red}APPEARS: lying on ground{/red}\r\n" <<
+			//"  {red}Short Description{/red}\r\n"
+			//"  {gld}|:: short_description{/gld} {red}APPEARS: when you type inv{/red}\r\n" <<
+			//"  {red}APPEARS: when you wield it{/red}\r\n" <<
+			//"  {red}APPEARS: when you look at yourself or someone wielding it{/red}\r\n" <<
+			//"  {grn}|IN-GAME: get xm\r\nYou get <Short Description>\r\n" << 
+			//"  {gld}|:: action_description{/gld} {red}APPEARS: when you examine{/red}\r\n" <<
+			//"  {gld}|:: worn_on{/gld}\r\n" <<
+			//"  {gld}|:: weapon_type {red}see: obuild help weapon_type{/red}{/gld}\r\n" <<
+			//"  {gld}|:: weapon_ammo{/gld}\r\n" <<
+			//"  {gld}|:: weapon_ammo_max{/gld}\r\n" <<
+			//"  {gld}|:: weapon_holds_ammo{/gld}\r\n" <<
+			//"  {gld}|:: flags{/gld}\r\n" <<
+			//" {grn}obuild{/grn} {red}ex <object_id> create <index>{/red}\r\n" <<
+			//" {grn}obuild{/grn} {red}ex <object_id> set <index> <keyword> <description>{/red}\r\n" <<
+			//" {grn}obuild{/grn} {red}ex <object_id> del <index>{/red}\r\n" <<
+			//"  {grn}|____[example]{/grn}\r\n" <<
+			//"  |:: {wht}obuild{/wht} {gld}ex 6 set 0 {/gld}\"keyword\" \"my description\"\r\n" <<
+			//"  |:: {wht}obuild{/wht} {gld}ex 6 del 0{/gld}\r\n" <<
+			//" {grn}obuild{/grn} {red}affected <object_id> set <affected_slot> <location> <modifier>{/red}\r\n" <<
+			//" {grn}obuild{/grn} {red}affected <object_id> del <affected_slot>{/red}\r\n" <<
+			//"  {grn}|____[example]{/grn}\r\n" <<
+			//"  |:: {wht}obuild{/wht} {gld}affected 6 3 STR 25{/gld}\r\n" <<
+			//"  |:: (this will set the affected slot number 3 on object 6 \r\n" <<
+			//"      to modify strength by 25)\r\n" <<
+			//"  |:: {red}see obuild help affected{/red}\r\n" <<
+			//" {grn}obuild{/grn} {red}flag <object_id> extra_flags <value>{/red}\r\n"<<
+			//" {red}see obuild help extra_flags{/red}\r\n" <<
+			//" {grn}obuild{/grn} {red}flag <object_id> <attr> <value>{/red}\r\n"<<
+			//" {red}see obuild help flags{/red}\r\n" <<
+			//"  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
+			//"  {gld}|:: value_0{/gld}\r\n" <<
+			//"  {gld}|:: value_1{/gld}\r\n" <<
+			//"  {gld}|:: value_2{/gld}\r\n" <<
+			//"  {gld}|:: value_3{/gld}\r\n" <<
+			//"  {gld}|:: type_flags {red}see: obuild help type_flags{/red}{/gld}\r\n" <<
+			//"  {gld}|:: wear_flags {red}see: obuild help wear_flags{/red}{/gld}\r\n" <<
+			//"  {gld}|:: extra_flags{/gld}\r\n" <<
+			//"  {gld}|:: weight{/gld}\r\n" <<
+			//"  {gld}|:: cost{/gld}\r\n" <<
+			//"  {gld}|:: cost_per_day{/gld}\r\n" <<
+			//"  {gld}|:: timer{/gld}\r\n" <<
+			//"  {gld}|:: bitvector {red}see: obuild help bitvector{/red}{/gld}\r\n" <<
+			" {grn}obuild{/grn} {red}create <item_number> <obj_type> <>{/red}\r\n" <<
+			"  {gld}|:: -:[obj_types]:-{/gld}\r\n" <<
+			"  {gld}|:: armor{/gld}\r\n" <<
+			"  {gld}|:: attachment{/gld}\r\n" <<
+			"  {gld}|:: consumable{/gld}\r\n" <<
+			"  {gld}|:: drone{/gld}\r\n" <<
+			"  {gld}|:: explosive{/gld}\r\n" <<
+			"  {gld}|:: gadget{/gld}\r\n" <<
+			"  {gld}|:: rifle{/gld}\r\n" <<
+			"  {gld}|:: trap{/gld}\r\n" <<
+			" {grn}obuild{/grn} {red}create <item_number> <obj_type> <>{/red}\r\n" <<
 			" {grn}obuild{/grn} {red}show <object_id>{/red}\r\n" <<
-			" {grn}obuild{/grn} {red}import <type> <yaml_file>{/red}\r\n" <<
+			" {grn}obuild{/grn} {red}obj_file <object_id> <file>{/red}\r\n" <<
 			" {red}types include: rifle, explosive, gadget, drone, attachment, armor, consumbale, trap{/red}\r\n" <<
 			"\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
 	}
-	auto args = mods::util::subcmd_args<4,args_t>(argument,"import");
+	std::cerr << "checkpoint H\n";
+	
+	auto args = mods::util::subcmd_args<9,args_t>(argument,"obj_file");
+	std::cerr << "checkpoint H\n";
 
 	if(args.has_value()) {
 		auto r = args.value();
@@ -2856,28 +2728,14 @@ ACMD(do_obuild) {
 			r_error(player, "Invalid number of arguments");
 			return;
 		}
-		std::map<std::string,int> types_map = {
-			{"rifle", ITEM_RIFLE},
-			{"explosive", ITEM_EXPLOSIVE},
-			{"gadget", ITEM_GADGET},
-			{"drone", ITEM_DRONE},
-			{"attachment", ITEM_ATTACHMENT},
-			{"armor", ITEM_ARMOR},
-			{"consumable", ITEM_CONSUMABLE},
-			{"trap", ITEM_TRAP}
-		};
-		if(types_map.find(r[1]) == types_map.end()){
-			r_error(player, "Invalid type");
+		int obj_index = mods::util::stoi(r[1]).value_or(-1);
+		if(obj_index < 0){
+			r_error(player, "Invalid index. Unrecognized.");
 			return;
 		}
-		r_status(player,"Creating new object");
-		obj_proto.push_back({});
-		auto & obj = obj_proto.back();
-		obj.feed(types_map[r[1]],r[2]);
-		if(player->is_executing_js()){
-			*player << "{index: " << obj_proto.size() - 1 << "}";
-		}
-		r_success(player,"Object imported and created");
+		auto & obj = obj_proto[obj_index];
+		obj.set_feed_file(r[2]);
+		r_success(player,"Object feed file set.");
 		return;
 	}
 
@@ -2886,13 +2744,61 @@ ACMD(do_obuild) {
 
 	if(args.has_value()) {
 		r_status(player,"Creating new object");
-		obj_proto.push_back({});
+		obj_proto.push_back({ITEM_RIFLE,"g36c.yml"});
 		if(player->is_executing_js()){
 			*player << "{index: " << obj_proto.size() - 1 << "}";
 		}
 		r_success(player,"Object created");
 		return;
 	}
+
+	args = mods::util::subcmd_args<7,args_t>(argument,"create");
+
+	if(args.has_value()) {
+		//TODO: !mundane make this a function
+		auto arg_vec = args.value();
+
+		if(arg_vec.size() < 3) {
+			r_error(player,"Invalid number of arguments");
+			return;
+		}
+		int obj_type = -1;
+
+#define MENTOC_LAZY_ME(a,mtype) if(arg_vec[2].compare(#a) == 0){ obj_type = mtype; }
+MENTOC_LAZY_ME(rifle,ITEM_RIFLE);
+MENTOC_LAZY_ME(explosive,ITEM_EXPLOSIVE);
+MENTOC_LAZY_ME(drone,ITEM_DRONE);
+MENTOC_LAZY_ME(gadget,ITEM_GADGET);
+MENTOC_LAZY_ME(attachment,ITEM_ATTACHMENT);
+MENTOC_LAZY_ME(armor,ITEM_ARMOR);
+MENTOC_LAZY_ME(consumable,ITEM_CONSUMABLE);
+MENTOC_LAZY_ME(trap,ITEM_TRAP);
+#undef MENTOC_LAZY_ME
+
+		int item_number = mods::util::stoi(arg_vec[1]).value_or(-1);
+
+		if(item_number == -1) {
+			r_error(player,"Please use a valid item number");
+			return;
+		}
+		if(obj_type == -1) {
+			r_error(player,"Please use a valid object type.");
+			return;
+		}
+
+		r_status(player,"Saving object");
+		std::string feed_file = arg_vec[3];
+		auto return_status = mods::builder::save_object(item_number,obj_type,feed_file);
+
+		if(!return_status.first) {
+			r_error(player,return_status.second);
+			return;
+		}
+		obj_proto.emplace_back(obj_type,feed_file);
+		r_success(player,"Object created");
+		return;
+	}
+
 
 	args = mods::util::subcmd_args<5,args_t>(argument,"save");
 
@@ -2928,7 +2834,10 @@ ACMD(do_obuild) {
 		}
 
 		r_status(player,"Saving object");
-		auto return_status = mods::builder::save_object(obj);
+		int item_number = obj->item_number;
+		int obj_type = obj->type;
+		std::string feed_file = obj->feed_file().data();
+		auto return_status = mods::builder::save_object(item_number,obj_type,feed_file);
 
 		if(!return_status.first) {
 			r_error(player,return_status.second);
@@ -3054,16 +2963,16 @@ ACMD(do_obuild) {
 				return;
 			}
 
-			obj_list.push_back(std::make_shared<obj_data>());
-			*obj_list.back() = obj_proto[index];
-			obj_list.back()->carried_by = obj_list.back()->worn_by = nullptr;
-			obj_to_room(obj_list.back().get(),IN_ROOM(player->cd()));
+			auto obj_ptr = create_object_from_index(i);
+			obj_ptr->carried_by = obj_ptr->worn_by = nullptr;
+			obj_to_room(obj_ptr.get(),IN_ROOM(player->cd()));
 			r_success(player,"Object created, look on the floor");
 		}
 
 		return;
 	}
 
+	
 	args = mods::util::subcmd_args<5,args_t>(argument,"list");
 
 	if(args.has_value()) {
@@ -3089,8 +2998,13 @@ ACMD(do_obuild) {
 					.push("short_description",obj->short_description)
 					.object_end();
 			}else{
-				*player << "{gld}[" << object_id << "]{/gld} :->{red} [" <<
-					obj->short_description << "]{/red}";
+				if(obj->short_description){
+					player->send("{gld}[%d]{/gld} :->{red}%s{/red}\r\n",object_id,obj->short_description);
+				}else if(obj->name){
+					player->send("{gld}[%d]{/gld} :->{red}%s{/red}\r\n",object_id,obj->name);
+				}else{
+					player->send("{gld}[%d]{/gld} :->{red}%s{/red}\r\n",object_id,"<null>");
+				}
 			}
 			object_id++;
 		}
@@ -3448,6 +3362,7 @@ ACMD(do_obuild) {
 		MENTOC_BITVECTOR(ITEM_ANTI_THIEF);
 		MENTOC_BITVECTOR(ITEM_ANTI_WARRIOR);
 		MENTOC_BITVECTOR(ITEM_NOSELL);
+		player->send("{red}obj_file: {/red} {grn}'%s'{/grn}\r\n",obj->feed_file());
 
 		for(unsigned index = 0;
 				index < MAX_OBJ_AFFECT; index++) {
@@ -3578,7 +3493,7 @@ ACMD(do_obuild) {
 			for(auto& ex_flag : mods::builder::weapon_type_flags) {
 				if(ex_flag.second.compare(*flag) == 0) {
 					if(!obj->rifle()){
-						obj->rifle(1);
+						exit(123);/** FIXME */
 					}
 					obj->obj_flags.weapon_flags ^= ex_flag.first;
 					found = true;
@@ -3595,7 +3510,7 @@ ACMD(do_obuild) {
 		}
 
 		if(!obj->rifle()){
-			obj->rifle(1);
+			exit(200);
 		}
 		MENTOC_OBI(worn_on);
 		MENTOC_OBI2(obj_flags.ammo,weapon_ammo);

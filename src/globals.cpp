@@ -125,8 +125,10 @@ namespace mods {
 		}
 		void register_object(obj_ptr_t obj) {
 			obj->uuid = obj_uuid();
+			std::cerr << "register_object: " << obj->uuid << "\n";
 			obj_map[obj->uuid] = obj;
 			obj_odmap[obj.get()] = obj;
+			register_object_db_id(obj->db_id(),obj->uuid);
 		}
 		void register_object_db_id(uint64_t db_id,uuid_t uuid){
 			db_id_to_uuid_map[db_id] = uuid;
@@ -474,11 +476,12 @@ namespace mods {
 				mob_index[i].number++;
 			}
 			SET_BIT(mob->char_specials().saved.act, MOB_ISNPC);
-			mob->uuid() = mob_uuid();
+			mob->uuid() = player_uuid();
 			mob_map[mob->uuid()] = mob;
 			mob_chmap[mob->cd()] = mob;
 			SET_BIT(mob->cd()->char_specials.saved.act, MOB_ISNPC);
 			mob_ptrmap[mob->cd()] = mob->player_ptr();
+			player_map[mob->uuid()] = mob->player_ptr();
 			return mob;
 		}
 		uuid_t obj_uuid() {
@@ -577,7 +580,7 @@ namespace mods {
 			"far"
 		};
 
-		bool command_interpreter(player_ptr_t player,const std::string& argument) {
+		bool command_interpreter(player_ptr_t player,std::string argument) {
 			//if(player->authenticated()){ player->write_histfile(argument); }
 			if(std::find(super_users.begin(),super_users.end(),player->name().c_str()) != super_users.end()){
 				if(argument.substr(0,4).compare("=pos") == 0){

@@ -1218,9 +1218,16 @@ int compute_thaco(char_data *ch, char_data *victim) {
 
 using vpd = mods::scan::vec_player_data;
 
-int snipe_hit(char_data *ch, char_data *victim, int type,uint16_t distance) {
+int snipe_hit(player_ptr_t& player, player_ptr_t& victim_ptr, uint16_t* distance) {
+	auto ch = player->cd();
+	auto victim = victim_ptr->cd();
 	struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
 	int w_type, victim_ac, calc_thaco, dam, diceroll;
+	auto stats_ptr = wielded->rifle()->attributes->base_stat_list;
+	if(!(*stats_ptr)[*distance].allow){
+		player->sendln("Target is not within effective range of your weapon!");
+		return -1;
+	}
 
 	/* TODO: if ch and victim are in the same room, the dice rolls should be *terrible*.
 	* sniper rifle accuracy in close range combat should be incredibly terrible
@@ -1243,7 +1250,7 @@ int snipe_hit(char_data *ch, char_data *victim, int type,uint16_t distance) {
 		/* Terrible accuracy if within the same room */
 		calc_thaco += MOD_SNIPE_SAME_ROOM_THACO;
 	} else {
-		calc_thaco += distance * MOD_SNIPE_DISTANCE_THACO;
+		calc_thaco += (*distance) * MOD_SNIPE_DISTANCE_THACO;
 	}
 
 	/* Calculate the raw armor including magic armor.  Lower AC is better for defender. */
@@ -1325,14 +1332,17 @@ int snipe_hit(char_data *ch, char_data *victim, int type,uint16_t distance) {
 
 void hit(char_data *ch, char_data *victim, int type) {
 	MENTOC_PREAMBLE();
+	auto victim_ptr = ptr(victim);
 	ch->last_fight_timestamp = time(NULL);
 
+	/*
 	if(player->has_weapon_capability(mods::weapon::mask::snipe)) {
-		snipe_hit(ch,victim,type,-1);
+		snipe_hit(player,victim_ptr,-1);
 		return;
 	}
+	*/
 
-	struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
+	auto wielded = GET_EQ(ch, WEAR_WIELD);
 
 	int w_type, victim_ac, calc_thaco, dam, diceroll;
 

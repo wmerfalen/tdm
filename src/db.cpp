@@ -1025,16 +1025,21 @@ void parse_sql_mobiles() {
 	 */
 	top_of_mobt = 0;
 
+#define psm_debug(a){ std::cerr << "[parse_sql_mobiles]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n"; }
+	psm_debug("db_get_all mobiles... -> parse_sql_mobiles [start]");
 	for(auto && row : db_get_all("mobile")) {
 		char_data proto;
-		d("name");
+		psm_debug("name");
 		proto.player.name.assign(row["mob_name"]);
-		d("DEBUG: mob proto name: '" << row["mob_name"].c_str());
+		psm_debug("DEBUG: mob proto name: '" << row["mob_name"].c_str());
+		psm_debug("proto.player.name.c_str(): '" << proto.player.name.c_str() << "'");
 		proto.player.short_descr.assign(row["mob_short_description"]);
 		proto.player.long_descr.assign(row["mob_long_description"]);
+		psm_debug("proto.player.short_descr: '" << proto.player.short_descr.c_str() << "'");
+		psm_debug("proto.player.long_descr: '" << proto.player.long_descr.c_str() << "'");
 
 		proto.player.description.assign(row["mob_description"]);
-		d("mob desc");
+		psm_debug("proto.player.description: '" << proto.player.description.c_str() << "'");
 
 		proto.char_specials.saved.act = mods::util::stoi<int>(row["mob_action_bitvector"]);
 		SET_BIT(proto.char_specials.saved.act, MOB_ISNPC);
@@ -1109,6 +1114,7 @@ void parse_sql_mobiles() {
 		assert(real_mobile(m_index.vnum) == mob_proto.size() -1);
 		mob_index.push_back(m_index);
 	}
+	psm_debug("db_get_all mobiles... -> parse_sql_mobiles [end]");
 }
 
 int parse_sql_objects() {
@@ -1116,17 +1122,34 @@ int parse_sql_objects() {
 
 	if(result.size()) {
 
-		obj_index.reserve(result.size());
-		obj_proto.reserve(result.size());
-		for(auto  row : result) {
-			//mods::meta_utils::write_meta("object",&row);
-			/** FIXME: this function has some issues. */
+		for(auto row : result) {
+			if(strlen(row["obj_file"].c_str()) == 0){
+				std::cerr << "obj_file is zero!-> '" << row["id"].c_str() << "\n";
+				exit(6);
+			}
+			if(row["obj_type"].as<int>() == 0 || !row["obj_file"].c_str()){
+				std::cerr << "parse_sql_objects encountered broken row: " << row["id"] << ".. skipping... \n";
+				continue;
+			}
 			index_data index;
-			index.vnum = mods::util::stoi<int>(row["obj_item_number"]);
+			index.vnum = (row["obj_item_number"]).as<int>();
 			index.number = 0;
 			index.func = nullptr;
 			obj_index.push_back(index);
-			obj_data proto;
+			auto index_ref = &obj_index.back();
+			std::string obj_file = "g36c.yml";
+			if(strlen(row["obj_file"].c_str())){
+				std::cerr << "found obj_file:'" << row["obj_file"].c_str() << "'\n";
+				obj_file = row["obj_file"].c_str();
+			}
+			if(row["obj_type"].as<int>() == 0){
+				std::cerr << "obj_type is zero: " << row["id"].as<int>() << "\n";
+				exit(5);
+			}
+			std::cerr << "[obj_proto].pushback\n";
+			obj_proto.push_back(obj_data(row["obj_type"].as<int16_t>(),obj_file));
+			auto & proto = obj_proto.back();
+			index_ref->vnum = proto.item_number;
 			//!proposed lmdb code:
 			auto aff_rows = db_get_by_meta("affected_type","aff_fk_id",row["obj_item_number"]);
 			for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
@@ -1134,27 +1157,26 @@ int parse_sql_objects() {
 				proto.affected[i].modifier = 0;
 			}
 
-			unsigned aff_index = 0;
+			//unsigned aff_index = 0;
 
-			for(auto aff_row : aff_rows) {
-				//mods::meta_utils::write_meta("affected_type",&aff_row);
-				if(aff_index >= MAX_OBJ_AFFECT) {
-					log(
-							(std::string(
-													 "WARNING: sql has more affected rows than allowed on object #")
-							 + std::to_string(mods::util::stoi<int>(row["obj_item_number"]))
-							).c_str()
-						 );
-					break;
-				}
-				proto.affected[aff_index].location = mods::util::stoi<int>(row["aff_location"]);
-				proto.affected[aff_index].modifier = mods::util::stoi<int>(row["aff_modifier"]);
-				++aff_index;
-			}
+			//if(aff_rows.size()){
+			//	for(auto aff_row : aff_rows) {
+			//		if(aff_index >= MAX_OBJ_AFFECT) {
+			//			log(
+			//					(std::string(
+			//											 "WARNING: sql has more affected rows than allowed on object #")
+			//					 + std::to_string(mods::util::stoi<int>(row["obj_item_number"]))
+			//					).c_str()
+			//				 );
+			//			break;
+			//		}
+			//		proto.affected[aff_index].location = mods::util::stoi<int>(row["aff_location"]);
+			//		proto.affected[aff_index].modifier = mods::util::stoi<int>(row["aff_modifier"]);
+			//		++aff_index;
+			//	}
+			//}
 
-			proto.item_number = mods::util::stoi<int>(row["obj_item_number"]);
-			proto.name.assign(row["obj_name"]);
-			proto.description.assign(row["obj_description"]);
+#if 0
 #define MENTOC_STR(sql_name,obj_name) \
 			if(mods::string(row[#sql_name]).length()){\
 				proto.obj_name = \
@@ -1162,43 +1184,62 @@ int parse_sql_objects() {
 			}else{\
 				proto.obj_name = strdup("<proto.obj_name>");\
 			}
-			proto.short_description.assign(row["obj_short_description"]);
-			proto.action_description.assign(row["obj_action_description"]);
-			auto ed_rows = db_get_by_meta("extra_description","obj_fk_id",row["id"]);
+			//if(row["obj_short_description"].as<std::string>().length() == 0){
+			//	proto.short_description.assign("<default short description>");
+			//}else{
+			//	proto.short_description.assign(row["obj_short_description"].c_str());
+			//}
+			//if(row["obj_action_description"].as<std::string>().length() == 0){
+			//	proto.action_description.assign("<default action description>");
+			//}else{
+			//	proto.action_description.assign(row["obj_action_description"].c_str());
+			//}
+			//auto ed_rows = db_get_by_meta("extra_description","obj_fk_id",row["id"]);
 
-			if(ed_rows.size()) {
-				for(auto ed_row : ed_rows){
-					proto.ex_description.emplace_back(row["extra_keyword"], row["extra_description"]);
-				}
-			}
+			//if(ed_rows.size()) {
+			//	for(auto ed_row : ed_rows){
+			//		proto.ex_description.emplace_back(row["extra_keyword"], row["extra_description"]);
+			//	}
+			//}else{
+			//	proto.ex_description.emplace_back("keyword","description");
+			//}
 
-			proto.worn_on = mods::util::stoi<int>(row["obj_worn_on"]);
-			proto.type = mods::util::stoi<int>(row["obj_type"]);
+			//proto.worn_on = mods::util::stoi<int>(row["obj_worn_on"]);
+			//proto.type = mods::util::stoi<int>(row["obj_type"]);
 			//proto.ammo = 0;
-			auto flag_rows = db_get_by_meta("object_flags","obj_fk_id",(row["id"]));
-			if(flag_rows.size() > 0){
-				proto.obj_flags.feed(flag_rows[0]);
-			}
+			//auto flag_rows = db_get_by_meta("object_flags","obj_fk_id",(row["id"]));
+			//if(flag_rows.size() > 0){
+			//	proto.obj_flags.feed(flag_rows[0]);
+			//}else{
+			//	//proto.obj_flags.init();
+			//}
 
 			/** TODO: this needs to be filled in by postgres. We need to
 			 * check if it's a weapon, if so, load the fields in proto with
 			 * whatever is in the database.
 			 */
 
+#endif
 			proto.carried_by = proto.worn_by = nullptr;
 			proto.next_content = nullptr;
 			proto.contains = nullptr;
 			proto.in_obj = nullptr;
 			proto.worn_by = nullptr;
 			proto.carried_by = nullptr;
-			proto.feed(row);
 			mods::globals::obj_stat_pages[
-				mods::util::stoi<int>(row["obj_item_number"])
+				proto.item_number
 			] = std::move(proto.generate_stat_page());
-			obj_proto.push_back(proto);
+			std::cerr << "obj_type for proto.back(): " << proto.type << "\n";
+			std::cerr << "obj_file for proto.back(): " << proto.feed_file() << "\n";
+	for(auto p : obj_proto){
+		std::cerr << "~~~[obj_proto dump]: type: '" << p.type << "' feed_file: '" << p.feed_file() << "'\n";
+	}
 		}
 	} else {
 		log("[notice] no objects from sql");
+	}
+	for(auto p : obj_proto){
+		std::cerr << "[obj_proto dump]: type: '" << p.type << "' feed_file: '" << p.feed_file() << "'\n";
 	}
 
 	return 0;
@@ -2009,7 +2050,7 @@ char_data *read_mobile(mob_vnum nr, int type) { /* and mob_rnum */
 
 
 obj_ptr_t blank_object() {
-	obj_list.push_back(std::make_shared<obj_data>());
+	obj_list.push_back(std::make_shared<obj_data>(ITEM_RIFLE,"g36c.yml"));
 	mods::globals::register_object(obj_list.back());
 	return obj_list.back();
 }
@@ -2030,16 +2071,20 @@ shop_ptr_t create_shop_from_index(std::size_t proto_index){
 /* create a new object from a prototype */
 obj_ptr_t create_object_from_index(std::size_t proto_index){
 	if (proto_index >= obj_proto.size()){
+		exit(4);
 		log("SYSERR: requesting to read object number(%d) out of obj_proto.size(): (%d)",
 				proto_index, obj_proto.size());
 		return nullptr;
 	}
-	obj_list.push_back(std::make_shared<obj_data>(obj_proto[proto_index]));
+	for(auto & p : obj_proto){
+		std::cerr << "[obj_proto dump]: type: '" << p.type << "' feed_file: '" << p.feed_file() << "'\n";
+	}
+	std::cerr << "create_object_from_index proto_index: " << proto_index << " obj_proto.type:" << obj_proto[proto_index].type << "\n";
+	obj_list.push_back(std::make_shared<obj_data>(obj_proto[proto_index].type,obj_proto[proto_index].feed_file()));
 	mods::globals::register_object(obj_list.back());
 	obj_index[proto_index].number++;
 	return obj_list.back();
 }
-
 
 /* create a new object from a prototype */
 struct obj_data *read_object(obj_vnum nr, int type) { /* and obj_rnum */

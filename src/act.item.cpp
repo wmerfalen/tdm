@@ -1396,7 +1396,7 @@ void perform_wear(char_data *ch, struct obj_data *obj, int where) {
 	}
 
 	wear_message(ch, obj, where);
-	player->equip(optr_by_uuid(obj->uuid),where);
+	player->equip(obj->uuid,where);
 	player->uncarry(optr_by_uuid(obj->uuid));
 }
 

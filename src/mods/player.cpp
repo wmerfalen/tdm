@@ -236,10 +236,10 @@ namespace mods {
 	void player::equip(obj_ptr_t in_object,int pos) {
 		if(pos < NUM_WEARS){
 			if(pos == WEAR_WIELD){
-				m_weapon_flags = in_object->obj_flags.weapon_flags;
+				this->m_weapon_flags = in_object->obj_flags.weapon_flags;
 			}
 			GET_EQ(m_char_data, pos) = in_object.get();
-			in_object->worn_by = cd();
+			in_object->worn_by = this->cd();
 			in_object->worn_on = pos;
 			m_equipment[pos] = in_object;
 			mods::orm::inventory::lmdb::add_player_wear(this->db_id(),in_object->db_id(),in_object->type,pos);
@@ -247,6 +247,14 @@ namespace mods {
 			//perform_equip_calculations(pos,true);
 			this->m_sync_equipment();
 		}
+	}
+	void player::equip(uuid_t obj_uuid,int pos){
+		std::cerr << "player::equip(uuid): " << obj_uuid << "\n";
+		auto obj = optr_by_uuid(obj_uuid);
+		if(!obj){
+			exit(3);
+		}
+		this->equip(obj,pos);
 	}
 	void player::unequip(int pos) {
 		if(pos < NUM_WEARS && m_equipment[pos]){
@@ -1126,6 +1134,12 @@ namespace mods {
 		m_camera = nullptr;
 	}
 
+	obj_data_ptr_t player::primary(){
+		return this->equipment(WEAR_PRIMARY);
+	}
+	obj_data_ptr_t player::secondary(){
+		return this->equipment(WEAR_SECONDARY);
+	}
 
 };
 

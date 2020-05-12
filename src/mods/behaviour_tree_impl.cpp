@@ -5,7 +5,7 @@
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
 extern void hit(char_data *ch, char_data *victim, int type);
-extern int snipe_hit(char_data *ch,char_data *victim, int type,uint16_t distance);
+extern int snipe_hit(player_ptr_t&,player_ptr_t&, uint16_t* distance);
 
 namespace mods::behaviour_tree_impl {
 	container_t trees;
@@ -93,7 +93,9 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 							/** TODO: if no ammo, search for ammo */
 							/** TODO: */
 								auto find_results = mods::scan::los_find(std::make_shared<mods::player>(mob),std::make_shared<mods::player>(remembered_sniper));
-								snipe_hit(mob,remembered_sniper,TYPE_SNIPE,find_results.distance);
+								auto mob_ptr = ptr(mob);
+								auto remembered_sniper_ptr = ptr(remembered_sniper);
+								snipe_hit(mob_ptr,remembered_sniper_ptr,&find_results.distance);
 								return status::SUCCESS;
 							}
 						}

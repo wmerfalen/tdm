@@ -71,7 +71,7 @@ namespace mods {
 		using   chdata_ptr = char_data *;
 		using		descriptor_t = mods::descriptor_data;
 		using		descriptor_iterator_t = std::deque<mods::descriptor_data>::iterator;
-		using		time_type_t = unsigned long;//std::chrono::system_clock::time_point;
+		using		time_type_t = unsigned long;
 		operator chdata_ptr(){ return cd(); }
 		enum misc_pref_enum_t {
 			HOLD_ANYTHING = 1,
@@ -519,6 +519,7 @@ namespace mods {
 		}
 		void set_overhead_map_height(uint8_t h){ m_overhead_map_height = h; }
 		void equip(obj_ptr_t obj,int pos);
+		void equip(uuid_t,int pos);
 		void unequip(int pos);
 		obj_ptr_t equipment(int pos);
 		std::vector<affected_type>& get_affected_by() { return m_affected_by; }
@@ -574,6 +575,9 @@ namespace mods {
 		void unblock_event(uint32_t unblock);
 		void cancel_block();
 		uint32_t current_block();
+
+		obj_data_ptr_t primary();
+		obj_data_ptr_t secondary();
 
 		protected:
 		std::array<bool,misc_pref_enum_t::SIZE> m_misc_pref;

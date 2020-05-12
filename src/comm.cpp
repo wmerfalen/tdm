@@ -731,7 +731,7 @@ void game_loop(socket_t mother_desc) {
 				} else if(perform_alias(player->desc(), comm, sizeof(comm))) { // Run it through aliasing system 
 					get_from_q(player->desc(), comm, &aliased);
 				}
-				command_interpreter(player, comm); // Send it to interpreter 
+				command_interpreter(player, std::string(comm)); // Send it to interpreter 
 			}
 			++i;
 		}//end while(i < r)
@@ -2271,6 +2271,7 @@ void send_to_room(room_rnum room, const char *messg, ...) {
 		va_start(args, messg);
 		vwrite_to_output(p->desc(), messg, args);
 		va_end(args);
+		p->desc().has_prompt = 0;
 	}
 }
 

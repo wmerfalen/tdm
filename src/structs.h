@@ -397,6 +397,7 @@ enum player_class_t {
 #define WEAR_PRIMARY   WEAR_WIELD
 #define WEAR_HOLD      17
 #define WEAR_SECONDARY_WEAPON 18
+#define WEAR_SECONDARY 18
 #define WEAR_WEAPON_ATTACHMENT      19
 #define WEAR_SHOULDERS_L 20
 #define WEAR_SHOULDERS_R 21
@@ -792,70 +793,29 @@ enum player_level {
 	/* ================== Memory Structure for Objects ================== */
 	struct obj_data {
 		using location_data_t = uint16_t;
+		static inline int to_int(std::string c){
+#define MENTOC_LAZY_F(a,b){ if(c.compare(#a) == 0){ return b; } }
+			MENTOC_LAZY_F(rifle,ITEM_RIFLE);
+			MENTOC_LAZY_F(explosive,ITEM_EXPLOSIVE);
+			MENTOC_LAZY_F(armor,ITEM_ARMOR);
+			MENTOC_LAZY_F(trap,ITEM_TRAP);
+			MENTOC_LAZY_F(gadget,ITEM_GADGET);
+			MENTOC_LAZY_F(attachment,ITEM_ATTACHMENT);
+			std::cerr << "dying... 201\n";
+			exit(2);
+		}
 		void feed(mentoc_pqxx_result_t);
-		void feed(std::string_view in_type,std::string_view feed_file);
-		void feed(int in_type,std::string_view feed_file);
+		void feed(int16_t in_type,std::string_view feed_file);
 		void init();
 		obj_data(const obj_data& other){
-			d("[WARNING] obj_data copy constructor is broken!!!\n");
-			item_number = other.item_number;
-			in_room = other.in_room;
-			name.assign(other.name.str_or(""));
-			description.assign(other.description.str_or(""));
-			short_description.assign(other.short_description.str_or(""));
-			action_description.assign(other.action_description.str_or(""));
-			ex_description = other.ex_description;
-			carried_by = other.carried_by;
-			worn_by = other.worn_by; 
-			worn_on = other.worn_on;
-			in_obj = other.in_obj;
-			contains = other.contains; 
-			next_content = other.next_content;
-			next = other.next;
-			ai_state = other.ai_state;
-			uuid = mods::globals::obj_uuid();
-			m_capabilities = other.m_capabilities;
-			obj_flags = other.obj_flags;
-			m_db_id = other.m_db_id;
-
-			/*
-#define MENTOC_OBJ_COPY_CONSTRUCTOR(r,data,CLASS_TYPE) \
-			if(other.BOOST_PP_CAT(m_,CLASS_TYPE)){\
-				this->CLASS_TYPE()->feed(other->feed_file()); }
-BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
-*/
-			/** FIXME: copy constructor is broken right now */
-			d("[WARNING] obj_data copy constructor is broken!!! [returning]\n");
+			feed(other.type,other.m_feed_file);
 		}
-		obj_data& operator=(const obj_data& other){ 
-			d("[WARNING] obj_data assign operator is broken!!!\n");
-			d("[WARNING] obj_data assign operator is broken!!!\n");
-			d("[WARNING] obj_data assign operator is broken!!!\n");
-			item_number = other.item_number;
-			in_room = other.in_room;
-			name.assign(other.name.str_or(""));
-			description.assign(other.description.str_or(""));
-			short_description.assign(other.short_description.str_or(""));
-			action_description.assign(other.action_description.str_or(""));
-			ex_description = other.ex_description;
-			carried_by = other.carried_by;
-			worn_by = other.worn_by; 
-			worn_on = other.worn_on;
-			in_obj = other.in_obj;
-			contains = other.contains; 
-			next_content = other.next_content;
-			next = other.next;
-			ai_state = other.ai_state;
-			uuid = mods::globals::obj_uuid();
-			m_capabilities = other.m_capabilities;
-			obj_flags = other.obj_flags;
-			m_db_id = 0;
-			/** FIXME: copy constructor is broken right now */
-//BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
-			d("[WARNING] obj_data assign operator is broken [returning]!!!\n");
+		obj_data& operator=(obj_data& other){ 
+			feed(other.type,other.m_feed_file);
 			return *this;
 		}
-		obj_data() : 
+		obj_data() = delete;
+		obj_data(int item_type,std::string_view feed_file) :
 			item_number(0),in_room(-1),name(""),
 			description(""),short_description(""),
 			action_description(""),
@@ -864,6 +824,8 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 			next(nullptr),ai_state(0),uuid(0),m_db_id(0)
 		{
 			this->init();
+			std::cerr << "feeding with item_type: " << item_type << " feed_file: '" << feed_file << "'\n";
+			this->feed(item_type,feed_file);
 		}
 		~obj_data() = default;
 		obj_vnum item_number;	/* Where in data-type			*/
@@ -939,26 +901,12 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_COPY_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 		CLASS_TYPE(\
 				std::string_view feed_file\
 		){\
-			d("[debug] object class type feed_file: '" << feed_file << "' " << \
-				"class_type: '" << BOOST_PP_STRINGIZE(CLASS_TYPE) << "'\n");\
+			std::cerr << "[debug] object class type feed_file: '" << feed_file << "' " << \
+				"class_type: '" << BOOST_PP_STRINGIZE(CLASS_TYPE) << "'\n";\
 	 		this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(feed_file);\
 			this->set_str_type(BOOST_PP_STRINGIZE(CLASS_TYPE));\
 			this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
 			return this->BOOST_PP_CAT(m_,CLASS_TYPE).get();\
-		}\
-		\
-		\
-		/* rifle_data_t* rifle(uint8_t mode) { */\
-		/* rifle_data_t* rifle(uint8_t mode) { */\
-		/* rifle_data_t* rifle(uint8_t mode) { */\
-		BOOST_PP_CAT(CLASS_TYPE,_data_t*)\
-		CLASS_TYPE(\
-				uint8_t mode\
-		){\
-			this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(); \
-			this->set_str_type(BOOST_PP_STRINGIZE(CLASS_TYPE));\
-			this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
-			return this->BOOST_PP_CAT(m_, CLASS_TYPE).get();\
 		}\
 		\
 		\
@@ -1021,14 +969,16 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_DATA_OBJ, ~, MENTOC_ITEM_TYPES_SEQ)
 			this->ex_description.emplace_back(this->name.c_str(),this->description.c_str());
 			this->extended_item_vnum = fed_object->attributes->vnum;
 			this->str_sub_type = fed_object->attributes->str_type;
-			d("[post_feed] str_sub_type: '" << str_sub_type << "'");
-			d("[post_feed][END]**********************************************");
+			std::cerr << "[post_feed] type: " << this->type << "\n";
+std::cerr << "[post_feed] str_sub_type: '" << str_sub_type << "'\n";
+std::cerr << "[post_feed][END]**********************************************\n";
 		}
 		void set_owner(uuid_t p){ m_owner = p; }
 		uuid_t get_owner(){ return m_owner; }
 		location_data_t location_data(){ return m_location_data; }
 		void set_location_data(location_data_t i){ m_location_data = i; }
 		std::string generate_stat_page();
+		void set_feed_file(std::string f){ m_feed_file = f; }
 		std::string_view feed_file(){ return m_feed_file; }
 		protected:
 #define MENTOC_UPTR(r,data,CLASS_TYPE) std::unique_ptr<BOOST_PP_CAT(CLASS_TYPE,_data_t)> BOOST_PP_CAT(m_, CLASS_TYPE);

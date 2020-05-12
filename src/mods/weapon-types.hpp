@@ -1,5 +1,18 @@
 #ifndef __MENTOC_MODS_WEAPON_TYPES_HEADER__
 #define __MENTOC_MODS_WEAPON_TYPES_HEADER__
+#include <vector>
+namespace mods::weapon {
+	using weapon_accuracy_t = float;
+	using weapon_damage_t = float;
+	using room_distance_t = uint8_t;
+	using allow_shot_t = bool;
+	struct weapon_type_statistics_t {
+		allow_shot_t allow;
+		weapon_accuracy_t accuracy;
+		weapon_damage_t damage;
+	};
+	using weapon_stat_list_t = std::vector<weapon_type_statistics_t>;
+};
 
 namespace mods::weapon::capabilities {
 	enum cap_t {

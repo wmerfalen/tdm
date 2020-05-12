@@ -25,6 +25,9 @@ using mw_attachment = mods::weapon::type::attachment;
 using mw_drone = mods::weapon::type::drone;
 using mw_consumable = mods::weapon::type::consumable;
 using mw_trap = mods::weapon::type::trap;
+namespace mods {
+	struct player;
+};
 namespace mods::weapon {
 	extern std::vector<cap_t> get_caps(mw_rifle);
 	extern std::vector<cap_t> get_caps(mw_gadget);
@@ -34,6 +37,13 @@ namespace mods::weapon {
 	extern std::vector<cap_t> get_caps(mw_drone);
 	extern std::vector<cap_t> get_caps(mw_consumable);
 	extern std::vector<cap_t> get_caps(mw_trap);
+	using obj_ptr_t = std::shared_ptr<obj_data>;
+	using player_ptr_t = std::shared_ptr<mods::player>;
+	extern obj_ptr_t get_clip_by_name(player_ptr_t & player,std::string_view arg);
+	extern void reload_primary_with(player_ptr_t& player,std::string_view arg);
+	extern void reload_secondary_with(player_ptr_t& player,std::string_view arg);
+	extern void reload_object_with(player_ptr_t& player,obj_ptr_t weapon,std::string_view arg);
+	extern bool hits_target(player_ptr_t& player,obj_ptr_t& weapon,player_ptr_t& target, uint16_t* distance);
 };
 struct obj_flag_data;
 
@@ -158,6 +168,7 @@ static inline durability_profile_type_t to_durability_profile(std::string_view d
 MENTOC_MEMBER_VARS_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
 
 			MENTOC_BASE_MEMBERS
+			const mods::weapon::weapon_stat_list_t* base_stat_list;
 	};
 
 	struct explosive_description_t : public yaml_description_t {

@@ -52,8 +52,14 @@
 #define LMDBRENEW() mods::db::lmdb_renew()
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
 /** vim-sorcery: :%s/std::cerr << \(.*\);/d(\1);/ */
+#ifndef __MENTOC_DEBUG__
+	#define __MENTOC_DEBUG__
+#endif
+
 #ifdef __MENTOC_DEBUG__
-#define d(a) std::cerr << "[**DEBUG**]->[file:" << __FILE__ << "][line:" << __LINE__ << "][msg]: " << a << "\n" << std::flush;
+#ifndef d
+	#define d(a) std::cerr << "[**DEBUG**]->[file:" << __FILE__ << "][line:" << __LINE__ << "][msg]: " << a << "\n" << std::flush;
+#endif
 #else
 #define d(a) ;
 #endif
@@ -145,7 +151,7 @@ namespace mods {
 		std::string color_eval(std::string_view buffer);
 		std::string replace_all(std::string str, const std::string& from, const std::string& to);
 		const char* say_random(const mods::ai_state::event_type_t&);
-		bool command_interpreter(player_ptr_t,const std::string& argument);
+		bool command_interpreter(player_ptr_t,std::string argument);
 		void post_command_interpreter(char_data *ch, char* argument);
 		int dir_int(char);
 		void affect_room_light(int room,int offset);

@@ -97,15 +97,15 @@ namespace mods::doors  {
 		mods::globals::dispose_object(obj_uuid);
 	}
 	static inline void knockback_room(const room_rnum room,int door){
-		send_to_room(room,"\r\n{gld}*** BOOM!!! ***{/gld}\r\nYou are knocked back by a breach charge explosion %s!", from_dirstr(door).c_str());
+		send_to_room(room,"\r\n{gld}*** BOOM!!! ***{/gld}\r\nYou are knocked back by a breach charge explosion %s!\r\n", from_dirstr(door).c_str());
 		auto opposite_room = world[room].dir_option[door]->to_room;
-		send_to_room(opposite_room,"You are knocked back by a breach charge explosion %s!", from_dirstr(OPPOSITE_DIR(door)).c_str());
+		send_to_room(opposite_room,"You are knocked back by a breach charge explosion %s!\r\n\r\n", from_dirstr(OPPOSITE_DIR(door)).c_str());
 	}
 	static inline void breached(const room_rnum room,int direction){
 		send_to_room(room, "\r\n{gld}*** BOOM!!! ***{/gld}\r\nThe door %s explodes from a breach charge explosion!\r\n", from_dirstr(direction).c_str());
 	}
 	static inline void thermite_breached(const room_rnum room,int direction){
-		send_to_room(room,"\r\n{gld}*** BOOM!!! ***{/gld}\r\nThe {red}REINFORCED{/red} door %s gets destroyed by a {gld}THERMITE{/gld} breach charge!\r\n", from_dirstr(direction).c_str());
+		send_to_room(room,"\r\n{gld}*** BOOM!!! ***{/gld}\r\nThe {red}REINFORCED{/red} door %s gets destroyed by a {gld}THERMITE{/gld} breach charge!", from_dirstr(direction).c_str());
 	}
 	static inline void warn_thermite_room(const room_rnum room,int direction){
 		send_to_room(room,"\r\n{gld}*** HISSSSS ***{/gld}\r\nThe {red}REINFORCED{/red} door %s starts to melt in a square pattern as a {gld}THERMITE{/gld} breach charge cuts through it...\r\n", from_dirstr(direction).c_str());
@@ -149,7 +149,7 @@ namespace mods::doors  {
 			auto holding = optr_by_uuid(obj_uuid);
 			auto player = ptr_by_uuid(player_uuid);
 			auto room = player->room();
-			player->send("\r\n{gld}*** CLICK ***{/gld}\r\nYou activate the trigger on the %s...\r\n", holding->name.c_str());
+			player->send("\r\n{gld}*** CLICK ***{/gld}\r\nYou activate the trigger on the %s...\r\n\r\n", holding->name.c_str());
 			send_to_room_except(room,{player},"\r\n{gld}*** CLICK ***{/gld}\r\n%s activates the trigger on %s...\r\n",player->name().c_str(),holding->name.c_str());
 		});
 

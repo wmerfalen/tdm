@@ -704,11 +704,13 @@ void look_in_obj(char_data *ch, char *arg) {
 	} else if(!(bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM |
 					FIND_OBJ_EQUIP, ch, &dummy, &obj))) {
 		player->send("There doesn't seem to be %s %s here.\r\n", AN(arg), arg);
-	} else if(obj->rifle() && obj->obj_flags.holds_ammo){
-		player->sendln(std::string(TOSTR(obj->obj_flags.ammo) + " rounds.").c_str());
+	} else if(obj->has_rifle()){
+		mods::weapon::list_rounds(player,obj);
+		return;
 	} else if((GET_OBJ_TYPE(obj) != ITEM_DRINKCON) &&
 			(GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN) &&
-			(GET_OBJ_TYPE(obj) != ITEM_CONTAINER)) {
+			(GET_OBJ_TYPE(obj) != ITEM_CONTAINER)
+			) {
 		player->sendln( "There's nothing inside that!");
 	} else {
 		if(GET_OBJ_TYPE(obj) == ITEM_CONTAINER) {

@@ -1,6 +1,9 @@
 #include "weapon.hpp"
 #include "../../db.h"
+#include "rand.hpp"
 /** FIXME: need to assign vnum/ids to objects */
+extern int generic_find(char *arg, bitvector_t bitvector, char_data *ch,
+		char_data **tar_ch, struct obj_data **tar_obj);
 namespace mods::weapon {
 	std::vector<cap_t> get_caps(mw_gadget type){
 		switch(type){
@@ -196,23 +199,23 @@ namespace mods::weapon {
 	/** This function is a prime example of how to populate a obj_ptr_t */
 	obj_data_ptr_t psg1(){
 		auto obj = base_rifle_object();
-		obj->rifle("base_sniper.yml");
+		obj->rifle("psg1.yml");
 
-		/** TODO: determine clip size */
-		obj->obj_flags.ammo = 12;
-		/** TODO: needs to be whatever the rifle's max is */
-		obj->obj_flags.ammo_max = 75;
-		obj->obj_flags.weapon_flags = mods::weapon::SNIPE;
-		obj->obj_flags.clip_size = 8;
-		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
-		obj->name.assign("PSG-1 sniper rifle");
-		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description.assign("A debilitating PSG-1 sniper rifle is lying here.");
-		/** [ APPEARS ]: when you type inv */
-		obj->short_description.assign("PSG-1 sniper rifle <short>");
-		obj->action_description.assign("action desc");      /* What to write when used          */
-		obj->rifle()->type = mw_rifle::SNIPER;
-		obj->ex_description.emplace_back("sniper rifle psg1",obj->description.c_str());
+		///** TODO: determine clip size */
+		//obj->obj_flags.ammo = 12;
+		///** TODO: needs to be whatever the rifle's max is */
+		//obj->obj_flags.ammo_max = 75;
+		//obj->obj_flags.weapon_flags = mods::weapon::SNIPE;
+		//obj->obj_flags.clip_size = 8;
+		///** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
+		//obj->name.assign("PSG-1 sniper rifle");
+		///** [ APPEARS ]: when you drop it and it's laying on the floor */
+		//obj->description.assign("A debilitating PSG-1 sniper rifle is lying here.");
+		///** [ APPEARS ]: when you type inv */
+		//obj->short_description.assign("PSG-1 sniper rifle <short>");
+		//obj->action_description.assign("action desc");      /* What to write when used          */
+		//obj->rifle()->type = mw_rifle::SNIPER;
+		//obj->ex_description.emplace_back("sniper rifle psg1",obj->description.c_str());
 
 		/** damage/hit roll modifications */
 		return std::move(obj);
@@ -220,19 +223,19 @@ namespace mods::weapon {
 
 	obj_data_ptr_t new_frag_grenade_object(){
 		auto obj = base_explosive_object();
-		obj->explosive(mw_explosive::FRAG_GRENADE);
-		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
-		obj->name.assign("a frag grenade");
-		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description.assign("A fragmentation grenade is lying here.");
-		/** [ APPEARS ]: when you type inv */
-		/** [ USED_WHEN ]: when you "hold frag", it will say "You hold frag grenade <short>" */
-		/**   |------------> obj->short_description.assign("frag grenade <short>");        */
-		obj->short_description.assign("an ACME Industries Frag grenade");
-		/** [ APPEARS ]: when you "examine frag", it will say exactly this  */
-		obj->action_description.assign("frag fragmentation grenade nade");
-		obj->explosive()->type = mw_explosive::FRAG_GRENADE;
-		obj->ex_description.emplace_back("frag grenade",obj->description.c_str());
+		obj->explosive("frag-grenade.yml");
+		///** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
+		//obj->name.assign("a frag grenade");
+		///** [ APPEARS ]: when you drop it and it's laying on the floor */
+		//obj->description.assign("A fragmentation grenade is lying here.");
+		///** [ APPEARS ]: when you type inv */
+		///** [ USED_WHEN ]: when you "hold frag", it will say "You hold frag grenade <short>" */
+		///**   |------------> obj->short_description.assign("frag grenade <short>");        */
+		//obj->short_description.assign("an ACME Industries Frag grenade");
+		///** [ APPEARS ]: when you "examine frag", it will say exactly this  */
+		//obj->action_description.assign("frag fragmentation grenade nade");
+		//obj->explosive()->type = mw_explosive::FRAG_GRENADE;
+		//obj->ex_description.emplace_back("frag grenade",obj->description.c_str());
 		return std::move(obj);
 	}
 
@@ -255,7 +258,7 @@ namespace mods::weapon {
 
 	obj_data_ptr_t new_incendiary_grenade_object(){
 		auto obj = base_explosive_object();
-		obj->explosive(mw_explosive::INCENDIARY_GRENADE);
+		obj->explosive("incendiary-grenade.yml");
 		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
 		obj->name.assign("An incendiary grenade");
 		/** [ APPEARS ]: when you drop it and it's laying on the floor */
@@ -270,7 +273,7 @@ namespace mods::weapon {
 
 	obj_data_ptr_t new_emp_grenade_object(){
 		auto obj = base_explosive_object();
-		obj->explosive(mw_explosive::EMP_GRENADE);
+		obj->explosive("emp-grenade.yml");
 		obj->explosive()->type = mw_explosive::EMP_GRENADE;
 		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
 		obj->name.assign("An E.M.P. grenade");
@@ -285,7 +288,7 @@ namespace mods::weapon {
 
 	obj_data_ptr_t new_smoke_grenade_object(){
 		auto obj = base_explosive_object();
-		obj->explosive(mw_explosive::SMOKE_GRENADE);
+		obj->explosive("smoke-grenade.yml");
 		obj->explosive()->type = mw_explosive::SMOKE_GRENADE;
 		/** [ APPEARS ]: when you 'look smoke' or 'examine smoke' @act.informative.cpp */
 		obj->name.assign("Smoke grenade");
@@ -300,7 +303,7 @@ namespace mods::weapon {
 
 	obj_data_ptr_t new_flashbang_grenade_object(){
 		auto obj = base_explosive_object();
-		obj->explosive(mw_explosive::FLASHBANG_GRENADE);
+		obj->explosive("flashbang.yml");
 		obj->explosive()->type = mw_explosive::FLASHBANG_GRENADE;
 		/** [ APPEARS ]: when you 'look flashbang' or 'examine flashbang' @act.informative.cpp */
 		obj->name.assign("flashbang grenade flash");
@@ -374,6 +377,64 @@ namespace mods::weapon {
 		obj->ex_description.emplace_back("deagle","A devastating Desert Eagle lays here");
 		obj->rifle()->type = mw_rifle::PISTOL;
 		return std::move(obj);
+	}
+
+	void list_rounds(player_ptr_t& player,obj_ptr_t& obj){
+		player->send("%d rounds.\r\n",obj->obj_flags.ammo);
+	}
+
+	obj_ptr_t get_clip_by_name(player_ptr_t & player, std::string_view arg){
+		obj_ptr_t clip = nullptr;
+		obj_data* found_obj = nullptr;
+		char_data* found_char = nullptr;
+		int bits = 0;
+		bits = generic_find((char*)arg.data(), FIND_OBJ_INV, player->cd(), &found_char, &found_obj);
+		if(bits){
+			clip = optr_by_uuid(found_obj->uuid);
+		}
+		return clip;
+	}
+
+
+	void reload_object(player_ptr_t & player, obj_ptr_t weapon,std::string_view with){
+		auto clip = get_clip_by_name(player,with);
+		if(!clip){
+			player->sendln("Couldn't find the clip you're referring to!");
+			return;
+		}
+		weapon->obj_flags.ammo += clip->obj_flags.ammo;
+		clip->obj_flags.ammo = 0;
+		mods::globals::dispose_object(clip->uuid);
+	}
+
+	void reload_primary_with(player_ptr_t& player,std::string_view with_clip){
+		if(!player->primary()){
+			player->sendln("You aren't wielding anything in your primary slot!");
+			return;
+		}
+		reload_object(player,player->primary(),with_clip);
+	}
+
+	void reload_secondary_with(player_ptr_t& player,std::string_view with_clip){
+		if(!player->secondary()){
+			player->sendln("You aren't wielding anything in your ary slot!");
+			return;
+		}
+		reload_object(player,player->secondary(),with_clip);
+	}
+
+	bool hits_target(player_ptr_t& player, obj_ptr_t& weapon, player_ptr_t& target, uint16_t* distance){
+		/** roll 6d6 */
+		static constexpr int ideal_roll = 21;
+		int hit_roll = mods::rand::roll(6,6);
+		int spread = ideal_roll - hit_roll;
+		if(spread < 0){
+			spread *= -1;
+		}
+		if(spread > 6){
+			return false;
+		}
+		return true;
 	}
 
 };

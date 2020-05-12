@@ -9,6 +9,7 @@
 extern obj_ptr_t read_object_ptr(obj_vnum nr, int type);
 extern obj_ptr_t blank_object();
 extern void obj_ptr_to_char(obj_ptr_t  object, player_ptr_t player);
+extern obj_ptr_t create_object_from_index(std::size_t proto_index);
 namespace mods::orm::inventory {
 
 	obj_data_ptr_t dynamic_fetch(int id, std::string_view in_type){
@@ -30,12 +31,23 @@ namespace mods::orm::inventory {
 				.where(id_field,"=",std::to_string(id))
 				.sql();
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
-			for(auto && row : player_record){
+				std::cerr << "DYNAMIC FETCH IS BROKEN!!!\n";
+				std::cerr << "DYNAMIC FETCH IS BROKEN!!!\n";
+				std::cerr << "DYNAMIC FETCH IS BROKEN!!!\n";
+			if(player_record.size()){
 				auto obj = blank_object();
-				obj->feed(in_type,std::string_view(row[file_field].c_str()));
+				/** FIXME */
+				int t = 0;
+				if(in_type.compare("rifle") == 0){
+					t = ITEM_RIFLE;
+				}
+				if(in_type.compare("gadget") == 0){
+					t = ITEM_GADGET;
+				}
+				obj->feed(t,std::string_view(player_record[0][file_field].c_str()));
+
 				mods::pq::commit(select_transaction);
 				return std::move(obj);
-				break;
 			}
 			mods::pq::commit(select_transaction);
 		}catch(std::exception& e){

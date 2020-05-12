@@ -43,20 +43,13 @@ void obj_data::init(){
 			this->BOOST_PP_CAT(m_,CLASS_TYPE) = nullptr;
 BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 }
-		void obj_data::feed(std::string_view in_type,std::string_view feed_file){
+		void obj_data::feed(int16_t in_type,std::string_view feed_file){
+			std::cerr << "[obj_data::feed] in_type: " << in_type << " feed_file: '" << feed_file << "'\n";
 			this->m_feed_file = feed_file;
-			auto t = mods::util::stoi(in_type.data());
-			if(t.has_value()){
-				this->feed(t.value(), feed_file);
-			}else{
-				std::cerr << "[feed failed] " << __FILE__ << ":" << __LINE__ << " -> in_type is most likely incorrect! ->" << in_type << "\n";
-			}
-		}
-		void obj_data::feed(int in_type,std::string_view feed_file){
-			this->m_feed_file = feed_file;
-			std::string type = "";
+			this->type = in_type;
+			std::string s_type = "";
 	switch(in_type){
-#define MENTOC_LAZY_ME(mtype) case mtype: type = #mtype; break;
+#define MENTOC_LAZY_ME(mtype) case mtype: s_type = #mtype; break;
 MENTOC_LAZY_ME(ITEM_RIFLE);
 MENTOC_LAZY_ME(ITEM_EXPLOSIVE);
 MENTOC_LAZY_ME(ITEM_DRONE);
@@ -69,16 +62,21 @@ MENTOC_LAZY_ME(ITEM_TRAP);
 		default: break;
 	}
 			m_db_id = 0;
-			std::transform(type.begin(),type.end(),type.begin(),
+			std::cerr << "s_type: " << s_type << "\n";
+			s_type = s_type.substr(strlen("ITEM_"));
+			std::transform(s_type.begin(),s_type.end(),s_type.begin(),
 					[](unsigned char c){ return std::tolower(c); });
-			str_type = type = type.substr(strlen("ITEM_"));
 #define MENTOC_OBJ_DATA_FEED_DUAL(r,data,CLASS_TYPE) \
-			if(type.compare( BOOST_PP_STRINGIZE(CLASS_TYPE) ) == 0){\
-				d("[obj_data::feed(str,str) [START] feeding type: " << BOOST_PP_STRINGIZE(CLASS_TYPE) << "\n");\
+			std::cerr << "CLASS_TYPE: '" << BOOST_PP_STRINGIZE(CLASS_TYPE) << "'\n";\
+			std::cerr << "s_type '" << s_type << "'\n";\
+			if(s_type.compare( BOOST_PP_STRINGIZE(CLASS_TYPE) ) == 0){\
+				std::cerr << "[obj_data::feed(str,str) [START] feeding type: " << BOOST_PP_STRINGIZE(CLASS_TYPE) << "\n";\
 				this->CLASS_TYPE(feed_file); \
-				d("[obj_data::feed(str,str) [DONE]");\
+				std::cerr << "[obj_data::feed(str,str) [DONE]\n";\
 				this->set_str_type(BOOST_PP_STRINGIZE(CLASS_TYPE));\
 				this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
+				std::cerr << "[obj_data][AFTER][post_feed][type]:" << this->type << "\n";\
+				this->type = in_type; this->m_feed_file = feed_file;\
 			}
 			BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_DUAL, ~, MENTOC_ITEM_TYPES_SEQ)
 		}
@@ -119,21 +117,22 @@ void obj_data::set_str_type(std::string_view in_type){
 	d("obj_data::set_str_type: '" << in_type.data());
 	this->str_type = in_type;
 #define MENTOC_LAZY_COMP(a,b) \
-	if(this->str_type.compare(a) == 0){\
-		this->type = b;\
+	if(this->str_type.compare(#a) == 0){\
+		this->a()->attributes->type = this->type = b;\
 	}
-	MENTOC_LAZY_COMP("rifle",ITEM_RIFLE);
-	MENTOC_LAZY_COMP("explosive",ITEM_EXPLOSIVE);
-MENTOC_LAZY_COMP("gadget",ITEM_GADGET);
-MENTOC_LAZY_COMP("drone",ITEM_DRONE);
-MENTOC_LAZY_COMP("weapon",ITEM_WEAPON);
-MENTOC_LAZY_COMP("weapon_attachment",ITEM_WEAPON_ATTACHMENT);
-MENTOC_LAZY_COMP("attachment",ITEM_ATTACHMENT);
-MENTOC_LAZY_COMP("armor",ITEM_ARMOR);
-MENTOC_LAZY_COMP("consumable",ITEM_CONSUMABLE);
-MENTOC_LAZY_COMP("trap",ITEM_TRAP);
+	MENTOC_LAZY_COMP(rifle,ITEM_RIFLE);
+	MENTOC_LAZY_COMP(explosive,ITEM_EXPLOSIVE);
+MENTOC_LAZY_COMP(gadget,ITEM_GADGET);
+MENTOC_LAZY_COMP(drone,ITEM_DRONE);
+//MENTOC_LAZY_COMP(weapon,ITEM_WEAPON);
+//MENTOC_LAZY_COMP(weapon_attachment,ITEM_WEAPON_ATTACHMENT);
+MENTOC_LAZY_COMP(attachment,ITEM_ATTACHMENT);
+MENTOC_LAZY_COMP(armor,ITEM_ARMOR);
+MENTOC_LAZY_COMP(consumable,ITEM_CONSUMABLE);
+MENTOC_LAZY_COMP(trap,ITEM_TRAP);
 
 }
+
 #ifdef __MENTOC_USE_PQXX_RESULT__
 void obj_data::feed(const pqxx::result::reference & row){
 #else

@@ -190,6 +190,7 @@ ACMD(do_builder_help){
 		 	"{gld}giveme_inc{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
 	 		"{gld}giveme_sensor{/gld} -- {grn}give me sensor grenades [feature-debug]{/grn}",
 	 		"{gld}giveme_smoke{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
+	 		"{gld}empty_clip{/gld} -- {grn}empty the clip in your primary weapon [feature-debug]{/grn}",
 			"{gld}flush_holding{/gld} -- {grn}flush the item you are holding to the db [feature-debug][staging-feature][builder-utils]{/grn}", 
 			"{gld}heal{/gld} -- {grn}heal yourself [feature-debug][staging-feature][class-medic]{/grn}", 
 			"{gld}histfile{/gld} -- {grn}start recording all commands. stop with 'histfile stop' [builder-utils][feature-debug]{/grn}", 
@@ -207,7 +208,9 @@ ACMD(do_builder_help){
 			"{gld}rnumlist{/gld} -- {grn}list rooms [feature-debug]{/grn}",
 			"{gld}rnumtele{/gld} -- {grn}teleport to a room [feature-debug]{/grn}",
 			"{gld}room_list{/gld} -- {grn}lists rooms [builder-utils][admin-utils]{/grn}",
+			"{gld}set_ammo{/gld} -- {grn}set ammo of currently wielded weapon{/grn}",
 			"{gld}sbuild{/gld} -- {grn}shop builder [builder-utils]{/grn}",
+			"{gld}show_tics{/gld} -- {grn}toggle tics[builder-utils]{/grn}",
 			"{gld}throw{/gld} -- {grn}throw a grenade [staging-feature]{/grn}",
 			"{gld}yaml_example{/gld} -- {grn}type 'yaml_example list' for a list of yaml files{/grn}",
 			"{gld}yaml_import{/gld} -- {grn}type 'yaml_import <filename>' to import a yaml file{/grn}",
@@ -328,6 +331,7 @@ ACMD(do_recall);
 ACMD(do_affect_me);
 ACMD(do_givemegold);
 ACMD(do_givemenades);
+ACMD(do_shoot);	/* just an alias of snipe */
 ACMD(do_snipe);
 /**--[ START ]--  camera/claymore install commands */
 ACMD(do_cancel);
@@ -369,9 +373,11 @@ ACMD(do_pref);
 ACMD(do_rbuild);
 ACMD(do_rbuild_sandbox);
 ACMD(do_room_list);
+ACMD(do_show_tics);
 ACMD(do_drone);
 ACMD(do_quest);
 ACMD(do_js);
+ACMD(do_set_ammo);
 //ACMD(do_ammo);
 
 /** debug mods */
@@ -738,6 +744,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** ---------------- */
 	/** COMBAT MECHANICS */
 	/** ---------------- */
+	{ "shoot"  , POS_RESTING , do_snipe   , 0, 0 },
 	{ "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
 	/** install/uninstall various gadgets */
 	{ "cancel"  , POS_RESTING , do_cancel, 0, 0 },	/** i.e.: claymore mine, camera */
@@ -747,7 +754,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	//TODO code me { "activate" , POS_RESTING , do_activate , 0, 0},
 	{ "drone"  , POS_RESTING , do_drone   , 0, 0 },
 	{ "throw"  , POS_RESTING , do_throw   , 0, 0 },
-	//{ "ammo"  , POS_RESTING , do_ammo   , 0, 0 },
+	{ "set_ammo"  , POS_RESTING , do_set_ammo   , LVL_GOD, 0 },
 	/** -------------------------- */
 	/** "GIVE ME" COMBAT MECHANICS */
 	/** -------------------------- */
@@ -772,6 +779,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** ------------- */
 	{ "require_js"  , POS_RESTING , do_require_js   , 0, 0 },
 	{ "builder"  , POS_RESTING , do_builder   , 0, 0 },
+	{ "show_tics"  , POS_RESTING , do_show_tics   , 0, 0 },
 	{ "builder_help"  , POS_RESTING , do_builder_help   , LVL_GOD, 0 },
 	{ "flush_holding"  , POS_RESTING , do_flush_holding   , LVL_GOD, 0 },
 	{ "hold_anything"  , POS_RESTING , do_hold_anything   , LVL_GOD, 0 },
@@ -927,17 +935,7 @@ const char *reserved[] = {
  * It makes sure you are the proper level and position to execute the command,
  * then calls the appropriate function.
  */
-/*
-void command_interpreter(char_data *ch, char *argument, bool legacy) {
-	auto p = ptr(ch);
-	command_interpreter(p,argument);
-}
-void command_interpreter(char_data *ch, const char *argument, bool legacy) {
-	auto p = ptr(ch);
-	command_interpreter(p,argument);
-}
-*/
-void command_interpreter(player_ptr_t & player, std::string_view in_argument){
+void command_interpreter(player_ptr_t & player, std::string in_argument){
 	auto ch = player->cd();
 	int cmd, length;
 	char *line;
@@ -947,9 +945,6 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 
 	std::vector<char> data;
 	std::size_t size = in_argument.length();
-	if(MAX_INPUT_LENGTH - 1 <= size){
-		size = MAX_INPUT_LENGTH - 1;
-	}
 	char* argument = nullptr;
 	if(size == 0){
 		return;
@@ -961,12 +956,15 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 
 	/* just drop to next line for hitting CR */
 	skip_spaces(&argument);
+	line = any_one_arg(argument, arg);
+	std::cerr << "line: '" << line << "'\n";
+	std::cerr << "argument: '" << argument << "'\n";
+	std::cerr << "in_argument: '" << in_argument << "'\n";
 
 	if(!mods::globals::command_interpreter(player,argument)) {
 		mods::globals::post_command_interpreter(ch,argument);
 		return;
 	}
-	line = any_one_arg(argument, arg);
 
 	/* otherwise, find the command */
 	for(length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++){
@@ -984,19 +982,8 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 		send_to_char(ch, "<cmd_interpretr>Huh?!?\r\n");
 		//TODO: change PLR_FLAGGED call to player->member method call
 	} else{
-		if(player->god_mode()){
-			assert(ch != nullptr);
-			//d("line: '" << line << "' cmd:'" << cmd_info[cmd].command << "' cmd_info[cmd].subcmd: '" << cmd_info[cmd].subcmd << "'");
-			if(player->is_blocked() && !mods::player_utils::is_cancel_command(cmd_info[cmd].command)) {
-				player->sendln("You can't! You're currently doing something!\r\n");
-			} else {
-				((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd, player));
-				std::cerr << "after cm ptr->\n";
-			}
-			std::cerr << "post command interpreter pre...\n";
-			mods::globals::post_command_interpreter(ch,argument);
-			std::cerr << "post command interpreter post...\n";
-			return;
+		if(player->is_blocked() && !mods::player_utils::is_cancel_command(cmd_info[cmd].command)) {
+			player->sendln("You can't! You're currently doing something!\r\n");
 		}
 		if(!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_FROZEN) && GET_LEVEL(ch) < LVL_IMPL) {
 			send_to_char(ch, "You try, but the mind-numbing cold prevents you...\r\n");
@@ -1037,12 +1024,7 @@ void command_interpreter(player_ptr_t & player, std::string_view in_argument){
 			}
 		}
 		else if(no_specials || !special(ch, cmd, line)) {
-			d("line: '" << line << "' cmd:'" << cmd_info[cmd].command << "' cmd_info[cmd].subcmd: '" << cmd_info[cmd].subcmd << "'");
-			if(player->is_blocked() && !mods::player_utils::is_cancel_command(cmd_info[cmd].command)) {
-				player->sendln("You can't! You're currently doing something!\r\n");
-			} else {
-				((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd,player));
-			}
+			((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd,player));
 		}
 	}
 

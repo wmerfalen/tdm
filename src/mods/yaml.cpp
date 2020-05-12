@@ -6,17 +6,27 @@
 #endif
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 namespace mods::yaml {
+#define debug_echo(a) std::cerr << "[MENTOC_FEED_BASE_MEMBERS][DEBUG]:'" << a << "'\n"; 
 
 #define MENTOC_FEED_BASE_MEMBERS \
 	try{ \
+		debug_echo("manufacturer");\
 		manufacturer = yaml_file["manufacturer"].as<std::string>();\
+		debug_echo("name");\
 		name = yaml_file["name"].as<std::string>();\
+		debug_echo("str_type");\
 		str_type = yaml_file["str_type"].as<std::string>();\
+		debug_echo("vnum");\
 		vnum = yaml_file["vnum"].as<int>();\
+		debug_echo("rarity");\
 		rarity = parse_rarity(yaml_file["rarity"].as<std::string>());\
+		debug_echo("feed_file");\
 		feed_file = yaml_file["feed_file"].as<std::string>();\
+		debug_echo("description");\
 		description = yaml_file["description"].as<std::string>();\
+		debug_echo("short_description");\
 		short_description = yaml_file["short_description"].as<std::string>();\
+		debug_echo("action_desc");\
 		action_description = yaml_file["action_description"].as<std::string>();\
 	}catch(std::exception &e){ std::cerr << "[yaml-cpp exception]: '" << e.what() << "'\n"; }
 
@@ -275,6 +285,8 @@ namespace mods::yaml {
 				(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD;
 				break;
 			default: 
+				(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD | ITEM_WEAR_SECONDARY;
+				std::cerr << "[WARNING] fill_flags DID NOT FILL ANYTHING!\n";
 				break;
 		}
 	}
@@ -651,6 +663,7 @@ namespace mods::yaml {
 			auto type_string = yaml_file["str_type"].as<std::string>();
 			MENTOC_FEED_RIFLE
 			MENTOC_FEED_BASE_MEMBERS
+			this->base_stat_list = mods::weapon::weapon_stats(this->type);
 		}catch(std::exception &e){
 			std::cerr << "[exception] rifle feed: '" << e.what() << "'\n";
 			return -1;

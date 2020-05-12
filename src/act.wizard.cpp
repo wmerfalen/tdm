@@ -246,7 +246,7 @@ ACMD(do_at) {
 	original_loc = IN_ROOM(ch);
 	char_from_room(ch);
 	char_to_room(ch, location);
-	command_interpreter(player, command);
+	command_interpreter(player, std::string(command));
 
 	/* check if the char is still there */
 	if(IN_ROOM(ch) == location) {
@@ -1753,7 +1753,7 @@ ACMD(do_force) {
 			act(buf1, TRUE, ch, NULL, vict, TO_VICT);
 			mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s forced %s to %s", GET_NAME(ch).c_str(), GET_NAME(vict).c_str(), to_force);
 			auto v = ptr(vict);
-			command_interpreter(v, to_force);
+			command_interpreter(v, std::string(to_force));
 		}
 	} else if(!str_cmp("room", arg)) {
 		player->sendln(OK);
@@ -1782,7 +1782,7 @@ ACMD(do_force) {
 
 			act(buf1, TRUE, ch, NULL, vict, TO_VICT);
 			auto vict_ptr = ptr(i.character);
-			command_interpreter(vict_ptr, to_force);
+			command_interpreter(vict_ptr, std::string(to_force));
 		}
 	}
 }
