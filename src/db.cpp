@@ -1025,7 +1025,11 @@ void parse_sql_mobiles() {
 	 */
 	top_of_mobt = 0;
 
+#ifdef __MENTOC_PARSE_MOBILES_DEBUG_OUTPUT__
 #define psm_debug(a){ std::cerr << "[parse_sql_mobiles]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n"; }
+#else
+#define psm_debug(a) /**/
+#endif
 	psm_debug("db_get_all mobiles... -> parse_sql_mobiles [start]");
 	for(auto && row : db_get_all("mobile")) {
 		char_data proto;
@@ -1139,14 +1143,12 @@ int parse_sql_objects() {
 			auto index_ref = &obj_index.back();
 			std::string obj_file = "g36c.yml";
 			if(strlen(row["obj_file"].c_str())){
-				std::cerr << "found obj_file:'" << row["obj_file"].c_str() << "'\n";
 				obj_file = row["obj_file"].c_str();
 			}
 			if(row["obj_type"].as<int>() == 0){
 				std::cerr << "obj_type is zero: " << row["id"].as<int>() << "\n";
 				exit(5);
 			}
-			std::cerr << "[obj_proto].pushback\n";
 			obj_proto.push_back(obj_data(row["obj_type"].as<int16_t>(),obj_file));
 			auto & proto = obj_proto.back();
 			index_ref->vnum = proto.item_number;
@@ -1229,19 +1231,10 @@ int parse_sql_objects() {
 			mods::globals::obj_stat_pages[
 				proto.item_number
 			] = std::move(proto.generate_stat_page());
-			std::cerr << "obj_type for proto.back(): " << proto.type << "\n";
-			std::cerr << "obj_file for proto.back(): " << proto.feed_file() << "\n";
-	for(auto p : obj_proto){
-		std::cerr << "~~~[obj_proto dump]: type: '" << p.type << "' feed_file: '" << p.feed_file() << "'\n";
-	}
 		}
 	} else {
 		log("[notice] no objects from sql");
 	}
-	for(auto p : obj_proto){
-		std::cerr << "[obj_proto dump]: type: '" << p.type << "' feed_file: '" << p.feed_file() << "'\n";
-	}
-
 	return 0;
 }
 /* load the zones */
@@ -2079,7 +2072,6 @@ obj_ptr_t create_object_from_index(std::size_t proto_index){
 	for(auto & p : obj_proto){
 		std::cerr << "[obj_proto dump]: type: '" << p.type << "' feed_file: '" << p.feed_file() << "'\n";
 	}
-	std::cerr << "create_object_from_index proto_index: " << proto_index << " obj_proto.type:" << obj_proto[proto_index].type << "\n";
 	obj_list.push_back(std::make_shared<obj_data>(obj_proto[proto_index].type,obj_proto[proto_index].feed_file()));
 	mods::globals::register_object(obj_list.back());
 	obj_index[proto_index].number++;

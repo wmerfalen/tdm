@@ -95,6 +95,10 @@ namespace mods::object_utils {
 		bool is_owner(T& obj, PlayerT& player){
 			return player->uuid() == obj->get_owner();
 		}
+	template <typename T>
+		bool can_attack_same_room(T& obj){
+			return obj->rifle()->attributes->base_stat_list->at(0).allow;
+		}
 };//End namespace
 
 #endif

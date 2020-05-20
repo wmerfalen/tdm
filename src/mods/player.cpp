@@ -1141,6 +1141,13 @@ namespace mods {
 		return this->equipment(WEAR_SECONDARY);
 	}
 
+	void player::set_attacking_with_primary(){
+		m_attacking_with = this->primary();
+	}
+	void player::set_attacking_with_secondary(){
+		m_attacking_with = this->secondary();
+	}
+
 };
 
 #endif

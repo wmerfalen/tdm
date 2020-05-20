@@ -20,13 +20,20 @@
 #include "screen.h"
 #include "globals.hpp"
 #include "mods/debug.hpp"
-
+#include "spells.h" // for TYPE_HIT
 extern void point_update(void);
 
 ACMD(do_givemenades){
 	
 
 
+}
+
+ACMD(do_one_punch){
+	if(FIGHTING(ch)){
+		auto victim = FIGHTING(ch);
+		damage(ch, victim, GET_HIT(victim), TYPE_HIT);
+	}
 }
 
 ACMD(do_set_ammo) {

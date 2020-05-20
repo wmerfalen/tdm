@@ -578,6 +578,12 @@ namespace mods {
 
 		obj_data_ptr_t primary();
 		obj_data_ptr_t secondary();
+		void set_attacking_with_primary();
+		void set_attacking_with_secondary();
+		void set_attacking_with(obj_ptr_t weapon){ m_attacking_with = weapon; }
+		void clear_attacking_with(){ m_attacking_with = nullptr; }
+		obj_data_ptr_t attacking_with(){ return m_attacking_with; }
+		int attacking_with_type(){ return m_attacking_with->rifle()->attributes->type; }
 
 		protected:
 		std::array<bool,misc_pref_enum_t::SIZE> m_misc_pref;
@@ -636,6 +642,7 @@ namespace mods {
 		std::shared_ptr<mods::camera> m_camera;
 		bool m_camera_viewing;
 		uint32_t m_blocked_until;
+		obj_ptr_t m_attacking_with;
 	};
 };
 

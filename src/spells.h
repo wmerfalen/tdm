@@ -146,10 +146,16 @@ TYPE_STAB,
 TYPE_SNIPE,
 TYPE_SHOTGUN,
 TYPE_SUB_MACHINE_GUN,
-TYPE_SMG,
+TYPE_LIGHT_MACHINE_GUN,
 TYPE_GRENADE,
-TYPE_SUFFERING
+TYPE_SUFFERING,
+TYPE_DECOMPOSE,
+TYPE_ANNIHILATE,
+TYPE_COMPLETELY_DESTROY,
+TYPE_UTTERLY_DECIMATE,
+TYPE_DEVOID
 };
+
 using weapon_attack_types = weapon_attack_types_t;
 /** TODO: phase out the defined constants and use the enum instead */
 #define TYPE_HIT weapon_attack_types::TYPE_HIT
@@ -170,9 +176,14 @@ using weapon_attack_types = weapon_attack_types_t;
 #define TYPE_SNIPE weapon_attack_types::TYPE_SNIPE
 #define TYPE_SHOTGUN weapon_attack_types::TYPE_SHOTGUN
 #define TYPE_SUB_MACHINE_GUN weapon_attack_types::TYPE_SUB_MACHINE_GUN
-#define TYPE_SMG weapon_attack_types::TYPE_SMG
+#define TYPE_LIGHT_MACHINE_GUN weapon_attack_types::TYPE_LIGHT_MACHINE_GUN
 #define TYPE_GRENADE weapon_attack_types::TYPE_GRENADE
 #define TYPE_SUFFER weapon_attack_types::TYPE_SUFFERING
+#define TYPE_DECOMPOSE weapon_attack_types::TYPE_DECOMPOSE;
+#define TYPE_ANNIHILATE weapon_attack_types::TYPE_ANNIHILATE;
+#define TYPE_COMPLETELY_DESTROY weapon_attack_types::TYPE_COMPLETELY_DESTROY;
+#define TYPE_UTTERLY_DECIMATE weapon_attack_types::TYPE_UTTERLY_DECIMATE;
+#define TYPE_DEVOID weapon_attack_types::TYPE_DEVOID;
 
 /* new attack types can be added here - up to TYPE_SUFFERING */
 

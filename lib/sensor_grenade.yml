@@ -24,7 +24,7 @@ vnum: 10 # integer, unique identifier
 rarity: 'COMMON'
 description: 'A FS13 Sensor Grenade is lying here'
 short_description: 'FS13 Sensor Grenade'
-action_description: 'a FS12 Sensor Grenade'
+action_description: 'a FS13 Sensor Grenade'
 feed_file: 'sensor_grenade.yml'
 alternate_explosion_type: 'SCAN' #std::string, ENUM NONE,SCAN
 loudness_type: 'SUSPICIOUS' #std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING

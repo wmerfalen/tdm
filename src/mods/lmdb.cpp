@@ -497,6 +497,7 @@ namespace mods::lmdb {
 						break;
 				default:
 					const auto e = mdb_strerror(ret);
+					std::cerr << "[mdb_strerror][LINE:" << __LINE__ << "][FILE:" << __FILE__ << "][msg]:'" << e << "'\n";
 					lmdb_debug(std::string("strerror: ") + e);
 					if(std::string("Successful return: 0").compare(mdb_strerror(ret)) == 0){
 						lmdb_debug("put success");

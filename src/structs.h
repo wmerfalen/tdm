@@ -753,7 +753,6 @@ enum player_level {
 
 	/* object-related structures ******************************************/
 
-
 	/* object flags; used in obj_data */
 	struct obj_flag_data {
 		obj_flag_data() : type(0), is_ammo(0), holds_ammo(0), type_flag(0),weapon_flags(0),
@@ -793,18 +792,6 @@ enum player_level {
 	/* ================== Memory Structure for Objects ================== */
 	struct obj_data {
 		using location_data_t = uint16_t;
-		static inline int to_int(std::string c){
-#define MENTOC_LAZY_F(a,b){ if(c.compare(#a) == 0){ return b; } }
-			MENTOC_LAZY_F(rifle,ITEM_RIFLE);
-			MENTOC_LAZY_F(explosive,ITEM_EXPLOSIVE);
-			MENTOC_LAZY_F(armor,ITEM_ARMOR);
-			MENTOC_LAZY_F(trap,ITEM_TRAP);
-			MENTOC_LAZY_F(gadget,ITEM_GADGET);
-			MENTOC_LAZY_F(attachment,ITEM_ATTACHMENT);
-			std::cerr << "dying... 201\n";
-			exit(2);
-		}
-		void feed(mentoc_pqxx_result_t);
 		void feed(int16_t in_type,std::string_view feed_file);
 		void init();
 		obj_data(const obj_data& other){
@@ -824,7 +811,6 @@ enum player_level {
 			next(nullptr),ai_state(0),uuid(0),m_db_id(0)
 		{
 			this->init();
-			std::cerr << "feeding with item_type: " << item_type << " feed_file: '" << feed_file << "'\n";
 			this->feed(item_type,feed_file);
 		}
 		~obj_data() = default;
@@ -901,10 +887,7 @@ enum player_level {
 		CLASS_TYPE(\
 				std::string_view feed_file\
 		){\
-			std::cerr << "[debug] object class type feed_file: '" << feed_file << "' " << \
-				"class_type: '" << BOOST_PP_STRINGIZE(CLASS_TYPE) << "'\n";\
-	 		this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_unique<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(feed_file);\
-			this->set_str_type(BOOST_PP_STRINGIZE(CLASS_TYPE));\
+	 		this->BOOST_PP_CAT(m_,CLASS_TYPE) = std::make_shared<BOOST_PP_CAT(CLASS_TYPE,_data_t)>(feed_file);\
 			this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
 			return this->BOOST_PP_CAT(m_,CLASS_TYPE).get();\
 		}\
@@ -934,6 +917,7 @@ enum player_level {
 BOOST_PP_SEQ_FOR_EACH(MENTOC_DATA_OBJ, ~, MENTOC_ITEM_TYPES_SEQ)
 #undef MENTOC_DATA_OBJ
 		int16_t type;
+		int extended_type; /** i.e. mw_rifle::SUB_MACHINE_GUN */
 		static constexpr std::size_t CAPABILITY_LIST_LENGTH = mods::weapon::capabilities::cap_t::__LAST;
 		using capability_list_t = std::array<bool,CAPABILITY_LIST_LENGTH>;
 		bool can(std::size_t val){
@@ -948,20 +932,16 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_DATA_OBJ, ~, MENTOC_ITEM_TYPES_SEQ)
 		std::string str_type;	//i.e.: explosive
 		std::string str_sub_type;	//i.e.: SENSOR_GRENADE
 		uint64_t extended_item_vnum;
-		void set_str_type(std::string_view t);
-		//void set_str_sub_type(std::string_view t);
 		void set_db_id(uint64_t i){ this->m_db_id = i; }
 		uint64_t db_id(){ return this->m_db_id; }
 		template <typename T>
 		void post_feed(T fed_object){
-			d("[post_feed][START]********************************************");
 			this->set_db_id(fed_object->attributes->db_id());
 			mods::globals::register_object_db_id(fed_object->attributes->db_id(),this->uuid);
 			this->clear_capabilities();
 			for(auto & cap_enum : fed_object->attributes->get_caps()){
 				m_capabilities[cap_enum] = true;
 			}
-			fed_object->attributes->fill_flags(&this->obj_flags);
 			this->name.assign(fed_object->attributes->name);
 			this->description.assign(fed_object->attributes->description);
 			this->short_description.assign(fed_object->attributes->short_description);
@@ -969,9 +949,14 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_DATA_OBJ, ~, MENTOC_ITEM_TYPES_SEQ)
 			this->ex_description.emplace_back(this->name.c_str(),this->description.c_str());
 			this->extended_item_vnum = fed_object->attributes->vnum;
 			this->str_sub_type = fed_object->attributes->str_type;
-			std::cerr << "[post_feed] type: " << this->type << "\n";
-std::cerr << "[post_feed] str_sub_type: '" << str_sub_type << "'\n";
+			this->extended_type = fed_object->attributes->type;
+			fed_object->attributes->fill_flags(this);
+#ifdef __MENTOC_SHOW_POST_FEED_DEBUG_OUTPUT__
+std::cerr << "[post_feed] type: " << this->type << "\n";
+std::cerr << "[post_feed] extended_type: " << this->extended_type << "\n";
+std::cerr << "[post_feed] str_sub_type: '" << this->str_sub_type << "'\n";
 std::cerr << "[post_feed][END]**********************************************\n";
+#endif
 		}
 		void set_owner(uuid_t p){ m_owner = p; }
 		uuid_t get_owner(){ return m_owner; }
@@ -981,7 +966,7 @@ std::cerr << "[post_feed][END]**********************************************\n";
 		void set_feed_file(std::string f){ m_feed_file = f; }
 		std::string_view feed_file(){ return m_feed_file; }
 		protected:
-#define MENTOC_UPTR(r,data,CLASS_TYPE) std::unique_ptr<BOOST_PP_CAT(CLASS_TYPE,_data_t)> BOOST_PP_CAT(m_, CLASS_TYPE);
+#define MENTOC_UPTR(r,data,CLASS_TYPE) std::shared_ptr<BOOST_PP_CAT(CLASS_TYPE,_data_t)> BOOST_PP_CAT(m_, CLASS_TYPE);
 BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 #undef MENTOC_UPTR
 		capability_list_t m_capabilities;

@@ -201,6 +201,7 @@ ACMD(do_builder_help){
 			"{gld}mbuild{/gld} -- {grn}mob builder [builder-utils]{/grn}",
 			"{gld}newjs{/gld} -- {grn}create a new javascript context [admin-tools][feature-debug]{/grn}", 
 			"{gld}obuild{/gld} -- {grn}object builder [builder-utils]{/grn}",
+			"{gld}one_punch{/gld} -- {grn}immediately kill your currently fighting char with one punch{/grn}",
 			"{gld}point_update{/gld} -- {grn}manually call point update [feature-debug]{/grn}",
 			"{gld}pref{/gld} -- {grn}preferences utility [staging-feature]{/grn}",
 			"{gld}rbuild{/gld} -- {grn}room builder [builder-utils]{/grn}",
@@ -382,6 +383,7 @@ ACMD(do_set_ammo);
 
 /** debug mods */
 ACMD(do_point_update);
+ACMD(do_one_punch);
 ACMD(do_zero_socket);
 /** -- end debug mods */
 
@@ -714,7 +716,8 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "heal"  , POS_RESTING , do_heal   , 0, 0 },
 	{ "newjs"  , POS_RESTING , do_newjs   , LVL_GOD, 0 },
 	{ "jstest"  , POS_RESTING , do_jstest   , LVL_GOD, 0 },
-	{ "point_update"  , POS_RESTING , do_point_update   , 0, 0 },
+	{ "one_punch"  , POS_RESTING , do_one_punch   , LVL_GOD, 0 },
+	{ "point_update"  , POS_RESTING , do_point_update   , LVL_GOD, 0 },
 	{ "zero_socket"  , POS_RESTING , do_zero_socket  , 0, 0 },
 	{ "uuid"  , POS_RESTING , do_uuid  , 0, 0 },
 	/** ----------------------- */

@@ -136,7 +136,7 @@ static inline durability_profile_type_t to_durability_profile(std::string_view d
 		void generate_map();
 		using mw_type = mw_rifle;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_rifle)this->type); }
-		void fill_flags(obj_flag_data*);
+		void fill_flags(obj_data* obj);
 		virtual ~rifle_description_t() = default;
 		rifle_description_t() : 
 			ammo_max(0),
@@ -152,6 +152,11 @@ static inline durability_profile_type_t to_durability_profile(std::string_view d
 			max_range(0),
 			range_multiplier(0),
 			reload_time(0),
+			rounds_per_minute(0),
+			muzzle_velocity(0),
+			effective_firing_range(0),
+			damage_dice_count(2),
+			damage_dice_sides(6),
 			MENTOC_BASE_MEMBERS_SET("rifle")
 		{
 			std::fill(accuracy_map.begin(),accuracy_map.end(),0);
@@ -168,7 +173,7 @@ static inline durability_profile_type_t to_durability_profile(std::string_view d
 MENTOC_MEMBER_VARS_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
 
 			MENTOC_BASE_MEMBERS
-			const mods::weapon::weapon_stat_list_t* base_stat_list;
+			mods::weapon::weapon_stat_list_t* base_stat_list;
 	};
 
 	struct explosive_description_t : public yaml_description_t {
@@ -176,7 +181,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
 		void generate_map();
 		using mw_type = mw_explosive;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_explosive)this->type); }
-		void fill_flags(obj_flag_data*);
+		void fill_flags(obj_data*);
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~explosive_description_t() = default;
@@ -206,7 +211,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_EXPLOSIVE_MEMBERS_TUPLE)
 		void generate_map();
 		using mw_type = mw_drone;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_drone)this->type); }
-		void fill_flags(obj_flag_data*);
+		void fill_flags(obj_data*);
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~drone_description_t() = default;
@@ -228,7 +233,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_DRONE_MEMBERS_TUPLE)
 		void generate_map();
 		using mw_type = mw_gadget;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_gadget)this->type); }
-		void fill_flags(obj_flag_data*);
+		void fill_flags(obj_data*);
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~gadget_description_t() = default;
@@ -251,7 +256,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_GADGET_MEMBERS_TUPLE)
 		void generate_map();
 		using mw_type = mw_attachment;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_attachment)this->type); }
-		void fill_flags(obj_flag_data*);
+		void fill_flags(obj_data*);
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~attachment_description_t() = default;
@@ -272,7 +277,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
 		void generate_map();
 		using mw_type = mw_armor;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_armor)this->type); }
-		void fill_flags(obj_flag_data*);
+		void fill_flags(obj_data*);
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~armor_description_t() = default;
@@ -293,7 +298,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
 		void generate_map();
 		using mw_type = mw_consumable;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_consumable)this->type); }
-		void fill_flags(obj_flag_data*);
+		void fill_flags(obj_data*);
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~consumable_description_t() = default;
@@ -315,7 +320,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_CONSUMABLE_MEMBERS_TUPLE)
 		void generate_map();
 		using mw_type = mw_trap;
 		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_trap)this->type); }
-		void fill_flags(obj_flag_data*);
+		void fill_flags(obj_data*);
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~trap_description_t() = default;

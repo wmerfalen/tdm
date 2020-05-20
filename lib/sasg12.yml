@@ -13,7 +13,7 @@ ammo_type: 'SHOTGUN' #string, constant enum
 chance_to_injure: 70.0 #float, out of 100 
 clip_size: 6 #integer
 cooldown_between_shots: 1.341 #float, in seconds
-critical_chance: 4.04 #float, out of 100
+critical_chance: 34 #int, out of 100
 critical_range: 1 #integer, measured in rooms
 damage_map: [
 90.00,
@@ -50,3 +50,5 @@ str_type: 'SHOTGUN'
 # DEFAULT
 rarity: 'COMMON'
 feed_file: 'sasg12.yml'
+damage_dice_count: 3
+damage_dice_sides: 20

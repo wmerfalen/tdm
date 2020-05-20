@@ -12,7 +12,7 @@ ammo_type: 'PISTOL' #string, constant enum
 chance_to_injure: 20.50100 #float, out of 100
 clip_size: 9 #integer
 cooldown_between_shots: 0.001301 #float, in seconds
-critical_chance: 5.14 #float, out of 100
+critical_chance: 5 #int, out of 100
 critical_range: 1 #integer, measured in rooms
 damage_map: [
 50.00,
@@ -49,3 +49,5 @@ feed_file: 'base_pistol.yml'
 description: 'A TN3 SMITH-X Industrial Pistol is lying here'
 short_description: 'TN3 SMITH-X Pistol <short>'
 action_description: 'TN3 SMITH-X Pistol <action>'
+damage_dice_count: 3
+damage_dice_sides: 16

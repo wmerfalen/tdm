@@ -37,7 +37,7 @@ namespace mods {
 			snipe_tracking = 1,
 			suspicious_roaming,
 		};
-		int8_t dispatch(argument_type ch);
+		int8_t dispatch(argument_type& ch);
 		void load_trees();
 		void run_trees();
 		int8_t register_mob(argument_type,std::string);

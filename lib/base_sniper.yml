@@ -13,7 +13,7 @@ ammo_type: 'SNIPER' #string, constant enum
 chance_to_injure: 0.00113 #float, out of 100 
 clip_size: 7 #integer
 cooldown_between_shots: 1.314 #float, in seconds
-critical_chance: 4.74 #float, out of 100
+critical_chance: 30 #int, out of 100
 critical_range: 4 #integer, measured in rooms
 damage_map: [
 10.00,
@@ -51,3 +51,5 @@ rarity: 'COMMON'
 description: 'A ZDX-Node Sniper Rifle is lying here'
 short_description: 'ZDX-Node Sniper Rifle <short>'
 action_description: 'ZDX-Node Sniper Rifle <action>'
+damage_dice_count: 2
+damage_dice_sides: 32

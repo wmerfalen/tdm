@@ -92,6 +92,7 @@ namespace mods::weapon {
 		return (mw_rifle)0;
 	}
 	obj_data_ptr_t attachment(attachment_t type){
+		MENTOC_DEPRECATED("attachment");
 		auto obj = blank_object();
 		//obj->holds_ammo = 0;
 
@@ -127,6 +128,7 @@ namespace mods::weapon {
 
 	}
 	obj_data_ptr_t base_rifle_object(){
+		MENTOC_DEPRECATED("base_rifle");
 		auto obj = blank_object();
 
 		obj->item_number = 0;	/* Where in data-base			*/
@@ -162,6 +164,7 @@ namespace mods::weapon {
 	}
 
 	obj_data_ptr_t base_explosive_object(){
+		MENTOC_DEPRECATED(".");
 		auto obj = blank_object();
 
 		obj->item_number = 0;	/* Where in data-base			*/
@@ -198,6 +201,7 @@ namespace mods::weapon {
 	/** !example !howto */
 	/** This function is a prime example of how to populate a obj_ptr_t */
 	obj_data_ptr_t psg1(){
+		MENTOC_DEPRECATED(".");
 		auto obj = base_rifle_object();
 		obj->rifle("psg1.yml");
 
@@ -222,6 +226,7 @@ namespace mods::weapon {
 	}
 
 	obj_data_ptr_t new_frag_grenade_object(){
+		MENTOC_DEPRECATED(".");
 		auto obj = base_explosive_object();
 		obj->explosive("frag-grenade.yml");
 		///** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
@@ -240,23 +245,25 @@ namespace mods::weapon {
 	}
 
 	obj_data_ptr_t new_sensor_grenade_object(){
+		MENTOC_DEPRECATED(".");
 		auto obj = base_explosive_object();
 		obj->explosive("sensor_grenade.yml");
 		obj->explosive()->type = mw_explosive::SENSOR_GRENADE;
-		obj->explosive()->attributes->type = mw_explosive::SENSOR_GRENADE;
-		obj->explosive()->attributes = std::make_unique<mods::yaml::explosive_description_t>();
-		obj->explosive()->attributes->chance_to_injure = 0.0;
-		obj->explosive()->attributes->critical_chance = 0.0;
-		obj->explosive()->attributes->critical_range = 0;
-		obj->explosive()->attributes->blast_radius = 2;
-		obj->explosive()->attributes->damage_per_second = 0;
-		obj->explosive()->attributes->disorient_amount = 0.0;
-		obj->explosive()->attributes->alternate_explosion_type = ALTEX_SCAN;
+		//obj->explosive()->attributes->type = mw_explosive::SENSOR_GRENADE;
+		//obj->explosive()->attributes = std::make_unique<mods::yaml::explosive_description_t>();
+		//obj->explosive()->attributes->chance_to_injure = 0.0;
+		//obj->explosive()->attributes->critical_chance = 0.0;
+		//obj->explosive()->attributes->critical_range = 0;
+		//obj->explosive()->attributes->blast_radius = 2;
+		//obj->explosive()->attributes->damage_per_second = 0;
+		//obj->explosive()->attributes->disorient_amount = 0.0;
+		//obj->explosive()->attributes->alternate_explosion_type = ALTEX_SCAN;
 		obj->ex_description.emplace_back("sensor grenade",obj->description.c_str());
 		return std::move(obj);
 	}
 
 	obj_data_ptr_t new_incendiary_grenade_object(){
+		MENTOC_DEPRECATED(".");
 		auto obj = base_explosive_object();
 		obj->explosive("incendiary-grenade.yml");
 		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
@@ -272,6 +279,7 @@ namespace mods::weapon {
 	}
 
 	obj_data_ptr_t new_emp_grenade_object(){
+		MENTOC_DEPRECATED(".");
 		auto obj = base_explosive_object();
 		obj->explosive("emp-grenade.yml");
 		obj->explosive()->type = mw_explosive::EMP_GRENADE;
@@ -287,6 +295,7 @@ namespace mods::weapon {
 	}
 
 	obj_data_ptr_t new_smoke_grenade_object(){
+		MENTOC_DEPRECATED(".");
 		auto obj = base_explosive_object();
 		obj->explosive("smoke-grenade.yml");
 		obj->explosive()->type = mw_explosive::SMOKE_GRENADE;
@@ -302,6 +311,7 @@ namespace mods::weapon {
 	}
 
 	obj_data_ptr_t new_flashbang_grenade_object(){
+		MENTOC_DEPRECATED(".");
 		auto obj = base_explosive_object();
 		obj->explosive("flashbang.yml");
 		obj->explosive()->type = mw_explosive::FLASHBANG_GRENADE;
@@ -317,6 +327,7 @@ namespace mods::weapon {
 	}
 
 	obj_data_ptr_t new_sniper_rifle_object(){
+		MENTOC_DEPRECATED(".");
 		auto obj = base_rifle_object();
 		obj->rifle("base_sniper.yml");
 
@@ -339,6 +350,7 @@ namespace mods::weapon {
 	}
 
 	obj_data_ptr_t new_pistol_object(){
+		MENTOC_DEPRECATED(".");
 		auto obj = base_rifle_object();
 		obj->rifle("base_pistol.yml");
 
@@ -362,6 +374,7 @@ namespace mods::weapon {
 	}
 
 	obj_data_ptr_t desert_eagle(){
+		MENTOC_DEPRECATED(".");
 		auto obj = new_pistol_object();
 		obj->obj_flags.ammo = 7;
 		obj->obj_flags.ammo_max = 63; /** 9 clips */

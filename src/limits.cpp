@@ -462,7 +462,7 @@ ACMD(do_idle){
 
 /* Update PCs, NPCs, and objects */
 void point_update(void) {
-	struct obj_data *j, *jj, *next_thing2;
+	struct obj_data *jj, *next_thing2;
 
 	/* characters */
 	mods::loops::foreach_all([&](player_ptr_t player) -> bool {
@@ -515,8 +515,13 @@ void point_update(void) {
 	});
 
 	/* objects */
-	for(auto& obj_reference : obj_list) {
-		j = obj_reference.get();
+	for(auto it = obj_list.begin(); it != obj_list.end(); ++it) {
+		auto j = it->get();
+		if(!j){
+			log("SYSERR: obj_list has null object.. attempting to remove...");
+			obj_list.erase(it);
+			continue;
+		}
 
 		/* If this is a corpse */
 		if(IS_CORPSE(j)) {

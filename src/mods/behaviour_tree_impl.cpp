@@ -5,15 +5,16 @@
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
 extern void hit(char_data *ch, char_data *victim, int type);
-extern int snipe_hit(player_ptr_t&,player_ptr_t&, uint16_t* distance);
+extern int snipe_hit(player_ptr_t&,obj_ptr_t,player_ptr_t&, uint16_t* distance);
 
 namespace mods::behaviour_tree_impl {
 	container_t trees;
 	container_mapping_t tree_mapping;
 	//mob_list_t mobs_with_trees;
 	void run_trees(){
+		std::cerr << "[behaviour_tree][run_trees] -- STUB\n";
 	}
-	int8_t dispatch(argument_type ch){
+	int8_t dispatch(argument_type& ch){
 		std::cerr << "dispatching behaviour tree on: " << ch.name().c_str() << "\n";
 		if(ch.mob_specials().behaviour_tree == 0){
 			return dispatch_status_t::AS_YOU_WERE;
@@ -95,7 +96,7 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 								auto find_results = mods::scan::los_find(std::make_shared<mods::player>(mob),std::make_shared<mods::player>(remembered_sniper));
 								auto mob_ptr = ptr(mob);
 								auto remembered_sniper_ptr = ptr(remembered_sniper);
-								snipe_hit(mob_ptr,remembered_sniper_ptr,&find_results.distance);
+								snipe_hit(mob_ptr,mob_ptr->primary(),remembered_sniper_ptr,&find_results.distance);
 								return status::SUCCESS;
 							}
 						}

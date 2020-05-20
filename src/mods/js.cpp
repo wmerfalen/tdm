@@ -9,7 +9,6 @@
 #include "../config.hpp"
 
 #include <unistd.h>	//for getcwd()
-#define DT_FORMAT "{player_name}:mob_death_trigger"
 extern void command_interpreter(player_ptr_t & player, std::string_view in_argument);
 extern void hit(char_data* ch,char_data* vict,int type);
 extern void affect_from_char(char_data *ch, int type);
@@ -17,11 +16,6 @@ extern void mobile_activity();
 namespace mods {
 	namespace js {
 			std::string current_working_dir(){
-				std::cerr << "current working dir...\n";
-				std::cerr << "current working dir...\n";
-				std::cerr << "current working dir...\n";
-				std::cerr << "current working dir...\n";
-				std::cerr << "current working dir...\n";
 				return MENTOC_CURRENT_WORKING_DIR;
 			}
 		namespace utils {

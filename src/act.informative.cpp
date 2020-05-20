@@ -862,33 +862,22 @@ void look_at_target(char_data *ch, char *arg) {
 	}
 
 	/* Does the argument match an extra desc in the room? */
-	d("world inroomch findex");
 	if((desc = find_exdesc(arg, world[IN_ROOM(ch)])) != NULL) {
 		d("page string");
 		page_string(*ch->desc, desc, FALSE);
 		return;
 	}
 
-	d("num wears");
 	/* Does the argument match an extra desc in the char's equipment? */
 	for(j = 0; j < NUM_WEARS && !found; j++){
 		if(GET_EQ(ch, j) && CAN_SEE_OBJ(ch, GET_EQ(ch, j)) && GET_EQ(ch, j)->ex_description.size()){
-			d("get eq ok");
-			d("eq exdesc.size: " << GET_EQ(ch,j)->ex_description.size());
-			//break;
 			const char* ex = find_exdesc_equipment(arg, ch, j);
-			d("fetched ex");
-			if(!ex){d("cont"); continue; }
-			d("num wears enumeration exdesc");
-			//if(++i == fnum) {
-			d("sending ex");
+			if(!ex){ continue; }
 			player->send(ex);
 			found = TRUE;
 			break;
-			//}
 		}
 	}
-	d("carrying");
 
 	/* Does the argument match an extra desc in the char's inventory? */
 	for(auto & item : player->real_carrying()){
@@ -903,12 +892,9 @@ void look_at_target(char_data *ch, char *arg) {
 		}
 	}
 
-	d("world contents");
 	/* Does the argument match an extra desc of an object in the room? */
 	assert(IN_ROOM(ch) < world.size());
-	//if(world[IN_ROOM(ch)].contents){
 
-	//}
 	for(obj = world[IN_ROOM(ch)].contents; obj && !found && obj->next_content; obj = obj->next_content){
 		log("checking can see obj ch[%s] obj[%s]",ch->player.name.c_str(),obj->name.c_str());
 		if(CAN_SEE_OBJ(ch, obj)){
@@ -920,7 +906,6 @@ void look_at_target(char_data *ch, char *arg) {
 		}
 	}
 
-	d("bits");
 	/* If an object was found back in generic_find */
 	if(bits) {
 		if(!found) {
@@ -962,6 +947,7 @@ ACMD(do_look) {
 		if(!*arg) {		/* "look" alone, without an argument at all */
 			look_at_room(ch, 1);
 		} else if(is_abbrev(arg, "in")) {
+			player->send("look in obj, arg2[%s]\r\n",arg2);
 			look_in_obj(ch, arg2);
 		}
 		/* did the char type 'look <direction>?' */
@@ -970,6 +956,7 @@ ACMD(do_look) {
 		} else if(is_abbrev(arg, "at")) {
 			look_at_target(ch, arg2);
 		} else {
+			player->send("look at target, arg2[%s]\r\n",arg);
 			look_at_target(ch, arg);
 		}
 	}

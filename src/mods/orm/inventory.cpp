@@ -12,7 +12,17 @@ extern void obj_ptr_to_char(obj_ptr_t  object, player_ptr_t player);
 extern obj_ptr_t create_object_from_index(std::size_t proto_index);
 namespace mods::orm::inventory {
 
-	obj_data_ptr_t dynamic_fetch(int id, std::string_view in_type){
+	obj_data_ptr_t dynamic_fetch(mentoc_pqxx_result_t row){//int id, std::string_view in_type){
+		std::string in_type = row["po_type"].c_str();
+		int id = 0;
+		std::string field_suffix = "_id";
+		if(row["po_type_load"].as<std::string>().compare("vnum") == 0){
+			id = row["po_type_vnum"].as<int>();
+			field_suffix = "_vnum";
+		}else{
+			id = row["po_type_id"].as<int>();
+		}
+
 #ifdef __MENTOC_FLUSH_PLAIN_OBJECTS__
 #else
 		if(in_type.compare("object") == 0){ return nullptr; }
@@ -24,7 +34,7 @@ namespace mods::orm::inventory {
 			std::string file_field = in_type.data();
 			file_field += "_file";
 			std::string id_field = in_type.data();
-			id_field += "_id";
+			id_field += field_suffix;
 			sql_compositor comp(in_type,&select_transaction);
 			auto player_sql = comp.select(file_field)
 				.from(table)
@@ -86,7 +96,7 @@ namespace mods::orm::inventory {
 #else
 						if(row["po_type"].as<std::string>().compare("object") == 0){ continue; }
 #endif
-						obj = dynamic_fetch(row["po_type_id"].as<int>(), row["po_type"].as<std::string>());
+						obj = dynamic_fetch(row);//["po_type_id"].as<int>(), row["po_type"].as<std::string>());
 						if(!obj){
 							log("Failed to load user object: player[%s] po_id[%d]", player->name().c_str(),row["po_id"].as<int>());
 							continue;

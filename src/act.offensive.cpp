@@ -37,7 +37,7 @@ extern mods::globals::room_list_t mods::globals::room_list;
 void raw_kill(char_data *ch);
 void check_killer(char_data *ch, char_data *vict);
 int compute_armor_class(char_data *ch);
-int snipe_hit(player_ptr_t& p,player_ptr_t& target,uint16_t*);
+int snipe_hit(player_ptr_t& p,obj_ptr_t,player_ptr_t& target,uint16_t*);
 
 /* using directives */
 using mw_explosive = mods::weapon::type::explosive;
@@ -92,7 +92,6 @@ ACMD(do_throw) {
 		player->sendln("You're not holding anything!");
 		return;
 	}
-	return;//FIXME
 	mods::projectile::throw_object(player, dir, cnt, held_object, "lob");
 }
 
@@ -135,7 +134,7 @@ enum weapon_status_t {
 };
 weapon_status_t weapon_preamble(
 		player_ptr_t& player){
-	auto weapon = player->equipment(WEAR_WIELD);
+	auto weapon = player->primary();
 	if(!weapon){
 		player->sendln("You aren't wielding any weapon.");
 		return NOT_WIELDING_WEAPON;
@@ -169,7 +168,8 @@ ACMD(do_snipe) {
 		return;
 	}
 
-	auto weapon = player->equipment(WEAR_WIELD);
+	/** TODO: if primary is out of ammo, and player_pref.auto_switch is on, use secondary */
+	auto weapon = player->primary();
 	/* HOWTO: perform line of sight scans */
 	mods::scan::los_scan_direction(ch,mods::weapon::MAX_RANGE,&scan,direction);
 
@@ -181,7 +181,7 @@ ACMD(do_snipe) {
 			}
 			auto target_ptr = ptr(scanned_target.ch);
 			if(mods::weapon::hits_target(player,weapon,target_ptr,&scanned_target.distance)) {
-				snipe_hit(player, target_ptr, &scanned_target.distance);
+				snipe_hit(player, weapon,target_ptr, &scanned_target.distance);
 			}else{
 				player->sendln("You miss your target!");
 			}

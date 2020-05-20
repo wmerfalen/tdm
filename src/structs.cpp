@@ -12,6 +12,7 @@ static inline std::string default_yaml_file(const std::string& type){
 }
 
 #include "mods/util.hpp"
+
 void obj_data::init(){
 	d("[debug]obj_data::init()\n");
 	m_location_data = 0;
@@ -44,8 +45,7 @@ void obj_data::init(){
 BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 }
 		void obj_data::feed(int16_t in_type,std::string_view feed_file){
-			std::cerr << "[obj_data::feed] in_type: " << in_type << " feed_file: '" << feed_file << "'\n";
-			this->m_feed_file = feed_file;
+			this->m_feed_file = feed_file.data();
 			this->type = in_type;
 			std::string s_type = "";
 	switch(in_type){
@@ -62,21 +62,13 @@ MENTOC_LAZY_ME(ITEM_TRAP);
 		default: break;
 	}
 			m_db_id = 0;
-			std::cerr << "s_type: " << s_type << "\n";
 			s_type = s_type.substr(strlen("ITEM_"));
 			std::transform(s_type.begin(),s_type.end(),s_type.begin(),
 					[](unsigned char c){ return std::tolower(c); });
 #define MENTOC_OBJ_DATA_FEED_DUAL(r,data,CLASS_TYPE) \
-			std::cerr << "CLASS_TYPE: '" << BOOST_PP_STRINGIZE(CLASS_TYPE) << "'\n";\
-			std::cerr << "s_type '" << s_type << "'\n";\
 			if(s_type.compare( BOOST_PP_STRINGIZE(CLASS_TYPE) ) == 0){\
-				std::cerr << "[obj_data::feed(str,str) [START] feeding type: " << BOOST_PP_STRINGIZE(CLASS_TYPE) << "\n";\
 				this->CLASS_TYPE(feed_file); \
-				std::cerr << "[obj_data::feed(str,str) [DONE]\n";\
-				this->set_str_type(BOOST_PP_STRINGIZE(CLASS_TYPE));\
 				this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
-				std::cerr << "[obj_data][AFTER][post_feed][type]:" << this->type << "\n";\
-				this->type = in_type; this->m_feed_file = feed_file;\
 			}
 			BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_DUAL, ~, MENTOC_ITEM_TYPES_SEQ)
 		}
@@ -113,73 +105,6 @@ void obj_flag_data::init(){
 bool obj_data::flagged(int value){
 	return ((obj_flags.extra_flags) & (value));
 }
-void obj_data::set_str_type(std::string_view in_type){
-	d("obj_data::set_str_type: '" << in_type.data());
-	this->str_type = in_type;
-#define MENTOC_LAZY_COMP(a,b) \
-	if(this->str_type.compare(#a) == 0){\
-		this->a()->attributes->type = this->type = b;\
-	}
-	MENTOC_LAZY_COMP(rifle,ITEM_RIFLE);
-	MENTOC_LAZY_COMP(explosive,ITEM_EXPLOSIVE);
-MENTOC_LAZY_COMP(gadget,ITEM_GADGET);
-MENTOC_LAZY_COMP(drone,ITEM_DRONE);
-//MENTOC_LAZY_COMP(weapon,ITEM_WEAPON);
-//MENTOC_LAZY_COMP(weapon_attachment,ITEM_WEAPON_ATTACHMENT);
-MENTOC_LAZY_COMP(attachment,ITEM_ATTACHMENT);
-MENTOC_LAZY_COMP(armor,ITEM_ARMOR);
-MENTOC_LAZY_COMP(consumable,ITEM_CONSUMABLE);
-MENTOC_LAZY_COMP(trap,ITEM_TRAP);
-
-}
-
-#ifdef __MENTOC_USE_PQXX_RESULT__
-void obj_data::feed(const pqxx::result::reference & row){
-#else
-	void obj_data::feed(pqxx::row row){
-#endif
-		/**
-		 * Weapon flow
-		 * --------------
-		 - Prototype Phase
-		 - Item has basic features
-		 - Item describes the object and can be used in game
-
-		 - Creation phase
-		 - [CONDITIONAL]
-		 - CONDITION: Item placed in container via zone command
-		 - OR CONDITION: Item awarded by quest
-		 - Unique item number placed on item
-		 - Save in db
-
-		 - [CONDITIONAL] Decoration phase
-		 - CONDITION: Item belongs to user
-		 - Decorate item and load sub-structures (i.e.: weapon())
-
-		 - Item is used
-		 - FOREACH item below, save()
-		 - Item is attached
-		 - Item gets attachments
-		 - Item has properties modified
-		 - Item gets put in user's inventory
-
-		 - [CONDITIONAL] User drops item
-		 - Save room and/or container
-
-*/
-		
-
-		type = mods::util::stoi<int>(row["obj_type"]);
-		std::string obj_file = row["obj_file"].c_str();
-
-		this->m_feed_file = obj_file;
-		switch(type){
-			MENTOC_OBJ_DATA_FEED_SWITCH
-			default:
-				log("[obj_data::feed] WARNING! Unknown 'type' value (%d)",type);
-				break;
-		}
-	}
 
 #ifdef __MENTOC_USE_PQXX_RESULT__
 	void obj_flag_data::feed(const pqxx::result::reference & row){

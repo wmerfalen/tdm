@@ -253,13 +253,14 @@ namespace mods::weapon {
 	}
 	static inline std::string to_string(weapon_rifle_t rifle_type){
 #define MENTOC_TO_STR(a){ case mw_rifle::a: return #a; }
-		switch(rifle_type){
+		switch((mw_rifle)rifle_type){
+			MENTOC_TO_STR(HANDGUN);
+			MENTOC_TO_STR(PISTOL);
+			MENTOC_TO_STR(MACHINE_PISTOL);
 			MENTOC_TO_STR(SHOTGUN);
 			MENTOC_TO_STR(ASSAULT_RIFLE);
 			MENTOC_TO_STR(SUB_MACHINE_GUN);
 			case weapon_rifle_t::SNIPER: return "SNIPER RIFLE";
-		 	MENTOC_TO_STR(HANDGUN);
-		 	MENTOC_TO_STR(MACHINE_PISTOL);
 		 	MENTOC_TO_STR(LIGHT_MACHINE_GUN);
 			default: return "<unknown>";
 #undef MENTOC_TO_STR
@@ -373,74 +374,7 @@ namespace mods::weapon {
 		}
 	}
 
-	static inline const weapon_stat_list_t* weapon_stats(int type){
-		static const weapon_stat_list_t shotgun = {
-			{1,80,0.0},
-			{1,30,0.0},
-			{0,0.0,0.0},
-			{0,0.0,0.0},
-			{0,0.0,0.0}
-		};
-		static const weapon_stat_list_t ar = {
-			{1,40.0,10.0},
-			{1,37.0,9.0},
-			{1,30.0,8.5},
-			{0,0.0,0.0},
-			{0,0.0,0.0}
-		};
-		static const weapon_stat_list_t smg = {
-			{1,50,4},
-			{0,0,0},
-			{0,0,0},
-			{0,0,0},
-			{0,0,0}
-		};
-		static const weapon_stat_list_t machine_pistol = {
-			{1,35,2},
-			{0,0,0},
-			{0,0,0},
-			{0,0,0},
-			{0,0,0}
-		};
-		static const weapon_stat_list_t lmg = {
-			{1,40.0,10},
-			{1,35.0,8},
-			{1,30.0,4},
-			{0,0,0},
-			{0,0,0}
-		};
-		static const weapon_stat_list_t sniper = {
-			{1,10.0,0},
-			{1,35.0,8},
-			{1,60.0,40},
-			{1,55,40},
-			{1,55,40}
-		};
-		static const weapon_stat_list_t empty = {
-			{0,0,0},
-			{0,0,0},
-			{0,0,0},
-			{0,0,0},
-			{0,0,0}
-		};
-		/** !DIABLO */
-		switch(static_cast<weapon_rifle_t>(type)){
-			case weapon_rifle_t::SHOTGUN: 
-				return &shotgun;
-			case weapon_rifle_t::ASSAULT_RIFLE:
-				return &ar;
-			case weapon_rifle_t::SUB_MACHINE_GUN:
-				return &smg;
-			case weapon_rifle_t::MACHINE_PISTOL:
-				return &machine_pistol;
-			case weapon_rifle_t::LIGHT_MACHINE_GUN:
-				return &lmg;
-			case weapon_rifle_t::SNIPER:
-				return &sniper;
-			default:
-				return &empty;
-		}
-	}//end stat list func
+	#include "weapon-stat-list.hpp"
 
 	template <typename TPlayer,typename TObject>
 	static inline void list_rounds(TPlayer& player,TObject& obj){

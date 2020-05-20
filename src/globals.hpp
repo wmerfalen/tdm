@@ -51,6 +51,10 @@
 #define LMDBCOMMIT() mods::db::lmdb_commit()
 #define LMDBRENEW() mods::db::lmdb_renew()
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
+#define MENTOC_DEPRECATED(mentoc_deprecated_argument_a) log("SYSERR:[%s] deprecated %s:%d",mentoc_deprecated_argument_a,__FILE__,__LINE__);
+#define MOBTOSTR(__mob) "name: '" << __mob->player.name.c_str() << "'\n" \
+	"short_description: '" << __mob->player.short_descr.c_str() << "'\n"
+
 /** vim-sorcery: :%s/std::cerr << \(.*\);/d(\1);/ */
 #ifndef __MENTOC_DEBUG__
 	#define __MENTOC_DEBUG__
@@ -77,6 +81,7 @@ CREATE((ch)->affected, affected_type, 1);\
 memset(&((ch)->affected),0,sizeof((ch)->affected));\
 (ch)->next = character_list;\
 character_list = ch;
+#define mentoc_prefix_debug(a) std::cerr << "[" << a << "]" << __FILE__ << "|" << __LINE__ << "->"
 
 using player_ptr_t = std::shared_ptr<mods::player>;
 using obj_ptr_t = std::shared_ptr<obj_data>;
@@ -178,6 +183,7 @@ player_ptr_t ptr_by_uuid(uuid_t);
 obj_ptr_t optr_by_uuid(uuid_t);
 std::optional<obj_ptr_t> optr_opt(uuid_t);
 std::optional<player_ptr_t> ptr_opt(uuid_t);
+std::optional<player_ptr_t> ptr_opt(char_data*);
 obj_ptr_t ptr_by_dbid(uint64_t);
 #define PARSE_ARGS() mods::util::arglist<std::vector<std::string>>(std::string(argument))
 #endif

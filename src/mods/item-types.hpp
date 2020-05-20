@@ -57,7 +57,7 @@
 (float,chance_to_injure,"#float, out of 100",10.0), \
 (int,clip_size,"#int, bullets",7), \
 (float,cooldown_between_shots,"#float, seconds",1.3), \
-(float,critical_chance,"#float, out of 100",33.3), \
+(int,critical_chance,"#int, out of 100",33), \
 (int,critical_range,"#int, rooms",3), \
 (float,damage_per_second,"#float, out of 100",44.0), \
 (float,disorient_amount,"#float, out of 100",3.0), \
@@ -67,7 +67,9 @@
 (float,reload_time,"#float, seconds",2.3), \
 (int,rounds_per_minute,"#int, bullets",8), \
 (int,muzzle_velocity,"#int, TBA",1.0), \
-(int,effective_firing_range,"#int, rooms",2) \
+(int,effective_firing_range,"#int, rooms",2), \
+(int,damage_dice_count,"#int, number of dice",2), \
+(int,damage_dice_sides,"#int, dice sides",6) \
 )
 
 
@@ -264,7 +266,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_DECLARE_DATA_STRUCTS_IMPL,~,MENTOC_ITEM_TYPES_SEQ)
 #define MENTOC_OBJ_DATA_FEED_SWITCH_IMPL(IN_R,data,CLASS_TYPE)\
 	case CLASS_TYPE: if(obj_file.length() == 0){\
 										 obj_file = default_yaml_file( BOOST_PP_STRINGIZE(BOOST_PP_ELEM(IN_R,MENTOC_ITEM_TYPES_SEQ)) );\
-			 }; this->feed(/* passed in as int enum (i.e. ITEM_RIFLE) */ CLASS_TYPE, row["obj_file"].as<std::string>());\
+			 }; this->feed(CLASS_TYPE, row["obj_file"].as<std::string>());\
 			 break;
 
 #define MENTOC_OBJ_DATA_FEED_SWITCH \
@@ -281,9 +283,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 /**************************************************************************/
 #define MENTOC_FEED_TYPE_IMPL(r,data,TYPE) \
 		if(this->str_type.compare(BOOST_PP_STRINGIZE(TYPE)) == 0){\
-			std::cerr << "Found type: " << BOOST_PP_STRINGIZE(TYPE) << "\n";\
 			this->type = mw_type::TYPE;\
-			std::cerr << "actual type: '" << this->type << "'";\
 		}
 
 #define MENTOC_EXAMPLE_IMPL(r,data,TYPE) \
@@ -308,7 +308,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 	BOOST_PP_TUPLE_ELEM(4,0,MEMBER_TUPLE) BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE);
 
 #define MENTOC_FEED_PARSE_ACTUAL_IMPL(r,data,MEMBER_TUPLE) \
-	std::cerr << "[feed parse actual]: " << BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE)) << "\n";\
+	d("[feed parse actual]: " << BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE)));\
 	BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE) = yaml_file[BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE))].as<BOOST_PP_TUPLE_ELEM(4,0,MEMBER_TUPLE)>();
 
 #define MENTOC_FEED_PARSE_ALL_IMPL(SEQUENCE) \

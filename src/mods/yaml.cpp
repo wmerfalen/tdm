@@ -6,7 +6,11 @@
 #endif
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 namespace mods::yaml {
+#ifdef __MENOC_FEED_BASE_MEMBERS_DEBUG__
 #define debug_echo(a) std::cerr << "[MENTOC_FEED_BASE_MEMBERS][DEBUG]:'" << a << "'\n"; 
+#else
+#define debug_echo(a) /**/
+#endif
 
 #define MENTOC_FEED_BASE_MEMBERS \
 	try{ \
@@ -50,7 +54,6 @@ namespace mods::yaml {
 	}
 	void base_items(std::ofstream* out_file,std::string_view name,std::string_view obj_type){
 		*out_file	<< "str_type: '" << obj_type << "' # enum, object type\n"
-			<< "type: '" << obj_type << "' # string enum \n"
 			<< "manufacturer: 'ACME Industries' # string, anything \n"
 			<< "name: '" << name << "' # string, anything name of object \n"
 			<< "vnum: 1000 # integer, unique identifier\n"
@@ -208,9 +211,9 @@ namespace mods::yaml {
 		out_file.close();
 		return 0;
 	};
-	void gadget_description_t::fill_flags(obj_flag_data* o){
-		auto * w = &o->wear_flags;
-		auto * tf = &o->type_flag;
+	void gadget_description_t::fill_flags(obj_data* o){
+		auto * w = &(o->obj_flags.wear_flags);
+		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_GADGET;
 		switch((mw_gadget)this->type){
 			case mw_gadget::GRAPPLING_HOOK:
@@ -263,14 +266,14 @@ namespace mods::yaml {
 		out_file.close();
 		return 0;
 	};
-	void rifle_description_t::fill_flags(obj_flag_data* o){
-		auto * w = &o->wear_flags;
-		auto * tf = &o->type_flag;
-		o->ammo = this->ammo_max;
-		o->ammo_max = this->ammo_max;
-		o->weapon_flags = this->type;
-		o->clip_size =this->clip_size;
+	void rifle_description_t::fill_flags(obj_data* o){
+		auto * w = &(o->obj_flags.wear_flags);
+		auto * tf = &(o->obj_flags.type_flag);
+		o->obj_flags.ammo = this->ammo_max;
+		o->obj_flags.ammo_max = this->ammo_max;
+		o->obj_flags.clip_size =this->clip_size;
 		(*tf) = ITEM_RIFLE;
+
 		switch((mw_rifle)this->type){
 			case mw_rifle::PISTOL:
 			case mw_rifle::HANDGUN:
@@ -286,21 +289,23 @@ namespace mods::yaml {
 				break;
 			default: 
 				(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD | ITEM_WEAR_SECONDARY;
-				std::cerr << "[WARNING] fill_flags DID NOT FILL ANYTHING!\n";
+				log("[rifle_description_t][WARNING] fill_flags used the default flags");
 				break;
 		}
+		o->obj_flags.weapon_flags = this->type;
 	}
 	/** vim sorcery:
 
 		s/(\([A-Z_]\+\)) .*$/\t\tcase mw_gadget::\1:\r\t\t(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;\r\t\t\treturn;\r/g
 
 */
-	void armor_description_t::fill_flags(obj_flag_data* o){
-		auto * w = &o->wear_flags;
-		auto * tf = &o->type_flag;
+	void armor_description_t::fill_flags(obj_data* o){
+		auto * w = &(o->obj_flags.wear_flags);
+		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_ARMOR;
-		switch((mw_armor)this->type){
+		switch((mw_armor)o->extended_type){
 			default:
+				log("[armor_description_t][WARNING] fill_flags used the default flags");
 				break;
 			case mw_armor::VEST:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_BODY | ITEM_WEAR_HOLD;
@@ -359,43 +364,47 @@ namespace mods::yaml {
 				break;
 		}
 	}
-	void drone_description_t::fill_flags(obj_flag_data* o){
-		auto * w = &o->wear_flags;
-		auto * tf = &o->type_flag;
+	void drone_description_t::fill_flags(obj_data* o){
+		auto * w = &(o->obj_flags.wear_flags);
+		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_DRONE;
-		switch((mw_drone)this->type){
+		switch((mw_drone)o->extended_type){
 			default: 
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+				log("[drone_description_t][WARNING] fill_flags used the default flags");
 				break;
 		}
 	}
-	void consumable_description_t::fill_flags(obj_flag_data* o){
-		auto * w = &o->wear_flags;
-		auto * tf = &o->type_flag;
+	void consumable_description_t::fill_flags(obj_data* o){
+		auto * w = &(o->obj_flags.wear_flags);
+		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_CONSUMABLE;
-		switch((mw_consumable)this->type){
+		switch((mw_consumable)o->extended_type){
 			default:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+				log("[consumable_description_t][WARNING] fill_flags used the default flags");
 				break;
 		}
 	}
-	void trap_description_t::fill_flags(obj_flag_data* o){
-		auto * w = &o->wear_flags;
-		auto * tf = &o->type_flag;
+	void trap_description_t::fill_flags(obj_data* o){
+		auto * w = &(o->obj_flags.wear_flags);
+		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_TRAP;
-		switch((mw_trap)this->type){
+		switch((mw_trap)o->extended_type){
 			default:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+				log("[trap_description_t][WARNING] fill_flags used the default flags");
 				break;
 		}
 	}
-	void attachment_description_t::fill_flags(obj_flag_data* o){
-		auto * w = &o->wear_flags;
-		auto * tf = &o->type_flag;
+	void attachment_description_t::fill_flags(obj_data* o){
+		auto * w = &(o->obj_flags.wear_flags);
+		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_ATTACHMENT;
-		switch((mw_attachment)this->type){
+		switch((mw_attachment)o->extended_type){
 			default:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+				log("[attachment_description_t][WARNING] fill_flags used the default flags");
 				break;
 		}
 	}
@@ -449,7 +458,7 @@ namespace mods::yaml {
 		out_file << "\n]\n";
 		MENTOC_EXAMPLE_RIFLES
 			MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
-			base_items(&out_file,"A PSG-1 Sniper Rifle","SNIPER");
+			base_items(&out_file,"A PSG-1 Sniper Rifle",std::to_string(ITEM_RIFLE));
 		out_file.flush();
 		out_file.close();
 		return 0;
@@ -508,9 +517,9 @@ namespace mods::yaml {
 	/** explosives */
 	/** explosives */
 	/** explosives */
-	void explosive_description_t::fill_flags(obj_flag_data* o){
-		auto * w = &o->wear_flags;
-		auto * tf = &o->type_flag;
+	void explosive_description_t::fill_flags(obj_data* o){
+		auto * w = &(o->obj_flags.wear_flags);
+		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_EXPLOSIVE;
 		(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
 	}
@@ -523,8 +532,8 @@ namespace mods::yaml {
 			feed_file = file;
 			auto yaml_file = YAML::LoadFile(file);
 			auto type_string = yaml_file["str_type"].as<std::string>();
-			MENTOC_FEED_EXPLOSIVE
 			MENTOC_FEED_BASE_MEMBERS
+			MENTOC_FEED_EXPLOSIVE
 		}catch(std::exception &e){
 			std::cerr << "[exception] explosive feed: '" << e.what() << "'\n";
 			return -1;
@@ -660,9 +669,8 @@ namespace mods::yaml {
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
 				damage_map[i] = dmap[i];
 			}
-			auto type_string = yaml_file["str_type"].as<std::string>();
-			MENTOC_FEED_RIFLE
 			MENTOC_FEED_BASE_MEMBERS
+			MENTOC_FEED_RIFLE
 			this->base_stat_list = mods::weapon::weapon_stats(this->type);
 		}catch(std::exception &e){
 			std::cerr << "[exception] rifle feed: '" << e.what() << "'\n";
@@ -672,6 +680,7 @@ namespace mods::yaml {
 	}
 
 	int16_t rifle_description_t::feed_from_po_record(mentoc_pqxx_result_t yaml_file){
+		exit(200);
 		try {
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
 				float item = yaml_file[std::string("accuracy_map_") + std::to_string(i)].as<float>();
@@ -682,8 +691,8 @@ namespace mods::yaml {
 				damage_map[i] = item;
 			}
 			auto type_string = yaml_file["str_type"].as<std::string>();
-			MENTOC_FEED_RIFLE
 			MENTOC_FEED_BASE_MEMBERS
+			MENTOC_FEED_RIFLE
 		}catch(std::exception &e){
 			std::cerr << "[exception] rifle feed: '" << e.what() << "'\n";
 			return -1;

@@ -30,11 +30,11 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-DMENTOC_NO_CONSTEXPR_CONF=1 \
 	-D__MENTOC_USE_LMDB=1 \
 	-Wno-sign-compare -I$(yamlcpp) -L$(yamllib) \
-	-fPIC -DMENTOC_CURRENT_WORKING_DIR=\"$(LIB_DIR)\" \
-	-D__MENTOC_SHOW_LMDB_DEBUG__=1
-
-#-D__MENTOC_SHOW_LMDB_DEBUG__=1 
-	#-DMENTOC_NO_CONSTEXPR_CONF=1 \ #-D__MENTOC_USE_PQXX_RESULT__=1 
+	-fPIC -DMENTOC_CURRENT_WORKING_DIR=\"$(LIB_DIR)\" #\
+	-D__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__=1 \
+	-D__MENTOC_SHOW_LMDB_DEBUG__=1 \
+	#-DMENTOC_NO_CONSTEXPR_CONF=1 \
+	#-D__MENTOC_USE_PQXX_RESULT__=1 
 LIBS = $(opnssl) -lc -lm -lpqxx -lpq -lssl -lcrypto -l$(yamlcpp_object)
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\

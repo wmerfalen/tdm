@@ -2,8 +2,8 @@
 #define __MENTOC_MODS_WEAPON_TYPES_HEADER__
 #include <vector>
 namespace mods::weapon {
-	using weapon_accuracy_t = float;
-	using weapon_damage_t = float;
+	using weapon_accuracy_t = uint16_t;
+	using weapon_damage_t = uint16_t;
 	using room_distance_t = uint8_t;
 	using allow_shot_t = bool;
 	struct weapon_type_statistics_t {
@@ -116,9 +116,6 @@ namespace mods::weapon_types {
 			auto tuple_ptr_id = std::move(mods::weapon_types::feed<mods::yaml::BOOST_PP_CAT(CLASS_TYPE,_description_t)>(feed_file));\
 			this->attributes = std::move(std::get<0>(tuple_ptr_id));\
 			this->id = std::get<1>(tuple_ptr_id);\
-			std::cerr << "[" << BOOST_PP_STRINGIZE(CLASS_TYPE) << "][feed with filename]\n";\
-			std::cerr << "[" << BOOST_PP_STRINGIZE(CLASS_TYPE) << "][feed with filename]\n";\
-			std::cerr << "[" << BOOST_PP_STRINGIZE(CLASS_TYPE) << "][feed with filename]\n";\
 		}\
 		uint64_t db_id();\
 		std::string feed_file;\

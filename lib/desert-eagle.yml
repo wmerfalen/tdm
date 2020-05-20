@@ -12,7 +12,7 @@ ammo_type: 'PISTOL' #string, constant enum
 chance_to_injure: 0.00100 #float, out of 100
 clip_size: 7 #integer
 cooldown_between_shots: 0.867701 #float, in seconds
-critical_chance: 1.14 #float, out of 100
+critical_chance: 11 #int, out of 100
 critical_range: 1 #integer, measured in rooms
 damage_map: [
 50.00,
@@ -43,3 +43,5 @@ object_type: rifle
 description: 'A debilitating Desert Eagle is lying here'
 short_description: 'Desert Eagle Pistol <short>'
 action_description: 'Desert Eagle Pistol <action>'
+damage_dice_count: 5
+damage_dice_sides: 20

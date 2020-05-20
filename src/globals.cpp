@@ -907,31 +907,62 @@ namespace mods {
 			}
 		}
 		void dispose_player(uuid_t pl_uuid){
+#ifdef __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__
+#define mgdp_debug(a) mentoc_prefix_debug("mods::globals::dispose_player") << a << "\n";
+#else
+#define mgdp_debug(a) /**/
+#endif
 			auto player = ptr_by_uuid(pl_uuid);
 			if(!player){
+				mgdp_debug("ptr_by_uuid returned an invalid player ptr... not removing from any structures!");
 				return;
 			}
 			{
 				auto p_room_list = mods::globals::get_room_list(player->room());
 				auto it = std::find(p_room_list.begin(),p_room_list.end(),player);
 				if(it != p_room_list.end()){
+					mgdp_debug("Erasing from player p_room_list");
 					p_room_list.erase(it);
 				}
 			}
 			/** TODO remove from room_list */
 			if(player->is_npc()){
+				mgdp_debug("Erasing from mob_chmap");
 				mods::globals::mob_chmap.erase(const_cast<char_data*>(player->cd()));
+				mob_map.erase(player->uuid());
+				mob_ptrmap.erase(player->cd());
+				player_map.erase(player->uuid());
+				{
+					auto ch = player->cd();
+					std::vector<std::deque<std::shared_ptr<mods::npc>>::iterator> mob_list_erasures;
+					for(auto m_it = mob_list.begin();m_it != mob_list.end(); ++m_it){
+						if((*m_it)->cd() == ch){
+							mgdp_debug("Found one in mob_list... emplacing...");
+							mob_list_erasures.emplace_back(m_it);
+						}
+					}
+					for(auto && erase_me : mob_list_erasures){
+						mgdp_debug("Erasing..." << "|use_count: " << (erase_me)->use_count());
+						mob_list.erase(erase_me);
+					}
+				}
+				player = nullptr;
+				return;
 			}
+			mgdp_debug("Erasing from player_chmap...");
 			mods::globals::player_chmap.erase(const_cast<char_data*>(player->cd()));
 			{
 				auto it = player_map.find(pl_uuid);
 				if(it != player_map.end()){
+					mgdp_debug("Found in player_map.. erasing...");
 					player_map.erase(it);
 				}
 			}
 			{
+				mgdp_debug("Looking in player_list...");
 				auto it = std::find(player_list.begin(), player_list.end(), player);
 				if(it != player_list.end()){
+					mgdp_debug("Found in player_list... erasing...");
 					player_list.erase(it);
 				}
 			}
@@ -960,6 +991,20 @@ std::optional<obj_ptr_t> optr_opt(uuid_t obj_uuid){
 		return it->second;
 	}
 	log("SYSERR: DID NOT find obj_uuid (optr) %d ",obj_uuid);
+	return std::nullopt;
+}
+std::optional<player_ptr_t> ptr_opt(char_data* ch){
+	if(IS_NPC(ch)){
+		auto it = mods::globals::mob_chmap.find(ch);
+		if(it != mods::globals::mob_chmap.end()){
+			return it->second;
+		}
+	}else{
+		auto it = mods::globals::player_chmap.find(ch);
+		if(it != mods::globals::player_chmap.end()){
+			return it->second;
+		}
+	}
 	return std::nullopt;
 }
 std::optional<player_ptr_t> ptr_opt(uuid_t plr_uuid){

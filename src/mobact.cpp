@@ -39,6 +39,11 @@ bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *att
 
 #define MOB_AGGR_TO_ALIGN (MOB_AGGR_EVIL | MOB_AGGR_NEUTRAL | MOB_AGGR_GOOD)
 
+#ifdef __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__
+	#define bht_debug(a) /**/
+#else
+	#define bht_debug(a){ std::cerr << "[mobile_activity][behaviour_trees]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n"; }
+#endif
 
 void mobile_activity(void) {
 	//auto player = mods::globals::current_player;
@@ -48,15 +53,24 @@ void mobile_activity(void) {
 		char_data *vict;
 		struct obj_data *obj, *best_obj;
 		int door, found, max;
+		bht_debug("FOREACH_MOB(" << MOBTOSTR(ch));
+
 
 		if(npc->mob_specials().behaviour_tree){
-			switch(mods::behaviour_tree_impl::dispatch(*npc)){
+			auto dispatch_result = mods::behaviour_tree_impl::dispatch(*npc);
+			bht_debug("dispatch_result: '" << std::to_string(dispatch_result) << "'");
+			switch(dispatch_result){
 				case mods::behaviour_tree_impl::dispatch_status_t::RETURN_IMMEDIATELY:
+					bht_debug("disatch result: Return immediately");
 					continue;
 				case mods::behaviour_tree_impl::dispatch_status_t::RETURN_FALSE_IMMEDIATELY:
+					bht_debug("disatch result: Return FALSE immediately");
 					continue;
 				case mods::behaviour_tree_impl::dispatch_status_t::AS_YOU_WERE:
+					bht_debug("disatch result: As you were...");
+					break;
 				default:
+					bht_debug("disatch result: defaulted...");
 					break;
 			}
 		}

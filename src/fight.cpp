@@ -23,6 +23,7 @@
 #include "constants.h"
 #include "mods/weapon.hpp"
 #include "mods/behaviour_tree_impl.hpp"
+#include "mods/object-utils.hpp"
 
 #define MOD_SNIPE_SAME_ROOM_THACO 250
 #define MOD_SNIPE_DISTANCE_THACO 5
@@ -32,6 +33,12 @@ char_data *combat_list = NULL;	/* head of l-list of fighting chars */
 char_data *next_combat_list = NULL;
 
 /* External structures */
+namespace mods::projectile {
+	extern std::string fromdirstr(int direction,bool prefix, bool suffix);
+};
+namespace mods::js {
+	extern std::string build_mob_death_trigger_string(std::string name);
+};
 extern struct message_list fight_messages[MAX_MESSAGES];
 extern int pk_allowed;		/* see config.c */
 extern int max_exp_gain;	/* see config.c */
@@ -82,8 +89,40 @@ struct attack_hit_type attack_hit_text[] = {
 	{"pierce", "pierces"},
 	{"blast", "blasts"},
 	{"punch", "punches"},
-	{"stab", "stabs"}
+	{"stab", "stabs"},
+	{"snipe","snipes"},	/* 15 */
+	{"blast","blasts"}, /* shotgun */
+	{"shoot","shoots"}, /* smg */
+	{"surpress","surpresses"}, /* LMG */
+	{"explode","explodes"}, /* nades */
+	{"torture","tortures"}, /* suffer */
+	{"decompose","decomposes"},
+	{"annihilate","annihilates"},	/* 20 */
+	{"completely destroy","completely destroys"},
+	{"utterly decimate","utterly decimates"},
+	{"devoid","devoids"}
 };
+
+int attack_message(mw_rifle type){
+	switch(type){
+		case mw_rifle::SHOTGUN: 
+			return (int)TYPE_SHOTGUN;
+		case mw_rifle::ASSAULT_RIFLE:
+		case mw_rifle::SUB_MACHINE_GUN:
+		case mw_rifle::PISTOL: 
+		case mw_rifle::MACHINE_PISTOL:
+		case mw_rifle::HANDGUN:
+			return (int)TYPE_SUB_MACHINE_GUN;
+		case mw_rifle::SNIPER: return (int)TYPE_SNIPE;
+		case mw_rifle::LIGHT_MACHINE_GUN: return (int)TYPE_LIGHT_MACHINE_GUN;
+		default: return (int)TYPE_SUB_MACHINE_GUN;
+	}
+}
+
+int rifle_damage(player_ptr_t& player,player_ptr_t& victim,int damage_points){
+	auto weapon_type = (mw_rifle)player->attacking_with_type();
+	return damage(player->cd(),victim->cd(),damage_points,attack_message(weapon_type));
+}
 
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
 
@@ -149,6 +188,7 @@ void free_messages(void) {
 
 
 void load_messages(void) {
+	MENTOC_DEPRECATED("load_messages");
 	FILE *fl;
 	int i, type;
 	struct message_type *messages;
@@ -251,6 +291,10 @@ void set_fighting(char_data *ch, char_data *vict) {
 		return;
 	}
 
+	if(IN_ROOM(ch) != IN_ROOM(vict)){
+		return;
+	}
+
 	if(FIGHTING(ch)) {
 		core_dump();
 		return;
@@ -298,15 +342,14 @@ void make_corpse(char_data *ch) {
 
 	auto corpse = blank_object();
 
-	corpse->name = strdup("corpse");
+	memset(buf2,0,sizeof(buf2));
+	snprintf(buf2, sizeof(buf2), "The corpse of %s is lying here.", ch->player.name.c_str());
+	corpse->description.assign(buf2);
+	corpse->name.assign(corpse->description.str());
 
 	memset(buf2,0,sizeof(buf2));
-	snprintf(buf2, sizeof(buf2), "The corpse of %s is lying here.", player->name().c_str());
-	corpse->description = strdup(buf2);
-
-	memset(buf2,0,sizeof(buf2));
-	snprintf(buf2, sizeof(buf2), "the corpse of %s", player->name().c_str());
-	corpse->short_description = strdup(buf2);
+	snprintf(buf2, sizeof(buf2), "The corpse of %s", ch->player.name.c_str());
+	corpse->short_description.assign(buf2);
 
 	GET_OBJ_TYPE(corpse) = ITEM_CONTAINER;
 	GET_OBJ_WEAR(corpse) = ITEM_WEAR_TAKE;
@@ -370,44 +413,50 @@ void death_cry(char_data *ch) {
 
 	act("Your blood freezes as you hear $n's death cry.", FALSE, ch, 0, 0, TO_ROOM);
 
-	for(door = 0; door < NUM_OF_DIRS; door++)
+	for(door = 0; door < NUM_OF_DIRS; door++){
+		std::string from_dir = mods::projectile::fromdirstr(door,true,true) + "\r\n";
 		if(CAN_GO(ch, door)) {
-			send_to_room(world[IN_ROOM(ch)].dir_option[door]->to_room, "Your blood freezes as you hear someone's death cry.\r\n");
+			std::string s = "Your blood freezes as you hear someone's death cry " + from_dir;
+			send_to_room(world[IN_ROOM(ch)].dir_option[door]->to_room, s.c_str());
 		}
+	}
 }
 
 
 
 void raw_kill(char_data *ch) {
-	if(FIGHTING(ch)) {
-		stop_fighting(ch);
-	}
+	//if(FIGHTING(ch)) {
+	//	std::cerr << "[raw_kill][player is fighting].. removing...\n";
+		//stop_fighting(ch);
+	//}else{
+	//	std::cerr << "[raw_kill][player is NOT fighting].. NOT removing...\n";
+	//}
 
-	while(ch->affected) {
-		affect_remove(ch, ch->affected);
-	}
+	//while(ch->affected) {
+	//	affect_remove(ch, ch->affected);
+	//}
 
 	death_cry(ch);
 
 	make_corpse(ch);
+	{
+		auto player = ptr(ch);
+		char_from_room(player);
+	}
 	extract_char(ch);
+	{
+		char_data* temp;
+		REMOVE_FROM_LIST(ch, combat_list, next_fighting);
+	}
+	ch->next_fighting = NULL;
+	FIGHTING(ch) = NULL;
+	mods::globals::dispose_player(ch->uuid);
 }
 
 
 void die(char_data* killer,char_data *victim) {
 	/* check if mob death trigger is active */
 	std::string functor;
-	DBGET(mods::globals::replace_all(DT_FORMAT,"{player_name}",killer->player.name.c_str()),functor);
-
-	if(functor.length()) {
-		functor += "(\"";
-		functor += killer->player.name.c_str();
-		functor += "\",\"";
-		functor += victim->player.name.c_str();
-		functor += "\",";
-		functor += "0);";	//TODO: Make this the zone where the player is killed at
-		mods::js::eval_string(functor);
-	}
 
 	if(victim->drone) {
 		auto room = IN_ROOM(victim);
@@ -416,6 +465,9 @@ void die(char_data* killer,char_data *victim) {
 		send_to_room(room,"A drone is destroyed.");
 		char_to_room(victim,NOWHERE);
 		return;
+	}
+	if(FIGHTING(killer) == victim){
+		stop_fighting(killer);
 	}
 
 	die(victim);
@@ -556,6 +608,7 @@ char *replace_string(const char *str, const char *weapon_singular, const char *w
 /* message for doing damage with a weapon */
 void dam_message(int dam, char_data *ch, char_data *victim,
                  int w_type) {
+	MENTOC_PREAMBLE();
 	char *buf;
 	int msgnum;
 
@@ -622,6 +675,105 @@ void dam_message(int dam, char_data *ch, char_data *victim,
 		}
 	};
 
+	static dam_weapon_type msg_SNIPER = {
+			"$n snipes $N!",	/* 8: > 23   */
+			"You aim and hit $N with your shot!!",
+			"$n snipes you!!"
+	};
+	static dam_weapon_type msg_SUB_MACHINE_GUN = {
+			"$n fires off some shots at $N!",	/* 8: > 23   */
+			"You aim and hit $N with a burst of bullets!!",
+			"$n hits you with a burst of bullets!!"
+	};
+	static dam_weapon_type msg_SHOTGUN = {
+			"$n unloads a shotgun blast at $N!",	/* 8: > 23   */
+			"You unload a shotgun blast at $N!!",
+			"$n unloads a shotgun blast directly at you!!"
+	};
+	static dam_weapon_type msg_ASSAULT_RIFLE = {
+			"$n release an unrelenting burst of shots at $N!",
+			"You unload an unrelenting burst of shots at $N!!",
+			"$n unloads an unrelenting burst of shots at you!!"
+	};
+	static dam_weapon_type msg_PISTOL = {
+			"$n fires off a shot at $N!",
+			"You fire off a shot at $N!!",
+			"$n fires off a shot at you!!"
+	};
+	static dam_weapon_type msg_MACHINE_PISTOL = {
+			"$n unleashes fast machine pistol fire at $N!",
+			"You unleash fast machine pistol fire at $N!!",
+			"$n unleashes fast machine pistol fire at you!!"
+	};
+	static dam_weapon_type msg_LIGHT_MACHINE_GUN = {
+			"$n unleashes suppressive fire at $N!",
+			"You suppress $N with your LMG burst!!",
+			"$n suppresses you with LMG fire!!"
+	};
+
+	if(player->attacking_with()){
+		const char* to_room = nullptr;
+		const char* to_char = nullptr;
+		const char* to_victim = nullptr;
+		switch((mw_rifle)player->attacking_with_type()){
+			default: break;
+			case mw_rifle::SHOTGUN:
+							 to_room = msg_SHOTGUN.to_room;
+							 to_char = msg_SHOTGUN.to_char;
+							 to_victim = msg_SHOTGUN.to_victim;
+							 break;
+
+			case mw_rifle::ASSAULT_RIFLE:
+							 to_room = msg_ASSAULT_RIFLE.to_room;
+							 to_char = msg_ASSAULT_RIFLE.to_char;
+							 to_victim = msg_ASSAULT_RIFLE.to_victim;
+							 break;
+
+			case mw_rifle::SUB_MACHINE_GUN:
+							 to_room = msg_SUB_MACHINE_GUN.to_room;
+							 to_char = msg_SUB_MACHINE_GUN.to_char;
+							 to_victim = msg_SUB_MACHINE_GUN.to_victim;
+							 break;
+
+			case mw_rifle::SNIPER:
+							 to_room = msg_SNIPER.to_room;
+							 to_char = msg_SNIPER.to_char;
+							 to_victim = msg_SNIPER.to_victim;
+							 break;
+
+			case mw_rifle::HANDGUN:
+			case mw_rifle::PISTOL:
+							 to_room = msg_PISTOL.to_room;
+							 to_char = msg_PISTOL.to_char;
+							 to_victim = msg_PISTOL.to_victim;
+							 break;
+
+			case mw_rifle::MACHINE_PISTOL:
+							 to_room = msg_MACHINE_PISTOL.to_room;
+							 to_char = msg_MACHINE_PISTOL.to_char;
+							 to_victim = msg_MACHINE_PISTOL.to_victim;
+							 break;
+
+			case mw_rifle::LIGHT_MACHINE_GUN:
+							 to_room = msg_LIGHT_MACHINE_GUN.to_room;
+							 to_char = msg_LIGHT_MACHINE_GUN.to_char;
+							 to_victim = msg_LIGHT_MACHINE_GUN.to_victim;
+							 break;
+		}
+
+		if(to_room && to_char && to_victim){
+			act(to_room, FALSE, ch, NULL, victim, TO_NOTVICT);
+			send_to_char(ch, CCYEL(ch, C_CMP));
+			act(to_char, FALSE, ch, NULL, victim, TO_CHAR);
+			send_to_char(ch, CCNRM(ch, C_CMP));
+			send_to_char(victim, CCRED(victim, C_CMP));
+			act(to_victim, FALSE, ch, NULL, victim, TO_VICT | TO_SLEEP);
+			send_to_char(victim, CCNRM(victim, C_CMP));
+			return;
+		}
+	}
+
+
 
 	w_type -= TYPE_HIT;		/* Change to base of table with text */
 
@@ -645,22 +797,24 @@ void dam_message(int dam, char_data *ch, char_data *victim,
 		msgnum = 8;
 	}
 
+
+
 	/* damage message to onlookers */
 	buf = replace_string(dam_weapons[msgnum].to_room,
-	                     attack_hit_text[w_type].singular, attack_hit_text[w_type].plural);
+			attack_hit_text[w_type].singular, attack_hit_text[w_type].plural);
 	act(buf, FALSE, ch, NULL, victim, TO_NOTVICT);
 
 	/* damage message to damager */
 	send_to_char(ch, CCYEL(ch, C_CMP));
 	buf = replace_string(dam_weapons[msgnum].to_char,
-	                     attack_hit_text[w_type].singular, attack_hit_text[w_type].plural);
+			attack_hit_text[w_type].singular, attack_hit_text[w_type].plural);
 	act(buf, FALSE, ch, NULL, victim, TO_CHAR);
 	send_to_char(ch, CCNRM(ch, C_CMP));
 
 	/* damage message to damagee */
 	send_to_char(victim, CCRED(victim, C_CMP));
 	buf = replace_string(dam_weapons[msgnum].to_victim,
-	                     attack_hit_text[w_type].singular, attack_hit_text[w_type].plural);
+			attack_hit_text[w_type].singular, attack_hit_text[w_type].plural);
 	act(buf, FALSE, ch, NULL, victim, TO_VICT | TO_SLEEP);
 	send_to_char(victim, CCNRM(victim, C_CMP));
 }
@@ -671,7 +825,7 @@ void dam_message(int dam, char_data *ch, char_data *victim,
  *  C3.0: Also used for weapon damage on miss and death blows
  */
 int skill_message(int dam, char_data *ch, char_data *vict,
-                  int attacktype) {
+		int attacktype) {
 	int i, j, nr;
 	struct message_type *msg;
 
@@ -758,7 +912,7 @@ int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 		}
 
 		log("SYSERR: Attempt to damage corpse '%s' in room #%d by '%s'.",
-		    GET_NAME(victim).c_str(), GET_ROOM_VNUM(IN_ROOM(victim)), GET_NAME(ch).c_str());
+				GET_NAME(victim).c_str(), GET_ROOM_VNUM(IN_ROOM(victim)), GET_NAME(ch).c_str());
 		die(ch,victim);
 		return (-1);            /* -je, 7/7/92 */
 	}
@@ -782,9 +936,9 @@ int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 	//if (victim != ch) {
 	/* Start the attacker fighting the victim */
 	/*
-	if (GET_POS(ch) > POS_STUNNED && (FIGHTING(ch) == NULL))
-	  set_fighting(ch, victim);
-	*/
+		 if (GET_POS(ch) > POS_STUNNED && (FIGHTING(ch) == NULL))
+		 set_fighting(ch, victim);
+		 */
 	/* Start the victim fighting the attacker */
 	//TODO Modify this code to allow NPCs to follow the attacker
 	if(GET_POS(victim) > POS_STUNNED && (FIGHTING(victim) == NULL)) {
@@ -799,15 +953,15 @@ int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 
 	/* If you attack a pet, it hates your guts */
 	/*
-	  if (victim->master == ch)
-	    stop_follower(victim);
-	*/
+		 if (victim->master == ch)
+		 stop_follower(victim);
+		 */
 
 	/* If the attacker is invisible, he becomes visible */
 	/*
-	  if (AFF_FLAGGED(ch, AFF_INVISIBLE | AFF_HIDE))
-	    appear(ch);
-	*/
+		 if (AFF_FLAGGED(ch, AFF_INVISIBLE | AFF_HIDE))
+		 appear(ch);
+		 */
 
 	/* Cut damage in half if victim has sanct, to a minimum 1 */
 	if(AFF_FLAGGED(victim, AFF_SANCTUARY) && dam >= 2) {
@@ -816,12 +970,12 @@ int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 
 	/* Check for PK if this is not a PK MUD */
 	/*
-	  if (!pk_allowed) {
-	    check_killer(ch, victim);
-	    if (PLR_FLAGGED(ch, PLR_KILLER) && (ch != victim))
-	      dam = 0;
-	  }
-	*/
+		 if (!pk_allowed) {
+		 check_killer(ch, victim);
+		 if (PLR_FLAGGED(ch, PLR_KILLER) && (ch != victim))
+		 dam = 0;
+		 }
+		 */
 
 	/* Set the maximum damage per round and subtract the hit points */
 	dam = MAX(MIN(dam, 100), 0);
@@ -831,9 +985,9 @@ int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 	/* Gain exp for the hit */
 	/* FIXME: Find out how to gain exp for ch if ch is nullptr */
 	/*
-	  if (ch != victim)
-	    gain_exp(ch, GET_LEVEL(victim) * dam);
-	*/
+		 if (ch != victim)
+		 gain_exp(ch, GET_LEVEL(victim) * dam);
+		 */
 	update_pos(victim);
 
 	/*
@@ -848,17 +1002,17 @@ int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 	 * dam_message. Otherwise, always send a dam_message.
 	 */
 	/*
-	  if (!IS_WEAPON(attacktype))
-	    skill_message(dam, ch, victim, attacktype);
-	  else {
-	    if (GET_POS(victim) == POS_DEAD || dam == 0) {
-	      if (!skill_message(dam, ch, victim, attacktype))
-	    dam_message(dam, ch, victim, attacktype);
-	    } else {
-	      dam_message(dam, ch, victim, attacktype);
-	    }
-	  }
-	*/
+		 if (!IS_WEAPON(attacktype))
+		 skill_message(dam, ch, victim, attacktype);
+		 else {
+		 if (GET_POS(victim) == POS_DEAD || dam == 0) {
+		 if (!skill_message(dam, ch, victim, attacktype))
+		 dam_message(dam, ch, victim, attacktype);
+		 } else {
+		 dam_message(dam, ch, victim, attacktype);
+		 }
+		 }
+		 */
 	send_to_char(ch,"{/grn}");
 
 	/* Use send_to_char -- act() doesn't send message if you are DEAD. */
@@ -890,7 +1044,7 @@ int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 
 			if(GET_HIT(victim) < (GET_MAX_HIT(victim) / 4)) {
 				send_to_char(victim, "{red}%sYou wish that your wounds would stop BLEEDING so much!%s{/red}\r\n",
-				             CCRED(victim, C_SPR), CCNRM(victim, C_SPR));
+						CCRED(victim, C_SPR), CCNRM(victim, C_SPR));
 
 				if(ch != victim && MOB_FLAGGED(victim, MOB_WIMPY)) {
 					do_flee(victim, NULL, 0, 0, player);
@@ -898,7 +1052,7 @@ int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 			}
 
 			if(!IS_NPC(victim) && GET_WIMP_LEV(victim) && (victim != ch) &&
-			        GET_HIT(victim) < GET_WIMP_LEV(victim) && GET_HIT(victim) > 0) {
+					GET_HIT(victim) < GET_WIMP_LEV(victim) && GET_HIT(victim) > 0) {
 				send_to_char(victim, "You wimp out, and attempt to flee!\r\n");
 				do_flee(victim, NULL, 0, 0, player);
 			}
@@ -954,40 +1108,40 @@ int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
  * @param ch Attacker (can be PC or NPC)
  * @param victim Receiver of damage (can be PC or NPC)
  * @param dam Integer value of how much damage to attempt to deal
- * @param attacktype the type of attack
  * @return < 0 Victim died, == 0 No damage,> 0 How much damage done.
  */
 int snipe_damage(
-		char_data *ch, 
-		char_data *victim, 
-		int dam, 
-		int attacktype) {
-	MENTOC_PREAMBLE();
+		player_ptr_t& player,
+		player_ptr_t& victim,
+		int dam
+		) {
 	player->cd()->last_fight_timestamp = time(NULL);
 
 	int dmg_dealt = 0;
-	if(GET_POS(victim) <= POS_DEAD) {
-		dmg_dealt = damage(ch,victim,dam,TYPE_SNIPE);
-		if(IS_NPC(victim)){
+	if(victim->position() > POS_DEAD) {
+		dmg_dealt = rifle_damage(player,victim,dam);
+		if(victim->is_npc()){
 			if(dmg_dealt == -1){
-					victim->mob_specials.snipe_tracking = nullptr;
-					victim->mob_specials.behaviour_tree = 0;
-					return -1;
+				victim->cd()->mob_specials.snipe_tracking = nullptr;
+				victim->cd()->mob_specials.behaviour_tree = 0;
+				return -1;
 			}else if(dmg_dealt == 0){
 				/** No damage dealt */
 			}else if(dmg_dealt > 0){
-					if(MOB_FLAGGED(victim,MOB_SENTINEL)){
-						victim->mob_specials.behaviour_tree = mods::behaviour_tree_impl::grab_tree_by_name("sentinel_snipe_tracking");
-					}else{
-						victim->mob_specials.behaviour_tree = mods::behaviour_tree_impl::grab_tree_by_name("snipe_tracking");
-					}
+				if(MOB_FLAGGED(victim->cd(),MOB_SENTINEL)){
+					victim->cd()->mob_specials.behaviour_tree = mods::behaviour_tree_impl::grab_tree_by_name("sentinel_snipe_tracking");
+				}else{
+					victim->cd()->mob_specials.behaviour_tree = mods::behaviour_tree_impl::grab_tree_by_name("snipe_tracking");
 				}
+			}
 		}
 	}else{
 		player->stc("It appears that your target is dead\r\n");
+		stop_fighting(player->cd());
+		stop_fighting(victim->cd());
 	}
 
-	remember(victim,ch);
+	remember(victim->cd(),player->cd());
 	return (dmg_dealt);
 }
 
@@ -1009,7 +1163,7 @@ int damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 		}
 
 		log("SYSERR: Attempt to damage corpse '%s' in room #%d by '%s'.",
-		    GET_NAME(victim).c_str(), GET_ROOM_VNUM(IN_ROOM(victim)), GET_NAME(ch).c_str());
+				GET_NAME(victim).c_str(), GET_ROOM_VNUM(IN_ROOM(victim)), GET_NAME(ch).c_str());
 		die(ch,victim);
 		return (-1);			/* -je, 7/7/92 */
 	}
@@ -1133,7 +1287,7 @@ int damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 
 			if(GET_HIT(victim) < (GET_MAX_HIT(victim) / 4)) {
 				send_to_char(victim, "%sYou wish that your wounds would stop BLEEDING so much!%s\r\n",
-				             CCRED(victim, C_SPR), CCNRM(victim, C_SPR));
+						CCRED(victim, C_SPR), CCNRM(victim, C_SPR));
 
 				if(ch != victim && MOB_FLAGGED(victim, MOB_WIMPY)) {
 					do_flee(victim, NULL, 0, 0,player);
@@ -1141,7 +1295,7 @@ int damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 			}
 
 			if(!IS_NPC(victim) && GET_WIMP_LEV(victim) && (victim != ch) &&
-			        GET_HIT(victim) < GET_WIMP_LEV(victim) && GET_HIT(victim) > 0) {
+					GET_HIT(victim) < GET_WIMP_LEV(victim) && GET_HIT(victim) > 0) {
 				send_to_char(victim, "You wimp out, and attempt to flee!\r\n");
 				do_flee(victim, NULL, 0, 0,player);
 			}
@@ -1218,128 +1372,95 @@ int compute_thaco(char_data *ch, char_data *victim) {
 
 using vpd = mods::scan::vec_player_data;
 
-int snipe_hit(player_ptr_t& player, player_ptr_t& victim_ptr, uint16_t* distance) {
-	auto ch = player->cd();
-	auto victim = victim_ptr->cd();
-	struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
-	int w_type, victim_ac, calc_thaco, dam, diceroll;
+int calculate_weapon_hit(player_ptr_t& player, obj_ptr_t weapon, player_ptr_t& victim, uint16_t distance) {
+	int dam = weapon->rifle()->attributes->base_stat_list->at(distance).damage;
+	int damage_dice = weapon->rifle()->attributes->damage_dice_count;
+	int damage_sides = weapon->rifle()->attributes->damage_dice_sides;
+	int crit_range = weapon->rifle()->attributes->critical_range;
+	int crit_chance = weapon->rifle()->attributes->critical_chance;
+	int critical_bonus = 0;
 
-	/* TODO: if ch and victim are in the same room, the dice rolls should be *terrible*.
-	* sniper rifle accuracy in close range combat should be incredibly terrible
-	*/
-	/* Find the weapon type (for display purposes only) */
-	if(wielded && GET_OBJ_TYPE(wielded) == ITEM_WEAPON) {
-		w_type = GET_OBJ_VAL(wielded, 3) + TYPE_HIT;
-	} else {
-		if(IS_NPC(ch) && ch->mob_specials.attack_type != 0) {
-			w_type = ch->mob_specials.attack_type + TYPE_HIT;
-		} else {
-			w_type = TYPE_HIT;
+	/** calculate headshot */
+	if(dice(1,100) >= 95){
+		player->send("{red}***HEADSHOT***{/red} -- ");
+		dam = victim->hp();
+	}
+	if(distance == crit_range){
+		if(dice(1,100) <= crit_chance){
+			player->send("{red}***CRITICAL***{/red} -- ");
+			critical_bonus = dice(
+					damage_dice,
+					damage_sides
+					);
 		}
 	}
+	dam += critical_bonus;
 
-	/* Calculate chance of hit. Lower THAC0 is better for attacker. */
-	calc_thaco = compute_thaco(ch, victim);
+	auto dice_roll = dice(
+			damage_dice,
+			damage_sides
+	);
+	dam += dice_roll;
 
-	if(IN_ROOM(ch) == IN_ROOM(victim)) {
-		/* Terrible accuracy if within the same room */
-		calc_thaco += MOD_SNIPE_SAME_ROOM_THACO;
-	} else {
-		calc_thaco += (*distance) * MOD_SNIPE_DISTANCE_THACO;
-	}
+#ifdef __MENTOC_SHOW_SNIPE_HIT_STATS__
+	player->send(
+			"dice roll[%d]\r\n"
+			"damage: [%d]\r\n"
+			"critical_bonus: [%d]\r\n"
+			"damage_dice [%d]\r\n"
+			"damage_slides [%d]\r\n"
+			"crit_range [%d]\r\n"
+			"crit_chance [%d]\r\n",
+			dice_roll,
+			dam,
+			critical_bonus,
+			damage_dice,
+			damage_sides,
+			crit_range,
+			crit_chance
+			);
+#endif
+	return dam;
+}
 
-	/* Calculate the raw armor including magic armor.  Lower AC is better for defender. */
-	victim_ac = compute_armor_class(victim) / 10;
 
-	/* roll the die and take your chances... */
-	diceroll = rand_number(1, 20);
-
-	send_to_char(ch,(std::string("Computed thaco:") + std::to_string(calc_thaco) + "\r\n"\
-				+ "victim_ac (computed armor class): " + std::to_string(victim_ac) + "\r\n" \
-				+ "diceroll:" + std::to_string(diceroll) + "\r\n").c_str());
-
-	/*
-	 * Decide whether this is a hit or a miss.
-	 *
-	 *  Victim asleep = hit, otherwise:
-	 *     1   = Automatic miss.
-	 *   2..19 = Checked vs. AC.
-	 *    20   = Automatic hit.
-	 */
-	if(diceroll == 20 || !AWAKE(victim)) {
-		dam = TRUE;
-	} else if(diceroll == 1) {
-		dam = FALSE;
-	} else {
-		dam = (calc_thaco - diceroll <= victim_ac);
-	}
-
-	if(!dam)
-		/* the attacker missed the victim */
-	{
-		snipe_damage(ch, victim, 0, w_type);
-	} else {
-		/* okay, we know the guy has been hit.  now calculate damage. */
-
-		/* Start with the damage bonuses: the damroll and strength apply */
-		dam = str_app[STRENGTH_APPLY_INDEX(ch)].todam;
-		dam += GET_DAMROLL(ch);
-
-		/* Maybe holding arrow? */
-		if(wielded && GET_OBJ_TYPE(wielded) == ITEM_WEAPON) {
-			/* Add weapon-based damage if a weapon is being wielded */
-			dam += dice(GET_OBJ_VAL(wielded, 1), GET_OBJ_VAL(wielded, 2));
-		} else {
-			/* If no weapon, add bare hand damage instead */
-			if(IS_NPC(ch)) {
-				dam += dice(ch->mob_specials.damnodice, ch->mob_specials.damsizedice);
-			} else {
-				dam += rand_number(0, 2);    /* Max 2 bare hand damage for players */
-			}
-		}
-
-		/*
-		 * Include a damage multiplier if victim isn't ready to fight:
-		 *
-		 * Position sitting  1.33 x normal
-		 * Position resting  1.66 x normal
-		 * Position sleeping 2.00 x normal
-		 * Position stunned  2.33 x normal
-		 * Position incap    2.66 x normal
-		 * Position mortally 3.00 x normal
-		 *
-		 * Note, this is a hack because it depends on the particular
-		 * values of the POSITION_XXX constants.
-		 */
-		if(GET_POS(victim) < POS_FIGHTING) {
-			dam *= 1 + (POS_FIGHTING - GET_POS(victim)) / 3;
-		}
-
-		/* at least 1 hp damage min per hit */
-		dam = MAX(1, dam);
-
-		return snipe_damage(ch, victim, dam, w_type);
-	}
-	return 0;
+int snipe_hit(player_ptr_t& player, obj_ptr_t weapon, player_ptr_t& victim, uint16_t* distance) {
+	player->set_attacking_with(weapon);
+	return snipe_damage(player,victim, calculate_weapon_hit(player,weapon,victim,*distance));
 }
 
 
 
 void hit(char_data *ch, char_data *victim, int type) {
+	assert(ch != nullptr);
+	assert(victim != nullptr);
+	assert(IN_ROOM(ch) == IN_ROOM(victim));
 	MENTOC_PREAMBLE();
-	auto victim_ptr = ptr(victim);
-	ch->last_fight_timestamp = time(NULL);
-
-	/*
-	if(player->has_weapon_capability(mods::weapon::mask::snipe)) {
-		snipe_hit(player,victim_ptr,-1);
+	auto victim_ptr_opt = ptr_opt(victim);
+	if(!victim_ptr_opt.has_value()){
+		log("SYSERR: found null victim ptr... returning prematurely");
 		return;
 	}
-	*/
-
-	auto wielded = GET_EQ(ch, WEAR_WIELD);
-
+	auto victim_ptr = victim_ptr_opt.value();
 	int w_type, victim_ac, calc_thaco, dam, diceroll;
+	auto primary = player->primary();
+	auto secondary = player->secondary();
+	obj_ptr_t wielded_weapon = nullptr;
+
+	bool same_room = IN_ROOM(ch) == IN_ROOM(victim);
+	if(same_room && primary && !mods::object_utils::can_attack_same_room(primary) && secondary) {
+		wielded_weapon = secondary;
+	} else if (same_room && !primary && secondary) {
+		wielded_weapon = secondary;
+	} else if (same_room && primary && mods::object_utils::can_attack_same_room(primary)) {
+		wielded_weapon = primary;
+	} else if (same_room && !primary && !secondary) {
+		wielded_weapon = nullptr;
+	}
+
+	player->set_attacking_with(wielded_weapon);
+
+	ch->last_fight_timestamp = time(NULL);
 
 	/* Do some sanity checking, in case someone flees, etc. */
 	if(IN_ROOM(ch) != IN_ROOM(victim)) {
@@ -1351,8 +1472,8 @@ void hit(char_data *ch, char_data *victim, int type) {
 	}
 
 	/* Find the weapon type (for display purposes only) */
-	if(wielded && GET_OBJ_TYPE(wielded) == ITEM_WEAPON) {
-		w_type = GET_OBJ_VAL(wielded, 3) + TYPE_HIT;
+	if(wielded_weapon && GET_OBJ_TYPE(wielded_weapon) == ITEM_WEAPON) {
+		w_type = GET_OBJ_VAL(wielded_weapon, 3) + TYPE_HIT;
 	} else {
 		if(IS_NPC(ch) && ch->mob_specials.attack_type != 0) {
 			w_type = ch->mob_specials.attack_type + TYPE_HIT;
@@ -1364,10 +1485,6 @@ void hit(char_data *ch, char_data *victim, int type) {
 	/* Calculate chance of hit. Lower THAC0 is better for attacker. */
 	calc_thaco = compute_thaco(ch, victim);
 
-	if(IN_ROOM(ch) == IN_ROOM(victim) && player->has_weapon_capability(mods::weapon::mask::snipe)) {
-		/* Terrible accuracy if within the same room */
-		calc_thaco += MOD_SNIPE_SAME_ROOM_THACO;
-	}
 
 	send_to_char(ch,(std::to_string(calc_thaco) + "\r\n").c_str());
 
@@ -1401,20 +1518,13 @@ void hit(char_data *ch, char_data *victim, int type) {
 		/* okay, we know the guy has been hit.  now calculate damage. */
 
 		/* Start with the damage bonuses: the damroll and strength apply */
-		dam = str_app[STRENGTH_APPLY_INDEX(ch)].todam;
-		dam += GET_DAMROLL(ch);
 
 		/* Maybe holding arrow? */
-		if(wielded && GET_OBJ_TYPE(wielded) == ITEM_WEAPON) {
+		if(wielded_weapon && wielded_weapon->has_rifle()) {
 			/* Add weapon-based damage if a weapon is being wielded */
-			dam += dice(GET_OBJ_VAL(wielded, 1), GET_OBJ_VAL(wielded, 2));
-		} else {
-			/* If no weapon, add bare hand damage instead */
-			if(IS_NPC(ch)) {
-				dam += dice(ch->mob_specials.damnodice, ch->mob_specials.damsizedice);
-			} else {
-				dam += rand_number(0, 2);    /* Max 2 bare hand damage for players */
-			}
+			dam = calculate_weapon_hit(player,wielded_weapon,victim_ptr,0);
+			rifle_damage(player,victim_ptr,dam);
+			return;
 		}
 
 		/*
@@ -1452,6 +1562,16 @@ void perform_violence() {
 	char_data *ch;
 
 	for(ch = combat_list; ch; ch = next_combat_list) {
+		auto mob_ptr_opt = ptr_opt(FIGHTING(ch));
+		if(!mob_ptr_opt.has_value()){
+			char_data* temp;
+			log("Invalid pointer. not performing violence...");
+			REMOVE_FROM_LIST(ch, combat_list, next_fighting);
+			ch->next_fighting = NULL;
+			FIGHTING(ch) = NULL;
+			log("removed invalid ptr from combat_list...");
+			continue;
+		}
 		next_combat_list = ch->next_fighting;
 
 		if(FIGHTING(ch) == NULL || IN_ROOM(ch) != IN_ROOM(FIGHTING(ch))) {
