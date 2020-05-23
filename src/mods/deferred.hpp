@@ -63,7 +63,7 @@ namespace mods {
 					uint64_t add
 			);
 			void iteration();
-			void detexturize_room(uint64_t ticks_in_future,room_rnum& room_id,room_data::texture_type_t texture);
+			void detexturize_room(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture);
 			template <typename TTextureList>
 				void texturize_room(uint64_t ticks_in_future,room_rnum& room_id,TTextureList& textures){
 					m_q.insert(std::make_pair(ticks_in_future + m_tick,[&](){

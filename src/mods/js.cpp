@@ -685,11 +685,13 @@ namespace mods {
 			std::string name = duk_to_string(ctx,0);
 			std::string key = duk_to_string(ctx,1);
 			bool found = false;
-			auto player_ptr = utils::find_player_by_name(name,found);
+			auto it = mods::globals::player_name_map.find(name.c_str());
+			found = it != mods::globals::player_name_map.end();
 			if(!found){
 				duk_push_number(ctx,-1);
 				return 1;
 			}
+			auto & player_ptr = it->second;
 			auto value = duk_to_number(ctx,2);
 			if(key.compare("name") == 0){ 
 				std::string str_value = duk_to_string(ctx,2);

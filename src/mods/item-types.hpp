@@ -95,6 +95,7 @@
 (int,blast_radius,"#int, rooms",2), \
 (float,damage_per_second,"#float, static base damage done",44.0), \
 (float,disorient_amount,"#float, percent",13.0), \
+(int,range_modifier,"#int, positive or negative, range modifier in rooms",0), \
 (std::string,loudness_type,"#std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING","'LOUD'") \
 )
 

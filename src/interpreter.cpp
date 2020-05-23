@@ -1840,6 +1840,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 
 												 /* check and make sure no other copies of this player are logged in */
 												 perform_dupe_check(p);
+												 mods::globals::register_authenticated_player(p);
 
 												 p->stc(WELC_MESSG);
 												 {

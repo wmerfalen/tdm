@@ -2,6 +2,11 @@
 #include "../globals.hpp"
 #include <algorithm>
 #include <cctype>
+#ifdef __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
+#define maffects_debug(a) std::cerr << "[mods::affects]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n";
+#else
+#define maffects_debug(a) /**/
+#endif
 namespace mods::affects {
 	static std::set<player_ptr_t> needs_dissolve;
 	dissolver::dissolver() {
@@ -78,6 +83,7 @@ namespace mods::affects {
 	void process(){
 		for(auto it = needs_dissolve.begin(); it != needs_dissolve.end();){
 			if(0 == (*it)->get_affect_dissolver().tick()){
+				maffects_debug("[process] tick reached zero for player:'" << (*it)->name() << "'");
 				needs_dissolve.erase(it++);
 				continue;
 			} 
@@ -87,6 +93,12 @@ namespace mods::affects {
 	void affect_player(affect_vector_t a,player_ptr_t player){
 		needs_dissolve.insert(player);
 		player->get_affect_dissolver().affect_via(a);
+	}
+	void affect_player_for(affect_vector_t a,player_ptr_t p,uint64_t ticks){
+		needs_dissolve.insert(p);
+		for(auto current_affect : a){
+			p->get_affect_dissolver().affect(current_affect,ticks);
+		}
 	}
 	void str_affect_player(std::vector<std::string> a,player_ptr_t p){
 		affect_player(to_affect(a),p);
@@ -121,19 +133,23 @@ std::vector<std::string>& affect_string_list_impl() {
 
 };
 std::vector<std::string>& affect_string_list() { return mods::affects::affect_string_list_impl(); }
-		void str_queue_on_room(std::vector<std::string> affects,int room_id){
-			for(auto & player : mods::globals::get_room_list(room_id)){
-				mods::affects::str_affect_player(affects,player);
-			}
-		}
-		void str_queue_on_player(std::vector<std::string> affects,player_ptr_t player){
-			mods::affects::str_affect_player(affects,player);
-		}
-		void queue_on_room(std::vector<mods::affects::affect_t> affects,int room_id){
-			for(auto & player : mods::globals::get_room_list(room_id)){
-				mods::affects::affect_player(affects,player);
-			}
-		}
-		void queue_on_room(std::vector<mods::affects::affect_t> affects,player_ptr_t player){
-			mods::affects::affect_player(affects,player);
-		}
+
+void str_queue_on_room(std::vector<std::string> affects,int room_id){
+	for(auto & player : mods::globals::get_room_list(room_id)){
+		mods::affects::str_affect_player(affects,player);
+	}
+}
+
+void str_queue_on_player(std::vector<std::string> affects,player_ptr_t player){
+	mods::affects::str_affect_player(affects,player);
+}
+
+void queue_on_room(std::vector<mods::affects::affect_t> affects,int room_id){
+	for(auto & player : mods::globals::get_room_list(room_id)){
+		mods::affects::affect_player(affects,player);
+	}
+}
+
+void queue_on_room(std::vector<mods::affects::affect_t> affects,player_ptr_t player){
+	mods::affects::affect_player(affects,player);
+}

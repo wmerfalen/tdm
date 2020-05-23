@@ -1,0 +1,18 @@
+# type: SENSOR_GRENADE
+str_type: 'BREACH_CHARGE' # enum, object type
+type: 'BREACH_CHARGE' # string enum 
+manufacturer: 'X-BETA CORP' # string, anything 
+name: 'XBC Breach Charge' # string, anything name of object 
+vnum: 11 # integer, unique identifier
+description: ''
+short_description: 'short description'
+action_description: 'action description'
+feed_file: 'breach-charge.yml'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'

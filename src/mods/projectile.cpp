@@ -263,10 +263,7 @@ namespace mods {
 			}
 
 			if(type == mw_explosive::SENSOR_GRENADE){
-				mods::sensor_grenade::gather_room(object_uuid,room_id,object->from_direction);
-				mods::sensor_grenade::send_results(object_uuid,player_uuid);
-				mods::sensor_grenade::consume(object_uuid);
-				obj_from_room(object);
+				mods::sensor_grenade::handle_explosion(object_uuid,player_uuid,room_id,object->from_direction);
 				return;
 			}
 

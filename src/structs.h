@@ -347,6 +347,7 @@ enum player_class_t {
 #define AFF_UNUSED20	      (1 << 20)	   /* Room for future expansion	*/
 #define AFF_CHARM             (1 << 21)	   /* Char is charmed		*/
 #define AFF_DISORIENT					(1 << 22)		/* User is disoriented */
+#define AFF_SCANNED						(1 << 23)
 
 
 

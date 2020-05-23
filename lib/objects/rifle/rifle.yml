@@ -1,0 +1,50 @@
+# accuracy map
+accuracy_map: [
+10.00,
+10.00,
+10.00,
+10.00
+]
+damage_map: [
+10.00,
+10.00,
+10.00,
+10.00
+]
+# type: SHOTGUN
+# type: ASSAULT_RIFLE
+# type: SUB_MACHINE_GUN
+# type: SNIPER
+# type: HANDGUN
+# type: PISTOL
+# type: MACHINE_PISTOL
+# type: LIGHT_MACHINE_GUN
+ammo_max: 30 #int, bullets
+ammo_type: 'SNIPER' #string, enum
+chance_to_injure: 10 #float, out of 100
+clip_size: 7 #int, bullets
+cooldown_between_shots: 1.3 #float, seconds
+critical_chance: 13 #int, out of 100
+critical_range: 3 #int, rooms
+damage_per_second: 44 #float, out of 100
+disorient_amount: 3 #float, out of 100
+headshot_bonus: 48 #float, static addition to hitroll
+max_range: 8 #int, rooms
+range_multiplier: 1 #float, TBA
+reload_time: 2.3 #float, seconds
+rounds_per_minute: 8 #int, bullets
+muzzle_velocity: 1 #int, TBA
+effective_firing_range: 2 #int, rooms
+str_type: 'SNIPER' # enum, object type
+type: 0 # integer enum 
+manufacturer: 'ACME Industries' # string, anything 
+name: 'A <adjectively> <horrific> PSG-1 Sniper Rifle' # string, anything name of object 
+vnum: 1000 # integer, unique identifier
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'

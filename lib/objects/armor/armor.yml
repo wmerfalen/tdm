@@ -1,0 +1,31 @@
+# type: VEST
+# type: LEGS
+# type: GAUNTLETS
+# type: SHOULDER_PADS
+# type: HELMET
+# type: HAT
+# type: EYEWEAR
+# type: GOGGLES
+# type: BACKPACK
+# type: WAIST_PACK
+# type: VEST_PACK
+# type: ELBOW_GUARDS
+# type: GLOVES
+csv_capabilities: 'TBA'#csv, strings free-form TBA
+csv_attach_to: 'TBA'#csv, strings attach to various kinds of items TBA
+str_type: 'VEST' # enum, object type
+type: 0 # integer enum 
+manufacturer: 'ACME Industries' # string, anything 
+name: 'MK-71X Ballistic Vest' # string, anything name of object 
+vnum: 1000 # integer, unique identifier
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+description: 'A sturdy ACME MK-71X Ballistic Vest is lying here'
+short_description: 'ACME MK-71X Ballistic Vest <short>'
+action_description: 'ACME MK-71X Ballistic Vest <action>'

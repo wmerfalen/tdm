@@ -114,7 +114,7 @@ namespace mods {
 		extern std::map<char_data*,std::shared_ptr<mods::player>> player_chmap;
 		extern std::unique_ptr<mods::deferred> defer_queue;
 		extern std::unique_ptr<lmdb_db> db;
-		extern std::map<const char*,player_ptr_t> player_name_map;
+		extern std::map<std::string,player_ptr_t> player_name_map;
 		extern std::map<uuid_t,player_ptr_t> player_map;
 		extern ai_state_map states;
 		extern duk_context* duktape_context;
@@ -135,6 +135,7 @@ namespace mods {
 		char_data* read_mobile(const mob_vnum &,const int & type);
 		std::shared_ptr<mods::npc> read_mobile_ptr(const mob_vnum &,const int & type);
 		void register_player(player_ptr_t);
+		void register_authenticated_player(player_ptr_t);
 		//void register_object_db_id(obj_ptr_t);
 		void register_object(obj_ptr_t);
 		template <typename TShopPtr>

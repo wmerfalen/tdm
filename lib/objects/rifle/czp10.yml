@@ -1,0 +1,53 @@
+# accuracy map
+accuracy_map: [
+80.0,
+40.00,
+13.00,
+5.00
+]
+ammo_max: 75 #integer
+ammo_type: 'PISTOL' #string, constant enum
+# The philosophy here is that you'll likely kill the target before
+# you injure the target due to it's high damage output
+chance_to_injure: 20.50100 #float, out of 100
+clip_size: 9 #integer
+cooldown_between_shots: 0.001301 #float, in seconds
+critical_chance: 5 #int, out of 100
+critical_range: 1 #integer, measured in rooms
+damage_map: [
+50.00,
+25.00,
+10.00,
+1.00
+]
+damage_per_second: 20.00 #float
+disorient_amount: 0.0 #float
+headshot_bonus: 33.0 #float
+rounds_per_minute: 80 #integer, measured in bullets
+effective_firing_range: 2 #integer, measured in rooms
+muzzle_velocity: 40 #integer, units TBA
+max_range: 1 #integer,measured in rooms
+# range_multiplier will be ignored if max_range is same room
+range_multiplier: 0.0 #float, multiplied by 
+# reload time must account for high damage output in order to balance the game
+reload_time: 2.0013 #float, measured in seconds
+str_type: 'PISTOL'
+type: 'PISTOL' #string, type of weapon
+manufacturer: 'TN3 SMITH-x Industrial'
+name: 'CZP10 pistol' #string
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'RARE'
+vnum: 7 #virtual number
+object_type: rifle
+feed_file: 'czp10.yml'
+description: 'A CZP10 Pistol is lying here'
+short_description: 'CZP10 Pistol <short>'
+action_description: 'CZP10 Pistol <action>'
+damage_dice_count: 3
+damage_dice_sides: 16

@@ -71,11 +71,12 @@ namespace mods {
 	void push_ticks_event(uint32_t ticks, std::tuple<uuid_t,uint32_t> type){
 
 	}
-	void deferred::detexturize_room(uint64_t ticks_in_future,room_rnum& room_id,room_data::texture_type_t texture){
-		m_q.insert(std::make_pair(ticks_in_future + m_tick,[&](){
-					world[room_id].remove_texture(texture);
-					})
-				);
+	void deferred::detexturize_room(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture){
+		m_q.insert(
+			std::make_pair(ticks_in_future + m_tick,[&](){
+				world[room_id].remove_texture(texture);
+			})
+		);
 	}
 };
 

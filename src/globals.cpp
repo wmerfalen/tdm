@@ -55,7 +55,7 @@ namespace mods {
 		std::unique_ptr<mods::deferred> defer_queue;
 		duk_context* duktape_context;
 		ai_state_map states;
-		std::map<const char*,player_ptr_t> player_name_map;
+		std::map<std::string,player_ptr_t> player_name_map;
 		//std::vector<std::vector<char_data*>> room_list; /**!TODO turn this into std::shared_ptr<...> */
 		room_list_t room_list;
 		player_list_t player_list;
@@ -136,6 +136,9 @@ namespace mods {
 		void register_player(player_ptr_t player){
 			player_chmap[player->cd()] = player;
 			player_map[player->uuid()] = player;
+		}
+		void register_authenticated_player(player_ptr_t player){
+			player_name_map[player->name()] = player;
 		}
 
 		void shutdown(void){

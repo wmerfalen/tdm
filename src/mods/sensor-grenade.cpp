@@ -5,6 +5,7 @@
 #include "util-map.hpp"
 #include "scan.hpp"
 
+extern void obj_from_room(obj_ptr_t);
 namespace mods::projectile {
 		extern std::string fromdirstr(int direction,bool prefix, bool suffix);
 };
@@ -14,7 +15,11 @@ namespace mods::sensor_grenade {
 	using direction_count_t = std::array<int,NUM_OF_DIRS>;
 	using count_gathering_t = std::unordered_map<uuid_t,direction_count_t>;
 	static count_gathering_t count_gathering;
+	static constexpr uint64_t SCANNED_AFFECT_DURATION = 60; /** in ticks */
 
+	bool player_can_do_range_modifier(player_ptr_t& player){
+		return player->level() >= 25; /** FIXME: maybe */
+	}
 	bool can_see_player(uuid_t nade,player_ptr_t& target){
 		return true; /** TODO: return false if player has stealth */
 	}
@@ -122,5 +127,36 @@ namespace mods::sensor_grenade {
 		for(auto & player_uuid : players){
 			send_results(nade_uuid,player_uuid);
 		}
+	}
+	void handle_explosion(uuid_t nade_uuid, uuid_t player_uuid, room_rnum room_id, int from_direction) {
+		auto optional_object = optr_opt(nade_uuid);
+		if(!optional_object.has_value()) {
+			log("mods::sensor_grenade::handle_explosion passed a bad nade uuid");
+			return;
+		}
+		auto player = ptr_by_uuid(player_uuid);
+		auto & object = optional_object.value();
+		if(player_can_do_range_modifier(player) && object->explosive()->attributes->range_modifier > 0) {
+			int blast_radius = object->explosive()->attributes->blast_radius * 2;
+			std::size_t scan_count = 0;
+			for(auto & room_number : scan_from_room(blast_radius,room_id)){
+				for(auto & player_in_room : mods::globals::get_room_list(room_number)){
+#ifdef __MENTOC_SENSOR_GRENADE_PVP__
+					mods::affects::affect_player({mods::affects::affect_t::SCANNED},player_in_room);
+#else
+					if(player_in_room->is_npc()) {
+						mods::affects::affect_player({mods::affects::affect_t::SCANNED},player_in_room);
+					}
+#endif
+					++scan_count;
+				}
+			}
+			player->send("\r\n[%d] target%s scanned.\r\n",scan_count, scan_count != 1 ? "s" : "");
+		}else{
+			gather_room(nade_uuid,room_id,from_direction);
+			send_results(nade_uuid,player_uuid);
+			consume(nade_uuid);
+		}
+		obj_from_room(object);
 	}
 };
