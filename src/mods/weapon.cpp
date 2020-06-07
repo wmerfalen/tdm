@@ -2,6 +2,7 @@
 #include "../../db.h"
 #include "rand.hpp"
 /** FIXME: need to assign vnum/ids to objects */
+extern obj_ptr_t create_object(int type,std::string file);
 extern int generic_find(char *arg, bitvector_t bitvector, char_data *ch,
 		char_data **tar_ch, struct obj_data **tar_obj);
 namespace mods::weapon {
@@ -163,6 +164,7 @@ namespace mods::weapon {
 		return std::move(obj);
 	}
 
+#if 0
 	obj_data_ptr_t base_explosive_object(){
 		MENTOC_DEPRECATED(".");
 		auto obj = blank_object();
@@ -197,6 +199,7 @@ namespace mods::weapon {
 		obj->ex_description.emplace_back("explosive",obj->description.c_str());
 		return std::move(obj);
 	}
+#endif
 
 	/** !example !howto */
 	/** This function is a prime example of how to populate a obj_ptr_t */
@@ -227,23 +230,10 @@ namespace mods::weapon {
 
 	obj_data_ptr_t new_frag_grenade_object(){
 		MENTOC_DEPRECATED(".");
-		auto obj = base_explosive_object();
-		obj->explosive("frag-grenade.yml");
-		///** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
-		//obj->name.assign("a frag grenade");
-		///** [ APPEARS ]: when you drop it and it's laying on the floor */
-		//obj->description.assign("A fragmentation grenade is lying here.");
-		///** [ APPEARS ]: when you type inv */
-		///** [ USED_WHEN ]: when you "hold frag", it will say "You hold frag grenade <short>" */
-		///**   |------------> obj->short_description.assign("frag grenade <short>");        */
-		//obj->short_description.assign("an ACME Industries Frag grenade");
-		///** [ APPEARS ]: when you "examine frag", it will say exactly this  */
-		//obj->action_description.assign("frag fragmentation grenade nade");
-		//obj->explosive()->type = mw_explosive::FRAG_GRENADE;
-		//obj->ex_description.emplace_back("frag grenade",obj->description.c_str());
-		return std::move(obj);
+		return std::move(create_object(ITEM_EXPLOSIVE,"objects/explosive/frag-grenade.yml"));
 	}
 
+#if 0
 	obj_data_ptr_t new_sensor_grenade_object(){
 		MENTOC_DEPRECATED(".");
 		auto obj = base_explosive_object();
@@ -261,69 +251,26 @@ namespace mods::weapon {
 		obj->ex_description.emplace_back("sensor grenade",obj->description.c_str());
 		return std::move(obj);
 	}
+#endif
 
 	obj_data_ptr_t new_incendiary_grenade_object(){
 		MENTOC_DEPRECATED(".");
-		auto obj = base_explosive_object();
-		obj->explosive("incendiary-grenade.yml");
-		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
-		obj->name.assign("An incendiary grenade");
-		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description.assign("An incendiary grenade is lying here.");
-		/** [ APPEARS ]: when you type inv */
-		obj->short_description.assign("incendiary grenade <short>");
-		obj->action_description.assign("incendiary grenade <action>");      /* What to write when used          */
-		obj->explosive()->type = mw_explosive::INCENDIARY_GRENADE;
-		obj->ex_description.emplace_back("incendiary grenade",obj->description.c_str());
-		return std::move(obj);
+		return std::move(create_object(ITEM_EXPLOSIVE,"objects/explosive/incendiary-grenade.yml"));
 	}
 
 	obj_data_ptr_t new_emp_grenade_object(){
 		MENTOC_DEPRECATED(".");
-		auto obj = base_explosive_object();
-		obj->explosive("emp-grenade.yml");
-		obj->explosive()->type = mw_explosive::EMP_GRENADE;
-		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
-		obj->name.assign("An E.M.P. grenade");
-		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description.assign("An E.M.P. grenade is lying here.");
-		/** [ APPEARS ]: when you type inv */
-		obj->short_description.assign("emp e.m.p. electro magnetic pulse grenade <short>");
-		obj->action_description.assign("emp e.m.p. electro magnetic pulse grenade <action>");      /* What to write when used          */
-		obj->ex_description.emplace_back("emp grenade",obj->description.c_str());
-		return std::move(obj);
+		return std::move(create_object(ITEM_EXPLOSIVE,"objects/explosive/emp-grenade.yml"));
 	}
 
 	obj_data_ptr_t new_smoke_grenade_object(){
 		MENTOC_DEPRECATED(".");
-		auto obj = base_explosive_object();
-		obj->explosive("smoke-grenade.yml");
-		obj->explosive()->type = mw_explosive::SMOKE_GRENADE;
-		/** [ APPEARS ]: when you 'look smoke' or 'examine smoke' @act.informative.cpp */
-		obj->name.assign("Smoke grenade");
-		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description.assign("A smoke grenade is lying here.");
-		/** [ APPEARS ]: when you type inv */
-		obj->short_description.assign("Smoke grenade");
-		obj->action_description.assign("smoke grenade");      /* What to write when used          */
-		obj->ex_description.emplace_back("smoke grenade",obj->description.c_str());
-		return std::move(obj);
+		return std::move(create_object(ITEM_EXPLOSIVE,"objects/explosive/smoke-grenade.yml"));
 	}
 
 	obj_data_ptr_t new_flashbang_grenade_object(){
 		MENTOC_DEPRECATED(".");
-		auto obj = base_explosive_object();
-		obj->explosive("flashbang.yml");
-		obj->explosive()->type = mw_explosive::FLASHBANG_GRENADE;
-		/** [ APPEARS ]: when you 'look flashbang' or 'examine flashbang' @act.informative.cpp */
-		obj->name.assign("flashbang grenade flash");
-		/** [ APPEARS ]: when you drop it and it's laying on the floor */
-		obj->description.assign("A flashbang grenade is lying here.");
-		/** [ APPEARS ]: when you type inv */
-		/** [ APPEARS ]: when you type remove "flash" */
-		obj->short_description.assign("a flashbang grenade");
-		obj->action_description.assign("a flashbang grenade <action>");      /* What to write when used          */
-		return std::move(obj);
+		return std::move(create_object(ITEM_EXPLOSIVE,"objects/explosive/flashbang-grenade.yml"));
 	}
 
 	obj_data_ptr_t new_sniper_rifle_object(){

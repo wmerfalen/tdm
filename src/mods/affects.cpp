@@ -2,6 +2,7 @@
 #include "../globals.hpp"
 #include <algorithm>
 #include <cctype>
+#define __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
 #ifdef __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
 #define maffects_debug(a) std::cerr << "[mods::affects]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n";
 #else
@@ -9,6 +10,30 @@
 #endif
 namespace mods::affects {
 	static std::set<player_ptr_t> needs_dissolve;
+	static time_t time_tracker_per_minute = time(nullptr);
+	static uint32_t ticks_per_minute = 0;
+	static uint32_t ticks_per_minute_sample = 0;
+	
+	bool dissolver::has_any_affect(affect_vector_t in_affects){
+			for(auto & affect : in_affects){
+				if(m_affects[affect]) {
+					return true;
+				}
+			}
+			return false;
+		}
+		bool dissolver::has_all_affects(affect_vector_t in_affects){
+			for(auto & affect : in_affects){
+				if(!m_affects[affect]) {
+					return false;
+				}
+			}
+			return true;
+		}
+		bool dissolver::has_affect(affect_t a){
+			maffects_debug("[has_affect] " << a);
+			return m_affects[a];
+		}
 	dissolver::dissolver() {
 		for(unsigned i =0; i < m_affects.size();i++){
 			m_affects[i] = 0;
@@ -79,8 +104,19 @@ namespace mods::affects {
 		}
 		return a;
 	}
+	uint32_t get_ticks_per_minute() {
+		return ticks_per_minute_sample;
+	}
 
 	void process(){
+		auto seconds = time(nullptr);
+		if((seconds - time_tracker_per_minute) >= 60){
+			ticks_per_minute_sample = ticks_per_minute;
+			ticks_per_minute = 0;
+			time_tracker_per_minute = seconds;
+		}
+		++ticks_per_minute;
+
 		for(auto it = needs_dissolve.begin(); it != needs_dissolve.end();){
 			if(0 == (*it)->get_affect_dissolver().tick()){
 				maffects_debug("[process] tick reached zero for player:'" << (*it)->name() << "'");
@@ -95,6 +131,7 @@ namespace mods::affects {
 		player->get_affect_dissolver().affect_via(a);
 	}
 	void affect_player_for(affect_vector_t a,player_ptr_t p,uint64_t ticks){
+		maffects_debug("[affect_player_for] " << p->name().c_str() << ": ticks: " << ticks);
 		needs_dissolve.insert(p);
 		for(auto current_affect : a){
 			p->get_affect_dissolver().affect(current_affect,ticks);

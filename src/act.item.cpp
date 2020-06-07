@@ -1235,7 +1235,7 @@ ACMD(do_pour) {
 
 
 void wear_message(char_data *ch, struct obj_data *obj, int where) {
-	const char *wear_messages[][2] = {
+	static const char *wear_messages[][2] = {
 		{
 			"$n lights $p and holds it.",
 			"You light $p and hold it."

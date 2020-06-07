@@ -350,7 +350,7 @@ ACMD(do_assist) {
 	one_argument(argument, arg);
 
 	if(!*arg) {
-		player->psendln( "Whom do you wish to assist?");
+		player->psendln("Whom do you wish to assist?");
 	} else if(!(helpee = get_char_vis(player, arg, NULL, FIND_CHAR_ROOM))) {
 		player->send(NOPERSON);
 	} else if(helpee->is(ch)) {

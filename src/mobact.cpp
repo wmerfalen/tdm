@@ -76,18 +76,20 @@ void mobile_activity(void) {
 		}
 
 		/* Examine call for special procedure */
+#ifdef __MENTOC_USE_MOB_SPECIALS_IN_MOBILE_ACTIVITY__
 		if(MOB_FLAGGED(ch, MOB_SPEC) && !no_specials) {
 			if(mob_index[GET_MOB_RNUM(ch)].func == NULL) {
 				log("SYSERR: %s (#%d): Attempting to call non-existing mob function.",
 						GET_NAME(ch).c_str(), GET_MOB_VNUM(ch));
 				REMOVE_BIT(MOB_FLAGS(ch), MOB_SPEC);
-			}/* else {
+			} else {
 				char actbuf[MAX_INPUT_LENGTH] = "";
 
 				if((mob_index[GET_MOB_RNUM(ch)].func)(ch, ch, 0, actbuf, player)) {
 				}
-			}*/
+			}
 		}
+#endif
 
 		/* If the mob has no specproc, do the default actions */
 		if(FIGHTING(ch) || !AWAKE(ch)) {

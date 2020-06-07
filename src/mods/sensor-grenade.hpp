@@ -14,6 +14,7 @@ namespace mods::sensor_grenade {
 	void send_results_multi(uuid_t nade_uuid,const std::vector<uuid_t>& player_uuid);
 	void consume(uuid_t nade_uuid);
 	void handle_explosion(uuid_t nade_uuid, uuid_t player_uuid,room_rnum room,int from_direction);
+	bool player_can_do_range_modifier(player_ptr_t& player);
 };
 #endif
 

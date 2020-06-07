@@ -24,6 +24,7 @@
 #include <stdio.h>	/** for STDERR descriptor */
 #include "mods/util.hpp"
 #include "mods/rand.hpp"
+#include "mods/rooms.hpp"
 
 
 /* external globals */
@@ -767,28 +768,7 @@ void core_dump_real(const char *who, int line) {
  * Outside rooms are dark at sunset and night.
  */
 int room_is_dark(room_rnum room) {
-	if(!VALID_ROOM_RNUM(room)) {
-		log("room_is_dark: Invalid room rnum %d. (0-%d)", room, top_of_world);
-		return (FALSE);
-	}
-
-	if(world[room].light) {
-		return (FALSE);
-	}
-
-	if(ROOM_FLAGGED(room, ROOM_DARK)) {
-		return (TRUE);
-	}
-
-	if(SECT(room) == SECT_INSIDE || SECT(room) == SECT_CITY) {
-		return (FALSE);
-	}
-
-	if(weather_info.sunlight == SUN_SET || weather_info.sunlight == SUN_DARK) {
-		return (TRUE);
-	}
-
-	return (FALSE);
+	return mods::rooms::is_dark(room);
 }
 
 

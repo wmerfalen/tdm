@@ -263,13 +263,20 @@ namespace mods {
 				/** FIXME: this needs to negate the bit */
 				m_weapon_flags = 0;//m_equipment[pos]->obj_flags.weapon_flags;
 			}
-			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
+			//std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
 			//perform_equip_calculations(pos,false);
 			m_equipment[pos]->worn_by = nullptr;
 			m_equipment[pos]->worn_on = -1;
 			m_equipment[pos] = nullptr;
 			mods::orm::inventory::lmdb::remove_player_wear(this->db_id(),pos);
 			this->m_sync_equipment();
+		}
+	}
+	void player::unequip_into_inventory(int pos) {
+		if(pos < NUM_WEARS && m_equipment[pos]){
+			auto item = m_equipment[pos];
+			this->unequip(pos);
+			this->carry(std::move(item));
 		}
 	}
 	void player::perform_equip_calculations(int pos,bool equip){
@@ -1146,6 +1153,14 @@ namespace mods {
 	}
 	void player::set_attacking_with_secondary(){
 		m_attacking_with = this->secondary();
+	}
+	bool player::has_night_vision() const {
+		/** TODO */
+		return false;
+	}
+	bool player::has_thermal_vision() const {
+		/** TODO */
+		return false;
 	}
 
 };

@@ -40,6 +40,7 @@
 #include "mods/classes/sentinel.hpp"
 #include "mods/orm/inventory.hpp"
 #include "mods/orm/shop.hpp"
+#include "mods/object-utils.hpp"
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>;
@@ -1124,6 +1125,9 @@ void parse_sql_mobiles() {
 int parse_sql_objects() {
 	auto result = db_get_all("object");
 
+	mods::object_utils::set_yaml_initiator("parse_sql_objects","","");
+	mods::object_utils::set_yaml_transaction_id(0);
+
 	if(result.size()) {
 
 		for(auto row : result) {
@@ -1135,6 +1139,7 @@ int parse_sql_objects() {
 				std::cerr << "parse_sql_objects encountered broken row: " << row["id"] << ".. skipping... \n";
 				continue;
 			}
+			mods::object_utils::set_yaml_initiator("parse_sql_objects","",row["obj_file"].c_str());
 			index_data index;
 			index.vnum = (row["obj_item_number"]).as<int>();
 			index.number = 0;
@@ -2047,6 +2052,13 @@ obj_ptr_t blank_object() {
 	mods::globals::register_object(obj_list.back());
 	return obj_list.back();
 }
+
+obj_ptr_t create_object(int type,std::string yaml_file) {
+	obj_list.push_back(std::make_shared<obj_data>(type,yaml_file));
+	mods::globals::register_object(obj_list.back());
+	return obj_list.back();
+}
+
 
 shop_ptr_t create_shop_from_index(std::size_t proto_index){
 	if (proto_index >= shop_proto.size()){

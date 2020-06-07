@@ -38,7 +38,7 @@ effective_firing_range: 2 #int, rooms
 str_type: 'SNIPER' # enum, object type
 type: 0 # integer enum 
 manufacturer: 'ACME Industries' # string, anything 
-name: 'A <adjectively> <horrific> PSG-1 Sniper Rifle' # string, anything name of object 
+name: 'A PSG-1 Sniper Rifle' # string, anything name of object 
 vnum: 1000 # integer, unique identifier
 #rarity types
 # COMMON

@@ -39,6 +39,9 @@ reload_time: 6.1 #float, measured in seconds
 type: 0  # enum, object type
 manufacturer: 'R.S.S.' # string, anything 
 name: 'SASG-12' # string, anything name of object 
+description: 'A SASG-12 shotgun is lying here.'
+short_description: 'a SASG-12 shotgun'
+action_description: 'SASG-12 shotgun'
 vnum: 6 # integer, unique identifier
 str_type: 'SHOTGUN'
 #rarity types

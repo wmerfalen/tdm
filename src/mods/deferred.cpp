@@ -15,6 +15,9 @@ namespace mods {
 	void deferred::cancel_event(event_queue_iterator it){
 		m_ticks_event_type.erase(it);
 	}
+ 	uint32_t deferred::get_ticks_per_minute(){
+		return m_ticks_per_minute_sample;
+	}
 	void deferred::push_chunk_affect(
 			uuid_t player_uuid,
 			std::size_t chunk,
@@ -37,6 +40,13 @@ namespace mods {
 		m_chunk_affect.emplace_back(ca);
 	}
 	void deferred::tick() {
+		auto seconds = time(nullptr);
+		if((seconds - m_time_tracker) >= 60){
+			m_ticks_per_minute_sample = m_ticks_per_minute;
+			m_ticks_per_minute = 0;
+			m_time_tracker = seconds;
+		}
+		m_ticks_per_minute++;
 		m_tick++;
 		auto fe = m_ticks_event_type.find(m_tick);
 		if(fe != m_ticks_event_type.end()) {

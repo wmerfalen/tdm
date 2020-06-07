@@ -42,8 +42,8 @@ name: 'A H&K G36C Assault Rifle' #string
 rarity: COMMON
 vnum: 101 #virtual number
 object_type: rifle
-description: 'A H&K G36C Assault Rifle is lying here'
-short_description: 'G36C Assault Rifle <short>'
-action_description: 'G36C Assault Rifle <action>'
+description: 'A H&K G36C Assault Rifle is lying here.'
+short_description: 'a G36C Assault Rifle'
+action_description: 'G36C Assault Rifle'
 damage_dice_count: 6
 damage_dice_sides: 10

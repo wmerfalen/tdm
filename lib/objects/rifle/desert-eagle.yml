@@ -29,7 +29,7 @@ range_multiplier: 0.0 #float, multiplied by
 # reload time must account for high damage output in order to balance the game
 reload_time: 4.5 #float, measured in seconds
 type: 'PISTOL' #string, type of weapon
-name: 'A <adjectively> <horrific> Desert Eagle' #string
+name: 'A Desert Eagle' #string
 #rarity types
 # COMMON
 # UNCOMMON
@@ -40,8 +40,8 @@ name: 'A <adjectively> <horrific> Desert Eagle' #string
 rarity: RARE
 vnum: 102 #virtual number
 object_type: rifle
-description: 'A debilitating Desert Eagle is lying here'
-short_description: 'Desert Eagle Pistol <short>'
+description: 'A debilitating Desert Eagle is lying here.'
+short_description: 'a Desert Eagle Pistol'
 action_description: 'Desert Eagle Pistol <action>'
 damage_dice_count: 5
 damage_dice_sides: 20

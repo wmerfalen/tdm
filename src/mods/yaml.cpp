@@ -1,6 +1,8 @@
 #include "yaml.hpp"
 #include "sql.hpp"
+#include "object-utils.hpp"
 #include "pq.hpp"
+#include "filesystem.hpp"
 #ifndef tostr
 #define tostr(a) std::to_string(a)
 #endif
@@ -16,23 +18,32 @@ namespace mods::yaml {
 	try{ \
 		debug_echo("manufacturer");\
 		manufacturer = yaml_file["manufacturer"].as<std::string>();\
+		fed_items.push_back("manufacturer");\
 		debug_echo("name");\
 		name = yaml_file["name"].as<std::string>();\
+		fed_items.push_back("name");\
 		debug_echo("str_type");\
 		str_type = yaml_file["str_type"].as<std::string>();\
+		fed_items.push_back("str_type");\
 		debug_echo("vnum");\
 		vnum = yaml_file["vnum"].as<int>();\
+		fed_items.push_back("vnum");\
 		debug_echo("rarity");\
 		rarity = parse_rarity(yaml_file["rarity"].as<std::string>());\
+		fed_items.push_back("rarity");\
 		debug_echo("feed_file");\
 		feed_file = yaml_file["feed_file"].as<std::string>();\
+		fed_items.push_back("feed_file");\
 		debug_echo("description");\
 		description = yaml_file["description"].as<std::string>();\
+		fed_items.push_back("description");\
 		debug_echo("short_description");\
 		short_description = yaml_file["short_description"].as<std::string>();\
+		fed_items.push_back("short_description");\
 		debug_echo("action_desc");\
 		action_description = yaml_file["action_description"].as<std::string>();\
-	}catch(std::exception &e){ std::cerr << "[yaml-cpp exception]: '" << e.what() << "'\n"; }
+		fed_items.push_back("action_description");\
+	}catch(YAML::Exception &e){ mods::object_utils::report_yaml_exception(e,fed_items); }
 
 	std::vector<std::pair<std::string,float>> rarity_strings() {
 		return {
@@ -185,6 +196,7 @@ namespace mods::yaml {
 	int16_t gadget_description_t::feed_from_po_record(mentoc_pqxx_result_t yaml_file){
 		try {
 			auto type_string = yaml_file["str_type"].as<std::string>();
+			std::vector<std::string> fed_items;
 			MENTOC_FEED_GADGET
 			MENTOC_FEED_BASE_MEMBERS
 		}catch(std::exception &e){
@@ -527,16 +539,21 @@ namespace mods::yaml {
 		return this->id;
 	}
 	int16_t explosive_description_t::feed(std::string_view in_file){
+		std::string file = current_working_dir() + "/" + in_file.data();
+		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
+			mods::object_utils::yaml_file_doesnt_exist("explosive");
+			return -1;
+		}
+		std::vector<std::string> fed_items;
 		try {
-			std::string file = current_working_dir() + "/" + in_file.data();
 			feed_file = file;
 			auto yaml_file = YAML::LoadFile(file);
 			auto type_string = yaml_file["str_type"].as<std::string>();
 			MENTOC_FEED_BASE_MEMBERS
 			MENTOC_FEED_EXPLOSIVE
-		}catch(std::exception &e){
-			std::cerr << "[exception] explosive feed: '" << e.what() << "'\n";
-			return -1;
+		}catch(YAML::Exception &e){
+			mods::object_utils::report_yaml_exception(e,fed_items);
+			return -2;
 		}
 		return 0;
 	}
@@ -639,8 +656,13 @@ namespace mods::yaml {
 	/* Step 7: Define the feed function:       */
 	/*******************************************/
 	int16_t gadget_description_t::feed(std::string_view in_file){
+		std::string file = current_working_dir() + "/" + in_file.data();
+		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
+			mods::object_utils::yaml_file_doesnt_exist("gadget");
+			return -1;
+		}
+			std::vector<std::string> fed_items;
 		try {
-			std::string file = current_working_dir() + "/" + in_file.data();
 			feed_file = file;
 			auto yaml_file = YAML::LoadFile(file);
 			this->str_type = yaml_file["str_type"].as<std::string>();
@@ -648,33 +670,42 @@ namespace mods::yaml {
 			MENTOC_FEED_BASE_MEMBERS
 			this->durability_profile_enum = mods::yaml::to_durability_profile(yaml_file["durability_profile"].as<std::string>());
 			this->durability_profile = mods::yaml::to_string_from_durability_profile(this->durability_profile_enum);
-		}catch(std::exception &e){
-			std::cerr << "[exception] gadget feed: '" << e.what() << "'\n";
-			return -1;
+		}catch(YAML::Exception &e){
+			mods::object_utils::report_yaml_exception(e,fed_items);
+			return -2;
 		}
 		return 0;
 	}
 
 
 	int16_t rifle_description_t::feed(std::string_view in_file){
+		std::string file = current_working_dir() + "/" + in_file.data();
+		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
+			mods::object_utils::yaml_file_doesnt_exist("rifle");
+			return -1;
+		}
+			std::vector<std::string> fed_items;
 		try {
-			std::string file = current_working_dir() + "/" + in_file.data();
 			feed_file = file;
 			auto yaml_file = YAML::LoadFile(file);
 			auto acmap = yaml_file["accuracy_map"].as<std::vector<float>>();
+			fed_items.push_back("accuracy_map");
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
 				accuracy_map[i] = acmap[i];
+				fed_items.push_back(std::string("accuracy_map[") + std::to_string(i) + "]");
 			}
 			auto dmap = yaml_file["damage_map"].as<std::vector<float>>();
+			fed_items.push_back("damage_map");
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
 				damage_map[i] = dmap[i];
+				fed_items.push_back(std::string("damage_map[") + std::to_string(i) + "]");
 			}
 			MENTOC_FEED_BASE_MEMBERS
 			MENTOC_FEED_RIFLE
 			this->base_stat_list = mods::weapon::weapon_stats(this->type);
-		}catch(std::exception &e){
-			std::cerr << "[exception] rifle feed: '" << e.what() << "'\n";
-			return -1;
+		}catch(YAML::Exception &e){
+			mods::object_utils::report_yaml_exception(e,fed_items);
+			return -2;
 		}
 		return 0;
 	}
@@ -682,6 +713,7 @@ namespace mods::yaml {
 	int16_t rifle_description_t::feed_from_po_record(mentoc_pqxx_result_t yaml_file){
 		exit(200);
 		try {
+			std::vector<std::string> fed_items;
 			for(unsigned i=0; i < MAX_ROOM_DISTANCE;i++){
 				float item = yaml_file[std::string("accuracy_map_") + std::to_string(i)].as<float>();
 				accuracy_map[i] = item;
@@ -703,52 +735,108 @@ namespace mods::yaml {
 
 	int16_t drone_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();
+		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
+			mods::object_utils::yaml_file_doesnt_exist("drone");
+			return -1;
+		}
+			std::vector<std::string> fed_items;
+		try {
 		feed_file = file;
 		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
+			std::vector<std::string> fed_items;
 		auto type_string = yaml_file["str_type"].as<std::string>();
+		fed_items.push_back("str_type");
 		MENTOC_FEED_DRONE
 			MENTOC_FEED_BASE_MEMBERS
 			return 0;
+		}catch(YAML::Exception& e){
+			mods::object_utils::report_yaml_exception(e,fed_items);
+			return -2;
+		}
 	}
 	int16_t attachment_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();
+		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
+			mods::object_utils::yaml_file_doesnt_exist("attachment");
+			return -1;
+		}
+			std::vector<std::string> fed_items;
+		try{
 		feed_file = file;
 		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
 		auto type_string = yaml_file["str_type"].as<std::string>();
+		fed_items.push_back("str_type");
 		MENTOC_FEED_ATTACHMENT
 			MENTOC_FEED_BASE_MEMBERS
 			return 0;
+		}catch(YAML::Exception& e){
+			mods::object_utils::report_yaml_exception(e,fed_items);
+			return -2;
+		}
 	}
 	int16_t armor_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();
+		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
+			mods::object_utils::yaml_file_doesnt_exist("armor");
+			return -1;
+		}
+			std::vector<std::string> fed_items;
+		try{
 		feed_file = file;
 		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
 		auto type_string = yaml_file["str_type"].as<std::string>();
+		fed_items.push_back("str_type");
 		MENTOC_FEED_ARMOR
 			MENTOC_FEED_BASE_MEMBERS
 			this->durability_profile_enum = mods::yaml::to_durability_profile(yaml_file["durability_profile"].as<std::string>());
 		this->durability_profile = mods::yaml::to_string_from_durability_profile(this->durability_profile_enum);
 		return 0;
+		}catch(YAML::Exception& e){
+			mods::object_utils::report_yaml_exception(e,fed_items);
+			return -2;
+		}
 	}
 
 	int16_t consumable_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();
+		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
+			mods::object_utils::yaml_file_doesnt_exist("consumable");
+			return -1;
+		}
+			std::vector<std::string> fed_items;
+		try{
 		feed_file = file;
 		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
 		auto type_string = yaml_file["str_type"].as<std::string>();
+		fed_items.push_back("str_type");
 		MENTOC_FEED_CONSUMABLE
 			MENTOC_FEED_BASE_MEMBERS
 			return 0;
+		}catch(YAML::Exception& e){
+			mods::object_utils::report_yaml_exception(e,fed_items);
+			return -2;
+		}
 	}
 
 	int16_t trap_description_t::feed(std::string_view in_file){
 		std::string file = current_working_dir() + "/" + in_file.data();
+		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
+			mods::object_utils::yaml_file_doesnt_exist("trap");
+			return -1;
+		}
+			std::vector<std::string> fed_items;
+		try{
 		feed_file = file;
 		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
 		auto type_string = yaml_file["str_type"].as<std::string>();
+		fed_items.push_back("str_type");
 		MENTOC_FEED_TRAP
 			MENTOC_FEED_BASE_MEMBERS
 			return 0;
+		}catch(YAML::Exception& e){
+			mods::object_utils::report_yaml_exception(e,fed_items);
+			return -2;
+		}
 	}
 
 

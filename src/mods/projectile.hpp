@@ -36,8 +36,9 @@ namespace mods {
 			EV_BLINDING_LIGHT,
 			EV_STAIN,
 			EV_DEFORM,
+			EV_EXPOSED,
 			__EV_FIRST = EV_TRAVEL,
-			__EV_LAST = EV_DEFORM
+			__EV_LAST = EV_EXPOSED
 		};
 		using player_ptr_t = std::shared_ptr<mods::player>;
 		using rooms_away_t = std::array<std::optional<room_rnum>,NUM_OF_DIRS>;
@@ -50,7 +51,7 @@ namespace mods {
 		int fire_damage(player_ptr_t victim,obj_ptr_t projectile);
 		int travel_to(room_rnum from, int direction, std::size_t depth, obj_ptr_t object);
 		void explode_in_future(int room_id, int ticks, uuid_t object_uuid,uuid_t player_uuid);
-		std::string todirstr(const char* direction,bool prefix,bool suffix);
+		std::string todirstr(int direction,bool prefix,bool suffix);
 		std::string fromdirstr(int direction,bool prefix, bool suffix);
 		rooms_away_t calculate_shrapnel_rooms(room_rnum room, obj_ptr_t held_object,std::size_t blast_radius);
 		int to_direction(const std::string&);
@@ -63,8 +64,8 @@ namespace mods {
 		void disorient_clears_up(player_ptr_t victim);
 		void propagate_chemical_blast(room_rnum& room_id,obj_ptr_t device);
 
-		void throw_object(player_ptr_t player, int direction, std::size_t depth, 
-				obj_ptr_t object, std::string_view verb);
+		void throw_object(player_ptr_t& player, int direction, std::size_t depth, 
+				obj_ptr_t& object, std::string_view verb);
 	};
 };
 #endif

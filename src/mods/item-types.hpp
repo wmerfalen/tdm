@@ -19,6 +19,17 @@
 (consumable) \
 (trap) 
 
+#define MENTOC_ITEM_TYPES_BY_CAPS_SEQ \
+(rifle,RIFLE) \
+(explosive,EXPLOSIVE) \
+(drone,DRONE) \
+(gadget,GADGET) \
+(attachment,ATTACHMENT) \
+(armor,ARMOR) \
+(consumable,CONSUMABLE) \
+(trap,TRAP) 
+
+
 /*************************************************/
 /** HOWTO: Add new item and subcategories        */
 /* Step 2: Add a constant to ITEM_TYPES_SEQ_CAPS */
@@ -309,7 +320,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 	BOOST_PP_TUPLE_ELEM(4,0,MEMBER_TUPLE) BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE);
 
 #define MENTOC_FEED_PARSE_ACTUAL_IMPL(r,data,MEMBER_TUPLE) \
-	d("[feed parse actual]: " << BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE)));\
+	fed_items.push_back(BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE)));\
 	BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE) = yaml_file[BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE))].as<BOOST_PP_TUPLE_ELEM(4,0,MEMBER_TUPLE)>();
 
 #define MENTOC_FEED_PARSE_ALL_IMPL(SEQUENCE) \

@@ -47,7 +47,7 @@ vnum: 102 #virtual number
 object_type: rifle
 feed_file: 'base_pistol.yml'
 description: 'A TN3 SMITH-X Industrial Pistol is lying here'
-short_description: 'TN3 SMITH-X Pistol <short>'
-action_description: 'TN3 SMITH-X Pistol <action>'
+short_description: 'a TN3 SMITH-X Pistol'
+action_description: 'TN3 SMITH-X Pistol'
 damage_dice_count: 3
 damage_dice_sides: 16

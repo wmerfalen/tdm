@@ -21,12 +21,29 @@
 #include "globals.hpp"
 #include "mods/debug.hpp"
 #include "spells.h" // for TYPE_HIT
+#include "mods/object-utils.hpp"
 extern void point_update(void);
 
+ACMD(do_get_ticks_per_minute){
+	player->send("[%d] ticks per minute\r\n",mods::globals::defer_queue->get_ticks_per_minute());
+	player->send("[%d] affects processer ticks per minute\r\n",mods::affects::get_ticks_per_minute());
+}
+
 ACMD(do_givemenades){
-	
 
+}
 
+ACMD(do_giveme_camera) {
+	auto obj = mods::object_utils::yaml_import("gadget","objects/gadget/camera.yml");
+	obj_to_char(obj,player);
+}
+ACMD(do_giveme_night_vision_camera) {
+	auto obj = mods::object_utils::yaml_import("gadget","objects/gadget/night-vision-camera.yml");
+	obj_to_char(obj,player);
+}
+ACMD(do_giveme_thermal_camera) {
+	auto obj = mods::object_utils::yaml_import("gadget","objects/gadget/thermal-camera.yml");
+	obj_to_char(obj,player);
 }
 
 ACMD(do_one_punch){
@@ -82,8 +99,7 @@ ACMD(do_giveme_smoke_grenades) {
 }
 
 ACMD(do_giveme_sensor_grenades) {
-	
-	auto obj = mods::weapon::new_sensor_grenade_object();
+	auto obj = mods::object_utils::yaml_import("explosive","sensor_grenade.yml");
 	obj_to_char(obj,player);
 }
 

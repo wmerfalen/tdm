@@ -1,4 +1,4 @@
-type: 'CAMERA'
+type: 'THERMAL_CAMERA'
 csv_capabilities: 'watch,listen,hear,remotely-view,access,hack' #csv, strings free-form TBA
 csv_attach_to: 'wall,door,room' #csv, strings attach to various kinds of items TBA
 health_points: 10 #int, health points before it dies. -1 is invincible
@@ -7,12 +7,12 @@ shield_points: 0 #int, additional points to decrement before decrementing health
 durability_profile: 'FLIMSY'
 move_points: 0
 damage_points: 0
-str_type: 'CAMERA' # enum, object type
-manufacturer: 'M4x' # string, anything 
-name: 'Pi-Mx Deployable Camera' # string, anything name of object 
-vnum: 16 # integer, unique identifier
-feed_file: 'camera.yml'
-description: 'A tiny Pi-Mx deployable Camera is lying here.'
-short_description: 'a Pi-Mx deployable Camera'
-action_description: 'Pi-Mx deployable Camera action description'
+str_type: 'THERMAL_CAMERA' # enum, object type
+manufacturer: 'SETI-N2PO Corp.' # string, anything 
+name: 'PK-Droid Thermal Camera' # string, anything name of object 
+vnum: 15 # integer, unique identifier
+feed_file: 'thermal-camera.yml'
+description: 'A PK-Droid Thermal Camera is lying here.'
+short_description: 'a PK-Droid Thermal Camera'
+action_description: 'PK-Droid Thermal Camera'
 rarity: 'COMMON'

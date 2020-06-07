@@ -73,12 +73,16 @@ namespace mods::affects {
 				}
 			}
 		~dissolver() = default;
+		bool has_any_affect(affect_vector_t affects);
+		bool has_all_affects(affect_vector_t affects);
+		bool has_affect(affect_t a);
 		protected:
 		bool m_has_affects;
 		affect_dissolve_t m_affects;
 	};
 
 	void process();
+	uint32_t get_ticks_per_minute();
 	mods::affects::affect_vector_t to_affect(std::vector<std::string> a);
 	void affect_player(affect_vector_t a,player_ptr_t p);
 	void affect_player_for(affect_vector_t a,player_ptr_t p,uint64_t ticks);

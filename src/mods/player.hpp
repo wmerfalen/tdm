@@ -521,6 +521,7 @@ namespace mods {
 		void equip(obj_ptr_t obj,int pos);
 		void equip(uuid_t,int pos);
 		void unequip(int pos);
+		void unequip_into_inventory(int pos);
 		obj_ptr_t equipment(int pos);
 		std::vector<affected_type>& get_affected_by() { return m_affected_by; }
 		std::vector<affected_type>& add_affected_by(affected_type&& add_this){
@@ -563,6 +564,12 @@ namespace mods {
 		bool get_misc_pref(misc_pref_enum_t bit){
 			return m_misc_pref[bit];
 		}
+
+		/** viewing modifiers */
+		bool has_night_vision() const;
+		bool has_thermal_vision() const;
+
+		/** camera dynamics */
 		void set_camera(obj_data_ptr_t obj);
 		std::shared_ptr<mods::camera> get_camera() const ;
 		void clear_camera();
@@ -576,6 +583,7 @@ namespace mods {
 		void cancel_block();
 		uint32_t current_block();
 
+		/** primary+secondary weapon helpers */
 		obj_data_ptr_t primary();
 		obj_data_ptr_t secondary();
 		void set_attacking_with_primary();
@@ -584,6 +592,7 @@ namespace mods {
 		void clear_attacking_with(){ m_attacking_with = nullptr; }
 		obj_data_ptr_t attacking_with(){ return m_attacking_with; }
 		int attacking_with_type(){ return m_attacking_with->rifle()->attributes->type; }
+
 
 		protected:
 		std::array<bool,misc_pref_enum_t::SIZE> m_misc_pref;

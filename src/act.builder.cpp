@@ -16,6 +16,7 @@
 #include "mods/yaml.hpp"
 #include "mods/date-time.hpp"
 #include "mods/world-configuration.hpp"
+#include "mods/object-utils.hpp"
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
 namespace mods::adhoc {
@@ -475,8 +476,7 @@ ACMD(do_flush_holding){
  */
 /** TODO: generalize this file system ls interface for use with other stuff */
 ACMD(do_yaml_import){
-	
-	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
+	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() == 0 || vec_args[0].compare("ls") == 0) {
 		player->pager_start();
 		mods::fs::ls(player,mods::yaml::current_working_dir());
@@ -486,30 +486,18 @@ ACMD(do_yaml_import){
 	}
 
 	if(vec_args.size() == 2){
-
-#define MENTOC_F_IMPORT(CLASS_TYPE,IT_TYPE)\
-		if(std::string(vec_args[0]).compare(#CLASS_TYPE) == 0){\
-			auto obj = blank_object();\
-			obj->feed(BOOST_PP_CAT(ITEM_,IT_TYPE),vec_args[1]);\
-			obj_to_room(obj.get(),player->room());\
-			player->sendln(std::string("Imported: ") + vec_args[1] + std::string(" of type:") + vec_args[0]);\
-			return;\
-		}
-		MENTOC_F_IMPORT(rifle,RIFLE);
-		MENTOC_F_IMPORT(explosive,EXPLOSIVE);
-		MENTOC_F_IMPORT(drone,DRONE);
-		MENTOC_F_IMPORT(attachment,ATTACHMENT);
-		MENTOC_F_IMPORT(gadget,GADGET);
-		MENTOC_F_IMPORT(armor,ARMOR);
-#undef MENTOC_F_IMPORT
-
+		mods::object_utils::set_yaml_initiator(player->name(),vec_args[0],vec_args[1]);
+		auto obj = mods::object_utils::yaml_import(vec_args[0],vec_args[1]);
+		obj_to_char(obj.get(),player->cd());
+		player->send("Imported: %s of type %s\r\n", vec_args[1].c_str(),vec_args[0].c_str());
+		return;
 	}
 	player->sendln("Unknown type/file combination. Nothing imported.");
 
 }
 
 ACMD(do_hold_anything){
-	
+
 	auto vec_args = PARSE_ARGS();
 	if(!player->get_imp_mode()){
 		player->sendln(HUH);
@@ -533,7 +521,7 @@ ACMD(do_hold_anything){
 	player->sendln(HUH);
 }
 ACMD(do_yaml_example){
-	
+
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("list") == 0) {
 		for(auto type : {"rifle","explosive","drone","gadget","attachment","armor"}) {
@@ -558,7 +546,7 @@ ACMD(do_yaml_example){
 }
 
 ACMD(do_histfile){
-	
+
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 		*player << "usage: \r\n" <<
@@ -584,7 +572,7 @@ ACMD(do_histfile){
 }
 
 ACMD(do_uuid){
-	
+
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 		*player << "usage: \r\n" <<
@@ -603,7 +591,7 @@ ACMD(do_uuid){
 }
 
 ACMD(do_pmw_obj_from_room){
-	
+
 	player->sendln("This function is under construction!");
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
@@ -630,7 +618,7 @@ ACMD(do_pmw_obj_from_room){
 }
 
 ACMD(do_toggle_obj_from_room){
-	
+
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 		*player << "usage: \r\n" <<

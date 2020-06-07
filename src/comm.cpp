@@ -646,6 +646,7 @@ void game_loop(socket_t mother_desc) {
 		int i = 0;
 		int new_desc = 0;
 		gettimeofday(&last_time, (struct timezone *) 0);
+		
 		while (i < epoll_wait_status) {
 			new_desc = 0;
 			auto operating_socket = events[i].data.fd;

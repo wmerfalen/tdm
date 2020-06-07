@@ -9,11 +9,11 @@
 # type: BREACH_CHARGE
 # type: FLASHBANG_GRENADE
 # type: SENSOR_GRENADE
-str_type: 'SENSOR_GRENADE' # enum, object type
-type: 'SENSOR_GRENADE' # integer enum 
+str_type: 'FLASHBANG_GRENADE' # enum, object type
+type: 'FLASHBANG_GRENADE' # integer enum 
 manufacturer: 'Hanzo-RSA Limited' # string, anything 
-name: 'FS13 Sensor grenade' # string, anything name of object 
-vnum: 10 # integer, unique identifier
+name: 'FS18 Flashbang grenade' # string, anything name of object 
+vnum: 18 # integer, unique identifier
 #rarity types
 # COMMON
 # UNCOMMON
@@ -22,16 +22,16 @@ vnum: 10 # integer, unique identifier
 # GOD_TIER
 # DEFAULT
 rarity: 'COMMON'
-description: 'A FS13 Sensor Grenade is lying here.'
-short_description: 'a FS13 Sensor Grenade'
-action_description: 'a FS13 Sensor Grenade'
-feed_file: 'sensor_grenade.yml'
-alternate_explosion_type: 'SCAN' #std::string, ENUM NONE,SCAN
+description: 'A FS18 Flashbang Grenade is lying here.'
+short_description: 'a FS18 Flashbang Grenade'
+action_description: 'a FS18 Flashbang Grenade'
+feed_file: 'objects/explosive/flashbang-grenade.yml'
+alternate_explosion_type: 'NONE' #std::string, ENUM NONE,SCAN
 loudness_type: 'SUSPICIOUS' #std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING
 chance_to_injure: 0.0 #float, percent
 critical_chance: 0.0 #float, percent
-critical_range: 2 #int, rooms
-blast_radius: 2 #int, rooms
+critical_range: 1 #int, rooms
+blast_radius: 1 #int, rooms
 damage_per_second: 0.0 #float, static base damage done
 disorient_amount: 0.0 #float, percent
-range_modifier: 2 #int, rooms
+range_modifier: 1 #int, rooms

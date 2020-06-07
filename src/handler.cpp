@@ -531,7 +531,6 @@ void obj_to_char(struct obj_data *object, char_data *ch) {
 
 /* take an object from a char */
 void obj_from_char(obj_ptr_t in_object){
-	log("good: using non-deprecated obj_from_char");
 	if(!in_object){
 		log("SYSERR: nullptr obj_data (obj_from_char)");
 		return;

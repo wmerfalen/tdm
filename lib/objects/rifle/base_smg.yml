@@ -51,7 +51,7 @@ str_type: 'SUB_MACHINE_GUN'
 rarity: 'COMMON'
 feed_file: 'base_smg.yml'
 description: 'A Heckler and Koch Sub-Machine gun is lying here'
-short_description: 'H&K SMG <short>'
-action_description: 'H&K SMG <action>'
+short_description: 'a Heckler and Koch Sub-Machine gun'
+action_description: 'Heckler and Koch Sub-Machine gun'
 damage_dice_count: 4
 damage_dice_sides: 12

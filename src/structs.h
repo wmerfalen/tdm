@@ -811,6 +811,7 @@ enum player_level {
 			in_obj(nullptr),contains(nullptr),next_content(nullptr),
 			next(nullptr),ai_state(0),uuid(0),m_db_id(0)
 		{
+			std::cerr << "[obj_data] item_type: " << item_type << "\n";
 			this->init();
 			this->feed(item_type,feed_file);
 		}
@@ -1057,6 +1058,15 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 			LAST
 		};
 
+		enum fire_status_t {
+			NONE = 0,
+			KINDLING = 1,
+			COMPLETELY_ON_FIRE = 2,
+			SMOLDERING = 3,
+			SMOKING = 4,
+			OUT = 5
+		};
+
 		void init();
 
 		room_data();
@@ -1087,6 +1097,9 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		std::string_view overhead(const lense_type_t& );
 		std::vector<texture_type_t>& textures();
 		void add_texture(texture_type_t t){
+			if(t == texture_type_t::ON_FIRE){
+				this->m_dispatch_fire_dissolver();
+			}
 			m_textures.emplace_back(t);
 		}
 		void remove_texture(texture_type_t& t){
@@ -1095,10 +1108,16 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 				if(texture == t){ continue; }
 				final_textures.emplace_back(t);
 			}
+			if(t == texture_type_t::ON_FIRE){
+				m_fire_status = fire_status_t::OUT;
+			}
 		}
 
 		const std::vector<uint8_t>& directions() const;
+		fire_status_t fire_status(){ return m_fire_status; }
 		protected:
+		void m_dispatch_fire_dissolver();
+		fire_status_t m_fire_status;
 		std::vector<uint8_t> m_directions;
 		std::vector<mods::extra_desc_data> m_ex_descriptions;
 		std::vector<texture_type_t> m_textures;

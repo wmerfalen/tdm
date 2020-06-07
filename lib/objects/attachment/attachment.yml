@@ -28,5 +28,5 @@ vnum: 1000 # integer, unique identifier
 # DEFAULT
 rarity: 'COMMON'
 description: 'A ACOG Scope is lying here'
-short_description: 'ACOG Scope <short>'
-action_description: 'ACOG Scope <action>'
+short_description: 'a ACOG Scope'
+action_description: 'ACOG Scope'

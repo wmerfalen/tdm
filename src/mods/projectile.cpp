@@ -264,6 +264,7 @@ namespace mods {
 
 			if(type == mw_explosive::SENSOR_GRENADE){
 				mods::sensor_grenade::handle_explosion(object_uuid,player_uuid,room_id,object->from_direction);
+				mods::globals::dispose_object(object_uuid);
 				return;
 			}
 
@@ -308,6 +309,7 @@ namespace mods {
 			}
 			log("calling perform blast radius");
 			mods::projectile::perform_blast_radius(room_id,blast_radius,object,player_uuid);
+			mods::globals::dispose_object(object_uuid);
 		}
 		/**
 		 * TODO: place the grenade on the floor so that some crazy bastards can potentially throw it back, 
@@ -330,33 +332,24 @@ namespace mods {
 		}
 		/** FIXME: needs blast radius stuff to happen */
 		/** FIXME: needs shrapnel calculation */
-		std::string todirstr(const char* direction,bool prefix,bool suffix) {
+		std::string todirstr(int direction,bool prefix,bool suffix) {
 			std::string pre = prefix ? " " : "";
 			std::string suf = suffix ? " " : "";
-			if(strncmp(direction,"north",5) == 0 || direction[0] == 'n' || direction[0] == 'N') {
-				return pre + "to the north" + suf;
+			switch(direction){
+				case NORTH:
+					return pre + "to the north" + suf;
+				case SOUTH:
+					return pre + "to the south" + suf;
+				case EAST:
+					return pre + "to the east" + suf;
+				case WEST:
+					return pre + "to the west" + suf;
+				case UP:
+					return pre + "above you" + suf;
+				case DOWN:
+					return pre + "below you" + suf;
+				default: return "<?>";
 			}
-
-			if(strncmp(direction,"south",5) == 0 || direction[0] == 's' || direction[0] == 'S') {
-				return pre + "to the south" + suf;
-			}
-
-			if(strncmp(direction,"east",4) == 0 || direction[0] == 'e' || direction[0] == 'E') {
-				return pre + "to the east" + suf;
-			}
-
-			if(strncmp(direction,"west",4) == 0 || direction[0] == 'w' || direction[0] == 'W') {
-				return pre + "to the west" + suf;
-			}
-
-			if(strncmp(direction,"up",2) == 0 || direction[0] == 'u' || direction[0] == 'U') {
-				return pre + "above you" + suf;
-			}
-
-			if(strncmp(direction,"down",4) == 0 || direction[0] == 'd' || direction[0] == 'D') {
-				return pre + "below you" + suf;
-			}
-			return pre + "??" + suf;
 		}
 
 		std::string fromdirstr(int direction,bool prefix, bool suffix) {
@@ -437,10 +430,11 @@ namespace mods {
 			});
 		}
 
-		void throw_object(player_ptr_t player, int direction, std::size_t depth,
-				std::shared_ptr<obj_data> object, std::string_view verb) {
-			std::array<char,MAX_INPUT_LENGTH> str_dir_buffer;
-			std::string str_dir = mods::projectile::todirstr(static_cast<const char*>(&str_dir_buffer[0]),1,0);
+		void throw_object(player_ptr_t& player, int direction, std::size_t depth,
+				std::shared_ptr<obj_data>& object, std::string_view verb) {
+			std::array<char,32> str_dir_buffer;
+			std::fill(str_dir_buffer.begin(),str_dir_buffer.end(),0);
+			std::string str_dir = mods::projectile::todirstr(direction,0,0);
 			std::string object_name = "";
 			int ticks = 0;
 			assert(object->has_explosive());
@@ -456,36 +450,30 @@ namespace mods {
 					break;
 				case mw_explosive::FRAG_GRENADE:
 					ticks = 2;
-					object_name = "frag grenade";
 					break;
 				case mw_explosive::INCENDIARY_GRENADE:
-					object_name = "incendiary grenade";
 					ticks = 2;
 					break;
 				case mw_explosive::EMP_GRENADE:
-					object_name = "emp grenade";
 					ticks = 2;
 					break;
 				case mw_explosive::SMOKE_GRENADE:
-					object_name = "smoke grenade";
 					ticks = 3;
 					break;
 				case mw_explosive::FLASHBANG_GRENADE:
-					object_name = "flashbang grenade";
 					ticks = 6;
 					break;
 				case mw_explosive::SENSOR_GRENADE:
-					object_name = "sensor grenade";
 					ticks = 6;
 					break;
 			}
 			send_to_room_except(player->room(), player, "%s %ss a %s%s!\r\n",
 					player->ucname().c_str(), 
 					verb.data(),
-					object_name.c_str(),
+					object->short_description.c_str(),
 					str_dir.c_str());
-			player->sendln("You " + std::string(verb.data()) + " a " + object->explosive()->name + str_dir);
-			obj_from_char(object);
+			player->send("You %s a %s %s!\r\n", verb.data(), object->name.c_str(),str_dir.c_str());
+			player->unequip(WEAR_HOLD);
 			auto room_id = travel_to(player->room(), direction, depth, object);
 			explode_in_future(room_id, ticks, object->uuid,player->uuid());
 		}

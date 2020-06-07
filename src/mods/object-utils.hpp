@@ -1,9 +1,69 @@
 #ifndef __MENTOC_MODS_OBJECT_UTILS_HEADER__
 #define __MENTOC_MODS_OBJECT_UTILS_HEADER__
 #include "../globals.hpp"
+#include <variant>
 extern obj_ptr_t optr_by_uuid(uuid_t);
-
+extern obj_ptr_t create_object(int type,std::string yaml_file);
 namespace mods::object_utils {
+	static std::string yaml_initiator = "";
+	static uint32_t yaml_transaction_id = 0;
+	struct YamlFeedExceptionInfo {
+		YamlFeedExceptionInfo() = default;
+		YamlFeedExceptionInfo(
+				YAML::Mark& arg_mark,
+				std::string& arg_msg,
+				std::vector<std::string>& arg_fed
+				) :
+			mark(arg_mark), msg(arg_msg), fields_fed_so_far(arg_fed) {
+			this->time = std::time(nullptr);
+			initiator = yaml_initiator;
+			transaction_id = yaml_transaction_id;
+		}
+		YAML::Mark mark;
+		std::string msg;
+		std::vector<std::string> fields_fed_so_far;
+		time_t time;
+		std::string initiator;
+		uint32_t transaction_id;
+	};
+
+	using yaml_exception_list_t = std::vector<std::variant<YamlFeedExceptionInfo,std::string>>;
+	static yaml_exception_list_t yaml_feed_exceptions;
+
+	static inline auto& get_yaml_exception_list() {
+		return yaml_feed_exceptions;
+	}
+	template <typename TStringType>
+	static inline void set_yaml_initiator(
+			TStringType arg_initiator,
+			TStringType arg_yaml_type,
+			TStringType arg_yaml_file){
+		yaml_initiator = arg_initiator;
+	}
+	static inline void yaml_file_doesnt_exist(std::string from_where){
+		std::variant<YamlFeedExceptionInfo,std::string> item;
+		item.emplace<1>("[yaml-feed::initiator::" + yaml_initiator +
+			"::transaction_id::" + std::to_string(yaml_transaction_id) + "]" +
+			"[error]: File does not exist, when feeding '" + from_where + "'"
+		);
+		yaml_feed_exceptions.emplace_back(item);
+	}
+	static inline void increment_yaml_transaction_id(){
+		++yaml_transaction_id;
+	}
+	static inline void set_yaml_transaction_id(uint32_t i){
+		yaml_transaction_id = i;
+	}
+	static inline uint32_t get_yaml_transaction_id(){
+		return yaml_transaction_id;
+	}
+
+	template <typename TException>
+	static inline void report_yaml_exception(TException& e,std::vector<std::string>& items_fed){
+		std::variant<YamlFeedExceptionInfo,std::string> item;
+		item.emplace<0>(e.mark,e.msg,items_fed);
+		yaml_feed_exceptions.emplace_back(item);
+	}
 	constexpr static bitvector_t STATUS_INSTALLING = (1 << 0);
 	constexpr static bitvector_t STATUS_BREACHING = (1 << 1);
 	constexpr static obj_data::location_data_t INSTALL_MASK = 16;
@@ -35,6 +95,43 @@ namespace mods::object_utils {
 		}
 		return false;
 	}
+	template <typename T>
+	static inline bool is_night_vision_camera(T& obj){
+		return is_camera(obj) && obj->gadget()->attributes->type == mw_gadget::NIGHT_VISION_CAMERA;
+	}
+	template <typename T>
+	static inline bool is_thermal_camera(T& obj){
+		return is_camera(obj) && obj->gadget()->attributes->type == mw_gadget::THERMAL_CAMERA;
+	}
+	template <typename T>
+	static inline bool is_night_vision_camera(T obj){
+		return is_camera(obj) && obj->gadget()->attributes->type == mw_gadget::NIGHT_VISION_CAMERA;
+	}
+	template <typename T>
+	static inline bool is_thermal_camera(T obj){
+		return is_camera(obj) && obj->gadget()->attributes->type == mw_gadget::THERMAL_CAMERA;
+	}
+	template <>
+	inline bool is_night_vision_camera(uuid_t& obj_uuid){
+		auto obj = optr_by_uuid(obj_uuid);
+		return is_camera(obj) && obj->gadget()->attributes->type == mw_gadget::NIGHT_VISION_CAMERA;
+	}
+	template <>
+	inline bool is_thermal_camera(uuid_t& obj_uuid){
+		auto obj = optr_by_uuid(obj_uuid);
+		return is_camera(obj) && obj->gadget()->attributes->type == mw_gadget::THERMAL_CAMERA;
+	}
+	template <>
+	inline bool is_night_vision_camera(uuid_t obj_uuid){
+		auto obj = optr_by_uuid(obj_uuid);
+		return is_camera(obj) && obj->gadget()->attributes->type == mw_gadget::NIGHT_VISION_CAMERA;
+	}
+	template <>
+	inline bool is_thermal_camera(uuid_t obj_uuid){
+		auto obj = optr_by_uuid(obj_uuid);
+		return is_camera(obj) && obj->gadget()->attributes->type == mw_gadget::THERMAL_CAMERA;
+	}
+
 	template <typename T>
 	static inline mw_explosive get_explosive_type(T& obj){
 		return static_cast<mw_explosive>(obj->explosive()->attributes->type);
@@ -99,6 +196,24 @@ namespace mods::object_utils {
 		bool can_attack_same_room(T& obj){
 			return obj->rifle()->attributes->base_stat_list->at(0).allow;
 		}
+
+	static inline auto yaml_import(std::string object_type,std::string yaml_file){
+#define MENTOC_F_IMPORT(CLASS_TYPE,IT_TYPE)\
+		if(object_type.compare(#CLASS_TYPE) == 0){\
+			return std::move(create_object(BOOST_PP_CAT(ITEM_,IT_TYPE),yaml_file));\
+		}
+		MENTOC_F_IMPORT(rifle,RIFLE);
+		MENTOC_F_IMPORT(explosive,EXPLOSIVE);
+		MENTOC_F_IMPORT(drone,DRONE);
+		MENTOC_F_IMPORT(attachment,ATTACHMENT);
+		MENTOC_F_IMPORT(gadget,GADGET);
+		MENTOC_F_IMPORT(armor,ARMOR);
+		MENTOC_F_IMPORT(trap,TRAP);
+#undef MENTOC_F_IMPORT
+
+		return blank_object();
+	}
+
 };//End namespace
 
 #endif

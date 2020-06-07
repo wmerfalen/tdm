@@ -49,7 +49,7 @@ vnum: 2 # integer, unique identifier
 # DEFAULT
 rarity: 'COMMON'
 description: 'A ZDX-Node Sniper Rifle is lying here'
-short_description: 'ZDX-Node Sniper Rifle <short>'
-action_description: 'ZDX-Node Sniper Rifle <action>'
+short_description: 'a ZDX-Node Sniper Rifle'
+action_description: 'ZDX-Node Sniper Rifle'
 damage_dice_count: 2
 damage_dice_sides: 32

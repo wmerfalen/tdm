@@ -45,9 +45,14 @@ namespace mods {
 			using event_queue_iterator = event_queue_t::iterator;
 
 			deferred() = delete;
-			deferred(uint64_t tick_resolution) : m_tres(tick_resolution),
-				m_tick(0), m_iterations(0) {
-
+			deferred(uint64_t tick_resolution) : 
+				m_tres(tick_resolution),
+				m_tick(0),
+				m_iterations(0),
+				m_time_tracker(time(nullptr)),
+				m_ticks_per_minute(0),
+				m_ticks_per_minute_sample(0) {
+				/** initialized */
 			}
 			~deferred() = default;
 			lambda_queue_iterator push(uint64_t ticks_in_future,std::function<void()> lambda);
@@ -65,17 +70,17 @@ namespace mods {
 			void iteration();
 			void detexturize_room(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture);
 			template <typename TTextureList>
-				void texturize_room(uint64_t ticks_in_future,room_rnum& room_id,TTextureList& textures){
-					m_q.insert(std::make_pair(ticks_in_future + m_tick,[&](){
-								for(auto & texture : textures){
-								mods::util::texturize_room(room_id,texture);
-								}
-								})
-							);//end insert
-				}
+			void texturize_room(uint64_t ticks_in_future,room_rnum& room_id,TTextureList& textures){
+				m_q.insert(std::make_pair(ticks_in_future + m_tick,[&](){
+						for(auto & texture : textures){
+							mods::util::texturize_room(room_id,texture);
+						}
+					})
+				);//end insert
+			}
 			void cancel_lambda(lambda_queue_iterator it);
 			void cancel_event(event_queue_iterator it);
-
+			uint32_t get_ticks_per_minute();
 		protected:
 			lambda_queue_t m_q;
 			event_queue_t m_ticks_event_type;
@@ -83,6 +88,9 @@ namespace mods {
 			uint64_t m_tick;
 			uint64_t m_iterations;
 			std::vector<chunk_affect_t> m_chunk_affect;
+			time_t m_time_tracker;
+			uint32_t m_ticks_per_minute;
+			uint32_t m_ticks_per_minute_sample;
 		private:
 			void tick();
 	};

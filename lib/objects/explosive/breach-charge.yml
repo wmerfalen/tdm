@@ -3,9 +3,9 @@ type: 'BREACH_CHARGE' # string enum
 manufacturer: 'X-BETA CORP' # string, anything 
 name: 'XBC Breach Charge' # string, anything name of object 
 vnum: 11 # integer, unique identifier
-description: ''
-short_description: ''
-action_description: ''
+description: 'a XBC Breach Charge is lying here.'
+short_description: 'a XBC Breach Charge'
+action_description: 'XBC Breach Charge'
 feed_file: 'breach-charge.yml'
 alternate_explosion_type: 0
 chance_to_injure: 20.0 #float, percent

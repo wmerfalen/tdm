@@ -23,7 +23,7 @@ thirdparty = $(duktape) $(lmdb)
 FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-Wno-char-subscripts -Wcomment \
 	-Wno-format-zero-length -Wno-format-security\
-	-std=c++17 -fpermissive -MMD \
+	-std=c++2a -fpermissive -MMD \
 	-I$(boostdir) -Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \
 	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\"  \

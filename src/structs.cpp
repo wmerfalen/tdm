@@ -12,6 +12,7 @@ static inline std::string default_yaml_file(const std::string& type){
 }
 
 #include "mods/util.hpp"
+#include "mods/rooms.hpp"
 
 void obj_data::init(){
 	d("[debug]obj_data::init()\n");
@@ -293,6 +294,10 @@ bool obj_data::flagged(int value){
 		std::vector<room_data::texture_type_t>& room_data::textures() { 
 			return m_textures;
 		}
+
+		void room_data::m_dispatch_fire_dissolver() {
+			mods::rooms::start_fire_dissolver(real_room(this->number));
+		}
 		void room_data::init(){
 			number = 0;
 			zone = 0;
@@ -302,6 +307,7 @@ bool obj_data::flagged(int value){
 			for(unsigned i = 0; i < NUM_OF_DIRS;i++){ 
 				dir_option[i] = nullptr;
 			}
+			m_fire_status = fire_status_t::NONE;
 		}
 
 		room_data::room_data() {

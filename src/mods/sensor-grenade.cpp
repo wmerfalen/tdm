@@ -15,7 +15,7 @@ namespace mods::sensor_grenade {
 	using direction_count_t = std::array<int,NUM_OF_DIRS>;
 	using count_gathering_t = std::unordered_map<uuid_t,direction_count_t>;
 	static count_gathering_t count_gathering;
-	static constexpr uint64_t SCANNED_AFFECT_DURATION = 60; /** in ticks */
+	static constexpr uint64_t SCANNED_AFFECT_DURATION = 400; /** in ticks */
 
 	bool player_can_do_range_modifier(player_ptr_t& player){
 		return player->level() >= 25; /** FIXME: maybe */
@@ -141,14 +141,10 @@ namespace mods::sensor_grenade {
 			std::size_t scan_count = 0;
 			for(auto & room_number : scan_from_room(blast_radius,room_id)){
 				for(auto & player_in_room : mods::globals::get_room_list(room_number)){
-#ifdef __MENTOC_SENSOR_GRENADE_PVP__
-					mods::affects::affect_player({mods::affects::affect_t::SCANNED},player_in_room);
-#else
 					if(player_in_room->is_npc()) {
-						mods::affects::affect_player({mods::affects::affect_t::SCANNED},player_in_room);
+						mods::affects::affect_player_for({mods::affects::affect_t::SCANNED},player_in_room,SCANNED_AFFECT_DURATION);
+						++scan_count;
 					}
-#endif
-					++scan_count;
 				}
 			}
 			player->send("\r\n[%d] target%s scanned.\r\n",scan_count, scan_count != 1 ? "s" : "");

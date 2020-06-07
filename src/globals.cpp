@@ -830,6 +830,7 @@ namespace mods {
 			 * \return void will log a SYSERR if the resolved room id (param 1) is out of bounds
 			 */
 			void char_to_room(const room_rnum& room,char_data* ch) {
+				std::cerr << "char_to_room: " << room << " ch:" << ch->player.name.c_str() << "\n";
 				auto player = ptr(ch);
 				auto target_room = room;
 				if(boot_type == boot_type_t::BOOT_HELL){

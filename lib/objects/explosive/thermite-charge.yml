@@ -3,9 +3,9 @@ type: 'THERMITE_CHARGE' # string enum
 manufacturer: 'X-BETA CORP' # string, anything 
 name: 'XBC Thermite Breach Charge' # string, anything name of object 
 vnum: 12 # integer, unique identifier
-description: ''
-short_description: ''
-action_description: ''
+description: 'a XBC Thermite Breach Charge is lying here.'
+short_description: 'a XBC Thermite Breach Charge'
+action_description: 'XBC Thermite Breach Charge'
 feed_file: 'thermite-charge.yml'
 alternate_explosion_type: 0
 chance_to_injure: 30.0 #float, percent

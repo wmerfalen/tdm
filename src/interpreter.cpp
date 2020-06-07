@@ -180,42 +180,66 @@ ACMD(do_builder_help){
 	}
 	if(player->implementor_mode() || player->builder_mode()){
 		for(std::string_view cmd : {
-			"{gld}affect_me{/gld} -- {grn}give yourself an affect <BLIND|DISORIENT|POISON> [feature-debug]{/grn}", 
-			"{gld}ammo{/gld} -- {grn}give yourself ammo [feature-debug]{/grn}", 
-			"{gld}chanmgr{/gld} -- {grn}channel manager utility [staging-feature]{/grn}",
-			"{gld}drone{/gld} -- {grn}start or stop your drone [staging-feature]{/grn}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{yel} --                      -:[ Cameras ]:-                               {/yel}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+		 	"{gld}giveme_camera{/gld} -- {grn}give me deployable camera [feature-debug]{/grn}",
+		 	"{gld}giveme_night_vision_camera{/gld} -- {grn}give me a night vision camera{/grn}",
+		 	"{gld}giveme_thermal_camera{/gld} -- {grn}give me a thermal camera {/grn}",
+			"",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{yel} --                      -:[ Grenades ]:-                              {/yel}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
 		 	"{gld}giveme_flash{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
 		 	"{gld}giveme_frag{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
-			"{gld}givemegold{/gld} -- {grn}give me gold [feature-debug]{/grn}", 
 		 	"{gld}giveme_inc{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
 	 		"{gld}giveme_sensor{/gld} -- {grn}give me sensor grenades [feature-debug]{/grn}",
 	 		"{gld}giveme_smoke{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
-	 		"{gld}empty_clip{/gld} -- {grn}empty the clip in your primary weapon [feature-debug]{/grn}",
-			"{gld}flush_holding{/gld} -- {grn}flush the item you are holding to the db [feature-debug][staging-feature][builder-utils]{/grn}", 
-			"{gld}heal{/gld} -- {grn}heal yourself [feature-debug][staging-feature][class-medic]{/grn}", 
-			"{gld}histfile{/gld} -- {grn}start recording all commands. stop with 'histfile stop' [builder-utils][feature-debug]{/grn}", 
-			"{gld}idle{/gld} -- {grn}force your character into idle state [feature-debug]{/grn}", 
-			"{gld}js{/gld} -- {grn}Run javascript [feature-debug][admin-utils]{/grn}", 
-			"{gld}js_help{/gld} -- {grn}Show useful js commands [builder-utils][admin-utils]{/grn}", 
-			"{gld}jstest{/gld} -- {grn}run a javascript test [builder-utils][admin-tools]{/grn}",
+			"{gld}givemegold{/gld} -- {grn}give me gold [feature-debug]{/grn}", 
+			"",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{yel} --                      -:[ Building ]:-                              {/yel}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{gld}mbuild{/gld} -- {grn}mob builder [builder-utils]{/grn}",
-			"{gld}newjs{/gld} -- {grn}create a new javascript context [admin-tools][feature-debug]{/grn}", 
 			"{gld}obuild{/gld} -- {grn}object builder [builder-utils]{/grn}",
-			"{gld}one_punch{/gld} -- {grn}immediately kill your currently fighting char with one punch{/grn}",
-			"{gld}point_update{/gld} -- {grn}manually call point update [feature-debug]{/grn}",
-			"{gld}pref{/gld} -- {grn}preferences utility [staging-feature]{/grn}",
+			"{gld}sbuild{/gld} -- {grn}shop builder [builder-utils]{/grn}",
 			"{gld}rbuild{/gld} -- {grn}room builder [builder-utils]{/grn}",
 			"{gld}rbuild_sandbox{/gld} -- {grn}room builder sandbox utility [builder-utils]{/grn}",
 			"{gld}rnumlist{/gld} -- {grn}list rooms [feature-debug]{/grn}",
 			"{gld}rnumtele{/gld} -- {grn}teleport to a room [feature-debug]{/grn}",
 			"{gld}room_list{/gld} -- {grn}lists rooms [builder-utils][admin-utils]{/grn}",
-			"{gld}set_ammo{/gld} -- {grn}set ammo of currently wielded weapon{/grn}",
-			"{gld}sbuild{/gld} -- {grn}shop builder [builder-utils]{/grn}",
-			"{gld}show_tics{/gld} -- {grn}toggle tics[builder-utils]{/grn}",
-			"{gld}throw{/gld} -- {grn}throw a grenade [staging-feature]{/grn}",
 			"{gld}yaml_example{/gld} -- {grn}type 'yaml_example list' for a list of yaml files{/grn}",
 			"{gld}yaml_import{/gld} -- {grn}type 'yaml_import <filename>' to import a yaml file{/grn}",
-			"{gld}zbuild{/gld} -- {grn}zone builder [builder-utils]{/grn}"
+			"{gld}zbuild{/gld} -- {grn}zone builder [builder-utils]{/grn}",
+			"",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{yel} --                      -:[ Ammunition ]:-                            {/yel}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{gld}ammo{/gld} -- {grn}give yourself ammo [feature-debug]{/grn}", 
+	 		"{gld}empty_clip{/gld} -- {grn}empty the clip in your primary weapon [feature-debug]{/grn}",
+			"{gld}set_ammo{/gld} -- {grn}set ammo of currently wielded weapon{/grn}",
+			"",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{yel} --                    -:[ Damage debugging ]:-                        {/yel}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{gld}affect_me{/gld} -- {grn}give yourself an affect <BLIND|DISORIENT|POISON> [feature-debug]{/grn}", 
+			"{gld}heal{/gld} -- {grn}heal yourself [feature-debug][staging-feature][class-medic]{/grn}", 
+			"{gld}one_punch{/gld} -- {grn}immediately kill your currently fighting char with one punch{/grn}",
+			"{gld}point_update{/gld} -- {grn}manually call point update [feature-debug]{/grn}",
+			"",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{yel} --                      -:[ Debugging ]:-                             {/yel}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{gld}flush_holding{/gld} -- {grn}flush the item you are holding to the db [feature-debug][staging-feature][builder-utils]{/grn}", 
+		 	"{gld}get_ticks_per_minute{/gld} -- {grn}get ticks per minute [feature-debug]{/grn}",
+			"{gld}histfile{/gld} -- {grn}start recording all commands. stop with 'histfile stop' [builder-utils][feature-debug]{/grn}", 
+			"{gld}idle{/gld} -- {grn}force your character into idle state [feature-debug]{/grn}", 
+			"{gld}js{/gld} -- {grn}Run javascript [feature-debug][admin-utils]{/grn}", 
+			"{gld}js_help{/gld} -- {grn}Show useful js commands [builder-utils][admin-utils]{/grn}", 
+			"{gld}jstest{/gld} -- {grn}run a javascript test [builder-utils][admin-tools]{/grn}",
+			"{gld}newjs{/gld} -- {grn}create a new javascript context [admin-tools][feature-debug]{/grn}", 
+			"{gld}pref{/gld} -- {grn}preferences utility [staging-feature]{/grn}",
+			"{gld}show_tics{/gld} -- {grn}toggle tics[builder-utils]{/grn}"
 	 	}){
 			player->sendln(cmd);
 		}
@@ -346,12 +370,16 @@ ACMD(do_giveme_incendiary_grenades);
 ACMD(do_giveme_sensor_grenades);
 ACMD(do_giveme_smoke_grenades);
 ACMD(do_giveme_emp_grenades);
+ACMD(do_giveme_camera);
+ACMD(do_giveme_night_vision_camera);
+ACMD(do_giveme_thermal_camera);
 ACMD(do_next_object_number);
 ACMD(do_next_mob_number);
 ACMD(do_next_room_number);
 ACMD(do_pmw_obj_from_room);
 ACMD(do_toggle_obj_from_room);
 ACMD(do_my_uuid);
+ACMD(do_get_ticks_per_minute);
 /** ------------------------ */
 /** GIVE ME combat mechanics */
 /** ------------------------ */
@@ -383,6 +411,7 @@ ACMD(do_set_ammo);
 
 /** debug mods */
 ACMD(do_point_update);
+ACMD(do_kill_now);
 ACMD(do_one_punch);
 ACMD(do_zero_socket);
 /** -- end debug mods */
@@ -716,6 +745,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "heal"  , POS_RESTING , do_heal   , 0, 0 },
 	{ "newjs"  , POS_RESTING , do_newjs   , LVL_GOD, 0 },
 	{ "jstest"  , POS_RESTING , do_jstest   , LVL_GOD, 0 },
+	{ "kill_now"  , POS_RESTING , do_one_punch   , LVL_GOD, 0 },
 	{ "one_punch"  , POS_RESTING , do_one_punch   , LVL_GOD, 0 },
 	{ "point_update"  , POS_RESTING , do_point_update   , LVL_GOD, 0 },
 	{ "zero_socket"  , POS_RESTING , do_zero_socket  , 0, 0 },
@@ -768,6 +798,9 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "giveme_smoke"  , POS_RESTING , do_giveme_smoke_grenades  , LVL_GOD, 0 },
 	{ "giveme_sensor"  , POS_RESTING , do_giveme_sensor_grenades  , LVL_GOD, 0 },
 	{ "giveme_emp"  , POS_RESTING , do_giveme_emp_grenades  , LVL_GOD, 0 },
+	{ "giveme_camera"  , POS_RESTING , do_giveme_camera  , LVL_GOD, 0 },
+	{ "giveme_night_vision_camera"  , POS_RESTING , do_giveme_night_vision_camera  , LVL_GOD, 0 },
+	{ "giveme_thermal_camera"  , POS_RESTING , do_giveme_thermal_camera  , LVL_GOD, 0 },
 	{ "affect_me"  , POS_RESTING , do_affect_me , LVL_GOD, 0 },
 
 	/** ------------------------------ */
@@ -807,6 +840,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "room_list"  , POS_RESTING , do_room_list   , LVL_IMMORT, 0 },
 	{ "histfile"  , POS_RESTING , do_histfile   , LVL_IMMORT, 0 },
 	{ "my_uuid"  , POS_RESTING , do_my_uuid  , LVL_IMMORT, 0 },
+	{ "get_ticks_per_minute"  , POS_RESTING , do_get_ticks_per_minute, LVL_IMMORT, 0 },
 	/** ----------------- */
 	/** END BUILDER UTILS */
 	/** ----------------- */

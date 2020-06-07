@@ -6,20 +6,24 @@ namespace mods::player_utils {
 	constexpr static bitvector_t STATUS_INSTALLING = (1 << 0);
 	template <typename T>
 	static inline bool is_cancel_command(T& arg){
-		return !strcmp(arg,"cancel");
+		return !strcasecmp(arg,"cancel");
 	}
 	template <>
 		inline bool is_cancel_command(const std::string& arg){
-			return !arg.compare("cancel");
+			return !strcasecmp(arg.c_str(),"cancel");
 		}
 	template <>
 		inline bool is_cancel_command(const std::string_view& arg){
-			return !arg.compare("cancel");
+			return !strcasecmp(arg.data(),"cancel");
 		}
 	template <typename T>
 		static inline bool is_installing(T& player){
 			 return player->current_block() == mods::deferred::EVENT_PLAYER_UNBLOCK_INSTALLATION;
 		}
+	template <typename T>
+	static inline bool is_scanned(T& player){
+		return player->get_affect_dissolver().has_affect(AFF(SCANNED));
+	}
 };
 
 #endif

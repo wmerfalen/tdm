@@ -51,7 +51,7 @@ str_type: 'SNIPER'
 rarity: 'COMMON'
 feed_file: 'xm109.yml'
 description: 'A debilitating XM109 Sniper Rifle lays here.'
-short_description: 'XM109 <short>'
-action_description: 'XM109 <action>'
+short_description: 'a XM109'
+action_description: 'XM109'
 damage_dice_count: 3
 damage_dice_sides: 40
