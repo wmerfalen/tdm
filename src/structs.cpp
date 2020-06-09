@@ -16,6 +16,7 @@ static inline std::string default_yaml_file(const std::string& type){
 
 void obj_data::init(){
 	d("[debug]obj_data::init()\n");
+	feed_status = 0;
 	m_location_data = 0;
 	std::fill(m_capabilities.begin(),m_capabilities.end(),0);
 	item_number = 0;
@@ -45,7 +46,8 @@ void obj_data::init(){
 			this->BOOST_PP_CAT(m_,CLASS_TYPE) = nullptr;
 BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 }
-		void obj_data::feed(int16_t in_type,std::string_view feed_file){
+		int16_t obj_data::feed(int16_t in_type,std::string_view feed_file){
+			this->feed_status = 2;
 			this->m_feed_file = feed_file.data();
 			this->type = in_type;
 			std::string s_type = "";
@@ -72,6 +74,7 @@ MENTOC_LAZY_ME(ITEM_TRAP);
 				this->post_feed(this->BOOST_PP_CAT(m_,CLASS_TYPE).get());\
 			}
 			BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_DUAL, ~, MENTOC_ITEM_TYPES_SEQ)
+			return this->feed_status;
 		}
 
 		std::string obj_data::generate_stat_page() {

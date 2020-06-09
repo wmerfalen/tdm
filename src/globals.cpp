@@ -22,6 +22,7 @@
 #include "mods/debug.hpp"
 #include "mods/orm/chargen.hpp"
 #include "mods/world-configuration.hpp"
+#include "mods/debug-pre-game.hpp"
 
 
 extern int errno;
@@ -428,6 +429,9 @@ namespace mods {
 			if(bootup_test_suite.length() > 0){
 				std::cout << "booting suite: " << bootup_test_suite << "\n";
 				mods::pregame::boot_suite(bootup_test_suite);
+			}
+			if(!mods::debug::pre_game::run()){
+				exit(0);
 			}
 		}
 		uuid_t player_uuid() {

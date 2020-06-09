@@ -1350,7 +1350,7 @@ ACMD(do_help) {
 	}
 
 #define IS_TOPIC(a) (strncmp((char*)&topic[0],a,sizeof(topic)) == 0)
-	if(IS_TOPIC("grenade") || IS_TOPIC("nade")) {
+	if(IS_TOPIC("grenade") || IS_TOPIC("nade") || IS_TOPIC("throw")) {
 		const char* usage = "usage: throw <direction> <room_count>\r\n"
 			"example: \r\n"
 			" $ get frag backpack\r\n"

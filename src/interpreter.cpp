@@ -210,6 +210,9 @@ ACMD(do_builder_help){
 			"{gld}room_list{/gld} -- {grn}lists rooms [builder-utils][admin-utils]{/grn}",
 			"{gld}yaml_example{/gld} -- {grn}type 'yaml_example list' for a list of yaml files{/grn}",
 			"{gld}yaml_import{/gld} -- {grn}type 'yaml_import <filename>' to import a yaml file{/grn}",
+			"{gld}yaml_log{/gld} -- {grn}get the yaml log to find out which files failed to import{/grn}",
+			"{gld}yaml_log_save{/gld} -- {grn}write the yaml log to disk{/grn}",
+			"{gld}yaml_log_clear{/gld} -- {grn}clear the yaml log without flushing to disk{/grn}",
 			"{gld}zbuild{/gld} -- {grn}zone builder [builder-utils]{/grn}",
 			"",
 			"{yel} ----------------------------------------------------------------------{/yel}",
@@ -250,6 +253,9 @@ ACMD(do_builder_help){
 }
 
 ACMD(do_yaml_import);
+ACMD(do_yaml_log);
+ACMD(do_yaml_log_save);
+ACMD(do_yaml_log_clear);
 ACMD(do_yaml_example);
 ACMD(do_flush_holding);
 ACMD(do_hold_anything);
@@ -820,6 +826,9 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "flush_holding"  , POS_RESTING , do_flush_holding   , LVL_GOD, 0 },
 	{ "hold_anything"  , POS_RESTING , do_hold_anything   , LVL_GOD, 0 },
 	{ "yaml_import"  , POS_RESTING , do_yaml_import   , LVL_GOD, 0 },
+	{ "yaml_log"  , POS_RESTING , do_yaml_log   , LVL_GOD, 0 },
+	{ "yaml_log_save"  , POS_RESTING , do_yaml_log_save   , LVL_GOD, 0 },
+	{ "yaml_log_clear"  , POS_RESTING , do_yaml_log_clear   , LVL_GOD, 0 },
 	{ "yaml_example"  , POS_RESTING , do_yaml_example   , LVL_GOD, 0 },
 	{ "next_object_number"  , POS_RESTING , do_next_object_number   , LVL_GOD, 0 },
 	{ "next_room_number"  , POS_RESTING , do_next_room_number   , LVL_GOD, 0 },

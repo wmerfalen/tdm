@@ -69,7 +69,11 @@ struct obj_flag_data;
 
 enum alternate_explosion_t {
 	ALTEX_NONE = 0,
-	ALTEX_SCAN
+	ALTEX_SCAN = (1),
+	ALTEX_SMOKE = (1 << 1),
+	ALTEX_EMP = (1 << 2),
+	ALTEX_INCENDIARY = (1 << 3),
+	ALTEX_FLASHBANG = (1 << 4)
 };
 
 namespace mods::yaml {
@@ -161,6 +165,7 @@ static inline durability_profile_type_t to_durability_profile(std::string_view d
 		{
 			std::fill(accuracy_map.begin(),accuracy_map.end(),0);
 			std::fill(damage_map.begin(),damage_map.end(),0);
+			feed_status = 2;
 		}
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t feed_from_po_record(mentoc_pqxx_result_t);
@@ -174,9 +179,11 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
 
 			MENTOC_BASE_MEMBERS
 			mods::weapon::weapon_stat_list_t* base_stat_list;
+		int16_t feed_status;
 	};
 
 	struct explosive_description_t : public yaml_description_t {
+		int16_t feed_status;
 		std::map<std::string,std::string> exported;
 		void generate_map();
 		using mw_type = mw_explosive;
@@ -195,6 +202,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
 			MENTOC_BASE_MEMBERS_SET("explosive")
 		{
 			std::fill(aoe_triggers.begin(),aoe_triggers.end(),0);
+			feed_status = 2;
 		}
 		uint64_t db_id();
 		uint64_t flush_to_db();
@@ -207,6 +215,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_EXPLOSIVE_MEMBERS_TUPLE)
 	};
 
 	struct drone_description_t : public yaml_description_t {
+		int16_t feed_status;
 		std::map<std::string,std::string> exported;
 		void generate_map();
 		using mw_type = mw_drone;
@@ -219,6 +228,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_EXPLOSIVE_MEMBERS_TUPLE)
 			damage(0),
 			MENTOC_BASE_MEMBERS_SET("drone")
 		{
+			feed_status = 2;
 		}
 		uint64_t db_id();
 
@@ -229,6 +239,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_DRONE_MEMBERS_TUPLE)
 	};
 
 	struct gadget_description_t : public yaml_description_t {
+		int16_t feed_status;
 		std::map<std::string,std::string> exported;
 		void generate_map();
 		using mw_type = mw_gadget;
@@ -240,6 +251,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_DRONE_MEMBERS_TUPLE)
 		gadget_description_t() :
 			MENTOC_BASE_MEMBERS_SET("gadget")
 		{
+			feed_status = 2;
 		}
 		virtual int16_t feed_from_po_record(mentoc_pqxx_result_t);
 		uint64_t db_id();
@@ -252,6 +264,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_GADGET_MEMBERS_TUPLE)
 
 
 	struct attachment_description_t : public yaml_description_t {
+		int16_t feed_status;
 		std::map<std::string,std::string> exported;
 		void generate_map();
 		using mw_type = mw_attachment;
@@ -263,6 +276,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_GADGET_MEMBERS_TUPLE)
 		attachment_description_t() :
 			MENTOC_BASE_MEMBERS_SET("attachment")
 		{
+			feed_status = 2;
 		}
 		uint64_t db_id();
 MENTOC_MEMBER_VARS_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
@@ -273,6 +287,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
 
 
 	struct armor_description_t : public yaml_description_t {
+		int16_t feed_status;
 		std::map<std::string,std::string> exported;
 		void generate_map();
 		using mw_type = mw_armor;
@@ -284,6 +299,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
 		armor_description_t() :
 			MENTOC_BASE_MEMBERS_SET("armor")
 		{
+			feed_status = 2;
 		}
 		uint64_t db_id();
 		durability_profile_type_t durability_profile_enum;
@@ -294,6 +310,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
 	};
 
 	struct consumable_description_t : public yaml_description_t {
+		int16_t feed_status;
 		std::map<std::string,std::string> exported;
 		void generate_map();
 		using mw_type = mw_consumable;
@@ -305,6 +322,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
 		consumable_description_t() :
 			MENTOC_BASE_MEMBERS_SET("consumable")
 		{
+			feed_status = 2;
 
 		}
 		uint64_t db_id();
@@ -316,6 +334,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_CONSUMABLE_MEMBERS_TUPLE)
 	};
 
 	struct trap_description_t : public yaml_description_t {
+		int16_t feed_status;
 		std::map<std::string,std::string> exported;
 		void generate_map();
 		using mw_type = mw_trap;
@@ -325,7 +344,9 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_CONSUMABLE_MEMBERS_TUPLE)
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~trap_description_t() = default;
 		trap_description_t() :
-			MENTOC_BASE_MEMBERS_SET("trap"){ }
+			MENTOC_BASE_MEMBERS_SET("trap"){
+			feed_status = 2;
+		}
 		uint64_t db_id();
 
 MENTOC_MEMBER_VARS_FOR(MENTOC_TRAP_MEMBERS_TUPLE)

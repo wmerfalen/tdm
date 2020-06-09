@@ -27,6 +27,7 @@
 #include "mods/object-utils.hpp"
 #include "mods/player.hpp"
 #include "mods/weapon.hpp"
+#include "mods/help.hpp"
 
 /* extern variables */
 extern int pk_allowed;
@@ -50,6 +51,7 @@ using vpd = mods::scan::vec_player_data;
  * throw <object> <direction> <count>
  */
 ACMD(do_throw) {
+	DO_HELP("throw");
 	auto vec_args = PARSE_ARGS();
 
 	if(!player->has_inventory_capability(mods::weapon::mask::grenade)) {
@@ -67,7 +69,7 @@ ACMD(do_throw) {
 	skip_spaces(&argument);
 
 	if(!*argument) {
-		player->sendln("Command not recognized. see: type 'throw usage' or 'help grenade'");
+		player->sendln("Command not recognized. see: type 'help grenade'");
 		return;
 	}
 

@@ -5,9 +5,33 @@
 extern obj_ptr_t optr_by_uuid(uuid_t);
 extern obj_ptr_t create_object(int type,std::string yaml_file);
 namespace mods::object_utils {
+
+	/** I understand that this may seem like it should be in the yaml.hpp file
+	 * instead of here in object_utils, but the only time we're catching
+	 * exceptions from the yaml-cpp library is when we're importing
+	 * objects. While this may be extracted to a more generic library for
+	 * other types of entities in-game, this will suffice.
+	 */
 	static std::string yaml_initiator = "";
 	static uint32_t yaml_transaction_id = 0;
 	struct YamlFeedExceptionInfo {
+		std::string to_string() {
+			std::string m = "[when:";
+			m += std::ctime(&this->time);
+			m += "]";
+			m += "msg:'";
+			m += msg;
+			m += "'\r\n";
+			if(fields_fed_so_far.size()){
+				m += "last_field_fed:'";
+				m += fields_fed_so_far.back();
+				m += "'\r\n";
+			}
+			m += "initiator:'";
+			m += this->initiator;
+			m += "'\r\n";
+			return m;
+		}
 		YamlFeedExceptionInfo() = default;
 		YamlFeedExceptionInfo(
 				YAML::Mark& arg_mark,
@@ -33,12 +57,17 @@ namespace mods::object_utils {
 	static inline auto& get_yaml_exception_list() {
 		return yaml_feed_exceptions;
 	}
-	template <typename TStringType>
 	static inline void set_yaml_initiator(
-			TStringType arg_initiator,
-			TStringType arg_yaml_type,
-			TStringType arg_yaml_file){
+			std::string arg_initiator,
+			std::string arg_yaml_type,
+			std::string arg_yaml_file){
 		yaml_initiator = arg_initiator;
+		if(arg_yaml_type.length()){
+			yaml_initiator += "|" + arg_yaml_type;
+		}
+		if(arg_yaml_file.length()){
+			yaml_initiator += "|" + arg_yaml_file;
+		}
 	}
 	static inline void yaml_file_doesnt_exist(std::string from_where){
 		std::variant<YamlFeedExceptionInfo,std::string> item;
@@ -64,6 +93,40 @@ namespace mods::object_utils {
 		item.emplace<0>(e.mark,e.msg,items_fed);
 		yaml_feed_exceptions.emplace_back(item);
 	}
+	template <typename TPlayerPointer>
+	static inline void send_yaml_exceptions_to(TPlayerPointer& player){
+		for(auto & e : yaml_feed_exceptions){
+			if(std::holds_alternative<std::string>(e)){
+				player->sendln(std::get<std::string>(e));
+				continue;
+			}
+			player->sendln(std::get<YamlFeedExceptionInfo>(e).to_string());
+		}
+	}
+
+	static inline void clear_yaml_exceptions(){
+		yaml_feed_exceptions.clear();
+	}
+	static inline std::tuple<int32_t,std::string> save_yaml_exceptions_to_disk(){
+		std::ofstream outfile("yaml-exceptions.log",std::ios::app);
+		if(!outfile.good()){
+			return {-1,"Couldn't open yaml-exceptions.log"};
+		}
+		int32_t ctr = 0;
+		for(auto & e : yaml_feed_exceptions){
+			if(std::holds_alternative<std::string>(e)){
+				outfile << std::get<std::string>(e) << "\n";
+				++ctr;
+				continue;
+			}
+			++ctr;
+			outfile << std::get<YamlFeedExceptionInfo>(e).to_string() << "\n";
+		}
+		outfile.close();
+		return {ctr,"Success"};
+	}
+
+
 	constexpr static bitvector_t STATUS_INSTALLING = (1 << 0);
 	constexpr static bitvector_t STATUS_BREACHING = (1 << 1);
 	constexpr static obj_data::location_data_t INSTALL_MASK = 16;
@@ -197,7 +260,7 @@ namespace mods::object_utils {
 			return obj->rifle()->attributes->base_stat_list->at(0).allow;
 		}
 
-	static inline auto yaml_import(std::string object_type,std::string yaml_file){
+	static inline obj_ptr_t yaml_import(std::string object_type,std::string yaml_file){
 #define MENTOC_F_IMPORT(CLASS_TYPE,IT_TYPE)\
 		if(object_type.compare(#CLASS_TYPE) == 0){\
 			return std::move(create_object(BOOST_PP_CAT(ITEM_,IT_TYPE),yaml_file));\
@@ -209,9 +272,10 @@ namespace mods::object_utils {
 		MENTOC_F_IMPORT(gadget,GADGET);
 		MENTOC_F_IMPORT(armor,ARMOR);
 		MENTOC_F_IMPORT(trap,TRAP);
+		MENTOC_F_IMPORT(consumable,CONSUMABLE);
 #undef MENTOC_F_IMPORT
 
-		return blank_object();
+		return nullptr;
 	}
 
 };//End namespace

@@ -30,6 +30,7 @@
 #include <pqxx/pqxx>
 #include <unordered_map>
 #include "mods/util.hpp"
+#include "mods/help.hpp"
 
 #define MENTOC_PREAMBLE() auto player = ptr(ch)
 
@@ -53,6 +54,7 @@
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
 #define MENTOC_DEPRECATED(mentoc_deprecated_argument_a) log("SYSERR:[%s] deprecated %s:%d",mentoc_deprecated_argument_a,__FILE__,__LINE__);
 #define MOBTOSTR(__mob) "\n[mob_dump]\nname: '" << __mob->player.name.c_str() << "'\n"
+#define DO_HELP(from) if(!mods::help::should_continue(from,argument,player)){ return; }
 
 /** vim-sorcery: :%s/std::cerr << \(.*\);/d(\1);/ */
 #ifndef __MENTOC_DEBUG__

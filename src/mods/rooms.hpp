@@ -71,5 +71,18 @@ namespace mods::rooms {
 		return fire_status >= mods::rooms::fire_status_t::COMPLETELY_ON_FIRE &&
 				 fire_status < mods::rooms::fire_status_t::OUT;
 	}
+	template <typename TRoom>
+	static inline room_rnum real_room(TRoom room_id){
+		return room_id;
+	}
+	template <>
+	inline room_rnum real_room(room_vnum room_id){
+		for(room_rnum i=0; i < world.size();++i){
+			if(world[i].number == room_id){
+				return i;
+			}
+		}
+		return NOWHERE;
+	}
 };//end namespace
 #endif

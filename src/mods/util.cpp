@@ -332,7 +332,7 @@ namespace mods::util {
 		while(!isspace(argument[ctr]) && ctr < max_len && ctr < argument.length()){
 			buffer += tolower(argument[ctr++]);
 		}
-		if(buffer.compare("help") == 0 || buffer.compare("-h") == 0 || buffer.compare("--help") == 0){
+		if(buffer.compare("usage") == 0 || buffer.compare("help") == 0 || buffer.compare("-h") == 0 || buffer.compare("--help") == 0){
 			return true;
 		}
 		return false;

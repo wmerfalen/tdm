@@ -9,3 +9,6 @@
 	- critical chance
 	- thac0
 
+# move help screens to mods::help
+	- ditto
+

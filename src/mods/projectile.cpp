@@ -6,6 +6,7 @@
 #include "pfind.hpp"
 
 #include <cctype>	/* for std::tolower */
+#include "flashbang.hpp"
 /* using directives */
 using mw_explosive = mods::weapon::type::explosive;
 using mw_rifle = mods::weapon::type::rifle;
@@ -297,6 +298,7 @@ namespace mods {
 						mods::projectile::smoke_room(room_id);
 						break;
 					case mw_explosive::FLASHBANG_GRENADE:
+						mods::flashbang::affect_room(room_id,object);
 						break;
 				}
 				log("gt_room_list(%d) for looping through (%d) tenants", room_id, mods::globals::get_room_list(room_id).size());

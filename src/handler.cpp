@@ -1677,6 +1677,7 @@ obj_ptr_t create_money(int amount) {
 		return (NULL);
 	}
 
+	/** TODO: feed as consumable type of money */
 	auto obj = blank_object();
 
 	if(amount == 1) {

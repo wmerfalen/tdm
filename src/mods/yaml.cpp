@@ -13,6 +13,12 @@ namespace mods::yaml {
 #else
 #define debug_echo(a) /**/
 #endif
+#define MENTOC_FILE_EXISTS_PREAMBLE(type)\
+		std::string file = current_working_dir() + "/" + in_file.data();\
+		if(!mods::filesystem::file_exists(in_file.data())){\
+			mods::object_utils::yaml_file_doesnt_exist(#type);\
+			return -1;\
+		}
 
 #define MENTOC_FEED_BASE_MEMBERS \
 	try{ \
@@ -43,7 +49,7 @@ namespace mods::yaml {
 		debug_echo("action_desc");\
 		action_description = yaml_file["action_description"].as<std::string>();\
 		fed_items.push_back("action_description");\
-	}catch(YAML::Exception &e){ mods::object_utils::report_yaml_exception(e,fed_items); }
+	}catch(YAML::Exception &e){ this->feed_status = -3; mods::object_utils::report_yaml_exception(e,fed_items); }
 
 	std::vector<std::pair<std::string,float>> rarity_strings() {
 		return {
@@ -103,7 +109,7 @@ namespace mods::yaml {
 			return -1;
 		}
 		if(!out_file.good()){
-			return -2;
+			return -1;
 		}
 		MENTOC_EXAMPLE_ARMORS
 			MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
@@ -227,6 +233,7 @@ namespace mods::yaml {
 		auto * w = &(o->obj_flags.wear_flags);
 		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_GADGET;
+		o->gadget()->type = (mw_gadget)this->type;
 		switch((mw_gadget)this->type){
 			case mw_gadget::GRAPPLING_HOOK:
 			case mw_gadget::BARBED_WIRE:
@@ -286,6 +293,7 @@ namespace mods::yaml {
 		o->obj_flags.clip_size =this->clip_size;
 		(*tf) = ITEM_RIFLE;
 
+		o->rifle()->type = (mw_rifle)this->type;
 		switch((mw_rifle)this->type){
 			case mw_rifle::PISTOL:
 			case mw_rifle::HANDGUN:
@@ -315,7 +323,8 @@ namespace mods::yaml {
 		auto * w = &(o->obj_flags.wear_flags);
 		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_ARMOR;
-		switch((mw_armor)o->extended_type){
+		o->armor()->type = (mw_armor)this->type;
+		switch((mw_armor)this->type){
 			default:
 				log("[armor_description_t][WARNING] fill_flags used the default flags");
 				break;
@@ -380,6 +389,7 @@ namespace mods::yaml {
 		auto * w = &(o->obj_flags.wear_flags);
 		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_DRONE;
+		o->drone()->type = (mw_drone)this->type;
 		switch((mw_drone)o->extended_type){
 			default: 
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
@@ -391,7 +401,8 @@ namespace mods::yaml {
 		auto * w = &(o->obj_flags.wear_flags);
 		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_CONSUMABLE;
-		switch((mw_consumable)o->extended_type){
+		o->consumable()->type = (mw_consumable)this->type;
+		switch((mw_consumable)this->type){
 			default:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
 				log("[consumable_description_t][WARNING] fill_flags used the default flags");
@@ -402,7 +413,8 @@ namespace mods::yaml {
 		auto * w = &(o->obj_flags.wear_flags);
 		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_TRAP;
-		switch((mw_trap)o->extended_type){
+		o->trap()->type = (mw_trap)this->type;
+		switch((mw_trap)this->type){
 			default:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
 				log("[trap_description_t][WARNING] fill_flags used the default flags");
@@ -413,7 +425,8 @@ namespace mods::yaml {
 		auto * w = &(o->obj_flags.wear_flags);
 		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_ATTACHMENT;
-		switch((mw_attachment)o->extended_type){
+		o->attachment()->type = (mw_attachment)this->type;
+		switch((mw_attachment)this->type){
 			default:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
 				log("[attachment_description_t][WARNING] fill_flags used the default flags");
@@ -534,16 +547,32 @@ namespace mods::yaml {
 		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_EXPLOSIVE;
 		(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+		o->explosive()->type = (mw_explosive)this->type;
+		switch((mw_explosive)this->type){
+			case mw_explosive::SENSOR_GRENADE:
+				o->explosive()->attributes->alternate_explosion_type = ALTEX_SCAN;
+				break;
+			case mw_explosive::SMOKE_GRENADE:
+				o->explosive()->attributes->alternate_explosion_type = ALTEX_SMOKE;
+				break;
+			case mw_explosive::EMP_GRENADE:
+				o->explosive()->attributes->alternate_explosion_type = ALTEX_EMP;
+				break;
+			case mw_explosive::INCENDIARY_GRENADE:
+				o->explosive()->attributes->alternate_explosion_type = ALTEX_INCENDIARY;
+				break;
+			case mw_explosive::FLASHBANG_GRENADE:
+				o->explosive()->attributes->alternate_explosion_type = ALTEX_FLASHBANG;
+				break;
+			default:
+				break;
+		}
 	}
 	uint64_t explosive_description_t::db_id(){
 		return this->id;
 	}
 	int16_t explosive_description_t::feed(std::string_view in_file){
-		std::string file = current_working_dir() + "/" + in_file.data();
-		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
-			mods::object_utils::yaml_file_doesnt_exist("explosive");
-			return -1;
-		}
+		MENTOC_FILE_EXISTS_PREAMBLE(explosive);
 		std::vector<std::string> fed_items;
 		try {
 			feed_file = file;
@@ -656,11 +685,7 @@ namespace mods::yaml {
 	/* Step 7: Define the feed function:       */
 	/*******************************************/
 	int16_t gadget_description_t::feed(std::string_view in_file){
-		std::string file = current_working_dir() + "/" + in_file.data();
-		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
-			mods::object_utils::yaml_file_doesnt_exist("gadget");
-			return -1;
-		}
+		MENTOC_FILE_EXISTS_PREAMBLE(gadget);
 			std::vector<std::string> fed_items;
 		try {
 			feed_file = file;
@@ -670,20 +695,18 @@ namespace mods::yaml {
 			MENTOC_FEED_BASE_MEMBERS
 			this->durability_profile_enum = mods::yaml::to_durability_profile(yaml_file["durability_profile"].as<std::string>());
 			this->durability_profile = mods::yaml::to_string_from_durability_profile(this->durability_profile_enum);
+			this->feed_status = 0;
+			return 0;
 		}catch(YAML::Exception &e){
 			mods::object_utils::report_yaml_exception(e,fed_items);
+		this->feed_status = -2;
 			return -2;
 		}
-		return 0;
 	}
 
 
 	int16_t rifle_description_t::feed(std::string_view in_file){
-		std::string file = current_working_dir() + "/" + in_file.data();
-		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
-			mods::object_utils::yaml_file_doesnt_exist("rifle");
-			return -1;
-		}
+		MENTOC_FILE_EXISTS_PREAMBLE(rifle);
 			std::vector<std::string> fed_items;
 		try {
 			feed_file = file;
@@ -703,11 +726,13 @@ namespace mods::yaml {
 			MENTOC_FEED_BASE_MEMBERS
 			MENTOC_FEED_RIFLE
 			this->base_stat_list = mods::weapon::weapon_stats(this->type);
+			this->feed_status = 0;
+			return 0;
 		}catch(YAML::Exception &e){
 			mods::object_utils::report_yaml_exception(e,fed_items);
+		this->feed_status = -2;
 			return -2;
 		}
-		return 0;
 	}
 
 	int16_t rifle_description_t::feed_from_po_record(mentoc_pqxx_result_t yaml_file){
@@ -734,12 +759,8 @@ namespace mods::yaml {
 
 
 	int16_t drone_description_t::feed(std::string_view in_file){
-		std::string file = current_working_dir() + "/" + in_file.data();
-		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
-			mods::object_utils::yaml_file_doesnt_exist("drone");
-			return -1;
-		}
-			std::vector<std::string> fed_items;
+		MENTOC_FILE_EXISTS_PREAMBLE(drone);
+		std::vector<std::string> fed_items;
 		try {
 		feed_file = file;
 		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
@@ -748,19 +769,17 @@ namespace mods::yaml {
 		fed_items.push_back("str_type");
 		MENTOC_FEED_DRONE
 			MENTOC_FEED_BASE_MEMBERS
+			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception& e){
 			mods::object_utils::report_yaml_exception(e,fed_items);
+		this->feed_status = -2;
 			return -2;
 		}
 	}
 	int16_t attachment_description_t::feed(std::string_view in_file){
-		std::string file = current_working_dir() + "/" + in_file.data();
-		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
-			mods::object_utils::yaml_file_doesnt_exist("attachment");
-			return -1;
-		}
-			std::vector<std::string> fed_items;
+		MENTOC_FILE_EXISTS_PREAMBLE(attachment);
+		std::vector<std::string> fed_items;
 		try{
 		feed_file = file;
 		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
@@ -768,19 +787,17 @@ namespace mods::yaml {
 		fed_items.push_back("str_type");
 		MENTOC_FEED_ATTACHMENT
 			MENTOC_FEED_BASE_MEMBERS
+			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception& e){
 			mods::object_utils::report_yaml_exception(e,fed_items);
+		this->feed_status = -2;
 			return -2;
 		}
 	}
 	int16_t armor_description_t::feed(std::string_view in_file){
-		std::string file = current_working_dir() + "/" + in_file.data();
-		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
-			mods::object_utils::yaml_file_doesnt_exist("armor");
-			return -1;
-		}
-			std::vector<std::string> fed_items;
+		MENTOC_FILE_EXISTS_PREAMBLE(armor);
+		std::vector<std::string> fed_items;
 		try{
 		feed_file = file;
 		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
@@ -790,19 +807,17 @@ namespace mods::yaml {
 			MENTOC_FEED_BASE_MEMBERS
 			this->durability_profile_enum = mods::yaml::to_durability_profile(yaml_file["durability_profile"].as<std::string>());
 		this->durability_profile = mods::yaml::to_string_from_durability_profile(this->durability_profile_enum);
+			this->feed_status = 0;
 		return 0;
 		}catch(YAML::Exception& e){
 			mods::object_utils::report_yaml_exception(e,fed_items);
+		this->feed_status = -2;
 			return -2;
 		}
 	}
 
 	int16_t consumable_description_t::feed(std::string_view in_file){
-		std::string file = current_working_dir() + "/" + in_file.data();
-		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
-			mods::object_utils::yaml_file_doesnt_exist("consumable");
-			return -1;
-		}
+		MENTOC_FILE_EXISTS_PREAMBLE(consumable);
 			std::vector<std::string> fed_items;
 		try{
 		feed_file = file;
@@ -811,19 +826,17 @@ namespace mods::yaml {
 		fed_items.push_back("str_type");
 		MENTOC_FEED_CONSUMABLE
 			MENTOC_FEED_BASE_MEMBERS
+			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception& e){
 			mods::object_utils::report_yaml_exception(e,fed_items);
+		this->feed_status = -2;
 			return -2;
 		}
 	}
 
 	int16_t trap_description_t::feed(std::string_view in_file){
-		std::string file = current_working_dir() + "/" + in_file.data();
-		if(in_file.length() == 0 || !mods::filesystem::exists(in_file.data())){
-			mods::object_utils::yaml_file_doesnt_exist("trap");
-			return -1;
-		}
+		MENTOC_FILE_EXISTS_PREAMBLE(trap);
 			std::vector<std::string> fed_items;
 		try{
 		feed_file = file;
@@ -832,9 +845,11 @@ namespace mods::yaml {
 		fed_items.push_back("str_type");
 		MENTOC_FEED_TRAP
 			MENTOC_FEED_BASE_MEMBERS
+			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception& e){
 			mods::object_utils::report_yaml_exception(e,fed_items);
+		this->feed_status = -2;
 			return -2;
 		}
 	}

@@ -430,16 +430,6 @@ void fill_consumable(std::shared_ptr<obj_data>& obj) {
 	/** TODO: this */
 }
 
-#define MENTOC_OBJ_FUNC(r,data,TYPE)\
-std::shared_ptr<obj_data> BOOST_PP_CAT(TYPE,_object)(std::string_view file){\
-	auto obj = blank_object();\
-	obj->TYPE(file);\
-	BOOST_PP_CAT(fill_,TYPE)(obj);\
-	return std::move(obj);\
-}
-BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_FUNC, ~, MENTOC_ITEM_TYPES_SEQ)
-#undef MENTOC_OBJ_FUNC
-
 ACMD(do_flush_holding){
 	
 	player->sendln("Looking at your carrying list...");
@@ -494,6 +484,37 @@ ACMD(do_yaml_import){
 	}
 	player->sendln("Unknown type/file combination. Nothing imported.");
 
+}
+
+ACMD(do_yaml_log){
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() == 0) {
+		player->pager_start();
+		mods::object_utils::send_yaml_exceptions_to(player);
+		player->pager_end();
+		player->page(0);
+		return;
+	}
+
+	if(vec_args.size() == 2){
+		mods::object_utils::set_yaml_initiator(player->name(),vec_args[0],vec_args[1]);
+		auto obj = mods::object_utils::yaml_import(vec_args[0],vec_args[1]);
+		obj_to_char(obj.get(),player->cd());
+		player->send("Imported: %s of type %s\r\n", vec_args[1].c_str(),vec_args[0].c_str());
+		return;
+	}
+	player->sendln("Unknown type/file combination. Nothing imported.");
+
+}
+ACMD(do_yaml_log_save){
+	player->send("Saving yaml log...");
+	mods::object_utils::save_yaml_exceptions_to_disk();
+	player->sendln("[done]");
+}
+ACMD(do_yaml_log_clear){
+	player->send("Clearing yaml log...");
+	mods::object_utils::clear_yaml_exceptions();
+	player->sendln("[done]");
 }
 
 ACMD(do_hold_anything){

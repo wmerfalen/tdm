@@ -31,7 +31,6 @@ extern int no_mail;
 
 /* external functions */
 SPECIAL(postmaster);
-
 /* local globals */
 mail_index_type *mail_index = NULL;	/* list of recs in the mail file  */
 position_list_type *free_list = NULL;	/* list of free positions in file */
@@ -392,6 +391,9 @@ void store_mail(long to, long from, char *message_pointer) {
  * the file and the mail index.
  */
 char *read_delete(long recipient) {
+	MENTOC_DEPRECATED("read_delete");
+	return nullptr;
+#if 0
 	header_block_type header;
 	data_block_type data;
 	mail_index_type *mail_pointer, *prev_mail;
@@ -491,6 +493,7 @@ char *read_delete(long recipient) {
 	}
 
 	return strdup(buf);
+#endif
 }
 
 
@@ -599,15 +602,13 @@ void postmaster_receive_mail(char_data *ch, char_data *mailman,
 	}
 
 	while(has_mail(GET_IDNUM(ch))) {
-		auto ptr_obj = blank_object();
+		auto ptr_obj = create_object(ITEM_CONSUMABLE, "objects/consumable/mail.yml");
 		obj = ptr_obj.get();
 		obj->item_number = NOTHING;
-		obj->name = strdup("mail paper letter");
-		obj->short_description = strdup("a piece of mail");
-		obj->description = strdup("Someone has left a piece of mail here.");
+		obj->name.assign("mail paper letter");
+		obj->short_description.assign("a piece of mail");
+		obj->description.assign("Someone has left a piece of mail here.");
 
-		GET_OBJ_TYPE(obj) = ITEM_NOTE;
-		GET_OBJ_WEAR(obj) = ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
 		GET_OBJ_WEIGHT(obj) = 1;
 		GET_OBJ_COST(obj) = 30;
 		GET_OBJ_RENT(obj) = 10;

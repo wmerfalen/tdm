@@ -92,42 +92,12 @@ namespace mods::weapon {
 	std::variant<mw_rifle,mw_explosive,mw_drone> get_type(obj_data_ptr_t& o){
 		return (mw_rifle)0;
 	}
+#if 0
 	obj_data_ptr_t attachment(attachment_t type){
 		MENTOC_DEPRECATED("attachment");
-		auto obj = blank_object();
-		//obj->holds_ammo = 0;
-
-		obj->item_number = 0;	/* Where in data-type			*/
-		obj->in_room = 0;		/* In what room -1 when conta/carr	*/
-		obj->obj_flags;/* Object information               */
-		memset(obj->obj_flags.value,0,sizeof(obj->obj_flags.value));
-		/** [ APPEARS ]: when you 'look sniper' or 'examine sniper' @act.informative.cpp */
-		obj->type = obj->obj_flags.type_flag = ITEM_WEAPON_ATTACHMENT; /* Type of item			    */
-		obj->obj_flags.ammo_max = 0;
-		obj->obj_flags.ammo = 0;
-		obj->obj_flags.wear_flags = ITEM_WEAR_TAKE;
-		obj->obj_flags.extra_flags = 0;
-		obj->obj_flags.weight = 0;
-		obj->obj_flags.cost = 0;
-		obj->obj_flags.cost_per_day = 0;
-		obj->obj_flags.timer = 0;
-		obj->obj_flags.bitvector = 0;
-		obj->affected[MAX_OBJ_AFFECT];  /* affects */
-		obj->carried_by = nullptr;
-		obj->worn_by = nullptr;
-		obj->worn_on = WEAR_WEAPON_ATTACHMENT;
-		obj->in_obj = nullptr;
-		obj->contains = nullptr;     /* Contains objects                 */
-		obj->next_content = nullptr; /* For 'contains' lists             */
-		obj->next = nullptr;         /* For the object list              */
-		obj->ai_state = 0;
-		obj->type = 0;
-		obj->attachment(0);
-		obj->ex_description.emplace_back("attachment",obj->description.c_str());
-
-		return std::move(obj);
-
+		return nullptr;
 	}
+#endif
 	obj_data_ptr_t base_rifle_object(){
 		MENTOC_DEPRECATED("base_rifle");
 		auto obj = blank_object();
@@ -240,6 +210,7 @@ namespace mods::weapon {
 		obj->explosive("sensor_grenade.yml");
 		obj->explosive()->type = mw_explosive::SENSOR_GRENADE;
 		//obj->explosive()->attributes->type = mw_explosive::SENSOR_GRENADE;
+		//obj->explosive()->attributes->alternate_explosion_type = ALTEX_SCAN;
 		//obj->explosive()->attributes = std::make_unique<mods::yaml::explosive_description_t>();
 		//obj->explosive()->attributes->chance_to_injure = 0.0;
 		//obj->explosive()->attributes->critical_chance = 0.0;
@@ -247,7 +218,6 @@ namespace mods::weapon {
 		//obj->explosive()->attributes->blast_radius = 2;
 		//obj->explosive()->attributes->damage_per_second = 0;
 		//obj->explosive()->attributes->disorient_amount = 0.0;
-		//obj->explosive()->attributes->alternate_explosion_type = ALTEX_SCAN;
 		obj->ex_description.emplace_back("sensor grenade",obj->description.c_str());
 		return std::move(obj);
 	}

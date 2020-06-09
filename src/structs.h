@@ -27,6 +27,7 @@
 #include "mods/yaml.hpp"
 #include "mods/weapon-types.hpp"
 #include "mods/item-types.hpp"
+extern void log(const char* format,...);
 
 #ifdef __MENTOC_USE_PQXX_RESULT__
 #define mentoc_pqxx_result_t const pqxx::result::reference&
@@ -793,7 +794,7 @@ enum player_level {
 	/* ================== Memory Structure for Objects ================== */
 	struct obj_data {
 		using location_data_t = uint16_t;
-		void feed(int16_t in_type,std::string_view feed_file);
+		int16_t feed(int16_t in_type,std::string_view feed_file);
 		void init();
 		obj_data(const obj_data& other){
 			feed(other.type,other.m_feed_file);
@@ -811,9 +812,36 @@ enum player_level {
 			in_obj(nullptr),contains(nullptr),next_content(nullptr),
 			next(nullptr),ai_state(0),uuid(0),m_db_id(0)
 		{
-			std::cerr << "[obj_data] item_type: " << item_type << "\n";
 			this->init();
-			this->feed(item_type,feed_file);
+			this->feed_status = 1;
+			this->feed_status = this->feed(item_type,feed_file);
+			switch(feed_status){
+				case -1:
+					log(
+							"SYSERR: feeding type [%d][file:'%s'] failed. File doesnt exist.",
+							item_type,
+							feed_file.data()
+					);
+					break;
+				case -2:
+					log(
+							"SYSERR: feeding type [%d][file:'%s'] failed. Feed error. ",
+							item_type,
+							feed_file.data()
+					);
+					break;
+				case 0:
+					/* feed success */
+					break;
+				default: 
+					log(
+							"SYSERR: feeding type [%d][file:'%s'] failed. UNKNOWN error: [%d] ",
+							item_type,
+							feed_file.data(),
+							feed_status
+					);
+					break;
+			}
 		}
 		~obj_data() = default;
 		obj_vnum item_number;	/* Where in data-type			*/
@@ -853,6 +881,7 @@ enum player_level {
 		uint8_t from_direction;
 
 		uuid_t uuid;
+		int16_t feed_status;
 
 		/**
 		 * Translating this boost pp cruft:
@@ -959,6 +988,7 @@ std::cerr << "[post_feed] extended_type: " << this->extended_type << "\n";
 std::cerr << "[post_feed] str_sub_type: '" << this->str_sub_type << "'\n";
 std::cerr << "[post_feed][END]**********************************************\n";
 #endif
+			this->feed_status = fed_object->attributes->feed_status;
 		}
 		void set_owner(uuid_t p){ m_owner = p; }
 		uuid_t get_owner(){ return m_owner; }
@@ -1033,8 +1063,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 
 	/* ================== Memory Structure for room ======================= */
 	struct room_data {
-		enum texture_type_t { 
-			FIRST,
+		enum texture_type_t : uint8_t { 
 			GRASS,			/** typically grass that isn't flammable (i.e. not dried out) */
 			CEMENT,			/** asphault, nearly indestructible */
 			OUTSIDE,		/** Outside where anyone can see you */
@@ -1054,11 +1083,10 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 			LADDER, /** a ladder leading up or down */
 			ELEVATOR,
 			GLASS_WINDOWS,
-			SCANNED,
-			LAST
+			SCANNED
 		};
 
-		enum fire_status_t {
+		enum fire_status_t : uint8_t {
 			NONE = 0,
 			KINDLING = 1,
 			COMPLETELY_ON_FIRE = 2,
