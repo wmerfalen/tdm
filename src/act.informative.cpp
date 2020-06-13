@@ -878,34 +878,25 @@ const char* find_exdesc_equipment(std::string_view word,const char_data* ch,cons
 	log("find_exdesc_equipment");
 	auto obj = player->equipment(position);
 	if(!obj){
-		d("obj is null-ish. returning from findexdesc_eq");
 		return nullptr;
 	}
 	for(const auto & i : obj->ex_description){
-		d("obj exdesc (equipment) looping");
 		if(i.keyword.length() == 0 || i.description.length() == 0){
-			d("one of these fuckers is zero");
 			continue;
 		}
 		if(isname(word.data(), i.keyword.c_str())) {
-			d("found by is_name - findexdesc_eq");
 			return (i.description.c_str());
 		}
 	}
-	d("returning nullptr from fexequip");
 	return nullptr;
 }
 char* find_exdesc(std::string_view word,std::vector<extra_descr_data>& in_list) {
-	log("find_exdesc, word: %s (vector)",word);
-	d("bruh");
+	log("find_exdesc, word: %s (vector)",word.data());
 	if(in_list.size() == 0){
-		d("in_list.size is zero");
 		return nullptr;
 	}
 	for(auto & i : in_list){
-		d("loop auto & i in_list");
 		if(i.keyword.length() == 0 || i.description.length() == 0){
-			d("one of these fuckers is zero");
 			continue;
 		}
 		if(isname(word.data(), i.keyword.c_str())) {
@@ -919,17 +910,13 @@ char* find_exdesc(std::string_view word,std::vector<extra_descr_data>& in_list) 
 char * find_exdesc(char *word,room_data& r){
 	log("find_exdesc, word: %s (room_data)",word);
 	if(r.ex_descriptions().size() == 0){
-		d("find_exdesc room_data ex desc is zero");
 		return nullptr;
 	}
 	for(auto & i : r.ex_descriptions()){
-		d("LOL");
 		if(isname(word, i.keyword.c_str())) {
-			d("ROFL");
 			return (i.description.ptr());
 		}
 	}
-	d("yup");
 	return nullptr;
 }
 
@@ -984,7 +971,6 @@ void look_at_target(char_data *ch, char *arg) {
 
 	/* Does the argument match an extra desc in the room? */
 	if((desc = find_exdesc(arg, world[IN_ROOM(ch)])) != NULL) {
-		d("page string");
 		page_string(*ch->desc, desc, FALSE);
 		return;
 	}
@@ -1003,10 +989,9 @@ void look_at_target(char_data *ch, char *arg) {
 	/* Does the argument match an extra desc in the char's inventory? */
 	for(auto & item : player->real_carrying()){
 		if(item && CAN_SEE_OBJ(ch, item.get())){
-			d("carrying enumeration exdesc (new for auto loop)");
 			auto ex = find_exdesc(arg, item->ex_description);
 			if(!ex){
-				d("cont"); continue;
+				continue;
 			}
 			player->send(ex);
 			found = true;break;

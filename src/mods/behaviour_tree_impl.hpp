@@ -3,6 +3,7 @@
 
 #include <iterator>
 #include <vector>
+#include <deque>
 #include <map>
 #include "behaviour_tree.hpp"
 #include "npc.hpp"
@@ -20,7 +21,7 @@ namespace mods {
 #else
 		using argument_type = mods::npc;
 #endif
-		using container_t = std::vector<behaviour_tree<argument_type>>;
+		using container_t = std::deque<behaviour_tree<argument_type>>;
 		using container_mapping_t = std::map<std::string,container_t::iterator>;
 		using mob_list_t = std::vector<argument_type>;
 		using node = mods::behaviour_tree_node<argument_type>;
@@ -30,14 +31,16 @@ namespace mods {
 		enum dispatch_status_t {
 			RETURN_IMMEDIATELY,
 			RETURN_FALSE_IMMEDIATELY,
-			AS_YOU_WERE
+			AS_YOU_WERE,
+			MOB_DOESNT_EXIST
 		};
 		enum type { 
 			NONE = 0,
 			snipe_tracking = 1,
 			suspicious_roaming,
 		};
-		int8_t dispatch(argument_type& ch);
+		int8_t dispatch_ptr(argument_type& ch);
+		int8_t dispatch(uuid_t mob_uuid);
 		void load_trees();
 		void run_trees();
 		int8_t register_mob(argument_type,std::string);

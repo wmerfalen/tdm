@@ -1,6 +1,10 @@
 #include "scan.hpp"
 #include <tuple>
+#ifdef __MENTOC_SHOW_LOS_SCAN_DEBUG__
 #define LOS_SCAN_DIRECTION_DEBUG(a) { std::cerr << "[los_scan_debug]: " << __FILE__ << "|" << __LINE__ << "->" << a << "\n"; }
+#else
+#define LOS_SCAN_DIRECTION_DEBUG(a) ;;
+#endif
 
 namespace mods::scan {
 	int directions[] = { NORTH,EAST,SOUTH,WEST,UP,DOWN };

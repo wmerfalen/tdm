@@ -7,7 +7,8 @@ namespace mods {
 		FAILURE,
 		RUNNING,
 		NO_LOGIC,
-		UNKNOWN_STATUS
+		UNKNOWN_STATUS,
+		MOB_DOESNT_EXIST
 	};
 };
 

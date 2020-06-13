@@ -7,6 +7,8 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 - sniper rifles
 - assault rifles
 - pistols
+- sub machine guns
+- light machine guns
 - machine pistols
 - shotguns
 - plastic explosives

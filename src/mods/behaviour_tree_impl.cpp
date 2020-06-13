@@ -2,10 +2,11 @@
 #include "weapon.hpp"
 #include <string>
 #include "../spells.h"
+#include "weapons/damage-types.hpp"
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
 extern void hit(char_data *ch, char_data *victim, int type);
-extern int snipe_hit(player_ptr_t&,obj_ptr_t,player_ptr_t&, uint16_t* distance);
+#define bti_debug(a) std::cerr << "[mods::behaviour_tree_imp::dispatch][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 
 namespace mods::behaviour_tree_impl {
 	container_t trees;
@@ -14,28 +15,40 @@ namespace mods::behaviour_tree_impl {
 	void run_trees(){
 		std::cerr << "[behaviour_tree][run_trees] -- STUB\n";
 	}
-	int8_t dispatch(argument_type& ch){
+	int8_t dispatch(uuid_t mob_uuid){
+		auto it = mods::globals::mob_map.find(mob_uuid);
+		if(it == mods::globals::mob_map.end()){
+			bti_debug("uuid doesn't have mob ptr value: " << mob_uuid);
+			return mods::behaviour_tree_impl::dispatch_status_t::MOB_DOESNT_EXIST;
+		}
+		return dispatch_ptr(*(it->second));
+	}
+	int8_t dispatch_ptr(argument_type& ch){
 		std::cerr << "dispatching behaviour tree on: " << ch.name().c_str() << "\n";
 		if(ch.mob_specials().behaviour_tree == 0){
+			bti_debug("As you were... ");
 			return dispatch_status_t::AS_YOU_WERE;
 		}
-		if(trees.size() > static_cast<std::size_t>(ch.mob_specials().behaviour_tree)){
+		if(ch.mob_specials().behaviour_tree){
+			bti_debug("mob has this behaviour_tree:" << ch.mob_specials().behaviour_tree);
 			auto btree_status = trees[ch.mob_specials().behaviour_tree].run(ch);
 			switch(btree_status.status){
 				case mods::behaviour_tree_status::SUCCESS:
+					bti_debug("Return success...");
 					return mods::behaviour_tree_impl::dispatch_status_t::RETURN_IMMEDIATELY;
 				default:
+					bti_debug("defaulted value from dispatch: " << btree_status.status << " (processing as 'as you were')");
 					return mods::behaviour_tree_impl::dispatch_status_t::AS_YOU_WERE;
 			}
 		}
 		return mods::behaviour_tree_impl::dispatch_status_t::AS_YOU_WERE;
 	}
 	int8_t register_mob(argument_type mob,std::string tree_name){
-		auto it = tree_mapping.find(tree_name.data());
+		auto it = tree_mapping.find(tree_name);
 		if(it == tree_mapping.end()){
 			return -1;
 		}
-		std::cerr << "registering mob '" << tree_name.data() << "'\n";
+		std::cerr << "registering mob '" << tree_name << "'\n";
 		mob.mob_specials().behaviour_tree = std::distance(tree_mapping.begin(),it);
 		return 0;
 	}
@@ -48,8 +61,9 @@ namespace mods::behaviour_tree_impl {
 		return std::distance(trees.begin(),tree_mapping[sv_tree.data()]);
 	}
 	void add_tree(std::string sv_tree_name,node & n){
-		trees.emplace_back(sv_tree_name.data(),n);
-		tree_mapping[sv_tree_name.data()] = trees.end()-1;
+		trees.emplace_back(sv_tree_name,n);
+		tree_mapping[sv_tree_name] = trees.end()-1;
+		bti_debug("Added tree mapping for name: '" << sv_tree_name << "'");
 	}
 	void load_trees(){
 		/**
@@ -81,25 +95,35 @@ namespace mods::behaviour_tree_impl {
 				node_mob_has_snipe_capability,
 				node::create_leaf(
 						[](argument_type mob) -> status {
+							bti_debug("before... for loop");
 						/** If we've made it to this node, that means the mob does
 						 * indeed have the snipe capability. Let's attempt to snipe
 						 * the player who last sniped us.
 						 */
-						for(auto & remembered_sniper : mob.mob_specials().memory){
+						for(auto & remembered_sniper_uuid : mob.mob_specials().memory){
+							bti_debug("for loop");
+							auto remembered_sniper = ptr_by_uuid(remembered_sniper_uuid);
+							if(!remembered_sniper){
+								bti_debug("Can't find remembered sniper by uuid: " << remembered_sniper_uuid);
+								mob.mob_specials().memory.erase(remembered_sniper_uuid);
+								continue;
+							}
+							bti_debug("checking if Can snipe remembered sniper");
 							if(mob.can_snipe(remembered_sniper)){
+								bti_debug("Can snipe remembered sniper");
 							/*
 int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 	struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
 	*/
 							/** TODO: if no ammo, search for ammo */
 							/** TODO: */
-								auto find_results = mods::scan::los_find(std::make_shared<mods::player>(mob),std::make_shared<mods::player>(remembered_sniper));
+								auto find_results = mods::scan::los_find(std::make_shared<mods::player>(mob),remembered_sniper);
 								auto mob_ptr = ptr(mob);
-								auto remembered_sniper_ptr = ptr(remembered_sniper);
-								snipe_hit(mob_ptr,mob_ptr->primary(),remembered_sniper_ptr,&find_results.distance);
+								mods::weapons::damage_types::rifle_attack(mob_ptr,mob_ptr->primary(),remembered_sniper,find_results.distance);
 								return status::SUCCESS;
 							}
 						}
+						bti_debug("returning FAILURE from sentinel_snipe_tracking");
 						return status::FAILURE;
 					}
 				)
@@ -108,11 +132,16 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 		snipe_tracking.append_child(node::create_sequence({
 			node::create_leaf(
 				[](argument_type mob) -> status{
-				auto find_results = mods::scan::los_find(
-						std::make_shared<mods::player>(mob),
-						std::make_shared<mods::player>(mob.mob_specials().snipe_tracking)
-						);
+				bti_debug("snipe_tracking tree: Looking for target (snipe_tracking ptr is: " << mob.cd()->mob_specials.snipe_tracking << ")");
+				auto target = ptr_opt(mob.cd()->mob_specials.snipe_tracking);
+				if(!target.has_value()){
+					bti_debug("snipe_tracking tree has invalid uuid value:" << mob.cd()->mob_specials.snipe_tracking);
+					mob.cd()->mob_specials.snipe_tracking = 0;
+					return status::SUCCESS;
+				}
+				auto find_results = mods::scan::los_find(std::make_shared<mods::player>(mob),target.value());
 				if(find_results.found){
+					bti_debug("snipe_tracking tree: FOUND OUR TARGET! (snipe_tracking ptr is: " << mob.cd()->mob_specials.snipe_tracking << ")");
 				/**
 				 * Move find_results.dinstance steps toward the player
 				 */
@@ -122,7 +151,12 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 					 * The 'direction' member will tell us where we need to go.
 					 */
 					perform_move(mob,find_results.direction,0);
-					if(mob.room() == IN_ROOM(mob.mob_specials().snipe_tracking)){
+					auto target = ptr_opt(mob.mob_specials().snipe_tracking);
+					if(!target.has_value()){
+						mob.mob_specials().snipe_tracking = 0;
+						return status::SUCCESS;
+					}
+					if(mob.room() == target.value()->room()){
 						return status::SUCCESS;
 					}else{
 						return status::FAILURE;
@@ -133,25 +167,38 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 		}),
 			node::create_leaf(
 				[](argument_type mob) -> status{
-				unsigned ctr = 0;
-				for(auto & memorized_attacker : mob.mob_specials().memory){
-				std::cerr << "memorized attacker--iter[" << ++ctr << "\n";
-					if(mob.room() == IN_ROOM(memorized_attacker)){
-						//act("$n recognizes ", FALSE, mob, 0, 0, TO_ROOM);
-					//std::cerr << "[recognize]: " << mob.name() << "->" << mods::player(memorized_attacker).name().c_str() << "\n";
-						set_fighting(mob,memorized_attacker);
-						hit(mob, memorized_attacker, TYPE_UNDEFINED);
+
+				status ret_value = status::SUCCESS;
+				std::vector<uuid_t> erase_these;
+				for(auto & memorized_attacker_uuid : mob.mob_specials().memory){
+					auto memorized_attacker_opt = ptr_opt(memorized_attacker_uuid);
+					if(!memorized_attacker_opt.has_value()){
+						std::cerr << "[memorized_attacker] grabbing by uuid failed! uuid points to nullptr: " << memorized_attacker_uuid << "\n";
+						erase_these.push_back(memorized_attacker_uuid);
+						continue;
+					}
+					auto memorized_attacker = memorized_attacker_opt.value();
+					if(mob.room() == memorized_attacker->room()){
+						act("$n recognizes ", FALSE, mob, 0, 0, TO_ROOM);
+						std::cerr << "[recognize]: " << mob.name() << "->" << memorized_attacker->name().c_str() << "\n";
+						set_fighting(mob,memorized_attacker->cd());
+						hit(mob, memorized_attacker->cd(), TYPE_UNDEFINED);
 						/**
 						 * If the memorized_attacker is dead, we can forget and return a success.
 						 * But if not, we need to continue attacking until that attacker is dead
 						 * or until the mob dies
 						 */
-						return status::SUCCESS;
+						ret_value = status::SUCCESS;
+						break;
 					}else{
-						return status::FAILURE;
+						ret_value = status::FAILURE;
+						break;
 					}
 				}
-				return status::FAILURE;
+				for(auto erase_me : erase_these){
+					mob.mob_specials().memory.erase(erase_me);
+				}
+				return ret_value;
 			})
 			})/** End create_sequence */
 		);// end append_child

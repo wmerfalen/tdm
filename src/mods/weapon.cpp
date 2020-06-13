@@ -353,7 +353,9 @@ namespace mods::weapon {
 		reload_object(player,player->secondary(),with_clip);
 	}
 
+	/** DEPRECATE THIS */
 	bool hits_target(player_ptr_t& player, obj_ptr_t& weapon, player_ptr_t& target, uint16_t* distance){
+		return true;
 		/** roll 6d6 */
 		static constexpr int ideal_roll = 21;
 		int hit_roll = mods::rand::roll(6,6);

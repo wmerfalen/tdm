@@ -21,8 +21,6 @@ namespace mods::rooms {
 		 * @brief room_rnum -> dissolver_t
 		 */
 		static std::map<entity_type_t,dissolver_t> needs_dissolve;
-		void add_fire(room_rnum);
-		void remove_fire(room_rnum);
 		void process();
 		/**
 		 * @brief add a dissolve affect to a room
@@ -391,10 +389,10 @@ namespace mods::rooms {
 				}
 				if(on){
 					msg += "\r\nsetting room to on fire\r\n";
-					affects::add_fire(room);
+					start_fire_dissolver(room);
 				}else{
 					msg += "\r\nsetting room to __NOT__ on fire\r\n";
-					affects::remove_fire(room);
+					stop_fire_dissolver(room);
 				}
 				if(level.length() == 0){
 					goto cleanup;

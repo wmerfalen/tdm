@@ -151,7 +151,7 @@ namespace mods {
 		obj_data* get_first_ammo_of_type(const weapon_type_t&) const;
 
 		/* combat functions */
-		bool can_snipe(char_data *target);
+		bool can_snipe(player_ptr_t target);
 		bool is_weapon_loaded();
 		bool carrying_ammo_of_type(const weapon_type_t&);
 		obj_data* carrying();
@@ -377,6 +377,7 @@ namespace mods {
 		void raw_send(const mods::string&);
 		void done();
 		size_t send(const char *messg, ...);
+		size_t godsend(const char *messg, ...);
 
 		/* pager functions */
 		player&             pager_start();
@@ -597,6 +598,7 @@ namespace mods {
 		void clear_attacking_with(){ m_attacking_with = nullptr; }
 		obj_data_ptr_t attacking_with(){ return m_attacking_with; }
 		int attacking_with_type(){ return m_attacking_with->rifle()->attributes->type; }
+		void set_fight_timestamp(){ m_char_data->last_fight_timestamp = std::time(NULL); }
 
 
 		protected:

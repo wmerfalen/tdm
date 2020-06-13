@@ -3,12 +3,6 @@
 
 namespace mods::rooms {
 	namespace affects {
-		void add_fire(room_rnum room){
-			start_fire_dissolver(room);
-		}
-		void remove_fire(room_rnum room){
-			stop_fire_dissolver(room);
-		}
 		void process(){
 			for(auto it = needs_dissolve.begin();it != needs_dissolve.end();++it){
 				auto ticked = it->second.tick();

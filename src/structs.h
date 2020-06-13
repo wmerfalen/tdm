@@ -56,14 +56,14 @@ struct char_data;
 extern std::deque<mods::descriptor_data> descriptor_list;
 /** BASE weapon type. */
 using weapon_type_t = uint16_t;
-using ai_state_map = std::map<char_data*,std::unique_ptr<mods::ai_state>>;
-using memory_rec_t = std::set<char_data*>;
-using ai_state_t = short;
 using goal_t = short;
 using player_ptr_t = std::shared_ptr<mods::player>;
 struct obj_data;
 using uuid_t = uint16_t;
 using aligned_int_t = uint64_t;
+using memory_rec_t = std::set<uuid_t>;
+using ai_state_map = std::map<char_data*,std::unique_ptr<mods::ai_state>>;
+using ai_state_t = short;
 namespace mods::globals {
 extern uuid_t player_uuid();
 extern uuid_t obj_uuid();
@@ -1359,12 +1359,13 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		byte default_pos;        /* Default position for NPC                */
 		byte damnodice;          /* The number of damage dice's	       */
 		byte damsizedice;        /* The size of the damage dice's           */
-		char_data* snipe_tracking;
+		uuid_t snipe_tracking;
 		uint16_t behaviour_tree;
 		uint64_t behaviour_tree_flags;
+		void set_behaviour_tree(std::string_view name);
 		mob_special_data() : memory({}),
 			attack_type(0),default_pos(POS_STANDING),
-			damnodice(0),damsizedice(0),snipe_tracking(nullptr),
+			damnodice(0),damsizedice(0),snipe_tracking(0),
 			behaviour_tree(0),behaviour_tree_flags(0)
 			{
 

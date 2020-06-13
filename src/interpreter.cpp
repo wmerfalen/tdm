@@ -1920,6 +1920,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 												 p->start_histfile();
 
 												 p->desc().has_prompt = 0;
+												 p->position() = POS_STANDING;
 #ifndef __MENTOC_DONT_RUN_PROFILE_SCRIPTS__
 												 mods::js::run_profile_scripts(p->name());
 #endif

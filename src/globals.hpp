@@ -54,7 +54,8 @@
 #define LMDBRENEW() mods::db::lmdb_renew()
 #define CREATE_ARG(size,m) std::array<char,size> arg_##m ; std::fill(arg_##m.begin(),arg_##m.end(),0);
 #define MENTOC_DEPRECATED(mentoc_deprecated_argument_a) log("SYSERR:[%s] deprecated %s:%d",mentoc_deprecated_argument_a,__FILE__,__LINE__);
-#define MOBTOSTR(__mob) "\n[mob_dump]\nname: '" << __mob->player.name.c_str() << "'\n"
+#define MOBTOSTR(__mob) "\n[mob_dump]\nname: '" << __mob->player.name.c_str() << "'\n"\
+	"\n[mob_dump]\nuuid: '" << __mob->uuid() << "'\n"
 #define DO_HELP(from) if(!mods::help::should_continue(from,argument,player)){ return; }
 
 /** vim-sorcery: :%s/std::cerr << \(.*\);/d(\1);/ */

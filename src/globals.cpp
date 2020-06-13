@@ -126,7 +126,6 @@ namespace mods {
 		}
 		void register_object(obj_ptr_t obj) {
 			obj->uuid = obj_uuid();
-			std::cerr << "register_object: " << obj->uuid << "\n";
 			obj_map[obj->uuid] = obj;
 			obj_odmap[obj.get()] = obj;
 			register_object_db_id(obj->db_id(),obj->uuid);
@@ -834,7 +833,6 @@ namespace mods {
 			 * \return void will log a SYSERR if the resolved room id (param 1) is out of bounds
 			 */
 			void char_to_room(const room_rnum& room,char_data* ch) {
-				std::cerr << "char_to_room: " << room << " ch:" << ch->player.name.c_str() << "\n";
 				auto player = ptr(ch);
 				auto target_room = room;
 				if(boot_type == boot_type_t::BOOT_HELL){
@@ -915,6 +913,7 @@ namespace mods {
 			}
 		}
 		void dispose_player(uuid_t pl_uuid){
+#define __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__
 #define mgdp_debug(a) mentoc_prefix_debug("mods::globals::dispose_player") << a << "\n";
 #else
@@ -974,6 +973,7 @@ namespace mods {
 					player_list.erase(it);
 				}
 			}
+			mgdp_debug("At end of function");
 		}
 	};//end globals
 };

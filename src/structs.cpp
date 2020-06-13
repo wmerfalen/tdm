@@ -2,6 +2,7 @@
 #include "structs.h"
 #include "comm.h"
 #include <array>
+#include "mods/behaviour_tree_impl.hpp"
 
 namespace mods {
 	struct extra_desc_data;
@@ -446,4 +447,7 @@ bool obj_data::flagged(int value){
 		bool room_data::has_texture(texture_type_t t){
 			if(m_textures.size() == 0){ return false; }
 			return std::find(m_textures.begin(),m_textures.end(),t) != m_textures.end();
+		}
+		void mob_special_data::set_behaviour_tree(std::string_view name){
+			this->behaviour_tree = mods::behaviour_tree_impl::grab_tree_by_name(name.data());
 		}

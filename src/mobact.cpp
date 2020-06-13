@@ -39,6 +39,7 @@ bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *att
 
 #define MOB_AGGR_TO_ALIGN (MOB_AGGR_EVIL | MOB_AGGR_NEUTRAL | MOB_AGGR_GOOD)
 
+#define __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__
 #ifdef __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__
 	#define bht_debug(a) /**/
 #else
@@ -47,9 +48,9 @@ bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *att
 
 void mobile_activity(void) {
 	//auto player = mods::globals::current_player;
-	FOREACH_MOB(npc) {
+	for(auto & npc : mob_list) {
 		auto ch = npc->cd();
-		auto player = npc->player_ptr();
+		auto & player = npc->player_ptr();
 		char_data *vict;
 		struct obj_data *obj, *best_obj;
 		int door, found, max;
@@ -57,20 +58,25 @@ void mobile_activity(void) {
 
 
 		if(npc->mob_specials().behaviour_tree){
-			auto dispatch_result = mods::behaviour_tree_impl::dispatch(*npc);
+			auto dispatch_result = mods::behaviour_tree_impl::dispatch(npc->uuid());
 			bht_debug("dispatch_result: '" << std::to_string(dispatch_result) << "'");
 			switch(dispatch_result){
 				case mods::behaviour_tree_impl::dispatch_status_t::RETURN_IMMEDIATELY:
-					bht_debug("disatch result: Return immediately");
-					continue;
+					bht_debug("dispatch result: Return immediately");
+					break;
+					//continue;
 				case mods::behaviour_tree_impl::dispatch_status_t::RETURN_FALSE_IMMEDIATELY:
-					bht_debug("disatch result: Return FALSE immediately");
-					continue;
+					bht_debug("dispatch result: Return FALSE immediately");
+					break;
+					//continue;
 				case mods::behaviour_tree_impl::dispatch_status_t::AS_YOU_WERE:
-					bht_debug("disatch result: As you were...");
+					bht_debug("dispatch result: As you were...");
+					break;
+				case mods::behaviour_tree_impl::dispatch_status_t::MOB_DOESNT_EXIST:
+					bht_debug("dispatch result: MOB doesn't exist according to behaviour tree...");
 					break;
 				default:
-					bht_debug("disatch result: defaulted...");
+					bht_debug("dispatch result: defaulted...");
 					break;
 			}
 		}
@@ -168,7 +174,7 @@ void mobile_activity(void) {
 				}
 
 				if(ch->mob_specials.memory.end() != 
-						ch->mob_specials.memory.find(vict)){
+						ch->mob_specials.memory.find(player_vict->uuid())){
 					/* Can a master successfully control the charmed monster? */
 					if(aggressive_mob_on_a_leash(ch, ch->master, vict)) {
 						continue;
@@ -223,20 +229,33 @@ void mobile_activity(void) {
 
 
 
-/* Mob Memory Routines */
-
 /* make ch remember victim */
 void remember(char_data *ch,char_data *victim) {
-	if(!IS_NPC(ch) || IS_NPC(victim) || PRF_FLAGGED(victim, PRF_NOHASSLE)) {
+	auto ov = ptr_opt(victim);
+	if(!ov.has_value()){
 		return;
 	}
-	ch->mob_specials.memory.emplace(victim);
+	auto op = ptr_opt(ch);
+	if(!op.has_value()){
+		return;
+	}
+	auto p = op.value();
+	auto v = ov.value();
+	if(!p->is_npc() || v->is_npc() || PRF_FLAGGED(victim, PRF_NOHASSLE)) {
+		ch->mob_specials.memory.erase(v->uuid());
+		return;
+	}
+	ch->mob_specials.memory.emplace(v->uuid());
 }
 
 
 /* make ch forget victim */
 void forget(char_data *ch,char_data *victim) {
-	ch->mob_specials.memory.erase(victim);
+	auto ov = ptr_opt(victim);
+	if(!ov.has_value()){
+		return;
+	}
+	ch->mob_specials.memory.erase(ov.value()->uuid());
 }
 
 

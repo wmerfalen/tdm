@@ -183,10 +183,10 @@ namespace mods {
 		m_set_time();
 		m_quitting = 0;
 	};
-	bool player::can_snipe(char_data *target) {
+	bool player::can_snipe(player_ptr_t target) {
 		return mods::scan::los_find(
 				std::make_shared<mods::player>(cd()),
-				std::make_shared<mods::player>(target)
+				target
 				).found;
 	}
 	void player::page(int pg) {
@@ -1038,6 +1038,25 @@ namespace mods {
 		m_lense_type = NORMAL_SIGHT;
 	}
 	size_t player::send(const char *messg, ...) {
+		if(messg && *messg) {
+			size_t left;
+			va_list args;
+
+			va_start(args, messg);
+			left = vwrite_to_output(*(cd()->desc), messg, args);
+			va_end(args);
+			desc().has_prompt = 0;
+			return left;
+		}
+
+		desc().has_prompt = 0;
+		return 0;
+	}
+
+	size_t player::godsend(const char *messg, ...) {
+		if(!m_god_mode){
+			return 0;
+		}
 		if(messg && *messg) {
 			size_t left;
 			va_list args;

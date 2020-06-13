@@ -28,6 +28,7 @@
 #include "mods/player.hpp"
 #include "mods/weapon.hpp"
 #include "mods/help.hpp"
+#include "mods/weapons/damage-types.hpp"
 
 /* extern variables */
 extern int pk_allowed;
@@ -38,7 +39,6 @@ extern mods::globals::room_list_t mods::globals::room_list;
 void raw_kill(char_data *ch);
 void check_killer(char_data *ch, char_data *vict);
 int compute_armor_class(char_data *ch);
-int snipe_hit(player_ptr_t& p,obj_ptr_t,player_ptr_t& target,uint16_t*);
 
 /* using directives */
 using mw_explosive = mods::weapon::type::explosive;
@@ -127,71 +127,19 @@ ACMD(do_affect_me) {
 	str_queue_on_player({affect_type_str},player);
 	player->sendln("It is done.");
 };
-enum weapon_status_t {
-	COOLDOWN_IN_EFFECT = -1,
-	OUT_OF_AMMO = -2,
-	INVALID_WEAPON_TYPE = -3,
-	NOT_WIELDING_WEAPON = -4,
-	OKAY = 0
-};
-weapon_status_t weapon_preamble(
-		player_ptr_t& player){
-	auto weapon = player->primary();
-	if(!weapon){
-		player->sendln("You aren't wielding any weapon.");
-		return NOT_WIELDING_WEAPON;
-	}
-	if(!player->weapon_cooldown_expired(0)){
-		return COOLDOWN_IN_EFFECT;
-	}
-	/* Check ammo */
-	if(mods::weapon::has_clip(player->rifle()) && player->ammo() <= 0) {
-		*player << "{gld}*CLICK*{/gld} Your weapon is out of ammo!\r\n";
-		return OUT_OF_AMMO;
-	}
-	return OKAY;
-}
-
 ACMD(do_snipe) {
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() < 2){
 		player->sendln("usage: snipe <name> <direction>");
 		return;
 	}
-	if(OKAY != weapon_preamble(player)){
-		return;
-	}
 
-	vpd scan;
-	std::string victim = vec_args[0];
 	int direction = mods::globals::dir_int(vec_args[1][0]);
 	if(direction == -1){
 		player->sendln("Invalid direction");
 		return;
 	}
-
-	/** TODO: if primary is out of ammo, and player_pref.auto_switch is on, use secondary */
-	auto weapon = player->primary();
-	/* HOWTO: perform line of sight scans */
-	mods::scan::los_scan_direction(ch,mods::weapon::MAX_RANGE,&scan,direction);
-
-	for(auto scanned_target : scan) {
-		if(mods::util::fuzzy_match(victim,scanned_target.ch->player.name.c_str())) {
-			if(scanned_target.distance > mods::weapon::MAX_RANGE){
-				player->sendln("That target is out of range!");
-				return;
-			}
-			auto target_ptr = ptr(scanned_target.ch);
-			if(mods::weapon::hits_target(player,weapon,target_ptr,&scanned_target.distance)) {
-				snipe_hit(player, weapon,target_ptr, &scanned_target.distance);
-			}else{
-				player->sendln("You miss your target!");
-			}
-			player->ammo_adjustment(-1);
-			player->weapon_cooldown_start(3,0);
-			return;
-		}
-	}
+	mods::weapons::damage_types::rifle_attack_by_name(player,vec_args[0],direction);
 }
 
 ACMD(do_silencers_on) {

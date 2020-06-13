@@ -24,6 +24,7 @@
 #include "mods/weapon.hpp"
 #include "mods/behaviour_tree_impl.hpp"
 #include "mods/object-utils.hpp"
+#include "mods/weapons/damage-types.hpp"
 
 #define MOD_SNIPE_SAME_ROOM_THACO 250
 #define MOD_SNIPE_DISTANCE_THACO 5
@@ -119,10 +120,6 @@ int attack_message(mw_rifle type){
 	}
 }
 
-int rifle_damage(player_ptr_t& player,player_ptr_t& victim,int damage_points){
-	auto weapon_type = (mw_rifle)player->attacking_with_type();
-	return damage(player->cd(),victim->cd(),damage_points,attack_message(weapon_type));
-}
 
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
 
@@ -336,6 +333,7 @@ void stop_fighting(char_data *ch) {
 
 void make_corpse(char_data *ch) {
 	MENTOC_PREAMBLE();
+	std::cerr << "[make_corpse(victim)] -> raw_kill for: " << ch->player.name.c_str() << "\n";
 	char buf2[MAX_NAME_LENGTH + 64];
 	obj_data *o;
 	int i;
@@ -409,6 +407,7 @@ void change_alignment(char_data *ch, char_data *victim) {
 
 
 void death_cry(char_data *ch) {
+	std::cerr << "[death_cry(victim)] -> for: " << ch->player.name.c_str() << "\n";
 	int door;
 
 	act("Your blood freezes as you hear $n's death cry.", FALSE, ch, 0, 0, TO_ROOM);
@@ -436,25 +435,23 @@ void raw_kill(char_data *ch) {
 	//	affect_remove(ch, ch->affected);
 	//}
 
+	std::cerr << "[raw_kill(victim)] -> raw_kill for: " << ch->player.name.c_str() << "\n";
 	death_cry(ch);
 
 	make_corpse(ch);
-	{
-		auto player = ptr(ch);
-		char_from_room(player);
-	}
 	extract_char(ch);
-	{
-		char_data* temp;
-		REMOVE_FROM_LIST(ch, combat_list, next_fighting);
-	}
-	ch->next_fighting = NULL;
-	FIGHTING(ch) = NULL;
-	mods::globals::dispose_player(ch->uuid);
+	//{
+	//	char_data* temp;
+	//	REMOVE_FROM_LIST(ch, combat_list, next_fighting);
+	//}
+	//ch->next_fighting = NULL;
+	//FIGHTING(ch) = NULL;
+	//mods::globals::dispose_player(ch->uuid);
 }
 
 
 void die(char_data* killer,char_data *victim) {
+	std::cerr << "[die(killer,victim)] -> killing: " << victim->player.name.c_str() << "\n";
 	/* check if mob death trigger is active */
 	std::string functor;
 
@@ -475,12 +472,14 @@ void die(char_data* killer,char_data *victim) {
 
 
 void die(char_data *ch) {
+	std::cerr << "[die(victim)] -> killing: " << ch->player.name.c_str() << "| removing exp...\n";
 	gain_exp(ch, -(GET_EXP(ch) / 2));
 
 	if(!IS_NPC(ch)) {
 		REMOVE_BIT(PLR_FLAGS(ch), PLR_KILLER | PLR_THIEF);
 	}
 
+	std::cerr << "[die(victim)] -> calling raw_kill for: " << ch->player.name.c_str() << "| removing exp...\n";
 	raw_kill(ch);
 }
 
@@ -1104,47 +1103,6 @@ int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 
 
 
-/** Performs snipe damage. Snipe damage is done from parameter 1 to parameter 2 (victim).
- * @param ch Attacker (can be PC or NPC)
- * @param victim Receiver of damage (can be PC or NPC)
- * @param dam Integer value of how much damage to attempt to deal
- * @return < 0 Victim died, == 0 No damage,> 0 How much damage done.
- */
-int snipe_damage(
-		player_ptr_t& player,
-		player_ptr_t& victim,
-		int dam
-		) {
-	player->cd()->last_fight_timestamp = time(NULL);
-
-	int dmg_dealt = 0;
-	if(victim->position() > POS_DEAD) {
-		dmg_dealt = rifle_damage(player,victim,dam);
-		if(victim->is_npc()){
-			if(dmg_dealt == -1){
-				victim->cd()->mob_specials.snipe_tracking = nullptr;
-				victim->cd()->mob_specials.behaviour_tree = 0;
-				return -1;
-			}else if(dmg_dealt == 0){
-				/** No damage dealt */
-			}else if(dmg_dealt > 0){
-				if(MOB_FLAGGED(victim->cd(),MOB_SENTINEL)){
-					victim->cd()->mob_specials.behaviour_tree = mods::behaviour_tree_impl::grab_tree_by_name("sentinel_snipe_tracking");
-				}else{
-					victim->cd()->mob_specials.behaviour_tree = mods::behaviour_tree_impl::grab_tree_by_name("snipe_tracking");
-				}
-			}
-		}
-	}else{
-		player->stc("It appears that your target is dead\r\n");
-		stop_fighting(player->cd());
-		stop_fighting(victim->cd());
-	}
-
-	remember(victim->cd(),player->cd());
-	return (dmg_dealt);
-}
-
 /*
  * Alert: As of bpl14, this function returns the following codes:
  *	< 0	Victim died.
@@ -1372,65 +1330,6 @@ int compute_thaco(char_data *ch, char_data *victim) {
 
 using vpd = mods::scan::vec_player_data;
 
-int calculate_weapon_hit(player_ptr_t& player, obj_ptr_t weapon, player_ptr_t& victim, uint16_t distance) {
-	int dam = weapon->rifle()->attributes->base_stat_list->at(distance).damage;
-	int damage_dice = weapon->rifle()->attributes->damage_dice_count;
-	int damage_sides = weapon->rifle()->attributes->damage_dice_sides;
-	int crit_range = weapon->rifle()->attributes->critical_range;
-	int crit_chance = weapon->rifle()->attributes->critical_chance;
-	int critical_bonus = 0;
-
-	/** calculate headshot */
-	if(dice(1,100) >= 95){
-		player->send("{red}***HEADSHOT***{/red} -- ");
-		dam = victim->hp();
-	}
-	if(distance == crit_range){
-		if(dice(1,100) <= crit_chance){
-			player->send("{red}***CRITICAL***{/red} -- ");
-			critical_bonus = dice(
-					damage_dice,
-					damage_sides
-					);
-		}
-	}
-	dam += critical_bonus;
-
-	auto dice_roll = dice(
-			damage_dice,
-			damage_sides
-	);
-	dam += dice_roll;
-
-#ifdef __MENTOC_SHOW_SNIPE_HIT_STATS__
-	player->send(
-			"dice roll[%d]\r\n"
-			"damage: [%d]\r\n"
-			"critical_bonus: [%d]\r\n"
-			"damage_dice [%d]\r\n"
-			"damage_slides [%d]\r\n"
-			"crit_range [%d]\r\n"
-			"crit_chance [%d]\r\n",
-			dice_roll,
-			dam,
-			critical_bonus,
-			damage_dice,
-			damage_sides,
-			crit_range,
-			crit_chance
-			);
-#endif
-	return dam;
-}
-
-
-int snipe_hit(player_ptr_t& player, obj_ptr_t weapon, player_ptr_t& victim, uint16_t* distance) {
-	player->set_attacking_with(weapon);
-	return snipe_damage(player,victim, calculate_weapon_hit(player,weapon,victim,*distance));
-}
-
-
-
 void hit(char_data *ch, char_data *victim, int type) {
 	assert(ch != nullptr);
 	assert(victim != nullptr);
@@ -1457,7 +1356,6 @@ void hit(char_data *ch, char_data *victim, int type) {
 	} else if (same_room && !primary && !secondary) {
 		wielded_weapon = nullptr;
 	}
-
 	player->set_attacking_with(wielded_weapon);
 
 	ch->last_fight_timestamp = time(NULL);
@@ -1520,12 +1418,6 @@ void hit(char_data *ch, char_data *victim, int type) {
 		/* Start with the damage bonuses: the damroll and strength apply */
 
 		/* Maybe holding arrow? */
-		if(wielded_weapon && wielded_weapon->has_rifle()) {
-			/* Add weapon-based damage if a weapon is being wielded */
-			dam = calculate_weapon_hit(player,wielded_weapon,victim_ptr,0);
-			rifle_damage(player,victim_ptr,dam);
-			return;
-		}
 
 		/*
 		 * Include a damage multiplier if victim isn't ready to fight:
