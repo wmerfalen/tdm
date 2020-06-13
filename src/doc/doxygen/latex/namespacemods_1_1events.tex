@@ -1,0 +1,44 @@
+\hypertarget{namespacemods_1_1events}{}\section{mods\+:\+:events Namespace Reference}
+\label{namespacemods_1_1events}\index{mods\+::events@{mods\+::events}}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacemods_1_1events_a9a0bfac34cee6fba0537ec2fc44e39d7}\label{namespacemods_1_1events_a9a0bfac34cee6fba0537ec2fc44e39d7}} 
+using {\bfseries event\+\_\+t} = event\+\_\+enum
+\item 
+\mbox{\Hypertarget{namespacemods_1_1events_a25c0445c52014744935ec90acc8ac033}\label{namespacemods_1_1events_a25c0445c52014744935ec90acc8ac033}} 
+using {\bfseries callback\+\_\+t} = std\+::function$<$ int(uuid\+\_\+t, mods\+::events\+::event\+\_\+t, void $\ast$, int)$>$
+\item 
+\mbox{\Hypertarget{namespacemods_1_1events_ad5a08104a155aec2381672a1da839179}\label{namespacemods_1_1events_ad5a08104a155aec2381672a1da839179}} 
+using {\bfseries listener\+\_\+collection\+\_\+t} = std\+::unordered\+\_\+map$<$ mods\+::events\+::event\+\_\+t, std\+::deque$<$ callback\+\_\+t $>$ $>$
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacemods_1_1events_a03502b9f101f2bbee980fd399f07ad18}\label{namespacemods_1_1events_a03502b9f101f2bbee980fd399f07ad18}} 
+enum {\bfseries event\+\_\+enum} \{ \newline
+{\bfseries N\+O\+NE} = 0, 
+{\bfseries C\+R\+E\+A\+T\+E\+\_\+\+O\+B\+J\+E\+CT}, 
+{\bfseries D\+E\+S\+T\+R\+O\+Y\+\_\+\+O\+B\+J\+E\+CT}, 
+{\bfseries C\+R\+E\+A\+T\+E\+\_\+\+P\+L\+A\+Y\+ER}, 
+\newline
+{\bfseries D\+E\+S\+T\+R\+O\+Y\+\_\+\+P\+L\+A\+Y\+ER}, 
+{\bfseries O\+B\+J\+E\+C\+T\+\_\+\+F\+R\+O\+M\+\_\+\+R\+O\+OM}, 
+{\bfseries O\+B\+J\+E\+C\+T\+\_\+\+T\+O\+\_\+\+R\+O\+OM}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacemods_1_1events_a9b40c21cb88b3f979bf3cca718383ca2}\label{namespacemods_1_1events_a9b40c21cb88b3f979bf3cca718383ca2}} 
+void {\bfseries publish\+\_\+event} (event\+\_\+t event, const uuid\+\_\+t \&entity\+\_\+uuid, void $\ast$data, int data2)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1events_ae933de869604800f486e8c9d80e409ea}\label{namespacemods_1_1events_ae933de869604800f486e8c9d80e409ea}} 
+void {\bfseries register\+\_\+callback} (event\+\_\+t event, callback\+\_\+t cb)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{When events are called $\ast$$\ast$ }
+
+Events are called after everything that\textquotesingle{}s needed to be done for the event type. For example, the O\+B\+J\+E\+C\+T\+\_\+\+F\+R\+O\+M\+\_\+\+R\+O\+OM event is published when the object is fully removed from the room. It is not called before or during the object being extracted from the room. These events are to be emitted when the action the event represents is complete. 

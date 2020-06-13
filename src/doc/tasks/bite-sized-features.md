@@ -12,3 +12,5 @@
 # move help screens to mods::help
 	- ditto
 
+# move structs.h definitions to structs.cpp
+	- yup

@@ -1,0 +1,123 @@
+\hypertarget{namespacemods}{}\section{mods Namespace Reference}
+\label{namespacemods}\index{mods@{mods}}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacemods_1_1db}{db}
+\item 
+ \hyperlink{namespacemods_1_1events}{events}
+\item 
+ \hyperlink{namespacemods_1_1weapon__types}{weapon\+\_\+types}
+\item 
+ \hyperlink{namespacemods_1_1weapons}{weapons}
+\end{DoxyCompactItemize}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classmods_1_1ai__state}{ai\+\_\+state}
+\item 
+struct \hyperlink{structmods_1_1behaviour__tree}{behaviour\+\_\+tree}
+\item 
+struct \hyperlink{structmods_1_1behaviour__tree__node}{behaviour\+\_\+tree\+\_\+node}
+\item 
+class \hyperlink{classmods_1_1camera}{camera}
+\item 
+struct \hyperlink{structmods_1_1chunk__affect__t}{chunk\+\_\+affect\+\_\+t}
+\item 
+class \hyperlink{classmods_1_1cron}{cron}
+\item 
+class \hyperlink{classmods_1_1deferred}{deferred}
+\item 
+struct \hyperlink{structmods_1_1descriptor__data}{descriptor\+\_\+data}
+\item 
+class \hyperlink{classmods_1_1drone}{drone}
+\item 
+struct \hyperlink{structmods_1_1extra__desc__data}{extra\+\_\+desc\+\_\+data}
+\item 
+struct \hyperlink{structmods_1_1npc}{npc}
+\item 
+struct \hyperlink{structmods_1_1object}{object}
+\item 
+struct \hyperlink{classmods_1_1player}{player}
+\item 
+struct \hyperlink{structmods_1_1player__scaffolding}{player\+\_\+scaffolding}
+\item 
+class \hyperlink{classmods_1_1prefs}{prefs}
+\item 
+class \hyperlink{classmods_1_1randomized__items}{randomized\+\_\+items}
+\item 
+struct \hyperlink{structmods_1_1string}{string}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacemods_a00b664aad4148632b9bf6ae75edf5e6f}\label{namespacemods_a00b664aad4148632b9bf6ae75edf5e6f}} 
+using {\bfseries container\+\_\+type\+\_\+t} = std\+::vector$<$ \hyperlink{structmods_1_1extra__desc__data}{extra\+\_\+desc\+\_\+data} $>$
+\item 
+\mbox{\Hypertarget{namespacemods_a7dae9576983aa2d6bc4f03fec7ceb9a8}\label{namespacemods_a7dae9576983aa2d6bc4f03fec7ceb9a8}} 
+using {\bfseries mask\+\_\+t} = mods\+::weapon\+::mask\+\_\+type
+\item 
+\mbox{\Hypertarget{namespacemods_a48ff20339fef03fd4f1bd17ce59ea469}\label{namespacemods_a48ff20339fef03fd4f1bd17ce59ea469}} 
+using {\bfseries lmdb\+\_\+db} = \hyperlink{structmods_1_1lmdb_1_1__db__handle}{db\+\_\+handle}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacemods_aedd8fe7f6b05c601c23a842577bfaf2d}\label{namespacemods_aedd8fe7f6b05c601c23a842577bfaf2d}} 
+enum {\bfseries behaviour\+\_\+tree\+\_\+status} \{ \newline
+{\bfseries S\+U\+C\+C\+E\+SS}, 
+{\bfseries F\+A\+I\+L\+U\+RE}, 
+{\bfseries R\+U\+N\+N\+I\+NG}, 
+{\bfseries N\+O\+\_\+\+L\+O\+G\+IC}, 
+\newline
+{\bfseries U\+N\+K\+N\+O\+W\+N\+\_\+\+S\+T\+A\+T\+US}
+ \}
+\item 
+\mbox{\Hypertarget{namespacemods_a20f5dc4d7d0a79ea776dea59daffea20}\label{namespacemods_a20f5dc4d7d0a79ea776dea59daffea20}} 
+enum {\bfseries histfile\+\_\+opcode\+\_\+t} \{ {\bfseries H\+F\+O\+\_\+\+I\+N\+D\+EX} =1, 
+{\bfseries H\+F\+O\+\_\+\+S\+T\+A\+RT} =2, 
+{\bfseries H\+F\+O\+\_\+\+S\+T\+OP} =3, 
+{\bfseries H\+F\+O\+\_\+\+L\+OG} =4
+ \}
+\item 
+\mbox{\Hypertarget{namespacemods_a2df2aa05ac0869b08ffefcb0455025f9}\label{namespacemods_a2df2aa05ac0869b08ffefcb0455025f9}} 
+enum {\bfseries rarity\+\_\+enum\+\_\+t} \{ \newline
+{\bfseries C\+O\+M\+M\+ON} = 0, 
+{\bfseries U\+N\+C\+O\+M\+M\+ON}, 
+{\bfseries R\+A\+RE}, 
+{\bfseries L\+E\+G\+E\+N\+D\+A\+RY}, 
+\newline
+{\bfseries E\+L\+I\+TE}, 
+{\bfseries F\+I\+R\+ST} = C\+O\+M\+M\+ON, 
+{\bfseries L\+A\+ST} = E\+L\+I\+TE
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{namespacemods_ac68072b024d7dcb997dfc641bb28b800}{seed} ()
+\item 
+\mbox{\Hypertarget{namespacemods_a427873d2048666aaf2f8e8d2faa21a3b}\label{namespacemods_a427873d2048666aaf2f8e8d2faa21a3b}} 
+void {\bfseries push\+\_\+ticks\+\_\+event} (uint32\+\_\+t ticks, std\+::tuple$<$ uuid\+\_\+t, uint32\+\_\+t $>$ type)
+\item 
+\mbox{\Hypertarget{namespacemods_addf3418f10b7ed3ad99d0010a3c5d9a9}\label{namespacemods_addf3418f10b7ed3ad99d0010a3c5d9a9}} 
+std\+::string {\bfseries word\+\_\+wrap} (std\+::string\+\_\+view paragraph, int width)
+\item 
+\mbox{\Hypertarget{namespacemods_a1535bd777bd15b17b9bb8d773f638afd}\label{namespacemods_a1535bd777bd15b17b9bb8d773f638afd}} 
+std\+::string {\bfseries grab\+\_\+raw\+\_\+histfile\+\_\+seconds} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+{\bfseries M\+E\+N\+T\+O\+C\+\_\+\+N\+O\+\_\+\+D\+E\+PS} Essentially means that we only want the behaviour tree implementation and no other dependencies, hence the \char`\"{}\+N\+O\+\_\+\+D\+E\+P\+S\char`\"{}.
+
+F\+I\+X\+ME This use of namespace mods is random and out of place 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespacemods_ac68072b024d7dcb997dfc641bb28b800}\label{namespacemods_ac68072b024d7dcb997dfc641bb28b800}} 
+\index{mods@{mods}!seed@{seed}}
+\index{seed@{seed}!mods@{mods}}
+\subsubsection{\texorpdfstring{seed()}{seed()}}
+{\footnotesize\ttfamily void mods\+::seed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+deprecated 

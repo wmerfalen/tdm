@@ -59,6 +59,11 @@ namespace mods::globals {
 namespace mods {
 	struct player {
 		using obj_ptr_t = std::shared_ptr<obj_data>;
+		using affect_t = mods::affects::affect_t;
+		using affect_list_t = std::vector<affect_t>;
+		using affect_map_t = std::map<affect_t,int16_t>;
+		using entity_id = uuid_t;
+		using affect_dissolver_t = mods::affects::dissolver<affect_t,affect_list_t,affect_map_t,uuid_t>;
 		public:
 		using 	access_level_t = player_level;
 		using   class_type = mods::classes::types;
@@ -557,7 +562,7 @@ namespace mods {
 		bool is_npc() const {
 			return IS_NPC(cd());
 		}
-		mods::affects::dissolver& get_affect_dissolver();
+		affect_dissolver_t& get_affect_dissolver();
 		void set_misc_pref(misc_pref_enum_t bit,bool on_off){
 			m_misc_pref[bit] = on_off;
 		}
@@ -645,7 +650,7 @@ namespace mods {
 		FILE* m_histfile_fp;
 		bool m_histfile_on;
 		uint32_t m_histfile_index;
-		mods::affects::dissolver m_affects;
+		affect_dissolver_t m_affects;
 		std::array<obj_ptr_t,NUM_WEARS> m_equipment;
 		bool m_quitting;
 		std::shared_ptr<mods::camera> m_camera;

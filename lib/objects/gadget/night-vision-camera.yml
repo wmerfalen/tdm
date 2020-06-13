@@ -11,7 +11,7 @@ str_type: 'NIGHT_VISION_CAMERA' # enum, object type
 manufacturer: 'SETI-N2PO Corp.' # string, anything 
 name: 'Spectre Night Vision Camera' # string, anything name of object 
 vnum: 14 # integer, unique identifier
-feed_file: 'night-vision-camera.yml'
+feed_file: 'objects/gadget/night-vision-camera.yml'
 description: 'A Spectre Night Vision Camera is lying here.'
 short_description: 'a Spectre Night Vision Camera'
 action_description: 'Spectre Night Vision Camera'

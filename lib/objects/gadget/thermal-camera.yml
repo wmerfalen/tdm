@@ -11,7 +11,7 @@ str_type: 'THERMAL_CAMERA' # enum, object type
 manufacturer: 'SETI-N2PO Corp.' # string, anything 
 name: 'PK-Droid Thermal Camera' # string, anything name of object 
 vnum: 15 # integer, unique identifier
-feed_file: 'thermal-camera.yml'
+feed_file: 'objects/gadget/thermal-camera.yml'
 description: 'A PK-Droid Thermal Camera is lying here.'
 short_description: 'a PK-Droid Thermal Camera'
 action_description: 'PK-Droid Thermal Camera'

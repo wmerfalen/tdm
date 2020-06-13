@@ -1,0 +1,88 @@
+\hypertarget{structmods_1_1behaviour__tree__node}{}\section{mods\+:\+:behaviour\+\_\+tree\+\_\+node$<$ Lambda\+Argument $>$ Struct Template Reference}
+\label{structmods_1_1behaviour__tree__node}\index{mods\+::behaviour\+\_\+tree\+\_\+node$<$ Lambda\+Argument $>$@{mods\+::behaviour\+\_\+tree\+\_\+node$<$ Lambda\+Argument $>$}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structmods_1_1behaviour__tree__node_1_1run__status__t}{run\+\_\+status\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_a6d55cd288e1de6615791fc2fd2b7886f}\label{structmods_1_1behaviour__tree__node_a6d55cd288e1de6615791fc2fd2b7886f}} 
+enum {\bfseries node\+\_\+type\+\_\+t} \{ {\bfseries D\+O\+\_\+\+N\+O\+T\+H\+I\+NG}, 
+{\bfseries S\+E\+L\+E\+C\+T\+OR}, 
+{\bfseries S\+E\+Q\+U\+E\+N\+CE}, 
+{\bfseries L\+E\+AF}
+ \}
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_ae2bae54e8cee0794f1d06e819860ed63}\label{structmods_1_1behaviour__tree__node_ae2bae54e8cee0794f1d06e819860ed63}} 
+using {\bfseries callback\+\_\+t} = std\+::function$<$ behaviour\+\_\+tree\+\_\+status(Lambda\+Argument)$>$
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_af209cd848ac105fdff22f3acc0b840cd}\label{structmods_1_1behaviour__tree__node_af209cd848ac105fdff22f3acc0b840cd}} 
+using {\bfseries child\+\_\+node\+\_\+t} = std\+::shared\+\_\+ptr$<$ \hyperlink{structmods_1_1behaviour__tree__node}{behaviour\+\_\+tree\+\_\+node}$<$ Lambda\+Argument $>$ $>$
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_a21514f2d396c22113a67577e88f7f883}\label{structmods_1_1behaviour__tree__node_a21514f2d396c22113a67577e88f7f883}} 
+using {\bfseries children\+\_\+t} = std\+::vector$<$ child\+\_\+node\+\_\+t $>$
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_acde0392957abfb14f4161f11d948137a}\label{structmods_1_1behaviour__tree__node_acde0392957abfb14f4161f11d948137a}} 
+{\bfseries behaviour\+\_\+tree\+\_\+node} (const node\+\_\+type\+\_\+t \&t, const children\+\_\+t \&ch)
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_a41338ee34f1210cd5387a67c072f20e5}\label{structmods_1_1behaviour__tree__node_a41338ee34f1210cd5387a67c072f20e5}} 
+{\bfseries behaviour\+\_\+tree\+\_\+node} (const node\+\_\+type\+\_\+t \&t)
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_af399325d6a69f0a05b98f2ab50961381}\label{structmods_1_1behaviour__tree__node_af399325d6a69f0a05b98f2ab50961381}} 
+{\bfseries behaviour\+\_\+tree\+\_\+node} (callback\+\_\+t \&c, const node\+\_\+type\+\_\+t \&t)
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_a3aa8a8d1de73e4344109b47f6bc658d4}\label{structmods_1_1behaviour__tree__node_a3aa8a8d1de73e4344109b47f6bc658d4}} 
+{\bfseries behaviour\+\_\+tree\+\_\+node} (callback\+\_\+t \&c, const node\+\_\+type\+\_\+t \&t, const children\+\_\+t \&ch)
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_aa8d1c50b8200f6d0ee9410ec9971f9f4}\label{structmods_1_1behaviour__tree__node_aa8d1c50b8200f6d0ee9410ec9971f9f4}} 
+\hyperlink{structmods_1_1behaviour__tree__node_1_1run__status__t}{run\+\_\+status\+\_\+t} {\bfseries run} (Lambda\+Argument \&arg)
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_a74c60315f5f5e456bb0fd22d3598d13c}\label{structmods_1_1behaviour__tree__node_a74c60315f5f5e456bb0fd22d3598d13c}} 
+void {\bfseries set\+\_\+logic} (const callback\+\_\+t \&logic)
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_a237cad45e25061fd5c48d009530bdd2e}\label{structmods_1_1behaviour__tree__node_a237cad45e25061fd5c48d009530bdd2e}} 
+void {\bfseries append\+\_\+child} (const child\+\_\+node\+\_\+t \&child)
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_ae4c220e640f4d578eeaddb871a5dbf29}\label{structmods_1_1behaviour__tree__node_ae4c220e640f4d578eeaddb871a5dbf29}} 
+void {\bfseries set\+\_\+children} (const children\+\_\+t \&child\+\_\+nodes)
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_ada37b5712c40f59cbe1337f8ffd53e30}\label{structmods_1_1behaviour__tree__node_ada37b5712c40f59cbe1337f8ffd53e30}} 
+void {\bfseries set\+\_\+node\+\_\+type} (const node\+\_\+type\+\_\+t \&n)
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_abbaf93041975593a45c6f1d01974414d}\label{structmods_1_1behaviour__tree__node_abbaf93041975593a45c6f1d01974414d}} 
+children\+\_\+t \& {\bfseries get\+\_\+children} () const
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_a568a5a76aa4220bcf9b6c00a6f72561a}\label{structmods_1_1behaviour__tree__node_a568a5a76aa4220bcf9b6c00a6f72561a}} 
+callback\+\_\+t \& {\bfseries get\+\_\+logic} () const
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_a89a977fea4bcbd9063fec397b646c89d}\label{structmods_1_1behaviour__tree__node_a89a977fea4bcbd9063fec397b646c89d}} 
+static child\+\_\+node\+\_\+t {\bfseries create} (callback\+\_\+t \&c, node\+\_\+type\+\_\+t n\+\_\+type)
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_a2b40de8dd4e5a3f88bc5483fd56cd582}\label{structmods_1_1behaviour__tree__node_a2b40de8dd4e5a3f88bc5483fd56cd582}} 
+static child\+\_\+node\+\_\+t {\bfseries create} (callback\+\_\+t \&c, node\+\_\+type\+\_\+t n\+\_\+type, children\+\_\+t \&ch)
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_a6fcc623c3a5b5652e4516328a014edce}\label{structmods_1_1behaviour__tree__node_a6fcc623c3a5b5652e4516328a014edce}} 
+static child\+\_\+node\+\_\+t {\bfseries create} (node\+\_\+type\+\_\+t n\+\_\+type)
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_ac00ab03b50be7a4e1b566b7816f88d9c}\label{structmods_1_1behaviour__tree__node_ac00ab03b50be7a4e1b566b7816f88d9c}} 
+static child\+\_\+node\+\_\+t {\bfseries create\+\_\+sequence} (const children\+\_\+t \&ch)
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_aa392a3524753d3ff4519f8c726a3488e}\label{structmods_1_1behaviour__tree__node_aa392a3524753d3ff4519f8c726a3488e}} 
+static child\+\_\+node\+\_\+t {\bfseries create\+\_\+selector} (const children\+\_\+t \&ch)
+\item 
+\mbox{\Hypertarget{structmods_1_1behaviour__tree__node_ae25a417dd01919a6687b9b3a9265f6f1}\label{structmods_1_1behaviour__tree__node_ae25a417dd01919a6687b9b3a9265f6f1}} 
+static child\+\_\+node\+\_\+t {\bfseries create\+\_\+leaf} (callback\+\_\+t c)
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+behaviour\+\_\+tree\+\_\+node.\+hpp\end{DoxyCompactItemize}

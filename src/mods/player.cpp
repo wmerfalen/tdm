@@ -1054,7 +1054,7 @@ namespace mods {
 	}
 
 
-	mods::affects::dissolver& player::get_affect_dissolver() {
+	player::affect_dissolver_t& player::get_affect_dissolver() {
 		return m_affects;
 	}
 

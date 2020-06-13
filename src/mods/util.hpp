@@ -267,7 +267,7 @@ std::ostream& log(Args... args); /*{
 	obj_ptr_t make_from(obj_data* o);
 	bool parse_help(std::string_view argument);
 
-	static inline bool icompare(std::string_view str1,std::string_view str2){
+	static inline bool is_lower_match(std::string_view str1,std::string_view str2){
 		unsigned int sz = str1.size();
 		if (str2.size() != sz){
 			return false;

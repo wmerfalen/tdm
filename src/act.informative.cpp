@@ -548,9 +548,32 @@ void list_char_to_char(char_data *ch) {
 	auto fire_status = mods::rooms::get_fire_status(room);
 	bool camera_is_thermal = camera != nullptr ? mods::object_utils::is_thermal_camera(camera->object_uuid()) : false;
 	bool camera_is_night_vision = camera != nullptr ? mods::object_utils::is_night_vision_camera(camera->object_uuid()) : false;
-	bool can_see_through_fire = mods::rooms::can_see_through_fire(fire_status);
+	bool can_see_through_fire = mods::rooms::can_see_through_fire(room);
 	bool player_has_thermal = player->has_thermal_vision();
 
+	player->send(
+			"dark: %d\r\n"
+			"smoke: %d\r\n"
+			"on_fire: %d\r\n"
+			"viewing_camera: %d\r\n"
+			"camera: %x\r\n"
+			"fire_status: %d\r\n"
+			"camera_is_thermal: %d\r\n"
+			"camera_is_night_vision: %d\r\n"
+			"can_see_through_fire: %d\r\n"
+			"player_has_thermal: %d\r\n"
+			,
+			dark,
+			smoke,
+			on_fire,
+			viewing_camera,
+			camera,
+			fire_status,
+			camera_is_thermal,
+			camera_is_night_vision,
+			can_see_through_fire,
+			player_has_thermal
+				);
 	for(auto & player_ptr : mods::globals::get_room_list(room)){
 		if(player_ptr->is(ch)){
 			continue;
@@ -575,8 +598,10 @@ void list_char_to_char(char_data *ch) {
 			player->send("{grn}[night-vision via camera]{/grn} You see %s here.\r\n", player_ptr->name().c_str());
 			continue;
 		}
+		/** TODO: needs testing */
 		if(((smoke || dark) && viewing_camera && camera_is_thermal) || 
 				((smoke || dark) && player_has_thermal)) {
+		/** TODO: needs testing */
 			if(viewing_camera){
 				player->send("{gld}[thermal via camera]{/gld} You see %s here.\r\n", player_ptr->name().c_str());
 			}else{
@@ -601,6 +626,7 @@ void list_char_to_char(char_data *ch) {
 			list_one_char(player_ptr->cd(), ch);
 		}
 	}
+	/** TODO: thermal vision distance is short. you can only see adjacent rooms and even then the sight is limited. */
 	auto room_number = player->viewing_room();
 	for(auto direction : {NORTH,SOUTH,EAST,WEST,UP,DOWN}) {
 		if(world[room_number].dir_option[direction]) {
@@ -725,10 +751,13 @@ void look_at_room(char_data *ch, int ignore_brief) {
 	int room = player->viewing_room();
 
 	if(room < 0){
+		std::cerr << "[ERROR INVALID VIEWING ROOM]: " << room << "\r\n";
 		return;
 	}
 
-	if(world.size() <= std::size_t(room)){
+	if(room >= world.size()){
+		std::cerr << "[ERROR INVALID ROOM ID]: " << room << "\r\n";
+		player->sendln("room out of bounds");
 		return;
 	}
 
@@ -1019,8 +1048,8 @@ ACMD(do_look) {
 		player->sendln("You can't see anything but stars!");
 	} else if(AFF_FLAGGED(ch, AFF_BLIND)) {
 		player->sendln("You can't see a damned thing, you're blind!");
-	} else if(IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch)) {
-		player->sendln("It is pitch black...");
+	//} else if(IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch)) {
+	//	player->sendln("It is pitch black...");
 	} else {
 		char arg[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
 
@@ -2275,4 +2304,31 @@ ACMD(do_commands) {
 	if(no % 7 != 1) {
 		player->sendln("\r\n");
 	}
+}
+
+extern void shop_view_item(player_ptr_t& player, int16_t item_number);
+ACMD(do_view) {
+	DO_HELP("view");
+	/** If the user is attempting to view an item in a shop */
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() && !mods::util::is_lower_match(vec_args[0], "camera")){
+		int16_t item = mods::util::stoi(vec_args[0]).value_or(-1);
+		shop_view_item(player,item);
+		return;
+	}
+	if(vec_args.size() == 0){
+		player->sendln("Usage: 'view camera'. For more information, type 'view help'");
+		return;
+	}
+	if(mods::util::is_lower_match(vec_args[0], "camera")) {
+		if(!player->get_camera()){
+			player->sendln("You haven't installed a camera");
+			return;
+		}
+		player->set_camera_viewing(true);
+		look_at_room(ch,0);
+		player->set_camera_viewing(false);
+		return;
+	}
+
 }

@@ -1,0 +1,15 @@
+<map id="follow_type" name="follow_type">
+<area shape="rect" id="node2" href="$structchar__data.html" title="char_data" alt="" coords="541,181,620,208"/>
+<area shape="rect" id="node5" href="$structobj__data.html" title="obj_data" alt="" coords="831,367,901,393"/>
+<area shape="rect" id="node12" href="$structchar__special__data.html" title="char_special_data" alt="" coords="803,65,929,92"/>
+<area shape="rect" id="node14" href="$structmob__special__data.html" title="mob_special_data" alt="" coords="803,179,929,205"/>
+<area shape="rect" id="node3" href="$structchar__point__data.html" title="char_point_data" alt="" coords="221,208,335,235"/>
+<area shape="rect" id="node4" href="$structaffected__type.html" title="affected_type" alt="" coords="227,297,329,324"/>
+<area shape="rect" id="node6" href="$structobj__affected__type.html" title="obj_affected_type" alt="" coords="518,363,643,389"/>
+<area shape="rect" id="node7" href="$structmods_1_1string.html" title="mods::string" alt="" coords="5,356,100,383"/>
+<area shape="rect" id="node9" href="$structchar__player__data.html" title="char_player_data" alt="" coords="217,68,339,95"/>
+<area shape="rect" id="node8" href="$structobj__flag__data.html" title="obj_flag_data" alt="" coords="531,464,630,491"/>
+<area shape="rect" id="node10" href="$structtime__data.html" title="time_data" alt="" coords="13,68,92,95"/>
+<area shape="rect" id="node11" href="$structchar__ability__data.html" title="char_ability_data" alt="" coords="218,348,338,375"/>
+<area shape="rect" id="node13" href="$structchar__special__data__saved.html" title="char_special_data_saved" alt="" coords="496,5,665,32"/>
+</map>

@@ -1,0 +1,61 @@
+\hypertarget{structmods_1_1orm_1_1shop__rooms}{}\section{mods\+:\+:orm\+:\+:shop\+\_\+rooms Struct Reference}
+\label{structmods_1_1orm_1_1shop__rooms}\index{mods\+::orm\+::shop\+\_\+rooms@{mods\+::orm\+::shop\+\_\+rooms}}
+
+
+Inheritance diagram for mods\+:\+:orm\+:\+:shop\+\_\+rooms\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=202pt]{structmods_1_1orm_1_1shop__rooms__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for mods\+:\+:orm\+:\+:shop\+\_\+rooms\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=202pt]{structmods_1_1orm_1_1shop__rooms__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop__rooms_a2f9ceb086bcc4956f88938f859fc967f}\label{structmods_1_1orm_1_1shop__rooms_a2f9ceb086bcc4956f88938f859fc967f}} 
+using {\bfseries room\+\_\+list\+\_\+t} = std\+::vector$<$ room\+\_\+vnum $>$
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop__rooms_a9facf0b45b67f151123ca490018e53a3}\label{structmods_1_1orm_1_1shop__rooms_a9facf0b45b67f151123ca490018e53a3}} 
+int16\+\_\+t {\bfseries load\+\_\+by\+\_\+shop\+\_\+vnum} (shop\+\_\+vnum in\+\_\+shop\+\_\+vnum)
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop__rooms_aaf9b2135573447f06f3a43a8ae4ec7d4}\label{structmods_1_1orm_1_1shop__rooms_aaf9b2135573447f06f3a43a8ae4ec7d4}} 
+int16\+\_\+t {\bfseries place\+\_\+keepers\+\_\+in\+\_\+rooms} (mob\+\_\+vnum)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop__rooms_a814b8d068d4fbe86e3e35895aa3c7051}\label{structmods_1_1orm_1_1shop__rooms_a814b8d068d4fbe86e3e35895aa3c7051}} 
+shop\+\_\+vnum {\bfseries shop\+\_\+vnum\+\_\+id}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop__rooms_a289e2ea54a8dd616a3cc7c91a408b79c}\label{structmods_1_1orm_1_1shop__rooms_a289e2ea54a8dd616a3cc7c91a408b79c}} 
+room\+\_\+list\+\_\+t {\bfseries rooms}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop__rooms_a35b5c0768c0c7b0281f81aca6790b8cb}\label{structmods_1_1orm_1_1shop__rooms_a35b5c0768c0c7b0281f81aca6790b8cb}} 
+std\+::map$<$ room\+\_\+vnum, std\+::shared\+\_\+ptr$<$ \hyperlink{structmods_1_1npc}{mods\+::npc} $>$ $>$ {\bfseries room\+\_\+keeper\+\_\+map}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop__rooms_a227f31310ec4e7de47e61fa6a8214bd0}\label{structmods_1_1orm_1_1shop__rooms_a227f31310ec4e7de47e61fa6a8214bd0}} 
+static constexpr const char $\ast$ {\bfseries table\+\_\+name} = \char`\"{}shop\+\_\+rooms\char`\"{}
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+orm/shop.\+hpp\item 
+mods/orm/shop.\+cpp\end{DoxyCompactItemize}

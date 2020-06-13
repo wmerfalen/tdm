@@ -22,6 +22,7 @@
 #include "mods/debug.hpp"
 #include "spells.h" // for TYPE_HIT
 #include "mods/object-utils.hpp"
+#include "mods/rooms.hpp"
 extern void point_update(void);
 
 ACMD(do_get_ticks_per_minute){
@@ -32,6 +33,42 @@ ACMD(do_get_ticks_per_minute){
 ACMD(do_givemenades){
 
 }
+
+ACMD(do_room_dark){
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() == 0){
+		player->sendln("usage: room_dark <on|off>");
+		return;
+	}
+	if(vec_args[0].compare("on") == 0){
+		mods::rooms::gods::force_dark(player->room());
+	}else{
+		mods::rooms::gods::remove_dark(player->room());
+	}
+}
+
+ACMD(do_room_fire){
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() == 0){
+		player->sendln(
+				"usage: room_fire <on|off> [level]\r\n"
+				"level is one of:\r\n"
+				"KINDLING, COMPLETELY_ON_FIRE, SMOLDERING, SMOKING, OUT, NONE\r\n"
+				"This documentation was generated on 2020-06-08\r\n"
+		);
+		return;
+	}
+	bool on = false;
+	if(vec_args[0].compare("on") == 0){
+		on = true;
+	}
+	std::string level = "";
+	if(vec_args.size() == 2){
+		level = vec_args[1];
+	}
+	mods::rooms::gods::set_fire(player->room(),on,level,player);
+}
+
 
 ACMD(do_giveme_camera) {
 	auto obj = mods::object_utils::yaml_import("gadget","objects/gadget/camera.yml");

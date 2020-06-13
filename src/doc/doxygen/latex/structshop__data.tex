@@ -1,0 +1,162 @@
+\hypertarget{structshop__data}{}\section{shop\+\_\+data$<$ T\+Orm\+Type, T\+Room\+Info, T\+Object\+Info $>$ Struct Template Reference}
+\label{structshop__data}\index{shop\+\_\+data$<$ T\+Orm\+Type, T\+Room\+Info, T\+Object\+Info $>$@{shop\+\_\+data$<$ T\+Orm\+Type, T\+Room\+Info, T\+Object\+Info $>$}}
+
+
+Collaboration diagram for shop\+\_\+data$<$ T\+Orm\+Type, T\+Room\+Info, T\+Object\+Info $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=278pt]{structshop__data__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structshop__data_aa8d5ca6548fe7a560e226933db1f7af8}\label{structshop__data_aa8d5ca6548fe7a560e226933db1f7af8}} 
+using {\bfseries db\+\_\+id\+\_\+t} = uint64\+\_\+t
+\item 
+\mbox{\Hypertarget{structshop__data_a93a07e41ba0d56b6fa9ffa4c39625754}\label{structshop__data_a93a07e41ba0d56b6fa9ffa4c39625754}} 
+using {\bfseries shop\+\_\+data\+\_\+orm\+\_\+type\+\_\+t} = T\+Orm\+Type
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structshop__data_a470d2a66b2ab603381f720653ebdf3d6}\label{structshop__data_a470d2a66b2ab603381f720653ebdf3d6}} 
+void {\bfseries init} ()
+\item 
+\mbox{\Hypertarget{structshop__data_a8d4ff1696887b5051879d62f7537370b}\label{structshop__data_a8d4ff1696887b5051879d62f7537370b}} 
+void {\bfseries feed} (pqxx\+::row row)
+\item 
+\mbox{\Hypertarget{structshop__data_aee4ef547f48f79114c7dbebce0364869}\label{structshop__data_aee4ef547f48f79114c7dbebce0364869}} 
+std\+::map$<$ std\+::string, std\+::string $>$ {\bfseries export\+\_\+shop} ()
+\item 
+\mbox{\Hypertarget{structshop__data_a51c99101db1d502b71cc673659da5f5f}\label{structshop__data_a51c99101db1d502b71cc673659da5f5f}} 
+std\+::tuple$<$ bool, db\+\_\+id\+\_\+t, std\+::string $>$ {\bfseries save} ()
+\item 
+\mbox{\Hypertarget{structshop__data_a95126b358a781ec10afeefac091daa0c}\label{structshop__data_a95126b358a781ec10afeefac091daa0c}} 
+void {\bfseries list\+\_\+to\+\_\+char} (player\+\_\+ptr\+\_\+t \&)
+\item 
+\mbox{\Hypertarget{structshop__data_abd168c07e56d01c8dd87e0ba1a64069a}\label{structshop__data_abd168c07e56d01c8dd87e0ba1a64069a}} 
+{\footnotesize template$<$$>$ }\\void {\bfseries feed} (pqxx\+::row in\+\_\+row)
+\item 
+{\footnotesize template$<$$>$ }\\void \hyperlink{structshop__data_a9eff8b43ae8575c9af49695dd3fa3618}{list\+\_\+to\+\_\+char} (player\+\_\+ptr\+\_\+t \&player)
+\item 
+\mbox{\Hypertarget{structshop__data_a368e8704f49db0546668c82bfa645905}\label{structshop__data_a368e8704f49db0546668c82bfa645905}} 
+{\footnotesize template$<$$>$ }\\std\+::tuple$<$ bool, uint64\+\_\+t, std\+::string $>$ {\bfseries save} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structshop__data_aa679de7edb1ba2eec3d167d390f9d1a9}\label{structshop__data_aa679de7edb1ba2eec3d167d390f9d1a9}} 
+db\+\_\+id\+\_\+t {\bfseries db\+\_\+id}
+\item 
+\mbox{\Hypertarget{structshop__data_a68a9e16319b3df0b7be2b67609c25b68}\label{structshop__data_a68a9e16319b3df0b7be2b67609c25b68}} 
+room\+\_\+vnum {\bfseries vnum}
+\item 
+\mbox{\Hypertarget{structshop__data_ae149601d5fca05cb1288b1ae2abe52ae}\label{structshop__data_ae149601d5fca05cb1288b1ae2abe52ae}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries title}
+\item 
+\mbox{\Hypertarget{structshop__data_abd606ca62218f9d09430a72f2c1bcbf6}\label{structshop__data_abd606ca62218f9d09430a72f2c1bcbf6}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries description}
+\item 
+\mbox{\Hypertarget{structshop__data_ac69749001a19513e0a7236277194e670}\label{structshop__data_ac69749001a19513e0a7236277194e670}} 
+obj\+\_\+vnum $\ast$ {\bfseries producing}
+\item 
+\mbox{\Hypertarget{structshop__data_af4487b8d68b59ee0c7919bce8b19779f}\label{structshop__data_af4487b8d68b59ee0c7919bce8b19779f}} 
+float {\bfseries profit\+\_\+buy}
+\item 
+\mbox{\Hypertarget{structshop__data_a7bb8e394bd78f76bf1c76b5274a55b26}\label{structshop__data_a7bb8e394bd78f76bf1c76b5274a55b26}} 
+float {\bfseries profit\+\_\+sell}
+\item 
+\mbox{\Hypertarget{structshop__data_a231603b305f867b43d9309462adea755}\label{structshop__data_a231603b305f867b43d9309462adea755}} 
+struct \hyperlink{structshop__buy__data}{shop\+\_\+buy\+\_\+data} $\ast$ {\bfseries type}
+\item 
+\mbox{\Hypertarget{structshop__data_a03bb7efb43cedee5cdb20a34bccbb9f5}\label{structshop__data_a03bb7efb43cedee5cdb20a34bccbb9f5}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries no\+\_\+such\+\_\+item1}
+\item 
+\mbox{\Hypertarget{structshop__data_ad1fe5aa17168682421e299d42734f188}\label{structshop__data_ad1fe5aa17168682421e299d42734f188}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries no\+\_\+such\+\_\+item2}
+\item 
+\mbox{\Hypertarget{structshop__data_ae4c023fe53302b02c396adcfda89252b}\label{structshop__data_ae4c023fe53302b02c396adcfda89252b}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries missing\+\_\+cash1}
+\item 
+\mbox{\Hypertarget{structshop__data_a634325b86f3536a47160e048174ee42f}\label{structshop__data_a634325b86f3536a47160e048174ee42f}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries missing\+\_\+cash2}
+\item 
+\mbox{\Hypertarget{structshop__data_a7ef729d742cdc5981ffc14fde072aab4}\label{structshop__data_a7ef729d742cdc5981ffc14fde072aab4}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries do\+\_\+not\+\_\+buy}
+\item 
+\mbox{\Hypertarget{structshop__data_a842bdf64a04e7f3689c03e7fc49bcd59}\label{structshop__data_a842bdf64a04e7f3689c03e7fc49bcd59}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries message\+\_\+buy}
+\item 
+\mbox{\Hypertarget{structshop__data_a02042176c206a10e9ad8151da56957ac}\label{structshop__data_a02042176c206a10e9ad8151da56957ac}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries message\+\_\+sell}
+\item 
+\mbox{\Hypertarget{structshop__data_adec8e90923c13d8cf2742b260ecf9673}\label{structshop__data_adec8e90923c13d8cf2742b260ecf9673}} 
+int {\bfseries temper1}
+\item 
+\mbox{\Hypertarget{structshop__data_ad9eabc90aa33418b45a64ca23cb469fc}\label{structshop__data_ad9eabc90aa33418b45a64ca23cb469fc}} 
+bitvector\+\_\+t {\bfseries bitvector}
+\item 
+\mbox{\Hypertarget{structshop__data_aa26ace5c9ae90c0d0b4f55c970d476d7}\label{structshop__data_aa26ace5c9ae90c0d0b4f55c970d476d7}} 
+mob\+\_\+vnum {\bfseries keeper}
+\item 
+\mbox{\Hypertarget{structshop__data_aad4eb4227868c7ec06f4263794b55e32}\label{structshop__data_aad4eb4227868c7ec06f4263794b55e32}} 
+int {\bfseries with\+\_\+who}
+\item 
+\mbox{\Hypertarget{structshop__data_af346021610cfedfcb97ebc029fcf065a}\label{structshop__data_af346021610cfedfcb97ebc029fcf065a}} 
+room\+\_\+vnum $\ast$ {\bfseries in\+\_\+room}
+\item 
+\mbox{\Hypertarget{structshop__data_a4dd7c00b83eb84a4f90c6d6a2200422e}\label{structshop__data_a4dd7c00b83eb84a4f90c6d6a2200422e}} 
+int {\bfseries open1}
+\item 
+\mbox{\Hypertarget{structshop__data_a48da825cfbf975fe94cb0f798315257e}\label{structshop__data_a48da825cfbf975fe94cb0f798315257e}} 
+int {\bfseries open2}
+\item 
+\mbox{\Hypertarget{structshop__data_a2536c8436c5d08b1ad307f150117ea7b}\label{structshop__data_a2536c8436c5d08b1ad307f150117ea7b}} 
+int {\bfseries close1}
+\item 
+\mbox{\Hypertarget{structshop__data_a4f69ec77440738cca95b6e2286e421f3}\label{structshop__data_a4f69ec77440738cca95b6e2286e421f3}} 
+int {\bfseries close2}
+\item 
+\mbox{\Hypertarget{structshop__data_a50501ce14e6146eb10cbed7dfdaed64e}\label{structshop__data_a50501ce14e6146eb10cbed7dfdaed64e}} 
+int {\bfseries bank\+Account}
+\item 
+\mbox{\Hypertarget{structshop__data_a13b4b2d2a2580ff1cbb205c123d76049}\label{structshop__data_a13b4b2d2a2580ff1cbb205c123d76049}} 
+int {\bfseries lastsort}
+\item 
+\mbox{\Hypertarget{structshop__data_a87196704a74e60f642633ed10b4f73b2}\label{structshop__data_a87196704a74e60f642633ed10b4f73b2}} 
+int {\bfseries shop\+\_\+type}
+\item 
+\mbox{\Hypertarget{structshop__data_a5c351d93850bb8439a0c9534d0735cff}\label{structshop__data_a5c351d93850bb8439a0c9534d0735cff}} 
+uint64\+\_\+t {\bfseries flags}
+\item 
+\mbox{\Hypertarget{structshop__data_ab20259105fa1b067a2834d68811517ca}\label{structshop__data_ab20259105fa1b067a2834d68811517ca}} 
+uint64\+\_\+t {\bfseries uuid}
+\item 
+\mbox{\Hypertarget{structshop__data_a3b3dea70f9dbbaac8fa4f77c3287a6df}\label{structshop__data_a3b3dea70f9dbbaac8fa4f77c3287a6df}} 
+S\+P\+E\+C\+I\+AL $\ast$ {\bfseries func}
+\item 
+\mbox{\Hypertarget{structshop__data_a932c2acf370f887f3f222a7d2eadb70d}\label{structshop__data_a932c2acf370f887f3f222a7d2eadb70d}} 
+T\+Room\+Info {\bfseries room\+\_\+info}
+\item 
+\mbox{\Hypertarget{structshop__data_a7f22b0dc24fb225cdaf03985ff46f990}\label{structshop__data_a7f22b0dc24fb225cdaf03985ff46f990}} 
+T\+Object\+Info {\bfseries object\+\_\+info}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{structshop__data_a9eff8b43ae8575c9af49695dd3fa3618}\label{structshop__data_a9eff8b43ae8575c9af49695dd3fa3618}} 
+\index{shop\+\_\+data@{shop\+\_\+data}!list\+\_\+to\+\_\+char@{list\+\_\+to\+\_\+char}}
+\index{list\+\_\+to\+\_\+char@{list\+\_\+to\+\_\+char}!shop\+\_\+data@{shop\+\_\+data}}
+\subsubsection{\texorpdfstring{list\+\_\+to\+\_\+char()}{list\_to\_char()}}
+{\footnotesize\ttfamily template$<$$>$ \\
+void \hyperlink{structshop__data}{shop\+\_\+data}$<$ \hyperlink{structmods_1_1orm_1_1shop}{mods\+::orm\+::shop}, \hyperlink{structmods_1_1orm_1_1shop__rooms}{mods\+::orm\+::shop\+\_\+rooms}, \hyperlink{structmods_1_1orm_1_1shop__objects}{mods\+::orm\+::shop\+\_\+objects} $>$\+::list\+\_\+to\+\_\+char (\begin{DoxyParamCaption}\item[{player\+\_\+ptr\+\_\+t \&}]{player }\end{DoxyParamCaption})}
+
+T\+O\+DO 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+shop.\+h\item 
+shop.\+cpp\end{DoxyCompactItemize}

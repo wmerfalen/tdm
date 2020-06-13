@@ -1,0 +1,75 @@
+\hypertarget{structmods_1_1lmdb_1_1transaction__t}{}\section{mods\+:\+:lmdb\+:\+:transaction\+\_\+t Struct Reference}
+\label{structmods_1_1lmdb_1_1transaction__t}\index{mods\+::lmdb\+::transaction\+\_\+t@{mods\+::lmdb\+::transaction\+\_\+t}}
+
+
+{\ttfamily \#include $<$lmdb.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1transaction__t_a3ad01fb11426f89327765dc0055d94a3}\label{structmods_1_1lmdb_1_1transaction__t_a3ad01fb11426f89327765dc0055d94a3}} 
+\hyperlink{structmods_1_1lmdb_1_1__selector}{selector\+\_\+type\+\_\+t} {\bfseries selector} (const key\+\_\+type\+\_\+t \&column, const uint64\+\_\+t \&row\+\_\+id)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1transaction__t_af4013121c80d588b0916a98662e4295f}\label{structmods_1_1lmdb_1_1transaction__t_af4013121c80d588b0916a98662e4295f}} 
+uint64\+\_\+t {\bfseries get\+\_\+row\+\_\+id\+\_\+list} (row\+\_\+id\+\_\+list\+\_\+t \&rows)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1transaction__t_aa130620f69dc71f180e6ef9771373d0d}\label{structmods_1_1lmdb_1_1transaction__t_aa130620f69dc71f180e6ef9771373d0d}} 
+void {\bfseries set\+\_\+str\+\_\+table} (table\+\_\+type\+\_\+t e\+\_\+table)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1transaction__t_a37e8dc8e3f9e3f705bdb801d829210ff}\label{structmods_1_1lmdb_1_1transaction__t_a37e8dc8e3f9e3f705bdb801d829210ff}} 
+{\bfseries transaction\+\_\+t} (std\+::string ce\+\_\+table, transact\+\_\+type\+\_\+t type)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1transaction__t_a516bc4084eb3ed2b282e7d059b2ef409}\label{structmods_1_1lmdb_1_1transaction__t_a516bc4084eb3ed2b282e7d059b2ef409}} 
+{\bfseries transaction\+\_\+t} (table\+\_\+type\+\_\+t e\+\_\+table, transact\+\_\+type\+\_\+t type)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1transaction__t_aad6618e385ed22538f860f0d1f2ae3ac}\label{structmods_1_1lmdb_1_1transaction__t_aad6618e385ed22538f860f0d1f2ae3ac}} 
+std\+::string {\bfseries table\+\_\+cstr} () const
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1transaction__t_a812dc866044aead9677b8a4e4e632975}\label{structmods_1_1lmdb_1_1transaction__t_a812dc866044aead9677b8a4e4e632975}} 
+table\+\_\+type\+\_\+t {\bfseries table} () const
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1transaction__t_ae581e7f664485009158f09151e134988}\label{structmods_1_1lmdb_1_1transaction__t_ae581e7f664485009158f09151e134988}} 
+transact\+\_\+type\+\_\+t {\bfseries type} () const
+\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::string \hyperlink{structmods_1_1lmdb_1_1transaction__t_a893faeea3f9f9a0875d0522c6c7de5b6}{get} (T consumer, std\+::string key)
+\item 
+{\footnotesize template$<$typename T $>$ }\\result\+\_\+container\+\_\+t \hyperlink{structmods_1_1lmdb_1_1transaction__t_a89e078b5a572044e71ee239589ea334f}{get\+\_\+all} (T consumer)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subparagraph*{}
+
+A typical transaction \subparagraph*{}
+
+\subparagraph*{}
+
+A typical transaction \subparagraph*{}
+
+\subparagraph*{}
+
+A typical transaction \subparagraph*{}
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1transaction__t_a893faeea3f9f9a0875d0522c6c7de5b6}\label{structmods_1_1lmdb_1_1transaction__t_a893faeea3f9f9a0875d0522c6c7de5b6}} 
+\index{mods\+::lmdb\+::transaction\+\_\+t@{mods\+::lmdb\+::transaction\+\_\+t}!get@{get}}
+\index{get@{get}!mods\+::lmdb\+::transaction\+\_\+t@{mods\+::lmdb\+::transaction\+\_\+t}}
+\subsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::string mods\+::lmdb\+::transaction\+\_\+t\+::get (\begin{DoxyParamCaption}\item[{T}]{consumer,  }\item[{std\+::string}]{key }\end{DoxyParamCaption})}
+
+get(key,val) is basically like the sql version of \char`\"{}where\char`\"{}. i.\+e.\+: get(\char`\"{}user\+\_\+id\char`\"{},123); //sql equiv\+: select $\ast$ from users where user\+\_\+id = 123 \mbox{\Hypertarget{structmods_1_1lmdb_1_1transaction__t_a89e078b5a572044e71ee239589ea334f}\label{structmods_1_1lmdb_1_1transaction__t_a89e078b5a572044e71ee239589ea334f}} 
+\index{mods\+::lmdb\+::transaction\+\_\+t@{mods\+::lmdb\+::transaction\+\_\+t}!get\+\_\+all@{get\+\_\+all}}
+\index{get\+\_\+all@{get\+\_\+all}!mods\+::lmdb\+::transaction\+\_\+t@{mods\+::lmdb\+::transaction\+\_\+t}}
+\subsubsection{\texorpdfstring{get\+\_\+all()}{get\_all()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+result\+\_\+container\+\_\+t mods\+::lmdb\+::transaction\+\_\+t\+::get\+\_\+all (\begin{DoxyParamCaption}\item[{T}]{consumer }\end{DoxyParamCaption})}
+
+The sql equivalent of this is \textquotesingle{}select $\ast$ from table\textquotesingle{}
+
+get(key,val) is basically like the sql version of \char`\"{}where\char`\"{}. i.\+e.\+: get(\char`\"{}user\+\_\+id\char`\"{},123); //sql equiv\+: select $\ast$ from users where user\+\_\+id = 123 The sql equivalent of this is \textquotesingle{}select $\ast$ from table\textquotesingle{} 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+lmdb.\+hpp\item 
+lmdb.\+cpp\end{DoxyCompactItemize}

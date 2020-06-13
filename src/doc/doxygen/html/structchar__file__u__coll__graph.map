@@ -1,0 +1,8 @@
+<map id="char_file_u" name="char_file_u">
+<area shape="rect" id="node2" href="$structchar__point__data.html" title="char_point_data" alt="" coords="33,5,147,32"/>
+<area shape="rect" id="node3" href="$structaffected__type.html" title="affected_type" alt="" coords="39,95,141,121"/>
+<area shape="rect" id="node4" href="$structplayer__special__data__saved.html" title="player_special_data\l_saved" alt="" coords="21,146,159,187"/>
+<area shape="rect" id="node5" href="$structmods_1_1string.html" title="mods::string" alt="" coords="43,236,137,263"/>
+<area shape="rect" id="node6" href="$structchar__ability__data.html" title="char_ability_data" alt="" coords="30,287,150,313"/>
+<area shape="rect" id="node7" href="$structchar__special__data__saved.html" title="char_special_data_saved" alt="" coords="5,337,175,364"/>
+</map>

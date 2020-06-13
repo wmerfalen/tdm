@@ -1,0 +1,296 @@
+\hypertarget{structroom__data}{}\section{room\+\_\+data Struct Reference}
+\label{structroom__data}\index{room\+\_\+data@{room\+\_\+data}}
+
+
+Collaboration diagram for room\+\_\+data\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structroom__data__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8e}{texture\+\_\+type\+\_\+t} \+: uint8\+\_\+t \{ \newline
+{\bfseries G\+R\+A\+SS}, 
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8ea11c29a8a341e0515595b1e6dd50457d6}{C\+E\+M\+E\+NT}, 
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8ea725f10e60d4c90ac587d77c85b28e922}{O\+U\+T\+S\+I\+DE}, 
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8ea30dbd9210e43561e3118aea65067d9b1}{I\+N\+S\+I\+DE}, 
+\newline
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8ea914e27e6a837fbd4808b438efa226574}{S\+E\+W\+ER}, 
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8ea4f2e9c36313c15fe141436285e66c580}{R\+A\+D\+I\+O\+A\+C\+T\+I\+VE}, 
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8ea21126e617e2a826c37c99f6c8c886892}{V\+O\+L\+A\+T\+I\+LE}, 
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8ea3ab460e29e26b0631d72e909e02a7578}{R\+U\+B\+B\+LE}, 
+\newline
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8ea68753c225baa220dc8dd9299acf73ea2}{D\+I\+RT}, 
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8ea1e70c1275b57dd3371316f49c780c059}{S\+H\+A\+T\+T\+E\+R\+E\+D\+\_\+\+G\+L\+A\+SS}, 
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8ea77edd2a7b85af07f1d34f080ab5504c1}{L\+O\+W\+\_\+\+A\+T\+M\+O\+S\+P\+H\+E\+RE}, 
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8eaed27f6f35a52e763486ad5497e42317f}{O\+N\+\_\+\+F\+I\+RE}, 
+\newline
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8ea0d7ef1795d2bde3dffbfb2ea750a0f17}{N\+O\+N\+\_\+\+H\+A\+Z\+A\+R\+D\+O\+U\+S\+\_\+\+S\+M\+O\+KE}, 
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8eaa728f7c355380fcd73472e8b8b2dcb75}{H\+A\+Z\+A\+R\+D\+O\+U\+S\+\_\+\+S\+M\+O\+KE}, 
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8ea194a18c2d87201d35b72c2e7aa45a6a4}{E\+MP}, 
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8ea629388630ef251099a51cbe093e3fadc}{T\+U\+N\+N\+EL}, 
+\newline
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8ea5b1767f3f8b4c1c40e36fb0c4d17c1d1}{L\+A\+D\+D\+ER}, 
+\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8ea73dc5c708ccbd44132d03b2ebe7db7c5}{E\+L\+E\+V\+A\+T\+OR}, 
+{\bfseries G\+L\+A\+S\+S\+\_\+\+W\+I\+N\+D\+O\+WS}, 
+{\bfseries S\+C\+A\+N\+N\+ED}
+ \}
+\item 
+\mbox{\Hypertarget{structroom__data_aad8501e5aeeaa48dd1ac944d62cf06cb}\label{structroom__data_aad8501e5aeeaa48dd1ac944d62cf06cb}} 
+enum {\bfseries fire\+\_\+status\+\_\+t} \+: uint8\+\_\+t \{ \newline
+{\bfseries N\+O\+NE} = 0, 
+{\bfseries K\+I\+N\+D\+L\+I\+NG} = 1, 
+{\bfseries C\+O\+M\+P\+L\+E\+T\+E\+L\+Y\+\_\+\+O\+N\+\_\+\+F\+I\+RE} = 2, 
+{\bfseries S\+M\+O\+L\+D\+E\+R\+I\+NG} = 3, 
+\newline
+{\bfseries S\+M\+O\+K\+I\+NG} = 4, 
+{\bfseries O\+UT} = 5
+ \}
+\item 
+\mbox{\Hypertarget{structroom__data_a1c9d12fd8be2e38c8f4f13be1fa245e6}\label{structroom__data_a1c9d12fd8be2e38c8f4f13be1fa245e6}} 
+using {\bfseries texture\+\_\+level\+\_\+t} = uint8\+\_\+t
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structroom__data_afcd0aff11a5deaeacb1b0a9a0d6d8024}\label{structroom__data_afcd0aff11a5deaeacb1b0a9a0d6d8024}} 
+void {\bfseries init} ()
+\item 
+\mbox{\Hypertarget{structroom__data_a130bb038480d990dbf2f1ae8107767b3}\label{structroom__data_a130bb038480d990dbf2f1ae8107767b3}} 
+{\bfseries room\+\_\+data} (const \hyperlink{structroom__data}{room\+\_\+data} \&r)
+\item 
+void \hyperlink{structroom__data_a34bca78611d71d3aaffa3c3353bd14f9}{set\+\_\+dir\+\_\+option} (byte i, const std\+::string \&gen\+\_\+desc, const std\+::string \&keyword, const int \&ex\+\_\+info, const int \&key, const room\+\_\+rnum to\+\_\+room)
+\item 
+\mbox{\Hypertarget{structroom__data_ab4f6133ecc1bd1d75ae511a151dba79a}\label{structroom__data_ab4f6133ecc1bd1d75ae511a151dba79a}} 
+std\+::vector$<$ \hyperlink{structmods_1_1extra__desc__data}{mods\+::extra\+\_\+desc\+\_\+data} $>$ \& {\bfseries ex\+\_\+descriptions} ()
+\item 
+\mbox{\Hypertarget{structroom__data_a426dcc56f86e2a6c6351cd10554e4d81}\label{structroom__data_a426dcc56f86e2a6c6351cd10554e4d81}} 
+std\+::deque$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{structobj__data}{obj\+\_\+data} $>$ $>$ \& {\bfseries contents\+\_\+container} ()
+\item 
+std\+::string\+\_\+view \hyperlink{structroom__data_a2884a2a31feeab08c7e495453e354261}{overhead} (const lense\+\_\+type\+\_\+t \&)
+\item 
+\mbox{\Hypertarget{structroom__data_ab43aed1d0b9a11454d53b53198f5d5e7}\label{structroom__data_ab43aed1d0b9a11454d53b53198f5d5e7}} 
+std\+::vector$<$ \hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8e}{texture\+\_\+type\+\_\+t} $>$ \& {\bfseries textures} ()
+\item 
+\mbox{\Hypertarget{structroom__data_acd1b6557b6eea95d4bc428d88f1bdd21}\label{structroom__data_acd1b6557b6eea95d4bc428d88f1bdd21}} 
+void {\bfseries add\+\_\+texture} (\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8e}{texture\+\_\+type\+\_\+t} t)
+\item 
+\mbox{\Hypertarget{structroom__data_a34fdac45a93da5bcf158088dc6d66ae8}\label{structroom__data_a34fdac45a93da5bcf158088dc6d66ae8}} 
+void {\bfseries remove\+\_\+texture} (\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8e}{texture\+\_\+type\+\_\+t} t)
+\item 
+\mbox{\Hypertarget{structroom__data_a5b0f4da4c7c51f80c704c686045ed331}\label{structroom__data_a5b0f4da4c7c51f80c704c686045ed331}} 
+const std\+::vector$<$ uint8\+\_\+t $>$ \& {\bfseries directions} () const
+\item 
+fire\+\_\+status\+\_\+t \& \hyperlink{structroom__data_a94b548a90fd4952075ab44b2622432a7}{fire\+\_\+status} ()
+\item 
+\mbox{\Hypertarget{structroom__data_ae276d39f5763333989a885be8c1d748b}\label{structroom__data_ae276d39f5763333989a885be8c1d748b}} 
+void {\bfseries fire\+\_\+status\+\_\+start} ()
+\item 
+texture\+\_\+level\+\_\+t \& \hyperlink{structroom__data_aae0acfa6fdd06020915943202f3826c2}{texture\+\_\+level} (\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8e}{texture\+\_\+type\+\_\+t} type)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structroom__data_ac02ddee80e6baae69013cfca076ad215}\label{structroom__data_ac02ddee80e6baae69013cfca076ad215}} 
+room\+\_\+vnum {\bfseries number}
+\item 
+\mbox{\Hypertarget{structroom__data_a0abda0c8a49d2b24dc06c11b9bef1dc4}\label{structroom__data_a0abda0c8a49d2b24dc06c11b9bef1dc4}} 
+zone\+\_\+rnum {\bfseries zone}
+\item 
+\mbox{\Hypertarget{structroom__data_adcba259049bfe3580ddba8f5ec8f14aa}\label{structroom__data_adcba259049bfe3580ddba8f5ec8f14aa}} 
+int {\bfseries sector\+\_\+type}
+\item 
+\mbox{\Hypertarget{structroom__data_ade1a73004006f5a1ced7350c675eaa76}\label{structroom__data_ade1a73004006f5a1ced7350c675eaa76}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries name}
+\item 
+\mbox{\Hypertarget{structroom__data_ad321243cda8b9a81ea8ee035a51d04f7}\label{structroom__data_ad321243cda8b9a81ea8ee035a51d04f7}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries description}
+\item 
+\mbox{\Hypertarget{structroom__data_ad9454eca58e458b9b5eb29612577c3d6}\label{structroom__data_ad9454eca58e458b9b5eb29612577c3d6}} 
+\hyperlink{structroom__direction__data}{room\+\_\+direction\+\_\+data} $\ast$ {\bfseries dir\+\_\+option} \mbox{[}N\+U\+M\+\_\+\+O\+F\+\_\+\+D\+I\+RS\mbox{]}
+\item 
+\mbox{\Hypertarget{structroom__data_a84dbca4dc31fa5c684a622ae44729024}\label{structroom__data_a84dbca4dc31fa5c684a622ae44729024}} 
+int {\bfseries room\+\_\+flags}
+\item 
+\mbox{\Hypertarget{structroom__data_a2b534af5a3f750c7205767661b568351}\label{structroom__data_a2b534af5a3f750c7205767661b568351}} 
+byte {\bfseries light}
+\item 
+\mbox{\Hypertarget{structroom__data_aae776b30a1dba3abc2824d845c3db650}\label{structroom__data_aae776b30a1dba3abc2824d845c3db650}} 
+S\+P\+E\+C\+I\+AL $\ast$ {\bfseries func}
+\item 
+\mbox{\Hypertarget{structroom__data_a02fe12382dbdd33e0c25a2db7ae11bc8}\label{structroom__data_a02fe12382dbdd33e0c25a2db7ae11bc8}} 
+\hyperlink{structobj__data}{obj\+\_\+data} $\ast$ {\bfseries contents}
+\item 
+\mbox{\Hypertarget{structroom__data_a64f561d7e3b94fa7bd8ec3bc3d0e1d8f}\label{structroom__data_a64f561d7e3b94fa7bd8ec3bc3d0e1d8f}} 
+\hyperlink{structchar__data}{char\+\_\+data} $\ast$ {\bfseries people}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr std\+::array$<$ \hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8e}{texture\+\_\+type\+\_\+t}, 5 $>$ {\bfseries textures\+\_\+that\+\_\+have\+\_\+levels}
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structroom__data_af1e3735077d459383ec20985eda26459}\label{structroom__data_af1e3735077d459383ec20985eda26459}} 
+void {\bfseries m\+\_\+dispatch\+\_\+fire\+\_\+dissolver} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structroom__data_a99d435147a074558d8c9885b91d79817}\label{structroom__data_a99d435147a074558d8c9885b91d79817}} 
+std\+::map$<$ \hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8e}{texture\+\_\+type\+\_\+t}, texture\+\_\+level\+\_\+t $>$ {\bfseries m\+\_\+texture\+\_\+levels}
+\item 
+\mbox{\Hypertarget{structroom__data_a0ffb7df8066794ff035aa6aab126cb82}\label{structroom__data_a0ffb7df8066794ff035aa6aab126cb82}} 
+std\+::vector$<$ uint8\+\_\+t $>$ {\bfseries m\+\_\+directions}
+\item 
+\mbox{\Hypertarget{structroom__data_acf2fa02a703a383c7d69e75ec7d2d606}\label{structroom__data_acf2fa02a703a383c7d69e75ec7d2d606}} 
+std\+::vector$<$ \hyperlink{structmods_1_1extra__desc__data}{mods\+::extra\+\_\+desc\+\_\+data} $>$ {\bfseries m\+\_\+ex\+\_\+descriptions}
+\item 
+\mbox{\Hypertarget{structroom__data_a7013d2fb07dffd6f9d12c8f9d757daa5}\label{structroom__data_a7013d2fb07dffd6f9d12c8f9d757daa5}} 
+std\+::vector$<$ \hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8e}{texture\+\_\+type\+\_\+t} $>$ {\bfseries m\+\_\+textures}
+\item 
+\mbox{\Hypertarget{structroom__data_a800e7e5c6c49f9d96b62922b9b183b21}\label{structroom__data_a800e7e5c6c49f9d96b62922b9b183b21}} 
+std\+::deque$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{structobj__data}{obj\+\_\+data} $>$ $>$ {\bfseries m\+\_\+contents}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8e}\label{structroom__data_a9552b46091ee649079e41f04f9543b8e}} 
+\index{room\+\_\+data@{room\+\_\+data}!texture\+\_\+type\+\_\+t@{texture\+\_\+type\+\_\+t}}
+\index{texture\+\_\+type\+\_\+t@{texture\+\_\+type\+\_\+t}!room\+\_\+data@{room\+\_\+data}}
+\subsubsection{\texorpdfstring{texture\+\_\+type\+\_\+t}{texture\_type\_t}}
+{\footnotesize\ttfamily enum \hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8e}{room\+\_\+data\+::texture\+\_\+type\+\_\+t} \+: uint8\+\_\+t}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{C\+E\+M\+E\+NT@{C\+E\+M\+E\+NT}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!C\+E\+M\+E\+NT@{C\+E\+M\+E\+NT}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8ea11c29a8a341e0515595b1e6dd50457d6}\label{structroom__data_a9552b46091ee649079e41f04f9543b8ea11c29a8a341e0515595b1e6dd50457d6}} 
+C\+E\+M\+E\+NT&typically grass that isn\textquotesingle{}t flammable (i.\+e. not dried out) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{O\+U\+T\+S\+I\+DE@{O\+U\+T\+S\+I\+DE}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!O\+U\+T\+S\+I\+DE@{O\+U\+T\+S\+I\+DE}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8ea725f10e60d4c90ac587d77c85b28e922}\label{structroom__data_a9552b46091ee649079e41f04f9543b8ea725f10e60d4c90ac587d77c85b28e922}} 
+O\+U\+T\+S\+I\+DE&asphault, nearly indestructible \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{I\+N\+S\+I\+DE@{I\+N\+S\+I\+DE}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!I\+N\+S\+I\+DE@{I\+N\+S\+I\+DE}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8ea30dbd9210e43561e3118aea65067d9b1}\label{structroom__data_a9552b46091ee649079e41f04f9543b8ea30dbd9210e43561e3118aea65067d9b1}} 
+I\+N\+S\+I\+DE&Outside where anyone can see you \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{S\+E\+W\+ER@{S\+E\+W\+ER}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!S\+E\+W\+ER@{S\+E\+W\+ER}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8ea914e27e6a837fbd4808b438efa226574}\label{structroom__data_a9552b46091ee649079e41f04f9543b8ea914e27e6a837fbd4808b438efa226574}} 
+S\+E\+W\+ER&Example\+: inside a home \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{R\+A\+D\+I\+O\+A\+C\+T\+I\+VE@{R\+A\+D\+I\+O\+A\+C\+T\+I\+VE}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!R\+A\+D\+I\+O\+A\+C\+T\+I\+VE@{R\+A\+D\+I\+O\+A\+C\+T\+I\+VE}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8ea4f2e9c36313c15fe141436285e66c580}\label{structroom__data_a9552b46091ee649079e41f04f9543b8ea4f2e9c36313c15fe141436285e66c580}} 
+R\+A\+D\+I\+O\+A\+C\+T\+I\+VE&Underground sewer tunnel \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{V\+O\+L\+A\+T\+I\+LE@{V\+O\+L\+A\+T\+I\+LE}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!V\+O\+L\+A\+T\+I\+LE@{V\+O\+L\+A\+T\+I\+LE}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8ea21126e617e2a826c37c99f6c8c886892}\label{structroom__data_a9552b46091ee649079e41f04f9543b8ea21126e617e2a826c37c99f6c8c886892}} 
+V\+O\+L\+A\+T\+I\+LE&actively emitting radioactivity \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{R\+U\+B\+B\+LE@{R\+U\+B\+B\+LE}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!R\+U\+B\+B\+LE@{R\+U\+B\+B\+LE}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8ea3ab460e29e26b0631d72e909e02a7578}\label{structroom__data_a9552b46091ee649079e41f04f9543b8ea3ab460e29e26b0631d72e909e02a7578}} 
+R\+U\+B\+B\+LE&Volatile means any slight spark will ignite an explosion \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{D\+I\+RT@{D\+I\+RT}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!D\+I\+RT@{D\+I\+RT}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8ea68753c225baa220dc8dd9299acf73ea2}\label{structroom__data_a9552b46091ee649079e41f04f9543b8ea68753c225baa220dc8dd9299acf73ea2}} 
+D\+I\+RT&decimation of buildings resulting in lots of ruble \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{S\+H\+A\+T\+T\+E\+R\+E\+D\+\_\+\+G\+L\+A\+SS@{S\+H\+A\+T\+T\+E\+R\+E\+D\+\_\+\+G\+L\+A\+SS}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!S\+H\+A\+T\+T\+E\+R\+E\+D\+\_\+\+G\+L\+A\+SS@{S\+H\+A\+T\+T\+E\+R\+E\+D\+\_\+\+G\+L\+A\+SS}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8ea1e70c1275b57dd3371316f49c780c059}\label{structroom__data_a9552b46091ee649079e41f04f9543b8ea1e70c1275b57dd3371316f49c780c059}} 
+S\+H\+A\+T\+T\+E\+R\+E\+D\+\_\+\+G\+L\+A\+SS&think about outside+cement but except no cement \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{L\+O\+W\+\_\+\+A\+T\+M\+O\+S\+P\+H\+E\+RE@{L\+O\+W\+\_\+\+A\+T\+M\+O\+S\+P\+H\+E\+RE}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!L\+O\+W\+\_\+\+A\+T\+M\+O\+S\+P\+H\+E\+RE@{L\+O\+W\+\_\+\+A\+T\+M\+O\+S\+P\+H\+E\+RE}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8ea77edd2a7b85af07f1d34f080ab5504c1}\label{structroom__data_a9552b46091ee649079e41f04f9543b8ea77edd2a7b85af07f1d34f080ab5504c1}} 
+L\+O\+W\+\_\+\+A\+T\+M\+O\+S\+P\+H\+E\+RE&results of breaking glass objects \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{O\+N\+\_\+\+F\+I\+RE@{O\+N\+\_\+\+F\+I\+RE}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!O\+N\+\_\+\+F\+I\+RE@{O\+N\+\_\+\+F\+I\+RE}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8eaed27f6f35a52e763486ad5497e42317f}\label{structroom__data_a9552b46091ee649079e41f04f9543b8eaed27f6f35a52e763486ad5497e42317f}} 
+O\+N\+\_\+\+F\+I\+RE&atmosphere too thin for helicopter to fly \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{N\+O\+N\+\_\+\+H\+A\+Z\+A\+R\+D\+O\+U\+S\+\_\+\+S\+M\+O\+KE@{N\+O\+N\+\_\+\+H\+A\+Z\+A\+R\+D\+O\+U\+S\+\_\+\+S\+M\+O\+KE}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!N\+O\+N\+\_\+\+H\+A\+Z\+A\+R\+D\+O\+U\+S\+\_\+\+S\+M\+O\+KE@{N\+O\+N\+\_\+\+H\+A\+Z\+A\+R\+D\+O\+U\+S\+\_\+\+S\+M\+O\+KE}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8ea0d7ef1795d2bde3dffbfb2ea750a0f17}\label{structroom__data_a9552b46091ee649079e41f04f9543b8ea0d7ef1795d2bde3dffbfb2ea750a0f17}} 
+N\+O\+N\+\_\+\+H\+A\+Z\+A\+R\+D\+O\+U\+S\+\_\+\+S\+M\+O\+KE&actively burning \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{H\+A\+Z\+A\+R\+D\+O\+U\+S\+\_\+\+S\+M\+O\+KE@{H\+A\+Z\+A\+R\+D\+O\+U\+S\+\_\+\+S\+M\+O\+KE}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!H\+A\+Z\+A\+R\+D\+O\+U\+S\+\_\+\+S\+M\+O\+KE@{H\+A\+Z\+A\+R\+D\+O\+U\+S\+\_\+\+S\+M\+O\+KE}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8eaa728f7c355380fcd73472e8b8b2dcb75}\label{structroom__data_a9552b46091ee649079e41f04f9543b8eaa728f7c355380fcd73472e8b8b2dcb75}} 
+H\+A\+Z\+A\+R\+D\+O\+U\+S\+\_\+\+S\+M\+O\+KE&think\+: burning car \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{E\+MP@{E\+MP}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!E\+MP@{E\+MP}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8ea194a18c2d87201d35b72c2e7aa45a6a4}\label{structroom__data_a9552b46091ee649079e41f04f9543b8ea194a18c2d87201d35b72c2e7aa45a6a4}} 
+E\+MP&think\+: gas attacks \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{T\+U\+N\+N\+EL@{T\+U\+N\+N\+EL}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!T\+U\+N\+N\+EL@{T\+U\+N\+N\+EL}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8ea629388630ef251099a51cbe093e3fadc}\label{structroom__data_a9552b46091ee649079e41f04f9543b8ea629388630ef251099a51cbe093e3fadc}} 
+T\+U\+N\+N\+EL&chaff or emp has been detonated \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{L\+A\+D\+D\+ER@{L\+A\+D\+D\+ER}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!L\+A\+D\+D\+ER@{L\+A\+D\+D\+ER}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8ea5b1767f3f8b4c1c40e36fb0c4d17c1d1}\label{structroom__data_a9552b46091ee649079e41f04f9543b8ea5b1767f3f8b4c1c40e36fb0c4d17c1d1}} 
+L\+A\+D\+D\+ER&a tunnel made of any material \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{E\+L\+E\+V\+A\+T\+OR@{E\+L\+E\+V\+A\+T\+OR}!room\+\_\+data@{room\+\_\+data}}\index{room\+\_\+data@{room\+\_\+data}!E\+L\+E\+V\+A\+T\+OR@{E\+L\+E\+V\+A\+T\+OR}}}\mbox{\Hypertarget{structroom__data_a9552b46091ee649079e41f04f9543b8ea73dc5c708ccbd44132d03b2ebe7db7c5}\label{structroom__data_a9552b46091ee649079e41f04f9543b8ea73dc5c708ccbd44132d03b2ebe7db7c5}} 
+E\+L\+E\+V\+A\+T\+OR&a ladder leading up or down \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{structroom__data_a94b548a90fd4952075ab44b2622432a7}\label{structroom__data_a94b548a90fd4952075ab44b2622432a7}} 
+\index{room\+\_\+data@{room\+\_\+data}!fire\+\_\+status@{fire\+\_\+status}}
+\index{fire\+\_\+status@{fire\+\_\+status}!room\+\_\+data@{room\+\_\+data}}
+\subsubsection{\texorpdfstring{fire\+\_\+status()}{fire\_status()}}
+{\footnotesize\ttfamily fire\+\_\+status\+\_\+t\& room\+\_\+data\+::fire\+\_\+status (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+fire status fire status fire status \mbox{\Hypertarget{structroom__data_a2884a2a31feeab08c7e495453e354261}\label{structroom__data_a2884a2a31feeab08c7e495453e354261}} 
+\index{room\+\_\+data@{room\+\_\+data}!overhead@{overhead}}
+\index{overhead@{overhead}!room\+\_\+data@{room\+\_\+data}}
+\subsubsection{\texorpdfstring{overhead()}{overhead()}}
+{\footnotesize\ttfamily std\+::string\+\_\+view room\+\_\+data\+::overhead (\begin{DoxyParamCaption}\item[{const lense\+\_\+type\+\_\+t \&}]{lense }\end{DoxyParamCaption})}
+
+T\+O\+DO\+: if we have mobs in this room, mark it with a red indicator to simulate heat signatures \mbox{\Hypertarget{structroom__data_a34bca78611d71d3aaffa3c3353bd14f9}\label{structroom__data_a34bca78611d71d3aaffa3c3353bd14f9}} 
+\index{room\+\_\+data@{room\+\_\+data}!set\+\_\+dir\+\_\+option@{set\+\_\+dir\+\_\+option}}
+\index{set\+\_\+dir\+\_\+option@{set\+\_\+dir\+\_\+option}!room\+\_\+data@{room\+\_\+data}}
+\subsubsection{\texorpdfstring{set\+\_\+dir\+\_\+option()}{set\_dir\_option()}}
+{\footnotesize\ttfamily void room\+\_\+data\+::set\+\_\+dir\+\_\+option (\begin{DoxyParamCaption}\item[{byte}]{i,  }\item[{const std\+::string \&}]{gen\+\_\+desc,  }\item[{const std\+::string \&}]{keyword,  }\item[{const int \&}]{ex\+\_\+info,  }\item[{const int \&}]{key,  }\item[{const room\+\_\+rnum}]{to\+\_\+room }\end{DoxyParamCaption})}
+
+free is handled properly in \hyperlink{structroom__data}{room\+\_\+data} destructor
+
+free is handled properly in \hyperlink{structroom__data}{room\+\_\+data} destructor
+
+F\+I\+X\+ME\+: replace strdup\textquotesingle{}d members with \hyperlink{structmods_1_1string}{mods\+::string}
+
+F\+I\+X\+ME\+: make this dynamic when bugs with builder.\+cpp are cleaned up \mbox{\Hypertarget{structroom__data_aae0acfa6fdd06020915943202f3826c2}\label{structroom__data_aae0acfa6fdd06020915943202f3826c2}} 
+\index{room\+\_\+data@{room\+\_\+data}!texture\+\_\+level@{texture\+\_\+level}}
+\index{texture\+\_\+level@{texture\+\_\+level}!room\+\_\+data@{room\+\_\+data}}
+\subsubsection{\texorpdfstring{texture\+\_\+level()}{texture\_level()}}
+{\footnotesize\ttfamily texture\+\_\+level\+\_\+t\& room\+\_\+data\+::texture\+\_\+level (\begin{DoxyParamCaption}\item[{\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8e}{texture\+\_\+type\+\_\+t}}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+E\+ND fire status 
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structroom__data_a153f9eb5c5c4d67bcf8ec85daedc8fa7}\label{structroom__data_a153f9eb5c5c4d67bcf8ec85daedc8fa7}} 
+\index{room\+\_\+data@{room\+\_\+data}!textures\+\_\+that\+\_\+have\+\_\+levels@{textures\+\_\+that\+\_\+have\+\_\+levels}}
+\index{textures\+\_\+that\+\_\+have\+\_\+levels@{textures\+\_\+that\+\_\+have\+\_\+levels}!room\+\_\+data@{room\+\_\+data}}
+\subsubsection{\texorpdfstring{textures\+\_\+that\+\_\+have\+\_\+levels}{textures\_that\_have\_levels}}
+{\footnotesize\ttfamily constexpr std\+::array$<$\hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8e}{texture\+\_\+type\+\_\+t},5$>$ room\+\_\+data\+::textures\+\_\+that\+\_\+have\+\_\+levels\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+= \{
+      texture\_type\_t::RADIOACTIVE,
+      texture\_type\_t::LOW\_ATMOSPHERE,
+      texture\_type\_t::ON\_FIRE,
+      texture\_type\_t::NON\_HAZARDOUS\_SMOKE,
+      texture\_type\_t::HAZARDOUS\_SMOKE
+    \}
+\end{DoxyCode}
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+structs.\+h\item 
+structs.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,8 @@
+<map id="mods::classes::base" name="mods::classes::base">
+<area shape="rect" id="node2" href="$structmods_1_1classes_1_1engineer.html" title="mods::classes::engineer" alt="" coords="196,5,360,32"/>
+<area shape="rect" id="node3" href="$structmods_1_1classes_1_1marine.html" title="mods::classes::marine" alt="" coords="201,56,355,83"/>
+<area shape="rect" id="node4" href="$structmods_1_1classes_1_1medic.html" title="mods::classes::medic" alt="" coords="203,107,353,133"/>
+<area shape="rect" id="node5" href="$structmods_1_1classes_1_1sentinel.html" title="mods::classes::sentinel" alt="" coords="198,157,358,184"/>
+<area shape="rect" id="node6" href="$structmods_1_1classes_1_1sniper.html" title="mods::classes::sniper" alt="" coords="203,208,353,235"/>
+<area shape="rect" id="node7" href="$structmods_1_1classes_1_1support.html" title="mods::classes::support" alt="" coords="199,259,357,285"/>
+</map>

@@ -47,6 +47,12 @@ namespace mods::adhoc {
 };
 
 namespace mods::fs {
+	/**
+	 * @brief list files in path to player
+	 *
+	 * @param player
+	 * @param _path
+	 */
 	void ls(player_ptr_t player,std::string_view _path) {
 		std::string path = _path.data();
 		DIR *dir;
@@ -65,6 +71,11 @@ namespace mods::fs {
 	}
 };
 
+/**
+ * @brief get the next object number from postgres (next PKID)
+ *
+ * @return int -1 if error, positive object number
+ */
 int next_obj_number(){
 	try{
 		auto select_transaction = txn();
@@ -86,10 +97,20 @@ int next_obj_number(){
 
 
 
+/**
+ * @brief get the next object number as a mud command
+ *
+ * @param do_next_object_number
+ */
 ACMD(do_next_object_number){
 	player->stc(std::to_string(next_obj_number()));
 }
 
+/**
+ * @brief get next zone number PKID from postgres
+ *
+ * @return -1 on error, number as pkid
+ */
 int next_zone_number() {
 	if(mods::adhoc::max_zone == -1){
 	try{
@@ -113,6 +134,11 @@ int next_zone_number() {
 }
 
 
+/**
+ * @brief get next room PKID from postgres
+ *
+ * @return  -1 if error, number if pkid
+ */
 int next_room_number(){ 
 	if(mods::adhoc::max_room == -1){
 		try{
@@ -138,6 +164,11 @@ int next_room_number(){
 	}
 	return mods::adhoc::next_room();
 }
+/**
+ * @brief get next pkid from postgres
+ *
+ * @return -1 on error, pkid
+ */
 int next_mob_number(){
 	if(mods::adhoc::max_mob == -1){
 	try{
@@ -180,6 +211,11 @@ ACMD(do_next_obj_number){
 }
 
 
+/**
+ * @brief DEPRECATED. fills rifle attributes of object
+ *
+ * @param obj
+ */
 void fill_rifle(std::shared_ptr<obj_data>& obj) {
 	obj_data &proto = *obj;
 	for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
@@ -214,6 +250,11 @@ void fill_rifle(std::shared_ptr<obj_data>& obj) {
 	proto.obj_flags.timer = 0;
 }
 
+/**
+ * @brief deprectated
+ *
+ * @param obj
+ */
 void fill_drone(std::shared_ptr<obj_data>& obj) {
 	obj_data &proto = *obj;
 	for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
@@ -249,6 +290,11 @@ void fill_drone(std::shared_ptr<obj_data>& obj) {
 }
 
 
+/**
+ * @brief deprecated
+ *
+ * @param obj
+ */
 void fill_attachment(std::shared_ptr<obj_data>& obj) {
 	obj_data &proto = *obj;
 	for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
@@ -283,6 +329,11 @@ void fill_attachment(std::shared_ptr<obj_data>& obj) {
 	proto.obj_flags.timer = 0;
 }
 
+/**
+ * @brief deprecated
+ *
+ * @param obj
+ */
 void fill_gadget(std::shared_ptr<obj_data>& obj) {
 	obj_data &proto = *obj;
 	for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
@@ -317,6 +368,11 @@ void fill_gadget(std::shared_ptr<obj_data>& obj) {
 	proto.obj_flags.timer = 0;
 }
 
+/**
+ * @brief deprecated
+ *
+ * @param obj
+ */
 void fill_explosive(std::shared_ptr<obj_data>& obj) {
 	obj_data &proto = *obj;
 	for(unsigned i = 0; i < MAX_OBJ_AFFECT; i++) {
@@ -351,6 +407,11 @@ void fill_explosive(std::shared_ptr<obj_data>& obj) {
 	proto.obj_flags.timer = 0;
 }
 
+/**
+ * @brief deprecated
+ *
+ * @param obj
+ */
 void fill_armor(std::shared_ptr<obj_data>& obj) {
 	log("Warning: fill_armor_object not optimized. obj values may be buggy");
 	obj_data &proto = *obj;
@@ -387,6 +448,11 @@ void fill_armor(std::shared_ptr<obj_data>& obj) {
 	proto.obj_flags.wear_flags = ITEM_WEAR_TAKE;
 }
 
+/**
+ * @brief deprecated
+ *
+ * @param obj
+ */
 void fill_trap(std::shared_ptr<obj_data>& obj) {
 	log("Warning: fill_trap is not optimized. obj values may be buggy");
 	obj_data &proto = *obj;
@@ -426,10 +492,20 @@ void fill_trap(std::shared_ptr<obj_data>& obj) {
 }
 
 
+/**
+ * @brief deprecated
+ *
+ * @param obj
+ */
 void fill_consumable(std::shared_ptr<obj_data>& obj) {
 	/** TODO: this */
 }
 
+/**
+ * @brief flush the currently holding items to db
+ *
+ * @param do_flush_holding
+ */
 ACMD(do_flush_holding){
 	
 	player->sendln("Looking at your carrying list...");
@@ -465,6 +541,11 @@ ACMD(do_flush_holding){
  * yaml_import ls 			#lists files in current dir
  */
 /** TODO: generalize this file system ls interface for use with other stuff */
+/**
+ * @brief import <type> <file>
+ *
+ * @param do_yaml_import
+ */
 ACMD(do_yaml_import){
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() == 0 || vec_args[0].compare("ls") == 0) {
@@ -486,6 +567,11 @@ ACMD(do_yaml_import){
 
 }
 
+/**
+ * @brief get the yaml exception log printed to the player
+ *
+ * @param do_yaml_log
+ */
 ACMD(do_yaml_log){
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() == 0) {
@@ -506,17 +592,32 @@ ACMD(do_yaml_log){
 	player->sendln("Unknown type/file combination. Nothing imported.");
 
 }
+/**
+ * @brief save the current exception log to file
+ *
+ * @param do_yaml_log_save
+ */
 ACMD(do_yaml_log_save){
 	player->send("Saving yaml log...");
 	mods::object_utils::save_yaml_exceptions_to_disk();
 	player->sendln("[done]");
 }
+/**
+ * @brief clear the exception log without saving it. no confirmation
+ *
+ * @param do_yaml_log_clear
+ */
 ACMD(do_yaml_log_clear){
 	player->send("Clearing yaml log...");
 	mods::object_utils::clear_yaml_exceptions();
 	player->sendln("[done]");
 }
 
+/**
+ * @brief debugging feature to set flag on god/imm to hold any item regardless of weight
+ *
+ * @param do_hold_anything
+ */
 ACMD(do_hold_anything){
 
 	auto vec_args = PARSE_ARGS();
@@ -541,6 +642,11 @@ ACMD(do_hold_anything){
 	}
 	player->sendln(HUH);
 }
+/**
+ * @brief calls write_example_file on yaml object. 
+ *
+ * @param command or name of file type (i.e.: rifle, explosive.. to list pass in "list")
+ */
 ACMD(do_yaml_example){
 
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
@@ -638,6 +744,11 @@ ACMD(do_pmw_obj_from_room){
 	}
 }
 
+/**
+ * @brief debugging feature to turn on or off obj_from_room calls
+ *
+ * @param on|off|help
+ */
 ACMD(do_toggle_obj_from_room){
 
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));

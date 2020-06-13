@@ -1,0 +1,153 @@
+\hypertarget{structmods_1_1orm_1_1shop}{}\section{mods\+:\+:orm\+:\+:shop Struct Reference}
+\label{structmods_1_1orm_1_1shop}\index{mods\+::orm\+::shop@{mods\+::orm\+::shop}}
+
+
+Inheritance diagram for mods\+:\+:orm\+:\+:shop\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=170pt]{structmods_1_1orm_1_1shop__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for mods\+:\+:orm\+:\+:shop\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structmods_1_1orm_1_1shop__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_af6942b864fd5faa45db52fc9955ba5d9}\label{structmods_1_1orm_1_1shop_af6942b864fd5faa45db52fc9955ba5d9}} 
+void {\bfseries init} ()
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a1645fa83ebf694d5bd6a247becec5538}\label{structmods_1_1orm_1_1shop_a1645fa83ebf694d5bd6a247becec5538}} 
+int16\+\_\+t {\bfseries feed} (const pqxx\+::result\+::reference \&)
+\item 
+int64\+\_\+t \hyperlink{structmods_1_1orm_1_1shop_a696c01543bff9b376b37136834c5c285}{db\+\_\+id} () const
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a0fa7c25ff8e6a40c6edfc48abcde585d}\label{structmods_1_1orm_1_1shop_a0fa7c25ff8e6a40c6edfc48abcde585d}} 
+std\+::tuple$<$ bool, db\+\_\+id\+\_\+t, std\+::string $>$ {\bfseries save} ()
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_aacd3c43225153cc554b8287cbe39477e}\label{structmods_1_1orm_1_1shop_aacd3c43225153cc554b8287cbe39477e}} 
+int16\+\_\+t {\bfseries delete\+\_\+shop\+\_\+record} ()
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a1f2b7f07775f3fb3a24aba853eeacb26}\label{structmods_1_1orm_1_1shop_a1f2b7f07775f3fb3a24aba853eeacb26}} 
+int16\+\_\+t {\bfseries remove\+\_\+room} (room\+\_\+vnum room)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a021affc10d65e761aa5492f10b7e4dcd}\label{structmods_1_1orm_1_1shop_a021affc10d65e761aa5492f10b7e4dcd}} 
+db\+\_\+id\+\_\+t {\bfseries shop\+\_\+id}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_aa1d016058ad667ab37df940929216fa0}\label{structmods_1_1orm_1_1shop_aa1d016058ad667ab37df940929216fa0}} 
+shop\+\_\+vnum {\bfseries shop\+\_\+vnum\+\_\+id}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a11c5c923b9963241baa6abb7027a9652}\label{structmods_1_1orm_1_1shop_a11c5c923b9963241baa6abb7027a9652}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries shop\+\_\+title}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_ad5bb3f64bea60807c4455b1a5758c6a7}\label{structmods_1_1orm_1_1shop_ad5bb3f64bea60807c4455b1a5758c6a7}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries shop\+\_\+description}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a711ce905c9a4d21d764f6746391136c1}\label{structmods_1_1orm_1_1shop_a711ce905c9a4d21d764f6746391136c1}} 
+float {\bfseries shop\+\_\+profit\+\_\+buy}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_ac4fda31ca48c2ee2d251a0e17ed31c4a}\label{structmods_1_1orm_1_1shop_ac4fda31ca48c2ee2d251a0e17ed31c4a}} 
+float {\bfseries shop\+\_\+profit\+\_\+sell}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a168e19588af9aec2aed8c1ab32662e33}\label{structmods_1_1orm_1_1shop_a168e19588af9aec2aed8c1ab32662e33}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries shop\+\_\+no\+\_\+such\+\_\+item1}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_aca2a7a067933b407946261233d287d9a}\label{structmods_1_1orm_1_1shop_aca2a7a067933b407946261233d287d9a}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries shop\+\_\+no\+\_\+such\+\_\+item2}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a9bf83340f85aaf8a1ba190c045c24722}\label{structmods_1_1orm_1_1shop_a9bf83340f85aaf8a1ba190c045c24722}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries shop\+\_\+missing\+\_\+cash1}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a615218d99a76c39a96e998ca782e2338}\label{structmods_1_1orm_1_1shop_a615218d99a76c39a96e998ca782e2338}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries shop\+\_\+missing\+\_\+cash2}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a42861b6d55c6219c9dcca8b56b645495}\label{structmods_1_1orm_1_1shop_a42861b6d55c6219c9dcca8b56b645495}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries shop\+\_\+do\+\_\+not\+\_\+buy}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_acfecb39fa25837afbaa018a22e1b416b}\label{structmods_1_1orm_1_1shop_acfecb39fa25837afbaa018a22e1b416b}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries shop\+\_\+message\+\_\+buy}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a0c003f7fef14ed0080a3d6435bc745b0}\label{structmods_1_1orm_1_1shop_a0c003f7fef14ed0080a3d6435bc745b0}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries shop\+\_\+message\+\_\+sell}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a659af6b009eed6c0f06be7ce512f020f}\label{structmods_1_1orm_1_1shop_a659af6b009eed6c0f06be7ce512f020f}} 
+int {\bfseries shop\+\_\+temper1}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a5926135b462b7b25c4f7e6ad070c5882}\label{structmods_1_1orm_1_1shop_a5926135b462b7b25c4f7e6ad070c5882}} 
+bitvector\+\_\+t {\bfseries shop\+\_\+bitvector}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_ad28ba1f3b943067fa8b63d9fd2dff69b}\label{structmods_1_1orm_1_1shop_ad28ba1f3b943067fa8b63d9fd2dff69b}} 
+mob\+\_\+rnum {\bfseries shop\+\_\+keeper}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_ae5a46bb94112793bc9dcf7a68941cbb2}\label{structmods_1_1orm_1_1shop_ae5a46bb94112793bc9dcf7a68941cbb2}} 
+int {\bfseries shop\+\_\+with\+\_\+who}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a79d8033a5bcd89c22565fc93cdbf73e9}\label{structmods_1_1orm_1_1shop_a79d8033a5bcd89c22565fc93cdbf73e9}} 
+room\+\_\+vnum {\bfseries shop\+\_\+in\+\_\+room}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a036e2c97febf3dda0f39683fe87fc5ab}\label{structmods_1_1orm_1_1shop_a036e2c97febf3dda0f39683fe87fc5ab}} 
+int {\bfseries shop\+\_\+open1}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a4a9028a12a895ae36938b91c87cd9c2f}\label{structmods_1_1orm_1_1shop_a4a9028a12a895ae36938b91c87cd9c2f}} 
+int {\bfseries shop\+\_\+open2}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a43fcc611d003a7b1fca630b709a4ef4a}\label{structmods_1_1orm_1_1shop_a43fcc611d003a7b1fca630b709a4ef4a}} 
+int {\bfseries shop\+\_\+close1}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_ab0e9ca89f3a3e82d665e09ebb447587f}\label{structmods_1_1orm_1_1shop_ab0e9ca89f3a3e82d665e09ebb447587f}} 
+int {\bfseries shop\+\_\+close2}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a82179733cbb07ba02107fb77cc5e6ef8}\label{structmods_1_1orm_1_1shop_a82179733cbb07ba02107fb77cc5e6ef8}} 
+int {\bfseries shop\+\_\+bank\+Account}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a143fd67d6b8ba4f546923b395625bf32}\label{structmods_1_1orm_1_1shop_a143fd67d6b8ba4f546923b395625bf32}} 
+int {\bfseries shop\+\_\+lastsort}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_ab29cb81d86c6b78eff044872c35c2852}\label{structmods_1_1orm_1_1shop_ab29cb81d86c6b78eff044872c35c2852}} 
+int {\bfseries shop\+\_\+type}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a7f57c4c26d04906bb2efc8fc3523236d}\label{structmods_1_1orm_1_1shop_a7f57c4c26d04906bb2efc8fc3523236d}} 
+bool {\bfseries loaded}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_ae7e36075cbd2799873676c93b988f085}\label{structmods_1_1orm_1_1shop_ae7e36075cbd2799873676c93b988f085}} 
+uint64\+\_\+t {\bfseries shop\+\_\+flags}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_af9bf4888996a8ddfa0929fd7d1674db4}\label{structmods_1_1orm_1_1shop_af9bf4888996a8ddfa0929fd7d1674db4}} 
+\hyperlink{structmods_1_1orm_1_1shop__rooms}{shop\+\_\+rooms} {\bfseries room\+\_\+info}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_ab53c0f829b7370ff9923d201fa523146}\label{structmods_1_1orm_1_1shop_ab53c0f829b7370ff9923d201fa523146}} 
+\hyperlink{structmods_1_1orm_1_1shop__objects}{shop\+\_\+objects} {\bfseries object\+\_\+info}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a6552986c4d062d01fe3126a340ec31ba}\label{structmods_1_1orm_1_1shop_a6552986c4d062d01fe3126a340ec31ba}} 
+static constexpr const char $\ast$ {\bfseries table\+\_\+name} = \char`\"{}shops\char`\"{}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{structmods_1_1orm_1_1shop_a696c01543bff9b376b37136834c5c285}\label{structmods_1_1orm_1_1shop_a696c01543bff9b376b37136834c5c285}} 
+\index{mods\+::orm\+::shop@{mods\+::orm\+::shop}!db\+\_\+id@{db\+\_\+id}}
+\index{db\+\_\+id@{db\+\_\+id}!mods\+::orm\+::shop@{mods\+::orm\+::shop}}
+\subsubsection{\texorpdfstring{db\+\_\+id()}{db\_id()}}
+{\footnotesize\ttfamily int64\+\_\+t mods\+::orm\+::shop\+::db\+\_\+id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+database routines 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+orm/shop.\+hpp\item 
+mods/orm/shop.\+cpp\end{DoxyCompactItemize}

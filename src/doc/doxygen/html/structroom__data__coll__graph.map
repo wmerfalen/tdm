@@ -1,0 +1,17 @@
+<map id="room_data" name="room_data">
+<area shape="rect" id="node2" href="$structroom__direction__data.html" title="room_direction_data" alt="" coords="437,8,576,35"/>
+<area shape="rect" id="node3" href="$structmods_1_1string.html" title="mods::string" alt="" coords="21,107,115,133"/>
+<area shape="rect" id="node4" href="$structobj__data.html" title="obj_data" alt="" coords="317,256,388,283"/>
+<area shape="rect" id="node9" href="$structchar__player__data.html" title="char_player_data" alt="" coords="292,392,413,419"/>
+<area shape="rect" id="node6" href="$structchar__data.html" title="char_data" alt="" coords="645,376,724,403"/>
+<area shape="rect" id="node5" href="$structobj__affected__type.html" title="obj_affected_type" alt="" coords="5,357,131,384"/>
+<area shape="rect" id="node11" href="$structfollow__type.html" title="follow_type" alt="" coords="926,489,1014,516"/>
+<area shape="rect" id="node13" href="$structchar__special__data.html" title="char_special_data" alt="" coords="907,285,1033,312"/>
+<area shape="rect" id="node15" href="$structmob__special__data.html" title="mob_special_data" alt="" coords="907,376,1033,403"/>
+<area shape="rect" id="node7" href="$structchar__point__data.html" title="char_point_data" alt="" coords="295,443,410,469"/>
+<area shape="rect" id="node8" href="$structaffected__type.html" title="affected_type" alt="" coords="302,532,403,559"/>
+<area shape="rect" id="node10" href="$structtime__data.html" title="time_data" alt="" coords="29,408,107,435"/>
+<area shape="rect" id="node12" href="$structchar__ability__data.html" title="char_ability_data" alt="" coords="293,341,413,368"/>
+<area shape="rect" id="node14" href="$structchar__special__data__saved.html" title="char_special_data_saved" alt="" coords="600,180,769,207"/>
+<area shape="rect" id="node16" href="$structobj__flag__data.html" title="obj_flag_data" alt="" coords="19,307,117,333"/>
+</map>

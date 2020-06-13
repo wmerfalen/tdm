@@ -1,10 +1,10 @@
 # List of possible names
 
-| title								| stars							|
-------------------------------------------|
-- Breach OPs					|	[ + +      ]
-- Counter Intel 			| [ + + +    ]
-- Rate of fire				| [ + + +    ]
-- Fully Automatic			| [ + +      ]
-- Persistent Threat   | [ + + + +  ]
--                			| [          ]
+| title								| stars							| notes                                             |
+------------------------------------------|---------------------------------------------------|
+- Breach OPs					|	[ + +      ]      |  okay sorta                                       |
+- Counter Intel 			| [ + + +    ]      |  lame                                             |
+- Rate of fire				| [ + + +    ]      |  meh                                              |
+- Fully Automatic			| [ + +      ]      |  lame                                             |
+- Persistent Threat   | [ + + + +  ]      |  not SEO friendly                                 |
+-                			| [          ]      |                                                   |

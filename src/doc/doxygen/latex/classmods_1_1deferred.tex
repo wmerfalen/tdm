@@ -1,0 +1,115 @@
+\hypertarget{classmods_1_1deferred}{}\section{mods\+:\+:deferred Class Reference}
+\label{classmods_1_1deferred}\index{mods\+::deferred@{mods\+::deferred}}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a60626d363466835d24f2552b8e137775}\label{classmods_1_1deferred_a60626d363466835d24f2552b8e137775}} 
+using {\bfseries seconds} = uint16\+\_\+t
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a16af03a33122bebfd5e95dbaf7089697}\label{classmods_1_1deferred_a16af03a33122bebfd5e95dbaf7089697}} 
+using {\bfseries lambda\+\_\+queue\+\_\+t} = std\+::multimap$<$ uint64\+\_\+t, std\+::function$<$ void()$>$ $>$
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_afcd68c9bedceabeba46a29fa2914746c}\label{classmods_1_1deferred_afcd68c9bedceabeba46a29fa2914746c}} 
+using {\bfseries event\+\_\+queue\+\_\+t} = std\+::multimap$<$ uint32\+\_\+t, std\+::tuple$<$ uuid\+\_\+t, uint32\+\_\+t $>$ $>$
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a720edc74344337fd2477db67eea12184}\label{classmods_1_1deferred_a720edc74344337fd2477db67eea12184}} 
+using {\bfseries lambda\+\_\+queue\+\_\+iterator} = lambda\+\_\+queue\+\_\+t\+::iterator
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_ab270f4e3c967e2abc8cc0c0a267a9ad0}\label{classmods_1_1deferred_ab270f4e3c967e2abc8cc0c0a267a9ad0}} 
+using {\bfseries event\+\_\+queue\+\_\+iterator} = event\+\_\+queue\+\_\+t\+::iterator
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classmods_1_1deferred_a4ddaf679f5be96555258be883fa111e7}{deferred} (uint64\+\_\+t tick\+\_\+resolution)
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a9f6d88929a03abf7ffa0b73c58133880}\label{classmods_1_1deferred_a9f6d88929a03abf7ffa0b73c58133880}} 
+lambda\+\_\+queue\+\_\+iterator {\bfseries push} (uint64\+\_\+t ticks\+\_\+in\+\_\+future, std\+::function$<$ void()$>$ lambda)
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a7b16b29be46808030a1355a367de436a}\label{classmods_1_1deferred_a7b16b29be46808030a1355a367de436a}} 
+event\+\_\+queue\+\_\+iterator {\bfseries push\+\_\+ticks\+\_\+event} (uint32\+\_\+t ticks, std\+::tuple$<$ uuid\+\_\+t, uint32\+\_\+t $>$ type)
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_ae54a47e45569c967ee908028f1d98665}\label{classmods_1_1deferred_ae54a47e45569c967ee908028f1d98665}} 
+void {\bfseries push\+\_\+chunk\+\_\+affect} (uuid\+\_\+t player\+\_\+uuid, std\+::size\+\_\+t chunk, uint64\+\_\+t bit, int64\+\_\+t amount, std\+::size\+\_\+t number\+\_\+of\+\_\+times, bool until\+\_\+zero, uint64\+\_\+t next\+\_\+event\+\_\+tick, uint64\+\_\+t add)
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a338b00519d462a4e4d7756d375311075}\label{classmods_1_1deferred_a338b00519d462a4e4d7756d375311075}} 
+void {\bfseries iteration} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_abf5badd8da9a2f207dcda53c693a3437}\label{classmods_1_1deferred_abf5badd8da9a2f207dcda53c693a3437}} 
+void {\bfseries detexturize\+\_\+room} (uint64\+\_\+t ticks\+\_\+in\+\_\+future, room\+\_\+rnum room\+\_\+id, \hyperlink{structroom__data_a9552b46091ee649079e41f04f9543b8e}{room\+\_\+data\+::texture\+\_\+type\+\_\+t} texture)
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a794e4677afb086836ecd3207d2d28fc4}\label{classmods_1_1deferred_a794e4677afb086836ecd3207d2d28fc4}} 
+{\footnotesize template$<$typename T\+Texture\+List $>$ }\\void {\bfseries texturize\+\_\+room} (uint64\+\_\+t ticks\+\_\+in\+\_\+future, room\+\_\+rnum \&room\+\_\+id, T\+Texture\+List \&textures)
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_acbd4699c918bcaaa129e46a26c43da16}\label{classmods_1_1deferred_acbd4699c918bcaaa129e46a26c43da16}} 
+void {\bfseries cancel\+\_\+lambda} (lambda\+\_\+queue\+\_\+iterator it)
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a1ccc63aa64057b4e5e1819816417f041}\label{classmods_1_1deferred_a1ccc63aa64057b4e5e1819816417f041}} 
+void {\bfseries cancel\+\_\+event} (event\+\_\+queue\+\_\+iterator it)
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a80b0c114610dfcfb48292f95a7ffda8e}\label{classmods_1_1deferred_a80b0c114610dfcfb48292f95a7ffda8e}} 
+uint32\+\_\+t {\bfseries get\+\_\+ticks\+\_\+per\+\_\+minute} ()
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_af4e84e4394187efdeb48f6a27b811aed}\label{classmods_1_1deferred_af4e84e4394187efdeb48f6a27b811aed}} 
+static constexpr uint32\+\_\+t {\bfseries E\+V\+E\+N\+T\+\_\+\+O\+B\+J\+E\+C\+T\+\_\+\+D\+E\+S\+T\+R\+U\+CT} = 0
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a875a87df39bf4ed34f281a59e0c7a18f}\label{classmods_1_1deferred_a875a87df39bf4ed34f281a59e0c7a18f}} 
+static constexpr uint32\+\_\+t {\bfseries E\+V\+E\+N\+T\+\_\+\+P\+L\+A\+Y\+E\+R\+\_\+\+U\+N\+B\+L\+O\+C\+K\+\_\+\+I\+N\+S\+T\+A\+L\+L\+A\+T\+I\+ON} = 1
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_ab5c5f5b79e4690006471a0253f9fb2db}\label{classmods_1_1deferred_ab5c5f5b79e4690006471a0253f9fb2db}} 
+static constexpr uint32\+\_\+t {\bfseries E\+V\+E\+N\+T\+\_\+\+G\+E\+T\+\_\+\+A\+T\+T\+A\+C\+K\+ED} = 2
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a7e8c5a393917f9234e2fbdc8a79c9a31}\label{classmods_1_1deferred_a7e8c5a393917f9234e2fbdc8a79c9a31}} 
+static constexpr uint32\+\_\+t {\bfseries E\+V\+E\+N\+T\+\_\+\+P\+L\+A\+Y\+E\+R\+\_\+\+U\+N\+B\+L\+O\+C\+K\+\_\+\+B\+R\+E\+A\+CH} = 3
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a5f85f1db9acec899e3fc93e0c10aa050}\label{classmods_1_1deferred_a5f85f1db9acec899e3fc93e0c10aa050}} 
+static constexpr uint64\+\_\+t {\bfseries T\+I\+C\+K\+\_\+\+R\+E\+S\+O\+L\+U\+T\+I\+ON} = 3
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a15b135f48b152a064999f9dd8dc626df}\label{classmods_1_1deferred_a15b135f48b152a064999f9dd8dc626df}} 
+lambda\+\_\+queue\+\_\+t {\bfseries m\+\_\+q}
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_acee225ce2a7420f7a908cda9800cf995}\label{classmods_1_1deferred_acee225ce2a7420f7a908cda9800cf995}} 
+event\+\_\+queue\+\_\+t {\bfseries m\+\_\+ticks\+\_\+event\+\_\+type}
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_ac5ed1e7ab579051b0ab6c818c40ffa3e}\label{classmods_1_1deferred_ac5ed1e7ab579051b0ab6c818c40ffa3e}} 
+uint64\+\_\+t {\bfseries m\+\_\+tres}
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_af5684e7324675feceb9da6458c45329a}\label{classmods_1_1deferred_af5684e7324675feceb9da6458c45329a}} 
+uint64\+\_\+t {\bfseries m\+\_\+tick}
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a527a2c28739e016124a69a61ad304938}\label{classmods_1_1deferred_a527a2c28739e016124a69a61ad304938}} 
+uint64\+\_\+t {\bfseries m\+\_\+iterations}
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a0fb7e18edeafd39ee36a5fef8b98a6fc}\label{classmods_1_1deferred_a0fb7e18edeafd39ee36a5fef8b98a6fc}} 
+std\+::vector$<$ \hyperlink{structmods_1_1chunk__affect__t}{chunk\+\_\+affect\+\_\+t} $>$ {\bfseries m\+\_\+chunk\+\_\+affect}
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a14b7e71f530a3a161701b39612a53628}\label{classmods_1_1deferred_a14b7e71f530a3a161701b39612a53628}} 
+time\+\_\+t {\bfseries m\+\_\+time\+\_\+tracker}
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a9fb6bf3795f93550fdfb421cee3238da}\label{classmods_1_1deferred_a9fb6bf3795f93550fdfb421cee3238da}} 
+uint32\+\_\+t {\bfseries m\+\_\+ticks\+\_\+per\+\_\+minute}
+\item 
+\mbox{\Hypertarget{classmods_1_1deferred_a1212320a6fcb731de6889e2c2c73ef39}\label{classmods_1_1deferred_a1212320a6fcb731de6889e2c2c73ef39}} 
+uint32\+\_\+t {\bfseries m\+\_\+ticks\+\_\+per\+\_\+minute\+\_\+sample}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classmods_1_1deferred_a4ddaf679f5be96555258be883fa111e7}\label{classmods_1_1deferred_a4ddaf679f5be96555258be883fa111e7}} 
+\index{mods\+::deferred@{mods\+::deferred}!deferred@{deferred}}
+\index{deferred@{deferred}!mods\+::deferred@{mods\+::deferred}}
+\subsubsection{\texorpdfstring{deferred()}{deferred()}}
+{\footnotesize\ttfamily mods\+::deferred\+::deferred (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{tick\+\_\+resolution }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+initialized 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+deferred.\+hpp\item 
+deferred.\+cpp\end{DoxyCompactItemize}

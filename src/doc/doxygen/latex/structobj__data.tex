@@ -1,0 +1,217 @@
+\hypertarget{structobj__data}{}\section{obj\+\_\+data Struct Reference}
+\label{structobj__data}\index{obj\+\_\+data@{obj\+\_\+data}}
+
+
+Collaboration diagram for obj\+\_\+data\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structobj__data__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structobj__data_a16fb22b0d504f5d6913e1feffa21bcca}\label{structobj__data_a16fb22b0d504f5d6913e1feffa21bcca}} 
+using {\bfseries location\+\_\+data\+\_\+t} = uint16\+\_\+t
+\item 
+\mbox{\Hypertarget{structobj__data_a607271510be271e80a6ced59870730dd}\label{structobj__data_a607271510be271e80a6ced59870730dd}} 
+using {\bfseries capability\+\_\+list\+\_\+t} = std\+::array$<$ bool, \hyperlink{structobj__data_a8cefe6b9b7e5e568f4cf758e60db2ce2}{C\+A\+P\+A\+B\+I\+L\+I\+T\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+L\+E\+N\+G\+TH} $>$
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structobj__data_a3d7da4441c8008b81092e8382bbcff35}\label{structobj__data_a3d7da4441c8008b81092e8382bbcff35}} 
+int16\+\_\+t {\bfseries feed} (int16\+\_\+t in\+\_\+type, std\+::string\+\_\+view feed\+\_\+file)
+\item 
+\mbox{\Hypertarget{structobj__data_a14f475c7d4aa30563cacad1229a1f654}\label{structobj__data_a14f475c7d4aa30563cacad1229a1f654}} 
+void {\bfseries init} ()
+\item 
+\mbox{\Hypertarget{structobj__data_aa1788a59d6b458a141dd5c63d19b3ecf}\label{structobj__data_aa1788a59d6b458a141dd5c63d19b3ecf}} 
+{\bfseries obj\+\_\+data} (const \hyperlink{structobj__data}{obj\+\_\+data} \&other)
+\item 
+\mbox{\Hypertarget{structobj__data_aef8b0442976e05a1e4967d8a63565d71}\label{structobj__data_aef8b0442976e05a1e4967d8a63565d71}} 
+\hyperlink{structobj__data}{obj\+\_\+data} \& {\bfseries operator=} (\hyperlink{structobj__data}{obj\+\_\+data} \&other)
+\item 
+\mbox{\Hypertarget{structobj__data_aa64aa8b7829789988220521123aa7d7a}\label{structobj__data_aa64aa8b7829789988220521123aa7d7a}} 
+{\bfseries obj\+\_\+data} (int item\+\_\+type, std\+::string\+\_\+view feed\+\_\+file)
+\item 
+\mbox{\Hypertarget{structobj__data_ab87c2b9c4cee66d19853733c5919caba}\label{structobj__data_ab87c2b9c4cee66d19853733c5919caba}} 
+bool {\bfseries flagged} (int value)
+\item 
+\mbox{\Hypertarget{structobj__data_afc408145d963e0014301a55b77063900}\label{structobj__data_afc408145d963e0014301a55b77063900}} 
+bool {\bfseries can} (std\+::size\+\_\+t val)
+\item 
+\mbox{\Hypertarget{structobj__data_a3b74355068b8924a0c3b67c339597bed}\label{structobj__data_a3b74355068b8924a0c3b67c339597bed}} 
+void {\bfseries clear\+\_\+capabilities} ()
+\item 
+\mbox{\Hypertarget{structobj__data_a707a4e8ebf545b2a926acdf9f9d9b89e}\label{structobj__data_a707a4e8ebf545b2a926acdf9f9d9b89e}} 
+capability\+\_\+list\+\_\+t \& {\bfseries capabilities} ()
+\item 
+\mbox{\Hypertarget{structobj__data_a141a2566b61bc97e6acc945ece2a2705}\label{structobj__data_a141a2566b61bc97e6acc945ece2a2705}} 
+void {\bfseries set\+\_\+db\+\_\+id} (uint64\+\_\+t i)
+\item 
+\mbox{\Hypertarget{structobj__data_a768ad168c38dd1de4c51c77d77b8f830}\label{structobj__data_a768ad168c38dd1de4c51c77d77b8f830}} 
+uint64\+\_\+t {\bfseries db\+\_\+id} ()
+\item 
+\mbox{\Hypertarget{structobj__data_af8838a3acb17974161ced6008dbc0329}\label{structobj__data_af8838a3acb17974161ced6008dbc0329}} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries post\+\_\+feed} (T fed\+\_\+object)
+\item 
+\mbox{\Hypertarget{structobj__data_a26cc632406e1647b2aad86024b41ef7d}\label{structobj__data_a26cc632406e1647b2aad86024b41ef7d}} 
+void {\bfseries set\+\_\+owner} (uuid\+\_\+t p)
+\item 
+\mbox{\Hypertarget{structobj__data_ae44c9aec7efacb48040cb4e8e3ccea85}\label{structobj__data_ae44c9aec7efacb48040cb4e8e3ccea85}} 
+uuid\+\_\+t {\bfseries get\+\_\+owner} ()
+\item 
+\mbox{\Hypertarget{structobj__data_aac7cee17fb9dbb69e30b972fd3749b37}\label{structobj__data_aac7cee17fb9dbb69e30b972fd3749b37}} 
+location\+\_\+data\+\_\+t {\bfseries location\+\_\+data} ()
+\item 
+\mbox{\Hypertarget{structobj__data_a52e67c2cb1c02d7d72dadbc47b2ce93f}\label{structobj__data_a52e67c2cb1c02d7d72dadbc47b2ce93f}} 
+void {\bfseries set\+\_\+location\+\_\+data} (location\+\_\+data\+\_\+t i)
+\item 
+\mbox{\Hypertarget{structobj__data_ab51d261012414f61e2d028ee71892731}\label{structobj__data_ab51d261012414f61e2d028ee71892731}} 
+std\+::string {\bfseries generate\+\_\+stat\+\_\+page} ()
+\item 
+\mbox{\Hypertarget{structobj__data_abeaf5cae3645dbf7b764cfb6b62a82c3}\label{structobj__data_abeaf5cae3645dbf7b764cfb6b62a82c3}} 
+void {\bfseries set\+\_\+feed\+\_\+file} (std\+::string f)
+\item 
+\mbox{\Hypertarget{structobj__data_a4ebed328e9028591a51dd89f26f8b5ab}\label{structobj__data_a4ebed328e9028591a51dd89f26f8b5ab}} 
+std\+::string\+\_\+view {\bfseries feed\+\_\+file} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structobj__data_a572bfc471d3b2d3708a64a28cea2414a}\label{structobj__data_a572bfc471d3b2d3708a64a28cea2414a}} 
+obj\+\_\+vnum {\bfseries item\+\_\+number}
+\item 
+\mbox{\Hypertarget{structobj__data_a0464ffd25b49d5616215edba9b113c95}\label{structobj__data_a0464ffd25b49d5616215edba9b113c95}} 
+room\+\_\+rnum {\bfseries in\+\_\+room}
+\item 
+\mbox{\Hypertarget{structobj__data_a4af50254c8919811dd9b3d55e3ff5113}\label{structobj__data_a4af50254c8919811dd9b3d55e3ff5113}} 
+\hyperlink{structobj__flag__data}{obj\+\_\+flag\+\_\+data} {\bfseries obj\+\_\+flags}
+\item 
+\mbox{\Hypertarget{structobj__data_a1abd39ad0e4c153fca53d84ec9abbd51}\label{structobj__data_a1abd39ad0e4c153fca53d84ec9abbd51}} 
+\hyperlink{structobj__affected__type}{obj\+\_\+affected\+\_\+type} {\bfseries affected} \mbox{[}M\+A\+X\+\_\+\+O\+B\+J\+\_\+\+A\+F\+F\+E\+CT\mbox{]}
+\item 
+\hyperlink{structmods_1_1string}{mods\+::string} \hyperlink{structobj__data_a6a6eff873924a8df3aa0562c425e477b}{name}
+\item 
+\hyperlink{structmods_1_1string}{mods\+::string} \hyperlink{structobj__data_ac48d7cdab17efaf5e9664bbbf9a15ffb}{description}
+\item 
+\hyperlink{structmods_1_1string}{mods\+::string} \hyperlink{structobj__data_a38420e39fa29369569eab896fd57ded7}{short\+\_\+description}
+\item 
+\hyperlink{structmods_1_1string}{mods\+::string} \hyperlink{structobj__data_a2e18adda623112bbd517ebb765aa8110}{action\+\_\+description}
+\item 
+\mbox{\Hypertarget{structobj__data_ae784731b0fa1cace5282cc2c25815b4a}\label{structobj__data_ae784731b0fa1cace5282cc2c25815b4a}} 
+std\+::vector$<$ \hyperlink{structextra__descr__data}{extra\+\_\+descr\+\_\+data} $>$ {\bfseries ex\+\_\+description}
+\item 
+\mbox{\Hypertarget{structobj__data_a5bfbda81f7aa541b1575c2e232990003}\label{structobj__data_a5bfbda81f7aa541b1575c2e232990003}} 
+\hyperlink{structchar__data}{char\+\_\+data} $\ast$ {\bfseries carried\+\_\+by}
+\item 
+\mbox{\Hypertarget{structobj__data_ae4f7664746d3c926b6ccd3bc3d5f593c}\label{structobj__data_ae4f7664746d3c926b6ccd3bc3d5f593c}} 
+\hyperlink{structchar__data}{char\+\_\+data} $\ast$ {\bfseries worn\+\_\+by}
+\item 
+\mbox{\Hypertarget{structobj__data_a558e99c164c8a95f01e5455c2fe74aa2}\label{structobj__data_a558e99c164c8a95f01e5455c2fe74aa2}} 
+sh\+\_\+int {\bfseries worn\+\_\+on}
+\item 
+\mbox{\Hypertarget{structobj__data_ade99681e1e92310221122f804685fa8e}\label{structobj__data_ade99681e1e92310221122f804685fa8e}} 
+\hyperlink{structobj__data}{obj\+\_\+data} $\ast$ {\bfseries in\+\_\+obj}
+\item 
+\mbox{\Hypertarget{structobj__data_a24e8597b5906e88163794127d6ddec4b}\label{structobj__data_a24e8597b5906e88163794127d6ddec4b}} 
+\hyperlink{structobj__data}{obj\+\_\+data} $\ast$ {\bfseries contains}
+\item 
+\mbox{\Hypertarget{structobj__data_acceff96a8a6ef5b38ed889c9b747f9ed}\label{structobj__data_acceff96a8a6ef5b38ed889c9b747f9ed}} 
+\hyperlink{structobj__data}{obj\+\_\+data} $\ast$ {\bfseries next\+\_\+content}
+\item 
+\mbox{\Hypertarget{structobj__data_afadd35b6a9d7e0d8cce0dd8ae1b27377}\label{structobj__data_afadd35b6a9d7e0d8cce0dd8ae1b27377}} 
+\hyperlink{structobj__data}{obj\+\_\+data} $\ast$ {\bfseries next}
+\item 
+\mbox{\Hypertarget{structobj__data_aad14a3a559fabd71830980481ef23a43}\label{structobj__data_aad14a3a559fabd71830980481ef23a43}} 
+uint8\+\_\+t {\bfseries ai\+\_\+state}
+\item 
+\mbox{\Hypertarget{structobj__data_a8b8478a01d10a0f0f08fa05375f0e6c1}\label{structobj__data_a8b8478a01d10a0f0f08fa05375f0e6c1}} 
+uint8\+\_\+t {\bfseries from\+\_\+direction}
+\item 
+\mbox{\Hypertarget{structobj__data_a0e910849154b4476afa01d9fa9bcaf0f}\label{structobj__data_a0e910849154b4476afa01d9fa9bcaf0f}} 
+uuid\+\_\+t {\bfseries uuid}
+\item 
+\mbox{\Hypertarget{structobj__data_abac3366bc8be56c0db8f47a9f67533f8}\label{structobj__data_abac3366bc8be56c0db8f47a9f67533f8}} 
+int16\+\_\+t {\bfseries feed\+\_\+status}
+\item 
+\mbox{\Hypertarget{structobj__data_ac04f2cf99b36d8165edb8e843064344b}\label{structobj__data_ac04f2cf99b36d8165edb8e843064344b}} 
+int16\+\_\+t {\bfseries type}
+\item 
+\mbox{\Hypertarget{structobj__data_a6fdeba174fda75714e4ffd6e22c85828}\label{structobj__data_a6fdeba174fda75714e4ffd6e22c85828}} 
+int {\bfseries extended\+\_\+type}
+\item 
+\mbox{\Hypertarget{structobj__data_aadb3fb95c8ca267eb13716401769456e}\label{structobj__data_aadb3fb95c8ca267eb13716401769456e}} 
+std\+::string {\bfseries str\+\_\+type}
+\item 
+\mbox{\Hypertarget{structobj__data_ad62dffe76d361d49b4c6475ad92e933a}\label{structobj__data_ad62dffe76d361d49b4c6475ad92e933a}} 
+std\+::string {\bfseries str\+\_\+sub\+\_\+type}
+\item 
+\mbox{\Hypertarget{structobj__data_a464bf2b096a75b2d4a5143a0ba1debb8}\label{structobj__data_a464bf2b096a75b2d4a5143a0ba1debb8}} 
+uint64\+\_\+t {\bfseries extended\+\_\+item\+\_\+vnum}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr std\+::size\+\_\+t \hyperlink{structobj__data_a8cefe6b9b7e5e568f4cf758e60db2ce2}{C\+A\+P\+A\+B\+I\+L\+I\+T\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+L\+E\+N\+G\+TH} = mods\+::weapon\+::capabilities\+::cap\+\_\+t\+::\+\_\+\+\_\+\+L\+A\+ST
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structobj__data_a95155d445f14001970bb4ce7e60869af}\label{structobj__data_a95155d445f14001970bb4ce7e60869af}} 
+capability\+\_\+list\+\_\+t {\bfseries m\+\_\+capabilities}
+\item 
+\mbox{\Hypertarget{structobj__data_a7634842111e8347a45b32e3b50c15b69}\label{structobj__data_a7634842111e8347a45b32e3b50c15b69}} 
+uint64\+\_\+t {\bfseries m\+\_\+db\+\_\+id}
+\item 
+\mbox{\Hypertarget{structobj__data_ae5a50ebf9852ccb48b962c2718b9279f}\label{structobj__data_ae5a50ebf9852ccb48b962c2718b9279f}} 
+uuid\+\_\+t {\bfseries m\+\_\+owner}
+\item 
+\mbox{\Hypertarget{structobj__data_af0a28c8761b3a97489e120c29d650590}\label{structobj__data_af0a28c8761b3a97489e120c29d650590}} 
+location\+\_\+data\+\_\+t {\bfseries m\+\_\+location\+\_\+data}
+\item 
+\mbox{\Hypertarget{structobj__data_a2e71f438fe78fceae35df4b51b132b49}\label{structobj__data_a2e71f438fe78fceae35df4b51b132b49}} 
+std\+::string {\bfseries m\+\_\+feed\+\_\+file}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structobj__data_a2e18adda623112bbd517ebb765aa8110}\label{structobj__data_a2e18adda623112bbd517ebb765aa8110}} 
+\index{obj\+\_\+data@{obj\+\_\+data}!action\+\_\+description@{action\+\_\+description}}
+\index{action\+\_\+description@{action\+\_\+description}!obj\+\_\+data@{obj\+\_\+data}}
+\subsubsection{\texorpdfstring{action\+\_\+description}{action\_description}}
+{\footnotesize\ttfamily \hyperlink{structmods_1_1string}{mods\+::string} obj\+\_\+data\+::action\+\_\+description}
+
+\mbox{[} \textquotesingle{}action\+\_\+description\textquotesingle{} A\+P\+P\+E\+A\+RS \mbox{]}\+: \char`\"{}\+John\+Doe123 throws a $<$action\+\_\+description$>$ to the north!\char`\"{} \mbox{\Hypertarget{structobj__data_a8cefe6b9b7e5e568f4cf758e60db2ce2}\label{structobj__data_a8cefe6b9b7e5e568f4cf758e60db2ce2}} 
+\index{obj\+\_\+data@{obj\+\_\+data}!C\+A\+P\+A\+B\+I\+L\+I\+T\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+L\+E\+N\+G\+TH@{C\+A\+P\+A\+B\+I\+L\+I\+T\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+L\+E\+N\+G\+TH}}
+\index{C\+A\+P\+A\+B\+I\+L\+I\+T\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+L\+E\+N\+G\+TH@{C\+A\+P\+A\+B\+I\+L\+I\+T\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+L\+E\+N\+G\+TH}!obj\+\_\+data@{obj\+\_\+data}}
+\subsubsection{\texorpdfstring{C\+A\+P\+A\+B\+I\+L\+I\+T\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+L\+E\+N\+G\+TH}{CAPABILITY\_LIST\_LENGTH}}
+{\footnotesize\ttfamily constexpr std\+::size\+\_\+t obj\+\_\+data\+::\+C\+A\+P\+A\+B\+I\+L\+I\+T\+Y\+\_\+\+L\+I\+S\+T\+\_\+\+L\+E\+N\+G\+TH = mods\+::weapon\+::capabilities\+::cap\+\_\+t\+::\+\_\+\+\_\+\+L\+A\+ST\hspace{0.3cm}{\ttfamily [static]}}
+
+i.\+e. mw\+\_\+rifle\+::\+S\+U\+B\+\_\+\+M\+A\+C\+H\+I\+N\+E\+\_\+\+G\+UN \mbox{\Hypertarget{structobj__data_ac48d7cdab17efaf5e9664bbbf9a15ffb}\label{structobj__data_ac48d7cdab17efaf5e9664bbbf9a15ffb}} 
+\index{obj\+\_\+data@{obj\+\_\+data}!description@{description}}
+\index{description@{description}!obj\+\_\+data@{obj\+\_\+data}}
+\subsubsection{\texorpdfstring{description}{description}}
+{\footnotesize\ttfamily \hyperlink{structmods_1_1string}{mods\+::string} obj\+\_\+data\+::description}
+
+\mbox{[} A\+P\+P\+E\+A\+RS \mbox{]}\+: when looking at item and mode is L\+O\+NG .informative.\+cpp It will show up when you look at a room and it\textquotesingle{}s lying on the floor S\+H\+O\+W\+\_\+\+O\+B\+J\+\_\+\+L\+O\+NG \mbox{\Hypertarget{structobj__data_a6a6eff873924a8df3aa0562c425e477b}\label{structobj__data_a6a6eff873924a8df3aa0562c425e477b}} 
+\index{obj\+\_\+data@{obj\+\_\+data}!name@{name}}
+\index{name@{name}!obj\+\_\+data@{obj\+\_\+data}}
+\subsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily \hyperlink{structmods_1_1string}{mods\+::string} obj\+\_\+data\+::name}
+
+\mbox{[} \textquotesingle{}name\textquotesingle{} A\+P\+P\+E\+A\+RS \mbox{]}\+: \mbox{\Hypertarget{structobj__data_a38420e39fa29369569eab896fd57ded7}\label{structobj__data_a38420e39fa29369569eab896fd57ded7}} 
+\index{obj\+\_\+data@{obj\+\_\+data}!short\+\_\+description@{short\+\_\+description}}
+\index{short\+\_\+description@{short\+\_\+description}!obj\+\_\+data@{obj\+\_\+data}}
+\subsubsection{\texorpdfstring{short\+\_\+description}{short\_description}}
+{\footnotesize\ttfamily \hyperlink{structmods_1_1string}{mods\+::string} obj\+\_\+data\+::short\+\_\+description}
+
+\mbox{[} \textquotesingle{}short\+\_\+description\textquotesingle{} A\+P\+P\+E\+A\+RS \mbox{]}\+: when looking at item and mode is S\+H\+O\+RT .informative.\+cpp It will show up when you look in your inventory S\+H\+O\+W\+\_\+\+O\+B\+J\+\_\+\+S\+H\+O\+RT 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+structs.\+h\item 
+structs.\+cpp\end{DoxyCompactItemize}

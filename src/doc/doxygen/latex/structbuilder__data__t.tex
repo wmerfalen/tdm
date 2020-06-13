@@ -1,0 +1,61 @@
+\hypertarget{structbuilder__data__t}{}\section{builder\+\_\+data\+\_\+t Struct Reference}
+\label{structbuilder__data__t}\index{builder\+\_\+data\+\_\+t@{builder\+\_\+data\+\_\+t}}
+
+
+Collaboration diagram for builder\+\_\+data\+\_\+t\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=304pt]{structbuilder__data__t__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structbuilder__data__t_aa081bbc82b8007a5f62b7540822dcba3}{builder\+\_\+data\+\_\+t} (int type, int start\+\_\+room, int start\+\_\+zone)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structbuilder__data__t_a6e94b87674eb76c6212104429801961e}\label{structbuilder__data__t_a6e94b87674eb76c6212104429801961e}} 
+bool {\bfseries room\+\_\+pave\+\_\+mode}
+\item 
+\mbox{\Hypertarget{structbuilder__data__t_a1cd44669d8e71ed62e2436928310b2b1}\label{structbuilder__data__t_a1cd44669d8e71ed62e2436928310b2b1}} 
+bool {\bfseries zone\+\_\+pave\+\_\+mode}
+\item 
+\mbox{\Hypertarget{structbuilder__data__t_ad8e3c4db1a9b71b32dcb7d29bffab63c}\label{structbuilder__data__t_ad8e3c4db1a9b71b32dcb7d29bffab63c}} 
+\hyperlink{structroom__pavement__t}{room\+\_\+pavement\+\_\+t} {\bfseries room\+\_\+pavements}
+\item 
+\mbox{\Hypertarget{structbuilder__data__t_a7d2e8f8f277f9cd36c38d637675fe6ae}\label{structbuilder__data__t_a7d2e8f8f277f9cd36c38d637675fe6ae}} 
+\hyperlink{structzone__pavement__t}{zone\+\_\+pavement\+\_\+t} {\bfseries zone\+\_\+pavements}
+\item 
+\mbox{\Hypertarget{structbuilder__data__t_ad4bdd03a13876fac8ced64b48f57c8cd}\label{structbuilder__data__t_ad4bdd03a13876fac8ced64b48f57c8cd}} 
+std\+::vector$<$ \hyperlink{structroom__pavement__t}{room\+\_\+pavement\+\_\+t} $>$ {\bfseries room\+\_\+pavement\+\_\+list}
+\item 
+\mbox{\Hypertarget{structbuilder__data__t_af897ad39acce126074a4121cdccbfbb9}\label{structbuilder__data__t_af897ad39acce126074a4121cdccbfbb9}} 
+std\+::vector$<$ \hyperlink{structzone__pavement__t}{zone\+\_\+pavement\+\_\+t} $>$ {\bfseries zone\+\_\+pavement\+\_\+list}
+\item 
+\mbox{\Hypertarget{structbuilder__data__t_a2cf2d3faf04c8ed297669a191792524e}\label{structbuilder__data__t_a2cf2d3faf04c8ed297669a191792524e}} 
+int {\bfseries room\+\_\+transaction\+\_\+id}
+\item 
+\mbox{\Hypertarget{structbuilder__data__t_af72d9ad9893d02d243f6d4d64a6c9253}\label{structbuilder__data__t_af72d9ad9893d02d243f6d4d64a6c9253}} 
+int {\bfseries zone\+\_\+transaction\+\_\+id}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structbuilder__data__t_aa081bbc82b8007a5f62b7540822dcba3}\label{structbuilder__data__t_aa081bbc82b8007a5f62b7540822dcba3}} 
+\index{builder\+\_\+data\+\_\+t@{builder\+\_\+data\+\_\+t}!builder\+\_\+data\+\_\+t@{builder\+\_\+data\+\_\+t}}
+\index{builder\+\_\+data\+\_\+t@{builder\+\_\+data\+\_\+t}!builder\+\_\+data\+\_\+t@{builder\+\_\+data\+\_\+t}}
+\subsubsection{\texorpdfstring{builder\+\_\+data\+\_\+t()}{builder\_data\_t()}}
+{\footnotesize\ttfamily builder\+\_\+data\+\_\+t\+::builder\+\_\+data\+\_\+t (\begin{DoxyParamCaption}\item[{int}]{type,  }\item[{int}]{start\+\_\+room,  }\item[{int}]{start\+\_\+zone }\end{DoxyParamCaption})}
+
+T\+O\+DO\+: I want this functionality to be done next room\+\_\+pavement\+\_\+list.\+emplace\+\_\+back(start\+\_\+room,start\+\_\+zone); room\+\_\+pavement\+\_\+list.\+back().transact\+\_\+id = next\+\_\+room\+\_\+pavement\+\_\+transaction\+\_\+id();
+
+F\+I\+X\+ME\+: this is incomplete code. fix this 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+structs.\+h\item 
+structs.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,6 @@
+<map id="mods::orm::shop" name="mods::orm::shop">
+<area shape="rect" id="node2" href="$structmods_1_1orm_1_1base.html" title="mods::orm::base" alt="" coords="46,5,166,32"/>
+<area shape="rect" id="node3" href="$structmods_1_1orm_1_1shop__objects.html" title="mods::orm::shop_objects" alt="" coords="22,81,191,108"/>
+<area shape="rect" id="node4" href="$structmods_1_1orm_1_1shop__rooms.html" title="mods::orm::shop_rooms" alt="" coords="216,81,378,108"/>
+<area shape="rect" id="node5" href="$structmods_1_1string.html" title="mods::string" alt="" coords="403,81,498,108"/>
+</map>

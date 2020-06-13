@@ -1,0 +1,106 @@
+\hypertarget{namespacemods_1_1db}{}\section{mods\+:\+:db Namespace Reference}
+\label{namespacemods_1_1db}\index{mods\+::db@{mods\+::db}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_ab9042a10599aa69b010be801966a2f2e}\label{namespacemods_1_1db_ab9042a10599aa69b010be801966a2f2e}} 
+tuple\+\_\+status\+\_\+t {\bfseries save\+\_\+char} (player\+\_\+ptr\+\_\+t)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_a56d7528778e7fa35943fb30006046f54}\label{namespacemods_1_1db_a56d7528778e7fa35943fb30006046f54}} 
+aligned\+\_\+int\+\_\+t {\bfseries save\+\_\+record\+\_\+get\+\_\+id} (const std\+::string \&table, mutable\+\_\+map\+\_\+t $\ast$values)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_ae6cd02ca445ea237caf3b63fd5c7c36b}\label{namespacemods_1_1db_ae6cd02ca445ea237caf3b63fd5c7c36b}} 
+aligned\+\_\+int\+\_\+t {\bfseries initialize\+\_\+row} (const std\+::string \&table)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_a77cb9fac2dd8aad01191849ceedff9ab}\label{namespacemods_1_1db_a77cb9fac2dd8aad01191849ceedff9ab}} 
+tuple\+\_\+status\+\_\+t {\bfseries new\+\_\+record} (const std\+::string \&table, mutable\+\_\+map\+\_\+t $\ast$values)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_af5d88db0c82983fcb247497adeeec339}\label{namespacemods_1_1db_af5d88db0c82983fcb247497adeeec339}} 
+tuple\+\_\+status\+\_\+t {\bfseries save\+\_\+record} (const std\+::string \&table, mutable\+\_\+map\+\_\+t $\ast$values, std\+::string pk\+\_\+id)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_afd5c08c56ba18bdd8c650d8d7345ad7f}\label{namespacemods_1_1db_afd5c08c56ba18bdd8c650d8d7345ad7f}} 
+void {\bfseries lmdb\+\_\+renew} ()
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_a2964d817c59b9a29ac62f0e67e080254}\label{namespacemods_1_1db_a2964d817c59b9a29ac62f0e67e080254}} 
+int {\bfseries lmdb\+\_\+nget\+\_\+void} (void $\ast$key, std\+::size\+\_\+t k\+\_\+size, void $\ast$value)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_a72e95918c9bc92bd82716f200f81eec5}\label{namespacemods_1_1db_a72e95918c9bc92bd82716f200f81eec5}} 
+int {\bfseries lmdb\+\_\+nget} (void $\ast$key, std\+::size\+\_\+t k\+\_\+size, std\+::string \&value)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_a76eb530e6b65cbed6c0462ccd14cdc94}\label{namespacemods_1_1db_a76eb530e6b65cbed6c0462ccd14cdc94}} 
+std\+::string {\bfseries lmdb\+\_\+get} (std\+::string\+\_\+view key)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_ab9ca8045480b5c845000f2dda073939e}\label{namespacemods_1_1db_ab9ca8045480b5c845000f2dda073939e}} 
+int {\bfseries lmdb\+\_\+nput} (void $\ast$key, std\+::size\+\_\+t key\+\_\+size, void $\ast$value, std\+::size\+\_\+t v\+\_\+size)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_aa7e3b257ce6a2920b088cc798af79da6}\label{namespacemods_1_1db_aa7e3b257ce6a2920b088cc798af79da6}} 
+void {\bfseries lmdb\+\_\+put} (std\+::string key, std\+::string value)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_a5fbce517ac53231aa35c7d9c58622ce2}\label{namespacemods_1_1db_a5fbce517ac53231aa35c7d9c58622ce2}} 
+void {\bfseries lmdb\+\_\+del} (std\+::string key)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_af13cbeaf36d1892265aca37289d5c7cc}\label{namespacemods_1_1db_af13cbeaf36d1892265aca37289d5c7cc}} 
+void {\bfseries lmdb\+\_\+ndel} (void $\ast$key, std\+::size\+\_\+t key\+\_\+size)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_a2ecd0fbb4254d5de7539205ae7b97f8a}\label{namespacemods_1_1db_a2ecd0fbb4254d5de7539205ae7b97f8a}} 
+void {\bfseries lmdb\+\_\+commit} ()
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_a8bccbc433ca6a53482a62f5181230d9b}\label{namespacemods_1_1db_a8bccbc433ca6a53482a62f5181230d9b}} 
+tuple\+\_\+status\+\_\+t {\bfseries save\+\_\+new\+\_\+char} (player\+\_\+ptr\+\_\+t player\+\_\+ptr)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_a1679c965eb39cf4c1c28f9670c4dbd26}\label{namespacemods_1_1db_a1679c965eb39cf4c1c28f9670c4dbd26}} 
+tuple\+\_\+status\+\_\+t {\bfseries lmdb\+\_\+write\+\_\+values} (const std\+::string \&table, mutable\+\_\+map\+\_\+t $\ast$values, std\+::string pk\+\_\+id)
+\item 
+void \hyperlink{namespacemods_1_1db_a2cb0a00d3700b5eab314405d909a8cce}{lmdb\+\_\+export\+\_\+char} (player\+\_\+ptr\+\_\+t player\+\_\+ptr, mutable\+\_\+map\+\_\+t \&values)
+\item 
+int \hyperlink{namespacemods_1_1db_acf6aefd449f5fcb8d9987a37cc1d7ba8}{load\+\_\+record} (const std\+::string \&table, aligned\+\_\+int\+\_\+t pk, mutable\+\_\+map\+\_\+t \&values)
+\item 
+int \hyperlink{namespacemods_1_1db_a0e743f7d6ff025f86a1bdbcc9b726e8c}{load\+\_\+record} (const std\+::string \&table, const std\+::string \&pk, mutable\+\_\+map\+\_\+t \&values)
+\item 
+int \hyperlink{namespacemods_1_1db_a2ec81c8ca3ce3f3a4b27b68645bf4e1d}{load\+\_\+record\+\_\+by\+\_\+meta} (const std\+::string \&table, mutable\+\_\+map\+\_\+t $\ast$values, mutable\+\_\+map\+\_\+t \&out\+\_\+record)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_ab14e0409a2059b7d3cadbba2c1712ead}\label{namespacemods_1_1db_ab14e0409a2059b7d3cadbba2c1712ead}} 
+aligned\+\_\+int\+\_\+t {\bfseries lmdb\+\_\+load\+\_\+by\+\_\+meta} (const std\+::string \&table, mutable\+\_\+map\+\_\+t $\ast$values)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1db_a21477a1dfc16d08ecdad38983855e626}\label{namespacemods_1_1db_a21477a1dfc16d08ecdad38983855e626}} 
+bool {\bfseries db\+\_\+insert} (const std\+::string \&table, mutable\+\_\+map\+\_\+t $\ast$values)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+initliaze\+\_\+row 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespacemods_1_1db_a2cb0a00d3700b5eab314405d909a8cce}\label{namespacemods_1_1db_a2cb0a00d3700b5eab314405d909a8cce}} 
+\index{mods\+::db@{mods\+::db}!lmdb\+\_\+export\+\_\+char@{lmdb\+\_\+export\+\_\+char}}
+\index{lmdb\+\_\+export\+\_\+char@{lmdb\+\_\+export\+\_\+char}!mods\+::db@{mods\+::db}}
+\subsubsection{\texorpdfstring{lmdb\+\_\+export\+\_\+char()}{lmdb\_export\_char()}}
+{\footnotesize\ttfamily void mods\+::db\+::lmdb\+\_\+export\+\_\+char (\begin{DoxyParamCaption}\item[{player\+\_\+ptr\+\_\+t}]{player\+\_\+ptr,  }\item[{mutable\+\_\+map\+\_\+t \&}]{values }\end{DoxyParamCaption})}
+
+T\+O\+DO\+: instead of using the \hyperlink{structchar__data}{char\+\_\+data} accesses, create functions(or use existing ones) on \hyperlink{classmods_1_1player}{mods\+::player} object \mbox{\Hypertarget{namespacemods_1_1db_acf6aefd449f5fcb8d9987a37cc1d7ba8}\label{namespacemods_1_1db_acf6aefd449f5fcb8d9987a37cc1d7ba8}} 
+\index{mods\+::db@{mods\+::db}!load\+\_\+record@{load\+\_\+record}}
+\index{load\+\_\+record@{load\+\_\+record}!mods\+::db@{mods\+::db}}
+\subsubsection{\texorpdfstring{load\+\_\+record()}{load\_record()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int mods\+::db\+::load\+\_\+record (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{table,  }\item[{aligned\+\_\+int\+\_\+t}]{pk,  }\item[{mutable\+\_\+map\+\_\+t \&}]{values }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+int number of rows loaded 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacemods_1_1db_a0e743f7d6ff025f86a1bdbcc9b726e8c}\label{namespacemods_1_1db_a0e743f7d6ff025f86a1bdbcc9b726e8c}} 
+\index{mods\+::db@{mods\+::db}!load\+\_\+record@{load\+\_\+record}}
+\index{load\+\_\+record@{load\+\_\+record}!mods\+::db@{mods\+::db}}
+\subsubsection{\texorpdfstring{load\+\_\+record()}{load\_record()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily int mods\+::db\+::load\+\_\+record (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{table,  }\item[{const std\+::string \&}]{pk,  }\item[{mutable\+\_\+map\+\_\+t \&}]{values }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+int number of rows loaded 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacemods_1_1db_a2ec81c8ca3ce3f3a4b27b68645bf4e1d}\label{namespacemods_1_1db_a2ec81c8ca3ce3f3a4b27b68645bf4e1d}} 
+\index{mods\+::db@{mods\+::db}!load\+\_\+record\+\_\+by\+\_\+meta@{load\+\_\+record\+\_\+by\+\_\+meta}}
+\index{load\+\_\+record\+\_\+by\+\_\+meta@{load\+\_\+record\+\_\+by\+\_\+meta}!mods\+::db@{mods\+::db}}
+\subsubsection{\texorpdfstring{load\+\_\+record\+\_\+by\+\_\+meta()}{load\_record\_by\_meta()}}
+{\footnotesize\ttfamily int mods\+::db\+::load\+\_\+record\+\_\+by\+\_\+meta (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{table,  }\item[{mutable\+\_\+map\+\_\+t $\ast$}]{values,  }\item[{mutable\+\_\+map\+\_\+t \&}]{out\+\_\+record }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+int number of rows loaded 
+\end{DoxyReturn}

@@ -1,5 +1,6 @@
 #ifndef __MENTOC_MODS_WEAPON_HEADER__
 #define __MENTOC_MODS_WEAPON_HEADER__
+#include "values.hpp"
 
 #include <iostream>
 #include <string>

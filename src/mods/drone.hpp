@@ -45,34 +45,6 @@ namespace mods {
 			char_data* cd() const {
 				return m_char_data;
 			}
-			/*
-			bool is_weapon_loaded();
-			bool has_ammo();
-			bool has_equipment_tag(const std::string&);
-			void weapon_cooldown_start(unsigned long duration,weapon_set set);
-			bool weapon_cooldown_expired(weapon_set);
-			bool carrying_ammo_of_type(const weapon_type_t &);
-			void stc_room(const room_rnum &);
-			void stc_room_desc(const room_rnum &);
-			void exits();
-			*/
-			/*
-			void weapon_cooldown_clear(weapon_set);
-			bool has_weapon_cooldown(weapon_set set){
-				if(m_cooldowns.find(set) == m_cooldowns.end()){
-					return false;
-				}
-				return true;
-			}
-			int weapon_cooldown_increment(){
-				return ++m_weapon_set;
-			}
-			*/
-			/*
-			void ammo_adjustment(int);
-			int ammo_type_adjustment(int,const weapon_type_t&);
-			obj_data* get_first_ammo_of_type(const weapon_type_t&) const;
-			*/
 			void stc(int m) {
 				send_to_char(m_char_data,"%s",std::to_string(m).c_str());
 			}
@@ -99,10 +71,6 @@ namespace mods {
 			obj_data* get_ammo(const weapon_type_t&);
 		protected:
 			char_data* m_char_data;
-			/*
-			std::array<unsigned long,DRONE_WEAPON_SET_NUM> m_weapon_cooldown;
-			weapon_set m_weapon_set;
-			*/
 	};
 };
 

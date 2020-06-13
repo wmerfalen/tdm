@@ -2,84 +2,16 @@
 #include "../globals.hpp"
 #include <algorithm>
 #include <cctype>
-#define __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
-#ifdef __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
-#define maffects_debug(a) std::cerr << "[mods::affects]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n";
-#else
-#define maffects_debug(a) /**/
-#endif
+namespace mods::rooms::affects {
+	extern void process();
+};
 namespace mods::affects {
 	static std::set<player_ptr_t> needs_dissolve;
 	static time_t time_tracker_per_minute = time(nullptr);
 	static uint32_t ticks_per_minute = 0;
 	static uint32_t ticks_per_minute_sample = 0;
 	
-	bool dissolver::has_any_affect(affect_vector_t in_affects){
-			for(auto & affect : in_affects){
-				if(m_affects[affect]) {
-					return true;
-				}
-			}
-			return false;
-		}
-		bool dissolver::has_all_affects(affect_vector_t in_affects){
-			for(auto & affect : in_affects){
-				if(!m_affects[affect]) {
-					return false;
-				}
-			}
-			return true;
-		}
-		bool dissolver::has_affect(affect_t a){
-			maffects_debug("[has_affect] " << a);
-			return m_affects[a];
-		}
-	dissolver::dissolver() {
-		for(unsigned i =0; i < m_affects.size();i++){
-			m_affects[i] = 0;
-		}
-		m_has_affects = 0;
-	}
-	void dissolver::affect_map(affect_map_t affects){
-		for(auto& item : affects){
-			m_affects[item.first] += item.second;
-			if(m_affects[item.first] == 0){
-				this->remove(item.first);
-			}
-		}
-	}
-	void dissolver::affect(affect_t aff_id){
-		affect(aff_id,mods::affects::DEFAULT_AMOUNT);
-	}
-	void dissolver::clear(std::vector<affect_t> affects){
-		for(auto a : affects){
-			m_affects[a] = 0;
-			this->remove(a);
-		}
-	}
-	void dissolver::affect(affect_t affect,int amount){
-		if((m_affects[affect] += amount) == 0){
-			this->remove(affect);
-		}
-	}
-	std::size_t dissolver::tick(){
-		d("Dissolver tick");
-		std::size_t incremented = 0;
-		for(unsigned i=0; i < AFFECT_DISSOLVE_COUNT; i++){
-			if(!m_affects[i]){
-				continue;
-			}
-			--m_affects[i];
-			++incremented;
-			if(!m_affects[i]){
-				this->remove(static_cast<affect_t>(i));
-			}
-		}
-		m_has_affects = incremented;
-		return incremented;
-	}
-	void dissolver::remove(affect_t id){
-	}
+	using affect_t = mods::affects::affect_t;
 	affect_t to_affect(std::string str){
 		std::string aff_name;
 		aff_name.reserve(str.length());
@@ -108,6 +40,9 @@ namespace mods::affects {
 		return ticks_per_minute_sample;
 	}
 
+	/**
+	 * \brief called every tick to process player affects. Also calls rooms affects
+	 */
 	void process(){
 		auto seconds = time(nullptr);
 		if((seconds - time_tracker_per_minute) >= 60){
@@ -125,11 +60,23 @@ namespace mods::affects {
 			} 
 			it++;
 		}
+		mods::rooms::affects::process();
 	}
+	/**
+	 * \brief affects a player with a vector of affects
+	 * @param affect_vector_t list of affects
+	 * @param player_ptr_t player
+	 */
 	void affect_player(affect_vector_t a,player_ptr_t player){
 		needs_dissolve.insert(player);
 		player->get_affect_dissolver().affect_via(a);
 	}
+	/**
+	 * \brief affects a player with a vector of affects for specified number of ticks
+	 * @param affect_vector_t list of affects
+	 * @param player_ptr_t player
+	 * @param uint64_t ticks
+	 */
 	void affect_player_for(affect_vector_t a,player_ptr_t p,uint64_t ticks){
 		maffects_debug("[affect_player_for] " << p->name().c_str() << ": ticks: " << ticks);
 		needs_dissolve.insert(p);
@@ -137,6 +84,9 @@ namespace mods::affects {
 			p->get_affect_dissolver().affect(current_affect,ticks);
 		}
 	}
+	/**
+	 * \brief same as affect_player but uses strings
+	 */
 	void str_affect_player(std::vector<std::string> a,player_ptr_t p){
 		affect_player(to_affect(a),p);
 	}

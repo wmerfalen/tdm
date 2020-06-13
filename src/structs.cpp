@@ -298,9 +298,20 @@ bool obj_data::flagged(int value){
 			return m_textures;
 		}
 
-		void room_data::m_dispatch_fire_dissolver() {
-			mods::rooms::start_fire_dissolver(real_room(this->number));
+		void room_data::add_texture(texture_type_t t){
+			if(m_textures.size() == 0 || std::find(m_textures.begin(),m_textures.end(),t) == m_textures.end()){
+				m_textures.emplace_back(t);
+			}
 		}
+		void room_data::remove_texture(texture_type_t t){
+			decltype(m_textures) final_textures;
+			for(auto && texture : m_textures){
+				if(texture == t){ continue; }
+				final_textures.emplace_back(texture);
+			}
+			m_textures = std::move(final_textures);
+		}
+
 		void room_data::init(){
 			number = 0;
 			zone = 0;
@@ -310,7 +321,7 @@ bool obj_data::flagged(int value){
 			for(unsigned i = 0; i < NUM_OF_DIRS;i++){ 
 				dir_option[i] = nullptr;
 			}
-			m_fire_status = fire_status_t::NONE;
+			m_texture_levels[ON_FIRE] = 0;
 		}
 
 		room_data::room_data() {
@@ -431,4 +442,8 @@ bool obj_data::flagged(int value){
 			//			d("[builder_data_t::create_pavement] WARNING: zone pavements are experimental!\n");
 			//			break;
 			//	}
+		}
+		bool room_data::has_texture(texture_type_t t){
+			if(m_textures.size() == 0){ return false; }
+			return std::find(m_textures.begin(),m_textures.end(),t) != m_textures.end();
 		}

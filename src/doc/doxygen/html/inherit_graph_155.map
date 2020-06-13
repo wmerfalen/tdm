@@ -1,0 +1,11 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$structmods_1_1yaml_1_1yaml__description__t.html" title="mods::yaml::yaml_description_t" alt="" coords="5,217,212,244"/>
+<area shape="rect" id="node2" href="$structmods_1_1yaml_1_1armor__description__t.html" title="mods::yaml::armor_description_t" alt="" coords="260,5,472,32"/>
+<area shape="rect" id="node3" href="$structmods_1_1yaml_1_1attachment__description__t.html" title="mods::yaml::attachment\l_description_t" alt="" coords="285,57,447,98"/>
+<area shape="rect" id="node4" href="$structmods_1_1yaml_1_1consumable__description__t.html" title="mods::yaml::consumable\l_description_t" alt="" coords="282,122,450,163"/>
+<area shape="rect" id="node5" href="$structmods_1_1yaml_1_1drone__description__t.html" title="mods::yaml::drone_description_t" alt="" coords="261,188,471,215"/>
+<area shape="rect" id="node6" href="$structmods_1_1yaml_1_1explosive__description__t.html" title="mods::yaml::explosive\l_description_t" alt="" coords="289,239,443,281"/>
+<area shape="rect" id="node7" href="$structmods_1_1yaml_1_1gadget__description__t.html" title="mods::yaml::gadget\l_description_t" alt="" coords="297,305,435,346"/>
+<area shape="rect" id="node8" href="$structmods_1_1yaml_1_1rifle__description__t.html" title="mods::yaml::rifle_description_t" alt="" coords="266,371,466,397"/>
+<area shape="rect" id="node9" href="$structmods_1_1yaml_1_1trap__description__t.html" title="mods::yaml::trap_description_t" alt="" coords="265,421,467,448"/>
+</map>

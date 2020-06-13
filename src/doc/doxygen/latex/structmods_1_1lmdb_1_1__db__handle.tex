@@ -1,0 +1,116 @@
+\hypertarget{structmods_1_1lmdb_1_1__db__handle}{}\section{mods\+:\+:lmdb\+:\+:\+\_\+db\+\_\+handle Struct Reference}
+\label{structmods_1_1lmdb_1_1__db__handle}\index{mods\+::lmdb\+::\+\_\+db\+\_\+handle@{mods\+::lmdb\+::\+\_\+db\+\_\+handle}}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a66496077f5c3b1812e50cf1ce2364bb7}\label{structmods_1_1lmdb_1_1__db__handle_a66496077f5c3b1812e50cf1ce2364bb7}} 
+using {\bfseries tuple\+\_\+return\+\_\+type\+\_\+t} = std\+::tuple$<$ bool, std\+::string $>$
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a2d8b717ebaa92132ce34d15ff85579c2}\label{structmods_1_1lmdb_1_1__db__handle_a2d8b717ebaa92132ce34d15ff85579c2}} 
+using {\bfseries status\+\_\+type\+\_\+t} = std\+::array$<$ std\+::tuple$<$ bool, std\+::string $>$, status\+\_\+step\+\_\+count $>$
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a85925e9d8d0e168f64a9db2a95328e69}\label{structmods_1_1lmdb_1_1__db__handle_a85925e9d8d0e168f64a9db2a95328e69}} 
+{\bfseries \+\_\+db\+\_\+handle} (std\+::string directory, std\+::string db\+\_\+name, const uint64\+\_\+t \&flags, const uint16\+\_\+t \&mode, bool unused)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a131a1099a47fc324190bacaeb984cd33}\label{structmods_1_1lmdb_1_1__db__handle_a131a1099a47fc324190bacaeb984cd33}} 
+std\+::vector$<$ std\+::string $>$ {\bfseries fields\+\_\+to\+\_\+grab} (const std\+::string \&table)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a89d952ebde51897bf5677a570cb6ec42}\label{structmods_1_1lmdb_1_1__db__handle_a89d952ebde51897bf5677a570cb6ec42}} 
+void {\bfseries set\+\_\+pluck\+\_\+filter} (const std\+::vector$<$ std\+::string $>$ \&)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a08f55815fcfda198243ad56f6c6c77d5}\label{structmods_1_1lmdb_1_1__db__handle_a08f55815fcfda198243ad56f6c6c77d5}} 
+void {\bfseries clear\+\_\+pluck\+\_\+filter} ()
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_ad5ac6cd8bed5f6330b1fecf8f9a55f8e}\label{structmods_1_1lmdb_1_1__db__handle_ad5ac6cd8bed5f6330b1fecf8f9a55f8e}} 
+const std\+::vector$<$ std\+::string $>$ \& {\bfseries get\+\_\+pluck\+\_\+filter} () const
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_abc6d0f79407e4bc1893dedd4005d214c}\label{structmods_1_1lmdb_1_1__db__handle_abc6d0f79407e4bc1893dedd4005d214c}} 
+void {\bfseries use\+\_\+pluck\+\_\+filter} (bool b)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_ae6943acbfe888c2e2d0cd58ac2d8ec3d}\label{structmods_1_1lmdb_1_1__db__handle_ae6943acbfe888c2e2d0cd58ac2d8ec3d}} 
+bool {\bfseries is\+\_\+using\+\_\+pluck\+\_\+filter} () const
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a804027c6192e3b7139482749c75f8ee3}\label{structmods_1_1lmdb_1_1__db__handle_a804027c6192e3b7139482749c75f8ee3}} 
+bool {\bfseries open} ()
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_adb4c07593c271ae3a064a305a2e0fb63}\label{structmods_1_1lmdb_1_1__db__handle_adb4c07593c271ae3a064a305a2e0fb63}} 
+int {\bfseries put} (std\+::string key, std\+::string value, bool renew)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a0ed32a4279b6f5d2208bd0b9304cee35}\label{structmods_1_1lmdb_1_1__db__handle_a0ed32a4279b6f5d2208bd0b9304cee35}} 
+int {\bfseries nput} (void $\ast$key, std\+::size\+\_\+t key\+\_\+size, void $\ast$value, std\+::size\+\_\+t v\+\_\+size)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a099cccc7f73edc949771274ba8ecaa13}\label{structmods_1_1lmdb_1_1__db__handle_a099cccc7f73edc949771274ba8ecaa13}} 
+int {\bfseries del} (std\+::string key)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_afed682f1c1b4481e3d94785a96c361bb}\label{structmods_1_1lmdb_1_1__db__handle_afed682f1c1b4481e3d94785a96c361bb}} 
+void {\bfseries ndel} (void $\ast$key, std\+::size\+\_\+t key\+\_\+size)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a84c388c496a013ecc2e46fec23d5e7c4}\label{structmods_1_1lmdb_1_1__db__handle_a84c388c496a013ecc2e46fec23d5e7c4}} 
+status\+\_\+type\+\_\+t {\bfseries status} () const
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a7087d7d0a9cf7476492f89baedd97a36}\label{structmods_1_1lmdb_1_1__db__handle_a7087d7d0a9cf7476492f89baedd97a36}} 
+int {\bfseries get} (std\+::string key, std\+::string \&in\+\_\+value)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a2d6b287c6a1c63139df32e26bd8531cd}\label{structmods_1_1lmdb_1_1__db__handle_a2d6b287c6a1c63139df32e26bd8531cd}} 
+int {\bfseries nget} (void $\ast$key, std\+::size\+\_\+t k\+\_\+size, std\+::string \&in\+\_\+value)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a60ac3fa83da7725016dab8fbe5ca4094}\label{structmods_1_1lmdb_1_1__db__handle_a60ac3fa83da7725016dab8fbe5ca4094}} 
+int {\bfseries nget} (void $\ast$key, std\+::size\+\_\+t k\+\_\+size, void $\ast$in\+\_\+value)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a84218a2943429838fc41d027b2131089}\label{structmods_1_1lmdb_1_1__db__handle_a84218a2943429838fc41d027b2131089}} 
+int {\bfseries put} (std\+::string key, std\+::string value)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a174aba1966475e1d8074796019c84a7e}\label{structmods_1_1lmdb_1_1__db__handle_a174aba1966475e1d8074796019c84a7e}} 
+int {\bfseries get} (M\+D\+B\+\_\+txn $\ast$, std\+::string key, std\+::string \&in\+\_\+value)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_aaa29ba2dfeaff18c62ac5b7dc736677f}\label{structmods_1_1lmdb_1_1__db__handle_aaa29ba2dfeaff18c62ac5b7dc736677f}} 
+int {\bfseries put} (M\+D\+B\+\_\+txn $\ast$, std\+::string key, std\+::string value)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a55bcadafaf012aeb3dcef782eb0d782c}\label{structmods_1_1lmdb_1_1__db__handle_a55bcadafaf012aeb3dcef782eb0d782c}} 
+std\+::string {\bfseries get} (std\+::string key)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_accce5da22ddddad187ca266cab1740e7}\label{structmods_1_1lmdb_1_1__db__handle_accce5da22ddddad187ca266cab1740e7}} 
+tuple\+\_\+return\+\_\+type\+\_\+t {\bfseries commit} ()
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a2bed96ee84f6d91bb6bbb0cba95aef0e}\label{structmods_1_1lmdb_1_1__db__handle_a2bed96ee84f6d91bb6bbb0cba95aef0e}} 
+tuple\+\_\+return\+\_\+type\+\_\+t {\bfseries new\+\_\+txn} ()
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_aa3cd410c05c781f763072da6ad3a3a97}\label{structmods_1_1lmdb_1_1__db__handle_aa3cd410c05c781f763072da6ad3a3a97}} 
+tuple\+\_\+return\+\_\+type\+\_\+t {\bfseries new\+\_\+txn} (M\+D\+B\+\_\+txn $\ast$$\ast$)
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_af4d870ecebe05e17ce680dc9058e6aa2}\label{structmods_1_1lmdb_1_1__db__handle_af4d870ecebe05e17ce680dc9058e6aa2}} 
+tuple\+\_\+return\+\_\+type\+\_\+t {\bfseries open\+\_\+dbi} ()
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a7d3cb6143fb5e400319d8f42826d5661}\label{structmods_1_1lmdb_1_1__db__handle_a7d3cb6143fb5e400319d8f42826d5661}} 
+tuple\+\_\+return\+\_\+type\+\_\+t {\bfseries abort\+\_\+txn} ()
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a42ebed3ed5afb3673b97f424fc003179}\label{structmods_1_1lmdb_1_1__db__handle_a42ebed3ed5afb3673b97f424fc003179}} 
+void {\bfseries close} ()
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a4eeaec221b54aafb0ecf7f67fe5baf82}\label{structmods_1_1lmdb_1_1__db__handle_a4eeaec221b54aafb0ecf7f67fe5baf82}} 
+void {\bfseries dump\+\_\+status} () const
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a93d43cfa607ecd743bcba325e658e9c6}\label{structmods_1_1lmdb_1_1__db__handle_a93d43cfa607ecd743bcba325e658e9c6}} 
+tuple\+\_\+return\+\_\+type\+\_\+t {\bfseries renew\+\_\+txn} ()
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a519bd0169f07df34cf61f424b217dc1e}\label{structmods_1_1lmdb_1_1__db__handle_a519bd0169f07df34cf61f424b217dc1e}} 
+static constexpr std\+::size\+\_\+t {\bfseries status\+\_\+step\+\_\+count} = 5
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_ac33ded24f41a4f32c3b2a22238bdecc7}\label{structmods_1_1lmdb_1_1__db__handle_ac33ded24f41a4f32c3b2a22238bdecc7}} 
+static constexpr int {\bfseries K\+E\+Y\+\_\+\+N\+O\+T\+\_\+\+F\+O\+U\+ND} = 0
+\item 
+\mbox{\Hypertarget{structmods_1_1lmdb_1_1__db__handle_a93a0e99651faadc18dc46cd940819600}\label{structmods_1_1lmdb_1_1__db__handle_a93a0e99651faadc18dc46cd940819600}} 
+static constexpr int {\bfseries K\+E\+Y\+\_\+\+F\+E\+T\+C\+H\+E\+D\+\_\+\+O\+K\+AY} = 1
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+lmdb.\+hpp\item 
+lmdb.\+cpp\end{DoxyCompactItemize}

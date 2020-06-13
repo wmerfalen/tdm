@@ -1,0 +1,6 @@
+<map id="Catch::DecomposedExpression" name="Catch::DecomposedExpression">
+<area shape="rect" id="node2" href="$classCatch_1_1BinaryExpression.html" title="Catch::BinaryExpression\l\&lt; LhsT, Op, RhsT \&gt;" alt="" coords="268,5,435,47"/>
+<area shape="rect" id="node3" href="$classCatch_1_1ExpressionLhs.html" title="Catch::ExpressionLhs\&lt; T \&gt;" alt="" coords="260,71,443,98"/>
+<area shape="rect" id="node4" href="$classCatch_1_1MatchExpression.html" title="Catch::MatchExpression\l\&lt; ArgT, MatcherT \&gt;" alt="" coords="268,123,435,164"/>
+<area shape="rect" id="node5" href="$classCatch_1_1ResultBuilder.html" title="Catch::ResultBuilder" alt="" coords="280,189,423,215"/>
+</map>

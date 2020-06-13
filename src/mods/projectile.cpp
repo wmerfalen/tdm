@@ -137,17 +137,17 @@ namespace mods {
 							case mw_explosive::CLAYMORE_MINE:
 							case mw_explosive::FRAG_GRENADE:
 								person->sendln("Shrapnel tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-								damage_multiplier = (1.0 * blast_count) / 3;
+								damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR;
 								person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
 								break;
 							case mw_explosive::INCENDIARY_GRENADE:
 								person->sendln("A heated explosion sets the room on fire" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-								damage_multiplier = (1.0 * blast_count) / 3;
+								damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR;
 								person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
 								break;
 							case mw_explosive::EMP_GRENADE:
 								person->sendln("The effectiveness of your electronics is hindered" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-								damage_multiplier = (1.0 * blast_count) / 3;
+								damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR;
 								person->sendln("[electronics " + std::to_string(damage_multiplier) + "]");
 								break;
 							case mw_explosive::SMOKE_GRENADE:
@@ -334,6 +334,15 @@ namespace mods {
 		}
 		/** FIXME: needs blast radius stuff to happen */
 		/** FIXME: needs shrapnel calculation */
+		/**
+		 * @brief will give you " to the DIRECTION " (i.e.: " to the north ", " above you ")
+		 *
+		 * @param direction
+		 * @param prefix
+		 * @param suffix
+		 *
+		 * @return 
+		 */
 		std::string todirstr(int direction,bool prefix,bool suffix) {
 			std::string pre = prefix ? " " : "";
 			std::string suf = suffix ? " " : "";
@@ -354,6 +363,15 @@ namespace mods {
 			}
 		}
 
+		/**
+		 * @brief get a string that results in " from the DIRECTION " (i.e.: " from the north ", " from above ")
+		 *
+		 * @param direction
+		 * @param prefix
+		 * @param suffix
+		 *
+		 * @return 
+		 */
 		std::string fromdirstr(int direction,bool prefix, bool suffix) {
 			std::string f = std::string(prefix ? " " : "") + "from ";
 			switch(direction){
@@ -380,6 +398,16 @@ namespace mods {
 			//}
 		}
 
+		/**
+		 * @brief crawls depth rooms from 'from' into direction and gives you the room id
+		 *
+		 * @param from
+		 * @param direction
+		 * @param depth
+		 * @param object
+		 *
+		 * @return 
+		 */
 		int travel_to(room_rnum from, int direction, std::size_t depth, std::shared_ptr<obj_data> object){
 			room_rnum room_id = resolve_room(from,direction,depth);
 			obj_to_room(object,room_id);
@@ -387,6 +415,15 @@ namespace mods {
 			return room_id;
 		}
 
+		/**
+		 * @brief crawls up to depth rooms in direction from source_room
+		 *
+		 * @param source_room
+		 * @param direction
+		 * @param depth
+		 *
+		 * @return 
+		 */
 		room_rnum resolve_room(room_rnum source_room,int direction,std::size_t depth) {
 			room_rnum room_id = source_room;
 
@@ -413,17 +450,14 @@ namespace mods {
 			return room_id;
 		}
 
-		/*
-		 * Alert: As of bpl14, this function returns the following codes:
-		 *  < 0 Victim died.
-		 *  = 0 No damage.
-		 *  > 0 How much damage done.
+		/**
+		 * @brief explodes the obj uuid in room_id ticks in the future. wrapper to explode(rnum,uuid obj,uuid plr)
+		 *
+		 * @param room_id
+		 * @param ticks
+		 * @param object_uuid
+		 * @param player_uuid
 		 */
-		//int grenade_damage(player_ptr_t victim, obj_ptr_t projectile) {
-			//	victim->stc(std::string("You are hit by a ") + projectile->explosive()->name);
-			//	return 0;
-		//}
-
 		void explode_in_future(int room_id, int ticks, uuid_t object_uuid,uuid_t player_uuid) {
 			d("explode_in_future uuid: " << object_uuid);
 			mods::globals::defer_queue->push(ticks, [room_id,object_uuid,player_uuid]() {
@@ -432,6 +466,15 @@ namespace mods {
 			});
 		}
 
+		/**
+		 * @brief Throw an object (grenade)
+		 *
+		 * @param player
+		 * @param direction
+		 * @param depth
+		 * @param object
+		 * @param verb
+		 */
 		void throw_object(player_ptr_t& player, int direction, std::size_t depth,
 				std::shared_ptr<obj_data>& object, std::string_view verb) {
 			std::array<char,32> str_dir_buffer;
@@ -451,22 +494,22 @@ namespace mods {
 					return;
 					break;
 				case mw_explosive::FRAG_GRENADE:
-					ticks = 2;
+					ticks = FRAG_GRENADE_TICKS;
 					break;
 				case mw_explosive::INCENDIARY_GRENADE:
-					ticks = 2;
+					ticks = INCENDIARY_GRENADE_TICKS;
 					break;
 				case mw_explosive::EMP_GRENADE:
-					ticks = 2;
+					ticks = EMP_GRENADE_TICKS;
 					break;
 				case mw_explosive::SMOKE_GRENADE:
-					ticks = 3;
+					ticks = SMOKE_GRENADE_TICKS;
 					break;
 				case mw_explosive::FLASHBANG_GRENADE:
-					ticks = 6;
+					ticks = FLASHBANG_GRENADE_TICKS;
 					break;
 				case mw_explosive::SENSOR_GRENADE:
-					ticks = 6;
+					ticks = SENSOR_GRENADE_TICKS;
 					break;
 			}
 			send_to_room_except(player->room(), player, "%s %ss a %s%s!\r\n",

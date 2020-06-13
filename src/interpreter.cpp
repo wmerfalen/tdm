@@ -81,6 +81,7 @@ ACMD(do_room_list){
 		player->stc(p->name());
 	}
 }
+
 ACMD(do_js_help){
 	
 	if(IS_NPC(ch)){
@@ -207,6 +208,8 @@ ACMD(do_builder_help){
 			"{gld}rbuild_sandbox{/gld} -- {grn}room builder sandbox utility [builder-utils]{/grn}",
 			"{gld}rnumlist{/gld} -- {grn}list rooms [feature-debug]{/grn}",
 			"{gld}rnumtele{/gld} -- {grn}teleport to a room [feature-debug]{/grn}",
+			"{gld}room_dark{/gld} -- {grn}usage: room_dark on, room_dark off [builder-utils][admin-utils]{/grn}",
+			"{gld}room_fire{/gld} -- {grn}usage: room_fire <on|off> [level] [builder-utils][admin-utils]{/grn}",
 			"{gld}room_list{/gld} -- {grn}lists rooms [builder-utils][admin-utils]{/grn}",
 			"{gld}yaml_example{/gld} -- {grn}type 'yaml_example list' for a list of yaml files{/grn}",
 			"{gld}yaml_import{/gld} -- {grn}type 'yaml_import <filename>' to import a yaml file{/grn}",
@@ -407,6 +410,8 @@ ACMD(do_rnumtele);
 ACMD(do_pref);
 ACMD(do_rbuild);
 ACMD(do_rbuild_sandbox);
+ACMD(do_room_dark);
+ACMD(do_room_fire);
 ACMD(do_room_list);
 ACMD(do_show_tics);
 ACMD(do_drone);
@@ -846,6 +851,8 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "pref"  , POS_RESTING , do_pref   , 0, 0 },
 	{ "rbuild"  , POS_RESTING , do_rbuild   , LVL_IMMORT, 0 },
 	{ "rbuild_sandbox"  , POS_RESTING , do_rbuild_sandbox   , LVL_IMMORT, 0 },
+	{ "room_dark"  , POS_RESTING , do_room_dark   , LVL_IMMORT, 0 },
+	{ "room_fire"  , POS_RESTING , do_room_fire   , LVL_IMMORT, 0 },
 	{ "room_list"  , POS_RESTING , do_room_list   , LVL_IMMORT, 0 },
 	{ "histfile"  , POS_RESTING , do_histfile   , LVL_IMMORT, 0 },
 	{ "my_uuid"  , POS_RESTING , do_my_uuid  , LVL_IMMORT, 0 },

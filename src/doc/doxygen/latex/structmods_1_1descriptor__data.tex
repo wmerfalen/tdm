@@ -1,0 +1,176 @@
+\hypertarget{structmods_1_1descriptor__data}{}\section{mods\+:\+:descriptor\+\_\+data Struct Reference}
+\label{structmods_1_1descriptor__data}\index{mods\+::descriptor\+\_\+data@{mods\+::descriptor\+\_\+data}}
+
+
+Collaboration diagram for mods\+:\+:descriptor\+\_\+data\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structmods_1_1descriptor__data__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_ae2e0ea67631556e450dff243be5495ad}\label{structmods_1_1descriptor__data_ae2e0ea67631556e450dff243be5495ad}} 
+enum {\bfseries queue\+\_\+behaviour\+\_\+enum\+\_\+t} \{ \newline
+{\bfseries N\+O\+R\+M\+AL} = 0, 
+{\bfseries I\+G\+N\+O\+R\+E\+\_\+\+A\+LL}, 
+{\bfseries R\+E\+D\+I\+R\+E\+C\+T\+\_\+\+T\+O\+\_\+\+P\+L\+A\+Y\+ER}, 
+{\bfseries R\+E\+D\+I\+R\+E\+C\+T\+\_\+\+T\+O\+\_\+\+F\+I\+L\+E\+S\+Y\+S\+T\+EM}, 
+\newline
+{\bfseries R\+E\+D\+I\+R\+E\+C\+T\+\_\+\+T\+O\+\_\+\+DB}
+ \}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_ad86b7f17bc8e871e64d258e496bd0f65}\label{structmods_1_1descriptor__data_ad86b7f17bc8e871e64d258e496bd0f65}} 
+using {\bfseries buffer\+\_\+type\+\_\+t} = std\+::string
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a18f7b591af240f31c7eccfeac3dc7679}\label{structmods_1_1descriptor__data_a18f7b591af240f31c7eccfeac3dc7679}} 
+using {\bfseries history\+\_\+type\+\_\+t} = std\+::array$<$ \hyperlink{structmods_1_1string}{mods\+::string}, H\+I\+S\+T\+O\+R\+Y\+\_\+\+S\+I\+ZE $>$
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a15575d751f234163e66211a306065043}\label{structmods_1_1descriptor__data_a15575d751f234163e66211a306065043}} 
+using {\bfseries history\+\_\+pos\+\_\+type\+\_\+t} = std\+::size\+\_\+t
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a3c66c2a608301363b9a7ec69de34daa2}\label{structmods_1_1descriptor__data_a3c66c2a608301363b9a7ec69de34daa2}} 
+{\bfseries descriptor\+\_\+data} (queue\+\_\+behaviour\+\_\+enum\+\_\+t queue\+\_\+behaviour)
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a9c33cb6ec96e34449799f3732cc52be5}\label{structmods_1_1descriptor__data_a9c33cb6ec96e34449799f3732cc52be5}} 
+{\bfseries operator bool} () const
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a79c88c03fa6ef091baebf1c61b1e7b34}\label{structmods_1_1descriptor__data_a79c88c03fa6ef091baebf1c61b1e7b34}} 
+void {\bfseries clear} ()
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_ad00a992930095713a62a9ffa96cded3b}\label{structmods_1_1descriptor__data_ad00a992930095713a62a9ffa96cded3b}} 
+void {\bfseries set\+\_\+queue\+\_\+behaviour} (queue\+\_\+behaviour\+\_\+enum\+\_\+t queue\+\_\+behaviour)
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a6313447ef708b5f9880a575e44db1138}\label{structmods_1_1descriptor__data_a6313447ef708b5f9880a575e44db1138}} 
+queue\+\_\+behaviour\+\_\+enum\+\_\+t {\bfseries get\+\_\+queue\+\_\+behaviour} () const
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_ac6f3112269b959fc86169e7dcddc2634}\label{structmods_1_1descriptor__data_ac6f3112269b959fc86169e7dcddc2634}} 
+void {\bfseries set\+\_\+state} (int c)
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_ad0c494eaeed6840dbacfb89db8c3ae0c}\label{structmods_1_1descriptor__data_ad0c494eaeed6840dbacfb89db8c3ae0c}} 
+void {\bfseries queue\+\_\+output} (std\+::string\+\_\+view msg, bool newline, bool plain)
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_af3632d40818506148b103d562785043c}\label{structmods_1_1descriptor__data_af3632d40818506148b103d562785043c}} 
+size\+\_\+t {\bfseries flush\+\_\+output} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_aecfa02a6d95c54147b6e1fb88415649f}\label{structmods_1_1descriptor__data_aecfa02a6d95c54147b6e1fb88415649f}} 
+socket\+\_\+t {\bfseries descriptor}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_add4aaf4af73e0c51436d3aa2f5ca4543}\label{structmods_1_1descriptor__data_add4aaf4af73e0c51436d3aa2f5ca4543}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries host}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a84f9d2724698efadd089053324a6786a}\label{structmods_1_1descriptor__data_a84f9d2724698efadd089053324a6786a}} 
+byte {\bfseries bad\+\_\+pws}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_ae609aa15699db17b75fd6c379ab58484}\label{structmods_1_1descriptor__data_ae609aa15699db17b75fd6c379ab58484}} 
+byte {\bfseries idle\+\_\+tics}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a0eedea0cad7a3b898fea1fe3b537e130}\label{structmods_1_1descriptor__data_a0eedea0cad7a3b898fea1fe3b537e130}} 
+int {\bfseries bufptr}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a2875346920519a99b2e8a46fce71d540}\label{structmods_1_1descriptor__data_a2875346920519a99b2e8a46fce71d540}} 
+int {\bfseries bufspace}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a90ccb737ea515d03b1ab3397209970e7}\label{structmods_1_1descriptor__data_a90ccb737ea515d03b1ab3397209970e7}} 
+struct \hyperlink{structtxt__block}{txt\+\_\+block} $\ast$ {\bfseries large\+\_\+outbuf}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_af9600cb3e35a89e302d60a2133accfc4}\label{structmods_1_1descriptor__data_af9600cb3e35a89e302d60a2133accfc4}} 
+std\+::list$<$ \hyperlink{structtxt__block}{txt\+\_\+block} $>$ {\bfseries input}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_aeecf3f8e952ee47657a9f9d9c07c91f5}\label{structmods_1_1descriptor__data_aeecf3f8e952ee47657a9f9d9c07c91f5}} 
+\hyperlink{structchar__data}{char\+\_\+data} $\ast$ {\bfseries character}
+\item 
+\hyperlink{structchar__data}{char\+\_\+data} $\ast$ \hyperlink{structmods_1_1descriptor__data_a0aafac1b6c34958e9e214f941ea2afdc}{original}
+\item 
+int \hyperlink{structmods_1_1descriptor__data_a6842b716dcb3f1b7874d3c5c2dd4c2df}{connected}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a978552dd9e11d3c14037715eb164f6c6}\label{structmods_1_1descriptor__data_a978552dd9e11d3c14037715eb164f6c6}} 
+int {\bfseries desc\+\_\+num}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a0e96abad9091b53d100bc4bf8088b9ee}\label{structmods_1_1descriptor__data_a0e96abad9091b53d100bc4bf8088b9ee}} 
+time\+\_\+t {\bfseries login\+\_\+time}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a8db990ef5c993bba65c8ee130e5419ca}\label{structmods_1_1descriptor__data_a8db990ef5c993bba65c8ee130e5419ca}} 
+char $\ast$ {\bfseries showstr\+\_\+head}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_ac21a1560fe53543e852eadd7babadb5b}\label{structmods_1_1descriptor__data_ac21a1560fe53543e852eadd7babadb5b}} 
+char $\ast$$\ast$ {\bfseries showstr\+\_\+vector}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_af6ad279b5d95f43aa2bdc4036e312078}\label{structmods_1_1descriptor__data_af6ad279b5d95f43aa2bdc4036e312078}} 
+int {\bfseries showstr\+\_\+count}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a86764f0b5dd4b1e9f3a82df0e092f9ef}\label{structmods_1_1descriptor__data_a86764f0b5dd4b1e9f3a82df0e092f9ef}} 
+int {\bfseries showstr\+\_\+page}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_ae730f973ff8d9c4d89b43a99fdad45aa}\label{structmods_1_1descriptor__data_ae730f973ff8d9c4d89b43a99fdad45aa}} 
+char $\ast$$\ast$ {\bfseries str}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a017f523649b86624e8f12f9660a2380b}\label{structmods_1_1descriptor__data_a017f523649b86624e8f12f9660a2380b}} 
+size\+\_\+t {\bfseries max\+\_\+str}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a953e964d7b42be2f1afb134c3d4c5d1b}\label{structmods_1_1descriptor__data_a953e964d7b42be2f1afb134c3d4c5d1b}} 
+long {\bfseries mail\+\_\+to}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a15e0e338453bfa0d4f5870c1fc762125}\label{structmods_1_1descriptor__data_a15e0e338453bfa0d4f5870c1fc762125}} 
+int {\bfseries has\+\_\+prompt}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_af343924d95ba2ef7c5f8d27f67aec0d8}\label{structmods_1_1descriptor__data_af343924d95ba2ef7c5f8d27f67aec0d8}} 
+buffer\+\_\+type\+\_\+t {\bfseries inbuf}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a81138fa43848fce00be88c0a4260c235}\label{structmods_1_1descriptor__data_a81138fa43848fce00be88c0a4260c235}} 
+buffer\+\_\+type\+\_\+t {\bfseries last\+\_\+input}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a2fbdfc80434f9ddcfbc201ce1bb3c9d0}\label{structmods_1_1descriptor__data_a2fbdfc80434f9ddcfbc201ce1bb3c9d0}} 
+buffer\+\_\+type\+\_\+t {\bfseries small\+\_\+outbuf}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a3be7e1b2136de152f07e9b9eb4d15a4b}\label{structmods_1_1descriptor__data_a3be7e1b2136de152f07e9b9eb4d15a4b}} 
+history\+\_\+type\+\_\+t {\bfseries history}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a762868b2bbe5d196e2f96f6519410c35}\label{structmods_1_1descriptor__data_a762868b2bbe5d196e2f96f6519410c35}} 
+history\+\_\+pos\+\_\+type\+\_\+t {\bfseries history\+\_\+pos}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_aca845b188059fcb2dca343c4aefa01b7}\label{structmods_1_1descriptor__data_aca845b188059fcb2dca343c4aefa01b7}} 
+std\+::shared\+\_\+ptr$<$ \hyperlink{structmods_1_1descriptor__data}{mods\+::descriptor\+\_\+data} $>$ {\bfseries snooping}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a2fde30d575dbe31d606f899f715dabcf}\label{structmods_1_1descriptor__data_a2fde30d575dbe31d606f899f715dabcf}} 
+std\+::shared\+\_\+ptr$<$ \hyperlink{structmods_1_1descriptor__data}{mods\+::descriptor\+\_\+data} $>$ {\bfseries snoop\+\_\+by}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a584932baae36deb1ebc0285130dd52fa}\label{structmods_1_1descriptor__data_a584932baae36deb1ebc0285130dd52fa}} 
+bool {\bfseries has\+\_\+output}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a212ce7a6ea2d34242244f9517c1b0233}\label{structmods_1_1descriptor__data_a212ce7a6ea2d34242244f9517c1b0233}} 
+static constexpr size\+\_\+t {\bfseries O\+U\+T\+P\+U\+T\+\_\+\+S\+I\+ZE} = L\+A\+R\+G\+E\+\_\+\+B\+U\+F\+S\+I\+ZE+1
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structmods_1_1descriptor__data_a6842b716dcb3f1b7874d3c5c2dd4c2df}\label{structmods_1_1descriptor__data_a6842b716dcb3f1b7874d3c5c2dd4c2df}} 
+\index{mods\+::descriptor\+\_\+data@{mods\+::descriptor\+\_\+data}!connected@{connected}}
+\index{connected@{connected}!mods\+::descriptor\+\_\+data@{mods\+::descriptor\+\_\+data}}
+\subsubsection{\texorpdfstring{connected}{connected}}
+{\footnotesize\ttfamily int mods\+::descriptor\+\_\+data\+::connected}
+
+F\+I\+X\+ME\+: turn to \hyperlink{classmods_1_1player}{mods\+::player} \mbox{\Hypertarget{structmods_1_1descriptor__data_a0aafac1b6c34958e9e214f941ea2afdc}\label{structmods_1_1descriptor__data_a0aafac1b6c34958e9e214f941ea2afdc}} 
+\index{mods\+::descriptor\+\_\+data@{mods\+::descriptor\+\_\+data}!original@{original}}
+\index{original@{original}!mods\+::descriptor\+\_\+data@{mods\+::descriptor\+\_\+data}}
+\subsubsection{\texorpdfstring{original}{original}}
+{\footnotesize\ttfamily \hyperlink{structchar__data}{char\+\_\+data}$\ast$ mods\+::descriptor\+\_\+data\+::original}
+
+F\+I\+X\+ME\+: turn to \hyperlink{classmods_1_1player}{mods\+::player} 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+structs.\+h\item 
+structs.\+cpp\end{DoxyCompactItemize}

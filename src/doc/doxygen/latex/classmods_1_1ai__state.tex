@@ -1,0 +1,101 @@
+\hypertarget{classmods_1_1ai__state}{}\section{mods\+:\+:ai\+\_\+state Class Reference}
+\label{classmods_1_1ai__state}\index{mods\+::ai\+\_\+state@{mods\+::ai\+\_\+state}}
+
+
+Collaboration diagram for mods\+:\+:ai\+\_\+state\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmods_1_1ai__state__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classmods_1_1ai__state_a1daab0dbc867404effc56046b4c44e02}\label{classmods_1_1ai__state_a1daab0dbc867404effc56046b4c44e02}} 
+enum {\bfseries state} \{ \newline
+{\bfseries W\+A\+N\+D\+ER}, 
+{\bfseries S\+U\+S\+P\+I\+C\+I\+O\+US}, 
+{\bfseries F\+I\+G\+HT}, 
+{\bfseries S\+U\+S\+P\+I\+C\+I\+O\+U\+S2}, 
+\newline
+{\bfseries P\+R\+O\+T\+E\+CT}, 
+{\bfseries A\+G\+G\+R\+E\+S\+S\+I\+V\+E\+\_\+\+P\+R\+O\+T\+E\+CT}, 
+{\bfseries M\+A\+N\+IC}, 
+{\bfseries C\+H\+A\+O\+T\+IC}, 
+\newline
+{\bfseries R\+E\+S\+E\+R\+V\+ED}
+ \}
+\item 
+\mbox{\Hypertarget{classmods_1_1ai__state_a9d0f0e619232f82a8cb970718a04b3ae}\label{classmods_1_1ai__state_a9d0f0e619232f82a8cb970718a04b3ae}} 
+enum {\bfseries event\+\_\+type\+\_\+t} \{ \newline
+{\bfseries A\+I\+\_\+\+E\+V\+E\+N\+T\+\_\+\+S\+N\+I\+P\+ED}, 
+{\bfseries A\+I\+\_\+\+E\+V\+E\+N\+T\+\_\+\+A\+T\+T\+A\+C\+K\+E\+R\+\_\+\+F\+O\+U\+ND}, 
+{\bfseries A\+I\+\_\+\+W\+I\+T\+N\+E\+S\+S\+\_\+\+A\+T\+T\+A\+CK}, 
+{\bfseries A\+I\+\_\+\+E\+V\+E\+N\+T\+\_\+\+W\+A\+N\+D\+ER}, 
+\newline
+{\bfseries B\+R\+E\+A\+C\+H\+E\+D\+\_\+\+N\+O\+R\+TH}, 
+{\bfseries B\+R\+E\+A\+C\+H\+E\+D\+\_\+\+S\+O\+U\+TH}, 
+{\bfseries B\+R\+E\+A\+C\+H\+E\+D\+\_\+\+E\+A\+ST}, 
+{\bfseries B\+R\+E\+A\+C\+H\+E\+D\+\_\+\+W\+E\+ST}, 
+\newline
+{\bfseries B\+R\+E\+A\+C\+H\+E\+D\+\_\+\+F\+R\+O\+M\+\_\+\+N\+O\+R\+TH}, 
+{\bfseries B\+R\+E\+A\+C\+H\+E\+D\+\_\+\+F\+R\+O\+M\+\_\+\+S\+O\+U\+TH}, 
+{\bfseries B\+R\+E\+A\+C\+H\+E\+D\+\_\+\+F\+R\+O\+M\+\_\+\+E\+A\+ST}, 
+{\bfseries B\+R\+E\+A\+C\+H\+E\+D\+\_\+\+F\+R\+O\+M\+\_\+\+W\+E\+ST}, 
+\newline
+{\bfseries G\+R\+E\+N\+A\+D\+E\+\_\+\+F\+L\+I\+E\+S\+\_\+\+BY}, 
+{\bfseries G\+R\+E\+N\+A\+D\+E\+\_\+\+E\+X\+P\+L\+O\+S\+I\+ON}, 
+{\bfseries R\+O\+O\+M\+\_\+\+E\+MP}, 
+{\bfseries R\+O\+O\+M\+\_\+\+N\+O\+R\+M\+AL}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classmods_1_1ai__state_a5420e46c2d616b588e8ebbe5b47ee435}\label{classmods_1_1ai__state_a5420e46c2d616b588e8ebbe5b47ee435}} 
+{\bfseries ai\+\_\+state} (\hyperlink{structchar__data}{char\+\_\+data} $\ast$ch, uint8\+\_\+t st, uint32\+\_\+t aggr)
+\item 
+\mbox{\Hypertarget{classmods_1_1ai__state_a98d1f297666c1fbefa3f6f1c93051dd0}\label{classmods_1_1ai__state_a98d1f297666c1fbefa3f6f1c93051dd0}} 
+\hyperlink{classmods_1_1ai__state}{ai\+\_\+state} \& {\bfseries operator$<$$<$} (const state \&m)
+\item 
+\mbox{\Hypertarget{classmods_1_1ai__state_a2c153b46ee1bb2021d238c1df4ba1dcd}\label{classmods_1_1ai__state_a2c153b46ee1bb2021d238c1df4ba1dcd}} 
+uint32\+\_\+t {\bfseries dispatch} (\hyperlink{structchar__data}{char\+\_\+data} $\ast$)
+\item 
+\mbox{\Hypertarget{classmods_1_1ai__state_ae53bc55732fd5ce46229ac5523541d09}\label{classmods_1_1ai__state_ae53bc55732fd5ce46229ac5523541d09}} 
+uint32\+\_\+t {\bfseries event} (\hyperlink{structchar__data}{char\+\_\+data} $\ast$, event\+\_\+type\+\_\+t)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classmods_1_1ai__state_a7b28e765d1f1ed2bec5965925d84d022}\label{classmods_1_1ai__state_a7b28e765d1f1ed2bec5965925d84d022}} 
+\hyperlink{structchar__data}{char\+\_\+data} $\ast$ {\bfseries m\+\_\+char\+\_\+data}
+\item 
+\mbox{\Hypertarget{classmods_1_1ai__state_a92eb3570093e243e0e3a1d812a5765fc}\label{classmods_1_1ai__state_a92eb3570093e243e0e3a1d812a5765fc}} 
+uint8\+\_\+t {\bfseries m\+\_\+state}
+\item 
+\mbox{\Hypertarget{classmods_1_1ai__state_a1eac0a0faaf577d858cddde75c8c4560}\label{classmods_1_1ai__state_a1eac0a0faaf577d858cddde75c8c4560}} 
+int32\+\_\+t {\bfseries mpub\+\_\+aggro}
+\item 
+\mbox{\Hypertarget{classmods_1_1ai__state_aa9e06d3e51b914362021ea8fe278efe2}\label{classmods_1_1ai__state_aa9e06d3e51b914362021ea8fe278efe2}} 
+int32\+\_\+t {\bfseries mpub\+\_\+lenient}
+\item 
+\mbox{\Hypertarget{classmods_1_1ai__state_aecb13989eaaacd8046e56fd5ed9f94ae}\label{classmods_1_1ai__state_aecb13989eaaacd8046e56fd5ed9f94ae}} 
+int32\+\_\+t {\bfseries mpub\+\_\+suspicious}
+\item 
+\mbox{\Hypertarget{classmods_1_1ai__state_a7bf2149dae325fa03d7c6a05a5967d2d}\label{classmods_1_1ai__state_a7bf2149dae325fa03d7c6a05a5967d2d}} 
+int32\+\_\+t {\bfseries mpub\+\_\+intelligence}
+\item 
+\mbox{\Hypertarget{classmods_1_1ai__state_a957bb5d36a0685e6d2eb6cde6623b5e5}\label{classmods_1_1ai__state_a957bb5d36a0685e6d2eb6cde6623b5e5}} 
+uint32\+\_\+t {\bfseries mpub\+\_\+stunned}
+\item 
+\mbox{\Hypertarget{classmods_1_1ai__state_a3faed1a567ce2d83ede56f7616180e3c}\label{classmods_1_1ai__state_a3faed1a567ce2d83ede56f7616180e3c}} 
+uint32\+\_\+t {\bfseries mpub\+\_\+dead}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+ai\+\_\+state.\+hpp\item 
+ai\+\_\+state.\+cpp\end{DoxyCompactItemize}

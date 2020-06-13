@@ -8,11 +8,18 @@
 #include <forward_list>
 #include <memory>
 
+#define __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
+#ifdef __MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__
+#define maffects_debug(a) std::cerr << "[mods::affects]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n";
+#else
+#define maffects_debug(a) /**/
+#endif
 namespace mods {
 	struct player;
 };
 using player_ptr_t = std::shared_ptr<mods::player>;
 
+#include <functional>
 namespace mods::affects {
 	using amount_t = int;
 	constexpr static amount_t DEFAULT_AMOUNT = 3;
@@ -41,30 +48,25 @@ namespace mods::affects {
 		{"intimidated",affect_t::INTIMIDATED},
 		{"scanned",affect_t::SCANNED}
 	};
-	using affect_dissolve_t = std::array<uint64_t,AFFECT_DISSOLVE_COUNT>;
-	using affect_map_t = std::map<affect_t,amount_t>;
+	//using affect_dissolve_t = std::array<uint64_t,AFFECT_DISSOLVE_COUNT>;
+	using affect_map_t = std::map<uint32_t,amount_t>;
 	using affect_t = mods::affects::affect_t;
 	using affect_vector_t = std::vector<affect_t>;
 
-	struct dissolver {
-		void affect(affect_t affect);
-		void affect(affect_t affect,amount_t amt);
+	template <typename TAffects,typename TAffectsContainer,typename TAffectsMap,typename TEntityId>
+		struct dissolver {
+			using callback_t = std::function<void(TEntityId,TAffects,uint32_t)>;
 
-		void remove(affect_t id);
-		void clear(std::vector<affect_t> affects);
+			TEntityId entity_id;
 
-		template <typename T>
-			void affect_via(T affects){
-				for(auto a : affects){
-					affect(a);
-				}
+			void on_affect_change(TAffects affect,callback_t cb){
+				m_callbacks[affect] = cb;
 			}
-		void affect_map(affect_map_t afmap);
-
-		std::size_t tick();
-		dissolver();
-		template <typename T>
-			dissolver(T affects){
+			dissolver(TAffectsMap affects){
+				m_has_affects = true;
+				affect_map(affects);
+			}
+			dissolver(TAffectsContainer affects){
 				m_has_affects = true;
 				std::fill(m_affects.begin(),m_affects.end(),0);
 				for(auto& item : affects){
@@ -72,14 +74,178 @@ namespace mods::affects {
 					d("Affecting item: " << item);
 				}
 			}
-		~dissolver() = default;
-		bool has_any_affect(affect_vector_t affects);
-		bool has_all_affects(affect_vector_t affects);
-		bool has_affect(affect_t a);
-		protected:
-		bool m_has_affects;
-		affect_dissolve_t m_affects;
-	};
+			~dissolver() = default;
+
+			void affect_via(TAffectsContainer affects){
+				for(auto a : affects){
+					affect(a);
+				}
+			}
+
+			/**
+			 * @brief set affect direction
+			 *
+			 * @param affect
+			 * @param direction true means increment, false decrement
+			 */
+			void set_direction(TAffects affect, bool direction){
+				if(direction){
+					m_increment.insert(affect);
+					return;
+				}
+				m_increment.erase(affect);
+			}
+			void set_max_amount(TAffects affect, uint32_t max){
+				m_max_amount[affect] = max;
+			}
+
+			bool has_all_affects(TAffectsContainer in_affects){
+				for(auto & affect : in_affects){
+					if(!m_affects[affect]) {
+						return false;
+					}
+				}
+				return true;
+			}
+			bool has_affect(TAffects a){
+				maffects_debug("[has_affect] " << a);
+				return m_affects[a];
+			}
+			dissolver() {
+				for(auto & affect : m_affects){
+					m_affects[affect.first] = 0;
+				}
+				m_has_affects = 0;
+			}
+			void trigger_callback(TAffects affect){
+				if(m_callbacks[affect]){
+					maffects_debug("calling callback via trigger_callback");
+					m_callbacks[affect](entity_id,affect,m_affects[affect]);
+				}
+			}
+			void affect_every_n_ticks(TAffects affect,uint32_t starting_amount, uint32_t every_n_ticks){
+					m_affects[affect] += starting_amount;
+					m_tick_resolution_map[affect] = every_n_ticks;
+					m_tick_resolution_map_counter[affect] = 0;
+#if 0
+					if(m_affects[item.first] == 0){
+	/** FIXME: need to uncomment this->remove() calls and implement that function */
+						//this->remove(item.first);
+					}
+#endif
+				}
+			void affect_map(TAffectsMap affects){
+				for(auto& item : affects){
+					m_affects[item.first] += item.second;
+#if 0
+					if(m_affects[item.first] == 0){
+	/** FIXME: need to uncomment this->remove() calls and implement that function */
+						//this->remove(item.first);
+					}
+#endif
+				}
+			}
+			void affect(TAffects aff_id){
+				affect(aff_id,mods::affects::DEFAULT_AMOUNT);
+			}
+			void clear(TAffectsContainer affects){
+				for(auto a : affects){
+					m_affects[a] = 0;
+	/** FIXME: need to uncomment this->remove() calls and implement that function */
+					//this->remove(a);
+				}
+			}
+			void process_affect(TAffects affect){
+				if(m_increment.find(affect) != m_increment.end()){
+					++m_affects[affect];
+				}else{
+					--m_affects[affect];
+				}
+				++m_processed;
+				if(m_callbacks[affect]){
+					maffects_debug("calling callback via process_affect");
+					m_callbacks[affect](entity_id,affect,m_affects[affect]);
+				}
+			}
+			void affect(TAffects affect,int amount){
+				m_affects[affect] += amount;
+#if 0
+				if((m_affects[affect] += amount) == 0){
+	/** FIXME: need to uncomment this->remove() calls and implement that function */
+					//this->remove(affect);
+				}
+#endif
+			}
+			/**
+			 * @brief 
+			 *
+			 * @return 
+			 */
+			std::size_t tick(){
+				m_processed = 0;
+				maffects_debug("Dissolver tick");
+				std::vector<TAffects> erase_me;
+				for(auto & affect : m_affects){
+					bool should_process = false;
+					if(m_tick_resolution_map[affect.first] != 0){
+						maffects_debug("Dissolver tick every " << m_tick_resolution_map_counter[affect.first] << " for affect: " << affect.first << 
+								"current value: " << affect.second);
+						++m_tick_resolution_map_counter[affect.first];
+						if(m_tick_resolution_map_counter[affect.first] == m_tick_resolution_map[affect.first]){
+							m_tick_resolution_map_counter[affect.first] = 0;
+							maffects_debug("decremented the affect.second for item: " << affect.first);
+							should_process = true;
+						}
+					} else {
+						should_process = true;
+					}
+					if(should_process){
+						process_affect(affect.first);
+					}
+					if(m_increment.find(affect.first) != m_increment.end() && m_max_amount[affect.first] <= affect.second){
+						erase_me.push_back(affect.first);
+					}
+					if(m_increment.find(affect.first) == m_increment.end() && affect.second == 0){
+						erase_me.push_back(affect.first);
+					}
+				}
+				for(auto && item : erase_me){
+					if(m_affects.find(item) != m_affects.end()){
+						m_affects.erase(item);
+					}
+				}
+				m_has_affects = m_affects.size();
+				return m_affects.size();
+			}
+			void remove(TAffects id){
+	/** FIXME: need to uncomment this->remove() calls and implement that function */
+	/** FIXME: need to uncomment this->remove() calls and implement that function */
+			}
+	bool has_any_affect(TAffectsContainer in_affects){
+			for(auto & affect : in_affects){
+				if(m_affects[affect]) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		TAffectsMap& get_affects(){ return m_affects; }
+
+		void set_callback(TAffects affect, std::function<void(TEntityId,TAffects,uint32_t)> f){
+			m_callbacks[affect] = f;
+		}
+
+			protected:
+			bool m_has_affects;
+			TAffectsMap m_affects;
+			std::map<TAffects,uint32_t> m_tick_resolution_map;
+			std::map<TAffects,uint32_t> m_tick_resolution_map_counter;
+			std::set<TAffects> m_increment;
+			std::map<TAffects,uint32_t> m_max_amount;
+			std::map<TAffects,std::function<void(TEntityId,TAffects,uint32_t)>> m_callbacks;
+			std::size_t m_processed;
+		};
 
 	void process();
 	uint32_t get_ticks_per_minute();

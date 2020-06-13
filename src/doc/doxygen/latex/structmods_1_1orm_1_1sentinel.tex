@@ -1,0 +1,117 @@
+\hypertarget{structmods_1_1orm_1_1sentinel}{}\section{mods\+:\+:orm\+:\+:sentinel Struct Reference}
+\label{structmods_1_1orm_1_1sentinel}\index{mods\+::orm\+::sentinel@{mods\+::orm\+::sentinel}}
+
+
+Inheritance diagram for mods\+:\+:orm\+:\+:sentinel\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=183pt]{structmods_1_1orm_1_1sentinel__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for mods\+:\+:orm\+:\+:sentinel\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=183pt]{structmods_1_1orm_1_1sentinel__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a9de7b9c1346aa8fb150325bb24f5a71c}\label{structmods_1_1orm_1_1sentinel_a9de7b9c1346aa8fb150325bb24f5a71c}} 
+using {\bfseries primary\+\_\+choice\+\_\+t} = mods\+::weapon\+::sentinel\+::primary\+\_\+choice\+\_\+t
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint64\+\_\+t \hyperlink{structmods_1_1orm_1_1sentinel_aa01c7770d384a6461a7d886e1ac94d03}{initialize\+\_\+row} (player\+\_\+ptr\+\_\+t \&\hyperlink{classmods_1_1player}{player}, primary\+\_\+choice\+\_\+t primary\+\_\+choice)
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a5ecb7826ac778ce46553d5e2ddc1e1ce}\label{structmods_1_1orm_1_1sentinel_a5ecb7826ac778ce46553d5e2ddc1e1ce}} 
+int16\+\_\+t {\bfseries feed} (const pqxx\+::result\+::reference \&)
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a647d47550ba7a701db859ae345ed4961}\label{structmods_1_1orm_1_1sentinel_a647d47550ba7a701db859ae345ed4961}} 
+void {\bfseries init} ()
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a92fab6f75026a8f32d4e247fdb354fe1}\label{structmods_1_1orm_1_1sentinel_a92fab6f75026a8f32d4e247fdb354fe1}} 
+sql\+\_\+save\+\_\+map\+\_\+t {\bfseries export\+\_\+class} ()
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a489399f341134b33a89e641824852de7}\label{structmods_1_1orm_1_1sentinel_a489399f341134b33a89e641824852de7}} 
+{\footnotesize template$<$typename T\+Object $>$ }\\int16\+\_\+t {\bfseries save} (T\+Object $\ast$s)
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_ae6255e3f50d7301ccc28fd42c4821e45}\label{structmods_1_1orm_1_1sentinel_ae6255e3f50d7301ccc28fd42c4821e45}} 
+int16\+\_\+t {\bfseries load\+\_\+by\+\_\+player} (uint64\+\_\+t)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a29c911a34eeb858460de9d5b8e13f34a}\label{structmods_1_1orm_1_1sentinel_a29c911a34eeb858460de9d5b8e13f34a}} 
+uint64\+\_\+t {\bfseries id}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a546bf0b76824aa6d4c7bcb2b5abf3457}\label{structmods_1_1orm_1_1sentinel_a546bf0b76824aa6d4c7bcb2b5abf3457}} 
+uint64\+\_\+t {\bfseries sentinel\+\_\+id}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a04036fc19d3587d5ff580d50cb33aa20}\label{structmods_1_1orm_1_1sentinel_a04036fc19d3587d5ff580d50cb33aa20}} 
+uint64\+\_\+t {\bfseries sentinel\+\_\+player\+\_\+id}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a741ac3a920ac62edd4f38a95ddd2ecf7}\label{structmods_1_1orm_1_1sentinel_a741ac3a920ac62edd4f38a95ddd2ecf7}} 
+std\+::string {\bfseries sentinel\+\_\+primary\+\_\+type}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_abd4a17a67b62887b6b7c336e5809d4e6}\label{structmods_1_1orm_1_1sentinel_abd4a17a67b62887b6b7c336e5809d4e6}} 
+uint64\+\_\+t {\bfseries sentinel\+\_\+primary\+\_\+weapon\+\_\+id}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a9e27d4f293b5646563119959663417e5}\label{structmods_1_1orm_1_1sentinel_a9e27d4f293b5646563119959663417e5}} 
+std\+::string {\bfseries sentinel\+\_\+secondary\+\_\+type}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_aeef1e8963c770577ab19741a7210414d}\label{structmods_1_1orm_1_1sentinel_aeef1e8963c770577ab19741a7210414d}} 
+uint64\+\_\+t {\bfseries sentinel\+\_\+secondary\+\_\+weapon\+\_\+id}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a89097297921c4d1a166b699f37ad6e24}\label{structmods_1_1orm_1_1sentinel_a89097297921c4d1a166b699f37ad6e24}} 
+uint64\+\_\+t {\bfseries sentinel\+\_\+heal\+\_\+level}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a72b8bc6538fc306debc6ec2890dc998f}\label{structmods_1_1orm_1_1sentinel_a72b8bc6538fc306debc6ec2890dc998f}} 
+uint64\+\_\+t {\bfseries sentinel\+\_\+intimidate\+\_\+level}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a1cec1d768af77adf7cf192e884a7a03d}\label{structmods_1_1orm_1_1sentinel_a1cec1d768af77adf7cf192e884a7a03d}} 
+uint64\+\_\+t {\bfseries sentinel\+\_\+human\+\_\+shield\+\_\+level}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a6cd882ed327e0d8eeaaf7a7d6d9b9ab2}\label{structmods_1_1orm_1_1sentinel_a6cd882ed327e0d8eeaaf7a7d6d9b9ab2}} 
+uint64\+\_\+t {\bfseries sentinel\+\_\+deny\+\_\+entry\+\_\+level}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a178b373bcaf8fd30a4f6325b5188ff22}\label{structmods_1_1orm_1_1sentinel_a178b373bcaf8fd30a4f6325b5188ff22}} 
+uint64\+\_\+t {\bfseries sentinel\+\_\+gadget\+\_\+shield\+\_\+level}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a08fa15298db1ff7b8c50989ae2649a34}\label{structmods_1_1orm_1_1sentinel_a08fa15298db1ff7b8c50989ae2649a34}} 
+uint64\+\_\+t {\bfseries sentinel\+\_\+oblique\+\_\+kick\+\_\+level}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a1a761a3d983e8bc6353d955285f13f28}\label{structmods_1_1orm_1_1sentinel_a1a761a3d983e8bc6353d955285f13f28}} 
+long {\bfseries created\+\_\+at}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a19401c12257cd5faf59939e8f70e6fbb}\label{structmods_1_1orm_1_1sentinel_a19401c12257cd5faf59939e8f70e6fbb}} 
+long {\bfseries updated\+\_\+at}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a2bf880a2f876fcbb2d76a78babde4bbf}\label{structmods_1_1orm_1_1sentinel_a2bf880a2f876fcbb2d76a78babde4bbf}} 
+static constexpr const char $\ast$ {\bfseries table\+\_\+name} = \char`\"{}class\+\_\+sentinel\char`\"{}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_aa01c7770d384a6461a7d886e1ac94d03}\label{structmods_1_1orm_1_1sentinel_aa01c7770d384a6461a7d886e1ac94d03}} 
+\index{mods\+::orm\+::sentinel@{mods\+::orm\+::sentinel}!initialize\+\_\+row@{initialize\+\_\+row}}
+\index{initialize\+\_\+row@{initialize\+\_\+row}!mods\+::orm\+::sentinel@{mods\+::orm\+::sentinel}}
+\subsubsection{\texorpdfstring{initialize\+\_\+row()}{initialize\_row()}}
+{\footnotesize\ttfamily uint64\+\_\+t mods\+::orm\+::sentinel\+::initialize\+\_\+row (\begin{DoxyParamCaption}\item[{player\+\_\+ptr\+\_\+t \&}]{player,  }\item[{primary\+\_\+choice\+\_\+t}]{primary\+\_\+choice }\end{DoxyParamCaption})}
+
+Handy little script to restore a sentinel\textquotesingle{}s primary and secondary weapons\+: You can pass it space separated primary keys run ./sql/restore-\/sentinel.sh \$\+U\+S\+E\+R\+\_\+\+P\+K\+\_\+\+ID \mbox{[}...\$\+U\+S\+E\+R\+\_\+\+P\+K\+\_\+\+I\+D\+\_\+N\mbox{]} Then run sql-\/copy, then  sql/restore.\+sql Primary\+\_\+choice will be either \char`\"{}\+M\+P5\char`\"{} or \char`\"{}\+S\+A\+S\+G12\char`\"{} 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+class-\/sentinel.\+hpp\item 
+class-\/sentinel.\+cpp\end{DoxyCompactItemize}

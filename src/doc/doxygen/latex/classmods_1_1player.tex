@@ -1,0 +1,1280 @@
+\hypertarget{classmods_1_1player}{}\section{mods\+:\+:player Struct Reference}
+\label{classmods_1_1player}\index{mods\+::player@{mods\+::player}}
+
+
+Inheritance diagram for mods\+:\+:player\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=153pt]{classmods_1_1player__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac499124d36e96d5513a0798f12b0d1ed}\label{classmods_1_1player_ac499124d36e96d5513a0798f12b0d1ed}} 
+enum {\bfseries player\+\_\+type\+\_\+enum\+\_\+t} \{ \newline
+{\bfseries P\+L\+A\+Y\+ER}, 
+{\bfseries M\+OB}, 
+{\bfseries D\+R\+O\+NE}, 
+{\bfseries P\+L\+A\+Y\+ER}, 
+\newline
+{\bfseries M\+OB}, 
+{\bfseries D\+R\+O\+NE}, 
+{\bfseries P\+L\+A\+Y\+E\+R\+\_\+\+M\+U\+T\+E\+D\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+OR}, 
+{\bfseries M\+O\+B\+\_\+\+M\+U\+T\+E\+D\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+OR}, 
+\newline
+{\bfseries D\+R\+O\+N\+E\+\_\+\+M\+U\+T\+E\+D\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+OR}
+ \}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_af6141b184d0742dc2d94dd04c390069d}\label{classmods_1_1player_af6141b184d0742dc2d94dd04c390069d}} 
+enum {\bfseries misc\+\_\+pref\+\_\+enum\+\_\+t} \{ {\bfseries H\+O\+L\+D\+\_\+\+A\+N\+Y\+T\+H\+I\+NG} = 1, 
+{\bfseries S\+I\+ZE} = H\+O\+L\+D\+\_\+\+A\+N\+Y\+T\+H\+I\+NG
+ \}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac499124d36e96d5513a0798f12b0d1ed}\label{classmods_1_1player_ac499124d36e96d5513a0798f12b0d1ed}} 
+enum {\bfseries player\+\_\+type\+\_\+enum\+\_\+t} \{ \newline
+{\bfseries P\+L\+A\+Y\+ER}, 
+{\bfseries M\+OB}, 
+{\bfseries D\+R\+O\+NE}, 
+{\bfseries P\+L\+A\+Y\+ER}, 
+\newline
+{\bfseries M\+OB}, 
+{\bfseries D\+R\+O\+NE}, 
+{\bfseries P\+L\+A\+Y\+E\+R\+\_\+\+M\+U\+T\+E\+D\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+OR}, 
+{\bfseries M\+O\+B\+\_\+\+M\+U\+T\+E\+D\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+OR}, 
+\newline
+{\bfseries D\+R\+O\+N\+E\+\_\+\+M\+U\+T\+E\+D\+\_\+\+D\+E\+S\+C\+R\+I\+P\+T\+OR}
+ \}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a20acafc81d8553756c3b140d992c528d}\label{classmods_1_1player_a20acafc81d8553756c3b140d992c528d}} 
+using {\bfseries class\+\_\+type} = mods\+::classes\+::types
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a82c7005a1c9552f9bd13fcc6db5bf745}\label{classmods_1_1player_a82c7005a1c9552f9bd13fcc6db5bf745}} 
+using {\bfseries descriptor\+\_\+data\+\_\+t} = std\+::deque$<$ \hyperlink{structmods_1_1descriptor__data}{descriptor\+\_\+data} $>$
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a7435f35fe5d165ed38c73ab60c1bd73f}\label{classmods_1_1player_a7435f35fe5d165ed38c73ab60c1bd73f}} 
+using {\bfseries descriptor\+\_\+data\+\_\+iterator\+\_\+t} = descriptor\+\_\+data\+\_\+t\+::iterator
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aa74e447de4ad181448c3ff7b27f32bf9}\label{classmods_1_1player_aa74e447de4ad181448c3ff7b27f32bf9}} 
+typedef short {\bfseries weapon\+\_\+set}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac4a894010346de83c2262262c7bfd878}\label{classmods_1_1player_ac4a894010346de83c2262262c7bfd878}} 
+typedef std\+::vector$<$ class\+\_\+type $>$ {\bfseries class\+\_\+capability\+\_\+t}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a79c2b6ef44dffb626eb41c03afbd9726}\label{classmods_1_1player_a79c2b6ef44dffb626eb41c03afbd9726}} 
+typedef std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{structmods_1_1classes_1_1base}{mods\+::classes\+::base} $>$ $>$ {\bfseries class\+\_\+info\+\_\+t}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a5d6182011d6c71b86d305cbbf2ad5a82}\label{classmods_1_1player_a5d6182011d6c71b86d305cbbf2ad5a82}} 
+using {\bfseries chdata} = \hyperlink{structchar__data}{char\+\_\+data}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a139f30733177426d3947a28348353854}\label{classmods_1_1player_a139f30733177426d3947a28348353854}} 
+using {\bfseries chdata\+\_\+ptr} = \hyperlink{structchar__data}{char\+\_\+data} $\ast$
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aa511c83b7a662ce372ac9cfc1474408b}\label{classmods_1_1player_aa511c83b7a662ce372ac9cfc1474408b}} 
+using {\bfseries descriptor\+\_\+t} = \hyperlink{structmods_1_1descriptor__data}{mods\+::descriptor\+\_\+data}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_afd13fc7776eb3cfd97113e5e5e67f4c2}\label{classmods_1_1player_afd13fc7776eb3cfd97113e5e5e67f4c2}} 
+using {\bfseries descriptor\+\_\+iterator\+\_\+t} = std\+::deque$<$ \hyperlink{structmods_1_1descriptor__data}{mods\+::descriptor\+\_\+data} $>$\+::iterator
+\item 
+\mbox{\Hypertarget{classmods_1_1player_adeef9857b23167853dbd20e7ac016203}\label{classmods_1_1player_adeef9857b23167853dbd20e7ac016203}} 
+using {\bfseries time\+\_\+type\+\_\+t} = unsigned long
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a40c493bab50426d4a75ae75a71a80415}\label{classmods_1_1player_a40c493bab50426d4a75ae75a71a80415}} 
+using {\bfseries obj\+\_\+ptr\+\_\+t} = std\+::shared\+\_\+ptr$<$ \hyperlink{structobj__data}{obj\+\_\+data} $>$
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ad91019467602d6eb067746a224b6b34a}\label{classmods_1_1player_ad91019467602d6eb067746a224b6b34a}} 
+using {\bfseries affect\+\_\+t} = mods\+::affects\+::affect\+\_\+t
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a1c4e7ba00b0943a826d3706581913ed3}\label{classmods_1_1player_a1c4e7ba00b0943a826d3706581913ed3}} 
+using {\bfseries affect\+\_\+list\+\_\+t} = std\+::vector$<$ affect\+\_\+t $>$
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ab8fb8409c326418ad130d44a163a2672}\label{classmods_1_1player_ab8fb8409c326418ad130d44a163a2672}} 
+using {\bfseries affect\+\_\+map\+\_\+t} = std\+::map$<$ affect\+\_\+t, int16\+\_\+t $>$
+\item 
+\mbox{\Hypertarget{classmods_1_1player_afcd148c80d58e381ba53d0cadcac7d19}\label{classmods_1_1player_afcd148c80d58e381ba53d0cadcac7d19}} 
+using {\bfseries entity\+\_\+id} = uuid\+\_\+t
+\item 
+\mbox{\Hypertarget{classmods_1_1player_adde126941025019ac7e259a05400e9c1}\label{classmods_1_1player_adde126941025019ac7e259a05400e9c1}} 
+using {\bfseries affect\+\_\+dissolver\+\_\+t} = \hyperlink{structmods_1_1affects_1_1dissolver}{mods\+::affects\+::dissolver}$<$ affect\+\_\+t, affect\+\_\+list\+\_\+t, affect\+\_\+map\+\_\+t, uuid\+\_\+t $>$
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a584c6eae4eed191082f507d4f1d49fd6}\label{classmods_1_1player_a584c6eae4eed191082f507d4f1d49fd6}} 
+using {\bfseries access\+\_\+level\+\_\+t} = player\+\_\+level
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a20acafc81d8553756c3b140d992c528d}\label{classmods_1_1player_a20acafc81d8553756c3b140d992c528d}} 
+using {\bfseries class\+\_\+type} = mods\+::classes\+::types
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a82c7005a1c9552f9bd13fcc6db5bf745}\label{classmods_1_1player_a82c7005a1c9552f9bd13fcc6db5bf745}} 
+using {\bfseries descriptor\+\_\+data\+\_\+t} = std\+::deque$<$ \hyperlink{structmods_1_1descriptor__data}{descriptor\+\_\+data} $>$
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a7435f35fe5d165ed38c73ab60c1bd73f}\label{classmods_1_1player_a7435f35fe5d165ed38c73ab60c1bd73f}} 
+using {\bfseries descriptor\+\_\+data\+\_\+iterator\+\_\+t} = descriptor\+\_\+data\+\_\+t\+::iterator
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a3b4b8b3c61e722a316014a54cdc077fb}\label{classmods_1_1player_a3b4b8b3c61e722a316014a54cdc077fb}} 
+using {\bfseries weapon\+\_\+set} = short
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a8e5f2125a853ff189fa1bd97985e3395}\label{classmods_1_1player_a8e5f2125a853ff189fa1bd97985e3395}} 
+using {\bfseries class\+\_\+capability\+\_\+t} = std\+::vector$<$ class\+\_\+type $>$
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a32ed361204004f1300835755242fda58}\label{classmods_1_1player_a32ed361204004f1300835755242fda58}} 
+using {\bfseries class\+\_\+info\+\_\+t} = std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{structmods_1_1classes_1_1base}{mods\+::classes\+::base} $>$ $>$
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a5d6182011d6c71b86d305cbbf2ad5a82}\label{classmods_1_1player_a5d6182011d6c71b86d305cbbf2ad5a82}} 
+using {\bfseries chdata} = \hyperlink{structchar__data}{char\+\_\+data}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a139f30733177426d3947a28348353854}\label{classmods_1_1player_a139f30733177426d3947a28348353854}} 
+using {\bfseries chdata\+\_\+ptr} = \hyperlink{structchar__data}{char\+\_\+data} $\ast$
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aa511c83b7a662ce372ac9cfc1474408b}\label{classmods_1_1player_aa511c83b7a662ce372ac9cfc1474408b}} 
+using {\bfseries descriptor\+\_\+t} = \hyperlink{structmods_1_1descriptor__data}{mods\+::descriptor\+\_\+data}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_afd13fc7776eb3cfd97113e5e5e67f4c2}\label{classmods_1_1player_afd13fc7776eb3cfd97113e5e5e67f4c2}} 
+using {\bfseries descriptor\+\_\+iterator\+\_\+t} = std\+::deque$<$ \hyperlink{structmods_1_1descriptor__data}{mods\+::descriptor\+\_\+data} $>$\+::iterator
+\item 
+\mbox{\Hypertarget{classmods_1_1player_adeef9857b23167853dbd20e7ac016203}\label{classmods_1_1player_adeef9857b23167853dbd20e7ac016203}} 
+using {\bfseries time\+\_\+type\+\_\+t} = unsigned long
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aa432d0791d36f2771613636390703ce6}\label{classmods_1_1player_aa432d0791d36f2771613636390703ce6}} 
+using {\bfseries mpref} = misc\+\_\+pref\+\_\+enum\+\_\+t
+\item 
+using \hyperlink{classmods_1_1player_a98e6f1c1529e3034d1c6e9a48475bc6b}{chunk\+\_\+type\+\_\+t} = mods\+::flags\+::chunk\+\_\+type\+\_\+t
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classmods_1_1player_ae86efeb0a9121b227ac34b24e0556fed}{player} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ad8976300005b211fd9c5ccafcf523de6}\label{classmods_1_1player_ad8976300005b211fd9c5ccafcf523de6}} 
+{\bfseries player} (\hyperlink{structchar__data}{char\+\_\+data} $\ast$)
+\item 
+\hyperlink{classmods_1_1player_abab6e7c067da6cac1c9e8bd2debbca7a}{player} (\hyperlink{classmods_1_1player}{mods\+::player} $\ast$)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a140e9fa644bed00bada74ce47150fb5d}\label{classmods_1_1player_a140e9fa644bed00bada74ce47150fb5d}} 
+{\bfseries player} (player\+\_\+type\+\_\+enum\+\_\+t)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac28bbd514e0f3d935f7c849ff61528c8}\label{classmods_1_1player_ac28bbd514e0f3d935f7c849ff61528c8}} 
+void {\bfseries init} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aba82c44ce3bf13c934b9d73c0fd08a4a}\label{classmods_1_1player_aba82c44ce3bf13c934b9d73c0fd08a4a}} 
+bool {\bfseries is\+\_\+executing\+\_\+js} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a190fc83395bf62dc83b1b90ec052e8d2}\label{classmods_1_1player_a190fc83395bf62dc83b1b90ec052e8d2}} 
+std\+::string {\bfseries js\+\_\+object} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a392917b4d74e7bbdda390e86dab7fd34}\label{classmods_1_1player_a392917b4d74e7bbdda390e86dab7fd34}} 
+void {\bfseries executing\+\_\+js} (bool)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ae01ca0c7632735009713cc458ebb558b}\label{classmods_1_1player_ae01ca0c7632735009713cc458ebb558b}} 
+bool {\bfseries has\+\_\+ammo} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ad4fa4d31b79a79f0e5353df1a58e235d}\label{classmods_1_1player_ad4fa4d31b79a79f0e5353df1a58e235d}} 
+bool {\bfseries has\+\_\+class\+\_\+capability} (class\+\_\+type)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a9685c8a6c64a4ebc5020d7acdc5998ca}\label{classmods_1_1player_a9685c8a6c64a4ebc5020d7acdc5998ca}} 
+bool {\bfseries has\+\_\+equipment\+\_\+tag} (const std\+::string \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a388ff716cb50f09aac0748bb96a42b6d}\label{classmods_1_1player_a388ff716cb50f09aac0748bb96a42b6d}} 
+bool {\bfseries has\+\_\+inventory\+\_\+capability} (int)
+\item 
+bool \hyperlink{classmods_1_1player_a7aa761f41a093581ba531b2aca325609}{has\+\_\+thermite} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aaf5f1cd8b7e1ce4a83dde5b9726a4e44}\label{classmods_1_1player_aaf5f1cd8b7e1ce4a83dde5b9726a4e44}} 
+bool {\bfseries has\+\_\+weapon\+\_\+capability} (int)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a49ddff24cd20e0289bfaf3c6a74ac0ac}\label{classmods_1_1player_a49ddff24cd20e0289bfaf3c6a74ac0ac}} 
+std\+::shared\+\_\+ptr$<$ \hyperlink{structmods_1_1classes_1_1base}{mods\+::classes\+::base} $>$ \& {\bfseries get\+\_\+class} (class\+\_\+type)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a3e3f07ba7e2d33db31f75f6e9a8c1663}\label{classmods_1_1player_a3e3f07ba7e2d33db31f75f6e9a8c1663}} 
+\hyperlink{structobj__data}{obj\+\_\+data} $\ast$ {\bfseries get\+\_\+first\+\_\+ammo\+\_\+of\+\_\+type} (const weapon\+\_\+type\+\_\+t \&) const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_af03346ba20be5abc4371d38c65934172}\label{classmods_1_1player_af03346ba20be5abc4371d38c65934172}} 
+bool {\bfseries can\+\_\+snipe} (\hyperlink{structchar__data}{char\+\_\+data} $\ast$target)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac61916af7f7983f789be3da07d8eef99}\label{classmods_1_1player_ac61916af7f7983f789be3da07d8eef99}} 
+bool {\bfseries is\+\_\+weapon\+\_\+loaded} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a34eb82a07bfcf1cda938b295a263b692}\label{classmods_1_1player_a34eb82a07bfcf1cda938b295a263b692}} 
+bool {\bfseries carrying\+\_\+ammo\+\_\+of\+\_\+type} (const weapon\+\_\+type\+\_\+t \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a24f37b27f2a8e2265c825b92dc9126f7}\label{classmods_1_1player_a24f37b27f2a8e2265c825b92dc9126f7}} 
+void {\bfseries ammo\+\_\+adjustment} (int)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a505508f9f4abf3d019137f56529cee2e}\label{classmods_1_1player_a505508f9f4abf3d019137f56529cee2e}} 
+int {\bfseries ammo\+\_\+type\+\_\+adjustment} (int, const weapon\+\_\+type\+\_\+t \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac7a081ac7ab4ed0a136ae31768c308e0}\label{classmods_1_1player_ac7a081ac7ab4ed0a136ae31768c308e0}} 
+void {\bfseries set\+\_\+class\+\_\+capability} (const class\+\_\+capability\+\_\+t \&caps)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a706d5f48fe7b8e3f3013e8a4e89026ea}\label{classmods_1_1player_a706d5f48fe7b8e3f3013e8a4e89026ea}} 
+void {\bfseries set\+\_\+cd} (\hyperlink{structchar__data}{char\+\_\+data} $\ast$ch)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a6c51e26561ea4c876295da2d3702b724}\label{classmods_1_1player_a6c51e26561ea4c876295da2d3702b724}} 
+void {\bfseries set\+\_\+shared\+\_\+ptr} (player\+\_\+ptr\+\_\+t \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ad60fbd4f0aaa6d3ee9c98dddb3ebc126}\label{classmods_1_1player_ad60fbd4f0aaa6d3ee9c98dddb3ebc126}} 
+time\+\_\+type\+\_\+t {\bfseries time} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a51c04c6fbc693242bff75b4c5f7a6f20}\label{classmods_1_1player_a51c04c6fbc693242bff75b4c5f7a6f20}} 
+sh\+\_\+int \& {\bfseries mana} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a5f33702911d5388a841c18fea85fc1f4}\label{classmods_1_1player_a5f33702911d5388a841c18fea85fc1f4}} 
+sh\+\_\+int \& {\bfseries max\+\_\+mana} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aeb9f1fcb518628ff9c9e5b801edbefa2}\label{classmods_1_1player_aeb9f1fcb518628ff9c9e5b801edbefa2}} 
+sh\+\_\+int \& {\bfseries hp} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a53bab528eede0206aaabac039eae01f1}\label{classmods_1_1player_a53bab528eede0206aaabac039eae01f1}} 
+sh\+\_\+int \& {\bfseries max\+\_\+hp} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a55c765377a7065cce535eb1513cde195}\label{classmods_1_1player_a55c765377a7065cce535eb1513cde195}} 
+sh\+\_\+int \& {\bfseries move} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aecc04f7e551f70f6273f117ac1b7ca08}\label{classmods_1_1player_aecc04f7e551f70f6273f117ac1b7ca08}} 
+sh\+\_\+int \& {\bfseries max\+\_\+move} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a7d381a08bf3e27ce1a6984e1cb29c7bd}\label{classmods_1_1player_a7d381a08bf3e27ce1a6984e1cb29c7bd}} 
+sh\+\_\+int \& {\bfseries armor} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_adaea8d2fa69b3dfb19de199a269fe5e7}\label{classmods_1_1player_adaea8d2fa69b3dfb19de199a269fe5e7}} 
+int \& {\bfseries gold} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a5b1cabaee05e10fc2d43edd0a6d2ae60}\label{classmods_1_1player_a5b1cabaee05e10fc2d43edd0a6d2ae60}} 
+int \& {\bfseries bank\+\_\+gold} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a57d3582952045068f8e4db98821b235e}\label{classmods_1_1player_a57d3582952045068f8e4db98821b235e}} 
+int \& {\bfseries exp} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ae0882e40b22814e55b10bc8d900c4169}\label{classmods_1_1player_ae0882e40b22814e55b10bc8d900c4169}} 
+sbyte \& {\bfseries hitroll} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ae2a99a26f0689a1fd4b5835788e8568a}\label{classmods_1_1player_ae2a99a26f0689a1fd4b5835788e8568a}} 
+sbyte \& {\bfseries damroll} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a043796ab73c0013c22a007abbe3110b4}\label{classmods_1_1player_a043796ab73c0013c22a007abbe3110b4}} 
+byte \& {\bfseries level} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aff7db378c70bbd3a023651726c1054e7}\label{classmods_1_1player_aff7db378c70bbd3a023651726c1054e7}} 
+std\+::string \& {\bfseries name} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ab1ce04aa4ca73ab5e43e1a0f4cd6906f}\label{classmods_1_1player_ab1ce04aa4ca73ab5e43e1a0f4cd6906f}} 
+byte \& {\bfseries sex} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aa0f9420628b22ec1b716d6cbe11ef0ef}\label{classmods_1_1player_aa0f9420628b22ec1b716d6cbe11ef0ef}} 
+room\+\_\+rnum \& {\bfseries room} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a0a4ba24512e65e975a1150a15d909f2c}\label{classmods_1_1player_a0a4ba24512e65e975a1150a15d909f2c}} 
+uuid\+\_\+t {\bfseries uuid} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aefbbd982695743a6977d18ce4853749b}\label{classmods_1_1player_aefbbd982695743a6977d18ce4853749b}} 
+\hyperlink{structchar__data}{char\+\_\+data} $\ast$ {\bfseries cd} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a22cbadc788e98b1d4f3331884110a741}\label{classmods_1_1player_a22cbadc788e98b1d4f3331884110a741}} 
+\hyperlink{structobj__data}{obj\+\_\+data} $\ast$ {\bfseries rifle} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a34994ab035cac45f4d91f99a11e13306}\label{classmods_1_1player_a34994ab035cac45f4d91f99a11e13306}} 
+\hyperlink{structobj__data}{obj\+\_\+data} $\ast$ {\bfseries get\+\_\+ammo} (const weapon\+\_\+type\+\_\+t \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ae42a701bdd5d5fb46d7658cad6161464}\label{classmods_1_1player_ae42a701bdd5d5fb46d7658cad6161464}} 
+{\bfseries operator chdata\+\_\+ptr} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a70937219529a099fba3933cfca8cfa8a}\label{classmods_1_1player_a70937219529a099fba3933cfca8cfa8a}} 
+void {\bfseries weapon\+\_\+cooldown\+\_\+start} (unsigned long duration, weapon\+\_\+set set)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a2489270f0eeb5e26ec509dcb75cd8bb4}\label{classmods_1_1player_a2489270f0eeb5e26ec509dcb75cd8bb4}} 
+bool {\bfseries weapon\+\_\+cooldown\+\_\+expired} (weapon\+\_\+set)
+\item 
+void \hyperlink{classmods_1_1player_a05030c2c9439f95c84704ed6f7c993d1}{stc\+\_\+room} (const room\+\_\+rnum \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a6195057ece7899142c460e5322498a4a}\label{classmods_1_1player_a6195057ece7899142c460e5322498a4a}} 
+void {\bfseries stc\+\_\+room\+\_\+desc} (const room\+\_\+rnum \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a87f149291db4a0a6b50ce9fbb8cd240e}\label{classmods_1_1player_a87f149291db4a0a6b50ce9fbb8cd240e}} 
+void {\bfseries exits} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a550769bddbe79e5086130df7deef07f7}\label{classmods_1_1player_a550769bddbe79e5086130df7deef07f7}} 
+void {\bfseries stc} (const char $\ast$m)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a0aaa555bf45fb81f83a08e083f28fac1}\label{classmods_1_1player_a0aaa555bf45fb81f83a08e083f28fac1}} 
+void {\bfseries stc} (const std\+::string m)
+\item 
+void \hyperlink{classmods_1_1player_a3d00ca11aeb86fa14ed502a661b84d9a}{stc} (int m)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_abcda2912465c7b7cff614713479566d9}\label{classmods_1_1player_abcda2912465c7b7cff614713479566d9}} 
+\hyperlink{classmods_1_1player}{player} \& {\bfseries pager\+\_\+start} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a99719cb878a864ca37d04834d0ed96ad}\label{classmods_1_1player_a99719cb878a864ca37d04834d0ed96ad}} 
+\hyperlink{classmods_1_1player}{player} \& {\bfseries pager\+\_\+end} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a90fb7668ff623bce96c51255fc10b287}\label{classmods_1_1player_a90fb7668ff623bce96c51255fc10b287}} 
+void {\bfseries pager\+\_\+next\+\_\+page} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac86a2bee53a0931b3ebed1ec18385ae0}\label{classmods_1_1player_ac86a2bee53a0931b3ebed1ec18385ae0}} 
+void {\bfseries page} (int page\+\_\+number)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a43832fcf34ddb3e7968a26703d3250cd}\label{classmods_1_1player_a43832fcf34ddb3e7968a26703d3250cd}} 
+void {\bfseries queue\+\_\+page\+\_\+fragment} (std\+::string\+\_\+view fragment)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac6c0d4b3f9047117ef797698df4b7306}\label{classmods_1_1player_ac6c0d4b3f9047117ef797698df4b7306}} 
+\hyperlink{classmods_1_1player}{player} \& {\bfseries operator$<$$<$} (const char $\ast$m)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ad09209c13b4f58e1bcd51897f8bb1feb}\label{classmods_1_1player_ad09209c13b4f58e1bcd51897f8bb1feb}} 
+\hyperlink{classmods_1_1player}{player} \& {\bfseries operator$<$$<$} (const std\+::string \&m)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a5c60061a3e82ade30f6b3ba5d94f7227}\label{classmods_1_1player_a5c60061a3e82ade30f6b3ba5d94f7227}} 
+\hyperlink{classmods_1_1player}{player} \& {\bfseries operator$<$$<$} (int m)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a09de19290c2191f95d8e07937c76dc1d}\label{classmods_1_1player_a09de19290c2191f95d8e07937c76dc1d}} 
+void {\bfseries pager\+\_\+clear} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a2ee6cf11d335225a4e2e035d419b8076}\label{classmods_1_1player_a2ee6cf11d335225a4e2e035d419b8076}} 
+bool {\bfseries paging} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ad8b5e48c762c234c99406dbb9d4510bb}\label{classmods_1_1player_ad8b5e48c762c234c99406dbb9d4510bb}} 
+void {\bfseries set\+\_\+desc} (std\+::deque$<$ \hyperlink{structmods_1_1descriptor__data}{descriptor\+\_\+data} $>$\+::iterator it)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a573f41de9bcd357412059bf016ebde78}\label{classmods_1_1player_a573f41de9bcd357412059bf016ebde78}} 
+void {\bfseries set\+\_\+desc} (std\+::shared\+\_\+ptr$<$ \hyperlink{structmods_1_1descriptor__data}{descriptor\+\_\+data} $>$ it)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ae0103c5de79432ccac31533bda656fa9}\label{classmods_1_1player_ae0103c5de79432ccac31533bda656fa9}} 
+void {\bfseries set\+\_\+char\+\_\+on\+\_\+descriptor} (std\+::deque$<$ \hyperlink{structmods_1_1descriptor__data}{descriptor\+\_\+data} $>$\+::iterator it)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a29c2b6b239cd337779e6c78794337e9d}\label{classmods_1_1player_a29c2b6b239cd337779e6c78794337e9d}} 
+\hyperlink{structmods_1_1descriptor__data}{descriptor\+\_\+data} \& {\bfseries desc} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a9b9ce853251b47cecf9a355010af8191}\label{classmods_1_1player_a9b9ce853251b47cecf9a355010af8191}} 
+void {\bfseries capture\+\_\+output} (bool capture\+\_\+status)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a71cf4e3a0c9a61cd769b42e889648901}\label{classmods_1_1player_a71cf4e3a0c9a61cd769b42e889648901}} 
+std\+::string\+\_\+view {\bfseries get\+\_\+captured\+\_\+output} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a4105554f0492c385628f95873db9f43d}\label{classmods_1_1player_a4105554f0492c385628f95873db9f43d}} 
+void {\bfseries clear\+\_\+captured\+\_\+output} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a5495b32c08d7c6d90508828d56cd917c}\label{classmods_1_1player_a5495b32c08d7c6d90508828d56cd917c}} 
+{\bfseries operator chdata\+\_\+ptr} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ad8976300005b211fd9c5ccafcf523de6}\label{classmods_1_1player_ad8976300005b211fd9c5ccafcf523de6}} 
+{\bfseries player} (\hyperlink{structchar__data}{char\+\_\+data} $\ast$)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_abab6e7c067da6cac1c9e8bd2debbca7a}\label{classmods_1_1player_abab6e7c067da6cac1c9e8bd2debbca7a}} 
+{\bfseries player} (\hyperlink{classmods_1_1player}{mods\+::player} $\ast$)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a140e9fa644bed00bada74ce47150fb5d}\label{classmods_1_1player_a140e9fa644bed00bada74ce47150fb5d}} 
+{\bfseries player} (player\+\_\+type\+\_\+enum\+\_\+t)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac28bbd514e0f3d935f7c849ff61528c8}\label{classmods_1_1player_ac28bbd514e0f3d935f7c849ff61528c8}} 
+void {\bfseries init} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a39615043bf34c00e83a08b8d9e58112b}\label{classmods_1_1player_a39615043bf34c00e83a08b8d9e58112b}} 
+void {\bfseries set\+\_\+db\+\_\+id} (aligned\+\_\+int\+\_\+t id)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac5ef7326f977ef2d2fc863e9cd1f9865}\label{classmods_1_1player_ac5ef7326f977ef2d2fc863e9cd1f9865}} 
+aligned\+\_\+int\+\_\+t {\bfseries get\+\_\+db\+\_\+id} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a4fae9fb0888895c859a142824e72d1aa}\label{classmods_1_1player_a4fae9fb0888895c859a142824e72d1aa}} 
+aligned\+\_\+int\+\_\+t {\bfseries db\+\_\+id} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a1ab8d73a8dbb7425176b0cc4aed31afc}\label{classmods_1_1player_a1ab8d73a8dbb7425176b0cc4aed31afc}} 
+void {\bfseries set\+\_\+password} (std\+::string pw)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a7f40e476613ef7e55fcb569f9591101f}\label{classmods_1_1player_a7f40e476613ef7e55fcb569f9591101f}} 
+std\+::string {\bfseries get\+\_\+password} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a69280bea19adc5d9178a539fe6fd4add}\label{classmods_1_1player_a69280bea19adc5d9178a539fe6fd4add}} 
+std\+::string {\bfseries password} ()
+\item 
+bool \hyperlink{classmods_1_1player_a2ce826104a9d3a2c853ee6d4e02fe689}{god\+\_\+mode} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a3506e52d175a1084f2c47cb5444bcb99}\label{classmods_1_1player_a3506e52d175a1084f2c47cb5444bcb99}} 
+bool {\bfseries implementor\+\_\+mode} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a60c010e970b60ea0f220509d0081a94e}\label{classmods_1_1player_a60c010e970b60ea0f220509d0081a94e}} 
+bool {\bfseries builder\+\_\+mode} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a85620ddeb9b848b2dfdae8b390dbf33c}\label{classmods_1_1player_a85620ddeb9b848b2dfdae8b390dbf33c}} 
+bool {\bfseries get\+\_\+imp\+\_\+mode} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ae2ca71f2d72946b486c99f28f4adca59}\label{classmods_1_1player_ae2ca71f2d72946b486c99f28f4adca59}} 
+bool {\bfseries get\+\_\+bui\+\_\+mode} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a60ebea4e2b97100c5fe1236708289c5b}\label{classmods_1_1player_a60ebea4e2b97100c5fe1236708289c5b}} 
+void {\bfseries set\+\_\+god\+\_\+mode} (bool b)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ae7b037dbf652b0f6365f12abbe72d1cd}\label{classmods_1_1player_ae7b037dbf652b0f6365f12abbe72d1cd}} 
+void {\bfseries set\+\_\+imp\+\_\+mode} (bool b)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a17c78a528891e8c0f5da89277f051684}\label{classmods_1_1player_a17c78a528891e8c0f5da89277f051684}} 
+void {\bfseries set\+\_\+bui\+\_\+mode} (bool b)
+\item 
+void \hyperlink{classmods_1_1player_ac40139396e5026382a297640fa5d57d2}{set\+\_\+time\+\_\+birth} (time\+\_\+t b)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_af21666708aac2e1f035d09b5d095eae9}\label{classmods_1_1player_af21666708aac2e1f035d09b5d095eae9}} 
+time\+\_\+t {\bfseries get\+\_\+time\+\_\+birth} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a8c7a83a36d90d08581679913825f13b4}\label{classmods_1_1player_a8c7a83a36d90d08581679913825f13b4}} 
+void {\bfseries set\+\_\+time\+\_\+logon} (time\+\_\+t t)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_af191eb5b5fcc615850f329a09e06c699}\label{classmods_1_1player_af191eb5b5fcc615850f329a09e06c699}} 
+time\+\_\+t {\bfseries get\+\_\+time\+\_\+login} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ad9842da7e5175f9e8c04b39d56ff65b9}\label{classmods_1_1player_ad9842da7e5175f9e8c04b39d56ff65b9}} 
+void {\bfseries set\+\_\+time\+\_\+played} (int t)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a4027ae0a79afd4d1ab15350e8b4fe341}\label{classmods_1_1player_a4027ae0a79afd4d1ab15350e8b4fe341}} 
+int {\bfseries get\+\_\+time\+\_\+played} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aba82c44ce3bf13c934b9d73c0fd08a4a}\label{classmods_1_1player_aba82c44ce3bf13c934b9d73c0fd08a4a}} 
+bool {\bfseries is\+\_\+executing\+\_\+js} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a190fc83395bf62dc83b1b90ec052e8d2}\label{classmods_1_1player_a190fc83395bf62dc83b1b90ec052e8d2}} 
+std\+::string {\bfseries js\+\_\+object} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a392917b4d74e7bbdda390e86dab7fd34}\label{classmods_1_1player_a392917b4d74e7bbdda390e86dab7fd34}} 
+void {\bfseries executing\+\_\+js} (bool)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ae01ca0c7632735009713cc458ebb558b}\label{classmods_1_1player_ae01ca0c7632735009713cc458ebb558b}} 
+bool {\bfseries has\+\_\+ammo} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ad4fa4d31b79a79f0e5353df1a58e235d}\label{classmods_1_1player_ad4fa4d31b79a79f0e5353df1a58e235d}} 
+bool {\bfseries has\+\_\+class\+\_\+capability} (class\+\_\+type)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a9685c8a6c64a4ebc5020d7acdc5998ca}\label{classmods_1_1player_a9685c8a6c64a4ebc5020d7acdc5998ca}} 
+bool {\bfseries has\+\_\+equipment\+\_\+tag} (const std\+::string \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a388ff716cb50f09aac0748bb96a42b6d}\label{classmods_1_1player_a388ff716cb50f09aac0748bb96a42b6d}} 
+bool {\bfseries has\+\_\+inventory\+\_\+capability} (int)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a7aa761f41a093581ba531b2aca325609}\label{classmods_1_1player_a7aa761f41a093581ba531b2aca325609}} 
+bool {\bfseries has\+\_\+thermite} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a3b7e1b89793257636a2b34905bf1ec87}\label{classmods_1_1player_a3b7e1b89793257636a2b34905bf1ec87}} 
+bool {\bfseries has\+\_\+weapon\+\_\+capability} (uint8\+\_\+t)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a820086915f10495e365413a391f331d4}\label{classmods_1_1player_a820086915f10495e365413a391f331d4}} 
+bool {\bfseries has\+\_\+builder\+\_\+data} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac44c2d6cab0cfd2bcce014339b2972a6}\label{classmods_1_1player_ac44c2d6cab0cfd2bcce014339b2972a6}} 
+bool {\bfseries room\+\_\+pave\+\_\+mode} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ada7986bb6604aeacaac9d1f22e32c66e}\label{classmods_1_1player_ada7986bb6604aeacaac9d1f22e32c66e}} 
+bool {\bfseries zone\+\_\+pave\+\_\+mode} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a048c0e70991f8a290cfda61d754b46f8}\label{classmods_1_1player_a048c0e70991f8a290cfda61d754b46f8}} 
+player\+\_\+class\+\_\+t {\bfseries get\+\_\+class} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a16948903572ee0b751746ea39e4a219e}\label{classmods_1_1player_a16948903572ee0b751746ea39e4a219e}} 
+void {\bfseries set\+\_\+class} (player\+\_\+class\+\_\+t c)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a3ee5b9cc2ec5bfcd3c4768831653c2c3}\label{classmods_1_1player_a3ee5b9cc2ec5bfcd3c4768831653c2c3}} 
+\hyperlink{structobj__data}{obj\+\_\+data} $\ast$ {\bfseries get\+\_\+first\+\_\+ammo\+\_\+of\+\_\+type} (const weapon\+\_\+type\+\_\+t \&) const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_af03346ba20be5abc4371d38c65934172}\label{classmods_1_1player_af03346ba20be5abc4371d38c65934172}} 
+bool {\bfseries can\+\_\+snipe} (\hyperlink{structchar__data}{char\+\_\+data} $\ast$target)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac61916af7f7983f789be3da07d8eef99}\label{classmods_1_1player_ac61916af7f7983f789be3da07d8eef99}} 
+bool {\bfseries is\+\_\+weapon\+\_\+loaded} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a34eb82a07bfcf1cda938b295a263b692}\label{classmods_1_1player_a34eb82a07bfcf1cda938b295a263b692}} 
+bool {\bfseries carrying\+\_\+ammo\+\_\+of\+\_\+type} (const weapon\+\_\+type\+\_\+t \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a5500e30cd64d867671b0aeb1513a4dd9}\label{classmods_1_1player_a5500e30cd64d867671b0aeb1513a4dd9}} 
+\hyperlink{structobj__data}{obj\+\_\+data} $\ast$ {\bfseries carrying} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a29cd4d24ec21d08b01e6e4ea57d056ad}\label{classmods_1_1player_a29cd4d24ec21d08b01e6e4ea57d056ad}} 
+void {\bfseries uncarry} (obj\+\_\+ptr\+\_\+t obj)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a8f095a914b197c84ca48daa6f027d63f}\label{classmods_1_1player_a8f095a914b197c84ca48daa6f027d63f}} 
+std\+::deque$<$ obj\+\_\+ptr\+\_\+t $>$ \& {\bfseries real\+\_\+carrying} ()
+\item 
+void \hyperlink{classmods_1_1player_a3dfd0e5a7bb17c98cfa5031b02620cbb}{carry} (obj\+\_\+ptr\+\_\+t)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a24f37b27f2a8e2265c825b92dc9126f7}\label{classmods_1_1player_a24f37b27f2a8e2265c825b92dc9126f7}} 
+void {\bfseries ammo\+\_\+adjustment} (int)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a505508f9f4abf3d019137f56529cee2e}\label{classmods_1_1player_a505508f9f4abf3d019137f56529cee2e}} 
+int {\bfseries ammo\+\_\+type\+\_\+adjustment} (int, const weapon\+\_\+type\+\_\+t \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a706d5f48fe7b8e3f3013e8a4e89026ea}\label{classmods_1_1player_a706d5f48fe7b8e3f3013e8a4e89026ea}} 
+void {\bfseries set\+\_\+cd} (\hyperlink{structchar__data}{char\+\_\+data} $\ast$ch)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a6c51e26561ea4c876295da2d3702b724}\label{classmods_1_1player_a6c51e26561ea4c876295da2d3702b724}} 
+void {\bfseries set\+\_\+shared\+\_\+ptr} (player\+\_\+ptr\+\_\+t \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a09754f81fd228f379ab56861aab2417b}\label{classmods_1_1player_a09754f81fd228f379ab56861aab2417b}} 
+void {\bfseries quitting} (bool s)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aaf94c533345266b4537d16e50ff68a38}\label{classmods_1_1player_aaf94c533345266b4537d16e50ff68a38}} 
+bool {\bfseries quitting} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a2f6a0f9164d7b60ecb206c814c6e1f8f}\label{classmods_1_1player_a2f6a0f9164d7b60ecb206c814c6e1f8f}} 
+time\+\_\+type\+\_\+t {\bfseries time} () const
+\item 
+bool \hyperlink{classmods_1_1player_ae7ad590bc136eac7a54ed0071a3e882b}{has\+\_\+affect} (aligned\+\_\+int\+\_\+t f)
+\item 
+void \hyperlink{classmods_1_1player_a5af5ab2621df94bc867bc56ab37b0099}{affect} (aligned\+\_\+int\+\_\+t flag)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a88ed3db5da5810c43fa3870c053ae839}\label{classmods_1_1player_a88ed3db5da5810c43fa3870c053ae839}} 
+void {\bfseries remove\+\_\+affect} (aligned\+\_\+int\+\_\+t flag)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ae60241b6f2ad07c7fdd4126bc66acb1a}\label{classmods_1_1player_ae60241b6f2ad07c7fdd4126bc66acb1a}} 
+aligned\+\_\+int\+\_\+t {\bfseries get\+\_\+affected} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_af23a9554f115730e529655a205dbe32c}\label{classmods_1_1player_af23a9554f115730e529655a205dbe32c}} 
+void {\bfseries clear\+\_\+all\+\_\+affected} ()
+\item 
+void \hyperlink{classmods_1_1player_a47a34f3be04cad723e561028c7ae24cd}{affect} (mods\+::flags\+::aff flag)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ab8f8187a386f9a9264fbea2047f15006}\label{classmods_1_1player_ab8f8187a386f9a9264fbea2047f15006}} 
+void {\bfseries remove\+\_\+affect} (mods\+::flags\+::aff flag)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_affc66459a833b6f9f242928f0ecfcee8}\label{classmods_1_1player_affc66459a833b6f9f242928f0ecfcee8}} 
+bool {\bfseries has\+\_\+affect} (mods\+::flags\+::aff f)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a19f76082128ca4e04a5b3e15be08efed}\label{classmods_1_1player_a19f76082128ca4e04a5b3e15be08efed}} 
+bool {\bfseries has\+\_\+affect\+\_\+plr} (mods\+::flags\+::plr flag)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_afb04417525df1af56cbbf21c092d2d84}\label{classmods_1_1player_afb04417525df1af56cbbf21c092d2d84}} 
+void {\bfseries affect\+\_\+plr} (mods\+::flags\+::plr flag)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_af7805037a2d455dee15ad5f7ae30a3ee}\label{classmods_1_1player_af7805037a2d455dee15ad5f7ae30a3ee}} 
+void {\bfseries remove\+\_\+affect\+\_\+plr} (mods\+::flags\+::plr flag)
+\item 
+bool \hyperlink{classmods_1_1player_ae07901c25cbe93b8c259720f1662e5d3}{has\+\_\+affect\+\_\+plr} (aligned\+\_\+int\+\_\+t flag)
+\item 
+void \hyperlink{classmods_1_1player_acd374d4b3b772201c0ec8611fbbc9c4a}{affect\+\_\+plr} (aligned\+\_\+int\+\_\+t flag)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a13bddf9d9e26c4a1c486f20e3b863eb3}\label{classmods_1_1player_a13bddf9d9e26c4a1c486f20e3b863eb3}} 
+void {\bfseries remove\+\_\+affect\+\_\+plr} (aligned\+\_\+int\+\_\+t flag)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a0431c2804168d8641764c13ca202b82b}\label{classmods_1_1player_a0431c2804168d8641764c13ca202b82b}} 
+aligned\+\_\+int\+\_\+t {\bfseries get\+\_\+affected\+\_\+plr} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac969608261f9794513b2719f7804db59}\label{classmods_1_1player_ac969608261f9794513b2719f7804db59}} 
+void {\bfseries clear\+\_\+all\+\_\+affected\+\_\+plr} ()
+\item 
+\hyperlink{structchar__special__data}{char\+\_\+special\+\_\+data} \& \hyperlink{classmods_1_1player_af85ed0368fd327f3747b4d1e6572cccc}{char\+\_\+specials} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aed046739ae34b5b39fdc315267809265}\label{classmods_1_1player_aed046739ae34b5b39fdc315267809265}} 
+player\+\_\+ptr\+\_\+t {\bfseries fighting} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a5390344e407af0c1b9f1d3cff0a42eca}\label{classmods_1_1player_a5390344e407af0c1b9f1d3cff0a42eca}} 
+bool {\bfseries is\+\_\+fighting} (\hyperlink{structchar__data}{char\+\_\+data} $\ast$ch)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a6452aee5f0b0387bb872c9c064d8a178}\label{classmods_1_1player_a6452aee5f0b0387bb872c9c064d8a178}} 
+bool {\bfseries is\+\_\+fighting} (player\+\_\+ptr\+\_\+t p)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a00396f35074226bf84a0bbc8398da39b}\label{classmods_1_1player_a00396f35074226bf84a0bbc8398da39b}} 
+\hyperlink{structchar__data}{char\+\_\+data} $\ast$ {\bfseries hunting} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a7e952ee04a1638b1cb2a5f38005902e4}\label{classmods_1_1player_a7e952ee04a1638b1cb2a5f38005902e4}} 
+byte \& {\bfseries position} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a2d696a05cbf566e911278d95c135ba29}\label{classmods_1_1player_a2d696a05cbf566e911278d95c135ba29}} 
+int \& {\bfseries carry\+\_\+weight} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_af5a877d3f2e6b1836c3c94376f45979d}\label{classmods_1_1player_af5a877d3f2e6b1836c3c94376f45979d}} 
+byte \& {\bfseries carry\+\_\+items} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aa2d14ebf63acd47608dc8a16f7583bfc}\label{classmods_1_1player_aa2d14ebf63acd47608dc8a16f7583bfc}} 
+int \& {\bfseries timer} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a065c1230541587b765473cce38ed1e2a}\label{classmods_1_1player_a065c1230541587b765473cce38ed1e2a}} 
+\hyperlink{structchar__special__data__saved}{char\+\_\+special\+\_\+data\+\_\+saved} \& {\bfseries saved} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a903ea280b7c1f302e8c20fa57f083491}\label{classmods_1_1player_a903ea280b7c1f302e8c20fa57f083491}} 
+\hyperlink{structchar__ability__data}{char\+\_\+ability\+\_\+data} \& {\bfseries real\+\_\+abils} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a731c700fbab5bdad7fcfae91ac7f2dfa}\label{classmods_1_1player_a731c700fbab5bdad7fcfae91ac7f2dfa}} 
+\hyperlink{structchar__ability__data}{char\+\_\+ability\+\_\+data} \& {\bfseries aff\+\_\+abils} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_adc14f7e744c36babaa310a9fb8bc80cc}\label{classmods_1_1player_adc14f7e744c36babaa310a9fb8bc80cc}} 
+sh\+\_\+int $\ast$ {\bfseries apply\+\_\+saving\+\_\+throw} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a11caa47a8e358d00972fb7cf2f6c7b6d}\label{classmods_1_1player_a11caa47a8e358d00972fb7cf2f6c7b6d}} 
+sh\+\_\+int \& {\bfseries apply\+\_\+saving\+\_\+throw} (std\+::size\+\_\+t i)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a51c04c6fbc693242bff75b4c5f7a6f20}\label{classmods_1_1player_a51c04c6fbc693242bff75b4c5f7a6f20}} 
+sh\+\_\+int \& {\bfseries mana} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a5f33702911d5388a841c18fea85fc1f4}\label{classmods_1_1player_a5f33702911d5388a841c18fea85fc1f4}} 
+sh\+\_\+int \& {\bfseries max\+\_\+mana} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aeb9f1fcb518628ff9c9e5b801edbefa2}\label{classmods_1_1player_aeb9f1fcb518628ff9c9e5b801edbefa2}} 
+sh\+\_\+int \& {\bfseries hp} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a53bab528eede0206aaabac039eae01f1}\label{classmods_1_1player_a53bab528eede0206aaabac039eae01f1}} 
+sh\+\_\+int \& {\bfseries max\+\_\+hp} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a55c765377a7065cce535eb1513cde195}\label{classmods_1_1player_a55c765377a7065cce535eb1513cde195}} 
+sh\+\_\+int \& {\bfseries move} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aecc04f7e551f70f6273f117ac1b7ca08}\label{classmods_1_1player_aecc04f7e551f70f6273f117ac1b7ca08}} 
+sh\+\_\+int \& {\bfseries max\+\_\+move} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a7d381a08bf3e27ce1a6984e1cb29c7bd}\label{classmods_1_1player_a7d381a08bf3e27ce1a6984e1cb29c7bd}} 
+sh\+\_\+int \& {\bfseries armor} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_adaea8d2fa69b3dfb19de199a269fe5e7}\label{classmods_1_1player_adaea8d2fa69b3dfb19de199a269fe5e7}} 
+int \& {\bfseries gold} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a2c04452f76ecd008230cb842a58f44b4}\label{classmods_1_1player_a2c04452f76ecd008230cb842a58f44b4}} 
+int \& {\bfseries mp} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a5b1cabaee05e10fc2d43edd0a6d2ae60}\label{classmods_1_1player_a5b1cabaee05e10fc2d43edd0a6d2ae60}} 
+int \& {\bfseries bank\+\_\+gold} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a57d3582952045068f8e4db98821b235e}\label{classmods_1_1player_a57d3582952045068f8e4db98821b235e}} 
+int \& {\bfseries exp} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ae0882e40b22814e55b10bc8d900c4169}\label{classmods_1_1player_ae0882e40b22814e55b10bc8d900c4169}} 
+sbyte \& {\bfseries hitroll} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ae2a99a26f0689a1fd4b5835788e8568a}\label{classmods_1_1player_ae2a99a26f0689a1fd4b5835788e8568a}} 
+sbyte \& {\bfseries damroll} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a043796ab73c0013c22a007abbe3110b4}\label{classmods_1_1player_a043796ab73c0013c22a007abbe3110b4}} 
+byte \& {\bfseries level} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a8a6edf071ab6401cdd538f334372dc9f}\label{classmods_1_1player_a8a6edf071ab6401cdd538f334372dc9f}} 
+ubyte \& {\bfseries weight} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a8eb7e3cd6991012a1225f7618a7ede03}\label{classmods_1_1player_a8eb7e3cd6991012a1225f7618a7ede03}} 
+ubyte \& {\bfseries height} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a52bcf65daef743da3e8c8771c0dff130}\label{classmods_1_1player_a52bcf65daef743da3e8c8771c0dff130}} 
+void {\bfseries set\+\_\+title} (const std\+::string \&t)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a980ece5a3ff5b8c3356dc6e2ba6e2c25}\label{classmods_1_1player_a980ece5a3ff5b8c3356dc6e2ba6e2c25}} 
+\hyperlink{structmods_1_1string}{mods\+::string} \& {\bfseries title} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a5483cb74fd3bef3a6cfb7c969eb6e134}\label{classmods_1_1player_a5483cb74fd3bef3a6cfb7c969eb6e134}} 
+\hyperlink{structmods_1_1string}{mods\+::string} \& {\bfseries short\+\_\+descr} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a929c1edbc3fe74db1ab136e2733a9b0b}\label{classmods_1_1player_a929c1edbc3fe74db1ab136e2733a9b0b}} 
+\hyperlink{structmods_1_1string}{mods\+::string} \& {\bfseries long\+\_\+descr} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aee0ae14cd0f89b6fd4d2c3d1edee854a}\label{classmods_1_1player_aee0ae14cd0f89b6fd4d2c3d1edee854a}} 
+\hyperlink{structmods_1_1string}{mods\+::string} \& {\bfseries description} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a2e2a9e417b31896d6360f87c563bc677}\label{classmods_1_1player_a2e2a9e417b31896d6360f87c563bc677}} 
+byte \& {\bfseries chclass} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aee20ec3da3c517e762627fcf888849ec}\label{classmods_1_1player_aee20ec3da3c517e762627fcf888849ec}} 
+sh\+\_\+int \& {\bfseries hometown} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aa54e00e29c1969dcabe5dc21e5e0cdde}\label{classmods_1_1player_aa54e00e29c1969dcabe5dc21e5e0cdde}} 
+\hyperlink{structtime__data}{time\+\_\+data} \& {\bfseries ch\+\_\+time} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a5ed6ef5db97f410723ef7ddf2b9b2675}\label{classmods_1_1player_a5ed6ef5db97f410723ef7ddf2b9b2675}} 
+void {\bfseries set\+\_\+name} (std\+::string n)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_af9dae273967126a811543ef1cacf71fb}\label{classmods_1_1player_af9dae273967126a811543ef1cacf71fb}} 
+std\+::string {\bfseries ucname} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a29dc752d622c697c4911a77a4b985564}\label{classmods_1_1player_a29dc752d622c697c4911a77a4b985564}} 
+std\+::string \& {\bfseries name} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_adea83a95f7027e965f525cdfe0c2880a}\label{classmods_1_1player_adea83a95f7027e965f525cdfe0c2880a}} 
+void {\bfseries set\+\_\+sex} (byte s)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ab1ce04aa4ca73ab5e43e1a0f4cd6906f}\label{classmods_1_1player_ab1ce04aa4ca73ab5e43e1a0f4cd6906f}} 
+byte \& {\bfseries sex} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ae6fdeb00bc88a130ea0ef27415ac2b4f}\label{classmods_1_1player_ae6fdeb00bc88a130ea0ef27415ac2b4f}} 
+void {\bfseries set\+\_\+room} (room\+\_\+rnum r)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aa0f9420628b22ec1b716d6cbe11ef0ef}\label{classmods_1_1player_aa0f9420628b22ec1b716d6cbe11ef0ef}} 
+room\+\_\+rnum \& {\bfseries room} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a4b118187f4fb03ef695e8af157ecf530}\label{classmods_1_1player_a4b118187f4fb03ef695e8af157ecf530}} 
+uuid\+\_\+t \& {\bfseries uuid} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aefbbd982695743a6977d18ce4853749b}\label{classmods_1_1player_aefbbd982695743a6977d18ce4853749b}} 
+\hyperlink{structchar__data}{char\+\_\+data} $\ast$ {\bfseries cd} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a49ed68a4bed3cb05ea26da0f4c50e9d8}\label{classmods_1_1player_a49ed68a4bed3cb05ea26da0f4c50e9d8}} 
+rifle\+\_\+data\+\_\+t $\ast$ {\bfseries rifle} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a66bf2cc10943dc00d629868dbb7bd862}\label{classmods_1_1player_a66bf2cc10943dc00d629868dbb7bd862}} 
+uint16\+\_\+t {\bfseries ammo} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a8853a1fe58152214459fbb7417a21d83}\label{classmods_1_1player_a8853a1fe58152214459fbb7417a21d83}} 
+uint16\+\_\+t {\bfseries set\+\_\+ammo} (uint16\+\_\+t value)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a1a89b6c5b9e2046ad76d0a1c7d348ba9}\label{classmods_1_1player_a1a89b6c5b9e2046ad76d0a1c7d348ba9}} 
+\hyperlink{structobj__data}{obj\+\_\+data} $\ast$ {\bfseries get\+\_\+ammo} (const weapon\+\_\+type\+\_\+t \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a16d099bf9995465e00b21cfa8f1cd594}\label{classmods_1_1player_a16d099bf9995465e00b21cfa8f1cd594}} 
+\hyperlink{structmods_1_1string}{mods\+::string} {\bfseries weapon\+\_\+name} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ae42a701bdd5d5fb46d7658cad6161464}\label{classmods_1_1player_ae42a701bdd5d5fb46d7658cad6161464}} 
+{\bfseries operator chdata\+\_\+ptr} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a74ab8e7f2cf826fe6f4a6bc0fa8a0efa}\label{classmods_1_1player_a74ab8e7f2cf826fe6f4a6bc0fa8a0efa}} 
+void {\bfseries weapon\+\_\+cooldown\+\_\+start} (uint16\+\_\+t duration, weapon\+\_\+set set)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a2489270f0eeb5e26ec509dcb75cd8bb4}\label{classmods_1_1player_a2489270f0eeb5e26ec509dcb75cd8bb4}} 
+bool {\bfseries weapon\+\_\+cooldown\+\_\+expired} (weapon\+\_\+set)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a05030c2c9439f95c84704ed6f7c993d1}\label{classmods_1_1player_a05030c2c9439f95c84704ed6f7c993d1}} 
+void {\bfseries stc\+\_\+room} (const room\+\_\+rnum \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a6195057ece7899142c460e5322498a4a}\label{classmods_1_1player_a6195057ece7899142c460e5322498a4a}} 
+void {\bfseries stc\+\_\+room\+\_\+desc} (const room\+\_\+rnum \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a550769bddbe79e5086130df7deef07f7}\label{classmods_1_1player_a550769bddbe79e5086130df7deef07f7}} 
+void {\bfseries stc} (const char $\ast$m)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a0aaa555bf45fb81f83a08e083f28fac1}\label{classmods_1_1player_a0aaa555bf45fb81f83a08e083f28fac1}} 
+void {\bfseries stc} (const std\+::string m)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac4743c458be0d770a0f45fb7c029aff4}\label{classmods_1_1player_ac4743c458be0d770a0f45fb7c029aff4}} 
+void {\bfseries stc} (const \hyperlink{structmods_1_1string}{mods\+::string} \&m)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a3d00ca11aeb86fa14ed502a661b84d9a}\label{classmods_1_1player_a3d00ca11aeb86fa14ed502a661b84d9a}} 
+void {\bfseries stc} (int m)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ad32f021b24d37dd06a535f9b4f1368b6}\label{classmods_1_1player_ad32f021b24d37dd06a535f9b4f1368b6}} 
+void {\bfseries stc} (std\+::string\+\_\+view)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ad1d45661120f41d45b8edc40543d28b3}\label{classmods_1_1player_ad1d45661120f41d45b8edc40543d28b3}} 
+void {\bfseries sendln} (std\+::string\+\_\+view str)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a8bd306f65abb257279843856e63ae542}\label{classmods_1_1player_a8bd306f65abb257279843856e63ae542}} 
+void {\bfseries sendln} (\hyperlink{structmods_1_1string}{mods\+::string} \&str)
+\item 
+void \hyperlink{classmods_1_1player_aaf97c2eac068d263981699d65d13d64d}{psendln} (std\+::string\+\_\+view str)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a930eb2db6ef2202cd41cbfd70490ebc4}\label{classmods_1_1player_a930eb2db6ef2202cd41cbfd70490ebc4}} 
+void {\bfseries psendln} (\hyperlink{structmods_1_1string}{mods\+::string} \&str)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aed0aa1d594cecbea5800fd563de34e9b}\label{classmods_1_1player_aed0aa1d594cecbea5800fd563de34e9b}} 
+void {\bfseries raw\+\_\+send} (const \hyperlink{structmods_1_1string}{mods\+::string} \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_acb2ad9298192df0d5e4de13e5588dee7}\label{classmods_1_1player_acb2ad9298192df0d5e4de13e5588dee7}} 
+void {\bfseries done} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a48eb3e7f7afe683c847653cc1f5d6a18}\label{classmods_1_1player_a48eb3e7f7afe683c847653cc1f5d6a18}} 
+size\+\_\+t {\bfseries send} (const char $\ast$messg,...)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aa5a831a796d55746bcc777fc561ea052}\label{classmods_1_1player_aa5a831a796d55746bcc777fc561ea052}} 
+\hyperlink{classmods_1_1player}{player} \& {\bfseries pager\+\_\+start} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a6ca23997dee1d8b94137da8b3a2a17a5}\label{classmods_1_1player_a6ca23997dee1d8b94137da8b3a2a17a5}} 
+\hyperlink{classmods_1_1player}{player} \& {\bfseries pager\+\_\+end} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a90fb7668ff623bce96c51255fc10b287}\label{classmods_1_1player_a90fb7668ff623bce96c51255fc10b287}} 
+void {\bfseries pager\+\_\+next\+\_\+page} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac86a2bee53a0931b3ebed1ec18385ae0}\label{classmods_1_1player_ac86a2bee53a0931b3ebed1ec18385ae0}} 
+void {\bfseries page} (int page\+\_\+number)
+\item 
+void \hyperlink{classmods_1_1player_a43832fcf34ddb3e7968a26703d3250cd}{queue\+\_\+page\+\_\+fragment} (std\+::string\+\_\+view fragment)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a09dabbd02a2418ca90a96f715e69bb68}\label{classmods_1_1player_a09dabbd02a2418ca90a96f715e69bb68}} 
+\hyperlink{classmods_1_1player}{player} \& {\bfseries operator$<$$<$} (const \hyperlink{structmods_1_1string}{mods\+::string} \&m)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac6c0d4b3f9047117ef797698df4b7306}\label{classmods_1_1player_ac6c0d4b3f9047117ef797698df4b7306}} 
+\hyperlink{classmods_1_1player}{player} \& {\bfseries operator$<$$<$} (const char $\ast$m)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ad09209c13b4f58e1bcd51897f8bb1feb}\label{classmods_1_1player_ad09209c13b4f58e1bcd51897f8bb1feb}} 
+\hyperlink{classmods_1_1player}{player} \& {\bfseries operator$<$$<$} (const std\+::string \&m)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a5c60061a3e82ade30f6b3ba5d94f7227}\label{classmods_1_1player_a5c60061a3e82ade30f6b3ba5d94f7227}} 
+\hyperlink{classmods_1_1player}{player} \& {\bfseries operator$<$$<$} (int m)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a09de19290c2191f95d8e07937c76dc1d}\label{classmods_1_1player_a09de19290c2191f95d8e07937c76dc1d}} 
+void {\bfseries pager\+\_\+clear} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a2ee6cf11d335225a4e2e035d419b8076}\label{classmods_1_1player_a2ee6cf11d335225a4e2e035d419b8076}} 
+bool {\bfseries paging} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ad8b5e48c762c234c99406dbb9d4510bb}\label{classmods_1_1player_ad8b5e48c762c234c99406dbb9d4510bb}} 
+void {\bfseries set\+\_\+desc} (std\+::deque$<$ \hyperlink{structmods_1_1descriptor__data}{descriptor\+\_\+data} $>$\+::iterator it)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a573f41de9bcd357412059bf016ebde78}\label{classmods_1_1player_a573f41de9bcd357412059bf016ebde78}} 
+void {\bfseries set\+\_\+desc} (std\+::shared\+\_\+ptr$<$ \hyperlink{structmods_1_1descriptor__data}{descriptor\+\_\+data} $>$ it)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ae0103c5de79432ccac31533bda656fa9}\label{classmods_1_1player_ae0103c5de79432ccac31533bda656fa9}} 
+void {\bfseries set\+\_\+char\+\_\+on\+\_\+descriptor} (std\+::deque$<$ \hyperlink{structmods_1_1descriptor__data}{descriptor\+\_\+data} $>$\+::iterator it)
+\item 
+void \hyperlink{classmods_1_1player_ad5c902bb8d73713f04628ca8988c128a}{set\+\_\+socket} (socket\+\_\+t d)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a07013d414884ecff448cf9de45c50efa}\label{classmods_1_1player_a07013d414884ecff448cf9de45c50efa}} 
+socket\+\_\+t {\bfseries socket} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_af4656fc7741254fc906d03cda32645ec}\label{classmods_1_1player_af4656fc7741254fc906d03cda32645ec}} 
+void {\bfseries increment\+\_\+bad\+\_\+password\+\_\+count} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a7211317b58a2079737faa133b88b2dc8}\label{classmods_1_1player_a7211317b58a2079737faa133b88b2dc8}} 
+int {\bfseries get\+\_\+bad\+\_\+password\+\_\+count} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a7141d48d5c3738c3c1b8939fb17556d3}\label{classmods_1_1player_a7141d48d5c3738c3c1b8939fb17556d3}} 
+void {\bfseries set\+\_\+bad\+\_\+password\+\_\+count} (int)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a6f6ccc5cb85fb90fc6c875e74d91bb79}\label{classmods_1_1player_a6f6ccc5cb85fb90fc6c875e74d91bb79}} 
+\hyperlink{structmods_1_1descriptor__data}{descriptor\+\_\+data} \& {\bfseries desc} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a7d9ade89f11985d139f8ad5baed27a15}\label{classmods_1_1player_a7d9ade89f11985d139f8ad5baed27a15}} 
+void {\bfseries set\+\_\+state} (int)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac969ea974d0f1d982a3fdb927e2bae8a}\label{classmods_1_1player_ac969ea974d0f1d982a3fdb927e2bae8a}} 
+int {\bfseries state} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aa44c9145134cfbed36edcf10f3c0f2dc}\label{classmods_1_1player_aa44c9145134cfbed36edcf10f3c0f2dc}} 
+void {\bfseries set\+\_\+host} (std\+::string host)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a62987a5ccddb984f048d2d6921d55817}\label{classmods_1_1player_a62987a5ccddb984f048d2d6921d55817}} 
+std\+::string {\bfseries host} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a9b9ce853251b47cecf9a355010af8191}\label{classmods_1_1player_a9b9ce853251b47cecf9a355010af8191}} 
+void {\bfseries capture\+\_\+output} (bool capture\+\_\+status)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a71cf4e3a0c9a61cd769b42e889648901}\label{classmods_1_1player_a71cf4e3a0c9a61cd769b42e889648901}} 
+std\+::string\+\_\+view {\bfseries get\+\_\+captured\+\_\+output} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a4105554f0492c385628f95873db9f43d}\label{classmods_1_1player_a4105554f0492c385628f95873db9f43d}} 
+void {\bfseries clear\+\_\+captured\+\_\+output} ()
+\item 
+void \hyperlink{classmods_1_1player_a75e7ab6e28ec637e3d1a8f905162bf3e}{set\+\_\+type} (player\+\_\+type\+\_\+enum\+\_\+t t)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac3e0e49947a0467423dfa6dcd49ee221}\label{classmods_1_1player_ac3e0e49947a0467423dfa6dcd49ee221}} 
+player\+\_\+type\+\_\+enum\+\_\+t {\bfseries type} ()
+\item 
+void \hyperlink{classmods_1_1player_abbbcc9a9d532b3fbfcd16faeb72e8a35}{deactivate\+\_\+account} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a64c35848966d08ed05f855d1c62379db}\label{classmods_1_1player_a64c35848966d08ed05f855d1c62379db}} 
+bool {\bfseries authenticated} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_adb9b217ecc48632204193e36f576a7d2}\label{classmods_1_1player_adb9b217ecc48632204193e36f576a7d2}} 
+void {\bfseries set\+\_\+authenticated} (bool b)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ad0354db5732137a41995c4356b533102}\label{classmods_1_1player_ad0354db5732137a41995c4356b533102}} 
+void {\bfseries set\+\_\+prefs} (long \hyperlink{classmods_1_1prefs}{prefs})
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a0ee2902819f112c4723abe3df1cd58ae}\label{classmods_1_1player_a0ee2902819f112c4723abe3df1cd58ae}} 
+auto {\bfseries get\+\_\+prefs} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a760f4dfe08f944e64ba64faf3a1b41bd}\label{classmods_1_1player_a760f4dfe08f944e64ba64faf3a1b41bd}} 
+auto {\bfseries get\+\_\+lense} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_af920cb9294852247b743416b11962bdc}\label{classmods_1_1player_af920cb9294852247b743416b11962bdc}} 
+void {\bfseries set\+\_\+lense} (const lense\+\_\+type\+\_\+t \&lense)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a5ae234a904fde59efe863101c0fa8569}\label{classmods_1_1player_a5ae234a904fde59efe863101c0fa8569}} 
+aligned\+\_\+int\+\_\+t {\bfseries set\+\_\+flag} (\hyperlink{classmods_1_1player_a98e6f1c1529e3034d1c6e9a48475bc6b}{chunk\+\_\+type\+\_\+t} chunk, aligned\+\_\+int\+\_\+t bit)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a8e3f6ee3fec9c25cdfbc8900dd7dd8de}\label{classmods_1_1player_a8e3f6ee3fec9c25cdfbc8900dd7dd8de}} 
+aligned\+\_\+int\+\_\+t {\bfseries toggle\+\_\+flag} (\hyperlink{classmods_1_1player_a98e6f1c1529e3034d1c6e9a48475bc6b}{chunk\+\_\+type\+\_\+t} chunk, aligned\+\_\+int\+\_\+t bit)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac82ced6921af9adc44e20e8d35bb423f}\label{classmods_1_1player_ac82ced6921af9adc44e20e8d35bb423f}} 
+aligned\+\_\+int\+\_\+t {\bfseries remove\+\_\+flag} (\hyperlink{classmods_1_1player_a98e6f1c1529e3034d1c6e9a48475bc6b}{chunk\+\_\+type\+\_\+t} chunk, aligned\+\_\+int\+\_\+t bit)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a4a136f9de177df78bf7a8253e1068082}\label{classmods_1_1player_a4a136f9de177df78bf7a8253e1068082}} 
+aligned\+\_\+int\+\_\+t {\bfseries get\+\_\+chunk} (\hyperlink{classmods_1_1player_a98e6f1c1529e3034d1c6e9a48475bc6b}{chunk\+\_\+type\+\_\+t} chunk) const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a553683497aed80e8768107b9c12b544e}\label{classmods_1_1player_a553683497aed80e8768107b9c12b544e}} 
+bool {\bfseries has\+\_\+flag} (\hyperlink{classmods_1_1player_a98e6f1c1529e3034d1c6e9a48475bc6b}{chunk\+\_\+type\+\_\+t} chunk, aligned\+\_\+int\+\_\+t bit) const
+\item 
+uint8\+\_\+t \hyperlink{classmods_1_1player_a05b78e56ec3b207c2ebd5396b4e3bd65}{get\+\_\+overhead\+\_\+map\+\_\+width} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a6bbc06149ecfe73e3968a8872e797707}\label{classmods_1_1player_a6bbc06149ecfe73e3968a8872e797707}} 
+void {\bfseries set\+\_\+overhead\+\_\+map\+\_\+width} (uint8\+\_\+t w)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a34400d516c566141a85314a5f1965c16}\label{classmods_1_1player_a34400d516c566141a85314a5f1965c16}} 
+uint8\+\_\+t {\bfseries get\+\_\+overhead\+\_\+map\+\_\+height} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_afc76c62b352e1712285f9d4a413842fb}\label{classmods_1_1player_afc76c62b352e1712285f9d4a413842fb}} 
+void {\bfseries set\+\_\+overhead\+\_\+map\+\_\+height} (uint8\+\_\+t h)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a7100859429762d41f258d69abf957448}\label{classmods_1_1player_a7100859429762d41f258d69abf957448}} 
+void {\bfseries equip} (obj\+\_\+ptr\+\_\+t obj, int pos)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_affcfe3327d9526ba8a9b1b9ce100132c}\label{classmods_1_1player_affcfe3327d9526ba8a9b1b9ce100132c}} 
+void {\bfseries equip} (uuid\+\_\+t, int pos)
+\item 
+void \hyperlink{classmods_1_1player_a7fd5d35771a57dfe6c8ec7e1199873ab}{unequip} (int pos)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a77034697db672561d57031c50b35ed9a}\label{classmods_1_1player_a77034697db672561d57031c50b35ed9a}} 
+void {\bfseries unequip\+\_\+into\+\_\+inventory} (int pos)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_add46b348bad812bdc34aeb8d79249ee4}\label{classmods_1_1player_add46b348bad812bdc34aeb8d79249ee4}} 
+obj\+\_\+ptr\+\_\+t {\bfseries equipment} (int pos)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ab8fe6141a54bcfdb0faa04daee8fb972}\label{classmods_1_1player_ab8fe6141a54bcfdb0faa04daee8fb972}} 
+std\+::vector$<$ \hyperlink{structaffected__type}{affected\+\_\+type} $>$ \& {\bfseries get\+\_\+affected\+\_\+by} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a3f4ba46ea9cc91d8434793efd41a7d90}\label{classmods_1_1player_a3f4ba46ea9cc91d8434793efd41a7d90}} 
+std\+::vector$<$ \hyperlink{structaffected__type}{affected\+\_\+type} $>$ \& {\bfseries add\+\_\+affected\+\_\+by} (\hyperlink{structaffected__type}{affected\+\_\+type} \&\&add\+\_\+this)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ab1df40b3ba4fd35a3eee15d6ad900d6b}\label{classmods_1_1player_ab1df40b3ba4fd35a3eee15d6ad900d6b}} 
+void {\bfseries clr\+\_\+affected\+\_\+by} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a15bd12b589620f42a9f6a57b18334142}\label{classmods_1_1player_a15bd12b589620f42a9f6a57b18334142}} 
+std\+::vector$<$ \hyperlink{structaffected__type}{affected\+\_\+type} $>$ \& {\bfseries del\+\_\+affected\+\_\+by} (const std\+::size\+\_\+t \&idx)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_af3235dd8391fdafec417fddb32f0df2d}\label{classmods_1_1player_af3235dd8391fdafec417fddb32f0df2d}} 
+std\+::vector$<$ \hyperlink{structaffected__type}{affected\+\_\+type} $>$ \& {\bfseries del\+\_\+affected\+\_\+by} (const \hyperlink{structaffected__type}{affected\+\_\+type} \&af)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aa24993316846c4d1a07ba50cc9f91504}\label{classmods_1_1player_aa24993316846c4d1a07ba50cc9f91504}} 
+std\+::shared\+\_\+ptr$<$ \hyperlink{structmods_1_1classes_1_1sniper}{mods\+::classes\+::sniper} $>$ {\bfseries cl\+\_\+sniper} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aff434718fc2b2d0c16097171d38a2bbc}\label{classmods_1_1player_aff434718fc2b2d0c16097171d38a2bbc}} 
+std\+::shared\+\_\+ptr$<$ \hyperlink{structmods_1_1classes_1_1medic}{mods\+::classes\+::medic} $>$ {\bfseries cl\+\_\+medic} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a8877f7dd1e695ce9b0ce29ee776c7136}\label{classmods_1_1player_a8877f7dd1e695ce9b0ce29ee776c7136}} 
+std\+::shared\+\_\+ptr$<$ \hyperlink{structmods_1_1classes_1_1sentinel}{mods\+::classes\+::sentinel} $>$ {\bfseries cl\+\_\+sentinel} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aecd6fc80087322dac1e7475cd85cc37f}\label{classmods_1_1player_aecd6fc80087322dac1e7475cd85cc37f}} 
+void {\bfseries set\+\_\+sentinel} (std\+::shared\+\_\+ptr$<$ \hyperlink{structmods_1_1classes_1_1sentinel}{mods\+::classes\+::sentinel} $>$ s)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_abd11111bfe0fc2c61e244e539ef4f27f}\label{classmods_1_1player_abd11111bfe0fc2c61e244e539ef4f27f}} 
+obj\+\_\+data\+\_\+ptr\+\_\+t {\bfseries sniper\+\_\+rifle} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a976af91450f06af213f9258ca7be0427}\label{classmods_1_1player_a976af91450f06af213f9258ca7be0427}} 
+void {\bfseries start\+\_\+histfile} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ae399e28d13428ef0dc3800bad3e05b5b}\label{classmods_1_1player_ae399e28d13428ef0dc3800bad3e05b5b}} 
+void {\bfseries write\+\_\+histfile} (std\+::string\+\_\+view)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a39bb8831e0f6f05988041f270fa99522}\label{classmods_1_1player_a39bb8831e0f6f05988041f270fa99522}} 
+void {\bfseries stop\+\_\+histfile} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a9a30e134073f21fc5bf5b60425e93028}\label{classmods_1_1player_a9a30e134073f21fc5bf5b60425e93028}} 
+bool {\bfseries is} (\hyperlink{structchar__data}{char\+\_\+data} $\ast$ch) const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a44c0e06e4d068226a8fc1c8fc315c259}\label{classmods_1_1player_a44c0e06e4d068226a8fc1c8fc315c259}} 
+bool {\bfseries is} (player\+\_\+ptr\+\_\+t p) const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a854ea69ac76dee8f93e3c0b2b1e6512d}\label{classmods_1_1player_a854ea69ac76dee8f93e3c0b2b1e6512d}} 
+bool {\bfseries is\+\_\+nobody} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aba76379ca29fd4b79a99843106b2bc43}\label{classmods_1_1player_aba76379ca29fd4b79a99843106b2bc43}} 
+bool {\bfseries is\+\_\+npc} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a9f6a8b1a9339eadb2836d56700f743d7}\label{classmods_1_1player_a9f6a8b1a9339eadb2836d56700f743d7}} 
+\hyperlink{structmods_1_1affects_1_1dissolver}{affect\+\_\+dissolver\+\_\+t} \& {\bfseries get\+\_\+affect\+\_\+dissolver} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac3f7da3737790ce82db3f97a35e175a6}\label{classmods_1_1player_ac3f7da3737790ce82db3f97a35e175a6}} 
+void {\bfseries set\+\_\+misc\+\_\+pref} (misc\+\_\+pref\+\_\+enum\+\_\+t bit, bool on\+\_\+off)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ad8524b2a600811e694c4cc1892ee8451}\label{classmods_1_1player_ad8524b2a600811e694c4cc1892ee8451}} 
+bool {\bfseries get\+\_\+misc\+\_\+pref} (misc\+\_\+pref\+\_\+enum\+\_\+t bit)
+\item 
+bool \hyperlink{classmods_1_1player_a9631c9d8b2bccdf598d84756fac2aeb9}{has\+\_\+night\+\_\+vision} () const
+\item 
+bool \hyperlink{classmods_1_1player_a0fceca22b6757b46d3b31c22acc3c690}{has\+\_\+thermal\+\_\+vision} () const
+\item 
+void \hyperlink{classmods_1_1player_aec46cbc02ebe8769c4c831510acafce3}{set\+\_\+camera} (obj\+\_\+data\+\_\+ptr\+\_\+t obj)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a7b639adaff3e21cceec7b9ebf39b6e90}\label{classmods_1_1player_a7b639adaff3e21cceec7b9ebf39b6e90}} 
+std\+::shared\+\_\+ptr$<$ \hyperlink{classmods_1_1camera}{mods\+::camera} $>$ {\bfseries get\+\_\+camera} () const
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a22d85a409c50a67837d1e2faab1bf0bb}\label{classmods_1_1player_a22d85a409c50a67837d1e2faab1bf0bb}} 
+void {\bfseries clear\+\_\+camera} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_af5c20d74a8a7d68ee0d63517145aa002}\label{classmods_1_1player_af5c20d74a8a7d68ee0d63517145aa002}} 
+bool {\bfseries camera\+\_\+viewing} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ab281ba48de0f14bab911f9804137b659}\label{classmods_1_1player_ab281ba48de0f14bab911f9804137b659}} 
+void {\bfseries set\+\_\+camera\+\_\+viewing} (bool b)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a72a0ca876e17e3802c39b48b84bfecf1}\label{classmods_1_1player_a72a0ca876e17e3802c39b48b84bfecf1}} 
+int {\bfseries viewing\+\_\+room} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a3835ab002b5095a596f421c262c6eac8}\label{classmods_1_1player_a3835ab002b5095a596f421c262c6eac8}} 
+void {\bfseries block\+\_\+for} (uint16\+\_\+t ticks, uint32\+\_\+t unblock\+\_\+event, uuid\+\_\+t optional\+\_\+uuid)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a1fd569b4507c1e9beefea643672f7fb9}\label{classmods_1_1player_a1fd569b4507c1e9beefea643672f7fb9}} 
+bool {\bfseries is\+\_\+blocked} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a5f0433a04d22c54caf333c7fd4aadf4c}\label{classmods_1_1player_a5f0433a04d22c54caf333c7fd4aadf4c}} 
+void {\bfseries unblock\+\_\+event} (uint32\+\_\+t unblock)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a88b940f9690adca6648f0f55bf3e7df8}\label{classmods_1_1player_a88b940f9690adca6648f0f55bf3e7df8}} 
+void {\bfseries cancel\+\_\+block} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a50c0e905eb53acc6abc01012704f8a70}\label{classmods_1_1player_a50c0e905eb53acc6abc01012704f8a70}} 
+uint32\+\_\+t {\bfseries current\+\_\+block} ()
+\item 
+obj\+\_\+data\+\_\+ptr\+\_\+t \hyperlink{classmods_1_1player_a88891bc28021b56598229c3b8a122ef0}{primary} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a118c02387c06c547b4d3c240f172fd18}\label{classmods_1_1player_a118c02387c06c547b4d3c240f172fd18}} 
+obj\+\_\+data\+\_\+ptr\+\_\+t {\bfseries secondary} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a6153d1ba7a90ccb20804409a322d4288}\label{classmods_1_1player_a6153d1ba7a90ccb20804409a322d4288}} 
+void {\bfseries set\+\_\+attacking\+\_\+with\+\_\+primary} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a067cdcd3ffbb193fb864b5720b8d7e6e}\label{classmods_1_1player_a067cdcd3ffbb193fb864b5720b8d7e6e}} 
+void {\bfseries set\+\_\+attacking\+\_\+with\+\_\+secondary} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a012244041a3396dc4ba3dc70092c5ea1}\label{classmods_1_1player_a012244041a3396dc4ba3dc70092c5ea1}} 
+void {\bfseries set\+\_\+attacking\+\_\+with} (obj\+\_\+ptr\+\_\+t weapon)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_acee88346f8e1bba25d38fcad0527ab3a}\label{classmods_1_1player_acee88346f8e1bba25d38fcad0527ab3a}} 
+void {\bfseries clear\+\_\+attacking\+\_\+with} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a674798a3d890110e2aa3d5c52ae579b8}\label{classmods_1_1player_a674798a3d890110e2aa3d5c52ae579b8}} 
+obj\+\_\+data\+\_\+ptr\+\_\+t {\bfseries attacking\+\_\+with} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aa35eeea77aca8368ef6e9909e22254ff}\label{classmods_1_1player_aa35eeea77aca8368ef6e9909e22254ff}} 
+int {\bfseries attacking\+\_\+with\+\_\+type} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a92bf949e9017cba7e15ceeddeecabd6e}\label{classmods_1_1player_a92bf949e9017cba7e15ceeddeecabd6e}} 
+std\+::shared\+\_\+ptr$<$ \hyperlink{structbuilder__data__t}{builder\+\_\+data\+\_\+t} $>$ {\bfseries builder\+\_\+data}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aaf1125ed813eb65509e04724182ac6d0}\label{classmods_1_1player_aaf1125ed813eb65509e04724182ac6d0}} 
+static constexpr int {\bfseries P\+A\+G\+E\+\_\+\+S\+I\+ZE} = 40
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a0af7899634f32acfecdfe05dced66ac1}\label{classmods_1_1player_a0af7899634f32acfecdfe05dced66ac1}} 
+void {\bfseries m\+\_\+sync\+\_\+equipment} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_ac69cc3d275e1df592b20ee19d072de56}\label{classmods_1_1player_ac69cc3d275e1df592b20ee19d072de56}} 
+void {\bfseries perform\+\_\+equip\+\_\+calculations} (int pos, bool equip)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a3f506528f2633149d6577a628b4fa86a}\label{classmods_1_1player_a3f506528f2633149d6577a628b4fa86a}} 
+std\+::array$<$ bool, misc\+\_\+pref\+\_\+enum\+\_\+t\+::\+S\+I\+ZE $>$ {\bfseries m\+\_\+misc\+\_\+pref}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a61668c66280f178e14b5aac9f6f7bf2d}\label{classmods_1_1player_a61668c66280f178e14b5aac9f6f7bf2d}} 
+lense\+\_\+type\+\_\+t {\bfseries m\+\_\+lense\+\_\+type}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_aea958890ec05b191ee9c3df20d406a04}\label{classmods_1_1player_aea958890ec05b191ee9c3df20d406a04}} 
+uint8\+\_\+t {\bfseries m\+\_\+overhead\+\_\+map\+\_\+width}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a74c1aa460bf10298e04df0819de4976d}\label{classmods_1_1player_a74c1aa460bf10298e04df0819de4976d}} 
+uint8\+\_\+t {\bfseries m\+\_\+overhead\+\_\+map\+\_\+height}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a815275e6ade43c0c7841e3978f4aaec4}\label{classmods_1_1player_a815275e6ade43c0c7841e3978f4aaec4}} 
+std\+::vector$<$ \hyperlink{structaffected__type}{affected\+\_\+type} $>$ {\bfseries m\+\_\+affected\+\_\+by}
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a670733959fee649b6b7bfbae5ea551a2}\label{classmods_1_1player_a670733959fee649b6b7bfbae5ea551a2}} 
+void {\bfseries mods\+::acl\+\_\+list\+::set\+\_\+access\+\_\+rights} (player\+\_\+ptr\+\_\+t, const std\+::string \&, bool)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\mbox{\Hypertarget{classmods_1_1player_a98e6f1c1529e3034d1c6e9a48475bc6b}\label{classmods_1_1player_a98e6f1c1529e3034d1c6e9a48475bc6b}} 
+\index{mods\+::player@{mods\+::player}!chunk\+\_\+type\+\_\+t@{chunk\+\_\+type\+\_\+t}}
+\index{chunk\+\_\+type\+\_\+t@{chunk\+\_\+type\+\_\+t}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{chunk\+\_\+type\+\_\+t}{chunk\_type\_t}}
+{\footnotesize\ttfamily using mods\+::player\+::chunk\+\_\+type\+\_\+t =  mods\+::flags\+::chunk\+\_\+type\+\_\+t}
+
+The m\+\_\+flag structure is the better design choice for any flag or preference saving mechanism. The affect/plr affect function interface on this object wastes a lot of space by using enums which are 64 bits in size. For that size we could have 64 flags instead of one enum that\textquotesingle{}s 64 bits long.
+
+The m\+\_\+flag interface philosophy is that you can essentially fill the std\+::array that is m\+\_\+flags with \char`\"{}chunks\char`\"{} of data. Each chunk corresponds to the set of flags that the user is interested in. If we want to dedicate 64 bits to a user\textquotesingle{}s preferences, all we\textquotesingle{}d have to do is agree on the index for which \char`\"{}chunk\char`\"{} that the flags will be stored in.
+
+If we wanted to store legacy values, we could dedicate the first chunk (0, zero) to the m\+\_\+flags chunk as follows\+: m\+\_\+flags\mbox{[}0\mbox{]} $\vert$= A\+F\+F\+\_\+\+B\+L\+I\+ND; ...
+
+Of course, we have helper functions below that will do the job for us\+:
+
+player-\/$>$set\+\_\+flag(\+L\+E\+G\+A\+C\+Y\+\_\+\+A\+F\+F\+\_\+\+C\+H\+U\+N\+K,\+A\+F\+F\+\_\+\+B\+L\+I\+N\+D); 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classmods_1_1player_ae86efeb0a9121b227ac34b24e0556fed}\label{classmods_1_1player_ae86efeb0a9121b227ac34b24e0556fed}} 
+\index{mods\+::player@{mods\+::player}!player@{player}}
+\index{player@{player}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{player()}{player()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily mods\+::player\+::player (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+I don\textquotesingle{}t like this class call F\+I\+X\+ME
+
+Need a better uuid generator than this
+
+I H\+\_\+\+A\+\_\+\+T\+\_\+E that we are still tied to the linked list F\+I\+X\+ME
+
+F\+I\+X\+ME\+: need to set the m\+\_\+char\+\_\+data-\/$>$desc
+
+I don\textquotesingle{}t like this class call F\+I\+X\+ME
+
+Need a better uuid generator than this
+
+F\+I\+X\+ME\+: this is not how uuid\textquotesingle{}s should be generated
+
+F\+I\+X\+ME\+: need to set the m\+\_\+char\+\_\+data-\/$>$desc \mbox{\Hypertarget{classmods_1_1player_abab6e7c067da6cac1c9e8bd2debbca7a}\label{classmods_1_1player_abab6e7c067da6cac1c9e8bd2debbca7a}} 
+\index{mods\+::player@{mods\+::player}!player@{player}}
+\index{player@{player}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{player()}{player()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily mods\+::player\+::player (\begin{DoxyParamCaption}\item[{\hyperlink{classmods_1_1player}{mods\+::player} $\ast$}]{ptr }\end{DoxyParamCaption})}
+
+T\+O\+DO\+: should we set the queue\+\_\+behaviour flags on the descriptor data items on $\ast$this?
+
+T\+O\+DO\+: investigate this function. I have a feeling that m\+\_\+desc needs to be updated here 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classmods_1_1player_a5af5ab2621df94bc867bc56ab37b0099}\label{classmods_1_1player_a5af5ab2621df94bc867bc56ab37b0099}} 
+\index{mods\+::player@{mods\+::player}!affect@{affect}}
+\index{affect@{affect}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{affect()}{affect()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void mods\+::player\+::affect (\begin{DoxyParamCaption}\item[{aligned\+\_\+int\+\_\+t}]{flag }\end{DoxyParamCaption})}
+
+\subsection*{========================= }
+
+========================= \subsection*{Affect flag manipulation }
+
+\subsection*{========================= }\mbox{\Hypertarget{classmods_1_1player_a47a34f3be04cad723e561028c7ae24cd}\label{classmods_1_1player_a47a34f3be04cad723e561028c7ae24cd}} 
+\index{mods\+::player@{mods\+::player}!affect@{affect}}
+\index{affect@{affect}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{affect()}{affect()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void mods\+::player\+::affect (\begin{DoxyParamCaption}\item[{mods\+::flags\+::aff}]{flag }\end{DoxyParamCaption})}
+
+T\+O\+DO these need to go \mbox{\Hypertarget{classmods_1_1player_acd374d4b3b772201c0ec8611fbbc9c4a}\label{classmods_1_1player_acd374d4b3b772201c0ec8611fbbc9c4a}} 
+\index{mods\+::player@{mods\+::player}!affect\+\_\+plr@{affect\+\_\+plr}}
+\index{affect\+\_\+plr@{affect\+\_\+plr}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{affect\+\_\+plr()}{affect\_plr()}}
+{\footnotesize\ttfamily void mods\+::player\+::affect\+\_\+plr (\begin{DoxyParamCaption}\item[{aligned\+\_\+int\+\_\+t}]{flag }\end{DoxyParamCaption})}
+
+\subsection*{============================= }
+
+============================= \subsection*{P\+LR Affect flag manipulation }
+
+\subsection*{============================= }\mbox{\Hypertarget{classmods_1_1player_a3dfd0e5a7bb17c98cfa5031b02620cbb}\label{classmods_1_1player_a3dfd0e5a7bb17c98cfa5031b02620cbb}} 
+\index{mods\+::player@{mods\+::player}!carry@{carry}}
+\index{carry@{carry}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{carry()}{carry()}}
+{\footnotesize\ttfamily void mods\+::player\+::carry (\begin{DoxyParamCaption}\item[{obj\+\_\+ptr\+\_\+t}]{obj }\end{DoxyParamCaption})}
+
+T\+O\+DO\+: do this \mbox{\Hypertarget{classmods_1_1player_af85ed0368fd327f3747b4d1e6572cccc}\label{classmods_1_1player_af85ed0368fd327f3747b4d1e6572cccc}} 
+\index{mods\+::player@{mods\+::player}!char\+\_\+specials@{char\+\_\+specials}}
+\index{char\+\_\+specials@{char\+\_\+specials}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{char\+\_\+specials()}{char\_specials()}}
+{\footnotesize\ttfamily \hyperlink{structchar__special__data}{char\+\_\+special\+\_\+data}\& mods\+::player\+::char\+\_\+specials (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\hyperlink{structchar__special__data__saved}{char\+\_\+special\+\_\+data\+\_\+saved} \mbox{\Hypertarget{classmods_1_1player_abbbcc9a9d532b3fbfcd16faeb72e8a35}\label{classmods_1_1player_abbbcc9a9d532b3fbfcd16faeb72e8a35}} 
+\index{mods\+::player@{mods\+::player}!deactivate\+\_\+account@{deactivate\+\_\+account}}
+\index{deactivate\+\_\+account@{deactivate\+\_\+account}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{deactivate\+\_\+account()}{deactivate\_account()}}
+{\footnotesize\ttfamily void mods\+::player\+::deactivate\+\_\+account (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+T\+O\+DO\+: call a C\+RM function. In fact, maybe don\textquotesingle{}t even store this \hyperlink{classmods_1_1player_abbbcc9a9d532b3fbfcd16faeb72e8a35}{deactivate\+\_\+account()} function on this object T\+O\+DO\+: what do we need to do to deactivate the account? for now, I think just setting an active flag for the player would be enough\mbox{\Hypertarget{classmods_1_1player_a05b78e56ec3b207c2ebd5396b4e3bd65}\label{classmods_1_1player_a05b78e56ec3b207c2ebd5396b4e3bd65}} 
+\index{mods\+::player@{mods\+::player}!get\+\_\+overhead\+\_\+map\+\_\+width@{get\+\_\+overhead\+\_\+map\+\_\+width}}
+\index{get\+\_\+overhead\+\_\+map\+\_\+width@{get\+\_\+overhead\+\_\+map\+\_\+width}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{get\+\_\+overhead\+\_\+map\+\_\+width()}{get\_overhead\_map\_width()}}
+{\footnotesize\ttfamily uint8\+\_\+t mods\+::player\+::get\+\_\+overhead\+\_\+map\+\_\+width (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Overhead map functions \mbox{\Hypertarget{classmods_1_1player_a2ce826104a9d3a2c853ee6d4e02fe689}\label{classmods_1_1player_a2ce826104a9d3a2c853ee6d4e02fe689}} 
+\index{mods\+::player@{mods\+::player}!god\+\_\+mode@{god\+\_\+mode}}
+\index{god\+\_\+mode@{god\+\_\+mode}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{god\+\_\+mode()}{god\_mode()}}
+{\footnotesize\ttfamily bool mods\+::player\+::god\+\_\+mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\subsection*{====================== }
+
+====================== \subsection*{E\+ND F\+L\+AG M\+A\+N\+I\+P\+U\+L\+A\+T\+I\+O\+NS }
+
+\subsection*{====================== }\mbox{\Hypertarget{classmods_1_1player_ae7ad590bc136eac7a54ed0071a3e882b}\label{classmods_1_1player_ae7ad590bc136eac7a54ed0071a3e882b}} 
+\index{mods\+::player@{mods\+::player}!has\+\_\+affect@{has\+\_\+affect}}
+\index{has\+\_\+affect@{has\+\_\+affect}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{has\+\_\+affect()}{has\_affect()}}
+{\footnotesize\ttfamily bool mods\+::player\+::has\+\_\+affect (\begin{DoxyParamCaption}\item[{aligned\+\_\+int\+\_\+t}]{f }\end{DoxyParamCaption})}
+
+Affects \begin{DoxyReturn}{Returns}
+returns the legacy A\+F\+F\+\_\+ flag given the modern aff flag 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classmods_1_1player_ae07901c25cbe93b8c259720f1662e5d3}\label{classmods_1_1player_ae07901c25cbe93b8c259720f1662e5d3}} 
+\index{mods\+::player@{mods\+::player}!has\+\_\+affect\+\_\+plr@{has\+\_\+affect\+\_\+plr}}
+\index{has\+\_\+affect\+\_\+plr@{has\+\_\+affect\+\_\+plr}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{has\+\_\+affect\+\_\+plr()}{has\_affect\_plr()}}
+{\footnotesize\ttfamily bool mods\+::player\+::has\+\_\+affect\+\_\+plr (\begin{DoxyParamCaption}\item[{aligned\+\_\+int\+\_\+t}]{flag }\end{DoxyParamCaption})}
+
+E\+ND got to go P\+L\+R\+\_\+$\ast$ Affects \mbox{\Hypertarget{classmods_1_1player_a9631c9d8b2bccdf598d84756fac2aeb9}\label{classmods_1_1player_a9631c9d8b2bccdf598d84756fac2aeb9}} 
+\index{mods\+::player@{mods\+::player}!has\+\_\+night\+\_\+vision@{has\+\_\+night\+\_\+vision}}
+\index{has\+\_\+night\+\_\+vision@{has\+\_\+night\+\_\+vision}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{has\+\_\+night\+\_\+vision()}{has\_night\_vision()}}
+{\footnotesize\ttfamily bool mods\+::player\+::has\+\_\+night\+\_\+vision (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+viewing modifiers T\+O\+DO \mbox{\Hypertarget{classmods_1_1player_a0fceca22b6757b46d3b31c22acc3c690}\label{classmods_1_1player_a0fceca22b6757b46d3b31c22acc3c690}} 
+\index{mods\+::player@{mods\+::player}!has\+\_\+thermal\+\_\+vision@{has\+\_\+thermal\+\_\+vision}}
+\index{has\+\_\+thermal\+\_\+vision@{has\+\_\+thermal\+\_\+vision}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{has\+\_\+thermal\+\_\+vision()}{has\_thermal\_vision()}}
+{\footnotesize\ttfamily bool mods\+::player\+::has\+\_\+thermal\+\_\+vision (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+T\+O\+DO \mbox{\Hypertarget{classmods_1_1player_a7aa761f41a093581ba531b2aca325609}\label{classmods_1_1player_a7aa761f41a093581ba531b2aca325609}} 
+\index{mods\+::player@{mods\+::player}!has\+\_\+thermite@{has\+\_\+thermite}}
+\index{has\+\_\+thermite@{has\+\_\+thermite}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{has\+\_\+thermite()}{has\_thermite()}}
+{\footnotesize\ttfamily bool mods\+::player\+::has\+\_\+thermite (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+T\+O\+DO\+: F\+I\+X\+ME \mbox{\Hypertarget{classmods_1_1player_a88891bc28021b56598229c3b8a122ef0}\label{classmods_1_1player_a88891bc28021b56598229c3b8a122ef0}} 
+\index{mods\+::player@{mods\+::player}!primary@{primary}}
+\index{primary@{primary}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{primary()}{primary()}}
+{\footnotesize\ttfamily obj\+\_\+data\+\_\+ptr\+\_\+t mods\+::player\+::primary (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+primary+secondary weapon helpers \mbox{\Hypertarget{classmods_1_1player_aaf97c2eac068d263981699d65d13d64d}\label{classmods_1_1player_aaf97c2eac068d263981699d65d13d64d}} 
+\index{mods\+::player@{mods\+::player}!psendln@{psendln}}
+\index{psendln@{psendln}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{psendln()}{psendln()}}
+{\footnotesize\ttfamily void mods\+::player\+::psendln (\begin{DoxyParamCaption}\item[{std\+::string\+\_\+view}]{str }\end{DoxyParamCaption})}
+
+\textquotesingle{}plain\textquotesingle{} sendln (no color eval needed) \mbox{\Hypertarget{classmods_1_1player_a43832fcf34ddb3e7968a26703d3250cd}\label{classmods_1_1player_a43832fcf34ddb3e7968a26703d3250cd}} 
+\index{mods\+::player@{mods\+::player}!queue\+\_\+page\+\_\+fragment@{queue\+\_\+page\+\_\+fragment}}
+\index{queue\+\_\+page\+\_\+fragment@{queue\+\_\+page\+\_\+fragment}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{queue\+\_\+page\+\_\+fragment()}{queue\_page\_fragment()}}
+{\footnotesize\ttfamily void mods\+::player\+::queue\+\_\+page\+\_\+fragment (\begin{DoxyParamCaption}\item[{std\+::string\+\_\+view}]{fragment }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+T\+O\+DO\+: all these queueing functions and overloaded operators need to accomodate the new player\+\_\+type\+\_\+enum\+\_\+t values when it comes to muting queued output. \mbox{\Hypertarget{classmods_1_1player_aec46cbc02ebe8769c4c831510acafce3}\label{classmods_1_1player_aec46cbc02ebe8769c4c831510acafce3}} 
+\index{mods\+::player@{mods\+::player}!set\+\_\+camera@{set\+\_\+camera}}
+\index{set\+\_\+camera@{set\+\_\+camera}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{set\+\_\+camera()}{set\_camera()}}
+{\footnotesize\ttfamily void mods\+::player\+::set\+\_\+camera (\begin{DoxyParamCaption}\item[{obj\+\_\+data\+\_\+ptr\+\_\+t}]{obj }\end{DoxyParamCaption})}
+
+camera dynamics \mbox{\Hypertarget{classmods_1_1player_ad5c902bb8d73713f04628ca8988c128a}\label{classmods_1_1player_ad5c902bb8d73713f04628ca8988c128a}} 
+\index{mods\+::player@{mods\+::player}!set\+\_\+socket@{set\+\_\+socket}}
+\index{set\+\_\+socket@{set\+\_\+socket}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{set\+\_\+socket()}{set\_socket()}}
+{\footnotesize\ttfamily void mods\+::player\+::set\+\_\+socket (\begin{DoxyParamCaption}\item[{socket\+\_\+t}]{d }\end{DoxyParamCaption})}
+
+Affects \mbox{\Hypertarget{classmods_1_1player_ac40139396e5026382a297640fa5d57d2}\label{classmods_1_1player_ac40139396e5026382a297640fa5d57d2}} 
+\index{mods\+::player@{mods\+::player}!set\+\_\+time\+\_\+birth@{set\+\_\+time\+\_\+birth}}
+\index{set\+\_\+time\+\_\+birth@{set\+\_\+time\+\_\+birth}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{set\+\_\+time\+\_\+birth()}{set\_time\_birth()}}
+{\footnotesize\ttfamily void mods\+::player\+::set\+\_\+time\+\_\+birth (\begin{DoxyParamCaption}\item[{time\+\_\+t}]{b }\end{DoxyParamCaption})}
+
+for the player.\+time.$\ast$ variables \mbox{\Hypertarget{classmods_1_1player_a75e7ab6e28ec637e3d1a8f905162bf3e}\label{classmods_1_1player_a75e7ab6e28ec637e3d1a8f905162bf3e}} 
+\index{mods\+::player@{mods\+::player}!set\+\_\+type@{set\+\_\+type}}
+\index{set\+\_\+type@{set\+\_\+type}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{set\+\_\+type()}{set\_type()}}
+{\footnotesize\ttfamily void mods\+::player\+::set\+\_\+type (\begin{DoxyParamCaption}\item[{player\+\_\+type\+\_\+enum\+\_\+t}]{t }\end{DoxyParamCaption})}
+
+F\+I\+X\+ME\+: take appropriate action on a per type basis. T\+O\+DO\+: If it\textquotesingle{}s a drone, then the appropriate drone flags need to be set T\+O\+DO\+: if it\textquotesingle{}s a mob, then it needs to have I\+S\+\_\+\+N\+PC return true.. so, set that flag T\+O\+DO\+: if it\textquotesingle{}s a player, set the I\+S\+\_\+\+N\+PC flag to false. Also, figure out how to handle \hyperlink{structmods_1_1descriptor__data}{descriptor\+\_\+data}\mbox{\Hypertarget{classmods_1_1player_a3d00ca11aeb86fa14ed502a661b84d9a}\label{classmods_1_1player_a3d00ca11aeb86fa14ed502a661b84d9a}} 
+\index{mods\+::player@{mods\+::player}!stc@{stc}}
+\index{stc@{stc}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{stc()}{stc()}}
+{\footnotesize\ttfamily void mods\+::player\+::stc (\begin{DoxyParamCaption}\item[{int}]{m }\end{DoxyParamCaption})}
+
+note, using 1 for plain parameter \mbox{\Hypertarget{classmods_1_1player_a05030c2c9439f95c84704ed6f7c993d1}\label{classmods_1_1player_a05030c2c9439f95c84704ed6f7c993d1}} 
+\index{mods\+::player@{mods\+::player}!stc\+\_\+room@{stc\+\_\+room}}
+\index{stc\+\_\+room@{stc\+\_\+room}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{stc\+\_\+room()}{stc\_room()}}
+{\footnotesize\ttfamily void mods\+::player\+::stc\+\_\+room (\begin{DoxyParamCaption}\item[{const room\+\_\+rnum \&}]{rnum }\end{DoxyParamCaption})}
+
+note\+: using 1 for the plain parameter since colr eval is done on room load from postgres \mbox{\Hypertarget{classmods_1_1player_a7fd5d35771a57dfe6c8ec7e1199873ab}\label{classmods_1_1player_a7fd5d35771a57dfe6c8ec7e1199873ab}} 
+\index{mods\+::player@{mods\+::player}!unequip@{unequip}}
+\index{unequip@{unequip}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{unequip()}{unequip()}}
+{\footnotesize\ttfamily void mods\+::player\+::unequip (\begin{DoxyParamCaption}\item[{int}]{pos }\end{DoxyParamCaption})}
+
+F\+I\+X\+ME\+: this needs to negate the bit 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+mob.\+hpp\item 
+player.\+hpp\item 
+mob.\+cpp\item 
+player.\+cpp\end{DoxyCompactItemize}

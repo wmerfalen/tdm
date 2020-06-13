@@ -1085,7 +1085,14 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 			GLASS_WINDOWS,
 			SCANNED
 		};
-
+		constexpr static std::array<texture_type_t,5> textures_that_have_levels = {
+			texture_type_t::RADIOACTIVE,
+			texture_type_t::LOW_ATMOSPHERE,
+			texture_type_t::ON_FIRE,
+			texture_type_t::NON_HAZARDOUS_SMOKE,
+			texture_type_t::HAZARDOUS_SMOKE
+		};
+		using texture_level_t = uint8_t;
 		enum fire_status_t : uint8_t {
 			NONE = 0,
 			KINDLING = 1,
@@ -1124,28 +1131,28 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		char_data *people;    /* List of NPC / PC in room           */
 		std::string_view overhead(const lense_type_t& );
 		std::vector<texture_type_t>& textures();
-		void add_texture(texture_type_t t){
-			if(t == texture_type_t::ON_FIRE){
-				this->m_dispatch_fire_dissolver();
-			}
-			m_textures.emplace_back(t);
-		}
-		void remove_texture(texture_type_t& t){
-			decltype(m_textures) final_textures;
-			for(auto && texture : m_textures){
-				if(texture == t){ continue; }
-				final_textures.emplace_back(t);
-			}
-			if(t == texture_type_t::ON_FIRE){
-				m_fire_status = fire_status_t::OUT;
-			}
-		}
+		void add_texture(texture_type_t);
+		void remove_texture(texture_type_t);
+		bool has_texture(texture_type_t);
 
 		const std::vector<uint8_t>& directions() const;
-		fire_status_t fire_status(){ return m_fire_status; }
+
+
+		/** fire status */
+		/** fire status */
+		/** fire status */
+		fire_status_t& fire_status(){
+			return reinterpret_cast<fire_status_t&>(m_texture_levels[ON_FIRE]);
+		}
+		void fire_status_start(){
+			m_texture_levels[ON_FIRE] = (texture_level_t)fire_status_t::KINDLING;
+		}
+		/** END fire status */
+		texture_level_t& texture_level(texture_type_t type){
+			return m_texture_levels[type];
+		}
 		protected:
-		void m_dispatch_fire_dissolver();
-		fire_status_t m_fire_status;
+		std::map<texture_type_t,texture_level_t> m_texture_levels;
 		std::vector<uint8_t> m_directions;
 		std::vector<mods::extra_desc_data> m_ex_descriptions;
 		std::vector<texture_type_t> m_textures;
