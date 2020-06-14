@@ -67,7 +67,7 @@
 (std::string,ammo_type,"#string, enum","'SNIPER'"), \
 (float,chance_to_injure,"#float, out of 100",10.0), \
 (int,clip_size,"#int, bullets",7), \
-(float,cooldown_between_shots,"#float, seconds",1.3), \
+(int,cooldown_between_shots,"#int, ticks",2), \
 (int,critical_chance,"#int, out of 100",33), \
 (int,critical_range,"#int, rooms",3), \
 (float,damage_per_second,"#float, out of 100",44.0), \
@@ -75,7 +75,7 @@
 (float,headshot_bonus,"#float, static addition to hitroll",48.00), \
 (int,max_range,"#int, rooms",8), \
 (float,range_multiplier,"#float, TBA",1.0), \
-(float,reload_time,"#float, seconds",2.3), \
+(int,reload_time,"#int, ticks",3), \
 (int,rounds_per_minute,"#int, bullets",8), \
 (int,muzzle_velocity,"#int, TBA",1.0), \
 (int,effective_firing_range,"#int, rooms",2), \

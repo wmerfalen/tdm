@@ -12,7 +12,7 @@ ammo_max: 40 #integer
 ammo_type: 'SHOTGUN' #string, constant enum
 chance_to_injure: 70.0 #float, out of 100 
 clip_size: 6 #integer
-cooldown_between_shots: 1.341 #float, in seconds
+cooldown_between_shots: 2 #int, in ticks
 critical_chance: 34 #int, out of 100
 critical_range: 1 #integer, measured in rooms
 damage_map: [
@@ -26,7 +26,7 @@ disorient_amount: 0.0 #float
 headshot_bonus: 53.0 #float
 max_range: 2 #integer,measured in rooms
 range_multiplier: 4.3 #float, multiplied by 
-reload_time: 6.1 #float, measured in seconds
+reload_time: 2 #int, measured in ticks
 # types
 #######
 # type: SNIPER

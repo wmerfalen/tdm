@@ -11,7 +11,7 @@ ammo_type: 'PISTOL' #string, constant enum
 # you injure the target due to it's high damage output
 chance_to_injure: 20.50100 #float, out of 100
 clip_size: 9 #integer
-cooldown_between_shots: 0.001301 #float, in seconds
+cooldown_between_shots: 1 #int, in ticks
 critical_chance: 5 #int, out of 100
 critical_range: 1 #integer, measured in rooms
 damage_map: [
@@ -30,7 +30,7 @@ max_range: 1 #integer,measured in rooms
 # range_multiplier will be ignored if max_range is same room
 range_multiplier: 0.0 #float, multiplied by 
 # reload time must account for high damage output in order to balance the game
-reload_time: 2.0013 #float, measured in seconds
+reload_time: 2 #int, measured in ticks
 str_type: 'PISTOL'
 type: 'PISTOL' #string, type of weapon
 manufacturer: 'TN3 SMITH-x Industrial'

@@ -1,0 +1,61 @@
+# 2020-06-12 
+	- fire dissolvers
+	- rooms can now be set on fire. they will now transition from the various fire statuses every few ticks
+	- mods::values namespace
+		- this namespace is globally available and will hold all dynamics integers/floats/strings
+	- fixed extractions
+		- if a player dies, the player was stuck in limbo. extractions now work perfectly, however mobs still remember you after you died. this could be a good or bad dynamic
+	- behaviour trees fixed
+		- behaviour trees for snipe tracking are now working properly
+	- mobs remember by uuids instead of legacy char\_data pointers
+	- mods::weapons::damage\_types
+		- rifle_attack should be the *only* way you can snipe someone
+		- lots of the dynamics for remotely attacking mobs is now put in rifle_attack function
+	- issues:
+		- mobs will remember you if you die and come back into the game
+			- and they will attack you
+		- we are still highly reliant on the damage() function within fight.cpp
+	
+# 2020-06-13
+	- plan:
+		- sniper rifles
+			- snipe <target> <direction>
+			- each shot is manually entered
+		- shotguns
+			- [1]
+			- fire 3 shots per shell
+				- each shot is of variable strength to emulate shrapnel
+			- user can
+				- shoot <target>
+				- k[ill] <target>
+				- spray <direction>
+		- pistols
+			- [1]
+			- shoot <target>
+			- k[ill] <target>
+		- machine pistols
+			- [1]
+			- spray <direction>
+			- shoot <target>
+			- k[ill] <target>
+		- sub machine guns
+			- user can
+				- spray <direction>
+				- shoot <target>
+				- k[ill] <target>
+		- assault rifles
+			- user can
+				- spray <direction>
+				- snipe <user> <direction>
+				- shoot <target>
+				- k[ill] <target>
+		- light machine guns
+			- user can
+				- surpress <target> <direction>
+				- spray <direction>
+				- shoot <target>
+				- k[ill] <target>
+
+		[1] -
+			- same room attacking on a per turn basis
+				- user can fire more shots if they spam 'shoot <victim>'

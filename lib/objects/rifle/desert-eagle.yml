@@ -11,7 +11,7 @@ ammo_type: 'PISTOL' #string, constant enum
 # you injure the target due to it's high damage output
 chance_to_injure: 0.00100 #float, out of 100
 clip_size: 7 #integer
-cooldown_between_shots: 0.867701 #float, in seconds
+cooldown_between_shots: 6 #int, in ticks
 critical_chance: 11 #int, out of 100
 critical_range: 1 #integer, measured in rooms
 damage_map: [
@@ -27,7 +27,7 @@ max_range: 1 #integer,measured in rooms
 # range_multiplier will be ignored if max_range is same room
 range_multiplier: 0.0 #float, multiplied by 
 # reload time must account for high damage output in order to balance the game
-reload_time: 4.5 #float, measured in seconds
+reload_time: 5 #int, measured in ticks
 type: 'PISTOL' #string, type of weapon
 name: 'A Desert Eagle' #string
 #rarity types
