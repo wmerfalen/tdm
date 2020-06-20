@@ -1111,7 +1111,7 @@ int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
  */
 int damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 	MENTOC_PREAMBLE();
-	ch->last_fight_timestamp = time(NULL);
+	//ch->last_fight_timestamp = time(NULL);
 
 	/*TODO: Modify this code to allow sniping */
 	if(GET_POS(victim) <= POS_DEAD) {
@@ -1120,8 +1120,6 @@ int damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 			return (-1);
 		}
 
-		log("SYSERR: Attempt to damage corpse '%s' in room #%d by '%s'.",
-				GET_NAME(victim).c_str(), GET_ROOM_VNUM(IN_ROOM(victim)), GET_NAME(ch).c_str());
 		die(ch,victim);
 		return (-1);			/* -je, 7/7/92 */
 	}

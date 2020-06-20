@@ -259,8 +259,35 @@ namespace mods::object_utils {
 		bool can_attack_same_room(T& obj){
 			return obj->rifle()->attributes->base_stat_list->at(0).allow;
 		}
+	template <typename T>
+	uint16_t get_ammo(T& weapon){
+		return weapon->rifle_instance->ammo;
+	}
 
-	static inline obj_ptr_t yaml_import(std::string object_type,std::string yaml_file){
+	/**
+	 * @brief import yaml object of type object_type and stored in yaml_file
+	 *
+	 * @param object_type
+	 * @param in_yaml_file
+	 *
+	 * @return 
+	 */
+	static inline obj_ptr_t yaml_import(std::string object_type,std::string in_yaml_file){
+		static std::vector<std::string> VALID_TYPES = {
+			"rifle","explosive","drone","attachment","gadget",
+			"armor","trap","consumable"
+		};
+		if(in_yaml_file.length() == 0 || object_type.length() == 0){
+			return nullptr;
+		}
+		if(!txt::match_any_of(VALID_TYPES,object_type)){
+			return nullptr;
+		}
+		if(!txt::preg_match("^[a-z0-9_\\-]+\\.yml$", in_yaml_file)){
+			log("SYSERR: invalid yaml file format detected. Not printing for security purpose.");
+			return nullptr;
+		}
+		std::string yaml_file = "objects/" + object_type + "/" + in_yaml_file;
 #define MENTOC_F_IMPORT(CLASS_TYPE,IT_TYPE)\
 		if(object_type.compare(#CLASS_TYPE) == 0){\
 			return std::move(create_object(BOOST_PP_CAT(ITEM_,IT_TYPE),yaml_file));\
@@ -276,6 +303,35 @@ namespace mods::object_utils {
 #undef MENTOC_F_IMPORT
 
 		return nullptr;
+	}
+	template <typename T>
+	uint16_t get_ammo(obj_ptr_t& weapon){
+		return (weapon->rifle_instance->ammo);
+	}
+	namespace gods {
+		template <typename T>
+		void set_ammo(obj_ptr_t& weapon,uint16_t ammo){
+			weapon->rifle_instance->ammo = ammo;
+		}
+	};
+
+	template <typename T>
+	void reload(T& player, obj_ptr_t& weapon) {
+		auto obj = player->get_ammo_for(weapon);
+		if(!obj){
+			player->send("You don't seem to have any ammunition for that weapon anywhere in your inventory!");
+			return;
+		}
+		auto ammo_amount = obj->obj_flags.ammo;
+		if(ammo_amount < weapon->rifle()->attributes->clip_size){
+			weapon->rifle_instance->ammo = ammo_amount;
+			player->send("You partially reload your %s with %d ammo.", weapon->name.c_str(), ammo_amount);
+			player->consume_from_carrying(obj);
+			return;
+		}
+		weapon->rifle_instance->ammo = weapon->rifle()->attributes->clip_size;
+		player->send("You reload your %s with %d ammo.", weapon->name.c_str(), ammo_amount);
+		player->consume_from_carrying(obj);
 	}
 
 };//End namespace

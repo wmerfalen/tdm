@@ -23,6 +23,7 @@
 #include "spells.h" // for TYPE_HIT
 #include "mods/object-utils.hpp"
 #include "mods/rooms.hpp"
+#include "mods/orm/inventory.hpp"
 extern void point_update(void);
 
 ACMD(do_get_ticks_per_minute){
@@ -30,6 +31,14 @@ ACMD(do_get_ticks_per_minute){
 	player->send("[%d] affects processer ticks per minute\r\n",mods::affects::get_ticks_per_minute());
 }
 
+ACMD(do_flush_player){
+	auto status = mods::orm::inventory::flush_player(player);
+	player->send("[%d] status\r\n",status);
+}
+ACMD(do_feed_player){
+	auto status = mods::orm::inventory::feed_player(player);
+	player->send("[%d] status\r\n",status);
+}
 ACMD(do_givemenades){
 
 }
@@ -47,6 +56,13 @@ ACMD(do_room_dark){
 	}
 }
 
+/**
+ * @brief if arg1 is on, sets fire to room. optionally arg2 is used to set to specific fire_status_t string representation
+ *
+ * @param do_room_fire
+ * @param on|off
+ * @param level optional fire_status_t
+ */
 ACMD(do_room_fire){
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() == 0){
@@ -71,18 +87,23 @@ ACMD(do_room_fire){
 
 
 ACMD(do_giveme_camera) {
-	auto obj = mods::object_utils::yaml_import("gadget","objects/gadget/camera.yml");
+	auto obj = mods::object_utils::yaml_import("gadget","camera.yml");
 	obj_to_char(obj,player);
 }
 ACMD(do_giveme_night_vision_camera) {
-	auto obj = mods::object_utils::yaml_import("gadget","objects/gadget/night-vision-camera.yml");
+	auto obj = mods::object_utils::yaml_import("gadget","night-vision-camera.yml");
 	obj_to_char(obj,player);
 }
 ACMD(do_giveme_thermal_camera) {
-	auto obj = mods::object_utils::yaml_import("gadget","objects/gadget/thermal-camera.yml");
+	auto obj = mods::object_utils::yaml_import("gadget","thermal-camera.yml");
 	obj_to_char(obj,player);
 }
 
+/**
+ * @brief makes whoever you are fighting get so hurt that the next hit is fatal
+ *
+ * @param do_one_punch
+ */
 ACMD(do_one_punch){
 	if(FIGHTING(ch)){
 		auto victim = FIGHTING(ch);
@@ -90,17 +111,22 @@ ACMD(do_one_punch){
 	}
 }
 
+/**
+ * @brief sets ammo of weapon identified by arg1 to arg2
+ *
+ * @param do_set_ammo
+ */
 ACMD(do_set_ammo) {
 	obj_data* obj = nullptr;
 	char_data* dummy = nullptr;
 	int bits = 0;
-	if(!(bits = generic_find(argument, FIND_OBJ_INV | FIND_OBJ_EQUIP, ch, &dummy, &obj))) {
-		player->send("There doesn't seem to be %s %s here.\r\n", AN(argument), argument);
-		return;
-	}
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() < 2){
 		player->sendln("usage: set_ammo <weapon> <number>");
+		return;
+	}
+	if(!(bits = generic_find(argument, FIND_OBJ_INV | FIND_OBJ_EQUIP, ch, &dummy, &obj))) {
+		player->send("There doesn't seem to be %s %s here.\r\n", AN(argument), argument);
 		return;
 	}
 	int ammo = mods::util::stoi(vec_args[1]).value_or(-1);

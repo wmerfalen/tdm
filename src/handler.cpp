@@ -466,13 +466,7 @@ void char_to_room(char_data *ch, room_rnum room) {
 
 void obj_ptr_to_char(obj_ptr_t  object, player_ptr_t player) {
 	if(object.get()) {
-		object->next_content = player->carrying();
 		player->carry(object);
-		object->carried_by = player->cd();
-		IN_ROOM(object) = NOWHERE;
-		player->carry_weight() += GET_OBJ_WEIGHT(object.get());
-		player->carry_items()++;
-
 #ifdef __MENTOC_USE_PLR_CRASH__
 		/* set flag for crash-save system, but not on mobs! */
 		if(!IS_NPC(ch)) {
@@ -486,13 +480,7 @@ void obj_ptr_to_char(obj_ptr_t  object, player_ptr_t player) {
 
 void obj_to_char(obj_ptr_t  object, player_ptr_t player) {
 	if(object.get()) {
-		object->next_content = player->carrying();
 		player->carry(object);
-		object->carried_by = player->cd();
-		IN_ROOM(object) = NOWHERE;
-		player->carry_weight() += GET_OBJ_WEIGHT(object.get());
-		player->carry_items()++;
-
 #ifdef __MENTOC_USE_PLR_CRASH__
 		/* set flag for crash-save system, but not on mobs! */
 		if(!IS_NPC(ch)) {

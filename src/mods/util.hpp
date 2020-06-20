@@ -297,6 +297,12 @@ std::ostream& log(Args... args); /*{
 	}
 	*/
 
+	bool preg_match(std::string_view regex,std::string_view haystack);
+	std::vector<std::string> explode(char delim,std::string& haystack);
+	bool yaml_file_path_is_sane(std::string path);
+	std::string yaml_int_to_string(int type);
+	int yaml_string_to_int(std::string type);
+	std::string yaml_caps_to_lower(std::string type);
 };
 
 namespace mods::util::err {

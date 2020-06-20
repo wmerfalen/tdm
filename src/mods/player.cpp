@@ -365,7 +365,11 @@ namespace mods {
 			m_char_data->carrying = nullptr;
 			return;
 		}
-		obj->carried_by = m_char_data;
+		obj->next_content = carrying();
+		obj->carried_by = cd();
+		IN_ROOM(obj) = NOWHERE;
+		carry_weight() += GET_OBJ_WEIGHT(obj.get());
+		carry_items()++;
 		m_char_data->m_carrying.emplace_back(obj);
 		m_char_data->carrying = obj.get();
 		mods::orm::inventory::lmdb::add_player_inventory(this->db_id(), obj->db_id(), obj->type);
@@ -1180,6 +1184,21 @@ namespace mods {
 	bool player::has_thermal_vision() const {
 		/** TODO */
 		return false;
+	}
+	obj_ptr_t player::get_ammo_for(obj_ptr_t& weapon){
+		/** TODO: use a query based interface to get any ammunition from packs, backpack, inventory, etc */
+		for(auto obj : m_char_data->m_carrying){
+			if(obj->obj_flags.is_ammo && obj->obj_flags.type == weapon->rifle()->attributes->type){
+				return obj;
+			}
+		}
+		return nullptr;
+	}
+	void player::consume_from_carrying(obj_ptr_t& item){
+		auto it = std::find(m_char_data->m_carrying.begin(),m_char_data->m_carrying.end(),item);
+		if(it != m_char_data->m_carrying.end()){
+			m_char_data->m_carrying.erase(it);
+		}
 	}
 
 };

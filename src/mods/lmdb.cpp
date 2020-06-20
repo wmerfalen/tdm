@@ -10,13 +10,33 @@ using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 #define __MENTOC_USE_LMDB__ 1
 namespace mods::lmdb {
 	using aligned_int_t = uint64_t;
+	/**
+	 * @brief builds a selector for grabbing values by metadata
+	 *
+	 * @param column
+	 * @param row_id
+	 *
+	 * @return 
+	 */
 	selector_type_t transaction_t::selector(const key_type_t & column,const uint64_t & row_id){
 		return {m_table,column,0,row_id};
 	}
 
+	/**
+	 * @brief constructor. initializes table and transaction type
+	 *
+	 * @param ce_table
+	 * @param type
+	 */
 	transaction_t::transaction_t(std::string ce_table,transact_type_t type) : m_type(type){
 		m_str_table = ce_table;
 	}
+	/**
+	 * @brief constructor. initializes table and transcation type
+	 *
+	 * @param e_table
+	 * @param type
+	 */
 	transaction_t::transaction_t(table_type_t e_table,transact_type_t type) : m_table(e_table), m_type(type){
 		set_str_table(e_table);
 	}
@@ -28,6 +48,14 @@ namespace mods::lmdb {
 
 	/**
 	 * The sql equivalent of this is 'select * from table'
+	 */
+	/**
+	 * @brief grabs all items from the db using consumer for extra data
+	 *
+	 * @tparam T
+	 * @param consumer
+	 *
+	 * @return 
 	 */
 	template <typename T>
 		result_container_t transaction_t::get_all(T consumer){
@@ -68,6 +96,13 @@ namespace mods::lmdb {
 #    #  #    #          #    #  #    #  #   ##  #    #  #       #
 #####   #####  #######  #    #  #    #  #    #  #####   ######  ######
 */
+	/**
+	 * @brief returns list of fields that we are interested in grabbing
+	 *
+	 * @param table
+	 *
+	 * @return 
+	 */
 	std::vector<std::string> _db_handle::fields_to_grab(const std::string& table){
 		auto ptr_db = mods::globals::db.get();
 		if(ptr_db->is_using_pluck_filter()){
@@ -83,23 +118,55 @@ namespace mods::lmdb {
 	#define lmdb_debug(a) /** */
 #endif
 
+	/**
+	 * @brief set list of fields we are interested in
+	 *
+	 * @param cols
+	 */
 	void _db_handle::set_pluck_filter(const std::vector<std::string> & cols){
 		m_pluck = cols;
 		m_use_pluck = true;
 	}
+	/**
+	 * @brief clears fields we're interested in
+	 */
 	void _db_handle::clear_pluck_filter(){
 		m_pluck.clear();
 		m_use_pluck = false;
 	}
+	/**
+	 * @brief grabs fields we're interested in
+	 *
+	 * @return 
+	 */
 	const std::vector<std::string> & _db_handle::get_pluck_filter() const {
 		return m_pluck;
 	}
+	/**
+	 * @brief toggle whether or not to use the pluck filter
+	 *
+	 * @param b
+	 */
 		void _db_handle::use_pluck_filter(bool b){
 			m_use_pluck = b;
 		}
+		/**
+		 * @brief get status of toggle
+		 *
+		 * @return 
+		 */
 		bool _db_handle::is_using_pluck_filter() const { 
 			return m_use_pluck;
 		}
+		/**
+		 * @brief constructor. dictates director, name of db, flags, mode.
+		 *
+		 * @param directory
+		 * @param db_name
+		 * @param flags
+		 * @param mode
+		 * @param unused
+		 */
 	_db_handle::_db_handle(std::string directory,std::string db_name,const uint64_t & flags,const uint16_t & mode,bool unused) 
 		: m_use_pluck(false), m_good(false), m_closed(true), 
 		m_dir(directory), m_name(db_name), m_flags(flags), m_mode(mode) {
@@ -116,6 +183,11 @@ namespace mods::lmdb {
 			}
 #endif
 		}
+	/**
+	 * @brief opens the connection to lmdb
+	 *
+	 * @return 
+	 */
 	bool _db_handle::open(){
 #ifdef __MENTOC_USE_LMDB__
 		m_closed = true;
@@ -169,6 +241,11 @@ namespace mods::lmdb {
 		return true;
 #endif
 	}
+	/**
+	 * @brief aborts transaction
+	 *
+	 * @return 
+	 */
 	_db_handle::tuple_return_type_t _db_handle::abort_txn(){
 #ifdef __MENTOC_USE_LMDB__
 		if(m_transaction_open){
@@ -182,6 +259,11 @@ namespace mods::lmdb {
 		return {true,"abort_txn stub"};
 #endif
 	}
+	/**
+	 * @brief creates a brand new transaction
+	 *
+	 * @return 
+	 */
 	_db_handle::tuple_return_type_t _db_handle::new_txn(){
 #ifdef __MENTOC_USE_LMDB__
 		int r = 0;
@@ -205,6 +287,11 @@ namespace mods::lmdb {
 		return {true,""};
 #endif
 	}
+	/**
+	 * @brief opens dbi. required by lmdb
+	 *
+	 * @return 
+	 */
 	_db_handle::tuple_return_type_t _db_handle::open_dbi(){
 #ifdef __MENTOC_USE_LMDB__
 		int r = 0;
@@ -231,6 +318,13 @@ namespace mods::lmdb {
 		return {true,""};
 #endif
 	}
+	/**
+	 * @brief grabs a key from lmdb and returns as (non-reference) string
+	 *
+	 * @param key
+	 *
+	 * @return 
+	 */
 	std::string _db_handle::get(std::string key){
 #ifdef __MENTOC_USE_LMDB__
 		std::string value;
@@ -240,6 +334,15 @@ namespace mods::lmdb {
 		return mods::globals::ram_db[key];
 #endif
 	}
+	/**
+	 * @brief grabs a key and stores in untyped buffer in_value
+	 *
+	 * @param key
+	 * @param k_size
+	 * @param in_value
+	 *
+	 * @return 
+	 */
 	int _db_handle::nget(void* key,std::size_t k_size,void* in_value){
 #ifdef __MENTOC_USE_LMDB__
 		lmdb_debug("nget entry");
@@ -280,6 +383,15 @@ namespace mods::lmdb {
 		return _db_handle::KEY_FETCHED_OKAY;
 #endif
 	}
+	/**
+	 * @brief grabs key and stores in std::string in_value ref
+	 *
+	 * @param key
+	 * @param k_size
+	 * @param in_value
+	 *
+	 * @return 
+	 */
 	int _db_handle::nget(void* key,std::size_t k_size,std::string& in_value){
 #ifdef __MENTOC_USE_LMDB__
 		lmdb_debug("nget entry");
@@ -321,6 +433,14 @@ namespace mods::lmdb {
 #endif
 	}
 
+	/**
+	 * @brief grabs string key and stores in std::string in_value ref
+	 *
+	 * @param key
+	 * @param in_value
+	 *
+	 * @return 
+	 */
 	int _db_handle::get(std::string key,std::string & in_value){
 #ifdef __MENTOC_USE_LMDB__
 		lmdb_debug("get entry");
@@ -366,6 +486,11 @@ namespace mods::lmdb {
 		return _db_handle::KEY_FETCHED_OKAY;
 #endif
 	}
+	/**
+	 * @brief renews transaction
+	 *
+	 * @return 
+	 */
 	_db_handle::tuple_return_type_t _db_handle::renew_txn(){
 #ifdef __MENTOC_USE_LMDB__
 		clear_pluck_filter();
@@ -386,6 +511,12 @@ namespace mods::lmdb {
 		return {true,""};
 #endif
 	}
+	/**
+	 * @brief delete key by untyped key and size
+	 *
+	 * @param key
+	 * @param key_size
+	 */
 	void _db_handle::ndel(void* key,std::size_t key_size){
 #ifdef __MENTOC_USE_LMDB__
 		MDB_val k;
@@ -396,6 +527,13 @@ namespace mods::lmdb {
 		mods::globals::ram_db[key] = "";
 #endif
 	}
+	/**
+	 * @brief deletes a string key
+	 *
+	 * @param key
+	 *
+	 * @return 
+	 */
 	int _db_handle::del(std::string key){
 #ifdef __MENTOC_USE_LMDB__
 		MDB_val k;
@@ -407,6 +545,16 @@ namespace mods::lmdb {
 		return 0;
 #endif
 	}
+	/**
+	 * @brief uses untyped key/value to grab value from lmdb and stores them in value
+	 *
+	 * @param key
+	 * @param key_size
+	 * @param value
+	 * @param v_size
+	 *
+	 * @return 
+	 */
 	int _db_handle::nput(void* key,std::size_t key_size,void* value,std::size_t v_size){
 #ifdef __MENTOC_USE_LMDB__
 		lmdb_debug("nput function entry");
@@ -446,6 +594,15 @@ namespace mods::lmdb {
 #endif
 		return 0;
 	}
+	/**
+	 * @brief places a value into key, optionally renewing the transaction beforehand
+	 *
+	 * @param key
+	 * @param value
+	 * @param renew
+	 *
+	 * @return 
+	 */
 	int _db_handle::put(std::string key,std::string value,bool renew){
 		lmdb_debug("put function entry");
 #ifdef __MENTOC_USE_LMDB__
@@ -464,6 +621,14 @@ namespace mods::lmdb {
 		return 0;
 #endif
 	}
+	/**
+	 * @brief places a string key and string value 
+	 *
+	 * @param key
+	 * @param value
+	 *
+	 * @return 
+	 */
 	int _db_handle::put(std::string key,std::string value){
 		lmdb_debug("put function entry (no renew)");
 #ifdef __MENTOC_USE_LMDB__
@@ -520,6 +685,11 @@ namespace mods::lmdb {
 		return 0;
 #endif
 	}
+	/**
+	 * @brief commits current transactions
+	 *
+	 * @return 
+	 */
 	_db_handle::tuple_return_type_t _db_handle::commit(){
 #ifdef __MENTOC_USE_LMDB__
 		if(m_good){
@@ -538,6 +708,9 @@ namespace mods::lmdb {
 		return {true,"stub commit"};
 #endif
 	}
+	/**
+	 * @brief destructor, calls commit and close
+	 */
 	_db_handle::~_db_handle(){
 #ifdef __MENTOC_USE_LMDB__
 		this->commit();
@@ -546,6 +719,9 @@ namespace mods::lmdb {
 		;;
 #endif
 	}
+	/**
+	 * @brief closes lmdb handle
+	 */
 	void _db_handle::close(){
 #ifdef __MENTOC_USE_LMDB__
 		lmdb_debug("close entry");
@@ -573,6 +749,9 @@ namespace mods::lmdb {
 		this->dump_status();
 #endif
 	}
+	/**
+	 * @brief debug function to print all status messages (if activated)
+	 */
 	void _db_handle::dump_status() const {
 		lmdb_debug("dump-status");
 		for(unsigned i =0; i < status_step_count; i++){
@@ -588,6 +767,13 @@ namespace mods::globals {
 	extern std::unique_ptr<mods::lmdb::db_handle> db;
 };
 
+/**
+ * @brief create a key by list of strings
+ *
+ * @param parts
+ *
+ * @return 
+ */
 std::string db_key(const std::vector<std::string> & parts){
 	std::string query = "";
 	std::size_t i = 0,s=parts.size();
@@ -600,16 +786,39 @@ std::string db_key(const std::vector<std::string> & parts){
 	return query;
 }
 
+/**
+ * @brief alias of renew_txn call
+ */
 void db_renew_txn(){
 	mods::globals::db->renew_txn();
 }
 
+/**
+ * @brief grabs a key and returns as string
+ *
+ * @param key
+ *
+ * @return 
+ */
 std::string db_get(std::string key){
 	return mods::globals::db->get(key);
 }
+/**
+ * @brief stores a value in key
+ *
+ * @param key
+ * @param value
+ */
 void db_put(std::string key,std::string value){
 	mods::globals::db->put(key,value);
 }
+/**
+ * @brief grabs all results from postgres for table
+ *
+ * @param table
+ *
+ * @return 
+ */
 mods::pq::result db_get_all(std::string table){
 #ifndef __MENTOC_USE_LMDB_INSTEAD_OF_POSTGRES__
 		try{
@@ -628,6 +837,14 @@ mods::pq::result db_get_all(std::string table){
 #endif
 }
 
+/**
+ * @brief grabs all values from table but plucks only list of columns in pluck
+ *
+ * @param table
+ * @param pluck
+ *
+ * @return 
+ */
 auto db_get_all_pluck(std::string table,const std::vector<std::string>& pluck){
 	mods::globals::db->set_pluck_filter(pluck);
 	auto r = db_get_all(table);
@@ -635,6 +852,15 @@ auto db_get_all_pluck(std::string table,const std::vector<std::string>& pluck){
 	return r;
 }
 
+/**
+ * @brief this is equivalent to: 'select * from table where col = value'
+ *
+ * @param table
+ * @param col
+ * @param value
+ *
+ * @return 
+ */
 pqxx::result db_get_by_meta(std::string table, std::string col,const std::string & value){
 		try{
 			auto up_txn = txn();
@@ -654,6 +880,15 @@ pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::field
 }
 */
 #ifdef __MENTOC_USE_PQXX_RESULT__
+/**
+ * @brief this is equivalent to: 'select * from table where col = value'
+ *
+ * @param table
+ * @param col
+ * @param value
+ *
+ * @return 
+ */
 pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::result::reference & value){
 #else
 pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::row::reference & value){

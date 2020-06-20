@@ -377,6 +377,94 @@ namespace mods::util {
 		return parse_objdir_capable(player,arg, CAP_ALL, capabilities);
 	}
 	*/
+	std::vector<std::string> explode(char delim,std::string& haystack){
+		std::vector<std::string> results;
+		std::string current = "";
+		for(auto ch : haystack){
+			if(ch == delim){
+				if(current.length()){
+					results.emplace_back(current);
+				}
+				current = "";
+				continue;
+			}
+			if(ch == '\0'){
+				break;
+			}
+			current += ch;
+		}
+		if(current.length()){
+#ifdef __MENTOC_SHOW_FINAL_EXPLODE_STRING__
+			for(auto c : current){
+				std::cerr << "[mods::utils::explode][c]'" << (int)c << "'\n";
+			}
+			std::cerr << "[mods::util::explode] trailing current:'" << current << "', delim:'" << delim << "', haystack: '" << haystack << "'\n";
+#endif
+			results.emplace_back(current);
+		}
+		return results;
+	}
+	bool yaml_file_path_is_sane(std::string path){
+		return preg_match("^objects/[a-z]+/[a-z0-9\\-]+\\.yml$",path);
+	}
+	std::string yaml_int_to_string(int type){
+		/** !!*****************!! */
+		/** !!UPDATE_ITEM_TYPES!! */
+		/** !!*****************!! */
+#define MENTOC_LAZY_ME(mtype,B) if(type == B){ return #B; }
+		MENTOC_LAZY_ME(rifle,ITEM_RIFLE);
+		MENTOC_LAZY_ME(explosive,ITEM_EXPLOSIVE);
+		MENTOC_LAZY_ME(drone,ITEM_DRONE);
+		MENTOC_LAZY_ME(gadget,ITEM_GADGET);
+		MENTOC_LAZY_ME(attachment,ITEM_ATTACHMENT);
+		MENTOC_LAZY_ME(armor,ITEM_ARMOR);
+		MENTOC_LAZY_ME(consumable,ITEM_CONSUMABLE);
+		MENTOC_LAZY_ME(trap,ITEM_TRAP);
+#undef MENTOC_LAZY_ME
+		return "unknown-yits";
+	}
+	int yaml_string_to_int(std::string type){
+		/** !!*****************!! */
+		/** !!UPDATE_ITEM_TYPES!! */
+		/** !!*****************!! */
+#define MENTOC_LAZY_ME(mtype,B) if(is_lower_match(#mtype,type)){ return B; }
+		MENTOC_LAZY_ME(rifle,ITEM_RIFLE);
+		MENTOC_LAZY_ME(explosive,ITEM_EXPLOSIVE);
+		MENTOC_LAZY_ME(drone,ITEM_DRONE);
+		MENTOC_LAZY_ME(gadget,ITEM_GADGET);
+		MENTOC_LAZY_ME(attachment,ITEM_ATTACHMENT);
+		MENTOC_LAZY_ME(armor,ITEM_ARMOR);
+		MENTOC_LAZY_ME(consumable,ITEM_CONSUMABLE);
+		MENTOC_LAZY_ME(trap,ITEM_TRAP);
+#undef MENTOC_LAZY_ME
+#define MENTOC_LAZY_ME(mtype) if(is_lower_match(#mtype,type)){ return mtype; }
+		MENTOC_LAZY_ME(ITEM_RIFLE);
+		MENTOC_LAZY_ME(ITEM_EXPLOSIVE);
+		MENTOC_LAZY_ME(ITEM_DRONE);
+		MENTOC_LAZY_ME(ITEM_GADGET);
+		MENTOC_LAZY_ME(ITEM_ATTACHMENT);
+		MENTOC_LAZY_ME(ITEM_ARMOR);
+		MENTOC_LAZY_ME(ITEM_CONSUMABLE);
+		MENTOC_LAZY_ME(ITEM_TRAP);
+#undef MENTOC_LAZY_ME
+		return -1;
+	}
+	std::string yaml_caps_to_lower(std::string type){
+		/** !!*****************!! */
+		/** !!UPDATE_ITEM_TYPES!! */
+		/** !!*****************!! */
+#define MENTOC_LAZY_ME(mtype,B) if(is_lower_match(#B,type)){ return #mtype; }
+		MENTOC_LAZY_ME(rifle,ITEM_RIFLE);
+		MENTOC_LAZY_ME(explosive,ITEM_EXPLOSIVE);
+		MENTOC_LAZY_ME(drone,ITEM_DRONE);
+		MENTOC_LAZY_ME(gadget,ITEM_GADGET);
+		MENTOC_LAZY_ME(attachment,ITEM_ATTACHMENT);
+		MENTOC_LAZY_ME(armor,ITEM_ARMOR);
+		MENTOC_LAZY_ME(consumable,ITEM_CONSUMABLE);
+		MENTOC_LAZY_ME(trap,ITEM_TRAP);
+#undef MENTOC_LAZY_ME
+		return "unkown-yctl";
+	}
 
 };/** end mods::util */
 

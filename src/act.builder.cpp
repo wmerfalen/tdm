@@ -559,7 +559,7 @@ ACMD(do_yaml_import){
 	if(vec_args.size() == 2){
 		mods::object_utils::set_yaml_initiator(player->name(),vec_args[0],vec_args[1]);
 		auto obj = mods::object_utils::yaml_import(vec_args[0],vec_args[1]);
-		obj_to_char(obj.get(),player->cd());
+		player->carry(obj);
 		player->send("Imported: %s of type %s\r\n", vec_args[1].c_str(),vec_args[0].c_str());
 		return;
 	}
@@ -651,11 +651,14 @@ ACMD(do_yaml_example){
 
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("list") == 0) {
-		for(auto type : {"rifle","explosive","drone","gadget","attachment","armor"}) {
+		for(auto type : {"rifle","explosive","drone","gadget","attachment","armor","consumable"}) {
 			player->sendln(type);
 		}
 		return;
 	}
+	/** !!*****************!! */
+	/** !!UPDATE_ITEM_TYPES!! */
+	/** !!*****************!! */
 #define MENTOC_F_EXA(CLASS_TYPE,CT_FILE)\
 	if(std::string(vec_args[0]).compare(#CLASS_TYPE) == 0){\
 		mods::yaml::CLASS_TYPE ## _description_t CLASS_TYPE;\
@@ -668,6 +671,8 @@ ACMD(do_yaml_example){
 	MENTOC_F_EXA(drone,"drone.yml");
 	MENTOC_F_EXA(attachment,"attachment.yml");
 	MENTOC_F_EXA(armor,"armor.yml");
+	MENTOC_F_EXA(consumable,"consumable.yml");
+	MENTOC_F_EXA(trap,"trap.yml");
 #undef MENTOC_F_EXA
 	player->sendln("[+] done");
 }

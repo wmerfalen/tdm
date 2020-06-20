@@ -203,11 +203,44 @@
 (HERBS) \
 (HALLUCINOGENS) \
 (PEDS) \
-(GASOLINE) 
+(GASOLINE)
 
 #define MENTOC_CONSUMABLE_MEMBERS_TUPLE ( \
 (std::string,csv_capabilities,"#csv, strings free-form TBA","'TBA'"), \
-(std::string,csv_attach_to,"#csv, strings attach to various kinds of items TBA","'TBA'") \
+(std::string,csv_attach_to,"#csv, strings attach to various kinds of items TBA","'TBA'"), \
+(int,weight_in_lbs,"#int, weight in lbs",2), \
+(std::string,consumed_by,"#string, ENUM HUMAN,VEHICLE,ATTACHMENT,DRONE,GADGET,RIFLE,TRAP ",2), \
+(int,adds_hp,"#int,  amount of hp it adds when consumed (can be negative)",0), \
+(int,adds_movement,"#int, amount of movement it adds when consumed (can be negative)",0), \
+(int,adds_room_range,"#int, amount of rooms it adds when consumed (can be negative)",0), \
+(int,adds_strength,"#int, amount of STR it adds when consumed (can be negative)",0), \
+(int,adds_intelligence,"#int, amount of INT it adds when consumed (can be negative)",0), \
+(int,adds_charisma,"#int, amount of CHA it adds when consumed (can be negative)",0), \
+(int,adds_dexterity,"#int, amount of DEX it adds when consumed (can be negative)",0), \
+(int,adds_constitution,"#int, amount of CON it adds when consumed (can be negative)",0), \
+(int,adds_wisdom,"#int, amount of WIS it adds when consumed (can be negative)",0), \
+(int,adds_weight,"#int, amount of weight it adds when consumed (can be negative)",0), \
+(int,adds_experience,"#int, amount of EXP it adds when consumed (can be negative)",0), \
+(int,adds_armor_class,"#int, amount of AC it adds when consumed (can be negative)",0), \
+(int,adds_hitroll,"#int, amount of HITROLL it adds when consumed (can be negative)",0), \
+(int,adds_damage_roll,"#int, amount of DAMROLL it adds when consumed (can be negative)",0), \
+(int,ticks_until_zero,"#int, amount of game ticks until consumable wears off (can be negative)",0), \
+(std::string,ammo_type,"#string, ENUM any type of ITEM_RIFLE if this is ammunition","'NONE'"), \
+(int,capacity,"#int, usually used for ammunition. how much of this consumable is present (i.e.: bullets)",0), \
+(int,adds_fire_damage,"#int, amount of fire damage it adds to the consumer",0), \
+(int,adds_critical_chance,"#int, amount of points to add to critical chance of consumer",0), \
+(int,adds_ammo_max,"#int, adds to ammo maximum of consumer",30), \
+(float,adds_chance_to_injure,"#float, out of 100",10.0), \
+(int,adds_clip_size,"#int, bullets",7), \
+(int,adds_cooldown_between_shots,"#int, ticks (can be negative)",0), \
+(int,adds_critical_range,"#int, rooms (can be negative)",3), \
+(float,adds_disorient_amount,"#float, out of 100",3.0), \
+(float,adds_headshot_bonus,"#float, static addition to hitroll",48.00), \
+(int,adds_max_range,"#int, rooms",8), \
+(int,adds_reload_time,"#int, ticks",3), \
+(int,adds_muzzle_velocity,"#int, TBA",1.0), \
+(int,adds_damage_dice_count,"#int, number of dice",2), \
+(int,adds_damage_dice_sides,"#int, dice sides",6) \
 )
 
 

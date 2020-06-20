@@ -1,5 +1,6 @@
 #include "damage-types.hpp"
 #include "../../spells.h"
+#include "../object-utils.hpp"
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 namespace mods::weapons::damage_types {
 	using vpd = mods::scan::vec_player_data;
@@ -28,6 +29,95 @@ namespace mods::weapons::damage_types {
 	}
 
 	/**
+	 * @brief sprays using the primary weapon
+	 *
+	 * @param player
+	 * @param direction
+	 */
+	void spray_direction(player_ptr_t& player,int direction){
+		auto weapon = player->primary();
+		if(!weapon || !weapon->has_rifle()){
+			player->sendln("You aren't wielding any weapon.");
+			return;
+		}
+		if(!player->weapon_cooldown_expired(0)){
+			player->sendln("Weapon on cooldown.");
+			return;
+		}
+		/* Check ammo */
+		if(mods::object_utils::get_ammo(weapon) == 0) {
+			player->sendln("{gld}*CLICK*{/gld} Your weapon is out of ammo!");
+			return;
+		}
+
+		/** FIXME : grab weapon's accuracy and apply accurace modifications */
+
+		int dam = 0;
+		int damage_dice = weapon->rifle()->attributes->damage_dice_count;
+		int damage_sides = weapon->rifle()->attributes->damage_dice_sides;
+		int crit_range = weapon->rifle()->attributes->critical_range;
+		int crit_chance = weapon->rifle()->attributes->critical_chance;
+		int critical_bonus = 0;
+
+		vpd scan;
+		mods::scan::los_scan_direction(player->cd(),weapon->rifle()->attributes->max_range,&scan,direction);
+
+		player->set_fight_timestamp();
+		decrease_spray_shot_ammo(weapon);
+		for(auto && scanned_target : scan) {
+			dam = 0;
+			auto victim = ptr(scanned_target.ch);
+			if(!victim){
+				continue;
+			}
+			if(dice(1,(100 * scanned_target.distance)) <= mods::values::SPRAY_CHANCE){
+				player->send("{yel}--[HIT]--{/yel}");
+				dam += weapon->rifle()->attributes->base_stat_list->at(scanned_target.distance).damage;
+			}
+			/** calculate headshot */
+			if(dice(1,(100 * scanned_target.distance)) <= mods::values::SPRAY_HEADSHOT_CHANCE){
+				player->send("{red}***HEADSHOT***{/red} -- ");
+				dam = victim->hp();
+			}
+			if(scanned_target.distance == crit_range){
+				if(dice(1,(100 * scanned_target.distance)) <= crit_chance){
+					player->send("{red}***CRITICAL***{/red} -- ");
+					critical_bonus = dice(
+							damage_dice,
+							damage_sides
+					);
+					critical_bonus /= mods::values::SPRAY_CRITICAL_REDUCTION_DIVISOR;
+					dam += critical_bonus;
+				}
+			}
+			if(dam && victim->position() > POS_DEAD) {
+				if(victim->is_npc()){
+					damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
+					//if(MOB_FLAGGED(victim->cd(),MOB_SENTINEL)){
+					//	dty_debug("Mob is a sentinel. Setting sentinel_snipe_tracking on mob's behaviour tree");
+					//	victim->cd()->mob_specials.set_behaviour_tree("sentinel_snipe_tracking");
+					//	victim->cd()->mob_specials.snipe_tracking = player->uuid();
+					//}else{
+					//	dty_debug("Mob is normal mob. Setting snipe_tracking on mob's behaviour tree");
+					//	victim->cd()->mob_specials.set_behaviour_tree("snipe_tracking");
+					//	victim->cd()->mob_specials.snipe_tracking = player->uuid();
+					//}
+					remember(victim->cd(),player->cd());
+					return;
+				}
+			}else{
+				stop_fighting(player->cd());
+				stop_fighting(victim->cd());
+			}
+		}
+
+		return;
+
+	}
+
+
+
+	/**
 	 * @brief if you know your target's name and direction, then use this to initiate the attack
 	 *
 	 * @param player
@@ -36,7 +126,7 @@ namespace mods::weapons::damage_types {
 	 */
 	void rifle_attack_by_name(player_ptr_t& player,std::string_view victim_name,int direction){
 		auto weapon = player->primary();
-		if(!weapon){
+		if(!weapon || !weapon->has_rifle()){
 			player->sendln("You aren't wielding any weapon.");
 			return;
 		}
@@ -59,6 +149,102 @@ namespace mods::weapons::damage_types {
 		}
 	}
 
+	/**
+	 * @brief reduces the amount of ammo used from spraying
+	 *
+	 * @param weapon
+	 */
+	void decrease_spray_shot_ammo(obj_ptr_t& weapon) {
+		/** TODO: if weapon has a bullet printer mod, calculate ammo */
+		if(weapon->rifle_instance->ammo == 0){
+			return;
+		}
+		switch((mw_rifle)weapon->rifle()->attributes->type){
+			case mw_rifle::LIGHT_MACHINE_GUN:
+				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_LIGHT_MACHINE_GUN;
+				break;
+
+			case mw_rifle::SUB_MACHINE_GUN:
+				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_SUB_MACHINE_GUN;
+				break;
+
+			case mw_rifle::SHOTGUN:
+				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_SHOTGUN;
+				break;
+
+			case mw_rifle::SNIPER:
+				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_SNIPER;
+				break;
+
+			case mw_rifle::ASSAULT_RIFLE:
+				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_ASSAULT_RIFLE;
+				break;
+			case mw_rifle::HANDGUN:
+			case mw_rifle::PISTOL:
+				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_HANDGUN;
+				break;
+			case mw_rifle::MACHINE_PISTOL:
+				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_MACHINE_PISTOL;
+				break;
+			default:
+				weapon->rifle_instance->ammo = 1;
+				log("SYSERR: warning, no rifle type given for decrease_spray_shot_ammo, default to 1");
+				break;
+		}
+	}
+	/**
+	 * @brief subtracts 1 from weapon ammo
+	 *
+	 * @param weapon
+	 */
+	void decrease_single_shot_ammo(obj_ptr_t& weapon) {
+		/** TODO: if weapon has a bullet printer mod, calculate ammo */
+		if(weapon->rifle_instance->ammo == 0){
+			return;
+		}
+		switch((mw_rifle)weapon->rifle()->attributes->type){
+			case mw_rifle::LIGHT_MACHINE_GUN:
+				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_LIGHT_MACHINE_GUN;
+				break;
+
+			case mw_rifle::SUB_MACHINE_GUN:
+				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_SUB_MACHINE_GUN;
+				break;
+
+			case mw_rifle::SHOTGUN:
+				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_SHOTGUN;
+				break;
+
+			case mw_rifle::SNIPER:
+				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_SNIPER;
+				break;
+
+			case mw_rifle::ASSAULT_RIFLE:
+				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_ASSAULT_RIFLE;
+				break;
+			case mw_rifle::HANDGUN:
+			case mw_rifle::PISTOL:
+				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_HANDGUN;
+				break;
+			case mw_rifle::MACHINE_PISTOL:
+				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_MACHINE_PISTOL;
+				break;
+			default:
+				weapon->rifle_instance->ammo = 1;
+				log("SYSERR: warning, no rifle type given for decrease_single_shot_ammo, default to 1");
+				break;
+		}
+	}
+
+
+	/**
+	 * @brief attack using any obj_data structure that has a rifle_data_t pointer
+	 *
+	 * @param player
+	 * @param weapon
+	 * @param victim
+	 * @param distance
+	 */
 	void rifle_attack(
 			player_ptr_t& player,
 			obj_ptr_t weapon,
@@ -66,7 +252,7 @@ namespace mods::weapons::damage_types {
 			uint16_t distance
 		){
 		/** TODO: if primary is out of ammo, and player_pref.auto_switch is on, use secondary */
-		if(!weapon){
+		if(!weapon || !weapon->has_rifle()){
 			player->sendln("You aren't wielding any weapon.");
 			return;
 		}
@@ -135,7 +321,6 @@ namespace mods::weapons::damage_types {
 #endif
 
 		if(victim->position() > POS_DEAD) {
-			player->set_fight_timestamp();
 			if(victim->is_npc()){
 				//if(victim->is_dead()){
 				//	victim->cd()->mob_specials.behaviour_tree = 0;
@@ -146,7 +331,7 @@ namespace mods::weapons::damage_types {
 				}else if(dam > 0){
 					damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
 					if(MOB_FLAGGED(victim->cd(),MOB_SENTINEL)){
-						dty_debug("Mob is a sentine. Setting sentinel_snipe_tracking on mob's behaviour tree");
+						dty_debug("Mob is a sentinel. Setting sentinel_snipe_tracking on mob's behaviour tree");
 						victim->cd()->mob_specials.set_behaviour_tree("sentinel_snipe_tracking");
 						victim->cd()->mob_specials.snipe_tracking = player->uuid();
 					}else{
@@ -163,12 +348,9 @@ namespace mods::weapons::damage_types {
 			stop_fighting(victim->cd());
 		}
 
-		/** FIXME: remove however many ammunition was used */
-		player->sendln("TODO: ammo adjustment");
-		//TODO: player->ammo_adjustment(-1);
-		player->sendln("TODO: weapon cooldown");
-		//TODO: player->weapon_cooldown_start(3,0);
-		return;// (dmg_dealt);
+		decrease_single_shot_ammo(weapon);
+		player->set_fight_timestamp();
+		return;
 
 	}
 

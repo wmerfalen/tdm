@@ -2059,7 +2059,6 @@ obj_ptr_t create_object(int type,std::string yaml_file) {
 	return obj_list.back();
 }
 
-
 shop_ptr_t create_shop_from_index(std::size_t proto_index){
 	if (proto_index >= shop_proto.size()){
 		log("SYSERR: requesting to read shop number(%d) out of shop_proto.size(): (%d)",

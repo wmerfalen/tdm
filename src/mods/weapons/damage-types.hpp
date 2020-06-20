@@ -14,13 +14,15 @@ extern int damage(char_data *ch, char_data *victim, int dam, int attacktype);
 namespace mods::weapons::damage_types {
 	using vpd = mods::scan::vec_player_data;
 	void rifle_attack_by_name(player_ptr_t& player,std::string_view victim_name,int direction);
+	void spray_direction(player_ptr_t& player,int direction);
 	void rifle_attack(
 		player_ptr_t& player,
 		obj_ptr_t weapon,
 		player_ptr_t victim,
 		uint16_t distance
 	);
-
+	void decrease_spray_shot_ammo(obj_ptr_t& weapon);
+	void decrease_single_shot_ammo(obj_ptr_t& weapon);
 };
 #endif
 

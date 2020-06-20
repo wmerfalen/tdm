@@ -142,6 +142,8 @@ namespace mods {
 		bool room_pave_mode();
 		bool zone_pave_mode();
 
+		obj_ptr_t get_ammo_for(obj_ptr_t&);
+		void consume_from_carrying(obj_ptr_t& item);
 
 		/* class info */
 		player_class_t get_class() const { return m_class; }
@@ -156,7 +158,7 @@ namespace mods {
 		bool carrying_ammo_of_type(const weapon_type_t&);
 		obj_data* carrying();
 		void uncarry(obj_ptr_t obj);
-		std::deque<obj_ptr_t>& real_carrying(){ return cd()->m_carrying; }
+		std::deque<obj_ptr_t>& real_carrying(){ return m_char_data->m_carrying; }
 		void carry(obj_ptr_t);
 		void ammo_adjustment(int);
 		int  ammo_type_adjustment(int,const weapon_type_t&);

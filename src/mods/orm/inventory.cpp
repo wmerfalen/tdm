@@ -5,6 +5,7 @@
 #include "../weapons/shotgun-sasg12.hpp"
 #include "../weapons/smg-mp5.hpp"
 #include "../weapons/pistol-czp10.hpp"
+#include "../../globals.hpp"
 
 extern obj_ptr_t read_object_ptr(obj_vnum nr, int type);
 extern obj_ptr_t blank_object();
@@ -45,19 +46,37 @@ namespace mods::orm::inventory {
 				std::cerr << "DYNAMIC FETCH IS BROKEN!!!\n";
 				std::cerr << "DYNAMIC FETCH IS BROKEN!!!\n";
 			if(player_record.size()){
-				auto obj = blank_object();
 				/** FIXME */
 				int t = 0;
+				/** !!*****************!! */
+				/** !!UPDATE_ITEM_TYPES!! */
+				/** !!*****************!! */
+				if(in_type.compare("trap") == 0){
+					t = ITEM_TRAP;
+				}
+				if(in_type.compare("consumable") == 0){
+					t = ITEM_CONSUMABLE;
+				}
+				if(in_type.compare("drone") == 0){
+					t = ITEM_DRONE;
+				}
+				if(in_type.compare("armor") == 0){
+					t = ITEM_ARMOR;
+				}
+				if(in_type.compare("attachment") == 0){
+					t = ITEM_ATTACHMENT;
+				}
+				if(in_type.compare("explosive") == 0){
+					t = ITEM_EXPLOSIVE;
+				}
 				if(in_type.compare("rifle") == 0){
 					t = ITEM_RIFLE;
 				}
 				if(in_type.compare("gadget") == 0){
 					t = ITEM_GADGET;
 				}
-				obj->feed(t,std::string_view(player_record[0][file_field].c_str()));
-
 				mods::pq::commit(select_transaction);
-				return std::move(obj);
+				return std::move(create_object(t,player_record[0][file_field].c_str()));
 			}
 			mods::pq::commit(select_transaction);
 		}catch(std::exception& e){
@@ -259,6 +278,133 @@ namespace mods::orm::inventory {
 			uint64_t player_db_id;
 			uint64_t value_db_id;
 		};
+		namespace yaml {
+			std::string just_yaml_file(std::string path){
+				if(path.length() == 0){
+					return "";
+				}
+				auto pos = path.find_last_of("/");
+				if(pos == std::string::npos){
+					return path;
+				}
+				++pos;
+				if(pos < path.length()){
+					return path.substr(pos);
+				}
+				return "";
+			}
+#define DBG(a) std::cerr << "[mods::orm::inventory::flush_player][LINE:" << __LINE__ << "][FILE:" << __FILE__ << "]->'" << a << "'\n"; 
+			int16_t flush_player(player_ptr_t & player){
+				DBG("entrance");
+				LMDBRENEW();
+				std::string wearing = "",carrying = "";
+				for(std::size_t i = 0; i < NUM_WEARS;i++){
+					auto eq = player->equipment(i);
+					if(!eq){
+						DBG("invalid equipment in slot: " << i);
+						continue;
+					}
+					wearing += txt::yaml_caps_to_lower(eq->str_type);
+					wearing += ":";
+					wearing += just_yaml_file(eq->feed_file().data());
+					wearing += ":";
+					wearing += std::to_string(i);
+					wearing += "|";
+				}
+				std::string key = "",player_key = "player|";
+				player_key += player->name().c_str();
+				key = player_key + "|wearing";
+
+				DBG("key: '" << key << "' value:'" << wearing << "'");
+
+				LMDBSET(key,wearing);
+				for(auto w : player->real_carrying()){
+					if(!w){
+						DBG("Invalid carrying");
+						continue;
+					}
+					DBG("valid carrying. str_type: '" << w->str_type << "', feed_file: '" << w->feed_file() << "'");
+					carrying += txt::yaml_caps_to_lower(w->str_type);
+					carrying += ":";
+					carrying += just_yaml_file(w->feed_file().data());
+					carrying += "|";
+				}
+				DBG("carrying value");
+				DBG(carrying);
+				key = player_key + "|carrying";
+				DBG("key: '" << key << "' value:'" << carrying << "'");
+				LMDBSET(key,carrying);
+				LMDBCOMMIT();
+				return 0;
+#undef DBG
+			}
+			int16_t feed_player(player_ptr_t & player){
+#define DBG(a) std::cerr << "[mods::orm::inventory::feed_player][LINE:" << __LINE__ << "][FILE:" << __FILE__ << "]->'" << a << "'\n"; 
+				DBG("entrance");
+				LMDBRENEW();
+				std::string player_key = std::string("player|") + player->name().c_str();
+				std::string wearing = LMDBGET(player_key + "|wearing");
+				std::string carrying = LMDBGET(player_key + "|carrying");
+				LMDBCOMMIT();
+				DBG("wearing: '" << wearing << "'");
+				DBG("carrying: '" << carrying << "'");
+				for(auto & yaml_file : txt::explode('|',wearing)){
+					DBG("exploding: '" << yaml_file << "'");
+					auto vec = txt::explode(':',yaml_file);
+					for(auto v : vec){
+						DBG("EXPLODED: v:'" << v << "'");
+					}
+					if(vec.size() < 3){
+						DBG("invalid size of string: '" << yaml_file << "'");
+						log("SYSERR: malformed type:yaml_file combination in lmdb. Not printing for security purposes.");
+						continue;
+					}
+					std::string file = "objects/" + vec[0] + "/" + vec[1];
+					DBG("file: '" << file << "'");
+					if(!txt::yaml_file_path_is_sane(file)){
+						DBG("not a sane ymal file path.. string: '" << file << "'");
+						log("SYSERR: malformedk yaml file used as path: '%s'",file.c_str());
+						continue;
+					}
+					std::cerr << "[mods::inventory::yaml::feed_player][WEARING] giving player: '" << file << "'\n";
+					int i_type = txt::yaml_string_to_int(vec[0]);
+					auto obj = create_object(i_type,vec[1]);
+					int wear = mods::util::stoi(vec[2]).value_or(-1);
+					DBG("equipping object");
+					player->equip(std::move(obj),wear);
+				}
+				for(auto & yaml_file : txt::explode('|',carrying)){
+					DBG("exploding: '" << yaml_file << "'");
+					auto vec = txt::explode(':',yaml_file);
+					for(auto v : vec){
+						DBG("EXPLODED: v:'" << v << "'");
+					}
+					if(vec.size() < 2){
+						DBG("invalid size of string: '" << yaml_file << "'");
+						log("SYSERR: malformed CARRYING type:yaml_file combination in lmdb. Not printing for security purposes.");
+						continue;
+					}
+					std::string file = "objects/" + vec[0] + "/" + vec[1];
+					if(!txt::yaml_file_path_is_sane(file)){
+						DBG("not a sane ymal file path.. string: '" << file << "'");
+						log("SYSERR: malformed CARRYING yaml file used as path: '%s'",file.c_str());
+						continue;
+					}
+					std::cerr << "[mods::inventory::yaml::feed_player][CARRYING] giving player: '" << file << "'\n";
+					int i_type = txt::yaml_string_to_int(vec[0]);
+					auto obj = create_object(i_type,vec[1]);
+					DBG("carrying object");
+					player->carry(std::move(obj));
+				}
+				return 0;
+			}
+		};
+		/**
+		 * @brief flush player's equipment and carrying to lmdb
+		 * @param player
+		 *
+		 * @return 
+		 */
 		int16_t flush_player(player_ptr_t & player){
 			std::vector<uint64_t> wearing;
 			wearing.resize(NUM_WEARS);
@@ -286,6 +432,13 @@ namespace mods::orm::inventory {
 			LMDBCOMMIT();
 			return 0;
 		}
+		/**
+		 * @brief gets player's equipment and carrying from lmdb and loads player
+		 *
+		 * @param player
+		 *
+		 * @return 
+		 */
 		int16_t feed_player(player_ptr_t & player){
 			std::vector<uint64_t> wearing,carrying;
 			auto wkey = "player|" + std::string(player->name().c_str()) + "|wearing";
@@ -306,7 +459,18 @@ namespace mods::orm::inventory {
 			LMDBCOMMIT();
 			return 0;
 		}
+		/**
+		 * @brief called when a player wears an item. saves to lmdb and flushes
+		 *
+		 * @param player_db_id
+		 * @param object_db_id
+		 * @param object_type_id
+		 * @param position
+		 */
 		void add_player_wear(uint64_t player_db_id, uint64_t object_db_id, uint8_t object_type_id, uint8_t position){
+#ifndef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
+			return;
+#endif
 			player_wear_t w;
 			w.object_db_id = object_db_id;
 			w.type = object_type_id;
@@ -321,7 +485,16 @@ namespace mods::orm::inventory {
 			d("[add_player_wear][uf_key:'" << uf_key << "'][uf_val:'" << uf_val << "']\n");
 			LMDBSET(uf_key,uf_val);
 		}
+		/**
+		 * @brief called when player removes a worn item. flushes to lmdb
+		 *
+		 * @param player_db_id
+		 * @param position
+		 */
 		void remove_player_wear(uint64_t player_db_id, uint8_t position){
+#ifndef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
+			return;
+#endif
 			player_wear_key_t id;
 			bcopy("wear",(void*)&id.type,sizeof(id.type));
 			id.player_db_id = player_db_id;
@@ -332,7 +505,17 @@ namespace mods::orm::inventory {
 
 			LMDBDEL(uf);
 		}
+		/**
+		 * @brief called when player adds an item to inv. flushes to lmdb
+		 *
+		 * @param player_db_id
+		 * @param object_db_id
+		 * @param obj_type
+		 */
 		void add_player_inventory(uint64_t player_db_id, uint64_t object_db_id, uint16_t obj_type){
+#ifndef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
+			return;
+#endif
 			player_inventory_data key_data;
 			bcopy("inv|",(void*)&key_data.type,sizeof(key_data.type));
 			key_data.player_db_id = player_db_id;
@@ -343,7 +526,16 @@ namespace mods::orm::inventory {
 			d("[add_player_inventory][uf_key:'" << uf_key << "'][uf_val:'" << uf_val << "']\n");
 			LMDBSET(uf_key,uf_val);
 		}
+		/**
+		 * @brief called when player removes item from inv. flushes to lmdb
+		 *
+		 * @param player_db_id
+		 * @param object_db_id
+		 */
 		void remove_player_inventory(uint64_t player_db_id, uint64_t object_db_id){
+#ifndef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
+			return;
+#endif
 			LMDBRENEW();
 			player_inventory_data key_data;
 			bcopy("inv|",(void*)&key_data.type,sizeof(key_data.type));
@@ -358,10 +550,18 @@ namespace mods::orm::inventory {
 	};
 
 	int16_t flush_player(player_ptr_t & player){
+#ifdef __MENTOC_USE_SQL_FLUSH_PLAYER__
 		return sql::flush_player(player);
+#else
+		return lmdb::yaml::flush_player(player);
+#endif
 	}
 	int16_t feed_player(player_ptr_t & player){
+#ifdef __MENTOC_USE_SQL_FLUSH_PLAYER__
 		return sql::feed_player(player);
+#else
+		return lmdb::yaml::feed_player(player);
+#endif
 	}
 };
 

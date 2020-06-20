@@ -792,35 +792,35 @@ ACMD(do_wimpy) {
 
 
 ACMD(do_display) {
-	size_t i;
 
 	if(IS_NPC(ch)) {
-		send_to_char(ch, "Mosters don't need displays.  Go away.\r\n");
 		return;
 	}
 
-	skip_spaces(&argument);
+	auto vec_args = PARSE_ARGS();
 
-	if(!*argument) {
+	if(vec_args.size() == 0){
 		send_to_char(ch, "Usage: prompt { { H | M | V } | all | auto | none }\r\n");
 		return;
 	}
 
-	if(!str_cmp(argument, "auto")) {
+	if(vec_args[0].compare("auto") == 0) {
 		TOGGLE_BIT(PRF_FLAGS(ch), PRF_DISPAUTO);
 		send_to_char(ch, "Auto prompt %sabled.\r\n", PRF_FLAGGED(ch, PRF_DISPAUTO) ? "en" : "dis");
+		mods::db::save_char(player);
+		/** TODO save prefs to lmdb */
 		return;
 	}
 
-	if(!str_cmp(argument, "on") || !str_cmp(argument, "all")) {
+	if(txt::match_any_of_lower({"on","all"},vec_args[0])){
 		SET_BIT(PRF_FLAGS(ch), PRF_DISPHP | PRF_DISPMANA | PRF_DISPMOVE);
-	} else if(!str_cmp(argument, "off") || !str_cmp(argument, "none")) {
+	} else if(txt::match_any_of_lower({"off","none"},vec_args[0])){
 		REMOVE_BIT(PRF_FLAGS(ch), PRF_DISPHP | PRF_DISPMANA | PRF_DISPMOVE);
 	} else {
 		REMOVE_BIT(PRF_FLAGS(ch), PRF_DISPHP | PRF_DISPMANA | PRF_DISPMOVE);
 
-		for(i = 0; i < strlen(argument); i++) {
-			switch(LOWER(argument[i])) {
+		for(auto i : vec_args[0]){
+			switch(LOWER(i)) {
 				case 'h':
 					SET_BIT(PRF_FLAGS(ch), PRF_DISPHP);
 					break;
@@ -834,12 +834,12 @@ ACMD(do_display) {
 					break;
 
 				default:
-					send_to_char(ch, "Usage: prompt { { H | M | V } | all | auto | none }\r\n");
-					return;
+					break;
 			}
 		}
 	}
 
+	mods::db::save_char(player);
 	send_to_char(ch, "%s", OK);
 }
 

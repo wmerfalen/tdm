@@ -160,6 +160,28 @@ namespace mods::values {
 		constexpr static uint16_t WSL_SNIPER_4_ACCURACY = 75;
 		constexpr static uint16_t WSL_SNIPER_4_DAMAGE = 75;
 
+		constexpr static uint8_t SINGLE_SHOT_SHOTGUN = 1;
+		constexpr static uint8_t SINGLE_SHOT_ASSAULT_RIFLE = 3;
+		constexpr static uint8_t SINGLE_SHOT_SUB_MACHINE_GUN = 3;
+		constexpr static uint8_t SINGLE_SHOT_SNIPER = 1;
+		constexpr static uint8_t SINGLE_SHOT_HANDGUN = 1;
+		constexpr static uint8_t SINGLE_SHOT_PISTOL = 1;
+		constexpr static uint8_t SINGLE_SHOT_MACHINE_PISTOL = 6;
+		constexpr static uint8_t SINGLE_SHOT_LIGHT_MACHINE_GUN = 8;
+
+		constexpr static uint8_t SPRAY_SHOT_SHOTGUN = 2;
+		constexpr static uint8_t SPRAY_SHOT_ASSAULT_RIFLE = 9;
+		constexpr static uint8_t SPRAY_SHOT_SUB_MACHINE_GUN = 6;
+		constexpr static uint8_t SPRAY_SHOT_SNIPER = 1;
+		constexpr static uint8_t SPRAY_SHOT_HANDGUN = 1;
+		constexpr static uint8_t SPRAY_SHOT_PISTOL = 1;
+		constexpr static uint8_t SPRAY_SHOT_MACHINE_PISTOL = 12;
+		constexpr static uint8_t SPRAY_SHOT_LIGHT_MACHINE_GUN = 16;
+
+		constexpr static uint8_t SPRAY_CHANCE = 25;
+		constexpr static uint8_t SPRAY_HEADSHOT_CHANCE = 3;
+		constexpr static uint8_t SPRAY_CRITICAL_CHANCE = 2;
+		constexpr static uint8_t SPRAY_CRITICAL_REDUCTION_DIVISOR = 10;
 };
 
 using namespace mods::values;

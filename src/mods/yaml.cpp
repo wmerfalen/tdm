@@ -293,12 +293,14 @@ namespace mods::yaml {
 		o->obj_flags.clip_size =this->clip_size;
 		(*tf) = ITEM_RIFLE;
 
+		bool recognized = 0;
 		o->rifle()->type = (mw_rifle)this->type;
 		switch((mw_rifle)this->type){
 			case mw_rifle::PISTOL:
 			case mw_rifle::HANDGUN:
 			case mw_rifle::MACHINE_PISTOL:
 				(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD | ITEM_WEAR_SECONDARY;
+				recognized = 1;
 				break;
 			case mw_rifle::SHOTGUN:
 			case mw_rifle::ASSAULT_RIFLE:
@@ -306,11 +308,16 @@ namespace mods::yaml {
 			case mw_rifle::SNIPER:
 			case mw_rifle::LIGHT_MACHINE_GUN:
 				(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD;
+				recognized = 1;
 				break;
 			default: 
 				(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD | ITEM_WEAR_SECONDARY;
 				log("[rifle_description_t][WARNING] fill_flags used the default flags");
 				break;
+		}
+		o->rifle_instance = std::make_unique<rifle_instance_data>();
+		if(recognized){
+			o->rifle_instance->ammo = this->clip_size;
 		}
 		o->obj_flags.weapon_flags = this->type;
 	}

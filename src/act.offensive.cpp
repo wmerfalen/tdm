@@ -142,6 +142,21 @@ ACMD(do_snipe) {
 	mods::weapons::damage_types::rifle_attack_by_name(player,vec_args[0],direction);
 }
 
+ACMD(do_spray) {
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() < 1){
+		player->sendln("usage: spray <direction>");
+		return;
+	}
+
+	int direction = mods::globals::dir_int(vec_args[0][0]);
+	if(direction == -1){
+		player->sendln("Invalid direction");
+		return;
+	}
+	mods::weapons::damage_types::spray_direction(player,direction);
+}
+
 ACMD(do_silencers_on) {
 
 }
@@ -183,42 +198,41 @@ ACMD(do_command_sequence) {
 
 /* TODO: Implement weapon tags in the obj_data data structure */
 ACMD(do_reload) {
-	
-
-	/* TODO get wielded equipment tag */
-	if(!player->rifle()) {
-		*player << "Invalid weapon to reload.\r\n";
-		return;
-	}
-
-	if(player->ammo() > 0) {
-		*player << "Weapon already loaded.\r\n";
-		return;
-	}
-
-	if(!player->carrying_ammo_of_type(player->rifle()->type)) {
-		*player << "{1} You don't have any ammo.\r\n";
-		return;
-	}
-
-	if(player->ammo() -12 < 0) {
-		auto difference = player->ammo() -12;
-		auto rounds = difference + 12;
-
-		if(rounds <= 0) {
-			*player << "Out of ammo.\r\n";
-			player->set_ammo(0);
-			return;
+	auto vec_args = PARSE_ARGS();
+	bool primary = true, secondary = false;
+	if(vec_args.size() > 0){
+		if(mods::util::is_lower_match(vec_args[0], "primary")){
+			primary = true;
+			secondary = false;
 		}
+		if(mods::util::is_lower_match(vec_args[0], "secondary")){
+			secondary = true;
+			primary = false;
+		}
+	}
+	
+	auto weapon = player->primary();
+	if(secondary){
+		weapon = player->secondary();
+	}
 
-		*player << "You load " << rounds << " rounds into " << player->weapon_name() << "\r\n";
-		player->set_ammo(rounds);
-		return;
-	} else {
-		player->set_ammo(12);
-		*player << "You load 12 rounds into " << player->weapon_name() << "\r\n";
+	if(!weapon || !weapon->has_rifle()) {
+		player->send("You aren't wielding a reloadable weapon in your [%s] slot.\r\n", primary ? "primary" : "secondary");
 		return;
 	}
+
+	auto ammo = mods::object_utils::get_ammo(weapon);
+	if(mods::object_utils::get_ammo(weapon) > 0) {
+		player->send("Item:[%s] has %d ammunition left.\r\n",weapon->name.c_str(),ammo);
+		return;
+	}
+
+	if(!player->carrying_ammo_of_type(player->rifle()->attributes->type)) {
+		player->sendln("{1} You don't have any ammo.");
+		return;
+	}
+
+	mods::object_utils::reload(player,weapon);
 }
 
 ACMD(do_scan) { /* !mods */

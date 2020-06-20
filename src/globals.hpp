@@ -180,6 +180,46 @@ namespace mods {
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 extern std::deque<std::shared_ptr<mods::npc>> mob_list;
 
+namespace txt {
+	using namespace mods::util;
+	/**
+	 * @brief returns true if lowercase compare returns true for any items that match target
+	 *
+	 * @tparam TString
+	 * @param items
+	 * @param target
+	 *
+	 * @return 
+	 */
+	template <typename TString>
+	static inline bool match_any_of_lower(std::vector<TString> items,TString target){
+		for(auto && needle : items){
+			if(is_lower_match(needle,target)){
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
+	 * @brief returns true if case-sensitive compare returns true for any items that match target
+	 *
+	 * @tparam TString
+	 * @param items
+	 * @param target
+	 *
+	 * @return 
+	 */
+	template <typename TString>
+	static inline bool match_any_of(std::vector<TString> items,TString target){
+		for(auto && needle : items){
+			if(needle.compare(target) == 0){
+				return true;
+			}
+		}
+		return false;
+	}
+
+};
 player_ptr_t ptr(const char_data*);
 player_ptr_t ptr(char_data*);
 obj_ptr_t optr(obj_data*);

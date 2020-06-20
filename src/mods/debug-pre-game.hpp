@@ -6,7 +6,7 @@ namespace mods::debug::pre_game {
 #define DD(a){ std::cerr << "[debug::pre_game][line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"; }
 	namespace fb = ::mods::flashbang;
 	bool run(){ return 1;
-		auto o = create_object(ITEM_EXPLOSIVE, "objects/explosive/flashbang-grenade.yml");
+		auto o = create_object(ITEM_EXPLOSIVE, "flashbang-grenade.yml");
 		if(o == nullptr){
 			DD("couldnt load flashbang-grenade.yml");
 			return false;

@@ -236,6 +236,8 @@ ACMD(do_builder_help){
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{yel} --                      -:[ Debugging ]:-                             {/yel}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{gld}flush_player{/gld} -- {grn}calls the default flush_player method [feature-debug][staging-feature][builder-utils]{/grn}", 
+			"{gld}feed_player{/gld} -- {grn}calls the default feed_player method [feature-debug][staging-feature][builder-utils]{/grn}", 
 			"{gld}flush_holding{/gld} -- {grn}flush the item you are holding to the db [feature-debug][staging-feature][builder-utils]{/grn}", 
 		 	"{gld}get_ticks_per_minute{/gld} -- {grn}get ticks per minute [feature-debug]{/grn}",
 			"{gld}histfile{/gld} -- {grn}start recording all commands. stop with 'histfile stop' [builder-utils][feature-debug]{/grn}", 
@@ -261,6 +263,8 @@ ACMD(do_yaml_log_save);
 ACMD(do_yaml_log_clear);
 ACMD(do_yaml_example);
 ACMD(do_flush_holding);
+ACMD(do_flush_player);
+ACMD(do_feed_player);
 ACMD(do_hold_anything);
 ACMD(do_histfile);
 ACMD(do_uuid);
@@ -367,6 +371,7 @@ ACMD(do_givemegold);
 ACMD(do_givemenades);
 ACMD(do_shoot);	/* just an alias of snipe */
 ACMD(do_snipe);
+ACMD(do_spray);
 /**--[ START ]--  camera/claymore install commands */
 ACMD(do_cancel);
 ACMD(do_install);
@@ -790,6 +795,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** ---------------- */
 	{ "shoot"  , POS_RESTING , do_snipe   , 0, 0 },
 	{ "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
+	{ "spray"  , POS_RESTING , do_spray   , 0, 0 },
 	/** install/uninstall various gadgets */
 	{ "cancel"  , POS_RESTING , do_cancel, 0, 0 },	/** i.e.: claymore mine, camera */
 	{ "install"  , POS_RESTING , do_install, 0, 0 },	/** i.e.: claymore mine, camera */
@@ -829,6 +835,8 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "show_tics"  , POS_RESTING , do_show_tics   , 0, 0 },
 	{ "builder_help"  , POS_RESTING , do_builder_help   , LVL_GOD, 0 },
 	{ "flush_holding"  , POS_RESTING , do_flush_holding   , LVL_GOD, 0 },
+	{ "flush_player"  , POS_RESTING , do_flush_player   , LVL_GOD, 0 },
+	{ "feed_player"  , POS_RESTING , do_feed_player   , LVL_GOD, 0 },
 	{ "hold_anything"  , POS_RESTING , do_hold_anything   , LVL_GOD, 0 },
 	{ "yaml_import"  , POS_RESTING , do_yaml_import   , LVL_GOD, 0 },
 	{ "yaml_log"  , POS_RESTING , do_yaml_log   , LVL_GOD, 0 },
@@ -1921,6 +1929,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 
 												 p->desc().has_prompt = 0;
 												 p->position() = POS_STANDING;
+												 p->hp() = p->max_hp();
 #ifndef __MENTOC_DONT_RUN_PROFILE_SCRIPTS__
 												 mods::js::run_profile_scripts(p->name());
 #endif

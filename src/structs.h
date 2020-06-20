@@ -435,6 +435,9 @@ enum player_class_t {
 #define ITEM_PEN       21		/* Item is a pen		*/
 #define ITEM_BOAT      22		/* Item is a boat		*/
 #define ITEM_FOUNTAIN  23		/* Item is a fountain		*/
+	/** !!*****************!! */
+	/** !!UPDATE_ITEM_TYPES!! */
+	/** !!*****************!! */
 #define ITEM_RIFLE     1
 #define ITEM_EXPLOSIVE 2
 #define ITEM_GADGET    3
@@ -791,6 +794,15 @@ enum player_level {
 		int16_t modifier;     /* How much it changes by              */
 	};
 
+	struct rifle_instance_data {
+		rifle_instance_data() : ammo(0) {
+
+		}
+		~rifle_instance_data() = default;
+		uint16_t ammo;
+		std::deque<attachment_data_t> attachments;
+	};
+
 	/* ================== Memory Structure for Objects ================== */
 	struct obj_data {
 		using location_data_t = uint16_t;
@@ -804,6 +816,7 @@ enum player_level {
 			return *this;
 		}
 		obj_data() = delete;
+		obj_data(std::string item_type,std::string_view feed_file);
 		obj_data(int item_type,std::string_view feed_file) :
 			item_number(0),in_room(-1),name(""),
 			description(""),short_description(""),
@@ -997,6 +1010,7 @@ std::cerr << "[post_feed][END]**********************************************\n";
 		std::string generate_stat_page();
 		void set_feed_file(std::string f){ m_feed_file = f; }
 		std::string_view feed_file(){ return m_feed_file; }
+		std::unique_ptr<rifle_instance_data> rifle_instance;
 		protected:
 #define MENTOC_UPTR(r,data,CLASS_TYPE) std::shared_ptr<BOOST_PP_CAT(CLASS_TYPE,_data_t)> BOOST_PP_CAT(m_, CLASS_TYPE);
 BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)

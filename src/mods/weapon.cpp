@@ -200,7 +200,7 @@ namespace mods::weapon {
 
 	obj_data_ptr_t new_frag_grenade_object(){
 		MENTOC_DEPRECATED(".");
-		return std::move(create_object(ITEM_EXPLOSIVE,"objects/explosive/frag-grenade.yml"));
+		return std::move(create_object(ITEM_EXPLOSIVE,"frag-grenade.yml"));
 	}
 
 #if 0
@@ -225,22 +225,22 @@ namespace mods::weapon {
 
 	obj_data_ptr_t new_incendiary_grenade_object(){
 		MENTOC_DEPRECATED(".");
-		return std::move(create_object(ITEM_EXPLOSIVE,"objects/explosive/incendiary-grenade.yml"));
+		return std::move(create_object(ITEM_EXPLOSIVE,"incendiary-grenade.yml"));
 	}
 
 	obj_data_ptr_t new_emp_grenade_object(){
 		MENTOC_DEPRECATED(".");
-		return std::move(create_object(ITEM_EXPLOSIVE,"objects/explosive/emp-grenade.yml"));
+		return std::move(create_object(ITEM_EXPLOSIVE,"emp-grenade.yml"));
 	}
 
 	obj_data_ptr_t new_smoke_grenade_object(){
 		MENTOC_DEPRECATED(".");
-		return std::move(create_object(ITEM_EXPLOSIVE,"objects/explosive/smoke-grenade.yml"));
+		return std::move(create_object(ITEM_EXPLOSIVE,"smoke-grenade.yml"));
 	}
 
 	obj_data_ptr_t new_flashbang_grenade_object(){
 		MENTOC_DEPRECATED(".");
-		return std::move(create_object(ITEM_EXPLOSIVE,"objects/explosive/flashbang-grenade.yml"));
+		return std::move(create_object(ITEM_EXPLOSIVE,"flashbang-grenade.yml"));
 	}
 
 	obj_data_ptr_t new_sniper_rifle_object(){

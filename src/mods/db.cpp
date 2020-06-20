@@ -6,6 +6,14 @@
 
 namespace mods::db {
 
+	/**
+	 * @brief saves a record and returns the pk id of that record
+	 *
+	 * @param table
+	 * @param values
+	 *
+	 * @return 
+	 */
 aligned_int_t save_record_get_id(
 		const std::string& table,
 		mutable_map_t* values){
@@ -18,6 +26,13 @@ aligned_int_t save_record_get_id(
 	}
 }
 
+/**
+ * @brief initializes a row on the table, thus filling default values for each column
+ *
+ * @param table
+ *
+ * @return 
+ */
 aligned_int_t initialize_row(
 		const std::string& table){
 	auto ptr_db = mods::globals::db.get();
@@ -68,6 +83,15 @@ tuple_status_t new_record(const std::string& table,mutable_map_t* values){
 	return save_record(table,values,std::to_string(pk_id));
 }
 
+/**
+ * @brief saves an already existing record into the db specified by pk_id 
+ *
+ * @param table
+ * @param values
+ * @param pk_id
+ *
+ * @return 
+ */
 tuple_status_t save_record(const std::string& table,mutable_map_t* values,std::string pk_id){
 	mods::globals::db->renew_txn();
 	for(const auto & meta_key : mods::meta_utils::get_all_meta_values(table,values)){
@@ -90,13 +114,34 @@ tuple_status_t save_record(const std::string& table,mutable_map_t* values,std::s
 	}
 }
 
+/**
+ * @brief renews the transaction on the lmdb interface
+ */
 void lmdb_renew() {
 	mods::globals::db->renew_txn();
 }
+/**
+ * @brief grabs a key and stores it in an untyped void* buffer
+ *
+ * @param key
+ * @param k_size
+ * @param value
+ *
+ * @return 
+ */
 int lmdb_nget_void(void* key,std::size_t k_size,void* value){
 	const auto status = mods::globals::db->nget(key,k_size,value);
 	return status;
 }
+/**
+ * @brief grabs a key and stores it in a string (value)
+ *
+ * @param key
+ * @param k_size
+ * @param value
+ *
+ * @return 
+ */
 int lmdb_nget(void* key,std::size_t k_size,std::string& value){
 	value = "";
 	const auto status = mods::globals::db->nget(key,k_size,value);
@@ -110,18 +155,37 @@ int lmdb_nget(void* key,std::size_t k_size,std::string& value){
 	//}
 	//return status;
 }
+/**
+ * @brief grabs a key and returns it by string
+ *
+ * @param key
+ *
+ * @return 
+ */
 std::string lmdb_get(std::string_view key){
 	std::string value = "";
-	mods::globals::db->get(key.data(),value);
+	auto status = mods::globals::db->get(key.data(),value);
+	std::cerr << "[lmbd_get] key:'" << key.data() << "', value: '" << value << "'\n";
+	if(status == EINVAL){
+		std::cerr << "[lmdb_get] got EINVAL -- retrying...\n";
+		lmdb_renew();
+		status = mods::globals::db->get(key.data(),value);
+		std::cerr << "retry status: " << status << "\n";
+		std::cerr << "[lmbd_get] key:'" << key.data() << "', value: '" << value << "'\n";
+	}
 	return value;
-	//if(status == EINVAL){
-	//	std::cerr << "[lmdb_put] got EINVAL -- retrying...\n";
-	//	lmdb_renew();
-	//	status = mods::globals::db->get(key.data(),value);
-	//	std::cerr << "retry status: " << status << "\n";
-	//}
-	//return value;
 }
+/**
+ * @brief places a key into lmdb using a void* buffer as both key and type
+ * Use the key_size and v_size parameters to dictate how big your untyped buffers are
+ *
+ * @param key
+ * @param key_size
+ * @param value
+ * @param v_size
+ *
+ * @return 
+ */
 int lmdb_nput(void* key,std::size_t key_size,
 		void* value,std::size_t v_size){
 	const auto status = mods::globals::db->nput(key,key_size,value,v_size);
@@ -134,19 +198,36 @@ int lmdb_nput(void* key,std::size_t key_size,
 	//}
 	//return status;
 }
+/**
+ * @brief places a string value into lmdb by key
+ *
+ * @param key
+ * @param value
+ */
 void lmdb_put(std::string key,std::string value){
-	mods::globals::db->put(key,value);
-	return;
-	//jif(status == EINVAL){
-	//j	std::cerr << "[lmdb_put] got EINVAL -- retrying...\n";
-	//j	lmdb_renew();
-	//j	status = mods::globals::db->put(key,value);
-	//j	std::cerr << "retry status: " << status << "\n";
-	//j}
+	std::cerr << "[lmdb_put]: '" << key << "', value:'" << value << "'\n";
+	auto status = mods::globals::db->put(key,value);
+	if(status == EINVAL){
+		std::cerr << "[lmdb_put] got EINVAL -- retrying...\n";
+		lmdb_renew();
+		status = mods::globals::db->put(key,value);
+		std::cerr << "retry status: " << status << "\n";
+	}
 }
+/**
+ * @brief deletes a string key
+ *
+ * @param key
+ */
 void lmdb_del(std::string key){
 	mods::globals::db->del(key);
 }
+/**
+ * @brief deletes a potentially binary key using untyped buffer
+ *
+ * @param key
+ * @param key_size
+ */
 void lmdb_ndel(void* key,std::size_t key_size){
 	mods::globals::db->ndel(key,key_size);
 	//if(status == EINVAL){
@@ -157,16 +238,33 @@ void lmdb_ndel(void* key,std::size_t key_size){
 	//}
 	//return status;
 }
+/**
+ * @brief commits all lmdb transactions
+ */
 void lmdb_commit(){
 	mods::globals::db->commit();
 }
 
+/**
+ * @brief exports and saves the player
+ *
+ * @param player_ptr
+ *
+ * @return 
+ */
 tuple_status_t save_char(
 		player_ptr_t player_ptr){
 	mutable_map_t values;
 	lmdb_export_char(player_ptr,values);
 	return save_record("player",&values,std::to_string(player_ptr->get_db_id()));
 }
+/**
+ * @brief exports and saves a new player
+ *
+ * @param player_ptr
+ *
+ * @return 
+ */
 tuple_status_t save_new_char(
 		player_ptr_t player_ptr){
 	std::cerr << "[DEPRECATED]: calls to mods::lmdb::save_new_char will be ignored!\n";
@@ -176,6 +274,15 @@ tuple_status_t save_new_char(
 	return save_record("player",&values,values["id"]);
 }
 
+/**
+ * @brief writes lmdb values to the db using table, values, and pk_id
+ *
+ * @param table
+ * @param values
+ * @param pk_id
+ *
+ * @return 
+ */
 tuple_status_t lmdb_write_values(
 		const std::string& table,
 		mutable_map_t* values,std::string pk_id){
@@ -186,6 +293,12 @@ tuple_status_t lmdb_write_values(
 	return {true,"saved",0};
 }
 
+/**
+ * @brief grabs all relevant keys for a player and store them in the values map
+ *
+ * @param player_ptr
+ * @param values
+ */
 void lmdb_export_char(player_ptr_t player_ptr, mutable_map_t &values){
 	/** TODO: instead of using the char_data accesses, create functions(or use existing ones) on mods::player object */
 	auto ch = player_ptr->cd();
@@ -238,18 +351,32 @@ void lmdb_export_char(player_ptr_t player_ptr, mutable_map_t &values){
 		values["player_level"] = std::to_string(player_ptr->level());
 		values["player_hitroll"] = std::to_string(player_ptr->cd()->points.hitroll);
 		values["player_armor"] = std::to_string(player_ptr->cd()->points.armor);
-		if(player_ptr->get_prefs() == 0){
-			values["player_preferences"] = "0";
-		}else{
-			values["player_preferences"] = std::to_string(player_ptr->get_prefs());
-		}
+		values["player_preferences"] = std::to_string(player_ptr->get_prefs());
 		return;
 }
 
+/**
+ * @brief loads a record from table using pk and stores them in values
+ *
+ * @param table
+ * @param pk
+ * @param values
+ *
+ * @return 
+ */
 int load_record(const std::string& table, aligned_int_t pk, mutable_map_t& values){
 	auto str_pk = std::to_string(pk);
 	return load_record(table,str_pk,values);
 }
+/**
+ * @brief loads a record from table using pk and stores them in values
+ *
+ * @param table
+ * @param pk
+ * @param values
+ *
+ * @return 
+ */
 int load_record(const std::string& table, const std::string& pk, mutable_map_t& values){
 	std::string value;
 	int count = 0;
@@ -263,6 +390,15 @@ int load_record(const std::string& table, const std::string& pk, mutable_map_t& 
 }
 
 
+/**
+ * @brief loads a record according to metadata that matches the values pointer from table, stores them in out_record
+ *
+ * @param table
+ * @param values
+ * @param out_record
+ *
+ * @return 
+ */
 int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_map_t& out_record){
 	if(values == nullptr){
 		std::cerr << "error: values is a nullptr in load_record_by_meta\n";

@@ -47,12 +47,20 @@ void obj_data::init(){
 			this->BOOST_PP_CAT(m_,CLASS_TYPE) = nullptr;
 BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 }
+		obj_data::obj_data(std::string item_type,std::string_view feed_file){
+			int type = txt::yaml_string_to_int(item_type);
+			obj_data(type,feed_file);
+		}
 		int16_t obj_data::feed(int16_t in_type,std::string_view feed_file){
 			this->feed_status = 2;
 			this->m_feed_file = feed_file.data();
 			this->type = in_type;
+			this->str_type = mods::util::yaml_int_to_string(in_type);
 			std::string s_type = "";
 	switch(in_type){
+	/** !!*****************!! */
+	/** !!UPDATE_ITEM_TYPES!! */
+	/** !!*****************!! */
 #define MENTOC_LAZY_ME(mtype) case mtype: s_type = #mtype; break;
 MENTOC_LAZY_ME(ITEM_RIFLE);
 MENTOC_LAZY_ME(ITEM_EXPLOSIVE);

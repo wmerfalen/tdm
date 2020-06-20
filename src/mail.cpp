@@ -602,7 +602,7 @@ void postmaster_receive_mail(char_data *ch, char_data *mailman,
 	}
 
 	while(has_mail(GET_IDNUM(ch))) {
-		auto ptr_obj = create_object(ITEM_CONSUMABLE, "objects/consumable/mail.yml");
+		auto ptr_obj = create_object(ITEM_CONSUMABLE, "mail.yml");
 		obj = ptr_obj.get();
 		obj->item_number = NOTHING;
 		obj->name.assign("mail paper letter");
