@@ -13,6 +13,7 @@ extern void obj_ptr_to_char(obj_ptr_t  object, player_ptr_t player);
 extern obj_ptr_t create_object_from_index(std::size_t proto_index);
 namespace mods::orm::inventory {
 
+#ifdef __MENTOC_USE_SQL_FLUSH_PLAYER__
 	obj_data_ptr_t dynamic_fetch(mentoc_pqxx_result_t row){//int id, std::string_view in_type){
 		std::string in_type = row["po_type"].c_str();
 		int id = 0;
@@ -42,9 +43,6 @@ namespace mods::orm::inventory {
 				.where(id_field,"=",std::to_string(id))
 				.sql();
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
-				std::cerr << "DYNAMIC FETCH IS BROKEN!!!\n";
-				std::cerr << "DYNAMIC FETCH IS BROKEN!!!\n";
-				std::cerr << "DYNAMIC FETCH IS BROKEN!!!\n";
 			if(player_record.size()){
 				/** FIXME */
 				int t = 0;
@@ -262,6 +260,7 @@ namespace mods::orm::inventory {
 			return 0;
 		}
 	};//end namespace sql
+#endif
 
 	namespace lmdb {
 		struct player_wear_t {
@@ -293,7 +292,11 @@ namespace mods::orm::inventory {
 				}
 				return "";
 			}
+#ifdef __MENTOC_SHOW_ORM_INVENTORY_FLUSH_OUTPUT__
 #define DBG(a) std::cerr << "[mods::orm::inventory::flush_player][LINE:" << __LINE__ << "][FILE:" << __FILE__ << "]->'" << a << "'\n"; 
+#else
+#define DBG(a) ;;
+#endif
 			int16_t flush_player(player_ptr_t & player){
 				DBG("entrance");
 				LMDBRENEW();
@@ -339,7 +342,11 @@ namespace mods::orm::inventory {
 #undef DBG
 			}
 			int16_t feed_player(player_ptr_t & player){
+#ifdef __MENTOC_SHOW_ORM_INVENTORY_FLUSH_OUTPUT__
 #define DBG(a) std::cerr << "[mods::orm::inventory::feed_player][LINE:" << __LINE__ << "][FILE:" << __FILE__ << "]->'" << a << "'\n"; 
+#else
+#define DBG(a) ;;
+#endif
 				DBG("entrance");
 				LMDBRENEW();
 				std::string player_key = std::string("player|") + player->name().c_str();
@@ -562,6 +569,14 @@ namespace mods::orm::inventory {
 #else
 		return lmdb::yaml::feed_player(player);
 #endif
+	}
+	int16_t flush_player_by_uuid(uuid_t uuid){
+		auto p = ptr_by_uuid(uuid);
+		return flush_player(p);
+	}
+	int16_t feed_player_by_uuid(uuid_t uuid){
+		auto p = ptr_by_uuid(uuid);
+		return feed_player(p);
 	}
 };
 

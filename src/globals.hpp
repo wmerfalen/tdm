@@ -228,7 +228,6 @@ obj_ptr_t optr_by_uuid(uuid_t);
 std::optional<obj_ptr_t> optr_opt(uuid_t);
 std::optional<player_ptr_t> ptr_opt(uuid_t);
 std::optional<player_ptr_t> ptr_opt(char_data*);
-obj_ptr_t ptr_by_dbid(uint64_t);
 inline mods::globals::player_list_t& room_list(room_rnum r){ return mods::globals::get_room_list(r); }
 #define PARSE_ARGS() mods::util::arglist<std::vector<std::string>>(std::string(argument))
 #endif

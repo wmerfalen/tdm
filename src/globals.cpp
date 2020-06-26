@@ -1029,13 +1029,4 @@ obj_ptr_t optr_by_uuid(uuid_t id){
 	return mods::globals::obj_map[id];
 }
 
-obj_ptr_t ptr_by_dbid(uint64_t db_id){
-	auto it = mods::globals::db_id_to_uuid_map.find(db_id);
-	if(it != mods::globals::db_id_to_uuid_map.end()){
-		return optr_by_uuid(it->second);
-	}
-	log("SYSERR: DID NOT find obj by db_id (optr) %d",db_id);
-	return nullptr;
-
-}
 #endif

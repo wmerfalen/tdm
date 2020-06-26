@@ -3,6 +3,9 @@
 #include <map>
 #include <string>
 
+/** This class is outdated and doesn't represent the classes in the mud */
+/** This class is outdated and doesn't represent the classes in the mud */
+/** This class is outdated and doesn't represent the classes in the mud */
 namespace mods::orm {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 	int16_t player_classes::feed(const pqxx::result::reference & result){

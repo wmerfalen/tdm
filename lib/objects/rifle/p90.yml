@@ -38,7 +38,7 @@ reload_time: 6 #int, measured in ticks
 # type: LIGHT_MACHINE_GUN
 type: 1  # enum, object type
 manufacturer: 'Heckler and Koch' # string, anything 
-name: 'P90' # string, anything name of object 
+name: 'A Heckler and Koch P90' # string, anything name of object 
 vnum: 21 # integer, unique identifier
 str_type: 'SUB_MACHINE_GUN'
 #rarity types

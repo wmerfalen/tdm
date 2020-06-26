@@ -42,6 +42,10 @@ namespace mods::orm::inventory::lmdb {
 	extern void add_player_inventory(uint64_t player_db_id, uint64_t object_db_id, uint16_t obj_type);
 	extern void remove_player_inventory(uint64_t player_db_id, uint64_t object_db_id);
 };
+namespace mods::orm::inventory {
+	extern int16_t flush_player_by_uuid(uuid_t);
+	extern int16_t feed_player_by_uuid(uuid_t);
+};
 
 namespace mods {
 	using mask_t = mods::weapon::mask_type;
@@ -242,7 +246,11 @@ namespace mods {
 			in_object->worn_by = this->cd();
 			in_object->worn_on = pos;
 			m_equipment[pos] = in_object;
+#ifdef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
 			mods::orm::inventory::lmdb::add_player_wear(this->db_id(),in_object->db_id(),in_object->type,pos);
+#else
+			mods::orm::inventory::flush_player_by_uuid(uuid());
+#endif
 			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
 			//perform_equip_calculations(pos,true);
 			this->m_sync_equipment();
@@ -268,7 +276,12 @@ namespace mods {
 			m_equipment[pos]->worn_by = nullptr;
 			m_equipment[pos]->worn_on = -1;
 			m_equipment[pos] = nullptr;
+
+#ifdef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
 			mods::orm::inventory::lmdb::remove_player_wear(this->db_id(),pos);
+#else
+			mods::orm::inventory::flush_player_by_uuid(uuid());
+#endif
 			this->m_sync_equipment();
 		}
 	}
@@ -372,7 +385,11 @@ namespace mods {
 		carry_items()++;
 		m_char_data->m_carrying.emplace_back(obj);
 		m_char_data->carrying = obj.get();
+#ifdef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
 		mods::orm::inventory::lmdb::add_player_inventory(this->db_id(), obj->db_id(), obj->type);
+#else
+			mods::orm::inventory::flush_player_by_uuid(uuid());
+#endif
 	}
 	void player::uncarry(obj_ptr_t obj){
 		obj_data* temp = 0;
@@ -392,7 +409,11 @@ namespace mods {
 				}
 			}
 		}
+#ifdef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
 		mods::orm::inventory::lmdb::remove_player_inventory(this->db_id(), obj->db_id());
+#else
+			mods::orm::inventory::flush_player_by_uuid(uuid());
+#endif
 	}
 	obj_data* player::carrying(){
 		return m_char_data->carrying;

@@ -1929,7 +1929,7 @@ OperatorTraits	mods/catch.hpp	/^		template<Operator Op> struct OperatorTraits   
 PAGE_LENGTH	comm.h	80;"	d
 PAGE_SIZE	mods/player.hpp	/^		static constexpr int PAGE_SIZE = 40;$/;"	m	struct:mods::player
 PAGE_WIDTH	comm.h	81;"	d
-PARSE_ARGS	globals.hpp	233;"	d
+PARSE_ARGS	globals.hpp	232;"	d
 PASSES_PER_SEC	structs.h	649;"	d
 PATH_MAX	sysdep.h	352;"	d
 PAUSE_FILE	db.h	54;"	d
@@ -4810,6 +4810,7 @@ into	mods/sql.hpp	/^			compositor<T>& into(str_object table) {$/;"	f	struct:mods
 invalid_align	handler.cpp	/^int invalid_align(char_data *ch, struct obj_data *obj) {$/;"	f
 invalid_class	class.cpp	/^int invalid_class(char_data *ch, struct obj_data *obj) {$/;"	f
 invalid_list	ban.cpp	/^char *invalid_list[MAX_INVALID_NAMES];$/;"	v
+inventory	mods/player.cpp	/^namespace mods::orm::inventory {$/;"	n	class:mods::orm	file:
 invoke	mods/catch.hpp	/^			virtual void invoke() const {$/;"	f	class:Catch::MethodTestCase
 irl	mods/date-time.cpp	/^	namespace irl {$/;"	n	namespace:mods::date_time	file:
 irl	mods/date-time.hpp	/^	namespace irl {$/;"	n	namespace:mods::date_time
@@ -5797,7 +5798,6 @@ pt_allowed	config.cpp	/^int pt_allowed = NO;$/;"	v
 ptr	globals.cpp	/^player_ptr_t ptr(char_data* in_ch){$/;"	f
 ptr	globals.cpp	/^player_ptr_t ptr(const char_data* in_ch){$/;"	f
 ptr	mods/string.hpp	/^		char* ptr() {$/;"	f	struct:mods::string
-ptr_by_dbid	globals.cpp	/^obj_ptr_t ptr_by_dbid(uint64_t db_id){$/;"	f
 ptr_by_uuid	globals.cpp	/^player_ptr_t ptr_by_uuid(uuid_t id){$/;"	f
 ptr_opt	globals.cpp	/^std::optional<player_ptr_t> ptr_opt(char_data* ch){$/;"	f
 ptr_opt	globals.cpp	/^std::optional<player_ptr_t> ptr_opt(uuid_t plr_uuid){$/;"	f

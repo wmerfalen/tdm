@@ -23,6 +23,8 @@ namespace mods::orm::inventory {
 		void add_player_inventory(uint64_t player_db_id, uint64_t object_db_id, uint16_t obj_type);
 		void remove_player_inventory(uint64_t player_db_id, uint64_t object_db_id);
 	};
+	int16_t flush_player_by_uuid(uuid_t);
+	int16_t feed_player_by_uuid(uuid_t);
 	int16_t flush_player(player_ptr_t & player);
 	int16_t feed_player(player_ptr_t & player);
 };

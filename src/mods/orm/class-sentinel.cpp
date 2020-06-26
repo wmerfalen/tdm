@@ -7,6 +7,14 @@
 #include "../weapons/pistol-czp10.hpp"
 #include <time.h>
 
+/**
+ * This class has the right idea, however it is unusable due to the fact
+ * that we're errnoeously saving the primary and secondary weapons
+ * to the user. In a mud, you must allow the user to customize their loadout.
+ * This class violates that. Instead of saving the primary and secondary,
+ * we should be using the mods::orm::inventory::feed/flush player functions
+ * to update the player's carrying and euipment.
+ */
 namespace mods::orm {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
@@ -17,6 +25,14 @@ namespace mods::orm {
 	 */
 	/**
 	 * Primary_choice will be either "MP5" or "SASG12"
+	 */
+	/**
+	 * @brief this should be called when you create a sentinel player for the first time
+	 *
+	 * @param player
+	 * @param primary_choice
+	 *
+	 * @return 
 	 */
 	uint64_t sentinel::initialize_row(player_ptr_t &player, primary_choice_t primary_choice) {
 		this->init();
@@ -116,9 +132,6 @@ namespace mods::orm {
 		this->created_at = pg_timestamp_to_long(row["created_at"].c_str());
 		this->updated_at = pg_timestamp_to_long(row["updated_at"].c_str());
 		this->loaded = 1;
-		std::cerr << "[sentinel][feed]\n";
-		std::cerr << "[sentinel][feed]\n";
-		std::cerr << "[sentinel][feed]\n";
 		return 0;
 	}
 	void sentinel::init(){

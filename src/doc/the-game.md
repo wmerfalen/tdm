@@ -48,6 +48,25 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 	- Contagion
 		- 
 	- 
+++++++++++++++++++++++++
+| Dyanmic: destruction |
+++++++++++++++++++++++++
+	- of walls, doors
+	- the dealing of (ATK)
+		- with weapons, technology
+		- with perks
+		- enhanced by intel
+			- scanning with
+				- cameras, sensor grandes
+		- enhanced by precision
+			- aiming
+	- the prevention of (DEF)
+		- with armor
+		- with resistances
+++++++++++++++++++++++++
+| Dyanmic: destruction |
+++++++++++++++++++++++++
+
 
 ++++++++++++++++++++
 | TYPES OF POISONS |
