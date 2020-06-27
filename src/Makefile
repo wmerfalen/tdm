@@ -64,7 +64,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/affects mods/item mods/weapon-types mods/sensor-grenade \
 					 mods/calc_visibility mods/events mods/chargen mods/classes/base \
 					 mods/object-utils mods/camera mods/orm/shop shop mods/shop mods/rand \
-					 mods/help mods/rooms mods/weapons/damage-types
+					 mods/help mods/rooms mods/weapons/damage-types mods/injure
 
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))

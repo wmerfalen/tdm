@@ -1174,6 +1174,7 @@ INDEX_SIZE	boards.h	15;"	d
 INDUSTRIAL_STRENGTH	mods/yaml.hpp	/^	INDUSTRIAL_STRENGTH,$/;"	e	enum:mods::yaml::durability_profile_type_t
 INFO_FILE	db.h	81;"	d
 INFRAVISION	mods/flags.hpp	/^		INFRAVISION,$/;"	e	enum:mods::flags::aff
+INJURED_HP	mods/values.hpp	/^		constexpr static uint8_t INJURED_HP = 5;$/;"	m	namespace:mods::values
 INK	mods/aoe.hpp	/^		INK,	\/** Marks surroundings and enemies with paint for the purpose of tracking *\/ $/;"	e	enum:mods::aoe::types_t
 INSERT	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_type_t
 INSIDE	structs.h	/^			INSIDE,			\/** Example: inside a home *\/$/;"	m	struct:room_data	typeref:enum:room_data::
@@ -2050,7 +2051,7 @@ QGRN	screen.h	42;"	d
 QMAG	screen.h	45;"	d
 QNRM	screen.h	40;"	d
 QRED	screen.h	41;"	d
-QUEUE_TEXTURE_REMOVAL	mods/projectile.cpp	31;"	d	file:
+QUEUE_TEXTURE_REMOVAL	mods/projectile.cpp	35;"	d	file:
 QWHT	screen.h	47;"	d
 QYEL	screen.h	43;"	d
 Q_COMPLETE_KEY	mods/quests.cpp	12;"	d	file:
@@ -3096,6 +3097,7 @@ __MENTOC_MODS_FLAGS_HEADER__	mods/flags.hpp	2;"	d
 __MENTOC_MODS_FLASHBANG_HEADER__	mods/flashbang.hpp	2;"	d
 __MENTOC_MODS_HELP_HEADER__	mods/help.hpp	2;"	d
 __MENTOC_MODS_IMMORTAL_HEADER__	mods/immortal.hpp	2;"	d
+__MENTOC_MODS_INJURE_HEADER__	mods/injure.hpp	2;"	d
 __MENTOC_MODS_ITEM_HEADER__	mods/item.hpp	2;"	d
 __MENTOC_MODS_ITEM_TYPES__	mods/item-types.hpp	2;"	d
 __MENTOC_MODS_JS_HEADER__	mods/js.hpp	2;"	d
@@ -3977,6 +3979,7 @@ do_hold_anything	interpreter.cpp	/^ACMD(do_hold_anything);$/;"	v
 do_house	house.cpp	/^ACMD(do_house);$/;"	v
 do_house	interpreter.cpp	/^ACMD(do_house);$/;"	v
 do_idle	interpreter.cpp	/^ACMD(do_idle);$/;"	v
+do_injure_roll	mods/injure.cpp	/^	bool do_injure_roll(uint8_t chance){$/;"	f	namespace:mods::injure
 do_install	interpreter.cpp	/^ACMD(do_install);$/;"	v
 do_insult	act.informative.cpp	/^ACMD(do_insult);$/;"	v
 do_insult	act.social.cpp	/^ACMD(do_insult);$/;"	v
@@ -4815,6 +4818,10 @@ initialize_row	mods/db.cpp	/^aligned_int_t initialize_row($/;"	f	namespace:mods:
 initialize_table_schema	mods/db.hpp	/^static inline int_status_t initialize_table_schema(std::string table){$/;"	f
 initialized	mods/rand.hpp	/^	static bool initialized = false;$/;"	m	namespace:mods::rand
 initiator	mods/object-utils.hpp	/^		std::string initiator;$/;"	m	struct:mods::object_utils::YamlFeedExceptionInfo
+injure	mods/injure.cpp	/^namespace mods::injure {$/;"	n	class:mods	file:
+injure	mods/injure.hpp	/^namespace mods::injure {$/;"	n	class:mods
+injure	mods/projectile.cpp	/^namespace mods::injure {$/;"	n	class:mods	file:
+injure_player	mods/injure.cpp	/^	void injure_player(player_ptr_t& person){$/;"	f	namespace:mods::injure
 inner_join	mods/sql.hpp	/^			compositor<T>& inner_join(std::string_view table) {$/;"	f	struct:mods::sql::compositor
 insert	mods/sql.hpp	/^			compositor<T>& insert() {$/;"	f	struct:mods::sql::compositor
 install_shop	db.cpp	/^int16_t install_shop(shop_ptr_t& shop){$/;"	f

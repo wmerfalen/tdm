@@ -12,6 +12,10 @@ using mw_explosive = mods::weapon::type::explosive;
 using mw_rifle = mods::weapon::type::rifle;
 using mw_drone = mods::weapon::type::drone;
 using affect_t = mods::affects::affect_t;
+namespace mods::injure {
+	extern bool do_injure_roll(uint8_t chance);
+	extern void injure_player(player_ptr_t& person);
+};
 namespace mods {
 	namespace projectile {
 		using affect_vector_t = mods::affects::affect_vector_t;
@@ -226,24 +230,31 @@ namespace mods {
 			auto type = object->explosive()->type;
 			std::size_t blast_radius = object->explosive()->attributes->blast_radius;	/** TODO: grab from explosive()->blast_radius */
 			log("grabbed blast radius... (%d)",blast_radius);
+			bool does_damage = false;
+
 			switch(type){
 				default: 
 					log("SYSERR: Invalid explosive type(%d) in %s:%d",type,__FILE__,__LINE__);
 					return;
 				case mw_explosive::REMOTE_EXPLOSIVE:
+					does_damage = true;
 					send_to_room(room_id,"A %s explodes!\r\n",object->name.c_str());
 					break;
 				case mw_explosive::REMOTE_CHEMICAL:
+					does_damage = true;
 					send_to_room(room_id,"A %s explodes! A noxious chemical is released!\r\n",object->name.c_str());
 					QUEUE_TEXTURE_REMOVAL(HAZARDOUS_SMOKE,room_id);
 					break;
 				case mw_explosive::CLAYMORE_MINE:
+					does_damage = true;
 					send_to_room(room_id,"You trip over a %s! An explosion catches you off guard!\r\n",object->name.c_str());
 					break;
 				case mw_explosive::FRAG_GRENADE:
+					does_damage = true;
 					send_to_room(room_id,"A %s explodes!\r\n",object->name.c_str());
 					break;
 				case mw_explosive::INCENDIARY_GRENADE:
+					does_damage = true;
 					send_to_room(room_id,"A %s explodes! The room turns into a fiery blaze!\r\n",object->name.c_str());
 					QUEUE_TEXTURE_REMOVAL(ON_FIRE,room_id);
 					break;
@@ -270,6 +281,9 @@ namespace mods {
 			}
 
 			for(auto & person : mods::globals::get_room_list(room_id)) {
+				if(does_damage && mods::injure::do_injure_roll(object->explosive()->attributes->chance_to_injure)){
+					mods::injure::injure_player(person);
+				}
 				switch(type){
 					default: 
 						log("SYSERR: Invalid explosive type(%d) in %s:%d",type,__FILE__,__LINE__);

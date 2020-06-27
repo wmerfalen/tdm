@@ -1,13 +1,14 @@
 #include "damage-types.hpp"
 #include "../../spells.h"
 #include "../object-utils.hpp"
+#include "../injure.hpp"
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 namespace mods::weapons::damage_types {
 	using vpd = mods::scan::vec_player_data;
 
 	bool attack_injures(obj_ptr_t& weapon) {
 		/** TODO: calculate other buffs/nerfs here */
-		return dice(1,100) <= weapon->rifle()->attributes->chance_to_injure;
+		return mods::injure::do_injure_roll(weapon->rifle()->attributes->chance_to_injure);
 	}
 	
 	/**
@@ -333,9 +334,7 @@ namespace mods::weapons::damage_types {
 						victim->cd()->mob_specials.snipe_tracking = player->uuid();
 					}
 					if(attack_injures(weapon)){
-						player->send("%s is injured!\r\n",victim->name().c_str());
-						victim->position() = POS_INCAP;
-						victim->cd()->mob_specials.clear_behaviour_tree();
+						mods::injure::injure_player(victim);
 					}
 				}
 				remember(victim->cd(),player->cd());

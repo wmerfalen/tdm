@@ -52,10 +52,11 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 		- LIGHT MACHINE GUN 
 			[x] Done
 		- attribute support
-			[ ] chance to injure
+			[x] chance to injure
+				[x] revive injured
 			[ ] cooldown between shots
 			[x] critical chance
-			[ ] critical range
+			[x] critical range
 			[ ] disorient amount
 			[ ] headshot bonus
 			[x] max range
@@ -139,9 +140,7 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 			[x] done
 		- attributes
 			[ ] alternate_explosion_type
-			[x] chance_to_injure
-				[x] revive once injured
-				[x] calculate from rifle attack
+			[ ] chance_to_injure
 			[ ] critical_chance
 			[ ] critical_range
 			[ ] blast_radius

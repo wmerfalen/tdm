@@ -185,6 +185,7 @@ namespace mods::values {
 
 		constexpr static uint8_t REVIVE_TICKS = 40;
 		constexpr static uint8_t REVIVE_HP = 50;
+		constexpr static uint8_t INJURED_HP = 5;
 };
 
 using namespace mods::values;
