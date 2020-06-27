@@ -196,6 +196,13 @@ ACMD(do_room_list_uuid) {
 	}
 	player->sendln("Done listing.");
 }
+ACMD(do_send_report) {
+	player->sendln("Beginning report...");
+	for(auto &p : room_list(player->room())){
+		p->report();
+	}
+	player->sendln("Done reporting.");
+}
 ACMD(do_set_npc_position) {
 	DO_HELP("set_npc_position");
 	auto vec_args = PARSE_ARGS();

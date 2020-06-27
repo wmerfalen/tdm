@@ -140,8 +140,8 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 			[x] done
 		- attributes
 			[ ] alternate_explosion_type
-			[ ] chance_to_injure
-			[ ] critical_chance
+			[x] chance_to_injure
+			[x] critical_chance
 			[ ] critical_range
 			[ ] blast_radius
 			[ ] damage_per_second

@@ -78,17 +78,17 @@ namespace mods::weapons::damage_types {
 				continue;
 			}
 			if(dice(1,(100 * scanned_target.distance)) <= mods::values::SPRAY_CHANCE){
-				player->send("{yel}--[HIT]--{/yel}");
+				player->send(msg::HIT);
 				dam += weapon->rifle()->attributes->base_stat_list->at(scanned_target.distance).damage;
 			}
 			/** calculate headshot */
 			if(dice(1,(100 * scanned_target.distance)) <= mods::values::SPRAY_HEADSHOT_CHANCE){
-				player->send("{red}***HEADSHOT***{/red} -- ");
+				player->send(msg::HEADSHOT);
 				dam = victim->hp();
 			}
 			if(scanned_target.distance == crit_range){
 				if(dice(1,(100 * scanned_target.distance)) <= crit_chance){
-					player->send("{red}***CRITICAL***{/red} -- ");
+					player->send(msg::CRITICAL);
 					critical_bonus = dice(
 							damage_dice,
 							damage_sides
@@ -279,12 +279,12 @@ namespace mods::weapons::damage_types {
 
 		/** calculate headshot */
 		if(dice(1,100) >= 95){
-			player->send("{red}***HEADSHOT***{/red} -- ");
+			player->send(msg::HEADSHOT);
 			dam = victim->hp();
 		}
 		if(distance == crit_range){
 			if(dice(1,100) <= crit_chance){
-				player->send("{red}***CRITICAL***{/red} -- ");
+				player->send(msg::CRITICAL);
 				critical_bonus = dice(
 						damage_dice,
 						damage_sides
@@ -321,7 +321,7 @@ namespace mods::weapons::damage_types {
 		if(victim->position() > POS_DEAD) {
 			if(victim->is_npc()){
 				if(dam == 0){
-					player->sendln("You missed your target!");
+					player->sendln(msg::MISSED_TARGET);
 				}else if(dam > 0){
 					damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
 					if(MOB_FLAGGED(victim->cd(),MOB_SENTINEL)){
@@ -340,7 +340,7 @@ namespace mods::weapons::damage_types {
 				remember(victim->cd(),player->cd());
 			}
 		}else{
-			player->stc("It appears that your target is dead\r\n");
+			player->sendln(msg::TARGET_DEAD);
 			stop_fighting(player->cd());
 			stop_fighting(victim->cd());
 		}

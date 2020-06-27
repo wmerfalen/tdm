@@ -186,6 +186,45 @@ namespace mods::values {
 		constexpr static uint8_t REVIVE_TICKS = 40;
 		constexpr static uint8_t REVIVE_HP = 50;
 		constexpr static uint8_t INJURED_HP = 5;
+		constexpr static uint8_t EXPLOSIVE_CRITICAL_MULTIPLIER = 0.75;
+		constexpr static uint8_t RIFLE_CRITICAL_MULTIPLIER = 0.75;
+		namespace msg {
+			constexpr static const char* CRITICAL= "{red}***CRITICAL***{/red} --";
+			constexpr static const char* HEADSHOT= "{red}***HEADSHOT***{/red} -- ";
+			constexpr static const char* HIT= "{yel}--[HIT]--{/yel}";
+			constexpr static const char* OUT_OF_AMMO= "{gld}*CLICK*{/gld} Your weapon is out of ammo!";
+			constexpr static const char* MISSED_TARGET = "You missed your target!";
+			constexpr static const char* TARGET_DEAD = "It appears that your target is dead.";
+			constexpr static const char* YOURE_INJURED = "You are injured!";
+			template <typename T>
+			static inline void crit(T& p){
+				p->send(CRITICAL);
+			}
+			template <typename T>
+			static inline void headshot(T& p){
+				p->send(HEADSHOT);
+			}
+			template <typename T>
+			static inline void hit(T& p){
+				p->send(HIT);
+			}
+			template <typename T>
+			static inline void outofammo(T& p){
+				p->sendln(OUT_OF_AMMO);
+			}
+			template <typename T>
+			static inline void missed(T& p){
+				p->sendln(MISSED_TARGET);
+			}
+			template <typename T>
+			static inline void target_dead(T& p){
+				p->sendln(TARGET_DEAD);
+			}
+			template <typename T>
+			static inline void youre_injured(T& p){
+				p->sendln(YOURE_INJURED);
+			}
+		};
 };
 
 using namespace mods::values;

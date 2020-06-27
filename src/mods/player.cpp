@@ -93,12 +93,12 @@ namespace mods {
 		m_type = type;
 		switch(type){
 			case player_type_enum_t::PLAYER:
-			case player_type_enum_t::MOB:
 			case player_type_enum_t::DRONE:
 				if(m_desc){
 					m_desc->set_queue_behaviour(mods::descriptor_data::queue_behaviour_enum_t::NORMAL);
 				}
 				break;
+			case player_type_enum_t::MOB:
 			case player_type_enum_t::PLAYER_MUTED_DESCRIPTOR:
 			case player_type_enum_t::MOB_MUTED_DESCRIPTOR:
 			case player_type_enum_t::DRONE_MUTED_DESCRIPTOR:
@@ -1240,6 +1240,41 @@ namespace mods {
 		if(it != m_char_data->m_carrying.end()){
 			m_char_data->m_carrying.erase(it);
 		}
+	}
+	std::string player::get_type_string(){
+		switch(m_type){
+			case player_type_enum_t::PLAYER:
+				return "PLAYER";
+			case player_type_enum_t::DRONE:
+				return "DRONE";
+			case player_type_enum_t::MOB:
+				return "MOB";
+			case player_type_enum_t::PLAYER_MUTED_DESCRIPTOR:
+				return "PLAYER_MUTED_DESCRIPTOR";
+			case player_type_enum_t::MOB_MUTED_DESCRIPTOR:
+				return "MOB_MUTED_DESCRIPTOR";
+			case player_type_enum_t::DRONE_MUTED_DESCRIPTOR:
+				return "DRONE_MUTED_DESCRIPTOR";
+			default:
+				return "<UNKNOWN>";
+				break;
+		}
+	}
+	void player::report(){
+		std::vector<std::string> msg;
+#define MR(MSG,VALUE) msg.push_back(std::string(MSG) + std::string(":") + std::to_string(VALUE));
+#define MRC(MSG,VALUE) msg.push_back(std::string(MSG) + std::string(":") + (char*)VALUE);
+		MRC("type",this->get_type_string().c_str());
+		MRC("name",this->name().c_str());
+		MR("uuid",this->uuid());
+		MRC("char_data*",this->cd());
+		send_to_room(room(), "{yel}[report-start]{/yel}\r\n");
+		for(auto & m : msg){
+			send_to_room(room(), "Report: %s\r\n", m.c_str());
+		}
+		send_to_room(room(), "{yel}[report-end]{/yel}\r\n\r\n");
+#undef MR
+#undef MRC
 	}
 
 };

@@ -602,6 +602,10 @@ namespace mods {
 		int attacking_with_type(){ return m_attacking_with->rifle()->attributes->type; }
 		void set_fight_timestamp(){ m_char_data->last_fight_timestamp = std::time(NULL); }
 
+		/** reporting utilities */
+		std::string get_type_string();
+		void report();
+
 
 		protected:
 		std::array<bool,misc_pref_enum_t::SIZE> m_misc_pref;

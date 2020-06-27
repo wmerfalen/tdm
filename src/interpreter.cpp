@@ -433,6 +433,7 @@ ACMD(do_point_update);
 ACMD(do_set_position);
 ACMD(do_set_npc_position);
 ACMD(do_room_list_uuid);
+ACMD(do_send_report);
 ACMD(do_kill_now);
 ACMD(do_one_punch);
 ACMD(do_zero_socket);
@@ -774,6 +775,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "set_position"  , POS_RESTING , do_set_position, LVL_GOD, 0 },
 	{ "set_npc_position"  , POS_RESTING , do_set_npc_position, LVL_GOD, 0 },
 	{ "room_list_uuid"  , POS_RESTING , do_room_list_uuid, LVL_GOD, 0 },
+	{ "send_report"  , POS_RESTING , do_send_report, LVL_GOD, 0 },
 	{ "zero_socket"  , POS_RESTING , do_zero_socket  , 0, 0 },
 	{ "uuid"  , POS_RESTING , do_uuid  , 0, 0 },
 	/** ----------------------- */

@@ -487,6 +487,7 @@ namespace mods {
 			mob_map[mob->uuid()] = mob;
 			mob_chmap[mob->cd()] = mob;
 			SET_BIT(mob->cd()->char_specials.saved.act, MOB_ISNPC);
+			mob->player_ptr()->set_type(mods::player::player_type_enum_t::MOB);
 			mob_ptrmap[mob->cd()] = mob->player_ptr();
 			player_map[mob->uuid()] = mob->player_ptr();
 			return mob;
