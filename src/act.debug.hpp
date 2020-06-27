@@ -12,6 +12,7 @@ extern void point_update(void);
 
 ACMD(do_givemenades);
 ACMD(do_point_update);
+ACMD(do_set_position);
 ACMD(do_uuid);
 ACMD(do_zero_socket);
 

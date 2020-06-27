@@ -49,7 +49,10 @@ ACMD	act.debug.cpp	/^ACMD(do_one_punch){$/;"	f
 ACMD	act.debug.cpp	/^ACMD(do_point_update) {$/;"	f
 ACMD	act.debug.cpp	/^ACMD(do_room_dark){$/;"	f
 ACMD	act.debug.cpp	/^ACMD(do_room_fire){$/;"	f
+ACMD	act.debug.cpp	/^ACMD(do_room_list_uuid) {$/;"	f
 ACMD	act.debug.cpp	/^ACMD(do_set_ammo) {$/;"	f
+ACMD	act.debug.cpp	/^ACMD(do_set_npc_position) {$/;"	f
+ACMD	act.debug.cpp	/^ACMD(do_set_position) {$/;"	f
 ACMD	act.debug.cpp	/^ACMD(do_show_tics) {$/;"	f
 ACMD	act.debug.cpp	/^ACMD(do_zero_socket) {$/;"	f
 ACMD	act.demolitions.cpp	/^ACMD(do_breach) {$/;"	f
@@ -98,6 +101,7 @@ ACMD	act.item.cpp	/^ACMD(do_remove) {$/;"	f
 ACMD	act.item.cpp	/^ACMD(do_wear) {$/;"	f
 ACMD	act.item.cpp	/^ACMD(do_wield) {$/;"	f
 ACMD	act.medic.cpp	/^ACMD(do_heal) {$/;"	f
+ACMD	act.medic.cpp	/^ACMD(do_revive) {$/;"	f
 ACMD	act.movement.cpp	/^	ACMD(do_enter) {$/;"	f
 ACMD	act.movement.cpp	/^	ACMD(do_follow) {$/;"	f
 ACMD	act.movement.cpp	/^	ACMD(do_gen_door) {$/;"	f
@@ -591,7 +595,7 @@ CCYEL	screen.h	32;"	d
 CEMENT	structs.h	/^			CEMENT,			\/** asphault, nearly indestructible *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 CHAOTIC	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 CHARM	mods/flags.hpp	/^		CHARM,$/;"	e	enum:mods::flags::aff
-CHECK_NULL	comm.cpp	2283;"	d	file:
+CHECK_NULL	comm.cpp	2301;"	d	file:
 CHECK_PLAYER_SPECIAL	utils.h	214;"	d
 CHECK_PLAYER_SPECIAL	utils.h	217;"	d
 CHECK_WAIT	utils.h	378;"	d
@@ -873,6 +877,7 @@ EOR	telnet.h	58;"	d
 ETEXT_FILE	utils.h	124;"	d
 EVENT_GET_ATTACKED	mods/deferred.hpp	/^			constexpr static uint32_t EVENT_GET_ATTACKED = 2;$/;"	m	class:mods::deferred
 EVENT_OBJECT_DESTRUCT	mods/deferred.hpp	/^			constexpr static uint32_t EVENT_OBJECT_DESTRUCT = 0;$/;"	m	class:mods::deferred
+EVENT_PLAYER_REVIVE_SUCCESSFUL	mods/deferred.hpp	/^			constexpr static uint32_t EVENT_PLAYER_REVIVE_SUCCESSFUL = 4;$/;"	m	class:mods::deferred
 EVENT_PLAYER_UNBLOCK_BREACH	mods/deferred.hpp	/^			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_BREACH = 3;$/;"	m	class:mods::deferred
 EVENT_PLAYER_UNBLOCK_INSTALLATION	mods/deferred.hpp	/^			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_INSTALLATION = 1;$/;"	m	class:mods::deferred
 EV_BLINDING_LIGHT	mods/projectile.hpp	/^			EV_BLINDING_LIGHT,$/;"	e	enum:mods::projectile::projectile_event_t
@@ -1636,6 +1641,10 @@ MENTOC_LAZY_ME	mods/util.cpp	456;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	465;"	d	file:
 MENTOC_LAZY_ME	structs.cpp	64;"	d	file:
 MENTOC_LAZY_ME	structs.cpp	73;"	d	file:
+MENTOC_LAZY_POS	act.debug.cpp	217;"	d	file:
+MENTOC_LAZY_POS	act.debug.cpp	231;"	d	file:
+MENTOC_LAZY_POS	act.debug.cpp	241;"	d	file:
+MENTOC_LAZY_POS	act.debug.cpp	255;"	d	file:
 MENTOC_LAZY_SHOP	mods/builder.cpp	1696;"	d	file:
 MENTOC_LAZY_SHOP	mods/builder.cpp	1721;"	d	file:
 MENTOC_LAZY_STR	mods/builder.cpp	1596;"	d	file:
@@ -1785,7 +1794,7 @@ MSG_NO_STEAL_HERE	shop.h	176;"	d
 MSG_NO_USED_WANDSTAFF	shop.h	180;"	d
 MSG_SLOTNUM	boards.h	45;"	d
 MUZZLE_BRAKE	mods/weapon.hpp	/^		COMPENSATOR, MUZZLE_BRAKE,EXTENDED,$/;"	e	enum:mods::weapon::barrel_t
-M_MATCH	mods/help.cpp	13;"	d	file:
+M_MATCH	mods/help.cpp	15;"	d	file:
 M_MATCH	mods/help.cpp	5;"	d	file:
 MatchAllOf	mods/catch.hpp	/^			struct MatchAllOf : MatcherBase<ArgT> {$/;"	s	namespace:Catch::Matchers::Impl
 MatchAnyOf	mods/catch.hpp	/^			struct MatchAnyOf : MatcherBase<ArgT> {$/;"	s	namespace:Catch::Matchers::Impl
@@ -1858,7 +1867,7 @@ NUM_CLASSES	structs.h	229;"	d
 NUM_OF_BOARDS	boards.h	11;"	d
 NUM_OF_DIRS	structs.h	637;"	d
 NUM_RESERVED_DESCS	comm.h	11;"	d
-NUM_TOKENS	interpreter.cpp	1206;"	d	file:
+NUM_TOKENS	interpreter.cpp	1217;"	d	file:
 NUM_WEARS	structs.h	412;"	d
 NameAndDesc	mods/catch.hpp	/^		NameAndDesc(const char* _name = "", const char* _description= "")$/;"	f	struct:Catch::NameAndDesc
 NameAndDesc	mods/catch.hpp	/^	struct NameAndDesc {$/;"	s	namespace:Catch
@@ -2066,7 +2075,7 @@ RC_DRONE_THERMAL	structs.h	/^	RC_DRONE_THERMAL,$/;"	e	enum:lense_type_t
 READ_LVL	boards.h	37;"	d
 READ_SIZE	utils.h	27;"	d
 REAL	db.h	/^	REAL=0,\\$/;"	e	enum:__anon1
-RECON	interpreter.cpp	1613;"	d	file:
+RECON	interpreter.cpp	1624;"	d	file:
 RECREATE	utils.h	173;"	d
 RELOAD	mods/weapon-types.hpp	/^		RELOAD,$/;"	e	enum:mods::weapon::capabilities::cap_t
 REMOTE	mods/item.hpp	/^		REMOTE = (1 << 7),$/;"	e	enum:mods::item::capability_t
@@ -2087,6 +2096,8 @@ RESERVED	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_stat
 RETSIGTYPE	conf.h	20;"	d
 RETURN_FALSE_IMMEDIATELY	mods/behaviour_tree_impl.hpp	/^			RETURN_FALSE_IMMEDIATELY,$/;"	e	enum:mods::behaviour_tree_impl::dispatch_status_t
 RETURN_IMMEDIATELY	mods/behaviour_tree_impl.hpp	/^			RETURN_IMMEDIATELY,$/;"	e	enum:mods::behaviour_tree_impl::dispatch_status_t
+REVIVE_HP	mods/values.hpp	/^		constexpr static uint8_t REVIVE_HP = 50;$/;"	m	namespace:mods::values
+REVIVE_TICKS	mods/values.hpp	/^		constexpr static uint8_t REVIVE_TICKS = 40;$/;"	m	namespace:mods::values
 RIFLE_NONE	mods/item-types.hpp	/^		RIFLE_NONE = 0,$/;"	e	enum:mods::weapon::type::rifle
 RLIMIT_NOFILE	sysdep.h	409;"	d
 RL_SEC	structs.h	650;"	d
@@ -2250,7 +2261,7 @@ SEEK_END	utils.h	537;"	d
 SEEK_SET	utils.h	535;"	d
 SELECTOR	mods/behaviour_tree_node.hpp	/^		enum node_type_t { DO_NOTHING, SELECTOR, SEQUENCE, LEAF };$/;"	e	enum:mods::behaviour_tree_node::node_type_t
 SELF	utils.h	452;"	d
-SENDOK	comm.cpp	2429;"	d	file:
+SENDOK	comm.cpp	2447;"	d	file:
 SENSE_LIFE	mods/flags.hpp	/^		SENSE_LIFE,$/;"	e	enum:mods::flags::aff
 SENSE_MOTION	mods/weapon-types.hpp	/^		SENSE_MOTION,$/;"	e	enum:mods::weapon::capabilities::cap_t
 SENSOR	mods/aoe.hpp	/^		SENSOR, \/** senses objects or enemies within blast_radius *\/$/;"	e	enum:mods::aoe::types_t
@@ -2809,7 +2820,7 @@ UNCOMMON_DROP_RATE	mods/randomized-items.hpp	/^		constexpr static float UNCOMMON
 UNKNOWN_STATUS	mods/behaviour_tree_status.hpp	/^		UNKNOWN_STATUS,$/;"	e	enum:mods::behaviour_tree_status
 UNLOCK_DOOR	act.movement.cpp	348;"	d	file:
 UNMARK	graph.cpp	54;"	d	file:
-UNSWITCH	interpreter.cpp	1615;"	d	file:
+UNSWITCH	interpreter.cpp	1626;"	d	file:
 UNUSED16	mods/flags.hpp	/^		UNUSED16,				\/\/ useless$/;"	e	enum:mods::flags::aff
 UNUSED17	mods/flags.hpp	/^		UNUSED17,				\/\/ useless$/;"	e	enum:mods::flags::aff
 UP	structs.h	151;"	d
@@ -2817,7 +2828,7 @@ UPDATE	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_t
 UPPER	utils.h	156;"	d
 USERS_FORMAT	act.informative.cpp	1608;"	d	file:
 USE_AUTOEQ	structs.h	110;"	d
-USURP	interpreter.cpp	1614;"	d	file:
+USURP	interpreter.cpp	1625;"	d	file:
 Unknown	mods/catch.hpp	/^			Unknown = -1,$/;"	e	enum:Catch::ResultWas::OfType
 VALID_EDGE	graph.cpp	/^int VALID_EDGE(room_rnum x, int y) {$/;"	f
 VALID_OBJ_RNUM	utils.h	397;"	d
@@ -3518,6 +3529,7 @@ clear_all_affected_flags	mods/js.cpp	/^		static duk_ret_t clear_all_affected_fla
 clear_all_affected_plr	mods/player.cpp	/^	void player::clear_all_affected_plr(){$/;"	f	class:mods::player
 clear_all_plr_flags	mods/js.cpp	/^		static duk_ret_t clear_all_plr_flags(duk_context *ctx) {$/;"	f	namespace:mods::js
 clear_attacking_with	mods/player.hpp	/^		void clear_attacking_with(){ m_attacking_with = nullptr; }$/;"	f	struct:mods::player
+clear_behaviour_tree	structs.cpp	/^		void mob_special_data::clear_behaviour_tree(){$/;"	f	class:mob_special_data
 clear_camera	mods/player.cpp	/^	void player::clear_camera(){$/;"	f	class:mods::player
 clear_capabilities	structs.h	/^		void clear_capabilities() {$/;"	f	struct:obj_data
 clear_captured_output	mods/player.cpp	/^	void player::clear_captured_output() {$/;"	f	class:mods::player
@@ -4050,6 +4062,7 @@ do_restore	interpreter.cpp	/^ACMD(do_restore);$/;"	v
 do_return	act.wizard.cpp	/^ACMD(do_return);$/;"	v
 do_return	handler.cpp	/^ACMD(do_return);$/;"	v
 do_return	interpreter.cpp	/^ACMD(do_return);$/;"	v
+do_revive	interpreter.cpp	/^ACMD(do_revive);$/;"	v
 do_rnumlist	interpreter.cpp	/^ACMD(do_rnumlist);$/;"	v
 do_rnumlist	mods/immortal.hpp	/^ACMD(do_rnumlist);$/;"	v
 do_rnumtele	interpreter.cpp	/^ACMD(do_rnumtele);$/;"	v
@@ -4057,6 +4070,7 @@ do_rnumtele	mods/immortal.hpp	/^ACMD(do_rnumtele);$/;"	v
 do_room_dark	interpreter.cpp	/^ACMD(do_room_dark);$/;"	v
 do_room_fire	interpreter.cpp	/^ACMD(do_room_fire);$/;"	v
 do_room_list	interpreter.cpp	/^ACMD(do_room_list);$/;"	v
+do_room_list_uuid	interpreter.cpp	/^ACMD(do_room_list_uuid);$/;"	v
 do_save	act.other.cpp	/^ACMD(do_save);$/;"	v
 do_save	interpreter.cpp	/^ACMD(do_save);$/;"	v
 do_say	act.comm.cpp	/^ACMD(do_say);$/;"	v
@@ -4074,6 +4088,9 @@ do_send	interpreter.cpp	/^ACMD(do_send);$/;"	v
 do_set	act.wizard.cpp	/^ACMD(do_set);$/;"	v
 do_set	interpreter.cpp	/^ACMD(do_set);$/;"	v
 do_set_ammo	interpreter.cpp	/^ACMD(do_set_ammo);$/;"	v
+do_set_npc_position	interpreter.cpp	/^ACMD(do_set_npc_position);$/;"	v
+do_set_position	act.debug.hpp	/^ACMD(do_set_position);$/;"	v
+do_set_position	interpreter.cpp	/^ACMD(do_set_position);$/;"	v
 do_shoot	interpreter.cpp	/^ACMD(do_shoot);	\/* just an alias of snipe *\/$/;"	v
 do_show	act.wizard.cpp	/^ACMD(do_show);$/;"	v
 do_show	interpreter.cpp	/^ACMD(do_show);$/;"	v
@@ -4661,6 +4678,8 @@ guild_info	class.cpp	/^struct guild_info_type guild_info[] = {$/;"	v	typeref:str
 h_cancel	mods/help.hpp	/^	static constexpr const char* h_cancel = "usage: cancel\\r\\n"$/;"	m	namespace:mods::help::pages
 h_grenade	mods/help.hpp	/^	static constexpr const char* h_grenade = "usage: throw <direction> [room_count=4]\\r\\n"$/;"	m	namespace:mods::help::pages
 h_install	mods/help.hpp	/^	static constexpr const char* h_install = "usage: install <object> <direction>\\r\\n"$/;"	m	namespace:mods::help::pages
+h_set_npc_position	mods/help.hpp	/^	static constexpr const char* h_set_npc_position = "usage: set_npc_position <UUID> <POSITION>\\r\\n"$/;"	m	namespace:mods::help::pages
+h_set_position	mods/help.hpp	/^	static constexpr const char* h_set_position = "usage: set_position <POSITION>\\r\\n"$/;"	m	namespace:mods::help::pages
 h_view	mods/help.hpp	/^	static constexpr const char* h_view = "usage: view camera\\r\\n"$/;"	m	namespace:mods::help::pages
 half_chop	interpreter.cpp	/^void half_chop(char *string, char *arg1, char *arg2) {$/;"	f
 handbook	db.cpp	/^char *handbook = NULL;		\/* handbook for new immortals	 *\/$/;"	v
@@ -6103,6 +6122,7 @@ send_to_outdoor	comm.cpp	/^void send_to_outdoor(const char *messg, ...) {$/;"	f
 send_to_room	comm.cpp	/^void send_to_room(room_rnum room, const char *messg, ...) {$/;"	f
 send_to_room_except	comm.cpp	/^void send_to_room_except(room_rnum room, const std::vector<char_data*>& except, const char *messg, ...) {$/;"	f
 send_to_room_except	comm.cpp	/^void send_to_room_except(room_rnum room, player_ptr_t except_me, const char *messg, ...) {$/;"	f
+send_to_room_except	comm.cpp	/^void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...) {$/;"	f
 send_to_uuid	mods/js.cpp	/^		static duk_ret_t send_to_uuid(duk_context *ctx) {$/;"	f	namespace:mods::js
 send_yaml_exceptions_to	mods/object-utils.hpp	/^	static inline void send_yaml_exceptions_to(TPlayerPointer& player){$/;"	f	namespace:mods::object_utils
 sendln	mods/player.cpp	/^	void player::sendln(mods::string& str) {$/;"	f	class:mods::player

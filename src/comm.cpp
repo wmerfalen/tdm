@@ -2215,6 +2215,24 @@ void send_to_outdoor(const char *messg, ...) {
 	}
 }
 
+void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...) {
+	va_list args;
+
+	if(messg == NULL) {
+		return;
+	}
+
+	for(auto & p : mods::globals::get_room_list(room)){
+		auto i = p->cd();
+		if(!i->has_desc || std::find(except.begin(),except.end(),p->uuid()) != except.end()) {
+			continue;
+		}
+
+		va_start(args, messg);
+		vwrite_to_output(*i->desc, messg, args);
+		va_end(args);
+	}
+}
 
 void send_to_room_except(room_rnum room, const std::vector<char_data*>& except, const char *messg, ...) {
 	va_list args;

@@ -24,6 +24,7 @@
  * output.
  */
 
+extern void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...);
 extern void do_auto_exits(char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
 extern mods::scan::find_results_t mods::scan::los_find(chptr hunter,chptr hunted);
@@ -1157,6 +1158,25 @@ namespace mods {
 						break;
 					}
 					mods::object_utils::set_done_breaching(obj);
+					break;
+				}
+			case mods::deferred::EVENT_PLAYER_REVIVE_SUCCESSFUL:
+				{
+					auto revive_target = ptr_by_uuid(target);
+					if(!revive_target){
+						std::cerr << "[WARNING] got nullptr from EVENT_PLAYER_REVIVE_SUCCESSFUL\n";
+						break;
+					}
+					revive_target->hp() = mods::values::REVIVE_HP;
+					revive_target->position() = POS_STANDING;
+					this->send("{grn}You revive %s!{/grn}\r\n",revive_target->name().c_str());
+					if(!IS_NPC(revive_target->cd())){
+						revive_target->send("%s {grn}revives you!{/grn}\r\n", this->name().c_str());
+						revive_target->sendln("{grn}You dust yourself off and get to your feet!");
+					}
+					send_to_room_except(this->room(), {this->uuid(),revive_target->uuid()}, 
+							"%s is revived by %s!",this->name().c_str(),revive_target->name().c_str()
+					);
 					break;
 				}
 			default:

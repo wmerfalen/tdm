@@ -24,10 +24,16 @@ extern void obj_from_room(obj_ptr_t object);
 /**
  * Description:
  * 'cancel' stops an installation of a device
+ * 'cancel' stops 
  * 
  * Arguments:
  * cancel
  * 
+ */
+/**
+ * @brief stops a player from performing his/her blocking action
+ *
+ * @param do_cancel
  */
 ACMD(do_cancel) {
 	DO_HELP("cancel");
@@ -35,8 +41,26 @@ ACMD(do_cancel) {
 		player->sendln("Cancel what? You're not installing anything...");
 		return;
 	}
+
+	std::string message = "You stop installing.";
+	switch(player->current_block()){
+		case mods::deferred::EVENT_PLAYER_UNBLOCK_INSTALLATION:
+			message = "You stop installing.";
+			break;
+		case mods::deferred::EVENT_PLAYER_UNBLOCK_BREACH:
+			message = "You stop installing your breach charge.";
+			break;
+		case mods::deferred::EVENT_PLAYER_REVIVE_SUCCESSFUL:
+			message = "You stop reviving...";
+			break;
+		case mods::deferred::EVENT_GET_ATTACKED:
+			/** Purposely using fall-through behaviour */
+		default:
+			message = "You stop what you're doing.";
+			break;
+	}
 	player->cancel_block();
-	player->sendln("You stop installing.");
+	player->sendln(message);
 }
 
 /**

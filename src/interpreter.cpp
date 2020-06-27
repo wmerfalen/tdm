@@ -232,6 +232,7 @@ ACMD(do_builder_help){
 			"{gld}heal{/gld} -- {grn}heal yourself [feature-debug][staging-feature][class-medic]{/grn}", 
 			"{gld}one_punch{/gld} -- {grn}immediately kill your currently fighting char with one punch{/grn}",
 			"{gld}point_update{/gld} -- {grn}manually call point update [feature-debug]{/grn}",
+			"{gld}set_position{/gld} -- {grn}set position to one of the POS_* constants [feature-debug]{/grn}",
 			"",
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{yel} --                      -:[ Debugging ]:-                             {/yel}",
@@ -247,6 +248,7 @@ ACMD(do_builder_help){
 			"{gld}jstest{/gld} -- {grn}run a javascript test [builder-utils][admin-tools]{/grn}",
 			"{gld}newjs{/gld} -- {grn}create a new javascript context [admin-tools][feature-debug]{/grn}", 
 			"{gld}pref{/gld} -- {grn}preferences utility [staging-feature]{/grn}",
+			"{gld}room_list_uuid{/gld} -- {grn}list uuids and names of everyone in the same room [builder-utils]{/grn}"
 			"{gld}show_tics{/gld} -- {grn}toggle tics[builder-utils]{/grn}"
 	 	}){
 			player->sendln(cmd);
@@ -403,6 +405,7 @@ ACMD(do_giveme_sniper_rifle);
 /** ------------------------ */
 
 ACMD(do_heal);
+ACMD(do_revive);
 ACMD(do_newjs);
 ACMD(do_jstest);
 ACMD(do_mbuild);
@@ -427,6 +430,9 @@ ACMD(do_set_ammo);
 
 /** debug mods */
 ACMD(do_point_update);
+ACMD(do_set_position);
+ACMD(do_set_npc_position);
+ACMD(do_room_list_uuid);
 ACMD(do_kill_now);
 ACMD(do_one_punch);
 ACMD(do_zero_socket);
@@ -759,11 +765,15 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "givemenades" , POS_RESTING , do_givemenades , 0, 0 },
 	{ "idle"  , POS_RESTING , do_idle   , 0, 0 },
 	{ "heal"  , POS_RESTING , do_heal   , 0, 0 },
+	{ "revive"  , POS_RESTING , do_revive   , 0, 0 },
 	{ "newjs"  , POS_RESTING , do_newjs   , LVL_GOD, 0 },
 	{ "jstest"  , POS_RESTING , do_jstest   , LVL_GOD, 0 },
 	{ "kill_now"  , POS_RESTING , do_one_punch   , LVL_GOD, 0 },
 	{ "one_punch"  , POS_RESTING , do_one_punch   , LVL_GOD, 0 },
 	{ "point_update"  , POS_RESTING , do_point_update   , LVL_GOD, 0 },
+	{ "set_position"  , POS_RESTING , do_set_position, LVL_GOD, 0 },
+	{ "set_npc_position"  , POS_RESTING , do_set_npc_position, LVL_GOD, 0 },
+	{ "room_list_uuid"  , POS_RESTING , do_room_list_uuid, LVL_GOD, 0 },
 	{ "zero_socket"  , POS_RESTING , do_zero_socket  , 0, 0 },
 	{ "uuid"  , POS_RESTING , do_uuid  , 0, 0 },
 	/** ----------------------- */
@@ -1051,6 +1061,7 @@ void command_interpreter(player_ptr_t & player, std::string in_argument){
 	} else{
 		if(player->is_blocked() && !mods::player_utils::is_cancel_command(cmd_info[cmd].command)) {
 			player->sendln("You can't! You're currently doing something!\r\n");
+			return;
 		}
 		//TODO: change PLR_FLAGGED call to player->member method call
 		if(!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_FROZEN) && GET_LEVEL(ch) < LVL_IMPL) {

@@ -189,6 +189,74 @@ ACMD(do_point_update) {
 	point_update();
 	player->stc("[debug]->done");
 }
+ACMD(do_room_list_uuid) {
+	player->sendln("Beginning room list...");
+	for(auto &p : room_list(player->room())){
+		player->send("uuid: [%d] name: '%s'\r\n",p->uuid(),p->name().c_str());
+	}
+	player->sendln("Done listing.");
+}
+ACMD(do_set_npc_position) {
+	DO_HELP("set_npc_position");
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() < 2){
+		player->sendln("not enough arguments");
+		return;
+	}
+	auto uuid = mods::util::stoi_optional<uuid_t>(vec_args[0]);
+	if(uuid.value_or(-1) < 0){
+		player->sendln("first argument needs to be a uuid. unknown value encountered");
+		return;
+	}
+	auto target = ptr_opt(uuid.value());
+	if(!target.has_value()){
+		player->sendln("unable to find anyone with that uuid");
+		return;
+	}
+	player->send("player with that uuid: '%s'\r\n", target.value()->name().c_str());
+#define MENTOC_LAZY_POS(a,b)\
+	if(mods::util::is_lower_match(vec_args[1],#a)){\
+		target.value()->position() = b;\
+		player->send("{grn}Set position to: %s on %s\r\n{/grn}",#a,target.value()->name().c_str());\
+		return;\
+	}
+	MENTOC_LAZY_POS(DEAD,POS_DEAD);
+	MENTOC_LAZY_POS(MORTALLY,POS_MORTALLYW);
+	MENTOC_LAZY_POS(INCAP,POS_INCAP);
+	MENTOC_LAZY_POS(STUNNED,POS_STUNNED);
+	MENTOC_LAZY_POS(SLEEPING,POS_SLEEPING);
+	MENTOC_LAZY_POS(RESTING,POS_RESTING);
+	MENTOC_LAZY_POS(SITTING,POS_SITTING);
+	MENTOC_LAZY_POS(FIGHTING,POS_FIGHTING);
+#undef MENTOC_LAZY_POS
+	player->sendln("Didn't set position. Make sure you used the correct string.");
+
+}
+ACMD(do_set_position) {
+	if(IS_NPC(ch)){
+		return;
+	}
+	DO_HELP("set_position");
+	auto vec_args = PARSE_ARGS();
+#define MENTOC_LAZY_POS(a,b)\
+	if(mods::util::is_lower_match(vec_args[0],#a)){\
+		player->position() = b;\
+		player->send("{grn}Set your position to: %s\r\n{/grn}",#a);\
+		return;\
+	}
+	MENTOC_LAZY_POS(DEAD,POS_DEAD);
+	MENTOC_LAZY_POS(MORTALLY,POS_MORTALLYW);
+	MENTOC_LAZY_POS(INCAP,POS_INCAP);
+	MENTOC_LAZY_POS(STUNNED,POS_STUNNED);
+	MENTOC_LAZY_POS(SLEEPING,POS_SLEEPING);
+	MENTOC_LAZY_POS(RESTING,POS_RESTING);
+	MENTOC_LAZY_POS(SITTING,POS_SITTING);
+	MENTOC_LAZY_POS(FIGHTING,POS_FIGHTING);
+#undef MENTOC_LAZY_POS
+	player->sendln("Didn't set your position. Make sure you used the correct string.");
+
+}
+
 
 ACMD(do_my_uuid) {
 	

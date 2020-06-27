@@ -182,6 +182,9 @@ namespace mods::values {
 		constexpr static uint8_t SPRAY_HEADSHOT_CHANCE = 3;
 		constexpr static uint8_t SPRAY_CRITICAL_CHANCE = 2;
 		constexpr static uint8_t SPRAY_CRITICAL_REDUCTION_DIVISOR = 10;
+
+		constexpr static uint8_t REVIVE_TICKS = 40;
+		constexpr static uint8_t REVIVE_HP = 50;
 };
 
 using namespace mods::values;

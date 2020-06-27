@@ -28,6 +28,174 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 
 # 
 
++++++++++++++++++++++++
+| ITEM TYPE CHECKLIST |
++++++++++++++++++++++++
+	- vim sorcery
+		# s/^([^,]\+,/\t[ ] /
+		# s/,.*//g
+	- RIFLE
+		- SHOTGUN
+			[x] Done
+		- ASSAULT RIFLE
+			[x] Done
+		- SUB MACHINE GUN 
+			[x] Done
+		- SNIPER 
+			[x] Done
+		- HANDGUN 
+			[x] Done
+		- PISTOL 
+			[x] Done
+		- MACHINE PISTOL 
+			[x] Done
+		- LIGHT MACHINE GUN 
+			[x] Done
+		- attribute support
+			[ ] chance to injure
+			[ ] cooldown between shots
+			[x] critical chance
+			[ ] critical range
+			[ ] disorient amount
+			[ ] headshot bonus
+			[x] max range
+			[ ] reload time
+			[ ] effective firing range
+			[x] damage dice count
+			[x] damage dice sides
+	- CONSUMBALE
+		- AMMUNITION 
+			[ ] done
+		- FOOD 
+			[ ] done
+		- PILLS 
+			[ ] done
+		- HERBS 
+			[ ] done
+		- HALLUCINOGENS 
+			[ ] done
+		- PEDS 
+			[ ] done
+		- GASOLINE
+			[ ] done
+		- attribute support
+			[ ] weight_in_lbs
+			[ ] consumed_by
+			[ ] adds_hp
+			[ ] adds_movement
+			[ ] adds_room_range
+			[ ] adds_strength
+			[ ] adds_intelligence
+			[ ] adds_charisma
+			[ ] adds_dexterity
+			[ ] adds_constitution
+			[ ] adds_wisdom
+			[ ] adds_weight
+			[ ] adds_experience
+			[ ] adds_armor_class
+			[ ] adds_hitroll
+			[ ] adds_damage_roll
+			[ ] ticks_until_zero
+			[ ] ammo_type
+			[ ] capacity
+			[ ] adds_fire_damage
+			[ ] adds_critical_chance
+			[ ] adds_ammo_max
+			[ ] adds_chance_to_injure
+			[ ] adds_clip_size
+			[ ] adds_cooldown_between_shots
+			[ ] adds_critical_range
+			[ ] adds_disorient_amount
+			[ ] adds_headshot_bonus
+			[ ] adds_max_range
+			[ ] adds_reload_time
+			[ ] adds_muzzle_velocity
+			[ ] adds_damage_dice_count
+			[ ] adds_damage_dice_sides
+	- EXPLOSIVE
+		- FRAG GRENADE 
+			[x] done
+		- INCENDIARY GRENADE 
+			[x] done
+		- REMOTE EXPLOSIVE 
+			[ ] done
+		- REMOTE CHEMICAL 
+			[ ] done
+		- EMP GRENADE 
+			[ ] done
+		- CLAYMORE MINE 
+			[ ] done
+		- SMOKE GRENADE 
+			[ ] done
+		- C4 
+			[ ] done
+		- BREACH CHARGE 
+			[ ] done
+		- THERMITE CHARGE 
+			[ ] done
+		- FLASHBANG GRENADE 
+			[x] done
+		- SENSOR GRENADE 
+			[x] done
+		- attributes
+			[ ] alternate_explosion_type
+			[ ] chance_to_injure
+			[ ] critical_chance
+			[ ] critical_range
+			[ ] blast_radius
+			[ ] damage_per_second
+			[ ] disorient_amount
+			[ ] range_modifier
+			[ ] loudness_type
+			
+	- GADGET
+		- GRAPPLING HOOK 
+			[ ] done
+		- BARBED WIRE 
+			[ ] done
+		- CAMERA 
+			[x] done
+		- THERMAL CAMERA 
+			[x] done
+		- NIGHT VISION CAMERA 
+			[x] done
+		- MOTION SENSOR 
+			[ ] done
+		- DEPLOYABLE SHIELD 
+			[ ] done
+		- TRIPWIRE 
+			[ ] done
+		- attributes
+			[ ] csv_capabilities
+			[ ] csv_attach_to
+			[ ] electronic
+			[ ] health_points
+			[ ] shield_points
+			[ ] durability_profile
+			[ ] move_points
+			[ ] damage_points
+	- ATTACHMENT
+		- SIGHT
+			[ ] done
+		- MUZZLE
+			[ ] done
+		- MAGAZINE 
+			[ ] done
+		- attributes
+			[ ] zoom_multiplier
+			[ ] ammunition_amount
+			[ ] silence_percent
+			[ ] durability_points
+			[ ] incendiary_damage
+			[ ] radiation_damage
+			[ ] poison_damage
+			[ ] electric_damage
+			[ ] armor_penetration_amount
+			[ ] disorient_amount
+			[ ] emp_amount
+			[ ] emp_radius
+			[ ] attach_to
+
 
 +++++++++++
 | CLASSES |
@@ -63,9 +231,26 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 	- the prevention of (DEF)
 		- with armor
 		- with resistances
-++++++++++++++++++++++++
-| Dyanmic: destruction |
-++++++++++++++++++++++++
++++++++++++++++++++++++++
+| Dyanmic: intelligence |
++++++++++++++++++++++++++
+	- enemy position
+		- from cameras
+		- from sensor grenades
+		- from satelites
+	- enhances damage by knowing position
+++++++++++++++++++++++
+| Dynamic: breaching |
+++++++++++++++++++++++
+	- of soft walls/doors
+	- of reinforced walls/doors
+		- but only by thermite charges
++++++++++++++++++++++
+| Dynamic: movement |
++++++++++++++++++++++
+	- of players, npcs
+	- blocking off a direction
+	- moving an npc to a separate room
 
 
 ++++++++++++++++++++

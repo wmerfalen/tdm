@@ -1377,6 +1377,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		uint16_t behaviour_tree;
 		uint64_t behaviour_tree_flags;
 		void set_behaviour_tree(std::string_view name);
+		void clear_behaviour_tree();
 		mob_special_data() : memory({}),
 			attack_type(0),default_pos(POS_STANDING),
 			damnodice(0),damsizedice(0),snipe_tracking(0),

@@ -456,6 +456,9 @@ bool obj_data::flagged(int value){
 			if(m_textures.size() == 0){ return false; }
 			return std::find(m_textures.begin(),m_textures.end(),t) != m_textures.end();
 		}
+		void mob_special_data::clear_behaviour_tree(){
+			this->behaviour_tree = 0;
+		}
 		void mob_special_data::set_behaviour_tree(std::string_view name){
 			this->behaviour_tree = mods::behaviour_tree_impl::grab_tree_by_name(name.data());
 		}

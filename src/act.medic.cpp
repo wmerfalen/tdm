@@ -37,3 +37,20 @@ ACMD(do_heal) {
 		*player << "You couldn't find your target!\n";
 	}
 }
+
+ACMD(do_revive) {
+	auto vec_args = PARSE_ARGS();
+
+	unsigned room = static_cast<unsigned>(player->room());
+	for(auto& v : vec_args) {
+		if(mods::globals::room_list.size() > room){
+			for(auto & plr : mods::globals::get_room_list(room)){
+				if(mods::util::fuzzy_match(v,plr->name().c_str())) {
+					player->block_for(mods::values::REVIVE_TICKS,mods::deferred::EVENT_PLAYER_REVIVE_SUCCESSFUL,plr->uuid());
+					player->send("You begin reviving %s...\r\n",plr->name().c_str());
+					return;
+				}
+			}
+		}
+	}
+}

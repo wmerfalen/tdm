@@ -9,6 +9,8 @@ namespace mods::help {
 		M_MATCH("throw,grenade",h_grenade);
 		M_MATCH("camera,claymore,install,uninstall",h_install);
 		M_MATCH("cancel",h_cancel);
+		M_MATCH("set_position",h_set_position);
+		M_MATCH("set_npc_position",h_set_npc_position);
 		return true;
 #undef M_MATCH
 	}

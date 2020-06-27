@@ -4,6 +4,12 @@
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 namespace mods::weapons::damage_types {
 	using vpd = mods::scan::vec_player_data;
+
+	bool attack_injures(obj_ptr_t& weapon) {
+		/** TODO: calculate other buffs/nerfs here */
+		return dice(1,100) <= weapon->rifle()->attributes->chance_to_injure;
+	}
+	
 	/**
 	 * @brief This is needed because we feed the damage and the attacktype to damage()
 	 * Unfortunately, the damage() function does so much and is such a core part of legacy cm
@@ -93,15 +99,6 @@ namespace mods::weapons::damage_types {
 			if(dam && victim->position() > POS_DEAD) {
 				if(victim->is_npc()){
 					damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
-					//if(MOB_FLAGGED(victim->cd(),MOB_SENTINEL)){
-					//	dty_debug("Mob is a sentinel. Setting sentinel_snipe_tracking on mob's behaviour tree");
-					//	victim->cd()->mob_specials.set_behaviour_tree("sentinel_snipe_tracking");
-					//	victim->cd()->mob_specials.snipe_tracking = player->uuid();
-					//}else{
-					//	dty_debug("Mob is normal mob. Setting snipe_tracking on mob's behaviour tree");
-					//	victim->cd()->mob_specials.set_behaviour_tree("snipe_tracking");
-					//	victim->cd()->mob_specials.snipe_tracking = player->uuid();
-					//}
 					remember(victim->cd(),player->cd());
 					return;
 				}
@@ -322,10 +319,6 @@ namespace mods::weapons::damage_types {
 
 		if(victim->position() > POS_DEAD) {
 			if(victim->is_npc()){
-				//if(victim->is_dead()){
-				//	victim->cd()->mob_specials.behaviour_tree = 0;
-				//	return;// -1;
-				//}else
 				if(dam == 0){
 					player->sendln("You missed your target!");
 				}else if(dam > 0){
@@ -338,6 +331,11 @@ namespace mods::weapons::damage_types {
 						dty_debug("Mob is normal mob. Setting snipe_tracking on mob's behaviour tree");
 						victim->cd()->mob_specials.set_behaviour_tree("snipe_tracking");
 						victim->cd()->mob_specials.snipe_tracking = player->uuid();
+					}
+					if(attack_injures(weapon)){
+						player->send("%s is injured!\r\n",victim->name().c_str());
+						victim->position() = POS_INCAP;
+						victim->cd()->mob_specials.clear_behaviour_tree();
 					}
 				}
 				remember(victim->cd(),player->cd());
