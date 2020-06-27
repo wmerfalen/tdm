@@ -18,7 +18,6 @@ yamlcpp = $(CURDIR)/yaml-cpp/include
 yamllib = $(CURDIR)/yaml-cpp/build
 yamlcpp_object = yaml-cpp
 boostdir = $(CURDIR)/boost
-
 thirdparty = $(duktape) $(lmdb)
 FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-Wno-char-subscripts -Wcomment \

@@ -364,7 +364,7 @@ namespace mods::lmdb {
 					break;
 				case EINVAL:
 					lmdb_debug("nget - EINVAL");
-					std::cerr << "EINVAL == " << EINVAL << "\n";
+					lmdb_debug("EINVAL == " << EINVAL);
 					break;
 				default:
 					lmdb_debug("nget - fetched okay");
@@ -413,7 +413,7 @@ namespace mods::lmdb {
 					break;
 				case EINVAL:
 					lmdb_debug("nget - EINVAL");
-					std::cerr << "EINVAL == " << EINVAL << "\n";
+					lmdb_debug("EINVAL == " << EINVAL);
 					break;
 				default:
 					lmdb_debug("nget - fetched okay");
@@ -451,8 +451,7 @@ namespace mods::lmdb {
 		if(m_good){
 			lmdb_debug("get - good. fetching..");
 			MDB_val k;
-			std::cerr << "key.length: " <<  key.length() << 
-				"key.size: " << key.size() << "\n";
+			lmdb_debug("key.length: " <<  key.length() << "key.size: " << key.size());
 			k.mv_size = key.length()+1;
 			k.mv_data = (void*)key.data();
 			MDB_val v;
@@ -465,7 +464,7 @@ namespace mods::lmdb {
 					break;
 				case EINVAL:
 					lmdb_debug("get - EINVAL");
-					std::cerr << "EINVAL == " << EINVAL << "\n";
+					lmdb_debug("EINVAL == " << EINVAL);
 					in_value="";
 					break;
 				default:
@@ -661,9 +660,11 @@ namespace mods::lmdb {
 						lmdb_debug("put txn full");
 						break;
 				default:
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 					const auto e = mdb_strerror(ret);
-					std::cerr << "[mdb_strerror][LINE:" << __LINE__ << "][FILE:" << __FILE__ << "][msg]:'" << e << "'\n";
+					lmdb_debug(e);
 					lmdb_debug(std::string("strerror: ") + e);
+#endif
 					if(std::string("Successful return: 0").compare(mdb_strerror(ret)) == 0){
 						lmdb_debug("put success");
 						return 0;
@@ -782,7 +783,7 @@ std::string db_key(const std::vector<std::string> & parts){
 		if(++i == s){ break; }
 		query.append("|");
 	}
-	std::cerr << "[debug][db_key:'" << query << "']\n";
+	lmdb_debug("db_key:'" << query << "'");
 	return query;
 }
 
