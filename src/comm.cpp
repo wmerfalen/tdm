@@ -693,6 +693,9 @@ void game_loop(socket_t mother_desc) {
 					case -1:
 						log("process_input failed for player %s",player->name().c_str()); 
 						break;
+					case -3:
+						log("process_input failed for player %s. Must disconnect immediately.",player->name().c_str()); 
+						break;
 					default:
 						log("process_input unknown error return: %d player [%s]",input_status,player->name().c_str());
 						break;
@@ -1340,6 +1343,16 @@ int destroy_player(player_ptr_t player){
 				removed = true;
 				break;
 			}
+			auto pl_it = std::find(mods::globals::player_list.begin(),
+					mods::globals::player_list.end(),
+					it->second
+			);
+			if(pl_it != mods::globals::player_list.end()){
+				log("Removing player from player_list");
+				mods::globals::player_list.erase(pl_it);
+				removed = true;
+				break;
+			}
 		}
 	} while(removed);
 
@@ -1676,7 +1689,7 @@ int process_input(mods::descriptor_data & t) {
 		bytes_read = perform_socket_read(t.descriptor, read_point, space_left);
 
 		if(bytes_read < 0) {	/* Error, disconnect them. */
-			return (-1);
+			return (-3);
 		} else if(bytes_read == 0) {	/* Just blocking, no problems. */
 			return (0);
 		}

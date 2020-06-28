@@ -252,6 +252,16 @@ int Valid_Name(const char *newname) {
 	char tempname[MAX_INPUT_LENGTH];
 	memset(tempname,0,sizeof(tempname));
 
+	for(i = 0; tempname[i]; i++) {
+		tempname[i] = LOWER(tempname[i]);
+	}
+
+	/* Does the desired name contain a string in the invalid list? */
+	for(i = 0; i < num_invalid; i++){
+		if(strstr(tempname, invalid_list[i])) {
+			return (0);
+		}
+	}
 	/*
 	 * Make sure someone isn't trying to create this same name.  We want to
 	 * do a 'str_cmp' so people can't do 'Bob' and 'BoB'.  The creating login
@@ -259,28 +269,12 @@ int Valid_Name(const char *newname) {
 	 * prompt won't have characters yet.
 	 */
 	for(auto & p : mods::globals::player_list){
-		if(!p->name().compare(newname)) {
-			return (p->state() == CON_PLAYING);
+		if(mods::util::is_lower_match(p->name().c_str(), newname)) {
+			if(p->state() == CON_PLAYING && p->authenticated()){
+				return 0;
+			}
 		}
 	}
-
-	/* return valid if list doesn't exist */
-	if(num_invalid < 1) {
-		return (1);
-	}
-
-	/* change to lowercase */
-	strlcpy(tempname, newname, sizeof(tempname));
-
-	for(i = 0; tempname[i]; i++) {
-		tempname[i] = LOWER(tempname[i]);
-	}
-
-	/* Does the desired name contain a string in the invalid list? */
-	for(i = 0; i < num_invalid; i++)
-		if(strstr(tempname, invalid_list[i])) {
-			return (0);
-		}
 
 	return (1);
 }
