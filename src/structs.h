@@ -159,6 +159,7 @@ using ush_int = uint32_t;
 #define ROOM_NOMOB		(1 << 2)   /* MOBs not allowed		*/
 #define ROOM_INDOORS		(1 << 3)   /* Indoors			*/
 #define ROOM_PEACEFUL		(1 << 4)   /* Violence not allowed	*/
+#define ROOM_DMZ				(1 << 4)   /* Violence not allowed	*/
 #define ROOM_SOUNDPROOF		(1 << 5)   /* Shouts, gossip blocked	*/
 #define ROOM_NOTRACK		(1 << 6)   /* Track won't go through	*/
 #define ROOM_NOMAGIC		(1 << 7)   /* Magic not allowed		*/

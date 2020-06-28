@@ -7,6 +7,7 @@
 
 #include <cctype>	/* for std::tolower */
 #include "flashbang.hpp"
+#include "rooms.hpp"
 #ifdef __MENTOC_SHOW_MODS_EXPLODE_DEBUG_OUTPUT__
 #define explode_debug(MSG) mentoc_prefix_debug("[mods::projectile::explode]")  << MSG << "\n";
 #else
@@ -78,6 +79,9 @@ namespace mods {
 			}
 		}
 		void emp_damage(room_rnum& room_id,obj_ptr_t object){
+			if(mods::rooms::is_peaceful(room_id)){
+				return;
+			}
 			/** TODO: fill this function */
 			send_to_room(room_id,"Your electronics sizzle and malfunction into uselessness.");
 			QUEUE_TEXTURE_REMOVAL(EMP,room_id);
@@ -125,6 +129,9 @@ namespace mods {
 				std::size_t blast_radius,
 				obj_ptr_t device,
 				uuid_t player_uuid) {
+			if(mods::rooms::is_peaceful(room_id)){
+				return;
+			}
 			pbr_debug("perform blast radius entry");
 			auto current_room = room_id;
 			auto type = device->explosive()->type;
@@ -253,6 +260,9 @@ namespace mods {
 		void explode(room_rnum room_id,uuid_t object_uuid,uuid_t player_uuid){
 			if(room_id >= world.size()){
 				log("[error]: mods::projectile::explode received room_id greater than world.size()");
+				return;
+			}
+			if(mods::rooms::is_peaceful(room_id)){
 				return;
 			}
 			explode_debug("explode, calling optr");
@@ -534,6 +544,16 @@ namespace mods {
 		 */
 		void throw_object(player_ptr_t& player, int direction, std::size_t depth,
 				std::shared_ptr<obj_data>& object, std::string_view verb) {
+
+			{
+				room_rnum room_id = resolve_room(player->room(),direction,depth);
+				if(mods::rooms::is_peaceful(room_id)){
+					player->sendln("Target room is in the D.M.Z.. Your item has been destroyed.");
+					mods::globals::dispose_object(object->uuid);
+					return;
+				}
+			}
+
 			std::array<char,32> str_dir_buffer;
 			std::fill(str_dir_buffer.begin(),str_dir_buffer.end(),0);
 			std::string str_dir = mods::projectile::todirstr(direction,0,0);

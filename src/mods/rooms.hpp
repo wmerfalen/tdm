@@ -8,6 +8,9 @@ extern obj_ptr_t optr_by_uuid(uuid_t);
 #define mra_debug(a) std::cerr << "[mods::affects]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n";
 namespace mods::rooms {
 	using fire_status_t = room_data::fire_status_t;
+	static inline bool is_peaceful(room_rnum room){
+		return world[room].room_flags & ROOM_PEACEFUL;
+	}
 
 	namespace affects {
 		using affect_t = room_data::texture_type_t;
@@ -241,6 +244,10 @@ namespace mods::rooms {
 	 * @param room
 	 */
 	static inline void start_fire_dissolver(room_rnum room) {
+		if(is_peaceful(room)){
+			log("Prevented peaceful room to catch on fire (%d)", room);
+			return;
+		}
 		auto fire = room_data::texture_type_t::ON_FIRE;
 		if(room >= world.size()){
 			return;

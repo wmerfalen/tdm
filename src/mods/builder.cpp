@@ -4145,6 +4145,29 @@ ACMD(do_rbuild) {
 			"  |:: {wht}rbuild{/wht} {gld}list 2{/gld}\r\n" << 
 			"  |:: (list the third page)\r\n" <<
 
+			" {grn}rbuild{/grn} {red}<flag> {yel}<FLAG> <on|off>{/red}\r\n" <<
+			"  |--> set flags on room.\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}flag DARK on{/gld}\r\n" << 
+			"  |:: (set the DARK flag on the room you are in)\r\n" <<
+			"  {gld}|:: DARK -> Dark\r\n" <<
+			"  {gld}|:: DEATH	-> Death trap\r\n" <<
+			"  {gld}|:: NOMOB	-> MOBs not allowed\r\n" <<
+			"  {gld}|:: INDOORS	-> Indoors\r\n" <<
+			"  {gld}|:: PEACEFUL -> Violence not allowed\r\n" <<
+			"  {gld}|:: DMZ	-> Violence not allowed\r\n" <<
+			"  {gld}|:: SOUNDPROOF -> Shouts, gossip blocked\r\n" <<
+			"  {gld}|:: NOTRACK	-> Track won't go through\r\n" <<
+			"  {gld}|:: NOMAGIC	-> Magic not allowed\r\n" <<
+			"  {gld}|:: TUNNEL -> room for only 1 pers\r\n" <<
+			"  {gld}|:: PRIVATE	-> Can't teleport in\r\n" <<
+			"  {gld}|:: GODROOM	-> LVL_GOD+ only allowed\r\n" <<
+			"  {gld}|:: HOUSE	-> (R) Room is a house\r\n" <<
+			"  {gld}|:: HOUSE_CRASH	-> (R) House needs saving\r\n" <<
+			"  {gld}|:: ATRIUM -> (R) The door to a house\r\n" <<
+			"  {gld}|:: OLC -> (R) Modifyable/!compress\r\n" <<
+			"  {gld}|:: BFS_MARK -> (R) breath-first srch mrk\r\n" <<
+
 			" {grn}NEW FEATURE [as of: 2019-03]{/grn}\r\n" <<
 			" {red}FEATURE: Room textures{/red}\r\n" <<
 			" {grn}rbuild{/grn} {red}<texture> <type1> ... <typeN>{/red}\r\n" <<
