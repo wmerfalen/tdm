@@ -596,7 +596,7 @@ CCYEL	screen.h	32;"	d
 CEMENT	structs.h	/^			CEMENT,			\/** asphault, nearly indestructible *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 CHAOTIC	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 CHARM	mods/flags.hpp	/^		CHARM,$/;"	e	enum:mods::flags::aff
-CHECK_NULL	comm.cpp	2314;"	d	file:
+CHECK_NULL	comm.cpp	2315;"	d	file:
 CHECK_PLAYER_SPECIAL	utils.h	214;"	d
 CHECK_PLAYER_SPECIAL	utils.h	217;"	d
 CHECK_WAIT	utils.h	378;"	d
@@ -760,8 +760,8 @@ DB_BOOT_OBJ	db.h	17;"	d
 DB_BOOT_SHP	db.h	19;"	d
 DB_BOOT_WLD	db.h	15;"	d
 DB_BOOT_ZON	db.h	18;"	d
-DD	mods/debug-pre-game.hpp	17;"	d
-DD	mods/debug-pre-game.hpp	6;"	d
+DD	mods/debug-pre-game.hpp	20;"	d
+DD	mods/debug-pre-game.hpp	7;"	d
 DECENT	mods/yaml.hpp	/^	DECENT,$/;"	e	enum:mods::yaml::durability_profile_type_t
 DEFAULT	mods/rarity.hpp	/^		constexpr static float DEFAULT = mods::rarity::COMMON;$/;"	m	namespace:mods::rarity
 DEFAULT_AMOUNT	mods/affects.hpp	/^	constexpr static amount_t DEFAULT_AMOUNT = 3;$/;"	m	namespace:mods::affects
@@ -1936,7 +1936,7 @@ OUT	structs.h	/^			OUT = 5$/;"	e	enum:uint8_t
 OUTSIDE	structs.h	/^			OUTSIDE,		\/** Outside where anyone can see you *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 OUTSIDE	utils.h	514;"	d
 OUT_OF_AMMO	mods/values.hpp	/^			constexpr static const char* OUT_OF_AMMO= "{gld}*CLICK*{\/gld} Your weapon is out of ammo!";$/;"	m	namespace:mods::values::msg
-O_NONBLOCK	comm.cpp	2031;"	d	file:
+O_NONBLOCK	comm.cpp	2032;"	d	file:
 Obj_from_store	objsave.cpp	/^struct obj_data *Obj_from_store(struct obj_file_elem object, int *location) {$/;"	f
 Obj_to_store	objsave.cpp	/^int Obj_to_store(struct obj_data *obj, FILE *fl, int location) {$/;"	f
 OfType	mods/catch.hpp	/^		enum OfType {$/;"	g	struct:Catch::ResultWas
@@ -2277,7 +2277,7 @@ SEEK_END	utils.h	537;"	d
 SEEK_SET	utils.h	535;"	d
 SELECTOR	mods/behaviour_tree_node.hpp	/^		enum node_type_t { DO_NOTHING, SELECTOR, SEQUENCE, LEAF };$/;"	e	enum:mods::behaviour_tree_node::node_type_t
 SELF	utils.h	452;"	d
-SENDOK	comm.cpp	2460;"	d	file:
+SENDOK	comm.cpp	2461;"	d	file:
 SENSE_LIFE	mods/flags.hpp	/^		SENSE_LIFE,$/;"	e	enum:mods::flags::aff
 SENSE_MOTION	mods/weapon-types.hpp	/^		SENSE_MOTION,$/;"	e	enum:mods::weapon::capabilities::cap_t
 SENSOR	mods/aoe.hpp	/^		SENSOR, \/** senses objects or enemies within blast_radius *\/$/;"	e	enum:mods::aoe::types_t
@@ -5450,7 +5450,7 @@ mud_time_to_secs	utils.cpp	/^time_t mud_time_to_secs(struct time_info_data *now)
 mudlog	utils.cpp	/^void mudlog(int type, int level, int file, const char *str, ...) {$/;"	f
 muzzle_velocity	mods/weapon.hpp	/^			int muzzle_velocity;	\/\/ Feet per second$/;"	m	struct:mods::weapon::yaml::rifle_description_t
 my_signal	comm.cpp	/^sigfunc *my_signal(int signo, sigfunc *func) {$/;"	f
-my_signal	comm.cpp	2108;"	d	file:
+my_signal	comm.cpp	2109;"	d	file:
 name	db.h	/^	char	*name;		    \/* name of this zone                  *\/$/;"	m	struct:zone_data
 name	db.h	/^	char	name[MAX_NAME_LENGTH+1];$/;"	m	struct:ban_list_element
 name	db.h	/^	mods::string name;$/;"	m	struct:player_index_element
@@ -6101,7 +6101,7 @@ routines	spells.h	/^	int routines;$/;"	m	struct:spell_info_type
 row_id	mods/lmdb.hpp	/^		uint64_t row_id;$/;"	m	struct:mods::lmdb::_selector
 run	mods/behaviour_tree.hpp	/^		run_status run(LambdaArgument arg) {$/;"	f	struct:mods::behaviour_tree
 run	mods/behaviour_tree_node.hpp	/^		run_status_t run(LambdaArgument & arg){$/;"	f	struct:mods::behaviour_tree_node
-run	mods/debug-pre-game.hpp	/^	bool run(){ return 1;$/;"	f	namespace:mods::debug::pre_game
+run	mods/debug-pre-game.hpp	/^	bool run(){$/;"	f	namespace:mods::debug::pre_game
 run_autowiz	limits.cpp	/^void run_autowiz(void) {$/;"	f
 run_profile_scripts	config.cpp	/^	bool run_profile_scripts;$/;"	m	namespace:config	file:
 run_profile_scripts	mods/js.cpp	/^		void run_profile_scripts(const std::string& player_name){$/;"	f	namespace:mods::js
@@ -6730,7 +6730,7 @@ world_conf	mods/world-configuration.cpp	/^namespace mods::world_conf {$/;"	n	cla
 world_conf	mods/world-configuration.hpp	/^namespace mods::world_conf {$/;"	n	class:mods
 worn_by	structs.h	/^		char_data *worn_by;	  \/* Worn by?			      *\/$/;"	m	struct:obj_data
 worn_on	structs.h	/^		sh_int worn_on;		  \/* Worn where?		      *\/$/;"	m	struct:obj_data
-write	comm.cpp	1498;"	d	file:
+write	comm.cpp	1499;"	d	file:
 write_aliases	alias.cpp	/^void write_aliases(char_data *ch) {$/;"	f
 write_ban_list	ban.cpp	/^void write_ban_list(void) {$/;"	f
 write_example_file	mods/yaml.cpp	/^	int16_t armor_description_t::write_example_file(std::string_view file){$/;"	f	class:mods::yaml::armor_description_t

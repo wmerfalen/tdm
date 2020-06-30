@@ -58,7 +58,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/chargen mods/orm/inventory \
 					 mods/weapons/pistol-czp10 \
 					 mods/weapons/smg-mp5 mods/weapons/shotgun-sasg12 mods/classes/sentinel \
-					 mods/orm/class-sentinel \
+					 mods/orm/class-sentinel mods/orm/room \
 					 mods/weapons/sniper-rifle-psg1 mods/classes/sniper \
 					 mods/orm/quotes act.builder mods/orm/base mods/yaml \
 					 mods/affects mods/item mods/weapon-types mods/sensor-grenade \

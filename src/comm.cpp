@@ -604,6 +604,7 @@ void game_loop(socket_t mother_desc) {
 	struct timeval before_sleep, now, timeout;
 	int pulse = 0, missed_pulses, aliased;
 
+	signal(SIGPIPE,SIG_IGN);
 	/* initialize various time values */
 	null_time.tv_sec = 0;
 	null_time.tv_usec = 0;
