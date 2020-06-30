@@ -23,6 +23,8 @@ namespace mods::orm {
 				try{
 					auto insert_transaction = txn();
 					sql_compositor comp(obj.table_name(),&insert_transaction);
+					auto mapped = obj.export_insert();
+					mapped.erase(obj.primary_key_name());
 					auto up_sql = comp
 						.insert()
 						.into(obj.table_name())
@@ -60,6 +62,28 @@ namespace mods::orm {
 				return {-2,"unknown"};
 			}
 		template <typename TObject>
+			static inline std::tuple<int16_t,std::string> delete_where(
+					std::string_view table_name,
+					std::string_view where, 
+					std::string_view sql_operator,
+					std::string_view value) {
+				try{
+					auto del_txn = txn();
+					sql_compositor comp(table_name.data(),&del_txn);
+					auto up_sql = comp
+						.del()
+						.from(table_name.data())
+						.where(where.data(), sql_operator.data(),value.data())
+						.sql();
+					mods::pq::exec(del_txn,up_sql);
+					mods::pq::commit(del_txn);
+					return {0,"okay"};
+				}catch(std::exception& e){
+					return {-1,e.what()};
+				}
+				return {-2,"unknown"};
+			}
+		template <typename TObject>
 			static inline std::tuple<int16_t,std::string> update(TObject& s, std::map<std::string,std::string>& values){
 				try{
 					auto up_txn = txn();
@@ -74,6 +98,31 @@ namespace mods::orm {
 					return {0,"okay"};
 				}catch(std::exception& e){
 					std::cerr << __FILE__ << ": " << __LINE__ << ": error updating room by pkid: '" << e.what() << "'\n";
+					return {-1,e.what()};
+				}
+				return {-2,"unknown"};
+			}
+		template <typename TContainerObject>
+			static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s,
+					std::string_view where,
+					std::string_view sql_operator,
+					std::string_view value){
+				try{
+					auto select_transaction = txn();
+					sql_compositor comp(s[0].table_name(),&select_transaction);
+					auto player_sql = comp.select("*")
+						.from(s[0].table_name())
+						.where(where.data(), sql_operator.data(), value.data())
+						.sql();
+					auto player_record = mods::pq::exec(select_transaction,player_sql);
+					mods::pq::commit(select_transaction);
+					for(auto row : player_record){
+						auto & m = s.emplace_back();
+						m.feed(row);
+					}
+					return {player_record.size(),"okay"};
+				}catch(std::exception& e){
+					std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
 					return {-1,e.what()};
 				}
 				return {-2,"unknown"};

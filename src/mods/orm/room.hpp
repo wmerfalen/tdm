@@ -25,7 +25,10 @@ namespace mods::orm {
 		uint64_t initialize_row();
 		int16_t feed(const pqxx::result::reference &);
 		void init();	
+		std::string dump_cols(std::vector<std::string> columns);
+		std::string dump_cols();
 		sql_save_map_t export_class();
+		sql_save_map_t export_insert();
 
 		int16_t				load_by_vnum(room_vnum);
 
@@ -41,31 +44,7 @@ namespace mods::orm {
 		uint64_t room_flag;
 	};
 
-	static inline void foobar(){
-		mods::orm::room r;
-
-		auto status3 = mods::orm::base::insert_returing<mods::orm::room>(r, "id");
-		if(std::get<0>(status3) < 0){
-			std::cerr << "[error] insert_returning failed!:\n";
-			exit(1);
-		}
-		std::cerr << "returned id:" << std::get<1>(status3) << "\n";
-
-		auto status = mods::orm::base::load_by_pkid(r,std::get<1>(status3));
-		if(std::get<0>(status) < 0){
-			std::cerr << "[error] load_by_pkid failed!: '" << std::get<1>(status) << "'\n";
-			exit(1);
-		}
-		std::cerr << ":)\n";
-		r.id = 1;
-		auto status2 = mods::orm::base::delete_from(r);
-		if(std::get<0>(status2) < 0){
-			std::cerr << "[error] delete_from failed!: '" << std::get<1>(status2) << "'\n";
-			exit(1);
-		}
-		std::cerr << ":)\n";
-		exit(0);
-	}
+	void foobar();
 };
 
 #endif
