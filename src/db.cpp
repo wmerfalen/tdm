@@ -41,6 +41,10 @@
 #include "mods/orm/inventory.hpp"
 #include "mods/orm/shop.hpp"
 #include "mods/object-utils.hpp"
+
+namespace mods::rooms {
+	extern void set_sector_type(room_rnum room_id, int sector_type);
+};
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>;
@@ -1395,6 +1399,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 
 				world.push_back(room);
 				mods::globals::register_room(world.size());
+				mods::rooms::set_sector_type(world.size()-1,room_records_row["sector_type"].as<int>());
 				top_of_world = world.size();
 			}catch(std::exception& e){
 				std::cerr << "SYSERR: exception select from rooms db: " << e.what() << "\n";
@@ -1426,30 +1431,9 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 			}
 			std::string gen_desc = row2["general_description"].c_str();
 			std::string keyword = row2["keyword"].c_str();
-			auto db_exit_info = (row2["exit_info"]).as<int>();
-			int exit_info = 0;
-
-			switch(db_exit_info) {
-				case 1:
-				default:
-					exit_info = EX_ISDOOR;
-					REMOVE_BIT(exit_info,EX_CLOSED);
-					break;
-
-				case 2:
-					exit_info = EX_ISDOOR | EX_PICKPROOF;
-					SET_BIT(exit_info,EX_CLOSED);
-					break;
-
-				case 3:
-					exit_info = EX_ISDOOR | EX_REINFORCED;
-					SET_BIT(exit_info,EX_CLOSED);
-					break;
-			}
-
 			int key = (row2["exit_key"]).as<int>();
 			room_rnum to_room = real_room(row2["to_room"].as<int>());
-			world[real_room_number].set_dir_option(direction,gen_desc,keyword,exit_info,key,to_room);
+			world[real_room_number].set_dir_option(direction,gen_desc,keyword,row2["exit_key"].as<int>(),key,to_room);
 			//log("DEBUG: set dir option: direction %d gen_desc: '%s' keyword: '%s'",direction,gen_desc.c_str(),keyword.c_str());
 		}
 	}catch(std::exception& e){

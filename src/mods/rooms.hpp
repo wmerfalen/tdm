@@ -11,7 +11,119 @@ namespace mods::rooms {
 	static inline bool is_peaceful(room_rnum room){
 		return world[room].room_flags & ROOM_PEACEFUL;
 	}
+	enum sector_type_t {
+		NONE = 0,
+		OUTSIDE_GRASSY,
+		OUTSIDE_CEMENT,
+		OUTSIDE_FOREST,
+		OUTSIDE_WOODEN_WALLS,
+		OUTSIDE_DIRT,
+		OUTSIDE_DESERT,
+		OUTSIDE_WATER,
+		OUTSIDE_UNDERWATER,
+		OUTSIDE_FROZEN,
+		OUTSIDE_HILLS,
+		OUTSIDE_MARKET_PLACE,
+		OUTSIDE_METAL_HATCH,
+		OUTSIDE_TREE,
+		OUTSIDE_ROOFTOP,
+		OUTSIDE_WOODEN_WALL,	/** rappelling */
+		OUTSIDE_METAL_WALL,	/** rappelling */
+		OUTSIDE_AIR,	/** on a rope hanging from a helicopter */
+		INDOOR_WOODEN_WALLS,
+		INDOOR_CEMENT,
+		INDOOR_CEMENT_WOODEN_WALLS,
+		INDOOR_CARPET_WOODEN_WALLS,
+		INDOOR_TUNNEL,
+		INDOOR_METAL_WALLS,
+		INDOOR_SERVER_ROOM,
+		INDOOR_SEWER,
+		INDOOR_MARKET_PLACE,
+		INDOOR_METAL_HATCH,
+		INDOOR_ROOF,	/** attached to the roof like spiderman */
+		INDOOR_ATTIC,
+		INDOOR_BASEMENT
+	};
+	/**
+	 * vim sorcery: :48,79s/^\t\t\([A-Z_]\+\),\?/\t\t{sector_type_t::\1,"\1"},/g
+	 */
+	static const std::map<sector_type_t,std::string> sector_strings {
+		{sector_type_t::NONE,"NONE"},
+		{sector_type_t::OUTSIDE_GRASSY,"OUTSIDE_GRASSY"},
+		{sector_type_t::OUTSIDE_CEMENT,"OUTSIDE_CEMENT"},
+		{sector_type_t::OUTSIDE_FOREST,"OUTSIDE_FOREST"},
+		{sector_type_t::OUTSIDE_WOODEN_WALLS,"OUTSIDE_WOODEN_WALLS"},
+		{sector_type_t::OUTSIDE_DIRT,"OUTSIDE_DIRT"},
+		{sector_type_t::OUTSIDE_DESERT,"OUTSIDE_DESERT"},
+		{sector_type_t::OUTSIDE_WATER,"OUTSIDE_WATER"},
+		{sector_type_t::OUTSIDE_UNDERWATER,"OUTSIDE_UNDERWATER"},
+		{sector_type_t::OUTSIDE_FROZEN,"OUTSIDE_FROZEN"},
+		{sector_type_t::OUTSIDE_HILLS,"OUTSIDE_HILLS"},
+		{sector_type_t::OUTSIDE_MARKET_PLACE,"OUTSIDE_MARKET_PLACE"},
+		{sector_type_t::OUTSIDE_METAL_HATCH,"OUTSIDE_METAL_HATCH"},
+		{sector_type_t::OUTSIDE_TREE,"OUTSIDE_TREE"},
+		{sector_type_t::OUTSIDE_ROOFTOP,"OUTSIDE_ROOFTOP"},
+		{sector_type_t::OUTSIDE_WOODEN_WALL,"OUTSIDE_WOODEN_WALL"},
+		{sector_type_t::OUTSIDE_METAL_WALL,"OUTSIDE_METAL_WALL"},
+		{sector_type_t::OUTSIDE_AIR,"OUTSIDE_AIR"},
+		{sector_type_t::INDOOR_WOODEN_WALLS,"INDOOR_WOODEN_WALLS"},
+		{sector_type_t::INDOOR_CEMENT,"INDOOR_CEMENT"},
+		{sector_type_t::INDOOR_CEMENT_WOODEN_WALLS,"INDOOR_CEMENT_WOODEN_WALLS"},
+		{sector_type_t::INDOOR_CARPET_WOODEN_WALLS,"INDOOR_CARPET_WOODEN_WALLS"},
+		{sector_type_t::INDOOR_TUNNEL,"INDOOR_TUNNEL"},
+		{sector_type_t::INDOOR_METAL_WALLS,"INDOOR_METAL_WALLS"},
+		{sector_type_t::INDOOR_SERVER_ROOM,"INDOOR_SERVER_ROOM"},
+		{sector_type_t::INDOOR_SEWER,"INDOOR_SEWER"},
+		{sector_type_t::INDOOR_MARKET_PLACE,"INDOOR_MARKET_PLACE"},
+		{sector_type_t::INDOOR_METAL_HATCH,"INDOOR_METAL_HATCH"},
+		{sector_type_t::INDOOR_ROOF,"INDOOR_ROOF"},
+		{sector_type_t::INDOOR_ATTIC,"INDOOR_ATTIC"},
+		{sector_type_t::INDOOR_BASEMENT,"INDOOR_BASEMENT"}
+	};
 
+	static inline std::string texture_to_string(room_data::texture_type_t t){
+#define MENTOC_LAZY(A) if(t == room_data::texture_type_t::A){ return #A; }
+MENTOC_LAZY(GRASS);
+MENTOC_LAZY(CEMENT);
+MENTOC_LAZY(OUTSIDE);
+MENTOC_LAZY(INSIDE);
+MENTOC_LAZY(SEWER);
+MENTOC_LAZY(RADIOACTIVE);
+MENTOC_LAZY(VOLATILE);
+MENTOC_LAZY(RUBBLE);
+MENTOC_LAZY(DIRT);
+MENTOC_LAZY(SHATTERED_GLASS);
+MENTOC_LAZY(LOW_ATMOSPHERE);
+MENTOC_LAZY(ON_FIRE);
+MENTOC_LAZY(NON_HAZARDOUS_SMOKE);
+MENTOC_LAZY(HAZARDOUS_SMOKE);
+MENTOC_LAZY(EMP);
+MENTOC_LAZY(TUNNEL);
+MENTOC_LAZY(LADDER);
+MENTOC_LAZY(ELEVATOR);
+MENTOC_LAZY(GLASS_WINDOWS);
+MENTOC_LAZY(SCANNED);
+MENTOC_LAZY(DAMP);
+MENTOC_LAZY(FOREST);
+MENTOC_LAZY(WOODEN_WALLS);
+MENTOC_LAZY(CARPET);
+MENTOC_LAZY(DRY);
+MENTOC_LAZY(DESERT);
+MENTOC_LAZY(WATER);
+MENTOC_LAZY(UNDERWATER);
+MENTOC_LAZY(METAL_HATCH);
+MENTOC_LAZY(METAL_WALL);
+MENTOC_LAZY(TREE);
+MENTOC_LAZY(ROOFTOP);
+MENTOC_LAZY(AIR);
+MENTOC_LAZY(FROZEN);
+MENTOC_LAZY(SERVER_ROOM);
+#undef MENTOC_LAZY
+		return "<unknown>";
+	}
+
+	void set_sector_type(room_rnum room_id, int sector_type);
+	std::optional<sector_type_t> sector_from_string(std::string m);
 	namespace affects {
 		using affect_t = room_data::texture_type_t;
 		using affect_amount_t = uint32_t;
@@ -181,17 +293,17 @@ namespace mods::rooms {
 	 * @return bool
 	 */
 	template <typename TRoom>
-	static inline bool is_smoked(TRoom room) {
-		auto & textures = world[room].textures();
-		if(textures.size() == 0){
-			return false;
+		static inline bool is_smoked(TRoom room) {
+			auto & textures = world[room].textures();
+			if(textures.size() == 0){
+				return false;
+			}
+			std::array<room_data::texture_type_t,2> smokes = {
+				room_data::texture_type_t::NON_HAZARDOUS_SMOKE,
+				room_data::texture_type_t::HAZARDOUS_SMOKE
+			};
+			return std::find_first_of(textures.begin(),textures.end(),smokes.begin(),smokes.end()) != textures.end();
 		}
-		std::array<room_data::texture_type_t,2> smokes = {
-			room_data::texture_type_t::NON_HAZARDOUS_SMOKE,
-			room_data::texture_type_t::HAZARDOUS_SMOKE
-		};
-		return std::find_first_of(textures.begin(),textures.end(),smokes.begin(),smokes.end()) != textures.end();
-	}
 	/**
 	 * @brief true if on fire
 	 *
@@ -201,13 +313,13 @@ namespace mods::rooms {
 	 * @return 
 	 */
 	template <typename TRoom>
-	static inline bool is_on_fire(TRoom room) {
-		auto & textures = world[room].textures();
-		if(textures.size() == 0){
-			return false;
+		static inline bool is_on_fire(TRoom room) {
+			auto & textures = world[room].textures();
+			if(textures.size() == 0){
+				return false;
+			}
+			return std::find(textures.begin(),textures.end(),room_data::texture_type_t::ON_FIRE) != textures.end();
 		}
-		return std::find(textures.begin(),textures.end(),room_data::texture_type_t::ON_FIRE) != textures.end();
-	}
 	/**
 	 * @brief gets fire_status_t enum if room on fire
 	 *
@@ -217,9 +329,9 @@ namespace mods::rooms {
 	 * @return 
 	 */
 	template <typename TRoom>
-	static inline fire_status_t get_fire_status(TRoom room) {
-		return world[room].fire_status();
-	}
+		static inline fire_status_t get_fire_status(TRoom room) {
+			return world[room].fire_status();
+		}
 
 	/**
 	 * @brief completely stops a fire and removes texture from room
@@ -234,7 +346,7 @@ namespace mods::rooms {
 		affects::remove_room_dissolve_affect(
 				room,
 				(affects::affect_t)fire
-		);
+				);
 		world[room].remove_texture(fire);
 		maffects_debug("Removed fire texture from: " << room);
 	}
@@ -262,23 +374,23 @@ namespace mods::rooms {
 				(affects::affect_t)fire,
 				room_data::fire_status_t::KINDLING,
 				FIRE_EVERY_N_TICKS
-		);
+				);
 
 		affects::set_affect_to_increment(
 				room,
 				fire
-		);
-		
+				);
+
 		affects::set_affect_max_amount(
 				room,
 				fire,
 				fire_status_t::OUT
-		);
+				);
 
 		affects::add_callback(room,
-			fire,
-			affects::on_room_fire_changed_affect
-		);
+				fire,
+				affects::on_room_fire_changed_affect
+				);
 
 		affects::trigger_callback_for_affect(room,fire);
 	}
@@ -357,7 +469,7 @@ namespace mods::rooms {
 		template <typename TRoom>
 			static inline void force_dark(TRoom room) {
 				if(room >= world.size()){
-						return;
+					return;
 				}
 				world[room].light = false;
 				SET_BIT(ROOM_FLAGS(room), ROOM_DARK);
@@ -372,7 +484,7 @@ namespace mods::rooms {
 		template <typename TRoom>
 			static inline void remove_dark(TRoom room) {
 				if(room >= world.size()){
-						return;
+					return;
 				}
 				world[room].light = true;
 				REMOVE_BIT(ROOM_FLAGS(room), ROOM_DARK);
@@ -387,68 +499,68 @@ namespace mods::rooms {
 		 * @param level
 		 * @param player
 		 */
-			static inline void set_fire(room_rnum room,bool on,std::string& level,player_ptr_t& player) {
-				std::string msg = "";
-				bool found = false;
-				if(room >= world.size()){
-					msg = "invalid room id";
-					goto cleanup;
-				}
-				if(on){
-					msg += "\r\nsetting room to on fire\r\n";
-					start_fire_dissolver(room);
-				}else{
-					msg += "\r\nsetting room to __NOT__ on fire\r\n";
-					stop_fire_dissolver(room);
-				}
-				if(level.length() == 0){
-					goto cleanup;
-				}
-				if(level.compare("NONE") == 0){
-					world[room].fire_status() = room_data::fire_status_t::OUT;
-					msg += "set to OUT...";
-					found = true;
-					goto cleanup;
-				}
-				if(level.compare("KINDLING") == 0){
-					world[room].fire_status() = room_data::fire_status_t::KINDLING;
-					msg += "set to kindling...";
-					found = true;
-					goto cleanup;
-				}
-				if(level.compare("COMPLETELY_ON_FIRE") == 0){
-					world[room].fire_status() = room_data::fire_status_t::COMPLETELY_ON_FIRE;
-					msg += "set to cof...";
-					found = true;
-					goto cleanup;
-				}
-				if(level.compare("SMOLDERING") == 0){
-					world[room].fire_status() = room_data::fire_status_t::SMOLDERING;
-					msg += "set to SMOLDERING...";
-					found = true;
-					goto cleanup;
-				}
-				if(level.compare("SMOKING") == 0){
-					world[room].fire_status() = room_data::fire_status_t::SMOKING;
-					msg += "set to SMOKING...";
-					found = true;
-					goto cleanup;
-				}
-				if(level.compare("OUT") == 0){
-					world[room].fire_status() = room_data::fire_status_t::OUT;
-					msg += "set to OUT...";
-					found = true;
-					goto cleanup;
-				}
-				if(!found){
-					player->sendln("Options are KINDLING,COMPLETELY_ON_FIRE,SMOLDERING,SMOKING,OUT,NONE");
-				}
-				cleanup:
-					msg += "\r\ncurrent fire status: '";
-					msg += to_string(get_fire_status(room)) + "'\r\n";
-					player->sendln(msg);
-				return;
+		static inline void set_fire(room_rnum room,bool on,std::string& level,player_ptr_t& player) {
+			std::string msg = "";
+			bool found = false;
+			if(room >= world.size()){
+				msg = "invalid room id";
+				goto cleanup;
 			}
+			if(on){
+				msg += "\r\nsetting room to on fire\r\n";
+				start_fire_dissolver(room);
+			}else{
+				msg += "\r\nsetting room to __NOT__ on fire\r\n";
+				stop_fire_dissolver(room);
+			}
+			if(level.length() == 0){
+				goto cleanup;
+			}
+			if(level.compare("NONE") == 0){
+				world[room].fire_status() = room_data::fire_status_t::OUT;
+				msg += "set to OUT...";
+				found = true;
+				goto cleanup;
+			}
+			if(level.compare("KINDLING") == 0){
+				world[room].fire_status() = room_data::fire_status_t::KINDLING;
+				msg += "set to kindling...";
+				found = true;
+				goto cleanup;
+			}
+			if(level.compare("COMPLETELY_ON_FIRE") == 0){
+				world[room].fire_status() = room_data::fire_status_t::COMPLETELY_ON_FIRE;
+				msg += "set to cof...";
+				found = true;
+				goto cleanup;
+			}
+			if(level.compare("SMOLDERING") == 0){
+				world[room].fire_status() = room_data::fire_status_t::SMOLDERING;
+				msg += "set to SMOLDERING...";
+				found = true;
+				goto cleanup;
+			}
+			if(level.compare("SMOKING") == 0){
+				world[room].fire_status() = room_data::fire_status_t::SMOKING;
+				msg += "set to SMOKING...";
+				found = true;
+				goto cleanup;
+			}
+			if(level.compare("OUT") == 0){
+				world[room].fire_status() = room_data::fire_status_t::OUT;
+				msg += "set to OUT...";
+				found = true;
+				goto cleanup;
+			}
+			if(!found){
+				player->sendln("Options are KINDLING,COMPLETELY_ON_FIRE,SMOLDERING,SMOKING,OUT,NONE");
+			}
+cleanup:
+			msg += "\r\ncurrent fire status: '";
+			msg += to_string(get_fire_status(room)) + "'\r\n";
+			player->sendln(msg);
+			return;
+		}
 	};//end gods
 };//end namespace
 #endif

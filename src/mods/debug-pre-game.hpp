@@ -7,6 +7,9 @@ namespace mods::debug::pre_game {
 #define DD(a){ std::cerr << "[debug::pre_game][line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"; }
 	namespace fb = ::mods::flashbang;
 	bool run(){
+#ifndef __MENTOC_RUN_PREGAME__
+		return 1;
+#endif
 		mods::orm::foobar();
 
 		auto o = create_object(ITEM_EXPLOSIVE, "flashbang-grenade.yml");

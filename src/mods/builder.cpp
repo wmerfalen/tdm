@@ -17,6 +17,8 @@
 #include "world-configuration.hpp"
 #include "orm/shop.hpp"
 #include "doors.hpp"
+#include "orm/room.hpp"
+#include "rooms.hpp"
 namespace mods {  struct player; };
 namespace mods { struct extra_desc_data; }; 
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
@@ -4168,6 +4170,7 @@ ACMD(do_rbuild) {
 			"  {gld}|:: OLC -> (R) Modifyable/!compress\r\n" <<
 			"  {gld}|:: BFS_MARK -> (R) breath-first srch mrk\r\n" <<
 
+			/*
 			" {grn}NEW FEATURE [as of: 2019-03]{/grn}\r\n" <<
 			" {red}FEATURE: Room textures{/red}\r\n" <<
 			" {grn}rbuild{/grn} {red}<texture> <type1> ... <typeN>{/red}\r\n" <<
@@ -4202,6 +4205,7 @@ ACMD(do_rbuild) {
 			"  |--> Deletes all textures in the current room. WARNING: This does not prompt for confirmation!\r\n" <<
 			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {wht}rbuild{/wht} {gld}texture clear{/gld}\r\n" <<
+			*/
 
 			" {grn}rbuild{/grn} {red}<set> <rnum> <number>{/red}\r\n" <<
 			"  |--> Set the real room number of the current room\r\n" <<
@@ -4304,6 +4308,18 @@ ACMD(do_rbuild) {
 			"  |:: (the north exit will require a key numbered 123)\r\n" <<
 			"  |:: {wht}rbuild{/wht} {gld}dopt north to_room 27{/gld}\r\n" <<
 			"  |:: (the north room will lead to room number 27)\r\n" <<
+
+			" {grn}rbuild{/grn} {red}sector-type <sectortype>{/red}\r\n" <<
+			"  |--> add a flag to the specified door\r\n" <<
+			"  {grn}|____[possible items]{/grn}\r\n";
+			for(auto & pair : mods::rooms::sector_strings) {
+				*player << "  |:: " << pair.second << "\r\n";
+			}
+
+			*player << 
+			"  {grn}|____[examples]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}sector-type OUTSIDE_GRASS{/gld}\r\n" <<
+			"  |:: (Sets the current room's sector type to OUTSIDE_GRASS)\r\n" <<
 
 			" {grn}rbuild{/grn} {red}exit:add <direction> <flag>{/red}\r\n" <<
 			"  |--> add a flag to the specified door\r\n" <<
@@ -4750,6 +4766,30 @@ ACMD(do_rbuild) {
 		}
 		return;
 	}
+
+	/** sector types */
+	/** sector types */
+	/** sector types */
+	args = mods::util::subcmd_args<12,args_t>(argument,"sector-type");
+
+	if(args.has_value()){
+		if(vec_args.size() < 2){
+			r_error(player,"Not enough args");
+			return;
+		}
+		auto opt_sector = mods::rooms::sector_from_string(vec_args[1]);
+		if(!opt_sector.has_value()){
+			r_error(player, "Unrecognized sector type");
+			return;
+		}
+		auto room = player->room();
+		mods::rooms::set_sector_type(room,opt_sector.value());
+		r_success(player, "Set sector type succesfully.");
+		return;
+	}
+	/** sector types */
+	/** sector types */
+	/** sector types */
 
 	args = mods::util::subcmd_args<9,args_t>(argument,"exit:add");
 

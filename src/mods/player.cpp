@@ -582,9 +582,7 @@ namespace mods {
 		desc().has_prompt = 0;
 	}
 	void player::stc_room(const room_rnum& rnum) {
-		std::cerr << __FILE__ << "|" << __LINE__ << " .. checking .. ";
 		if(rnum < 0 || std::size_t(rnum) >= world.size()){
-			std::cerr << __FILE__ << "|" << __LINE__ << " .. invalid ..\n";
 			return;
 		}
 		raw_send(world[rnum].name);

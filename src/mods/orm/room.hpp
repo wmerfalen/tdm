@@ -21,6 +21,7 @@ namespace mods::orm {
 		std::string table_name(){ return "room"; }
 
 		room() : base(), id(0) { this->init(); loaded = 0; }
+		room(const pqxx::result::reference &);
 		~room() = default;
 		uint64_t initialize_row();
 		int16_t feed(const pqxx::result::reference &);

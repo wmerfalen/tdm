@@ -1098,7 +1098,22 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 			LADDER, /** a ladder leading up or down */
 			ELEVATOR,
 			GLASS_WINDOWS,
-			SCANNED
+			SCANNED,
+			DAMP,
+			FOREST,
+			WOODEN_WALLS,
+			CARPET,
+			DRY,
+			DESERT,
+			WATER,
+			UNDERWATER,
+			METAL_HATCH,
+			METAL_WALL,
+			TREE,
+			ROOFTOP,
+			AIR,
+			FROZEN,
+			SERVER_ROOM
 		};
 		constexpr static std::array<texture_type_t,5> textures_that_have_levels = {
 			texture_type_t::RADIOACTIVE,
@@ -1131,7 +1146,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 				const room_rnum to_room);
 		room_vnum number;		/* Rooms number	(vnum)		      */
 		zone_rnum zone;              /* Room zone (for resetting)          */
-		int	sector_type;            /* sector type (move/hide)            */
+		uint16_t	sector_type;            /* sector type (move/hide)            */
 		mods::string	name;                  /* Rooms name 'You are ...'           */
 		mods::string	description;           /* Shown when entered                 */
 		room_direction_data *dir_option[NUM_OF_DIRS]; /* Directions */
@@ -1145,8 +1160,13 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		std::deque<std::shared_ptr<obj_data>>& contents_container(){ return this->m_contents; }
 		char_data *people;    /* List of NPC / PC in room           */
 		std::string_view overhead(const lense_type_t& );
-		std::vector<texture_type_t>& textures();
+		std::set<texture_type_t>& textures();
 		void add_texture(texture_type_t);
+		void add_textures(std::set<texture_type_t> m){
+			for(auto t : m){
+				add_texture(t);
+			}
+		}
 		void remove_texture(texture_type_t);
 		bool has_texture(texture_type_t);
 
@@ -1170,7 +1190,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		std::map<texture_type_t,texture_level_t> m_texture_levels;
 		std::vector<uint8_t> m_directions;
 		std::vector<mods::extra_desc_data> m_ex_descriptions;
-		std::vector<texture_type_t> m_textures;
+		std::set<texture_type_t> m_textures;
 		std::deque<std::shared_ptr<obj_data>> m_contents;
 	};
 	/* ====================================================================== */

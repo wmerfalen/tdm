@@ -260,6 +260,7 @@ AFF_UNUSED17	structs.h	346;"	d
 AFF_UNUSED20	structs.h	349;"	d
 AGGRESSIVE_PROTECT	mods/ai_state.hpp	/^				WANDER, SUSPICIOUS, FIGHT,SUSPICIOUS2,PROTECT,AGGRESSIVE_PROTECT,$/;"	e	enum:mods::ai_state::state
 AIM	mods/weapon-types.hpp	/^		AIM,$/;"	e	enum:mods::weapon::capabilities::cap_t
+AIR	structs.h	/^			AIR,$/;"	m	struct:room_data	typeref:enum:room_data::
 AI_EVENT_ATTACKER_FOUND	mods/ai_state.hpp	/^				AI_EVENT_SNIPED,AI_EVENT_ATTACKER_FOUND,AI_WITNESS_ATTACK,AI_EVENT_WANDER,$/;"	e	enum:mods::ai_state::event_type_t
 AI_EVENT_SNIPED	mods/ai_state.hpp	/^				AI_EVENT_SNIPED,AI_EVENT_ATTACKER_FOUND,AI_WITNESS_ATTACK,AI_EVENT_WANDER,$/;"	e	enum:mods::ai_state::event_type_t
 AI_EVENT_WANDER	mods/ai_state.hpp	/^				AI_EVENT_SNIPED,AI_EVENT_ATTACKER_FOUND,AI_WITNESS_ATTACK,AI_EVENT_WANDER,$/;"	e	enum:mods::ai_state::event_type_t
@@ -399,8 +400,8 @@ BLOCK_SIZE	mail.h	29;"	d
 BOARD_MAGIC	boards.h	17;"	d
 BOARD_RNUM	boards.h	41;"	d
 BOARD_VNUM	boards.h	36;"	d
-BOOL_CASE	db.cpp	1739;"	d	file:
-BOOL_CASE	db.cpp	1803;"	d	file:
+BOOL_CASE	db.cpp	1723;"	d	file:
+BOOL_CASE	db.cpp	1787;"	d	file:
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ARMOR_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::armor
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ATTACHMENT_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::attachment
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_CONSUMABLE_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::consumable
@@ -459,8 +460,9 @@ CAPABILITY_LIST_LENGTH	structs.h	/^		static constexpr std::size_t CAPABILITY_LIS
 CAP_ALL	mods/util.hpp	/^	static constexpr uint8_t CAP_ALL = 0;$/;"	m	namespace:mods::util
 CAP_ANY	mods/util.hpp	/^	static constexpr uint8_t CAP_ANY = 0;$/;"	m	namespace:mods::util
 CAP_SINGLE	mods/util.hpp	/^	static constexpr uint8_t CAP_SINGLE = 0;$/;"	m	namespace:mods::util
-CASE	db.cpp	1736;"	d	file:
-CASE	db.cpp	1802;"	d	file:
+CARPET	structs.h	/^			CARPET,$/;"	m	struct:room_data	typeref:enum:room_data::
+CASE	db.cpp	1720;"	d	file:
+CASE	db.cpp	1786;"	d	file:
 CASE_MOON	mods/date-time.cpp	172;"	d	file:
 CAST_POTION	spells.h	18;"	d
 CAST_SCROLL	spells.h	21;"	d
@@ -751,6 +753,7 @@ Crash_save	objsave.cpp	/^int Crash_save(struct obj_data *obj, FILE *fp, int loca
 Crash_save_all	objsave.cpp	/^void Crash_save_all(void) {$/;"	f
 Crash_write_rentcode	objsave.cpp	/^int Crash_write_rentcode(char_data *ch, FILE *fl, struct rent_info *rent) {$/;"	f
 DAMAGE_DIVISOR	mods/values.hpp	/^		constexpr static int DAMAGE_DIVISOR = 3;$/;"	m	namespace:mods::values
+DAMP	structs.h	/^			DAMP,$/;"	m	struct:room_data	typeref:enum:room_data::
 DATA_BLOCK_DATASIZE	mail.h	75;"	d
 DBGET	globals.hpp	43;"	d
 DBSET	globals.hpp	42;"	d
@@ -760,7 +763,7 @@ DB_BOOT_OBJ	db.h	17;"	d
 DB_BOOT_SHP	db.h	19;"	d
 DB_BOOT_WLD	db.h	15;"	d
 DB_BOOT_ZON	db.h	18;"	d
-DD	mods/debug-pre-game.hpp	20;"	d
+DD	mods/debug-pre-game.hpp	23;"	d
 DD	mods/debug-pre-game.hpp	7;"	d
 DECENT	mods/yaml.hpp	/^	DECENT,$/;"	e	enum:mods::yaml::durability_profile_type_t
 DEFAULT	mods/rarity.hpp	/^		constexpr static float DEFAULT = mods::rarity::COMMON;$/;"	m	namespace:mods::rarity
@@ -770,6 +773,7 @@ DEFAULT_WAND_LVL	spells.h	14;"	d
 DELETED	mods/flags.hpp	/^		DELETED,$/;"	e	enum:mods::flags::plr
 DELETED_BLOCK	mail.h	55;"	d
 DESCRIBE_TESTING_SUITE	mods/testing_index.hpp	4;"	d
+DESERT	structs.h	/^			DESERT,$/;"	m	struct:room_data	typeref:enum:room_data::
 DESTROY_OBJECT	mods/events.hpp	/^		DESTROY_OBJECT,$/;"	e	enum:mods::events::event_enum
 DESTROY_PLAYER	mods/events.hpp	/^		DESTROY_PLAYER,$/;"	e	enum:mods::events::event_enum
 DETECT_ALIGN	mods/flags.hpp	/^		DETECT_ALIGN, 	\/\/ useless$/;"	e	enum:mods::flags::aff
@@ -826,6 +830,7 @@ DRONE_NONE	mods/item-types.hpp	/^		DRONE_NONE = 0,$/;"	e	enum:mods::weapon::type
 DRONE_OWNER_KEY	mods/drone.cpp	12;"	d	file:
 DRONE_WEAPON_SET_NUM	mods/drone.hpp	14;"	d
 DRUNK	structs.h	579;"	d
+DRY	structs.h	/^			DRY,$/;"	m	struct:room_data	typeref:enum:room_data::
 DT_FORMAT	mods/js.hpp	19;"	d
 DURABLE	mods/yaml.hpp	/^	DURABLE,$/;"	e	enum:mods::yaml::durability_profile_type_t
 DYNAMIC_FORMAT_STRING	mods/prefs.hpp	16;"	d
@@ -973,9 +978,11 @@ FLASHBANG_GRENADE_TICKS	mods/values.hpp	/^		constexpr static int FLASHBANG_GRENA
 FLASH_HIDER	mods/weapon.hpp	/^		FLASH_HIDER, SUPPRESSOR$/;"	e	enum:mods::weapon::barrel_t
 FLIMSY	mods/yaml.hpp	/^	FLIMSY,$/;"	e	enum:mods::yaml::durability_profile_type_t
 FOREACH_MOB	utils.h	558;"	d
+FOREST	structs.h	/^			FOREST,$/;"	m	struct:room_data	typeref:enum:room_data::
 FOR_ROOM	utils.h	557;"	d
 FRAG_GRENADE_TICKS	mods/values.hpp	/^		constexpr static int FRAG_GRENADE_TICKS = 6;$/;"	m	namespace:mods::values
 FROZEN	mods/flags.hpp	/^		FROZEN,$/;"	e	enum:mods::flags::plr
+FROZEN	structs.h	/^			FROZEN,$/;"	m	struct:room_data	typeref:enum:room_data::
 FULL	structs.h	580;"	d
 FULL_MOON	mods/date-time.hpp	/^		FULL_MOON,$/;"	e	enum:mods::date_time::moon_phase
 FUMES	mods/weapon.hpp	/^		MACHINE_PISTOL = (1 << 7), ENERGY = (1 << 8), FUMES = (1 << 9),$/;"	e	enum:mods::weapon::mask_type
@@ -1178,6 +1185,19 @@ INCENDIARY_GRENADE_TICKS	mods/values.hpp	/^		constexpr static int INCENDIARY_GRE
 INDESTRUCTIBLE	mods/yaml.hpp	/^	INDESTRUCTIBLE$/;"	e	enum:mods::yaml::durability_profile_type_t
 INDEX_FILE	db.h	66;"	d
 INDEX_SIZE	boards.h	15;"	d
+INDOOR_ATTIC	mods/rooms.hpp	/^		INDOOR_ATTIC,$/;"	e	enum:mods::rooms::sector_type_t
+INDOOR_BASEMENT	mods/rooms.hpp	/^		INDOOR_BASEMENT$/;"	e	enum:mods::rooms::sector_type_t
+INDOOR_CARPET_WOODEN_WALLS	mods/rooms.hpp	/^		INDOOR_CARPET_WOODEN_WALLS,$/;"	e	enum:mods::rooms::sector_type_t
+INDOOR_CEMENT	mods/rooms.hpp	/^		INDOOR_CEMENT,$/;"	e	enum:mods::rooms::sector_type_t
+INDOOR_CEMENT_WOODEN_WALLS	mods/rooms.hpp	/^		INDOOR_CEMENT_WOODEN_WALLS,$/;"	e	enum:mods::rooms::sector_type_t
+INDOOR_MARKET_PLACE	mods/rooms.hpp	/^		INDOOR_MARKET_PLACE,$/;"	e	enum:mods::rooms::sector_type_t
+INDOOR_METAL_HATCH	mods/rooms.hpp	/^		INDOOR_METAL_HATCH,$/;"	e	enum:mods::rooms::sector_type_t
+INDOOR_METAL_WALLS	mods/rooms.hpp	/^		INDOOR_METAL_WALLS,$/;"	e	enum:mods::rooms::sector_type_t
+INDOOR_ROOF	mods/rooms.hpp	/^		INDOOR_ROOF,	\/** attached to the roof like spiderman *\/$/;"	e	enum:mods::rooms::sector_type_t
+INDOOR_SERVER_ROOM	mods/rooms.hpp	/^		INDOOR_SERVER_ROOM,$/;"	e	enum:mods::rooms::sector_type_t
+INDOOR_SEWER	mods/rooms.hpp	/^		INDOOR_SEWER,$/;"	e	enum:mods::rooms::sector_type_t
+INDOOR_TUNNEL	mods/rooms.hpp	/^		INDOOR_TUNNEL,$/;"	e	enum:mods::rooms::sector_type_t
+INDOOR_WOODEN_WALLS	mods/rooms.hpp	/^		INDOOR_WOODEN_WALLS,$/;"	e	enum:mods::rooms::sector_type_t
 INDUSTRIAL_STRENGTH	mods/yaml.hpp	/^	INDUSTRIAL_STRENGTH,$/;"	e	enum:mods::yaml::durability_profile_type_t
 INFO_FILE	db.h	81;"	d
 INFRAVISION	mods/flags.hpp	/^		INFRAVISION,$/;"	e	enum:mods::flags::aff
@@ -1251,7 +1271,7 @@ IS_NPC	utils.h	231;"	d
 IS_SET	utils.h	200;"	d
 IS_SUPPORT	utils.h	511;"	d
 IS_THIEF	utils.h	506;"	d
-IS_TOPIC	act.informative.cpp	1366;"	d	file:
+IS_TOPIC	act.informative.cpp	1373;"	d	file:
 IS_WARRIOR	utils.h	510;"	d
 IS_WEAPON	fight.cpp	124;"	d	file:
 IS_WEAPON_LOADED	mods/weapon.hpp	15;"	d
@@ -1574,14 +1594,14 @@ MAX_TITLE_LENGTH	structs.h	678;"	d
 MAX_TONGUE	structs.h	681;"	d
 MAX_TRADE	shop.h	82;"	d
 MEMORY	utils.h	355;"	d
-MENTOC_ABIL_SET	db.cpp	1060;"	d	file:
+MENTOC_ABIL_SET	db.cpp	1064;"	d	file:
 MENTOC_ARMOR_MEMBERS_TUPLE	mods/item-types.hpp	187;"	d
 MENTOC_ARMOR_TYPES_SEQUENCE	mods/item-types.hpp	172;"	d
 MENTOC_ATTACHMENT_MEMBERS_TUPLE	mods/item-types.hpp	156;"	d
 MENTOC_ATTACHMENT_TYPES_SEQUENCE	mods/item-types.hpp	152;"	d
 MENTOC_BASE_MEMBERS	mods/yaml.hpp	50;"	d
 MENTOC_BASE_MEMBERS_SET	mods/yaml.hpp	63;"	d
-MENTOC_BITVECTOR	mods/builder.cpp	3347;"	d	file:
+MENTOC_BITVECTOR	mods/builder.cpp	3349;"	d	file:
 MENTOC_CONSUMABLE_MEMBERS_TUPLE	mods/item-types.hpp	208;"	d
 MENTOC_CONSUMABLE_TYPES_SEQUENCE	mods/item-types.hpp	200;"	d
 MENTOC_DATA_CLASS	mods/weapon-types.hpp	135;"	d
@@ -1633,12 +1653,14 @@ MENTOC_ITEM_TYPES_BY_CAPS_SEQ	mods/item-types.hpp	22;"	d
 MENTOC_ITEM_TYPES_SEQ	mods/item-types.hpp	12;"	d
 MENTOC_ITEM_TYPES_SEQ_CAPS	mods/item-types.hpp	37;"	d
 MENTOC_ITEM_TYPE_LIST_SEQUENCE	mods/item-types.hpp	263;"	d
+MENTOC_LAZY	mods/rooms.hpp	121;"	d
+MENTOC_LAZY	mods/rooms.hpp	85;"	d
 MENTOC_LAZY_COMP	mods/doors.hpp	241;"	d
 MENTOC_LAZY_COMP	mods/doors.hpp	252;"	d
-MENTOC_LAZY_INT	mods/builder.cpp	1612;"	d	file:
-MENTOC_LAZY_INT	mods/builder.cpp	1631;"	d	file:
-MENTOC_LAZY_ME	mods/builder.cpp	2767;"	d	file:
-MENTOC_LAZY_ME	mods/builder.cpp	2776;"	d	file:
+MENTOC_LAZY_INT	mods/builder.cpp	1614;"	d	file:
+MENTOC_LAZY_INT	mods/builder.cpp	1633;"	d	file:
+MENTOC_LAZY_ME	mods/builder.cpp	2769;"	d	file:
+MENTOC_LAZY_ME	mods/builder.cpp	2778;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	414;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	423;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	430;"	d	file:
@@ -1653,33 +1675,33 @@ MENTOC_LAZY_POS	act.debug.cpp	224;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	238;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	248;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	262;"	d	file:
-MENTOC_LAZY_SHOP	mods/builder.cpp	1696;"	d	file:
-MENTOC_LAZY_SHOP	mods/builder.cpp	1721;"	d	file:
-MENTOC_LAZY_STR	mods/builder.cpp	1596;"	d	file:
-MENTOC_LAZY_STR	mods/builder.cpp	1611;"	d	file:
+MENTOC_LAZY_SHOP	mods/builder.cpp	1698;"	d	file:
+MENTOC_LAZY_SHOP	mods/builder.cpp	1723;"	d	file:
+MENTOC_LAZY_STR	mods/builder.cpp	1598;"	d	file:
+MENTOC_LAZY_STR	mods/builder.cpp	1613;"	d	file:
 MENTOC_MEMBER_VARS_EXAMPLE_FOR	mods/item-types.hpp	346;"	d
 MENTOC_MEMBER_VARS_EXAMPLE_IMPL	mods/item-types.hpp	337;"	d
 MENTOC_MEMBER_VARS_FOR	mods/item-types.hpp	349;"	d
 MENTOC_MEMBER_VARS_IMPL	mods/item-types.hpp	352;"	d
 MENTOC_MS_COMP	mods/doors.hpp	224;"	d
 MENTOC_MS_COMP	mods/doors.hpp	238;"	d
-MENTOC_OBI	mods/builder.cpp	22;"	d	file:
-MENTOC_OBI2	mods/builder.cpp	23;"	d	file:
+MENTOC_OBI	mods/builder.cpp	24;"	d	file:
+MENTOC_OBI2	mods/builder.cpp	25;"	d	file:
 MENTOC_OBJ_DATA_FEED_DUAL	structs.cpp	80;"	d	file:
 MENTOC_OBJ_DATA_FEED_SWITCH	mods/item-types.hpp	317;"	d
 MENTOC_OBJ_DATA_FEED_SWITCH_IMPL	mods/item-types.hpp	311;"	d
 MENTOC_OBJ_DATA_STAT_GEN	structs.cpp	90;"	d	file:
 MENTOC_OBJ_INITIALIZE_CONSTRUCTOR	structs.cpp	46;"	d	file:
-MENTOC_OBS	mods/builder.cpp	24;"	d	file:
-MENTOC_OBS2	mods/builder.cpp	25;"	d	file:
-MENTOC_PLAYER_NULL_CHECK	mods/builder.cpp	999;"	d	file:
+MENTOC_OBS	mods/builder.cpp	26;"	d	file:
+MENTOC_OBS2	mods/builder.cpp	27;"	d	file:
+MENTOC_PLAYER_NULL_CHECK	mods/builder.cpp	1001;"	d	file:
 MENTOC_PREAMBLE	globals.hpp	36;"	d
 MENTOC_RIFLE_MEMBERS_TUPLE	mods/item-types.hpp	65;"	d
 MENTOC_RIFLE_TYPES_SEQUENCE	mods/item-types.hpp	56;"	d
-MENTOC_SHOW_FLAG	mods/builder.cpp	3383;"	d	file:
-MENTOC_SHOW_OBJ	mods/builder.cpp	2175;"	d	file:
-MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	2167;"	d	file:
-MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	2159;"	d	file:
+MENTOC_SHOW_FLAG	mods/builder.cpp	3385;"	d	file:
+MENTOC_SHOW_OBJ	mods/builder.cpp	2177;"	d	file:
+MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	2169;"	d	file:
+MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	2161;"	d	file:
 MENTOC_T	mods/aoe.hpp	32;"	d
 MENTOC_T	mods/aoe.hpp	55;"	d
 MENTOC_T	mods/lmdb.hpp	68;"	d
@@ -1702,19 +1724,21 @@ MENTOC_TO_STR	mods/weapon.hpp	305;"	d
 MENTOC_TO_STR	mods/weapon.hpp	311;"	d
 MENTOC_TRAP_MEMBERS_TUPLE	mods/item-types.hpp	250;"	d
 MENTOC_TRAP_TYPES_SEQUENCE	mods/item-types.hpp	247;"	d
-MENTOC_TYPE	mods/builder.cpp	3321;"	d	file:
+MENTOC_TYPE	mods/builder.cpp	3323;"	d	file:
 MENTOC_TYPE_LIST_IMPL	mods/item-types.hpp	504;"	d
 MENTOC_UPTR	structs.h	1016;"	d
 MENTOC_UPTR	structs.h	1018;"	d
 MENTOC_USING_CT	mods/item-types.hpp	280;"	d
 MENTOC_USING_CT_IMPL	mods/item-types.hpp	277;"	d
-MENTOC_WEAPON	mods/builder.cpp	125;"	d	file:
-MENTOC_WEAPON	mods/builder.cpp	141;"	d	file:
-MENTOC_WEAR	mods/builder.cpp	3304;"	d	file:
+MENTOC_WEAPON	mods/builder.cpp	127;"	d	file:
+MENTOC_WEAPON	mods/builder.cpp	143;"	d	file:
+MENTOC_WEAR	mods/builder.cpp	3306;"	d	file:
 MENTOC_YAML_DESC	mods/item-types.hpp	289;"	d
 MENTOC_YAML_DESC_IMPL	mods/item-types.hpp	288;"	d
 MENU	config.cpp	/^const char *MENU =$/;"	v
 MESS_FILE	db.h	91;"	d
+METAL_HATCH	structs.h	/^			METAL_HATCH,$/;"	m	struct:room_data	typeref:enum:room_data::
+METAL_WALL	structs.h	/^			METAL_WALL,$/;"	m	struct:room_data	typeref:enum:room_data::
 MIN	utils.cpp	/^int MIN(int a, int b) {$/;"	f
 MIN	utils.h	79;"	d
 MINDEX_FILE	db.h	67;"	d
@@ -1790,10 +1814,10 @@ MORT_CAN_SEE	utils.h	447;"	d
 MORT_CAN_SEE_OBJ	utils.h	470;"	d
 MOTD_FILE	db.h	77;"	d
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1265;"	d	file:
-MR	mods/player.cpp	1276;"	d	file:
-MRC	mods/player.cpp	1266;"	d	file:
-MRC	mods/player.cpp	1277;"	d	file:
+MR	mods/player.cpp	1263;"	d	file:
+MR	mods/player.cpp	1274;"	d	file:
+MRC	mods/player.cpp	1264;"	d	file:
+MRC	mods/player.cpp	1275;"	d	file:
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
 MSG_HEADING	boards.h	44;"	d
@@ -1844,6 +1868,7 @@ NONE	mods/affects.hpp	/^		NONE = -1,$/;"	e	enum:mods::affects::affect_t
 NONE	mods/behaviour_tree.hpp	/^		static constexpr int NONE = 0;$/;"	m	struct:mods::behaviour_tree
 NONE	mods/behaviour_tree_impl.hpp	/^			NONE = 0,$/;"	e	enum:mods::behaviour_tree_impl::type
 NONE	mods/events.hpp	/^		NONE = 0,$/;"	e	enum:mods::events::event_enum
+NONE	mods/rooms.hpp	/^		NONE = 0,$/;"	e	enum:mods::rooms::sector_type_t
 NONE	mods/weapon.hpp	/^			NONE = 0,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
 NONE	structs.h	/^			NONE = 0,$/;"	e	enum:uint8_t
 NON_HAZARDOUS_SMOKE	structs.h	/^			NON_HAZARDOUS_SMOKE, \/** think: burning car *\/$/;"	m	struct:room_data	typeref:enum:room_data::
@@ -1935,6 +1960,23 @@ OTHER_PLAYER_INDEX_START	mods/player-scaffolding.hpp	/^		constexpr static std::s
 OUT	structs.h	/^			OUT = 5$/;"	e	enum:uint8_t
 OUTSIDE	structs.h	/^			OUTSIDE,		\/** Outside where anyone can see you *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 OUTSIDE	utils.h	514;"	d
+OUTSIDE_AIR	mods/rooms.hpp	/^		OUTSIDE_AIR,	\/** on a rope hanging from a helicopter *\/$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_CEMENT	mods/rooms.hpp	/^		OUTSIDE_CEMENT,$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_DESERT	mods/rooms.hpp	/^		OUTSIDE_DESERT,$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_DIRT	mods/rooms.hpp	/^		OUTSIDE_DIRT,$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_FOREST	mods/rooms.hpp	/^		OUTSIDE_FOREST,$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_FROZEN	mods/rooms.hpp	/^		OUTSIDE_FROZEN,$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_GRASSY	mods/rooms.hpp	/^		OUTSIDE_GRASSY,$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_HILLS	mods/rooms.hpp	/^		OUTSIDE_HILLS,$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_MARKET_PLACE	mods/rooms.hpp	/^		OUTSIDE_MARKET_PLACE,$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_METAL_HATCH	mods/rooms.hpp	/^		OUTSIDE_METAL_HATCH,$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_METAL_WALL	mods/rooms.hpp	/^		OUTSIDE_METAL_WALL,	\/** rappelling *\/$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_ROOFTOP	mods/rooms.hpp	/^		OUTSIDE_ROOFTOP,$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_TREE	mods/rooms.hpp	/^		OUTSIDE_TREE,$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_UNDERWATER	mods/rooms.hpp	/^		OUTSIDE_UNDERWATER,$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_WATER	mods/rooms.hpp	/^		OUTSIDE_WATER,$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_WOODEN_WALL	mods/rooms.hpp	/^		OUTSIDE_WOODEN_WALL,	\/** rappelling *\/$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_WOODEN_WALLS	mods/rooms.hpp	/^		OUTSIDE_WOODEN_WALLS,$/;"	e	enum:mods::rooms::sector_type_t
 OUT_OF_AMMO	mods/values.hpp	/^			constexpr static const char* OUT_OF_AMMO= "{gld}*CLICK*{\/gld} Your weapon is out of ammo!";$/;"	m	namespace:mods::values::msg
 O_NONBLOCK	comm.cpp	2032;"	d	file:
 Obj_from_store	objsave.cpp	/^struct obj_data *Obj_from_store(struct obj_file_elem object, int *location) {$/;"	f
@@ -2076,8 +2118,8 @@ Q_TRIGGER_KEY	mods/quests.cpp	8;"	d	file:
 RADIATION	mods/aoe.hpp	/^		RADIATION, \/** Radioactive fallout *\/$/;"	e	enum:mods::aoe::types_t
 RADIOACTIVE	structs.h	/^			RADIOACTIVE, \/** actively emitting radioactivity *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 RANGE	act.wizard.cpp	2358;"	d	file:
-RANGE	db.cpp	1742;"	d	file:
-RANGE	db.cpp	1804;"	d	file:
+RANGE	db.cpp	1726;"	d	file:
+RANGE	db.cpp	1788;"	d	file:
 RANGED_ATTACK	mods/weapon-types.hpp	/^		RANGED_ATTACK,$/;"	e	enum:mods::weapon::capabilities::cap_t
 RARE	mods/randomized-items.hpp	/^	RARE,$/;"	e	enum:mods::rarity_enum_t
 RARE	mods/rarity.hpp	/^		constexpr static float RARE = 0.05034415;$/;"	m	namespace:mods::rarity
@@ -2117,6 +2159,7 @@ RIFLE_NONE	mods/item-types.hpp	/^		RIFLE_NONE = 0,$/;"	e	enum:mods::weapon::type
 RLIMIT_NOFILE	sysdep.h	409;"	d
 RL_SEC	structs.h	651;"	d
 RNUMLIST_MAX_PER_CALL	mods/builder.hpp	/^	constexpr static unsigned int RNUMLIST_MAX_PER_CALL = 10000;$/;"	m	namespace:mods::builder
+ROOFTOP	structs.h	/^			ROOFTOP,$/;"	m	struct:room_data	typeref:enum:room_data::
 ROOM_ATRIUM	structs.h	171;"	d
 ROOM_BFS_MARK	structs.h	173;"	d
 ROOM_DARK	structs.h	157;"	d
@@ -2159,6 +2202,7 @@ SAVING_SPELL	spells.h	196;"	d
 SB	telnet.h	47;"	d
 SCAN	mods/weapon-types.hpp	/^		SCAN,$/;"	e	enum:mods::weapon::capabilities::cap_t
 SCANNED	mods/affects.hpp	/^		SCANNED = 4,$/;"	e	enum:mods::affects::affect_t
+SCANNED	structs.h	/^			SCANNED,$/;"	m	struct:room_data	typeref:enum:room_data::
 SCANNED_AFFECT_DURATION	mods/sensor-grenade.cpp	/^	static constexpr uint64_t SCANNED_AFFECT_DURATION = 400; \/** in ticks *\/$/;"	m	namespace:mods::sensor_grenade	file:
 SCENARIO	mods/catch.hpp	12208;"	d
 SCENARIO_METHOD	mods/catch.hpp	12209;"	d
@@ -2673,6 +2717,7 @@ TRADE_NONEUTRAL	shop.h	109;"	d
 TRADE_NOTHIEF	shop.h	112;"	d
 TRADE_NOWARRIOR	shop.h	113;"	d
 TRAP_NONE	mods/item-types.hpp	/^		TRAP_NONE = 0,$/;"	e	enum:mods::weapon::type::trap
+TREE	structs.h	/^			TREE,$/;"	m	struct:room_data	typeref:enum:room_data::
 TRIGGER_ALERT	mods/weapon-types.hpp	/^		TRIGGER_ALERT,$/;"	e	enum:mods::weapon::capabilities::cap_t
 TRIGGER_EXPLOSION	mods/weapon-types.hpp	/^		TRIGGER_EXPLOSION,$/;"	e	enum:mods::weapon::capabilities::cap_t
 TRUE	utils.h	530;"	d
@@ -2834,6 +2879,7 @@ TupleDetail	mods/catch.hpp	/^	namespace TupleDetail {$/;"	n	namespace:Catch
 UNCOMMON	mods/randomized-items.hpp	/^	UNCOMMON,$/;"	e	enum:mods::rarity_enum_t
 UNCOMMON	mods/rarity.hpp	/^		constexpr static float UNCOMMON = 0.1503172;$/;"	m	namespace:mods::rarity
 UNCOMMON_DROP_RATE	mods/randomized-items.hpp	/^		constexpr static float UNCOMMON_DROP_RATE = 15.0;$/;"	m	class:mods::randomized_items
+UNDERWATER	structs.h	/^			UNDERWATER,$/;"	m	struct:room_data	typeref:enum:room_data::
 UNKNOWN_STATUS	mods/behaviour_tree_status.hpp	/^		UNKNOWN_STATUS,$/;"	e	enum:mods::behaviour_tree_status
 UNLOCK_DOOR	act.movement.cpp	348;"	d	file:
 UNMARK	graph.cpp	54;"	d	file:
@@ -2843,7 +2889,7 @@ UNUSED17	mods/flags.hpp	/^		UNUSED17,				\/\/ useless$/;"	e	enum:mods::flags::af
 UP	structs.h	151;"	d
 UPDATE	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_type_t
 UPPER	utils.h	156;"	d
-USERS_FORMAT	act.informative.cpp	1608;"	d	file:
+USERS_FORMAT	act.informative.cpp	1615;"	d	file:
 USE_AUTOEQ	structs.h	110;"	d
 USURP	interpreter.cpp	1627;"	d	file:
 Unknown	mods/catch.hpp	/^			Unknown = -1,$/;"	e	enum:Catch::ResultWas::OfType
@@ -2864,6 +2910,7 @@ WAIT_STATE	utils.h	377;"	d
 WANDER	mods/ai_state.hpp	/^				WANDER, SUSPICIOUS, FIGHT,SUSPICIOUS2,PROTECT,AGGRESSIVE_PROTECT,$/;"	e	enum:mods::ai_state::state
 WANING_CRESCENT	mods/date-time.hpp	/^		WANING_CRESCENT,$/;"	e	enum:mods::date_time::moon_phase
 WANING_GIBBOUS	mods/date-time.hpp	/^		WANING_GIBBOUS,$/;"	e	enum:mods::date_time::moon_phase
+WATER	structs.h	/^			WATER,$/;"	m	struct:room_data	typeref:enum:room_data::
 WATERWALK	mods/flags.hpp	/^		WATERWALK,			\/\/ useless$/;"	e	enum:mods::flags::aff
 WAXING_CRESCENT	mods/date-time.hpp	/^		WAXING_CRESCENT,$/;"	e	enum:mods::date_time::moon_phase
 WAXING_GIBBOUS	mods/date-time.hpp	/^		WAXING_GIBBOUS,$/;"	e	enum:mods::date_time::moon_phase
@@ -2905,7 +2952,7 @@ WEAR_WRIST_R	structs.h	397;"	d
 WELC_MESSG	config.cpp	/^const char *WELC_MESSG =$/;"	v
 WEST	structs.h	150;"	d
 WHEN	mods/catch.hpp	12215;"	d
-WHO_FORMAT	act.informative.cpp	1419;"	d	file:
+WHO_FORMAT	act.informative.cpp	1426;"	d	file:
 WILL	telnet.h	46;"	d
 WILL_BANK_MONEY	shop.h	164;"	d
 WILL_START_FIGHT	shop.h	163;"	d
@@ -2914,6 +2961,7 @@ WIN32_LEAN_AND_MEAN	mods/catch.hpp	6795;"	d
 WIZLIST_FILE	db.h	82;"	d
 WLD_PREFIX	db.h	68;"	d
 WONT	telnet.h	45;"	d
+WOODEN_WALLS	structs.h	/^			WOODEN_WALLS,$/;"	m	struct:room_data	typeref:enum:room_data::
 WRITE_LVL	boards.h	38;"	d
 WRITING	mods/flags.hpp	/^		WRITING,$/;"	e	enum:mods::flags::plr
 WSL_AR_0_ACCURACY	mods/values.hpp	/^		constexpr static uint16_t WSL_AR_0_ACCURACY = 40;$/;"	m	namespace:mods::values
@@ -3029,12 +3077,12 @@ YOURE_INJURED	mods/values.hpp	/^			constexpr static const char* YOURE_INJURED = 
 YamlFeedExceptionInfo	mods/object-utils.hpp	/^		YamlFeedExceptionInfo($/;"	f	struct:mods::object_utils::YamlFeedExceptionInfo
 YamlFeedExceptionInfo	mods/object-utils.hpp	/^	struct YamlFeedExceptionInfo {$/;"	s	namespace:mods::object_utils
 Yes	mods/catch.hpp	/^			Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
-Z	db.cpp	1857;"	d	file:
-Z	db.cpp	1865;"	d	file:
-ZONE_ERROR	db.cpp	2201;"	d	file:
+Z	db.cpp	1841;"	d	file:
+Z	db.cpp	1849;"	d	file:
+ZONE_ERROR	db.cpp	2185;"	d	file:
 ZON_PREFIX	db.h	71;"	d
 ZOOM	mods/weapon-types.hpp	/^		ZOOM,$/;"	e	enum:mods::weapon::capabilities::cap_t
-ZO_DEAD	db.cpp	2120;"	d	file:
+ZO_DEAD	db.cpp	2104;"	d	file:
 Z_KINGS_C	castle.cpp	31;"	d	file:
 _ARPA_TELNET_H	telnet.h	37;"	d
 _BSD_SNPRINTF_H	bsd-snprintf.h	41;"	d
@@ -3162,7 +3210,7 @@ __MENTOC_MODS_deferred_HEADER__	mods/deferred.hpp	2;"	d
 __MENTOC_MODS_prefs_HEADER__	mods/prefs.hpp	2;"	d
 __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
 __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__	mobact.cpp	42;"	d	file:
-__MENTOC_PLR	db.cpp	2588;"	d	file:
+__MENTOC_PLR	db.cpp	2572;"	d	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	917;"	d	file:
 __MENTOC_STRING_LIT__	mods/util.hpp	21;"	d
 __MENTOC_TYPES_HEADER__	types.hpp	2;"	d
@@ -3216,6 +3264,7 @@ add_room_dissolve_affect	mods/rooms.hpp	/^		static inline void add_room_dissolve
 add_room_dissolve_affect_every_n_tick	mods/rooms.hpp	/^		static inline void add_room_dissolve_affect_every_n_tick(room_rnum room, affect_t affect, affect_amount_t amt, uint32_t n_ticks){$/;"	f	namespace:mods::rooms::affects
 add_subscriber	mods/chat.cpp	/^	void channel::add_subscriber(const socket_t& sock) {$/;"	f	class:mods::chat::channel
 add_texture	structs.cpp	/^		void room_data::add_texture(texture_type_t t){$/;"	f	class:room_data
+add_textures	structs.h	/^		void add_textures(std::set<texture_type_t> m){$/;"	f
 add_to_list	shop.cpp	/^int add_to_list(struct shop_buy_data *list, int type, int *len, int *val) {$/;"	f
 add_tree	mods/behaviour_tree_impl.cpp	/^	void add_tree(std::string sv_tree_name,node & n){$/;"	f	namespace:mods::behaviour_tree_impl
 add_type	mods/object.cpp	/^	object& object::add_type(object_type_enum_t type){$/;"	f	class:mods::object
@@ -4594,7 +4643,7 @@ get_explosive_type	mods/object-utils.hpp	/^	inline mw_explosive get_explosive_ty
 get_explosive_type	mods/object-utils.hpp	/^	static inline mw_explosive get_explosive_type(T& obj){$/;"	f	namespace:mods::object_utils
 get_file	mods/js.hpp	/^				inline std::string_view get_file() {$/;"	f	struct:mods::js::include
 get_filename	utils.cpp	/^int get_filename(char *filename, size_t fbufsize, int mode, const char *orig_name) {$/;"	f
-get_fire_status	mods/rooms.hpp	/^	static inline fire_status_t get_fire_status(TRoom room) {$/;"	f	namespace:mods::rooms
+get_fire_status	mods/rooms.hpp	/^		static inline fire_status_t get_fire_status(TRoom room) {$/;"	f	namespace:mods::rooms
 get_first_ammo_of_type	mods/player.cpp	/^	obj_data* player::get_first_ammo_of_type(const weapon_type_t& type) const {$/;"	f	class:mods::player
 get_from_container	act.item.cpp	/^void get_from_container(char_data *ch, struct obj_data *cont,$/;"	f
 get_from_q	comm.cpp	/^int get_from_q(mods::descriptor_data& d, char *dest, int *aliased) {$/;"	f
@@ -4918,13 +4967,13 @@ is_npc	mods/player.hpp	/^		bool is_npc() const {$/;"	f	struct:mods::player
 is_number	interpreter.cpp	/^int is_number(const char *str) {$/;"	f
 is_ok	shop.cpp	/^int is_ok(char_data *keeper, char_data *ch, int shop_nr) {$/;"	f
 is_ok_char	shop.cpp	/^int is_ok_char(char_data *keeper, char_data *ch, int shop_nr) {$/;"	f
-is_on_fire	mods/rooms.hpp	/^	static inline bool is_on_fire(TRoom room) {$/;"	f	namespace:mods::rooms
+is_on_fire	mods/rooms.hpp	/^		static inline bool is_on_fire(TRoom room) {$/;"	f	namespace:mods::rooms
 is_open	mods/doors.hpp	/^	static inline bool is_open(const room_rnum  room, int direction){$/;"	f	namespace:mods::doors
 is_open	shop.cpp	/^int is_open(char_data *keeper, int shop_nr, int msg) {$/;"	f
 is_owner	mods/object-utils.hpp	/^		bool is_owner(T& obj, PlayerT& player){$/;"	f	namespace:mods::object_utils
 is_peaceful	mods/rooms.hpp	/^	static inline bool is_peaceful(room_rnum room){$/;"	f	namespace:mods::rooms
 is_scanned	mods/player-utils.hpp	/^	static inline bool is_scanned(T& player){$/;"	f	namespace:mods::player_utils
-is_smoked	mods/rooms.hpp	/^	static inline bool is_smoked(TRoom room) {$/;"	f	namespace:mods::rooms
+is_smoked	mods/rooms.hpp	/^		static inline bool is_smoked(TRoom room) {$/;"	f	namespace:mods::rooms
 is_tell_ok	act.comm.cpp	/^int is_tell_ok(char_data *ch, char_data *vict) {$/;"	f
 is_thermal_camera	mods/object-utils.hpp	/^	inline bool is_thermal_camera(uuid_t obj_uuid){$/;"	f	namespace:mods::object_utils
 is_thermal_camera	mods/object-utils.hpp	/^	inline bool is_thermal_camera(uuid_t& obj_uuid){$/;"	f	namespace:mods::object_utils
@@ -5221,7 +5270,7 @@ m_sync_equipment	mods/player.cpp	/^	void player::m_sync_equipment(){$/;"	f	class
 m_table	mods/lmdb.hpp	/^		table_type_t m_table;$/;"	m	struct:mods::lmdb::transaction_t
 m_table	mods/sql.hpp	/^			std::string m_table;$/;"	m	struct:mods::sql::compositor
 m_texture_levels	structs.h	/^		std::map<texture_type_t,texture_level_t> m_texture_levels;$/;"	v
-m_textures	structs.h	/^		std::vector<texture_type_t> m_textures;$/;"	v
+m_textures	structs.h	/^		std::set<texture_type_t> m_textures;$/;"	v
 m_tick	mods/deferred.hpp	/^			uint64_t m_tick;$/;"	m	class:mods::deferred
 m_tick_resolution_map	mods/affects.hpp	/^			std::map<TAffects,uint32_t> m_tick_resolution_map;$/;"	m	struct:mods::affects::dissolver
 m_tick_resolution_map_counter	mods/affects.hpp	/^			std::map<TAffects,uint32_t> m_tick_resolution_map_counter;$/;"	m	struct:mods::affects::dissolver
@@ -5859,7 +5908,7 @@ prune_crlf	utils.cpp	/^void prune_crlf(char *txt) {$/;"	f
 psendln	mods/player.cpp	/^	void player::psendln(mods::string& str) {$/;"	f	class:mods::player
 psendln	mods/player.cpp	/^	void player::psendln(std::string_view str) {$/;"	f	class:mods::player
 psg1	mods/weapon.cpp	/^	obj_data_ptr_t psg1(){$/;"	f	namespace:mods::weapon
-psm_debug	db.cpp	1030;"	d	file:
+psm_debug	db.cpp	1034;"	d	file:
 psyop_skillset	class.cpp	/^std::string psyop_skillset() {$/;"	f
 pt_allowed	config.cpp	/^int pt_allowed = NO;$/;"	v
 ptr	globals.cpp	/^player_ptr_t ptr(char_data* in_ch){$/;"	f
@@ -6088,6 +6137,7 @@ room_pave_mode	mods/player.cpp	/^	bool player::room_pave_mode(){$/;"	f	class:mod
 room_rnum	structs.h	/^	typedef IDXTYPE room_rnum;$/;"	t
 room_shopmap	shop.cpp	/^	std::map<room_rnum,std::shared_ptr<shop_data_t>> room_shopmap;$/;"	m	namespace:mods::globals	file:
 room_vnum	structs.h	/^	typedef IDXTYPE room_vnum;$/;"	t
+rooms	db.cpp	/^namespace mods::rooms {$/;"	n	class:mods	file:
 rooms	globals.cpp	/^		namespace rooms {$/;"	n	namespace:mods::globals	file:
 rooms	globals.hpp	/^		namespace rooms {$/;"	n	namespace:mods::globals
 rooms	mods/events.cpp	/^		namespace rooms {$/;"	n	namespace:mods::events::publish	file:
@@ -6151,7 +6201,9 @@ schema	mods/schema.hpp	/^namespace mods::schema { $/;"	n	class:mods
 scope_t	mods/weapon.hpp	/^	enum scope_t {$/;"	g	namespace:mods::weapon
 search_block	interpreter.cpp	/^int search_block(char *arg, const char **list, int exact) { \/** FIXME: arg 2  *\/$/;"	f
 secondary	mods/player.cpp	/^	obj_data_ptr_t player::secondary(){$/;"	f	class:mods::player
-sector_type	structs.h	/^		int	sector_type;            \/* sector type (move\/hide)            *\/$/;"	v
+sector_from_string	mods/rooms.cpp	/^	std::optional<sector_type_t> sector_from_string(std::string m){$/;"	f	namespace:mods::rooms
+sector_type	structs.h	/^		uint16_t	sector_type;            \/* sector type (move\/hide)            *\/$/;"	v
+sector_type_t	mods/rooms.hpp	/^	enum sector_type_t {$/;"	g	namespace:mods::rooms
 sector_types	constants.cpp	/^const char *sector_types[] = {$/;"	v
 sector_types	constants.hpp	/^const char *sector_types[] = {$/;"	v
 seed	mods/ai_state.cpp	/^	void seed() {$/;"	f	namespace:mods
@@ -6223,7 +6275,7 @@ set_fields	act.wizard.cpp	/^} set_fields[] = {$/;"	v	typeref:struct:set_struct
 set_fight_timestamp	mods/player.hpp	/^		void set_fight_timestamp(){ m_char_data->last_fight_timestamp = std::time(NULL); }$/;"	f	struct:mods::player
 set_fighting	fight.cpp	/^void set_fighting(char_data *ch, char_data *vict) {$/;"	f
 set_file	mods/js.hpp	/^				inline void set_file(const std::string& m) {$/;"	f	struct:mods::js::include
-set_fire	mods/rooms.hpp	/^			static inline void set_fire(room_rnum room,bool on,std::string& level,player_ptr_t& player) {$/;"	f	namespace:mods::rooms::gods
+set_fire	mods/rooms.hpp	/^		static inline void set_fire(room_rnum room,bool on,std::string& level,player_ptr_t& player) {$/;"	f	namespace:mods::rooms::gods
 set_flag	mods/player.hpp	/^		aligned_int_t set_flag(chunk_type_t chunk,aligned_int_t bit){$/;"	f	struct:mods::player
 set_frozen_room	mods/world-configuration.cpp	/^	std::pair<bool,std::string> set_frozen_room(room_vnum room_id){$/;"	f	namespace:mods::world_conf
 set_god_mode	mods/player.cpp	/^	void player::set_god_mode(bool b){$/;"	f	class:mods::player
@@ -6259,6 +6311,7 @@ set_points	mods/js.cpp	/^		static duk_ret_t set_points(duk_context *ctx) {$/;"	f
 set_prefs	mods/player.hpp	/^		void set_prefs(long prefs){ cd()->player_specials->saved.pref = prefs; }$/;"	f	struct:mods::player
 set_private	mods/chat.hpp	/^			void set_private(bool b_private) {$/;"	f	struct:mods::mods::chat::channel
 set_room	mods/player.hpp	/^		void set_room(room_rnum r){$/;"	f	struct:mods::player
+set_sector_type	mods/rooms.cpp	/^	void set_sector_type(room_rnum room_id, int sector_type){$/;"	f	namespace:mods::rooms
 set_sendbuf	comm.cpp	/^int set_sendbuf(socket_t s) {$/;"	f
 set_sentinel	mods/player.hpp	/^		void set_sentinel(std::shared_ptr<mods::classes::sentinel> s){$/;"	f	struct:mods::player
 set_sex	mods/player.hpp	/^		void set_sex(byte s){$/;"	f	struct:mods::player
@@ -6497,7 +6550,8 @@ test	mods/js.cpp	/^		namespace test {$/;"	n	namespace:mods::js	file:
 text	mods/util-conf.hpp	/^		namespace text {$/;"	n	namespace:mods::util
 text_overflow	comm.cpp	/^const char *text_overflow = "**OVERFLOW**\\r\\n";$/;"	v
 texture_level	structs.h	/^		texture_level_t& texture_level(texture_type_t type){$/;"	f
-textures	structs.cpp	/^		std::vector<room_data::texture_type_t>& room_data::textures() { $/;"	f	class:room_data
+texture_to_string	mods/rooms.hpp	/^	static inline std::string texture_to_string(room_data::texture_type_t t){$/;"	f	namespace:mods::rooms
+textures	structs.cpp	/^		std::set<room_data::texture_type_t>& room_data::textures() { $/;"	f	class:room_data
 textures_that_have_levels	structs.h	/^		constexpr static std::array<texture_type_t,5> textures_that_have_levels = {$/;"	v
 texturize_room	mods/deferred.hpp	/^			void texturize_room(uint64_t ticks_in_future,room_rnum& room_id,TTextureList& textures){$/;"	f	class:mods::deferred
 texturize_room	mods/util.hpp	/^	static inline void texturize_room(room_rnum room_id, room_data::texture_type_t texture_type){$/;"	f	namespace:mods::util

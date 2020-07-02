@@ -5,6 +5,9 @@
 namespace mods::orm {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
+	room::room(const pqxx::result::reference & r){
+		this->feed(r);
+	}
 	uint64_t room::initialize_row(){
 		this->init();
 		return 0;

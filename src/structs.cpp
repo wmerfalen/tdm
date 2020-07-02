@@ -303,20 +303,18 @@ bool obj_data::flagged(int value){
 			}
 			return "[ ]";
 		}
-		std::vector<room_data::texture_type_t>& room_data::textures() { 
+		std::set<room_data::texture_type_t>& room_data::textures() { 
 			return m_textures;
 		}
 
 		void room_data::add_texture(texture_type_t t){
-			if(m_textures.size() == 0 || std::find(m_textures.begin(),m_textures.end(),t) == m_textures.end()){
-				m_textures.emplace_back(t);
-			}
+			m_textures.insert(t);
 		}
 		void room_data::remove_texture(texture_type_t t){
 			decltype(m_textures) final_textures;
 			for(auto && texture : m_textures){
 				if(texture == t){ continue; }
-				final_textures.emplace_back(texture);
+				final_textures.insert(texture);
 			}
 			m_textures = std::move(final_textures);
 		}

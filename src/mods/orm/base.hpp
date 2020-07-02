@@ -117,8 +117,7 @@ namespace mods::orm {
 					auto player_record = mods::pq::exec(select_transaction,player_sql);
 					mods::pq::commit(select_transaction);
 					for(auto row : player_record){
-						auto & m = s.emplace_back();
-						m.feed(row);
+						s.emplace_back(row);
 					}
 					return {player_record.size(),"okay"};
 				}catch(std::exception& e){

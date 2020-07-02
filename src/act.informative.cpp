@@ -780,6 +780,13 @@ void look_at_room(char_data *ch, int ignore_brief) {
 		player->stc(mods::overhead_map::generate<mods::player*>(player.get(),room));
 	}
 
+	for(auto & t : world[room].textures()){
+		player->send("[%s]", mods::rooms::texture_to_string(t).c_str());
+	}
+	if(world[room].textures().size()){
+		player->send("\r\n");
+	}
+
 	/* autoexits */
 	if(!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_AUTOEXIT)) {
 		do_auto_exits(ch);
