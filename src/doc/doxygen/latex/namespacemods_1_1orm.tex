@@ -1,0 +1,152 @@
+\hypertarget{namespacemods_1_1orm}{}\section{mods\+:\+:orm Namespace Reference}
+\label{namespacemods_1_1orm}\index{mods\+::orm@{mods\+::orm}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structmods_1_1orm_1_1base}{base}
+\item 
+struct \hyperlink{structmods_1_1orm_1_1base__quotes}{base\+\_\+quotes}
+\item 
+struct \hyperlink{structmods_1_1orm_1_1player__classes}{player\+\_\+classes}
+\item 
+struct \hyperlink{structmods_1_1orm_1_1player__generated__data}{player\+\_\+generated\+\_\+data}
+\item 
+struct \hyperlink{structmods_1_1orm_1_1player__race__perks}{player\+\_\+race\+\_\+perks}
+\item 
+struct \hyperlink{structmods_1_1orm_1_1player__races}{player\+\_\+races}
+\item 
+struct \hyperlink{structmods_1_1orm_1_1player__skill__trees__unlocked}{player\+\_\+skill\+\_\+trees\+\_\+unlocked}
+\item 
+struct \hyperlink{structmods_1_1orm_1_1room}{room}
+\item 
+struct \hyperlink{structmods_1_1orm_1_1sentinel}{sentinel}
+\item 
+struct \hyperlink{structmods_1_1orm_1_1shop}{shop}
+\item 
+struct \hyperlink{structmods_1_1orm_1_1shop__objects}{shop\+\_\+objects}
+\item 
+struct \hyperlink{structmods_1_1orm_1_1shop__rooms}{shop\+\_\+rooms}
+\item 
+struct \hyperlink{structmods_1_1orm_1_1skill__trees}{skill\+\_\+trees}
+\item 
+struct \hyperlink{structmods_1_1orm_1_1specialty__skills}{specialty\+\_\+skills}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacemods_1_1orm_a9c7edd00f6865764b90bea5b967e4e5b}\label{namespacemods_1_1orm_a9c7edd00f6865764b90bea5b967e4e5b}} 
+using {\bfseries sql\+\_\+compositor} = \hyperlink{structmods_1_1sql_1_1compositor}{mods\+::sql\+::compositor}$<$ mods\+::pq\+::transaction $>$
+\item 
+\mbox{\Hypertarget{namespacemods_1_1orm_a71a7d1e51fef4ad2c051065c27d09e4f}\label{namespacemods_1_1orm_a71a7d1e51fef4ad2c051065c27d09e4f}} 
+using {\bfseries sql\+\_\+save\+\_\+map\+\_\+t} = std\+::map$<$ std\+::string, std\+::string $>$
+\item 
+\mbox{\Hypertarget{namespacemods_1_1orm_a844bf26414ceb7427f56f4ad763288fb}\label{namespacemods_1_1orm_a844bf26414ceb7427f56f4ad763288fb}} 
+using {\bfseries quotes} = \hyperlink{structmods_1_1orm_1_1base__quotes}{base\+\_\+quotes}$<$ uint64\+\_\+t, uint32\+\_\+t $>$
+\item 
+\mbox{\Hypertarget{namespacemods_1_1orm_a384d6923bfbb888aa4b1860ceb305c01}\label{namespacemods_1_1orm_a384d6923bfbb888aa4b1860ceb305c01}} 
+using {\bfseries db\+\_\+id\+\_\+t} = uint64\+\_\+t
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacemods_1_1orm_a6c26de974455cf5435c916ba61b478dd}\label{namespacemods_1_1orm_a6c26de974455cf5435c916ba61b478dd}} 
+void {\bfseries seed\+\_\+player\+\_\+races} ()
+\item 
+\mbox{\Hypertarget{namespacemods_1_1orm_aa286e245a5e7b99b7141f1d9de855db4}\label{namespacemods_1_1orm_aa286e245a5e7b99b7141f1d9de855db4}} 
+void {\bfseries seed\+\_\+player\+\_\+classes} ()
+\item 
+\mbox{\Hypertarget{namespacemods_1_1orm_a74bca76a2a152d0be5c26fb710e43932}\label{namespacemods_1_1orm_a74bca76a2a152d0be5c26fb710e43932}} 
+void {\bfseries seed\+\_\+player\+\_\+race\+\_\+perks} ()
+\item 
+\mbox{\Hypertarget{namespacemods_1_1orm_a39077006f44062eecb8fffdee413c85a}\label{namespacemods_1_1orm_a39077006f44062eecb8fffdee413c85a}} 
+void {\bfseries seed\+\_\+skill\+\_\+trees} ()
+\item 
+\mbox{\Hypertarget{namespacemods_1_1orm_a610ad878547937a6eb07d4430a81290e}\label{namespacemods_1_1orm_a610ad878547937a6eb07d4430a81290e}} 
+void {\bfseries seed\+\_\+specialty\+\_\+skills} ()
+\item 
+\mbox{\Hypertarget{namespacemods_1_1orm_a774302ed1cb75a0780009326395b6ae6}\label{namespacemods_1_1orm_a774302ed1cb75a0780009326395b6ae6}} 
+long {\bfseries pg\+\_\+timestamp\+\_\+to\+\_\+long} (std\+::string timestamp)
+\item 
+{\footnotesize template$<$typename T\+Row\+Type , typename T\+Iterable $>$ }\\std\+::vector$<$ T\+Row\+Type $>$ \&\& \hyperlink{namespacemods_1_1orm_a2ab3ea4b32ee4d381314c237155249ac}{fetch\+\_\+by\+\_\+meta} (std\+::string\+\_\+view column, std\+::string\+\_\+view value)
+\item 
+{\footnotesize template$<$typename T\+Row\+Type , typename T\+Iterable $>$ }\\T\+Row\+Type \&\& \hyperlink{namespacemods_1_1orm_adfe5cbbffe9a35eeccfedcda9b1a7d20}{find} (const uint64\+\_\+t \&id)
+\item 
+{\footnotesize template$<$typename T\+Row\+Type , typename T\+Iterable $>$ }\\std\+::vector$<$ T\+Row\+Type $>$ \&\& \hyperlink{namespacemods_1_1orm_a7b55ee63e04fc5075fb1c17e6d5d17ed}{find\+\_\+multi} (T\+Iterable \&id\+\_\+list)
+\item 
+void \hyperlink{namespacemods_1_1orm_accdf745e499a02aa3c7b025477ae3bee}{foobar} ()
+\item 
+\mbox{\Hypertarget{namespacemods_1_1orm_a27544adeedafa02e5557ec417e4426b4}\label{namespacemods_1_1orm_a27544adeedafa02e5557ec417e4426b4}} 
+void {\bfseries delete\+\_\+shop\+\_\+rooms} (shop\+\_\+vnum shop\+\_\+vnum\+\_\+id)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1orm_a4320fbe0ebe2314c6a5083d72f695572}\label{namespacemods_1_1orm_a4320fbe0ebe2314c6a5083d72f695572}} 
+void {\bfseries delete\+\_\+shop\+\_\+objects} (shop\+\_\+vnum shop\+\_\+vnum\+\_\+id)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1orm_a292e8507c92a7972d1c6cb54eab93d81}\label{namespacemods_1_1orm_a292e8507c92a7972d1c6cb54eab93d81}} 
+void {\bfseries save\+\_\+shop\+\_\+objects} (\hyperlink{structmods_1_1orm_1_1shop__objects}{shop\+\_\+objects} \&so\+\_\+list)
+\item 
+\mbox{\Hypertarget{namespacemods_1_1orm_a4609881e6d165f90af95619548587807}\label{namespacemods_1_1orm_a4609881e6d165f90af95619548587807}} 
+void {\bfseries save\+\_\+shop\+\_\+rooms} (\hyperlink{structmods_1_1orm_1_1shop__rooms}{shop\+\_\+rooms} \&sr\+\_\+list)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacemods_1_1orm_aed9abfc6794ebee61041f54db6b91f04}\label{namespacemods_1_1orm_aed9abfc6794ebee61041f54db6b91f04}} 
+const std\+::string {\bfseries base\+\_\+attributes} \mbox{[}$\,$\mbox{]} = \{\char`\"{}S\+TR\char`\"{},\char`\"{}I\+NT\char`\"{},\char`\"{}D\+EX\char`\"{},\char`\"{}W\+IS\char`\"{},\char`\"{}C\+HA\char`\"{},\char`\"{}C\+ON\char`\"{},\char`\"{}L\+CK\char`\"{}\}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is outdated and doesn\textquotesingle{}t represent the classes in the mud This class is outdated and doesn\textquotesingle{}t represent the classes in the mud This class is outdated and doesn\textquotesingle{}t represent the classes in the mud
+
+This class has the right idea, however it is unusable due to the fact that we\textquotesingle{}re errnoeously saving the primary and secondary weapons to the user. In a mud, you must allow the user to customize their loadout. This class violates that. Instead of saving the primary and secondary, we should be using the mods\+::orm\+::inventory\+::feed/flush player functions to update the player\textquotesingle{}s carrying and euipment. 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespacemods_1_1orm_a2ab3ea4b32ee4d381314c237155249ac}\label{namespacemods_1_1orm_a2ab3ea4b32ee4d381314c237155249ac}} 
+\index{mods\+::orm@{mods\+::orm}!fetch\+\_\+by\+\_\+meta@{fetch\+\_\+by\+\_\+meta}}
+\index{fetch\+\_\+by\+\_\+meta@{fetch\+\_\+by\+\_\+meta}!mods\+::orm@{mods\+::orm}}
+\subsubsection{\texorpdfstring{fetch\+\_\+by\+\_\+meta()}{fetch\_by\_meta()}}
+{\footnotesize\ttfamily template$<$typename T\+Row\+Type , typename T\+Iterable $>$ \\
+std\+::vector$<$T\+Row\+Type$>$\&\& mods\+::orm\+::fetch\+\_\+by\+\_\+meta (\begin{DoxyParamCaption}\item[{std\+::string\+\_\+view}]{column,  }\item[{std\+::string\+\_\+view}]{value }\end{DoxyParamCaption})}
+
+\hyperlink{namespacemods_1_1orm_a2ab3ea4b32ee4d381314c237155249ac}{fetch\+\_\+by\+\_\+meta$<$\+T\+Row\+Type,\+T\+Iterable$>$(std\+::string\+\_\+view column,std\+::string\+\_\+view value)}; 
+\begin{DoxyParams}{Parameters}
+{\em std\+::string\+\_\+view} & column name \\
+\hline
+{\em std\+::string\+\_\+view} & value of the column \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$\+T\+Row\+Type$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacemods_1_1orm_adfe5cbbffe9a35eeccfedcda9b1a7d20}\label{namespacemods_1_1orm_adfe5cbbffe9a35eeccfedcda9b1a7d20}} 
+\index{mods\+::orm@{mods\+::orm}!find@{find}}
+\index{find@{find}!mods\+::orm@{mods\+::orm}}
+\subsubsection{\texorpdfstring{find()}{find()}}
+{\footnotesize\ttfamily template$<$typename T\+Row\+Type , typename T\+Iterable $>$ \\
+T\+Row\+Type\&\& mods\+::orm\+::find (\begin{DoxyParamCaption}\item[{const uint64\+\_\+t \&}]{id }\end{DoxyParamCaption})}
+
+find$<$\+T\+Row\+Type,\+T\+Iterable$>$(id) \begin{DoxyReturn}{Returns}
+T\+Row\+Type struct 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacemods_1_1orm_a7b55ee63e04fc5075fb1c17e6d5d17ed}\label{namespacemods_1_1orm_a7b55ee63e04fc5075fb1c17e6d5d17ed}} 
+\index{mods\+::orm@{mods\+::orm}!find\+\_\+multi@{find\+\_\+multi}}
+\index{find\+\_\+multi@{find\+\_\+multi}!mods\+::orm@{mods\+::orm}}
+\subsubsection{\texorpdfstring{find\+\_\+multi()}{find\_multi()}}
+{\footnotesize\ttfamily template$<$typename T\+Row\+Type , typename T\+Iterable $>$ \\
+std\+::vector$<$T\+Row\+Type$>$\&\& mods\+::orm\+::find\+\_\+multi (\begin{DoxyParamCaption}\item[{T\+Iterable \&}]{id\+\_\+list }\end{DoxyParamCaption})}
+
+find$<$\+T\+Row\+Type,\+T\+Iterable$>$(std\+::iterator \&id\+\_\+list); 
+\begin{DoxyParams}{Parameters}
+{\em std\+::iterator} & id\+\_\+list iterable container of ids to fetch \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$\+T\+Row\+Type$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacemods_1_1orm_accdf745e499a02aa3c7b025477ae3bee}\label{namespacemods_1_1orm_accdf745e499a02aa3c7b025477ae3bee}} 
+\index{mods\+::orm@{mods\+::orm}!foobar@{foobar}}
+\index{foobar@{foobar}!mods\+::orm@{mods\+::orm}}
+\subsubsection{\texorpdfstring{foobar()}{foobar()}}
+{\footnotesize\ttfamily void mods\+::orm\+::foobar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+load multiple into object container 
