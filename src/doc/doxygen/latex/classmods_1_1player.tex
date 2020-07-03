@@ -2,8 +2,7 @@
 \label{classmods_1_1player}\index{mods\+::player@{mods\+::player}}
 
 
-Inheritance diagram for mods\+:\+:player\+:
-\nopagebreak
+Inheritance diagram for mods\+:\+:player\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -460,6 +459,11 @@ bool {\bfseries room\+\_\+pave\+\_\+mode} ()
 \mbox{\Hypertarget{classmods_1_1player_ada7986bb6604aeacaac9d1f22e32c66e}\label{classmods_1_1player_ada7986bb6604aeacaac9d1f22e32c66e}} 
 bool {\bfseries zone\+\_\+pave\+\_\+mode} ()
 \item 
+obj\+\_\+ptr\+\_\+t \hyperlink{classmods_1_1player_a0f650360e3abd409657d69aece464f9b}{get\+\_\+ammo\+\_\+for} (obj\+\_\+ptr\+\_\+t \&)
+\item 
+\mbox{\Hypertarget{classmods_1_1player_adf65b2ac8d627710b5e22232b90388f0}\label{classmods_1_1player_adf65b2ac8d627710b5e22232b90388f0}} 
+void {\bfseries consume\+\_\+from\+\_\+carrying} (obj\+\_\+ptr\+\_\+t \&item)
+\item 
 \mbox{\Hypertarget{classmods_1_1player_a048c0e70991f8a290cfda61d754b46f8}\label{classmods_1_1player_a048c0e70991f8a290cfda61d754b46f8}} 
 player\+\_\+class\+\_\+t {\bfseries get\+\_\+class} () const
 \item 
@@ -469,8 +473,8 @@ void {\bfseries set\+\_\+class} (player\+\_\+class\+\_\+t c)
 \mbox{\Hypertarget{classmods_1_1player_a3ee5b9cc2ec5bfcd3c4768831653c2c3}\label{classmods_1_1player_a3ee5b9cc2ec5bfcd3c4768831653c2c3}} 
 \hyperlink{structobj__data}{obj\+\_\+data} $\ast$ {\bfseries get\+\_\+first\+\_\+ammo\+\_\+of\+\_\+type} (const weapon\+\_\+type\+\_\+t \&) const
 \item 
-\mbox{\Hypertarget{classmods_1_1player_af03346ba20be5abc4371d38c65934172}\label{classmods_1_1player_af03346ba20be5abc4371d38c65934172}} 
-bool {\bfseries can\+\_\+snipe} (\hyperlink{structchar__data}{char\+\_\+data} $\ast$target)
+\mbox{\Hypertarget{classmods_1_1player_a7d3551cdfa6a862d263444343133ab52}\label{classmods_1_1player_a7d3551cdfa6a862d263444343133ab52}} 
+bool {\bfseries can\+\_\+snipe} (player\+\_\+ptr\+\_\+t target)
 \item 
 \mbox{\Hypertarget{classmods_1_1player_ac61916af7f7983f789be3da07d8eef99}\label{classmods_1_1player_ac61916af7f7983f789be3da07d8eef99}} 
 bool {\bfseries is\+\_\+weapon\+\_\+loaded} ()
@@ -758,6 +762,9 @@ void {\bfseries done} ()
 \mbox{\Hypertarget{classmods_1_1player_a48eb3e7f7afe683c847653cc1f5d6a18}\label{classmods_1_1player_a48eb3e7f7afe683c847653cc1f5d6a18}} 
 size\+\_\+t {\bfseries send} (const char $\ast$messg,...)
 \item 
+\mbox{\Hypertarget{classmods_1_1player_a7828a3aaa2147e985f7e91af567bc7f3}\label{classmods_1_1player_a7828a3aaa2147e985f7e91af567bc7f3}} 
+size\+\_\+t {\bfseries godsend} (const char $\ast$messg,...)
+\item 
 \mbox{\Hypertarget{classmods_1_1player_aa5a831a796d55746bcc777fc561ea052}\label{classmods_1_1player_aa5a831a796d55746bcc777fc561ea052}} 
 \hyperlink{classmods_1_1player}{player} \& {\bfseries pager\+\_\+start} ()
 \item 
@@ -1020,6 +1027,14 @@ obj\+\_\+data\+\_\+ptr\+\_\+t {\bfseries attacking\+\_\+with} ()
 \item 
 \mbox{\Hypertarget{classmods_1_1player_aa35eeea77aca8368ef6e9909e22254ff}\label{classmods_1_1player_aa35eeea77aca8368ef6e9909e22254ff}} 
 int {\bfseries attacking\+\_\+with\+\_\+type} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a38890a047f7537df35b34a37b3f30f31}\label{classmods_1_1player_a38890a047f7537df35b34a37b3f30f31}} 
+void {\bfseries set\+\_\+fight\+\_\+timestamp} ()
+\item 
+std\+::string \hyperlink{classmods_1_1player_ab0139ef41b09f35cf6212763e9ff4584}{get\+\_\+type\+\_\+string} ()
+\item 
+\mbox{\Hypertarget{classmods_1_1player_a56d250b0bf59bf02bb055b1cca00e81a}\label{classmods_1_1player_a56d250b0bf59bf02bb055b1cca00e81a}} 
+void {\bfseries report} ()
 \end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -1161,13 +1176,25 @@ T\+O\+DO\+: do this \mbox{\Hypertarget{classmods_1_1player_af85ed0368fd327f3747b
 \subsubsection{\texorpdfstring{deactivate\+\_\+account()}{deactivate\_account()}}
 {\footnotesize\ttfamily void mods\+::player\+::deactivate\+\_\+account (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-T\+O\+DO\+: call a C\+RM function. In fact, maybe don\textquotesingle{}t even store this \hyperlink{classmods_1_1player_abbbcc9a9d532b3fbfcd16faeb72e8a35}{deactivate\+\_\+account()} function on this object T\+O\+DO\+: what do we need to do to deactivate the account? for now, I think just setting an active flag for the player would be enough\mbox{\Hypertarget{classmods_1_1player_a05b78e56ec3b207c2ebd5396b4e3bd65}\label{classmods_1_1player_a05b78e56ec3b207c2ebd5396b4e3bd65}} 
+T\+O\+DO\+: call a C\+RM function. In fact, maybe don\textquotesingle{}t even store this \hyperlink{classmods_1_1player_abbbcc9a9d532b3fbfcd16faeb72e8a35}{deactivate\+\_\+account()} function on this object T\+O\+DO\+: what do we need to do to deactivate the account? for now, I think just setting an active flag for the player would be enough\mbox{\Hypertarget{classmods_1_1player_a0f650360e3abd409657d69aece464f9b}\label{classmods_1_1player_a0f650360e3abd409657d69aece464f9b}} 
+\index{mods\+::player@{mods\+::player}!get\+\_\+ammo\+\_\+for@{get\+\_\+ammo\+\_\+for}}
+\index{get\+\_\+ammo\+\_\+for@{get\+\_\+ammo\+\_\+for}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{get\+\_\+ammo\+\_\+for()}{get\_ammo\_for()}}
+{\footnotesize\ttfamily obj\+\_\+ptr\+\_\+t mods\+::player\+::get\+\_\+ammo\+\_\+for (\begin{DoxyParamCaption}\item[{obj\+\_\+ptr\+\_\+t \&}]{weapon }\end{DoxyParamCaption})}
+
+T\+O\+DO\+: use a query based interface to get any ammunition from packs, backpack, inventory, etc \mbox{\Hypertarget{classmods_1_1player_a05b78e56ec3b207c2ebd5396b4e3bd65}\label{classmods_1_1player_a05b78e56ec3b207c2ebd5396b4e3bd65}} 
 \index{mods\+::player@{mods\+::player}!get\+\_\+overhead\+\_\+map\+\_\+width@{get\+\_\+overhead\+\_\+map\+\_\+width}}
 \index{get\+\_\+overhead\+\_\+map\+\_\+width@{get\+\_\+overhead\+\_\+map\+\_\+width}!mods\+::player@{mods\+::player}}
 \subsubsection{\texorpdfstring{get\+\_\+overhead\+\_\+map\+\_\+width()}{get\_overhead\_map\_width()}}
 {\footnotesize\ttfamily uint8\+\_\+t mods\+::player\+::get\+\_\+overhead\+\_\+map\+\_\+width (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
-Overhead map functions \mbox{\Hypertarget{classmods_1_1player_a2ce826104a9d3a2c853ee6d4e02fe689}\label{classmods_1_1player_a2ce826104a9d3a2c853ee6d4e02fe689}} 
+Overhead map functions \mbox{\Hypertarget{classmods_1_1player_ab0139ef41b09f35cf6212763e9ff4584}\label{classmods_1_1player_ab0139ef41b09f35cf6212763e9ff4584}} 
+\index{mods\+::player@{mods\+::player}!get\+\_\+type\+\_\+string@{get\+\_\+type\+\_\+string}}
+\index{get\+\_\+type\+\_\+string@{get\+\_\+type\+\_\+string}!mods\+::player@{mods\+::player}}
+\subsubsection{\texorpdfstring{get\+\_\+type\+\_\+string()}{get\_type\_string()}}
+{\footnotesize\ttfamily std\+::string mods\+::player\+::get\+\_\+type\+\_\+string (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+reporting utilities \mbox{\Hypertarget{classmods_1_1player_a2ce826104a9d3a2c853ee6d4e02fe689}\label{classmods_1_1player_a2ce826104a9d3a2c853ee6d4e02fe689}} 
 \index{mods\+::player@{mods\+::player}!god\+\_\+mode@{god\+\_\+mode}}
 \index{god\+\_\+mode@{god\+\_\+mode}!mods\+::player@{mods\+::player}}
 \subsubsection{\texorpdfstring{god\+\_\+mode()}{god\_mode()}}

@@ -63,7 +63,6 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="structroom__data-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -75,51 +74,70 @@ Collaboration diagram for room_data:</div>
 <div class="dyncontent">
 <div class="center"><img src="structroom__data__coll__graph.png" border="0" usemap="#room__data_coll__map" alt="Collaboration graph"/></div>
 <map name="room__data_coll__map" id="room__data_coll__map">
-<area shape="rect" id="node2" href="structroom__direction__data.html" title="room_direction_data" alt="" coords="437,8,576,35"/>
+<area shape="rect" id="node2" href="structroom__direction__data.html" title="room_direction_data" alt="" coords="443,8,581,35"/>
 <area shape="rect" id="node3" href="structmods_1_1string.html" title="mods::string" alt="" coords="21,107,115,133"/>
-<area shape="rect" id="node4" href="structobj__data.html" title="obj_data" alt="" coords="317,256,388,283"/>
-<area shape="rect" id="node9" href="structchar__player__data.html" title="char_player_data" alt="" coords="292,392,413,419"/>
-<area shape="rect" id="node6" href="structchar__data.html" title="char_data" alt="" coords="645,376,724,403"/>
-<area shape="rect" id="node5" href="structobj__affected__type.html" title="obj_affected_type" alt="" coords="5,357,131,384"/>
-<area shape="rect" id="node11" href="structfollow__type.html" title="follow_type" alt="" coords="926,489,1014,516"/>
-<area shape="rect" id="node13" href="structchar__special__data.html" title="char_special_data" alt="" coords="907,285,1033,312"/>
-<area shape="rect" id="node15" href="structmob__special__data.html" title="mob_special_data" alt="" coords="907,376,1033,403"/>
-<area shape="rect" id="node7" href="structchar__point__data.html" title="char_point_data" alt="" coords="295,443,410,469"/>
-<area shape="rect" id="node8" href="structaffected__type.html" title="affected_type" alt="" coords="302,532,403,559"/>
+<area shape="rect" id="node4" href="structobj__data.html" title="obj_data" alt="" coords="320,200,391,227"/>
+<area shape="rect" id="node9" href="structchar__player__data.html" title="char_player_data" alt="" coords="295,391,416,417"/>
+<area shape="rect" id="node6" href="structchar__data.html" title="char_data" alt="" coords="651,313,729,340"/>
+<area shape="rect" id="node5" href="structobj__affected__type.html" title="obj_affected_type" alt="" coords="5,307,131,333"/>
+<area shape="rect" id="node11" href="structfollow__type.html" title="follow_type" alt="" coords="927,260,1015,287"/>
+<area shape="rect" id="node13" href="structchar__special__data.html" title="char_special_data" alt="" coords="908,388,1035,415"/>
+<area shape="rect" id="node7" href="structchar__point__data.html" title="char_point_data" alt="" coords="298,251,413,277"/>
+<area shape="rect" id="node8" href="structaffected__type.html" title="affected_type" alt="" coords="305,340,406,367"/>
 <area shape="rect" id="node10" href="structtime__data.html" title="time_data" alt="" coords="29,408,107,435"/>
-<area shape="rect" id="node12" href="structchar__ability__data.html" title="char_ability_data" alt="" coords="293,341,413,368"/>
-<area shape="rect" id="node14" href="structchar__special__data__saved.html" title="char_special_data_saved" alt="" coords="600,180,769,207"/>
-<area shape="rect" id="node16" href="structobj__flag__data.html" title="obj_flag_data" alt="" coords="19,307,117,333"/>
+<area shape="rect" id="node12" href="structchar__ability__data.html" title="char_ability_data" alt="" coords="295,441,415,468"/>
+<area shape="rect" id="node14" href="structchar__special__data__saved.html" title="char_special_data_saved" alt="" coords="605,433,775,460"/>
+<area shape="rect" id="node15" href="structmob__special__data.html" title="mob_special_data" alt="" coords="292,492,419,519"/>
+<area shape="rect" id="node16" href="structobj__flag__data.html" title="obj_flag_data" alt="" coords="19,357,117,384"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a9552b46091ee649079e41f04f9543b8e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8e">texture_type_t</a> : uint8_t { <br />
-&#160;&#160;<b>GRASS</b>, 
-<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea11c29a8a341e0515595b1e6dd50457d6">CEMENT</a>, 
-<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea725f10e60d4c90ac587d77c85b28e922">OUTSIDE</a>, 
-<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea30dbd9210e43561e3118aea65067d9b1">INSIDE</a>, 
+&#160;&#160;<b>AIR</b>, 
+<b>CARPET</b>, 
+<b>CEMENT</b>, 
+<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea52ea2374cf8f765fce8ee0d91c935e7c">DAMP</a>, 
 <br />
-&#160;&#160;<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea914e27e6a837fbd4808b438efa226574">SEWER</a>, 
-<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea4f2e9c36313c15fe141436285e66c580">RADIOACTIVE</a>, 
-<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea21126e617e2a826c37c99f6c8c886892">VOLATILE</a>, 
-<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea3ab460e29e26b0631d72e909e02a7578">RUBBLE</a>, 
+&#160;&#160;<b>DESERT</b>, 
+<b>DIRT</b>, 
+<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea58338010011406f1ba606b188e8c821c">DRY</a>, 
+<b>ELEVATOR</b>, 
 <br />
-&#160;&#160;<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea68753c225baa220dc8dd9299acf73ea2">DIRT</a>, 
-<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea1e70c1275b57dd3371316f49c780c059">SHATTERED_GLASS</a>, 
-<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea77edd2a7b85af07f1d34f080ab5504c1">LOW_ATMOSPHERE</a>, 
-<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8eaed27f6f35a52e763486ad5497e42317f">ON_FIRE</a>, 
-<br />
-&#160;&#160;<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea0d7ef1795d2bde3dffbfb2ea750a0f17">NON_HAZARDOUS_SMOKE</a>, 
-<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8eaa728f7c355380fcd73472e8b8b2dcb75">HAZARDOUS_SMOKE</a>, 
-<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea194a18c2d87201d35b72c2e7aa45a6a4">EMP</a>, 
-<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea629388630ef251099a51cbe093e3fadc">TUNNEL</a>, 
-<br />
-&#160;&#160;<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea5b1767f3f8b4c1c40e36fb0c4d17c1d1">LADDER</a>, 
-<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea73dc5c708ccbd44132d03b2ebe7db7c5">ELEVATOR</a>, 
+&#160;&#160;<b>EMP</b>, 
+<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea91d56162cdccfadd739bb5bc56158e1d">FOREST</a>, 
+<b>FROZEN</b>, 
 <b>GLASS_WINDOWS</b>, 
-<b>SCANNED</b>
+<br />
+&#160;&#160;<b>GRASS</b>, 
+<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8eaa728f7c355380fcd73472e8b8b2dcb75">HAZARDOUS_SMOKE</a>, 
+<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea30dbd9210e43561e3118aea65067d9b1">INSIDE</a>, 
+<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea5b1767f3f8b4c1c40e36fb0c4d17c1d1">LADDER</a>, 
+<br />
+&#160;&#160;<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea77edd2a7b85af07f1d34f080ab5504c1">LOW_ATMOSPHERE</a>, 
+<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea816f13ab6dfd850b672def0bcb0ea080">METAL_HATCH</a>, 
+<b>METAL_WALL</b>, 
+<b>NON_HAZARDOUS_SMOKE</b>, 
+<br />
+&#160;&#160;<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8eaed27f6f35a52e763486ad5497e42317f">ON_FIRE</a>, 
+<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea725f10e60d4c90ac587d77c85b28e922">OUTSIDE</a>, 
+<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea4f2e9c36313c15fe141436285e66c580">RADIOACTIVE</a>, 
+<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea3b0133973d24d775881f0cc64f09d26f">ROOFTOP</a>, 
+<br />
+&#160;&#160;<b>RUBBLE</b>, 
+<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8eaf720715094a47343cdaedb80ee92b401">SCANNED</a>, 
+<b>SERVER_ROOM</b>, 
+<b>SEWER</b>, 
+<br />
+&#160;&#160;<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea1e70c1275b57dd3371316f49c780c059">SHATTERED_GLASS</a>, 
+<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8eac23f1e799abbde1e381716a170ddfb8e">TREE</a>, 
+<b>TUNNEL</b>, 
+<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8eac33d8731543e03593fd28f74c3499827">UNDERWATER</a>, 
+<br />
+&#160;&#160;<b>VOLATILE</b>, 
+<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8ea10a6d00e0451c8741ee965acdb891835">WATER</a>, 
+<b>WOODEN_WALLS</b>
 <br />
  }</td></tr>
 <tr class="separator:a9552b46091ee649079e41f04f9543b8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -156,15 +174,21 @@ std::deque&lt; std::shared_ptr&lt; <a class="el" href="structobj__data.html">obj
 <tr class="separator:a426dcc56f86e2a6c6351cd10554e4d81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2884a2a31feeab08c7e495453e354261"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structroom__data.html#a2884a2a31feeab08c7e495453e354261">overhead</a> (const lense_type_t &amp;)</td></tr>
 <tr class="separator:a2884a2a31feeab08c7e495453e354261"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab43aed1d0b9a11454d53b53198f5d5e7"><td class="memItemLeft" align="right" valign="top"><a id="ab43aed1d0b9a11454d53b53198f5d5e7"></a>
-std::vector&lt; <a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8e">texture_type_t</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>textures</b> ()</td></tr>
-<tr class="separator:ab43aed1d0b9a11454d53b53198f5d5e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd1b6557b6eea95d4bc428d88f1bdd21"><td class="memItemLeft" align="right" valign="top"><a id="acd1b6557b6eea95d4bc428d88f1bdd21"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>add_texture</b> (<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8e">texture_type_t</a> t)</td></tr>
-<tr class="separator:acd1b6557b6eea95d4bc428d88f1bdd21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34fdac45a93da5bcf158088dc6d66ae8"><td class="memItemLeft" align="right" valign="top"><a id="a34fdac45a93da5bcf158088dc6d66ae8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>remove_texture</b> (<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8e">texture_type_t</a> t)</td></tr>
-<tr class="separator:a34fdac45a93da5bcf158088dc6d66ae8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6b8b5bfe7d756defe8449474d980b37"><td class="memItemLeft" align="right" valign="top"><a id="ae6b8b5bfe7d756defe8449474d980b37"></a>
+std::set&lt; <a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8e">texture_type_t</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>textures</b> ()</td></tr>
+<tr class="separator:ae6b8b5bfe7d756defe8449474d980b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab920d34ccdc9ee2410d21e3c662d3b13"><td class="memItemLeft" align="right" valign="top"><a id="ab920d34ccdc9ee2410d21e3c662d3b13"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>add_texture</b> (<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8e">texture_type_t</a>)</td></tr>
+<tr class="separator:ab920d34ccdc9ee2410d21e3c662d3b13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20fdff584e4dcf7aca035408f89ce584"><td class="memItemLeft" align="right" valign="top"><a id="a20fdff584e4dcf7aca035408f89ce584"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>add_textures</b> (std::set&lt; <a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8e">texture_type_t</a> &gt; m)</td></tr>
+<tr class="separator:a20fdff584e4dcf7aca035408f89ce584"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22d4cba8d92d179a8de23232cb1c6cfc"><td class="memItemLeft" align="right" valign="top"><a id="a22d4cba8d92d179a8de23232cb1c6cfc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>remove_texture</b> (<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8e">texture_type_t</a>)</td></tr>
+<tr class="separator:a22d4cba8d92d179a8de23232cb1c6cfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d3d3ce872f4157dc238f44131d33b5a"><td class="memItemLeft" align="right" valign="top"><a id="a3d3d3ce872f4157dc238f44131d33b5a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_texture</b> (<a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8e">texture_type_t</a>)</td></tr>
+<tr class="separator:a3d3d3ce872f4157dc238f44131d33b5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b0f4da4c7c51f80c704c686045ed331"><td class="memItemLeft" align="right" valign="top"><a id="a5b0f4da4c7c51f80c704c686045ed331"></a>
 const std::vector&lt; uint8_t &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>directions</b> () const</td></tr>
 <tr class="separator:a5b0f4da4c7c51f80c704c686045ed331"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -184,9 +208,9 @@ room_vnum&#160;</td><td class="memItemRight" valign="bottom"><b>number</b></td><
 <tr class="memitem:a0abda0c8a49d2b24dc06c11b9bef1dc4"><td class="memItemLeft" align="right" valign="top"><a id="a0abda0c8a49d2b24dc06c11b9bef1dc4"></a>
 zone_rnum&#160;</td><td class="memItemRight" valign="bottom"><b>zone</b></td></tr>
 <tr class="separator:a0abda0c8a49d2b24dc06c11b9bef1dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcba259049bfe3580ddba8f5ec8f14aa"><td class="memItemLeft" align="right" valign="top"><a id="adcba259049bfe3580ddba8f5ec8f14aa"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>sector_type</b></td></tr>
-<tr class="separator:adcba259049bfe3580ddba8f5ec8f14aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92befc8bc457e557927f8331a8ab3371"><td class="memItemLeft" align="right" valign="top"><a id="a92befc8bc457e557927f8331a8ab3371"></a>
+uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>sector_type</b></td></tr>
+<tr class="separator:a92befc8bc457e557927f8331a8ab3371"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade1a73004006f5a1ced7350c675eaa76"><td class="memItemLeft" align="right" valign="top"><a id="ade1a73004006f5a1ced7350c675eaa76"></a>
 <a class="el" href="structmods_1_1string.html">mods::string</a>&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td></tr>
 <tr class="separator:ade1a73004006f5a1ced7350c675eaa76"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -217,12 +241,6 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:a153f9eb5c5c4d67bcf8ec85daedc8fa7"><td class="memItemLeft" align="right" valign="top">static constexpr std::array&lt; <a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8e">texture_type_t</a>, 5 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>textures_that_have_levels</b></td></tr>
 <tr class="separator:a153f9eb5c5c4d67bcf8ec85daedc8fa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:af1e3735077d459383ec20985eda26459"><td class="memItemLeft" align="right" valign="top"><a id="af1e3735077d459383ec20985eda26459"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>m_dispatch_fire_dissolver</b> ()</td></tr>
-<tr class="separator:af1e3735077d459383ec20985eda26459"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a99d435147a074558d8c9885b91d79817"><td class="memItemLeft" align="right" valign="top"><a id="a99d435147a074558d8c9885b91d79817"></a>
@@ -234,9 +252,9 @@ std::vector&lt; uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom">
 <tr class="memitem:acf2fa02a703a383c7d69e75ec7d2d606"><td class="memItemLeft" align="right" valign="top"><a id="acf2fa02a703a383c7d69e75ec7d2d606"></a>
 std::vector&lt; <a class="el" href="structmods_1_1extra__desc__data.html">mods::extra_desc_data</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_ex_descriptions</b></td></tr>
 <tr class="separator:acf2fa02a703a383c7d69e75ec7d2d606"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7013d2fb07dffd6f9d12c8f9d757daa5"><td class="memItemLeft" align="right" valign="top"><a id="a7013d2fb07dffd6f9d12c8f9d757daa5"></a>
-std::vector&lt; <a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8e">texture_type_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_textures</b></td></tr>
-<tr class="separator:a7013d2fb07dffd6f9d12c8f9d757daa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6153c67ebe5af94f1349ce4342dce93"><td class="memItemLeft" align="right" valign="top"><a id="ab6153c67ebe5af94f1349ce4342dce93"></a>
+std::set&lt; <a class="el" href="structroom__data.html#a9552b46091ee649079e41f04f9543b8e">texture_type_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_textures</b></td></tr>
+<tr class="separator:ab6153c67ebe5af94f1349ce4342dce93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a800e7e5c6c49f9d96b62922b9b183b21"><td class="memItemLeft" align="right" valign="top"><a id="a800e7e5c6c49f9d96b62922b9b183b21"></a>
 std::deque&lt; std::shared_ptr&lt; <a class="el" href="structobj__data.html">obj_data</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_contents</b></td></tr>
 <tr class="separator:a800e7e5c6c49f9d96b62922b9b183b21"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -254,39 +272,39 @@ std::deque&lt; std::shared_ptr&lt; <a class="el" href="structobj__data.html">obj
       </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea11c29a8a341e0515595b1e6dd50457d6"></a>CEMENT&#160;</td><td class="fielddoc"><p>typically grass that isn't flammable (i.e. not dried out) </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea52ea2374cf8f765fce8ee0d91c935e7c"></a>DAMP&#160;</td><td class="fielddoc"><p>asphault, nearly indestructible </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea725f10e60d4c90ac587d77c85b28e922"></a>OUTSIDE&#160;</td><td class="fielddoc"><p>asphault, nearly indestructible </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea58338010011406f1ba606b188e8c821c"></a>DRY&#160;</td><td class="fielddoc"><p>think about outside+cement but except no cement </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea30dbd9210e43561e3118aea65067d9b1"></a>INSIDE&#160;</td><td class="fielddoc"><p>Outside where anyone can see you </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea91d56162cdccfadd739bb5bc56158e1d"></a>FOREST&#160;</td><td class="fielddoc"><p>chaff or emp has been detonated </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea914e27e6a837fbd4808b438efa226574"></a>SEWER&#160;</td><td class="fielddoc"><p>Example: inside a home </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8eaa728f7c355380fcd73472e8b8b2dcb75"></a>HAZARDOUS_SMOKE&#160;</td><td class="fielddoc"><p>typically grass that isn't flammable (i.e. not dried out) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea4f2e9c36313c15fe141436285e66c580"></a>RADIOACTIVE&#160;</td><td class="fielddoc"><p>Underground sewer tunnel </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea30dbd9210e43561e3118aea65067d9b1"></a>INSIDE&#160;</td><td class="fielddoc"><p>think: gas attacks </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea21126e617e2a826c37c99f6c8c886892"></a>VOLATILE&#160;</td><td class="fielddoc"><p>actively emitting radioactivity </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea5b1767f3f8b4c1c40e36fb0c4d17c1d1"></a>LADDER&#160;</td><td class="fielddoc"><p>Example: inside a home </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea3ab460e29e26b0631d72e909e02a7578"></a>RUBBLE&#160;</td><td class="fielddoc"><p>Volatile means any slight spark will ignite an explosion </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea77edd2a7b85af07f1d34f080ab5504c1"></a>LOW_ATMOSPHERE&#160;</td><td class="fielddoc"><p>a ladder leading up or down </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea68753c225baa220dc8dd9299acf73ea2"></a>DIRT&#160;</td><td class="fielddoc"><p>decimation of buildings resulting in lots of ruble </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea816f13ab6dfd850b672def0bcb0ea080"></a>METAL_HATCH&#160;</td><td class="fielddoc"><p>atmosphere too thin for helicopter to fly </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea1e70c1275b57dd3371316f49c780c059"></a>SHATTERED_GLASS&#160;</td><td class="fielddoc"><p>think about outside+cement but except no cement </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8eaed27f6f35a52e763486ad5497e42317f"></a>ON_FIRE&#160;</td><td class="fielddoc"><p>think: burning car </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea77edd2a7b85af07f1d34f080ab5504c1"></a>LOW_ATMOSPHERE&#160;</td><td class="fielddoc"><p>results of breaking glass objects </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea725f10e60d4c90ac587d77c85b28e922"></a>OUTSIDE&#160;</td><td class="fielddoc"><p>actively burning </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8eaed27f6f35a52e763486ad5497e42317f"></a>ON_FIRE&#160;</td><td class="fielddoc"><p>atmosphere too thin for helicopter to fly </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea4f2e9c36313c15fe141436285e66c580"></a>RADIOACTIVE&#160;</td><td class="fielddoc"><p>Outside where anyone can see you </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea0d7ef1795d2bde3dffbfb2ea750a0f17"></a>NON_HAZARDOUS_SMOKE&#160;</td><td class="fielddoc"><p>actively burning </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea3b0133973d24d775881f0cc64f09d26f"></a>ROOFTOP&#160;</td><td class="fielddoc"><p>actively emitting radioactivity </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8eaa728f7c355380fcd73472e8b8b2dcb75"></a>HAZARDOUS_SMOKE&#160;</td><td class="fielddoc"><p>think: burning car </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8eaf720715094a47343cdaedb80ee92b401"></a>SCANNED&#160;</td><td class="fielddoc"><p>decimation of buildings resulting in lots of ruble </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea194a18c2d87201d35b72c2e7aa45a6a4"></a>EMP&#160;</td><td class="fielddoc"><p>think: gas attacks </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea1e70c1275b57dd3371316f49c780c059"></a>SHATTERED_GLASS&#160;</td><td class="fielddoc"><p>Underground sewer tunnel </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea629388630ef251099a51cbe093e3fadc"></a>TUNNEL&#160;</td><td class="fielddoc"><p>chaff or emp has been detonated </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8eac23f1e799abbde1e381716a170ddfb8e"></a>TREE&#160;</td><td class="fielddoc"><p>results of breaking glass objects </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea5b1767f3f8b4c1c40e36fb0c4d17c1d1"></a>LADDER&#160;</td><td class="fielddoc"><p>a tunnel made of any material </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8eac33d8731543e03593fd28f74c3499827"></a>UNDERWATER&#160;</td><td class="fielddoc"><p>a tunnel made of any material </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea73dc5c708ccbd44132d03b2ebe7db7c5"></a>ELEVATOR&#160;</td><td class="fielddoc"><p>a ladder leading up or down </p>
+<tr><td class="fieldname"><a id="a9552b46091ee649079e41f04f9543b8ea10a6d00e0451c8741ee965acdb891835"></a>WATER&#160;</td><td class="fielddoc"><p>Volatile means any slight spark will ignite an explosion </p>
 </td></tr>
 </table>
 

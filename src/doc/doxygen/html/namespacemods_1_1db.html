@@ -71,61 +71,67 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ab9042a10599aa69b010be801966a2f2e"><td class="memItemLeft" align="right" valign="top"><a id="ab9042a10599aa69b010be801966a2f2e"></a>
-tuple_status_t&#160;</td><td class="memItemRight" valign="bottom"><b>save_char</b> (player_ptr_t)</td></tr>
-<tr class="separator:ab9042a10599aa69b010be801966a2f2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56d7528778e7fa35943fb30006046f54"><td class="memItemLeft" align="right" valign="top"><a id="a56d7528778e7fa35943fb30006046f54"></a>
-aligned_int_t&#160;</td><td class="memItemRight" valign="bottom"><b>save_record_get_id</b> (const std::string &amp;table, mutable_map_t *values)</td></tr>
+<tr class="memitem:a0f80be75e7e86082ec106bd952307cf6"><td class="memItemLeft" align="right" valign="top">tuple_status_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#a0f80be75e7e86082ec106bd952307cf6">save_char</a> (player_ptr_t player_ptr)</td></tr>
+<tr class="memdesc:a0f80be75e7e86082ec106bd952307cf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">exports and saves the player  <a href="#a0f80be75e7e86082ec106bd952307cf6">More...</a><br /></td></tr>
+<tr class="separator:a0f80be75e7e86082ec106bd952307cf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56d7528778e7fa35943fb30006046f54"><td class="memItemLeft" align="right" valign="top">aligned_int_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#a56d7528778e7fa35943fb30006046f54">save_record_get_id</a> (const std::string &amp;table, mutable_map_t *values)</td></tr>
+<tr class="memdesc:a56d7528778e7fa35943fb30006046f54"><td class="mdescLeft">&#160;</td><td class="mdescRight">saves a record and returns the pk id of that record  <a href="#a56d7528778e7fa35943fb30006046f54">More...</a><br /></td></tr>
 <tr class="separator:a56d7528778e7fa35943fb30006046f54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6cd02ca445ea237caf3b63fd5c7c36b"><td class="memItemLeft" align="right" valign="top"><a id="ae6cd02ca445ea237caf3b63fd5c7c36b"></a>
-aligned_int_t&#160;</td><td class="memItemRight" valign="bottom"><b>initialize_row</b> (const std::string &amp;table)</td></tr>
+<tr class="memitem:ae6cd02ca445ea237caf3b63fd5c7c36b"><td class="memItemLeft" align="right" valign="top">aligned_int_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#ae6cd02ca445ea237caf3b63fd5c7c36b">initialize_row</a> (const std::string &amp;table)</td></tr>
+<tr class="memdesc:ae6cd02ca445ea237caf3b63fd5c7c36b"><td class="mdescLeft">&#160;</td><td class="mdescRight">initializes a row on the table, thus filling default values for each column  <a href="#ae6cd02ca445ea237caf3b63fd5c7c36b">More...</a><br /></td></tr>
 <tr class="separator:ae6cd02ca445ea237caf3b63fd5c7c36b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77cb9fac2dd8aad01191849ceedff9ab"><td class="memItemLeft" align="right" valign="top"><a id="a77cb9fac2dd8aad01191849ceedff9ab"></a>
 tuple_status_t&#160;</td><td class="memItemRight" valign="bottom"><b>new_record</b> (const std::string &amp;table, mutable_map_t *values)</td></tr>
 <tr class="separator:a77cb9fac2dd8aad01191849ceedff9ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5d88db0c82983fcb247497adeeec339"><td class="memItemLeft" align="right" valign="top"><a id="af5d88db0c82983fcb247497adeeec339"></a>
-tuple_status_t&#160;</td><td class="memItemRight" valign="bottom"><b>save_record</b> (const std::string &amp;table, mutable_map_t *values, std::string pk_id)</td></tr>
+<tr class="memitem:af5d88db0c82983fcb247497adeeec339"><td class="memItemLeft" align="right" valign="top">tuple_status_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#af5d88db0c82983fcb247497adeeec339">save_record</a> (const std::string &amp;table, mutable_map_t *values, std::string pk_id)</td></tr>
+<tr class="memdesc:af5d88db0c82983fcb247497adeeec339"><td class="mdescLeft">&#160;</td><td class="mdescRight">saves an already existing record into the db specified by pk_id  <a href="#af5d88db0c82983fcb247497adeeec339">More...</a><br /></td></tr>
 <tr class="separator:af5d88db0c82983fcb247497adeeec339"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd5c08c56ba18bdd8c650d8d7345ad7f"><td class="memItemLeft" align="right" valign="top"><a id="afd5c08c56ba18bdd8c650d8d7345ad7f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>lmdb_renew</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#afd5c08c56ba18bdd8c650d8d7345ad7f">lmdb_renew</a> ()</td></tr>
+<tr class="memdesc:afd5c08c56ba18bdd8c650d8d7345ad7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">renews the transaction on the lmdb interface <br /></td></tr>
 <tr class="separator:afd5c08c56ba18bdd8c650d8d7345ad7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2964d817c59b9a29ac62f0e67e080254"><td class="memItemLeft" align="right" valign="top"><a id="a2964d817c59b9a29ac62f0e67e080254"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>lmdb_nget_void</b> (void *key, std::size_t k_size, void *value)</td></tr>
+<tr class="memitem:a2964d817c59b9a29ac62f0e67e080254"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#a2964d817c59b9a29ac62f0e67e080254">lmdb_nget_void</a> (void *key, std::size_t k_size, void *value)</td></tr>
+<tr class="memdesc:a2964d817c59b9a29ac62f0e67e080254"><td class="mdescLeft">&#160;</td><td class="mdescRight">grabs a key and stores it in an untyped void* buffer  <a href="#a2964d817c59b9a29ac62f0e67e080254">More...</a><br /></td></tr>
 <tr class="separator:a2964d817c59b9a29ac62f0e67e080254"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72e95918c9bc92bd82716f200f81eec5"><td class="memItemLeft" align="right" valign="top"><a id="a72e95918c9bc92bd82716f200f81eec5"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>lmdb_nget</b> (void *key, std::size_t k_size, std::string &amp;value)</td></tr>
+<tr class="memitem:a72e95918c9bc92bd82716f200f81eec5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#a72e95918c9bc92bd82716f200f81eec5">lmdb_nget</a> (void *key, std::size_t k_size, std::string &amp;value)</td></tr>
+<tr class="memdesc:a72e95918c9bc92bd82716f200f81eec5"><td class="mdescLeft">&#160;</td><td class="mdescRight">grabs a key and stores it in a string (value)  <a href="#a72e95918c9bc92bd82716f200f81eec5">More...</a><br /></td></tr>
 <tr class="separator:a72e95918c9bc92bd82716f200f81eec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76eb530e6b65cbed6c0462ccd14cdc94"><td class="memItemLeft" align="right" valign="top"><a id="a76eb530e6b65cbed6c0462ccd14cdc94"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>lmdb_get</b> (std::string_view key)</td></tr>
+<tr class="memitem:a76eb530e6b65cbed6c0462ccd14cdc94"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#a76eb530e6b65cbed6c0462ccd14cdc94">lmdb_get</a> (std::string_view key)</td></tr>
+<tr class="memdesc:a76eb530e6b65cbed6c0462ccd14cdc94"><td class="mdescLeft">&#160;</td><td class="mdescRight">grabs a key and returns it by string  <a href="#a76eb530e6b65cbed6c0462ccd14cdc94">More...</a><br /></td></tr>
 <tr class="separator:a76eb530e6b65cbed6c0462ccd14cdc94"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9ca8045480b5c845000f2dda073939e"><td class="memItemLeft" align="right" valign="top"><a id="ab9ca8045480b5c845000f2dda073939e"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>lmdb_nput</b> (void *key, std::size_t key_size, void *value, std::size_t v_size)</td></tr>
+<tr class="memitem:ab9ca8045480b5c845000f2dda073939e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#ab9ca8045480b5c845000f2dda073939e">lmdb_nput</a> (void *key, std::size_t key_size, void *value, std::size_t v_size)</td></tr>
+<tr class="memdesc:ab9ca8045480b5c845000f2dda073939e"><td class="mdescLeft">&#160;</td><td class="mdescRight">places a key into lmdb using a void* buffer as both key and type Use the key_size and v_size parameters to dictate how big your untyped buffers are  <a href="#ab9ca8045480b5c845000f2dda073939e">More...</a><br /></td></tr>
 <tr class="separator:ab9ca8045480b5c845000f2dda073939e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7e3b257ce6a2920b088cc798af79da6"><td class="memItemLeft" align="right" valign="top"><a id="aa7e3b257ce6a2920b088cc798af79da6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>lmdb_put</b> (std::string key, std::string value)</td></tr>
+<tr class="memitem:aa7e3b257ce6a2920b088cc798af79da6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#aa7e3b257ce6a2920b088cc798af79da6">lmdb_put</a> (std::string key, std::string value)</td></tr>
+<tr class="memdesc:aa7e3b257ce6a2920b088cc798af79da6"><td class="mdescLeft">&#160;</td><td class="mdescRight">places a string value into lmdb by key  <a href="#aa7e3b257ce6a2920b088cc798af79da6">More...</a><br /></td></tr>
 <tr class="separator:aa7e3b257ce6a2920b088cc798af79da6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5fbce517ac53231aa35c7d9c58622ce2"><td class="memItemLeft" align="right" valign="top"><a id="a5fbce517ac53231aa35c7d9c58622ce2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>lmdb_del</b> (std::string key)</td></tr>
+<tr class="memitem:a5fbce517ac53231aa35c7d9c58622ce2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#a5fbce517ac53231aa35c7d9c58622ce2">lmdb_del</a> (std::string key)</td></tr>
+<tr class="memdesc:a5fbce517ac53231aa35c7d9c58622ce2"><td class="mdescLeft">&#160;</td><td class="mdescRight">deletes a string key  <a href="#a5fbce517ac53231aa35c7d9c58622ce2">More...</a><br /></td></tr>
 <tr class="separator:a5fbce517ac53231aa35c7d9c58622ce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af13cbeaf36d1892265aca37289d5c7cc"><td class="memItemLeft" align="right" valign="top"><a id="af13cbeaf36d1892265aca37289d5c7cc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>lmdb_ndel</b> (void *key, std::size_t key_size)</td></tr>
+<tr class="memitem:af13cbeaf36d1892265aca37289d5c7cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#af13cbeaf36d1892265aca37289d5c7cc">lmdb_ndel</a> (void *key, std::size_t key_size)</td></tr>
+<tr class="memdesc:af13cbeaf36d1892265aca37289d5c7cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">deletes a potentially binary key using untyped buffer  <a href="#af13cbeaf36d1892265aca37289d5c7cc">More...</a><br /></td></tr>
 <tr class="separator:af13cbeaf36d1892265aca37289d5c7cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ecd0fbb4254d5de7539205ae7b97f8a"><td class="memItemLeft" align="right" valign="top"><a id="a2ecd0fbb4254d5de7539205ae7b97f8a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>lmdb_commit</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#a2ecd0fbb4254d5de7539205ae7b97f8a">lmdb_commit</a> ()</td></tr>
+<tr class="memdesc:a2ecd0fbb4254d5de7539205ae7b97f8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">commits all lmdb transactions <br /></td></tr>
 <tr class="separator:a2ecd0fbb4254d5de7539205ae7b97f8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bccbc433ca6a53482a62f5181230d9b"><td class="memItemLeft" align="right" valign="top"><a id="a8bccbc433ca6a53482a62f5181230d9b"></a>
-tuple_status_t&#160;</td><td class="memItemRight" valign="bottom"><b>save_new_char</b> (player_ptr_t player_ptr)</td></tr>
+<tr class="memitem:a8bccbc433ca6a53482a62f5181230d9b"><td class="memItemLeft" align="right" valign="top">tuple_status_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#a8bccbc433ca6a53482a62f5181230d9b">save_new_char</a> (player_ptr_t player_ptr)</td></tr>
+<tr class="memdesc:a8bccbc433ca6a53482a62f5181230d9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">exports and saves a new player  <a href="#a8bccbc433ca6a53482a62f5181230d9b">More...</a><br /></td></tr>
 <tr class="separator:a8bccbc433ca6a53482a62f5181230d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1679c965eb39cf4c1c28f9670c4dbd26"><td class="memItemLeft" align="right" valign="top"><a id="a1679c965eb39cf4c1c28f9670c4dbd26"></a>
-tuple_status_t&#160;</td><td class="memItemRight" valign="bottom"><b>lmdb_write_values</b> (const std::string &amp;table, mutable_map_t *values, std::string pk_id)</td></tr>
+<tr class="memitem:a1679c965eb39cf4c1c28f9670c4dbd26"><td class="memItemLeft" align="right" valign="top">tuple_status_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#a1679c965eb39cf4c1c28f9670c4dbd26">lmdb_write_values</a> (const std::string &amp;table, mutable_map_t *values, std::string pk_id)</td></tr>
+<tr class="memdesc:a1679c965eb39cf4c1c28f9670c4dbd26"><td class="mdescLeft">&#160;</td><td class="mdescRight">writes lmdb values to the db using table, values, and pk_id  <a href="#a1679c965eb39cf4c1c28f9670c4dbd26">More...</a><br /></td></tr>
 <tr class="separator:a1679c965eb39cf4c1c28f9670c4dbd26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cb0a00d3700b5eab314405d909a8cce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#a2cb0a00d3700b5eab314405d909a8cce">lmdb_export_char</a> (player_ptr_t player_ptr, mutable_map_t &amp;values)</td></tr>
+<tr class="memdesc:a2cb0a00d3700b5eab314405d909a8cce"><td class="mdescLeft">&#160;</td><td class="mdescRight">grabs all relevant keys for a player and store them in the values map  <a href="#a2cb0a00d3700b5eab314405d909a8cce">More...</a><br /></td></tr>
 <tr class="separator:a2cb0a00d3700b5eab314405d909a8cce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf6aefd449f5fcb8d9987a37cc1d7ba8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#acf6aefd449f5fcb8d9987a37cc1d7ba8">load_record</a> (const std::string &amp;table, aligned_int_t pk, mutable_map_t &amp;values)</td></tr>
+<tr class="memdesc:acf6aefd449f5fcb8d9987a37cc1d7ba8"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads a record from table using pk and stores them in values  <a href="#acf6aefd449f5fcb8d9987a37cc1d7ba8">More...</a><br /></td></tr>
 <tr class="separator:acf6aefd449f5fcb8d9987a37cc1d7ba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e743f7d6ff025f86a1bdbcc9b726e8c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#a0e743f7d6ff025f86a1bdbcc9b726e8c">load_record</a> (const std::string &amp;table, const std::string &amp;pk, mutable_map_t &amp;values)</td></tr>
+<tr class="memdesc:a0e743f7d6ff025f86a1bdbcc9b726e8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads a record from table using pk and stores them in values  <a href="#a0e743f7d6ff025f86a1bdbcc9b726e8c">More...</a><br /></td></tr>
 <tr class="separator:a0e743f7d6ff025f86a1bdbcc9b726e8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ec81c8ca3ce3f3a4b27b68645bf4e1d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemods_1_1db.html#a2ec81c8ca3ce3f3a4b27b68645bf4e1d">load_record_by_meta</a> (const std::string &amp;table, mutable_map_t *values, mutable_map_t &amp;out_record)</td></tr>
+<tr class="memdesc:a2ec81c8ca3ce3f3a4b27b68645bf4e1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">loads a record according to metadata that matches the values pointer from table, stores them in out_record  <a href="#a2ec81c8ca3ce3f3a4b27b68645bf4e1d">More...</a><br /></td></tr>
 <tr class="separator:a2ec81c8ca3ce3f3a4b27b68645bf4e1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab14e0409a2059b7d3cadbba2c1712ead"><td class="memItemLeft" align="right" valign="top"><a id="ab14e0409a2059b7d3cadbba2c1712ead"></a>
 aligned_int_t&#160;</td><td class="memItemRight" valign="bottom"><b>lmdb_load_by_meta</b> (const std::string &amp;table, mutable_map_t *values)</td></tr>
@@ -137,6 +143,59 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>db_insert</b> (const 
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>initliaze_row </p>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="ae6cd02ca445ea237caf3b63fd5c7c36b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6cd02ca445ea237caf3b63fd5c7c36b">&#9670;&nbsp;</a></span>initialize_row()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">aligned_int_t mods::db::initialize_row </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>table</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>initializes a row on the table, thus filling default values for each column </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a5fbce517ac53231aa35c7d9c58622ce2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fbce517ac53231aa35c7d9c58622ce2">&#9670;&nbsp;</a></span>lmdb_del()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mods::db::lmdb_del </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>deletes a string key </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a2cb0a00d3700b5eab314405d909a8cce"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2cb0a00d3700b5eab314405d909a8cce">&#9670;&nbsp;</a></span>lmdb_export_char()</h2>
 
@@ -162,7 +221,304 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>db_insert</b> (const 
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>grabs all relevant keys for a player and store them in the values map </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">player_ptr</td><td></td></tr>
+    <tr><td class="paramname">values</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 <p>TODO: instead of using the <a class="el" href="structchar__data.html">char_data</a> accesses, create functions(or use existing ones) on <a class="el" href="classmods_1_1player.html">mods::player</a> object </p>
+
+</div>
+</div>
+<a id="a76eb530e6b65cbed6c0462ccd14cdc94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76eb530e6b65cbed6c0462ccd14cdc94">&#9670;&nbsp;</a></span>lmdb_get()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string mods::db::lmdb_get </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>grabs a key and returns it by string </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="af13cbeaf36d1892265aca37289d5c7cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af13cbeaf36d1892265aca37289d5c7cc">&#9670;&nbsp;</a></span>lmdb_ndel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mods::db::lmdb_ndel </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>key_size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>deletes a potentially binary key using untyped buffer </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td></td></tr>
+    <tr><td class="paramname">key_size</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a72e95918c9bc92bd82716f200f81eec5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72e95918c9bc92bd82716f200f81eec5">&#9670;&nbsp;</a></span>lmdb_nget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int mods::db::lmdb_nget </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>k_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>grabs a key and stores it in a string (value) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td></td></tr>
+    <tr><td class="paramname">k_size</td><td></td></tr>
+    <tr><td class="paramname">value</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a2964d817c59b9a29ac62f0e67e080254"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2964d817c59b9a29ac62f0e67e080254">&#9670;&nbsp;</a></span>lmdb_nget_void()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int mods::db::lmdb_nget_void </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>k_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>grabs a key and stores it in an untyped void* buffer </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td></td></tr>
+    <tr><td class="paramname">k_size</td><td></td></tr>
+    <tr><td class="paramname">value</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="ab9ca8045480b5c845000f2dda073939e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9ca8045480b5c845000f2dda073939e">&#9670;&nbsp;</a></span>lmdb_nput()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int mods::db::lmdb_nput </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>key_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>v_size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>places a key into lmdb using a void* buffer as both key and type Use the key_size and v_size parameters to dictate how big your untyped buffers are </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td></td></tr>
+    <tr><td class="paramname">key_size</td><td></td></tr>
+    <tr><td class="paramname">value</td><td></td></tr>
+    <tr><td class="paramname">v_size</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="aa7e3b257ce6a2920b088cc798af79da6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7e3b257ce6a2920b088cc798af79da6">&#9670;&nbsp;</a></span>lmdb_put()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mods::db::lmdb_put </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>places a string value into lmdb by key </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td></td></tr>
+    <tr><td class="paramname">value</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1679c965eb39cf4c1c28f9670c4dbd26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1679c965eb39cf4c1c28f9670c4dbd26">&#9670;&nbsp;</a></span>lmdb_write_values()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">tuple_status_t mods::db::lmdb_write_values </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>table</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">mutable_map_t *&#160;</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>pk_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>writes lmdb values to the db using table, values, and pk_id </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table</td><td></td></tr>
+    <tr><td class="paramname">values</td><td></td></tr>
+    <tr><td class="paramname">pk_id</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>
@@ -197,7 +553,19 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>db_insert</b> (const 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>int number of rows loaded </dd></dl>
+
+<p>loads a record from table using pk and stores them in values </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table</td><td></td></tr>
+    <tr><td class="paramname">pk</td><td></td></tr>
+    <tr><td class="paramname">values</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd>
+<dd>
+int number of rows loaded </dd></dl>
 
 </div>
 </div>
@@ -232,7 +600,19 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>db_insert</b> (const 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>int number of rows loaded </dd></dl>
+
+<p>loads a record from table using pk and stores them in values </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table</td><td></td></tr>
+    <tr><td class="paramname">pk</td><td></td></tr>
+    <tr><td class="paramname">values</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd>
+<dd>
+int number of rows loaded </dd></dl>
 
 </div>
 </div>
@@ -267,7 +647,156 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>db_insert</b> (const 
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>int number of rows loaded </dd></dl>
+
+<p>loads a record according to metadata that matches the values pointer from table, stores them in out_record </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table</td><td></td></tr>
+    <tr><td class="paramname">values</td><td></td></tr>
+    <tr><td class="paramname">out_record</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd>
+<dd>
+int number of rows loaded </dd></dl>
+
+</div>
+</div>
+<a id="a0f80be75e7e86082ec106bd952307cf6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f80be75e7e86082ec106bd952307cf6">&#9670;&nbsp;</a></span>save_char()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">tuple_status_t mods::db::save_char </td>
+          <td>(</td>
+          <td class="paramtype">player_ptr_t&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>exports and saves the player </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">player_ptr</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a8bccbc433ca6a53482a62f5181230d9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8bccbc433ca6a53482a62f5181230d9b">&#9670;&nbsp;</a></span>save_new_char()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">tuple_status_t mods::db::save_new_char </td>
+          <td>(</td>
+          <td class="paramtype">player_ptr_t&#160;</td>
+          <td class="paramname"><em>player_ptr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>exports and saves a new player </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">player_ptr</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="af5d88db0c82983fcb247497adeeec339"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5d88db0c82983fcb247497adeeec339">&#9670;&nbsp;</a></span>save_record()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">tuple_status_t mods::db::save_record </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>table</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">mutable_map_t *&#160;</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>pk_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>saves an already existing record into the db specified by pk_id </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table</td><td></td></tr>
+    <tr><td class="paramname">values</td><td></td></tr>
+    <tr><td class="paramname">pk_id</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a56d7528778e7fa35943fb30006046f54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56d7528778e7fa35943fb30006046f54">&#9670;&nbsp;</a></span>save_record_get_id()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">aligned_int_t mods::db::save_record_get_id </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>table</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">mutable_map_t *&#160;</td>
+          <td class="paramname"><em>values</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>saves a record and returns the pk id of that record </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">table</td><td></td></tr>
+    <tr><td class="paramname">values</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>

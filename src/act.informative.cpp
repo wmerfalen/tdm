@@ -769,7 +769,11 @@ void look_at_room(char_data *ch, int ignore_brief) {
 		sprintbit(ROOM_FLAGS(room), room_bits, buf, sizeof(buf));
 		player->send("[%5d] %s [ %s]", GET_ROOM_VNUM(room), world[room].name.c_str(), buf);
 	}
-	player->send("\r\n{grn}%s{/grn}", world[room].name.c_str());
+	player->send("\r\n{grn}%s ->{gld}", world[room].name.c_str());
+	for(auto && flag : mods::rooms::get_room_flags_from_room(player->room())){
+		player->send("[%s]",flag.c_str());
+	}
+	player->sendln("{/gld}");
 
 	player->sendln(CCNRM(ch, C_NRM));
 	if((!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_BRIEF)) || ignore_brief ||

@@ -16,6 +16,80 @@ namespace mods::rooms {
 			}
 		}
 	};
+	bool has_textures(room_rnum r, std::vector<txt> textures){
+		assert(r < world.size());
+		for(auto & t : textures){
+			if(world[r].has_texture(t) == false){
+				return false;
+			}
+		}
+		return true;
+	}
+	/**
+	 * @brief entry point for setting a room on fire. use this
+	 *
+	 * @param room
+	 */
+	void start_fire_dissolver(room_rnum room) {
+		static std::vector<txt> never_ignites = {
+			txt::SEWER,txt::DAMP,txt::WATER,txt::UNDERWATER,
+			txt::FROZEN
+		};
+		assert(room < world.size());
+		if(is_peaceful(room)){
+			log("Prevented peaceful room to catch on fire (%d)", room);
+			return;
+		}
+		if(has_textures(room,never_ignites)){
+			log("Room will never ignite because it has a texture that isn't flammable");
+			return;
+		}
+		auto fire = fs::COMPLETELY_ON_FIRE;
+		if(world[room].has_texture(txt::ON_FIRE) && affects::needs_dissolve.find(room) != affects::needs_dissolve.end()){
+			log("Room already has fire dissolver running. Roomid: %d", room);
+			return;
+		}
+		world[room].add_texture(txt::ON_FIRE);
+		int ticks = FIRE_EVERY_N_TICKS;
+		if(world[room].has_texture(txt::WOODEN_WALLS)){
+			ticks += mods::values::FIRE_WOODEN_ADDITIONAL_TICKS;
+		}
+		if(world[room].has_texture(txt::CARPET)){
+			ticks += mods::values::FIRE_CARPET_ADDITIONAL_TICKS;
+		}
+		auto initial_status = fs::KINDLING;
+		if(has_textures(room, {txt::DRY, txt::GRASS})){
+			initial_status = fs::COMPLETELY_ON_FIRE;
+		}
+
+		affects::add_room_dissolve_affect_every_n_tick(
+				room,
+				(affects::affect_t)fire,
+				initial_status,
+				ticks
+		);
+
+		affects::set_affect_to_increment(
+				room,
+				txt::ON_FIRE
+				);
+
+		affects::set_affect_max_amount(
+				room,
+				txt::ON_FIRE,
+				fire_status_t::OUT
+				);
+
+		affects::add_callback(room,
+				txt::ON_FIRE,
+				affects::on_room_fire_changed_affect
+				);
+
+		affects::trigger_callback_for_affect(room,txt::ON_FIRE);
+	}
+	void set_flag_absolute(room_rnum room, int flag){
+		world[room].room_flags = flag;
+	}
 	std::optional<sector_type_t> sector_from_string(std::string m){
 		for(auto & pair : mods::rooms::sector_strings) {
 			if(m.compare(pair.second) == 0){

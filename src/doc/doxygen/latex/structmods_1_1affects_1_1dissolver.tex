@@ -2,16 +2,24 @@
 \label{structmods_1_1affects_1_1dissolver}\index{mods\+::affects\+::dissolver$<$ T\+Affects, T\+Affects\+Container, T\+Affects\+Map, T\+Entity\+Id $>$@{mods\+::affects\+::dissolver$<$ T\+Affects, T\+Affects\+Container, T\+Affects\+Map, T\+Entity\+Id $>$}}
 
 
-Collaboration diagram for mods\+:\+:affects\+:\+:dissolver$<$ T\+Affects, T\+Affects\+Container, T\+Affects\+Map, T\+Entity\+Id $>$\+:
-\nopagebreak
+Collaboration diagram for mods\+:\+:affects\+:\+:dissolver$<$ T\+Affects, T\+Affects\+Container, T\+Affects\+Map, T\+Entity\+Id $>$\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=235pt]{structmods_1_1affects_1_1dissolver__coll__graph}
 \end{center}
 \end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_abcac7d436cb1fba4928b57e0ca854f01}\label{structmods_1_1affects_1_1dissolver_abcac7d436cb1fba4928b57e0ca854f01}} 
+using {\bfseries callback\+\_\+t} = std\+::function$<$ void(T\+Entity\+Id, T\+Affects, uint32\+\_\+t)$>$
+\end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a7cda3d45be180cda49e40179e02bf37b}\label{structmods_1_1affects_1_1dissolver_a7cda3d45be180cda49e40179e02bf37b}} 
+void {\bfseries on\+\_\+affect\+\_\+change} (T\+Affects affect, callback\+\_\+t cb)
 \item 
 \mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a539dff8baaec99e0a72fb898dae01299}\label{structmods_1_1affects_1_1dissolver_a539dff8baaec99e0a72fb898dae01299}} 
 {\bfseries dissolver} (T\+Affects\+Map affects)
@@ -22,11 +30,19 @@ Collaboration diagram for mods\+:\+:affects\+:\+:dissolver$<$ T\+Affects, T\+Aff
 \mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a382f4ebb292806a3aca5635122cb9de1}\label{structmods_1_1affects_1_1dissolver_a382f4ebb292806a3aca5635122cb9de1}} 
 void {\bfseries affect\+\_\+via} (T\+Affects\+Container affects)
 \item 
+void \hyperlink{structmods_1_1affects_1_1dissolver_a35c94d35d686bf871fd29aba834ec150}{set\+\_\+direction} (T\+Affects affect, bool direction)
+\begin{DoxyCompactList}\small\item\em set affect direction \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a0f93b582346b0ca6096b90d16c8062e2}\label{structmods_1_1affects_1_1dissolver_a0f93b582346b0ca6096b90d16c8062e2}} 
+void {\bfseries set\+\_\+max\+\_\+amount} (T\+Affects affect, uint32\+\_\+t max)
+\item 
 \mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a552da19095c0caddb9fb0bc5aa233776}\label{structmods_1_1affects_1_1dissolver_a552da19095c0caddb9fb0bc5aa233776}} 
 bool {\bfseries has\+\_\+all\+\_\+affects} (T\+Affects\+Container in\+\_\+affects)
 \item 
 \mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_aea716f0b8cf0fea7ef48e829b2b8c8d1}\label{structmods_1_1affects_1_1dissolver_aea716f0b8cf0fea7ef48e829b2b8c8d1}} 
 bool {\bfseries has\+\_\+affect} (T\+Affects a)
+\item 
+\mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a58e3fcea6f452e247f76840a5e16a0d9}\label{structmods_1_1affects_1_1dissolver_a58e3fcea6f452e247f76840a5e16a0d9}} 
+void {\bfseries trigger\+\_\+callback} (T\+Affects affect)
 \item 
 \mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a91175b4f73883f8034d84380cce73794}\label{structmods_1_1affects_1_1dissolver_a91175b4f73883f8034d84380cce73794}} 
 void {\bfseries affect\+\_\+every\+\_\+n\+\_\+ticks} (T\+Affects affect, uint32\+\_\+t starting\+\_\+amount, uint32\+\_\+t every\+\_\+n\+\_\+ticks)
@@ -39,11 +55,13 @@ void {\bfseries affect} (T\+Affects aff\+\_\+id)
 \item 
 void \hyperlink{structmods_1_1affects_1_1dissolver_adda06b1b31ee9e7a55ac55132321f811}{clear} (T\+Affects\+Container affects)
 \item 
+\mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a1f220e9e0e15da60d22065a42d709a91}\label{structmods_1_1affects_1_1dissolver_a1f220e9e0e15da60d22065a42d709a91}} 
+void {\bfseries process\+\_\+affect} (T\+Affects affect)
+\item 
 \mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_afa1664b53140ef4ddf136e2ee1b12c3b}\label{structmods_1_1affects_1_1dissolver_afa1664b53140ef4ddf136e2ee1b12c3b}} 
 void {\bfseries affect} (T\+Affects affect, int amount)
 \item 
-\mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a26d75b016d86619cb74f80418f98bc10}\label{structmods_1_1affects_1_1dissolver_a26d75b016d86619cb74f80418f98bc10}} 
-std\+::size\+\_\+t {\bfseries tick} ()
+std\+::size\+\_\+t \hyperlink{structmods_1_1affects_1_1dissolver_a26d75b016d86619cb74f80418f98bc10}{tick} ()
 \item 
 void \hyperlink{structmods_1_1affects_1_1dissolver_ad8059ffe681c083c83ec0fa82ef82a9b}{remove} (T\+Affects id)
 \item 
@@ -52,6 +70,9 @@ bool {\bfseries has\+\_\+any\+\_\+affect} (T\+Affects\+Container in\+\_\+affects
 \item 
 \mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a40c6cc4d89660af3813a24b596653b1e}\label{structmods_1_1affects_1_1dissolver_a40c6cc4d89660af3813a24b596653b1e}} 
 T\+Affects\+Map \& {\bfseries get\+\_\+affects} ()
+\item 
+\mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a07299dbab300ae29d216e6bdf913574a}\label{structmods_1_1affects_1_1dissolver_a07299dbab300ae29d216e6bdf913574a}} 
+void {\bfseries set\+\_\+callback} (T\+Affects affect, std\+::function$<$ void(T\+Entity\+Id, T\+Affects, uint32\+\_\+t)$>$ f)
 \end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -73,6 +94,18 @@ std\+::map$<$ T\+Affects, uint32\+\_\+t $>$ {\bfseries m\+\_\+tick\+\_\+resoluti
 \item 
 \mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_aba2351d57a6d335183c85bf064b6e71c}\label{structmods_1_1affects_1_1dissolver_aba2351d57a6d335183c85bf064b6e71c}} 
 std\+::map$<$ T\+Affects, uint32\+\_\+t $>$ {\bfseries m\+\_\+tick\+\_\+resolution\+\_\+map\+\_\+counter}
+\item 
+\mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a9b31e7f54820a8bbfa028f559470a4b3}\label{structmods_1_1affects_1_1dissolver_a9b31e7f54820a8bbfa028f559470a4b3}} 
+std\+::set$<$ T\+Affects $>$ {\bfseries m\+\_\+increment}
+\item 
+\mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a5dfcabbe587171375039a7846a4e9c55}\label{structmods_1_1affects_1_1dissolver_a5dfcabbe587171375039a7846a4e9c55}} 
+std\+::map$<$ T\+Affects, uint32\+\_\+t $>$ {\bfseries m\+\_\+max\+\_\+amount}
+\item 
+\mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a5232205a48c98ea423f5f96dd035bba2}\label{structmods_1_1affects_1_1dissolver_a5232205a48c98ea423f5f96dd035bba2}} 
+std\+::map$<$ T\+Affects, std\+::function$<$ void(T\+Entity\+Id, T\+Affects, uint32\+\_\+t)$>$ $>$ {\bfseries m\+\_\+callbacks}
+\item 
+\mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a82d655e41c043ee4e96d25ac5fcbd2d2}\label{structmods_1_1affects_1_1dissolver_a82d655e41c043ee4e96d25ac5fcbd2d2}} 
+std\+::size\+\_\+t {\bfseries m\+\_\+processed}
 \end{DoxyCompactItemize}
 
 
@@ -93,7 +126,35 @@ void \hyperlink{structmods_1_1affects_1_1dissolver}{mods\+::affects\+::dissolver
 
 F\+I\+X\+ME\+: need to uncomment this-\/$>$\hyperlink{structmods_1_1affects_1_1dissolver_ad8059ffe681c083c83ec0fa82ef82a9b}{remove()} calls and implement that function
 
-F\+I\+X\+ME\+: need to uncomment this-\/$>$\hyperlink{structmods_1_1affects_1_1dissolver_ad8059ffe681c083c83ec0fa82ef82a9b}{remove()} calls and implement that function 
+F\+I\+X\+ME\+: need to uncomment this-\/$>$\hyperlink{structmods_1_1affects_1_1dissolver_ad8059ffe681c083c83ec0fa82ef82a9b}{remove()} calls and implement that function \mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a35c94d35d686bf871fd29aba834ec150}\label{structmods_1_1affects_1_1dissolver_a35c94d35d686bf871fd29aba834ec150}} 
+\index{mods\+::affects\+::dissolver@{mods\+::affects\+::dissolver}!set\+\_\+direction@{set\+\_\+direction}}
+\index{set\+\_\+direction@{set\+\_\+direction}!mods\+::affects\+::dissolver@{mods\+::affects\+::dissolver}}
+\subsubsection{\texorpdfstring{set\+\_\+direction()}{set\_direction()}}
+{\footnotesize\ttfamily template$<$typename T\+Affects, typename T\+Affects\+Container, typename T\+Affects\+Map, typename T\+Entity\+Id$>$ \\
+void \hyperlink{structmods_1_1affects_1_1dissolver}{mods\+::affects\+::dissolver}$<$ T\+Affects, T\+Affects\+Container, T\+Affects\+Map, T\+Entity\+Id $>$\+::set\+\_\+direction (\begin{DoxyParamCaption}\item[{T\+Affects}]{affect,  }\item[{bool}]{direction }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+set affect direction 
+
+
+\begin{DoxyParams}{Parameters}
+{\em affect} & \\
+\hline
+{\em direction} & true means increment, false decrement \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structmods_1_1affects_1_1dissolver_a26d75b016d86619cb74f80418f98bc10}\label{structmods_1_1affects_1_1dissolver_a26d75b016d86619cb74f80418f98bc10}} 
+\index{mods\+::affects\+::dissolver@{mods\+::affects\+::dissolver}!tick@{tick}}
+\index{tick@{tick}!mods\+::affects\+::dissolver@{mods\+::affects\+::dissolver}}
+\subsubsection{\texorpdfstring{tick()}{tick()}}
+{\footnotesize\ttfamily template$<$typename T\+Affects, typename T\+Affects\+Container, typename T\+Affects\+Map, typename T\+Entity\+Id$>$ \\
+std\+::size\+\_\+t \hyperlink{structmods_1_1affects_1_1dissolver}{mods\+::affects\+::dissolver}$<$ T\+Affects, T\+Affects\+Container, T\+Affects\+Map, T\+Entity\+Id $>$\+::tick (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

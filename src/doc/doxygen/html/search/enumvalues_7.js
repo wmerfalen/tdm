@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['ladder',['LADDER',['../structroom__data.html#a9552b46091ee649079e41f04f9543b8ea5b1767f3f8b4c1c40e36fb0c4d17c1d1',1,'room_data']]],
-  ['low_5fatmosphere',['LOW_ATMOSPHERE',['../structroom__data.html#a9552b46091ee649079e41f04f9543b8ea77edd2a7b85af07f1d34f080ab5504c1',1,'room_data']]]
+  ['on_5ffire',['ON_FIRE',['../structroom__data.html#a9552b46091ee649079e41f04f9543b8eaed27f6f35a52e763486ad5497e42317f',1,'room_data']]],
+  ['outside',['OUTSIDE',['../structroom__data.html#a9552b46091ee649079e41f04f9543b8ea725f10e60d4c90ac587d77c85b28e922',1,'room_data']]]
 ];

@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['abort_5ftxn',['abort_txn',['../structmods_1_1lmdb_1_1__db__handle.html#a7d3cb6143fb5e400319d8f42826d5661',1,'mods::lmdb::_db_handle']]],
   ['action_5fdescription',['action_description',['../structobj__data.html#a2e18adda623112bbd517ebb765aa8110',1,'obj_data']]],
   ['add_5fconst',['add_const',['../structCatch_1_1add__const.html',1,'Catch']]],
   ['add_5flvalue_5freference',['add_lvalue_reference',['../structCatch_1_1add__lvalue__reference.html',1,'Catch']]],

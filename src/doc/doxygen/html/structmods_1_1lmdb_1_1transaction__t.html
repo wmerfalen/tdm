@@ -74,8 +74,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3ad01fb11426f89327765dc0055d94a3"><td class="memItemLeft" align="right" valign="top"><a id="a3ad01fb11426f89327765dc0055d94a3"></a>
-<a class="el" href="structmods_1_1lmdb_1_1__selector.html">selector_type_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>selector</b> (const key_type_t &amp;column, const uint64_t &amp;row_id)</td></tr>
+<tr class="memitem:a3ad01fb11426f89327765dc0055d94a3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmods_1_1lmdb_1_1__selector.html">selector_type_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmods_1_1lmdb_1_1transaction__t.html#a3ad01fb11426f89327765dc0055d94a3">selector</a> (const key_type_t &amp;column, const uint64_t &amp;row_id)</td></tr>
+<tr class="memdesc:a3ad01fb11426f89327765dc0055d94a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">builds a selector for grabbing values by metadata  <a href="#a3ad01fb11426f89327765dc0055d94a3">More...</a><br /></td></tr>
 <tr class="separator:a3ad01fb11426f89327765dc0055d94a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4013121c80d588b0916a98662e4295f"><td class="memItemLeft" align="right" valign="top"><a id="af4013121c80d588b0916a98662e4295f"></a>
 uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_row_id_list</b> (row_id_list_t &amp;rows)</td></tr>
@@ -83,11 +83,11 @@ uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_row_id_list</
 <tr class="memitem:aa130620f69dc71f180e6ef9771373d0d"><td class="memItemLeft" align="right" valign="top"><a id="aa130620f69dc71f180e6ef9771373d0d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_str_table</b> (table_type_t e_table)</td></tr>
 <tr class="separator:aa130620f69dc71f180e6ef9771373d0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37e8dc8e3f9e3f705bdb801d829210ff"><td class="memItemLeft" align="right" valign="top"><a id="a37e8dc8e3f9e3f705bdb801d829210ff"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>transaction_t</b> (std::string ce_table, transact_type_t type)</td></tr>
+<tr class="memitem:a37e8dc8e3f9e3f705bdb801d829210ff"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmods_1_1lmdb_1_1transaction__t.html#a37e8dc8e3f9e3f705bdb801d829210ff">transaction_t</a> (std::string ce_table, transact_type_t type)</td></tr>
+<tr class="memdesc:a37e8dc8e3f9e3f705bdb801d829210ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">constructor. initializes table and transaction type  <a href="#a37e8dc8e3f9e3f705bdb801d829210ff">More...</a><br /></td></tr>
 <tr class="separator:a37e8dc8e3f9e3f705bdb801d829210ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a516bc4084eb3ed2b282e7d059b2ef409"><td class="memItemLeft" align="right" valign="top"><a id="a516bc4084eb3ed2b282e7d059b2ef409"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>transaction_t</b> (table_type_t e_table, transact_type_t type)</td></tr>
+<tr class="memitem:a516bc4084eb3ed2b282e7d059b2ef409"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmods_1_1lmdb_1_1transaction__t.html#a516bc4084eb3ed2b282e7d059b2ef409">transaction_t</a> (table_type_t e_table, transact_type_t type)</td></tr>
+<tr class="memdesc:a516bc4084eb3ed2b282e7d059b2ef409"><td class="mdescLeft">&#160;</td><td class="mdescRight">constructor. initializes table and transcation type  <a href="#a516bc4084eb3ed2b282e7d059b2ef409">More...</a><br /></td></tr>
 <tr class="separator:a516bc4084eb3ed2b282e7d059b2ef409"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad6618e385ed22538f860f0d1f2ae3ac"><td class="memItemLeft" align="right" valign="top"><a id="aad6618e385ed22538f860f0d1f2ae3ac"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>table_cstr</b> () const</td></tr>
@@ -103,6 +103,7 @@ transact_type_t&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> (
 <tr class="separator:a893faeea3f9f9a0875d0522c6c7de5b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89e078b5a572044e71ee239589ea334f"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a89e078b5a572044e71ee239589ea334f"><td class="memTemplItemLeft" align="right" valign="top">result_container_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structmods_1_1lmdb_1_1transaction__t.html#a89e078b5a572044e71ee239589ea334f">get_all</a> (T consumer)</td></tr>
+<tr class="memdesc:a89e078b5a572044e71ee239589ea334f"><td class="mdescLeft">&#160;</td><td class="mdescRight">grabs all items from the db using consumer for extra data  <a href="#a89e078b5a572044e71ee239589ea334f">More...</a><br /></td></tr>
 <tr class="separator:a89e078b5a572044e71ee239589ea334f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -112,7 +113,82 @@ transact_type_t&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> (
 <p>A typical transaction </p><h6></h6>
 <h6></h6>
 <p>A typical transaction </p><h6></h6>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a37e8dc8e3f9e3f705bdb801d829210ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37e8dc8e3f9e3f705bdb801d829210ff">&#9670;&nbsp;</a></span>transaction_t() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mods::lmdb::transaction_t::transaction_t </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>ce_table</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">transact_type_t&#160;</td>
+          <td class="paramname"><em>type</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>constructor. initializes table and transaction type </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ce_table</td><td></td></tr>
+    <tr><td class="paramname">type</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a516bc4084eb3ed2b282e7d059b2ef409"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a516bc4084eb3ed2b282e7d059b2ef409">&#9670;&nbsp;</a></span>transaction_t() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mods::lmdb::transaction_t::transaction_t </td>
+          <td>(</td>
+          <td class="paramtype">table_type_t&#160;</td>
+          <td class="paramname"><em>e_table</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">transact_type_t&#160;</td>
+          <td class="paramname"><em>type</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>constructor. initializes table and transcation type </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">e_table</td><td></td></tr>
+    <tr><td class="paramname">type</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="a893faeea3f9f9a0875d0522c6c7de5b6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a893faeea3f9f9a0875d0522c6c7de5b6">&#9670;&nbsp;</a></span>get()</h2>
 
@@ -161,8 +237,60 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>grabs all items from the db using consumer for extra data </p>
 <p>The sql equivalent of this is 'select * from table'</p>
-<p>get(key,val) is basically like the sql version of "where". i.e.: get("user_id",123); //sql equiv: select * from users where user_id = 123 The sql equivalent of this is 'select * from table' </p>
+<p>get(key,val) is basically like the sql version of "where". i.e.: get("user_id",123); //sql equiv: select * from users where user_id = 123 The sql equivalent of this is 'select * from table' </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">consumer</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a3ad01fb11426f89327765dc0055d94a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ad01fb11426f89327765dc0055d94a3">&#9670;&nbsp;</a></span>selector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmods_1_1lmdb_1_1__selector.html">selector_type_t</a> mods::lmdb::transaction_t::selector </td>
+          <td>(</td>
+          <td class="paramtype">const key_type_t &amp;&#160;</td>
+          <td class="paramname"><em>column</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint64_t &amp;&#160;</td>
+          <td class="paramname"><em>row_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>builds a selector for grabbing values by metadata </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">column</td><td></td></tr>
+    <tr><td class="paramname">row_id</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>

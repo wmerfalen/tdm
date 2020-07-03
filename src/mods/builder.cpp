@@ -19,6 +19,7 @@
 #include "doors.hpp"
 #include "orm/room.hpp"
 #include "rooms.hpp"
+#include <algorithm> // for std::min
 namespace mods {  struct player; };
 namespace mods { struct extra_desc_data; }; 
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
@@ -4147,11 +4148,22 @@ ACMD(do_rbuild) {
 			"  |:: {wht}rbuild{/wht} {gld}list 2{/gld}\r\n" << 
 			"  |:: (list the third page)\r\n" <<
 
-			" {grn}rbuild{/grn} {red}<flag> {yel}<FLAG> <on|off>{/red}\r\n" <<
+			" {grn}rbuild{/grn} {red}<flag:add> {yel}<FLAG>...<FLAG N>{/red}\r\n" <<
 			"  |--> set flags on room.\r\n" <<
 			"  {grn}|____[example]{/grn}\r\n" <<
-			"  |:: {wht}rbuild{/wht} {gld}flag DARK on{/gld}\r\n" << 
-			"  |:: (set the DARK flag on the room you are in)\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}flag:add NOMOB PEACEFUL{/gld}\r\n" << 
+			"  |:: (set the NOMOB and PEACEFUL flags on the room you are in)\r\n" <<
+
+			" {grn}rbuild{/grn} {red}<flag:list>{/red}\r\n" <<
+			"  |--> list flags on room.\r\n" <<
+
+			" {grn}rbuild{/grn} {red}<flag:remove> {yel}<FLAG>...<FLAG N>{/red}\r\n" <<
+			"  |--> set flags on room.\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}flag:remove NOMOB PEACEFUL{/gld}\r\n" << 
+			"  |:: (removes the NOMOB and PEACEFUL flags on the room you are in)\r\n" <<
+			"  {grn}|____[possible items]{/grn}\r\n" <<
+			"  {gld}|:: DARK -> Dark\r\n" <<
 			"  {gld}|:: DARK -> Dark\r\n" <<
 			"  {gld}|:: DEATH	-> Death trap\r\n" <<
 			"  {gld}|:: NOMOB	-> MOBs not allowed\r\n" <<
@@ -4169,6 +4181,7 @@ ACMD(do_rbuild) {
 			"  {gld}|:: ATRIUM -> (R) The door to a house\r\n" <<
 			"  {gld}|:: OLC -> (R) Modifyable/!compress\r\n" <<
 			"  {gld}|:: BFS_MARK -> (R) breath-first srch mrk\r\n" <<
+			"{/gld}" <<
 
 			/*
 			" {grn}NEW FEATURE [as of: 2019-03]{/grn}\r\n" <<
@@ -4790,6 +4803,78 @@ ACMD(do_rbuild) {
 	/** sector types */
 	/** sector types */
 	/** sector types */
+
+	/** room flags */
+	/** room flags */
+	args = mods::util::subcmd_args<11,args_t>(argument,"flag:list");
+	if(args.has_value()){
+		r_status(player, "Listing...");
+		for(auto & str : mods::rooms::get_room_flags_from_room(player->room())){
+			player->sendln(str);
+		}
+		r_status(player, "Done Listing.");
+		return;
+	}
+
+	args = mods::util::subcmd_args<10,args_t>(argument,"flag:add");
+
+	if(args.has_value()){
+		if(vec_args.size() < 2){
+			r_error(player,"Not enough args");
+			return;
+		}
+		auto room = player->room();
+		unsigned count = 0;
+		for(unsigned i=1; i < std::min((int)vec_args.size(),64);++i){
+			std::string real_flag = std::string("ROOM_") + vec_args[i];
+			auto opt_flag = mods::rooms::room_flag_from_string(real_flag);
+			if(opt_flag.has_value() == false){
+				r_error(player, "Unrecognized flag");
+				continue;
+			}
+			mods::rooms::set_flag(room, opt_flag.value());
+			r_status(player, vec_args[i] + " added.");
+			++count;
+		}
+		if(count == 0){
+			r_error(player, "Didn't set any flags");
+			return;
+		}
+		r_success(player, std::string("Set ") + std::to_string(count) + " flags on room. To list: rbuild flag:list");
+		return;
+	}
+
+	args = mods::util::subcmd_args<12,args_t>(argument,"flag:remove");
+	if(args.has_value()){
+		if(vec_args.size() < 2){
+			r_error(player,"Not enough args");
+			return;
+		}
+		auto room = player->room();
+		unsigned count = 0;
+		for(unsigned i=1; i < std::min((int)vec_args.size(),64);++i){
+			std::string real_flag = std::string("ROOM_") + vec_args[i];
+			auto opt_flag = mods::rooms::room_flag_from_string(real_flag);
+			if(opt_flag.has_value() == false){
+				r_error(player, "Unrecognized flag");
+				continue;
+			}
+			mods::rooms::remove_flag(room, opt_flag.value());
+			r_status(player, vec_args[i] + " removed.");
+			++count;
+		}
+		if(count == 0){
+			r_error(player, "Didn't remove any flags");
+			return;
+		}
+		r_success(player, std::string("Removed ") + std::to_string(count) + " flag(s) on door");
+		return;
+	}
+
+
+	/** room flags */
+	/** room flags */
+
 
 	args = mods::util::subcmd_args<9,args_t>(argument,"exit:add");
 

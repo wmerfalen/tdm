@@ -5,6 +5,8 @@
 namespace mods::values {
 		constexpr static int FLASHBANG_COOLDOWN_TICKS = 3;	/** approx 2 seconds */
 		constexpr static int FIRE_EVERY_N_TICKS = 400;
+		constexpr static int FIRE_WOODEN_ADDITIONAL_TICKS = 80;
+		constexpr static int FIRE_CARPET_ADDITIONAL_TICKS = 60;
 		constexpr static int DAMAGE_DIVISOR = 3;
 		constexpr static int FRAG_GRENADE_TICKS = 6;
 		constexpr static int EMP_GRENADE_TICKS = 6;

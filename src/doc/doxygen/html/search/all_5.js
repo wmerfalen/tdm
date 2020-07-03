@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['elevator',['ELEVATOR',['../structroom__data.html#a9552b46091ee649079e41f04f9543b8ea73dc5c708ccbd44132d03b2ebe7db7c5',1,'room_data']]],
-  ['emp',['EMP',['../structroom__data.html#a9552b46091ee649079e41f04f9543b8ea194a18c2d87201d35b72c2e7aa45a6a4',1,'room_data']]],
   ['endswithmatcher',['EndsWithMatcher',['../structCatch_1_1Matchers_1_1StdString_1_1EndsWithMatcher.html',1,'Catch::Matchers::StdString']]],
   ['engineer',['engineer',['../structmods_1_1classes_1_1engineer.html',1,'mods::classes']]],
   ['equalsmatcher',['EqualsMatcher',['../structCatch_1_1Matchers_1_1StdString_1_1EqualsMatcher.html',1,'Catch::Matchers::StdString::EqualsMatcher'],['../structCatch_1_1Matchers_1_1Vector_1_1EqualsMatcher.html',1,'Catch::Matchers::Vector::EqualsMatcher&lt; T &gt;']]],

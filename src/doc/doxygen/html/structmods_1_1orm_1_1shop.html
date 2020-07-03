@@ -58,7 +58,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="namespacemods.html">mods</a></li><li class="navelem"><b>orm</b></li><li class="navelem"><a class="el" href="structmods_1_1orm_1_1shop.html">shop</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespacemods.html">mods</a></li><li class="navelem"><a class="el" href="namespacemods_1_1orm.html">orm</a></li><li class="navelem"><a class="el" href="structmods_1_1orm_1_1shop.html">shop</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -108,7 +108,7 @@ std::tuple&lt; bool, db_id_t, std::string &gt;&#160;</td><td class="memItemRight
 int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>delete_shop_record</b> ()</td></tr>
 <tr class="separator:aacd3c43225153cc554b8287cbe39477e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f2b7f07775f3fb3a24aba853eeacb26"><td class="memItemLeft" align="right" valign="top"><a id="a1f2b7f07775f3fb3a24aba853eeacb26"></a>
-int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>remove_room</b> (room_vnum room)</td></tr>
+int16_t&#160;</td><td class="memItemRight" valign="bottom"><b>remove_room</b> (room_vnum <a class="el" href="structmods_1_1orm_1_1room.html">room</a>)</td></tr>
 <tr class="separator:a1f2b7f07775f3fb3a24aba853eeacb26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -210,6 +210,37 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:a6552986c4d062d01fe3126a340ec31ba"><td class="memItemLeft" align="right" valign="top"><a id="a6552986c4d062d01fe3126a340ec31ba"></a>
 static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"><b>table_name</b> = &quot;shops&quot;</td></tr>
 <tr class="separator:a6552986c4d062d01fe3126a340ec31ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_static_methods_structmods_1_1orm_1_1base"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_structmods_1_1orm_1_1base')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="structmods_1_1orm_1_1base.html">mods::orm::base</a></td></tr>
+<tr class="memitem:a4af88a9e666484da8495034902354d8b inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memTemplParams" colspan="2"><a id="a4af88a9e666484da8495034902354d8b"></a>
+template&lt;typename TObject &gt; </td></tr>
+<tr class="memitem:a4af88a9e666484da8495034902354d8b inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memTemplItemLeft" align="right" valign="top">static std::tuple&lt; int16_t, std::string &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>insert_returing</b> (TObject obj, std::string_view returning_field)</td></tr>
+<tr class="separator:a4af88a9e666484da8495034902354d8b inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76c73cc22cd1ea2dc738281d9155e4c4 inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memTemplParams" colspan="2"><a id="a76c73cc22cd1ea2dc738281d9155e4c4"></a>
+template&lt;typename TObject &gt; </td></tr>
+<tr class="memitem:a76c73cc22cd1ea2dc738281d9155e4c4 inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memTemplItemLeft" align="right" valign="top">static std::tuple&lt; int16_t, std::string &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>delete_from</b> (TObject &amp;obj)</td></tr>
+<tr class="separator:a76c73cc22cd1ea2dc738281d9155e4c4 inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04952a850097ec7ddfca0a94b51fe120 inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memTemplParams" colspan="2"><a id="a04952a850097ec7ddfca0a94b51fe120"></a>
+template&lt;typename TObject &gt; </td></tr>
+<tr class="memitem:a04952a850097ec7ddfca0a94b51fe120 inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memTemplItemLeft" align="right" valign="top">static std::tuple&lt; int16_t, std::string &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>delete_where</b> (std::string_view table_name, std::string_view where, std::string_view sql_operator, std::string_view value)</td></tr>
+<tr class="separator:a04952a850097ec7ddfca0a94b51fe120 inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2113b305b253592658b0bc49229affa inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memTemplParams" colspan="2"><a id="aa2113b305b253592658b0bc49229affa"></a>
+template&lt;typename TObject &gt; </td></tr>
+<tr class="memitem:aa2113b305b253592658b0bc49229affa inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memTemplItemLeft" align="right" valign="top">static std::tuple&lt; int16_t, std::string &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>update</b> (TObject &amp;s, std::map&lt; std::string, std::string &gt; &amp;values)</td></tr>
+<tr class="separator:aa2113b305b253592658b0bc49229affa inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79e2d79291cb9695a51cb238fd7fd42b inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memTemplParams" colspan="2"><a id="a79e2d79291cb9695a51cb238fd7fd42b"></a>
+template&lt;typename TContainerObject &gt; </td></tr>
+<tr class="memitem:a79e2d79291cb9695a51cb238fd7fd42b inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memTemplItemLeft" align="right" valign="top">static std::tuple&lt; int16_t, std::string &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>load_where</b> (TContainerObject &amp;s, std::string_view where, std::string_view sql_operator, std::string_view value)</td></tr>
+<tr class="separator:a79e2d79291cb9695a51cb238fd7fd42b inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa92dbee5a2eb2be19d7107896871ac49 inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memTemplParams" colspan="2"><a id="aa92dbee5a2eb2be19d7107896871ac49"></a>
+template&lt;typename TObject &gt; </td></tr>
+<tr class="memitem:aa92dbee5a2eb2be19d7107896871ac49 inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memTemplItemLeft" align="right" valign="top">static std::tuple&lt; int16_t, std::string &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>load_by_pkid</b> (TObject &amp;s, std::string pkid)</td></tr>
+<tr class="separator:aa92dbee5a2eb2be19d7107896871ac49 inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b811c8e961e32f3404f6a6e823bee3a inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memItemLeft" align="right" valign="top"><a id="a2b811c8e961e32f3404f6a6e823bee3a"></a>
+static long&#160;</td><td class="memItemRight" valign="bottom"><b>pg_timestamp_to_long</b> (std::string timestamp)</td></tr>
+<tr class="separator:a2b811c8e961e32f3404f6a6e823bee3a inherit pub_static_methods_structmods_1_1orm_1_1base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a696c01543bff9b376b37136834c5c285"></a>

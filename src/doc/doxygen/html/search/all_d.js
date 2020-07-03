@@ -8,6 +8,8 @@ var searchData=
   ['object',['object',['../structmods_1_1object.html',1,'mods']]],
   ['object_5ftype_5fenum_5ft',['object_type_enum_t',['../structmods_1_1object.html#a6a8f895bbe1d2306a097a2090a6caf7f',1,'mods::object']]],
   ['on_5ffire',['ON_FIRE',['../structroom__data.html#a9552b46091ee649079e41f04f9543b8eaed27f6f35a52e763486ad5497e42317f',1,'room_data']]],
+  ['open',['open',['../structmods_1_1lmdb_1_1__db__handle.html#a804027c6192e3b7139482749c75f8ee3',1,'mods::lmdb::_db_handle']]],
+  ['open_5fdbi',['open_dbi',['../structmods_1_1lmdb_1_1__db__handle.html#af4d870ecebe05e17ce680dc9058e6aa2',1,'mods::lmdb::_db_handle']]],
   ['operatortraits',['OperatorTraits',['../structCatch_1_1Internal_1_1OperatorTraits.html',1,'Catch::Internal']]],
   ['operatortraits_3c_20isequalto_20_3e',['OperatorTraits&lt; IsEqualTo &gt;',['../structCatch_1_1Internal_1_1OperatorTraits_3_01IsEqualTo_01_4.html',1,'Catch::Internal']]],
   ['operatortraits_3c_20isgreaterthan_20_3e',['OperatorTraits&lt; IsGreaterThan &gt;',['../structCatch_1_1Internal_1_1OperatorTraits_3_01IsGreaterThan_01_4.html',1,'Catch::Internal']]],

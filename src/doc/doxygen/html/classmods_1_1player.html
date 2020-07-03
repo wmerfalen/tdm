@@ -532,6 +532,11 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>room_pave_mode</b> ()
 <tr class="memitem:ada7986bb6604aeacaac9d1f22e32c66e"><td class="memItemLeft" align="right" valign="top"><a id="ada7986bb6604aeacaac9d1f22e32c66e"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>zone_pave_mode</b> ()</td></tr>
 <tr class="separator:ada7986bb6604aeacaac9d1f22e32c66e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f650360e3abd409657d69aece464f9b"><td class="memItemLeft" align="right" valign="top">obj_ptr_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmods_1_1player.html#a0f650360e3abd409657d69aece464f9b">get_ammo_for</a> (obj_ptr_t &amp;)</td></tr>
+<tr class="separator:a0f650360e3abd409657d69aece464f9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf65b2ac8d627710b5e22232b90388f0"><td class="memItemLeft" align="right" valign="top"><a id="adf65b2ac8d627710b5e22232b90388f0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>consume_from_carrying</b> (obj_ptr_t &amp;item)</td></tr>
+<tr class="separator:adf65b2ac8d627710b5e22232b90388f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a048c0e70991f8a290cfda61d754b46f8"><td class="memItemLeft" align="right" valign="top"><a id="a048c0e70991f8a290cfda61d754b46f8"></a>
 player_class_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_class</b> () const</td></tr>
 <tr class="separator:a048c0e70991f8a290cfda61d754b46f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -541,9 +546,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>set_class</b> (player
 <tr class="memitem:a3ee5b9cc2ec5bfcd3c4768831653c2c3"><td class="memItemLeft" align="right" valign="top"><a id="a3ee5b9cc2ec5bfcd3c4768831653c2c3"></a>
 <a class="el" href="structobj__data.html">obj_data</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_first_ammo_of_type</b> (const weapon_type_t &amp;) const</td></tr>
 <tr class="separator:a3ee5b9cc2ec5bfcd3c4768831653c2c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af03346ba20be5abc4371d38c65934172"><td class="memItemLeft" align="right" valign="top"><a id="af03346ba20be5abc4371d38c65934172"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>can_snipe</b> (<a class="el" href="structchar__data.html">char_data</a> *target)</td></tr>
-<tr class="separator:af03346ba20be5abc4371d38c65934172"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d3551cdfa6a862d263444343133ab52"><td class="memItemLeft" align="right" valign="top"><a id="a7d3551cdfa6a862d263444343133ab52"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>can_snipe</b> (player_ptr_t target)</td></tr>
+<tr class="separator:a7d3551cdfa6a862d263444343133ab52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac61916af7f7983f789be3da07d8eef99"><td class="memItemLeft" align="right" valign="top"><a id="ac61916af7f7983f789be3da07d8eef99"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_weapon_loaded</b> ()</td></tr>
 <tr class="separator:ac61916af7f7983f789be3da07d8eef99"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -830,6 +835,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>done</b> ()</td></tr>
 <tr class="memitem:a48eb3e7f7afe683c847653cc1f5d6a18"><td class="memItemLeft" align="right" valign="top"><a id="a48eb3e7f7afe683c847653cc1f5d6a18"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>send</b> (const char *messg,...)</td></tr>
 <tr class="separator:a48eb3e7f7afe683c847653cc1f5d6a18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7828a3aaa2147e985f7e91af567bc7f3"><td class="memItemLeft" align="right" valign="top"><a id="a7828a3aaa2147e985f7e91af567bc7f3"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>godsend</b> (const char *messg,...)</td></tr>
+<tr class="separator:a7828a3aaa2147e985f7e91af567bc7f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5a831a796d55746bcc777fc561ea052"><td class="memItemLeft" align="right" valign="top"><a id="aa5a831a796d55746bcc777fc561ea052"></a>
 <a class="el" href="classmods_1_1player.html">player</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>pager_start</b> ()</td></tr>
 <tr class="separator:aa5a831a796d55746bcc777fc561ea052"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1093,6 +1101,14 @@ obj_data_ptr_t&#160;</td><td class="memItemRight" valign="bottom"><b>attacking_w
 <tr class="memitem:aa35eeea77aca8368ef6e9909e22254ff"><td class="memItemLeft" align="right" valign="top"><a id="aa35eeea77aca8368ef6e9909e22254ff"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>attacking_with_type</b> ()</td></tr>
 <tr class="separator:aa35eeea77aca8368ef6e9909e22254ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38890a047f7537df35b34a37b3f30f31"><td class="memItemLeft" align="right" valign="top"><a id="a38890a047f7537df35b34a37b3f30f31"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_fight_timestamp</b> ()</td></tr>
+<tr class="separator:a38890a047f7537df35b34a37b3f30f31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0139ef41b09f35cf6212763e9ff4584"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmods_1_1player.html#ab0139ef41b09f35cf6212763e9ff4584">get_type_string</a> ()</td></tr>
+<tr class="separator:ab0139ef41b09f35cf6212763e9ff4584"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56d250b0bf59bf02bb055b1cca00e81a"><td class="memItemLeft" align="right" valign="top"><a id="a56d250b0bf59bf02bb055b1cca00e81a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>report</b> ()</td></tr>
+<tr class="separator:a56d250b0bf59bf02bb055b1cca00e81a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -1331,6 +1347,25 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>mods::acl_list::set_a
 
 </div>
 </div>
+<a id="a0f650360e3abd409657d69aece464f9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f650360e3abd409657d69aece464f9b">&#9670;&nbsp;</a></span>get_ammo_for()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">obj_ptr_t mods::player::get_ammo_for </td>
+          <td>(</td>
+          <td class="paramtype">obj_ptr_t &amp;&#160;</td>
+          <td class="paramname"><em>weapon</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>TODO: use a query based interface to get any ammunition from packs, backpack, inventory, etc </p>
+
+</div>
+</div>
 <a id="a05b78e56ec3b207c2ebd5396b4e3bd65"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a05b78e56ec3b207c2ebd5396b4e3bd65">&#9670;&nbsp;</a></span>get_overhead_map_width()</h2>
 
@@ -1354,6 +1389,24 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>mods::acl_list::set_a
 </table>
 </div><div class="memdoc">
 <p>Overhead map functions </p>
+
+</div>
+</div>
+<a id="ab0139ef41b09f35cf6212763e9ff4584"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0139ef41b09f35cf6212763e9ff4584">&#9670;&nbsp;</a></span>get_type_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string mods::player::get_type_string </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>reporting utilities </p>
 
 </div>
 </div>

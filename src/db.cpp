@@ -44,6 +44,7 @@
 
 namespace mods::rooms {
 	extern void set_sector_type(room_rnum room_id, int sector_type);
+	extern void set_flag_absolute(room_rnum room_id, int);
 };
 using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
@@ -1393,13 +1394,13 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				room.number = room_records_row["room_number"].as<int>(0);
 				log("parse_sql_rooms: room.number (%d)",room.number);
 				room.zone = room_records_row["zone"].as<int>(0);
-				room.room_flags = room_records_row["room_flag"].as<int>(0);
 				room.sector_type = room_records_row["sector_type"].as<int>(0);
 				room.light = (room_records_row["light"]).as<int>(0);
 
 				world.push_back(room);
 				mods::globals::register_room(world.size());
 				mods::rooms::set_sector_type(world.size()-1,room_records_row["sector_type"].as<int>());
+				mods::rooms::set_flag_absolute(world.size()-1,room_records_row["room_flag"].as<int>(0));
 				top_of_world = world.size();
 			}catch(std::exception& e){
 				std::cerr << "SYSERR: exception select from rooms db: " << e.what() << "\n";

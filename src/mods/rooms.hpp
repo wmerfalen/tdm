@@ -5,12 +5,82 @@ extern obj_ptr_t optr_by_uuid(uuid_t);
 // For our dissolver
 #include "affects.hpp"
 
-#define mra_debug(a) std::cerr << "[mods::affects]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n";
+#ifdef __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__
+	#define mra_debug(a) std::cerr << "[mods::affects]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n";
+#else
+	#define mra_debug(a) /*-*/
+#endif
 namespace mods::rooms {
+	using txt = room_data::texture_type_t;
+	using fs = room_data::fire_status_t;
 	using fire_status_t = room_data::fire_status_t;
-	static inline bool is_peaceful(room_rnum room){
-		return world[room].room_flags & ROOM_PEACEFUL;
+	static const std::map<int,std::string> room_flag_strings = {
+		{ROOM_DARK, "ROOM_DARK"},
+		{ROOM_DEATH, "ROOM_DEATH"},
+		{ROOM_NOMOB, "ROOM_NOMOB"},
+		{ROOM_INDOORS, "ROOM_INDOORS"},
+		{ROOM_PEACEFUL, "ROOM_PEACEFUL"},
+		{ROOM_DMZ, "ROOM_DMZ"},
+		{ROOM_SOUNDPROOF, "ROOM_SOUNDPROOF"},
+		{ROOM_NOTRACK, "ROOM_NOTRACK"},
+		{ROOM_NOMAGIC, "ROOM_NOMAGIC"},
+		{ROOM_TUNNEL, "ROOM_TUNNEL"},
+		{ROOM_PRIVATE, "ROOM_PRIVATE"},
+		{ROOM_GODROOM, "ROOM_GODROOM"},
+		{ROOM_HOUSE, "ROOM_HOUSE"},
+		{ROOM_HOUSE_CRASH, "ROOM_HOUSE_CRASH"},
+		{ROOM_ATRIUM, "ROOM_ATRIUM"},
+		{ROOM_OLC, "ROOM_OLC"},
+		{ROOM_BFS_MARK, "ROOM_BFS_MARK"}
+	};
+	static inline std::optional<int> room_flag_from_string(std::string& s){
+#define MENTOC_LAZY(A) if(s.compare(#A) == 0){ return A; }
+		MENTOC_LAZY(ROOM_DARK);
+		MENTOC_LAZY(ROOM_DEATH);
+		MENTOC_LAZY(ROOM_NOMOB);
+		MENTOC_LAZY(ROOM_INDOORS);
+		MENTOC_LAZY(ROOM_PEACEFUL);
+		MENTOC_LAZY(ROOM_DMZ);
+		MENTOC_LAZY(ROOM_SOUNDPROOF);
+		MENTOC_LAZY(ROOM_NOTRACK);
+		MENTOC_LAZY(ROOM_NOMAGIC);
+		MENTOC_LAZY(ROOM_TUNNEL);
+		MENTOC_LAZY(ROOM_PRIVATE);
+		MENTOC_LAZY(ROOM_GODROOM);
+		MENTOC_LAZY(ROOM_HOUSE);
+		MENTOC_LAZY(ROOM_HOUSE_CRASH);
+		MENTOC_LAZY(ROOM_ATRIUM);
+		MENTOC_LAZY(ROOM_OLC);
+		MENTOC_LAZY(ROOM_BFS_MARK);
+#undef MENTOC_LAZY
+		return std::nullopt;
 	}
+
+	static inline void set_flag(room_rnum room, int flag){
+		world[room].room_flags |= flag;
+	}
+	static inline void remove_flag(room_rnum room, int flag){
+		world[room].room_flags &= ~flag;
+	}
+	static inline std::vector<std::string> get_room_flag_strings(){
+		std::vector<std::string> m;
+		for(auto & pair : room_flag_strings){
+			m.emplace_back(pair.second);
+		}
+		return m;
+	}
+	void set_flag_absolute(room_rnum room, int flag);
+
+	static inline std::vector<std::string> get_room_flags_from_room(room_rnum r){
+		std::vector<std::string> accumulator;
+		for(auto & pair : room_flag_strings){
+			if(world[r].room_flags & pair.first){
+				accumulator.emplace_back(pair.second.substr(strlen("ROOM_")));
+			}
+		}
+		return accumulator;
+	}
+
 	enum sector_type_t {
 		NONE = 0,
 		OUTSIDE_GRASSY,
@@ -49,81 +119,85 @@ namespace mods::rooms {
 	 */
 	static const std::map<sector_type_t,std::string> sector_strings {
 		{sector_type_t::NONE,"NONE"},
-		{sector_type_t::OUTSIDE_GRASSY,"OUTSIDE_GRASSY"},
-		{sector_type_t::OUTSIDE_CEMENT,"OUTSIDE_CEMENT"},
-		{sector_type_t::OUTSIDE_FOREST,"OUTSIDE_FOREST"},
-		{sector_type_t::OUTSIDE_WOODEN_WALLS,"OUTSIDE_WOODEN_WALLS"},
-		{sector_type_t::OUTSIDE_DIRT,"OUTSIDE_DIRT"},
-		{sector_type_t::OUTSIDE_DESERT,"OUTSIDE_DESERT"},
-		{sector_type_t::OUTSIDE_WATER,"OUTSIDE_WATER"},
-		{sector_type_t::OUTSIDE_UNDERWATER,"OUTSIDE_UNDERWATER"},
-		{sector_type_t::OUTSIDE_FROZEN,"OUTSIDE_FROZEN"},
-		{sector_type_t::OUTSIDE_HILLS,"OUTSIDE_HILLS"},
-		{sector_type_t::OUTSIDE_MARKET_PLACE,"OUTSIDE_MARKET_PLACE"},
-		{sector_type_t::OUTSIDE_METAL_HATCH,"OUTSIDE_METAL_HATCH"},
-		{sector_type_t::OUTSIDE_TREE,"OUTSIDE_TREE"},
-		{sector_type_t::OUTSIDE_ROOFTOP,"OUTSIDE_ROOFTOP"},
-		{sector_type_t::OUTSIDE_WOODEN_WALL,"OUTSIDE_WOODEN_WALL"},
-		{sector_type_t::OUTSIDE_METAL_WALL,"OUTSIDE_METAL_WALL"},
-		{sector_type_t::OUTSIDE_AIR,"OUTSIDE_AIR"},
-		{sector_type_t::INDOOR_WOODEN_WALLS,"INDOOR_WOODEN_WALLS"},
-		{sector_type_t::INDOOR_CEMENT,"INDOOR_CEMENT"},
-		{sector_type_t::INDOOR_CEMENT_WOODEN_WALLS,"INDOOR_CEMENT_WOODEN_WALLS"},
-		{sector_type_t::INDOOR_CARPET_WOODEN_WALLS,"INDOOR_CARPET_WOODEN_WALLS"},
-		{sector_type_t::INDOOR_TUNNEL,"INDOOR_TUNNEL"},
-		{sector_type_t::INDOOR_METAL_WALLS,"INDOOR_METAL_WALLS"},
-		{sector_type_t::INDOOR_SERVER_ROOM,"INDOOR_SERVER_ROOM"},
-		{sector_type_t::INDOOR_SEWER,"INDOOR_SEWER"},
-		{sector_type_t::INDOOR_MARKET_PLACE,"INDOOR_MARKET_PLACE"},
-		{sector_type_t::INDOOR_METAL_HATCH,"INDOOR_METAL_HATCH"},
-		{sector_type_t::INDOOR_ROOF,"INDOOR_ROOF"},
-		{sector_type_t::INDOOR_ATTIC,"INDOOR_ATTIC"},
-		{sector_type_t::INDOOR_BASEMENT,"INDOOR_BASEMENT"}
+			{sector_type_t::OUTSIDE_GRASSY,"OUTSIDE_GRASSY"},
+			{sector_type_t::OUTSIDE_CEMENT,"OUTSIDE_CEMENT"},
+			{sector_type_t::OUTSIDE_FOREST,"OUTSIDE_FOREST"},
+			{sector_type_t::OUTSIDE_WOODEN_WALLS,"OUTSIDE_WOODEN_WALLS"},
+			{sector_type_t::OUTSIDE_DIRT,"OUTSIDE_DIRT"},
+			{sector_type_t::OUTSIDE_DESERT,"OUTSIDE_DESERT"},
+			{sector_type_t::OUTSIDE_WATER,"OUTSIDE_WATER"},
+			{sector_type_t::OUTSIDE_UNDERWATER,"OUTSIDE_UNDERWATER"},
+			{sector_type_t::OUTSIDE_FROZEN,"OUTSIDE_FROZEN"},
+			{sector_type_t::OUTSIDE_HILLS,"OUTSIDE_HILLS"},
+			{sector_type_t::OUTSIDE_MARKET_PLACE,"OUTSIDE_MARKET_PLACE"},
+			{sector_type_t::OUTSIDE_METAL_HATCH,"OUTSIDE_METAL_HATCH"},
+			{sector_type_t::OUTSIDE_TREE,"OUTSIDE_TREE"},
+			{sector_type_t::OUTSIDE_ROOFTOP,"OUTSIDE_ROOFTOP"},
+			{sector_type_t::OUTSIDE_WOODEN_WALL,"OUTSIDE_WOODEN_WALL"},
+			{sector_type_t::OUTSIDE_METAL_WALL,"OUTSIDE_METAL_WALL"},
+			{sector_type_t::OUTSIDE_AIR,"OUTSIDE_AIR"},
+			{sector_type_t::INDOOR_WOODEN_WALLS,"INDOOR_WOODEN_WALLS"},
+			{sector_type_t::INDOOR_CEMENT,"INDOOR_CEMENT"},
+			{sector_type_t::INDOOR_CEMENT_WOODEN_WALLS,"INDOOR_CEMENT_WOODEN_WALLS"},
+			{sector_type_t::INDOOR_CARPET_WOODEN_WALLS,"INDOOR_CARPET_WOODEN_WALLS"},
+			{sector_type_t::INDOOR_TUNNEL,"INDOOR_TUNNEL"},
+			{sector_type_t::INDOOR_METAL_WALLS,"INDOOR_METAL_WALLS"},
+			{sector_type_t::INDOOR_SERVER_ROOM,"INDOOR_SERVER_ROOM"},
+			{sector_type_t::INDOOR_SEWER,"INDOOR_SEWER"},
+			{sector_type_t::INDOOR_MARKET_PLACE,"INDOOR_MARKET_PLACE"},
+			{sector_type_t::INDOOR_METAL_HATCH,"INDOOR_METAL_HATCH"},
+			{sector_type_t::INDOOR_ROOF,"INDOOR_ROOF"},
+			{sector_type_t::INDOOR_ATTIC,"INDOOR_ATTIC"},
+			{sector_type_t::INDOOR_BASEMENT,"INDOOR_BASEMENT"}
 	};
 
 	static inline std::string texture_to_string(room_data::texture_type_t t){
 #define MENTOC_LAZY(A) if(t == room_data::texture_type_t::A){ return #A; }
-MENTOC_LAZY(GRASS);
-MENTOC_LAZY(CEMENT);
-MENTOC_LAZY(OUTSIDE);
-MENTOC_LAZY(INSIDE);
-MENTOC_LAZY(SEWER);
-MENTOC_LAZY(RADIOACTIVE);
-MENTOC_LAZY(VOLATILE);
-MENTOC_LAZY(RUBBLE);
-MENTOC_LAZY(DIRT);
-MENTOC_LAZY(SHATTERED_GLASS);
-MENTOC_LAZY(LOW_ATMOSPHERE);
-MENTOC_LAZY(ON_FIRE);
-MENTOC_LAZY(NON_HAZARDOUS_SMOKE);
-MENTOC_LAZY(HAZARDOUS_SMOKE);
-MENTOC_LAZY(EMP);
-MENTOC_LAZY(TUNNEL);
-MENTOC_LAZY(LADDER);
-MENTOC_LAZY(ELEVATOR);
-MENTOC_LAZY(GLASS_WINDOWS);
-MENTOC_LAZY(SCANNED);
-MENTOC_LAZY(DAMP);
-MENTOC_LAZY(FOREST);
-MENTOC_LAZY(WOODEN_WALLS);
-MENTOC_LAZY(CARPET);
-MENTOC_LAZY(DRY);
-MENTOC_LAZY(DESERT);
-MENTOC_LAZY(WATER);
-MENTOC_LAZY(UNDERWATER);
-MENTOC_LAZY(METAL_HATCH);
-MENTOC_LAZY(METAL_WALL);
-MENTOC_LAZY(TREE);
-MENTOC_LAZY(ROOFTOP);
-MENTOC_LAZY(AIR);
-MENTOC_LAZY(FROZEN);
-MENTOC_LAZY(SERVER_ROOM);
+		MENTOC_LAZY(GRASS);
+		MENTOC_LAZY(CEMENT);
+		MENTOC_LAZY(OUTSIDE);
+		MENTOC_LAZY(INSIDE);
+		MENTOC_LAZY(SEWER);
+		MENTOC_LAZY(RADIOACTIVE);
+		MENTOC_LAZY(VOLATILE);
+		MENTOC_LAZY(RUBBLE);
+		MENTOC_LAZY(DIRT);
+		MENTOC_LAZY(SHATTERED_GLASS);
+		MENTOC_LAZY(LOW_ATMOSPHERE);
+		MENTOC_LAZY(ON_FIRE);
+		MENTOC_LAZY(NON_HAZARDOUS_SMOKE);
+		MENTOC_LAZY(HAZARDOUS_SMOKE);
+		MENTOC_LAZY(EMP);
+		MENTOC_LAZY(TUNNEL);
+		MENTOC_LAZY(LADDER);
+		MENTOC_LAZY(ELEVATOR);
+		MENTOC_LAZY(GLASS_WINDOWS);
+		MENTOC_LAZY(SCANNED);
+		MENTOC_LAZY(DAMP);
+		MENTOC_LAZY(FOREST);
+		MENTOC_LAZY(WOODEN_WALLS);
+		MENTOC_LAZY(CARPET);
+		MENTOC_LAZY(DRY);
+		MENTOC_LAZY(DESERT);
+		MENTOC_LAZY(WATER);
+		MENTOC_LAZY(UNDERWATER);
+		MENTOC_LAZY(METAL_HATCH);
+		MENTOC_LAZY(METAL_WALL);
+		MENTOC_LAZY(TREE);
+		MENTOC_LAZY(ROOFTOP);
+		MENTOC_LAZY(AIR);
+		MENTOC_LAZY(FROZEN);
+		MENTOC_LAZY(SERVER_ROOM);
 #undef MENTOC_LAZY
 		return "<unknown>";
 	}
 
 	void set_sector_type(room_rnum room_id, int sector_type);
 	std::optional<sector_type_t> sector_from_string(std::string m);
+	static inline bool is_peaceful(room_rnum room){
+		return world[room].room_flags & ROOM_PEACEFUL;
+	}
+	bool has_textures(room_rnum r, std::vector<txt>);
 	namespace affects {
 		using affect_t = room_data::texture_type_t;
 		using affect_amount_t = uint32_t;
@@ -355,45 +429,7 @@ MENTOC_LAZY(SERVER_ROOM);
 	 *
 	 * @param room
 	 */
-	static inline void start_fire_dissolver(room_rnum room) {
-		if(is_peaceful(room)){
-			log("Prevented peaceful room to catch on fire (%d)", room);
-			return;
-		}
-		auto fire = room_data::texture_type_t::ON_FIRE;
-		if(room >= world.size()){
-			return;
-		}
-		if(world[room].has_texture(fire) && affects::needs_dissolve.find(room) != affects::needs_dissolve.end()){
-			log("Room already has fire dissolver running. Roomid: %d", room);
-			return;
-		}
-		world[room].add_texture(fire);
-		affects::add_room_dissolve_affect_every_n_tick(
-				room,
-				(affects::affect_t)fire,
-				room_data::fire_status_t::KINDLING,
-				FIRE_EVERY_N_TICKS
-				);
-
-		affects::set_affect_to_increment(
-				room,
-				fire
-				);
-
-		affects::set_affect_max_amount(
-				room,
-				fire,
-				fire_status_t::OUT
-				);
-
-		affects::add_callback(room,
-				fire,
-				affects::on_room_fire_changed_affect
-				);
-
-		affects::trigger_callback_for_affect(room,fire);
-	}
+	void start_fire_dissolver(room_rnum room);
 
 	/**
 	 * @brief convert fire_status_t enum to string

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['non_5fhazardous_5fsmoke',['NON_HAZARDOUS_SMOKE',['../structroom__data.html#a9552b46091ee649079e41f04f9543b8ea0d7ef1795d2bde3dffbfb2ea750a0f17',1,'room_data']]]
+  ['radioactive',['RADIOACTIVE',['../structroom__data.html#a9552b46091ee649079e41f04f9543b8ea4f2e9c36313c15fe141436285e66c580',1,'room_data']]],
+  ['rooftop',['ROOFTOP',['../structroom__data.html#a9552b46091ee649079e41f04f9543b8ea3b0133973d24d775881f0cc64f09d26f',1,'room_data']]]
 ];

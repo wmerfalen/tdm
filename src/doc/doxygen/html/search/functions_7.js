@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['include_5ffile',['include_file',['../structmods_1_1js_1_1include.html#afed2b4e711b0b0100f3083921591ba25',1,'mods::js::include']]],
-  ['init',['init',['../structchar__data.html#ac08c59f455b01ef91858398b98c708fc',1,'char_data']]],
-  ['initialize_5fplayer',['initialize_player',['../structmods_1_1player__scaffolding.html#a5338073bc0cbf880db342e8a5d2c99bb',1,'mods::player_scaffolding']]],
-  ['initialize_5frow',['initialize_row',['../structmods_1_1orm_1_1sentinel.html#aa01c7770d384a6461a7d886e1ac94d03',1,'mods::orm::sentinel']]]
+  ['has_5faffect',['has_affect',['../classmods_1_1player.html#ae7ad590bc136eac7a54ed0071a3e882b',1,'mods::player']]],
+  ['has_5faffect_5fplr',['has_affect_plr',['../classmods_1_1player.html#ae07901c25cbe93b8c259720f1662e5d3',1,'mods::player']]],
+  ['has_5fnight_5fvision',['has_night_vision',['../classmods_1_1player.html#a9631c9d8b2bccdf598d84756fac2aeb9',1,'mods::player']]],
+  ['has_5fthermal_5fvision',['has_thermal_vision',['../classmods_1_1player.html#a0fceca22b6757b46d3b31c22acc3c690',1,'mods::player']]],
+  ['has_5fthermite',['has_thermite',['../classmods_1_1player.html#a7aa761f41a093581ba531b2aca325609',1,'mods::player']]]
 ];

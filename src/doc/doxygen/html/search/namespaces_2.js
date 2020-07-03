@@ -6,6 +6,7 @@ var searchData=
   ['gods',['gods',['../namespacemods_1_1rooms_1_1gods.html',1,'mods::rooms']]],
   ['lmdb',['lmdb',['../namespacemods_1_1testing_1_1lmdb.html',1,'mods::testing']]],
   ['mods',['mods',['../namespacemods.html',1,'']]],
+  ['orm',['orm',['../namespacemods_1_1orm.html',1,'mods']]],
   ['pistol',['pistol',['../namespacemods_1_1weapons_1_1pistol.html',1,'mods::weapons']]],
   ['shotgun',['shotgun',['../namespacemods_1_1weapons_1_1shotgun.html',1,'mods::weapons']]],
   ['smg',['smg',['../namespacemods_1_1weapons_1_1smg.html',1,'mods::weapons']]],

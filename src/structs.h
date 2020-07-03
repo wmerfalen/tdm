@@ -1079,41 +1079,41 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 	/* ================== Memory Structure for room ======================= */
 	struct room_data {
 		enum texture_type_t : uint8_t { 
-			GRASS,			/** typically grass that isn't flammable (i.e. not dried out) */
-			CEMENT,			/** asphault, nearly indestructible */
-			OUTSIDE,		/** Outside where anyone can see you */
-			INSIDE,			/** Example: inside a home */
-			SEWER,			/** Underground sewer tunnel */
-			RADIOACTIVE, /** actively emitting radioactivity */
-			VOLATILE,		/** Volatile means any slight spark will ignite an explosion */
-			RUBBLE,			/** decimation of buildings resulting in lots of ruble */
-			DIRT,				/** think about outside+cement but except no cement */
-			SHATTERED_GLASS, /** results of breaking glass objects */
-			LOW_ATMOSPHERE,	/** atmosphere too thin for helicopter to fly */
-			ON_FIRE,		/** actively burning */
-			NON_HAZARDOUS_SMOKE, /** think: burning car */
-			HAZARDOUS_SMOKE, /** think: gas attacks */
-			EMP, /** chaff or emp has been detonated */
-			TUNNEL, /** a tunnel made of any material */
-			LADDER, /** a ladder leading up or down */
-			ELEVATOR,
-			GLASS_WINDOWS,
-			SCANNED,
-			DAMP,
-			FOREST,
-			WOODEN_WALLS,
+			AIR,
 			CARPET,
-			DRY,
+			CEMENT,			/** asphault, nearly indestructible */
+			DAMP,
 			DESERT,
-			WATER,
-			UNDERWATER,
+			DIRT,				/** think about outside+cement but except no cement */
+			DRY,
+			ELEVATOR,
+			EMP, /** chaff or emp has been detonated */
+			FOREST,
+			FROZEN,
+			GLASS_WINDOWS,
+			GRASS,			/** typically grass that isn't flammable (i.e. not dried out) */
+			HAZARDOUS_SMOKE, /** think: gas attacks */
+			INSIDE,			/** Example: inside a home */
+			LADDER, /** a ladder leading up or down */
+			LOW_ATMOSPHERE,	/** atmosphere too thin for helicopter to fly */
 			METAL_HATCH,
 			METAL_WALL,
-			TREE,
+			NON_HAZARDOUS_SMOKE, /** think: burning car */
+			ON_FIRE,		/** actively burning */
+			OUTSIDE,		/** Outside where anyone can see you */
+			RADIOACTIVE, /** actively emitting radioactivity */
 			ROOFTOP,
-			AIR,
-			FROZEN,
-			SERVER_ROOM
+			RUBBLE,			/** decimation of buildings resulting in lots of ruble */
+			SCANNED,
+			SERVER_ROOM,
+			SEWER,			/** Underground sewer tunnel */
+			SHATTERED_GLASS, /** results of breaking glass objects */
+			TREE,
+			TUNNEL, /** a tunnel made of any material */
+			UNDERWATER,
+			VOLATILE,		/** Volatile means any slight spark will ignite an explosion */
+			WATER,
+			WOODEN_WALLS
 		};
 		constexpr static std::array<texture_type_t,5> textures_that_have_levels = {
 			texture_type_t::RADIOACTIVE,

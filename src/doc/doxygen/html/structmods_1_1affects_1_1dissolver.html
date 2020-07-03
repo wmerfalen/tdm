@@ -63,6 +63,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
@@ -75,12 +76,19 @@ $(function() {
 Collaboration diagram for mods::affects::dissolver&lt; TAffects, TAffectsContainer, TAffectsMap, TEntityId &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="structmods_1_1affects_1_1dissolver__coll__graph.png" border="0" usemap="#mods_1_1affects_1_1dissolver_3_01TAffects_00_01TAffectsContainer_00_01TAffectsMap_00_01TEntityId_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="mods_1_1affects_1_1dissolver_3_01TAffects_00_01TAffectsContainer_00_01TAffectsMap_00_01TEntityId_01_4_coll__map" id="mods_1_1affects_1_1dissolver_3_01TAffects_00_01TAffectsContainer_00_01TAffectsMap_00_01TEntityId_01_4_coll__map">
-</map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:abcac7d436cb1fba4928b57e0ca854f01"><td class="memItemLeft" align="right" valign="top"><a id="abcac7d436cb1fba4928b57e0ca854f01"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>callback_t</b> = std::function&lt; void(TEntityId, TAffects, uint32_t)&gt;</td></tr>
+<tr class="separator:abcac7d436cb1fba4928b57e0ca854f01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a7cda3d45be180cda49e40179e02bf37b"><td class="memItemLeft" align="right" valign="top"><a id="a7cda3d45be180cda49e40179e02bf37b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>on_affect_change</b> (TAffects affect, callback_t cb)</td></tr>
+<tr class="separator:a7cda3d45be180cda49e40179e02bf37b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a539dff8baaec99e0a72fb898dae01299"><td class="memItemLeft" align="right" valign="top"><a id="a539dff8baaec99e0a72fb898dae01299"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>dissolver</b> (TAffectsMap affects)</td></tr>
 <tr class="separator:a539dff8baaec99e0a72fb898dae01299"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -90,12 +98,21 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a382f4ebb292806a3aca5635122cb9de1"><td class="memItemLeft" align="right" valign="top"><a id="a382f4ebb292806a3aca5635122cb9de1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>affect_via</b> (TAffectsContainer affects)</td></tr>
 <tr class="separator:a382f4ebb292806a3aca5635122cb9de1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35c94d35d686bf871fd29aba834ec150"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmods_1_1affects_1_1dissolver.html#a35c94d35d686bf871fd29aba834ec150">set_direction</a> (TAffects affect, bool direction)</td></tr>
+<tr class="memdesc:a35c94d35d686bf871fd29aba834ec150"><td class="mdescLeft">&#160;</td><td class="mdescRight">set affect direction  <a href="#a35c94d35d686bf871fd29aba834ec150">More...</a><br /></td></tr>
+<tr class="separator:a35c94d35d686bf871fd29aba834ec150"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f93b582346b0ca6096b90d16c8062e2"><td class="memItemLeft" align="right" valign="top"><a id="a0f93b582346b0ca6096b90d16c8062e2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_max_amount</b> (TAffects affect, uint32_t max)</td></tr>
+<tr class="separator:a0f93b582346b0ca6096b90d16c8062e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a552da19095c0caddb9fb0bc5aa233776"><td class="memItemLeft" align="right" valign="top"><a id="a552da19095c0caddb9fb0bc5aa233776"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_all_affects</b> (TAffectsContainer in_affects)</td></tr>
 <tr class="separator:a552da19095c0caddb9fb0bc5aa233776"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea716f0b8cf0fea7ef48e829b2b8c8d1"><td class="memItemLeft" align="right" valign="top"><a id="aea716f0b8cf0fea7ef48e829b2b8c8d1"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_affect</b> (TAffects a)</td></tr>
 <tr class="separator:aea716f0b8cf0fea7ef48e829b2b8c8d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58e3fcea6f452e247f76840a5e16a0d9"><td class="memItemLeft" align="right" valign="top"><a id="a58e3fcea6f452e247f76840a5e16a0d9"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>trigger_callback</b> (TAffects affect)</td></tr>
+<tr class="separator:a58e3fcea6f452e247f76840a5e16a0d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91175b4f73883f8034d84380cce73794"><td class="memItemLeft" align="right" valign="top"><a id="a91175b4f73883f8034d84380cce73794"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>affect_every_n_ticks</b> (TAffects affect, uint32_t starting_amount, uint32_t every_n_ticks)</td></tr>
 <tr class="separator:a91175b4f73883f8034d84380cce73794"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -107,11 +124,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>affect</b> (TAffects 
 <tr class="separator:aefe486fceee597c5c032832ddb25c1f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adda06b1b31ee9e7a55ac55132321f811"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmods_1_1affects_1_1dissolver.html#adda06b1b31ee9e7a55ac55132321f811">clear</a> (TAffectsContainer affects)</td></tr>
 <tr class="separator:adda06b1b31ee9e7a55ac55132321f811"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f220e9e0e15da60d22065a42d709a91"><td class="memItemLeft" align="right" valign="top"><a id="a1f220e9e0e15da60d22065a42d709a91"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>process_affect</b> (TAffects affect)</td></tr>
+<tr class="separator:a1f220e9e0e15da60d22065a42d709a91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa1664b53140ef4ddf136e2ee1b12c3b"><td class="memItemLeft" align="right" valign="top"><a id="afa1664b53140ef4ddf136e2ee1b12c3b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>affect</b> (TAffects affect, int amount)</td></tr>
 <tr class="separator:afa1664b53140ef4ddf136e2ee1b12c3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26d75b016d86619cb74f80418f98bc10"><td class="memItemLeft" align="right" valign="top"><a id="a26d75b016d86619cb74f80418f98bc10"></a>
-std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>tick</b> ()</td></tr>
+<tr class="memitem:a26d75b016d86619cb74f80418f98bc10"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmods_1_1affects_1_1dissolver.html#a26d75b016d86619cb74f80418f98bc10">tick</a> ()</td></tr>
 <tr class="separator:a26d75b016d86619cb74f80418f98bc10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8059ffe681c083c83ec0fa82ef82a9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmods_1_1affects_1_1dissolver.html#ad8059ffe681c083c83ec0fa82ef82a9b">remove</a> (TAffects id)</td></tr>
 <tr class="separator:ad8059ffe681c083c83ec0fa82ef82a9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,6 +140,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_any_affect</b> (T
 <tr class="memitem:a40c6cc4d89660af3813a24b596653b1e"><td class="memItemLeft" align="right" valign="top"><a id="a40c6cc4d89660af3813a24b596653b1e"></a>
 TAffectsMap &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_affects</b> ()</td></tr>
 <tr class="separator:a40c6cc4d89660af3813a24b596653b1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07299dbab300ae29d216e6bdf913574a"><td class="memItemLeft" align="right" valign="top"><a id="a07299dbab300ae29d216e6bdf913574a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_callback</b> (TAffects affect, std::function&lt; void(TEntityId, TAffects, uint32_t)&gt; f)</td></tr>
+<tr class="separator:a07299dbab300ae29d216e6bdf913574a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -142,6 +164,18 @@ std::map&lt; TAffects, uint32_t &gt;&#160;</td><td class="memItemRight" valign="
 <tr class="memitem:aba2351d57a6d335183c85bf064b6e71c"><td class="memItemLeft" align="right" valign="top"><a id="aba2351d57a6d335183c85bf064b6e71c"></a>
 std::map&lt; TAffects, uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_tick_resolution_map_counter</b></td></tr>
 <tr class="separator:aba2351d57a6d335183c85bf064b6e71c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b31e7f54820a8bbfa028f559470a4b3"><td class="memItemLeft" align="right" valign="top"><a id="a9b31e7f54820a8bbfa028f559470a4b3"></a>
+std::set&lt; TAffects &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_increment</b></td></tr>
+<tr class="separator:a9b31e7f54820a8bbfa028f559470a4b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dfcabbe587171375039a7846a4e9c55"><td class="memItemLeft" align="right" valign="top"><a id="a5dfcabbe587171375039a7846a4e9c55"></a>
+std::map&lt; TAffects, uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_max_amount</b></td></tr>
+<tr class="separator:a5dfcabbe587171375039a7846a4e9c55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5232205a48c98ea423f5f96dd035bba2"><td class="memItemLeft" align="right" valign="top"><a id="a5232205a48c98ea423f5f96dd035bba2"></a>
+std::map&lt; TAffects, std::function&lt; void(TEntityId, TAffects, uint32_t)&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_callbacks</b></td></tr>
+<tr class="separator:a5232205a48c98ea423f5f96dd035bba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82d655e41c043ee4e96d25ac5fcbd2d2"><td class="memItemLeft" align="right" valign="top"><a id="a82d655e41c043ee4e96d25ac5fcbd2d2"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>m_processed</b></td></tr>
+<tr class="separator:a82d655e41c043ee4e96d25ac5fcbd2d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="adda06b1b31ee9e7a55ac55132321f811"></a>
@@ -200,6 +234,81 @@ template&lt;typename TAffects, typename TAffectsContainer, typename TAffectsMap,
 </div><div class="memdoc">
 <p>FIXME: need to uncomment this-&gt;<a class="el" href="structmods_1_1affects_1_1dissolver.html#ad8059ffe681c083c83ec0fa82ef82a9b">remove()</a> calls and implement that function</p>
 <p>FIXME: need to uncomment this-&gt;<a class="el" href="structmods_1_1affects_1_1dissolver.html#ad8059ffe681c083c83ec0fa82ef82a9b">remove()</a> calls and implement that function </p>
+
+</div>
+</div>
+<a id="a35c94d35d686bf871fd29aba834ec150"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35c94d35d686bf871fd29aba834ec150">&#9670;&nbsp;</a></span>set_direction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TAffects, typename TAffectsContainer, typename TAffectsMap, typename TEntityId&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structmods_1_1affects_1_1dissolver.html">mods::affects::dissolver</a>&lt; TAffects, TAffectsContainer, TAffectsMap, TEntityId &gt;::set_direction </td>
+          <td>(</td>
+          <td class="paramtype">TAffects&#160;</td>
+          <td class="paramname"><em>affect</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>direction</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>set affect direction </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">affect</td><td></td></tr>
+    <tr><td class="paramname">direction</td><td>true means increment, false decrement </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a26d75b016d86619cb74f80418f98bc10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26d75b016d86619cb74f80418f98bc10">&#9670;&nbsp;</a></span>tick()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TAffects, typename TAffectsContainer, typename TAffectsMap, typename TEntityId&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="structmods_1_1affects_1_1dissolver.html">mods::affects::dissolver</a>&lt; TAffects, TAffectsContainer, TAffectsMap, TEntityId &gt;::tick </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>

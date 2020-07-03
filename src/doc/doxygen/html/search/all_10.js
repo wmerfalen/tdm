@@ -4,6 +4,7 @@ var searchData=
   ['randomized_5fitems',['randomized_items',['../classmods_1_1randomized__items.html',1,'mods']]],
   ['registrarfortagaliases',['RegistrarForTagAliases',['../structCatch_1_1RegistrarForTagAliases.html',1,'Catch']]],
   ['remove',['remove',['../structmods_1_1affects_1_1dissolver.html#ad8059ffe681c083c83ec0fa82ef82a9b',1,'mods::affects::dissolver']]],
+  ['renew_5ftxn',['renew_txn',['../structmods_1_1lmdb_1_1__db__handle.html#a93d43cfa607ecd743bcba325e658e9c6',1,'mods::lmdb::_db_handle']]],
   ['rent_5finfo',['rent_info',['../structrent__info.html',1,'']]],
   ['reset_5fcom',['reset_com',['../structreset__com.html',1,'']]],
   ['reset_5fpoints',['reset_points',['../structmods_1_1player__scaffolding.html#ab83785facbe8d207e1bb5e8b8e2b0308',1,'mods::player_scaffolding']]],
@@ -12,11 +13,13 @@ var searchData=
   ['resultbuilder',['ResultBuilder',['../classCatch_1_1ResultBuilder.html',1,'Catch']]],
   ['resultdisposition',['ResultDisposition',['../structCatch_1_1ResultDisposition.html',1,'Catch']]],
   ['resultwas',['ResultWas',['../structCatch_1_1ResultWas.html',1,'Catch']]],
-  ['rifle_5fdescription_5ft',['rifle_description_t',['../structmods_1_1weapon_1_1yaml_1_1rifle__description__t.html',1,'mods::weapon::yaml::rifle_description_t'],['../structmods_1_1yaml_1_1rifle__description__t.html',1,'mods::yaml::rifle_description_t']]],
+  ['rifle_5fdescription_5ft',['rifle_description_t',['../structmods_1_1yaml_1_1rifle__description__t.html',1,'mods::yaml::rifle_description_t'],['../structmods_1_1weapon_1_1yaml_1_1rifle__description__t.html',1,'mods::weapon::yaml::rifle_description_t']]],
+  ['rifle_5finstance_5fdata',['rifle_instance_data',['../structrifle__instance__data.html',1,'']]],
+  ['rooftop',['ROOFTOP',['../structroom__data.html#a9552b46091ee649079e41f04f9543b8ea3b0133973d24d775881f0cc64f09d26f',1,'room_data']]],
+  ['room',['room',['../structmods_1_1orm_1_1room.html',1,'mods::orm']]],
   ['room_5fdata',['room_data',['../structroom__data.html',1,'']]],
   ['room_5fdirection_5fdata',['room_direction_data',['../structroom__direction__data.html',1,'']]],
   ['room_5fpavement_5ft',['room_pavement_t',['../structroom__pavement__t.html',1,'']]],
-  ['rubble',['RUBBLE',['../structroom__data.html#a9552b46091ee649079e41f04f9543b8ea3ab460e29e26b0631d72e909e02a7578',1,'room_data']]],
   ['run',['run',['../structmods_1_1behaviour__tree.html#a16325f964dcd87f8f59202bb8cde5a6d',1,'mods::behaviour_tree']]],
   ['run_5fstatus_5ft',['run_status_t',['../structmods_1_1behaviour__tree__node_1_1run__status__t.html',1,'mods::behaviour_tree_node']]]
 ];

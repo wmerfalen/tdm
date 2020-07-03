@@ -7,7 +7,7 @@ Inheritance diagram for mods\+:\+:orm\+:\+:base\+:
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=350pt]{structmods_1_1orm_1_1base__inherit__graph}
+\includegraphics[height=550pt]{structmods_1_1orm_1_1base__inherit__graph}
 \end{center}
 \end{figure}
 \subsection*{Public Member Functions}
@@ -15,6 +15,30 @@ Inheritance diagram for mods\+:\+:orm\+:\+:base\+:
 \item 
 \mbox{\Hypertarget{structmods_1_1orm_1_1base_a664fca1958049edfb203ec8993cf81bd}\label{structmods_1_1orm_1_1base_a664fca1958049edfb203ec8993cf81bd}} 
 virtual int16\+\_\+t {\bfseries feed} (const pqxx\+::result\+::reference \&)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1base_a4af88a9e666484da8495034902354d8b}\label{structmods_1_1orm_1_1base_a4af88a9e666484da8495034902354d8b}} 
+{\footnotesize template$<$typename T\+Object $>$ }\\static std\+::tuple$<$ int16\+\_\+t, std\+::string $>$ {\bfseries insert\+\_\+returing} (T\+Object obj, std\+::string\+\_\+view returning\+\_\+field)
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1base_a76c73cc22cd1ea2dc738281d9155e4c4}\label{structmods_1_1orm_1_1base_a76c73cc22cd1ea2dc738281d9155e4c4}} 
+{\footnotesize template$<$typename T\+Object $>$ }\\static std\+::tuple$<$ int16\+\_\+t, std\+::string $>$ {\bfseries delete\+\_\+from} (T\+Object \&obj)
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1base_a04952a850097ec7ddfca0a94b51fe120}\label{structmods_1_1orm_1_1base_a04952a850097ec7ddfca0a94b51fe120}} 
+{\footnotesize template$<$typename T\+Object $>$ }\\static std\+::tuple$<$ int16\+\_\+t, std\+::string $>$ {\bfseries delete\+\_\+where} (std\+::string\+\_\+view table\+\_\+name, std\+::string\+\_\+view where, std\+::string\+\_\+view sql\+\_\+operator, std\+::string\+\_\+view value)
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1base_aa2113b305b253592658b0bc49229affa}\label{structmods_1_1orm_1_1base_aa2113b305b253592658b0bc49229affa}} 
+{\footnotesize template$<$typename T\+Object $>$ }\\static std\+::tuple$<$ int16\+\_\+t, std\+::string $>$ {\bfseries update} (T\+Object \&s, std\+::map$<$ std\+::string, std\+::string $>$ \&values)
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1base_a79e2d79291cb9695a51cb238fd7fd42b}\label{structmods_1_1orm_1_1base_a79e2d79291cb9695a51cb238fd7fd42b}} 
+{\footnotesize template$<$typename T\+Container\+Object $>$ }\\static std\+::tuple$<$ int16\+\_\+t, std\+::string $>$ {\bfseries load\+\_\+where} (T\+Container\+Object \&s, std\+::string\+\_\+view where, std\+::string\+\_\+view sql\+\_\+operator, std\+::string\+\_\+view value)
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1base_aa92dbee5a2eb2be19d7107896871ac49}\label{structmods_1_1orm_1_1base_aa92dbee5a2eb2be19d7107896871ac49}} 
+{\footnotesize template$<$typename T\+Object $>$ }\\static std\+::tuple$<$ int16\+\_\+t, std\+::string $>$ {\bfseries load\+\_\+by\+\_\+pkid} (T\+Object \&s, std\+::string pkid)
+\item 
+\mbox{\Hypertarget{structmods_1_1orm_1_1base_a2b811c8e961e32f3404f6a6e823bee3a}\label{structmods_1_1orm_1_1base_a2b811c8e961e32f3404f6a6e823bee3a}} 
+static long {\bfseries pg\+\_\+timestamp\+\_\+to\+\_\+long} (std\+::string timestamp)
 \end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}

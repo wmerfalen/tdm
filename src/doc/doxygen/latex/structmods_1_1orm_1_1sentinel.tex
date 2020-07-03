@@ -2,8 +2,7 @@
 \label{structmods_1_1orm_1_1sentinel}\index{mods\+::orm\+::sentinel@{mods\+::orm\+::sentinel}}
 
 
-Inheritance diagram for mods\+:\+:orm\+:\+:sentinel\+:
-\nopagebreak
+Inheritance diagram for mods\+:\+:orm\+:\+:sentinel\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -12,8 +11,7 @@ Inheritance diagram for mods\+:\+:orm\+:\+:sentinel\+:
 \end{figure}
 
 
-Collaboration diagram for mods\+:\+:orm\+:\+:sentinel\+:
-\nopagebreak
+Collaboration diagram for mods\+:\+:orm\+:\+:sentinel\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -30,7 +28,7 @@ using {\bfseries primary\+\_\+choice\+\_\+t} = mods\+::weapon\+::sentinel\+::pri
 \begin{DoxyCompactItemize}
 \item 
 uint64\+\_\+t \hyperlink{structmods_1_1orm_1_1sentinel_aa01c7770d384a6461a7d886e1ac94d03}{initialize\+\_\+row} (player\+\_\+ptr\+\_\+t \&\hyperlink{classmods_1_1player}{player}, primary\+\_\+choice\+\_\+t primary\+\_\+choice)
-\item 
+\begin{DoxyCompactList}\small\item\em this should be called when you create a sentinel player for the first time \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a5ecb7826ac778ce46553d5e2ddc1e1ce}\label{structmods_1_1orm_1_1sentinel_a5ecb7826ac778ce46553d5e2ddc1e1ce}} 
 int16\+\_\+t {\bfseries feed} (const pqxx\+::result\+::reference \&)
 \item 
@@ -100,6 +98,7 @@ long {\bfseries updated\+\_\+at}
 \mbox{\Hypertarget{structmods_1_1orm_1_1sentinel_a2bf880a2f876fcbb2d76a78babde4bbf}\label{structmods_1_1orm_1_1sentinel_a2bf880a2f876fcbb2d76a78babde4bbf}} 
 static constexpr const char $\ast$ {\bfseries table\+\_\+name} = \char`\"{}class\+\_\+sentinel\char`\"{}
 \end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
 
 
 \subsection{Member Function Documentation}
@@ -109,7 +108,21 @@ static constexpr const char $\ast$ {\bfseries table\+\_\+name} = \char`\"{}class
 \subsubsection{\texorpdfstring{initialize\+\_\+row()}{initialize\_row()}}
 {\footnotesize\ttfamily uint64\+\_\+t mods\+::orm\+::sentinel\+::initialize\+\_\+row (\begin{DoxyParamCaption}\item[{player\+\_\+ptr\+\_\+t \&}]{player,  }\item[{primary\+\_\+choice\+\_\+t}]{primary\+\_\+choice }\end{DoxyParamCaption})}
 
+
+
+this should be called when you create a sentinel player for the first time 
+
 Handy little script to restore a sentinel\textquotesingle{}s primary and secondary weapons\+: You can pass it space separated primary keys run ./sql/restore-\/sentinel.sh \$\+U\+S\+E\+R\+\_\+\+P\+K\+\_\+\+ID \mbox{[}...\$\+U\+S\+E\+R\+\_\+\+P\+K\+\_\+\+I\+D\+\_\+N\mbox{]} Then run sql-\/copy, then  sql/restore.\+sql Primary\+\_\+choice will be either \char`\"{}\+M\+P5\char`\"{} or \char`\"{}\+S\+A\+S\+G12\char`\"{} 
+\begin{DoxyParams}{Parameters}
+{\em player} & \\
+\hline
+{\em primary\+\_\+choice} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
 
 The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
