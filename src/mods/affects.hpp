@@ -168,6 +168,12 @@ namespace mods::affects {
 				++m_processed;
 				trigger_callback(affect);
 			}
+			bool has_max_amount(TAffects affect){
+				return m_max_amount.find(affect) != m_max_amount.end();
+			}
+			bool max_amount_reached(TAffects affect){
+				return m_affects[affect] >= m_max_amount[affect];
+			}
 			void affect(TAffects affect,int amount){
 				m_affects[affect] += amount;
 #if 0
@@ -202,21 +208,29 @@ namespace mods::affects {
 					if(!has_resolution){
 						process_affect(affect.first);
 					}
+					if(has_max_amount(affect.first) && max_amount_reached(affect.first)){
+						queue_item_to_be_erased(affect.first);
+					}
 					if(m_increment.find(affect.first) != m_increment.end() && m_max_amount[affect.first] <= affect.second){
-						erase_me.push_back(affect.first);
+						queue_item_to_be_erased(affect.first);
 					}
 					if(m_increment.find(affect.first) == m_increment.end() && affect.second == 0){
-						erase_me.push_back(affect.first);
+						queue_item_to_be_erased(affect.first);
 					}
 				}
-				for(auto && item : erase_me){
-					if(m_affects.find(item) != m_affects.end()){
-						m_affects.erase(item);
-					}
-				}
-				m_has_affects = m_affects.size();
+				erase_queued_items();
 				return m_affects.size();
 			}
+			void queue_item_to_be_erased(TAffects affect){
+				m_destroy_queue.emplace_back(affect);
+			}
+			void erase_queued_items(){
+				for(auto & m : m_destroy_queue){
+					m_affects.erase(m);
+				}
+				m_has_affects = m_affects.size();
+			}
+				
 			void remove(TAffects id){
 	/** FIXME: need to uncomment this->remove() calls and implement that function */
 	/** FIXME: need to uncomment this->remove() calls and implement that function */
@@ -245,6 +259,7 @@ namespace mods::affects {
 			std::map<TAffects,uint32_t> m_max_amount;
 			std::map<TAffects,std::function<void(TEntityId,TAffects,uint32_t)>> m_callbacks;
 			std::size_t m_processed;
+			std::vector<TAffects> m_destroy_queue;
 		};
 
 	void process();

@@ -48,6 +48,7 @@ namespace mods::rooms {
 					break;
 				case fire_status_t::OUT:
 					send_to_room(room, "\r\n{red}The fire is put out.{/red}\r\n");
+					world[room].remove_texture(txt::ON_FIRE);
 					break;
 				default:
 					log((std::string("Invalid fire status: ") + std::to_string(fire_status) + std::string("on room:") + std::to_string(room)).c_str());
@@ -59,7 +60,7 @@ namespace mods::rooms {
 		}
 		void set_affect_max_amount(room_rnum room,affect_t affect,affect_amount_t amount){
 			needs_dissolve[room].set_max_amount(affect,amount);
-			mra_debug("Set direction to increment for affect: " << affect);
+			mra_debug("Set direction to increment for affect: " << affect << " with max_amount: " << amount);
 		}
 		void add_room_dissolve_affect_every_n_tick(room_rnum room, affect_t affect, affect_amount_t amt, uint32_t n_ticks){
 			needs_dissolve[room].entity_id = room;
@@ -117,7 +118,7 @@ namespace mods::rooms {
 			}
 			if(fire_damage){
 				for(auto & player : room_list(nd.first)){
-					mods::weapons::damage_types::fire_damage(player,damage);
+					mods::weapons::damage_types::fire_damage(player,fire_damage);
 				}
 			}
 			if(smoke_damage){

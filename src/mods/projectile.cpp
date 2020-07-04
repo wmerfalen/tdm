@@ -157,7 +157,7 @@ namespace mods {
 										 QUEUE_TEXTURE_REMOVAL(HAZARDOUS_SMOKE,current_room);
 										 break;
 						case mw_explosive::INCENDIARY_GRENADE:
-										 QUEUE_TEXTURE_REMOVAL(ON_FIRE,current_room);
+										 mods::rooms::start_fire_dissolver(current_room);
 										 break;
 						case mw_explosive::EMP_GRENADE:
 										 QUEUE_TEXTURE_REMOVAL(EMP,current_room);
@@ -307,7 +307,7 @@ namespace mods {
 				case mw_explosive::INCENDIARY_GRENADE:
 					does_damage = true;
 					send_to_room(room_id,"A %s explodes! The room turns into a fiery blaze!\r\n",object->name.c_str());
-					QUEUE_TEXTURE_REMOVAL(ON_FIRE,room_id);
+					mods::rooms::start_fire_dissolver(room_id);
 					break;
 				case mw_explosive::EMP_GRENADE:
 					send_to_room(room_id,"A %s explodes!\r\n",object->name.c_str());
