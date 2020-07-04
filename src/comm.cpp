@@ -20,6 +20,7 @@
 #include "mods/debug.hpp"
 #include "mods/loops.hpp"
 #include "mods/affects.hpp"
+#include "mods/rooms.hpp"
 #include <algorithm>
 #include "mods/world-configuration.hpp"
 #include "mods/auto-login.hpp"
@@ -852,8 +853,12 @@ void heartbeat(int pulse) {
 	if(!(pulse % mods::deferred::TICK_RESOLUTION)){
 		/** Process affect dissolver ticks */
 		mods::affects::process();
+		mods::rooms::affects::process();
 	}
 
+	if(!(pulse % FIRE_DAMAGE_TICK_RESOLUTION)){
+		mods::rooms::process_fire_damage();
+	}
 
 	if(!(pulse % PULSE_ZONE)) {
 		zone_update();

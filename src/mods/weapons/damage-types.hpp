@@ -23,6 +23,11 @@ namespace mods::weapons::damage_types {
 	);
 	void decrease_spray_shot_ammo(obj_ptr_t& weapon);
 	void decrease_single_shot_ammo(obj_ptr_t& weapon);
+	void fire_damage(player_ptr_t&,uint16_t);
+	void smoke_damage(player_ptr_t& player, uint16_t damage);
+	namespace legacy {
+		int damage(char_data *ch, char_data *victim, int dam, int attacktype);
+	};
 };
 #endif
 

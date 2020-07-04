@@ -785,7 +785,7 @@ void look_at_room(char_data *ch, int ignore_brief) {
 	}
 
 	for(auto & t : world[room].textures()){
-		player->send("[%s]", mods::rooms::texture_to_string(t).c_str());
+		player->send("[%s]", mods::rooms::texture_to_string(t).value_or(std::string("unknown")).c_str());
 	}
 	if(world[room].textures().size()){
 		player->send("\r\n");

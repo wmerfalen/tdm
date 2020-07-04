@@ -1,5 +1,6 @@
 #include "rooms.hpp"
 #include "weapon-types.hpp"
+#include "weapons/damage-types.hpp"
 
 namespace mods::rooms {
 	namespace affects {
@@ -7,13 +8,77 @@ namespace mods::rooms {
 			for(auto it = needs_dissolve.begin();it != needs_dissolve.end();++it){
 				auto ticked = it->second.tick();
 				auto fire_amount = it->second.get_affects()[(affect_t)room_data::texture_type_t::ON_FIRE];
-				if(ticked == 0 && fire_amount == 0){
+				if(ticked == 0 && fire_amount == fs::OUT){
 					mra_debug("Reached zero on: " << it->first);
 					needs_dissolve.erase(it);
+					mra_debug("recursion");
 					mods::rooms::affects::process();
 					return;
 				}
 			}
+		}
+		void trigger_callback_for_affect(room_rnum room,affect_t affect){
+			needs_dissolve[room].trigger_callback(affect);
+		}
+		void add_callback(room_rnum room, affect_t affect, callback_t f){
+			mra_debug("add_callback entry");
+			mra_debug("SETTING CALLBACK on AFFECT: " << std::to_string(affect).c_str());
+			needs_dissolve[room].set_callback(affect,f);
+		}
+		void on_room_fire_changed_affect(
+				room_rnum room,
+				affect_t affect, /* will always be ON_FIRE */
+				affect_amount_t amount
+				){
+			fire_status_t fire_status = (fire_status_t)amount;
+			world[room].fire_status() = fire_status;
+			mra_debug("on_room_fire_Changed_affect [callback] -> affect:" << affect << ", amnt: " << amount << ", fire_status: " << fire_status);
+			switch(fire_status){
+				case fire_status_t::KINDLING:
+					send_to_room(room, "\r\n{red}A fire begins to form!{/red}\r\n");
+					break;
+				case fire_status_t::COMPLETELY_ON_FIRE:
+					send_to_room(room, "\r\n{red}The room is {yel}TOTALLY ENGULFED{/yel}{red} in fire!{/red}\r\n");
+					break;
+				case fire_status_t::SMOLDERING:
+					send_to_room(room, "\r\n{red}The fire loses some intesity and smoke begins to fill the room.{/red}\r\n");
+					break;
+				case fire_status_t::SMOKING:
+					send_to_room(room, "\r\n{red}The room is filled with smoke as the fire dies...{/red}\r\n");
+					break;
+				case fire_status_t::OUT:
+					send_to_room(room, "\r\n{red}The fire is put out.{/red}\r\n");
+					break;
+				default:
+					log((std::string("Invalid fire status: ") + std::to_string(fire_status) + std::string("on room:") + std::to_string(room)).c_str());
+					break;
+			}
+		}
+		void remove_room_dissolve_affect(room_rnum room, affect_t item){
+			needs_dissolve.erase(room);
+		}
+		void set_affect_max_amount(room_rnum room,affect_t affect,affect_amount_t amount){
+			needs_dissolve[room].set_max_amount(affect,amount);
+			mra_debug("Set direction to increment for affect: " << affect);
+		}
+		void add_room_dissolve_affect_every_n_tick(room_rnum room, affect_t affect, affect_amount_t amt, uint32_t n_ticks){
+			needs_dissolve[room].entity_id = room;
+			needs_dissolve[room].affect_every_n_ticks(affect,amt,n_ticks);
+			std::cerr << "add_room_dissolve_affect_every_n_tick: affect: " << affect << ", amt: " << amt << ", nticks:" << n_ticks << "\n";
+			mra_debug("Added room dissolve using ever n (" << n_ticks << ") ticks... to " << room);
+		}
+		void add_room_dissolve_affect(room_rnum room, affect_map_t& items){
+			mra_debug("Added mapped items to " << room);
+			needs_dissolve[room].entity_id = room;
+			needs_dissolve[room].affect_map(items);
+		}
+		void set_affect_to_decrement(room_rnum room,affect_t affect){
+			needs_dissolve[room].set_direction(affect,false);
+			mra_debug("Set direction to decrement for affect: " << affect);
+		}
+		void set_affect_to_increment(room_rnum room,affect_t affect){
+			needs_dissolve[room].set_direction(affect,true);
+			mra_debug("Set direction to increment for affect: " << affect);
 		}
 	};
 	bool has_textures(room_rnum r, std::vector<txt> textures){
@@ -25,12 +90,52 @@ namespace mods::rooms {
 		}
 		return true;
 	}
+	void process_fire_damage() {
+		for(auto & nd : affects::needs_dissolve){
+			if(!nd.second.has_affect(txt::ON_FIRE)){
+				continue;
+			}
+
+			uint16_t fire_damage = 0,smoke_damage =0;
+			switch((fs)nd.second.get_affects()[txt::ON_FIRE]){
+				case fs::KINDLING:
+					fire_damage = FIRE_STATUS_KINDLING_DAMAGE;
+					break;
+				case fs::COMPLETELY_ON_FIRE:
+					fire_damage = FIRE_STATUS_COMPLETELY_ON_FIRE_DAMAGE;
+					smoke_damage = FIRE_STATUS_COMPLETELY_ON_FIRE_DAMAGE;
+					break;
+				case fs::SMOLDERING:
+					fire_damage = FIRE_STATUS_SMOLDERING_DAMAGE;
+					smoke_damage = FIRE_STATUS_SMOLDERING_DAMAGE;
+					break;
+				case fs::SMOKING:
+					smoke_damage = FIRE_STATUS_SMOKING_DAMAGE;
+					break;
+				default:
+					return;
+			}
+			if(fire_damage){
+				for(auto & player : room_list(nd.first)){
+					mods::weapons::damage_types::fire_damage(player,damage);
+				}
+			}
+			if(smoke_damage){
+				for(auto & player : room_list(nd.first)){
+					mods::weapons::damage_types::smoke_damage(player,smoke_damage);
+				}
+			}
+		}
+	}
 	/**
 	 * @brief entry point for setting a room on fire. use this
 	 *
 	 * @param room
 	 */
 	void start_fire_dissolver(room_rnum room) {
+		std::cerr << "###############################\n";
+		std::cerr << "[start_fire_dissolver] ENTRY\n";
+		std::cerr << "###############################\n";
 		static std::vector<txt> never_ignites = {
 			txt::SEWER,txt::DAMP,txt::WATER,txt::UNDERWATER,
 			txt::FROZEN
@@ -44,27 +149,30 @@ namespace mods::rooms {
 			log("Room will never ignite because it has a texture that isn't flammable");
 			return;
 		}
-		auto fire = fs::COMPLETELY_ON_FIRE;
 		if(world[room].has_texture(txt::ON_FIRE) && affects::needs_dissolve.find(room) != affects::needs_dissolve.end()){
 			log("Room already has fire dissolver running. Roomid: %d", room);
 			return;
 		}
 		world[room].add_texture(txt::ON_FIRE);
-		int ticks = FIRE_EVERY_N_TICKS;
+		uint32_t ticks = FIRE_EVERY_N_TICKS;
 		if(world[room].has_texture(txt::WOODEN_WALLS)){
-			ticks += mods::values::FIRE_WOODEN_ADDITIONAL_TICKS;
+			ticks += FIRE_WOODEN_ADDITIONAL_TICKS;
 		}
 		if(world[room].has_texture(txt::CARPET)){
 			ticks += mods::values::FIRE_CARPET_ADDITIONAL_TICKS;
 		}
-		auto initial_status = fs::KINDLING;
+		fs initial_status = fs::KINDLING;
 		if(has_textures(room, {txt::DRY, txt::GRASS})){
 			initial_status = fs::COMPLETELY_ON_FIRE;
 		}
+		world[room].texture_level(txt::ON_FIRE) = initial_status;
 
+		std::cerr << "###############################\n";
+		std::cerr << "[start_fire_dissolver] TICKS: " << ticks << "\n";
+		std::cerr << "###############################\n";
 		affects::add_room_dissolve_affect_every_n_tick(
 				room,
-				(affects::affect_t)fire,
+				(affects::affect_t)txt::ON_FIRE,
 				initial_status,
 				ticks
 		);
@@ -72,18 +180,18 @@ namespace mods::rooms {
 		affects::set_affect_to_increment(
 				room,
 				txt::ON_FIRE
-				);
+		);
 
 		affects::set_affect_max_amount(
 				room,
 				txt::ON_FIRE,
 				fire_status_t::OUT
-				);
+		);
 
 		affects::add_callback(room,
 				txt::ON_FIRE,
 				affects::on_room_fire_changed_affect
-				);
+		);
 
 		affects::trigger_callback_for_affect(room,txt::ON_FIRE);
 	}
@@ -315,3 +423,69 @@ namespace mods::rooms {
 		world[room_id].sector_type = sector_type;
 	}
 };//End namespace
+
+namespace mods::rooms::gods {
+		void set_fire(room_rnum room,bool on,std::string& level,player_ptr_t& player) {
+			std::string msg = "{yel}[debugging]";
+			bool found = false;
+			if(room >= world.size()){
+				msg = "invalid room id";
+				goto cleanup;
+			}
+			if(on){
+				msg += "\r\nsetting room to on fire\r\n";
+				start_fire_dissolver(room);
+			}else{
+				msg += "\r\nsetting room to __NOT__ on fire\r\n";
+				stop_fire_dissolver(room);
+			}
+			if(level.length() == 0){
+				goto cleanup;
+			}
+			if(level.compare("NONE") == 0){
+				world[room].fire_status() = room_data::fire_status_t::OUT;
+				msg += "set to OUT...";
+				found = true;
+				goto cleanup;
+			}
+			if(level.compare("KINDLING") == 0){
+				world[room].fire_status() = room_data::fire_status_t::KINDLING;
+				msg += "set to kindling...";
+				found = true;
+				goto cleanup;
+			}
+			if(level.compare("COMPLETELY_ON_FIRE") == 0){
+				world[room].fire_status() = room_data::fire_status_t::COMPLETELY_ON_FIRE;
+				msg += "set to cof...";
+				found = true;
+				goto cleanup;
+			}
+			if(level.compare("SMOLDERING") == 0){
+				world[room].fire_status() = room_data::fire_status_t::SMOLDERING;
+				msg += "set to SMOLDERING...";
+				found = true;
+				goto cleanup;
+			}
+			if(level.compare("SMOKING") == 0){
+				world[room].fire_status() = room_data::fire_status_t::SMOKING;
+				msg += "set to SMOKING...";
+				found = true;
+				goto cleanup;
+			}
+			if(level.compare("OUT") == 0){
+				world[room].fire_status() = room_data::fire_status_t::OUT;
+				msg += "set to OUT...";
+				found = true;
+				goto cleanup;
+			}
+			if(!found){
+				player->sendln("Options are KINDLING,COMPLETELY_ON_FIRE,SMOLDERING,SMOKING,OUT,NONE");
+			}
+cleanup:
+			msg += "\r\ncurrent fire status: '";
+			msg += to_string(get_fire_status(room)) + "{/yel}'\r\n";
+			player->sendln(msg);
+			return;
+		}
+
+}

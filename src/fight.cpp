@@ -121,7 +121,9 @@ int attack_message(mw_rifle type){
 }
 
 
+#ifndef IS_WEAPON
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
+#endif
 
 /* The Fight related routines */
 
@@ -1109,6 +1111,7 @@ int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
  *	= 0	No damage.
  *	> 0	How much damage done.
  */
+#if 0
 int damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 	MENTOC_PREAMBLE();
 	//ch->last_fight_timestamp = time(NULL);
@@ -1300,7 +1303,11 @@ int damage(char_data *ch, char_data *victim, int dam, int attacktype) {
 
 	return (dam);
 }
+#endif
 
+int damage(char_data *ch, char_data *victim, int dam, int attacktype) {
+	return mods::weapons::damage_types::legacy::damage(ch,victim,dam,attacktype);
+}
 
 /*
  * Calculate the THAC0 of the attacker.

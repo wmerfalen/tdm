@@ -49,7 +49,16 @@ namespace mods::overhead_map {
 				){
 			if(map_coordinates[in_y][in_x].compare("[x]") != 0){
 				auto textures = world[room].textures();
-				map_coordinates[in_y][in_x] = "[ ]"; 
+#define MENTOC_TFIND(A) textures.find(room_data::texture_type_t::A) != textures.end()
+				if(MENTOC_TFIND(WATER) || MENTOC_TFIND(UNDERWATER)){
+					map_coordinates[in_y][in_x] = "{blu}~~~{/blu}"; 
+				} else if(MENTOC_TFIND(DESERT)){
+					map_coordinates[in_y][in_x] = "{gld}:::{/gld}"; 
+				} else if(MENTOC_TFIND(ON_FIRE)){
+					map_coordinates[in_y][in_x] = "{yel}^%^{/yel}"; 
+				} else {
+					map_coordinates[in_y][in_x] = "[ ]"; 
+				}
 				if(std::find(
 							textures.begin(),
 							textures.end(),

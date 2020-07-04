@@ -4186,38 +4186,27 @@ ACMD(do_rbuild) {
 			/*
 			" {grn}NEW FEATURE [as of: 2019-03]{/grn}\r\n" <<
 			" {red}FEATURE: Room textures{/red}\r\n" <<
-			" {grn}rbuild{/grn} {red}<texture> <type1> ... <typeN>{/red}\r\n" <<
+			" {grn}rbuild{/grn} {red}<texture:add> <type1> ... <typeN>{/red}\r\n" <<
 			"  |--> Set the room's texture type. A room can have multiple texture types.\r\n" <<
 			"  |:: {yel}-:[{/yel}{grn}types{/grn}{yel}]:-{/yel}\r\n" <<
-			"  |:: \r\n" <<
-			"  {gld}|:: GRASS{/gld}\r\n" <<
-			"  {gld}|:: CEMENT{/gld}\r\n" <<
-			"  {gld}|:: OUTSIDE{/gld}\r\n" <<
-			"  {gld}|:: INSIDE{/gld}\r\n" <<
-			"  {gld}|:: SEWER{/gld}\r\n" << 
-			"  {gld}|:: VOLATILE{/gld}\r\n" << 
-			"  {gld}|:: TUNNEL{/gld}\r\n" <<
-			"  {gld}|:: RADIOACTIVE{/gld}\r\n" <<
-			"  {gld}|:: RUBBLE{/gld}\r\n" <<
-			"  {gld}|:: DIRT{/gld}\r\n" <<
-			"  {gld}|:: SHATTERED_GLASS{/gld}\r\n" <<
-			"  {gld}|:: LOW_ATMOSPHERE{/gld}\r\n" <<
-			"  {gld}|:: ON_FIRE{/gld}\r\n" <<
-			"  {gld}|:: NON_HAZARDOUS_SMOKE{/gld}\r\n" <<
-			"  {gld}|:: HAZARDOUS_SMOKE{/gld}\r\n" <<
-			"  {gld}|:: EMP{/gld}\r\n" <<
+			"  |:: \r\n"
+			;
+			for(auto & pair : mods::rooms::texture_strings){
+				player->send("  {gld}|:: %s{/gld}\r\n",pair.second.c_str());
+			}
+			*player << 
 			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {wht}rbuild{/wht} {gld}texture GRASS OUTSIDE{/gld}\r\n" <<
 
-			" {grn}rbuild{/grn} {red}<texture> <delete> <type1> ... <typeN>{/red}\r\n" <<
+			" {grn}rbuild{/grn} {red}<texture:remove> <type1> ... <typeN>{/red}\r\n" <<
 			"  |--> Delete the textures listed after the delete keyword.\r\n" <<
 			"  {grn}|____[example]{/grn}\r\n" <<
-			"  |:: {wht}rbuild{/wht} {gld}texture delete GRASS OUTSIDE{/gld}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}texture:remove GRASS OUTSIDE{/gld}\r\n" <<
 
-			" {grn}rbuild{/grn} {red}<texture> <clear>{/red}\r\n" <<
+			" {grn}rbuild{/grn} {red}<texture:clear>{/red}\r\n" <<
 			"  |--> Deletes all textures in the current room. WARNING: This does not prompt for confirmation!\r\n" <<
 			"  {grn}|____[example]{/grn}\r\n" <<
-			"  |:: {wht}rbuild{/wht} {gld}texture clear{/gld}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}texture:clear{/gld}\r\n" <<
 			*/
 
 			" {grn}rbuild{/grn} {red}<set> <rnum> <number>{/red}\r\n" <<
@@ -4779,6 +4768,65 @@ ACMD(do_rbuild) {
 		}
 		return;
 	}
+	/** textures */
+	/** textures */
+	/** textures */
+	args = mods::util::subcmd_args<12,args_t>(argument,"texture:add");
+
+	if(args.has_value()){
+		if(vec_args.size() < 2){
+			r_error(player,"Not enough args");
+			return;
+		}
+		auto room = player->room();
+		unsigned count = 0;
+		for(unsigned i=1; i < std::min((int)vec_args.size(),64);++i){
+			auto opt_flag = mods::rooms::texture_from_string(vec_args[i]);
+			if(opt_flag.has_value() == false){
+				r_error(player, vec_args[i] + ": unrecognized texture.");
+				continue;
+			}
+			world[room].add_texture(opt_flag.value());
+			r_status(player, vec_args[i] + " added.");
+			++count;
+		}
+		if(count == 0){
+			r_error(player, "Didn't set any flags");
+			return;
+		}
+		r_success(player, std::string("Set ") + std::to_string(count) + " textures on room.");
+		return;
+	}
+	args = mods::util::subcmd_args<16,args_t>(argument,"texture:remove");
+
+	if(args.has_value()){
+		if(vec_args.size() < 2){
+			r_error(player,"Not enough args");
+			return;
+		}
+		auto room = player->room();
+		unsigned count = 0;
+		for(unsigned i=1; i < std::min((int)vec_args.size(),64);++i){
+			auto opt_flag = mods::rooms::texture_from_string(vec_args[i]);
+			if(opt_flag.has_value() == false){
+				r_error(player, vec_args[i] + ": unrecognized texture.");
+				continue;
+			}
+			world[room].remove_texture(opt_flag.value());
+			r_status(player, vec_args[i] + " removed.");
+			++count;
+		}
+		if(count == 0){
+			r_error(player, "Didn't remove any textures");
+			return;
+		}
+		r_success(player, std::string("Set ") + std::to_string(count) + " textures on room.");
+		return;
+	}
+	/** textures */
+	/** textures */
+	/** textures */
+
 
 	/** sector types */
 	/** sector types */

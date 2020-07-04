@@ -124,7 +124,11 @@ namespace mods::affects {
 				}
 			}
 			void affect_every_n_ticks(TAffects affect,uint32_t starting_amount, uint32_t every_n_ticks){
-					m_affects[affect] += starting_amount;
+				std::cerr << "[affect_every_n_ticks]: starting_amt: " << starting_amount << ", every_n_ticks: " << every_n_ticks << "\n";
+				/** this is the original.. i have a feeling it's wrong
+				 * m_affects[affect] += starting_amount;
+				 */
+				  m_affects[affect] = starting_amount;
 					m_tick_resolution_map[affect] = every_n_ticks;
 					m_tick_resolution_map_counter[affect] = 0;
 #if 0
@@ -162,10 +166,7 @@ namespace mods::affects {
 					--m_affects[affect];
 				}
 				++m_processed;
-				if(m_callbacks[affect]){
-					maffects_debug("calling callback via process_affect");
-					m_callbacks[affect](entity_id,affect,m_affects[affect]);
-				}
+				trigger_callback(affect);
 			}
 			void affect(TAffects affect,int amount){
 				m_affects[affect] += amount;
@@ -183,23 +184,22 @@ namespace mods::affects {
 			 */
 			std::size_t tick(){
 				m_processed = 0;
-				maffects_debug("Dissolver tick");
 				std::vector<TAffects> erase_me;
 				for(auto & affect : m_affects){
-					bool should_process = false;
-					if(m_tick_resolution_map[affect.first] != 0){
-						maffects_debug("Dissolver tick every " << m_tick_resolution_map_counter[affect.first] << " for affect: " << affect.first << 
-								"current value: " << affect.second);
-						++m_tick_resolution_map_counter[affect.first];
-						if(m_tick_resolution_map_counter[affect.first] == m_tick_resolution_map[affect.first]){
-							m_tick_resolution_map_counter[affect.first] = 0;
-							maffects_debug("decremented the affect.second for item: " << affect.first);
-							should_process = true;
-						}
-					} else {
-						should_process = true;
+					bool has_resolution = m_tick_resolution_map.find(affect.first) != m_tick_resolution_map.end();
+					if(has_resolution){
+						m_tick_resolution_map_counter[affect.first] = m_tick_resolution_map_counter[affect.first] + 1;
 					}
-					if(should_process){
+					if(has_resolution && m_tick_resolution_map_counter[affect.first] < m_tick_resolution_map[affect.first]){
+						continue;
+					}
+					if(has_resolution && m_tick_resolution_map_counter[affect.first] >= m_tick_resolution_map[affect.first]){
+							maffects_debug("processing because map counter equals tick resolution: " << affect.first );
+							m_tick_resolution_map_counter[affect.first] = 0;
+							process_affect(affect.first);
+							continue;
+					}
+					if(!has_resolution){
 						process_affect(affect.first);
 					}
 					if(m_increment.find(affect.first) != m_increment.end() && m_max_amount[affect.first] <= affect.second){

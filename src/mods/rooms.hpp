@@ -5,6 +5,7 @@ extern obj_ptr_t optr_by_uuid(uuid_t);
 // For our dissolver
 #include "affects.hpp"
 
+#define __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__
 	#define mra_debug(a) std::cerr << "[mods::affects]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n";
 #else
@@ -14,6 +15,43 @@ namespace mods::rooms {
 	using txt = room_data::texture_type_t;
 	using fs = room_data::fire_status_t;
 	using fire_status_t = room_data::fire_status_t;
+	static std::map<txt,std::string> texture_strings = {
+			{txt::AIR,"AIR"},
+			{txt::CARPET,"CARPET"},
+			{txt::CEMENT,"CEMENT"},
+			{txt::DAMP,"DAMP"},
+			{txt::DESERT,"DESERT"},
+			{txt::DIRT,"DIRT"},
+			{txt::DRY,"DRY"},
+			{txt::ELEVATOR,"ELEVATOR"},
+			{txt::EMP,"EMP"},
+			{txt::FOREST,"FOREST"},
+			{txt::FROZEN,"FROZEN"},
+			{txt::GLASS_WINDOWS,"GLASS_WINDOWS"},
+			{txt::GRASS,"GRASS"},
+			{txt::HAZARDOUS_SMOKE,"HAZARDOUS_SMOKE"},
+			{txt::INSIDE,"INSIDE"},
+			{txt::LADDER,"LADDER"},
+			{txt::LOW_ATMOSPHERE,"LOW_ATMOSPHERE"},
+			{txt::METAL_HATCH,"METAL_HATCH"},
+			{txt::METAL_WALL,"METAL_WALL"},
+			{txt::NON_HAZARDOUS_SMOKE,"NON_HAZARDOUS_SMOKE"},
+			{txt::ON_FIRE,"ON_FIRE"},
+			{txt::OUTSIDE,"OUTSIDE"},
+			{txt::RADIOACTIVE,"RADIOACTIVE"},
+			{txt::ROOFTOP,"ROOFTOP"},
+			{txt::RUBBLE,"RUBBLE"},
+			{txt::SCANNED,"SCANNED"},
+			{txt::SERVER_ROOM,"SERVER_ROOM"},
+			{txt::SEWER,"SEWER"},
+			{txt::SHATTERED_GLASS,"SHATTERED_GLASS"},
+			{txt::TREE,"TREE"},
+			{txt::TUNNEL,"TUNNEL"},
+			{txt::UNDERWATER,"UNDERWATER"},
+			{txt::VOLATILE,"VOLATILE"},
+			{txt::WATER,"WATER"},
+			{txt::WOODEN_WALLS,"WOODEN_WALLS"}
+	};
 	static const std::map<int,std::string> room_flag_strings = {
 		{ROOM_DARK, "ROOM_DARK"},
 		{ROOM_DEATH, "ROOM_DEATH"},
@@ -33,6 +71,21 @@ namespace mods::rooms {
 		{ROOM_OLC, "ROOM_OLC"},
 		{ROOM_BFS_MARK, "ROOM_BFS_MARK"}
 	};
+	static inline std::optional<std::string> texture_to_string(txt t){
+		auto it = texture_strings.find(t);
+		if(it ==texture_strings.end()){
+			return std::nullopt;
+		}
+		return texture_strings[t];
+	}
+	static inline std::optional<txt> texture_from_string(std::string& s){
+		for(auto & pair : texture_strings){
+			if(s.compare(pair.second) == 0){
+				return pair.first;
+			}
+		}
+		return std::nullopt;
+	}
 	static inline std::optional<int> room_flag_from_string(std::string& s){
 #define MENTOC_LAZY(A) if(s.compare(#A) == 0){ return A; }
 		MENTOC_LAZY(ROOM_DARK);
@@ -151,47 +204,6 @@ namespace mods::rooms {
 			{sector_type_t::INDOOR_BASEMENT,"INDOOR_BASEMENT"}
 	};
 
-	static inline std::string texture_to_string(room_data::texture_type_t t){
-#define MENTOC_LAZY(A) if(t == room_data::texture_type_t::A){ return #A; }
-		MENTOC_LAZY(GRASS);
-		MENTOC_LAZY(CEMENT);
-		MENTOC_LAZY(OUTSIDE);
-		MENTOC_LAZY(INSIDE);
-		MENTOC_LAZY(SEWER);
-		MENTOC_LAZY(RADIOACTIVE);
-		MENTOC_LAZY(VOLATILE);
-		MENTOC_LAZY(RUBBLE);
-		MENTOC_LAZY(DIRT);
-		MENTOC_LAZY(SHATTERED_GLASS);
-		MENTOC_LAZY(LOW_ATMOSPHERE);
-		MENTOC_LAZY(ON_FIRE);
-		MENTOC_LAZY(NON_HAZARDOUS_SMOKE);
-		MENTOC_LAZY(HAZARDOUS_SMOKE);
-		MENTOC_LAZY(EMP);
-		MENTOC_LAZY(TUNNEL);
-		MENTOC_LAZY(LADDER);
-		MENTOC_LAZY(ELEVATOR);
-		MENTOC_LAZY(GLASS_WINDOWS);
-		MENTOC_LAZY(SCANNED);
-		MENTOC_LAZY(DAMP);
-		MENTOC_LAZY(FOREST);
-		MENTOC_LAZY(WOODEN_WALLS);
-		MENTOC_LAZY(CARPET);
-		MENTOC_LAZY(DRY);
-		MENTOC_LAZY(DESERT);
-		MENTOC_LAZY(WATER);
-		MENTOC_LAZY(UNDERWATER);
-		MENTOC_LAZY(METAL_HATCH);
-		MENTOC_LAZY(METAL_WALL);
-		MENTOC_LAZY(TREE);
-		MENTOC_LAZY(ROOFTOP);
-		MENTOC_LAZY(AIR);
-		MENTOC_LAZY(FROZEN);
-		MENTOC_LAZY(SERVER_ROOM);
-#undef MENTOC_LAZY
-		return "<unknown>";
-	}
-
 	void set_sector_type(room_rnum room_id, int sector_type);
 	std::optional<sector_type_t> sector_from_string(std::string m);
 	static inline bool is_peaceful(room_rnum room){
@@ -217,42 +229,28 @@ namespace mods::rooms {
 		 * @param room
 		 * @param items
 		 */
-		static inline void add_room_dissolve_affect(room_rnum room, affect_map_t& items){
-			mra_debug("Added mapped items to " << room);
-			needs_dissolve[room].entity_id = room;
-			needs_dissolve[room].affect_map(items);
-		}
+		void add_room_dissolve_affect(room_rnum room, affect_map_t& items);
 		/*! Add a specific affect onto a room, except only process it ever N ticks
 		 * @param room_rnum room
 		 * @param affect_t affect
 		 * @param affect_amount_t amount
 		 * @param uint32_t How many ticks before we process it
 		 */
-		static inline void add_room_dissolve_affect_every_n_tick(room_rnum room, affect_t affect, affect_amount_t amt, uint32_t n_ticks){
-			needs_dissolve[room].entity_id = room;
-			needs_dissolve[room].affect_every_n_ticks(affect,amt,n_ticks);
-			mra_debug("Added room dissolve using ever n (" << n_ticks << ") ticks... to " << room);
-		}
+		void add_room_dissolve_affect_every_n_tick(room_rnum room, affect_t affect, affect_amount_t amt, uint32_t n_ticks);
 		/**
 		 * @brief set direction to increment
 		 *
 		 * @param room
 		 * @param affect
 		 */
-		static inline void set_affect_to_increment(room_rnum room,affect_t affect){
-			needs_dissolve[room].set_direction(affect,true);
-			mra_debug("Set direction to increment for affect: " << affect);
-		}
+		void set_affect_to_increment(room_rnum room,affect_t affect);
 		/**
 		 * @brief change direction to decrememnt (this is the default)
 		 *
 		 * @param room
 		 * @param affect
 		 */
-		static inline void set_affect_to_decrement(room_rnum room,affect_t affect){
-			needs_dissolve[room].set_direction(affect,false);
-			mra_debug("Set direction to decrement for affect: " << affect);
-		}
+		void set_affect_to_decrement(room_rnum room,affect_t affect);
 		/**
 		 * @brief sets maximum amount on incrementing affect to amount
 		 *
@@ -260,19 +258,14 @@ namespace mods::rooms {
 		 * @param affect
 		 * @param amount
 		 */
-		static inline void set_affect_max_amount(room_rnum room,affect_t affect,affect_amount_t amount){
-			needs_dissolve[room].set_max_amount(affect,amount);
-			mra_debug("Set direction to increment for affect: " << affect);
-		}
+		void set_affect_max_amount(room_rnum room,affect_t affect,affect_amount_t amount);
 		/**
 		 * @brief remove any dissolver affect
 		 *
 		 * @param room
 		 * @param item
 		 */
-		static inline void remove_room_dissolve_affect(room_rnum room, affect_t item){
-			needs_dissolve.erase(room);
-		}
+		void remove_room_dissolve_affect(room_rnum room, affect_t item);
 
 		/**
 		 * @brief set the callback when the affect changes values
@@ -281,41 +274,14 @@ namespace mods::rooms {
 		 * @param affect
 		 * @param f
 		 */
-		static inline void add_callback(room_rnum room, affect_t affect, callback_t f){
-			needs_dissolve[room].set_callback(affect,f);
-		}
+		void add_callback(room_rnum room, affect_t affect, callback_t f);
 
-		static inline void on_room_fire_changed_affect(
+		void on_room_fire_changed_affect(
 				room_rnum room,
 				affect_t affect, /* will always be ON_FIRE */
 				affect_amount_t amount
-				){
-			fire_status_t fire_status = (fire_status_t)amount;
-			world[room].fire_status() = fire_status;
-			switch(fire_status){
-				case fire_status_t::KINDLING:
-					send_to_room(room, "\r\n{red}A fire begins to form!{/red}\r\n");
-					break;
-				case fire_status_t::COMPLETELY_ON_FIRE:
-					send_to_room(room, "\r\n{red}The room is {yel}TOTALLY ENGULFED{/yel}{red} in fire!{/red}\r\n");
-					break;
-				case fire_status_t::SMOLDERING:
-					send_to_room(room, "\r\n{red}The fire loses some intesity and smoke begins to fill the room.{/red}\r\n");
-					break;
-				case fire_status_t::SMOKING:
-					send_to_room(room, "\r\n{red}The room is filled with smoke as the fire dies...{/red}\r\n");
-					break;
-				case fire_status_t::OUT:
-					send_to_room(room, "\r\n{red}The fire is put out.{/red}\r\n");
-					break;
-				default:
-					log((std::string("Invalid fire status: ") + std::to_string(fire_status) + std::string("on room:") + std::to_string(room)).c_str());
-					break;
-			}
-		}
-		static inline void trigger_callback_for_affect(room_rnum room,affect_t affect){
-			needs_dissolve[room].trigger_callback(affect);
-		}
+		);
+		void trigger_callback_for_affect(room_rnum room,affect_t affect);
 	};//end affects namespace
 
 
@@ -535,68 +501,12 @@ namespace mods::rooms {
 		 * @param level
 		 * @param player
 		 */
-		static inline void set_fire(room_rnum room,bool on,std::string& level,player_ptr_t& player) {
-			std::string msg = "";
-			bool found = false;
-			if(room >= world.size()){
-				msg = "invalid room id";
-				goto cleanup;
-			}
-			if(on){
-				msg += "\r\nsetting room to on fire\r\n";
-				start_fire_dissolver(room);
-			}else{
-				msg += "\r\nsetting room to __NOT__ on fire\r\n";
-				stop_fire_dissolver(room);
-			}
-			if(level.length() == 0){
-				goto cleanup;
-			}
-			if(level.compare("NONE") == 0){
-				world[room].fire_status() = room_data::fire_status_t::OUT;
-				msg += "set to OUT...";
-				found = true;
-				goto cleanup;
-			}
-			if(level.compare("KINDLING") == 0){
-				world[room].fire_status() = room_data::fire_status_t::KINDLING;
-				msg += "set to kindling...";
-				found = true;
-				goto cleanup;
-			}
-			if(level.compare("COMPLETELY_ON_FIRE") == 0){
-				world[room].fire_status() = room_data::fire_status_t::COMPLETELY_ON_FIRE;
-				msg += "set to cof...";
-				found = true;
-				goto cleanup;
-			}
-			if(level.compare("SMOLDERING") == 0){
-				world[room].fire_status() = room_data::fire_status_t::SMOLDERING;
-				msg += "set to SMOLDERING...";
-				found = true;
-				goto cleanup;
-			}
-			if(level.compare("SMOKING") == 0){
-				world[room].fire_status() = room_data::fire_status_t::SMOKING;
-				msg += "set to SMOKING...";
-				found = true;
-				goto cleanup;
-			}
-			if(level.compare("OUT") == 0){
-				world[room].fire_status() = room_data::fire_status_t::OUT;
-				msg += "set to OUT...";
-				found = true;
-				goto cleanup;
-			}
-			if(!found){
-				player->sendln("Options are KINDLING,COMPLETELY_ON_FIRE,SMOLDERING,SMOKING,OUT,NONE");
-			}
-cleanup:
-			msg += "\r\ncurrent fire status: '";
-			msg += to_string(get_fire_status(room)) + "'\r\n";
-			player->sendln(msg);
-			return;
-		}
+		void set_fire(room_rnum room,bool on,std::string& level,player_ptr_t& player);
 	};//end gods
+	
+	/**
+	 * @brief processes fire damage in any rooms that have it
+	 */
+	void process_fire_damage();
 };//end namespace
 #endif
