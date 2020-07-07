@@ -44,6 +44,9 @@ extern void look_at_room(char_data* ch,int ignore_brief);
 namespace config {
 	extern void init(int,char**);
 };
+namespace mods::skills {
+	extern void game_init();
+};
 namespace mods {
 	namespace globals {
 		using player = mods::player;
@@ -371,6 +374,7 @@ namespace mods {
 				return;
 			}
 			mods::debug::init(show_tics);
+			mods::skills::game_init();
 		}
 		void post_boot_db() {
 		}

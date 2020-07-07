@@ -129,7 +129,10 @@ namespace mods::skills {
 	void init_player_levels(player_ptr_t& player);
 	void init_player_levels(std::string_view);
 	void load_player_levels(player_ptr_t& player);
-	using skill_t = mods::skills::proficiencies::proficiency_name_t;
+	int get_enum_by_name(std::string_view name);
+	std::string to_string(int e_name);
+	bool player_can(player_ptr_t& player,int e_name);
 };
+using skill_t = mods::skills::proficiencies::proficiency_name_t;
 
 #endif

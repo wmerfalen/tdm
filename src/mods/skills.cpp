@@ -47,15 +47,35 @@ namespace mods::skills {
 		}
 		put_player_map(player_name.data(),"skills",m);
 	}
-	int get_enum_by_name(std::string_view name){
+	static std::map<std::string,int> mappings;
+	static std::map<int,std::string> to_string_mappings;
+	static std::map<int,proficiencies::proficiency_t> e_name_to_proficiency;
+
+	/** called by game initialization sequence */
+	void game_init(){
 		for(auto & skillset : mods::skills::proficiencies::list) {
 			for(auto & prof : skillset){
-				if(ICMP(prof.name.c_str(),name.data())){
-					return prof.e_name;
+				mappings[prof.name.c_str()] = prof.e_name;
+				to_string_mappings[prof.e_name] = prof.name.c_str();
+				e_name_to_proficiency[prof.e_name] = prof;
+			}
+		}
+	}
+	int get_enum_by_name(std::string_view name){
+		return mappings[name.data()];
+	}
+	std::string to_string(int e_name){
+		return to_string_mappings[e_name];
+	}
+	uint16_t get_minimum_proficiency(int e_name){
+		for(auto & skillset : mods::skills::proficiencies::list) {
+			for(auto & prof : skillset){
+				if(prof.e_name == e_name){
+					return prof.minimum_profiency;
 				}
 			}
 		}
-		return -1;
+		return 0;
 	}
 	void load_player_levels(player_ptr_t& player){
 		strmap_t skills;
@@ -78,5 +98,8 @@ namespace mods::skills {
 	}
 	uint16_t get_player_level(player_ptr_t& player,std::string_view skill){
 		return 0;
+	}
+	bool player_can(player_ptr_t& player,int e_name){
+		return player->skill(e_name) >= get_minimum_proficiency(e_name);
 	}
 };
