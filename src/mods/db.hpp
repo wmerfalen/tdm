@@ -2,6 +2,7 @@
 #define __MENTOC_MODS_DB_LIB__
 #include "lmdb.hpp"
 #include <sstream>
+#include "util.hpp"
 
 #ifdef __MENTOC_DEBUG__
 #define debug(d) std::cerr << "[debug]: " << d << "\n";
@@ -108,5 +109,12 @@ int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_
 
 bool db_insert(const std::string& table, mutable_map_t* values);
 };//End namespace
+
+using strmap_t = std::map<std::string,std::string>;
+using strvec_t = std::vector<std::string>;
+int put_player_map(std::string_view player_name,std::string prefix, strmap_t values);
+int get_player_map(std::string_view player_name,std::string prefix, strmap_t& values);
+int put_player_vector(std::string_view player_name,std::string prefix, strvec_t values);
+int get_player_vector(std::string_view player_name,std::string prefix, strvec_t& values);
 
 #endif

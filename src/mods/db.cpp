@@ -431,3 +431,70 @@ int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_
 
 
 };
+
+int put_player_map(std::string_view player_name,std::string prefix, std::map<std::string,std::string> values){
+	mods::db::lmdb_renew();
+	std::string key = "",player_key = "player|";
+	player_key += player_name.data();
+	key = player_key + "|" + prefix + "|map|";
+	int i =0;
+	std::string keys;
+	for(auto & pair : values){
+		keys += pair.first + "|";
+		mods::db::lmdb_put(key + pair.first,pair.second);
+		++i;
+	}
+	mods::db::lmdb_put(key + "index",keys);
+	mods::db::lmdb_commit();
+	return i;
+}
+
+int get_player_map(std::string_view player_name,std::string prefix, std::map<std::string,std::string>& values){
+	mods::db::lmdb_renew();
+	std::string key = "",player_key = "player|";
+	player_key += player_name.data();
+	key = player_key + "|" + prefix + "|map|";
+	std::string index_key = key + "index";
+	int i= 0;
+	std::string current = "";
+	for(auto ch : mods::db::lmdb_get(index_key)){
+		if(ch == '|' && current.length()){
+			values[current] = mods::db::lmdb_get(key + current);
+			current = "";
+			continue;
+		}
+		current += ch;
+	}
+	mods::db::lmdb_commit();
+	return i;
+}
+int put_player_vector(std::string_view player_name,std::string prefix, std::vector<std::string> values){
+	mods::db::lmdb_renew();
+	std::string key = "",player_key = "player|";
+	player_key += player_name.data();
+	key = player_key + "|" + prefix + "|vector|";
+	int i= 0;
+	for(auto & val : values){
+		mods::db::lmdb_put(key + std::to_string(i),val);
+		++i;
+	}
+	mods::db::lmdb_put(key + "count",std::to_string(i));
+	mods::db::lmdb_commit();
+	return i;
+}
+
+int get_player_vector(std::string_view player_name,std::string prefix, std::vector<std::string>& values){
+	mods::db::lmdb_renew();
+	std::string key = "",player_key = "player|";
+	player_key += player_name.data();
+	key = player_key + "|" + prefix + "|vector|";
+	std::string count_key = key + "count";
+	int i= 0;
+	auto count = atoi(mods::db::lmdb_get(key + "count").c_str());
+	for(; i < count;++i){
+		std::string value = mods::db::lmdb_get(key + std::to_string(i));
+		values.emplace_back(value);
+	}
+	mods::db::lmdb_commit();
+	return i;
+}

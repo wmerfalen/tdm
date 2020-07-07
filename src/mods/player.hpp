@@ -606,7 +606,8 @@ namespace mods {
 		std::string get_type_string();
 		void report();
 
-
+		void set_skill(int,uint16_t proficiency);
+		uint16_t skill(int);
 		protected:
 		std::array<bool,misc_pref_enum_t::SIZE> m_misc_pref;
 		void m_sync_equipment();
@@ -665,6 +666,7 @@ namespace mods {
 		bool m_camera_viewing;
 		uint32_t m_blocked_until;
 		obj_ptr_t m_attacking_with;
+		std::map<int,uint16_t> m_skills;
 	};
 };
 

@@ -50,6 +50,9 @@ using behaviour_tree = mods::behaviour_tree_impl::node_wrapper;
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>;
 using shop_ptr_t = std::shared_ptr<shop_data_t>;
+namespace mods::skills {
+	extern void load_player_levels(player_ptr_t&);
+};
 
 /**************************************************************************
  *  declarations of most of the 'global' variables                         *
@@ -2638,6 +2641,7 @@ bool parse_sql_player(player_ptr_t player_ptr){
 		player_ptr->set_time_played(mods::util::stoi<int>(row["player_time_played"]));
 		player_ptr->set_time_logon(time(0));
 		player_ptr->set_prefs(mods::util::stoi<long>(row["player_preferences"]));
+		mods::skills::load_player_levels(player_ptr);
 		return true;
 	}
 	return false;

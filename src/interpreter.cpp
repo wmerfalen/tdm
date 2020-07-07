@@ -364,7 +364,7 @@ ACMD(do_set);
 ACMD(do_show);
 ACMD(do_shutdown);
 ACMD(do_sit);
-ACMD(do_skillset);
+ACMD(do_skills);
 ACMD(do_sleep);
 ACMD(do_sneak);
 ACMD(do_recall);
@@ -750,7 +750,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "sing"     , POS_RESTING , do_action   , 0, 0 },
 	{ "sip"      , POS_RESTING , do_drink    , 0, SCMD_SIP },
 	{ "sit"      , POS_RESTING , do_sit      , 0, 0 },
-	{ "skillset" , POS_SLEEPING, do_skillset , LVL_GRGOD, 0 },
+	{ "skills" , POS_SLEEPING, do_skills , 0, 0 },
 	{ "sleep"    , POS_SLEEPING, do_sleep    , 0, 0 },
 	{ "slap"     , POS_RESTING , do_action   , 0, 0 },
 	{ "slowns"   , POS_DEAD    , do_gen_tog  , LVL_IMPL, SCMD_SLOWNS },

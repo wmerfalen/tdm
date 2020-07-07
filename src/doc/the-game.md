@@ -1,5 +1,5 @@
-# Siege MUD
-Siege MUD is a text-based looter shooter set in a world similar to modern Earth. 
+# Tactical Denial
+Tactical Denial is a text-based looter shooter set in a world similar to modern Earth. 
 The core gameplay emphasizes ranged and melee combat. Think: Diablo III 
 looter mechanics mixed with an exciting fast-paced military shooter.
 
@@ -25,8 +25,13 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 	- aerial drones
 	- land-based drones
 - claymore mines
+- remote view cameras
 
-# 
+# The Roguelike that turned into a full-blown mud
+The first goal of Tactical Denial is to a roguelike mud setup as soon as possible.
+This will allow the audience to play the game while development can focus on 
+building out gameplay features in an iterative manner. Once the dynamics are solid
+enough, we can compose those into skillsets that are divided by assets.
 
 +++++++++++++++++++++++
 | ITEM TYPE CHECKLIST |
@@ -253,6 +258,60 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 	- blocking off a direction
 	- moving an npc to a separate room
 
++++++++++++++++++++
+| Fields of study |
++++++++++++++++++++
+		- [Electronics] [ ]
+			- Use of cameras
+			- Able to disable electronics
+			- Adept at electronics damage
+			- Can adapt electronics to be resistant to EMP
+			- Can adapt electronics to become EMP
+			- Can detect electronics
+			- Can disrupt cameras
+			- Can appear invisible to cameras (feed loop)
+			- Can hack servers
+			- Can disable electronics protection (electronic locks)
+		- [Armor] [ ]
+			- Can enhance armor
+			- Can penetrate armor with normal ammo
+			- Can take armor from NPCs
+			- Can mold collected armor
+			- Held armor has no weight bearance
+			- Heavy armor doesn't affect movement
+			- Explosions less likely to injure
+			- Chance to injure decreased
+		- [Marksmanship] [ ]
+			- Chance to hit during spray is increased
+			- Chance to headshot is increased
+			- Chance to target limb is increased
+			- Sniping accuracy increased
+		- [Sniping] [ ]
+			- Accuracy increased with sniper rifles
+			- Exclusive access to advanced sniper rifles
+			- Tracking bullets
+		- [Demolitions] [ ]
+			- Breach charge placement time decreased
+			- C4 remote detonation distance increased
+			- Grenade throw distance increased
+			- Claymore damage increased
+			- Thermite breach charge placement time decreased
+			- Incendiary grenade damage increased
+			- Can craft C4
+			- Chance to do 33% more damage with any explosive
+		- [Chemistry] [ ]
+			- Can create steroids
+			- Can create human growth hormone
+			- Can create noxious gas grenades
+			- Seal off room to make air-tight
+			- Can create incendiary ammo
+		- [Weapon Handling] [ ]
+			- Enhanced familiarity with weapons
+			- Increased accuracy with any weapon
+			- Decreased cooldown between shots
+			- Faster reloading
+
+
 
 ++++++++++++++++++++
 | TYPES OF POISONS |
@@ -283,7 +342,6 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 				- 3 Speed, 1 Armor [HYPER - Agile, Stealthy, Quiet, Fast, Lots of Movement Points, Recovers MP fast]
 				- 3 Armor, 1 Speed [TANK - Slow, Sturdy, Natural Defender, Anchor]
 				- 2 Speed, 2 Armor [BALANCED - Well-rounded, Somewhat Agile, Average strength, Average Recovery times]
-
 	-  Melee Martial Arts
 			- Submission Grappling
 				- Skills

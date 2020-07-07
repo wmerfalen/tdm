@@ -1275,6 +1275,12 @@ namespace mods {
 #undef MRC
 	}
 
+		void player::set_skill(int skill,uint16_t proficiency){
+			m_skills[skill] = proficiency;
+		}
+		uint16_t player::skill(int t){
+			return m_skills[t];
+		}
 };
 
 #endif

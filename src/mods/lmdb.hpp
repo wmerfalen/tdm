@@ -256,7 +256,7 @@ pqxx::result db_get_by_meta_multi(std::string table, std::string col,const TIDLi
 		return {};
 	}
 }
-//pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::tuple::reference& value);
+
 pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::field& value);
 #ifdef __MENTOC_USE_PQXX_RESULT__
 pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::result::reference& value);
