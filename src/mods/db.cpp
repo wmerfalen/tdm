@@ -4,6 +4,7 @@
 #include "player.hpp"
 #include "pq.hpp"
 
+extern std::string sanitize_key(std::string key);
 namespace mods::db {
 
 	/**
@@ -119,6 +120,10 @@ tuple_status_t save_record(const std::string& table,mutable_map_t* values,std::s
  */
 void lmdb_renew() {
 	mods::globals::db->renew_txn();
+}
+
+bool lmdb_exists(std::string key) {
+	return mods::globals::db->exists(key);
 }
 /**
  * @brief grabs a key and stores it in an untyped void* buffer
@@ -432,29 +437,36 @@ int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_
 
 };
 
+std::string player_key(std::string player_name,std::string prefix, std::string type){
+	return db_key({"player",player_name,prefix,type}) + "|";
+}
+std::string player_key_index(std::string player_name,std::string prefix, std::string type){
+	return player_key(player_name.data(),prefix,type) + "index";
+}
+std::string player_key_count(std::string player_name,std::string prefix, std::string type){
+	return player_key(player_name.data(),prefix,type) + "count";
+}
 int put_player_map(std::string_view player_name,std::string prefix, std::map<std::string,std::string> values){
 	mods::db::lmdb_renew();
-	std::string key = "",player_key = "player|";
-	player_key += player_name.data();
-	key = player_key + "|" + prefix + "|map|";
+	std::string key = "";
+	key = player_key(player_name.data(),prefix,"map");
 	int i =0;
 	std::string keys;
 	for(auto & pair : values){
 		keys += pair.first + "|";
-		mods::db::lmdb_put(key + pair.first,pair.second);
+		mods::db::lmdb_put(key + sanitize_key(pair.first),pair.second);
 		++i;
 	}
-	mods::db::lmdb_put(key + "index",keys);
+	mods::db::lmdb_put(player_key_index(player_name.data(),prefix,"map"),keys);
 	mods::db::lmdb_commit();
 	return i;
 }
 
 int get_player_map(std::string_view player_name,std::string prefix, std::map<std::string,std::string>& values){
 	mods::db::lmdb_renew();
-	std::string key = "",player_key = "player|";
-	player_key += player_name.data();
-	key = player_key + "|" + prefix + "|map|";
-	std::string index_key = key + "index";
+	std::string key = "";
+	key = player_key(player_name.data(),prefix,"map");
+	std::string index_key = player_key_index(player_name.data(),prefix,"map");
 	int i= 0;
 	std::string current = "";
 	for(auto ch : mods::db::lmdb_get(index_key)){
@@ -470,31 +482,33 @@ int get_player_map(std::string_view player_name,std::string prefix, std::map<std
 }
 int put_player_vector(std::string_view player_name,std::string prefix, std::vector<std::string> values){
 	mods::db::lmdb_renew();
-	std::string key = "",player_key = "player|";
-	player_key += player_name.data();
-	key = player_key + "|" + prefix + "|vector|";
+	std::string key = "";
+	key = player_key(player_name.data(),prefix,"vector");
 	int i= 0;
 	for(auto & val : values){
 		mods::db::lmdb_put(key + std::to_string(i),val);
 		++i;
 	}
-	mods::db::lmdb_put(key + "count",std::to_string(i));
+	mods::db::lmdb_put(player_key_count(player_name.data(),prefix,"vector"),std::to_string(i));
 	mods::db::lmdb_commit();
 	return i;
 }
 
 int get_player_vector(std::string_view player_name,std::string prefix, std::vector<std::string>& values){
 	mods::db::lmdb_renew();
-	std::string key = "",player_key = "player|";
-	player_key += player_name.data();
-	key = player_key + "|" + prefix + "|vector|";
+	std::string key = "";
+	key = player_key(player_name.data(),prefix,"vector");
 	std::string count_key = key + "count";
 	int i= 0;
-	auto count = atoi(mods::db::lmdb_get(key + "count").c_str());
+	auto count = atoi(mods::db::lmdb_get(player_key_count(player_name.data(),prefix,"vector")).c_str());
 	for(; i < count;++i){
 		std::string value = mods::db::lmdb_get(key + std::to_string(i));
 		values.emplace_back(value);
 	}
 	mods::db::lmdb_commit();
 	return i;
+}
+
+bool key_exists(std::string key){
+	return mods::db::lmdb_exists(key);
 }

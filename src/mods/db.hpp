@@ -46,6 +46,7 @@ namespace mods::globals {
  */
 namespace mods::db{
 	void lmdb_renew();
+	bool lmdb_exists(std::string);
 	void lmdb_commit();
 void lmdb_put(std::string key,std::string value);
 int lmdb_nput(void* key,std::size_t k_size,void* value,std::size_t v_size);
@@ -116,5 +117,8 @@ int put_player_map(std::string_view player_name,std::string prefix, strmap_t val
 int get_player_map(std::string_view player_name,std::string prefix, strmap_t& values);
 int put_player_vector(std::string_view player_name,std::string prefix, strvec_t values);
 int get_player_vector(std::string_view player_name,std::string prefix, strvec_t& values);
+std::string player_key(std::string player_name,std::string prefix, std::string type);
+std::string player_key_index(std::string player_name,std::string prefix, std::string type);
+std::string player_key_count(std::string player_name,std::string prefix, std::string type);
 
 #endif

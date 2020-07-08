@@ -32,7 +32,6 @@
 #include <unordered_map>
 #include "mods/util.hpp"
 #include "mods/help.hpp"
-#include "mods/skills.hpp"
 
 #define MENTOC_PREAMBLE() auto player = ptr(ch)
 

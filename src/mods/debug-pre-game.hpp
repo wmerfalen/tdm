@@ -4,6 +4,7 @@
 #include "flashbang.hpp"
 #include "orm/room.hpp"
 #include "db.hpp"
+#define __MENTOC_RUN_PREGAME_SKILL_CODE__
 #ifdef __MENTOC_RUN_PREGAME_SKILL_CODE__
 #include "skills.hpp"
 #endif
@@ -12,8 +13,12 @@ namespace mods::debug::pre_game {
 	namespace fb = ::mods::flashbang;
 	bool run(){
 #ifdef __MENTOC_RUN_PREGAME_SKILL_CODE__
+		int count = mods::skills::update_schema_for_player("far");
+		DD("Number of fields updated: " << count);
+		return 1;
 		mods::skills::init_player_levels("<fiz>");
-		mods::skills::load_player_levels("<fiz>");
+		
+		//mods::skills::load_player_levels("<fiz>");
 		put_player_map("<fiz>","test1",{
 				{"foo","bar"},
 				{"baz","buz"}

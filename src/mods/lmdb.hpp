@@ -180,6 +180,7 @@ namespace mods::lmdb {
 		int nget(void* key,std::size_t k_size,std::string& in_value);
 		int nget(void* key,std::size_t k_size,void* in_value);
 		int put(std::string key,std::string value);
+		bool exists(std::string);
 
 		int get(MDB_txn*,std::string key,std::string & in_value);
 		int put(MDB_txn*,std::string key,std::string value);

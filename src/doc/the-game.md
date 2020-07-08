@@ -203,25 +203,6 @@ enough, we can compose those into skillsets that are divided by assets.
 			[ ] attach_to
 
 
-+++++++++++
-| CLASSES |
-+++++++++++
-	- Sentinel
-	- Daemon
-	- Pistolita
-		- Excellent pistol handling
-		- Psychic Ability: 
-	- Tank [ TODO: rename this class ]
-	- [theme:The Good Guy, natural leader] NAME TBA [ TODO ]
-	- Ethereal Zero
-	- Catalyst
-	- Zenith
-	- MK-X
-	- Syndrome
-	- Malady
-	- Contagion
-		- 
-	- 
 ++++++++++++++++++++++++
 | Dyanmic: destruction |
 ++++++++++++++++++++++++
@@ -310,6 +291,18 @@ enough, we can compose those into skillsets that are divided by assets.
 			- Increased accuracy with any weapon
 			- Decreased cooldown between shots
 			- Faster reloading
++++++++++++++++++++++
+| WEAPON ATTRIBUTES |
++++++++++++++++++++++
+ 	- Description: 
+		- Attributes for weapons apply to a specific character.
+	- Familiarity
+		- Increases damage by 4% per level
+		- Decreases reload time by 4% per level
+		- Increases injure chance by 2% per level
+		- Increases critical chance by 2.5% per level
+		- Increases limb damage chance by 3% per level
+		- Increases headshot chance by 0.5% per level
 
 
 

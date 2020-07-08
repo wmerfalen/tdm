@@ -433,6 +433,37 @@ namespace mods::lmdb {
 #endif
 	}
 
+	bool _db_handle::exists(std::string key){
+#ifdef __MENTOC_USE_LMDB__
+		lmdb_debug("exists entry");
+		if(!m_good){
+			lmdb_debug("get - renewed txn");
+			this->renew_txn();
+		}
+		if(m_good){
+			MDB_val k;
+			k.mv_size = key.length()+1;
+			k.mv_data = (void*)key.data();
+			MDB_val v;
+			memset(&v,0,sizeof(v));
+			int ret = mdb_get(m_txn,m_dbi,&k,&v);
+			switch(ret){
+				case MDB_NOTFOUND:
+					return false;
+				case EINVAL:
+					return false;
+				default:
+					return true;
+			}
+		}else{
+			return false;
+		}
+#else
+		mods::globals::ram_db[key];
+		return std::find(mods::globals::ram_db.begin(),mods::globals::ram_db.end(),key) != mods::globals::ram_db.end();
+#endif
+	}
+
 	/**
 	 * @brief grabs string key and stores in std::string in_value ref
 	 *
@@ -768,6 +799,20 @@ namespace mods::globals {
 	extern std::unique_ptr<mods::lmdb::db_handle> db;
 };
 
+std::string sanitize_key(std::string key){
+	std::string k = "";
+	for(auto ch : key){
+		if(!isascii(ch)){
+			continue;
+		}
+		if(!isalnum(ch) && ch != '_' && ch != '-'){
+			continue;
+		}
+		k += ch;
+	}
+	return k;
+}
+
 /**
  * @brief create a key by list of strings
  *
@@ -778,7 +823,8 @@ namespace mods::globals {
 std::string db_key(const std::vector<std::string> & parts){
 	std::string query = "";
 	std::size_t i = 0,s=parts.size();
-	for(auto & part : parts){
+	for(auto & unsanitized_part : parts){
+		std::string part = sanitize_key(unsanitized_part);
 		query.append(part);
 		if(++i == s){ break; }
 		query.append("|");
