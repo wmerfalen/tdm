@@ -139,7 +139,7 @@ namespace mods::rooms {
 		std::cerr << "###############################\n";
 		static std::vector<txt> never_ignites = {
 			txt::SEWER,txt::DAMP,txt::WATER,txt::UNDERWATER,
-			txt::FROZEN
+			txt::FROZEN,txt::SHALLOW_WATER
 		};
 		assert(room < world.size());
 		if(is_peaceful(room)){
@@ -327,6 +327,14 @@ namespace mods::rooms {
 						txt::OUTSIDE
 						});
 				break;
+			case sector_type_t::OUTSIDE_SHALLOW_WATER:
+
+				world[room_id].add_textures({
+						txt::SHALLOW_WATER,
+						txt::DAMP,
+						txt::OUTSIDE
+						});
+				break;
 			case sector_type_t::INDOOR_WOODEN_WALLS:
 
 				world[room_id].add_textures({
@@ -414,6 +422,14 @@ namespace mods::rooms {
 				world[room_id].add_textures({
 						txt::DAMP,
 						txt::INSIDE
+						});
+				break;
+			case sector_type_t::INDOOR_SHALLOW_WATER:
+
+				world[room_id].add_textures({
+						txt::DAMP,
+						txt::OUTSIDE,
+						txt::SHALLOW_WATER
 						});
 				break;
 			default:

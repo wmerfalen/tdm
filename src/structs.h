@@ -1113,7 +1113,8 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 			UNDERWATER,
 			VOLATILE,		/** Volatile means any slight spark will ignite an explosion */
 			WATER,
-			WOODEN_WALLS
+			WOODEN_WALLS,
+			SHALLOW_WATER	/** less than 5 inches of water */
 		};
 		constexpr static std::array<texture_type_t,5> textures_that_have_levels = {
 			texture_type_t::RADIOACTIVE,

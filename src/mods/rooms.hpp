@@ -50,7 +50,9 @@ namespace mods::rooms {
 			{txt::UNDERWATER,"UNDERWATER"},
 			{txt::VOLATILE,"VOLATILE"},
 			{txt::WATER,"WATER"},
-			{txt::WOODEN_WALLS,"WOODEN_WALLS"}
+			{txt::WOODEN_WALLS,"WOODEN_WALLS"},
+			{txt::SHALLOW_WATER,"SHALLOW_WATER"},
+
 	};
 	static const std::map<int,std::string> room_flag_strings = {
 		{ROOM_DARK, "ROOM_DARK"},
@@ -153,6 +155,7 @@ namespace mods::rooms {
 		OUTSIDE_WOODEN_WALL,	/** rappelling */
 		OUTSIDE_METAL_WALL,	/** rappelling */
 		OUTSIDE_AIR,	/** on a rope hanging from a helicopter */
+		OUTSIDE_SHALLOW_WATER,
 		INDOOR_WOODEN_WALLS,
 		INDOOR_CEMENT,
 		INDOOR_CEMENT_WOODEN_WALLS,
@@ -165,7 +168,8 @@ namespace mods::rooms {
 		INDOOR_METAL_HATCH,
 		INDOOR_ROOF,	/** attached to the roof like spiderman */
 		INDOOR_ATTIC,
-		INDOOR_BASEMENT
+		INDOOR_BASEMENT,
+		INDOOR_SHALLOW_WATER
 	};
 	/**
 	 * vim sorcery: :48,79s/^\t\t\([A-Z_]\+\),\?/\t\t{sector_type_t::\1,"\1"},/g
@@ -189,6 +193,7 @@ namespace mods::rooms {
 			{sector_type_t::OUTSIDE_WOODEN_WALL,"OUTSIDE_WOODEN_WALL"},
 			{sector_type_t::OUTSIDE_METAL_WALL,"OUTSIDE_METAL_WALL"},
 			{sector_type_t::OUTSIDE_AIR,"OUTSIDE_AIR"},
+			{sector_type_t::OUTSIDE_SHALLOW_WATER,"OUTSIDE_SHALLOW_WATER"},
 			{sector_type_t::INDOOR_WOODEN_WALLS,"INDOOR_WOODEN_WALLS"},
 			{sector_type_t::INDOOR_CEMENT,"INDOOR_CEMENT"},
 			{sector_type_t::INDOOR_CEMENT_WOODEN_WALLS,"INDOOR_CEMENT_WOODEN_WALLS"},
@@ -201,7 +206,8 @@ namespace mods::rooms {
 			{sector_type_t::INDOOR_METAL_HATCH,"INDOOR_METAL_HATCH"},
 			{sector_type_t::INDOOR_ROOF,"INDOOR_ROOF"},
 			{sector_type_t::INDOOR_ATTIC,"INDOOR_ATTIC"},
-			{sector_type_t::INDOOR_BASEMENT,"INDOOR_BASEMENT"}
+			{sector_type_t::INDOOR_BASEMENT,"INDOOR_BASEMENT"},
+			{sector_type_t::INDOOR_SHALLOW_WATER,"INDOOR_SHALLOW_WATER"}
 	};
 
 	void set_sector_type(room_rnum room_id, int sector_type);

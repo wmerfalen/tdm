@@ -1256,7 +1256,7 @@ INDESTRUCTIBLE	mods/yaml.hpp	/^	INDESTRUCTIBLE$/;"	e	enum:mods::yaml::durability
 INDEX_FILE	db.h	66;"	d
 INDEX_SIZE	boards.h	15;"	d
 INDOOR_ATTIC	mods/rooms.hpp	/^		INDOOR_ATTIC,$/;"	e	enum:mods::rooms::sector_type_t
-INDOOR_BASEMENT	mods/rooms.hpp	/^		INDOOR_BASEMENT$/;"	e	enum:mods::rooms::sector_type_t
+INDOOR_BASEMENT	mods/rooms.hpp	/^		INDOOR_BASEMENT,$/;"	e	enum:mods::rooms::sector_type_t
 INDOOR_CARPET_WOODEN_WALLS	mods/rooms.hpp	/^		INDOOR_CARPET_WOODEN_WALLS,$/;"	e	enum:mods::rooms::sector_type_t
 INDOOR_CEMENT	mods/rooms.hpp	/^		INDOOR_CEMENT,$/;"	e	enum:mods::rooms::sector_type_t
 INDOOR_CEMENT_WOODEN_WALLS	mods/rooms.hpp	/^		INDOOR_CEMENT_WOODEN_WALLS,$/;"	e	enum:mods::rooms::sector_type_t
@@ -1266,6 +1266,7 @@ INDOOR_METAL_WALLS	mods/rooms.hpp	/^		INDOOR_METAL_WALLS,$/;"	e	enum:mods::rooms
 INDOOR_ROOF	mods/rooms.hpp	/^		INDOOR_ROOF,	\/** attached to the roof like spiderman *\/$/;"	e	enum:mods::rooms::sector_type_t
 INDOOR_SERVER_ROOM	mods/rooms.hpp	/^		INDOOR_SERVER_ROOM,$/;"	e	enum:mods::rooms::sector_type_t
 INDOOR_SEWER	mods/rooms.hpp	/^		INDOOR_SEWER,$/;"	e	enum:mods::rooms::sector_type_t
+INDOOR_SHALLOW_WATER	mods/rooms.hpp	/^		INDOOR_SHALLOW_WATER$/;"	e	enum:mods::rooms::sector_type_t
 INDOOR_TUNNEL	mods/rooms.hpp	/^		INDOOR_TUNNEL,$/;"	e	enum:mods::rooms::sector_type_t
 INDOOR_WOODEN_WALLS	mods/rooms.hpp	/^		INDOOR_WOODEN_WALLS,$/;"	e	enum:mods::rooms::sector_type_t
 INDUSTRIAL_STRENGTH	mods/yaml.hpp	/^	INDUSTRIAL_STRENGTH,$/;"	e	enum:mods::yaml::durability_profile_type_t
@@ -1731,8 +1732,8 @@ MENTOC_ITEM_TYPES_BY_CAPS_SEQ	mods/item-types.hpp	22;"	d
 MENTOC_ITEM_TYPES_SEQ	mods/item-types.hpp	12;"	d
 MENTOC_ITEM_TYPES_SEQ_CAPS	mods/item-types.hpp	37;"	d
 MENTOC_ITEM_TYPE_LIST_SEQUENCE	mods/item-types.hpp	275;"	d
-MENTOC_LAZY	mods/rooms.hpp	108;"	d
-MENTOC_LAZY	mods/rooms.hpp	90;"	d
+MENTOC_LAZY	mods/rooms.hpp	110;"	d
+MENTOC_LAZY	mods/rooms.hpp	92;"	d
 MENTOC_LAZY_COMP	mods/doors.hpp	241;"	d
 MENTOC_LAZY_COMP	mods/doors.hpp	252;"	d
 MENTOC_LAZY_INT	mods/builder.cpp	1615;"	d	file:
@@ -2069,6 +2070,7 @@ OUTSIDE_MARKET_PLACE	mods/rooms.hpp	/^		OUTSIDE_MARKET_PLACE,$/;"	e	enum:mods::r
 OUTSIDE_METAL_HATCH	mods/rooms.hpp	/^		OUTSIDE_METAL_HATCH,$/;"	e	enum:mods::rooms::sector_type_t
 OUTSIDE_METAL_WALL	mods/rooms.hpp	/^		OUTSIDE_METAL_WALL,	\/** rappelling *\/$/;"	e	enum:mods::rooms::sector_type_t
 OUTSIDE_ROOFTOP	mods/rooms.hpp	/^		OUTSIDE_ROOFTOP,$/;"	e	enum:mods::rooms::sector_type_t
+OUTSIDE_SHALLOW_WATER	mods/rooms.hpp	/^		OUTSIDE_SHALLOW_WATER,$/;"	e	enum:mods::rooms::sector_type_t
 OUTSIDE_TREE	mods/rooms.hpp	/^		OUTSIDE_TREE,$/;"	e	enum:mods::rooms::sector_type_t
 OUTSIDE_UNDERWATER	mods/rooms.hpp	/^		OUTSIDE_UNDERWATER,$/;"	e	enum:mods::rooms::sector_type_t
 OUTSIDE_WATER	mods/rooms.hpp	/^		OUTSIDE_WATER,$/;"	e	enum:mods::rooms::sector_type_t
@@ -3087,6 +3089,7 @@ WIN32_LEAN_AND_MEAN	mods/catch.hpp	6795;"	d
 WIZLIST_FILE	db.h	82;"	d
 WLD_PREFIX	db.h	68;"	d
 WONT	telnet.h	45;"	d
+WOODEN_WALLS	structs.h	/^			WOODEN_WALLS,$/;"	m	struct:room_data	typeref:enum:room_data::
 WRITE_LVL	boards.h	38;"	d
 WRITING	mods/flags.hpp	/^		WRITING,$/;"	e	enum:mods::flags::plr
 WSL_AR_0_ACCURACY	mods/values.hpp	/^		const static uint16_t WSL_AR_0_ACCURACY = 40;$/;"	m	namespace:mods::values
