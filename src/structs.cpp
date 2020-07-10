@@ -326,9 +326,14 @@ bool obj_data::flagged(int value){
 			contents = nullptr;
 			people = nullptr;
 			for(unsigned i = 0; i < NUM_OF_DIRS;i++){ 
-				dir_option[i] = nullptr;
+				this->dir_option[i] = nullptr;
 			}
 			m_texture_levels[ON_FIRE] = 0;
+		name = "name";
+		description = "description";
+		room_flags = 0;
+		light = 0;                  /* Number of lightsources in room     */
+		func = 0;
 		}
 
 		room_data::room_data() {
@@ -359,21 +364,21 @@ bool obj_data::flagged(int value){
 			if(i >= NUM_OF_DIRS){
 				return;
 			}
-			if(dir_option[i] == nullptr){
+			if(this->dir_option[i] == nullptr){
 				/** free is handled properly in room_data destructor */
-				dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
+				this->dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
 			}else{
 				/** free is handled properly in room_data destructor */
-				free(dir_option[i]);
-				dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
+				free(this->dir_option[i]);
+				this->dir_option[i] = reinterpret_cast<room_direction_data*>(calloc(sizeof(room_direction_data),1));
 			}
 			/** FIXME: replace strdup'd members with mods::string */
-			dir_option[i]->general_description = strdup(gen_desc.c_str());
-			dir_option[i]->keyword = strdup(keyword.c_str());
-			dir_option[i]->exit_info = ex_info;
+			this->dir_option[i]->general_description = gen_desc.c_str();
+			this->dir_option[i]->keyword = keyword.c_str();
+			this->dir_option[i]->exit_info = ex_info;
 			/** FIXME: make this dynamic when bugs with builder.cpp are cleaned up */
-			dir_option[i]->key = 0;
-			dir_option[i]->to_room = to_room;
+			this->dir_option[i]->key = 0;
+			this->dir_option[i]->to_room = to_room;
 			m_directions.emplace_back(i);
 		}
 		const std::vector<uint8_t>& room_data::directions() const {

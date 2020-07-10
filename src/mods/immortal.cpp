@@ -5,7 +5,7 @@
 #include "util.hpp"
 #include "jx.hpp"
 
-extern std::vector<room_data> world;
+extern std::deque<room_data> world;
 namespace mods::immortal {
 
 };

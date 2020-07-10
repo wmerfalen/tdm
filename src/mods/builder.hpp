@@ -99,7 +99,6 @@ namespace mods::builder {
 			int reset_mode
 			);
 	std::pair<bool,std::string> zone_place(int zone_id,std::string_view command, std::string_view if_flag,std::string_view arg1, std::string_view arg2,std::string_view arg3);
-	void pave_to(player_ptr_t ch,room_data* room,int direction,int to_room);
 	std::optional<obj_data*> instantiate_object_by_index(int index);
 	std::optional<obj_data*> instantiate_object_by_vnum(int vnum);
 	void report_error(mods::player* player,std::string_view message);
@@ -117,6 +116,7 @@ namespace mods::builder {
 	void report_success(T player,std::string_view message) {
 		*player << "{grn}[success]: {/grn}" << message.data() << "\r\n";
 	}
+	void add_room_to_pavements(player_ptr_t& player, int room_id);
 };
 
 void r_error(const player_ptr_t & player,std::string_view msg);

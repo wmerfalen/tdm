@@ -424,37 +424,11 @@ namespace mods::builder {
 		}
 		player->set_bui_mode(true);
 	}
-
-	/**
-	 * Pave to
-	 * -------
-	 *  Pave from the current room to 'direction'.
-	 *
-	 *  pave_to(player,room_data* current_room,int direction);
-	 *
-	 */
-	void pave_to(player_ptr_t player,room_data * current_room,int direction,int to_room) {
-		//builder_data = mods::builder::sandboxes[player->name().c_str()].begin()->builder_data();
-		std::cerr << "player's builder data zone_id: " << player->builder_data->room_pavements.zone_id << "\n";
-		player->builder_data->room_pavements.rooms.push_back(to_room);
-		std::cerr << "room_pavements.rooms.push_back(to_room) -> " << to_room << " <-- should be the same as world.size() and new_room_id\n";
-		current_room->zone = world[player->room()].zone = player->builder_data->room_pavements.zone_id;
-
-		world[player->room()].set_dir_option(direction,
-				"general description",
-				"keyword",
-				EX_ISDOOR,
-				0,
-				to_room
-		);
-		current_room->set_dir_option(OPPOSITE_DIR(direction),
-				"general desc",
-				"keyword",
-				EX_ISDOOR,
-				0,
-				player->room()
-		);
-		r_status(player,"Paved room to that direction");
+	void add_room_to_pavements(player_ptr_t& player, int room_id){
+		auto & r = player->builder_data->room_pavements.rooms;
+		if(std::find(r.begin(),r.end(),room_id) != r.end()){
+			player->builder_data->room_pavements.rooms.push_back(room_id);
+		}
 	}
 
 	/**
@@ -907,9 +881,6 @@ namespace mods::builder {
 	}
 	bool create_direction(room_rnum room_id,byte direction,room_rnum to_room) {
 		if(direction > NUM_OF_DIRS) {
-			std::cerr << "[DIRECTION BIGGER THAN NUM_DIRS\n";
-			std::cerr << "[DIRECTION BIGGER THAN NUM_DIRS\n";
-			std::cerr << "[DIRECTION BIGGER THAN NUM_DIRS\n";
 			std::cerr << "[DIRECTION BIGGER THAN NUM_DIRS\n";
 			return false;
 		}
@@ -4270,11 +4241,11 @@ ACMD(do_rbuild) {
 			"  |:: {wht}rbuild{/wht} {gld}create north{/gld}\r\n" <<
 			"  |:: (the room to the north will be a brand new defaulted room)\r\n" <<
 
-			" {grn}rbuild{/grn} {red}<bind> <direction> <room_rnum>{/red}\r\n" <<
+			" {grn}rbuild{/grn} {red}<bind> <direction> <room_vnum>{/red}\r\n" <<
 			"  |--> bind a room to a direction\r\n" <<
 			"  {grn}|____[example]{/grn}\r\n"<<
-			"  |:: {wht}rbuild{/wht} {gld}bind north 27{/gld}\r\n"<<
-			"  |:: (the room to the north will lead to room 27)\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}bind north 127{/gld}\r\n"<<
+			"  |:: (the room to the north will lead to the room with a vnum of 127)\r\n" <<
 
 			" {grn}rbuild{/grn} {red}<title> <string>{/red}\r\n" <<
 			"  |--> set the current room title to string\r\n" <<
@@ -4349,6 +4320,10 @@ ACMD(do_rbuild) {
 			"  |:: {wht}rbuild{/wht} {gld}exit:remove north REINFORCED PICPROOF CLOSED{/gld}\r\n" <<
 			"  |:: (removes flags from northern door)\r\n" <<
 
+			" {grn}rbuild{/grn} {red}pave <continue>{/red}\r\n" <<
+			"  |--> start paving in the current room and zone that you are currently standing in.\r\n" <<
+			"  |    This allows you to continue where you left off without having to create a \r\n" <<
+			"  |    brand new zone and set of rooms.\r\n" <<
 			" {grn}rbuild{/grn} {red}pave <on|off> <room_number_start> <zone_id>{/red}\r\n" <<
 			"  |--> starts the pave mode where any direction you go to will automatically \r\n" <<
 			"  |    create and bind rooms. Helpful for when you want to carve out a ton of\r\n" <<
@@ -4638,14 +4613,17 @@ ACMD(do_rbuild) {
 		}
 
 		auto room = mods::util::stoi(&room_id[0]);
-		std::size_t r = room.value();
-
-		if(room.value_or(-1) == -1 || r > mods::globals::room_list.size()) {
-			r_error(player,"Invalid room number");
+		int r = room.value_or(-1);
+		if(r < 0){
+			r_error(player,"Invalid vnum. Could not convert to a number.");
 			return;
 		}
-
-		if(mods::builder::create_direction(IN_ROOM(ch),mods::globals::dir_int(direction[0]),room.value())) {
+		r = real_room((room_vnum)r);
+		if(r == NOWHERE){
+			r_error(player, "Could not find a room with that vnum");
+			return;
+		}
+		if(mods::builder::create_direction(player->room(),mods::globals::dir_int(direction[0]),r)) {
 			r_success(player,"Direction created");
 		} else {
 			r_error(player,"Error");
@@ -5056,9 +5034,23 @@ ACMD(do_rbuild) {
 
 	if(args.has_value()) {
 		auto arg_vec = args.value();
+		//pave continue
+		// 0    1 
+		if (arg_vec.size() == 2 && ICMP(arg_vec[1],"continue")){
+			if(player->builder_data && player->builder_data->room_pave_mode){
+				r_error(player,"It looks like you're already paving. Save your existing pavement to begin.");
+				return;
+			}
+			r_success(player,"Continuing pavement.");
+			player->builder_data->room_pave_mode = true;
+			player->builder_data->room_pavements.start_room = player->room();
+			player->builder_data->room_pavements.zone_id = world[player->room()].zone;
+			return;
+		}
 
 		//pave on|off <starting_room_number> <zone_id>
 		// 0    1        2                     3
+		
 		if(arg_vec.size() < 2) {
 			r_error(player,"Please specify on or off as the second argument");
 			return;

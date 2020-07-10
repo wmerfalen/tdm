@@ -65,7 +65,7 @@ std::tuple<int16_t,std::string> parse_sql_zones();
 int parse_sql_objects();
 void parse_sql_mobiles();
 int parse_sql_shops();
-std::vector<room_data> world;	/* array of rooms		 */
+std::deque<room_data> world;	/* array of rooms		 */
 room_rnum top_of_world = 0;	/* ref to top element of world	 */
 
 extern char_data *character_list;	/* global linked list of
@@ -1367,15 +1367,12 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 		auto room_records = db_get_all("room");
 		log("parse_sql_rooms[result.size()]->%d",room_records.size());
 		if(room_records.size() == 0){
-			world.reserve(0);
 			return {0,"warning: no room_records fetched from postgres"};
 		}
 
 		if(room_records.size() == 0){
-			world.reserve(0);
 			return {0,"warning: no room_records fetched from postgres"};
 		}
-		world.reserve(room_records.size());
 		for(auto && room_records_row: room_records) {
 			try{
 				//log("DEBUG: room: %d",mods::util::stoi<int>(room_records_row["id"].c_str()));

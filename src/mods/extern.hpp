@@ -12,7 +12,7 @@ extern void hit(char_data* ch,char_data* vict,int type);
 extern std::deque<obj_data> object_list;
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 extern void do_auto_exits(char_data *ch);
-extern std::vector<room_data> world;
+extern std::deque<room_data> world;
 extern int grenade_damage(char_data *ch, char_data *victim, int dam, int attacktype);
 extern char_data* character_list;
 extern std::vector<char_data> mob_proto;

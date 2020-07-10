@@ -4,7 +4,7 @@
 #include "../structs.h"
 #include <vector>
 
-extern std::vector<room_data> world;
+extern std::deque<room_data> world;
 namespace mods::overhead_map {
 	constexpr static uint8_t width = 48;
 	constexpr static uint8_t height = 16;

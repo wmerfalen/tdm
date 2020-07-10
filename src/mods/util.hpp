@@ -25,7 +25,7 @@ static inline std::string operator "" _s(const char* s,uint64_t i) {
 #endif
 #include "weapon-types.hpp"
 
-extern std::vector<room_data> world;
+extern std::deque<room_data> world;
 extern int get_number(char **name);
 extern int isname(const char *str, const char *namelist);
 extern struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *number, struct obj_data *list);

@@ -736,21 +736,33 @@ namespace mods {
 					}
 
 					auto cached_room = player->room();
-					int new_room_id = 0;
 					if(world[cached_room].dir_option[door] == nullptr){
 						player->sendln("Creating room in that direction");
-						new_room_id = next_room_number();
-						do{
-							world.emplace_back();
-							world.back().init();
-						}while(new_room_id >= world.size());
+						int new_room_rnum = 0;
+						world.emplace_back();
 						register_room(0);
-						world[new_room_id].number = next_room_vnum();
-						mods::builder::pave_to(player,&world[new_room_id],door,new_room_id);
-						player->set_room(new_room_id);
-						mods::globals::rooms::char_to_room(player->room(),player->cd());
-						look_at_room(player->cd(),0);
-						return false;
+						int new_room_vnum = next_room_vnum();
+						auto & w = world.back();
+						w.number = new_room_vnum;
+						new_room_rnum = world.size() - 1;
+
+						world[cached_room].set_dir_option(door,
+								"general_description",
+								"keyword",
+								EX_ISDOOR,
+								0,
+								new_room_rnum
+						);
+						w.set_dir_option(
+								OPPOSITE_DIR(door),
+								"general description",
+								"keyword",
+								EX_ISDOOR,
+								0,
+								cached_room
+						);
+						mods::builder::add_room_to_pavements(player,cached_room);
+						mods::builder::add_room_to_pavements(player,new_room_rnum);
 					}
 				}
 			}
@@ -817,10 +829,10 @@ namespace mods {
 					return;
 				}
 				auto place = std::find(
-					mods::globals::room_list[room_id].begin(),
-					mods::globals::room_list[room_id].end(),
-					player
-				);
+						mods::globals::room_list[room_id].begin(),
+						mods::globals::room_list[room_id].end(),
+						player
+						);
 				if(place != mods::globals::room_list[room_id].end()){
 					mods::globals::room_list[room_id].erase(place);
 				} else {

@@ -1,6 +1,6 @@
 #include "deferred.hpp"
 #include "player.hpp"
-extern std::vector<room_data> world;
+extern std::deque<room_data> world;
 extern player_ptr_t ptr_by_uuid(uuid_t);
 namespace mods {
 	deferred::lambda_queue_iterator deferred::push(uint64_t ticks_in_future,std::function<void()> lambda) {

@@ -4,7 +4,7 @@
 #include "item-types.hpp"
 #include "../globals.hpp"
 
-extern std::vector<room_data> world;
+extern std::deque<room_data> world;
 namespace mods::flashbang {
 #define mentoc_flashbang_debug(a) std::cerr << "[flashbang::affect][debug]: '" << a << "'\n"; 
 	inline void affect_room(room_rnum room, obj_ptr_t& object){
