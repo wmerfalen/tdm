@@ -423,8 +423,8 @@ BLOCK_SIZE	mail.h	29;"	d
 BOARD_MAGIC	boards.h	17;"	d
 BOARD_RNUM	boards.h	41;"	d
 BOARD_VNUM	boards.h	36;"	d
-BOOL_CASE	db.cpp	1724;"	d	file:
-BOOL_CASE	db.cpp	1788;"	d	file:
+BOOL_CASE	db.cpp	1733;"	d	file:
+BOOL_CASE	db.cpp	1797;"	d	file:
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ARMOR_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::armor
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ATTACHMENT_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::attachment
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_CONSUMABLE_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::consumable
@@ -486,8 +486,8 @@ CAP_ALL	mods/util.hpp	/^	static constexpr uint8_t CAP_ALL = 0;$/;"	m	namespace:m
 CAP_ANY	mods/util.hpp	/^	static constexpr uint8_t CAP_ANY = 0;$/;"	m	namespace:mods::util
 CAP_SINGLE	mods/util.hpp	/^	static constexpr uint8_t CAP_SINGLE = 0;$/;"	m	namespace:mods::util
 CARPET	structs.h	/^			CARPET,$/;"	m	struct:room_data	typeref:enum:room_data::
-CASE	db.cpp	1721;"	d	file:
-CASE	db.cpp	1787;"	d	file:
+CASE	db.cpp	1730;"	d	file:
+CASE	db.cpp	1796;"	d	file:
 CASE_MOON	mods/date-time.cpp	172;"	d	file:
 CAST_POTION	spells.h	18;"	d
 CAST_SCROLL	spells.h	21;"	d
@@ -1673,14 +1673,14 @@ MAX_TITLE_LENGTH	structs.h	679;"	d
 MAX_TONGUE	structs.h	682;"	d
 MAX_TRADE	shop.h	82;"	d
 MEMORY	utils.h	355;"	d
-MENTOC_ABIL_SET	db.cpp	1068;"	d	file:
+MENTOC_ABIL_SET	db.cpp	1069;"	d	file:
 MENTOC_ARMOR_MEMBERS_TUPLE	mods/item-types.hpp	198;"	d
 MENTOC_ARMOR_TYPES_SEQUENCE	mods/item-types.hpp	182;"	d
 MENTOC_ATTACHMENT_MEMBERS_TUPLE	mods/item-types.hpp	166;"	d
 MENTOC_ATTACHMENT_TYPES_SEQUENCE	mods/item-types.hpp	153;"	d
 MENTOC_BASE_MEMBERS	mods/yaml.hpp	50;"	d
 MENTOC_BASE_MEMBERS_SET	mods/yaml.hpp	63;"	d
-MENTOC_BITVECTOR	mods/builder.cpp	3406;"	d	file:
+MENTOC_BITVECTOR	mods/builder.cpp	3407;"	d	file:
 MENTOC_CONSUMABLE_MEMBERS_TUPLE	mods/item-types.hpp	220;"	d
 MENTOC_CONSUMABLE_TYPES_SEQUENCE	mods/item-types.hpp	211;"	d
 MENTOC_DATA_CLASS	mods/weapon-types.hpp	135;"	d
@@ -1738,8 +1738,8 @@ MENTOC_LAZY_COMP	mods/doors.hpp	241;"	d
 MENTOC_LAZY_COMP	mods/doors.hpp	252;"	d
 MENTOC_LAZY_INT	mods/builder.cpp	1588;"	d	file:
 MENTOC_LAZY_INT	mods/builder.cpp	1607;"	d	file:
-MENTOC_LAZY_ME	mods/builder.cpp	2826;"	d	file:
-MENTOC_LAZY_ME	mods/builder.cpp	2835;"	d	file:
+MENTOC_LAZY_ME	mods/builder.cpp	2827;"	d	file:
+MENTOC_LAZY_ME	mods/builder.cpp	2836;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	414;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	423;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	430;"	d	file:
@@ -1777,10 +1777,10 @@ MENTOC_PLAYER_NULL_CHECK	mods/builder.cpp	974;"	d	file:
 MENTOC_PREAMBLE	globals.hpp	36;"	d
 MENTOC_RIFLE_MEMBERS_TUPLE	mods/item-types.hpp	65;"	d
 MENTOC_RIFLE_TYPES_SEQUENCE	mods/item-types.hpp	56;"	d
-MENTOC_SHOW_FLAG	mods/builder.cpp	3442;"	d	file:
-MENTOC_SHOW_OBJ	mods/builder.cpp	2233;"	d	file:
-MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	2225;"	d	file:
-MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	2217;"	d	file:
+MENTOC_SHOW_FLAG	mods/builder.cpp	3443;"	d	file:
+MENTOC_SHOW_OBJ	mods/builder.cpp	2234;"	d	file:
+MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	2226;"	d	file:
+MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	2218;"	d	file:
 MENTOC_T	mods/aoe.hpp	32;"	d
 MENTOC_T	mods/aoe.hpp	55;"	d
 MENTOC_T	mods/lmdb.hpp	68;"	d
@@ -1804,7 +1804,7 @@ MENTOC_TO_STR	mods/weapon.hpp	305;"	d
 MENTOC_TO_STR	mods/weapon.hpp	311;"	d
 MENTOC_TRAP_MEMBERS_TUPLE	mods/item-types.hpp	262;"	d
 MENTOC_TRAP_TYPES_SEQUENCE	mods/item-types.hpp	259;"	d
-MENTOC_TYPE	mods/builder.cpp	3380;"	d	file:
+MENTOC_TYPE	mods/builder.cpp	3381;"	d	file:
 MENTOC_TYPE_LIST_IMPL	mods/item-types.hpp	517;"	d
 MENTOC_UPTR	structs.h	1017;"	d
 MENTOC_UPTR	structs.h	1019;"	d
@@ -1812,7 +1812,7 @@ MENTOC_USING_CT	mods/item-types.hpp	292;"	d
 MENTOC_USING_CT_IMPL	mods/item-types.hpp	289;"	d
 MENTOC_WEAPON	mods/builder.cpp	129;"	d	file:
 MENTOC_WEAPON	mods/builder.cpp	145;"	d	file:
-MENTOC_WEAR	mods/builder.cpp	3363;"	d	file:
+MENTOC_WEAR	mods/builder.cpp	3364;"	d	file:
 MENTOC_YAML_DESC	mods/item-types.hpp	301;"	d
 MENTOC_YAML_DESC_IMPL	mods/item-types.hpp	300;"	d
 MENU	config.cpp	/^const char *MENU =$/;"	v
@@ -2222,8 +2222,8 @@ Q_TRIGGER_KEY	mods/quests.cpp	8;"	d	file:
 RADIATION	mods/aoe.hpp	/^		RADIATION, \/** Radioactive fallout *\/$/;"	e	enum:mods::aoe::types_t
 RADIOACTIVE	structs.h	/^			RADIOACTIVE, \/** actively emitting radioactivity *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 RANGE	act.wizard.cpp	2358;"	d	file:
-RANGE	db.cpp	1727;"	d	file:
-RANGE	db.cpp	1789;"	d	file:
+RANGE	db.cpp	1736;"	d	file:
+RANGE	db.cpp	1798;"	d	file:
 RANGED_ATTACK	mods/weapon-types.hpp	/^		RANGED_ATTACK,$/;"	e	enum:mods::weapon::capabilities::cap_t
 RARE	mods/randomized-items.hpp	/^	RARE,$/;"	e	enum:mods::rarity_enum_t
 RARE	mods/rarity.hpp	/^		constexpr static float RARE = 0.05034415;$/;"	m	namespace:mods::rarity
@@ -3205,12 +3205,12 @@ YOURE_INJURED	mods/values.hpp	/^			static const char* YOURE_INJURED=MSG_YOURE_IN
 YamlFeedExceptionInfo	mods/object-utils.hpp	/^		YamlFeedExceptionInfo($/;"	f	struct:mods::object_utils::YamlFeedExceptionInfo
 YamlFeedExceptionInfo	mods/object-utils.hpp	/^	struct YamlFeedExceptionInfo {$/;"	s	namespace:mods::object_utils
 Yes	mods/catch.hpp	/^			Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
-Z	db.cpp	1842;"	d	file:
-Z	db.cpp	1850;"	d	file:
-ZONE_ERROR	db.cpp	2186;"	d	file:
+Z	db.cpp	1851;"	d	file:
+Z	db.cpp	1859;"	d	file:
+ZONE_ERROR	db.cpp	2195;"	d	file:
 ZON_PREFIX	db.h	71;"	d
 ZOOM	mods/weapon-types.hpp	/^		ZOOM,$/;"	e	enum:mods::weapon::capabilities::cap_t
-ZO_DEAD	db.cpp	2105;"	d	file:
+ZO_DEAD	db.cpp	2114;"	d	file:
 Z_KINGS_C	castle.cpp	31;"	d	file:
 _ARPA_TELNET_H	telnet.h	37;"	d
 _BSD_SNPRINTF_H	bsd-snprintf.h	41;"	d
@@ -3339,9 +3339,9 @@ __MENTOC_MODS_deferred_HEADER__	mods/deferred.hpp	2;"	d
 __MENTOC_MODS_prefs_HEADER__	mods/prefs.hpp	2;"	d
 __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
 __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__	mobact.cpp	42;"	d	file:
-__MENTOC_PLR	db.cpp	2573;"	d	file:
+__MENTOC_PLR	db.cpp	2582;"	d	file:
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
-__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	933;"	d	file:
+__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	942;"	d	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	d
 __MENTOC_STRING_LIT__	mods/util.hpp	21;"	d
 __MENTOC_TYPES_HEADER__	types.hpp	2;"	d
@@ -5015,6 +5015,8 @@ immortal	mods/immortal.hpp	/^namespace mods::immortal {$/;"	n	class:mods
 imotd	db.cpp	/^char *imotd = NULL;		\/* message of the day - immorts *\/$/;"	v
 implementor_mode	mods/player.cpp	/^	bool player::implementor_mode() const{$/;"	f	class:mods::player
 implementors	mods/acl_list.cpp	/^		static player_acl_list_t implementors;$/;"	m	namespace:mods::acl_list::list_container	file:
+import	structs.cpp	/^		void char_data::import(const char_data* o){$/;"	f	class:char_data
+import	structs.cpp	/^		void mob_special_data::import(const mob_special_data& other){$/;"	f	class:mob_special_data
 import_room	mods/builder.cpp	/^	int import_room(struct room_data* room) {$/;"	f	namespace:mods::builder
 in_addr	sysdep.h	/^struct in_addr {$/;"	s
 in_obj	structs.h	/^		obj_data *in_obj;       \/* In what object NULL when none    *\/$/;"	m	struct:obj_data
@@ -5039,6 +5041,7 @@ init	mods/player.cpp	/^	void player::init(){$/;"	f	class:mods::player
 init	mods/rand.hpp	/^	static void init() {$/;"	f	namespace:mods::rand
 init	shop.cpp	/^void shop_data<TOrmType,T,R>::init(){$/;"	f	class:shop_data
 init	structs.cpp	/^		void char_data::init(){$/;"	f	class:char_data
+init	structs.cpp	/^		void mob_special_data::init(){$/;"	f	class:mob_special_data
 init	structs.cpp	/^		void room_data::init(){$/;"	f	class:room_data
 init	structs.cpp	/^void obj_data::init(){$/;"	f	class:obj_data
 init	structs.cpp	/^void obj_flag_data::init(){$/;"	f	class:obj_flag_data
@@ -5553,7 +5556,7 @@ message_len	boards.h	/^	int	message_len;  \/* size of message text (for file wri
 message_sell	shop.h	/^	mods::string message_sell;		\/* Message when player sells item	*\/$/;"	m	struct:shop_data
 meta_utils	mods/meta_utils.cpp	/^namespace mods::meta_utils {$/;"	n	class:mods	file:
 meta_utils	mods/meta_utils.hpp	/^namespace mods::meta_utils {$/;"	n	class:mods
-mgdp_debug	globals.cpp	935;"	d	file:
+mgdp_debug	globals.cpp	944;"	d	file:
 min_level	spells.h	/^	int min_level[NUM_CLASSES];$/;"	m	struct:spell_info_type
 min_position	spells.h	/^	byte min_position;	\/* Position for caster	 *\/$/;"	m	struct:spell_info_type
 min_rent_cost	config.cpp	/^int min_rent_cost = 100;$/;"	v
@@ -6088,7 +6091,7 @@ prune_crlf	utils.cpp	/^void prune_crlf(char *txt) {$/;"	f
 psendln	mods/player.cpp	/^	void player::psendln(mods::string& str) {$/;"	f	class:mods::player
 psendln	mods/player.cpp	/^	void player::psendln(std::string_view str) {$/;"	f	class:mods::player
 psg1	mods/weapon.cpp	/^	obj_data_ptr_t psg1(){$/;"	f	namespace:mods::weapon
-psm_debug	db.cpp	1038;"	d	file:
+psm_debug	db.cpp	1039;"	d	file:
 psyop_skillset	class.cpp	/^std::string psyop_skillset() {$/;"	f
 pt_allowed	config.cpp	/^int pt_allowed = NO;$/;"	v
 ptr	globals.cpp	/^player_ptr_t ptr(char_data* in_ch){$/;"	f

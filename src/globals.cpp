@@ -466,11 +466,12 @@ namespace mods {
 				log("SYSERR: requested mob_proto index is invalid: ", i ,". mob_proto.size() is currently: ", mob_proto.size(), ". Ignoring...");
 				return nullptr;
 			}
+			std::cerr << "[mob_vnum]: " << nr << ", mob_rnum:" << i << "\n";
 
 			auto & mob = mob_list.emplace_back(std::make_shared<mods::npc>(i));
 			mob->position() = POS_STANDING;
-			for(i = 0; i < NUM_WEARS; i++) {
-				GET_EQ(mob->cd(), i) = nullptr;
+			for(unsigned num_wears_i = 0; num_wears_i < NUM_WEARS; num_wears_i++) {
+				GET_EQ(mob->cd(), num_wears_i) = nullptr;
 			}
 			mob->cd()->carrying = nullptr;
 			mob->max_hp() = rand_number(mob->hp(), mob->mana());
@@ -494,6 +495,14 @@ namespace mods {
 			mob->player_ptr()->set_type(mods::player::player_type_enum_t::MOB);
 			mob_ptrmap[mob->cd()] = mob->player_ptr();
 			player_map[mob->uuid()] = mob->player_ptr();
+
+			std::cerr << "[mob_specials via read_mobile_ptr]:" << i << "\n";
+			std::cerr << "[mob_specials via read_mobile_ptr]:" << mob->cd()->mob_specials.extended_mob_type << "\n";
+			std::cerr << "[mob_specials via read_mobile_ptr]:" << mob->cd()->mob_specials.extended_mob_type << "\n";
+			std::cerr << "[mob_specials via read_mobile_ptr]:" << mob->cd()->mob_specials.extended_mob_type << "\n";
+			std::cerr << "[mob_specials via read_mobile_ptr]:" << mob->cd()->mob_specials.extended_mob_type << "\n";
+			std::cerr << "[mob_specials via read_mobile_ptr]:" << mob->cd()->mob_specials.extended_mob_type << "\n";
+			mods::mobs::decorate(mob->uuid());
 			return mob;
 		}
 		uuid_t obj_uuid() {

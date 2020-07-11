@@ -1,6 +1,8 @@
 #include "mini-gunner.hpp"
-
+#include <map>
+#include <memory>
 namespace mods::mobs {
+	static std::map<uuid_t,std::shared_ptr<mini_gunner>> mini_gunners;
 #define __MENTOC_MODS_MOBS_MINI_GUNNER_SHOW_DEBUG__
 #ifdef __MENTOC_MODS_MOBS_MINI_GUNNER_SHOW_DEBUG__
 #define mini_debug(a) std::cerr << "[mods::mobs::mini_gunner][FILE:'" << __FILE__ << "'][LINE:" << __LINE__ << "]->'" << a << "'\n";
@@ -30,5 +32,8 @@ namespace mods::mobs {
 	void mini_gunner::init(){
 		this->uuid = 0;
 		this->loaded = false;
+	}
+	void free_mob(uuid_t uuid){
+		mini_gunners.erase(uuid);
 	}
 };

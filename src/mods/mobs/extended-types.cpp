@@ -1,6 +1,28 @@
 #include "extended-types.hpp"
 #include "../util.hpp"
+#include "mini-gunner.hpp"
 
+namespace mods::mobs {
+	void decorate(uuid_t mob_id){
+		auto p = ptr_by_uuid(mob_id);
+		if(!p){
+			std::cerr << "[mods::mobs::decorate] NOT-FOUND cant find by uuid:" << mob_id << "\n";
+			return;
+		}
+		std::cerr << "[mods::mobs::decorate] FOUND by uuid:" << mob_id << "\n";
+		auto ch = p->cd();
+		switch(ch->mob_specials.extended_mob_type){
+			default:
+			case extended_types_t::NONE:
+				std::cerr << "[extended type of mob isn't handled]\n";
+				return;
+			case extended_types_t::MINI_GUNNER:
+				std::cerr << "[found mini-gunner >:)]\n";
+				return;
+		}
+	}
+
+};
 
 namespace mods::mobs::extended_types {
 	std::vector<std::string> strings(){

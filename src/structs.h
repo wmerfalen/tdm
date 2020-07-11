@@ -1411,7 +1411,13 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 			{
 
 			}
+		mob_special_data(const mob_special_data& copy){
+			std::cerr << "copy constructor [mob_special_data]\n";
+			this->import(copy);
+		}
 		~mob_special_data() = default;
+		void import(const mob_special_data& m);
+		void init();
 	};
 
 
@@ -1595,6 +1601,12 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		};
 		~char_data() = default;
 		char_data(char_data* o);
+		char_data(const char_data& other){
+			std::cerr << "char_data copy constructor\n";
+			this->init();
+			this->import(&other);
+		}
+		void import(const char_data*);
 		void init();
 		int pfilepos;			 /* playerfile pos		  */
 		uuid_t uuid;

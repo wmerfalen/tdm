@@ -170,6 +170,11 @@ bool obj_data::flagged(int value){
 			std::fill(m_passwd.begin(),m_passwd.end(),0);
 		}
 		char_data::char_data(char_data* o){
+			std::cerr << "[char_data] ptr copy constructor\n";
+			this->import(o);
+		}
+		void char_data::import(const char_data* o){
+			std::cerr << "[char_data][import] ptr copy constructor\n";
 			has_desc = false;
 			desc = nullptr;
 			pfilepos = o->pfilepos;
@@ -189,7 +194,7 @@ bool obj_data::flagged(int value){
 			points = o->points;        /* Points                        */
 			char_specials = o->char_specials;  /* PC/NPC specials    */
 			player_specials = o->player_specials; /* PC specials      */
-			mob_specials = o->mob_specials;  /* NPC specials     */
+			mob_specials.import(o->mob_specials);  /* NPC specials     */
 			affected = o->affected;       /* affected by what spells       */
 			for(unsigned i = 0; i < NUM_WEARS; i++){
 				equipment[i] = o->equipment[i];/* Equipment array               */
@@ -207,6 +212,7 @@ bool obj_data::flagged(int value){
 			builder_data = o->builder_data;
 		}
 		void char_data::init(){
+			std::cerr << "[char_data][init]\n";
 			has_desc = false;
 			desc.reset();
 			pfilepos = 0;
@@ -220,6 +226,7 @@ bool obj_data::flagged(int value){
 			drone_owner = 0;
 			drone_simulate = 0;
 			drone_uuid = 0;
+			mob_specials.init();
 			/** TODO: do something smart with this.. maybe call .init() on them 
 				memset(&real_abils,0,sizeof(real_abils));
 				memset(&aff_abils,0,sizeof(aff_abils));
@@ -458,6 +465,39 @@ bool obj_data::flagged(int value){
 		bool room_data::has_texture(texture_type_t t){
 			if(m_textures.size() == 0){ return false; }
 			return std::find(m_textures.begin(),m_textures.end(),t) != m_textures.end();
+		}
+		void mob_special_data::init(){
+			std::cerr << "mob_special_data::init()\n";
+			this->memory.clear();
+			this->attack_type = 0;
+			this->default_pos = 0;
+			this->damnodice = 0;
+			this->damsizedice = 0;
+			this->snipe_tracking = 0;
+			this->behaviour_tree = 0;
+			this->behaviour_tree_flags = 0;
+			this->extended_mob_type = mods::mobs::extended_types_t::NONE;
+		}
+		void mob_special_data::import(const mob_special_data& other){
+			std::cerr << "[mob_special_data]::IMPORT\n";
+			std::cerr << "other.attack_type->" << other.attack_type << "\n";
+			std::cerr << "other.default_pos->" << other.default_pos << "\n";
+			std::cerr << "other.damnodice->" << other.damnodice << "\n";
+			std::cerr << "other.damsizedice->" << other.damsizedice << "\n";
+			std::cerr << "other.snipe_tracking->" << other.snipe_tracking << "\n";
+			std::cerr << "other.behaviour_tree->" << other.behaviour_tree << "\n";
+			std::cerr << "other.behaviour_tree_flags->" << other.behaviour_tree_flags << "\n";
+			std::cerr << "other.extended_mob_type->" << other.extended_mob_type << "\n";
+
+			this->memory = other.memory;
+			this->attack_type = other.attack_type;
+			this->default_pos = other.default_pos;
+			this->damnodice = other.damnodice;
+			this->damsizedice = other.damsizedice;
+			this->snipe_tracking = other.snipe_tracking;
+			this->behaviour_tree = other.behaviour_tree;
+			this->behaviour_tree_flags = other.behaviour_tree_flags;
+			this->extended_mob_type = other.extended_mob_type;
 		}
 		void mob_special_data::clear_behaviour_tree(){
 			this->behaviour_tree = 0;

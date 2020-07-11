@@ -14,6 +14,7 @@ namespace mods::mobs {
 		bool loaded;
 		bool error;
 	};
+	void free_mob(uuid_t uuid);
 };
 
 #endif

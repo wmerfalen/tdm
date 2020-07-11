@@ -41,6 +41,7 @@
 #include "mods/orm/inventory.hpp"
 #include "mods/orm/shop.hpp"
 #include "mods/object-utils.hpp"
+#include "mods/mobs/extended-types.hpp"
 
 namespace mods::rooms {
 	extern void set_sector_type(room_rnum room_id, int sector_type);
@@ -1115,8 +1116,12 @@ void parse_sql_mobiles() {
 		proto.nr = mods::util::stoi<decltype(proto.nr)>(row["mob_virtual_number"]);
 		log("proto.nr: %d", proto.nr);
 		proto.uuid = mods::globals::mob_uuid();
+		proto.mob_specials.init();
+		proto.mob_specials.extended_mob_type = static_cast<mods::mobs::extended_types_t>(row["mob_special_extended_type"].as<uint16_t>());
+		std::cerr << "[mob_specials.extended_mob_type]:" << proto.mob_specials.extended_mob_type << "\n";
 		mob_proto.push_back(proto);
 		mob_proto.back().nr = proto.nr;
+		log("mob_proto.size(): %d",mob_proto.size());
 		log("mob_proto.back().nr: %d", mob_proto.back().nr);
 
 		top_of_mobt = mob_proto.size();
@@ -1126,6 +1131,10 @@ void parse_sql_mobiles() {
 		m_index.func = nullptr;
 		assert(real_mobile(m_index.vnum) == mob_proto.size() -1);
 		mob_index.push_back(m_index);
+	}
+	unsigned i =0;
+	for(auto & m : mob_proto){
+		std::cerr << "[post-load sanity check of mob_specials]: " << i++ << ", emt:'" << m.mob_specials.extended_mob_type <<"\n";
 	}
 	psm_debug("db_get_all mobiles... -> parse_sql_mobiles [end]");
 }

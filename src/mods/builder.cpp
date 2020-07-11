@@ -2098,8 +2098,9 @@ ACMD(do_mbuild) {
 				return;
 			}
 
-			auto obj = mods::globals::read_mobile(index,VIRTUAL - 1);
-			mods::globals::rooms::char_to_room(player->room(),obj);
+			mob_vnum v = mob_proto[index].nr;
+			auto obj = mods::globals::read_mobile_ptr(v,VIRTUAL);
+			mods::globals::rooms::char_to_room(player->room(),obj->cd());
 			r_success(player,"Object created, look on the floor");
 		}
 

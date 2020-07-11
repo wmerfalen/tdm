@@ -8,7 +8,8 @@
 #include <vector>
 
 namespace mods::mobs {
-	enum extended_types_t {
+	using uuid_t = uint64_t;
+	enum extended_types_t : uint16_t {
 		NONE =0,
 		MINI_GUNNER,
 		INNOCENT,
@@ -29,6 +30,7 @@ namespace mods::mobs {
 		{LUNATIC,"LUNATIC"},
 		{GRUNT,"GRUNT"},
 	};
+	void decorate(uuid_t mob_id);
 
 	namespace desc {
 	static const std::string mini_gunner = std::string("The mob will have a backpack and minigun which he/she will use as the main weapon.") +
