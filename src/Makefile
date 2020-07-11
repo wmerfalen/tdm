@@ -64,7 +64,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/affects mods/item mods/weapon-types mods/sensor-grenade \
 					 mods/calc_visibility mods/events mods/chargen mods/classes/base \
 					 mods/object-utils mods/camera mods/orm/shop shop mods/shop mods/rand \
-					 mods/help mods/rooms mods/weapons/damage-types mods/injure mods/skills 
+					 mods/help mods/rooms mods/weapons/damage-types mods/injure mods/skills \
+					 mods/mobs/mini-gunner mods/mobs/extended-types
 
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
@@ -76,13 +77,14 @@ clean:
 		rm -f $(addprefix $(builddir)/,*.o *.d  mods/*.o \
 		mods/*.d mods/orm/*.o mods/orm/*.d \
 		mods/classes/*.o mods/classes/*.d) \
+		mods/mobs/*.o mods/mobs/*.d) \
 		rm -f $(builddir)/mods/testing/lmdb/*.o \
 		rm -f $(builddir)/mods/testing/lmdb/*.d 
 
 $(builddir):
 	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb \
 		$(builddir)/sql $(builddir)/mods/orm/ \
-		$(builddir)/mods/weapons/
+		$(builddir)/mods/weapons/ $(builddir)/mods/mobs/
 
 $(builddir)/%.o: %.cpp
 	$(CC) -c $(FLAGS) -o $@ $<

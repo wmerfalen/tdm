@@ -73,6 +73,7 @@ namespace mods::behaviour_tree_impl {
 		node do_nothing(node_type::DO_NOTHING);
 		node snipe_tracking(node_type::SELECTOR);
 		node sentinel_snipe_tracking(node_type::SELECTOR);
+		node mini_gunner(node_type::SELECTOR);
 		auto node_mob_has_snipe_capability = node::create_leaf(
 				[](argument_type mob) -> status {
 					if(mob.has_weapon_capability(mods::weapon::mask::snipe)){
@@ -202,9 +203,21 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 			})
 			})/** End create_sequence */
 		);// end append_child
+
+		mini_gunner.append_child(node::create_sequence({
+				node::create_leaf([](argument_type mob) -> status {
+						return status::SUCCESS;
+						}),
+				node::create_leaf([](argument_type mob) -> status {
+						return status::SUCCESS;
+						}
+				)
+				})
+		);
 		add_tree("do_nothing",do_nothing);
 		add_tree("snipe_tracking",snipe_tracking);
 		add_tree("sentinel_snipe_tracking",sentinel_snipe_tracking);
+		add_tree("mini_gunner",mini_gunner);
 
 		/**
 		 * Suspicious roaming tree. 

@@ -71,7 +71,7 @@ room_rnum top_of_world = 0;	/* ref to top element of world	 */
 extern char_data *character_list;	/* global linked list of
 																					 * chars	 */
 std::vector<index_data> mob_index;	/* index table for mobile file	 */
-std::vector<char_data> mob_proto;	/* prototypes for mobs		 */
+std::deque<char_data> mob_proto;	/* prototypes for mobs		 */
 mob_rnum top_of_mobt = 0;	/* top of mobile index table	 */
 
 std::deque<std::shared_ptr<obj_data>> obj_list;
@@ -83,7 +83,7 @@ namespace mods::globals {
 	extern std::map<room_rnum,std::shared_ptr<shop_data_t>> room_shopmap;
 };
 std::vector<index_data> obj_index;	/* index table for object file	 */
-std::vector<obj_data> obj_proto;	/* prototypes for objs		 */
+std::deque<obj_data> obj_proto;	/* prototypes for objs		 */
 std::vector<shop_data_t> shop_proto;	/* prototypes for objs		 */
 obj_rnum top_of_objt = 0;	/* top of object index table	 */
 

@@ -20,6 +20,7 @@
 #include "orm/room.hpp"
 #include "rooms.hpp"
 #include <algorithm> // for std::min
+#include "mobs/extended-types.hpp"
 namespace mods {  struct player; };
 namespace mods { struct extra_desc_data; }; 
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
@@ -1016,6 +1017,7 @@ namespace mods::builder {
 			p_map["mob_damsizedice"] = "0"; //TODO: find this
 			p_map["mob_damroll"] = "0"; //TODO: find this
 			p_map["mob_class"] = "0"; //TODO: find this
+			p_map["mob_special_extended_type"] = std::to_string(obj->mob_specials.extended_mob_type);
 			auto txn_02 = txn();
 			std::string sql = "";
 
@@ -1745,6 +1747,21 @@ void present_action(player_ptr_t & player, std::size_t index){
 		mods::builder_util::list_line(player, "action", flag_values);
 		return;
 }
+void present_mob_specials(player_ptr_t & player, std::size_t index){
+		std::string flag_values;
+		bool found = false;
+		auto obj = grab_mobile(index,found);
+		if(!found){
+			return;
+		}
+		std::string payload = "";
+		payload = "extended_mob_type: '";
+		payload += mods::mobs::extended_types::to_string(obj->mob_specials.extended_mob_type);
+		payload += "'";
+		mods::builder_util::list_line(player, "mob_specials", payload);
+		return;
+}
+
 
 ACMD(do_mbuild) {
 	/**
@@ -1850,6 +1867,24 @@ ACMD(do_mbuild) {
 			"  {gld}|:: sex {red}see mbuild help sex{/red}{/gld}\r\n" <<
 			"  {gld}|:: default_position {red}see mbuild help default_position{/red}{/gld}\r\n" <<
 			"  {gld}|:: action {red}see mbuild help action{/red}{/gld}\r\n" <<
+
+			" {grn}NEW FEATURE [as of: 2020-07-10]{/grn}\r\n" <<
+			" {red}FEATURE: extended-type{/red}\r\n" <<
+			" {grn}mbuild{/grn} {red}extended-type <mob_id> <type>{/red}\r\n" <<
+			"  |--> will set the mob's extended type to <type>. The list of\r\n" <<
+			"  available mob types follow.\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}mbuild{/wht} {gld}extended-type 5 INNOCENT{/gld}\r\n" <<
+			"  |:: (will mark the mob (using the rnum) as INNOCENT)\r\n" <<
+			"  {gld}|:: -:[extended-types]:-{/gld}\r\n";
+			for(auto type : mods::mobs::extended_types::strings()){
+				*player << "  {gld}|:: " << type << "{/gld}\r\n";
+			}
+			*player << 
+			"  |::{red} for a description, type mbuild describe <type>\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}mbuild{/wht} {gld}describe INNOCENT{/gld}\r\n" <<
+			"[documentation written on 2020-07-10]\r\n" <<
 			" {grn}mbuild{/grn} {red}save <mob_id>{/red}\r\n" <<
 			" {grn}mbuild{/grn} {red}show <mob_id>{/red}\r\n" <<
 			" {grn}mbuild{/grn} {red}instantiate <mob_id>{/red}\r\n" <<
@@ -1862,6 +1897,55 @@ ACMD(do_mbuild) {
 		player->page(0);
 		return;
 	}
+	{
+		auto args = mods::util::subcmd_args<9,args_t>(argument,"describe");
+		if(args.has_value()){
+			//[ -  ] [ 0        ] [ 1    ]
+			//mbuild <describe>    <type>
+			auto arg_vec = args.value();
+			if(arg_vec.size() < 2){
+				r_error(player,"Please specify a type");
+				return;
+			}
+			auto desc = mods::mobs::extended_types::description(arg_vec[1]);
+			r_success(player,desc.c_str());
+			return;
+		}
+	}
+
+	{
+		auto args = mods::util::subcmd_args<50,args_t>(argument,"extended-type");
+		if(args.has_value()){
+			//[ -  ] [ 0        ]    [ 1    ]  [  2   ]
+			//mbuild <extended-type> <mob-id>  <type>
+			auto arg_vec = args.value();
+			if(arg_vec.size() < 3){
+				r_error(player,"Please specify a mob-id and extended-type");
+				return;
+			}
+			auto i_value = mods::util::stoi(arg_vec[1]);
+			if(!i_value.has_value()){
+				r_error(player,"Please specify a valid mob-id");
+				return;
+			}
+			auto mob_id = i_value.value();
+			std::string str_type = arg_vec[2];
+			auto et_opt = mods::mobs::extended_types::from_string(str_type);
+			if(et_opt.has_value() == false){
+				r_error(player, "Unrecognized extended type");
+				return;
+			}
+			auto opt = et_opt.value();
+			if(mob_proto.size() <= mob_id){
+				r_error(player, "Mob-id is out of bounds.");
+				return;
+			}
+			mob_proto[mob_id].mob_specials.extended_mob_type = opt;
+			r_success(player,"Set mob type.");
+			return;
+		}
+	}
+	
 	auto args = mods::util::subcmd_args<11,args_t>(argument,"action:add");
 	if(args.has_value()){
 		//[ -  ] [ 0        ] [ 1    ] [ 2  ]
@@ -2179,6 +2263,7 @@ ACMD(do_mbuild) {
 		MENTOC_SHOW_OBJ(hitroll,points.hitroll);
 		MENTOC_SHOW_OBJ(damroll,points.damroll);
 		present_action(player,i);
+		present_mob_specials(player,i);
 		player->pager_end();
 		player->page(0);
 		return;

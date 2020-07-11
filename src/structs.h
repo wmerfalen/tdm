@@ -27,6 +27,7 @@
 #include "mods/yaml.hpp"
 #include "mods/weapon-types.hpp"
 #include "mods/item-types.hpp"
+#include "mods/mobs/extended-types.hpp"
 extern void log(const char* format,...);
 
 #ifdef __MENTOC_USE_PQXX_RESULT__
@@ -1390,6 +1391,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 
 	/* Specials used by NPCs, not PCs */
 	struct mob_special_data {
+		using extended_mob_type_t = mods::mobs::extended_types_t;
 		memory_rec_t memory;
 		byte	attack_type;        /* The Attack Type Bitvector for NPC's     */
 		byte default_pos;        /* Default position for NPC                */
@@ -1398,12 +1400,14 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		uuid_t snipe_tracking;
 		uint16_t behaviour_tree;
 		uint64_t behaviour_tree_flags;
+		extended_mob_type_t extended_mob_type;
 		void set_behaviour_tree(std::string_view name);
 		void clear_behaviour_tree();
 		mob_special_data() : memory({}),
 			attack_type(0),default_pos(POS_STANDING),
 			damnodice(0),damsizedice(0),snipe_tracking(0),
-			behaviour_tree(0),behaviour_tree_flags(0)
+			behaviour_tree(0),behaviour_tree_flags(0),
+			extended_mob_type(extended_mob_type_t::NONE)
 			{
 
 			}
