@@ -449,24 +449,20 @@ namespace mods {
 			return read_mobile_ptr(nr,type)->cd();
 		}
 		std::shared_ptr<mods::npc> read_mobile_ptr(const mob_vnum & nr,const int & type){
-			log("DEBUG: mods::globals::read_mobile. vnum: %d",nr);
 			mob_rnum i;
 
 			if(type == VIRTUAL) {
-				log("DEBUG: mods::globals::read_mobile %d VIRTUAL",nr);
 				if((i = real_mobile(nr)) == NOBODY) {
 					log("WARNING: Mobile vnum ",nr," does not exist in database.");
 					return nullptr;
 				}
 			} else {
-				log("DEBUG: mods::globals::read_mobile %d REAL",nr);
 				i = nr;
 			}
 			if(std::size_t(i) >= mob_proto.size()){
 				log("SYSERR: requested mob_proto index is invalid: ", i ,". mob_proto.size() is currently: ", mob_proto.size(), ". Ignoring...");
 				return nullptr;
 			}
-			std::cerr << "[mob_vnum]: " << nr << ", mob_rnum:" << i << "\n";
 
 			auto & mob = mob_list.emplace_back(std::make_shared<mods::npc>(i));
 			mob->position() = POS_STANDING;

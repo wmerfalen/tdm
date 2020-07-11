@@ -3341,7 +3341,7 @@ __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
 __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__	mobact.cpp	42;"	d	file:
 __MENTOC_PLR	db.cpp	2582;"	d	file:
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
-__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	935;"	d	file:
+__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	931;"	d	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	d
 __MENTOC_STRING_LIT__	mods/util.hpp	21;"	d
 __MENTOC_TYPES_HEADER__	types.hpp	2;"	d
@@ -5556,7 +5556,7 @@ message_len	boards.h	/^	int	message_len;  \/* size of message text (for file wri
 message_sell	shop.h	/^	mods::string message_sell;		\/* Message when player sells item	*\/$/;"	m	struct:shop_data
 meta_utils	mods/meta_utils.cpp	/^namespace mods::meta_utils {$/;"	n	class:mods	file:
 meta_utils	mods/meta_utils.hpp	/^namespace mods::meta_utils {$/;"	n	class:mods
-mgdp_debug	globals.cpp	937;"	d	file:
+mgdp_debug	globals.cpp	933;"	d	file:
 min_level	spells.h	/^	int min_level[NUM_CLASSES];$/;"	m	struct:spell_info_type
 min_position	spells.h	/^	byte min_position;	\/* Position for caster	 *\/$/;"	m	struct:spell_info_type
 min_rent_cost	config.cpp	/^int min_rent_cost = 100;$/;"	v
