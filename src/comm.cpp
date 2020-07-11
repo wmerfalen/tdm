@@ -680,12 +680,10 @@ void game_loop(socket_t mother_desc) {
 			auto player = it->second;
 			mods::globals::current_player = player;
 
-			/*
 			if(mods::auto_login::auto_login_enabled() && player->state() != CON_PLAYING){
 				perform_auto_login(player);
 				break;
 			}
-			*/
 			auto input_status = process_input(player->desc());
 			if(input_status < 0){
 				switch(input_status){
