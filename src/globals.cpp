@@ -495,13 +495,6 @@ namespace mods {
 			mob->player_ptr()->set_type(mods::player::player_type_enum_t::MOB);
 			mob_ptrmap[mob->cd()] = mob->player_ptr();
 			player_map[mob->uuid()] = mob->player_ptr();
-
-			std::cerr << "[mob_specials via read_mobile_ptr]:" << i << "\n";
-			std::cerr << "[mob_specials via read_mobile_ptr]:" << mob->cd()->mob_specials.extended_mob_type << "\n";
-			std::cerr << "[mob_specials via read_mobile_ptr]:" << mob->cd()->mob_specials.extended_mob_type << "\n";
-			std::cerr << "[mob_specials via read_mobile_ptr]:" << mob->cd()->mob_specials.extended_mob_type << "\n";
-			std::cerr << "[mob_specials via read_mobile_ptr]:" << mob->cd()->mob_specials.extended_mob_type << "\n";
-			std::cerr << "[mob_specials via read_mobile_ptr]:" << mob->cd()->mob_specials.extended_mob_type << "\n";
 			mods::mobs::decorate(mob->uuid());
 			return mob;
 		}

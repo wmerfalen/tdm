@@ -174,7 +174,6 @@ bool obj_data::flagged(int value){
 			this->import(o);
 		}
 		void char_data::import(const char_data* o){
-			std::cerr << "[char_data][import] ptr copy constructor\n";
 			has_desc = false;
 			desc = nullptr;
 			pfilepos = o->pfilepos;
@@ -212,7 +211,6 @@ bool obj_data::flagged(int value){
 			builder_data = o->builder_data;
 		}
 		void char_data::init(){
-			std::cerr << "[char_data][init]\n";
 			has_desc = false;
 			desc.reset();
 			pfilepos = 0;
@@ -467,7 +465,6 @@ bool obj_data::flagged(int value){
 			return std::find(m_textures.begin(),m_textures.end(),t) != m_textures.end();
 		}
 		void mob_special_data::init(){
-			std::cerr << "mob_special_data::init()\n";
 			this->memory.clear();
 			this->attack_type = 0;
 			this->default_pos = 0;
@@ -479,16 +476,6 @@ bool obj_data::flagged(int value){
 			this->extended_mob_type = mods::mobs::extended_types_t::NONE;
 		}
 		void mob_special_data::import(const mob_special_data& other){
-			std::cerr << "[mob_special_data]::IMPORT\n";
-			std::cerr << "other.attack_type->" << other.attack_type << "\n";
-			std::cerr << "other.default_pos->" << other.default_pos << "\n";
-			std::cerr << "other.damnodice->" << other.damnodice << "\n";
-			std::cerr << "other.damsizedice->" << other.damsizedice << "\n";
-			std::cerr << "other.snipe_tracking->" << other.snipe_tracking << "\n";
-			std::cerr << "other.behaviour_tree->" << other.behaviour_tree << "\n";
-			std::cerr << "other.behaviour_tree_flags->" << other.behaviour_tree_flags << "\n";
-			std::cerr << "other.extended_mob_type->" << other.extended_mob_type << "\n";
-
 			this->memory = other.memory;
 			this->attack_type = other.attack_type;
 			this->default_pos = other.default_pos;
