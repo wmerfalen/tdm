@@ -12,6 +12,11 @@ namespace mods::debug::pre_game {
 #define DD(a){ std::cerr << "[debug::pre_game][line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"; }
 	namespace fb = ::mods::flashbang;
 	bool run(){
+#define __MENTOC_RUN_PREGAME_EXTRACT_YAML_INFO_CODE__
+#ifdef __MENTOC_RUN_PREGAME_EXTRACT_YAML_INFO_CODE__
+		std::tuple<int,std::string> e = mods::util::extract_yaml_info_from_path("objects/armor/ballistic-helmet.yml");
+		std::cerr << "[type]:'" << std::get<0>(e) << "', yaml_file:'" << std::get<1>(e) << "'\n";
+#endif
 #ifdef __MENTOC_RUN_PREGAME_SKILL_CODE__
 		int count = mods::skills::update_schema_for_player("far");
 		DD("Number of fields updated: " << count);

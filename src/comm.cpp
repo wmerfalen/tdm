@@ -854,7 +854,7 @@ void heartbeat(int pulse) {
 		mods::rooms::affects::process();
 	}
 
-	if(!(pulse % FIRE_DAMAGE_TICK_RESOLUTION)){
+	if(!(pulse % FIRE_DAMAGE_TICK_RESOLUTION())){
 		mods::rooms::process_fire_damage();
 	}
 

@@ -14,10 +14,9 @@ namespace mods::mobs {
 		switch(ch->mob_specials.extended_mob_type){
 			default:
 			case extended_types_t::NONE:
-				std::cerr << "[extended type of mob isn't handled]\n";
 				return;
 			case extended_types_t::MINI_GUNNER:
-				std::cerr << "[found mini-gunner >:)]\n";
+				mini_gunner::create(mob_id);
 				return;
 		}
 	}

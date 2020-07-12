@@ -56,25 +56,8 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SE
 			this->m_feed_file = feed_file.data();
 			this->type = in_type;
 			this->str_type = mods::util::yaml_int_to_string(in_type);
-			std::string s_type = "";
-	switch(in_type){
-	/** !!*****************!! */
-	/** !!UPDATE_ITEM_TYPES!! */
-	/** !!*****************!! */
-#define MENTOC_LAZY_ME(mtype) case mtype: s_type = #mtype; break;
-MENTOC_LAZY_ME(ITEM_RIFLE);
-MENTOC_LAZY_ME(ITEM_EXPLOSIVE);
-MENTOC_LAZY_ME(ITEM_DRONE);
-MENTOC_LAZY_ME(ITEM_GADGET);
-MENTOC_LAZY_ME(ITEM_ATTACHMENT);
-MENTOC_LAZY_ME(ITEM_ARMOR);
-MENTOC_LAZY_ME(ITEM_CONSUMABLE);
-MENTOC_LAZY_ME(ITEM_TRAP);
-#undef MENTOC_LAZY_ME
-		default: break;
-	}
 			m_db_id = 0;
-			s_type = s_type.substr(strlen("ITEM_"));
+			std::string s_type = this->str_type.substr(strlen("ITEM_"));
 			std::transform(s_type.begin(),s_type.end(),s_type.begin(),
 					[](unsigned char c){ return std::tolower(c); });
 #define MENTOC_OBJ_DATA_FEED_DUAL(r,data,CLASS_TYPE) \
@@ -156,6 +139,7 @@ bool obj_data::flagged(int value){
 			return m_ex_descriptions;
 		}
 		char_player_data::char_player_data(){
+			std::cerr << "[char_player_data()] default constructor\n";
 			name.assign("");         /* PC / NPC s name (kill ...  )         */
 			short_descr.assign("");  /* for NPC 'actions'                    */
 			long_descr.assign("");   /* for 'look'             */
@@ -174,6 +158,7 @@ bool obj_data::flagged(int value){
 			this->import(o);
 		}
 		void char_data::import(const char_data* o){
+			std::cerr << "[char_data::import] using ptr\n";
 			has_desc = false;
 			desc = nullptr;
 			pfilepos = o->pfilepos;
@@ -209,6 +194,43 @@ bool obj_data::flagged(int value){
 			disorient = o->disorient;
 			state = o->state;
 			builder_data = o->builder_data;
+		}
+		char_data::~char_data(){
+			std::cerr << "~char_data[" << this->uuid << "\n";
+			has_desc = false;
+			desc.reset();
+			pfilepos = 0;
+			uuid = 0;
+			last_fight_timestamp = 0;
+			nr = 0;
+			in_room = 0;
+			was_in_room = 0;
+			wait = 0;
+			drone = 0;
+			drone_owner = 0;
+			drone_simulate = 0;
+			drone_uuid = 0;
+			mob_specials.init();
+			affected = nullptr;
+			for(unsigned i = 0; i < NUM_WEARS; i++){
+				equipment[i] = nullptr;
+			}
+			carrying = nullptr;
+			/** TODO: m_carrying */
+			next = nullptr;
+			next_fighting = nullptr;
+			followers = nullptr;
+			master = nullptr;
+			player_ptr = nullptr;
+			goal = 0;
+			disorient = 0;
+			state = 0;
+			if(this->builder_data){
+				this->builder_data.reset();
+			}
+			if(this->player_specials){
+				this->player_specials.reset();
+			}
 		}
 		void char_data::init(){
 			has_desc = false;

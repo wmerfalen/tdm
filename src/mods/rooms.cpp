@@ -100,18 +100,18 @@ namespace mods::rooms {
 			uint16_t fire_damage = 0,smoke_damage =0;
 			switch((fs)nd.second.get_affects()[txt::ON_FIRE]){
 				case fs::KINDLING:
-					fire_damage = FIRE_STATUS_KINDLING_DAMAGE;
+					fire_damage = FIRE_STATUS_KINDLING_DAMAGE();
 					break;
 				case fs::COMPLETELY_ON_FIRE:
-					fire_damage = FIRE_STATUS_COMPLETELY_ON_FIRE_DAMAGE;
-					smoke_damage = FIRE_STATUS_COMPLETELY_ON_FIRE_DAMAGE;
+					fire_damage = FIRE_STATUS_COMPLETELY_ON_FIRE_DAMAGE();
+					smoke_damage = FIRE_STATUS_COMPLETELY_ON_FIRE_DAMAGE();
 					break;
 				case fs::SMOLDERING:
-					fire_damage = FIRE_STATUS_SMOLDERING_DAMAGE;
-					smoke_damage = FIRE_STATUS_SMOLDERING_DAMAGE;
+					fire_damage = FIRE_STATUS_SMOLDERING_DAMAGE();
+					smoke_damage = FIRE_STATUS_SMOLDERING_DAMAGE();
 					break;
 				case fs::SMOKING:
-					smoke_damage = FIRE_STATUS_SMOKING_DAMAGE;
+					smoke_damage = FIRE_STATUS_SMOKING_DAMAGE();
 					break;
 				default:
 					return;
@@ -155,12 +155,12 @@ namespace mods::rooms {
 			return;
 		}
 		world[room].add_texture(txt::ON_FIRE);
-		uint32_t ticks = FIRE_EVERY_N_TICKS;
+		uint32_t ticks = FIRE_EVERY_N_TICKS();
 		if(world[room].has_texture(txt::WOODEN_WALLS)){
-			ticks += FIRE_WOODEN_ADDITIONAL_TICKS;
+			ticks += FIRE_WOODEN_ADDITIONAL_TICKS();
 		}
 		if(world[room].has_texture(txt::CARPET)){
-			ticks += mods::values::FIRE_CARPET_ADDITIONAL_TICKS;
+			ticks += mods::values::FIRE_CARPET_ADDITIONAL_TICKS();
 		}
 		fs initial_status = fs::KINDLING;
 		if(has_textures(room, {txt::DRY, txt::GRASS})){

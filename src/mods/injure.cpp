@@ -9,7 +9,7 @@ namespace mods::injure {
 	void injure_player(player_ptr_t& person){
 		send_to_room_except(person->room(), person,"%s is injured!\r\n",person->name().c_str());
 		person->position() = POS_INCAP;
-		person->hp() = mods::values::INJURED_HP;
+		person->hp() = mods::values::INJURED_HP();
 		if(IS_NPC(person->cd())){
 			person->cd()->mob_specials.clear_behaviour_tree();
 			return;
@@ -31,10 +31,10 @@ namespace mods::injure {
 			int amount = 0;
 			switch(type){
 				case ITEM_EXPLOSIVE:
-					amount = victim->max_hp() * mods::values::EXPLOSIVE_CRITICAL_MULTIPLIER;
+					amount = victim->max_hp() * mods::values::EXPLOSIVE_CRITICAL_MULTIPLIER();
 					break;
 				case ITEM_RIFLE:
-					amount = victim->max_hp() * mods::values::RIFLE_CRITICAL_MULTIPLIER;
+					amount = victim->max_hp() * mods::values::RIFLE_CRITICAL_MULTIPLIER();
 					break;
 				default:
 					log("WARNING: using default of / 4 for crit damage due to unrecognized type");

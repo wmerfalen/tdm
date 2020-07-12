@@ -1118,7 +1118,6 @@ void parse_sql_mobiles() {
 		proto.uuid = mods::globals::mob_uuid();
 		proto.mob_specials.init();
 		proto.mob_specials.extended_mob_type = static_cast<mods::mobs::extended_types_t>(row["mob_special_extended_type"].as<uint16_t>());
-		std::cerr << "[mob_specials.extended_mob_type]:" << proto.mob_specials.extended_mob_type << "\n";
 		mob_proto.push_back(proto);
 		mob_proto.back().nr = proto.nr;
 		log("mob_proto.size(): %d",mob_proto.size());
@@ -1131,10 +1130,6 @@ void parse_sql_mobiles() {
 		m_index.func = nullptr;
 		assert(real_mobile(m_index.vnum) == mob_proto.size() -1);
 		mob_index.push_back(m_index);
-	}
-	unsigned i =0;
-	for(auto & m : mob_proto){
-		std::cerr << "[post-load sanity check of mob_specials]: " << i++ << ", emt:'" << m.mob_specials.extended_mob_type <<"\n";
 	}
 	psm_debug("db_get_all mobiles... -> parse_sql_mobiles [end]");
 }
@@ -1166,10 +1161,6 @@ int parse_sql_objects() {
 			std::string obj_file = "g36c.yml";
 			if(strlen(row["obj_file"].c_str())){
 				obj_file = row["obj_file"].c_str();
-			}
-			if(row["obj_type"].as<int>() == 0){
-				std::cerr << "obj_type is zero: " << row["id"].as<int>() << "\n";
-				exit(5);
 			}
 			obj_proto.push_back(obj_data(row["obj_type"].as<int16_t>(),obj_file));
 			auto & proto = obj_proto.back();

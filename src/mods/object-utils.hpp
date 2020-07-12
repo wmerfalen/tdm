@@ -292,6 +292,9 @@ namespace mods::object_utils {
 		if(object_type.compare(#CLASS_TYPE) == 0){\
 			return std::move(create_object(BOOST_PP_CAT(ITEM_,IT_TYPE),yaml_file));\
 		}
+		/** !!*****************!! */
+		/** !!UPDATE_ITEM_TYPES!! */
+		/** !!*****************!! */
 		MENTOC_F_IMPORT(rifle,RIFLE);
 		MENTOC_F_IMPORT(explosive,EXPLOSIVE);
 		MENTOC_F_IMPORT(drone,DRONE);

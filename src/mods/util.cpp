@@ -465,6 +465,40 @@ namespace mods::util {
 #undef MENTOC_LAZY_ME
 		return "unkown-yctl";
 	}
+	std::tuple<int,std::string> extract_yaml_info_from_path(std::string_view path){
+		std::string yaml_file = "",buffer = "", current = "";
+		std::vector<std::string> parts;
+		for(auto ch: path){
+			if(ch == '/' && current.length()){
+				parts.emplace_back(current);
+				current = "";
+				continue;
+			}
+			current += ch;
+		}
+		if(current.length()){
+			parts.emplace_back(current);
+			current = "";
+		}
+		/**
+		 * parts:
+		 * [0] => objects
+		 * [1] => rifle
+		 * [2] => psg1.yml
+		 */
+		if(parts.size() != 3){
+			return {-1,""};
+		}
+#define MENTOC_ITEM_PARSE_IMPL(r,data,CLASS_TYPE)\
+		if(ICMP(parts[1],BOOST_PP_STRINGIZE(CLASS_TYPE))){\
+			return {BOOST_PP_CAT(ITEM_,CLASS_TYPE),parts[2]};\
+		}
+#define MENTOC_ITEM_PARSE \
+BOOST_PP_SEQ_FOR_EACH(MENTOC_ITEM_PARSE_IMPL, ~, MENTOC_ITEM_TYPES_CAPS_SEQ)
+
+		MENTOC_ITEM_PARSE
+		return {-2,""};
+	}
 
 };/** end mods::util */
 

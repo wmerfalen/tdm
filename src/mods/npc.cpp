@@ -3,6 +3,7 @@
 #include "../utils.h"
 namespace mods {
 	npc::npc(const mob_rnum & i){
+		std::cerr << "[npc::npc] constructor with mob_rnum: " << i << "\n";
 		m_shared_ptr = std::move(std::make_shared<char_data>(&mob_proto[i]));
 		m_char_data = m_shared_ptr.get();
 		m_player_ptr = std::make_shared<mods::player>(m_char_data);
@@ -12,6 +13,7 @@ namespace mods {
 	}
 	const mob_vnum& npc::vnum() const { return cd()->nr; }
 	npc::~npc(){
+		std::cerr << "[npc::npc] destructor\n";
 		m_shared_ptr.reset();
 		m_player_ptr.reset();
 	}

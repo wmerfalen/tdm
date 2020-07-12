@@ -277,11 +277,11 @@ namespace mods::weapons::damage_types {
 	namespace elemental {
 		namespace fire {
 			void damage(player_ptr_t& player, uint16_t damage){
-				player->send(mods::values::MSG_FIRE_DAMAGE,damage); 
+				player->send(mods::values::MSG_FIRE_DAMAGE().c_str(),damage); 
 				deal_hp_damage(player,damage);
 			}
 			void smoke_damage(player_ptr_t& player, uint16_t damage){
-				player->send(mods::values::MSG_SMOKE_DAMAGE,damage); 
+				player->send(mods::values::MSG_SMOKE_DAMAGE().c_str(),damage); 
 				deal_hp_damage(player,damage);
 			}
 		};
@@ -360,23 +360,23 @@ namespace mods::weapons::damage_types {
 			if(!victim){
 				continue;
 			}
-			if(dice(1,(100 * scanned_target.distance)) <= mods::values::SPRAY_CHANCE){
-				player->send(msg::HIT);
+			if(dice(1,(100 * scanned_target.distance)) <= mods::values::SPRAY_CHANCE()){
+				player->send(MSG_HIT().c_str());
 				dam += weapon->rifle()->attributes->base_stat_list->at(scanned_target.distance).damage;
 			}
 			/** calculate headshot */
-			if(dice(1,(100 * scanned_target.distance)) <= mods::values::SPRAY_HEADSHOT_CHANCE){
-				player->send(msg::HEADSHOT);
+			if(dice(1,(100 * scanned_target.distance)) <= mods::values::SPRAY_HEADSHOT_CHANCE()){
+				player->send(MSG_HEADSHOT().c_str());
 				dam = victim->hp();
 			}
 			if(scanned_target.distance == crit_range){
 				if(dice(1,(100 * scanned_target.distance)) <= crit_chance){
-					player->send(msg::CRITICAL);
+					player->send(MSG_CRITICAL().c_str());
 					critical_bonus = dice(
 							damage_dice,
 							damage_sides
 					);
-					critical_bonus /= mods::values::SPRAY_CRITICAL_REDUCTION_DIVISOR;
+					critical_bonus /= mods::values::SPRAY_CRITICAL_REDUCTION_DIVISOR();
 					dam += critical_bonus;
 				}
 			}
@@ -442,30 +442,30 @@ namespace mods::weapons::damage_types {
 		}
 		switch((mw_rifle)weapon->rifle()->attributes->type){
 			case mw_rifle::LIGHT_MACHINE_GUN:
-				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_LIGHT_MACHINE_GUN;
+				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_LIGHT_MACHINE_GUN();
 				break;
 
 			case mw_rifle::SUB_MACHINE_GUN:
-				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_SUB_MACHINE_GUN;
+				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_SUB_MACHINE_GUN();
 				break;
 
 			case mw_rifle::SHOTGUN:
-				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_SHOTGUN;
+				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_SHOTGUN();
 				break;
 
 			case mw_rifle::SNIPER:
-				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_SNIPER;
+				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_SNIPER();
 				break;
 
 			case mw_rifle::ASSAULT_RIFLE:
-				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_ASSAULT_RIFLE;
+				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_ASSAULT_RIFLE();
 				break;
 			case mw_rifle::HANDGUN:
 			case mw_rifle::PISTOL:
-				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_HANDGUN;
+				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_HANDGUN();
 				break;
 			case mw_rifle::MACHINE_PISTOL:
-				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_MACHINE_PISTOL;
+				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_MACHINE_PISTOL();
 				break;
 			default:
 				weapon->rifle_instance->ammo = 1;
@@ -485,30 +485,30 @@ namespace mods::weapons::damage_types {
 		}
 		switch((mw_rifle)weapon->rifle()->attributes->type){
 			case mw_rifle::LIGHT_MACHINE_GUN:
-				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_LIGHT_MACHINE_GUN;
+				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_LIGHT_MACHINE_GUN();
 				break;
 
 			case mw_rifle::SUB_MACHINE_GUN:
-				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_SUB_MACHINE_GUN;
+				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_SUB_MACHINE_GUN();
 				break;
 
 			case mw_rifle::SHOTGUN:
-				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_SHOTGUN;
+				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_SHOTGUN();
 				break;
 
 			case mw_rifle::SNIPER:
-				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_SNIPER;
+				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_SNIPER();
 				break;
 
 			case mw_rifle::ASSAULT_RIFLE:
-				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_ASSAULT_RIFLE;
+				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_ASSAULT_RIFLE();
 				break;
 			case mw_rifle::HANDGUN:
 			case mw_rifle::PISTOL:
-				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_HANDGUN;
+				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_HANDGUN();
 				break;
 			case mw_rifle::MACHINE_PISTOL:
-				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_MACHINE_PISTOL;
+				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_MACHINE_PISTOL();
 				break;
 			default:
 				weapon->rifle_instance->ammo = 1;
@@ -562,12 +562,12 @@ namespace mods::weapons::damage_types {
 
 		/** calculate headshot */
 		if(dice(1,100) >= 95){
-			player->send(msg::HEADSHOT);
+			player->send(MSG_HEADSHOT().c_str());
 			dam = victim->hp();
 		}
 		if(distance == crit_range){
 			if(dice(1,100) <= crit_chance){
-				player->send(msg::CRITICAL);
+				player->send(MSG_CRITICAL().c_str());
 				critical_bonus = dice(
 						damage_dice,
 						damage_sides
@@ -604,7 +604,7 @@ namespace mods::weapons::damage_types {
 		if(victim->position() > POS_DEAD) {
 			if(victim->is_npc()){
 				if(dam == 0){
-					player->sendln(msg::MISSED_TARGET);
+					player->sendln(MSG_MISSED_TARGET());
 				}else if(dam > 0){
 					damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
 					if(MOB_FLAGGED(victim->cd(),MOB_SENTINEL)){
@@ -623,7 +623,7 @@ namespace mods::weapons::damage_types {
 				remember(victim->cd(),player->cd());
 			}
 		}else{
-			player->sendln(msg::TARGET_DEAD);
+			player->sendln(MSG_TARGET_DEAD());
 			stop_fighting(player->cd());
 			stop_fighting(victim->cd());
 		}

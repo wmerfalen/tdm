@@ -176,19 +176,19 @@ namespace mods {
 							case mw_explosive::CLAYMORE_MINE:
 							case mw_explosive::FRAG_GRENADE:
 											 person->sendln("Shrapnel tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-											 damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR;
+											 damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR();
 											 person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
 											 /** TODO: deal explosive damage here */
 											 break;
 							case mw_explosive::INCENDIARY_GRENADE:
 											 person->sendln("A heated explosion sets the room on fire" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-											 damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR;
+											 damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR();
 											 person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
 											 /** TODO: deal fire damage here */
 											 break;
 							case mw_explosive::EMP_GRENADE:
 											 person->sendln("The effectiveness of your electronics is hindered" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-											 damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR;
+											 damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR();
 											 person->sendln("[electronics " + std::to_string(damage_multiplier) + "]");
 											 /** TODO: affect room with emp here */
 											 break;
@@ -571,22 +571,22 @@ namespace mods {
 					return;
 					break;
 				case mw_explosive::FRAG_GRENADE:
-					ticks = FRAG_GRENADE_TICKS;
+					ticks = FRAG_GRENADE_TICKS();
 					break;
 				case mw_explosive::INCENDIARY_GRENADE:
-					ticks = INCENDIARY_GRENADE_TICKS;
+					ticks = INCENDIARY_GRENADE_TICKS();
 					break;
 				case mw_explosive::EMP_GRENADE:
-					ticks = EMP_GRENADE_TICKS;
+					ticks = EMP_GRENADE_TICKS();
 					break;
 				case mw_explosive::SMOKE_GRENADE:
-					ticks = SMOKE_GRENADE_TICKS;
+					ticks = SMOKE_GRENADE_TICKS();
 					break;
 				case mw_explosive::FLASHBANG_GRENADE:
-					ticks = FLASHBANG_GRENADE_TICKS;
+					ticks = FLASHBANG_GRENADE_TICKS();
 					break;
 				case mw_explosive::SENSOR_GRENADE:
-					ticks = SENSOR_GRENADE_TICKS;
+					ticks = SENSOR_GRENADE_TICKS();
 					break;
 			}
 			send_to_room_except(player->room(), player, "%s %ss a %s%s!\r\n",

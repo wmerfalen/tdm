@@ -1,248 +1,282 @@
 #ifndef __MENTOC_MODS_VALUES_HEADER__
 #define __MENTOC_MODS_VALUES_HEADER__
 #include <iostream>
+#include <map>
+#include <variant>
 
 namespace mods::values {
-		const static int FIRE_DAMAGE_TICK_RESOLUTION = 30;
-		const static int FLASHBANG_COOLDOWN_TICKS = 3;	/** approx 2 seconds */
-		const static int FIRE_EVERY_N_TICKS = 400;
-		const static int FIRE_WOODEN_ADDITIONAL_TICKS = 80;
-		const static int FIRE_CARPET_ADDITIONAL_TICKS = 60;
-		const static int DAMAGE_DIVISOR = 3;
-		const static int FRAG_GRENADE_TICKS = 6;
-		const static int EMP_GRENADE_TICKS = 6;
-		const static int SENSOR_GRENADE_TICKS = 6;
-		const static int FLASHBANG_GRENADE_TICKS = 6;
-		const static int SMOKE_GRENADE_TICKS = 6;
-		const static int INCENDIARY_GRENADE_TICKS = 6;
-		const static int FIRE_STATUS_KINDLING_DAMAGE = 10;
-		const static int FIRE_STATUS_COMPLETELY_ON_FIRE_DAMAGE = 70;
-		const static int FIRE_STATUS_SMOLDERING_DAMAGE = 40;
-		const static int FIRE_STATUS_SMOKING_DAMAGE = 15;
+		using variants_t = std::variant<int,uint8_t,uint16_t,std::string>;
+		extern std::map<std::string,variants_t> alt_value_map;
+		void save_to_lmdb(std::string key,std::string value);
+		void load_from_lmdb(std::string in_key);
+		void revert_to_default(std::string in_key);
+		template <typename T>
+		static inline void CONSTSET(std::string m,T value){
+			alt_value_map[m] = value;
+		}
+		template <typename T>
+		static inline T CONSTGET(std::string m,T fallback){
+			if(alt_value_map.find(m) != alt_value_map.end()){
+				return std::get<T>(alt_value_map[m]);
+			}
+			return fallback;
+		}
+#ifndef CGET
+#define CGET(A,KEY,MENTOC_DEFAULT) \
+		A KEY();
+#endif
+		CGET(int,FIRE_DAMAGE_TICK_RESOLUTION,30);
+		CGET(int,FLASHBANG_COOLDOWN_TICKS,3);
+		CGET(int,FIRE_EVERY_N_TICKS,400);
+		CGET(int,FIRE_WOODEN_ADDITIONAL_TICKS,80);
+		CGET(int,FIRE_CARPET_ADDITIONAL_TICKS,60);
+		CGET(int,DAMAGE_DIVISOR,3);
+		CGET(int,FRAG_GRENADE_TICKS,6);
+		CGET(int,EMP_GRENADE_TICKS,6);
+		CGET(int,SENSOR_GRENADE_TICKS,6);
+		CGET(int,FLASHBANG_GRENADE_TICKS,6);
+		CGET(int,SMOKE_GRENADE_TICKS,6);
+		CGET(int,INCENDIARY_GRENADE_TICKS,6);
+		CGET(int,FIRE_STATUS_KINDLING_DAMAGE,10);
+		CGET(int,FIRE_STATUS_COMPLETELY_ON_FIRE_DAMAGE,70);
+		CGET(int,FIRE_STATUS_SMOLDERING_DAMAGE,40);
+		CGET(int,FIRE_STATUS_SMOKING_DAMAGE,15);
 
-		const static uint16_t WSL_SHOTGUN_0_ALLOWABLE = 1;
-		const static uint16_t WSL_SHOTGUN_0_ACCURACY = 80;
-		const static uint16_t WSL_SHOTGUN_0_DAMAGE = 80;
-
-		const static uint16_t WSL_SHOTGUN_1_ALLOWABLE = 1;
-		const static uint16_t WSL_SHOTGUN_1_ACCURACY = 15;
-		const static uint16_t WSL_SHOTGUN_1_DAMAGE = 15;
-
-		const static uint16_t WSL_SHOTGUN_2_ALLOWABLE = 0;
-		const static uint16_t WSL_SHOTGUN_2_ACCURACY = 0;
-		const static uint16_t WSL_SHOTGUN_2_DAMAGE = 0;
-
-		const static uint16_t WSL_SHOTGUN_3_ALLOWABLE = 0;
-		const static uint16_t WSL_SHOTGUN_3_ACCURACY = 0;
-		const static uint16_t WSL_SHOTGUN_3_DAMAGE = 0;
-
-		const static uint16_t WSL_SHOTGUN_4_ALLOWABLE = 0;
-		const static uint16_t WSL_SHOTGUN_4_ACCURACY = 0;
-		const static uint16_t WSL_SHOTGUN_4_DAMAGE = 0;
-
-		const static uint16_t WSL_AR_0_ALLOWABLE = 1;
-		const static uint16_t WSL_AR_0_ACCURACY = 40;
-		const static uint16_t WSL_AR_0_DAMAGE = 40;
-
-		const static uint16_t WSL_AR_1_ALLOWABLE = 1;
-		const static uint16_t WSL_AR_1_ACCURACY = 40;
-		const static uint16_t WSL_AR_1_DAMAGE = 40;
-
-		const static uint16_t WSL_AR_2_ALLOWABLE = 1;
-		const static uint16_t WSL_AR_2_ACCURACY = 40;
-		const static uint16_t WSL_AR_2_DAMAGE = 40;
-
-		const static uint16_t WSL_AR_3_ALLOWABLE = 0;
-		const static uint16_t WSL_AR_3_ACCURACY = 0;
-		const static uint16_t WSL_AR_3_DAMAGE = 0;
-
-		const static uint16_t WSL_AR_4_ALLOWABLE = 0;
-		const static uint16_t WSL_AR_4_ACCURACY = 0;
-		const static uint16_t WSL_AR_4_DAMAGE = 0;
-
-
-
-		const static uint16_t WSL_SMG_0_ALLOWABLE = 1;
-		const static uint16_t WSL_SMG_0_ACCURACY = 90;
-		const static uint16_t WSL_SMG_0_DAMAGE = 40;
-
-		const static uint16_t WSL_SMG_1_ALLOWABLE = 0;
-		const static uint16_t WSL_SMG_1_ACCURACY = 0;
-		const static uint16_t WSL_SMG_1_DAMAGE = 0;
-
-		const static uint16_t WSL_SMG_2_ALLOWABLE = 0;
-		const static uint16_t WSL_SMG_2_ACCURACY = 0;
-		const static uint16_t WSL_SMG_2_DAMAGE = 0;
-
-		const static uint16_t WSL_SMG_3_ALLOWABLE = 0;
-		const static uint16_t WSL_SMG_3_ACCURACY = 0;
-		const static uint16_t WSL_SMG_3_DAMAGE = 0;
-
-		const static uint16_t WSL_SMG_4_ALLOWABLE = 0;
-		const static uint16_t WSL_SMG_4_ACCURACY = 0;
-		const static uint16_t WSL_SMG_4_DAMAGE = 0;
-
-
-		const static uint16_t WSL_MACHINE_PISTOL_0_ALLOWABLE = 1;
-		const static uint16_t WSL_MACHINE_PISTOL_0_ACCURACY = 25;
-		const static uint16_t WSL_MACHINE_PISTOL_0_DAMAGE = 15;
-
-		const static uint16_t WSL_MACHINE_PISTOL_1_ALLOWABLE = 0;
-		const static uint16_t WSL_MACHINE_PISTOL_1_ACCURACY = 0;
-		const static uint16_t WSL_MACHINE_PISTOL_1_DAMAGE = 0;
-
-		const static uint16_t WSL_MACHINE_PISTOL_2_ALLOWABLE = 0;
-		const static uint16_t WSL_MACHINE_PISTOL_2_ACCURACY = 0;
-		const static uint16_t WSL_MACHINE_PISTOL_2_DAMAGE = 0;
-
-		const static uint16_t WSL_MACHINE_PISTOL_3_ALLOWABLE = 0;
-		const static uint16_t WSL_MACHINE_PISTOL_3_ACCURACY = 0;
-		const static uint16_t WSL_MACHINE_PISTOL_3_DAMAGE = 0;
-
-		const static uint16_t WSL_MACHINE_PISTOL_4_ALLOWABLE = 0;
-		const static uint16_t WSL_MACHINE_PISTOL_4_ACCURACY = 0;
-		const static uint16_t WSL_MACHINE_PISTOL_4_DAMAGE = 0;
+		CGET(uint16_t,WSL_SHOTGUN_0_ALLOWABLE,1);
+		CGET(uint16_t,WSL_SHOTGUN_0_ACCURACY,80);
+		CGET(uint16_t,WSL_SHOTGUN_0_DAMAGE,80);
+		CGET(uint16_t,WSL_SHOTGUN_1_ALLOWABLE,1);
+		CGET(uint16_t,WSL_SHOTGUN_1_ACCURACY,15);
+		CGET(uint16_t,WSL_SHOTGUN_1_DAMAGE,15);
+		CGET(uint16_t,WSL_SHOTGUN_2_ALLOWABLE,0);
+		CGET(uint16_t,WSL_SHOTGUN_2_ACCURACY,0);
+		CGET(uint16_t,WSL_SHOTGUN_2_DAMAGE,0);
+		CGET(uint16_t,WSL_SHOTGUN_3_ALLOWABLE,0);
+		CGET(uint16_t,WSL_SHOTGUN_3_ACCURACY,0);
+		CGET(uint16_t,WSL_SHOTGUN_3_DAMAGE,0);
+		CGET(uint16_t,WSL_SHOTGUN_4_ALLOWABLE,0);
+		CGET(uint16_t,WSL_SHOTGUN_4_ACCURACY,0);
+		CGET(uint16_t,WSL_SHOTGUN_4_DAMAGE,0);
+		CGET(uint16_t,WSL_AR_0_ALLOWABLE,1);
+		CGET(uint16_t,WSL_AR_0_ACCURACY,40);
+		CGET(uint16_t,WSL_AR_0_DAMAGE,40);
+		CGET(uint16_t,WSL_AR_1_ALLOWABLE,1);
+		CGET(uint16_t,WSL_AR_1_ACCURACY,40);
+		CGET(uint16_t,WSL_AR_1_DAMAGE,40);
+		CGET(uint16_t,WSL_AR_2_ALLOWABLE,1);
+		CGET(uint16_t,WSL_AR_2_ACCURACY,40);
+		CGET(uint16_t,WSL_AR_2_DAMAGE,40);
+		CGET(uint16_t,WSL_AR_3_ALLOWABLE,0);
+		CGET(uint16_t,WSL_AR_3_ACCURACY,0);
+		CGET(uint16_t,WSL_AR_3_DAMAGE,0);
+		CGET(uint16_t,WSL_AR_4_ALLOWABLE,0);
+		CGET(uint16_t,WSL_AR_4_ACCURACY,0);
+		CGET(uint16_t,WSL_AR_4_DAMAGE,0);
+		CGET(uint16_t,WSL_SMG_0_ALLOWABLE,1);
+		CGET(uint16_t,WSL_SMG_0_ACCURACY,90);
+		CGET(uint16_t,WSL_SMG_0_DAMAGE,40);
+		CGET(uint16_t,WSL_SMG_1_ALLOWABLE,0);
+		CGET(uint16_t,WSL_SMG_1_ACCURACY,0);
+		CGET(uint16_t,WSL_SMG_1_DAMAGE,0);
+		CGET(uint16_t,WSL_SMG_2_ALLOWABLE,0);
+		CGET(uint16_t,WSL_SMG_2_ACCURACY,0);
+		CGET(uint16_t,WSL_SMG_2_DAMAGE,0);
+		CGET(uint16_t,WSL_SMG_3_ALLOWABLE,0);
+		CGET(uint16_t,WSL_SMG_3_ACCURACY,0);
+		CGET(uint16_t,WSL_SMG_3_DAMAGE,0);
+		CGET(uint16_t,WSL_SMG_4_ALLOWABLE,0);
+		CGET(uint16_t,WSL_SMG_4_ACCURACY,0);
+		CGET(uint16_t,WSL_SMG_4_DAMAGE,0);
+		CGET(uint16_t,WSL_MACHINE_PISTOL_0_ALLOWABLE,1);
+		CGET(uint16_t,WSL_MACHINE_PISTOL_0_ACCURACY,25);
+		CGET(uint16_t,WSL_MACHINE_PISTOL_0_DAMAGE,15);
+		CGET(uint16_t,WSL_MACHINE_PISTOL_1_ALLOWABLE,0);
+		CGET(uint16_t,WSL_MACHINE_PISTOL_1_ACCURACY,0);
+		CGET(uint16_t,WSL_MACHINE_PISTOL_1_DAMAGE,0);
+		CGET(uint16_t,WSL_MACHINE_PISTOL_2_ALLOWABLE,0);
+		CGET(uint16_t,WSL_MACHINE_PISTOL_2_ACCURACY,0);
+		CGET(uint16_t,WSL_MACHINE_PISTOL_2_DAMAGE,0);
+		CGET(uint16_t,WSL_MACHINE_PISTOL_3_ALLOWABLE,0);
+		CGET(uint16_t,WSL_MACHINE_PISTOL_3_ACCURACY,0);
+		CGET(uint16_t,WSL_MACHINE_PISTOL_3_DAMAGE,0);
+		CGET(uint16_t,WSL_MACHINE_PISTOL_4_ALLOWABLE,0);
+		CGET(uint16_t,WSL_MACHINE_PISTOL_4_ACCURACY,0);
+		CGET(uint16_t,WSL_MACHINE_PISTOL_4_DAMAGE,0);
 
 
 
-		const static uint16_t WSL_HANDGUN_0_ALLOWABLE = 1;
-		const static uint16_t WSL_HANDGUN_0_ACCURACY = 55;
-		const static uint16_t WSL_HANDGUN_0_DAMAGE = 10;
+		CGET(uint16_t,WSL_HANDGUN_0_ALLOWABLE,1);
+		CGET(uint16_t,WSL_HANDGUN_0_ACCURACY,55);
+		CGET(uint16_t,WSL_HANDGUN_0_DAMAGE,10);
+		CGET(uint16_t,WSL_HANDGUN_1_ALLOWABLE,0);
+		CGET(uint16_t,WSL_HANDGUN_1_ACCURACY,0);
+		CGET(uint16_t,WSL_HANDGUN_1_DAMAGE,0);
+		CGET(uint16_t,WSL_HANDGUN_2_ALLOWABLE,0);
+		CGET(uint16_t,WSL_HANDGUN_2_ACCURACY,0);
+		CGET(uint16_t,WSL_HANDGUN_2_DAMAGE,0);
+		CGET(uint16_t,WSL_HANDGUN_3_ALLOWABLE,0);
+		CGET(uint16_t,WSL_HANDGUN_3_ACCURACY,0);
+		CGET(uint16_t,WSL_HANDGUN_3_DAMAGE,0);
+		CGET(uint16_t,WSL_HANDGUN_4_ALLOWABLE,0);
+		CGET(uint16_t,WSL_HANDGUN_4_ACCURACY,0);
+		CGET(uint16_t,WSL_HANDGUN_4_DAMAGE,0);
+		CGET(uint16_t,WSL_LMG_0_ALLOWABLE,1);
+		CGET(uint16_t,WSL_LMG_0_ACCURACY,40);
+		CGET(uint16_t,WSL_LMG_0_DAMAGE,40);
+		CGET(uint16_t,WSL_LMG_1_ALLOWABLE,1);
+		CGET(uint16_t,WSL_LMG_1_ACCURACY,35);
+		CGET(uint16_t,WSL_LMG_1_DAMAGE,35);
+		CGET(uint16_t,WSL_LMG_2_ALLOWABLE,1);
+		CGET(uint16_t,WSL_LMG_2_ACCURACY,30);
+		CGET(uint16_t,WSL_LMG_2_DAMAGE,30);
+		CGET(uint16_t,WSL_LMG_3_ALLOWABLE,0);
+		CGET(uint16_t,WSL_LMG_3_ACCURACY,0);
+		CGET(uint16_t,WSL_LMG_3_DAMAGE,0);
+		CGET(uint16_t,WSL_LMG_4_ALLOWABLE,0);
+		CGET(uint16_t,WSL_LMG_4_ACCURACY,0);
+		CGET(uint16_t,WSL_LMG_4_DAMAGE,0);
+		CGET(uint16_t,WSL_SNIPER_0_ALLOWABLE,1);
+		CGET(uint16_t,WSL_SNIPER_0_ACCURACY,10);
+		CGET(uint16_t,WSL_SNIPER_0_DAMAGE,10);
+		CGET(uint16_t,WSL_SNIPER_1_ALLOWABLE,1);
+		CGET(uint16_t,WSL_SNIPER_1_ACCURACY,35);
+		CGET(uint16_t,WSL_SNIPER_1_DAMAGE,35);
+		CGET(uint16_t,WSL_SNIPER_2_ALLOWABLE,1);
+		CGET(uint16_t,WSL_SNIPER_2_ACCURACY,60);
+		CGET(uint16_t,WSL_SNIPER_2_DAMAGE,60);
+		CGET(uint16_t,WSL_SNIPER_3_ALLOWABLE,1);
+		CGET(uint16_t,WSL_SNIPER_3_ACCURACY,75);
+		CGET(uint16_t,WSL_SNIPER_3_DAMAGE,75);
+		CGET(uint16_t,WSL_SNIPER_4_ALLOWABLE,1);
+		CGET(uint16_t,WSL_SNIPER_4_ACCURACY,75);
+		CGET(uint16_t,WSL_SNIPER_4_DAMAGE,75);
+		CGET(uint8_t,SINGLE_SHOT_SHOTGUN,1);
+		CGET(uint8_t,SINGLE_SHOT_ASSAULT_RIFLE,3);
+		CGET(uint8_t,SINGLE_SHOT_SUB_MACHINE_GUN,3);
+		CGET(uint8_t,SINGLE_SHOT_SNIPER,1);
+		CGET(uint8_t,SINGLE_SHOT_HANDGUN,1);
+		CGET(uint8_t,SINGLE_SHOT_PISTOL,1);
+		CGET(uint8_t,SINGLE_SHOT_MACHINE_PISTOL,6);
+		CGET(uint8_t,SINGLE_SHOT_LIGHT_MACHINE_GUN,8);
+		CGET(uint8_t,SPRAY_SHOT_SHOTGUN,2);
+		CGET(uint8_t,SPRAY_SHOT_ASSAULT_RIFLE,9);
+		CGET(uint8_t,SPRAY_SHOT_SUB_MACHINE_GUN,6);
+		CGET(uint8_t,SPRAY_SHOT_SNIPER,1);
+		CGET(uint8_t,SPRAY_SHOT_HANDGUN,1);
+		CGET(uint8_t,SPRAY_SHOT_PISTOL,1);
+		CGET(uint8_t,SPRAY_SHOT_MACHINE_PISTOL,12);
+		CGET(uint8_t,SPRAY_SHOT_LIGHT_MACHINE_GUN,16);
+		CGET(uint8_t,SPRAY_CHANCE,25);
+		CGET(uint8_t,SPRAY_HEADSHOT_CHANCE,3);
+		CGET(uint8_t,SPRAY_CRITICAL_CHANCE,2);
+		CGET(uint8_t,SPRAY_CRITICAL_REDUCTION_DIVISOR,10);
 
-		const static uint16_t WSL_HANDGUN_1_ALLOWABLE = 0;
-		const static uint16_t WSL_HANDGUN_1_ACCURACY = 0;
-		const static uint16_t WSL_HANDGUN_1_DAMAGE = 0;
+		CGET(std::string,MINI_GUNNER_WEAR_LIGHT,"");
+		CGET(std::string,MINI_GUNNER_WEAR_FINGER_R,"");
+		CGET(std::string,MINI_GUNNER_WEAR_FINGER_L,"");
+		CGET(std::string,MINI_GUNNER_WEAR_NECK_1,"");
+		CGET(std::string,MINI_GUNNER_WEAR_NECK_2,"");
+		CGET(std::string,MINI_GUNNER_WEAR_BODY,"objects/armor/vanguard-spiked-vest.yml");
+		CGET(std::string,MINI_GUNNER_WEAR_HEAD,"objects/armor/ballistic-helmet.yml");
+		CGET(std::string,MINI_GUNNER_WEAR_LEGS,"");
+		CGET(std::string,MINI_GUNNER_WEAR_FEET,"objects/armor/phagia-corps-ballistic-boots.yml");
+		CGET(std::string,MINI_GUNNER_WEAR_HANDS,"objects/armor/weight-lifting-gloves.yml");
+		CGET(std::string,MINI_GUNNER_WEAR_ARMS,"");
+		CGET(std::string,MINI_GUNNER_WEAR_SHIELD,"");
+		CGET(std::string,MINI_GUNNER_WEAR_ABOUT,"");
+		CGET(std::string,MINI_GUNNER_WEAR_WAIST,"");
+		CGET(std::string,MINI_GUNNER_WEAR_WRIST_R,"");
+		CGET(std::string,MINI_GUNNER_WEAR_WRIST_L,"");
+		CGET(std::string,MINI_GUNNER_WEAR_PRIMARY,"objects/rifle/belt-fed-minigun.yml");
+		CGET(std::string,MINI_GUNNER_WEAR_WIELD,"objects/rifle/belt-fed-minigun.yml");
+		CGET(std::string,MINI_GUNNER_WEAR_HOLD,"");
+		CGET(std::string,MINI_GUNNER_WEAR_SECONDARY_WEAPON,"");
+		CGET(std::string,MINI_GUNNER_WEAR_SECONDARY,"");
+		CGET(std::string,MINI_GUNNER_WEAR_WEAPON_ATTACHMENT,"objects/attachment/belt-feeder.yml");
+		CGET(std::string,MINI_GUNNER_WEAR_SHOULDERS_L,"objects/armor/vanguard-shoulder-pad.yml");
+		CGET(std::string,MINI_GUNNER_WEAR_SHOULDERS_R,"objects/armor/vanguard-shoulder-pad.yml");
+		CGET(std::string,MINI_GUNNER_WEAR_BACKPACK,"objects/armor/ammo-backpack.yml");
+		CGET(std::string,MINI_GUNNER_WEAR_GOGGLES,"objects/armor/ballistic-eye-gaurd.yml");
+		CGET(std::string,MINI_GUNNER_WEAR_VEST_PACK,"");
+		CGET(std::string,MINI_GUNNER_WEAR_ELBOW_L,"");
+		CGET(std::string,MINI_GUNNER_WEAR_ELBOW_R,"objects/armor/vanguard-elbow-guard.yml");
 
-		const static uint16_t WSL_HANDGUN_2_ALLOWABLE = 0;
-		const static uint16_t WSL_HANDGUN_2_ACCURACY = 0;
-		const static uint16_t WSL_HANDGUN_2_DAMAGE = 0;
-
-		const static uint16_t WSL_HANDGUN_3_ALLOWABLE = 0;
-		const static uint16_t WSL_HANDGUN_3_ACCURACY = 0;
-		const static uint16_t WSL_HANDGUN_3_DAMAGE = 0;
-
-		const static uint16_t WSL_HANDGUN_4_ALLOWABLE = 0;
-		const static uint16_t WSL_HANDGUN_4_ACCURACY = 0;
-		const static uint16_t WSL_HANDGUN_4_DAMAGE = 0;
-
-
-		const static uint16_t WSL_LMG_0_ALLOWABLE = 1;
-		const static uint16_t WSL_LMG_0_ACCURACY = 40;
-		const static uint16_t WSL_LMG_0_DAMAGE = 40;
-
-		const static uint16_t WSL_LMG_1_ALLOWABLE = 1;
-		const static uint16_t WSL_LMG_1_ACCURACY = 35;
-		const static uint16_t WSL_LMG_1_DAMAGE = 35;
-
-		const static uint16_t WSL_LMG_2_ALLOWABLE = 1;
-		const static uint16_t WSL_LMG_2_ACCURACY = 30;
-		const static uint16_t WSL_LMG_2_DAMAGE = 30;
-
-		const static uint16_t WSL_LMG_3_ALLOWABLE = 0;
-		const static uint16_t WSL_LMG_3_ACCURACY = 0;
-		const static uint16_t WSL_LMG_3_DAMAGE = 0;
-
-		const static uint16_t WSL_LMG_4_ALLOWABLE = 0;
-		const static uint16_t WSL_LMG_4_ACCURACY = 0;
-		const static uint16_t WSL_LMG_4_DAMAGE = 0;
+		CGET(std::string,LUNATIC_WEAR_LIGHT,"");
+		CGET(std::string,LUNATIC_WEAR_FINGER_R,"");
+		CGET(std::string,LUNATIC_WEAR_FINGER_L,"objects/armor/spiked-skull-ring.yml");
+		CGET(std::string,LUNATIC_WEAR_NECK_1,"objects/armor/qi-wol-clock-chain.yml");
+		CGET(std::string,LUNATIC_WEAR_NECK_2,"");
+		CGET(std::string,LUNATIC_WEAR_BODY,"objects/armor/weak-tanktop.yml");
+		CGET(std::string,LUNATIC_WEAR_HEAD,"objects/armor/generic-hat.yml");
+		CGET(std::string,LUNATIC_WEAR_LEGS,"objects/armor/generic-red-jeans.yml");
+		CGET(std::string,LUNATIC_WEAR_FEET,"objects/armor/iconic-shoes.yml");
+		CGET(std::string,LUNATIC_WEAR_HANDS,"");
+		CGET(std::string,LUNATIC_WEAR_ARMS,"");
+		CGET(std::string,LUNATIC_WEAR_SHIELD,"");
+		CGET(std::string,LUNATIC_WEAR_ABOUT,"");
+		CGET(std::string,LUNATIC_WEAR_WAIST,"objects/armor/plain-black-belt.yml");
+		CGET(std::string,LUNATIC_WEAR_WRIST_R,"");
+		CGET(std::string,LUNATIC_WEAR_WRIST_L,"");
+		CGET(std::string,LUNATIC_WEAR_PRIMARY,"objects/rifle/uzi-machine-pistol.yml");
+		CGET(std::string,LUNATIC_WEAR_WIELD,"objects/rifle/uzi-machine-pistol.yml");
+		CGET(std::string,LUNATIC_WEAR_HOLD,"");
+		CGET(std::string,LUNATIC_WEAR_SECONDARY_WEAPON,"");
+		CGET(std::string,LUNATIC_WEAR_SECONDARY,"");
+		CGET(std::string,LUNATIC_WEAR_WEAPON_ATTACHMENT,"objects/attachment/high-velocity-magazine.yml");
+		CGET(std::string,LUNATIC_WEAR_SHOULDERS_L,"");
+		CGET(std::string,LUNATIC_WEAR_SHOULDERS_R,"");
+		CGET(std::string,LUNATIC_WEAR_BACKPACK,"");
+		CGET(std::string,LUNATIC_WEAR_GOGGLES,"objects/armor/idiots-sunglasses.yml");
+		CGET(std::string,LUNATIC_WEAR_VEST_PACK,"");
+		CGET(std::string,LUNATIC_WEAR_ELBOW_L,"");
+		CGET(std::string,LUNATIC_WEAR_ELBOW_R,"");
 
 
-		const static uint16_t WSL_SNIPER_0_ALLOWABLE = 1;
-		const static uint16_t WSL_SNIPER_0_ACCURACY = 10;
-		const static uint16_t WSL_SNIPER_0_DAMAGE = 10;
-
-		const static uint16_t WSL_SNIPER_1_ALLOWABLE = 1;
-		const static uint16_t WSL_SNIPER_1_ACCURACY = 35;
-		const static uint16_t WSL_SNIPER_1_DAMAGE = 35;
-
-		const static uint16_t WSL_SNIPER_2_ALLOWABLE = 1;
-		const static uint16_t WSL_SNIPER_2_ACCURACY = 60;
-		const static uint16_t WSL_SNIPER_2_DAMAGE = 60;
-
-		const static uint16_t WSL_SNIPER_3_ALLOWABLE = 1;
-		const static uint16_t WSL_SNIPER_3_ACCURACY = 75;
-		const static uint16_t WSL_SNIPER_3_DAMAGE = 75;
-
-		const static uint16_t WSL_SNIPER_4_ALLOWABLE = 1;
-		const static uint16_t WSL_SNIPER_4_ACCURACY = 75;
-		const static uint16_t WSL_SNIPER_4_DAMAGE = 75;
-
-		const static uint8_t SINGLE_SHOT_SHOTGUN = 1;
-		const static uint8_t SINGLE_SHOT_ASSAULT_RIFLE = 3;
-		const static uint8_t SINGLE_SHOT_SUB_MACHINE_GUN = 3;
-		const static uint8_t SINGLE_SHOT_SNIPER = 1;
-		const static uint8_t SINGLE_SHOT_HANDGUN = 1;
-		const static uint8_t SINGLE_SHOT_PISTOL = 1;
-		const static uint8_t SINGLE_SHOT_MACHINE_PISTOL = 6;
-		const static uint8_t SINGLE_SHOT_LIGHT_MACHINE_GUN = 8;
-
-		const static uint8_t SPRAY_SHOT_SHOTGUN = 2;
-		const static uint8_t SPRAY_SHOT_ASSAULT_RIFLE = 9;
-		const static uint8_t SPRAY_SHOT_SUB_MACHINE_GUN = 6;
-		const static uint8_t SPRAY_SHOT_SNIPER = 1;
-		const static uint8_t SPRAY_SHOT_HANDGUN = 1;
-		const static uint8_t SPRAY_SHOT_PISTOL = 1;
-		const static uint8_t SPRAY_SHOT_MACHINE_PISTOL = 12;
-		const static uint8_t SPRAY_SHOT_LIGHT_MACHINE_GUN = 16;
-
-		const static uint8_t SPRAY_CHANCE = 25;
-		const static uint8_t SPRAY_HEADSHOT_CHANCE = 3;
-		const static uint8_t SPRAY_CRITICAL_CHANCE = 2;
-		const static uint8_t SPRAY_CRITICAL_REDUCTION_DIVISOR = 10;
-
-		const static uint8_t REVIVE_TICKS = 40;
-		const static uint8_t REVIVE_HP = 50;
-		const static uint8_t INJURED_HP = 5;
-		const static uint8_t EXPLOSIVE_CRITICAL_MULTIPLIER = 0.75;
-		const static uint8_t RIFLE_CRITICAL_MULTIPLIER = 0.75;
-		static const char* MSG_CRITICAL= "{red}***CRITICAL***{/red} --";
-		static const char* MSG_HEADSHOT= "{red}***HEADSHOT***{/red} -- ";
-		static const char* MSG_HIT= "{yel}--[HIT]--{/yel}";
-		static const char* MSG_OUT_OF_AMMO= "{gld}*CLICK*{/gld} Your weapon is out of ammo!";
-		static const char* MSG_MISSED_TARGET = "You missed your target!";
-		static const char* MSG_TARGET_DEAD = "It appears that your target is dead.";
-		static const char* MSG_YOURE_INJURED = "You are injured!";
-		static const char* MSG_FIRE_DAMAGE = "[%d] You suffer burns from the roaring fire!\r\n";
-		static const char* MSG_SMOKE_DAMAGE = "[%d] You struggle to breath as smoke fills your lungs!\r\n";
+		CGET(uint8_t,REVIVE_TICKS,40);
+		CGET(uint8_t,REVIVE_HP,50);
+		CGET(uint8_t,INJURED_HP,5);
+		CGET(uint8_t,EXPLOSIVE_CRITICAL_MULTIPLIER,0.75);
+		CGET(uint8_t,RIFLE_CRITICAL_MULTIPLIER,0.75);
+		CGET(std::string,MSG_CRITICAL,"{red}***CRITICAL***{/red} --");
+		CGET(std::string,MSG_HEADSHOT,"{red}***HEADSHOT***{/red} -- ");
+		CGET(std::string,MSG_HIT,"{yel}--[HIT]--{/yel}");
+		CGET(std::string,MSG_OUT_OF_AMMO,"{gld}*CLICK*{/gld} Your weapon is out of ammo!");
+		CGET(std::string,MSG_MISSED_TARGET ,"You missed your target!");
+		CGET(std::string,MSG_TARGET_DEAD ,"It appears that your target is dead.");
+		CGET(std::string,MSG_YOURE_INJURED ,"You are injured!");
+		CGET(std::string,MSG_FIRE_DAMAGE ,"[%d] You suffer burns from the roaring fire!\r\n");
+		CGET(std::string,MSG_SMOKE_DAMAGE ,"[%d] You struggle to breath as smoke fills your lungs!\r\n");
 		namespace msg {
-			static const char* SMOKE_DAMAGE=MSG_SMOKE_DAMAGE;
-			static const char* FIRE_DAMAGE=MSG_FIRE_DAMAGE;
-			static const char* CRITICAL=MSG_CRITICAL;
-			static const char* HEADSHOT=MSG_HEADSHOT;
-			static const char* HIT=MSG_HIT;
-			static const char* OUT_OF_AMMO=MSG_OUT_OF_AMMO;
-			static const char* MISSED_TARGET=MSG_MISSED_TARGET;
-			static const char* TARGET_DEAD=MSG_TARGET_DEAD;
-			static const char* YOURE_INJURED=MSG_YOURE_INJURED;
 			template <typename T>
 			static inline void crit(T& p){
-				p->send(CRITICAL);
+				p->send(MSG_CRITICAL().c_str());
 			}
 			template <typename T>
 			static inline void headshot(T& p){
-				p->send(HEADSHOT);
+				p->send(MSG_HEADSHOT().c_str());
 			}
 			template <typename T>
 			static inline void hit(T& p){
-				p->send(HIT);
+				p->send(MSG_HIT().c_str());
 			}
 			template <typename T>
 			static inline void outofammo(T& p){
-				p->sendln(OUT_OF_AMMO);
+				p->sendln(MSG_OUT_OF_AMMO().c_str());
 			}
 			template <typename T>
 			static inline void missed(T& p){
-				p->sendln(MISSED_TARGET);
+				p->sendln(MSG_MISSED_TARGET().c_str());
 			}
 			template <typename T>
 			static inline void target_dead(T& p){
-				p->sendln(TARGET_DEAD);
+				p->sendln(MSG_TARGET_DEAD().c_str());
 			}
 			template <typename T>
 			static inline void youre_injured(T& p){
-				p->sendln(YOURE_INJURED);
+				p->sendln(MSG_YOURE_INJURED().c_str());
 			}
 		};
+#undef CGET
 };
 
 using namespace mods::values;

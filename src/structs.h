@@ -1599,7 +1599,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		char_data(){
 			init();	
 		};
-		~char_data() = default;
+		~char_data();
 		char_data(char_data* o);
 		char_data(const char_data& other){
 			std::cerr << "char_data copy constructor\n";

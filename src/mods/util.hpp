@@ -303,6 +303,7 @@ std::ostream& log(Args... args); /*{
 	std::string yaml_int_to_string(int type);
 	int yaml_string_to_int(std::string type);
 	std::string yaml_caps_to_lower(std::string type);
+	std::tuple<int,std::string> extract_yaml_info_from_path(std::string_view path);
 };
 
 namespace mods::util::err {

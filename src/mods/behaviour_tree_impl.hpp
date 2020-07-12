@@ -19,7 +19,7 @@ namespace mods {
 		template <typename T> 
 		using argument_type = T;
 #else
-		using argument_type = mods::npc;
+		using argument_type = mods::npc&;
 #endif
 		using container_t = std::deque<behaviour_tree<argument_type>>;
 		using container_mapping_t = std::map<std::string,container_t::iterator>;

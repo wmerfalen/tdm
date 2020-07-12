@@ -58,7 +58,7 @@ void mobile_activity(void) {
 
 
 		if(npc->mob_specials().behaviour_tree){
-			auto dispatch_result = mods::behaviour_tree_impl::dispatch(npc->uuid());
+			auto dispatch_result = mods::behaviour_tree_impl::dispatch_ptr(*npc);
 			bht_debug("dispatch_result: '" << std::to_string(dispatch_result) << "'");
 			switch(dispatch_result){
 				case mods::behaviour_tree_impl::dispatch_status_t::RETURN_IMMEDIATELY:

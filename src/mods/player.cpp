@@ -1165,7 +1165,7 @@ namespace mods {
 						std::cerr << "[WARNING] got nullptr from EVENT_PLAYER_REVIVE_SUCCESSFUL\n";
 						break;
 					}
-					revive_target->hp() = mods::values::REVIVE_HP;
+					revive_target->hp() = mods::values::REVIVE_HP();
 					revive_target->position() = POS_STANDING;
 					this->send("{grn}You revive %s!{/grn}\r\n",revive_target->name().c_str());
 					if(!IS_NPC(revive_target->cd())){

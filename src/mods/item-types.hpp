@@ -19,6 +19,16 @@
 (consumable) \
 (trap) 
 
+#define MENTOC_ITEM_TYPES_CAPS_SEQ \
+(RIFLE) \
+(EXPLOSIVE) \
+(DRONE) \
+(GADGET) \
+(ATTACHMENT) \
+(ARMOR) \
+(CONSUMABLE) \
+(TRAP) 
+
 #define MENTOC_ITEM_TYPES_BY_CAPS_SEQ \
 (rifle,RIFLE) \
 (explosive,EXPLOSIVE) \
@@ -28,6 +38,37 @@
 (armor,ARMOR) \
 (consumable,CONSUMABLE) \
 (trap,TRAP) 
+
+#define MENTOC_WEAR_PLACES_SEQ \
+(LIGHT) \
+(FINGER_R) \
+(FINGER_L) \
+(NECK_1) \
+(NECK_2) \
+(BODY) \
+(HEAD) \
+(LEGS) \
+(FEET) \
+(HANDS) \
+(ARMS) \
+(SHIELD) \
+(ABOUT) \
+(WAIST) \
+(WRIST_R) \
+(WRIST_L) \
+(WIELD) \
+(PRIMARY) \
+(HOLD) \
+(SECONDARY_WEAPON) \
+(SECONDARY) \
+(WEAPON_ATTACHMENT) \
+(SHOULDERS_L) \
+(SHOULDERS_R) \
+(BACKPACK) \
+(GOGGLES) \
+(VEST_PACK) \
+(ELBOW_L) \
+(ELBOW_R)
 
 
 /*************************************************/
@@ -293,6 +334,10 @@ using BOOST_PP_CAT(mw_,CLASS_TYPE) = mods::weapon::type::CLASS_TYPE;
 BOOST_PP_SEQ_FOR_EACH(MENTOC_USING_CT_IMPL, ~, MENTOC_ITEM_TYPES_SEQ)
 
 
+#define MENTOC_GENERIC_WEARS_IMPL(r,data,WEAR_CONSTANT)\
+		this->wear(BOOST_PP_CAT(WEAR_,WEAR_CONSTANT),BOOST_PP_CAT(data,BOOST_PP_CAT(_WEAR_,WEAR_CONSTANT))());
+#define MENTOC_MOB_WEARS(TYPE) \
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_GENERIC_WEARS_IMPL, TYPE, MENTOC_WEAR_PLACES_SEQ)
 
 /**************************************************************************/
 /** forward declarations of each *_description_t class                    */
