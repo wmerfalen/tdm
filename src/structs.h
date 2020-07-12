@@ -1409,13 +1409,14 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 			behaviour_tree(0),behaviour_tree_flags(0),
 			extended_mob_type(extended_mob_type_t::NONE)
 			{
+				std::cerr << "[mob_special_data] default constructor\n";
 
 			}
 		mob_special_data(const mob_special_data& copy){
 			std::cerr << "copy constructor [mob_special_data]\n";
 			this->import(copy);
 		}
-		~mob_special_data() = default;
+		~mob_special_data();
 		void import(const mob_special_data& m);
 		void init();
 	};

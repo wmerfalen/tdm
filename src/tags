@@ -6904,6 +6904,7 @@ zone_vnum	structs.h	/^	typedef IDXTYPE zone_vnum;$/;"	t
 ~Ptr	mods/catch.hpp	/^			~Ptr() {$/;"	f	class:Catch::Ptr
 ~_db_handle	mods/lmdb.cpp	/^	_db_handle::~_db_handle(){$/;"	f	class:mods::lmdb::_db_handle
 ~char_data	structs.cpp	/^		char_data::~char_data(){$/;"	f	class:char_data
+~mob_special_data	structs.cpp	/^		mob_special_data::~mob_special_data(){$/;"	f	class:mob_special_data
 ~npc	mods/npc.cpp	/^	npc::~npc(){$/;"	f	class:mods::npc
 ~object	mods/object.cpp	/^	object::~object(){$/;"	f	class:mods::object
 ~player	mods/player.cpp	/^	player::~player() {$/;"	f	class:mods::player

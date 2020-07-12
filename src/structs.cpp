@@ -514,3 +514,16 @@ bool obj_data::flagged(int value){
 		void mob_special_data::set_behaviour_tree(std::string_view name){
 			this->behaviour_tree = mods::behaviour_tree_impl::grab_tree_by_name(name.data());
 		}
+		mob_special_data::~mob_special_data(){
+			std::cerr << "[~mob_special_data]\n";
+			this->clear_behaviour_tree();
+			this->memory.clear();
+			this->attack_type = 0;
+			this->default_pos = 0;
+			this->damnodice = 0;
+			this->damsizedice = 0;
+			this->snipe_tracking = 0;
+			this->behaviour_tree = 0;
+			this->behaviour_tree_flags = 0;
+			this->extended_mob_type = mods::mobs::extended_types_t::NONE;
+		}
