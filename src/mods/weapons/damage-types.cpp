@@ -2,6 +2,7 @@
 #include "../../spells.h"
 #include "../object-utils.hpp"
 #include "../injure.hpp"
+#include "../rooms.hpp"
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 extern int ok_damage_shopkeeper(char_data *ch, char_data *victim);
 extern void die(char_data* killer,char_data *victim);
@@ -365,6 +366,10 @@ namespace mods::weapons::damage_types {
 			if(!victim){
 				continue;
 			}
+			if(mods::rooms::is_peaceful(victim->room())){
+				player->sendln(MSG_TARGET_IN_PEACEFUL_ROOM());
+				continue;
+			}
 			if(dice(1,(100 * scanned_target.distance)) <= mods::values::SPRAY_CHANCE()){
 				player->send(MSG_HIT().c_str());
 				dam += weapon->rifle()->attributes->base_stat_list->at(scanned_target.distance).damage;
@@ -573,6 +578,10 @@ namespace mods::weapons::damage_types {
 		int crit_range = weapon->rifle()->attributes->critical_range;
 		int crit_chance = weapon->rifle()->attributes->critical_chance;
 		int critical_bonus = 0;
+		if(mods::rooms::is_peaceful(victim->room())){
+			player->sendln(MSG_TARGET_IN_PEACEFUL_ROOM());
+			return;
+		}
 
 		/** calculate headshot */
 		if(dice(1,100) >= 95){

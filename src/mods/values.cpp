@@ -239,6 +239,7 @@ namespace mods::values {
 		"MSG_YOUR_TARGET_IS_DEAD",
 		"MSG_HIT_BY_RIFLE_ATTACK",
 		"MSG_HIT_BY_SPRAY_ATTACK",
+		"MSG_TARGET_IN_PEACEFUL_ROOM",
 			};
 		bool is_int(std::string key){
 			return (std::find(int_types.begin(),int_types.end(),key) != int_types.end());
@@ -541,5 +542,6 @@ namespace mods::values {
 		CGET_DEF(std::string,MSG_YOUR_TARGET_IS_DEAD,"{grn}*** YOUR TARGET IS DEAD ***{/grn}\r\n");
 		CGET_DEF(std::string,MSG_HIT_BY_RIFLE_ATTACK,"{red}*** YOUR ARE HIT ***{/red}\r\n");
 		CGET_DEF(std::string,MSG_HIT_BY_SPRAY_ATTACK,"{red}*** YOUR ARE HIT ***{/red}\r\n");
+		CGET_DEF(std::string,MSG_TARGET_IN_PEACEFUL_ROOM,"{gld}Your target is in a peaceful room{/gld}");
 #undef CGET_DEF
 };

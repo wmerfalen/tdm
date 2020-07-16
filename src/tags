@@ -624,9 +624,9 @@ CCWHT	screen.h	36;"	d
 CCYEL	screen.h	32;"	d
 CEMENT	structs.h	/^			CEMENT,			\/** asphault, nearly indestructible *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 CGET	mods/values.hpp	25;"	d
-CGET	mods/values.hpp	286;"	d
-CGET_DEF	mods/values.cpp	313;"	d	file:
-CGET_DEF	mods/values.cpp	544;"	d	file:
+CGET	mods/values.hpp	287;"	d
+CGET_DEF	mods/values.cpp	314;"	d	file:
+CGET_DEF	mods/values.cpp	546;"	d	file:
 CHAINABLE_BREACHING	mods/skills.hpp	/^			CHAINABLE_BREACHING,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 CHAOTIC	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 CHARM	mods/flags.hpp	/^		CHARM,$/;"	e	enum:mods::flags::aff
