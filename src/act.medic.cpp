@@ -9,33 +9,38 @@
 
 using sptr_medic = std::shared_ptr<mods::classes::medic>;
 using class_type = mods::player::class_type;
+int scaled_heal(player_ptr_t& target){
+	return (33 * (target->level() * 0.5));
+}
+void heal_player(player_ptr_t& medic,player_ptr_t& target){
+	scaled_heal(target);
+	send_to_room(medic->room(),CAT({"{grn}",medic->name()," heals ",target->name(),"{/grn}\r\n"}).c_str());
+}
 ACMD(do_heal) {
 
-	if(player->get_class() != player_class_t::CLASS_MEDIC){
-		*player << "You are not a medic\r\n";
+	if(player->get_class() != player_class_t::CLASS_MEDIC && !(player->god_mode() || player->builder_mode() || player->implementor_mode())){
+		player->sendln("You are not a medic.");
 		return;
 	}
 
-	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() < 1){
+		player->sendln("Specify who to heal.");
+		return;
+	}
 
-	bool healed = false;
-	unsigned room = static_cast<unsigned>(player->room());
-	for(auto& v : vec_args) {
-		if(mods::globals::room_list.size() > room){
-			for(auto & plr : mods::globals::get_room_list(room)){
-				if(mods::util::fuzzy_match(v,plr->name().c_str())) {
-					mods::classes::medic::heal_player(player,plr);
-					healed = true;
-					break;
-				}
-			}
-		}else{
-			std::cerr << "[bounds] player->room (" << room << ") >= room_list.size " << __FILE__ << "\n";
+	auto v = vec_args[0];
+	if(ICMP(v,"me") || ICMP(v,"self") || ICMP(v,player->name())){
+		heal_player(player,player);
+		return;
+	}
+	for(auto & plr : mods::globals::get_room_list(player->room())){
+		if(mods::util::fuzzy_match(v,plr->name().c_str())) {
+			heal_player(player,plr);
+			return;
 		}
 	}
-	if(!healed){
-		*player << "You couldn't find your target!\n";
-	}
+	player->sendln("You couldn't find your target!");
 }
 
 ACMD(do_revive) {

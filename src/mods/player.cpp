@@ -49,6 +49,9 @@ namespace mods::orm::inventory {
 };
 
 namespace mods {
+#define NPC_SEND_DEBUG(a){ std::cerr << "[player-output--NPC_SEND_DEBUG--][NPC:" << this->name().c_str() << "][uuid:" << this->uuid() << "]->'" << a <<"'\n"; }
+#define MENTOC_NPC_CHECK(str) if(IS_NPC(cd())){ NPC_SEND_DEBUG(str); return; }
+#define MENTOC_NPC_CHECK_0(str) if(IS_NPC(cd())){ NPC_SEND_DEBUG(str); return 0; }
 	using mask_t = mods::weapon::mask_type;
 	using lmdb_db = db_handle;
 
@@ -566,22 +569,27 @@ namespace mods {
 		return 0;
 	}
 	void player::psendln(std::string_view str) {
+		MENTOC_NPC_CHECK(str.data());
 		write_to_char(m_char_data, str,1,1);
 		desc().has_prompt = 0;
 	}
 	void player::psendln(mods::string& str) {
+		MENTOC_NPC_CHECK(str.c_str());
 		write_to_char(m_char_data, str.view(),1,1);
 		desc().has_prompt = 0;
 	}
 	void player::sendln(mods::string& str) {
+		MENTOC_NPC_CHECK(str.str());
 		write_to_char(m_char_data, str.view(), 1,0);
 		desc().has_prompt = 0;
 	}
 	void player::sendln(std::string_view str) {
+		MENTOC_NPC_CHECK(str.data());
 		write_to_char(m_char_data, str, 1,0);
 		desc().has_prompt = 0;
 	}
 	void player::stc_room(const room_rnum& rnum) {
+		MENTOC_NPC_CHECK(std::to_string(rnum));
 		if(rnum < 0 || std::size_t(rnum) >= world.size()){
 			return;
 		}
@@ -601,6 +609,7 @@ namespace mods {
 		desc().has_prompt = 0;
 	}
 	void player::stc(const char* m) {
+		MENTOC_NPC_CHECK(std::string(m));
 		/* FIXME: this does not scale */
 		if(m_capture_output) {
 			m_captured_output += m;
@@ -609,14 +618,17 @@ namespace mods {
 		desc().has_prompt = 0;
 	}
 	void player::stc(const mods::string& m){
+		MENTOC_NPC_CHECK(m.str());
 		write_to_char(m_char_data,m.view(),0,0);
 		desc().has_prompt = 0;
 	}
 	void player::stc(std::string_view sview) {
+		MENTOC_NPC_CHECK(sview.data());
 		write_to_char(m_char_data,sview,0,0);
 		desc().has_prompt = 0;
 	}
 	void player::stc(const std::string m) {
+		MENTOC_NPC_CHECK(m);
 		/* FIXME: this does not scale */
 		if(m_capture_output) {
 			m_captured_output += m;
@@ -625,6 +637,7 @@ namespace mods {
 		desc().has_prompt = 0;
 	}
 	void player::stc(int m) {
+		MENTOC_NPC_CHECK(m);
 		if(m_capture_output) {
 			m_captured_output += std::to_string(m);
 		}
@@ -634,6 +647,7 @@ namespace mods {
 		desc().has_prompt = 0;
 	}
 	void player::stc_room_desc(const room_rnum& rnum) {
+		MENTOC_NPC_CHECK(rnum);
 		if(rnum < 0 || std::size_t(rnum) >= world.size()){
 			std::cerr << "[stc_room_desc] invalid rnum!\n";
 			return;
@@ -645,6 +659,7 @@ namespace mods {
 		desc().has_prompt = 0;
 	}
 	void player::raw_send(const mods::string& str){
+		MENTOC_NPC_CHECK(str.c_str());
 		write_to_descriptor(m_desc->descriptor,str.c_str());
 		//desc().has_prompt = 0;
 	}
@@ -1062,6 +1077,7 @@ namespace mods {
 		m_lense_type = NORMAL_SIGHT;
 	}
 	size_t player::send(const char *messg, ...) {
+		MENTOC_NPC_CHECK_0(messg);
 		if(messg && *messg) {
 			size_t left;
 			va_list args;
@@ -1078,6 +1094,7 @@ namespace mods {
 	}
 
 	size_t player::godsend(const char *messg, ...) {
+		MENTOC_NPC_CHECK_0(messg);
 		if(!m_god_mode){
 			return 0;
 		}
@@ -1281,6 +1298,32 @@ namespace mods {
 		uint16_t player::skill(int t){
 			return m_skills[t];
 		}
-};
+
+		void player::damage_event(damage_event_t e){
+			switch(e){
+				default:
+					std::cerr << "[damage_event]: UNHANDLED case!->'" << e << "'\n";
+					break;
+				case damage_event_t::ATTACKER_NARROWLY_MISSED_YOU_EVENT:
+					this->sendln(MSG_NARROWLY_MISSED_ME());
+					break;
+				case damage_event_t::YOU_ARE_INJURED_EVENT:
+					this->sendln(MSG_YOU_ARE_INJURED());
+					break;
+				case damage_event_t::TARGET_DEAD_EVENT:
+					this->sendln(MSG_YOUR_TARGET_IS_DEAD());
+					break;
+				case damage_event_t::YOU_MISSED_YOUR_TARGET_EVENT:
+					this->sendln(MSG_MISSED_TARGET());
+					break;
+				case damage_event_t::HIT_BY_RIFLE_ATTACK:
+					this->sendln(MSG_HIT_BY_RIFLE_ATTACK());
+					break;
+				case damage_event_t::HIT_BY_SPRAY_ATTACK:
+					this->sendln(MSG_HIT_BY_SPRAY_ATTACK());
+					break;
+			}
+		}
+	};
 
 #endif

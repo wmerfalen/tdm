@@ -5,7 +5,7 @@
 #include <variant>
 
 namespace mods::values {
-		using variants_t = std::variant<int,uint8_t,uint16_t,std::string>;
+		using variants_t = std::variant<float,int,uint8_t,uint16_t,std::string>;
 		extern std::map<std::string,variants_t> alt_value_map;
 		void save_to_lmdb(std::string key,std::string value);
 		void load_from_lmdb(std::string in_key);
@@ -200,6 +200,7 @@ namespace mods::values {
 		CGET(std::string,MINI_GUNNER_WEAR_VEST_PACK,"");
 		CGET(std::string,MINI_GUNNER_WEAR_ELBOW_L,"");
 		CGET(std::string,MINI_GUNNER_WEAR_ELBOW_R,"objects/armor/vanguard-elbow-guard.yml");
+		CGET(uint8_t,MINI_GUNNER_SCAN_DEPTH,5);
 
 		CGET(std::string,LUNATIC_WEAR_LIGHT,"");
 		CGET(std::string,LUNATIC_WEAR_FINGER_R,"");
@@ -231,12 +232,13 @@ namespace mods::values {
 		CGET(std::string,LUNATIC_WEAR_ELBOW_L,"");
 		CGET(std::string,LUNATIC_WEAR_ELBOW_R,"");
 
+		CGET(float,EXPLOSIVE_CRITICAL_MULTIPLIER,0.75);
+		CGET(float,RIFLE_CRITICAL_MULTIPLIER,0.75);
+
 
 		CGET(uint8_t,REVIVE_TICKS,40);
 		CGET(uint8_t,REVIVE_HP,50);
 		CGET(uint8_t,INJURED_HP,5);
-		CGET(uint8_t,EXPLOSIVE_CRITICAL_MULTIPLIER,0.75);
-		CGET(uint8_t,RIFLE_CRITICAL_MULTIPLIER,0.75);
 		CGET(std::string,MSG_CRITICAL,"{red}***CRITICAL***{/red} --");
 		CGET(std::string,MSG_HEADSHOT,"{red}***HEADSHOT***{/red} -- ");
 		CGET(std::string,MSG_HIT,"{yel}--[HIT]--{/yel}");
@@ -246,6 +248,11 @@ namespace mods::values {
 		CGET(std::string,MSG_YOURE_INJURED ,"You are injured!");
 		CGET(std::string,MSG_FIRE_DAMAGE ,"[%d] You suffer burns from the roaring fire!\r\n");
 		CGET(std::string,MSG_SMOKE_DAMAGE ,"[%d] You struggle to breath as smoke fills your lungs!\r\n");
+		CGET(std::string,MSG_NARROWLY_MISSED_ME,"You just barely get out of the way of a potentially fatal shot!\r\n");
+		CGET(std::string,MSG_YOU_ARE_INJURED,"{red}***YOU ARE INJURED***{/red} --");
+		CGET(std::string,MSG_YOUR_TARGET_IS_DEAD,"{grn}*** YOUR TARGET IS DEAD ***{/grn}\r\n");
+		CGET(std::string,MSG_HIT_BY_RIFLE_ATTACK,"{red}*** YOUR ARE HIT ***{/red}\r\n");
+		CGET(std::string,MSG_HIT_BY_SPRAY_ATTACK,"{red}*** YOUR ARE HIT ***{/red}\r\n");
 		namespace msg {
 			template <typename T>
 			static inline void crit(T& p){

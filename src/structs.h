@@ -1401,13 +1401,16 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		uint16_t behaviour_tree;
 		uint64_t behaviour_tree_flags;
 		extended_mob_type_t extended_mob_type;
+		int heading;
+		int previous_room;
 		void set_behaviour_tree(std::string_view name);
 		void clear_behaviour_tree();
 		mob_special_data() : memory({}),
 			attack_type(0),default_pos(POS_STANDING),
 			damnodice(0),damsizedice(0),snipe_tracking(0),
 			behaviour_tree(0),behaviour_tree_flags(0),
-			extended_mob_type(extended_mob_type_t::NONE)
+			extended_mob_type(extended_mob_type_t::NONE),
+			heading(NORTH), previous_room(0)
 			{
 				std::cerr << "[mob_special_data] default constructor\n";
 

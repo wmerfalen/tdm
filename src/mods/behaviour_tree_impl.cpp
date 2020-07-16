@@ -3,12 +3,15 @@
 #include <string>
 #include "../spells.h"
 #include "weapons/damage-types.hpp"
+#include "scan.hpp"
+#include "../mobs/mini-gunner.hpp"
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
 extern void hit(char_data *ch, char_data *victim, int type);
 #define bti_debug(a) std::cerr << "[mods::behaviour_tree_imp::dispatch][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 
 namespace mods::behaviour_tree_impl {
+	using vec_player_data = mods::scan::vec_player_data;
 	container_t trees;
 	container_mapping_t tree_mapping;
 	//mob_list_t mobs_with_trees;
@@ -73,7 +76,9 @@ namespace mods::behaviour_tree_impl {
 		node do_nothing(node_type::DO_NOTHING);
 		node snipe_tracking(node_type::SELECTOR);
 		node sentinel_snipe_tracking(node_type::SELECTOR);
-		node mini_gunner(node_type::SELECTOR);
+		node mini_gunner_roam(node_type::SELECTOR);
+		node mini_gunner_engage(node_type::SELECTOR);
+		node mini_gunner_aggressive_roam(node_type::SELECTOR);
 		auto node_mob_has_snipe_capability = node::create_leaf(
 				[](argument_type mob) -> status {
 					if(mob.has_weapon_capability(mods::weapon::mask::snipe)){
@@ -204,10 +209,96 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 			})/** End create_sequence */
 		);// end append_child
 
-		mini_gunner.append_child(node::create_sequence({
+		/**
+		 *
+		 * [ default roam ]
+		 * [1] roam
+		 * [2] look down hallway
+		 * [3] see target?
+		 * 	[y] -> engage -> [ engage target ]
+		 * 	[n] -> roam -> [1]
+		 *
+		 * [ aggressive scan ]
+		 * [1] 
+		 *
+		 * [ engage target ]
+		 * [0] save uuid of player
+		 * [1] aim (consume N ticks)
+		 * [2] spray at target
+		 * 	[2.1] deal damage to target
+		 * 	[2.2] continue spray
+		 * 		[2.2.1] roll chance of post-shot hit?
+		 * 			[2.2.1.1] deal damage
+		 * 	[2.3] cooldown
+		 * [3] can still see target?
+		 * 	[y] -> [1]
+		 * 	[n] -> [ aggressive scan ]
+		 * 
+		 * 
+		 */
+		mini_gunner_roam.append_child(node::create_sequence({
+				/** scan for targets
+				 * success means: we found a target and engaged them, don't move, we're fine
+				 * failure means: move to another room to see if you can find another player
+				 */
+				node::create_leaf([](argument_type mob) -> status {
+						int depth = MINI_GUNNER_SCAN_DEPTH(); /** TODO calculate depth with default mods::values + buffs */
+						vec_player_data vpd;
+						mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
+						if(vpd.size() == 0){
+							return status::SUCCESS;
+						}
+						std::map<int,int> scores;
+						for(auto v : vpd){
+							if(!ptr_by_uuid(v.uuid)){
+								continue;
+							}
+							++scores[v.direction];
+						}
+						int should_fire = -1;
+						int max = 0;
+						for(auto pair : scores){
+							if(pair.second > max){
+								max = pair.second;
+								should_fire = pair.first;
+							}
+						}
+						if(should_fire != -1){
+							std::cerr << "[should_fire][" << dirstr(should_fire) << "\n";
+							auto mg = mini_gunner_ptr(mob.uuid());
+							mg->spray(should_fire);
+							return status::FAILURE;
+						}
+							return status::SUCCESS;
+					}
+				),
+					/** move in heading direction
+					 * success means: scan for players to kill
+					 */
+				node::create_leaf([](argument_type mob) -> status {
+						int dir = mob.cd()->mob_specials.heading;
+						if(CAN_GO(mob.cd(),dir)){
+							mob.cd()->mob_specials.previous_room = IN_ROOM(mob.cd());
+							char_from_room(mob.cd());
+							char_to_room(mob.cd(),world[IN_ROOM(mob.cd())].dir_option[dir]->to_room);
+						}
+						return status::SUCCESS;
+				})
+		}));
+		mini_gunner_engage.append_child(node::create_selector({
 				node::create_leaf([](argument_type mob) -> status {
 						return status::SUCCESS;
-						}),
+				}),
+				node::create_leaf([](argument_type mob) -> status {
+						return status::SUCCESS;
+						}
+				)
+				})
+		);
+		mini_gunner_aggressive_roam.append_child(node::create_selector({
+				node::create_leaf([](argument_type mob) -> status {
+						return status::SUCCESS;
+				}),
 				node::create_leaf([](argument_type mob) -> status {
 						return status::SUCCESS;
 						}
@@ -217,7 +308,9 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 		add_tree("do_nothing",do_nothing);
 		add_tree("snipe_tracking",snipe_tracking);
 		add_tree("sentinel_snipe_tracking",sentinel_snipe_tracking);
-		add_tree("mini_gunner",mini_gunner);
+		add_tree("mini_gunner_roam",mini_gunner_roam);
+		add_tree("mini_gunner_engage",mini_gunner_engage);
+		add_tree("mini_gunner_aggressive_roam",mini_gunner_aggressive_roam);
 
 		/**
 		 * Suspicious roaming tree. 

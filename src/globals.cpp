@@ -1043,5 +1043,23 @@ player_ptr_t ptr_by_uuid(uuid_t id){
 obj_ptr_t optr_by_uuid(uuid_t id){
 	return mods::globals::obj_map[id];
 }
+std::string dirstr(int dir){
+	switch(dir){
+		case NORTH:
+			return "NORTH";
+		case SOUTH:
+			return "SOUTH";
+		case EAST:
+			return "EAST";
+		case WEST:
+			return "WEST";
+		case UP:
+			return "UP";
+		case DOWN:
+			return "DOWN";
+		default:
+			return "UNKNOWN";
+	}
+}
 
 #endif

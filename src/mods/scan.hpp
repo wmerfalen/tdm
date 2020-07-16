@@ -34,8 +34,15 @@ namespace mods {
 		extern int directions[];
 		constexpr unsigned num_directions = 6;
 		using room_list_t = std::array<std::vector<room_rnum>,num_directions>;
+		enum find_type_t {
+			NPC,
+			PLAYERS,
+			ANY
+		};
 
 		void los_scan(char_data* ch,int depth,vec_player_data* vec_room_list);
+		void los_scan_for_players(char_data* ch,int depth,vec_player_data* vec_room_list);
+		void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction,find_type_t f);
 		void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction);
 
 		/**

@@ -8,14 +8,17 @@
 #endif
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 namespace mods::yaml {
+#define __MENOC_FEED_BASE_MEMBERS_DEBUG__
 #ifdef __MENOC_FEED_BASE_MEMBERS_DEBUG__
 #define debug_echo(a) std::cerr << "[MENTOC_FEED_BASE_MEMBERS][DEBUG]:'" << a << "'\n"; 
 #else
 #define debug_echo(a) /**/
 #endif
 #define MENTOC_FILE_EXISTS_PREAMBLE(type)\
-		std::string file = current_working_dir() + "/" + in_file.data();\
-		if(!mods::filesystem::file_exists(in_file.data())){\
+	std::string file = true_path(#type,in_file);\
+		if(!mods::filesystem::file_exists(file)){\
+			std::cerr << "WARNING FILE DOESNT EXIST: '" << file << "'\n";\
+			sleep(10);\
 			mods::object_utils::yaml_file_doesnt_exist(#type);\
 			return -1;\
 		}
@@ -50,6 +53,19 @@ namespace mods::yaml {
 		action_description = yaml_file["action_description"].as<std::string>();\
 		fed_items.push_back("action_description");\
 	}catch(YAML::Exception &e){ this->feed_status = -3; mods::object_utils::report_yaml_exception(e,fed_items); }
+
+	std::string true_path(std::string_view type,std::string_view in_file){
+		std::string cwd = current_working_dir();
+		std::string prefixed = CAT({cwd,"/objects/",type.data(),"/",in_file.data()});
+		std::string standalone = CAT({cwd,"/",in_file.data()});
+		if(mods::filesystem::file_exists(prefixed)){
+			return prefixed;
+		}
+		if(mods::filesystem::file_exists(standalone)){
+			return standalone;
+		}
+		return "";
+	}
 
 	std::vector<std::pair<std::string,float>> rarity_strings() {
 		return {
@@ -736,6 +752,7 @@ namespace mods::yaml {
 			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception &e){
+			std::cerr << "[YAML::EXCEPTION]:'" << e.what() << "'\n";
 			mods::object_utils::report_yaml_exception(e,fed_items);
 		this->feed_status = -2;
 			return -2;

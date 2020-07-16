@@ -54,7 +54,11 @@ namespace mods::scan {
 			rooms_found.clear();
 		}
 	}
-	void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction) {
+	void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction){
+		los_scan_direction(ch,depth,vec_room_list,direction, find_type_t::ANY);
+	}
+		
+	void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction, find_type_t type){
 		std::string s_dir;
 		auto i_d = direction;
 			LOS_SCAN_DIRECTION_DEBUG("scan directions: current dir: " << i_d);
@@ -95,6 +99,12 @@ namespace mods::scan {
 					room_id = room_dir->to_room;
 
 					for(auto character : mods::globals::get_room_list(room_id)) {
+						if(type == find_type_t::PLAYERS && IS_NPC(character->cd())){
+							continue;
+						}
+						if(type == find_type_t::NPC && !IS_NPC(character->cd())){
+							continue;
+						}
 						vec_room_list->push_back({});
 						auto & pushed_item = vec_room_list->back();
 						pushed_item.ch = character->cd();
@@ -124,7 +134,17 @@ namespace mods::scan {
 
 	void los_scan(char_data* ch,int depth,vec_player_data* vec_room_list) {
 		for(auto i_d : mods::scan::directions) {
-			los_scan_direction(ch,depth,vec_room_list,i_d);
+			los_scan_direction(ch,depth,vec_room_list,i_d,find_type_t::ANY);
+		}
+	}
+	void los_scan_for_npcs(char_data* ch,int depth,vec_player_data* vec_room_list){
+		for(auto i_d : mods::scan::directions) {
+			los_scan_direction(ch,depth,vec_room_list,i_d,find_type_t::PLAYERS);
+		}
+	}
+	void los_scan_for_players(char_data* ch,int depth,vec_player_data* vec_room_list){
+		for(auto i_d : mods::scan::directions) {
+			los_scan_direction(ch,depth,vec_room_list,i_d,find_type_t::PLAYERS);
 		}
 	}
 	static std::map<std::pair<room_rnum,room_rnum>,distance_t> distance_cache;

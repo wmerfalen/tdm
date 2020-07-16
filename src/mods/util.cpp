@@ -3,6 +3,7 @@
 
 #include "util.hpp"
 #include "flags.hpp"
+#include "filesystem.hpp"
 
 
 namespace mods::util {
@@ -498,6 +499,9 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_ITEM_PARSE_IMPL, ~, MENTOC_ITEM_TYPES_CAPS_SEQ)
 
 		MENTOC_ITEM_PARSE
 		return {-2,""};
+	}
+	bool yaml_file_exists(std::string path){
+		return mods::filesystem::file_exists(CAT({MENTOC_CURRENT_WORKING_DIR,"/",path}));
 	}
 
 };/** end mods::util */

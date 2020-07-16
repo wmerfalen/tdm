@@ -22,6 +22,11 @@ extern void forget(char_data *ch,char_data *victim);
 namespace mods::weapons::damage_types {
 	using vpd = mods::scan::vec_player_data;
 
+	void remember_event(player_ptr_t& victim,player_ptr_t& attacker){
+		if(IS_NPC(victim->cd())){
+			remember(victim->cd(),attacker->cd());
+		}
+	}
 	
 	namespace legacy {
 		int step_one(char_data *ch, char_data *victim, int dam, int attacktype) {
@@ -380,21 +385,30 @@ namespace mods::weapons::damage_types {
 					dam += critical_bonus;
 				}
 			}
-			if(dam && victim->position() > POS_DEAD) {
-				if(victim->is_npc()){
-					damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
-					remember(victim->cd(),player->cd());
-					return;
+
+			if(victim->position() > POS_DEAD) {
+				damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
+				if(dam == 0){
+					victim->damage_event(player::damage::ATTACKER_NARROWLY_MISSED_YOU_EVENT);
+					player->damage_event(player::damage::YOU_MISSED_YOUR_TARGET_EVENT);
+				}else if(dam > 0){
+					victim->set_attacker(player->uuid());
+					victim->damage_event(player::damage::HIT_BY_SPRAY_ATTACK);
+					if(attack_injures(weapon)){
+						victim->damage_event(player::damage::YOU_ARE_INJURED_EVENT);
+						mods::injure::injure_player(victim);
+					}
 				}
+				remember_event(victim,player);
 			}else{
 				stop_fighting(player->cd());
 				stop_fighting(victim->cd());
 			}
-		}
+		}//end for loop
 
 		return;
 
-	}
+	}//end spray_direction function
 
 
 
@@ -602,28 +616,32 @@ namespace mods::weapons::damage_types {
 #endif
 
 		if(victim->position() > POS_DEAD) {
-			if(victim->is_npc()){
+			damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
 				if(dam == 0){
-					player->sendln(MSG_MISSED_TARGET());
+					victim->damage_event(player::damage::ATTACKER_NARROWLY_MISSED_YOU_EVENT);
+					player->damage_event(player::damage::YOU_MISSED_YOUR_TARGET_EVENT);
 				}else if(dam > 0){
-					damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
-					if(MOB_FLAGGED(victim->cd(),MOB_SENTINEL)){
-						dty_debug("Mob is a sentinel. Setting sentinel_snipe_tracking on mob's behaviour tree");
-						victim->cd()->mob_specials.set_behaviour_tree("sentinel_snipe_tracking");
-						victim->cd()->mob_specials.snipe_tracking = player->uuid();
-					}else{
-						dty_debug("Mob is normal mob. Setting snipe_tracking on mob's behaviour tree");
-						victim->cd()->mob_specials.set_behaviour_tree("snipe_tracking");
-						victim->cd()->mob_specials.snipe_tracking = player->uuid();
+					victim->set_attacker(player->uuid());
+					victim->damage_event(player::damage::HIT_BY_RIFLE_ATTACK);
+					if(IS_NPC(victim->cd())){
+						if(MOB_FLAGGED(victim->cd(),MOB_SENTINEL)){
+							dty_debug("Mob is a sentinel. Setting sentinel_snipe_tracking on mob's behaviour tree");
+							victim->cd()->mob_specials.set_behaviour_tree("sentinel_snipe_tracking");
+							victim->cd()->mob_specials.snipe_tracking = player->uuid();
+						}else{
+							dty_debug("Mob is normal mob. Setting snipe_tracking on mob's behaviour tree");
+							victim->cd()->mob_specials.set_behaviour_tree("snipe_tracking");
+							victim->cd()->mob_specials.snipe_tracking = player->uuid();
+						}
 					}
 					if(attack_injures(weapon)){
+						victim->damage_event(player::damage::YOU_ARE_INJURED_EVENT);
 						mods::injure::injure_player(victim);
 					}
 				}
-				remember(victim->cd(),player->cd());
-			}
+				remember_event(victim,player);
 		}else{
-			player->sendln(MSG_TARGET_DEAD());
+			player->damage_event(player::damage::TARGET_DEAD_EVENT);
 			stop_fighting(player->cd());
 			stop_fighting(victim->cd());
 		}

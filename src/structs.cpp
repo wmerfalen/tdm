@@ -56,6 +56,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SE
 			this->m_feed_file = feed_file.data();
 			this->type = in_type;
 			this->str_type = mods::util::yaml_int_to_string(in_type);
+			std::cerr << "[type]: " << this->type << ", str_type:" << this->str_type << "\n";
 			m_db_id = 0;
 			std::string s_type = this->str_type.substr(strlen("ITEM_"));
 			std::transform(s_type.begin(),s_type.end(),s_type.begin(),
@@ -496,6 +497,8 @@ bool obj_data::flagged(int value){
 			this->behaviour_tree = 0;
 			this->behaviour_tree_flags = 0;
 			this->extended_mob_type = mods::mobs::extended_types_t::NONE;
+			this->heading = 0;
+			this->previous_room = 0;
 		}
 		void mob_special_data::import(const mob_special_data& other){
 			this->memory = other.memory;
@@ -507,6 +510,8 @@ bool obj_data::flagged(int value){
 			this->behaviour_tree = other.behaviour_tree;
 			this->behaviour_tree_flags = other.behaviour_tree_flags;
 			this->extended_mob_type = other.extended_mob_type;
+			this->heading = other.heading;
+			this->previous_room = other.previous_room;
 		}
 		void mob_special_data::clear_behaviour_tree(){
 			this->behaviour_tree = 0;

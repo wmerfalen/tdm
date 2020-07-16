@@ -7,6 +7,10 @@
 extern bool key_exists(std::string key);
 namespace mods::values {
 		std::map<std::string,variants_t> alt_value_map;
+		static const std::vector<std::string> float_types = {
+		"EXPLOSIVE_CRITICAL_MULTIPLIER",
+		"RIFLE_CRITICAL_MULTIPLIER"
+		};
 		static const std::vector<std::string> int_types = {
 		"FIRE_DAMAGE_TICK_RESOLUTION",
 		"FLASHBANG_COOLDOWN_TICKS",
@@ -50,7 +54,8 @@ namespace mods::values {
 		"REVIVE_HP",
 		"INJURED_HP",
 		"EXPLOSIVE_CRITICAL_MULTIPLIER",
-		"RIFLE_CRITICAL_MULTIPLIER"
+		"RIFLE_CRITICAL_MULTIPLIER",
+		"MINI_GUNNER_SCAN_DEPTH"
 		};
 
 
@@ -159,8 +164,7 @@ namespace mods::values {
 		"WSL_SNIPER_3_DAMAGE",
 		"WSL_SNIPER_4_ALLOWABLE",
 		"WSL_SNIPER_4_ACCURACY",
-		"WSL_SNIPER_4_DAMAGE",
-
+		"WSL_SNIPER_4_DAMAGE"
 		};
 			static const std::vector<std::string> string_types = {
 		"MINI_GUNNER_WEAR_LIGHT",
@@ -229,7 +233,12 @@ namespace mods::values {
 		"MSG_TARGET_DEAD",
 		"MSG_YOURE_INJURED",
 		"MSG_FIRE_DAMAGE",
-		"MSG_SMOKE_DAMAGE"
+		"MSG_SMOKE_DAMAGE",
+		"MSG_NARROWLY_MISSED_ME",
+		"MSG_YOU_ARE_INJURED",
+		"MSG_YOUR_TARGET_IS_DEAD",
+		"MSG_HIT_BY_RIFLE_ATTACK",
+		"MSG_HIT_BY_SPRAY_ATTACK",
 			};
 		bool is_int(std::string key){
 			return (std::find(int_types.begin(),int_types.end(),key) != int_types.end());
@@ -242,6 +251,9 @@ namespace mods::values {
 		}
 		bool is_string(std::string key){
 			return (std::find(string_types.begin(),string_types.end(),key) != string_types.end());
+		}
+		bool is_float(std::string key){
+			return (std::find(float_types.begin(),float_types.end(),key) != float_types.end());
 		}
 
 		void revert_to_default(std::string in_key){
@@ -277,6 +289,10 @@ namespace mods::values {
 			}
 			if(is_string(key)){
 				alt_value_map[key] = value;
+				return;
+			}
+			if(is_float(key)){
+				alt_value_map[key] = static_cast<float>(atof(value.c_str()));
 				return;
 			}
 			std::cerr << "[WARNING] key doesnt exist in int or string types!->'" << in_key << "'\n";
@@ -448,8 +464,10 @@ namespace mods::values {
 		CGET_DEF(uint8_t,REVIVE_TICKS,40);
 		CGET_DEF(uint8_t,REVIVE_HP,50);
 		CGET_DEF(uint8_t,INJURED_HP,5);
-		CGET_DEF(uint8_t,EXPLOSIVE_CRITICAL_MULTIPLIER,0.75);
-		CGET_DEF(uint8_t,RIFLE_CRITICAL_MULTIPLIER,0.75);
+		CGET_DEF(uint8_t,MINI_GUNNER_SCAN_DEPTH,5);
+
+		CGET_DEF(float,EXPLOSIVE_CRITICAL_MULTIPLIER,0.75);
+		CGET_DEF(float,RIFLE_CRITICAL_MULTIPLIER,0.75);
 
 		CGET_DEF(std::string,MINI_GUNNER_WEAR_LIGHT,"");
 		CGET_DEF(std::string,MINI_GUNNER_WEAR_FINGER_R,"");
@@ -518,5 +536,10 @@ namespace mods::values {
 		CGET_DEF(std::string,MSG_YOURE_INJURED ,"You are injured!");
 		CGET_DEF(std::string,MSG_FIRE_DAMAGE ,"[%d] You suffer burns from the roaring fire!\r\n");
 		CGET_DEF(std::string,MSG_SMOKE_DAMAGE ,"[%d] You struggle to breath as smoke fills your lungs!\r\n");
+		CGET_DEF(std::string,MSG_NARROWLY_MISSED_ME,"You just barely get out of the way of a potentially fatal shot!\r\n");
+		CGET_DEF(std::string,MSG_YOU_ARE_INJURED,"{red}***YOU ARE INJURED***{/red} --");
+		CGET_DEF(std::string,MSG_YOUR_TARGET_IS_DEAD,"{grn}*** YOUR TARGET IS DEAD ***{/grn}\r\n");
+		CGET_DEF(std::string,MSG_HIT_BY_RIFLE_ATTACK,"{red}*** YOUR ARE HIT ***{/red}\r\n");
+		CGET_DEF(std::string,MSG_HIT_BY_SPRAY_ATTACK,"{red}*** YOUR ARE HIT ***{/red}\r\n");
 #undef CGET_DEF
 };

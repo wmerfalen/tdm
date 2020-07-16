@@ -60,5 +60,7 @@ namespace mods::mobs {
 		std::string description(std::string str);
 		std::string description(extended_types_t type);
 	};
+	void default_wear_strategy(int where, std::string_view path);
+	std::tuple<int,std::string> extract_yaml_info_from_path(std::string_view path);
 };
 #endif

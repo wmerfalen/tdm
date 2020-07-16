@@ -16,11 +16,11 @@ namespace mods::mobs {
 			case extended_types_t::NONE:
 				return;
 			case extended_types_t::MINI_GUNNER:
+				std::cerr << "[ found mini gunner ]\n";
 				mini_gunner::create(mob_id);
 				return;
 		}
 	}
-
 };
 
 namespace mods::mobs::extended_types {

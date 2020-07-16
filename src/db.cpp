@@ -2043,6 +2043,15 @@ obj_ptr_t create_object(int type,std::string yaml_file) {
 	mods::globals::register_object(obj_list.back());
 	return obj_list.back();
 }
+std::tuple<bool,obj_ptr_t> create_object_opt(int type,std::string yaml_file) {
+	auto obj = std::make_shared<obj_data>(type,yaml_file);
+	if(!obj){
+		return {false,nullptr};
+	}
+	obj_list.push_back(std::move(obj));
+	mods::globals::register_object(obj_list.back());
+	return {true,obj_list.back()};
+}
 
 shop_ptr_t create_shop_from_index(std::size_t proto_index){
 	if (proto_index >= shop_proto.size()){

@@ -235,4 +235,12 @@ namespace mods::skills {
 	extern bool player_can(player_ptr_t&,int);
 };
 static inline bool can(player_ptr_t& player,int skill){ return mods::skills::player_can(player,skill); }
+static inline std::string CAT(std::vector<std::string_view> m){
+	std::string f = "";
+	for(auto s : m){
+		f += s;
+	}
+	return f;
+}
+std::string dirstr(int);
 #endif

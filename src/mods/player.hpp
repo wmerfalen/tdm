@@ -58,6 +58,16 @@ namespace mods::globals {
 };
 namespace mods {
 	struct player {
+		enum damage_event_t : uint16_t {
+			ATTACKER_NARROWLY_MISSED_YOU_EVENT,
+			YOU_ARE_INJURED_EVENT,
+			TARGET_DEAD_EVENT,
+			YOU_MISSED_YOUR_TARGET_EVENT,
+			HIT_BY_RIFLE_ATTACK,
+			HIT_BY_SPRAY_ATTACK
+		};
+
+		using damage = damage_event_t;
 		using obj_ptr_t = std::shared_ptr<obj_data>;
 		using affect_t = mods::affects::affect_t;
 		using affect_list_t = std::vector<affect_t>;
@@ -608,6 +618,16 @@ namespace mods {
 
 		void set_skill(int,uint16_t proficiency);
 		uint16_t skill(int);
+		
+		void damage_event(damage_event_t e);
+		void set_attacker(uuid_t a){
+			this->m_attacker_uuid = a;
+		}
+		uuid_t get_attacker() {
+			return this->m_attacker_uuid;
+		}
+		
+
 		protected:
 		std::array<bool,misc_pref_enum_t::SIZE> m_misc_pref;
 		void m_sync_equipment();
@@ -619,7 +639,10 @@ namespace mods {
 		std::shared_ptr<char_data> m_shared_ptr;
 		//std::deque<std::shared_ptr<obj_data>> m_carrying;
 		std::vector<affected_type> m_affected_by;
+
+
 		private: 
+		uuid_t m_attacker_uuid;
 		event_queue_iterator m_block_event;
 		bool m_has_block_event;
 		std::unordered_map<uint32_t,uuid_t> m_block_data;
