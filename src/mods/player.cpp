@@ -1316,7 +1316,9 @@ namespace mods {
 			this->dispatch_event(e,tple);
 			switch(e){
 				default:
+#ifdef __MENTOC_SHOW_UNHANDLED_DAMAGE_EVENTS__
 					std::cerr << "[damage_event]: UNHANDLED case!->'" << e << "'\n";
+#endif
 					break;
 				case damage_event_t::ATTACKER_NARROWLY_MISSED_YOU_EVENT:
 					this->sendln(MSG_NARROWLY_MISSED_ME());
@@ -1357,7 +1359,7 @@ namespace mods {
 					this->sendln(CAT({"You've been headshot! [",std::to_string(std::get<0>(tple)),"]"}));
 					break;
 				case damage_event_t::YOU_INJURED_SOMEONE_EVENT:
-					std::cerr << "[mods::player] you injured someone event stub\n";
+					/** TODO */
 					break;
 			}
 		}

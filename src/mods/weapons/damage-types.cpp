@@ -374,6 +374,7 @@ namespace mods::weapons::damage_types {
 		int crit_range = weapon->rifle()->attributes->critical_range;
 		int crit_chance = weapon->rifle()->attributes->critical_chance;
 		int critical_bonus = 0;
+#ifdef __MENTOC_SHOW_DAMAGE_DUMP_DEBUG_OUTPUT__
 #define DMG_DUMP() \
 		std::cerr << "dam:" << dam << "\n";\
 		std::cerr << "damage_dice: ";\
@@ -388,6 +389,9 @@ namespace mods::weapons::damage_types {
 		std::cerr << critical_bonus << "\n";\
 		std::cerr << "damage_sides:";\
 		std::cerr << damage_sides << "\n";
+#else
+#define DMG_DUMP()
+#endif
 
 
 		vpd scan;
@@ -660,7 +664,7 @@ namespace mods::weapons::damage_types {
 		/** calculate headshot */
 		if(dice(1,100) >= 95){
 			/** TODO: evaluate damage if wearing super strong headgear */
-			auto headshot_damage = victim->hp();
+			int headshot_damage = victim->hp() / HEADSHOT_DIVISOR();
 			dam = headshot_damage;
 			player->damage_event(de::YOU_DEALT_HEADSHOT_WITH_RIFLE_ATTACK,std::make_tuple<>(headshot_damage,victim->uuid()));
 			victim->damage_event(de::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK,std::make_tuple<>(headshot_damage,player->uuid()));
@@ -748,4 +752,7 @@ namespace mods::weapons::damage_types {
 
 
 };
+#ifdef DMG_DEBUG
+#undef DMG_DEBUG
+#endif
 

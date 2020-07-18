@@ -11,7 +11,11 @@
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
 extern void hit(char_data *ch, char_data *victim, int type);
+#ifdef __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__
 #define bti_debug(a) std::cerr << "[mods::behaviour_tree_imp::dispatch][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+#else
+#define bti_debug(a)
+#endif
 
 namespace mods::behaviour_tree_impl {
 	using vec_player_data = mods::scan::vec_player_data;
@@ -19,7 +23,7 @@ namespace mods::behaviour_tree_impl {
 	container_mapping_t tree_mapping;
 	//mob_list_t mobs_with_trees;
 	void run_trees(){
-		std::cerr << "[behaviour_tree][run_trees] -- STUB\n";
+		bti_debug( "[behaviour_tree][run_trees] -- STUB\n");
 	}
 	int8_t dispatch(uuid_t mob_uuid){
 		auto it = mods::globals::mob_map.find(mob_uuid);
@@ -30,7 +34,7 @@ namespace mods::behaviour_tree_impl {
 		return dispatch_ptr(*(it->second));
 	}
 	int8_t dispatch_ptr(argument_type& ch){
-		std::cerr << "dispatching behaviour tree on: " << ch.name().c_str() << "\n";
+		bti_debug("dispatching behaviour tree on: " << ch.name().c_str());
 		if(ch.mob_specials().behaviour_tree == 0){
 			bti_debug("As you were... ");
 			return dispatch_status_t::AS_YOU_WERE;
@@ -54,7 +58,7 @@ namespace mods::behaviour_tree_impl {
 		if(it == tree_mapping.end()){
 			return -1;
 		}
-		std::cerr << "registering mob '" << tree_name << "'\n";
+		bti_debug("registering mob '" << tree_name);
 		mob.mob_specials().behaviour_tree = std::distance(tree_mapping.begin(),it);
 		return 0;
 	}
@@ -85,10 +89,10 @@ namespace mods::behaviour_tree_impl {
 		auto node_mob_has_snipe_capability = node::create_leaf(
 				[](argument_type mob) -> status {
 					if(mob.has_weapon_capability(mods::weapon::mask::snipe)){
-						std::cerr << "[node_mob_has_snipe_capability]-> mob has snipe\n";
+						bti_debug("[node_mob_has_snipe_capability]-> mob has snipe");
 						return status::SUCCESS;
 					}else{
-						std::cerr << "[node_mob_has_snipe_capability]-> mob DOEST NOT have snipe\n";
+						bti_debug("[node_mob_has_snipe_capability]-> mob DOEST NOT have snipe");
 						return status::FAILURE;
 					}
 				}
@@ -182,14 +186,14 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 				for(auto & memorized_attacker_uuid : mob.mob_specials().memory){
 					auto memorized_attacker_opt = ptr_opt(memorized_attacker_uuid);
 					if(!memorized_attacker_opt.has_value()){
-						std::cerr << "[memorized_attacker] grabbing by uuid failed! uuid points to nullptr: " << memorized_attacker_uuid << "\n";
+						bti_debug( "[memorized_attacker] grabbing by uuid failed! uuid points to nullptr: " << memorized_attacker_uuid );
 						erase_these.push_back(memorized_attacker_uuid);
 						continue;
 					}
 					auto memorized_attacker = memorized_attacker_opt.value();
 					if(mob.room() == memorized_attacker->room()){
 						act("$n recognizes ", FALSE, mob, 0, 0, TO_ROOM);
-						std::cerr << "[recognize]: " << mob.name() << "->" << memorized_attacker->name().c_str() << "\n";
+						bti_debug( "[recognize]: " << mob.name() << "->" << memorized_attacker->name().c_str());
 						set_fighting(mob,memorized_attacker->cd());
 						hit(mob, memorized_attacker->cd(), TYPE_UNDEFINED);
 						/**
@@ -323,7 +327,9 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 		 */
 		node suspicious_roaming(node_type::SELECTOR);
 		suspicious_roaming.append_child(node::create_selector({
-			return status::SUCCESS;
+			node::create_leaf([](argument_type mob) -> status {
+				return status::SUCCESS;
+			})
 		}));
 		add_tree("suspicious_roaming",suspicious_roaming);
 	}

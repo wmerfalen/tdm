@@ -164,7 +164,8 @@ namespace mods::values {
 		"WSL_SNIPER_3_DAMAGE",
 		"WSL_SNIPER_4_ALLOWABLE",
 		"WSL_SNIPER_4_ACCURACY",
-		"WSL_SNIPER_4_DAMAGE"
+		"WSL_SNIPER_4_DAMAGE",
+		"HEADSHOT_DIVISOR",
 		};
 			static const std::vector<std::string> string_types = {
 		"MINI_GUNNER_WEAR_LIGHT",
@@ -415,6 +416,7 @@ namespace mods::values {
 		CGET_DEF(uint16_t,WSL_MACHINE_PISTOL_4_ALLOWABLE,0);
 		CGET_DEF(uint16_t,WSL_MACHINE_PISTOL_4_ACCURACY,0);
 		CGET_DEF(uint16_t,WSL_MACHINE_PISTOL_4_DAMAGE,0);
+		CGET_DEF(uint16_t,HEADSHOT_DIVISOR,3);
 
 
 

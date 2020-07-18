@@ -653,6 +653,7 @@ void game_loop(socket_t mother_desc) {
 		gettimeofday(&last_time, (struct timezone *) 0);
 		
 		while (i < epoll_wait_status) {
+			std::cerr << "[while epoll wait status]\n";
 			new_desc = 0;
 			auto operating_socket = events[i].data.fd;
 			if (events[i].data.fd == mother_desc) {
@@ -853,6 +854,7 @@ void game_loop(socket_t mother_desc) {
 	#define rb_bht_debug(a){ std::cerr << "[run_behaviour_trees][behaviour_trees]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n"; }
 #endif
 void run_behaviour_trees(){
+	rb_bht_debug("run_behaviour_trees [ENTRY]");
 	for(auto & npc : mob_list){
 		if(npc->mob_specials().behaviour_tree){
 			auto dispatch_result = mods::behaviour_tree_impl::dispatch_ptr(*npc);
@@ -878,6 +880,7 @@ void run_behaviour_trees(){
 			}
 		}
 	}
+	rb_bht_debug("run_behaviour_trees [RETURN]");
 }
 
 void heartbeat(int pulse) {
