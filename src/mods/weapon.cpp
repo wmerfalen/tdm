@@ -358,7 +358,7 @@ namespace mods::weapon {
 		return true;
 		/** roll 6d6 */
 		static constexpr int ideal_roll = 21;
-		int hit_roll = mods::rand::roll(6,6);
+		int hit_roll = dice(6,6);
 		int spread = ideal_roll - hit_roll;
 		if(spread < 0){
 			spread *= -1;

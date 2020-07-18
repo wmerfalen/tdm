@@ -57,29 +57,6 @@ void mobile_activity(void) {
 		bht_debug("FOREACH_MOB(" << MOBTOSTR(ch));
 
 
-		if(npc->mob_specials().behaviour_tree){
-			auto dispatch_result = mods::behaviour_tree_impl::dispatch_ptr(*npc);
-			bht_debug("dispatch_result: '" << std::to_string(dispatch_result) << "'");
-			switch(dispatch_result){
-				case mods::behaviour_tree_impl::dispatch_status_t::RETURN_IMMEDIATELY:
-					bht_debug("dispatch result: Return immediately");
-					break;
-					//continue;
-				case mods::behaviour_tree_impl::dispatch_status_t::RETURN_FALSE_IMMEDIATELY:
-					bht_debug("dispatch result: Return FALSE immediately");
-					break;
-					//continue;
-				case mods::behaviour_tree_impl::dispatch_status_t::AS_YOU_WERE:
-					bht_debug("dispatch result: As you were...");
-					break;
-				case mods::behaviour_tree_impl::dispatch_status_t::MOB_DOESNT_EXIST:
-					bht_debug("dispatch result: MOB doesn't exist according to behaviour tree...");
-					break;
-				default:
-					bht_debug("dispatch result: defaulted...");
-					break;
-			}
-		}
 
 		/* Examine call for special procedure */
 #ifdef __MENTOC_USE_MOB_SPECIALS_IN_MOBILE_ACTIVITY__

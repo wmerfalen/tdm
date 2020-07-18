@@ -3,6 +3,8 @@
 #include <memory>
 #include "../weapons/damage-types.hpp"
 #include "../damage-event.hpp"
+#include "../scan.hpp"
+#include "../rooms.hpp"
 
 #define __MENTOC_MODS_MOBS_MINI_GUNNER_SHOW_DEBUG_OUTPUT__
 #ifdef __MENTOC_MODS_MOBS_MINI_GUNNER_SHOW_DEBUG_OUTPUT__
@@ -11,6 +13,36 @@
 #define mini_debug(a) ;;
 #endif
 namespace mods::mobs {
+
+	int weighted_direction_decider(player_ptr_t& mob){
+		int depth = MINI_GUNNER_SCAN_DEPTH();
+		mods::scan::vec_player_data vpd;
+		mods::scan::los_scan_for_players(mob->cd(),depth,&vpd);
+		std::map<int,int> scores;
+		for(auto v : vpd){
+			if(!ptr_by_uuid(v.uuid)){
+				continue;
+			}
+			if(mods::rooms::is_peaceful(v.room_rnum)){
+				continue;
+			}
+			++scores[v.direction];
+		}
+		int should_fire = -1;
+		int max = 0;
+		for(auto pair : scores){
+			if(pair.second > max){
+				max = pair.second;
+				should_fire = pair.first;
+			}
+		}
+		/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
+		if(should_fire == -1){
+			/** FIXME */
+			std::cerr << "[stub] should_fire is -1, choose random direction\n";
+		}
+		return should_fire;
+	}
 	std::map<uuid_t,std::shared_ptr<mini_gunner>> mg_map;
 	void mini_gunner::create(uuid_t mob_uuid){
 		mini_debug("mini_gunner create on uuid:" << mob_uuid);
@@ -38,7 +70,24 @@ namespace mods::mobs {
 		this->player_ptr->equip(obj,where);
 	}
 	void mini_gunner::setup_damage_callbacks(){
-		//this->player_ptr->register_damage_event_callback(damage_event_t::
+		using de = damage_event_t;
+		this->player_ptr->register_damage_event_callback(de::YOURE_IN_PEACEFUL_ROOM,[&](de event,damage_info_t dinfo) {
+				auto & room = world[this->player_ptr->room()];
+				int decision = weighted_direction_decider(this->player_ptr);
+				if(decision == -1){
+					for(auto dir : room.directions()){
+						if(mods::rooms::is_peaceful(room.dir_option[dir]->to_room) == false){
+							decision = dir;
+							break;
+						}
+					}
+				}
+				assert(decision != -1);
+				this->player_ptr->cd()->mob_specials.previous_room = this->player_ptr->room();
+				char_from_room(this->player_ptr->cd());
+				char_to_room(this->player_ptr->cd(),world[this->player_ptr->room()].dir_option[decision]->to_room);
+				this->set_heading(decision);
+		});
 	}
 	mini_gunner::mini_gunner(uuid_t mob_uuid){
 		this->init();

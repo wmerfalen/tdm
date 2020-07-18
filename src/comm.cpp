@@ -579,6 +579,7 @@ void perform_auto_login(player_ptr_t& player){
 	mods::globals::register_authenticated_player(player);
 	act("$n has entered the game.", TRUE, player->cd(), 0, 0, TO_ROOM);
 	player->set_state(CON_PLAYING);
+	player->position() = POS_STANDING;
 
 	if(player->level() == 0) {
 		do_start(player->cd());
@@ -845,6 +846,39 @@ void game_loop(socket_t mother_desc) {
 	}
 
 }
+#define __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__
+#ifdef __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__
+	#define rb_bht_debug(a) /**/
+#else
+	#define rb_bht_debug(a){ std::cerr << "[run_behaviour_trees][behaviour_trees]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n"; }
+#endif
+void run_behaviour_trees(){
+	for(auto & npc : mob_list){
+		if(npc->mob_specials().behaviour_tree){
+			auto dispatch_result = mods::behaviour_tree_impl::dispatch_ptr(*npc);
+			rb_bht_debug("dispatch_result: '" << std::to_string(dispatch_result) << "'");
+			switch(dispatch_result){
+				case mods::behaviour_tree_impl::dispatch_status_t::RETURN_IMMEDIATELY:
+					rb_bht_debug("dispatch result: Return immediately");
+					break;
+					//continue;
+				case mods::behaviour_tree_impl::dispatch_status_t::RETURN_FALSE_IMMEDIATELY:
+					rb_bht_debug("dispatch result: Return FALSE immediately");
+					break;
+					//continue;
+				case mods::behaviour_tree_impl::dispatch_status_t::AS_YOU_WERE:
+					rb_bht_debug("dispatch result: As you were...");
+					break;
+				case mods::behaviour_tree_impl::dispatch_status_t::MOB_DOESNT_EXIST:
+					rb_bht_debug("dispatch result: MOB doesn't exist according to behaviour tree...");
+					break;
+				default:
+					rb_bht_debug("dispatch result: defaulted...");
+					break;
+			}
+		}
+	}
+}
 
 void heartbeat(int pulse) {
 	mods::date_time::heartbeat();
@@ -867,6 +901,12 @@ void heartbeat(int pulse) {
 	if(!(pulse % PULSE_IDLEPWD)) {	/* 15 seconds */
 		check_idle_passwords();
 	}
+
+	constexpr static uint32_t PULSE_BEHAVIOUR_TREES = 30;
+	if(!(pulse % PULSE_BEHAVIOUR_TREES)) {
+		run_behaviour_trees();
+	}
+
 
 	if(!(pulse % PULSE_MOBILE)) {
 		mobile_activity();

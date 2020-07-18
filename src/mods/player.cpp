@@ -1306,14 +1306,14 @@ namespace mods {
 		void player::register_damage_event_callback(damage_event_t e,damage_event_callback_t cb){
 			m_damage_event_callbacks[e] = cb;
 		}
-		void player::dispatch_event(damage_event_t e){
+		void player::dispatch_event(damage_event_t e,damage_info_t tple){
 			if(m_damage_event_callbacks.find(e) != m_damage_event_callbacks.end()){
-				m_damage_event_callbacks[e](e,uuid());
+				m_damage_event_callbacks[e](e,tple);
 			}
 		}
 
-		void player::damage_event(damage_event_t e){
-			this->dispatch_event(e);
+		void player::damage_event(damage_event_t e,damage_info_t tple){
+			this->dispatch_event(e,tple);
 			switch(e){
 				default:
 					std::cerr << "[damage_event]: UNHANDLED case!->'" << e << "'\n";
@@ -1331,10 +1331,10 @@ namespace mods {
 					this->sendln(MSG_MISSED_TARGET());
 					break;
 				case damage_event_t::HIT_BY_RIFLE_ATTACK:
-					this->sendln(MSG_HIT_BY_RIFLE_ATTACK());
+					this->sendln(CAT({MSG_HIT_BY_RIFLE_ATTACK(),"[",std::to_string(std::get<0>(tple)),"]"}));
 					break;
 				case damage_event_t::HIT_BY_SPRAY_ATTACK:
-					this->sendln(MSG_HIT_BY_SPRAY_ATTACK());
+					this->sendln(CAT({MSG_HIT_BY_SPRAY_ATTACK(),"[",std::to_string(std::get<0>(tple)),"]"}));
 					break;
 				case damage_event_t::NO_PRIMARY_WIELDED_EVENT:
 					this->sendln(MSG_NO_PRIMARY_WIELDED());
@@ -1350,6 +1350,11 @@ namespace mods {
 					break;
 				case damage_event_t::TARGET_IN_PEACEFUL_ROOM_EVENT:
 					this->sendln(MSG_TARGET_IN_PEACEFUL_ROOM());
+					break;
+				case damage_event_t::YOU_GOT_HEADSHOT_BY_SPRAY_ATTACK:
+					break;
+				case damage_event_t::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK:
+					this->sendln(CAT({"You've been headshot! [",std::to_string(std::get<0>(tple)),"]"}));
 					break;
 				case damage_event_t::YOU_INJURED_SOMEONE_EVENT:
 					std::cerr << "[mods::player] you injured someone event stub\n";

@@ -239,11 +239,10 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 		 * 
 		 * 
 		 */
-		auto scan_for_targets = node::create_leaf([](argument_type mob) -> status {
+		auto scan_for_targets_and_engage = node::create_leaf([](argument_type mob) -> status {
 						/** TODO calculate depth with default mods::values + buffs */
 						int depth = MINI_GUNNER_SCAN_DEPTH();
-						vec_player_data vpd;
-						mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
+						vec_player_data vpd; mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
 						if(vpd.size() == 0){
 							return status::FAILURE;
 						}
@@ -268,7 +267,8 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 						if(should_fire != -1){
 							auto mg = mini_gunner_ptr(mob.uuid());
 							mg->set_heading(should_fire);
-							mg->set_behaviour_tree("mini_gunner_engage");
+							mg->spray(should_fire);
+							//mg->set_behaviour_tree("mini_gunner_engage");
 							return status::SUCCESS;
 						}
 						return status::FAILURE;
@@ -292,11 +292,11 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 							char_to_room(mob.cd(),world[IN_ROOM(mob.cd())].dir_option[dir]->to_room);
 							return status::SUCCESS;
 						}
-						mg->set_behaviour_tree("mini_gunner_aggressive_roam");
+						//mg->set_behaviour_tree("mini_gunner_aggressive_roam");
 						return status::FAILURE;
 				});
 		mini_gunner_roam.append_child(node::create_sequence({
-				scan_for_targets
+				scan_for_targets_and_engage
 		}));
 		mini_gunner_engage.append_child(node::create_sequence({
 					spray_heading,

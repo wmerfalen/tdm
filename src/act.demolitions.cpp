@@ -202,7 +202,7 @@ ACMD(do_breach) {
 	}
 	if(mods::doors::is_dir_electrified(room,door)){
 		player->sendln("You attempt to place the breach charge but notice that the door is {blu}ELECTRIFIED{/blu}!!!");
-		auto dam = mods::rand::roll(16,6); /** TODO: need to calculate resistences and what not */
+		auto dam = dice(16,6); /** TODO: need to calculate resistences and what not */
 		GET_HIT(player->cd()) -= dam; /** FIXME ^ */
 		player->send("{red}[%d]{/red} you are {blu}ELECTROCUTED{/blu} by the door!",dam);
 		return;
