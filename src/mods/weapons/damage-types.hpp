@@ -7,6 +7,7 @@
 #include "../pqxx-types.hpp"
 #include "../../globals.hpp"
 #include "../scan.hpp"
+#include "../damage-event.hpp"
 
 extern void remember(char_data *ch,char_data *victim);
 extern void stop_fighting(char_data *ch);
@@ -16,6 +17,13 @@ namespace mods::weapons::damage_types {
 	void rifle_attack_by_name(player_ptr_t& player,std::string_view victim_name,int direction);
 	void spray_direction(player_ptr_t& player,int direction);
 	void rifle_attack(
+		player_ptr_t& player,
+		obj_ptr_t weapon,
+		player_ptr_t victim,
+		uint16_t distance
+	);
+	feedback_t spray_direction_with_feedback(player_ptr_t& player,int direction);
+	feedback_t rifle_attack_with_feedback(
 		player_ptr_t& player,
 		obj_ptr_t weapon,
 		player_ptr_t victim,

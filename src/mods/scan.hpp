@@ -21,6 +21,7 @@ namespace mods {
 			uint16_t distance;
 			uuid_t uuid;
 			uint8_t direction;
+			uint32_t room_rnum;
 		} vec_player_data_element;
 		using chptr = player_ptr_t;
 		using vec_player_data = std::vector<vec_player_data_element>;
@@ -30,6 +31,7 @@ namespace mods {
 			bool found;
 			int direction;
 			uint16_t distance;
+			uint32_t room_rnum;
 		};
 		extern int directions[];
 		constexpr unsigned num_directions = 6;

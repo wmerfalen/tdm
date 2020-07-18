@@ -5,6 +5,9 @@
 #include "weapons/damage-types.hpp"
 #include "scan.hpp"
 #include "../mobs/mini-gunner.hpp"
+#include "rand.hpp"
+#include "rooms.hpp"
+
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
 extern void hit(char_data *ch, char_data *victim, int type);
@@ -236,21 +239,20 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 		 * 
 		 * 
 		 */
-		mini_gunner_roam.append_child(node::create_sequence({
-				/** scan for targets
-				 * success means: we found a target and engaged them, don't move, we're fine
-				 * failure means: move to another room to see if you can find another player
-				 */
-				node::create_leaf([](argument_type mob) -> status {
-						int depth = MINI_GUNNER_SCAN_DEPTH(); /** TODO calculate depth with default mods::values + buffs */
+		auto scan_for_targets = node::create_leaf([](argument_type mob) -> status {
+						/** TODO calculate depth with default mods::values + buffs */
+						int depth = MINI_GUNNER_SCAN_DEPTH();
 						vec_player_data vpd;
 						mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
 						if(vpd.size() == 0){
-							return status::SUCCESS;
+							return status::FAILURE;
 						}
 						std::map<int,int> scores;
 						for(auto v : vpd){
 							if(!ptr_by_uuid(v.uuid)){
+								continue;
+							}
+							if(mods::rooms::is_peaceful(v.room_rnum)){
 								continue;
 							}
 							++scores[v.direction];
@@ -264,35 +266,42 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 							}
 						}
 						if(should_fire != -1){
-							std::cerr << "[should_fire][" << dirstr(should_fire) << "\n";
 							auto mg = mini_gunner_ptr(mob.uuid());
-							mg->spray(should_fire);
-							return status::FAILURE;
-						}
+							mg->set_heading(should_fire);
+							mg->set_behaviour_tree("mini_gunner_engage");
 							return status::SUCCESS;
-					}
-				),
-					/** move in heading direction
-					 * success means: scan for players to kill
-					 */
-				node::create_leaf([](argument_type mob) -> status {
+						}
+						return status::FAILURE;
+		});
+		auto spray_heading = node::create_leaf([](argument_type mob) -> status {
+					auto mg = mini_gunner_ptr(mob.uuid());
+					mg->spray(mg->get_heading());
+					return status::SUCCESS;
+				});
+		auto random_action = node::create_leaf([](argument_type mob) -> status {
+					auto mg = mini_gunner_ptr(mob.uuid());
+					mg->shout(random_key_string(MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS()));
+					return status::SUCCESS;
+		});
+		auto walk_heading = node::create_leaf([](argument_type mob) -> status {
+					auto mg = mini_gunner_ptr(mob.uuid());
 						int dir = mob.cd()->mob_specials.heading;
 						if(CAN_GO(mob.cd(),dir)){
 							mob.cd()->mob_specials.previous_room = IN_ROOM(mob.cd());
 							char_from_room(mob.cd());
 							char_to_room(mob.cd(),world[IN_ROOM(mob.cd())].dir_option[dir]->to_room);
+							return status::SUCCESS;
 						}
-						return status::SUCCESS;
-				})
+						mg->set_behaviour_tree("mini_gunner_aggressive_roam");
+						return status::FAILURE;
+				});
+		mini_gunner_roam.append_child(node::create_sequence({
+				scan_for_targets
 		}));
-		mini_gunner_engage.append_child(node::create_selector({
-				node::create_leaf([](argument_type mob) -> status {
-						return status::SUCCESS;
-				}),
-				node::create_leaf([](argument_type mob) -> status {
-						return status::SUCCESS;
-						}
-				)
+		mini_gunner_engage.append_child(node::create_sequence({
+					spray_heading,
+					walk_heading,
+					random_action
 				})
 		);
 		mini_gunner_aggressive_roam.append_child(node::create_selector({

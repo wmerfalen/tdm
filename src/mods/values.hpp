@@ -3,6 +3,8 @@
 #include <iostream>
 #include <map>
 #include <variant>
+#include "damage-event.hpp"
+extern std::string IMPLODE(std::vector<std::string>,std::string);
 
 namespace mods::values {
 		using variants_t = std::variant<float,int,uint8_t,uint16_t,std::string>;
@@ -21,6 +23,7 @@ namespace mods::values {
 			}
 			return fallback;
 		}
+		std::string random_key_string(std::string value);
 #ifndef CGET
 #define CGET(A,KEY,MENTOC_DEFAULT) \
 		A KEY();
@@ -200,6 +203,13 @@ namespace mods::values {
 		CGET(std::string,MINI_GUNNER_WEAR_VEST_PACK,"");
 		CGET(std::string,MINI_GUNNER_WEAR_ELBOW_L,"");
 		CGET(std::string,MINI_GUNNER_WEAR_ELBOW_R,"objects/armor/vanguard-elbow-guard.yml");
+		static std::string mini_gunner_random_attack = IMPLODE({"It's a dangerous game!","Have I ever told you the path to insanity?",
+				"Come out, come out, wherever you are...",
+				"The ones who hate me the most are the ones who don't scare me.",
+				"Do you have the slightest clue how easily I could kill you right now?"
+				},"|");
+		CGET(std::string,MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS,mini_gunner_random_attack);
+
 		CGET(uint8_t,MINI_GUNNER_SCAN_DEPTH,5);
 
 		CGET(std::string,LUNATIC_WEAR_LIGHT,"");
@@ -254,6 +264,9 @@ namespace mods::values {
 		CGET(std::string,MSG_HIT_BY_RIFLE_ATTACK,"{red}*** YOUR ARE HIT ***{/red}\r\n");
 		CGET(std::string,MSG_HIT_BY_SPRAY_ATTACK,"{red}*** YOUR ARE HIT ***{/red}\r\n");
 		CGET(std::string,MSG_TARGET_IN_PEACEFUL_ROOM,"{gld}Your target is in a peaceful room{/gld}");
+		CGET(std::string,MSG_NO_PRIMARY_WIELDED,"{gld}You aren't wielding a primary weapon.{/gld}");
+		CGET(std::string,MSG_COOLDOWN_IN_EFFECT,"{gld}Weapon cooldown in effect.{/gld}");
+		CGET(std::string,MSG_COULDNT_FIND_TARGET,"You couldn't find your target!");
 		namespace msg {
 			template <typename T>
 			static inline void crit(T& p){

@@ -513,6 +513,27 @@ bool obj_data::flagged(int value){
 			this->heading = other.heading;
 			this->previous_room = other.previous_room;
 		}
+		void mob_special_data::report(room_rnum room){
+			for(auto & uuid : this->memory){
+				send_to_room(room, "Report: %s\r\n", CAT({"memory:",std::to_string(uuid)}).c_str());
+			}
+			std::vector<std::string> msg;
+#define MR(MSG,VALUE) msg.push_back(std::string(MSG) + std::string(":") + std::to_string(VALUE));
+			MR("attack_type",this->attack_type);
+			MR("default_pos",this->default_pos);
+			MR("damnodice",this->damnodice);
+			MR("damsizedice",this->damsizedice);
+			MR("snipe_tracking",this->snipe_tracking);
+			MR("behaviour_tree",this->behaviour_tree);
+			MR("behaviour_tree_flags",this->behaviour_tree_flags);
+			MR("extended_mob_type",this->extended_mob_type);
+			MR("heading",this->heading);
+			MR("previous_room",this->previous_room);
+#undef MR
+			for(auto m : msg){
+				send_to_room(room, "Report: %s\r\n", m.c_str());
+			}
+		}
 		void mob_special_data::clear_behaviour_tree(){
 			this->behaviour_tree = 0;
 		}

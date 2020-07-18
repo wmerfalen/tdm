@@ -43,6 +43,8 @@ namespace mods::acl_list {
 			player_ptr_t,const std::string&,bool);
 };
 extern player_ptr_t ptr(char_data*);
+
+#include "damage-event.hpp"
 namespace mods::classes {
 	struct medic;
 	struct sniper;
@@ -58,14 +60,6 @@ namespace mods::globals {
 };
 namespace mods {
 	struct player {
-		enum damage_event_t : uint16_t {
-			ATTACKER_NARROWLY_MISSED_YOU_EVENT,
-			YOU_ARE_INJURED_EVENT,
-			TARGET_DEAD_EVENT,
-			YOU_MISSED_YOUR_TARGET_EVENT,
-			HIT_BY_RIFLE_ATTACK,
-			HIT_BY_SPRAY_ATTACK
-		};
 
 		using damage = damage_event_t;
 		using obj_ptr_t = std::shared_ptr<obj_data>;
@@ -626,6 +620,8 @@ namespace mods {
 		uuid_t get_attacker() {
 			return this->m_attacker_uuid;
 		}
+		void register_damage_event_callback(damage_event_t a,damage_event_callback_t cb);
+		void dispatch_event(damage_event_t);
 		
 
 		protected:
@@ -690,6 +686,7 @@ namespace mods {
 		uint32_t m_blocked_until;
 		obj_ptr_t m_attacking_with;
 		std::map<int,uint16_t> m_skills;
+		std::map<damage_event_t,damage_event_callback_t> m_damage_event_callbacks;
 	};
 };
 

@@ -576,6 +576,7 @@ void perform_auto_login(player_ptr_t& player){
 		player->set_room(start_room);
 		char_to_room(player->cd(),start_room);
 	}
+	mods::globals::register_authenticated_player(player);
 	act("$n has entered the game.", TRUE, player->cd(), 0, 0, TO_ROOM);
 	player->set_state(CON_PLAYING);
 
@@ -600,6 +601,7 @@ void perform_auto_login(player_ptr_t& player){
  * such as mobile_activity().
  */
 void game_loop(socket_t mother_desc) {
+	mods::globals::current_tick = 0;
 	char comm[MAX_INPUT_LENGTH];
 	struct timeval last_time, opt_time, process_time, temp_time;
 	struct timeval before_sleep, now, timeout;
@@ -847,7 +849,7 @@ void game_loop(socket_t mother_desc) {
 void heartbeat(int pulse) {
 	mods::date_time::heartbeat();
 	static int mins_since_crashsave = 0;
-
+	mods::globals::current_tick++;
 	if(!(pulse % mods::deferred::TICK_RESOLUTION)){
 		/** Process affect dissolver ticks */
 		mods::affects::process();

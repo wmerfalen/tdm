@@ -7,11 +7,18 @@
 #define __MENTOC_RUN_PREGAME_SKILL_CODE__
 #ifdef __MENTOC_RUN_PREGAME_SKILL_CODE__
 #include "skills.hpp"
+#include "rand.hpp"
 #endif
 namespace mods::debug::pre_game {
 #define DD(a){ std::cerr << "[debug::pre_game][line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"; }
 	namespace fb = ::mods::flashbang;
 	bool run(){
+#ifdef __MENTOC_RUN_PREGAME_RANDOM_MINIGUNNER_YELLING_CODE__
+		mods::rand::init();
+		for(int i=0; i < 50; i++){
+			std::cerr << "random_string:" << random_key_string(MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS()) << "\n";
+		}
+#endif
 #ifdef __MENTOC_RUN_PREGAME_EXTRACT_YAML_INFO_CODE__
 		std::tuple<int,std::string> e = mods::util::extract_yaml_info_from_path("objects/armor/ballistic-helmet.yml");
 		std::cerr << "[type]:'" << std::get<0>(e) << "', yaml_file:'" << std::get<1>(e) << "'\n";

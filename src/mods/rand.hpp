@@ -38,12 +38,11 @@ namespace mods::rand {
 		}
 		auto search = popular_distributions.find(size);
 		if(search == popular_distributions.end()){
-			popular_distributions[size] = std::uniform_int_distribution<int>(1,size);
+			popular_distributions[size] = std::uniform_int_distribution<int>(0,size);
 		}
-		auto& dist = popular_distributions[size];
 		int result = 0;
 		while(number-- > 0){
-			result += dist(mods::rand::lax_generator);
+			result += popular_distributions[size](serious_generator);
 		}
 		return result;
 	}

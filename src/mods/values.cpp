@@ -240,6 +240,11 @@ namespace mods::values {
 		"MSG_HIT_BY_RIFLE_ATTACK",
 		"MSG_HIT_BY_SPRAY_ATTACK",
 		"MSG_TARGET_IN_PEACEFUL_ROOM",
+		"MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS",
+		"MSG_NO_PRIMARY_WIELDED",
+		"MSG_OUT_OF_AMMO",
+		"MSG_COOLDOWN_IN_EFFECT",
+		"MSG_COULDNT_FIND_TARGET",
 			};
 		bool is_int(std::string key){
 			return (std::find(int_types.begin(),int_types.end(),key) != int_types.end());
@@ -298,6 +303,23 @@ namespace mods::values {
 			}
 			std::cerr << "[WARNING] key doesnt exist in int or string types!->'" << in_key << "'\n";
 			mods::db::lmdb_commit();
+		}
+
+		std::string random_key_string(std::string value){
+					std::vector<std::string> strings;
+					std::string current = "";
+					for(auto ch : value){
+						if(ch == '|' && current.length()){
+							strings.emplace_back(current);
+							current = "";
+							continue;
+						}
+						current += ch;
+					}
+					if(current.length()){
+						strings.emplace_back(current);
+					}
+				return strings[rand_number(0,strings.size()-1)];
 		}
 
 #if 0
@@ -543,5 +565,9 @@ namespace mods::values {
 		CGET_DEF(std::string,MSG_HIT_BY_RIFLE_ATTACK,"{red}*** YOUR ARE HIT ***{/red}\r\n");
 		CGET_DEF(std::string,MSG_HIT_BY_SPRAY_ATTACK,"{red}*** YOUR ARE HIT ***{/red}\r\n");
 		CGET_DEF(std::string,MSG_TARGET_IN_PEACEFUL_ROOM,"{gld}Your target is in a peaceful room{/gld}");
+		CGET_DEF(std::string,MSG_NO_PRIMARY_WIELDED,"{gld}You aren't wielding a primary weapon.{/gld}");
+		CGET_DEF(std::string,MSG_COOLDOWN_IN_EFFECT,"{gld}Weapon cooldown in effect.{/gld}");
+		CGET_DEF(std::string,MSG_COULDNT_FIND_TARGET,"You couldn't find your target!");
+		CGET_DEF(std::string,MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS,mini_gunner_random_attack);
 #undef CGET_DEF
 };

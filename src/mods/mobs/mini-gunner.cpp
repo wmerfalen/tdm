@@ -2,6 +2,7 @@
 #include <map>
 #include <memory>
 #include "../weapons/damage-types.hpp"
+#include "../damage-event.hpp"
 
 #define __MENTOC_MODS_MOBS_MINI_GUNNER_SHOW_DEBUG_OUTPUT__
 #ifdef __MENTOC_MODS_MOBS_MINI_GUNNER_SHOW_DEBUG_OUTPUT__
@@ -36,6 +37,9 @@ namespace mods::mobs {
 		auto obj = create_object(std::get<0>(yaml_tuple),std::get<1>(yaml_tuple));
 		this->player_ptr->equip(obj,where);
 	}
+	void mini_gunner::setup_damage_callbacks(){
+		//this->player_ptr->register_damage_event_callback(damage_event_t::
+	}
 	mini_gunner::mini_gunner(uuid_t mob_uuid){
 		this->init();
 		this->uuid = mob_uuid;
@@ -51,6 +55,7 @@ namespace mods::mobs {
 		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::MINI_GUNNER;
 		ch->mob_specials.set_behaviour_tree("mini_gunner_roam");
 		MENTOC_MOB_WEARS(MINI_GUNNER);
+		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;
 	}
@@ -60,13 +65,25 @@ namespace mods::mobs {
 	void mini_gunner::init(){
 		this->uuid = 0;
 		this->loaded = false;
-	}
+		this->weapon_heat =0;
+		this->player_ptr = nullptr;
+		this->heading = NORTH;
+		this->spray_direction = NORTH;
+	};
 	void mini_gunner::set_heading(int dir){
-		this->player_ptr->cd()->mob_specials.heading = dir;
+		this->heading = this->player_ptr->cd()->mob_specials.heading = dir;
 	}
-	void mini_gunner::spray(int dir){
+	feedback_t& mini_gunner::spray(int dir){
 		mini_debug("SPRAYING: " << dirstr(dir));
 		this->spray_direction = dir;
-		mods::weapons::damage_types::spray_direction(this->player_ptr,dir);
+		this->last_attack = mods::weapons::damage_types::spray_direction_with_feedback(this->player_ptr,dir);
+		this->weapon_heat += 20;
+		return this->last_attack;
+	}
+	void mini_gunner::shout(std::string msg){
+		std::cerr << "[stub]shout:'" << msg.data() << "'\n";
+	}
+	void mini_gunner::set_behaviour_tree(std::string_view name){
+		this->player_ptr->cd()->mob_specials.set_behaviour_tree(name);
 	}
 };

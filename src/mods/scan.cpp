@@ -111,6 +111,7 @@ namespace mods::scan {
 						pushed_item.uuid = character->uuid();
 						pushed_item.distance = ++ctr;
 						pushed_item.direction = i_d;
+						pushed_item.room_rnum = room_id;
 						LOS_SCAN_DIRECTION_DEBUG("moved item to list");
 					}
 				}

@@ -16,6 +16,7 @@
 #include "date-time.hpp"
 #include <chrono>
 #include "object-utils.hpp"
+#include "damage-event.hpp"
 /**
  * TODO: All these stc* functions need to be altered to accomodate
  * the new player_type_enum_t values. If output is to be muted, then
@@ -1283,9 +1284,13 @@ namespace mods {
 		MRC("name",this->name().c_str());
 		MR("uuid",this->uuid());
 		MRC("char_data*",this->cd());
+		MR("IS_NPC",(bool)IS_NPC(this->cd()));
 		send_to_room(room(), "{yel}[report-start]{/yel}\r\n");
 		for(auto & m : msg){
 			send_to_room(room(), "Report: %s\r\n", m.c_str());
+		}
+		if(IS_NPC(this->cd())){
+			this->cd()->mob_specials.report(this->room());
 		}
 		send_to_room(room(), "{yel}[report-end]{/yel}\r\n\r\n");
 #undef MR
@@ -1298,8 +1303,17 @@ namespace mods {
 		uint16_t player::skill(int t){
 			return m_skills[t];
 		}
+		void player::register_damage_event_callback(damage_event_t e,damage_event_callback_t cb){
+			m_damage_event_callbacks[e] = cb;
+		}
+		void player::dispatch_event(damage_event_t e){
+			if(m_damage_event_callbacks.find(e) != m_damage_event_callbacks.end()){
+				m_damage_event_callbacks[e](e,uuid());
+			}
+		}
 
 		void player::damage_event(damage_event_t e){
+			this->dispatch_event(e);
 			switch(e){
 				default:
 					std::cerr << "[damage_event]: UNHANDLED case!->'" << e << "'\n";
@@ -1322,8 +1336,26 @@ namespace mods {
 				case damage_event_t::HIT_BY_SPRAY_ATTACK:
 					this->sendln(MSG_HIT_BY_SPRAY_ATTACK());
 					break;
+				case damage_event_t::NO_PRIMARY_WIELDED_EVENT:
+					this->sendln(MSG_NO_PRIMARY_WIELDED());
+					break;
+				case damage_event_t::OUT_OF_AMMO_EVENT:
+					this->sendln(MSG_OUT_OF_AMMO());
+					break;
+				case damage_event_t::COOLDOWN_IN_EFFECT_EVENT:
+					this->sendln(MSG_COOLDOWN_IN_EFFECT());
+					break;
+				case damage_event_t::COULDNT_FIND_TARGET_EVENT:
+					this->sendln(MSG_COULDNT_FIND_TARGET());
+					break;
+				case damage_event_t::TARGET_IN_PEACEFUL_ROOM_EVENT:
+					this->sendln(MSG_TARGET_IN_PEACEFUL_ROOM());
+					break;
+				case damage_event_t::YOU_INJURED_SOMEONE_EVENT:
+					std::cerr << "[mods::player] you injured someone event stub\n";
+					break;
 			}
 		}
-	};
+};
 
 #endif

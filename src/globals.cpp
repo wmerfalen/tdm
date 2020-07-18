@@ -50,6 +50,7 @@ namespace mods::skills {
 namespace mods {
 	namespace globals {
 		using player = mods::player;
+		uint64_t current_tick;
 		std::map<char_data*,player_ptr_t> mob_ptrmap;
 		std::unordered_map<std::string,std::string> ram_db;
 		boot_type_t boot_type;
@@ -1060,6 +1061,14 @@ std::string dirstr(int dir){
 		default:
 			return "UNKNOWN";
 	}
+}
+std::string IMPLODE(std::vector<std::string> m,std::string delim){
+	std::string f = "";
+	for(auto s : m){
+		f += s;
+		f += delim;
+	}
+	return f;
 }
 
 #endif

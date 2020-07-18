@@ -132,6 +132,7 @@ namespace mods {
 		extern std::unordered_map<std::string,std::string> ram_db;
 		extern std::set<player_ptr_t> needs_dissolve;
 		extern std::map<obj_vnum,std::string> obj_stat_pages;
+		extern uint64_t current_tick;
 		void init_player(char_data*);
 		std::unique_ptr<ai_state>& state_fetch(char_data* ch);
 		int mobile_activity(char_data*);
@@ -242,5 +243,6 @@ static inline std::string CAT(std::vector<std::string_view> m){
 	}
 	return f;
 }
+std::string IMPLODE(std::vector<std::string> m,std::string delim);
 std::string dirstr(int);
 #endif

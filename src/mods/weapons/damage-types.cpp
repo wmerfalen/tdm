@@ -21,6 +21,7 @@ extern void forget(char_data *ch,char_data *victim);
 	#define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
 #endif
 namespace mods::weapons::damage_types {
+	using de = damage_event_t;
 	using vpd = mods::scan::vec_player_data;
 
 	void remember_event(player_ptr_t& victim,player_ptr_t& attacker){
@@ -331,19 +332,29 @@ namespace mods::weapons::damage_types {
 	 * @param direction
 	 */
 	void spray_direction(player_ptr_t& player,int direction){
+		spray_direction_with_feedback(player,direction);
+	}
+	feedback_t spray_direction_with_feedback(player_ptr_t& player,int direction){
+		using de = damage_event_t;
+		feedback_t feedback;
+		feedback.hits = 0;
+		feedback.damage = 0;
 		auto weapon = player->primary();
 		if(!weapon || !weapon->has_rifle()){
-			player->sendln("You aren't wielding any weapon.");
-			return;
+			feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
+			player->damage_event(de::NO_PRIMARY_WIELDED_EVENT);
+			return feedback;
 		}
 		if(!player->weapon_cooldown_expired(0)){
-			player->sendln("Weapon on cooldown.");
-			return;
+			feedback.damage_event = de::COOLDOWN_IN_EFFECT_EVENT;
+			player->damage_event(de::COOLDOWN_IN_EFFECT_EVENT);
+			return feedback;
 		}
 		/* Check ammo */
 		if(mods::object_utils::get_ammo(weapon) == 0) {
-			player->sendln("{gld}*CLICK*{/gld} Your weapon is out of ammo!");
-			return;
+			feedback.damage_event = de::OUT_OF_AMMO_EVENT;
+			player->damage_event(de::OUT_OF_AMMO_EVENT);
+			return feedback;
 		}
 
 		/** FIXME : grab weapon's accuracy and apply accurace modifications */
@@ -394,14 +405,18 @@ namespace mods::weapons::damage_types {
 			if(victim->position() > POS_DEAD) {
 				damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
 				if(dam == 0){
-					victim->damage_event(player::damage::ATTACKER_NARROWLY_MISSED_YOU_EVENT);
-					player->damage_event(player::damage::YOU_MISSED_YOUR_TARGET_EVENT);
+					victim->damage_event(de::ATTACKER_NARROWLY_MISSED_YOU_EVENT);
+					player->damage_event(de::YOU_MISSED_YOUR_TARGET_EVENT);
 				}else if(dam > 0){
+					feedback.hits++;
+					feedback.damage += dam;
+					feedback.damage_info.emplace_back(victim->uuid(),dam,victim->room());
 					victim->set_attacker(player->uuid());
-					victim->damage_event(player::damage::HIT_BY_SPRAY_ATTACK);
+					victim->damage_event(de::HIT_BY_SPRAY_ATTACK);
 					if(attack_injures(weapon)){
-						victim->damage_event(player::damage::YOU_ARE_INJURED_EVENT);
+						victim->damage_event(de::YOU_ARE_INJURED_EVENT);
 						mods::injure::injure_player(victim);
+						feedback.injured.emplace_back(victim->uuid());
 					}
 				}
 				remember_event(victim,player);
@@ -411,7 +426,7 @@ namespace mods::weapons::damage_types {
 			}
 		}//end for loop
 
-		return;
+		return feedback;
 
 	}//end spray_direction function
 
@@ -536,7 +551,6 @@ namespace mods::weapons::damage_types {
 		}
 	}
 
-
 	/**
 	 * @brief attack using any obj_data structure that has a rifle_data_t pointer
 	 *
@@ -551,24 +565,42 @@ namespace mods::weapons::damage_types {
 			player_ptr_t victim,
 			uint16_t distance
 		){
+		rifle_attack_with_feedback(player,weapon,victim,distance);
+	}
+
+	feedback_t rifle_attack_with_feedback(
+			player_ptr_t& player,
+			obj_ptr_t weapon,
+			player_ptr_t victim,
+			uint16_t distance
+		){
+		using de = damage_event_t;
+		feedback_t feedback;
+		feedback.hits = 0;
+		feedback.damage = 0;
 		/** TODO: if primary is out of ammo, and player_pref.auto_switch is on, use secondary */
+
 		if(!weapon || !weapon->has_rifle()){
-			player->sendln("You aren't wielding any weapon.");
-			return;
+			feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
+			player->damage_event(feedback.damage_event);
+			return feedback;
 		}
 		if(!player->weapon_cooldown_expired(0)){
-			player->sendln("Weapon on cooldown.");
-			return;
+			feedback.damage_event = de::COOLDOWN_IN_EFFECT_EVENT;
+			player->damage_event(feedback.damage_event);
+			return feedback;
 		}
 		/* Check ammo */
 		if(mods::weapon::has_clip(player->rifle()) && player->ammo() <= 0) {
-			player->sendln("{gld}*CLICK*{/gld} Your weapon is out of ammo!");
-			return;
+			feedback.damage_event = de::OUT_OF_AMMO_EVENT;
+			player->damage_event(feedback.damage_event);
+			return feedback;
 		}
 
 		if(!victim){
-			player->sendln("You can't find your target!");
-			return;
+			feedback.damage_event = de::COULDNT_FIND_TARGET_EVENT;
+			player->damage_event(feedback.damage_event);
+			return feedback;
 		}
 		/** FIXME : grab weapon's accuracy and apply accurace modifications */
 
@@ -579,8 +611,9 @@ namespace mods::weapons::damage_types {
 		int crit_chance = weapon->rifle()->attributes->critical_chance;
 		int critical_bonus = 0;
 		if(mods::rooms::is_peaceful(victim->room())){
-			player->sendln(MSG_TARGET_IN_PEACEFUL_ROOM());
-			return;
+			feedback.damage_event = de::TARGET_IN_PEACEFUL_ROOM_EVENT;
+			player->damage_event(feedback.damage_event);
+			return feedback;
 		}
 
 		/** calculate headshot */
@@ -627,11 +660,14 @@ namespace mods::weapons::damage_types {
 		if(victim->position() > POS_DEAD) {
 			damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
 				if(dam == 0){
-					victim->damage_event(player::damage::ATTACKER_NARROWLY_MISSED_YOU_EVENT);
-					player->damage_event(player::damage::YOU_MISSED_YOUR_TARGET_EVENT);
+					victim->damage_event(de::ATTACKER_NARROWLY_MISSED_YOU_EVENT);
+					player->damage_event(de::YOU_MISSED_YOUR_TARGET_EVENT);
 				}else if(dam > 0){
+					feedback.hits = 1;
+					feedback.damage = dam;
+					feedback.damage_info.emplace_back(victim->uuid(),dam,victim->room());
 					victim->set_attacker(player->uuid());
-					victim->damage_event(player::damage::HIT_BY_RIFLE_ATTACK);
+					victim->damage_event(de::HIT_BY_RIFLE_ATTACK);
 					if(IS_NPC(victim->cd())){
 						if(MOB_FLAGGED(victim->cd(),MOB_SENTINEL)){
 							dty_debug("Mob is a sentinel. Setting sentinel_snipe_tracking on mob's behaviour tree");
@@ -644,21 +680,22 @@ namespace mods::weapons::damage_types {
 						}
 					}
 					if(attack_injures(weapon)){
-						victim->damage_event(player::damage::YOU_ARE_INJURED_EVENT);
+						victim->damage_event(YOU_ARE_INJURED_EVENT);
+						player->damage_event(YOU_INJURED_SOMEONE_EVENT);
 						mods::injure::injure_player(victim);
+						feedback.injured.emplace_back(victim->uuid());
 					}
 				}
 				remember_event(victim,player);
 		}else{
-			player->damage_event(player::damage::TARGET_DEAD_EVENT);
+			player->damage_event(de::TARGET_DEAD_EVENT);
 			stop_fighting(player->cd());
 			stop_fighting(victim->cd());
 		}
 
 		decrease_single_shot_ammo(weapon);
 		player->set_fight_timestamp();
-		return;
-
+		return feedback;
 	}
 
 

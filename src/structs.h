@@ -60,7 +60,7 @@ using weapon_type_t = uint16_t;
 using goal_t = short;
 using player_ptr_t = std::shared_ptr<mods::player>;
 struct obj_data;
-using uuid_t = uint16_t;
+using uuid_t = uint64_t;
 using aligned_int_t = uint64_t;
 using memory_rec_t = std::set<uuid_t>;
 using ai_state_map = std::map<char_data*,std::unique_ptr<mods::ai_state>>;
@@ -1422,6 +1422,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		~mob_special_data();
 		void import(const mob_special_data& m);
 		void init();
+		void report(room_rnum);
 	};
 
 
