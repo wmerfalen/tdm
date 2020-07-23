@@ -41,6 +41,9 @@ extern int port_main(int,char**);
 extern int next_room_number();
 extern int next_room_vnum();
 extern void look_at_room(char_data* ch,int ignore_brief);
+namespace mods::mobs::room_watching::events {
+	extern void room_entry(room_rnum,uuid_t);
+};
 namespace config {
 	extern void init(int,char**);
 };
@@ -860,6 +863,10 @@ namespace mods {
 				}
 				player->set_room(target_room);
 				mods::globals::room_list[target_room].push_back(player);
+				if(!IS_NPC(ch)){
+					std::cerr << "[room_entry] watching events: " << player->name().c_str() << "\n";
+					mods::mobs::room_watching::events::room_entry(target_room,player->uuid());
+				}
 				return;
 			}
 		};//end namespace rooms

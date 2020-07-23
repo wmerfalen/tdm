@@ -305,6 +305,18 @@ std::ostream& log(Args... args); /*{
 	std::string yaml_caps_to_lower(std::string type);
 	std::tuple<int,std::string> extract_yaml_info_from_path(std::string_view path);
 	bool yaml_file_exists(std::string path);
+	template <typename T>
+	void vector_erase(std::vector<T>& vec,T element){
+		vec.erase(std::remove(vec.begin(), vec.end(),element), vec.end());
+	}
+	template <typename T>
+	void vector_add_if_not_exists(std::vector<T>& vec,T element){
+		auto it = std::find(vec.begin(), vec.end(),element);
+		if(it != vec.end()){
+			vec.emplace_back(element);
+		}
+	}
+
 };
 
 namespace mods::util::err {

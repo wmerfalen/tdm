@@ -21,6 +21,7 @@ namespace mods::mobs {
 		int get_weapon_heat() const { return weapon_heat; }
 		void set_behaviour_tree(std::string_view name);
 		void shout(std::string);
+		void enemy_spotted(room_rnum room,uuid_t player);
 		private:
 		int weapon_heat;
 		int heading;
@@ -32,6 +33,10 @@ namespace mods::mobs {
 	};
 	extern std::map<uuid_t,std::shared_ptr<mini_gunner>> mg_map;
 };
+
+static inline bool has_mini_gunner_ptr(uuid_t u){
+	return mods::mobs::mg_map.find(u) != mods::mobs::mg_map.end();
+}
 
 static inline std::shared_ptr<mods::mobs::mini_gunner> mini_gunner_ptr(uuid_t u){
 	return mods::mobs::mg_map[u];

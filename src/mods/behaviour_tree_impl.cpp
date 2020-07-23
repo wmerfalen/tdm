@@ -4,9 +4,10 @@
 #include "../spells.h"
 #include "weapons/damage-types.hpp"
 #include "scan.hpp"
-#include "../mobs/mini-gunner.hpp"
+#include "mobs/mini-gunner.hpp"
 #include "rand.hpp"
 #include "rooms.hpp"
+#include "mobs/room-watching.hpp"
 
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
@@ -272,6 +273,11 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 				auto mg = mini_gunner_ptr(mob.uuid());
 				mg->set_heading(should_fire);
 				mg->spray(should_fire);
+				if(mob.get_watching() != should_fire){
+					std::cerr << "[mini_gunner] watching:" << dirstr(should_fire) << "uuid:" << mob.uuid() << " room:" << mob.room() << "\n";
+					mods::mobs::room_watching::stop_watching(mob.uuid());
+					mods::mobs::room_watching::watch_direction(mob.uuid(),mob.room(),should_fire,depth);
+				}
 				return status::SUCCESS;
 			}
 			return status::FAILURE;
