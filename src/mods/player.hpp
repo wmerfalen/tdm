@@ -613,7 +613,7 @@ namespace mods {
 		void set_skill(int,uint16_t proficiency);
 		uint16_t skill(int);
 		
-		void damage_event(damage_event_t,damage_info_t);
+		void damage_event(feedback_t);
 		void set_attacker(uuid_t a){
 			this->m_attacker_uuid = a;
 		}
@@ -621,7 +621,7 @@ namespace mods {
 			return this->m_attacker_uuid;
 		}
 		void register_damage_event_callback(damage_event_t a,damage_event_callback_t cb);
-		void dispatch_event(damage_event_t,damage_info_t);
+		void dispatch_event(feedback_t);
 		void set_watching(direction_t dir){ this->m_watching = dir; }
 		direction_t get_watching(){ return this->m_watching; }
 		

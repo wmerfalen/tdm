@@ -133,7 +133,7 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 							/** TODO: */
 								auto find_results = mods::scan::los_find(std::make_shared<mods::player>(mob),remembered_sniper);
 								auto mob_ptr = ptr(mob);
-								mods::weapons::damage_types::rifle_attack(mob_ptr,mob_ptr->primary(),remembered_sniper,find_results.distance);
+								mods::weapons::damage_types::rifle_attack(mob_ptr,mob_ptr->primary(),remembered_sniper,find_results.distance,find_results.direction);
 								return status::SUCCESS;
 							}
 						}

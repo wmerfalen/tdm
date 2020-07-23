@@ -625,9 +625,9 @@ CCWHT	screen.h	36;"	d
 CCYEL	screen.h	32;"	d
 CEMENT	structs.h	/^			CEMENT,			\/** asphault, nearly indestructible *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 CGET	mods/values.hpp	28;"	d
-CGET	mods/values.hpp	302;"	d
-CGET_DEF	mods/values.cpp	337;"	d	file:
-CGET_DEF	mods/values.cpp	574;"	d	file:
+CGET	mods/values.hpp	305;"	d
+CGET_DEF	mods/values.cpp	340;"	d	file:
+CGET_DEF	mods/values.cpp	580;"	d	file:
 CHAINABLE_BREACHING	mods/skills.hpp	/^			CHAINABLE_BREACHING,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 CHAOTIC	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 CHARM	mods/flags.hpp	/^		CHARM,$/;"	e	enum:mods::flags::aff
@@ -3398,6 +3398,7 @@ attachments	structs.h	/^		std::deque<attachment_data_t> attachments;$/;"	m	struc
 attack_hit_text	fight.cpp	/^struct attack_hit_type attack_hit_text[] = {$/;"	v	typeref:struct:attack_hit_type
 attack_hit_type	spells.h	/^struct attack_hit_type {$/;"	s
 attack_message	fight.cpp	/^int attack_message(mw_rifle type){$/;"	f
+attacker	mods/damage-event.hpp	/^	uuid_t attacker;$/;"	m	struct:feedback_t
 attacking_with	mods/player.hpp	/^		obj_data_ptr_t attacking_with(){ return m_attacking_with; }$/;"	f	struct:mods::player
 attacking_with_type	mods/player.hpp	/^		int attacking_with_type(){ return m_attacking_with->rifle()->attributes->type; }$/;"	f	struct:mods::player
 authenticated	mods/player.hpp	/^		bool authenticated() const { return m_authenticated; }$/;"	f	struct:mods::player
@@ -3788,7 +3789,7 @@ damage	mods/weapon-types.hpp	/^		weapon_damage_t damage;$/;"	m	struct:mods::weap
 damage	mods/yaml.hpp	/^		int damage;$/;"	m	struct:mods::yaml::drone_description_t
 damage	mods/yaml.hpp	/^		int damage;$/;"	m	struct:mods::yaml::explosive_description_t
 damage_event	mods/damage-event.hpp	/^	damage_event_t damage_event;$/;"	m	struct:feedback_t
-damage_event	mods/player.cpp	/^		void player::damage_event(damage_event_t e,damage_info_t tple){$/;"	f	class:mods::player
+damage_event	mods/player.cpp	/^		void player::damage_event(feedback_t feedback){$/;"	f	class:mods::player
 damage_info	mods/damage-event.hpp	/^	std::vector<std::tuple<uuid_t,int,uint32_t>> damage_info;$/;"	m	struct:feedback_t
 damage_map	mods/weapon.hpp	/^			std::array<float,MAX_ROOM_DISTANCE> damage_map;$/;"	m	struct:mods::weapon::yaml::rifle_description_t
 damage_map	mods/yaml.hpp	/^			std::array<float,MAX_ROOM_DISTANCE> damage_map;	\/** Percent per room *\/$/;"	m	struct:mods::yaml::rifle_description_t
@@ -3926,7 +3927,7 @@ disorient_person	mods/projectile.cpp	/^		void disorient_person(player_ptr_t vict
 disorient_target	mods/projectile.cpp	/^		void disorient_target(player_ptr_t player){$/;"	f	namespace:mods::projectile
 dispatch	mods/ai_state.cpp	/^	uint32_t ai_state::dispatch(char_data* ch) {$/;"	f	class:mods::ai_state
 dispatch	mods/behaviour_tree_impl.cpp	/^	int8_t dispatch(uuid_t mob_uuid){$/;"	f	namespace:mods::behaviour_tree_impl
-dispatch_event	mods/player.cpp	/^		void player::dispatch_event(damage_event_t e,damage_info_t tple){$/;"	f	class:mods::player
+dispatch_event	mods/player.cpp	/^		void player::dispatch_event(feedback_t feedback){$/;"	f	class:mods::player
 dispatch_ptr	mods/behaviour_tree_impl.cpp	/^	int8_t dispatch_ptr(argument_type& ch){$/;"	f	namespace:mods::behaviour_tree_impl
 dispatch_status_t	mods/behaviour_tree_impl.hpp	/^		enum dispatch_status_t {$/;"	g	namespace:mods::behaviour_tree_impl
 dispose_breach	mods/doors.hpp	/^	static inline void dispose_breach(uuid_t obj_uuid){$/;"	f	namespace:mods::doors
@@ -4582,6 +4583,7 @@ free_social_messages	act.social.cpp	/^void free_social_messages(void) {$/;"	f
 free_text_files	db.cpp	/^void free_text_files(void) {$/;"	f
 from	mail.h	/^	long from;			\/* idnum of the mail's sender		*\/$/;"	m	struct:header_data_type
 from	mods/sql.hpp	/^			compositor<T>& from(str_object table) {$/;"	f	struct:mods::sql::compositor
+from_direction	mods/damage-event.hpp	/^	uint8_t from_direction;$/;"	m	struct:feedback_t
 from_direction	structs.h	/^		uint8_t from_direction;$/;"	m	struct:obj_data
 from_dirstr	mods/doors.hpp	/^	static inline std::string from_dirstr(const int& direction){$/;"	f	namespace:mods::doors
 from_string	mods/doors.hpp	/^	static inline int from_string(std::string_view i){$/;"	f	namespace:mods::doors
@@ -4881,7 +4883,7 @@ hit	mods/js.cpp	/^		static duk_ret_t hit(duk_context *ctx) {$/;"	f	namespace:mod
 hit	mods/values.hpp	/^			static inline void hit(T& p){$/;"	f	namespace:mods::values::msg
 hit_gain	limits.cpp	/^int hit_gain(char_data *ch) {$/;"	f
 hitroll	mods/player.hpp	/^		sbyte& hitroll() {$/;"	f	struct:mods::player
-hits	mods/damage-event.hpp	/^	int hits;$/;"	m	struct:feedback_t
+hits	mods/damage-event.hpp	/^	uint16_t hits;$/;"	m	struct:feedback_t
 hits_target	mods/weapon.cpp	/^	bool hits_target(player_ptr_t& player, obj_ptr_t& weapon, player_ptr_t& target, uint16_t* distance){$/;"	f	namespace:mods::weapon
 holds_ammo	structs.h	/^		bool holds_ammo;$/;"	m	struct:obj_flag_data
 holler_move_cost	config.cpp	/^int holler_move_cost = 20;$/;"	v
@@ -5182,6 +5184,7 @@ look_in_obj	act.informative.cpp	/^void look_in_obj(char_data *ch, char *arg) {$/
 loops	mods/loops.cpp	/^namespace mods::loops {$/;"	n	class:mods	file:
 loops	mods/loops.hpp	/^namespace mods::loops {$/;"	n	class:mods
 los_find	mods/scan.cpp	/^	find_results_t los_find(chptr hunter,chptr hunted){$/;"	f	namespace:mods::scan
+los_find_player	mods/scan.cpp	/^	int los_find_player(player_ptr_t& player,player_ptr_t& victim,int depth){$/;"	f	namespace:mods::scan
 los_list_by_room	mods/scan.cpp	/^	void los_list_by_room(room_rnum& in_room,room_list_t & room_list,unsigned depth){$/;"	f	namespace:mods::scan
 los_list_rooms	mods/scan.cpp	/^	void los_list_rooms(chptr player_hunter,room_list_t & room_list,unsigned depth){$/;"	f	namespace:mods::scan
 los_scan	mods/scan.cpp	/^	void los_scan(char_data* ch,int depth,vec_player_data* vec_room_list) {$/;"	f	namespace:mods::scan
