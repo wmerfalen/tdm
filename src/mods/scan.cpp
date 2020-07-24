@@ -10,6 +10,20 @@ namespace mods::scan {
 	int directions[] = { NORTH,EAST,SOUTH,WEST,UP,DOWN };
 	constexpr static std::size_t MAX_DEPTH = 6;
 
+	int los_find_player(player_ptr_t& player,player_ptr_t& victim,int depth){
+		vec_player_data vec_room_list;
+		auto directions = world[player->room()].directions();
+		for(auto i_d : directions){
+			vec_room_list.clear();
+			los_scan_direction(player->cd(),depth,&vec_room_list,i_d,find_type_t::ANY);
+			for(auto info : vec_room_list){
+				if(info.ch->uuid == victim->uuid()){
+					return i_d;
+				}
+			}
+		}
+		return -1;
+	}
 	void los_list_by_room(room_rnum& in_room,room_list_t & room_list,unsigned depth){
 		if(in_room == NOWHERE || in_room < 0) {
 			return;

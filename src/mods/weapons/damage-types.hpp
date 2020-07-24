@@ -20,14 +20,16 @@ namespace mods::weapons::damage_types {
 		player_ptr_t& player,
 		obj_ptr_t weapon,
 		player_ptr_t victim,
-		uint16_t distance
+		uint16_t distance,
+		uint8_t direction
 	);
 	feedback_t spray_direction_with_feedback(player_ptr_t& player,int direction);
 	feedback_t rifle_attack_with_feedback(
 		player_ptr_t& player,
 		obj_ptr_t weapon,
 		player_ptr_t victim,
-		uint16_t distance
+		uint16_t distance,
+		uint8_t direction
 	);
 	void decrease_spray_shot_ammo(obj_ptr_t& weapon);
 	void decrease_single_shot_ammo(obj_ptr_t& weapon);

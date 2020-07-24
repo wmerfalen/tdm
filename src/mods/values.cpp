@@ -9,7 +9,8 @@ namespace mods::values {
 		std::map<std::string,variants_t> alt_value_map;
 		static const std::vector<std::string> float_types = {
 		"EXPLOSIVE_CRITICAL_MULTIPLIER",
-		"RIFLE_CRITICAL_MULTIPLIER"
+		"RIFLE_CRITICAL_MULTIPLIER",
+		"INJURED_MAX_HP_MULTIPLIER",
 		};
 		static const std::vector<std::string> int_types = {
 		"FIRE_DAMAGE_TICK_RESOLUTION",
@@ -246,6 +247,8 @@ namespace mods::values {
 		"MSG_OUT_OF_AMMO",
 		"MSG_COOLDOWN_IN_EFFECT",
 		"MSG_COULDNT_FIND_TARGET",
+		"MSG_HIT_BY_HEADSHOT",
+		"MSG_YOU_INJURED_SOMEONE",
 			};
 		bool is_int(std::string key){
 			return (std::find(int_types.begin(),int_types.end(),key) != int_types.end());
@@ -493,6 +496,7 @@ namespace mods::values {
 
 		CGET_DEF(float,EXPLOSIVE_CRITICAL_MULTIPLIER,0.75);
 		CGET_DEF(float,RIFLE_CRITICAL_MULTIPLIER,0.75);
+		CGET_DEF(float,INJURED_MAX_HP_MULTIPLIER,0.10);
 
 		CGET_DEF(std::string,MINI_GUNNER_WEAR_LIGHT,"");
 		CGET_DEF(std::string,MINI_GUNNER_WEAR_FINGER_R,"");
@@ -554,6 +558,7 @@ namespace mods::values {
 		CGET_DEF(std::string,LUNATIC_WEAR_ELBOW_R,"");
 		CGET_DEF(std::string,MSG_CRITICAL,"{red}***CRITICAL***{/red} --");
 		CGET_DEF(std::string,MSG_HEADSHOT,"{red}***HEADSHOT***{/red} -- ");
+		CGET_DEF(std::string,MSG_HIT_BY_HEADSHOT,"{red}*** YOU'VE BEEN HEADSHOTTED ***{/red} -- ");
 		CGET_DEF(std::string,MSG_HIT,"{yel}--[HIT]--{/yel}");
 		CGET_DEF(std::string,MSG_OUT_OF_AMMO,"{gld}*CLICK*{/gld} Your weapon is out of ammo!");
 		CGET_DEF(std::string,MSG_MISSED_TARGET ,"You missed your target!");
@@ -564,12 +569,13 @@ namespace mods::values {
 		CGET_DEF(std::string,MSG_NARROWLY_MISSED_ME,"You just barely get out of the way of a potentially fatal shot!\r\n");
 		CGET_DEF(std::string,MSG_YOU_ARE_INJURED,"{red}***YOU ARE INJURED***{/red} --");
 		CGET_DEF(std::string,MSG_YOUR_TARGET_IS_DEAD,"{grn}*** YOUR TARGET IS DEAD ***{/grn}\r\n");
-		CGET_DEF(std::string,MSG_HIT_BY_RIFLE_ATTACK,"{red}*** YOUR ARE HIT ***{/red}\r\n");
-		CGET_DEF(std::string,MSG_HIT_BY_SPRAY_ATTACK,"{red}*** YOUR ARE HIT ***{/red}\r\n");
+		CGET_DEF(std::string,MSG_HIT_BY_RIFLE_ATTACK,"{red}*** YOUR ARE HIT ***{/red} -- ");
+		CGET_DEF(std::string,MSG_HIT_BY_SPRAY_ATTACK,"{red}*** YOUR ARE HIT BY A SPRAY OF BULLETS ***{/red} -- ");
 		CGET_DEF(std::string,MSG_TARGET_IN_PEACEFUL_ROOM,"{gld}Your target is in a peaceful room{/gld}");
 		CGET_DEF(std::string,MSG_NO_PRIMARY_WIELDED,"{gld}You aren't wielding a primary weapon.{/gld}");
 		CGET_DEF(std::string,MSG_COOLDOWN_IN_EFFECT,"{gld}Weapon cooldown in effect.{/gld}");
 		CGET_DEF(std::string,MSG_COULDNT_FIND_TARGET,"You couldn't find your target!");
 		CGET_DEF(std::string,MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS,mini_gunner_random_attack);
+		CGET_DEF(std::string,MSG_YOU_INJURED_SOMEONE ,"{red}*** YOU INJURED %s{/red}!");
 #undef CGET_DEF
 };

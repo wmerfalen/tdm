@@ -46,6 +46,7 @@ namespace mods {
 		void los_scan_for_players(char_data* ch,int depth,vec_player_data* vec_room_list);
 		void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction,find_type_t f);
 		void los_scan_direction(char_data* ch,int depth,vec_player_data* vec_room_list,int direction);
+		int los_find_player(player_ptr_t& player,player_ptr_t& victim,int depth);
 
 		/**
 		 * Simply list rooms within line of sight for recursive_depth depth

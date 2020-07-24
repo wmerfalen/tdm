@@ -348,6 +348,7 @@ bool obj_data::flagged(int value){
 		}
 
 		void room_data::init(){
+			watching = 0;
 			number = 0;
 			zone = 0;
 			sector_type = 0;

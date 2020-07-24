@@ -26,13 +26,15 @@ enum damage_event_t : uint16_t {
 #include <functional>
 using uuid_t = uint64_t;
 using damage_info_t = std::tuple<int,uuid_t>;
-using damage_event_callback_t = std::function<void(damage_event_t,damage_info_t)>;
 struct feedback_t {
 	damage_event_t damage_event;
 	int damage;
-	int hits;
+	uint16_t hits;
 	std::vector<uuid_t> injured;
 	std::vector<std::tuple<uuid_t,int,uint32_t>> damage_info;
+	uint8_t from_direction;
+	uuid_t attacker;
 };
+using damage_event_callback_t = std::function<void(feedback_t,uuid_t)>;
 
 #endif

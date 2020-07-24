@@ -44,6 +44,8 @@ extern void log(const char* format,...);
 	#define d(a) ; 
 #endif
 
+using direction_t = uint8_t;
+using depth_t = uint8_t;
 constexpr static std::size_t MAX_EXPLOSION_FADE_OUT = 5;
 namespace mods {
 	struct player;
@@ -1188,6 +1190,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		texture_level_t& texture_level(texture_type_t type){
 			return m_texture_levels[type];
 		}
+		bool watching;
 		protected:
 		std::map<texture_type_t,texture_level_t> m_texture_levels;
 		std::vector<uint8_t> m_directions;

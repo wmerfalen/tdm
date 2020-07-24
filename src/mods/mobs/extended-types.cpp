@@ -9,7 +9,6 @@ namespace mods::mobs {
 			std::cerr << "[mods::mobs::decorate] NOT-FOUND cant find by uuid:" << mob_id << "\n";
 			return;
 		}
-		std::cerr << "[mods::mobs::decorate] FOUND by uuid:" << mob_id << "\n";
 		auto ch = p->cd();
 		switch(ch->mob_specials.extended_mob_type){
 			default:
@@ -18,10 +17,10 @@ namespace mods::mobs {
 			case extended_types_t::MINI_GUNNER:
 				std::cerr << "[ found mini gunner ]\n";
 				mini_gunner::create(mob_id, "normal");
+				return;
 			case extended_types_t::MINI_GUNNER_SENTINEL:
 				std::cerr << "[ found mini gunner sentinel ]\n";
 				mini_gunner::create(mob_id, "sentinel");
-				return;
 				return;
 		}
 	}

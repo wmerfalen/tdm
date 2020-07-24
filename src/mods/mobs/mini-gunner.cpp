@@ -13,7 +13,6 @@
 #define mini_debug(a) ;;
 #endif
 namespace mods::mobs {
-
 	int weighted_direction_decider(player_ptr_t& mob){
 		int depth = MINI_GUNNER_SCAN_DEPTH();
 		mods::scan::vec_player_data vpd;
@@ -51,13 +50,29 @@ namespace mods::mobs {
 			log("SYSERR: did not find player to populate mini_gunner with: %d",mob_uuid);
 			return;
 		}
-		mg_map.insert({mob_uuid,std::make_shared<mini_gunner>(mob_uuid)});
-		mg_map.back()->set_variation(variation);
+		mg_map.insert({mob_uuid,std::make_shared<mini_gunner>(mob_uuid,variation)});
 	}
 	void mini_gunner::set_variation(std::string v){
 		this->variation = v;
 		if(v.compare("sentinel") == 0){
+			auto row = db_get_by_meta("mini_gunner_sentinel","mgs_mob_vnum",std::to_string(this->player_ptr->cd()->nr));
+			if(row.size() == 0){
+				std::cerr << "[mini_gunner][set_variation]-> cannot load data from postgres...\n";
+				return;
+			}
+#define MG_REPORT(A)\
+	std::cerr << "[[[[ MINI GUNNER SENTINEL DUMP ]]]]\n";\
+	std::cerr << #A << ": '" << row[0][#A].c_str() << "'\n";\
+	std::cerr << "[[[[ -- MINI GUNNER SENTINEL DUMP -- ]]]]\n";
 
+			std::cerr << "[status][mini_gunner][setting variation data]->\n";
+			MG_REPORT(mgs_face_direction);
+			MG_REPORT(mgs_room_vnum);
+			MG_REPORT(mgs_mob_vnum);
+#undef MG_REPORT
+
+			this->set_heading(mods::globals::dir_int(row[0]["mgs_face_direction"].c_str()[0]));
+			char_to_room(this->player_ptr->cd(),real_room(row[0]["mgs_room_vnum"].as<int>()));
 		}
 	}
 	void mini_gunner::free_mob(uuid_t uuid){
@@ -78,7 +93,7 @@ namespace mods::mobs {
 	}
 	void mini_gunner::setup_damage_callbacks(){
 		using de = damage_event_t;
-		this->player_ptr->register_damage_event_callback(de::YOURE_IN_PEACEFUL_ROOM,[&](de event,damage_info_t dinfo) {
+		this->player_ptr->register_damage_event_callback(de::YOURE_IN_PEACEFUL_ROOM,[&](feedback_t feedback,uuid_t player){
 				auto & room = world[this->player_ptr->room()];
 				int decision = weighted_direction_decider(this->player_ptr);
 				if(decision == -1){
@@ -96,7 +111,7 @@ namespace mods::mobs {
 				this->set_heading(decision);
 		});
 	}
-	mini_gunner::mini_gunner(uuid_t mob_uuid){
+	mini_gunner::mini_gunner(uuid_t mob_uuid, std::string variation){
 		this->init();
 		this->uuid = mob_uuid;
 		auto p = ptr_by_uuid(mob_uuid);
@@ -114,6 +129,7 @@ namespace mods::mobs {
 		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;
+		this->set_variation(variation);
 	}
 	mini_gunner::~mini_gunner(){
 		this->uuid = 0;
@@ -141,5 +157,15 @@ namespace mods::mobs {
 	}
 	void mini_gunner::set_behaviour_tree(std::string_view name){
 		this->player_ptr->cd()->mob_specials.set_behaviour_tree(name);
+	}
+	void mini_gunner::enemy_spotted(room_rnum room,uuid_t player){
+		std::cerr << "##################################################################################\n";
+		std::cerr << "##################################################################################\n";
+		std::cerr << "##################################################################################\n";
+		std::cerr << "[mini_gunner] enemy spotted:" << room << "\n";
+		std::cerr << "##################################################################################\n";
+		std::cerr << "##################################################################################\n";
+		std::cerr << "##################################################################################\n";
+		this->spray(this->player_ptr->get_watching());
 	}
 };

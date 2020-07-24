@@ -246,6 +246,7 @@ namespace mods::values {
 
 		CGET(float,EXPLOSIVE_CRITICAL_MULTIPLIER,0.75);
 		CGET(float,RIFLE_CRITICAL_MULTIPLIER,0.75);
+		CGET(float,INJURED_MAX_HP_MULTIPLIER,0.10);
 
 
 		CGET(uint8_t,REVIVE_TICKS,40);
@@ -253,18 +254,20 @@ namespace mods::values {
 		CGET(uint8_t,INJURED_HP,5);
 		CGET(std::string,MSG_CRITICAL,"{red}***CRITICAL***{/red} --");
 		CGET(std::string,MSG_HEADSHOT,"{red}***HEADSHOT***{/red} -- ");
+		CGET(std::string,MSG_HIT_BY_HEADSHOT,"{red}*** YOU'VE BEEN HEADSHOTTED ***{/red} -- ");
 		CGET(std::string,MSG_HIT,"{yel}--[HIT]--{/yel}");
 		CGET(std::string,MSG_OUT_OF_AMMO,"{gld}*CLICK*{/gld} Your weapon is out of ammo!");
 		CGET(std::string,MSG_MISSED_TARGET ,"You missed your target!");
 		CGET(std::string,MSG_TARGET_DEAD ,"It appears that your target is dead.");
+		CGET(std::string,MSG_YOU_INJURED_SOMEONE ,"{red}*** YOU INJURED %s{/red}!");
 		CGET(std::string,MSG_YOURE_INJURED ,"You are injured!");
 		CGET(std::string,MSG_FIRE_DAMAGE ,"[%d] You suffer burns from the roaring fire!\r\n");
 		CGET(std::string,MSG_SMOKE_DAMAGE ,"[%d] You struggle to breath as smoke fills your lungs!\r\n");
-		CGET(std::string,MSG_NARROWLY_MISSED_ME,"You just barely get out of the way of a potentially fatal shot!\r\n");
+		CGET(std::string,MSG_NARROWLY_MISSED_ME,"You just barely get out of the way of a potentially fatal shot! -- ");
 		CGET(std::string,MSG_YOU_ARE_INJURED,"{red}***YOU ARE INJURED***{/red} --");
 		CGET(std::string,MSG_YOUR_TARGET_IS_DEAD,"{grn}*** YOUR TARGET IS DEAD ***{/grn}\r\n");
-		CGET(std::string,MSG_HIT_BY_RIFLE_ATTACK,"{red}*** YOUR ARE HIT ***{/red}\r\n");
-		CGET(std::string,MSG_HIT_BY_SPRAY_ATTACK,"{red}*** YOUR ARE HIT ***{/red}\r\n");
+		CGET(std::string,MSG_HIT_BY_RIFLE_ATTACK,"{red}*** YOUR ARE HIT ***{/red} -- ");
+		CGET(std::string,MSG_HIT_BY_SPRAY_ATTACK,"{red}*** YOUR ARE HIT BY A SPRAY OF BULLETS ***{/red} -- ");
 		CGET(std::string,MSG_TARGET_IN_PEACEFUL_ROOM,"{gld}Your target is in a peaceful room{/gld}");
 		CGET(std::string,MSG_NO_PRIMARY_WIELDED,"{gld}You aren't wielding a primary weapon.{/gld}");
 		CGET(std::string,MSG_COOLDOWN_IN_EFFECT,"{gld}Weapon cooldown in effect.{/gld}");

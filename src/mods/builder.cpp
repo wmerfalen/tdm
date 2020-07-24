@@ -21,6 +21,7 @@
 #include "rooms.hpp"
 #include <algorithm> // for std::min
 #include "mobs/extended-types.hpp"
+#include "mobs/mini-gunner.hpp"
 namespace mods {  struct player; };
 namespace mods { struct extra_desc_data; }; 
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
@@ -1885,6 +1886,16 @@ ACMD(do_mbuild) {
 			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {wht}mbuild{/wht} {gld}describe INNOCENT{/gld}\r\n" <<
 			"[documentation written on 2020-07-10]\r\n" <<
+
+			" {grn}mbuild{/grn} {red}mini-gunner-sentinel <mobid> <key> <value>{/red}\r\n" <<
+			"  |--> will set the mob's sentinel column named <key> to <type>. The list of\r\n" <<
+			"  available keys follow.\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}mbuild{/wht} {gld}mini-gunner-sentinel 40 face-direction NORTH{/gld}\r\n" <<
+			"  |:: {wht}mbuild{/wht} {gld}mini-gunner-sentinel 40 room-vnum 120{/gld}\r\n" <<
+			"  {gld}|:: -:[keys]:-{/gld}\r\n" << 
+			"  {gld}|:: face-direction{/gld}{red}which direction to face{/red}\r\n" <<
+			"  {gld}|:: room-vnum {red}which room (vnum) to spawn in{/red}{/gld}\r\n" <<
 			" {grn}mbuild{/grn} {red}save <mob_id>{/red}\r\n" <<
 			" {grn}mbuild{/grn} {red}show <mob_id>{/red}\r\n" <<
 			" {grn}mbuild{/grn} {red}instantiate <mob_id>{/red}\r\n" <<
@@ -1942,6 +1953,59 @@ ACMD(do_mbuild) {
 			}
 			mob_proto[mob_id].mob_specials.extended_mob_type = opt;
 			r_success(player,"Set mob type.");
+			return;
+		}
+	}
+	{
+		auto args = mods::util::subcmd_args<50,args_t>(argument,"mini-gunner-sentinel");
+		if(args.has_value()){
+			//[ -  ] [ 0        ]          [ 1    ]  [  2   ] [ 3 ]
+			//mbuild <mini-gunner-sentinel> <mob-id> <field> <value>
+			auto arg_vec = args.value();
+			if(arg_vec.size() < 4){
+				r_error(player,"Not enough arguments.");
+				return;
+			}
+			auto i_value = mods::util::stoi(arg_vec[1]);
+			if(!i_value.has_value()){
+				r_error(player,"Please specify a valid mob-id");
+				return;
+			}
+			auto mob_id = i_value.value();
+			if(mob_id >= mob_proto.size()){
+				r_error(player,"Mob id out of range");
+				return;
+			}
+			std::string field = arg_vec[2];
+			std::string value = arg_vec[3];
+			if(mods::util::in_array<std::string>(field,{"face-direction","room-vnum"}) == false){
+				r_error(player, "Please use a valid key");
+				return;
+			}
+			mob_vnum mvnum = mob_proto[mob_id].nr;
+			if(field.compare("face-direction") == 0){
+					std::map<std::string,std::string> m = {
+						{"face-direction",value},
+						{"room-vnum",std::to_string(world[0].number)}
+					};
+				if(!mods::mobs::mg::orm::db_exists<sql_compositor>(mvnum)){
+					mods::mobs::mg::orm::db_create<sql_compositor>(mvnum,m);
+				}
+				m["face-direction"] = value;
+				mods::mobs::mg::orm::db_update<sql_compositor>(mob_proto[mob_id].nr,m);
+			}
+			if(field.compare("room-vnum") == 0){
+					std::map<std::string,std::string> m = {
+							{"face-direction","N"},
+							{"room-vnum",value}
+					};
+				if(!mods::mobs::mg::orm::db_exists<sql_compositor>(mvnum)){
+					mods::mobs::mg::orm::db_create<sql_compositor>(mvnum,m);
+				}
+				m["room-vnum"] = value;
+				mods::mobs::mg::orm::db_update<sql_compositor>(mvnum,m);
+			}
+			r_success(player,CAT({"Successfully set '", field, "'."}));
 			return;
 		}
 	}
@@ -2058,6 +2122,34 @@ ACMD(do_mbuild) {
 		mob_proto.push_back(mods::builder::new_npc());
 		r_success(player,"Mobile created");
 		return;
+	}
+	
+	args = mods::util::subcmd_args<12,args_t>(argument,"clone");
+	{
+		if(args.has_value()){
+			auto arg_vec = args.value();
+			auto i_value = mods::util::stoi(arg_vec[1]);
+
+			if(!i_value.has_value()) {
+				r_error(player,"Please use a valid numeric value.");
+				return;
+			} else {
+				auto index = i_value.value();
+				std::size_t i = index;
+
+				if(i >= mob_proto.size()) {
+					r_error(player,"Out of bounds");
+					return;
+				}
+
+				mob_vnum v = next_mob_number();
+				mob_proto.emplace_back();
+				mob_proto.back() = mob_proto[i];
+				mob_proto.back().nr = v;
+				r_success(player,"Object cloned");
+			}
+			return;
+		}
 	}
 
 	args = mods::util::subcmd_args<12,args_t>(argument,"instantiate");
