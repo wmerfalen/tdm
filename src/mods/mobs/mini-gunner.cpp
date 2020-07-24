@@ -44,7 +44,7 @@ namespace mods::mobs {
 		return should_fire;
 	}
 	std::map<uuid_t,std::shared_ptr<mini_gunner>> mg_map;
-	void mini_gunner::create(uuid_t mob_uuid){
+	void mini_gunner::create(uuid_t mob_uuid,std::string variation){
 		mini_debug("mini_gunner create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
 		if(!p){
@@ -52,6 +52,13 @@ namespace mods::mobs {
 			return;
 		}
 		mg_map.insert({mob_uuid,std::make_shared<mini_gunner>(mob_uuid)});
+		mg_map.back()->set_variation(variation);
+	}
+	void mini_gunner::set_variation(std::string v){
+		this->variation = v;
+		if(v.compare("sentinel") == 0){
+
+		}
 	}
 	void mini_gunner::free_mob(uuid_t uuid){
 		mg_map.erase(uuid);

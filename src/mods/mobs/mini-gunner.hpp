@@ -6,7 +6,7 @@
 
 namespace mods::mobs {
 	struct mini_gunner {
-		static void create(uuid_t uuid);
+		static void create(uuid_t uuid, std::string);
 		static void free_mob(uuid_t uuid);
 		void init();
 		mini_gunner() = delete;
@@ -21,7 +21,9 @@ namespace mods::mobs {
 		int get_weapon_heat() const { return weapon_heat; }
 		void set_behaviour_tree(std::string_view name);
 		void shout(std::string);
+		void set_variation(std::string);
 		private:
+		std::string variation;
 		int weapon_heat;
 		int heading;
 		int spray_direction;

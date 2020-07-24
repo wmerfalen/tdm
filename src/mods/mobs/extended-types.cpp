@@ -17,7 +17,11 @@ namespace mods::mobs {
 				return;
 			case extended_types_t::MINI_GUNNER:
 				std::cerr << "[ found mini gunner ]\n";
-				mini_gunner::create(mob_id);
+				mini_gunner::create(mob_id, "normal");
+			case extended_types_t::MINI_GUNNER_SENTINEL:
+				std::cerr << "[ found mini gunner sentinel ]\n";
+				mini_gunner::create(mob_id, "sentinel");
+				return;
 				return;
 		}
 	}

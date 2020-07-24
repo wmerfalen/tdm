@@ -12,6 +12,7 @@ namespace mods::mobs {
 	enum extended_types_t : uint16_t {
 		NONE =0,
 		MINI_GUNNER,
+		MINI_GUNNER_SENTINEL,
 		INNOCENT,
 		SENTINEL,
 		AGGRESSIVE_MELEE,
@@ -23,6 +24,7 @@ namespace mods::mobs {
 	static std::map<extended_types_t,std::string> ext_map = {
 		{NONE,"NONE"},
 		{MINI_GUNNER,"MINI_GUNNER"},
+		{MINI_GUNNER_SENTINEL,"MINI_GUNNER_SENTINEL"},
 		{INNOCENT,"INNOCENT"},
 		{SENTINEL,"SENTINEL"},
 		{AGGRESSIVE_MELEE,"AGGRESSIVE_MELEE"},
@@ -38,6 +40,7 @@ namespace mods::mobs {
 			("they are attempting to spray toward. Once they have found a target, they will spray in that ") +
 			("direction. There is one caveat with the mini-gunner and that is HEAT. Their mini-gun overheats ") +
 			("frequently and requires their constant spraying to cease every once in awhile.");
+	static const std::string mini_gunner_sentinel = std::string("The mob will have a backpack and minigun which he/she will use as the main weapon.","This mob stands guard in a single room and will generally face on direction (while watching each room in that direction for a number of rooms).");
 	static const std::string innocent = std::string("Innocent mobs that wouldn't harm a fly (even when provoked). These mobs fulfill the ") +
 			("victim archetype, often being in the middle of unfortunate situations despite their willingness ") +
 			("to actively avoid any conflict. An innocent mob will do anything as long as it means they can ") +
@@ -46,6 +49,7 @@ namespace mods::mobs {
 	static std::map<extended_types_t,std::string> description_strings = {
 		{NONE,"NONE"},
 		{MINI_GUNNER,desc::mini_gunner},
+		{MINI_GUNNER_SENTINEL,desc::mini_gunner_sentinel},
 		{INNOCENT,desc::innocent},
 		{SENTINEL,"SENTINEL"},
 		{AGGRESSIVE_MELEE,"AGGRESSIVE_MELEE"},
