@@ -23,6 +23,7 @@ namespace mods::mobs {
 		void shout(std::string);
 		void set_variation(std::string);
 		void enemy_spotted(room_rnum room,uuid_t player);
+		str_map_t report();
 		private:
 		std::string variation;
 		int weapon_heat;
@@ -42,13 +43,6 @@ namespace mods::mobs {
 			}
 			return value.substr(0,1);
 		}
-		static inline std::map<std::string,std::string> translate(std::map<std::string,std::string> v){
-			std::map<std::string,std::string> m;
-			m["mgs_face_direction"] = face_direction(v["face-direction"]);
-			m["mgs_room_vnum"] = v["room-vnum"];
-			m["mgs_mob_vnum"] = v["mob-vnum"];
-			return m;
-		}
 	template <typename sql_compositor>
 	static inline bool db_exists(mob_vnum mob_vnum){
 			try{
@@ -67,8 +61,7 @@ namespace mods::mobs {
 			}
 	}
 	template <typename sql_compositor>
-	static inline int db_update(mob_vnum mob_vnum,std::map<std::string,std::string> values){
-		values = translate(values);
+	static inline int db_update(mob_vnum mob_vnum,str_map_t values){
 		values["mgs_mob_vnum"] = std::to_string(mob_vnum);
 			try{
 		values["mgs_face_direction"] = face_direction(values["mgs_face_direction"]);
@@ -88,8 +81,7 @@ namespace mods::mobs {
 			}
 	}
 	template <typename sql_compositor>
-	static inline int db_create(mob_vnum mob_vnum,std::map<std::string,std::string> values){
-		values = translate(values);
+	static inline int db_create(mob_vnum mob_vnum,str_map_t values){
 		values["mgs_mob_vnum"] = std::to_string(mob_vnum);
 		values["mgs_face_direction"] = face_direction(values["mgs_face_direction"]);
 		{

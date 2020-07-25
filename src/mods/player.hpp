@@ -393,7 +393,8 @@ namespace mods {
 		/** TODO: all these queueing functions and overloaded operators need to accomodate
 		 * the new player_type_enum_t values when it comes to muting queued output.
 		 */
-		void                queue_page_fragment(std::string_view fragment) {
+		void queue_send_fragment(const char* messg, ...);
+		void queue_page_fragment(std::string_view fragment) {
 			for(const auto & c : fragment) {
 				m_current_page_fragment += c;
 				if(c == '\n') {

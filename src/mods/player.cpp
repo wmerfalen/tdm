@@ -661,7 +661,11 @@ namespace mods {
 	}
 	void player::raw_send(const mods::string& str){
 		MENTOC_NPC_CHECK(str.c_str());
-		write_to_descriptor(m_desc->descriptor,str.c_str());
+		if(m_do_paging) {
+			queue_page_fragment(str.c_str());
+		}else{
+			write_to_descriptor(m_desc->descriptor,str.c_str());
+		}
 		//desc().has_prompt = 0;
 	}
 	mods::string player::weapon_name(){
@@ -1077,19 +1081,49 @@ namespace mods {
 		}
 		m_lense_type = NORMAL_SIGHT;
 	}
+	void player::queue_send_fragment(const char *message, ...) {
+	}
 	size_t player::send(const char *messg, ...) {
 		MENTOC_NPC_CHECK_0(messg);
+		if(m_do_paging) {
+			static constexpr int txt_buffer_size_total = MAX_STRING_LENGTH;
+			static constexpr int txt_buffer_size_allowable = txt_buffer_size_total - 12;
+			std::array<char,txt_buffer_size_total> txt;
+			std::fill(txt.begin(),txt.end(),0);
+			const char *text_overflow = "**OVERFLOW**\r\n";
+			int size = 0;
+			va_list args;
+			va_start(args, messg);
+			size = vsnprintf(&txt[0], txt_buffer_size_allowable, messg, args);
+			if(size == 0){
+				return 0;
+			}
+			if(size < 0) {
+				size = txt_buffer_size_allowable;
+				int offset = size - strlen(text_overflow);
+				if(offset < 0){
+					offset = 0;
+				}
+				if(offset >= txt_buffer_size_total){
+					offset = txt_buffer_size_total - strlen(text_overflow);
+				}
+				strncpy(&txt[0] + offset, text_overflow,strlen(text_overflow)+1);
+			}else{
+				txt[std::min(size,txt_buffer_size_allowable)] = '\0';
+			}
+			va_end(args);
+			queue_page_fragment(&txt[0]);
+			return 0;
+		}
 		if(messg && *messg) {
 			size_t left;
 			va_list args;
-
 			va_start(args, messg);
 			left = vwrite_to_output(*(cd()->desc), messg, args);
 			va_end(args);
 			desc().has_prompt = 0;
 			return left;
 		}
-
 		desc().has_prompt = 0;
 		return 0;
 	}

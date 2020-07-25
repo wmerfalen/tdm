@@ -43,6 +43,7 @@ namespace mods::mobs {
 		return should_fire;
 	}
 	std::map<uuid_t,std::shared_ptr<mini_gunner>> mg_map;
+	
 	void mini_gunner::create(uuid_t mob_uuid,std::string variation){
 		mini_debug("mini_gunner create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);

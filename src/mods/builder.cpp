@@ -22,6 +22,8 @@
 #include <algorithm> // for std::min
 #include "mobs/extended-types.hpp"
 #include "mobs/mini-gunner.hpp"
+#include <list>
+#include <memory>
 namespace mods {  struct player; };
 namespace mods { struct extra_desc_data; }; 
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
@@ -1763,8 +1765,154 @@ void present_mob_specials(player_ptr_t & player, std::size_t index){
 		return;
 }
 
+enum field_type_t {
+	MOB_VNUM,
+	MOB_RNUM,
+	STRING_COLUMN,
+	SINGLE_CHAR_COLUMN,
+	INTEGER_COLUMN,
+	FLOATING_POINT_COLUMN
+};
+enum parse_response_t {
+	HANDLED,
+	NOT_OURS,
+	INCOMPLETE
+};
+struct command_t;
+using save_function_t = std::function<void(std::shared_ptr<command_t>)>;
+struct command_t {
+	str_t table;
+	str_map_t column_mappings;
+	str_t name;
+	str_t format;
+	size_t arguments;
+	int mob_vnum_argument;
+	int mob_id_argument;
+	mob_rnum mob_id;
+	mob_vnum m_vnum;
+	str_map_t values;
+	save_function_t save_function;
+
+	command_t() = delete;
+	command_t(
+			str_t in_table,
+			str_map_t in_column_mappings,
+			str_t in_name,
+			str_t in_format,
+			size_t in_arguments,
+			int in_mob_vnum_argument,
+			int in_mob_id_argument,
+			save_function_t in_save_function
+			) :
+		table(in_table),
+			column_mappings(in_column_mappings),
+			name(in_name),
+			format(in_format),
+			arguments(in_arguments),
+			mob_vnum_argument(in_mob_vnum_argument),
+			mob_id_argument(in_mob_id_argument),
+			mob_id(0),
+			m_vnum(0),
+			save_function(in_save_function)
+	{
+		
+	}
+	bool ready_to_save(str_t argument){
+		auto args = mods::util::subcmd_args<50,args_t>(argument,this->name.c_str());
+		if(!args.has_value() || args.value().size() < 3){
+			return false;
+		}
+		auto arg_vec = args.value();
+		int m_id = mods::util::stoi(arg_vec[2]).value_or(-1);
+		return arg_vec[1].compare("save") == 0 && m_id == this->mob_id;
+	}
+
+	parse_response_t parse(str_t argument,player_ptr_t& player){
+		auto args = mods::util::subcmd_args<50,args_t>(argument,this->name.c_str());
+		if(!args.has_value()){
+			return NOT_OURS;
+		}
+		auto arg_vec = args.value();
+		if(arg_vec.size() >= 3 && arg_vec[2].compare("save") == 0){
+			return NOT_OURS;
+		}
+		if(arg_vec.size() < this->arguments + 1){
+			r_error(player,"Not enough arguments.");
+			return INCOMPLETE;
+		}
+		auto i_value = mods::util::stoi(arg_vec[this->mob_id_argument + 1]);
+		if(!i_value.has_value()){
+			r_error(player,"Please specify a valid mob-id");
+			return INCOMPLETE;
+		}
+		this->mob_id = i_value.value();
+		if(mob_id >= mob_proto.size()){
+			r_error(player,"Mob id out of range");
+			return INCOMPLETE;
+		}
+		this->m_vnum = mob_proto[this->mob_id].nr;
+		std::string field = arg_vec[2];
+		std::string value = arg_vec[3];
+		if(mods::util::in_array<std::string>(field,map_keys(this->column_mappings)) == false){
+			r_error(player, "Please use a valid key");
+			return INCOMPLETE;
+		}
+		for(auto & pair : this->column_mappings){
+			if(field.compare(pair.first) == 0){
+				this->values[this->column_mappings[field]] = value;
+				r_success(player,CAT({"Successfully set '", field, "'."}));
+				return HANDLED;
+			}
+		}
+		r_error(player,"Didn't process any data.");
+		return INCOMPLETE;
+	}
+	void print_command(player_ptr_t& player){
+		player->send(" {grn}mbuild{/grn} {red}%s %s{/red}\r\n",this->name.c_str(),this->format.c_str());
+		player->send("  {gld}|:: -:[keys]:-{/gld}\r\n");
+		for(auto & pair : column_mappings){
+			player->send("  {gld}|::%s {/gld}\r\n",pair.first.c_str());
+		}
+		player->send(" {grn}mbuild{/grn} {red}%s <mob-id> save{/red}\r\n",this->name.c_str());
+	}
+};
+static std::list<std::shared_ptr<command_t>> mob_commands;
+
+void initialize_mob_commands(){
+	static bool initialized = false;
+	if(initialized){
+		return;
+	}
+	mob_commands.emplace_back(
+		std::make_shared<command_t>(
+				"mini_gunner_sentinel", /* table */
+				str_map_t{
+					{"face-direction","mgs_face_direction"},
+					{"room-vnum","mgs_room_vnum"},
+					{"mob-vnum","mgs_mob_vnum"}
+				},	/** column mappings */
+				"mini-gunner-sentinel", /* command name */
+				"<mob-id> <field> <value>", /* command format */
+				 3, /* command argument s*/
+				-1, /* mob_vnum argument */
+				 0, /* mob_id argument */
+			[](std::shared_ptr<command_t> cmd) {
+					if(!mods::mobs::mg::orm::db_exists<sql_compositor>(cmd->m_vnum)){
+						mods::mobs::mg::orm::db_create<sql_compositor>(cmd->m_vnum,cmd->values);
+					}
+					mods::mobs::mg::orm::db_update<sql_compositor>(cmd->m_vnum,cmd->values);
+			}
+		)
+	);
+	initialized = true;
+}
 
 ACMD(do_mbuild) {
+	static bool initialized = false;
+	if(!initialized){
+		initialize_mob_commands();
+		initialized = true;
+	}
 	/**
 	 * Function status
 	 * ---------------[ as of: 2019-02-16 ]
@@ -1778,6 +1926,7 @@ ACMD(do_mbuild) {
 	
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
+
 
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0
 			&& vec_args[1].compare("action") == 0) {
@@ -1886,24 +2035,17 @@ ACMD(do_mbuild) {
 			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {wht}mbuild{/wht} {gld}describe INNOCENT{/gld}\r\n" <<
 			"[documentation written on 2020-07-10]\r\n" <<
-
-			" {grn}mbuild{/grn} {red}mini-gunner-sentinel <mobid> <key> <value>{/red}\r\n" <<
-			"  |--> will set the mob's sentinel column named <key> to <type>. The list of\r\n" <<
-			"  available keys follow.\r\n" <<
-			"  {grn}|____[example]{/grn}\r\n" <<
-			"  |:: {wht}mbuild{/wht} {gld}mini-gunner-sentinel 40 face-direction NORTH{/gld}\r\n" <<
-			"  |:: {wht}mbuild{/wht} {gld}mini-gunner-sentinel 40 room-vnum 120{/gld}\r\n" <<
-			"  {gld}|:: -:[keys]:-{/gld}\r\n" << 
-			"  {gld}|:: face-direction{/gld}{red}which direction to face{/red}\r\n" <<
-			"  {gld}|:: room-vnum {red}which room (vnum) to spawn in{/red}{/gld}\r\n" <<
 			" {grn}mbuild{/grn} {red}save <mob_id>{/red}\r\n" <<
 			" {grn}mbuild{/grn} {red}show <mob_id>{/red}\r\n" <<
 			" {grn}mbuild{/grn} {red}instantiate <mob_id>{/red}\r\n" <<
 			" {grn}mbuild{/grn} {red}action:add <mob_id> <flag>{/red}\r\n" <<
 			" {grn}mbuild{/grn} {red}action:remove <mob_id> <flag>{/red}\r\n" <<
-			" {grn}mbuild{/grn} {red}action:list <mob_id>{/red}\r\n" <<
-			"\r\n"
+			" {grn}mbuild{/grn} {red}action:list <mob_id>{/red}\r\n"
 			;
+		for(auto & cmd : mob_commands){
+			cmd->print_command(player);
+		}
+		player->sendln("");
 		player->pager_end();
 		player->page(0);
 		return;
@@ -1956,60 +2098,19 @@ ACMD(do_mbuild) {
 			return;
 		}
 	}
-	{
-		auto args = mods::util::subcmd_args<50,args_t>(argument,"mini-gunner-sentinel");
-		if(args.has_value()){
-			//[ -  ] [ 0        ]          [ 1    ]  [  2   ] [ 3 ]
-			//mbuild <mini-gunner-sentinel> <mob-id> <field> <value>
-			auto arg_vec = args.value();
-			if(arg_vec.size() < 4){
-				r_error(player,"Not enough arguments.");
-				return;
-			}
-			auto i_value = mods::util::stoi(arg_vec[1]);
-			if(!i_value.has_value()){
-				r_error(player,"Please specify a valid mob-id");
-				return;
-			}
-			auto mob_id = i_value.value();
-			if(mob_id >= mob_proto.size()){
-				r_error(player,"Mob id out of range");
-				return;
-			}
-			std::string field = arg_vec[2];
-			std::string value = arg_vec[3];
-			if(mods::util::in_array<std::string>(field,{"face-direction","room-vnum"}) == false){
-				r_error(player, "Please use a valid key");
-				return;
-			}
-			mob_vnum mvnum = mob_proto[mob_id].nr;
-			if(field.compare("face-direction") == 0){
-					std::map<std::string,std::string> m = {
-						{"face-direction",value},
-						{"room-vnum",std::to_string(world[0].number)}
-					};
-				if(!mods::mobs::mg::orm::db_exists<sql_compositor>(mvnum)){
-					mods::mobs::mg::orm::db_create<sql_compositor>(mvnum,m);
-				}
-				m["face-direction"] = value;
-				mods::mobs::mg::orm::db_update<sql_compositor>(mob_proto[mob_id].nr,m);
-			}
-			if(field.compare("room-vnum") == 0){
-					std::map<std::string,std::string> m = {
-							{"face-direction","N"},
-							{"room-vnum",value}
-					};
-				if(!mods::mobs::mg::orm::db_exists<sql_compositor>(mvnum)){
-					mods::mobs::mg::orm::db_create<sql_compositor>(mvnum,m);
-				}
-				m["room-vnum"] = value;
-				mods::mobs::mg::orm::db_update<sql_compositor>(mvnum,m);
-			}
-			r_success(player,CAT({"Successfully set '", field, "'."}));
+	for(auto & cmd : mob_commands){
+		if(cmd->ready_to_save(argument)){
+			cmd->save_function(cmd);
 			return;
 		}
+		switch(cmd->parse(argument,player)){
+			case parse_response_t::HANDLED:
+				return;
+			default:
+				break;
+		}
 	}
-	
+
 	auto args = mods::util::subcmd_args<11,args_t>(argument,"action:add");
 	if(args.has_value()){
 		//[ -  ] [ 0        ] [ 1    ] [ 2  ]

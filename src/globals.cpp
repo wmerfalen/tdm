@@ -1077,5 +1077,12 @@ std::string IMPLODE(std::vector<std::string> m,std::string delim){
 	}
 	return f;
 }
+std::vector<str_t> map_keys(str_map_t & m){
+	std::vector<str_t> s;
+	for(auto & pair : m){
+		s.emplace_back(pair.first);
+	}
+	return s;
+}
 
 #endif

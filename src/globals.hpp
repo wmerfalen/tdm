@@ -89,6 +89,12 @@ character_list = ch;
 using player_ptr_t = std::shared_ptr<mods::player>;
 using obj_ptr_t = std::shared_ptr<obj_data>;
 using mob_ptr_t = std::shared_ptr<mods::npc>;
+using str_map_t = std::map<std::string,std::string>;
+using str_t = std::string;
+using mstr_t = mods::string;
+using size_t = std::size_t;
+using str_list_t = std::list<std::string>;
+using str_vec_t = std::vector<std::string>;
 namespace mods {
 	namespace lmdb { 
 		struct _db_handle;
@@ -245,4 +251,5 @@ static inline std::string CAT(std::vector<std::string_view> m){
 }
 std::string IMPLODE(std::vector<std::string> m,std::string delim);
 std::string dirstr(int);
+std::vector<str_t> map_keys(str_map_t & m);
 #endif
