@@ -33,6 +33,72 @@ This will allow the audience to play the game while development can focus on
 building out gameplay features in an iterative manner. Once the dynamics are solid
 enough, we can compose those into skillsets that are divided by assets.
 
+[##########################################]
+[            SIMPLE MOB CLASSES            ]
+[ key: WGE = weapons/gadgets/explosives    ]
+[##########################################]
+	- [#########################################] -
+	- [ ROGUE ARCHETYPES                        ] -
+	- [#########################################] -
+	- GHOST [illusionist]
+		- can apply stealth to self and WGE
+		- H&K G36C Assault Rifle
+	- SNIPER [assassin]
+		- can snipe from long distances
+		- PSG-1 Sniper Rifle
+
+	- [#########################################] -
+	- [ ELEMENTALIST ARCHETYPES                 ] -
+	- [#########################################] -
+	- HEAT [fire elementalist]
+		- can apply fire to WGE
+		- SASG-12 Shotgun
+	- MALODY [poison elementalist]
+		- can apply poison to WGE
+		- MP5 Sub-Machine Gun
+
+	- [#########################################] -
+	- [ WARRIOR ARCHETYPES                      ] -
+	- [#########################################] -
+	- TANK [warrior]
+		- can deploy shield
+		- P90 Sub-Machine Gun
+
+	- [#########################################] -
+	- [ GUNSLINGER ARCHETYPES                   ] -
+	- [#########################################] -
+	- PISTOL SPECIALIST [specialist]
+		- can dual wield pistols. critical/headshot chance increased
+		- Dual Desert Eagle
+
+	- [#########################################] -
+	- [ ENGINEER ARCHETYPES                     ] -
+	- [#########################################] -
+	- FORGE [blacksmith]
+		- can create/modify/combine WGE
+		- VARIED
+
+	- [#########################################] -
+	- [ PSYCHIC ARCHETYPES                      ] -
+	- [#########################################] -
+	- INTERCEPT [psychic]
+		- can remotely control NPCs for a limited amount of time
+		- Vector
+
+	- [#########################################] -
+	- [ CLERIC ARCHETYPES                       ] -
+	- [#########################################] -
+	- MEDIC [healer]
+		- can heal self and others
+		- FMG-9
+
+	- [########################] -
+	- [ BEASTMASTER ARCHETYPES ] -
+	- [########################] -
+	- SYNDROME [ beastmaster ]
+		- has flying/ground UAV drone. Can control any other drone
+		- [ weapon TBA ]
+
 +++++++++++++++++++++++
 | ITEM TYPE CHECKLIST |
 +++++++++++++++++++++++
@@ -311,8 +377,6 @@ enough, we can compose those into skillsets that are divided by assets.
 ++++++++++++++++++++
 	- Friendly attacks
 		- Poisoned NPC's will attack their own side
-	- Re-animate
-		- Necromancer skill to bring corpse back from the dead
 	- Acidic blood
 		- Poisoned NPC will bleed acid
 	- Explode
@@ -377,192 +441,6 @@ enough, we can compose those into skillsets that are divided by assets.
 				- Skills
 					- 
 
-	- Class Template
-		- Theme: keywords to describe class
-		- Loadout:
-			- Primary [*] -> CLASS_WEAPON
-			- Secondary [*] -> CLASS_WEAPON
-		- Psychic Ability:
-			- Ability that transcends space/time/physics
-		- Global Weapon Ability:
-			- Ability that enhances primary or secondary weapon
-		- Military Triad [6 points]
-			- [Melee]   [ ] [ ] [ ]
-			- [Weapons] [ ] [ ] [ ]
-			- [Intel]   [ ] [ ] [ ]
-		- Speed/Amor tradeoff [4 points]
-			- [Speed]   [ ] [ ] [ ]
-			- [Armor]   [ ] [ ] [ ] 
-		[*] -> CLASS_WEAPON: Cannot be junked/dropped/traded. PC can still use other weapons if so chooses.
-
-  ####   ######  #    #   #####     #    #    #  ######  #
- #       #       ##   #     #       #    ##   #  #       #
-  ####   #####   # #  #     #       #    # #  #  #####   #
-      #  #       #  # #     #       #    #  # #  #       #
- #    #  #       #   ##     #       #    #   ##  #       #
-  ####   ######  #    #     #       #    #    #  ######  ######
-
-
-  ####   #         ##     ####    ####
- #    #  #        #  #   #       #
- #       #       #    #   ####    ####
- #       #       ######       #       #
- #    #  #       #    #  #    #  #    #
-  ####   ######  #    #   ####    ####
-	- Sentinel Class
-		- Theme: Anchor class, can take punishment, defensive tank
-		- Loadout:
-			- Primary:
-				- MP5 Sub Machine Gun
-				- Alternate SPAS-12 Shotgun
-			- Secondary:
-				- CZ P-10 C
-				- file: cz-p10-c.html 
-			- Psychic Ability:
-				- Intimidate (very effective form of preventing crits from enemies)
-				- Bolster Defense
-					- 
-			- Passive Abilities:
-				- Damage resistence for every second guarding a room
-			- Global Weapon Ability:
-			- Triad Allocation:
-				- [Weapons] [x] [x] [x]
-				- [Melee]   [x] [x] [ ]
-				- [Intel]   [x] [ ] [ ]
-			- Play style: imagine the heavy and tall looking knights guarding the gates
-			- NOTE: this could be an npc or player class
-
-
-	 #####   ######  #    #   ####   #    #
-	 #    #  #       ##  ##  #    #  ##   #
-	 #    #  #####   # ## #  #    #  # #  #
-	 #    #  #       #    #  #    #  #  # #
-	 #    #  #       #    #  #    #  #   ##
-	 #####   ######  #    #   ####   #    #
-
-
-		####   #         ##     ####    ####
-	 #    #  #        #  #   #       #
-	 #       #       #    #   ####    ####
-	 #       #       ######       #       #
-	 #    #  #       #    #  #    #  #    #
-		####   ######  #    #   ####    ####
-
-	- DAEMON CLASS
-		- Theme: Demonic force, Military Brutality, Hellfire, Incendiary
-		- Loadout:
-			- Primary:
-				- SCAR-H + auxiliary grenade launcher
-			- Secondary:
-				- Machine Pistol: Uzi or Glock (see: Rainbow Six Vegas 2 glock handgun that is rapid fire)
-			- Psychic Ability:
-				- Torture (inflict cruel damage on target)
-			- Passive Abilities:
-				- Kills with Melee weapons gain increased chance of doubling up attacks
-			- Global Weapon Ability:
-				- Turn primary/secondary ammunition into incendiary
-			- Triad Allocation:
-				- [Weapons] [x] [x] [x]
-				- [Melee]   [x] [x] [ ]
-				- [Intel]   [x] [ ] [ ]
-			- Play style: does lots of damage, can take decent amount of punishment, quickly get aquainted with new weapons
-
-	- SYNDROME CLASS
-		- Theme: High tech user
-		- Loadout:
-			- Primary:
-				- Vector ACP
-			- Secondary:
-				- CZ P-10 C
-				- file: cz-p10-c.html 
-			- Psychic Ability:
-				- Invisibility
-				- Disable gagdets
-			- Passive Abilities:
-				- Damage resistence for every second guarding a room
-			- Global Weapon Ability:
-				- Tracking shot (NPCs hit with tracking shot appear on your radar)
-			- Triad Allocation:
-				- [Weapons] [x] [x] [x]
-				- [Melee]   [x] [x] [ ]
-				- [Intel]   [x] [ ] [ ]
-			- Play style: 
-
-  #################
-	### CONTAGION ###
-  #################
-	- CONTAGION CLASS
-		- Theme: Anchor class, can take punishment, defensive tank
-		- Loadout:
-			- Primary:
-				- MP5 Sub Machine Gun
-				- Alternate SPAS-12 Shotgun
-			- Secondary:
-				- CZ P-10 C
-				- file: cz-p10-c.html 
-			- Psychic Ability:
-				- Intimidate (very effective form of preventing crits from enemies)
-				- Bolster Defense
-					- 
-			- Passive Abilities:
-				- Damage resistence for every second guarding a room
-			- Global Weapon Ability:
-			- Triad Allocation:
-				- [Weapons] [x] [x] [x]
-				- [Melee]   [x] [x] [ ]
-				- [Intel]   [x] [ ] [ ]
-			- Play style: imagine the heavy and tall looking knights guarding the gates
-			- NOTE: this could be an npc or player class
-	### NEW CLASS ##
-	### NEW CLASS ##
-	### NEW CLASS ##
-
-
-	- TANK CLASS [ RENAME THIS ]
-		- Theme: bullet sponge, heavy armour but slow, anchor
-		- Loadout:
-			- Primary:
-				- 
-			- Secondary:
-				- 
-		- Global Weapon Ability:
-			- 
-		- Triad Allocation:
-			- [Weapons] [x] [x] [ ]
-			- [Melee]   [x] [x] [x]
-			- [Intel]   [x] [ ] [ ]
-
-	- ENGINEER CLASS
-		- Theme: gadgets expert, hacking, intelligence is key, drone is ur friend
-		- Loadout:
-			- Primary:
-				- 552 Commando
-			- Secondary:
-				- 5.7 USG
-
-	- FORGE CLASS
-		- Theme:  forged in fire, arms dealer, weapon/armour repair+modification+deconstruction
-		- Loadout:
-			- Primary:
-				- P90
-			- Secondary:
-				- Glock
-			- Psychic Ability:
-				- Weapon Link
-					- when wielding a weapon that FORGE created get Enhanced Weapon Profiency Bonus
-			- Global Weapon Ability
-				- Forge random attributes on an existing weapon potentially making it OP
-					- Naturally, this is a chaotic ability but it can yield surprising results
-
-	- Sub Focus: {CLASS_NAME} CLASS
-		- Theme: 
-		- Loadout:
-			- Frag/Incendiary Grenade launcher (CLASS OBJECT)
-			- Machine Pistol: Uzi or Glock (see: Rainbow Six Vegas 2 glock handgun that is rapid fire)
-			- Demon has PSYCHIC ABILITY: Torture (inflict cruel damage on target)
-			- Global Weapon Ability: Turn primary/secondary ammunition into incendiary
-			- Alignment: Evil
-	
 Proficiencies
 =============
 	- Description:
@@ -596,54 +474,6 @@ Proficiencies
 
 Focus:GRENADE LAUNCHER
 	- Demon
-
-Focus:SNIPER CLASS
-	-  Create base Sniper Rifle in object system
-	-  Make sure if it's a class sniper rifle, that it must be BOUND to it's owner
-	-  Sniper Rifle is NON-TRANSFERABLE if it's a CLASS SNIPER RIFLE
-	-  Sniper Rifles bought and sold on the "BLACK MARKET" aren't bound to anyone, but aren't as powerful as CLASS SNIPER RIFLES
-	-  BONUS: A Sniper Rifle may have different types of modifications, slots, tweaks made to it
-		Slots:
-			- Scope
-		
-Sprint 2019-??
-Focus:CRAFTING WEAPONS
-	-  Create base types for weapons
-		- shotgun
-		- assault rifle
-		- sub-machine gun
-		- sniper rifle
-		- handgun
-		- machine pistol
-		- light machine gun
-	
-	
-	-  Create base types for explosives
-			- frag grenade
-			- incendiary grenade
-			- remote detonation
-			- mine
-			- smoke grenade
-			- flash bang
-		
-	
-	-  Create base types for drones
-			- grounded drone
-			- aerial drone
-			- aquatic drone
-		
-
-Sprint 2019-??
-Focus:CRAFTING GADGETS
-	-  Create base types for weapons
-
-Sprint 2019-??
-Focus:BASE ATTRIBUTES ALLOCATION
-	- Allocate STR/INT/WIS/DEX/CON/CHA for each class
-	- 
-
-Sprint 2019-??
-Focus:RIFLE CUSTOMIZATIONS
 
 Examples (source: Ghost Recon Future Soldier)
  Trigger 
