@@ -625,9 +625,9 @@ CCWHT	screen.h	36;"	d
 CCYEL	screen.h	32;"	d
 CEMENT	structs.h	/^			CEMENT,			\/** asphault, nearly indestructible *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 CGET	mods/values.hpp	28;"	d
-CGET	mods/values.hpp	305;"	d
-CGET_DEF	mods/values.cpp	340;"	d	file:
-CGET_DEF	mods/values.cpp	580;"	d	file:
+CGET	mods/values.hpp	307;"	d
+CGET_DEF	mods/values.cpp	341;"	d	file:
+CGET_DEF	mods/values.cpp	582;"	d	file:
 CHAINABLE_BREACHING	mods/skills.hpp	/^			CHAINABLE_BREACHING,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 CHAOTIC	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 CHARM	mods/flags.hpp	/^		CHARM,$/;"	e	enum:mods::flags::aff
@@ -965,6 +965,8 @@ EXPERT_PISTOL	mods/skills.hpp	/^			EXPERT_PISTOL,$/;"	e	enum:mods::skills::profi
 EXPERT_SHOTGUN	mods/skills.hpp	/^			EXPERT_SHOTGUN,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 EXPERT_SNIPER_RIFLE	mods/skills.hpp	/^			EXPERT_SNIPER_RIFLE,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 EXPERT_SUB_MACHINE_GUN	mods/skills.hpp	/^			EXPERT_SUB_MACHINE_GUN,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
+EXPLODE	globals.cpp	/^str_vec_t EXPLODE(str_t value,char delimiter){$/;"	f
+EXPLODE	globals.cpp	/^str_vec_t EXPLODE(str_t& value,char delimiter){$/;"	f
 EXPLODE	mods/item.hpp	/^		EXPLODE = (1 << 6),$/;"	e	enum:mods::item::capability_t
 EXPLODE	mods/weapon-types.hpp	/^		EXPLODE,$/;"	e	enum:mods::weapon::capabilities::cap_t
 EXPLOSIVE	mods/aoe.hpp	/^		EXPLOSIVE,	\/** Typical explosive dmg from a frag grenade *\/$/;"	e	enum:mods::aoe::types_t
@@ -3229,7 +3231,7 @@ __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__	comm.cpp	850;"	d	file:
 __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__	mobact.cpp	42;"	d	file:
 __MENTOC_PLR	db.cpp	2582;"	d	file:
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
-__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	939;"	d	file:
+__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	945;"	d	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	d
 __MENTOC_STRING_LIT__	mods/util.hpp	21;"	d
 __MENTOC_TYPES_HEADER__	types.hpp	2;"	d
@@ -3279,6 +3281,7 @@ add_affected_by	mods/player.hpp	/^		std::vector<affected_type>& add_affected_by(
 add_callback	mods/rooms.cpp	/^		void add_callback(room_rnum room, affect_t affect, callback_t f){$/;"	f	namespace:mods::rooms::affects
 add_follower	utils.cpp	/^void add_follower(char_data *ch, char_data *leader) {$/;"	f
 add_private_publisher	mods/chat.cpp	/^	void channel::add_private_publisher(std::string_view user) {$/;"	f	class:mods::chat::channel
+add_public_channel	mods/chat.cpp	/^	void add_public_channel(str_t channel,str_t verb){$/;"	f	namespace:mods::chat
 add_room_dissolve_affect	mods/rooms.cpp	/^		void add_room_dissolve_affect(room_rnum room, affect_map_t& items){$/;"	f	namespace:mods::rooms::affects
 add_room_dissolve_affect_every_n_tick	mods/rooms.cpp	/^		void add_room_dissolve_affect_every_n_tick(room_rnum room, affect_t affect, affect_amount_t amt, uint32_t n_ticks){$/;"	f	namespace:mods::rooms::affects
 add_room_to_pavements	mods/builder.cpp	/^	void add_room_to_pavements(player_ptr_t& player, int room_id){$/;"	f	namespace:mods::builder
@@ -3865,6 +3868,7 @@ decomposedExpression	mods/catch.hpp	/^		mutable DecomposedExpression const* deco
 decorate_authenticated_player	db.cpp	/^void decorate_authenticated_player(player_ptr_t player_ptr){$/;"	f
 decrypt	mods/crypto.cpp	/^int decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,$/;"	f	namespace:mods::crypto
 decrypt_buffer	mods/crypto.cpp	/^	std::string decrypt_buffer(std::string_view in_ciphertext,std::string_view in_key,std::string in_iv,std::string buffer){$/;"	f	namespace:mods::crypto
+default_public_channels	mods/values.hpp	/^		static std::string default_public_channels = IMPLODE({"chat","gossip","newbie","gratz"},"|");$/;"	m	namespace:mods::values
 default_yaml_file	structs.cpp	/^static inline std::string default_yaml_file(const std::string& type){$/;"	f	file:
 defer_queue	globals.cpp	/^		std::unique_ptr<mods::deferred> defer_queue;$/;"	m	namespace:mods::globals	file:
 deferred	mods/deferred.hpp	/^			deferred(uint64_t tick_resolution) : $/;"	f	class:mods::deferred
@@ -4994,6 +4998,7 @@ into	mods/sql.hpp	/^			compositor<T>& into(str_object table) {$/;"	f	struct:mods
 invalid_align	handler.cpp	/^int invalid_align(char_data *ch, struct obj_data *obj) {$/;"	f
 invalid_class	class.cpp	/^int invalid_class(char_data *ch, struct obj_data *obj) {$/;"	f
 invalid_list	ban.cpp	/^char *invalid_list[MAX_INVALID_NAMES];$/;"	v
+invec	globals.hpp	/^bool invec(T m, std::vector<T>& v){$/;"	f
 inventory	mods/player.cpp	/^namespace mods::orm::inventory {$/;"	n	class:mods::orm	file:
 invoke	mods/catch.hpp	/^			virtual void invoke() const {$/;"	f	class:Catch::MethodTestCase
 irl	mods/date-time.cpp	/^	namespace irl {$/;"	n	namespace:mods::date_time	file:
@@ -5484,7 +5489,7 @@ message_len	boards.h	/^	int	message_len;  \/* size of message text (for file wri
 message_sell	shop.h	/^	mods::string message_sell;		\/* Message when player sells item	*\/$/;"	m	struct:shop_data
 meta_utils	mods/meta_utils.cpp	/^namespace mods::meta_utils {$/;"	n	class:mods	file:
 meta_utils	mods/meta_utils.hpp	/^namespace mods::meta_utils {$/;"	n	class:mods
-mgdp_debug	globals.cpp	941;"	d	file:
+mgdp_debug	globals.cpp	947;"	d	file:
 min_level	spells.h	/^	int min_level[NUM_CLASSES];$/;"	m	struct:spell_info_type
 min_position	spells.h	/^	byte min_position;	\/* Position for caster	 *\/$/;"	m	struct:spell_info_type
 min_rent_cost	config.cpp	/^int min_rent_cost = 100;$/;"	v
@@ -6481,6 +6486,7 @@ set_watching	mods/player.hpp	/^		void set_watching(direction_t dir){ this->m_wat
 set_yaml_initiator	mods/object-utils.hpp	/^	static inline void set_yaml_initiator($/;"	f	namespace:mods::object_utils
 set_yaml_transaction_id	mods/object-utils.hpp	/^	static inline void set_yaml_transaction_id(uint32_t i){$/;"	f	namespace:mods::object_utils
 setup_log	comm.cpp	/^void setup_log(const char *filename, int fd) {$/;"	f
+setup_public_channels	mods/chat.cpp	/^	void setup_public_channels(){$/;"	f	namespace:mods::chat
 sex	mods/player.hpp	/^		byte& sex(){$/;"	f	struct:mods::player
 sex_flags	mods/builder.cpp	/^	std::array<std::pair<int,std::string>,3> sex_flags = { {$/;"	m	namespace:mods::builder	file:
 shop	mods/shop.cpp	/^namespace mods::shop {$/;"	n	class:mods	file:
@@ -6801,6 +6807,7 @@ transaction_t	mods/lmdb.cpp	/^	transaction_t::transaction_t(std::string ce_table
 transaction_t	mods/lmdb.cpp	/^	transaction_t::transaction_t(table_type_t e_table,transact_type_t type) : m_table(e_table), m_type(type){$/;"	f	class:mods::lmdb::transaction_t
 transaction_t	mods/lmdb.hpp	/^	struct transaction_t {$/;"	s	namespace:mods::lmdb
 transmit	mods/chat.cpp	/^	void channel::transmit(std::string_view user,std::string_view message) {$/;"	f	class:mods::chat::channel
+transmit	mods/chat.cpp	/^	void transmit(std::string verb,std::string_view player_name,std::string_view message){$/;"	f	namespace:mods::chat
 trap	mods/item-types.hpp	/^	enum trap {$/;"	g	namespace:mods::weapon::type
 trap_description_t	mods/yaml.hpp	/^		trap_description_t() :$/;"	f	struct:mods::yaml::trap_description_t
 trap_description_t	mods/yaml.hpp	/^	struct trap_description_t : public yaml_description_t {$/;"	s	namespace:mods::yaml

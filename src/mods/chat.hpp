@@ -20,6 +20,8 @@ namespace mods::chat {
 #include "../interpreter.h"
 #include <utility>
 namespace mods::chat {
+	using str_t = std::string;
+	void add_public_channel(str_t channel,str_t verb);
 	struct channel {
 			channel() = delete;
 			channel(std::string_view name,std::string_view verb,bool b_private) :
@@ -49,5 +51,7 @@ namespace mods::chat {
 			std::string m_verb;
 			bool m_private;
 	};
+	void transmit(std::string verb,std::string_view player_name,std::string_view message);
+	void setup_public_channels();
 };
 #endif

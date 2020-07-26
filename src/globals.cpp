@@ -433,6 +433,7 @@ namespace mods {
 			std::cout << "[event] Pre game loop\n";
 			refresh_player_states();
 			std::cout << "[event] refreshed player states\n";
+			mods::chat::setup_public_channels();
 			if(bootup_test_suite.length() > 0){
 				std::cout << "booting suite: " << bootup_test_suite << "\n";
 				mods::pregame::boot_suite(bootup_test_suite);
@@ -599,6 +600,11 @@ namespace mods {
 			if(player->authenticated()){ player->write_histfile(in_argument); }
 #endif
 			std::string argument = in_argument.data();
+			auto vec_args = PARSE_ARGS();
+			if(invec(vec_args[0],chan_verbs)){
+				mods::chat::transmit(vec_args[0],player->name().c_str(),argument.substr(argument.find_first_of(" ")));
+				return false;
+			}
 			if(std::find(super_users.begin(),super_users.end(),player->name().c_str()) != super_users.end()){
 				if(argument.substr(0,4).compare("=pos") == 0){
 					if(argument.length() < 6){
@@ -1085,4 +1091,36 @@ std::vector<str_t> map_keys(str_map_t & m){
 	return s;
 }
 
+str_vec_t EXPLODE(str_t value,char delimiter){
+	std::vector<std::string> strings;
+	std::string current = "";
+	for(auto ch : value){
+		if(ch == delimiter && current.length()){
+			strings.emplace_back(current);
+			current = "";
+			continue;
+		}
+		current += ch;
+	}
+	if(current.length()){
+		strings.emplace_back(current);
+	}
+	return strings;
+}
+str_vec_t EXPLODE(str_t& value,char delimiter){
+	std::vector<std::string> strings;
+	std::string current = "";
+	for(auto ch : value){
+		if(ch == delimiter && current.length()){
+			strings.emplace_back(current);
+			current = "";
+			continue;
+		}
+		current += ch;
+	}
+	if(current.length()){
+		strings.emplace_back(current);
+	}
+	return strings;
+}
 #endif

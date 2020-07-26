@@ -252,4 +252,10 @@ static inline std::string CAT(std::vector<std::string_view> m){
 std::string IMPLODE(std::vector<std::string> m,std::string delim);
 std::string dirstr(int);
 std::vector<str_t> map_keys(str_map_t & m);
+template <typename T>
+bool invec(T m, std::vector<T>& v){
+	return std::find(v.begin(),v.end(),m) != v.end();
+}
+str_vec_t EXPLODE(str_t& value,char delimiter);
+str_vec_t EXPLODE(str_t value,char delimiter);
 #endif

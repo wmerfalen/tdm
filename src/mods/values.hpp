@@ -211,6 +211,8 @@ namespace mods::values {
 				"Do you have the slightest clue how easily I could kill you right now?"
 				},"|");
 		CGET(std::string,MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS,mini_gunner_random_attack);
+		static std::string default_public_channels = IMPLODE({"chat","gossip","newbie","gratz"},"|");
+		CGET(std::string,DEFAULT_PUBLIC_CHANNELS,default_public_channels);
 
 		CGET(uint8_t,MINI_GUNNER_SCAN_DEPTH,5);
 

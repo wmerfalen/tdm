@@ -2,6 +2,13 @@
 #include "../utils.h"
 
 namespace mods::chat {
+	void add_public_channel(str_t channel,str_t verb){
+		if(invec(verb,mods::globals::chan_verbs)){
+			return;
+		}
+		mods::globals::chan_verbs.emplace_back(verb);
+		mods::globals::chan.emplace_back(channel,verb,false);
+	}
 	void channel::set_name(std::string_view name) {
 		m_name = name;
 	}
@@ -15,7 +22,11 @@ namespace mods::chat {
 		return m_verb;
 	}
 	void channel::add_subscriber(const socket_t& sock) {
-		if(std::find(m_subscribers.begin(),m_subscribers.end(),sock) == m_subscribers.end()) {
+		if(!invec(sock,m_subscribers)){
+			std::cerr << "added socket to subscribers...\n";
+			std::cerr << "added socket to subscribers...\n";
+			std::cerr << "added socket to subscribers...\n";
+			std::cerr << "added socket to subscribers...\n";
 			m_subscribers.push_back(sock);
 		}
 	}
@@ -53,6 +64,7 @@ namespace mods::chat {
 		msg += "{/gld}";
 		msg = mods::globals::color_eval(msg);
 
+		/*
 		for(auto descriptor : m_subscribers) {
 			auto write_value = write(descriptor,msg.c_str(),msg.length());
 			if(write_value == -1){
@@ -64,12 +76,31 @@ namespace mods::chat {
 				);
 			}
 		}
+		*/
+		for(auto & player : mods::globals::player_list){
+			if(IS_NPC(player->cd())){
+				continue;
+			}
+			player->send("[%s][%s]->%s\r\n",this->get_name().data(),user.data(),message.data());
+		}
+	}
+	void transmit(std::string verb,std::string_view player_name,std::string_view message){
+		for(auto & channel : mods::globals::chan){
+			if(verb.compare(channel.get_verb().data()) == 0){
+				channel.transmit(player_name,message);
+				return;
+			}
+		}
+	}
+	void setup_public_channels(){
+		auto chans = EXPLODE(DEFAULT_PUBLIC_CHANNELS(),'|');
+		for(auto & channel : chans){
+			add_public_channel(channel,channel);
+		}
 	}
 };
 
 ACMD(do_chanmgr) {
-	
-
 	if(std::string(argument).length() == 0 || std::string(argument).compare("help") == 0) {
 		player->pager_start() << "usage: \r\n" <<
 		                      " chanmgr help\r\n" <<
@@ -116,10 +147,9 @@ ACMD(do_chanmgr) {
 		return;
 	}
 
-	constexpr unsigned int max_char = 14;
-	std::array<char,max_char> command;
+	auto vec_args = PARSE_ARGS();
 
-	if(std::string(&command[0]).compare("add") == 0) {
+	if(vec_args.size() > 2 && vec_args[0].compare("add") == 0) {
 		std::string arg = argument;
 		auto past = arg.substr(arg.find("add ") + 4);
 		/* i.e.: chanmgr add terry gossip */
@@ -142,7 +172,7 @@ ACMD(do_chanmgr) {
 		return;
 	}
 
-	if(std::string(&command[0]).compare("create-hidden") == 0) {
+	if(vec_args.size() > 2 && vec_args[0].compare("create-hidden") == 0) {
 		std::string arg = argument;
 		auto past = arg.substr(arg.find("create-hidden ") + 14);
 		/* i.e.: chanmgr create go gossip */
@@ -154,11 +184,10 @@ ACMD(do_chanmgr) {
 		}
 
 		/* Emplaced back: name_of_channel,verb */
-		mods::globals::chan.emplace_back(arglist[0],arglist[1],true);
-		mods::globals::chan_verbs.emplace_back(arglist[1]);
+		mods::chat::add_public_channel(arglist[0],arglist[1]);
 	}
 
-	if(std::string(&command[0]).compare("create") == 0) {
+	if(vec_args.size() > 2 && vec_args[0].compare("create") == 0) {
 		std::string arg = argument;
 		auto past = arg.substr(arg.find("create ") + 7);
 		/* i.e.: chanmgr create go gossip */
@@ -172,7 +201,9 @@ ACMD(do_chanmgr) {
 		/* Emplaced back: name_of_channel,verb */
 		mods::globals::chan.emplace_back(arglist[0],arglist[1],false);
 		mods::globals::chan_verbs.emplace_back(arglist[1]);
+		player->sendln("Created channel.");
 		return;
 	}
 
+	player->sendln("Did nothing.");
 }
