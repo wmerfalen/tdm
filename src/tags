@@ -1239,7 +1239,7 @@ House_save	house.cpp	/^int House_save(struct obj_data *obj, FILE *fp) {$/;"	f
 House_save_all	house.cpp	/^void House_save_all(void) {$/;"	f
 House_save_control	house.cpp	/^void House_save_control(void) {$/;"	f
 IAC	telnet.h	42;"	d
-ICMP	globals.hpp	241;"	d
+ICMP	globals.hpp	242;"	d
 IContext	mods/catch.hpp	/^	struct IContext {$/;"	s	namespace:Catch
 IDEA_FILE	db.h	88;"	d
 IDXTYPE	structs.h	131;"	d
@@ -2101,7 +2101,7 @@ PAGE_LENGTH	comm.h	80;"	d
 PAGE_SIZE	mods/player.hpp	/^		static constexpr int PAGE_SIZE = 40;$/;"	m	struct:mods::player
 PAGE_WIDTH	comm.h	81;"	d
 PARASITIC_HP_RECOVERY	mods/skills.hpp	/^			PARASITIC_HP_RECOVERY,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
-PARSE_ARGS	globals.hpp	240;"	d
+PARSE_ARGS	globals.hpp	241;"	d
 PASSES_PER_SEC	structs.h	653;"	d
 PATH_MAX	sysdep.h	352;"	d
 PAUSE_FILE	db.h	54;"	d
@@ -3232,7 +3232,7 @@ __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__	comm.cpp	850;"	d	file:
 __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__	mobact.cpp	42;"	d	file:
 __MENTOC_PLR	db.cpp	2582;"	d	file:
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
-__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	945;"	d	file:
+__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	968;"	d	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	d
 __MENTOC_STRING_LIT__	mods/util.hpp	21;"	d
 __MENTOC_TYPES_HEADER__	types.hpp	2;"	d
@@ -3794,6 +3794,7 @@ current_quest	mods/quests.cpp	/^		std::string current_quest(char_data *ch) {$/;"
 current_value	mods/quests.cpp	/^		std::string current_value(room_rnum room,int t_index) {$/;"	f	namespace:mods::quests
 current_working_dir	mods/js.cpp	/^			std::string current_working_dir(){$/;"	f	namespace:mods::js
 current_working_dir	mods/yaml.hpp	/^			static inline std::string current_working_dir(){$/;"	f	namespace:mods::yaml
+custom_color_eval	globals.cpp	/^		std::string custom_color_eval(std::string_view buffer,std::map<std::string_view,std::string_view> custom_color_map) {$/;"	f	namespace:mods::globals
 customer_string	shop.cpp	/^char *customer_string(int shop_nr, int detailed) {$/;"	f
 d	globals.hpp	69;"	d
 d	globals.hpp	72;"	d
@@ -3869,6 +3870,7 @@ decomposedExpression	mods/catch.hpp	/^		mutable DecomposedExpression const* deco
 decorate_authenticated_player	db.cpp	/^void decorate_authenticated_player(player_ptr_t player_ptr){$/;"	f
 decrypt	mods/crypto.cpp	/^int decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,$/;"	f	namespace:mods::crypto
 decrypt_buffer	mods/crypto.cpp	/^	std::string decrypt_buffer(std::string_view in_ciphertext,std::string_view in_key,std::string in_iv,std::string buffer){$/;"	f	namespace:mods::crypto
+default_colors	globals.cpp	/^		static const std::map<std::string_view,std::string_view> default_colors = {$/;"	m	namespace:mods::globals	file:
 default_public_channels	mods/values.hpp	/^		static std::string default_public_channels = IMPLODE({"chat","gossip","newbie","gratz"},"|");$/;"	m	namespace:mods::values
 default_yaml_file	structs.cpp	/^static inline std::string default_yaml_file(const std::string& type){$/;"	f	file:
 defer_queue	globals.cpp	/^		std::unique_ptr<mods::deferred> defer_queue;$/;"	m	namespace:mods::globals	file:
@@ -5490,7 +5492,7 @@ message_len	boards.h	/^	int	message_len;  \/* size of message text (for file wri
 message_sell	shop.h	/^	mods::string message_sell;		\/* Message when player sells item	*\/$/;"	m	struct:shop_data
 meta_utils	mods/meta_utils.cpp	/^namespace mods::meta_utils {$/;"	n	class:mods	file:
 meta_utils	mods/meta_utils.hpp	/^namespace mods::meta_utils {$/;"	n	class:mods
-mgdp_debug	globals.cpp	947;"	d	file:
+mgdp_debug	globals.cpp	970;"	d	file:
 min_level	spells.h	/^	int min_level[NUM_CLASSES];$/;"	m	struct:spell_info_type
 min_position	spells.h	/^	byte min_position;	\/* Position for caster	 *\/$/;"	m	struct:spell_info_type
 min_rent_cost	config.cpp	/^int min_rent_cost = 100;$/;"	v
@@ -6689,6 +6691,7 @@ string_fields	modify.cpp	/^const char *string_fields[] = {$/;"	v
 string_map	mods/affects.hpp	/^	const static std::map<std::string,affect_t> string_map = {$/;"	m	namespace:mods::affects
 string_types	mods/values.cpp	/^			static const std::vector<std::string> string_types = {$/;"	m	namespace:mods::values	file:
 string_write	modify.cpp	/^void string_write(mods::descriptor_data d, char **writeto, size_t len, long mailto, void *data) {$/;"	f
+strip_colors	globals.cpp	/^		std::string strip_colors(std::string_view buffer) {$/;"	f	namespace:mods::globals
 strlcpy	utils.cpp	/^size_t strlcpy(char *dest, const char *source, size_t totalsize) {$/;"	f
 strn_cmp	sysdep.h	333;"	d
 strn_cmp	utils.cpp	/^int strn_cmp(const char *arg1, const char *arg2, int n) {$/;"	f

@@ -537,8 +537,7 @@ namespace mods {
 
 			return NORTH;
 		}
-		std::string color_eval(std::string_view buffer) {
-			std::map<std::string_view,std::string_view> colors = {
+		static const std::map<std::string_view,std::string_view> default_colors = {
 				{"blu","\033[34m"},
 				{"gld","\033[33m"},
 				{"grn","\033[32m"},
@@ -546,6 +545,8 @@ namespace mods {
 				{"wht","\033[37m"},
 				{"yel","\033[93m"}
 			};
+		std::string custom_color_eval(std::string_view buffer,std::map<std::string_view,std::string_view> custom_color_map) {
+			std::map<std::string_view,std::string_view> colors = custom_color_map;
 			std::string final_buffer = "";
 			const std::size_t len = buffer.length();
 			for(std::size_t i=0;i < len;i++){
@@ -559,7 +560,7 @@ namespace mods {
 					}
 					if(len > i + 4 && buffer[i+4] == '}'){
 						const std::string_view substring = buffer.substr(i+1,3);
-						if(colors[substring].length()){
+						if(colors.find(substring) != colors.end()){
 							final_buffer += colors[substring];
 							i += 4;
 							continue;
@@ -569,6 +570,28 @@ namespace mods {
 				final_buffer += current_char;
 			}
 			return final_buffer;
+		}
+
+		std::string color_eval(std::string_view buffer) {
+			return custom_color_eval(buffer,default_colors);
+		}
+		std::string strip_colors(std::string_view buffer) {
+			std::string stripped = custom_color_eval(buffer,{
+				{"blu",""},
+				{"gld",""},
+				{"grn",""},
+				{"red",""},
+				{"wht",""},
+				{"yel",""}
+			});
+			std::string even_more_stripped = "";
+			for(auto ch : stripped){
+				if(!isprint(ch)){
+					continue;
+				}
+				even_more_stripped += ch;
+			}
+			return even_more_stripped;
 		}
 
 		int file_to_lmdb(const std::string& file, const std::string& key) {

@@ -55,33 +55,11 @@ namespace mods::chat {
 			}
 		}
 
-		std::string msg = "{gld}";
-		msg += user;
-		msg += " ";
-		msg += m_verb;
-		msg += ": ";
-		msg += message;
-		msg += "{/gld}";
-		msg = mods::globals::color_eval(msg);
-
-		/*
-		for(auto descriptor : m_subscribers) {
-			auto write_value = write(descriptor,msg.c_str(),msg.length());
-			if(write_value == -1){
-				log(
-					(
-					 std::string("channel::transmit::write error: ") + 
-					 strerror(errno)
-					 ).c_str()
-				);
-			}
-		}
-		*/
 		for(auto & player : mods::globals::player_list){
 			if(IS_NPC(player->cd())){
 				continue;
 			}
-			player->send("[%s][%s]->%s\r\n",this->get_name().data(),user.data(),message.data());
+			player->send("{yel}[{/yel}{blu}%s{/blu}{yel}][{/yel}{blu}%s{/blu}{yel}]->{/yel}%s\r\n",this->get_name().data(),user.data(),mods::globals::strip_colors(message).c_str());
 		}
 	}
 	void transmit(std::string verb,std::string_view player_name,std::string_view message){
