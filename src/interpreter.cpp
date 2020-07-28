@@ -423,7 +423,7 @@ ACMD(do_room_fire);
 ACMD(do_room_list);
 ACMD(do_show_tics);
 ACMD(do_drone);
-ACMD(do_quest);
+ACMD(do_contract);
 ACMD(do_js);
 ACMD(do_set_ammo);
 //ACMD(do_ammo);
@@ -788,7 +788,9 @@ cpp_extern const struct command_info cmd_info[] = {
 		/** ------ */
 		/** QUESTS */
 		/** ------ */
-	{ "quest"  , POS_RESTING , do_quest   , 0, 0 },
+	{ "quest"  , POS_RESTING , do_contract   , 0, 0 },
+	{ "contract"  , POS_RESTING , do_contract   , 0, 0 },
+	{ "contracts"  , POS_RESTING , do_contract  , 0, 0 },
 		/** ------- */
 		/** DISPLAY */
 		/** ------- */

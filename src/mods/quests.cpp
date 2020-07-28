@@ -70,6 +70,9 @@ namespace mods {
 
 		}
 
+		void punish_for_leaving_contract(std::shared_ptr<mods::player>& player,int contract_num){
+			/** TODO: dock player mp */
+		}
 		/*
 		 * quest:room_id:N:name
 		 * quest:room_id:N:description
@@ -84,11 +87,7 @@ namespace mods {
 			std::vector<std::string> quests;
 
 			for(unsigned ctr = 0; true ; ctr++) {
-				std::string key  = "quest:";
-				key += std::to_string(room_id);
-				key += ":";
-				key += std::to_string(ctr);
-				key += ":name";
+				std::string key  = CAT({"quest:",tostr(room_id),":",tostr(ctr),":name"});
 				value = "";
 				mods::globals::db->get(key,value);
 
@@ -166,42 +165,11 @@ namespace mods {
 			return current_quest(ch).length() > 0;
 		}
 
-		//		void load_quest_code(char_data* ch,room_rnum room,int quest_id){
-		//			/* load code from file into Q_TRIGGER_CODE_KEY if not already loaded */
-		//			std::string value;
-		//			std::string code_key;
-		//
-		//			if(value.length() == 0){
-		//				/* open up the quest file at pwd/../../lib/quests/{room_id}:{N}:{T}.js */
-		//				int ctr=0;
-		//				while(ctr < MAX_QUEST_TRIGGERS){
-		//					/* If a quest trigger file doesn't exist, it's not the end of the world. But if there were
-		//					 * zero trigger files loaded then that should atleast be reported
-		//					 */
-		//					if(mods::globals::file_to_lmdb(trigger_code_path,trigger_code_key(room,quest_id,ctr)) < 0){
-		//						break;
-		//					}else{
-		//						/* set Q_PLAYER_TRIGGER_KEY to key:{Q_TRIGGER_CODE_KEY} */
-		//						DBSET(trigger_key(ch,room,quest_id),std::string("key:")+trigger_code_key(room,quest_id,ctr));
-		//					}
-		//					ctr++;
-		//				}
-		//				if(ctr == 0){
-		//					//TODO: report error (no mud triggers loaded)
-		//				}
-		//			}
-		//			/* set Q_PLAY_TRIGGER_INDEX_KEY to zero */
-		//			DBSET(trigger_index_key(ch),"0");
-		//			/* run first trigger */
-		//		}
-
 		void load_quest_code(char_data* ch) {
-			char temp[MAXPATHLEN];
-			std::string pwd = getcwd(temp, MAXPATHLEN) ? std::string(temp) : std::string("");
-			std::string quest_file = pwd + std::string("/quests/") + current_quest(ch) + ".js";
-			//std::cout << quest_file << "\n";
-			/* Only one quest per room */
-			quests_file_to_lmdb(ch,quest_file,trigger_key(ch,IN_ROOM(ch),0));
+			/** The first goal in refactoring the quest code is to 
+			 * establish the various types of quests that will be 
+			 * available to builders.
+			 */
 		}
 
 		int quests_file_to_lmdb(char_data* ch,const std::string& quests_file,const std::string& lmdb_key) {
@@ -258,7 +226,7 @@ namespace mods {
 			DBSET(key,"");
 		}
 
-		void start_quest(char_data* ch,int quest_id) {
+		bool start_quest(char_data* ch,int quest_id) {
 			MENTOC_PREAMBLE();
 			std::string formatter = Q_FORMAT;
 			auto key = mods::globals::replace_all(formatter,"{room_id}",std::to_string(IN_ROOM(ch)));
@@ -272,15 +240,15 @@ namespace mods {
 
 			//std::cout << name << "->" << value << "\n";
 			if(value.length()) {
-				*player << "{red}Starting quest: {/red}" << value.c_str() << "\r\n";
 				/* Set the current quest number to this room id and quest id */
 				DBSET(current_key(ch),current_value(IN_ROOM(ch),quest_id));
 				/* set the current quest to incomplete ("0") */
 				DBSET(complete_key(ch,IN_ROOM(ch),quest_id),"0");
 				load_quest_code(ch);
 				run_trigger(ch);
+				return true;
 			} else {
-				*player << "Cannot find that quest\r\n";
+				return false;
 			}
 		}
 	};

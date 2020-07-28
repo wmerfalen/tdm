@@ -20,7 +20,13 @@ namespace mods::help {
 		}
 		return false;
 	}
+	bool send_help(std::string_view from,std::shared_ptr<mods::player>& player);
 	namespace pages {
+	static constexpr const char* h_contract = "usage: contract <list>\r\n"
+		"usage: contract <join> <N>\r\n"
+		"usage: contract <leave> <N>\r\n"
+		"This documentation was written on 2020-07-27."
+		;
 	static constexpr const char* h_grenade = "usage: throw <direction> [room_count=4]\r\n"
 			"example: \r\n"
 			" $ get frag backpack\r\n"
@@ -121,7 +127,7 @@ namespace mods::help {
 
 	};// end pages namespace
 
-	bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::player>& player);
+	bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::player>& player,bool zero_is_help);
 };
 #endif
 

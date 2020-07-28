@@ -65,6 +65,7 @@ ACMD	act.demolitions.cpp	/^ACMD(do_uninstall) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_color) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_commands) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_consider) {$/;"	f
+ACMD	act.informative.cpp	/^ACMD(do_contract) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_diagnose) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_drone) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_equipment) {$/;"	f
@@ -81,7 +82,6 @@ ACMD	act.informative.cpp	/^ACMD(do_levels) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_look) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_newjs) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_preferences) {$/;"	f
-ACMD	act.informative.cpp	/^ACMD(do_quest) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_recall) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_score) {$/;"	f
 ACMD	act.informative.cpp	/^ACMD(do_time) {$/;"	f
@@ -746,7 +746,7 @@ CRASH	mods/flags.hpp	/^		CRASH,$/;"	e	enum:mods::flags::plr
 CRASH_FILE	utils.h	123;"	d
 CREATE	utils.h	167;"	d
 CREATE_ARG	globals.hpp	55;"	d
-CREATE_CHAR	globals.hpp	78;"	d
+CREATE_CHAR	globals.hpp	79;"	d
 CREATE_EMP_WEAPONS	mods/skills.hpp	/^			CREATE_EMP_WEAPONS,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 CREATE_OBJECT	mods/events.hpp	/^		CREATE_OBJECT,$/;"	e	enum:mods::events::event_enum
 CREATE_PLAYER	mods/events.hpp	/^		CREATE_PLAYER,$/;"	e	enum:mods::events::event_enum
@@ -850,6 +850,7 @@ DOOR_KEY	act.movement.cpp	483;"	d	file:
 DOUSE	mods/item.hpp	/^		DOUSE = (1 << 8),$/;"	e	enum:mods::item::capability_t
 DOWN	structs.h	155;"	d
 DO_HELP	globals.hpp	59;"	d
+DO_HELP_WITH_ZERO	globals.hpp	60;"	d
 DO_NOTHING	mods/behaviour_tree_node.hpp	/^		enum node_type_t { DO_NOTHING, SELECTOR, SEQUENCE, LEAF };$/;"	e	enum:mods::behaviour_tree_node::node_type_t
 DP_C_LDOUBLE	bsd-snprintf.cpp	151;"	d	file:
 DP_C_LONG	bsd-snprintf.cpp	150;"	d	file:
@@ -1238,7 +1239,7 @@ House_save	house.cpp	/^int House_save(struct obj_data *obj, FILE *fp) {$/;"	f
 House_save_all	house.cpp	/^void House_save_all(void) {$/;"	f
 House_save_control	house.cpp	/^void House_save_control(void) {$/;"	f
 IAC	telnet.h	42;"	d
-ICMP	globals.hpp	240;"	d
+ICMP	globals.hpp	241;"	d
 IContext	mods/catch.hpp	/^	struct IContext {$/;"	s	namespace:Catch
 IDEA_FILE	db.h	88;"	d
 IDXTYPE	structs.h	131;"	d
@@ -1350,7 +1351,7 @@ IS_NPC	utils.h	231;"	d
 IS_SET	utils.h	200;"	d
 IS_SUPPORT	utils.h	511;"	d
 IS_THIEF	utils.h	506;"	d
-IS_TOPIC	act.informative.cpp	1377;"	d	file:
+IS_TOPIC	act.informative.cpp	1373;"	d	file:
 IS_WARRIOR	utils.h	510;"	d
 IS_WEAPON	fight.cpp	125;"	d	file:
 IS_WEAPON_LOADED	mods/weapon.hpp	15;"	d
@@ -1925,7 +1926,7 @@ MSG_NO_USED_WANDSTAFF	shop.h	180;"	d
 MSG_SLOTNUM	boards.h	45;"	d
 MUNITIONS_REFLECTOR	mods/skills.hpp	/^			MUNITIONS_REFLECTOR,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 MUZZLE_BRAKE	mods/weapon.hpp	/^		COMPENSATOR, MUZZLE_BRAKE,EXTENDED,$/;"	e	enum:mods::weapon::barrel_t
-M_MATCH	mods/help.cpp	15;"	d	file:
+M_MATCH	mods/help.cpp	12;"	d	file:
 M_MATCH	mods/help.cpp	5;"	d	file:
 MatchAllOf	mods/catch.hpp	/^			struct MatchAllOf : MatcherBase<ArgT> {$/;"	s	namespace:Catch::Matchers::Impl
 MatchAnyOf	mods/catch.hpp	/^			struct MatchAnyOf : MatcherBase<ArgT> {$/;"	s	namespace:Catch::Matchers::Impl
@@ -2009,7 +2010,7 @@ NUM_CLASSES	structs.h	233;"	d
 NUM_OF_BOARDS	boards.h	11;"	d
 NUM_OF_DIRS	structs.h	641;"	d
 NUM_RESERVED_DESCS	comm.h	11;"	d
-NUM_TOKENS	interpreter.cpp	1219;"	d	file:
+NUM_TOKENS	interpreter.cpp	1221;"	d	file:
 NUM_WEARS	structs.h	416;"	d
 NameAndDesc	mods/catch.hpp	/^		NameAndDesc(const char* _name = "", const char* _description= "")$/;"	f	struct:Catch::NameAndDesc
 NameAndDesc	mods/catch.hpp	/^	struct NameAndDesc {$/;"	s	namespace:Catch
@@ -2100,7 +2101,7 @@ PAGE_LENGTH	comm.h	80;"	d
 PAGE_SIZE	mods/player.hpp	/^		static constexpr int PAGE_SIZE = 40;$/;"	m	struct:mods::player
 PAGE_WIDTH	comm.h	81;"	d
 PARASITIC_HP_RECOVERY	mods/skills.hpp	/^			PARASITIC_HP_RECOVERY,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
-PARSE_ARGS	globals.hpp	239;"	d
+PARSE_ARGS	globals.hpp	240;"	d
 PASSES_PER_SEC	structs.h	653;"	d
 PATH_MAX	sysdep.h	352;"	d
 PAUSE_FILE	db.h	54;"	d
@@ -2242,7 +2243,7 @@ RC_DRONE_THERMAL	structs.h	/^	RC_DRONE_THERMAL,$/;"	e	enum:lense_type_t
 READ_LVL	boards.h	37;"	d
 READ_SIZE	utils.h	27;"	d
 REAL	db.h	/^	REAL=0,\\$/;"	e	enum:__anon1
-RECON	interpreter.cpp	1626;"	d	file:
+RECON	interpreter.cpp	1628;"	d	file:
 RECREATE	utils.h	173;"	d
 REDUCED_DETECTION_CHANCE	mods/skills.hpp	/^			REDUCED_DETECTION_CHANCE,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 RELOAD	mods/weapon-types.hpp	/^		RELOAD,$/;"	e	enum:mods::weapon::capabilities::cap_t
@@ -2481,9 +2482,9 @@ SHORT_RANGE	mods/object.hpp	/^				SHORT_RANGE,$/;"	e	enum:mods::object::object_t
 SHOTGUN	mods/object.hpp	/^				SHOTGUN,$/;"	e	enum:mods::object::object_type_enum_t
 SHOTGUN	mods/weapon.hpp	/^	enum mask_type { SMG = 1, SNIPE = (1 << 2), SHOTGUN = (1 << 3), $/;"	e	enum:mods::weapon::mask_type
 SHOULDER	mods/object.hpp	/^				SHOULDER,$/;"	e	enum:mods::object::object_type_enum_t
-SHOW_OBJ_ACTION	act.informative.cpp	112;"	d	file:
-SHOW_OBJ_LONG	act.informative.cpp	110;"	d	file:
-SHOW_OBJ_SHORT	act.informative.cpp	111;"	d	file:
+SHOW_OBJ_ACTION	act.informative.cpp	111;"	d	file:
+SHOW_OBJ_LONG	act.informative.cpp	109;"	d	file:
+SHOW_OBJ_SHORT	act.informative.cpp	110;"	d	file:
 SHP_PREFIX	db.h	72;"	d
 SHRAPNEL	mods/aoe.hpp	/^		SHRAPNEL,	\/** metal fragments flown in random directions *\/$/;"	e	enum:mods::aoe::types_t
 SIDERAIL	mods/weapon.hpp	/^		SIDERAIL$/;"	e	enum:mods::weapon::attachment_t
@@ -2993,15 +2994,15 @@ UNDERWATER	structs.h	/^			UNDERWATER,$/;"	m	struct:room_data	typeref:enum:room_d
 UNKNOWN_STATUS	mods/behaviour_tree_status.hpp	/^		UNKNOWN_STATUS,$/;"	e	enum:mods::behaviour_tree_status
 UNLOCK_DOOR	act.movement.cpp	348;"	d	file:
 UNMARK	graph.cpp	54;"	d	file:
-UNSWITCH	interpreter.cpp	1628;"	d	file:
+UNSWITCH	interpreter.cpp	1630;"	d	file:
 UNUSED16	mods/flags.hpp	/^		UNUSED16,				\/\/ useless$/;"	e	enum:mods::flags::aff
 UNUSED17	mods/flags.hpp	/^		UNUSED17,				\/\/ useless$/;"	e	enum:mods::flags::aff
 UP	structs.h	154;"	d
 UPDATE	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_type_t
 UPPER	utils.h	156;"	d
-USERS_FORMAT	act.informative.cpp	1619;"	d	file:
+USERS_FORMAT	act.informative.cpp	1615;"	d	file:
 USE_AUTOEQ	structs.h	113;"	d
-USURP	interpreter.cpp	1627;"	d	file:
+USURP	interpreter.cpp	1629;"	d	file:
 Unknown	mods/catch.hpp	/^			Unknown = -1,$/;"	e	enum:Catch::ResultWas::OfType
 VALID_EDGE	graph.cpp	/^int VALID_EDGE(room_rnum x, int y) {$/;"	f
 VALID_OBJ_RNUM	utils.h	397;"	d
@@ -3064,7 +3065,7 @@ WEAR_WRIST_R	structs.h	400;"	d
 WELC_MESSG	config.cpp	/^const char *WELC_MESSG =$/;"	v
 WEST	structs.h	153;"	d
 WHEN	mods/catch.hpp	12215;"	d
-WHO_FORMAT	act.informative.cpp	1430;"	d	file:
+WHO_FORMAT	act.informative.cpp	1426;"	d	file:
 WILL	telnet.h	46;"	d
 WILL_BANK_MONEY	shop.h	164;"	d
 WILL_START_FIGHT	shop.h	163;"	d
@@ -3142,7 +3143,7 @@ __MENTOC_ACT_DEBUG_HEADER__	act.debug.hpp	2;"	d
 __MENTOC_BUILDER_UTILS_ACCEPT_ZERO_INDEX__	mods/builder.hpp	3;"	d
 __MENTOC_CONFIG_HEADER__	config.hpp	2;"	d
 __MENTOC_DB_HEADER__	db.h	2;"	d
-__MENTOC_DEBUG__	globals.hpp	63;"	d
+__MENTOC_DEBUG__	globals.hpp	64;"	d
 __MENTOC_HELL_HEADER__	mods/hell.hpp	2;"	d
 __MENTOC_ITEM_CONSTANTS_DEFINED__	structs.h	455;"	d
 __MENTOC_LOGIN_HEADER__	login.hpp	2;"	d
@@ -3794,8 +3795,8 @@ current_value	mods/quests.cpp	/^		std::string current_value(room_rnum room,int t
 current_working_dir	mods/js.cpp	/^			std::string current_working_dir(){$/;"	f	namespace:mods::js
 current_working_dir	mods/yaml.hpp	/^			static inline std::string current_working_dir(){$/;"	f	namespace:mods::yaml
 customer_string	shop.cpp	/^char *customer_string(int shop_nr, int detailed) {$/;"	f
-d	globals.hpp	68;"	d
-d	globals.hpp	71;"	d
+d	globals.hpp	69;"	d
+d	globals.hpp	72;"	d
 d	structs.h	41;"	d
 d	structs.h	44;"	d
 dam_message	fight.cpp	/^void dam_message(int dam, char_data *ch, char_data *victim,$/;"	f
@@ -3990,6 +3991,7 @@ do_commands	act.informative.cpp	/^ACMD(do_commands);$/;"	v
 do_commands	interpreter.cpp	/^ACMD(do_commands);$/;"	v
 do_consider	act.informative.cpp	/^ACMD(do_consider);$/;"	v
 do_consider	interpreter.cpp	/^ACMD(do_consider);$/;"	v
+do_contract	interpreter.cpp	/^ACMD(do_contract);$/;"	v
 do_credits	interpreter.cpp	/^ACMD(do_credits);$/;"	v
 do_critical_roll	mods/injure.cpp	/^	bool do_critical_roll(int chance){$/;"	f	namespace:mods::injure
 do_date	act.wizard.cpp	/^ACMD(do_date);$/;"	v
@@ -4003,7 +4005,7 @@ do_display	interpreter.cpp	/^ACMD(do_display);$/;"	v
 do_doorcmd	act.movement.cpp	/^	void do_doorcmd(char_data *ch, struct obj_data *obj, int door, int scmd) {$/;"	f
 do_drink	act.item.cpp	/^ACMD(do_drink);$/;"	v
 do_drink	interpreter.cpp	/^ACMD(do_drink);$/;"	v
-do_drone	act.informative.cpp	/^ACMD(do_drone);	\/*!mods*\/$/;"	v
+do_drone	act.informative.cpp	/^ACMD(do_drone);$/;"	v
 do_drone	interpreter.cpp	/^ACMD(do_drone);$/;"	v
 do_drop	act.item.cpp	/^ACMD(do_drop);$/;"	v
 do_drop	interpreter.cpp	/^ACMD(do_drop);$/;"	v
@@ -4063,7 +4065,7 @@ do_giveme_sensor_grenades	interpreter.cpp	/^ACMD(do_giveme_sensor_grenades);$/;"
 do_giveme_smoke_grenades	interpreter.cpp	/^ACMD(do_giveme_smoke_grenades);$/;"	v
 do_giveme_sniper_rifle	interpreter.cpp	/^ACMD(do_giveme_sniper_rifle);$/;"	v
 do_giveme_thermal_camera	interpreter.cpp	/^ACMD(do_giveme_thermal_camera);$/;"	v
-do_givemegold	act.informative.cpp	/^ACMD(do_givemegold); \/*!mods*\/$/;"	v
+do_givemegold	act.informative.cpp	/^ACMD(do_givemegold);$/;"	v
 do_givemegold	interpreter.cpp	/^ACMD(do_givemegold);$/;"	v
 do_givemenades	act.debug.hpp	/^ACMD(do_givemenades);$/;"	v
 do_givemenades	interpreter.cpp	/^ACMD(do_givemenades);$/;"	v
@@ -4100,7 +4102,7 @@ do_inventory	act.informative.cpp	/^ACMD(do_inventory);$/;"	v
 do_inventory	interpreter.cpp	/^ACMD(do_inventory);$/;"	v
 do_invis	act.wizard.cpp	/^ACMD(do_invis);$/;"	v
 do_invis	interpreter.cpp	/^ACMD(do_invis);$/;"	v
-do_js	act.informative.cpp	/^ACMD(do_js);	\/*!mods*\/$/;"	v
+do_js	act.informative.cpp	/^ACMD(do_js);$/;"	v
 do_js	interpreter.cpp	/^ACMD(do_js);$/;"	v
 do_jstest	interpreter.cpp	/^ACMD(do_jstest);$/;"	v
 do_kick	interpreter.cpp	/^ACMD(do_kick);$/;"	v
@@ -4145,22 +4147,20 @@ do_practice	act.other.cpp	/^ACMD(do_practice);$/;"	v
 do_practice	interpreter.cpp	/^ACMD(do_practice);$/;"	v
 do_pref	interpreter.cpp	/^ACMD(do_pref);$/;"	v
 do_pref	mods/prefs.hpp	/^ACMD(do_pref);$/;"	v
-do_preferences	act.informative.cpp	/^ACMD(do_preferences); \/*!mods *\/$/;"	v
+do_preferences	act.informative.cpp	/^ACMD(do_preferences);$/;"	v
 do_purge	act.wizard.cpp	/^ACMD(do_purge);$/;"	v
 do_purge	interpreter.cpp	/^ACMD(do_purge);$/;"	v
 do_put	act.item.cpp	/^ACMD(do_put);$/;"	v
 do_put	interpreter.cpp	/^ACMD(do_put);$/;"	v
 do_qcomm	act.comm.cpp	/^ACMD(do_qcomm);$/;"	v
 do_qcomm	interpreter.cpp	/^ACMD(do_qcomm);$/;"	v
-do_quest	act.informative.cpp	/^ACMD(do_quest);	\/*!mods*\/$/;"	v
-do_quest	interpreter.cpp	/^ACMD(do_quest);$/;"	v
 do_quit	act.other.cpp	/^ACMD(do_quit);$/;"	v
 do_quit	interpreter.cpp	/^ACMD(do_quit);$/;"	v
 do_rbuild	interpreter.cpp	/^ACMD(do_rbuild);$/;"	v
 do_rbuild_sandbox	interpreter.cpp	/^ACMD(do_rbuild_sandbox);$/;"	v
 do_reboot	db.cpp	/^ACMD(do_reboot);$/;"	v
 do_reboot	interpreter.cpp	/^ACMD(do_reboot);$/;"	v
-do_recall	act.informative.cpp	/^ACMD(do_recall);	\/*!mods*\/$/;"	v
+do_recall	act.informative.cpp	/^ACMD(do_recall);$/;"	v
 do_recall	interpreter.cpp	/^ACMD(do_recall);$/;"	v
 do_reload	interpreter.cpp	/^ACMD(do_reload);$/;"	v
 do_remove	act.item.cpp	/^ACMD(do_remove);$/;"	v
@@ -4825,6 +4825,7 @@ guild_guard	spec_assign.cpp	/^SPECIAL(guild_guard);$/;"	v
 guild_guard	spec_procs.cpp	/^SPECIAL(guild_guard);$/;"	v
 guild_info	class.cpp	/^struct guild_info_type guild_info[] = {$/;"	v	typeref:struct:guild_info_type
 h_cancel	mods/help.hpp	/^	static constexpr const char* h_cancel = "usage: cancel\\r\\n"$/;"	m	namespace:mods::help::pages
+h_contract	mods/help.hpp	/^	static constexpr const char* h_contract = "usage: contract <list>\\r\\n"$/;"	m	namespace:mods::help::pages
 h_grenade	mods/help.hpp	/^	static constexpr const char* h_grenade = "usage: throw <direction> [room_count=4]\\r\\n"$/;"	m	namespace:mods::help::pages
 h_install	mods/help.hpp	/^	static constexpr const char* h_install = "usage: install <object> <direction>\\r\\n"$/;"	m	namespace:mods::help::pages
 h_set_npc_position	mods/help.hpp	/^	static constexpr const char* h_set_npc_position = "usage: set_npc_position <UUID> <POSITION>\\r\\n"$/;"	m	namespace:mods::help::pages
@@ -5482,7 +5483,7 @@ mentoc_pqxx_result_t	mods/string.hpp	12;"	d
 mentoc_pqxx_result_t	mods/string.hpp	14;"	d
 mentoc_pqxx_result_t	structs.h	34;"	d
 mentoc_pqxx_result_t	structs.h	36;"	d
-mentoc_prefix_debug	globals.hpp	87;"	d
+mentoc_prefix_debug	globals.hpp	88;"	d
 message	mods/catch.hpp	/^		std::string message;$/;"	m	struct:Catch::AssertionResultData
 message_buy	shop.h	/^	mods::string message_buy;		\/* Message when player buys item	*\/$/;"	m	struct:shop_data
 message_len	boards.h	/^	int	message_len;  \/* size of message text (for file write) *\/$/;"	m	struct:board_msginfo
@@ -6048,6 +6049,7 @@ publish	mods/events.hpp	/^	namespace publish {$/;"	n	namespace:mods::events
 publish_event	mods/events.cpp	/^	void publish_event(event_t event,const uuid_t& entity_uuid,void* data,int data2){$/;"	f	namespace:mods::events
 puff	spec_assign.cpp	/^SPECIAL(puff);$/;"	v
 puff	spec_procs.cpp	/^SPECIAL(puff);$/;"	v
+punish_for_leaving_contract	mods/quests.cpp	/^		void punish_for_leaving_contract(std::shared_ptr<mods::player>& player,int contract_num){$/;"	f	namespace:mods::quests
 push	mods/deferred.cpp	/^	deferred::lambda_queue_iterator deferred::push(uint64_t ticks_in_future,std::function<void()> lambda) {$/;"	f	class:mods::deferred
 push	mods/jx.hpp	/^			compositor& push(bool value) {$/;"	f	struct:mods::jx::compositor
 push	mods/jx.hpp	/^			compositor& push(const char* value) {$/;"	f	struct:mods::jx::compositor
@@ -6363,6 +6365,7 @@ selector	mods/lmdb.cpp	/^	selector_type_t transaction_t::selector(const key_type
 sell_price	shop.cpp	/^int sell_price(struct obj_data *obj, int shop_nr, char_data *keeper, char_data *seller) {$/;"	f
 send	mods/js.cpp	/^		static duk_ret_t send(duk_context *ctx) {$/;"	f	namespace:mods::js
 send	mods/player.cpp	/^	size_t player::send(const char *messg, ...) {$/;"	f	class:mods::player
+send_help	mods/help.cpp	/^	bool send_help(std::string_view from, std::shared_ptr<mods::player>& player){$/;"	f	namespace:mods::help
 send_results	mods/sensor-grenade.cpp	/^	void send_results(uuid_t nade_uuid,uuid_t player_uuid){$/;"	f	namespace:mods::sensor_grenade
 send_results_multi	mods/sensor-grenade.cpp	/^	void send_results_multi(uuid_t nade_uuid,const std::vector<uuid_t>& players){$/;"	f	namespace:mods::sensor_grenade
 send_to_all	comm.cpp	/^void send_to_all(const char *messg, ...) {$/;"	f
@@ -6512,7 +6515,7 @@ short_descr	mods/player.hpp	/^		mods::string& short_descr(){$/;"	f	struct:mods::
 short_description	structs.h	/^		mods::string short_description;       \/* when worn\/carry\/in cont.         *\/$/;"	m	struct:obj_data
 shouldContinueOnFailure	mods/catch.hpp	/^	inline bool shouldContinueOnFailure(int flags)    {$/;"	f	namespace:Catch
 shouldSuppressFailure	mods/catch.hpp	/^	inline bool shouldSuppressFailure(int flags)      {$/;"	f	namespace:Catch
-should_continue	mods/help.cpp	/^	bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::player>& player){$/;"	f	namespace:mods::help
+should_continue	mods/help.cpp	/^	bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::player>& player,bool zero_is_help){$/;"	f	namespace:mods::help
 show_finalized_chargen_screen	mods/chargen.cpp	/^	void show_finalized_chargen_screen(player_ptr_t p){$/;"	f	namespace:mods::chargen
 show_item	mods/shop.hpp	/^	static inline void show_item(player_ptr_t& player,TShopMap& shop_map, int16_t item_number){$/;"	f	namespace:mods::shop
 show_nonconst_vector	mods/builder_util.hpp	/^	void show_nonconst_vector($/;"	f	namespace:mods::builder_util
@@ -6624,7 +6627,7 @@ stack_data	shop.h	/^struct stack_data {$/;"	s
 start	mods/drone.cpp	/^	 void drone::start(char_data* owner) {$/;"	f	class:mods::drone
 start_fire_dissolver	mods/rooms.cpp	/^	void start_fire_dissolver(room_rnum room) {$/;"	f	namespace:mods::rooms
 start_histfile	mods/player.cpp	/^	void player::start_histfile(){$/;"	f	class:mods::player
-start_quest	mods/quests.cpp	/^		void start_quest(char_data* ch,int quest_id) {$/;"	f	namespace:mods::quests
+start_quest	mods/quests.cpp	/^		bool start_quest(char_data* ch,int quest_id) {$/;"	f	namespace:mods::quests
 started	mods/drone.cpp	/^	 bool drone::started(char_data* owner) {$/;"	f	class:mods::drone
 state	mods/ai_state.hpp	/^			enum state {$/;"	g	class:mods::ai_state
 state	mods/debug.cpp	/^	state::state(bool _show_tics) : m_show_tics(_show_tics) {$/;"	f	class:mods::debug::state
@@ -6694,7 +6697,7 @@ subcmd_args	mods/util.hpp	/^		inline std::optional<Container> subcmd_args(std::s
 success	mods/db.hpp	/^	constexpr static int_status_t success = 0;$/;"	m	namespace:mods::lmdb::error
 super_users	globals.cpp	/^		const std::vector<std::string> super_users = {$/;"	m	namespace:mods::globals	file:
 suspicious_roaming	mods/behaviour_tree_impl.hpp	/^			suspicious_roaming,$/;"	e	enum:mods::behaviour_tree_impl::type
-svtostr	globals.hpp	75;"	d
+svtostr	globals.hpp	76;"	d
 swap	mods/catch.hpp	/^			void swap(Ptr& other) {$/;"	f	class:Catch::Ptr
 syllable	spell_parser.cpp	/^struct syllable {$/;"	s	file:
 syls	spell_parser.cpp	/^struct syllable syls[] = {$/;"	v	typeref:struct:syllable
@@ -6793,7 +6796,7 @@ top_of_p_table	db.cpp	/^int top_of_p_table = 0;		\/* ref to top of table		 *\/$/
 top_of_world	db.cpp	/^room_rnum top_of_world = 0;	\/* ref to top element of world	 *\/$/;"	v
 top_of_zone_table	db.cpp	/^zone_rnum top_of_zone_table = 0;\/* top element of zone tab	 *\/$/;"	v
 top_shop	shop.cpp	/^int top_shop = -1;$/;"	v
-tostr	globals.hpp	74;"	d
+tostr	globals.hpp	75;"	d
 tostr	mods/yaml.cpp	7;"	d	file:
 touch	utils.cpp	/^int touch(const char *path) {$/;"	f
 track_through_doors	config.cpp	/^int track_through_doors = YES;$/;"	v

@@ -37,8 +37,9 @@ namespace mods {
 		void award_quest(char_data*ch,int quest_id);
 
 		/* player actions for questing */
-		void start_quest(char_data* ch,int quest_num);
+		bool start_quest(char_data* ch,int quest_num);
 		void leave_quest(char_data* ch,int quest_num);
+		void punish_for_leaving_contract(std::shared_ptr<mods::player>& player,int contract_num);
 		std::vector<std::string> list_quests(room_rnum room_id);
 		void load_c_functions(duk_context * ctx);
 		int quests_file_to_lmdb(char_data* ch,const std::string& quests_file,const std::string& lmdb_key);

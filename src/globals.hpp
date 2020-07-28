@@ -56,7 +56,8 @@
 #define MENTOC_DEPRECATED(mentoc_deprecated_argument_a) log("SYSERR:[%s] deprecated %s:%d",mentoc_deprecated_argument_a,__FILE__,__LINE__);
 #define MOBTOSTR(__mob) "\n[mob_dump]\nname: '" << __mob->player.name.c_str() << "'\n"\
 	"\n[mob_dump]\nuuid: '" << __mob->uuid() << "'\n"
-#define DO_HELP(from) if(!mods::help::should_continue(from,argument,player)){ return; }
+#define DO_HELP(from) if(!mods::help::should_continue(from,argument,player,0)){ return; }
+#define DO_HELP_WITH_ZERO(from) if(!mods::help::should_continue(from,argument,player,1)){ return; }
 
 /** vim-sorcery: :%s/std::cerr << \(.*\);/d(\1);/ */
 #ifndef __MENTOC_DEBUG__

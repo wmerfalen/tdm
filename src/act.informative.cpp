@@ -64,11 +64,10 @@ void print_object_location(int num, struct obj_data *obj, char_data *ch, int rec
 void show_obj_to_char(struct obj_data *obj, char_data *ch, int mode);
 void list_obj_to_char(struct obj_data *list, char_data *ch, int mode, int show);
 void show_obj_modifiers(struct obj_data *obj, char_data *ch);
-ACMD(do_js);	/*!mods*/
-ACMD(do_quest);	/*!mods*/
-ACMD(do_recall);	/*!mods*/
-ACMD(do_givemegold); /*!mods*/
-ACMD(do_drone);	/*!mods*/
+ACMD(do_js);
+ACMD(do_recall);
+ACMD(do_givemegold);
+ACMD(do_drone);
 ACMD(do_look);
 ACMD(do_examine);
 ACMD(do_gold);
@@ -81,7 +80,7 @@ ACMD(do_help);
 ACMD(do_who);
 ACMD(do_users);
 ACMD(do_gen_ps);
-ACMD(do_preferences); /*!mods */
+ACMD(do_preferences);
 void perform_mortal_where(char_data *ch, char *arg);
 void perform_immort_where(char_data *ch, char *arg);
 ACMD(do_where);
@@ -153,60 +152,57 @@ ACMD(do_recall) {
 	}
 }
 
-ACMD(do_quest) {
-	CREATE_ARG(16,1);
-	one_argument(argument, static_cast<char*>(&arg_1[0]),16);
+ACMD(do_contract) {
+	auto vec_args = PARSE_ARGS();
+	DO_HELP_WITH_ZERO("contract");
 
-	if(std::string(static_cast<char*>(&arg_1[0])).compare("list") == 0) {
-		auto quest_names = mods::quests::list_quests(IN_ROOM(ch));
-
-		for(auto qn : quest_names) {
-			*player << "{grn}[ QUEST ]{/grn} " << qn << "";
+	if(vec_args.size() > 0 && vec_args[0].compare("list") == 0) {
+		auto quest_names = mods::quests::list_quests(player->room());
+		if(quest_names.size() == 0){
+			player->sendln("{red}There are no contracts in this room.{/red}");
+			return;
 		}
+		player->sendln("{grn}Listing available contracts in this room...{/grn}");
+		for(auto qn : quest_names) {
+			*player << "{grn}[ CONTRACT ]{/grn} {yel}" << qn << "{/yel}\r\n";
+		}
+		player->sendln("{grn}Done listing.{/grn}");
 
 		return;
 	}
 
-	if(std::string(static_cast<char*>(&arg_1[0])).compare("join") == 0) {
-		CREATE_ARG(4,2);
-		two_arguments(argument,static_cast<char*>(&arg_1[0]),static_cast<char*>(&arg_2[0]));
-		std::string arg_2_str = static_cast<char*>(&arg_2[0]);
-
-		if(arg_2_str.length() == 0) {
-			*player << "usage: quest join <number>\n";
-			return;
-		}
-
-		auto quest_num = mods::util::stoi(arg_2_str);
+	if(vec_args.size() > 1 && vec_args[0].compare("join") == 0) {
+		auto quest_num = mods::util::stoi(vec_args[1]);
 
 		if(quest_num.value_or(-1) == -1) {
-			*player << "{red}Invalid quest number\r\n";
+			*player << "{red}Invalid contract number.{/red}\r\n";
 			return;
 		}
 
-		mods::quests::start_quest(ch,quest_num.value());
+		if(mods::quests::start_quest(ch,quest_num.value())){
+			player->sendln("{grn}Your contract has been started! Good luck!{/grn}");
+			return;
+		}
+		player->sendln("{red}There is no contract here that matches your criteria.{/red}");
+		return;
 	}
 
-	if(std::string(static_cast<char*>(&arg_1[0])).compare("leave") == 0) {
-//TODO: when multiple quests are allowed, this hard-coded zero needs to change
-		CREATE_ARG(4,2);
-		two_arguments(argument,static_cast<char*>(&arg_1[0]),static_cast<char*>(&arg_2[0]));
-		std::string arg_2_str = static_cast<char*>(&arg_2[0]);
-
-		if(arg_2_str.length() == 0) {
-			*player << "usage: quest leave <number>\n";
-			return;
-		}
-
-		auto quest_num = mods::util::stoi(arg_2_str);
+	if(vec_args.size() > 1 && vec_args[0].compare("leave") == 0) {
+		auto quest_num = mods::util::stoi(vec_args[1]);
 
 		if(quest_num.value_or(-1) == -1) {
-			*player << "{red}Invalid quest number\r\n";
+			*player << "{red}Invalid contract number{/red}\r\n";
 			return;
 		}
 
 		mods::quests::leave_quest(ch,quest_num.value());
-		*player << "{red}You have left the quest{/red}\n";
+		if(mods::quests::current_quest(ch).compare(vec_args[1]) != 0){
+			player->sendln("{red}You are not part of that contract.{/red}");
+			return;
+		}
+		*player << "{red}You have left the contract.{/red}\n";
+		mods::quests::punish_for_leaving_contract(player,quest_num.value());
+		return;
 	}
 }
 
