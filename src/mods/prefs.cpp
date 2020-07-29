@@ -9,15 +9,14 @@ namespace mods {
 	void prefs::set(const std::string& key,const std::string& value,char_data* ch) {
 		char_data * c = ch;
 		auto named = namify(key,c);
-		mods::globals::db->put(named,value);
+		mods::db::lmdb_put(named,value);
 	}
 
 	std::string prefs::get(const std::string& key,char_data* ch) {
 		char_data * c = ch;
 		std::string value;
 		auto k = namify(key,c);
-		mods::globals::db->get(key,value);
-		return value;
+		return mods::db::lmdb_get(k);
 	}
 	std::string prefs::dynamic_namify(const std::string& key,const std::string& section,char_data* c) {
 		std::string format = DYNAMIC_FORMAT_STRING;
@@ -28,24 +27,44 @@ namespace mods {
 	}
 	void prefs::dynamic_set(const std::string& key,const std::string& value,const std::string& section,char_data* ch) {
 		auto k = dynamic_namify(key,section,ch);
-		mods::globals::db->put(k,value);
+		mods::db::lmdb_put(k,value);
 	}
 	std::string prefs::dynamic_get(const std::string& key,const std::string& section,char_data* ch) {
 		auto k = dynamic_namify(key,section,ch);
 		std::string value;
-		mods::globals::db->get(k,value);
-		return value;
+		return mods::db::lmdb_get(k);
 	}
 };
 
 ACMD(do_pref) {
-	
-	constexpr unsigned int max_char = 11;
-	std::array<char,max_char> item;
-	std::array<char,max_char> value;
-	one_argument(one_argument(argument,&item[0],max_char),&value[0],max_char);
+	auto vec_args = PARSE_ARGS();
+	str_vec_t no_comms{"nochat","nogossip","nogratz","nonewbie"};
+	DO_HELP("pref");
 
-	if(std::string(&item[0]).compare("width") == 0) {
+	if(vec_args.size() == 0){
+		*player << "{gld}::[ preferences ]::{/gld}\r\n";
+		std::string line;
+
+		line = "=================================================================================";
+		*player << "{gld}" << line << "{/gld}\r\n";
+		auto width = PLAYER_GET("screen_width");
+		int w = mods::util::stoi(width).value_or(80);
+		for(auto pref : no_comms){
+			std::string v = PLAYER_GET(pref);
+			player->send("      %s: %s\r\n",pref.c_str(),v.c_str());
+		}
+		*player << "     width: " << w << "\r\n";
+		*player << "{gld}" << line << "{/gld}\r\n";
+		*player << "{gld} usage: pref <item> <value> {/gld}{blu}(Example: pref width 80){/blu}\r\n";
+		return;
+	}
+	if(vec_args.size() < 2){
+		player->sendln("{gld} usage: pref <item> <value> {/gld}{blu}(Example: pref width 80){/blu}");
+		return;
+	}
+
+	std::string item = vec_args[0],value = vec_args[1];
+	if(item.compare("width") == 0) {
 		PLAYER_SET("screen_width",&value[0]);
 		auto v_int = mods::util::stoi(&value[0]);
 
@@ -56,18 +75,16 @@ ACMD(do_pref) {
 
 		PLAYER_SET("screen_width",&value[0]);
 		*player << "{gld}Screen width set to: " << &value[0] << "\r\n";
+		return;
+	}
+	if(invec(item,no_comms)){
+		if(value.compare("1") != 0 && value.compare("0") != 0){
+			player->sendln("{red}Use either 1 or 0.{/red}");
+			return;
+		}
+		PLAYER_SET(item,&value[0]);
+		*player << "{gld}" << item << " set to: " << &value[0] << "\r\n";
+		return;
 	}
 
-	*player << "{gld}::[ preferences ]::{/gld}\r\n";
-	std::string line = "";
-
-	for(unsigned i =0; i < 80; i++) {
-		line += "=";
-	}
-
-	*player << "{gld}" << line << "{/gld}\r\n";
-	auto width = PLAYER_GET("screen_width");
-	*player << "     width: " << width << "\r\n";
-	*player << "{gld}" << line << "{/gld}\r\n";
-	*player << "{gld} usage: pref <item> <value> {/gld}{blu}(Example: pref width 80){/blu}\r\n";
 }

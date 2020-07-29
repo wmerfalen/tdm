@@ -625,9 +625,9 @@ CCWHT	screen.h	36;"	d
 CCYEL	screen.h	32;"	d
 CEMENT	structs.h	/^			CEMENT,			\/** asphault, nearly indestructible *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 CGET	mods/values.hpp	28;"	d
-CGET	mods/values.hpp	307;"	d
-CGET_DEF	mods/values.cpp	341;"	d	file:
-CGET_DEF	mods/values.cpp	582;"	d	file:
+CGET	mods/values.hpp	309;"	d
+CGET_DEF	mods/values.cpp	343;"	d	file:
+CGET_DEF	mods/values.cpp	586;"	d	file:
 CHAINABLE_BREACHING	mods/skills.hpp	/^			CHAINABLE_BREACHING,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 CHAOTIC	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 CHARM	mods/flags.hpp	/^		CHARM,$/;"	e	enum:mods::flags::aff
@@ -1889,8 +1889,8 @@ MODE_MASK	telnet.h	172;"	d
 MODE_OUTBIN	telnet.h	178;"	d
 MODE_SOFT_TAB	telnet.h	169;"	d
 MODE_TRAPSIG	telnet.h	167;"	d
-MODS_BREACH_DISORIENT	globals.cpp	29;"	d	file:
-MODS_GRENADE_BASE_DAMAGE	globals.cpp	30;"	d	file:
+MODS_BREACH_DISORIENT	globals.cpp	30;"	d	file:
+MODS_GRENADE_BASE_DAMAGE	globals.cpp	31;"	d	file:
 MOD_AGGRESSION_CHANCE	mods/ai_state.cpp	17;"	d	file:
 MOD_AGGRESSION_MODIFIER	mods/ai_state.cpp	16;"	d	file:
 MOD_LENIENT_MAX	mods/ai_state.hpp	17;"	d
@@ -3232,7 +3232,7 @@ __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__	comm.cpp	850;"	d	file:
 __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__	mobact.cpp	42;"	d	file:
 __MENTOC_PLR	db.cpp	2582;"	d	file:
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
-__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	968;"	d	file:
+__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	986;"	d	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	d
 __MENTOC_STRING_LIT__	mods/util.hpp	21;"	d
 __MENTOC_TYPES_HEADER__	types.hpp	2;"	d
@@ -5001,7 +5001,7 @@ into	mods/sql.hpp	/^			compositor<T>& into(str_object table) {$/;"	f	struct:mods
 invalid_align	handler.cpp	/^int invalid_align(char_data *ch, struct obj_data *obj) {$/;"	f
 invalid_class	class.cpp	/^int invalid_class(char_data *ch, struct obj_data *obj) {$/;"	f
 invalid_list	ban.cpp	/^char *invalid_list[MAX_INVALID_NAMES];$/;"	v
-invec	globals.hpp	/^bool invec(T m, std::vector<T>& v){$/;"	f
+invec	globals.hpp	257;"	d
 inventory	mods/player.cpp	/^namespace mods::orm::inventory {$/;"	n	class:mods::orm	file:
 invoke	mods/catch.hpp	/^			virtual void invoke() const {$/;"	f	class:Catch::MethodTestCase
 irl	mods/date-time.cpp	/^	namespace irl {$/;"	n	namespace:mods::date_time	file:
@@ -5492,7 +5492,7 @@ message_len	boards.h	/^	int	message_len;  \/* size of message text (for file wri
 message_sell	shop.h	/^	mods::string message_sell;		\/* Message when player sells item	*\/$/;"	m	struct:shop_data
 meta_utils	mods/meta_utils.cpp	/^namespace mods::meta_utils {$/;"	n	class:mods	file:
 meta_utils	mods/meta_utils.hpp	/^namespace mods::meta_utils {$/;"	n	class:mods
-mgdp_debug	globals.cpp	970;"	d	file:
+mgdp_debug	globals.cpp	988;"	d	file:
 min_level	spells.h	/^	int min_level[NUM_CLASSES];$/;"	m	struct:spell_info_type
 min_position	spells.h	/^	byte min_position;	\/* Position for caster	 *\/$/;"	m	struct:spell_info_type
 min_rent_cost	config.cpp	/^int min_rent_cost = 100;$/;"	v

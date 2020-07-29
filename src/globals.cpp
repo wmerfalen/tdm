@@ -23,6 +23,7 @@
 #include "mods/orm/chargen.hpp"
 #include "mods/world-configuration.hpp"
 #include "mods/debug-pre-game.hpp"
+#include "mods/prefs.hpp"
 
 
 extern int errno;
@@ -624,7 +625,24 @@ namespace mods {
 #endif
 			std::string argument = in_argument.data();
 			auto vec_args = PARSE_ARGS();
+			for(auto verb : chan_verbs) {
+				if(mods::util::is_lower_match(CAT({"no",verb}),vec_args[0])){
+					player->send("Turning {grn}OFF{/grn} '%s' channel...\r\n",verb.c_str());
+					PLAYER_SET(CAT({"no",verb}),"1");
+					return false;
+				}
+			}
 			if(invec(vec_args[0],chan_verbs)){
+				auto verb = vec_args[0];
+				auto pos = argument.find_first_of(" ");
+				if(pos == std::string::npos){
+					return false;
+				}
+				std::string status = PLAYER_GET(CAT({"no",verb}));
+				if(status.compare("1") == 0){
+					player->sendln(CAT({"{red}To unmute this channel, type pref ",CAT({"no",verb})," 0"}));
+					return false;
+				}
 				mods::chat::transmit(vec_args[0],player->name().c_str(),argument.substr(argument.find_first_of(" ")));
 				return false;
 			}

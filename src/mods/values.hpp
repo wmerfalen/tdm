@@ -274,6 +274,8 @@ namespace mods::values {
 		CGET(std::string,MSG_NO_PRIMARY_WIELDED,"{gld}You aren't wielding a primary weapon.{/gld}");
 		CGET(std::string,MSG_COOLDOWN_IN_EFFECT,"{gld}Weapon cooldown in effect.{/gld}");
 		CGET(std::string,MSG_COULDNT_FIND_TARGET,"You couldn't find your target!");
+		CGET(std::string,EXTENDED_PREFERENCES,IMPLODE({"nochat","nogossip","nonewbie","nogratz"},'|'));
+		CGET(std::string,EXTENDED_PREFERENCES_DEFAULTS,IMPLODE({"0","0","0","0"},'|'));
 		namespace msg {
 			template <typename T>
 			static inline void crit(T& p){

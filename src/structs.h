@@ -1355,7 +1355,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		byte freeze_level;		/* Level of god who froze char, if any	*/
 		sh_int invis_level;		/* level of invisibility		*/
 		room_vnum load_room;		/* Which room to place char in		*/
-		long /*bitvector_t*/	pref;	/* preference flags for PC's.		*/
+		uint64_t 	pref;	/* preference flags for PC's.		*/
 		ubyte bad_pws;		/* number of bad password attemps	*/
 		std::array<sbyte,conditions_max> conditions;         /* Drunk, full, thirsty			*/
 

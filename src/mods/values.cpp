@@ -250,6 +250,8 @@ namespace mods::values {
 		"MSG_HIT_BY_HEADSHOT",
 		"MSG_YOU_INJURED_SOMEONE",
 		"DEFAULT_PUBLIC_CHANNELS",
+		"EXTENDED_PREFERENCES",
+		"EXTENDED_PREFERENCES_DEFAULTS",
 			};
 		bool is_int(std::string key){
 			return (std::find(int_types.begin(),int_types.end(),key) != int_types.end());
@@ -579,5 +581,7 @@ namespace mods::values {
 		CGET_DEF(std::string,MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS,mini_gunner_random_attack);
 		CGET_DEF(std::string,MSG_YOU_INJURED_SOMEONE ,"{red}*** YOU INJURED %s{/red}!");
 		CGET_DEF(std::string,DEFAULT_PUBLIC_CHANNELS,default_public_channels);
+		CGET_DEF(std::string,EXTENDED_PREFERENCES,IMPLODE({"nochat","nogossip","nonewbie","nogratz"},"|"));
+		CGET_DEF(std::string,EXTENDED_PREFERENCES_DEFAULTS,IMPLODE({"0","0","0","0"},"|"));
 #undef CGET_DEF
 };

@@ -1,4 +1,5 @@
 #include "chat.hpp"
+#include "prefs.hpp"
 #include "../utils.h"
 
 namespace mods::chat {
@@ -56,10 +57,15 @@ namespace mods::chat {
 		}
 
 		for(auto & player : mods::globals::player_list){
-			if(IS_NPC(player->cd())){
+			if((IS_NPC(player->cd()) || !player->authenticated())){
 				continue;
 			}
-			player->send("{yel}[{/yel}{blu}%s{/blu}{yel}][{/yel}{blu}%s{/blu}{yel}]->{/yel}%s\r\n",this->get_name().data(),user.data(),mods::globals::strip_colors(message).c_str());
+			auto key = CAT({"no",get_verb().data()});
+			std::string muted = PLAYER_GET(key);
+			if(muted.compare("1") == 0){
+				continue;
+			}
+			player->send("\r\n{yel}[{/yel}{blu}%s{/blu}{yel}][{/yel}{blu}%s{/blu}{yel}]->{/yel}%s\r\n",this->get_name().data(),user.data(),mods::globals::strip_colors(message).c_str());
 		}
 	}
 	void transmit(std::string verb,std::string_view player_name,std::string_view message){
