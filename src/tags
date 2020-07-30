@@ -356,6 +356,7 @@ ASSIGNOBJ	spec_assign.cpp	/^void ASSIGNOBJ(obj_vnum obj, SPECIAL(fname)) {$/;"	f
 ASSIGNROOM	spec_assign.cpp	/^void ASSIGNROOM(room_vnum room, SPECIAL(fname)) {$/;"	f
 AS_YOU_WERE	mods/behaviour_tree_impl.hpp	/^			AS_YOU_WERE,$/;"	e	enum:mods::behaviour_tree_impl::dispatch_status_t
 ATTACHMENT_NONE	mods/item-types.hpp	/^		ATTACHMENT_NONE = 0,$/;"	e	enum:mods::weapon::type::attachment
+ATTACK	mods/intent.hpp	/^		ATTACK = 1,$/;"	e	enum:mods::intent::intent_to_t
 ATTACKER_NARROWLY_MISSED_YOU_EVENT	mods/damage-event.hpp	/^	ATTACKER_NARROWLY_MISSED_YOU_EVENT,$/;"	e	enum:uint16_t
 ATTACK_DRONE	mods/weapon.hpp	/^		ATTACK_DRONE = (1 << 13)$/;"	e	enum:mods::weapon::mask_type
 AUDITORY_DISTRACTION	mods/aoe.hpp	/^		AUDITORY_DISTRACTION,	\/** Pre-recorded audio to distract or deceive *\/$/;"	e	enum:mods::aoe::types_t
@@ -1036,6 +1037,7 @@ FLAME	mods/weapon.hpp	/^		FLAME = (1 << 10), CLAYMORE = (1 << 11), REMOTE_EXPLOS
 FLAMETHROWER	mods/object.hpp	/^				FLAMETHROWER,$/;"	e	enum:mods::object::object_type_enum_t
 FLASHBANG_COOLDOWN_TICKS	mods/projectile.hpp	/^		constexpr static int FLASHBANG_COOLDOWN_TICKS = 4; \/** FIXME: a wild guess *\/$/;"	m	namespace:mods::projectile
 FLASH_HIDER	mods/weapon.hpp	/^		FLASH_HIDER, SUPPRESSOR$/;"	e	enum:mods::weapon::barrel_t
+FLEE	mods/intent.hpp	/^		FLEE$/;"	e	enum:mods::intent::intent_to_t
 FLIMSY	mods/yaml.hpp	/^	FLIMSY,$/;"	e	enum:mods::yaml::durability_profile_type_t
 FLOATING_POINT_COLUMN	mods/builder.cpp	/^	FLOATING_POINT_COLUMN$/;"	e	enum:field_type_t	file:
 FOREACH_MOB	utils.h	558;"	d
@@ -1683,7 +1685,7 @@ MENTOC_ATTACHMENT_MEMBERS_TUPLE	mods/item-types.hpp	207;"	d
 MENTOC_ATTACHMENT_TYPES_SEQUENCE	mods/item-types.hpp	194;"	d
 MENTOC_BASE_MEMBERS	mods/yaml.hpp	50;"	d
 MENTOC_BASE_MEMBERS_SET	mods/yaml.hpp	63;"	d
-MENTOC_BITVECTOR	mods/builder.cpp	3600;"	d	file:
+MENTOC_BITVECTOR	mods/builder.cpp	3601;"	d	file:
 MENTOC_CONSUMABLE_MEMBERS_TUPLE	mods/item-types.hpp	261;"	d
 MENTOC_CONSUMABLE_TYPES_SEQUENCE	mods/item-types.hpp	252;"	d
 MENTOC_DATA_CLASS	mods/weapon-types.hpp	135;"	d
@@ -1712,6 +1714,8 @@ MENTOC_EXAMPLE_RIFLES	mods/item-types.hpp	461;"	d
 MENTOC_EXAMPLE_TRAP	mods/item-types.hpp	502;"	d
 MENTOC_EXPLOSIVE_MEMBERS_TUPLE	mods/item-types.hpp	142;"	d
 MENTOC_EXPLOSIVE_TYPES_SEQUENCE	mods/item-types.hpp	128;"	d
+MENTOC_EX_CHECK	mods/intent.cpp	53;"	d	file:
+MENTOC_EX_CHECK	mods/intent.cpp	67;"	d	file:
 MENTOC_FEED_ARMOR	mods/item-types.hpp	478;"	d
 MENTOC_FEED_ATTACHMENT	mods/item-types.hpp	446;"	d
 MENTOC_FEED_BASE_MEMBERS	mods/yaml.cpp	26;"	d	file:
@@ -1743,10 +1747,10 @@ MENTOC_LAZY	mods/rooms.hpp	110;"	d
 MENTOC_LAZY	mods/rooms.hpp	92;"	d
 MENTOC_LAZY_COMP	mods/doors.hpp	241;"	d
 MENTOC_LAZY_COMP	mods/doors.hpp	252;"	d
-MENTOC_LAZY_INT	mods/builder.cpp	1591;"	d	file:
-MENTOC_LAZY_INT	mods/builder.cpp	1610;"	d	file:
-MENTOC_LAZY_ME	mods/builder.cpp	3020;"	d	file:
-MENTOC_LAZY_ME	mods/builder.cpp	3029;"	d	file:
+MENTOC_LAZY_INT	mods/builder.cpp	1592;"	d	file:
+MENTOC_LAZY_INT	mods/builder.cpp	1611;"	d	file:
+MENTOC_LAZY_ME	mods/builder.cpp	3021;"	d	file:
+MENTOC_LAZY_ME	mods/builder.cpp	3030;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	415;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	424;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	431;"	d	file:
@@ -1759,10 +1763,10 @@ MENTOC_LAZY_POS	act.debug.cpp	224;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	238;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	248;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	262;"	d	file:
-MENTOC_LAZY_SHOP	mods/builder.cpp	1675;"	d	file:
-MENTOC_LAZY_SHOP	mods/builder.cpp	1700;"	d	file:
-MENTOC_LAZY_STR	mods/builder.cpp	1575;"	d	file:
-MENTOC_LAZY_STR	mods/builder.cpp	1590;"	d	file:
+MENTOC_LAZY_SHOP	mods/builder.cpp	1676;"	d	file:
+MENTOC_LAZY_SHOP	mods/builder.cpp	1701;"	d	file:
+MENTOC_LAZY_STR	mods/builder.cpp	1576;"	d	file:
+MENTOC_LAZY_STR	mods/builder.cpp	1591;"	d	file:
 MENTOC_MEMBER_VARS_EXAMPLE_FOR	mods/item-types.hpp	403;"	d
 MENTOC_MEMBER_VARS_EXAMPLE_IMPL	mods/item-types.hpp	394;"	d
 MENTOC_MEMBER_VARS_FOR	mods/item-types.hpp	406;"	d
@@ -1781,14 +1785,14 @@ MENTOC_OBJ_DATA_STAT_GEN	structs.cpp	74;"	d	file:
 MENTOC_OBJ_INITIALIZE_CONSTRUCTOR	structs.cpp	46;"	d	file:
 MENTOC_OBS	mods/builder.cpp	31;"	d	file:
 MENTOC_OBS2	mods/builder.cpp	32;"	d	file:
-MENTOC_PLAYER_NULL_CHECK	mods/builder.cpp	977;"	d	file:
+MENTOC_PLAYER_NULL_CHECK	mods/builder.cpp	978;"	d	file:
 MENTOC_PREAMBLE	globals.hpp	36;"	d
 MENTOC_RIFLE_MEMBERS_TUPLE	mods/item-types.hpp	106;"	d
 MENTOC_RIFLE_TYPES_SEQUENCE	mods/item-types.hpp	97;"	d
-MENTOC_SHOW_FLAG	mods/builder.cpp	3636;"	d	file:
-MENTOC_SHOW_OBJ	mods/builder.cpp	2427;"	d	file:
-MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	2419;"	d	file:
-MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	2411;"	d	file:
+MENTOC_SHOW_FLAG	mods/builder.cpp	3637;"	d	file:
+MENTOC_SHOW_OBJ	mods/builder.cpp	2428;"	d	file:
+MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	2420;"	d	file:
+MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	2412;"	d	file:
 MENTOC_T	mods/aoe.hpp	32;"	d
 MENTOC_T	mods/aoe.hpp	55;"	d
 MENTOC_T	mods/lmdb.hpp	68;"	d
@@ -1812,7 +1816,7 @@ MENTOC_TO_STR	mods/weapon.hpp	305;"	d
 MENTOC_TO_STR	mods/weapon.hpp	311;"	d
 MENTOC_TRAP_MEMBERS_TUPLE	mods/item-types.hpp	303;"	d
 MENTOC_TRAP_TYPES_SEQUENCE	mods/item-types.hpp	300;"	d
-MENTOC_TYPE	mods/builder.cpp	3574;"	d	file:
+MENTOC_TYPE	mods/builder.cpp	3575;"	d	file:
 MENTOC_TYPE_LIST_IMPL	mods/item-types.hpp	562;"	d
 MENTOC_UPTR	structs.h	1019;"	d
 MENTOC_UPTR	structs.h	1021;"	d
@@ -1820,7 +1824,7 @@ MENTOC_USING_CT	mods/item-types.hpp	333;"	d
 MENTOC_USING_CT_IMPL	mods/item-types.hpp	330;"	d
 MENTOC_WEAPON	mods/builder.cpp	132;"	d	file:
 MENTOC_WEAPON	mods/builder.cpp	148;"	d	file:
-MENTOC_WEAR	mods/builder.cpp	3557;"	d	file:
+MENTOC_WEAR	mods/builder.cpp	3558;"	d	file:
 MENTOC_WEAR_PLACES_SEQ	mods/item-types.hpp	42;"	d
 MENTOC_YAML_DESC	mods/item-types.hpp	346;"	d
 MENTOC_YAML_DESC_IMPL	mods/item-types.hpp	345;"	d
@@ -3218,6 +3222,7 @@ __MENTOC_MODS_SQL_HEADER__	mods/sql.hpp	9;"	d
 __MENTOC_MODS_STRING_HEADER__	mods/string.hpp	2;"	d
 __MENTOC_MODS_TESTING_INDEX_HEADER__	mods/testing_index.hpp	2;"	d
 __MENTOC_MODS_VALUES_HEADER__	mods/values.hpp	2;"	d
+__MENTOC_MODS_WEAPONS_INTENT_HEADER__	mods/intent.hpp	2;"	d
 __MENTOC_MODS_WEAPON_HEADER__	mods/weapon.hpp	2;"	d
 __MENTOC_MODS_WEAPON_STAT_LIST_HEADER__	mods/weapon-stat-list.hpp	2;"	d
 __MENTOC_MODS_WEAPON_TYPES_HEADER__	mods/weapon-types.hpp	2;"	d
@@ -3472,6 +3477,7 @@ block_for	mods/player.cpp	/^	void player::block_for(uint16_t ticks, uint32_t unb
 block_type	mail.h	/^	long	block_type;		\/* -1 if header block, -2 if last data block$/;"	m	struct:data_block_type_d
 block_type	mail.h	/^	long	block_type;		\/* is this a header or data block?	*\/$/;"	m	struct:header_block_type_d
 block_way	castle.cpp	/^int block_way(char_data *ch, int cmd, char *arg, room_vnum iIn_room,$/;"	f
+blockers	mods/intent.hpp	/^		std::vector<std::string> blockers;$/;"	m	struct:mods::intent::intent_t
 board_info	boards.cpp	/^struct board_info_type board_info[NUM_OF_BOARDS] = {$/;"	v	typeref:struct:board_info_type
 board_info_type	boards.h	/^struct board_info_type {$/;"	s
 board_msginfo	boards.h	/^struct board_msginfo {$/;"	s
@@ -3523,8 +3529,10 @@ camera	mods/camera.hpp	/^	class camera {$/;"	c	namespace:mods
 camera_viewing	mods/player.cpp	/^	bool player::camera_viewing(){ return m_camera_viewing; }$/;"	f	class:mods::player
 can	globals.hpp	/^static inline bool can(player_ptr_t& player,int skill){ return mods::skills::player_can(player,skill); }$/;"	f
 can	structs.h	/^		bool can(std::size_t val){$/;"	f	struct:obj_data
+can_attack	mods/intent.cpp	/^	bool can_attack(intent_t & i){$/;"	f	namespace:mods::intent
 can_attack_same_room	mods/object-utils.hpp	/^		bool can_attack_same_room(T& obj){$/;"	f	namespace:mods::object_utils
 can_carry_n	act.item.cpp	/^int can_carry_n(player_ptr_t player){$/;"	f
+can_flee	mods/intent.cpp	/^	bool can_flee(intent_t & i){$/;"	f	namespace:mods::intent
 can_modify	olc.cpp	/^int can_modify(char_data *ch, int vnum) {$/;"	f
 can_see_player	mods/sensor-grenade.cpp	/^	bool can_see_player(uuid_t nade,player_ptr_t& target){$/;"	f	namespace:mods::sensor_grenade
 can_see_through_fire	mods/rooms.hpp	/^	static inline bool can_see_through_fire(room_rnum room) {$/;"	f	namespace:mods::rooms
@@ -3776,6 +3784,7 @@ create_player	mods/player-scaffolding.cpp	/^	player_ptr_t player_scaffolding::cr
 create_selector	mods/behaviour_tree_node.hpp	/^		static child_node_t create_selector(const children_t& ch){$/;"	f	struct:mods::behaviour_tree_node
 create_sequence	mods/behaviour_tree_node.hpp	/^		static child_node_t create_sequence(const children_t& ch){$/;"	f	struct:mods::behaviour_tree_node
 create_shop_from_index	db.cpp	/^shop_ptr_t create_shop_from_index(std::size_t proto_index){$/;"	f
+created_at	mods/intent.hpp	/^		uint64_t						created_at;$/;"	m	struct:mods::intent::intent_t
 credits	db.cpp	/^char *credits = NULL;		\/* game credits			 *\/$/;"	v
 crit	mods/values.hpp	/^			static inline void crit(T& p){$/;"	f	namespace:mods::values::msg
 critical_chance	mods/weapon.hpp	/^			float critical_chance;$/;"	m	struct:mods::weapon::yaml::rifle_description_t
@@ -3868,6 +3877,7 @@ debug_echo	mods/yaml.cpp	13;"	d	file:
 debug_state	mods/debug.cpp	/^	std::unique_ptr<state> debug_state;$/;"	m	namespace:mods::debug	file:
 decomposedExpression	mods/catch.hpp	/^		mutable DecomposedExpression const* decomposedExpression;$/;"	m	struct:Catch::AssertionResultData
 decorate_authenticated_player	db.cpp	/^void decorate_authenticated_player(player_ptr_t player_ptr){$/;"	f
+decorate_door_issues	mods/intent.cpp	/^	uint8_t decorate_door_issues(intent_t& i){$/;"	f	namespace:mods::intent
 decrypt	mods/crypto.cpp	/^int decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,$/;"	f	namespace:mods::crypto
 decrypt_buffer	mods/crypto.cpp	/^	std::string decrypt_buffer(std::string_view in_ciphertext,std::string_view in_key,std::string in_iv,std::string buffer){$/;"	f	namespace:mods::crypto
 default_colors	globals.cpp	/^		static const std::map<std::string_view,std::string_view> default_colors = {$/;"	m	namespace:mods::globals	file:
@@ -3928,6 +3938,7 @@ dir_int	globals.cpp	/^		int dir_int(char dir) {$/;"	f	namespace:mods::globals
 dir_option	mods/builder.cpp	/^	std::optional<std::string> dir_option(room_rnum room_id,int direction,std::optional<std::string_view> description,$/;"	f	namespace:mods::builder
 dir_option	structs.h	/^		room_direction_data *dir_option[NUM_OF_DIRS]; \/* Directions *\/$/;"	v
 dir_to_str	globals.cpp	/^		std::string dir_to_str(int dir, bool adjective){$/;"	f	namespace:mods::globals
+direction	mods/intent.hpp	/^		uint8_t 						direction;$/;"	m	struct:mods::intent::intent_t
 direction	mods/scan.hpp	/^			int direction;$/;"	m	struct:mods::scan::find_results_t
 direction	mods/scan.hpp	/^			uint8_t direction;$/;"	m	struct:mods::scan::__anon4
 directional_dirstr	mods/doors.hpp	/^	static inline std::string directional_dirstr(const int & direction){$/;"	f	namespace:mods::doors
@@ -4044,6 +4055,7 @@ do_gen_comm	interpreter.cpp	/^ACMD(do_gen_comm);$/;"	v
 do_gen_door	act.movement.cpp	/^ACMD(do_gen_door);$/;"	v
 do_gen_door	castle.cpp	/^ACMD(do_gen_door);$/;"	v
 do_gen_door	interpreter.cpp	/^ACMD(do_gen_door);$/;"	v
+do_gen_door	mods/intent.cpp	/^ACMD(do_gen_door);$/;"	v
 do_gen_door	spec_procs.cpp	/^ACMD(do_gen_door);$/;"	v
 do_gen_ps	act.informative.cpp	/^ACMD(do_gen_ps);$/;"	v
 do_gen_ps	interpreter.cpp	/^ACMD(do_gen_ps);$/;"	v
@@ -4607,6 +4619,7 @@ from	mods/sql.hpp	/^			compositor<T>& from(str_object table) {$/;"	f	struct:mods
 from_direction	mods/damage-event.hpp	/^	uint8_t from_direction;$/;"	m	struct:feedback_t
 from_direction	structs.h	/^		uint8_t from_direction;$/;"	m	struct:obj_data
 from_dirstr	mods/doors.hpp	/^	static inline std::string from_dirstr(const int& direction){$/;"	f	namespace:mods::doors
+from_room_id	mods/intent.hpp	/^		room_rnum						from_room_id;$/;"	m	struct:mods::intent::intent_t
 from_string	mods/doors.hpp	/^	static inline int from_string(std::string_view i){$/;"	f	namespace:mods::doors
 fromdirstr	mods/projectile.cpp	/^		std::string fromdirstr(int direction,bool prefix, bool suffix) {$/;"	f	namespace:mods::projectile
 frozen_start_room	config.cpp	/^room_vnum frozen_start_room = 0;$/;"	v
@@ -4995,6 +5008,12 @@ instantiate_object_vector	mods/builder_util.hpp	/^	void instantiate_object_vecto
 int_app	constants.cpp	/^cpp_extern const struct int_app_type int_app[] = {$/;"	v	typeref:struct:int_app_type
 int_app	constants.hpp	/^cpp_extern const struct int_app_type int_app[] = {$/;"	v	typeref:struct:int_app_type
 int_types	mods/values.cpp	/^		static const std::vector<std::string> int_types = {$/;"	m	namespace:mods::values	file:
+intent	mods/intent.cpp	/^namespace mods::intent {$/;"	n	class:mods	file:
+intent	mods/intent.hpp	/^namespace mods::intent {$/;"	n	class:mods
+intent_debug	mods/intent.cpp	3;"	d	file:
+intent_t	mods/intent.hpp	/^	struct intent_t {$/;"	s	namespace:mods::intent
+intent_to_t	mods/intent.hpp	/^	enum intent_to_t {$/;"	g	namespace:mods::intent
+intents	mods/intent.cpp	/^	static std::vector<mods::intent::intent_t> intents;$/;"	m	namespace:mods::intent	file:
 interpret	mods/drone.cpp	/^	 bool drone::interpret(char_data *owner,const std::string& argument) {$/;"	f	class:mods::drone
 interpret_espec	db.cpp	/^void interpret_espec(const char *keyword, const char *value, int i, int nr) {$/;"	f
 into	mods/sql.hpp	/^			compositor<T>& into(str_object table) {$/;"	f	struct:mods::sql::compositor
@@ -5923,6 +5942,7 @@ phase_ring_buffer	mods/date-time.cpp	/^	std::array<moon_phase_t,12> phase_ring_b
 phase_ring_buffer_index	mods/date-time.cpp	/^	static uint8_t phase_ring_buffer_index;$/;"	m	namespace:mods::date_time	file:
 pk_allowed	config.cpp	/^int pk_allowed = YES;$/;"	v
 pkey	mods/skills.cpp	/^	std::string pkey(std::string player_name,std::string key){$/;"	f	namespace:mods::skills
+player	mods/intent.hpp	/^		uuid_t 							player;$/;"	m	struct:mods::intent::intent_t
 player	mods/js-player-scaffolding.cpp	/^namespace mods::js::player {$/;"	n	class:mods::js	file:
 player	mods/js-player-scaffolding.hpp	/^namespace mods::js::player {$/;"	n	class:mods::js
 player	mods/js.cpp	/^				player_ptr_t player;$/;"	m	struct:mods::js::utils::find_player_payload_t	file:
@@ -6166,6 +6186,8 @@ refresh_skill_name_list	mods/skills.cpp	/^	void refresh_skill_name_list() {$/;"	
 register_authenticated_player	globals.cpp	/^		void register_authenticated_player(player_ptr_t player){$/;"	f	namespace:mods::globals
 register_callback	mods/events.cpp	/^	void register_callback(event_t event,callback_t cb){$/;"	f	namespace:mods::events
 register_damage_event_callback	mods/player.cpp	/^		void player::register_damage_event_callback(damage_event_t e,damage_event_callback_t cb){$/;"	f	class:mods::player
+register_intent_to_attack	mods/intent.cpp	/^	void register_intent_to_attack($/;"	f	namespace:mods::intent
+register_intent_to_flee	mods/intent.cpp	/^	void register_intent_to_flee($/;"	f	namespace:mods::intent
 register_mob	mods/behaviour_tree_impl.cpp	/^	int8_t register_mob(argument_type mob,std::string tree_name){$/;"	f	namespace:mods::behaviour_tree_impl
 register_object	globals.cpp	/^		void register_object(obj_ptr_t obj) {$/;"	f	namespace:mods::globals
 register_object_db_id	globals.cpp	/^		void register_object_db_id(uint64_t db_id,uuid_t uuid){$/;"	f	namespace:mods::globals
@@ -6300,6 +6322,7 @@ run	mods/behaviour_tree_node.hpp	/^		run_status_t run(LambdaArgument & arg){$/;"
 run	mods/debug-pre-game.hpp	/^	bool run(){$/;"	f	namespace:mods::debug::pre_game
 run_autowiz	limits.cpp	/^void run_autowiz(void) {$/;"	f
 run_behaviour_trees	comm.cpp	/^void run_behaviour_trees(){$/;"	f
+run_intents	mods/intent.cpp	/^	void run_intents(){$/;"	f	namespace:mods::intent
 run_profile_scripts	config.cpp	/^	bool run_profile_scripts;$/;"	m	namespace:config	file:
 run_profile_scripts	mods/js.cpp	/^		void run_profile_scripts(const std::string& player_name){$/;"	f	namespace:mods::js
 run_status_t	mods/behaviour_tree_node.hpp	/^		} run_status_t;$/;"	t	struct:mods::behaviour_tree_node	typeref:struct:mods::behaviour_tree_node::__anon2
@@ -6581,6 +6604,7 @@ socket_t	mods/quests.hpp	/^typedef int socket_t;$/;"	t
 socket_t	mods/scan.hpp	/^typedef int socket_t;$/;"	t
 socket_t	sysdep.h	/^typedef SOCKET		socket_t;$/;"	t
 solo_gain	fight.cpp	/^void solo_gain(char_data *ch, char_data *victim) {$/;"	f
+solution	mods/intent.hpp	/^		std::vector<std::string> solution;$/;"	m	struct:mods::intent::intent_t
 sort_commands	act.informative.cpp	/^void sort_commands(void) {$/;"	f
 sort_commands	mods/hell.hpp	/^	constexpr inline bool sort_commands = false;$/;"	m	namespace:mods::hell
 sort_commands_helper	act.informative.cpp	/^int sort_commands_helper(const void *a, const void *b) {$/;"	f
@@ -6712,6 +6736,8 @@ table	mods/sql.hpp	/^			compositor<T>& table(str_object table) {$/;"	f	struct:mo
 table_cstr	mods/lmdb.hpp	/^		std::string table_cstr() const { return m_str_table; }$/;"	f	struct:mods::lmdb::transaction_t
 tail	db.h	/^	struct reset_q_element *tail;$/;"	m	struct:reset_q_type	typeref:struct:reset_q_type::reset_q_element
 target_dead	mods/values.hpp	/^			static inline void target_dead(T& p){$/;"	f	namespace:mods::values::msg
+target_room_id	mods/intent.hpp	/^		room_rnum						target_room_id;$/;"	m	struct:mods::intent::intent_t
+targets	mods/intent.hpp	/^		std::vector<uuid_t> targets;$/;"	m	struct:mods::intent::intent_t
 targets	spells.h	/^	int targets;         \/* See below for use with TAR_XXX  *\/$/;"	m	struct:spell_info_type
 telcmds	telnet.h	/^char *telcmds[] = {$/;"	v
 telopts	telnet.h	/^char *telopts[NTELOPTS+1] = {$/;"	v
@@ -6748,6 +6774,7 @@ time_tracker_per_minute	mods/affects.cpp	/^	static time_t time_tracker_per_minut
 timeadd	comm.cpp	/^void timeadd(struct timeval *rslt, struct timeval *a, struct timeval *b) {$/;"	f
 timediff	comm.cpp	/^void timediff(struct timeval *rslt, struct timeval *a, struct timeval *b) {$/;"	f
 timelog	mods/date-time.cpp	/^	void timelog(const std::string& msg) {$/;"	f	namespace:mods::date_time
+timeout	mods/intent.hpp	/^		uint64_t						timeout;$/;"	m	struct:mods::intent::intent_t
 timer	mods/player.hpp	/^		int&	timer(){$/;"	f	struct:mods::player
 timer	structs.h	/^		int	timer;		\/* Timer for object                 *\/$/;"	m	struct:obj_flag_data
 timer	structs.h	/^		int	timer;$/;"	m	struct:obj_file_elem
@@ -6920,6 +6947,7 @@ vnum_object	db.cpp	/^int vnum_object(char *searchname, char_data *ch) {$/;"	f
 vsnprintf	bsd-snprintf.cpp	/^vsnprintf(char *str, size_t count, const char *fmt, va_list args) {$/;"	f
 vsnprintf	sysdep.h	351;"	d
 vwrite_to_output	comm.cpp	/^size_t vwrite_to_output(mods::descriptor_data &t, const char *format, va_list args) {$/;"	f
+wants_to	mods/intent.hpp	/^		intent_to_t 				wants_to;$/;"	m	struct:mods::intent::intent_t
 warn_thermite_room	mods/doors.hpp	/^	static inline void warn_thermite_room(const room_rnum room,int direction){$/;"	f	namespace:mods::doors
 watching	structs.h	/^		bool watching;$/;"	v
 weapon	mods/weapon-types.hpp	/^namespace mods::weapon {$/;"	n	class:mods

@@ -430,7 +430,8 @@ namespace mods::builder {
 	}
 	void add_room_to_pavements(player_ptr_t& player, int room_id){
 		auto & r = player->builder_data->room_pavements.rooms;
-		if(std::find(r.begin(),r.end(),room_id) != r.end()){
+		if(std::find(r.begin(),r.end(),room_id) == r.end()){
+			std::cerr << "[add_room_to_pavements]-> adding room: " << room_id << "\n";
 			player->builder_data->room_pavements.rooms.push_back(room_id);
 		}
 	}
@@ -5016,15 +5017,36 @@ ACMD(do_rbuild) {
 
 	if(args.has_value()) {
 		if(player->builder_data){
-			/** TODO: multi room pavements per character
-				for(auto room_pavement : player->builder_data->room_pavements) {
-				r_status(player,std::to_string(room_pavement.transact_id));
-				}
-				*/
+			for(auto room: player->builder_data->room_pavements.rooms) {
+				r_status(player,tostr(room));
+			}
 			r_status(player, "Transaction id: " + std::to_string(player->builder_data->room_pavements.transact_id));
 		}
 		return;
 	}
+
+	args = mods::util::subcmd_args<50,args_t>(argument,"save-paved");
+
+	if(args.has_value()) {
+		if(player->builder_data){
+			unsigned c = 0;
+			std::string error;
+			for(auto & room_id : player->builder_data->room_pavements.rooms){
+				auto ret = mods::builder::save_to_db(room_id,error);
+				if(ret != 0) {
+					r_error(player,std::string("Error saving room: ") + std::to_string(ret) + "->" + error);
+				} else {
+					++c;
+					r_success(player,CAT({"Room:", tostr(room_id), " saved"}));
+				}
+			}
+			r_success(player, CAT({"Saved ",tostr(c), " rooms."}));
+		}else{
+			r_error(player,"You currently don't have any builder data. Try starting the pave process.");
+		}
+		return;
+	}
+
 	/** textures */
 	/** textures */
 	/** textures */
@@ -5263,52 +5285,6 @@ ACMD(do_rbuild) {
 		return;
 	}
 
-
-
-	//args = mods::util::subcmd_args<11,args_t>(argument,"save-paved");
-
-	//if(args.has_value() && args.value().size() > 1 && args.value()[0].compare("save-paved") == 0 ) {
-	//	/** Start **/
-	//	auto arg_vec = args.value();
-	//	/** TODO: multi room pavements */
-	//	//for(unsigned i=1; i < arg_vec.size();i++){
-	//	//
-	//	//	auto transaction_id = mods::util::stoi(arg_vec[i]);
-	//	//	if(!transaction_id.has_value()){
-	//	//		r_error(player,"Invalid transaction id: '" + arg_vec[i] + "'");
-	//	//		return;
-	//	//	}
-	//	//}
-	//	/** End **/
-	//	unsigned saved_room_counter = 0;
-
-	//	if(!player->builder_data){
-	//		r_error(player, "You do not have any builder data");
-	//		return;
-	//	}
-	//		/** FIXME: save by transaction id */
-	//		/* TODO: multi room pavements by tid
-	//		//for(auto room_transactions : player->builder_data->room_pavements) {
-	//		//	if(room_transactions.transact_id == args[1].value()){
-	//		//		/** FIXME save room id */
-	//		//		std::string error;
-	//		//		if(mods::builder::save_to_db(room_id,error) < 0) {
-	//		//			r_error(player,std::string("Unable to save room id#: ") + std::to_string(world[room_id].number) + " ->" + error);
-	//		//			break;
-	//		//		}
-	//		//	}
-	//		//}
-	//		
-	//				if(mods::builder::save_to_db(room_id,error) < 0) {
-	//					r_error(player,std::string("Unable to save room id#: ") + std::to_string(world[room_id].number) + " ->" + error);
-	//					return;
-	//				}
-
-
-	//	r_success(player,std::string("Saved ") + std::to_string(saved_room_counter) + " rooms");
-	//	return;
-	//}
-
 	args = mods::util::subcmd_args<5,args_t>(argument,"pave");
 
 	if(args.has_value()) {
@@ -5321,6 +5297,7 @@ ACMD(do_rbuild) {
 				return;
 			}
 			r_success(player,"Continuing pavement.");
+			mods::builder::initialize_builder(player);
 			player->builder_data->room_pave_mode = true;
 			player->builder_data->room_pavements.start_room = player->room();
 			player->builder_data->room_pavements.zone_id = world[player->room()].zone;
