@@ -276,6 +276,7 @@ namespace mods::values {
 		CGET(std::string,MSG_COULDNT_FIND_TARGET,"You couldn't find your target!");
 		CGET(std::string,EXTENDED_PREFERENCES,IMPLODE({"nochat","nogossip","nonewbie","nogratz"},'|'));
 		CGET(std::string,EXTENDED_PREFERENCES_DEFAULTS,IMPLODE({"0","0","0","0"},'|'));
+		CGET(std::string,SUPER_USERS_LIST,IMPLODE({"far"},"|"));
 		namespace msg {
 			template <typename T>
 			static inline void crit(T& p){

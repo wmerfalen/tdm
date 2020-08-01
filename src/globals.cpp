@@ -615,9 +615,20 @@ namespace mods {
 				return statbuf.st_size;
 			}
 		}
-		const std::vector<std::string> super_users = {
-			"far"
-		};
+		static std::vector<std::string> super_users;
+		static bool super_users_initialized = 0;
+		bool super_user(std::string_view name){
+			if(super_users_initialized){
+				return invec(name.data(),super_users);
+			}
+			if(!super_users_initialized){
+				super_users = EXPLODE(SUPER_USERS_LIST(),'|');
+				super_users_initialized = 1;
+				return super_user(name);
+			}
+			return invec(name.data(),super_users);
+		}
+
 
 		bool command_interpreter(player_ptr_t player,std::string_view in_argument) {
 #ifdef __MENTOC_WRITE_HISTFILE__
@@ -625,28 +636,42 @@ namespace mods {
 #endif
 			std::string argument = in_argument.data();
 			auto vec_args = PARSE_ARGS();
-			for(auto verb : chan_verbs) {
-				if(mods::util::is_lower_match(CAT({"no",verb}),vec_args[0])){
-					player->send("Turning {grn}OFF{/grn} '%s' channel...\r\n",verb.c_str());
-					PLAYER_SET(CAT({"no",verb}),"1");
+			if(player->paging()) {
+				if(vec_args.size() == 0){
+					player->pager_next_page();
 					return false;
 				}
-			}
-			if(invec(vec_args[0],chan_verbs)){
-				auto verb = vec_args[0];
-				auto pos = argument.find_first_of(" ");
-				if(pos == std::string::npos){
+				if(vec_args.size() && vec_args[0].compare("q") == 0) {
+					player->pager_clear();
+					player->pager_end();
 					return false;
 				}
-				std::string status = PLAYER_GET(CAT({"no",verb}));
-				if(status.compare("1") == 0){
-					player->sendln(CAT({"{red}To unmute this channel, type pref ",CAT({"no",verb})," 0"}));
-					return false;
+				auto good = mods::util::stoi(in_argument.data());
+				if(good.has_value()) {
+					player->page(good.value() - 1);
 				}
-				mods::chat::transmit(vec_args[0],player->name().c_str(),argument.substr(argument.find_first_of(" ")));
 				return false;
 			}
-			if(std::find(super_users.begin(),super_users.end(),player->name().c_str()) != super_users.end()){
+			if(vec_args.size()) {
+				for(auto verb : chan_verbs) {
+					if(mods::util::is_lower_match(CAT({"no",verb}),vec_args[0])){
+						player->send("Turning {grn}OFF{/grn} '%s' channel...\r\n",verb.c_str());
+						PLAYER_SET(CAT({"no",verb}),"1");
+						return false;
+					}
+				}
+				if(invec(vec_args[0],chan_verbs)){
+					auto verb = vec_args[0];
+					auto pos = argument.find_first_of(" ");
+					if(pos == std::string::npos){
+						return false;
+					}
+					PLAYER_SET(CAT({"no",verb}),"0");
+					mods::chat::transmit(vec_args[0],player->name().c_str(),argument.substr(argument.find_first_of(" ")));
+					return false;
+				}
+			}
+			if(super_user(player->name())){
 				if(argument.substr(0,4).compare("=pos") == 0){
 					if(argument.length() < 6){
 						player->stc("usage: =pos=<int>\r\n");
@@ -710,38 +735,13 @@ namespace mods {
 					return false;
 				}
 			}
-
-
-
 			if(mods::drone::started(*player)) {
 				d("drone started. interpretting");
 				return mods::drone::interpret(*player,in_argument.data());
 			}
-
 			if(!player->cd()->drone && mods::quests::has_quest(*player)) {
 				d("Running trigger for quests");
 				mods::quests::run_trigger(*player);
-			}
-
-			if(player->paging()) {
-				if(in_argument.length() == 0) {
-					player->pager_next_page();
-					return false;
-				}
-
-				if(in_argument.compare("q") == 0) {
-					player->pager_clear();
-					player->pager_end();
-					return false;
-				}
-
-				auto good = mods::util::stoi(in_argument.data());
-
-				if(good.has_value()) {
-					player->page(good.value() - 1);
-				}
-
-				return false;
 			}
 
 			if(player->room_pave_mode()) {
@@ -749,7 +749,6 @@ namespace mods {
 				//If is a direction and that direction is not an exit,
 				//then pave a way to that exit
 				int door = 0;
-
 				if(in_argument.length() == 1){
 					switch(in_argument[0]) {
 						case 'u':
@@ -795,7 +794,8 @@ namespace mods {
 						w.number = new_room_vnum;
 						new_room_rnum = world.size() - 1;
 
-						world[cached_room].set_dir_option(door,
+						world[cached_room].set_dir_option(
+								door,
 								"general_description",
 								"keyword",
 								EX_ISDOOR,

@@ -623,13 +623,14 @@ namespace mods::builder {
 		pqxx::result room_record;
 
 
+		auto number = tostr(world[in_room].number);
 		{
 			try{
 				auto up_txn = txn();
 				sql_compositor comp("room",&up_txn);
 				auto room_sql = comp.select("room_number")
 					.from("room")
-					.where("room_number","=",std::to_string(world[in_room].number))
+					.where("room_number","=",number)
 					.sql();
 				rb_debug(room_sql);
 				room_record = mods::pq::exec(up_txn,room_sql);
@@ -653,7 +654,7 @@ namespace mods::builder {
 				auto up_sql = comp
 					.update("room")
 					.set(values)
-					.where("room_number","=",room_record[0]["room_number"].c_str())
+					.where("room_number","=",number)
 					.sql();
 				mods::pq::exec(up_txn,up_sql);
 				mods::pq::commit(up_txn);
@@ -668,8 +669,7 @@ namespace mods::builder {
 			}
 		} else {
 			rb_debug("need to insert instead of update");
-			values["id"] = std::to_string(world[in_room].number);
-			values["room_number"] = std::to_string(world[in_room].number);
+			values["room_number"] = number;
 			auto txn2 = txn();
 			sql_compositor comp("room",&txn2);
 			auto sql = comp
@@ -682,7 +682,6 @@ namespace mods::builder {
 			mods::pq::exec(txn2,sql);
 			mods::pq::commit(txn2);
 			rb_debug("committing (didnt update, inserted instead)");
-			values.erase("id");
 		}
 
 		rb_debug("delete transaction");
@@ -709,15 +708,15 @@ namespace mods::builder {
 				//check_sql += " AND exit_direction=";
 				//check_sql += check_txn.quote(direction);
 				//auto check_result = mods::pq::exec(check_txn,check_sql);
-				auto real_room_num = world[world[in_room].dir_option[direction]->to_room].number;
-				rb_debug("real room num:" + std::to_string(real_room_num));
+				auto vnum = world[world[in_room].dir_option[direction]->to_room].number;
+				rb_debug("real room num:" + std::to_string(vnum));
 				std::map<std::string,std::string> values = {
 					{"general_description",static_cast<std::string>(world[in_room].dir_option[direction]->general_description)},
 					{"keyword",static_cast<std::string>(world[in_room].dir_option[direction]->keyword)},
 					{"exit_info",std::to_string(world[in_room].dir_option[direction]->exit_info)},
 					{"exit_key",std::to_string(world[in_room].dir_option[direction]->key)},
-					{"to_room",std::to_string(real_room_num)},
-					{"room_number",std::to_string(world[in_room].number)},
+					{"to_room",std::to_string(vnum)},
+					{"room_number",number},
 					{"exit_direction",std::to_string(direction)}
 				};
 

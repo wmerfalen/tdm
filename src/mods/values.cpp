@@ -252,6 +252,7 @@ namespace mods::values {
 		"DEFAULT_PUBLIC_CHANNELS",
 		"EXTENDED_PREFERENCES",
 		"EXTENDED_PREFERENCES_DEFAULTS",
+		"SUPER_USERS_LIST",
 			};
 		bool is_int(std::string key){
 			return (std::find(int_types.begin(),int_types.end(),key) != int_types.end());
@@ -583,5 +584,6 @@ namespace mods::values {
 		CGET_DEF(std::string,DEFAULT_PUBLIC_CHANNELS,default_public_channels);
 		CGET_DEF(std::string,EXTENDED_PREFERENCES,IMPLODE({"nochat","nogossip","nonewbie","nogratz"},"|"));
 		CGET_DEF(std::string,EXTENDED_PREFERENCES_DEFAULTS,IMPLODE({"0","0","0","0"},"|"));
+		CGET_DEF(std::string,SUPER_USERS_LIST,IMPLODE({"far"},"|"));
 #undef CGET_DEF
 };
