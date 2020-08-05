@@ -20,6 +20,7 @@
 #include "db.h"
 #include "screen.h"
 #include "globals.hpp"
+#include "mods/chat.hpp"
 
 /* extern variables */
 extern int level_can_shout;
@@ -344,7 +345,6 @@ ACMD(do_write) {
 
 ACMD(do_gen_comm) {
 	char color_on[24];
-	char buf1[MAX_INPUT_LENGTH];
 
 	/* Array of flags which must _not_ be set in order for comm to be heard */
 	int channels[] = {
@@ -454,32 +454,7 @@ ACMD(do_gen_comm) {
 		send_to_char(ch, "%sYou %s, '%s'%s\r\n", COLOR_LEV(ch) >= C_CMP ? color_on : "", com_msgs[subcmd][1], argument, CCNRM(ch, C_CMP));
 	}
 
-	snprintf(buf1, sizeof(buf1), "$n %ss, '%s'", com_msgs[subcmd][1], argument);
-
-	/* now send all the strings out */
-	for(auto & i : descriptor_list){
-		if(STATE(i) == CON_PLAYING && i.character && i.character->uuid != ch->uuid &&
-		        !PRF_FLAGGED(i.character, channels[subcmd]) &&
-		        !PLR_FLAGGED(i.character, PLR_WRITING) &&
-		        !ROOM_FLAGGED(IN_ROOM(i.character), ROOM_SOUNDPROOF)) {
-
-			if(subcmd == SCMD_SHOUT &&
-			        ((world[IN_ROOM(ch)].zone != world[IN_ROOM(i.character)].zone) ||
-			         !AWAKE(i.character))) {
-				continue;
-			}
-
-			if(COLOR_LEV(i.character) >= C_NRM) {
-				send_to_char(i.character, "%s", color_on);
-			}
-
-			act(buf1, FALSE, ch, 0, i.character, TO_VICT | TO_SLEEP);
-
-			if(COLOR_LEV(i.character) >= C_NRM) {
-				send_to_char(i.character, "%s", KNRM);
-			}
-		}
-	}
+	mods::chat::communicate<player_ptr_t,std::string_view>(player,com_msgs[subcmd][1],argument);
 }
 
 

@@ -190,8 +190,14 @@ namespace mods::doors  {
 		if(!d_opt){
 			return false;
 		}
-		return ((d_opt->exit_info & (EIM_ISDOOR | EIM_CLOSED)) == EIM_ISDOOR) || 
-			((d_opt->exit_info & (EIM_ISDOOR | EIM_CLOSED | EIM_BREACHED)) == (EIM_ISDOOR | EIM_BREACHED));
+		bool is_door = d_opt->exit_info & EX_ISDOOR;
+		bool is_closed = d_opt->exit_info & EX_CLOSED;
+		bool is_breached = d_opt->exit_info & EX_BREACHED;
+		bool is_reinforced = d_opt->exit_info & EX_REINFORCED;
+		return !is_door ||
+			(is_door && !is_closed) ||
+			(is_door && is_breached) ||
+			(is_door && is_reinforced && !is_breached);
 	}
 
 	static inline bool is_dir_electrified(const room_rnum room, int direction){

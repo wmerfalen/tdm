@@ -5,14 +5,22 @@
 #include "../damage-event.hpp"
 #include "../scan.hpp"
 #include "../rooms.hpp"
+#include "helpers.hpp"
 
 #define __MENTOC_MODS_MOBS_MINI_GUNNER_SHOW_DEBUG_OUTPUT__
-#ifdef __MENTOC_MODS_MOBS_MINI_GUNNER_SHOW_DEBUG_OUTPUT__
+#ifdef  __MENTOC_MODS_MOBS_MINI_GUNNER_SHOW_DEBUG_OUTPUT__
 #define mini_debug(a) mentoc_prefix_debug("mods::mobs::mini_gunner") << a << "\n";
 #else
 #define mini_debug(a) ;;
 #endif
 namespace mods::mobs {
+	/**
+	 * @brief find the room with the most enemies, and go towards that direction
+	 *
+	 * @param mob
+	 *
+	 * @return 
+	 */
 	int weighted_direction_decider(player_ptr_t& mob){
 		int depth = MINI_GUNNER_SCAN_DEPTH();
 		mods::scan::vec_player_data vpd;
@@ -38,12 +46,21 @@ namespace mods::mobs {
 		/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
 		if(should_fire == -1){
 			/** FIXME */
-			std::cerr << "[stub] should_fire is -1, choose random direction\n";
+			mini_debug("[stub] should_fire is -1, choose random direction");
 		}
 		return should_fire;
 	}
+	/**
+	 * @brief all mini gunner instances in the game
+	 */
 	std::map<uuid_t,std::shared_ptr<mini_gunner>> mg_map;
 	
+	/**
+	 * @brief factory function for mg's
+	 *
+	 * @param mob_uuid
+	 * @param variation
+	 */
 	void mini_gunner::create(uuid_t mob_uuid,std::string variation){
 		mini_debug("mini_gunner create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
@@ -53,45 +70,64 @@ namespace mods::mobs {
 		}
 		mg_map.insert({mob_uuid,std::make_shared<mini_gunner>(mob_uuid,variation)});
 	}
+	/**
+	 * @brief set variation of mg. 
+	 *
+	 * @param v valid types: "sentinel"
+	 */
 	void mini_gunner::set_variation(std::string v){
 		this->variation = v;
 		if(v.compare("sentinel") == 0){
-			auto row = db_get_by_meta("mini_gunner_sentinel","mgs_mob_vnum",std::to_string(this->player_ptr->cd()->nr));
+			auto row = db_get_by_meta("mini_gunner_sentinel","mgs_mob_vnum",std::to_string(this->cd()->nr));
 			if(row.size() == 0){
-				std::cerr << "[mini_gunner][set_variation]-> cannot load data from postgres...\n";
+				mini_debug("[mini_gunner][set_variation]-> cannot load data from postgres...");
 				return;
 			}
 #define MG_REPORT(A)\
-	std::cerr << "[[[[ MINI GUNNER SENTINEL DUMP ]]]]\n";\
-	std::cerr << #A << ": '" << row[0][#A].c_str() << "'\n";\
-	std::cerr << "[[[[ -- MINI GUNNER SENTINEL DUMP -- ]]]]\n";
+	mini_debug("[[[[ MINI GUNNER SENTINEL DUMP ]]]]" << \
+	#A << ": '" << row[0][#A].c_str() << "'" << \
+	"[[[[ -- MINI GUNNER SENTINEL DUMP -- ]]]]");
 
-			std::cerr << "[status][mini_gunner][setting variation data]->\n";
+			mini_debug("[status][mini_gunner][setting variation data]->");
 			MG_REPORT(mgs_face_direction);
 			MG_REPORT(mgs_room_vnum);
 			MG_REPORT(mgs_mob_vnum);
 #undef MG_REPORT
 
 			this->set_heading(mods::globals::dir_int(row[0]["mgs_face_direction"].c_str()[0]));
-			char_to_room(this->player_ptr->cd(),real_room(row[0]["mgs_room_vnum"].as<int>()));
+			char_to_room(this->cd(),real_room(row[0]["mgs_room_vnum"].as<int>()));
 		}
 	}
+	/**
+	 * @brief erase the mg instance from our list of mgs
+	 *
+	 * @param uuid
+	 */
 	void mini_gunner::free_mob(uuid_t uuid){
 		mg_map.erase(uuid);
 	}
+	/**
+	 * @brief wear a piece of eq
+	 *
+	 * @param where
+	 * @param yaml
+	 */
 	void mini_gunner::wear(int where,std::string_view yaml){
-		std::cerr << "mini_gunner wearing: [where:" << where << "]->'" << yaml.data() << "'\n";
+		mini_debug("mini_gunner wearing: [where:" << where << "]->'" << yaml.data() << "'");
 		std::tuple<int,std::string> yaml_tuple = mods::util::extract_yaml_info_from_path(yaml);
 		if(std::get<0>(yaml_tuple) < 0){
 			return;
 		}
 		if(!mods::util::yaml_file_exists(yaml.data())){
-			std::cerr << "[mini_gunner] WARNING: yaml file doesn't exist!->'" << yaml.data() << "'\n";
+			mini_debug("[mini_gunner] WARNING: yaml file doesn't exist!->'" << yaml.data() << "'");
 			return;
 		}
 		auto obj = create_object(std::get<0>(yaml_tuple),std::get<1>(yaml_tuple));
 		this->player_ptr->equip(obj,where);
 	}
+	/**
+	 * @brief damage_events registered here
+	 */
 	void mini_gunner::setup_damage_callbacks(){
 		using de = damage_event_t;
 		this->player_ptr->register_damage_event_callback(de::YOURE_IN_PEACEFUL_ROOM,[&](feedback_t feedback,uuid_t player){
@@ -106,12 +142,18 @@ namespace mods::mobs {
 					}
 				}
 				assert(decision != -1);
-				this->player_ptr->cd()->mob_specials.previous_room = this->player_ptr->room();
-				char_from_room(this->player_ptr->cd());
-				char_to_room(this->player_ptr->cd(),world[this->player_ptr->room()].dir_option[decision]->to_room);
+				this->cd()->mob_specials.previous_room = this->player_ptr->room();
+				char_from_room(this->cd());
+				char_to_room(this->cd(),world[this->room()].dir_option[decision]->to_room);
 				this->set_heading(decision);
 		});
 	}
+	/**
+	 * @brief preferred constructor method
+	 *
+	 * @param mob_uuid
+	 * @param variation
+	 */
 	mini_gunner::mini_gunner(uuid_t mob_uuid, std::string variation){
 		this->init();
 		this->uuid = mob_uuid;
@@ -135,6 +177,9 @@ namespace mods::mobs {
 	mini_gunner::~mini_gunner(){
 		this->uuid = 0;
 	}
+	/**
+	 * @brief initialize
+	 */
 	void mini_gunner::init(){
 		this->uuid = 0;
 		this->loaded = false;
@@ -143,30 +188,130 @@ namespace mods::mobs {
 		this->heading = NORTH;
 		this->spray_direction = NORTH;
 	};
+	/**
+	 * @brief set heading
+	 *
+	 * @param dir
+	 */
 	void mini_gunner::set_heading(int dir){
-		this->heading = this->player_ptr->cd()->mob_specials.heading = dir;
+		this->heading = this->cd()->mob_specials.heading = dir;
 	}
+	/**
+	 * @brief spray direction
+	 *
+	 * @param dir
+	 *
+	 * @return 
+	 */
 	feedback_t& mini_gunner::spray(int dir){
 		mini_debug("SPRAYING: " << dirstr(dir));
 		this->spray_direction = dir;
 		this->last_attack = mods::weapons::damage_types::spray_direction_with_feedback(this->player_ptr,dir);
-		this->weapon_heat += 20;
+		this->weapon_heat += 20; /** TODO: */
 		return this->last_attack;
 	}
-	void mini_gunner::shout(std::string msg){
-		std::cerr << "[stub]shout:'" << msg.data() << "'\n";
+	/**
+	 * @brief yell. stub
+	 *
+	 * @param msg
+	 */
+	void mini_gunner::shout(std::string_view msg){
+		mini_debug("[stub]shout:'" << msg.data() << "'");
 	}
+	/**
+	 * @brief set behaviour tree
+	 *
+	 * @param name
+	 */
 	void mini_gunner::set_behaviour_tree(std::string_view name){
-		this->player_ptr->cd()->mob_specials.set_behaviour_tree(name);
+		this->cd()->mob_specials.set_behaviour_tree(name);
 	}
+	/**
+	 * @brief callback when someone spotted
+	 *
+	 * @param room
+	 * @param player
+	 */
 	void mini_gunner::enemy_spotted(room_rnum room,uuid_t player){
-		std::cerr << "##################################################################################\n";
-		std::cerr << "##################################################################################\n";
-		std::cerr << "##################################################################################\n";
-		std::cerr << "[mini_gunner] enemy spotted:" << room << "\n";
-		std::cerr << "##################################################################################\n";
-		std::cerr << "##################################################################################\n";
-		std::cerr << "##################################################################################\n";
+		mini_debug("##################################################################################" <<
+		"[mini_gunner] enemy spotted:" << room << "\n" <<
+		"##################################################################################");
 		this->spray(this->player_ptr->get_watching());
+		this->last_seen[player] = CURRENT_TICK();
+	}
+	/**
+	 * @brief set hunting uuid_t list
+	 *
+	 * @param hunting
+	 */
+	void mini_gunner::set_hunting(const uuidvec_t& hunting){
+		this->hunting = hunting;
+	}
+	/**
+	 * @brief get hunting uuid's
+	 *
+	 * @return 
+	 */
+	uuidvec_t& mini_gunner::get_hunting(){
+		return this->hunting;
+	}
+	/**
+	 * @brief get last seen
+	 *
+	 * @param player
+	 *
+	 * @return 
+	 */
+	tick_t mini_gunner::get_last_seen(uuid_t player){
+		return this->last_seen[player];
+	}
+	/**
+	 * @brief get the last tiem in ticks when we saw that player
+	 *
+	 * @param player
+	 *
+	 * @return 
+	 */
+	tick_t mini_gunner::get_last_seen_diff(uuid_t player){
+		auto t = this->last_seen[player];
+		return t - CURRENT_TICK();
+	}
+	/**
+	 * @brief same as mob forget
+	 *
+	 * @param player
+	 */
+	void mini_gunner::forget(uuid_t player){
+		this->last_seen.erase(player);
+		mods::util::vector_erase(this->hunting,player);
+	}
+	/**
+	 * @brief char data ptr
+	 *
+	 * @return 
+	 */
+	char_data* mini_gunner::cd(){
+		return this->player_ptr->cd();
+	}
+	/**
+	 * @brief which room
+	 *
+	 * @return 
+	 */
+	room_rnum mini_gunner::room(){
+		return IN_ROOM(this->cd());
+	}
+	void mini_gunner::watch_directions(vec_t<uint8_t> directions){
+		mods::mobs::helpers::watch_multiple(directions,this->cd(),MINI_GUNNER_SCAN_DEPTH());
+	}
+	/**
+	 * @brief watch acertain dir
+	 *
+	 * @param direction
+	 */
+	void mini_gunner::watch(uint8_t direction){
+		this->watching = direction;
+		mini_debug("[mini_gunner] watching:" << dirstr(direction) << "uuid:" << this->uuid);
+		mods::mobs::helpers::watch(direction,this->cd(),MINI_GUNNER_SCAN_DEPTH());
 	}
 };

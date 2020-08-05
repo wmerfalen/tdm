@@ -8,21 +8,7 @@ namespace mods::weapons::shotgun {
 		return sasg12::feed_by_file("sasg12.yml");
 	}
 	obj_data_ptr_t sasg12::feed_by_file(std::string_view file){
-		auto obj = mods::weapon::base_rifle_object();
-		obj->rifle(file.data());
-		obj->obj_flags.ammo = obj->rifle()->attributes->ammo_max;
-		obj->obj_flags.ammo_max = obj->rifle()->attributes->ammo_max;
-		obj->obj_flags.weapon_flags = mw_rifle::SHOTGUN;
-		obj->obj_flags.clip_size =obj->rifle()->attributes->clip_size;
-		obj->rifle()->type = mw_rifle::SHOTGUN;
-		obj->name.assign(obj->rifle()->attributes->name);
-		obj->description.assign("A debilitating SASG12 shotgun is lying here.");
-		obj->short_description.assign("SASG12 shotgun <short>");
-		obj->action_description.assign("SASG12");      /* What to write when used          */
-		obj->ex_description.emplace_back("SASG12 shotgun",obj->description.c_str());
-		mods::weapon::feed_caps(obj, (mw_rifle) obj->rifle()->type);
-		obj->extended_item_vnum = obj->rifle()->attributes->vnum;
-		return std::move(obj);
+		return std::move(create_object(ITEM_RIFLE,file.data()));
 	}
 
 	void sasg12::feed(const mods::pq::row_type & row){
@@ -36,5 +22,6 @@ namespace mods::weapons::shotgun {
 	sasg12::sasg12(){
 		bound_to = 0;
 		id = 0;
+		obj = this->make();
 	}
 };

@@ -3,8 +3,10 @@
 
 #include "../../globals.hpp"
 #include "../damage-event.hpp"
+#include "../npc.hpp"
 
 namespace mods::mobs {
+	using tick_t = uint64_t;
 	struct mini_gunner {
 		static void create(uuid_t uuid, std::string);
 		static void free_mob(uuid_t uuid);
@@ -20,11 +22,23 @@ namespace mods::mobs {
 		void setup_damage_callbacks();
 		int get_weapon_heat() const { return weapon_heat; }
 		void set_behaviour_tree(std::string_view name);
-		void shout(std::string);
+		void shout(std::string_view);
 		void set_variation(std::string);
 		void enemy_spotted(room_rnum room,uuid_t player);
 		str_map_t report();
+		void set_hunting(const uuidvec_t&);
+		uuidvec_t& get_hunting();
+		tick_t get_last_seen(uuid_t player);
+		tick_t get_last_seen_diff(uuid_t player);
+		void forget(uuid_t);
+		void watch(uint8_t direction);
+		void watch_directions(vec_t<uint8_t> direction);
+		room_rnum room();
+		char_data* cd();
 		private:
+		uint8_t watching;
+		std::map<uuid_t,uint64_t> last_seen;
+		uuidvec_t hunting;
 		std::string variation;
 		int weapon_heat;
 		int heading;

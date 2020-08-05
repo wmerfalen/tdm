@@ -8,6 +8,7 @@
 #include "rand.hpp"
 #include "rooms.hpp"
 #include "mobs/room-watching.hpp"
+#include "mobs/mini-gunner-behaviour-tree.hpp"
 
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
@@ -87,6 +88,10 @@ namespace mods::behaviour_tree_impl {
 		node mini_gunner_roam(node_type::SELECTOR);
 		node mini_gunner_engage(node_type::SELECTOR);
 		node mini_gunner_aggressive_roam(node_type::SELECTOR);
+		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_roam<node,argument_type,status>(mini_gunner_roam);
+		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_engage<node,argument_type,status>(mini_gunner_engage);
+		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_aggressive_roam<node,argument_type,status>(mini_gunner_aggressive_roam);
+
 		auto node_mob_has_snipe_capability = node::create_leaf(
 				[](argument_type mob) -> status {
 					if(mob.has_weapon_capability(mods::weapon::mask::snipe)){
@@ -217,110 +222,6 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 			})/** End create_sequence */
 		);// end append_child
 
-		/**
-		 *
-		 * [ default roam ]
-		 * [1] roam
-		 * [2] look down hallway
-		 * [3] see target?
-		 * 	[y] -> engage -> [ engage target ]
-		 * 	[n] -> roam -> [1]
-		 *
-		 * [ aggressive scan ]
-		 * [1] 
-		 *
-		 * [ engage target ]
-		 * [0] save uuid of player
-		 * [1] aim (consume N ticks)
-		 * [2] spray at target
-		 * 	[2.1] deal damage to target
-		 * 	[2.2] continue spray
-		 * 		[2.2.1] roll chance of post-shot hit?
-		 * 			[2.2.1.1] deal damage
-		 * 	[2.3] cooldown
-		 * [3] can still see target?
-		 * 	[y] -> [1]
-		 * 	[n] -> [ aggressive scan ]
-		 * 
-		 * 
-		 */
-		auto scan_for_targets_and_engage = node::create_leaf([](argument_type mob) -> status {
-			/** TODO calculate depth with default mods::values + buffs */
-			int depth = MINI_GUNNER_SCAN_DEPTH();
-			vec_player_data vpd; mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
-			if(vpd.size() == 0){
-				return status::FAILURE;
-			}
-			std::map<int,int> scores;
-			for(auto v : vpd){
-				if(!ptr_by_uuid(v.uuid)){
-					continue;
-				}
-				if(mods::rooms::is_peaceful(v.room_rnum)){
-					continue;
-				}
-				++scores[v.direction];
-			}
-			int should_fire = -1;
-			int max = 0;
-			for(auto pair : scores){
-				if(pair.second > max){
-					max = pair.second;
-					should_fire = pair.first;
-				}
-			}
-			if(should_fire != -1){
-				auto mg = mini_gunner_ptr(mob.uuid());
-				mg->set_heading(should_fire);
-				mg->spray(should_fire);
-				if(mob.get_watching() != should_fire){
-					std::cerr << "[mini_gunner] watching:" << dirstr(should_fire) << "uuid:" << mob.uuid() << " room:" << mob.room() << "\n";
-					mods::mobs::room_watching::stop_watching(mob.uuid());
-					mods::mobs::room_watching::watch_direction(mob.uuid(),mob.room(),should_fire,depth);
-				}
-				return status::SUCCESS;
-			}
-			return status::FAILURE;
-		});
-		auto spray_heading = node::create_leaf([](argument_type mob) -> status {
-			auto mg = mini_gunner_ptr(mob.uuid());
-			mg->spray(mg->get_heading());
-			return status::SUCCESS;
-		});
-		auto random_action = node::create_leaf([](argument_type mob) -> status {
-			auto mg = mini_gunner_ptr(mob.uuid());
-			mg->shout(random_key_string(MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS()));
-			return status::SUCCESS;
-		});
-		auto walk_heading = node::create_leaf([](argument_type mob) -> status {
-			auto mg = mini_gunner_ptr(mob.uuid());
-			int dir = mob.cd()->mob_specials.heading;
-			if(CAN_GO(mob.cd(),dir)){
-				mob.cd()->mob_specials.previous_room = IN_ROOM(mob.cd());
-				char_from_room(mob.cd());
-				char_to_room(mob.cd(),world[IN_ROOM(mob.cd())].dir_option[dir]->to_room);
-				return status::SUCCESS;
-			}
-			return status::FAILURE;
-		});
-		mini_gunner_roam.append_child(node::create_sequence({
-			scan_for_targets_and_engage
-		}));
-		mini_gunner_engage.append_child(node::create_sequence({
-				spray_heading,
-				walk_heading,
-				random_action
-			})
-		);
-		mini_gunner_aggressive_roam.append_child(node::create_selector({
-				node::create_leaf([](argument_type mob) -> status {
-					return status::SUCCESS;
-				}),
-				node::create_leaf([](argument_type mob) -> status {
-					return status::SUCCESS;
-				})
-			})
-		);
 		add_tree("do_nothing",do_nothing);
 		add_tree("snipe_tracking",snipe_tracking);
 		add_tree("sentinel_snipe_tracking",sentinel_snipe_tracking);
