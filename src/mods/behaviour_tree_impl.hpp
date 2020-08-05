@@ -13,8 +13,7 @@
 #include "util.hpp"
 #endif
 
-namespace mods {
-	namespace behaviour_tree_impl { 
+namespace mods::behaviour_tree_impl { 
 #ifdef __MENTOC_NO_DEPS__
 		template <typename T> 
 		using argument_type = T;
@@ -60,7 +59,6 @@ namespace mods {
 				mob.mob_specials().behaviour_tree == type;
 		}
 #endif
-	};
 };
 
 

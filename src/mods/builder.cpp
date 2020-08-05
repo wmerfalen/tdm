@@ -22,7 +22,6 @@
 #include <algorithm> // for std::min
 #include "mobs/extended-types.hpp"
 #include "mobs/mini-gunner.hpp"
-#include "builder/rectangle-layouts.hpp"
 #include <list>
 #include <memory>
 namespace mods {  struct player; };
@@ -4631,7 +4630,6 @@ ACMD(do_rbuild) {
 			"  |--> lists all the currently paved transaction id numbers\r\n" <<
 			"[documentation written on 2018-01-19]\r\n" <<
 			"\r\n";
-		mods::builder::rectangle_layouts::send_rbuild_help(player);
 		player->pager_end();
 		player->page(0);
 		return;
@@ -4648,9 +4646,6 @@ ACMD(do_rbuild) {
 		return;
 	}
 
-	if(mods::builder::rectangle_layouts::handled_rbuild_command(player,argument)){
-		return;
-	}
 	auto args = mods::util::subcmd_args<11,args_t>(argument,"set-recall");
 	if(args.has_value() && args.value().size() > 1 && args.value()[0].compare("set-recall") == 0){
 		auto arg_vec = args.value();

@@ -270,6 +270,7 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 				})
 			})
 		);
+	}
 };
 
 #undef m_debug
