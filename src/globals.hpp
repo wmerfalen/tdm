@@ -96,6 +96,13 @@ using mstr_t = mods::string;
 using size_t = std::size_t;
 using str_list_t = std::list<std::string>;
 using str_vec_t = std::vector<std::string>;
+using strvec_t = std::vector<std::string>;
+using svvec_t = std::vector<std::string_view>;
+using ivec_t = std::vector<int>;
+using u64vec_t = std::vector<uint64_t>;
+using uuidvec_t = std::vector<uuid_t>;
+template <typename T>
+using vec_t = std::vector<T>;
 namespace mods {
 	namespace lmdb { 
 		struct _db_handle;
@@ -257,4 +264,5 @@ std::vector<str_t> map_keys(str_map_t & m);
 #define invec(A,B) (std::find(B.begin(),B.end(),A)!=B.end())
 str_vec_t EXPLODE(str_t& value,char delimiter);
 str_vec_t EXPLODE(str_t value,char delimiter);
+static inline uint64_t CURRENT_TICK(){ return mods::globals::current_tick; }
 #endif

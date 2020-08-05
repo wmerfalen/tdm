@@ -23,13 +23,31 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	using namespace helpers;
 	using vec_player_data = mods::scan::vec_player_data;
 
+	/**
+	 * @brief check ammo
+	 *
+	 * @tparam TNode
+	 * @tparam TArgumentType
+	 * @tparam TStatus
+	 *
+	 * @return 
+	 */
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto check_ammo(){
 		return TNode::create_leaf([](TArgumentType mob) -> TStatus {
 			auto mg = mini_gunner_ptr(mob.uuid());
-			//do look in rifle
+			/** TODO: do look in rifle */
 		});
 	}
+	/**
+	 * @brief randomly yell something
+	 *
+	 * @tparam TNode
+	 * @tparam TArgumentType
+	 * @tparam TStatus
+	 *
+	 * @return 
+	 */
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto shout_random(){
 		return TNode::create_leaf([](TArgumentType mob) -> TStatus {
@@ -37,6 +55,15 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 			mg->shout(random_key_string(MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS()));
 		});
 	}
+	/**
+	 * @brief set behaviour tree
+	 *
+	 * @tparam TNode
+	 * @tparam TArgumentType
+	 * @tparam TStatus
+	 *
+	 * @return 
+	 */
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto set_behaviour_tree_to_engage(){
 		return TNode::create_leaf([](TArgumentType mob) -> TStatus {
@@ -45,6 +72,15 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 			return TStatus::SUCCESS;
 		});
 	}
+	/**
+	 * @brief spray dir
+	 *
+	 * @tparam TNode
+	 * @tparam TArgumentType
+	 * @tparam TStatus
+	 *
+	 * @return 
+	 */
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto spray_direction(){
 		return TNode::create_leaf([](TArgumentType mob) -> TStatus {
@@ -53,6 +89,15 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 			return TStatus::SUCCESS;
 		});
 	}
+	/**
+	 * @brief returns success if mg can still see a target
+	 *
+	 * @tparam TNode
+	 * @tparam TArgumentType
+	 * @tparam TStatus
+	 *
+	 * @return 
+	 */
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto can_still_see_target(){
 		return TNode::create_leaf([](TArgumentType mob) -> TStatus {

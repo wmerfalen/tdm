@@ -67,7 +67,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/object-utils mods/camera mods/orm/shop shop mods/shop mods/rand \
 					 mods/help mods/rooms mods/weapons/damage-types mods/injure mods/skills \
 					 mods/mobs/mini-gunner mods/mobs/extended-types mods/values \
-					 mods/mobs/room-watching mods/builder/rectangle-layouts
+					 mods/mobs/room-watching mods/mobs/mini-gunner-behaviour-tree
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
@@ -77,9 +77,7 @@ clean:
 	make -f $(lmdbdir)/Makefile clean ; \
 		rm -f $(addprefix $(builddir)/,*.o *.d  mods/*.o \
 		mods/*.d mods/orm/*.o mods/orm/*.d \
-		mods/classes/*.o mods/classes/*.d \
-		mods/builder/*.o mods/builder/*.d \
-		mods/mobs/*.o mods/mobs/*.d mods/builder/*.d) \
+		mods/classes/*.o mods/classes/*.d mods/mobs/*.o mods/mobs/*.d) \
 		rm -f $(builddir)/mods/testing/lmdb/*.o \
 		rm -f $(builddir)/mods/testing/lmdb/*.d 
 

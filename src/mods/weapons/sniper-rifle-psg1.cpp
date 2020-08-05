@@ -24,6 +24,6 @@ namespace mods::weapons::sniper_rifle {
 	psg1::psg1(){
 		bound_to = 0;
 		id = 0;
-		m_obj = psg1::make();
+		m_obj = this->make();
 	}
 };

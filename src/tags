@@ -756,9 +756,12 @@ CRYO	mods/flags.hpp	/^		CRYO,$/;"	e	enum:mods::flags::plr
 CRYO_FACTOR	objsave.cpp	26;"	d	file:
 CRYPT	utils.h	547;"	d
 CRYPT	utils.h	549;"	d
+CURRENT_TICK	globals.hpp	/^static inline uint64_t CURRENT_TICK(){ return mods::globals::current_tick; }$/;"	f
 CURSE	mods/flags.hpp	/^		CURSE,					\/\/ useless$/;"	e	enum:mods::flags::aff
 CYCLONE_RECON	mods/object.hpp	/^				CYCLONE_RECON,$/;"	e	enum:mods::object::object_type_enum_t
 C_CMP	screen.h	25;"	d
+C_NRM	mods/chat.hpp	33;"	d
+C_NRM	mods/chat.hpp	74;"	d
 C_NRM	screen.h	24;"	d
 C_OFF	screen.h	22;"	d
 C_SPR	screen.h	23;"	d
@@ -1241,7 +1244,7 @@ House_save	house.cpp	/^int House_save(struct obj_data *obj, FILE *fp) {$/;"	f
 House_save_all	house.cpp	/^void House_save_all(void) {$/;"	f
 House_save_control	house.cpp	/^void House_save_control(void) {$/;"	f
 IAC	telnet.h	42;"	d
-ICMP	globals.hpp	242;"	d
+ICMP	globals.hpp	249;"	d
 IContext	mods/catch.hpp	/^	struct IContext {$/;"	s	namespace:Catch
 IDEA_FILE	db.h	88;"	d
 IDXTYPE	structs.h	131;"	d
@@ -1466,6 +1469,8 @@ KILLSCRIPT_FILE	db.h	61;"	d
 KINDLING	structs.h	/^			KINDLING = 1,$/;"	e	enum:uint8_t
 KMAG	screen.h	16;"	d
 KNIFE	mods/object.hpp	/^				KNIFE,$/;"	e	enum:mods::object::object_type_enum_t
+KNRM	mods/chat.hpp	32;"	d
+KNRM	mods/chat.hpp	73;"	d
 KNRM	screen.h	11;"	d
 KNUL	screen.h	19;"	d
 KRED	screen.h	12;"	d
@@ -1685,7 +1690,7 @@ MENTOC_ATTACHMENT_MEMBERS_TUPLE	mods/item-types.hpp	207;"	d
 MENTOC_ATTACHMENT_TYPES_SEQUENCE	mods/item-types.hpp	194;"	d
 MENTOC_BASE_MEMBERS	mods/yaml.hpp	50;"	d
 MENTOC_BASE_MEMBERS_SET	mods/yaml.hpp	63;"	d
-MENTOC_BITVECTOR	mods/builder.cpp	3600;"	d	file:
+MENTOC_BITVECTOR	mods/builder.cpp	3601;"	d	file:
 MENTOC_CONSUMABLE_MEMBERS_TUPLE	mods/item-types.hpp	261;"	d
 MENTOC_CONSUMABLE_TYPES_SEQUENCE	mods/item-types.hpp	252;"	d
 MENTOC_DATA_CLASS	mods/weapon-types.hpp	135;"	d
@@ -1736,6 +1741,8 @@ MENTOC_F_IMPORT	mods/object-utils.hpp	306;"	d
 MENTOC_GADGET_MEMBERS_TUPLE	mods/item-types.hpp	183;"	d
 MENTOC_GADGET_TYPES_SEQUENCE	mods/item-types.hpp	173;"	d
 MENTOC_GENERIC_WEARS_IMPL	mods/item-types.hpp	337;"	d
+MENTOC_HACK_USED	mods/chat.hpp	31;"	d
+MENTOC_HACK_USED	mods/chat.hpp	72;"	d
 MENTOC_ITEM_PARSE	mods/util.cpp	497;"	d	file:
 MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	493;"	d	file:
 MENTOC_ITEM_TYPES_BY_CAPS_SEQ	mods/item-types.hpp	32;"	d
@@ -1745,12 +1752,12 @@ MENTOC_ITEM_TYPES_SEQ_CAPS	mods/item-types.hpp	78;"	d
 MENTOC_ITEM_TYPE_LIST_SEQUENCE	mods/item-types.hpp	316;"	d
 MENTOC_LAZY	mods/rooms.hpp	110;"	d
 MENTOC_LAZY	mods/rooms.hpp	92;"	d
-MENTOC_LAZY_COMP	mods/doors.hpp	241;"	d
-MENTOC_LAZY_COMP	mods/doors.hpp	252;"	d
-MENTOC_LAZY_INT	mods/builder.cpp	1591;"	d	file:
-MENTOC_LAZY_INT	mods/builder.cpp	1610;"	d	file:
-MENTOC_LAZY_ME	mods/builder.cpp	3020;"	d	file:
-MENTOC_LAZY_ME	mods/builder.cpp	3029;"	d	file:
+MENTOC_LAZY_COMP	mods/doors.hpp	247;"	d
+MENTOC_LAZY_COMP	mods/doors.hpp	258;"	d
+MENTOC_LAZY_INT	mods/builder.cpp	1592;"	d	file:
+MENTOC_LAZY_INT	mods/builder.cpp	1611;"	d	file:
+MENTOC_LAZY_ME	mods/builder.cpp	3021;"	d	file:
+MENTOC_LAZY_ME	mods/builder.cpp	3030;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	415;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	424;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	431;"	d	file:
@@ -1763,36 +1770,36 @@ MENTOC_LAZY_POS	act.debug.cpp	224;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	238;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	248;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	262;"	d	file:
-MENTOC_LAZY_SHOP	mods/builder.cpp	1675;"	d	file:
-MENTOC_LAZY_SHOP	mods/builder.cpp	1700;"	d	file:
-MENTOC_LAZY_STR	mods/builder.cpp	1575;"	d	file:
-MENTOC_LAZY_STR	mods/builder.cpp	1590;"	d	file:
+MENTOC_LAZY_SHOP	mods/builder.cpp	1676;"	d	file:
+MENTOC_LAZY_SHOP	mods/builder.cpp	1701;"	d	file:
+MENTOC_LAZY_STR	mods/builder.cpp	1576;"	d	file:
+MENTOC_LAZY_STR	mods/builder.cpp	1591;"	d	file:
 MENTOC_MEMBER_VARS_EXAMPLE_FOR	mods/item-types.hpp	403;"	d
 MENTOC_MEMBER_VARS_EXAMPLE_IMPL	mods/item-types.hpp	394;"	d
 MENTOC_MEMBER_VARS_FOR	mods/item-types.hpp	406;"	d
 MENTOC_MEMBER_VARS_IMPL	mods/item-types.hpp	409;"	d
 MENTOC_MOB_WEARS	mods/item-types.hpp	339;"	d
-MENTOC_MS_COMP	mods/doors.hpp	224;"	d
-MENTOC_MS_COMP	mods/doors.hpp	238;"	d
+MENTOC_MS_COMP	mods/doors.hpp	230;"	d
+MENTOC_MS_COMP	mods/doors.hpp	244;"	d
 MENTOC_NPC_CHECK	mods/player.cpp	54;"	d	file:
 MENTOC_NPC_CHECK_0	mods/player.cpp	55;"	d	file:
-MENTOC_OBI	mods/builder.cpp	29;"	d	file:
-MENTOC_OBI2	mods/builder.cpp	30;"	d	file:
+MENTOC_OBI	mods/builder.cpp	30;"	d	file:
+MENTOC_OBI2	mods/builder.cpp	31;"	d	file:
 MENTOC_OBJ_DATA_FEED_DUAL	structs.cpp	64;"	d	file:
 MENTOC_OBJ_DATA_FEED_SWITCH	mods/item-types.hpp	374;"	d
 MENTOC_OBJ_DATA_FEED_SWITCH_IMPL	mods/item-types.hpp	368;"	d
 MENTOC_OBJ_DATA_STAT_GEN	structs.cpp	74;"	d	file:
 MENTOC_OBJ_INITIALIZE_CONSTRUCTOR	structs.cpp	46;"	d	file:
-MENTOC_OBS	mods/builder.cpp	31;"	d	file:
-MENTOC_OBS2	mods/builder.cpp	32;"	d	file:
-MENTOC_PLAYER_NULL_CHECK	mods/builder.cpp	977;"	d	file:
+MENTOC_OBS	mods/builder.cpp	32;"	d	file:
+MENTOC_OBS2	mods/builder.cpp	33;"	d	file:
+MENTOC_PLAYER_NULL_CHECK	mods/builder.cpp	978;"	d	file:
 MENTOC_PREAMBLE	globals.hpp	36;"	d
 MENTOC_RIFLE_MEMBERS_TUPLE	mods/item-types.hpp	106;"	d
 MENTOC_RIFLE_TYPES_SEQUENCE	mods/item-types.hpp	97;"	d
-MENTOC_SHOW_FLAG	mods/builder.cpp	3636;"	d	file:
-MENTOC_SHOW_OBJ	mods/builder.cpp	2427;"	d	file:
-MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	2419;"	d	file:
-MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	2411;"	d	file:
+MENTOC_SHOW_FLAG	mods/builder.cpp	3637;"	d	file:
+MENTOC_SHOW_OBJ	mods/builder.cpp	2428;"	d	file:
+MENTOC_SHOW_OBJ_BITVECTOR	mods/builder.cpp	2420;"	d	file:
+MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	2412;"	d	file:
 MENTOC_T	mods/aoe.hpp	32;"	d
 MENTOC_T	mods/aoe.hpp	55;"	d
 MENTOC_T	mods/lmdb.hpp	68;"	d
@@ -1816,15 +1823,15 @@ MENTOC_TO_STR	mods/weapon.hpp	305;"	d
 MENTOC_TO_STR	mods/weapon.hpp	311;"	d
 MENTOC_TRAP_MEMBERS_TUPLE	mods/item-types.hpp	303;"	d
 MENTOC_TRAP_TYPES_SEQUENCE	mods/item-types.hpp	300;"	d
-MENTOC_TYPE	mods/builder.cpp	3574;"	d	file:
+MENTOC_TYPE	mods/builder.cpp	3575;"	d	file:
 MENTOC_TYPE_LIST_IMPL	mods/item-types.hpp	562;"	d
 MENTOC_UPTR	structs.h	1019;"	d
 MENTOC_UPTR	structs.h	1021;"	d
 MENTOC_USING_CT	mods/item-types.hpp	333;"	d
 MENTOC_USING_CT_IMPL	mods/item-types.hpp	330;"	d
-MENTOC_WEAPON	mods/builder.cpp	132;"	d	file:
-MENTOC_WEAPON	mods/builder.cpp	148;"	d	file:
-MENTOC_WEAR	mods/builder.cpp	3557;"	d	file:
+MENTOC_WEAPON	mods/builder.cpp	133;"	d	file:
+MENTOC_WEAPON	mods/builder.cpp	149;"	d	file:
+MENTOC_WEAR	mods/builder.cpp	3558;"	d	file:
 MENTOC_WEAR_PLACES_SEQ	mods/item-types.hpp	42;"	d
 MENTOC_YAML_DESC	mods/item-types.hpp	346;"	d
 MENTOC_YAML_DESC_IMPL	mods/item-types.hpp	345;"	d
@@ -2105,7 +2112,7 @@ PAGE_LENGTH	comm.h	80;"	d
 PAGE_SIZE	mods/player.hpp	/^		static constexpr int PAGE_SIZE = 40;$/;"	m	struct:mods::player
 PAGE_WIDTH	comm.h	81;"	d
 PARASITIC_HP_RECOVERY	mods/skills.hpp	/^			PARASITIC_HP_RECOVERY,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
-PARSE_ARGS	globals.hpp	241;"	d
+PARSE_ARGS	globals.hpp	248;"	d
 PASSES_PER_SEC	structs.h	653;"	d
 PATH_MAX	sysdep.h	352;"	d
 PAUSE_FILE	db.h	54;"	d
@@ -2820,7 +2827,11 @@ TO_NOTVICT	comm.h	66;"	d
 TO_OBJ_PTR	utils.h	553;"	d
 TO_ROOM	comm.h	64;"	d
 TO_SLEEP	comm.h	68;"	d
+TO_SLEEP	mods/chat.hpp	30;"	d
+TO_SLEEP	mods/chat.hpp	71;"	d
 TO_VICT	comm.h	65;"	d
+TO_VICT	mods/chat.hpp	29;"	d
+TO_VICT	mods/chat.hpp	70;"	d
 TRACER_AMMUNITION	mods/weapon.hpp	/^		TRACER_AMMUNITION,$/;"	e	enum:mods::weapon::magazine_t
 TRACKER	mods/skills.hpp	/^			TRACKER,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 TRADE_NOCLERIC	shop.h	111;"	d
@@ -3497,8 +3508,8 @@ boot_world	db.cpp	/^void boot_world(void) {$/;"	f
 bootup_test_suite	globals.cpp	/^		std::string bootup_test_suite;$/;"	m	namespace:mods::globals	file:
 bot	db.h	/^	uint64_t bot;           \/* starting room number for this zone *\/$/;"	m	struct:zone_data
 breached	mods/doors.hpp	/^	static inline void breached(const room_rnum room,int direction){$/;"	f	namespace:mods::doors
-bti_debug	mods/behaviour_tree_impl.cpp	16;"	d	file:
-bti_debug	mods/behaviour_tree_impl.cpp	18;"	d	file:
+bti_debug	mods/behaviour_tree_impl.cpp	17;"	d	file:
+bti_debug	mods/behaviour_tree_impl.cpp	19;"	d	file:
 buf_largecount	comm.cpp	/^int buf_largecount = 0;		\/* # of large buffers which exist *\/$/;"	v
 buf_overflows	comm.cpp	/^int buf_overflows = 0;		\/* # of overflows of output *\/$/;"	v
 buf_switches	comm.cpp	/^int buf_switches = 0;		\/* # of switches from small to large buf *\/$/;"	v
@@ -3683,6 +3694,7 @@ command_t	mods/builder.cpp	/^struct command_t {$/;"	s	file:
 commit	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::commit(){$/;"	f	class:mods::lmdb::_db_handle
 commit	mods/pq.cpp	/^	void commit(transaction& txn) {$/;"	f	namespace:mods::pq
 common_weaponry_skillset	class.cpp	/^std::string common_weaponry_skillset() {$/;"	f
+communicate	mods/chat.hpp	/^	void communicate(TPlayer obj,TActionString type,TActionString message){$/;"	f	namespace:mods::mods::chat
 compare	mods/catch.hpp	/^		bool compare(T1 const& lhs, T2 const& rhs) {$/;"	f	namespace:Catch::Internal
 compare	mods/catch.hpp	/^		template<Operator Op, typename T> bool compare(T* lhs, int rhs) {$/;"	f	namespace:Catch::Internal
 compare	mods/catch.hpp	/^		template<Operator Op, typename T> bool compare(T* lhs, long long rhs) {$/;"	f	namespace:Catch::Internal
@@ -5020,7 +5032,7 @@ into	mods/sql.hpp	/^			compositor<T>& into(str_object table) {$/;"	f	struct:mods
 invalid_align	handler.cpp	/^int invalid_align(char_data *ch, struct obj_data *obj) {$/;"	f
 invalid_class	class.cpp	/^int invalid_class(char_data *ch, struct obj_data *obj) {$/;"	f
 invalid_list	ban.cpp	/^char *invalid_list[MAX_INVALID_NAMES];$/;"	v
-invec	globals.hpp	257;"	d
+invec	globals.hpp	264;"	d
 inventory	mods/player.cpp	/^namespace mods::orm::inventory {$/;"	n	class:mods::orm	file:
 invoke	mods/catch.hpp	/^			virtual void invoke() const {$/;"	f	class:Catch::MethodTestCase
 irl	mods/date-time.cpp	/^	namespace irl {$/;"	n	namespace:mods::date_time	file:
@@ -6127,6 +6139,8 @@ r_success	mods/builder.cpp	/^void r_success(const player_ptr_t & player,std::str
 ram_db	globals.cpp	/^		std::unordered_map<std::string,std::string> ram_db;$/;"	m	namespace:mods::globals	file:
 rand	mods/rand.cpp	/^namespace mods::rand {$/;"	n	class:mods	file:
 rand	mods/rand.hpp	/^namespace mods::rand {$/;"	n	class:mods
+rand_debug	mods/rand.cpp	10;"	d	file:
+rand_debug	mods/rand.cpp	8;"	d	file:
 rand_number	mods/rand.cpp	/^int rand_number(int from, int to) {$/;"	f
 random_element	globals.cpp	/^			I random_element(I begin, I end) {$/;"	f	namespace:mods::globals
 random_key_string	mods/values.cpp	/^		std::string random_key_string(std::string value){$/;"	f	namespace:mods::values
