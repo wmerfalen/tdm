@@ -103,8 +103,8 @@ namespace mods::mobs {
 	 *
 	 * @param uuid
 	 */
-	void mini_gunner::free_mob(uuid_t uuid){
-		mg_map.erase(uuid);
+	void mini_gunner::free_mob(uuid_t u){
+		mg_map.erase(u);
 	}
 	/**
 	 * @brief wear a piece of eq
@@ -217,6 +217,7 @@ namespace mods::mobs {
 	 */
 	void mini_gunner::shout(std::string_view msg){
 		mini_debug("[stub]shout:'" << msg.data() << "'");
+		act(CAT({"$n shouts '",msg.data(),"'"}).c_str(), TRUE, this->cd(), 0, 0, TO_ROOM);
 	}
 	/**
 	 * @brief set behaviour tree
@@ -304,6 +305,15 @@ namespace mods::mobs {
 	void mini_gunner::watch_directions(vec_t<uint8_t> directions){
 		mods::mobs::helpers::watch_multiple(directions,this->cd(),MINI_GUNNER_SCAN_DEPTH());
 	}
+	void mini_gunner::watch_heading(){
+		this->watch(this->heading);
+	}
+	void mini_gunner::save_targets(vec_t<uuid_t>& t){
+		this->targeting = t;
+	}
+	void mini_gunner::watch_nothing(){
+		mods::mobs::helpers::clear_watching(this->uuid);
+	}
 	/**
 	 * @brief watch acertain dir
 	 *
@@ -313,5 +323,8 @@ namespace mods::mobs {
 		this->watching = direction;
 		mini_debug("[mini_gunner] watching:" << dirstr(direction) << "uuid:" << this->uuid);
 		mods::mobs::helpers::watch(direction,this->cd(),MINI_GUNNER_SCAN_DEPTH());
+	}
+	obj_ptr_t mini_gunner::primary(){
+		return this->player_ptr->primary();
 	}
 };

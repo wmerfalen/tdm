@@ -6,7 +6,7 @@
 #include "../doors.hpp"
 #include "../rand.hpp"
 
-#define __MENTOC_MODS_MOBS_HELPERS_SHOW_DEBUG_OUTPUT__
+//#define __MENTOC_MODS_MOBS_HELPERS_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_HELPERS_SHOW_DEBUG_OUTPUT__
 #define mmh_debug(a) mentoc_prefix_debug("mods::mobs::helpers") << a << "\n";
 #else
@@ -14,6 +14,10 @@
 #endif
 extern int perform_move(char_data *ch, int dir, int need_specials_check);
 namespace mods::mobs::helpers {
+	template <typename Tuuid>
+	static inline void clear_watching(Tuuid u){
+		mods::mobs::room_watching::stop_watching(u);
+	}
 	/**
 	 * @brief mob helper function to ease movement operations
 	 *

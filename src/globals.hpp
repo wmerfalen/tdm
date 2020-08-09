@@ -7,6 +7,8 @@
 #include <memory>
 #include <map>
 #include <set>
+#include "mods/colors.hpp"
+using namespace mods::colors;
 #include "mods/values.hpp"
 #include "types.hpp"
 #include "mods/acl/config-parser.hpp"
@@ -92,6 +94,7 @@ using obj_ptr_t = std::shared_ptr<obj_data>;
 using mob_ptr_t = std::shared_ptr<mods::npc>;
 using str_map_t = std::map<std::string,std::string>;
 using str_t = std::string;
+using strview_t = std::string_view;
 using mstr_t = mods::string;
 using size_t = std::size_t;
 using str_list_t = std::list<std::string>;
@@ -101,6 +104,12 @@ using svvec_t = std::vector<std::string_view>;
 using ivec_t = std::vector<int>;
 using u64vec_t = std::vector<uint64_t>;
 using uuidvec_t = std::vector<uuid_t>;
+#define cstr(a) std::string(a).c_str()
+#include <optional>
+template <typename T>
+using opt_t = std::optional<T>;
+using optcd_t = opt_t<char_data*>;
+using optobj_t = opt_t<obj_data*>;
 template <typename T>
 using vec_t = std::vector<T>;
 namespace mods {
@@ -251,6 +260,7 @@ namespace mods::skills {
 	extern bool player_can(player_ptr_t&,int);
 };
 static inline bool can(player_ptr_t& player,int skill){ return mods::skills::player_can(player,skill); }
+
 static inline std::string CAT(std::vector<std::string_view> m){
 	std::string f = "";
 	for(auto s : m){

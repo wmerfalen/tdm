@@ -10,6 +10,8 @@
 #include "../doors.hpp"
 #include "../rand.hpp"
 #include "helpers.hpp"
+#include "../weapon.hpp"
+#include "../affects.hpp"
 
 #define __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__
@@ -18,27 +20,26 @@
 #define m_debug(a)
 #endif
 
+extern void act(const std::string & str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
 
 namespace mods::mobs::mini_gunner_behaviour_tree {
+
+#define TSUCCESS TStatus::SUCCESS
+#define TFAILURE TStatus::FAILURE
 	using namespace helpers;
 	using vec_player_data = mods::scan::vec_player_data;
 
-	/**
-	 * @brief check ammo
-	 *
-	 * @tparam TNode
-	 * @tparam TArgumentType
-	 * @tparam TStatus
-	 *
-	 * @return 
-	 */
 	template <typename TNode,typename TArgumentType,typename TStatus>
-	auto check_ammo(){
-		return TNode::create_leaf([](TArgumentType mob) -> TStatus {
-			auto mg = mini_gunner_ptr(mob.uuid());
-			/** TODO: do look in rifle */
+	auto debug_echo_tree_name(str_t name){
+		return TNode::create_leaf([name](TArgumentType& mob) -> TStatus {
+#ifdef __MENTOC_SHOW_TREE_NAME__
+			std::cerr << "[debug_echo_tree_name][mob_uuid:" << mob.uuid() << "]" <<
+			green_str(CAT({"[tree:'",name,"']\n"}));
+#endif
+			return TSUCCESS;
 		});
 	}
+
 	/**
 	 * @brief randomly yell something
 	 *
@@ -50,9 +51,34 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	 */
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto shout_random(){
-		return TNode::create_leaf([](TArgumentType mob) -> TStatus {
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = mini_gunner_ptr(mob.uuid());
 			mg->shout(random_key_string(MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS()));
+			return TSUCCESS;
+		});
+	}
+	template <typename TNode,typename TArgumentType,typename TStatus>
+	auto random_trivial_action(){
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			auto mg = mini_gunner_ptr(mob.uuid());
+			static constexpr uint8_t RANDOM_THINGS = 3;
+			switch(dice(0,RANDOM_THINGS)){
+				case 0:
+					mg->shout(random_key_string(MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS()));
+					break;
+				case 1:
+					act("$n slams $s fist against $s chest!",FALSE,mob.cd(),0,0,TO_ROOM);
+					break;
+				case 2:
+					act("$n only seems to get angrier with every passing moment...",FALSE,mob.cd(),0,0,TO_ROOM);
+					break;
+				case 3:
+					act("$n scans the room.",0,mob.cd(),0,0,TO_ROOM);
+					break;
+				default:
+					break;
+			}
+			return TSUCCESS;
 		});
 	}
 	/**
@@ -66,10 +92,10 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	 */
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto set_behaviour_tree_to_engage(){
-		return TNode::create_leaf([](TArgumentType mob) -> TStatus {
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = mini_gunner_ptr(mob.uuid());
 			mg->set_behaviour_tree("mini_gunner_engage");
-			return TStatus::SUCCESS;
+			return TSUCCESS;
 		});
 	}
 	/**
@@ -83,10 +109,10 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	 */
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto spray_direction(){
-		return TNode::create_leaf([](TArgumentType mob) -> TStatus {
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = mini_gunner_ptr(mob.uuid());
 			mg->spray(mg->get_heading());
-			return TStatus::SUCCESS;
+			return TSUCCESS;
 		});
 	}
 	/**
@@ -100,9 +126,9 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	 */
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto can_still_see_target(){
-		return TNode::create_leaf([](TArgumentType mob) -> TStatus {
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = mini_gunner_ptr(mob.uuid());
-			return TStatus::SUCCESS;
+			return TSUCCESS;
 		});
 	}
 
@@ -117,7 +143,7 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	 */
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto find_targets(){
-		return TNode::create_leaf([](TArgumentType mob) -> TStatus {
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = mini_gunner_ptr(mob.uuid());
 			int depth = MINI_GUNNER_SCAN_DEPTH();
 			vec_player_data vpd; mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
@@ -147,11 +173,11 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 				 * in the previous line we are going in a random direction
 				 */
 				mg->watch_directions(world[mg->room()].directions());
-				return TStatus::FAILURE;
+				return TFAILURE;
 			}
 			mg->watch_directions(world[mg->room()].directions());
 			mg->set_heading(should_fire);
-			return TStatus::SUCCESS;
+			return TSUCCESS;
 		});
 	}
 	/**
@@ -166,6 +192,7 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	void make_mini_gunner_roam(TNode& tree){
 		tree.append_child(
 			TNode::create_sequence({
+				debug_echo_tree_name<TNode,TArgumentType,TStatus>("mini_gunner_roam"),
 				find_targets<TNode,TArgumentType,TStatus>(),
 				spray_direction<TNode,TArgumentType,TStatus>(),
 				set_behaviour_tree_to_engage<TNode,TArgumentType,TStatus>()
@@ -185,14 +212,64 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 		 */ 
 		tree.append_child(
 			TNode::create_sequence({
+				debug_echo_tree_name<TNode,TArgumentType,TStatus>("mini_gunner_engage"),
 				spray_direction<TNode,TArgumentType,TStatus>(),
 				find_targets<TNode,TArgumentType,TStatus>(),
 				TNode::create_sequence({
 					can_still_see_target<TNode,TArgumentType,TStatus>(),
-					spray_direction<TNode,TArgumentType,TStatus>(),
+					shout_random<TNode,TArgumentType,TStatus>(),
 				})
 			})
 		);
+	}
+	template <typename TNode,typename TArgumentType,typename TStatus>
+	auto scan_to_find_targets(){
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			auto mg = mini_gunner_ptr(mob.uuid());
+			int depth = MINI_GUNNER_SCAN_DEPTH();
+			vec_player_data vpd; mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
+			std::map<int,int> scores;
+			std::map<uint8_t,uuidvec_t> dir_players;
+			for(auto v : vpd){
+				if(!ptr_by_uuid(v.uuid)){
+					continue;
+				}
+				if(mods::rooms::is_peaceful(v.room_rnum)){
+					continue;
+				}
+				++scores[v.direction];
+				dir_players[v.direction].emplace_back(v.uuid);
+			}
+			int should_fire = -1;
+			int max = 0;
+			for(auto pair : scores){
+				if(pair.second > max){
+					max = pair.second;
+					should_fire = pair.first;
+				}
+			}
+			mg->set_heading(should_fire);
+			if(should_fire == -1){
+				return TFAILURE;
+			}
+			mg->save_targets(dir_players[should_fire]);
+			return TSUCCESS;
+		});
+	}
+
+	template <typename TNode,typename TArgumentType,typename TStatus>
+	auto watch_all_directions(){
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			auto mg = mini_gunner_ptr(mob.uuid());
+			/** if stunned */
+			auto ad = mg->player()->get_affect_dissolver();
+			if(ad.has_any({AFF(BLIND),AFF(DISORIENT)})){
+				mg->watch_nothing();
+				return TFAILURE;
+			}
+			mg->watch_heading();
+			return TSUCCESS;
+		});
 	}
 
 	template <typename TNode,typename TArgumentType,typename TStatus>
@@ -205,7 +282,7 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 		 * 	  |-> [spray direction]
 		 * 		|-> [save sprayed player uuids]
 		 * 		|-> [go toward direction]
-		 * 	[no]{no:1}
+		 * 	[no]
 		 * 		|-> [selector]
 		 * 		|-> [check for blood trail]
 		 * 		|		  |
@@ -261,12 +338,12 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 		 * 		|-> [shuffle order of tree]
 		 */ 
 		tree.append_child(
-			TNode::create_sequence({
-				spray_direction<TNode,TArgumentType,TStatus>(),
-				find_targets<TNode,TArgumentType,TStatus>(),
+			TNode::create_selector({
 				TNode::create_sequence({
-					can_still_see_target<TNode,TArgumentType,TStatus>(),
-					spray_direction<TNode,TArgumentType,TStatus>(),
+						debug_echo_tree_name<TNode,TArgumentType,TStatus>("mini_gunner_aggressive_roam"),
+						scan_to_find_targets<TNode,TArgumentType,TStatus>(),
+						watch_all_directions<TNode,TArgumentType,TStatus>(),
+						spray_direction<TNode,TArgumentType,TStatus>(),
 				})
 			})
 		);
