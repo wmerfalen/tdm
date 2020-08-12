@@ -213,6 +213,14 @@ namespace mods::values {
 		CGET(std::string,MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS,mini_gunner_random_attack);
 		static std::string default_public_channels = IMPLODE({"chat","gossip","newbie","gratz"},"|");
 		CGET(std::string,DEFAULT_PUBLIC_CHANNELS,default_public_channels);
+		static std::string mini_gunner_random_disorient_stings = IMPLODE(
+				{
+					"My EYES! My EYESSSSSSSS!!!!",
+					"Enough of your tricks! Come out and fight me like a MAN!!!",
+					"You're only delaying the inevitable!",
+					"Tricks?! You're trying to defeat me with... TRICKS!?!"
+				},"|");
+		CGET(std::string,MINI_GUNNER_RANDOM_DISORIENT_STRINGS,mini_gunner_random_disorient_stings);
 
 		CGET(uint8_t,MINI_GUNNER_SCAN_DEPTH,5);
 
@@ -249,6 +257,7 @@ namespace mods::values {
 		CGET(float,EXPLOSIVE_CRITICAL_MULTIPLIER,0.75);
 		CGET(float,RIFLE_CRITICAL_MULTIPLIER,0.75);
 		CGET(float,INJURED_MAX_HP_MULTIPLIER,0.10);
+		CGET(float,MINI_GUNNER_DECREASED_SIGHT_MULTIPLIER,0.75);
 
 
 		CGET(uint8_t,REVIVE_TICKS,40);

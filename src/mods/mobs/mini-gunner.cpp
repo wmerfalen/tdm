@@ -14,6 +14,10 @@
 #define mini_debug(a) ;;
 #endif
 namespace mods::mobs {
+	mg_map_t& mg_map(){
+		static mg_map_t m;
+		return m;
+	}
 	/**
 	 * @brief find the room with the most enemies, and go towards that direction
 	 *
@@ -50,10 +54,6 @@ namespace mods::mobs {
 		}
 		return should_fire;
 	}
-	/**
-	 * @brief all mini gunner instances in the game
-	 */
-	std::map<uuid_t,std::shared_ptr<mini_gunner>> mg_map;
 	
 	/**
 	 * @brief factory function for mg's
@@ -68,7 +68,7 @@ namespace mods::mobs {
 			log("SYSERR: did not find player to populate mini_gunner with: %d",mob_uuid);
 			return;
 		}
-		mg_map.insert({mob_uuid,std::make_shared<mini_gunner>(mob_uuid,variation)});
+		mg_map().insert({mob_uuid,std::make_shared<mini_gunner>(mob_uuid,variation)});
 	}
 	/**
 	 * @brief set variation of mg. 
@@ -104,7 +104,7 @@ namespace mods::mobs {
 	 * @param uuid
 	 */
 	void mini_gunner::free_mob(uuid_t u){
-		mg_map.erase(u);
+		mg_map().erase(u);
 	}
 	/**
 	 * @brief wear a piece of eq
@@ -225,6 +225,10 @@ namespace mods::mobs {
 	 * @param name
 	 */
 	void mini_gunner::set_behaviour_tree(std::string_view name){
+		if(name.find_first_of("mini_gunner") == std::string::npos){
+			this->cd()->mob_specials.set_behaviour_tree(str_t("mini_gunner") + name.data());
+			return;
+		}
 		this->cd()->mob_specials.set_behaviour_tree(name);
 	}
 	/**

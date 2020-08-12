@@ -95,7 +95,9 @@ namespace mods::mobs {
 		feedback_t last_attack;
 		vec_t<uuid_t> targeting;
 	};
-	extern std::map<uuid_t,std::shared_ptr<mini_gunner>> mg_map;
+	using mg_map_t = std::map<uuid_t,std::shared_ptr<mini_gunner>>;
+	mg_map_t& mg_map();
+	
 	namespace mg::orm {
 		static inline std::string face_direction(std::string value){
 			if(value.length() == 0){
@@ -167,10 +169,10 @@ namespace mods::mobs {
 };
 
 static inline bool has_mini_gunner_ptr(uuid_t u){
-	return mods::mobs::mg_map.find(u) != mods::mobs::mg_map.end();
+	return mods::mobs::mg_map().find(u) != mods::mobs::mg_map().end();
 }
 
 static inline std::shared_ptr<mods::mobs::mini_gunner> mini_gunner_ptr(uuid_t u){
-	return mods::mobs::mg_map[u];
+	return mods::mobs::mg_map()[u];
 }
 #endif

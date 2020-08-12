@@ -40,6 +40,15 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 		});
 	}
 
+	template <typename TNode,typename TArgumentType,typename TStatus>
+	auto shout_where_are_you_random_string(){
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			auto mg = mini_gunner_ptr(mob.uuid());
+			mg->shout(random_key_string(MINI_GUNNER_RANDOM_DISORIENT_STRINGS()));
+			return TSUCCESS;
+		});
+	}
+
 	/**
 	 * @brief randomly yell something
 	 *
@@ -94,7 +103,7 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	auto set_behaviour_tree_to_engage(){
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = mini_gunner_ptr(mob.uuid());
-			mg->set_behaviour_tree("mini_gunner_engage");
+			mg->set_behaviour_tree("engage");
 			return TSUCCESS;
 		});
 	}
@@ -129,6 +138,16 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = mini_gunner_ptr(mob.uuid());
 			return TSUCCESS;
+		});
+	}
+
+	template <typename TNode,typename TArgumentType,typename TStatus>
+	auto find_targets_with_compromised_line_of_sight(){
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			auto mg = mini_gunner_ptr(mob.uuid());
+			int depth = MINI_GUNNER_SCAN_DEPTH() * MINI_GUNNER_DECREASED_SIGHT_MULTIPLIER();
+			m_debug("has decreased line of sight: " << depth << ". normal line of site depth:" << MINI_GUNNER_SCAN_DEPTH());
+			return TStatus::SUCCESS;
 		});
 	}
 
@@ -265,6 +284,22 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 			auto ad = mg->player()->get_affect_dissolver();
 			if(ad.has_any({AFF(BLIND),AFF(DISORIENT)})){
 				mg->watch_nothing();
+				mg->set_behaviour_tree("disoriented");
+				return TFAILURE;
+			}
+			mg->watch_heading();
+			return TSUCCESS;
+		});
+	}
+
+	template <typename TNode,typename TArgumentType,typename TStatus>
+	auto contact_hq_for_camera_spots(){
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			auto mg = mini_gunner_ptr(mob.uuid());
+			/** if stunned */
+			auto ad = mg->player()->get_affect_dissolver();
+			if(ad.has_any({AFF(BLIND),AFF(DISORIENT)})){
+				mg->watch_nothing();
 				return TFAILURE;
 			}
 			mg->watch_heading();
@@ -345,6 +380,18 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 						watch_all_directions<TNode,TArgumentType,TStatus>(),
 						spray_direction<TNode,TArgumentType,TStatus>(),
 				})
+			})
+		);
+	}
+	template <typename TNode,typename TArgumentType,typename TStatus>
+	void make_mini_gunner_disoriented(TNode& tree){
+		tree.append_child(
+			TNode::create_sequence({
+				debug_echo_tree_name<TNode,TArgumentType,TStatus>("disoriented"),
+				shout_where_are_you_random_string<TNode,TArgumentType,TStatus>(),
+				find_targets_with_compromised_line_of_sight<TNode,TArgumentType,TStatus>(),
+				spray_direction<TNode,TArgumentType,TStatus>(),
+				set_behaviour_tree_to_engage<TNode,TArgumentType,TStatus>()
 			})
 		);
 	}

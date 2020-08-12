@@ -626,9 +626,9 @@ CCWHT	screen.h	36;"	d
 CCYEL	screen.h	32;"	d
 CEMENT	structs.h	/^			CEMENT,			\/** asphault, nearly indestructible *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 CGET	mods/values.hpp	28;"	d
-CGET	mods/values.hpp	310;"	d
-CGET_DEF	mods/values.cpp	344;"	d	file:
-CGET_DEF	mods/values.cpp	588;"	d	file:
+CGET	mods/values.hpp	319;"	d
+CGET_DEF	mods/values.cpp	346;"	d	file:
+CGET_DEF	mods/values.cpp	592;"	d	file:
 CHAINABLE_BREACHING	mods/skills.hpp	/^			CHAINABLE_BREACHING,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 CHAOTIC	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 CHARM	mods/flags.hpp	/^		CHARM,$/;"	e	enum:mods::flags::aff
@@ -5538,6 +5538,7 @@ min_rent_cost	config.cpp	/^int min_rent_cost = 100;$/;"	v
 min_victim_position	act.social.cpp	/^	int min_victim_position;	\/* Position of victim *\/$/;"	m	struct:social_messg	file:
 min_wizlist_lev	config.cpp	/^int min_wizlist_lev = LVL_GOD;$/;"	v
 mini_gunner_random_attack	mods/values.hpp	/^		static std::string mini_gunner_random_attack = IMPLODE({"It's a dangerous game!","Have I ever told you the path to insanity?",$/;"	m	namespace:mods::values
+mini_gunner_random_disorient_stings	mods/values.hpp	/^		static std::string mini_gunner_random_disorient_stings = IMPLODE($/;"	m	namespace:mods::values
 mini_mud	db.cpp	/^int mini_mud = 0;		\/* mini-mud mode?		 *\/$/;"	v
 minimum_level	interpreter.h	/^	sh_int minimum_level;$/;"	m	struct:command_info
 minimum_position	interpreter.h	/^	byte minimum_position;$/;"	m	struct:command_info
