@@ -83,7 +83,7 @@ namespace mods::affects {
 			}
 
 			/**
-			 * @brief set affect direction
+			 * @brief used so that we can define if the affect is added or subtracted each iteration
 			 *
 			 * @param affect
 			 * @param direction true means increment, false decrement
@@ -95,6 +95,12 @@ namespace mods::affects {
 				}
 				m_increment.erase(affect);
 			}
+			/**
+			 * @brief value that signals the affect to stop
+			 *
+			 * @param affect
+			 * @param max
+			 */
 			void set_max_amount(TAffects affect, uint32_t max){
 				m_max_amount[affect] = max;
 			}
@@ -106,6 +112,14 @@ namespace mods::affects {
 					}
 				}
 				return true;
+			}
+			bool has_any(TAffectsContainer in_affects){
+				for(auto & affect : in_affects){
+					if(m_affects[affect]) {
+						return true;
+					}
+				}
+				return false;
 			}
 			bool has_affect(TAffects a){
 				maffects_debug("[has_affect] " << a);

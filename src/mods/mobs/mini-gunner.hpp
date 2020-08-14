@@ -8,34 +8,80 @@
 namespace mods::mobs {
 	using tick_t = uint64_t;
 	struct mini_gunner {
+		/**====================================================*/ 
+		/** factory and destruct */
+		/**====================================================*/ 
 		static void create(uuid_t uuid, std::string);
 		static void free_mob(uuid_t uuid);
+
+		/**====================================================*/ 
+		/** initialization routine called by constructor */
+		/** can be called anytime after construct if needed */
+		/**====================================================*/ 
 		void init();
+
+		/**====================================================*/ 
+		/** preferred construct method */
+		/**====================================================*/ 
+		mini_gunner(uuid_t mob_uuid,std::string variation);
 		mini_gunner() = delete;
 		~mini_gunner();
-		mini_gunner(uuid_t mob_uuid,std::string variation);
+
+		/**====================================================*/ 
+		/** used to specify which variation of the mini gunner */
+		/** npc type we should use. i.e.: "sentinel"           */
+		/**====================================================*/ 
+		void set_variation(std::string);
+
 		uuid_t uuid;
-		void wear(int where,std::string_view yaml);
+		/**====================================================*/ 
+		/** motion control */
+		/**====================================================*/ 
 		void set_heading(int dir);
 		int get_heading() const { return heading; }
-		feedback_t& spray(int dir);
-		void setup_damage_callbacks();
-		int get_weapon_heat() const { return weapon_heat; }
-		void set_behaviour_tree(std::string_view name);
 		void shout(std::string_view);
-		void set_variation(std::string);
-		void enemy_spotted(room_rnum room,uuid_t player);
+		void set_behaviour_tree(std::string_view name);
+		
+		/**================*/
+		/** debugging info */
+		/**================*/
 		str_map_t report();
+
+		/**=====================================*/
+		/** hunting helpers & state maintenance */
+		/**=====================================*/
+		int get_weapon_heat() const { return weapon_heat; }
+		room_rnum room();
+		char_data* cd();
+		/** hunting helpers */
+		feedback_t& spray(int dir);
+		void watch_nothing(); 
+		void watch_heading();
+		void watch(uint8_t direction);
+		void watch_directions(vec_t<uint8_t> direction);
 		void set_hunting(const uuidvec_t&);
 		uuidvec_t& get_hunting();
 		tick_t get_last_seen(uuid_t player);
 		tick_t get_last_seen_diff(uuid_t player);
 		void forget(uuid_t);
-		void watch(uint8_t direction);
-		void watch_directions(vec_t<uint8_t> direction);
-		room_rnum room();
-		char_data* cd();
+		player_ptr_t& player(){ return player_ptr; }
+		void save_targets(vec_t<uuid_t>&);
+
+		
+		/**=================*/
+		/** event callbacks */
+		/**=================*/
+		void setup_damage_callbacks();
+		void enemy_spotted(room_rnum room,uuid_t player);
+
+		/**====================================================*/ 
+		/** weapon helpers */
+		/**====================================================*/ 
+		obj_ptr_t primary();
+		void wear(int where,std::string_view yaml);
+
 		private:
+
 		uint8_t watching;
 		std::map<uuid_t,uint64_t> last_seen;
 		uuidvec_t hunting;
@@ -47,8 +93,11 @@ namespace mods::mobs {
 		bool loaded;
 		bool error;
 		feedback_t last_attack;
+		vec_t<uuid_t> targeting;
 	};
-	extern std::map<uuid_t,std::shared_ptr<mini_gunner>> mg_map;
+	using mg_map_t = std::map<uuid_t,std::shared_ptr<mini_gunner>>;
+	mg_map_t& mg_map();
+	
 	namespace mg::orm {
 		static inline std::string face_direction(std::string value){
 			if(value.length() == 0){
@@ -120,10 +169,10 @@ namespace mods::mobs {
 };
 
 static inline bool has_mini_gunner_ptr(uuid_t u){
-	return mods::mobs::mg_map.find(u) != mods::mobs::mg_map.end();
+	return mods::mobs::mg_map().find(u) != mods::mobs::mg_map().end();
 }
 
 static inline std::shared_ptr<mods::mobs::mini_gunner> mini_gunner_ptr(uuid_t u){
-	return mods::mobs::mg_map[u];
+	return mods::mobs::mg_map()[u];
 }
 #endif

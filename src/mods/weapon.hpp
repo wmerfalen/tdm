@@ -377,12 +377,16 @@ namespace mods::weapon {
 
 	#include "weapon-stat-list.hpp"
 
+	template <typename TObject>
+	static inline auto get_rounds(TObject& obj){
+		return obj->obj_flags.ammo;
+	}
 	template <typename TPlayer,typename TObject>
 	static inline void list_rounds(TPlayer& player,TObject& obj){
 		if(obj->obj_flags.ammo == 0){
 			player->sendln("{red}Out of ammo!{/red}");
 		}else{
-			player->send("%d rounds.\r\n", obj->obj_flags.ammo);
+			player->send("%d rounds.\r\n", get_rounds(obj));
 		}
 	}
 

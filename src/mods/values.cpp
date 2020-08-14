@@ -11,6 +11,7 @@ namespace mods::values {
 		"EXPLOSIVE_CRITICAL_MULTIPLIER",
 		"RIFLE_CRITICAL_MULTIPLIER",
 		"INJURED_MAX_HP_MULTIPLIER",
+		"MINI_GUNNER_DECREASED_SIGHT_MULTIPLIER",
 		};
 		static const std::vector<std::string> int_types = {
 		"FIRE_DAMAGE_TICK_RESOLUTION",
@@ -253,6 +254,7 @@ namespace mods::values {
 		"EXTENDED_PREFERENCES",
 		"EXTENDED_PREFERENCES_DEFAULTS",
 		"SUPER_USERS_LIST",
+		"MINI_GUNNER_RANDOM_DISORIENT_STRINGS",
 			};
 		bool is_int(std::string key){
 			return (std::find(int_types.begin(),int_types.end(),key) != int_types.end());
@@ -501,6 +503,7 @@ namespace mods::values {
 		CGET_DEF(float,EXPLOSIVE_CRITICAL_MULTIPLIER,0.75);
 		CGET_DEF(float,RIFLE_CRITICAL_MULTIPLIER,0.75);
 		CGET_DEF(float,INJURED_MAX_HP_MULTIPLIER,0.10);
+		CGET_DEF(float,MINI_GUNNER_DECREASED_SIGHT_MULTIPLIER,0.75);
 
 		CGET_DEF(std::string,MINI_GUNNER_WEAR_LIGHT,"");
 		CGET_DEF(std::string,MINI_GUNNER_WEAR_FINGER_R,"");
@@ -580,6 +583,7 @@ namespace mods::values {
 		CGET_DEF(std::string,MSG_COOLDOWN_IN_EFFECT,"{gld}Weapon cooldown in effect.{/gld}");
 		CGET_DEF(std::string,MSG_COULDNT_FIND_TARGET,"You couldn't find your target!");
 		CGET_DEF(std::string,MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS,mini_gunner_random_attack);
+		CGET_DEF(std::string,MINI_GUNNER_RANDOM_DISORIENT_STRINGS,mini_gunner_random_disorient_stings);
 		CGET_DEF(std::string,MSG_YOU_INJURED_SOMEONE ,"{red}*** YOU INJURED %s{/red}!");
 		CGET_DEF(std::string,DEFAULT_PUBLIC_CHANNELS,default_public_channels);
 		CGET_DEF(std::string,EXTENDED_PREFERENCES,IMPLODE({"nochat","nogossip","nonewbie","nogratz"},"|"));

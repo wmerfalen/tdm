@@ -10,9 +10,9 @@ LIB_DIR="$(HOME)/code/code/siege-mud/lib"
 POST_BUILD_SCRIPT="$(CURDIR)/scripts/post-build.sh"
 
 lmdbdir = $(CURDIR)/liblmdb
-lmdb = $(lmdbdir)/liblmdb.so
+lmdb = liblmdb/liblmdb.so
 duktapeout = $(builddir)/duktape
-duktape = $(duktapeout)/duktape.o
+duktape = duktape.o
 openssl = -lssl -lcrypto
 yamlcpp = $(CURDIR)/yaml-cpp/include
 yamllib = $(CURDIR)/yaml-cpp/build
@@ -36,7 +36,7 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-D__MENTOC_SHOW_LMDB_DEBUG__=1 \
 	#-DMENTOC_NO_CONSTEXPR_CONF=1 \
 	#-D__MENTOC_USE_PQXX_RESULT__=1 
-LIBS = $(opnssl) -lc -lm -lpqxx -lpq -lssl -lcrypto -l$(yamlcpp_object)
+LIBS =  -lc -lm -lpqxx -lpq $(openssl) -l$(yamlcpp_object)
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
 					 act.wizard act.demolitions alias ban boards bsd-snprintf castle \
@@ -96,7 +96,7 @@ $(duktape): duktape-2.2.0/src/duktape.h duktape-2.2.0/src/duktape.c
 	$(CC) -c $(FLAGS) duktape-2.2.0/src/duktape.c  -o $(duktape)
 
 $(lmdb):
-	cd $(lmdbdir) && make clean ; make liblmdb.so && cd $(src)
+	cd $(lmdbdir) && make clean ; make liblmdb.so && cp liblmdb.so $(src) && cd $(src) 
 
 $(DATA_DIR):
 	mkdir $(DATA_DIR)

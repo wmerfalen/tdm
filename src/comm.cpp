@@ -657,6 +657,7 @@ void game_loop(socket_t mother_desc) {
 			new_desc = 0;
 			auto operating_socket = events[i].data.fd;
 			if (events[i].data.fd == mother_desc) {
+				std::cerr << "[fd == mother desc]\n";
 				new_desc = new_descriptor(mother_desc);
 				operating_socket = new_desc;
 				epoll_ev.events = EPOLLIN; // new connection is a read event
@@ -689,6 +690,7 @@ void game_loop(socket_t mother_desc) {
 				break;
 			}
 			auto input_status = process_input(player->desc());
+			std::cerr << green_str("input_status:") << input_status << "\n";
 			if(input_status < 0){
 				switch(input_status){
 					case -2:
@@ -713,6 +715,7 @@ void game_loop(socket_t mother_desc) {
 			}
 			aliased = 0;
 			if(!get_from_q(player->desc(), comm, &aliased)) {
+				std::cerr << red_str("get_from_q returns falsey\n");
 				++i;
 				continue;
 			}
@@ -732,13 +735,17 @@ void game_loop(socket_t mother_desc) {
 			GET_WAIT_STATE(player->cd()) = 1;
 			player->desc().has_prompt = false;
 			if(player->state() != CON_PLAYING) { // In menus, etc. 
+				std::cerr << blue_str("nanny\n");
 				nanny(player, comm);
 			} else {			// else: we're playing normally. 
 				if(aliased) {	// To prevent recursive aliases. 
+					std::cerr << blue_str("aliased\n");
 					player->desc().has_prompt = TRUE;    // To get newline before next cmd output. 
 				} else if(perform_alias(player->desc(), comm, sizeof(comm))) { // Run it through aliasing system 
+					std::cerr << blue_str("perform_aliased\n");
 					get_from_q(player->desc(), comm, &aliased);
 				}
+				std::cerr << blue_str("calling command_interpreter\n");
 				command_interpreter(player, comm); // Send it to interpreter 
 			}
 			++i;
@@ -1717,6 +1724,7 @@ int process_input(mods::descriptor_data & t) {
 
 	/* first, find the point where we left off reading data */
 	if(t.inbuf.length()){
+		std::cerr << green_str("input length is:") << t.inbuf.length() << "\n";
 		buf_length = t.inbuf.length();
 		bcopy(t.inbuf.c_str(),&tmp[0],t.inbuf.length());
 		read_point = static_cast<char*>(&tmp[buf_length-1]);
@@ -1736,6 +1744,26 @@ int process_input(mods::descriptor_data & t) {
 			return -2;
 		}
 		bytes_read = perform_socket_read(t.descriptor, read_point, space_left);
+#ifdef __MENTOC_SHOW_SOCKET_READ_DEBUG_OUTPUT__
+		std::cerr << "bytes_read:" << bytes_read << "\n";
+		for(int ix = 0; ix < bytes_read; ++ix){
+			std::cerr << "byte[" << ix << "]:->" << std::hex << (int)read_point[ix] << "(dec:" << std::dec << (int)read_point[ix] << ")\n";
+		}
+		std::cerr << std::dec;
+#endif
+
+		if(bytes_read == 5){
+			int64_t a;
+			memcpy(&a,(void*)read_point,sizeof(a));
+			/** control+c */
+			if(a == 30031213823){
+				return -1;
+			}
+		}
+		/** control + d */
+		if(bytes_read == 1 && (int)read_point[0] == 4){
+			return -1;
+		}
 
 		if(bytes_read < 0) {	/* Error, disconnect them. */
 			return (-3);

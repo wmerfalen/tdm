@@ -88,9 +88,11 @@ namespace mods::behaviour_tree_impl {
 		node mini_gunner_roam(node_type::SELECTOR);
 		node mini_gunner_engage(node_type::SELECTOR);
 		node mini_gunner_aggressive_roam(node_type::SELECTOR);
+		node mini_gunner_disoriented(node_type::SELECTOR);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_roam<node,argument_type,status>(mini_gunner_roam);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_engage<node,argument_type,status>(mini_gunner_engage);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_aggressive_roam<node,argument_type,status>(mini_gunner_aggressive_roam);
+		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_disoriented<node,argument_type,status>(mini_gunner_disoriented);
 
 		auto node_mob_has_snipe_capability = node::create_leaf(
 				[](argument_type mob) -> status {
@@ -228,6 +230,7 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 		add_tree("mini_gunner_roam",mini_gunner_roam);
 		add_tree("mini_gunner_engage",mini_gunner_engage);
 		add_tree("mini_gunner_aggressive_roam",mini_gunner_aggressive_roam);
+		add_tree("mini_gunner_disoriented",mini_gunner_disoriented);
 
 		/**
 		 * Suspicious roaming tree. 

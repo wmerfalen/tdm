@@ -639,17 +639,20 @@ namespace mods {
 			if(player->paging()) {
 				if(vec_args.size() == 0){
 					player->pager_next_page();
+					std::cerr << red_str("paging, returning false vec_args.size() == 0\n");
 					return false;
 				}
 				if(vec_args.size() && vec_args[0].compare("q") == 0) {
 					player->pager_clear();
 					player->pager_end();
+					std::cerr << red_str("quitting paging, returning false\n");
 					return false;
 				}
 				auto good = mods::util::stoi(in_argument.data());
 				if(good.has_value()) {
 					player->page(good.value() - 1);
 				}
+				std::cerr << red_str("quitting paging, returning false\n");
 				return false;
 			}
 			if(vec_args.size()) {
