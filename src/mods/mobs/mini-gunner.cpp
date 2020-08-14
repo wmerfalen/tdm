@@ -167,7 +167,7 @@ namespace mods::mobs {
 		this->player_ptr = p;
 		auto ch = p->cd();
 		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::MINI_GUNNER;
-		ch->mob_specials.set_behaviour_tree("mini_gunner_roam");
+		this->set_behaviour_tree("mini_gunner_roam");
 		MENTOC_MOB_WEARS(MINI_GUNNER);
 		this->setup_damage_callbacks();
 		this->loaded = true;
@@ -225,10 +225,7 @@ namespace mods::mobs {
 	 * @param name
 	 */
 	void mini_gunner::set_behaviour_tree(std::string_view name){
-		if(name.find_first_of("mini_gunner") == std::string::npos){
-			this->cd()->mob_specials.set_behaviour_tree(str_t("mini_gunner") + name.data());
-			return;
-		}
+		mini_debug("Setting behaviour tree to: '" << name << "'");
 		this->cd()->mob_specials.set_behaviour_tree(name);
 	}
 	/**

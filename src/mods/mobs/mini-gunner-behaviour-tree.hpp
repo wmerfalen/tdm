@@ -103,7 +103,7 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	auto set_behaviour_tree_to_engage(){
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = mini_gunner_ptr(mob.uuid());
-			mg->set_behaviour_tree("engage");
+			mg->set_behaviour_tree("mini_gunner_engage");
 			return TSUCCESS;
 		});
 	}
@@ -284,7 +284,7 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 			auto ad = mg->player()->get_affect_dissolver();
 			if(ad.has_any({AFF(BLIND),AFF(DISORIENT)})){
 				mg->watch_nothing();
-				mg->set_behaviour_tree("disoriented");
+				mg->set_behaviour_tree("mini_gunner_disoriented");
 				return TFAILURE;
 			}
 			mg->watch_heading();

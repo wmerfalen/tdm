@@ -42,9 +42,14 @@ namespace mods::behaviour_tree_impl {
 			bti_debug("As you were... ");
 			return dispatch_status_t::AS_YOU_WERE;
 		}
+		if(ch.mob_specials().behaviour_tree >= trees.size()){
+			bti_debug(red_str(CAT({"invalid behaviour tree index:",std::to_string(ch.mob_specials().behaviour_tree)})));
+			log("SYSERR: behaviour tree out of range: %d. not running",ch.mob_specials().behaviour_tree);
+			return dispatch_status_t::AS_YOU_WERE;
+		}
 		if(ch.mob_specials().behaviour_tree){
 			bti_debug("mob has this behaviour_tree:" << ch.mob_specials().behaviour_tree);
-			std::find(trees.begin(),trees.end(),ch.mob_specials().behaviour_tree);
+			assert(ch.mob_specials().behaviour_tree < trees.size());
 			auto btree_status = trees[ch.mob_specials().behaviour_tree].run(ch);
 			switch(btree_status.status){
 				case mods::behaviour_tree_status::SUCCESS:
