@@ -13,6 +13,7 @@
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
 extern void hit(char_data *ch, char_data *victim, int type);
+#define __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__
 #define bti_debug(a) std::cerr << "[mods::behaviour_tree_imp::dispatch][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #else
@@ -43,6 +44,7 @@ namespace mods::behaviour_tree_impl {
 		}
 		if(ch.mob_specials().behaviour_tree){
 			bti_debug("mob has this behaviour_tree:" << ch.mob_specials().behaviour_tree);
+			std::find(trees.begin(),trees.end(),ch.mob_specials().behaviour_tree);
 			auto btree_status = trees[ch.mob_specials().behaviour_tree].run(ch);
 			switch(btree_status.status){
 				case mods::behaviour_tree_status::SUCCESS:

@@ -7,6 +7,13 @@
 
 
 namespace mods::util {
+	std::string compile_yaml_path_from_type_and_file(int type, std::string_view file){
+		std::string string_type = mods::util::yaml_int_to_string(type);
+		if(string_type.compare(mods::util::UNKNOWN_YAML_FILE) == 0){
+			return mods::util::UNKNOWN_YAML_FILE;
+		}
+		return CAT({MENTOC_CURRENT_WORKING_DIR,"/",string_type,"/",file.data()});
+	}
 	std::string&& word_wrap(std::string_view paragraph,int width) {
 		std::string buffer;
 
@@ -422,7 +429,7 @@ namespace mods::util {
 		MENTOC_LAZY_ME(consumable,ITEM_CONSUMABLE);
 		MENTOC_LAZY_ME(trap,ITEM_TRAP);
 #undef MENTOC_LAZY_ME
-		return "unknown-yits";
+		return mods::util::UNKNOWN_YAML_FILE;
 	}
 	int yaml_string_to_int(std::string type){
 		/** !!*****************!! */
@@ -464,7 +471,7 @@ namespace mods::util {
 		MENTOC_LAZY_ME(consumable,ITEM_CONSUMABLE);
 		MENTOC_LAZY_ME(trap,ITEM_TRAP);
 #undef MENTOC_LAZY_ME
-		return "unkown-yctl";
+		return mods::util::UNKNOWN_YAML_FILE;
 	}
 	std::tuple<int,std::string> extract_yaml_info_from_path(std::string_view path){
 		std::string yaml_file = "",buffer = "", current = "";

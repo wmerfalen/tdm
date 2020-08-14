@@ -32,6 +32,7 @@ extern struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *numb
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 
 namespace mods::util {
+	constexpr static const char* UNKNOWN_YAML_FILE = "unknown-yits";
 	template <typename TKey,typename TVal>
 	std::string map2str(std::map<TKey,TVal> in_map){
 		std::string d = "";
@@ -320,6 +321,7 @@ std::ostream& log(Args... args); /*{
 	bool in_array(std::string f,std::vector<T> strings){
 		return std::find(strings.begin(),strings.end(),f) != strings.end();
 	}
+	std::string compile_yaml_path_from_type_and_file(int type, std::string_view file);
 };
 
 namespace mods::util::err {
