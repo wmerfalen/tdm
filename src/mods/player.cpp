@@ -17,6 +17,7 @@
 #include <chrono>
 #include "object-utils.hpp"
 #include "damage-event.hpp"
+#include "armor/basic-protection.hpp"
 /**
  * TODO: All these stc* functions need to be altered to accomodate
  * the new player_type_enum_t values. If output is to be muted, then
@@ -243,7 +244,11 @@ namespace mods {
 		return m_equipment[pos];
 	}
 	void player::equip(obj_ptr_t in_object,int pos) {
+		if(!m_basic_protection){
+			m_basic_protection = std::make_shared<mods::armor::basic_protection>(uuid());
+		}
 		if(pos < NUM_WEARS){
+			m_basic_protection->equip(pos,in_object->uuid);
 			if(pos == WEAR_WIELD){
 				this->m_weapon_flags = in_object->obj_flags.weapon_flags;
 			}
@@ -270,7 +275,11 @@ namespace mods {
 		this->equip(obj,pos);
 	}
 	void player::unequip(int pos) {
+		if(!m_basic_protection){
+			m_basic_protection = std::make_shared<mods::armor::basic_protection>(uuid());
+		}
 		if(pos < NUM_WEARS && m_equipment[pos]){
+			m_basic_protection->unequip(pos);
 			auto item = m_equipment[pos];
 			if(pos == WEAR_WIELD){
 				/** FIXME: this needs to negate the bit */
@@ -1398,6 +1407,14 @@ namespace mods {
 					break;
 			}
 		}
+		/*
+		void player::m_sync_basic_equipment(){
+			if(!m_basic_protection){
+				m_basic_protection = std::make_shared<mods::armor::basic_protection>(uuid());
+			}
+			m_basic_protection->sync_equipment(uuid());
+		}
+		*/
 };
 
 #endif

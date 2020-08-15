@@ -67,7 +67,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/object-utils mods/camera mods/orm/shop shop mods/shop mods/rand \
 					 mods/help mods/rooms mods/weapons/damage-types mods/injure mods/skills \
 					 mods/mobs/mini-gunner mods/mobs/extended-types mods/values \
-					 mods/mobs/room-watching mods/mobs/mini-gunner-behaviour-tree
+					 mods/mobs/room-watching mods/mobs/mini-gunner-behaviour-tree \
+					 mods/armor/basic-protection
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
@@ -77,7 +78,8 @@ clean:
 	make -f $(lmdbdir)/Makefile clean ; \
 		rm -f $(addprefix $(builddir)/,*.o *.d  mods/*.o \
 		mods/*.d mods/orm/*.o mods/orm/*.d \
-		mods/classes/*.o mods/classes/*.d mods/mobs/*.o mods/mobs/*.d) \
+		mods/classes/*.o mods/classes/*.d mods/mobs/*.o mods/mobs/*.d \
+		mods/armor/*.o mods/armor/*.d) \
 		rm -f $(builddir)/mods/testing/lmdb/*.o \
 		rm -f $(builddir)/mods/testing/lmdb/*.d 
 
@@ -85,7 +87,7 @@ $(builddir):
 	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb \
 		$(builddir)/sql $(builddir)/mods/orm/ \
 		$(builddir)/mods/weapons/ $(builddir)/mods/mobs/ \
-		$(builddir)/mods/builder/
+		$(builddir)/mods/builder/ $(builddir)/mods/armor/
 
 $(builddir)/%.o: %.cpp
 	$(CC) -c $(FLAGS) -o $@ $<

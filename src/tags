@@ -1781,8 +1781,8 @@ MENTOC_MEMBER_VARS_IMPL	mods/item-types.hpp	409;"	d
 MENTOC_MOB_WEARS	mods/item-types.hpp	339;"	d
 MENTOC_MS_COMP	mods/doors.hpp	230;"	d
 MENTOC_MS_COMP	mods/doors.hpp	244;"	d
-MENTOC_NPC_CHECK	mods/player.cpp	54;"	d	file:
-MENTOC_NPC_CHECK_0	mods/player.cpp	55;"	d	file:
+MENTOC_NPC_CHECK	mods/player.cpp	55;"	d	file:
+MENTOC_NPC_CHECK_0	mods/player.cpp	56;"	d	file:
 MENTOC_OBI	mods/builder.cpp	29;"	d	file:
 MENTOC_OBI2	mods/builder.cpp	30;"	d	file:
 MENTOC_OBJ_DATA_FEED_DUAL	structs.cpp	64;"	d	file:
@@ -1917,12 +1917,12 @@ MORT_CAN_SEE	utils.h	447;"	d
 MORT_CAN_SEE_OBJ	utils.h	470;"	d
 MOTD_FILE	db.h	77;"	d
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1315;"	d	file:
-MR	mods/player.cpp	1330;"	d	file:
+MR	mods/player.cpp	1324;"	d	file:
+MR	mods/player.cpp	1339;"	d	file:
 MR	structs.cpp	522;"	d	file:
 MR	structs.cpp	533;"	d	file:
-MRC	mods/player.cpp	1316;"	d	file:
-MRC	mods/player.cpp	1331;"	d	file:
+MRC	mods/player.cpp	1325;"	d	file:
+MRC	mods/player.cpp	1340;"	d	file:
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
 MSG_HEADING	boards.h	44;"	d
@@ -2011,7 +2011,7 @@ NO_LOGIC	mods/behaviour_tree_status.hpp	/^		NO_LOGIC,$/;"	e	enum:mods::behaviour
 NO_PRIMARY_WIELDED_EVENT	mods/damage-event.hpp	/^	NO_PRIMARY_WIELDED_EVENT,$/;"	e	enum:uint16_t
 NPC	act.wizard.cpp	2347;"	d	file:
 NPC	mods/scan.hpp	/^			NPC,$/;"	e	enum:mods::scan::find_type_t
-NPC_SEND_DEBUG	mods/player.cpp	53;"	d	file:
+NPC_SEND_DEBUG	mods/player.cpp	54;"	d	file:
 NRM	utils.h	119;"	d
 NSLC	telnet.h	200;"	d
 NTELOPTS	telnet.h	125;"	d
@@ -3048,7 +3048,7 @@ WC_IMM	mods/world-configuration.hpp	/^constexpr static int WC_IMM = 2;$/;"	v
 WC_MOR	mods/world-configuration.hpp	/^constexpr static int WC_MOR = 3;$/;"	v
 WEAPON	mods/object.hpp	/^				WEAPON,$/;"	e	enum:mods::object::object_type_enum_t
 WEAPON_HANDLING	mods/skills.hpp	/^		WEAPON_HANDLING,$/;"	e	enum:mods::skills::fields_of_study
-WEAPON_SET_NUM	mods/player.hpp	38;"	d
+WEAPON_SET_NUM	mods/player.hpp	42;"	d
 WEAR_ABOUT	structs.h	398;"	d
 WEAR_ARMS	structs.h	396;"	d
 WEAR_BACKPACK	structs.h	410;"	d
@@ -3401,6 +3401,7 @@ argument_interpreter	interpreter.h	42;"	d
 arguments	mods/builder.cpp	/^	size_t arguments;$/;"	m	struct:command_t	file:
 armor	mods/item-types.hpp	/^	enum armor {$/;"	g	namespace:mods::weapon::type
 armor	mods/player.hpp	/^		sh_int& armor() {$/;"	f	struct:mods::player
+armor	mods/player.hpp	/^namespace mods::armor {$/;"	n	class:mods
 armor	mods/skills.hpp	/^		static std::vector<proficiency_t> armor = {$/;"	m	namespace:mods::skills::proficiencies
 armor_description_t	mods/yaml.hpp	/^		armor_description_t() :$/;"	f	struct:mods::yaml::armor_description_t
 armor_description_t	mods/yaml.hpp	/^	struct armor_description_t : public yaml_description_t {$/;"	s	namespace:mods::yaml
@@ -5269,6 +5270,7 @@ m_assertionInfo	mods/catch.hpp	/^			AssertionInfo m_assertionInfo;$/;"	m	class:C
 m_attacker_uuid	mods/player.hpp	/^		uuid_t m_attacker_uuid;$/;"	m	struct:mods::player
 m_attacking_with	mods/player.hpp	/^		obj_ptr_t m_attacking_with;$/;"	m	struct:mods::player
 m_authenticated	mods/player.hpp	/^		bool m_authenticated;$/;"	m	struct:mods::player
+m_basic_protection	mods/player.hpp	/^		std::shared_ptr<mods::armor::basic_protection> m_basic_protection;$/;"	m	struct:mods::player
 m_block_data	mods/player.hpp	/^		std::unordered_map<uint32_t,uuid_t> m_block_data;$/;"	m	struct:mods::player
 m_block_event	mods/player.hpp	/^		event_queue_iterator m_block_event;$/;"	m	struct:mods::player
 m_blocked_until	mods/player.hpp	/^		uint32_t m_blocked_until;$/;"	m	struct:mods::player

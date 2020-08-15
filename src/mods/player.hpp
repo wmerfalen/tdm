@@ -35,6 +35,10 @@ namespace mods {
 #include "camera.hpp"
 #include "deferred.hpp"
 
+namespace mods::armor {
+	struct basic_protection;
+};
+
 #define WEAPON_SET_NUM 1
 extern size_t send_to_char(char_data *ch, const char *messg, ...);
 extern room_rnum real_room(room_vnum);
@@ -690,6 +694,7 @@ namespace mods {
 		std::map<int,uint16_t> m_skills;
 		std::map<damage_event_t,damage_event_callback_t> m_damage_event_callbacks;
 		direction_t m_watching;
+		std::shared_ptr<mods::armor::basic_protection> m_basic_protection;
 	};
 };
 
