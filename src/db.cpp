@@ -219,6 +219,7 @@ namespace db {
 				.set(values)
 				.where("id","=",std::to_string(player->get_db_id()))
 				.sql();
+			values.clear();
 			mods::pq::exec(up_txn,up_sql);
 			mods::pq::commit(up_txn);
 			return 0;
@@ -237,8 +238,9 @@ namespace db {
 			auto up_sql = comp
 				.insert()
 				.into("player")
-				.values(values)
+				.values_with_password(values, "player_password")
 				.sql();
+			values.clear();
 			mods::pq::exec(insert_transaction,up_sql);
 			mods::pq::commit(insert_transaction);
 			return 0;
@@ -2545,14 +2547,14 @@ bool player_exists(player_ptr_t player_ptr){
 }
 bool login(std::string_view user_name,std::string_view password){
 	try{
-		auto up_txn = txn();
-		sql_compositor comp("player",&up_txn);
-		auto room_sql = comp.select("player_password")
+		auto select_transaction = txn();
+		sql_compositor comp("player",&select_transaction);
+		auto room_sql = comp.select("id")
 			.from("player")
-			.where("player_name","=",user_name.data())
-			.where("player_password","=",password.data())
+			.where_crypt("player_password",password)
+			.op_and("player_name","=",user_name.data())
 			.sql();
-		auto row = mods::pq::exec(up_txn,room_sql.data());
+		auto row = mods::pq::exec(select_transaction,room_sql.data());
 		return row.size();
 	}catch(std::exception& e){
 		std::cerr << __FILE__ << ": " << __LINE__ << " login() exception: " << e.what() << "\n";

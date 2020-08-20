@@ -81,6 +81,35 @@ namespace mods::sql {
 				return *this;
 			}
 
+			compositor<T>& set_with_password(const value_map& values,std::string_view password_field) {
+				std::string set = " SET ";
+				unsigned v_size = values.size();
+				unsigned ctr = 0;
+
+				for(auto& pair : values) {
+					if(pair.first.compare(password_field) == 0){
+						set += pair.first;
+						set += "=";
+						set += "crypt(";
+						set += m_txn_ptr->quote(pair.second);
+						set += ",gen_salt('bf'))";
+					}else{
+						set += pair.first;
+						set += "=";
+						set += m_txn_ptr->quote(pair.second);
+					}
+
+					if(ctr + 1 != v_size) {
+						set += ", ";
+					}
+
+					++ctr;
+				}
+
+				m_query[2] = set;
+				return *this;
+			}
+
 			compositor<T>& set(const value_map& values) {
 				std::string set = " SET ";
 				unsigned v_size = values.size();
@@ -109,6 +138,46 @@ namespace mods::sql {
 			}
 			compositor<T>& into(str_object table) {
 				m_query[1] = m_table = table.data();
+				return *this;
+			}
+			compositor<T>& values_with_password(const value_map& values, std::string_view password_field) {
+				std::string fields = "(";
+				unsigned v_size = values.size();
+				unsigned ctr = 0;
+
+				for(auto& pair : values) {
+					fields += pair.first;
+
+					if(ctr + 1 != v_size) {
+						fields += ", ";
+					}
+
+					++ctr;
+				}
+
+				fields += ") ";
+				m_query[2] = fields;
+				std::string value_sql = "VALUES(";
+				ctr = 0;
+
+				for(auto& pair : values) {
+					if(pair.first.compare(password_field) == 0){
+						value_sql += "crypt(";
+						value_sql += m_txn_ptr->quote(pair.second);
+						value_sql += ",gen_salt('bf'))";
+					}else{
+						value_sql += m_txn_ptr->quote(pair.second);
+					}
+
+					if(ctr + 1 != v_size) {
+						value_sql += ", ";
+					}
+
+					++ctr;
+				}
+
+				value_sql += ")";
+				m_query[4] = value_sql;
 				return *this;
 			}
 			compositor<T>& values(const value_map& values) {
@@ -188,6 +257,18 @@ namespace mods::sql {
 				sql += op.data();
 				sql += " ";
 				sql += m_txn_ptr->quote(std::string(rhs.data()));
+				m_query[4] = sql;
+				return *this;
+			}
+			compositor<T>& where_crypt(str_object lhs,
+			                     str_object rhs) {
+				std::string sql = " WHERE ";
+				sql += lhs.data();
+				sql += " = crypt(";
+				sql += m_txn_ptr->quote(std::string(rhs.data()));
+				sql += ", ";
+				sql += m_txn_ptr->esc(std::string(lhs.data()));
+				sql += ") ";
 				m_query[4] = sql;
 				return *this;
 			}
