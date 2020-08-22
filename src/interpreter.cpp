@@ -100,6 +100,7 @@ ACMD(do_js_help){
 		"{gld}db_geti{/gld} -- ",
 		"{gld}db_set{/gld} -- ",
 		"{gld}db_seti{/gld} -- ",
+		"{gld}get_char_pk_id{/gld} -- ",
 		"{gld}get_current_player{/gld} -- ",
 		"{gld}get_day{/gld} -- ",
 		"{gld}get_month{/gld} -- ",
@@ -1885,11 +1886,17 @@ void nanny(player_ptr_t p, char * in_arg) {
 				return;
 			}
 			switch(load_result){
+				case CLASS_SNIPER:
+				case CLASS_CONTAGION:
+			 	case CLASS_MARINE:
 				case CLASS_SENTINEL:
 					write_to_output(d, "%s\r\nSelect primary weapon: ", mods::chargen::primary_weapon_menu(static_cast<player_class_t>(load_result)).data());
 					p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
 					break;
 				default:
+					write_to_output(d, "\r\nThat's not a class.");
+					write_to_output(d, "%s\r\nSelect class: \r\nSelect class: ", class_menu);
+					p->set_state(CON_QCLASS);
 					break;
 			}
 			return;

@@ -1734,8 +1734,8 @@ MENTOC_FEED_RIFLE	mods/item-types.hpp	457;"	d
 MENTOC_FEED_TRAP	mods/item-types.hpp	498;"	d
 MENTOC_FEED_TYPE_IMPL	mods/item-types.hpp	386;"	d
 MENTOC_FILE_EXISTS_PREAMBLE	mods/yaml.cpp	17;"	d	file:
-MENTOC_F_EXA	act.builder.cpp	662;"	d	file:
-MENTOC_F_EXA	act.builder.cpp	676;"	d	file:
+MENTOC_F_EXA	act.builder.cpp	372;"	d	file:
+MENTOC_F_EXA	act.builder.cpp	386;"	d	file:
 MENTOC_F_IMPORT	mods/object-utils.hpp	291;"	d
 MENTOC_F_IMPORT	mods/object-utils.hpp	306;"	d
 MENTOC_GADGET_MEMBERS_TUPLE	mods/item-types.hpp	183;"	d
@@ -2021,7 +2021,7 @@ NUM_CLASSES	structs.h	233;"	d
 NUM_OF_BOARDS	boards.h	11;"	d
 NUM_OF_DIRS	structs.h	641;"	d
 NUM_RESERVED_DESCS	comm.h	11;"	d
-NUM_TOKENS	interpreter.cpp	1223;"	d	file:
+NUM_TOKENS	interpreter.cpp	1224;"	d	file:
 NUM_WEARS	structs.h	416;"	d
 NameAndDesc	mods/catch.hpp	/^		NameAndDesc(const char* _name = "", const char* _description= "")$/;"	f	struct:Catch::NameAndDesc
 NameAndDesc	mods/catch.hpp	/^	struct NameAndDesc {$/;"	s	namespace:Catch
@@ -2254,7 +2254,7 @@ RC_DRONE_THERMAL	structs.h	/^	RC_DRONE_THERMAL,$/;"	e	enum:lense_type_t
 READ_LVL	boards.h	37;"	d
 READ_SIZE	utils.h	27;"	d
 REAL	db.h	/^	REAL=0,\\$/;"	e	enum:__anon1
-RECON	interpreter.cpp	1630;"	d	file:
+RECON	interpreter.cpp	1631;"	d	file:
 RECREATE	utils.h	173;"	d
 REDUCED_DETECTION_CHANCE	mods/skills.hpp	/^			REDUCED_DETECTION_CHANCE,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 RELOAD	mods/weapon-types.hpp	/^		RELOAD,$/;"	e	enum:mods::weapon::capabilities::cap_t
@@ -3010,7 +3010,7 @@ UNKNOWN_STATUS	mods/behaviour_tree_status.hpp	/^		UNKNOWN_STATUS,$/;"	e	enum:mod
 UNKNOWN_YAML_FILE	mods/util.hpp	/^	constexpr static const char* UNKNOWN_YAML_FILE = "unknown-yits";$/;"	m	namespace:mods::util
 UNLOCK_DOOR	act.movement.cpp	348;"	d	file:
 UNMARK	graph.cpp	54;"	d	file:
-UNSWITCH	interpreter.cpp	1632;"	d	file:
+UNSWITCH	interpreter.cpp	1633;"	d	file:
 UNUSED16	mods/flags.hpp	/^		UNUSED16,				\/\/ useless$/;"	e	enum:mods::flags::aff
 UNUSED17	mods/flags.hpp	/^		UNUSED17,				\/\/ useless$/;"	e	enum:mods::flags::aff
 UP	structs.h	154;"	d
@@ -3018,7 +3018,7 @@ UPDATE	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_t
 UPPER	utils.h	156;"	d
 USERS_FORMAT	act.informative.cpp	1615;"	d	file:
 USE_AUTOEQ	structs.h	113;"	d
-USURP	interpreter.cpp	1631;"	d	file:
+USURP	interpreter.cpp	1632;"	d	file:
 Unknown	mods/catch.hpp	/^			Unknown = -1,$/;"	e	enum:Catch::ResultWas::OfType
 VALID_EDGE	graph.cpp	/^int VALID_EDGE(room_rnum x, int y) {$/;"	f
 VALID_OBJ_RNUM	utils.h	397;"	d
@@ -3251,7 +3251,7 @@ __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__	mobact.cpp	42;"	d	file:
 __MENTOC_PLR	db.cpp	2606;"	d	file:
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__	mods/behaviour_tree_impl.cpp	16;"	d	file:
-__MENTOC_SHOW_COMMAND_INTERPRETER_DEBUG_OUTPUT__	interpreter.cpp	1046;"	d	file:
+__MENTOC_SHOW_COMMAND_INTERPRETER_DEBUG_OUTPUT__	interpreter.cpp	1047;"	d	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	989;"	d	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	d
 __MENTOC_STRING_LIT__	mods/util.hpp	21;"	d
@@ -4535,11 +4535,6 @@ file_to_string_alloc	db.cpp	/^int file_to_string_alloc(const char *name, char **
 filename	boards.h	/^	char	filename[50];	\/* file to save this board to *\/$/;"	m	struct:board_info_type
 filesystem	mods/filesystem.hpp	/^namespace mods::filesystem {$/;"	n	class:mods
 fill	interpreter.cpp	/^const char *fill[] = {$/;"	v
-fill_armor	act.builder.cpp	/^void fill_armor(std::shared_ptr<obj_data>& obj) {$/;"	f
-fill_attachment	act.builder.cpp	/^void fill_attachment(std::shared_ptr<obj_data>& obj) {$/;"	f
-fill_consumable	act.builder.cpp	/^void fill_consumable(std::shared_ptr<obj_data>& obj) {$/;"	f
-fill_drone	act.builder.cpp	/^void fill_drone(std::shared_ptr<obj_data>& obj) {$/;"	f
-fill_explosive	act.builder.cpp	/^void fill_explosive(std::shared_ptr<obj_data>& obj) {$/;"	f
 fill_flags	mods/yaml.cpp	/^	void armor_description_t::fill_flags(obj_data* o){$/;"	f	class:mods::yaml::armor_description_t
 fill_flags	mods/yaml.cpp	/^	void attachment_description_t::fill_flags(obj_data* o){$/;"	f	class:mods::yaml::attachment_description_t
 fill_flags	mods/yaml.cpp	/^	void consumable_description_t::fill_flags(obj_data* o){$/;"	f	class:mods::yaml::consumable_description_t
@@ -4548,9 +4543,6 @@ fill_flags	mods/yaml.cpp	/^	void explosive_description_t::fill_flags(obj_data* o
 fill_flags	mods/yaml.cpp	/^	void gadget_description_t::fill_flags(obj_data* o){$/;"	f	class:mods::yaml::gadget_description_t
 fill_flags	mods/yaml.cpp	/^	void rifle_description_t::fill_flags(obj_data* o){$/;"	f	class:mods::yaml::rifle_description_t
 fill_flags	mods/yaml.cpp	/^	void trap_description_t::fill_flags(obj_data* o){$/;"	f	class:mods::yaml::trap_description_t
-fill_gadget	act.builder.cpp	/^void fill_gadget(std::shared_ptr<obj_data>& obj) {$/;"	f
-fill_rifle	act.builder.cpp	/^void fill_rifle(std::shared_ptr<obj_data>& obj) {$/;"	f
-fill_trap	act.builder.cpp	/^void fill_trap(std::shared_ptr<obj_data>& obj) {$/;"	f
 fill_word	interpreter.cpp	/^int fill_word(char *argument) {$/;"	f
 find_action	act.social.cpp	/^int find_action(int cmd) {$/;"	f
 find_alias	interpreter.cpp	/^struct alias_data *find_alias(struct alias_data *alias_list, char *str) {$/;"	f
@@ -4714,6 +4706,7 @@ get_caps	mods/yaml.hpp	/^		std::vector<cap_t> get_caps(){ return mods::weapon::g
 get_caps	mods/yaml.hpp	/^		std::vector<cap_t> get_caps(){ return mods::weapon::get_caps((mw_trap)this->type); }$/;"	f	struct:mods::yaml::trap_description_t
 get_captured_output	mods/player.cpp	/^	std::string_view player::get_captured_output() {$/;"	f	class:mods::player
 get_char_num	handler.cpp	/^char_data *get_char_num(mob_rnum nr) {$/;"	f
+get_char_pk_id	mods/js.cpp	/^		static duk_ret_t get_char_pk_id(duk_context *ctx){$/;"	f	namespace:mods::js
 get_char_room	handler.cpp	/^char_data *get_char_room(char *name, int *number, room_rnum room) {$/;"	f
 get_char_room_vis	handler.cpp	/^char_data * get_char_room_vis( char_data *ch, char *name, int *number) {$/;"	f
 get_char_vis	handler.cpp	/^char_data *get_char_vis(char_data *ch, char *name, int *number, int where) {$/;"	f

@@ -431,6 +431,18 @@ namespace mods {
 			duk_push_number(ctx,-1);
 			return 1;
 		}
+		static duk_ret_t get_char_pk_id(duk_context *ctx){
+			std::string c_name = duk_to_string(ctx,0);
+			bool found = false;
+			auto player_ptr = utils::find_player_by_name(c_name,found);
+			if(found){
+				mods::db::save_char(player_ptr);
+				duk_push_number(ctx,player_ptr->db_id());
+				return 1;
+			}
+			duk_push_number(ctx,-1);
+			return 1;
+		}
 		static duk_ret_t room(duk_context *ctx){
 			auto room = mods::globals::current_player->room();
 			duk_push_number(ctx,room);
@@ -752,6 +764,8 @@ __set_points_cleanup:
 			duk_put_global_string(ctx,"clear_all_affected_flags");
 			duk_push_c_function(ctx,mods::js::set_char_pk_id,2);
 			duk_put_global_string(ctx,"set_char_pk_id");
+			duk_push_c_function(ctx,mods::js::get_char_pk_id,1);
+			duk_put_global_string(ctx,"get_char_pk_id");
 		}
 
 		void run_profile_scripts(const std::string& player_name){
