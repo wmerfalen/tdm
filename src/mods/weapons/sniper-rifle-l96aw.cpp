@@ -1,24 +1,24 @@
-#include "sniper-rifle-psg1.hpp"
+#include "sniper-rifle-l96aw.hpp"
 /** db.h for read_object() */
 #include "../../db.h"
 
 namespace mods::weapons::sniper_rifle {
-	obj_data_ptr_t psg1::make(){
-		return create_object(ITEM_RIFLE,"psg1.yml");
+	obj_data_ptr_t l96aw::make(){
+		return create_object(ITEM_RIFLE,"l96aw.yml");
 	}
-	void psg1::feed(const mods::pq::row_type & row){
+	void l96aw::feed(const mods::pq::row_type & row){
 		bound_to = row["bound_to"].as<uint16_t>();
 		id = row["id"].as<uint16_t>();
-		m_obj = psg1::make();
+		m_obj = l96aw::make();
 	}
-	obj_data_ptr_t psg1::obj(){
+	obj_data_ptr_t l96aw::obj(){
 		return m_obj;
 	}
-	psg1::~psg1(){
+	l96aw::~l96aw(){
 		m_obj.reset();
 	}
 
-	psg1::psg1(){
+	l96aw::l96aw(){
 		bound_to = 0;
 		id = 0;
 		m_obj = this->make();

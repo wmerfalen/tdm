@@ -90,8 +90,8 @@ namespace mods::orm {
 				case CLASS_MEDIC:
 					pclass_name = "MEDIC";
 					break;
-				case CLASS_MARKSMAN:
-					pclass_name = "MARKSMAN";
+				case CLASS_SNIPER:
+					pclass_name = "SNIPER";
 					break;
 				case CLASS_PSYOP:
 					pclass_name = "PSYOP";
@@ -101,6 +101,12 @@ namespace mods::orm {
 					break;
 				case CLASS_MARINE:
 					pclass_name = "MARINE";
+					break;
+				case CLASS_SENTINEL:
+					pclass_name = "SENTINEL";
+					break;
+				case CLASS_CONTAGION:
+					pclass_name = "CONTAGION";
 					break;
 				default:
 					pclass_name = "<unknown>";
@@ -168,7 +174,7 @@ namespace mods::orm {
 					{"description","Battlefield suture expert. Capable of absorbing high amounts of damage. Can revive and heal downed teammates."}
 				},
 				{
-					{"name","MARKSMAN"},
+					{"name","SNIPER"},
 					{"description","Ranged weapons expert. Spawns with a sniper rifle that only you can use."}
 				},
 				{

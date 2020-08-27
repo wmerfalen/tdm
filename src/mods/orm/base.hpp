@@ -146,12 +146,6 @@ namespace mods::orm {
 				}
 				return {-2,"unknown"};
 			}
-		static inline long pg_timestamp_to_long(std::string timestamp){
-			struct tm time;
-			memset(&time,0,sizeof(tm));
-			strptime(timestamp.c_str(), "%Y-%m-%d %H:%M:%S",&time);
-			return mktime(&time);
-		}
 	};
 
 };

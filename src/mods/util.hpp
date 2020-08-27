@@ -32,6 +32,12 @@ extern struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *numb
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 
 namespace mods::util {
+		static inline long pg_timestamp_to_long(std::string timestamp){
+			struct tm time;
+			memset(&time,0,sizeof(tm));
+			strptime(timestamp.c_str(), "%Y-%m-%d %H:%M:%S",&time);
+			return mktime(&time);
+		}
 	constexpr static const char* UNKNOWN_YAML_FILE = "unknown-yits";
 	template <typename TKey,typename TVal>
 	std::string map2str(std::map<TKey,TVal> in_map){

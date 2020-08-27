@@ -163,6 +163,7 @@ namespace mods {
 		std::shared_ptr<mods::npc> read_mobile_ptr(const mob_vnum &,const int & type);
 		void register_player(player_ptr_t);
 		void register_authenticated_player(player_ptr_t);
+		void unregister_authenticated_player(player_ptr_t);
 		//void register_object_db_id(obj_ptr_t);
 		void register_object(obj_ptr_t);
 		template <typename TShopPtr>

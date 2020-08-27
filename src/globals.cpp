@@ -148,6 +148,9 @@ namespace mods {
 		void register_authenticated_player(player_ptr_t player){
 			player_name_map[player->name()] = player;
 		}
+		void unregister_authenticated_player(player_ptr_t player){
+			player_name_map.erase(player->name());
+		}
 
 		void shutdown(void){
 			circle_shutdown = 1;

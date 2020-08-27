@@ -17,6 +17,12 @@ namespace mods::orm {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 	using sql_save_map_t = std::map<std::string,std::string>;
 
+	/**
+	 * I really wanted to utilize the name of "sentinel" as an homage to
+	 * the archetype of the guard. A sentinel is the epitome of a 
+	 * bodyguard that is loyal to it's protectee.
+	 * - Will, 2020-08-22
+	 */
 	struct sentinel : public base {
 		using primary_choice_t = mods::weapon::sentinel::primary_choice_t;
 		sentinel() : base(), id(0) { this->init(); loaded = 0; }

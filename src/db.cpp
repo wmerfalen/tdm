@@ -229,6 +229,25 @@ namespace db {
 		}
 	}
 
+	int16_t delete_char(player_ptr_t& player){
+		try{
+			std::map<std::string,std::string> values;
+			mods::db::lmdb_export_char(player,values);
+			auto delete_txn = txn();
+			sql_compositor comp("player",&delete_txn);
+			auto del_sql = comp
+				.del()
+				.from("player")
+				.where("player_name","=",values["player_name"])
+				.sql();
+			mods::pq::exec(delete_txn,del_sql);
+			mods::pq::commit(delete_txn);
+			return 0;
+		}catch(std::exception& e){
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error deleting character: '" << e.what() << "'\n";
+			return -1;
+		}
+	}
 	int16_t save_new_char(player_ptr_t& player){
 		try{
 			std::map<std::string,std::string> values;

@@ -504,7 +504,7 @@ room_rnum& GET_WAS_IN(char_data* player);
 #define IS_CLERIC(ch)		(!IS_NPC(ch) && \
 				(GET_CLASS(ch) == CLASS_MEDIC))
 #define IS_THIEF(ch)		(!IS_NPC(ch) && \
-				(GET_CLASS(ch) == CLASS_MARKSMAN))
+				(GET_CLASS(ch) == CLASS_SNIPER))
 #define IS_MARINE(ch)		(!IS_NPC(ch) && \
 				(GET_CLASS(ch) == CLASS_SUPPORT))
 #define IS_WARRIOR(ch) IS_MARINE(ch)

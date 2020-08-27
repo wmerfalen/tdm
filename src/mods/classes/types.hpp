@@ -9,6 +9,8 @@ namespace mods::classes {
 		MARINE,
 		SUPPORT,
 		SENTINEL,
+		CONTAGION,
+		PSYOPS,
 		UNDEFINED
 	};
 };

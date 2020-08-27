@@ -1,13 +1,13 @@
-#ifndef __MENTOC_MODS_WEAPONS_SNIPER_RIFLE_PSG1_HEADER__
-#define __MENTOC_MODS_WEAPONS_SNIPER_RIFLE_PSG1_HEADER__
+#ifndef __MENTOC_MODS_WEAPONS_SNIPER_RIFLE_L96AW_HEADER__
+#define __MENTOC_MODS_WEAPONS_SNIPER_RIFLE_L96AW_HEADER__
 
 #include "../weapon.hpp"
 #include "../pqxx-types.hpp"
 
 namespace mods::weapons::sniper_rifle {
-		struct psg1 {
-			psg1();
-			~psg1();
+		struct l96aw {
+			l96aw();
+			~l96aw();
 			static obj_data_ptr_t make();
 
 			uint16_t bound_to;

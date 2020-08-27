@@ -327,6 +327,25 @@ namespace mods::weapon {
 		}
 		return false;
 	}
+	namespace sniper {
+		enum primary_choice_t {
+			SNIPER_NONE = 0,
+			SNIPER_PRIMARY_PSG1 = 1,
+			SNIPER_PRIMARY_L96AW = 2,
+			NONE = 0,
+			PSG1 = 1,
+			L96AW = 2
+		};
+		static inline std::string_view to_string(primary_choice_t s){
+#define SNI_STR(a){ case mods::weapon::sniper::primary_choice_t::a: return #a; }
+			switch(s){
+				SNI_STR(SNIPER_NONE);
+				SNI_STR(SNIPER_PRIMARY_PSG1);
+				SNI_STR(SNIPER_PRIMARY_L96AW);
+				default:return "<unknown>";
+			}
+		}
+	};
 	namespace sentinel {
 		enum primary_choice_t {
 			SENTINEL_NONE = 0,

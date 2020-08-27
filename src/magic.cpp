@@ -54,6 +54,8 @@ void affect_update(void);
  * in some other systems.
  */
 int mag_savingthrow(char_data *ch, int type, int modifier) {
+	return false;/** FIXME */
+#if 0
 	/* NPCs use warrior tables according to some book */
 	int class_sav = CLASS_SUPPORT;
 	int save;
@@ -62,9 +64,11 @@ int mag_savingthrow(char_data *ch, int type, int modifier) {
 		class_sav = GET_CLASS(ch);
 	}
 
+	/** TODO uncomment next line and do saving_throws 
 	save = saving_throws(class_sav, type, GET_LEVEL(ch));
 	save += GET_SAVE(ch, type);
 	save += modifier;
+	*/
 
 	/* Throwing a 0 is always a failure. */
 	if(MAX(1, save) < rand_number(0, 99)) {
@@ -73,6 +77,7 @@ int mag_savingthrow(char_data *ch, int type, int modifier) {
 
 	/* Oops, failed. Sorry. */
 	return (FALSE);
+#endif
 }
 
 void update_player_affected_by(player_ptr_t& player){

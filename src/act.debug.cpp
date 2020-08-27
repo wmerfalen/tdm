@@ -173,11 +173,8 @@ ACMD(do_giveme_flashbang_grenades) {
 }
 
 ACMD(do_giveme_sniper_rifle) {
-	
-	if(player->cl_sniper() == nullptr) {
-		player->set_class(CLASS_SNIPER);
-	}
-	obj_to_char(player->sniper_rifle(),player);
+	auto obj = create_object(ITEM_RIFLE,"psg1.yml");
+	obj_to_char(obj,player);
 }
 
 ACMD(do_point_update) {

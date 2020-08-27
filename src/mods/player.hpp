@@ -111,6 +111,7 @@ namespace mods {
 		void set_db_id(aligned_int_t id);
 		aligned_int_t get_db_id() const;
 		aligned_int_t db_id() const { return m_db_id; }
+		aligned_int_t pk_id() const { return m_db_id; }
 		void set_password(std::string pw);
 		std::string get_password();
 		std::string password(){
@@ -562,6 +563,9 @@ namespace mods {
 		std::shared_ptr<mods::classes::sentinel> cl_sentinel(){ return m_class_sentinel; }
 		void set_sentinel(std::shared_ptr<mods::classes::sentinel> s){
 			m_class_sentinel = s;
+		}
+		void set_sniper(std::shared_ptr<mods::classes::sniper> s){
+			m_class_sniper = s;
 		}
 		obj_data_ptr_t sniper_rifle();
 		void start_histfile();

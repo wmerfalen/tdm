@@ -464,7 +464,8 @@ namespace mods {
 		switch(pclass){
 			case CLASS_SNIPER:
 				m_class_sniper = std::make_shared<mods::classes::sniper>();
-				cl_sniper()->rifle()->bound_to = uuid();
+				/** TODO: make sure this is needed */
+				cl_sniper()->psg1()->bound_to = uuid();
 				break;
 			case CLASS_MEDIC:
 				m_class_medic = std::make_shared<mods::classes::medic>();
@@ -1008,11 +1009,6 @@ namespace mods {
 	socket_t player::socket(){
 		return this->desc().descriptor;
 	}
-	/* Javascript functions */
-	obj_data_ptr_t player::sniper_rifle(){
-		return cl_sniper()->rifle()->obj();
-	}
-
 
 	std::string grab_raw_histfile_seconds(){
 		time_t seconds;
