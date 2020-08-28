@@ -274,7 +274,7 @@ namespace mods::chargen {
 	void handle_primary_choice(player_ptr_t p,char arg_choice,player_class_t class_type){
 		if(class_type == CLASS_SNIPER){
 			auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
-			if(choice.compare("PSG1") == 0){
+			if(choice[0] == 'P'){
 				p->set_sniper(mods::classes::create_sniper(p));
 				auto sresult = p->cl_sniper()->new_player(p,"PSG1");
 				if(sresult < 0){

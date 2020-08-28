@@ -25,10 +25,12 @@ namespace mods::classes {
 	int16_t sniper::new_player(player_ptr_t &player, std::string_view primary_choice){
 		using primary = mods::weapon::sniper::primary_choice_t;
 		auto pchoice = 0;
-		if(!primary_choice.compare("PSG1")){
+		assert(primary_choice.length() > 0);
+
+		if(primary_choice[0] == 'P'){
 			pchoice = primary::SNIPER_PRIMARY_PSG1;
 		}
-		if(!primary_choice.compare("L96") == 0){
+		if(primary_choice[0] == 'L'){
 			pchoice = primary::SNIPER_PRIMARY_L96AW;
 		}
 		if(pchoice == 0){

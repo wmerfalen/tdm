@@ -2071,17 +2071,6 @@ obj_ptr_t create_object(int type,std::string yaml_file) {
 		log(CAT({"SYSERR: create_object:: warning: yaml file DOESNT EXIST:'",yaml_file,"', with type:'", std::to_string(type),"'"}).c_str());
 		return blank_object();
 	}
-	bool sane = mods::util::yaml_file_path_is_sane(path);
-	if(!sane){
-		log(CAT({"SYSERR: create_object:: warning: yaml file ISNT SANE:'",yaml_file,"', with type:'", std::to_string(type),"'"}).c_str());
-		return blank_object();
-	}
-	std::tuple<int,std::string> extracted = mods::util::extract_yaml_info_from_path(path);
-	if(std::get<0>(extracted) != type){
-		log(CAT({"SYSERR: create_object:: warning: yaml file reverse extraction failed... yaml_file:'",yaml_file,"', with type:'", std::to_string(type),"'"}).c_str());
-		return blank_object();
-	}
-
 	obj_list.push_back(std::make_shared<obj_data>(type,yaml_file));
 	mods::globals::register_object(obj_list.back());
 	return obj_list.back();

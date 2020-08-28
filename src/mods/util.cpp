@@ -12,7 +12,24 @@ namespace mods::util {
 		if(string_type.compare(mods::util::UNKNOWN_YAML_FILE) == 0){
 			return mods::util::UNKNOWN_YAML_FILE;
 		}
-		return CAT({MENTOC_CURRENT_WORKING_DIR,"/",string_type,"/",file.data()});
+		if(string_type.substr(0,5).compare("ITEM_") == 0){
+			string_type = string_type.substr(5);
+			std::string f;
+			for(auto c : string_type){
+				f += tolower(c);
+			}
+			string_type = f;
+		}
+		std::string path = "";
+		path = CAT({MENTOC_CURRENT_WORKING_DIR,"/objects/",string_type,"/",file.data()});
+		std::cerr << "[compiled path]: '" << path << "'\n";
+		if(strstr(file.data(),MENTOC_CURRENT_WORKING_DIR)){
+			std::string f = file.data();
+			f = f.substr(f.find_last_of("/"));
+			path = CAT({MENTOC_CURRENT_WORKING_DIR,"/objects/",string_type,"/",f});
+			std::cerr << "[compiled path --{ corrected }--]: '" << path << "'\n";
+		}
+		return path;
 	}
 	std::string&& word_wrap(std::string_view paragraph,int width) {
 		std::string buffer;
@@ -508,7 +525,12 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_ITEM_PARSE_IMPL, ~, MENTOC_ITEM_TYPES_CAPS_SEQ)
 		return {-2,""};
 	}
 	bool yaml_file_exists(std::string path){
-		return mods::filesystem::file_exists(CAT({MENTOC_CURRENT_WORKING_DIR,"/",path}));
+		std::string f = path;
+		std::cerr << "[yaml_file_exists test] '" << f << "'\n";
+		if(!strstr(path.data(),MENTOC_CURRENT_WORKING_DIR)){
+			f = CAT({MENTOC_CURRENT_WORKING_DIR,"/",path});
+		}
+		return mods::filesystem::file_exists(f);
 	}
 
 };/** end mods::util */

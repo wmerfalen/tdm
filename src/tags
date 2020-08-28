@@ -1776,8 +1776,8 @@ MENTOC_GADGET_TYPES_SEQUENCE	mods/item-types.hpp	173;"	d
 MENTOC_GENERIC_WEARS_IMPL	mods/item-types.hpp	337;"	d
 MENTOC_HACK_USED	mods/chat.hpp	31;"	d
 MENTOC_HACK_USED	mods/chat.hpp	72;"	d
-MENTOC_ITEM_PARSE	mods/util.cpp	504;"	d	file:
-MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	500;"	d	file:
+MENTOC_ITEM_PARSE	mods/util.cpp	521;"	d	file:
+MENTOC_ITEM_PARSE_IMPL	mods/util.cpp	517;"	d	file:
 MENTOC_ITEM_TYPES_BY_CAPS_SEQ	mods/item-types.hpp	32;"	d
 MENTOC_ITEM_TYPES_CAPS_SEQ	mods/item-types.hpp	22;"	d
 MENTOC_ITEM_TYPES_SEQ	mods/item-types.hpp	12;"	d
@@ -1791,14 +1791,14 @@ MENTOC_LAZY_INT	mods/builder.cpp	1591;"	d	file:
 MENTOC_LAZY_INT	mods/builder.cpp	1610;"	d	file:
 MENTOC_LAZY_ME	mods/builder.cpp	3020;"	d	file:
 MENTOC_LAZY_ME	mods/builder.cpp	3029;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	422;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	431;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	438;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	447;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	439;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	448;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	457;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	455;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	464;"	d	file:
-MENTOC_LAZY_ME	mods/util.cpp	473;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	465;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	474;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	481;"	d	file:
+MENTOC_LAZY_ME	mods/util.cpp	490;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	221;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	235;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	245;"	d	file:
@@ -3169,10 +3169,10 @@ YamlFeedExceptionInfo	mods/object-utils.hpp	/^	struct YamlFeedExceptionInfo {$/;
 Yes	mods/catch.hpp	/^			Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
 Z	db.cpp	1864;"	d	file:
 Z	db.cpp	1872;"	d	file:
-ZONE_ERROR	db.cpp	2238;"	d	file:
+ZONE_ERROR	db.cpp	2227;"	d	file:
 ZON_PREFIX	db.h	71;"	d
 ZOOM	mods/weapon-types.hpp	/^		ZOOM,$/;"	e	enum:mods::weapon::capabilities::cap_t
-ZO_DEAD	db.cpp	2157;"	d	file:
+ZO_DEAD	db.cpp	2146;"	d	file:
 Z_KINGS_C	castle.cpp	31;"	d	file:
 _ARPA_TELNET_H	telnet.h	37;"	d
 _BSD_SNPRINTF_H	bsd-snprintf.h	41;"	d
@@ -3306,7 +3306,7 @@ __MENTOC_MODS_prefs_HEADER__	mods/prefs.hpp	2;"	d
 __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
 __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__	comm.cpp	857;"	d	file:
 __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__	mobact.cpp	42;"	d	file:
-__MENTOC_PLR	db.cpp	2625;"	d	file:
+__MENTOC_PLR	db.cpp	2614;"	d	file:
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__	mods/behaviour_tree_impl.cpp	16;"	d	file:
 __MENTOC_SHOW_COMMAND_INTERPRETER_DEBUG_OUTPUT__	interpreter.cpp	1047;"	d	file:
