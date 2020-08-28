@@ -6,6 +6,8 @@
 #include "../weapons/shotgun-sasg12.hpp"
 #include "../weapons/pistol-czp10.hpp"
 #include <time.h>
+#include "../sql.hpp"
+#include "../pq.hpp"
 
 /**
  * This class has the right idea, however it is unusable due to the fact
@@ -71,6 +73,10 @@ namespace mods::orm {
 				std::cerr << __FILE__ << ": " << __LINE__ << ": error initializing sentinel class row: '" << e.what() << "'\n";
 			}
 			return 0;
+	}
+	int16_t sentinel::save(void* s){
+		/** FIXME */
+		return 0;
 	}
 	sql_save_map_t sentinel::export_class() {
 		sql_save_map_t values;

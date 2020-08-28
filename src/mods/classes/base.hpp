@@ -1,6 +1,7 @@
 #ifndef __MENTOC_MODS_CLASSES_BASE_HEADER__
 #define  __MENTOC_MODS_CLASSES_BASE_HEADER__
 
+#if 0
 #include "types.hpp"
 #include <memory>
 
@@ -24,5 +25,6 @@ void          psendln(std::string_view msg);
 	};
 };
 #include "../player.hpp"
+#endif
 
 #endif

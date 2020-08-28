@@ -10,9 +10,9 @@
 namespace mods {
 	struct player;
 	namespace classes {
-		struct sentinel;
 		struct sniper;
 		struct marine;
+		struct sentinel;
 		struct contagion;
 		struct engineer;
 		struct medic;
@@ -22,7 +22,8 @@ namespace mods {
 };
 #include "flags.hpp"
 #include "classes/types.hpp"
-#include "classes/base.hpp"
+//#include "classes/base.hpp"
+#if 0
 #include "classes/sniper.hpp"
 #include "classes/marine.hpp"
 #include "classes/sentinel.hpp"
@@ -31,6 +32,8 @@ namespace mods {
 #include "classes/medic.hpp"
 #include "classes/psyop.hpp"
 #include "classes/support.hpp"
+#endif
+
 #include "../conf.h"
 #include "../sysdep.h"
 #include "../structs.h"
@@ -84,7 +87,7 @@ namespace mods {
 		using 	descriptor_data_iterator_t = descriptor_data_t::iterator;
 		using 	weapon_set = short;
 		using 	class_capability_t = std::vector<class_type>;
-		using		class_info_t = std::vector<std::shared_ptr<mods::classes::base>>;
+		//using		class_info_t = std::vector<std::shared_ptr<mods::classes::base>>;
 		using   chdata = char_data;
 		using   chdata_ptr = char_data *;
 		using		descriptor_t = mods::descriptor_data;
@@ -705,7 +708,7 @@ namespace mods {
 		unsigned int m_current_page;
 		std::string  m_current_page_fragment;
 		std::vector<std::string> m_pages;
-		class_info_t m_class_info;
+		//class_info_t m_class_info;
 		std::shared_ptr<player_special_data> m_player_specials;
 		time_type_t	m_time;
 		player_type_enum_t m_type;

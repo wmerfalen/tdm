@@ -4,6 +4,7 @@
 #else
 #define apcrit_debug(MSG) ;;
 #endif
+extern void send_to_room_except(room_rnum room, player_ptr_t, const char *messg, ...);
 
 namespace mods::injure {
 	void injure_player(player_ptr_t& person){

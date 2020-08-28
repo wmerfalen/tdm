@@ -26,6 +26,10 @@
  * output.
  */
 
+extern size_t vwrite_to_output(mods::descriptor_data &t, const char *format, va_list args);
+extern int write_to_descriptor(socket_t desc, const char *txt);
+extern void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
+extern void write_to_char(char_data* ch, std::string_view msg,bool newline, bool plain);
 extern void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...);
 extern void do_auto_exits(char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
@@ -737,7 +741,7 @@ namespace mods {
 		m_current_page = 0;
 		m_current_page_fragment.clear();
 		m_pages.clear();
-		m_class_info = {};
+		//m_class_info = {};
 		if(m_shared_ptr){
 			m_shared_ptr.reset();
 		}
@@ -1084,7 +1088,7 @@ namespace mods {
 		m_current_page = 0;
 		m_current_page_fragment.clear();
 		m_pages.clear();
-		m_class_info = {};
+		//m_class_info = {};
 		if(m_shared_ptr){
 			m_shared_ptr.reset();
 		}

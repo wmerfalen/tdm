@@ -12,6 +12,9 @@
 #include "../affects.hpp"
 
 namespace mods::classes {
+#if 0
 void base::sendln(std::string_view msg){ m_player->sendln(msg); }
 void base::psendln(std::string_view msg){ m_player->psendln(msg); }
+#endif
+
 };

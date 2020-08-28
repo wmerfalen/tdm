@@ -1,5 +1,5 @@
-#ifndef __MENTOC_MODS_CLASSES_SNIPER_HEADER__
-#define  __MENTOC_MODS_CLASSES_SNIPER_HEADER__
+#ifndef __MENTOC_MODS_CLASSES_SUPPORT_HEADER__
+#define  __MENTOC_MODS_CLASSES_SUPPORT_HEADER__
 //#include "base.hpp"
 #include <memory>
 #include "../weapons/sniper-rifle-psg1.hpp"

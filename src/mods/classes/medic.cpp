@@ -1,9 +1,15 @@
 #include "medic.hpp"
 
 namespace mods::classes {
+	template <typename TPlayer>
+	int scaled_heal(TPlayer& target){
+		return (33 * (target->level() * 0.5));
+	}
+	/*
 	int scaled_heal(player_ptr_t& target){
 		return (33 * (target->level() * 0.5));
 	}
+	*/
 	void medic::heal_player(player_ptr_t& player_obj,player_ptr_t& target) {
 		/*
 		if(target->cd()->in_room != player_obj->cd()->in_room) {

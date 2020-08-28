@@ -17,6 +17,7 @@ namespace db {
 
 extern player_class_t parse_class(char arg);
 extern std::string motd;
+extern size_t write_to_output(mods::descriptor_data &t, const char *txt, ...) __attribute__((format(printf, 2, 3)));
 namespace mods::chargen {
 	std::string get_class_description(player_class_t p_class){
 		static std::map<player_class_t,std::string> d;

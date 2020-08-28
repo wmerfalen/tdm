@@ -7,6 +7,8 @@
 #include "../weapons/sniper-rifle-l96aw.hpp"
 #include "../weapons/pistol-czp10.hpp"
 #include <time.h>
+#include "../sql.hpp"
+#include "../pq.hpp"
 
 /**
  * This class has the right idea, however it is unusable due to the fact

@@ -25,11 +25,11 @@ namespace mods::classes {
 	int16_t support::new_player(player_ptr_t &player, std::string_view primary_choice){
 		using primary = mods::weapon::support::primary_choice_t;
 		auto pchoice = 0;
-		if(!primary_choice.compare("PSG-1")){
-			pchoice = primary::SNIPER_PRIMARY_PSG1;
+		if(!primary_choice.compare("MK46")){
+			pchoice = primary::SUPPORT_PRIMARY_MK46;
 		}
-		if(!primary_choice.compare("L96-Arctic-Warfare") == 0){
-			pchoice = primary::SNIPER_PRIMARY_L96AW;
+		if(!primary_choice.compare("HK21") == 0){
+			pchoice = primary::SUPPORT_PRIMARY_HK21;
 		}
 		if(pchoice == 0){
 			std::cerr << "invalid primary weapon choice for support class...\n";

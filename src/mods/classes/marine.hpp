@@ -1,5 +1,5 @@
-#ifndef __MENTOC_MODS_CLASSES_SNIPER_HEADER__
-#define  __MENTOC_MODS_CLASSES_SNIPER_HEADER__
+#ifndef __MENTOC_MODS_CLASSES_MARINE_HEADER__
+#define  __MENTOC_MODS_CLASSES_MARINE_HEADER__
 //#include "base.hpp"
 #include <memory>
 #include "../weapons/sniper-rifle-psg1.hpp"
@@ -14,7 +14,7 @@ namespace mods::classes {
 		static int16_t destroy(player_ptr_t& player);
 		*/
 		types kind() {
-			return types::SNIPER;
+			return types::MARINE;
 		}
 
 		/* constructors and destructors */

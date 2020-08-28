@@ -1,12 +1,12 @@
-#ifndef __MENTOC_MODS_CLASSES_SNIPER_HEADER__
-#define  __MENTOC_MODS_CLASSES_SNIPER_HEADER__
+#ifndef __MENTOC_MODS_CLASSES_PSYOP_HEADER__
+#define  __MENTOC_MODS_CLASSES_PSYOP_HEADER__
 //#include "base.hpp"
 #include <memory>
 #include "../weapons/sniper-rifle-psg1.hpp"
 #include "../weapons/sniper-rifle-l96aw.hpp"
 #include <deque>
 #include <memory>
-#include "../orm/class-sniper.hpp"
+#include "../orm/class-psyop.hpp"
 #include "types.hpp"
 using psyop_orm_t = mods::orm::psyop;
 namespace mods::classes {

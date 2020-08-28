@@ -8,6 +8,7 @@
 #include <memory>
 #include "../orm/class-sniper.hpp"
 #include "types.hpp"
+
 using sniper_orm_t = mods::orm::sniper;
 
 namespace mods::classes {

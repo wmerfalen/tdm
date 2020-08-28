@@ -4,6 +4,9 @@
 #include "../injure.hpp"
 #include "../rooms.hpp"
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+#ifndef TO_ROOM
+#define TO_ROOM		1
+#endif
 extern int ok_damage_shopkeeper(char_data *ch, char_data *victim);
 extern void die(char_data* killer,char_data *victim);
 extern void die(char_data *victim);
@@ -20,6 +23,7 @@ extern void forget(char_data *ch,char_data *victim);
 #ifndef IS_WEAPON
 	#define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
 #endif
+extern void act(const std::string & str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
 namespace mods::weapons::damage_types {
 	using de = damage_event_t;
 	using vpd = mods::scan::vec_player_data;

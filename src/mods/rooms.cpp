@@ -1,6 +1,8 @@
 #include "rooms.hpp"
 #include "weapon-types.hpp"
 #include "weapons/damage-types.hpp"
+extern void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
+extern void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...);
 
 namespace mods::rooms {
 	namespace affects {

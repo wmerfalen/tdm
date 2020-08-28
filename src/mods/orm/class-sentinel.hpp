@@ -36,7 +36,7 @@ namespace mods::orm {
 		sql_save_map_t export_class();
 
 		static constexpr const char* table_name = "class_sentinel";
-		int16_t save(void* s){ return 0; }
+		int16_t save(void* s);
 #if 0
 		template <typename TObject>
 			int16_t save(TObject* s){

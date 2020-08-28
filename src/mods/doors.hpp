@@ -4,6 +4,7 @@
 #include "../globals.hpp"
 #include "loops.hpp"
 #include "object-utils.hpp"
+#include "../comm.h"
 
 extern obj_ptr_t read_object_ptr(obj_vnum nr, int type);
 namespace mods::doors  {

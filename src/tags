@@ -1785,8 +1785,8 @@ MENTOC_ITEM_TYPES_SEQ_CAPS	mods/item-types.hpp	78;"	d
 MENTOC_ITEM_TYPE_LIST_SEQUENCE	mods/item-types.hpp	316;"	d
 MENTOC_LAZY	mods/rooms.hpp	110;"	d
 MENTOC_LAZY	mods/rooms.hpp	92;"	d
-MENTOC_LAZY_COMP	mods/doors.hpp	247;"	d
-MENTOC_LAZY_COMP	mods/doors.hpp	258;"	d
+MENTOC_LAZY_COMP	mods/doors.hpp	248;"	d
+MENTOC_LAZY_COMP	mods/doors.hpp	259;"	d
 MENTOC_LAZY_INT	mods/builder.cpp	1591;"	d	file:
 MENTOC_LAZY_INT	mods/builder.cpp	1610;"	d	file:
 MENTOC_LAZY_ME	mods/builder.cpp	3020;"	d	file:
@@ -1812,10 +1812,10 @@ MENTOC_MEMBER_VARS_EXAMPLE_IMPL	mods/item-types.hpp	394;"	d
 MENTOC_MEMBER_VARS_FOR	mods/item-types.hpp	406;"	d
 MENTOC_MEMBER_VARS_IMPL	mods/item-types.hpp	409;"	d
 MENTOC_MOB_WEARS	mods/item-types.hpp	339;"	d
-MENTOC_MS_COMP	mods/doors.hpp	230;"	d
-MENTOC_MS_COMP	mods/doors.hpp	244;"	d
-MENTOC_NPC_CHECK	mods/player.cpp	55;"	d	file:
-MENTOC_NPC_CHECK_0	mods/player.cpp	56;"	d	file:
+MENTOC_MS_COMP	mods/doors.hpp	231;"	d
+MENTOC_MS_COMP	mods/doors.hpp	245;"	d
+MENTOC_NPC_CHECK	mods/player.cpp	59;"	d	file:
+MENTOC_NPC_CHECK_0	mods/player.cpp	60;"	d	file:
 MENTOC_OBI	mods/builder.cpp	29;"	d	file:
 MENTOC_OBI2	mods/builder.cpp	30;"	d	file:
 MENTOC_OBJ_DATA_FEED_DUAL	structs.cpp	64;"	d	file:
@@ -1951,12 +1951,12 @@ MORT_CAN_SEE	utils.h	447;"	d
 MORT_CAN_SEE_OBJ	utils.h	470;"	d
 MOTD_FILE	db.h	77;"	d
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1324;"	d	file:
-MR	mods/player.cpp	1339;"	d	file:
+MR	mods/player.cpp	1328;"	d	file:
+MR	mods/player.cpp	1343;"	d	file:
 MR	structs.cpp	522;"	d	file:
 MR	structs.cpp	533;"	d	file:
-MRC	mods/player.cpp	1325;"	d	file:
-MRC	mods/player.cpp	1340;"	d	file:
+MRC	mods/player.cpp	1329;"	d	file:
+MRC	mods/player.cpp	1344;"	d	file:
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
 MSG_HEADING	boards.h	44;"	d
@@ -2052,7 +2052,7 @@ NO_LOGIC	mods/behaviour_tree_status.hpp	/^		NO_LOGIC,$/;"	e	enum:mods::behaviour
 NO_PRIMARY_WIELDED_EVENT	mods/damage-event.hpp	/^	NO_PRIMARY_WIELDED_EVENT,$/;"	e	enum:uint16_t
 NPC	act.wizard.cpp	2347;"	d	file:
 NPC	mods/scan.hpp	/^			NPC,$/;"	e	enum:mods::scan::find_type_t
-NPC_SEND_DEBUG	mods/player.cpp	54;"	d	file:
+NPC_SEND_DEBUG	mods/player.cpp	58;"	d	file:
 NRM	utils.h	119;"	d
 NSLC	telnet.h	200;"	d
 NTELOPTS	telnet.h	125;"	d
@@ -2274,7 +2274,7 @@ QGRN	screen.h	42;"	d
 QMAG	screen.h	45;"	d
 QNRM	screen.h	40;"	d
 QRED	screen.h	41;"	d
-QUEUE_TEXTURE_REMOVAL	mods/projectile.cpp	61;"	d	file:
+QUEUE_TEXTURE_REMOVAL	mods/projectile.cpp	66;"	d	file:
 QUIETER_SNIPER_SHOTS	mods/skills.hpp	/^			QUIETER_SNIPER_SHOTS,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 QWHT	screen.h	47;"	d
 QYEL	screen.h	43;"	d
@@ -3106,7 +3106,7 @@ WC_IMM	mods/world-configuration.hpp	/^constexpr static int WC_IMM = 2;$/;"	v
 WC_MOR	mods/world-configuration.hpp	/^constexpr static int WC_MOR = 3;$/;"	v
 WEAPON	mods/object.hpp	/^				WEAPON,$/;"	e	enum:mods::object::object_type_enum_t
 WEAPON_HANDLING	mods/skills.hpp	/^		WEAPON_HANDLING,$/;"	e	enum:mods::skills::fields_of_study
-WEAPON_SET_NUM	mods/player.hpp	52;"	d
+WEAPON_SET_NUM	mods/player.hpp	55;"	d
 WEAR_ABOUT	structs.h	387;"	d
 WEAR_ARMS	structs.h	385;"	d
 WEAR_BACKPACK	structs.h	399;"	d
@@ -5348,7 +5348,6 @@ m_class	mods/player.hpp	/^		player_class_t m_class;$/;"	m	struct:mods::player
 m_class_capability	mods/player.hpp	/^		class_capability_t m_class_capability;$/;"	m	struct:mods::player
 m_class_contagion	mods/player.hpp	/^		std::shared_ptr<mods::classes::contagion> m_class_contagion;$/;"	m	struct:mods::player
 m_class_engineer	mods/player.hpp	/^		std::shared_ptr<mods::classes::engineer> m_class_engineer;$/;"	m	struct:mods::player
-m_class_info	mods/player.hpp	/^		class_info_t m_class_info;$/;"	m	struct:mods::player
 m_class_marine	mods/player.hpp	/^		std::shared_ptr<mods::classes::marine> m_class_marine;$/;"	m	struct:mods::player
 m_class_medic	mods/player.hpp	/^		std::shared_ptr<mods::classes::medic> m_class_medic;$/;"	m	struct:mods::player
 m_class_psyop	mods/player.hpp	/^		std::shared_ptr<mods::classes::psyop> m_class_psyop;$/;"	m	struct:mods::player

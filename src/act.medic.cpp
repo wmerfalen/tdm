@@ -1,10 +1,10 @@
 #include "globals.hpp"
+#include "comm.h"
 #include "conf.h"
 #include "mods/extern.hpp"
 #include "structs.h"
 #include "utils.h"
 #include "db.h"
-#include "mods/classes/medic.hpp"
 #include "mods/util.hpp"
 
 using sptr_medic = std::shared_ptr<mods::classes::medic>;

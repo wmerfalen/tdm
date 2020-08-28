@@ -28,6 +28,11 @@
 #endif
 
 
+extern void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
+extern void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...);
+extern void send_to_room_except(room_rnum room, const std::vector<char_data*>& except, const char *messg, ...);
+extern void send_to_room_except(room_rnum room, player_ptr_t except_me, const char *messg, ...);
+extern void send_to_room(room_rnum room, const char *messg, ...);
 /* using directives */
 using mw_explosive = mods::weapon::type::explosive;
 using mw_rifle = mods::weapon::type::rifle;
