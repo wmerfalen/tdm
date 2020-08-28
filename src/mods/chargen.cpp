@@ -130,10 +130,10 @@ namespace mods::chargen {
 				break;
 			case CLASS_SNIPER:
 				if(choice == 'p' || choice == 'P'){
-					return "PSG-1";
+					return "PSG1";
 				}
 				if(choice == 'a' || choice == 'A'){
-					return "L96-Arctic-Warfare";
+					return "L96";
 				}
 				break;
 			case CLASS_MARINE:
@@ -274,9 +274,9 @@ namespace mods::chargen {
 	void handle_primary_choice(player_ptr_t p,char arg_choice,player_class_t class_type){
 		if(class_type == CLASS_SNIPER){
 			auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
-			if(choice.compare("PSG-1") == 0){
+			if(choice.compare("PSG1") == 0){
 				p->set_sniper(mods::classes::create_sniper(p));
-				auto sresult = p->cl_sniper()->new_player(p,"PSG-1");
+				auto sresult = p->cl_sniper()->new_player(p,"PSG1");
 				if(sresult < 0){
 					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
 					p->set_state(CON_CLOSE);
@@ -285,9 +285,9 @@ namespace mods::chargen {
 				show_finalized_chargen_screen(p);
 				return;
 			}
-			if(choice.compare("L96-Arctic-Warfare") == 0){
+			if(choice.compare("L96") == 0){
 				p->set_sniper(mods::classes::create_sniper(p));
-				auto sresult = p->cl_sniper()->new_player(p,"L96-Arctic-Warfare");
+				auto sresult = p->cl_sniper()->new_player(p,"L96");
 				if(sresult < 0){
 					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
 					p->set_state(CON_CLOSE);
