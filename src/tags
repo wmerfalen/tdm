@@ -1951,12 +1951,12 @@ MORT_CAN_SEE	utils.h	447;"	d
 MORT_CAN_SEE_OBJ	utils.h	470;"	d
 MOTD_FILE	db.h	77;"	d
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1328;"	d	file:
-MR	mods/player.cpp	1343;"	d	file:
+MR	mods/player.cpp	1346;"	d	file:
+MR	mods/player.cpp	1361;"	d	file:
 MR	structs.cpp	522;"	d	file:
 MR	structs.cpp	533;"	d	file:
-MRC	mods/player.cpp	1329;"	d	file:
-MRC	mods/player.cpp	1344;"	d	file:
+MRC	mods/player.cpp	1347;"	d	file:
+MRC	mods/player.cpp	1362;"	d	file:
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
 MSG_HEADING	boards.h	44;"	d
@@ -3696,9 +3696,14 @@ circlemud_version	constants.cpp	/^const char *circlemud_version =$/;"	v
 circlemud_version	constants.hpp	/^constexpr const char *circlemud_version =$/;"	v
 cityguard	spec_assign.cpp	/^SPECIAL(cityguard);$/;"	v
 cityguard	spec_procs.cpp	/^SPECIAL(cityguard);$/;"	v
+cl_contagion	mods/player.cpp	/^	std::shared_ptr<mods::classes::contagion> 	player::cl_contagion(){$/;"	f	class:mods::player
+cl_engineer	mods/player.cpp	/^	std::shared_ptr<mods::classes::engineer> 	player::cl_engineer(){$/;"	f	class:mods::player
+cl_marine	mods/player.cpp	/^	std::shared_ptr<mods::classes::marine> 	player::cl_marine(){$/;"	f	class:mods::player
 cl_medic	mods/player.cpp	/^	std::shared_ptr<mods::classes::medic> 	player::cl_medic(){$/;"	f	class:mods::player
+cl_psyop	mods/player.cpp	/^	std::shared_ptr<mods::classes::psyop> 	player::cl_psyop(){$/;"	f	class:mods::player
 cl_sentinel	mods/player.cpp	/^	std::shared_ptr<mods::classes::sentinel> 	player::cl_sentinel(){$/;"	f	class:mods::player
 cl_sniper	mods/player.cpp	/^	std::shared_ptr<mods::classes::sniper> 	player::cl_sniper(){$/;"	f	class:mods::player
+cl_support	mods/player.cpp	/^	std::shared_ptr<mods::classes::support> 	player::cl_support(){$/;"	f	class:mods::player
 class_abbrevs	class.cpp	/^const char *class_abbrevs[] = {$/;"	v
 class_menu	class.cpp	/^const char* class_menu =$/;"	v
 classes	mods/player.hpp	/^	namespace classes {$/;"	n	namespace:mods

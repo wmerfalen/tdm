@@ -460,14 +460,31 @@ namespace mods {
 	std::shared_ptr<mods::classes::sniper> 	player::cl_sniper(){
 		return m_class_sniper;
 	}
-	std::shared_ptr<mods::classes::medic> 	player::cl_medic(){
-		return m_class_medic;
+	std::shared_ptr<mods::classes::marine> 	player::cl_marine(){
+		return m_class_marine;
 	}
 	std::shared_ptr<mods::classes::sentinel> 	player::cl_sentinel(){
 		return m_class_sentinel;
 	}
+	std::shared_ptr<mods::classes::contagion> 	player::cl_contagion(){
+		return m_class_contagion;
+	}
+	std::shared_ptr<mods::classes::engineer> 	player::cl_engineer(){
+		return m_class_engineer;
+	}
+	std::shared_ptr<mods::classes::medic> 	player::cl_medic(){
+		return m_class_medic;
+	}
+	std::shared_ptr<mods::classes::psyop> 	player::cl_psyop(){
+		return m_class_psyop;
+	}
+	std::shared_ptr<mods::classes::support> 	player::cl_support(){
+		return m_class_support;
+	}
 	void player::set_class(player_class_t pclass){
 		m_class = pclass;
+		std::cerr << "[DEPRECATED] calling player::set_class!!!\n";
+#if 0
 		switch(pclass){
 			case CLASS_SNIPER:
 				m_class_sniper = std::make_shared<mods::classes::sniper>();
@@ -481,6 +498,7 @@ namespace mods {
 			default:
 				break;
 		}
+#endif
 	}
 
 	std::string& player::name(){ return m_name; }

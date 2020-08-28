@@ -65,4 +65,47 @@ namespace mods::classes {
 		*target << "You gain " << amount << " hit points.\r\n";
 		*/
 	}
+		std::shared_ptr<medic> create_medic(player_ptr_t &in_player){
+			return std::move(std::make_shared<medic>(in_player));
+		}
+		int16_t medic::new_player(player_ptr_t &player, std::string_view primary_choice){
+			using primary = mods::weapon::medic::primary_choice_t;
+			auto pchoice = 0;
+			if(!primary_choice.compare("AUGPARA")){
+				pchoice = primary::MEDIC_PRIMARY_AUGPARA;
+			}
+			if(!primary_choice.compare("TAR21")){
+				pchoice = primary::MEDIC_PRIMARY_TAR21;
+			}
+			if(pchoice == 0){
+				std::cerr << "invalid primary weapon choice for medic class...\n";
+				return -1;
+			}
+			auto db_id = m_orm.initialize_row(player,static_cast<primary>(pchoice));
+			if(db_id == 0){
+				return -2;
+			}
+			load_by_player(player);
+			return 0;
+		}
+	int16_t medic::load_by_player(player_ptr_t & player){
+		m_player = player;
+		auto result = m_orm.load_by_player(player->db_id());
+		if(result < 0){
+			std::cerr << "unable to load medic class by player id: " << player->db_id() << ".. return status: " << result << "\n";
+		}
+		return result;
+	}
+	medic::medic(){
+			m_psg1 = nullptr;
+			m_l96aw = nullptr;
+	}
+	medic::medic(player_ptr_t p){
+		m_psg1 = nullptr;
+		m_l96aw = nullptr;
+		load_by_player(p);
+	}
+	player_ptr_t 	medic::player(){
+		return m_player;
+	}
 };
