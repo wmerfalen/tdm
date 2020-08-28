@@ -66,7 +66,6 @@ const char *pc_class_types[] = {
 	"Contagion"
 	"Engineer",
 	"Medic",
-	"Marksman",
 	"Psyop",
 	"Support",
 	"\n"
@@ -80,9 +79,8 @@ const char* class_menu =
 		"  [4] Contagion\r\n"  
 		"  [5] Engineer\r\n"
 		"  [6] Medic\r\n"
-		"  [7] Marksman\r\n"
-		"  [8] Psyop\r\n"
-		"  [9] Support\r\n"
+		"  [7] Psyop\r\n"
+		"  [8] Support\r\n"
 		"\r\n"
 		"NOTE: For a description of a class, type a question mark then the number.\r\n"
 		"For example: ?1 will give you a description of the Sniper class\r\n"
@@ -314,15 +312,9 @@ player_class_t parse_class(char arg) {
 	std::string a;
 	a[0] = arg;
 	switch(arg) {
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':
+		case '1': case '2': case '3':
+		case '4': case '5': case '6':
+		case '7': case '8':
 			return static_cast<player_class_t>(atoi(a.c_str()));
 		default:
 			return CLASS_UNDEFINED;

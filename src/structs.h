@@ -204,18 +204,6 @@ using ush_int = uint32_t;
 /* char and mob-related defines *****************************************/
 
 
-/* PC classes */
-//enum player_class_t {
-//CLASS_UNDEFINED	 =  0 ,
-//CLASS_ENGINEER   =  1 ,
-//CLASS_MEDIC      =  2 ,
-//CLASS_MARKSMAN	 =  3 ,
-//CLASS_PSYOP			 =  4 ,
-//CLASS_SUPPORT	   =  5 ,
-//CLASS_MARINE		 =  6 ,
-//CLASS_SNIPER     = CLASS_MARKSMAN
-//};
-
 enum player_class_t {
 	CLASS_UNDEFINED = 0,
 	CLASS_SNIPER = 1,

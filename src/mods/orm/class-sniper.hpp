@@ -4,16 +4,15 @@
 #include <iostream>
 #include <vector>
 #include "../../globals.hpp"
-#include "../pq.hpp"
-#include "../sql.hpp"
-
 
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
 	struct sniper {
 		using primary_choice_t = mods::weapon::sniper::primary_choice_t;
+
 		sniper() : id(0) { this->init(); loaded = 0; }
 		~sniper() = default;
+
 		uint64_t initialize_row(player_ptr_t &player, primary_choice_t primary_choice);
 		int16_t feed(const pqxx::result::reference &);
 		void init();	

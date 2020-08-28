@@ -1,11 +1,12 @@
 #ifndef __MENTOC_MODS_CLASSES_MEDIC_HEADER__
 #define  __MENTOC_MODS_CLASSES_MEDIC_HEADER__
 
-#include "base.hpp"
+//#include "base.hpp"
 #include "../../comm.h"
+#include "types.hpp"
 namespace mods::classes {
 	using player_ptr = player_ptr_t;
-	struct medic : base {
+	struct medic {
 		types kind() {
 			return types::MEDIC;
 		}

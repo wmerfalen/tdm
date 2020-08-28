@@ -11,16 +11,26 @@ namespace mods {
 	struct player;
 	namespace classes {
 		struct sentinel;
+		struct sniper;
+		struct marine;
+		struct contagion;
+		struct engineer;
+		struct medic;
+		struct psyop;
+		struct support;
 	};
 };
 #include "flags.hpp"
 #include "classes/types.hpp"
 #include "classes/base.hpp"
-#include "classes/medic.hpp"
 #include "classes/sniper.hpp"
 #include "classes/marine.hpp"
-#include "classes/support.hpp"
+#include "classes/sentinel.hpp"
+#include "classes/contagion.hpp"
 #include "classes/engineer.hpp"
+#include "classes/medic.hpp"
+#include "classes/psyop.hpp"
+#include "classes/support.hpp"
 #include "../conf.h"
 #include "../sysdep.h"
 #include "../structs.h"
@@ -49,11 +59,6 @@ namespace mods::acl_list {
 extern player_ptr_t ptr(char_data*);
 
 #include "damage-event.hpp"
-namespace mods::classes {
-	struct medic;
-	struct sniper;
-	struct sentinel;
-};
 using lambda_queue_t = std::multimap<uint64_t,std::function<void()>>;
 using event_queue_t = std::multimap<uint32_t,std::tuple<uuid_t,uint32_t>>;
 using lambda_queue_iterator = lambda_queue_t::iterator;
@@ -559,13 +564,37 @@ namespace mods {
 			return del_affected_by(af.index);
 		}
 		std::shared_ptr<mods::classes::sniper> 	cl_sniper();
+		std::shared_ptr<mods::classes::marine> cl_marine();
+		std::shared_ptr<mods::classes::sentinel> cl_sentinel();
+		std::shared_ptr<mods::classes::contagion> cl_contagion();
+		std::shared_ptr<mods::classes::engineer> cl_engineer();
 		std::shared_ptr<mods::classes::medic> 	cl_medic();
-		std::shared_ptr<mods::classes::sentinel> cl_sentinel(){ return m_class_sentinel; }
-		void set_sentinel(std::shared_ptr<mods::classes::sentinel> s){
-			m_class_sentinel = s;
-		}
+		std::shared_ptr<mods::classes::psyop> 	cl_psyop();
+		std::shared_ptr<mods::classes::support> 	cl_support();
+
 		void set_sniper(std::shared_ptr<mods::classes::sniper> s){
 			m_class_sniper = s;
+		}
+		void set_marine(std::shared_ptr<mods::classes::marine> s){
+			m_class_marine = s;
+		}
+		void set_contagion(std::shared_ptr<mods::classes::contagion> s){
+			m_class_contagion = s;
+		}
+		void set_engineer(std::shared_ptr<mods::classes::engineer> s){
+			m_class_engineer = s;
+		}
+		void set_medic(std::shared_ptr<mods::classes::medic> s){
+			m_class_medic = s;
+		}
+		void set_psyop(std::shared_ptr<mods::classes::psyop> s){
+			m_class_psyop = s;
+		}
+		void set_support(std::shared_ptr<mods::classes::support> s){
+			m_class_support = s;
+		}
+		void set_sentinel(std::shared_ptr<mods::classes::sentinel> s){
+			m_class_sentinel = s;
 		}
 		obj_data_ptr_t sniper_rifle();
 		void start_histfile();
@@ -684,7 +713,12 @@ namespace mods {
 		weapon_type_t m_weapon_flags;
 		std::shared_ptr<mods::classes::sentinel> m_class_sentinel;
 		std::shared_ptr<mods::classes::sniper> m_class_sniper;
+		std::shared_ptr<mods::classes::marine> m_class_marine;
+		std::shared_ptr<mods::classes::contagion> m_class_contagion;
+		std::shared_ptr<mods::classes::engineer> m_class_engineer;
 		std::shared_ptr<mods::classes::medic> m_class_medic;
+		std::shared_ptr<mods::classes::psyop> m_class_psyop;
+		std::shared_ptr<mods::classes::support> m_class_support;
 		FILE* m_histfile_fp;
 		bool m_histfile_on;
 		uint32_t m_histfile_index;

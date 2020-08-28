@@ -459,16 +459,20 @@ namespace mods {
 	std::shared_ptr<mods::classes::medic> 	player::cl_medic(){
 		return m_class_medic;
 	}
+	std::shared_ptr<mods::classes::sentinel> 	player::cl_sentinel(){
+		return m_class_sentinel;
+	}
 	void player::set_class(player_class_t pclass){
 		m_class = pclass;
 		switch(pclass){
 			case CLASS_SNIPER:
 				m_class_sniper = std::make_shared<mods::classes::sniper>();
-				/** TODO: make sure this is needed */
-				cl_sniper()->psg1()->bound_to = uuid();
 				break;
 			case CLASS_MEDIC:
 				m_class_medic = std::make_shared<mods::classes::medic>();
+				break;
+			case CLASS_SENTINEL:
+				//m_class_sentinel = std::make_shared<mods::classes::sentinel>();
 				break;
 			default:
 				break;

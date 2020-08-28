@@ -48,7 +48,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/chat mods/conf mods/deferred mods/drone mods/immortal\
 					 mods/js mods/player mods/prefs mods/pregame\
 					 mods/projectile mods/quests mods/scan mods/sql mods/util\
-					 mods/weapon mods/classes/medic mods/string mods/loops\
+					 mods/weapon mods/string mods/loops\
 					 mods/hell mods/db mods/testing/lmdb/player-syncing\
 					 mods/testing/lmdb/db mods/player-scaffolding sql/port\
 					 mods/meta_utils mods/acl_list mods/flags mods/js-player-scaffolding \
@@ -57,14 +57,22 @@ buildobj = act.informative act.item act.medic \
 					 mods/randomized-items mods/auto-login mods/date-time \
 					 mods/world-configuration mods/debug act.debug mods/pfind \
 					 mods/orm/chargen mods/orm/inventory \
+					 mods/orm/room \
 					 mods/weapons/pistol-czp10 \
-					 mods/weapons/smg-mp5 mods/weapons/shotgun-sasg12 mods/classes/sentinel \
-					 mods/orm/class-sentinel mods/orm/room \
+					 mods/weapons/smg-mp5 mods/weapons/shotgun-sasg12 \
 					 mods/orm/class-sniper mods/classes/sniper \
+					 mods/orm/class-marine mods/classes/marine \
+					 mods/orm/class-sentinel mods/classes/sentinel \
+					 mods/orm/class-contagion mods/classes/contagion \
+					 mods/orm/class-engineer mods/classes/engineer \
+					 mods/orm/class-medic mods/classes/medic \
+					 mods/orm/class-psyop mods/classes/psyop \
+					 mods/orm/class-support mods/classes/support \
+					 mods/classes/base \
 					 mods/weapons/sniper-rifle-psg1 mods/weapons/sniper-rifle-l96aw \
 					 mods/orm/quotes act.builder mods/orm/base mods/yaml \
 					 mods/affects mods/item mods/weapon-types mods/sensor-grenade \
-					 mods/calc_visibility mods/events mods/chargen mods/classes/base \
+					 mods/calc_visibility mods/events mods/chargen \
 					 mods/object-utils mods/camera mods/orm/shop shop mods/shop mods/rand \
 					 mods/help mods/rooms mods/weapons/damage-types mods/injure mods/skills \
 					 mods/mobs/mini-gunner mods/mobs/extended-types mods/values \

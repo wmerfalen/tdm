@@ -1,7 +1,7 @@
 #ifndef __MENTOC_MODS_CLASSES_SENTINEL_HEADER__
 #define  __MENTOC_MODS_CLASSES_SENTINEL_HEADER__
 #include "../../structs.h"
-#include "base.hpp"
+//#include "base.hpp"
 #include <memory>
 #include "../weapons/smg-mp5.hpp"
 #include "../weapons/shotgun-sasg12.hpp"
@@ -12,9 +12,9 @@
 #include "../orm/class-sentinel.hpp"
 #include "../weapon.hpp"
 
+using sentinel_orm_t = mods::orm::sentinel;
 namespace mods::classes {
-	struct sentinel : base {
-		using sentinel_orm_t = mods::orm::sentinel;
+	struct sentinel {
 		using primary_choice_t = mods::weapon::sentinel::primary_choice_t;
 		enum cure_levels_t {
 				SENTINEL_CURE_NONE = 0,
@@ -94,6 +94,8 @@ namespace mods::classes {
 		int16_t				new_player(player_ptr_t&, std::string_view primary);
 		int64_t				db_id() const;
 		int16_t       save();
+void          sendln(std::string_view msg);
+void          psendln(std::string_view msg);
 		private:
 			mp5_ptr_t 			m_mp5;
 			sasg12_ptr_t  	m_sasg12;
@@ -106,6 +108,7 @@ namespace mods::classes {
 			deny_entry_levels_t m_deny_entry_level;
 			gadget_shield_levels_t m_gadget_shield_level;
 			oblique_kick_levels_t m_oblique_kick_level;
+			player_ptr_t m_player;
 	};
 	std::shared_ptr<mods::classes::sentinel> create_sentinel(player_ptr_t &player);
 

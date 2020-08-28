@@ -10,7 +10,7 @@ namespace mods::classes {
 		SUPPORT,
 		SENTINEL,
 		CONTAGION,
-		PSYOPS,
+		PSYOP,
 		UNDEFINED
 	};
 };

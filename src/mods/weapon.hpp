@@ -346,6 +346,127 @@ namespace mods::weapon {
 			}
 		}
 	};
+#undef SNI_STR
+	namespace marine {
+		enum primary_choice_t {
+			MARINE_NONE = 0,
+			MARINE_PRIMARY_M16A4 = 1,
+			MARINE_PRIMARY_M4 = 2,
+			NONE = 0,
+			M16A4 = 1,
+			M4 = 2
+		};
+		static inline std::string_view to_string(primary_choice_t s){
+#define MAR_STR(a){ case mods::weapon::marine::primary_choice_t::a: return #a; }
+			switch(s){
+				MAR_STR(MARINE_NONE);
+				MAR_STR(MARINE_PRIMARY_M16A4);
+				MAR_STR(MARINE_PRIMARY_M4);
+				default:return "<unknown>";
+			}
+		}
+	};
+#undef MAR_STR
+	namespace contagion {
+		enum primary_choice_t {
+			CONTAGION_NONE = 0,
+			CONTAGION_PRIMARY_M3 = 1,
+			CONTAGION_PRIMARY_FAMAS = 2,
+			NONE = 0,
+			M3 = 1,
+			FAMAS = 2
+		};
+		static inline std::string_view to_string(primary_choice_t s){
+#define MAR_STR(a){ case mods::weapon::contagion::primary_choice_t::a: return #a; }
+			switch(s){
+				MAR_STR(CONTAGION_NONE);
+				MAR_STR(CONTAGION_PRIMARY_M3);
+				MAR_STR(CONTAGION_PRIMARY_FAMAS);
+				default:return "<unknown>";
+			}
+		}
+	};
+#undef MAR_STR
+	namespace engineer {
+		enum primary_choice_t {
+			ENGINEER_NONE = 0,
+			ENGINEER_PRIMARY_FMG9 = 1,
+			ENGINEER_PRIMARY_P90 = 2,
+			NONE = 0,
+			FMG9 = 1,
+			P90 = 2
+		};
+		static inline std::string_view to_string(primary_choice_t s){
+#define MAR_STR(a){ case mods::weapon::engineer::primary_choice_t::a: return #a; }
+			switch(s){
+				MAR_STR(ENGINEER_NONE);
+				MAR_STR(ENGINEER_PRIMARY_FMG9);
+				MAR_STR(ENGINEER_PRIMARY_P90);
+				default:return "<unknown>";
+			}
+		}
+	};
+#undef MAR_STR
+	namespace medic {
+		enum primary_choice_t {
+			MEDIC_NONE = 0,
+			MEDIC_PRIMARY_AUGPARA = 1,
+			MEDIC_PRIMARY_TAR21 = 2,
+			NONE = 0,
+			AUGPARA = 1,
+			TAR21 = 2
+		};
+		static inline std::string_view to_string(primary_choice_t s){
+#define MAR_STR(a){ case mods::weapon::medic::primary_choice_t::a: return #a; }
+			switch(s){
+				MAR_STR(MEDIC_NONE);
+				MAR_STR(MEDIC_PRIMARY_AUGPARA);
+				MAR_STR(MEDIC_PRIMARY_TAR21);
+				default:return "<unknown>";
+			}
+		}
+	};
+#undef MAR_STR
+	namespace psyop {
+		enum primary_choice_t {
+			PSYOP_NONE = 0,
+			PSYOP_PRIMARY_SCARH = 1,
+			PSYOP_PRIMARY_UMP45 = 2,
+			NONE = 0,
+			SCARH = 1,
+			UMP45 = 2
+		};
+		static inline std::string_view to_string(primary_choice_t s){
+#define MAR_STR(a){ case mods::weapon::psyop::primary_choice_t::a: return #a; }
+			switch(s){
+				MAR_STR(PSYOP_NONE);
+				MAR_STR(PSYOP_PRIMARY_SCARH);
+				MAR_STR(PSYOP_PRIMARY_UMP45);
+				default:return "<unknown>";
+			}
+		}
+	};
+#undef MAR_STR
+	namespace support {
+		enum primary_choice_t {
+			SUPPORT_NONE = 0,
+			SUPPORT_PRIMARY_MK46 = 1,
+			SUPPORT_PRIMARY_HK21 = 2,
+			NONE = 0,
+			MK46 = 1,
+			HK21 = 2
+		};
+		static inline std::string_view to_string(primary_choice_t s){
+#define MAR_STR(a){ case mods::weapon::support::primary_choice_t::a: return #a; }
+			switch(s){
+				MAR_STR(SUPPORT_NONE);
+				MAR_STR(SUPPORT_PRIMARY_MK46);
+				MAR_STR(SUPPORT_PRIMARY_HK21);
+				default:return "<unknown>";
+			}
+		}
+	};
+#undef MAR_STR
 	namespace sentinel {
 		enum primary_choice_t {
 			SENTINEL_NONE = 0,
@@ -365,6 +486,7 @@ namespace mods::weapon {
 			}
 		}
 	};
+#undef SEN_STR
 	obj_data_ptr_t base_rifle_object();
 	obj_data_ptr_t new_pistol_object();
 	obj_data_ptr_t base_explosive_object();

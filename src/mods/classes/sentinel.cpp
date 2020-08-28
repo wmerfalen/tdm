@@ -102,6 +102,8 @@ namespace mods::classes {
 			mods::orm::inventory::flush_player(this->m_player);
 			return m_orm.save(this);
 		}
+void sentinel::sendln(std::string_view msg){ m_player->sendln(msg); }
+void sentinel::psendln(std::string_view msg){ m_player->psendln(msg); }
 		void sentinel::heal(player_ptr_t& target){
 			int healing = 0;
 			switch(m_heal_level) {

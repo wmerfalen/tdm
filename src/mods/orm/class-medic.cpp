@@ -1,5 +1,5 @@
 //#include "base.hpp"
-#include "class-sniper.hpp"
+#include "class-medic.hpp"
 #include <vector>
 #include <map>
 #include <string>
@@ -18,85 +18,85 @@
  */
 namespace mods::orm {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
-	int16_t sniper::save(){
+	int16_t medic::save(){
 		try{
 			auto up_txn = txn();
-			sql_compositor comp(sniper::table_name,&up_txn);
+			sql_compositor comp(medic::table_name,&up_txn);
 			auto up_sql = comp
-				.update(sniper::table_name)
+				.update(medic::table_name)
 				.set(export_class())
-				.where("sniper_id","=",std::to_string(this->id))
+				.where("medic_id","=",std::to_string(this->id))
 				.sql();
 			mods::pq::exec(up_txn,up_sql);
 			mods::pq::commit(up_txn);
 			return 0;
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error updating sniper by pkid: '" << e.what() << "'\n";
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error updating medic by pkid: '" << e.what() << "'\n";
 			return -1;
 		}
 	}
 	/**
-	 * @brief this should be called when you create a sniper player for the first time
+	 * @brief this should be called when you create a medic player for the first time
 	 *
 	 * @param player
 	 * @param primary_choice
 	 *
 	 * @return 
 	 */
-	uint64_t sniper::initialize_row(player_ptr_t &player, primary_choice_t primary_choice) {
+	uint64_t medic::initialize_row(player_ptr_t &player, primary_choice_t primary_choice) {
 		init();
-		sniper_secondary_type = "czp10";
-		if(primary_choice == primary_choice_t::PSG1){
+		medic_secondary_type = "czp10";
+		if(primary_choice == primary_choice_t::AUGPARA){
 			auto psg1 = mods::weapons::sniper_rifle::psg1::make();
-			sniper_primary_weapon_id = psg1->rifle()->attributes->flush_to_db();
-			sniper_primary_type = "PSG1";
+			medic_primary_weapon_id = psg1->rifle()->attributes->flush_to_db();
+			medic_primary_type = "AUGPARA";
 		}
-		if(primary_choice == primary_choice_t::L96AW){
+		if(primary_choice == primary_choice_t::TAR21){
 			auto l96aw = mods::weapons::sniper_rifle::l96aw::make();
-			sniper_primary_weapon_id = l96aw->rifle()->attributes->flush_to_db();
-			sniper_primary_type = "L96AW";
+			medic_primary_weapon_id = l96aw->rifle()->attributes->flush_to_db();
+			medic_primary_type = "TAR21";
 		}
 		auto czp10 = mods::weapons::pistol::czp10::make();
-		sniper_secondary_weapon_id = czp10->rifle()->attributes->flush_to_db();
+		medic_secondary_weapon_id = czp10->rifle()->attributes->flush_to_db();
 		try{
 			auto insert_transaction = txn();
-			sql_compositor comp("class_sniper",&insert_transaction);
-			sniper_player_id = player->db_id();
+			sql_compositor comp("class_medic",&insert_transaction);
+			medic_player_id = player->db_id();
 			auto up_sql = comp
 				.insert()
-				.into("class_sniper")
+				.into("class_medic")
 				.values(export_class())
-				.returning("sniper_id")
+				.returning("medic_id")
 				.sql();
 			auto record = mods::pq::exec(insert_transaction,up_sql);
 			mods::pq::commit(insert_transaction);
 			for(auto && row : record){
 				updated_at = created_at = time(nullptr);
 				loaded = 1;
-				id = sniper_id = row["sniper_id"].as<uint64_t>();
+				id = medic_id = row["medic_id"].as<uint64_t>();
 				return id;
 			}
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error initializing sniper class row: '" << e.what() << "'\n";
+			std::cerr << __FILE__ << ": " << __LINE__ << ": error initializing medic class row: '" << e.what() << "'\n";
 		}
 		return 0;
 	}
-	strmap_t sniper::export_class() {
+	strmap_t medic::export_class() {
 		strmap_t values;
-		values["sniper_player_id"] = std::to_string(sniper_player_id);
-		values["sniper_primary_type"] = sniper_primary_type;
-		values["sniper_primary_weapon_id"] = std::to_string( sniper_primary_weapon_id);
-		values["sniper_secondary_type"] = "czp10";
-		values["sniper_secondary_weapon_id"] = std::to_string(sniper_secondary_weapon_id);
+		values["medic_player_id"] = std::to_string(medic_player_id);
+		values["medic_primary_type"] = medic_primary_type;
+		values["medic_primary_weapon_id"] = std::to_string( medic_primary_weapon_id);
+		values["medic_secondary_type"] = "czp10";
+		values["medic_secondary_weapon_id"] = std::to_string(medic_secondary_weapon_id);
 		return std::move(values);
 	}
-	int16_t sniper::load_by_player(uint64_t player_id){
+	int16_t medic::load_by_player(uint64_t player_id){
 		try{
 			auto select_transaction = txn();
 			sql_compositor comp(table_name,&select_transaction);
 			auto player_sql = comp.select("*")
 				.from(table_name)
-				.where("sniper_player_id","=",std::to_string(player_id))
+				.where("medic_player_id","=",std::to_string(player_id))
 				.sql();
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
 				for(auto && row : player_record){
@@ -109,29 +109,29 @@ namespace mods::orm {
 			return -2;
 		}
 	}
-	int16_t sniper::feed(const pqxx::result::reference & row){
+	int16_t medic::feed(const pqxx::result::reference & row){
 		init();
 		loaded = 0;
-		id = row["sniper_id"].as<uint64_t>();
-		sniper_id = row["sniper_id"].as<uint64_t>();
-		sniper_player_id = row["sniper_player_id"].as<uint64_t>();
-		sniper_primary_type = row["sniper_primary_type"].c_str();
-		sniper_primary_weapon_id = row["sniper_primary_weapon_id"].as<uint64_t>();
-		sniper_secondary_type = row["sniper_secondary_type"].c_str();
-		sniper_secondary_weapon_id = row["sniper_secondary_weapon_id"].as<uint64_t>();
+		id = row["medic_id"].as<uint64_t>();
+		medic_id = row["medic_id"].as<uint64_t>();
+		medic_player_id = row["medic_player_id"].as<uint64_t>();
+		medic_primary_type = row["medic_primary_type"].c_str();
+		medic_primary_weapon_id = row["medic_primary_weapon_id"].as<uint64_t>();
+		medic_secondary_type = row["medic_secondary_type"].c_str();
+		medic_secondary_weapon_id = row["medic_secondary_weapon_id"].as<uint64_t>();
 		created_at = mods::util::pg_timestamp_to_long(row["created_at"].c_str());
 		updated_at = mods::util::pg_timestamp_to_long(row["updated_at"].c_str());
 		loaded = 1;
 		return 0;
 	}
-	void sniper::init(){
+	void medic::init(){
 		id = 0;
-		sniper_id = 0;
-		sniper_player_id = 0;
-		sniper_primary_type.clear();
-		sniper_primary_weapon_id = 0;
-		sniper_secondary_type.clear();
-		sniper_secondary_weapon_id = 0;
+		medic_id = 0;
+		medic_player_id = 0;
+		medic_primary_type.clear();
+		medic_primary_weapon_id = 0;
+		medic_secondary_type.clear();
+		medic_secondary_weapon_id = 0;
 		created_at = 0;
 		updated_at = 0;
 		loaded = 0;

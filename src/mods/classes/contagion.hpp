@@ -1,29 +1,29 @@
-#ifndef __MENTOC_MODS_CLASSES_ENGINEER_HEADER__
-#define  __MENTOC_MODS_CLASSES_ENGINEER_HEADER__
+#ifndef __MENTOC_MODS_CLASSES_CONTAGION_HEADER__
+#define  __MENTOC_MODS_CLASSES_CONTAGION_HEADER__
 //#include "base.hpp"
 #include <memory>
 #include "../weapons/sniper-rifle-psg1.hpp"
 #include "../weapons/sniper-rifle-l96aw.hpp"
 #include <deque>
 #include <memory>
-#include "../orm/class-engineer.hpp"
+#include "../orm/class-contagion.hpp"
 #include "types.hpp"
 
-using engineer_orm_t = mods::orm::engineer;
+		using contagion_orm_t = mods::orm::contagion;
 namespace mods::classes {
-	struct engineer {
+	struct contagion {
 		/*
-		static std::shared_ptr<engineer> create(player_ptr_t &player);
+		static std::shared_ptr<contagion> create(player_ptr_t &player);
 		static int16_t destroy(player_ptr_t& player);
 		*/
 		types kind() {
-			return types::ENGINEER;
+			return types::SNIPER;
 		}
 
 		/* constructors and destructors */
-		engineer();
-		engineer(player_ptr_t);
-		~engineer() = default;
+		contagion();
+		contagion(player_ptr_t);
+		~contagion() = default;
 
 		int16_t load_by_player(player_ptr_t &);
 		/** FIXME */
@@ -40,12 +40,12 @@ namespace mods::classes {
 		/** FIXME */
 			std::shared_ptr<mods::weapons::sniper_rifle::l96aw> m_l96aw;
 			player_ptr_t m_player;
-			engineer_orm_t m_orm;
+			contagion_orm_t m_orm;
 	};
 	/*
-	static std::deque<std::shared_ptr<mods::classes::sniper>> sniper_players;
+	static std::deque<std::shared_ptr<mods::classes::contagion>> contagion_players;
 	*/
-	std::shared_ptr<mods::classes::engineer> create_engineer(player_ptr_t &player);
+	std::shared_ptr<mods::classes::contagion> create_contagion(player_ptr_t &player);
 
 
 };

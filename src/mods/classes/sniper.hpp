@@ -1,4 +1,4 @@
-#ifndef __MENTOC_MODS_CLASSES_SNIPER_HEADER__
+#ifndef  __MENTOC_MODS_CLASSES_SNIPER_HEADER__
 #define  __MENTOC_MODS_CLASSES_SNIPER_HEADER__
 //#include "base.hpp"
 #include <memory>
@@ -7,13 +7,15 @@
 #include <deque>
 #include <memory>
 #include "../orm/class-sniper.hpp"
+#include "types.hpp"
+using sniper_orm_t = mods::orm::sniper;
+
 namespace mods::classes {
-	struct sniper : base {
+	struct sniper {
 		/*
 		static std::shared_ptr<sniper> create(player_ptr_t &player);
 		static int16_t destroy(player_ptr_t& player);
 		*/
-		using sniper_orm_t = mods::orm::sniper;
 		types kind() {
 			return types::SNIPER;
 		}

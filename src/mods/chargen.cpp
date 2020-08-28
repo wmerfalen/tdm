@@ -1,5 +1,12 @@
 #include "chargen.hpp"
+#include "classes/sniper.hpp"
+#include "classes/marine.hpp"
 #include "classes/sentinel.hpp"
+#include "classes/contagion.hpp"
+#include "classes/engineer.hpp"
+#include "classes/medic.hpp"
+#include "classes/psyop.hpp"
+#include "classes/support.hpp"
 #include "weapon.hpp"
 #include "../db.h"
 #include <tuple>
@@ -280,6 +287,146 @@ namespace mods::chargen {
 			if(choice.compare("L96-Arctic-Warfare") == 0){
 				p->set_sniper(mods::classes::create_sniper(p));
 				auto sresult = p->cl_sniper()->new_player(p,"L96-Arctic-Warfare");
+				if(sresult < 0){
+					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
+					p->set_state(CON_CLOSE);
+					return;
+				}
+				show_finalized_chargen_screen(p);
+				return;
+			}
+			write_to_output(p->desc(), "\r\nI don't get it? Please read the menu and try again...\r\n%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
+			p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
+			return;
+		}
+		if(class_type == CLASS_MARINE){
+			auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
+			if(choice.compare("M16A4") == 0){
+				p->set_marine(mods::classes::create_marine(p));
+				auto sresult = p->cl_marine()->new_player(p,"M16A4");
+				if(sresult < 0){
+					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
+					p->set_state(CON_CLOSE);
+					return;
+				}
+				show_finalized_chargen_screen(p);
+				return;
+			}
+			if(choice.compare("M4") == 0){
+				p->set_marine(mods::classes::create_marine(p));
+				auto sresult = p->cl_marine()->new_player(p,"M4");
+				if(sresult < 0){
+					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
+					p->set_state(CON_CLOSE);
+					return;
+				}
+				show_finalized_chargen_screen(p);
+				return;
+			}
+			write_to_output(p->desc(), "\r\nI don't get it? Please read the menu and try again...\r\n%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
+			p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
+			return;
+		}
+		if(class_type == CLASS_ENGINEER){
+			auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
+			if(choice.compare("FMG-9") == 0){
+				p->set_engineer(mods::classes::create_engineer(p));
+				auto sresult = p->cl_engineer()->new_player(p,"M16A4");
+				if(sresult < 0){
+					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
+					p->set_state(CON_CLOSE);
+					return;
+				}
+				show_finalized_chargen_screen(p);
+				return;
+			}
+			if(choice.compare("M4") == 0){
+				p->set_engineer(mods::classes::create_engineer(p));
+				auto sresult = p->cl_engineer()->new_player(p,"M4");
+				if(sresult < 0){
+					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
+					p->set_state(CON_CLOSE);
+					return;
+				}
+				show_finalized_chargen_screen(p);
+				return;
+			}
+			write_to_output(p->desc(), "\r\nI don't get it? Please read the menu and try again...\r\n%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
+			p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
+			return;
+		}
+		if(class_type == CLASS_MEDIC){
+			auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
+			if(choice.compare("AUG-PARA") == 0){
+				p->set_medic(mods::classes::create_medic(p));
+				auto sresult = p->cl_medic()->new_player(p,"M16A4");
+				if(sresult < 0){
+					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
+					p->set_state(CON_CLOSE);
+					return;
+				}
+				show_finalized_chargen_screen(p);
+				return;
+			}
+			if(choice.compare("TAR-21") == 0){
+				p->set_medic(mods::classes::create_medic(p));
+				auto sresult = p->cl_medic()->new_player(p,"M4");
+				if(sresult < 0){
+					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
+					p->set_state(CON_CLOSE);
+					return;
+				}
+				show_finalized_chargen_screen(p);
+				return;
+			}
+			write_to_output(p->desc(), "\r\nI don't get it? Please read the menu and try again...\r\n%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
+			p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
+			return;
+		}
+		if(class_type == CLASS_PSYOP){
+			auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
+			if(choice.compare("SCAR-H") == 0){
+				p->set_psyop(mods::classes::create_psyop(p));
+				auto sresult = p->cl_psyop()->new_player(p,"M16A4");
+				if(sresult < 0){
+					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
+					p->set_state(CON_CLOSE);
+					return;
+				}
+				show_finalized_chargen_screen(p);
+				return;
+			}
+			if(choice.compare("UMP45") == 0){
+				p->set_psyop(mods::classes::create_psyop(p));
+				auto sresult = p->cl_psyop()->new_player(p,"M4");
+				if(sresult < 0){
+					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
+					p->set_state(CON_CLOSE);
+					return;
+				}
+				show_finalized_chargen_screen(p);
+				return;
+			}
+			write_to_output(p->desc(), "\r\nI don't get it? Please read the menu and try again...\r\n%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
+			p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
+			return;
+		}
+		if(class_type == CLASS_SUPPORT){
+			auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
+			if(choice.compare("MK46") == 0){
+				p->set_support(mods::classes::create_support(p));
+				auto sresult = p->cl_support()->new_player(p,"M16A4");
+				if(sresult < 0){
+					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
+					p->set_state(CON_CLOSE);
+					return;
+				}
+				show_finalized_chargen_screen(p);
+				return;
+			}
+			if(choice.compare("HK21") == 0){
+				p->set_support(mods::classes::create_support(p));
+				auto sresult = p->cl_support()->new_player(p,"M4");
 				if(sresult < 0){
 					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
 					p->set_state(CON_CLOSE);
