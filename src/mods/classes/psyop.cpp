@@ -1,6 +1,7 @@
 #include "psyop.hpp"
 #include "../weapon.hpp"
 #include "../orm/inventory.hpp"
+#include "../bugs-fixtures.hpp"
 
 namespace mods::classes {
 	std::shared_ptr<mods::weapons::sniper_rifle::psg1> psyop::psg1(){ 
@@ -22,26 +23,18 @@ namespace mods::classes {
 		return m_player;
 	}
 
-	int16_t psyop::new_player(player_ptr_t &player, std::string_view primary_choice){
-		using primary = mods::weapon::psyop::primary_choice_t;
-		auto pchoice = 0;
-		if(!primary_choice.compare("SCARH")){
-			pchoice = primary::PSYOP_PRIMARY_SCARH;
+		int16_t psyop::new_player(player_ptr_t &player, primary_choice_t primary_choice){
+			if(primary_choice == primary_choice_t::NONE){
+				mods::bugs::fixtures("psyop::new_player. got primary_choice of zero. defaulting to SCAR-H");
+				primary_choice = primary_choice_t::SCARH;
+			}
+			auto db_id = m_orm.initialize_row(player,primary_choice);
+			if(db_id == 0){
+				return -2;
+			}
+			load_by_player(player);
+			return 0;
 		}
-		if(!primary_choice.compare("UMP45") == 0){
-			pchoice = primary::PSYOP_PRIMARY_UMP45;
-		}
-		if(pchoice == 0){
-			std::cerr << "invalid primary weapon choice for psyop class...\n";
-			return -1;
-		}
-		auto db_id = m_orm.initialize_row(player,static_cast<primary>(pchoice));
-		if(db_id == 0){
-			return -2;
-		}
-		load_by_player(player);
-		return 0;
-	}
 	int16_t psyop::load_by_player(player_ptr_t & player){
 		m_player = player;
 		auto result = m_orm.load_by_player(player->db_id());

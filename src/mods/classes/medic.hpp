@@ -32,13 +32,11 @@ namespace mods::classes {
 	};
 #endif 
 
-#include <memory>
 #include "../weapons/sniper-rifle-psg1.hpp"
 #include "../weapons/sniper-rifle-l96aw.hpp"
-#include <deque>
-#include <memory>
 #include "../orm/class-medic.hpp"
 #include "types.hpp"
+#include "../weapon.hpp"
 
 using medic_orm_t = mods::orm::medic;
 
@@ -51,6 +49,7 @@ namespace mods::classes {
 		types kind() {
 			return types::MEDIC;
 		}
+		using primary_choice_t = mods::weapon::medic::primary_choice_t;
 
 		/* constructors and destructors */
 		medic();
@@ -61,7 +60,7 @@ namespace mods::classes {
 		std::shared_ptr<mods::weapons::sniper_rifle::psg1> psg1();
 		std::shared_ptr<mods::weapons::sniper_rifle::l96aw> l96aw();
 		player_ptr_t 	player();
-		int16_t				new_player(player_ptr_t&, std::string_view primary);
+		int16_t				new_player(player_ptr_t&, primary_choice_t primary);
 		int16_t save();
 
 		void heal_player(player_ptr_t& player_obj,player_ptr_t& target);

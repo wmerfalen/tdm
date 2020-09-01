@@ -1655,18 +1655,18 @@ MARINE_PRIMARY_M16A4	mods/weapon.hpp	/^			MARINE_PRIMARY_M16A4 = 1,$/;"	e	enum:m
 MARINE_PRIMARY_M4	mods/weapon.hpp	/^			MARINE_PRIMARY_M4 = 2,$/;"	e	enum:mods::weapon::marine::primary_choice_t
 MARK	graph.cpp	53;"	d	file:
 MARKSMANSHIP	mods/skills.hpp	/^		MARKSMANSHIP,$/;"	e	enum:mods::skills::fields_of_study
-MAR_STR	mods/weapon.hpp	360;"	d
-MAR_STR	mods/weapon.hpp	369;"	d
-MAR_STR	mods/weapon.hpp	380;"	d
-MAR_STR	mods/weapon.hpp	389;"	d
-MAR_STR	mods/weapon.hpp	400;"	d
-MAR_STR	mods/weapon.hpp	409;"	d
-MAR_STR	mods/weapon.hpp	420;"	d
-MAR_STR	mods/weapon.hpp	429;"	d
-MAR_STR	mods/weapon.hpp	440;"	d
-MAR_STR	mods/weapon.hpp	449;"	d
-MAR_STR	mods/weapon.hpp	460;"	d
-MAR_STR	mods/weapon.hpp	469;"	d
+MAR_STR	mods/weapon.hpp	376;"	d
+MAR_STR	mods/weapon.hpp	385;"	d
+MAR_STR	mods/weapon.hpp	396;"	d
+MAR_STR	mods/weapon.hpp	405;"	d
+MAR_STR	mods/weapon.hpp	416;"	d
+MAR_STR	mods/weapon.hpp	425;"	d
+MAR_STR	mods/weapon.hpp	436;"	d
+MAR_STR	mods/weapon.hpp	445;"	d
+MAR_STR	mods/weapon.hpp	456;"	d
+MAR_STR	mods/weapon.hpp	465;"	d
+MAR_STR	mods/weapon.hpp	476;"	d
+MAR_STR	mods/weapon.hpp	485;"	d
 MAX	bsd-snprintf.cpp	97;"	d	file:
 MAX	utils.cpp	/^int MAX(int a, int b) {$/;"	f
 MAX	utils.h	75;"	d
@@ -2503,8 +2503,8 @@ SENTINEL_DISCIPLINE	mods/skills.hpp	/^			SENTINEL_DISCIPLINE,$/;"	e	enum:mods::s
 SENTINEL_NONE	mods/weapon.hpp	/^			SENTINEL_NONE = 0,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
 SENTINEL_PRIMARY_MP5	mods/weapon.hpp	/^			SENTINEL_PRIMARY_MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
 SENTINEL_PRIMARY_SASG12	mods/weapon.hpp	/^			SENTINEL_PRIMARY_SASG12 = 2,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-SEN_STR	mods/weapon.hpp	480;"	d
-SEN_STR	mods/weapon.hpp	489;"	d
+SEN_STR	mods/weapon.hpp	496;"	d
+SEN_STR	mods/weapon.hpp	505;"	d
 SEQUENCE	mods/behaviour_tree_node.hpp	/^		enum node_type_t { DO_NOTHING, SELECTOR, SEQUENCE, LEAF };$/;"	e	enum:mods::behaviour_tree_node::node_type_t
 SERVER_ROOM	structs.h	/^			SERVER_ROOM,$/;"	m	struct:room_data	typeref:enum:room_data::
 SET_BIT	utils.h	201;"	d
@@ -2616,10 +2616,16 @@ SNIPER_NONE	mods/weapon.hpp	/^			SNIPER_NONE = 0,$/;"	e	enum:mods::weapon::snipe
 SNIPER_PRIMARY_L96AW	mods/weapon.hpp	/^			SNIPER_PRIMARY_L96AW = 2,$/;"	e	enum:mods::weapon::sniper::primary_choice_t
 SNIPER_PRIMARY_PSG1	mods/weapon.hpp	/^			SNIPER_PRIMARY_PSG1 = 1,$/;"	e	enum:mods::weapon::sniper::primary_choice_t
 SNIPER_RIFLE	mods/object.hpp	/^				SNIPER_RIFLE,$/;"	e	enum:mods::object::object_type_enum_t
+SNIPER_SECONARY_L96AW	mods/weapon.hpp	/^			SNIPER_SECONARY_L96AW = 2,$/;"	e	enum:mods::weapon::sniper::secondary_choice_t
+SNIPER_SECONARY_PSG1	mods/weapon.hpp	/^			SNIPER_SECONARY_PSG1 = 1,$/;"	e	enum:mods::weapon::sniper::secondary_choice_t
+SNIPER_SECONDARY_NONE	mods/weapon.hpp	/^			SNIPER_SECONDARY_NONE = 0,$/;"	e	enum:mods::weapon::sniper::secondary_choice_t
 SNIPER_SUPPORT	mods/skills.hpp	/^			SNIPER_SUPPORT,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 SNIPING	mods/skills.hpp	/^		SNIPING,$/;"	e	enum:mods::skills::fields_of_study
 SNI_STR	mods/weapon.hpp	340;"	d
-SNI_STR	mods/weapon.hpp	349;"	d
+SNI_STR	mods/weapon.hpp	345;"	d
+SNI_STR	mods/weapon.hpp	355;"	d
+SNI_STR	mods/weapon.hpp	360;"	d
+SNI_STR	mods/weapon.hpp	365;"	d
 SOCMESS_FILE	db.h	92;"	d
 SONIC_WAVE	mods/aoe.hpp	/^		SONIC_WAVE,	\/** The same type of explosion caused by breaking the sound barrier *\/$/;"	e	enum:mods::aoe::types_t
 SOUTH	structs.h	152;"	d
@@ -3231,6 +3237,7 @@ __MENTOC_MODS_BEHAVIOUR_TREE_HEADER__	mods/behaviour_tree.hpp	2;"	d
 __MENTOC_MODS_BEHAVIOUR_TREE_IMPL_HEADER__	mods/behaviour_tree_impl.hpp	2;"	d
 __MENTOC_MODS_BEHAVIOUR_TREE_NODE_HEADER__	mods/behaviour_tree_node.hpp	2;"	d
 __MENTOC_MODS_BEHAVIOUR_TREE_STATUS_HEADER__	mods/behaviour_tree_status.hpp	2;"	d
+__MENTOC_MODS_BUGS_FIXTURES_HEADER__	mods/bugs-fixtures.hpp	2;"	d
 __MENTOC_MODS_BUILDER_HEADER__	mods/builder.hpp	2;"	d
 __MENTOC_MODS_CALC_VISIBILITY_HEADER__	mods/calc_visibility.hpp	2;"	d
 __MENTOC_MODS_CAMERA_HEADER__	mods/camera.hpp	2;"	d
@@ -3578,6 +3585,8 @@ buf_largecount	comm.cpp	/^int buf_largecount = 0;		\/* # of large buffers which 
 buf_overflows	comm.cpp	/^int buf_overflows = 0;		\/* # of overflows of output *\/$/;"	v
 buf_switches	comm.cpp	/^int buf_switches = 0;		\/* # of switches from small to large buf *\/$/;"	v
 bufpool	comm.cpp	/^struct txt_block *bufpool = 0;	\/* pool of large output buffers *\/$/;"	v	typeref:struct:txt_block
+bugs	mods/bugs-fixtures.cpp	/^namespace mods::bugs {$/;"	n	class:mods	file:
+bugs	mods/bugs-fixtures.hpp	/^namespace mods::bugs {$/;"	n	class:mods
 build_player_index	db.cpp	/^void build_player_index(void) {$/;"	f
 builder	mods/builder.cpp	/^namespace mods::builder {$/;"	n	class:mods	file:
 builder	mods/builder.hpp	/^namespace mods::builder {$/;"	n	class:mods
@@ -4638,6 +4647,7 @@ find_type_t	mods/scan.hpp	/^		enum find_type_t {$/;"	g	namespace:mods::scan
 fire_damage	mods/projectile.cpp	/^		int fire_damage(player_ptr_t victim,obj_ptr_t projectile){$/;"	f	namespace:mods::projectile
 fire_status	structs.h	/^		fire_status_t& fire_status(){$/;"	f
 fire_status_start	structs.h	/^		void fire_status_start(){$/;"	f
+fixtures	mods/bugs-fixtures.cpp	/^	void fixtures(std::string_view msg){$/;"	f	namespace:mods::bugs
 flag_group	mods/flags.hpp	/^	enum flag_group {$/;"	g	namespace:mods::flags
 flag_help	mods/builder_util.hpp	/^	void flag_help($/;"	f	namespace:mods::builder_util
 flagged	mods/behaviour_tree_impl.hpp	/^		bool inline flagged(argument_type & mob){$/;"	f	namespace:mods::behaviour_tree_impl
@@ -5972,7 +5982,7 @@ parse_object	db.cpp	/^char *parse_object(FILE *obj_f, int nr) {$/;"	f
 parse_object	mods/util.cpp	/^	obj_ptr_t parse_object(player_ptr_t& player,std::string_view arg, int start_at, int* last_index) {$/;"	f	namespace:mods::util
 parse_object_vec	mods/util.cpp	/^	obj_ptr_t parse_object_vec(player_ptr_t& player,std::vector<std::string>& vec_args){$/;"	f	namespace:mods::util
 parse_object_with_capability	mods/util.cpp	/^	obj_ptr_t parse_object_with_capability(player_ptr_t& player,std::string_view arg, int start_at, int* last_index, mods::weapon::type::type_list type, std::vector<int>& types) {$/;"	f	namespace:mods::util
-parse_primary_choice	mods/chargen.cpp	/^	std::string_view parse_primary_choice(char choice,int class_type){$/;"	f	namespace:mods::chargen
+parse_primary_choice	mods/chargen.cpp	/^	std::string_view parse_primary_choice(char in_choice,int class_type){$/;"	f	namespace:mods::chargen
 parse_rarity	mods/yaml.cpp	/^	float parse_rarity(const std::string& rarity_string) {$/;"	f	namespace:mods::yaml
 parse_response_t	mods/builder.cpp	/^enum parse_response_t {$/;"	g	file:
 parse_room	db.cpp	/^void parse_room(FILE *fl, int virtual_nr) {$/;"	f
@@ -6479,6 +6489,7 @@ schema	mods/schema.hpp	/^namespace mods::schema { $/;"	n	class:mods
 scope_t	mods/weapon.hpp	/^	enum scope_t {$/;"	g	namespace:mods::weapon
 search_block	interpreter.cpp	/^int search_block(char *arg, const char **list, int exact) { \/** FIXME: arg 2  *\/$/;"	f
 secondary	mods/player.cpp	/^	obj_data_ptr_t player::secondary(){$/;"	f	class:mods::player
+secondary_choice_t	mods/weapon.hpp	/^		enum secondary_choice_t {$/;"	g	namespace:mods::weapon::sniper
 sector_from_string	mods/rooms.cpp	/^	std::optional<sector_type_t> sector_from_string(std::string m){$/;"	f	namespace:mods::rooms
 sector_type	structs.h	/^		uint16_t	sector_type;            \/* sector type (move\/hide)            *\/$/;"	v
 sector_type_t	mods/rooms.hpp	/^	enum sector_type_t {$/;"	g	namespace:mods::rooms
@@ -6922,6 +6933,7 @@ to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(primary_c
 to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(primary_choice_t s){$/;"	f	namespace:mods::weapon::sentinel
 to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(primary_choice_t s){$/;"	f	namespace:mods::weapon::sniper
 to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(primary_choice_t s){$/;"	f	namespace:mods::weapon::support
+to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(secondary_choice_t s){$/;"	f	namespace:mods::weapon::sniper
 to_string	mods/weapon.hpp	/^	static inline std::string to_string(weapon_armor_t armor_type){$/;"	f	namespace:mods::weapon
 to_string	mods/weapon.hpp	/^	static inline std::string to_string(weapon_attachment_t attachment_type){$/;"	f	namespace:mods::weapon
 to_string	mods/weapon.hpp	/^	static inline std::string to_string(weapon_consumable_t consumable_type){$/;"	f	namespace:mods::weapon

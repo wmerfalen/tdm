@@ -1,4 +1,5 @@
 #include "medic.hpp"
+#include "../bugs-fixtures.hpp"
 
 namespace mods::classes {
 	template <typename TPlayer>
@@ -68,20 +69,12 @@ namespace mods::classes {
 		std::shared_ptr<medic> create_medic(player_ptr_t &in_player){
 			return std::move(std::make_shared<medic>(in_player));
 		}
-		int16_t medic::new_player(player_ptr_t &player, std::string_view primary_choice){
-			using primary = mods::weapon::medic::primary_choice_t;
-			auto pchoice = 0;
-			if(!primary_choice.compare("AUGPARA")){
-				pchoice = primary::MEDIC_PRIMARY_AUGPARA;
+		int16_t medic::new_player(player_ptr_t &player, primary_choice_t primary_choice){
+			if(primary_choice == primary_choice_t::NONE){
+				mods::bugs::fixtures("medic::new_player. got primary_choice of zero. defaulting to AUGPARA");
+				primary_choice = primary_choice_t::AUGPARA;
 			}
-			if(!primary_choice.compare("TAR21")){
-				pchoice = primary::MEDIC_PRIMARY_TAR21;
-			}
-			if(pchoice == 0){
-				std::cerr << "invalid primary weapon choice for medic class...\n";
-				return -1;
-			}
-			auto db_id = m_orm.initialize_row(player,static_cast<primary>(pchoice));
+			auto db_id = m_orm.initialize_row(player,primary_choice);
 			if(db_id == 0){
 				return -2;
 			}

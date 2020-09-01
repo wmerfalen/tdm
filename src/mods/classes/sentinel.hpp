@@ -91,7 +91,7 @@ namespace mods::classes {
 
 		/** database routines */
 		int16_t       load_by_player(player_ptr_t&);
-		int16_t				new_player(player_ptr_t&, std::string_view primary);
+		int16_t				new_player(player_ptr_t&, primary_choice_t primary);
 		int64_t				db_id() const;
 		int16_t       save();
 void          sendln(std::string_view msg);

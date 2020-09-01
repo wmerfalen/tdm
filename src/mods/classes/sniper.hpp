@@ -22,6 +22,8 @@ namespace mods::classes {
 		types kind() {
 			return types::SNIPER;
 		}
+		using primary_choice_t = mods::weapon::sniper::primary_choice_t;
+		using secondary_choice_t = mods::weapon::sniper::secondary_choice_t;
 
 		/* constructors and destructors */
 		sniper();
@@ -32,7 +34,7 @@ namespace mods::classes {
 		psg1_t psg1();
 		l96aw_t l96aw();
 		player_ptr_t player();
-		int16_t new_player(player_ptr_t&, std::string_view primary);
+		int16_t new_player(player_ptr_t&, primary_choice_t primary);
 		int16_t save();
 
 		private:

@@ -21,23 +21,10 @@ namespace mods::classes {
 	player_ptr_t 	sniper::player(){
 		return m_player;
 	}
-	int16_t sniper::new_player(player_ptr_t &player, std::string_view primary_choice){
-		using primary = mods::weapon::sniper::primary_choice_t;
-		auto pchoice = 0;
-		assert(primary_choice.length() > 0);
+	int16_t sniper::new_player(player_ptr_t &player,primary_choice_t primary_choice){
+		assert(primary_choice != 0);
 
-		if(std::tolower(primary_choice[0]) == 'p'){
-			pchoice = primary::SNIPER_PRIMARY_PSG1;
-		}
-
-		if(std::tolower(primary_choice[0]) == 'l'){ // "ell"
-			pchoice = primary::SNIPER_PRIMARY_L96AW;
-		}
-		if(pchoice == 0){
-			std::cerr << "invalid primary weapon choice for sniper class...\n";
-			return -1;
-		}
-		auto db_id = m_orm.initialize_row(player,static_cast<primary>(pchoice));
+		auto db_id = m_orm.initialize_row(player,primary_choice);
 		if(db_id == 0){
 			return -2;
 		}

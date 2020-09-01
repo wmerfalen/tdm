@@ -20,6 +20,7 @@ namespace mods::classes {
 			return types::ENGINEER;
 		}
 
+		using primary_choice_t = mods::weapon::engineer::primary_choice_t;
 		/* constructors and destructors */
 		engineer();
 		engineer(player_ptr_t);
@@ -31,7 +32,7 @@ namespace mods::classes {
 		/** FIXME */
 		std::shared_ptr<mods::weapons::sniper_rifle::l96aw> l96aw();
 		player_ptr_t 	player();
-		int16_t				new_player(player_ptr_t&, std::string_view primary);
+		int16_t				new_player(player_ptr_t&, primary_choice_t primary);
 		int16_t save();
 
 		private:

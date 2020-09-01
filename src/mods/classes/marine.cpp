@@ -1,6 +1,7 @@
 #include "marine.hpp"
 #include "../weapon.hpp"
 #include "../orm/inventory.hpp"
+#include "../bugs-fixtures.hpp"
 
 namespace mods::classes {
 	std::shared_ptr<mods::weapons::sniper_rifle::psg1> marine::psg1(){ 
@@ -22,20 +23,12 @@ namespace mods::classes {
 		return m_player;
 	}
 
-	int16_t marine::new_player(player_ptr_t &player, std::string_view primary_choice){
-		using primary = mods::weapon::marine::primary_choice_t;
-		auto pchoice = 0;
-		if(!primary_choice.compare("M16A4")){
-			pchoice = primary::MARINE_PRIMARY_M16A4;
+	int16_t marine::new_player(player_ptr_t &player, primary_choice_t primary_choice){
+		if(primary_choice == primary_choice_t::NONE){
+			mods::bugs::fixtures("marine::new_player. got primary_choice of zero. defaulting to M16A4");
+			primary_choice = primary_choice_t::M16A4;
 		}
-		if(!primary_choice.compare("M4")){
-			pchoice = primary::MARINE_PRIMARY_M4;
-		}
-		if(pchoice == 0){
-			std::cerr << "invalid primary weapon choice for marine class...\n";
-			return -1;
-		}
-		auto db_id = m_orm.initialize_row(player,static_cast<primary>(pchoice));
+		auto db_id = m_orm.initialize_row(player,primary_choice);
 		if(db_id == 0){
 			return -2;
 		}

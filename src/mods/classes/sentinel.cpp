@@ -2,6 +2,7 @@
 #include "../orm/inventory.hpp"
 #include "../weapon.hpp"
 #include "../affects.hpp"
+#include "../bugs-fixtures.hpp"
 
 namespace mods::orm::inventory {
 	extern int16_t flush_player(player_ptr_t & player);
@@ -60,22 +61,13 @@ namespace mods::classes {
 		void sentinel::set_player(player_ptr_t p){
 			m_player = p;
 		}
-		int16_t sentinel::new_player(player_ptr_t &player,
-				std::string_view primary_choice
-				){
-			using primary = mods::weapon::sentinel::primary_choice_t;
+		int16_t sentinel::new_player(player_ptr_t &player, primary_choice_t primary_choice){
 			auto pchoice = 0;
-			if(!primary_choice.compare("MP5")){
-				pchoice = primary::SENTINEL_PRIMARY_MP5;
+			if(primary_choice == primary_choice_t::NONE){
+				mods::bugs::fixtures("sentinel::new_player. got primary_choice of zero. defaulting to MP5");
+				primary_choice = primary_choice_t::MP5;
 			}
-			if(!primary_choice.compare("SASG12")){
-				pchoice = primary::SENTINEL_PRIMARY_SASG12;
-			}
-			if(pchoice == 0){
-				std::cerr << "invalid primary weapon choice for sentinel class...\n";
-				return -1;
-			}
-			auto db_id = m_orm.initialize_row(player,static_cast<primary>(pchoice));
+			auto db_id = m_orm.initialize_row(player,primary_choice);
 			if(db_id == 0){
 				return -2;
 			}

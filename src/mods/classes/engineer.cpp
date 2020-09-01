@@ -1,6 +1,7 @@
 #include "engineer.hpp"
 #include "../weapon.hpp"
 #include "../orm/inventory.hpp"
+#include "../bugs-fixtures.hpp"
 
 namespace mods::classes {
 	std::shared_ptr<mods::weapons::sniper_rifle::psg1> engineer::psg1(){ 
@@ -22,20 +23,13 @@ namespace mods::classes {
 		return m_player;
 	}
 
-	int16_t engineer::new_player(player_ptr_t &player, std::string_view primary_choice){
-		using primary = mods::weapon::engineer::primary_choice_t;
+	int16_t engineer::new_player(player_ptr_t &player, primary_choice_t primary_choice){
 		auto pchoice = 0;
-		if(!primary_choice.compare("FMG9")){
-			pchoice = primary::ENGINEER_PRIMARY_FMG9;
+		if(primary_choice == primary_choice_t::NONE){
+			mods::bugs::fixtures("engineer::new_player. got primary_choice of zero. defaulting to P90");
+			primary_choice = primary_choice_t::P90;
 		}
-		if(!primary_choice.compare("P90") == 0){
-			pchoice = primary::ENGINEER_PRIMARY_P90;
-		}
-		if(pchoice == 0){
-			std::cerr << "invalid primary weapon choice for engineer class...\n";
-			return -1;
-		}
-		auto db_id = m_orm.initialize_row(player,static_cast<primary>(pchoice));
+		auto db_id = m_orm.initialize_row(player,primary_choice);
 		if(db_id == 0){
 			return -2;
 		}

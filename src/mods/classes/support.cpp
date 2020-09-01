@@ -1,6 +1,7 @@
 #include "support.hpp"
 #include "../weapon.hpp"
 #include "../orm/inventory.hpp"
+#include "../bugs-fixtures.hpp"
 
 namespace mods::classes {
 	std::shared_ptr<mods::weapons::sniper_rifle::psg1> support::psg1(){ 
@@ -22,26 +23,18 @@ namespace mods::classes {
 		return m_player;
 	}
 
-	int16_t support::new_player(player_ptr_t &player, std::string_view primary_choice){
-		using primary = mods::weapon::support::primary_choice_t;
-		auto pchoice = 0;
-		if(!primary_choice.compare("MK46")){
-			pchoice = primary::SUPPORT_PRIMARY_MK46;
+		int16_t support::new_player(player_ptr_t &player, primary_choice_t primary_choice){
+			if(primary_choice == primary_choice_t::NONE){
+				mods::bugs::fixtures("support::new_player. got primary_choice of zero. defaulting to MK46");
+				primary_choice = primary_choice_t::MK46;
+			}
+			auto db_id = m_orm.initialize_row(player,primary_choice);
+			if(db_id == 0){
+				return -2;
+			}
+			load_by_player(player);
+			return 0;
 		}
-		if(!primary_choice.compare("HK21") == 0){
-			pchoice = primary::SUPPORT_PRIMARY_HK21;
-		}
-		if(pchoice == 0){
-			std::cerr << "invalid primary weapon choice for support class...\n";
-			return -1;
-		}
-		auto db_id = m_orm.initialize_row(player,static_cast<primary>(pchoice));
-		if(db_id == 0){
-			return -2;
-		}
-		load_by_player(player);
-		return 0;
-	}
 	int16_t support::load_by_player(player_ptr_t & player){
 		m_player = player;
 		auto result = m_orm.load_by_player(player->db_id());

@@ -7,6 +7,7 @@
 #include <deque>
 #include <memory>
 #include "../orm/class-contagion.hpp"
+#include "../weapon.hpp"
 #include "types.hpp"
 
 		using contagion_orm_t = mods::orm::contagion;
@@ -17,8 +18,9 @@ namespace mods::classes {
 		static int16_t destroy(player_ptr_t& player);
 		*/
 		types kind() {
-			return types::SNIPER;
+			return types::CONTAGION;
 		}
+		using primary_choice_t = mods::weapon::contagion::primary_choice_t;
 
 		/* constructors and destructors */
 		contagion();
@@ -31,7 +33,7 @@ namespace mods::classes {
 		/** FIXME */
 		std::shared_ptr<mods::weapons::sniper_rifle::l96aw> l96aw();
 		player_ptr_t 	player();
-		int16_t				new_player(player_ptr_t&, std::string_view primary);
+		int16_t				new_player(player_ptr_t&, primary_choice_t primary); /** TODO: create secondary enum and pass as 3rd param */
 		int16_t save();
 
 		private:

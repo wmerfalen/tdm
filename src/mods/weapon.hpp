@@ -342,6 +342,22 @@ namespace mods::weapon {
 				SNI_STR(SNIPER_NONE);
 				SNI_STR(SNIPER_PRIMARY_PSG1);
 				SNI_STR(SNIPER_PRIMARY_L96AW);
+#undef SNI_STR
+				default:return "<unknown>";
+			}
+		}
+		enum secondary_choice_t {
+			SNIPER_SECONDARY_NONE = 0,
+			SNIPER_SECONARY_PSG1 = 1,
+			SNIPER_SECONARY_L96AW = 2,
+		};
+		static inline std::string_view to_string(secondary_choice_t s){
+#define SNI_STR(a){ case mods::weapon::sniper::secondary_choice_t::a: return #a; }
+			switch(s){
+				SNI_STR(SNIPER_SECONDARY_NONE);
+				SNI_STR(SNIPER_SECONARY_PSG1);
+				SNI_STR(SNIPER_SECONARY_L96AW);
+#undef SNI_STR
 				default:return "<unknown>";
 			}
 		}

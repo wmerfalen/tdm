@@ -118,69 +118,70 @@ namespace mods::chargen {
 		}
 		return d[p_class];
 	}
-	std::string_view parse_primary_choice(char choice,int class_type){
+	std::string_view parse_primary_choice(char in_choice,int class_type){
+		char choice = std::tolower(in_choice);
 		switch(class_type){
 			case CLASS_SENTINEL:
-				if(choice == 'm' || choice == 'M'){
+				if(choice == 'm'){
 					return "MP5";
 				}
-				if(choice == 's' || choice == 'S'){
+				if(choice == 's'){
 					return "SASG12";
 				}
 				break;
 			case CLASS_SNIPER:
-				if(choice == 'p' || choice == 'P'){
+				if(choice == 'p'){
 					return "PSG1";
 				}
-				if(choice == 'a' || choice == 'A'){
+				if(choice == 'a'){
 					return "L96";
 				}
 				break;
 			case CLASS_MARINE:
-				if(choice == 'm' || choice == 'M'){
+				if(choice == 'm'){
 					return "M16A4";
 				}
-				if(choice == 'c' || choice == 'C'){
+				if(choice == 'c'){
 					return "M4";
 				}
 				break;
 			case CLASS_CONTAGION:
-				if(choice == 'm' || choice == 'M'){
+				if(choice == 'm'){
 					return "M3";
 				}
-				if(choice == 'f' || choice == 'F'){
+				if(choice == 'f'){
 					return "FAMAS";
 				}
 				break;
 			case CLASS_ENGINEER:
-				if(choice == 'f' || choice == 'F'){
+				if(choice == 'f'){
 					return "FMG-9";
 				}
-				if(choice == 'p' || choice == 'P'){
+				if(choice == 'p'){
 					return "P90";
 				}
 				break;
 			case CLASS_MEDIC:
-				if(choice == 'a' || choice == 'A'){
+				if(choice == 'a'){
 					return "AUG-PARA";
 				}
-				if(choice == 't' || choice == 'T'){
+				if(choice == 't'){
 					return "TAR-21";
 				}
 				break;
 			case CLASS_PSYOP:
-				if(choice == 's' || choice == 'S'){
+				if(choice == 's'){
 					return "SCAR-H";
 				}
-				if(choice == 'u' || choice == 'U'){
+				if(choice == 'u'){
 					return "UMP45";
 				}
 				break;
 			case CLASS_SUPPORT:
-				if(choice == 'm' || choice == 'M'){
+				if(choice == 'm'){
 					return "MK46";
 				}
-				if(choice == 'h' || choice == 'H'){
+				if(choice == 'h'){
 					return "HK21";
 				}
 				break;
@@ -272,203 +273,138 @@ namespace mods::chargen {
 		write_to_output(p->desc(), "%s\r\n*** PRESS RETURN: ", motd.c_str());
 	}
 	void handle_primary_choice(player_ptr_t p,char arg_choice,player_class_t class_type){
-		if(class_type == CLASS_SNIPER){
-			auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
-			if(choice[0] == 'P'){
+		auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
+		int sresult = -1;
+		if(choice.compare("INVALID") == 0 || choice.compare("IGNORE") == 0){
+			write_to_output(p->desc(), "\r\nI don't get it? Please read the menu and try again...\r\n%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
+			p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
+			return;
+		}
+		bool created = false;
+		switch(class_type){
+			case CLASS_SNIPER:
+				{
 				p->set_sniper(mods::classes::create_sniper(p));
-				auto sresult = p->cl_sniper()->new_player(p,"PSG1");
-				if(sresult < 0){
-					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
-					p->set_state(CON_CLOSE);
-					return;
+				mods::classes::sniper::primary_choice_t p_choice;
+				if(std::tolower(choice[0]) == 'p'){
+					p_choice = mods::classes::sniper::primary_choice_t::PSG1;
 				}
-				show_finalized_chargen_screen(p);
-				return;
-			}
-			if(choice.compare("L96") == 0){
-				p->set_sniper(mods::classes::create_sniper(p));
-				auto sresult = p->cl_sniper()->new_player(p,"L96");
-				if(sresult < 0){
-					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
-					p->set_state(CON_CLOSE);
-					return;
+				if(std::tolower(choice[0]) == 'l'){
+					p_choice = mods::classes::sniper::primary_choice_t::L96AW;
 				}
-				show_finalized_chargen_screen(p);
-				return;
-			}
-			write_to_output(p->desc(), "\r\nI don't get it? Please read the menu and try again...\r\n%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
-			p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
-			return;
-		}
-		if(class_type == CLASS_MARINE){
-			auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
-			if(choice.compare("M16A4") == 0){
+				sresult = p->cl_sniper()->new_player(p,p_choice);
+				created = true;
+				}
+				break;
+			case CLASS_CONTAGION:
+				{
+				p->set_contagion(mods::classes::create_contagion(p));
+				mods::classes::contagion::primary_choice_t p_choice;
+				if(std::tolower(choice[0]) == 'm'){
+					p_choice = mods::classes::contagion::primary_choice_t::M3;
+				}
+				if(std::tolower(choice[0]) == 'f'){
+					p_choice = mods::classes::contagion::primary_choice_t::FAMAS;
+				}
+				sresult = p->cl_contagion()->new_player(p,p_choice);
+				created = true;
+				}
+				break;
+			case CLASS_MARINE:
+				{
 				p->set_marine(mods::classes::create_marine(p));
-				auto sresult = p->cl_marine()->new_player(p,"M16A4");
-				if(sresult < 0){
-					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
-					p->set_state(CON_CLOSE);
-					return;
+				mods::classes::marine::primary_choice_t p_choice;
+				if(choice.compare("M16A4") == 0){
+					p_choice = mods::classes::marine::primary_choice_t::M16A4;
 				}
-				show_finalized_chargen_screen(p);
-				return;
-			}
-			if(choice.compare("M4") == 0){
-				p->set_marine(mods::classes::create_marine(p));
-				auto sresult = p->cl_marine()->new_player(p,"M4");
-				if(sresult < 0){
-					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
-					p->set_state(CON_CLOSE);
-					return;
+				if(choice.compare("M4") == 0){
+					p_choice = mods::classes::marine::primary_choice_t::M4;
 				}
-				show_finalized_chargen_screen(p);
-				return;
-			}
-			write_to_output(p->desc(), "\r\nI don't get it? Please read the menu and try again...\r\n%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
-			p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
-			return;
-		}
-		if(class_type == CLASS_ENGINEER){
-			auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
-			if(choice.compare("FMG-9") == 0){
+				sresult = p->cl_marine()->new_player(p,p_choice);
+				created = true;
+				}
+				break;
+			case CLASS_ENGINEER:
+				{
 				p->set_engineer(mods::classes::create_engineer(p));
-				auto sresult = p->cl_engineer()->new_player(p,"M16A4");
-				if(sresult < 0){
-					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
-					p->set_state(CON_CLOSE);
-					return;
+				mods::classes::engineer::primary_choice_t p_choice;
+				if(std::tolower(choice[0]) == 'f'){
+					p_choice = mods::classes::engineer::primary_choice_t::FMG9;
 				}
-				show_finalized_chargen_screen(p);
-				return;
-			}
-			if(choice.compare("M4") == 0){
-				p->set_engineer(mods::classes::create_engineer(p));
-				auto sresult = p->cl_engineer()->new_player(p,"M4");
-				if(sresult < 0){
-					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
-					p->set_state(CON_CLOSE);
-					return;
+				if(std::tolower(choice[0]) == 'p'){
+					p_choice = mods::classes::engineer::primary_choice_t::P90;
 				}
-				show_finalized_chargen_screen(p);
-				return;
-			}
-			write_to_output(p->desc(), "\r\nI don't get it? Please read the menu and try again...\r\n%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
-			p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
-			return;
-		}
-		if(class_type == CLASS_MEDIC){
-			auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
-			if(choice.compare("AUG-PARA") == 0){
+				sresult = p->cl_engineer()->new_player(p,p_choice);
+				created = true;
+				}
+				break;
+			case CLASS_MEDIC:
+				{
 				p->set_medic(mods::classes::create_medic(p));
-				auto sresult = p->cl_medic()->new_player(p,"M16A4");
-				if(sresult < 0){
-					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
-					p->set_state(CON_CLOSE);
-					return;
+				mods::classes::medic::primary_choice_t p_choice;
+				if(std::tolower(choice[0]) == 'a'){
+					p_choice = mods::classes::medic::primary_choice_t::AUGPARA;
 				}
-				show_finalized_chargen_screen(p);
-				return;
-			}
-			if(choice.compare("TAR-21") == 0){
-				p->set_medic(mods::classes::create_medic(p));
-				auto sresult = p->cl_medic()->new_player(p,"M4");
-				if(sresult < 0){
-					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
-					p->set_state(CON_CLOSE);
-					return;
+				if(std::tolower(choice[0]) == 't'){
+					p_choice = mods::classes::medic::primary_choice_t::TAR21;
 				}
-				show_finalized_chargen_screen(p);
-				return;
-			}
-			write_to_output(p->desc(), "\r\nI don't get it? Please read the menu and try again...\r\n%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
-			p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
-			return;
-		}
-		if(class_type == CLASS_PSYOP){
-			auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
-			if(choice.compare("SCAR-H") == 0){
+				sresult = p->cl_medic()->new_player(p,p_choice);
+				created = true;
+				}
+				break;
+			case CLASS_PSYOP:
+				{
 				p->set_psyop(mods::classes::create_psyop(p));
-				auto sresult = p->cl_psyop()->new_player(p,"M16A4");
-				if(sresult < 0){
-					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
-					p->set_state(CON_CLOSE);
-					return;
+				mods::classes::psyop::primary_choice_t p_choice;
+				if(std::tolower(choice[0]) == 's'){
+					p_choice = mods::classes::psyop::primary_choice_t::SCARH;
 				}
-				show_finalized_chargen_screen(p);
-				return;
-			}
-			if(choice.compare("UMP45") == 0){
-				p->set_psyop(mods::classes::create_psyop(p));
-				auto sresult = p->cl_psyop()->new_player(p,"M4");
-				if(sresult < 0){
-					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
-					p->set_state(CON_CLOSE);
-					return;
+				if(std::tolower(choice[0]) == 'u'){
+					p_choice = mods::classes::psyop::primary_choice_t::UMP45;
 				}
-				show_finalized_chargen_screen(p);
-				return;
-			}
-			write_to_output(p->desc(), "\r\nI don't get it? Please read the menu and try again...\r\n%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
-			p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
-			return;
-		}
-		if(class_type == CLASS_SUPPORT){
-			auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
-			if(choice.compare("MK46") == 0){
+				sresult = p->cl_psyop()->new_player(p,p_choice);
+				created = true;
+				}
+				break;
+			case CLASS_SUPPORT:
+				{
 				p->set_support(mods::classes::create_support(p));
-				auto sresult = p->cl_support()->new_player(p,"M16A4");
-				if(sresult < 0){
-					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
-					p->set_state(CON_CLOSE);
-					return;
+				mods::classes::support::primary_choice_t p_choice;
+				if(std::tolower(choice[0]) == 'm'){
+					p_choice = mods::classes::support::primary_choice_t::MK46;
 				}
-				show_finalized_chargen_screen(p);
-				return;
-			}
-			if(choice.compare("HK21") == 0){
-				p->set_support(mods::classes::create_support(p));
-				auto sresult = p->cl_support()->new_player(p,"M4");
-				if(sresult < 0){
-					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
-					p->set_state(CON_CLOSE);
-					return;
+				if(std::tolower(choice[0]) == 'h'){
+					p_choice = mods::classes::support::primary_choice_t::HK21;
 				}
-				show_finalized_chargen_screen(p);
-				return;
-			}
-			write_to_output(p->desc(), "\r\nI don't get it? Please read the menu and try again...\r\n%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
-			p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
+				sresult = p->cl_support()->new_player(p,p_choice);
+				created = true;
+				}
+				break;
+			case CLASS_SENTINEL:
+				{
+				p->set_sentinel(mods::classes::create_sentinel(p));
+				mods::classes::sentinel::primary_choice_t p_choice;
+				if(std::tolower(choice[0]) == 's'){
+					p_choice = mods::classes::sentinel::primary_choice_t::SASG12;
+				}
+				if(std::tolower(choice[0]) == 'm'){
+					p_choice = mods::classes::sentinel::primary_choice_t::MP5;
+				}
+				sresult = p->cl_sentinel()->new_player(p,p_choice);
+				created = true;
+				}
+				break;
+			default:
+				write_to_output(p->desc(), "\r\nPlease contact an admin for assistance. Error code 611.");
+				p->set_state(CON_CLOSE);
+				break;
+			}//end switch
+		if(sresult < 0){
+			write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
+			p->set_state(CON_CLOSE);
 			return;
 		}
-		if(class_type == CLASS_SENTINEL){
-			auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
-			if(choice.compare("MP5") == 0){
-				p->set_sentinel(mods::classes::create_sentinel(p));
-				auto sresult = p->cl_sentinel()->new_player(p,"MP5");
-				if(sresult < 0){
-					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
-					p->set_state(CON_CLOSE);
-					return;
-				}
-				show_finalized_chargen_screen(p);
-				return;
-			}
-			if(choice.compare("SASG12") == 0){
-				p->set_sentinel(mods::classes::create_sentinel(p));
-				auto sresult = p->cl_sentinel()->new_player(p,"SASG12");
-				if(sresult < 0){
-					write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
-					p->set_state(CON_CLOSE);
-					return;
-				}
-				show_finalized_chargen_screen(p);
-				return;
-			}
-			write_to_output(p->desc(), "\r\nI don't get it? Please read the menu and try again...\r\n%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
-			p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
-			return;
-		}
-
 		show_finalized_chargen_screen(p);
+		return;
 	}
 };
