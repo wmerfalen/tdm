@@ -539,9 +539,6 @@ namespace mods::yaml {
 			this->exported["rifle_manufacturer"] = manufacturer;
 			this->exported["rifle_name"] = name;
 			this->exported["rifle_vnum"] = std::to_string(vnum);
-			this->exported["rifle_description"] = description;
-			this->exported["rifle_short_description"] = short_description;
-			this->exported["rifle_action_description"] = action_description;
 			this->exported["rifle_file"] = feed_file;
 			for(auto & rarity_pair : rarity_strings()){
 				if(rarity == rarity_pair.second){
@@ -549,40 +546,6 @@ namespace mods::yaml {
 					break;
 				}
 			}
-#if 0
- rifle_id                     | integer                     |           | not null | nextval('object_rifle_rifle_id_seq'::regclass)
- rifle_accuracy_map_0         | double precision            |           |          | 10.0
- rifle_accuracy_map_1         | double precision            |           |          | 10.0
- rifle_accuracy_map_2         | double precision            |           |          | 10.0
- rifle_accuracy_map_3         | double precision            |           |          | 10.0
- rifle_damage_map_0           | double precision            |           |          | 10.0
- rifle_damage_map_1           | double precision            |           |          | 10.0
- rifle_damage_map_2           | double precision            |           |          | 10.0
- rifle_damage_map_3           | double precision            |           |          | 10.0
- rifle_ammo_max               | integer                     |           |          |
- rifle_ammo_type              | character varying(32)       |           | not null |
- rifle_chance_to_injure       | double precision            |           |          |
- rifle_clip_size              | integer                     |           |          |
- rifle_cooldown_between_shots | double precision            |           |          |
- rifle_critical_chance        | double precision            |           |          |
- rifle_critical_range         | integer                     |           |          |
- rifle_damage_per_second      | double precision            |           |          |
- rifle_disorient_amount       | double precision            |           |          |
- rifle_headshot_bonus         | double precision            |           |          |
- rifle_max_range              | integer                     |           |          |
- rifle_range_multiplier       | double precision            |           |          |
- rifle_reload_time            | double precision            |           |          |
- rifle_rounds_per_minute      | integer                     |           |          |
- rifle_muzzle_velocity        | integer                     |           |          |
- rifle_effective_firing_range | integer                     |           |          |
- rifle_str_type               | rifle_type_t                |           | not null |
- rifle_type                   | integer                     |           | not null |
- rifle_manufacturer           | character varying(256)      |           | not null |
- rifle_name                   | character varying(256)      |           | not null |
- rifle_vnum                   | integer                     |           | not null |
- rifle_rarity                 | rarity_t                    |           | not null | 'COMMON'::rarity_t
- rifle_file 
-#endif
 	}
 
 	uint64_t rifle_description_t::flush_to_db(){

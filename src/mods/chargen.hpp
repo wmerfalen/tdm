@@ -6,7 +6,7 @@
 #include "../structs.h"
 
 namespace mods::chargen {
-	std::string_view parse_primary_choice(char choice,int class_type);
+	int parse_primary_choice(char choice,int class_type);
 	std::string_view primary_weapon_menu(player_class_t class_type);
 	std::tuple<bool,std::string> make_char(player_ptr_t player);
 	void undo_make_char(player_ptr_t player);

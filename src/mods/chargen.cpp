@@ -118,76 +118,76 @@ namespace mods::chargen {
 		}
 		return d[p_class];
 	}
-	std::string_view parse_primary_choice(char in_choice,int class_type){
+	int parse_primary_choice(char in_choice,int class_type){
 		char choice = std::tolower(in_choice);
 		switch(class_type){
 			case CLASS_SENTINEL:
 				if(choice == 'm'){
-					return "MP5";
+					return mods::classes::sentinel::primary_choice_t::MP5;
 				}
 				if(choice == 's'){
-					return "SASG12";
+					return mods::classes::sentinel::primary_choice_t::SASG12;
 				}
 				break;
 			case CLASS_SNIPER:
 				if(choice == 'p'){
-					return "PSG1";
+					return mods::classes::sniper::primary_choice_t::PSG1;
 				}
 				if(choice == 'a'){
-					return "L96";
+					return mods::classes::sniper::primary_choice_t::L96AW;
 				}
 				break;
 			case CLASS_MARINE:
 				if(choice == 'm'){
-					return "M16A4";
+					return mods::classes::marine::primary_choice_t::M16A4;
 				}
 				if(choice == 'c'){
-					return "M4";
+					return mods::classes::marine::primary_choice_t::M4;
 				}
 				break;
 			case CLASS_CONTAGION:
 				if(choice == 'm'){
-					return "M3";
+					return mods::classes::contagion::primary_choice_t::M3;
 				}
 				if(choice == 'f'){
-					return "FAMAS";
+					return mods::classes::contagion::primary_choice_t::FAMAS;
 				}
 				break;
 			case CLASS_ENGINEER:
 				if(choice == 'f'){
-					return "FMG-9";
+					return mods::classes::engineer::primary_choice_t::FMG9;
 				}
 				if(choice == 'p'){
-					return "P90";
+					return mods::classes::engineer::primary_choice_t::P90;
 				}
 				break;
 			case CLASS_MEDIC:
 				if(choice == 'a'){
-					return "AUG-PARA";
+					return mods::classes::medic::primary_choice_t::AUGPARA;
 				}
 				if(choice == 't'){
-					return "TAR-21";
+					return mods::classes::medic::primary_choice_t::TAR21;
 				}
 				break;
 			case CLASS_PSYOP:
 				if(choice == 's'){
-					return "SCAR-H";
+					return mods::classes::psyop::primary_choice_t::SCARH;
 				}
 				if(choice == 'u'){
-					return "UMP45";
+					return mods::classes::psyop::primary_choice_t::UMP45;
 				}
 				break;
 			case CLASS_SUPPORT:
 				if(choice == 'm'){
-					return "MK46";
+					return mods::classes::support::primary_choice_t::MK46;
 				}
 				if(choice == 'h'){
-					return "HK21";
+					return mods::classes::support::primary_choice_t::HK21;
 				}
 				break;
-			default: return "IGNORE";
+			default: return -1;
 		}
-		return "INVALID";
+		return -1;
 	}
 	std::string_view primary_weapon_menu(player_class_t class_type){
 		switch(class_type){
@@ -273,126 +273,45 @@ namespace mods::chargen {
 		write_to_output(p->desc(), "%s\r\n*** PRESS RETURN: ", motd.c_str());
 	}
 	void handle_primary_choice(player_ptr_t p,char arg_choice,player_class_t class_type){
-		auto choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
+		int choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
 		int sresult = -1;
-		if(choice.compare("INVALID") == 0 || choice.compare("IGNORE") == 0){
+		if(choice < 0){
 			write_to_output(p->desc(), "\r\nI don't get it? Please read the menu and try again...\r\n%s\r\nSelect primary weapon: ", primary_weapon_menu(class_type).data());
 			p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
 			return;
 		}
-		bool created = false;
 		switch(class_type){
 			case CLASS_SNIPER:
-				{
 				p->set_sniper(mods::classes::create_sniper(p));
-				mods::classes::sniper::primary_choice_t p_choice;
-				if(std::tolower(choice[0]) == 'p'){
-					p_choice = mods::classes::sniper::primary_choice_t::PSG1;
-				}
-				if(std::tolower(choice[0]) == 'l'){
-					p_choice = mods::classes::sniper::primary_choice_t::L96AW;
-				}
-				sresult = p->cl_sniper()->new_player(p,p_choice);
-				created = true;
-				}
-				break;
-			case CLASS_CONTAGION:
-				{
-				p->set_contagion(mods::classes::create_contagion(p));
-				mods::classes::contagion::primary_choice_t p_choice;
-				if(std::tolower(choice[0]) == 'm'){
-					p_choice = mods::classes::contagion::primary_choice_t::M3;
-				}
-				if(std::tolower(choice[0]) == 'f'){
-					p_choice = mods::classes::contagion::primary_choice_t::FAMAS;
-				}
-				sresult = p->cl_contagion()->new_player(p,p_choice);
-				created = true;
-				}
+				sresult = p->cl_sniper()->new_player(p,(mods::classes::sniper::primary_choice_t)choice);
 				break;
 			case CLASS_MARINE:
-				{
 				p->set_marine(mods::classes::create_marine(p));
-				mods::classes::marine::primary_choice_t p_choice;
-				if(choice.compare("M16A4") == 0){
-					p_choice = mods::classes::marine::primary_choice_t::M16A4;
-				}
-				if(choice.compare("M4") == 0){
-					p_choice = mods::classes::marine::primary_choice_t::M4;
-				}
-				sresult = p->cl_marine()->new_player(p,p_choice);
-				created = true;
-				}
-				break;
-			case CLASS_ENGINEER:
-				{
-				p->set_engineer(mods::classes::create_engineer(p));
-				mods::classes::engineer::primary_choice_t p_choice;
-				if(std::tolower(choice[0]) == 'f'){
-					p_choice = mods::classes::engineer::primary_choice_t::FMG9;
-				}
-				if(std::tolower(choice[0]) == 'p'){
-					p_choice = mods::classes::engineer::primary_choice_t::P90;
-				}
-				sresult = p->cl_engineer()->new_player(p,p_choice);
-				created = true;
-				}
-				break;
-			case CLASS_MEDIC:
-				{
-				p->set_medic(mods::classes::create_medic(p));
-				mods::classes::medic::primary_choice_t p_choice;
-				if(std::tolower(choice[0]) == 'a'){
-					p_choice = mods::classes::medic::primary_choice_t::AUGPARA;
-				}
-				if(std::tolower(choice[0]) == 't'){
-					p_choice = mods::classes::medic::primary_choice_t::TAR21;
-				}
-				sresult = p->cl_medic()->new_player(p,p_choice);
-				created = true;
-				}
-				break;
-			case CLASS_PSYOP:
-				{
-				p->set_psyop(mods::classes::create_psyop(p));
-				mods::classes::psyop::primary_choice_t p_choice;
-				if(std::tolower(choice[0]) == 's'){
-					p_choice = mods::classes::psyop::primary_choice_t::SCARH;
-				}
-				if(std::tolower(choice[0]) == 'u'){
-					p_choice = mods::classes::psyop::primary_choice_t::UMP45;
-				}
-				sresult = p->cl_psyop()->new_player(p,p_choice);
-				created = true;
-				}
-				break;
-			case CLASS_SUPPORT:
-				{
-				p->set_support(mods::classes::create_support(p));
-				mods::classes::support::primary_choice_t p_choice;
-				if(std::tolower(choice[0]) == 'm'){
-					p_choice = mods::classes::support::primary_choice_t::MK46;
-				}
-				if(std::tolower(choice[0]) == 'h'){
-					p_choice = mods::classes::support::primary_choice_t::HK21;
-				}
-				sresult = p->cl_support()->new_player(p,p_choice);
-				created = true;
-				}
+				sresult = p->cl_marine()->new_player(p,(mods::classes::marine::primary_choice_t)choice);
 				break;
 			case CLASS_SENTINEL:
-				{
 				p->set_sentinel(mods::classes::create_sentinel(p));
-				mods::classes::sentinel::primary_choice_t p_choice;
-				if(std::tolower(choice[0]) == 's'){
-					p_choice = mods::classes::sentinel::primary_choice_t::SASG12;
-				}
-				if(std::tolower(choice[0]) == 'm'){
-					p_choice = mods::classes::sentinel::primary_choice_t::MP5;
-				}
-				sresult = p->cl_sentinel()->new_player(p,p_choice);
-				created = true;
-				}
+				sresult = p->cl_sentinel()->new_player(p,(mods::classes::sentinel::primary_choice_t)choice);
+				break;
+			case CLASS_CONTAGION:
+				p->set_contagion(mods::classes::create_contagion(p));
+				sresult = p->cl_contagion()->new_player(p,(mods::classes::contagion::primary_choice_t)choice);
+				break;
+			case CLASS_ENGINEER:
+				p->set_engineer(mods::classes::create_engineer(p));
+				sresult = p->cl_engineer()->new_player(p,(mods::classes::engineer::primary_choice_t)choice);
+				break;
+			case CLASS_MEDIC:
+				p->set_medic(mods::classes::create_medic(p));
+				sresult = p->cl_medic()->new_player(p,(mods::classes::medic::primary_choice_t)choice);
+				break;
+			case CLASS_PSYOP:
+				p->set_psyop(mods::classes::create_psyop(p));
+				sresult = p->cl_psyop()->new_player(p,(mods::classes::psyop::primary_choice_t)choice);
+				break;
+			case CLASS_SUPPORT:
+				p->set_support(mods::classes::create_support(p));
+				sresult = p->cl_support()->new_player(p,(mods::classes::support::primary_choice_t)choice);
 				break;
 			default:
 				write_to_output(p->desc(), "\r\nPlease contact an admin for assistance. Error code 611.");

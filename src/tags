@@ -5982,7 +5982,7 @@ parse_object	db.cpp	/^char *parse_object(FILE *obj_f, int nr) {$/;"	f
 parse_object	mods/util.cpp	/^	obj_ptr_t parse_object(player_ptr_t& player,std::string_view arg, int start_at, int* last_index) {$/;"	f	namespace:mods::util
 parse_object_vec	mods/util.cpp	/^	obj_ptr_t parse_object_vec(player_ptr_t& player,std::vector<std::string>& vec_args){$/;"	f	namespace:mods::util
 parse_object_with_capability	mods/util.cpp	/^	obj_ptr_t parse_object_with_capability(player_ptr_t& player,std::string_view arg, int start_at, int* last_index, mods::weapon::type::type_list type, std::vector<int>& types) {$/;"	f	namespace:mods::util
-parse_primary_choice	mods/chargen.cpp	/^	std::string_view parse_primary_choice(char in_choice,int class_type){$/;"	f	namespace:mods::chargen
+parse_primary_choice	mods/chargen.cpp	/^	int parse_primary_choice(char in_choice,int class_type){$/;"	f	namespace:mods::chargen
 parse_rarity	mods/yaml.cpp	/^	float parse_rarity(const std::string& rarity_string) {$/;"	f	namespace:mods::yaml
 parse_response_t	mods/builder.cpp	/^enum parse_response_t {$/;"	g	file:
 parse_room	db.cpp	/^void parse_room(FILE *fl, int virtual_nr) {$/;"	f
