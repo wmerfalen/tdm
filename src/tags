@@ -427,8 +427,8 @@ BLOCK_SIZE	mail.h	29;"	d
 BOARD_MAGIC	boards.h	17;"	d
 BOARD_RNUM	boards.h	41;"	d
 BOARD_VNUM	boards.h	36;"	d
-BOOL_CASE	db.cpp	1746;"	d	file:
-BOOL_CASE	db.cpp	1810;"	d	file:
+BOOL_CASE	db.cpp	1747;"	d	file:
+BOOL_CASE	db.cpp	1811;"	d	file:
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ARMOR_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::armor
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ATTACHMENT_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::attachment
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_CONSUMABLE_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::consumable
@@ -490,8 +490,8 @@ CAP_ALL	mods/util.hpp	/^	static constexpr uint8_t CAP_ALL = 0;$/;"	m	namespace:m
 CAP_ANY	mods/util.hpp	/^	static constexpr uint8_t CAP_ANY = 0;$/;"	m	namespace:mods::util
 CAP_SINGLE	mods/util.hpp	/^	static constexpr uint8_t CAP_SINGLE = 0;$/;"	m	namespace:mods::util
 CARPET	structs.h	/^			CARPET,$/;"	m	struct:room_data	typeref:enum:room_data::
-CASE	db.cpp	1743;"	d	file:
-CASE	db.cpp	1809;"	d	file:
+CASE	db.cpp	1744;"	d	file:
+CASE	db.cpp	1810;"	d	file:
 CASE_MOON	mods/date-time.cpp	172;"	d	file:
 CAST_POTION	spells.h	18;"	d
 CAST_SCROLL	spells.h	21;"	d
@@ -1716,7 +1716,7 @@ MEDIC_NONE	mods/weapon.hpp	/^			MEDIC_NONE = 0,$/;"	e	enum:mods::weapon::medic::
 MEDIC_PRIMARY_AUGPARA	mods/weapon.hpp	/^			MEDIC_PRIMARY_AUGPARA = 1,$/;"	e	enum:mods::weapon::medic::primary_choice_t
 MEDIC_PRIMARY_TAR21	mods/weapon.hpp	/^			MEDIC_PRIMARY_TAR21 = 2,$/;"	e	enum:mods::weapon::medic::primary_choice_t
 MEMORY	utils.h	355;"	d
-MENTOC_ABIL_SET	db.cpp	1091;"	d	file:
+MENTOC_ABIL_SET	db.cpp	1092;"	d	file:
 MENTOC_ARMOR_MEMBERS_TUPLE	mods/item-types.hpp	239;"	d
 MENTOC_ARMOR_TYPES_SEQUENCE	mods/item-types.hpp	223;"	d
 MENTOC_ATTACHMENT_MEMBERS_TUPLE	mods/item-types.hpp	207;"	d
@@ -2287,8 +2287,8 @@ Q_TRIGGER_KEY	mods/quests.cpp	8;"	d	file:
 RADIATION	mods/aoe.hpp	/^		RADIATION, \/** Radioactive fallout *\/$/;"	e	enum:mods::aoe::types_t
 RADIOACTIVE	structs.h	/^			RADIOACTIVE, \/** actively emitting radioactivity *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 RANGE	act.wizard.cpp	2358;"	d	file:
-RANGE	db.cpp	1749;"	d	file:
-RANGE	db.cpp	1811;"	d	file:
+RANGE	db.cpp	1750;"	d	file:
+RANGE	db.cpp	1812;"	d	file:
 RANGED_ATTACK	mods/weapon-types.hpp	/^		RANGED_ATTACK,$/;"	e	enum:mods::weapon::capabilities::cap_t
 RARE	mods/randomized-items.hpp	/^	RARE,$/;"	e	enum:mods::rarity_enum_t
 RARE	mods/rarity.hpp	/^		constexpr static float RARE = 0.05034415;$/;"	m	namespace:mods::rarity
@@ -3167,12 +3167,12 @@ YOU_MISSED_YOUR_TARGET_EVENT	mods/damage-event.hpp	/^	YOU_MISSED_YOUR_TARGET_EVE
 YamlFeedExceptionInfo	mods/object-utils.hpp	/^		YamlFeedExceptionInfo($/;"	f	struct:mods::object_utils::YamlFeedExceptionInfo
 YamlFeedExceptionInfo	mods/object-utils.hpp	/^	struct YamlFeedExceptionInfo {$/;"	s	namespace:mods::object_utils
 Yes	mods/catch.hpp	/^			Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
-Z	db.cpp	1864;"	d	file:
-Z	db.cpp	1872;"	d	file:
-ZONE_ERROR	db.cpp	2227;"	d	file:
+Z	db.cpp	1865;"	d	file:
+Z	db.cpp	1873;"	d	file:
+ZONE_ERROR	db.cpp	2228;"	d	file:
 ZON_PREFIX	db.h	71;"	d
 ZOOM	mods/weapon-types.hpp	/^		ZOOM,$/;"	e	enum:mods::weapon::capabilities::cap_t
-ZO_DEAD	db.cpp	2146;"	d	file:
+ZO_DEAD	db.cpp	2147;"	d	file:
 Z_KINGS_C	castle.cpp	31;"	d	file:
 _ARPA_TELNET_H	telnet.h	37;"	d
 _BSD_SNPRINTF_H	bsd-snprintf.h	41;"	d
@@ -3306,7 +3306,7 @@ __MENTOC_MODS_prefs_HEADER__	mods/prefs.hpp	2;"	d
 __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
 __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__	comm.cpp	857;"	d	file:
 __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__	mobact.cpp	42;"	d	file:
-__MENTOC_PLR	db.cpp	2614;"	d	file:
+__MENTOC_PLR	db.cpp	2617;"	d	file:
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__	mods/behaviour_tree_impl.cpp	16;"	d	file:
 __MENTOC_SHOW_COMMAND_INTERPRETER_DEBUG_OUTPUT__	interpreter.cpp	1047;"	d	file:
@@ -6156,7 +6156,7 @@ prune_crlf	utils.cpp	/^void prune_crlf(char *txt) {$/;"	f
 psendln	mods/player.cpp	/^	void player::psendln(mods::string& str) {$/;"	f	class:mods::player
 psendln	mods/player.cpp	/^	void player::psendln(std::string_view str) {$/;"	f	class:mods::player
 psg1	mods/weapon.cpp	/^	obj_data_ptr_t psg1(){$/;"	f	namespace:mods::weapon
-psm_debug	db.cpp	1061;"	d	file:
+psm_debug	db.cpp	1062;"	d	file:
 psyop	mods/weapon.hpp	/^	namespace psyop {$/;"	n	namespace:mods::weapon
 psyop_skillset	class.cpp	/^std::string psyop_skillset() {$/;"	f
 pt_allowed	config.cpp	/^int pt_allowed = NO;$/;"	v

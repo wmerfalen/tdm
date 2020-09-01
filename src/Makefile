@@ -77,26 +77,42 @@ buildobj = act.informative act.item act.medic \
 					 mods/help mods/rooms mods/weapons/damage-types mods/injure mods/skills \
 					 mods/mobs/mini-gunner mods/mobs/extended-types mods/values \
 					 mods/mobs/room-watching mods/mobs/mini-gunner-behaviour-tree \
-					 mods/armor/basic-protection
+					 mods/armor/basic-protection mods/players/db-load
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
-all: $(builddir) $(objects) $(thirdparty) #$(DATA_DIR)
+all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(objects) $(thirdparty) #$(DATA_DIR)
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT)
+
 clean:
 	make -f $(lmdbdir)/Makefile clean ; \
 		rm -f $(addprefix $(builddir)/,*.o *.d  mods/*.o \
 		mods/*.d mods/orm/*.o mods/orm/*.d \
 		mods/classes/*.o mods/classes/*.d mods/mobs/*.o mods/mobs/*.d \
-		mods/armor/*.o mods/armor/*.d) \
+		mods/armor/*.o mods/armor/*.d mods/players/*.o mods/players/*.d) \
 		rm -f $(builddir)/mods/testing/lmdb/*.o \
 		rm -f $(builddir)/mods/testing/lmdb/*.d 
 
-$(builddir):
-	mkdir -p $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb \
-		$(builddir)/sql $(builddir)/mods/orm/ \
-		$(builddir)/mods/weapons/ $(builddir)/mods/mobs/ \
-		$(builddir)/mods/builder/ $(builddir)/mods/armor/
+$(builddir)/mods/classes:
+	mkdir -p $(builddir)/mods/classes
+$(duktapeout): 
+	mkdir -p $(duktapeout)
+$(builddir)/mods/testing/lmdb:
+	mkdir -p $(builddir)/mods/testing/lmdb
+$(builddir)/sql:
+	mkdir -p $(builddir)/sql
+$(builddir)/mods/orm:
+	mkdir -p $(builddir)/mods/orm
+$(builddir)/mods/weapons:
+	mkdir -p $(builddir)/mods/weapons
+$(builddir)/mods/mobs:
+	mkdir -p $(builddir)/mods/mobs
+$(builddir)/mods/builder:
+	mkdir -p $(builddir)/mods/builder
+$(builddir)/mods/armor:
+	mkdir -p $(builddir)/mods/armor
+$(builddir)/mods/players:
+	mkdir -p $(builddir)/mods/players
 
 $(builddir)/%.o: %.cpp
 	$(CC) -c $(FLAGS) -o $@ $<

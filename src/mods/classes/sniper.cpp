@@ -3,10 +3,10 @@
 #include "../orm/inventory.hpp"
 
 namespace mods::classes {
-	std::shared_ptr<mods::weapons::sniper_rifle::psg1> sniper::psg1(){ 
+	psg1_t sniper::psg1(){ 
 			return m_psg1;
 	}
-	std::shared_ptr<mods::weapons::sniper_rifle::l96aw> sniper::l96aw(){ 
+	l96aw_t sniper::l96aw(){ 
 			return m_l96aw;
 	}
 	sniper::sniper(){
@@ -21,16 +21,16 @@ namespace mods::classes {
 	player_ptr_t 	sniper::player(){
 		return m_player;
 	}
-
 	int16_t sniper::new_player(player_ptr_t &player, std::string_view primary_choice){
 		using primary = mods::weapon::sniper::primary_choice_t;
 		auto pchoice = 0;
 		assert(primary_choice.length() > 0);
 
-		if(primary_choice[0] == 'P'){
+		if(std::tolower(primary_choice[0]) == 'p'){
 			pchoice = primary::SNIPER_PRIMARY_PSG1;
 		}
-		if(primary_choice[0] == 'L'){
+
+		if(std::tolower(primary_choice[0]) == 'l'){ // "ell"
 			pchoice = primary::SNIPER_PRIMARY_L96AW;
 		}
 		if(pchoice == 0){

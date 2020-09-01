@@ -75,7 +75,6 @@ namespace mods::orm {
 			return 0;
 	}
 	int16_t sentinel::save(void* s){
-		/** FIXME */
 		return 0;
 	}
 	sql_save_map_t sentinel::export_class() {

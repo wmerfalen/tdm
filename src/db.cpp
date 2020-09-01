@@ -43,6 +43,7 @@
 #include "mods/object-utils.hpp"
 #include "mods/mobs/extended-types.hpp"
 #include "mods/util.hpp"
+#include "mods/players/db-load.hpp"
 
 namespace mods::rooms {
 	extern void set_sector_type(room_rnum room_id, int sector_type);
@@ -2571,6 +2572,9 @@ bool login(std::string_view user_name,std::string_view password){
 }
 bool parse_sql_player(player_ptr_t player_ptr){
 	/** TODO: make sure sql injection is not possible here */
+	mods::players::db_load::set_reporter_lambda([&player_ptr](int64_t code,std::string_view msg){
+			log("SYSERR: failed loading player's class [player name:'%s'] error code: %d, message: '%s'", player_ptr->name().c_str(), code, msg.data());
+	});
 	for(auto && row: db_get_by_meta("player","player_name",player_ptr->name().c_str())){
 		player_ptr->set_db_id(row["id"].as<int>());
 		player_ptr->clear_all_affected();
@@ -2606,7 +2610,6 @@ bool parse_sql_player(player_ptr_t player_ptr){
 		player_ptr->hitroll() = mods::util::stoi<int>(row["player_hitroll"]);
 		player_ptr->weight() = mods::util::stoi<int>(row["player_weight"]);
 		player_ptr->height() = mods::util::stoi<int>(row["player_height"]);
-		player_ptr->set_class(static_cast<player_class_t>(row["player_class"].as<int>()));
 		player_ptr->title().assign((row["player_title"]));
 		player_ptr->hometown() = mods::util::stoi<int>(row["player_hometown"]);
 		player_ptr->clear_all_affected();
@@ -2696,6 +2699,7 @@ bool parse_sql_player(player_ptr_t player_ptr){
 			}
 			++ctr;
 		}
+		mods::players::db_load::set_class(player_ptr, static_cast<player_class_t>(row["player_class"].as<int>()));
 		mods::skills::load_player_levels(player_ptr);
 		return true;
 	}

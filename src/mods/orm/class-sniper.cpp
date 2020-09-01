@@ -101,11 +101,11 @@ namespace mods::orm {
 				.where("sniper_player_id","=",std::to_string(player_id))
 				.sql();
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
-				for(auto && row : player_record){
-					feed(row);
-					return 0;
-				}
-				return -1;
+			if(player_record.size()){
+				feed(player_record[0]);
+				return 0;
+			}
+			return -1;
 		}catch(std::exception& e){
 			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
 			return -2;

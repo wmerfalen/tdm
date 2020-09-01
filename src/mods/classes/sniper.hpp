@@ -12,6 +12,8 @@
 using sniper_orm_t = mods::orm::sniper;
 
 namespace mods::classes {
+	using psg1_t = std::shared_ptr<mods::weapons::sniper_rifle::psg1>;
+	using l96aw_t = std::shared_ptr<mods::weapons::sniper_rifle::l96aw>;
 	struct sniper {
 		/*
 		static std::shared_ptr<sniper> create(player_ptr_t &player);
@@ -27,15 +29,15 @@ namespace mods::classes {
 		~sniper() = default;
 
 		int16_t load_by_player(player_ptr_t &);
-		std::shared_ptr<mods::weapons::sniper_rifle::psg1> psg1();
-		std::shared_ptr<mods::weapons::sniper_rifle::l96aw> l96aw();
-		player_ptr_t 	player();
-		int16_t				new_player(player_ptr_t&, std::string_view primary);
+		psg1_t psg1();
+		l96aw_t l96aw();
+		player_ptr_t player();
+		int16_t new_player(player_ptr_t&, std::string_view primary);
 		int16_t save();
 
 		private:
-			std::shared_ptr<mods::weapons::sniper_rifle::psg1> m_psg1;
-			std::shared_ptr<mods::weapons::sniper_rifle::l96aw> m_l96aw;
+			psg1_t m_psg1;
+			l96aw_t m_l96aw;
 			player_ptr_t m_player;
 			sniper_orm_t m_orm;
 	};

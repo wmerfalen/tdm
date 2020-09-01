@@ -1,0 +1,54 @@
+# accuracy map
+accuracy_map: [
+0.00,
+20.00,
+90.00,
+90.00
+]
+rounds_per_minute: 10
+muzzle_velocity: 1818 # Feet per second
+effective_firing_range: 500 # feet
+ammo_max: 70 #integer
+ammo_type: 'SNIPER' #string, constant enum
+chance_to_injure: 0.813 #float, out of 100 
+clip_size: 7 #integer
+cooldown_between_shots: 2 #int, in ticks
+critical_chance: 19 #int, out of 100
+critical_range: 3 #integer, measured in rooms
+damage_map: [
+10.00,
+20.00,
+90.00,
+90.00
+]
+damage_per_second: 450.0 #float
+disorient_amount: 0.0 #float
+headshot_bonus: 13.0 #float
+max_range: 4 #integer,measured in rooms
+range_multiplier: 4.3 #float, multiplied by 
+reload_time: 8 #int, measured in ticks
+# types
+#######
+# type: SNIPER
+# type: ASSAULT_RIFLE
+# type: SHOTGUN
+# type: SUB_MACHINE_GUN
+# type: HANDGUN
+# type: MACHINE_PISTOL
+# type: LIGHT_MACHINE_GUN
+type: 'SNIPER'  # enum, object type
+manufacturer: 'Heckler and Koch' # string, anything 
+name: 'L96 Arctic Warfare' # string, anything name of object 
+vnum: 24 # integer, unique identifier
+str_type: 'SNIPER'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+feed_file: 'l96aw.yml'
+damage_dice_count: 3
+damage_dice_sides: 54
