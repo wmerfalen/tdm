@@ -173,6 +173,14 @@ namespace mods {
 		m_quitting = 0;
 		m_equipment = ptr->m_equipment;
 		m_sync_equipment();
+		this->m_class_sniper = ptr->m_class_sniper;
+		this->m_class_marine = ptr->m_class_marine;
+		this->m_class_sentinel = ptr->m_class_sentinel;
+		this->m_class_contagion = ptr->m_class_contagion;
+		this->m_class_engineer = ptr->m_class_engineer;
+		this->m_class_medic = ptr->m_class_medic;
+		this->m_class_psyop = ptr->m_class_psyop;
+		this->m_class_support = ptr->m_class_support;
 	}
 	void player::capture_output(bool capture_status) {
 		m_capture_output = capture_status;
@@ -481,25 +489,6 @@ namespace mods {
 	std::shared_ptr<mods::classes::support> 	player::cl_support(){
 		return m_class_support;
 	}
-	void player::set_class(player_class_t pclass){
-		m_class = pclass;
-		std::cerr << "[DEPRECATED] calling player::set_class!!!\n";
-#if 0
-		switch(pclass){
-			case CLASS_SNIPER:
-				m_class_sniper = std::make_shared<mods::classes::sniper>();
-				break;
-			case CLASS_MEDIC:
-				m_class_medic = std::make_shared<mods::classes::medic>();
-				break;
-			case CLASS_SENTINEL:
-				//m_class_sentinel = std::make_shared<mods::classes::sentinel>();
-				break;
-			default:
-				break;
-		}
-#endif
-	}
 
 	std::string& player::name(){ return m_name; }
 	std::string player::ucname(){ return m_ucname; }
@@ -767,6 +756,7 @@ namespace mods {
 		for(unsigned i=0;i < NUM_WEARS;i++){ m_equipment[i] = nullptr; }
 		std::fill(m_misc_pref.begin(),m_misc_pref.end(),false);
 		this->m_sync_equipment();
+		m_class = CLASS_UNDEFINED;
 	}
 	void player::set_cd(char_data* ch) {
 		m_char_data = ch;
@@ -1437,6 +1427,41 @@ namespace mods {
 			m_basic_protection->sync_equipment(uuid());
 		}
 		*/
+		void player::set_sniper(std::shared_ptr<mods::classes::sniper> s){
+			m_class_sniper = s;
+			m_class = CLASS_SNIPER;
+		}
+		void player::set_marine(std::shared_ptr<mods::classes::marine> s){
+			m_class_marine = s;
+			m_class = CLASS_MARINE;
+		}
+		void player::set_sentinel(std::shared_ptr<mods::classes::sentinel> s){
+			m_class_sentinel = s;
+			m_class = CLASS_SENTINEL;
+		}
+		void player::set_contagion(std::shared_ptr<mods::classes::contagion> s){
+			m_class_contagion = s;
+			m_class = CLASS_CONTAGION;
+		}
+		void player::set_engineer(std::shared_ptr<mods::classes::engineer> s){
+			m_class_engineer = s;
+			m_class = CLASS_ENGINEER;
+		}
+		void player::set_medic(std::shared_ptr<mods::classes::medic> s){
+			m_class_medic = s;
+			m_class = CLASS_MEDIC;
+		}
+		void player::set_psyop(std::shared_ptr<mods::classes::psyop> s){
+			m_class_psyop = s;
+			m_class = CLASS_PSYOP;
+		}
+		void player::set_support(std::shared_ptr<mods::classes::support> s){
+			m_class_support = s;
+			m_class = CLASS_SUPPORT;
+		}
+		player_class_t player::get_class(){
+			return m_class;
+		}
 };
 
 #endif

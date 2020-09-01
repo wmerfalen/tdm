@@ -24,7 +24,6 @@ namespace mods::classes {
 	}
 
 	int16_t engineer::new_player(player_ptr_t &player, primary_choice_t primary_choice){
-		auto pchoice = 0;
 		if(primary_choice == primary_choice_t::NONE){
 			mods::bugs::fixtures("engineer::new_player. got primary_choice of zero. defaulting to P90");
 			primary_choice = primary_choice_t::P90;

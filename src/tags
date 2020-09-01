@@ -985,7 +985,7 @@ EXPLODE	mods/weapon-types.hpp	/^		EXPLODE,$/;"	e	enum:mods::weapon::capabilities
 EXPLOSIVE	mods/aoe.hpp	/^		EXPLOSIVE,	\/** Typical explosive dmg from a frag grenade *\/$/;"	e	enum:mods::aoe::types_t
 EXPLOSIVE_NONE	mods/item-types.hpp	/^		EXPLOSIVE_NONE = 0,$/;"	e	enum:mods::weapon::type::explosive
 EXPLOSIVE_RESISTANCE	mods/skills.hpp	/^			EXPLOSIVE_RESISTANCE,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
-EXP_MAX	class.cpp	1132;"	d	file:
+EXP_MAX	class.cpp	1131;"	d	file:
 EXTENDED	mods/weapon.hpp	/^		COMPENSATOR, MUZZLE_BRAKE,EXTENDED,$/;"	e	enum:mods::weapon::barrel_t
 EXTENDED_MAGAZINE	mods/weapon.hpp	/^		EXTENDED_MAGAZINE,$/;"	e	enum:mods::weapon::magazine_t
 EXTENDS_CLIP	mods/weapon-types.hpp	/^		EXTENDS_CLIP,$/;"	e	enum:mods::weapon::capabilities::cap_t
@@ -1951,12 +1951,12 @@ MORT_CAN_SEE	utils.h	447;"	d
 MORT_CAN_SEE_OBJ	utils.h	470;"	d
 MOTD_FILE	db.h	77;"	d
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1346;"	d	file:
-MR	mods/player.cpp	1361;"	d	file:
+MR	mods/player.cpp	1336;"	d	file:
+MR	mods/player.cpp	1351;"	d	file:
 MR	structs.cpp	522;"	d	file:
 MR	structs.cpp	533;"	d	file:
-MRC	mods/player.cpp	1347;"	d	file:
-MRC	mods/player.cpp	1362;"	d	file:
+MRC	mods/player.cpp	1337;"	d	file:
+MRC	mods/player.cpp	1352;"	d	file:
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
 MSG_HEADING	boards.h	44;"	d
@@ -2553,7 +2553,7 @@ SINFO	spell_parser.cpp	25;"	d	file:
 SINGLE_CHAR_COLUMN	mods/builder.cpp	/^	SINGLE_CHAR_COLUMN,$/;"	e	enum:field_type_t	file:
 SITEOK	mods/flags.hpp	/^		SITEOK,$/;"	e	enum:mods::flags::plr
 SIZE	mods/player.hpp	/^			SIZE = HOLD_ANYTHING$/;"	e	enum:mods::player::misc_pref_enum_t
-SKILL	class.cpp	366;"	d	file:
+SKILL	class.cpp	365;"	d	file:
 SKILL_BACKSTAB	spells.h	96;"	d
 SKILL_BASH	spells.h	97;"	d
 SKILL_HIDE	spells.h	98;"	d
@@ -2658,7 +2658,7 @@ SPECIAL	spec_procs.cpp	/^SPECIAL(puff) {$/;"	f
 SPECIAL	spec_procs.cpp	/^SPECIAL(snake) {$/;"	f
 SPECIAL	spec_procs.cpp	/^SPECIAL(thief) {$/;"	f
 SPECIAL	structs.h	142;"	d
-SPELL	class.cpp	365;"	d	file:
+SPELL	class.cpp	364;"	d	file:
 SPELL_ACID_BREATH	spells.h	121;"	d
 SPELL_ANIMATE_DEAD	spells.h	85;"	d
 SPELL_ARMOR	spells.h	41;"	d
@@ -4791,7 +4791,7 @@ get_char_world_vis	handler.cpp	/^ char_data *get_char_world_vis( char_data *ch, 
 get_check_money	act.item.cpp	/^void get_check_money(char_data *ch, struct obj_data *obj) {$/;"	f
 get_children	mods/behaviour_tree_node.hpp	/^		children_t & get_children() const { return m_children; }$/;"	f	struct:mods::behaviour_tree_node
 get_chunk	mods/player.hpp	/^		aligned_int_t get_chunk(chunk_type_t chunk) const {$/;"	f	struct:mods::player
-get_class	mods/player.hpp	/^		player_class_t get_class() const { return m_class; }$/;"	f	struct:mods::player
+get_class	mods/player.cpp	/^		player_class_t player::get_class(){$/;"	f	class:mods::player
 get_class_description	mods/chargen.cpp	/^	std::string get_class_description(player_class_t p_class){$/;"	f	namespace:mods::chargen
 get_clip_by_name	mods/weapon.cpp	/^	obj_ptr_t get_clip_by_name(player_ptr_t & player, std::string_view arg){$/;"	f	namespace:mods::weapon
 get_context	mods/js.hpp	/^				inline duk_context* get_context() {$/;"	f	struct:mods::js::include
@@ -5552,7 +5552,7 @@ mail_time	mail.h	/^	time_t mail_time;		\/* when was the letter mailed?		*\/$/;"	
 main	bsd-snprintf.cpp	/^main(void) {$/;"	f
 main	comm.cpp	/^int main(int argc, char **argv) {$/;"	f
 makeSafe	mods/catch.hpp	/^			static type makeSafe(bool value) {$/;"	f	class:Catch::SafeBool
-make_char	mods/chargen.cpp	/^	std::tuple<bool,std::string> make_char(player_ptr_t player){$/;"	f	namespace:mods::chargen
+make_char	mods/chargen.cpp	/^	std::tuple<bool,std::string> make_char(player_ptr_t player,player_class_t class_type){$/;"	f	namespace:mods::chargen
 make_corpse	fight.cpp	/^void make_corpse(char_data *ch) {$/;"	f
 make_from	mods/util.cpp	/^	obj_ptr_t make_from(obj_data* o){$/;"	f	namespace:mods::util
 make_prompt	comm.cpp	/^char *make_prompt(mods::descriptor_data &d) {$/;"	f
@@ -6550,8 +6550,7 @@ set_cd	mods/player.cpp	/^	void player::set_cd(char_data* ch) {$/;"	f	class:mods:
 set_char_on_descriptor	mods/player.cpp	/^	void player::set_char_on_descriptor(std::deque<descriptor_data>::iterator it){$/;"	f	class:mods::player
 set_char_pk_id	mods/js.cpp	/^		static duk_ret_t set_char_pk_id(duk_context *ctx){$/;"	f	namespace:mods::js
 set_children	mods/behaviour_tree_node.hpp	/^		void set_children(const children_t & child_nodes){$/;"	f	struct:mods::behaviour_tree_node
-set_class	mods/player.cpp	/^	void player::set_class(player_class_t pclass){$/;"	f	class:mods::player
-set_contagion	mods/player.hpp	/^		void set_contagion(std::shared_ptr<mods::classes::contagion> s){$/;"	f	struct:mods::player
+set_contagion	mods/player.cpp	/^		void player::set_contagion(std::shared_ptr<mods::classes::contagion> s){$/;"	f	class:mods::player
 set_context	mods/js.hpp	/^				inline void set_context(duk_context *ctx) {$/;"	f	struct:mods::js::include
 set_db_id	mods/player.cpp	/^	void player::set_db_id(aligned_int_t id){$/;"	f	class:mods::player
 set_db_id	structs.h	/^		void set_db_id(uint64_t i){ this->m_db_id = i; }$/;"	f	struct:obj_data
@@ -6562,7 +6561,7 @@ set_dir_option	structs.cpp	/^		void room_data::set_dir_option(byte i,$/;"	f	clas
 set_direction	mods/affects.hpp	/^			void set_direction(TAffects affect, bool direction){$/;"	f	struct:mods::affects::dissolver
 set_done_breaching	mods/object-utils.hpp	/^		void set_done_breaching(T& obj){$/;"	f	namespace:mods::object_utils
 set_done_installing	mods/object-utils.hpp	/^		void set_done_installing(T& obj){$/;"	f	namespace:mods::object_utils
-set_engineer	mods/player.hpp	/^		void set_engineer(std::shared_ptr<mods::classes::engineer> s){$/;"	f	struct:mods::player
+set_engineer	mods/player.cpp	/^		void player::set_engineer(std::shared_ptr<mods::classes::engineer> s){$/;"	f	class:mods::player
 set_feed_file	structs.h	/^		void set_feed_file(std::string f){ m_feed_file = f; }$/;"	f	struct:obj_data
 set_fields	act.wizard.cpp	/^} set_fields[] = {$/;"	v	typeref:struct:set_struct
 set_fight_timestamp	mods/player.hpp	/^		void set_fight_timestamp(){ m_char_data->last_fight_timestamp = std::time(NULL); }$/;"	f	struct:mods::player
@@ -6584,9 +6583,9 @@ set_is_installing	mods/object-utils.hpp	/^		void set_is_installing(T& obj, P& pl
 set_lense	mods/player.hpp	/^		void set_lense(const lense_type_t& lense){ m_lense_type = lense; }$/;"	f	struct:mods::player
 set_location_data	structs.h	/^		void set_location_data(location_data_t i){ m_location_data = i; }$/;"	f	struct:obj_data
 set_logic	mods/behaviour_tree_node.hpp	/^		void set_logic(const callback_t & logic){$/;"	f	struct:mods::behaviour_tree_node
-set_marine	mods/player.hpp	/^		void set_marine(std::shared_ptr<mods::classes::marine> s){$/;"	f	struct:mods::player
+set_marine	mods/player.cpp	/^		void player::set_marine(std::shared_ptr<mods::classes::marine> s){$/;"	f	class:mods::player
 set_max_amount	mods/affects.hpp	/^			void set_max_amount(TAffects affect, uint32_t max){$/;"	f	struct:mods::affects::dissolver
-set_medic	mods/player.hpp	/^		void set_medic(std::shared_ptr<mods::classes::medic> s){$/;"	f	struct:mods::player
+set_medic	mods/player.cpp	/^		void player::set_medic(std::shared_ptr<mods::classes::medic> s){$/;"	f	class:mods::player
 set_misc_pref	mods/player.hpp	/^		void set_misc_pref(misc_pref_enum_t bit,bool on_off){$/;"	f	struct:mods::player
 set_mortal_start_room	mods/world-configuration.cpp	/^	std::pair<bool,std::string> set_mortal_start_room(room_vnum room_id){$/;"	f	namespace:mods::world_conf
 set_name	mods/builder.cpp	/^	void sandbox_data_t::set_name(std::string_view n){$/;"	f	class:mods::builder::sandbox_data_t
@@ -6607,21 +6606,21 @@ set_pluck_filter	mods/lmdb.cpp	/^	void _db_handle::set_pluck_filter(const std::v
 set_points	mods/js.cpp	/^		static duk_ret_t set_points(duk_context *ctx) {$/;"	f	namespace:mods::js
 set_prefs	mods/player.hpp	/^		void set_prefs(long prefs){ cd()->player_specials->saved.pref = prefs; }$/;"	f	struct:mods::player
 set_private	mods/chat.hpp	/^			void set_private(bool b_private) {$/;"	f	struct:mods::mods::chat::channel
-set_psyop	mods/player.hpp	/^		void set_psyop(std::shared_ptr<mods::classes::psyop> s){$/;"	f	struct:mods::player
+set_psyop	mods/player.cpp	/^		void player::set_psyop(std::shared_ptr<mods::classes::psyop> s){$/;"	f	class:mods::player
 set_room	mods/player.hpp	/^		void set_room(room_rnum r){$/;"	f	struct:mods::player
 set_sector_type	mods/rooms.cpp	/^	void set_sector_type(room_rnum room_id, int sector_type){$/;"	f	namespace:mods::rooms
 set_sendbuf	comm.cpp	/^int set_sendbuf(socket_t s) {$/;"	f
-set_sentinel	mods/player.hpp	/^		void set_sentinel(std::shared_ptr<mods::classes::sentinel> s){$/;"	f	struct:mods::player
+set_sentinel	mods/player.cpp	/^		void player::set_sentinel(std::shared_ptr<mods::classes::sentinel> s){$/;"	f	class:mods::player
 set_sex	mods/player.hpp	/^		void set_sex(byte s){$/;"	f	struct:mods::player
 set_shared_ptr	mods/object.cpp	/^	object& object::set_shared_ptr(std::shared_ptr<obj_data>& ptr){$/;"	f	class:mods::object
 set_shared_ptr	mods/player.cpp	/^	void player::set_shared_ptr(player_ptr_t& self_ptr) {$/;"	f	class:mods::player
 set_skill	mods/player.cpp	/^		void player::set_skill(int skill,uint16_t proficiency){$/;"	f	class:mods::player
-set_sniper	mods/player.hpp	/^		void set_sniper(std::shared_ptr<mods::classes::sniper> s){$/;"	f	struct:mods::player
+set_sniper	mods/player.cpp	/^		void player::set_sniper(std::shared_ptr<mods::classes::sniper> s){$/;"	f	class:mods::player
 set_socket	mods/player.cpp	/^	void player::set_socket(socket_t d){$/;"	f	class:mods::player
 set_state	mods/player.cpp	/^	void player::set_state(int state){$/;"	f	class:mods::player
 set_str_table	mods/lmdb.hpp	/^		void set_str_table(table_type_t e_table){$/;"	f	struct:mods::lmdb::transaction_t
 set_struct	act.wizard.cpp	/^struct set_struct {$/;"	s	file:
-set_support	mods/player.hpp	/^		void set_support(std::shared_ptr<mods::classes::support> s){$/;"	f	struct:mods::player
+set_support	mods/player.cpp	/^		void player::set_support(std::shared_ptr<mods::classes::support> s){$/;"	f	class:mods::player
 set_time_birth	mods/player.cpp	/^	void player::set_time_birth(time_t b){$/;"	f	class:mods::player
 set_time_logon	mods/player.cpp	/^	void player::set_time_logon(time_t t){$/;"	f	class:mods::player
 set_time_played	mods/player.cpp	/^	void player::set_time_played(int t){$/;"	f	class:mods::player

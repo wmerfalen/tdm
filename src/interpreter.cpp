@@ -60,7 +60,7 @@ extern char_data* character_list;
 void echo_on(mods::descriptor_data &d);
 void echo_off(mods::descriptor_data &d);
 void do_start(char_data *ch);
-int parse_class(char arg);
+player_class_t parse_class(char arg);
 int special(char_data *ch, int cmd, char *arg);
 int Valid_Name(const char *newname);
 void read_aliases(char_data *ch);
@@ -1868,69 +1868,46 @@ void nanny(player_ptr_t p, char * in_arg) {
 			break;
 
 		case CON_QCLASS:
-			if(arg.length() > 0 && arg[0] == '?' && arg.length() < 2){
-				write_to_output(d, "Describe which class? Usage: question mark followed by number.\r\nFor example: ?2\r\n");
-				write_to_output(d, "%s\r\nSelect class: ", class_menu);
-				p->set_state(CON_QCLASS);
-				return;
-			}
-
 			{
-				player_class_t chosen_class = CLASS_UNDEFINED;
-				if(arg[0] == '?' && arg.length() > 1 &&  ((chosen_class = (player_class_t)parse_class(arg[1])) != CLASS_UNDEFINED)){
+				player_class_t chosen_class = player_class_t::CLASS_UNDEFINED;
+				if(arg[0] == '?' && arg.length() > 1){
+					chosen_class = parse_class(arg[1]);
+					if(chosen_class == player_class_t::CLASS_UNDEFINED){
+						write_to_output(d, "Describe which class? Usage: question mark followed by number.\r\nFor example: ?2\r\n");
+						write_to_output(d, "%s\r\nSelect class: ", class_menu);
+						p->set_state(CON_QCLASS);
+						return;
+					}
 					write_to_output(d, "%s\r\n%s\r\nSelect class: ",mods::chargen::get_class_description(chosen_class).data(),class_menu);
 					p->set_state(CON_QCLASS);
 					return;
 				}
-				if(arg[0] == '?' && arg.length() > 1 &&  (parse_class(arg[1])) == CLASS_UNDEFINED){
-					write_to_output(d, "Describe which class? Usage: question mark followed by number.\r\nFor example: ?2\r\n");
+				if(arg[0] == '?'){
 					write_to_output(d, "%s\r\nSelect class: ", class_menu);
 					p->set_state(CON_QCLASS);
 					return;
 				}
-			}
 
-			if(arg[0] == '?'){
-				write_to_output(d, "%s\r\nSelect class: ", class_menu);
-				p->set_state(CON_QCLASS);
-				return;
-			}
-
-			load_result = parse_class(arg[0]);
-
-			switch(load_result){
-				case CLASS_SNIPER:
-				case CLASS_CONTAGION:
-			 	case CLASS_MARINE:
-				case CLASS_ENGINEER:
-				case CLASS_MEDIC:
-				case CLASS_PSYOP:
-				case CLASS_SUPPORT:
-				case CLASS_SENTINEL:
-					GET_CLASS(p->cd()) = load_result;
-					p->set_class(static_cast<player_class_t>(load_result));
-					{
-						std::tuple<bool,std::string> make_char_status;
-						make_char_status = mods::chargen::make_char(p);
-						if(!std::get<0>(make_char_status)){
-							write_to_output(d,"\r\n%s\r\n",std::get<1>(make_char_status).data());
-							p->set_state(CON_CLOSE);
-							mods::chargen::undo_make_char(p);
-							mods::globals::unregister_authenticated_player(p);
-							p->set_authenticated(false);
-							p->set_db_id(0);
-							return;
-						}
-					}
-					write_to_output(d, "%s\r\nSelect primary weapon: ", mods::chargen::primary_weapon_menu(static_cast<player_class_t>(load_result)).data());
-					p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
-					break;
-				default:
-				case CLASS_UNDEFINED:
-					write_to_output(d, "\r\nThat's not a class.");
+				player_class_t pclass = parse_class(arg[0]);
+				if(pclass == player_class_t::CLASS_UNDEFINED){
+					write_to_output(d, "\r\nThat's not a class.\r\n");
 					write_to_output(d, "%s\r\nSelect class: ", class_menu);
 					p->set_state(CON_QCLASS);
-					break;
+					return;
+				}
+				std::tuple<bool,std::string> make_char_status;
+				make_char_status = mods::chargen::make_char(p,pclass);
+				if(!std::get<0>(make_char_status)){
+					write_to_output(d,"\r\n%s\r\n",std::get<1>(make_char_status).data());
+					p->set_state(CON_CLOSE);
+					mods::chargen::undo_make_char(p);
+					mods::globals::unregister_authenticated_player(p);
+					p->set_authenticated(false);
+					p->set_db_id(0);
+					return;
+				}
+				write_to_output(d, "%s\r\nSelect primary weapon: ", mods::chargen::primary_weapon_menu(pclass).data());
+				p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
 			}
 			return;
 		case CON_CHARGEN_PRIMARY_CHOICE:

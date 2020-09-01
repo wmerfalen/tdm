@@ -163,8 +163,7 @@ namespace mods {
 		void consume_from_carrying(obj_ptr_t& item);
 
 		/* class info */
-		player_class_t get_class() const { return m_class; }
-		void set_class(player_class_t c);
+		player_class_t get_class();
 
 		/* ammo gettters */
 		obj_data* get_first_ammo_of_type(const weapon_type_t&) const;
@@ -575,31 +574,14 @@ namespace mods {
 		std::shared_ptr<mods::classes::psyop> 	cl_psyop();
 		std::shared_ptr<mods::classes::support> 	cl_support();
 
-		void set_sniper(std::shared_ptr<mods::classes::sniper> s){
-			m_class_sniper = s;
-		}
-		void set_marine(std::shared_ptr<mods::classes::marine> s){
-			m_class_marine = s;
-		}
-		void set_contagion(std::shared_ptr<mods::classes::contagion> s){
-			m_class_contagion = s;
-		}
-		void set_engineer(std::shared_ptr<mods::classes::engineer> s){
-			m_class_engineer = s;
-		}
-		void set_medic(std::shared_ptr<mods::classes::medic> s){
-			m_class_medic = s;
-		}
-		void set_psyop(std::shared_ptr<mods::classes::psyop> s){
-			m_class_psyop = s;
-		}
-		void set_support(std::shared_ptr<mods::classes::support> s){
-			m_class_support = s;
-		}
-		void set_sentinel(std::shared_ptr<mods::classes::sentinel> s){
-			m_class_sentinel = s;
-		}
-		obj_data_ptr_t sniper_rifle();
+		void set_sniper(std::shared_ptr<mods::classes::sniper>);
+		void set_marine(std::shared_ptr<mods::classes::marine>);
+		void set_contagion(std::shared_ptr<mods::classes::contagion>);
+		void set_engineer(std::shared_ptr<mods::classes::engineer>);
+		void set_medic(std::shared_ptr<mods::classes::medic>);
+		void set_psyop(std::shared_ptr<mods::classes::psyop>);
+		void set_support(std::shared_ptr<mods::classes::support>);
+		void set_sentinel(std::shared_ptr<mods::classes::sentinel>);
 		void start_histfile();
 		void write_histfile(std::string_view);
 		void stop_histfile();
@@ -708,15 +690,14 @@ namespace mods {
 		unsigned int m_current_page;
 		std::string  m_current_page_fragment;
 		std::vector<std::string> m_pages;
-		//class_info_t m_class_info;
 		std::shared_ptr<player_special_data> m_player_specials;
 		time_type_t	m_time;
 		player_type_enum_t m_type;
 		weapon_type_t m_weapon_type;
 		weapon_type_t m_weapon_flags;
-		std::shared_ptr<mods::classes::sentinel> m_class_sentinel;
 		std::shared_ptr<mods::classes::sniper> m_class_sniper;
 		std::shared_ptr<mods::classes::marine> m_class_marine;
+		std::shared_ptr<mods::classes::sentinel> m_class_sentinel;
 		std::shared_ptr<mods::classes::contagion> m_class_contagion;
 		std::shared_ptr<mods::classes::engineer> m_class_engineer;
 		std::shared_ptr<mods::classes::medic> m_class_medic;

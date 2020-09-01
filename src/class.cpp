@@ -26,6 +26,7 @@
 #include "spells.h"
 #include "interpreter.h"
 #include "constants.h"
+#include "mods/util.hpp"
 
 extern int siteok_everyone;
 
@@ -310,15 +311,13 @@ std::string sniper_skillset() {
 
 player_class_t parse_class(char arg) {
 	std::string a;
-	a[0] = arg;
-	switch(arg) {
-		case '1': case '2': case '3':
-		case '4': case '5': case '6':
-		case '7': case '8':
-			return static_cast<player_class_t>(atoi(a.c_str()));
-		default:
-			return CLASS_UNDEFINED;
+	a += arg;
+	auto opt = mods::util::stoi_optional<int>(a);
+	player_class_t p = static_cast<player_class_t>(opt.value_or(player_class_t::CLASS_UNDEFINED));
+	if(p >= player_class_t::CLASS_FIRST && p <= player_class_t::CLASS_LAST){
+		return p;
 	}
+	return player_class_t::CLASS_UNDEFINED;
 }
 
 /*

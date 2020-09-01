@@ -154,9 +154,10 @@ namespace mods::chargen {
 		mudlog(NRM, LVL_IMMORT, TRUE, CAT({player->name()," [",player->host(),"] player creation rollback ",
 					green_str("success")}).c_str());
 	}
-	std::tuple<bool,std::string> make_char(player_ptr_t player){
+	std::tuple<bool,std::string> make_char(player_ptr_t player,player_class_t class_type){
 		REMOVE_BIT(MOB_FLAGS(player->cd()), MOB_ISNPC);
 		player->set_db_id(0);
+		GET_CLASS(player->cd()) = class_type;
 		if(::db::save_new_char(player) == 0){
 			if(::db::load_char_pkid(player) < 0){
 				log("SYSERR: couldn't load character's pkid: '%s'",player->name().c_str());
