@@ -62,7 +62,6 @@ namespace mods::classes {
 			m_player = p;
 		}
 		int16_t sentinel::new_player(player_ptr_t &player, primary_choice_t primary_choice){
-			auto pchoice = 0;
 			if(primary_choice == primary_choice_t::NONE){
 				mods::bugs::fixtures("sentinel::new_player. got primary_choice of zero. defaulting to MP5");
 				primary_choice = primary_choice_t::MP5;

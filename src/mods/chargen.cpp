@@ -1,12 +1,5 @@
 #include "chargen.hpp"
-#include "classes/sniper.hpp"
-#include "classes/marine.hpp"
-#include "classes/sentinel.hpp"
-#include "classes/contagion.hpp"
-#include "classes/engineer.hpp"
-#include "classes/medic.hpp"
-#include "classes/psyop.hpp"
-#include "classes/support.hpp"
+#include "classes/includes.hpp"
 #include "weapon.hpp"
 #include "../db.h"
 #include <tuple>
@@ -20,103 +13,18 @@ extern std::string motd;
 extern size_t write_to_output(mods::descriptor_data &t, const char *txt, ...) __attribute__((format(printf, 2, 3)));
 namespace mods::chargen {
 	std::string get_class_description(player_class_t p_class){
-		static std::map<player_class_t,std::string> d;
-		static bool initialized = false;
-		static std::string ed = green_str("\r\n####- = [ end description\r\n");
-		static std::string desc = yellow_str("[description]: ");
-		if(!initialized){
-			d[CLASS_SNIPER] = green_str(
-						   "####- = [ The Sniper ] = -####\r\n"
-							 "==============================\r\n") +
-							 desc + " The sniper is a specialty class that \r\n"
-							 "focusses on the SNIPER RIFLE weapon type. While any\r\n"
-							 "class can wield and use a sniper rifle, the sniper has\r\n"
-							 "extra proficiencies and perks associated with the use\r\n"
-							 "of ranged weaponry.\r\n"
-							 + ed
-					;
-			d[CLASS_MARINE] =
-				green_str(
-						   "####- = [ The Marine ] = -####\r\n"
-							 "==============================\r\n") +
-							 desc + "A well-rounded soldier built for many\r\n"
-							 "tasks. The marine utilizes every aspect of warfare\r\n"
-							 "and composes destructive technology for use against\r\n"
-							 "insurgents. The ideal candidate is always itching\r\n"
-							 "to get back into the battlefield. Marines have their\r\n"
-							 "own specialized martial arts training program which\r\n"
-							 "unlocks special melee and lethal weapon abilities.\r\n"
-							 + ed
-					;
-			d[CLASS_SENTINEL] = green_str(
-						   "####- = [ The Sentinel ] = -####\r\n"
-							 "================================\r\n") +
-							 desc + "The sentinel is your ideal security \r\n"
-							 "task force. The longer you secure an area, the \r\n"
-							 "more perks you unlock. This occurs by strategically \r\n"
-							 "utilizing technology to impose your will upon the enemy.\r\n"
-							 + ed
-					;
-			d[CLASS_CONTAGION] = green_str(
-							 "####- = [ The Contagion ] = -####\r\n"
-							 "=================================\r\n") +
-							 desc + "Highly trained in the art of chemical \r\n"
-							 "warfare, the Contagion takes chemistry to unprecedented\r\n"
-							 "levels in order to support and clear out forces behind \r\n"
-							 "enemy lines. A strategically placed detonation can be\r\n"
-							 "the determining factor in wiping out resistance in the \r\n"
-							 "local vicinity.\r\n"
-							 + ed
-					;
-			d[CLASS_ENGINEER] = green_str(
-						   "####- = [ The Engineer ] = -####\r\n"
-							 "================================\r\n") +
-							 desc + "Skilled in advanced methods of offensive \r\n"
-							 "electronics, the Engineer supplies his squad with\r\n"
-							 "intelligence and electronic subversion. A carefully \r\n"
-							 "placed Engineer can subvert radio communications and\r\n"
-							 "cause the opposing force to disrupt or even harm one \r\n"
-							 "another by leveraging advanced hacking techniques.\r\n"
-							 "The Engineer can employ offensive air, land, or water \r\n"
-							 "autonomous drones to discover, steal, and disrupt the\r\n"
-							 "opposing force's well-guarded secrets.\r\n"
-							 + ed
-					;
-			d[CLASS_MEDIC] = green_str(
-						   "####- = [ The Medic ] = -####\r\n"
-							 "=============================\r\n") +
-							 desc + "The only class with the ability to \r\n"
-							 "revive downed teammates from a few rooms away.\r\n"
-							 "The Medic can bandage and repair broken limbs. Squads \r\n"
-							 "with a Medic in their team gain a passive HP regen\r\n"
-							 "bonus and will take less damage.\r\n"
-							 + ed
-					;
-			d[CLASS_PSYOP] = green_str(
-						   "####- = [ Psychological Warfare ] = -####\r\n"
-							 "====================================================\r\n") +
-							 desc + "PSYOP specialists utilize techniques\r\n"
-							 "of advanced warfare that simply can't be explained. \r\n"
-							 "The techniques employed by a PSYOP involve a combination\r\n"
-							 "of occult practices and off-world technology.\r\n" +
-							 red_str("This is an advanced class.\r\n")
-							 + ed
-					;
-			d[CLASS_SUPPORT] = green_str(
-						   "####- = [ The Support Team ] = -####\r\n"
-							 "=============================\r\n") +
-							 desc + "Operatives in the Supporting role can\r\n"
-							 "carry an obscene amount of equipment long distances. \r\n"
-							 "They can revitalize wounded soldiers with medkits,\r\n"
-							 "or supply ammo to fellow squad members. A support \r\n"
-							 "specialist has a natural affinity for the light machine gun\r\n"
-							 "weapon type, and can surpress an enemy while team mates advance.\r\n"
-							 + ed
-					;
-			initialized = true;
-			d[CLASS_UNDEFINED] = green_str("class not found");
+		switch(p_class){
+			case CLASS_SNIPER: return CHARGEN_SNIPER_CLASS_DESCRIPTION();
+			case CLASS_MARINE: return CHARGEN_MARINE_CLASS_DESCRIPTION();
+			case CLASS_SENTINEL: return CHARGEN_SENTINEL_CLASS_DESCRIPTION();
+			case CLASS_CONTAGION: return CHARGEN_CONTAGION_CLASS_DESCRIPTION();
+			case CLASS_ENGINEER: return CHARGEN_ENGINEER_CLASS_DESCRIPTION();
+			case CLASS_MEDIC: return CHARGEN_MEDIC_CLASS_DESCRIPTION();
+			case CLASS_PSYOP: return CHARGEN_PSYOP_CLASS_DESCRIPTION();
+			case CLASS_SUPPORT: return CHARGEN_SUPPORT_CLASS_DESCRIPTION();
+			default:
+			case CLASS_UNDEFINED: return CHARGEN_UNDEFINED_CLASS_DESCRIPTION();
 		}
-		return d[p_class];
 	}
 	int parse_primary_choice(char in_choice,int class_type){
 		char choice = std::tolower(in_choice);
@@ -190,46 +98,47 @@ namespace mods::chargen {
 		return -1;
 	}
 	std::string_view primary_weapon_menu(player_class_t class_type){
+		std::string r = "Primary weapon selection\r\n";
 		switch(class_type){
 			case CLASS_SNIPER:
-				return "Primary weapon selection\r\n"
-					"[p] PSG-1 - sniper rifle \r\n"
-					"[a] L96 Arctic Warfare - sniper rifle \r\n"
+				return r +
+					"[p] PSG-1 - " + PRIMARY_CHOICE_SCREEN_PSG1_DESCRIPTION() +
+					"[a] L96 Arctic Warfare - " + PRIMARY_CHOICE_SCREEN_L96AW_DESCRIPTION()
 					;
 			case CLASS_MARINE:
-				return "Primary weapon selection\r\n"
-					"[m] M16A4 - Standard issue marine corps automatic rifle.\r\n"
-					"[c] M4 Carbine - Lighter and shorter variant of the M16A2.\r\n"
+				return r +
+					"[m] M16A4 - " + PRIMARY_CHOICE_SCREEN_M16A4_DESCRIPTION() +
+					"[c] M4 Carbine - " + PRIMARY_CHOICE_SCREEN_M4_DESCRIPTION()
 					;
 			case CLASS_SENTINEL:
-				return "Primary weapon selection\r\n"
-					"[m] MP5 - A good close combat sub machine gun.\r\n"
-					"[s] SASG-12 - Shotgun\r\n"
+				return r +
+					"[m] MP5 - " + PRIMARY_CHOICE_SCREEN_MP5_DESCRIPTION() +
+					"[s] SASG-12 - " + PRIMARY_CHOICE_SCREEN_SASG12_DESCRIPTION()
 					;
 			case CLASS_CONTAGION:
-				return "Primary weapon selection\r\n"
-					"[m] M3 - shotgun \r\n"
-					"[f] FAMAS - assault rifle \r\n"
+				return r +
+					"[m] M3 - " + PRIMARY_CHOICE_SCREEN_M3_DESCRIPTION() + 
+					"[f] FAMAS - " + PRIMARY_CHOICE_SCREEN_FAMAS_DESCRIPTION()
 					;
 			case CLASS_ENGINEER:
-				return "Primary weapon selection\r\n"
-					"[f] FMG-9 - foldable machine gun\r\n" 
-					"[p] P90 - sub machine gun with large magazine\r\n"
+				return r +
+					"[f] FMG-9 - " + PRIMARY_CHOICE_SCREEN_FMG9_DESCRIPTION() +
+					"[p] P90 - " + PRIMARY_CHOICE_SCREEN_P90_DESCRIPTION()
 					;
 			case CLASS_MEDIC:
-				return "Primary weapon selection\r\n"
-					"[a] AUG-PARA - assault rifle\r\n"
-					"[t] TAR-21 - assault rifle\r\n"
+				return r +
+					"[a] AUG-PARA - " + PRIMARY_CHOICE_SCREEN_AUGPARA_DESCRIPTION() +
+					"[t] TAR-21 - " + PRIMARY_CHOICE_SCREEN_TAR21_DESCRIPTION()
 					;
 			case CLASS_PSYOP:
-				return "Primary weapon selection\r\n"
-					"[s] SCAR-H - assault rifle\r\n"
-					"[u] UMP45 - sub machine gun\r\n"
+				return r +
+					"[s] SCAR-H - " + PRIMARY_CHOICE_SCREEN_SCARH_DESCRIPTION() +
+					"[u] UMP45 - " + PRIMARY_CHOICE_SCREEN_UMP45_DESCRIPTION()
 					;
 			case CLASS_SUPPORT:
-				return "Primary weapon selection\r\n"
-					"[m] MK46 - light machine gun\r\n"
-					"[h] HK21 - light machine gun\r\n"
+				return r +
+					"[m] MK46 - " + PRIMARY_CHOICE_SCREEN_MK46_DESCRIPTION() +
+					"[h] HK21 - " + PRIMARY_CHOICE_SCREEN_HK21_DESCRIPTION()
 					;
 			default: return "";
 		}

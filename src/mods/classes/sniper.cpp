@@ -22,8 +22,9 @@ namespace mods::classes {
 		return m_player;
 	}
 	int16_t sniper::new_player(player_ptr_t &player,primary_choice_t primary_choice){
-		assert(primary_choice != 0);
-
+		if(primary_choice == primary_choice_t::NONE){
+			primary_choice = primary_choice_t::PSG1;
+		}
 		auto db_id = m_orm.initialize_row(player,primary_choice);
 		if(db_id == 0){
 			return -2;

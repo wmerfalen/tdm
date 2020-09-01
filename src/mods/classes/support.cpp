@@ -4,19 +4,9 @@
 #include "../bugs-fixtures.hpp"
 
 namespace mods::classes {
-	std::shared_ptr<mods::weapons::sniper_rifle::psg1> support::psg1(){ 
-			return m_psg1;
-	}
-	std::shared_ptr<mods::weapons::sniper_rifle::l96aw> support::l96aw(){ 
-			return m_l96aw;
-	}
 	support::support(){
-			m_psg1 = nullptr;
-			m_l96aw = nullptr;
 	}
 	support::support(player_ptr_t p){
-		m_psg1 = nullptr;
-		m_l96aw = nullptr;
 		load_by_player(p);
 	}
 	player_ptr_t 	support::player(){
