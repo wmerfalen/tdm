@@ -1,42 +1,6 @@
-//#include "base.hpp"
 #include "class-marine.hpp"
-#include <vector>
-#include <map>
-#include <string>
-#include "../weapons/sniper-rifle-psg1.hpp"
-#include "../weapons/sniper-rifle-l96aw.hpp"
-#include "../weapons/pistol-czp10.hpp"
-#include <time.h>
-#include "../sql.hpp"
-#include "../pq.hpp"
 
-/**
- * This class has the right idea, however it is unusable due to the fact
- * that we're errnoeously saving the primary and secondary weapons
- * to the user. In a mud, you must allow the user to customize their loadout.
- * This class violates that. Instead of saving the primary and secondary,
- * we should be using the mods::orm::inventory::feed/flush player functions
- * to update the player's carrying and euipment.
- */
 namespace mods::orm {
-	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;	
-	int16_t marine::save(){
-		try{
-			auto up_txn = txn();
-			sql_compositor comp(marine::table_name,&up_txn);
-			auto up_sql = comp
-				.update(marine::table_name)
-				.set(export_class())
-				.where("marine_id","=",std::to_string(this->id))
-				.sql();
-			mods::pq::exec(up_txn,up_sql);
-			mods::pq::commit(up_txn);
-			return 0;
-		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error updating marine by pkid: '" << e.what() << "'\n";
-			return -1;
-		}
-	}
 	/**
 	 * @brief this should be called when you create a marine player for the first time
 	 *
@@ -47,71 +11,46 @@ namespace mods::orm {
 	 */
 	uint64_t marine::initialize_row(player_ptr_t &player, primary_choice_t primary_choice) {
 		init();
-		marine_secondary_type = "czp10";
+		marine_secondary_type = CZP10;
 		if(primary_choice == primary_choice_t::M16A4){
-			/** FIXME */
-			auto psg1 = mods::weapons::sniper_rifle::psg1::make();
-			marine_primary_weapon_id = psg1->rifle()->attributes->flush_to_db();
-			marine_primary_type = "M16A4";
+			auto m16a4 = create_object(ITEM_RIFLE,"m16a4.yml");
+			marine_primary_weapon_id = m16a4->rifle()->attributes->flush_to_db();
+			marine_primary_type = M16A4;
 		}
 		if(primary_choice == primary_choice_t::M4){
-			/** FIXME */
-			auto l96aw = mods::weapons::sniper_rifle::l96aw::make();
-			marine_primary_weapon_id = l96aw->rifle()->attributes->flush_to_db();
-			marine_primary_type = "M4";
+			auto m4 = create_object(ITEM_RIFLE,"m4.yml");
+			marine_primary_weapon_id = m4->rifle()->attributes->flush_to_db();
+			marine_primary_type = M4;
 		}
-		auto czp10 = mods::weapons::pistol::czp10::make();
+		auto czp10 = create_object(ITEM_RIFLE,"czp10.yml");
 		marine_secondary_weapon_id = czp10->rifle()->attributes->flush_to_db();
-		try{
-			auto insert_transaction = txn();
-			sql_compositor comp("class_marine",&insert_transaction);
-			marine_player_id = player->db_id();
-			auto up_sql = comp
-				.insert()
-				.into("class_marine")
-				.values(export_class())
-				.returning("marine_id")
-				.sql();
-			auto record = mods::pq::exec(insert_transaction,up_sql);
-			mods::pq::commit(insert_transaction);
-			for(auto && row : record){
-				updated_at = created_at = time(nullptr);
-				loaded = 1;
-				id = marine_id = row["marine_id"].as<uint64_t>();
-				return id;
-			}
-		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error initializing marine class row: '" << e.what() << "'\n";
+
+		marine_player_id = player->db_id();
+		auto status = this->create<marine>(this);
+		if(ORM_SUCCESS(status)){
+			updated_at = created_at = time(nullptr);
+			loaded = 1;
+			id = marine_id = std::get<2>(status);
 		}
-		return 0;
+		return id;
 	}
 	strmap_t marine::export_class() {
 		strmap_t values;
 		values["marine_player_id"] = std::to_string(marine_player_id);
 		values["marine_primary_type"] = marine_primary_type;
 		values["marine_primary_weapon_id"] = std::to_string( marine_primary_weapon_id);
-		values["marine_secondary_type"] = "czp10";
+		values["marine_secondary_type"] = CZP10;
 		values["marine_secondary_weapon_id"] = std::to_string(marine_secondary_weapon_id);
 		return std::move(values);
 	}
 	int16_t marine::load_by_player(uint64_t player_id){
-		try{
-			auto select_transaction = txn();
-			sql_compositor comp(table_name,&select_transaction);
-			auto player_sql = comp.select("*")
-				.from(table_name)
-				.where("marine_player_id","=",std::to_string(player_id))
-				.sql();
-			auto player_record = mods::pq::exec(select_transaction,player_sql);
-				for(auto && row : player_record){
-					feed(row);
-					return 0;
-				}
-				return -1;
-		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
-			return -2;
-		}
+		loaded = 0;
+		created_at = updated_at = 0;
+		id = marine_id = 0;
+		marine_player_id = 0;
+		marine_secondary_type = marine_primary_type ="NONE";
+		marine_primary_weapon_id = marine_secondary_weapon_id = 0;
+		return std::get<0>(this->read<marine>(this,"marine_player_id",std::to_string(marine_player_id)));
 	}
 	int16_t marine::feed(const pqxx::result::reference & row){
 		init();
@@ -142,4 +81,3 @@ namespace mods::orm {
 	}
 
 };
-

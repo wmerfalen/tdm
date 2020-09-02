@@ -86,15 +86,10 @@ namespace mods::classes {
 			m_deny_entry_level = static_cast<deny_entry_levels_t>(m_orm.sentinel_deny_entry_level);
 			m_gadget_shield_level = static_cast<gadget_shield_levels_t>(m_orm.sentinel_gadget_shield_level);
 
-			std::cerr << "[sentinel][load_by_player]\n";
 			return 0;
 		}
-		int16_t sentinel::save() {
-			mods::orm::inventory::flush_player(this->m_player);
-			return m_orm.save(this);
-		}
-void sentinel::sendln(std::string_view msg){ m_player->sendln(msg); }
-void sentinel::psendln(std::string_view msg){ m_player->psendln(msg); }
+		void sentinel::sendln(std::string_view msg){ m_player->sendln(msg); }
+		void sentinel::psendln(std::string_view msg){ m_player->psendln(msg); }
 		void sentinel::heal(player_ptr_t& target){
 			int healing = 0;
 			switch(m_heal_level) {

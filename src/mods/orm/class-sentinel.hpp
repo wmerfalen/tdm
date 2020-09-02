@@ -1,17 +1,7 @@
 #ifndef __MENTOC_MODS_ORM_CLASS_SENTINEL_HEADER__
 #define __MENTOC_MODS_ORM_CLASS_SENTINEL_HEADER__
 
-#include "../pq.hpp"
-#include "../sql.hpp"
-#include <iostream>
-#include <vector>
-//#include "../player.hpp"
-#include "../../structs.h"
-//#include "base.hpp"
-#include <string_view>
-#include "../weapon.hpp"
-#include <map>
-#include <string>
+#include "orm-base.hpp"
 
 namespace mods::orm {
 	/*
@@ -25,8 +15,18 @@ namespace mods::orm {
 	 * bodyguard that is loyal to it's protectee.
 	 * - Will, 2020-08-22
 	 */
-	struct sentinel {
+	struct sentinel : public mods::orm::orm_base<sentinel,mods::weapon::sentinel::primary_choice_t> {
 		using primary_choice_t = mods::weapon::sentinel::primary_choice_t;
+		const std::string MP5 = "MP5";
+		const std::string SASG12 = "SASG12";
+		const std::string CZP10 = "CZP10";
+		std::string table_name() const { return "class_sentinel"; }
+		std::string column_prefix() const { return "sentinel_"; }
+		std::string id_column() const { return "sentinel_id"; }
+
+		std::string primary_key_name() { return id_column(); }
+		std::string primary_key_value(){ return std::to_string(this->id); }
+
 		bool loaded;
 		sentinel() : id(0) { this->init(); loaded = 0; }
 		~sentinel() = default;
@@ -35,28 +35,9 @@ namespace mods::orm {
 		void init();	
 		sql_save_map_t export_class();
 
-		static constexpr const char* table_name = "class_sentinel";
-		int16_t save(void* s);
-#if 0
-		template <typename TObject>
-			int16_t save(TObject* s){
-				try{
-					auto up_txn = txn();
-					sql_compositor comp(sentinel::table_name,&up_txn);
-					auto up_sql = comp
-						.update(sentinel::table_name)
-						.set(export_class())
-						.where("sentinel_id","=",std::to_string(this->id))
-						.sql();
-					mods::pq::exec(up_txn,up_sql);
-					mods::pq::commit(up_txn);
-					return 0;
-				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error updating sentinel by pkid: '" << e.what() << "'\n";
-					return -1;
-				}
-			}
-#endif
+		int16_t save(){
+			return std::get<0>(this->update<sentinel>(this));
+		}
 		int16_t				load_by_player(uint64_t);
 		uint64_t id;
 		uint64_t sentinel_id;

@@ -1,7 +1,6 @@
 #ifndef __MENTOC_MODS_ORM_CLASS_MEDIC_HEADER__
 #define __MENTOC_MODS_ORM_CLASS_MEDIC_HEADER__
 
-#include "../../globals.hpp"
 #include "orm-base.hpp"
 
 namespace mods::orm {

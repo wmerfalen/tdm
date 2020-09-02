@@ -1,42 +1,6 @@
-//#include "base.hpp"
 #include "class-engineer.hpp"
-#include <vector>
-#include <map>
-#include <string>
-#include "../weapons/sniper-rifle-psg1.hpp"
-#include "../weapons/sniper-rifle-l96aw.hpp"
-#include "../weapons/pistol-czp10.hpp"
-#include <time.h>
-#include "../sql.hpp"
-#include "../pq.hpp"
 
-/**
- * This class has the right idea, however it is unusable due to the fact
- * that we're errnoeously saving the primary and secondary weapons
- * to the user. In a mud, you must allow the user to customize their loadout.
- * This class violates that. Instead of saving the primary and secondary,
- * we should be using the mods::orm::inventory::feed/flush player functions
- * to update the player's carrying and euipment.
- */
 namespace mods::orm {
-	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
-	int16_t engineer::save(){
-		try{
-			auto up_txn = txn();
-			sql_compositor comp(engineer::table_name,&up_txn);
-			auto up_sql = comp
-				.update(engineer::table_name)
-				.set(export_class())
-				.where("engineer_id","=",std::to_string(this->id))
-				.sql();
-			mods::pq::exec(up_txn,up_sql);
-			mods::pq::commit(up_txn);
-			return 0;
-		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error updating engineer by pkid: '" << e.what() << "'\n";
-			return -1;
-		}
-	}
 	/**
 	 * @brief this should be called when you create a engineer player for the first time
 	 *
@@ -47,69 +11,46 @@ namespace mods::orm {
 	 */
 	uint64_t engineer::initialize_row(player_ptr_t &player, primary_choice_t primary_choice) {
 		init();
-		engineer_secondary_type = "czp10";
+		engineer_secondary_type = CZP10;
 		if(primary_choice == primary_choice_t::FMG9){
-			auto psg1 = mods::weapons::sniper_rifle::psg1::make();
-			engineer_primary_weapon_id = psg1->rifle()->attributes->flush_to_db();
-			engineer_primary_type = "FMG9";
+			auto fmg9 = create_object(ITEM_RIFLE,"fmg9.yml");
+			engineer_primary_weapon_id = fmg9->rifle()->attributes->flush_to_db();
+			engineer_primary_type = FMG9;
 		}
 		if(primary_choice == primary_choice_t::P90){
-			auto l96aw = mods::weapons::sniper_rifle::l96aw::make();
-			engineer_primary_weapon_id = l96aw->rifle()->attributes->flush_to_db();
-			engineer_primary_type = "P90";
+			auto p90 = create_object(ITEM_RIFLE,"p90.yml");
+			engineer_primary_weapon_id = p90->rifle()->attributes->flush_to_db();
+			engineer_primary_type = P90;
 		}
-		auto czp10 = mods::weapons::pistol::czp10::make();
+		auto czp10 = create_object(ITEM_RIFLE,"czp10.yml");
 		engineer_secondary_weapon_id = czp10->rifle()->attributes->flush_to_db();
-		try{
-			auto insert_transaction = txn();
-			sql_compositor comp("class_engineer",&insert_transaction);
-			engineer_player_id = player->db_id();
-			auto up_sql = comp
-				.insert()
-				.into("class_engineer")
-				.values(export_class())
-				.returning("engineer_id")
-				.sql();
-			auto record = mods::pq::exec(insert_transaction,up_sql);
-			mods::pq::commit(insert_transaction);
-			for(auto && row : record){
-				updated_at = created_at = time(nullptr);
-				loaded = 1;
-				id = engineer_id = row["engineer_id"].as<uint64_t>();
-				return id;
-			}
-		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error initializing engineer class row: '" << e.what() << "'\n";
+
+		engineer_player_id = player->db_id();
+		auto status = this->create<engineer>(this);
+		if(ORM_SUCCESS(status)){
+			updated_at = created_at = time(nullptr);
+			loaded = 1;
+			id = engineer_id = std::get<2>(status);
 		}
-		return 0;
+		return id;
 	}
 	strmap_t engineer::export_class() {
 		strmap_t values;
 		values["engineer_player_id"] = std::to_string(engineer_player_id);
 		values["engineer_primary_type"] = engineer_primary_type;
 		values["engineer_primary_weapon_id"] = std::to_string( engineer_primary_weapon_id);
-		values["engineer_secondary_type"] = "czp10";
+		values["engineer_secondary_type"] = CZP10;
 		values["engineer_secondary_weapon_id"] = std::to_string(engineer_secondary_weapon_id);
 		return std::move(values);
 	}
 	int16_t engineer::load_by_player(uint64_t player_id){
-		try{
-			auto select_transaction = txn();
-			sql_compositor comp(table_name,&select_transaction);
-			auto player_sql = comp.select("*")
-				.from(table_name)
-				.where("engineer_player_id","=",std::to_string(player_id))
-				.sql();
-			auto player_record = mods::pq::exec(select_transaction,player_sql);
-				for(auto && row : player_record){
-					feed(row);
-					return 0;
-				}
-				return -1;
-		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
-			return -2;
-		}
+		loaded = 0;
+		created_at = updated_at = 0;
+		id = engineer_id = 0;
+		engineer_player_id = 0;
+		engineer_secondary_type = engineer_primary_type ="NONE";
+		engineer_primary_weapon_id = engineer_secondary_weapon_id = 0;
+		return std::get<0>(this->read<engineer>(this,"engineer_player_id",std::to_string(engineer_player_id)));
 	}
 	int16_t engineer::feed(const pqxx::result::reference & row){
 		init();
@@ -140,4 +81,3 @@ namespace mods::orm {
 	}
 
 };
-

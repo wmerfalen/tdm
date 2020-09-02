@@ -1,14 +1,5 @@
-//#include "base.hpp"
 #include "class-medic.hpp"
 
-/**
- * This class has the right idea, however it is unusable due to the fact
- * that we're errnoeously saving the primary and secondary weapons
- * to the user. In a mud, you must allow the user to customize their loadout.
- * This class violates that. Instead of saving the primary and secondary,
- * we should be using the mods::orm::inventory::feed/flush player functions
- * to update the player's carrying and euipment.
- */
 namespace mods::orm {
 	/**
 	 * @brief this should be called when you create a medic player for the first time
@@ -40,9 +31,8 @@ namespace mods::orm {
 			updated_at = created_at = time(nullptr);
 			loaded = 1;
 			id = medic_id = std::get<2>(status);
-			return id;
 		}
-		return std::get<2>(status);
+		return id;
 	}
 	strmap_t medic::export_class() {
 		strmap_t values;
