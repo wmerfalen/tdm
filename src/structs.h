@@ -1404,11 +1404,15 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 			extended_mob_type(extended_mob_type_t::NONE),
 			heading(NORTH), previous_room(0)
 			{
+#ifdef __MENTOC_SHOW_STRUCTS_H_DEBUG_OUTPUT__
 				std::cerr << "[mob_special_data] default constructor\n";
+#endif
 
 			}
 		mob_special_data(const mob_special_data& copy){
+#ifdef __MENTOC_SHOW_STRUCTS_H_DEBUG_OUTPUT__
 			std::cerr << "copy constructor [mob_special_data]\n";
+#endif
 			this->import(copy);
 		}
 		~mob_special_data();
@@ -1599,7 +1603,9 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		~char_data();
 		char_data(char_data* o);
 		char_data(const char_data& other){
+#ifdef __MENTOC_SHOW_STRUCTS_H_DEBUG_OUTPUT__
 			std::cerr << "char_data copy constructor\n";
+#endif
 			this->init();
 			this->import(&other);
 		}

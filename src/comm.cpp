@@ -659,11 +659,15 @@ void game_loop(socket_t mother_desc) {
 		gettimeofday(&last_time, (struct timezone *) 0);
 		
 		while (i < epoll_wait_status) {
+#ifdef __MENTOC_SHOW_EPOLL_WAIT_STATUS_MESSAGE__
 			std::cerr << "[while epoll wait status]\n";
+#endif
 			new_desc = 0;
 			auto operating_socket = events[i].data.fd;
 			if (events[i].data.fd == mother_desc) {
+#ifdef __MENTOC_SHOW_FD_EQUALS_MOTHER_MESSAGE__
 				std::cerr << "[fd == mother desc]\n";
+#endif
 				new_desc = new_descriptor(mother_desc);
 				operating_socket = new_desc;
 				epoll_ev.events = EPOLLIN; // new connection is a read event
@@ -696,7 +700,9 @@ void game_loop(socket_t mother_desc) {
 				break;
 			}
 			auto input_status = process_input(player->desc());
+#ifdef __MENTOC_SHOW_INPUT_STATUS_MESSAGE__
 			std::cerr << green_str("input_status:") << input_status << "\n";
+#endif
 			if(input_status < 0){
 				switch(input_status){
 					case -2:
@@ -721,7 +727,9 @@ void game_loop(socket_t mother_desc) {
 			}
 			aliased = 0;
 			if(!get_from_q(player->desc(), comm, &aliased)) {
+#ifdef __MENTOC_SHOW_GET_FROM_Q_FALSEY__
 				std::cerr << red_str("get_from_q returns falsey\n");
+#endif
 				++i;
 				continue;
 			}
@@ -741,17 +749,25 @@ void game_loop(socket_t mother_desc) {
 			GET_WAIT_STATE(player->cd()) = 1;
 			player->desc().has_prompt = false;
 			if(player->state() != CON_PLAYING) { // In menus, etc. 
+#ifdef __MENTOC_SHOW_COMM_CPP_DEBUG_OUTPUT__
 				std::cerr << blue_str("nanny\n");
+#endif
 				nanny(player, comm);
 			} else {			// else: we're playing normally. 
 				if(aliased) {	// To prevent recursive aliases. 
+#ifdef __MENTOC_SHOW_COMM_CPP_DEBUG_OUTPUT__
 					std::cerr << blue_str("aliased\n");
+#endif
 					player->desc().has_prompt = TRUE;    // To get newline before next cmd output. 
 				} else if(perform_alias(player->desc(), comm, sizeof(comm))) { // Run it through aliasing system 
+#ifdef __MENTOC_SHOW_COMM_CPP_DEBUG_OUTPUT__
 					std::cerr << blue_str("perform_aliased\n");
+#endif
 					get_from_q(player->desc(), comm, &aliased);
 				}
+#ifdef __MENTOC_SHOW_COMM_CPP_DEBUG_OUTPUT__
 				std::cerr << blue_str("calling command_interpreter\n");
+#endif
 				command_interpreter(player, comm); // Send it to interpreter 
 			}
 			++i;
@@ -860,7 +876,6 @@ void game_loop(socket_t mother_desc) {
 	}
 
 }
-#define __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__
 #ifdef __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__
 	#define rb_bht_debug(a) /**/
 #else
@@ -1730,7 +1745,9 @@ int process_input(mods::descriptor_data & t) {
 
 	/* first, find the point where we left off reading data */
 	if(t.inbuf.length()){
+#ifdef __MENTOC_SHOW_COMM_CPP_DEBUG_OUTPUT__
 		std::cerr << green_str("input length is:") << t.inbuf.length() << "\n";
+#endif
 		buf_length = t.inbuf.length();
 		bcopy(t.inbuf.c_str(),&tmp[0],t.inbuf.length());
 		read_point = static_cast<char*>(&tmp[buf_length-1]);

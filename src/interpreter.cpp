@@ -1044,7 +1044,6 @@ void command_interpreter(player_ptr_t & player, std::string in_argument){
 	}
 
 	if(strlen(arg) == 0){
-#define __MENTOC_SHOW_COMMAND_INTERPRETER_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_COMMAND_INTERPRETER_DEBUG_OUTPUT__
 		std::cerr << red_str("zero len argument. Returning...\n");
 #endif

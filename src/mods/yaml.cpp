@@ -8,7 +8,6 @@
 #endif
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 namespace mods::yaml {
-#define __MENOC_FEED_BASE_MEMBERS_DEBUG__
 #ifdef __MENOC_FEED_BASE_MEMBERS_DEBUG__
 #define debug_echo(a) std::cerr << "[MENTOC_FEED_BASE_MEMBERS][DEBUG]:'" << a << "'\n"; 
 #else
@@ -17,8 +16,6 @@ namespace mods::yaml {
 #define MENTOC_FILE_EXISTS_PREAMBLE(type)\
 	std::string file = true_path(#type,in_file);\
 		if(!mods::filesystem::file_exists(file)){\
-			std::cerr << "WARNING FILE DOESNT EXIST: '" << file << "'\n";\
-			sleep(10);\
 			mods::object_utils::yaml_file_doesnt_exist(#type);\
 			return -1;\
 		}

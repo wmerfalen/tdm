@@ -55,7 +55,11 @@ namespace mods::orm::inventory {
 };
 
 namespace mods {
+#ifdef __MENTOC_NPC_SEND_DEBUG_OUTPUT__
 #define NPC_SEND_DEBUG(a){ std::cerr << "[player-output--NPC_SEND_DEBUG--][NPC:" << this->name().c_str() << "][uuid:" << this->uuid() << "]->'" << a <<"'\n"; }
+#else
+	#define NPC_SEND_DEBUG(a)
+#endif
 #define MENTOC_NPC_CHECK(str) if(IS_NPC(cd())){ NPC_SEND_DEBUG(str); return; }
 #define MENTOC_NPC_CHECK_0(str) if(IS_NPC(cd())){ NPC_SEND_DEBUG(str); return 0; }
 	using mask_t = mods::weapon::mask_type;
@@ -63,7 +67,9 @@ namespace mods {
 
 
 	void player::set_shared_ptr(player_ptr_t& self_ptr) {
+#ifdef __MENTOC_SHOW_SET_SHARED_PTR_DEPRECATED__
 		std::cerr << "[deprecated] set_shared_ptr\n";
+#endif
 		return;
 		/*
 			 m_self_ptr = self_ptr;
@@ -280,7 +286,9 @@ namespace mods {
 		}
 	}
 	void player::equip(uuid_t obj_uuid,int pos){
+#ifdef __MENTOC_SHOW_EQUIP_DEBUG_OUTPUT__
 		std::cerr << "player::equip(uuid): " << obj_uuid << "\n";
+#endif
 		auto obj = optr_by_uuid(obj_uuid);
 		if(!obj){
 			exit(3);
@@ -298,7 +306,9 @@ namespace mods {
 				/** FIXME: this needs to negate the bit */
 				m_weapon_flags = 0;//m_equipment[pos]->obj_flags.weapon_flags;
 			}
-			//std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
+#ifdef __MENTOC_SHOW_EQUIP_DEBUG_OUTPUT__
+			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
+#endif
 			//perform_equip_calculations(pos,false);
 			m_equipment[pos]->worn_by = nullptr;
 			m_equipment[pos]->worn_on = -1;
@@ -778,7 +788,6 @@ namespace mods {
 		if(m_desc){
 			return *m_desc;
 		}else{
-			std::cerr << "Warning: player::desc() called but m_desc is null. Creating temporary descriptor_data shared_ptr\n";
 			set_desc(std::make_shared<mods::descriptor_data>());
 			return *m_desc;
 		}
@@ -1072,7 +1081,9 @@ namespace mods {
 	}
 
 	player::~player() {
+#ifdef __MENTOC_SHOW_MODS_PLAYER__DESTRUCTOR_CALLS__
 		std::cerr << "[~player]\n";
+#endif
 		if(m_histfile_on){ stop_histfile(); }
 		m_weapon_type = 0;
 		m_weapon_flags = 0;

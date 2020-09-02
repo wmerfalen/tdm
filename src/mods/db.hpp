@@ -33,7 +33,9 @@ using mutable_map_t = ::mods::lmdb::mutable_map_t;
 using tuple_status_t  = std::tuple<bool,std::string,aligned_int_t>;
 
 static inline int_status_t initialize_table_schema(std::string table){
+#ifdef __MENTOC_SHOW_DEPRECATED_MESSAGES__
 	std::cerr << "deprecated: initialize_table_schema\n";
+#endif
 	return mods::lmdb::error::success;
 }
 

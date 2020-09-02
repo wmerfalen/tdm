@@ -39,7 +39,6 @@ bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *att
 
 #define MOB_AGGR_TO_ALIGN (MOB_AGGR_EVIL | MOB_AGGR_NEUTRAL | MOB_AGGR_GOOD)
 
-#define __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__
 #ifdef __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__
 	#define bht_debug(a) /**/
 #else

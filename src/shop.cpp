@@ -1712,15 +1712,21 @@ void destroy_shops(void) {
 	void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::feed(pqxx::row in_row)
 #endif
 {
+#ifdef __MENTOC_SHOW_SHOP_CPP_DEBUG_OUTPUT__
 	std::cerr << "[shop_data::feed] called\n";
+#endif
 	this->db_id = in_row["shop_id"].as<db_id_t>();
 	this->vnum = in_row["shop_vnum"].as<shop_vnum>();
 	this->profit_buy = in_row["shop_profit_buy"].as<float>();
 	this->profit_sell = in_row["shop_profit_sell"].as<float>();
 	this->title.assign(in_row["shop_title"].c_str());
+#ifdef __MENTOC_SHOW_SHOP_CPP_DEBUG_OUTPUT__
 	std::cerr << "[shop_data::feed] title from row: '" << in_row["shop_title"].c_str() << "'\n";
+#endif
 	this->description.assign(in_row["shop_description"].c_str());
+#ifdef __MENTOC_SHOW_SHOP_CPP_DEBUG_OUTPUT__
 	std::cerr << "[shop_data::feed] description from row: '" << in_row["shop_description"].c_str() << "'\n";
+#endif
 	this->flags = in_row["shop_flags"].as<uint64_t>();
 	this->no_such_item1.assign(in_row["shop_no_such_item1"].c_str());
 	this->no_such_item2.assign(in_row["shop_no_such_item2"].c_str());
@@ -1742,13 +1748,17 @@ void destroy_shops(void) {
 	this->shop_type = in_row["shop_type"].as<int>();
 	
 	for(auto && s_row : db_get_by_meta("shop_rooms","shop_vnum",std::to_string(this->vnum).c_str())){
+#ifdef __MENTOC_SHOW_SHOP_CPP_DEBUG_OUTPUT__
 		std::cerr << __FILE__ << "|" << __LINE__ << ": found shop_rooms record: " << s_row["shop_room_vnum"].c_str() << "\n";
+#endif
 		this->room_info.rooms.emplace_back(s_row["shop_room_vnum"].as<room_vnum>());
 	}
 	int16_t count_placed = this->room_info.place_keepers_in_rooms(this->keeper);
 	log("%d keepers loaded in shop_vnum: %d",count_placed,this->vnum);
 	for(auto &&  s_row : db_get_by_meta("shop_objects","shop_vnum",std::to_string(this->vnum).c_str())){
+#ifdef __MENTOC_SHOW_SHOP_CPP_DEBUG_OUTPUT__
 		std::cerr << __FILE__ << "|" << __LINE__ << ": found shop_objects record: " << s_row["shop_object_vnum"].c_str() << "\n";
+#endif
 		this->object_info.objects.emplace_back(s_row["shop_object_vnum"].as<obj_vnum>());
 	}
 	this->m_loaded = true;
@@ -1834,7 +1844,9 @@ void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::l
 
 template <typename TOrmType,typename T,typename R>
 void shop_data<TOrmType,T,R>::init(){
+#ifdef __MENTOC_SHOW_SHOP_CPP_DEBUG_OUTPUT__
 	std::cerr << "[shop_data::init] called\n";
+#endif
 	this->func = nullptr;
 	this->title.clear();
 	this->description.clear();

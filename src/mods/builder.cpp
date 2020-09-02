@@ -421,17 +421,23 @@ namespace mods::builder {
 
 	void initialize_builder(player_ptr_t& player){
 		if(!player->has_builder_data()){
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 			std::cerr << "initialize_builder: creating shared_ptr\n";
+#endif
 			player->builder_data = std::make_shared<builder_data_t>();
 		}else{
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 			std::cerr << "initialize_builder: shared_ptr already built\n";
+#endif
 		}
 		player->set_bui_mode(true);
 	}
 	void add_room_to_pavements(player_ptr_t& player, int room_id){
 		auto & r = player->builder_data->room_pavements.rooms;
 		if(std::find(r.begin(),r.end(),room_id) == r.end()){
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 			std::cerr << "[add_room_to_pavements]-> adding room: " << room_id << "\n";
+#endif
 			player->builder_data->room_pavements.rooms.push_back(room_id);
 		}
 	}
@@ -483,7 +489,9 @@ namespace mods::builder {
 
 	template <typename T>
 	void rb_debug(T s){
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 		std::cerr << "[builder-debug]: " << s << "\n";
+#endif
 	}
 	template <typename T>
 	void rb_map_debug(T & t){
@@ -885,7 +893,9 @@ namespace mods::builder {
 	}
 	bool create_direction(room_rnum room_id,byte direction,room_rnum to_room) {
 		if(direction > NUM_OF_DIRS) {
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 			std::cerr << "[DIRECTION BIGGER THAN NUM_DIRS\n";
+#endif
 			return false;
 		}
 
@@ -1188,7 +1198,9 @@ ACMD(do_rbuild_sandbox) {
 				 */
 				mods::builder::sandbox_data_t sandbox;
 				auto zone_vnum = next_zone_vnum();
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 				std::cerr << ("zone_vnum:" + std::to_string(zone_vnum));
+#endif
 				auto room_id = next_room_vnum();
 				sandbox.new_sandbox(player,
 						cmd_args[2],
@@ -2595,10 +2607,14 @@ ACMD(do_mbuild) {
 ACMD(do_obuild) {
 	
 	mods::builder::initialize_builder(player);
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 	std::cerr << "obuild argument: '" << argument << "'\n";
+#endif
 	auto vec_args = PARSE_ARGS();
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 	std::cerr << "after parse args\n";
 	std::cerr << "[vec_args.size()]->" << vec_args.size() << "\n";
+#endif
 
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("weapon_type") == 0) {
 		player->pager_start();
@@ -2622,7 +2638,9 @@ ACMD(do_obuild) {
 		return;
 	}
 
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 	std::cerr << "checkpoint b\n";
+#endif
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("affected") == 0) {
 		player->pager_start();
 		*player <<
@@ -2677,7 +2695,9 @@ ACMD(do_obuild) {
 		return;
 	}
 
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 	std::cerr << "checkpoint c\n";
+#endif
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("extra_flags") == 0) {
 		player->pager_start();
 		*player <<
@@ -2704,7 +2724,9 @@ ACMD(do_obuild) {
 		return;
 	}
 
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 	std::cerr << "checkpoint d\n";
+#endif
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("wear_flags") == 0) {
 		player->pager_start();
 		*player <<
@@ -2729,7 +2751,9 @@ ACMD(do_obuild) {
 		return;
 	}
 
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 	std::cerr << "checkpoint e\n";
+#endif
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("type_flags") == 0) {
 		player->pager_start();
 		*player <<
@@ -2762,7 +2786,9 @@ ACMD(do_obuild) {
 		return;
 	}
 
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 	std::cerr << "checkpoint F\n";
+#endif
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0 && vec_args[1].compare("flags") == 0) {
 		player->pager_start();
 		*player <<
@@ -2892,7 +2918,9 @@ ACMD(do_obuild) {
 		player->page(0);
 		return;
 	}
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 	std::cerr << "checkpoint G\n";
+#endif
 
 	if(!vec_args.size() || vec_args[0].compare("help") == 0) {
 		player->pager_start();
@@ -2970,10 +2998,14 @@ ACMD(do_obuild) {
 		player->page(0);
 		return;
 	}
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 	std::cerr << "checkpoint H\n";
+#endif
 	
 	auto args = mods::util::subcmd_args<9,args_t>(argument,"obj_file");
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 	std::cerr << "checkpoint H\n";
+#endif
 
 	if(args.has_value()) {
 		auto r = args.value();
@@ -4796,7 +4828,9 @@ ACMD(do_rbuild) {
 			auto size_before = world[IN_ROOM(ch)].ex_descriptions().size();
 			world[IN_ROOM(ch)].ex_descriptions().emplace_back();
 			auto size_after = world[IN_ROOM(ch)].ex_descriptions().size();
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
 			std::cerr << "before: " << size_before << " after: " << size_after << "\n";
+#endif
 			if(size_after > size_before){
 				r_success(player,"Room ed saved");
 				return;
