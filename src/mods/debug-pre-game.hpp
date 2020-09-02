@@ -10,6 +10,7 @@
 #include "rand.hpp"
 #endif
 #include "orm/class-medic.hpp"
+#include "orm/class-sniper.hpp"
 
 extern bool login(std::string_view user_name,std::string_view password);
 extern int16_t save_char_data(player_ptr_t& player,std::map<std::string,std::string> values);
@@ -17,15 +18,27 @@ namespace mods::debug::pre_game {
 #define DD(a){ std::cerr << "[debug::pre_game][line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"; }
 	namespace fb = ::mods::flashbang;
 	bool run(){
-		mods::orm::medic m;
+#define __MENTOC_RUN_SNIPER_PREGAME_TESTS__
+#ifdef __MENTOC_RUN_SNIPER_PREGAME_TESTS__
+		mods::orm::sniper sniper;
 		auto p = std::make_shared<mods::player>();
 		p->set_db_id(69);
-		std::cerr << "initialize_row:'" << m.initialize_row(p,mods::orm::medic::primary_choice_t::AUGPARA) << "'\n";
+		std::cerr << "initialize_row:'" << std::to_string(sniper.initialize_row(p,mods::orm::sniper::primary_choice_t::PSG1)) << "'\n";
+		std::cerr << "pk name:'" << sniper.primary_key_name() << "'\n";
+		sniper.save();
+		sniper.load_by_player(69);
+#endif
+
+#define __MENTOC_RUN_MEDIC_PREGAME_TESTS__
+#ifdef __MENTOC_RUN_MEDIC_PREGAME_TESTS__
+		mods::orm::medic m;
+		auto mp = std::make_shared<mods::player>();
+		mp->set_db_id(69);
+		std::cerr << "initialize_row:'" << m.initialize_row(mp,mods::orm::medic::primary_choice_t::AUGPARA) << "'\n";
 		std::cerr << "pk name:'" << m.primary_key_name() << "'\n";
 		m.save();
 		m.load_by_player(69);
-		sleep(20);
-		exit(0);
+#endif
 		std::cerr << "chargen sniper cl desc: '" << CHARGEN_SNIPER_CLASS_DESCRIPTION() << "'\n";
 		if(login("zim", "zoo")){
 			DD(green_str("Logged in properly with 'zim': 'zoo'"));

@@ -1,11 +1,5 @@
 //#include "base.hpp"
 #include "class-medic.hpp"
-#include <vector>
-#include <map>
-#include <string>
-#include <time.h>
-#include "../sql.hpp"
-#include "../pq.hpp"
 
 /**
  * This class has the right idea, however it is unusable due to the fact
@@ -41,14 +35,14 @@ namespace mods::orm {
 		medic_secondary_weapon_id = czp10->rifle()->attributes->flush_to_db();
 
 		medic_player_id = player->db_id();
-		std::tuple<int16_t,std::string,uint64_t> status = this->create<medic>(this);
-		if(std::get<0>(status)){
+		auto status = this->create<medic>(this);
+		if(ORM_SUCCESS(status)){
 			updated_at = created_at = time(nullptr);
 			loaded = 1;
 			id = medic_id = std::get<2>(status);
 			return id;
 		}
-		return std::get<0>(status);
+		return std::get<2>(status);
 	}
 	strmap_t medic::export_class() {
 		strmap_t values;

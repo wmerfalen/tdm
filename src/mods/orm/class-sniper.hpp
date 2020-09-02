@@ -1,22 +1,20 @@
 #ifndef __MENTOC_MODS_ORM_CLASS_SNIPER_HEADER__
 #define __MENTOC_MODS_ORM_CLASS_SNIPER_HEADER__
 
-#include <iostream>
-#include <vector>
 #include "../../globals.hpp"
-#include "util.hpp"
+#include "orm-base.hpp"
 
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
-	struct sniper {
-		std::string PSG1 = "PSG1";
-		std::string L96AW = "L96AW";
+	struct sniper : public mods::orm::orm_base<sniper,mods::weapon::sniper::primary_choice_t> {
+		using primary_choice_t = mods::weapon::sniper::primary_choice_t;
+		const std::string PSG1 = "PSG1";
+		const std::string L96AW = "L96AW";
 		std::string table_name(){ return "class_sniper"; }
 		std::string column_prefix(){ return "sniper_"; }
 		std::string id_column(){ return "sniper_id"; }
-		std::string_view primary_key_name() { return id_column(); }
-		std::string_view primary_key_value() { return std::to_string(id); }
-		using primary_choice_t = mods::weapon::sniper::primary_choice_t;
+		std::string primary_key_name() { return this->id_column(); }
+		std::string primary_key_value() { return std::to_string(this->id); }
 
 		sniper() : id(0) { this->init(); loaded = 0; }
 		~sniper() = default;
@@ -34,8 +32,10 @@ namespace mods::orm {
 			}
 			return primary_choice_t::NONE;
 		}
+		int16_t save(){
+			return std::get<0>(this->update<sniper>(this));
+		}
 
-		int16_t save();
 		int16_t				load_by_player(uint64_t);
 		uint64_t id;
 		uint64_t sniper_id;

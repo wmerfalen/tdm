@@ -1,14 +1,5 @@
 //#include "base.hpp"
 #include "class-sniper.hpp"
-#include <vector>
-#include <map>
-#include <string>
-#include "../weapons/sniper-rifle-psg1.hpp"
-#include "../weapons/sniper-rifle-l96aw.hpp"
-#include "../weapons/pistol-czp10.hpp"
-#include <time.h>
-#include "../sql.hpp"
-#include "../pq.hpp"
 
 /**
  * This class has the right idea, however it is unusable due to the fact
@@ -19,10 +10,6 @@
  * to update the player's carrying and euipment.
  */
 namespace mods::orm {
-	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
-	int16_t sniper::save(){
-		return std::get<0>(mods::orm::util::update<sniper,sql_compositor>(this));
-	}
 	/**
 	 * @brief this should be called when you create a sniper player for the first time
 	 *
@@ -48,17 +35,16 @@ namespace mods::orm {
 		sniper_secondary_weapon_id = czp10->rifle()->attributes->flush_to_db();
 
 		sniper_player_id = player->db_id();
-#if 0
-		std::tuple<int16_t,std::string,uint64_t> status = mods::orm::util::insert_returing<sniper,sql_compositor>(this,primary_key_name());
-		if(std::get<0>(status)){
+		auto status = this->create<sniper>(this);
+		if(ORM_SUCCESS(status)){
 			updated_at = created_at = time(nullptr);
 			loaded = 1;
 			id = sniper_id = std::get<2>(status);
+			std::cerr << "sniper_id:'" << std::to_string(sniper_id) << "'\n";
+			sleep(60);
 			return id;
 		}
 		return std::get<0>(status);
-#endif
-		return 0;
 	}
 	strmap_t sniper::export_class() {
 		strmap_t values;
@@ -76,12 +62,7 @@ namespace mods::orm {
 		sniper_player_id = 0;
 		sniper_secondary_type = sniper_primary_type ="NONE";
 		sniper_primary_weapon_id = sniper_secondary_weapon_id = 0;
-#if 0
-		std::tuple<int16_t,std::string> status = mods::orm::util::load_by_pkid<sniper,sql_compositor>(this);
-		loaded = std::get<0>(status) > 0;
-		return std::get<0>(status);
-#endif
-		return 0;
+		return std::get<0>(this->read<sniper>(this,"sniper_player_id",std::to_string(sniper_player_id)));
 	}
 	int16_t sniper::feed(const pqxx::result::reference & row){
 		init();

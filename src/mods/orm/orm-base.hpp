@@ -8,6 +8,8 @@
 #include "../sql.hpp"
 #include "util.hpp"
 
+#define ORM_SUCCESS(a) std::get<0>(a) == 0
+#define ORM_FAILURE(a) std::get<0>(a) < 0
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
@@ -16,7 +18,7 @@ namespace mods::orm {
 		template <typename TClass>
 		static inline std::tuple<int16_t,std::string,uint64_t> create(TClass* c){
 			auto status = mods::orm::util::insert_returning<TClass,sql_compositor>(c,c->primary_key_name());
-			if(std::get<0>(status) < 0){
+			if(ORM_FAILURE(status)){
 				std::cerr << "[orm_base::insert] failed: '" << std::get<1>(status) << "'\n";
 			}
 			return status;
@@ -24,7 +26,7 @@ namespace mods::orm {
 		template <typename TClass>
 		std::tuple<int16_t,std::string> read(TClass* c){
 			auto status = mods::orm::util::load_by_pkid<TClass,sql_compositor>(c);
-			if(std::get<0>(status) < 0){
+			if(ORM_FAILURE(status)){
 				std::cerr << "[load_by_pkid] failed: '" << std::get<1>(status) << "'\n";
 			}
 			return status;
@@ -32,7 +34,7 @@ namespace mods::orm {
 		template <typename TClass>
 		std::tuple<int16_t,std::string> read(TClass* c,std::string_view column,std::string_view value){
 			auto status = mods::orm::util::load_by_column<TClass,sql_compositor>(c,column,value);
-			if(std::get<0>(status) < 0){
+			if(ORM_FAILURE(status)){
 				std::cerr << "[load_by_column] failed: '" << std::get<1>(status) << "'\n";
 			}
 			return status;
@@ -40,14 +42,14 @@ namespace mods::orm {
 		template <typename TClass>
 		static inline std::tuple<int16_t,std::string> update(TClass* c){
 			auto status = mods::orm::util::update<TClass,sql_compositor>(c);
-			if(std::get<0>(status) < 0){
+			if(ORM_FAILURE(status)){
 				std::cerr << "[orm_base::update] failed: '" << std::get<1>(status) << "'\n";
 			}
 			return status;
 		}
 		std::tuple<int16_t,std::string> remove(){
 			auto status = mods::orm::util::delete_from<orm_base,sql_compositor>(this);
-			if(std::get<0>(status) < 0){
+			if(ORM_FAILURE(status)){
 				std::cerr << "[orm_base::remove] failed: '" << std::get<1>(status) << "'\n";
 			}
 			return status;

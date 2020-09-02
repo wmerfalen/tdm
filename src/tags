@@ -813,8 +813,8 @@ DB_BOOT_SHP	db.h	19;"	d
 DB_BOOT_WLD	db.h	15;"	d
 DB_BOOT_ZON	db.h	18;"	d
 DB_PREFIX	mods/skills.cpp	/^	constexpr static const char* DB_PREFIX = "skills";$/;"	m	namespace:mods::skills	file:
-DD	mods/debug-pre-game.hpp	17;"	d
-DD	mods/debug-pre-game.hpp	94;"	d
+DD	mods/debug-pre-game.hpp	107;"	d
+DD	mods/debug-pre-game.hpp	18;"	d
 DECENT	mods/yaml.hpp	/^	DECENT,$/;"	e	enum:mods::yaml::durability_profile_type_t
 DEFAULT	mods/rarity.hpp	/^		constexpr static float DEFAULT = mods::rarity::COMMON;$/;"	m	namespace:mods::rarity
 DEFAULT_AMOUNT	mods/affects.hpp	/^	constexpr static amount_t DEFAULT_AMOUNT = 3;$/;"	m	namespace:mods::affects
@@ -3314,7 +3314,9 @@ __MENTOC_MODS_deferred_HEADER__	mods/deferred.hpp	2;"	d
 __MENTOC_MODS_prefs_HEADER__	mods/prefs.hpp	2;"	d
 __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
 __MENTOC_PLR	db.cpp	2617;"	d	file:
+__MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	32;"	d
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
+__MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	21;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__	mods/behaviour_tree_impl.cpp	16;"	d	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	992;"	d	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	d

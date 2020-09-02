@@ -18,10 +18,10 @@ namespace mods::orm::util {
 					auto record = mods::pq::exec(insert_transaction,up_sql);
 					mods::pq::commit(insert_transaction);
 					if(record.size()){
-						return {0,"okay",mods::util::stoi<uint64_t>(record[0][returning_field.data()].c_str())};
+						auto i_value = mods::util::stoi<uint64_t>(record[0][returning_field.data()].c_str());
+						return {0,"okay",i_value};
 					}
 				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error initializing class row: '" << e.what() << "'\n";
 					return {-1,e.what(),0};
 				}
 				return {-2,"unknown",0};
@@ -81,7 +81,6 @@ namespace mods::orm::util {
 					mods::pq::commit(up_txn);
 					return {0,"okay"};
 				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error updating room by pkid: '" << e.what() << "'\n";
 					return {-1,e.what()};
 				}
 				return {-2,"unknown"};
@@ -105,7 +104,6 @@ namespace mods::orm::util {
 					}
 					return {0,"okay"};
 				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
 					return {-1,e.what()};
 				}
 				return {-2,"unknown"};
@@ -125,7 +123,6 @@ namespace mods::orm::util {
 						return {0,"okay"};
 					}
 				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
 					return {-1,e.what()};
 				}
 				return {-2,"unknown"};
@@ -145,7 +142,6 @@ namespace mods::orm::util {
 						return {0,"okay"};
 					}
 				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
 					return {-1,e.what()};
 				}
 				return {-2,"unknown"};

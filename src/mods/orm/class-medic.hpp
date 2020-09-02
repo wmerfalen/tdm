@@ -1,16 +1,14 @@
 #ifndef __MENTOC_MODS_ORM_CLASS_MEDIC_HEADER__
 #define __MENTOC_MODS_ORM_CLASS_MEDIC_HEADER__
 
-#include <iostream>
-#include <vector>
 #include "../../globals.hpp"
 #include "orm-base.hpp"
 
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
-	using primary_choice_t = mods::weapon::medic::primary_choice_t;
-	struct medic : public mods::orm::orm_base<medic,primary_choice_t> {
+	struct medic : public mods::orm::orm_base<medic,mods::weapon::medic::primary_choice_t> {
+		using primary_choice_t = mods::weapon::medic::primary_choice_t;
 		const std::string AUGPARA = "AUGPARA";
 		const std::string TAR21 = "TAR21";
 		const std::string CZP10 = "CZP10";
@@ -18,10 +16,8 @@ namespace mods::orm {
 		std::string column_prefix() const { return "medic_"; }
 		std::string id_column() const { return "medic_id"; }
 		medic() : id(0) {
-			std::cerr << "medic constructor. table_name:'" << table_name() << "'\n";
-			std::cerr << "medic constructor. primary_key_name:'" << primary_key_name() << "'\n";
-			std::cerr << "medic constructor. primary_key_value:'" << primary_key_value() << "'\n";
-			this->init(); loaded = 0; }
+			this->init(); loaded = 0;
+		}
 		~medic() = default;
 
 		std::string primary_key_name() { return id_column(); }
