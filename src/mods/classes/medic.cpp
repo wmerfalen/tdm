@@ -82,7 +82,6 @@ namespace mods::classes {
 	int16_t medic::load_by_player(player_ptr_t & player){
 		m_player = player;
 		auto result = m_orm.load_by_player(player->db_id());
-		return result;
 		if(result < 0){
 			report({"unable to load medic class by player id: ",std::to_string(player->db_id()),".. return status: ",std::to_string(result),"player:",player->name().c_str()});
 			return -100 - result;
