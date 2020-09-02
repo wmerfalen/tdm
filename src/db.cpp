@@ -2064,12 +2064,12 @@ obj_ptr_t blank_object() {
 obj_ptr_t create_object(int type,std::string yaml_file) {
 	std::string path = mods::util::compile_yaml_path_from_type_and_file(type,yaml_file);
 	if(path.compare(mods::util::UNKNOWN_YAML_FILE) == 0){
-		log(CAT({"SYSERR: create_object:: warning: unknown yaml file type+yaml_file:'",yaml_file,"', with type:'", std::to_string(type),"'"}).c_str());
+		log(CAT("SYSERR: create_object:: warning: unknown yaml file type+yaml_file:'",yaml_file,"', with type:'", type,"'").c_str());
 		return blank_object();
 	}
 	bool exists = mods::util::yaml_file_exists(path);
 	if(!exists){
-		log(CAT({"SYSERR: create_object:: warning: yaml file DOESNT EXIST:'",yaml_file,"', with type:'", std::to_string(type),"'"}).c_str());
+		log(CAT("SYSERR: create_object:: warning: yaml file DOESNT EXIST:'",yaml_file,"', with type:'", type,"'").c_str());
 		return blank_object();
 	}
 	obj_list.push_back(std::make_shared<obj_data>(type,yaml_file));

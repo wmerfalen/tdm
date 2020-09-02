@@ -1,14 +1,10 @@
 #ifndef __MENTOC_MODS_CLASSES_SUPPORT_HEADER__
 #define  __MENTOC_MODS_CLASSES_SUPPORT_HEADER__
-//#include "base.hpp"
-#include <memory>
-#include "../weapons/sniper-rifle-psg1.hpp"
-#include "../weapons/sniper-rifle-l96aw.hpp"
-#include <deque>
-#include <memory>
 #include "../orm/class-support.hpp"
+#include "../bugs-fixtures.hpp"
 #include "types.hpp"
-		using support_orm_t = mods::orm::support;
+
+using support_orm_t = mods::orm::support;
 namespace mods::classes {
 	struct support {
 		types kind() {

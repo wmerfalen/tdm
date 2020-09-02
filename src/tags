@@ -499,7 +499,7 @@ CAST_SPELL	spells.h	17;"	d
 CAST_STAFF	spells.h	20;"	d
 CAST_UNDEFINED	spells.h	16;"	d
 CAST_WAND	spells.h	19;"	d
-CAT	globals.hpp	/^static inline std::string CAT(std::vector<std::string_view> m){$/;"	f
+CAT	globals.hpp	/^static inline std::string CAT(Args const&... args) {$/;"	f
 CATCH_AND_THEN	mods/catch.hpp	12145;"	d
 CATCH_AND_WHEN	mods/catch.hpp	12143;"	d
 CATCH_ANON_TEST_CASE	mods/catch.hpp	12126;"	d
@@ -5119,7 +5119,7 @@ into	mods/sql.hpp	/^			compositor<T>& into(str_object table) {$/;"	f	struct:mods
 invalid_align	handler.cpp	/^int invalid_align(char_data *ch, struct obj_data *obj) {$/;"	f
 invalid_class	class.cpp	/^int invalid_class(char_data *ch, struct obj_data *obj) {$/;"	f
 invalid_list	ban.cpp	/^char *invalid_list[MAX_INVALID_NAMES];$/;"	v
-invec	globals.hpp	280;"	d
+invec	globals.hpp	292;"	d
 inventory	mods/player.cpp	/^namespace mods::orm::inventory {$/;"	n	class:mods::orm	file:
 invoke	mods/catch.hpp	/^			virtual void invoke() const {$/;"	f	class:Catch::MethodTestCase
 irl	mods/date-time.cpp	/^	namespace irl {$/;"	n	namespace:mods::date_time	file:
@@ -6929,6 +6929,7 @@ to_dirstr	mods/doors.hpp	/^	static inline std::string to_dirstr(const int& direc
 to_durability_profile	mods/yaml.hpp	/^static inline durability_profile_type_t to_durability_profile(std::string_view dp){$/;"	f	namespace:mods::yaml
 to_hex_digit	mods/util-conf.hpp	/^			char to_hex_digit(unsigned int target) {$/;"	f	namespace:mods::util::conf
 to_room	structs.h	/^		room_rnum to_room;		\/* Where direction leads (NOWHERE)	*\/$/;"	m	struct:room_direction_data
+to_string	globals.hpp	/^inline std::string const& to_string(std::string const& s) { return s; }$/;"	f	class:std
 to_string	mods/aoe.hpp	/^	static inline std::string to_string(const types_t& type) {$/;"	f	namespace:mods::aoe
 to_string	mods/object-utils.hpp	/^		std::string to_string() {$/;"	f	struct:mods::object_utils::YamlFeedExceptionInfo
 to_string	mods/rooms.hpp	/^	static inline std::string to_string(room_data::fire_status_t stat){$/;"	f	namespace:mods::rooms

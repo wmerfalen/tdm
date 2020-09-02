@@ -78,7 +78,7 @@ namespace mods::intent {
 		auto door_issues = decorate_door_issues(i);
 		if(door_issues){
 			auto p = ptr_by_uuid(i.player);
-			do_gen_door(p->cd(),CAT({"open ",dirstr(i.direction)}).data(),0,0,p);
+			do_gen_door(p->cd(),CAT("open ",dirstr(i.direction)).data(),0,0,p);
 		}
 		return true;
 	}

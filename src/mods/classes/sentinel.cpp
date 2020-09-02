@@ -9,51 +9,11 @@ namespace mods::orm::inventory {
 };
 namespace mods::classes {
 		int16_t destroy(player_ptr_t& player){
-			/** TODO */
 			player = nullptr;
 			return 0;
 		}
 		sentinel::sentinel(player_ptr_t p){
-			m_mp5 = nullptr;
-			m_sasg12 = nullptr;
-			m_czp10 = nullptr;
-			this->load_by_player(p);
-		}
-		mp5_ptr_t sentinel::mp5(){
-			return m_mp5;
-		}
-		sasg12_ptr_t sentinel::sasg12(){
-			return m_sasg12;
-		}
-		czp10_ptr_t sentinel::secondary(){
-			return m_czp10;
-		}
-		czp10_ptr_t sentinel::czp10(){
-			return m_czp10;
-		}
-		mp5_ptr_t sentinel::create_mp5(uint64_t id){
-			m_mp5 = std::make_shared<mods::weapons::smg::mp5>();
-			auto result = db_get_by_meta("object_rifle","rifle_id",std::to_string(id));
-			for(auto&& row : result){
-				m_mp5->feed_by_file(row["rifle_file"].as<std::string>());
-			}
-			return m_mp5;
-		}
-		sasg12_ptr_t sentinel::create_sasg12(uint64_t id){
-			m_sasg12 = std::make_shared<mods::weapons::shotgun::sasg12>();
-			auto result = db_get_by_meta("object_rifle","rifle_id",std::to_string(id));
-			for(auto&& row : result){
-				m_sasg12->feed_by_file(row["rifle_file"].as<std::string>());
-			}
-			return m_sasg12;
-		}
-		czp10_ptr_t sentinel::create_czp10(uint64_t id){
-			m_czp10 = std::make_shared<mods::weapons::pistol::czp10>();
-			auto result = db_get_by_meta("object_rifle","rifle_id",std::to_string(id));
-			for(auto&& row : result){
-				m_czp10->feed_by_file(row["rifle_file"].as<std::string>());
-			}
-			return m_czp10;
+			load_by_player(p);
 		}
 		player_ptr_t 	sentinel::player(){
 			return m_player;
@@ -76,7 +36,7 @@ namespace mods::classes {
 		int16_t sentinel::load_by_player(player_ptr_t & player){
 			auto result = m_orm.load_by_player(player->db_id());
 			if(result < 0){
-				std::cerr << "unable to load sentinel class by player id: " << player->db_id() << ".. return status: " << result << "\n";
+				mods::bugs::fixtures(CAT("sentinel::load_by_player unable to load sentinel class by player id: ",(player->db_id()),".. return status: ",(result)));
 				return result;
 			}
 			set_player(player);
@@ -141,9 +101,6 @@ namespace mods::classes {
 		}
 		/* constructors and destructors */
 		sentinel::sentinel(){
-			m_mp5 = nullptr;
-			m_sasg12 = nullptr;
-			m_czp10 = nullptr;
 			m_player = nullptr;
 		}
 		std::shared_ptr<sentinel> create_sentinel(player_ptr_t &in_player){

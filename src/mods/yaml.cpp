@@ -53,8 +53,8 @@ namespace mods::yaml {
 
 	std::string true_path(std::string_view type,std::string_view in_file){
 		std::string cwd = current_working_dir();
-		std::string prefixed = CAT({cwd,"/objects/",type.data(),"/",in_file.data()});
-		std::string standalone = CAT({cwd,"/",in_file.data()});
+		std::string prefixed = CAT(cwd,"/objects/",type.data(),"/",in_file.data());
+		std::string standalone = CAT(cwd,"/",in_file.data());
 		if(mods::filesystem::file_exists(prefixed)){
 			return prefixed;
 		}

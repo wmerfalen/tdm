@@ -217,7 +217,7 @@ namespace mods::mobs {
 	 */
 	void mini_gunner::shout(std::string_view msg){
 		mini_debug("[stub]shout:'" << msg.data() << "'");
-		act(CAT({"$n shouts '",msg.data(),"'"}).c_str(), TRUE, this->cd(), 0, 0, TO_ROOM);
+		act(CAT("$n shouts '",msg.data(),"'").c_str(), TRUE, this->cd(), 0, 0, TO_ROOM);
 	}
 	/**
 	 * @brief set behaviour tree

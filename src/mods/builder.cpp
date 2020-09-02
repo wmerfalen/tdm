@@ -1872,7 +1872,7 @@ struct command_t {
 		for(auto & pair : this->column_mappings){
 			if(field.compare(pair.first) == 0){
 				this->values[this->column_mappings[field]] = value;
-				r_success(player,CAT({"Successfully set '", field, "'."}));
+				r_success(player,CAT("Successfully set '", field, "'."));
 				return HANDLED;
 			}
 		}
@@ -5069,10 +5069,10 @@ ACMD(do_rbuild) {
 					r_error(player,std::string("Error saving room: ") + std::to_string(ret) + "->" + error);
 				} else {
 					++c;
-					r_success(player,CAT({"Room:", tostr(room_id), " saved"}));
+					r_success(player,CAT("Room:", tostr(room_id), " saved"));
 				}
 			}
-			r_success(player, CAT({"Saved ",tostr(c), " rooms."}));
+			r_success(player, CAT("Saved ",tostr(c), " rooms."));
 		}else{
 			r_error(player,"You currently don't have any builder data. Try starting the pave process.");
 		}

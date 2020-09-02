@@ -262,6 +262,17 @@ namespace mods::skills {
 };
 static inline bool can(player_ptr_t& player,int skill){ return mods::skills::player_can(player,skill); }
 
+inline std::string const& to_string(std::string const& s) { return s; }
+template<typename... Args>
+static inline std::string CAT(Args const&... args) {
+    std::string result;
+    using ::to_string;
+    using std::to_string;
+    int unpack[]{0, (result += to_string(args), 0)...};
+    static_cast<void>(unpack);
+    return result;
+}
+/*
 static inline std::string CAT(std::vector<std::string_view> m){
 	std::string f = "";
 	std::size_t size = 0;
@@ -274,6 +285,7 @@ static inline std::string CAT(std::vector<std::string_view> m){
 	}
 	return f;
 }
+*/
 std::string IMPLODE(std::vector<std::string> m,std::string delim);
 std::string dirstr(int);
 std::vector<str_t> map_keys(str_map_t & m);

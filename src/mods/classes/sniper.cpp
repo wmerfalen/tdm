@@ -4,19 +4,11 @@
 #include "../bugs-fixtures.hpp"
 
 namespace mods::classes {
-	psg1_t sniper::psg1(){ 
-			return m_psg1;
-	}
-	l96aw_t sniper::l96aw(){ 
-			return m_l96aw;
-	}
 	sniper::sniper(){
-			m_psg1 = nullptr;
-			m_l96aw = nullptr;
+		m_player = nullptr;
 	}
 	sniper::sniper(player_ptr_t p){
-		m_psg1 = nullptr;
-		m_l96aw = nullptr;
+		m_player = nullptr;
 		load_by_player(p);
 	}
 	player_ptr_t 	sniper::player(){

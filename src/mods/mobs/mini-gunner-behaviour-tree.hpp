@@ -34,7 +34,7 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 		return TNode::create_leaf([name](TArgumentType& mob) -> TStatus {
 #ifdef __MENTOC_SHOW_TREE_NAME__
 			std::cerr << "[debug_echo_tree_name][mob_uuid:" << mob.uuid() << "]" <<
-			green_str(CAT({"[tree:'",name,"']\n"}));
+			green_str(CAT("[tree:'",name,"']\n"));
 #endif
 			return TSUCCESS;
 		});

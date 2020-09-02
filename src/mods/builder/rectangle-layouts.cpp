@@ -96,7 +96,7 @@ namespace mods::builder::rectangle_layouts {
 		auto args = EXPLODE(input,",");
 		bool has_error = 0;
 		if(args.size() != 4){
-			errors.emplace_back(CAT({"We expected 4 comma separated values. Instead we got ",tostr(args.size()),", please correct this and try again."}));
+			errors.emplace_back(CAT("We expected 4 comma separated values. Instead we got ",(args.size()),", please correct this and try again."));
 			return {false, errors};
 		}
 		auto opt_width = mods::util::stoi<uint8_t>(args[0]);
@@ -143,7 +143,7 @@ namespace mods::builder::rectangle_layouts {
 		auto status = parse_dimensions(vec_args[1],&dim);
 		if(!std::get<0>(status)){
 			for(auto & error : std::get<1>(status)){
-				r_error(player,CAT({"Error parsing dimensions: '",error,"'"}));
+				r_error(player,CAT("Error parsing dimensions: '",error,"'"));
 				return true;
 			}
 		}

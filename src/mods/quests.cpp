@@ -87,7 +87,7 @@ namespace mods {
 			std::vector<std::string> quests;
 
 			for(unsigned ctr = 0; true ; ctr++) {
-				std::string key  = CAT({"quest:",tostr(room_id),":",tostr(ctr),":name"});
+				std::string key  = CAT("quest:",(room_id),":",ctr,":name");
 				value = "";
 				mods::globals::db->get(key,value);
 

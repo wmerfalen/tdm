@@ -516,7 +516,7 @@ bool obj_data::flagged(int value){
 		}
 		void mob_special_data::report(room_rnum room){
 			for(auto & uuid : this->memory){
-				send_to_room(room, "Report: %s\r\n", CAT({"memory:",std::to_string(uuid)}).c_str());
+				send_to_room(room, "Report: %s\r\n", CAT("memory:",(uuid)).c_str());
 			}
 			std::vector<std::string> msg;
 #define MR(MSG,VALUE) msg.push_back(std::string(MSG) + std::string(":") + std::to_string(VALUE));

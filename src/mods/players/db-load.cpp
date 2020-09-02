@@ -20,7 +20,7 @@ namespace mods::players::db_load {
 	}
 	void report(int64_t code, std::string_view msg){
 		if(!reporter_function_set){
-			std::cerr << "[fallback reporter]: " << red_str(CAT({"code:",std::to_string(code)})) << 
+			std::cerr << "[fallback reporter]: " << red_str(CAT("code:",(code))) << 
 				" message: '" << red_str(msg.data()) << "'\n";
 			return;
 		}

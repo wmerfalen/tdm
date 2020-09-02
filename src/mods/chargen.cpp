@@ -147,12 +147,12 @@ namespace mods::chargen {
 	void undo_make_char(player_ptr_t player){
 		int ret = ::db::delete_char(player);
 		if(ret < 0){
-			mudlog(NRM, LVL_IMMORT, TRUE, CAT({player->name()," [",player->host(),"] player creation rollback ",
-						red_str("failed")," for user: S.Q.L. id: '",tostr(player->pk_id()),"'"}).c_str());
+			mudlog(NRM, LVL_IMMORT, TRUE, CAT(player->name()," [",player->host(),"] player creation rollback ",
+						red_str("failed")," for user: S.Q.L. id: '",(player->pk_id()),"'").c_str());
 			return;
 		}
-		mudlog(NRM, LVL_IMMORT, TRUE, CAT({player->name()," [",player->host(),"] player creation rollback ",
-					green_str("success")}).c_str());
+		mudlog(NRM, LVL_IMMORT, TRUE, CAT(player->name()," [",player->host(),"] player creation rollback ",
+					green_str("success")).c_str());
 	}
 	std::tuple<bool,std::string> make_char(player_ptr_t player,player_class_t class_type){
 		REMOVE_BIT(MOB_FLAGS(player->cd()), MOB_ISNPC);

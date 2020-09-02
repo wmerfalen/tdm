@@ -303,7 +303,7 @@ namespace mods::values {
 		CGET(std::string,PRIMARY_CHOICE_SCREEN_MK46_DESCRIPTION,"The MK-46 LMG is a perfect balance of firepower, portability, and accuracy.\r\n");
 		CGET(std::string,PRIMARY_CHOICE_SCREEN_HK21_DESCRIPTION,"General purpose LMG widely used in tactical teams all over the world.\r\n");
 		CGET(std::string,CHARGEN_SNIPER_CLASS_DESCRIPTION,
-				CAT({green_str(
+				CAT(green_str(
 							 "=====================================================\r\n"
 						   "#               - = [ The Sniper ] = -              #\r\n"
 							 "=====================================================\r\n"),
@@ -315,10 +315,10 @@ namespace mods::values {
 							 "of ranged weaponry.\r\n",
 							 yellow_str(
 							 "=====================================================\r\n")
-			 })
+			 )
 		);
 		CGET(std::string,CHARGEN_MARINE_CLASS_DESCRIPTION,
-				CAT({green_str(
+				CAT(green_str(
 							 "=====================================================\r\n"
 						   "#               - = [ The Marine ] = -              #\r\n"
 							 "=====================================================\r\n"),
@@ -332,10 +332,10 @@ namespace mods::values {
 							 "unlocks special melee and lethal weapon abilities.\r\n",
 							 yellow_str(
 							 "=====================================================\r\n")
-				})
+				)
 			);
 		CGET(std::string,CHARGEN_SENTINEL_CLASS_DESCRIPTION,
-				CAT({green_str(
+				CAT(green_str(
 							 "=====================================================\r\n"
 						   "#               - = [ The Sentinel ] = -             #\r\n"
 							 "=====================================================\r\n"),
@@ -346,10 +346,10 @@ namespace mods::values {
 							 "utilizing technology to impose your will upon the enemy.\r\n",
 							 yellow_str(
 							 "=====================================================\r\n")
-							 })
+							 )
 		);
 		CGET(std::string,CHARGEN_CONTAGION_CLASS_DESCRIPTION,
-				CAT({green_str(
+				CAT(green_str(
 							 "=====================================================\r\n"
 						   "#               - = [ The Contagion ] = -           #\r\n"
 							 "=====================================================\r\n"),
@@ -362,10 +362,10 @@ namespace mods::values {
 							 "local vicinity.\r\n",
 							 yellow_str(
 							 "=====================================================\r\n")
-				})
+				)
 		);
 		CGET(std::string,CHARGEN_ENGINEER_CLASS_DESCRIPTION,
-				CAT({green_str(
+				CAT(green_str(
 							 "=====================================================\r\n"
 						   "#               - = [ The Engineer ] = -              #\r\n"
 							 "=====================================================\r\n"),
@@ -381,10 +381,10 @@ namespace mods::values {
 							 "opposing force's well-guarded secrets.\r\n",
 							 yellow_str(
 							 "=====================================================\r\n")
-			})
+			)
 		);
 		CGET(std::string,CHARGEN_MEDIC_CLASS_DESCRIPTION,
-				CAT({green_str(
+				CAT(green_str(
 							 "=====================================================\r\n"
 						   "#               - = [ The Medic ] = -               #\r\n"
 							 "=====================================================\r\n"),
@@ -396,10 +396,10 @@ namespace mods::values {
 							 "bonus and will take less damage.\r\n",
 							 yellow_str(
 							 "=====================================================\r\n")
-				})
+				)
 		);
 		CGET(std::string,CHARGEN_PSYOP_CLASS_DESCRIPTION,
-				CAT({green_str(
+				CAT(green_str(
 							 "=====================================================\r\n"
 						   "#               - = [ The PSYOP ] = -               #\r\n"
 							 "=====================================================\r\n"),
@@ -411,10 +411,10 @@ namespace mods::values {
 							 red_str("This is an advanced class.\r\n"),
 							 yellow_str(
 							 "====================================================\r\n")
-				})
+				)
 		);
 		CGET(std::string,CHARGEN_SUPPORT_CLASS_DESCRIPTION,
-				CAT({green_str(
+				CAT(green_str(
 							 "=====================================================\r\n"
 						   "#               - = [ Support ] = -                 #\r\n"
 							 "=====================================================\r\n"),
@@ -427,7 +427,7 @@ namespace mods::values {
 							 "weapon type, and can surpress an enemy while team mates advance.\r\n",
 							 yellow_str(
 							 "===============================================================\r\n")
-				})
+				)
 		);
 		CGET(std::string,CHARGEN_UNDEFINED_CLASS_DESCRIPTION,red_str("huh? that's not a class...\r\n"));
 

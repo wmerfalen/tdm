@@ -660,9 +660,9 @@ namespace mods {
 			}
 			if(vec_args.size()) {
 				for(auto verb : chan_verbs) {
-					if(mods::util::is_lower_match(CAT({"no",verb}),vec_args[0])){
+					if(mods::util::is_lower_match(CAT("no",verb),vec_args[0])){
 						player->send("Turning {grn}OFF{/grn} '%s' channel...\r\n",verb.c_str());
-						PLAYER_SET(CAT({"no",verb}),"1");
+						PLAYER_SET(CAT("no",verb),"1");
 						return false;
 					}
 				}
@@ -672,7 +672,7 @@ namespace mods {
 					if(pos == std::string::npos){
 						return false;
 					}
-					PLAYER_SET(CAT({"no",verb}),"0");
+					PLAYER_SET(CAT("no",verb),"0");
 					mods::chat::transmit(vec_args[0],player->name().c_str(),argument.substr(argument.find_first_of(" ")));
 					return false;
 				}

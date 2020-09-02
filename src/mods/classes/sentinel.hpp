@@ -1,13 +1,6 @@
 #ifndef __MENTOC_MODS_CLASSES_SENTINEL_HEADER__
 #define  __MENTOC_MODS_CLASSES_SENTINEL_HEADER__
 #include "../../structs.h"
-//#include "base.hpp"
-#include <memory>
-#include "../weapons/smg-mp5.hpp"
-#include "../weapons/shotgun-sasg12.hpp"
-#include "../weapons/pistol-czp10.hpp"
-#include <deque>
-#include <memory>
 #include <variant>
 #include "../orm/class-sentinel.hpp"
 #include "../weapon.hpp"
@@ -74,15 +67,6 @@ namespace mods::classes {
 		sentinel(player_ptr_t);
 		~sentinel() = default;
 
-		czp10_ptr_t secondary();
-
-		czp10_ptr_t 	create_czp10(uint64_t);
-		mp5_ptr_t 		create_mp5(uint64_t);
-		sasg12_ptr_t 	create_sasg12(uint64_t);
-
-		mp5_ptr_t 		mp5();
-		sasg12_ptr_t 	sasg12();
-		czp10_ptr_t 	czp10();
 		player_ptr_t 	player();
 
 		void 					set_player(player_ptr_t);
@@ -97,9 +81,6 @@ namespace mods::classes {
 void          sendln(std::string_view msg);
 void          psendln(std::string_view msg);
 		private:
-			mp5_ptr_t 			m_mp5;
-			sasg12_ptr_t  	m_sasg12;
-			czp10_ptr_t 		m_czp10;
 			cure_levels_t		m_heal_level;
 			intimidate_levels_t m_intimidate_level;
 			sentinel_orm_t	m_orm;

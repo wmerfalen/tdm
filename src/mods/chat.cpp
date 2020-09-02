@@ -60,7 +60,7 @@ namespace mods::chat {
 			if((IS_NPC(player->cd()) || !player->authenticated())){
 				continue;
 			}
-			auto key = CAT({"no",get_verb().data()});
+			auto key = CAT("no",get_verb().data());
 			std::string muted = PLAYER_GET(key);
 			if(muted.compare("1") == 0){
 				continue;

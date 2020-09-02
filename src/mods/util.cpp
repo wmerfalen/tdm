@@ -21,12 +21,12 @@ namespace mods::util {
 			string_type = f;
 		}
 		std::string path = "";
-		path = CAT({MENTOC_CURRENT_WORKING_DIR,"/objects/",string_type,"/",file.data()});
+		path = CAT(MENTOC_CURRENT_WORKING_DIR,"/objects/",string_type,"/",file.data());
 		std::cerr << "[compiled path]: '" << path << "'\n";
 		if(strstr(file.data(),MENTOC_CURRENT_WORKING_DIR)){
 			std::string f = file.data();
 			f = f.substr(f.find_last_of("/"));
-			path = CAT({MENTOC_CURRENT_WORKING_DIR,"/objects/",string_type,"/",f});
+			path = CAT(MENTOC_CURRENT_WORKING_DIR,"/objects/",string_type,"/",f);
 			std::cerr << "[compiled path --{ corrected }--]: '" << path << "'\n";
 		}
 		return path;
@@ -528,7 +528,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_ITEM_PARSE_IMPL, ~, MENTOC_ITEM_TYPES_CAPS_SEQ)
 		std::string f = path;
 		std::cerr << "[yaml_file_exists test] '" << f << "'\n";
 		if(!strstr(path.data(),MENTOC_CURRENT_WORKING_DIR)){
-			f = CAT({MENTOC_CURRENT_WORKING_DIR,"/",path});
+			f = CAT(MENTOC_CURRENT_WORKING_DIR,"/",path);
 		}
 		return mods::filesystem::file_exists(f);
 	}
