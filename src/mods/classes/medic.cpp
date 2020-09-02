@@ -66,36 +66,47 @@ namespace mods::classes {
 		*target << "You gain " << amount << " hit points.\r\n";
 		*/
 	}
-		std::shared_ptr<medic> create_medic(player_ptr_t &in_player){
-			return std::move(std::make_shared<medic>(in_player));
+	std::shared_ptr<medic> create_medic(player_ptr_t &in_player){
+		return std::move(std::make_shared<medic>(in_player));
+	}
+	int16_t medic::new_player(player_ptr_t &player, primary_choice_t primary_choice){
+		auto db_id = m_orm.initialize_row(player,primary_choice);
+		if(db_id == 0){
+			report({"medic::new_player. failed to initialize_row for player:",player->name().c_str()});
+			return -2;
 		}
-		int16_t medic::new_player(player_ptr_t &player, primary_choice_t primary_choice){
-			if(primary_choice == primary_choice_t::NONE){
-				mods::bugs::fixtures("medic::new_player. got primary_choice of zero. defaulting to AUGPARA");
-				primary_choice = primary_choice_t::AUGPARA;
-			}
-			auto db_id = m_orm.initialize_row(player,primary_choice);
-			if(db_id == 0){
-				return -2;
-			}
-			load_by_player(player);
-			return 0;
-		}
+		player->set_db_id(db_id);
+		load_by_player(player);
+		return 0;
+	}
 	int16_t medic::load_by_player(player_ptr_t & player){
 		m_player = player;
 		auto result = m_orm.load_by_player(player->db_id());
+		return result;
 		if(result < 0){
-			std::cerr << "unable to load medic class by player id: " << player->db_id() << ".. return status: " << result << "\n";
+			report({"unable to load medic class by player id: ",std::to_string(player->db_id()),".. return status: ",std::to_string(result),"player:",player->name().c_str()});
+			return -100 - result;
 		}
+		obj_ptr_t primary = nullptr;
+		switch(m_orm.primary_type()){
+			case primary_choice_t::AUGPARA:
+				primary = create_object(ITEM_RIFLE,"augpara.yml");
+				break;
+			case primary_choice_t::TAR21:
+				primary = create_object(ITEM_RIFLE,"tar21.yml");
+				break;
+			default:
+				report({"Unknown medic primary type detected...",player->name().c_str()});
+				primary = nullptr;
+				return -200;
+		}
+		player->equip(primary,WEAR_PRIMARY);
+		player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
 		return result;
 	}
 	medic::medic(){
-			m_psg1 = nullptr;
-			m_l96aw = nullptr;
 	}
 	medic::medic(player_ptr_t p){
-		m_psg1 = nullptr;
-		m_l96aw = nullptr;
 		load_by_player(p);
 	}
 	player_ptr_t 	medic::player(){

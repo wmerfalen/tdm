@@ -441,6 +441,9 @@ namespace mods::weapon {
 				default:return "<unknown>";
 			}
 		}
+		enum secondary_choice_t {
+			CZP10 = 1,
+		};
 	};
 #undef MAR_STR
 	namespace psyop {

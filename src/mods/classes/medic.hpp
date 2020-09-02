@@ -37,28 +37,27 @@ namespace mods::classes {
 #include "../orm/class-medic.hpp"
 #include "types.hpp"
 #include "../weapon.hpp"
+#include "../bugs-fixtures.hpp"
 
 using medic_orm_t = mods::orm::medic;
 
 namespace mods::classes {
 	struct medic {
-		/*
-		static std::shared_ptr<sniper> create(player_ptr_t &player);
-		static int16_t destroy(player_ptr_t& player);
-		*/
 		types kind() {
 			return types::MEDIC;
 		}
 		using primary_choice_t = mods::weapon::medic::primary_choice_t;
+		using secondary_choice_t = mods::weapon::medic::secondary_choice_t;
 
+		static inline void report(std::vector<std::string> msgs){
+			mods::bugs::fixtures("mods::classes::medic::",IMPLODE(msgs,""));
+		}
 		/* constructors and destructors */
 		medic();
 		medic(player_ptr_t);
 		~medic() = default;
 
 		int16_t load_by_player(player_ptr_t &);
-		std::shared_ptr<mods::weapons::sniper_rifle::psg1> psg1();
-		std::shared_ptr<mods::weapons::sniper_rifle::l96aw> l96aw();
 		player_ptr_t 	player();
 		int16_t				new_player(player_ptr_t&, primary_choice_t primary);
 		int16_t save();
@@ -66,8 +65,6 @@ namespace mods::classes {
 		void heal_player(player_ptr_t& player_obj,player_ptr_t& target);
 
 		private:
-			std::shared_ptr<mods::weapons::sniper_rifle::psg1> m_psg1;
-			std::shared_ptr<mods::weapons::sniper_rifle::l96aw> m_l96aw;
 			player_ptr_t m_player;
 			medic_orm_t m_orm;
 	};

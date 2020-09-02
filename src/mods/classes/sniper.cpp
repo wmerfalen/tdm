@@ -4,9 +4,6 @@
 #include "../bugs-fixtures.hpp"
 
 namespace mods::classes {
-	void report(std::vector<std::string> msgs){
-		mods::bugs::fixtures(std::string("mods::classes::sniper::") + IMPLODE(msgs,""));
-	}
 	psg1_t sniper::psg1(){ 
 			return m_psg1;
 	}
@@ -51,7 +48,7 @@ namespace mods::classes {
 				primary = create_object(ITEM_RIFLE,"l96aw.yml");
 				break;
 			default:
-				std::cerr << red_str("Unknown sniper primary type detected...\n");
+				report({"Unknown sniper primary type detected..."});
 				primary = nullptr;
 				return -200;
 		}

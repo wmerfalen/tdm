@@ -4,12 +4,18 @@
 #include <iostream>
 #include <vector>
 #include "../../globals.hpp"
+#include "util.hpp"
 
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
 	struct sniper {
-		constexpr static const char* PSG1 = "PSG1";
-		constexpr static const char* L96AW = "L96AW";
+		std::string PSG1 = "PSG1";
+		std::string L96AW = "L96AW";
+		std::string table_name(){ return "class_sniper"; }
+		std::string column_prefix(){ return "sniper_"; }
+		std::string id_column(){ return "sniper_id"; }
+		std::string_view primary_key_name() { return id_column(); }
+		std::string_view primary_key_value() { return std::to_string(id); }
 		using primary_choice_t = mods::weapon::sniper::primary_choice_t;
 
 		sniper() : id(0) { this->init(); loaded = 0; }
@@ -19,7 +25,6 @@ namespace mods::orm {
 		int16_t feed(const pqxx::result::reference &);
 		void init();	
 		strmap_t export_class();
-		static constexpr const char* table_name = "class_sniper";
 		primary_choice_t primary_type(){
 			if(sniper_primary_type.compare(PSG1) == 0){
 				return primary_choice_t::PSG1;

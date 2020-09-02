@@ -8,6 +8,7 @@
 #include <memory>
 #include "../orm/class-sniper.hpp"
 #include "types.hpp"
+#include "../bugs-fixtures.hpp"
 
 using sniper_orm_t = mods::orm::sniper;
 
@@ -15,6 +16,9 @@ namespace mods::classes {
 	using psg1_t = std::shared_ptr<mods::weapons::sniper_rifle::psg1>;
 	using l96aw_t = std::shared_ptr<mods::weapons::sniper_rifle::l96aw>;
 	struct sniper {
+		static inline void report(std::vector<std::string> msgs){
+			mods::bugs::fixtures("mods::classes::sniper::",IMPLODE(msgs,""));
+		}
 		/*
 		static std::shared_ptr<sniper> create(player_ptr_t &player);
 		static int16_t destroy(player_ptr_t& player);

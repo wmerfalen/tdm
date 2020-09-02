@@ -9,6 +9,7 @@
 #include "skills.hpp"
 #include "rand.hpp"
 #endif
+#include "orm/class-medic.hpp"
 
 extern bool login(std::string_view user_name,std::string_view password);
 extern int16_t save_char_data(player_ptr_t& player,std::map<std::string,std::string> values);
@@ -16,6 +17,15 @@ namespace mods::debug::pre_game {
 #define DD(a){ std::cerr << "[debug::pre_game][line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"; }
 	namespace fb = ::mods::flashbang;
 	bool run(){
+		mods::orm::medic m;
+		auto p = std::make_shared<mods::player>();
+		p->set_db_id(69);
+		std::cerr << "initialize_row:'" << m.initialize_row(p,mods::orm::medic::primary_choice_t::AUGPARA) << "'\n";
+		std::cerr << "pk name:'" << m.primary_key_name() << "'\n";
+		m.save();
+		m.load_by_player(69);
+		sleep(20);
+		exit(0);
 		std::cerr << "chargen sniper cl desc: '" << CHARGEN_SNIPER_CLASS_DESCRIPTION() << "'\n";
 		if(login("zim", "zoo")){
 			DD(green_str("Logged in properly with 'zim': 'zoo'"));

@@ -764,6 +764,7 @@ CRYPT	utils.h	549;"	d
 CURRENT_TICK	globals.hpp	/^static inline uint64_t CURRENT_TICK(){ return mods::globals::current_tick; }$/;"	f
 CURSE	mods/flags.hpp	/^		CURSE,					\/\/ useless$/;"	e	enum:mods::flags::aff
 CYCLONE_RECON	mods/object.hpp	/^				CYCLONE_RECON,$/;"	e	enum:mods::object::object_type_enum_t
+CZP10	mods/weapon.hpp	/^			CZP10 = 1,$/;"	e	enum:mods::weapon::medic::secondary_choice_t
 C_CMP	screen.h	25;"	d
 C_NRM	mods/chat.hpp	33;"	d
 C_NRM	mods/chat.hpp	74;"	d
@@ -812,8 +813,8 @@ DB_BOOT_SHP	db.h	19;"	d
 DB_BOOT_WLD	db.h	15;"	d
 DB_BOOT_ZON	db.h	18;"	d
 DB_PREFIX	mods/skills.cpp	/^	constexpr static const char* DB_PREFIX = "skills";$/;"	m	namespace:mods::skills	file:
-DD	mods/debug-pre-game.hpp	16;"	d
-DD	mods/debug-pre-game.hpp	84;"	d
+DD	mods/debug-pre-game.hpp	17;"	d
+DD	mods/debug-pre-game.hpp	94;"	d
 DECENT	mods/yaml.hpp	/^	DECENT,$/;"	e	enum:mods::yaml::durability_profile_type_t
 DEFAULT	mods/rarity.hpp	/^		constexpr static float DEFAULT = mods::rarity::COMMON;$/;"	m	namespace:mods::rarity
 DEFAULT_AMOUNT	mods/affects.hpp	/^	constexpr static amount_t DEFAULT_AMOUNT = 3;$/;"	m	namespace:mods::affects
@@ -1662,11 +1663,11 @@ MAR_STR	mods/weapon.hpp	405;"	d
 MAR_STR	mods/weapon.hpp	416;"	d
 MAR_STR	mods/weapon.hpp	425;"	d
 MAR_STR	mods/weapon.hpp	436;"	d
-MAR_STR	mods/weapon.hpp	445;"	d
-MAR_STR	mods/weapon.hpp	456;"	d
-MAR_STR	mods/weapon.hpp	465;"	d
-MAR_STR	mods/weapon.hpp	476;"	d
-MAR_STR	mods/weapon.hpp	485;"	d
+MAR_STR	mods/weapon.hpp	448;"	d
+MAR_STR	mods/weapon.hpp	459;"	d
+MAR_STR	mods/weapon.hpp	468;"	d
+MAR_STR	mods/weapon.hpp	479;"	d
+MAR_STR	mods/weapon.hpp	488;"	d
 MAX	bsd-snprintf.cpp	97;"	d	file:
 MAX	utils.cpp	/^int MAX(int a, int b) {$/;"	f
 MAX	utils.h	75;"	d
@@ -2505,8 +2506,8 @@ SENTINEL_DISCIPLINE	mods/skills.hpp	/^			SENTINEL_DISCIPLINE,$/;"	e	enum:mods::s
 SENTINEL_NONE	mods/weapon.hpp	/^			SENTINEL_NONE = 0,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
 SENTINEL_PRIMARY_MP5	mods/weapon.hpp	/^			SENTINEL_PRIMARY_MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
 SENTINEL_PRIMARY_SASG12	mods/weapon.hpp	/^			SENTINEL_PRIMARY_SASG12 = 2,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-SEN_STR	mods/weapon.hpp	496;"	d
-SEN_STR	mods/weapon.hpp	505;"	d
+SEN_STR	mods/weapon.hpp	499;"	d
+SEN_STR	mods/weapon.hpp	508;"	d
 SEQUENCE	mods/behaviour_tree_node.hpp	/^		enum node_type_t { DO_NOTHING, SELECTOR, SEQUENCE, LEAF };$/;"	e	enum:mods::behaviour_tree_node::node_type_t
 SERVER_ROOM	structs.h	/^			SERVER_ROOM,$/;"	m	struct:room_data	typeref:enum:room_data::
 SET_BIT	utils.h	201;"	d
@@ -6493,6 +6494,7 @@ schema	mods/schema.hpp	/^namespace mods::schema { $/;"	n	class:mods
 scope_t	mods/weapon.hpp	/^	enum scope_t {$/;"	g	namespace:mods::weapon
 search_block	interpreter.cpp	/^int search_block(char *arg, const char **list, int exact) { \/** FIXME: arg 2  *\/$/;"	f
 secondary	mods/player.cpp	/^	obj_data_ptr_t player::secondary(){$/;"	f	class:mods::player
+secondary_choice_t	mods/weapon.hpp	/^		enum secondary_choice_t {$/;"	g	namespace:mods::weapon::medic
 secondary_choice_t	mods/weapon.hpp	/^		enum secondary_choice_t {$/;"	g	namespace:mods::weapon::sniper
 sector_from_string	mods/rooms.cpp	/^	std::optional<sector_type_t> sector_from_string(std::string m){$/;"	f	namespace:mods::rooms
 sector_type	structs.h	/^		uint16_t	sector_type;            \/* sector type (move\/hide)            *\/$/;"	v

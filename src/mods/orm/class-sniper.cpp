@@ -21,21 +21,7 @@
 namespace mods::orm {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 	int16_t sniper::save(){
-		try{
-			auto up_txn = txn();
-			sql_compositor comp(sniper::table_name,&up_txn);
-			auto up_sql = comp
-				.update(sniper::table_name)
-				.set(export_class())
-				.where("sniper_id","=",std::to_string(this->id))
-				.sql();
-			mods::pq::exec(up_txn,up_sql);
-			mods::pq::commit(up_txn);
-			return 0;
-		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error updating sniper by pkid: '" << e.what() << "'\n";
-			return -1;
-		}
+		return std::get<0>(mods::orm::util::update<sniper,sql_compositor>(this));
 	}
 	/**
 	 * @brief this should be called when you create a sniper player for the first time
@@ -49,38 +35,29 @@ namespace mods::orm {
 		init();
 		sniper_secondary_type = "czp10";
 		if(primary_choice == primary_choice_t::PSG1){
-			auto psg1 = mods::weapons::sniper_rifle::psg1::make();
+			auto psg1 = create_object(ITEM_RIFLE,"psg1.yml");
 			sniper_primary_weapon_id = psg1->rifle()->attributes->flush_to_db();
 			sniper_primary_type = PSG1;
 		}
 		if(primary_choice == primary_choice_t::L96AW){
-			auto l96aw = mods::weapons::sniper_rifle::l96aw::make();
+			auto l96aw = create_object(ITEM_RIFLE,"l96aw.yml");
 			sniper_primary_weapon_id = l96aw->rifle()->attributes->flush_to_db();
 			sniper_primary_type = L96AW;
 		}
-		auto czp10 = mods::weapons::pistol::czp10::make();
+		auto czp10 = create_object(ITEM_RIFLE,"czp10.yml");
 		sniper_secondary_weapon_id = czp10->rifle()->attributes->flush_to_db();
-		try{
-			auto insert_transaction = txn();
-			sql_compositor comp("class_sniper",&insert_transaction);
-			sniper_player_id = player->db_id();
-			auto up_sql = comp
-				.insert()
-				.into("class_sniper")
-				.values(export_class())
-				.returning("sniper_id")
-				.sql();
-			auto record = mods::pq::exec(insert_transaction,up_sql);
-			mods::pq::commit(insert_transaction);
-			for(auto && row : record){
-				updated_at = created_at = time(nullptr);
-				loaded = 1;
-				id = sniper_id = row["sniper_id"].as<uint64_t>();
-				return id;
-			}
-		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error initializing sniper class row: '" << e.what() << "'\n";
+
+		sniper_player_id = player->db_id();
+#if 0
+		std::tuple<int16_t,std::string,uint64_t> status = mods::orm::util::insert_returing<sniper,sql_compositor>(this,primary_key_name());
+		if(std::get<0>(status)){
+			updated_at = created_at = time(nullptr);
+			loaded = 1;
+			id = sniper_id = std::get<2>(status);
+			return id;
 		}
+		return std::get<0>(status);
+#endif
 		return 0;
 	}
 	strmap_t sniper::export_class() {
@@ -93,23 +70,18 @@ namespace mods::orm {
 		return std::move(values);
 	}
 	int16_t sniper::load_by_player(uint64_t player_id){
-		try{
-			auto select_transaction = txn();
-			sql_compositor comp(table_name,&select_transaction);
-			auto player_sql = comp.select("*")
-				.from(table_name)
-				.where("sniper_player_id","=",std::to_string(player_id))
-				.sql();
-			auto player_record = mods::pq::exec(select_transaction,player_sql);
-			if(player_record.size()){
-				feed(player_record[0]);
-				return 0;
-			}
-			return -1;
-		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
-			return -2;
-		}
+		loaded = 0;
+		created_at = updated_at = 0;
+		id = sniper_id = 0;
+		sniper_player_id = 0;
+		sniper_secondary_type = sniper_primary_type ="NONE";
+		sniper_primary_weapon_id = sniper_secondary_weapon_id = 0;
+#if 0
+		std::tuple<int16_t,std::string> status = mods::orm::util::load_by_pkid<sniper,sql_compositor>(this);
+		loaded = std::get<0>(status) > 0;
+		return std::get<0>(status);
+#endif
+		return 0;
 	}
 	int16_t sniper::feed(const pqxx::result::reference & row){
 		init();
