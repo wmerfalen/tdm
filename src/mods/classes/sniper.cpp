@@ -1,8 +1,12 @@
 #include "sniper.hpp"
 #include "../weapon.hpp"
 #include "../orm/inventory.hpp"
+#include "../bugs-fixtures.hpp"
 
 namespace mods::classes {
+	void report(std::vector<std::string> msgs){
+		mods::bugs::fixtures(std::string("mods::classes::sniper::") + IMPLODE(msgs,""));
+	}
 	psg1_t sniper::psg1(){ 
 			return m_psg1;
 	}
@@ -22,13 +26,12 @@ namespace mods::classes {
 		return m_player;
 	}
 	int16_t sniper::new_player(player_ptr_t &player,primary_choice_t primary_choice){
-		if(primary_choice == primary_choice_t::NONE){
-			primary_choice = primary_choice_t::PSG1;
-		}
 		auto db_id = m_orm.initialize_row(player,primary_choice);
 		if(db_id == 0){
+			report({"unable to initialize row for player (sniper::new_player) ",std::to_string(player->db_id()),".. player's database id is zero!"});
 			return -2;
 		}
+		player->set_db_id(db_id);
 		load_by_player(player);
 		return 0;
 	}
@@ -37,7 +40,23 @@ namespace mods::classes {
 		auto result = m_orm.load_by_player(player->db_id());
 		if(result < 0){
 			std::cerr << "unable to load sniper class by player id: " << player->db_id() << ".. return status: " << result << "\n";
+			return -100 - result;
 		}
+		obj_ptr_t primary = nullptr;
+		switch(m_orm.primary_type()){
+			case primary_choice_t::PSG1:
+				primary = create_object(ITEM_RIFLE,"psg1.yml");
+				break;
+			case primary_choice_t::L96AW:
+				primary = create_object(ITEM_RIFLE,"l96aw.yml");
+				break;
+			default:
+				std::cerr << red_str("Unknown sniper primary type detected...\n");
+				primary = nullptr;
+				return -200;
+		}
+		player->equip(primary,WEAR_PRIMARY);
+		player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
 		return result;
 	}
 	int16_t sniper::save() {

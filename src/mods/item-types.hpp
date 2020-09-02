@@ -188,7 +188,10 @@
 (int,shield_points,"#int, additional points to decrement before decrementing health points. -1 is invincible","1"), \
 (std::string,durability_profile,"#string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUSTRIAL_STRENGTH,GODLIKE,INDESTRUCTIBLE","'DECENT'"), \
 (int,move_points,"#int, number of move points required to circumvent gadget","0"), \
-(int,damage_points,"#int, number of damage points acrued when tripped/touched","0") \
+(int,damage_points,"#int, number of damage points acrued when tripped/touched","0"), \
+(int,exit_key,"#int, numeric identifier of door that this object opens.",0), \
+(int,min_level,"#int, the minimum level you need to be in order to use this gadget.",0), \
+(int,worth,"#int, how much the item is worth.",0) \
 )
 
 #define MENTOC_ATTACHMENT_TYPES_SEQUENCE (SIGHT) \
@@ -246,7 +249,10 @@
 (int,speed_profile,"#int, ENUM 0=UNHINDERED,1=FAST,2=HINDERED,3=SLOW,4=SLUGGISH",0), \
 (static_amount_t,offensive_damage_amount,"#int, static amount of offensive damage",0), \
 (std::string,durability_profile,"#string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUSTRIAL_STRENGTH,GODLIKE,INDESTRUCTIBLE","'DECENT'"), \
-(int,repair_cost_profile,"#int, ENUM 0=CHEAP,1=DECENT,2=COSTLY,3=VERY_EXPENSIVE",1) \
+(int,repair_cost_profile,"#int, ENUM 0=CHEAP,1=DECENT,2=COSTLY,3=VERY_EXPENSIVE",1), \
+(int,hp,"#int, hit points",1000), \
+(std::string,classification,"#string, 'BASIC', 'ADVANCED', 'ELITE'","'BASIC'"), \
+(int,worth,"#int, how much the item is worth.",0) \
 )
 
 #define MENTOC_CONSUMABLE_TYPES_SEQUENCE (AMMUNITION) \

@@ -1889,6 +1889,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 				}
 
 				player_class_t pclass = parse_class(arg[0]);
+				p->set_class(pclass);
 				if(pclass == player_class_t::CLASS_UNDEFINED){
 					write_to_output(d, "\r\nThat's not a class.\r\n");
 					write_to_output(d, "%s\r\nSelect class: ", class_menu);
@@ -1906,7 +1907,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 					p->set_db_id(0);
 					return;
 				}
-				write_to_output(d, "%s\r\nSelect primary weapon: ", mods::chargen::primary_weapon_menu(pclass).data());
+				write_to_output(d, "%s\r\nSelect primary weapon: ", mods::chargen::primary_weapon_menu(pclass).c_str());
 				p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
 			}
 			return;

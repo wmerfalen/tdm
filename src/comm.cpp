@@ -228,12 +228,18 @@ void deregister_player(player_ptr_t player_obj){
 	}
 	return;
 }
-
+namespace mods::bugs {
+	extern void close();
+};
+void atexit_handler(){
+	mods::bugs::close();
+}
 /***********************************************************************
  *  main game loop and related stuff                                    *
  ***********************************************************************/
 
 int main(int argc, char **argv) {
+	atexit(atexit_handler);
 	mods::globals::init(argc,argv);
 	ush_int port;
 	int pos = 1;

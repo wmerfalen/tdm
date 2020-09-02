@@ -1124,6 +1124,11 @@ std::string dirstr(int dir){
 }
 std::string IMPLODE(std::vector<std::string> m,std::string delim){
 	std::string f = "";
+	std::size_t size = 0;
+	for(auto s : m){
+		size += s.length() + delim.length();
+	}
+	f.reserve(size);
 	for(auto s : m){
 		f += s;
 		f += delim;

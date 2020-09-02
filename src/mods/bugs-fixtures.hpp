@@ -6,6 +6,8 @@
 
 namespace mods::bugs {
 	void fixtures(std::string_view msg);
+	void fixtures(std::string_view from,std::string_view msg);
+	void close();
 };
 
 #endif

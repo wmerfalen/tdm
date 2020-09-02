@@ -14,22 +14,22 @@ extern size_t write_to_output(mods::descriptor_data &t, const char *txt, ...) __
 namespace mods::chargen {
 	std::string get_class_description(player_class_t p_class){
 		switch(p_class){
-			case CLASS_SNIPER: return CHARGEN_SNIPER_CLASS_DESCRIPTION();
-			case CLASS_MARINE: return CHARGEN_MARINE_CLASS_DESCRIPTION();
-			case CLASS_SENTINEL: return CHARGEN_SENTINEL_CLASS_DESCRIPTION();
-			case CLASS_CONTAGION: return CHARGEN_CONTAGION_CLASS_DESCRIPTION();
-			case CLASS_ENGINEER: return CHARGEN_ENGINEER_CLASS_DESCRIPTION();
-			case CLASS_MEDIC: return CHARGEN_MEDIC_CLASS_DESCRIPTION();
-			case CLASS_PSYOP: return CHARGEN_PSYOP_CLASS_DESCRIPTION();
-			case CLASS_SUPPORT: return CHARGEN_SUPPORT_CLASS_DESCRIPTION();
+			case player_class_t::CLASS_SNIPER: return CHARGEN_SNIPER_CLASS_DESCRIPTION();
+			case player_class_t::CLASS_MARINE: return CHARGEN_MARINE_CLASS_DESCRIPTION();
+			case player_class_t::CLASS_SENTINEL: return CHARGEN_SENTINEL_CLASS_DESCRIPTION();
+			case player_class_t::CLASS_CONTAGION: return CHARGEN_CONTAGION_CLASS_DESCRIPTION();
+			case player_class_t::CLASS_ENGINEER: return CHARGEN_ENGINEER_CLASS_DESCRIPTION();
+			case player_class_t::CLASS_MEDIC: return CHARGEN_MEDIC_CLASS_DESCRIPTION();
+			case player_class_t::CLASS_PSYOP: return CHARGEN_PSYOP_CLASS_DESCRIPTION();
+			case player_class_t::CLASS_SUPPORT: return CHARGEN_SUPPORT_CLASS_DESCRIPTION();
 			default:
 			case CLASS_UNDEFINED: return CHARGEN_UNDEFINED_CLASS_DESCRIPTION();
 		}
 	}
 	int parse_primary_choice(char in_choice,int class_type){
 		char choice = std::tolower(in_choice);
-		switch(class_type){
-			case CLASS_SENTINEL:
+		switch((player_class_t)class_type){
+			case player_class_t::CLASS_SENTINEL:
 				if(choice == 'm'){
 					return mods::classes::sentinel::primary_choice_t::MP5;
 				}
@@ -37,7 +37,7 @@ namespace mods::chargen {
 					return mods::classes::sentinel::primary_choice_t::SASG12;
 				}
 				break;
-			case CLASS_SNIPER:
+			case player_class_t::CLASS_SNIPER:
 				if(choice == 'p'){
 					return mods::classes::sniper::primary_choice_t::PSG1;
 				}
@@ -45,7 +45,7 @@ namespace mods::chargen {
 					return mods::classes::sniper::primary_choice_t::L96AW;
 				}
 				break;
-			case CLASS_MARINE:
+			case player_class_t::CLASS_MARINE:
 				if(choice == 'm'){
 					return mods::classes::marine::primary_choice_t::M16A4;
 				}
@@ -53,7 +53,7 @@ namespace mods::chargen {
 					return mods::classes::marine::primary_choice_t::M4;
 				}
 				break;
-			case CLASS_CONTAGION:
+			case player_class_t::CLASS_CONTAGION:
 				if(choice == 'm'){
 					return mods::classes::contagion::primary_choice_t::M3;
 				}
@@ -61,7 +61,7 @@ namespace mods::chargen {
 					return mods::classes::contagion::primary_choice_t::FAMAS;
 				}
 				break;
-			case CLASS_ENGINEER:
+			case player_class_t::CLASS_ENGINEER:
 				if(choice == 'f'){
 					return mods::classes::engineer::primary_choice_t::FMG9;
 				}
@@ -69,7 +69,7 @@ namespace mods::chargen {
 					return mods::classes::engineer::primary_choice_t::P90;
 				}
 				break;
-			case CLASS_MEDIC:
+			case player_class_t::CLASS_MEDIC:
 				if(choice == 'a'){
 					return mods::classes::medic::primary_choice_t::AUGPARA;
 				}
@@ -77,7 +77,7 @@ namespace mods::chargen {
 					return mods::classes::medic::primary_choice_t::TAR21;
 				}
 				break;
-			case CLASS_PSYOP:
+			case player_class_t::CLASS_PSYOP:
 				if(choice == 's'){
 					return mods::classes::psyop::primary_choice_t::SCARH;
 				}
@@ -85,7 +85,7 @@ namespace mods::chargen {
 					return mods::classes::psyop::primary_choice_t::UMP45;
 				}
 				break;
-			case CLASS_SUPPORT:
+			case player_class_t::CLASS_SUPPORT:
 				if(choice == 'm'){
 					return mods::classes::support::primary_choice_t::MK46;
 				}
@@ -97,7 +97,7 @@ namespace mods::chargen {
 		}
 		return -1;
 	}
-	std::string_view primary_weapon_menu(player_class_t class_type){
+	std::string primary_weapon_menu(player_class_t class_type){
 		std::string r = "Primary weapon selection\r\n";
 		switch(class_type){
 			case CLASS_SNIPER:
@@ -227,7 +227,7 @@ namespace mods::chargen {
 				write_to_output(p->desc(), "\r\nPlease contact an admin for assistance. Error code 611.");
 				p->set_state(CON_CLOSE);
 				break;
-			}//end switch
+		}//end switch
 		if(sresult < 0){
 			write_to_output(p->desc(), "\r\nIt appears something went wrong. Contact an admin. Error code 600.");
 			p->set_state(CON_CLOSE);

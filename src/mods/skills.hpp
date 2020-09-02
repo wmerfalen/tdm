@@ -145,9 +145,11 @@ namespace mods::skills {
 			{ELITE_ARMOR,"elite-armor", "Can use ELITE class armor.",50},
 			{THIEF,"thief", "Can steal armor off of corpses.", 200},
 			{MOLD,"mold", "Can mold together various types of armor to create new armor.", 350},
+			/** THESE WORK PERFECTLY FOR mods/armor/basic-protection classes!!! */
 			{NO_FACTOR_BASIC,"no-factor-basic", "Heavy BASIC armor doesn't affect your movement.", 400},
-			{NO_FACTOR_ADVANCED,"no-factor-advanced", "Heavy BASIC armor doesn't affect your movement.", 850},
-			{NO_FACTOR_ELITE,"no-factor-elite", "Heavy BASIC armor doesn't affect your movement.", 900},
+			{NO_FACTOR_ADVANCED,"no-factor-advanced", "Heavy ADVANCED armor doesn't affect your movement.", 850},
+			{NO_FACTOR_ELITE,"no-factor-elite", "Heavy ELITE armor doesn't affect your movement.", 900},
+
 			{EXPLOSIVE_RESISTANCE,"explosive-resistance", "Explosions have less impact on you.", 2050},
 			{INJURE_RESISTANCE,"injure-resistance", "You are less likely to get injured.", 3050},
 			{MUNITIONS_REFLECTOR,"munitions-reflector", "You have a 4\% chance (per level) of reflecting damage onto your attacker.", 8050},

@@ -181,6 +181,7 @@ namespace mods {
 		this->m_class_medic = ptr->m_class_medic;
 		this->m_class_psyop = ptr->m_class_psyop;
 		this->m_class_support = ptr->m_class_support;
+		m_class = ptr->m_class;
 	}
 	void player::capture_output(bool capture_status) {
 		m_capture_output = capture_status;
@@ -717,6 +718,7 @@ namespace mods {
 		it->character->has_desc = true;
 	}
 	void player::init(){
+		m_class = player_class_t::CLASS_UNDEFINED;
 		m_blocked_until = 0;
 		m_has_block_event = false;
 		m_camera = nullptr;
@@ -1461,6 +1463,10 @@ namespace mods {
 		}
 		player_class_t player::get_class(){
 			return m_class;
+		}
+		void player::set_class(player_class_t c){
+			std::cerr << "[mods::player] set class to: " << c << "\n";
+			m_class = c;
 		}
 };
 

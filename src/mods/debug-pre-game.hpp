@@ -16,6 +16,7 @@ namespace mods::debug::pre_game {
 #define DD(a){ std::cerr << "[debug::pre_game][line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"; }
 	namespace fb = ::mods::flashbang;
 	bool run(){
+		std::cerr << "chargen sniper cl desc: '" << CHARGEN_SNIPER_CLASS_DESCRIPTION() << "'\n";
 		if(login("zim", "zoo")){
 			DD(green_str("Logged in properly with 'zim': 'zoo'"));
 		}else{

@@ -339,9 +339,9 @@ namespace mods::weapon {
 		static inline std::string_view to_string(primary_choice_t s){
 #define SNI_STR(a){ case mods::weapon::sniper::primary_choice_t::a: return #a; }
 			switch(s){
-				SNI_STR(SNIPER_NONE);
-				SNI_STR(SNIPER_PRIMARY_PSG1);
-				SNI_STR(SNIPER_PRIMARY_L96AW);
+				SNI_STR(NONE);
+				SNI_STR(PSG1);
+				SNI_STR(L96AW);
 #undef SNI_STR
 				default:return "<unknown>";
 			}

@@ -164,6 +164,7 @@ namespace mods {
 
 		/* class info */
 		player_class_t get_class();
+		void set_class(player_class_t);
 
 		/* ammo gettters */
 		obj_data* get_first_ammo_of_type(const weapon_type_t&) const;

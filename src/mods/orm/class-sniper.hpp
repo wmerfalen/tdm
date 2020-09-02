@@ -8,6 +8,8 @@
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
 	struct sniper {
+		constexpr static const char* PSG1 = "PSG1";
+		constexpr static const char* L96AW = "L96AW";
 		using primary_choice_t = mods::weapon::sniper::primary_choice_t;
 
 		sniper() : id(0) { this->init(); loaded = 0; }
@@ -18,6 +20,15 @@ namespace mods::orm {
 		void init();	
 		strmap_t export_class();
 		static constexpr const char* table_name = "class_sniper";
+		primary_choice_t primary_type(){
+			if(sniper_primary_type.compare(PSG1) == 0){
+				return primary_choice_t::PSG1;
+			}
+			if(sniper_primary_type.compare(L96AW) == 0){
+				return primary_choice_t::L96AW;
+			}
+			return primary_choice_t::NONE;
+		}
 
 		int16_t save();
 		int16_t				load_by_player(uint64_t);

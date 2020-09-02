@@ -264,6 +264,11 @@ static inline bool can(player_ptr_t& player,int skill){ return mods::skills::pla
 
 static inline std::string CAT(std::vector<std::string_view> m){
 	std::string f = "";
+	std::size_t size = 0;
+	for(auto s : m){
+		size += s.length();
+	}
+	f.reserve(size);
 	for(auto s : m){
 		f += s;
 	}

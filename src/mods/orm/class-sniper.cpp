@@ -51,12 +51,12 @@ namespace mods::orm {
 		if(primary_choice == primary_choice_t::PSG1){
 			auto psg1 = mods::weapons::sniper_rifle::psg1::make();
 			sniper_primary_weapon_id = psg1->rifle()->attributes->flush_to_db();
-			sniper_primary_type = "PSG1";
+			sniper_primary_type = PSG1;
 		}
 		if(primary_choice == primary_choice_t::L96AW){
 			auto l96aw = mods::weapons::sniper_rifle::l96aw::make();
 			sniper_primary_weapon_id = l96aw->rifle()->attributes->flush_to_db();
-			sniper_primary_type = "L96AW";
+			sniper_primary_type = L96AW;
 		}
 		auto czp10 = mods::weapons::pistol::czp10::make();
 		sniper_secondary_weapon_id = czp10->rifle()->attributes->flush_to_db();

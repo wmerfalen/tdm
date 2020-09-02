@@ -29,3 +29,10 @@ rarity: 'COMMON'
 description: 'A sturdy ACME MK-71X Ballistic Vest is lying here'
 short_description: 'a ACME MK-71X Ballistic Vest'
 action_description: 'ACME MK-71X Ballistic Vest'
+hp: 95000
+# classification types
+# BASIC
+# ADVANCED
+# ELITE
+classification: 'BASIC'
+worth: 50 # integer, how many credits its worth

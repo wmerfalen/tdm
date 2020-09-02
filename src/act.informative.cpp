@@ -547,6 +547,7 @@ void list_char_to_char(char_data *ch) {
 	bool can_see_through_fire = mods::rooms::can_see_through_fire(room);
 	bool player_has_thermal = player->has_thermal_vision();
 
+#ifdef __MENTOC_SHOW_VISION_FLAGS_IN_INFORMATIVE_CPP__
 	player->send(
 			"dark: %d\r\n"
 			"smoke: %d\r\n"
@@ -570,6 +571,7 @@ void list_char_to_char(char_data *ch) {
 			can_see_through_fire,
 			player_has_thermal
 				);
+#endif
 	for(auto & player_ptr : mods::globals::get_room_list(room)){
 		if(player_ptr->is(ch)){
 			continue;
