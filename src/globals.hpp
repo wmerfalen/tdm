@@ -272,20 +272,6 @@ static inline std::string CAT(Args const&... args) {
     static_cast<void>(unpack);
     return result;
 }
-/*
-static inline std::string CAT(std::vector<std::string_view> m){
-	std::string f = "";
-	std::size_t size = 0;
-	for(auto s : m){
-		size += s.length();
-	}
-	f.reserve(size);
-	for(auto s : m){
-		f += s;
-	}
-	return f;
-}
-*/
 std::string IMPLODE(std::vector<std::string> m,std::string delim);
 std::string dirstr(int);
 std::vector<str_t> map_keys(str_map_t & m);

@@ -11,6 +11,7 @@
 #endif
 #include "orm/class-medic.hpp"
 #include "orm/class-sniper.hpp"
+#include "classes/medic.hpp"
 
 extern bool login(std::string_view user_name,std::string_view password);
 extern int16_t save_char_data(player_ptr_t& player,std::map<std::string,std::string> values);
@@ -18,6 +19,13 @@ namespace mods::debug::pre_game {
 #define DD(a){ std::cerr << "[debug::pre_game][line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"; }
 	namespace fb = ::mods::flashbang;
 	bool run(){
+#define __MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__
+#ifdef __MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__
+		{
+			mods::classes::medic m;
+			m.report({"foobar message goes here. lot's of things to report about..","bar"});
+		}
+#endif
 #define __MENTOC_RUN_SNIPER_PREGAME_TESTS__
 #ifdef __MENTOC_RUN_SNIPER_PREGAME_TESTS__
 		mods::orm::sniper sniper;

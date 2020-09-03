@@ -813,8 +813,8 @@ DB_BOOT_SHP	db.h	19;"	d
 DB_BOOT_WLD	db.h	15;"	d
 DB_BOOT_ZON	db.h	18;"	d
 DB_PREFIX	mods/skills.cpp	/^	constexpr static const char* DB_PREFIX = "skills";$/;"	m	namespace:mods::skills	file:
-DD	mods/debug-pre-game.hpp	107;"	d
-DD	mods/debug-pre-game.hpp	18;"	d
+DD	mods/debug-pre-game.hpp	115;"	d
+DD	mods/debug-pre-game.hpp	19;"	d
 DECENT	mods/yaml.hpp	/^	DECENT,$/;"	e	enum:mods::yaml::durability_profile_type_t
 DEFAULT	mods/rarity.hpp	/^		constexpr static float DEFAULT = mods::rarity::COMMON;$/;"	m	namespace:mods::rarity
 DEFAULT_AMOUNT	mods/affects.hpp	/^	constexpr static amount_t DEFAULT_AMOUNT = 3;$/;"	m	namespace:mods::affects
@@ -3314,9 +3314,10 @@ __MENTOC_MODS_deferred_HEADER__	mods/deferred.hpp	2;"	d
 __MENTOC_MODS_prefs_HEADER__	mods/prefs.hpp	2;"	d
 __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
 __MENTOC_PLR	db.cpp	2617;"	d	file:
-__MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	32;"	d
+__MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__	mods/debug-pre-game.hpp	22;"	d
+__MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	40;"	d
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
-__MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	21;"	d
+__MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	29;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__	mods/behaviour_tree_impl.cpp	16;"	d	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	992;"	d	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	d
@@ -3897,6 +3898,7 @@ current_block	mods/player.cpp	/^	uint32_t player::current_block(){$/;"	f	class:m
 current_key	mods/quests.cpp	/^		std::string current_key(char_data* ch) {$/;"	f	namespace:mods::quests
 current_player	globals.cpp	/^		player_ptr_t current_player;$/;"	m	namespace:mods::globals	file:
 current_quest	mods/quests.cpp	/^		std::string current_quest(char_data *ch) {$/;"	f	namespace:mods::quests
+current_time_string	mods/util.hpp	/^	static inline std::string current_time_string(){$/;"	f	namespace:mods::util
 current_value	mods/quests.cpp	/^		std::string current_value(room_rnum room,int t_index) {$/;"	f	namespace:mods::quests
 current_working_dir	mods/js.cpp	/^			std::string current_working_dir(){$/;"	f	namespace:mods::js
 current_working_dir	mods/yaml.hpp	/^			static inline std::string current_working_dir(){$/;"	f	namespace:mods::yaml
@@ -4651,7 +4653,7 @@ find_type_t	mods/scan.hpp	/^		enum find_type_t {$/;"	g	namespace:mods::scan
 fire_damage	mods/projectile.cpp	/^		int fire_damage(player_ptr_t victim,obj_ptr_t projectile){$/;"	f	namespace:mods::projectile
 fire_status	structs.h	/^		fire_status_t& fire_status(){$/;"	f
 fire_status_start	structs.h	/^		void fire_status_start(){$/;"	f
-fixtures	mods/bugs-fixtures.cpp	/^	void fixtures(std::string_view from, std::string_view msg){$/;"	f	namespace:mods::bugs
+fixtures	mods/bugs-fixtures.cpp	/^	void fixtures(std::string from, std::string msg){$/;"	f	namespace:mods::bugs
 fixtures	mods/bugs-fixtures.cpp	/^	void fixtures(std::string_view msg){$/;"	f	namespace:mods::bugs
 flag_group	mods/flags.hpp	/^	enum flag_group {$/;"	g	namespace:mods::flags
 flag_help	mods/builder_util.hpp	/^	void flag_help($/;"	f	namespace:mods::builder_util
@@ -5119,7 +5121,7 @@ into	mods/sql.hpp	/^			compositor<T>& into(str_object table) {$/;"	f	struct:mods
 invalid_align	handler.cpp	/^int invalid_align(char_data *ch, struct obj_data *obj) {$/;"	f
 invalid_class	class.cpp	/^int invalid_class(char_data *ch, struct obj_data *obj) {$/;"	f
 invalid_list	ban.cpp	/^char *invalid_list[MAX_INVALID_NAMES];$/;"	v
-invec	globals.hpp	292;"	d
+invec	globals.hpp	278;"	d
 inventory	mods/player.cpp	/^namespace mods::orm::inventory {$/;"	n	class:mods::orm	file:
 invoke	mods/catch.hpp	/^			virtual void invoke() const {$/;"	f	class:Catch::MethodTestCase
 irl	mods/date-time.cpp	/^	namespace irl {$/;"	n	namespace:mods::date_time	file:
@@ -7171,6 +7173,14 @@ yaml	mods/yaml.hpp	/^namespace mods::yaml {$/;"	n	class:mods
 yaml_caps_to_lower	mods/util.cpp	/^	std::string yaml_caps_to_lower(std::string type){$/;"	f	namespace:mods::util
 yaml_description_t	mods/yaml.hpp	/^	struct yaml_description_t {$/;"	s	namespace:mods::yaml
 yaml_feed_exceptions	mods/object-utils.hpp	/^	static yaml_exception_list_t yaml_feed_exceptions;$/;"	m	namespace:mods::object_utils
+yaml_file	mods/weapon.hpp	/^		static inline std::string yaml_file(contagion::primary_choice_t s){$/;"	f	namespace:mods::weapon
+yaml_file	mods/weapon.hpp	/^		static inline std::string yaml_file(engineer::primary_choice_t s){$/;"	f	namespace:mods::weapon
+yaml_file	mods/weapon.hpp	/^		static inline std::string yaml_file(marine::primary_choice_t s){$/;"	f	namespace:mods::weapon
+yaml_file	mods/weapon.hpp	/^		static inline std::string yaml_file(medic::primary_choice_t s){$/;"	f	namespace:mods::weapon
+yaml_file	mods/weapon.hpp	/^		static inline std::string yaml_file(psyop::primary_choice_t s){$/;"	f	namespace:mods::weapon
+yaml_file	mods/weapon.hpp	/^		static inline std::string yaml_file(sentinel::primary_choice_t s){$/;"	f	namespace:mods::weapon
+yaml_file	mods/weapon.hpp	/^		static inline std::string yaml_file(sniper::primary_choice_t s){$/;"	f	namespace:mods::weapon
+yaml_file	mods/weapon.hpp	/^	static inline std::string yaml_file(support::primary_choice_t s){$/;"	f	namespace:mods::weapon
 yaml_file_doesnt_exist	mods/object-utils.hpp	/^	static inline void yaml_file_doesnt_exist(std::string from_where){$/;"	f	namespace:mods::object_utils
 yaml_file_exists	mods/util.cpp	/^	bool yaml_file_exists(std::string path){$/;"	f	namespace:mods::util
 yaml_file_path_is_sane	mods/util.cpp	/^	bool yaml_file_path_is_sane(std::string path){$/;"	f	namespace:mods::util

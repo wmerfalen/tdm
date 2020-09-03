@@ -1,30 +1,22 @@
 #ifndef __MENTOC_MODS_CLASSES_BASE_HEADER__
 #define  __MENTOC_MODS_CLASSES_BASE_HEADER__
 
-#if 0
 #include "types.hpp"
-#include <memory>
-
-namespace mods {
-	struct player;
-};
-using player_ptr_t = std::shared_ptr<mods::player>;
+#include "../weapon.hpp"
+#include "../bugs-fixtures.hpp"
 
 namespace mods::classes {
 	struct base {
 		virtual types kind() {
 			return types::UNDEFINED;
 		}
-		player_ptr_t player_obj;
-		player_ptr_t m_player;
-		/* constructors and destructors */
-		base() = default;
-		virtual ~base() = default;
-void          sendln(std::string_view msg);
-void          psendln(std::string_view msg);
+		void report(std::vector<std::string> msgs){
+			mods::bugs::fixtures(mods::classes::to_string(this->kind()), IMPLODE(msgs,""));
+		}
+		void report(std::string_view msg){
+			mods::bugs::fixtures(mods::classes::to_string(this->kind()), msg.data());
+		}
 	};
 };
-#include "../player.hpp"
-#endif
 
 #endif

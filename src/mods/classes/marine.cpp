@@ -1,22 +1,10 @@
 #include "marine.hpp"
-#include "../weapon.hpp"
 #include "../orm/inventory.hpp"
-#include "../bugs-fixtures.hpp"
 
 namespace mods::classes {
-	std::shared_ptr<mods::weapons::sniper_rifle::psg1> marine::psg1(){ 
-			return m_psg1;
-	}
-	std::shared_ptr<mods::weapons::sniper_rifle::l96aw> marine::l96aw(){ 
-			return m_l96aw;
-	}
 	marine::marine(){
-			m_psg1 = nullptr;
-			m_l96aw = nullptr;
 	}
 	marine::marine(player_ptr_t p){
-		m_psg1 = nullptr;
-		m_l96aw = nullptr;
 		load_by_player(p);
 	}
 	player_ptr_t 	marine::player(){
@@ -25,7 +13,7 @@ namespace mods::classes {
 
 	int16_t marine::new_player(player_ptr_t &player, primary_choice_t primary_choice){
 		if(primary_choice == primary_choice_t::NONE){
-			mods::bugs::fixtures("marine::new_player. got primary_choice of zero. defaulting to M16A4");
+			report("marine::new_player. got primary_choice of zero. defaulting to M16A4");
 			primary_choice = primary_choice_t::M16A4;
 		}
 		auto db_id = m_orm.initialize_row(player,primary_choice);
@@ -39,8 +27,13 @@ namespace mods::classes {
 		m_player = player;
 		auto result = m_orm.load_by_player(player->db_id());
 		if(result < 0){
-			std::cerr << "unable to load marine class by player id: " << player->db_id() << ".. return status: " << result << "\n";
+			report(CAT("unable to load marine class by player id: ",(player->db_id()),".. return status: ",(result),"player:",player->name().c_str()));
+			return -100 - result;
 		}
+		obj_ptr_t primary = nullptr;
+		primary = create_object(ITEM_RIFLE,mods::weapon::yaml_file(m_orm.primary_type()));
+		player->equip(primary,WEAR_PRIMARY);
+		player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
 		return result;
 	}
 	int16_t marine::save() {

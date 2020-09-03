@@ -1,7 +1,5 @@
 #include "sniper.hpp"
-#include "../weapon.hpp"
 #include "../orm/inventory.hpp"
-#include "../bugs-fixtures.hpp"
 
 namespace mods::classes {
 	sniper::sniper(){
@@ -17,7 +15,7 @@ namespace mods::classes {
 	int16_t sniper::new_player(player_ptr_t &player,primary_choice_t primary_choice){
 		auto db_id = m_orm.initialize_row(player,primary_choice);
 		if(db_id == 0){
-			report({"unable to initialize row for player (sniper::new_player) ",std::to_string(player->db_id()),".. player's database id is zero!"});
+			report(CAT("unable to initialize row for player (sniper::new_player) ",(player->db_id()),".. player's database id is zero!"));
 			return -2;
 		}
 		player->set_db_id(db_id);
@@ -28,22 +26,11 @@ namespace mods::classes {
 		m_player = player;
 		auto result = m_orm.load_by_player(player->db_id());
 		if(result < 0){
-			std::cerr << "unable to load sniper class by player id: " << player->db_id() << ".. return status: " << result << "\n";
+			report(CAT("unable to load sniper class by player id: " , player->db_id() , ".. return status: " , result));
 			return -100 - result;
 		}
 		obj_ptr_t primary = nullptr;
-		switch(m_orm.primary_type()){
-			case primary_choice_t::PSG1:
-				primary = create_object(ITEM_RIFLE,"psg1.yml");
-				break;
-			case primary_choice_t::L96AW:
-				primary = create_object(ITEM_RIFLE,"l96aw.yml");
-				break;
-			default:
-				report({"Unknown sniper primary type detected..."});
-				primary = nullptr;
-				return -200;
-		}
+		primary = create_object(ITEM_RIFLE,mods::weapon::yaml_file(m_orm.primary_type()));
 		player->equip(primary,WEAR_PRIMARY);
 		player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
 		return result;

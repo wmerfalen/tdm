@@ -13,7 +13,9 @@ int scaled_heal(player_ptr_t& target){
 	return (33 * (target->level() * 0.5));
 }
 void heal_player(player_ptr_t& medic,player_ptr_t& target){
-	scaled_heal(target);
+	int amount = scaled_heal(target);
+	assert(amount > 0);
+	target->hp() += amount;
 	send_to_room(medic->room(),CAT("{grn}",medic->name()," heals ",target->name(),"{/grn}\r\n").c_str());
 }
 ACMD(do_heal) {

@@ -64,6 +64,11 @@ namespace mods::util {
 	static inline void detexturize_room(room_rnum room_id, room_data::texture_type_t texture_type){
 		world[room_id].remove_texture(texture_type);
 	}
+	static inline std::string current_time_string(){
+		time_t t;
+		time(&t);
+		return ctime(&t);
+	}
 
 
 namespace detail{ 

@@ -1,15 +1,12 @@
 #ifndef  __MENTOC_MODS_CLASSES_SNIPER_HEADER__
 #define  __MENTOC_MODS_CLASSES_SNIPER_HEADER__
 #include "../orm/class-sniper.hpp"
-#include "../bugs-fixtures.hpp"
+#include "base.hpp"
 
 using sniper_orm_t = mods::orm::sniper;
 
 namespace mods::classes {
-	struct sniper {
-		static inline void report(std::vector<std::string> msgs){
-			mods::bugs::fixtures("mods::classes::sniper::",IMPLODE(msgs,""));
-		}
+	struct sniper : base {
 		types kind() {
 			return types::SNIPER;
 		}

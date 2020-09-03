@@ -1,13 +1,12 @@
 #ifndef __MENTOC_MODS_CLASSES_SENTINEL_HEADER__
 #define  __MENTOC_MODS_CLASSES_SENTINEL_HEADER__
-#include "../../structs.h"
 #include <variant>
 #include "../orm/class-sentinel.hpp"
-#include "../weapon.hpp"
+#include "base.hpp"
 
 using sentinel_orm_t = mods::orm::sentinel;
 namespace mods::classes {
-	struct sentinel {
+	struct sentinel : base {
 		using primary_choice_t = mods::weapon::sentinel::primary_choice_t;
 		enum cure_levels_t {
 				SENTINEL_CURE_NONE = 0,

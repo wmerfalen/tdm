@@ -5,8 +5,8 @@
 #include <fstream>
 
 namespace mods::bugs {
-	void fixtures(std::string_view msg);
-	void fixtures(std::string_view from,std::string_view msg);
+	void fixtures(std::string name,std::string msg);
+	void fixtures(std::string_view from);
 	void close();
 };
 

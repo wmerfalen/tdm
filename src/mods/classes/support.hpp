@@ -1,12 +1,11 @@
 #ifndef __MENTOC_MODS_CLASSES_SUPPORT_HEADER__
 #define  __MENTOC_MODS_CLASSES_SUPPORT_HEADER__
 #include "../orm/class-support.hpp"
-#include "../bugs-fixtures.hpp"
-#include "types.hpp"
+#include "base.hpp"
 
 using support_orm_t = mods::orm::support;
 namespace mods::classes {
-	struct support {
+	struct support : base {
 		types kind() {
 			return types::SUPPORT;
 		}
@@ -17,6 +16,7 @@ namespace mods::classes {
 		support(player_ptr_t);
 		~support() = default;
 
+		std::string yaml_file(primary_choice_t f);
 		int16_t load_by_player(player_ptr_t &);
 		player_ptr_t 	player();
 		int16_t				new_player(player_ptr_t&, primary_choice_t primary);

@@ -30,6 +30,10 @@ namespace mods::classes {
 		if(result < 0){
 			mods::bugs::fixtures(CAT("support::load_by_player.",(result)));
 		}
+		obj_ptr_t primary = nullptr;
+		primary = create_object(ITEM_RIFLE,mods::weapon::yaml_file(m_orm.primary_type()));
+		player->equip(primary,WEAR_PRIMARY);
+		player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
 		return result;
 	}
 	int16_t support::save() {

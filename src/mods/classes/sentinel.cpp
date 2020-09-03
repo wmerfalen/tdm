@@ -1,8 +1,6 @@
 #include "sentinel.hpp"
 #include "../orm/inventory.hpp"
-#include "../weapon.hpp"
 #include "../affects.hpp"
-#include "../bugs-fixtures.hpp"
 
 namespace mods::orm::inventory {
 	extern int16_t flush_player(player_ptr_t & player);
@@ -23,7 +21,7 @@ namespace mods::classes {
 		}
 		int16_t sentinel::new_player(player_ptr_t &player, primary_choice_t primary_choice){
 			if(primary_choice == primary_choice_t::NONE){
-				mods::bugs::fixtures("sentinel::new_player. got primary_choice of zero. defaulting to MP5");
+				report("sentinel::new_player. got primary_choice of zero. defaulting to MP5");
 				primary_choice = primary_choice_t::MP5;
 			}
 			auto db_id = m_orm.initialize_row(player,primary_choice);
@@ -36,7 +34,7 @@ namespace mods::classes {
 		int16_t sentinel::load_by_player(player_ptr_t & player){
 			auto result = m_orm.load_by_player(player->db_id());
 			if(result < 0){
-				mods::bugs::fixtures(CAT("sentinel::load_by_player unable to load sentinel class by player id: ",(player->db_id()),".. return status: ",(result)));
+				report(CAT("sentinel::load_by_player unable to load sentinel class by player id: ",(player->db_id()),".. return status: ",(result)));
 				return result;
 			}
 			set_player(player);
@@ -46,7 +44,11 @@ namespace mods::classes {
 			m_deny_entry_level = static_cast<deny_entry_levels_t>(m_orm.sentinel_deny_entry_level);
 			m_gadget_shield_level = static_cast<gadget_shield_levels_t>(m_orm.sentinel_gadget_shield_level);
 
-			return 0;
+			obj_ptr_t primary = nullptr;
+			primary = create_object(ITEM_RIFLE,mods::weapon::yaml_file(m_orm.primary_type()));
+			player->equip(primary,WEAR_PRIMARY);
+			player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
+			return result;
 		}
 		void sentinel::sendln(std::string_view msg){ m_player->sendln(msg); }
 		void sentinel::psendln(std::string_view msg){ m_player->psendln(msg); }

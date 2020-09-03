@@ -1,70 +1,65 @@
 #include "medic.hpp"
-#include "../bugs-fixtures.hpp"
 
+extern void send_to_room_except(room_rnum room, player_ptr_t except_me, const char *messg, ...);
+extern void send_to_room_except(room_rnum room, const std::vector<char_data*>& except, const char *messg, ...);
 namespace mods::classes {
 	template <typename TPlayer>
 	int scaled_heal(TPlayer& target){
 		return (33 * (target->level() * 0.5));
 	}
-	/*
-	int scaled_heal(player_ptr_t& target){
-		return (33 * (target->level() * 0.5));
+	uint8_t& medic::stim_pistol_ammo(){
+		return m_stim_pistol_ammo;
 	}
-	*/
-	void medic::heal_player(player_ptr_t& player_obj,player_ptr_t& target) {
-		/*
-		if(target->cd()->in_room != player_obj->cd()->in_room) {
-			*player_obj << "You can't find your target.\r\n";
+	void medic::init(){
+		m_stim_pistol_ammo = medic::DEFAULT_STARTING_STIM_PISTOL_AMMO;
+	}
+	void medic::heal_player(player_ptr_t& target) {
+		if(m_stim_pistol_ammo == 0) {
+			m_player->psendln("Out of ammo.");
 			return;
 		}
 
-		if(stim_pistol_ammo == 0) {
-			*player_obj << "Out of ammo.\r\n";
-			return;
-		}
-
-		if(target->cd() == player_obj->cd()) {
-			const char* self_name = (player_obj->sex() == SEX_MALE ? "himself" : "herself");
-			const char* short_self_name = (player_obj->sex() == SEX_MALE ? "his" : "her");
-			*player_obj << "You aim your stim pistol at yourself...\r\n";
-			send_to_room_except(player_obj->room(),
-				{player_obj->cd()},
+		if(target->cd() == m_player->cd()) {
+			const char* self_name = (m_player->sex() == SEX_MALE ? "himself" : "herself");
+			const char* short_self_name = (m_player->sex() == SEX_MALE ? "his" : "her");
+			m_player->psendln("You aim your stim pistol at yourself...");
+			send_to_room_except(m_player->room(),
+				m_player,
 				"%s aims a stim pistol at %s\r\n",
-				player_obj->name().c_str(),self_name);
-			*player_obj << "You fire your stim pistol.\r\n";
-			send_to_room_except(player_obj->room(),
-				{player_obj->cd()},
+				m_player->name().c_str(),self_name);
+			m_player->psendln("You fire your stim pistol.");
+			send_to_room_except(m_player->room(),
+				m_player,
 				"%s fires a stim pistol into %s arm\r\n",
-				player_obj->name().c_str(),short_self_name);
-			auto amount = scaled_heal(player_obj);
-			player_obj->hp() += amount;
-			*player_obj << "You gain " << amount << " hit points.\r\n";
+				m_player->name().c_str(),short_self_name);
+			auto amount = scaled_heal(m_player);
+			m_player->hp() += amount;
+			m_player->sendln(CAT("{grn}You gain {blu}", amount,"{/blu} {grn}hit points.{/grn}"));
 			return;
 		}
 
-		*player_obj << "You aim your stim pistol at " <<
+		*m_player << "You aim your stim pistol at " <<
 		            target->name() << " carefully...\r\n";
-		const char* gender = (player_obj->cd()->player.sex == SEX_MALE ? "his" : "her");
-		send_to_room_except(player_obj->room(),
-			{player_obj->cd(),target->cd()},
+		const char* gender = (m_player->cd()->player.sex == SEX_MALE ? "his" : "her");
+		send_to_room_except(m_player->room(),
+			{m_player->cd(),target->cd()},
 			"%s aims a stim pistol at %s\r\n",
-			player_obj->name().c_str(),
+			m_player->name().c_str(),
 			target->name().c_str()
 		);
-		*target << player_obj->name() << " aims " << gender <<
+		*target << m_player->name() << " aims " << gender <<
 		        " stim pistol at you...\r\n";
-		*player_obj << "You fire your stim pistol.\r\n";
-		*target << player_obj->name() << " fires!\r\n";
-		send_to_room_except(player_obj->room(),
-			{player_obj->cd(),target->cd()},
+		*m_player << "You fire your stim pistol.\r\n";
+		*target << m_player->name() << " fires!\r\n";
+		send_to_room_except(m_player->room(),
+			{m_player->cd(),target->cd()},
 			"%s fires a stim pistol at %s\r\n",
-			player_obj->name().c_str(),
+			m_player->name().c_str(),
 			target->name().c_str()
 		);
 		auto amount = scaled_heal(target); 
 		target->hp() += amount;
 		*target << "You gain " << amount << " hit points.\r\n";
-		*/
 	}
 	std::shared_ptr<medic> create_medic(player_ptr_t &in_player){
 		return std::move(std::make_shared<medic>(in_player));
@@ -87,18 +82,7 @@ namespace mods::classes {
 			return -100 - result;
 		}
 		obj_ptr_t primary = nullptr;
-		switch(m_orm.primary_type()){
-			case primary_choice_t::AUGPARA:
-				primary = create_object(ITEM_RIFLE,"augpara.yml");
-				break;
-			case primary_choice_t::TAR21:
-				primary = create_object(ITEM_RIFLE,"tar21.yml");
-				break;
-			default:
-				report({"Unknown medic primary type detected...",player->name().c_str()});
-				primary = nullptr;
-				return -200;
-		}
+		primary = create_object(ITEM_RIFLE,mods::weapon::yaml_file(m_orm.primary_type()));
 		player->equip(primary,WEAR_PRIMARY);
 		player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
 		return result;

@@ -549,6 +549,86 @@ namespace mods::weapon {
 			player->send("%d rounds.\r\n", get_rounds(obj));
 		}
 	}
+	static inline std::string yaml_file(support::primary_choice_t s){
+		switch(s){
+			case support::primary_choice_t::MK46:
+				return "mk46.yml";
+			case support::primary_choice_t::HK21:
+				return "hk21.yml";
+			default:
+				return "unknown";
+		}
+	}
+		static inline std::string yaml_file(sniper::primary_choice_t s){
+			switch(s){
+				case sniper::primary_choice_t::PSG1:
+					return "psg1.yml";
+				case sniper::primary_choice_t::L96AW:
+					return "l96aw.yml";
+				default:
+					return "unknown";
+			}
+		}
+		static inline std::string yaml_file(marine::primary_choice_t s){
+			switch(s){
+				case marine::primary_choice_t::M16A4:
+					return "m16a4.yml";
+				case marine::primary_choice_t::M4:
+					return "m4.yml";
+				default:
+					return "unknown";
+			}
+		}
+		static inline std::string yaml_file(contagion::primary_choice_t s){
+			switch(s){
+				case contagion::primary_choice_t::M3:
+					return "m3.yml";
+				case contagion::primary_choice_t::FAMAS:
+					return "famas.yml";
+				default:
+					return "unknown";
+			}
+		}
+		static inline std::string yaml_file(engineer::primary_choice_t s){
+			switch(s){
+				case engineer::primary_choice_t::FMG9:
+					return "fmg9.yml";
+				case engineer::primary_choice_t::P90:
+					return "p90.yml";
+				default:
+					return "unknown";
+			}
+		}
+		static inline std::string yaml_file(medic::primary_choice_t s){
+			switch(s){
+				case medic::primary_choice_t::AUGPARA:
+					return "augpara.yml";
+				case medic::primary_choice_t::TAR21:
+					return "tar21.yml";
+				default:
+					return "unknown";
+			}
+		}
+		static inline std::string yaml_file(psyop::primary_choice_t s){
+			switch(s){
+				case psyop::primary_choice_t::SCARH:
+					return "scarh.yml";
+				case psyop::primary_choice_t::UMP45:
+					return "ump45.yml";
+				default:
+					return "unknown";
+			}
+		}
+		static inline std::string yaml_file(sentinel::primary_choice_t s){
+			switch(s){
+				case sentinel::primary_choice_t::MP5:
+					return "mp5.yml";
+				case sentinel::primary_choice_t::SASG12:
+					return "sasg12.yml";
+				default:
+					return "unknown";
+			}
+		}
 
 };
 #endif
