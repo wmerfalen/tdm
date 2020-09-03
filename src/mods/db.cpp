@@ -40,8 +40,8 @@ aligned_int_t initialize_row(
 	ptr_db->renew_txn();
 	std::string id_list = "";
 	id_list = db_get(db_key({table,"id_list"}));
-	std::cout << "id_list: '" << id_list << "' .size(): " << id_list.length() << "\n";
-	std::cout << "debug: id_list buffer: '" << id_list << "'\n";
+	//std::cout << "id_list: '" << id_list << "' .size(): " << id_list.length() << "\n";
+	//std::cout << "debug: id_list buffer: '" << id_list << "'\n";
 	aligned_int_t next_id = 0;
 	std::vector<aligned_int_t> deserialized_id_list;
 	if(id_list.length() == 0){
@@ -60,19 +60,25 @@ aligned_int_t initialize_row(
 			std::back_inserter(str_buffer));
 	auto ret = ptr_db->put(db_key({table,"id_list"}),str_buffer);
 	if(ret < 0){
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 		std::cerr << "failed to place id_list!!!\n";
+#endif
 		return 0;
 	}
 
 	ret = ptr_db->put(db_key({table,"id",std::to_string(next_id)}),"active");
 	ret = ptr_db->put(db_key({table,"active",std::to_string(next_id)}),"active");
 	if(ret < 0){
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 		std::cerr << "failed to place active key!!!\n";
+#endif
 		return 0;
 	}
 	auto tuple_return = ptr_db->commit();
 	if(!std::get<0>(tuple_return)){
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 		std::cerr << "error: commit failed (initialize_row)\n";
+#endif
 		return 0;
 	}
 	return next_id;
@@ -80,7 +86,7 @@ aligned_int_t initialize_row(
 
 tuple_status_t new_record(const std::string& table,mutable_map_t* values){
 	auto pk_id = mods::db::initialize_row(table);
-	std::cout << "debug: new pk_id: '" << pk_id << "'\n";
+	//std::cout << "debug: new pk_id: '" << pk_id << "'\n";
 	return save_record(table,values,std::to_string(pk_id));
 }
 
@@ -96,21 +102,27 @@ tuple_status_t new_record(const std::string& table,mutable_map_t* values){
 tuple_status_t save_record(const std::string& table,mutable_map_t* values,std::string pk_id){
 	mods::globals::db->renew_txn();
 	for(const auto & meta_key : mods::meta_utils::get_all_meta_values(table,values)){
-		std::cout << "debug: save_record. Putting: '" << meta_key << "' as '" << pk_id << "'\n";
+		//std::cout << "debug: save_record. Putting: '" << meta_key << "' as '" << pk_id << "'\n";
 		lmdb_put(meta_key,pk_id);
 	}
 		const auto write_status =  lmdb_write_values(
 				table,
 				values,pk_id);
 		if(!std::get<0>(write_status)){
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 			std::cerr << "error: lmdb_write_values failed with: '" << std::get<1>(write_status) << "'\n";
+#endif
 		}
 	const auto tuple_status = mods::globals::db->commit();
 	if(std::get<0>(tuple_status)){
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 		std::cerr << "debug: save_record success\n";
+#endif
 		return {true,"saved",mods::util::stoi<aligned_int_t>(pk_id)};
 	}else{
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 		std::cerr << "debug: save_record FAILURE: '" << std::get<1>(tuple_status) << "'\n";
+#endif
 		return {false,std::get<1>(tuple_status),0};
 	}
 }
@@ -170,13 +182,19 @@ int lmdb_nget(void* key,std::size_t k_size,std::string& value){
 std::string lmdb_get(std::string_view key){
 	std::string value = "";
 	auto status = mods::globals::db->get(key.data(),value);
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 	std::cerr << "[lmbd_get] key:'" << key.data() << "', value: '" << value << "'\n";
+#endif
 	if(status == EINVAL){
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 		std::cerr << "[lmdb_get] got EINVAL -- retrying...\n";
+#endif
 		lmdb_renew();
 		status = mods::globals::db->get(key.data(),value);
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 		std::cerr << "retry status: " << status << "\n";
 		std::cerr << "[lmbd_get] key:'" << key.data() << "', value: '" << value << "'\n";
+#endif
 	}
 	return value;
 }
@@ -210,13 +228,19 @@ int lmdb_nput(void* key,std::size_t key_size,
  * @param value
  */
 void lmdb_put(std::string key,std::string value){
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 	std::cerr << "[lmdb_put]: '" << key << "', value:'" << value << "'\n";
+#endif
 	auto status = mods::globals::db->put(key,value);
 	if(status == EINVAL){
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 		std::cerr << "[lmdb_put] got EINVAL -- retrying...\n";
+#endif
 		lmdb_renew();
 		status = mods::globals::db->put(key,value);
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 		std::cerr << "retry status: " << status << "\n";
+#endif
 	}
 }
 /**
@@ -272,7 +296,9 @@ tuple_status_t save_char(
  */
 tuple_status_t save_new_char(
 		player_ptr_t player_ptr){
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 	std::cerr << "[DEPRECATED]: calls to mods::lmdb::save_new_char will be ignored!\n";
+#endif
 	//player_ptr->set_db_id(initialize_row("player"));
 	mutable_map_t values;
 	lmdb_export_char(player_ptr,values);
@@ -387,7 +413,9 @@ int load_record(const std::string& table, const std::string& pk, mutable_map_t& 
 	int count = 0;
 	for(auto & key : mods::globals::db->fields_to_grab(table)){
 		value = db_get(db_key({table,key,pk}));
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 		std::cerr << "debug: load_record key: '" << key << "' value: '" << value << "'\n";
+#endif
 		values[key] = value;
 		++count;
 	}
@@ -406,7 +434,9 @@ int load_record(const std::string& table, const std::string& pk, mutable_map_t& 
  */
 int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_map_t& out_record){
 	if(values == nullptr){
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
 		std::cerr << "error: values is a nullptr in load_record_by_meta\n";
+#endif
 		return -1;
 	}
 	int count = 0;

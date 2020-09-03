@@ -284,20 +284,24 @@ ACMD(do_yaml_import){
  * @param do_yaml_log
  */
 ACMD(do_yaml_log){
+	DO_HELP("yaml_log");
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() == 0) {
-		player->pager_start();
+		player->sendln("sending yaml exception log...");
 		mods::object_utils::send_yaml_exceptions_to(player);
-		player->pager_end();
-		player->page(0);
+		player->sendln("[done]");
 		return;
 	}
 
 	if(vec_args.size() == 2){
 		mods::object_utils::set_yaml_initiator(player->name(),vec_args[0],vec_args[1]);
 		auto obj = mods::object_utils::yaml_import(vec_args[0],vec_args[1]);
+		if(!obj){
+			player->sendln("Didn't import that yaml file. Make sure it exists.");
+			return;
+		}
 		obj_to_char(obj.get(),player->cd());
-		player->send("Imported: %s of type %s\r\n", vec_args[1].c_str(),vec_args[0].c_str());
+		player->send("{grn}Imported: %s of type %s\r\n{/grn}", vec_args[1].c_str(),vec_args[0].c_str());
 		return;
 	}
 	player->sendln("Unknown type/file combination. Nothing imported.");
@@ -310,7 +314,11 @@ ACMD(do_yaml_log){
  */
 ACMD(do_yaml_log_save){
 	player->send("Saving yaml log...");
-	mods::object_utils::save_yaml_exceptions_to_disk();
+	auto status = mods::object_utils::save_yaml_exceptions_to_disk();
+	if(std::get<0>(status) < 0){
+		player->sendln(CAT("{red}Issue writing log to file: '",std::get<1>(status),"'{/red}"));
+		return;
+	}
 	player->sendln("[done]");
 }
 /**

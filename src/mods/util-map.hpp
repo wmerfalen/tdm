@@ -14,15 +14,17 @@ namespace mods {
 			static inline void remove_if_exists(TMapType* in_map,TKeyType key){
 				auto it = in_map->find(key);
 				if(it != in_map->end()){
-					std::cerr << "removing map entry: " << key << "\n";
+					//std::cerr << "removing map entry: " << key << "\n";
 					in_map->erase(it);
 				}
 			}
 			template <typename TKey,typename TVal>
 			static inline void dump(std::map<TKey,TVal> m){
+#ifdef __MENTOC_SHOW_UTIL_MAP_DUMP_OUTPUT__
 				for(auto & [k,v]: m){
 					std::cout << "[" << k << "]->'" << v << "'\n";
 				}
+#endif
 			}
 			template <typename Tkey,typename Tval>
 			Tkey keyval_first(std::map<Tkey,Tval>& m,const Tval value,Tkey default_value) {

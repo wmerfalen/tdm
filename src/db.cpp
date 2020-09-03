@@ -651,7 +651,7 @@ void destroy_db(void) {
 	//
 	//	/* Shops */
 	//	destroy_shops();
-	std::cerr << "[stub]: destory_db - things will break if malloc()'d\n";
+	//std::cerr << "[stub]: destory_db - things will break if malloc()'d\n";
 }
 
 
@@ -2065,12 +2065,16 @@ obj_ptr_t blank_object() {
 obj_ptr_t create_object(int type,std::string yaml_file) {
 	std::string path = mods::util::compile_yaml_path_from_type_and_file(type,yaml_file);
 	if(path.compare(mods::util::UNKNOWN_YAML_FILE) == 0){
-		log(CAT("SYSERR: create_object:: warning: unknown yaml file type+yaml_file:'",yaml_file,"', with type:'", type,"'").c_str());
+		auto error = CAT("SYSERR: create_object:: warning: unknown yaml file type+yaml_file:'",yaml_file,"', with type:'", type,"'");
+		log(error.c_str());
+		mods::object_utils::report_yaml_message(error);
 		return blank_object();
 	}
 	bool exists = mods::util::yaml_file_exists(path);
 	if(!exists){
-		log(CAT("SYSERR: create_object:: warning: yaml file DOESNT EXIST:'",yaml_file,"', with type:'", type,"'").c_str());
+		auto error = CAT("SYSERR: create_object:: warning: yaml file DOESNT EXIST:'",yaml_file,"', with type:'", type,"'");
+		mods::object_utils::report_yaml_message(error);
+		log(error.c_str());
 		return blank_object();
 	}
 	obj_list.push_back(std::make_shared<obj_data>(type,yaml_file));
@@ -2108,9 +2112,11 @@ obj_ptr_t create_object_from_index(std::size_t proto_index){
 				proto_index, obj_proto.size());
 		return nullptr;
 	}
+	/*
 	for(auto & p : obj_proto){
 		std::cerr << "[obj_proto dump]: type: '" << p.type << "' feed_file: '" << p.feed_file() << "'\n";
 	}
+	*/
 	obj_list.push_back(std::make_shared<obj_data>(obj_proto[proto_index].type,obj_proto[proto_index].feed_file()));
 	mods::globals::register_object(obj_list.back());
 	obj_index[proto_index].number++;
@@ -2615,7 +2621,11 @@ bool parse_sql_player(player_ptr_t player_ptr){
 		player_ptr->hometown() = mods::util::stoi<int>(row["player_hometown"]);
 		player_ptr->clear_all_affected();
 		player_ptr->clear_all_affected_plr();
+#ifdef __MENTOC_PLR_DEBUG_OUTPUT__
 #define __MENTOC_PLR(a) case a: std::cerr << "flag: " << #a << " is set\n"; break;
+#else
+#define __MENTOC_PLR
+#endif
 		if(strlen(row["player_affection_bitvector"].c_str()) > 0){
 			uint64_t aff = row["player_affection_bitvector"].as<uint64_t>(0);
 			uint64_t shift = 1;

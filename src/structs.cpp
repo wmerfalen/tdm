@@ -56,7 +56,6 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SE
 			this->m_feed_file = feed_file.data();
 			this->type = in_type;
 			this->str_type = mods::util::yaml_int_to_string(in_type);
-			std::cerr << "[type]: " << this->type << ", str_type:" << this->str_type << "\n";
 			m_db_id = 0;
 			std::string s_type = this->str_type.substr(strlen("ITEM_"));
 			std::transform(s_type.begin(),s_type.end(),s_type.begin(),
@@ -140,7 +139,9 @@ bool obj_data::flagged(int value){
 			return m_ex_descriptions;
 		}
 		char_player_data::char_player_data(){
+#ifdef __MENTOC_SHOW_STRUCTS_CPP_DEBUG_OUTPUT__
 			std::cerr << "[char_player_data()] default constructor\n";
+#endif
 			name.assign("");         /* PC / NPC s name (kill ...  )         */
 			short_descr.assign("");  /* for NPC 'actions'                    */
 			long_descr.assign("");   /* for 'look'             */
@@ -155,11 +156,15 @@ bool obj_data::flagged(int value){
 			std::fill(m_passwd.begin(),m_passwd.end(),0);
 		}
 		char_data::char_data(char_data* o){
+#ifdef __MENTOC_SHOW_STRUCTS_CPP_DEBUG_OUTPUT__
 			std::cerr << "[char_data] ptr copy constructor\n";
+#endif
 			this->import(o);
 		}
 		void char_data::import(const char_data* o){
+#ifdef __MENTOC_SHOW_STRUCTS_CPP_DEBUG_OUTPUT__
 			std::cerr << "[char_data::import] using ptr\n";
+#endif
 			has_desc = false;
 			desc = nullptr;
 			pfilepos = o->pfilepos;
@@ -197,7 +202,9 @@ bool obj_data::flagged(int value){
 			builder_data = o->builder_data;
 		}
 		char_data::~char_data(){
+#ifdef __MENTOC_SHOW_STRUCTS_CPP_DEBUG_OUTPUT__
 			std::cerr << "~char_data[" << this->uuid << "\n";
+#endif
 			has_desc = false;
 			desc.reset();
 			pfilepos = 0;
@@ -542,7 +549,9 @@ bool obj_data::flagged(int value){
 			this->behaviour_tree = mods::behaviour_tree_impl::grab_tree_by_name(name.data());
 		}
 		mob_special_data::~mob_special_data(){
+#ifdef __MENTOC_SHOW_STRUCTS_CPP_DEBUG_OUTPUT__
 			std::cerr << "[~mob_special_data]\n";
+#endif
 			this->clear_behaviour_tree();
 			this->memory.clear();
 			this->attack_type = 0;

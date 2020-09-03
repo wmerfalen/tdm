@@ -9,6 +9,7 @@ namespace mods::help {
 			M_MATCH("set_position",h_set_position);
 			M_MATCH("set_npc_position",h_set_npc_position);
 			M_MATCH("contract,contracts,quest,quests",h_contract);
+			M_MATCH("yaml_log",h_yaml_log);
 #undef M_MATCH
 			return true;
 	}

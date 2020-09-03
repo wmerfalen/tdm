@@ -30,6 +30,9 @@
 #include "mods/mobs/extended-types.hpp"
 extern void log(const char* format,...);
 
+namespace mods::object_utils {
+	extern void report_yaml_message(std::string_view);
+};
 #ifdef __MENTOC_USE_PQXX_RESULT__
 #define mentoc_pqxx_result_t const pqxx::result::reference&
 #else
@@ -823,6 +826,7 @@ enum player_level {
 			this->feed_status = this->feed(item_type,feed_file);
 			switch(feed_status){
 				case -1:
+					mods::object_utils::report_yaml_message(std::string("File doesn't exist. ") + std::to_string(item_type) + std::string("[file:'") + feed_file.data() + "']");
 					log(
 							"SYSERR: feeding type [%d][file:'%s'] failed. File doesnt exist.",
 							item_type,
@@ -830,6 +834,7 @@ enum player_level {
 					);
 					break;
 				case -2:
+					mods::object_utils::report_yaml_message(std::string("feed failed. ") +std::to_string(item_type) + std::string("[file:'") + feed_file.data() + "']");
 					log(
 							"SYSERR: feeding type [%d][file:'%s'] failed. Feed error. ",
 							item_type,
@@ -840,6 +845,7 @@ enum player_level {
 					/* feed success */
 					break;
 				default: 
+					mods::object_utils::report_yaml_message(std::string("unkown error of type ") + std::to_string(feed_status) + std::string(" item type:") + std::to_string(item_type) + std::string(",[file:'") + feed_file.data() + "']");
 					log(
 							"SYSERR: feeding type [%d][file:'%s'] failed. UNKNOWN error: [%d] ",
 							item_type,

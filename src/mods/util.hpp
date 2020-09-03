@@ -114,19 +114,16 @@ std::ostream& log(Args... args); /*{
 	bool fuzzy_match(const std::string& _needle,const std::string& _haystack);
 	template <typename T>
 		T arglist(std::string in_arglist_argument) {
-			std::cerr << "arglist! '" << in_arglist_argument << "'\n";
 			T our_arglist;
 			bool escaped = false;
 			std::string current = "";
 			int string_length = in_arglist_argument.length();
-			std::cerr << "string_length: " << string_length << "\n";
 
 			for(auto c : in_arglist_argument) {
 				--string_length;
 
 				if(c == '"') {
 					if(escaped) {
-					std::cerr << "emplacing current: '" << current << "'\n";
 						our_arglist.emplace_back(current);
 						escaped = false;
 						current = "";
@@ -139,7 +136,6 @@ std::ostream& log(Args... args); /*{
 
 				if(c == ' ' && !escaped) {
 					if(current.length()) {
-					std::cerr << "emplacing current: '" << current << "'\n";
 						our_arglist.emplace_back(current);
 						current = "";
 					}
@@ -155,12 +151,10 @@ std::ostream& log(Args... args); /*{
 				current += c;
 
 				if(string_length == 0 && current.length()) {
-					std::cerr << "emplacing current: '" << current << "'\n";
 					our_arglist.emplace_back(current);
 					break;
 				}
 			}
-			std::cerr << "moving...\n";
 
 			return std::move(our_arglist);
 		}

@@ -323,7 +323,9 @@ namespace mods::sql {
 				return *this;
 			}
 			compositor<T>& returning(str_object column) {
+#ifdef __MENTOC_SHOW_SQL_DEBUG_OUTPUT__
 				std::cerr << "[sql-compositor--returning]: status of sql: '" << m_sql << "'\n";
+#endif
 				m_returning = std::string(" RETURNING ") + column.data();
 				return *this;
 			}
@@ -343,7 +345,9 @@ namespace mods::sql {
 					m_sql += m_returning;
 				}
 
+#ifdef __MENTOC_SHOW_SQL_DEBUG_OUTPUT__
 				std::cerr << m_sql << "\n";
+#endif
 				return m_sql;
 			}
 		private:

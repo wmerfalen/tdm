@@ -29,7 +29,9 @@ namespace mods {
 			};
 			static inline bool __find_player_by_name(player_ptr_t player_ptr,find_player_payload_t* param){
 				param->found = false;
+#ifdef __MENTOC_SHOW_JS_DEBUG__
 				std::cerr << "current-player(find):'" << player_ptr->name().c_str() << "'\nLooking for: '" << param->player_name.c_str() << "'\n";
+#endif
 					if(std::string(player_ptr->name().c_str()).compare(param->player_name.c_str()) == 0){
 						param->found = true;
 						param->player = player_ptr;
@@ -408,7 +410,6 @@ namespace mods {
 				bool found = false;
 				auto player_ptr = utils::find_player_by_name(c_name,found);
 				if(found){
-					std::cerr << "found player bypayload\n";
 					mods::globals::rooms::char_from_room(*(player_ptr));
 					duk_push_number(ctx,0);
 					return 1;
@@ -769,7 +770,9 @@ __set_points_cleanup:
 		}
 
 		void run_profile_scripts(const std::string& player_name){
+#ifdef __MENTOC_SHOW_JS_DEBUG__
 			std::cerr << "run_profile_scripts: '" << player_name << "'\n";
+#endif
 			if(config::run_profile_scripts){
 				load_library(mods::globals::duktape_context,
 						std::string(MENTOC_CURRENT_WORKING_DIR) + std::string("/js/profiles/" + player_name + ".js").c_str());
@@ -781,16 +784,22 @@ __set_points_cleanup:
 		}
 
 		bool include::include_file() {
+#ifdef __MENTOC_SHOW_JS_DEBUG__
 			std::cerr << "m_file: '" << m_file << "'\n";
+#endif
 			std::string path = m_file;
 
 			if(m_dir.length()) {
 				path = m_dir + "/" + m_file;
 			}
+#ifdef __MENTOC_SHOW_JS_DEBUG__
 			std::cerr << "include file path: '" << path << "'\n";
+#endif
 			if(access(path.c_str(),F_OK) == -1){
 				/** File doesn't exist */
+#ifdef __MENTOC_SHOW_JS_DEBUG__
 				std::cerr << "[include_file] file doesnt exist\n";
+#endif
 				return false;
 			}
 
@@ -820,8 +829,10 @@ __set_points_cleanup:
 				eval_string(m_context,std::string((char*)&buffer[0]));
 				status = true;
 			}else{
+#ifdef __MENTOC_SHOW_JS_DEBUG__
 				std::cerr << "couldn't read entire file: " << 
 					include_file.gcount() << "/" << length << "\n";
+#endif
 			}
 			include_file.close();
 			return status;
@@ -830,11 +841,15 @@ __set_points_cleanup:
 			auto m = std::make_unique<include>(ctx,file.data());
 
 			if(m->good()) {
+#ifdef __MENTOC_SHOW_JS_DEBUG__
 				std::cerr << "[DEBUG]: included js file: '" << file.data() << "'\n";
+#endif
 				return 0;
 			}
 
+#ifdef __MENTOC_SHOW_JS_DEBUG__
 			std::cerr << "SYSERR: couldn't include js file! '" << file.data() << "'\n";
+#endif
 			return -1;
 		}
 		void load_c_functions(duk_context *ctx) {

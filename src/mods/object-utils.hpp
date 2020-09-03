@@ -86,6 +86,7 @@ namespace mods::object_utils {
 	static inline uint32_t get_yaml_transaction_id(){
 		return yaml_transaction_id;
 	}
+	void report_yaml_message(std::string_view msg);
 
 	template <typename TException>
 	static inline void report_yaml_exception(TException& e,std::vector<std::string>& items_fed){
@@ -278,19 +279,22 @@ namespace mods::object_utils {
 			"armor","trap","consumable"
 		};
 		if(in_yaml_file.length() == 0 || object_type.length() == 0){
+			report_yaml_message("the yaml file specified is of zero length");
 			return nullptr;
 		}
 		if(!txt::match_any_of(VALID_TYPES,object_type)){
+			report_yaml_message("you must specify a valid object type, such as 'rifle'.");
 			return nullptr;
 		}
 		if(!txt::preg_match("^[a-z0-9_\\-]+\\.yml$", in_yaml_file)){
+			report_yaml_message("the yaml file you specified has invalid characters or is formatted incorrectly.");
 			log("SYSERR: invalid yaml file format detected. Not printing for security purpose.");
 			return nullptr;
 		}
-		std::string yaml_file = "objects/" + object_type + "/" + in_yaml_file;
+		obj_ptr_t obj;
 #define MENTOC_F_IMPORT(CLASS_TYPE,IT_TYPE)\
 		if(object_type.compare(#CLASS_TYPE) == 0){\
-			return std::move(create_object(BOOST_PP_CAT(ITEM_,IT_TYPE),yaml_file));\
+			obj = create_object(BOOST_PP_CAT(ITEM_,IT_TYPE),in_yaml_file);\
 		}
 		/** !!*****************!! */
 		/** !!UPDATE_ITEM_TYPES!! */
@@ -305,7 +309,11 @@ namespace mods::object_utils {
 		MENTOC_F_IMPORT(consumable,CONSUMABLE);
 #undef MENTOC_F_IMPORT
 
-		return nullptr;
+		if(!obj){
+			report_yaml_message("yaml import failed for that combination of item type and yaml file name");
+			return nullptr;
+		}
+		return std::move(obj);
 	}
 	template <typename T>
 	uint16_t get_ammo(obj_ptr_t& weapon){

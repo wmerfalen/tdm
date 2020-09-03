@@ -124,8 +124,18 @@ namespace mods::help {
 			"\r\n"
 			"this documentation was written on 2020-06-26." 
 	;
-
-	};// end pages namespace
+	static constexpr const char* h_yaml_log = "usage: yaml_log \r\n"
+			"description: the yaml_log command has two types of usages.\r\n"
+			"1) calling yaml_log with no arguments will send you the current yaml log\r\n"
+			"2) calling yaml_log the same way you would call yaml_import\r\n"
+			"Example: yaml_log RIFLE g36c.yml\r\n"
+			"The above example will attempt to import and give you the g36c.yml file.\r\n"
+			"Should any exceptions with the yaml import occur, you can see the log\r\n"
+			"of those errors by calling yaml_log with no arguments.\r\n"
+			"\r\n"
+			"this documentation was written on 2020-09-02." 
+	;
+	};
 
 	bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::player>& player,bool zero_is_help);
 };

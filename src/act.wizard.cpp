@@ -857,10 +857,6 @@ ACMD(do_stat) {
 		} else if((victim = get_player_vis(ch, buf2, NULL, FIND_CHAR_WORLD)) != NULL) {
 			do_stat_character(ch, victim);
 		} else {
-			/** TODO: !needs-testing - Removed CREATE/clear_char() combo. */
-			std::cerr << "[deprecation-notice]: clear_char (do_stat)\n";
-			std::cerr << "[stub]: clear_char (do_stat)\n";
-
 			char_data temp_victim_shadow;
 
 			std::string name = buf2;
@@ -1947,8 +1943,6 @@ ACMD(do_zreset) {
  * example: wiz_quote ammend <title|content> <id> <title|@@@content@@@>
  */
 ACMD(do_wiz_quote) {
-	
-	std::cerr << "wiz_quote: " << argument << "\n";
 }
 
 /*
@@ -2872,10 +2866,6 @@ ACMD(do_set) {
 			}
 		}
 	} else if(is_file) {
-		/* try to load the player off disk */
-		/** TODO: create temporary character function that is global and we can call. */
-		std::cerr << "[deprecation-notice]: CREATE/clear_char combo\n";
-		std::cerr << "[stub]: CREATE/clear_char combo\n";
 		return;
 
 	}
@@ -2899,8 +2889,6 @@ ACMD(do_set) {
 
 		if(is_file) {
 			char_to_store(vict, &tmp_store);
-			//fseek(player_fl, (player_i) * sizeof(struct char_file_u), SEEK_SET);
-			//fwrite(&tmp_store, sizeof(struct char_file_u), 1, player_fl);
 			player->sendln("Saved in file.");
 		}
 	}

@@ -1039,7 +1039,9 @@ void command_interpreter(player_ptr_t & player, std::string in_argument){
 	REMOVE_BIT(AFF_FLAGS(ch), AFF_HIDE);
 
 	if(!mods::globals::command_interpreter(player,argument)) {
+#ifdef  __MENTOC_SHOW_COMMAND_INTERPRETER_DEBUG_OUTPUT__
 		std::cerr << green_str("mods::globals::command_interpreter handled it...\n");
+#endif
 		return;
 	}
 

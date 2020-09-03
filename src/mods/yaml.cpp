@@ -50,10 +50,7 @@ namespace mods::yaml {
 		debug_echo("action_desc");\
 		action_description = yaml_file["action_description"].as<std::string>();\
 		fed_items.push_back("action_description");\
-	}catch(YAML::Exception &e){\
-		REPORT_DB_ISSUE("yaml error",e.what());\
-		this->feed_status = -3; mods::object_utils::report_yaml_exception(e,fed_items); }
-
+	}catch(YAML::Exception &e){this->feed_status = -3; mods::object_utils::report_yaml_exception(e,fed_items); REPORT_DB_ISSUE("yaml error",e.what()); }
 	std::string true_path(std::string_view type,std::string_view in_file){
 		std::string cwd = current_working_dir();
 		std::string prefixed = CAT(cwd,"/objects/",type.data(),"/",in_file.data());
@@ -152,6 +149,9 @@ namespace mods::yaml {
 			this->exported["armor_vnum"] = std::to_string(vnum);
 			this->exported["armor_rarity"] = rarity_to_string(rarity);
 			this->exported["armor_file"] = feed_file;
+			this->exported["armor_hp"] = std::to_string(hp);
+			this->exported["armor_classification"] = classification;
+			this->exported["armor_worth"] = std::to_string(worth);
 	}
 	uint64_t armor_description_t::flush_to_db(){
 		try{
@@ -191,6 +191,9 @@ namespace mods::yaml {
 			this->exported["gadget_vnum"] = std::to_string(vnum);
 			this->exported["gadget_rarity"] = rarity_to_string(rarity);
 			this->exported["gadget_file"] = feed_file;
+			this->exported["gadget_exit_key"] = std::to_string(exit_key);
+			this->exported["gadget_min_level"] = std::to_string(min_level);
+			this->exported["gadget_worth"] = std::to_string(worth);
 	}
 	uint64_t gadget_description_t::flush_to_db(){
 		try{
@@ -614,8 +617,8 @@ namespace mods::yaml {
 			MENTOC_FEED_BASE_MEMBERS
 			MENTOC_FEED_EXPLOSIVE
 		}catch(YAML::Exception &e){
-			REPORT_DB_ISSUE("error",e.what());
 			mods::object_utils::report_yaml_exception(e,fed_items);
+			REPORT_DB_ISSUE("error",e.what());
 			return -2;
 		}
 		return 0;
@@ -732,9 +735,9 @@ namespace mods::yaml {
 			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception &e){
-			REPORT_DB_ISSUE("error",e.what());
+			this->feed_status = -2;
 			mods::object_utils::report_yaml_exception(e,fed_items);
-		this->feed_status = -2;
+			REPORT_DB_ISSUE("error",e.what());
 			return -2;
 		}
 	}
@@ -764,8 +767,8 @@ namespace mods::yaml {
 			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception &e){
-			REPORT_DB_ISSUE("error",e.what());
 			mods::object_utils::report_yaml_exception(e,fed_items);
+			REPORT_DB_ISSUE("error",e.what());
 		this->feed_status = -2;
 			return -2;
 		}
@@ -808,8 +811,8 @@ namespace mods::yaml {
 			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception& e){
-			REPORT_DB_ISSUE("error",e.what());
 			mods::object_utils::report_yaml_exception(e,fed_items);
+			REPORT_DB_ISSUE("error",e.what());
 		this->feed_status = -2;
 			return -2;
 		}
@@ -848,8 +851,8 @@ namespace mods::yaml {
 			this->feed_status = 0;
 		return 0;
 		}catch(YAML::Exception& e){
-			REPORT_DB_ISSUE("error",e.what());
 			mods::object_utils::report_yaml_exception(e,fed_items);
+			REPORT_DB_ISSUE("error",e.what());
 		this->feed_status = -2;
 			return -2;
 		}
@@ -868,8 +871,8 @@ namespace mods::yaml {
 			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception& e){
-			REPORT_DB_ISSUE("error",e.what());
 			mods::object_utils::report_yaml_exception(e,fed_items);
+			REPORT_DB_ISSUE("error",e.what());
 		this->feed_status = -2;
 			return -2;
 		}
@@ -888,8 +891,8 @@ namespace mods::yaml {
 			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception& e){
-			REPORT_DB_ISSUE("error",e.what());
 			mods::object_utils::report_yaml_exception(e,fed_items);
+			REPORT_DB_ISSUE("error",e.what());
 		this->feed_status = -2;
 			return -2;
 		}
