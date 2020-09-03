@@ -159,7 +159,7 @@ namespace mods::orm {
 					mods::pq::exec(insert_transaction,up_sql);
 					mods::pq::commit(insert_transaction);
 				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error seeding player_classes: '" << e.what() << "'\n";
+					REPORT_DB_ISSUE(": error seeding player_classes: '",e.what());
 				}
 			}
 	}
@@ -201,7 +201,7 @@ namespace mods::orm {
 					mods::pq::exec(insert_transaction,up_sql);
 					mods::pq::commit(insert_transaction);
 				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error seeding player_classes: '" << e.what() << "'\n";
+					REPORT_DB_ISSUE(": error seeding player_classes: '",e.what());
 				}
 			}//end for
 	}

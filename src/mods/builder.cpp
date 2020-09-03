@@ -57,7 +57,7 @@ int next_zone_vnum(){
 					next_zone_vnum = 1;
 				}
 			}catch(std::exception& e){
-				std::cerr << "error grabbing next max room number '" << e.what() << "'\n";
+				REPORT_DB_ISSUE("error grabbing next max room number '",e.what());
 				next_zone_vnum = 1;
 			}
 		}
@@ -77,7 +77,7 @@ int next_room_vnum(){
 					next_room_number = 1;
 				}
 			}catch(std::exception& e){
-				std::cerr << "error grabbing next max room number '" << e.what() << "'\n";
+				REPORT_DB_ISSUE("error grabbing next max room number '",e.what());
 				next_room_number = 1;
 			}
 		}
@@ -480,6 +480,7 @@ namespace mods::builder {
 				mods::pq::commit(txn2);
 			}
 		} catch(std::exception& e) {
+			REPORT_DB_ISSUE("update zone commands failed",e.what());
 			return {false,std::string("Saving zone commands failed: ") + e.what()};
 		}
 
@@ -529,7 +530,7 @@ namespace mods::builder {
 				mods::pq::commit(up_txn);
 				return {true, 0,"success"};
 			}catch(std::exception& e){
-				std::cerr << "error updating zone in db: '" << e.what() << "'\n";
+				REPORT_DB_ISSUE("updating zone in db",e.what());
 				rb_debug("EXCEPTION (UPDATE)");
 				rb_debug(e.what());
 				return {false,-1,e.what()};
@@ -560,6 +561,7 @@ namespace mods::builder {
 				mods::pq::commit(txn2);
 				rb_debug("Done comitting");
 			}catch(std::exception &e){
+				REPORT_DB_ISSUE("saving zone in db",e.what());
 				rb_debug("EXCEPTION");
 				rb_debug(e.what());
 				return {false,-1};
@@ -577,7 +579,7 @@ namespace mods::builder {
 				auto zone_record = mods::pq::exec(grab_zone_pk_id_txn,zone_select_sql);
 				return {true,mods::util::stoi<zone_pkid_t>(zone_record[0]["id"].c_str())};
 			}catch(std::exception& e){
-				std::cerr << "error selecting zone from db: '" << e.what() << "'\n";
+				REPORT_DB_ISSUE("selecting zone in db",e.what());
 				rb_debug("EXCEPTION");
 				rb_debug(e.what());
 				return {false,-2};
@@ -645,7 +647,7 @@ namespace mods::builder {
 				rb_debug("done");
 				rb_debug(room_record.size());
 			}catch(std::exception& e){
-				std::cerr << "error selecting room from db: '" << e.what() << "'\n";
+				REPORT_DB_ISSUE("selecting room in db",e.what());
 				error_string = "error selecting room from db: '";
 				error_string += e.what();
 				rb_debug("EXCEPTION");
@@ -667,7 +669,7 @@ namespace mods::builder {
 				mods::pq::exec(up_txn,up_sql);
 				mods::pq::commit(up_txn);
 			}catch(std::exception& e){
-				std::cerr << "error updating room in db: '" << e.what() << "'\n";
+				REPORT_DB_ISSUE("updating room in db",e.what());
 				error_string = "error updating room in db: '";
 				error_string += e.what();
 				rb_debug("EXCEPTION (UPDATE)");
@@ -755,7 +757,7 @@ namespace mods::builder {
 						mods::pq::exec(txn2,sql);
 						mods::pq::commit(txn2);
 					}catch(std::exception& e){
-						std::cerr << "[room dir data]-> error: " << e.what() << "\n";
+						REPORT_DB_ISSUE("room dir data in db",e.what());
 					}
 				}
 				//}
@@ -770,7 +772,9 @@ namespace mods::builder {
 						+ std::to_string(world[in_room].number));
 				mods::pq::commit(room_ex_desc_d_del_txn);
 				rb_debug("deleted..");
-			}catch(std::exception &e){ }
+			}catch(std::exception &e){
+				REPORT_DB_ISSUE("deleting room extra desc data in db",e.what());
+			}
 			for(const auto & ex_desc : world[in_room].ex_descriptions()){
 				values.clear();
 				values["ex_keyword"] = ex_desc.keyword.c_str();
@@ -788,7 +792,7 @@ namespace mods::builder {
 						mods::pq::exec(room_ex_desc_data_txn,sql);
 						mods::pq::commit(room_ex_desc_data_txn);
 					}catch(std::exception& e){
-						std::cerr << "[room_extra_desc_data]-> error: '" << e.what() << "'\n";
+						REPORT_DB_ISSUE("[room_extra_desc_data]-> error",e.what());
 						error_string = "[room_extra_desc_data]->error: '";
 						error_string += e.what();
 						rb_debug(error_string);
@@ -952,6 +956,7 @@ namespace mods::builder {
 			mods::pq::exec(t,sql);
 			mods::pq::commit(t);
 		} catch(std::exception& e) {
+			REPORT_DB_ISSUE("error",e.what());
 			return {false,std::string("Exception occurred: ") + e.what()};
 		}
 		return {true,"Saved zone successfully."};
@@ -1053,6 +1058,7 @@ namespace mods::builder {
 			mods::pq::exec(txn_02,sql);
 			mods::pq::commit(txn_02);
 		} catch(const std::exception& e) {
+			REPORT_DB_ISSUE("error",e.what());
 			return {false,e.what()};
 		}
 
@@ -1104,6 +1110,7 @@ namespace mods::builder {
 			}
 
 		} catch(std::exception& e) {
+			REPORT_DB_ISSUE("error",e.what());
 			return {false,std::string("Exception occurred: ") + e.what()};
 		}
 		return {true,"saved successfully"};

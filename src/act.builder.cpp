@@ -1,3 +1,4 @@
+#include "mods/db-report.hpp"
 #include "conf.h"
 #include "sysdep.h"
 
@@ -90,7 +91,7 @@ int next_obj_number(){
 			return mods::util::stoi<int>(rec[0]["obj_number"]);
 		}
 	}catch(std::exception& e){
-		std::cerr << __FILE__ << ": " << __LINE__ << ": error in next_obj_number(): '" << e.what() << "'\n";
+		REPORT_DB_ISSUE(": error in next_obj_number(): '",e.what());
 		return -1;
 	}
 }
@@ -126,7 +127,7 @@ int next_zone_number() {
 			mods::adhoc::max_zone = mods::util::stoi<int>(zone_record[0]["zone_number"]);
 		}
 	}catch(std::exception& e){
-		std::cerr << __FILE__ << ": " << __LINE__ << ": error in next_zone_number(): '" << e.what() << "'\n";
+		REPORT_DB_ISSUE(": error in next_zone_number(): '",e.what());
 		return -1;
 	}
 	}
@@ -159,7 +160,7 @@ int next_room_number(){
 				}
 			}
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error in next_room_number(): '" << e.what() << "'\n";
+			REPORT_DB_ISSUE(": error in next_room_number(): '",e.what());
 		}
 	}
 	return mods::adhoc::next_room();
@@ -184,7 +185,7 @@ int next_mob_number(){
 			mods::adhoc::max_mob = mods::util::stoi<int>(mob_record[0]["mob_number"]);
 		}
 	}catch(std::exception& e){
-		std::cerr << __FILE__ << ": " << __LINE__ << ": error in next_mob_number(): '" << e.what() << "'\n";
+		REPORT_DB_ISSUE(": error in next_mob_number(): '",e.what());
 		return -1;
 	}
 	}

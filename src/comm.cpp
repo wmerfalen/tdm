@@ -11,6 +11,7 @@
 #define __COMM_C__
 
 #include "globals.hpp"
+#include "mods/db-report.hpp"
 #include <array>
 #include "conf.h"
 #include "sysdep.h"
@@ -233,6 +234,7 @@ namespace mods::bugs {
 };
 void atexit_handler(){
 	mods::bugs::close();
+	mods::db_report::close();
 }
 /***********************************************************************
  *  main game loop and related stuff                                    *

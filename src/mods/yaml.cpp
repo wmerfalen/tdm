@@ -1,3 +1,4 @@
+#include "db-report.hpp"
 #include "yaml.hpp"
 #include "sql.hpp"
 #include "object-utils.hpp"
@@ -49,7 +50,9 @@ namespace mods::yaml {
 		debug_echo("action_desc");\
 		action_description = yaml_file["action_description"].as<std::string>();\
 		fed_items.push_back("action_description");\
-	}catch(YAML::Exception &e){ this->feed_status = -3; mods::object_utils::report_yaml_exception(e,fed_items); }
+	}catch(YAML::Exception &e){\
+		REPORT_DB_ISSUE("yaml error",e.what());\
+		this->feed_status = -3; mods::object_utils::report_yaml_exception(e,fed_items); }
 
 	std::string true_path(std::string_view type,std::string_view in_file){
 		std::string cwd = current_working_dir();
@@ -168,7 +171,7 @@ namespace mods::yaml {
 			}
 			return 0;
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting new object_armor record: '" << e.what() << "'\n";
+			REPORT_DB_ISSUE(": error inserting new object_armor record: '",e.what());
 			return 0;
 		}
 	}
@@ -207,7 +210,7 @@ namespace mods::yaml {
 			}
 			return 0;
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting new object_gadget record: '" << e.what() << "'\n";
+			REPORT_DB_ISSUE(": error inserting new object_gadget record: '",e.what());
 			return 0;
 		}
 	}
@@ -219,7 +222,7 @@ namespace mods::yaml {
 			MENTOC_FEED_GADGET
 			MENTOC_FEED_BASE_MEMBERS
 		}catch(std::exception &e){
-			std::cerr << "[exception] rifle feed: '" << e.what() << "'\n";
+			REPORT_DB_ISSUE("rifle feed error",e.what());
 			return -1;
 		}
 		return 0;
@@ -563,7 +566,7 @@ namespace mods::yaml {
 			}
 			return 0;
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting new object_rifle record: '" << e.what() << "'\n";
+			REPORT_DB_ISSUE(": error inserting new object_rifle record: '",e.what());
 			return 0;
 		}
 	}
@@ -611,6 +614,7 @@ namespace mods::yaml {
 			MENTOC_FEED_BASE_MEMBERS
 			MENTOC_FEED_EXPLOSIVE
 		}catch(YAML::Exception &e){
+			REPORT_DB_ISSUE("error",e.what());
 			mods::object_utils::report_yaml_exception(e,fed_items);
 			return -2;
 		}
@@ -669,7 +673,7 @@ namespace mods::yaml {
 			}
 			return 0;
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting new object_explosive record: '" << e.what() << "'\n";
+			REPORT_DB_ISSUE(": error inserting new object_explosive record: '",e.what());
 			return 0;
 		}
 	}
@@ -728,6 +732,7 @@ namespace mods::yaml {
 			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception &e){
+			REPORT_DB_ISSUE("error",e.what());
 			mods::object_utils::report_yaml_exception(e,fed_items);
 		this->feed_status = -2;
 			return -2;
@@ -759,7 +764,7 @@ namespace mods::yaml {
 			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception &e){
-			std::cerr << "[YAML::EXCEPTION]:'" << e.what() << "'\n";
+			REPORT_DB_ISSUE("error",e.what());
 			mods::object_utils::report_yaml_exception(e,fed_items);
 		this->feed_status = -2;
 			return -2;
@@ -782,7 +787,7 @@ namespace mods::yaml {
 			MENTOC_FEED_BASE_MEMBERS
 			MENTOC_FEED_RIFLE
 		}catch(std::exception &e){
-			std::cerr << "[exception] rifle feed: '" << e.what() << "'\n";
+			REPORT_DB_ISSUE("rifle error",e.what());
 			return -1;
 		}
 		return 0;
@@ -803,6 +808,7 @@ namespace mods::yaml {
 			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception& e){
+			REPORT_DB_ISSUE("error",e.what());
 			mods::object_utils::report_yaml_exception(e,fed_items);
 		this->feed_status = -2;
 			return -2;
@@ -821,6 +827,7 @@ namespace mods::yaml {
 			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception& e){
+			REPORT_DB_ISSUE("error",e.what());
 			mods::object_utils::report_yaml_exception(e,fed_items);
 		this->feed_status = -2;
 			return -2;
@@ -841,6 +848,7 @@ namespace mods::yaml {
 			this->feed_status = 0;
 		return 0;
 		}catch(YAML::Exception& e){
+			REPORT_DB_ISSUE("error",e.what());
 			mods::object_utils::report_yaml_exception(e,fed_items);
 		this->feed_status = -2;
 			return -2;
@@ -860,6 +868,7 @@ namespace mods::yaml {
 			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception& e){
+			REPORT_DB_ISSUE("error",e.what());
 			mods::object_utils::report_yaml_exception(e,fed_items);
 		this->feed_status = -2;
 			return -2;
@@ -879,6 +888,7 @@ namespace mods::yaml {
 			this->feed_status = 0;
 			return 0;
 		}catch(YAML::Exception& e){
+			REPORT_DB_ISSUE("error",e.what());
 			mods::object_utils::report_yaml_exception(e,fed_items);
 		this->feed_status = -2;
 			return -2;

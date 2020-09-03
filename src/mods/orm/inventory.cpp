@@ -78,7 +78,7 @@ namespace mods::orm::inventory {
 			}
 			mods::pq::commit(select_transaction);
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character preferences by pkid: '" << e.what() << "'\n";
+			REPORT_DB_ISSUE(": error loading character preferences by pkid: '",e.what());
 		}
 		return nullptr;
 	}
@@ -131,7 +131,7 @@ namespace mods::orm::inventory {
 					d("[sql][feed_player] size: " << player_record.size() << "\n");
 					return player_record.size();
 				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
+					REPORT_DB_ISSUE(": error loading character by pkid: '",e.what());
 					return -2;
 				}
 			}
@@ -155,7 +155,7 @@ namespace mods::orm::inventory {
 					mods::pq::exec(del_txn,up_sql);
 					mods::pq::commit(del_txn);
 				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error deleting player's existing player_object row: '" << e.what() << "'\n";
+					REPORT_DB_ISSUE(": error deleting player's existing player_object row: '",e.what());
 				}
 				d("done");
 			}
@@ -211,7 +211,7 @@ namespace mods::orm::inventory {
 					mods::pq::exec(insert_transaction,up_sql);
 					mods::pq::commit(insert_transaction);
 				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting player_object row: '" << e.what() << "'\n";
+					REPORT_DB_ISSUE(": error inserting player_object row: '",e.what());
 				}
 				d("Done [position:" << i << "]");
 			}
@@ -253,7 +253,7 @@ namespace mods::orm::inventory {
 					mods::pq::exec(insert_transaction,up_sql);
 					mods::pq::commit(insert_transaction);
 				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting player_object row: '" << e.what() << "'\n";
+					REPORT_DB_ISSUE(": error inserting player_object row: '",e.what());
 					continue;
 				}
 			}

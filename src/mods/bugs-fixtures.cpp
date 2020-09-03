@@ -10,7 +10,7 @@ namespace mods::bugs {
 		if(!opened){
 			out = std::make_shared<std::ofstream>("fixtures.log",std::ios::app | std::ios::out);
 			opened = true;
-			(*out) << CAT("[[[--------------- FIXTURES ----------](date:",mods::util::current_time_string(),")\n");
+			(*out) << CAT("[[[--------------- FIXTURES ----------](date:",mods::util::time_string(),")\n");
 		}
 		std::string buffer = CAT("[[[bug::fixture::->",msg.data(),"]]]\n");
 		std::cerr << red_str(buffer);

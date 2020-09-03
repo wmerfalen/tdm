@@ -16,6 +16,7 @@
 #else
 #include <dirent.h>
 #endif
+#include <ctime>
 	
 #ifndef __MENTOC_STRING_LIT__
 #define __MENTOC_STRING_LIT__
@@ -64,11 +65,25 @@ namespace mods::util {
 	static inline void detexturize_room(room_rnum room_id, room_data::texture_type_t texture_type){
 		world[room_id].remove_texture(texture_type);
 	}
-	static inline std::string current_time_string(){
-		time_t t;
-		time(&t);
-		return ctime(&t);
+	static inline std::string time_string(){
+		 char outstr[200];
+		 time_t t;
+		 struct tm *tmp;
+
+		 t = time(NULL);
+		 tmp = localtime(&t);
+		 if (tmp == NULL) {
+			 return "date-unknown";
+		 }
+		 std::string format = "%";
+		 format += "F-%";
+		 format += "T";
+		 if (strftime(outstr, sizeof(outstr), format.c_str(), tmp) == 0) {
+			 return "date-unknown";
+		 }
+		 return outstr;
 	}
+
 
 
 namespace detail{ 

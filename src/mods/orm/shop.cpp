@@ -17,7 +17,7 @@ namespace mods::orm {
 			mods::pq::exec(del_transaction,up_sql);
 			mods::pq::commit(del_transaction);
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error deleting from '" << shop_rooms::table_name << "': " << e.what() << "'\n";
+			REPORT_DB_ISSUE(": error deleting from '",e.what());
 		}
 	}
 	void delete_shop_objects(shop_vnum shop_vnum_id){
@@ -32,7 +32,7 @@ namespace mods::orm {
 			mods::pq::exec(del_transaction,up_sql);
 			mods::pq::commit(del_transaction);
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error deleting from '" << shop_rooms::table_name << "': " << e.what() << "'\n";
+			REPORT_DB_ISSUE(": error deleting from '",e.what());
 		}
 	}
 	int64_t				shop::db_id() const { return shop_id; }
@@ -49,7 +49,7 @@ namespace mods::orm {
 			mods::pq::commit(del_transaction);
 			return 1;
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error deleting from '" << shop::table_name << "': " << e.what() << "'\n";
+			REPORT_DB_ISSUE(": error deleting from '",e.what());
 		}
 		return 0;
 	}
@@ -123,7 +123,7 @@ namespace mods::orm {
 				}
 				return {false,0,"unreachable"};
 			}catch(std::exception& e){
-				std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting into '" << shop::table_name << "': " << e.what() << "'\n";
+				REPORT_DB_ISSUE(": error inserting into '",e.what());
 				return {false,0,e.what()};
 			}
 			return {false,0,"unreachable"};
@@ -145,7 +145,7 @@ namespace mods::orm {
 				mods::pq::exec(insert_transaction,ins_sql);
 				mods::pq::commit(insert_transaction);
 			}catch(std::exception& e){
-				std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting into '" << shop_objects::table_name << "': " << e.what() << "'\n";
+				REPORT_DB_ISSUE(": error inserting into '",e.what());
 			}
 		}
 	}
@@ -164,7 +164,7 @@ namespace mods::orm {
 				mods::pq::exec(insert_transaction,ins_sql);
 				mods::pq::commit(insert_transaction);
 			}catch(std::exception& e){
-				std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting into '" << shop_rooms::table_name << "': " << e.what() << "'\n";
+				REPORT_DB_ISSUE(": error inserting into '",e.what());
 			}
 		}
 	}

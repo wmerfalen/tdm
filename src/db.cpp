@@ -10,6 +10,7 @@
 
 #define __DB_C__
 
+#include "mods/db-report.hpp"
 #include "conf.h"
 #include "sysdep.h"
 
@@ -225,7 +226,7 @@ namespace db {
 			mods::pq::commit(up_txn);
 			return 0;
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error updating character by pkid: '" << e.what() << "'\n";
+			REPORT_DB_ISSUE("error updating character by pkid",e.what());
 			return -1;
 		}
 	}
@@ -245,7 +246,7 @@ namespace db {
 			mods::pq::commit(delete_txn);
 			return 0;
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error deleting character: '" << e.what() << "'\n";
+			REPORT_DB_ISSUE("error deleting character",e.what());
 			return -1;
 		}
 	}
@@ -265,7 +266,7 @@ namespace db {
 			mods::pq::commit(insert_transaction);
 			return 0;
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error inserting new character: '" << e.what() << "'\n";
+			REPORT_DB_ISSUE("error inserting new character",e.what());
 			return -1;
 		}
 	}
@@ -286,7 +287,7 @@ namespace db {
 			log("SYSERR: couldn't grab player's pkid: '%s'",player->name().c_str());
 			return -1;
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
+			REPORT_DB_ISSUE("error loading character by pkid",e.what());
 			return -2;
 		}
 	}
@@ -308,7 +309,7 @@ namespace db {
 			player->set_prefs(0);
 			return -1;
 		}catch(std::exception& e){
-			std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character preferences by pkid: '" << e.what() << "'\n";
+			REPORT_DB_ISSUE("error loading character preferences by pkid",e.what());
 			return -2;
 		}
 	}
@@ -1171,7 +1172,7 @@ int parse_sql_objects() {
 				exit(6);
 			}
 			if(row["obj_type"].as<int>() == 0 || !row["obj_file"].c_str()){
-				std::cerr << "parse_sql_objects encountered broken row: " << row["id"] << ".. skipping... \n";
+				REPORT_DB_ISSUE("parse_sql_objects encountered broken row ","");
 				continue;
 			}
 			mods::object_utils::set_yaml_initiator("parse_sql_objects","",row["obj_file"].c_str());
@@ -1426,7 +1427,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				mods::rooms::set_flag_absolute(world.size()-1,room_records_row["room_flag"].as<int>(0));
 				top_of_world = world.size();
 			}catch(std::exception& e){
-				std::cerr << "SYSERR: exception select from rooms db: " << e.what() << "\n";
+				REPORT_DB_ISSUE("SYSERR: exception select from rooms db: ",e.what());
 			}
 		}
 		log("parse_sql_rooms: world.size(): %d",world.size());
@@ -1461,7 +1462,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 			//log("DEBUG: set dir option: direction %d gen_desc: '%s' keyword: '%s'",direction,gen_desc.c_str(),keyword.c_str());
 		}
 	}catch(std::exception& e){
-		std::cerr << "error selecting room from db: '" << e.what() << "'\n";
+		REPORT_DB_ISSUE("error selecting room from dd",e.what());
 		return {-1,std::string("An exception occured: ") + e.what()};
 	}
 	return {world.size(),"okay"};
@@ -2566,7 +2567,7 @@ bool login(std::string_view user_name,std::string_view password){
 		auto row = mods::pq::exec(select_transaction,room_sql.data());
 		return row.size();
 	}catch(std::exception& e){
-		std::cerr << __FILE__ << ": " << __LINE__ << " login() exception: " << e.what() << "\n";
+		REPORT_DB_ISSUE("login exception",e.what());
 		return false;
 	}
 }

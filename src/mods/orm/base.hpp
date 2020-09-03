@@ -1,6 +1,6 @@
 #ifndef __MENTOC_MODS_ORM_BASE_HEADER__
 #define __MENTOC_MODS_ORM_BASE_HEADER__
-
+#include "../db-report.hpp"
 #include <iostream>
 #include <vector>
 #include "../player.hpp"
@@ -37,7 +37,7 @@ namespace mods::orm {
 						return {record.size(),record[0][returning_field.data()].c_str()};
 					}
 				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error initializing sentinel class row: '" << e.what() << "'\n";
+					REPORT_DB_ISSUE(": error initializing sentinel class row: '",e.what());
 					return {-1,e.what()};
 				}
 				return {-2,"unknown"};
@@ -97,7 +97,7 @@ namespace mods::orm {
 					mods::pq::commit(up_txn);
 					return {0,"okay"};
 				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error updating room by pkid: '" << e.what() << "'\n";
+					REPORT_DB_ISSUE(": error updating room by pkid: '",e.what());
 					return {-1,e.what()};
 				}
 				return {-2,"unknown"};
@@ -121,7 +121,7 @@ namespace mods::orm {
 					}
 					return {player_record.size(),"okay"};
 				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
+					REPORT_DB_ISSUE(": error loading character by pkid: '",e.what());
 					return {-1,e.what()};
 				}
 				return {-2,"unknown"};
@@ -141,7 +141,7 @@ namespace mods::orm {
 						return {player_record.size(),"okay"};
 					}
 				}catch(std::exception& e){
-					std::cerr << __FILE__ << ": " << __LINE__ << ": error loading character by pkid: '" << e.what() << "'\n";
+					REPORT_DB_ISSUE(": error loading character by pkid: '",e.what());
 					return {-1,e.what()};
 				}
 				return {-2,"unknown"};
