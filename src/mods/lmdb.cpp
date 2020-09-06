@@ -112,8 +112,9 @@ namespace mods::lmdb {
 		}
 	}
 
+#define __MENTOC_SHOW_LMDB_DEBUG__
 #ifdef __MENTOC_SHOW_LMDB_DEBUG__
-	void lmdb_debug(std::string f){ std::cerr << "[lmdb_debug]:'" << f << "'\n"; }
+#define lmdb_debug(A) std::cerr << "[lmdb_debug]:'" << A << "'\n";
 #else
 	#define lmdb_debug(a) /** */
 #endif

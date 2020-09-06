@@ -3,6 +3,7 @@
 #include "../object-utils.hpp"
 #include "../injure.hpp"
 #include "../rooms.hpp"
+#include "../skills.hpp"
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #ifndef TO_ROOM
 #define TO_ROOM		1
@@ -36,7 +37,21 @@ namespace mods::weapons::damage_types {
 	bool can_be_injured(player_ptr_t& victim){
 		return victim->hp() <= (victim->max_hp() * INJURED_MAX_HP_MULTIPLIER());
 	}
-	
+	void reflect_munitions(player_ptr_t& attacker,player_ptr_t& victim,int dam,int from_direction){
+		feedback_t f;
+		f.hits = 1;
+		f.damage = dam;
+		f.from_direction = from_direction;
+		f.attacker = attacker->uuid();
+
+		f.damage_event = de::YOU_GOT_HIT_BY_REFLECTED_MUNITIONS_EVENT;
+		victim->damage_event(f);
+
+		f.attacker = victim->uuid();
+		f.damage_event = de::YOU_REFLECTED_MUNITIONS_EVENT;
+		attacker->damage_event(f);
+	}
+
 	namespace legacy {
 		int step_one(char_data *ch, char_data *victim, int dam, int attacktype) {
 			/*TODO: Modify this code to allow sniping */
@@ -285,9 +300,15 @@ namespace mods::weapons::damage_types {
 		legacy::send_combat_messages(nullptr,victim,damage,0);
 	}
 
-	bool attack_injures(obj_ptr_t& weapon) {
-		/** TODO: calculate other buffs/nerfs here */
-		return mods::injure::do_injure_roll(weapon->rifle()->attributes->chance_to_injure);
+	bool attack_injures(player_ptr_t& player,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t feedback){
+		auto chance = weapon->rifle()->attributes->chance_to_injure;
+		if(mods::skills::player_can(player,skill_t::INCREASED_INJURE_CHANCE)){
+			chance += CHANCE_TO_INJURE_SKILL_MODIFIER();
+		}
+		if(mods::skills::player_can(victim,skill_t::INJURE_RESISTANCE)){
+			chance -= INJURE_RESISTANCE_SKILL_MODIFIER();
+		}
+		return mods::injure::do_injure_roll(chance);
 	}
 
 	namespace elemental {
@@ -332,6 +353,13 @@ namespace mods::weapons::damage_types {
 				log("SYSERR: invalid rifle type");
 				return TYPE_SNIPE;
 		}
+	}
+	uint8_t calculate_spray_chance(player_ptr_t& player){
+		uint8_t spray_chance = mods::values::SPRAY_CHANCE();
+		if(mods::skills::player_can(player,skill_t::SPRAY_CHANCE)){
+			spray_chance += mods::values::SPRAY_CHANCE_SKILL_MODIFIER();
+		}
+		return spray_chance;
 	}
 
 	/**
@@ -431,7 +459,7 @@ namespace mods::weapons::damage_types {
 				player->sendln(MSG_TARGET_IN_PEACEFUL_ROOM());
 				continue;
 			}
-			if(dice(1,(100 * scanned_target.distance)) <= mods::values::SPRAY_CHANCE()){
+			if(dice(1,(100 * scanned_target.distance)) <= calculate_spray_chance(player)){
 				player->send(MSG_HIT().c_str());
 				int spray_damage = 0;
 				spray_damage = dice(damage_dice,damage_sides);
@@ -476,12 +504,15 @@ namespace mods::weapons::damage_types {
 					feedback.damage_event = de::YOU_MISSED_YOUR_TARGET_EVENT;
 					player->damage_event(feedback);
 				}else if(dam > 0){
+					if(mods::skills::player_can(victim,skill_t::MUNITIONS_REFLECTOR) && dice(1,100) <= 4){
+						reflect_munitions(player,victim,dam,OPPOSITE_DIR(direction));
+					}
 					feedback.hits++;
 					feedback.damage += dam;
 					feedback.damage_info.emplace_back(victim->uuid(),dam,victim->room());
 					victim->set_attacker(player->uuid());
 					MFEEDBACK(feedback.hits,dam,de::HIT_BY_SPRAY_ATTACK);
-					if(attack_injures(weapon) && can_be_injured(victim)){
+					if(attack_injures(player,victim,weapon,feedback) && can_be_injured(victim)){
 						mods::injure::injure_player(victim);
 						feedback.injured.emplace_back(victim->uuid());
 						MFEEDBACK(feedback.hits,dam,de::YOU_ARE_INJURED_EVENT);
@@ -695,7 +726,8 @@ namespace mods::weapons::damage_types {
 		}
 
 		/** calculate headshot */
-		if(dice(1,100) >= 95){
+		auto headshot_roll = dice(1,100) + (mods::skills::player_can(player,skill_t::HEADSHOT_CHANCE) ? mods::values::HEADSHOT_SKILL_MODIFIER() : 0);
+		if(headshot_roll >= 95){
 			/** TODO: evaluate damage if wearing super strong headgear */
 			int headshot_damage = victim->hp() / HEADSHOT_DIVISOR();
 			dam = headshot_damage;
@@ -783,7 +815,7 @@ namespace mods::weapons::damage_types {
 							victim->cd()->mob_specials.snipe_tracking = player->uuid();
 						}
 					}
-					if(attack_injures(weapon)){
+					if(attack_injures(player,victim,weapon,feedback)){
 						feedback.injured.emplace_back(victim->uuid());
 						feedback.damage_event= de::YOU_ARE_INJURED_EVENT;
 						victim->damage_event(feedback);

@@ -627,9 +627,9 @@ CCWHT	screen.h	36;"	d
 CCYEL	screen.h	32;"	d
 CEMENT	structs.h	/^			CEMENT,			\/** asphault, nearly indestructible *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 CGET	mods/values.hpp	28;"	d
-CGET	mods/values.hpp	464;"	d
-CGET_DEF	mods/values.cpp	371;"	d	file:
-CGET_DEF	mods/values.cpp	761;"	d	file:
+CGET	mods/values.hpp	565;"	d
+CGET_DEF	mods/values.cpp	481;"	d	file:
+CGET_DEF	mods/values.cpp	972;"	d	file:
 CHAINABLE_BREACHING	mods/skills.hpp	/^			CHAINABLE_BREACHING,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 CHAOTIC	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 CHARM	mods/flags.hpp	/^		CHARM,$/;"	e	enum:mods::flags::aff
@@ -986,7 +986,7 @@ EXPLODE	mods/weapon-types.hpp	/^		EXPLODE,$/;"	e	enum:mods::weapon::capabilities
 EXPLOSIVE	mods/aoe.hpp	/^		EXPLOSIVE,	\/** Typical explosive dmg from a frag grenade *\/$/;"	e	enum:mods::aoe::types_t
 EXPLOSIVE_NONE	mods/item-types.hpp	/^		EXPLOSIVE_NONE = 0,$/;"	e	enum:mods::weapon::type::explosive
 EXPLOSIVE_RESISTANCE	mods/skills.hpp	/^			EXPLOSIVE_RESISTANCE,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
-EXP_MAX	class.cpp	1126;"	d	file:
+EXP_MAX	class.cpp	1137;"	d	file:
 EXTENDED	mods/weapon.hpp	/^		COMPENSATOR, MUZZLE_BRAKE,EXTENDED,$/;"	e	enum:mods::weapon::barrel_t
 EXTENDED_MAGAZINE	mods/weapon.hpp	/^		EXTENDED_MAGAZINE,$/;"	e	enum:mods::weapon::magazine_t
 EXTENDS_CLIP	mods/weapon-types.hpp	/^		EXTENDS_CLIP,$/;"	e	enum:mods::weapon::capabilities::cap_t
@@ -1368,7 +1368,7 @@ IS_NPC	utils.h	231;"	d
 IS_SET	utils.h	200;"	d
 IS_SUPPORT	utils.h	511;"	d
 IS_THIEF	utils.h	506;"	d
-IS_TOPIC	act.informative.cpp	1375;"	d	file:
+IS_TOPIC	act.informative.cpp	1372;"	d	file:
 IS_WARRIOR	utils.h	510;"	d
 IS_WEAPON	fight.cpp	125;"	d	file:
 IS_WEAPON_LOADED	mods/weapon.hpp	15;"	d
@@ -3084,7 +3084,7 @@ UNUSED17	mods/flags.hpp	/^		UNUSED17,				\/\/ useless$/;"	e	enum:mods::flags::af
 UP	structs.h	157;"	d
 UPDATE	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_type_t
 UPPER	utils.h	156;"	d
-USERS_FORMAT	act.informative.cpp	1617;"	d	file:
+USERS_FORMAT	act.informative.cpp	1614;"	d	file:
 USE_AUTOEQ	structs.h	116;"	d
 USURP	interpreter.cpp	1633;"	d	file:
 Unknown	mods/catch.hpp	/^			Unknown = -1,$/;"	e	enum:Catch::ResultWas::OfType
@@ -3149,7 +3149,7 @@ WEAR_WRIST_R	structs.h	392;"	d
 WELC_MESSG	config.cpp	/^const char *WELC_MESSG =$/;"	v
 WEST	structs.h	156;"	d
 WHEN	mods/catch.hpp	12215;"	d
-WHO_FORMAT	act.informative.cpp	1428;"	d	file:
+WHO_FORMAT	act.informative.cpp	1425;"	d	file:
 WILL	telnet.h	46;"	d
 WILL_BANK_MONEY	shop.h	164;"	d
 WILL_START_FIGHT	shop.h	163;"	d
@@ -3172,8 +3172,10 @@ YOU_DEALT_HEADSHOT_WITH_RIFLE_ATTACK	mods/damage-event.hpp	/^	YOU_DEALT_HEADSHOT
 YOU_DEALT_HEADSHOT_WITH_SPRAY_ATTACK	mods/damage-event.hpp	/^	YOU_DEALT_HEADSHOT_WITH_SPRAY_ATTACK,$/;"	e	enum:uint16_t
 YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK	mods/damage-event.hpp	/^	YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK,$/;"	e	enum:uint16_t
 YOU_GOT_HEADSHOT_BY_SPRAY_ATTACK	mods/damage-event.hpp	/^	YOU_GOT_HEADSHOT_BY_SPRAY_ATTACK,$/;"	e	enum:uint16_t
+YOU_GOT_HIT_BY_REFLECTED_MUNITIONS_EVENT	mods/damage-event.hpp	/^	YOU_GOT_HIT_BY_REFLECTED_MUNITIONS_EVENT,$/;"	e	enum:uint16_t
 YOU_INJURED_SOMEONE_EVENT	mods/damage-event.hpp	/^	YOU_INJURED_SOMEONE_EVENT,$/;"	e	enum:uint16_t
 YOU_MISSED_YOUR_TARGET_EVENT	mods/damage-event.hpp	/^	YOU_MISSED_YOUR_TARGET_EVENT,$/;"	e	enum:uint16_t
+YOU_REFLECTED_MUNITIONS_EVENT	mods/damage-event.hpp	/^	YOU_REFLECTED_MUNITIONS_EVENT,$/;"	e	enum:uint16_t
 YamlFeedExceptionInfo	mods/object-utils.hpp	/^		YamlFeedExceptionInfo($/;"	f	struct:mods::object_utils::YamlFeedExceptionInfo
 YamlFeedExceptionInfo	mods/object-utils.hpp	/^	struct YamlFeedExceptionInfo {$/;"	s	namespace:mods::object_utils
 Yes	mods/catch.hpp	/^			Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
@@ -3304,6 +3306,7 @@ __MENTOC_MODS_SQL_HEADER__	mods/sql.hpp	9;"	d
 __MENTOC_MODS_STRING_HEADER__	mods/string.hpp	2;"	d
 __MENTOC_MODS_TESTING_INDEX_HEADER__	mods/testing_index.hpp	2;"	d
 __MENTOC_MODS_VALUES_HEADER__	mods/values.hpp	2;"	d
+__MENTOC_MODS_VALUES_SHOW_DEBUG_OUTPUT__	mods/values.cpp	7;"	d	file:
 __MENTOC_MODS_WEAPONS_INTENT_HEADER__	mods/intent.hpp	2;"	d
 __MENTOC_MODS_WEAPON_HEADER__	mods/weapon.hpp	2;"	d
 __MENTOC_MODS_WEAPON_STAT_LIST_HEADER__	mods/weapon-stat-list.hpp	2;"	d
@@ -3322,6 +3325,8 @@ __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
 __MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	29;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__	mods/behaviour_tree_impl.cpp	16;"	d	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	992;"	d	file:
+__MENTOC_SHOW_LMDB_DEBUG__	mods/db.cpp	6;"	d	file:
+__MENTOC_SHOW_LMDB_DEBUG__	mods/lmdb.cpp	115;"	d	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	d
 __MENTOC_STRING_LIT__	mods/util.hpp	22;"	d
 __MENTOC_TYPES_HEADER__	types.hpp	2;"	d
@@ -5273,8 +5278,8 @@ lmdb	mods/lmdb.cpp	/^namespace mods::lmdb {$/;"	n	class:mods	file:
 lmdb	mods/lmdb.hpp	/^namespace mods::lmdb {$/;"	n	class:mods
 lmdb	mods/player.cpp	/^namespace mods::orm::inventory::lmdb {$/;"	n	class:mods::orm::inventory	file:
 lmdb_commit	mods/db.cpp	/^void lmdb_commit(){$/;"	f	namespace:mods::db
-lmdb_debug	mods/lmdb.cpp	/^	void lmdb_debug(std::string f){ std::cerr << "[lmdb_debug]:'" << f << "'\\n"; }$/;"	f	namespace:mods::lmdb
-lmdb_debug	mods/lmdb.cpp	118;"	d	file:
+lmdb_debug	mods/lmdb.cpp	117;"	d	file:
+lmdb_debug	mods/lmdb.cpp	119;"	d	file:
 lmdb_del	mods/db.cpp	/^void lmdb_del(std::string key){$/;"	f	namespace:mods::db
 lmdb_exists	mods/db.cpp	/^bool lmdb_exists(std::string key) {$/;"	f	namespace:mods::db
 lmdb_export_char	mods/db.cpp	/^void lmdb_export_char(player_ptr_t player_ptr, mutable_map_t &values){$/;"	f	namespace:mods::db
@@ -5298,6 +5303,7 @@ load_c_test_functions	mods/js.cpp	/^		void load_c_test_functions(duk_context *ct
 load_char_pkid	db.cpp	/^	int16_t load_char_pkid(player_ptr_t& player){$/;"	f	namespace:db
 load_char_prefs	db.cpp	/^	int16_t load_char_prefs(player_ptr_t& player){$/;"	f	namespace:db
 load_from_lmdb	mods/values.cpp	/^		void load_from_lmdb(std::string in_key){$/;"	f	namespace:mods::values
+load_from_values	mods/skills.cpp	/^	void load_from_values(){$/;"	f	namespace:mods::skills
 load_help	db.cpp	/^void load_help(FILE *fl) {$/;"	f
 load_into_inventory	config.cpp	/^int load_into_inventory = NO;$/;"	v
 load_library	mods/js.cpp	/^		int load_library(duk_context *ctx,std::string_view file) {$/;"	f	namespace:mods::js
@@ -5400,6 +5406,8 @@ m_dbi	mods/lmdb.hpp	/^		MDB_dbi	m_dbi;$/;"	m	struct:mods::lmdb::_db_handle
 m_dbi_opened	mods/lmdb.hpp	/^		bool m_dbi_opened;$/;"	m	struct:mods::lmdb::_db_handle
 m_deallocate	mods/string.cpp	/^	void string::m_deallocate(){$/;"	f	class:mods::string
 m_debug	mods/string.cpp	4;"	d	file:
+m_debug	mods/values.cpp	11;"	d	file:
+m_debug	mods/values.cpp	9;"	d	file:
 m_desc	mods/player.hpp	/^		std::shared_ptr<mods::descriptor_data> m_desc;$/;"	m	struct:mods::player
 m_destroy_queue	mods/affects.hpp	/^			std::vector<TAffects> m_destroy_queue;$/;"	m	struct:mods::affects::dissolver
 m_dir	mods/js.hpp	/^				std::string m_dir;$/;"	m	struct:mods::js::include
@@ -5636,7 +5644,7 @@ mini_gunner_random_disorient_stings	mods/values.hpp	/^		static std::string mini_
 mini_mud	db.cpp	/^int mini_mud = 0;		\/* mini-mud mode?		 *\/$/;"	v
 minimum_level	interpreter.h	/^	sh_int minimum_level;$/;"	m	struct:command_info
 minimum_position	interpreter.h	/^	byte minimum_position;$/;"	m	struct:command_info
-minimum_profiency	mods/skills.hpp	/^			uint16_t minimum_profiency;$/;"	m	struct:mods::skills::proficiencies::proficiency_t
+minimum_proficiency	mods/skills.hpp	/^			uint16_t minimum_proficiency;$/;"	m	struct:mods::skills::proficiencies::proficiency_t
 misc_pref_enum_t	mods/player.hpp	/^		enum misc_pref_enum_t {$/;"	g	struct:mods::player
 missed	mods/values.hpp	/^			static inline void missed(T& p){$/;"	f	namespace:mods::values::msg
 missing_cash1	shop.h	/^	mods::string missing_cash1;		\/* Message if keeper hasn't got cash	*\/$/;"	m	struct:shop_data
@@ -7080,7 +7088,11 @@ value	mods/catch.hpp	/^			enum { value = sizeof(testStreamable(s << t)) == sizeo
 value	structs.h	/^		int	value[4];	\/* Values of the item (see list)    *\/$/;"	m	struct:obj_flag_data
 value	structs.h	/^		int	value[4];$/;"	m	struct:obj_file_elem
 value_callback	mods/builder_util.hpp	/^	typedef std::function<void(sql_compositor::value_map&)> value_callback;$/;"	t	namespace:mods::builder_util
+value_load	mods/js.cpp	/^		static duk_ret_t value_load(duk_context *ctx){$/;"	f	namespace:mods::js
 value_map	mods/sql.hpp	/^			typedef std::map<std::string, std::string> value_map;$/;"	t	struct:mods::sql::compositor
+value_revert	mods/js.cpp	/^		static duk_ret_t value_revert(duk_context *ctx){$/;"	f	namespace:mods::js
+value_sanity_check	mods/js.cpp	/^		static duk_ret_t value_sanity_check(duk_context *ctx){$/;"	f	namespace:mods::js
+value_save	mods/js.cpp	/^		static duk_ret_t value_save(duk_context *ctx){$/;"	f	namespace:mods::js
 values	mods/builder.cpp	/^	str_map_t values;$/;"	m	struct:command_t	file:
 values	mods/sql.hpp	/^			compositor<T>& values(const value_map& values) {$/;"	f	struct:mods::sql::compositor
 values	mods/values.cpp	/^namespace mods::values {$/;"	n	class:mods	file:

@@ -7,6 +7,7 @@
 #include "db.hpp"
 #include "date-time.hpp"
 #include "../config.hpp"
+#include "values.hpp"
 
 #include <unistd.h>	//for getcwd()
 extern void command_interpreter(player_ptr_t & player, std::string_view in_argument);
@@ -155,6 +156,26 @@ namespace mods {
 			}
 			char_to_room(mob,real_room_id);
 			duk_push_number(ctx,1);
+			return 1;
+		}
+		static duk_ret_t value_sanity_check(duk_context *ctx){
+			duk_push_string(ctx,SANITY_CHECK().c_str());
+			return 1;
+		}
+		static duk_ret_t value_save(duk_context *ctx){
+			std::string key = duk_to_string(ctx,0);
+			std::string value = duk_to_string(ctx,1);
+			mods::values::save_to_lmdb(key,value);
+			return 1;
+		}
+		static duk_ret_t value_load(duk_context *ctx){
+			std::string key = duk_to_string(ctx,0);
+			mods::values::load_from_lmdb(key);
+			return 1;
+		}
+		static duk_ret_t value_revert(duk_context *ctx){
+			std::string key = duk_to_string(ctx,0);
+			mods::values::revert_to_default(key);
 			return 1;
 		}
 		static duk_ret_t real_mobile(duk_context *ctx){
@@ -526,13 +547,13 @@ namespace mods {
 		static duk_ret_t db_seti(duk_context *ctx) {
 			std::string key = duk_to_string(ctx,0);
 			auto value = duk_to_number(ctx,1);
-			mods::globals::db->put(key,std::to_string(value));
+			mods::db::lmdb_put(key,std::to_string(value));
 			return 0;
 		}
 		static duk_ret_t db_geti(duk_context *ctx) {
 			std::string key = duk_to_string(ctx,0);
-			std::string value = "";
-			mods::globals::db->get(key,value);
+			std::string value = mods::db::lmdb_get(key);
+
 			auto i_value = mods::util::stoi(value);
 
 			if(i_value.has_value()) {
@@ -545,14 +566,13 @@ namespace mods {
 		static duk_ret_t db_set(duk_context *ctx) {
 			std::string key = duk_to_string(ctx,0);
 			std::string value = duk_to_string(ctx,1);
-			mods::globals::db->put(key,value);
+			mods::db::lmdb_put(key,value);
 			return 0;
 		}
 
 		static duk_ret_t db_get(duk_context *ctx) {
 			std::string key = duk_to_string(ctx,0);
-			std::string value = "";
-			mods::globals::db->get(key,value);
+			std::string value = mods::db::lmdb_get(key);
 			duk_push_string(ctx,value.c_str());
 			return 1;
 		}
@@ -658,6 +678,14 @@ namespace mods {
 			duk_put_global_string(ctx,"char_from_room");
 			duk_push_c_function(ctx,mods::js::real_mobile,1);
 			duk_put_global_string(ctx,"real_mobile");
+			duk_push_c_function(ctx,mods::js::value_save,2);
+			duk_put_global_string(ctx,"value_save");
+			duk_push_c_function(ctx,mods::js::value_load,1);
+			duk_put_global_string(ctx,"value_load");
+			duk_push_c_function(ctx,mods::js::value_revert,1);
+			duk_put_global_string(ctx,"value_revert");
+			duk_push_c_function(ctx,mods::js::value_sanity_check,0);
+			duk_put_global_string(ctx,"value_sanity_check");
 		}
 
 		//enum mask_type { SMG, SNIPE, SHOTGUN, GRENADE };

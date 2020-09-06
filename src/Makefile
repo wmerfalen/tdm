@@ -78,7 +78,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/help mods/rooms mods/weapons/damage-types mods/injure mods/skills \
 					 mods/mobs/mini-gunner mods/mobs/extended-types mods/values \
 					 mods/mobs/room-watching mods/mobs/mini-gunner-behaviour-tree \
-					 mods/armor/basic-protection mods/players/db-load mods/bugs-fixtures
+					 mods/armor/basic-protection mods/armor/advanced-protection mods/armor/elite-protection \
+					 mods/players/db-load mods/bugs-fixtures
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

@@ -118,7 +118,7 @@ namespace mods::skills {
 			proficiency_name_t e_name;
 			mods::string name;
 			mods::string description;
-			uint16_t minimum_profiency;
+			uint16_t minimum_proficiency;
 		};
 		/** ATTENTION !!!!
 		 * ALL minimum_proficiencies are GUESSTIMATIONS. They will change!
@@ -130,7 +130,7 @@ namespace mods::skills {
 			{ELECTRIFIED_DAMAGE,"electrified-damage", "Can use gadgets and weapons that can deal electric damage.",100},
 			{PROTECT_FROM_EMP,"protect-from-emp", "Can protect various electronic devices from E.M.P. damage.",200},
 			{CREATE_EMP_WEAPONS,"create-emp-weapons","Can create E.M.P. weapons.",200},
-			{COUNTER_SHOCK,"counter-shock","Enemies who melee you have a 4\% chance (per level) of getting shocked by you.",1050},
+			{COUNTER_SHOCK,"counter-shock","Enemies who melee you have a 4\% chance of getting shocked by you.",1050},
 			{TOGGLE_THERMAL,"toggle-thermal","Cameras and headgear you own now have Thermal vision.",2050},
 			{TOGGLE_NIGHT_VISION,"toggle-night-vision","Cameras and headgear you own now have night vision.",2050},
 			{HEADGEAR_INTROSPECTION,"headgear-introspection","Tactical headgear gives you the ability to see stats and inventory of any NPC.",3050},
@@ -151,14 +151,14 @@ namespace mods::skills {
 			{NO_FACTOR_ELITE,"no-factor-elite", "Heavy ELITE armor doesn't affect your movement.", 900},
 
 			{EXPLOSIVE_RESISTANCE,"explosive-resistance", "Explosions have less impact on you.", 2050},
-			{INJURE_RESISTANCE,"injure-resistance", "You are less likely to get injured.", 3050},
-			{MUNITIONS_REFLECTOR,"munitions-reflector", "You have a 4\% chance (per level) of reflecting damage onto your attacker.", 8050},
-			{SENTINEL_DISCIPLINE,"sentinel-discipline", "Standing still gives 3\% HP regen every 1 second and 4\% critical chance (per level). Must be actively attacking a mob.", 8050},
+			{INJURE_RESISTANCE,"injure-resistance", "You are less likely to get injured.", 3050}, /** implemented */
+			{MUNITIONS_REFLECTOR,"munitions-reflector", "You have a 4\% chance of reflecting damage onto your attacker.", 8050}, /** implemented */
+			{SENTINEL_DISCIPLINE,"sentinel-discipline", "Standing still gives 3\% HP regen every 1 second and 4\% critical chance. Must be actively attacking a mob.", 8050},
 			{DEPLOYABLE_SHIELD,"deployable-shield", "Deploy a bulletproof shield for a limited amount of time.", 8050},
 		};
 		static std::vector<proficiency_t> marksmanship = {
-			{SPRAY_CHANCE,"spray-chance", "Chance to hit during spray is increased", 150},
-			{HEADSHOT_CHANCE,"headshot-chance", "Chance to headshot is increased.", 250},
+			{SPRAY_CHANCE,"spray-chance", "Chance to hit during spray is increased", 150},/** implemented */
+			{HEADSHOT_CHANCE,"headshot-chance", "Chance to headshot is increased.", 250},/** implemented */
 			{LIMB_CHANCE,"limb-chance", "Chance to target limb is increased.", 350},
 			{BETTER_SNIPING_ACCURACY,"better-sniping-accuracy", "Sniping accuracy increased.",450},
 			{TARGET_LIMB,"target-limb", "Adds the ability to target a limb.",850}
@@ -218,14 +218,14 @@ namespace mods::skills {
 			{EXPERT_SUB_MACHINE_GUN,"expert-sub-machine-gun","Expert handling of SUB-MACHINE GUNS",150},
 			{ARMOR_PENETRATION_SHOT,"armor-penetration-shot","Chance to penetrate armor.",150},
 			{NONSTOP_PENETRATION_SHOT,"nonstop-penetration-shot","If an NPC happens to be behind the mob you are sniping, you have a chance of also hitting that mob.",150},
-			{INCREASED_INJURE_CHANCE,"increased-injure-chance","The chance of injuring a mob is increased.",150},
+			{INCREASED_INJURE_CHANCE,"increased-injure-chance","The chance of injuring a mob is increased.",150}, /** implemented */
 			{ASSAULT_RIFLE_SHRAPNEL,"assault-rifle-shrapnel","Assault rifle attacks have a chance of producing shrapnel on impact.",150},
 		};
 		static std::vector<proficiency_t> strategy = {
 			{ENTRY_DENIAL,"entry-denial", "Prevent anyone from coming into your current room for a limited time.", 2050},
 			{MISDIRECTION,"misdirection", "Focus the enemy's attention elsewhere for a brief period of time, thus making them vulnerable.", 2050},
 			{SNIPER_SUPPORT,"sniper-support", "Call in sniper support to pick off targets.", 2050},
-			{REDUCED_DETECTION_CHANCE,"reduced-detection-chance", "Reduces the chance of detection by 4\% per level.", 2050},
+			{REDUCED_DETECTION_CHANCE,"reduced-detection-chance", "Reduces the chance of detection by 4\%.", 2050},
 			{INCREASED_AWARENESS,"increased-awareness", "Enhances your ability to detect mobs even if they are hidden.", 2050},
 			{TRICK_MAGAZINE,"trick-magazine", "Chance to get a bigger mag upon reloading.", 2050},
 			{CHAINABLE_BREACHING,"chainable-breaching", "Perform 1-2 extra actions immediately after you breach. For example, breach and clear.", 2050},

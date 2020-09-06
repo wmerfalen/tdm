@@ -896,6 +896,7 @@ void roll_real_abils(char_data *ch) {
 
 	ch->real_abils.str_add = 0;
 
+
 	switch(GET_CLASS(ch)) {
 		case CLASS_ENGINEER:
 			ch->real_abils.intel = table[0];
@@ -904,6 +905,16 @@ void roll_real_abils(char_data *ch) {
 			ch->real_abils.str = table[3];
 			ch->real_abils.con = table[4];
 			ch->real_abils.cha = table[5];
+
+		ch->real_abils.electronics = table[0];
+		ch->real_abils.armor = table[3];
+		ch->real_abils.marksmanship = table[2];
+		ch->real_abils.sniping = table[2];
+		ch->real_abils.demolitions = table[0];
+		ch->real_abils.chemistry = table[0];
+		ch->real_abils.weapon_handling = table[3];
+		ch->real_abils.strategy = table[0];
+		ch->real_abils.medical = table[5];
 			break;
 
 		case CLASS_MEDIC:

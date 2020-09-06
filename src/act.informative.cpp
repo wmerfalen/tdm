@@ -449,11 +449,9 @@ void look_at_char(char_data *i, char_data *ch) {
 void list_one_char(char_data *i, char_data *ch) {
 	MENTOC_PREAMBLE();
 	if(i == nullptr){
-		log("i is nullptr!");
 		return;
 	}
 	if(ch == nullptr){
-		log("ch is nullptr!");
 		return;
 	}
 	
@@ -1011,7 +1009,6 @@ void look_at_target(char_data *ch, char *arg) {
 	assert(IN_ROOM(ch) < world.size());
 
 	for(obj = world[IN_ROOM(ch)].contents; obj && !found && obj->next_content; obj = obj->next_content){
-		log("checking can see obj ch[%s] obj[%s]",ch->player.name.c_str(),obj->name.c_str());
 		if(CAN_SEE_OBJ(ch, obj)){
 			log("can see obj good. searching exdesc");
 			if((desc = find_exdesc(arg, obj->ex_description)) != NULL && ++i == fnum) {

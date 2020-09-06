@@ -1252,15 +1252,36 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 	/* Char's abilities.  Used in char_file_u *DO*NOT*CHANGE* */
 	/** TODO place this in the db */
 	struct char_ability_data {
-		sbyte str;
-		sbyte str_add;      /* 000 - 100 if strength 18             */
-		sbyte intel;
-		sbyte wis;
-		sbyte dex;
-		sbyte con;
-		sbyte cha;
+		using skill_measurement_t = uint16_t;
+		skill_measurement_t str;
+		skill_measurement_t str_add;      /* 000 - 100 if strength 18             */
+		skill_measurement_t intel;
+		skill_measurement_t wis;
+		skill_measurement_t dex;
+		skill_measurement_t con;
+		skill_measurement_t cha;
+		skill_measurement_t electronics;
+		skill_measurement_t armor;
+		skill_measurement_t marksmanship;
+		skill_measurement_t sniping;
+		skill_measurement_t demolitions;
+		skill_measurement_t chemistry;
+		skill_measurement_t weapon_handling;
+		skill_measurement_t strategy;
+		skill_measurement_t medical;
 		char_ability_data() : str(0),str_add(0),intel(0),
-		wis(0),dex(0),con(0),cha(0){}
+		wis(0),dex(0),con(0),cha(0),
+		electronics(0),
+		armor(0),
+		marksmanship(0),
+		sniping(0),
+		demolitions(0),
+		chemistry(0),
+		weapon_handling(0),
+		strategy(0),
+		medical(0) {
+			// init
+		}
 		~char_ability_data() = default;
 	};
 

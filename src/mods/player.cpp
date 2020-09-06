@@ -1429,6 +1429,11 @@ namespace mods {
 					break;
 				case damage_event_t::YOU_INJURED_SOMEONE_EVENT:
 					this->sendln(MSG_YOU_INJURED_SOMEONE());
+				case damage_event_t::YOU_GOT_HIT_BY_REFLECTED_MUNITIONS_EVENT:
+					sendln(CAT(MSG_YOU_GOT_HIT_BY_REFLECTED_MUNTIONS(),"[",feedback.damage,"][from:",dirstr(feedback.from_direction)));
+					break;
+				case damage_event_t::YOU_REFLECTED_MUNITIONS_EVENT:
+					sendln(CAT(MSG_YOU_REFLECTED_MUNITIONS(),"[",feedback.damage,"][from:",dirstr(feedback.from_direction)));
 					break;
 			}
 		}
