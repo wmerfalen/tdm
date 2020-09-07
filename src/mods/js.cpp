@@ -8,6 +8,7 @@
 #include "date-time.hpp"
 #include "../config.hpp"
 #include "values.hpp"
+#include "skills.hpp"
 
 #include <unistd.h>	//for getcwd()
 extern void command_interpreter(player_ptr_t & player, std::string_view in_argument);
@@ -156,6 +157,10 @@ namespace mods {
 			}
 			char_to_room(mob,real_room_id);
 			duk_push_number(ctx,1);
+			return 1;
+		}
+		static duk_ret_t refresh_minimum_proficiencies(duk_context *ctx){
+			mods::skills::refresh_minimum_proficiencies();
 			return 1;
 		}
 		static duk_ret_t value_sanity_check(duk_context *ctx){
@@ -686,6 +691,8 @@ namespace mods {
 			duk_put_global_string(ctx,"value_revert");
 			duk_push_c_function(ctx,mods::js::value_sanity_check,0);
 			duk_put_global_string(ctx,"value_sanity_check");
+			duk_push_c_function(ctx,mods::js::refresh_minimum_proficiencies,0);
+			duk_put_global_string(ctx,"refresh_minimum_proficiencies");
 		}
 
 		//enum mask_type { SMG, SNIPE, SHOTGUN, GRENADE };

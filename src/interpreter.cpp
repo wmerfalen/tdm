@@ -122,6 +122,7 @@ ACMD(do_js_help){
 		"{gld}next_zone_number{/gld} -- gives you the next zone number",
 		"{gld}pmw_obj_from_room{/gld} -- when called, will toggle prompts for obj_from_room",
 		"{gld}read_mobile{/gld} -- ",
+		"{gld}refresh_minimum_proficiencies{/gld} -- reloads minimum proficiencies from lmdb (if any) and updates skill proficiencies",
 		"{gld}require_js{/gld} -- include from /lib/js/",
 		"{gld}require_test{/gld} -- include from /lib/js/tests",
 		"{gld}room{/gld} -- ",
@@ -130,11 +131,14 @@ ACMD(do_js_help){
 		"{gld}send_to_uuid{/gld} -- ",
 		"{gld}set_char_pk_id{/gld} -- ",
 		"{gld}set_points{/gld} -- i.e.:  set_points(player_name,key,value)",
-"{gld}set_points keys{/gld}",
-"mana max_mana hp max_hp move max_move armor",
-"gold bank_gold exp hitroll damroll level",
-"sex room uuid",
+		"{gld}set_points keys{/gld}",
+			"mana max_mana hp max_hp move max_move armor",
+			"gold bank_gold exp hitroll damroll level",
+			"sex room uuid",
 		"{gld}uuid{/gld} -- ",
+		"{gld}value_load{/gld} -- loads a value saved with value_save() -- i.e.: value_load('SANITY_CHECK');",
+		"{gld}value_revert{/gld} -- reverts to hard-coded value (ignores lmdb value)  -- i.e.: value_revert('SANITY_CHECK');",
+		"{gld}value_save{/gld} -- saves an override to lmdb -- i.e.: value_save('SANITY_CHECK','value');",
 		}){
 			player->sendln(cmd);
 		}

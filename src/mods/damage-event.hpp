@@ -1,6 +1,13 @@
 #ifndef __MENTOC_MODS_DAMAGE_EVENT_HEADER__
 #define __MENTOC_MODS_DAMAGE_EVENT_HEADER__
 
+/**
+ * To be consistent and to have a centralized place where all these
+ * damage events are emitted, no other file other than weapons/damage-types.cpp
+ * should emit these events. Likewise, no other file other than player.cpp
+ * should handle these events.
+ * -will, 2020-09-06
+ */
 enum damage_event_t : uint16_t {
 	ATTACKER_NARROWLY_MISSED_YOU_EVENT,
 	YOU_ARE_INJURED_EVENT,
@@ -24,6 +31,8 @@ enum damage_event_t : uint16_t {
 	YOU_INJURED_SOMEONE_EVENT,
 	YOU_GOT_HIT_BY_REFLECTED_MUNITIONS_EVENT,
 	YOU_REFLECTED_MUNITIONS_EVENT,
+	YOU_GOT_HIT_BY_AR_SHRAPNEL,
+	YOU_INFLICTED_AR_SHRAPNEL
 };
 #include <functional>
 using uuid_t = uint64_t;

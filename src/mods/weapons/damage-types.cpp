@@ -4,6 +4,7 @@
 #include "../injure.hpp"
 #include "../rooms.hpp"
 #include "../skills.hpp"
+#include "../projectile.hpp"
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #ifndef TO_ROOM
 #define TO_ROOM		1
@@ -25,6 +26,7 @@ extern void forget(char_data *ch,char_data *victim);
 	#define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
 #endif
 extern void act(const std::string & str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
+
 namespace mods::weapons::damage_types {
 	using de = damage_event_t;
 	using vpd = mods::scan::vec_player_data;
@@ -311,6 +313,22 @@ namespace mods::weapons::damage_types {
 		return mods::injure::do_injure_roll(chance);
 	}
 
+	void handle_assault_rifle_shrapnel_skill(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t& feedback){
+		if(mods::skills::player_can(attacker,skill_t::ASSAULT_RIFLE_SHRAPNEL) && 
+				dice(1,100) <= ASSAULT_RIFLE_SHRAPNEL_SKILL_CHANCE()){
+			feedback_t shrapnel;
+			shrapnel.hits = 1;
+			shrapnel.from_direction = feedback.from_direction;
+			shrapnel.attacker = attacker->uuid();
+			int dice_count = ASSAULT_RIFLE_SHRAPNEL_SKILL_DICE_COUNT();
+			int dice_sides = ASSAULT_RIFLE_SHRAPNEL_SKILL_DICE_SIDES();
+			shrapnel.damage = mods::projectile::deploy_shrapnel_at(victim,dice_count,dice_sides,feedback.from_direction);
+			shrapnel.damage_event = de::YOU_INFLICTED_AR_SHRAPNEL;
+			attacker->damage_event(shrapnel);
+			shrapnel.damage_event = de::YOU_GOT_HIT_BY_AR_SHRAPNEL;
+			victim->damage_event(shrapnel);
+		}
+	}
 	namespace elemental {
 		namespace fire {
 			void damage(player_ptr_t& player, uint16_t damage){
@@ -516,6 +534,9 @@ namespace mods::weapons::damage_types {
 						mods::injure::injure_player(victim);
 						feedback.injured.emplace_back(victim->uuid());
 						MFEEDBACK(feedback.hits,dam,de::YOU_ARE_INJURED_EVENT);
+					}
+					if(weapon->rifle()->attributes->type == mw_rifle::ASSAULT_RIFLE){
+						handle_assault_rifle_shrapnel_skill(player,victim,weapon,feedback);
 					}
 				}
 				remember_event(victim,player);

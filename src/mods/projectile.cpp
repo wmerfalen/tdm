@@ -604,5 +604,10 @@ namespace mods {
 			auto room_id = travel_to(player->room(), direction, depth, object);
 			explode_in_future(room_id, ticks, object->uuid,player->uuid());
 		}
+		int deploy_shrapnel_at(player_ptr_t& victim, int dice_count,int dice_sides,int from_direction){
+			int damage = dice(dice_count,dice_sides);
+			victim->hp() -= damage;
+			return damage;
+		}
 	};
 };

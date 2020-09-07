@@ -63,6 +63,7 @@ namespace mods {
 		void blindness_clears_up(player_ptr_t victim);
 		void disorient_clears_up(player_ptr_t victim);
 		void propagate_chemical_blast(room_rnum& room_id,obj_ptr_t device);
+		int deploy_shrapnel_at(player_ptr_t& victim, int dice_count,int dice_sides,int from_direction);
 
 		void throw_object(player_ptr_t& player, int direction, std::size_t depth, 
 				obj_ptr_t& object, std::string_view verb);
