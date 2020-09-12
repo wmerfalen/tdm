@@ -51,6 +51,9 @@ namespace config {
 namespace mods::skills {
 	extern void game_init();
 };
+namespace mods::super_users {
+	extern bool player_is(player_ptr_t&);
+};
 namespace mods {
 	namespace globals {
 		using player = mods::player;
@@ -618,19 +621,6 @@ namespace mods {
 				return statbuf.st_size;
 			}
 		}
-		static std::vector<std::string> super_users;
-		static bool super_users_initialized = 0;
-		bool super_user(std::string_view name){
-			if(super_users_initialized){
-				return invec(name.data(),super_users);
-			}
-			if(!super_users_initialized){
-				super_users = EXPLODE(SUPER_USERS_LIST(),'|');
-				super_users_initialized = 1;
-				return super_user(name);
-			}
-			return invec(name.data(),super_users);
-		}
 
 
 		bool command_interpreter(player_ptr_t player,std::string_view in_argument) {
@@ -677,7 +667,7 @@ namespace mods {
 					return false;
 				}
 			}
-			if(super_user(player->name())){
+			if(mods::super_users::player_is(player)){
 				if(argument.substr(0,4).compare("=pos") == 0){
 					if(argument.length() < 6){
 						player->stc("usage: =pos=<int>\r\n");
@@ -1122,7 +1112,26 @@ std::string dirstr(int dir){
 			return "UNKNOWN";
 	}
 }
+std::string IMPLODE_PAD(std::string delim_one,std::vector<std::string> m,std::string delim_two){
+	return IMPLODE_PAD(delim_one,m,delim_two,false);
+}
+std::string IMPLODE_PAD(std::string delim_one,std::vector<std::string> m,std::string delim_two,bool ignore_empty){
+	std::string f = "";
+	std::size_t size = 0;
+	for(auto s : m){
+		size += s.length() + delim_one.length() + delim_two.length();
+	}
+	f.reserve(size);
+	for(auto s : m){
+		if(s.length() == 0 && ignore_empty){ continue; }
+		f += delim_one + s + delim_two;
+	}
+	return f;
+}
 std::string IMPLODE(std::vector<std::string> m,std::string delim){
+	return IMPLODE(m,delim,false);
+}
+std::string IMPLODE(std::vector<std::string> m,std::string delim, bool ignore_empty){
 	std::string f = "";
 	std::size_t size = 0;
 	for(auto s : m){
@@ -1130,6 +1139,7 @@ std::string IMPLODE(std::vector<std::string> m,std::string delim){
 	}
 	f.reserve(size);
 	for(auto s : m){
+		if(s.length() == 0 && ignore_empty){ continue; }
 		f += s;
 		f += delim;
 	}
@@ -1152,7 +1162,9 @@ str_vec_t EXPLODE(str_t value,char delimiter){
 			current = "";
 			continue;
 		}
-		current += ch;
+		if(ch != delimiter){
+			current += ch;
+		}
 	}
 	if(current.length()){
 		strings.emplace_back(current);
@@ -1168,7 +1180,9 @@ str_vec_t EXPLODE(str_t& value,char delimiter){
 			current = "";
 			continue;
 		}
-		current += ch;
+		if(ch != delimiter){
+			current += ch;
+		}
 	}
 	if(current.length()){
 		strings.emplace_back(current);

@@ -274,6 +274,7 @@ namespace mods::values {
 		CGET(uint8_t,ASSAULT_RIFLE_SHRAPNEL_SKILL_CHANCE,10);
 		CGET(uint8_t,ASSAULT_RIFLE_SHRAPNEL_SKILL_DICE_COUNT,3);
 		CGET(uint8_t,ASSAULT_RIFLE_SHRAPNEL_SKILL_DICE_SIDES,30);
+		CGET(uint8_t,SHOW_UNIMPLEMENTED_SKILLS,1);
 
 		CGET(std::string,SANITY_CHECK,"sanity-check");
 		CGET(std::string,MINI_GUNNER_WEAR_LIGHT,"");
@@ -538,6 +539,10 @@ namespace mods::values {
 		CGET(std::string,MSG_YOU_REFLECTED_MUNITIONS,"{grn}*** [ You REFLECTED part of that attack ] *** {/grn}");
 		CGET(std::string,MSG_YOU_INFLICTED_AR_SHRAPNEL,"{grn}*** [ You INFLICTED A.R. ::SHRAPNEL:: ] *** {/grn}");
 		CGET(std::string,MSG_YOU_GOT_HIT_BY_AR_SHRAPNEL,"{red}*** [ You got hit by A.R. ::SHRAPNEL:: ] *** {/red}");
+		CGET(std::string,SUPER_USER_REJECT_MESSAGE,"{red}You are not a super user.\r\nA man with no teeth spits on you.{/red}");
+		CGET(std::string,ADMIN_SUCCESS_MESSAGE,"{grn}[+] It is done.{/grn}");
+		CGET(std::string,ADMIN_FAILURE_MESSAGE,"{red}[-] Failure.{/red}");
+		CGET(std::string,UNIMPLEMENTED_MESSAGE,"this command is unimplemented");
 
 		namespace msg {
 			template <typename T>

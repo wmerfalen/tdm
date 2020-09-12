@@ -86,6 +86,35 @@ enum durability_profile_type_t {
 	GODLIKE,
 	INDESTRUCTIBLE
 };
+enum armor_classification_type_t {
+	NONE = 0,
+	BASIC = 1,
+	ADVANCED = 2,
+	ELITE = 3,
+	DEFAULT = armor_classification_type_t::BASIC,
+};
+static inline armor_classification_type_t to_classification(std::string_view cf){
+#define MENTOC_CF(_XDP_) if(cf.compare(#_XDP_) ==0){ return armor_classification_type_t::_XDP_; }
+	MENTOC_CF(NONE);
+	MENTOC_CF(BASIC);
+	MENTOC_CF(ADVANCED);
+	MENTOC_CF(ELITE);
+#undef MENTOC_CF
+	return armor_classification_type_t::BASIC;
+}
+static inline std::string to_string_from_classification(armor_classification_type_t cf){
+#define MENTOC_CF(a) case a: return #a
+	switch(cf){
+		MENTOC_CF(NONE);
+		MENTOC_CF(BASIC);
+		MENTOC_CF(ADVANCED);
+		MENTOC_CF(ELITE);
+		default:
+		return "BASIC";
+	}
+#undef MENTOC_CF
+}
+
 static inline std::string to_string_from_durability_profile(durability_profile_type_t dp){
 #define MENTOC_DP(a) case a: return #a
 
@@ -305,6 +334,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
 		durability_profile_type_t durability_profile_enum;
 MENTOC_MEMBER_VARS_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
 
+		armor_classification_type_t classification_enum;
 		MENTOC_BASE_MEMBERS
 		uint64_t flush_to_db();
 	};

@@ -9,6 +9,7 @@
 #include "../config.hpp"
 #include "values.hpp"
 #include "skills.hpp"
+#include "super-users.hpp"
 
 #include <unistd.h>	//for getcwd()
 extern void command_interpreter(player_ptr_t & player, std::string_view in_argument);
@@ -61,6 +62,21 @@ namespace mods {
 				return 1;	/* number of return values */
 			}
 		};
+		static duk_ret_t add_super_user(duk_context *ctx) {
+			auto player_name = duk_to_string(ctx,0);
+			mods::super_users::add(player_name);
+			return 0;
+		}
+		static duk_ret_t get_super_user_list(duk_context *ctx) {
+			duk_push_string(ctx,mods::super_users::get_list().c_str());
+			return 1;
+		}
+		static duk_ret_t remove_super_user(duk_context *ctx) {
+			static std::vector<std::string_view> always_super = {"far","grifter"};
+			auto player_name = duk_to_string(ctx,0);
+			mods::super_users::remove(player_name);
+			return 0;
+		}
 		/*! \brief returns the current month as a string within the game
 		 * \return integer
 		 */
@@ -802,6 +818,12 @@ __set_points_cleanup:
 			duk_put_global_string(ctx,"set_char_pk_id");
 			duk_push_c_function(ctx,mods::js::get_char_pk_id,1);
 			duk_put_global_string(ctx,"get_char_pk_id");
+			duk_push_c_function(ctx,mods::js::add_super_user,1);
+			duk_put_global_string(ctx,"add_super_user");
+			duk_push_c_function(ctx,mods::js::get_super_user_list,0);
+			duk_put_global_string(ctx,"get_super_user_list");
+			duk_push_c_function(ctx,mods::js::remove_super_user,1);
+			duk_put_global_string(ctx,"remove_super_user");
 		}
 
 		void run_profile_scripts(const std::string& player_name){

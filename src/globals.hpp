@@ -273,10 +273,16 @@ static inline std::string CAT(Args const&... args) {
     return result;
 }
 std::string IMPLODE(std::vector<std::string> m,std::string delim);
+std::string IMPLODE(std::vector<std::string> m,std::string delim,bool ignore_empty);
+std::string IMPLODE_PAD(std::string delim_one,std::vector<std::string> m,std::string delim_two);
+std::string IMPLODE_PAD(std::string delim_one,std::vector<std::string> m,std::string delim_two,bool ignore_empty);
 std::string dirstr(int);
 std::vector<str_t> map_keys(str_map_t & m);
 #define invec(A,B) (std::find(B.begin(),B.end(),A)!=B.end())
 str_vec_t EXPLODE(str_t& value,char delimiter);
 str_vec_t EXPLODE(str_t value,char delimiter);
 static inline uint64_t CURRENT_TICK(){ return mods::globals::current_tick; }
+#define ADMIN_DONE() player->sendln(ADMIN_SUCCESS_MESSAGE())
+#define ADMIN_FAIL() player->sendln(ADMIN_FAILURE_MESSAGE())
+#define ADMIN_REJECT() if(!mods::super_users::player_is(player)){ player->sendln(SUPER_USER_REJECT_MESSAGE()); return; }
 #endif

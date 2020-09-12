@@ -55,7 +55,7 @@ namespace mods::orm {
 			return status;
 		}
 
-		virtual std::string table_name(){ return "player"; }
+		virtual std::string table_name() { return "player"; }
 		virtual std::string column_prefix(){ return "player_"; }
 		virtual std::string id_column(){ return "id"; }
 		using primary_choice_t = TPrimaryType;

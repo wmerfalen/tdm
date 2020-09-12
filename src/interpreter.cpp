@@ -34,7 +34,15 @@
 #include "mods/world-configuration.hpp"
 #include "mods/chargen.hpp"
 #include "mods/player-utils.hpp"
+#include "mods/super-users.hpp"
 
+ACMD(do_unimplemented){
+	player->sendln(UNIMPLEMENTED_MESSAGE());
+}
+
+namespace mods::globals {
+	extern std::vector<std::string> super_users;
+};
 /* external variables */
 extern int destroy_socket(socket_t&);
 extern std::size_t handle_disconnects();
@@ -139,6 +147,13 @@ ACMD(do_js_help){
 		"{gld}value_load{/gld} -- loads a value saved with value_save() -- i.e.: value_load('SANITY_CHECK');",
 		"{gld}value_revert{/gld} -- reverts to hard-coded value (ignores lmdb value)  -- i.e.: value_revert('SANITY_CHECK');",
 		"{gld}value_save{/gld} -- saves an override to lmdb -- i.e.: value_save('SANITY_CHECK','value');",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{yel} --                      -:[ Super User List ]:-                       {/yel}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{gld}add_super_user{/gld} -- add user to super user list -- i.e.: add_super_user('grifter');{/gld}",
+			"{gld}get_super_user_list{/gld} -- returns super user list -- i.e.: send(get_super_user_list());{/gld}",
+			"{gld}remove_super_user{/gld} -- removes user from super user list -- i.e.: remove_super_user('jack');{/gld}"
+
 		}){
 			player->sendln(cmd);
 		}
@@ -242,6 +257,7 @@ ACMD(do_builder_help){
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{yel} --                      -:[ Debugging ]:-                             {/yel}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{gld}allow_skill{/gld} -- {grn}allow player to access a skill [feature-debug]{/grn}",
 			"{gld}flush_player{/gld} -- {grn}calls the default flush_player method [feature-debug][staging-feature][builder-utils]{/grn}", 
 			"{gld}feed_player{/gld} -- {grn}calls the default feed_player method [feature-debug][staging-feature][builder-utils]{/grn}", 
 			"{gld}flush_holding{/gld} -- {grn}flush the item you are holding to the db [feature-debug][staging-feature][builder-utils]{/grn}", 
@@ -255,6 +271,12 @@ ACMD(do_builder_help){
 			"{gld}pref{/gld} -- {grn}preferences utility [staging-feature]{/grn}",
 			"{gld}room_list_uuid{/gld} -- {grn}list uuids and names of everyone in the same room [builder-utils]{/grn}"
 			"{gld}show_tics{/gld} -- {grn}toggle tics[builder-utils]{/grn}"
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{yel} --                      -:[ Character Generation ]:-                  {/yel}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{gld}disable_registration{/gld} -- {grn}yup[builder-utils]{/grn}"
+			"{gld}enable_registration{/gld} -- {grn}yup[builder-utils]{/grn}"
+			"{gld}registration_status{/gld} -- {grn}prints allowed or not allowed.[builder-utils]{/grn}"
 	 	}){
 			player->sendln(cmd);
 		}
@@ -270,6 +292,7 @@ ACMD(do_yaml_log_save);
 ACMD(do_yaml_log_clear);
 ACMD(do_yaml_example);
 ACMD(do_flush_holding);
+ACMD(do_allow_skill);
 ACMD(do_flush_player);
 ACMD(do_feed_player);
 ACMD(do_hold_anything);
@@ -444,6 +467,10 @@ ACMD(do_one_punch);
 ACMD(do_zero_socket);
 /** -- end debug mods */
 
+/** player stuff */
+ACMD(do_enable_registration);
+ACMD(do_disable_registration);
+ACMD(do_registration_status);
 /** wizard commands */
 ACMD(do_wiz_quote);
 /** end wizard commands */
@@ -503,6 +530,7 @@ ACMD(do_scan);
  * priority.
  */
 
+/** !__CMD_INFO_START__! **/
 cpp_extern const struct command_info cmd_info[] = {
 	{ "RESERVED", 0, 0, 0, 0 },	/* this must be first -- for specprocs */
 
@@ -526,12 +554,12 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "autoexit" , POS_DEAD    , do_gen_tog  , 0, SCMD_AUTOEXIT },
 
 	{ "bounce"   , POS_STANDING, do_action   , 0, 0 },
-	//{ "backstab" , POS_STANDING, do_backstab , 1, 0 },
+	{ "backstab" , POS_STANDING, do_unimplemented, 1, 0 },
 	{ "ban"      , POS_DEAD    , do_ban      , LVL_GRGOD, 0 },
 	{ "balance"  , POS_STANDING, do_not_here , 1, 0 },
 	{ "breach"     , POS_STANDING, do_breach     , 1, 0 },
 	{ "thermite"     , POS_STANDING, do_thermite     , 1, 0 },
-	//{ "bash"     , POS_FIGHTING, do_bash     , 1, 0 },
+	{ "bash"     , POS_FIGHTING, do_unimplemented     , 1, 0 },
 	{ "beg"      , POS_RESTING , do_action   , 0, 0 },
 	{ "bleed"    , POS_RESTING , do_action   , 0, 0 },
 	{ "blush"    , POS_RESTING , do_action   , 0, 0 },
@@ -542,7 +570,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "buy"      , POS_STANDING, do_buy      , 0, 0 },
 	{ "bug"      , POS_DEAD    , do_gen_write, 0, SCMD_BUG },
 
-	//{ "cast"     , POS_SITTING , do_cast     , 1, 0 },
+	{ "cast"     , POS_SITTING , do_unimplemented     , 1, 0 },
 	{ "cackle"   , POS_RESTING , do_action   , 0, 0 },
 	{ "check"    , POS_STANDING, do_not_here , 1, 0 },
 	{ "chuckle"  , POS_RESTING , do_action   , 0, 0 },
@@ -644,7 +672,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "junk"     , POS_RESTING , do_drop     , 0, SCMD_JUNK },
 
 	{ "kill"     , POS_FIGHTING, do_kill     , 0, 0 },
-	//{ "kick"     , POS_FIGHTING, do_kick     , 1, 0 },
+	{ "kick"     , POS_FIGHTING, do_unimplemented     , 1, 0 },
 	{ "kiss"     , POS_RESTING , do_action   , 0, 0 },
 
 	{ "look"     , POS_RESTING , do_look     , 0, SCMD_LOOK },
@@ -664,7 +692,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "mail"     , POS_STANDING, do_not_here , 1, 0 },
 	{ "massage"  , POS_RESTING , do_action   , 0, 0 },
 	{ "mute"     , POS_DEAD    , do_wizutil  , LVL_GOD, SCMD_SQUELCH },
-	//{ "murder"   , POS_FIGHTING, do_hit      , 0, SCMD_MURDER },
+	{ "murder"   , POS_FIGHTING, do_unimplemented      , 0, SCMD_MURDER },
 
 	{ "news"     , POS_SLEEPING, do_gen_ps   , 0, SCMD_NEWS },
 	{ "nibble"   , POS_RESTING , do_action   , 0, 0 },
@@ -689,7 +717,7 @@ cpp_extern const struct command_info cmd_info[] = {
 
 	{ "put"      , POS_RESTING , do_put      , 0, 0 },
 	{ "pat"      , POS_RESTING , do_action   , 0, 0 },
-	//{ "page"     , POS_DEAD    , do_page     , LVL_GOD, 0 },
+	{ "page"     , POS_DEAD    , do_unimplemented     , LVL_GOD, 0 },
 	{ "pardon"   , POS_DEAD    , do_wizutil  , LVL_GOD, SCMD_PARDON },
 	{ "peer"     , POS_RESTING , do_action   , 0, 0 },
 	{ "pick"     , POS_STANDING, do_gen_door , 1, SCMD_PICK },
@@ -711,7 +739,7 @@ cpp_extern const struct command_info cmd_info[] = {
 
 	{ "quaff"    , POS_RESTING , do_use      , 0, SCMD_QUAFF },
 	{ "qecho"    , POS_DEAD    , do_qcomm    , LVL_IMMORT, SCMD_QECHO },
-	//{ "quest"    , POS_DEAD    , do_gen_tog  , 0, SCMD_QUEST },
+	{ "quest"    , POS_DEAD    , do_unimplemented  , 0, SCMD_QUEST },
 	{ "qui"      , POS_DEAD    , do_quit     , 0, 0 },
 	{ "quit"     , POS_DEAD    , do_quit     , 0, SCMD_QUIT },
 	{ "qsay"     , POS_RESTING , do_qcomm    , 0, SCMD_QSAY },
@@ -730,7 +758,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "rescue"   , POS_FIGHTING, do_rescue   , 1, 0 },
 	{ "restore"  , POS_DEAD    , do_restore  , LVL_GOD, 0 },
 	{ "return"   , POS_DEAD    , do_return   , 0, 0 },
-	//{ "rnum"    , POS_STANDING, do_rnum     , 0, 0 },
+	{ "rnum"    , POS_STANDING, do_unimplemented     , 0, 0 },
 	{ "roll"     , POS_RESTING , do_action   , 0, 0 },
 	{ "roomflags", POS_DEAD    , do_gen_tog  , LVL_IMMORT, SCMD_ROOMFLAGS },
 	{ "ruffle"   , POS_STANDING, do_action   , 0, 0 },
@@ -762,8 +790,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "smile"    , POS_RESTING , do_action   , 0, 0 },
 	{ "smirk"    , POS_RESTING , do_action   , 0, 0 },
 	{ "snicker"  , POS_RESTING , do_action   , 0, 0 },
-	/** mods */
-	{ "js"  , POS_RESTING , do_js   , 0, 0 },
+	{ "js"  , POS_RESTING , do_js   , LVL_BUILDER, 0 },
 	/** ------------------- */
 	/** DEBUGGING + TESTING */
 	/** ------------------- */
@@ -819,8 +846,8 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "cancel"  , POS_RESTING , do_cancel, 0, 0 },	/** i.e.: claymore mine, camera */
 	{ "install"  , POS_RESTING , do_install, 0, 0 },	/** i.e.: claymore mine, camera */
 	{ "uninstall"  , POS_RESTING , do_uninstall, 0, 0 },	/** i.e.: claymore mine, camera */
-	//TODO code me{ "plant" , POS_RESTING , do_plant , 0, 0},
-	//TODO code me { "activate" , POS_RESTING , do_activate , 0, 0},
+	{ "plant" , POS_RESTING , do_unimplemented , 0, 0},
+	{ "activate" , POS_RESTING , do_unimplemented, 0, 0},
 	{ "drone"  , POS_RESTING , do_drone   , 0, 0 },
 	{ "throw"  , POS_RESTING , do_throw   , 0, 0 },
 	{ "set_ammo"  , POS_RESTING , do_set_ammo   , LVL_GOD, 0 },
@@ -851,10 +878,14 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** ------------- */
 	{ "require_js"  , POS_RESTING , do_require_js   , 0, 0 },
 	{ "builder"  , POS_RESTING , do_builder   , 0, 0 },
+	{ "add_super_user"  , POS_RESTING , do_add_super_user   , LVL_BUILDER, 0 },
+	{ "remove_super_user"  , POS_RESTING , do_remove_super_user   , LVL_BUILDER, 0 },
+	{ "get_super_user_list"  , POS_RESTING , do_get_super_user_list   , LVL_BUILDER, 0 },
 	{ "show_tics"  , POS_RESTING , do_show_tics   , 0, 0 },
 	{ "builder_help"  , POS_RESTING , do_builder_help   , LVL_GOD, 0 },
 	{ "flush_holding"  , POS_RESTING , do_flush_holding   , LVL_GOD, 0 },
 	{ "flush_player"  , POS_RESTING , do_flush_player   , LVL_GOD, 0 },
+	{ "allow_skill"  , POS_RESTING , do_allow_skill   , LVL_GOD, 0 },
 	{ "feed_player"  , POS_RESTING , do_feed_player   , LVL_GOD, 0 },
 	{ "hold_anything"  , POS_RESTING , do_hold_anything   , LVL_GOD, 0 },
 	{ "yaml_import"  , POS_RESTING , do_yaml_import   , LVL_GOD, 0 },
@@ -884,6 +915,9 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "histfile"  , POS_RESTING , do_histfile   , LVL_IMMORT, 0 },
 	{ "my_uuid"  , POS_RESTING , do_my_uuid  , LVL_IMMORT, 0 },
 	{ "get_ticks_per_minute"  , POS_RESTING , do_get_ticks_per_minute, LVL_IMMORT, 0 },
+	{ "enable_registration"  , POS_RESTING , do_enable_registration   , LVL_BUILDER, 0 },
+	{ "disable_registration"  , POS_RESTING , do_disable_registration   , LVL_BUILDER, 0 },
+	{ "registration_status"  , POS_RESTING , do_registration_status   , LVL_BUILDER, 0 },
 	/** ----------------- */
 	/** END BUILDER UTILS */
 	/** ----------------- */
@@ -985,6 +1019,7 @@ cpp_extern const struct command_info cmd_info[] = {
 
 	{ "\n", 0, 0, 0, 0 }
 };	/* this must be last */
+/** !__CMD_INFO_END__! **/
 
 
 const char *fill[] = {
@@ -1059,6 +1094,9 @@ void command_interpreter(player_ptr_t & player, std::string in_argument){
 	/* otherwise, find the command */
 	for(length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++){
 		if(!strncmp(cmd_info[cmd].command, arg, length)){
+			if(mods::super_users::player_is(player)){
+				break;
+			}
 			if(player->god_mode()){
 				break;
 			}

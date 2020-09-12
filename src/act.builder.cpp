@@ -367,10 +367,10 @@ ACMD(do_hold_anything){
  * @param command or name of file type (i.e.: rifle, explosive.. to list pass in "list")
  */
 ACMD(do_yaml_example){
-
+	DO_HELP("yaml_example");
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("list") == 0) {
-		for(auto type : {"rifle","explosive","drone","gadget","attachment","armor","consumable"}) {
+		for(auto type : mods::object_utils::object_types()){
 			player->sendln(type);
 		}
 		return;

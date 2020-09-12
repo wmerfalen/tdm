@@ -73,6 +73,7 @@ namespace mods::values {
 		"ASSAULT_RIFLE_SHRAPNEL_SKILL_CHANCE",
 		"ASSAULT_RIFLE_SHRAPNEL_SKILL_DICE_COUNT",
 		"ASSAULT_RIFLE_SHRAPNEL_SKILL_DICE_SIDES",
+		"SHOW_UNIMPLEMENTED_SKILLS",
 		};
 
 
@@ -394,6 +395,10 @@ namespace mods::values {
 		"MSG_YOU_REFLECTED_MUNITIONS",
 		"MSG_YOU_INFLICTED_AR_SHRAPNEL",
 		"MSG_YOU_GOT_HIT_BY_AR_SHRAPNEL",
+		"SUPER_USER_REJECT_MESSAGE",
+		"ADMIN_SUCCESS_MESSAGE",
+		"ADMIN_FAILURE_MESSAGE",
+		"UNIMPLEMENTED_MESSAGE",
 			};
 		bool is_int(std::string key){
 			return (std::find(int_types.begin(),int_types.end(),key) != int_types.end());
@@ -739,6 +744,7 @@ namespace mods::values {
 		CGET_DEF(uint8_t,ASSAULT_RIFLE_SHRAPNEL_SKILL_CHANCE,10);
 		CGET_DEF(uint8_t,ASSAULT_RIFLE_SHRAPNEL_SKILL_DICE_COUNT,3);
 		CGET_DEF(uint8_t,ASSAULT_RIFLE_SHRAPNEL_SKILL_DICE_SIDES,30);
+		CGET_DEF(uint8_t,SHOW_UNIMPLEMENTED_SKILLS,1);
 
 		CGET_DEF(float,EXPLOSIVE_CRITICAL_MULTIPLIER,0.75);
 		CGET_DEF(float,RIFLE_CRITICAL_MULTIPLIER,0.75);
@@ -981,5 +987,9 @@ namespace mods::values {
 		CGET_DEF(std::string,MSG_YOU_REFLECTED_MUNITIONS,"*** [ You {grn} REFLECTED part of that attack {/grn}] *** ");
 		CGET_DEF(std::string,MSG_YOU_INFLICTED_AR_SHRAPNEL,"{grn}*** [ You INFLICTED A.R. ::SHRAPNEL:: ] *** {/grn}");
 		CGET_DEF(std::string,MSG_YOU_GOT_HIT_BY_AR_SHRAPNEL,"{red}*** [ You got hit by A.R. ::SHRAPNEL:: ] *** {/red}");
+		CGET_DEF(std::string,SUPER_USER_REJECT_MESSAGE,"{red}You are not a super user.\r\nA man with no teeth spits on you.{/red}");
+		CGET_DEF(std::string,ADMIN_SUCCESS_MESSAGE,"{grn}[+] It is done.{/grn}");
+		CGET_DEF(std::string,ADMIN_FAILURE_MESSAGE,"{red}[-] Failure.{/red}");
+		CGET_DEF(std::string,UNIMPLEMENTED_MESSAGE,"this command is unimplemented");
 #undef CGET_DEF
 };

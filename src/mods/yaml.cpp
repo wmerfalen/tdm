@@ -51,6 +51,7 @@ namespace mods::yaml {
 		action_description = yaml_file["action_description"].as<std::string>();\
 		fed_items.push_back("action_description");\
 	}catch(YAML::Exception &e){this->feed_status = -3; mods::object_utils::report_yaml_exception(e,fed_items); REPORT_DB_ISSUE("yaml error",e.what()); }
+
 	std::string true_path(std::string_view type,std::string_view in_file){
 		std::string cwd = current_working_dir();
 		std::string prefixed = CAT(cwd,"/objects/",type.data(),"/",in_file.data());
@@ -410,6 +411,7 @@ namespace mods::yaml {
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_SHIELD;
 				break;
 		}
+		classification_enum = to_classification(classification);
 	}
 	void drone_description_t::fill_flags(obj_data* o){
 		auto * w = &(o->obj_flags.wear_flags);

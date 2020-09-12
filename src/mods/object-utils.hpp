@@ -5,6 +5,7 @@
 extern obj_ptr_t optr_by_uuid(uuid_t);
 extern obj_ptr_t create_object(int type,std::string yaml_file);
 namespace mods::object_utils {
+	std::vector<std::string> object_types();
 
 	/** I understand that this may seem like it should be in the yaml.hpp file
 	 * instead of here in object_utils, but the only time we're catching

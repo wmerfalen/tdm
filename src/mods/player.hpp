@@ -50,7 +50,10 @@ namespace mods {
 
 namespace mods::armor {
 	struct basic_protection;
+	struct advanced_protection;
+	struct elite_protection;
 };
+
 
 #define WEAPON_SET_NUM 1
 extern size_t send_to_char(char_data *ch, const char *messg, ...);
@@ -718,6 +721,8 @@ namespace mods {
 		std::map<damage_event_t,damage_event_callback_t> m_damage_event_callbacks;
 		direction_t m_watching;
 		std::shared_ptr<mods::armor::basic_protection> m_basic_protection;
+		std::shared_ptr<mods::armor::advanced_protection> m_advanced_protection;
+		std::shared_ptr<mods::armor::elite_protection> m_elite_protection;
 	};
 };
 

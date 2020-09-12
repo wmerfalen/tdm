@@ -21,6 +21,9 @@
 #include "spells.h"
 #include "constants.h"
 #include "mods/object-utils.hpp"
+#include "mods/armor/includes.hpp"
+#include "mods/yaml.hpp"
+#include "mods/skills.hpp"
 
 /* extern variables */
 extern room_rnum donation_room_1;
@@ -1333,15 +1336,14 @@ void wear_message(char_data *ch, struct obj_data *obj, int where) {
 
 
 
-void perform_wear(char_data *ch, struct obj_data *obj, int where) {
-	MENTOC_PREAMBLE();
+bool perform_wear_with_confirmation(player_ptr_t& player, obj_ptr_t& in_obj, int where) {
 	/*
 	 * ITEM_WEAR_TAKE is used for objects that do not require special bits
 	 * to be put into that position (e.g. you can hold any object, not just
 	 * an object with a HOLD bit.)
 	 */
 
-	int wear_bitvectors[] = {
+	static constexpr int wear_bitvectors[] = {
 		ITEM_WEAR_TAKE, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_NECK,
 		ITEM_WEAR_NECK, ITEM_WEAR_BODY, ITEM_WEAR_HEAD, ITEM_WEAR_LEGS,
 		ITEM_WEAR_FEET, ITEM_WEAR_HANDS, ITEM_WEAR_ARMS, ITEM_WEAR_SHIELD,
@@ -1351,7 +1353,7 @@ void perform_wear(char_data *ch, struct obj_data *obj, int where) {
 		ITEM_WEAR_BACKPACK, ITEM_WEAR_GOGGLES
 	};
 
-	std::string already_wearing[] = {
+	static const std::string already_wearing[] = {
 		"You're already using a light.",
 		"YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.",
 		"You're already wearing something on both of your ring fingers.",
@@ -1377,11 +1379,18 @@ void perform_wear(char_data *ch, struct obj_data *obj, int where) {
 		"You are already wearing something as a backpack.",
 		"You are already wearing something over your eyes."
 	};
+	char_data * ch = player->cd();
+	obj_data * obj = in_obj.get();
+
+	if(!obj->has_armor()){
+		act("You can't wear $p because it is not a piece of armor.", FALSE, ch, obj, 0, TO_CHAR);
+		return 0;
+	}
 
 	/* first, make sure that the wear position is valid. */
 	if(!CAN_WEAR(obj, wear_bitvectors[where])) {
 		act("You can't wear $p there.", FALSE, ch, obj, 0, TO_CHAR);
-		return;
+		return 0;
 	}
 
 	/* for neck, finger, and wrist, try pos 2 if pos 1 is already full */
@@ -1392,12 +1401,34 @@ void perform_wear(char_data *ch, struct obj_data *obj, int where) {
 
 	if(GET_EQ(ch, where)) {
 		player->sendln(already_wearing[where]);
-		return;
+		return 0;
 	}
 
+	auto classification = obj->armor()->attributes->classification_enum;
+	if(classification == mods::yaml::armor_classification_type_t::BASIC && 
+		!mods::skills::player_can(player,skill_t::BASIC_ARMOR)){
+		act("You can't wear $p until you master the {yel}BASIC_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
+		return 0;
+	}
+	if(classification == mods::yaml::armor_classification_type_t::ADVANCED && 
+		!mods::skills::player_can(player,skill_t::ADVANCED_ARMOR)){
+		act("You can't wear $p until you master the {yel}ADVANCED_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
+		return 0;
+	}
+	if(classification == mods::yaml::armor_classification_type_t::ELITE && 
+		!mods::skills::player_can(player,skill_t::ELITE_ARMOR)){
+		act("You can't wear $p until you master the {yel}ELITE_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
+		return 0;
+	}
 	wear_message(ch, obj, where);
 	player->equip(obj->uuid,where);
 	player->uncarry(optr_by_uuid(obj->uuid));
+	return 1;
+}
+void perform_wear(char_data *ch, struct obj_data *obj, int where) {
+	MENTOC_PREAMBLE();
+	auto o = optr(obj);
+	perform_wear_with_confirmation(player,o,where);
 }
 
 
@@ -1541,8 +1572,10 @@ ACMD(do_wear) {
 			next_obj = obj->next_content;
 
 			if(CAN_SEE_OBJ(ch, obj) && (where = find_eq_pos(ch, obj, 0)) >= 0) {
-				items_worn++;
-				perform_wear(ch, obj, where);
+				auto obj_ptr = optr(obj);
+				if(perform_wear_with_confirmation(player,obj_ptr,where)){
+					items_worn++;
+				}
 			}
 		}
 

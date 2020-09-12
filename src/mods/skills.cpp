@@ -1,8 +1,14 @@
 #include "skills.hpp"
+#ifdef __MENTOC_MODS_SKILLS_SHOW_DEBUG_OUTPUT__
+#define m_debug(A) std::cerr << "[mods::skills][debug]:'" << A << "'\n";
+#else
+#define m_debug(A)
+#endif
 
 ACMD(do_skills){
+	DO_HELP("skills");
 	auto vec_args = PARSE_ARGS();
-	if(vec_args.size() >= 2 && ICMP(vec_args[0],"help")){
+	if(vec_args.size() >= 2 && ICMP(vec_args[0],"show")){
 		for(unsigned i = 1; i < vec_args.size();++i){
 			for(auto & skillset : mods::skills::proficiencies::list) {
 				for(auto & prof : std::get<1>(skillset)){
@@ -10,6 +16,7 @@ ACMD(do_skills){
 						player->send("{grn}skill-name: '{yel}%s{/yel}'\r\n", prof.name.c_str());
 						player->send("{grn}skill-description: '{yel}%s{/yel}'\r\n", prof.description.c_str());
 						player->send("{grn}minium-proficiency: {yel}%d{/yel}\r\n", prof.minimum_proficiency);
+						player->send("{grn}implemented: {yel}%s{/yel}\r\n", prof.implemented ? "yes" : "no" );
 						continue;
 					}
 				}
@@ -21,18 +28,57 @@ ACMD(do_skills){
 	for(auto & skillset : mods::skills::proficiencies::list) {
 		player->send("{grn}-[ %s ]:----------------------------------------{/grn}\r\n",std::get<0>(skillset).c_str());
 		for(auto & prof : std::get<1>(skillset)){
-			player->send("{gld}[%d]\t\t[%s]\t[%d]\r\n{/gld}",
+			if(!SHOW_UNIMPLEMENTED_SKILLS() && !prof.implemented){
+				continue;
+			}
+			player->send("{gld}[%d]\t\t[%s]\t[%d]\t%s{/gld}",
 					mods::skills::get_player_level(player,prof.e_name),
 					prof.name.c_str(),
-					prof.minimum_proficiency
+					prof.minimum_proficiency,
+					SHOW_UNIMPLEMENTED_SKILLS() ?
+						(!prof.implemented ? "{red}[x]{gld}" : "{grn}[+]{/grn}") : ""
 			);
+			if(mods::skills::player_can(player,prof.e_name)){
+					player->sendln("{gld}[{grn}learned{/grn}{gld}]{/gld}");
+			}else{
+					player->sendln("{gld}[{red}not-learned{gld}]{/gld}");
+			}
 		}
 	}
 	player->sendln("To see a detailed description of a skill, type: {grn}skills help <skill>{/grn}");
-	player->sendln("Example: {yel}skills help spray-chance{/yel}");
+	player->sendln("Example: {yel}skills show spray-chance{/yel}");
 	player->sendln("NOTE: you can specify multiple skills");
-	player->sendln("Example: {yel}skills help spray-chance basic-armor mold{/yel}");
+	player->sendln("Example: {yel}skills show spray-chance basic-armor mold{/yel}");
+	if(SHOW_UNIMPLEMENTED_SKILLS()){
+		player->sendln("Skills with a {red}[x]{/red} next to them are not currently implemented by the developers.");
+		player->sendln("Skills with a {grn}[+]{/grn} next to them are readily available and implemented by the developers.");
+	}
 	player->sendln("this documentation was written on 2020-07-06.");
+}
+ACMD(do_allow_skill){
+	DO_HELP("allow_skill");
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() < 2){
+		player->sendln("Invalid argument count");
+		return;
+	}
+	auto found = mods::globals::player_name_map.find(vec_args[0]);
+	if(found == mods::globals::player_name_map.end()){
+		player->sendln("Couldn't find player by that name.");
+		return;
+	}
+
+	if(ICMP(vec_args[1],"all")){
+		player->send("Setting all skills...");
+		mods::skills::allow_player_to_do_everything(found->second);
+		player->sendln("done");
+		return;
+	}
+	skill_t s = mods::skills::to_skill_from_user_friendly_string(vec_args[1]);
+	player->send("Setting skill...");
+	mods::skills::set_player_can_override(found->second,{s});
+	player->sendln("done");
+
 }
 namespace mods::skills {
 	constexpr static const char* DB_PREFIX = "skills";
@@ -161,6 +207,15 @@ namespace mods::skills {
 		e_name_to_proficiency[proficiency_t::ADRENALINE_BOOST].minimum_proficiency = SKILL_ADRENALINE_BOOST();/** 2050 */
 	}
 
+	void refresh_implemented_skills(){
+		for(auto & skillset : mods::skills::proficiencies::list) {
+			for(auto & prof : std::get<1>(skillset)){
+				if(prof.implemented){
+					implemented_skills.emplace_back(prof.e_name);
+				}
+			}
+		}
+	}
 	/** called by game initialization sequence */
 	void game_init(){
 		refresh_minimum_proficiencies();
@@ -172,6 +227,7 @@ namespace mods::skills {
 				skill_name_list.emplace_back(prof.name.str());
 			}
 		}
+		refresh_implemented_skills();
 	}
 	int get_enum_by_name(std::string_view name){
 		return mappings[name.data()];
@@ -210,9 +266,21 @@ namespace mods::skills {
 	bool npc_can(player_ptr_t& player,int e_name){
 		return true;/** TODO */
 	}
+	bool player_has_override_for(player_ptr_t& player,int e_name){
+		auto it = player_can_overrides.find(player->name().c_str());
+		if(it != player_can_overrides.end()){
+			m_debug("[player can by override]: " << green_str(player->name().c_str()) << "->" << e_name);
+			return std::find(it->second.begin(),it->second.end(),e_name) != it->second.end();
+		}
+		return false;
+	}
+
 	bool player_can(player_ptr_t& player,int e_name){
 		if(player->is_npc()){
 			return npc_can(player,e_name);
+		}
+		if(player_has_override_for(player,e_name)){
+			return true;
 		}
 		return player->skill(e_name) >= get_minimum_proficiency(e_name);
 	}
@@ -229,4 +297,37 @@ namespace mods::skills {
 		}
 		return ctr;
 	}
+	std::vector<skill_t> convert_to_skill_list(std::vector<std::string_view> in_skill_list){
+		std::vector<skill_t> parsed;
+		for(auto & name : in_skill_list){
+			skill_t s = to_skill_from_user_friendly_string(name);
+			if(s != skill_t::NONE){
+				parsed.emplace_back(s);
+			}
+		}
+		return parsed;
+	}
+	void allow_player_to_do_everything(player_ptr_t& player){
+		std::vector<skill_t> skills;
+		for(auto & skill : passive_skills){
+			skills.emplace_back(skill);
+		}
+		for(auto & skill : castable_skills){
+			skills.emplace_back(skill);
+		}
+		set_player_can_override(player,skills);
+	}
+	void set_player_can_override(player_ptr_t& player,std::vector<skill_t> in_skill_list){
+		player_can_overrides[player->name().c_str()] = in_skill_list;
+	}
+	void clear_player_can_override(player_ptr_t& player){
+		player_can_overrides.erase(player->name().c_str());
+	}
+	skill_t to_skill_from_user_friendly_string(std::string_view s){
+		return static_cast<skill_t>(mappings[s.data()]);
+	}
+	std::string_view to_user_friendly_string_from_skill(skill_t s){
+		return e_name_to_proficiency[s].name.c_str();
+	}
 };
+#undef m_debug

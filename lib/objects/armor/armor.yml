@@ -11,13 +11,29 @@
 # type: VEST_PACK
 # type: ELBOW_GUARDS
 # type: GLOVES
-csv_capabilities: 'TBA'#csv, strings free-form TBA
-csv_attach_to: 'TBA'#csv, strings attach to various kinds of items TBA
+# type: SHIELD
+# type: MASK
+csv_capabilities: 'TBA' #csv, strings free-form TBA
+csv_attach_to: 'TBA' #csv, strings attach to various kinds of items TBA
+thac0: 50 #int
+weight_in_lbs: 5 #float, weight in lbs
+fire_resistance_percent: 15 #percent
+balistic_resistance_percent: 15 #percent
+speed_profile: 0 #int, ENUM 0=UNHINDERED,1=FAST,2=HINDERED,3=SLOW,4=SLUGGISH
+offensive_damage_amount: 0 #int, static amount of offensive damage
+durability_profile: 'DECENT' #string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUSTRIAL_STRENGTH,GODLIKE,INDESTRUCTIBLE
+repair_cost_profile: 1 #int, ENUM 0=CHEAP,1=DECENT,2=COSTLY,3=VERY_EXPENSIVE
+hp: 1000 #int, hit points
+classification: 'BASIC' #string, 'BASIC', 'ADVANCED', 'ELITE'
+worth: 0 #int, how much the item is worth.
 str_type: 'VEST' # enum, object type
-type: 0 # integer enum 
 manufacturer: 'ACME Industries' # string, anything 
 name: 'MK-71X Ballistic Vest' # string, anything name of object 
 vnum: 1000 # integer, unique identifier
+description: 'Description'
+short_description: 'short description'
+action_description: 'action description'
+feed_file: 'VEST.yml'
 #rarity types
 # COMMON
 # UNCOMMON
@@ -26,13 +42,3 @@ vnum: 1000 # integer, unique identifier
 # GOD_TIER
 # DEFAULT
 rarity: 'COMMON'
-description: 'A sturdy ACME MK-71X Ballistic Vest is lying here'
-short_description: 'a ACME MK-71X Ballistic Vest'
-action_description: 'ACME MK-71X Ballistic Vest'
-hp: 95000
-# classification types
-# BASIC
-# ADVANCED
-# ELITE
-classification: 'BASIC'
-worth: 50 # integer, how many credits its worth
