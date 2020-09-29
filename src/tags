@@ -837,8 +837,8 @@ DB_BOOT_SHP	db.h	19;"	d
 DB_BOOT_WLD	db.h	15;"	d
 DB_BOOT_ZON	db.h	18;"	d
 DB_PREFIX	mods/skills.cpp	/^	constexpr static const char* DB_PREFIX = "skills";$/;"	m	namespace:mods::skills	file:
-DD	mods/debug-pre-game.hpp	128;"	d
-DD	mods/debug-pre-game.hpp	21;"	d
+DD	mods/debug-pre-game.hpp	136;"	d
+DD	mods/debug-pre-game.hpp	22;"	d
 DECENT	mods/yaml.hpp	/^	DECENT,$/;"	e	enum:mods::yaml::durability_profile_type_t
 DEFAULT	mods/rarity.hpp	/^		constexpr static float DEFAULT = mods::rarity::COMMON;$/;"	m	namespace:mods::rarity
 DEFAULT	mods/yaml.hpp	/^	DEFAULT = armor_classification_type_t::BASIC,$/;"	e	enum:mods::yaml::armor_classification_type_t
@@ -3366,10 +3366,10 @@ __MENTOC_MODS_deferred_HEADER__	mods/deferred.hpp	2;"	d
 __MENTOC_MODS_prefs_HEADER__	mods/prefs.hpp	2;"	d
 __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
 __MENTOC_PLR	db.cpp	2629;"	d	file:
-__MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__	mods/debug-pre-game.hpp	35;"	d
-__MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	53;"	d
+__MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__	mods/debug-pre-game.hpp	43;"	d
+__MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	61;"	d
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
-__MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	42;"	d
+__MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	50;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__	mods/behaviour_tree_impl.cpp	16;"	d	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	982;"	d	file:
 __MENTOC_SHOW_LMDB_DEBUG__	mods/db.cpp	6;"	d	file:
@@ -3411,6 +3411,7 @@ acl_list	mods/acl_list.hpp	/^namespace mods::acl_list {$/;"	n	class:mods
 acl_list	mods/player.hpp	/^namespace mods::acl_list {$/;"	n	class:mods
 act	comm.cpp	/^void act(const std::string & str, int hide_invisible, char_data *ch,$/;"	f
 act_nr	act.social.cpp	/^	int act_nr;$/;"	m	struct:social_messg	file:
+action	mods/mini-games.hpp	/^		std::string action;$/;"	m	struct:mini_game_payload_t
 action_bits	constants.cpp	/^const char *action_bits[] = {$/;"	v
 action_bits	constants.hpp	/^const char *action_bits[] = {$/;"	v
 action_bits_count	constants.cpp	/^        action_bits_count = sizeof(action_bits) \/ sizeof(action_bits[0]) - 1,$/;"	v
@@ -4817,6 +4818,7 @@ gain_exp_regardless	limits.cpp	/^void gain_exp_regardless(char_data *ch, int gai
 game	mods/mini-games.cpp	/^	line_up& game(room_vnum vnum,int id){$/;"	f	namespace:mods::mini_games
 game_init	mods/skills.cpp	/^	void game_init(){$/;"	f	namespace:mods::skills
 game_loop	comm.cpp	/^void game_loop(socket_t mother_desc) {$/;"	f
+game_room_vnum	mods/mini-games.hpp	/^		int game_room_vnum;$/;"	m	struct:mini_game_payload_t
 gather_room	mods/sensor-grenade.cpp	/^	void gather_room(uuid_t nade_uuid,room_rnum& room,uint8_t from_direction){$/;"	f	namespace:mods::sensor_grenade
 gen_board	boards.cpp	/^SPECIAL(gen_board);$/;"	v
 gen_board	spec_assign.cpp	/^SPECIAL(gen_board);$/;"	v
@@ -5392,6 +5394,7 @@ lmdb_nput	mods/db.cpp	/^int lmdb_nput(void* key,std::size_t key_size,$/;"	f	name
 lmdb_put	mods/db.cpp	/^void lmdb_put(std::string key,std::string value){$/;"	f	namespace:mods::db
 lmdb_renew	mods/db.cpp	/^void lmdb_renew() {$/;"	f	namespace:mods::db
 lmdb_write_values	mods/db.cpp	/^tuple_status_t lmdb_write_values($/;"	f	namespace:mods::db
+load	mods/mini-games.cpp	/^	void load(mini_game_payload_t g){$/;"	f	namespace:mods::mini_games
 load_all	mods/world-configuration.cpp	/^	rooms_t load_all() {$/;"	f	namespace:mods::world_conf
 load_banned	ban.cpp	/^void load_banned(void) {$/;"	f
 load_banned	mods/hell.hpp	/^	constexpr inline bool load_banned = false;$/;"	m	namespace:mods::hell
@@ -5747,6 +5750,8 @@ min_position	spells.h	/^	byte min_position;	\/* Position for caster	 *\/$/;"	m	s
 min_rent_cost	config.cpp	/^int min_rent_cost = 100;$/;"	v
 min_victim_position	act.social.cpp	/^	int min_victim_position;	\/* Position of victim *\/$/;"	m	struct:social_messg	file:
 min_wizlist_lev	config.cpp	/^int min_wizlist_lev = LVL_GOD;$/;"	v
+mini_game_orm_test	mods/debug-pre-game.hpp	/^	void mini_game_orm_test(){$/;"	f	namespace:mods::debug::pre_game
+mini_game_payload_t	mods/mini-games.hpp	/^	struct mini_game_payload_t {$/;"	s
 mini_game_test	mods/debug-pre-game.hpp	/^	void mini_game_test(){$/;"	f	namespace:mods::debug::pre_game
 mini_games	mods/mini-games.cpp	/^namespace mods::mini_games {$/;"	n	class:mods	file:
 mini_games	mods/mini-games.hpp	/^namespace mods::mini_games {$/;"	n	class:mods
@@ -5874,6 +5879,7 @@ name	mods/builder.cpp	/^	std::string_view sandbox_data_t::name() const {$/;"	f	c
 name	mods/builder.cpp	/^	str_t name;$/;"	m	struct:command_t	file:
 name	mods/catch.hpp	/^		const char* name;$/;"	m	struct:Catch::NameAndDesc
 name	mods/drone.hpp	/^			const char* name() {$/;"	f	class:mods::drone
+name	mods/mini-games.hpp	/^		std::string name;$/;"	m	struct:mini_game_payload_t
 name	mods/player.cpp	/^	std::string& player::name(){ return m_name; }$/;"	f	class:mods::player
 name	mods/skills.hpp	/^			mods::string name;$/;"	m	struct:mods::skills::proficiencies::proficiency_t
 name	spells.h	/^	const char *name;	\/* Input size not limited. Originates from string constants. *\/$/;"	m	struct:spell_info_type
@@ -6084,6 +6090,7 @@ opposite_dir	globals.cpp	/^		int opposite_dir(int dir) {$/;"	f	namespace:mods::g
 optr	globals.cpp	/^obj_ptr_t optr(obj_data* in_obj){$/;"	f
 optr_by_uuid	globals.cpp	/^obj_ptr_t optr_by_uuid(uuid_t id){$/;"	f
 optr_opt	globals.cpp	/^std::optional<obj_ptr_t> optr_opt(uuid_t obj_uuid){$/;"	f
+order	mods/mini-games.hpp	/^		int order;$/;"	m	struct:mini_game_payload_t
 org	spell_parser.cpp	/^	const char *org;$/;"	m	struct:syllable	file:
 original_rows	mods/mini-games.hpp	/^		std::vector<std::vector<uint8_t>> original_rows;$/;"	m	namespace:mods::mini_games
 orm	shop.h	/^namespace mods::orm {$/;"	n	class:mods
@@ -6287,6 +6294,7 @@ primary_choice_t	mods/weapon.hpp	/^		enum primary_choice_t {$/;"	g	namespace:mod
 primary_choice_t	mods/weapon.hpp	/^		enum primary_choice_t {$/;"	g	namespace:mods::weapon::sentinel
 primary_choice_t	mods/weapon.hpp	/^		enum primary_choice_t {$/;"	g	namespace:mods::weapon::sniper
 primary_choice_t	mods/weapon.hpp	/^		enum primary_choice_t {$/;"	g	namespace:mods::weapon::support
+primary_key	mods/mini-games.hpp	/^		int primary_key;$/;"	m	struct:mini_game_payload_t
 primary_weapon_menu	mods/chargen.cpp	/^	std::string primary_weapon_menu(player_class_t class_type){$/;"	f	namespace:mods::chargen
 print_command	mods/builder.cpp	/^	void print_command(player_ptr_t& player){$/;"	f	struct:command_t
 print_group	act.other.cpp	/^void print_group(char_data *ch) {$/;"	f
@@ -7184,6 +7192,7 @@ type	interpreter.h	/^	int type;$/;"	m	struct:alias_data
 type	mods/behaviour_tree_impl.hpp	/^		enum type { $/;"	g	namespace:mods::behaviour_tree_impl
 type	mods/item-types.hpp	/^namespace mods::weapon::type {$/;"	n	class:mods::weapon
 type	mods/lmdb.hpp	/^		transact_type_t type() const { return m_type; }$/;"	f	struct:mods::lmdb::transaction_t
+type	mods/mini-games.hpp	/^		std::string type;$/;"	m	struct:mini_game_payload_t
 type	mods/player.hpp	/^		player_type_enum_t type(){$/;"	f	struct:mods::player
 type	mods/weapon.hpp	/^			mw_rifle type;$/;"	m	struct:mods::weapon::yaml::rifle_description_t
 type	shop.h	/^	int type;$/;"	m	struct:shop_buy_data
@@ -7267,6 +7276,7 @@ visibility	mods/calc_visibility.cpp	/^namespace mods::calc::visibility {$/;"	n	c
 visibility	mods/calc_visibility.hpp	/^namespace mods::calc::visibility {$/;"	n	class:mods::calc
 vnum	boards.h	/^	obj_vnum vnum;	\/* vnum of this board *\/$/;"	m	struct:board_info_type
 vnum	house.h	/^	room_vnum vnum;		\/* vnum of this house		*\/$/;"	m	struct:house_control_rec
+vnum	mods/mini-games.hpp	/^		int vnum;$/;"	m	struct:mini_game_payload_t
 vnum	mods/npc.cpp	/^	const mob_vnum& npc::vnum() const { return cd()->nr; }$/;"	f	class:mods::npc
 vnum	mods/player.hpp	/^		room_vnum vnum(){ return world[room()].number; }$/;"	f	struct:mods::player
 vnum	shop.h	/^	room_vnum vnum;		\/* Virtual number of this shop		*\/$/;"	m	struct:shop_data

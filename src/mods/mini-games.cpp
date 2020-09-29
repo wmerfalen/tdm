@@ -256,6 +256,15 @@ namespace mods::mini_games {
 		player->send("Current row value: %d/%d\r\n", row,mods::mini_games::game(player->vnum(),id).row_count());
 		player->sendln(mods::mini_games::game(player->vnum(),id).get_body());
 	}
+	void load(mini_game_payload_t g){
+		std::cerr << "[mods::mini_games::load]: " << g.primary_key << ", "
+			<< "type:" << g.type << ", "
+			<< "vnum:" << g.vnum << ", "
+			<< "name:'" << g.name << "', "
+			<< "action:'" << g.action << "', "
+			<< "room:" << g.game_room_vnum  << ", "
+			<< "order:" << g.order << "\n";
+	}
 };
 
 ACMD(do_install_minigame) {
@@ -264,7 +273,7 @@ ACMD(do_install_minigame) {
 	ADMIN_DONE();
 }
 ACMD(do_uninstall_minigame) {
-	DO_HELP("install_minigame");
+	DO_HELP("uninstall_minigame");
 	ADMIN_REJECT();
 	ADMIN_DONE();
 }

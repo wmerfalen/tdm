@@ -9,6 +9,7 @@
 #include "util.hpp"
 
 #define ORM_SUCCESS(a) std::get<0>(a) == 0
+#define ORM_NO_RESULTS(a) std::get<0>(a) == mods::orm::util::NO_RESULTS
 #define ORM_FAILURE(a) std::get<0>(a) < 0
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
@@ -26,16 +27,33 @@ namespace mods::orm {
 		template <typename TClass>
 		std::tuple<int16_t,std::string> read(TClass* c){
 			auto status = mods::orm::util::load_by_pkid<TClass,sql_compositor>(c);
+			if(ORM_NO_RESULTS(status)){
+				std::cout << "[load_by_pkid] no results.\n";
+			}
 			if(ORM_FAILURE(status)){
 				std::cerr << "[load_by_pkid] failed: '" << std::get<1>(status) << "'\n";
 			}
 			return status;
 		}
 		template <typename TClass>
+		std::tuple<int16_t,std::string> read_normalized(TClass* c,std::string column,std::string value){
+			auto status = mods::orm::util::load_multi_by_column<TClass,sql_compositor>(c,column,value);
+			if(ORM_NO_RESULTS(status)){
+				std::cout << "[read_normalized] no results.\n";
+			}
+			if(ORM_FAILURE(status)){
+				std::cerr << "[read_normalized] failed: '" << std::get<1>(status) << "'\n";
+			}
+			return status;
+		}
+		template <typename TClass>
 		std::tuple<int16_t,std::string> read(TClass* c,std::string_view column,std::string_view value){
 			auto status = mods::orm::util::load_by_column<TClass,sql_compositor>(c,column,value);
+			if(ORM_NO_RESULTS(status)){
+				std::cout << "[mods::orm::orm_base::read] no results.\n";
+			}
 			if(ORM_FAILURE(status)){
-				std::cerr << "[load_by_column] failed: '" << std::get<1>(status) << "'\n";
+				std::cerr << "[mods::orm::orm_base::read] failed: '" << std::get<1>(status) << "'\n";
 			}
 			return status;
 		}

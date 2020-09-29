@@ -43,6 +43,16 @@ namespace mods::mini_games {
 	void next_row(player_ptr_t& player);
 	/** called by boot_db. should only be called once to bootstrap all mini games in the mud */
 	void init();
+	struct mini_game_payload_t {
+		int primary_key;
+		std::string type;
+		int vnum;
+		std::string name;
+		std::string action;
+		int game_room_vnum;
+		int order;
+	};
+	void load(mini_game_payload_t p);
 };
 
 ACMD(do_install_minigame);

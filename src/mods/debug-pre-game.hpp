@@ -14,6 +14,7 @@
 #include "classes/medic.hpp"
 #include "builder/object-placement.hpp"
 #include "mini-games.hpp"
+#include "orm/mini-game.hpp"
 
 extern bool login(std::string_view user_name,std::string_view password);
 extern int16_t save_char_data(player_ptr_t& player,std::map<std::string,std::string> values);
@@ -26,8 +27,15 @@ namespace mods::debug::pre_game {
 		std::cerr << game.rotate_right(1).data() << "\n";
 		std::cerr << game.rotate_left(1).data() << "\n";
 	}
+	void mini_game_orm_test(){
+		mods::orm::mini_game db;
+		db.load_by_room_vnum(128);
+		sleep(120);
+	}
 	bool run(){
 		mini_game_test();
+
+		mini_game_orm_test();
 
 		std::cerr << "RUN\n";
 		mods::builder::object_placement::rifle_attachments_t a("g36c.yml{sight:acog.yml,under_barrel:gmtgrenadelauncher.yml,grip:vertical-grip.yml,barrel:extended-barrel.yml,muzzle:brake.yml,magazine:extended-mag.yml,stock:default-stock.yml,strap:shoulder-strap.yml}");

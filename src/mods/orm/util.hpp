@@ -2,6 +2,10 @@
 #define __MENTOC_MODS_ORM_UTIL_HEADER__
 
 namespace mods::orm::util {
+	static constexpr int8_t NO_RESULTS = 1;
+	static constexpr int8_t FETCHED_OKAY = 0;
+	static constexpr int8_t EXCEPTION_OCCURRED = -1;
+	static constexpr int8_t UNKNOWN_ERROR = -2;
 		template <typename TObject,typename sql_compositor>
 			static inline std::tuple<int16_t,std::string,uint64_t> insert_returning(TObject* obj, std::string_view returning_field){
 				try{
@@ -19,12 +23,13 @@ namespace mods::orm::util {
 					mods::pq::commit(insert_transaction);
 					if(record.size()){
 						auto i_value = mods::util::stoi<uint64_t>(record[0][returning_field.data()].c_str());
-						return {0,"okay",i_value};
+						return {FETCHED_OKAY,"okay",i_value};
 					}
+					return {NO_RESULTS,"no results",0};
 				}catch(std::exception& e){
-					return {-1,e.what(),0};
+					return {EXCEPTION_OCCURRED,e.what(),0};
 				}
-				return {-2,"unknown",0};
+				return {UNKNOWN_ERROR,"unknown",0};
 			}
 
 		template <typename TObject,typename sql_compositor>
@@ -39,11 +44,11 @@ namespace mods::orm::util {
 						.sql();
 					auto record = mods::pq::exec(del_txn,up_sql);
 					mods::pq::commit(del_txn);
-					return {0,"okay"};
+					return {FETCHED_OKAY,"okay"};
 				}catch(std::exception& e){
-					return {-1,e.what()};
+					return {EXCEPTION_OCCURRED,e.what()};
 				}
-				return {-2,"unknown"};
+				return {UNKNOWN_ERROR,"unknown"};
 			}
 		template <typename TObject,typename sql_compositor>
 			static inline std::tuple<int16_t,std::string> delete_where(
@@ -61,11 +66,11 @@ namespace mods::orm::util {
 						.sql();
 					mods::pq::exec(del_txn,up_sql);
 					mods::pq::commit(del_txn);
-					return {0,"okay"};
+					return {FETCHED_OKAY,"okay"};
 				}catch(std::exception& e){
-					return {-1,e.what()};
+					return {EXCEPTION_OCCURRED,e.what()};
 				}
-				return {-2,"unknown"};
+				return {UNKNOWN_ERROR,"unknown"};
 			}
 		template <typename TObject,typename sql_compositor>
 			static inline std::tuple<int16_t,std::string> update(TObject* s){
@@ -79,11 +84,11 @@ namespace mods::orm::util {
 						.sql();
 					mods::pq::exec(up_txn,up_sql);
 					mods::pq::commit(up_txn);
-					return {0,"okay"};
+					return {FETCHED_OKAY,"okay"};
 				}catch(std::exception& e){
-					return {-1,e.what()};
+					return {EXCEPTION_OCCURRED,e.what()};
 				}
-				return {-2,"unknown"};
+				return {UNKNOWN_ERROR,"unknown"};
 			}
 		template <typename TContainerObject,typename sql_compositor>
 			static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s,
@@ -102,11 +107,11 @@ namespace mods::orm::util {
 					for(auto row : player_record){
 						s.emplace_back(row);
 					}
-					return {0,"okay"};
+					return {FETCHED_OKAY,"okay"};
 				}catch(std::exception& e){
-					return {-1,e.what()};
+					return {EXCEPTION_OCCURRED,e.what()};
 				}
-				return {-2,"unknown"};
+				return {UNKNOWN_ERROR,"unknown"};
 			}
 		template <typename TObject,typename sql_compositor>
 			static inline std::tuple<int16_t,std::string> load_by_column(TObject* s,std::string_view column,std::string_view value){
@@ -120,12 +125,13 @@ namespace mods::orm::util {
 					auto player_record = mods::pq::exec(select_transaction,player_sql);
 					if(player_record.size()){
 						s->feed(player_record[0]);
-						return {0,"okay"};
+						return {FETCHED_OKAY,"okay"};
 					}
+					return {NO_RESULTS,"no results"};
 				}catch(std::exception& e){
-					return {-1,e.what()};
+					return {EXCEPTION_OCCURRED,e.what()};
 				}
-				return {-2,"unknown"};
+				return {UNKNOWN_ERROR,"unknown"};
 			}
 		template <typename TObject,typename sql_compositor>
 			static inline std::tuple<int16_t,std::string> load_multi_by_column(TObject* s,std::string_view column,std::string_view value){
@@ -138,13 +144,14 @@ namespace mods::orm::util {
 						.sql();
 					auto player_record = mods::pq::exec(select_transaction,player_sql);
 					if(player_record.size()){
-						s->feed(player_record);
-						return {0,"okay"};
+						s->feed_multi(player_record);
+						return {FETCHED_OKAY,"okay"};
 					}
+					return {NO_RESULTS,"no results"};
 				}catch(std::exception& e){
-					return {-1,e.what()};
+					return {EXCEPTION_OCCURRED,e.what()};
 				}
-				return {-2,"unknown"};
+				return {UNKNOWN_ERROR,"unknown"};
 			}
 		template <typename TObject,typename sql_compositor>
 			static inline std::tuple<int16_t,std::string> load_by_pkid(TObject* s){
@@ -158,12 +165,13 @@ namespace mods::orm::util {
 					auto player_record = mods::pq::exec(select_transaction,player_sql);
 					if(player_record.size()){
 						s->feed(player_record[0]);
-						return {0,"okay"};
+						return {FETCHED_OKAY,"okay"};
 					}
+					return {NO_RESULTS,"no results"};
 				}catch(std::exception& e){
-					return {-1,e.what()};
+					return {EXCEPTION_OCCURRED,e.what()};
 				}
-				return {-2,"unknown"};
+				return {UNKNOWN_ERROR,"unknown"};
 			}
 
 }; //end namespace
