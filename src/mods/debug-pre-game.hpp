@@ -30,7 +30,6 @@ namespace mods::debug::pre_game {
 	void mini_game_orm_test(){
 		mods::orm::mini_game db;
 		db.load_by_room_vnum(128);
-		sleep(120);
 	}
 	bool run(){
 		mini_game_test();
