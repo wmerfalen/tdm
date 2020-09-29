@@ -12,13 +12,26 @@
 #include "orm/class-medic.hpp"
 #include "orm/class-sniper.hpp"
 #include "classes/medic.hpp"
+#include "builder/object-placement.hpp"
+#include "mini-games.hpp"
 
 extern bool login(std::string_view user_name,std::string_view password);
 extern int16_t save_char_data(player_ptr_t& player,std::map<std::string,std::string> values);
 namespace mods::debug::pre_game {
 #define DD(a){ std::cerr << "[debug::pre_game][line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"; }
 	namespace fb = ::mods::flashbang;
+	void mini_game_test(){
+		mods::mini_games::line_up game;
+		std::cerr << game.get_body().data() << "\n";
+		std::cerr << game.rotate_right(1).data() << "\n";
+		std::cerr << game.rotate_left(1).data() << "\n";
+	}
 	bool run(){
+		mini_game_test();
+
+		std::cerr << "RUN\n";
+		mods::builder::object_placement::rifle_attachments_t a("g36c.yml{sight:acog.yml,under_barrel:gmtgrenadelauncher.yml,grip:vertical-grip.yml,barrel:extended-barrel.yml,muzzle:brake.yml,magazine:extended-mag.yml,stock:default-stock.yml,strap:shoulder-strap.yml}");
+
 #define __MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__
 #ifdef __MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__
 		{

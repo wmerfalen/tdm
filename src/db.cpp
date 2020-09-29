@@ -45,6 +45,7 @@
 #include "mods/mobs/extended-types.hpp"
 #include "mods/util.hpp"
 #include "mods/players/db-load.hpp"
+#include "mods/mini-games.hpp"
 
 namespace mods::rooms {
 	extern void set_sector_type(room_rnum room_id, int sector_type);
@@ -88,7 +89,7 @@ namespace mods::globals {
 };
 std::vector<index_data> obj_index;	/* index table for object file	 */
 std::deque<obj_data> obj_proto;	/* prototypes for objs		 */
-std::vector<shop_data_t> shop_proto;	/* prototypes for objs		 */
+std::deque<shop_data_t> shop_proto;	/* prototypes for objs		 */
 obj_rnum top_of_objt = 0;	/* top of object index table	 */
 
 std::vector<zone_data> zone_table;	/* zone table			 */
@@ -751,6 +752,8 @@ void boot_db(void) {
 				zone_table[i].name, zone_table[i].bot, zone_table[i].top);
 		reset_zone(i);
 	}
+
+	mods::mini_games::init();
 
 	reset_q.head = reset_q.tail = NULL;
 
@@ -1479,6 +1482,7 @@ int16_t install_shop(shop_ptr_t& shop){
 		world[room].name.assign(shop->title.c_str());
 		world[room].description.assign(shop->description.c_str());
 		mods::globals::room_shopmap[s_room_vnum] = shop;
+		world[room].shop_vnum = shop->vnum;
 	}
 	return 1;
 }
@@ -1487,7 +1491,7 @@ int parse_sql_shops() {
 	auto result = db_get_all("shops");
 
 	if(result.size()) {
-		shop_proto.reserve(result.size());
+		shop_proto.resize(result.size());
 		for(const auto & current_row : result) {
 			shop_proto.emplace_back();
 			shop_proto.back().feed(current_row);

@@ -355,6 +355,7 @@ bool obj_data::flagged(int value){
 		}
 
 		void room_data::init(){
+			this->shop_vnum = 0;
 			watching = 0;
 			number = 0;
 			zone = 0;
@@ -382,6 +383,7 @@ bool obj_data::flagged(int value){
 			sector_type = r.sector_type;
 			contents = r.contents;
 			people = r.people;
+			this->shop_vnum = r.shop_vnum;
 		}
 		room_data::~room_data() {
 			for(unsigned i = 0; i < NUM_OF_DIRS; i++){

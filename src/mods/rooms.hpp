@@ -514,5 +514,6 @@ namespace mods::rooms {
 	 * @brief processes fire damage in any rooms that have it
 	 */
 	void process_fire_damage();
+	void word_wrap_description(player_ptr_t& player,room_rnum);
 };//end namespace
 #endif

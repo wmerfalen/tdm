@@ -1186,6 +1186,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 			return m_texture_levels[type];
 		}
 		bool watching;
+		room_vnum shop_vnum;
 		protected:
 		std::map<texture_type_t,texture_level_t> m_texture_levels;
 		std::vector<uint8_t> m_directions;

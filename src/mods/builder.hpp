@@ -20,7 +20,11 @@ typedef int socket_t;
 #include <unordered_map>
 #include "flags.hpp"
 
+void r_error(const player_ptr_t & player,std::string_view msg);
+void r_success(const player_ptr_t & player,std::string_view msg);
+void r_status(const player_ptr_t & player,std::string_view msg);
 namespace mods::builder {
+	void initialize_builder(player_ptr_t& player);
 //struct room_data {
 //   1    room_vnum number;        /* Rooms number (vnum)            */
 //   2    zone_rnum zone;              /* Room zone (for resetting)          */

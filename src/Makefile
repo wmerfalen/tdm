@@ -80,7 +80,9 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/room-watching mods/mobs/mini-gunner-behaviour-tree \
 					 mods/armor/basic-protection mods/armor/advanced-protection mods/armor/elite-protection \
 					 mods/players/db-load mods/bugs-fixtures mods/player-registration \
-					 mods/super-users
+					 mods/super-users mods/builder/object-placement mods/integral-objects \
+					 mods/orm/integral-object mods/orm/camera-feed mods/orm/door-event \
+					 mods/mini-games
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

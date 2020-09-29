@@ -35,6 +35,7 @@
 #include "mods/chargen.hpp"
 #include "mods/player-utils.hpp"
 #include "mods/super-users.hpp"
+#include "mods/mini-games.hpp"
 
 ACMD(do_unimplemented){
 	player->sendln(UNIMPLEMENTED_MESSAGE());
@@ -88,6 +89,9 @@ ACMD(do_room_list){
 	for(auto & p : mods::globals::get_room_list(player->room())){
 		player->stc(p->name());
 	}
+}
+ACMD(do_room_vnum){
+	player->send("%d\r\n",player->vnum());
 }
 
 ACMD(do_js_help){
@@ -221,6 +225,10 @@ ACMD(do_builder_help){
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{yel} --                      -:[ Building ]:-                              {/yel}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
+			//"{gld}cambuild{/gld} -- {grn}create surveilance cameras that change their feed [builder-utils]{/grn}",
+			"{gld}list_minigame{/gld} -- {grn}lists minigames currently installed in the room [builder-utils]{/grn}",
+			"{gld}install_minigame{/gld} -- {grn}installs a minigame in the room [builder-utils]{/grn}",
+			"{gld}uninstall_minigame{/gld} -- {grn}uninstalls a minigame in the room [builder-utils]{/grn}",
 			"{gld}mbuild{/gld} -- {grn}mob builder [builder-utils]{/grn}",
 			"{gld}obuild{/gld} -- {grn}object builder [builder-utils]{/grn}",
 			"{gld}sbuild{/gld} -- {grn}shop builder [builder-utils]{/grn}",
@@ -401,6 +409,13 @@ ACMD(do_givemegold);
 ACMD(do_givemenades);
 ACMD(do_shoot);	/* just an alias of snipe */
 ACMD(do_snipe);
+ACMD(do_room_vnum);
+
+ACMD(do_rotate_right);
+ACMD(do_rotate_left);
+ACMD(do_next_row);
+ACMD(do_reset_game);
+
 ACMD(do_spray);
 /**--[ START ]--  camera/claymore install commands */
 ACMD(do_cancel);
@@ -840,6 +855,11 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** COMBAT MECHANICS */
 	/** ---------------- */
 	{ "shoot"  , POS_RESTING , do_snipe   , 0, 0 },
+	{ "hack"  , POS_RESTING , do_hack  , 0, 0 },
+	{ "rotate_right"  , POS_RESTING , do_rotate_right  , 0, 0 },
+	{ "rotate_left"  , POS_RESTING , do_rotate_left  , 0, 0 },
+	{ "next_row"  , POS_RESTING , do_next_row  , 0, 0 },
+	{ "reset_hack"  , POS_RESTING , do_reset_hack  , 0, 0 },
 	{ "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
 	{ "spray"  , POS_RESTING , do_spray   , 0, 0 },
 	/** install/uninstall various gadgets */
@@ -876,6 +896,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** ------------- */
 	/** BUILDER UTILS */
 	/** ------------- */
+	{ "room_vnum"  , POS_RESTING , do_room_vnum   , 0, 0 },
 	{ "require_js"  , POS_RESTING , do_require_js   , 0, 0 },
 	{ "builder"  , POS_RESTING , do_builder   , 0, 0 },
 	{ "add_super_user"  , POS_RESTING , do_add_super_user   , LVL_BUILDER, 0 },
@@ -899,6 +920,9 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "pmw_obj_from_room"  , POS_RESTING , do_pmw_obj_from_room   , LVL_GOD, 0 },
 	{ "toggle_obj_from_room"  , POS_RESTING , do_toggle_obj_from_room   , LVL_GOD, 0 },
 	{ "js_help"  , POS_RESTING , do_js_help   , LVL_GOD, 0 },
+	{ "install_minigame"  , POS_RESTING , do_install_minigame   , LVL_GOD, 0 },
+	{ "uninstall_minigame"  , POS_RESTING , do_uninstall_minigame   , LVL_GOD, 0 },
+	{ "list_minigame"  , POS_RESTING , do_list_minigame   , LVL_GOD, 0 },
 	{ "mbuild"  , POS_RESTING , do_mbuild   , LVL_GOD, 0 },
 	{ "obuild"  , POS_RESTING , do_obuild   , LVL_GOD, 0 },
 	{ "sbuild"  , POS_RESTING , do_sbuild   , LVL_GOD, 0 },

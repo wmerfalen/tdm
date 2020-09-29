@@ -441,6 +441,33 @@ namespace mods::rooms {
 		}
 		world[room_id].sector_type = sector_type;
 	}
+	void word_wrap_description(player_ptr_t& player,room_rnum r){
+		int width = player->screen_width();
+		if(width <= 0){
+			width = 80;
+		}
+		std::string f;
+		int i = 0;
+		for(auto ch : world[r].description.str()){
+			if(i >= (width - 6) && ch == ' '){
+				player->sendln(f);
+				i = 0;
+				f = "";
+				continue;
+			}
+			if(i >= width && ch == ' '){
+				player->sendln(f);
+				i = 0;
+				f = "";
+				continue;
+			}
+			f += ch;
+			i++;
+		}
+		if(f.length()){
+			player->sendln(f);
+		}
+	}
 };//End namespace
 
 namespace mods::rooms::gods {

@@ -128,6 +128,25 @@ namespace mods::orm::util {
 				return {-2,"unknown"};
 			}
 		template <typename TObject,typename sql_compositor>
+			static inline std::tuple<int16_t,std::string> load_multi_by_column(TObject* s,std::string_view column,std::string_view value){
+				try{
+					auto select_transaction = txn();
+					sql_compositor comp(s->table_name(),&select_transaction);
+					auto player_sql = comp.select("*")
+						.from(s->table_name())
+						.where(column.data(),"=",value.data())
+						.sql();
+					auto player_record = mods::pq::exec(select_transaction,player_sql);
+					if(player_record.size()){
+						s->feed(player_record);
+						return {0,"okay"};
+					}
+				}catch(std::exception& e){
+					return {-1,e.what()};
+				}
+				return {-2,"unknown"};
+			}
+		template <typename TObject,typename sql_compositor>
 			static inline std::tuple<int16_t,std::string> load_by_pkid(TObject* s){
 				try{
 					auto select_transaction = txn();

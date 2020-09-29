@@ -285,4 +285,5 @@ static inline uint64_t CURRENT_TICK(){ return mods::globals::current_tick; }
 #define ADMIN_DONE() player->sendln(ADMIN_SUCCESS_MESSAGE())
 #define ADMIN_FAIL() player->sendln(ADMIN_FAILURE_MESSAGE())
 #define ADMIN_REJECT() if(!mods::super_users::player_is(player)){ player->sendln(SUPER_USER_REJECT_MESSAGE()); return; }
+#define TODO(a) std::cerr << green_str("[TODO]: ") << a << " [file]: " << __FILE__ << "[line]:" << __LINE__ << "\n";
 #endif

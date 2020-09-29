@@ -542,8 +542,18 @@ namespace mods::values {
 		CGET(std::string,SUPER_USER_REJECT_MESSAGE,"{red}You are not a super user.\r\nA man with no teeth spits on you.{/red}");
 		CGET(std::string,ADMIN_SUCCESS_MESSAGE,"{grn}[+] It is done.{/grn}");
 		CGET(std::string,ADMIN_FAILURE_MESSAGE,"{red}[-] Failure.{/red}");
-		CGET(std::string,UNIMPLEMENTED_MESSAGE,"this command is unimplemented");
+		CGET(std::string,UNIMPLEMENTED_MESSAGE,"{red}this command is unimplemented{/red}");
 
+		CGET(std::string,STOCK_STARS_MESSAGE,"You can't see anything but stars!");
+		CGET(std::string,STOCK_BLIND_MESSAGE,"You can't see a damned thing, you're blind!");
+		CGET(std::string,STOCK_PITCH_BLACK_MESSAGE,"It is pitch black...");
+		CGET(std::string,STOCK_READ_WHAT_MESSAGE,"Read what?");
+		CGET(std::string,STOCK_EXAMINE_MESSAGE,"Examine what?");
+		CGET(std::string,STOCK_LOOK_INSIDE_MESSAGE, "When you look inside, you see:");
+		CGET(std::string,STOCK_GOLD_BROKE_MESSAGE,"You're broke!");
+		CGET(std::string,STOCK_GOLD_ONE_MISERABLE_MESSAGE,"You have one miserable little gold coin.");
+		CGET(std::string,STOCK_GOLD_PREFIX_MESSAGE,"You have ");
+		CGET(std::string,STOCK_GOLD_SUFFIX_MESSAGE," gold coins.");
 		namespace msg {
 			template <typename T>
 			static inline void crit(T& p){

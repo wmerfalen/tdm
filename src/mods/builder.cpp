@@ -24,6 +24,7 @@
 #include "mobs/mini-gunner.hpp"
 #include <list>
 #include <memory>
+#include "orm/shop.hpp"
 namespace mods {  struct player; };
 namespace mods { struct extra_desc_data; }; 
 #define MENTOC_OBI(i) obj->i = get_intval(#i).value_or(obj->i);
@@ -42,8 +43,70 @@ extern std::tuple<int16_t,std::string> parse_sql_zones();
 extern std::vector<int> zone_id_blacklist;
 extern bool disable_all_zone_resets;
 extern obj_ptr_t create_object_from_index(std::size_t proto_index);
+using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>;
+extern std::deque<shop_data_t> shop_proto;	/* prototypes for objs		 */
 
 using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>;
+#define in_room(a) IN_ROOM(a)
+#define nowhere NOWHERE
+#define is_direction(A) IS_DIRECTION(A)
+void show_shop_by_index(std::size_t i,player_ptr_t& player){
+	mods::builder_util::show_object_vector<std::deque<shop_data_t>>(
+			player,
+			CAT("show ",tostr(i)),
+			shop_proto,
+			[&player](shop_data_t & shop) -> void {
+#define MENTOC_LAZY_SHOP(a) mods::builder_util::list_line(player,#a, shop.a)
+			MENTOC_LAZY_SHOP(db_id);
+			MENTOC_LAZY_SHOP(vnum);
+			MENTOC_LAZY_SHOP(title);
+			MENTOC_LAZY_SHOP(description);
+			MENTOC_LAZY_SHOP(flags);
+			MENTOC_LAZY_SHOP(profit_buy);
+			MENTOC_LAZY_SHOP(profit_sell);
+			MENTOC_LAZY_SHOP(no_such_item1);
+			MENTOC_LAZY_SHOP(no_such_item2);
+			MENTOC_LAZY_SHOP(missing_cash1);
+			MENTOC_LAZY_SHOP(missing_cash2);
+			MENTOC_LAZY_SHOP(do_not_buy);
+			MENTOC_LAZY_SHOP(message_buy);
+			MENTOC_LAZY_SHOP(message_sell);
+			MENTOC_LAZY_SHOP(temper1);
+			MENTOC_LAZY_SHOP(bitvector);
+			MENTOC_LAZY_SHOP(keeper);
+			MENTOC_LAZY_SHOP(with_who);
+			MENTOC_LAZY_SHOP(open1);
+			MENTOC_LAZY_SHOP(open2);
+			MENTOC_LAZY_SHOP(close1);
+			MENTOC_LAZY_SHOP(close2);
+			MENTOC_LAZY_SHOP(bankAccount);
+			MENTOC_LAZY_SHOP(lastsort);
+#undef MENTOC_LAZY_SHOP
+			if(shop.room_info.rooms.size() == 0){
+				mods::builder_util::list_line(player, "room list", "zero rooms");
+			}
+			if(shop.object_info.objects.size() == 0){
+				mods::builder_util::list_line(player, "object list", "zero objects");
+			}
+			for(auto & room_vnum : shop.room_info.rooms){
+				auto real_room_id =  real_room(room_vnum);
+				if(real_room_id >= world.size()){
+					mods::builder_util::list_line(player, "invalid room vnum:", room_vnum);
+				}else{
+					mods::builder_util::list_line(player, "room", world[real_room_id].name);
+				}
+			}
+			for(auto & obj_vnum : shop.object_info.objects){
+				auto real_obj_id = real_object(obj_vnum);
+				if(real_obj_id >= obj_list.size()){
+					mods::builder_util::list_line(player, "invalid object vnum:", obj_vnum);
+				}else{
+					mods::builder_util::list_line(player, "object", obj_list[real_obj_id]->name);
+				}
+			}
+			}
+		);//end show_object_vector call
+}
 int next_zone_vnum(){
 		static int next_zone_vnum = 0;
 		if(next_zone_vnum == 0){
@@ -881,6 +944,22 @@ namespace mods::builder {
 		if(direction > NUM_OF_DIRS) {
 			return "direction number is incorrect";
 		}
+		if(!world[room_id].dir_option[direction]){
+			std::string d = "description", k= "keyword";
+			if(description.has_value()){
+				d = description.value().data();
+			}
+			if(keywords.has_value()){
+				k = keywords.value().data();
+			}
+			world[room_id].set_dir_option(
+					direction,
+					d,k,
+				exit_info.value_or(0),
+				key.value_or(0),
+				to_room.value_or(0));
+				return std::nullopt;
+		}
 
 		if(description.value_or("-1").compare("-1") != 0) {
 			world[room_id].dir_option[direction]->general_description = strdup(description.value().data());
@@ -1374,13 +1453,46 @@ ACMD(do_sbuild) {
 			"  |:: {red}sbuild{/red} del-object 2 3\r\n" <<
 			"  |:: (removes object 3 from shop number 2)\r\n" <<
 			"  |:: (for a list of objects, type obuild)\r\n" <<
+			" {red}sbuild{/red} {grn}info{/grn}\r\n" <<
+			"  |--> prints information about the shop installed in this room (if any).\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {red}sbuild{/red} info\r\n" <<
+			"  |:: (prints info (if any))\r\n" <<
 			"\r\n"
 			;
 		player->pager_end();
 		player->page(0);
 	}
 
-	auto args = mods::util::subcmd_args<5,args_t>(argument,"save");
+	/** sbuild info */
+	auto args = mods::util::subcmd_args<5,args_t>(argument,"info");
+
+	if(args.has_value()) {
+		auto room = player->room();
+
+		if(world.size() > room){
+			r_status(player,"checking of shop installed in this room...");
+			if(world[room].shop_vnum){
+				r_success(player,"Found shop installed in room...printing...");
+				for(std::size_t i = 0; i < shop_proto.size(); ++i){
+					if(shop_proto[i].vnum == world[room].shop_vnum){
+						show_shop_by_index(i,player);
+						break;
+					}
+				}
+				r_success(player,"done");
+				return;
+			}
+			r_error(player, "no shop installed in this room");
+		}else{
+			r_error(player, "cannot get reliable room number. Are you in a weird room?");
+			return;
+		}
+		return;
+	}
+
+	/** sbuild save */
+	args = mods::util::subcmd_args<5,args_t>(argument,"save");
 
 	if(args.has_value()) {
 		auto arg_vec = args.value();
@@ -1399,12 +1511,12 @@ ACMD(do_sbuild) {
 
 		std::size_t i = index.value();
 
-		if(i  >= shop_index.size()) {
+		if(i  >= shop_proto.size()) {
 			r_error(player,"Invalid index");
 			return;
 		}
 
-		auto result = shop_index[index.value()].save();
+		auto result = shop_proto[index.value()].save();
 		if(std::get<0>(result)){
 			player->send("%d\n", std::get<1>(result));
 			r_success(player,"Shop saved.");
@@ -1414,10 +1526,11 @@ ACMD(do_sbuild) {
 		return;
 	}
 
+	/** sbuild delete */
 	args = mods::util::subcmd_args<7,args_t>(argument,"delete");
 
 	if(args.has_value()){
-		if(shop_index.size() == 0){
+		if(shop_proto.size() == 0){
 			r_error(player, "Shop size is zero.");
 			return;
 		}
@@ -1427,30 +1540,32 @@ ACMD(do_sbuild) {
 			r_error(player, "Invalid index. Expected zero-based integer.");
 			return;
 		}
-		if(index.value() >= shop_index.size()){
+		if(index.value() >= shop_proto.size()){
 			r_error(player, "Index out of bounds.");
 			return;
 		}
-		auto it = shop_index.begin();
+		auto it = shop_proto.begin();
 		it = it + index.value();
-		if(it == shop_index.end()){
+		if(it == shop_proto.end()){
 			r_error(player, "Index out of bounds.");
 			return;
 		}
-		shop_index.erase(it);
+		shop_proto.erase(it);
 		r_success(player,"Shop deleted.");
 		return;
 	}
 
 
+	/** sbuild new */
 	args = mods::util::subcmd_args<4,args_t>(argument,"new");
 
 	if(args.has_value()) {
-		shop_index.emplace_back();
+		shop_proto.emplace_back();
 		r_success(player,"Shop created");
 		return;
 	}
 
+	/** sbuild install */
 	args = mods::util::subcmd_args<8,args_t>(argument,"install");
 
 	if(args.has_value()) {
@@ -1461,8 +1576,8 @@ ACMD(do_sbuild) {
 			return;
 		}
 		auto index = mods::util::stoi(arg_vec[2]);
-		if(index.has_value() && index.value() < shop_index.size()){ 
-			auto & shop = shop_index[index.value()];
+		if(index.has_value() && index.value() < shop_proto.size()){ 
+			auto & shop = shop_proto[index.value()];
 			auto room = player->room();
 			auto r_vnum = world[room].number;
 			auto it = std::find(shop.room_info.rooms.begin(),shop.room_info.rooms.end(),r_vnum);
@@ -1478,6 +1593,7 @@ ACMD(do_sbuild) {
 		return;
 	}
 
+	/** sbuild uninstall */
 	args = mods::util::subcmd_args<10,args_t>(argument,"uninstall");
 	if(args.has_value()) {
 		auto arg_vec = args.value();
@@ -1487,8 +1603,8 @@ ACMD(do_sbuild) {
 			return;
 		}
 		auto index = mods::util::stoi(arg_vec[2]);
-		if(index.has_value() && index.value() < shop_index.size()){ 
-			auto & shop = shop_index[index.value()];
+		if(index.has_value() && index.value() < shop_proto.size()){ 
+			auto & shop = shop_proto[index.value()];
 			auto room = player->room();
 			auto r_vnum = world[room].number;
 			auto it = std::find(shop.room_info.rooms.begin(),shop.room_info.rooms.end(),r_vnum);
@@ -1505,6 +1621,7 @@ ACMD(do_sbuild) {
 	}
 
 
+	/** sbuild add-object */
 	args = mods::util::subcmd_args<11,args_t>(argument,"add-object");
 
 	if(args.has_value()) {
@@ -1516,14 +1633,14 @@ ACMD(do_sbuild) {
 		}
 		auto index = mods::util::stoi(arg_vec[2]);
 		auto o_index = mods::util::stoi(arg_vec[3]);
-		if(index.has_value() == false || (index.has_value() && index.value() >= shop_index.size())){
+		if(index.has_value() == false || (index.has_value() && index.value() >= shop_proto.size())){
 			r_error(player, "Invalid shop index");
 			return;
 		}
 		if(o_index.has_value() == false || (o_index.value() >= obj_list.size())){
 			r_error(player, "Invalid object index");
 		}
-		auto & shop = shop_index[index.value()];
+		auto & shop = shop_proto[index.value()];
 		auto obj = obj_list[o_index.value()];
 		auto r_vnum = obj->item_number;
 		auto it = std::find(shop.object_info.objects.begin(),shop.object_info.objects.end(),r_vnum);
@@ -1536,6 +1653,7 @@ ACMD(do_sbuild) {
 		return;
 	}
 
+	/** sbuild del-object */
 	args = mods::util::subcmd_args<11,args_t>(argument,"del-object");
 
 	if(args.has_value()) {
@@ -1547,14 +1665,14 @@ ACMD(do_sbuild) {
 		}
 		auto index = mods::util::stoi(arg_vec[2]);
 		auto o_index = mods::util::stoi(arg_vec[3]);
-		if(index.has_value() == false || (index.has_value() && index.value() >= shop_index.size())){
+		if(index.has_value() == false || (index.has_value() && index.value() >= shop_proto.size())){
 			r_error(player, "Invalid shop index");
 			return;
 		}
 		if(o_index.has_value() == false || (o_index.value() >= obj_list.size())){
 			r_error(player, "Invalid object index");
 		}
-		auto & shop = shop_index[index.value()];
+		auto & shop = shop_proto[index.value()];
 		auto obj = obj_list[o_index.value()];
 		auto r_vnum = obj->item_number;
 		auto it = std::find(shop.object_info.objects.begin(),shop.object_info.objects.end(),r_vnum);
@@ -1567,6 +1685,7 @@ ACMD(do_sbuild) {
 		return;
 	}
 
+	/** sbuild attr */
 	args = mods::util::subcmd_args<5,args_t>(argument,"attr");
 
 
@@ -1579,8 +1698,8 @@ ACMD(do_sbuild) {
 		}
 
 		auto index = mods::util::stoi(arg_vec[1]);
-		if(index.has_value() && index.value() < shop_index.size()){ 
-			auto & shop = shop_index[index.value()];
+		if(index.has_value() && index.value() < shop_proto.size()){ 
+			auto & shop = shop_proto[index.value()];
 			if(arg_vec[2].compare("profit_buy") == 0){
 				shop.profit_buy = std::stol(arg_vec[3]);
 				r_success(player, "Successfully set profit_buy.");
@@ -1632,19 +1751,22 @@ ACMD(do_sbuild) {
 		return;
 	}
 
-	mods::builder_util::list_object_vector<std::vector<shop_data_t>,std::string>(
+	mods::builder_util::list_object_vector<std::deque<shop_data_t>,std::string>(
 		player,
 		std::string(argument),
-		shop_index,
+		shop_proto,
 		[](shop_data_t & shop) -> std::string {
 			return std::string(mods::util::itoa(shop.vnum));
 		}
 	);
 
-	mods::builder_util::save_object_vector<std::vector<shop_data_t>>(
+	/**
+	 * not obvious, but this handles the "save" sub-command
+	 */
+	mods::builder_util::save_object_vector<std::deque<shop_data_t>>(
 			player,
 			std::string(argument),
-			shop_index,
+			shop_proto,
 			[](shop_data_t & shop) -> std::pair<bool,std::string> {
 				mods::builder_util::post_modify_callback pm_callback = []() -> std::pair<bool,std::string> {
 					return {true,""};
@@ -1686,10 +1808,13 @@ ACMD(do_sbuild) {
 					);
 			}
 	);
-	mods::builder_util::show_object_vector<std::vector<shop_data_t>>(
+	/**
+	 * not obvious, but this handles the "show" sub command
+	 */
+	mods::builder_util::show_object_vector<std::deque<shop_data_t>>(
 			player,
 			std::string(argument),
-			shop_index,
+			shop_proto,
 			[&player](shop_data_t & shop) -> void {
 #define MENTOC_LAZY_SHOP(a) mods::builder_util::list_line(player,#a, shop.a)
 			MENTOC_LAZY_SHOP(db_id);
@@ -4418,8 +4543,11 @@ ACMD(do_rbuild) {
 			"  {grn}|____[example]{/grn}\r\n" <<
 			"  |:: {wht}rbuild{/wht} {gld}help{/gld}\r\n" <<
 			"  |:: (this help menu will show up)\r\n" <<
-			" {grn}rbuild{/grn} {red}vnum{/red}\r\n" <<
-			"  |--> print the current room's vnum\r\n" <<
+			" {grn}rbuild{/grn} {red}vnum <vnum>{/red}\r\n" <<
+			"  |--> set the current room's vnum\r\n" <<
+			"  {grn}|____[example]{/grn}\r\n" <<
+			"  |:: {wht}rbuild{/wht} {gld}vnum 410{/gld}\r\n" <<
+			"  |:: (set vnum of the current room to 410)\r\n" <<
 			" {grn}rbuild{/grn} {red}set-recall{/red} {red}<mortal|immortal>{/red}\r\n" <<
 			"  |--> set the current room as recall\r\n" <<
 			"  {grn}|____[example]{/grn}\r\n" <<
@@ -4674,6 +4802,29 @@ ACMD(do_rbuild) {
 		return;
 	}
 
+	auto args = mods::util::subcmd_args<4,args_t>(argument,"vnum");
+	if(args.has_value()){
+		if(vec_args.size() < 2){
+			r_error(player,"Not enough arguments to dopt. Expecting 4.");
+			return;
+		}
+		auto str_vnum = vec_args[1];
+		auto opt = mods::util::stoi(str_vnum);
+		if(opt.value_or(-1) <= 0){
+			r_error(player,"Invalid vnum. Must be positive number and not zero.");
+			return;
+		}
+		auto room = player->room();
+		if(world.size() <= room){
+			r_error(player,"You are not in a room that I can reference. Perhaps you haven't saved your room.");
+			return;
+		}
+		world[room].number = opt.value();
+		r_success(player,"Set the virtual number of this room successfully.");
+		return;
+	}
+
+
 	constexpr unsigned int max_char = 2048;
 	std::array<char,max_char> command;
 	std::array<char,max_char> direction;
@@ -4685,7 +4836,7 @@ ACMD(do_rbuild) {
 		return;
 	}
 
-	auto args = mods::util::subcmd_args<11,args_t>(argument,"set-recall");
+	args = mods::util::subcmd_args<11,args_t>(argument,"set-recall");
 	if(args.has_value() && args.value().size() > 1 && args.value()[0].compare("set-recall") == 0){
 		auto arg_vec = args.value();
 		if(arg_vec[1].compare("mortal") == 0){
@@ -4725,7 +4876,7 @@ ACMD(do_rbuild) {
 		player->pager_start();
 		auto max_per_call = mods::builder::RNUMLIST_MAX_PER_CALL;
 		jxcomp jx; 
-		jx.array_start("roomss");
+		jx.array_start("rooms");
 		if(std::distance(world.begin(),world.end()) > max_per_call * number.value()){
 			auto it = world.begin() + max_per_call * number.value();
 			auto end_range = world.end();
@@ -4757,35 +4908,14 @@ ACMD(do_rbuild) {
 		return;
 	}
 
-	if(std::string(&command[0]).compare("room") == 0 ||
-			std::string(&command[0]).compare("vnum") == 0) {
-		*player << world[IN_ROOM(ch)].number << "\r\n";
-		return;
-	}
-
-	if(std::string(&command[0]).compare("set") == 0) {
-		auto set = std::string(argument);
-		set = set.substr(set.find("rnum ") + 5);
-		auto number = mods::util::stoi(set);
-
-		if(number.value_or(-1) == -1) {
-			r_error(player,"Invalid number");
-			return;
-		}
-
-		world[IN_ROOM(ch)].number = number.value();
-		r_success(player,std::string("real room number set to ") + std::to_string(number.value()));
-		return;
-	}
-
 	if(std::string(&command[0]).compare("title") == 0) {
 		auto title = std::string(argument);
 		title = title.substr(title.find("title ") + 6);
 
-		if(mods::builder::title(IN_ROOM(ch),title)) {
-			r_success(player,"Title changed");
+		if(mods::builder::title(in_room(ch),title)) {
+			r_success(player,"title changed");
 		} else {
-			r_error(player,"Error");
+			r_error(player,"error");
 		}
 
 		return;
@@ -4795,24 +4925,24 @@ ACMD(do_rbuild) {
 		auto description = std::string(argument);
 		description = description.substr(description.find("description ") + 12);
 
-		if(mods::builder::description(IN_ROOM(ch),description + "\r\n")) {
-			r_success(player,"Description changed");
+		if(mods::builder::description(in_room(ch),description + "\r\n")) {
+			r_success(player,"description changed");
 		} else {
-			r_error(player,"Error");
+			r_error(player,"error");
 		}
 
 		return;
 	}
 
-	//" {grn}rbuild{/grn} {red}ed <list>{/red}\r\n" << 	/** TODO needs impl */
-	//" {grn}rbuild{/grn} {red}ed <save-all>{/red}\r\n" << /** TODO: needs impl */
-	//" {grn}rbuild{/grn} {red}ed <show> <N>{/red}\r\n" <<  /** TODO: needs impl */
-	//" {grn}rbuild{/grn} {red}ed <N> <keyword> <value>{/red}\r\n" <<  /** TODO: needs impl */
-	//" {grn}rbuild{/grn} {red}ed <N> <description> <value>{/red}\r\n" <<  /** TODO: needs impl */
+	//" {grn}rbuild{/grn} {red}ed <list>{/red}\r\n" << 	/** todo needs impl */
+	//" {grn}rbuild{/grn} {red}ed <save-all>{/red}\r\n" << /** todo: needs impl */
+	//" {grn}rbuild{/grn} {red}ed <show> <n>{/red}\r\n" <<  /** todo: needs impl */
+	//" {grn}rbuild{/grn} {red}ed <n> <keyword> <value>{/red}\r\n" <<  /** todo: needs impl */
+	//" {grn}rbuild{/grn} {red}ed <n> <description> <value>{/red}\r\n" <<  /** todo: needs impl */
 	//
 
-	/** HOw positional parameters are parsed: */
-	/* On the command: rbuild ed foo bar 1 
+	/** how positional parameters are parsed: */
+	/* on the command: rbuild ed foo bar 1 
 		 vec_args[0] == 'ed'
 		 vec_args[1] == 'foo'
 		 vec_args[2] == 'bar'
@@ -4820,41 +4950,41 @@ ACMD(do_rbuild) {
 		 */
 
 	/**
-	 *  Command line: rbuild ed [...] 
+	 *  command line: rbuild ed [...] 
 	 */
 	if(std::string(&command[0]).compare("ed") == 0) {
 		/**
-		 *  Command line: rbuild ed new [N]
+		 *  command line: rbuild ed new [n]
 		 * ------------------------------------------
-		 *  the N is for optionally how many new ones to create
+		 *  the n is for optionally how many new ones to create
 		 */
 		if(vec_args.size() >= 2 && vec_args[1].compare("new") == 0){
-			// rbuild ed <new>\r\n" <<  /** TODO: needs impl */
-			/** TODO: add mutex lock so that other builders cant lock this room */
+			// rbuild ed <new>\r\n" <<  /** todo: needs impl */
+			/** todo: add mutex lock so that other builders cant lock this room */
 
-			auto size_before = world[IN_ROOM(ch)].ex_descriptions().size();
-			world[IN_ROOM(ch)].ex_descriptions().emplace_back();
-			auto size_after = world[IN_ROOM(ch)].ex_descriptions().size();
-#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
+			auto size_before = world[in_room(ch)].ex_descriptions().size();
+			world[in_room(ch)].ex_descriptions().emplace_back();
+			auto size_after = world[in_room(ch)].ex_descriptions().size();
+#ifdef __mentoc_show_mods_builder_debug_output__
 			std::cerr << "before: " << size_before << " after: " << size_after << "\n";
 #endif
 			if(size_after > size_before){
-				r_success(player,"Room ed saved");
+				r_success(player,"room ed saved");
 				return;
-			}else { r_error(player,std::string("Error creating ed: ")); }
+			}else { r_error(player,std::string("error creating ed: ")); }
 			return;
 		}
 		/**
-		 *  Command line: rbuild ed list [N]
+		 *  command line: rbuild ed list [n]
 		 * --------------------------------------------------
-		 *  the N is for which page to list. 25 to a page
+		 *  the n is for which page to list. 25 to a page
 		 */
 		if(vec_args.size() >= 3 && vec_args[1].compare("list") == 0){
 			r_status(player,"listing...");
 			unsigned ex_id = 0;
 			player->pager_start();
 
-			for(const auto& ex : world[IN_ROOM(ch)].ex_descriptions()) {
+			for(const auto& ex : world[in_room(ch)].ex_descriptions()) {
 				*player << "{gld}[" << ex_id++ << "]{/gld} :->{red} [" <<
 					ex.keyword.c_str() <<  "]->'" << 
 					ex.description.c_str() << "'{/red}\r\n";
@@ -4864,54 +4994,54 @@ ACMD(do_rbuild) {
 			return;
 		}
 		if(vec_args.size() >= 3 && vec_args[1].compare("delete") == 0){
-			/** Accepts: rbuild ed delete N */
-			// rbuild ed <delete> <N>\n" <<  /** TODO: needs impl */
+			/** accepts: rbuild ed delete n */
+			// rbuild ed <delete> <n>\n" <<  /** todo: needs impl */
 			/**
-			 *  Command line: rbuild ed delte N
+			 *  command line: rbuild ed delte n
 			 * --------------------------------------------------
-			 *  where N is the index you want to delete. accepts csv (TODO)
+			 *  where n is the index you want to delete. accepts csv (todo)
 			 */
 			int32_t target = mods::util::stoi<int>(vec_args[2]);
 			int32_t i = target;
 			if(i < 0){
-				r_error(player,std::string("Value must be greater than zero"));
+				r_error(player,std::string("value must be greater than zero"));
 				return;
 			}
 			else{
-				auto temp = world[IN_ROOM(ch)].ex_descriptions();
+				auto temp = world[in_room(ch)].ex_descriptions();
 				auto size_temp = temp.size();
 				if(temp.size()){
 					r_error(player,std::string(
-								"Nothing to delete"));
+								"nothing to delete"));
 					return;
 				}
-				world[IN_ROOM(ch)].ex_descriptions().clear();
+				world[in_room(ch)].ex_descriptions().clear();
 				int32_t ctr = 0; 
 				for(auto && m : temp){
 					if(ctr == target){
 						continue;
 					}else{
-						world[IN_ROOM(ch)].ex_descriptions().emplace_back(std::move(m));
+						world[in_room(ch)].ex_descriptions().emplace_back(std::move(m));
 					}
 				}
-				std::string before = std::string("Before: [") + std::to_string(size_temp) + "] items.";
-				std::string items = std::string("Now: [") + std::to_string(world[IN_ROOM(ch)].ex_descriptions().size() ) + "] items."; 
+				std::string before = std::string("before: [") + std::to_string(size_temp) + "] items.";
+				std::string items = std::string("now: [") + std::to_string(world[in_room(ch)].ex_descriptions().size() ) + "] items."; 
 				r_success(player,before + items);
 			}
 		}
 
 
-	}/** All code that handles ed should be in above statement */
+	}/** all code that handles ed should be in above statement */
 
 
 	if(std::string(&command[0]).compare("save") == 0) {
 		std::string error;
-		auto ret = mods::builder::save_to_db(IN_ROOM(ch),error);
+		auto ret = mods::builder::save_to_db(in_room(ch),error);
 
 		if(ret != 0) {
-			r_error(player,std::string("Error saving room: ") + std::to_string(ret) + "->" + error);
+			r_error(player,std::string("error saving room: ") + std::to_string(ret) + "->" + error);
 		} else {
-			r_success(player,"Room saved");
+			r_success(player,"room saved");
 		}
 
 		return;
@@ -4926,26 +5056,26 @@ ACMD(do_rbuild) {
 		one_argument(one_argument(one_argument(argument,&command[0],max_char),&direction[0],max_char_item),&room_id[0],max_char_item);
 
 		/* command = bind, direction = neswud, room_id = int */
-		if(!IS_DIRECTION(&direction[0])) {
-			r_error(player,"Invalid direction");
+		if(!is_direction(&direction[0])) {
+			r_error(player,"invalid direction");
 			return;
 		}
 
 		auto room = mods::util::stoi(&room_id[0]);
 		int r = room.value_or(-1);
 		if(r < 0){
-			r_error(player,"Invalid vnum. Could not convert to a number.");
+			r_error(player,"invalid vnum. could not convert to a number.");
 			return;
 		}
 		r = real_room((room_vnum)r);
-		if(r == NOWHERE){
-			r_error(player, "Could not find a room with that vnum");
+		if(r == nowhere){
+			r_error(player, "could not find a room with that vnum");
 			return;
 		}
 		if(mods::builder::create_direction(player->room(),mods::globals::dir_int(direction[0]),r)) {
-			r_success(player,"Direction created");
+			r_success(player,"direction created");
 		} else {
-			r_error(player,"Error");
+			r_error(player,"error");
 		}
 
 		return;
@@ -4959,30 +5089,33 @@ ACMD(do_rbuild) {
 		auto description = std::string(argument);
 		std::string str_item = &item[0];
 
-		if(!IS_DIRECTION(&direction[0])) {
-			r_error(player,"Invalid direction");
+		if(!is_direction(&direction[0])) {
+			r_error(player,"invalid direction");
 			return;
 		}
 
-		if(!mods::builder::destroy_direction(IN_ROOM(ch),mods::globals::dir_int(direction[0]))) {
-			r_error(player,"Unable to destroy direction");
+		if(!mods::builder::destroy_direction(in_room(ch),mods::globals::dir_int(direction[0]))) {
+			r_error(player,"unable to destroy direction");
 		} else {
-			r_success(player,"Direction destroyed");
+			r_success(player,"direction destroyed");
 		}
 
 		return;
 	}
 
-	if(std::string(&command[0]).compare("dopt") == 0) {
-		constexpr unsigned int max_char_item = 20;
-		std::array<char,max_char_item> direction;
-		std::array<char,max_char_item> item;
-		one_argument(one_argument(one_argument(argument,&command[0],max_char),&direction[0],max_char_item),&item[0],max_char_item);
-		auto description = std::string(argument);
-		std::string str_item = &item[0];
-
+	args = mods::util::subcmd_args<4,args_t>(argument,"dopt");
+	if(args.has_value()){
+		if(vec_args.size() < 4){
+			r_error(player,"Not enough arguments to dopt. Expecting 4.");
+			return;
+		}
+		for(auto a : vec_args){
+			player->sendln(CAT("arg: '",a,"'"));
+		}
+		auto str_item = vec_args[2];
+		std::string direction = vec_args[1];
+		std::string description = vec_args[3];
 		if(str_item.compare("gen") == 0) {
-			description = description.substr(description.find("gen ") + 4);
 			auto ret = mods::builder::dir_option(IN_ROOM(ch),mods::globals::dir_int(direction[0]),description,
 					std::nullopt,std::nullopt,std::nullopt,std::nullopt).value_or("success");
 
@@ -4996,7 +5129,6 @@ ACMD(do_rbuild) {
 		}
 
 		if(str_item.compare("keyword") == 0) {
-			description = description.substr(description.find("keyword ") + 8);
 			auto ret = mods::builder::dir_option(IN_ROOM(ch),mods::globals::dir_int(direction[0]),std::nullopt,
 					description,std::nullopt,std::nullopt,std::nullopt).value_or("success");
 
@@ -5010,7 +5142,6 @@ ACMD(do_rbuild) {
 		}
 
 		if(str_item.compare("key") == 0) {
-			description = description.substr(description.find("key ") + 4);
 			auto key = mods::util::stoi(description);
 
 			if(key.value_or(-1) == -1) {
@@ -5031,7 +5162,6 @@ ACMD(do_rbuild) {
 		}
 
 		if(str_item.compare("to_room") == 0) {
-			description = description.substr(description.find("to_room ") + 8);
 			auto to_room = mods::util::stoi(description);
 
 			if(to_room.value_or(-1) == -1) {

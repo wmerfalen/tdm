@@ -26,6 +26,9 @@
  * output.
  */
 
+namespace mods::rooms {
+	extern std::string word_wrap_description(room_rnum,int width);
+};
 extern size_t vwrite_to_output(mods::descriptor_data &t, const char *format, va_list args);
 extern int write_to_descriptor(socket_t desc, const char *txt);
 extern void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
@@ -683,18 +686,6 @@ namespace mods {
 		write_to_char(m_char_data,std::to_string(m).c_str(),0,1);
 		desc().has_prompt = 0;
 	}
-	void player::stc_room_desc(const room_rnum& rnum) {
-		MENTOC_NPC_CHECK(rnum);
-		if(rnum < 0 || std::size_t(rnum) >= world.size()){
-			std::cerr << "[stc_room_desc] invalid rnum!\n";
-			return;
-		}
-		raw_send(world[rnum].description);
-		if(((get_prefs()) & PRF_OVERHEAD_MAP)){
-			stc(mods::overhead_map::generate<mods::player*>(this,rnum));
-		}
-		desc().has_prompt = 0;
-	}
 	void player::raw_send(const mods::string& str){
 		MENTOC_NPC_CHECK(str.c_str());
 		if(m_do_paging) {
@@ -728,6 +719,8 @@ namespace mods {
 		it->character->has_desc = true;
 	}
 	void player::init(){
+		m_hacking_row = 0;
+		m_currently_hacking = 0;
 		m_class = player_class_t::CLASS_UNDEFINED;
 		m_blocked_until = 0;
 		m_has_block_event = false;
@@ -1489,6 +1482,16 @@ namespace mods {
 		void player::set_class(player_class_t c){
 			std::cerr << "[mods::player] set class to: " << c << "\n";
 			m_class = c;
+		}
+		int player::screen_width(){
+			return mods::util::stoi(mods::prefs::dynamic_get("width","player",m_char_data)).value_or(80);
+		}
+		std::tuple<uint32_t,uint8_t> player::currently_hacking(){
+			return {m_currently_hacking,m_hacking_row};
+		}
+		void player::set_currently_hacking(uint32_t id,uint8_t row){
+			m_currently_hacking = id;
+			m_hacking_row = row;
 		}
 };
 

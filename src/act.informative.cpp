@@ -29,6 +29,7 @@
 #include "mods/object-utils.hpp"
 #include "mods/player-utils.hpp"
 #include "mods/rooms.hpp"
+#include "mods/prefs.hpp"
 
 extern char_data* character_list;
 /* extern variables */
@@ -774,7 +775,7 @@ void look_at_room(char_data *ch, int ignore_brief) {
 	player->sendln(CCNRM(ch, C_NRM));
 	if((!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_BRIEF)) || ignore_brief ||
 			ROOM_FLAGGED(room, ROOM_DEATH)) {
-		player->send("{wht}%s{/wht}\r\n", world[room].description.c_str());
+		mods::rooms::word_wrap_description(player,room);
 	}
 	if(((player->get_prefs()) & PRF_OVERHEAD_MAP)){
 		player->stc(mods::overhead_map::generate<mods::player*>(player.get(),room));
@@ -1036,11 +1037,11 @@ ACMD(do_look) {
 	int look_type;
 
 	if(GET_POS(ch) < POS_SLEEPING) {
-		player->sendln("You can't see anything but stars!");
+		player->sendln(STOCK_STARS_MESSAGE());
 	} else if(AFF_FLAGGED(ch, AFF_BLIND)) {
-		player->sendln("You can't see a damned thing, you're blind!");
-	//} else if(IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch)) {
-	//	player->sendln("It is pitch black...");
+		player->sendln(STOCK_BLIND_MESSAGE());
+	} else if(IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch)) {
+		player->sendln(STOCK_PITCH_BLACK_MESSAGE());
 	} else {
 		char arg[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
 
@@ -1048,7 +1049,7 @@ ACMD(do_look) {
 
 		if(subcmd == SCMD_READ) {
 			if(!*arg) {
-				player->sendln("Read what?");
+				player->sendln(STOCK_READ_WHAT_MESSAGE());
 			} else {
 				look_at_target(ch, arg);
 			}
@@ -1081,7 +1082,7 @@ ACMD(do_examine) {
 	one_argument(argument, arg);
 
 	if(!*arg) {
-		player->sendln("Examine what?");
+		player->sendln(STOCK_EXAMINE_MESSAGE());
 		return;
 	}
 
@@ -1095,7 +1096,7 @@ ACMD(do_examine) {
 		if((GET_OBJ_TYPE(tmp_object) == ITEM_DRINKCON) ||
 				(GET_OBJ_TYPE(tmp_object) == ITEM_FOUNTAIN) ||
 				(GET_OBJ_TYPE(tmp_object) == ITEM_CONTAINER)) {
-			player->sendln("When you look inside, you see:");
+			player->sendln(STOCK_LOOK_INSIDE_MESSAGE());
 			look_in_obj(ch, arg);
 		}
 	}
@@ -1105,11 +1106,11 @@ ACMD(do_examine) {
 
 ACMD(do_gold) {
 	if(GET_GOLD(ch) == 0) {
-		player->sendln("You're broke!");
+		player->sendln(STOCK_GOLD_BROKE_MESSAGE());
 	} else if(GET_GOLD(ch) == 1) {
-		player->sendln("You have one miserable little gold coin.");
+		player->sendln(STOCK_GOLD_ONE_MISERABLE_MESSAGE());
 	} else {
-		player->sendln( TOSTR("You have ") + TOSTR(player->gold()) + " gold coins.");
+		player->sendln(CAT(STOCK_GOLD_PREFIX_MESSAGE(),TOSTR(player->gold()),STOCK_GOLD_SUFFIX_MESSAGE())); 
 	}
 }
 

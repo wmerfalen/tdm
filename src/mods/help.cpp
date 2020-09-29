@@ -153,6 +153,68 @@ namespace mods::help::pages {
 			"\r\n"
 			"{blu}this documentation was written on 2020-09-11.{/blu}"
 	;
+	static constexpr const char* h_install_camera_feed = "usage: install_camera_feed <name> <id>...[id_N]\r\n"
+			"description: installs a camera feed identified by 'name'.\r\n"
+			"The room virtual numbers you pass after the name of the camera feed will be the rooms\r\n"
+			"that you would like to be shown on the camera feed.\r\n"
+			"{blu}Example: {yel}install_camera_feed \"Camera Feed A\" 20 21 22 23 24{/yel}\r\n"
+			"\r\n"
+			"{blu}this documentation was written on 2020-09-26.{/blu}"
+	;
+	static constexpr const char* h_uninstall_camera_feed = "usage: uninstall_camera_feed <name>\r\n"
+			"description: uninstalls the camera feed identified by 'name'.\r\n"
+			"{blu}Example: {yel}uninstall_camera_feed \"Camera Feed A\"{/yel}\r\n"
+			"\r\n"
+			"{blu}this documentation was written on 2020-09-26.{/blu}"
+	;
+	static constexpr const char* h_install_minigame = "usage: install_minigame <name> <type> <difficulty> <unlock-event>\r\n"
+			"description: installs a mini game identified by 'name'.\r\n"
+			"Valid types:\r\n"
+			"{blu}line-up: Will show a series of rows that the user has to line up accordingly\r\n"
+			"{blu}wires: will show a series of wires and allow the user to attach them\r\n"
+			"Valid difficulties:\r\n"
+			"easy\r\n"
+			"medium\r\n"
+			"hard\r\n"
+			"impossible\r\n"
+			"\r\n"
+			"The unlock-event will be one of the following:\r\n"
+			"unlock <direction>\r\n"
+			"lock <direction>\r\n"
+			"toggle <direction>\r\n"
+			"\r\n"
+			"The unlock-event can also work with several directions separated by commas\r\n"
+			"The unlock-event can work with room virtual numbers and directions\r\n"
+			"unlock vnum:40 <direction>\r\n"
+			"lock vnum:40 <direction>\r\n"
+			"toggle vnum:40 <direction>\r\n"
+			"If the unlock-event is neither of the above strings, then it will be fed to the system\r\n"
+			"and handled accordingly.\r\n"
+			"Example of a custom event:\r\n"
+			"{blu}Example: {yel}install_minigame \"North Door Lock\" medium custom \"custom event. handled by system\"{/yel}\r\n"
+			"The 'custom' keyword takes whatever you pass in and the system interprets it. This is for adding custom events\r\n"
+			"that might work in the future or if the developers have a custom even that allow you to do special things.\r\n"
+			"As of this writing, there are no custom events. 2020-09-28\r\n"
+			
+			"{blu}Example: {yel}install_minigame \"North Door Lock\" line-up medium unlock north{/yel}\r\n"
+			"{blu}Example: {yel}install_minigame \"North Door Lock\" line-up medium unlock vnum:40 north,south,east,west{/yel}\r\n"
+			"{blu}Example: {yel}install_minigame \"North Door Lock\" line-up medium toggle vnum:40 south,west,up{/yel}\r\n"
+			"\r\n"
+			"{blu}this documentation was written on 2020-09-28.{/blu}"
+	;
+	static constexpr const char* h_list_minigame = "usage: list_minigame\r\n"
+			"description: lists all the mini games in the current room. This command is needed to pass the id of the minigame\r\n"
+			"to the uninstall_minigame command.\r\n"
+			"\r\n"
+			"{blu}this documentation was written on 2020-09-28.{/blu}"
+	;
+	static constexpr const char* h_uninstall_minigame = "usage: uninstall_minigame <id>\r\n"
+			"description: uninstalls the currently installed mini game identified by the id you pass in.\r\n"
+			"To see the ID's of the mini games currently installed in this room, see the list_minigame command.\r\n"
+			"{blu}Example: {yel}uninstall_minigame \"North Door Lock\"{/yel}\r\n"
+			"\r\n"
+			"{blu}this documentation was written on 2020-09-28.{/blu}"
+	;
 };
 
 namespace mods::help {
@@ -180,6 +242,11 @@ namespace mods::help {
 			M_MATCH("yaml_example",h_yaml_example);
 			M_MATCH("skills,skill",h_skills);
 			M_MATCH("registration_status,enable_registration,disable_registration",h_enable_registration);
+			M_MATCH("install_camera_feed",h_install_camera_feed);
+			M_MATCH("uninstall_camera_feed",h_uninstall_camera_feed);
+			M_MATCH("install_minigame",h_install_minigame);
+			M_MATCH("list_minigame",h_list_minigame);
+			M_MATCH("uninstall_minigame",h_uninstall_minigame);
 #undef M_MATCH
 			return true;
 	}

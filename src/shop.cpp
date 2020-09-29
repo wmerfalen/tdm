@@ -38,7 +38,7 @@ void sort_keeper_objs(char_data *keeper, int shop_nr);
 
 using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>;
 /* Local variables */
-std::vector<shop_data_t> shop_index;
+std::deque<shop_data_t> shop_index;
 int top_shop = -1;
 int cmd_say, cmd_tell, cmd_emote, cmd_slap, cmd_puke;
 

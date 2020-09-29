@@ -13,6 +13,8 @@
 	- obuild
 	- mbuild
 	- rbuild\_sandbox
+	- cambuild
+		- so that users can install permanent surveilance cam feeds in rooms
 
 - duktape js scripting
 	- profile scripts
@@ -103,4 +105,17 @@
 	- framework for more ORM based code
 	- needs work
 
+- projectiles system
+	- smoke grenades
+	- flash grenades
+	- incendiary grenades
 
+- fire system
+	- fires can be lit inside rooms
+	- certain textures of rooms will exacerbate and prolong fires
+	- fire damage done to players and objects inside a burning room
+	- a system to process fires so that they have an attack, decay, sustain, release envelope
+
+- cambuild system
+	- allows a builder to create a surveilance camera feed that changes automatically
+	- allows a builder to create a surveilance camera feed that changes by control of user

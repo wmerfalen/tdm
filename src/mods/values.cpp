@@ -399,6 +399,16 @@ namespace mods::values {
 		"ADMIN_SUCCESS_MESSAGE",
 		"ADMIN_FAILURE_MESSAGE",
 		"UNIMPLEMENTED_MESSAGE",
+		"STOCK_STARS_MESSAGE",
+		"STOCK_BLIND_MESSAGE",
+		"STOCK_PITCH_BLACK_MESSAGE",
+		"STOCK_READ_WHAT_MESSAGE",
+		"STOCK_EXAMINE_MESSAGE",
+		"STOCK_LOOK_INSIDE_MESSAGE",
+		"STOCK_GOLD_BROKE_MESSAGE",
+		"STOCK_GOLD_ONE_MISERABLE_MESSAGE",
+		"STOCK_GOLD_PREFIX_MESSAGE",
+		"STOCK_GOLD_SUFFIX_MESSAGE",
 			};
 		bool is_int(std::string key){
 			return (std::find(int_types.begin(),int_types.end(),key) != int_types.end());
@@ -990,6 +1000,16 @@ namespace mods::values {
 		CGET_DEF(std::string,SUPER_USER_REJECT_MESSAGE,"{red}You are not a super user.\r\nA man with no teeth spits on you.{/red}");
 		CGET_DEF(std::string,ADMIN_SUCCESS_MESSAGE,"{grn}[+] It is done.{/grn}");
 		CGET_DEF(std::string,ADMIN_FAILURE_MESSAGE,"{red}[-] Failure.{/red}");
-		CGET_DEF(std::string,UNIMPLEMENTED_MESSAGE,"this command is unimplemented");
+		CGET_DEF(std::string,UNIMPLEMENTED_MESSAGE,"{red}this command is unimplemented{/red}");
+		CGET_DEF(std::string,STOCK_STARS_MESSAGE,"You can't see anything but stars!");
+		CGET_DEF(std::string,STOCK_BLIND_MESSAGE,"You can't see a damned thing, you're blind!");
+		CGET_DEF(std::string,STOCK_PITCH_BLACK_MESSAGE,"It is pitch black...");
+		CGET_DEF(std::string,STOCK_READ_WHAT_MESSAGE,"Read what?");
+		CGET_DEF(std::string,STOCK_EXAMINE_MESSAGE,"Examine what?");
+		CGET_DEF(std::string,STOCK_LOOK_INSIDE_MESSAGE, "When you look inside, you see:");
+		CGET_DEF(std::string,STOCK_GOLD_BROKE_MESSAGE,"You're broke!");
+		CGET_DEF(std::string,STOCK_GOLD_ONE_MISERABLE_MESSAGE,"You have one miserable little gold coin.");
+		CGET_DEF(std::string,STOCK_GOLD_PREFIX_MESSAGE,"You have ");
+		CGET_DEF(std::string,STOCK_GOLD_SUFFIX_MESSAGE," gold coins.");
 #undef CGET_DEF
 };

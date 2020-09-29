@@ -651,7 +651,13 @@ namespace mods {
 		void dispatch_event(feedback_t);
 		void set_watching(direction_t dir){ this->m_watching = dir; }
 		direction_t get_watching(){ return this->m_watching; }
+		int screen_width();
+		room_vnum vnum(){ return world[room()].number; }
 		
+		/** for shift left/right defuse/hack games */
+		std::tuple<uint32_t,uint8_t> currently_hacking();
+		void set_currently_hacking(uint32_t id,uint8_t row);
+
 		protected:
 		std::array<bool,misc_pref_enum_t::SIZE> m_misc_pref;
 		void m_sync_equipment();
@@ -723,6 +729,8 @@ namespace mods {
 		std::shared_ptr<mods::armor::basic_protection> m_basic_protection;
 		std::shared_ptr<mods::armor::advanced_protection> m_advanced_protection;
 		std::shared_ptr<mods::armor::elite_protection> m_elite_protection;
+		uint32_t m_currently_hacking;
+		uint8_t m_hacking_row;
 	};
 };
 
