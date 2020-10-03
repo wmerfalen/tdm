@@ -663,7 +663,12 @@ namespace mods {
 		std::tuple<uint32_t,uint8_t> currently_hacking();
 		void set_currently_hacking(uint32_t id,uint8_t row);
 
+
+		/** Americans with Disabilities Act (ADA) support */
+		bool needs_ada() const { return m_ada; }
+		void set_ada(bool s){ m_ada = true; }
 		protected:
+		bool m_ada;
 		mods::string m_class_string;
 		std::array<bool,misc_pref_enum_t::SIZE> m_misc_pref;
 		void m_sync_equipment();

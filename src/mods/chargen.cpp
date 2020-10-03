@@ -12,6 +12,110 @@ extern player_class_t parse_class(char arg);
 extern std::string motd;
 extern size_t write_to_output(mods::descriptor_data &t, const char *txt, ...) __attribute__((format(printf, 2, 3)));
 namespace mods::chargen {
+const char* class_menu =
+		"\r\n"
+		"  |=================================================|\r\n"
+    "  | Sniper (Rogue Archetype)                        |\r\n"
+		"  |-------------------------------------------------|\r\n"
+		"  |  -> [1G] GHOST       |         stealth operator |\r\n" 
+		"  |  -> [1M] Marksman    |           weapons expert |\r\n" 
+		"  |  -> [1B] Bandit      |                    thief |\r\n" 
+		"  |=================================================|\r\n"
+		"  | Marine (Warrior Archetype)                      |\r\n"
+		"  |-------------------------------------------------|\r\n"
+		"  |  -> [2B] Butcher     | bladed weapon specialist |\r\n"
+		"  |  -> [2S] Striker     |      martial arts expert |\r\n"
+		"  |  -> [2M] Obstructor  |       submissions expert |\r\n"
+		"  |=================================================|\r\n"
+		"  | Chemist (Alchemist Archetype)                   |\r\n"
+		"  |-------------------------------------------------|\r\n"
+		"  |  -> [3M] Malady      | poison weapon specialist |\r\n"
+		"  |  -> [3P] Pyrexia     |    incendiary specialist |\r\n"
+		"  |  -> [3D] Dealer      |   enhancement specialist |\r\n"
+		"  |=================================================|\r\n"
+		"  | Engineer (Blacksmith Archetype)                 |\r\n"
+		"  |-------------------------------------------------|\r\n"
+		"  |  -> [4F] Forge       |          weapons crafter |\r\n"
+		"  |  -> [4S] Syndrome    |  autonomous drone expert |\r\n"
+		"  |  -> [4M] Machinist   |        technology expert |\r\n"
+		"  |----------------------===========================|\r\n"
+		"\r\n"
+		"To see the stats of a class, type the phrase stats followed by a space and the class identifier.\r\n"
+		"For example: {grn}stats 4F{/grn}\r\n"
+		"Your choice: "
+		;
+const char* real_blind_friendly_prompt = 
+	"Before we get started, do you need the blind-friendly version of our character creation screens? Type 'Yes' or 'No'.\r\n";
+
+	const char* blind_friendly_prompt(){
+		return real_blind_friendly_prompt;
+	}
+
+std::vector<std::string> blind_friendly_class_menu_list = {
+    " Here are a list of Sniper sub-classes.\r\n",
+		" The GHOST class. This class is a stealth operator. To select this class type 1G. That's the number one immediately followed by the letter G as in Good.\r\n",
+		" The Marksman class. This class is a weapons expert. To select this class type 1M. That's the number one immediately followed by the letter M as in Military.\r\n",
+		" The Bandit class. This class is a thief class. To select this class type 1B. That's the number one immediately followed by the letter B as in Bravo.\r\n",
+		" That's all of the Sniper sub-classes.\r\n",
+		"\r\n",
+		" Here are a list of Marine sub-classes.r\n",
+		" The Butcher class. This class is a bladed weapons specialist. To select this class type 2B. That's the number two immediately followed by the letter B as in Bravo.\r\n",
+		" The Striker class. This class is a martial arts expert. To select this class type 2S. That's the number two immediately followed by the letter S as in Sahara.\r\n",
+		" The Obstructor class. This class is a submissions grappling expert. To select this class type 2M. That's the number two immediately followed by the letter  M as in Military.\r\n",
+		" That's all of the Marine sub-classes.\r\n",
+		"\r\n",
+		" Here are a list of Chemist sub-classes.\r\n",
+		" The Malady class. This class is a poison weapons specialist. To select this class type 3M. That's the number three immediately followed by the letter M as in Military.\r\n",
+		" The Pyrexia class. This is a incendiary pyro class. To select this class type 3P. That's the number three immediately followed by the letter P as in Proximity.\r\n",
+		" The Dealer class. This is a chemical performance enhancment specialist. To select this class type 3D. That's the number three immediately followed by the letter D as in Delta.\r\n",
+		" That's all of the Chemist sub-classes.\r\n",
+		"\r\n",
+		"Here are a list of Engineer sub-classes.\r\n",
+		"The Forge class. This is a weapons crafting expert. To select this class type 4F. That's the number four immediately followed by the letter F as in Fighter.\r\n",
+		"The Syndrome class. This is an autonomous drone expert class. To select this class type 4S. That's the number four immediately followed by the letter S as in Sahara.\r\n",
+		"The Machinist class. This is technology expert class. To select this class type 4M. That's the number four immediately followed by the letter M as in Military.\r\n",
+		"\r\n",
+		/* nice to have
+		"If you would like these classes listed line by line, type 'line please'. That's the word line followed by a space followed by the word please.\r\n",
+		"Otherwise, choose your class below.\r\n",
+		"\r\n",
+		*/
+		"To see the stats of a class, type the phrase stats followed by a space and the class identifier.\r\n"
+		"For example: {grn}stats 4F{/grn}. That's the word 'stats' followed by a space, then the number four followed by the letter F as in Fighter.\r\n"
+		"Type the class of your choice: "
+	};
+
+	void show_blind_friendly_class_menu(player_ptr_t& player){
+			for(auto line :  blind_friendly_class_menu_list){
+				write_to_output(player->desc(), "%s", line.c_str());
+			}
+	}
+	void show_class_menu(player_ptr_t& player){
+		if(player->needs_ada()){
+			show_blind_friendly_class_menu(player);
+			return;
+		}
+		write_to_output(player->desc(), "%s", class_menu);
+	}
+	void show_triads(player_ptr_t& player, player_class_t p_class){
+		switch(p_class){
+			case player_class_t::CLASS_GHOST:player->sendln(CHARGEN_GHOST_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_MARKSMAN:player->sendln(CHARGEN_MARKSMAN_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_BANDIT:player->sendln(CHARGEN_BANDIT_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_BUTCHER:player->sendln(CHARGEN_BUTCHER_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_STRIKER:player->sendln(CHARGEN_STRIKER_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_OBSTRUCTOR:player->sendln(CHARGEN_OBSTRUCTOR_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_MALADY:player->sendln(CHARGEN_MALADY_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_PYREXIA:player->sendln(CHARGEN_PYREXIA_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_DEALER:player->sendln(CHARGEN_DEALER_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_FORGE:player->sendln(CHARGEN_FORGE_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_SYNDROME:player->sendln(CHARGEN_SYNDROME_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_MACHINIST:player->sendln(CHARGEN_MACHINIST_CLASS_TRIADS()); break;
+			default:
+			case CLASS_UNDEFINED: player->sendln(CHARGEN_UNDEFINED_CLASS_TRIADS()); break;
+		}
+
+	}
 	std::string get_class_description(player_class_t p_class){
 		switch(p_class){
 			case player_class_t::CLASS_GHOST: return CHARGEN_GHOST_CLASS_DESCRIPTION();

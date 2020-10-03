@@ -18,6 +18,7 @@
 #endif
 #include <ctime>
 #include <random>
+#include <regex>
 	
 #ifndef __MENTOC_STRING_LIT__
 #define __MENTOC_STRING_LIT__
@@ -34,6 +35,34 @@ extern struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *numb
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 
 namespace mods::util {
+	static inline bool regex_match(std::string_view regex_string,std::string_view target_string){
+    using namespace std::regex_constants;
+  	return std::regex_search(target_string.data(),std::regex(regex_string.data()), match_any | match_not_null | match_continuous);
+	}
+	static inline std::string trim(std::string& str){
+		std::string s;
+		int i = 0;
+		for(auto ch : str){
+			if(!isspace(ch)){
+				return str.substr(i);
+			}
+			++i;
+		}
+		return str;
+	}
+	static inline bool first_alpha_is_any(std::string_view line,std::string_view any){
+		for(auto ch : line){
+			if(isalpha(ch)){
+				for(auto a : any){
+					if(ch == a){
+						return true;
+					}
+				}
+				return false;
+			}
+		}
+		return false;
+	}
 	template <typename T>
 	static inline void shuffle(T& vec){
 		std::random_device rd;

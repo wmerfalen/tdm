@@ -74,32 +74,6 @@ const char *pc_class_types[] = {
 };
 
 
-const char* class_menu =
-    "  [ Sniper               [          ROGUE ARCHETYPE ]\r\n"
-		"     -> [1G] GHOST       [         stealth operator ]\r\n" 
-		"     -> [1M] Marksman    [           weapons expert ]\r\n" 
-		"     -> [1B] Bandit      [                    thief ]\r\n" 
-		"  ===================================================\r\n"
-		"  [ Marine               [        WARRIOR ARCHETYPE ]\r\n"
-		"     -> [2B] Butcher     [ bladed weapon specialist ]\r\n"
-		"     -> [2S] Striker     [      martial arts expert ]\r\n"
-		"     -> [2M] Obstructor  [       submissions expert ]\r\n"
-		"  ===================================================\r\n"
-		"  [ Chemist              [      ALCHEMIST ARCHETYPE ]\r\n"
-		"     -> [3M] Malady      [ poison weapon specialist ]\r\n"
-		"     -> [3P] Pyrexia     [    incendiary specialist ]\r\n"
-		"     -> [3D] Dealer      [   enhancement specialist ]\r\n"
-		"  ===================================================\r\n"
-		"  [ Engineer             [     BLACKSMITH ARCHETYPE ]\r\n"
-		"     -> [4F] Forge       [          weapons crafter ]\r\n"
-		"     -> [4S] Syndrome    [  autonomous drone expert ]\r\n"
-		"     -> [4M] Machinist   [        technology expert ]\r\n"
-		"  ===================================================\r\n"
-		"\r\n"
-		"NOTE: For a description of a class, type a question mark then the number.\r\n"
-		"For example: ?1 will give you a description of the Sniper class\r\n"
-		"\r\n"
-		;
 
 std::string common_weaponry_skillset() {
 	std::string skillset = ""

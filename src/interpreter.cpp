@@ -1938,13 +1938,38 @@ void nanny(player_ptr_t p, char * in_arg) {
 					return;
 			}
 
-			write_to_output(d, "%s\r\nSelect class: ", class_menu);
-			p->set_state(CON_QCLASS);
+			mods::chargen::show_class_menu(p);
+			p->set_state(CON_BLIND_CHARGEN);
 			break;
+		case CON_BLIND_CHARGEN:
+			{
+				if(arg.length() == 0){
+					write_to_output(d, "Huh?! That's not a valid answer. Please type 'Yes' or 'No'.\r\n%s: ", mods::chargen::blind_friendly_prompt());
+					p->set_state(CON_BLIND_CHARGEN);
+					return;
+				}
+				if(mods::util::first_alpha_is_any(arg,"Yy")){
+					p->set_ada(true);
+				}
+				if(mods::util::first_alpha_is_any(arg,"Nn")){
+					p->set_ada(false);
+				}
+				mods::chargen::show_class_menu(p);
+				p->set_state(CON_QCLASS);
+				return;
+				break;
+			}
 
 		case CON_QCLASS:
 			{
 				std::string argument = arg;
+				argument = mods::util::trim(argument);
+				if(mods::util::regex_match("^stats [0-9][a-zA-Z]",argument)){
+					mods::chargen::show_triads(p, parse_class(argument.substr(strlen("stats "))));
+
+					p->set_state(CON_QCLASS);
+					return;
+				}
 				player_class_t chosen_class = player_class_t::CLASS_UNDEFINED;
 				if(arg[0] == '?' && arg.length() > 2){
 					chosen_class = parse_class(argument.substr(1));

@@ -39,3 +39,10 @@ ACMD(do_uninstall_camera_feed){
 	/** code here */
 	ADMIN_DONE();
 }
+
+ACMD(do_install_computer_choice){
+	DO_HELP("install_computer_choice");
+	ADMIN_REJECT();
+	/** code here */
+	ADMIN_DONE();
+}

@@ -43,17 +43,59 @@ enough, we can compose those into skillsets that are divided by assets.
     "  [1] Sniper             [          ROGUE ARCHETYPE ]\r\n"
 		"   [ Sniper sub-classes                             ]\r\n"
 		"     -> [1G] GHOST       [         stealth operator ]\r\n" 
+						- Military Triad
+							- [Melee]   [x] [ ] [ ]
+							- [Weapons] [x] [x] [x]
+							- [Intel]   [x] [x] [ ]
+						- Speed/Armor tradeoff MAX 4 points
+							- [Speed]   [x] [ ] [ ]
+							- [Armor]   [x] [x] [x]
 		"     -> [1M] Marksman    [           weapons expert ]\r\n" 
+						- Military Triad
+							- [Melee]   [x] [ ] [ ]
+							- [Weapons] [x] [x] [x]
+							- [Intel]   [x] [x] [ ]
+						- Speed/Armor tradeoff MAX 4 points
+							- [Speed]   [x] [x] [ ]
+							- [Armor]   [x] [x] [ ]
 		"     -> [1T] Bandit      [                    thief ]\r\n" 
+						- Military Triad
+							- [Melee]   [x] [x] [ ]
+							- [Weapons] [x] [x] [ ]
+							- [Intel]   [x] [x] [x]
+						- Speed/Armor tradeoff MAX 4 points
+							- [Speed]   [x] [x] [x]
+							- [Armor]   [x] [ ] [ ]
 
 	- [#########################################] -
-	- [ ELEMENTALIST ARCHETYPES                 ] -
+	- [ ALCHEMIST ARCHETYPES                    ] -
 	- [#########################################] -
 		"  [3] Chemist            [      ALCHEMIST ARCHETYPE ]\r\n"
 		"   [ Chemist sub-classes                            ]\r\n"
 		"     -> [3M] Malady      [ poison weapon specialist ]\r\n"
+						- Military Triad
+							- [Melee]   [x] [x] [ ]
+							- [Weapons] [x] [x] [ ]
+							- [Intel]   [x] [x] [x]
+						- Speed/Armor tradeoff MAX 4 points
+							- [Speed]   [x] [x] [ ]
+							- [Armor]   [x] [x] [ ]
 		"     -> [3P] Pyrexia     [    incendiary specialist ]\r\n"
-		"     -> [3C] Chemist     [   enhancement specialist ]\r\n"
+						- Military Triad
+							- [Melee]   [x] [ ] [ ]
+							- [Weapons] [x] [x] [x]
+							- [Intel]   [x] [x] [x]
+						- Speed/Armor tradeoff MAX 4 points
+							- [Speed]   [x] [x] [x]
+							- [Armor]   [x] [ ] [ ]
+		"     -> [3C] Dealer      [   enhancement specialist ]\r\n"
+						- Military Triad
+							- [Melee]   [x] [ ] [ ]
+							- [Weapons] [x] [x] [x]
+							- [Intel]   [x] [x] [x]
+						- Speed/Armor tradeoff MAX 4 points
+							- [Speed]   [x] [ ] [ ]
+							- [Armor]   [x] [x] [x]
 
 	- [#########################################] -
 	- [ WARRIOR ARCHETYPES                      ] -
@@ -61,7 +103,29 @@ enough, we can compose those into skillsets that are divided by assets.
 		"  [2] Marine             [        WARRIOR ARCHETYPE ]\r\n"
 		"   [ Marine sub-classes                             ]\r\n"
 		"     -> [2B] Butcher     [ bladed weapon specialist ]\r\n"
-		"     -> [2C]  \r\n"
+						- Military Triad
+							- [Melee]   [x] [x] [x]
+							- [Weapons] [x] [x] [ ]
+							- [Intel]   [x] [x] [ ]
+						- Speed/Armor tradeoff MAX 4 points
+							- [Speed]   [x] [x] [ ]
+							- [Armor]   [x] [x] [ ]
+		"     -> [2S] Striker     [      martial arts expert ]\r\n"
+						- Military Triad
+							- [Melee]   [x] [x] [x]
+							- [Weapons] [x] [x] [x]
+							- [Intel]   [x] [ ] [ ]
+						- Speed/Armor tradeoff MAX 4 points
+							- [Speed]   [x] [x] [x]
+							- [Armor]   [x] [ ] [ ]
+		"     -> [2M] Obstructor  [       submissions expert ]\r\n"
+						- Military Triad
+							- [Melee]   [x] [x] [x]
+							- [Weapons] [x] [x] [ ]
+							- [Intel]   [x] [x] [ ]
+						- Speed/Armor tradeoff MAX 4 points
+							- [Speed]   [x] [ ] [ ]
+							- [Armor]   [x] [x] [x]
 
 
 	- [#########################################] -
@@ -70,36 +134,30 @@ enough, we can compose those into skillsets that are divided by assets.
 		"  [4] Engineer           [     BLACKSMITH ARCHETYPE ]\r\n"
 		"   [ Engineer sub-classes                           ]\r\n"
 		"     -> [4F] Forge       [          weapons crafter ]\r\n"
+						- Military Triad
+							- [Melee]   [x] [x] [ ]
+							- [Weapons] [x] [x] [ ]
+							- [Intel]   [x] [x] [x]
+						- Speed/Armor tradeoff MAX 4 points
+							- [Speed]   [x] [x] [ ]
+							- [Armor]   [x] [x] [ ]
 		"     -> [4D] Syndrome    [  autonomous drone expert ]\r\n"
+						- Military Triad
+							- [Melee]   [x] [ ] [ ]
+							- [Weapons] [x] [x] [x]
+							- [Intel]   [x] [x] [x]
+						- Speed/Armor tradeoff MAX 4 points
+							- [Speed]   [x] [x] [x]
+							- [Armor]   [x] [ ] [ ]
 		"     -> [4M] Machinist   [        technology expert ]\r\n"
-	- FORGE [blacksmith]
-		- can create/modify/combine WGE
-		- VARIED
+						- Military Triad
+							- [Melee]   [x] [x] [ ]
+							- [Weapons] [x] [x] [ ]
+							- [Intel]   [x] [x] [x]
+						- Speed/Armor tradeoff MAX 4 points
+							- [Speed]   [x] [ ] [ ]
+							- [Armor]   [x] [x] [x]
 
-	############################
-	## HALF BAKED IDEAS START ##
-	## HALF BAKED IDEAS START ##
-	## HALF BAKED IDEAS START ##
-	############################
-	- [#########################################] -
-	- [ GUNSLINGER ARCHETYPES                   ] -
-	- [#########################################] -
-	- PISTOL SPECIALIST [specialist]
-		- can dual wield pistols. critical/headshot chance increased
-		- Dual Desert Eagle
-
-	- [#########################################] -
-	- [ PSYCHIC ARCHETYPES                      ] -
-	- [#########################################] -
-	- INTERCEPT [psychic]
-		- can remotely control NPCs for a limited amount of time
-		- Vector
-
-	##########################
-	## HALF BAKED IDEAS END ##
-	## HALF BAKED IDEAS END ##
-	## HALF BAKED IDEAS END ##
-	##########################
 
 +++++++++++++++++++++++
 | ITEM TYPE CHECKLIST |
@@ -585,3 +643,51 @@ Barrel
 		- 50
 		- Magazine Size
 		- 16+1
+
+#### HALF-BAKED IDEAS ####
+#### HALF-BAKED IDEAS ####
+#### HALF-BAKED IDEAS ####
+
+# Sniping from SUPER far away
+- the idea is that a user can snipe a target as long as they
+  have an autonomous drone in that same room. The target room must 
+	have specific textures in order for this to be possible.
+	For example, if the target room is a building, it must either
+	be on the roof or in a room with a window in it. If the target
+	is in a wide open space like a parking lot, then you simply need
+	your drone to be at or near the target room.
+
+	- The Process
+		- deploy drone
+		- n, n, n, n, e, n, e, e, n
+		- look
+			- displays room
+			- displays mobs in room
+				- "A pissed of Los Employee is standing here."
+		- target los via drone
+		* the game takes a number of ticks in order for the drone to lock on *
+		* drone finishes locking on target. can now engage *
+		- snipe target
+			- this will *always* be "snipe target" in order for this mechanic to work
+		- NPC reacts to getting shot
+			- NPC can snipe back. must roll to see if sees attacker
+
+	- [#########################################] -
+	- [ GUNSLINGER ARCHETYPES                   ] -
+	- [#########################################] -
+	- PISTOL SPECIALIST [specialist]
+		- can dual wield pistols. critical/headshot chance increased
+		- Dual Desert Eagle
+
+	- [#########################################] -
+	- [ PSYCHIC ARCHETYPES                      ] -
+	- [#########################################] -
+	- INTERCEPT [psychic]
+		- can remotely control NPCs for a limited amount of time
+		- Vector
+
+##########################
+## HALF BAKED IDEAS END ##
+## HALF BAKED IDEAS END ##
+## HALF BAKED IDEAS END ##
+##########################

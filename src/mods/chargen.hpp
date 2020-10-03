@@ -12,6 +12,9 @@ namespace mods::chargen {
 	void undo_make_char(player_ptr_t player);
 	void handle_primary_choice(player_ptr_t p,char choice,player_class_t class_type);
 	std::string get_class_description(player_class_t p_class);
+	void show_triads(player_ptr_t& player, player_class_t class_type);
+	void show_class_menu(player_ptr_t& player);
+	const char* blind_friendly_prompt();
 };
 
 #endif

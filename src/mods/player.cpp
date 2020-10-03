@@ -692,6 +692,7 @@ namespace mods {
 		it->character->has_desc = true;
 	}
 	void player::init(){
+		m_ada = false;
 		m_hacking_row = 0;
 		m_currently_hacking = 0;
 		m_class = player_class_t::CLASS_UNDEFINED;
