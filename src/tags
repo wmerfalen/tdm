@@ -216,13 +216,8 @@ ACMD	mods/immortal.cpp	/^ACMD(do_rnumlist) {$/;"	f
 ACMD	mods/immortal.cpp	/^ACMD(do_rnumtele) {$/;"	f
 ACMD	mods/integral-objects.cpp	/^ACMD(do_install_camera_feed){$/;"	f
 ACMD	mods/integral-objects.cpp	/^ACMD(do_uninstall_camera_feed){$/;"	f
-ACMD	mods/mini-games.cpp	/^ACMD(do_hack){$/;"	f
 ACMD	mods/mini-games.cpp	/^ACMD(do_install_minigame) {$/;"	f
 ACMD	mods/mini-games.cpp	/^ACMD(do_list_minigame) {$/;"	f
-ACMD	mods/mini-games.cpp	/^ACMD(do_next_row) {$/;"	f
-ACMD	mods/mini-games.cpp	/^ACMD(do_reset_hack) {$/;"	f
-ACMD	mods/mini-games.cpp	/^ACMD(do_rotate_left) {$/;"	f
-ACMD	mods/mini-games.cpp	/^ACMD(do_rotate_right) {$/;"	f
 ACMD	mods/mini-games.cpp	/^ACMD(do_uninstall_minigame) {$/;"	f
 ACMD	mods/player-registration.cpp	/^ACMD(do_disable_registration){$/;"	f
 ACMD	mods/player-registration.cpp	/^ACMD(do_enable_registration){$/;"	f
@@ -837,8 +832,8 @@ DB_BOOT_SHP	db.h	19;"	d
 DB_BOOT_WLD	db.h	15;"	d
 DB_BOOT_ZON	db.h	18;"	d
 DB_PREFIX	mods/skills.cpp	/^	constexpr static const char* DB_PREFIX = "skills";$/;"	m	namespace:mods::skills	file:
-DD	mods/debug-pre-game.hpp	135;"	d
-DD	mods/debug-pre-game.hpp	22;"	d
+DD	mods/debug-pre-game.hpp	174;"	d
+DD	mods/debug-pre-game.hpp	24;"	d
 DECENT	mods/yaml.hpp	/^	DECENT,$/;"	e	enum:mods::yaml::durability_profile_type_t
 DEFAULT	mods/rarity.hpp	/^		constexpr static float DEFAULT = mods::rarity::COMMON;$/;"	m	namespace:mods::rarity
 DEFAULT	mods/yaml.hpp	/^	DEFAULT = armor_classification_type_t::BASIC,$/;"	e	enum:mods::yaml::armor_classification_type_t
@@ -1083,7 +1078,6 @@ FMG9	mods/weapon.hpp	/^			FMG9 = 1,$/;"	e	enum:mods::weapon::engineer::primary_c
 FOREACH_MOB	utils.h	558;"	d
 FOREST	structs.h	/^			FOREST,$/;"	m	struct:room_data	typeref:enum:room_data::
 FOR_ROOM	utils.h	557;"	d
-FROM	mods/mini-games.hpp	/^		static constexpr int FROM = 3;$/;"	m	struct:mods::mini_games::line_up
 FROZEN	mods/flags.hpp	/^		FROZEN,$/;"	e	enum:mods::flags::plr
 FROZEN	structs.h	/^			FROZEN,$/;"	m	struct:room_data	typeref:enum:room_data::
 FULL	structs.h	575;"	d
@@ -1247,7 +1241,6 @@ HFO_STOP	mods/player.cpp	/^		HFO_INDEX =1,HFO_START=2,HFO_STOP=3,HFO_LOG=4$/;"	e
 HGH_DEALER	mods/skills.hpp	/^			HGH_DEALER,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 HGH_MORE_POWERFUL	mods/skills.hpp	/^			HGH_MORE_POWERFUL,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 HIDE	mods/flags.hpp	/^		HIDE,$/;"	e	enum:mods::flags::aff
-HIGHLIGHT_ODD_NUMBER	mods/mini-games.hpp	/^			HIGHLIGHT_ODD_NUMBER,$/;"	m	struct:mods::mini_games::line_up	typeref:enum:mods::mini_games::line_up::
 HIP_FIRE	mods/weapon-types.hpp	/^		HIP_FIRE,$/;"	e	enum:mods::weapon::capabilities::cap_t
 HISTFILE_DUAL	mods/player.cpp	/^	HISTFILE_FILE = 1, HISTFILE_LMDB = 2, HISTFILE_DUAL = 3$/;"	e	enum:histfile_type_t	file:
 HISTFILE_FILE	mods/player.cpp	/^	HISTFILE_FILE = 1, HISTFILE_LMDB = 2, HISTFILE_DUAL = 3$/;"	e	enum:histfile_type_t	file:
@@ -2011,8 +2004,8 @@ MSG_NO_USED_WANDSTAFF	shop.h	180;"	d
 MSG_SLOTNUM	boards.h	45;"	d
 MUNITIONS_REFLECTOR	mods/skills.hpp	/^			MUNITIONS_REFLECTOR,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 MUZZLE_BRAKE	mods/weapon.hpp	/^		COMPENSATOR, MUZZLE_BRAKE,EXTENDED,$/;"	e	enum:mods::weapon::barrel_t
-M_MATCH	mods/help.cpp	233;"	d	file:
-M_MATCH	mods/help.cpp	250;"	d	file:
+M_MATCH	mods/help.cpp	239;"	d	file:
+M_MATCH	mods/help.cpp	257;"	d	file:
 MatchAllOf	mods/catch.hpp	/^			struct MatchAllOf : MatcherBase<ArgT> {$/;"	s	namespace:Catch::Matchers::Impl
 MatchAnyOf	mods/catch.hpp	/^			struct MatchAnyOf : MatcherBase<ArgT> {$/;"	s	namespace:Catch::Matchers::Impl
 MatchNotOf	mods/catch.hpp	/^				MatchNotOf(MatcherBase<ArgT> const& underlyingMatcher) : m_underlyingMatcher(underlyingMatcher) {}$/;"	f	struct:Catch::Matchers::Impl::MatchNotOf
@@ -2361,6 +2354,7 @@ RENT_RENTED	structs.h	596;"	d
 RENT_TIMEDOUT	structs.h	599;"	d
 RENT_UNDEF	structs.h	594;"	d
 REPORT_DB_ISSUE	mods/db-report.hpp	11;"	d
+REPORT_DB_ISSUE	mods/migrations.cpp	/^	void REPORT_DB_ISSUE(std::string issue,std::string exception_message){$/;"	f	namespace:mods::migrations
 RESERVED	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 RETROFIT_FIRE_GRENADE_LAUNCHER	mods/skills.hpp	/^			RETROFIT_FIRE_GRENADE_LAUNCHER,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 RETROFIT_GRENADE_LAUNCHER	mods/skills.hpp	/^			RETROFIT_GRENADE_LAUNCHER,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
@@ -2916,7 +2910,6 @@ TIME_FILE	db.h	99;"	d
 TIME_LOG_FILE_NAME	mods/date-time.cpp	/^	constexpr const char* TIME_LOG_FILE_NAME = "\/tmp\/cm++-time.log";$/;"	m	namespace:mods::date_time	file:
 TIME_WITH_SYS_TIME	conf.h	29;"	d
 TITAN_COMBAT	mods/object.hpp	/^				TITAN_COMBAT,$/;"	e	enum:mods::object::object_type_enum_t
-TO	mods/mini-games.hpp	/^		static constexpr int TO = 6;$/;"	m	struct:mods::mini_games::line_up
 TODO	globals.hpp	288;"	d
 TOGGLE_BIT	utils.h	203;"	d
 TOGGLE_LOCK	act.movement.cpp	351;"	d	file:
@@ -3313,17 +3306,19 @@ __MENTOC_MODS_HELP_HEADER__	mods/help.hpp	2;"	d
 __MENTOC_MODS_IMMORTAL_HEADER__	mods/immortal.hpp	2;"	d
 __MENTOC_MODS_INJURE_HEADER__	mods/injure.hpp	2;"	d
 __MENTOC_MODS_INTEGRAL_OBJECTS_HEADER__	mods/integral-objects.hpp	2;"	d
-__MENTOC_MODS_INTEGRAL_OBJECTS_HEADER__	mods/mini-games.hpp	2;"	d
 __MENTOC_MODS_ITEM_HEADER__	mods/item.hpp	2;"	d
 __MENTOC_MODS_ITEM_TYPES__	mods/item-types.hpp	2;"	d
 __MENTOC_MODS_JS_HEADER__	mods/js.hpp	2;"	d
 __MENTOC_MODS_JS_PATH_HEADER__	mods/js-path.hpp	2;"	d
 __MENTOC_MODS_JS_PLAYER_SCAFFOLDING_HEADER__	mods/js-player-scaffolding.hpp	2;"	d
 __MENTOC_MODS_JX_HEADER__	mods/jx.hpp	2;"	d
+__MENTOC_MODS_KARMA_HEADER__	mods/karma.hpp	2;"	d
 __MENTOC_MODS_LMDB_HEADER__	mods/lmdb.hpp	2;"	d
 __MENTOC_MODS_LOOPS_HEADER__	mods/loops.hpp	2;"	d
 __MENTOC_MODS_MACRO_IMPL_HEADER__	mods/macro_impl.hpp	2;"	d
 __MENTOC_MODS_META_UTILS_HEADER__	mods/meta_utils.hpp	2;"	d
+__MENTOC_MODS_MIGRATIONS_HEADER__	mods/migrations.hpp	2;"	d
+__MENTOC_MODS_MINI_GAMES_HEADER__	mods/mini-games.hpp	2;"	d
 __MENTOC_MODS_NPC_HEADER__	mods/npc.hpp	2;"	d
 __MENTOC_MODS_OBJECT_HEADER__	mods/object.hpp	2;"	d
 __MENTOC_MODS_OBJECT_SOURCE__	mods/object.cpp	2;"	d	file:
@@ -3366,15 +3361,15 @@ __MENTOC_MODS_deferred_HEADER__	mods/deferred.hpp	2;"	d
 __MENTOC_MODS_prefs_HEADER__	mods/prefs.hpp	2;"	d
 __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
 __MENTOC_PLR	db.cpp	2629;"	d	file:
-__MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__	mods/debug-pre-game.hpp	42;"	d
-__MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	60;"	d
+__MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__	mods/debug-pre-game.hpp	81;"	d
+__MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	99;"	d
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
-__MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	49;"	d
+__MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	88;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__	mods/behaviour_tree_impl.cpp	16;"	d	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	982;"	d	file:
 __MENTOC_SHOW_LMDB_DEBUG__	mods/db.cpp	6;"	d	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	d
-__MENTOC_STRING_LIT__	mods/util.hpp	22;"	d
+__MENTOC_STRING_LIT__	mods/util.hpp	23;"	d
 __MENTOC_TYPES_HEADER__	types.hpp	2;"	d
 __MENTOC_USE_LMDB__	mods/lmdb.cpp	10;"	d	file:
 __MENTOC_UTILS_HEADER__	mods/util.hpp	2;"	d
@@ -3411,7 +3406,7 @@ acl_list	mods/acl_list.hpp	/^namespace mods::acl_list {$/;"	n	class:mods
 acl_list	mods/player.hpp	/^namespace mods::acl_list {$/;"	n	class:mods
 act	comm.cpp	/^void act(const std::string & str, int hide_invisible, char_data *ch,$/;"	f
 act_nr	act.social.cpp	/^	int act_nr;$/;"	m	struct:social_messg	file:
-action	mods/mini-games.hpp	/^		std::string action;$/;"	m	struct:mini_game_payload_t
+action	mods/mini-games.hpp	/^		std::string action;$/;"	m	struct:mods::mini_games::mini_game_payload_t
 action_bits	constants.cpp	/^const char *action_bits[] = {$/;"	v
 action_bits	constants.hpp	/^const char *action_bits[] = {$/;"	v
 action_bits_count	constants.cpp	/^        action_bits_count = sizeof(action_bits) \/ sizeof(action_bits[0]) - 1,$/;"	v
@@ -3626,7 +3621,6 @@ blue_str	mods/colors.hpp	/^static inline std::string blue_str(TStr str){$/;"	f	n
 board_info	boards.cpp	/^struct board_info_type board_info[NUM_OF_BOARDS] = {$/;"	v	typeref:struct:board_info_type
 board_info_type	boards.h	/^struct board_info_type {$/;"	s
 board_msginfo	boards.h	/^struct board_msginfo {$/;"	s
-body_content	mods/mini-games.hpp	/^		std::string body_content;$/;"	m	namespace:mods::mini_games
 bool	structs.h	/^	typedef char			bool;$/;"	t
 boot_db	db.cpp	/^void boot_db(void) {$/;"	f
 boot_hell	db.cpp	/^void boot_hell(void){$/;"	f
@@ -3824,6 +3818,7 @@ cmd_say	shop.cpp	/^int cmd_say, cmd_tell, cmd_emote, cmd_slap, cmd_puke;$/;"	v
 cmd_slap	shop.cpp	/^int cmd_say, cmd_tell, cmd_emote, cmd_slap, cmd_puke;$/;"	v
 cmd_sort_info	act.informative.cpp	/^int *cmd_sort_info;$/;"	v
 cmd_tell	shop.cpp	/^int cmd_say, cmd_tell, cmd_emote, cmd_slap, cmd_puke;$/;"	v
+cold_blooded_index	mods/karma.hpp	/^		float cold_blooded_index;$/;"	m	struct:mods::karma
 color_eval	globals.cpp	/^		std::string color_eval(std::string_view buffer) {$/;"	f	namespace:mods::globals
 color_liquid	constants.cpp	/^const char *color_liquid[] = {$/;"	v
 color_liquid	constants.hpp	/^const char *color_liquid[] =$/;"	v
@@ -4091,7 +4086,6 @@ detail	mods/util.hpp	/^namespace detail{ $/;"	n	namespace:mods::util
 detexturize_room	mods/deferred.cpp	/^	void deferred::detexturize_room(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture){$/;"	f	class:mods::deferred
 detexturize_room	mods/util.hpp	/^	static inline void detexturize_room(room_rnum room_id, room_data::texture_type_t texture_type){$/;"	f	namespace:mods::util
 device_exists	mods/mini-games.cpp	/^	bool device_exists(room_vnum vnum,int device_id){$/;"	f	namespace:mods::mini_games
-device_id	mods/mini-games.cpp	/^	int line_up::device_id(){$/;"	f	class:mods::mini_games::line_up
 devices	mods/mini-games.cpp	/^	static std::map<room_vnum,std::deque<line_up>> devices;$/;"	m	namespace:mods::mini_games	file:
 dex_app	constants.cpp	/^cpp_extern const struct dex_app_type dex_app[] = {$/;"	v	typeref:struct:dex_app_type
 dex_app	constants.hpp	/^cpp_extern const struct dex_app_type dex_app[] = {$/;"	v	typeref:struct:dex_app_type
@@ -4269,6 +4263,7 @@ do_group	act.other.cpp	/^ACMD(do_group);$/;"	v
 do_group	interpreter.cpp	/^ACMD(do_group);$/;"	v
 do_gsay	act.comm.cpp	/^ACMD(do_gsay);$/;"	v
 do_gsay	interpreter.cpp	/^ACMD(do_gsay);$/;"	v
+do_hack	mods/mini-games.hpp	/^ACMD(do_hack);$/;"	v
 do_hcontrol	house.cpp	/^ACMD(do_hcontrol);$/;"	v
 do_hcontrol	interpreter.cpp	/^ACMD(do_hcontrol);$/;"	v
 do_heal	interpreter.cpp	/^ACMD(do_heal);$/;"	v
@@ -4285,6 +4280,7 @@ do_house	interpreter.cpp	/^ACMD(do_house);$/;"	v
 do_idle	interpreter.cpp	/^ACMD(do_idle);$/;"	v
 do_injure_roll	mods/injure.cpp	/^	bool do_injure_roll(uint8_t chance){$/;"	f	namespace:mods::injure
 do_install	interpreter.cpp	/^ACMD(do_install);$/;"	v
+do_install_minigame	mods/mini-games.hpp	/^ACMD(do_install_minigame);$/;"	v
 do_insult	act.informative.cpp	/^ACMD(do_insult);$/;"	v
 do_insult	act.social.cpp	/^ACMD(do_insult);$/;"	v
 do_insult	interpreter.cpp	/^ACMD(do_insult);$/;"	v
@@ -4305,6 +4301,7 @@ do_leave	interpreter.cpp	/^ACMD(do_leave);$/;"	v
 do_levels	act.informative.cpp	/^ACMD(do_levels);$/;"	v
 do_levels	interpreter.cpp	/^ACMD(do_levels);$/;"	v
 do_list	interpreter.cpp	/^ACMD(do_list);	\/** in shop.cpp *\/$/;"	v
+do_list_minigame	mods/mini-games.hpp	/^ACMD(do_list_minigame);$/;"	v
 do_load	act.wizard.cpp	/^ACMD(do_load);$/;"	v
 do_load	interpreter.cpp	/^ACMD(do_load);$/;"	v
 do_look	act.informative.cpp	/^ACMD(do_look);$/;"	v
@@ -4317,6 +4314,7 @@ do_next_mob_number	interpreter.cpp	/^ACMD(do_next_mob_number);$/;"	v
 do_next_object_number	interpreter.cpp	/^ACMD(do_next_object_number);$/;"	v
 do_next_room_number	interpreter.cpp	/^ACMD(do_next_room_number);$/;"	v
 do_next_row	interpreter.cpp	/^ACMD(do_next_row);$/;"	v
+do_next_row	mods/mini-games.hpp	/^ACMD(do_next_row);$/;"	v
 do_not_buy	shop.h	/^	mods::string do_not_buy;		\/* If keeper dosn't buy such things	*\/$/;"	m	struct:shop_data
 do_not_here	act.other.cpp	/^ACMD(do_not_here);$/;"	v
 do_not_here	interpreter.cpp	/^ACMD(do_not_here);$/;"	v
@@ -4327,6 +4325,7 @@ do_olc	olc.cpp	/^ACMD(do_olc);$/;"	v
 do_one_punch	interpreter.cpp	/^ACMD(do_one_punch);$/;"	v
 do_order	interpreter.cpp	/^ACMD(do_order);$/;"	v
 do_page	act.comm.cpp	/^ACMD(do_page);$/;"	v
+do_plug_cable	mods/mini-games.hpp	/^ACMD(do_plug_cable);$/;"	v
 do_pmw_obj_from_room	interpreter.cpp	/^ACMD(do_pmw_obj_from_room);$/;"	v
 do_point_update	act.debug.hpp	/^ACMD(do_point_update);$/;"	v
 do_point_update	interpreter.cpp	/^ACMD(do_point_update);$/;"	v
@@ -4362,8 +4361,10 @@ do_reply	act.comm.cpp	/^ACMD(do_reply);$/;"	v
 do_reply	interpreter.cpp	/^ACMD(do_reply);$/;"	v
 do_report	act.other.cpp	/^ACMD(do_report);$/;"	v
 do_report	interpreter.cpp	/^ACMD(do_report);$/;"	v
+do_reputation	mods/karma.hpp	/^ACMD(do_reputation);$/;"	v
 do_rescue	interpreter.cpp	/^ACMD(do_rescue);$/;"	v
 do_reset_game	interpreter.cpp	/^ACMD(do_reset_game);$/;"	v
+do_reset_hack	mods/mini-games.hpp	/^ACMD(do_reset_hack);$/;"	v
 do_rest	act.movement.cpp	/^ACMD(do_rest);$/;"	v
 do_rest	interpreter.cpp	/^ACMD(do_rest);$/;"	v
 do_restore	act.wizard.cpp	/^ACMD(do_restore);$/;"	v
@@ -4382,7 +4383,9 @@ do_room_list	interpreter.cpp	/^ACMD(do_room_list);$/;"	v
 do_room_list_uuid	interpreter.cpp	/^ACMD(do_room_list_uuid);$/;"	v
 do_room_vnum	interpreter.cpp	/^ACMD(do_room_vnum);$/;"	v
 do_rotate_left	interpreter.cpp	/^ACMD(do_rotate_left);$/;"	v
+do_rotate_left	mods/mini-games.hpp	/^ACMD(do_rotate_left);$/;"	v
 do_rotate_right	interpreter.cpp	/^ACMD(do_rotate_right);$/;"	v
+do_rotate_right	mods/mini-games.hpp	/^ACMD(do_rotate_right);$/;"	v
 do_save	act.other.cpp	/^ACMD(do_save);$/;"	v
 do_save	interpreter.cpp	/^ACMD(do_save);$/;"	v
 do_say	act.comm.cpp	/^ACMD(do_say);$/;"	v
@@ -4466,6 +4469,7 @@ do_unban	interpreter.cpp	/^ACMD(do_unban);$/;"	v
 do_ungroup	act.other.cpp	/^ACMD(do_ungroup);$/;"	v
 do_ungroup	interpreter.cpp	/^ACMD(do_ungroup);$/;"	v
 do_uninstall	interpreter.cpp	/^ACMD(do_uninstall);$/;"	v
+do_uninstall_minigame	mods/mini-games.hpp	/^ACMD(do_uninstall_minigame);$/;"	v
 do_use	act.other.cpp	/^ACMD(do_use);$/;"	v
 do_use	interpreter.cpp	/^ACMD(do_use);$/;"	v
 do_users	act.informative.cpp	/^ACMD(do_users);$/;"	v
@@ -4736,7 +4740,6 @@ find_type_t	mods/scan.hpp	/^		enum find_type_t {$/;"	g	namespace:mods::scan
 fire_damage	mods/projectile.cpp	/^		int fire_damage(player_ptr_t victim,obj_ptr_t projectile){$/;"	f	namespace:mods::projectile
 fire_status	structs.h	/^		fire_status_t& fire_status(){$/;"	f
 fire_status_start	structs.h	/^		void fire_status_start(){$/;"	f
-first_values	mods/mini-games.hpp	/^		std::vector<uint8_t> first_values;$/;"	m	namespace:mods::mini_games
 fixtures	mods/bugs-fixtures.cpp	/^	void fixtures(std::string from, std::string msg){$/;"	f	namespace:mods::bugs
 fixtures	mods/bugs-fixtures.cpp	/^	void fixtures(std::string_view msg){$/;"	f	namespace:mods::bugs
 flag_group	mods/flags.hpp	/^	enum flag_group {$/;"	g	namespace:mods::flags
@@ -4818,7 +4821,7 @@ gain_exp_regardless	limits.cpp	/^void gain_exp_regardless(char_data *ch, int gai
 game	mods/mini-games.cpp	/^	line_up& game(room_vnum vnum,int id){$/;"	f	namespace:mods::mini_games
 game_init	mods/skills.cpp	/^	void game_init(){$/;"	f	namespace:mods::skills
 game_loop	comm.cpp	/^void game_loop(socket_t mother_desc) {$/;"	f
-game_room_vnum	mods/mini-games.hpp	/^		int game_room_vnum;$/;"	m	struct:mini_game_payload_t
+game_room_vnum	mods/mini-games.hpp	/^		int game_room_vnum;$/;"	m	struct:mods::mini_games::mini_game_payload_t
 gather_room	mods/sensor-grenade.cpp	/^	void gather_room(uuid_t nade_uuid,room_rnum& room,uint8_t from_direction){$/;"	f	namespace:mods::sensor_grenade
 gen_board	boards.cpp	/^SPECIAL(gen_board);$/;"	v
 gen_board	spec_assign.cpp	/^SPECIAL(gen_board);$/;"	v
@@ -4855,7 +4858,6 @@ get_ammo_for	mods/player.cpp	/^	obj_ptr_t player::get_ammo_for(obj_ptr_t& weapon
 get_attacker	mods/player.hpp	/^		uuid_t get_attacker() {$/;"	f	struct:mods::player
 get_bad_password_count	mods/player.cpp	/^	int player::get_bad_password_count(){$/;"	f	class:mods::player
 get_bind_addr	comm.cpp	/^struct in_addr *get_bind_addr() {$/;"	f
-get_body	mods/mini-games.cpp	/^	std::string line_up::get_body(){$/;"	f	class:mods::mini_games::line_up
 get_bui_mode	mods/player.hpp	/^		bool get_bui_mode(){ return m_bui_mode; }$/;"	f	struct:mods::player
 get_camera	mods/player.cpp	/^	std::shared_ptr<mods::camera> player::get_camera() const {$/;"	f	class:mods::player
 get_caps	mods/weapon.cpp	/^	std::vector<cap_t> get_caps(mw_armor type){$/;"	f	namespace:mods::weapon
@@ -5038,6 +5040,7 @@ h_install	mods/help.cpp	/^	static constexpr const char* h_install = "usage: inst
 h_install_camera_feed	mods/help.cpp	/^	static constexpr const char* h_install_camera_feed = "usage: install_camera_feed <name> <id>...[id_N]\\r\\n"$/;"	m	namespace:mods::help::pages	file:
 h_install_minigame	mods/help.cpp	/^	static constexpr const char* h_install_minigame = "usage: install_minigame <name> <type> <difficulty> <unlock-event>\\r\\n"$/;"	m	namespace:mods::help::pages	file:
 h_list_minigame	mods/help.cpp	/^	static constexpr const char* h_list_minigame = "usage: list_minigame\\r\\n"$/;"	m	namespace:mods::help::pages	file:
+h_plug_cable	mods/help.cpp	/^	static constexpr const char* h_plug_cable = "usage: plug_cable <id>\\r\\n"$/;"	m	namespace:mods::help::pages	file:
 h_set_npc_position	mods/help.cpp	/^	static constexpr const char* h_set_npc_position = "usage: set_npc_position <UUID> <POSITION>\\r\\n"$/;"	m	namespace:mods::help::pages	file:
 h_set_position	mods/help.cpp	/^	static constexpr const char* h_set_position = "usage: set_position <POSITION>\\r\\n"$/;"	m	namespace:mods::help::pages	file:
 h_skills	mods/help.cpp	/^	static constexpr const char* h_skills = "usage: skills [show] [skill_name]...[skill_N]\\r\\n"$/;"	m	namespace:mods::help::pages	file:
@@ -5112,7 +5115,6 @@ help	mods/help.hpp	/^namespace mods::help {$/;"	n	class:mods
 help_index_element	db.h	/^struct help_index_element {$/;"	s
 help_table	db.cpp	/^struct help_index_element *help_table = 0;	\/* the help table	 *\/$/;"	v	typeref:struct:help_index_element
 hide	act.social.cpp	/^	int hide;$/;"	m	struct:social_messg	file:
-highlight_strategy	mods/mini-games.hpp	/^		highlight_strategy_t highlight_strategy;$/;"	m	namespace:mods::mini_games
 histfile_opcode_t	mods/player.cpp	/^	enum histfile_opcode_t {$/;"	g	namespace:mods	file:
 histfile_type_t	mods/player.cpp	/^enum histfile_type_t {$/;"	g	file:
 hit	fight.cpp	/^void hit(char_data *ch, char_data *victim, int type) {$/;"	f
@@ -5174,6 +5176,7 @@ index_mail	mail.cpp	/^void index_mail(long id_to_index, long pos) {$/;"	f
 info	db.cpp	/^char *info = NULL;		\/* info page			 *\/$/;"	v
 init	globals.cpp	/^		void init(int argc,char** argv) {$/;"	f	namespace:mods::globals
 init	mods/debug.hpp	/^	static inline void init(bool tics){ debug_state = std::make_unique<state>(tics); }$/;"	f	namespace:mods::debug
+init	mods/karma.cpp	/^	void init(){$/;"	f	namespace:mods
 init	mods/mini-games.cpp	/^	void init(){$/;"	f	namespace:mods::mini_games
 init	mods/object.cpp	/^	void object::init(){$/;"	f	class:mods::object
 init	mods/player.cpp	/^	void player::init(){$/;"	f	class:mods::player
@@ -5229,7 +5232,6 @@ into	mods/sql.hpp	/^			compositor<T>& into(str_object table) {$/;"	f	struct:mods
 invalid_align	handler.cpp	/^int invalid_align(char_data *ch, struct obj_data *obj) {$/;"	f
 invalid_class	class.cpp	/^int invalid_class(char_data *ch, struct obj_data *obj) {$/;"	f
 invalid_list	ban.cpp	/^char *invalid_list[MAX_INVALID_NAMES];$/;"	v
-invalid_row	mods/mini-games.cpp	/^	std::string line_up::invalid_row(){$/;"	f	class:mods::mini_games::line_up
 invec	globals.hpp	281;"	d
 inventory	mods/player.cpp	/^namespace mods::orm::inventory {$/;"	n	class:mods::orm	file:
 invoke	mods/catch.hpp	/^			virtual void invoke() const {$/;"	f	class:Catch::MethodTestCase
@@ -5321,6 +5323,9 @@ js	mods/js.cpp	/^	namespace js {$/;"	n	namespace:mods	file:
 js	mods/js.hpp	/^	namespace js {$/;"	n	namespace:mods
 js_object	mods/player.cpp	/^	std::string player::js_object() {$/;"	f	class:mods::player
 jx	mods/jx.hpp	/^namespace mods::jx {$/;"	n	class:mods
+karma	mods/karma.hpp	/^	struct karma {$/;"	s	namespace:mods
+karma_index	mods/karma.cpp	/^	static std::map<uint64_t,karma> karma_index;$/;"	m	namespace:mods	file:
+karmic_index	mods/karma.hpp	/^		float karmic_index;$/;"	m	struct:mods::karma
 keeper	shop.h	/^	mob_vnum	 keeper;	\/* The mobile who owns the shop (rnum)	*\/$/;"	m	struct:shop_data
 key	structs.h	/^		obj_vnum key;		\/* Key's number (-1 for no key)		*\/$/;"	m	struct:room_direction_data
 key_exists	mods/db.cpp	/^bool key_exists(std::string key){$/;"	f
@@ -5351,8 +5356,6 @@ light	structs.h	/^		byte light;                  \/* Number of lightsources in r
 line	db.h	/^	int line;		\/* line number this command appears on  *\/$/;"	m	struct:reset_com
 line	mods/catch.hpp	/^		std::size_t line;$/;"	m	struct:Catch::SourceLineInfo
 lineInfo	mods/catch.hpp	/^		SourceLineInfo lineInfo;$/;"	m	struct:Catch::AssertionInfo
-line_up	mods/mini-games.cpp	/^	line_up::line_up() {$/;"	f	class:mods::mini_games::line_up
-line_up	mods/mini-games.hpp	/^	struct line_up {$/;"	s	namespace:mods::mini_games
 linked_list_remove	mods/util.hpp	/^		inline void linked_list_remove(T item, T head) {$/;"	f	namespace:mods::util
 list	mods/skills.hpp	/^		static std::vector<std::tuple<std::string,std::vector<proficiencies::proficiency_t>>> list = {$/;"	m	namespace:mods::skills::proficiencies
 list_all_shops	shop.cpp	/^void list_all_shops(char_data *ch) {$/;"	f
@@ -5394,6 +5397,7 @@ lmdb_nput	mods/db.cpp	/^int lmdb_nput(void* key,std::size_t key_size,$/;"	f	name
 lmdb_put	mods/db.cpp	/^void lmdb_put(std::string key,std::string value){$/;"	f	namespace:mods::db
 lmdb_renew	mods/db.cpp	/^void lmdb_renew() {$/;"	f	namespace:mods::db
 lmdb_write_values	mods/db.cpp	/^tuple_status_t lmdb_write_values($/;"	f	namespace:mods::db
+load	mods/karma.cpp	/^	void load(player_ptr_t& player){$/;"	f	namespace:mods
 load	mods/mini-games.cpp	/^	void load(mini_game_payload_t g){$/;"	f	namespace:mods::mini_games
 load_all	mods/world-configuration.cpp	/^	rooms_t load_all() {$/;"	f	namespace:mods::world_conf
 load_banned	ban.cpp	/^void load_banned(void) {$/;"	f
@@ -5510,6 +5514,8 @@ m_db_id	structs.h	/^		uint64_t m_db_id;$/;"	m	struct:obj_data
 m_dbi	mods/lmdb.hpp	/^		MDB_dbi	m_dbi;$/;"	m	struct:mods::lmdb::_db_handle
 m_dbi_opened	mods/lmdb.hpp	/^		bool m_dbi_opened;$/;"	m	struct:mods::lmdb::_db_handle
 m_deallocate	mods/string.cpp	/^	void string::m_deallocate(){$/;"	f	class:mods::string
+m_debug	mods/migrations.cpp	32;"	d	file:
+m_debug	mods/migrations.cpp	4;"	d	file:
 m_debug	mods/skills.cpp	333;"	d	file:
 m_debug	mods/skills.cpp	3;"	d	file:
 m_debug	mods/skills.cpp	5;"	d	file:
@@ -5518,7 +5524,6 @@ m_debug	mods/values.cpp	11;"	d	file:
 m_debug	mods/values.cpp	9;"	d	file:
 m_desc	mods/player.hpp	/^		std::shared_ptr<mods::descriptor_data> m_desc;$/;"	m	struct:mods::player
 m_destroy_queue	mods/affects.hpp	/^			std::vector<TAffects> m_destroy_queue;$/;"	m	struct:mods::affects::dissolver
-m_device_id	mods/mini-games.hpp	/^		int m_device_id;$/;"	m	namespace:mods::mini_games
 m_dir	mods/js.hpp	/^				std::string m_dir;$/;"	m	struct:mods::js::include
 m_dir	mods/lmdb.hpp	/^		std::string m_dir;$/;"	m	struct:mods::lmdb::_db_handle
 m_directions	structs.h	/^		std::vector<uint8_t> m_directions;$/;"	v
@@ -5745,13 +5750,16 @@ message_sell	shop.h	/^	mods::string message_sell;		\/* Message when player sells
 meta_utils	mods/meta_utils.cpp	/^namespace mods::meta_utils {$/;"	n	class:mods	file:
 meta_utils	mods/meta_utils.hpp	/^namespace mods::meta_utils {$/;"	n	class:mods
 mgdp_debug	globals.cpp	984;"	d	file:
+migrations	mods/migrations.cpp	/^namespace mods::migrations {$/;"	n	class:mods	file:
+migrations	mods/migrations.hpp	/^namespace mods::migrations {$/;"	n	class:mods
+migrations_test	mods/debug-pre-game.hpp	/^	void migrations_test(){$/;"	f	namespace:mods::debug::pre_game
 min_level	spells.h	/^	int min_level[NUM_CLASSES];$/;"	m	struct:spell_info_type
 min_position	spells.h	/^	byte min_position;	\/* Position for caster	 *\/$/;"	m	struct:spell_info_type
 min_rent_cost	config.cpp	/^int min_rent_cost = 100;$/;"	v
 min_victim_position	act.social.cpp	/^	int min_victim_position;	\/* Position of victim *\/$/;"	m	struct:social_messg	file:
 min_wizlist_lev	config.cpp	/^int min_wizlist_lev = LVL_GOD;$/;"	v
 mini_game_orm_test	mods/debug-pre-game.hpp	/^	void mini_game_orm_test(){$/;"	f	namespace:mods::debug::pre_game
-mini_game_payload_t	mods/mini-games.hpp	/^	struct mini_game_payload_t {$/;"	s
+mini_game_payload_t	mods/mini-games.hpp	/^	struct mini_game_payload_t {$/;"	s	namespace:mods::mini_games
 mini_game_test	mods/debug-pre-game.hpp	/^	void mini_game_test(){$/;"	f	namespace:mods::debug::pre_game
 mini_games	mods/mini-games.cpp	/^namespace mods::mini_games {$/;"	n	class:mods	file:
 mini_games	mods/mini-games.hpp	/^namespace mods::mini_games {$/;"	n	class:mods
@@ -5813,6 +5821,8 @@ mods	mods/extra_desc_data.cpp	/^namespace mods {$/;"	n	file:
 mods	mods/extra_desc_data.hpp	/^namespace mods {$/;"	n
 mods	mods/js.cpp	/^namespace mods {$/;"	n	file:
 mods	mods/js.hpp	/^namespace mods {$/;"	n
+mods	mods/karma.cpp	/^namespace mods {$/;"	n	file:
+mods	mods/karma.hpp	/^namespace mods {$/;"	n
 mods	mods/npc.cpp	/^namespace mods {$/;"	n	file:
 mods	mods/npc.hpp	/^namespace mods {$/;"	n
 mods	mods/object.cpp	/^namespace mods {$/;"	n	file:
@@ -5879,7 +5889,7 @@ name	mods/builder.cpp	/^	std::string_view sandbox_data_t::name() const {$/;"	f	c
 name	mods/builder.cpp	/^	str_t name;$/;"	m	struct:command_t	file:
 name	mods/catch.hpp	/^		const char* name;$/;"	m	struct:Catch::NameAndDesc
 name	mods/drone.hpp	/^			const char* name() {$/;"	f	class:mods::drone
-name	mods/mini-games.hpp	/^		std::string name;$/;"	m	struct:mini_game_payload_t
+name	mods/mini-games.hpp	/^		std::string name;$/;"	m	struct:mods::mini_games::mini_game_payload_t
 name	mods/player.cpp	/^	std::string& player::name(){ return m_name; }$/;"	f	class:mods::player
 name	mods/skills.hpp	/^			mods::string name;$/;"	m	struct:mods::skills::proficiencies::proficiency_t
 name	spells.h	/^	const char *name;	\/* Input size not limited. Originates from string constants. *\/$/;"	m	struct:spell_info_type
@@ -5893,7 +5903,6 @@ nanny	interpreter.cpp	/^void nanny(player_ptr_t p, char * in_arg) {$/;"	f
 ndel	mods/lmdb.cpp	/^	void _db_handle::ndel(void* key,std::size_t key_size){$/;"	f	class:mods::lmdb::_db_handle
 needs_dissolve	mods/affects.cpp	/^	static std::set<player_ptr_t> needs_dissolve;$/;"	m	namespace:mods::affects	file:
 needs_dissolve	mods/rooms.hpp	/^		static std::map<entity_type_t,dissolver_t> needs_dissolve;$/;"	m	namespace:mods::rooms::affects
-needs_regen	mods/mini-games.hpp	/^		bool needs_regen;$/;"	m	namespace:mods::mini_games
 negate	mods/catch.hpp	/^		void negate(bool parenthesize) {$/;"	f	struct:Catch::AssertionResultData
 negated	mods/catch.hpp	/^		bool negated;$/;"	m	struct:Catch::AssertionResultData
 net_cost_per_diem	structs.h	/^		int	net_cost_per_diem;$/;"	m	struct:rent_info
@@ -5934,7 +5943,6 @@ next_room	act.builder.cpp	/^	static inline int next_room(){$/;"	f	namespace:mods
 next_room_number	act.builder.cpp	/^int next_room_number(){ $/;"	f
 next_room_pavement_transaction_id	mods/builder.cpp	/^int next_room_pavement_transaction_id(){$/;"	f
 next_room_vnum	mods/builder.cpp	/^int next_room_vnum(){$/;"	f
-next_row	mods/mini-games.cpp	/^	void next_row(player_ptr_t& player){$/;"	f	namespace:mods::mini_games
 next_zone	act.builder.cpp	/^	static inline int next_zone(){$/;"	f	namespace:mods::adhoc
 next_zone_number	act.builder.cpp	/^int next_zone_number() {$/;"	f
 next_zone_vnum	mods/builder.cpp	/^int next_zone_vnum(){$/;"	f
@@ -6090,9 +6098,8 @@ opposite_dir	globals.cpp	/^		int opposite_dir(int dir) {$/;"	f	namespace:mods::g
 optr	globals.cpp	/^obj_ptr_t optr(obj_data* in_obj){$/;"	f
 optr_by_uuid	globals.cpp	/^obj_ptr_t optr_by_uuid(uuid_t id){$/;"	f
 optr_opt	globals.cpp	/^std::optional<obj_ptr_t> optr_opt(uuid_t obj_uuid){$/;"	f
-order	mods/mini-games.hpp	/^		int order;$/;"	m	struct:mini_game_payload_t
+order	mods/mini-games.hpp	/^		int order;$/;"	m	struct:mods::mini_games::mini_game_payload_t
 org	spell_parser.cpp	/^	const char *org;$/;"	m	struct:syllable	file:
-original_rows	mods/mini-games.hpp	/^		std::vector<std::vector<uint8_t>> original_rows;$/;"	m	namespace:mods::mini_games
 orm	shop.h	/^namespace mods::orm {$/;"	n	class:mods
 oss	mods/catch.hpp	/^		std::ostringstream oss;$/;"	m	struct:Catch::CopyableStream
 other	mods/catch.hpp	/^		SourceLineInfo(SourceLineInfo const& other)          = default;$/;"	m	struct:Catch::SourceLineInfo
@@ -6246,13 +6253,11 @@ pop	shop.cpp	/^int pop(struct stack_data *stack) {$/;"	f
 pop_free_list	mail.cpp	/^long pop_free_list(void) {$/;"	f
 position	mail.h	/^	long	position;$/;"	m	struct:position_list_type_d
 position	mods/player.hpp	/^		byte& position(){$/;"	f	struct:mods::player
-position_count	mods/mini-games.hpp	/^		int position_count;$/;"	m	namespace:mods::mini_games
 position_flags	mods/builder.cpp	/^	std::array<std::pair<int,std::string>,9> position_flags = { {$/;"	m	namespace:mods::builder	file:
 position_list_type	mail.h	/^typedef struct position_list_type_d position_list_type;$/;"	t	typeref:struct:position_list_type_d
 position_list_type_d	mail.h	/^struct position_list_type_d {$/;"	s
 position_types	constants.cpp	/^const char *position_types[] = {$/;"	v
 position_types	constants.hpp	/^const char *position_types[] = {$/;"	v
-positions	mods/mini-games.hpp	/^		std::vector<uint8_t> positions;$/;"	m	namespace:mods::mini_games
 post_boot_db	globals.cpp	/^		void post_boot_db() {$/;"	f	namespace:mods::globals
 post_feed	structs.h	/^		void post_feed(T fed_object){$/;"	f	struct:obj_data
 post_modify_callback	mods/builder_util.hpp	/^	typedef std::function<std::pair<bool,std::string>()> post_modify_callback;$/;"	t	namespace:mods::builder_util
@@ -6294,7 +6299,7 @@ primary_choice_t	mods/weapon.hpp	/^		enum primary_choice_t {$/;"	g	namespace:mod
 primary_choice_t	mods/weapon.hpp	/^		enum primary_choice_t {$/;"	g	namespace:mods::weapon::sentinel
 primary_choice_t	mods/weapon.hpp	/^		enum primary_choice_t {$/;"	g	namespace:mods::weapon::sniper
 primary_choice_t	mods/weapon.hpp	/^		enum primary_choice_t {$/;"	g	namespace:mods::weapon::support
-primary_key	mods/mini-games.hpp	/^		int primary_key;$/;"	m	struct:mini_game_payload_t
+primary_key	mods/mini-games.hpp	/^		int primary_key;$/;"	m	struct:mods::mini_games::mini_game_payload_t
 primary_weapon_menu	mods/chargen.cpp	/^	std::string primary_weapon_menu(player_class_t class_type){$/;"	f	namespace:mods::chargen
 print_command	mods/builder.cpp	/^	void print_command(player_ptr_t& player){$/;"	f	struct:command_t
 print_group	act.other.cpp	/^void print_group(char_data *ch) {$/;"	f
@@ -6524,11 +6529,9 @@ reserved_rooms	act.builder.cpp	/^	static std::vector<int> reserved_rooms;$/;"	m	
 reserved_word	interpreter.cpp	/^int reserved_word(char *argument) {$/;"	f
 reserved_zones	act.builder.cpp	/^	static std::vector<int> reserved_zones;$/;"	m	namespace:mods::adhoc	file:
 reset	mods/catch.hpp	/^			void reset() {$/;"	f	class:Catch::Ptr
-reset	mods/mini-games.cpp	/^	void line_up::reset(){$/;"	f	class:mods::mini_games::line_up
 reset_char	db.cpp	/^void reset_char(char_data *ch) {$/;"	f
 reset_com	db.h	/^	reset_com() : command('X'),$/;"	f	struct:reset_com
 reset_com	db.h	/^struct reset_com {$/;"	s
-reset_hack	mods/mini-games.cpp	/^	void reset_hack(player_ptr_t& player){$/;"	f	namespace:mods::mini_games
 reset_mode	db.h	/^	int	reset_mode;         \/* conditions for reset (see below)   *\/$/;"	m	struct:zone_data
 reset_points	mods/player-scaffolding.cpp	/^	void player_scaffolding::reset_points(player_ptr_t player,std::map<std::string_view,int> * points_map){$/;"	f	class:mods::player_scaffolding
 reset_q	db.cpp	/^struct reset_q_type reset_q;	\/* queue of zones to be reset	 *\/$/;"	v	typeref:struct:reset_q_type
@@ -6599,16 +6602,10 @@ rooms	mods/player.cpp	/^namespace mods::rooms {$/;"	n	class:mods	file:
 rooms	mods/rooms.cpp	/^namespace mods::rooms {$/;"	n	class:mods	file:
 rooms	mods/rooms.hpp	/^namespace mods::rooms {$/;"	n	class:mods
 rooms	mods/world-configuration.cpp	/^	rooms_t rooms;$/;"	m	namespace:mods::world_conf	file:
-rotate_left	mods/mini-games.cpp	/^	std::string line_up::rotate_left(int in_row){$/;"	f	class:mods::mini_games::line_up
-rotate_left	mods/mini-games.cpp	/^	void rotate_left(player_ptr_t& player){$/;"	f	namespace:mods::mini_games
-rotate_right	mods/mini-games.cpp	/^	std::string line_up::rotate_right(int in_row){$/;"	f	class:mods::mini_games::line_up
-rotate_right	mods/mini-games.cpp	/^	void rotate_right(player_ptr_t& player){$/;"	f	namespace:mods::mini_games
 round	bsd-snprintf.cpp	/^round(long double value) {$/;"	f	file:
 rounds_per_minute	mods/weapon.hpp	/^			int rounds_per_minute;$/;"	m	struct:mods::weapon::yaml::rifle_description_t
 routines	spells.h	/^	int routines;$/;"	m	struct:spell_info_type
-row_count	mods/mini-games.cpp	/^	int line_up::row_count(){$/;"	f	class:mods::mini_games::line_up
 row_id	mods/lmdb.hpp	/^		uint64_t row_id;$/;"	m	struct:mods::lmdb::_selector
-rows	mods/mini-games.hpp	/^		std::vector<std::vector<uint8_t>> rows;$/;"	m	namespace:mods::mini_games
 run	mods/behaviour_tree.hpp	/^		run_status run(LambdaArgument arg) {$/;"	f	struct:mods::behaviour_tree
 run	mods/behaviour_tree_node.hpp	/^		run_status_t run(LambdaArgument & arg){$/;"	f	struct:mods::behaviour_tree_node
 run	mods/debug-pre-game.hpp	/^	bool run(){$/;"	f	namespace:mods::debug::pre_game
@@ -6675,7 +6672,6 @@ sector_type_t	mods/rooms.hpp	/^	enum sector_type_t {$/;"	g	namespace:mods::rooms
 sector_types	constants.cpp	/^const char *sector_types[] = {$/;"	v
 sector_types	constants.hpp	/^const char *sector_types[] = {$/;"	v
 seed	mods/ai_state.cpp	/^	void seed() {$/;"	f	namespace:mods
-seed	mods/mini-games.cpp	/^	void line_up::seed(){$/;"	f	class:mods::mini_games::line_up
 seed	random.cpp	/^static unsigned long seed;$/;"	v	file:
 select	mods/sql.hpp	/^			compositor<T>& select(str_object fields) {$/;"	f	struct:mods::sql::compositor
 select_randomly	globals.cpp	/^			Iter select_randomly(Iter start, Iter end) {$/;"	f	namespace:mods::globals
@@ -6738,7 +6734,6 @@ set_db_id	mods/player.cpp	/^	void player::set_db_id(aligned_int_t id){$/;"	f	cla
 set_db_id	structs.h	/^		void set_db_id(uint64_t i){ this->m_db_id = i; }$/;"	f	struct:obj_data
 set_desc	mods/player.cpp	/^	void player::set_desc(std::deque<descriptor_data>::iterator it){ $/;"	f	class:mods::player
 set_desc	mods/player.cpp	/^	void player::set_desc(std::shared_ptr<descriptor_data> it){ $/;"	f	class:mods::player
-set_device_id	mods/mini-games.cpp	/^	void line_up::set_device_id(int i){$/;"	f	class:mods::mini_games::line_up
 set_dir	mods/js.hpp	/^				inline void set_dir(const std::string& m) {$/;"	f	struct:mods::js::include
 set_dir_option	structs.cpp	/^		void room_data::set_dir_option(byte i,$/;"	f	class:room_data
 set_direction	mods/affects.hpp	/^			void set_direction(TAffects affect, bool direction){$/;"	f	struct:mods::affects::dissolver
@@ -6848,7 +6843,6 @@ short_description	structs.h	/^		mods::string short_description;       \/* when w
 shouldContinueOnFailure	mods/catch.hpp	/^	inline bool shouldContinueOnFailure(int flags)    {$/;"	f	namespace:Catch
 shouldSuppressFailure	mods/catch.hpp	/^	inline bool shouldSuppressFailure(int flags)      {$/;"	f	namespace:Catch
 should_continue	mods/help.cpp	/^	bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::player>& player,bool zero_is_help){$/;"	f	namespace:mods::help
-should_highlight	mods/mini-games.cpp	/^	bool line_up::should_highlight(int row, uint8_t value){$/;"	f	class:mods::mini_games::line_up
 show_finalized_chargen_screen	mods/chargen.cpp	/^	void show_finalized_chargen_screen(player_ptr_t p){$/;"	f	namespace:mods::chargen
 show_item	mods/shop.hpp	/^	static inline void show_item(player_ptr_t& player,TShopMap& shop_map, int16_t item_number){$/;"	f	namespace:mods::shop
 show_nonconst_vector	mods/builder_util.hpp	/^	void show_nonconst_vector($/;"	f	namespace:mods::builder_util
@@ -6861,6 +6855,7 @@ show_string	modify.cpp	/^void show_string(mods::descriptor_data d, char *input) 
 show_tics	mods/debug.cpp	/^	bool state::show_tics() { return m_show_tics; }$/;"	f	class:mods::debug::state
 show_tics	mods/debug.cpp	/^	void state::show_tics(bool b){ m_show_tics = b; }$/;"	f	class:mods::debug::state
 shptr	mods/loops.hpp	/^	namespace shptr {$/;"	n	namespace:mods::loops
+shuffle	mods/util.hpp	/^	static inline void shuffle(T& vec){$/;"	f	namespace:mods::util
 shutdown	globals.cpp	/^		void shutdown(void){$/;"	f	namespace:mods::globals
 siderail_t	mods/weapon.hpp	/^	enum siderail_t {$/;"	g	namespace:mods::weapon
 sigfunc	comm.h	/^typedef RETSIGTYPE sigfunc(int);$/;"	t
@@ -6914,7 +6909,6 @@ socket_t	mods/scan.hpp	/^typedef int socket_t;$/;"	t
 socket_t	sysdep.h	/^typedef SOCKET		socket_t;$/;"	t
 solo_gain	fight.cpp	/^void solo_gain(char_data *ch, char_data *victim) {$/;"	f
 solution	mods/intent.hpp	/^		std::vector<std::string> solution;$/;"	m	struct:mods::intent::intent_t
-solutions	mods/mini-games.hpp	/^		std::vector<uint8_t> solutions;$/;"	m	namespace:mods::mini_games
 sort_commands	act.informative.cpp	/^void sort_commands(void) {$/;"	f
 sort_commands	mods/hell.hpp	/^	constexpr inline bool sort_commands = false;$/;"	m	namespace:mods::hell
 sort_commands_helper	act.informative.cpp	/^int sort_commands_helper(const void *a, const void *b) {$/;"	f
@@ -7057,6 +7051,7 @@ telcmds	telnet.h	/^char *telcmds[] = {$/;"	v
 telopts	telnet.h	/^char *telopts[NTELOPTS+1] = {$/;"	v
 temper1	shop.h	/^	int	 temper1;		\/* How does keeper react if no money	*\/$/;"	m	struct:shop_data
 test	mods/js.cpp	/^		namespace test {$/;"	n	namespace:mods::js	file:
+test	mods/migrations.cpp	/^	std::tuple<bool,int> test(std::string identifier, std::string up_sql,std::string down_sql,std::string purpose){$/;"	f	namespace:mods::migrations
 text	mods/util-conf.hpp	/^		namespace text {$/;"	n	namespace:mods::util
 text_overflow	comm.cpp	/^const char *text_overflow = "**OVERFLOW**\\r\\n";$/;"	v
 texture_from_string	mods/rooms.hpp	/^	static inline std::optional<txt> texture_from_string(std::string& s){$/;"	f	namespace:mods::rooms
@@ -7192,7 +7187,7 @@ type	interpreter.h	/^	int type;$/;"	m	struct:alias_data
 type	mods/behaviour_tree_impl.hpp	/^		enum type { $/;"	g	namespace:mods::behaviour_tree_impl
 type	mods/item-types.hpp	/^namespace mods::weapon::type {$/;"	n	class:mods::weapon
 type	mods/lmdb.hpp	/^		transact_type_t type() const { return m_type; }$/;"	f	struct:mods::lmdb::transaction_t
-type	mods/mini-games.hpp	/^		std::string type;$/;"	m	struct:mini_game_payload_t
+type	mods/mini-games.hpp	/^		std::string type;$/;"	m	struct:mods::mini_games::mini_game_payload_t
 type	mods/player.hpp	/^		player_type_enum_t type(){$/;"	f	struct:mods::player
 type	mods/weapon.hpp	/^			mw_rifle type;$/;"	m	struct:mods::weapon::yaml::rifle_description_t
 type	shop.h	/^	int type;$/;"	m	struct:shop_buy_data
@@ -7276,7 +7271,7 @@ visibility	mods/calc_visibility.cpp	/^namespace mods::calc::visibility {$/;"	n	c
 visibility	mods/calc_visibility.hpp	/^namespace mods::calc::visibility {$/;"	n	class:mods::calc
 vnum	boards.h	/^	obj_vnum vnum;	\/* vnum of this board *\/$/;"	m	struct:board_info_type
 vnum	house.h	/^	room_vnum vnum;		\/* vnum of this house		*\/$/;"	m	struct:house_control_rec
-vnum	mods/mini-games.hpp	/^		int vnum;$/;"	m	struct:mini_game_payload_t
+vnum	mods/mini-games.hpp	/^		int vnum;$/;"	m	struct:mods::mini_games::mini_game_payload_t
 vnum	mods/npc.cpp	/^	const mob_vnum& npc::vnum() const { return cd()->nr; }$/;"	f	class:mods::npc
 vnum	mods/player.hpp	/^		room_vnum vnum(){ return world[room()].number; }$/;"	f	struct:mods::player
 vnum	shop.h	/^	room_vnum vnum;		\/* Virtual number of this shop		*\/$/;"	m	struct:shop_data
@@ -7327,6 +7322,7 @@ where_crypt	mods/sql.hpp	/^			compositor<T>& where_crypt(str_object lhs,$/;"	f	s
 where_in	mods/sql.hpp	/^			compositor<T>& where_in(str_object lhs,$/;"	f	struct:mods::sql::compositor
 white_str	mods/colors.hpp	/^static inline std::string white_str(TStr str){$/;"	f	namespace:mods::colors
 width	mods/overhead_map.hpp	/^	constexpr static uint8_t width = 48;$/;"	m	namespace:mods::overhead_map
+wire_mini_game_test	mods/debug-pre-game.hpp	/^	void wire_mini_game_test(){$/;"	f	namespace:mods::debug::pre_game
 wis_app	constants.cpp	/^cpp_extern const struct wis_app_type wis_app[] = {$/;"	v	typeref:struct:wis_app_type
 wis_app	constants.hpp	/^cpp_extern const struct wis_app_type wis_app[] = {$/;"	v	typeref:struct:wis_app_type
 with_who	shop.h	/^	int	 with_who;		\/* Who does the shop trade with?	*\/$/;"	m	struct:shop_data

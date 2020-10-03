@@ -15,6 +15,8 @@
 #include "builder/object-placement.hpp"
 #include "mini-games.hpp"
 #include "orm/mini-game.hpp"
+#include "mini-games/wires.hpp"
+#include "migrations.hpp"
 
 extern bool login(std::string_view user_name,std::string_view password);
 extern int16_t save_char_data(player_ptr_t& player,std::map<std::string,std::string> values);
@@ -31,7 +33,44 @@ namespace mods::debug::pre_game {
 		mods::orm::mini_game db;
 		db.load_by_room_vnum(128);
 	}
+	void wire_mini_game_test(){
+		mods::mini_games::wires w;
+		std::cerr << w.get_body() << "\n";
+		sleep(60 * 5);
+	}
+	void migrations_test(){
+		std::string up_sql = "CREATE TABLE karma (\n"
+		"karma_id SERIAL,\n"
+		"karma_player_id INTEGER NOT NULL,\n"
+		"karma_alignment INTEGER NOT NULL DEFAULT 0,\n"
+		"karma_cold_blooded_index INTEGER NOT NULL DEFAULT 0,\n"
+		"created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
+		"updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n"
+		");\n"
+		;
+		std::string down_sql = "DROP TABLE karma;";
+		std::string identifier = "karmic";
+		std::string purpose = "to create the karma table";
+
+		auto i = mods::migrations::test(identifier,up_sql,down_sql,purpose);
+		std::cout << "[" << std::get<0>(i) << ",";
+		std::cout << std::get<1>(i) << "]\n";
+
+		identifier = "purposely broken";
+		up_sql = "CRAZKDJFKDLF;";
+		down_sql = "";
+		purpose = "purposely run a broken migration";
+		i = mods::migrations::test(identifier,up_sql,down_sql,purpose);
+		std::cout << "[" << std::get<0>(i) << ",";
+		std::cout << std::get<1>(i) << "]\n";
+
+		sleep(60 * 60);
+	}
 	bool run(){
+		migrations_test();
+		
+		wire_mini_game_test();
+
 		mini_game_test();
 
 		mini_game_orm_test();

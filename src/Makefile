@@ -82,11 +82,12 @@ buildobj = act.informative act.item act.medic \
 					 mods/players/db-load mods/bugs-fixtures mods/player-registration \
 					 mods/super-users mods/builder/object-placement mods/integral-objects \
 					 mods/orm/integral-object mods/orm/camera-feed mods/orm/door-event \
-					 mods/mini-games mods/orm/mini-game
+					 mods/mini-games/line-up mods/orm/mini-game mods/mini-games \
+					 mods/mini-games/wires mods/migrations
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
-all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(objects) $(thirdparty) #$(DATA_DIR)
+all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(objects) $(thirdparty) #$(DATA_DIR)
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT)
 
 clean:
@@ -96,8 +97,12 @@ clean:
 		mods/classes/*.o mods/classes/*.d mods/mobs/*.o mods/mobs/*.d \
 		mods/armor/*.o mods/armor/*.d mods/players/*.o mods/players/*.d) \
 		rm -f $(builddir)/mods/testing/lmdb/*.o \
-		rm -f $(builddir)/mods/testing/lmdb/*.d 
+		rm -f $(builddir)/mods/testing/lmdb/*.d  \
+		rm -f $(builddir)/mods/mini-games/*.o \
+		rm -f $(builddir)/mods/mini-games/*.d 
 
+$(builddir)/mods/mini-games:
+	mkdir -p $(builddir)/mods/mini-games
 $(builddir)/mods/classes:
 	mkdir -p $(builddir)/mods/classes
 $(duktapeout): 

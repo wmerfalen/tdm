@@ -215,6 +215,12 @@ namespace mods::help::pages {
 			"\r\n"
 			"{blu}this documentation was written on 2020-09-28.{/blu}"
 	;
+	static constexpr const char* h_plug_cable = "usage: plug_cable <id>\r\n"
+			"description: plugs into the ethernet port identified by 'id'.\r\n"
+			"{blu}Example: {yel}plug_cable A{/yel}\r\n"
+			"\r\n"
+			"{blu}this documentation was written on 2020-10-02.{/blu}"
+	;
 };
 
 namespace mods::help {
@@ -247,6 +253,7 @@ namespace mods::help {
 			M_MATCH("install_minigame",h_install_minigame);
 			M_MATCH("list_minigame",h_list_minigame);
 			M_MATCH("uninstall_minigame",h_uninstall_minigame);
+			M_MATCH("plug_cable",h_plug_cable);
 #undef M_MATCH
 			return true;
 	}

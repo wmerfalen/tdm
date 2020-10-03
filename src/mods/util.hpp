@@ -17,6 +17,7 @@
 #include <dirent.h>
 #endif
 #include <ctime>
+#include <random>
 	
 #ifndef __MENTOC_STRING_LIT__
 #define __MENTOC_STRING_LIT__
@@ -33,6 +34,12 @@ extern struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *numb
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 
 namespace mods::util {
+	template <typename T>
+	static inline void shuffle(T& vec){
+		std::random_device rd;
+		std::mt19937 g(rd());
+		std::shuffle(vec.begin(),vec.end(),g);
+	}
 		static inline long pg_timestamp_to_long(std::string timestamp){
 			struct tm time;
 			memset(&time,0,sizeof(tm));

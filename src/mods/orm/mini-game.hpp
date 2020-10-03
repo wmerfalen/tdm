@@ -47,6 +47,14 @@ namespace mods::orm {
 			return 0;
 		}
 		void load_by_room_vnum(room_vnum);
+		void load_all();
+		auto create_game(mods::mini_games::mini_game_payload_t game){
+			return this->create<mini_game>(this);
+		}
+		auto update_game(uint64_t pk_id,mods::mini_games::mini_game_payload_t game){
+			return this->update<mini_game>(this);
+		}
+		strmap_t export_class();
 
 		id_type_t game_id;
 		std::string game_type;

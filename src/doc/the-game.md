@@ -50,7 +50,7 @@ enough, we can compose those into skillsets that are divided by assets.
 	- [#########################################] -
 	- [ ELEMENTALIST ARCHETYPES                 ] -
 	- [#########################################] -
-	- HEAT [fire elementalist]
+	- PYREXIA [fire elementalist]
 		- can apply fire to WGE
 		- SASG-12 Shotgun
 	- MALODY [poison elementalist]

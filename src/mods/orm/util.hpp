@@ -90,6 +90,26 @@ namespace mods::orm::util {
 				}
 				return {UNKNOWN_ERROR,"unknown"};
 			}
+		template <typename TObject,typename sql_compositor>
+			static inline std::tuple<int16_t,std::string> load_all(TObject* s){
+				try{
+					auto select_transaction = txn();
+					sql_compositor comp(s->table_name(),&select_transaction);
+					auto player_sql = comp.select("*")
+						.from(s->table_name())
+						.sql();
+					auto player_record = mods::pq::exec(select_transaction,player_sql);
+					mods::pq::commit(select_transaction);
+					if(player_record.size()){
+						s->feed_multi(player_record);
+						return {FETCHED_OKAY,"okay"};
+					}
+					return {NO_RESULTS,"no results"};
+				}catch(std::exception& e){
+					return {EXCEPTION_OCCURRED,e.what()};
+				}
+				return {UNKNOWN_ERROR,"unknown"};
+			}
 		template <typename TContainerObject,typename sql_compositor>
 			static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s,
 					std::string_view where,

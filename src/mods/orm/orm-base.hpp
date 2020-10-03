@@ -47,6 +47,17 @@ namespace mods::orm {
 			return status;
 		}
 		template <typename TClass>
+		std::tuple<int16_t,std::string> read_all(TClass* c){
+			auto status = mods::orm::util::load_all<TClass,sql_compositor>(c);
+			if(ORM_NO_RESULTS(status)){
+				std::cout << "[mods::orm::orm_base::read] no results.\n";
+			}
+			if(ORM_FAILURE(status)){
+				std::cerr << "[mods::orm::orm_base::read] failed: '" << std::get<1>(status) << "'\n";
+			}
+			return status;
+		}
+		template <typename TClass>
 		std::tuple<int16_t,std::string> read(TClass* c,std::string_view column,std::string_view value){
 			auto status = mods::orm::util::load_by_column<TClass,sql_compositor>(c,column,value);
 			if(ORM_NO_RESULTS(status)){
