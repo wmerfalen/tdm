@@ -3366,7 +3366,7 @@ __MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	95;"	d
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
 __MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	84;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__	mods/behaviour_tree_impl.cpp	16;"	d	file:
-__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1033;"	d	file:
+__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1035;"	d	file:
 __MENTOC_SHOW_LMDB_DEBUG__	mods/db.cpp	6;"	d	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	d
 __MENTOC_STRING_LIT__	mods/util.hpp	23;"	d
@@ -5751,7 +5751,7 @@ message_len	boards.h	/^	int	message_len;  \/* size of message text (for file wri
 message_sell	shop.h	/^	mods::string message_sell;		\/* Message when player sells item	*\/$/;"	m	struct:shop_data
 meta_utils	mods/meta_utils.cpp	/^namespace mods::meta_utils {$/;"	n	class:mods	file:
 meta_utils	mods/meta_utils.hpp	/^namespace mods::meta_utils {$/;"	n	class:mods
-mgdp_debug	globals.cpp	1035;"	d	file:
+mgdp_debug	globals.cpp	1037;"	d	file:
 migrations	mods/migrations.cpp	/^namespace mods::migrations {$/;"	n	class:mods	file:
 migrations	mods/migrations.hpp	/^namespace mods::migrations {$/;"	n	class:mods
 migrations_test	mods/debug-pre-game.hpp	/^	void migrations_test(){$/;"	f	namespace:mods::debug::pre_game

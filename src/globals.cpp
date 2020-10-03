@@ -434,6 +434,8 @@ namespace mods {
 						mods::migrations::report_migration_status(CAT("Successfully ran [",direction,"] migration: '",identifier,"'"),"success");
 					}
 				}
+				std::cout << "All migrations ran. Exiting...\n";
+				exit(0);
 			}
 			mods::debug::init(show_tics);
 			mods::skills::game_init();
