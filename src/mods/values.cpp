@@ -382,14 +382,17 @@ namespace mods::values {
 		"PRIMARY_CHOICE_SCREEN_UMP45_DESCRIPTION",
 		"PRIMARY_CHOICE_SCREEN_MK46_DESCRIPTION",
 		"PRIMARY_CHOICE_SCREEN_HK21_DESCRIPTION",
-		"CHARGEN_SNIPER_CLASS_DESCRIPTION",
-		"CHARGEN_MARINE_CLASS_DESCRIPTION",
-		"CHARGEN_SENTINEL_CLASS_DESCRIPTION",
-		"CHARGEN_CONTAGION_CLASS_DESCRIPTION",
-		"CHARGEN_ENGINEER_CLASS_DESCRIPTION",
-		"CHARGEN_MEDIC_CLASS_DESCRIPTION",
-		"CHARGEN_PSYOP_CLASS_DESCRIPTION",
-		"CHARGEN_SUPPORT_CLASS_DESCRIPTION",
+		"CHARGEN_GHOST_CLASS_DESCRIPTION",
+	  "CHARGEN_MARKSMAN_CLASS_DESCRIPTION",
+	  "CHARGEN_BANDIT_CLASS_DESCRIPTION",
+	  "CHARGEN_BUTCHER_CLASS_DESCRIPTION",
+	  "CHARGEN_STRIKER_CLASS_DESCRIPTION",
+	  "CHARGEN_OBSTRUCTOR_CLASS_DESCRIPTION",
+	  "CHARGEN_MALADY_CLASS_DESCRIPTION",
+	  "CHARGEN_PYREXIA_CLASS_DESCRIPTION",
+	  "CHARGEN_DEALER_CLASS_DESCRIPTION",
+	  "CHARGEN_FORGE_CLASS_DESCRIPTION",
+	  "CHARGEN_SYNDROME_CLASS_DESCRIPTION",
 		"CHARGEN_UNDEFINED_CLASS_DESCRIPTION",
 		"MSG_YOU_GOT_HIT_BY_REFLECTED_MUNTIONS",
 		"MSG_YOU_REFLECTED_MUNITIONS",
@@ -865,132 +868,127 @@ namespace mods::values {
 		CGET_DEF(std::string,PRIMARY_CHOICE_SCREEN_UMP45_DESCRIPTION,"Dubbed the 'Universal Sub Machinegun', the UMP-45 is a versatile and reliable SMG.\r\n");
 		CGET_DEF(std::string,PRIMARY_CHOICE_SCREEN_MK46_DESCRIPTION,"The MK-46 LMG is a perfect balance of firepower, portability, and accuracy.\r\n");
 		CGET_DEF(std::string,PRIMARY_CHOICE_SCREEN_HK21_DESCRIPTION,"General purpose LMG widely used in tactical teams all over the world.\r\n");
-		CGET_DEF(std::string,CHARGEN_SNIPER_CLASS_DESCRIPTION,
+		CGET_DEF(std::string,CHARGEN_GHOST_CLASS_DESCRIPTION,
 				CAT(green_str(
 							 "=====================================================\r\n"
-						   "#               - = [ The Sniper ] = -              #\r\n"
+						   "#               - = [ GHOST ] = -                   #\r\n"
 							 "=====================================================\r\n"),
 							 yellow_str("[description]:"),
-							 "The sniper is a specialty class that \r\n",
-							 "focuses on the SNIPER RIFLE weapon type. While any\r\n",
-							 "class can wield and use a sniper rifle, the sniper has\r\n",
-							 "extra proficiencies and perks associated with the use\r\n",
-							 "of ranged weaponry.\r\n",
+							 "The GHOST class is the only class that can deploy stealth\r\n",
+							 "to their entire body using reflective camo.\r\n",
 							 yellow_str(
 							 "=====================================================\r\n")
 			 )
 		);
-		CGET_DEF(std::string,CHARGEN_MARINE_CLASS_DESCRIPTION,
+		 	CGET_DEF(std::string,CHARGEN_MARKSMAN_CLASS_DESCRIPTION,
 				CAT(green_str(
 							 "=====================================================\r\n"
-						   "#               - = [ The Marine ] = -              #\r\n"
+						   "#               - = [ MARKSMAN ] = -                   #\r\n"
 							 "=====================================================\r\n"),
 							 yellow_str("[description]:"),
-							 "A well-rounded soldier built for many\r\n",
-							 "tasks. The marine utilizes every aspect of warfare\r\n",
-							 "and composes destructive technology for use against\r\n",
-							 "insurgents. The ideal candidate is always itching\r\n",
-							 "to get back into the battlefield. Marines have their\r\n",
-							 "own specialized martial arts training program which\r\n",
-							 "unlocks special melee and lethal weapon abilities.\r\n",
 							 yellow_str(
 							 "=====================================================\r\n")
-				)
-			);
-		CGET_DEF(std::string,CHARGEN_SENTINEL_CLASS_DESCRIPTION,
+			 )
+		);
+		 	CGET_DEF(std::string,CHARGEN_BANDIT_CLASS_DESCRIPTION,
 				CAT(green_str(
 							 "=====================================================\r\n"
-						   "#               - = [ The Sentinel ] = -             #\r\n"
+						   "#               - = [ BANDIT ] = -                   #\r\n"
 							 "=====================================================\r\n"),
 							 yellow_str("[description]:"),
-							 "The sentinel is your ideal security \r\n",
-							 "task force. The longer you secure an area, the \r\n",
-							 "more perks you unlock. This occurs by strategically \r\n",
-							 "utilizing technology to impose your will upon the enemy.\r\n",
 							 yellow_str(
 							 "=====================================================\r\n")
-							 )
+			 )
 		);
-		CGET_DEF(std::string,CHARGEN_CONTAGION_CLASS_DESCRIPTION,
+		 	CGET_DEF(std::string,CHARGEN_BUTCHER_CLASS_DESCRIPTION,
 				CAT(green_str(
 							 "=====================================================\r\n"
-						   "#               - = [ The Contagion ] = -           #\r\n"
+						   "#               - = [ BUTCHER ] = -                   #\r\n"
 							 "=====================================================\r\n"),
 							 yellow_str("[description]:"),
-							 "Highly trained in the art of chemical \r\n",
-							 "warfare, the Contagion takes chemistry to unprecedented\r\n",
-							 "levels in order to support and clear out forces behind \r\n",
-							 "enemy lines. A strategically placed detonation can be\r\n",
-							 "the determining factor in wiping out resistance in the \r\n",
-							 "local vicinity.\r\n",
 							 yellow_str(
 							 "=====================================================\r\n")
-				)
+			 )
 		);
-		CGET_DEF(std::string,CHARGEN_ENGINEER_CLASS_DESCRIPTION,
+		 	CGET_DEF(std::string,CHARGEN_STRIKER_CLASS_DESCRIPTION,
 				CAT(green_str(
 							 "=====================================================\r\n"
-						   "#               - = [ The Engineer ] = -              #\r\n"
+						   "#               - = [ STRIKER ] = -                   #\r\n"
 							 "=====================================================\r\n"),
 							 yellow_str("[description]:"),
-							 "Skilled in advanced methods of offensive \r\n",
-							 "electronics, the Engineer supplies his squad with\r\n",
-							 "useful intelligence. A carefully \r\n",
-							 "placed Engineer can subvert radio communications and\r\n",
-							 "cause the opposing force to disrupt or even harm one \r\n",
-							 "another by leveraging advanced hacking techniques.\r\n",
-							 "The Engineer can employ offensive air, land, or water \r\n",
-							 "autonomous drones to discover, steal, and disrupt the\r\n",
-							 "opposing force's well-guarded secrets.\r\n",
 							 yellow_str(
 							 "=====================================================\r\n")
-			)
+			 )
 		);
-		CGET_DEF(std::string,CHARGEN_MEDIC_CLASS_DESCRIPTION,
+		 	CGET_DEF(std::string,CHARGEN_OBSTRUCTOR_CLASS_DESCRIPTION,
 				CAT(green_str(
 							 "=====================================================\r\n"
-						   "#               - = [ The Medic ] = -               #\r\n"
+						   "#               - = [ OBSTRUCTOR ] = -                   #\r\n"
 							 "=====================================================\r\n"),
 							 yellow_str("[description]:"),
-							 "The only class with the ability to \r\n",
-							 "revive downed teammates from a few rooms away.\r\n",
-							 "The Medic can bandage and repair broken limbs. Squads \r\n",
-							 "with a Medic in their team gain a passive HP regen\r\n",
-							 "bonus and will take less damage.\r\n",
 							 yellow_str(
 							 "=====================================================\r\n")
-				)
+			 )
 		);
-		CGET_DEF(std::string,CHARGEN_PSYOP_CLASS_DESCRIPTION,
+		 	CGET_DEF(std::string,CHARGEN_MALADY_CLASS_DESCRIPTION,
 				CAT(green_str(
 							 "=====================================================\r\n"
-						   "#               - = [ The PSYOP ] = -               #\r\n"
+						   "#               - = [ MALADY ] = -                   #\r\n"
 							 "=====================================================\r\n"),
 							 yellow_str("[description]:"),
-							 "PSYOP specialists utilize techniques\r\n"
-							 "of advanced warfare that simply can't be explained. \r\n"
-							 "The techniques employed by a PSYOP involve the use of\r\n"
-							 "inexplicably advanced technology.\r\n",
-							 red_str("This is an advanced class.\r\n"),
 							 yellow_str(
-							 "====================================================\r\n")
-				)
+							 "=====================================================\r\n")
+			 )
 		);
-		CGET_DEF(std::string,CHARGEN_SUPPORT_CLASS_DESCRIPTION,
+		 	CGET_DEF(std::string,CHARGEN_PYREXIA_CLASS_DESCRIPTION,
 				CAT(green_str(
 							 "=====================================================\r\n"
-						   "#               - = [ Support ] = -                 #\r\n"
+						   "#               - = [ PYREXIA ] = -                   #\r\n"
 							 "=====================================================\r\n"),
 							 yellow_str("[description]:"),
-							 "Operatives in the Supporting role can\r\n"
-							 "carry an obscene amount of equipment long distances. \r\n"
-							 "They can revitalize wounded soldiers with medkits,\r\n"
-							 "or supply ammo to fellow squad members. A support \r\n"
-							 "specialist has a natural affinity for the light machine gun\r\n"
-							 "weapon type, and can surpress an enemy while team mates advance.\r\n",
 							 yellow_str(
-							 "===============================================================\r\n")
-				)
+							 "=====================================================\r\n")
+			 )
+		);
+		 	CGET_DEF(std::string,CHARGEN_DEALER_CLASS_DESCRIPTION,
+				CAT(green_str(
+							 "=====================================================\r\n"
+						   "#               - = [ DEALER ] = -                   #\r\n"
+							 "=====================================================\r\n"),
+							 yellow_str("[description]:"),
+							 yellow_str(
+							 "=====================================================\r\n")
+			 )
+		);
+		 	CGET_DEF(std::string,CHARGEN_FORGE_CLASS_DESCRIPTION,
+				CAT(green_str(
+							 "=====================================================\r\n"
+						   "#               - = [ FORGE ] = -                   #\r\n"
+							 "=====================================================\r\n"),
+							 yellow_str("[description]:"),
+							 yellow_str(
+							 "=====================================================\r\n")
+			 )
+		);
+		 	CGET_DEF(std::string,CHARGEN_SYNDROME_CLASS_DESCRIPTION,
+				CAT(green_str(
+							 "=====================================================\r\n"
+						   "#               - = [ SYNDROME ] = -                   #\r\n"
+							 "=====================================================\r\n"),
+							 yellow_str("[description]:"),
+							 yellow_str(
+							 "=====================================================\r\n")
+			 )
+		);
+		 	CGET_DEF(std::string,CHARGEN_MACHINIST_CLASS_DESCRIPTION,
+				CAT(green_str(
+							 "=====================================================\r\n"
+						   "#               - = [ MACHINIST ] = -                   #\r\n"
+							 "=====================================================\r\n"),
+							 yellow_str("[description]:"),
+							 yellow_str(
+							 "=====================================================\r\n")
+			 )
 		);
 		CGET_DEF(std::string,CHARGEN_UNDEFINED_CLASS_DESCRIPTION,red_str("huh? that's not a class...\r\n"));
 		CGET_DEF(std::string,MSG_YOU_GOT_HIT_BY_REFLECTED_MUNTIONS,"*** [ You are HIT by {red} REFLECTED MUNITIONS {/red}] *** ");

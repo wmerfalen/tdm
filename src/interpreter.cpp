@@ -69,7 +69,7 @@ extern char_data* character_list;
 void echo_on(mods::descriptor_data &d);
 void echo_off(mods::descriptor_data &d);
 void do_start(char_data *ch);
-player_class_t parse_class(char arg);
+player_class_t parse_class(std::string argument);
 int special(char_data *ch, int cmd, char *arg);
 int Valid_Name(const char *newname);
 void read_aliases(char_data *ch);
@@ -293,6 +293,10 @@ ACMD(do_builder_help){
 		return;
 	}
 }
+ACMD(do_set_who_line);
+ACMD(do_clear_who_line);
+ACMD(do_go_invisible);
+ACMD(do_go_visible);
 
 ACMD(do_yaml_import);
 ACMD(do_yaml_log);
@@ -1028,6 +1032,10 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "wimpy"    , POS_DEAD    , do_wimpy    , 0, 0 },
 	{ "wink"     , POS_RESTING , do_action   , 0, 0 },
 	{ "withdraw" , POS_STANDING, do_not_here , 1, 0 },
+	{ "set_who_line",      POS_DEAD    , do_set_who_line      , LVL_IMMORT, 0 },
+	{ "clear_who_line",      POS_DEAD    , do_clear_who_line      , LVL_IMMORT, 0 },
+	{ "go_invisible"      , POS_DEAD    , do_go_invisible      , LVL_IMMORT, 0 },
+	{ "go_visible"      , POS_DEAD    , do_go_visible      , LVL_IMMORT, 0 },
 	{ "wiznet"   , POS_DEAD    , do_wiznet   , LVL_IMMORT, 0 },
 	{ ";"        , POS_DEAD    , do_wiznet   , LVL_IMMORT, 0 },
 	{ "wizhelp"  , POS_SLEEPING, do_commands , LVL_IMMORT, SCMD_WIZHELP },
@@ -1936,9 +1944,10 @@ void nanny(player_ptr_t p, char * in_arg) {
 
 		case CON_QCLASS:
 			{
+				std::string argument = arg;
 				player_class_t chosen_class = player_class_t::CLASS_UNDEFINED;
-				if(arg[0] == '?' && arg.length() > 1){
-					chosen_class = parse_class(arg[1]);
+				if(arg[0] == '?' && arg.length() > 2){
+					chosen_class = parse_class(argument.substr(1));
 					if(chosen_class == player_class_t::CLASS_UNDEFINED){
 						write_to_output(d, "Describe which class? Usage: question mark followed by number.\r\nFor example: ?2\r\n");
 						write_to_output(d, "%s\r\nSelect class: ", class_menu);
@@ -1955,7 +1964,8 @@ void nanny(player_ptr_t p, char * in_arg) {
 					return;
 				}
 
-				player_class_t pclass = parse_class(arg[0]);
+				std::cerr << "[argument]:'" << argument << "'\n";
+				player_class_t pclass = parse_class(argument);
 				p->set_class(pclass);
 				if(pclass == player_class_t::CLASS_UNDEFINED){
 					write_to_output(d, "\r\nThat's not a class.\r\n");
@@ -1974,12 +1984,9 @@ void nanny(player_ptr_t p, char * in_arg) {
 					p->set_db_id(0);
 					return;
 				}
-				write_to_output(d, "%s\r\nSelect primary weapon: ", mods::chargen::primary_weapon_menu(pclass).c_str());
-				p->set_state(CON_CHARGEN_PRIMARY_CHOICE);
 			}
-			return;
-		case CON_CHARGEN_PRIMARY_CHOICE:
-			mods::chargen::handle_primary_choice(p,arg[0],p->get_class());
+			write_to_output(d, "%s", MENU);
+			p->set_state(CON_MENU);
 			return;
 		case CON_RMOTD:		/* read CR after printing motd   */
 			write_to_output(d, "%s", MENU);

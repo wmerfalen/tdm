@@ -36,7 +36,6 @@ namespace mods::debug::pre_game {
 	void wire_mini_game_test(){
 		mods::mini_games::wires w;
 		std::cerr << w.get_body() << "\n";
-		sleep(60 * 5);
 	}
 	void migrations_test(){
 		std::string identifier = "create-karma-table";
@@ -102,7 +101,7 @@ namespace mods::debug::pre_game {
 		m.save();
 		m.load_by_player(69);
 #endif
-		std::cerr << "chargen sniper cl desc: '" << CHARGEN_SNIPER_CLASS_DESCRIPTION() << "'\n";
+		std::cerr << "chargen ghost cl desc: '" << CHARGEN_GHOST_CLASS_DESCRIPTION() << "'\n";
 		if(login("zim", "zoo")){
 			DD(green_str("Logged in properly with 'zim': 'zoo'"));
 		}else{

@@ -217,8 +217,20 @@ enum player_class_t {
 	CLASS_MEDIC = 6,
 	CLASS_PSYOP = 7,
 	CLASS_SUPPORT = 8,
+	CLASS_GHOST = 9,
+	CLASS_MARKSMAN = 10,
+	CLASS_BANDIT = 11,
+	CLASS_BUTCHER = 12,
+	CLASS_STRIKER = 13,
+	CLASS_OBSTRUCTOR = 14,
+	CLASS_MALADY = 15,
+	CLASS_PYREXIA = 16,
+	CLASS_DEALER = 17,
+	CLASS_FORGE = 18,
+	CLASS_SYNDROME = 19,
+	CLASS_MACHINIST = 20,
 	CLASS_FIRST = CLASS_SNIPER,
-	CLASS_LAST = CLASS_SUPPORT
+	CLASS_LAST = CLASS_MACHINIST
 };
 
 
@@ -369,6 +381,7 @@ enum player_class_t {
 #define CON_DELCNF2	 17	/* Delete confirmation 2		*/
 #define CON_DISCONNECT	 18	/* In-game link loss (leave character)	*/
 #define CON_IDLE         19 /* user is idle. not playing but also not disconnected */
+#define CON_SUB_CLASS 20
 #define CON_CHARGEN_PRIMARY_CHOICE 30
 #define CON_CHARGEN_FINALIZE 50 
 

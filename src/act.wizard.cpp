@@ -49,7 +49,7 @@ void do_start(char_data *ch);
 void appear(char_data *ch);
 void reset_zone(zone_rnum zone);
 void roll_real_abils(char_data *ch);
-int parse_class(char arg);
+int parse_class(std::string arg);
 void run_autowiz(void);
 
 /* local functions */
@@ -2715,7 +2715,7 @@ int perform_set(char_data *ch, char_data *vict, int mode,
 			break;
 
 		case 39:
-			if((i = parse_class(*val_arg)) == CLASS_UNDEFINED) {
+			if((i = parse_class(val_arg)) == CLASS_UNDEFINED) {
 				player->sendln("That is not a class.");
 				return (0);
 			}

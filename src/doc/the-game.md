@@ -40,30 +40,47 @@ enough, we can compose those into skillsets that are divided by assets.
 	- [#########################################] -
 	- [ ROGUE ARCHETYPES                        ] -
 	- [#########################################] -
-	- GHOST [illusionist]
-		- can apply stealth to self and WGE
-		- H&K G36C Assault Rifle
-	- SNIPER [assassin]
-		- can snipe from long distances
-		- PSG-1 Sniper Rifle
+    "  [1] Sniper             [          ROGUE ARCHETYPE ]\r\n"
+		"   [ Sniper sub-classes                             ]\r\n"
+		"     -> [1G] GHOST       [         stealth operator ]\r\n" 
+		"     -> [1M] Marksman    [           weapons expert ]\r\n" 
+		"     -> [1T] Bandit      [                    thief ]\r\n" 
 
 	- [#########################################] -
 	- [ ELEMENTALIST ARCHETYPES                 ] -
 	- [#########################################] -
-	- PYREXIA [fire elementalist]
-		- can apply fire to WGE
-		- SASG-12 Shotgun
-	- MALODY [poison elementalist]
-		- can apply poison to WGE
-		- MP5 Sub-Machine Gun
+		"  [3] Chemist            [      ALCHEMIST ARCHETYPE ]\r\n"
+		"   [ Chemist sub-classes                            ]\r\n"
+		"     -> [3M] Malady      [ poison weapon specialist ]\r\n"
+		"     -> [3P] Pyrexia     [    incendiary specialist ]\r\n"
+		"     -> [3C] Chemist     [   enhancement specialist ]\r\n"
 
 	- [#########################################] -
 	- [ WARRIOR ARCHETYPES                      ] -
 	- [#########################################] -
-	- TANK [warrior]
-		- can deploy shield
-		- P90 Sub-Machine Gun
+		"  [2] Marine             [        WARRIOR ARCHETYPE ]\r\n"
+		"   [ Marine sub-classes                             ]\r\n"
+		"     -> [2B] Butcher     [ bladed weapon specialist ]\r\n"
+		"     -> [2C]  \r\n"
 
+
+	- [#########################################] -
+	- [ ENGINEER ARCHETYPES                     ] -
+	- [#########################################] -
+		"  [4] Engineer           [     BLACKSMITH ARCHETYPE ]\r\n"
+		"   [ Engineer sub-classes                           ]\r\n"
+		"     -> [4F] Forge       [          weapons crafter ]\r\n"
+		"     -> [4D] Syndrome    [  autonomous drone expert ]\r\n"
+		"     -> [4M] Machinist   [        technology expert ]\r\n"
+	- FORGE [blacksmith]
+		- can create/modify/combine WGE
+		- VARIED
+
+	############################
+	## HALF BAKED IDEAS START ##
+	## HALF BAKED IDEAS START ##
+	## HALF BAKED IDEAS START ##
+	############################
 	- [#########################################] -
 	- [ GUNSLINGER ARCHETYPES                   ] -
 	- [#########################################] -
@@ -72,32 +89,17 @@ enough, we can compose those into skillsets that are divided by assets.
 		- Dual Desert Eagle
 
 	- [#########################################] -
-	- [ ENGINEER ARCHETYPES                     ] -
-	- [#########################################] -
-	- FORGE [blacksmith]
-		- can create/modify/combine WGE
-		- VARIED
-
-	- [#########################################] -
 	- [ PSYCHIC ARCHETYPES                      ] -
 	- [#########################################] -
 	- INTERCEPT [psychic]
 		- can remotely control NPCs for a limited amount of time
 		- Vector
 
-	- [#########################################] -
-	- [ CLERIC ARCHETYPES                       ] -
-	- [#########################################] -
-	- MEDIC [healer]
-		- can heal self and others
-		- FMG-9
-
-	- [########################] -
-	- [ BEASTMASTER ARCHETYPES ] -
-	- [########################] -
-	- SYNDROME [ beastmaster ]
-		- has flying/ground UAV drone. Can control any other drone
-		- [ weapon TBA ]
+	##########################
+	## HALF BAKED IDEAS END ##
+	## HALF BAKED IDEAS END ##
+	## HALF BAKED IDEAS END ##
+	##########################
 
 +++++++++++++++++++++++
 | ITEM TYPE CHECKLIST |

@@ -6,3 +6,4 @@
 #include "sentinel.hpp"
 #include "sniper.hpp"
 #include "support.hpp"
+#include "ghost.hpp"

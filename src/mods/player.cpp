@@ -182,14 +182,6 @@ namespace mods {
 		m_quitting = 0;
 		m_equipment = ptr->m_equipment;
 		m_sync_equipment();
-		this->m_class_sniper = ptr->m_class_sniper;
-		this->m_class_marine = ptr->m_class_marine;
-		this->m_class_sentinel = ptr->m_class_sentinel;
-		this->m_class_contagion = ptr->m_class_contagion;
-		this->m_class_engineer = ptr->m_class_engineer;
-		this->m_class_medic = ptr->m_class_medic;
-		this->m_class_psyop = ptr->m_class_psyop;
-		this->m_class_support = ptr->m_class_support;
 		m_class = ptr->m_class;
 	}
 	void player::capture_output(bool capture_status) {
@@ -479,30 +471,11 @@ namespace mods {
 		write_to_char(m_char_data, "[stub] FIXME",1,1);
 		return false;
 	}
-	std::shared_ptr<mods::classes::sniper> 	player::cl_sniper(){
-		return m_class_sniper;
+	/*
+	std::shared_ptr<mods::classes::ghost> player::cl_ghost(){
+		return m_class_ghost;
 	}
-	std::shared_ptr<mods::classes::marine> 	player::cl_marine(){
-		return m_class_marine;
-	}
-	std::shared_ptr<mods::classes::sentinel> 	player::cl_sentinel(){
-		return m_class_sentinel;
-	}
-	std::shared_ptr<mods::classes::contagion> 	player::cl_contagion(){
-		return m_class_contagion;
-	}
-	std::shared_ptr<mods::classes::engineer> 	player::cl_engineer(){
-		return m_class_engineer;
-	}
-	std::shared_ptr<mods::classes::medic> 	player::cl_medic(){
-		return m_class_medic;
-	}
-	std::shared_ptr<mods::classes::psyop> 	player::cl_psyop(){
-		return m_class_psyop;
-	}
-	std::shared_ptr<mods::classes::support> 	player::cl_support(){
-		return m_class_support;
-	}
+	*/
 
 	std::string& player::name(){ return m_name; }
 	std::string player::ucname(){ return m_ucname; }
@@ -1444,37 +1417,32 @@ namespace mods {
 			m_basic_protection->sync_equipment(uuid());
 		}
 		*/
-		void player::set_sniper(std::shared_ptr<mods::classes::sniper> s){
-			m_class_sniper = s;
-			m_class = CLASS_SNIPER;
-		}
-		void player::set_marine(std::shared_ptr<mods::classes::marine> s){
-			m_class_marine = s;
-			m_class = CLASS_MARINE;
-		}
-		void player::set_sentinel(std::shared_ptr<mods::classes::sentinel> s){
-			m_class_sentinel = s;
-			m_class = CLASS_SENTINEL;
-		}
-		void player::set_contagion(std::shared_ptr<mods::classes::contagion> s){
-			m_class_contagion = s;
-			m_class = CLASS_CONTAGION;
-		}
-		void player::set_engineer(std::shared_ptr<mods::classes::engineer> s){
-			m_class_engineer = s;
-			m_class = CLASS_ENGINEER;
-		}
-		void player::set_medic(std::shared_ptr<mods::classes::medic> s){
-			m_class_medic = s;
-			m_class = CLASS_MEDIC;
-		}
-		void player::set_psyop(std::shared_ptr<mods::classes::psyop> s){
-			m_class_psyop = s;
-			m_class = CLASS_PSYOP;
-		}
-		void player::set_support(std::shared_ptr<mods::classes::support> s){
-			m_class_support = s;
-			m_class = CLASS_SUPPORT;
+
+		std::string player_class_to_string(player_class_t c){
+			switch(c){
+				default:
+				case player_class_t::CLASS_UNDEFINED: return "UNDEFINED";
+				case player_class_t::CLASS_SNIPER: return "SNIPER";
+				case player_class_t::CLASS_MARINE: return "MARINE";
+				case player_class_t::CLASS_SENTINEL: return "SENTINEL";
+				case player_class_t::CLASS_CONTAGION: return "CONTAGION";
+				case player_class_t::CLASS_ENGINEER: return "ENGINEER";
+				case player_class_t::CLASS_MEDIC: return "MEDIC";
+				case player_class_t::CLASS_PSYOP: return "PSYOP";
+				case player_class_t::CLASS_SUPPORT: return "SUPPORT";
+				case player_class_t::CLASS_GHOST: return "GHOST";
+				case player_class_t::CLASS_MARKSMAN: return "MARKSMAN";
+				case player_class_t::CLASS_BANDIT: return "BANDIT";
+				case player_class_t::CLASS_BUTCHER: return "BUTCHER";
+				case player_class_t::CLASS_STRIKER: return "STRIKER";
+				case player_class_t::CLASS_OBSTRUCTOR: return "OBSTRUCTOR";
+				case player_class_t::CLASS_MALADY: return "MALADY";
+				case player_class_t::CLASS_PYREXIA: return "PYREXIA";
+				case player_class_t::CLASS_DEALER: return "DEALER";
+				case player_class_t::CLASS_FORGE: return "FORGE";
+				case player_class_t::CLASS_SYNDROME: return "SYNDROME";
+				case player_class_t::CLASS_MACHINIST: return "MACHINIST";
+			}
 		}
 		player_class_t player::get_class(){
 			return m_class;
@@ -1482,6 +1450,7 @@ namespace mods {
 		void player::set_class(player_class_t c){
 			std::cerr << "[mods::player] set class to: " << c << "\n";
 			m_class = c;
+			m_class_string = player_class_to_string(c);
 		}
 		int player::screen_width(){
 			return mods::util::stoi(mods::prefs::dynamic_get("width","player",m_char_data)).value_or(80);
@@ -1492,6 +1461,12 @@ namespace mods {
 		void player::set_currently_hacking(uint32_t id,uint8_t row){
 			m_currently_hacking = id;
 			m_hacking_row = row;
+		}
+		bool player::can(std::string_view c){
+			if(c.compare("heal") == 0){
+				return true;/** aww, aren't i such a nice guy? this needs to be fixed though... TODO FIXME */
+			}
+			return true;/** FIXME */
 		}
 };
 

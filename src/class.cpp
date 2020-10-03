@@ -32,7 +32,7 @@ extern int siteok_everyone;
 
 /* local functions */
 void snoop_check(char_data *ch);
-player_class_t parse_class(char arg);
+player_class_t parse_class(std::string arg);
 bitvector_t find_class_bitvector(const char *arg);
 byte saving_throws(int class_num, int type, int level);
 int thaco(int class_num, int level);
@@ -49,19 +49,20 @@ const char *title_female(int chclass, int level);
 const char *class_abbrevs[] = {
 	"Snp",
 	"Mrn",
-	"Sen",
+	"Chm",
 	"Con"
 	"Eng",
 	"Med",
 	"Mrk",
 	"Psy",
 	"Sup",
+	"Ghs",
 	"\n"
 };
 
 
 const char *pc_class_types[] = {
-	"Ghost",
+	"Sniper",
 	"Marine",
 	"Sentinel",
 	"Contagion"
@@ -74,19 +75,32 @@ const char *pc_class_types[] = {
 
 
 const char* class_menu =
-    "  [1] Ghost\r\n"
-		"  [2] Marine\r\n"
-		"  [3] Sentinel\r\n"  
-		"  [4] Contagion\r\n"  
-		"  [5] Engineer\r\n"
-		"  [6] Medic\r\n"
-		"  [7] Psyop\r\n"
-		"  [8] Support\r\n"
+    "  [ Sniper               [          ROGUE ARCHETYPE ]\r\n"
+		"     -> [1G] GHOST       [         stealth operator ]\r\n" 
+		"     -> [1M] Marksman    [           weapons expert ]\r\n" 
+		"     -> [1B] Bandit      [                    thief ]\r\n" 
+		"  ===================================================\r\n"
+		"  [ Marine               [        WARRIOR ARCHETYPE ]\r\n"
+		"     -> [2B] Butcher     [ bladed weapon specialist ]\r\n"
+		"     -> [2S] Striker     [      martial arts expert ]\r\n"
+		"     -> [2M] Obstructor  [       submissions expert ]\r\n"
+		"  ===================================================\r\n"
+		"  [ Chemist              [      ALCHEMIST ARCHETYPE ]\r\n"
+		"     -> [3M] Malady      [ poison weapon specialist ]\r\n"
+		"     -> [3P] Pyrexia     [    incendiary specialist ]\r\n"
+		"     -> [3D] Dealer      [   enhancement specialist ]\r\n"
+		"  ===================================================\r\n"
+		"  [ Engineer             [     BLACKSMITH ARCHETYPE ]\r\n"
+		"     -> [4F] Forge       [          weapons crafter ]\r\n"
+		"     -> [4S] Syndrome    [  autonomous drone expert ]\r\n"
+		"     -> [4M] Machinist   [        technology expert ]\r\n"
+		"  ===================================================\r\n"
 		"\r\n"
 		"NOTE: For a description of a class, type a question mark then the number.\r\n"
 		"For example: ?1 will give you a description of the Sniper class\r\n"
 		"\r\n"
 		;
+
 std::string common_weaponry_skillset() {
 	std::string skillset = ""
 		"                   [*] --[ Weaponry Skills ]-- [*]                           \r\n"
@@ -309,13 +323,49 @@ std::string sniper_skillset() {
  * new character is selecting a class and by 'set class' in act.wizard.c.
  */
 
-player_class_t parse_class(char arg) {
-	std::string a;
-	a += arg;
-	auto opt = mods::util::stoi_optional<int>(a);
-	player_class_t p = static_cast<player_class_t>(opt.value_or(player_class_t::CLASS_UNDEFINED));
-	if(p >= player_class_t::CLASS_FIRST && p <= player_class_t::CLASS_LAST){
-		return p;
+player_class_t parse_class(std::string a) {
+	static std::map<std::string,player_class_t> class_map;
+	static bool initialized = false;
+	if(!initialized){
+		class_map["1G"] = player_class_t::CLASS_GHOST;
+		class_map["1M"] = player_class_t::CLASS_MARKSMAN;
+		class_map["1B"] = player_class_t::CLASS_BANDIT;
+		class_map["2B"] = player_class_t::CLASS_BUTCHER;
+		class_map["2S"] = player_class_t::CLASS_STRIKER;
+		class_map["2M"] = player_class_t::CLASS_OBSTRUCTOR;
+		class_map["3M"] = player_class_t::CLASS_MALADY;
+		class_map["3P"] = player_class_t::CLASS_PYREXIA;
+		class_map["3D"] = player_class_t::CLASS_DEALER;
+		class_map["4F"] = player_class_t::CLASS_FORGE;
+		class_map["4S"] = player_class_t::CLASS_SYNDROME;
+		class_map["4M"] = player_class_t::CLASS_MACHINIST;
+		initialized = true;
+	}
+	std::string trimmed = "";
+	for(auto ch : a){
+		if(isspace(ch)){ continue; }
+		if(isalpha(ch) && islower(ch)){
+			trimmed += toupper(ch);
+			break;
+		}
+		if(isalpha(ch) && isupper(ch)){
+			trimmed += ch;
+			break;
+		}
+		if(isdigit(ch)){
+			trimmed += ch;
+		}
+		if(trimmed.length() >= 2){
+			break;
+		}
+	}
+	std::cerr << "[trimmed]: '" << trimmed << "'\n";
+	if(trimmed.length() < 2){
+		return player_class_t::CLASS_UNDEFINED;
+	}
+	auto it = class_map.find(trimmed);
+	if(it != class_map.end()){
+		return it->second;
 	}
 	return player_class_t::CLASS_UNDEFINED;
 }
@@ -329,8 +379,12 @@ player_class_t parse_class(char arg) {
 bitvector_t find_class_bitvector(const char *arg) {
 	size_t rpos, ret = 0;
 
+		std::string s = "";
 	for(rpos = 0; rpos < strlen(arg); rpos++) {
-		ret |= (1 << parse_class(arg[rpos]));
+		std::cerr << "[FIXME] find_class_bitvector may be broken...\n";
+		s = "";
+		s += arg[rpos];
+		ret |= (1 << parse_class(s));
 	}
 
 	return (ret);

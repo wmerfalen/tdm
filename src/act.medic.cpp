@@ -20,7 +20,7 @@ void heal_player(player_ptr_t& medic,player_ptr_t& target){
 }
 ACMD(do_heal) {
 
-	if(player->get_class() != player_class_t::CLASS_MEDIC && !(player->god_mode() || player->builder_mode() || player->implementor_mode())){
+	if(!player->can("heal") && !(player->god_mode() || player->builder_mode() || player->implementor_mode())){
 		player->sendln("You are not a medic.");
 		return;
 	}

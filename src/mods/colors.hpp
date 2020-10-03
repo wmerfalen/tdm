@@ -4,7 +4,6 @@
 #include <iostream>
 
 namespace mods::colors {
-template <typename TStr>
 static inline std::string reset_str(){
 	return "\033[0m";
 }

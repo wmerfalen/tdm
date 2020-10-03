@@ -14,22 +14,27 @@ extern size_t write_to_output(mods::descriptor_data &t, const char *txt, ...) __
 namespace mods::chargen {
 	std::string get_class_description(player_class_t p_class){
 		switch(p_class){
-			case player_class_t::CLASS_SNIPER: return CHARGEN_SNIPER_CLASS_DESCRIPTION();
-			case player_class_t::CLASS_MARINE: return CHARGEN_MARINE_CLASS_DESCRIPTION();
-			case player_class_t::CLASS_SENTINEL: return CHARGEN_SENTINEL_CLASS_DESCRIPTION();
-			case player_class_t::CLASS_CONTAGION: return CHARGEN_CONTAGION_CLASS_DESCRIPTION();
-			case player_class_t::CLASS_ENGINEER: return CHARGEN_ENGINEER_CLASS_DESCRIPTION();
-			case player_class_t::CLASS_MEDIC: return CHARGEN_MEDIC_CLASS_DESCRIPTION();
-			case player_class_t::CLASS_PSYOP: return CHARGEN_PSYOP_CLASS_DESCRIPTION();
-			case player_class_t::CLASS_SUPPORT: return CHARGEN_SUPPORT_CLASS_DESCRIPTION();
+			case player_class_t::CLASS_GHOST: return CHARGEN_GHOST_CLASS_DESCRIPTION();
+		 	case player_class_t::CLASS_MARKSMAN: return CHARGEN_MARKSMAN_CLASS_DESCRIPTION();
+		 	case player_class_t::CLASS_BANDIT: return CHARGEN_BANDIT_CLASS_DESCRIPTION();
+		 	case player_class_t::CLASS_BUTCHER: return CHARGEN_BUTCHER_CLASS_DESCRIPTION();
+		 	case player_class_t::CLASS_STRIKER: return CHARGEN_STRIKER_CLASS_DESCRIPTION();
+		 	case player_class_t::CLASS_OBSTRUCTOR: return CHARGEN_OBSTRUCTOR_CLASS_DESCRIPTION();
+		 	case player_class_t::CLASS_MALADY: return CHARGEN_MALADY_CLASS_DESCRIPTION();
+		 	case player_class_t::CLASS_PYREXIA: return CHARGEN_PYREXIA_CLASS_DESCRIPTION();
+		 	case player_class_t::CLASS_DEALER: return CHARGEN_DEALER_CLASS_DESCRIPTION();
+		 	case player_class_t::CLASS_FORGE: return CHARGEN_FORGE_CLASS_DESCRIPTION();
+		 	case player_class_t::CLASS_SYNDROME: return CHARGEN_SYNDROME_CLASS_DESCRIPTION();
+		 	case player_class_t::CLASS_MACHINIST: return CHARGEN_MACHINIST_CLASS_DESCRIPTION();
 			default:
 			case CLASS_UNDEFINED: return CHARGEN_UNDEFINED_CLASS_DESCRIPTION();
 		}
 	}
 	int parse_primary_choice(char in_choice,int class_type){
+#if 0
 		char choice = std::tolower(in_choice);
 		switch((player_class_t)class_type){
-			case player_class_t::CLASS_SENTINEL:
+			case player_class_t::CLASS_BANDIT:
 				if(choice == 'm'){
 					return mods::classes::sentinel::primary_choice_t::MP5;
 				}
@@ -37,15 +42,18 @@ namespace mods::chargen {
 					return mods::classes::sentinel::primary_choice_t::SASG12;
 				}
 				break;
-			case player_class_t::CLASS_SNIPER:
+			case player_class_t::CLASS_MARKSMAN:
+			case player_class_t::CLASS_GHOST:
 				if(choice == 'p'){
-					return mods::classes::sniper::primary_choice_t::PSG1;
+					return mods::classes::ghost::primary_choice_t::PSG1;
 				}
 				if(choice == 'a'){
-					return mods::classes::sniper::primary_choice_t::L96AW;
+					return mods::classes::ghost::primary_choice_t::L96AW;
 				}
 				break;
-			case player_class_t::CLASS_MARINE:
+			case player_class_t::CLASS_STRIKER:
+			case player_class_t::CLASS_OBSTRUCTOR:
+			case player_class_t::CLASS_BUTCHER:
 				if(choice == 'm'){
 					return mods::classes::marine::primary_choice_t::M16A4;
 				}
@@ -53,7 +61,8 @@ namespace mods::chargen {
 					return mods::classes::marine::primary_choice_t::M4;
 				}
 				break;
-			case player_class_t::CLASS_CONTAGION:
+			case player_class_t::CLASS_PYREXIA:
+			case player_class_t::CLASS_MALADY:
 				if(choice == 'm'){
 					return mods::classes::contagion::primary_choice_t::M3;
 				}
@@ -61,7 +70,9 @@ namespace mods::chargen {
 					return mods::classes::contagion::primary_choice_t::FAMAS;
 				}
 				break;
-			case player_class_t::CLASS_ENGINEER:
+			case player_class_t::CLASS_FORGE:
+			case player_class_t::CLASS_SYNDROME:
+			case player_class_t::CLASS_MACHINIST:
 				if(choice == 'f'){
 					return mods::classes::engineer::primary_choice_t::FMG9;
 				}
@@ -69,14 +80,7 @@ namespace mods::chargen {
 					return mods::classes::engineer::primary_choice_t::P90;
 				}
 				break;
-			case player_class_t::CLASS_MEDIC:
-				if(choice == 'a'){
-					return mods::classes::medic::primary_choice_t::AUGPARA;
-				}
-				if(choice == 't'){
-					return mods::classes::medic::primary_choice_t::TAR21;
-				}
-				break;
+			
 			case player_class_t::CLASS_PSYOP:
 				if(choice == 's'){
 					return mods::classes::psyop::primary_choice_t::SCARH;
@@ -96,31 +100,41 @@ namespace mods::chargen {
 			default: return -1;
 		}
 		return -1;
+#endif
+		return 0;
 	}
 	std::string primary_weapon_menu(player_class_t class_type){
+		return "";
+#if 0
 		std::string r = "Primary weapon selection\r\n";
 		switch(class_type){
-			case CLASS_SNIPER:
+			case CLASS_MARKSMAN:
+			case CLASS_GHOST:
 				return r +
 					"[p] PSG-1 - " + PRIMARY_CHOICE_SCREEN_PSG1_DESCRIPTION() +
 					"[a] L96 Arctic Warfare - " + PRIMARY_CHOICE_SCREEN_L96AW_DESCRIPTION()
 					;
-			case CLASS_MARINE:
+			case CLASS_STRIKER:
+			case CLASS_OBSTRUCTOR:
+			case CLASS_BUTCHER:
 				return r +
 					"[m] M16A4 - " + PRIMARY_CHOICE_SCREEN_M16A4_DESCRIPTION() +
 					"[c] M4 Carbine - " + PRIMARY_CHOICE_SCREEN_M4_DESCRIPTION()
 					;
-			case CLASS_SENTINEL:
+			case CLASS_BANDIT:
 				return r +
 					"[m] MP5 - " + PRIMARY_CHOICE_SCREEN_MP5_DESCRIPTION() +
 					"[s] SASG-12 - " + PRIMARY_CHOICE_SCREEN_SASG12_DESCRIPTION()
 					;
-			case CLASS_CONTAGION:
+			case CLASS_PYREXIA:
+			case CLASS_MALADY:
 				return r +
 					"[m] M3 - " + PRIMARY_CHOICE_SCREEN_M3_DESCRIPTION() + 
 					"[f] FAMAS - " + PRIMARY_CHOICE_SCREEN_FAMAS_DESCRIPTION()
 					;
-			case CLASS_ENGINEER:
+			case CLASS_FORGE:
+			case CLASS_SYNDROME:
+			case CLASS_MACHINIST:
 				return r +
 					"[f] FMG-9 - " + PRIMARY_CHOICE_SCREEN_FMG9_DESCRIPTION() +
 					"[p] P90 - " + PRIMARY_CHOICE_SCREEN_P90_DESCRIPTION()
@@ -142,6 +156,7 @@ namespace mods::chargen {
 					;
 			default: return "";
 		}
+#endif
 	}
 
 	void undo_make_char(player_ptr_t player){
@@ -183,6 +198,7 @@ namespace mods::chargen {
 		write_to_output(p->desc(), "%s\r\n*** PRESS RETURN: ", motd.c_str());
 	}
 	void handle_primary_choice(player_ptr_t p,char arg_choice,player_class_t class_type){
+#if 0
 		int choice = mods::chargen::parse_primary_choice(arg_choice,class_type);
 		int sresult = -1;
 		if(choice < 0){
@@ -191,6 +207,21 @@ namespace mods::chargen {
 			return;
 		}
 		switch(class_type){
+			case CLASS_STRIKER:
+			case CLASS_OBSTRUCTOR:
+			case CLASS_BUTCHER:
+			case CLASS_BANDIT:
+			case CLASS_PYREXIA:
+			case CLASS_MALADY:
+			case CLASS_FORGE:
+			case CLASS_SYNDROME:
+			case CLASS_MACHINIST:
+			case CLASS_MARKSMAN:
+				break;
+			case CLASS_GHOST:
+				p->set_ghost(mods::classes::create_ghost(p));
+				sresult = p->cl_ghost()->new_player(p,(mods::classes::ghost::primary_choice_t)choice);
+				break;
 			case CLASS_SNIPER:
 				p->set_sniper(mods::classes::create_sniper(p));
 				sresult = p->cl_sniper()->new_player(p,(mods::classes::sniper::primary_choice_t)choice);
@@ -234,6 +265,7 @@ namespace mods::chargen {
 			return;
 		}
 		show_finalized_chargen_screen(p);
+#endif
 		return;
 	}
 };

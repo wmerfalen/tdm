@@ -2545,6 +2545,7 @@ bool char_exists(const std::string& name){
 
 void decorate_authenticated_player(player_ptr_t player_ptr){
 	mods::orm::inventory::feed_player(player_ptr);
+#if 0
 	switch(player_ptr->get_class()){
 		case CLASS_SENTINEL:
 			log("User [%s] is a sentinel. Loading... ", player_ptr->name());
@@ -2557,6 +2558,7 @@ void decorate_authenticated_player(player_ptr_t player_ptr){
 		default:
 			break;
 	}
+#endif
 }
 
 /*

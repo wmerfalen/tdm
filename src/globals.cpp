@@ -149,7 +149,11 @@ namespace mods {
 			player_map[player->uuid()] = player;
 		}
 		void register_authenticated_player(player_ptr_t player){
+			std::cerr << "registering authenticated user...:'" << player->name().c_str() << "'\n";
 			player_name_map[player->name()] = player;
+			for(auto & pair : player_name_map){
+				std::cerr << "[name:" << pair.first << "]\n";
+			}
 		}
 		void unregister_authenticated_player(player_ptr_t player){
 			player_name_map.erase(player->name());

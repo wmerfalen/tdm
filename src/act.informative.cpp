@@ -30,6 +30,7 @@
 #include "mods/player-utils.hpp"
 #include "mods/rooms.hpp"
 #include "mods/prefs.hpp"
+#include "mods/super-users.hpp"
 
 extern char_data* character_list;
 /* extern variables */
@@ -1427,6 +1428,40 @@ ACMD(do_help) {
 	"format: who [minlev[-maxlev]] [-n name] [-c classlist] [-s] [-o] [-q] [-r] [-z]"
 
 ACMD(do_who) {
+	player->sendln("Players-------");
+
+	int num_can_see = 0;
+	for(auto & pair : mods::globals::player_name_map){
+		if(mods::super_users::player_is(player)){
+			num_can_see++;
+			auto s = CAT("[",pair.second->get_class_string().str(),"] - ",pair.first.c_str());
+			if(mods::super_users::invisible(pair.second)){
+				s += green_str(" (invisible to non-immortals)");
+			}else{
+				s += CAT("[displayed as:'",mods::super_users::who_line(pair.second),"' to non-immortals]");
+			}
+			s += reset_str();
+			player->sendln(s);
+			continue;
+		}
+		if(mods::super_users::invisible(pair.second)){
+			continue;
+		}
+		num_can_see++;
+		player->sendln(CAT("[",pair.second->get_class_string().str(),"] - ",mods::super_users::who_line(pair.second)));
+	}
+
+	if(num_can_see == 0) {
+		player->sendln("\r\nNobody at all!");
+	} else if(num_can_see == 1) {
+		player->sendln("\r\nOne lonely character displayed.");
+	} else {
+		player->send("\r\n%d characters displayed.\r\n", num_can_see);
+	}
+}
+
+ACMD(do_broken_who) {
+#if 0
 	char_data *tch;
 	char name_search[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
 	char mode;
@@ -1500,15 +1535,17 @@ ACMD(do_who) {
 			return;
 		}
 	}				/* end while (parser) */
+#endif
 
 	player->sendln("Players-------");
 
+	int num_can_see = 0;
 	for(auto & player : mods::globals::player_list) {
-		auto d = player->desc();
-		if(STATE(d) != CON_PLAYING) {
+		if(!player->authenticated()){
 			continue;
 		}
 
+#if 0
 		if(d.original) {
 			tch = d.original;
 		} else if(!(tch = d.character)) {
@@ -1552,7 +1589,10 @@ ACMD(do_who) {
 					(GET_LEVEL(tch) >= LVL_IMMORT ? CCNRM(ch, C_SPR) : ""),
 					((!(++num_can_see % 4)) ? "\r\n" : ""));
 		} else {
+#endif
 			num_can_see++;
+			player->send("[%s] - %s\r\n", player->get_class_string().c_str(),player->name().c_str());
+#if 0
 			player->send("%s[%2d %s] %s %s",
 					(GET_LEVEL(tch) >= LVL_IMMORT ? CCYEL(ch, C_SPR) : ""),
 					GET_LEVEL(tch), CLASS_ABBR(tch), GET_NAME(tch).c_str(),
@@ -1596,11 +1636,14 @@ ACMD(do_who) {
 
 			player->sendln("");
 		}				/* endif shortlist */
+#endif
 	}				/* end of for */
 
+#if 0
 	if(short_list && (num_can_see % 4)) {
 		player->sendln("");
 	}
+#endif
 
 	if(num_can_see == 0) {
 		player->sendln("\r\nNobody at all!");

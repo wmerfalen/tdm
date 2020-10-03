@@ -10,7 +10,7 @@ namespace mods::migrations {
 	std::tuple<int,std::string> strip_identifier(std::string identifier){
 		std::string stripped;
 		for(auto ch : identifier){
-			if(isalpha(ch) || ch == '-'){
+			if(isdigit(ch) || isalpha(ch) || ch == '-' || ch == '_'){
 				stripped += ch;
 			}
 		}

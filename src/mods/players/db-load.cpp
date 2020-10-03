@@ -27,6 +27,8 @@ namespace mods::players::db_load {
 		report_function(code,msg);
 	}
 	void set_class(player_ptr_t& player, player_class_t p_class){
+		player->set_class(p_class);
+#if 0
 		switch(p_class){
 			case CLASS_MARINE:
 				player->set_marine(std::make_shared<mods::classes::marine>(player));
@@ -56,5 +58,6 @@ namespace mods::players::db_load {
 				report(p_class,"Unable to create class. unknown class");
 				break;
 		}
+#endif
 	}
 };
