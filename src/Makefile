@@ -8,6 +8,7 @@ JS_PROFILES_PATH = "$(HOME)/code/code/siege-mud/lib/js/profiles/"
 LMDBNAME = bnull
 LIB_DIR="$(HOME)/code/code/siege-mud/lib"
 POST_BUILD_SCRIPT="$(CURDIR)/scripts/post-build.sh"
+SQL_MIGRATIONS_DIR="$(CURDIR)/sql/migrations"
 
 lmdbdir = $(CURDIR)/liblmdb
 lmdb = liblmdb/liblmdb.so
@@ -32,7 +33,8 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-fPIC -DMENTOC_CURRENT_WORKING_DIR=\"$(LIB_DIR)\" \
 	-D__MENTOC_SHOW_SNIPE_HIT_STATS__=1 \
 	-DMENTOC_LIB_DIR=\"$(CURDIR)/../lib/\" \
-	-D__MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__=1
+	-D__MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__=1 \
+	-D__MENTOC_SQL_MIGRATIONS_DIR=\"$(SQL_MIGRATIONS_DIR)\"
 	#-D__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__=1 \
 	-D__MENTOC_SHOW_LMDB_DEBUG__=1 \
 	#-DMENTOC_NO_CONSTEXPR_CONF=1 \

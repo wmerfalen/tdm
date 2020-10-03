@@ -652,7 +652,7 @@ CGET_DEF	mods/values.cpp	502;"	d	file:
 CHAINABLE_BREACHING	mods/skills.hpp	/^			CHAINABLE_BREACHING,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 CHAOTIC	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 CHARM	mods/flags.hpp	/^		CHARM,$/;"	e	enum:mods::flags::aff
-CHECK_NULL	comm.cpp	2416;"	d	file:
+CHECK_NULL	comm.cpp	2374;"	d	file:
 CHECK_PLAYER_SPECIAL	utils.h	214;"	d
 CHECK_PLAYER_SPECIAL	utils.h	217;"	d
 CHECK_WAIT	utils.h	378;"	d
@@ -832,7 +832,7 @@ DB_BOOT_SHP	db.h	19;"	d
 DB_BOOT_WLD	db.h	15;"	d
 DB_BOOT_ZON	db.h	18;"	d
 DB_PREFIX	mods/skills.cpp	/^	constexpr static const char* DB_PREFIX = "skills";$/;"	m	namespace:mods::skills	file:
-DD	mods/debug-pre-game.hpp	174;"	d
+DD	mods/debug-pre-game.hpp	170;"	d
 DD	mods/debug-pre-game.hpp	24;"	d
 DECENT	mods/yaml.hpp	/^	DECENT,$/;"	e	enum:mods::yaml::durability_profile_type_t
 DEFAULT	mods/rarity.hpp	/^		constexpr static float DEFAULT = mods::rarity::COMMON;$/;"	m	namespace:mods::rarity
@@ -2171,7 +2171,7 @@ OUTSIDE_WATER	mods/rooms.hpp	/^		OUTSIDE_WATER,$/;"	e	enum:mods::rooms::sector_t
 OUTSIDE_WOODEN_WALL	mods/rooms.hpp	/^		OUTSIDE_WOODEN_WALL,	\/** rappelling *\/$/;"	e	enum:mods::rooms::sector_type_t
 OUTSIDE_WOODEN_WALLS	mods/rooms.hpp	/^		OUTSIDE_WOODEN_WALLS,$/;"	e	enum:mods::rooms::sector_type_t
 OUT_OF_AMMO_EVENT	mods/damage-event.hpp	/^	OUT_OF_AMMO_EVENT,$/;"	e	enum:uint16_t
-O_NONBLOCK	comm.cpp	2133;"	d	file:
+O_NONBLOCK	comm.cpp	2091;"	d	file:
 Obj_from_store	objsave.cpp	/^struct obj_data *Obj_from_store(struct obj_file_elem object, int *location) {$/;"	f
 Obj_to_store	objsave.cpp	/^int Obj_to_store(struct obj_data *obj, FILE *fl, int location) {$/;"	f
 OfType	mods/catch.hpp	/^		enum OfType {$/;"	g	struct:Catch::ResultWas
@@ -2531,7 +2531,7 @@ SEEK_END	utils.h	537;"	d
 SEEK_SET	utils.h	535;"	d
 SELECTOR	mods/behaviour_tree_node.hpp	/^		enum node_type_t { DO_NOTHING, SELECTOR, SEQUENCE, LEAF };$/;"	e	enum:mods::behaviour_tree_node::node_type_t
 SELF	utils.h	452;"	d
-SENDOK	comm.cpp	2562;"	d	file:
+SENDOK	comm.cpp	2520;"	d	file:
 SENSE_LIFE	mods/flags.hpp	/^		SENSE_LIFE,$/;"	e	enum:mods::flags::aff
 SENSE_MOTION	mods/weapon-types.hpp	/^		SENSE_MOTION,$/;"	e	enum:mods::weapon::capabilities::cap_t
 SENSOR	mods/aoe.hpp	/^		SENSOR, \/** senses objects or enemies within blast_radius *\/$/;"	e	enum:mods::aoe::types_t
@@ -3361,12 +3361,12 @@ __MENTOC_MODS_deferred_HEADER__	mods/deferred.hpp	2;"	d
 __MENTOC_MODS_prefs_HEADER__	mods/prefs.hpp	2;"	d
 __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
 __MENTOC_PLR	db.cpp	2629;"	d	file:
-__MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__	mods/debug-pre-game.hpp	81;"	d
-__MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	99;"	d
+__MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__	mods/debug-pre-game.hpp	77;"	d
+__MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	95;"	d
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
-__MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	88;"	d
+__MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	84;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__	mods/behaviour_tree_impl.cpp	16;"	d	file:
-__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	982;"	d	file:
+__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1033;"	d	file:
 __MENTOC_SHOW_LMDB_DEBUG__	mods/db.cpp	6;"	d	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	d
 __MENTOC_STRING_LIT__	mods/util.hpp	23;"	d
@@ -4697,6 +4697,7 @@ fighting	mods/player.hpp	/^		player_ptr_t fighting(){$/;"	f	struct:mods::player
 file	mods/catch.hpp	/^		char const* file;$/;"	m	struct:Catch::SourceLineInfo
 file_end_pos	mail.cpp	/^long file_end_pos = 0;			\/* length of file *\/$/;"	v
 file_exists	mods/filesystem.hpp	/^	static inline bool file_exists(const std::string& path){$/;"	f	namespace:mods::filesystem
+file_get_contents	mods/filesystem.hpp	/^	static inline int file_get_contents(std::string_view path, std::string& guts,std::string& error){$/;"	f	namespace:mods::filesystem
 file_to_lmdb	globals.cpp	/^		int file_to_lmdb(const std::string& file, const std::string& key) {$/;"	f	namespace:mods::globals
 file_to_string	db.cpp	/^int file_to_string(const char *name, char *buf) {$/;"	f
 file_to_string_alloc	db.cpp	/^int file_to_string_alloc(const char *name, char **buf) {$/;"	f
@@ -5246,6 +5247,7 @@ isOk	mods/catch.hpp	/^	inline bool isOk(ResultWas::OfType resultType) {$/;"	f	na
 isTrue	mods/catch.hpp	/^	inline bool isTrue(bool value) {$/;"	f	namespace:Catch
 is_abbrev	interpreter.cpp	/^int is_abbrev(const char *arg1, const char *arg2) {$/;"	f
 is_ammo	structs.h	/^		bool is_ammo;$/;"	m	struct:obj_flag_data
+is_argument	globals.cpp	/^		bool is_argument(std::string_view argv,std::string_view test){$/;"	f	namespace:mods::globals
 is_blocked	mods/player.cpp	/^	bool player::is_blocked(){ return m_blocked_until != 0; }$/;"	f	class:mods::player
 is_breach_charge	mods/object-utils.hpp	/^	static inline bool is_breach_charge(T& obj){$/;"	f	namespace:mods::object_utils
 is_camera	mods/object-utils.hpp	/^	static inline bool is_camera(T& obj){$/;"	f	namespace:mods::object_utils
@@ -5514,8 +5516,8 @@ m_db_id	structs.h	/^		uint64_t m_db_id;$/;"	m	struct:obj_data
 m_dbi	mods/lmdb.hpp	/^		MDB_dbi	m_dbi;$/;"	m	struct:mods::lmdb::_db_handle
 m_dbi_opened	mods/lmdb.hpp	/^		bool m_dbi_opened;$/;"	m	struct:mods::lmdb::_db_handle
 m_deallocate	mods/string.cpp	/^	void string::m_deallocate(){$/;"	f	class:mods::string
-m_debug	mods/migrations.cpp	32;"	d	file:
-m_debug	mods/migrations.cpp	4;"	d	file:
+m_debug	mods/migrations.cpp	5;"	d	file:
+m_debug	mods/migrations.cpp	70;"	d	file:
 m_debug	mods/skills.cpp	333;"	d	file:
 m_debug	mods/skills.cpp	3;"	d	file:
 m_debug	mods/skills.cpp	5;"	d	file:
@@ -5749,7 +5751,7 @@ message_len	boards.h	/^	int	message_len;  \/* size of message text (for file wri
 message_sell	shop.h	/^	mods::string message_sell;		\/* Message when player sells item	*\/$/;"	m	struct:shop_data
 meta_utils	mods/meta_utils.cpp	/^namespace mods::meta_utils {$/;"	n	class:mods	file:
 meta_utils	mods/meta_utils.hpp	/^namespace mods::meta_utils {$/;"	n	class:mods
-mgdp_debug	globals.cpp	984;"	d	file:
+mgdp_debug	globals.cpp	1035;"	d	file:
 migrations	mods/migrations.cpp	/^namespace mods::migrations {$/;"	n	class:mods	file:
 migrations	mods/migrations.hpp	/^namespace mods::migrations {$/;"	n	class:mods
 migrations_test	mods/debug-pre-game.hpp	/^	void migrations_test(){$/;"	f	namespace:mods::debug::pre_game
@@ -5880,7 +5882,7 @@ mud_time_to_secs	utils.cpp	/^time_t mud_time_to_secs(struct time_info_data *now)
 mudlog	utils.cpp	/^void mudlog(int type, int level, int file, const char *str, ...) {$/;"	f
 muzzle_velocity	mods/weapon.hpp	/^			int muzzle_velocity;	\/\/ Feet per second$/;"	m	struct:mods::weapon::yaml::rifle_description_t
 my_signal	comm.cpp	/^sigfunc *my_signal(int signo, sigfunc *func) {$/;"	f
-my_signal	comm.cpp	2210;"	d	file:
+my_signal	comm.cpp	2168;"	d	file:
 name	db.h	/^	char	*name;		    \/* name of this zone                  *\/$/;"	m	struct:zone_data
 name	db.h	/^	char	name[MAX_NAME_LENGTH+1];$/;"	m	struct:ban_list_element
 name	db.h	/^	mods::string name;$/;"	m	struct:player_index_element
@@ -6419,8 +6421,8 @@ rarity_to_string	mods/yaml.cpp	/^	std::string rarity_to_string(float val){$/;"	f
 rawMemoryToString	mods/catch.hpp	/^		inline std::string rawMemoryToString(const T& object) {$/;"	f	namespace:Catch::Detail
 raw_kill	fight.cpp	/^void raw_kill(char_data *ch) {$/;"	f
 raw_send	mods/player.cpp	/^	void player::raw_send(const mods::string& str){$/;"	f	class:mods::player
-rb_bht_debug	comm.cpp	882;"	d	file:
-rb_bht_debug	comm.cpp	884;"	d	file:
+rb_bht_debug	comm.cpp	840;"	d	file:
+rb_bht_debug	comm.cpp	842;"	d	file:
 rb_debug	mods/builder.cpp	/^	void rb_debug(T s){$/;"	f	namespace:mods::builder
 rb_map_debug	mods/builder.cpp	/^	void rb_map_debug(T & t){$/;"	f	namespace:mods::builder
 read_aliases	alias.cpp	/^void read_aliases(char_data *ch) {$/;"	f
@@ -6513,6 +6515,7 @@ report	mods/player.cpp	/^	void player::report(){$/;"	f	class:mods::player
 report	structs.cpp	/^		void mob_special_data::report(room_rnum room){$/;"	f	class:mob_special_data
 report_db_issue	mods/db-report.hpp	/^static inline void report_db_issue(std::string_view message,std::string_view exception_message){$/;"	f
 report_error	mods/builder.hpp	/^	void report_error(T player,std::string_view message) {$/;"	f	namespace:mods::builder
+report_migration_status	mods/migrations.cpp	/^	void report_migration_status(std::string message,std::string type){$/;"	f	namespace:mods::migrations
 report_status	mods/builder.hpp	/^	void report_status(T player,std::string_view message) {$/;"	f	namespace:mods::builder
 report_success	mods/builder.hpp	/^	void report_success(T player,std::string_view message) {$/;"	f	namespace:mods::builder
 report_yaml_exception	mods/object-utils.hpp	/^	static inline void report_yaml_exception(TException& e,std::vector<std::string>& items_fed){$/;"	f	namespace:mods::object_utils
@@ -6612,6 +6615,7 @@ run	mods/debug-pre-game.hpp	/^	bool run(){$/;"	f	namespace:mods::debug::pre_game
 run_autowiz	limits.cpp	/^void run_autowiz(void) {$/;"	f
 run_behaviour_trees	comm.cpp	/^void run_behaviour_trees(){$/;"	f
 run_intents	mods/intent.cpp	/^	void run_intents(){$/;"	f	namespace:mods::intent
+run_migration	mods/migrations.cpp	/^	std::tuple<bool,int,std::string> run_migration(std::string identifier, std::string purpose,std::string direction){$/;"	f	namespace:mods::migrations
 run_profile_scripts	config.cpp	/^	bool run_profile_scripts;$/;"	m	namespace:config	file:
 run_profile_scripts	mods/js.cpp	/^		void run_profile_scripts(const std::string& player_name){$/;"	f	namespace:mods::js
 run_status_t	mods/behaviour_tree_node.hpp	/^		} run_status_t;$/;"	t	struct:mods::behaviour_tree_node	typeref:struct:mods::behaviour_tree_node::__anon2
@@ -6878,6 +6882,7 @@ skills	mods/skills.cpp	/^namespace mods::skills {$/;"	n	class:mods	file:
 skills	mods/skills.hpp	/^namespace mods::skills {$/;"	n	class:mods
 skip_spaces	interpreter.cpp	/^void skip_spaces(char **string) {$/;"	f
 slc_names	telnet.h	/^char *slc_names[] = {$/;"	v
+slice_option_off	globals.cpp	/^		std::string slice_option_off(std::string_view argv,std::string_view option_including_equals){$/;"	f	namespace:mods::globals
 slide_obj	shop.cpp	/^struct obj_data *slide_obj(struct obj_data *obj, char_data *keeper,$/;"	f
 slot_num	boards.h	/^	int	slot_num;     \/* pos of message in "master index" *\/$/;"	m	struct:board_msginfo
 smash_tilde	modify.cpp	/^void smash_tilde(char *str) {$/;"	f
@@ -7019,6 +7024,7 @@ string_map	mods/affects.hpp	/^	const static std::map<std::string,affect_t> strin
 string_types	mods/values.cpp	/^			static const std::vector<std::string> string_types = {$/;"	m	namespace:mods::values	file:
 string_write	modify.cpp	/^void string_write(mods::descriptor_data d, char **writeto, size_t len, long mailto, void *data) {$/;"	f
 strip_colors	globals.cpp	/^		std::string strip_colors(std::string_view buffer) {$/;"	f	namespace:mods::globals
+strip_identifier	mods/migrations.cpp	/^	std::tuple<int,std::string> strip_identifier(std::string identifier){$/;"	f	namespace:mods::migrations
 strlcpy	utils.cpp	/^size_t strlcpy(char *dest, const char *source, size_t totalsize) {$/;"	f
 strn_cmp	sysdep.h	333;"	d
 strn_cmp	utils.cpp	/^int strn_cmp(const char *arg1, const char *arg2, int n) {$/;"	f
@@ -7051,7 +7057,6 @@ telcmds	telnet.h	/^char *telcmds[] = {$/;"	v
 telopts	telnet.h	/^char *telopts[NTELOPTS+1] = {$/;"	v
 temper1	shop.h	/^	int	 temper1;		\/* How does keeper react if no money	*\/$/;"	m	struct:shop_data
 test	mods/js.cpp	/^		namespace test {$/;"	n	namespace:mods::js	file:
-test	mods/migrations.cpp	/^	std::tuple<bool,int> test(std::string identifier, std::string up_sql,std::string down_sql,std::string purpose){$/;"	f	namespace:mods::migrations
 text	mods/util-conf.hpp	/^		namespace text {$/;"	n	namespace:mods::util
 text_overflow	comm.cpp	/^const char *text_overflow = "**OVERFLOW**\\r\\n";$/;"	v
 texture_from_string	mods/rooms.hpp	/^	static inline std::optional<txt> texture_from_string(std::string& s){$/;"	f	namespace:mods::rooms
@@ -7334,7 +7339,7 @@ world_conf	mods/world-configuration.cpp	/^namespace mods::world_conf {$/;"	n	cla
 world_conf	mods/world-configuration.hpp	/^namespace mods::world_conf {$/;"	n	class:mods
 worn_by	structs.h	/^		char_data *worn_by;	  \/* Worn by?			      *\/$/;"	m	struct:obj_data
 worn_on	structs.h	/^		sh_int worn_on;		  \/* Worn where?		      *\/$/;"	m	struct:obj_data
-write	comm.cpp	1577;"	d	file:
+write	comm.cpp	1535;"	d	file:
 write_aliases	alias.cpp	/^void write_aliases(char_data *ch) {$/;"	f
 write_ban_list	ban.cpp	/^void write_ban_list(void) {$/;"	f
 write_example_file	mods/yaml.cpp	/^	int16_t armor_description_t::write_example_file(std::string_view file){$/;"	f	class:mods::yaml::armor_description_t

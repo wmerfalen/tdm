@@ -39,36 +39,32 @@ namespace mods::debug::pre_game {
 		sleep(60 * 5);
 	}
 	void migrations_test(){
-		std::string up_sql = "CREATE TABLE karma (\n"
-		"karma_id SERIAL,\n"
-		"karma_player_id INTEGER NOT NULL,\n"
-		"karma_alignment INTEGER NOT NULL DEFAULT 0,\n"
-		"karma_cold_blooded_index INTEGER NOT NULL DEFAULT 0,\n"
-		"created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n"
-		"updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n"
-		");\n"
-		;
-		std::string down_sql = "DROP TABLE karma;";
-		std::string identifier = "karmic";
+		std::string identifier = "create-karma-table";
 		std::string purpose = "to create the karma table";
 
-		auto i = mods::migrations::test(identifier,up_sql,down_sql,purpose);
+		auto i = mods::migrations::run_migration(identifier,purpose,"up");
 		std::cout << "[" << std::get<0>(i) << ",";
 		std::cout << std::get<1>(i) << "]\n";
 
 		identifier = "purposely broken";
-		up_sql = "CRAZKDJFKDLF;";
-		down_sql = "";
 		purpose = "purposely run a broken migration";
-		i = mods::migrations::test(identifier,up_sql,down_sql,purpose);
+		i = mods::migrations::run_migration(identifier,purpose,"down");
 		std::cout << "[" << std::get<0>(i) << ",";
 		std::cout << std::get<1>(i) << "]\n";
 
-		sleep(60 * 60);
+		identifier = "create-karma-table";
+		purpose = "down the create karma table";
+		i = mods::migrations::run_migration(identifier,purpose,"down");
+		std::cout << "[" << std::get<0>(i) << ",";
+		std::cout << std::get<1>(i) << "]\n";
+
+		identifier = "create-karma-table";
+		purpose = "recreate karma table";
+		i = mods::migrations::run_migration(identifier,purpose,"up");
+		std::cout << "[" << std::get<0>(i) << ",";
+		std::cout << std::get<1>(i) << "]\n";
 	}
 	bool run(){
-		migrations_test();
-		
 		wire_mini_game_test();
 
 		mini_game_test();

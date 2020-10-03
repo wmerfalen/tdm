@@ -10,7 +10,8 @@ namespace mods::migrations {
 	void r_error(std::string_view msg);
 	void r_success(std::string_view msg);
 	void r_status(std::string_view msg);
-	std::tuple<bool,int> test(std::string identifier,std::string up,std::string down,std::string purpose);
+	std::tuple<bool,int,std::string> run_migration(std::string identifier,std::string purpose,std::string direction);
+	void report_migration_status(std::string message,std::string type);
 
 };
 

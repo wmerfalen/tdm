@@ -244,7 +244,6 @@ int main(int argc, char **argv) {
 	atexit(atexit_handler);
 	mods::globals::init(argc,argv);
 	ush_int port;
-	int pos = 1;
 	const char *dir;
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
@@ -253,47 +252,6 @@ int main(int argc, char **argv) {
 
 	port = DFLT_PORT;
 	dir = DFLT_DIR;
-
-	while((pos < argc) && (*(argv[pos]) == '-')) {
-		switch(*(argv[pos] + 1)) {
-			case 'T':
-				if(argc > pos +1){
-					mods::globals::bootup_test_suite = argv[pos+1];
-					++pos;
-				}else{
-					log("SYSERR: Invalid test suite");
-					exit(1);
-				}
-				break;
-			case 'h':
-				/* From: Anil Mahajan <amahajan@proxicom.com> */
-				std::cerr << "Usage: " << argv[0] << " [-c] [-m] [-q] [-r] [-s] [-d pathname] [port #]\n"
-					/** TODO: when we know that we need these cmdline opts, un-comment. For now, they are not supported - 2019-03-08 */
-					"  --sql-port     Run the 'postgres to lmdb' port command.\n"
-					"  --testing=<N>  Run the test suite labeled N.\n"
-					"  --lmdb-dir=N   Save lmdb to the directory at N.\n"
-					"  --lmdb-name=N  Name the lmdb database N.\n"
-					"  --hell         Minimalist mode. Useful for testing.\n"
-					"  --import-rooms Import rooms\n"
-					;
-				exit(0);
-			default:
-				std::cerr << "SYSERR: Unknown option -" << *(argv[pos]+1) << " in argument string.\n";
-				break;
-		}
-
-		pos++;
-	}
-
-	if(pos < argc) {
-		if(!isdigit(*argv[pos])) {
-			std::cerr << "Usage: " << argv[0] << " [--sql-port] [--testing=T] [--lmdb-dir=D] [--lmdb-name=N] [--hell] [--import-rooms] [port #]\n";
-			exit(0);
-		} else if((port = atoi(argv[pos])) <= 1024) {
-			std::cerr << "SYSERR: Illegal port number " << port << ".\n";
-			exit(-1);
-		}
-	}
 
 	/* All arguments have been parsed, try to open log file. */
 	setup_log(LOGNAME, STDERR_FILENO);

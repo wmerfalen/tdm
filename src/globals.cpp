@@ -165,6 +165,19 @@ namespace mods {
 		int mobile_activity(char_data* ch) {
 			return 1;
 		}
+		bool is_argument(std::string_view argv,std::string_view test){
+			std::string s = argv.data();
+			if(s.length() < test.length()){
+				return false;
+			}
+			s.substr(0,test.length());
+			return strncmp(s.data(),test.data(),test.length()) == 0;
+		}
+		std::string slice_option_off(std::string_view argv,std::string_view option_including_equals){
+			std::string sliced = argv.data();
+			sliced = sliced.substr(option_including_equals.length());
+			return sliced;
+		}
 		void init(int argc,char** argv) {
 			int pos = 0;
 			std::string argument,
@@ -181,6 +194,7 @@ namespace mods {
 			std::string postgres_host = mods::conf::postgres_host.data();
 			std::string postgres_port = mods::conf::postgres_port.data();
 			mods::world_conf::toggle::set_obj_from_room(1);
+			std::vector<std::tuple<std::string,std::string>> migrations;
 
 			while(++pos < argc){
 				if(argv[pos]){
@@ -205,11 +219,32 @@ namespace mods {
 						<< "--run-profile-scripts=<0|1> set to 1 to run profile scripts. default: 0\n"
 						<< "--show-tics show a dot for every game tic\n"
 						<< "--seed=<what> seed the database with one of the following:\n"
+						<< "--run-migration-up=<identifier> run the specified 'up' migration\n"
+						<< "--run-migration-down=<identifier> run the specified 'down' migration\n"
 						<< "     'player_classes': character generation\n"
 						<< "     '': ''\n"
 						;
 					mods::globals::shutdown();
 					exit(0);
+				}
+				if(is_argument(argument,"--run-migration-up=")){
+					std::string migration_id = slice_option_off(argument,"--run-migration-up=");
+					if(migration_id.length() == 0){
+						std::cerr << "[ERROR]: what is this (UP) migration? it's of zero length: '" << argument << "'\nExiting...\n";
+						exit(1);
+					}
+					migrations.push_back(std::make_tuple<>("up",migration_id));
+					continue;
+				}
+				if(is_argument(argument,"--run-migration-down=")){
+					std::string migration_id = slice_option_off(argument,"--run-migration-down=");
+					std::cout << "migration_id:'" << migration_id << "'\n";
+					if(migration_id.length() == 0){
+						std::cerr << "[ERROR]: what is this (DOWN) migration? it's of zero length: '" << argument << "'\nExiting...\n";
+						exit(1);
+					}
+					migrations.push_back(std::make_tuple<>("down",migration_id));
+					continue;
 				}
 
 				if(strncmp(argv[pos],"--show-tics",11) == 0){
@@ -383,6 +418,22 @@ namespace mods {
 				log("SYSERR: Couldn't connect to postgres");
 				mods::globals::shutdown();
 				return;
+			}
+			if(migrations.size()){
+				for(auto t : migrations){
+					auto direction = std::get<0>(t);
+					auto identifier = std::get<1>(t);
+					mods::migrations::report_migration_status(CAT("running [",direction,"] migration: '",identifier,"'"),"status");
+					std::tuple<bool,int,std::string> status = mods::migrations::run_migration(identifier,"run a migration from the cli",direction);
+					int code = std::get<1>(status);
+					std::string error_message = std::get<2>(status);
+					if(code < 0){
+						mods::migrations::report_migration_status(CAT("Error running [",direction,"] migration: '",identifier,"': error message: '", error_message, "'"),"error");
+						exit(1);
+					}else{
+						mods::migrations::report_migration_status(CAT("Successfully ran [",direction,"] migration: '",identifier,"'"),"success");
+					}
+				}
 			}
 			mods::debug::init(show_tics);
 			mods::skills::game_init();
