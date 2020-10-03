@@ -27,6 +27,22 @@ looter mechanics mixed with an exciting fast-paced military shooter.
 - claymore mines
 - remote view cameras
 
+# TODO
+- must implement drone assisted sniping
+- must implement attach+detonate for C4
+- implement install/uninstall minigame functions
+- implement actions on both wires/lineup mini games
+- crud operations for mini games
+- fix medic healing. currently, anyone can heal
+- implement buffs/nerfs for all courses [ huge ]
+- implement `install_computer_choice` and `add_computer_choice` commands
+- tactical gadgetry course help file
+- implement melee functions for the striking clinic course
+- implement save/recall of striking combos
+- crud operations for save/recall (maybe use the proficiency skills db?)
+- implement MCMAP Judo course
+- implement MCMAP Submission Grappling course
+
 # The Roguelike that turned into a full-blown mud
 The first goal of Tactical Denial is to a roguelike mud setup as soon as possible.
 This will allow the audience to play the game while development can focus on 
