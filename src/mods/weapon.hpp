@@ -327,6 +327,43 @@ namespace mods::weapon {
 		}
 		return false;
 	}
+	/** ghost class */
+	namespace ghost {
+		enum primary_choice_t {
+			GHOST_NONE = 0,
+			GHOST_PRIMARY_PSG1 = 1,
+			GHOST_PRIMARY_L96AW = 2,
+			NONE = 0,
+			PSG1 = 1,
+			L96AW = 2
+		};
+		static inline std::string_view to_string(primary_choice_t s){
+#define SNI_STR(a){ case mods::weapon::ghost::primary_choice_t::a: return #a; }
+			switch(s){
+				SNI_STR(NONE);
+				SNI_STR(PSG1);
+				SNI_STR(L96AW);
+#undef SNI_STR
+				default:return "<unknown>";
+			}
+		}
+		enum secondary_choice_t {
+			GHOST_SECONDARY_NONE = 0,
+			GHOST_SECONARY_PSG1 = 1,
+			GHOST_SECONARY_L96AW = 2,
+		};
+		static inline std::string_view to_string(secondary_choice_t s){
+#define SNI_STR(a){ case mods::weapon::ghost::secondary_choice_t::a: return #a; }
+			switch(s){
+				SNI_STR(GHOST_SECONDARY_NONE);
+				SNI_STR(GHOST_SECONARY_PSG1);
+				SNI_STR(GHOST_SECONARY_L96AW);
+#undef SNI_STR
+				default:return "<unknown>";
+			}
+		}
+	};
+
 	namespace sniper {
 		enum primary_choice_t {
 			SNIPER_NONE = 0,
@@ -559,6 +596,16 @@ namespace mods::weapon {
 				return "unknown";
 		}
 	}
+		static inline std::string yaml_file(ghost::primary_choice_t s){
+			switch(s){
+				case ghost::primary_choice_t::PSG1:
+					return "psg1.yml";
+				case ghost::primary_choice_t::L96AW:
+					return "l96aw.yml";
+				default:
+					return "unknown";
+			}
+		}
 		static inline std::string yaml_file(sniper::primary_choice_t s){
 			switch(s){
 				case sniper::primary_choice_t::PSG1:

@@ -12,6 +12,7 @@ namespace mods::classes {
 		SENTINEL,
 		CONTAGION,
 		PSYOP,
+		GHOST,
 		UNDEFINED
 	};
 	static inline std::string to_string(mods::classes::types t){
@@ -25,6 +26,7 @@ namespace mods::classes {
 			case types::SENTINEL: return "SENTINEL";
 			case types::CONTAGION: return "CONTAGION";
 			case types::PSYOP: return "PSYOP";
+			case types::GHOST: return "GHOST";
 			default:
 				return "UNDEFINED";
 		}

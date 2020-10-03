@@ -71,6 +71,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/class-medic mods/classes/medic \
 					 mods/orm/class-psyop mods/classes/psyop \
 					 mods/orm/class-support mods/classes/support \
+					 mods/orm/class-ghost mods/classes/ghost \
 					 mods/classes/base \
 					 mods/weapons/sniper-rifle-psg1 mods/weapons/sniper-rifle-l96aw \
 					 mods/orm/quotes act.builder mods/orm/base mods/yaml \

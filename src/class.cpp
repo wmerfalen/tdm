@@ -61,7 +61,7 @@ const char *class_abbrevs[] = {
 
 
 const char *pc_class_types[] = {
-	"Sniper",
+	"Ghost",
 	"Marine",
 	"Sentinel",
 	"Contagion"
@@ -74,7 +74,7 @@ const char *pc_class_types[] = {
 
 
 const char* class_menu =
-    "  [1] Sniper\r\n"
+    "  [1] Ghost\r\n"
 		"  [2] Marine\r\n"
 		"  [3] Sentinel\r\n"  
 		"  [4] Contagion\r\n"  

@@ -1165,6 +1165,12 @@ GET_WAS_IN	utils.cpp	/^room_rnum& GET_WAS_IN(player_ptr_t& player){$/;"	f
 GET_WEIGHT	utils.h	299;"	d
 GET_WIMP_LEV	utils.h	335;"	d
 GET_WIS	utils.h	306;"	d
+GHOST_NONE	mods/weapon.hpp	/^			GHOST_NONE = 0,$/;"	e	enum:mods::weapon::ghost::primary_choice_t
+GHOST_PRIMARY_L96AW	mods/weapon.hpp	/^			GHOST_PRIMARY_L96AW = 2,$/;"	e	enum:mods::weapon::ghost::primary_choice_t
+GHOST_PRIMARY_PSG1	mods/weapon.hpp	/^			GHOST_PRIMARY_PSG1 = 1,$/;"	e	enum:mods::weapon::ghost::primary_choice_t
+GHOST_SECONARY_L96AW	mods/weapon.hpp	/^			GHOST_SECONARY_L96AW = 2,$/;"	e	enum:mods::weapon::ghost::secondary_choice_t
+GHOST_SECONARY_PSG1	mods/weapon.hpp	/^			GHOST_SECONARY_PSG1 = 1,$/;"	e	enum:mods::weapon::ghost::secondary_choice_t
+GHOST_SECONDARY_NONE	mods/weapon.hpp	/^			GHOST_SECONDARY_NONE = 0,$/;"	e	enum:mods::weapon::ghost::secondary_choice_t
 GIVEN	mods/catch.hpp	12214;"	d
 GLASS_WINDOWS	structs.h	/^			GLASS_WINDOWS,$/;"	m	struct:room_data	typeref:enum:room_data::
 GODLIKE	mods/yaml.hpp	/^	GODLIKE,$/;"	e	enum:mods::yaml::durability_profile_type_t
@@ -1512,6 +1518,7 @@ KNUL	screen.h	19;"	d
 KRED	screen.h	12;"	d
 KWHT	screen.h	18;"	d
 KYEL	screen.h	14;"	d
+L96AW	mods/weapon.hpp	/^			L96AW = 2$/;"	e	enum:mods::weapon::ghost::primary_choice_t
 L96AW	mods/weapon.hpp	/^			L96AW = 2$/;"	e	enum:mods::weapon::sniper::primary_choice_t
 LADDER	structs.h	/^			LADDER, \/** a ladder leading up or down *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 LARGE_BUFSIZE	structs.h	664;"	d
@@ -1680,18 +1687,18 @@ MARINE_PRIMARY_M16A4	mods/weapon.hpp	/^			MARINE_PRIMARY_M16A4 = 1,$/;"	e	enum:m
 MARINE_PRIMARY_M4	mods/weapon.hpp	/^			MARINE_PRIMARY_M4 = 2,$/;"	e	enum:mods::weapon::marine::primary_choice_t
 MARK	graph.cpp	53;"	d	file:
 MARKSMANSHIP	mods/skills.hpp	/^		MARKSMANSHIP,$/;"	e	enum:mods::skills::fields_of_study
-MAR_STR	mods/weapon.hpp	376;"	d
-MAR_STR	mods/weapon.hpp	385;"	d
-MAR_STR	mods/weapon.hpp	396;"	d
-MAR_STR	mods/weapon.hpp	405;"	d
-MAR_STR	mods/weapon.hpp	416;"	d
-MAR_STR	mods/weapon.hpp	425;"	d
-MAR_STR	mods/weapon.hpp	436;"	d
-MAR_STR	mods/weapon.hpp	448;"	d
-MAR_STR	mods/weapon.hpp	459;"	d
-MAR_STR	mods/weapon.hpp	468;"	d
-MAR_STR	mods/weapon.hpp	479;"	d
-MAR_STR	mods/weapon.hpp	488;"	d
+MAR_STR	mods/weapon.hpp	413;"	d
+MAR_STR	mods/weapon.hpp	422;"	d
+MAR_STR	mods/weapon.hpp	433;"	d
+MAR_STR	mods/weapon.hpp	442;"	d
+MAR_STR	mods/weapon.hpp	453;"	d
+MAR_STR	mods/weapon.hpp	462;"	d
+MAR_STR	mods/weapon.hpp	473;"	d
+MAR_STR	mods/weapon.hpp	485;"	d
+MAR_STR	mods/weapon.hpp	496;"	d
+MAR_STR	mods/weapon.hpp	505;"	d
+MAR_STR	mods/weapon.hpp	516;"	d
+MAR_STR	mods/weapon.hpp	525;"	d
 MAX	bsd-snprintf.cpp	97;"	d	file:
 MAX	utils.cpp	/^int MAX(int a, int b) {$/;"	f
 MAX	utils.h	75;"	d
@@ -2046,6 +2053,7 @@ NONE	mods/skills.hpp	/^			NONE = -1,$/;"	e	enum:mods::skills::proficiencies::pro
 NONE	mods/skills.hpp	/^		NONE = 0,$/;"	e	enum:mods::skills::fields_of_study
 NONE	mods/weapon.hpp	/^			NONE = 0,$/;"	e	enum:mods::weapon::contagion::primary_choice_t
 NONE	mods/weapon.hpp	/^			NONE = 0,$/;"	e	enum:mods::weapon::engineer::primary_choice_t
+NONE	mods/weapon.hpp	/^			NONE = 0,$/;"	e	enum:mods::weapon::ghost::primary_choice_t
 NONE	mods/weapon.hpp	/^			NONE = 0,$/;"	e	enum:mods::weapon::marine::primary_choice_t
 NONE	mods/weapon.hpp	/^			NONE = 0,$/;"	e	enum:mods::weapon::medic::primary_choice_t
 NONE	mods/weapon.hpp	/^			NONE = 0,$/;"	e	enum:mods::weapon::psyop::primary_choice_t
@@ -2286,6 +2294,7 @@ PROTECT_FROM_EMP	mods/skills.hpp	/^			PROTECT_FROM_EMP,$/;"	e	enum:mods::skills:
 PROTECT_GOOD	mods/flags.hpp	/^		PROTECT_GOOD,		\/\/ useless$/;"	e	enum:mods::flags::aff
 PROXIMITY_ALARM	mods/skills.hpp	/^			PROXIMITY_ALARM,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 PRO_WEAPON_HANDLER	mods/skills.hpp	/^			PRO_WEAPON_HANDLER,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
+PSG1	mods/weapon.hpp	/^			PSG1 = 1,$/;"	e	enum:mods::weapon::ghost::primary_choice_t
 PSG1	mods/weapon.hpp	/^			PSG1 = 1,$/;"	e	enum:mods::weapon::sniper::primary_choice_t
 PSYOP_NONE	mods/weapon.hpp	/^			PSYOP_NONE = 0,$/;"	e	enum:mods::weapon::psyop::primary_choice_t
 PSYOP_PRIMARY_SCARH	mods/weapon.hpp	/^			PSYOP_PRIMARY_SCARH = 1,$/;"	e	enum:mods::weapon::psyop::primary_choice_t
@@ -2540,8 +2549,8 @@ SENTINEL_DISCIPLINE	mods/skills.hpp	/^			SENTINEL_DISCIPLINE,$/;"	e	enum:mods::s
 SENTINEL_NONE	mods/weapon.hpp	/^			SENTINEL_NONE = 0,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
 SENTINEL_PRIMARY_MP5	mods/weapon.hpp	/^			SENTINEL_PRIMARY_MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
 SENTINEL_PRIMARY_SASG12	mods/weapon.hpp	/^			SENTINEL_PRIMARY_SASG12 = 2,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-SEN_STR	mods/weapon.hpp	499;"	d
-SEN_STR	mods/weapon.hpp	508;"	d
+SEN_STR	mods/weapon.hpp	536;"	d
+SEN_STR	mods/weapon.hpp	545;"	d
 SEQUENCE	mods/behaviour_tree_node.hpp	/^		enum node_type_t { DO_NOTHING, SELECTOR, SEQUENCE, LEAF };$/;"	e	enum:mods::behaviour_tree_node::node_type_t
 SERVER_ROOM	structs.h	/^			SERVER_ROOM,$/;"	m	struct:room_data	typeref:enum:room_data::
 SET_BIT	utils.h	201;"	d
@@ -2658,11 +2667,15 @@ SNIPER_SECONARY_PSG1	mods/weapon.hpp	/^			SNIPER_SECONARY_PSG1 = 1,$/;"	e	enum:m
 SNIPER_SECONDARY_NONE	mods/weapon.hpp	/^			SNIPER_SECONDARY_NONE = 0,$/;"	e	enum:mods::weapon::sniper::secondary_choice_t
 SNIPER_SUPPORT	mods/skills.hpp	/^			SNIPER_SUPPORT,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 SNIPING	mods/skills.hpp	/^		SNIPING,$/;"	e	enum:mods::skills::fields_of_study
-SNI_STR	mods/weapon.hpp	340;"	d
-SNI_STR	mods/weapon.hpp	345;"	d
-SNI_STR	mods/weapon.hpp	355;"	d
-SNI_STR	mods/weapon.hpp	360;"	d
-SNI_STR	mods/weapon.hpp	365;"	d
+SNI_STR	mods/weapon.hpp	341;"	d
+SNI_STR	mods/weapon.hpp	346;"	d
+SNI_STR	mods/weapon.hpp	356;"	d
+SNI_STR	mods/weapon.hpp	361;"	d
+SNI_STR	mods/weapon.hpp	377;"	d
+SNI_STR	mods/weapon.hpp	382;"	d
+SNI_STR	mods/weapon.hpp	392;"	d
+SNI_STR	mods/weapon.hpp	397;"	d
+SNI_STR	mods/weapon.hpp	402;"	d
 SOCMESS_FILE	db.h	92;"	d
 SONIC_WAVE	mods/aoe.hpp	/^		SONIC_WAVE,	\/** The same type of explosion caused by breaking the sound barrier *\/$/;"	e	enum:mods::aoe::types_t
 SOUTH	structs.h	155;"	d
@@ -4989,6 +5002,7 @@ get_victim	castle.cpp	/^char_data *get_victim( char_data *ch) {$/;"	f
 get_watching	mods/player.hpp	/^		direction_t get_watching(){ return this->m_watching; }$/;"	f	struct:mods::player
 get_yaml_exception_list	mods/object-utils.hpp	/^	static inline auto& get_yaml_exception_list() {$/;"	f	namespace:mods::object_utils
 get_yaml_transaction_id	mods/object-utils.hpp	/^	static inline uint32_t get_yaml_transaction_id(){$/;"	f	namespace:mods::object_utils
+ghost	mods/weapon.hpp	/^	namespace ghost {$/;"	n	namespace:mods::weapon
 give_find_vict	act.item.cpp	/^char_data *give_find_vict(char_data *ch, char *arg) {$/;"	f
 glob	mods/util.cpp	/^		directory_list_t glob(std::string_view path){$/;"	f	namespace:mods::util
 globals	comm.cpp	/^namespace mods::globals { $/;"	n	class:mods	file:
@@ -6295,6 +6309,7 @@ present_mob_specials	mods/builder.cpp	/^void present_mob_specials(player_ptr_t &
 primary	mods/player.cpp	/^	obj_data_ptr_t player::primary(){$/;"	f	class:mods::player
 primary_choice_t	mods/weapon.hpp	/^		enum primary_choice_t {$/;"	g	namespace:mods::weapon::contagion
 primary_choice_t	mods/weapon.hpp	/^		enum primary_choice_t {$/;"	g	namespace:mods::weapon::engineer
+primary_choice_t	mods/weapon.hpp	/^		enum primary_choice_t {$/;"	g	namespace:mods::weapon::ghost
 primary_choice_t	mods/weapon.hpp	/^		enum primary_choice_t {$/;"	g	namespace:mods::weapon::marine
 primary_choice_t	mods/weapon.hpp	/^		enum primary_choice_t {$/;"	g	namespace:mods::weapon::medic
 primary_choice_t	mods/weapon.hpp	/^		enum primary_choice_t {$/;"	g	namespace:mods::weapon::psyop
@@ -6668,6 +6683,7 @@ scope_t	mods/weapon.hpp	/^	enum scope_t {$/;"	g	namespace:mods::weapon
 screen_width	mods/player.cpp	/^		int player::screen_width(){$/;"	f	class:mods::player
 search_block	interpreter.cpp	/^int search_block(char *arg, const char **list, int exact) { \/** FIXME: arg 2  *\/$/;"	f
 secondary	mods/player.cpp	/^	obj_data_ptr_t player::secondary(){$/;"	f	class:mods::player
+secondary_choice_t	mods/weapon.hpp	/^		enum secondary_choice_t {$/;"	g	namespace:mods::weapon::ghost
 secondary_choice_t	mods/weapon.hpp	/^		enum secondary_choice_t {$/;"	g	namespace:mods::weapon::medic
 secondary_choice_t	mods/weapon.hpp	/^		enum secondary_choice_t {$/;"	g	namespace:mods::weapon::sniper
 sector_from_string	mods/rooms.cpp	/^	std::optional<sector_type_t> sector_from_string(std::string m){$/;"	f	namespace:mods::rooms
@@ -7119,12 +7135,14 @@ to_string	mods/rooms.hpp	/^	static inline std::string to_string(room_data::fire_
 to_string	mods/skills.cpp	/^	std::string to_string(int e_name){$/;"	f	namespace:mods::skills
 to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(primary_choice_t s){$/;"	f	namespace:mods::weapon::contagion
 to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(primary_choice_t s){$/;"	f	namespace:mods::weapon::engineer
+to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(primary_choice_t s){$/;"	f	namespace:mods::weapon::ghost
 to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(primary_choice_t s){$/;"	f	namespace:mods::weapon::marine
 to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(primary_choice_t s){$/;"	f	namespace:mods::weapon::medic
 to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(primary_choice_t s){$/;"	f	namespace:mods::weapon::psyop
 to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(primary_choice_t s){$/;"	f	namespace:mods::weapon::sentinel
 to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(primary_choice_t s){$/;"	f	namespace:mods::weapon::sniper
 to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(primary_choice_t s){$/;"	f	namespace:mods::weapon::support
+to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(secondary_choice_t s){$/;"	f	namespace:mods::weapon::ghost
 to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(secondary_choice_t s){$/;"	f	namespace:mods::weapon::sniper
 to_string	mods/weapon.hpp	/^	static inline std::string to_string(weapon_armor_t armor_type){$/;"	f	namespace:mods::weapon
 to_string	mods/weapon.hpp	/^	static inline std::string to_string(weapon_attachment_t attachment_type){$/;"	f	namespace:mods::weapon
@@ -7367,6 +7385,7 @@ yaml_description_t	mods/yaml.hpp	/^	struct yaml_description_t {$/;"	s	namespace:
 yaml_feed_exceptions	mods/object-utils.hpp	/^	static yaml_exception_list_t yaml_feed_exceptions;$/;"	m	namespace:mods::object_utils
 yaml_file	mods/weapon.hpp	/^		static inline std::string yaml_file(contagion::primary_choice_t s){$/;"	f	namespace:mods::weapon
 yaml_file	mods/weapon.hpp	/^		static inline std::string yaml_file(engineer::primary_choice_t s){$/;"	f	namespace:mods::weapon
+yaml_file	mods/weapon.hpp	/^		static inline std::string yaml_file(ghost::primary_choice_t s){$/;"	f	namespace:mods::weapon
 yaml_file	mods/weapon.hpp	/^		static inline std::string yaml_file(marine::primary_choice_t s){$/;"	f	namespace:mods::weapon
 yaml_file	mods/weapon.hpp	/^		static inline std::string yaml_file(medic::primary_choice_t s){$/;"	f	namespace:mods::weapon
 yaml_file	mods/weapon.hpp	/^		static inline std::string yaml_file(psyop::primary_choice_t s){$/;"	f	namespace:mods::weapon
