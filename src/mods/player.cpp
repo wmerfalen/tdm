@@ -1469,6 +1469,10 @@ namespace mods {
 			}
 			return true;/** FIXME */
 		}
+		void player::set_ada_data(std::string_view key,std::string_view value){
+			m_ada_data[key.data()] = value.data();
+		}
+		std::map<std::string,std::string>& player::get_ada_data(){ return m_ada_data; }
 };
 
 #endif

@@ -15,6 +15,9 @@ namespace mods::chargen {
 	void show_triads(player_ptr_t& player, player_class_t class_type);
 	void show_class_menu(player_ptr_t& player);
 	const char* blind_friendly_prompt();
+	void show_blind_friendly_chargen_prompt(player_ptr_t& player);
+	void blind_chargen_take_over(player_ptr_t& player,std::string_view);
+	int create_char_from_registration(player_ptr_t&,std::string);
 };
 
 #endif

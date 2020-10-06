@@ -667,7 +667,10 @@ namespace mods {
 		/** Americans with Disabilities Act (ADA) support */
 		bool needs_ada() const { return m_ada; }
 		void set_ada(bool s){ m_ada = true; }
+		void set_ada_data(std::string_view,std::string_view);
+		std::map<std::string,std::string>& get_ada_data();
 		protected:
+		std::map<std::string,std::string> m_ada_data;
 		bool m_ada;
 		mods::string m_class_string;
 		std::array<bool,misc_pref_enum_t::SIZE> m_misc_pref;

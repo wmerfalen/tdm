@@ -383,6 +383,7 @@ enum player_class_t {
 #define CON_IDLE         19 /* user is idle. not playing but also not disconnected */
 #define CON_SUB_CLASS 20
 #define CON_BLIND_CHARGEN	 21	/* ask the user if they need blind-friendly chargen screens */
+#define CON_BLIND_CHARGEN_TAKE_OVER	 22	/* ask the user if they need blind-friendly chargen screens */
 #define CON_CHARGEN_PRIMARY_CHOICE 30
 #define CON_CHARGEN_FINALIZE 50 
 

@@ -11,6 +11,7 @@ namespace db {
 extern player_class_t parse_class(char arg);
 extern std::string motd;
 extern size_t write_to_output(mods::descriptor_data &t, const char *txt, ...) __attribute__((format(printf, 2, 3)));
+extern const char* MENU;
 namespace mods::chargen {
 const char* class_menu =
 		"\r\n"
@@ -51,85 +52,209 @@ const char* real_blind_friendly_prompt =
 		return real_blind_friendly_prompt;
 	}
 
-std::vector<std::string> blind_friendly_class_menu_list = {
-    " Here are a list of Sniper sub-classes.\r\n",
-		" The GHOST class. This class is a stealth operator. To select this class type 1G. That's the number one immediately followed by the letter G as in Good.\r\n",
-		" The Marksman class. This class is a weapons expert. To select this class type 1M. That's the number one immediately followed by the letter M as in Military.\r\n",
-		" The Bandit class. This class is a thief class. To select this class type 1B. That's the number one immediately followed by the letter B as in Bravo.\r\n",
-		" That's all of the Sniper sub-classes.\r\n",
-		"\r\n",
-		" Here are a list of Marine sub-classes.r\n",
-		" The Butcher class. This class is a bladed weapons specialist. To select this class type 2B. That's the number two immediately followed by the letter B as in Bravo.\r\n",
-		" The Striker class. This class is a martial arts expert. To select this class type 2S. That's the number two immediately followed by the letter S as in Sahara.\r\n",
-		" The Obstructor class. This class is a submissions grappling expert. To select this class type 2M. That's the number two immediately followed by the letter  M as in Military.\r\n",
-		" That's all of the Marine sub-classes.\r\n",
-		"\r\n",
-		" Here are a list of Chemist sub-classes.\r\n",
-		" The Malady class. This class is a poison weapons specialist. To select this class type 3M. That's the number three immediately followed by the letter M as in Military.\r\n",
-		" The Pyrexia class. This is a incendiary pyro class. To select this class type 3P. That's the number three immediately followed by the letter P as in Proximity.\r\n",
-		" The Dealer class. This is a chemical performance enhancment specialist. To select this class type 3D. That's the number three immediately followed by the letter D as in Delta.\r\n",
-		" That's all of the Chemist sub-classes.\r\n",
-		"\r\n",
-		"Here are a list of Engineer sub-classes.\r\n",
-		"The Forge class. This is a weapons crafting expert. To select this class type 4F. That's the number four immediately followed by the letter F as in Fighter.\r\n",
-		"The Syndrome class. This is an autonomous drone expert class. To select this class type 4S. That's the number four immediately followed by the letter S as in Sahara.\r\n",
-		"The Machinist class. This is technology expert class. To select this class type 4M. That's the number four immediately followed by the letter M as in Military.\r\n",
-		"\r\n",
-		/* nice to have
-		"If you would like these classes listed line by line, type 'line please'. That's the word line followed by a space followed by the word please.\r\n",
-		"Otherwise, choose your class below.\r\n",
-		"\r\n",
-		*/
-		"To see the stats of a class, type the phrase stats followed by a space and the class identifier.\r\n"
-		"For example: {grn}stats 4F{/grn}. That's the word 'stats' followed by a space, then the number four followed by the letter F as in Fighter.\r\n"
-		"Type the class of your choice: "
-	};
+		static std::vector<std::string> classes;
+		void init(){
+			classes.clear();
+			classes.emplace_back(
+				"GHOST: The ghost class is a stealth operator that can deploy full stealth camoflauge. "
+				"This class is a sniper sub-class which means it can take out enemies from long distances."
+				"To display the stats for this class, type stats.\r\n"
+				"To display the next class, type next. If you would like to choose this class type choose GHOST."
+				"Your choice: "
+			);
+			classes.emplace_back(
+				"MARKSMAN: The Marksman class is a weapons export. This is a sniper sub-class which means it can "
+				"snipe from far distances and is also very well-versed in assault rifles."
+				"To display the stats for this class, type stats.\r\n"
+				"To display the next class, type next. If you would like to choose this class type choose MARKSMAN."
+				"Your choice: "
+			);
+			classes.emplace_back(
+				"BANDIT: This is a thief class.\r\n"
+				"To display the stats for this class, type stats.\r\n"
+				"To display the next class, type next. If you would like to choose this class type choose BANDIT."
+				"Your choice: "
+			);
+			classes.emplace_back(
+				"BUTCHER:  Bladed weapons specialist.\r\n"
+				"To display the stats for this class, type stats.\r\n"
+				"To display the next class, type next. If you would like to choose this class type choose BUTCHER."
+				"Your choice: "
+			);
+			classes.emplace_back(
+				"STRIKER: Martial arts expert."
+				"To display the stats for this class, type stats.\r\n"
+				"To display the next class, type next. If you would like to choose this class type choose STRIKER."
+				"Your choice: "
+			);
+			classes.emplace_back(
+				"OBSTRUCTOR: Submissions grappling expert."
+				"To display the stats for this class, type stats.\r\n"
+				"To display the next class, type next. If you would like to choose this class type choose OBSTRUCTOR."
+				"Your choice: "
+			);
+			classes.emplace_back(
+				"MALADY: Poison and chemical warfare specialist."
+				"To display the stats for this class, type stats.\r\n"
+				"To display the next class, type next. If you would like to choose this class type choose MALADY."
+				"Your choice: "
+			);
+			classes.emplace_back(
+				"PYREXIA: Incendiary weapons specialist."
+				"To display the stats for this class, type stats.\r\n"
+				"To display the next class, type next. If you would like to choose this class type choose PYREXIA."
+				"Your choice: "
+			);
+			classes.emplace_back(
+				"DEALER: Chemical performance enhancement specialist."
+				"To display the stats for this class, type stats.\r\n"
+				"To display the next class, type next. If you would like to choose this class type choose DEALER."
+				"Your choice: "
+			);
+			classes.emplace_back(
+				"FORGE: Master weapons crafting specialist."
+				"To display the stats for this class, type stats.\r\n"
+				"To display the next class, type next. If you would like to choose this class type choose FORGE."
+				"Your choice: "
+			);
+			classes.emplace_back(
+				"SYNDROME: Autonomous drone and recon expert."
+				"To display the stats for this class, type stats.\r\n"
+				"To display the next class, type next. If you would like to choose this class type choose SYNDROME."
+				"Your choice: "
+			);
+			classes.emplace_back(
+				"MACHINIST: Technology expert."
+				"To display the stats for this class, type stats.\r\n"
+				"To display the next class, type next. If you would like to choose this class type choose MACHINIST."
+				"Your choice: "
+			);
+		}
+	void show_blind_stats(player_ptr_t& player){
+		auto data = player->get_ada_data();
+		auto i = mods::util::stoi(data["current-class"]).value_or(0);
+		auto str_class = classes[i];//std::get<0>(classes[i]);
+		if(str_class.compare("GHOST") == 0){player->sendln(CHARGEN_BLIND_GHOST_CLASS_TRIADS()); return; }
+		if(str_class.compare("MARKSMAN") == 0){player->sendln(CHARGEN_BLIND_MARKSMAN_CLASS_TRIADS()); return; }
+		if(str_class.compare("BANDIT") == 0){player->sendln(CHARGEN_BLIND_BANDIT_CLASS_TRIADS()); return; }
+		if(str_class.compare("BUTCHER") == 0){player->sendln(CHARGEN_BLIND_BUTCHER_CLASS_TRIADS()); return; }
+		if(str_class.compare("STRIKER") == 0){player->sendln(CHARGEN_BLIND_STRIKER_CLASS_TRIADS()); return; }
+		if(str_class.compare("OBSTRUCTOR") == 0){player->sendln(CHARGEN_BLIND_OBSTRUCTOR_CLASS_TRIADS()); return; }
+		if(str_class.compare("MALADY") == 0){player->sendln(CHARGEN_BLIND_MALADY_CLASS_TRIADS()); return; }
+		if(str_class.compare("PYREXIA") == 0){player->sendln(CHARGEN_BLIND_PYREXIA_CLASS_TRIADS()); return; }
+		if(str_class.compare("DEALER") == 0){player->sendln(CHARGEN_BLIND_DEALER_CLASS_TRIADS()); return; }
+		if(str_class.compare("FORGE") == 0){player->sendln(CHARGEN_BLIND_FORGE_CLASS_TRIADS()); return; }
+		if(str_class.compare("SYNDROME") == 0){player->sendln(CHARGEN_BLIND_SYNDROME_CLASS_TRIADS()); return; }
+		if(str_class.compare("MACHINIST") == 0){player->sendln(CHARGEN_BLIND_MACHINIST_CLASS_TRIADS()); return; }
+	}
+
+	int create_char_from_registration(player_ptr_t& p,std::string argument){
+		player_class_t pclass = CLASS_GHOST;//FIXME parse_class(argument);
+		p->set_class(pclass);
+		std::tuple<bool,std::string> make_char_status;
+		make_char_status = mods::chargen::make_char(p,pclass);
+		if(!std::get<0>(make_char_status)){
+			p->send("\r\nAn error occurred: %s\r\n", std::get<1>(make_char_status).data());
+			p->set_state(CON_CLOSE);
+			mods::chargen::undo_make_char(p);
+			mods::globals::unregister_authenticated_player(p);
+			p->set_authenticated(false);
+			p->set_db_id(0);
+			return -2;
+		}
+		p->sendln(MENU);
+		p->set_state(CON_MENU);
+		return 0;
+	}
 
 	void show_blind_friendly_class_menu(player_ptr_t& player){
-			for(auto line :  blind_friendly_class_menu_list){
-				write_to_output(player->desc(), "%s", line.c_str());
-			}
+		static bool initialized = false;
+		if(!initialized){init(); initialized = true;}
+		auto data = player->get_ada_data();
+		if(data.find("current-class") == data.end()){
+			player->set_ada_data("current-class","0");
+			data = player->get_ada_data();
+		}
+		int ctr = mods::util::stoi(data["current-class"]).value_or(0);
+		if(ctr >= classes.size()){
+			ctr = 0;
+			player->set_ada_data("current-class","0");
+			data = player->get_ada_data();
+		}
+		player->sendln(classes[ctr]);
+		player->set_state(CON_BLIND_CHARGEN_TAKE_OVER);
+		player->set_ada_data("accept","class-menu");
+		return;
 	}
-	void show_class_menu(player_ptr_t& player){
-		if(player->needs_ada()){
+	void blind_chargen_take_over(player_ptr_t& player,std::string_view argument){
+		auto & data = player->get_ada_data();
+		if(data.find("state") == data.end()){
+			player->set_ada_data("state","show-class-menu");
+			data = player->get_ada_data();
+		}
+		if(data["accept"].compare("class-menu") == 0){
+			if(strncmp(argument.data(),"stats",strlen("stats")) == 0){
+				show_blind_stats(player);
+				player->set_state(CON_BLIND_CHARGEN_TAKE_OVER);
+				player->set_ada_data("accept","stats-menu");
+				return;
+			}
+		}
+		if(data["accept"].compare("class-menu") == 0 && strncmp(argument.data(),"next",strlen("next")) == 0){
+			auto i = mods::util::stoi(data["current-class"]).value_or(0);
+			player->set_ada_data("current-class",std::to_string(++i));
 			show_blind_friendly_class_menu(player);
 			return;
 		}
-		write_to_output(player->desc(), "%s", class_menu);
+		if(data["state"].compare("show-class-menu") == 0){
+			show_blind_friendly_class_menu(player);
+			player->set_state(CON_BLIND_CHARGEN_TAKE_OVER);
+		}
+	}
+
+	void show_blind_friendly_chargen_prompt(player_ptr_t& player){
+		player->send("You are about to choose your class. Do you need us to format the menu to accomodate for screen readers? Type Yes or No:");
+	}
+	void show_class_menu(player_ptr_t& player){
+		//if(player->needs_ada()){
+			show_blind_friendly_class_menu(player);
+			//return;
+		//}
+		//write_to_output(player->desc(), "%s", class_menu);
 	}
 	void show_triads(player_ptr_t& player, player_class_t p_class){
 		switch(p_class){
-			case player_class_t::CLASS_GHOST:player->sendln(CHARGEN_GHOST_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_MARKSMAN:player->sendln(CHARGEN_MARKSMAN_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_BANDIT:player->sendln(CHARGEN_BANDIT_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_BUTCHER:player->sendln(CHARGEN_BUTCHER_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_STRIKER:player->sendln(CHARGEN_STRIKER_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_OBSTRUCTOR:player->sendln(CHARGEN_OBSTRUCTOR_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_MALADY:player->sendln(CHARGEN_MALADY_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_PYREXIA:player->sendln(CHARGEN_PYREXIA_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_DEALER:player->sendln(CHARGEN_DEALER_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_FORGE:player->sendln(CHARGEN_FORGE_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_SYNDROME:player->sendln(CHARGEN_SYNDROME_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_MACHINIST:player->sendln(CHARGEN_MACHINIST_CLASS_TRIADS()); break;
+			case player_class_t::CLASS_GHOST:player->sendln(CHARGEN_BLIND_GHOST_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_MARKSMAN:player->sendln(CHARGEN_BLIND_MARKSMAN_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_BANDIT:player->sendln(CHARGEN_BLIND_BANDIT_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_BUTCHER:player->sendln(CHARGEN_BLIND_BUTCHER_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_STRIKER:player->sendln(CHARGEN_BLIND_STRIKER_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_OBSTRUCTOR:player->sendln(CHARGEN_BLIND_OBSTRUCTOR_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_MALADY:player->sendln(CHARGEN_BLIND_MALADY_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_PYREXIA:player->sendln(CHARGEN_BLIND_PYREXIA_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_DEALER:player->sendln(CHARGEN_BLIND_DEALER_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_FORGE:player->sendln(CHARGEN_BLIND_FORGE_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_SYNDROME:player->sendln(CHARGEN_BLIND_SYNDROME_CLASS_TRIADS()); break;
+		 	case player_class_t::CLASS_MACHINIST:player->sendln(CHARGEN_BLIND_MACHINIST_CLASS_TRIADS()); break;
 			default:
 			case CLASS_UNDEFINED: player->sendln(CHARGEN_UNDEFINED_CLASS_TRIADS()); break;
 		}
-
+		player->send("Press enter to go back to the class menu.");
 	}
 	std::string get_class_description(player_class_t p_class){
 		switch(p_class){
-			case player_class_t::CLASS_GHOST: return CHARGEN_GHOST_CLASS_DESCRIPTION();
-		 	case player_class_t::CLASS_MARKSMAN: return CHARGEN_MARKSMAN_CLASS_DESCRIPTION();
-		 	case player_class_t::CLASS_BANDIT: return CHARGEN_BANDIT_CLASS_DESCRIPTION();
-		 	case player_class_t::CLASS_BUTCHER: return CHARGEN_BUTCHER_CLASS_DESCRIPTION();
-		 	case player_class_t::CLASS_STRIKER: return CHARGEN_STRIKER_CLASS_DESCRIPTION();
-		 	case player_class_t::CLASS_OBSTRUCTOR: return CHARGEN_OBSTRUCTOR_CLASS_DESCRIPTION();
-		 	case player_class_t::CLASS_MALADY: return CHARGEN_MALADY_CLASS_DESCRIPTION();
-		 	case player_class_t::CLASS_PYREXIA: return CHARGEN_PYREXIA_CLASS_DESCRIPTION();
-		 	case player_class_t::CLASS_DEALER: return CHARGEN_DEALER_CLASS_DESCRIPTION();
-		 	case player_class_t::CLASS_FORGE: return CHARGEN_FORGE_CLASS_DESCRIPTION();
-		 	case player_class_t::CLASS_SYNDROME: return CHARGEN_SYNDROME_CLASS_DESCRIPTION();
-		 	case player_class_t::CLASS_MACHINIST: return CHARGEN_MACHINIST_CLASS_DESCRIPTION();
+			case player_class_t::CLASS_GHOST: return classes[0];
+		 	case player_class_t::CLASS_MARKSMAN: return classes[1];
+		 	case player_class_t::CLASS_BANDIT: return classes[2];
+		 	case player_class_t::CLASS_BUTCHER: return classes[3];
+		 	case player_class_t::CLASS_STRIKER: return classes[4];
+		 	case player_class_t::CLASS_OBSTRUCTOR: return classes[5];
+		 	case player_class_t::CLASS_MALADY: return classes[6];
+		 	case player_class_t::CLASS_PYREXIA: return classes[7];
+		 	case player_class_t::CLASS_DEALER: return classes[8];
+		 	case player_class_t::CLASS_FORGE: return classes[9];
+		 	case player_class_t::CLASS_SYNDROME: return classes[10];
+		 	case player_class_t::CLASS_MACHINIST: return classes[11];
 			default:
 			case CLASS_UNDEFINED: return CHARGEN_UNDEFINED_CLASS_DESCRIPTION();
 		}

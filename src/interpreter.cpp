@@ -50,7 +50,6 @@ extern std::size_t handle_disconnects();
 extern room_rnum r_mortal_start_room;
 extern room_rnum r_immort_start_room;
 extern room_rnum r_frozen_start_room;
-extern const char *class_menu;
 extern std::string motd;
 extern char *imotd;
 extern char *background;
@@ -1939,8 +1938,9 @@ void nanny(player_ptr_t p, char * in_arg) {
 			}
 
 			mods::chargen::show_class_menu(p);
-			p->set_state(CON_BLIND_CHARGEN);
+			p->set_state(CON_BLIND_CHARGEN_TAKE_OVER);
 			break;
+#if 0
 		case CON_BLIND_CHARGEN:
 			{
 				if(arg.length() == 0){
@@ -1950,23 +1950,34 @@ void nanny(player_ptr_t p, char * in_arg) {
 				}
 				if(mods::util::first_alpha_is_any(arg,"Yy")){
 					p->set_ada(true);
+					p->set_state(CON_BLIND_CHARGEN_TAKE_OVER);
+					mods::chargen::show_class_menu(p);
+					return;
 				}
 				if(mods::util::first_alpha_is_any(arg,"Nn")){
 					p->set_ada(false);
 				}
 				mods::chargen::show_class_menu(p);
-				p->set_state(CON_QCLASS);
+				p->set_state(CON_BLIND_CHARGEN_TAKE_OVER);
 				return;
 				break;
 			}
+#endif
 
+		case CON_BLIND_CHARGEN_TAKE_OVER:
+			{
+				std::string argument = arg;
+				argument = mods::util::trim(argument);
+				mods::chargen::blind_chargen_take_over(p,argument);
+				return;
+			}
+#if 0
 		case CON_QCLASS:
 			{
 				std::string argument = arg;
 				argument = mods::util::trim(argument);
 				if(mods::util::regex_match("^stats [0-9][a-zA-Z]",argument)){
 					mods::chargen::show_triads(p, parse_class(argument.substr(strlen("stats "))));
-
 					p->set_state(CON_QCLASS);
 					return;
 				}
@@ -1975,16 +1986,17 @@ void nanny(player_ptr_t p, char * in_arg) {
 					chosen_class = parse_class(argument.substr(1));
 					if(chosen_class == player_class_t::CLASS_UNDEFINED){
 						write_to_output(d, "Describe which class? Usage: question mark followed by number.\r\nFor example: ?2\r\n");
-						write_to_output(d, "%s\r\nSelect class: ", class_menu);
+						mods::chargen::show_class_menu(p);
 						p->set_state(CON_QCLASS);
 						return;
 					}
-					write_to_output(d, "%s\r\n%s\r\nSelect class: ",mods::chargen::get_class_description(chosen_class).data(),class_menu);
+					write_to_output(d, "%s\r\n",mods::chargen::get_class_description(chosen_class).data());
+					mods::chargen::show_class_menu(p);
 					p->set_state(CON_QCLASS);
 					return;
 				}
 				if(arg[0] == '?'){
-					write_to_output(d, "%s\r\nSelect class: ", class_menu);
+					mods::chargen::show_class_menu(p);
 					p->set_state(CON_QCLASS);
 					return;
 				}
@@ -1994,7 +2006,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 				p->set_class(pclass);
 				if(pclass == player_class_t::CLASS_UNDEFINED){
 					write_to_output(d, "\r\nThat's not a class.\r\n");
-					write_to_output(d, "%s\r\nSelect class: ", class_menu);
+					mods::chargen::show_class_menu(p);
 					p->set_state(CON_QCLASS);
 					return;
 				}
@@ -2013,6 +2025,17 @@ void nanny(player_ptr_t p, char * in_arg) {
 			write_to_output(d, "%s", MENU);
 			p->set_state(CON_MENU);
 			return;
+#endif
+		case CON_QCLASS:
+			{
+				/** TODO FIXME: this needs to happen once they've chosen a class */
+				/** TODO FIXME: this needs to happen once they've chosen a class */
+				/** TODO FIXME: this needs to happen once they've chosen a class */
+				std::string argument = arg;
+				argument = mods::util::trim(argument);
+				mods::chargen::create_char_from_registration(p,argument);
+			return;
+			}
 		case CON_RMOTD:		/* read CR after printing motd   */
 			write_to_output(d, "%s", MENU);
 			p->set_state(CON_MENU);

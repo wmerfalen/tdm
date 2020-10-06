@@ -394,6 +394,7 @@ namespace mods::values {
 	  "CHARGEN_FORGE_CLASS_DESCRIPTION",
 	  "CHARGEN_SYNDROME_CLASS_DESCRIPTION",
 		"CHARGEN_UNDEFINED_CLASS_DESCRIPTION",
+
 		"CHARGEN_GHOST_CLASS_TRIADS",
 	  "CHARGEN_MARKSMAN_CLASS_TRIADS",
 	  "CHARGEN_BANDIT_CLASS_TRIADS",
@@ -406,6 +407,20 @@ namespace mods::values {
 	  "CHARGEN_FORGE_CLASS_TRIADS",
 	  "CHARGEN_SYNDROME_CLASS_TRIADS",
 		"CHARGEN_UNDEFINED_CLASS_TRIADS",
+
+		"CHARGEN_BLIND_GHOST_CLASS_TRIADS",
+	  "CHARGEN_BLIND_MARKSMAN_CLASS_TRIADS",
+	  "CHARGEN_BLIND_BANDIT_CLASS_TRIADS",
+	  "CHARGEN_BLIND_BUTCHER_CLASS_TRIADS",
+	  "CHARGEN_BLIND_STRIKER_CLASS_TRIADS",
+	  "CHARGEN_BLIND_OBSTRUCTOR_CLASS_TRIADS",
+	  "CHARGEN_BLIND_MALADY_CLASS_TRIADS",
+	  "CHARGEN_BLIND_PYREXIA_CLASS_TRIADS",
+	  "CHARGEN_BLIND_DEALER_CLASS_TRIADS",
+	  "CHARGEN_BLIND_FORGE_CLASS_TRIADS",
+	  "CHARGEN_BLIND_SYNDROME_CLASS_TRIADS",
+		"CHARGEN_BLIND_UNDEFINED_CLASS_TRIADS",
+
 		"MSG_YOU_GOT_HIT_BY_REFLECTED_MUNTIONS",
 		"MSG_YOU_REFLECTED_MUNITIONS",
 		"MSG_YOU_INFLICTED_AR_SHRAPNEL",
@@ -1034,6 +1049,13 @@ namespace mods::values {
 		CGET_DEF(std::string,STOCK_GOLD_ONE_MISERABLE_MESSAGE,"You have one miserable little gold coin.");
 		CGET_DEF(std::string,STOCK_GOLD_PREFIX_MESSAGE,"You have ");
 		CGET_DEF(std::string,STOCK_GOLD_SUFFIX_MESSAGE," gold coins.");
+			CGET_DEF(std::string,CHARGEN_BLIND_GHOST_CLASS_TRIADS,
+							"Melee: 1\r\n"
+							"Weapons: 3\r\n"
+							"Intel: 2\r\n"
+							"Speed: 1\r\n"
+							"Armor: 3\r\n"
+					);
 			CGET_DEF(std::string,CHARGEN_GHOST_CLASS_TRIADS,
 						"- Military Triad\r\n"
 							"- [Melee]   [x] [ ] [ ]\r\n"
@@ -1042,6 +1064,13 @@ namespace mods::values {
 						"- Speed/Armor tradeoff MAX 4 points\r\n"
 							"- [Speed]   [x] [ ] [ ]\r\n"
 							"- [Armor]   [x] [x] [x]\r\n"
+					);
+			CGET_DEF(std::string,CHARGEN_BLIND_MARKSMAN_CLASS_TRIADS,
+							"Melee: 1\r\n"
+							"Weapons: 3\r\n"
+							"Intel: 2\r\n"
+							"Speed: 2\r\n"
+							"Armor: 2\r\n"
 					);
 		 	CGET_DEF(std::string,CHARGEN_MARKSMAN_CLASS_TRIADS,
 						"- Military Triad\r\n"
@@ -1052,6 +1081,13 @@ namespace mods::values {
 							"- [Speed]   [x] [x] [ ]\r\n"
 							"- [Armor]   [x] [x] [ ]\r\n"
 					);
+			CGET_DEF(std::string,CHARGEN_BLIND_BANDIT_CLASS_TRIADS,
+							"Melee: 2\r\n"
+							"Weapons: 2\r\n"
+							"Intel: 3\r\n"
+							"Speed: 3\r\n"
+							"Armor: 1\r\n"
+					);
 		 	CGET_DEF(std::string,CHARGEN_BANDIT_CLASS_TRIADS,
 						"- Military Triad\r\n"
 							"- [Melee]   [x] [x] [ ]\r\n"
@@ -1060,6 +1096,13 @@ namespace mods::values {
 						"- Speed/Armor tradeoff MAX 4 points\r\n"
 							"- [Speed]   [x] [x] [x]\r\n"
 							"- [Armor]   [x] [ ] [ ]\r\n"
+					);
+			CGET_DEF(std::string,CHARGEN_BLIND_BUTCHER_CLASS_TRIADS,
+							"Melee: 3\r\n"
+							"Weapons: 2\r\n"
+							"Intel: 2\r\n"
+							"Speed: 2\r\n"
+							"Armor: 2\r\n"
 					);
 		 	CGET_DEF(std::string,CHARGEN_BUTCHER_CLASS_TRIADS,
 						"- Military Triad\r\n"
@@ -1070,6 +1113,13 @@ namespace mods::values {
 							"- [Speed]   [x] [x] [ ]\r\n"
 							"- [Armor]   [x] [x] [ ]\r\n"
 					);
+			CGET_DEF(std::string,CHARGEN_BLIND_STRIKER_CLASS_TRIADS,
+							"Melee: 3\r\n"
+							"Weapons: 3\r\n"
+							"Intel: 1\r\n"
+							"Speed: 3\r\n"
+							"Armor: 1\r\n"
+					);
 		 	CGET_DEF(std::string,CHARGEN_STRIKER_CLASS_TRIADS,
 						"- Military Triad\r\n"
 							"- [Melee]   [x] [x] [x]\r\n"
@@ -1078,6 +1128,13 @@ namespace mods::values {
 						"- Speed/Armor tradeoff MAX 4 points\r\n"
 							"- [Speed]   [x] [x] [x]\r\n"
 							"- [Armor]   [x] [ ] [ ]\r\n"
+					);
+			CGET_DEF(std::string,CHARGEN_BLIND_OBSTRUCTOR_CLASS_TRIADS,
+							"Melee: 3\r\n"
+							"Weapons: 2\r\n"
+							"Intel: 2\r\n"
+							"Speed: 1\r\n"
+							"Armor: 3\r\n"
 					);
 		 	CGET_DEF(std::string,CHARGEN_OBSTRUCTOR_CLASS_TRIADS,
 						"- Military Triad\r\n"
@@ -1088,6 +1145,13 @@ namespace mods::values {
 							"- [Speed]   [x] [ ] [ ]\r\n"
 							"- [Armor]   [x] [x] [x]\r\n"
 					);
+			CGET_DEF(std::string,CHARGEN_BLIND_MALADY_CLASS_TRIADS,
+							"Melee: 2\r\n"
+							"Weapons: 2\r\n"
+							"Intel: 3\r\n"
+							"Speed: 2\r\n"
+							"Armor: 2\r\n"
+					);
 		 	CGET_DEF(std::string,CHARGEN_MALADY_CLASS_TRIADS,
 						"- Military Triad\r\n"
 							"- [Melee]   [x] [x] [ ]\r\n"
@@ -1097,6 +1161,13 @@ namespace mods::values {
 							"- [Speed]   [x] [x] [ ]\r\n"
 							"- [Armor]   [x] [x] [ ]\r\n"
 				);
+			CGET_DEF(std::string,CHARGEN_BLIND_PYREXIA_CLASS_TRIADS,
+							"Melee: 1\r\n"
+							"Weapons: 3\r\n"
+							"Intel: 3\r\n"
+							"Speed: 3\r\n"
+							"Armor: 1\r\n"
+					);
 		 	CGET_DEF(std::string,CHARGEN_PYREXIA_CLASS_TRIADS,
 						"- Military Triad\r\n"
 							"- [Melee]   [x] [ ] [ ]\r\n"
@@ -1106,6 +1177,13 @@ namespace mods::values {
 							"- [Speed]   [x] [x] [x]\r\n"
 							"- [Armor]   [x] [ ] [ ]\r\n"
 				);
+			CGET_DEF(std::string,CHARGEN_BLIND_DEALER_CLASS_TRIADS,
+							"Melee: 1\r\n"
+							"Weapons: 3\r\n"
+							"Intel: 3\r\n"
+							"Speed: 1\r\n"
+							"Armor: 3\r\n"
+					);
 		 	CGET_DEF(std::string,CHARGEN_DEALER_CLASS_TRIADS,
 						"- Military Triad\r\n"
 							"- [Melee]   [x] [ ] [ ]\r\n"
@@ -1115,6 +1193,13 @@ namespace mods::values {
 							"- [Speed]   [x] [ ] [ ]\r\n"
 							"- [Armor]   [x] [x] [x]\r\n"
 				);
+			CGET_DEF(std::string,CHARGEN_BLIND_FORGE_CLASS_TRIADS,
+							"Melee: 2\r\n"
+							"Weapons: 2\r\n"
+							"Intel: 3\r\n"
+							"Speed: 2\r\n"
+							"Armor: 2\r\n"
+					);
 		 	CGET_DEF(std::string,CHARGEN_FORGE_CLASS_TRIADS,
 						"- Military Triad\r\n"
 							"- [Melee]   [x] [x] [ ]\r\n"
@@ -1124,6 +1209,13 @@ namespace mods::values {
 							"- [Speed]   [x] [x] [ ]\r\n"
 							"- [Armor]   [x] [x] [ ]\r\n"
 					);
+			CGET_DEF(std::string,CHARGEN_BLIND_SYNDROME_CLASS_TRIADS,
+							"Melee: 1\r\n"
+							"Weapons: 3\r\n"
+							"Intel: 3\r\n"
+							"Speed: 3\r\n"
+							"Armor: 1\r\n"
+					);
 		 	CGET_DEF(std::string,CHARGEN_SYNDROME_CLASS_TRIADS,
 						"- Military Triad\r\n"
 							"- [Melee]   [x] [ ] [ ]\r\n"
@@ -1132,6 +1224,13 @@ namespace mods::values {
 						"- Speed/Armor tradeoff MAX 4 points\r\n"
 							"- [Speed]   [x] [x] [x]\r\n"
 							"- [Armor]   [x] [ ] [ ]\r\n"
+					);
+			CGET_DEF(std::string,CHARGEN_BLIND_MACHINIST_CLASS_TRIADS,
+							"Melee: 2\r\n"
+							"Weapons: 2\r\n"
+							"Intel: 3\r\n"
+							"Speed: 1\r\n"
+							"Armor: 3\r\n"
 					);
 		 	CGET_DEF(std::string,CHARGEN_MACHINIST_CLASS_TRIADS,
 						"- Military Triad\r\n"
