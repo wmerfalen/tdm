@@ -130,6 +130,10 @@ namespace mods::mobs {
 	 */
 	void mini_gunner::setup_damage_callbacks(){
 		using de = damage_event_t;
+		this->player_ptr->register_damage_event_callback(de::TARGET_DEAD_EVENT,[&](feedback_t feedback,uuid_t player){
+			this->set_behaviour_tree("mini_gunner_roam");
+		});
+				
 		this->player_ptr->register_damage_event_callback(de::YOURE_IN_PEACEFUL_ROOM,[&](feedback_t feedback,uuid_t player){
 				auto & room = world[this->player_ptr->room()];
 				int decision = weighted_direction_decider(this->player_ptr);

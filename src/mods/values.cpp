@@ -74,6 +74,9 @@ namespace mods::values {
 		"ASSAULT_RIFLE_SHRAPNEL_SKILL_DICE_COUNT",
 		"ASSAULT_RIFLE_SHRAPNEL_SKILL_DICE_SIDES",
 		"SHOW_UNIMPLEMENTED_SKILLS",
+		"GHOST_FEIGN_DEATH_INITIATE_DURATION",
+		"GHOST_FEIGN_DEATH_FAMILIAR_DURATION",
+		"GHOST_FEIGN_DEATH_MASTER_DURATION",
 		};
 
 
@@ -278,6 +281,7 @@ namespace mods::values {
 "SKILL_PARASITIC_HP_RECOVERY",
 "SKILL_SUTURE",
 "SKILL_ADRENALINE_BOOST",
+		"GHOST_FEIGN_DEATH_BLOCKED_FOR_TICKS",
 		};
 			static const std::vector<std::string> string_types = {
 		"SANITY_CHECK",
@@ -382,31 +386,6 @@ namespace mods::values {
 		"PRIMARY_CHOICE_SCREEN_UMP45_DESCRIPTION",
 		"PRIMARY_CHOICE_SCREEN_MK46_DESCRIPTION",
 		"PRIMARY_CHOICE_SCREEN_HK21_DESCRIPTION",
-		"CHARGEN_GHOST_CLASS_DESCRIPTION",
-	  "CHARGEN_MARKSMAN_CLASS_DESCRIPTION",
-	  "CHARGEN_BANDIT_CLASS_DESCRIPTION",
-	  "CHARGEN_BUTCHER_CLASS_DESCRIPTION",
-	  "CHARGEN_STRIKER_CLASS_DESCRIPTION",
-	  "CHARGEN_OBSTRUCTOR_CLASS_DESCRIPTION",
-	  "CHARGEN_MALADY_CLASS_DESCRIPTION",
-	  "CHARGEN_PYREXIA_CLASS_DESCRIPTION",
-	  "CHARGEN_DEALER_CLASS_DESCRIPTION",
-	  "CHARGEN_FORGE_CLASS_DESCRIPTION",
-	  "CHARGEN_SYNDROME_CLASS_DESCRIPTION",
-		"CHARGEN_UNDEFINED_CLASS_DESCRIPTION",
-
-		"CHARGEN_GHOST_CLASS_TRIADS",
-	  "CHARGEN_MARKSMAN_CLASS_TRIADS",
-	  "CHARGEN_BANDIT_CLASS_TRIADS",
-	  "CHARGEN_BUTCHER_CLASS_TRIADS",
-	  "CHARGEN_STRIKER_CLASS_TRIADS",
-	  "CHARGEN_OBSTRUCTOR_CLASS_TRIADS",
-	  "CHARGEN_MALADY_CLASS_TRIADS",
-	  "CHARGEN_PYREXIA_CLASS_TRIADS",
-	  "CHARGEN_DEALER_CLASS_TRIADS",
-	  "CHARGEN_FORGE_CLASS_TRIADS",
-	  "CHARGEN_SYNDROME_CLASS_TRIADS",
-		"CHARGEN_UNDEFINED_CLASS_TRIADS",
 
 		"CHARGEN_BLIND_GHOST_CLASS_TRIADS",
 	  "CHARGEN_BLIND_MARKSMAN_CLASS_TRIADS",
@@ -439,6 +418,8 @@ namespace mods::values {
 		"STOCK_GOLD_ONE_MISERABLE_MESSAGE",
 		"STOCK_GOLD_PREFIX_MESSAGE",
 		"STOCK_GOLD_SUFFIX_MESSAGE",
+		"MSG_YOU_FEIGN_DEATH",
+		"MSG_YOU_FAIL_FEIGN_DEATH",
 			};
 		bool is_int(std::string key){
 			return (std::find(int_types.begin(),int_types.end(),key) != int_types.end());
@@ -754,6 +735,7 @@ namespace mods::values {
 		CGET_DEF(uint16_t, SKILL_PARASITIC_HP_RECOVERY, 2050 );
 		CGET_DEF(uint16_t, SKILL_SUTURE, 2050 );
 		CGET_DEF(uint16_t, SKILL_ADRENALINE_BOOST, 2050 );
+		CGET_DEF(uint16_t, GHOST_FEIGN_DEATH_BLOCKED_FOR_TICKS,60);
 
 		CGET_DEF(uint8_t,SINGLE_SHOT_SHOTGUN,1);
 		CGET_DEF(uint8_t,SINGLE_SHOT_ASSAULT_RIFLE,3);
@@ -785,6 +767,9 @@ namespace mods::values {
 		CGET_DEF(uint8_t,ASSAULT_RIFLE_SHRAPNEL_SKILL_DICE_COUNT,3);
 		CGET_DEF(uint8_t,ASSAULT_RIFLE_SHRAPNEL_SKILL_DICE_SIDES,30);
 		CGET_DEF(uint8_t,SHOW_UNIMPLEMENTED_SKILLS,1);
+		CGET_DEF(uint8_t,GHOST_FEIGN_DEATH_INITIATE_DURATION,33);
+		CGET_DEF(uint8_t,GHOST_FEIGN_DEATH_FAMILIAR_DURATION,66);
+		CGET_DEF(uint8_t,GHOST_FEIGN_DEATH_MASTER_DURATION,99);
 
 		CGET_DEF(float,EXPLOSIVE_CRITICAL_MULTIPLIER,0.75);
 		CGET_DEF(float,RIFLE_CRITICAL_MULTIPLIER,0.75);
@@ -908,129 +893,6 @@ namespace mods::values {
 		CGET_DEF(std::string,PRIMARY_CHOICE_SCREEN_UMP45_DESCRIPTION,"Dubbed the 'Universal Sub Machinegun', the UMP-45 is a versatile and reliable SMG.\r\n");
 		CGET_DEF(std::string,PRIMARY_CHOICE_SCREEN_MK46_DESCRIPTION,"The MK-46 LMG is a perfect balance of firepower, portability, and accuracy.\r\n");
 		CGET_DEF(std::string,PRIMARY_CHOICE_SCREEN_HK21_DESCRIPTION,"General purpose LMG widely used in tactical teams all over the world.\r\n");
-		CGET_DEF(std::string,CHARGEN_GHOST_CLASS_DESCRIPTION,
-				CAT(green_str(
-							 "=====================================================\r\n"
-						   "#               - = [ GHOST ] = -                   #\r\n"
-							 "=====================================================\r\n"),
-							 yellow_str("[description]:"),
-							 "The GHOST class is the only class that can deploy stealth\r\n",
-							 "to their entire body using reflective camo.\r\n",
-							 yellow_str(
-							 "=====================================================\r\n")
-			 )
-		);
-		 	CGET_DEF(std::string,CHARGEN_MARKSMAN_CLASS_DESCRIPTION,
-				CAT(green_str(
-							 "=====================================================\r\n"
-						   "#               - = [ MARKSMAN ] = -                   #\r\n"
-							 "=====================================================\r\n"),
-							 yellow_str("[description]:"),
-							 yellow_str(
-							 "=====================================================\r\n")
-			 )
-		);
-		 	CGET_DEF(std::string,CHARGEN_BANDIT_CLASS_DESCRIPTION,
-				CAT(green_str(
-							 "=====================================================\r\n"
-						   "#               - = [ BANDIT ] = -                   #\r\n"
-							 "=====================================================\r\n"),
-							 yellow_str("[description]:"),
-							 yellow_str(
-							 "=====================================================\r\n")
-			 )
-		);
-		 	CGET_DEF(std::string,CHARGEN_BUTCHER_CLASS_DESCRIPTION,
-				CAT(green_str(
-							 "=====================================================\r\n"
-						   "#               - = [ BUTCHER ] = -                   #\r\n"
-							 "=====================================================\r\n"),
-							 yellow_str("[description]:"),
-							 yellow_str(
-							 "=====================================================\r\n")
-			 )
-		);
-		 	CGET_DEF(std::string,CHARGEN_STRIKER_CLASS_DESCRIPTION,
-				CAT(green_str(
-							 "=====================================================\r\n"
-						   "#               - = [ STRIKER ] = -                   #\r\n"
-							 "=====================================================\r\n"),
-							 yellow_str("[description]:"),
-							 yellow_str(
-							 "=====================================================\r\n")
-			 )
-		);
-		 	CGET_DEF(std::string,CHARGEN_OBSTRUCTOR_CLASS_DESCRIPTION,
-				CAT(green_str(
-							 "=====================================================\r\n"
-						   "#               - = [ OBSTRUCTOR ] = -                   #\r\n"
-							 "=====================================================\r\n"),
-							 yellow_str("[description]:"),
-							 yellow_str(
-							 "=====================================================\r\n")
-			 )
-		);
-		 	CGET_DEF(std::string,CHARGEN_MALADY_CLASS_DESCRIPTION,
-				CAT(green_str(
-							 "=====================================================\r\n"
-						   "#               - = [ MALADY ] = -                   #\r\n"
-							 "=====================================================\r\n"),
-							 yellow_str("[description]:"),
-							 yellow_str(
-							 "=====================================================\r\n")
-			 )
-		);
-		 	CGET_DEF(std::string,CHARGEN_PYREXIA_CLASS_DESCRIPTION,
-				CAT(green_str(
-							 "=====================================================\r\n"
-						   "#               - = [ PYREXIA ] = -                   #\r\n"
-							 "=====================================================\r\n"),
-							 yellow_str("[description]:"),
-							 yellow_str(
-							 "=====================================================\r\n")
-			 )
-		);
-		 	CGET_DEF(std::string,CHARGEN_DEALER_CLASS_DESCRIPTION,
-				CAT(green_str(
-							 "=====================================================\r\n"
-						   "#               - = [ DEALER ] = -                   #\r\n"
-							 "=====================================================\r\n"),
-							 yellow_str("[description]:"),
-							 yellow_str(
-							 "=====================================================\r\n")
-			 )
-		);
-		 	CGET_DEF(std::string,CHARGEN_FORGE_CLASS_DESCRIPTION,
-				CAT(green_str(
-							 "=====================================================\r\n"
-						   "#               - = [ FORGE ] = -                   #\r\n"
-							 "=====================================================\r\n"),
-							 yellow_str("[description]:"),
-							 yellow_str(
-							 "=====================================================\r\n")
-			 )
-		);
-		 	CGET_DEF(std::string,CHARGEN_SYNDROME_CLASS_DESCRIPTION,
-				CAT(green_str(
-							 "=====================================================\r\n"
-						   "#               - = [ SYNDROME ] = -                   #\r\n"
-							 "=====================================================\r\n"),
-							 yellow_str("[description]:"),
-							 yellow_str(
-							 "=====================================================\r\n")
-			 )
-		);
-		 	CGET_DEF(std::string,CHARGEN_MACHINIST_CLASS_DESCRIPTION,
-				CAT(green_str(
-							 "=====================================================\r\n"
-						   "#               - = [ MACHINIST ] = -                   #\r\n"
-							 "=====================================================\r\n"),
-							 yellow_str("[description]:"),
-							 yellow_str(
-							 "=====================================================\r\n")
-			 )
-		);
-		CGET_DEF(std::string,CHARGEN_UNDEFINED_CLASS_DESCRIPTION,red_str("huh? that's not a class...\r\n"));
 		CGET_DEF(std::string,MSG_YOU_GOT_HIT_BY_REFLECTED_MUNTIONS,"*** [ You are HIT by {red} REFLECTED MUNITIONS {/red}] *** ");
 		CGET_DEF(std::string,MSG_YOU_REFLECTED_MUNITIONS,"*** [ You {grn} REFLECTED part of that attack {/grn}] *** ");
 		CGET_DEF(std::string,MSG_YOU_INFLICTED_AR_SHRAPNEL,"{grn}*** [ You INFLICTED A.R. ::SHRAPNEL:: ] *** {/grn}");
@@ -1049,21 +911,14 @@ namespace mods::values {
 		CGET_DEF(std::string,STOCK_GOLD_ONE_MISERABLE_MESSAGE,"You have one miserable little gold coin.");
 		CGET_DEF(std::string,STOCK_GOLD_PREFIX_MESSAGE,"You have ");
 		CGET_DEF(std::string,STOCK_GOLD_SUFFIX_MESSAGE," gold coins.");
+		CGET_DEF(std::string,MSG_YOU_FEIGN_DEATH,"You succesfully feign death. The enemy is none the wiser...");
+		CGET_DEF(std::string,MSG_YOU_FAIL_FEIGN_DEATH,"You fail at feigning death...\r\nYou are on the ground and vulnerable!");
 			CGET_DEF(std::string,CHARGEN_BLIND_GHOST_CLASS_TRIADS,
 							"Melee: 1\r\n"
 							"Weapons: 3\r\n"
 							"Intel: 2\r\n"
 							"Speed: 1\r\n"
 							"Armor: 3\r\n"
-					);
-			CGET_DEF(std::string,CHARGEN_GHOST_CLASS_TRIADS,
-						"- Military Triad\r\n"
-							"- [Melee]   [x] [ ] [ ]\r\n"
-							"- [Weapons] [x] [x] [x]\r\n"
-							"- [Intel]   [x] [x] [ ]\r\n"
-						"- Speed/Armor tradeoff MAX 4 points\r\n"
-							"- [Speed]   [x] [ ] [ ]\r\n"
-							"- [Armor]   [x] [x] [x]\r\n"
 					);
 			CGET_DEF(std::string,CHARGEN_BLIND_MARKSMAN_CLASS_TRIADS,
 							"Melee: 1\r\n"
@@ -1072,30 +927,12 @@ namespace mods::values {
 							"Speed: 2\r\n"
 							"Armor: 2\r\n"
 					);
-		 	CGET_DEF(std::string,CHARGEN_MARKSMAN_CLASS_TRIADS,
-						"- Military Triad\r\n"
-							"- [Melee]   [x] [ ] [ ]\r\n"
-							"- [Weapons] [x] [x] [x]\r\n"
-							"- [Intel]   [x] [x] [ ]\r\n"
-						"- Speed/Armor tradeoff MAX 4 points\r\n"
-							"- [Speed]   [x] [x] [ ]\r\n"
-							"- [Armor]   [x] [x] [ ]\r\n"
-					);
 			CGET_DEF(std::string,CHARGEN_BLIND_BANDIT_CLASS_TRIADS,
 							"Melee: 2\r\n"
 							"Weapons: 2\r\n"
 							"Intel: 3\r\n"
 							"Speed: 3\r\n"
 							"Armor: 1\r\n"
-					);
-		 	CGET_DEF(std::string,CHARGEN_BANDIT_CLASS_TRIADS,
-						"- Military Triad\r\n"
-							"- [Melee]   [x] [x] [ ]\r\n"
-							"- [Weapons] [x] [x] [ ]\r\n"
-							"- [Intel]   [x] [x] [x]\r\n"
-						"- Speed/Armor tradeoff MAX 4 points\r\n"
-							"- [Speed]   [x] [x] [x]\r\n"
-							"- [Armor]   [x] [ ] [ ]\r\n"
 					);
 			CGET_DEF(std::string,CHARGEN_BLIND_BUTCHER_CLASS_TRIADS,
 							"Melee: 3\r\n"
@@ -1104,30 +941,12 @@ namespace mods::values {
 							"Speed: 2\r\n"
 							"Armor: 2\r\n"
 					);
-		 	CGET_DEF(std::string,CHARGEN_BUTCHER_CLASS_TRIADS,
-						"- Military Triad\r\n"
-							"- [Melee]   [x] [x] [x]\r\n"
-							"- [Weapons] [x] [x] [ ]\r\n"
-							"- [Intel]   [x] [x] [ ]\r\n"
-						"- Speed/Armor tradeoff MAX 4 points\r\n"
-							"- [Speed]   [x] [x] [ ]\r\n"
-							"- [Armor]   [x] [x] [ ]\r\n"
-					);
 			CGET_DEF(std::string,CHARGEN_BLIND_STRIKER_CLASS_TRIADS,
 							"Melee: 3\r\n"
 							"Weapons: 3\r\n"
 							"Intel: 1\r\n"
 							"Speed: 3\r\n"
 							"Armor: 1\r\n"
-					);
-		 	CGET_DEF(std::string,CHARGEN_STRIKER_CLASS_TRIADS,
-						"- Military Triad\r\n"
-							"- [Melee]   [x] [x] [x]\r\n"
-							"- [Weapons] [x] [x] [x]\r\n"
-							"- [Intel]   [x] [ ] [ ]\r\n"
-						"- Speed/Armor tradeoff MAX 4 points\r\n"
-							"- [Speed]   [x] [x] [x]\r\n"
-							"- [Armor]   [x] [ ] [ ]\r\n"
 					);
 			CGET_DEF(std::string,CHARGEN_BLIND_OBSTRUCTOR_CLASS_TRIADS,
 							"Melee: 3\r\n"
@@ -1136,15 +955,6 @@ namespace mods::values {
 							"Speed: 1\r\n"
 							"Armor: 3\r\n"
 					);
-		 	CGET_DEF(std::string,CHARGEN_OBSTRUCTOR_CLASS_TRIADS,
-						"- Military Triad\r\n"
-							"- [Melee]   [x] [x] [x]\r\n"
-							"- [Weapons] [x] [x] [ ]\r\n"
-							"- [Intel]   [x] [x] [ ]\r\n"
-						"- Speed/Armor tradeoff MAX 4 points\r\n"
-							"- [Speed]   [x] [ ] [ ]\r\n"
-							"- [Armor]   [x] [x] [x]\r\n"
-					);
 			CGET_DEF(std::string,CHARGEN_BLIND_MALADY_CLASS_TRIADS,
 							"Melee: 2\r\n"
 							"Weapons: 2\r\n"
@@ -1152,15 +962,6 @@ namespace mods::values {
 							"Speed: 2\r\n"
 							"Armor: 2\r\n"
 					);
-		 	CGET_DEF(std::string,CHARGEN_MALADY_CLASS_TRIADS,
-						"- Military Triad\r\n"
-							"- [Melee]   [x] [x] [ ]\r\n"
-							"- [Weapons] [x] [x] [ ]\r\n"
-							"- [Intel]   [x] [x] [x]\r\n"
-						"- Speed/Armor tradeoff MAX 4 points\r\n"
-							"- [Speed]   [x] [x] [ ]\r\n"
-							"- [Armor]   [x] [x] [ ]\r\n"
-				);
 			CGET_DEF(std::string,CHARGEN_BLIND_PYREXIA_CLASS_TRIADS,
 							"Melee: 1\r\n"
 							"Weapons: 3\r\n"
@@ -1168,15 +969,6 @@ namespace mods::values {
 							"Speed: 3\r\n"
 							"Armor: 1\r\n"
 					);
-		 	CGET_DEF(std::string,CHARGEN_PYREXIA_CLASS_TRIADS,
-						"- Military Triad\r\n"
-							"- [Melee]   [x] [ ] [ ]\r\n"
-							"- [Weapons] [x] [x] [x]\r\n"
-							"- [Intel]   [x] [x] [x]\r\n"
-						"- Speed/Armor tradeoff MAX 4 points\r\n"
-							"- [Speed]   [x] [x] [x]\r\n"
-							"- [Armor]   [x] [ ] [ ]\r\n"
-				);
 			CGET_DEF(std::string,CHARGEN_BLIND_DEALER_CLASS_TRIADS,
 							"Melee: 1\r\n"
 							"Weapons: 3\r\n"
@@ -1184,30 +976,12 @@ namespace mods::values {
 							"Speed: 1\r\n"
 							"Armor: 3\r\n"
 					);
-		 	CGET_DEF(std::string,CHARGEN_DEALER_CLASS_TRIADS,
-						"- Military Triad\r\n"
-							"- [Melee]   [x] [ ] [ ]\r\n"
-							"- [Weapons] [x] [x] [x]\r\n"
-							"- [Intel]   [x] [x] [x]\r\n"
-						"- Speed/Armor tradeoff MAX 4 points\r\n"
-							"- [Speed]   [x] [ ] [ ]\r\n"
-							"- [Armor]   [x] [x] [x]\r\n"
-				);
 			CGET_DEF(std::string,CHARGEN_BLIND_FORGE_CLASS_TRIADS,
 							"Melee: 2\r\n"
 							"Weapons: 2\r\n"
 							"Intel: 3\r\n"
 							"Speed: 2\r\n"
 							"Armor: 2\r\n"
-					);
-		 	CGET_DEF(std::string,CHARGEN_FORGE_CLASS_TRIADS,
-						"- Military Triad\r\n"
-							"- [Melee]   [x] [x] [ ]\r\n"
-							"- [Weapons] [x] [x] [ ]\r\n"
-							"- [Intel]   [x] [x] [x]\r\n"
-						"- Speed/Armor tradeoff MAX 4 points\r\n"
-							"- [Speed]   [x] [x] [ ]\r\n"
-							"- [Armor]   [x] [x] [ ]\r\n"
 					);
 			CGET_DEF(std::string,CHARGEN_BLIND_SYNDROME_CLASS_TRIADS,
 							"Melee: 1\r\n"
@@ -1216,30 +990,12 @@ namespace mods::values {
 							"Speed: 3\r\n"
 							"Armor: 1\r\n"
 					);
-		 	CGET_DEF(std::string,CHARGEN_SYNDROME_CLASS_TRIADS,
-						"- Military Triad\r\n"
-							"- [Melee]   [x] [ ] [ ]\r\n"
-							"- [Weapons] [x] [x] [x]\r\n"
-							"- [Intel]   [x] [x] [x]\r\n"
-						"- Speed/Armor tradeoff MAX 4 points\r\n"
-							"- [Speed]   [x] [x] [x]\r\n"
-							"- [Armor]   [x] [ ] [ ]\r\n"
-					);
 			CGET_DEF(std::string,CHARGEN_BLIND_MACHINIST_CLASS_TRIADS,
 							"Melee: 2\r\n"
 							"Weapons: 2\r\n"
 							"Intel: 3\r\n"
 							"Speed: 1\r\n"
 							"Armor: 3\r\n"
-					);
-		 	CGET_DEF(std::string,CHARGEN_MACHINIST_CLASS_TRIADS,
-						"- Military Triad\r\n"
-							"- [Melee]   [x] [x] [ ]\r\n"
-							"- [Weapons] [x] [x] [ ]\r\n"
-							"- [Intel]   [x] [x] [x]\r\n"
-						"- Speed/Armor tradeoff MAX 4 points\r\n"
-							"- [Speed]   [x] [ ] [ ]\r\n"
-							"- [Armor]   [x] [x] [x]\r\n"
 					);
 		 	CGET_DEF(std::string,CHARGEN_UNDEFINED_CLASS_TRIADS,"class undefined. How'd you get here?");
 #undef CGET_DEF

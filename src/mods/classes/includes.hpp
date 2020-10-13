@@ -7,3 +7,4 @@
 #include "sniper.hpp"
 #include "support.hpp"
 #include "ghost.hpp"
+#include "striker.hpp"

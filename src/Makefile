@@ -63,15 +63,11 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/room \
 					 mods/weapons/pistol-czp10 \
 					 mods/weapons/smg-mp5 mods/weapons/shotgun-sasg12 \
-					 mods/orm/class-sniper mods/classes/sniper \
-					 mods/orm/class-marine mods/classes/marine \
-					 mods/orm/class-sentinel mods/classes/sentinel \
-					 mods/orm/class-contagion mods/classes/contagion \
-					 mods/orm/class-engineer mods/classes/engineer \
 					 mods/orm/class-medic mods/classes/medic \
-					 mods/orm/class-psyop mods/classes/psyop \
-					 mods/orm/class-support mods/classes/support \
-					 mods/orm/class-ghost mods/classes/ghost \
+					 mods/orm/class-sniper mods/classes/sniper \
+					 mods/orm/ghost mods/classes/ghost \
+					 mods/orm/striker mods/classes/striker \
+					 mods/orm/pyrexia mods/classes/pyrexia \
 					 mods/classes/base \
 					 mods/weapons/sniper-rifle-psg1 mods/weapons/sniper-rifle-l96aw \
 					 mods/orm/quotes act.builder mods/orm/base mods/yaml \
@@ -86,7 +82,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/super-users mods/builder/object-placement mods/integral-objects \
 					 mods/orm/integral-object mods/orm/camera-feed mods/orm/door-event \
 					 mods/mini-games/line-up mods/orm/mini-game mods/mini-games \
-					 mods/mini-games/wires mods/migrations
+					 mods/mini-games/wires mods/migrations mods/interpreter
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

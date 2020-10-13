@@ -13,6 +13,8 @@ namespace mods::classes {
 		CONTAGION,
 		PSYOP,
 		GHOST,
+		PYREXIA,
+		STRIKER,
 		UNDEFINED
 	};
 	static inline std::string to_string(mods::classes::types t){
@@ -27,6 +29,8 @@ namespace mods::classes {
 			case types::CONTAGION: return "CONTAGION";
 			case types::PSYOP: return "PSYOP";
 			case types::GHOST: return "GHOST";
+			case types::PYREXIA: return "PYREXIA";
+			case types::STRIKER: return "STRIKER";
 			default:
 				return "UNDEFINED";
 		}

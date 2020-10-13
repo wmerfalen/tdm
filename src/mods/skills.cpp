@@ -55,6 +55,23 @@ ACMD(do_skills){
 	}
 	player->sendln("this documentation was written on 2020-07-06.");
 }
+ACMD(do_train){
+	DO_HELP("train");
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() >= 1){
+		for(auto & skillset : mods::skills::proficiencies::list) {
+			for(auto & prof : std::get<1>(skillset)){
+				if(ICMP(prof.name.c_str(),vec_args[0])){
+					player->send("{grn}skill-name: '{yel}%s{/yel}'\r\n", prof.name.c_str());
+					player->send("{grn}skill-description: '{yel}%s{/yel}'\r\n", prof.description.c_str());
+					player->send("{grn}minium-proficiency: {yel}%d{/yel}\r\n", prof.minimum_proficiency);
+					player->send("{grn}implemented: {yel}%s{/yel}\r\n", prof.implemented ? "yes" : "no" );
+					return;
+				}
+			}
+		}
+	}
+}
 ACMD(do_allow_skill){
 	DO_HELP("allow_skill");
 	auto vec_args = PARSE_ARGS();

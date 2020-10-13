@@ -38,6 +38,7 @@ namespace mods {
 			constexpr static uint32_t EVENT_GET_ATTACKED = 2;
 			constexpr static uint32_t EVENT_PLAYER_UNBLOCK_BREACH = 3;
 			constexpr static uint32_t EVENT_PLAYER_REVIVE_SUCCESSFUL = 4;
+			constexpr static uint32_t EVENT_PLAYER_FINISHES_FEIGN_DEATH = 5;
 			constexpr static uint64_t TICK_RESOLUTION = 3;
 			using seconds = uint16_t;
 			using lambda_queue_t = std::multimap<uint64_t,std::function<void()>>;

@@ -709,25 +709,13 @@ void game_loop(socket_t mother_desc) {
 			GET_WAIT_STATE(player->cd()) = 1;
 			player->desc().has_prompt = false;
 			if(player->state() != CON_PLAYING) { // In menus, etc. 
-#ifdef __MENTOC_SHOW_COMM_CPP_DEBUG_OUTPUT__
-				std::cerr << blue_str("nanny\n");
-#endif
 				nanny(player, comm);
 			} else {			// else: we're playing normally. 
 				if(aliased) {	// To prevent recursive aliases. 
-#ifdef __MENTOC_SHOW_COMM_CPP_DEBUG_OUTPUT__
-					std::cerr << blue_str("aliased\n");
-#endif
 					player->desc().has_prompt = TRUE;    // To get newline before next cmd output. 
 				} else if(perform_alias(player->desc(), comm, sizeof(comm))) { // Run it through aliasing system 
-#ifdef __MENTOC_SHOW_COMM_CPP_DEBUG_OUTPUT__
-					std::cerr << blue_str("perform_aliased\n");
-#endif
 					get_from_q(player->desc(), comm, &aliased);
 				}
-#ifdef __MENTOC_SHOW_COMM_CPP_DEBUG_OUTPUT__
-				std::cerr << blue_str("calling command_interpreter\n");
-#endif
 				command_interpreter(player, comm); // Send it to interpreter 
 			}
 			++i;
@@ -781,7 +769,7 @@ void game_loop(socket_t mother_desc) {
 		/* Print prompts for other descriptors who had no other output */
 		for(auto & p : mods::globals::player_list) {
 			if(!p->desc().has_output && !p->desc().has_prompt && p->state() == CON_PLAYING){
-				*p << make_prompt(p->desc());
+				p->send("\r\n%s", make_prompt(p->desc()));
 				p->desc().has_prompt = true;
 				continue;
 			}

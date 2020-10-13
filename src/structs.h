@@ -229,6 +229,26 @@ enum player_class_t {
 	CLASS_FORGE = 18,
 	CLASS_SYNDROME = 19,
 	CLASS_MACHINIST = 20,
+	SNIPER = 1,
+	MARINE = 2,
+	SENTINEL = 3,
+	CONTAGION = 4,
+	ENGINEER = 5,
+	MEDIC = 6,
+	PSYOP = 7,
+	SUPPORT = 8,
+	GHOST = 9,
+	MARKSMAN = 10,
+	BANDIT = 11,
+	BUTCHER = 12,
+	STRIKER = 13,
+	OBSTRUCTOR = 14,
+	MALADY = 15,
+	PYREXIA = 16,
+	DEALER = 17,
+	FORGE = 18,
+	SYNDROME = 19,
+	MACHINIST = 20,
 	CLASS_FIRST = CLASS_SNIPER,
 	CLASS_LAST = CLASS_MACHINIST
 };
@@ -816,6 +836,9 @@ enum player_level {
 
 	/* ================== Memory Structure for Objects ================== */
 	struct obj_data {
+		using visibility_t = uint8_t;
+		static constexpr visibility_t STARTING_VISIBILITY = 255;
+		visibility_t visibility;
 		using location_data_t = uint16_t;
 		int16_t feed(int16_t in_type,std::string_view feed_file);
 		void init();
@@ -1640,6 +1663,9 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		};
 	};
 	struct char_data {
+		using visibility_t = uint8_t;
+		static constexpr visibility_t STARTING_VISIBILITY = 255;
+		visibility_t visibility;
 		char_data(){
 			init();	
 		};

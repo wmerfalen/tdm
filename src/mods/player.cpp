@@ -29,6 +29,9 @@
 namespace mods::rooms {
 	extern std::string word_wrap_description(room_rnum,int width);
 };
+namespace mods::classes {
+	extern void unblock_event(uint32_t,uuid_t);
+};
 extern size_t vwrite_to_output(mods::descriptor_data &t, const char *format, va_list args);
 extern int write_to_descriptor(socket_t desc, const char *txt);
 extern void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
@@ -471,11 +474,6 @@ namespace mods {
 		write_to_char(m_char_data, "[stub] FIXME",1,1);
 		return false;
 	}
-	/*
-	std::shared_ptr<mods::classes::ghost> player::cl_ghost(){
-		return m_class_ghost;
-	}
-	*/
 
 	std::string& player::name(){ return m_name; }
 	std::string player::ucname(){ return m_ucname; }
@@ -583,21 +581,33 @@ namespace mods {
 	}
 	void player::psendln(std::string_view str) {
 		MENTOC_NPC_CHECK(str.data());
+		if(desc().has_prompt){
+			write_to_char(m_char_data,"\r\n",0,0);
+		}
 		write_to_char(m_char_data, str,1,1);
 		desc().has_prompt = 0;
 	}
 	void player::psendln(mods::string& str) {
 		MENTOC_NPC_CHECK(str.c_str());
+		if(desc().has_prompt){
+			write_to_char(m_char_data,"\r\n",0,0);
+		}
 		write_to_char(m_char_data, str.view(),1,1);
 		desc().has_prompt = 0;
 	}
 	void player::sendln(mods::string& str) {
 		MENTOC_NPC_CHECK(str.str());
+		if(desc().has_prompt){
+			write_to_char(m_char_data,"\r\n",0,0);
+		}
 		write_to_char(m_char_data, str.view(), 1,0);
 		desc().has_prompt = 0;
 	}
 	void player::sendln(std::string_view str) {
 		MENTOC_NPC_CHECK(str.data());
+		if(desc().has_prompt){
+			write_to_char(m_char_data,"\r\n",0,0);
+		}
 		write_to_char(m_char_data, str, 1,0);
 		desc().has_prompt = 0;
 	}
@@ -1184,11 +1194,20 @@ namespace mods {
 		m_blocked_until = 0;
 	}
 	bool player::is_blocked(){ return m_blocked_until != 0; }
+	void player::set_position(byte pos){
+			m_char_data->char_specials.position = pos;
+	}
+		
 	void player::unblock_event(uint32_t unblock){
 		d("[player::unblock_event]:" << unblock);
 		uuid_t target = 0;
 		target = m_block_data[unblock];
 		switch(unblock){
+			case mods::deferred::EVENT_PLAYER_FINISHES_FEIGN_DEATH:
+				{
+					mods::classes::unblock_event(unblock,uuid());
+					break;
+				}
 			case mods::deferred::EVENT_PLAYER_UNBLOCK_INSTALLATION:
 				{
 					auto obj = optr_by_uuid(target);
@@ -1464,15 +1483,36 @@ namespace mods {
 			m_hacking_row = row;
 		}
 		bool player::can(std::string_view c){
-			if(c.compare("heal") == 0){
-				return true;/** aww, aren't i such a nice guy? this needs to be fixed though... TODO FIXME */
+			auto class_name = mods::util::extract_until(c,'.');
+			if(mods::util::is_lower_match(player_class_to_string(get_class()),class_name)){
+				return true;
 			}
-			return true;/** FIXME */
+			if(c.compare("heal") == 0){
+				switch(get_class()){
+					default: return false;
+					case player_class_t::DEALER:
+					case player_class_t::MALADY:
+					case player_class_t::PYREXIA:
+						return true;
+				}
+			}
+			return false;
 		}
 		void player::set_ada_data(std::string_view key,std::string_view value){
 			m_ada_data[key.data()] = value.data();
 		}
-		std::map<std::string,std::string>& player::get_ada_data(){ return m_ada_data; }
+		std::map<std::string,std::string>& player::get_ada_data(){
+			return m_ada_data;
+		}
+		std::shared_ptr<mods::classes::ghost>& player::ghost(){ return m_ghost; }
+		void player::set_ghost(std::shared_ptr<mods::classes::ghost> g){ m_ghost = g; }
+		std::shared_ptr<mods::classes::pyrexia>& player::pyrexia(){ return m_pyrexia; }
+		void player::set_pyrexia(std::shared_ptr<mods::classes::pyrexia> g){ m_pyrexia = g; }
+		std::shared_ptr<mods::classes::striker>& player::striker(){ return m_striker; }
+		void player::set_striker(std::shared_ptr<mods::classes::striker> g){ m_striker = g; }
+		char_data::visibility_t& player::visibility(){
+			return m_char_data->visibility;
+		}
 };
 
 #endif

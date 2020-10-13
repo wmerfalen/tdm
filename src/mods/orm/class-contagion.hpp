@@ -11,6 +11,12 @@ namespace mods::orm {
 		const std::string M3 = "M3";
 		const std::string FAMAS = "FAMAS";
 		const std::string CZP10 = "CZP10";
+		enum apply_anthrax_levels_t {
+				CONTAGION_APPLY_ANTRHAX_NONE = 0,
+				CONTAGION_APPLY_ANTRHAX_INITIATE,
+				CONTAGION_APPLY_ANTRHAX_FAMILIAR,
+				CONTAGION_APPLY_ANTRHAX_MASTER
+		};
 		std::string table_name() const { return "class_contagion"; }
 		std::string column_prefix() const { return "contagion_"; }
 		std::string id_column() const { return "contagion_id"; }
@@ -49,6 +55,7 @@ namespace mods::orm {
 		uint64_t contagion_primary_weapon_id;
 		std::string contagion_secondary_type;
 		uint64_t contagion_secondary_weapon_id;
+		apply_anthrax_levels_t contagion_apply_anthrax_level;
 		long created_at;
 		long updated_at;
 		bool loaded;

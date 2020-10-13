@@ -1,28 +1,27 @@
-#ifndef __MENTOC_MODS_CLASSES_GHOST_HEADER__
-#define  __MENTOC_MODS_CLASSES_GHOST_HEADER__
+#ifndef __MENTOC_MODS_CLASSES_STRIKER_HEADER__
+#define  __MENTOC_MODS_CLASSES_STRIKER_HEADER__
 #include <variant>
-#include "../orm/ghost.hpp"
+#include "../orm/striker.hpp"
 #include "base.hpp"
 
-using ghost_orm_t = mods::orm::ghost;
+using striker_orm_t = mods::orm::striker;
 namespace mods::classes {
-	struct ghost : base {
-		using primary_choice_t = mods::weapon::ghost::primary_choice_t;
-		using drone_scan_levels_t = ghost_orm_t::drone_scan_levels_t;
-		using stealth_levels_t = ghost_orm_t::stealth_levels_t;
-		using summon_extraction_levels_t = ghost_orm_t::summon_extraction_levels_t;
-		using xray_shot_levels_t = ghost_orm_t::xray_shot_levels_t;
-		using feign_death_levels_t = ghost_orm_t::feign_death_levels_t;
+	struct striker : base {
+		using teep_levels_t = striker_orm_t::teep_levels_t;
+		using stealth_levels_t = striker_orm_t::stealth_levels_t;
+		using summon_extraction_levels_t = striker_orm_t::summon_extraction_levels_t;
+		using xray_shot_levels_t = striker_orm_t::xray_shot_levels_t;
+		using feign_death_levels_t = striker_orm_t::feign_death_levels_t;
 
 		static int16_t destroy(player_ptr_t& player);
 		types kind() {
-			return types::GHOST;
+			return types::STRIKER;
 		}
 
 		/* constructors and destructors */
-		ghost();
-		ghost(player_ptr_t);
-		~ghost() = default;
+		striker();
+		striker(player_ptr_t);
+		~striker() = default;
 
 		player_ptr_t 	player();
 
@@ -30,7 +29,7 @@ namespace mods::classes {
 		void go_stealth();
 		void apply_stealth_to(obj_ptr_t& object);
 		void apply_stealth_to_player(player_ptr_t&);
-		std::pair<int16_t,std::string> feign_death();
+		std::pair<int16_t,std::string> teep(direction_t direction);
 		void feign_death_done();
 		std::pair<int16_t,std::string> summon_extraction(room_rnum);
 		/** requires drone assisted sniping mode */
@@ -42,17 +41,17 @@ namespace mods::classes {
 		int64_t db_id() const;
 		int16_t save();
 		private:
-			ghost_orm_t	m_orm;
+			striker_orm_t	m_orm;
 			player_ptr_t m_player;
 
-			drone_scan_levels_t m_drone_scan_level;
+			teep_levels_t m_teep_level;
 			stealth_levels_t m_stealth_level;
 			summon_extraction_levels_t m_summon_extraction_level;
 			xray_shot_levels_t m_xray_shot_level;
 			feign_death_levels_t m_feign_death_level;
 
 	};
-	std::shared_ptr<mods::classes::ghost> create_ghost(player_ptr_t &player);
+	std::shared_ptr<mods::classes::striker> create_striker(player_ptr_t &player);
 };
 
 

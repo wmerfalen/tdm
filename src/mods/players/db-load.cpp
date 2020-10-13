@@ -28,36 +28,13 @@ namespace mods::players::db_load {
 	}
 	void set_class(player_ptr_t& player, player_class_t p_class){
 		player->set_class(p_class);
-#if 0
 		switch(p_class){
-			case CLASS_MARINE:
-				player->set_marine(std::make_shared<mods::classes::marine>(player));
-				break;
-			case CLASS_SNIPER:
-				player->set_sniper(std::make_shared<mods::classes::sniper>(player));
-				break;
-			case CLASS_SENTINEL:
-				player->set_sentinel(std::make_shared<mods::classes::sentinel>(player));
-				break;
-			case CLASS_MEDIC:
-				player->set_medic(std::make_shared<mods::classes::medic>(player));
-				break;
-			case CLASS_CONTAGION:
-				player->set_contagion(std::make_shared<mods::classes::contagion>(player));
-				break;
-			case CLASS_ENGINEER:
-				player->set_engineer(std::make_shared<mods::classes::engineer>(player));
-				break;
-			case CLASS_SUPPORT:
-				player->set_support(std::make_shared<mods::classes::support>(player));
-				break;
-			case CLASS_PSYOP:
-				player->set_psyop(std::make_shared<mods::classes::psyop>(player));
+			case GHOST:
+				player->set_ghost(std::make_shared<mods::classes::ghost>(player));
 				break;
 			default:
 				report(p_class,"Unable to create class. unknown class");
 				break;
 		}
-#endif
 	}
 };

@@ -76,19 +76,19 @@ namespace mods::debug::pre_game {
 #define __MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__
 #ifdef __MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__
 		{
-			mods::classes::medic m;
-			m.report({"foobar message goes here. lot's of things to report about..","bar"});
+			//mods::classes::medic m;
+			//m.report({"foobar message goes here. lot's of things to report about..","bar"});
 		}
 #endif
 #define __MENTOC_RUN_SNIPER_PREGAME_TESTS__
 #ifdef __MENTOC_RUN_SNIPER_PREGAME_TESTS__
-		mods::orm::sniper sniper;
-		auto p = std::make_shared<mods::player>();
-		p->set_db_id(69);
-		std::cerr << "initialize_row:'" << std::to_string(sniper.initialize_row(p,mods::orm::sniper::primary_choice_t::PSG1)) << "'\n";
-		std::cerr << "pk name:'" << sniper.primary_key_name() << "'\n";
-		sniper.save();
-		sniper.load_by_player(69);
+		//mods::orm::sniper sniper;
+		//auto p = std::make_shared<mods::player>();
+		//p->set_db_id(69);
+		//std::cerr << "initialize_row:'" << std::to_string(sniper.initialize_row(p,mods::orm::sniper::primary_choice_t::PSG1)) << "'\n";
+		//std::cerr << "pk name:'" << sniper.primary_key_name() << "'\n";
+		//sniper.save();
+		//sniper.load_by_player(69);
 #endif
 
 #define __MENTOC_RUN_MEDIC_PREGAME_TESTS__
@@ -101,7 +101,6 @@ namespace mods::debug::pre_game {
 		m.save();
 		m.load_by_player(69);
 #endif
-		std::cerr << "chargen ghost cl desc: '" << CHARGEN_GHOST_CLASS_DESCRIPTION() << "'\n";
 		if(login("zim", "zoo")){
 			DD(green_str("Logged in properly with 'zim': 'zoo'"));
 		}else{

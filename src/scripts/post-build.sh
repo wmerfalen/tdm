@@ -1,4 +1,8 @@
 #!/bin/bash
+if [[ -f $PWD/../dont-kill-gc ]]; then
+	echo 'not killing gc due to ../dont-kill-gc file existence'
+	exit 0
+fi
 function log(){
 	echo "$(date -I): '$1'" >> /tmp/cm-post-build-general
 }

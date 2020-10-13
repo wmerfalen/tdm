@@ -35,9 +35,31 @@ extern struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *numb
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 
 namespace mods::util {
+
+	static inline std::string extract_until(std::string_view target, char this_char){
+		std::string buffer;
+		buffer.reserve(target.size());
+		for(auto ch : target){
+			if(ch == this_char){
+				return buffer;
+			}
+			buffer += ch;
+		}
+		return buffer;
+	}
 	static inline bool regex_match(std::string_view regex_string,std::string_view target_string){
     using namespace std::regex_constants;
   	return std::regex_search(target_string.data(),std::regex(regex_string.data()), match_any | match_not_null | match_continuous);
+	}
+	static inline std::string trim_view(std::string_view str){
+		int i = 0;
+		for(auto ch : str){
+			if(!isspace(ch)){
+				return str.substr(i).data();
+			}
+			++i;
+		}
+		return str.data();
 	}
 	static inline std::string trim(std::string& str){
 		std::string s;
@@ -324,6 +346,15 @@ std::ostream& log(Args... args); /*{
 	obj_ptr_t make_from(obj_data* o);
 	bool parse_help(std::string_view argument);
 
+	static inline bool match_any(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch){
+		for(auto & str : any_of_these){
+			if(strncmp(src.data(),str.c_str(),max_ch) == 0){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	static inline bool is_lower_match(std::string_view str1,std::string_view str2){
 		unsigned int sz = str1.size();
 		if (str2.size() != sz){
@@ -336,6 +367,29 @@ std::ostream& log(Args... args); /*{
 			}
 		}
 		return true;
+	}
+	static inline bool match_any_lower(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch){
+		for(auto & str : any_of_these){
+			if(is_lower_match(str,src)){
+				return true;
+			}
+		}
+		return false;
+	}
+	static inline player_class_t to_player_class(std::string_view str){
+			if(is_lower_match(str,"GHOST")){ return player_class_t::CLASS_GHOST; }
+		 	if(is_lower_match(str,"MARKSMAN")){ return player_class_t::CLASS_MARKSMAN; }
+		 	if(is_lower_match(str,"BANDIT")){ return player_class_t::CLASS_BANDIT; }
+		 	if(is_lower_match(str,"BUTCHER")){ return player_class_t::CLASS_BUTCHER; }
+		 	if(is_lower_match(str,"STRIKER")){ return player_class_t::CLASS_STRIKER; }
+		 	if(is_lower_match(str,"OBSTRUCTOR")){ return player_class_t::CLASS_OBSTRUCTOR; }
+		 	if(is_lower_match(str,"MALADY")){ return player_class_t::CLASS_MALADY; }
+		 	if(is_lower_match(str,"PYREXIA")){ return player_class_t::CLASS_PYREXIA; }
+		 	if(is_lower_match(str,"DEALER")){ return player_class_t::CLASS_DEALER; }
+		 	if(is_lower_match(str,"FORGE")){ return player_class_t::CLASS_FORGE; }
+		 	if(is_lower_match(str,"SYNDROME")){ return player_class_t::CLASS_SYNDROME; }
+		 	if(is_lower_match(str,"MACHINIST")){ return player_class_t::CLASS_MACHINIST; }
+			return player_class_t::CLASS_UNDEFINED;
 	}
 	/*
 	template <typename T,typename TT>

@@ -49,6 +49,7 @@ struct command_info {
 	(char_data *ch, char *argument, int cmd, int subcmd,player_ptr_t&);
 	sh_int minimum_level;
 	int	subcmd;
+	std::string str_command;
 };
 
 /*

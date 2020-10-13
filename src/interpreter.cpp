@@ -36,6 +36,12 @@
 #include "mods/player-utils.hpp"
 #include "mods/super-users.hpp"
 #include "mods/mini-games.hpp"
+#include "mods/classes/class-commands.hpp"
+#include "mods/skills.hpp"
+
+namespace mods::interpreter {
+	extern command_info& get_command(std::string_view,player_ptr_t&);
+};
 
 ACMD(do_unimplemented){
 	player->sendln(UNIMPLEMENTED_MESSAGE());
@@ -142,6 +148,8 @@ ACMD(do_js_help){
 		"{gld}send_to_uuid{/gld} -- ",
 		"{gld}set_char_pk_id{/gld} -- ",
 		"{gld}set_points{/gld} -- i.e.:  set_points(player_name,key,value)",
+		"{gld}instigate{/gld} -- i.e.:  instigate(player_name,attacker_name)",
+		"{gld}set_attacker{/gld} -- i.e.:  set_attacker(player_name,attacker_name)",
 		"{gld}set_points keys{/gld}",
 			"mana max_mana hp max_hp move max_move armor",
 			"gold bank_gold exp hitroll damroll level",
@@ -1121,23 +1129,32 @@ void command_interpreter(player_ptr_t & player, std::string in_argument){
 #endif
 		return;
 	}
+	auto command = cmd_info[0];
+	bool found = false;
 
 	/* otherwise, find the command */
 	for(length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++){
+		command = cmd_info[cmd];
 		if(!strncmp(cmd_info[cmd].command, arg, length)){
 			if(mods::super_users::player_is(player)){
+				found = true;
 				break;
 			}
 			if(player->god_mode()){
+				found = true;
 				break;
 			}
 			if(GET_LEVEL(ch) >= cmd_info[cmd].minimum_level) {
+				found = true;
 				break;
 			}
 		}
 	}
 
-	if(*cmd_info[cmd].command == '\n') {
+	if(!found){
+		command = mods::interpreter::get_command(arg,player);
+	}
+	if(command.command[0] == '\n') {
 		send_to_char(ch, "Huh?!?\r\n");
 	} else{
 		if(player->is_blocked() && !mods::player_utils::is_cancel_command(cmd_info[cmd].command)) {
@@ -1187,7 +1204,7 @@ void command_interpreter(player_ptr_t & player, std::string in_argument){
 		}
 #else
 		else {
-			((*cmd_info[cmd].command_pointer)(ch, line, cmd, cmd_info[cmd].subcmd,player));
+			((*command.command_pointer)(ch, line, cmd, command.subcmd,player));
 		}
 #endif
 	}

@@ -10,8 +10,11 @@
 namespace mods {
 	struct player;
 	namespace classes {
-		struct sniper;
 		struct ghost;
+		struct pyrexia;
+		struct striker;
+
+		/** old crappy classes */
 		struct marine;
 		struct sentinel;
 		struct contagion;
@@ -23,17 +26,6 @@ namespace mods {
 };
 #include "flags.hpp"
 #include "classes/types.hpp"
-//#include "classes/base.hpp"
-#if 0
-#include "classes/sniper.hpp"
-#include "classes/marine.hpp"
-#include "classes/sentinel.hpp"
-#include "classes/contagion.hpp"
-#include "classes/engineer.hpp"
-#include "classes/medic.hpp"
-#include "classes/psyop.hpp"
-#include "classes/support.hpp"
-#endif
 
 #include "../conf.h"
 #include "../sysdep.h"
@@ -240,6 +232,7 @@ namespace mods {
 		byte& position(){
 			return this->char_specials().position;
 		}
+		void set_position(byte p);
 
 		int&	carry_weight(){
 			return this->char_specials().carry_weight;
@@ -572,25 +565,13 @@ namespace mods {
 		std::vector<affected_type>& del_affected_by(const affected_type& af){
 			return del_affected_by(af.index);
 		}
-		//std::shared_ptr<mods::classes::sniper> 	cl_sniper();
-		//std::shared_ptr<mods::classes::ghost> 	cl_ghost();
-		//std::shared_ptr<mods::classes::marine> cl_marine();
-		//std::shared_ptr<mods::classes::sentinel> cl_sentinel();
-		//std::shared_ptr<mods::classes::contagion> cl_contagion();
-		//std::shared_ptr<mods::classes::engineer> cl_engineer();
-		//std::shared_ptr<mods::classes::medic> 	cl_medic();
-		//std::shared_ptr<mods::classes::psyop> 	cl_psyop();
-		//std::shared_ptr<mods::classes::support> 	cl_support();
+		std::shared_ptr<mods::classes::ghost>& ghost();
+		void set_ghost(std::shared_ptr<mods::classes::ghost> g);
+		std::shared_ptr<mods::classes::pyrexia>& pyrexia();
+		void set_pyrexia(std::shared_ptr<mods::classes::pyrexia> g);
+		std::shared_ptr<mods::classes::striker>& striker();
+		void set_striker(std::shared_ptr<mods::classes::striker> g);
 
-		//void set_sniper(std::shared_ptr<mods::classes::sniper>);
-		//void set_ghost(std::shared_ptr<mods::classes::ghost>);
-		//void set_marine(std::shared_ptr<mods::classes::marine>);
-		//void set_contagion(std::shared_ptr<mods::classes::contagion>);
-		//void set_engineer(std::shared_ptr<mods::classes::engineer>);
-		//void set_medic(std::shared_ptr<mods::classes::medic>);
-		//void set_psyop(std::shared_ptr<mods::classes::psyop>);
-		//void set_support(std::shared_ptr<mods::classes::support>);
-		//void set_sentinel(std::shared_ptr<mods::classes::sentinel>);
 		void start_histfile();
 		void write_histfile(std::string_view);
 		void stop_histfile();
@@ -612,6 +593,9 @@ namespace mods {
 		/** viewing modifiers */
 		bool has_night_vision() const;
 		bool has_thermal_vision() const;
+
+		/** visibility */
+		char_data::visibility_t& visibility();
 
 		/** camera dynamics */
 		void set_camera(obj_data_ptr_t obj);
@@ -719,15 +703,9 @@ namespace mods {
 		player_type_enum_t m_type;
 		weapon_type_t m_weapon_type;
 		weapon_type_t m_weapon_flags;
-		std::shared_ptr<mods::classes::ghost> m_class_ghost;
-		//std::shared_ptr<mods::classes::sniper> m_class_sniper;
-		//std::shared_ptr<mods::classes::marine> m_class_marine;
-		//std::shared_ptr<mods::classes::sentinel> m_class_sentinel;
-		//std::shared_ptr<mods::classes::contagion> m_class_contagion;
-		//std::shared_ptr<mods::classes::engineer> m_class_engineer;
-		//std::shared_ptr<mods::classes::medic> m_class_medic;
-		//std::shared_ptr<mods::classes::psyop> m_class_psyop;
-		//std::shared_ptr<mods::classes::support> m_class_support;
+		std::shared_ptr<mods::classes::ghost> m_ghost;
+		std::shared_ptr<mods::classes::pyrexia> m_pyrexia;
+		std::shared_ptr<mods::classes::striker> m_striker;
 		FILE* m_histfile_fp;
 		bool m_histfile_on;
 		uint32_t m_histfile_index;

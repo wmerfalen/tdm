@@ -462,7 +462,16 @@ namespace mods::skills {
 	};
 	skill_t to_skill_from_user_friendly_string(std::string_view s);
 	std::string_view to_user_friendly_string_from_skill(skill_t s);
+	enum skillset_level_t : uint8_t {
+		INITIATE = 0,
+		FAMILIAR,
+		ADVANCED,
+		MASTER
+	};
 };
 using skill_t = mods::skills::proficiencies::proficiency_name_t;
+
+ACMD(do_train);
+ACMD(do_skills);
 
 #endif

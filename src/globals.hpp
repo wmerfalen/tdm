@@ -277,6 +277,7 @@ std::string IMPLODE(std::vector<std::string> m,std::string delim,bool ignore_emp
 std::string IMPLODE_PAD(std::string delim_one,std::vector<std::string> m,std::string delim_two);
 std::string IMPLODE_PAD(std::string delim_one,std::vector<std::string> m,std::string delim_two,bool ignore_empty);
 std::string dirstr(int);
+std::pair<bool,direction_t> to_direction(std::string_view);
 std::vector<str_t> map_keys(str_map_t & m);
 #define invec(A,B) (std::find(B.begin(),B.end(),A)!=B.end())
 str_vec_t EXPLODE(str_t& value,char delimiter);
@@ -286,4 +287,5 @@ static inline uint64_t CURRENT_TICK(){ return mods::globals::current_tick; }
 #define ADMIN_FAIL() player->sendln(ADMIN_FAILURE_MESSAGE())
 #define ADMIN_REJECT() if(!mods::super_users::player_is(player)){ player->sendln(SUPER_USER_REJECT_MESSAGE()); return; }
 #define TODO(a) std::cerr << green_str("[TODO]: ") << a << " [file]: " << __FILE__ << "[line]:" << __LINE__ << "\n";
+#define PLAYER_CAN(A) if(!player->can(A)){ player->sendln("Wrong class."); return; }
 #endif

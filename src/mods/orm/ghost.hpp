@@ -10,6 +10,36 @@ namespace mods::orm {
 		using primary_choice_t = mods::weapon::ghost::primary_choice_t;
 		const std::string PSG1 = "PSG1";
 		const std::string L96AW = "L96AW";
+		enum drone_scan_levels_t {
+				GHOST_DRONE_SCAN_NONE = 0,
+				GHOST_DRONE_SCAN_INITIATE,
+				GHOST_DRONE_SCAN_FAMILIAR,
+				GHOST_DRONE_SCAN_MASTER
+		};
+		enum stealth_levels_t {
+				GHOST_STEALTH_NONE = 0,
+				GHOST_STEALTH_INITIATE,
+				GHOST_STEALTH_FAMILIAR,
+				GHOST_STEALTH_MASTER
+		};
+		enum xray_shot_levels_t {
+				GHOST_XRAY_SHOT_NONE = 0,
+				GHOST_XRAY_SHOT_INITIATE,
+				GHOST_XRAY_SHOT_FAMILIAR,
+				GHOST_XRAY_SHOT_MASTER
+		};
+		enum feign_death_levels_t {
+				GHOST_FEIGN_DEATH_NONE = 0,
+				GHOST_FEIGN_DEATH_INITIATE,
+				GHOST_FEIGN_DEATH_FAMILIAR,
+				GHOST_FEIGN_DEATH_MASTER
+		};
+		enum summon_extraction_levels_t {
+				GHOST_SUMMON_EXTRACTION_NONE = 0,
+				GHOST_SUMMON_EXTRACTION_INITIATE,
+				GHOST_SUMMON_EXTRACTION_FAMILIAR,
+				GHOST_SUMMON_EXTRACTION_MASTER
+		};
 		std::string table_name(){ return "class_ghost"; }
 		std::string column_prefix(){ return "ghost_"; }
 		std::string id_column(){ return "ghost_id"; }
@@ -24,12 +54,6 @@ namespace mods::orm {
 		void init();	
 		strmap_t export_class();
 		primary_choice_t primary_type(){
-			if(ghost_primary_type.compare(PSG1) == 0){
-				return primary_choice_t::PSG1;
-			}
-			if(ghost_primary_type.compare(L96AW) == 0){
-				return primary_choice_t::L96AW;
-			}
 			return primary_choice_t::NONE;
 		}
 		int16_t save(){
@@ -40,10 +64,11 @@ namespace mods::orm {
 		uint64_t id;
 		uint64_t ghost_id;
 		uint64_t ghost_player_id;
-		std::string ghost_primary_type;
-		uint64_t ghost_primary_weapon_id;
-		std::string ghost_secondary_type;
-		uint64_t ghost_secondary_weapon_id;
+		drone_scan_levels_t ghost_drone_scan_level;
+		stealth_levels_t ghost_stealth_level;
+		xray_shot_levels_t ghost_xray_shot_level;
+		feign_death_levels_t ghost_feign_death_level;
+		summon_extraction_levels_t ghost_summon_extraction_level;
 		long created_at;
 		long updated_at;
 		bool loaded;

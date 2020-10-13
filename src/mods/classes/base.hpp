@@ -17,6 +17,7 @@ namespace mods::classes {
 			mods::bugs::fixtures(mods::classes::to_string(this->kind()), msg.data());
 		}
 	};
+	void unblock_event(uint32_t unblock_event,uuid_t player);
 };
 
 #endif

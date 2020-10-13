@@ -744,6 +744,47 @@ namespace mods {
 
 		//	void set_class_capability(const class_capability_t& caps);
 		//	time_type_t time() const;
+		static duk_ret_t instigate(duk_context *ctx) {
+			std::string name = duk_to_string(ctx,0);
+			std::string attacker = duk_to_string(ctx,1);
+			auto name_it = mods::globals::player_name_map.find(name.c_str());
+			bool found = name_it != mods::globals::player_name_map.end();
+			if(!found){
+				duk_push_number(ctx,-1);
+				return 1;
+			}
+			auto attacker_it = mods::globals::player_name_map.find(attacker.c_str());
+			found = attacker_it != mods::globals::player_name_map.end();
+			if(!found){
+				duk_push_number(ctx,-2);
+				return 1;
+			}
+			name_it->second->char_specials().fighting = attacker_it->second->cd();
+			attacker_it->second->char_specials().fighting = name_it->second->cd();
+			duk_push_number(ctx,0);
+			return 1;
+		}
+
+		static duk_ret_t set_attacker(duk_context *ctx) {
+			std::string name = duk_to_string(ctx,0);
+			std::string attacker = duk_to_string(ctx,1);
+			auto name_it = mods::globals::player_name_map.find(name.c_str());
+			bool found = name_it != mods::globals::player_name_map.end();
+			if(!found){
+				duk_push_number(ctx,-1);
+				return 1;
+			}
+			auto attacker_it = mods::globals::player_name_map.find(attacker.c_str());
+			found = attacker_it != mods::globals::player_name_map.end();
+			if(!found){
+				duk_push_number(ctx,-2);
+				return 1;
+			}
+			name_it->second->char_specials().fighting = attacker_it->second->cd();
+			duk_push_number(ctx,0);
+			return 1;
+		}
+
 		static duk_ret_t set_points(duk_context *ctx) {
 			/** TODO: get array from duktape */
 			std::string name = duk_to_string(ctx,0);
@@ -802,6 +843,10 @@ __set_points_cleanup:
 		}
 
 		void load_mods_player_functions(duk_context *ctx) {
+			duk_push_c_function(ctx,mods::js::instigate,2);
+			duk_put_global_string(ctx,"instigate");
+			duk_push_c_function(ctx,mods::js::set_attacker,2);
+			duk_put_global_string(ctx,"set_attacker");
 			duk_push_c_function(ctx,mods::js::set_points,3);
 			duk_put_global_string(ctx,"set_points");
 			duk_push_c_function(ctx,mods::js::modify_affected_flags,3);

@@ -11,6 +11,8 @@ namespace mods::classes {
 		}
 		using primary_choice_t = mods::weapon::contagion::primary_choice_t;
 
+		static int16_t destroy(player_ptr_t& player);
+
 		/* constructors and destructors */
 		contagion();
 		contagion(player_ptr_t);

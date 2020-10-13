@@ -17,6 +17,7 @@ static inline std::string default_yaml_file(const std::string& type){
 
 void obj_data::init(){
 	d("[debug]obj_data::init()\n");
+	visibility = STARTING_VISIBILITY;
 	feed_status = 0;
 	m_location_data = 0;
 	std::fill(m_capabilities.begin(),m_capabilities.end(),0);
@@ -241,6 +242,7 @@ bool obj_data::flagged(int value){
 			}
 		}
 		void char_data::init(){
+			visibility = STARTING_VISIBILITY;
 			has_desc = false;
 			desc.reset();
 			pfilepos = 0;

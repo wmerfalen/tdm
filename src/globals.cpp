@@ -54,6 +54,9 @@ namespace mods::skills {
 namespace mods::super_users {
 	extern bool player_is(player_ptr_t&);
 };
+namespace mods::interpreter {
+	extern void init();
+};
 namespace mods {
 	namespace globals {
 		using player = mods::player;
@@ -443,6 +446,7 @@ namespace mods {
 			}
 			mods::debug::init(show_tics);
 			mods::skills::game_init();
+			mods::interpreter::init();
 		}
 		void post_boot_db() {
 		}
@@ -1245,5 +1249,20 @@ str_vec_t EXPLODE(str_t& value,char delimiter){
 		strings.emplace_back(current);
 	}
 	return strings;
+}
+std::pair<bool,direction_t> to_direction(std::string_view str){
+	auto s = mods::util::trim_view(str);
+	if(s.length() == 0 || !std::isalpha(s[0])){
+		return {0,NORTH};
+	}
+	switch(std::tolower(s[0])){
+		case 'n': return {1,NORTH};
+		case 'e': return {1,EAST};
+		case 's': return {1,SOUTH};
+		case 'w': return {1,WEST};
+		case 'u': return {1,UP};
+		case 'd': return {1,DOWN};
+		default: return {0,NORTH};
+	}
 }
 #endif
