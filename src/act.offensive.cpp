@@ -127,6 +127,21 @@ ACMD(do_affect_me) {
 	str_queue_on_player({affect_type_str},player);
 	player->sendln("It is done.");
 };
+ACMD(do_snipe_object) {
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() < 2){
+		player->sendln("usage: snipe <object> <direction>");
+		return;
+	}
+
+	int direction = mods::globals::dir_int(vec_args[1][0]);
+	if(direction == -1){
+		player->sendln("Invalid direction");
+		return;
+	}
+	mods::weapons::damage_types::rifle_attack_object_by_name(player,vec_args[0],direction);
+}
+
 ACMD(do_snipe) {
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() < 2){

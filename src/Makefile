@@ -68,13 +68,14 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/ghost mods/classes/ghost \
 					 mods/orm/striker mods/classes/striker \
 					 mods/orm/pyrexia mods/classes/pyrexia \
-					 mods/classes/base \
+					 mods/classes/base mods/classes/super-user-fiddler \
 					 mods/weapons/sniper-rifle-psg1 mods/weapons/sniper-rifle-l96aw \
 					 mods/orm/quotes act.builder mods/orm/base mods/yaml \
 					 mods/affects mods/item mods/weapon-types mods/sensor-grenade \
 					 mods/calc_visibility mods/events mods/chargen \
 					 mods/object-utils mods/camera mods/orm/shop shop mods/shop mods/rand \
-					 mods/help mods/rooms mods/weapons/damage-types mods/injure mods/skills \
+					 mods/weapons/damage-types mods/weapons/heat \
+					 mods/injure mods/skills  mods/help mods/rooms \
 					 mods/mobs/mini-gunner mods/mobs/extended-types mods/values \
 					 mods/mobs/room-watching mods/mobs/mini-gunner-behaviour-tree \
 					 mods/armor/basic-protection mods/armor/advanced-protection mods/armor/elite-protection \
@@ -82,7 +83,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/super-users mods/builder/object-placement mods/integral-objects \
 					 mods/orm/integral-object mods/orm/camera-feed mods/orm/door-event \
 					 mods/mini-games/line-up mods/orm/mini-game mods/mini-games \
-					 mods/mini-games/wires mods/migrations mods/interpreter
+					 mods/mini-games/wires mods/migrations mods/interpreter \
+					 mods/radio
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

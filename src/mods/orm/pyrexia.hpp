@@ -3,6 +3,7 @@
 
 #include "../../globals.hpp"
 #include "orm-base.hpp"
+#include "../skills.hpp"
 
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
@@ -10,36 +11,14 @@ namespace mods::orm {
 		using primary_choice_t = int;
 		const std::string PSG1 = "PSG1";
 		const std::string L96AW = "L96AW";
-		enum drone_scan_levels_t {
-				PYREXIA_DRONE_SCAN_NONE = 0,
-				PYREXIA_DRONE_SCAN_INITIATE,
-				PYREXIA_DRONE_SCAN_FAMILIAR,
-				PYREXIA_DRONE_SCAN_MASTER
-		};
-		enum stealth_levels_t {
-				PYREXIA_STEALTH_NONE = 0,
-				PYREXIA_STEALTH_INITIATE,
-				PYREXIA_STEALTH_FAMILIAR,
-				PYREXIA_STEALTH_MASTER
-		};
-		enum xray_shot_levels_t {
-				PYREXIA_XRAY_SHOT_NONE = 0,
-				PYREXIA_XRAY_SHOT_INITIATE,
-				PYREXIA_XRAY_SHOT_FAMILIAR,
-				PYREXIA_XRAY_SHOT_MASTER
-		};
-		enum feign_death_levels_t {
-				PYREXIA_FEIGN_DEATH_NONE = 0,
-				PYREXIA_FEIGN_DEATH_INITIATE,
-				PYREXIA_FEIGN_DEATH_FAMILIAR,
-				PYREXIA_FEIGN_DEATH_MASTER
-		};
-		enum summon_extraction_levels_t {
-				PYREXIA_SUMMON_EXTRACTION_NONE = 0,
-				PYREXIA_SUMMON_EXTRACTION_INITIATE,
-				PYREXIA_SUMMON_EXTRACTION_FAMILIAR,
-				PYREXIA_SUMMON_EXTRACTION_MASTER
-		};
+		std::pair<bool,std::string> drench_object_in_gasoline(uuid_t npc);
+		std::pair<bool,std::string> drench_room_in_gasoline(uuid_t npc);
+		std::pair<bool,std::string> convert_to_fire_nade(obj_ptr_t& object);
+		std::pair<bool,std::string> attach_incendiary_grenade_launcher(obj_ptr_t& weapon);
+		std::pair<bool,std::string> attach_flamethrower(obj_ptr_t& weapon);
+		std::pair<bool,std::string> create_wall_of_fire(uint8_t direction);
+		std::pair<bool,std::string> seal_off_room_with_wall_of_fire(room_rnum room_id);
+
 		std::string table_name(){ return "class_pyrexia"; }
 		std::string column_prefix(){ return "pyrexia_"; }
 		std::string id_column(){ return "pyrexia_id"; }
@@ -61,11 +40,14 @@ namespace mods::orm {
 		uint64_t id;
 		uint64_t pyrexia_id;
 		uint64_t pyrexia_player_id;
-		drone_scan_levels_t pyrexia_drone_scan_level;
-		stealth_levels_t pyrexia_stealth_level;
-		xray_shot_levels_t pyrexia_xray_shot_level;
-		feign_death_levels_t pyrexia_feign_death_level;
-		summon_extraction_levels_t pyrexia_summon_extraction_level;
+		skill_familiarity_t pyrexia_fire_nade_level;
+		skill_familiarity_t drench_object_in_gasoline_level;
+		skill_familiarity_t drench_room_in_gasoline_level;
+		skill_familiarity_t convert_to_fire_nade_level;
+		skill_familiarity_t attach_incendiary_grenade_launcher_level;
+		skill_familiarity_t attach_flamethrower_level;
+		skill_familiarity_t create_wall_of_fire_level;
+		skill_familiarity_t seal_off_room_with_wall_of_fire_level;
 		long created_at;
 		long updated_at;
 		bool loaded;

@@ -1,11 +1,7 @@
 #include "interpreter.hpp"
 #include "help.hpp"
-#include <set>
 #include "super-users.hpp"
 
-ACMD(do_wax){
-	player->sendln("wax trax");
-}
 namespace mods::super_users {
 	extern bool player_is(player_ptr_t&);
 };

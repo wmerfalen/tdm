@@ -1,6 +1,7 @@
 #include "pyrexia.hpp"
 #include "../orm/inventory.hpp"
 #include "../affects.hpp"
+#include "../interpreter.hpp"
 
 extern void stop_fighting(char_data *ch);
 namespace mods::orm::inventory {
@@ -38,8 +39,182 @@ namespace mods::classes {
 		/* constructors and destructors */
 		pyrexia::pyrexia(){
 			m_player = nullptr;
+			m_fire_nade_charges = PYREXIA_FIRE_NADE_CHARGES_DEFAULT();
+			m_fire_nade_level = level_t::SKILL_INITIATE;
+			switch(m_fire_nade_level){
+				default:
+				case level_t::SKILL_INITIATE:
+					m_fire_nade_charges = PYREXIA_FIRE_NADE_CHARGES_INITIATE();
+					break;
+				case level_t::SKILL_FAMILIAR:
+					m_fire_nade_charges = PYREXIA_FIRE_NADE_CHARGES_FAMILIAR();
+					break;
+				case level_t::SKILL_MASTER:
+					m_fire_nade_charges = PYREXIA_FIRE_NADE_CHARGES_MASTER();
+					break;
+			}
 		}
 		std::shared_ptr<pyrexia> create_pyrexia(player_ptr_t &in_player){
 			return std::move(std::make_shared<pyrexia>(in_player));
 		}
+		std::pair<bool,std::string> pyrexia::throw_fire_nade(uint8_t direction,uint8_t depth){
+			int replenish_ticks = 0;
+			switch(m_fire_nade_level){
+				default:
+				case level_t::SKILL_INITIATE:
+					replenish_ticks = PYREXIA_FIRE_NADE_RECHARGE_TICKS_INITIATE();
+					break;
+				case level_t::SKILL_FAMILIAR:
+					replenish_ticks = PYREXIA_FIRE_NADE_RECHARGE_TICKS_FAMILIAR();
+					break;
+				case level_t::SKILL_MASTER:
+					replenish_ticks = PYREXIA_FIRE_NADE_RECHARGE_TICKS_MASTER();
+					break;
+			}
+			if(m_fire_nade_charges){
+				auto player_uuid = m_player->uuid();
+				mods::globals::defer_queue->push(replenish_ticks, [player_uuid]() {
+					auto player = ptr_by_uuid(player_uuid);
+					player->pyrexia()->replenish_charge();
+				});
+			}
+
+			return {0,""};
+		}
+		void pyrexia::replenish_charge(){
+			++m_fire_nade_charges;
+			m_player->sendln(PYREXIA_REPLENISH_MESSAGE());
+		}
+		std::pair<bool,std::string> pyrexia::drench_object_in_gasoline(uuid_t npc){
+			switch(m_drench_object_in_gasoline_level){
+				default:
+				case level_t::SKILL_NONE:
+					break;
+				case level_t::SKILL_INITIATE:
+					break;
+				case level_t::SKILL_FAMILIAR:
+					break;
+				case level_t::SKILL_MASTER:
+					break;
+			}
+
+			return {0,""};
+		}
+		std::pair<bool,std::string> pyrexia::drench_room_in_gasoline(uuid_t npc){
+			switch(m_drench_room_in_gasoline_level){
+				default:
+				case level_t::SKILL_NONE:
+					break;
+				case level_t::SKILL_INITIATE:
+					break;
+				case level_t::SKILL_FAMILIAR:
+					break;
+				case level_t::SKILL_MASTER:
+					break;
+			}
+			return {0,""};
+		}
+		std::pair<bool,std::string> pyrexia::convert_to_fire_nade(obj_ptr_t& object){
+			switch(m_convert_to_fire_nade_level){
+				default:
+				case level_t::SKILL_NONE:
+					break;
+				case level_t::SKILL_INITIATE:
+					break;
+				case level_t::SKILL_FAMILIAR:
+					break;
+				case level_t::SKILL_MASTER:
+					break;
+			}
+			return {0,""};
+		}
+		std::pair<bool,std::string> pyrexia::attach_incendiary_grenade_launcher(obj_ptr_t& weapon){
+			switch(m_attach_incendiary_grenade_launcher_level){
+				default:
+				case level_t::SKILL_NONE:
+					break;
+				case level_t::SKILL_INITIATE:
+					break;
+				case level_t::SKILL_FAMILIAR:
+					break;
+				case level_t::SKILL_MASTER:
+					break;
+			}
+			return {0,""};
+		}
+		std::pair<bool,std::string> pyrexia::attach_flamethrower(obj_ptr_t& weapon){
+			switch(m_attach_flamethrower_level){
+				default:
+				case level_t::SKILL_NONE:
+					break;
+				case level_t::SKILL_INITIATE:
+					break;
+				case level_t::SKILL_FAMILIAR:
+					break;
+				case level_t::SKILL_MASTER:
+					break;
+			}
+			return {0,""};
+		}
+		std::pair<bool,std::string> pyrexia::create_wall_of_fire(uint8_t direction){
+			switch(m_create_wall_of_fire_level){
+				default:
+				case level_t::SKILL_NONE:
+					break;
+				case level_t::SKILL_INITIATE:
+					break;
+				case level_t::SKILL_FAMILIAR:
+					break;
+				case level_t::SKILL_MASTER:
+					break;
+			}
+			return {0,""};
+		}
+		std::pair<bool,std::string> pyrexia::seal_off_room_with_wall_of_fire(room_rnum room_id){
+			switch(m_seal_off_room_with_wall_of_fire_level){
+				default:
+				case level_t::SKILL_NONE:
+					break;
+				case level_t::SKILL_INITIATE:
+					break;
+				case level_t::SKILL_FAMILIAR:
+					break;
+				case level_t::SKILL_MASTER:
+					break;
+			}
+			return {0,""};
+		}
+		uint16_t pyrexia::roll_incendiary_shot(obj_ptr_t& attacking_weapon,uuid_t target){
+			feedback_t inc_shot;
+			inc_shot.damage_event = damage_event_t::YOU_GOT_HIT_BY_INCENDIARY_AMMO;
+			inc_shot.damage_event = damage_event_t::YOU_INFLICTED_INCENDIARY_AMMO;
+			inc_shot.damage = 0;
+			inc_shot.hits = 3;
+			inc_shot.injured.emplace_back(target);
+			inc_shot.damage_info.emplace_back(target,inc_shot.damage,m_player->room());
+			inc_shot.from_direction = NORTH;
+			inc_shot.attacker = m_player->uuid();
+			return inc_shot.damage;
+		}
+		uint16_t pyrexia::roll_heat_accumulation_hp_gain(obj_ptr_t& attacking_weapon){
+			return 15;
+		}
+
 };
+
+ACMD(do_fire_nade){
+	PLAYER_CAN("pyrexia.fire_nade");
+	DO_HELP("fire_nade");
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() < 2){
+		player->sendln("usage: fire_nade <direction> <distance>");
+		return;
+	}
+	direction_t dir = to_direction(vec_args[0]).second;
+	int distance = mods::util::stoi(vec_args[1]).value_or(-1);
+	if(distance <= 0){
+		player->sendln("Invalid distance.\r\nusage: fire_nade <direction> <distance>");
+		return;
+	}
+	player->pyrexia()->throw_fire_nade(dir,distance);
+}

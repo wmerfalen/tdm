@@ -30,6 +30,21 @@ extern void act(const std::string & str, int hide_invisible, char_data *ch, obj_
 namespace mods::weapons::damage_types {
 	using de = damage_event_t;
 	using vpd = mods::scan::vec_player_data;
+	void rifle_attack_object(
+			player_ptr_t& player,
+			obj_ptr_t weapon,
+			obj_ptr_t victim,
+			uint16_t distance,
+			uint8_t direction
+		);
+	feedback_t rifle_attack_object_with_feedback(
+			player_ptr_t& player,
+			obj_ptr_t weapon,
+			obj_ptr_t victim,
+			uint16_t distance,
+			uint8_t direction
+		);
+
 
 	void remember_event(player_ptr_t& victim,player_ptr_t& attacker){
 		if(IS_NPC(victim->cd())){
@@ -550,6 +565,30 @@ namespace mods::weapons::damage_types {
 
 	}//end spray_direction function
 
+	void rifle_attack_object_by_name(player_ptr_t& player,std::string_view target_object,int direction){
+		auto weapon = player->primary();
+		if(!weapon || !weapon->has_rifle()){
+			player->sendln("You aren't wielding any weapon.");
+			return;
+		}
+		vpd scan;
+		/** TODO: add onto max range if has buff */
+		mods::scan::los_scan_direction(player->cd(),weapon->rifle()->attributes->max_range,&scan,direction,mods::scan::find_type_t::OBJECTS);
+		obj_ptr_t victim = nullptr;
+
+		for(auto && scanned_target : scan) {
+			if(mods::util::fuzzy_match(target_object.data(),scanned_target.obj->name.c_str())) {
+				/** FIXME needs to be weapon's max range not global max range */
+				if(scanned_target.distance > weapon->rifle()->attributes->max_range){
+					player->sendln("That target is out of range!");
+					return;
+				}
+				auto obj = optr_by_uuid(scanned_target.obj->uuid);
+				rifle_attack_object(player,weapon,obj,scanned_target.distance,direction);
+				return;
+			}
+		}
+	}
 
 
 	/**
@@ -688,6 +727,129 @@ namespace mods::weapons::damage_types {
 		){
 		rifle_attack_with_feedback(player,weapon,victim,distance,direction);
 	}
+
+	void rifle_attack_object(
+			player_ptr_t& player,
+			obj_ptr_t weapon,
+			obj_ptr_t victim,
+			uint16_t distance,
+			uint8_t direction
+		){
+		rifle_attack_object_with_feedback(player,weapon,victim,distance,direction);
+	}
+
+	feedback_t rifle_attack_object_with_feedback(
+			player_ptr_t& player,
+			obj_ptr_t weapon,
+			obj_ptr_t victim,
+			uint16_t distance,
+			uint8_t direction
+		){
+		using de = damage_event_t;
+		std::tuple<int,uuid_t> sentinel;
+		feedback_t feedback;
+		feedback.hits = 0;
+		feedback.damage = 0;
+		feedback.from_direction = OPPOSITE_DIR(direction);
+
+		if(mods::rooms::is_peaceful(player->room())){
+			feedback.damage_event = de::YOURE_IN_PEACEFUL_ROOM;
+			player->damage_event(feedback);
+			return feedback;
+		}
+		/** TODO: if primary is out of ammo, and player_pref.auto_switch is on, use secondary */
+
+		if(!weapon || !weapon->has_rifle()){
+			feedback.damage_event = de::NO_PRIMARY_WIELDED_EVENT;
+			player->damage_event(feedback);
+			return feedback;
+		}
+		if(!player->weapon_cooldown_expired(0)){
+			feedback.damage_event = de::COOLDOWN_IN_EFFECT_EVENT;
+			player->damage_event(feedback);
+			return feedback;
+		}
+		/* Check ammo */
+		if(mods::weapon::has_clip(player->rifle()) && player->ammo() <= 0) {
+			feedback.damage_event = de::OUT_OF_AMMO_EVENT;
+			player->damage_event(feedback);
+			return feedback;
+		}
+
+		if(!victim){
+			feedback.damage_event = de::COULDNT_FIND_TARGET_EVENT;
+			player->damage_event(feedback);
+			return feedback;
+		}
+		/** FIXME : grab weapon's accuracy and apply accurace modifications */
+
+		int dam = weapon->rifle()->attributes->base_stat_list->at(distance).damage;
+		int damage_dice = weapon->rifle()->attributes->damage_dice_count;
+		int damage_sides = weapon->rifle()->attributes->damage_dice_sides;
+		int crit_range = weapon->rifle()->attributes->critical_range;
+		int crit_chance = weapon->rifle()->attributes->critical_chance;
+		int critical_bonus = 0;
+		if(mods::rooms::is_peaceful(victim->in_room)){
+			feedback.damage_event = de::TARGET_IN_PEACEFUL_ROOM_EVENT;
+			player->damage_event(feedback);
+			return feedback;
+		}
+
+		/** calculate headshot */
+		if(distance == crit_range && dice(1,100) <= crit_chance){
+				player->send(MSG_CRITICAL().c_str());
+				critical_bonus = dice(
+						damage_dice,
+						damage_sides
+				);
+			feedback.damage = dam;
+			feedback.hits = 1;
+
+			feedback.damage_event = de::YOU_DEALT_CRITICAL_RIFLE_ATTACK;
+			player->damage_event(feedback);
+			/** TODO: process damage on object here */
+		}
+		dam += critical_bonus;
+
+		auto dice_roll = dice(
+				damage_dice,
+				damage_sides
+				);
+		dam += dice_roll;
+
+#ifdef __MENTOC_SHOW_SNIPE_HIT_STATS__
+		player->send(
+				"dice roll[%d]\r\n"
+				"damage: [%d]\r\n"
+				"critical_bonus: [%d]\r\n"
+				"damage_dice [%d]\r\n"
+				"damage_slides [%d]\r\n"
+				"crit_range [%d]\r\n"
+				"crit_chance [%d]\r\n",
+				dice_roll,
+				dam,
+				critical_bonus,
+				damage_dice,
+				damage_sides,
+				crit_range,
+				crit_chance
+				);
+#endif
+
+		if(dice(2,6) <= 3){
+			feedback.damage = dam;
+			feedback.hits = 0;
+			feedback.damage_event = de::YOU_MISSED_YOUR_TARGET_EVENT;
+			player->damage_event(feedback);
+			return feedback;
+		}
+
+		/** TODO: process damage on object here */
+		decrease_single_shot_ammo(weapon);
+		player->set_fight_timestamp();
+		return feedback;
+	}
+
 
 	feedback_t rifle_attack_with_feedback(
 			player_ptr_t& player,

@@ -266,7 +266,7 @@ namespace mods {
 		}
 		if(pos < NUM_WEARS){
 			m_basic_protection->equip(pos,in_object->uuid);
-			if(pos == WEAR_WIELD){
+			if(pos == WEAR_WIELD || pos == WEAR_PRIMARY || pos == WEAR_SECONDARY){
 				this->m_weapon_flags = in_object->obj_flags.weapon_flags;
 			}
 			GET_EQ(m_char_data, pos) = in_object.get();
@@ -1373,6 +1373,10 @@ namespace mods {
 #ifdef __MENTOC_SHOW_UNHANDLED_DAMAGE_EVENTS__
 					std::cerr << "[damage_event]: UNHANDLED case!->'" << e << "'\n";
 #endif
+					break;
+				case damage_event_t::YOU_GOT_HIT_BY_INCENDIARY_AMMO:
+					break;
+				case damage_event_t::YOU_INFLICTED_INCENDIARY_AMMO:
 					break;
 				case damage_event_t::ATTACKER_NARROWLY_MISSED_YOU_EVENT:
 					this->sendln(CAT(MSG_NARROWLY_MISSED_ME(),"[from:",dirstr(feedback.from_direction),"]"));

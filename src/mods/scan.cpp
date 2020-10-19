@@ -112,6 +112,20 @@ namespace mods::scan {
 
 					room_id = room_dir->to_room;
 
+					if(type == find_type_t::OBJECTS){
+						for(auto object : world[room_id].contents_container()) {
+							vec_room_list->push_back({});
+							auto & pushed_item = vec_room_list->back();
+							pushed_item.ch = nullptr;
+							pushed_item.obj = object.get();
+							pushed_item.uuid = object->uuid;
+							pushed_item.distance = ++ctr;
+							pushed_item.direction = i_d;
+							pushed_item.room_rnum = room_id;
+							LOS_SCAN_DIRECTION_DEBUG("moved item to list");
+						}
+						continue;
+					}
 					for(auto character : mods::globals::get_room_list(room_id)) {
 						if(type == find_type_t::PLAYERS && IS_NPC(character->cd())){
 							continue;

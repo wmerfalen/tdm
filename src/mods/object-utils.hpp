@@ -346,6 +346,7 @@ namespace mods::object_utils {
 		player->consume_from_carrying(obj);
 	}
 
+	void change_visibility(obj_ptr_t& object,int amount);
 };//End namespace
 
 #endif

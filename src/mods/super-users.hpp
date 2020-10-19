@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include "../globals.hpp"
+#include "classes/super-user-fiddler.hpp"
 
 namespace mods::super_users {
 	bool player_name_is(std::string_view);
@@ -16,6 +17,7 @@ namespace mods::super_users {
 	std::string who_line(player_ptr_t& player);
 	void set_who_line(std::string_view player_name,std::string_view line);
 	void clear_who_line(std::string_view player_name);
+	static std::shared_ptr<mods::classes::super_user_fiddler> fiddler;
 };
 
 ACMD(do_set_who_line);

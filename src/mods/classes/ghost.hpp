@@ -3,10 +3,12 @@
 #include <variant>
 #include "../orm/ghost.hpp"
 #include "base.hpp"
+#include "super-user-fiddler.hpp"
 
 using ghost_orm_t = mods::orm::ghost;
 namespace mods::classes {
 	struct ghost : base {
+		friend class mods::classes::super_user_fiddler;
 		using primary_choice_t = mods::weapon::ghost::primary_choice_t;
 		using drone_scan_levels_t = ghost_orm_t::drone_scan_levels_t;
 		using stealth_levels_t = ghost_orm_t::stealth_levels_t;

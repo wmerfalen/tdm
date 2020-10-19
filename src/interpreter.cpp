@@ -420,6 +420,7 @@ ACMD(do_givemegold);
 ACMD(do_givemenades);
 ACMD(do_shoot);	/* just an alias of snipe */
 ACMD(do_snipe);
+ACMD(do_snipe_object);
 ACMD(do_room_vnum);
 
 ACMD(do_rotate_right);
@@ -873,6 +874,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "reset_hack"  , POS_RESTING , do_reset_hack  , 0, 0 },
 	{ "snipe"  , POS_RESTING , do_snipe   , 0, 0 },
 	{ "spray"  , POS_RESTING , do_spray   , 0, 0 },
+	{ "snipe_object", POS_RESTING, do_snipe_object, 0, 0},
 	/** install/uninstall various gadgets */
 	{ "cancel"  , POS_RESTING , do_cancel, 0, 0 },	/** i.e.: claymore mine, camera */
 	{ "install"  , POS_RESTING , do_install, 0, 0 },	/** i.e.: claymore mine, camera */

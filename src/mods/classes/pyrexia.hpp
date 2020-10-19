@@ -1,13 +1,18 @@
-#ifndef __MENTOC_MODS_CLASSES_GHOST_HEADER__
-#define  __MENTOC_MODS_CLASSES_GHOST_HEADER__
+#ifndef __MENTOC_MODS_CLASSES_PYREXIA_HEADER__
+#define  __MENTOC_MODS_CLASSES_PYREXIA_HEADER__
 #include <variant>
 #include "../orm/pyrexia.hpp"
 #include "base.hpp"
 #include "../skills.hpp"
+#include "../super-users.hpp"
 
+namespace mods::classes {
+	struct super_user_fiddler;
+};
 using pyrexia_orm_t = mods::orm::pyrexia;
 namespace mods::classes {
 	struct pyrexia : base {
+		friend class mods::classes::super_user_fiddler;
 		enum skillset_t : uint8_t {
 			THROW_FIRE_NADE = 0,
 			DOUSE_OBJECT,
@@ -51,8 +56,11 @@ namespace mods::classes {
 		std::pair<bool,std::string> create_wall_of_fire(uint8_t direction);
 		std::pair<bool,std::string> seal_off_room_with_wall_of_fire(room_rnum room_id);
 
+		void replenish_charge();
+
 		/** passive ability */
-		bool roll_chance_for_incendiary_shot(obj_ptr_t& attacking_weapon);
+		uint16_t roll_incendiary_shot(obj_ptr_t& attacking_weapon, uuid_t target);
+		uint16_t roll_heat_accumulation_hp_gain(obj_ptr_t& attacking_weapon);
 
 		/** database routines */
 		int16_t load_by_player(player_ptr_t&);
@@ -60,6 +68,15 @@ namespace mods::classes {
 		int64_t db_id() const;
 		int16_t save();
 		private:
+			skill_familiarity_t m_fire_nade_level;
+			skill_familiarity_t m_drench_object_in_gasoline_level;
+			skill_familiarity_t m_drench_room_in_gasoline_level;
+			skill_familiarity_t m_convert_to_fire_nade_level;
+			skill_familiarity_t m_attach_incendiary_grenade_launcher_level;
+			skill_familiarity_t m_attach_flamethrower_level;
+			skill_familiarity_t m_create_wall_of_fire_level;
+			skill_familiarity_t m_seal_off_room_with_wall_of_fire_level;
+			uint8_t m_fire_nade_charges;
 			pyrexia_orm_t	m_orm;
 			player_ptr_t m_player;
 	};

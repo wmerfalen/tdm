@@ -148,7 +148,15 @@
 (float,damage_per_second,"#float, static base damage done",44.0), \
 (float,disorient_amount,"#float, percent",13.0), \
 (int,range_modifier,"#int, positive or negative, range modifier in rooms",0), \
-(std::string,loudness_type,"#std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING","'LOUD'") \
+(std::string,loudness_type,"#std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING","'LOUD'"), \
+(static_amount_t,incendiary_damage,"#int, static amount of incendiary damage, no limit","10"), \
+(static_amount_t,radiation_damage,"#int, static amount of radiation damage, no limit","10"), \
+(static_amount_t,chemical_damage,"#int, static amount of chemical damage, no limit","10"), \
+(static_amount_t,electric_damage,"#int, static amount of electric damage, no limit","10"), \
+(static_amount_t,armor_penetration_amount,"#int, static amount of armor penetration done, no limit","10"), \
+(static_amount_t,emp_amount,"#int, static amount of EMP done, no limit","10"), \
+(int,damage_dice_count,"#int, number of dice",2), \
+(int,damage_dice_sides,"#int, dice sides",6) \
 )
 
 #define MENTOC_DRONE_TYPES_SEQUENCE (GROUND_DRONE) \
@@ -248,7 +256,10 @@
 (int,repair_cost_profile,"#int, ENUM 0=CHEAP,1=DECENT,2=COSTLY,3=VERY_EXPENSIVE",1), \
 (int,hp,"#int, hit points",1000), \
 (std::string,classification,"#string, 'BASIC', 'ADVANCED', 'ELITE'","'BASIC'"), \
-(int,worth,"#int, how much the item is worth.",0) \
+(int,worth,"#int, how much the item is worth.",0), \
+(static_amount_t,radiation_resistance_percent,"#int, static amount of radiation resistance_percent, no limit","10"), \
+(static_amount_t,poison_resistance_percent,"#int, static amount of poison resistance_percent, no limit","10"), \
+(static_amount_t,electric_resistance_percent,"#int, static amount of electric resistance_percent, no limit","10") \
 )
 
 #define MENTOC_CONSUMABLE_TYPES_SEQUENCE (AMMUNITION) \

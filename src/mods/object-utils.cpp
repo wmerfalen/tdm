@@ -21,4 +21,7 @@ namespace mods::object_utils {
 "trap"
 		};
 	}
+	void change_visibility(obj_ptr_t& object, int amount){
+		object->visibility += amount;
+	}
 };//End namespace

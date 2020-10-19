@@ -335,7 +335,7 @@ namespace mods::yaml {
 				log("[rifle_description_t][WARNING] fill_flags used the default flags");
 				break;
 		}
-		o->rifle_instance = std::make_unique<rifle_instance_data>();
+		o->rifle_instance = std::make_unique<rifle_instance_data<attachment_data_t,obj_ptr_t,uuid_t>>();
 		if(recognized){
 			o->rifle_instance->ammo = this->clip_size;
 		}

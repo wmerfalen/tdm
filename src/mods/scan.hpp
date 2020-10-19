@@ -18,6 +18,7 @@ namespace mods {
 	namespace scan {
 		typedef struct {
 			char_data* ch;
+			obj_data* obj;
 			uint16_t distance;
 			uuid_t uuid;
 			uint8_t direction;
@@ -39,6 +40,7 @@ namespace mods {
 		enum find_type_t {
 			NPC,
 			PLAYERS,
+			OBJECTS,
 			ANY
 		};
 

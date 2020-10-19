@@ -2083,6 +2083,7 @@ obj_ptr_t create_object(int type,std::string yaml_file) {
 	}
 	obj_list.push_back(std::make_shared<obj_data>(type,yaml_file));
 	mods::globals::register_object(obj_list.back());
+	auto item = obj_list.back();
 	return obj_list.back();
 }
 std::tuple<bool,obj_ptr_t> create_object_opt(int type,std::string yaml_file) {

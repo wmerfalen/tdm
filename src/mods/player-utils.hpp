@@ -24,6 +24,10 @@ namespace mods::player_utils {
 	static inline bool is_scanned(T& player){
 		return player->get_affect_dissolver().has_affect(AFF(SCANNED));
 	}
+	template <typename T>
+	static inline void change_visibility(T& player,int amount){
+		player->visibility() += amount;
+	}
 };
 
 #endif

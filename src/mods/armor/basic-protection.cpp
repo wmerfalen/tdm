@@ -63,6 +63,24 @@ namespace mods::armor {
 			auto ptr = optr_by_uuid(obj);
 			m_armor_ptrs[where] = ptr;
 		}
+		int basic_protection::reduce_explosive_damage_using_armor(obj_ptr_t& explosive,int damage,int where){
+			int reduced = damage;
+			reduced -= (m_armor_ptrs[where]->armor()->attributes->balistic_resistance_percent * damage);
+			if(explosive->explosive()->attributes->incendiary_damage){
+				reduced -= (m_armor_ptrs[where]->armor()->attributes->fire_resistance_percent * damage);
+			}
+			return reduced;
+		}
+		int basic_protection::calculate_explosive_damage(obj_ptr_t& explosive,int damage){
+			int reduced = damage;
+			for(auto wear : {WEAR_BODY,WEAR_HEAD,WEAR_GOGGLES,WEAR_ABOUT,WEAR_LEGS,WEAR_FEET,WEAR_SHIELD}){
+				if(m_armor_ptrs[wear]){
+					/** TODO: we may have to pass in damage instead of reduced as second param */
+					reduced = reduce_explosive_damage_using_armor(explosive,reduced,wear);
+				}
+			}
+			return std::clamp(reduced,0,INT_MAX);
+		}
 #undef m_crit
 };
 

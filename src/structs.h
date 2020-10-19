@@ -28,6 +28,8 @@
 #include "mods/weapon-types.hpp"
 #include "mods/item-types.hpp"
 #include "mods/mobs/extended-types.hpp"
+#include "mods/rifle-instance-data.hpp"
+
 extern void log(const char* format,...);
 
 namespace mods::object_utils {
@@ -825,15 +827,6 @@ enum player_level {
 		int16_t modifier;     /* How much it changes by              */
 	};
 
-	struct rifle_instance_data {
-		rifle_instance_data() : ammo(0) {
-
-		}
-		~rifle_instance_data() = default;
-		uint16_t ammo;
-		std::deque<attachment_data_t> attachments;
-	};
-
 	/* ================== Memory Structure for Objects ================== */
 	struct obj_data {
 		using visibility_t = uint8_t;
@@ -961,8 +954,6 @@ enum player_level {
 		 */
 #define MENTOC_DATA_OBJ(r,data,CLASS_TYPE)\
 		/* rifle_data_t* rifle(std::string_view feed_file) { */\
-		/* rifle_data_t* rifle(std::string_view feed_file) { */\
-		/* rifle_data_t* rifle(std::string_view feed_file) { */\
 		/** TODO: mods::weapon::feed_caps(this, { cap_t::CQC, cap_t::RELOAD, cap_t::RANGED_ATTACK, cap_t::AIM, cap_t::SHOOT }); */\
 		BOOST_PP_CAT(CLASS_TYPE,_data_t*) \
 		CLASS_TYPE(\
@@ -975,8 +966,6 @@ enum player_level {
 		\
 		\
 		/* rifle_data_t rifle(void) { */\
-		/* rifle_data_t rifle(void) { */\
-		/* rifle_data_t rifle(void) { */\
 		BOOST_PP_CAT(CLASS_TYPE,_data_t*)\
 		CLASS_TYPE(\
 				void\
@@ -985,8 +974,6 @@ enum player_level {
 		}\
 		\
 		\
-		/* bool has_rifle(void) { */\
-		/* bool has_rifle(void) { */\
 		/* bool has_rifle(void) { */\
 		bool BOOST_PP_CAT(has_,CLASS_TYPE)\
 				(\
@@ -1047,7 +1034,7 @@ std::cerr << "[post_feed][END]**********************************************\n";
 		std::string generate_stat_page();
 		void set_feed_file(std::string f){ m_feed_file = f; }
 		std::string_view feed_file(){ return m_feed_file; }
-		std::unique_ptr<rifle_instance_data> rifle_instance;
+		std::unique_ptr<rifle_instance_data<attachment_data_t,std::shared_ptr<obj_data>,uuid_t>> rifle_instance;
 		protected:
 #define MENTOC_UPTR(r,data,CLASS_TYPE) std::shared_ptr<BOOST_PP_CAT(CLASS_TYPE,_data_t)> BOOST_PP_CAT(m_, CLASS_TYPE);
 BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)

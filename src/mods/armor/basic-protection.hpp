@@ -18,6 +18,7 @@ namespace mods::armor {
 		 * by the actual damage calculated in the mods/damage-types class.
 		 *
 		 * */
+		int calculate_explosive_damage(obj_ptr_t& explosive,int damage);
 		float calculate_limb_damage(feedback_t& damage,int where);
 		float calculate_headshot_damage(feedback_t& damage);
 		float calculate_critical_damage(feedback_t& damage);
@@ -26,6 +27,7 @@ namespace mods::armor {
 		void sync_equipment(uuid_t player_uuid);
 		void unequip(int where);
 		void equip(int where,uuid_t obj);
+		int reduce_explosive_damage_using_armor(obj_ptr_t& explosive,int damage,int where);
 		private:
 			vec_t<uuid_t> m_destroyed_pieces;
 			std::map<int,float> m_cached_limb_damage;

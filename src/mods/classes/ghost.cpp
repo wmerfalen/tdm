@@ -1,6 +1,8 @@
 #include "ghost.hpp"
 #include "../orm/inventory.hpp"
 #include "../affects.hpp"
+#include "../player-utils.hpp"
+#include "../object-utils.hpp"
 
 extern void stop_fighting(char_data *ch);
 namespace mods::orm::inventory {
@@ -59,10 +61,28 @@ namespace mods::classes {
 					stealth = 100 + dice(3, 8);
 					break;
 			}
-			target->visibility -= stealth;
+			mods::object_utils::change_visibility(target,- stealth);
 		}
 		void ghost::apply_stealth_to_player(player_ptr_t& target){
+			int stealth = 0;
+			switch(m_stealth_level) {
+				default:
+				case stealth_levels_t::GHOST_STEALTH_NONE:
+					m_player->sendln("It looks like you still need to train that skill");
+					return;
+				case stealth_levels_t::GHOST_STEALTH_INITIATE:
+					stealth = dice(1, 8) + 1 + (m_player->level() / 4);
+					break;
 
+				case stealth_levels_t::GHOST_STEALTH_FAMILIAR:
+					stealth = dice(3, 8) + 3 + (m_player->level() / 4);
+					break;
+
+				case stealth_levels_t::GHOST_STEALTH_MASTER:
+					stealth = 100 + dice(3, 8);
+					break;
+			}
+			mods::player_utils::change_visibility(target,- stealth);
 		}
 		void ghost::feign_death_done(){
 			m_player->set_position(POS_STANDING);

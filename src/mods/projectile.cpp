@@ -4,10 +4,13 @@
 //#include "calc_visibility.hpp"
 #include "sensor-grenade.hpp"
 #include "pfind.hpp"
+#include "skills.hpp"
 
 #include <cctype>	/* for std::tolower */
 #include "flashbang.hpp"
 #include "rooms.hpp"
+#include "injure.hpp"
+
 #ifdef __MENTOC_SHOW_MODS_EXPLODE_DEBUG_OUTPUT__
 #define explode_debug(MSG) mentoc_prefix_debug("[mods::projectile::explode]")  << MSG << "\n";
 #else
@@ -248,8 +251,51 @@ namespace mods {
 		int explosive_damage(player_ptr_t victim, obj_ptr_t item){
 			/** TODO: cause explosive damage */
 			/** TODO: check if critical, if so, cause critical damage */
-			/** TODO: check if injured, if so, injure player */
+			auto & attr = item->explosive()->attributes;
+			if(attr->alternate_explosion_type.compare("SCAN") == 0){
+				return 0;
+			}
+			uint8_t chance = attr->chance_to_injure;
+			uint8_t critical_chance = attr->critical_chance;
+			if(mods::skills::player_can(victim,skill_t::INJURE_RESISTANCE)){
+				chance -= INJURE_RESISTANCE_SKILL_MODIFIER();
+			}
+			if(mods::injure::do_injure_roll(chance)){
+				mods::injure::injure_player(victim);
+				msg::youre_injured(victim);
+			}
+			/** TODO handle critical range attribute */
+			/** TODO handle blast radius attribute */
+			/** TODO handle loudness type */
+			auto damage = dice(attr->damage_dice_count,attr->damage_dice_sides);
+
+			if(dice(1,100) <= critical_chance){
+				damage += 75; /** FIXME TODO */
+				victim->sendln("[CRITICAL]");
+			}
+
+			victim->hp() -= attr->damage;
 			victim->sendln("An explosion causes you to take damage!");
+
+			if(attr->chemical_damage){
+				victim->hp() -= attr->chemical_damage;
+				victim->sendln("A chemical weapons explosion causes you to take damage!");
+			}
+			if(attr->incendiary_damage){
+				victim->hp() -= attr->incendiary_damage;
+				victim->sendln("An incendiary explosion causes you to take damage!");
+			}
+			if(attr->radiation_damage){
+				victim->hp() -= attr->radiation_damage;
+				victim->sendln("A radiation explosion causes you to take damage!");
+			}
+			if(attr->electric_damage){
+				victim->hp() -= attr->electric_damage;
+				victim->sendln("An electric explosion causes you to take damage!");
+			}
+			if(attr->armor_penetration_amount){
+				/** TODO */
+			}
 			return 0;
 		}
 		int chemical_damage(player_ptr_t victim, obj_ptr_t item){
