@@ -459,7 +459,7 @@ enum player_class_t {
 #define ITEM_WORN      11		/* Unimplemented		*/
 #define ITEM_OTHER     12		/* Misc object			*/
 #define ITEM_TRASH     13		/* Trash - shopkeeps won't buy	*/
-#define ITEM_CONTAINER 15		/* Item is a container		*/
+#define ITEM_CONTAINER_LEGACY 15		/* Item is a container		*/
 #define ITEM_NOTE      16		/* Item is note 		*/
 #define ITEM_DRINKCON  17		/* Item is a drink container	*/
 #define ITEM_KEY       18		/* Item is a key		*/
@@ -481,6 +481,7 @@ enum player_class_t {
 #define ITEM_ARMOR      7		/* Item is armor		*/
 #define ITEM_CONSUMABLE 8
 #define ITEM_TRAP      9		
+#define ITEM_CONTAINER      10		
 #define __MENTOC_ITEM_CONSTANTS_DEFINED__
 
 
@@ -922,6 +923,7 @@ enum player_level {
 		uint8_t ai_state;
 		bool flagged(int value);
 		uint8_t from_direction;
+		std::string tag;
 
 		uuid_t uuid;
 		int16_t feed_status;

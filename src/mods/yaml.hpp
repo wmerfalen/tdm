@@ -25,6 +25,7 @@ using mw_attachment = mods::weapon::type::attachment;
 using mw_drone = mods::weapon::type::drone;
 using mw_consumable = mods::weapon::type::consumable;
 using mw_trap = mods::weapon::type::trap;
+using mw_container = mods::weapon::type::container;
 namespace mods {
 	struct player;
 };
@@ -172,28 +173,11 @@ static inline durability_profile_type_t to_durability_profile(std::string_view d
 		void fill_flags(obj_data* obj);
 		virtual ~rifle_description_t() = default;
 		rifle_description_t() : 
-			ammo_max(0),
-			ammo_type(""),
-			chance_to_injure(0),
-			clip_size(0),
-			cooldown_between_shots(0),
-			critical_chance(0),
-			critical_range(0),
-			damage_per_second(0),
-			disorient_amount(0),
-			headshot_bonus(0),
-			max_range(0),
-			range_multiplier(0),
-			reload_time(0),
-			rounds_per_minute(0),
-			muzzle_velocity(0),
-			effective_firing_range(0),
-			damage_dice_count(2),
-			damage_dice_sides(6),
 			MENTOC_BASE_MEMBERS_SET("rifle")
 		{
 			std::fill(accuracy_map.begin(),accuracy_map.end(),0);
 			std::fill(damage_map.begin(),damage_map.end(),0);
+			MENTOC_INITIALIZE(MENTOC_RIFLE_MEMBERS_TUPLE);
 			feed_status = 2;
 		}
 		virtual int16_t feed(std::string_view file);
@@ -222,15 +206,10 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~explosive_description_t() = default;
 		explosive_description_t() :
-			damage(0),
-			chance_to_injure(0.0),
-			critical_chance(0.0),
-			critical_range(0),
-			damage_per_second(0.0),
-			disorient_amount(0.0),
 			MENTOC_BASE_MEMBERS_SET("explosive")
 		{
 			std::fill(aoe_triggers.begin(),aoe_triggers.end(),0);
+			MENTOC_INITIALIZE(MENTOC_EXPLOSIVE_MEMBERS_TUPLE);
 			feed_status = 2;
 		}
 		uint64_t db_id();
@@ -254,9 +233,9 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_EXPLOSIVE_MEMBERS_TUPLE)
 		virtual int16_t write_example_file(std::string_view file);
 		virtual ~drone_description_t() = default;
 		drone_description_t() :
-			damage(0),
 			MENTOC_BASE_MEMBERS_SET("drone")
 		{
+			MENTOC_INITIALIZE(MENTOC_DRONE_MEMBERS_TUPLE);
 			feed_status = 2;
 		}
 		uint64_t db_id();
@@ -280,6 +259,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_DRONE_MEMBERS_TUPLE)
 		gadget_description_t() :
 			MENTOC_BASE_MEMBERS_SET("gadget")
 		{
+			MENTOC_INITIALIZE(MENTOC_GADGET_MEMBERS_TUPLE);
 			feed_status = 2;
 		}
 		virtual int16_t feed_from_po_record(mentoc_pqxx_result_t);
@@ -305,6 +285,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_GADGET_MEMBERS_TUPLE)
 		attachment_description_t() :
 			MENTOC_BASE_MEMBERS_SET("attachment")
 		{
+			MENTOC_INITIALIZE(MENTOC_ATTACHMENT_MEMBERS_TUPLE);
 			feed_status = 2;
 		}
 		uint64_t db_id();
@@ -328,6 +309,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ATTACHMENT_MEMBERS_TUPLE)
 		armor_description_t() :
 			MENTOC_BASE_MEMBERS_SET("armor")
 		{
+			MENTOC_INITIALIZE(MENTOC_ARMOR_MEMBERS_TUPLE);
 			feed_status = 2;
 		}
 		uint64_t db_id();
@@ -352,6 +334,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
 		consumable_description_t() :
 			MENTOC_BASE_MEMBERS_SET("consumable")
 		{
+			MENTOC_INITIALIZE(MENTOC_CONSUMABLE_MEMBERS_TUPLE);
 			feed_status = 2;
 
 		}
@@ -375,11 +358,37 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_CONSUMABLE_MEMBERS_TUPLE)
 		virtual ~trap_description_t() = default;
 		trap_description_t() :
 			MENTOC_BASE_MEMBERS_SET("trap"){
+			MENTOC_INITIALIZE(MENTOC_TRAP_MEMBERS_TUPLE);
 			feed_status = 2;
 		}
 		uint64_t db_id();
 
 MENTOC_MEMBER_VARS_FOR(MENTOC_TRAP_MEMBERS_TUPLE)
+
+		MENTOC_BASE_MEMBERS
+
+	};
+
+	struct container_description_t : public yaml_description_t {
+		int16_t feed_status;
+		std::map<std::string,std::string> exported;
+		void generate_map();
+		using mw_type = mw_container;
+
+		std::vector<cap_t> get_caps(){ return {}; }
+		void fill_flags(obj_data* c);
+		uint64_t flush_to_db();
+		virtual int16_t feed(std::string_view file);
+		virtual int16_t write_example_file(std::string_view file);
+		virtual ~container_description_t() = default;
+		uint64_t db_id();
+		container_description_t() :
+			MENTOC_BASE_MEMBERS_SET("container"){
+			MENTOC_INITIALIZE(MENTOC_CONTAINER_MEMBERS_TUPLE);
+			feed_status = 2;
+		}
+
+MENTOC_MEMBER_VARS_FOR(MENTOC_CONTAINER_MEMBERS_TUPLE)
 
 		MENTOC_BASE_MEMBERS
 

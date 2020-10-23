@@ -392,6 +392,7 @@ ACMD(do_yaml_example){
 	MENTOC_F_EXA(armor,"armor.yml");
 	MENTOC_F_EXA(consumable,"consumable.yml");
 	MENTOC_F_EXA(trap,"trap.yml");
+	MENTOC_F_EXA(container,"container.yml");
 #undef MENTOC_F_EXA
 	player->sendln("[+] done");
 }

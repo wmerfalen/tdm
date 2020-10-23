@@ -49,6 +49,9 @@ namespace mods::orm::inventory {
 				/** !!*****************!! */
 				/** !!UPDATE_ITEM_TYPES!! */
 				/** !!*****************!! */
+				if(in_type.compare("container") == 0){
+					t = ITEM_CONTAINER;
+				}
 				if(in_type.compare("trap") == 0){
 					t = ITEM_TRAP;
 				}

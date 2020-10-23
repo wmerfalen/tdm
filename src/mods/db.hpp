@@ -123,4 +123,16 @@ std::string player_key(std::string player_name,std::string prefix, std::string t
 std::string player_key_index(std::string player_name,std::string prefix, std::string type);
 std::string player_key_count(std::string player_name,std::string prefix, std::string type);
 
+namespace mods::db{
+	std::string section_key(std::string section_name,std::string prefix, std::string type);
+	std::string section_key_index(std::string section_name,std::string prefix, std::string type);
+	std::string section_key_count(std::string section_name,std::string prefix, std::string type);
+	int put_section_map(std::string_view section_name,std::string prefix, std::map<std::string,std::string> values);
+	int get_section_map(std::string_view section_name,std::string prefix, std::map<std::string,std::string>& values);
+	int put_section_vector(std::string_view section_name,std::string prefix, std::vector<std::string> values);
+	int get_section_vector(std::string_view section_name,std::string prefix, std::vector<std::string>& values);
+	bool vector_exists(std::string section_name,std::string prefix);
+	int delete_section_vector(std::string_view section_name,std::string prefix);
+};//end namespace db_wrapper
+
 #endif

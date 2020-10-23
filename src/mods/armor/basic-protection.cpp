@@ -66,7 +66,7 @@ namespace mods::armor {
 		int basic_protection::reduce_explosive_damage_using_armor(obj_ptr_t& explosive,int damage,int where){
 			int reduced = damage;
 			reduced -= (m_armor_ptrs[where]->armor()->attributes->balistic_resistance_percent * damage);
-			if(explosive->explosive()->attributes->incendiary_damage){
+			if(explosive->explosive()->attributes->incendiary_damage_dice_count){
 				reduced -= (m_armor_ptrs[where]->armor()->attributes->fire_resistance_percent * damage);
 			}
 			return reduced;

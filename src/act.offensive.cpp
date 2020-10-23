@@ -59,36 +59,13 @@ ACMD(do_throw) {
 		return;
 	}
 
-	std::array<char,MAX_INPUT_LENGTH> item;
-	std::array<char,MAX_INPUT_LENGTH> direction;
-	std::array<char,MAX_INPUT_LENGTH> count;
-	std::fill(item.begin(),item.end(),0);
-	std::fill(direction.begin(),direction.end(),0);
-	std::fill(count.begin(),count.end(),0);
-
-	skip_spaces(&argument);
-
-	if(!*argument) {
-		player->sendln("Command not recognized. see: type 'help grenade'");
-		return;
-	}
-
-	two_arguments(argument, &direction[0], &count[0]);
-
-	int cnt = atoi(static_cast<const char*>(&count[0]));
-
-	if(cnt > 4) {
-		player->sendln("But you can only throw up to 4 rooms away!");
-		return;
-	}
-
-	auto dir = mods::projectile::to_direction(&direction[0]);
+	int cnt = atoi(vec_args[2].c_str());
+	auto dir = mods::projectile::to_direction(vec_args[1]);
 	if(dir < 0){
 		player->sendln("Use a valid direction!");
 		return;
 	}
 
-	/* TODO: change to equipment() */
 	auto held_object = player->equipment(WEAR_HOLD);
 	if(!held_object) {
 		player->sendln("You're not holding anything!");

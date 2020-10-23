@@ -1,22 +1,25 @@
 # type: GROUND_DRONE
 # type: AERIAL_DRONE
 # type: AQUATIC_DRONE
-hover_airtime: 4#float, seconds
-radio_range: 4#int, rooms
-ammo_max: 33#int, bullets
-recharge_rate: 2.5#float, percentage per second
-discharge_rate: 38#float, percentage battery is reduced per shot
-self_destruct: 1#int, 0 = NEVER, 1 = CAN DESTRUCT, 2 = KAMIKAZE
-health_points: 60#float, no limit
-move_points: 50#float, no limit
-emp_range: 0#int, rooms. 0 = disabled
-spray_range: 0#int, rooms. 0 = disabled
-spray_type: 'DISABLED'#string, enum. TBE. leave empty to disable
+hover_airtime: 4 #float, seconds
+radio_range: 4 #int, rooms
+ammo_max: 33 #int, bullets
+recharge_rate: 2.5 #float, percentage per second
+discharge_rate: 38 #float, percentage battery is reduced per shot
+self_destruct: 1 #int, 0 = NEVER, 1 = CAN DESTRUCT, 2 = KAMIKAZE
+health_points: 60 #float, no limit
+move_points: 50 #float, no limit
+emp_range: 0 #int, rooms. 0 = disabled
+spray_range: 0 #int, rooms. 0 = disabled
+spray_type: 'DISABLED' #string, enum. TBE. leave empty to disable
 str_type: 'GROUND_DRONE' # enum, object type
-type: 0 # integer enum 
 manufacturer: 'ACME Industries' # string, anything 
 name: 'TN Land Drone' # string, anything name of object 
 vnum: 1000 # integer, unique identifier
+description: 'Description'
+short_description: 'short description'
+action_description: 'action description'
+feed_file: 'GROUND_DRONE.yml'
 #rarity types
 # COMMON
 # UNCOMMON
@@ -25,6 +28,3 @@ vnum: 1000 # integer, unique identifier
 # GOD_TIER
 # DEFAULT
 rarity: 'COMMON'
-description: 'A sneaky TN Land Drone is idling here'
-short_description: 'a TN Land Drone'
-action_description: 'TN Land Drone'

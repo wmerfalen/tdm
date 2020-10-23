@@ -1,5 +1,5 @@
-#ifndef __MENTOC_MODS_ORM_CLASS_MEDIC_HEADER__
-#define __MENTOC_MODS_ORM_CLASS_MEDIC_HEADER__
+#ifndef __MENTOC_MODS_ORM_INTEGRAL_OBJECTS_HEADER__
+#define __MENTOC_MODS_ORM_INTEGRAL_OBJECTS_HEADER__
 
 #include "orm-base.hpp"
 
@@ -22,6 +22,7 @@ namespace mods::orm {
 		uint64_t initialize_row();
 		int16_t feed(const pqxx::result::reference &);
 		void init();
+		int16_t save_new();
 
 		strmap_t export_class();
 		//int16_t				load_by_player(uint64_t);

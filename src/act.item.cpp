@@ -1382,11 +1382,6 @@ bool perform_wear_with_confirmation(player_ptr_t& player, obj_ptr_t& in_obj, int
 	char_data * ch = player->cd();
 	obj_data * obj = in_obj.get();
 
-	if(!obj->has_armor()){
-		act("You can't wear $p because it is not a piece of armor.", FALSE, ch, obj, 0, TO_CHAR);
-		return 0;
-	}
-
 	/* first, make sure that the wear position is valid. */
 	if(!CAN_WEAR(obj, wear_bitvectors[where])) {
 		act("You can't wear $p there.", FALSE, ch, obj, 0, TO_CHAR);
@@ -1403,22 +1398,23 @@ bool perform_wear_with_confirmation(player_ptr_t& player, obj_ptr_t& in_obj, int
 		player->sendln(already_wearing[where]);
 		return 0;
 	}
-
-	auto classification = obj->armor()->attributes->classification_enum;
-	if(classification == mods::yaml::armor_classification_type_t::BASIC && 
-		!mods::skills::player_can(player,skill_t::BASIC_ARMOR)){
-		act("You can't wear $p until you master the {yel}BASIC_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
-		return 0;
-	}
-	if(classification == mods::yaml::armor_classification_type_t::ADVANCED && 
-		!mods::skills::player_can(player,skill_t::ADVANCED_ARMOR)){
-		act("You can't wear $p until you master the {yel}ADVANCED_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
-		return 0;
-	}
-	if(classification == mods::yaml::armor_classification_type_t::ELITE && 
-		!mods::skills::player_can(player,skill_t::ELITE_ARMOR)){
-		act("You can't wear $p until you master the {yel}ELITE_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
-		return 0;
+	if(obj->has_armor()){
+		auto classification = obj->armor()->attributes->classification_enum;
+		if(classification == mods::yaml::armor_classification_type_t::BASIC && 
+			!mods::skills::player_can(player,skill_t::BASIC_ARMOR)){
+			act("You can't wear $p until you master the {yel}BASIC_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
+			return 0;
+		}
+		if(classification == mods::yaml::armor_classification_type_t::ADVANCED && 
+			!mods::skills::player_can(player,skill_t::ADVANCED_ARMOR)){
+			act("You can't wear $p until you master the {yel}ADVANCED_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
+			return 0;
+		}
+		if(classification == mods::yaml::armor_classification_type_t::ELITE && 
+			!mods::skills::player_can(player,skill_t::ELITE_ARMOR)){
+			act("You can't wear $p until you master the {yel}ELITE_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
+			return 0;
+		}
 	}
 	wear_message(ch, obj, where);
 	player->equip(obj->uuid,where);

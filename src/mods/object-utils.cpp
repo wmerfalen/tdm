@@ -18,10 +18,21 @@ namespace mods::object_utils {
 "attachment",
 "armor",
 "consumable",
-"trap"
+"trap",
+"container"
 		};
 	}
 	void change_visibility(obj_ptr_t& object, int amount){
 		object->visibility += amount;
+	}
+	bool is_wield_position(int where){
+		switch(where){
+			case WEAR_SHIELD:
+			case WEAR_SECONDARY_WEAPON:
+			case WEAR_PRIMARY:
+				return true;
+			default:
+				return false;
+		}
 	}
 };//End namespace

@@ -19,6 +19,16 @@ namespace mods::orm {
 		values["object_vnum"] = std::to_string(object_vnum);
 		return std::move(values);
 	}
+	int16_t integral_object::save_new(){
+		id = 0;
+		auto status = this->create<integral_object>(this);
+		if(ORM_SUCCESS(status)){
+			updated_at = created_at = time(nullptr);
+			loaded = 1;
+			id = std::get<2>(status);
+		}
+		return id;
+	}
 
 	int16_t integral_object::feed(const pqxx::result::reference & row){
 		init();

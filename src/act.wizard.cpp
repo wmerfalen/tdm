@@ -579,7 +579,7 @@ void do_stat_object(char_data *ch, struct obj_data *j) {
 			player->send("Spell: %d, - Hitpoints: %d", GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 1));
 			break;
 
-		case ITEM_CONTAINER:
+		case ITEM_CONTAINER_LEGACY:
 			sprintbit(GET_OBJ_VAL(j, 1), container_bits, buf, sizeof(buf));
 			player->send("Weight capacity: %d, Lock Type: %s, Key Num: %d, Corpse: %s",
 			             GET_OBJ_VAL(j, 0), buf, GET_OBJ_VAL(j, 2),

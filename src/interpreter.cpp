@@ -204,6 +204,13 @@ ACMD(do_builder){
 	mods::js::eval_string("builder_init();");
 	player->done();
 }
+ACMD(do_install_camera_feed);
+ACMD(do_uninstall_camera_feed);
+ACMD(do_install_weapon_locker);
+ACMD(do_uninstall_weapon_locker);
+ACMD(do_install_armor_locker);
+ACMD(do_uninstall_armor_locker);
+
 ACMD(do_builder_help){
 	
 	if(IS_NPC(ch)){
@@ -419,6 +426,8 @@ ACMD(do_affect_me);
 ACMD(do_givemegold);
 ACMD(do_givemenades);
 ACMD(do_shoot);	/* just an alias of snipe */
+ACMD(do_install_weapon_locker);
+ACMD(do_install_armor_locker);
 ACMD(do_snipe);
 ACMD(do_snipe_object);
 ACMD(do_room_vnum);
@@ -915,6 +924,12 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "add_super_user"  , POS_RESTING , do_add_super_user   , LVL_BUILDER, 0 },
 	{ "remove_super_user"  , POS_RESTING , do_remove_super_user   , LVL_BUILDER, 0 },
 	{ "get_super_user_list"  , POS_RESTING , do_get_super_user_list   , LVL_BUILDER, 0 },
+	{ "install_camera_feed"  , POS_RESTING , do_install_camera_feed   , LVL_BUILDER, 0 },
+	{ "uninstall_camera_feed"  , POS_RESTING , do_uninstall_camera_feed   , LVL_BUILDER, 0 },
+	{ "install_weapon_locker"  , POS_RESTING , do_install_weapon_locker   , LVL_BUILDER, 0 },
+	{ "uninstall_weapon_locker"  , POS_RESTING , do_uninstall_weapon_locker   , LVL_BUILDER, 0 },
+	{ "install_armor_locker"  , POS_RESTING , do_install_armor_locker   , LVL_BUILDER, 0 },
+	{ "uninstall_armor_locker"  , POS_RESTING , do_uninstall_armor_locker   , LVL_BUILDER, 0 },
 	{ "show_tics"  , POS_RESTING , do_show_tics   , 0, 0 },
 	{ "builder_help"  , POS_RESTING , do_builder_help   , LVL_GOD, 0 },
 	{ "flush_holding"  , POS_RESTING , do_flush_holding   , LVL_GOD, 0 },

@@ -1,0 +1,46 @@
+# type: FRAG_GRENADE
+# type: INCENDIARY_GRENADE
+# type: REMOTE_EXPLOSIVE
+# type: REMOTE_CHEMICAL
+# type: EMP_GRENADE
+# type: CLAYMORE_MINE
+# type: SMOKE_GRENADE
+# type: C4
+# type: BREACH_CHARGE
+# type: FLASHBANG_GRENADE
+# type: SENSOR_GRENADE
+str_type: 'FRAG_GRENADE' # enum, object type
+type: 'FRAG_GRENADE' # integer enum 
+manufacturer: 'Helion Limited' # string, anything 
+name: 'FR Altex Grenade' # string, anything name of object 
+vnum: 34  # integer, unique identifier
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+description: 'A FR Altex Grenade is lying here.'
+short_description: 'a FR Altex Grenade'
+action_description: 'a FR Altex Grenade'
+feed_file: 'objects/explosive/frag.yml'
+alternate_explosion_type: 'NONE' #std::string, ENUM NONE,SCAN
+loudness_type: 'DEAFENING' #std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING
+chance_to_injure: 15.0 #float, percent
+critical_chance: 20.0 #float, percent
+critical_range: 1 #int, rooms
+blast_radius: 2 #int, rooms
+damage_per_second: 0.0 #float, static base damage done
+disorient_amount: 0.0 #float, percent
+range_modifier: 1 #int, rooms
+incendiary_damage: 20 #
+radiation_damage: 0 #int, static amount of radiation damage, no limit","10"),
+chemical_damage: 0 #int, static amount of chemical damage, no limit","10"), 
+electric_damage: 0 #int, static amount of electric damage, no limit","10"), 
+armor_penetration_amount: 15 #int, static amount of armor penetration done, no limit","10"), 
+emp_amount: 0 
+damage_dice_count: 10
+damage_dice_sides: 6
+

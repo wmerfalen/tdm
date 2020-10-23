@@ -9,6 +9,15 @@
 #endif
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 namespace mods::yaml {
+	template <typename T>
+	static inline std::string to_string(T& item){
+		return std::to_string(item);
+	}
+	template <>
+	inline std::string to_string<std::string>(std::string& item){
+		return item;
+	}
+
 #ifdef __MENOC_FEED_BASE_MEMBERS_DEBUG__
 #define debug_echo(a) std::cerr << "[MENTOC_FEED_BASE_MEMBERS][DEBUG]:'" << a << "'\n"; 
 #else
@@ -125,14 +134,33 @@ namespace mods::yaml {
 		if(!out_file.good()){
 			return -1;
 		}
-		MENTOC_EXAMPLE_ARMORS
-			MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
-			base_items(&out_file,"MK-71X Ballistic Vest","VEST");
+		MENTOC_EXAMPLE_CONTAINERS
+		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_CONTAINER_MEMBERS_TUPLE)
+		base_items(&out_file,"Weapons locker","LOCKER");
 		out_file.flush();
 		out_file.close();
 		return 0;
 	}
 
+	int16_t container_description_t::write_example_file(std::string_view file){
+		std::string file_name = current_working_dir() + "/" + file.data();
+		std::ofstream out_file(file_name);
+		if(!out_file.is_open()){
+			return -1;
+		}
+		if(!out_file.good()){
+			return -1;
+		}
+		MENTOC_EXAMPLE_CONTAINERS
+		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_CONTAINER_MEMBERS_TUPLE)
+		base_items(&out_file,"Weapons Locker","WEAPON_LOCKER");
+		out_file.flush();
+		out_file.close();
+		return 0;
+	}
+	void container_description_t::generate_map(){
+		exported["container_detailed_description"] = this->detailed_description;
+	}
 	void armor_description_t::generate_map(){
 			this->exported["armor_csv_capabilities"] = this->csv_capabilities; //VARCHAR(2048),
 			this->exported["armor_csv_attach_to"] = this->csv_attach_to; //VARCHAR(2048),
@@ -153,6 +181,28 @@ namespace mods::yaml {
 			this->exported["armor_hp"] = std::to_string(hp);
 			this->exported["armor_classification"] = classification;
 			this->exported["armor_worth"] = std::to_string(worth);
+	}
+	uint64_t container_description_t::flush_to_db(){
+		try{
+			this->generate_map();
+			auto insert_transaction = txn();
+			sql_compositor comp("object_container",&insert_transaction);
+			auto up_sql = comp
+				.insert()
+				.into("object_container")
+				.values(this->exported)
+				.returning("container_id")
+				.sql();
+			auto row = mods::pq::exec(insert_transaction,up_sql);
+			mods::pq::commit(insert_transaction);
+			if(row.size()){
+				return row[0]["container_id"].as<uint64_t>();
+			}
+			return 0;
+		}catch(std::exception& e){
+			REPORT_DB_ISSUE(": error inserting new object_armor record: '",e.what());
+			return 0;
+		}
 	}
 	uint64_t armor_description_t::flush_to_db(){
 		try{
@@ -249,6 +299,19 @@ namespace mods::yaml {
 		out_file.close();
 		return 0;
 	};
+	void container_description_t::fill_flags(obj_data* o){
+		auto * w = &(o->obj_flags.wear_flags);
+		auto * tf = &(o->obj_flags.type_flag);
+		(*tf) = ITEM_CONTAINER;
+		o->container()->type = (mw_container)this->type;
+		switch((mw_container)this->type){
+			case mw_container::LOCKER:
+			default:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;
+				break;
+		}
+	}
+
 	void gadget_description_t::fill_flags(obj_data* o){
 		auto * w = &(o->obj_flags.wear_flags);
 		auto * tf = &(o->obj_flags.type_flag);
@@ -483,6 +546,9 @@ namespace mods::yaml {
 	uint64_t attachment_description_t::db_id(){
 		return this->id;
 	}
+	uint64_t container_description_t::db_id(){
+		return this->id;
+	}
 	int16_t rifle_description_t::write_example_file(std::string_view file){
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
@@ -626,6 +692,7 @@ namespace mods::yaml {
 		return 0;
 	}
 	int16_t explosive_description_t::write_example_file(std::string_view file){
+		this->generate_map();
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
 		if(!out_file.is_open()){
@@ -634,8 +701,10 @@ namespace mods::yaml {
 		if(!out_file.good()){
 			return -2;
 		}
+
 		MENTOC_EXAMPLE_EXPLOSIVES
-			base_items(&out_file, "FS12 Fragmentation grenade","FRAG_GRENADE");
+
+		base_items(&out_file, "FS12 Fragmentation grenade","FRAG_GRENADE");
 		out_file.flush();
 		out_file.close();
 		return 0;
@@ -644,22 +713,8 @@ namespace mods::yaml {
 	// vim-sorcery: :555,569s/values\["\([^ ]\+\).*/\t\tvalues["\1"] = std::to_string(this->\1);/
 	//
 	void explosive_description_t::generate_map(){
-			this->exported["explosive_alternate_explosion_type"] = this->alternate_explosion_type;
-			this->exported["explosive_chance_to_injure"] = std::to_string(this->chance_to_injure);
-			this->exported["explosive_critical_chance"] = std::to_string(this->critical_chance);
-			this->exported["explosive_critical_range"] = std::to_string(this->critical_range);
-			this->exported["explosive_blast_radius"] = std::to_string(this->blast_radius);
-			this->exported["explosive_damage_per_second"] = std::to_string(this->damage_per_second);
-			this->exported["explosive_disorient_amount"] = std::to_string(this->disorient_amount);
-			this->exported["explosive_loudness_type"] = this->loudness_type;
-			this->exported["explosive_str_type"] = this->str_type;
-			this->exported["explosive_type"] = std::to_string(this->type);
-			this->exported["explosive_manufacturer"] = this->manufacturer;
-			this->exported["explosive_name"] = this->name;
-			this->exported["explosive_vnum"] = std::to_string(this->vnum);
-			this->exported["explosive_rarity"] = rarity_to_string(this->rarity);
-			this->exported["explosive_file"] = this->feed_file;
-		}
+		MENTOC_GENERATE_MAP(MENTOC_EXPLOSIVE_MEMBERS_TUPLE,"explosive");
+	}
 	uint64_t explosive_description_t::flush_to_db(){
 		try{
 			this->generate_map();
@@ -712,6 +767,7 @@ namespace mods::yaml {
 			return -2;
 		}
 		MENTOC_EXAMPLE_TRAP
+		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_CONSUMABLE_MEMBERS_TUPLE)
 			base_items(&out_file, "Bear Trap ","BEAR_TRAP");
 		out_file.flush();
 		out_file.close();
@@ -889,6 +945,25 @@ namespace mods::yaml {
 		auto type_string = yaml_file["str_type"].as<std::string>();
 		fed_items.push_back("str_type");
 		MENTOC_FEED_TRAP
+			MENTOC_FEED_BASE_MEMBERS
+			this->feed_status = 0;
+			return 0;
+		}catch(YAML::Exception& e){
+			mods::object_utils::report_yaml_exception(e,fed_items);
+			REPORT_DB_ISSUE("error",e.what());
+		this->feed_status = -2;
+			return -2;
+		}
+	}
+	int16_t container_description_t::feed(std::string_view in_file){
+		MENTOC_FILE_EXISTS_PREAMBLE(container);
+			std::vector<std::string> fed_items;
+		try{
+		feed_file = file;
+		YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
+		auto type_string = yaml_file["str_type"].as<std::string>();
+		fed_items.push_back("str_type");
+		MENTOC_FEED_CONTAINER
 			MENTOC_FEED_BASE_MEMBERS
 			this->feed_status = 0;
 			return 0;

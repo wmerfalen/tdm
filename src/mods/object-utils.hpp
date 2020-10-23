@@ -275,9 +275,12 @@ namespace mods::object_utils {
 	 * @return 
 	 */
 	static inline obj_ptr_t yaml_import(std::string object_type,std::string in_yaml_file){
+		/** !!*****************!! */
+		/** !!UPDATE_ITEM_TYPES!! */
+		/** !!*****************!! */
 		static std::vector<std::string> VALID_TYPES = {
 			"rifle","explosive","drone","attachment","gadget",
-			"armor","trap","consumable"
+			"armor","trap","consumable","container"
 		};
 		if(in_yaml_file.length() == 0 || object_type.length() == 0){
 			report_yaml_message("the yaml file specified is of zero length");
@@ -308,6 +311,7 @@ namespace mods::object_utils {
 		MENTOC_F_IMPORT(armor,ARMOR);
 		MENTOC_F_IMPORT(trap,TRAP);
 		MENTOC_F_IMPORT(consumable,CONSUMABLE);
+		MENTOC_F_IMPORT(container,CONTAINER);
 #undef MENTOC_F_IMPORT
 
 		if(!obj){
@@ -347,6 +351,8 @@ namespace mods::object_utils {
 	}
 
 	void change_visibility(obj_ptr_t& object,int amount);
+	bool is_wield_position(int where);
+	bool is_hold_position(int where);
 };//End namespace
 
 #endif

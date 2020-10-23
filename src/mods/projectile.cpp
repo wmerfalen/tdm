@@ -24,12 +24,18 @@
 #endif
 
 
+#define __MENTOC_SHOW_MODS_EXPLODE_IN_FUTURE_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_EXPLODE_IN_FUTURE_DEBUG_OUTPUT__
 #define eif_debug(MSG) mentoc_prefix_debug("[mods::projectile::explode_in_future]")  << MSG << "\n";
 #else
 #define eif_debug(MSG) ;;
 #endif
 
+#define m_error(MSG) mentoc_prefix_debug(red_str("[mods::projectile::ERROR]"))  << MSG << "\n";
+
+namespace mods::weapons::damage_types {
+	extern void deal_hp_damage(player_ptr_t& player, uint16_t damage);
+};
 
 extern void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
 extern void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...);
@@ -132,6 +138,98 @@ namespace mods {
 			 }
 			 }
 			 */
+		int grenade_damage(player_ptr_t victim,obj_ptr_t projectile){
+			return explosive_damage(victim,projectile);
+		}
+		int fire_damage(player_ptr_t victim,obj_ptr_t projectile){
+			victim->sendln("The room catches fire!");
+			return explosive_damage(victim,projectile);
+		}
+		void disable_electronics(room_rnum room){
+			/** TODO: disable electronics */
+		}
+		void smoke_room(room_rnum room){
+			/** TODO: cause limited visibility and smoke texture */
+		}
+		void blindness_clears_up(player_ptr_t victim){
+			victim->remove_affect(AFF_BLIND);
+			victim->sendln("You take the world in as the effects of your blindness wear off.");
+		}
+		void disorient_clears_up(player_ptr_t victim){
+			victim->remove_affect(AFF_DISORIENT);
+			victim->sendln("The world around you starts to focus. You are no longer disoriented.");
+		}
+		void blind_target(player_ptr_t victim){
+			victim->affect(AFF_BLIND);
+			victim->sendln("You are blinded.");
+		}
+		void disorient_person(player_ptr_t victim){
+			victim->affect(AFF_DISORIENT);
+			victim->sendln("You become disoriented.");
+		}
+		struct explosive_damage_t {
+			int chemical;
+			int fire;
+			int radiation;
+			int electric;
+			int armor_pen;
+			int total;
+			int damage;
+			int critical;
+			bool injured;
+			explosive_damage_t() : 
+			chemical(0),
+			fire(0),
+			radiation(0),
+			electric(0),
+			armor_pen(0),
+			total(0),
+			damage(0),
+			critical(0),
+			 injured(false){}
+		};
+		explosive_damage_t calculate_explosive_damage(player_ptr_t victim, obj_ptr_t item){
+			explosive_damage_t e;
+
+			auto & attr = item->explosive()->attributes;
+			if(attr->alternate_explosion_type.compare("SCAN") == 0){
+				return e;
+			}
+			uint8_t chance = attr->chance_to_injure;
+			uint8_t critical_chance = attr->critical_chance;
+			if(mods::skills::player_can(victim,skill_t::INJURE_RESISTANCE)){
+				chance -= INJURE_RESISTANCE_SKILL_MODIFIER();
+			}
+			e.injured = mods::injure::do_injure_roll(chance);
+
+			/** TODO handle critical range attribute */
+			/** TODO handle blast radius attribute */
+			/** TODO handle loudness type */
+			e.damage = dice(attr->damage_dice_count,attr->damage_dice_sides);
+
+			if(dice(1,100) <= critical_chance){
+				e.critical = e.damage * EXPLOSIVE_CRITICAL_MULTIPLIER();
+			}
+
+			if(attr->chemical_damage_dice_count){
+				e.chemical = dice(attr->chemical_damage_dice_count,attr->chemical_damage_dice_sides);
+			}
+			if(attr->incendiary_damage_dice_count){
+				e.fire = dice(attr->incendiary_damage_dice_count,attr->incendiary_damage_dice_sides);
+			}
+			if(attr->radiation_damage_dice_count){
+				e.radiation = dice(attr->radiation_damage_dice_count,attr->radiation_damage_dice_sides);
+			}
+			if(attr->electric_damage_dice_count){
+				e.electric = dice(attr->electric_damage_dice_count,attr->electric_damage_dice_sides);
+			}
+			if(attr->armor_penetration_damage_dice_count){
+				e.armor_pen = dice(attr->armor_penetration_damage_dice_count,attr->armor_penetration_damage_dice_sides);
+			}
+
+			return e;
+		}
+
 		void perform_blast_radius(
 				room_rnum room_id,
 				std::size_t blast_radius,
@@ -159,153 +257,118 @@ namespace mods {
 					switch(type){
 						default: break;
 						case mw_explosive::EXPLOSIVE_NONE:
-										 log("SYSERR: EXPLOSIVE_NONE specified in perform_blast_radius");
-										 return;
+							 log("SYSERR: EXPLOSIVE_NONE specified in perform_blast_radius");
+							 return;
 						case mw_explosive::REMOTE_CHEMICAL:
-										 QUEUE_TEXTURE_REMOVAL(HAZARDOUS_SMOKE,current_room);
-										 break;
+							 QUEUE_TEXTURE_REMOVAL(HAZARDOUS_SMOKE,current_room);
+							 break;
 						case mw_explosive::INCENDIARY_GRENADE:
-										 mods::rooms::start_fire_dissolver(current_room);
-										 break;
+							 mods::rooms::start_fire_dissolver(current_room);
+							 break;
 						case mw_explosive::EMP_GRENADE:
-										 QUEUE_TEXTURE_REMOVAL(EMP,current_room);
-										 break;
+							 disable_electronics(current_room);
+							 QUEUE_TEXTURE_REMOVAL(EMP,current_room);
+							 break;
 						case mw_explosive::SMOKE_GRENADE:
-										 QUEUE_TEXTURE_REMOVAL(NON_HAZARDOUS_SMOKE,current_room);
-										 break;
+							 QUEUE_TEXTURE_REMOVAL(NON_HAZARDOUS_SMOKE,current_room);
+							 break;
 					}
 					for(auto & person : mods::globals::get_room_list(current_room)){
 						switch(type){
 							case mw_explosive::REMOTE_CHEMICAL:
 								mods::projectile::propagate_chemical_blast(current_room,device,blast_count);
 								break;
-							default: return;	/** THis should _NEVER_ happen */
+							default:
+								m_error("type of explosive is invalid value!");
+								return;	/** THis should _NEVER_ happen */
 							case mw_explosive::REMOTE_EXPLOSIVE:
 							case mw_explosive::CLAYMORE_MINE:
 							case mw_explosive::FRAG_GRENADE:
-											 person->sendln("Shrapnel tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-											 damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR();
-											 person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
-											 /** TODO: deal explosive damage here */
-											 break;
+								person->sendln("Shrapnel tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
+								damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR();
+								person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
+								explosive_damage(person, device);
+								break;
 							case mw_explosive::INCENDIARY_GRENADE:
-											 person->sendln("A heated explosion sets the room on fire" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-											 damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR();
-											 person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
-											 /** TODO: deal fire damage here */
-											 break;
+								person->sendln("A heated explosion sets the room on fire" + mods::projectile::fromdirstr(opposite,1,0) + "!");
+								damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR();
+								person->sendln("[damage: " + std::to_string(damage_multiplier) + "]");
+								fire_damage(person, device);
+								break;
 							case mw_explosive::EMP_GRENADE:
-											 person->sendln("The effectiveness of your electronics is hindered" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-											 damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR();
-											 person->sendln("[electronics " + std::to_string(damage_multiplier) + "]");
-											 /** TODO: affect room with emp here */
-											 break;
+								person->sendln("The effectiveness of your electronics is hindered" + mods::projectile::fromdirstr(opposite,1,0) + "!");
+								damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR();
+								person->sendln("[electronics " + std::to_string(damage_multiplier) + "]");
+								/** TODO */
+								break;
 							case mw_explosive::SMOKE_GRENADE:
-											 person->sendln("A cloud of smoke billows in" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-											 /** TODO: add smoke texture to room */
-											 break;
+								person->sendln("A cloud of smoke billows in" + mods::projectile::fromdirstr(opposite,1,0) + "!");
+								/** TODO */
+								break;
 							case mw_explosive::FLASHBANG_GRENADE:
-											 person->sendln("You are partially blinded by flash of light" + mods::projectile::fromdirstr(opposite,1,0) + "!");
-											 /** TODO: add disorient to player here */
-											 break;
+								blind_target(person);
+								disorient_person(person);
+								break;
 						}
 					}
 				}
 			}
 			obj_from_room(device);
 		}
-		int grenade_damage(player_ptr_t victim,obj_ptr_t projectile){
-			mods::projectile::explosive_damage(victim,projectile);
-			return 0;
-		}
-		int fire_damage(player_ptr_t victim,obj_ptr_t projectile){
-			/** TODO: add fire texture to room */
-			mods::injure::explosive::handle_crit_injure(projectile,victim);
-			victim->sendln("The room and part of your equipment catch on fire!");
-			return 0;
-		}
-		void disable_electronics(room_rnum room){
-			/** TODO: disable electronics */
-
-		}
-		void smoke_room(room_rnum room){
-			/** TODO: cause limited visibility and smoke texture */
-		}
-		void blindness_clears_up(player_ptr_t victim){
-			victim->remove_affect(AFF_BLIND);
-			victim->sendln("You take the world in as the effects of your blindness wear off.");
-		}
-		void disorient_clears_up(player_ptr_t victim){
-			victim->remove_affect(AFF_DISORIENT);
-			victim->sendln("The world around you starts to focus. You are no longer disoriented.");
-		}
-		void blind_target(player_ptr_t victim){
-			victim->affect(AFF_BLIND);
-			victim->sendln("You are blinded.");
-		}
-		void disorient_person(player_ptr_t victim){
-			victim->affect(AFF_DISORIENT);
-			victim->sendln("You become disoriented.");
-		}
-
 		int explosive_damage(player_ptr_t victim, obj_ptr_t item){
-			/** TODO: cause explosive damage */
-			/** TODO: check if critical, if so, cause critical damage */
+			if(mods::rooms::is_peaceful(victim->room())){
+				std::cerr << red_str("Not dispatching explosive_damage to peaceful room: ") << victim->room() << "\n";
+				return 0;
+			}
 			auto & attr = item->explosive()->attributes;
 			if(attr->alternate_explosion_type.compare("SCAN") == 0){
 				return 0;
 			}
-			uint8_t chance = attr->chance_to_injure;
-			uint8_t critical_chance = attr->critical_chance;
-			if(mods::skills::player_can(victim,skill_t::INJURE_RESISTANCE)){
-				chance -= INJURE_RESISTANCE_SKILL_MODIFIER();
-			}
-			if(mods::injure::do_injure_roll(chance)){
+			auto e = calculate_explosive_damage(victim,item);
+			if(e.injured){
 				mods::injure::injure_player(victim);
 				msg::youre_injured(victim);
 			}
 			/** TODO handle critical range attribute */
 			/** TODO handle blast radius attribute */
 			/** TODO handle loudness type */
-			auto damage = dice(attr->damage_dice_count,attr->damage_dice_sides);
+			int damage = e.damage;
 
-			if(dice(1,100) <= critical_chance){
-				damage += 75; /** FIXME TODO */
-				victim->sendln("[CRITICAL]");
+			if(e.critical){
+				damage += e.critical;
+				victim->send("{red}*** [CRITICAL] ***{/red} -- ");
 			}
 
-			victim->hp() -= attr->damage;
-			victim->sendln("An explosion causes you to take damage!");
-
-			if(attr->chemical_damage){
-				victim->hp() -= attr->chemical_damage;
+			if(e.chemical){
+				damage += e.chemical;
 				victim->sendln("A chemical weapons explosion causes you to take damage!");
 			}
-			if(attr->incendiary_damage){
-				victim->hp() -= attr->incendiary_damage;
+			if(e.fire){
+				damage += e.fire;
 				victim->sendln("An incendiary explosion causes you to take damage!");
 			}
-			if(attr->radiation_damage){
-				victim->hp() -= attr->radiation_damage;
+			if(e.radiation){
+				damage += e.radiation;
 				victim->sendln("A radiation explosion causes you to take damage!");
 			}
-			if(attr->electric_damage){
-				victim->hp() -= attr->electric_damage;
+			if(e.electric){
+				damage += e.electric;
 				victim->sendln("An electric explosion causes you to take damage!");
 			}
-			if(attr->armor_penetration_amount){
-				/** TODO */
+			if(e.armor_pen){
+				damage += e.armor_pen;
+				victim->sendln("The explosion shreds through your armor!");
 			}
-			return 0;
+
+			mods::weapons::damage_types::deal_hp_damage(victim,damage);
+			return damage;
 		}
 		int chemical_damage(player_ptr_t victim, obj_ptr_t item){
-			/** TODO: cause chemical damage */
-			/** TODO: check if critical, if so, cause critical damage */
-			/** TODO: check if injured, if so, injure player */
-			return 0;
+			return explosive_damage(victim,item);
 		}
+
 		void disorient_target(player_ptr_t player){
-			/** TODO: cause disorientation affect */
+			disorient_person(player);
 			player->sendln("You become extremely disoriented!");
 		}
 		void explode(room_rnum room_id,uuid_t object_uuid,uuid_t player_uuid){
@@ -391,7 +454,6 @@ namespace mods {
 						mods::projectile::explosive_damage(person,object);
 						break;
 					case mw_explosive::REMOTE_CHEMICAL:
-						mods::projectile::explosive_damage(person,object);
 						mods::projectile::chemical_damage(person,object);
 						break;
 					case mw_explosive::CLAYMORE_MINE:
@@ -657,3 +719,4 @@ namespace mods {
 		}
 	};
 };
+#undef m_error

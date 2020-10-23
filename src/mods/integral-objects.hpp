@@ -8,5 +8,10 @@ namespace mods::integral_objects {
 	struct camera_feed_t {
 
 	};
+	void init();
+	void feed_weapon_locker(room_vnum);
+	void feed_armor_locker(room_vnum);
+	void feed_weapon_locker(std::vector<std::string>& values);
+	void feed_armor_locker(std::vector<std::string>& values);
 };
 #endif

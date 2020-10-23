@@ -86,6 +86,7 @@
 #include "mods/behaviour_tree_impl.hpp"
 #include "globals.hpp"
 
+extern void run_replenish();
 /* externs */
 extern struct ban_list_element *ban_list;
 extern int num_invalid;
@@ -873,9 +874,9 @@ void heartbeat(int pulse) {
 		mods::rooms::process_fire_damage();
 	}
 
-	//if(!(pulse % PULSE_ZONE)) {
-	//	zone_update();
-	//}
+	if(!(pulse % PULSE_ZONE)) {
+		run_replenish();
+	}
 
 	if(!(pulse % PULSE_IDLEPWD)) {	/* 15 seconds */
 		check_idle_passwords();

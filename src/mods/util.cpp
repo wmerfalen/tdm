@@ -445,6 +445,7 @@ namespace mods::util {
 		MENTOC_LAZY_ME(armor,ITEM_ARMOR);
 		MENTOC_LAZY_ME(consumable,ITEM_CONSUMABLE);
 		MENTOC_LAZY_ME(trap,ITEM_TRAP);
+		MENTOC_LAZY_ME(container,ITEM_CONTAINER);
 #undef MENTOC_LAZY_ME
 		return mods::util::UNKNOWN_YAML_FILE;
 	}
@@ -461,6 +462,7 @@ namespace mods::util {
 		MENTOC_LAZY_ME(armor,ITEM_ARMOR);
 		MENTOC_LAZY_ME(consumable,ITEM_CONSUMABLE);
 		MENTOC_LAZY_ME(trap,ITEM_TRAP);
+		MENTOC_LAZY_ME(conatiner,ITEM_CONTAINER);
 #undef MENTOC_LAZY_ME
 #define MENTOC_LAZY_ME(mtype) if(is_lower_match(#mtype,type)){ return mtype; }
 		MENTOC_LAZY_ME(ITEM_RIFLE);
@@ -471,6 +473,7 @@ namespace mods::util {
 		MENTOC_LAZY_ME(ITEM_ARMOR);
 		MENTOC_LAZY_ME(ITEM_CONSUMABLE);
 		MENTOC_LAZY_ME(ITEM_TRAP);
+		MENTOC_LAZY_ME(ITEM_CONTAINER);
 #undef MENTOC_LAZY_ME
 		return -1;
 	}
@@ -487,6 +490,7 @@ namespace mods::util {
 		MENTOC_LAZY_ME(armor,ITEM_ARMOR);
 		MENTOC_LAZY_ME(consumable,ITEM_CONSUMABLE);
 		MENTOC_LAZY_ME(trap,ITEM_TRAP);
+		MENTOC_LAZY_ME(container,ITEM_CONTAINER);
 #undef MENTOC_LAZY_ME
 		return mods::util::UNKNOWN_YAML_FILE;
 	}

@@ -7,6 +7,96 @@
 
 extern std::string sanitize_key(std::string key);
 namespace mods::db {
+	std::string section_key(std::string section_name,std::string prefix, std::string type){
+		return db_key({section_name,prefix,type}) + "|";
+	}
+	std::string section_key_index(std::string section_name,std::string prefix, std::string type){
+		return section_key(section_name.data(),prefix,type) + "index";
+	}
+	std::string section_key_count(std::string section_name,std::string prefix, std::string type){
+		return section_key(section_name.data(),prefix,type) + "count";
+	}
+	bool vector_exists(std::string section_name,std::string prefix){
+		return mods::globals::db->exists(db_key({section_name,prefix,"vector","count"}));
+	}
+
+	int put_section_map(std::string_view section_name,std::string prefix, std::map<std::string,std::string> values){
+		mods::db::lmdb_renew();
+		std::string key = "";
+		key = section_key(section_name.data(),prefix,"map");
+		int i =0;
+		std::string keys;
+		for(auto & pair : values){
+			keys += pair.first + "|";
+			mods::db::lmdb_put(key + sanitize_key(pair.first),pair.second);
+			++i;
+		}
+		mods::db::lmdb_put(section_key_index(section_name.data(),prefix,"map"),keys);
+		mods::db::lmdb_commit();
+		return i;
+	}
+
+	int get_section_map(std::string_view section_name,std::string prefix, std::map<std::string,std::string>& values){
+		mods::db::lmdb_renew();
+		std::string key = "";
+		key = section_key(section_name.data(),prefix,"map");
+		std::string index_key = section_key_index(section_name.data(),prefix,"map");
+		int i= 0;
+		std::string current = "";
+		for(auto ch : mods::db::lmdb_get(index_key)){
+			if(ch == '|' && current.length()){
+				values[current] = mods::db::lmdb_get(key + current);
+				current = "";
+				continue;
+			}
+			current += ch;
+		}
+		mods::db::lmdb_commit();
+		return i;
+	}
+	int put_section_vector(std::string_view section_name,std::string prefix, std::vector<std::string> values){
+		mods::db::lmdb_renew();
+		std::string key = "";
+		key = section_key(section_name.data(),prefix,"vector");
+		int i= 0;
+		for(auto & val : values){
+			mods::db::lmdb_put(key + std::to_string(i),val);
+			++i;
+		}
+		mods::db::lmdb_put(section_key_count(section_name.data(),prefix,"vector"),std::to_string(i));
+		mods::db::lmdb_commit();
+		return i;
+	}
+
+	int delete_section_vector(std::string_view section_name,std::string prefix){
+		mods::db::lmdb_renew();
+		std::string key = "";
+		key = section_key(section_name.data(),prefix,"vector");
+		std::string count_key = key + "count";
+		int i= 0;
+		auto count = atoi(mods::db::lmdb_get(section_key_count(section_name.data(),prefix,"vector")).c_str());
+		for(; i < count;++i){
+			mods::db::lmdb_del(key + std::to_string(i));
+		}
+		mods::db::lmdb_del(count_key);
+		mods::db::lmdb_commit();
+		return i;
+	}
+
+	int get_section_vector(std::string_view section_name,std::string prefix, std::vector<std::string>& values){
+		mods::db::lmdb_renew();
+		std::string key = "";
+		key = section_key(section_name.data(),prefix,"vector");
+		std::string count_key = key + "count";
+		int i= 0;
+		auto count = atoi(mods::db::lmdb_get(section_key_count(section_name.data(),prefix,"vector")).c_str());
+		for(; i < count;++i){
+			std::string value = mods::db::lmdb_get(key + std::to_string(i));
+			values.emplace_back(value);
+		}
+		mods::db::lmdb_commit();
+		return i;
+	}
 
 	/**
 	 * @brief saves a record and returns the pk id of that record

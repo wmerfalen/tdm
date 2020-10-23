@@ -17,7 +17,8 @@
 (attachment) \
 (armor) \
 (consumable) \
-(trap) 
+(trap) \
+(container)
 
 #define MENTOC_ITEM_TYPES_CAPS_SEQ \
 (RIFLE) \
@@ -27,7 +28,8 @@
 (ATTACHMENT) \
 (ARMOR) \
 (CONSUMABLE) \
-(TRAP) 
+(TRAP) \
+(CONTAINER)
 
 #define MENTOC_ITEM_TYPES_BY_CAPS_SEQ \
 (rifle,RIFLE) \
@@ -37,7 +39,8 @@
 (attachment,ATTACHMENT) \
 (armor,ARMOR) \
 (consumable,CONSUMABLE) \
-(trap,TRAP) 
+(trap,TRAP) \
+(container,CONTAINER)
 
 #define MENTOC_WEAR_PLACES_SEQ \
 (LIGHT) \
@@ -83,7 +86,8 @@
 (ITEM_ATTACHMENT) \
 (ITEM_ARMOR) \
 (ITEM_CONSUMABLE) \
-(ITEM_TRAP)
+(ITEM_TRAP) \
+(ITEM_CONTAINER)
 
 
 
@@ -94,6 +98,19 @@
 /** HOWTO: Add new item and subcategories                */
 /* Step 3: Add a new *_TYPES_SEQUENCE for sub categories */
 /*********************************************************/
+#define MENTOC_CONTAINER_TYPES_SEQUENCE (ARMOR_LOCKER) \
+	(WEAPON_LOCKER) \
+	(LOCKER) \
+	(EXPLOSIVE_BARREL) \
+	(BILE_BARREL) \
+	(WATER_BARREL) \
+	(GASOLINE_BARREL) \
+	(GAS_STATION_PUMP)
+
+#define MENTOC_CONTAINER_MEMBERS_TUPLE ( \
+(std::string,detailed_description,"#string, description","'Ammo locker.'") \
+)
+
 #define MENTOC_RIFLE_TYPES_SEQUENCE (SHOTGUN) \
 (ASSAULT_RIFLE) \
 (SUB_MACHINE_GUN) \
@@ -149,12 +166,16 @@
 (float,disorient_amount,"#float, percent",13.0), \
 (int,range_modifier,"#int, positive or negative, range modifier in rooms",0), \
 (std::string,loudness_type,"#std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING","'LOUD'"), \
-(static_amount_t,incendiary_damage,"#int, static amount of incendiary damage, no limit","10"), \
-(static_amount_t,radiation_damage,"#int, static amount of radiation damage, no limit","10"), \
-(static_amount_t,chemical_damage,"#int, static amount of chemical damage, no limit","10"), \
-(static_amount_t,electric_damage,"#int, static amount of electric damage, no limit","10"), \
-(static_amount_t,armor_penetration_amount,"#int, static amount of armor penetration done, no limit","10"), \
-(static_amount_t,emp_amount,"#int, static amount of EMP done, no limit","10"), \
+(int,incendiary_damage_dice_count,"#int, dice count of incendiary damage, no limit",6), \
+(int,incendiary_damage_dice_sides,"#int, dice sides of incendiary damage, no limit",6), \
+(int,radiation_damage_dice_count,"#int, dice count of radiation damage, no limit",6), \
+(int,radiation_damage_dice_sides,"#int, dice sides of radiation damage, no limit",6), \
+(int,chemical_damage_dice_count,"#int, dice count of chemical damage, no limit",6), \
+(int,chemical_damage_dice_sides,"#int, dice sides of chemical damage, no limit",6), \
+(int,electric_damage_dice_count,"#int, dice count of electric damage, no limit",6), \
+(int,electric_damage_dice_sides,"#int, dice sides of electric damage, no limit",6), \
+(int,armor_penetration_damage_dice_count,"#int, dice count of armor penetration done, no limit",6), \
+(int,armor_penetration_damage_dice_sides,"#int, dice sides of armor penetration done, no limit",6), \
 (int,damage_dice_count,"#int, number of dice",2), \
 (int,damage_dice_sides,"#int, dice sides",6) \
 )
@@ -191,12 +212,12 @@
 #define MENTOC_GADGET_MEMBERS_TUPLE ( \
 (std::string,csv_capabilities,"#csv, strings free-form TBA","'TBA'"), \
 (std::string,csv_attach_to,"#csv, strings attach to various kinds of items TBA","'TBA'"), \
-(int,electronic,"#int, 1 or zero. If item is electronic","0"), \
-(int,health_points,"#int, health points before it dies. -1 is invincible","100"), \
-(int,shield_points,"#int, additional points to decrement before decrementing health points. -1 is invincible","1"), \
+(int,electronic,"#int, 1 or zero. If item is electronic",0), \
+(int,health_points,"#int, health points before it dies. -1 is invincible",100), \
+(int,shield_points,"#int, additional points to decrement before decrementing health points. -1 is invincible",1), \
 (std::string,durability_profile,"#string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUSTRIAL_STRENGTH,GODLIKE,INDESTRUCTIBLE","'DECENT'"), \
-(int,move_points,"#int, number of move points required to circumvent gadget","0"), \
-(int,damage_points,"#int, number of damage points acrued when tripped/touched","0"), \
+(int,move_points,"#int, number of move points required to circumvent gadget",0), \
+(int,damage_points,"#int, number of damage points acrued when tripped/touched",0), \
 (int,exit_key,"#int, numeric identifier of door that this object opens.",0), \
 (int,min_level,"#int, the minimum level you need to be in order to use this gadget.",0), \
 (int,worth,"#int, how much the item is worth.",0) \
@@ -212,18 +233,18 @@
 (STRAP)
 
 #define MENTOC_ATTACHMENT_MEMBERS_TUPLE ( \
-(float,zoom_multiplier,"#float","2.0"), \
-(static_amount_t,ammunition_amount,"#int","32"), \
-(percent_t,silence_percent,"#float, percentage","10.0"), \
-(static_amount_t,durability_points,"#int, static amount of durability points, no limit","100"), \
-(static_amount_t,incendiary_damage,"#int, static amount of incendiary damage, no limit","10"), \
-(static_amount_t,radiation_damage,"#int, static amount of radiation damage, no limit","10"), \
-(static_amount_t,poison_damage,"#int, static amount of poison damage, no limit","10"), \
-(static_amount_t,electric_damage,"#int, static amount of electric damage, no limit","10"), \
-(static_amount_t,armor_penetration_amount,"#int, static amount of armor penetration done, no limit","10"), \
-(static_amount_t,disorient_amount,"#int, static amount of disorientation done, no limit","10"), \
-(static_amount_t,emp_amount,"#int, static amount of EMP done, no limit","10"), \
-(rooms_t,emp_radius,"#int, radius size in rooms","1"), \
+(float,zoom_multiplier,"#float",2.0), \
+(static_amount_t,ammunition_amount,"#int",32), \
+(percent_t,silence_percent,"#float, percentage",10.0), \
+(static_amount_t,durability_points,"#int, static amount of durability points, no limit",100), \
+(static_amount_t,incendiary_damage,"#int, static amount of incendiary damage, no limit",10), \
+(static_amount_t,radiation_damage,"#int, static amount of radiation damage, no limit",10), \
+(static_amount_t,poison_damage,"#int, static amount of poison damage, no limit",10), \
+(static_amount_t,electric_damage,"#int, static amount of electric damage, no limit",10), \
+(static_amount_t,armor_penetration_amount,"#int, static amount of armor penetration done, no limit",10), \
+(static_amount_t,disorient_amount,"#int, static amount of disorientation done, no limit",10), \
+(static_amount_t,emp_amount,"#int, static amount of EMP done, no limit",10), \
+(rooms_t,emp_radius,"#int, radius size in rooms",1), \
 (std::string,attach_to,"#csv, strings attach to various kinds of items TBA","'TBA'") \
 )
 
@@ -257,9 +278,9 @@
 (int,hp,"#int, hit points",1000), \
 (std::string,classification,"#string, 'BASIC', 'ADVANCED', 'ELITE'","'BASIC'"), \
 (int,worth,"#int, how much the item is worth.",0), \
-(static_amount_t,radiation_resistance_percent,"#int, static amount of radiation resistance_percent, no limit","10"), \
-(static_amount_t,poison_resistance_percent,"#int, static amount of poison resistance_percent, no limit","10"), \
-(static_amount_t,electric_resistance_percent,"#int, static amount of electric resistance_percent, no limit","10") \
+(static_amount_t,radiation_resistance_percent,"#int, static amount of radiation resistance_percent, no limit",10), \
+(static_amount_t,poison_resistance_percent,"#int, static amount of poison resistance_percent, no limit",10), \
+(static_amount_t,electric_resistance_percent,"#int, static amount of electric resistance_percent, no limit",10) \
 )
 
 #define MENTOC_CONSUMABLE_TYPES_SEQUENCE (AMMUNITION) \
@@ -413,6 +434,24 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 						BOOST_PP_TUPLE_ELEM(4,2,MEMBER_TUPLE)      \
 						<< "\n";
 
+#define MENTOC_GENERATE_MAP_IMPL(r,PREFIX,MEMBER_TUPLE) \
+{\
+	std::string item_name = PREFIX; item_name += "_";\
+	item_name += BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE));\
+	std::cerr << "generating map: '" << item_name << "\n";\
+		this->exported[item_name.c_str()] = mods::yaml::to_string<BOOST_PP_TUPLE_ELEM(4,0,MEMBER_TUPLE)>(BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE));\
+}
+
+#define MENTOC_INITIALIZE_IMPL(r,data,MEMBER_TUPLE) \
+	this->BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE) = BOOST_PP_TUPLE_ELEM(4,3,MEMBER_TUPLE);
+
+
+#define MENTOC_INITIALIZE(SEQUENCE) \
+			BOOST_PP_SEQ_FOR_EACH(MENTOC_INITIALIZE_IMPL,~,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE))
+
+#define MENTOC_GENERATE_MAP(SEQUENCE,PREFIX) \
+			BOOST_PP_SEQ_FOR_EACH(MENTOC_GENERATE_MAP_IMPL,PREFIX,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE))
+
 #define MENTOC_MEMBER_VARS_EXAMPLE_FOR(SEQUENCE) \
 			BOOST_PP_SEQ_FOR_EACH(MENTOC_MEMBER_VARS_EXAMPLE_IMPL,~,BOOST_PP_TUPLE_TO_SEQ(BOOST_PP_TUPLE_SIZE(SEQUENCE),SEQUENCE))
 
@@ -447,6 +486,17 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 
 #define MENTOC_EXAMPLE_GADGETS \
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_EXAMPLE_IMPL,mw_gadget,MENTOC_GADGET_TYPES_SEQUENCE)
+
+
+/**************************************************************************/
+/** CONTAINER */
+/**************************************************************************/
+#define MENTOC_FEED_CONTAINER \
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_FEED_TYPE_IMPL,mw_container,MENTOC_CONTAINER_TYPES_SEQUENCE) \
+	MENTOC_FEED_PARSE_ALL_IMPL(MENTOC_CONTAINER_MEMBERS_TUPLE)
+
+#define MENTOC_EXAMPLE_CONTAINERS \
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_EXAMPLE_IMPL,mw_container,MENTOC_CONTAINER_TYPES_SEQUENCE)
 
 
 /**************************************************************************/
@@ -489,7 +539,8 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 	MENTOC_FEED_PARSE_ALL_IMPL(MENTOC_EXPLOSIVE_MEMBERS_TUPLE)
 
 #define MENTOC_EXAMPLE_EXPLOSIVES \
-	BOOST_PP_SEQ_FOR_EACH(MENTOC_EXAMPLE_IMPL,mw_explosive,MENTOC_EXPLOSIVE_TYPES_SEQUENCE)
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_EXAMPLE_IMPL,mw_explosive,MENTOC_EXPLOSIVE_TYPES_SEQUENCE) \
+	MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_EXPLOSIVE_MEMBERS_TUPLE)
 
 /**************************************************************************/
 /** ARMORS                                                                */
@@ -538,7 +589,9 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 #define ITEM_ARMOR             7
 #define ITEM_CONSUMABLE        8
 #define ITEM_TRAP              9
+#define ITEM_CONTAINER         10
 #endif
+
 namespace mods::weapon::type {
 	enum rifle {
 		RIFLE_NONE = 0,
@@ -575,6 +628,11 @@ namespace mods::weapon::type {
 	enum trap {
 		TRAP_NONE = 0,
 		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_TRAP_TYPES_SEQUENCE)
+	};
+
+	enum container {
+		CONTAINER_NONE = 0,
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_CONTAINER_TYPES_SEQUENCE)
 	};
 
 

@@ -193,6 +193,7 @@ using weapon_attachment_t = mods::weapon::type::attachment;
 using weapon_armor_t = mods::weapon::type::armor;
 using weapon_consumable_t = mods::weapon::type::consumable;
 using weapon_trap_t = mods::weapon::type::trap;
+using weapon_container_t = mods::weapon::type::container;
 namespace mods::weapon {
 
 	static inline std::string to_string(weapon_trap_t trap_type){
