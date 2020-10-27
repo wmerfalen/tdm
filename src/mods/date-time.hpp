@@ -52,5 +52,6 @@ namespace mods::date_time {
 		std::string date_to_string();
 		std::string epoch_string();
 	};
+	void init();
 };
 #endif

@@ -149,11 +149,30 @@ namespace mods::util {
 		}
 
 		bool fuzzy_match(const std::string& _needle,const std::string & _haystack) {
-			std::string needle = _needle,haystack = _haystack;
+			std::string needle = "", haystack = _haystack;
 
 			/* If matches EXACTLY (strcmp) */
-			if(needle.compare(haystack) == 0) {
+			if(_needle.compare(haystack) == 0) {
 				return true;
+			}
+			static const std::vector<char> escape = {
+				'-','{','}','*','[',']','!',','
+			};
+			static const std::vector<char> extras = {
+				'_', ':'
+			};
+
+			for(auto ch : _needle){
+				auto escape_me = std::find(escape.begin(),escape.end(),ch);
+				if(!isalnum(ch) && !isspace(ch) && escape_me != escape.end() && std::find(extras.begin(),extras.end(),ch) != extras.end()){
+					continue;
+				}
+				if(escape_me != escape.end()){
+					needle += "\\";
+					needle += ch;
+					continue;
+				}
+				needle += ch;
 			}
 
 			if(needle.length()) {

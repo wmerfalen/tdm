@@ -4,9 +4,9 @@
 #include <iostream>
 #include <chrono>
 #include <ctime>
+#include "interpreter.hpp"
 
-namespace mods::date_time {
-	namespace irl {
+namespace mods::date_time::irl {
 		std::string epoch_string(){
 			return std::to_string(time(0));
 		}
@@ -44,7 +44,9 @@ namespace mods::date_time {
 
 			return dateString;
 		}
-	};//end irl namespace
+};//end irl namespace
+
+namespace mods::date_time {
 	static moon_phase_t moon;
 	std::array<moon_phase_t,12> phase_ring_buffer = {
 		NEW_MOON, WANING_CRESCENT,THIRD_QUARTER,
@@ -61,6 +63,19 @@ namespace mods::date_time {
 	constexpr const char* TIME_LOG_FILE_NAME = "/tmp/cm++-time.log";
 	static FILE* time_log_file_handle = nullptr;
 #endif
+
+	std::string serialize_date(){
+		std::array<char,255> buffer = {0};
+		snprintf(&buffer[0],sizeof(buffer),
+				"m:%d|d:%d|y:%d|h:%d|phase:%d",
+				mods::date_time::month,
+				mods::date_time::day,
+				mods::date_time::year,
+				mods::date_time::hour,
+				mods::date_time::phase_ring_buffer_index
+		);
+		return std::move(std::string(&buffer[0]));
+	}
 
 	void initialize_all(uint8_t month,uint8_t day,uint8_t year,uint8_t hour,uint8_t moon_phase_index) {
 		mods::date_time::month = month;
@@ -104,18 +119,18 @@ namespace mods::date_time {
 	}
 	std::string get_month(){
 		switch(mods::date_time::month){
-			case 1: return "january";
-			case 2: return "february";
-			case 3: return "march";
-			case 4: return "april";
-			case 5: return "may";
-			case 6: return "june";
-			case 7: return "july";
-			case 8: return "august";
-			case 9: return "september";
-			case 10: return "october";
-			case 11: return "november";
-			case 12: return "december";
+			case 0: return "january";
+			case 1: return "february";
+			case 2: return "march";
+			case 3: return "april";
+			case 4: return "may";
+			case 5: return "june";
+			case 6: return "july";
+			case 7: return "august";
+			case 8: return "september";
+			case 9: return "october";
+			case 10: return "november";
+			case 11: return "december";
 			default: return "unknown";
 		}
 	}
@@ -157,15 +172,15 @@ namespace mods::date_time {
 		last_call = time(0);
 #endif
 		mods::date_time::hour += 1;
-		if(mods::date_time::hour == 25){
+		if(mods::date_time::hour > 24){
 			mods::date_time::hour = 0;
 			mods::date_time::day += 1;
 		}
 		if(mods::date_time::day >= 30){
 			mods::date_time::month += 1;
 		}
-		if(mods::date_time::month > 12){
-			mods::date_time::month = 1;
+		if(mods::date_time::month > 11){
+			mods::date_time::month = 0;
 		}
 	}
 	std::string get_moon_phase() {
@@ -181,5 +196,15 @@ namespace mods::date_time {
 			default:
 			return "UNKNOWN";
 		}
+	}
+	ACMD(do_serialize_date){
+		player->sendln(serialize_date());
+	}
+	ACMD(do_moon_phase){
+		player->sendln(get_moon_phase());
+	}
+	void init(){
+		mods::interpreter::add_command("serialize_date", POS_RESTING, do_serialize_date, 0, 0);
+		mods::interpreter::add_command("moon_phase", POS_RESTING, do_moon_phase, 0, 0);
 	}
 };

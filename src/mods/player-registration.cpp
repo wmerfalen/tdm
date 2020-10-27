@@ -27,6 +27,7 @@ ACMD(do_disable_registration){
 }
 
 ACMD(do_registration_status){
+	DO_HELP("registration_status");
 	player->sendln(
 			mods::player_registration::allowed() ?
 			green_str("[+] Allowed.") 

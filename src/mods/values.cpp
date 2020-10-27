@@ -291,6 +291,7 @@ namespace mods::values {
 		"GHOST_FEIGN_DEATH_BLOCKED_FOR_TICKS",
 		};
 			static const std::vector<std::string> string_types = {
+				"CAN_BE_SEARCHED",
 		"PYREXIA_REPLENISH_MESSAGE",
 		"SANITY_CHECK",
 		"MINI_GUNNER_WEAR_LIGHT",
@@ -795,6 +796,7 @@ namespace mods::values {
 		CGET_DEF(float,ASSAULT_RIFLE_SHRAPNEL_SKILL_DAMAGE_MULTIPLIER,0.33);
 
 		static std::string default_public_channels = IMPLODE({"chat","gossip","newbie","gratz"},"|");
+		CGET_DEF(std::string,CAN_BE_SEARCHED,"This command can be searched by typing the command followed by a space and a word that you would like to search for.");
 		CGET_DEF(std::string,SANITY_CHECK,"sanity-check");
 		CGET_DEF(std::string,MINI_GUNNER_WEAR_LIGHT,"");
 		CGET_DEF(std::string,MINI_GUNNER_WEAR_FINGER_R,"");

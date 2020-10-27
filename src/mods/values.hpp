@@ -287,6 +287,7 @@ namespace mods::values {
 		CGET(uint8_t,GHOST_FEIGN_DEATH_FAMILIAR_DURATION);
 		CGET(uint8_t,GHOST_FEIGN_DEATH_MASTER_DURATION);
 
+		CGET(std::string,CAN_BE_SEARCHED);
 		CGET(std::string,SANITY_CHECK);
 		CGET(std::string,MINI_GUNNER_WEAR_LIGHT);
 		CGET(std::string,MINI_GUNNER_WEAR_FINGER_R);

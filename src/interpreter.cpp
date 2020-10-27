@@ -38,6 +38,7 @@
 #include "mods/mini-games.hpp"
 #include "mods/classes/class-commands.hpp"
 #include "mods/skills.hpp"
+#include "mods/screen-searcher.hpp"
 
 namespace mods::interpreter {
 	extern command_info& get_command(std::string_view,player_ptr_t&);
@@ -106,7 +107,7 @@ ACMD(do_js_help){
 		return;
 	}
 	if(player->implementor_mode() || player->builder_mode()){
-		for(std::string_view cmd : {
+		static std::vector<std::string> screen = {
 		"{gld}affect_from_char{/gld} -- {grn}1: player_name,2: affect_string{/grn}",
 		"{gld}clear_all_affected_flags{/gld} -- ",
 		"{gld}clear_all_plr_flags{/gld} -- ",
@@ -164,9 +165,15 @@ ACMD(do_js_help){
 			"{gld}add_super_user{/gld} -- add user to super user list -- i.e.: add_super_user('grifter');{/gld}",
 			"{gld}get_super_user_list{/gld} -- returns super user list -- i.e.: send(get_super_user_list());{/gld}",
 			"{gld}remove_super_user{/gld} -- removes user from super user list -- i.e.: remove_super_user('jack');{/gld}"
-
-		}){
-			player->sendln(cmd);
+		};
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size()){
+			mods::search_screen<player_ptr_t>(player,screen,vec_args,64);
+			player->sendln("Done listing.");
+			return;
+		}
+		for(auto & line : screen){
+			player->sendln(line);
 		}
 	}else{
 		player->stc("Huh?!?");
@@ -204,12 +211,12 @@ ACMD(do_builder){
 	mods::js::eval_string("builder_init();");
 	player->done();
 }
-ACMD(do_install_camera_feed);
-ACMD(do_uninstall_camera_feed);
-ACMD(do_install_weapon_locker);
-ACMD(do_uninstall_weapon_locker);
-ACMD(do_install_armor_locker);
-ACMD(do_uninstall_armor_locker);
+//ACMD(do_install_camera_feed);
+//ACMD(do_uninstall_camera_feed);
+//ACMD(do_install_weapon_locker);
+//ACMD(do_uninstall_weapon_locker);
+//ACMD(do_install_armor_locker);
+//ACMD(do_uninstall_armor_locker);
 
 ACMD(do_builder_help){
 	
@@ -218,7 +225,7 @@ ACMD(do_builder_help){
 		return;
 	}
 	if(player->implementor_mode() || player->builder_mode()){
-		for(std::string_view cmd : {
+		static std::vector<std::string> screen = {
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{yel} --                      -:[ Cameras ]:-                               {/yel}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
@@ -291,17 +298,26 @@ ACMD(do_builder_help){
 			"{gld}jstest{/gld} -- {grn}run a javascript test [builder-utils][admin-tools]{/grn}",
 			"{gld}newjs{/gld} -- {grn}create a new javascript context [admin-tools][feature-debug]{/grn}", 
 			"{gld}pref{/gld} -- {grn}preferences utility [staging-feature]{/grn}",
-			"{gld}room_list_uuid{/gld} -- {grn}list uuids and names of everyone in the same room [builder-utils]{/grn}"
-			"{gld}show_tics{/gld} -- {grn}toggle tics[builder-utils]{/grn}"
+			"{gld}room_list_uuid{/gld} -- {grn}list uuids and names of everyone in the same room [builder-utils]{/grn}",
+			"{gld}show_tics{/gld} -- {grn}toggle tics[builder-utils]{/grn}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{yel} --                      -:[ Character Generation ]:-                  {/yel}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{gld}disable_registration{/gld} -- {grn}yup[builder-utils]{/grn}"
-			"{gld}enable_registration{/gld} -- {grn}yup[builder-utils]{/grn}"
-			"{gld}registration_status{/gld} -- {grn}prints allowed or not allowed.[builder-utils]{/grn}"
-	 	}){
-			player->sendln(cmd);
+			"{gld}disable_registration{/gld} -- {grn}yup[builder-utils]{/grn}",
+			"{gld}enable_registration{/gld} -- {grn}yup[builder-utils]{/grn}",
+			"{gld}registration_status{/gld} -- {grn}prints allowed or not allowed.[builder-utils]{/grn}",
+	 		};
+			
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size()){
+			mods::search_screen<player_ptr_t>(player,screen,vec_args,64);
+			player->sendln("Done listing.");
+			return;
 		}
+		for(auto & line : screen){
+			player->sendln(line);
+		}
+		player->sendln("Done listing.");
 	}else{
 		player->stc("Huh?!?");
 		return;
@@ -427,7 +443,7 @@ ACMD(do_givemegold);
 ACMD(do_givemenades);
 ACMD(do_shoot);	/* just an alias of snipe */
 ACMD(do_install_weapon_locker);
-ACMD(do_install_armor_locker);
+//ACMD(do_install_armor_locker);
 ACMD(do_snipe);
 ACMD(do_snipe_object);
 ACMD(do_room_vnum);
@@ -844,7 +860,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "set_npc_position"  , POS_RESTING , do_set_npc_position, LVL_GOD, 0 },
 	{ "room_list_uuid"  , POS_RESTING , do_room_list_uuid, LVL_GOD, 0 },
 	{ "send_report"  , POS_RESTING , do_send_report, LVL_GOD, 0 },
-	{ "zero_socket"  , POS_RESTING , do_zero_socket  , 0, 0 },
+	{ "zero_socket"  , POS_RESTING , do_zero_socket  , LVL_IMPL, 0 },
 	{ "uuid"  , POS_RESTING , do_uuid  , 0, 0 },
 	/** ----------------------- */
 	/** END DEBUGGING + TESTING */
@@ -876,6 +892,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** COMBAT MECHANICS */
 	/** ---------------- */
 	{ "shoot"  , POS_RESTING , do_snipe   , 0, 0 },
+	{ "pref"  , POS_RESTING , do_pref   , 0, 0 },
 	{ "hack"  , POS_RESTING , do_hack  , 0, 0 },
 	{ "rotate_right"  , POS_RESTING , do_rotate_right  , 0, 0 },
 	{ "rotate_left"  , POS_RESTING , do_rotate_left  , 0, 0 },
@@ -918,19 +935,13 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** ------------- */
 	/** BUILDER UTILS */
 	/** ------------- */
-	{ "room_vnum"  , POS_RESTING , do_room_vnum   , 0, 0 },
-	{ "require_js"  , POS_RESTING , do_require_js   , 0, 0 },
-	{ "builder"  , POS_RESTING , do_builder   , 0, 0 },
+	{ "room_vnum"  , POS_RESTING , do_room_vnum   , LVL_IMMORT, 0 },
+	{ "require_js"  , POS_RESTING , do_require_js   , LVL_IMPL, 0 },
+	{ "builder"  , POS_RESTING , do_builder   , LVL_BUILDER, 0 },
 	{ "add_super_user"  , POS_RESTING , do_add_super_user   , LVL_BUILDER, 0 },
 	{ "remove_super_user"  , POS_RESTING , do_remove_super_user   , LVL_BUILDER, 0 },
 	{ "get_super_user_list"  , POS_RESTING , do_get_super_user_list   , LVL_BUILDER, 0 },
-	{ "install_camera_feed"  , POS_RESTING , do_install_camera_feed   , LVL_BUILDER, 0 },
-	{ "uninstall_camera_feed"  , POS_RESTING , do_uninstall_camera_feed   , LVL_BUILDER, 0 },
-	{ "install_weapon_locker"  , POS_RESTING , do_install_weapon_locker   , LVL_BUILDER, 0 },
-	{ "uninstall_weapon_locker"  , POS_RESTING , do_uninstall_weapon_locker   , LVL_BUILDER, 0 },
-	{ "install_armor_locker"  , POS_RESTING , do_install_armor_locker   , LVL_BUILDER, 0 },
-	{ "uninstall_armor_locker"  , POS_RESTING , do_uninstall_armor_locker   , LVL_BUILDER, 0 },
-	{ "show_tics"  , POS_RESTING , do_show_tics   , 0, 0 },
+	{ "show_tics"  , POS_RESTING , do_show_tics   , LVL_BUILDER, 0 },
 	{ "builder_help"  , POS_RESTING , do_builder_help   , LVL_GOD, 0 },
 	{ "flush_holding"  , POS_RESTING , do_flush_holding   , LVL_GOD, 0 },
 	{ "flush_player"  , POS_RESTING , do_flush_player   , LVL_GOD, 0 },
@@ -958,7 +969,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "chanmgr"  , POS_RESTING , do_chanmgr   , LVL_IMMORT, 0 },
 	{ "rnumtele"  , POS_RESTING , do_rnumtele   , LVL_IMMORT, 0 },
 	{ "rnumlist"  , POS_RESTING , do_rnumlist   , LVL_IMMORT, 0 },
-	{ "pref"  , POS_RESTING , do_pref   , 0, 0 },
 	{ "rbuild"  , POS_RESTING , do_rbuild   , LVL_IMMORT, 0 },
 	{ "rbuild_sandbox"  , POS_RESTING , do_rbuild_sandbox   , LVL_IMMORT, 0 },
 	{ "room_dark"  , POS_RESTING , do_room_dark   , LVL_IMMORT, 0 },
@@ -1146,32 +1156,35 @@ void command_interpreter(player_ptr_t & player, std::string in_argument){
 #endif
 		return;
 	}
+	cmd = 0;
 	auto command = cmd_info[0];
 	bool found = false;
-
-	/* otherwise, find the command */
-	for(length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++){
-		command = cmd_info[cmd];
-		if(!strncmp(cmd_info[cmd].command, arg, length)){
-			if(mods::super_users::player_is(player)){
-				found = true;
-				break;
+	command = mods::interpreter::get_command(arg,player);
+	if(command.command[0] != '\n'){
+		found = true;
+	}
+	if(!found){
+		/* otherwise, find the command */
+		for(length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++){
+			command = cmd_info[cmd];
+			if(!strncmp(cmd_info[cmd].command, arg, length)){
+				if(mods::super_users::player_is(player)){
+					found = true;
+				}
+				if(player->god_mode()){
+					found = true;
+				}
+				if(GET_LEVEL(ch) >= cmd_info[cmd].minimum_level) {
+					found = true;
+				}
 			}
-			if(player->god_mode()){
-				found = true;
-				break;
-			}
-			if(GET_LEVEL(ch) >= cmd_info[cmd].minimum_level) {
-				found = true;
+			if(found){
 				break;
 			}
 		}
 	}
 
 	if(!found){
-		command = mods::interpreter::get_command(arg,player);
-	}
-	if(command.command[0] == '\n') {
 		send_to_char(ch, "Huh?!?\r\n");
 	} else{
 		if(player->is_blocked() && !mods::player_utils::is_cancel_command(cmd_info[cmd].command)) {

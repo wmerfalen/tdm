@@ -221,6 +221,19 @@ namespace mods::help::pages {
 			"\r\n"
 			"{blu}this documentation was written on 2020-10-02.{/blu}"
 	;
+	static constexpr const char* h_edit_object = "usage: edit_object <id> <attribute> <value>\r\n"
+			"description: attributes include: \r\n" 
+			"\r\n"
+			"wear_flag\r\n"
+			"\r\n"
+			"This command is not case-sensitive.\r\n"
+			"\r\n"
+			"example: edit_object 3 wear_flag PRIMARY SECONDARY TAKE\r\n"
+			"\r\n"
+			"To see a list of valid wear_flags, type list_wear_flags\r\n"
+			"\r\n"
+			"this documentation was written on 2020-06-26." 
+	;
 };
 
 namespace mods::help {

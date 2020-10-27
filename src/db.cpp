@@ -48,6 +48,7 @@
 #include "mods/mini-games.hpp"
 #include "mods/integral-objects.hpp"
 #include "mods/db.hpp"
+#include "mods/zone.hpp"
 
 namespace mods::rooms {
 	extern void set_sector_type(room_rnum room_id, int sector_type);
@@ -200,45 +201,6 @@ extern room_vnum immort_start_room;
 extern room_vnum frozen_start_room;
 extern std::deque<mods::descriptor_data>  descriptor_list;
 extern const char *unused_spellname;	/* spell_parser.c */
-
-struct replenish_command {
-	room_vnum room;
-	std::string type;
-};
-static std::deque<replenish_command> replenish;
-
-void build_weapon_locker(room_vnum room){
-	auto obj = create_object(ITEM_CONTAINER, "weapon-locker.yml");
-	obj_to_room(obj.get(),real_room(room));
-	mods::integral_objects::feed_weapon_locker(room);
-	sleep(10);
-}
-void build_armor_locker(room_vnum room){
-	auto obj = create_object(ITEM_CONTAINER, "armor-locker.yml");
-	obj_to_room(obj.get(),real_room(room));
-	mods::integral_objects::feed_armor_locker(room);
-	sleep(10);
-}
-void register_replenish(room_vnum room,std::string type){
-	replenish_command c;
-	c.room = room;
-	c.type = type;
-	replenish.emplace_back(c);
-}
-
-void run_replenish(){
-	std::vector<std::string> values;
-	for(auto & command : replenish){
-		values.clear();
-		if(command.type.compare("weapon-locker") == 0){
-			mods::integral_objects::feed_weapon_locker(command.room);
-		}
-		if(command.type.compare("armor-locker") == 0){
-			mods::integral_objects::feed_armor_locker(command.room);
-		}
-	}
-}
-
 namespace db {
 	namespace extraction {
 		void save_player(player_ptr_t& player){
@@ -1468,14 +1430,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				mods::rooms::set_sector_type(world.size()-1,room_records_row["sector_type"].as<int>());
 				mods::rooms::set_flag_absolute(world.size()-1,room_records_row["room_flag"].as<int>(0));
 				top_of_world = world.size();
-				if(mods::db::vector_exists("weapon-locker",std::to_string(room.number))){
-					build_weapon_locker(room.number);
-					register_replenish(room.number,"weapon-locker");
-				}
-				if(mods::db::vector_exists("armor-locker",std::to_string(room.number))){
-					build_armor_locker(room.number);
-					register_replenish(room.number,"armor-locker");
-				}
+				mods::zone::new_room(&room);
 			}catch(std::exception& e){
 				REPORT_DB_ISSUE("SYSERR: exception select from rooms db: ",e.what());
 			}

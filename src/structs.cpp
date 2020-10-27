@@ -395,6 +395,15 @@ bool obj_data::flagged(int value){
 			}
 		}
 
+		bool obj_data::matches_query(std::string_view query){
+			if(query.compare("weapon-locker") == 0) {
+				return has_container() && this->container()->attributes->type == mods::weapon::type::container::WEAPON_LOCKER;
+			}
+			if(query.compare("armor-locker") == 0) {
+				return has_container() && this->container()->attributes->type == mods::weapon::type::container::ARMOR_LOCKER;
+			}
+			return false;
+		}
 		void room_data::set_dir_option(byte i,
 				const std::string& gen_desc,
 				const std::string& keyword,

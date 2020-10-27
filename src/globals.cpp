@@ -45,6 +45,9 @@ extern void look_at_room(char_data* ch,int ignore_brief);
 namespace mods::mobs::room_watching::events {
 	extern void room_entry(room_rnum,uuid_t);
 };
+namespace mods::date_time {
+	extern void init();
+};
 namespace mods::integral_objects {
 	extern void init();
 };
@@ -449,8 +452,8 @@ namespace mods {
 			}
 			mods::debug::init(show_tics);
 			mods::skills::game_init();
-			mods::interpreter::init();
 			mods::integral_objects::init();
+			mods::date_time::init();
 		}
 		void post_boot_db() {
 		}

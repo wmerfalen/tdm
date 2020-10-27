@@ -13,5 +13,6 @@ namespace mods::integral_objects {
 	void feed_armor_locker(room_vnum);
 	void feed_weapon_locker(std::vector<std::string>& values);
 	void feed_armor_locker(std::vector<std::string>& values);
+	void new_room(room_data* room);
 };
 #endif

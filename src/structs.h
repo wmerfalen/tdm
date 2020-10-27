@@ -692,6 +692,7 @@ enum player_level {
 #define PULSE_SANITY	(30 RL_SEC)
 #define PULSE_USAGE	(5 * 60 RL_SEC)	/* 5 mins */
 #define PULSE_TIMESAVE	(30 * 60 RL_SEC) /* should be >= SECS_PER_MUD_HOUR */
+#define PULSE_REPLENISH (3600 RL_SEC)
 
 	/* Variables for the output buffering system */
 #define MAX_SOCK_BUF            (12 * 1024) /* Size of kernel's sock buf   */
@@ -830,6 +831,7 @@ enum player_level {
 
 	/* ================== Memory Structure for Objects ================== */
 	struct obj_data {
+		bool matches_query(std::string_view);
 		using visibility_t = uint8_t;
 		static constexpr visibility_t STARTING_VISIBILITY = 255;
 		visibility_t visibility;

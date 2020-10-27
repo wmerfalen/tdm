@@ -2267,7 +2267,7 @@ int sort_commands_helper(const void *a, const void *b) {
 void sort_commands(void) {
 	int a, num_of_cmds = 0;
 
-	while(cmd_info[num_of_cmds].command[0] != '\n') {
+	while(*cmd_info[num_of_cmds].command != '\n') {
 		num_of_cmds++;
 	}
 
@@ -2318,7 +2318,7 @@ ACMD(do_commands) {
 			vict == ch ? "you" : GET_NAME(vict).c_str());
 
 	/* cmd_num starts at 1, not 0, to remove 'RESERVED' */
-	for(no = 1, cmd_num = 1; cmd_info[cmd_sort_info[cmd_num]].command[0] != '\n'; cmd_num++) {
+	for(no = 1, cmd_num = 1; *cmd_info[cmd_sort_info[cmd_num]].command != '\n'; cmd_num++) {
 		i = cmd_sort_info[cmd_num];
 
 		if(cmd_info[i].minimum_level < 0 || GET_LEVEL(vict) < cmd_info[i].minimum_level) {
@@ -2333,7 +2333,7 @@ ACMD(do_commands) {
 			continue;
 		}
 
-		send_to_char(ch, "%-11s%s", cmd_info[i].command, no++ % 7 == 0 ? "\r\n" : "");
+		send_to_char(ch, "%-11s%s", cmd_info[i].str_command.c_str(), no++ % 7 == 0 ? "\r\n" : "");
 	}
 
 	if(no % 7 != 1) {
