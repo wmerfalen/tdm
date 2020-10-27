@@ -18,7 +18,10 @@
 #include "mods/date-time.hpp"
 #include "mods/world-configuration.hpp"
 #include "mods/object-utils.hpp"
+#include "mods/interpreter.hpp"
+#include "mods/screen-searcher.hpp"
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
+
 
 namespace mods::adhoc {
 	static std::vector<int> reserved_rooms;
@@ -505,3 +508,105 @@ ACMD(do_toggle_obj_from_room){
 	}
 
 }
+
+ACMD(do_js_help) {	
+	if(IS_NPC(ch)){
+		/** nice try */
+		return;
+	}
+	if(player->implementor_mode() || player->builder_mode()){
+		static std::vector<std::string> screen = {
+		"{gld}affect_from_char{/gld} -- {grn}1: player_name,2: affect_string{/grn}",
+		"{gld}clear_all_affected_flags{/gld} -- ",
+		"{gld}clear_all_plr_flags{/gld} -- ",
+		"{gld}char_from_room{/gld}",
+		"{gld}cmd{/gld} -- ",
+		"{gld}cmd_exec{/gld} -- ",
+		"{gld}db_get{/gld} -- ",
+		"{gld}db_geti{/gld} -- ",
+		"{gld}db_set{/gld} -- ",
+		"{gld}db_seti{/gld} -- ",
+		"{gld}get_char_pk_id{/gld} -- ",
+		"{gld}get_current_player{/gld} -- ",
+		"{gld}get_day{/gld} -- ",
+		"{gld}get_month{/gld} -- ",
+		"{gld}get_moon_phase{/gld} -- ",
+		"{gld}get_iday{/gld} -- ",
+		"{gld}get_ihour{/gld} -- ",
+		"{gld}get_imonth{/gld} -- ",
+		"{gld}get_iyear{/gld} -- ",
+		"{gld}hit{/gld} -- i.e.: hit(uuid_atk,uuid_vict)",
+		"{gld}in_room{/gld} -- ",
+		"{gld}list_mobiles{/gld} -- ",
+		"{gld}mob_death_trigger{/gld} -- ",
+		"{gld}mobile_activity{/gld} -- manually call it",
+		"{gld}modify_affected_flags{/gld} -- i.e.: maf('far','INVISIBLE',1)",
+		"{gld}modify_plr_flags{/gld} -- ",
+		"{gld}next_mob_number{/gld} -- gives you the next item number for mobs",
+		"{gld}next_object_number{/gld} -- gives you the next item number for objects",
+		"{gld}next_room_number{/gld} -- gives you the next item number for rooms",
+		"{gld}next_zone_number{/gld} -- gives you the next zone number",
+		"{gld}pmw_obj_from_room{/gld} -- when called, will toggle prompts for obj_from_room",
+		"{gld}read_mobile{/gld} -- ",
+		"{gld}refresh_minimum_proficiencies{/gld} -- reloads minimum proficiencies from lmdb (if any) and updates skill proficiencies",
+		"{gld}require_js{/gld} -- include from /lib/js/",
+		"{gld}require_test{/gld} -- include from /lib/js/tests",
+		"{gld}room{/gld} -- ",
+		"{gld}send{/gld} -- ",
+		"{gld}send_to_char{/gld} -- ",
+		"{gld}send_to_uuid{/gld} -- ",
+		"{gld}set_char_pk_id{/gld} -- ",
+		"{gld}set_points{/gld} -- i.e.:  set_points(player_name,key,value)",
+		"{gld}instigate{/gld} -- i.e.:  instigate(player_name,attacker_name)",
+		"{gld}set_attacker{/gld} -- i.e.:  set_attacker(player_name,attacker_name)",
+		"{gld}set_points keys{/gld}",
+			"mana max_mana hp max_hp move max_move armor",
+			"gold bank_gold exp hitroll damroll level",
+			"sex room uuid",
+		"{gld}uuid{/gld} -- ",
+		"{gld}value_load{/gld} -- loads a value saved with value_save() -- i.e.: value_load('SANITY_CHECK');",
+		"{gld}value_revert{/gld} -- reverts to hard-coded value (ignores lmdb value)  -- i.e.: value_revert('SANITY_CHECK');",
+		"{gld}value_save{/gld} -- saves an override to lmdb -- i.e.: value_save('SANITY_CHECK','value');",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{yel} --                      -:[ Super User List ]:-                       {/yel}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{gld}add_super_user{/gld} -- add user to super user list -- i.e.: add_super_user('grifter');{/gld}",
+			"{gld}get_super_user_list{/gld} -- returns super user list -- i.e.: send(get_super_user_list());{/gld}",
+			"{gld}remove_super_user{/gld} -- removes user from super user list -- i.e.: remove_super_user('jack');{/gld}"
+		};
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size()){
+			mods::search_screen<player_ptr_t>(player,screen,vec_args,64);
+			player->sendln("Done listing.");
+			return;
+		}
+		for(auto & line : screen){
+			player->sendln(line);
+		}
+	}else{
+		player->stc("Huh?!?");
+		return;
+	}
+}
+
+namespace builder {
+	void init(){
+
+mods::interpreter::add_command("next_object_number",POS_RESTING,do_next_object_number, LVL_BUILDER,0);
+mods::interpreter::add_command("next_zone_number",POS_RESTING,do_next_zone_number, LVL_BUILDER,0);
+mods::interpreter::add_command("next_room_number",POS_RESTING,do_next_room_number, LVL_BUILDER,0);
+mods::interpreter::add_command("next_mob_number",POS_RESTING,do_next_mob_number, LVL_BUILDER,0);
+mods::interpreter::add_command("next_obj_number",POS_RESTING,do_next_obj_number, LVL_BUILDER,0);
+mods::interpreter::add_command("flush_holding",POS_RESTING,do_flush_holding, LVL_BUILDER,0);
+mods::interpreter::add_command("yaml_import",POS_RESTING,do_yaml_import, LVL_BUILDER,0);
+mods::interpreter::add_command("yaml_log",POS_RESTING,do_yaml_log, LVL_BUILDER,0);
+mods::interpreter::add_command("yaml_log_save",POS_RESTING,do_yaml_log_save, LVL_BUILDER,0);
+mods::interpreter::add_command("yaml_log_clear",POS_RESTING,do_yaml_log_clear, LVL_BUILDER,0);
+mods::interpreter::add_command("hold_anything",POS_RESTING,do_hold_anything, LVL_BUILDER,0);
+mods::interpreter::add_command("yaml_example",POS_RESTING,do_yaml_example, LVL_BUILDER,0);
+mods::interpreter::add_command("histfile",POS_RESTING,do_histfile, LVL_BUILDER,0);
+mods::interpreter::add_command("uuid",POS_RESTING,do_uuid, LVL_BUILDER,0);
+mods::interpreter::add_command("pmw_obj_from_room",POS_RESTING,do_pmw_obj_from_room, LVL_BUILDER,0);
+mods::interpreter::add_command("toggle_obj_from_room",POS_RESTING,do_toggle_obj_from_room, LVL_BUILDER,0);
+	}
+};

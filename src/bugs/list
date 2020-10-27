@@ -1,3 +1,9 @@
+### OCTOBER 27th
+
+-- DRONE command fails as soon as you type a direction
+
+
+
 Program received signal SIGSEGV, Segmentation fault.                                                                                                                         mods::player::set_cd (this=0x0, ch=0xc34068) at mods/player.cpp:640                                                                                                          640                                     m_char_data = ch;                                                                                                                    (gdb) bt
 #0  mods::player::set_cd (this=0x0, ch=0xc34068) at mods/player.cpp:640
 #1  0x0000000000709600 in mods::globals::rooms::char_from_room (ch=0xc34068) at globals.cpp:738

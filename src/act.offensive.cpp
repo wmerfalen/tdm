@@ -29,6 +29,7 @@
 #include "mods/weapon.hpp"
 #include "mods/help.hpp"
 #include "mods/weapons/damage-types.hpp"
+#include "mods/interpreter.hpp"
 
 /* extern variables */
 extern int pk_allowed;
@@ -53,16 +54,25 @@ using vpd = mods::scan::vec_player_data;
 ACMD(do_throw) {
 	DO_HELP("throw");
 	auto vec_args = PARSE_ARGS();
+	const char* usage = "Usage: throw <direction> <count>";
 
 	if(!player->has_inventory_capability(mods::weapon::mask::grenade)) {
-		player->stc("You must be holding a grenade to do that!");
+		player->error("You must be holding a grenade to do that!\r\n");
 		return;
 	}
 
-	int cnt = atoi(vec_args[2].c_str());
-	auto dir = mods::projectile::to_direction(vec_args[1]);
+	if(vec_args.size() < 2){
+		player->errorln(CAT("Not enough arguments.\r\n",usage));
+		return;
+	}
+	int cnt = mods::util::stoi(vec_args[1].c_str()).value_or(-1);
+	if(cnt < 0){
+		player->errorln(CAT("How many rooms away do you want to throw this object?\r\n",usage));
+		return;
+	}
+	auto dir = mods::projectile::to_direction(vec_args[0]);
 	if(dir < 0){
-		player->sendln("Use a valid direction!");
+		player->errorln("Use a valid direction!");
 		return;
 	}
 
@@ -783,3 +793,30 @@ ACMD(c4_brain) {
 
 }
 
+namespace offensive {
+	void init(){
+		mods::interpreter::add_command("affect_me",POS_RESTING,do_affect_me,0,0);
+		mods::interpreter::add_command("assist",POS_RESTING,do_assist,0,0);
+		mods::interpreter::add_command("backstab",POS_RESTING,do_backstab,0,0);
+		mods::interpreter::add_command("bash",POS_RESTING,do_bash,0,0);
+		mods::interpreter::add_command("c4_brain",POS_RESTING,c4_brain,0,0);
+		mods::interpreter::add_command("command_sequence",POS_RESTING,do_command_sequence,0,0);
+		mods::interpreter::add_command("engagement_mode",POS_RESTING,do_engagement_mode,0,0);
+		mods::interpreter::add_command("flee",POS_RESTING,do_flee,0,0);
+		mods::interpreter::add_command("go_loud",POS_RESTING,do_go_loud,0,0);
+		mods::interpreter::add_command("hit",POS_RESTING,do_hit,0,0);
+		mods::interpreter::add_command("kick",POS_RESTING,do_kick,0,0);
+		mods::interpreter::add_command("kill",POS_RESTING,do_kill,0,0);
+		mods::interpreter::add_command("order",POS_RESTING,do_order,0,0);
+		mods::interpreter::add_command("regroup",POS_RESTING,do_regroup,0,0);
+		mods::interpreter::add_command("reload",POS_RESTING,do_reload,0,0);
+		mods::interpreter::add_command("rescue",POS_RESTING,do_rescue,0,0);
+		mods::interpreter::add_command("scan",POS_RESTING,do_scan,0,0); /* !mods */
+		mods::interpreter::add_command("silencers_off",POS_RESTING,do_silencers_off,0,0);
+		mods::interpreter::add_command("silencers_on",POS_RESTING,do_silencers_on,0,0);
+		mods::interpreter::add_command("snipe",POS_RESTING,do_snipe,0,0);
+		mods::interpreter::add_command("snipe_object",POS_RESTING,do_snipe_object,0,0);
+		mods::interpreter::add_command("spray",POS_RESTING,do_spray,0,0);
+		mods::interpreter::add_command("throw",POS_RESTING,do_throw,0,0);
+	}
+};

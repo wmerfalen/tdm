@@ -42,14 +42,19 @@ extern int port_main(int,char**);
 extern int next_room_number();
 extern int next_room_vnum();
 extern void look_at_room(char_data* ch,int ignore_brief);
+#define INIT(A) \
+	namespace A { extern void init(); };
+
+INIT(builder);
+INIT(mods::date_time);
+INIT(mods::integral_objects);
+INIT(mods::interpreter);
+INIT(offensive);
+INIT(informative);
+#undef INIT
+
 namespace mods::mobs::room_watching::events {
 	extern void room_entry(room_rnum,uuid_t);
-};
-namespace mods::date_time {
-	extern void init();
-};
-namespace mods::integral_objects {
-	extern void init();
 };
 namespace config {
 	extern void init(int,char**);
@@ -59,9 +64,6 @@ namespace mods::skills {
 };
 namespace mods::super_users {
 	extern bool player_is(player_ptr_t&);
-};
-namespace mods::interpreter {
-	extern void init();
 };
 namespace mods {
 	namespace globals {
@@ -454,6 +456,9 @@ namespace mods {
 			mods::skills::game_init();
 			mods::integral_objects::init();
 			mods::date_time::init();
+			::offensive::init();
+			::builder::init();
+			::informative::init();
 		}
 		void post_boot_db() {
 		}

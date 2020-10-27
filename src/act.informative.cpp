@@ -31,6 +31,7 @@
 #include "mods/rooms.hpp"
 #include "mods/prefs.hpp"
 #include "mods/super-users.hpp"
+#include "mods/interpreter.hpp"
 
 extern char_data* character_list;
 /* extern variables */
@@ -1460,200 +1461,6 @@ ACMD(do_who) {
 	}
 }
 
-ACMD(do_broken_who) {
-#if 0
-	char_data *tch;
-	char name_search[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
-	char mode;
-	int low = 0, high = LVL_IMPL, localwho = 0, questwho = 0;
-	int showclass = 0, short_list = 0, outlaws = 0, num_can_see = 0;
-	int who_room = 0;
-
-	skip_spaces(&argument);
-	strcpy(buf, argument);	/* strcpy: OK (sizeof: argument == buf) */
-	name_search[0] = '\0';
-
-	while(*buf) {
-		char arg[MAX_INPUT_LENGTH], buf1[MAX_INPUT_LENGTH];
-
-		half_chop(buf, arg, buf1);
-
-		if(isdigit(*arg)) {
-			sscanf(arg, "%d-%d", &low, &high);
-			strcpy(buf, buf1);	/* strcpy: OK (sizeof: buf1 == buf) */
-		} else if(*arg == '-') {
-			mode = *(arg + 1);       /* just in case; we destroy arg in the switch */
-
-			switch(mode) {
-				case 'o':
-				case 'k':
-					outlaws = 1;
-					strcpy(buf, buf1);	/* strcpy: OK (sizeof: buf1 == buf) */
-					break;
-
-				case 'z':
-					localwho = 1;
-					strcpy(buf, buf1);	/* strcpy: OK (sizeof: buf1 == buf) */
-					break;
-
-				case 's':
-					short_list = 1;
-					strcpy(buf, buf1);	/* strcpy: OK (sizeof: buf1 == buf) */
-					break;
-
-				case 'q':
-					questwho = 1;
-					strcpy(buf, buf1);	/* strcpy: OK (sizeof: buf1 == buf) */
-					break;
-
-				case 'l':
-					half_chop(buf1, arg, buf);
-					sscanf(arg, "%d-%d", &low, &high);
-					break;
-
-				case 'n':
-					half_chop(buf1, name_search, buf);
-					break;
-
-				case 'r':
-					who_room = 1;
-					strcpy(buf, buf1);	/* strcpy: OK (sizeof: buf1 == buf) */
-					break;
-
-				case 'c':
-					half_chop(buf1, arg, buf);
-					showclass = find_class_bitvector(arg);
-					break;
-
-				default:
-					player->send( WHO_FORMAT);
-					return;
-			}				/* end of switch */
-
-		} else {			/* endif */
-			player->sendln( WHO_FORMAT);
-			return;
-		}
-	}				/* end while (parser) */
-#endif
-
-	player->sendln("Players-------");
-
-	int num_can_see = 0;
-	for(auto & player : mods::globals::player_list) {
-		if(!player->authenticated()){
-			continue;
-		}
-
-#if 0
-		if(d.original) {
-			tch = d.original;
-		} else if(!(tch = d.character)) {
-			continue;
-		}
-
-		if(*name_search && str_cmp(GET_NAME(tch), name_search) &&
-				!strstr(GET_TITLE(tch).c_str(), name_search)) {
-			continue;
-		}
-
-		if(!CAN_SEE(ch, tch) || GET_LEVEL(tch) < low || GET_LEVEL(tch) > high) {
-			continue;
-		}
-
-		if(outlaws && !PLR_FLAGGED(tch, PLR_KILLER) &&
-				!PLR_FLAGGED(tch, PLR_THIEF)) {
-			continue;
-		}
-
-		if(questwho && !PRF_FLAGGED(tch, PRF_QUEST)) {
-			continue;
-		}
-
-		if(localwho && world[IN_ROOM(ch)].zone != world[IN_ROOM(tch)].zone) {
-			continue;
-		}
-
-		if(who_room && (IN_ROOM(tch) != IN_ROOM(ch))) {
-			continue;
-		}
-
-		if(showclass && !(showclass & (1 << GET_CLASS(tch)))) {
-			continue;
-		}
-
-		if(short_list) {
-			player->send("%s[%2d %s] %-12.12s%s%s",
-					(GET_LEVEL(tch) >= LVL_IMMORT ? CCYEL(ch, C_SPR) : ""),
-					GET_LEVEL(tch), CLASS_ABBR(tch), GET_NAME(tch).c_str(),
-					(GET_LEVEL(tch) >= LVL_IMMORT ? CCNRM(ch, C_SPR) : ""),
-					((!(++num_can_see % 4)) ? "\r\n" : ""));
-		} else {
-#endif
-			num_can_see++;
-			player->send("[%s] - %s\r\n", player->get_class_string().c_str(),player->name().c_str());
-#if 0
-			player->send("%s[%2d %s] %s %s",
-					(GET_LEVEL(tch) >= LVL_IMMORT ? CCYEL(ch, C_SPR) : ""),
-					GET_LEVEL(tch), CLASS_ABBR(tch), GET_NAME(tch).c_str(),
-					GET_TITLE(tch).c_str());
-
-			if(GET_INVIS_LEV(tch)) {
-				player->send(" (i%d)", GET_INVIS_LEV(tch));
-			} else if(AFF_FLAGGED(tch, AFF_INVISIBLE)) {
-				player->send(" (invis)");
-			}
-
-			if(PLR_FLAGGED(tch, PLR_MAILING)) {
-				player->send(" (mailing)");
-			} else if(PLR_FLAGGED(tch, PLR_WRITING)) {
-				player->send(" (writing)");
-			}
-
-			if(PRF_FLAGGED(tch, PRF_DEAF)) {
-				player->send(" (deaf)");
-			}
-
-			if(PRF_FLAGGED(tch, PRF_NOTELL)) {
-				player->send(" (notell)");
-			}
-
-			if(PRF_FLAGGED(tch, PRF_QUEST)) {
-				player->send(" (quest)");
-			}
-
-			if(PLR_FLAGGED(tch, PLR_THIEF)) {
-				player->send(" (THIEF)");
-			}
-
-			if(PLR_FLAGGED(tch, PLR_KILLER)) {
-				player->send(" (KILLER)");
-			}
-
-			if(GET_LEVEL(tch) >= LVL_IMMORT) {
-				player->send( CCNRM(ch, C_SPR));
-			}
-
-			player->sendln("");
-		}				/* endif shortlist */
-#endif
-	}				/* end of for */
-
-#if 0
-	if(short_list && (num_can_see % 4)) {
-		player->sendln("");
-	}
-#endif
-
-	if(num_can_see == 0) {
-		player->sendln("\r\nNobody at all!");
-	} else if(num_can_see == 1) {
-		player->sendln("\r\nOne lonely character displayed.");
-	} else {
-		player->send("\r\n%d characters displayed.\r\n", num_can_see);
-	}
-}
-
 
 #define USERS_FORMAT \
 	"format: users [-l minlevel[-maxlevel]] [-n name] [-h host] [-c classlist] [-o] [-p]"
@@ -2367,3 +2174,38 @@ ACMD(do_view) {
 	}
 
 }
+
+namespace informative {
+	void init(){
+		mods::interpreter::add_command("action",POS_RESTING,do_action,0,0);
+		mods::interpreter::add_command("color",POS_RESTING,do_color,0,0);
+		mods::interpreter::add_command("commands",POS_RESTING,do_commands,0,0);
+		mods::interpreter::add_command("consider",POS_RESTING,do_consider,0,0);
+		mods::interpreter::add_command("contract",POS_RESTING,do_contract,0,0);
+		mods::interpreter::add_command("diagnose",POS_RESTING,do_diagnose,0,0);
+		mods::interpreter::add_command("drone",POS_RESTING,do_drone,0,0);
+		mods::interpreter::add_command("equipment",POS_RESTING,do_equipment,0,0);
+		mods::interpreter::add_command("examine",POS_RESTING,do_examine,0,0);
+		mods::interpreter::add_command("exits",POS_RESTING,do_exits,0,0);
+		mods::interpreter::add_command("gen_ps",POS_RESTING,do_gen_ps,0,0);
+		mods::interpreter::add_command("givemegold",POS_RESTING,do_givemegold,0,0);
+		mods::interpreter::add_command("gold",POS_RESTING,do_gold,0,0);
+		mods::interpreter::add_command("insult",POS_RESTING,do_insult,0,0);
+		mods::interpreter::add_command("inventory",POS_RESTING,do_inventory,0,0);
+		mods::interpreter::add_command("js",POS_RESTING,do_js,0,0);
+		mods::interpreter::add_command("jstest",POS_RESTING,do_jstest,0,0);
+		mods::interpreter::add_command("levels",POS_RESTING,do_levels,0,0);
+		mods::interpreter::add_command("look",POS_RESTING,do_look,0,0);
+		mods::interpreter::add_command("newjs",POS_RESTING,do_newjs,0,0);
+		mods::interpreter::add_command("preferences",POS_RESTING,do_preferences,0,0);
+		mods::interpreter::add_command("recall",POS_RESTING,do_recall,0,0);
+		mods::interpreter::add_command("score",POS_RESTING,do_score,0,0);
+		mods::interpreter::add_command("time",POS_RESTING,do_time,0,0);
+		mods::interpreter::add_command("toggle",POS_RESTING,do_toggle,0,0);
+		mods::interpreter::add_command("users",POS_RESTING,do_users,0,0);
+		mods::interpreter::add_command("view",POS_RESTING,do_view,0,0);
+		mods::interpreter::add_command("weather",POS_RESTING,do_weather,0,0);
+		mods::interpreter::add_command("where",POS_RESTING,do_where,0,0);
+		mods::interpreter::add_command("who",POS_RESTING,do_who,0,0);
+	}
+};

@@ -653,6 +653,10 @@ namespace mods {
 		void set_ada(bool s){ m_ada = true; }
 		void set_ada_data(std::string_view,std::string_view);
 		std::map<std::string,std::string>& get_ada_data();
+
+		void error(std::string_view msg){ send("{red}%s{/red}", msg.data()); }
+		void errorln(std::string_view msg){ send("{red}%s{/red}\r\n", msg.data()); }
+
 		protected:
 		std::map<std::string,std::string> m_ada_data;
 		bool m_ada;

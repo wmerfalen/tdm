@@ -100,87 +100,6 @@ ACMD(do_room_vnum){
 	player->send("%d\r\n",player->vnum());
 }
 
-ACMD(do_js_help){
-	
-	if(IS_NPC(ch)){
-		/** nice try */
-		return;
-	}
-	if(player->implementor_mode() || player->builder_mode()){
-		static std::vector<std::string> screen = {
-		"{gld}affect_from_char{/gld} -- {grn}1: player_name,2: affect_string{/grn}",
-		"{gld}clear_all_affected_flags{/gld} -- ",
-		"{gld}clear_all_plr_flags{/gld} -- ",
-		"{gld}char_from_room{/gld}",
-		"{gld}cmd{/gld} -- ",
-		"{gld}cmd_exec{/gld} -- ",
-		"{gld}db_get{/gld} -- ",
-		"{gld}db_geti{/gld} -- ",
-		"{gld}db_set{/gld} -- ",
-		"{gld}db_seti{/gld} -- ",
-		"{gld}get_char_pk_id{/gld} -- ",
-		"{gld}get_current_player{/gld} -- ",
-		"{gld}get_day{/gld} -- ",
-		"{gld}get_month{/gld} -- ",
-		"{gld}get_moon_phase{/gld} -- ",
-		"{gld}get_iday{/gld} -- ",
-		"{gld}get_ihour{/gld} -- ",
-		"{gld}get_imonth{/gld} -- ",
-		"{gld}get_iyear{/gld} -- ",
-		"{gld}hit{/gld} -- i.e.: hit(uuid_atk,uuid_vict)",
-		"{gld}in_room{/gld} -- ",
-		"{gld}list_mobiles{/gld} -- ",
-		"{gld}mob_death_trigger{/gld} -- ",
-		"{gld}mobile_activity{/gld} -- manually call it",
-		"{gld}modify_affected_flags{/gld} -- i.e.: maf('far','INVISIBLE',1)",
-		"{gld}modify_plr_flags{/gld} -- ",
-		"{gld}next_mob_number{/gld} -- gives you the next item number for mobs",
-		"{gld}next_object_number{/gld} -- gives you the next item number for objects",
-		"{gld}next_room_number{/gld} -- gives you the next item number for rooms",
-		"{gld}next_zone_number{/gld} -- gives you the next zone number",
-		"{gld}pmw_obj_from_room{/gld} -- when called, will toggle prompts for obj_from_room",
-		"{gld}read_mobile{/gld} -- ",
-		"{gld}refresh_minimum_proficiencies{/gld} -- reloads minimum proficiencies from lmdb (if any) and updates skill proficiencies",
-		"{gld}require_js{/gld} -- include from /lib/js/",
-		"{gld}require_test{/gld} -- include from /lib/js/tests",
-		"{gld}room{/gld} -- ",
-		"{gld}send{/gld} -- ",
-		"{gld}send_to_char{/gld} -- ",
-		"{gld}send_to_uuid{/gld} -- ",
-		"{gld}set_char_pk_id{/gld} -- ",
-		"{gld}set_points{/gld} -- i.e.:  set_points(player_name,key,value)",
-		"{gld}instigate{/gld} -- i.e.:  instigate(player_name,attacker_name)",
-		"{gld}set_attacker{/gld} -- i.e.:  set_attacker(player_name,attacker_name)",
-		"{gld}set_points keys{/gld}",
-			"mana max_mana hp max_hp move max_move armor",
-			"gold bank_gold exp hitroll damroll level",
-			"sex room uuid",
-		"{gld}uuid{/gld} -- ",
-		"{gld}value_load{/gld} -- loads a value saved with value_save() -- i.e.: value_load('SANITY_CHECK');",
-		"{gld}value_revert{/gld} -- reverts to hard-coded value (ignores lmdb value)  -- i.e.: value_revert('SANITY_CHECK');",
-		"{gld}value_save{/gld} -- saves an override to lmdb -- i.e.: value_save('SANITY_CHECK','value');",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{yel} --                      -:[ Super User List ]:-                       {/yel}",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{gld}add_super_user{/gld} -- add user to super user list -- i.e.: add_super_user('grifter');{/gld}",
-			"{gld}get_super_user_list{/gld} -- returns super user list -- i.e.: send(get_super_user_list());{/gld}",
-			"{gld}remove_super_user{/gld} -- removes user from super user list -- i.e.: remove_super_user('jack');{/gld}"
-		};
-		auto vec_args = PARSE_ARGS();
-		if(vec_args.size()){
-			mods::search_screen<player_ptr_t>(player,screen,vec_args,64);
-			player->sendln("Done listing.");
-			return;
-		}
-		for(auto & line : screen){
-			player->sendln(line);
-		}
-	}else{
-		player->stc("Huh?!?");
-		return;
-	}
-}
-
 ACMD(do_require_js){
 	
 	CREATE_ARG(512,1);
@@ -328,83 +247,55 @@ ACMD(do_clear_who_line);
 ACMD(do_go_invisible);
 ACMD(do_go_visible);
 
-ACMD(do_yaml_import);
-ACMD(do_yaml_log);
-ACMD(do_yaml_log_save);
-ACMD(do_yaml_log_clear);
-ACMD(do_yaml_example);
-ACMD(do_flush_holding);
 ACMD(do_allow_skill);
 ACMD(do_flush_player);
 ACMD(do_feed_player);
-ACMD(do_hold_anything);
-ACMD(do_histfile);
-ACMD(do_uuid);
 /* prototypes for all do_x functions. */
-ACMD(do_action);
 ACMD(do_advance);
 ACMD(do_alias);
-ACMD(do_assist);
 ACMD(do_at);
-ACMD(do_backstab);
 ACMD(do_ban);
-ACMD(do_bash);
 ACMD(do_breach);
 ACMD(do_thermite);
 ACMD(do_cast);
-ACMD(do_color);
-ACMD(do_commands);
-ACMD(do_consider);
 ACMD(do_credits);
 ACMD(do_date);
 ACMD(do_dc);
-ACMD(do_diagnose);
 ACMD(do_display);
 ACMD(do_drink);
 ACMD(do_drop);
 ACMD(do_eat);
 ACMD(do_echo);
 ACMD(do_enter);
-ACMD(do_equipment);
-ACMD(do_examine);
 ACMD(do_exit);
-ACMD(do_exits);
 ACMD(do_flee);
 ACMD(do_follow);
 ACMD(do_force);
 ACMD(do_gecho);
 ACMD(do_gen_comm);
 ACMD(do_gen_door);
-ACMD(do_gen_ps);
 ACMD(do_gen_tog);
 ACMD(do_gen_write);
 ACMD(do_get);
 ACMD(do_give);
-ACMD(do_gold);
 ACMD(do_goto);
 ACMD(do_grab);
 ACMD(do_group);
 ACMD(do_gsay);
 ACMD(do_hcontrol);
-ACMD(do_help);
 ACMD(do_hide);
 ACMD(do_hit);
 ACMD(do_house);
 ACMD(do_idle);
-ACMD(do_insult);
-ACMD(do_inventory);
 ACMD(do_invis);
 ACMD(do_kick);
 ACMD(do_kill);
 ACMD(do_last);
 ACMD(do_leave);
-ACMD(do_levels);
 
-ACMD(do_view);
 ACMD(do_buy);	/** in shop.cpp */
 ACMD(do_list);	/** in shop.cpp */
 ACMD(do_load);
-ACMD(do_look);
 /* ACMD(do_move); -- interpreter.h */
 ACMD(do_not_here);
 ACMD(do_olc);
@@ -428,7 +319,6 @@ ACMD(do_restore);
 ACMD(do_return);
 ACMD(do_save);
 ACMD(do_say);
-ACMD(do_score);
 ACMD(do_send);
 ACMD(do_set);
 ACMD(do_show);
@@ -437,9 +327,6 @@ ACMD(do_sit);
 ACMD(do_skills);
 ACMD(do_sleep);
 ACMD(do_sneak);
-ACMD(do_recall);
-ACMD(do_affect_me);
-ACMD(do_givemegold);
 ACMD(do_givemenades);
 ACMD(do_shoot);	/* just an alias of snipe */
 ACMD(do_install_weapon_locker);
@@ -469,11 +356,6 @@ ACMD(do_giveme_emp_grenades);
 ACMD(do_giveme_camera);
 ACMD(do_giveme_night_vision_camera);
 ACMD(do_giveme_thermal_camera);
-ACMD(do_next_object_number);
-ACMD(do_next_mob_number);
-ACMD(do_next_room_number);
-ACMD(do_pmw_obj_from_room);
-ACMD(do_toggle_obj_from_room);
 ACMD(do_my_uuid);
 ACMD(do_get_ticks_per_minute);
 /** ------------------------ */
@@ -486,8 +368,6 @@ ACMD(do_giveme_sniper_rifle);
 
 ACMD(do_heal);
 ACMD(do_revive);
-ACMD(do_newjs);
-ACMD(do_jstest);
 ACMD(do_mbuild);
 ACMD(do_obuild);
 ACMD(do_sbuild);
@@ -502,9 +382,6 @@ ACMD(do_room_dark);
 ACMD(do_room_fire);
 ACMD(do_room_list);
 ACMD(do_show_tics);
-ACMD(do_drone);
-ACMD(do_contract);
-ACMD(do_js);
 ACMD(do_set_ammo);
 //ACMD(do_ammo);
 
@@ -536,25 +413,18 @@ ACMD(do_switch);
 ACMD(do_syslog);
 ACMD(do_teleport);
 ACMD(do_tell);
-ACMD(do_time);
 ACMD(do_title);
-ACMD(do_toggle);
 ACMD(do_track);
 ACMD(do_trans);
-ACMD(do_help_throw);
 ACMD(do_throw);
 ACMD(do_unban);
 ACMD(do_ungroup);
 ACMD(do_use);
-ACMD(do_users);
 ACMD(do_visible);
 ACMD(do_vnum);
 ACMD(do_vstat);
 ACMD(do_wake);
 ACMD(do_wear);
-ACMD(do_weather);
-ACMD(do_where);
-ACMD(do_who);
 ACMD(do_wield);
 ACMD(do_wimpy);
 ACMD(do_wizlock);
@@ -581,7 +451,7 @@ ACMD(do_scan);
  * infrequently used and dangerously destructive commands should have low
  * priority.
  */
-
+ACMD(do_look);
 /** !__CMD_INFO_START__! **/
 cpp_extern const struct command_info cmd_info[] = {
 	{ "RESERVED", 0, 0, 0, 0 },	/* this must be first -- for specprocs */
@@ -593,162 +463,86 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "west"     , POS_STANDING, do_move     , 0, SCMD_WEST },
 	{ "up"       , POS_STANDING, do_move     , 0, SCMD_UP },
 	{ "down"     , POS_STANDING, do_move     , 0, SCMD_DOWN },
+	{ "l"     , POS_STANDING, do_look     , 0, 0},
 
 	/* now, the main list */
 	{ "at"       , POS_DEAD    , do_at       , LVL_IMMORT, 0 },
 	{ "advance"  , POS_DEAD    , do_advance  , LVL_IMPL, 0 },
 	{ "alias"    , POS_DEAD    , do_alias    , 0, 0 },
-	{ "accuse"   , POS_SITTING , do_action   , 0, 0 },
-	{ "applaud"  , POS_RESTING , do_action   , 0, 0 },
-	{ "assist"   , POS_FIGHTING, do_assist   , 1, 0 },
 	{ "ask"      , POS_RESTING , do_spec_comm, 0, SCMD_ASK },
 	{ "auction"  , POS_SLEEPING, do_gen_comm , 0, SCMD_AUCTION },
 	{ "autoexit" , POS_DEAD    , do_gen_tog  , 0, SCMD_AUTOEXIT },
 
-	{ "bounce"   , POS_STANDING, do_action   , 0, 0 },
-	{ "backstab" , POS_STANDING, do_unimplemented, 1, 0 },
 	{ "ban"      , POS_DEAD    , do_ban      , LVL_GRGOD, 0 },
 	{ "balance"  , POS_STANDING, do_not_here , 1, 0 },
 	{ "breach"     , POS_STANDING, do_breach     , 1, 0 },
 	{ "thermite"     , POS_STANDING, do_thermite     , 1, 0 },
-	{ "bash"     , POS_FIGHTING, do_unimplemented     , 1, 0 },
-	{ "beg"      , POS_RESTING , do_action   , 0, 0 },
-	{ "bleed"    , POS_RESTING , do_action   , 0, 0 },
-	{ "blush"    , POS_RESTING , do_action   , 0, 0 },
-	{ "bow"      , POS_STANDING, do_action   , 0, 0 },
-	{ "brb"      , POS_RESTING , do_action   , 0, 0 },
 	{ "brief"    , POS_DEAD    , do_gen_tog  , 0, SCMD_BRIEF },
-	{ "burp"     , POS_RESTING , do_action   , 0, 0 },
 	{ "buy"      , POS_STANDING, do_buy      , 0, 0 },
 	{ "bug"      , POS_DEAD    , do_gen_write, 0, SCMD_BUG },
 
 	{ "cast"     , POS_SITTING , do_unimplemented     , 1, 0 },
-	{ "cackle"   , POS_RESTING , do_action   , 0, 0 },
 	{ "check"    , POS_STANDING, do_not_here , 1, 0 },
-	{ "chuckle"  , POS_RESTING , do_action   , 0, 0 },
-	{ "clap"     , POS_RESTING , do_action   , 0, 0 },
-	{ "clear"    , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR },
 	{ "close"    , POS_SITTING , do_gen_door , 0, SCMD_CLOSE },
-	{ "cls"      , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR },
-	{ "consider" , POS_RESTING , do_consider , 0, 0 },
-	{ "color"    , POS_DEAD    , do_color    , 0, 0 },
-	{ "comfort"  , POS_RESTING , do_action   , 0, 0 },
-	{ "comb"     , POS_RESTING , do_action   , 0, 0 },
-	{ "commands" , POS_DEAD    , do_commands , 0, SCMD_COMMANDS },
 	{ "compact"  , POS_DEAD    , do_gen_tog  , 0, SCMD_COMPACT },
-	{ "cough"    , POS_RESTING , do_action   , 0, 0 },
-	{ "credits"  , POS_DEAD    , do_gen_ps   , 0, SCMD_CREDITS },
-	{ "cringe"   , POS_RESTING , do_action   , 0, 0 },
-	{ "cry"      , POS_RESTING , do_action   , 0, 0 },
-	{ "cuddle"   , POS_RESTING , do_action   , 0, 0 },
-	{ "curse"    , POS_RESTING , do_action   , 0, 0 },
-	{ "curtsey"  , POS_STANDING, do_action   , 0, 0 },
 
-	{ "dance"    , POS_STANDING, do_action   , 0, 0 },
 	{ "date"     , POS_DEAD    , do_date     , LVL_IMMORT, SCMD_DATE },
-	{ "daydream" , POS_SLEEPING, do_action   , 0, 0 },
 	{ "dc"       , POS_DEAD    , do_dc       , LVL_GOD, 0 },
 	{ "deposit"  , POS_STANDING, do_not_here , 1, 0 },
-	{ "diagnose" , POS_RESTING , do_diagnose , 0, 0 },
 	{ "display"  , POS_DEAD    , do_display  , 0, 0 },
 	{ "donate"   , POS_RESTING , do_drop     , 0, SCMD_DONATE },
 	{ "drink"    , POS_RESTING , do_drink    , 0, SCMD_DRINK },
 	{ "drop"     , POS_RESTING , do_drop     , 0, SCMD_DROP },
-	{ "drool"    , POS_RESTING , do_action   , 0, 0 },
 
 	{ "eat"      , POS_RESTING , do_eat      , 0, SCMD_EAT },
 	{ "echo"     , POS_SLEEPING, do_echo     , LVL_IMMORT, SCMD_ECHO },
 	{ "emote"    , POS_RESTING , do_echo     , 1, SCMD_EMOTE },
 	{ ":"        , POS_RESTING, do_echo      , 1, SCMD_EMOTE },
-	{ "embrace"  , POS_STANDING, do_action   , 0, 0 },
 	{ "enter"    , POS_STANDING, do_enter    , 0, 0 },
-	{ "equipment", POS_SLEEPING, do_equipment, 0, 0 },
-	{ "exits"    , POS_RESTING , do_exits    , 0, 0 },
-	{ "examine"  , POS_SITTING , do_examine  , 0, 0 },
 
 	{ "force"    , POS_SLEEPING, do_force    , LVL_GOD, 0 },
-	{ "fart"     , POS_RESTING , do_action   , 0, 0 },
 	{ "fill"     , POS_STANDING, do_pour     , 0, SCMD_FILL },
 	{ "flee"     , POS_FIGHTING, do_flee     , 1, 0 },
-	{ "flip"     , POS_STANDING, do_action   , 0, 0 },
-	{ "flirt"    , POS_RESTING , do_action   , 0, 0 },
 	{ "follow"   , POS_RESTING , do_follow   , 0, 0 },
-	{ "fondle"   , POS_RESTING , do_action   , 0, 0 },
 	{ "freeze"   , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_FREEZE },
-	{ "french"   , POS_RESTING , do_action   , 0, 0 },
-	{ "frown"    , POS_RESTING , do_action   , 0, 0 },
-	{ "fume"     , POS_RESTING , do_action   , 0, 0 },
 
 	{ "get"      , POS_RESTING , do_get      , 0, 0 },
-	{ "gasp"     , POS_RESTING , do_action   , 0, 0 },
 	{ "gecho"    , POS_DEAD    , do_gecho    , LVL_GOD, 0 },
 	{ "give"     , POS_RESTING , do_give     , 0, 0 },
-	{ "giggle"   , POS_RESTING , do_action   , 0, 0 },
-	{ "glare"    , POS_RESTING , do_action   , 0, 0 },
 	{ "goto"     , POS_SLEEPING, do_goto     , LVL_IMMORT, 0 },
-	{ "gold"     , POS_RESTING , do_gold     , 0, 0 },
 	{ "gossip"   , POS_SLEEPING, do_gen_comm , 0, SCMD_GOSSIP },
 	{ "group"    , POS_RESTING , do_group    , 1, 0 },
 	{ "grab"     , POS_RESTING , do_grab     , 0, 0 },
 	{ "grats"    , POS_SLEEPING, do_gen_comm , 0, SCMD_GRATZ },
-	{ "greet"    , POS_RESTING , do_action   , 0, 0 },
-	{ "grin"     , POS_RESTING , do_action   , 0, 0 },
-	{ "groan"    , POS_RESTING , do_action   , 0, 0 },
-	{ "grope"    , POS_RESTING , do_action   , 0, 0 },
-	{ "grovel"   , POS_RESTING , do_action   , 0, 0 },
-	{ "growl"    , POS_RESTING , do_action   , 0, 0 },
 	{ "gsay"     , POS_SLEEPING, do_gsay     , 0, 0 },
 	{ "gtell"    , POS_SLEEPING, do_gsay     , 0, 0 },
 
-	{ "help"     , POS_DEAD    , do_help     , 0, 0 },
-	{ "handbook" , POS_DEAD    , do_gen_ps   , LVL_IMMORT, SCMD_HANDBOOK },
 	{ "hcontrol" , POS_DEAD    , do_hcontrol , LVL_GRGOD, 0 },
-	{ "hiccup"   , POS_RESTING , do_action   , 0, 0 },
 	{ "hide"     , POS_RESTING , do_hide     , 1, 0 },
 	{ "hit"      , POS_FIGHTING, do_hit      , 0, SCMD_HIT },
 	{ "hold"     , POS_RESTING , do_grab     , 1, 0 },
 	{ "holler"   , POS_RESTING , do_gen_comm , 1, SCMD_HOLLER },
 	{ "holylight", POS_DEAD    , do_gen_tog  , LVL_IMMORT, SCMD_HOLYLIGHT },
-	{ "hop"      , POS_RESTING , do_action   , 0, 0 },
 	{ "house"    , POS_RESTING , do_house    , 0, 0 },
-	{ "hug"      , POS_RESTING , do_action   , 0, 0 },
 
-	{ "inventory", POS_DEAD    , do_inventory, 0, 0 },
 	{ "idea"     , POS_DEAD    , do_gen_write, 0, SCMD_IDEA },
-	{ "imotd"    , POS_DEAD    , do_gen_ps   , LVL_IMMORT, SCMD_IMOTD },
-	{ "immlist"  , POS_DEAD    , do_gen_ps   , 0, SCMD_IMMLIST },
-	{ "info"     , POS_SLEEPING, do_gen_ps   , 0, SCMD_INFO },
-	{ "insult"   , POS_RESTING , do_insult   , 0, 0 },
 	{ "invis"    , POS_DEAD    , do_invis    , LVL_IMMORT, 0 },
 
 	{ "junk"     , POS_RESTING , do_drop     , 0, SCMD_JUNK },
 
 	{ "kill"     , POS_FIGHTING, do_kill     , 0, 0 },
 	{ "kick"     , POS_FIGHTING, do_unimplemented     , 1, 0 },
-	{ "kiss"     , POS_RESTING , do_action   , 0, 0 },
 
-	{ "look"     , POS_RESTING , do_look     , 0, SCMD_LOOK },
-	{ "view"     , POS_RESTING , do_view     , 0, 0 },
-	{ "laugh"    , POS_RESTING , do_action   , 0, 0 },
 	{ "last"     , POS_DEAD    , do_last     , LVL_GOD, 0 },
 	{ "leave"    , POS_STANDING, do_leave    , 0, 0 },
-	{ "levels"   , POS_DEAD    , do_levels   , 0, 0 },
 	{ "list"     , POS_STANDING, do_list , 0, 0 },
-	{ "lick"     , POS_RESTING , do_action   , 0, 0 },
 	{ "lock"     , POS_SITTING , do_gen_door , 0, SCMD_LOCK },
 	{ "load"     , POS_DEAD    , do_load     , LVL_GOD, 0 },
-	{ "love"     , POS_RESTING , do_action   , 0, 0 },
 
-	{ "moan"     , POS_RESTING , do_action   , 0, 0 },
-	{ "motd"     , POS_DEAD    , do_gen_ps   , 0, SCMD_MOTD },
 	{ "mail"     , POS_STANDING, do_not_here , 1, 0 },
-	{ "massage"  , POS_RESTING , do_action   , 0, 0 },
 	{ "mute"     , POS_DEAD    , do_wizutil  , LVL_GOD, SCMD_SQUELCH },
 	{ "murder"   , POS_FIGHTING, do_unimplemented      , 0, SCMD_MURDER },
 
-	{ "news"     , POS_SLEEPING, do_gen_ps   , 0, SCMD_NEWS },
-	{ "nibble"   , POS_RESTING , do_action   , 0, 0 },
-	{ "nod"      , POS_RESTING , do_action   , 0, 0 },
 	{ "noauction", POS_DEAD    , do_gen_tog  , 0, SCMD_NOAUCTION },
 	{ "nogossip" , POS_DEAD    , do_gen_tog  , 0, SCMD_NOGOSSIP },
 	{ "nograts"  , POS_DEAD    , do_gen_tog  , 0, SCMD_NOGRATZ },
@@ -759,8 +553,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "notell"   , POS_DEAD    , do_gen_tog  , 1, SCMD_NOTELL },
 	{ "notitle"  , POS_DEAD    , do_wizutil  , LVL_GOD, SCMD_NOTITLE },
 	{ "nowiz"    , POS_DEAD    , do_gen_tog  , LVL_IMMORT, SCMD_NOWIZ },
-	{ "nudge"    , POS_RESTING , do_action   , 0, 0 },
-	{ "nuzzle"   , POS_RESTING , do_action   , 0, 0 },
 
 	{ "olc"      , POS_DEAD    , do_olc      , LVL_IMPL, 0 },
 	{ "order"    , POS_RESTING , do_order    , 1, 0 },
@@ -768,25 +560,14 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "open"     , POS_SITTING , do_gen_door , 0, SCMD_OPEN },
 
 	{ "put"      , POS_RESTING , do_put      , 0, 0 },
-	{ "pat"      , POS_RESTING , do_action   , 0, 0 },
 	{ "page"     , POS_DEAD    , do_unimplemented     , LVL_GOD, 0 },
 	{ "pardon"   , POS_DEAD    , do_wizutil  , LVL_GOD, SCMD_PARDON },
-	{ "peer"     , POS_RESTING , do_action   , 0, 0 },
 	{ "pick"     , POS_STANDING, do_gen_door , 1, SCMD_PICK },
-	{ "point"    , POS_RESTING , do_action   , 0, 0 },
-	{ "poke"     , POS_RESTING , do_action   , 0, 0 },
-	{ "policy"   , POS_DEAD    , do_gen_ps   , 0, SCMD_POLICIES },
-	{ "ponder"   , POS_RESTING , do_action   , 0, 0 },
 	{ "poofin"   , POS_DEAD    , do_poofset  , LVL_IMMORT, SCMD_POOFIN },
 	{ "poofout"  , POS_DEAD    , do_poofset  , LVL_IMMORT, SCMD_POOFOUT },
 	{ "pour"     , POS_STANDING, do_pour     , 0, SCMD_POUR },
-	{ "pout"     , POS_RESTING , do_action   , 0, 0 },
 	{ "prompt"   , POS_DEAD    , do_display  , 0, 0 },
 	{ "practice" , POS_RESTING , do_practice , 1, 0 },
-	{ "pray"     , POS_SITTING , do_action   , 0, 0 },
-	{ "puke"     , POS_RESTING , do_action   , 0, 0 },
-	{ "punch"    , POS_RESTING , do_action   , 0, 0 },
-	{ "purr"     , POS_RESTING , do_action   , 0, 0 },
 	{ "purge"    , POS_DEAD    , do_purge    , LVL_GOD, 0 },
 
 	{ "quaff"    , POS_RESTING , do_use      , 0, SCMD_QUAFF },
@@ -798,7 +579,6 @@ cpp_extern const struct command_info cmd_info[] = {
 
 	{ "reply"    , POS_SLEEPING, do_reply    , 0, 0 },
 	{ "rest"     , POS_RESTING , do_rest     , 0, 0 },
-	{ "read"     , POS_RESTING , do_look     , 0, SCMD_READ },
 	{ "reboot"   , POS_DEAD    , do_reboot   , LVL_IMPL, 0 },
 	{ "reload"  , POS_RESTING , do_reload   , 0, 0 },
 	{ "recite"   , POS_RESTING , do_use      , 0, SCMD_RECITE },
@@ -811,48 +591,31 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "restore"  , POS_DEAD    , do_restore  , LVL_GOD, 0 },
 	{ "return"   , POS_DEAD    , do_return   , 0, 0 },
 	{ "rnum"    , POS_STANDING, do_unimplemented     , 0, 0 },
-	{ "roll"     , POS_RESTING , do_action   , 0, 0 },
 	{ "roomflags", POS_DEAD    , do_gen_tog  , LVL_IMMORT, SCMD_ROOMFLAGS },
-	{ "ruffle"   , POS_STANDING, do_action   , 0, 0 },
 
 	{ "say"      , POS_RESTING , do_say      , 0, 0 },
 	{ "'"        , POS_RESTING , do_say      , 0, 0 },
 	{ "save"     , POS_SLEEPING, do_save     , 0, 0 },
-	{ "score"    , POS_DEAD    , do_score    , 0, 0 },
-	{ "scream"   , POS_RESTING , do_action   , 0, 0 },
 	{ "sell"     , POS_STANDING, do_not_here , 0, 0 },
 	{ "send"     , POS_SLEEPING, do_send     , LVL_GOD, 0 },
 	{ "set"      , POS_DEAD    , do_set      , LVL_GOD, 0 },
 	{ "shout"    , POS_RESTING , do_gen_comm , 0, SCMD_SHOUT },
-	{ "shake"    , POS_RESTING , do_action   , 0, 0 },
-	{ "shiver"   , POS_RESTING , do_action   , 0, 0 },
 	{ "show"     , POS_DEAD    , do_show     , LVL_IMMORT, 0 },
-	{ "shrug"    , POS_RESTING , do_action   , 0, 0 },
 	{ "shutdow"  , POS_DEAD    , do_shutdown , LVL_IMPL, 0 },
 	{ "scan" 		, POS_RESTING    , do_scan , 0, 0 },
 	{ "shutdown" , POS_RESTING   , do_shutdown , 0, SCMD_SHUTDOWN },
-	{ "sigh"     , POS_RESTING , do_action   , 0, 0 },
-	{ "sing"     , POS_RESTING , do_action   , 0, 0 },
 	{ "sip"      , POS_RESTING , do_drink    , 0, SCMD_SIP },
 	{ "sit"      , POS_RESTING , do_sit      , 0, 0 },
 	{ "skills" , POS_SLEEPING, do_skills , 0, 0 },
 	{ "sleep"    , POS_SLEEPING, do_sleep    , 0, 0 },
-	{ "slap"     , POS_RESTING , do_action   , 0, 0 },
 	{ "slowns"   , POS_DEAD    , do_gen_tog  , LVL_IMPL, SCMD_SLOWNS },
-	{ "smile"    , POS_RESTING , do_action   , 0, 0 },
-	{ "smirk"    , POS_RESTING , do_action   , 0, 0 },
-	{ "snicker"  , POS_RESTING , do_action   , 0, 0 },
-	{ "js"  , POS_RESTING , do_js   , LVL_BUILDER, 0 },
 	/** ------------------- */
 	/** DEBUGGING + TESTING */
 	/** ------------------- */
-	{ "givemegold"  , POS_RESTING , do_givemegold   , 0, 0 },
 	{ "givemenades" , POS_RESTING , do_givemenades , 0, 0 },
 	{ "idle"  , POS_RESTING , do_idle   , 0, 0 },
 	{ "heal"  , POS_RESTING , do_heal   , 0, 0 },
 	{ "revive"  , POS_RESTING , do_revive   , 0, 0 },
-	{ "newjs"  , POS_RESTING , do_newjs   , LVL_GOD, 0 },
-	{ "jstest"  , POS_RESTING , do_jstest   , LVL_GOD, 0 },
 	{ "kill_now"  , POS_RESTING , do_one_punch   , LVL_GOD, 0 },
 	{ "one_punch"  , POS_RESTING , do_one_punch   , LVL_GOD, 0 },
 	{ "point_update"  , POS_RESTING , do_point_update   , LVL_GOD, 0 },
@@ -861,7 +624,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "room_list_uuid"  , POS_RESTING , do_room_list_uuid, LVL_GOD, 0 },
 	{ "send_report"  , POS_RESTING , do_send_report, LVL_GOD, 0 },
 	{ "zero_socket"  , POS_RESTING , do_zero_socket  , LVL_IMPL, 0 },
-	{ "uuid"  , POS_RESTING , do_uuid  , 0, 0 },
 	/** ----------------------- */
 	/** END DEBUGGING + TESTING */
 	/** ----------------------- */
@@ -872,9 +634,6 @@ cpp_extern const struct command_info cmd_info[] = {
 		/** ------ */
 		/** QUESTS */
 		/** ------ */
-	{ "quest"  , POS_RESTING , do_contract   , 0, 0 },
-	{ "contract"  , POS_RESTING , do_contract   , 0, 0 },
-	{ "contracts"  , POS_RESTING , do_contract  , 0, 0 },
 		/** ------- */
 		/** DISPLAY */
 		/** ------- */
@@ -886,7 +645,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** -------- */
 	/** MOVEMENT */
 	/** -------- */
-	{ "recall"  , POS_RESTING , do_recall   , 0, 0 },
 
 	/** ---------------- */
 	/** COMBAT MECHANICS */
@@ -907,7 +665,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "uninstall"  , POS_RESTING , do_uninstall, 0, 0 },	/** i.e.: claymore mine, camera */
 	{ "plant" , POS_RESTING , do_unimplemented , 0, 0},
 	{ "activate" , POS_RESTING , do_unimplemented, 0, 0},
-	{ "drone"  , POS_RESTING , do_drone   , 0, 0 },
 	{ "throw"  , POS_RESTING , do_throw   , 0, 0 },
 	{ "set_ammo"  , POS_RESTING , do_set_ammo   , LVL_GOD, 0 },
 	/** -------------------------- */
@@ -923,7 +680,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "giveme_camera"  , POS_RESTING , do_giveme_camera  , LVL_GOD, 0 },
 	{ "giveme_night_vision_camera"  , POS_RESTING , do_giveme_night_vision_camera  , LVL_GOD, 0 },
 	{ "giveme_thermal_camera"  , POS_RESTING , do_giveme_thermal_camera  , LVL_GOD, 0 },
-	{ "affect_me"  , POS_RESTING , do_affect_me , LVL_GOD, 0 },
 
 	/** ------------------------------ */
 	/** END "GIVE ME" COMBAT MECHANICS */
@@ -943,22 +699,9 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "get_super_user_list"  , POS_RESTING , do_get_super_user_list   , LVL_BUILDER, 0 },
 	{ "show_tics"  , POS_RESTING , do_show_tics   , LVL_BUILDER, 0 },
 	{ "builder_help"  , POS_RESTING , do_builder_help   , LVL_GOD, 0 },
-	{ "flush_holding"  , POS_RESTING , do_flush_holding   , LVL_GOD, 0 },
 	{ "flush_player"  , POS_RESTING , do_flush_player   , LVL_GOD, 0 },
 	{ "allow_skill"  , POS_RESTING , do_allow_skill   , LVL_GOD, 0 },
 	{ "feed_player"  , POS_RESTING , do_feed_player   , LVL_GOD, 0 },
-	{ "hold_anything"  , POS_RESTING , do_hold_anything   , LVL_GOD, 0 },
-	{ "yaml_import"  , POS_RESTING , do_yaml_import   , LVL_GOD, 0 },
-	{ "yaml_log"  , POS_RESTING , do_yaml_log   , LVL_GOD, 0 },
-	{ "yaml_log_save"  , POS_RESTING , do_yaml_log_save   , LVL_GOD, 0 },
-	{ "yaml_log_clear"  , POS_RESTING , do_yaml_log_clear   , LVL_GOD, 0 },
-	{ "yaml_example"  , POS_RESTING , do_yaml_example   , LVL_GOD, 0 },
-	{ "next_object_number"  , POS_RESTING , do_next_object_number   , LVL_GOD, 0 },
-	{ "next_room_number"  , POS_RESTING , do_next_room_number   , LVL_GOD, 0 },
-	{ "next_mob_number"  , POS_RESTING , do_next_mob_number   , LVL_GOD, 0 },
-	{ "pmw_obj_from_room"  , POS_RESTING , do_pmw_obj_from_room   , LVL_GOD, 0 },
-	{ "toggle_obj_from_room"  , POS_RESTING , do_toggle_obj_from_room   , LVL_GOD, 0 },
-	{ "js_help"  , POS_RESTING , do_js_help   , LVL_GOD, 0 },
 	{ "install_minigame"  , POS_RESTING , do_install_minigame   , LVL_GOD, 0 },
 	{ "uninstall_minigame"  , POS_RESTING , do_uninstall_minigame   , LVL_GOD, 0 },
 	{ "list_minigame"  , POS_RESTING , do_list_minigame   , LVL_GOD, 0 },
@@ -974,7 +717,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "room_dark"  , POS_RESTING , do_room_dark   , LVL_IMMORT, 0 },
 	{ "room_fire"  , POS_RESTING , do_room_fire   , LVL_IMMORT, 0 },
 	{ "room_list"  , POS_RESTING , do_room_list   , LVL_IMMORT, 0 },
-	{ "histfile"  , POS_RESTING , do_histfile   , LVL_IMMORT, 0 },
 	{ "my_uuid"  , POS_RESTING , do_my_uuid  , LVL_IMMORT, 0 },
 	{ "get_ticks_per_minute"  , POS_RESTING , do_get_ticks_per_minute, LVL_IMMORT, 0 },
 	{ "enable_registration"  , POS_RESTING , do_enable_registration   , LVL_BUILDER, 0 },
@@ -992,49 +734,24 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** END ADMIN/WIZARD UTILS */
 	/** ---------------------- */
 
-	{ "snap"     , POS_RESTING , do_action   , 0, 0 },
-	{ "snarl"    , POS_RESTING , do_action   , 0, 0 },
-	{ "sneeze"   , POS_RESTING , do_action   , 0, 0 },
 	{ "sneak"    , POS_STANDING, do_sneak    , 1, 0 },
-	{ "sniff"    , POS_RESTING , do_action   , 0, 0 },
-	{ "snore"    , POS_SLEEPING, do_action   , 0, 0 },
-	{ "snowball" , POS_STANDING, do_action   , LVL_IMMORT, 0 },
 	{ "snoop"    , POS_DEAD    , do_snoop    , LVL_GOD, 0 },
-	{ "snuggle"  , POS_RESTING , do_action   , 0, 0 },
-	{ "socials"  , POS_DEAD    , do_commands , 0, SCMD_SOCIALS },
 	{ "split"    , POS_SITTING , do_split    , 1, 0 },
-	{ "spank"    , POS_RESTING , do_action   , 0, 0 },
-	{ "spit"     , POS_STANDING, do_action   , 0, 0 },
-	{ "squeeze"  , POS_RESTING , do_action   , 0, 0 },
 	{ "stand"    , POS_RESTING , do_stand    , 0, 0 },
-	{ "stare"    , POS_RESTING , do_action   , 0, 0 },
 	{ "stat"     , POS_DEAD    , do_stat     , LVL_IMMORT, 0 },
 	{ "steal"    , POS_STANDING, do_steal    , 1, 0 },
-	{ "steam"    , POS_RESTING , do_action   , 0, 0 },
-	{ "stroke"   , POS_RESTING , do_action   , 0, 0 },
-	{ "strut"    , POS_STANDING, do_action   , 0, 0 },
-	{ "sulk"     , POS_RESTING , do_action   , 0, 0 },
 	{ "switch"   , POS_DEAD    , do_switch   , LVL_GRGOD, 0 },
 	{ "syslog"   , POS_DEAD    , do_syslog   , LVL_IMMORT, 0 },
 
 	{ "tell"     , POS_DEAD    , do_tell     , 0, 0 },
-	{ "tackle"   , POS_RESTING , do_action   , 0, 0 },
 	{ "take"     , POS_RESTING , do_get      , 0, 0 },
-	{ "tango"    , POS_STANDING, do_action   , 0, 0 },
-	{ "taunt"    , POS_RESTING , do_action   , 0, 0 },
 	{ "taste"    , POS_RESTING , do_eat      , 0, SCMD_TASTE },
 	{ "teleport" , POS_DEAD    , do_teleport , LVL_GOD, 0 },
-	{ "thank"    , POS_RESTING , do_action   , 0, 0 },
-	{ "think"    , POS_RESTING , do_action   , 0, 0 },
 	{ "thaw"     , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_THAW },
 	{ "title"    , POS_DEAD    , do_title    , 0, 0 },
-	{ "tickle"   , POS_RESTING , do_action   , 0, 0 },
-	{ "time"     , POS_DEAD    , do_time     , 0, 0 },
-	{ "toggle"   , POS_DEAD    , do_toggle   , 0, 0 },
 	{ "track"    , POS_STANDING, do_track    , 0, 0 },
 	{ "trackthru", POS_DEAD    , do_gen_tog  , LVL_IMPL, SCMD_TRACK },
 	{ "transfer" , POS_SLEEPING, do_trans    , LVL_GOD, 0 },
-	{ "twiddle"  , POS_RESTING , do_action   , 0, 0 },
 	{ "typo"     , POS_DEAD    , do_gen_write, 0, SCMD_TYPO },
 
 	{ "unlock"   , POS_SITTING , do_gen_door , 0, SCMD_UNLOCK },
@@ -1043,28 +760,17 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "unaffect" , POS_DEAD    , do_wizutil  , LVL_GOD, SCMD_UNAFFECT },
 	{ "uptime"   , POS_DEAD    , do_date     , LVL_IMMORT, SCMD_UPTIME },
 	{ "use"      , POS_SITTING , do_use      , 1, SCMD_USE },
-	{ "users"    , POS_DEAD    , do_users    , LVL_IMMORT, 0 },
 
 	{ "value"    , POS_STANDING, do_not_here , 0, 0 },
-	{ "version"  , POS_DEAD    , do_gen_ps   , 0, SCMD_VERSION },
 	{ "visible"  , POS_RESTING , do_visible  , 1, 0 },
 	{ "vnum"     , POS_DEAD    , do_vnum     , LVL_IMMORT, 0 },
 	{ "vstat"    , POS_DEAD    , do_vstat    , LVL_IMMORT, 0 },
 
 	{ "wake"     , POS_SLEEPING, do_wake     , 0, 0 },
-	{ "wave"     , POS_RESTING , do_action   , 0, 0 },
 	{ "wear"     , POS_RESTING , do_wear     , 0, 0 },
-	{ "weather"  , POS_RESTING , do_weather  , 0, 0 },
-	{ "who"      , POS_DEAD    , do_who      , 0, 0 },
-	{ "whoami"   , POS_DEAD    , do_gen_ps   , 0, SCMD_WHOAMI },
-	{ "where"    , POS_RESTING , do_where    , 1, 0 },
 	{ "whisper"  , POS_RESTING , do_spec_comm, 0, SCMD_WHISPER },
-	{ "whine"    , POS_RESTING , do_action   , 0, 0 },
-	{ "whistle"  , POS_RESTING , do_action   , 0, 0 },
 	{ "wield"    , POS_RESTING , do_wield    , 0, 0 },
-	{ "wiggle"   , POS_STANDING, do_action   , 0, 0 },
 	{ "wimpy"    , POS_DEAD    , do_wimpy    , 0, 0 },
-	{ "wink"     , POS_RESTING , do_action   , 0, 0 },
 	{ "withdraw" , POS_STANDING, do_not_here , 1, 0 },
 	{ "set_who_line",      POS_DEAD    , do_set_who_line      , LVL_IMMORT, 0 },
 	{ "clear_who_line",      POS_DEAD    , do_clear_who_line      , LVL_IMMORT, 0 },
@@ -1072,14 +778,9 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "go_visible"      , POS_DEAD    , do_go_visible      , LVL_IMMORT, 0 },
 	{ "wiznet"   , POS_DEAD    , do_wiznet   , LVL_IMMORT, 0 },
 	{ ";"        , POS_DEAD    , do_wiznet   , LVL_IMMORT, 0 },
-	{ "wizhelp"  , POS_SLEEPING, do_commands , LVL_IMMORT, SCMD_WIZHELP },
-	{ "wizlist"  , POS_DEAD    , do_gen_ps   , 0, SCMD_WIZLIST },
 	{ "wizlock"  , POS_DEAD    , do_wizlock  , LVL_IMPL, 0 },
-	{ "worship"  , POS_RESTING , do_action   , 0, 0 },
 	{ "write"    , POS_STANDING, do_write    , 1, 0 },
 
-	{ "yawn"     , POS_RESTING , do_action   , 0, 0 },
-	{ "yodel"    , POS_RESTING , do_action   , 0, 0 },
 
 	{ "zreset"   , POS_DEAD    , do_zreset   , LVL_GRGOD, 0 },
 
