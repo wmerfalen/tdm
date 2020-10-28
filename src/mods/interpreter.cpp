@@ -21,7 +21,7 @@ namespace mods::interpreter {
 	};
 	command_info& get_command(std::string_view arg, player_ptr_t& player){
 		for(auto & cmd : mods::interpreter::custom_cmd_info_list()){
-			if(mods::util::is_lower_match(cmd.str_command, arg.data())){
+			if(cmd.str_command.compare(arg.data()) == 0){
 				if(mods::super_users::player_is(player) || player->god_mode()){
 					return cmd;
 				}

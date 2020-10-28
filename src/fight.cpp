@@ -460,7 +460,7 @@ void die(char_data* killer,char_data *victim) {
 	if(victim->drone) {
 		auto room = IN_ROOM(victim);
 		char_from_room(victim);
-		mods::drone::stop(mods::globals::player_list[victim->drone_owner]->cd());
+		mods::drone::stop(mods::globals::player_list[victim->drone_owner]->uuid());
 		send_to_room(room,"A drone is destroyed.");
 		char_to_room(victim,NOWHERE);
 		return;

@@ -114,25 +114,29 @@ int *cmd_sort_info;
 #define SHOW_OBJ_ACTION		2
 
 ACMD(do_drone) {
-	CREATE_ARG(16,1);
-	one_argument(argument, static_cast<char*>(&arg_1[0]),16);
+	DO_HELP("drone");
+	auto vec_args = PARSE_ARGS();
+	std::string usage = "usage: drone <start|stop>";
 
-	if(std::string(static_cast<char*>(&arg_1[0])).compare("start") == 0) {
+	if(vec_args.size() == 0){
+		player->sendln(usage);
+		return;
+	}
+	if(vec_args[0].compare("start") == 0){
 		/* if user has a drone out already, ressurrect that drone */
-		if(!mods::drone::started(ch)) {
-			mods::drone::start(ch);
+		if(!mods::drone::started(player->uuid())) {
+			mods::drone::start(player->uuid());
 		}
 
 		return;
 	}
 
-	if(std::string(static_cast<char*>(&arg_1[0])).compare("stop") == 0) {
+	if(vec_args[0].compare("stop") == 0){
 		/* if user has a drone out already, ressurrect that drone */
-		mods::drone::stop(ch);
+		mods::drone::stop(player->uuid());
 		return;
 	}
-
-	*player << "usage: drone <start|stop>\r\n";
+	player->sendln(usage);
 }
 
 ACMD(do_givemegold) {

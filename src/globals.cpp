@@ -804,9 +804,9 @@ namespace mods {
 					return false;
 				}
 			}
-			if(mods::drone::started(*player)) {
+			if(mods::drone::started(player->uuid())) {
 				d("drone started. interpretting");
-				return mods::drone::interpret(*player,in_argument.data());
+				return mods::drone::interpret(player->uuid(),in_argument.data());
 			}
 			if(!player->cd()->drone && mods::quests::has_quest(*player)) {
 				d("Running trigger for quests");

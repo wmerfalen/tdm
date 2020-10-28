@@ -15,19 +15,18 @@
 extern size_t send_to_char(char_data *ch, const char *messg, ...);
 
 namespace mods {
-	class drone {
-		public:
+	namespace drone {
+			player_ptr_t create(uuid_t);
+			void start(uuid_t);
+			void stop(uuid_t);
+			bool started(uuid_t);
+			void simulate(uuid_t,bool value);
+			bool interpret(uuid_t,const std::string& argument);
+			uuid_t get_existing(uuid_t owner);
+			void get_drone(uuid_t owner);
+	};
+	struct drone_impl {
 			typedef short weapon_set;
-			drone();
-			drone(char_data* ch);
-			static char_data* create(char_data* owner);
-			static void start(char_data * owner);
-			static void stop(char_data * owner);
-			static bool started(char_data *owner);
-			static void simulate(char_data *owner,bool value);
-			static bool interpret(char_data *owner,const std::string& argument);
-			static char_data * get_existing(char_data* owner);
-			static void get_drone(char_data* owner);
 			/*
 			bool has_weapon_capability(int);
 			bool has_inventory_capability(int);
@@ -41,7 +40,9 @@ namespace mods {
 			uuid_t uuid() const {
 				return m_char_data->uuid;
 			}
-			~drone() = default;
+			~drone_impl() = default;
+			drone_impl() = delete;
+			drone_impl(uuid_t u);
 			char_data* cd() const {
 				return m_char_data;
 			}
@@ -55,15 +56,15 @@ namespace mods {
 				send_to_char(m_char_data,"%s",m);
 			}
 			/* TODO: Operator << for sending to the character */
-			drone& operator<<(const char* m) {
+			drone_impl& operator<<(const char* m) {
 				stc(m);
 				return *this;
 			}
-			drone& operator<<(const std::string m) {
+			drone_impl& operator<<(const std::string m) {
 				stc(m);
 				return *this;
 			}
-			drone& operator<<(int m) {
+			drone_impl& operator<<(int m) {
 				stc(m);
 				return *this;
 			}

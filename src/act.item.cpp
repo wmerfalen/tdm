@@ -366,7 +366,7 @@ ACMD(do_get) {
 		send_to_char(ch, "Get what?\r\n");
 	} else if(!*arg2) {
 		if(std::string(arg1).compare("drone") == 0) {
-			mods::drone::get_drone(ch);
+			mods::drone::get_drone(player->uuid());
 		} else {
 			get_from_room(ch, arg1, 1);
 		}

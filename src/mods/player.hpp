@@ -657,6 +657,8 @@ namespace mods {
 		void error(std::string_view msg){ send("{red}%s{/red}", msg.data()); }
 		void errorln(std::string_view msg){ send("{red}%s{/red}\r\n", msg.data()); }
 
+		uuid_t& drone_uuid(){ return m_char_data->drone_uuid; }
+
 		protected:
 		std::map<std::string,std::string> m_ada_data;
 		bool m_ada;
