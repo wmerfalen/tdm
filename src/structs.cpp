@@ -395,14 +395,34 @@ bool obj_data::flagged(int value){
 			}
 		}
 
+		/** !zone
+		 * !integral-objects !integral_objects
+		 */
+#define mq_debug(A) std::cerr << "[matches_query]:'" << A << "'\n";
+		/** for the most part, this is crap. clean it up */
 		bool obj_data::matches_query(std::string_view query){
-			if(query.compare("weapon-locker") == 0) {
-				return has_container() && this->container()->attributes->type == mods::weapon::type::container::WEAPON_LOCKER;
+			if(query.compare("armor-locker") == 0){
+			mq_debug("AL entry");
 			}
-			if(query.compare("armor-locker") == 0) {
-				return has_container() && this->container()->attributes->type == mods::weapon::type::container::ARMOR_LOCKER;
+
+			mq_debug("entry");
+			mq_debug("feed_file: " << this->feed_file());
+				if(has_container()){
+					mq_debug("has container");
+					mq_debug("type: " << this->container()->attributes->type);
+					mq_debug("locker constant:" << mods::weapon::type::container::WEAPON_LOCKER);
+					mq_debug("this->feed_file: " << this->feed_file());
+				}
+			if(query.compare("weapon-locker") == 0 && has_container() && this->feed_file().compare("weapon-locker.yml") == 0){
+				mq_debug("is a weapon locker");
+				return true;
+			}
+			if(query.compare("armor-locker") == 0 && has_container() && this->feed_file().compare("armor-locker.yml") == 0){
+				mq_debug("is a armor locker");
+				return true;
 			}
 			return false;
+#undef mq_debug
 		}
 		void room_data::set_dir_option(byte i,
 				const std::string& gen_desc,
@@ -443,7 +463,9 @@ bool obj_data::flagged(int value){
 							output += mods::globals::color_eval(msg);
 						}
 						if(newline){
+#ifdef __MENTOC_OUTPUT_DEBUGGUNG__
 							std::cerr << "descriptor_data::queue_output: newline requested\n";
+#endif
 							output += "\r\n";
 						}
 						has_output = true;

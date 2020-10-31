@@ -19,6 +19,7 @@ namespace mods::zone {
 	void build_weapon_locker(room_vnum room);
 	void build_armor_locker(room_vnum room);
 	void register_replenish(room_vnum room,std::string type);
+	void remove_replenish(room_vnum room,std::string type);
 	void zone_update();
 	void run_replenish();
 	void new_room(room_data*);

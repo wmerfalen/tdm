@@ -87,7 +87,6 @@
 #include "mods/behaviour_tree_impl.hpp"
 #include "globals.hpp"
 
-extern void run_replenish();
 /* externs */
 extern struct ban_list_element *ban_list;
 extern int num_invalid;
@@ -877,10 +876,6 @@ void heartbeat(int pulse) {
 
 	if(!(pulse % PULSE_ZONE)) {
 		mods::zone::zone_update();
-	}
-
-	if(!(pulse % PULSE_REPLENISH)) {
-		mods::zone::run_replenish();
 	}
 
 	if(!(pulse % PULSE_IDLEPWD)) {	/* 15 seconds */

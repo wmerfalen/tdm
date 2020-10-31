@@ -6,6 +6,10 @@
 #include "screen-searcher.hpp"
 #include "db.hpp"
 #include "util.hpp"
+#include "object-utils.hpp"
+#include "zone.hpp"
+
+#define mo_debug(A) std::cerr << "[mods::integral_objects][debug]:" << A <<"\n";
 
 extern std::string sanitize_key(std::string key);
 extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
@@ -36,13 +40,12 @@ CREATE TABLE camera_feed (
 );
 */
 	void save_item_to_db(player_ptr_t& player, std::string section_name, std::vector<std::string>& args){
-		using namespace mods::db;
 		std::string value = "";
 		std::string prefix = std::to_string(world[player->room()].number);
-		auto status = put_section_vector(section_name,prefix, args);
+		auto status = mods::db::put_section_vector(section_name,prefix, args);
 		player->send("status: %d\r\n",status);
 		std::vector<std::string> values;
-		status = get_section_vector(section_name,prefix,values);
+		status = mods::db::get_section_vector(section_name,prefix,values);
 		player->send("get status: %d\r\nTo confirm, we placed these values...\r\n",status);
 		for(auto line : values){
 			player->send("[item]: '%s'\r\n",line.c_str());
@@ -50,58 +53,103 @@ CREATE TABLE camera_feed (
 		player->sendln("Done listing.");
 	}
 	void save_weapon_locker(player_ptr_t& player, std::vector<std::string>& args){
+		mo_debug("saving weapon locker");
 		save_item_to_db(player, "weapon-locker", args);
 	}
 	void save_armor_locker(player_ptr_t& player, std::vector<std::string>& args){
+		mo_debug("saving armor locker");
 		save_item_to_db(player, "armor-locker", args);
 	}
-	int get_yaml_type(std::string& yaml){
-		auto exploded = EXPLODE(yaml.c_str(),'/');
-		return mods::util::yaml_string_to_int(exploded[0]);
-	}
-	obj_ptr_t first_or_create(room_rnum room,std::string query, int type, std::string yaml_file){
-		for(auto obj = world[room].contents; obj != nullptr; obj = obj->next){
-			if(obj->matches_query(query)){
-				return optr(obj);
-			}
-		}
-		return create_object(type, yaml_file);
-	}
+
 	void save_camera_feed(player_ptr_t& player, std::vector<std::string>& args){
 		write_db_values("camera-feed",std::to_string(world[player->room()].number), args);
 	}
+	obj_ptr_t first_or_create(room_vnum room,std::string query, int type, std::string yaml_file){
+		std::cerr << green_str("[first_or_create]: room: ") << room << "| real:" << real_room(room) << "\n";
+		for(auto obj = world[real_room(room)].contents; obj != nullptr; obj = obj->next_content){
+			if(obj->feed_file().compare(yaml_file.c_str()) == 0){
+				mo_debug(green_str("found object of feed_file:'") << obj->feed_file() << "' " << yaml_file << "' in room:" << real_room(room));
+				return optr_by_uuid(obj->uuid);
+			}
+		}
+		mo_debug(red_str("creating object because we couldnt find one:'") << yaml_file << "' in room:" << room);
+		auto obj = create_object(type, yaml_file);
+		obj_to_room(obj.get(),real_room(room));
+		return obj;
+	}
 	void feed_weapon_locker(room_vnum room){
+		mo_debug("feeding weapon locker to room vnum:" << room << "| real room:" << real_room(room));
 		std::vector<std::string> values;
 		mods::db::get_section_vector("weapon-locker", std::to_string(room), values);
-		auto locker = first_or_create(real_room(room),"weapon-locker", ITEM_CONTAINER, "weapon-locker.yml");
+		auto locker = mods::integral_objects::first_or_create(room,"weapon-locker", ITEM_CONTAINER, "weapon-locker.yml");
 		for(auto yaml : values){
-			for(int i=0; i < 10;i++){
-				auto obj = create_object(get_yaml_type(yaml),yaml);
-				obj_to_obj(obj,locker);
+			if(!mods::object_utils::assert_sane_object(yaml)){
+				std::cerr << "[feed_weapon_locker]: not feeding invalid yaml type: '" << yaml << "'\n";
+				continue;
 			}
+			mo_debug("[feed_weapon_locker]: feeding sane object:'" << yaml << "'");
+			auto obj = create_object(mods::object_utils::get_yaml_type(yaml),EXPLODE(yaml.c_str(),'/')[1]);
+			obj_to_obj(obj,locker);
 		}
 	}
+
 	void feed_armor_locker(room_vnum room){
+		mo_debug("feeding armor locker to room vnum:" << room << "| real room:" << real_room(room));
 		std::vector<std::string> values;
 		mods::db::get_section_vector("armor-locker", std::to_string(room), values);
-		auto locker = first_or_create(real_room(room),"armor-locker", ITEM_CONTAINER, "armor-locker.yml");
+		auto locker = mods::integral_objects::first_or_create(room,"armor-locker", ITEM_CONTAINER, "armor-locker.yml");
 		for(auto yaml : values){
-			auto obj = create_object(get_yaml_type(yaml),yaml);
-			for(int i=0; i < 10;i++){
-				obj_to_obj(obj,locker);
+			if(!mods::object_utils::assert_sane_object(yaml)){
+				std::cerr << "[feed_armor_locker]: not feeding invalid yaml type: '" << yaml << "'\n";
+				continue;
+			}
+			mo_debug("[feed_armor_locker]: feeding sane object:'" << yaml << "'");
+			auto obj = create_object(mods::object_utils::get_yaml_type(yaml),EXPLODE(yaml.c_str(),'/')[1]);
+			obj_to_obj(obj,locker);
+		}
+	}
+
+	void feed_camera_feed(room_vnum room_v_num){
+		mo_debug("feeding camera feed to room vnum:" << room_v_num << "| real room:" << real_room(room_v_num));
+		std::vector<std::string> values;
+		mods::db::get_section_vector("camera-feed", std::to_string(room_v_num), values);
+		auto camera = mods::integral_objects::first_or_create(room_v_num,"camera-feed", ITEM_GADGET, "camera.yml");
+		if(camera->has_gadget()){
+			auto & vlist = camera->gadget()->attributes->vnum_list;
+			if(vlist.size()){
+				mo_debug("camera feed is already fed for room " << room_v_num << ", skipping");
+				return;
+			}
+			vlist.clear();
+			vlist.emplace_back(0);
+			for(auto room_v_num_string : values){
+				auto opt = mods::util::stoi(room_v_num_string);
+				room_rnum r = real_room(opt.value_or(-1));
+				if(r == NOWHERE){
+					mo_debug("camera feed has invalid room_vnum:" << room_v_num << ", skipping");
+					continue;
+				}
+				vlist.emplace_back(opt.value());
+			}
+			if(vlist.size() > 1){
+				vlist[0] = 1;
 			}
 		}
 	}
-	void feed_weapon_locker(std::vector<std::string>& values){
 
+	void rotate_camera_feed(room_vnum room_v_num){
+		mo_debug("feeding camera feed to room vnum:" << room_v_num << "| real room:" << real_room(room_v_num));
+		std::vector<std::string> values;
+		mods::db::get_section_vector("camera-feed", std::to_string(room_v_num), values);
+		auto camera = mods::integral_objects::first_or_create(room_v_num,"camera-feed", ITEM_GADGET, "camera.yml");
+		if(camera->has_gadget()){
+			auto & vlist = camera->gadget()->attributes->vnum_list;
+			vlist[0] = vlist[0] + 1;
+			if(vlist[0] >= vlist.size()){
+				vlist[0] = 1;
+			}
+		}
 	}
-	void feed_armor_locker(std::vector<std::string>& values){
-
-	}
-	void feed_camera_feed(room_vnum room_id,std::vector<std::string>& values){
-
-	}
-
 
 	void remove_camera_feed(player_ptr_t& player, std::vector<std::string>& args){
 		using namespace mods::db;
@@ -119,26 +167,28 @@ CREATE TABLE camera_feed (
 		player->send("delete status: %d\r\n",status);
 	}
 
+#if 0
 	void edit_object(player_ptr_t& player, const std::vector<std::string>& args){
 	}
 
 	void list_objects(player_ptr_t& player, const std::vector<std::string>& args){
-		int ctr = 0;
+		//int ctr = 0;
 		player->sendln("Listing...");
-		for(auto & contents = world[player->room()].contents; contents != nullptr; contents = contents->next,++ctr){
-			player->send("[%d] - %s\r\n", ctr, contents->name.c_str());
-		}
+		//for(auto & contents = world[player->room()].contents; contents != nullptr; contents = contents->next,++ctr){
+	//		player->send("[%d] - %s\r\n", ctr, contents->name.c_str());
+//		}
 		player->sendln("Done listing.");
 	}
 
 	void mark_object(player_ptr_t& player, const std::vector<std::string>& args){
-		int ctr = 0;
+		//int ctr = 0;
 		player->sendln("Listing...");
-		for(auto & contents = world[player->room()].contents; contents != nullptr; contents = contents->next,++ctr){
-			player->send("[%d] - %s\r\n", ctr, contents->name.c_str());
-		}
+		//for(auto & contents = world[player->room()].contents; contents != nullptr; contents = contents->next,++ctr){
+			//player->send("[%d] - %s\r\n", ctr, contents->name.c_str());
+		//}
 		player->sendln("Done listing.");
 	}
+#endif
 };
 
 ACMD(do_install_camera_feed){
@@ -147,6 +197,7 @@ ACMD(do_install_camera_feed){
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	mods::integral_objects::save_camera_feed(player,vec_args);
+	mods::zone::register_replenish(world[player->room()].number,"camera-feed");
 	ADMIN_DONE();
 }
 
@@ -156,6 +207,7 @@ ACMD(do_uninstall_camera_feed){
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	mods::integral_objects::remove_camera_feed(player,vec_args);
+	mods::zone::remove_replenish(world[player->room()].number,"camera-feed");
 	ADMIN_DONE();
 }
 
@@ -172,6 +224,8 @@ ACMD(do_install_armor_locker){
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	mods::integral_objects::save_armor_locker(player,vec_args);
+	mods::zone::register_replenish(world[player->room()].number,"armor-locker");
+	mods::zone::remove_replenish(world[player->room()].number,"armor-locker");
 	ADMIN_DONE();
 }
 
@@ -181,6 +235,8 @@ ACMD(do_install_weapon_locker){
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	mods::integral_objects::save_weapon_locker(player,vec_args);
+	mods::zone::register_replenish(world[player->room()].number,"weapon-locker");
+	mods::zone::remove_replenish(world[player->room()].number,"weapon-locker");
 	ADMIN_DONE();
 }
 ACMD(do_uninstall_armor_locker){
@@ -206,7 +262,7 @@ ACMD(do_edit_object){
 	ADMIN_REJECT();
 	/** code here */
 	auto vec_args = PARSE_ARGS();
-	mods::integral_objects::edit_object(player,vec_args);
+	//mods::integral_objects::edit_object(player,vec_args);
 	ADMIN_DONE();
 }
 
@@ -215,7 +271,7 @@ ACMD(do_list_objects){
 	ADMIN_REJECT();
 	/** code here */
 	auto vec_args = PARSE_ARGS();
-	mods::integral_objects::list_objects(player,vec_args);
+	//mods::integral_objects::list_objects(player,vec_args);
 	ADMIN_DONE();
 }
 
@@ -224,7 +280,7 @@ ACMD(do_mark_object){
 	ADMIN_REJECT();
 	/** code here */
 	auto vec_args = PARSE_ARGS();
-	mods::integral_objects::mark_object(player,vec_args);
+	//mods::integral_objects::mark_object(player,vec_args);
 	ADMIN_DONE();
 }
 
@@ -257,8 +313,8 @@ ACMD(do_list_wear_flags){
 
 namespace mods::integral_objects {
 	void init(){
-			mods::interpreter::add_command("edit_object", POS_RESTING, do_edit_object, LVL_BUILDER,0);
-			mods::interpreter::add_command("list_objects", POS_RESTING, do_list_objects, LVL_BUILDER,0);
+			//mods::interpreter::add_command("edit_object", POS_RESTING, do_edit_object, LVL_BUILDER,0);
+			//mods::interpreter::add_command("list_objects", POS_RESTING, do_list_objects, LVL_BUILDER,0);
 			mods::interpreter::add_command("list_wear_flags", POS_RESTING, do_list_wear_flags, LVL_BUILDER,0);
 
 			mods::interpreter::add_command("install_weapon_locker", POS_RESTING, do_install_weapon_locker, LVL_BUILDER,0);
@@ -271,3 +327,4 @@ namespace mods::integral_objects {
 			mods::interpreter::add_command("uninstall_armor_locker", POS_RESTING, do_uninstall_armor_locker, LVL_BUILDER,0);
 	}
 };
+#undef mo_debug

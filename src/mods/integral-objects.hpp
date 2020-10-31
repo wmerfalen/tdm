@@ -11,8 +11,8 @@ namespace mods::integral_objects {
 	void init();
 	void feed_weapon_locker(room_vnum);
 	void feed_armor_locker(room_vnum);
-	void feed_weapon_locker(std::vector<std::string>& values);
-	void feed_armor_locker(std::vector<std::string>& values);
+	void feed_camera_feed(room_vnum);
+	void rotate_camera_feed(room_vnum);
 	void new_room(room_data* room);
 };
 #endif

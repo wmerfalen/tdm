@@ -247,6 +247,7 @@ MENTOC_MEMBER_VARS_FOR(MENTOC_DRONE_MEMBERS_TUPLE)
 	};
 
 	struct gadget_description_t : public yaml_description_t {
+		std::vector<int> vnum_list;
 		int16_t feed_status;
 		std::map<std::string,std::string> exported;
 		void generate_map();

@@ -17,7 +17,7 @@ namespace mods::db {
 		return section_key(section_name.data(),prefix,type) + "count";
 	}
 	bool vector_exists(std::string section_name,std::string prefix){
-		return mods::globals::db->exists(db_key({section_name,prefix,"vector","count"}));
+		return mods::globals::db->exists(section_key_count(section_name,prefix,"vector"));
 	}
 
 	int put_section_map(std::string_view section_name,std::string prefix, std::map<std::string,std::string> values){

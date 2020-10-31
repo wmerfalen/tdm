@@ -3228,11 +3228,6 @@ void init_char(player_ptr_t player) {
 
 /* returns the real number of the room with given virtual number */
 room_rnum real_room(room_vnum vnum) {
-	room_rnum bot, top, mid;
-
-	bot = 0;
-	top = top_of_world;
-
 	for(unsigned i =0; i < world.size(); i++) {
 		if(world[i].number == vnum) {
 			return i;
@@ -3240,25 +3235,6 @@ room_rnum real_room(room_vnum vnum) {
 	}
 
 	return NOWHERE;
-	/* perform binary search on world-table */
-
-	for(;;) {
-		mid = (bot + top) / 2;
-
-		if((world[mid]).number == vnum) {
-			return (mid);
-		}
-
-		if(bot >= top) {
-			return (NOWHERE);
-		}
-
-		if((world[mid]).number > vnum) {
-			top = mid - 1;
-		} else {
-			bot = mid + 1;
-		}
-	}
 }
 
 

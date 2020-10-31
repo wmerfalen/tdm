@@ -61,6 +61,9 @@ char *title_female(int chclass, int level);
 struct time_info_data *real_time_passed(time_t t2, time_t t1);
 int compute_armor_class(char_data *ch);
 
+/** use this for camera feeds... not installable cameras */
+void look_at_room_specific(player_ptr_t& player, int ignore_brief,int room);
+
 /* local functions */
 int sort_commands_helper(const void *a, const void *b);
 void print_object_location(int num, struct obj_data *obj, char_data *ch, int recur);
@@ -237,6 +240,33 @@ ACMD(do_jstest) {
 	*player << "Test suite loaded...\r\n";
 	return;
 }
+bool is_camera_feed(obj_data* obj){
+	return obj->has_gadget() && obj->gadget()->attributes->vnum_list.size();
+}
+void look_into_camera_feed(player_ptr_t& player, obj_data* obj, int mode){
+	if(is_camera_feed(obj)){
+		auto & vlist = obj->gadget()->attributes->vnum_list;
+		int index = vlist[0];
+		if(index < vlist.size()){
+			auto viewing_room_vnum = vlist[vlist[0]];
+			auto room = real_room(viewing_room_vnum);
+			if(room == NOWHERE){
+				player->sendln("You see nothing but static...");
+				return;
+			}
+			player->sendln("{blu}You peer into the camera feed...{/blu}");
+			player->sendln(CAT("{grn}Room title:{/grn}",world[room].name.c_str()));
+			player->sendln(CAT("{grn}Room description:{/grn}",world[room].description.c_str()));
+			player->send("{grn}Room occupants:{/grn}");
+			list_char_to_char(player->cd());
+			player->send("\r\n{blu}* * * End of Camera Feed * * *{/blu}\r\n");
+			player->send(CCNRM(ch, C_NRM));
+			return;
+		}
+		player->sendln("You see nothing but static...");
+		return;
+	}
+}
 void show_obj_to_char(struct obj_data *obj, char_data *ch, int mode) {
 	MENTOC_PREAMBLE();
 	if(!obj || !ch) {
@@ -296,7 +326,7 @@ void show_obj_to_char(struct obj_data *obj, char_data *ch, int mode) {
 					}
 					/** Purposeful fall-through to display ".. nothing special.." */
 				default:
-					player->send("You see nothing special..");
+					player->sendln("You see nothing special...");
 					break;
 			}
 
@@ -752,6 +782,14 @@ void look_at_room(char_data *ch, int ignore_brief) {
 	}
 
 	int room = player->viewing_room();
+	look_at_room_specific(player,ignore_brief,room);
+}
+
+void look_at_room_specific(player_ptr_t& player, int ignore_brief,int room) {
+	auto ch = player->cd();
+	if(!ch->has_desc) {
+		return;
+	}
 
 	if(room < 0){
 		std::cerr << "[ERROR INVALID VIEWING ROOM]: " << room << "\r\n";
@@ -1099,6 +1137,10 @@ ACMD(do_examine) {
 			FIND_OBJ_EQUIP, ch, &tmp_char, &tmp_object);
 
 	if(tmp_object) {
+		if(is_camera_feed(tmp_object)){
+			look_into_camera_feed(player,tmp_object,0);
+			return;
+		}
 		if((GET_OBJ_TYPE(tmp_object) == ITEM_DRINKCON) ||
 				(GET_OBJ_TYPE(tmp_object) == ITEM_FOUNTAIN) ||
 				(GET_OBJ_TYPE(tmp_object) == ITEM_CONTAINER)) {

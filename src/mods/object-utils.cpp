@@ -2,10 +2,6 @@
 #include "weapon-types.hpp"
 
 namespace mods::object_utils {
-	void report_yaml_message(std::string_view msg){
-		yaml_feed_exceptions.emplace_back(CAT(mods::util::time_string(),"->",msg.data()));
-	}
-
 	std::vector<std::string> object_types(){
 	/** !!*****************!! */
 	/** !!UPDATE_ITEM_TYPES!! */
@@ -22,6 +18,27 @@ namespace mods::object_utils {
 "container"
 		};
 	}
+	int get_yaml_type(std::string& yaml){
+		auto exploded = EXPLODE(yaml.c_str(),'/');
+		return mods::util::yaml_string_to_int(exploded[0]);
+	}
+ 	bool assert_sane_object(std::string_view yaml){
+		auto exploded = EXPLODE(yaml.data(),'/');
+		if(exploded.size() < 2){
+			return false;
+		}
+
+		for(auto t : object_types()){
+			if(exploded[0].compare(t) == 0){
+				return true;
+			}
+		}
+		return false;
+	}
+	void report_yaml_message(std::string_view msg){
+		yaml_feed_exceptions.emplace_back(CAT(mods::util::time_string(),"->",msg.data()));
+	}
+
 	void change_visibility(obj_ptr_t& object, int amount){
 		object->visibility += amount;
 	}

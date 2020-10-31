@@ -20,6 +20,7 @@
 #include "mods/object-utils.hpp"
 #include "mods/interpreter.hpp"
 #include "mods/screen-searcher.hpp"
+#include "mods/super-users.hpp"
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
 
@@ -279,6 +280,93 @@ ACMD(do_yaml_import){
 	}
 	player->sendln("Unknown type/file combination. Nothing imported.");
 
+}
+void generic_import(player_ptr_t& player,std::string_view type, const std::vector<std::string>& vec_args, std::string_view usage){
+	if(vec_args.size() == 0){
+		player->errorln(usage);
+		return;
+	}
+
+	for(const auto & yaml : vec_args){
+		mods::object_utils::set_yaml_initiator(player->name(),type.data(),CAT(yaml,".yml"));
+		auto obj = mods::object_utils::yaml_import(type.data(),CAT(yaml,".yml"));
+		player->carry(obj);
+		player->sendln(CAT("Imported: ",yaml,".yml"));
+	}
+}
+
+/** !!*****************!! */
+/** !!UPDATE_ITEM_TYPES!! */
+/** !!*****************!! */
+ACMD(do_rifle_import){
+	ADMIN_REJECT();
+	DO_HELP("rifle_import");
+	auto usage = "usage: rifle_import <name-without-extension>\r\nExample: rifle_import g36c";
+	generic_import(player,"rifle",PARSE_ARGS(),usage);
+	ADMIN_DONE();
+}
+
+ACMD(do_armor_import){
+	ADMIN_REJECT();
+	DO_HELP("armor_import");
+	auto usage = "usage: armor_import <name-without-extension>\r\nExample: armor_import g36c";
+	generic_import(player,"armor",PARSE_ARGS(),usage);
+	ADMIN_DONE();
+}
+ACMD(do_explosive_import){
+	ADMIN_REJECT();
+	DO_HELP("explosive_import");
+	auto usage = "usage: explosive_import <name-without-extension>\r\nExample: explosive_import g36c";
+	generic_import(player,"explosive",PARSE_ARGS(),usage);
+	ADMIN_DONE();
+}
+
+ACMD(do_drone_import){
+	ADMIN_REJECT();
+	DO_HELP("drone_import");
+	auto usage = "usage: drone_import <name-without-extension>\r\nExample: drone_import g36c";
+	generic_import(player,"drone",PARSE_ARGS(),usage);
+	ADMIN_DONE();
+}
+
+ACMD(do_attachment_import){
+	ADMIN_REJECT();
+	DO_HELP("attachment_import");
+	auto usage = "usage: attachment_import <name-without-extension>\r\nExample: attachment_import g36c";
+	generic_import(player,"attachment",PARSE_ARGS(),usage);
+	ADMIN_DONE();
+}
+
+ACMD(do_gadget_import){
+	ADMIN_REJECT();
+	DO_HELP("gadget_import");
+	auto usage = "usage: gadget_import <name-without-extension>\r\nExample: gadget_import g36c";
+	generic_import(player,"gadget",PARSE_ARGS(),usage);
+	ADMIN_DONE();
+}
+
+ACMD(do_trap_import){
+	ADMIN_REJECT();
+	DO_HELP("trap_import");
+	auto usage = "usage: trap_import <name-without-extension>\r\nExample: trap_import g36c";
+	generic_import(player,"trap",PARSE_ARGS(),usage);
+	ADMIN_DONE();
+}
+
+ACMD(do_consumable_import){
+	ADMIN_REJECT();
+	DO_HELP("consumable_import");
+	auto usage = "usage: consumable_import <name-without-extension>\r\nExample: consumable_import g36c";
+	generic_import(player,"consumable",PARSE_ARGS(),usage);
+	ADMIN_DONE();
+}
+
+ACMD(do_container_import){
+	ADMIN_REJECT();
+	DO_HELP("container_import");
+	auto usage = "usage: container_import <name-without-extension>\r\nExample: container_import g36c";
+	generic_import(player,"container",PARSE_ARGS(),usage);
+	ADMIN_DONE();
 }
 
 /**
@@ -568,6 +656,18 @@ ACMD(do_js_help) {
 		"{gld}value_revert{/gld} -- reverts to hard-coded value (ignores lmdb value)  -- i.e.: value_revert('SANITY_CHECK');",
 		"{gld}value_save{/gld} -- saves an override to lmdb -- i.e.: value_save('SANITY_CHECK','value');",
 			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{yel} --                      -:[ YAML import shortcuts ]:-                 {/yel}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{gld}rifle_import{/gld} -- import a rifle without having to specify .yml -- i.e.: rifle_import g36c",
+			"{gld}explosive_import{/gld} -- import a explosive without having to specify .yml -- i.e.: explosive_import frag",
+			"{gld}drone_import{/gld} -- import a drone without having to specify .yml -- i.e.: drone_import drone",
+			"{gld}attachment_import{/gld} -- import a attachment without having to specify .yml -- i.e.: attachment_import acog",
+			"{gld}gadget_import{/gld} -- import a gadget without having to specify .yml -- i.e.: gadget_import gadget",
+			"{gld}armor_import{/gld} -- import a armor without having to specify .yml -- i.e.: armor_import boots",
+			"{gld}trap_import{/gld} -- import a trap without having to specify .yml -- i.e.: trap_import trap",
+			"{gld}consumable_import{/gld} -- import a consumable without having to specify .yml -- i.e.: consumable_import hgh",
+			"{gld}container_import{/gld} -- import a container without having to specify .yml -- i.e.: container_import barrel",
+			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{yel} --                      -:[ Super User List ]:-                       {/yel}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{gld}add_super_user{/gld} -- add user to super user list -- i.e.: add_super_user('grifter');{/gld}",
@@ -591,22 +691,35 @@ ACMD(do_js_help) {
 
 namespace builder {
 	void init(){
+		mods::interpreter::add_command("next_object_number",POS_RESTING,do_next_object_number, LVL_BUILDER,0);
+		mods::interpreter::add_command("next_zone_number",POS_RESTING,do_next_zone_number, LVL_BUILDER,0);
+		mods::interpreter::add_command("next_room_number",POS_RESTING,do_next_room_number, LVL_BUILDER,0);
+		mods::interpreter::add_command("next_mob_number",POS_RESTING,do_next_mob_number, LVL_BUILDER,0);
+		mods::interpreter::add_command("next_obj_number",POS_RESTING,do_next_obj_number, LVL_BUILDER,0);
+		mods::interpreter::add_command("flush_holding",POS_RESTING,do_flush_holding, LVL_BUILDER,0);
+		mods::interpreter::add_command("yaml_import",POS_RESTING,do_yaml_import, LVL_BUILDER,0);
+		mods::interpreter::add_command("yaml_log",POS_RESTING,do_yaml_log, LVL_BUILDER,0);
+		mods::interpreter::add_command("yaml_log_save",POS_RESTING,do_yaml_log_save, LVL_BUILDER,0);
+		mods::interpreter::add_command("yaml_log_clear",POS_RESTING,do_yaml_log_clear, LVL_BUILDER,0);
+		mods::interpreter::add_command("hold_anything",POS_RESTING,do_hold_anything, LVL_BUILDER,0);
+		mods::interpreter::add_command("yaml_example",POS_RESTING,do_yaml_example, LVL_BUILDER,0);
+		mods::interpreter::add_command("histfile",POS_RESTING,do_histfile, LVL_BUILDER,0);
+		mods::interpreter::add_command("uuid",POS_RESTING,do_uuid, LVL_BUILDER,0);
+		mods::interpreter::add_command("pmw_obj_from_room",POS_RESTING,do_pmw_obj_from_room, LVL_BUILDER,0);
+		mods::interpreter::add_command("toggle_obj_from_room",POS_RESTING,do_toggle_obj_from_room, LVL_BUILDER,0);
 
-mods::interpreter::add_command("next_object_number",POS_RESTING,do_next_object_number, LVL_BUILDER,0);
-mods::interpreter::add_command("next_zone_number",POS_RESTING,do_next_zone_number, LVL_BUILDER,0);
-mods::interpreter::add_command("next_room_number",POS_RESTING,do_next_room_number, LVL_BUILDER,0);
-mods::interpreter::add_command("next_mob_number",POS_RESTING,do_next_mob_number, LVL_BUILDER,0);
-mods::interpreter::add_command("next_obj_number",POS_RESTING,do_next_obj_number, LVL_BUILDER,0);
-mods::interpreter::add_command("flush_holding",POS_RESTING,do_flush_holding, LVL_BUILDER,0);
-mods::interpreter::add_command("yaml_import",POS_RESTING,do_yaml_import, LVL_BUILDER,0);
-mods::interpreter::add_command("yaml_log",POS_RESTING,do_yaml_log, LVL_BUILDER,0);
-mods::interpreter::add_command("yaml_log_save",POS_RESTING,do_yaml_log_save, LVL_BUILDER,0);
-mods::interpreter::add_command("yaml_log_clear",POS_RESTING,do_yaml_log_clear, LVL_BUILDER,0);
-mods::interpreter::add_command("hold_anything",POS_RESTING,do_hold_anything, LVL_BUILDER,0);
-mods::interpreter::add_command("yaml_example",POS_RESTING,do_yaml_example, LVL_BUILDER,0);
-mods::interpreter::add_command("histfile",POS_RESTING,do_histfile, LVL_BUILDER,0);
-mods::interpreter::add_command("uuid",POS_RESTING,do_uuid, LVL_BUILDER,0);
-mods::interpreter::add_command("pmw_obj_from_room",POS_RESTING,do_pmw_obj_from_room, LVL_BUILDER,0);
-mods::interpreter::add_command("toggle_obj_from_room",POS_RESTING,do_toggle_obj_from_room, LVL_BUILDER,0);
+		/** !!*****************!! */
+		/** !!UPDATE_ITEM_TYPES!! */
+		/** !!*****************!! */
+		mods::interpreter::add_command("rifle_import",POS_RESTING,do_rifle_import, LVL_BUILDER,0);
+		mods::interpreter::add_command("explosive_import",POS_RESTING,do_explosive_import, LVL_BUILDER,0);
+		mods::interpreter::add_command("drone_import",POS_RESTING,do_drone_import, LVL_BUILDER,0);
+		mods::interpreter::add_command("attachment_import",POS_RESTING,do_attachment_import, LVL_BUILDER,0);
+		mods::interpreter::add_command("gadget_import",POS_RESTING,do_gadget_import, LVL_BUILDER,0);
+		mods::interpreter::add_command("armor_import",POS_RESTING,do_armor_import, LVL_BUILDER,0);
+		mods::interpreter::add_command("trap_import",POS_RESTING,do_trap_import, LVL_BUILDER,0);
+		mods::interpreter::add_command("consumable_import",POS_RESTING,do_consumable_import, LVL_BUILDER,0);
+		mods::interpreter::add_command("container_import",POS_RESTING,do_container_import, LVL_BUILDER,0);
+
 	}
 };
