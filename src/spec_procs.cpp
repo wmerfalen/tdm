@@ -186,16 +186,16 @@ SPECIAL(guild) {
 
 	if(skill_num < 1 ||
 	        GET_LEVEL(ch) < spell_info[skill_num].min_level[(int) GET_CLASS(ch)]) {
-		send_to_char(ch, "You do not know of that %s.\r\n", SPLSKL(ch));
+		send_to_char(ch, "You do not know of that %s.", SPLSKL(ch));
 		return (TRUE);
 	}
 
 	if(GET_SKILL(ch, skill_num) >= LEARNED(ch)) {
-		send_to_char(ch, "You are already learned in that area.\r\n");
+		send_to_char(ch, "You are already learned in that area.");
 		return (TRUE);
 	}
 
-	send_to_char(ch, "You practice for a while...\r\n");
+	send_to_char(ch, "You practice for a while...");
 
 	/** TODO: decrement practice session here */
 	percent = GET_SKILL(ch, skill_num);
@@ -204,7 +204,7 @@ SPECIAL(guild) {
 	SET_SKILL(ch, skill_num, MIN(LEARNED(ch), percent));
 
 	if(GET_SKILL(ch, skill_num) >= LEARNED(ch)) {
-		send_to_char(ch, "You are now learned in that area.\r\n");
+		send_to_char(ch, "You are now learned in that area.");
 	}
 
 	return (TRUE);
@@ -234,7 +234,7 @@ SPECIAL(dump) {
 	}
 
 	if(value) {
-		send_to_char(ch, "You are awarded for outstanding performance.\r\n");
+		send_to_char(ch, "You are awarded for outstanding performance.");
 		act("$n has been awarded for being a good citizen.", TRUE, ch, 0, 0, TO_ROOM);
 
 		if(GET_LEVEL(ch) < 3) {
@@ -710,7 +710,7 @@ SPECIAL(pet_shops) {
 	pet_room = IN_ROOM(ch) + 1;
 
 	if(CMD_IS("list")) {
-		send_to_char(ch, "Available pets are:\r\n");
+		send_to_char(ch, "Available pets are:");
 
 		//for(pet = world[pet_room].people; pet; pet = pet->next_in_room) {
 		FOR_ROOM(plr) {
@@ -720,7 +720,7 @@ SPECIAL(pet_shops) {
 				continue;
 			}
 
-			send_to_char(ch, "%8d - %s\r\n", PET_PRICE(pet), GET_NAME(pet).c_str());
+			send_to_char(ch, "%8d - %s", PET_PRICE(pet), GET_NAME(pet).c_str());
 		}
 
 		return (TRUE);
@@ -729,12 +729,12 @@ SPECIAL(pet_shops) {
 		two_arguments(argument, buf, pet_name);
 
 		if(!(pet = get_char_room(buf, NULL, pet_room)) || !IS_NPC(pet)) {
-			send_to_char(ch, "There is no such pet!\r\n");
+			send_to_char(ch, "There is no such pet!");
 			return (TRUE);
 		}
 
 		if(GET_GOLD(ch) < PET_PRICE(pet)) {
-			send_to_char(ch, "You don't have enough gold!\r\n");
+			send_to_char(ch, "You don't have enough gold!");
 			return (TRUE);
 		}
 
@@ -762,7 +762,7 @@ SPECIAL(pet_shops) {
 		IS_CARRYING_W(pet) = 1000;
 		IS_CARRYING_N(pet) = 100;
 
-		send_to_char(ch, "May you enjoy your pet.\r\n");
+		send_to_char(ch, "May you enjoy your pet.");
 		act("$n buys $N as a pet.", FALSE, ch, 0, pet, TO_ROOM);
 
 		return (TRUE);
@@ -784,42 +784,42 @@ SPECIAL(bank) {
 
 	if(CMD_IS("balance")) {
 		if(GET_BANK_GOLD(ch) > 0) {
-			send_to_char(ch, "Your current balance is %d coins.\r\n", GET_BANK_GOLD(ch));
+			send_to_char(ch, "Your current balance is %d coins.", GET_BANK_GOLD(ch));
 		} else {
-			send_to_char(ch, "You currently have no money deposited.\r\n");
+			send_to_char(ch, "You currently have no money deposited.");
 		}
 
 		return (TRUE);
 	} else if(CMD_IS("deposit")) {
 		if((amount = atoi(argument)) <= 0) {
-			send_to_char(ch, "How much do you want to deposit?\r\n");
+			send_to_char(ch, "How much do you want to deposit?");
 			return (TRUE);
 		}
 
 		if(GET_GOLD(ch) < amount) {
-			send_to_char(ch, "You don't have that many coins!\r\n");
+			send_to_char(ch, "You don't have that many coins!");
 			return (TRUE);
 		}
 
 		GET_GOLD(ch) -= amount;
 		GET_BANK_GOLD(ch) += amount;
-		send_to_char(ch, "You deposit %d coins.\r\n", amount);
+		send_to_char(ch, "You deposit %d coins.", amount);
 		act("$n makes a bank transaction.", TRUE, ch, 0, FALSE, TO_ROOM);
 		return (TRUE);
 	} else if(CMD_IS("withdraw")) {
 		if((amount = atoi(argument)) <= 0) {
-			send_to_char(ch, "How much do you want to withdraw?\r\n");
+			send_to_char(ch, "How much do you want to withdraw?");
 			return (TRUE);
 		}
 
 		if(GET_BANK_GOLD(ch) < amount) {
-			send_to_char(ch, "You don't have that many coins deposited!\r\n");
+			send_to_char(ch, "You don't have that many coins deposited!");
 			return (TRUE);
 		}
 
 		GET_GOLD(ch) += amount;
 		GET_BANK_GOLD(ch) -= amount;
-		send_to_char(ch, "You withdraw %d coins.\r\n", amount);
+		send_to_char(ch, "You withdraw %d coins.", amount);
 		act("$n makes a bank transaction.", TRUE, ch, 0, FALSE, TO_ROOM);
 		return (TRUE);
 	} else {

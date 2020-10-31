@@ -394,7 +394,7 @@ int block_way(char_data *ch, int cmd, char *arg, room_vnum iIn_room,
 		act("The guard roars at $n and pushes $m back.", FALSE, ch, 0, 0, TO_ROOM);
 	}
 
-	send_to_char(ch, "The guard roars: 'Entrance is Prohibited!', and pushes you back.\r\n");
+	send_to_char(ch, "The guard roars: 'Entrance is Prohibited!', and pushes you back.");
 	return (TRUE);
 }
 
@@ -438,14 +438,14 @@ void fry_victim(char_data *ch) {
 		case 1:
 		case 2:
 		case 3:
-			send_to_char(ch, "You raise your hand in a dramatical gesture.\r\n");
+			send_to_char(ch, "You raise your hand in a dramatical gesture.");
 			act("$n raises $s hand in a dramatical gesture.", 1, ch, 0, 0, TO_ROOM);
 			cast_spell(ch, tch, 0, SPELL_COLOR_SPRAY);
 			break;
 
 		case 4:
 		case 5:
-			send_to_char(ch, "You concentrate and mumble to yourself.\r\n");
+			send_to_char(ch, "You concentrate and mumble to yourself.");
 			act("$n concentrates, and mumbles to $mself.", 1, ch, 0, 0, TO_ROOM);
 			cast_spell(ch, tch, 0, SPELL_HARM);
 			break;
@@ -650,7 +650,7 @@ SPECIAL(training_master) {
 			break;
 
 		case 2:
-			send_to_char(ch, "You command your pupils to bow.\r\n");
+			send_to_char(ch, "You command your pupils to bow.");
 			act("$n commands $s pupils to bow.", FALSE, ch, 0, 0, TO_ROOM);
 			act("$n bows before $N.", FALSE, pupil1, 0, pupil2, TO_NOTVICT);
 			act("$N bows before $n.", FALSE, pupil1, 0, pupil2, TO_NOTVICT);
@@ -685,7 +685,7 @@ SPECIAL(training_master) {
 			break;
 
 		default:
-			send_to_char(ch, "You show your pupils an advanced technique.\r\n");
+			send_to_char(ch, "You show your pupils an advanced technique.");
 			act("$n shows $s pupils an advanced technique.", FALSE, ch, 0, 0, TO_ROOM);
 			break;
 	}

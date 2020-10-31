@@ -298,9 +298,9 @@ void gain_exp(char_data *ch, int gain) {
 			       GET_NAME(ch).c_str(), num_levels, num_levels == 1 ? "" : "s", GET_LEVEL(ch));
 
 			if(num_levels == 1) {
-				send_to_char(ch, "You rise a level!\r\n");
+				send_to_char(ch, "You rise a level!");
 			} else {
-				send_to_char(ch, "You rise %d levels!\r\n", num_levels);
+				send_to_char(ch, "You rise %d levels!", num_levels);
 			}
 
 			set_title(ch, NULL);
@@ -344,9 +344,9 @@ void gain_exp_regardless(char_data *ch, int gain) {
 			       GET_NAME(ch).c_str(), num_levels, num_levels == 1 ? "" : "s", GET_LEVEL(ch));
 
 			if(num_levels == 1) {
-				send_to_char(ch, "You rise a level!\r\n");
+				send_to_char(ch, "You rise a level!");
 			} else {
-				send_to_char(ch, "You rise %d levels!\r\n", num_levels);
+				send_to_char(ch, "You rise %d levels!", num_levels);
 			}
 
 			set_title(ch, NULL);
@@ -379,16 +379,16 @@ void gain_condition(char_data *ch, int condition, int value) {
 
 	switch(condition) {
 		case FULL:
-			send_to_char(ch, "You are hungry.\r\n");
+			send_to_char(ch, "You are hungry.");
 			break;
 
 		case THIRST:
-			send_to_char(ch, "You are thirsty.\r\n");
+			send_to_char(ch, "You are thirsty.");
 			break;
 
 		case DRUNK:
 			if(intoxicated) {
-				send_to_char(ch, "You are now sober.\r\n");
+				send_to_char(ch, "You are now sober.");
 			}
 
 			break;

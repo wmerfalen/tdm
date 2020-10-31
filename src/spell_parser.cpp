@@ -374,7 +374,7 @@ void mag_objectmagic(char_data *ch, struct obj_data *obj,
 			}
 
 			if(GET_OBJ_VAL(obj, 2) <= 0) {
-				send_to_char(ch, "It seems powerless.\r\n");
+				send_to_char(ch, "It seems powerless.");
 				act("Nothing seems to happen.", FALSE, ch, obj, 0, TO_ROOM);
 			} else {
 				GET_OBJ_VAL(obj, 2)--;
@@ -444,7 +444,7 @@ void mag_objectmagic(char_data *ch, struct obj_data *obj,
 			}
 
 			if(GET_OBJ_VAL(obj, 2) <= 0) {
-				send_to_char(ch, "It seems powerless.\r\n");
+				send_to_char(ch, "It seems powerless.");
 				act("Nothing seems to happen.", FALSE, ch, obj, 0, TO_ROOM);
 				return;
 			}
@@ -545,23 +545,23 @@ int cast_spell(char_data *ch, char_data *tch,
 	if(GET_POS(ch) < SINFO.min_position) {
 		switch(GET_POS(ch)) {
 			case POS_SLEEPING:
-				send_to_char(ch, "You dream about great magical powers.\r\n");
+				send_to_char(ch, "You dream about great magical powers.");
 				break;
 
 			case POS_RESTING:
-				send_to_char(ch, "You cannot concentrate while resting.\r\n");
+				send_to_char(ch, "You cannot concentrate while resting.");
 				break;
 
 			case POS_SITTING:
-				send_to_char(ch, "You can't do this sitting!\r\n");
+				send_to_char(ch, "You can't do this sitting!");
 				break;
 
 			case POS_FIGHTING:
-				send_to_char(ch, "Impossible!  You can't concentrate enough!\r\n");
+				send_to_char(ch, "Impossible!  You can't concentrate enough!");
 				break;
 
 			default:
-				send_to_char(ch, "You can't do much of anything like this!\r\n");
+				send_to_char(ch, "You can't do much of anything like this!");
 				break;
 		}
 
@@ -569,22 +569,22 @@ int cast_spell(char_data *ch, char_data *tch,
 	}
 
 	if(AFF_FLAGGED(ch, AFF_CHARM) && (ch->master == tch)) {
-		send_to_char(ch, "You are afraid you might hurt your master!\r\n");
+		send_to_char(ch, "You are afraid you might hurt your master!");
 		return (0);
 	}
 
 	if((tch != ch) && IS_SET(SINFO.targets, TAR_SELF_ONLY)) {
-		send_to_char(ch, "You can only cast this spell upon yourself!\r\n");
+		send_to_char(ch, "You can only cast this spell upon yourself!");
 		return (0);
 	}
 
 	if((tch == ch) && IS_SET(SINFO.targets, TAR_NOT_SELF)) {
-		send_to_char(ch, "You cannot cast this spell upon yourself!\r\n");
+		send_to_char(ch, "You cannot cast this spell upon yourself!");
 		return (0);
 	}
 
 	if(IS_SET(SINFO.routines, MAG_GROUPS) && !AFF_FLAGGED(ch, AFF_GROUP)) {
-		send_to_char(ch, "You can't cast this spell if you're not in a group!\r\n");
+		send_to_char(ch, "You can't cast this spell if you're not in a group!");
 		return (0);
 	}
 
@@ -615,14 +615,14 @@ ACMD(do_cast) {
 	s = strtok(argument, "'");
 
 	if(s == NULL) {
-		send_to_char(ch, "Cast what where?\r\n");
+		send_to_char(ch, "Cast what where?");
 		return;
 	}
 
 	s = strtok(NULL, "'");
 
 	if(s == NULL) {
-		send_to_char(ch, "Spell names must be enclosed in the Holy Magic Symbols: '\r\n");
+		send_to_char(ch, "Spell names must be enclosed in the Holy Magic Symbols: '");
 		return;
 	}
 
@@ -632,17 +632,17 @@ ACMD(do_cast) {
 	spellnum = find_skill_num(s);
 
 	if((spellnum < 1) || (spellnum > MAX_SPELLS)) {
-		send_to_char(ch, "Cast what?!?\r\n");
+		send_to_char(ch, "Cast what?!?");
 		return;
 	}
 
 	if(GET_LEVEL(ch) < SINFO.min_level[(int) GET_CLASS(ch)]) {
-		send_to_char(ch, "You do not know that spell!\r\n");
+		send_to_char(ch, "You do not know that spell!");
 		return;
 	}
 
 	if(GET_SKILL(ch, spellnum) == 0) {
-		send_to_char(ch, "You are unfamiliar with that spell.\r\n");
+		send_to_char(ch, "You are unfamiliar with that spell.");
 		return;
 	}
 
@@ -713,26 +713,26 @@ ACMD(do_cast) {
 		}
 
 		if(!target) {
-			send_to_char(ch, "Upon %s should the spell be cast?\r\n",
+			send_to_char(ch, "Upon %s should the spell be cast?",
 			             IS_SET(SINFO.targets, TAR_OBJ_ROOM | TAR_OBJ_INV | TAR_OBJ_WORLD | TAR_OBJ_EQUIP) ? "what" : "who");
 			return;
 		}
 	}
 
 	if(target && (tch == ch) && SINFO.violent) {
-		send_to_char(ch, "You shouldn't cast that on yourself -- could be bad for your health!\r\n");
+		send_to_char(ch, "You shouldn't cast that on yourself -- could be bad for your health!");
 		return;
 	}
 
 	if(!target) {
-		send_to_char(ch, "Cannot find the target of your spell!\r\n");
+		send_to_char(ch, "Cannot find the target of your spell!");
 		return;
 	}
 
 	mana = mag_manacost(ch, spellnum);
 
 	if((mana > 0) && (GET_MANA(ch) < mana) && (GET_LEVEL(ch) < LVL_IMMORT)) {
-		send_to_char(ch, "You haven't the energy to cast that spell!\r\n");
+		send_to_char(ch, "You haven't the energy to cast that spell!");
 		return;
 	}
 
@@ -741,7 +741,7 @@ ACMD(do_cast) {
 		WAIT_STATE(ch, PULSE_VIOLENCE);
 
 		if(!tch || !skill_message(0, ch, tch, spellnum)) {
-			send_to_char(ch, "You lost your concentration!\r\n");
+			send_to_char(ch, "You lost your concentration!");
 		}
 
 		if(mana > 0) {

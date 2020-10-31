@@ -631,12 +631,12 @@ void shopping_buy(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
 	}
 
 	if(IS_CARRYING_N(ch) + 1 > CAN_CARRY_N(ch)) {
-		send_to_char(ch, "%s: You can't carry any more items.\r\n", fname(obj->name));
+		send_to_char(ch, "%s: You can't carry any more items.", fname(obj->name));
 		return;
 	}
 
 	if(IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
-		send_to_char(ch, "%s: You can't carry that much weight.\r\n", fname(obj->name));
+		send_to_char(ch, "%s: You can't carry that much weight.", fname(obj->name));
 		return;
 	}
 
@@ -702,7 +702,7 @@ void shopping_buy(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
 	snprintf(tempbuf, sizeof(tempbuf), shop_index[shop_nr].message_buy, GET_NAME(ch).c_str(), goldamt);
 	do_tell(keeper, tempbuf, cmd_tell, 0);
 
-	send_to_char(ch, "You now have %s.\r\n", tempstr);
+	send_to_char(ch, "You now have %s.", tempstr);
 
 	if(SHOP_USES_BANK(shop_nr))
 		if(GET_GOLD(keeper) > MAX_OUTSIDE_BANK) {
@@ -909,7 +909,7 @@ void shopping_sell(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
 	//snprintf(tempbuf, sizeof(tempbuf) - 10, shop_index[shop_nr].message_sell, GET_NAME(ch).c_str(), goldamt);
 	//do_tell(keeper, tempbuf, cmd_tell, 0);
 
-	//send_to_char(ch, "The shopkeeper now has %s.\r\n", tempstr);
+	//send_to_char(ch, "The shopkeeper now has %s.", tempstr);
 
 	if(GET_GOLD(keeper) < MIN_OUTSIDE_BANK) {
 		goldamt = MIN(MAX_OUTSIDE_BANK - GET_GOLD(keeper), SHOP_BANK(shop_nr));
@@ -1036,9 +1036,9 @@ void shopping_list(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
 	lindex++;
 
 	if(!last_obj) {	/* we actually have nothing in our list for sale, period */
-		send_to_char(ch, "Currently, there is nothing for sale.\r\n");
+		send_to_char(ch, "Currently, there is nothing for sale.");
 	} else if(*name && !found) {	/* nothing the char was looking for was found */
-		send_to_char(ch, "Presently, none of those are for sale.\r\n");
+		send_to_char(ch, "Presently, none of those are for sale.");
 	} else {
 		if(!*name || isname(name, last_obj->name))	/* show last obj */
 			if(len < sizeof(buf)) {
@@ -1474,7 +1474,7 @@ void list_detailed_shop(char_data *ch, int shop_nr) {
 	int sindex, column;
 	char *ptrsave;
 
-	send_to_char(ch, "Vnum:       [%5d], Rnum: [%5d]\r\n", SHOP_NUM(shop_nr), shop_nr + 1);
+	send_to_char(ch, "Vnum:       [%5d], Rnum: [%5d]", SHOP_NUM(shop_nr), shop_nr + 1);
 
 
 	send_to_char(ch, "Rooms:      ");
@@ -1497,7 +1497,7 @@ void list_detailed_shop(char_data *ch, int shop_nr) {
 
 		/* Implementing word-wrapping: assumes screen-size == 80 */
 		if(linelen + column >= 78 && column >= 20) {
-			send_to_char(ch, "\r\n            ");
+			send_to_char(ch, "            ");
 			/* 12 is to line up with "Rooms:" printed first, and spaces above. */
 			column = 12;
 		}
@@ -1513,23 +1513,23 @@ void list_detailed_shop(char_data *ch, int shop_nr) {
 		send_to_char(ch, "Rooms:      None!");
 	}
 
-	send_to_char(ch, "\r\nShopkeeper: ");
+	send_to_char(ch, "Shopkeeper: ");
 
 	if(SHOP_KEEPER(shop_nr) != NOBODY) {
-		send_to_char(ch, "%s (#%d), Special Function: %s\r\n",
+		send_to_char(ch, "%s (#%d), Special Function: %s",
 		             GET_NAME(&mob_proto[SHOP_KEEPER(shop_nr)]).c_str(),
 		             mob_index[SHOP_KEEPER(shop_nr)].vnum,
 		             YESNO(SHOP_FUNC(shop_nr)));
 
 		if((k = get_char_num(SHOP_KEEPER(shop_nr))))
-			send_to_char(ch, "Coins:      [%9d], Bank: [%9d] (Total: %d)\r\n",
+			send_to_char(ch, "Coins:      [%9d], Bank: [%9d] (Total: %d)",
 			             GET_GOLD(k), SHOP_BANK(shop_nr), GET_GOLD(k) + SHOP_BANK(shop_nr));
 	} else {
-		send_to_char(ch, "<NONE>\r\n");
+		send_to_char(ch, "<NONE>");
 	}
 
 
-	send_to_char(ch, "Customers:  %s\r\n", (ptrsave = customer_string(shop_nr, TRUE)) ? ptrsave : "None");
+	send_to_char(ch, "Customers:  %s", (ptrsave = customer_string(shop_nr, TRUE)) ? ptrsave : "None");
 
 
 	send_to_char(ch, "Produces:   ");
@@ -1550,7 +1550,7 @@ void list_detailed_shop(char_data *ch, int shop_nr) {
 
 		/* Implementing word-wrapping: assumes screen-size == 80 */
 		if(linelen + column >= 78 && column >= 20) {
-			send_to_char(ch, "\r\n            ");
+			send_to_char(ch, "            ");
 			/* 12 is to line up with "Produces:" printed first, and spaces above. */
 			column = 12;
 		}
@@ -1566,7 +1566,7 @@ void list_detailed_shop(char_data *ch, int shop_nr) {
 		send_to_char(ch, "Produces:   Nothing!");
 	}
 
-	send_to_char(ch, "\r\nBuys:       ");
+	send_to_char(ch, "Buys:       ");
 	column = 12;	/* ^^^ strlen ^^^ */
 
 	for(sindex = 0; SHOP_BUYTYPE(shop_nr, sindex) != NOTHING; sindex++) {
@@ -1585,7 +1585,7 @@ void list_detailed_shop(char_data *ch, int shop_nr) {
 
 		/* Implementing word-wrapping: assumes screen-size == 80 */
 		if(linelen + column >= 78 && column >= 20) {
-			send_to_char(ch, "\r\n            ");
+			send_to_char(ch, "            ");
 			/* 12 is to line up with "Buys:" printed first, and spaces above. */
 			column = 12;
 		}
@@ -1601,7 +1601,7 @@ void list_detailed_shop(char_data *ch, int shop_nr) {
 		send_to_char(ch, "Buys:       Nothing!");
 	}
 
-	send_to_char(ch, "\r\nBuy at:     [%4.2f], Sell at: [%4.2f], Open: [%d-%d, %d-%d]\r\n",
+	send_to_char(ch, "\r\nBuy at:     [%4.2f], Sell at: [%4.2f], Open: [%d-%d, %d-%d]",
 	             SHOP_SELLPROFIT(shop_nr), SHOP_BUYPROFIT(shop_nr), SHOP_OPEN1(shop_nr),
 	             SHOP_CLOSE1(shop_nr), SHOP_OPEN2(shop_nr), SHOP_CLOSE2(shop_nr));
 
@@ -1610,7 +1610,7 @@ void list_detailed_shop(char_data *ch, int shop_nr) {
 	{
 		char buf1[128];
 		sprintbit(SHOP_BITVECTOR(shop_nr), shop_bits, buf1, sizeof(buf1));
-		send_to_char(ch, "Bits:       %s\r\n", buf1);
+		send_to_char(ch, "Bits:       %s", buf1);
 	}
 }
 
@@ -1628,7 +1628,7 @@ void show_shops(char_data *ch, char *arg) {
 				}
 
 			if(shop_nr > top_shop) {
-				send_to_char(ch, "This isn't a shop!\r\n");
+				send_to_char(ch, "This isn't a shop!");
 				return;
 			}
 		} else if(is_number(arg)) {
@@ -1638,7 +1638,7 @@ void show_shops(char_data *ch, char *arg) {
 		}
 
 		if(shop_nr < 0 || shop_nr > top_shop) {
-			send_to_char(ch, "Illegal shop number.\r\n");
+			send_to_char(ch, "Illegal shop number.");
 			return;
 		}
 

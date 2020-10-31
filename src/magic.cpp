@@ -136,15 +136,15 @@ int mag_materials(char_data *ch, int item0, int item1, int item2,
 		if(verbose) {
 			switch(rand_number(0, 2)) {
 				case 0:
-					send_to_char(ch, "A wart sprouts on your nose.\r\n");
+					send_to_char(ch, "A wart sprouts on your nose.");
 					break;
 
 				case 1:
-					send_to_char(ch, "Your hair falls out in clumps.\r\n");
+					send_to_char(ch, "Your hair falls out in clumps.");
 					break;
 
 				case 2:
-					send_to_char(ch, "A huge corn develops on your big toe.\r\n");
+					send_to_char(ch, "A huge corn develops on your big toe.");
 					break;
 			}
 		}
@@ -167,7 +167,7 @@ int mag_materials(char_data *ch, int item0, int item1, int item2,
 	}
 
 	if(verbose) {
-		send_to_char(ch, "A puff of smoke rises from your pack.\r\n");
+		send_to_char(ch, "A puff of smoke rises from your pack.");
 		act("A puff of smoke rises from $n's pack.", TRUE, ch, NULL, NULL, TO_ROOM);
 	}
 
@@ -380,7 +380,7 @@ void mag_affects(int level, char_data *ch, char_data *victim,
 
 		case SPELL_BLINDNESS:
 			if(MOB_FLAGGED(victim,MOB_NOBLIND) || mag_savingthrow(victim, savetype, 0)) {
-				send_to_char(ch, "You fail.\r\n");
+				send_to_char(ch, "You fail.");
 				return;
 			}
 
@@ -830,7 +830,7 @@ void mag_summons(int level, char_data *ch, struct obj_data *obj,
 	}
 
 	if(AFF_FLAGGED(ch, AFF_CHARM)) {
-		send_to_char(ch, "You are too giddy to have any followers!\r\n");
+		send_to_char(ch, "You are too giddy to have any followers!");
 		return;
 	}
 
@@ -841,7 +841,7 @@ void mag_summons(int level, char_data *ch, struct obj_data *obj,
 
 	for(i = 0; i < num; i++) {
 		if(!(mob = read_mobile(mob_num, VIRTUAL))) {
-			send_to_char(ch, "You don't quite remember how to make that creature.\r\n");
+			send_to_char(ch, "You don't quite remember how to make that creature.");
 			return;
 		}
 
@@ -1069,12 +1069,12 @@ void mag_creations(int level, char_data *ch, int spellnum) {
 			break;
 
 		default:
-			send_to_char(ch, "Spell unimplemented, it would seem.\r\n");
+			send_to_char(ch, "Spell unimplemented, it would seem.");
 			return;
 	}
 
 	if(!(tobj = read_object(z, VIRTUAL))) {
-		send_to_char(ch, "I seem to have goofed.\r\n");
+		send_to_char(ch, "I seem to have goofed.");
 		log("SYSERR: spell_creations, spell %d, obj %d: obj not found",
 		    spellnum, z);
 		return;

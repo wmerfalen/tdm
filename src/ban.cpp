@@ -122,7 +122,7 @@ ACMD(do_ban) {
 
 	if(!*argument) {
 		if(!ban_list) {
-			send_to_char(ch, "No sites are banned.\r\n");
+			send_to_char(ch, "No sites are banned.");
 			return;
 		}
 
@@ -154,18 +154,18 @@ ACMD(do_ban) {
 	two_arguments(argument, flag, site);
 
 	if(!*site || !*flag) {
-		send_to_char(ch, "Usage: ban {all | select | new} site_name\r\n");
+		send_to_char(ch, "Usage: ban {all | select | new} site_name");
 		return;
 	}
 
 	if(!(!str_cmp(flag, "select") || !str_cmp(flag, "all") || !str_cmp(flag, "new"))) {
-		send_to_char(ch, "Flag must be ALL, SELECT, or NEW.\r\n");
+		send_to_char(ch, "Flag must be ALL, SELECT, or NEW.");
 		return;
 	}
 
 	for(ban_node = ban_list; ban_node; ban_node = ban_node->next) {
 		if(!str_cmp(ban_node->site, site)) {
-			send_to_char(ch, "That site has already been banned -- unban it to change the ban type.\r\n");
+			send_to_char(ch, "That site has already been banned -- unban it to change the ban type.");
 			return;
 		}
 	}
@@ -194,7 +194,7 @@ ACMD(do_ban) {
 //
 //	mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "%s has banned %s for %s players.",
 //	       GET_NAME(ch).c_str(), site, ban_types[ban_node->type]);
-//	send_to_char(ch, "Site banned.\r\n");
+//	send_to_char(ch, "Site banned.");
 //	write_ban_list();
 }
 #undef BAN_LIST_FORMAT
@@ -208,7 +208,7 @@ ACMD(do_unban) {
 	one_argument(argument, site);
 
 	if(!*site) {
-		send_to_char(ch, "A site to unban might help.\r\n");
+		send_to_char(ch, "A site to unban might help.");
 		return;
 	}
 
@@ -223,12 +223,12 @@ ACMD(do_unban) {
 	}
 
 	if(!found) {
-		send_to_char(ch, "That site is not currently banned.\r\n");
+		send_to_char(ch, "That site is not currently banned.");
 		return;
 	}
 
 	REMOVE_FROM_LIST(ban_node, ban_list, next);
-	send_to_char(ch, "Site unbanned.\r\n");
+	send_to_char(ch, "Site unbanned.");
 	mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "%s removed the %s-player ban on %s.",
 	       GET_NAME(ch).c_str(), ban_types[ban_node->type], ban_node->site);
 

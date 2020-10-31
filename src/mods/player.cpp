@@ -35,7 +35,6 @@ namespace mods::classes {
 extern size_t vwrite_to_output(mods::descriptor_data &t, const char *format, va_list args);
 extern int write_to_descriptor(socket_t desc, const char *txt);
 extern void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
-extern void write_to_char(char_data* ch, std::string_view msg,bool newline, bool plain);
 extern void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...);
 extern void do_auto_exits(char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
@@ -471,7 +470,6 @@ namespace mods {
 	}
 	bool player::has_thermite() {
 		/** TODO: FIXME */
-		write_to_char(m_char_data, "[stub] FIXME",1,1);
 		return false;
 	}
 
@@ -582,33 +580,33 @@ namespace mods {
 	void player::psendln(std::string_view str) {
 		MENTOC_NPC_CHECK(str.data());
 		if(desc().has_prompt){
-			write_to_char(m_char_data,"\r\n",0,0);
+			write_to_char("\r\n",0,0);
 		}
-		write_to_char(m_char_data, str,1,1);
+		write_to_char( str,1,1);
 		desc().has_prompt = 0;
 	}
 	void player::psendln(mods::string& str) {
 		MENTOC_NPC_CHECK(str.c_str());
 		if(desc().has_prompt){
-			write_to_char(m_char_data,"\r\n",0,0);
+			write_to_char("\r\n",0,0);
 		}
-		write_to_char(m_char_data, str.view(),1,1);
+		write_to_char( str.view(),1,1);
 		desc().has_prompt = 0;
 	}
 	void player::sendln(mods::string& str) {
 		MENTOC_NPC_CHECK(str.str());
 		if(desc().has_prompt){
-			write_to_char(m_char_data,"\r\n",0,0);
+			write_to_char("\r\n",0,0);
 		}
-		write_to_char(m_char_data, str.view(), 1,0);
+		write_to_char( str.view(), 1,0);
 		desc().has_prompt = 0;
 	}
 	void player::sendln(std::string_view str) {
 		MENTOC_NPC_CHECK(str.data());
 		if(desc().has_prompt){
-			write_to_char(m_char_data,"\r\n",0,0);
+			write_to_char("\r\n",0,0);
 		}
-		write_to_char(m_char_data, str, 1,0);
+		write_to_char( str, 1,0);
 		desc().has_prompt = 0;
 	}
 	void player::stc_room(const room_rnum& rnum) {
@@ -620,10 +618,10 @@ namespace mods {
 		//if(world[rnum].name) {
 		//	/** note: using 1 for the plain parameter since colr eval is done on room load from postgres */
 		//	std::cerr << __FILE__ << "|" << __LINE__ << "-> name:'" << world[rnum].name.c_str() << "'\n";
-		//	//write_to_char(m_char_data, world[rnum].name.view(),1,1);
+		//	//write_to_char( world[rnum].name.view(),1,1);
 		//}
 		if(builder_mode()){
-			write_to_char(m_char_data,(std::string("[room_id:") + std::to_string(rnum) + "|number:" + 
+			write_to_char((std::string("[room_id:") + std::to_string(rnum) + "|number:" + 
 						std::to_string(world[rnum].number) + "|zone:" + 
 						std::to_string(world[rnum].zone)
 						),1,1
@@ -637,17 +635,17 @@ namespace mods {
 		if(m_capture_output) {
 			m_captured_output += m;
 		}
-		write_to_char(m_char_data,m,0,0);
+		write_to_char(m,0,0);
 		desc().has_prompt = 0;
 	}
 	void player::stc(const mods::string& m){
 		MENTOC_NPC_CHECK(m.str());
-		write_to_char(m_char_data,m.view(),0,0);
+		write_to_char(m.view(),0,0);
 		desc().has_prompt = 0;
 	}
 	void player::stc(std::string_view sview) {
 		MENTOC_NPC_CHECK(sview.data());
-		write_to_char(m_char_data,sview,0,0);
+		write_to_char(sview,0,0);
 		desc().has_prompt = 0;
 	}
 	void player::stc(const std::string m) {
@@ -656,7 +654,7 @@ namespace mods {
 		if(m_capture_output) {
 			m_captured_output += m;
 		}
-		write_to_char(m_char_data,m,0,0);
+		write_to_char(m,0,0);
 		desc().has_prompt = 0;
 	}
 	void player::stc(int m) {
@@ -666,7 +664,7 @@ namespace mods {
 		}
 
 		/** note, using 1 for plain parameter */
-		write_to_char(m_char_data,std::to_string(m).c_str(),0,1);
+		write_to_char(std::to_string(m).c_str(),0,1);
 		desc().has_prompt = 0;
 	}
 	void player::raw_send(const mods::string& str){
@@ -1096,6 +1094,9 @@ namespace mods {
 	}
 	size_t player::send(const char *messg, ...) {
 		MENTOC_NPC_CHECK_0(messg);
+		if(desc().has_prompt){
+			write_to_char("\r\n",0,0);
+		}
 		if(m_do_paging) {
 			static constexpr int txt_buffer_size_total = MAX_STRING_LENGTH;
 			static constexpr int txt_buffer_size_allowable = txt_buffer_size_total - 12;
@@ -1516,6 +1517,9 @@ namespace mods {
 		void player::set_striker(std::shared_ptr<mods::classes::striker> g){ m_striker = g; }
 		char_data::visibility_t& player::visibility(){
 			return m_char_data->visibility;
+		}
+		void player::write_to_char(std::string_view msg, bool newline,bool plain) {
+			m_char_data->desc->queue_output(msg,newline,plain);
 		}
 };
 

@@ -512,7 +512,7 @@ SPECIAL(postmaster) {
 	}
 
 	if(no_mail) {
-		send_to_char(ch, "Sorry, the mail system is having technical difficulties.\r\n");
+		send_to_char(ch, "Sorry, the mail system is having technical difficulties.");
 		return (0);
 	}
 

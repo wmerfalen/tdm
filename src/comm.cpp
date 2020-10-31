@@ -1099,26 +1099,10 @@ char *make_prompt(mods::descriptor_data &d) {
 }
 
 
-/*
- * NOTE: 'txt' must be at most MAX_INPUT_LENGTH big.
- */
-//LEGACY: void write_to_q(const char *txt, struct txt_q *queue, int aliased)
-//struct txt_block *newt;
-
-//CREATE(newt, struct txt_block, 1);
-//newt->text = strdup(txt);
-//newt->aliased = aliased;
-
-///* queue empty? */
-//if(!queue->head) {
-//	newt->next = NULL;
-//	queue->head = queue->tail = newt;
-//} else {
-//	queue->tail->next = newt;
-//	queue->tail = newt;
-//	newt->next = NULL;
-//}
 void	write_to_q(std::string_view txt, mods::descriptor_data& d, int aliased){
+#ifdef __MENTOC_OUTPUT_DEBUGGUNG__
+	std::cerr << "write_to_q:'" << txt.data() << "'\n";
+#endif
 	d.input.emplace_back(txt,aliased);
 }
 
@@ -1133,15 +1117,13 @@ int get_from_q(mods::descriptor_data& d, char *dest, int *aliased) {
 }
 
 
-/* Empty the queues before closing connection */
-void flush_queues(mods::descriptor_data &d) {
-	log("[deprecated] flush_queues");
-	return;
-}
 
 
 /* Add a new string to a player's output queue. For outside use. */
 size_t write_to_output(mods::descriptor_data &t, const char *txt, ...) {
+#ifdef __MENTOC_OUTPUT_DEBUGGUNG__
+	std::cerr << "write_to_output:'" << txt << "'\n";
+#endif
 	va_list args;
 	size_t left;
 
@@ -1150,27 +1132,6 @@ size_t write_to_output(mods::descriptor_data &t, const char *txt, ...) {
 	va_end(args);
 
 	return left;
-}
-
-/* Add a new string to a player's output queue. */
-size_t _old_unused_vwrite_to_output_unused_(mods::descriptor_data &t, const char *format, va_list args) {
-	std::array<char,MAX_STRING_LENGTH> txt;
-	std::fill(txt.begin(),txt.end(),0);
-	size_t wantsize;
-	int size;
-
-	wantsize = size = vsnprintf(&txt[0], MAX_STRING_LENGTH-1, format, args);
-
-	/* If exceeding the size of the buffer, truncate it for the overflow message */
-
-	if(size < 0 || wantsize >= MAX_STRING_LENGTH -1) {
-		size = MAX_STRING_LENGTH - 1;
-		strcpy(&txt[0] + size - strlen(text_overflow), text_overflow);	/* strcpy: OK */
-	}else{
-		txt[size] = '\0';
-		t.queue_output(&txt[0],0,0);	/* strcpy: OK (size checked above) */
-	}
-	return 0;
 }
 
 size_t vwrite_to_output(mods::descriptor_data &t, const char *format, va_list args) {
@@ -1197,6 +1158,9 @@ size_t vwrite_to_output(mods::descriptor_data &t, const char *format, va_list ar
 		txt[std::min(size,txt_buffer_size_allowable)] = '\0';
 	}
 	t.queue_output(&txt[0],0,0);
+#ifdef __MENTOC_OUTPUT_DEBUGGUNG__
+	std::cerr << t.character->player.name.c_str() << "->vwrite_to_output'" << &txt[0] << "'\n";
+#endif
 	return 0;
 }
 
@@ -1956,8 +1920,6 @@ void close_socket(mods::descriptor_data& d) {
 	/** !fixme: there are some free() calls here that need to be eliminated but first the mallocs need to be found and the members turned into stl containers. */
 	d("erasing descriptor from socket map");
 	mods::globals::socket_map.erase(d.descriptor);
-	d("flushing queues");
-	flush_queues(d);
 	d("destroying socket desc");
 	destroy_socket(d.descriptor);
 
@@ -2225,20 +2187,16 @@ size_t send_to_char(char_data *ch, const char *messg, ...) {
 	if(ch->has_desc && messg && *messg) {
 		size_t left;
 		va_list args;
-
 		va_start(args, messg);
+		if(ch->desc->has_prompt){
+			vwrite_to_output(*ch->desc,"\r\n",args);
+		}
 		left = vwrite_to_output(*ch->desc, messg, args);
 		va_end(args);
 		return left;
 	}
 
 	return 0;
-}
-
-void write_to_char(char_data *ch, std::string_view msg, bool newline,bool plain) {
-	if(ch->desc) {
-		ch->desc->queue_output(msg,newline,plain);
-	}
 }
 
 void send_to_all(const char *messg, ...) {
@@ -2248,15 +2206,21 @@ void send_to_all(const char *messg, ...) {
 		return;
 	}
 
+#ifdef __MENTOC_OUTPUT_DEBUGGUNG__
+	std::cerr << "send_to_all:'" << messg << "'\n";
+#endif
+	va_start(args, messg);
 	for(auto & i : descriptor_list){
 		if(STATE(i) != CON_PLAYING) {
 			continue;
 		}
+		if(i.has_prompt){
+			vwrite_to_output(i,"\r\n",args);
+		}
 
-		va_start(args, messg);
 		vwrite_to_output(i, messg, args);
-		va_end(args);
 	}
+	va_end(args);
 }
 
 
@@ -2265,8 +2229,12 @@ void send_to_outdoor(const char *messg, ...) {
 		return;
 	}
 
+#ifdef __MENTOC_OUTPUT_DEBUGGUNG__
+	std::cerr << "send_to_outdoor:'" << messg << "'\n";
+#endif
+	va_list args;
+	va_start(args, messg);
 	for(auto & i : descriptor_list){
-		va_list args;
 
 		if(STATE(i) != CON_PLAYING || i.character == nullptr) {
 			continue;
@@ -2276,89 +2244,122 @@ void send_to_outdoor(const char *messg, ...) {
 			continue;
 		}
 
-		va_start(args, messg);
+		if(i.has_prompt){
+			vwrite_to_output(i,"\r\n",args);
+		}
 		vwrite_to_output(i, messg, args);
-		va_end(args);
 	}
+	va_end(args);
 }
 
-void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...) {
+void send_to_room_except(room_rnum room, const std::vector<player_ptr_t>& except, const char *messg, ...) {
+#ifdef __MENTOC_OUTPUT_DEBUGGUNG__
+	std::cerr << "send_to_room_except(0):'" << messg << "'\n";
+#endif
 	va_list args;
 
 	if(messg == NULL) {
 		return;
 	}
 
-	for(auto & p : mods::globals::get_room_list(room)){
-		auto i = p->cd();
-		if(!i->has_desc || std::find(except.begin(),except.end(),p->uuid()) != except.end()) {
-			continue;
+	bool send = true;
+	va_start(args, messg);
+	for(auto & player :  mods::globals::get_room_list(room)){
+		send = true;
+		for(const auto & e : except){
+			if(player->uuid() == e->uuid()){
+				send = false;
+				break;
+			}
 		}
-
-		va_start(args, messg);
-		vwrite_to_output(*i->desc, messg, args);
-		va_end(args);
+		if(send){
+			player->send(messg, args);
+		}
 	}
+	va_end(args);
 }
+void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...) {
+#ifdef __MENTOC_OUTPUT_DEBUGGUNG__
+	std::cerr << "send_to_room_except(1):'" << messg << "'\n";
+#endif
+	va_list args;
+
+	if(messg == NULL) {
+		return;
+	}
+	bool emplace = true;
+	va_start(args, messg);
+	for(auto & player :  mods::globals::get_room_list(room)){
+		emplace = true;
+		for(const auto & e : except){
+			if(player->uuid() == e){
+				emplace = false;
+				break;
+			}
+		}
+		if(emplace){
+			player->send(messg, args);
+		}
+	}
+	va_end(args);
+}
+
 
 void send_to_room_except(room_rnum room, const std::vector<char_data*>& except, const char *messg, ...) {
+#ifdef __MENTOC_OUTPUT_DEBUGGUNG__
+	std::cerr << "send_to_room_except(2):'" << messg << "'\n";
+#endif
 	va_list args;
 
 	if(messg == NULL) {
 		return;
 	}
 
+	va_start(args, messg);
 	for(auto & p : mods::globals::get_room_list(room)){
-		auto i = p->cd();
-		if(!i->has_desc || std::find(except.begin(),except.end(),i) != except.end()) {
-			continue;
+		if(std::find(except.begin(),except.end(),p->cd()) == except.end()) {
+			p->send(messg, args);
 		}
-
-		va_start(args, messg);
-		vwrite_to_output(*i->desc, messg, args);
-		va_end(args);
 	}
+	va_end(args);
 }
 
 void send_to_room_except(room_rnum room, player_ptr_t except_me, const char *messg, ...) {
+#ifdef __MENTOC_OUTPUT_DEBUGGUNG__
+	std::cerr << "send_to_room_except(3):'" << messg << "'\n";
+#endif
 	va_list args;
 
 	if(messg == NULL) {
 		return;
 	}
 
+	const auto & u = except_me->uuid();
+	va_start(args, messg);
 	for(auto & p : mods::globals::get_room_list(room)){
-		if(!p->cd()->has_desc) {
-			continue;
+		if (u != p->uuid()){
+			p->send(messg, args);
 		}
-		if (except_me->cd() == p->cd()) { /** FIXME: confirm that this works in ALL cases */
-			continue;
-		}
-
-		va_start(args, messg);
-		vwrite_to_output(p->desc(), messg, args);
-		va_end(args);
 	}
+	va_end(args);
 }
 
 
 void send_to_room(room_rnum room, const char *messg, ...) {
+#ifdef __MENTOC_OUTPUT_DEBUGGUNG__
+	std::cerr << "send_to_room:'" << messg << "'\n";
+#endif
 	va_list args;
 
 	if(messg == NULL) {
 		return;
 	}
 
+	va_start(args, messg);
 	for(auto & p : mods::globals::get_room_list(room)){
-		if(!p->cd()->has_desc) {
-			continue;
-		}
-
-		va_start(args, messg);
-		vwrite_to_output(p->desc(), messg, args);
-		va_end(args);
-		p->desc().has_prompt = 0;
+		p->send(messg,args);
 	}
+	va_end(args);
 }
 
 
@@ -2502,12 +2503,8 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 		}
 	}
 
-	*(--buf) = '\r';
-	*(++buf) = '\n';
-	*(++buf) = '\0';
-
-	to->desc->queue_output(CAP(lbuf),0,0);
-	to->desc->has_prompt = 0;
+	*(--buf) = '\0';
+	ptr(to)->send(CAP(lbuf));
 }
 
 

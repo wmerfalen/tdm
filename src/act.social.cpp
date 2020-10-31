@@ -85,7 +85,7 @@ int find_action(int cmd) {
 	}
 }
 
-
+#define ACT_DEBUG(A) std::cerr << "[do_action][checkpoint: #" << A << "\n";
 
 ACMD(do_action) {
 	char buf[MAX_INPUT_LENGTH];
@@ -94,7 +94,8 @@ ACMD(do_action) {
 	char_data *vict;
 
 	if((act_nr = find_action(cmd)) < 0) {
-		send_to_char(ch, "That action is not supported.\r\n");
+		ACT_DEBUG(1);
+		send_to_char(ch, "That action is not supported.");
 		return;
 	}
 
@@ -107,20 +108,25 @@ ACMD(do_action) {
 	}
 
 	if(!*buf) {
-		send_to_char(ch, "%s\r\n", action->char_no_arg);
+		ACT_DEBUG(2);
+		send_to_char(ch, "%s", action->char_no_arg);
 		act(action->others_no_arg, action->hide, ch, 0, 0, TO_ROOM);
 		return;
 	}
 
 	if(!(vict = get_char_vis(ch, buf, NULL, FIND_CHAR_ROOM))) {
-		send_to_char(ch, "%s\r\n", action->not_found);
+		ACT_DEBUG(3);
+		send_to_char(ch, "%s", action->not_found);
 	} else if(vict == ch) {
-		send_to_char(ch, "%s\r\n", action->char_auto);
+		ACT_DEBUG(4);
+		send_to_char(ch, "%s", action->char_auto);
 		act(action->others_auto, action->hide, ch, 0, 0, TO_ROOM);
 	} else {
 		if(GET_POS(vict) < action->min_victim_position) {
+		ACT_DEBUG(5);
 			act("$N is not in a proper position for that.", FALSE, ch, 0, vict, TO_CHAR | TO_SLEEP);
 		} else {
+		ACT_DEBUG(6);
 			act(action->char_found, 0, ch, 0, vict, TO_CHAR | TO_SLEEP);
 			act(action->others_found, action->hide, ch, 0, vict, TO_NOTVICT);
 			act(action->vict_found, action->hide, ch, 0, vict, TO_VICT);
@@ -138,10 +144,10 @@ ACMD(do_insult) {
 
 	if(*arg) {
 		if(!(victim = get_char_vis(ch, arg, NULL, FIND_CHAR_ROOM))) {
-			send_to_char(ch, "Can't hear you!\r\n");
+			send_to_char(ch, "Can't hear you!");
 		} else {
 			if(victim != ch) {
-				send_to_char(ch, "You insult %s.\r\n", GET_NAME(victim).c_str());
+				send_to_char(ch, "You insult %s.", GET_NAME(victim).c_str());
 
 				switch(rand_number(0, 2)) {
 					case 0:
@@ -173,11 +179,11 @@ ACMD(do_insult) {
 
 				act("$n insults $N.", TRUE, ch, 0, victim, TO_NOTVICT);
 			} else {			/* ch == victim */
-				send_to_char(ch, "You feel insulted.\r\n");
+				send_to_char(ch, "You feel insulted.");
 			}
 		}
 	} else {
-		send_to_char(ch, "I'm sure you don't want to insult *everybody*...\r\n");
+		send_to_char(ch, "I'm sure you don't want to insult *everybody*...");
 	}
 }
 

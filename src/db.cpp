@@ -399,7 +399,7 @@ ACMD(do_reboot) {
 
 		index_boot(DB_BOOT_HLP);
 	} else {
-		send_to_char(ch, "Unknown reload option.\r\n");
+		send_to_char(ch, "Unknown reload option.");
 		return;
 	}
 
@@ -1997,7 +1997,7 @@ int vnum_mobile(char *searchname, char_data *ch) {
 
 	for(nr = 0; nr <= top_of_mobt; nr++)
 		if(isname(searchname, mob_proto[nr].player.name)) {
-			send_to_char(ch, "%3d. [%5d] %s\r\n", ++found, mob_index[nr].vnum, mob_proto[nr].player.short_descr.c_str());
+			send_to_char(ch, "%3d. [%5d] %s", ++found, mob_index[nr].vnum, mob_proto[nr].player.short_descr.c_str());
 		}
 
 	return (found);

@@ -46,7 +46,7 @@ ACMD(do_say) {
 	skip_spaces(&argument);
 
 	if(!*argument) {
-		send_to_char(ch, "Yes, but WHAT do you want to say?\r\n");
+		send_to_char(ch, "Yes, but WHAT do you want to say?");
 	} else {
 		char buf[1024 + 12];
 
@@ -57,7 +57,7 @@ ACMD(do_say) {
 			send_to_char(ch, "%s", OK);
 		} else {
 			delete_doubledollar(argument);
-			send_to_char(ch, "You say, '%s'\r\n", argument);
+			send_to_char(ch, "You say, '%s'", argument);
 		}
 	}
 }
@@ -70,12 +70,12 @@ ACMD(do_gsay) {
 	skip_spaces(&argument);
 
 	if(!AFF_FLAGGED(ch, AFF_GROUP)) {
-		send_to_char(ch, "But you are not the member of a group!\r\n");
+		send_to_char(ch, "But you are not the member of a group!");
 		return;
 	}
 
 	if(!*argument) {
-		send_to_char(ch, "Yes, but WHAT do you want to group-say?\r\n");
+		send_to_char(ch, "Yes, but WHAT do you want to group-say?");
 	} else {
 		char buf[MAX_STRING_LENGTH];
 
@@ -99,7 +99,7 @@ ACMD(do_gsay) {
 		if(PRF_FLAGGED(ch, PRF_NOREPEAT)) {
 			send_to_char(ch, "%s", OK);
 		} else {
-			send_to_char(ch, "You tell the group, '%s'\r\n", argument);
+			send_to_char(ch, "You tell the group, '%s'", argument);
 		}
 	}
 }
@@ -129,11 +129,11 @@ void perform_tell(char_data *ch, char_data *vict, char *arg) {
 
 int is_tell_ok(char_data *ch, char_data *vict) {
 	if(ch == vict) {
-		send_to_char(ch, "You try to tell yourself something.\r\n");
+		send_to_char(ch, "You try to tell yourself something.");
 	} else if(!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_NOTELL)) {
-		send_to_char(ch, "You can't tell other people while you have notell on.\r\n");
+		send_to_char(ch, "You can't tell other people while you have notell on.");
 	} else if(ROOM_FLAGGED(IN_ROOM(ch), ROOM_SOUNDPROOF)) {
-		send_to_char(ch, "The walls seem to absorb your words.\r\n");
+		send_to_char(ch, "The walls seem to absorb your words.");
 	} else if(!IS_NPC(vict) && !vict->has_desc) {     /* linkless */
 		act("$E's linkless at the moment.", FALSE, ch, 0, vict, TO_CHAR | TO_SLEEP);
 	} else if(PLR_FLAGGED(vict, PLR_WRITING)) {
@@ -158,7 +158,7 @@ ACMD(do_tell) {
 	half_chop(argument, buf, buf2);
 
 	if(!*buf || !*buf2) {
-		send_to_char(ch, "Who do you wish to tell what??\r\n");
+		send_to_char(ch, "Who do you wish to tell what??");
 	} else if(GET_LEVEL(ch) < LVL_IMMORT && !(vict = get_player_vis(ch, buf, NULL, FIND_CHAR_WORLD))) {
 		send_to_char(ch, "%s", NOPERSON);
 	} else if(GET_LEVEL(ch) >= LVL_IMMORT && !(vict = get_char_vis(ch, buf, NULL, FIND_CHAR_WORLD))) {
@@ -179,9 +179,9 @@ ACMD(do_reply) {
 	skip_spaces(&argument);
 
 	if(GET_LAST_TELL(ch) == NOBODY) {
-		send_to_char(ch, "You have nobody to reply to!\r\n");
+		send_to_char(ch, "You have nobody to reply to!");
 	} else if(!*argument) {
-		send_to_char(ch, "What is your reply?\r\n");
+		send_to_char(ch, "What is your reply?");
 	} else {
 		/*
 		 * Make sure the person you're replying to is still playing by searching
@@ -200,7 +200,7 @@ ACMD(do_reply) {
 		}
 
 		if(tch == NULL) {
-			send_to_char(ch, "They are no longer playing.\r\n");
+			send_to_char(ch, "They are no longer playing.");
 		} else if(is_tell_ok(ch, tch)) {
 			perform_tell(ch, tch, argument);
 		}
@@ -236,11 +236,11 @@ ACMD(do_spec_comm) {
 	half_chop(argument, buf, buf2);
 
 	if(!*buf || !*buf2) {
-		send_to_char(ch, "Whom do you want to %s.. and what??\r\n", action_sing);
+		send_to_char(ch, "Whom do you want to %s.. and what??", action_sing);
 	} else if(!(vict = get_char_vis(ch, buf, NULL, FIND_CHAR_ROOM))) {
 		send_to_char(ch, "%s", NOPERSON);
 	} else if(vict == ch) {
-		send_to_char(ch, "You can't get your mouth close enough to your ear...\r\n");
+		send_to_char(ch, "You can't get your mouth close enough to your ear...");
 	} else {
 		char buf1[MAX_STRING_LENGTH];
 
@@ -250,7 +250,7 @@ ACMD(do_spec_comm) {
 		if(PRF_FLAGGED(ch, PRF_NOREPEAT)) {
 			send_to_char(ch, "%s", OK);
 		} else {
-			send_to_char(ch, "You %s %s, '%s'\r\n", action_sing, GET_NAME(vict).c_str(), buf2);
+			send_to_char(ch, "You %s %s, '%s'", action_sing, GET_NAME(vict).c_str(), buf2);
 		}
 
 		act(action_others, FALSE, ch, 0, vict, TO_NOTVICT);
@@ -277,23 +277,23 @@ ACMD(do_write) {
 	}
 
 	if(!*papername) {		/* nothing was delivered */
-		send_to_char(ch, "Write?  With what?  ON what?  What are you trying to do?!?\r\n");
+		send_to_char(ch, "Write?  With what?  ON what?  What are you trying to do?!?");
 		return;
 	}
 
 	if(*penname) {		/* there were two arguments */
 		if(!(paper = get_obj_in_list_vis(ch, papername, NULL, ch->carrying))) {
-			send_to_char(ch, "You have no %s.\r\n", papername);
+			send_to_char(ch, "You have no %s.", papername);
 			return;
 		}
 
 		if(!(pen = get_obj_in_list_vis(ch, penname, NULL, ch->carrying))) {
-			send_to_char(ch, "You have no %s.\r\n", penname);
+			send_to_char(ch, "You have no %s.", penname);
 			return;
 		}
 	} else {		/* there was one arg.. let's see what we can find */
 		if(!(paper = get_obj_in_list_vis(ch, papername, NULL, ch->carrying))) {
-			send_to_char(ch, "There is no %s in your inventory.\r\n", papername);
+			send_to_char(ch, "There is no %s in your inventory.", papername);
 			return;
 		}
 
@@ -301,18 +301,18 @@ ACMD(do_write) {
 			pen = paper;
 			paper = NULL;
 		} else if(GET_OBJ_TYPE(paper) != ITEM_NOTE) {
-			send_to_char(ch, "That thing has nothing to do with writing.\r\n");
+			send_to_char(ch, "That thing has nothing to do with writing.");
 			return;
 		}
 
 		/* One object was found.. now for the other one. */
 		if(!GET_EQ(ch, WEAR_HOLD)) {
-			send_to_char(ch, "You can't write with %s %s alone.\r\n", AN(papername), papername);
+			send_to_char(ch, "You can't write with %s %s alone.", AN(papername), papername);
 			return;
 		}
 
 		if(!CAN_SEE_OBJ(ch, GET_EQ(ch, WEAR_HOLD))) {
-			send_to_char(ch, "The stuff in your hand is invisible!  Yeech!!\r\n");
+			send_to_char(ch, "The stuff in your hand is invisible!  Yeech!!");
 			return;
 		}
 
@@ -330,10 +330,10 @@ ACMD(do_write) {
 	} else if(GET_OBJ_TYPE(paper) != ITEM_NOTE) {
 		act("You can't write on $p.", FALSE, ch, paper, 0, TO_CHAR);
 	} else if(paper->action_description) {
-		send_to_char(ch, "There's something written on it already.\r\n");
+		send_to_char(ch, "There's something written on it already.");
 	} else {
 		/* we can write - hooray! */
-		send_to_char(ch, "Write your note.  End with '@' on a new line.\r\n");
+		send_to_char(ch, "Write your note.  End with '@' on a new line.");
 		act("$n begins to jot down a note.", TRUE, ch, 0, 0, TO_ROOM);
 		//string_write(ch->desc, &paper->action_description, MAX_NOTE_LENGTH, 0, NULL);
 	}
@@ -410,13 +410,13 @@ ACMD(do_gen_comm) {
 	}
 
 	if(ROOM_FLAGGED(IN_ROOM(ch), ROOM_SOUNDPROOF)) {
-		send_to_char(ch, "The walls seem to absorb your words.\r\n");
+		send_to_char(ch, "The walls seem to absorb your words.");
 		return;
 	}
 
 	/* level_can_shout defined in config.c */
 	if(GET_LEVEL(ch) < level_can_shout) {
-		send_to_char(ch, "You must be at least level %d before you can %s.\r\n", level_can_shout, com_msgs[subcmd][1]);
+		send_to_char(ch, "You must be at least level %d before you can %s.", level_can_shout, com_msgs[subcmd][1]);
 		return;
 	}
 
@@ -431,13 +431,13 @@ ACMD(do_gen_comm) {
 
 	/* make sure that there is something there to say! */
 	if(!*argument) {
-		send_to_char(ch, "Yes, %s, fine, %s we must, but WHAT???\r\n", com_msgs[subcmd][1], com_msgs[subcmd][1]);
+		send_to_char(ch, "Yes, %s, fine, %s we must, but WHAT???", com_msgs[subcmd][1], com_msgs[subcmd][1]);
 		return;
 	}
 
 	if(subcmd == SCMD_HOLLER) {
 		if(GET_MOVE(ch) < holler_move_cost) {
-			send_to_char(ch, "You're too exhausted to holler.\r\n");
+			send_to_char(ch, "You're too exhausted to holler.");
 			return;
 		} else {
 			GET_MOVE(ch) -= holler_move_cost;
@@ -451,7 +451,7 @@ ACMD(do_gen_comm) {
 	if(PRF_FLAGGED(ch, PRF_NOREPEAT)) {
 		send_to_char(ch, "%s", OK);
 	} else {
-		send_to_char(ch, "%sYou %s, '%s'%s\r\n", COLOR_LEV(ch) >= C_CMP ? color_on : "", com_msgs[subcmd][1], argument, CCNRM(ch, C_CMP));
+		send_to_char(ch, "%sYou %s, '%s'%s", COLOR_LEV(ch) >= C_CMP ? color_on : "", com_msgs[subcmd][1], argument, CCNRM(ch, C_CMP));
 	}
 
 	mods::chat::communicate<player_ptr_t,std::string_view>(player,com_msgs[subcmd][1],argument);
@@ -460,14 +460,14 @@ ACMD(do_gen_comm) {
 
 ACMD(do_qcomm) {
 	if(!PRF_FLAGGED(ch, PRF_QUEST)) {
-		send_to_char(ch, "You aren't even part of the quest!\r\n");
+		send_to_char(ch, "You aren't even part of the quest!");
 		return;
 	}
 
 	skip_spaces(&argument);
 
 	if(!*argument) {
-		send_to_char(ch, "%c%s?  Yes, fine, %s we must, but WHAT??\r\n", UPPER(*CMD_NAME), CMD_NAME + 1, CMD_NAME);
+		send_to_char(ch, "%c%s?  Yes, fine, %s we must, but WHAT??", UPPER(*CMD_NAME), CMD_NAME + 1, CMD_NAME);
 	} else {
 		char buf[MAX_STRING_LENGTH];
 

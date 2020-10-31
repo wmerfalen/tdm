@@ -241,7 +241,7 @@ namespace mods {
 			/* First parameter is character name */
 			std::string message = duk_to_string(ctx,0);
 			if(mods::globals::current_player){
-				*mods::globals::current_player << message << "\r\n";
+				mods::globals::current_player->sendln(message);
 			}
 			duk_push_number(ctx,0);
 			return 0;

@@ -1124,10 +1124,10 @@ void update_char_objects(char_data *ch) {
 				i = --GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2);
 
 				if(i == 1) {
-					send_to_char(ch, "Your light begins to flicker and fade.\r\n");
+					send_to_char(ch, "Your light begins to flicker and fade.");
 					act("$n's light begins to flicker and fade.", FALSE, ch, 0, 0, TO_ROOM);
 				} else if(i == 0) {
-					send_to_char(ch, "Your light sputters out and dies.\r\n");
+					send_to_char(ch, "Your light sputters out and dies.");
 					act("$n's light sputters out and dies.", FALSE, ch, 0, 0, TO_ROOM);
 					world[IN_ROOM(ch)].light--;
 				}

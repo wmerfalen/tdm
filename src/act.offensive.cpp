@@ -363,11 +363,11 @@ ACMD(do_hit) {
 	one_argument(argument, arg);
 
 	if(!*arg) {
-		send_to_char(ch, "Hit who?\r\n");
+		send_to_char(ch, "Hit who?");
 	} else if(!(vict = get_char_vis(ch, arg, NULL, FIND_CHAR_ROOM))) {
-		send_to_char(ch, "They don't seem to be here.\r\n");
+		send_to_char(ch, "They don't seem to be here.");
 	} else if(vict == ch) {
-		send_to_char(ch, "You hit yourself...OUCH!.\r\n");
+		send_to_char(ch, "You hit yourself...OUCH!.");
 		act("$n hits $mself, and says OUCH!", FALSE, ch, 0, vict, TO_ROOM);
 	} else if(AFF_FLAGGED(ch, AFF_CHARM) && (ch->master == vict)) {
 		act("$N is just such a good friend, you simply can't hit $M.", FALSE, ch, 0, vict, TO_CHAR);
@@ -376,7 +376,7 @@ ACMD(do_hit) {
 		if(!pk_allowed) {
 			if(!IS_NPC(vict) && !IS_NPC(ch)) {
 				if(subcmd != SCMD_MURDER) {
-					send_to_char(ch, "Use 'murder' to hit another player.\r\n");
+					send_to_char(ch, "Use 'murder' to hit another player.");
 					return;
 				} else {
 					check_killer(ch, vict);
@@ -392,7 +392,7 @@ ACMD(do_hit) {
 			hit(ch, vict, TYPE_UNDEFINED);
 			WAIT_STATE(ch, PULSE_VIOLENCE + 2);
 		} else {
-			send_to_char(ch, "You do the best you can!\r\n");
+			send_to_char(ch, "You do the best you can!");
 		}
 	}
 }
@@ -411,12 +411,12 @@ ACMD(do_kill) {
 	one_argument(argument, arg);
 
 	if(!*arg) {
-		send_to_char(ch, "Kill who?\r\n");
+		send_to_char(ch, "Kill who?");
 	} else {
 		if(!(vict = get_char_vis(ch, arg, NULL, FIND_CHAR_ROOM))) {
-			send_to_char(ch, "They aren't here.\r\n");
+			send_to_char(ch, "They aren't here.");
 		} else if(ch == vict) {
-			send_to_char(ch, "Your mother would be so sad.. :(\r\n");
+			send_to_char(ch, "Your mother would be so sad.. :(");
 		} else {
 			act("You chop $M to pieces!  Ah!  The blood!", FALSE, ch, 0, vict, TO_CHAR);
 			act("$N chops you to pieces!", FALSE, vict, 0, ch, TO_CHAR);
@@ -435,34 +435,34 @@ ACMD(do_backstab) {
 	int percent, prob;
 
 	if(IS_NPC(ch) || !GET_SKILL(ch, SKILL_BACKSTAB)) {
-		send_to_char(ch, "You have no idea how to do that.\r\n");
+		send_to_char(ch, "You have no idea how to do that.");
 		return;
 	}
 
 	one_argument(argument, buf);
 
 	if(!(vict = get_char_vis(ch, buf, NULL, FIND_CHAR_ROOM))) {
-		send_to_char(ch, "Backstab who?\r\n");
+		send_to_char(ch, "Backstab who?");
 		return;
 	}
 
 	if(vict == ch) {
-		send_to_char(ch, "How can you sneak up on yourself?\r\n");
+		send_to_char(ch, "How can you sneak up on yourself?");
 		return;
 	}
 
 	if(!GET_EQ(ch, WEAR_WIELD)) {
-		send_to_char(ch, "You need to wield a weapon to make it a success.\r\n");
+		send_to_char(ch, "You need to wield a weapon to make it a success.");
 		return;
 	}
 
 	if(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3) != TYPE_PIERCE - TYPE_HIT) {
-		send_to_char(ch, "Only piercing weapons can be used for backstabbing.\r\n");
+		send_to_char(ch, "Only piercing weapons can be used for backstabbing.");
 		return;
 	}
 
 	if(FIGHTING(vict)) {
-		send_to_char(ch, "You can't backstab a fighting person -- they're too alert!\r\n");
+		send_to_char(ch, "You can't backstab a fighting person -- they're too alert!");
 		return;
 	}
 
@@ -496,14 +496,14 @@ ACMD(do_order) {
 	half_chop(argument, name, message);
 
 	if(!*name || !*message) {
-		send_to_char(ch, "Order who to do what?\r\n");
+		send_to_char(ch, "Order who to do what?");
 	} else if(!(vict = get_char_vis(ch, name, NULL, FIND_CHAR_ROOM)) && !is_abbrev(name, "followers")) {
-		send_to_char(ch, "That person isn't here.\r\n");
+		send_to_char(ch, "That person isn't here.");
 	} else if(ch == vict) {
-		send_to_char(ch, "You obviously suffer from skitzofrenia.\r\n");
+		send_to_char(ch, "You obviously suffer from skitzofrenia.");
 	} else {
 		if(AFF_FLAGGED(ch, AFF_CHARM)) {
-			send_to_char(ch, "Your superior would not aprove of you giving orders.\r\n");
+			send_to_char(ch, "Your superior would not aprove of you giving orders.");
 			return;
 		}
 
@@ -539,7 +539,7 @@ ACMD(do_order) {
 			if(found) {
 				send_to_char(ch, "%s", OK);
 			} else {
-				send_to_char(ch, "Nobody here is a loyal subject of yours!\r\n");
+				send_to_char(ch, "Nobody here is a loyal subject of yours!");
 			}
 		}
 	}
@@ -552,7 +552,7 @@ ACMD(do_flee) {
 	char_data *was_fighting;
 
 	if(GET_POS(ch) < POS_FIGHTING) {
-		send_to_char(ch, "You are in pretty bad shape, unable to flee!\r\n");
+		send_to_char(ch, "You are in pretty bad shape, unable to flee!");
 		return;
 	}
 
@@ -565,7 +565,7 @@ ACMD(do_flee) {
 			was_fighting = FIGHTING(ch);
 
 			if(do_simple_move(ch, attempt, TRUE)) {
-				send_to_char(ch, "You flee head over heels.\r\n");
+				send_to_char(ch, "You flee head over heels.");
 
 				if(was_fighting && !IS_NPC(ch)) {
 					loss = GET_MAX_HIT(was_fighting) - GET_HIT(was_fighting);
@@ -580,7 +580,7 @@ ACMD(do_flee) {
 		}
 	}
 
-	send_to_char(ch, "PANIC!  You couldn't escape!\r\n");
+	send_to_char(ch, "PANIC!  You couldn't escape!");
 }
 
 
@@ -592,17 +592,17 @@ ACMD(do_bash) {
 	one_argument(argument, arg);
 
 	if(IS_NPC(ch) || !GET_SKILL(ch, SKILL_BASH)) {
-		send_to_char(ch, "You have no idea how.\r\n");
+		send_to_char(ch, "You have no idea how.");
 		return;
 	}
 
 	if(ROOM_FLAGGED(IN_ROOM(ch), ROOM_PEACEFUL)) {
-		send_to_char(ch, "This room just has such a peaceful, easy feeling...\r\n");
+		send_to_char(ch, "This room just has such a peaceful, easy feeling...");
 		return;
 	}
 
 	if(!GET_EQ(ch, WEAR_WIELD)) {
-		send_to_char(ch, "You need to wield a weapon to make it a success.\r\n");
+		send_to_char(ch, "You need to wield a weapon to make it a success.");
 		return;
 	}
 
@@ -610,13 +610,13 @@ ACMD(do_bash) {
 		if(FIGHTING(ch) && IN_ROOM(ch) == IN_ROOM(FIGHTING(ch))) {
 			vict = FIGHTING(ch);
 		} else {
-			send_to_char(ch, "Bash who?\r\n");
+			send_to_char(ch, "Bash who?");
 			return;
 		}
 	}
 
 	if(vict == ch) {
-		send_to_char(ch, "Aren't we funny today...\r\n");
+		send_to_char(ch, "Aren't we funny today...");
 		return;
 	}
 
@@ -730,7 +730,7 @@ ACMD(do_kick) {
 	int percent, prob;
 
 	if(IS_NPC(ch) || !GET_SKILL(ch, SKILL_KICK)) {
-		send_to_char(ch, "You have no idea how.\r\n");
+		send_to_char(ch, "You have no idea how.");
 		return;
 	}
 
@@ -740,13 +740,13 @@ ACMD(do_kick) {
 		if(FIGHTING(ch) && IN_ROOM(ch) == IN_ROOM(FIGHTING(ch))) {
 			vict = FIGHTING(ch);
 		} else {
-			send_to_char(ch, "Kick who?\r\n");
+			send_to_char(ch, "Kick who?");
 			return;
 		}
 	}
 
 	if(vict == ch) {
-		send_to_char(ch, "Aren't we funny today...\r\n");
+		send_to_char(ch, "Aren't we funny today...");
 		return;
 	}
 

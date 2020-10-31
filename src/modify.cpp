@@ -188,7 +188,7 @@ ACMD(do_skillset) {
 	argument = one_argument(argument, name);
 
 	if(!*name) {			/* no arguments. print an informative text */
-		send_to_char(ch, "Syntax: skillset <name> '<skill>' <value>\r\n"
+		send_to_char(ch, "Syntax: skillset <name> '<skill>' <value>"
 		             "Skill being one of the following:\r\n");
 
 		for(qend = 0, i = 0; i <= TOP_SPELL_DEFINE; i++) {
@@ -199,12 +199,12 @@ ACMD(do_skillset) {
 			send_to_char(ch, "%18s", spell_info[i].name);
 
 			if(qend++ % 4 == 3) {
-				send_to_char(ch, "\r\n");
+				send_to_char(ch, "");
 			}
 		}
 
 		if(qend % 4 != 0) {
-			send_to_char(ch, "\r\n");
+			send_to_char(ch, "");
 		}
 
 		return;
@@ -219,12 +219,12 @@ ACMD(do_skillset) {
 
 	/* If there is no chars in argument */
 	if(!*argument) {
-		send_to_char(ch, "Skill name expected.\r\n");
+		send_to_char(ch, "Skill name expected.");
 		return;
 	}
 
 	if(*argument != '\'') {
-		send_to_char(ch, "Skill must be enclosed in: ''\r\n");
+		send_to_char(ch, "Skill must be enclosed in: ''");
 		return;
 	}
 
@@ -235,7 +235,7 @@ ACMD(do_skillset) {
 	}
 
 	if(argument[qend] != '\'') {
-		send_to_char(ch, "Skill must be enclosed in: ''\r\n");
+		send_to_char(ch, "Skill must be enclosed in: ''");
 		return;
 	}
 
@@ -243,7 +243,7 @@ ACMD(do_skillset) {
 	help[qend - 1] = '\0';
 
 	if((skill = find_skill_num(help)) <= 0) {
-		send_to_char(ch, "Unrecognized skill.\r\n");
+		send_to_char(ch, "Unrecognized skill.");
 		return;
 	}
 
@@ -251,24 +251,24 @@ ACMD(do_skillset) {
 	argument = one_argument(argument, buf);
 
 	if(!*buf) {
-		send_to_char(ch, "Learned value expected.\r\n");
+		send_to_char(ch, "Learned value expected.");
 		return;
 	}
 
 	value = atoi(buf);
 
 	if(value < 0) {
-		send_to_char(ch, "Minimum value for learned is 0.\r\n");
+		send_to_char(ch, "Minimum value for learned is 0.");
 		return;
 	}
 
 	if(value > 100) {
-		send_to_char(ch, "Max value for learned is 100.\r\n");
+		send_to_char(ch, "Max value for learned is 100.");
 		return;
 	}
 
 	if(IS_NPC(vict)) {
-		send_to_char(ch, "You can't set NPC skills.\r\n");
+		send_to_char(ch, "You can't set NPC skills.");
 		return;
 	}
 
@@ -278,7 +278,7 @@ ACMD(do_skillset) {
 	 */
 	SET_SKILL(vict, skill, value);
 	mudlog(BRF, LVL_IMMORT, TRUE, "%s changed %s's %s to %d.", GET_NAME(ch).c_str(), GET_NAME(vict).c_str(), spell_info[skill].name, value);
-	send_to_char(ch, "You change %s's %s to %d.\r\n", GET_NAME(vict).c_str(), spell_info[skill].name, value);
+	send_to_char(ch, "You change %s's %s to %d.", GET_NAME(vict).c_str(), spell_info[skill].name, value);
 }
 
 

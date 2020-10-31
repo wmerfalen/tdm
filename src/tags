@@ -256,6 +256,7 @@ ACMD_REMOVE	boards.cpp	/^int ACMD_READ, ACMD_LOOK, ACMD_EXAMINE, ACMD_WRITE, ACM
 ACMD_WRITE	boards.cpp	/^int ACMD_READ, ACMD_LOOK, ACMD_EXAMINE, ACMD_WRITE, ACMD_REMOVE;$/;"	v
 ACOG	mods/weapon.hpp	/^		ACOG, LASER_DOT, HOLOGRAPHIC,$/;"	e	enum:mods::weapon::scope_t
 ACTNULL	comm.cpp	/^const char *ACTNULL = "<NULL>";$/;"	v
+ACT_DEBUG	act.social.cpp	88;"	d	file:
 ADMIN_DONE	globals.hpp	286;"	d
 ADMIN_FAIL	globals.hpp	287;"	d
 ADMIN_REJECT	globals.hpp	288;"	d
@@ -672,7 +673,7 @@ CGET_DEF	mods/values.cpp	522;"	d	file:
 CHAINABLE_BREACHING	mods/skills.hpp	/^			CHAINABLE_BREACHING,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 CHAOTIC	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 CHARM	mods/flags.hpp	/^		CHARM,$/;"	e	enum:mods::flags::aff
-CHECK_NULL	comm.cpp	2368;"	d	file:
+CHECK_NULL	comm.cpp	2369;"	d	file:
 CHECK_PLAYER_SPECIAL	utils.h	214;"	d
 CHECK_PLAYER_SPECIAL	utils.h	217;"	d
 CHECK_WAIT	utils.h	378;"	d
@@ -942,7 +943,6 @@ DP_S_MOD	bsd-snprintf.cpp	135;"	d	file:
 DRONE	mods/player.hpp	/^			PLAYER, MOB, DRONE,$/;"	e	enum:mods::player::player_type_enum_t
 DRONE_MUTED_DESCRIPTOR	mods/player.hpp	/^			DRONE_MUTED_DESCRIPTOR$/;"	e	enum:mods::player::player_type_enum_t
 DRONE_NONE	mods/item-types.hpp	/^		DRONE_NONE = 0,$/;"	e	enum:mods::weapon::type::drone
-DRONE_OWNER_KEY	mods/drone.cpp	12;"	d	file:
 DRONE_WEAPON_SET_NUM	mods/drone.hpp	14;"	d
 DRUNK	structs.h	612;"	d
 DRY	structs.h	/^			DRY,$/;"	m	struct:room_data	typeref:enum:room_data::
@@ -1913,8 +1913,8 @@ MENTOC_MEMBER_VARS_IMPL	mods/item-types.hpp	461;"	d
 MENTOC_MOB_WEARS	mods/item-types.hpp	373;"	d
 MENTOC_MS_COMP	mods/doors.hpp	231;"	d
 MENTOC_MS_COMP	mods/doors.hpp	245;"	d
-MENTOC_NPC_CHECK	mods/player.cpp	69;"	d	file:
-MENTOC_NPC_CHECK_0	mods/player.cpp	70;"	d	file:
+MENTOC_NPC_CHECK	mods/player.cpp	68;"	d	file:
+MENTOC_NPC_CHECK_0	mods/player.cpp	69;"	d	file:
 MENTOC_OBI	mods/builder.cpp	30;"	d	file:
 MENTOC_OBI2	mods/builder.cpp	31;"	d	file:
 MENTOC_OBJ_DATA_FEED_DUAL	structs.cpp	64;"	d	file:
@@ -2050,12 +2050,12 @@ MORT_CAN_SEE	utils.h	447;"	d
 MORT_CAN_SEE_OBJ	utils.h	470;"	d
 MOTD_FILE	db.h	77;"	d
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1335;"	d	file:
-MR	mods/player.cpp	1350;"	d	file:
-MR	structs.cpp	542;"	d	file:
-MR	structs.cpp	553;"	d	file:
-MRC	mods/player.cpp	1336;"	d	file:
-MRC	mods/player.cpp	1351;"	d	file:
+MR	mods/player.cpp	1336;"	d	file:
+MR	mods/player.cpp	1351;"	d	file:
+MR	structs.cpp	545;"	d	file:
+MR	structs.cpp	556;"	d	file:
+MRC	mods/player.cpp	1337;"	d	file:
+MRC	mods/player.cpp	1352;"	d	file:
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
 MSG_HEADING	boards.h	44;"	d
@@ -2154,7 +2154,7 @@ NO_LOGIC	mods/behaviour_tree_status.hpp	/^		NO_LOGIC,$/;"	e	enum:mods::behaviour
 NO_PRIMARY_WIELDED_EVENT	mods/damage-event.hpp	/^	NO_PRIMARY_WIELDED_EVENT,$/;"	e	enum:uint16_t
 NPC	act.wizard.cpp	2341;"	d	file:
 NPC	mods/scan.hpp	/^			NPC,$/;"	e	enum:mods::scan::find_type_t
-NPC_SEND_DEBUG	mods/player.cpp	65;"	d	file:
+NPC_SEND_DEBUG	mods/player.cpp	64;"	d	file:
 NRM	utils.h	119;"	d
 NSLC	telnet.h	200;"	d
 NTELOPTS	telnet.h	125;"	d
@@ -2240,7 +2240,7 @@ OUTSIDE_WATER	mods/rooms.hpp	/^		OUTSIDE_WATER,$/;"	e	enum:mods::rooms::sector_t
 OUTSIDE_WOODEN_WALL	mods/rooms.hpp	/^		OUTSIDE_WOODEN_WALL,	\/** rappelling *\/$/;"	e	enum:mods::rooms::sector_type_t
 OUTSIDE_WOODEN_WALLS	mods/rooms.hpp	/^		OUTSIDE_WOODEN_WALLS,$/;"	e	enum:mods::rooms::sector_type_t
 OUT_OF_AMMO_EVENT	mods/damage-event.hpp	/^	OUT_OF_AMMO_EVENT,$/;"	e	enum:uint16_t
-O_NONBLOCK	comm.cpp	2085;"	d	file:
+O_NONBLOCK	comm.cpp	2047;"	d	file:
 Obj_from_store	objsave.cpp	/^struct obj_data *Obj_from_store(struct obj_file_elem object, int *location) {$/;"	f
 Obj_to_store	objsave.cpp	/^int Obj_to_store(struct obj_data *obj, FILE *fl, int location) {$/;"	f
 OfType	mods/catch.hpp	/^		enum OfType {$/;"	g	struct:Catch::ResultWas
@@ -2605,7 +2605,7 @@ SEEK_END	utils.h	537;"	d
 SEEK_SET	utils.h	535;"	d
 SELECTOR	mods/behaviour_tree_node.hpp	/^		enum node_type_t { DO_NOTHING, SELECTOR, SEQUENCE, LEAF };$/;"	e	enum:mods::behaviour_tree_node::node_type_t
 SELF	utils.h	452;"	d
-SENDOK	comm.cpp	2514;"	d	file:
+SENDOK	comm.cpp	2511;"	d	file:
 SENSE_LIFE	mods/flags.hpp	/^		SENSE_LIFE,$/;"	e	enum:mods::flags::aff
 SENSE_MOTION	mods/weapon-types.hpp	/^		SENSE_MOTION,$/;"	e	enum:mods::weapon::capabilities::cap_t
 SENSOR	mods/aoe.hpp	/^		SENSOR, \/** senses objects or enemies within blast_radius *\/$/;"	e	enum:mods::aoe::types_t
@@ -3482,7 +3482,6 @@ __find_player_by_name	mods/js.cpp	/^			static inline bool __find_player_by_name(
 _clrlevel	screen.h	26;"	d
 _db_handle	mods/lmdb.cpp	/^	_db_handle::_db_handle(std::string directory,std::string db_name,const uint64_t & flags,const uint16_t & mode,bool unused) $/;"	f	class:mods::lmdb::_db_handle
 _db_handle	mods/lmdb.hpp	/^	struct _db_handle {$/;"	s	namespace:mods::lmdb
-_old_unused_vwrite_to_output_unused_	comm.cpp	/^size_t _old_unused_vwrite_to_output_unused_(mods::descriptor_data &t, const char *format, va_list args) {$/;"	f
 _parse_name	interpreter.cpp	/^int _parse_name(char *arg, char *name) {$/;"	f
 _s	mods/lmdb.hpp	/^	inline static std::string operator "" _s(const char* str,std::size_t size){ $/;"	f	namespace:mods::lmdb
 _s	mods/util.hpp	/^static inline std::string operator "" _s(const char* s,uint64_t i) {$/;"	f
@@ -4030,7 +4029,7 @@ crawl_lambda	mods/overhead_map.cpp	/^	void crawl_lambda(std::vector<std::vector<
 create	mods/behaviour_tree_node.hpp	/^		static child_node_t create(callback_t& c,node_type_t n_type){$/;"	f	struct:mods::behaviour_tree_node
 create	mods/behaviour_tree_node.hpp	/^		static child_node_t create(callback_t& c,node_type_t n_type,children_t& ch){$/;"	f	struct:mods::behaviour_tree_node
 create	mods/behaviour_tree_node.hpp	/^		static child_node_t create(node_type_t n_type){$/;"	f	struct:mods::behaviour_tree_node
-create	mods/drone.cpp	/^	player_ptr_t create(uuid_t owner_uuid) {$/;"	f	namespace:mods::drone
+create	mods/drone.cpp	/^		player_ptr_t create(uuid_t owner_uuid) {$/;"	f	namespace:mods::drone
 create	mods/events.cpp	/^			void create(uuid_t uuid){$/;"	f	namespace:mods::events::publish::objects
 create	mods/events.cpp	/^			void create(uuid_t uuid){$/;"	f	namespace:mods::events::publish::players
 create	mods/sql.hpp	/^			compositor<T>& create() {$/;"	f	struct:mods::sql::compositor
@@ -4662,6 +4661,7 @@ drone_description_t	mods/yaml.hpp	/^		drone_description_t() :$/;"	f	struct:mods:
 drone_description_t	mods/yaml.hpp	/^	struct drone_description_t : public yaml_description_t {$/;"	s	namespace:mods::yaml
 drone_impl	mods/drone.cpp	/^	drone_impl::drone_impl(uuid_t ch) : m_char_data(nullptr) { };$/;"	f	class:mods::drone_impl
 drone_impl	mods/drone.hpp	/^	struct drone_impl {$/;"	s	namespace:mods
+drone_simulate	mods/player.hpp	/^		bool& drone_simulate(){ return m_char_data->drone_simulate; }$/;"	f	struct:mods::player
 drone_uuid	mods/player.hpp	/^		uuid_t& drone_uuid(){ return m_char_data->drone_uuid; }$/;"	f	struct:mods::player
 dts_are_dumps	config.cpp	/^int dts_are_dumps = YES;$/;"	v
 duktape_context	globals.cpp	/^		duk_context* duktape_context;$/;"	m	namespace:mods::globals	file:
@@ -4902,7 +4902,6 @@ flags_door	act.movement.cpp	/^	const int flags_door[] = {$/;"	v
 flashbang	mods/flashbang.hpp	/^namespace mods::flashbang {$/;"	n	class:mods
 float_types	mods/values.cpp	/^		static const std::vector<std::string> float_types = {$/;"	m	namespace:mods::values	file:
 flush_output	structs.cpp	/^			size_t mods::descriptor_data::flush_output(){$/;"	f	class:mods::mods::descriptor_data
-flush_queues	comm.cpp	/^void flush_queues(mods::descriptor_data &d) {$/;"	f
 flush_to_db	mods/builder.cpp	/^	bool flush_to_db(char_data *ch,int room) {$/;"	f	namespace:mods::builder
 flush_to_db	mods/yaml.cpp	/^	uint64_t armor_description_t::flush_to_db(){$/;"	f	class:mods::yaml::armor_description_t
 flush_to_db	mods/yaml.cpp	/^	uint64_t container_description_t::flush_to_db(){$/;"	f	class:mods::yaml::container_description_t
@@ -5051,9 +5050,9 @@ get_day	mods/date-time.cpp	/^	std::string get_day(){$/;"	f	namespace:mods::date_
 get_day	mods/js.cpp	/^		static duk_ret_t get_day(duk_context *ctx) {$/;"	f	namespace:mods::js
 get_db_id	mods/player.cpp	/^	aligned_int_t player::get_db_id() const {$/;"	f	class:mods::player
 get_dir	mods/js.hpp	/^				inline std::string_view get_dir() {$/;"	f	struct:mods::js::include
-get_drone	mods/drone.cpp	/^	void get_drone(uuid_t  owner_uuid) {$/;"	f	namespace:mods::drone
+get_drone	mods/drone.cpp	/^		void get_drone(uuid_t  owner_uuid) {$/;"	f	namespace:mods::drone
 get_enum_by_name	mods/skills.cpp	/^	int get_enum_by_name(std::string_view name){$/;"	f	namespace:mods::skills
-get_existing	mods/drone.cpp	/^	uuid_t  get_existing(uuid_t  owner_uuid) {$/;"	f	namespace:mods::drone
+get_existing	mods/drone.cpp	/^		uuid_t  get_existing(uuid_t  owner_uuid) {$/;"	f	namespace:mods::drone
 get_explosive_type	mods/object-utils.hpp	/^	inline mw_explosive get_explosive_type<uuid_t>(uuid_t& obj_uuid){$/;"	f	namespace:mods::object_utils
 get_explosive_type	mods/object-utils.hpp	/^	static inline mw_explosive get_explosive_type(T& obj){$/;"	f	namespace:mods::object_utils
 get_file	mods/js.hpp	/^				inline std::string_view get_file() {$/;"	f	struct:mods::js::include
@@ -5404,7 +5403,7 @@ intent_debug	mods/intent.cpp	3;"	d	file:
 intent_t	mods/intent.hpp	/^	struct intent_t {$/;"	s	namespace:mods::intent
 intent_to_t	mods/intent.hpp	/^	enum intent_to_t {$/;"	g	namespace:mods::intent
 intents	mods/intent.cpp	/^	static std::vector<mods::intent::intent_t> intents;$/;"	m	namespace:mods::intent	file:
-interpret	mods/drone.cpp	/^	bool interpret(uuid_t owner_uuid,const std::string& argument) {$/;"	f	namespace:mods::drone
+interpret	mods/drone.cpp	/^		bool interpret(uuid_t owner_uuid,const std::string& argument) {$/;"	f	namespace:mods::drone
 interpret_espec	db.cpp	/^void interpret_espec(const char *keyword, const char *value, int i, int nr) {$/;"	f
 interpreter	globals.cpp	/^INIT(mods::interpreter);$/;"	v
 interpreter	interpreter.cpp	/^namespace mods::interpreter {$/;"	n	class:mods	file:
@@ -6081,7 +6080,7 @@ mud_time_to_secs	utils.cpp	/^time_t mud_time_to_secs(struct time_info_data *now)
 mudlog	utils.cpp	/^void mudlog(int type, int level, int file, const char *str, ...) {$/;"	f
 muzzle_velocity	mods/weapon.hpp	/^			int muzzle_velocity;	\/\/ Feet per second$/;"	m	struct:mods::weapon::yaml::rifle_description_t
 my_signal	comm.cpp	/^sigfunc *my_signal(int signo, sigfunc *func) {$/;"	f
-my_signal	comm.cpp	2162;"	d	file:
+my_signal	comm.cpp	2124;"	d	file:
 mzone_debug	mods/zone.hpp	10;"	d
 mzone_debug	mods/zone.hpp	8;"	d
 name	db.h	/^	char	*name;		    \/* name of this zone                  *\/$/;"	m	struct:zone_data
@@ -6321,6 +6320,7 @@ overhead	structs.cpp	/^		std::string_view room_data::overhead(const lense_type_t
 overhead_map	mods/overhead_map.cpp	/^namespace mods::overhead_map {$/;"	n	class:mods	file:
 overhead_map	mods/overhead_map.hpp	/^namespace mods::overhead_map {$/;"	n	class:mods
 owner	house.h	/^	long owner;			\/* idnum of house's owner	*\/$/;"	m	struct:house_control_rec
+owner_drone	mods/drone.cpp	/^		std::pair<player_ptr_t,player_ptr_t> owner_drone(uuid_t owner_uuid){$/;"	f	namespace:mods::drone
 owner_uuid	mods/camera.hpp	/^			uuid_t owner_uuid() const { return m_player; }$/;"	f	class:mods::camera
 pad_room	globals.cpp	/^		void pad_room(int room,char_data* ch,int door){$/;"	f	namespace:mods::globals
 page	mods/player.cpp	/^	void player::page(int pg) {$/;"	f	class:mods::player
@@ -6925,6 +6925,7 @@ send_to_char	mods/js.cpp	/^		static duk_ret_t send_to_char(duk_context *ctx) {$/
 send_to_outdoor	comm.cpp	/^void send_to_outdoor(const char *messg, ...) {$/;"	f
 send_to_room	comm.cpp	/^void send_to_room(room_rnum room, const char *messg, ...) {$/;"	f
 send_to_room_except	comm.cpp	/^void send_to_room_except(room_rnum room, const std::vector<char_data*>& except, const char *messg, ...) {$/;"	f
+send_to_room_except	comm.cpp	/^void send_to_room_except(room_rnum room, const std::vector<player_ptr_t>& except, const char *messg, ...) {$/;"	f
 send_to_room_except	comm.cpp	/^void send_to_room_except(room_rnum room, player_ptr_t except_me, const char *messg, ...) {$/;"	f
 send_to_room_except	comm.cpp	/^void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...) {$/;"	f
 send_to_uuid	mods/js.cpp	/^		static duk_ret_t send_to_uuid(duk_context *ctx) {$/;"	f	namespace:mods::js
@@ -7102,7 +7103,7 @@ shutdown	globals.cpp	/^		void shutdown(void){$/;"	f	namespace:mods::globals
 siderail_t	mods/weapon.hpp	/^	enum siderail_t {$/;"	g	namespace:mods::weapon
 sigfunc	comm.h	/^typedef RETSIGTYPE sigfunc(int);$/;"	t
 signal_setup	comm.cpp	/^void signal_setup(void) {$/;"	f
-simulate	mods/drone.cpp	/^	void simulate(uuid_t  owner_uuid,bool value) {$/;"	f	namespace:mods::drone
+simulate	mods/drone.cpp	/^		void simulate(uuid_t  owner_uuid,bool value) {$/;"	f	namespace:mods::drone
 singular	spells.h	/^	const char	*singular;$/;"	m	struct:attack_hit_type
 site	db.h	/^	char	site[BANNED_SITE_LENGTH+1];$/;"	m	struct:ban_list_element
 siteok_everyone	config.cpp	/^int siteok_everyone = TRUE;$/;"	v
@@ -7197,11 +7198,11 @@ sql	mods/sql.hpp	/^			str_object sql() {$/;"	f	struct:mods::sql::compositor
 sql	mods/sql.hpp	/^namespace mods::sql {$/;"	n	class:mods
 sql_compositor	mods/builder_util.hpp	/^typedef mods::sql::compositor<mods::pq::transaction> sql_compositor;$/;"	t
 stack_data	shop.h	/^struct stack_data {$/;"	s
-start	mods/drone.cpp	/^	void start(uuid_t  owner_uuid) {$/;"	f	namespace:mods::drone
+start	mods/drone.cpp	/^		void start(uuid_t  owner_uuid) {$/;"	f	namespace:mods::drone
 start_fire_dissolver	mods/rooms.cpp	/^	void start_fire_dissolver(room_rnum room) {$/;"	f	namespace:mods::rooms
 start_histfile	mods/player.cpp	/^	void player::start_histfile(){$/;"	f	class:mods::player
 start_quest	mods/quests.cpp	/^		bool start_quest(char_data* ch,int quest_id) {$/;"	f	namespace:mods::quests
-started	mods/drone.cpp	/^	bool started(uuid_t  owner_uuid) {$/;"	f	namespace:mods::drone
+started	mods/drone.cpp	/^		bool started(uuid_t  owner_uuid) {$/;"	f	namespace:mods::drone
 state	mods/ai_state.hpp	/^			enum state {$/;"	g	class:mods::ai_state
 state	mods/debug.cpp	/^	state::state(bool _show_tics) : m_show_tics(_show_tics) {$/;"	f	class:mods::debug::state
 state	mods/debug.hpp	/^	struct state {$/;"	s	namespace:mods::debug
@@ -7225,7 +7226,7 @@ stoi	mods/util.cpp	/^		std::optional<int> stoi(std::string_view str) {$/;"	f	nam
 stoi	mods/util.hpp	/^		T stoi(const pqxx::result::reference & i){$/;"	f	namespace:mods::util
 stoi	mods/util.hpp	/^		T stoi(const std::string& i){$/;"	f	namespace:mods::util
 stoi_optional	mods/util.hpp	/^		std::optional<T> stoi_optional(std::string_view str){$/;"	f	namespace:mods::util
-stop	mods/drone.cpp	/^	void stop(uuid_t  owner_uuid) {$/;"	f	namespace:mods::drone
+stop	mods/drone.cpp	/^		void stop(uuid_t  owner_uuid) {$/;"	f	namespace:mods::drone
 stop_fighting	fight.cpp	/^void stop_fighting(char_data *ch) {$/;"	f
 stop_fire_dissolver	mods/rooms.hpp	/^	static inline void stop_fire_dissolver(room_rnum room) {$/;"	f	namespace:mods::rooms
 stop_follower	utils.cpp	/^void stop_follower(char_data *ch) {$/;"	f
@@ -7595,7 +7596,7 @@ world_conf	mods/world-configuration.cpp	/^namespace mods::world_conf {$/;"	n	cla
 world_conf	mods/world-configuration.hpp	/^namespace mods::world_conf {$/;"	n	class:mods
 worn_by	structs.h	/^		char_data *worn_by;	  \/* Worn by?			      *\/$/;"	m	struct:obj_data
 worn_on	structs.h	/^		sh_int worn_on;		  \/* Worn where?		      *\/$/;"	m	struct:obj_data
-write	comm.cpp	1529;"	d	file:
+write	comm.cpp	1493;"	d	file:
 write_aliases	alias.cpp	/^void write_aliases(char_data *ch) {$/;"	f
 write_ban_list	ban.cpp	/^void write_ban_list(void) {$/;"	f
 write_db_values	mods/integral-objects.cpp	/^	int write_db_values(std::string_view section_name, std::string_view prefix, const std::vector<std::string>& values){$/;"	f	namespace:mods::integral_objects
@@ -7611,7 +7612,7 @@ write_example_file	mods/yaml.cpp	/^	int16_t trap_description_t::write_example_fi
 write_histfile	mods/player.cpp	/^	void player::write_histfile(std::string_view line){$/;"	f	class:mods::player
 write_lvl	boards.h	/^	int	write_lvl;	\/* min level to write messages on this board *\/$/;"	m	struct:board_info_type
 write_meta	mods/meta_utils.cpp	/^	void write_meta(std::string table,mutable_map_t* values){$/;"	f	namespace:mods::meta_utils
-write_to_char	comm.cpp	/^void write_to_char(char_data *ch, std::string_view msg, bool newline,bool plain) {$/;"	f
+write_to_char	mods/player.cpp	/^		void player::write_to_char(std::string_view msg, bool newline,bool plain) {$/;"	f	class:mods::player
 write_to_descriptor	comm.cpp	/^int write_to_descriptor(socket_t desc, const char *txt) {$/;"	f
 write_to_file	mail.cpp	/^void write_to_file(void *buf, int size, long filepos) {$/;"	f
 write_to_output	comm.cpp	/^size_t write_to_output(mods::descriptor_data &t, const char *txt, ...) {$/;"	f

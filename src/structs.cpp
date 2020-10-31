@@ -442,7 +442,10 @@ bool obj_data::flagged(int value){
 						} else {
 							output += mods::globals::color_eval(msg);
 						}
-						if(newline){ output += "\r\n"; }
+						if(newline){
+							std::cerr << "descriptor_data::queue_output: newline requested\n";
+							output += "\r\n";
+						}
 						has_output = true;
 						return;
 					case queue_behaviour_enum_t::IGNORE_ALL:

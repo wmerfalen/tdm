@@ -175,26 +175,26 @@ ACMD(do_track) {
 
 	/* The character must have the track skill. */
 	if(IS_NPC(ch) || !GET_SKILL(ch, SKILL_TRACK)) {
-		send_to_char(ch, "You have no idea how.\r\n");
+		send_to_char(ch, "You have no idea how.");
 		return;
 	}
 
 	one_argument(argument, arg);
 
 	if(!*arg) {
-		send_to_char(ch, "Whom are you trying to track?\r\n");
+		send_to_char(ch, "Whom are you trying to track?");
 		return;
 	}
 
 	/* The person can't see the victim. */
 	if(!(vict = get_char_vis(ch, arg, NULL, FIND_CHAR_WORLD))) {
-		send_to_char(ch, "No one is around by that name.\r\n");
+		send_to_char(ch, "No one is around by that name.");
 		return;
 	}
 
 	/* We can't track the victim. */
 	if(AFF_FLAGGED(vict, AFF_NOTRACK)) {
-		send_to_char(ch, "You sense no trail.\r\n");
+		send_to_char(ch, "You sense no trail.");
 		return;
 	}
 
@@ -207,7 +207,7 @@ ACMD(do_track) {
 			dir = rand_number(0, NUM_OF_DIRS - 1);
 		} while(!CAN_GO(ch, dir) && --tries);
 
-		send_to_char(ch, "You sense a trail %s from here!\r\n", dirs[dir]);
+		send_to_char(ch, "You sense a trail %s from here!", dirs[dir]);
 		return;
 	}
 
@@ -216,19 +216,19 @@ ACMD(do_track) {
 
 	switch(dir) {
 		case BFS_ERROR:
-			send_to_char(ch, "Hmm.. something seems to be wrong.\r\n");
+			send_to_char(ch, "Hmm.. something seems to be wrong.");
 			break;
 
 		case BFS_ALREADY_THERE:
-			send_to_char(ch, "You're already in the same room!!\r\n");
+			send_to_char(ch, "You're already in the same room!!");
 			break;
 
 		case BFS_NO_PATH:
-			send_to_char(ch, "You can't sense a trail to %s from here.\r\n", HMHR(vict));
+			send_to_char(ch, "You can't sense a trail to %s from here.", HMHR(vict));
 			break;
 
 		default:	/* Success! */
-			send_to_char(ch, "You sense a trail %s from here!\r\n", dirs[dir]);
+			send_to_char(ch, "You sense a trail %s from here!", dirs[dir]);
 			break;
 	}
 }

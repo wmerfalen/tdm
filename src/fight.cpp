@@ -278,7 +278,7 @@ void check_killer(char_data *ch, char_data *vict) {
 	}
 
 	SET_BIT(PLR_FLAGS(ch), PLR_KILLER);
-	send_to_char(ch, "If you want to be a PLAYER KILLER, so be it...\r\n");
+	send_to_char(ch, "If you want to be a PLAYER KILLER, so be it...");
 	mudlog(BRF, LVL_IMMORT, TRUE, "PC Killer bit set on %s for initiating attack on %s at %s.",
 	       GET_NAME(ch).c_str(), GET_NAME(vict).c_str(), world[IN_ROOM(vict)].name.c_str());
 }
@@ -494,9 +494,9 @@ void perform_group_gain(char_data *ch, int base,
 	share = MIN(max_exp_gain, MAX(1, base));
 
 	if(share > 1) {
-		send_to_char(ch, "You receive your share of experience -- %d points.\r\n", share);
+		send_to_char(ch, "You receive your share of experience -- %d points.", share);
 	} else {
-		send_to_char(ch, "You receive your share of experience -- one measly little point!\r\n");
+		send_to_char(ch, "You receive your share of experience -- one measly little point!");
 	}
 
 	gain_exp(ch, share);
@@ -564,9 +564,9 @@ void solo_gain(char_data *ch, char_data *victim) {
 	exp = MAX(exp, 1);
 
 	if(exp > 1) {
-		send_to_char(ch, "You receive %d experience points.\r\n", exp);
+		send_to_char(ch, "You receive %d experience points.", exp);
 	} else {
-		send_to_char(ch, "You receive one lousy experience point.\r\n");
+		send_to_char(ch, "You receive one lousy experience point.");
 	}
 
 	gain_exp(ch, exp);
@@ -1082,7 +1082,7 @@ void perform_violence() {
 		}
 
 		if(GET_POS(ch) < POS_FIGHTING) {
-			send_to_char(ch, "You can't fight while sitting!!\r\n");
+			send_to_char(ch, "You can't fight while sitting!!");
 			continue;
 		}
 

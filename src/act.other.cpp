@@ -77,16 +77,16 @@ ACMD(do_quit) {
 	player->quitting(true);
 	db::extraction::save_player(player);
 	if(subcmd != SCMD_QUIT && GET_LEVEL(ch) < LVL_IMMORT) {
-		send_to_char(ch, "You have to type quit--no less, to quit!\r\n");
+		send_to_char(ch, "You have to type quit--no less, to quit!");
 	} else if(GET_POS(ch) == POS_FIGHTING) {
-		send_to_char(ch, "No way!  You're fighting for your life!\r\n");
+		send_to_char(ch, "No way!  You're fighting for your life!");
 	} else if(GET_POS(ch) < POS_STUNNED) {
-		send_to_char(ch, "You die before your time...\r\n");
+		send_to_char(ch, "You die before your time...");
 		die(ch);
 	} else {
 		act("$n has left the game.", TRUE, ch, 0, 0, TO_ROOM);
 		mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s has quit the game.", GET_NAME(ch).c_str());
-		send_to_char(ch, "Goodbye, friend.. Come back soon!\r\n");
+		send_to_char(ch, "Goodbye, friend.. Come back soon!");
 
 		/*  We used to check here for duping attempts, but we may as well
 		 *  do it right in extract_char(), since there is no check if a
@@ -129,12 +129,12 @@ ACMD(do_save) {
 		 * immortal advances from mortality, you may want < instead of <=.
 		 */
 		if(auto_save && GET_LEVEL(ch) <= LVL_IMMORT) {
-			send_to_char(ch, "Saving aliases.\r\n");
+			send_to_char(ch, "Saving aliases.");
 			write_aliases(ch);
 			return;
 		}
 
-		send_to_char(ch, "Saving %s and aliases.\r\n", GET_NAME(ch).c_str());
+		send_to_char(ch, "Saving %s and aliases.", GET_NAME(ch).c_str());
 
 	write_aliases(ch);
 	Crash_crashsave(ch);
@@ -148,7 +148,7 @@ ACMD(do_save) {
 /* generic function for commands which are normally overridden by
    special procedures - i.e., shop commands, mail commands, etc. */
 ACMD(do_not_here) {
-	send_to_char(ch, "Sorry, but you cannot do that here!\r\n");
+	send_to_char(ch, "Sorry, but you cannot do that here!");
 }
 
 
@@ -158,11 +158,11 @@ ACMD(do_sneak) {
 	byte percent;
 
 	if(IS_NPC(ch) || !GET_SKILL(ch, SKILL_SNEAK)) {
-		send_to_char(ch, "You have no idea how to do that.\r\n");
+		send_to_char(ch, "You have no idea how to do that.");
 		return;
 	}
 
-	send_to_char(ch, "Okay, you'll try to move silently for a while.\r\n");
+	send_to_char(ch, "Okay, you'll try to move silently for a while.");
 
 	if(AFF_FLAGGED(ch, AFF_SNEAK)) {
 		affect_from_char(ch, SKILL_SNEAK);
@@ -188,11 +188,11 @@ ACMD(do_hide) {
 	byte percent;
 
 	if(IS_NPC(ch) || !GET_SKILL(ch, SKILL_HIDE)) {
-		send_to_char(ch, "You have no idea how to do that.\r\n");
+		send_to_char(ch, "You have no idea how to do that.");
 		return;
 	}
 
-	send_to_char(ch, "You attempt to hide yourself.\r\n");
+	send_to_char(ch, "You attempt to hide yourself.");
 
 	if(AFF_FLAGGED(ch, AFF_HIDE)) {
 		REMOVE_BIT(AFF_FLAGS(ch), AFF_HIDE);
@@ -218,22 +218,22 @@ ACMD(do_steal) {
 //	int percent, gold, eq_pos, pcsteal = 0, ohoh = 0;
 //
 //	if(IS_NPC(ch) || !GET_SKILL(ch, SKILL_STEAL)) {
-//		send_to_char(ch, "You have no idea how to do that.\r\n");
+//		send_to_char(ch, "You have no idea how to do that.");
 //		return;
 //	}
 //
 //	if(ROOM_FLAGGED(IN_ROOM(ch), ROOM_PEACEFUL)) {
-//		send_to_char(ch, "This room just has such a peaceful, easy feeling...\r\n");
+//		send_to_char(ch, "This room just has such a peaceful, easy feeling...");
 //		return;
 //	}
 //
 //	two_arguments(argument, obj_name, vict_name);
 //
 //	if(!(vict = get_char_vis(ch, vict_name, NULL, FIND_CHAR_ROOM))) {
-//		send_to_char(ch, "Steal what from who?\r\n");
+//		send_to_char(ch, "Steal what from who?");
 //		return;
 //	} else if(vict == ch) {
-//		send_to_char(ch, "Come on now, that's rather stupid!\r\n");
+//		send_to_char(ch, "Come on now, that's rather stupid!");
 //		return;
 //	}
 //
@@ -275,7 +275,7 @@ ACMD(do_steal) {
 //				return;
 //			} else {			/* It is equipment */
 //				if((GET_POS(vict) > POS_STUNNED)) {
-//					send_to_char(ch, "Steal the equipment now?  Impossible!\r\n");
+//					send_to_char(ch, "Steal the equipment now?  Impossible!");
 //					return;
 //				} else {
 //					act("You unequip $p and steal it.", FALSE, ch, obj, 0, TO_CHAR);
@@ -289,7 +289,7 @@ ACMD(do_steal) {
 //
 //			if(percent > GET_SKILL(ch, SKILL_STEAL)) {
 //				ohoh = TRUE;
-//				send_to_char(ch, "Oops..\r\n");
+//				send_to_char(ch, "Oops..");
 //				act("$n tried to steal something from you!", FALSE, ch, 0, vict, TO_VICT);
 //				act("$n tries to steal something from $N.", TRUE, ch, 0, vict, TO_NOTVICT);
 //			} else {			/* Steal the item */
@@ -297,17 +297,17 @@ ACMD(do_steal) {
 //					if(IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) < CAN_CARRY_W(ch)) {
 //						obj_from_char(obj);
 //						obj_to_char(obj, ch);
-//						send_to_char(ch, "Got it!\r\n");
+//						send_to_char(ch, "Got it!");
 //					}
 //				} else {
-//					send_to_char(ch, "You cannot carry that much.\r\n");
+//					send_to_char(ch, "You cannot carry that much.");
 //				}
 //			}
 //		}
 //	} else {			/* Steal some coins */
 //		if(AWAKE(vict) && (percent > GET_SKILL(ch, SKILL_STEAL))) {
 //			ohoh = TRUE;
-//			send_to_char(ch, "Oops..\r\n");
+//			send_to_char(ch, "Oops..");
 //			act("You discover that $n has $s hands in your wallet.", FALSE, ch, 0, vict, TO_VICT);
 //			act("$n tries to steal gold from $N.", TRUE, ch, 0, vict, TO_NOTVICT);
 //		} else {
@@ -320,12 +320,12 @@ ACMD(do_steal) {
 //				GET_GOLD(vict) -= gold;
 //
 //				if(gold > 1) {
-//					send_to_char(ch, "Bingo!  You got %d gold coins.\r\n", gold);
+//					send_to_char(ch, "Bingo!  You got %d gold coins.", gold);
 //				} else {
-//					send_to_char(ch, "You manage to swipe a solitary gold coin.\r\n");
+//					send_to_char(ch, "You manage to swipe a solitary gold coin.");
 //				}
 //			} else {
-//				send_to_char(ch, "You couldn't get any gold...\r\n");
+//				send_to_char(ch, "You couldn't get any gold...");
 //			}
 //		}
 //	}
@@ -347,7 +347,7 @@ ACMD(do_practice) {
 	one_argument(argument, arg);
 
 	if(*arg) {
-		send_to_char(ch, "You can only practice skills in your guild.\r\n");
+		send_to_char(ch, "You can only practice skills in your guild.");
 	} else {
 		list_skills(ch);
 	}
@@ -363,9 +363,9 @@ ACMD(do_visible) {
 
 	if AFF_FLAGGED(ch, AFF_INVISIBLE) {
 		appear(ch);
-		send_to_char(ch, "You break the spell of invisibility.\r\n");
+		send_to_char(ch, "You break the spell of invisibility.");
 	} else {
-		send_to_char(ch, "You are already visible.\r\n");
+		send_to_char(ch, "You are already visible.");
 	}
 }
 
@@ -376,13 +376,13 @@ ACMD(do_title) {
 	delete_doubledollar(argument);
 
 	if(IS_NPC(ch)) {
-		send_to_char(ch, "Your title is fine... go away.\r\n");
+		send_to_char(ch, "Your title is fine... go away.");
 	} else if(PLR_FLAGGED(ch, PLR_NOTITLE)) {
-		send_to_char(ch, "You can't title yourself -- you shouldn't have abused it!\r\n");
+		send_to_char(ch, "You can't title yourself -- you shouldn't have abused it!");
 	} else if(strstr(argument, "(") || strstr(argument, ")")) {
-		send_to_char(ch, "Titles can't contain the ( or ) characters.\r\n");
+		send_to_char(ch, "Titles can't contain the ( or ) characters.");
 	} else if(strlen(argument) > MAX_TITLE_LENGTH) {
-		send_to_char(ch, "Sorry, titles can't be longer than %d characters.\r\n", MAX_TITLE_LENGTH);
+		send_to_char(ch, "Sorry, titles can't be longer than %d characters.", MAX_TITLE_LENGTH);
 	} else {
 		
 		set_title(player, argument);
@@ -414,11 +414,11 @@ void print_group(char_data *ch) {
 	struct follow_type *f;
 
 	if(!AFF_FLAGGED(ch, AFF_GROUP)) {
-		send_to_char(ch, "But you are not the member of a group!\r\n");
+		send_to_char(ch, "But you are not the member of a group!");
 	} else {
 		char buf[MAX_STRING_LENGTH];
 
-		send_to_char(ch, "Your group consists of:\r\n");
+		send_to_char(ch, "Your group consists of:");
 
 		k = (ch->master ? ch->master : ch);
 
@@ -470,7 +470,7 @@ ACMD(do_group) {
 		}
 
 		if(!found) {
-			send_to_char(ch, "Everyone following you is already in your group.\r\n");
+			send_to_char(ch, "Everyone following you is already in your group.");
 		}
 
 		return;
@@ -506,7 +506,7 @@ ACMD(do_ungroup) {
 
 	if(!*buf) {
 		if(ch->master || !(AFF_FLAGGED(ch, AFF_GROUP))) {
-			send_to_char(ch, "But you lead no group!\r\n");
+			send_to_char(ch, "But you lead no group!");
 			return;
 		}
 
@@ -524,22 +524,22 @@ ACMD(do_ungroup) {
 		}
 
 		REMOVE_BIT(AFF_FLAGS(ch), AFF_GROUP);
-		send_to_char(ch, "You disband the group.\r\n");
+		send_to_char(ch, "You disband the group.");
 		return;
 	}
 
 	if(!(tch = get_char_vis(ch, buf, NULL, FIND_CHAR_ROOM))) {
-		send_to_char(ch, "There is no such person!\r\n");
+		send_to_char(ch, "There is no such person!");
 		return;
 	}
 
 	if(tch->master != ch) {
-		send_to_char(ch, "That person is not following you!\r\n");
+		send_to_char(ch, "That person is not following you!");
 		return;
 	}
 
 	if(!AFF_FLAGGED(tch, AFF_GROUP)) {
-		send_to_char(ch, "That person isn't in your group.\r\n");
+		send_to_char(ch, "That person isn't in your group.");
 		return;
 	}
 
@@ -563,7 +563,7 @@ ACMD(do_report) {
 	struct follow_type *f;
 
 	if(!AFF_FLAGGED(ch, AFF_GROUP)) {
-		send_to_char(ch, "But you are not a member of any group!\r\n");
+		send_to_char(ch, "But you are not a member of any group!");
 		return;
 	}
 
@@ -583,7 +583,7 @@ ACMD(do_report) {
 		act(buf, TRUE, ch, NULL, k, TO_VICT);
 	}
 
-	send_to_char(ch, "You report to the group.\r\n");
+	send_to_char(ch, "You report to the group.");
 }
 
 
@@ -605,12 +605,12 @@ ACMD(do_split) {
 		amount = atoi(buf);
 
 		if(amount <= 0) {
-			send_to_char(ch, "Sorry, you can't do that.\r\n");
+			send_to_char(ch, "Sorry, you can't do that.");
 			return;
 		}
 
 		if(amount > GET_GOLD(ch)) {
-			send_to_char(ch, "You don't seem to have that much gold to split.\r\n");
+			send_to_char(ch, "You don't seem to have that much gold to split.");
 			return;
 		}
 
@@ -633,7 +633,7 @@ ACMD(do_split) {
 			share = amount / num;
 			rest = amount % num;
 		} else {
-			send_to_char(ch, "With whom do you wish to share your gold?\r\n");
+			send_to_char(ch, "With whom do you wish to share your gold?");
 			return;
 		}
 
@@ -666,16 +666,16 @@ ACMD(do_split) {
 			}
 		}
 
-		send_to_char(ch, "You split %d coins among %d members -- %d coins each.\r\n",
+		send_to_char(ch, "You split %d coins among %d members -- %d coins each.",
 		             amount, num, share);
 
 		if(rest) {
-			send_to_char(ch, "%d coin%s %s not splitable, so you keep the money.\r\n",
+			send_to_char(ch, "%d coin%s %s not splitable, so you keep the money.",
 			             rest, (rest == 1) ? "" : "s", (rest == 1) ? "was" : "were");
 			GET_GOLD(ch) += rest;
 		}
 	} else {
-		send_to_char(ch, "How many coins do you wish to split with your group?\r\n");
+		send_to_char(ch, "How many coins do you wish to split with your group?");
 		return;
 	}
 }
@@ -689,7 +689,7 @@ ACMD(do_use) {
 	half_chop(argument, arg, buf);
 
 	if(!*arg) {
-		send_to_char(ch, "What do you want to %s?\r\n", CMD_NAME);
+		send_to_char(ch, "What do you want to %s?", CMD_NAME);
 		return;
 	}
 
@@ -700,14 +700,14 @@ ACMD(do_use) {
 			case SCMD_RECITE:
 			case SCMD_QUAFF:
 				if(!(mag_item = get_obj_in_list_vis(ch, arg, NULL, ch->carrying))) {
-					send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+					send_to_char(ch, "You don't seem to have %s %s.", AN(arg), arg);
 					return;
 				}
 
 				break;
 
 			case SCMD_USE:
-				send_to_char(ch, "You don't seem to be holding %s %s.\r\n", AN(arg), arg);
+				send_to_char(ch, "You don't seem to be holding %s %s.", AN(arg), arg);
 				return;
 
 			default:
@@ -719,7 +719,7 @@ ACMD(do_use) {
 	switch(subcmd) {
 		case SCMD_QUAFF:
 			if(GET_OBJ_TYPE(mag_item) != ITEM_POTION) {
-				send_to_char(ch, "You can only quaff potions.\r\n");
+				send_to_char(ch, "You can only quaff potions.");
 				return;
 			}
 
@@ -727,7 +727,7 @@ ACMD(do_use) {
 
 		case SCMD_RECITE:
 			if(GET_OBJ_TYPE(mag_item) != ITEM_SCROLL) {
-				send_to_char(ch, "You can only recite scrolls.\r\n");
+				send_to_char(ch, "You can only recite scrolls.");
 				return;
 			}
 
@@ -736,7 +736,7 @@ ACMD(do_use) {
 		case SCMD_USE:
 			if((GET_OBJ_TYPE(mag_item) != ITEM_WAND) &&
 			        (GET_OBJ_TYPE(mag_item) != ITEM_STAFF)) {
-				send_to_char(ch, "You can't seem to figure out how to use it.\r\n");
+				send_to_char(ch, "You can't seem to figure out how to use it.");
 				return;
 			}
 
@@ -761,10 +761,10 @@ ACMD(do_wimpy) {
 
 	if(!*arg) {
 		if(GET_WIMP_LEV(ch)) {
-			send_to_char(ch, "Your current wimp level is %d hit points.\r\n", GET_WIMP_LEV(ch));
+			send_to_char(ch, "Your current wimp level is %d hit points.", GET_WIMP_LEV(ch));
 			return;
 		} else {
-			send_to_char(ch, "At the moment, you're not a wimp.  (sure, sure...)\r\n");
+			send_to_char(ch, "At the moment, you're not a wimp.  (sure, sure...)");
 			return;
 		}
 	}
@@ -772,21 +772,21 @@ ACMD(do_wimpy) {
 	if(isdigit(*arg)) {
 		if((wimp_lev = atoi(arg)) != 0) {
 			if(wimp_lev < 0) {
-				send_to_char(ch, "Heh, heh, heh.. we are jolly funny today, eh?\r\n");
+				send_to_char(ch, "Heh, heh, heh.. we are jolly funny today, eh?");
 			} else if(wimp_lev > GET_MAX_HIT(ch)) {
-				send_to_char(ch, "That doesn't make much sense, now does it?\r\n");
+				send_to_char(ch, "That doesn't make much sense, now does it?");
 			} else if(wimp_lev > (GET_MAX_HIT(ch) / 2)) {
-				send_to_char(ch, "You can't set your wimp level above half your hit points.\r\n");
+				send_to_char(ch, "You can't set your wimp level above half your hit points.");
 			} else {
-				send_to_char(ch, "Okay, you'll wimp out if you drop below %d hit points.\r\n", wimp_lev);
+				send_to_char(ch, "Okay, you'll wimp out if you drop below %d hit points.", wimp_lev);
 				GET_WIMP_LEV(ch) = wimp_lev;
 			}
 		} else {
-			send_to_char(ch, "Okay, you'll now tough out fights to the bitter end.\r\n");
+			send_to_char(ch, "Okay, you'll now tough out fights to the bitter end.");
 			GET_WIMP_LEV(ch) = 0;
 		}
 	} else {
-		send_to_char(ch, "Specify at how many hit points you want to wimp out at.  (0 to disable)\r\n");
+		send_to_char(ch, "Specify at how many hit points you want to wimp out at.  (0 to disable)");
 	}
 }
 
@@ -800,13 +800,13 @@ ACMD(do_display) {
 	auto vec_args = PARSE_ARGS();
 
 	if(vec_args.size() == 0){
-		send_to_char(ch, "Usage: prompt { { H | M | V } | all | auto | none }\r\n");
+		send_to_char(ch, "Usage: prompt { { H | M | V } | all | auto | none }");
 		return;
 	}
 
 	if(vec_args[0].compare("auto") == 0) {
 		TOGGLE_BIT(PRF_FLAGS(ch), PRF_DISPAUTO);
-		send_to_char(ch, "Auto prompt %sabled.\r\n", PRF_FLAGGED(ch, PRF_DISPAUTO) ? "en" : "dis");
+		send_to_char(ch, "Auto prompt %sabled.", PRF_FLAGGED(ch, PRF_DISPAUTO) ? "en" : "dis");
 		mods::db::save_char(player);
 		/** TODO save prefs to lmdb */
 		return;
@@ -873,7 +873,7 @@ ACMD(do_gen_write) {
 	tmp = asctime(localtime(&ct));
 
 	if(IS_NPC(ch)) {
-		send_to_char(ch, "Monsters can't have ideas - Go away.\r\n");
+		send_to_char(ch, "Monsters can't have ideas - Go away.");
 		return;
 	}
 
@@ -881,7 +881,7 @@ ACMD(do_gen_write) {
 	delete_doubledollar(argument);
 
 	if(!*argument) {
-		send_to_char(ch, "That must be a mistake...\r\n");
+		send_to_char(ch, "That must be a mistake...");
 		return;
 	}
 
@@ -893,20 +893,20 @@ ACMD(do_gen_write) {
 	}
 
 	if(fbuf.st_size >= max_filesize) {
-		send_to_char(ch, "Sorry, the file is full right now.. try again later.\r\n");
+		send_to_char(ch, "Sorry, the file is full right now.. try again later.");
 		return;
 	}
 
 	if(!(fl = fopen(filename, "a"))) {
 		perror("SYSERR: do_gen_write");
-		send_to_char(ch, "Could not open the file.  Sorry.\r\n");
+		send_to_char(ch, "Could not open the file.  Sorry.");
 		return;
 	}
 
 	fprintf(fl, "%-8s (%6.6s) [%5d] %s\n", GET_NAME(ch).c_str(), (tmp + 4),
 	        GET_ROOM_VNUM(IN_ROOM(ch)), argument);
 	fclose(fl);
-	send_to_char(ch, "Okay.  Thanks!\r\n");
+	send_to_char(ch, "Okay.  Thanks!");
 }
 
 

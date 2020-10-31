@@ -2144,7 +2144,7 @@ ACMD(do_commands) {
 			continue;
 		}
 
-		send_to_char(ch, "%-11s%s", cmd_info[i].str_command.c_str(), no++ % 7 == 0 ? "\r\n" : "");
+		send_to_char(ch, "%-11s%s", cmd_info[i].str_command.c_str(), no++ % 7 == 0 ? "" : "");
 	}
 
 	if(no % 7 != 1) {

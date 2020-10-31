@@ -74,7 +74,7 @@ ACMD(do_olc) {
 
 	/* WARNING!  **DO NOT** under any circumstances remove the code below!!!!  */
 	if(strcmp(GET_NAME(ch), "Ras")) {
-		send_to_char(ch, "OLC is not yet complete.  Sorry.\r\n");
+		send_to_char(ch, "OLC is not yet complete.  Sorry.");
 		return;
 	}
 
@@ -84,7 +84,7 @@ ACMD(do_olc) {
 	half_chop(argument, mode_arg, argument);
 
 	if((olc_mode = search_block(mode_arg, olc_modes, FALSE)) < 0) {
-		send_to_char(ch, "Invalid mode '%s'.\r\n%s", mode_arg, OLC_USAGE);
+		send_to_char(ch, "Invalid mode '%s'.%s", mode_arg, OLC_USAGE);
 		return;
 	}
 
@@ -97,7 +97,7 @@ ACMD(do_olc) {
 		case OLC_REPEAT:
 			if(!(olc_mode = GET_LAST_OLC_MODE(ch)) ||
 			        ((olc_targ = GET_LAST_OLC_TARG(ch)) == NULL)) {
-				send_to_char(ch, "No last OLC operation!\r\n");
+				send_to_char(ch, "No last OLC operation!");
 				return;
 			}
 
@@ -109,24 +109,24 @@ ACMD(do_olc) {
 				argument = one_argument(argument, arg);
 
 				if(!is_number(arg)) {
-					send_to_char(ch, "Invalid room vnum '%s'.\r\n", arg);
+					send_to_char(ch, "Invalid room vnum '%s'.", arg);
 					return;
 				}
 
 				vnum = atoi(arg);
 
 				if((rnum = real_room(vnum)) == NOWHERE) {
-					send_to_char(ch, "No such room!\r\n");
+					send_to_char(ch, "No such room!");
 					return;
 				}
 			} else {
 				rnum = IN_ROOM(ch);
 				vnum = GET_ROOM_VNUM(IN_ROOM(ch));
-				send_to_char(ch, "(Using current room %d)\r\n", vnum);
+				send_to_char(ch, "(Using current room %d)", vnum);
 			}
 
 			/*   if (!ROOM_FLAGGED(rnum, ROOM_OLC))
-				 send_to_char(ch, "That room is not modifyable.\r\n");
+				 send_to_char(ch, "That room is not modifyable.");
 			     else
 			*/
 			olc_targ = (void *) &(world[rnum]);
@@ -136,14 +136,14 @@ ACMD(do_olc) {
 			argument = one_argument(argument, arg);
 
 			if(!is_number(arg)) {
-				send_to_char(ch, "Invalid mob vnum '%s'.\r\n", arg);
+				send_to_char(ch, "Invalid mob vnum '%s'.", arg);
 				return;
 			}
 
 			vnum = atoi(arg);
 
 			if((rnum = real_mobile(vnum)) == NOBODY) {
-				send_to_char(ch, "No such mobile vnum.\r\n");
+				send_to_char(ch, "No such mobile vnum.");
 			} else {
 				olc_targ = (void *) &(mob_proto[rnum]);
 			}
@@ -154,14 +154,14 @@ ACMD(do_olc) {
 			argument = one_argument(argument, arg);
 
 			if(!is_number(arg)) {
-				send_to_char(ch, "Invalid obj vnum '%s'\r\n", arg);
+				send_to_char(ch, "Invalid obj vnum '%s'", arg);
 				return;
 			}
 
 			vnum = atoi(arg);
 
 			if((rnum = real_object(vnum)) == NOTHING) {
-				send_to_char(ch, "No object with vnum %d.\r\n", vnum);
+				send_to_char(ch, "No object with vnum %d.", vnum);
 			} else {
 				olc_targ = (void *) &(obj_proto[rnum]);
 			}
@@ -169,7 +169,7 @@ ACMD(do_olc) {
 			break;
 
 		default:
-			send_to_char(ch, "Usage: olc {.|set|show|obj|mob|room} [args]\r\n");
+			send_to_char(ch, "Usage: olc {.|set|show|obj|mob|room} [args]");
 			return;
 	}
 
@@ -178,7 +178,7 @@ ACMD(do_olc) {
 	}
 
 	if(!can_modify(ch, vnum)) {
-		send_to_char(ch, "You can't modify that.\r\n");
+		send_to_char(ch, "You can't modify that.");
 		return;
 	}
 

@@ -204,7 +204,7 @@ void House_listrent(char_data *ch, room_vnum vnum) {
 	}
 
 	if(!(fl = fopen(filename, "rb"))) {
-		send_to_char(ch, "No objects on file for house #%d.\r\n", vnum);
+		send_to_char(ch, "No objects on file for house #%d.", vnum);
 		return;
 	}
 
@@ -340,7 +340,7 @@ void hcontrol_list_houses(char_data *ch) {
 	char built_on[128], last_pay[128], own_name[MAX_NAME_LENGTH + 1];
 
 	if(!num_of_houses) {
-		send_to_char(ch, "No houses have been defined.\r\n");
+		send_to_char(ch, "No houses have been defined.");
 		return;
 	}
 
@@ -372,7 +372,7 @@ void hcontrol_list_houses(char_data *ch) {
 
 		/* Now we need a copy of the owner's name to capitalize. -gg 6/21/98 */
 		strcpy(own_name, temp);	/* strcpy: OK (names guaranteed <= MAX_NAME_LENGTH+1) */
-		send_to_char(ch, "%7d %7d  %-10s    %2d    %-12s %s\r\n",
+		send_to_char(ch, "%7d %7d  %-10s    %2d    %-12s %s",
 		             house_control[i].vnum, house_control[i].atrium, built_on,
 		             house_control[i].num_of_guests, CAP(own_name), last_pay);
 
@@ -391,7 +391,7 @@ void hcontrol_build_house(char_data *ch, char *arg) {
 	long owner;
 
 	if(num_of_houses >= MAX_HOUSES) {
-		send_to_char(ch, "Max houses already defined.\r\n");
+		send_to_char(ch, "Max houses already defined.");
 		return;
 	}
 
@@ -406,12 +406,12 @@ void hcontrol_build_house(char_data *ch, char *arg) {
 	virt_house = atoi(arg1);
 
 	if((real_house = real_room(virt_house)) == NOWHERE) {
-		send_to_char(ch, "No such room exists.\r\n");
+		send_to_char(ch, "No such room exists.");
 		return;
 	}
 
 	if((find_house(virt_house)) != NOWHERE) {
-		send_to_char(ch, "House already exists.\r\n");
+		send_to_char(ch, "House already exists.");
 		return;
 	}
 
@@ -424,12 +424,12 @@ void hcontrol_build_house(char_data *ch, char *arg) {
 	}
 
 	if((exit_num = search_block(arg1, dirs, FALSE)) < 0) {
-		send_to_char(ch, "'%s' is not a valid direction.\r\n", arg1);
+		send_to_char(ch, "'%s' is not a valid direction.", arg1);
 		return;
 	}
 
 	if(TOROOM(real_house, exit_num) == NOWHERE) {
-		send_to_char(ch, "There is no exit %s from room %d.\r\n", dirs[exit_num], virt_house);
+		send_to_char(ch, "There is no exit %s from room %d.", dirs[exit_num], virt_house);
 		return;
 	}
 
@@ -437,7 +437,7 @@ void hcontrol_build_house(char_data *ch, char *arg) {
 	virt_atrium = GET_ROOM_VNUM(real_atrium);
 
 	if(TOROOM(real_atrium, rev_dir[exit_num]) != real_house) {
-		send_to_char(ch, "A house's exit must be a two-way door.\r\n");
+		send_to_char(ch, "A house's exit must be a two-way door.");
 		return;
 	}
 
@@ -450,7 +450,7 @@ void hcontrol_build_house(char_data *ch, char *arg) {
 	}
 
 	if((owner = get_id_by_name(arg1)) < 0) {
-		send_to_char(ch, "Unknown player '%s'.\r\n", arg1);
+		send_to_char(ch, "Unknown player '%s'.", arg1);
 		return;
 	}
 
@@ -469,7 +469,7 @@ void hcontrol_build_house(char_data *ch, char *arg) {
 	SET_BIT(ROOM_FLAGS(real_atrium), ROOM_ATRIUM);
 	House_crashsave(virt_house);
 
-	send_to_char(ch, "House built.  Mazel tov!\r\n");
+	send_to_char(ch, "House built.  Mazel tov!");
 	House_save_control();
 }
 
@@ -485,7 +485,7 @@ void hcontrol_destroy_house(char_data *ch, char *arg) {
 	}
 
 	if((i = find_house(atoi(arg))) == NOWHERE) {
-		send_to_char(ch, "Unknown house.\r\n");
+		send_to_char(ch, "Unknown house.");
 		return;
 	}
 
@@ -509,7 +509,7 @@ void hcontrol_destroy_house(char_data *ch, char *arg) {
 
 	num_of_houses--;
 
-	send_to_char(ch, "House deleted.\r\n");
+	send_to_char(ch, "House deleted.");
 	House_save_control();
 
 	/*
@@ -530,13 +530,13 @@ void hcontrol_pay_house(char_data *ch, char *arg) {
 	if(!*arg) {
 		send_to_char(ch, "%s", HCONTROL_FORMAT);
 	} else if((i = find_house(atoi(arg))) == NOWHERE) {
-		send_to_char(ch, "Unknown house.\r\n");
+		send_to_char(ch, "Unknown house.");
 	} else {
 		mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "Payment for house %s collected by %s.", arg, GET_NAME(ch).c_str());
 
 		house_control[i].last_payment = time(0);
 		House_save_control();
-		send_to_char(ch, "Payment recorded.\r\n");
+		send_to_char(ch, "Payment recorded.");
 	}
 }
 
@@ -569,17 +569,17 @@ ACMD(do_house) {
 	one_argument(argument, arg);
 
 	if(!ROOM_FLAGGED(IN_ROOM(ch), ROOM_HOUSE)) {
-		send_to_char(ch, "You must be in your house to set guests.\r\n");
+		send_to_char(ch, "You must be in your house to set guests.");
 	} else if((i = find_house(GET_ROOM_VNUM(IN_ROOM(ch)))) == NOWHERE) {
-		send_to_char(ch, "Um.. this house seems to be screwed up.\r\n");
+		send_to_char(ch, "Um.. this house seems to be screwed up.");
 	} else if(GET_IDNUM(ch) != house_control[i].owner) {
-		send_to_char(ch, "Only the primary owner can set guests.\r\n");
+		send_to_char(ch, "Only the primary owner can set guests.");
 	} else if(!*arg) {
 		House_list_guests(ch, i, FALSE);
 	} else if((id = get_id_by_name(arg)) < 0) {
-		send_to_char(ch, "No such player.\r\n");
+		send_to_char(ch, "No such player.");
 	} else if(id == GET_IDNUM(ch)) {
-		send_to_char(ch, "It's your house!\r\n");
+		send_to_char(ch, "It's your house!");
 	} else {
 		for(j = 0; j < house_control[i].num_of_guests; j++)
 			if(house_control[i].guests[j] == id) {
@@ -589,19 +589,19 @@ ACMD(do_house) {
 
 				house_control[i].num_of_guests--;
 				House_save_control();
-				send_to_char(ch, "Guest deleted.\r\n");
+				send_to_char(ch, "Guest deleted.");
 				return;
 			}
 
 		if(house_control[i].num_of_guests == MAX_GUESTS) {
-			send_to_char(ch, "You have too many guests.\r\n");
+			send_to_char(ch, "You have too many guests.");
 			return;
 		}
 
 		j = house_control[i].num_of_guests++;
 		house_control[i].guests[j] = id;
 		House_save_control();
-		send_to_char(ch, "Guest added.\r\n");
+		send_to_char(ch, "Guest added.");
 	}
 }
 
@@ -652,7 +652,7 @@ void House_list_guests(char_data *ch, int i, int quiet) {
 
 	if(house_control[i].num_of_guests == 0) {
 		if(!quiet) {
-			send_to_char(ch, "  Guests: None\r\n");
+			send_to_char(ch, "  Guests: None");
 		}
 
 		return;
@@ -674,6 +674,6 @@ void House_list_guests(char_data *ch, int i, int quiet) {
 		send_to_char(ch, "all dead");
 	}
 
-	send_to_char(ch, "\r\n");
+	send_to_char(ch, "");
 }
 

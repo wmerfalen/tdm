@@ -658,6 +658,7 @@ namespace mods {
 		void errorln(std::string_view msg){ send("{red}%s{/red}\r\n", msg.data()); }
 
 		uuid_t& drone_uuid(){ return m_char_data->drone_uuid; }
+		bool& drone_simulate(){ return m_char_data->drone_simulate; }
 
 		protected:
 		std::map<std::string,std::string> m_ada_data;
@@ -676,6 +677,7 @@ namespace mods {
 
 
 		private: 
+		void write_to_char(std::string_view msg, bool newline,bool plain);
 		uuid_t m_attacker_uuid;
 		event_queue_iterator m_block_event;
 		bool m_has_block_event;
