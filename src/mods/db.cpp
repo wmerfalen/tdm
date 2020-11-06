@@ -3,7 +3,6 @@
 #include "meta_utils.hpp"
 #include "player.hpp"
 #include "pq.hpp"
-#define __MENTOC_SHOW_LMDB_DEBUG__
 
 extern std::string sanitize_key(std::string key);
 namespace mods::db {

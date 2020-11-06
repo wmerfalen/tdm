@@ -1,8 +1,13 @@
 #include "zone.hpp"
 #include "integral-objects.hpp"
 
+#ifdef __MENTOC_MODS_ZONE_DEBUG__
 #define z_debug(A) std::cerr << "[mods::zone debug]" << A << "\n";
 #define rr_debug(A) std::cerr << "[run_replenish]:" << A << "\n";
+#else
+#define z_debug(A)
+#define rr_debug(A) 
+#endif
 namespace mods::zone {
 static std::deque<replenish_command> replenish;
 

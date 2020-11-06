@@ -34,7 +34,8 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-D__MENTOC_SHOW_SNIPE_HIT_STATS__=1 \
 	-DMENTOC_LIB_DIR=\"$(CURDIR)/../lib/\" \
 	-D__MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__=1 \
-	-D__MENTOC_SQL_MIGRATIONS_DIR=\"$(SQL_MIGRATIONS_DIR)\"
+	-D__MENTOC_SQL_MIGRATIONS_DIR=\"$(SQL_MIGRATIONS_DIR)\" \
+	-D__MENTOC_SHOW_LMDB_DEBUG__=1
 	#-D__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__=1 \
 	-D__MENTOC_SHOW_LMDB_DEBUG__=1 \
 	#-DMENTOC_NO_CONSTEXPR_CONF=1 \
@@ -84,7 +85,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/integral-object mods/orm/camera-feed mods/orm/door-event \
 					 mods/mini-games/line-up mods/orm/mini-game mods/mini-games \
 					 mods/mini-games/wires mods/migrations mods/interpreter \
-					 mods/radio mods/zone
+					 mods/radio mods/zone mods/count-objects mods/deep-object-parser \
+					 mods/rifle-attachments
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

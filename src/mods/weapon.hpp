@@ -20,49 +20,13 @@ using obj_ptr_t = std::shared_ptr<obj_data>;
 using attachment_list_t = std::array<obj_data_ptr_t,6>;
 extern pqxx::result db_get_by_meta(std::string table, std::string col,const std::string & value);
 
-#ifndef FIND_OBJ_INV
-#define FIND_OBJ_INV       (1 << 2)
-#define FIND_OBJ_EQUIP     (1 << 5)
-#endif
 
 
 namespace mods::weapon {
+ static constexpr int FIND_OBJ_INV       = (1 << 2);
+ static constexpr int FIND_OBJ_EQUIP     = (1 << 5);
+
 	using cap_t = mods::weapon::capabilities::cap_t;
-
-	/*
-
-		 Weapons and Equipment of Tom Clancy's Rainbow Six Siege
-		 L85A2 · AR33 · G36C · R4-C · 556xi · F2 · AK-12 · AUG A2 · 552
-		 Assault Rifles     Commando · 416-C Carbine · C8-SFW · Mk17 CQB · PARA-308 · Type-89
-		 · C7E · M762 · V308 · Spear .308 · AR-15.50 · M4 · AK-74M · ARX200
-		 · F90 · Commando 9
-		 FMG-9 · MP5K · UMP45 · MP5 · P90 · 9×19VSN · MP7 · 9mm C1 · MPX ·
-		 Submachine Guns    M12 · MP5SD · PDW9 · Vector .45 ACP · T-5 SMG · Scorpion EVO 3 A1
-		 · K1A · Mx4 Storm · AUG A3 · P10 RONI
-		 M590A1 · M1014 · SG-CQB · SASG-12 · M870 · Super 90 · SPAS-12 ·
-		 Shotguns           SPAS-15 · SuperNova · ITA12L · ITA12S · SIX12 · FO-12 · BOSG.12.2
-		 · ACS12 · TCSG12 · Super Shorty
-		 Marksman Rifles    417 · OTs-03 · CAMRS · SR-25 · Mk 14 EBR · CSRX 300
-		 Light Machine Guns 6P41 · G8A1 · M249 · T-95 LSW · LMG-E · ALDA 5.56
-		 P226 Mk 25 · M45 MEUSOC · 5.7 USG · P9 · LFP586 · GSh-18 · PMM ·
-		 Handguns           P12 · Mk1 9mm · D-50 · PRB92 · P229 · USP40 · Q-929 · RG15 ·
-		 Bailiff 410 · Keratos .357 · 1911 TACOPS · P-10C · .44 Mag
-		 Semi-Auto · SDP 9mm
-		 Machine Pistols    SMG-11 · Bearing 9 · C75 Auto · SMG-12 · SPSMG9
-		 Red Dot Sight · Reflex Sight · Holographic Sight · ACOG Sight ·
-		 Weapon Attachments Suppressor · Flash Hider · Compensator · Muzzle Brake · Extended
-		 Barrel · Vertical Grip · Angled Grip · Laser
-		 Attackers
-		 Ballistic Shield · Breach Charge · Claymore · Frag Grenade · Smoke
-		 Grenade · Stun Grenade
-		 Gadgets            Drone · Grappling Hook
-		 Defenders
-		 Barbed Wire · Bulletproof Camera · Deployable Shield · Impact
-		 Grenade · Nitro Cell
-		 Barricade · CCTV · Reinforcement
-		 Italic
-	 *
-	 */
 	struct mask {
 		static constexpr uint64_t snipe = (1 << 0);
 		static constexpr uint64_t grenade = (1 << 1);

@@ -8,8 +8,14 @@
 #include "util.hpp"
 #include "object-utils.hpp"
 #include "zone.hpp"
+#include "builder/object-placement.hpp"
+#include "rifle-attachments.hpp"
 
+#ifdef __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
 #define mo_debug(A) std::cerr << "[mods::integral_objects][debug]:" << A <<"\n";
+#else
+#define mo_debug(A)
+#endif
 
 extern std::string sanitize_key(std::string key);
 extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
@@ -19,26 +25,6 @@ namespace mods::integral_objects {
 		std::string value = "";
 		return put_section_vector(section_name.data(),prefix.data(), values);
 	}
-	/*
-CREATE TABLE integral_object (
-	object_id SERIAL,
-	object_room_vnum INTEGER NOT NULL,
-	object_type VARCHAR(16) NOT NULL,
-	object_vnum INTEGER NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE camera_feed (
-	feed_id SERIAL,
-	feed_type VARCHAR(16) NOT NULL,
-	feed_vnum INTEGER NOT NULL,
-	feed_room_vnum INTEGER NOT NULL,
-	feed_order INTEGER NOT NULL DEFAULT 0,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-*/
 	void save_item_to_db(player_ptr_t& player, std::string section_name, std::vector<std::string>& args){
 		std::string value = "";
 		std::string prefix = std::to_string(world[player->room()].number);
@@ -60,12 +46,35 @@ CREATE TABLE camera_feed (
 		mo_debug("saving armor locker");
 		save_item_to_db(player, "armor-locker", args);
 	}
+	void save_weapon_locker_quota(player_ptr_t& player, std::vector<std::string>& args){
+		mo_debug("saving weapon locker quota");
+		save_item_to_db(player, "weapon-locker-quota", args);
+	}
+	void save_armor_locker_quota(player_ptr_t& player, std::vector<std::string>& args){
+		mo_debug("saving armor locker quota");
+		save_item_to_db(player, "armor-locker-quota", args);
+	}
+
+	void save_catchy_name(player_ptr_t& player, std::string_view identifier, std::string_view name,std::string_view deep_object_description){
+		mo_debug("saving catchy name for item");
+		std::string value = "";
+		std::string prefix = identifier.data();
+		auto status = mods::db::put_section_vector("catchy-name",prefix, {name.data(),deep_object_description.data()});
+		player->send("status: %d\r\n",status);
+		std::vector<std::string> values;
+		status = mods::db::get_section_vector("catchy-name",prefix,values);
+		player->send("get status: %d\r\nTo confirm, we placed these values...\r\n",status);
+		for(auto line : values){
+			player->send("[item]: '%s'\r\n",line.c_str());
+		}
+		player->sendln("Done listing.");
+	}
 
 	void save_camera_feed(player_ptr_t& player, std::vector<std::string>& args){
 		write_db_values("camera-feed",std::to_string(world[player->room()].number), args);
 	}
 	obj_ptr_t first_or_create(room_vnum room,std::string query, int type, std::string yaml_file){
-		std::cerr << green_str("[first_or_create]: room: ") << room << "| real:" << real_room(room) << "\n";
+		mo_debug(green_str("[first_or_create]: room: ") << room << "| real:" << real_room(room));
 		for(auto obj = world[real_room(room)].contents; obj != nullptr; obj = obj->next_content){
 			if(obj->feed_file().compare(yaml_file.c_str()) == 0){
 				mo_debug(green_str("found object of feed_file:'") << obj->feed_file() << "' " << yaml_file << "' in room:" << real_room(room));
@@ -77,6 +86,26 @@ CREATE TABLE camera_feed (
 		obj_to_room(obj.get(),real_room(room));
 		return obj;
 	}
+
+	int armor_quota(room_vnum room){
+		mo_debug("getting armor locker quota:" << room << "| real room:" << real_room(room));
+		std::vector<std::string> values;
+		mods::db::get_section_vector("armor-locker-quota", std::to_string(room), values);
+		for(auto packed_yaml_info : values){
+			return mods::util::stoi_optional<int>(packed_yaml_info).value_or(10);
+		}
+		return 10;
+	}
+	int weapon_quota(room_vnum room){
+		mo_debug("getting weapon locker quota:" << room << "| real room:" << real_room(room));
+		std::vector<std::string> values;
+		mods::db::get_section_vector("weapon-locker-quota", std::to_string(room), values);
+		for(auto packed_yaml_info : values){
+			return mods::util::stoi_optional<int>(packed_yaml_info).value_or(10);
+		}
+		return 10;
+	}
+
 	void feed_weapon_locker(room_vnum room){
 		mo_debug("feeding weapon locker to room vnum:" << room << "| real room:" << real_room(room));
 		std::vector<std::string> values;
@@ -84,7 +113,7 @@ CREATE TABLE camera_feed (
 		auto locker = mods::integral_objects::first_or_create(room,"weapon-locker", ITEM_CONTAINER, "weapon-locker.yml");
 		for(auto yaml : values){
 			if(!mods::object_utils::assert_sane_object(yaml)){
-				std::cerr << "[feed_weapon_locker]: not feeding invalid yaml type: '" << yaml << "'\n";
+				mo_debug("[feed_weapon_locker]: not feeding invalid yaml type: '" << yaml << "'");
 				continue;
 			}
 			mo_debug("[feed_weapon_locker]: feeding sane object:'" << yaml << "'");
@@ -100,7 +129,7 @@ CREATE TABLE camera_feed (
 		auto locker = mods::integral_objects::first_or_create(room,"armor-locker", ITEM_CONTAINER, "armor-locker.yml");
 		for(auto yaml : values){
 			if(!mods::object_utils::assert_sane_object(yaml)){
-				std::cerr << "[feed_armor_locker]: not feeding invalid yaml type: '" << yaml << "'\n";
+				mo_debug("[feed_armor_locker]: not feeding invalid yaml type: '" << yaml << "'");
 				continue;
 			}
 			mo_debug("[feed_armor_locker]: feeding sane object:'" << yaml << "'");
@@ -167,33 +196,20 @@ CREATE TABLE camera_feed (
 		player->send("delete status: %d\r\n",status);
 	}
 
-#if 0
-	void edit_object(player_ptr_t& player, const std::vector<std::string>& args){
+	template <typename TAttachments>
+	TAttachments instantiate_catchy_name(std::string_view identifier){
+		std::vector<std::string> values;
+		mods::db::get_section_vector("catchy-name",identifier.data(),values);
+		if(values.size() > 1){
+			return TAttachments(values[1]);
+		}
+		return TAttachments("");
 	}
-
-	void list_objects(player_ptr_t& player, const std::vector<std::string>& args){
-		//int ctr = 0;
-		player->sendln("Listing...");
-		//for(auto & contents = world[player->room()].contents; contents != nullptr; contents = contents->next,++ctr){
-	//		player->send("[%d] - %s\r\n", ctr, contents->name.c_str());
-//		}
-		player->sendln("Done listing.");
-	}
-
-	void mark_object(player_ptr_t& player, const std::vector<std::string>& args){
-		//int ctr = 0;
-		player->sendln("Listing...");
-		//for(auto & contents = world[player->room()].contents; contents != nullptr; contents = contents->next,++ctr){
-			//player->send("[%d] - %s\r\n", ctr, contents->name.c_str());
-		//}
-		player->sendln("Done listing.");
-	}
-#endif
 };
 
 ACMD(do_install_camera_feed){
-	DO_HELP("install_camera_feed");
 	ADMIN_REJECT();
+	DO_HELP("install_camera_feed");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	mods::integral_objects::save_camera_feed(player,vec_args);
@@ -202,8 +218,8 @@ ACMD(do_install_camera_feed){
 }
 
 ACMD(do_uninstall_camera_feed){
-	DO_HELP("uninstall_camera_feed");
 	ADMIN_REJECT();
+	DO_HELP("uninstall_camera_feed");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	mods::integral_objects::remove_camera_feed(player,vec_args);
@@ -212,15 +228,15 @@ ACMD(do_uninstall_camera_feed){
 }
 
 ACMD(do_install_computer_choice){
-	DO_HELP("install_computer_choice");
 	ADMIN_REJECT();
+	DO_HELP("install_computer_choice");
 	/** code here */
 	ADMIN_DONE();
 }
 
 ACMD(do_install_armor_locker){
-	DO_HELP("install_armor_locker");
 	ADMIN_REJECT();
+	DO_HELP("install_armor_locker");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	mods::integral_objects::save_armor_locker(player,vec_args);
@@ -230,8 +246,8 @@ ACMD(do_install_armor_locker){
 }
 
 ACMD(do_install_weapon_locker){
-	DO_HELP("install_weapon_locker");
 	ADMIN_REJECT();
+	DO_HELP("install_weapon_locker");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	mods::integral_objects::save_weapon_locker(player,vec_args);
@@ -240,8 +256,8 @@ ACMD(do_install_weapon_locker){
 	ADMIN_DONE();
 }
 ACMD(do_uninstall_armor_locker){
-	DO_HELP("uninstall_armor_locker");
 	ADMIN_REJECT();
+	DO_HELP("uninstall_armor_locker");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	mods::integral_objects::remove_armor_locker(player,vec_args);
@@ -249,38 +265,11 @@ ACMD(do_uninstall_armor_locker){
 }
 
 ACMD(do_uninstall_weapon_locker){
-	DO_HELP("uninstall_weapon_locker");
 	ADMIN_REJECT();
+	DO_HELP("uninstall_weapon_locker");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	mods::integral_objects::remove_weapon_locker(player,vec_args);
-	ADMIN_DONE();
-}
-
-ACMD(do_edit_object){
-	DO_HELP("edit_object");
-	ADMIN_REJECT();
-	/** code here */
-	auto vec_args = PARSE_ARGS();
-	//mods::integral_objects::edit_object(player,vec_args);
-	ADMIN_DONE();
-}
-
-ACMD(do_list_objects){
-	DO_HELP("list_objects");
-	ADMIN_REJECT();
-	/** code here */
-	auto vec_args = PARSE_ARGS();
-	//mods::integral_objects::list_objects(player,vec_args);
-	ADMIN_DONE();
-}
-
-ACMD(do_mark_object){
-	DO_HELP("mark_object");
-	ADMIN_REJECT();
-	/** code here */
-	auto vec_args = PARSE_ARGS();
-	//mods::integral_objects::mark_object(player,vec_args);
 	ADMIN_DONE();
 }
 
@@ -311,10 +300,52 @@ ACMD(do_list_wear_flags){
 	player->sendln(CAN_BE_SEARCHED());
 }
 
+ACMD(do_armor_locker_quota){
+	ADMIN_REJECT();
+	DO_HELP("armor_locker_quota");
+	/** code here */
+	auto vec_args = PARSE_ARGS();
+	mods::integral_objects::save_armor_locker_quota(player,vec_args);
+	ADMIN_DONE();
+}
+ACMD(do_weapon_locker_quota){
+	ADMIN_REJECT();
+	DO_HELP("weapon_locker_quota");
+	/** code here */
+	auto vec_args = PARSE_ARGS();
+	mods::integral_objects::save_weapon_locker_quota(player,vec_args);
+	ADMIN_DONE();
+}
+
+ACMD(do_create_catchy_name){
+	ADMIN_REJECT();
+	DO_HELP("create_catchy_name");
+	/** code here */
+	auto vec_args = PARSE_ARGS();
+	static constexpr const char* usage = "usage: create_catchy_name <identifier-with-no-spaces> <catchy-name> <deep-object-description>";
+	if(vec_args.size() < 3){
+		player->errorln(usage);
+		return;
+	}
+	mods::integral_objects::save_catchy_name(player,vec_args[0],vec_args[1],vec_args[2]);
+	ADMIN_DONE();
+}
+
+ACMD(do_instantiate_catchy_name){
+	ADMIN_REJECT();
+	DO_HELP("instantiate_catchy_name");
+	/** code here */
+	auto vec_args = PARSE_ARGS();
+	static constexpr const char* usage = "usage: instantiate_catchy_name <identifier-with-no-spaces>";
+	if(vec_args.size() < 1){
+		player->errorln(usage);
+		return;
+	}
+	auto rifle = mods::integral_objects::instantiate_catchy_name<mods::rifle_attachments_t>(vec_args[0]);
+	ADMIN_DONE();
+}
 namespace mods::integral_objects {
 	void init(){
-			//mods::interpreter::add_command("edit_object", POS_RESTING, do_edit_object, LVL_BUILDER,0);
-			//mods::interpreter::add_command("list_objects", POS_RESTING, do_list_objects, LVL_BUILDER,0);
 			mods::interpreter::add_command("list_wear_flags", POS_RESTING, do_list_wear_flags, LVL_BUILDER,0);
 
 			mods::interpreter::add_command("install_weapon_locker", POS_RESTING, do_install_weapon_locker, LVL_BUILDER,0);
@@ -325,6 +356,12 @@ namespace mods::integral_objects {
 
 			mods::interpreter::add_command("install_armor_locker", POS_RESTING, do_install_armor_locker, LVL_BUILDER,0);
 			mods::interpreter::add_command("uninstall_armor_locker", POS_RESTING, do_uninstall_armor_locker, LVL_BUILDER,0);
+
+			mods::interpreter::add_command("armor_locker_quota", POS_RESTING, do_armor_locker_quota, LVL_BUILDER,0);
+			mods::interpreter::add_command("weapon_locker_quota", POS_RESTING, do_weapon_locker_quota, LVL_BUILDER,0);
+
+			mods::interpreter::add_command("create_catchy_name", POS_RESTING, do_create_catchy_name, LVL_BUILDER,0);
+			mods::interpreter::add_command("instantiate_catchy_name", POS_RESTING, do_instantiate_catchy_name, LVL_BUILDER,0);
 	}
 };
 #undef mo_debug
