@@ -3415,6 +3415,7 @@ __MENTOC_MODS_FLASHBANG_HEADER__	mods/flashbang.hpp	2;"	d
 __MENTOC_MODS_HELP_HEADER__	mods/help.hpp	2;"	d
 __MENTOC_MODS_IMMORTAL_HEADER__	mods/immortal.hpp	2;"	d
 __MENTOC_MODS_INJURE_HEADER__	mods/injure.hpp	2;"	d
+__MENTOC_MODS_INTEGRAL_OBJECTS_DB_HEADER__	mods/integral-objects-db.hpp	2;"	d
 __MENTOC_MODS_INTEGRAL_OBJECTS_HEADER__	mods/integral-objects.hpp	2;"	d
 __MENTOC_MODS_INTEPRETER_HEADER__	mods/interpreter.hpp	2;"	d
 __MENTOC_MODS_ITEM_HEADER__	mods/item.hpp	2;"	d
@@ -3650,7 +3651,7 @@ armor_classification_type_t	mods/yaml.hpp	/^enum armor_classification_type_t {$/
 armor_description_t	mods/yaml.hpp	/^		armor_description_t() :$/;"	f	struct:mods::yaml::armor_description_t
 armor_description_t	mods/yaml.hpp	/^	struct armor_description_t : public yaml_description_t {$/;"	s	namespace:mods::yaml
 armor_pen	mods/projectile.cpp	/^			int armor_pen;$/;"	m	struct:mods::projectile::explosive_damage_t	file:
-armor_quota	mods/integral-objects.cpp	/^	int armor_quota(room_vnum room){$/;"	f	namespace:mods::integral_objects
+armor_quota	mods/integral-objects-db.cpp	/^	int armor_quota(room_vnum room){$/;"	f	namespace:mods::integral_objects_db
 array_end	mods/jx.hpp	/^			compositor& array_end() {$/;"	f	struct:mods::jx::compositor
 array_start	mods/jx.hpp	/^			compositor& array_start(const std::string& key) {$/;"	f	struct:mods::jx::compositor
 as_int	mods/pq.cpp	/^	int as_int(result& r,int index, int index_y) {$/;"	f	namespace:mods::pq
@@ -4927,7 +4928,7 @@ fire_status	structs.h	/^		fire_status_t& fire_status(){$/;"	f
 fire_status_start	structs.h	/^		void fire_status_start(){$/;"	f
 fire_weapon	mods/rifle-instance-data.hpp	/^	void fire_weapon(){$/;"	f	struct:heat
 first_alpha_is_any	mods/util.hpp	/^	static inline bool first_alpha_is_any(std::string_view line,std::string_view any){$/;"	f	namespace:mods::util
-first_or_create	mods/integral-objects.cpp	/^	obj_ptr_t first_or_create(room_vnum room,std::string query, int type, std::string yaml_file){$/;"	f	namespace:mods::integral_objects
+first_or_create	mods/integral-objects-db.cpp	/^	obj_ptr_t first_or_create(room_vnum room,std::string query, int type, std::string yaml_file){$/;"	f	namespace:mods::integral_objects_db
 fixtures	mods/bugs-fixtures.cpp	/^	void fixtures(std::string from, std::string msg){$/;"	f	namespace:mods::bugs
 fixtures	mods/bugs-fixtures.cpp	/^	void fixtures(std::string_view msg){$/;"	f	namespace:mods::bugs
 flag_group	mods/flags.hpp	/^	enum flag_group {$/;"	g	namespace:mods::flags
@@ -5441,6 +5442,8 @@ int_types	mods/values.cpp	/^		static const std::vector<std::string> int_types = 
 integral_objects	globals.cpp	/^INIT(mods::integral_objects);$/;"	v
 integral_objects	mods/integral-objects.cpp	/^namespace mods::integral_objects {$/;"	n	class:mods	file:
 integral_objects	mods/integral-objects.hpp	/^namespace mods::integral_objects {$/;"	n	class:mods
+integral_objects_db	mods/integral-objects-db.cpp	/^namespace mods::integral_objects_db {$/;"	n	class:mods	file:
+integral_objects_db	mods/integral-objects-db.hpp	/^namespace mods::integral_objects_db {$/;"	n	class:mods
 intent	mods/intent.cpp	/^namespace mods::intent {$/;"	n	class:mods	file:
 intent	mods/intent.hpp	/^namespace mods::intent {$/;"	n	class:mods
 intent_debug	mods/intent.cpp	3;"	d	file:
@@ -6034,9 +6037,12 @@ missed	mods/values.hpp	/^			static inline void missed(T& p){$/;"	f	namespace:mod
 missing_cash1	shop.h	/^	mods::string missing_cash1;		\/* Message if keeper hasn't got cash	*\/$/;"	m	struct:shop_data
 missing_cash2	shop.h	/^	mods::string missing_cash2;		\/* Message if player hasn't got cash	*\/$/;"	m	struct:shop_data
 mloops_debug	mods/loops.cpp	4;"	d	file:
-mo_debug	mods/integral-objects.cpp	15;"	d	file:
-mo_debug	mods/integral-objects.cpp	17;"	d	file:
-mo_debug	mods/integral-objects.cpp	367;"	d	file:
+mo_debug	mods/integral-objects-db.cpp	127;"	d	file:
+mo_debug	mods/integral-objects-db.cpp	15;"	d	file:
+mo_debug	mods/integral-objects-db.cpp	17;"	d	file:
+mo_debug	mods/integral-objects.cpp	16;"	d	file:
+mo_debug	mods/integral-objects.cpp	18;"	d	file:
+mo_debug	mods/integral-objects.cpp	282;"	d	file:
 mob_act_flags	mods/builder.cpp	/^	std::array<std::pair<int,std::string>,19> mob_act_flags = { {$/;"	m	namespace:mods::builder	file:
 mob_chmap	globals.cpp	/^		std::map<char_data*,std::shared_ptr<mods::npc>> mob_chmap;$/;"	m	namespace:mods::globals	file:
 mob_commands	mods/builder.cpp	/^static std::list<std::shared_ptr<command_t>> mob_commands;$/;"	v	file:
@@ -6786,7 +6792,9 @@ remove	mods/affects.hpp	/^			void remove(TAffects id){$/;"	f	struct:mods::affect
 remove	mods/super-users.cpp	/^	bool remove(std::string_view name){$/;"	f	namespace:mods::super_users
 remove_affect	mods/player.cpp	/^	void player::remove_affect(uint64_t flag){$/;"	f	class:mods::player
 remove_affect_plr	mods/player.cpp	/^	void player::remove_affect_plr(uint64_t flag){$/;"	f	class:mods::player
+remove_armor_locker	mods/integral-objects-db.cpp	/^	void remove_armor_locker(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
 remove_armor_locker	mods/integral-objects.cpp	/^	void remove_armor_locker(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects
+remove_camera_feed	mods/integral-objects-db.cpp	/^	void remove_camera_feed(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
 remove_camera_feed	mods/integral-objects.cpp	/^	void remove_camera_feed(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects
 remove_dark	mods/rooms.hpp	/^			static inline void remove_dark(TRoom room) {$/;"	f	namespace:mods::rooms::gods
 remove_flag	mods/player.hpp	/^		aligned_int_t remove_flag(chunk_type_t chunk,aligned_int_t bit){$/;"	f	struct:mods::player
@@ -6799,6 +6807,7 @@ remove_subscriber	mods/chat.cpp	/^	void channel::remove_subscriber(const socket_
 remove_super_user	mods/js.cpp	/^		static duk_ret_t remove_super_user(duk_context *ctx) {$/;"	f	namespace:mods::js
 remove_texture	structs.cpp	/^		void room_data::remove_texture(texture_type_t t){$/;"	f	class:room_data
 remove_type	mods/object.cpp	/^	object& object::remove_type(object_type_enum_t type){$/;"	f	class:mods::object
+remove_weapon_locker	mods/integral-objects-db.cpp	/^	void remove_weapon_locker(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
 remove_weapon_locker	mods/integral-objects.cpp	/^	void remove_weapon_locker(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects
 renew_txn	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::renew_txn(){$/;"	f	class:mods::lmdb::_db_handle
 rent_file_timeout	config.cpp	/^int rent_file_timeout = 30;$/;"	v
@@ -6942,16 +6951,16 @@ sandboxes	mods/builder.cpp	/^	sandbox_list_t sandboxes;$/;"	m	namespace:mods::bu
 sanitize	mods/util.cpp	/^		std::function<void(const std::string&,std::string&)> sanitize = [](const std::string & command,std::string& sanitized){$/;"	m	namespace:mods::util	file:
 sanitize_key	mods/lmdb.cpp	/^std::string sanitize_key(std::string key){$/;"	f
 save	shop.cpp	/^std::tuple<bool,uint64_t,std::string> shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::save(){$/;"	f	class:shop_data
-save_armor_locker	mods/integral-objects.cpp	/^	void save_armor_locker(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects
-save_armor_locker_quota	mods/integral-objects.cpp	/^	void save_armor_locker_quota(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects
-save_camera_feed	mods/integral-objects.cpp	/^	void save_camera_feed(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects
-save_catchy_name	mods/integral-objects.cpp	/^	void save_catchy_name(player_ptr_t& player, std::string_view identifier, std::string_view name,std::string_view deep_object_description){$/;"	f	namespace:mods::integral_objects
+save_armor_locker	mods/integral-objects-db.cpp	/^	void save_armor_locker(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
+save_armor_locker_quota	mods/integral-objects-db.cpp	/^	void save_armor_locker_quota(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
+save_camera_feed	mods/integral-objects-db.cpp	/^	void save_camera_feed(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
+save_catchy_name	mods/integral-objects-db.cpp	/^	void save_catchy_name(player_ptr_t& player, std::string_view identifier, std::string_view name,std::string_view deep_object_description){$/;"	f	namespace:mods::integral_objects_db
 save_char	mods/db.cpp	/^tuple_status_t save_char($/;"	f	namespace:mods::db
 save_char_data	db.cpp	/^	int16_t save_char_data(player_ptr_t& player,std::map<std::string,std::string> values){$/;"	f	namespace:db
 save_char_prefs	db.cpp	/^	int16_t save_char_prefs(player_ptr_t& player){$/;"	f	namespace:db
 save_etext	db.cpp	/^void save_etext(char_data *ch) {$/;"	f
 save_function	mods/builder.cpp	/^	save_function_t save_function;$/;"	m	struct:command_t	file:
-save_item_to_db	mods/integral-objects.cpp	/^	void save_item_to_db(player_ptr_t& player, std::string section_name, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects
+save_item_to_db	mods/integral-objects-db.cpp	/^	void save_item_to_db(player_ptr_t& player, std::string section_name, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
 save_mud_time	db.cpp	/^void save_mud_time(struct time_info_data *when) {$/;"	f
 save_new_char	db.cpp	/^	int16_t save_new_char(player_ptr_t& player){$/;"	f	namespace:db
 save_new_char	mods/db.cpp	/^tuple_status_t save_new_char($/;"	f	namespace:mods::db
@@ -6965,8 +6974,8 @@ save_room_distance_to_cache	mods/scan.cpp	/^	void save_room_distance_to_cache(co
 save_to_db	mods/builder.cpp	/^	int save_to_db(room_rnum in_room,std::string & error_string) {$/;"	f	namespace:mods::builder
 save_to_db	mods/builder_util.hpp	/^	std::pair<bool,std::string> save_to_db($/;"	f	namespace:mods::builder_util
 save_to_lmdb	mods/values.cpp	/^		void save_to_lmdb(std::string key,std::string value){$/;"	f	namespace:mods::values
-save_weapon_locker	mods/integral-objects.cpp	/^	void save_weapon_locker(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects
-save_weapon_locker_quota	mods/integral-objects.cpp	/^	void save_weapon_locker_quota(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects
+save_weapon_locker	mods/integral-objects-db.cpp	/^	void save_weapon_locker(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
+save_weapon_locker_quota	mods/integral-objects-db.cpp	/^	void save_weapon_locker_quota(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
 save_yaml_exceptions_to_disk	mods/object-utils.hpp	/^	static inline std::tuple<int32_t,std::string> save_yaml_exceptions_to_disk(){$/;"	f	namespace:mods::object_utils
 save_zone_to_db	mods/builder.cpp	/^	std::tuple<bool,zone_pkid_t> save_zone_to_db(int virtual_number,std::string_view zone_name,int zone_start,int zone_end,int lifespan,int reset_mode) {$/;"	f	namespace:mods::builder
 saved	mods/player.hpp	/^		char_special_data_saved& saved(){$/;"	f	struct:mods::player
@@ -7649,7 +7658,7 @@ weapon_cooldown_start	mods/player.cpp	/^	void player::weapon_cooldown_start(uint
 weapon_flags	structs.h	/^		uint64_t weapon_flags;$/;"	m	struct:obj_flag_data
 weapon_handling	mods/skills.hpp	/^		static std::vector<proficiency_t> weapon_handling = {$/;"	m	namespace:mods::skills::proficiencies
 weapon_name	mods/player.cpp	/^	mods::string player::weapon_name(){$/;"	f	class:mods::player
-weapon_quota	mods/integral-objects.cpp	/^	int weapon_quota(room_vnum room){$/;"	f	namespace:mods::integral_objects
+weapon_quota	mods/integral-objects-db.cpp	/^	int weapon_quota(room_vnum room){$/;"	f	namespace:mods::integral_objects_db
 weapon_set	mods/drone.hpp	/^			typedef short weapon_set;$/;"	t	struct:mods::drone_impl
 weapon_stats	mods/weapon-stat-list.hpp	/^	static inline weapon_stat_list_t* weapon_stats(int type){$/;"	f
 weapon_type_flags	mods/builder.cpp	/^	std::array<std::pair<int,std::string>,13> weapon_type_flags = { {$/;"	m	namespace:mods::builder	file:
@@ -7695,7 +7704,7 @@ worn_on	structs.h	/^		sh_int worn_on;		  \/* Worn where?		      *\/$/;"	m	struct
 write	comm.cpp	1488;"	d	file:
 write_aliases	alias.cpp	/^void write_aliases(char_data *ch) {$/;"	f
 write_ban_list	ban.cpp	/^void write_ban_list(void) {$/;"	f
-write_db_values	mods/integral-objects.cpp	/^	int write_db_values(std::string_view section_name, std::string_view prefix, const std::vector<std::string>& values){$/;"	f	namespace:mods::integral_objects
+write_db_values	mods/integral-objects-db.cpp	/^	int write_db_values(std::string_view section_name, std::string_view prefix, const std::vector<std::string>& values){$/;"	f	namespace:mods::integral_objects_db
 write_example_file	mods/yaml.cpp	/^	int16_t armor_description_t::write_example_file(std::string_view file){$/;"	f	class:mods::yaml::armor_description_t
 write_example_file	mods/yaml.cpp	/^	int16_t attachment_description_t::write_example_file(std::string_view file){$/;"	f	class:mods::yaml::attachment_description_t
 write_example_file	mods/yaml.cpp	/^	int16_t consumable_description_t::write_example_file(std::string_view file){$/;"	f	class:mods::yaml::consumable_description_t
