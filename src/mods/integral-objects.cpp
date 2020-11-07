@@ -95,21 +95,6 @@ namespace mods::integral_objects {
 		}
 	}
 
-	void remove_camera_feed(player_ptr_t& player, std::vector<std::string>& args){
-		using namespace mods::db;
-		auto status = delete_section_vector("camera-feed",std::to_string(world[player->room()].number));
-		player->send("delete status: %d\r\n",status);
-	}
-	void remove_weapon_locker(player_ptr_t& player, std::vector<std::string>& args){
-		using namespace mods::db;
-		auto status = delete_section_vector("weapon-locker",std::to_string(world[player->room()].number));
-		player->send("delete status: %d\r\n",status);
-	}
-	void remove_armor_locker(player_ptr_t& player, std::vector<std::string>& args){
-		using namespace mods::db;
-		auto status = delete_section_vector("armor-locker",std::to_string(world[player->room()].number));
-		player->send("delete status: %d\r\n",status);
-	}
 
 	template <typename TAttachments>
 	TAttachments instantiate_catchy_name(std::string_view identifier){
@@ -261,22 +246,22 @@ ACMD(do_instantiate_catchy_name){
 }
 namespace mods::integral_objects {
 	void init(){
-			mods::interpreter::add_command("list_wear_flags", POS_RESTING, do_list_wear_flags, LVL_BUILDER,0);
+		mods::interpreter::add_command("list_wear_flags", POS_RESTING, do_list_wear_flags, LVL_BUILDER,0);
 
-			mods::interpreter::add_command("install_weapon_locker", POS_RESTING, do_install_weapon_locker, LVL_BUILDER,0);
-			mods::interpreter::add_command("uninstall_weapon_locker", POS_RESTING, do_uninstall_weapon_locker, LVL_BUILDER,0);
+		mods::interpreter::add_command("install_weapon_locker", POS_RESTING, do_install_weapon_locker, LVL_BUILDER,0);
+		mods::interpreter::add_command("uninstall_weapon_locker", POS_RESTING, do_uninstall_weapon_locker, LVL_BUILDER,0);
 
-			mods::interpreter::add_command("install_camera_feed", POS_RESTING, do_install_camera_feed, LVL_BUILDER,0);
-			mods::interpreter::add_command("uninstall_camera_feed", POS_RESTING, do_uninstall_camera_feed, LVL_BUILDER,0);
+		mods::interpreter::add_command("install_camera_feed", POS_RESTING, do_install_camera_feed, LVL_BUILDER,0);
+		mods::interpreter::add_command("uninstall_camera_feed", POS_RESTING, do_uninstall_camera_feed, LVL_BUILDER,0);
 
-			mods::interpreter::add_command("install_armor_locker", POS_RESTING, do_install_armor_locker, LVL_BUILDER,0);
-			mods::interpreter::add_command("uninstall_armor_locker", POS_RESTING, do_uninstall_armor_locker, LVL_BUILDER,0);
+		mods::interpreter::add_command("install_armor_locker", POS_RESTING, do_install_armor_locker, LVL_BUILDER,0);
+		mods::interpreter::add_command("uninstall_armor_locker", POS_RESTING, do_uninstall_armor_locker, LVL_BUILDER,0);
 
-			mods::interpreter::add_command("armor_locker_quota", POS_RESTING, do_armor_locker_quota, LVL_BUILDER,0);
-			mods::interpreter::add_command("weapon_locker_quota", POS_RESTING, do_weapon_locker_quota, LVL_BUILDER,0);
+		mods::interpreter::add_command("armor_locker_quota", POS_RESTING, do_armor_locker_quota, LVL_BUILDER,0);
+		mods::interpreter::add_command("weapon_locker_quota", POS_RESTING, do_weapon_locker_quota, LVL_BUILDER,0);
 
-			mods::interpreter::add_command("create_catchy_name", POS_RESTING, do_create_catchy_name, LVL_BUILDER,0);
-			mods::interpreter::add_command("instantiate_catchy_name", POS_RESTING, do_instantiate_catchy_name, LVL_BUILDER,0);
+		mods::interpreter::add_command("create_catchy_name", POS_RESTING, do_create_catchy_name, LVL_BUILDER,0);
+		mods::interpreter::add_command("instantiate_catchy_name", POS_RESTING, do_instantiate_catchy_name, LVL_BUILDER,0);
 	}
 };
 #undef mo_debug

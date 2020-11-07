@@ -6042,7 +6042,7 @@ mo_debug	mods/integral-objects-db.cpp	15;"	d	file:
 mo_debug	mods/integral-objects-db.cpp	17;"	d	file:
 mo_debug	mods/integral-objects.cpp	16;"	d	file:
 mo_debug	mods/integral-objects.cpp	18;"	d	file:
-mo_debug	mods/integral-objects.cpp	282;"	d	file:
+mo_debug	mods/integral-objects.cpp	267;"	d	file:
 mob_act_flags	mods/builder.cpp	/^	std::array<std::pair<int,std::string>,19> mob_act_flags = { {$/;"	m	namespace:mods::builder	file:
 mob_chmap	globals.cpp	/^		std::map<char_data*,std::shared_ptr<mods::npc>> mob_chmap;$/;"	m	namespace:mods::globals	file:
 mob_commands	mods/builder.cpp	/^static std::list<std::shared_ptr<command_t>> mob_commands;$/;"	v	file:
@@ -6793,9 +6793,7 @@ remove	mods/super-users.cpp	/^	bool remove(std::string_view name){$/;"	f	namespa
 remove_affect	mods/player.cpp	/^	void player::remove_affect(uint64_t flag){$/;"	f	class:mods::player
 remove_affect_plr	mods/player.cpp	/^	void player::remove_affect_plr(uint64_t flag){$/;"	f	class:mods::player
 remove_armor_locker	mods/integral-objects-db.cpp	/^	void remove_armor_locker(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
-remove_armor_locker	mods/integral-objects.cpp	/^	void remove_armor_locker(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects
 remove_camera_feed	mods/integral-objects-db.cpp	/^	void remove_camera_feed(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
-remove_camera_feed	mods/integral-objects.cpp	/^	void remove_camera_feed(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects
 remove_dark	mods/rooms.hpp	/^			static inline void remove_dark(TRoom room) {$/;"	f	namespace:mods::rooms::gods
 remove_flag	mods/player.hpp	/^		aligned_int_t remove_flag(chunk_type_t chunk,aligned_int_t bit){$/;"	f	struct:mods::player
 remove_flag	mods/rooms.hpp	/^	static inline void remove_flag(room_rnum room, int flag){$/;"	f	namespace:mods::rooms
@@ -6808,7 +6806,6 @@ remove_super_user	mods/js.cpp	/^		static duk_ret_t remove_super_user(duk_context
 remove_texture	structs.cpp	/^		void room_data::remove_texture(texture_type_t t){$/;"	f	class:room_data
 remove_type	mods/object.cpp	/^	object& object::remove_type(object_type_enum_t type){$/;"	f	class:mods::object
 remove_weapon_locker	mods/integral-objects-db.cpp	/^	void remove_weapon_locker(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
-remove_weapon_locker	mods/integral-objects.cpp	/^	void remove_weapon_locker(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects
 renew_txn	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::renew_txn(){$/;"	f	class:mods::lmdb::_db_handle
 rent_file_timeout	config.cpp	/^int rent_file_timeout = 30;$/;"	v
 rent_info	structs.h	/^	struct rent_info {$/;"	s
