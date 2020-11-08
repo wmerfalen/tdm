@@ -35,6 +35,23 @@ namespace mods::object_utils {
 		}
 		return false;
 	}
+	std::string get_yaml_file(std::string& yaml){
+		std::string current = "";
+		bool save = false;
+		for(auto ch : yaml){
+			if(ch == '/'){
+				save = true;
+				continue;
+			}
+			if(ch == '{'){
+				return current;
+			}
+			if(save){
+				current += ch;
+			}
+		}
+		return current;
+	}
 	void report_yaml_message(std::string_view msg){
 		yaml_feed_exceptions.emplace_back(CAT(mods::util::time_string(),"->",msg.data()));
 	}

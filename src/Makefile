@@ -86,8 +86,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/integral-object mods/orm/camera-feed mods/orm/door-event \
 					 mods/mini-games/line-up mods/orm/mini-game mods/mini-games \
 					 mods/mini-games/wires mods/migrations mods/interpreter \
-					 mods/radio mods/zone mods/count-objects mods/deep-object-parser \
-					 mods/rifle-attachments
+					 mods/radio mods/zone mods/query-objects mods/deep-object-parser \
+					 mods/rifle-attachments mods/examine
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

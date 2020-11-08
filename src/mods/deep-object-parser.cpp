@@ -6,7 +6,7 @@
 #define m_success(a) std::cout << "[deep_object_parser_t]" << green_str("[success]") << "[line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"
 #define m_parse_error(a) std::cerr << "[deep_object_parser_t]" << red_str("[parse_error]") << "[line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"
 namespace mods {
-	const std::string example_grammar = "g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}";
+	const std::string example_grammar = "rifle/g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}";
 	using counter_t = uint16_t;
 	std::tuple<bool,std::string,counter_t> expect_yaml_file(const std::string& line, counter_t in_counter) {
 		counter_t saved = in_counter;
@@ -14,7 +14,7 @@ namespace mods {
 		std::string file_name = "";
 		std::string extension = "";
 		while(line.length() > in_counter && !file_parsed){
-			if(line[in_counter] == '-' || isalpha(line[in_counter]) || isdigit(line[in_counter])) {
+			if(line[in_counter] == '/' || line[in_counter] == '-' || isalpha(line[in_counter]) || isdigit(line[in_counter])) {
 				file_name += line[in_counter++];
 				continue;
 			}

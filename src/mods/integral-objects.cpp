@@ -11,6 +11,7 @@
 #include "zone.hpp"
 #include "builder/object-placement.hpp"
 #include "rifle-attachments.hpp"
+#include "query-objects.hpp"
 
 #ifdef __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
 #define mo_debug(A) std::cerr << "[mods::integral_objects][debug]:" << A <<"\n";
@@ -21,6 +22,12 @@
 extern std::string sanitize_key(std::string key);
 extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
 namespace mods::integral_objects {
+	std::size_t weapon_locker_quota(const obj_ptr_t& object){
+		return 10;
+	}
+	std::size_t armor_locker_quota(const obj_ptr_t& object){
+		return 10;
+	}
 	void feed_weapon_locker(room_vnum room){
 		mo_debug("feeding weapon locker to room vnum:" << room << "| real room:" << real_room(room));
 		std::vector<std::string> values;
@@ -32,8 +39,12 @@ namespace mods::integral_objects {
 				continue;
 			}
 			mo_debug("[feed_weapon_locker]: feeding sane object:'" << yaml << "'");
-			auto obj = create_object(mods::object_utils::get_yaml_type(yaml),EXPLODE(yaml.c_str(),'/')[1]);
-			obj_to_obj(obj,locker);
+			auto yaml_file = mods::object_utils::get_yaml_file(yaml);
+			auto uuid_list = mods::query_objects::query_contents_by_yaml(locker,yaml_file);
+			if(uuid_list.size() < weapon_locker_quota(locker)){
+				auto obj = create_object(mods::object_utils::get_yaml_type(yaml),yaml_file);
+				obj_to_obj(obj,locker);
+			}
 		}
 	}
 
@@ -48,8 +59,12 @@ namespace mods::integral_objects {
 				continue;
 			}
 			mo_debug("[feed_armor_locker]: feeding sane object:'" << yaml << "'");
-			auto obj = create_object(mods::object_utils::get_yaml_type(yaml),EXPLODE(yaml.c_str(),'/')[1]);
-			obj_to_obj(obj,locker);
+			auto yaml_file = mods::object_utils::get_yaml_file(yaml);
+			auto uuid_list = mods::query_objects::query_contents_by_yaml(locker,yaml_file);
+			if(uuid_list.size() < armor_locker_quota(locker)){
+				auto obj = create_object(mods::object_utils::get_yaml_type(yaml),yaml_file);
+				obj_to_obj(obj,locker);
+			}
 		}
 	}
 

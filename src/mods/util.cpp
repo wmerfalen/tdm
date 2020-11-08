@@ -7,6 +7,14 @@
 
 
 namespace mods::util {
+	bool is_yaml_type(std::string_view type){
+		for(const auto & valid_type : VALID_TYPES){
+			if(type.compare(valid_type.c_str()) == 0){
+				return true;
+			}
+		}
+		return false;
+	}
 	std::string compile_yaml_path_from_type_and_file(int type, std::string_view file){
 		std::string string_type = mods::util::yaml_int_to_string(type);
 		if(string_type.compare(mods::util::UNKNOWN_YAML_FILE) == 0){
@@ -449,7 +457,7 @@ namespace mods::util {
 		return results;
 	}
 	bool yaml_file_path_is_sane(std::string path){
-		return preg_match("^objects/[a-z]+/[a-z0-9\\-]+\\.yml$",path);
+		return preg_match("^[a-z]+/[a-z0-9\\-]+\\.yml$",path);
 	}
 	std::string yaml_int_to_string(int type){
 		/** !!*****************!! */
@@ -528,15 +536,24 @@ namespace mods::util {
 			parts.emplace_back(current);
 			current = "";
 		}
-		/**
-		 * parts:
-		 * [0] => objects
-		 * [1] => rifle
-		 * [2] => psg1.yml
-		 */
-		if(parts.size() != 3){
-			return {-1,""};
+		if(parts.size() == 2){
+			/** parts:
+			 * [0] => rifle
+			 * [1] => psg1.yml
+			 */
+#define MENTOC_ITEM_PARSE_IMPL(r,data,CLASS_TYPE)\
+		if(ICMP(parts[0],BOOST_PP_STRINGIZE(CLASS_TYPE))){\
+			return {BOOST_PP_CAT(ITEM_,CLASS_TYPE),parts[1]};\
 		}
+#define MENTOC_ITEM_PARSE \
+BOOST_PP_SEQ_FOR_EACH(MENTOC_ITEM_PARSE_IMPL, ~, MENTOC_ITEM_TYPES_CAPS_SEQ)
+
+		MENTOC_ITEM_PARSE
+
+#undef MENTOC_ITEM_PARSE_IMPL
+#undef MENTOC_ITEM_PARSE
+		}
+			
 #define MENTOC_ITEM_PARSE_IMPL(r,data,CLASS_TYPE)\
 		if(ICMP(parts[1],BOOST_PP_STRINGIZE(CLASS_TYPE))){\
 			return {BOOST_PP_CAT(ITEM_,CLASS_TYPE),parts[2]};\
@@ -544,7 +561,15 @@ namespace mods::util {
 #define MENTOC_ITEM_PARSE \
 BOOST_PP_SEQ_FOR_EACH(MENTOC_ITEM_PARSE_IMPL, ~, MENTOC_ITEM_TYPES_CAPS_SEQ)
 
-		MENTOC_ITEM_PARSE
+		/**
+		 * parts:
+		 * [0] => objects
+		 * [1] => rifle
+		 * [2] => psg1.yml
+		 */
+		if(parts.size() == 3){
+			MENTOC_ITEM_PARSE
+		}
 		return {-2,""};
 	}
 	bool yaml_file_exists(std::string path){

@@ -35,6 +35,19 @@ extern struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *numb
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 
 namespace mods::util {
+		/** !!*****************!! */
+		/** !!UPDATE_ITEM_TYPES!! */
+		/** !!*****************!! */
+		static std::vector<std::string> VALID_TYPES = {
+			"rifle","explosive","drone","attachment","gadget",
+			"armor","trap","consumable","container"
+		};
+	enum yaml_type_t {
+		UNRECOGNIZED = 0,
+		CATCHY_YAML_FILE = 1,
+		YAML_FILE_WITH_PREFIX = 2,
+		DEEP_OBJECT = 3
+	};
 
 	static inline std::string extract_until(std::string_view target, char this_char){
 		std::string buffer;
@@ -410,12 +423,15 @@ std::ostream& log(Args... args); /*{
 
 	bool preg_match(std::string_view regex,std::string_view haystack);
 	std::vector<std::string> explode(char delim,std::string& haystack);
+
 	bool yaml_file_path_is_sane(std::string path);
 	std::string yaml_int_to_string(int type);
 	int yaml_string_to_int(std::string type);
 	std::string yaml_caps_to_lower(std::string type);
 	std::tuple<int,std::string> extract_yaml_info_from_path(std::string_view path);
 	bool yaml_file_exists(std::string path);
+	bool is_yaml_type(std::string_view type);
+
 	template <typename T>
 	void vector_erase(std::vector<T>& vec,T element){
 		vec.erase(std::remove(vec.begin(), vec.end(),element), vec.end());

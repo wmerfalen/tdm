@@ -1,4 +1,4 @@
-#include "count-objects.hpp"
+#include "query-objects.hpp"
 #include "help.hpp"
 #include "super-users.hpp"
 #include "interpreter.hpp"
@@ -8,7 +8,7 @@
 #include "zone.hpp"
 
 #ifdef __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
-#define mc_debug(A) std::cerr << "[mods::count_objects][debug]:" << A <<"\n";
+#define mc_debug(A) std::cerr << "[mods::query_objects][debug]:" << A <<"\n";
 #else
 #define mc_debug(A)
 #endif
@@ -33,7 +33,7 @@
 
 extern int generic_find(char *arg, bitvector_t bitvector, char_data *ch, char_data **tar_ch, struct obj_data **tar_obj);
 
-namespace mods::count_objects {
+namespace mods::query_objects {
 	static constexpr int FIND_CHAR_ROOM    = (1 << 0);
 	static constexpr int FIND_CHAR_WORLD   = (1 << 1);
 	static constexpr int FIND_OBJ_INV      = (1 << 2);
@@ -140,12 +140,12 @@ ACMD(do_query_container){
 		player->errorln(usage);
 		return;
 	}
-	auto found_object = mods::count_objects::query_room_for_object(player->room(),vec_args[0]);
+	auto found_object = mods::query_objects::query_room_for_object(player->room(),vec_args[0]);
 	if(!found_object){
 		player->errorln(CAT("Couldn't find anything in the room that matches the search string of '",vec_args[0],"'"));
 		return;
 	}
-	auto uuid_list = mods::count_objects::query_contents_by_yaml_multi(found_object,vec_args);
+	auto uuid_list = mods::query_objects::query_contents_by_yaml_multi(found_object,vec_args);
 	for(auto & uuid : uuid_list){
 		player->sendln(optr_by_uuid(uuid)->name);
 	}
@@ -161,7 +161,7 @@ ACMD(do_query_room){
 		player->errorln(usage);
 		return;
 	}
-	auto uuid_list = mods::count_objects::query_room_for_object_by_yaml_multi(player->room(),vec_args);
+	auto uuid_list = mods::query_objects::query_room_for_object_by_yaml_multi(player->room(),vec_args);
 	for(auto & uuid : uuid_list){
 		player->sendln(optr_by_uuid(uuid)->name);
 	}
@@ -201,12 +201,12 @@ ACMD(do_query_inventory_container){
 		return;
 	}
 	obj_data* tar_obj;
-	int result = generic_find((char*)vec_args[0].c_str(),mods::count_objects::FIND_OBJ_INV,player->cd(),nullptr,&tar_obj);
+	int result = generic_find((char*)vec_args[0].c_str(),mods::query_objects::FIND_OBJ_INV,player->cd(),nullptr,&tar_obj);
 	if(result == 0){
 		player->errorln(CAT("Couldn't find anything in the room that matches the search string of '",vec_args[0],"'"));
 		return;
 	}
-	auto uuid_list = mods::count_objects::query_inventory_container_by_yaml(player,vec_args[0],vec_args[1]);
+	auto uuid_list = mods::query_objects::query_inventory_container_by_yaml(player,vec_args[0],vec_args[1]);
 	for(auto & uuid : uuid_list){
 		player->sendln(optr_by_uuid(uuid)->name);
 	}
@@ -217,14 +217,14 @@ ACMD(do_query_zone){
 	DO_HELP("query_zone");
 	/** code here */
 	//auto vec_args = PARSE_ARGS();
-	//auto uuid_list = mods::count_objects::query_zone(player,vec_args);
+	//auto uuid_list = mods::query_objects::query_zone(player,vec_args);
 	//for(auto & uuid : uuid_list){
 	//	player->sendln(optr_by_uuid(uuid)->name);
 	//}
 	ADMIN_DONE();
 }
 
-namespace mods::count_objects {
+namespace mods::query_objects {
 	void init(){
 			mods::interpreter::add_command("query_container", POS_RESTING, do_query_container, LVL_BUILDER,0);
 			mods::interpreter::add_command("query_room", POS_RESTING, do_query_room, LVL_BUILDER,0);

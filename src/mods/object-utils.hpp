@@ -278,18 +278,11 @@ namespace mods::object_utils {
 	 * @return 
 	 */
 	static inline obj_ptr_t yaml_import(std::string object_type,std::string in_yaml_file){
-		/** !!*****************!! */
-		/** !!UPDATE_ITEM_TYPES!! */
-		/** !!*****************!! */
-		static std::vector<std::string> VALID_TYPES = {
-			"rifle","explosive","drone","attachment","gadget",
-			"armor","trap","consumable","container"
-		};
 		if(in_yaml_file.length() == 0 || object_type.length() == 0){
 			report_yaml_message("the yaml file specified is of zero length");
 			return nullptr;
 		}
-		if(!txt::match_any_of(VALID_TYPES,object_type)){
+		if(!txt::match_any_of(mods::util::VALID_TYPES,object_type)){
 			report_yaml_message("you must specify a valid object type, such as 'rifle'.");
 			return nullptr;
 		}
@@ -356,6 +349,7 @@ namespace mods::object_utils {
 	void change_visibility(obj_ptr_t& object,int amount);
 	bool is_wield_position(int where);
 	bool is_hold_position(int where);
+	std::string get_yaml_file(std::string& yaml);
 };//End namespace
 
 #endif

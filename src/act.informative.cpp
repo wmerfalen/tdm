@@ -32,6 +32,7 @@
 #include "mods/prefs.hpp"
 #include "mods/super-users.hpp"
 #include "mods/interpreter.hpp"
+#include "mods/examine.hpp"
 
 extern char_data* character_list;
 /* extern variables */
@@ -268,7 +269,14 @@ void look_into_camera_feed(player_ptr_t& player, obj_data* obj, int mode){
 	}
 }
 void show_obj_to_char(struct obj_data *obj, char_data *ch, int mode) {
-	MENTOC_PREAMBLE();
+	auto o = optr(obj);
+	auto player = ptr(ch);
+	show_obj_to_char(o,player,mode,1);
+}
+
+void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int count) {
+	auto obj = object.get();
+	auto ch = player->cd();
 	if(!obj || !ch) {
 		log("SYSERR: NULL pointer in show_obj_to_char(): obj=%p ch=%p", obj, ch);
 		return;
@@ -282,6 +290,18 @@ void show_obj_to_char(struct obj_data *obj, char_data *ch, int mode) {
 	if(mods::object_utils::is_claymore(obj) && obj->location_data() >= 16) {
 		player->send("A %s is installed at the foot of the %s entrance.\r\n", obj->name.c_str(), mods::globals::dir_to_str(obj->location_data() - 16, true).c_str());
 		return;
+	}
+
+	switch(mode){
+		case SHOW_OBJ_LONG:
+		case SHOW_OBJ_SHORT:
+		case ITEM_WEAPON:
+			if(count > 1){
+				player->send(CAT("(",std::to_string(count),") ").c_str());
+			}
+			break;
+		default:
+			break;
 	}
 
 	switch(mode) {
@@ -367,10 +387,9 @@ void show_obj_modifiers(struct obj_data *obj, char_data *ch) {
 
 void list_obj_to_char(struct obj_data *list, char_data *ch, int mode, int show) {
 	MENTOC_PREAMBLE();
-	struct obj_data *i;
 	bool found = FALSE;
 
-	for(i = list; i; i = i->next_content) {
+	for(auto i = list; i; i = i->next_content) {
 		if(!i){
 			break;
 		}
@@ -905,8 +924,8 @@ void look_in_obj(char_data *ch, char *arg) {
 						player->sendln(" (used): ");
 						break;
 				}
-
-				list_obj_to_char(obj->contains, ch, SHOW_OBJ_SHORT, TRUE);
+				auto o = optr(obj);
+				mods::examine::list_obj_contents_to_char(o,player,SHOW_OBJ_SHORT,1);
 			}
 		} else {		/* item must be a fountain or drink container */
 			if(GET_OBJ_VAL(obj, 1) <= 0) {

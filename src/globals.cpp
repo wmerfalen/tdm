@@ -51,7 +51,7 @@ INIT(mods::integral_objects);
 INIT(mods::interpreter);
 INIT(offensive);
 INIT(informative);
-INIT(mods::count_objects);
+INIT(mods::query_objects);
 #undef INIT
 
 namespace mods::mobs::room_watching::events {
@@ -456,7 +456,7 @@ namespace mods {
 			mods::debug::init(show_tics);
 			mods::skills::game_init();
 			mods::integral_objects::init();
-			mods::count_objects::init();
+			mods::query_objects::init();
 			mods::date_time::init();
 			::offensive::init();
 			::builder::init();
