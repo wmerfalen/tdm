@@ -35,6 +35,14 @@ namespace mods::classes {
 		std::pair<int16_t,std::string> feign_death();
 		void feign_death_done();
 		std::pair<int16_t,std::string> summon_extraction(room_rnum);
+
+		void plant_claymore();
+		void intimidate(uuid_t);
+		std::pair<bool,std::string>  pass_through_door_attempt(int direction);
+
+		/** will return how many turns the attacker will be distracted until it re-engages the player */
+		std::pair<int16_t,std::string> distract();
+
 		/** requires drone assisted sniping mode */
 		std::pair<int16_t,std::string> xray_shot();
 

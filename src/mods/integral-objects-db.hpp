@@ -3,10 +3,9 @@
 
 #include "../globals.hpp"
 #include "orm/integral-object.hpp"
+#include "db.hpp"
 
 namespace mods::integral_objects_db {
-	int write_db_values(std::string_view section_name, std::string_view prefix, const std::vector<std::string>& values);
-	void save_item_to_db(player_ptr_t& player, std::string section_name, std::vector<std::string>& args);
 	void save_weapon_locker(player_ptr_t& player, std::vector<std::string>& args);
 	void save_armor_locker(player_ptr_t& player, std::vector<std::string>& args);
 	void save_weapon_locker_quota(player_ptr_t& player, std::vector<std::string>& args);

@@ -32,41 +32,9 @@ namespace mods::classes {
 			}
 			set_player(player);
 			m_teep_level = static_cast<teep_levels_t>(m_orm.striker_teep_level);
-			m_xray_shot_level = static_cast<xray_shot_levels_t>(m_orm.striker_xray_shot_level);
-			m_stealth_level = static_cast<stealth_levels_t>(m_orm.striker_stealth_level);
-			m_feign_death_level = static_cast<feign_death_levels_t>(m_orm.striker_feign_death_level);
-			m_summon_extraction_level = static_cast<summon_extraction_levels_t>(m_orm.striker_summon_extraction_level);
 
 			player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
 			return result;
-		}
-		void striker::apply_stealth_to(obj_ptr_t& target){
-			int stealth = 0;
-			switch(m_stealth_level) {
-				default:
-				case stealth_levels_t::STRIKER_STEALTH_NONE:
-					m_player->sendln("It looks like you still need to train that skill");
-					return;
-				case stealth_levels_t::STRIKER_STEALTH_INITIATE:
-					stealth = dice(1, 8) + 1 + (m_player->level() / 4);
-					break;
-
-				case stealth_levels_t::STRIKER_STEALTH_FAMILIAR:
-					stealth = dice(3, 8) + 3 + (m_player->level() / 4);
-					break;
-
-				case stealth_levels_t::STRIKER_STEALTH_MASTER:
-					stealth = 100 + dice(3, 8);
-					break;
-			}
-			target->visibility -= stealth;
-		}
-		void striker::apply_stealth_to_player(player_ptr_t& target){
-
-		}
-		void striker::feign_death_done(){
-			m_player->set_position(POS_STANDING);
-			m_player->sendln("You stand up and dust yourself off.");
 		}
 		std::pair<int16_t,std::string> striker::teep(direction_t direction){
 			switch(m_teep_level){
@@ -80,14 +48,6 @@ namespace mods::classes {
 					break;
 			}
 			return {1, MSG_YOU_FEIGN_DEATH()};
-		}
-		std::pair<int16_t,std::string> striker::summon_extraction(room_rnum room){
-			return {0,""};
-		}
-		/** requires drone assisted sniping mode */
-		std::pair<int16_t,std::string> striker::xray_shot(){
-
-			return {0,""};
 		}
 		/* constructors and destructors */
 		striker::striker(){

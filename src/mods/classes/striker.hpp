@@ -26,14 +26,7 @@ namespace mods::classes {
 		player_ptr_t 	player();
 
 		void set_player(player_ptr_t);
-		void go_stealth();
-		void apply_stealth_to(obj_ptr_t& object);
-		void apply_stealth_to_player(player_ptr_t&);
 		std::pair<int16_t,std::string> teep(direction_t direction);
-		void feign_death_done();
-		std::pair<int16_t,std::string> summon_extraction(room_rnum);
-		/** requires drone assisted sniping mode */
-		std::pair<int16_t,std::string> xray_shot();
 
 		/** database routines */
 		int16_t load_by_player(player_ptr_t&);
@@ -44,11 +37,7 @@ namespace mods::classes {
 			striker_orm_t	m_orm;
 			player_ptr_t m_player;
 
-			teep_levels_t m_teep_level;
-			stealth_levels_t m_stealth_level;
-			summon_extraction_levels_t m_summon_extraction_level;
-			xray_shot_levels_t m_xray_shot_level;
-			feign_death_levels_t m_feign_death_level;
+			int /** todo replace iwth skill_familiarity_t */ m_teep_level;
 
 	};
 	std::shared_ptr<mods::classes::striker> create_striker(player_ptr_t &player);

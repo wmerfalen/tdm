@@ -4,7 +4,6 @@
 #include "interpreter.hpp"
 #include "orm/integral-object.hpp"
 #include "screen-searcher.hpp"
-#include "db.hpp"
 #include "util.hpp"
 #include "object-utils.hpp"
 #include "zone.hpp"
@@ -20,24 +19,6 @@
 extern std::string sanitize_key(std::string key);
 extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
 namespace mods::integral_objects_db {
-	int write_db_values(std::string_view section_name, std::string_view prefix, const std::vector<std::string>& values){
-		using namespace mods::db;
-		std::string value = "";
-		return put_section_vector(section_name.data(),prefix.data(), values);
-	}
-	void save_item_to_db(player_ptr_t& player, std::string section_name, std::vector<std::string>& args){
-		std::string value = "";
-		std::string prefix = std::to_string(world[player->room()].number);
-		auto status = mods::db::put_section_vector(section_name,prefix, args);
-		player->send("status: %d\r\n",status);
-		std::vector<std::string> values;
-		status = mods::db::get_section_vector(section_name,prefix,values);
-		player->send("get status: %d\r\nTo confirm, we placed these values...\r\n",status);
-		for(auto line : values){
-			player->send("[item]: '%s'\r\n",line.c_str());
-		}
-		player->sendln("Done listing.");
-	}
 	void save_weapon_locker(player_ptr_t& player, std::vector<std::string>& args){
 		mo_debug("saving weapon locker");
 		save_item_to_db(player, "weapon-locker", args);

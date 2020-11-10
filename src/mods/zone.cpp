@@ -1,5 +1,6 @@
 #include "zone.hpp"
 #include "integral-objects.hpp"
+#include "target-practice-db.hpp"
 
 #ifdef __MENTOC_MODS_ZONE_DEBUG__
 #define z_debug(A) std::cerr << "[mods::zone debug]" << A << "\n";
@@ -25,6 +26,9 @@ void build_camera_feed(room_vnum room){
 	z_debug("building camera feed");
 	auto obj = create_object(ITEM_GADGET, "camera.yml");
 	obj_to_room(obj.get(),real_room(room));
+}
+void build_dummy(room_vnum room){
+	mods::target_practice_db::queue_dummy_on_room(room);
 }
 void register_replenish(room_vnum room,std::string type){
 	replenish_command c;
@@ -80,6 +84,10 @@ void remove_replenish(room_vnum room,std::string type){
 			z_debug("Found camera feed in room_ptr->number: " << room_ptr->number);
 			build_camera_feed(room_ptr->number);
 			register_replenish(room_ptr->number,"camera-feed");
+		}
+		if(mods::db::vector_exists("dummy",std::to_string(room_ptr->number))){
+			z_debug("Found dummy in room_ptr->number: " << room_ptr->number);
+			build_dummy(room_ptr->number);
 		}
 	}
 };

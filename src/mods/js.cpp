@@ -375,8 +375,8 @@ namespace mods {
 				duk_push_number(ctx,-1);
 				return 1;
 			}
+			if(key.compare("ANIMATE_DEAD") == 0){ ::affect_from_char(*player_ptr,SPELL_ANIMATE_DEAD); }
 			if(key.compare("ARMOR") == 0){ ::affect_from_char(*player_ptr,SPELL_ARMOR); }
-			if(key.compare("TELEPORT") == 0){ ::affect_from_char(*player_ptr,SPELL_TELEPORT); }
 			if(key.compare("BLESS") == 0){ ::affect_from_char(*player_ptr,SPELL_BLESS); }
 			if(key.compare("BLINDNESS") == 0){ ::affect_from_char(*player_ptr,SPELL_BLINDNESS); }
 			if(key.compare("BURNING_HANDS") == 0){ ::affect_from_char(*player_ptr,SPELL_BURNING_HANDS); }
@@ -397,12 +397,18 @@ namespace mods {
 			if(key.compare("DETECT_MAGIC") == 0){ ::affect_from_char(*player_ptr,SPELL_DETECT_MAGIC); }
 			if(key.compare("DETECT_POISON") == 0){ ::affect_from_char(*player_ptr,SPELL_DETECT_POISON); }
 			if(key.compare("DISPEL_EVIL") == 0){ ::affect_from_char(*player_ptr,SPELL_DISPEL_EVIL); }
+			if(key.compare("DISPEL_GOOD") == 0){ ::affect_from_char(*player_ptr,SPELL_DISPEL_GOOD); }
 			if(key.compare("EARTHQUAKE") == 0){ ::affect_from_char(*player_ptr,SPELL_EARTHQUAKE); }
 			if(key.compare("ENCHANT_WEAPON") == 0){ ::affect_from_char(*player_ptr,SPELL_ENCHANT_WEAPON); }
 			if(key.compare("ENERGY_DRAIN") == 0){ ::affect_from_char(*player_ptr,SPELL_ENERGY_DRAIN); }
 			if(key.compare("FIREBALL") == 0){ ::affect_from_char(*player_ptr,SPELL_FIREBALL); }
+			if(key.compare("GROUP_ARMOR") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_ARMOR); }
+			if(key.compare("GROUP_HEAL") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_HEAL); }
+			if(key.compare("GROUP_RECALL") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_RECALL); }
 			if(key.compare("HARM") == 0){ ::affect_from_char(*player_ptr,SPELL_HARM); }
 			if(key.compare("HEAL") == 0){ ::affect_from_char(*player_ptr,SPELL_HEAL); }
+			if(key.compare("INFRAVISION") == 0){ ::affect_from_char(*player_ptr,SPELL_INFRAVISION); }
+			if(key.compare("INTIMIDATED") == 0){ ::affect_from_char(*player_ptr,SPELL_INTIMIDATED); }
 			if(key.compare("INVISIBLE") == 0){ ::affect_from_char(*player_ptr,SPELL_INVISIBLE); }
 			if(key.compare("LIGHTNING_BOLT") == 0){ ::affect_from_char(*player_ptr,SPELL_LIGHTNING_BOLT); }
 			if(key.compare("LOCATE_OBJECT") == 0){ ::affect_from_char(*player_ptr,SPELL_LOCATE_OBJECT); }
@@ -410,22 +416,16 @@ namespace mods {
 			if(key.compare("POISON") == 0){ ::affect_from_char(*player_ptr,SPELL_POISON); }
 			if(key.compare("PROT_FROM_EVIL") == 0){ ::affect_from_char(*player_ptr,SPELL_PROT_FROM_EVIL); }
 			if(key.compare("REMOVE_CURSE") == 0){ ::affect_from_char(*player_ptr,SPELL_REMOVE_CURSE); }
+			if(key.compare("REMOVE_POISON") == 0){ ::affect_from_char(*player_ptr,SPELL_REMOVE_POISON); }
 			if(key.compare("SANCTUARY") == 0){ ::affect_from_char(*player_ptr,SPELL_SANCTUARY); }
+			if(key.compare("SENSE_LIFE") == 0){ ::affect_from_char(*player_ptr,SPELL_SENSE_LIFE); }
 			if(key.compare("SHOCKING_GRASP") == 0){ ::affect_from_char(*player_ptr,SPELL_SHOCKING_GRASP); }
 			if(key.compare("SLEEP") == 0){ ::affect_from_char(*player_ptr,SPELL_SLEEP); }
 			if(key.compare("STRENGTH") == 0){ ::affect_from_char(*player_ptr,SPELL_STRENGTH); }
 			if(key.compare("SUMMON") == 0){ ::affect_from_char(*player_ptr,SPELL_SUMMON); }
+			if(key.compare("TELEPORT") == 0){ ::affect_from_char(*player_ptr,SPELL_TELEPORT); }
 			if(key.compare("VENTRILOQUATE") == 0){ ::affect_from_char(*player_ptr,SPELL_VENTRILOQUATE); }
 			if(key.compare("WORD_OF_RECALL") == 0){ ::affect_from_char(*player_ptr,SPELL_WORD_OF_RECALL); }
-			if(key.compare("REMOVE_POISON") == 0){ ::affect_from_char(*player_ptr,SPELL_REMOVE_POISON); }
-			if(key.compare("SENSE_LIFE") == 0){ ::affect_from_char(*player_ptr,SPELL_SENSE_LIFE); }
-			if(key.compare("ANIMATE_DEAD") == 0){ ::affect_from_char(*player_ptr,SPELL_ANIMATE_DEAD); }
-			if(key.compare("DISPEL_GOOD") == 0){ ::affect_from_char(*player_ptr,SPELL_DISPEL_GOOD); }
-			if(key.compare("GROUP_ARMOR") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_ARMOR); }
-			if(key.compare("GROUP_HEAL") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_HEAL); }
-			if(key.compare("GROUP_RECALL") == 0){ ::affect_from_char(*player_ptr,SPELL_GROUP_RECALL); }
-			if(key.compare("INFRAVISION") == 0){ ::affect_from_char(*player_ptr,SPELL_INFRAVISION); }
-			if(key.compare("INTIMIDATED") == 0){ ::affect_from_char(*player_ptr,SPELL_INTIMIDATED); }
 			duk_push_number(ctx,0);
 			return 1;
 		}

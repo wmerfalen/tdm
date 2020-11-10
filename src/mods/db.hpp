@@ -134,5 +134,7 @@ namespace mods::db{
 	bool vector_exists(std::string section_name,std::string prefix);
 	int delete_section_vector(std::string_view section_name,std::string prefix);
 };//end namespace db_wrapper
+int write_db_values(std::string_view section_name, std::string_view prefix, const std::vector<std::string>& values);
+void save_item_to_db(player_ptr_t& player, std::string section_name, std::vector<std::string>& args);
 
 #endif

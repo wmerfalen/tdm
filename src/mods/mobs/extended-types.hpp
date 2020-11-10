@@ -18,7 +18,8 @@ namespace mods::mobs {
 		AGGRESSIVE_MELEE,
 		AGGRESSIVE_RIFLER,
 		LUNATIC,
-		GRUNT
+		GRUNT,
+		PRACTICE_DUMMY,
 	};
 	//vim sorcery: s/\t\t\([A-Z_]\+\),/\t\t{\1,"\1"},/g
 	static std::map<extended_types_t,std::string> ext_map = {
@@ -31,6 +32,7 @@ namespace mods::mobs {
 		{AGGRESSIVE_RIFLER,"AGGRESSIVE_RIFLER"},
 		{LUNATIC,"LUNATIC"},
 		{GRUNT,"GRUNT"},
+		{PRACTICE_DUMMY,"PRACTICE_DUMMY"},
 	};
 	void decorate(uuid_t mob_id);
 
@@ -56,6 +58,7 @@ namespace mods::mobs {
 		{AGGRESSIVE_RIFLER,"AGGRESSIVE_RIFLER"},
 		{LUNATIC,"LUNATIC"},
 		{GRUNT,"GRUNT"},
+		{PRACTICE_DUMMY,"PRACTICE_DUMMY"},
 	};
 	namespace extended_types {
 		std::vector<std::string> strings();
