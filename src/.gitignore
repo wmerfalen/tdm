@@ -30,6 +30,8 @@ duktape-2.2.0/libduktaped.so.*
 conf/
 cscope.files
 cscope.out
-
 sql/restore.sql
 ../.run
+yaml-cpp
+boost_1_72_0/
+boost

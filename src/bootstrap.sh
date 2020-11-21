@@ -9,3 +9,4 @@ chmod +x boost-fetcher.sh
 ./boost-fetcher.sh
 cd $DIR
 ln -s boost_1_72_0 boost
+rm boost_1_72_0.tar.gz
