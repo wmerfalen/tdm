@@ -227,6 +227,15 @@ ACMD(do_builder_help){
 			"{gld}disable_registration{/gld} -- {grn}yup[builder-utils]{/grn}",
 			"{gld}enable_registration{/gld} -- {grn}yup[builder-utils]{/grn}",
 			"{gld}registration_status{/gld} -- {grn}prints allowed or not allowed.[builder-utils]{/grn}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{yel} --                      -:[ Values System ]:-                         {/yel}",
+			"{yel} ----------------------------------------------------------------------{/yel}",
+			"{gld}disable_registration{/gld} -- {grn}yup[builder-utils]{/grn}",
+			"{gld}revert_value_to_default{/gld} -- {grn}revert a value back to factory default{/grn}",
+			"{gld}list_values{/gld} -- {grn}list all available values{/grn}",
+			"{gld}list_value{/gld} -- {grn}alias of list_values{/grn}",
+			"{gld}set_value{/gld} -- {grn}set value to specific value{/grn}",
+			"{gld}get_value{/gld} -- {grn}display a specific value{/grn}",
 	 		};
 			
 		auto vec_args = PARSE_ARGS();
@@ -929,7 +938,8 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "squeeze"  , POS_RESTING , do_action   , 0, 0 },
 	{ "stand"    , POS_RESTING , do_stand    , 0, 0 },
 	{ "stare"    , POS_RESTING , do_action   , 0, 0 },
-	{ "stat"     , POS_DEAD    , do_stat     , LVL_IMMORT, 0 },
+	{ "stat"     , POS_DEAD    , do_stat     , 0, 0 },
+	{ "stats"     , POS_DEAD    , do_stat     , 0, 0 },
 	{ "steal"    , POS_STANDING, do_steal    , 1, 0 },
 	{ "steam"    , POS_RESTING , do_action   , 0, 0 },
 	{ "stroke"   , POS_RESTING , do_action   , 0, 0 },
@@ -1939,66 +1949,8 @@ void nanny(player_ptr_t p, char * in_arg) {
 				mods::chargen::blind_chargen_take_over(p,argument);
 				return;
 			}
-#if 0
 		case CON_QCLASS:
 			{
-				std::string argument = arg;
-				argument = mods::util::trim(argument);
-				if(mods::util::regex_match("^stats [0-9][a-zA-Z]",argument)){
-					mods::chargen::show_triads(p, parse_class(argument.substr(strlen("stats "))));
-					p->set_state(CON_QCLASS);
-					return;
-				}
-				player_class_t chosen_class = player_class_t::CLASS_UNDEFINED;
-				if(arg[0] == '?' && arg.length() > 2){
-					chosen_class = parse_class(argument.substr(1));
-					if(chosen_class == player_class_t::CLASS_UNDEFINED){
-						write_to_output(d, "Describe which class? Usage: question mark followed by number.\r\nFor example: ?2\r\n");
-						mods::chargen::show_class_menu(p);
-						p->set_state(CON_QCLASS);
-						return;
-					}
-					write_to_output(d, "%s\r\n",mods::chargen::get_class_description(chosen_class).data());
-					mods::chargen::show_class_menu(p);
-					p->set_state(CON_QCLASS);
-					return;
-				}
-				if(arg[0] == '?'){
-					mods::chargen::show_class_menu(p);
-					p->set_state(CON_QCLASS);
-					return;
-				}
-
-				std::cerr << "[argument]:'" << argument << "'\n";
-				player_class_t pclass = parse_class(argument);
-				p->set_class(pclass);
-				if(pclass == player_class_t::CLASS_UNDEFINED){
-					write_to_output(d, "\r\nThat's not a class.\r\n");
-					mods::chargen::show_class_menu(p);
-					p->set_state(CON_QCLASS);
-					return;
-				}
-				std::tuple<bool,std::string> make_char_status;
-				make_char_status = mods::chargen::make_char(p,pclass);
-				if(!std::get<0>(make_char_status)){
-					write_to_output(d,"\r\n%s\r\n",std::get<1>(make_char_status).data());
-					p->set_state(CON_CLOSE);
-					mods::chargen::undo_make_char(p);
-					mods::globals::unregister_authenticated_player(p);
-					p->set_authenticated(false);
-					p->set_db_id(0);
-					return;
-				}
-			}
-			write_to_output(d, "%s", MENU);
-			p->set_state(CON_MENU);
-			return;
-#endif
-		case CON_QCLASS:
-			{
-				/** TODO FIXME: this needs to happen once they've chosen a class */
-				/** TODO FIXME: this needs to happen once they've chosen a class */
-				/** TODO FIXME: this needs to happen once they've chosen a class */
 				std::string argument = arg;
 				argument = mods::util::trim(argument);
 				mods::chargen::create_char_from_registration(p,argument);
@@ -2007,7 +1959,6 @@ void nanny(player_ptr_t p, char * in_arg) {
 		case CON_RMOTD:		/* read CR after printing motd   */
 			write_to_output(d, "%s", MENU);
 			p->set_state(CON_MENU);
-			parse_sql_player(p);
 			break;
 
 		case CON_MENU: {		/* get selection from main menu  */

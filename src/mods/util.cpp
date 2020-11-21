@@ -302,6 +302,17 @@ namespace mods::util {
 		return make_from(get_obj_in_list_vis(player->cd(), buffer.data(), &number, player->carrying()));
 	}
 
+	int parse_direction(std::string_view arg){
+		switch(arg[0]){
+			case 'n': case 'N': return NORTH;
+			case 'e': case 'E': return EAST;
+			case 's': case 'S': return SOUTH;
+			case 'w': case 'W': return WEST;
+			case 'u': case 'U': return UP;
+			case 'd': case 'D': return DOWN;
+			default: return -1;
+		}
+	}
 	int parse_direction(std::string_view arg, int start_at, int* last_index) {
 		static constexpr int max_len = MAX_INPUT_LENGTH;
 		std::string buffer;

@@ -1,11 +1,14 @@
 #include "help.hpp"
+#include <map>
+#include <string>
 namespace mods::help::pages {
-	static constexpr const char* h_contract = "usage: contract <list>\r\n"
+#define HELP_STR static constexpr const char*
+	HELP_STR h_contract = "usage: contract <list>\r\n"
 		"usage: contract <join> <N>\r\n"
 		"usage: contract <leave> <N>\r\n"
 		"This documentation was written on 2020-07-27."
 		;
-	static constexpr const char* h_grenade = "usage: throw <direction> [room_count=4]\r\n"
+	HELP_STR h_grenade = "usage: throw <direction> [room_count=4]\r\n"
 			"example: \r\n"
 			" $ get frag backpack\r\n"
 			" $ hold frag\r\n"
@@ -16,7 +19,7 @@ namespace mods::help::pages {
 			"or however many rooms before it reaches a dead-end\r\n"
 			"see: help grenade"
 		;
-	static constexpr const char* h_install = "usage: install <object> <direction>\r\n"
+	HELP_STR h_install = "usage: install <object> <direction>\r\n"
 			"description: the 'install' command is used to install \r\n" 
 			"devices like cameras or claymore mines. To install a claymore\r\n" 
 			"mine, you would simply type 'install claymore north'. This would\r\n" 
@@ -40,7 +43,7 @@ namespace mods::help::pages {
 			"This documentation was written on 2020-03-29." 
 			;
 
-	static constexpr const char* h_cancel = "usage: cancel\r\n"
+	HELP_STR h_cancel = "usage: cancel\r\n"
 			"description: the 'cancel' command is used to stop the install\r\n" 
 			"command. If you are installing a camera on the wall, it takes a\r\n" 
 			"certain amount of time before that process is done. In that time,\r\n" 
@@ -52,7 +55,7 @@ namespace mods::help::pages {
 			"This documentation was written on 2020-03-29." 
 	;
 
-	static constexpr const char* h_view = "usage: view camera\r\n"
+	HELP_STR h_view = "usage: view camera\r\n"
 			"description: the 'view' command is used to look through the eyes \r\n" 
 			"of a camera that has been installed.\r\n" 
 			"\r\n" 
@@ -61,7 +64,7 @@ namespace mods::help::pages {
 			"\r\n"  
 			"this documentation was written on 2020-03-25." 
 	;
-	static constexpr const char* h_set_npc_position = "usage: set_npc_position <UUID> <POSITION>\r\n"
+	HELP_STR h_set_npc_position = "usage: set_npc_position <UUID> <POSITION>\r\n"
 			"description: valid positions include: \r\n" 
 			"DEAD        -> dead\r\n"
 			"MORTALLYW   -> mortally wounded\r\n"
@@ -84,7 +87,7 @@ namespace mods::help::pages {
 			"\r\n"
 			"this documentation was written on 2020-06-26." 
 	;
-	static constexpr const char* h_set_position = "usage: set_position <POSITION>\r\n"
+	HELP_STR h_set_position = "usage: set_position <POSITION>\r\n"
 			"description: valid positions include: \r\n" 
 			"DEAD        -> dead\r\n"
 			"MORTALLYW   -> mortally wounded\r\n"
@@ -102,7 +105,7 @@ namespace mods::help::pages {
 			"\r\n"
 			"this documentation was written on 2020-06-26." 
 	;
-	static constexpr const char* h_yaml_log = "usage: yaml_log \r\n"
+	HELP_STR h_yaml_log = "usage: yaml_log \r\n"
 			"description: the yaml_log command has two types of usages.\r\n"
 			"1) calling yaml_log with no arguments will send you the current yaml log\r\n"
 			"2) calling yaml_log the same way you would call yaml_import\r\n"
@@ -113,7 +116,7 @@ namespace mods::help::pages {
 			"\r\n"
 			"this documentation was written on 2020-09-02." 
 	;
-	static constexpr const char* h_allow_skill = "usage: allow_skill <player_name> <skill|all> \r\n"
+	HELP_STR h_allow_skill = "usage: allow_skill <player_name> <skill|all> \r\n"
 			"description: this command will take a player name and a skill as the second\r\n"
 			"argument. You can also pass in 'all' as the second argument and it will\r\n"
 			"allow all skills available.\r\n"
@@ -122,7 +125,7 @@ namespace mods::help::pages {
 			"\r\n"
 			"this documentation was written on 2020-09-06." 
 	;
-	static constexpr const char* h_yaml_example = "usage: yaml_example <list> <object_type>\r\n"
+	HELP_STR h_yaml_example = "usage: yaml_example <list> <object_type>\r\n"
 			"description: this command will take an object type and write an example yaml file.\r\n"
 			"you can optionally send the string list as the only argument to this function\r\n"
 			"and it will spit out all the possible object types.\r\n"
@@ -134,7 +137,7 @@ namespace mods::help::pages {
 			"\r\n"
 			"this documentation was written on 2020-09-08." 
 	;
-	static constexpr const char* h_skills = "usage: skills [show] [skill_name]...[skill_N]\r\n"
+	HELP_STR h_skills = "usage: skills [show] [skill_name]...[skill_N]\r\n"
 			"description: This command will show you your proficiencies with each skill.\r\n"
 			"To see a detailed description of a skill, type: {grn}skills show <skill>{/grn}\r\n"
 			"{blu}Example: {yel}skills show spray-chance{/yel}\r\n"
@@ -143,7 +146,7 @@ namespace mods::help::pages {
 			"\r\n"
 			"{blu}this documentation was written on 2020-09-10.{/blu}"
 	;
-	static constexpr const char* h_enable_registration = "usage: enable_registration\r\n"
+	HELP_STR h_enable_registration = "usage: enable_registration\r\n"
 	 	"usage: disable_registration\r\n"
 	 	"usage: registration_status\r\n"
 			"description: depending on which command you call, it will enable/disable player\r\n"
@@ -153,7 +156,7 @@ namespace mods::help::pages {
 			"\r\n"
 			"{blu}this documentation was written on 2020-09-11.{/blu}"
 	;
-	static constexpr const char* h_install_camera_feed = "usage: install_camera_feed <name> <id>...[id_N]\r\n"
+	HELP_STR h_install_camera_feed = "usage: install_camera_feed <name> <id>...[id_N]\r\n"
 			"description: installs a camera feed identified by 'name'.\r\n"
 			"The room virtual numbers you pass after the name of the camera feed will be the rooms\r\n"
 			"that you would like to be shown on the camera feed.\r\n"
@@ -161,13 +164,13 @@ namespace mods::help::pages {
 			"\r\n"
 			"{blu}this documentation was written on 2020-09-26.{/blu}"
 	;
-	static constexpr const char* h_uninstall_camera_feed = "usage: uninstall_camera_feed <name>\r\n"
+	HELP_STR h_uninstall_camera_feed = "usage: uninstall_camera_feed <name>\r\n"
 			"description: uninstalls the camera feed identified by 'name'.\r\n"
 			"{blu}Example: {yel}uninstall_camera_feed \"Camera Feed A\"{/yel}\r\n"
 			"\r\n"
 			"{blu}this documentation was written on 2020-09-26.{/blu}"
 	;
-	static constexpr const char* h_install_minigame = "usage: install_minigame <name> <type> <difficulty> <unlock-event>\r\n"
+	HELP_STR h_install_minigame = "usage: install_minigame <name> <type> <difficulty> <unlock-event>\r\n"
 			"description: installs a mini game identified by 'name'.\r\n"
 			"Valid types:\r\n"
 			"{blu}line-up: Will show a series of rows that the user has to line up accordingly\r\n"
@@ -202,26 +205,26 @@ namespace mods::help::pages {
 			"\r\n"
 			"{blu}this documentation was written on 2020-09-28.{/blu}"
 	;
-	static constexpr const char* h_list_minigame = "usage: list_minigame\r\n"
+	HELP_STR h_list_minigame = "usage: list_minigame\r\n"
 			"description: lists all the mini games in the current room. This command is needed to pass the id of the minigame\r\n"
 			"to the uninstall_minigame command.\r\n"
 			"\r\n"
 			"{blu}this documentation was written on 2020-09-28.{/blu}"
 	;
-	static constexpr const char* h_uninstall_minigame = "usage: uninstall_minigame <id>\r\n"
+	HELP_STR h_uninstall_minigame = "usage: uninstall_minigame <id>\r\n"
 			"description: uninstalls the currently installed mini game identified by the id you pass in.\r\n"
 			"To see the ID's of the mini games currently installed in this room, see the list_minigame command.\r\n"
 			"{blu}Example: {yel}uninstall_minigame \"North Door Lock\"{/yel}\r\n"
 			"\r\n"
 			"{blu}this documentation was written on 2020-09-28.{/blu}"
 	;
-	static constexpr const char* h_plug_cable = "usage: plug_cable <id>\r\n"
+	HELP_STR h_plug_cable = "usage: plug_cable <id>\r\n"
 			"description: plugs into the ethernet port identified by 'id'.\r\n"
 			"{blu}Example: {yel}plug_cable A{/yel}\r\n"
 			"\r\n"
 			"{blu}this documentation was written on 2020-10-02.{/blu}"
 	;
-	static constexpr const char* h_edit_object = "usage: edit_object <id> <attribute> <value>\r\n"
+	HELP_STR h_edit_object = "usage: edit_object <id> <attribute> <value>\r\n"
 			"description: attributes include: \r\n" 
 			"\r\n"
 			"wear_flag\r\n"
@@ -234,9 +237,90 @@ namespace mods::help::pages {
 			"\r\n"
 			"this documentation was written on 2020-06-26." 
 	;
+	HELP_STR h_room_dark = "usage: room_dark <on|off>\r\n"
+		"description: \r\n" 
+		"\r\n"
+		"example: \r\n"
+		"\r\n"
+		"this documentation was written on 2020-11-15."
+	;
+	HELP_STR h_room_fire = "usage: room_fire <on|off> [level]\r\n"
+		"description: \r\n"
+		"example: \r\n"
+		"\r\n"
+		"this documentation was written on 2020-11-15."
+	;
+	HELP_STR h_set_ammo = "usage: set_ammo <weapon> <number>\r\n"
+		"description: \r\n"
+		"example: \r\n"
+		"\r\n"
+		"this documentation was written on 2020-11-15."
+	;
+		HELP_STR h_plant_claymore = "usage: plant_claymore <direction>\r\n"
+			"description: \r\n"
+		"example: \r\n"
+		"\r\n"
+		"this documentation was written on 2020-11-16."
+		;
+		HELP_STR h_penetrating_shot = "usage: penetrating_shot <target>\r\n"
+			"description: \r\n"
+		"example: \r\n"
+		"\r\n"
+		"this documentation was written on 2020-11-16."
+		;
+		HELP_STR h_intimidate = "usage: intimidate <target>\r\n"
+			"description: \r\n"
+		"example: \r\n"
+		"\r\n"
+		"this documentation was written on 2020-11-16."
+		;
+		HELP_STR h_toss_cryogenic_grenade = "usage: toss_cryogenic_grenade <direction> <rooms>\r\n"
+			"description: \r\n"
+		"example: \r\n"
+		"\r\n"
+		"this documentation was written on 2020-11-16."
+		;
+		HELP_STR h_use_flash_underbarrel = "usage: use_flash_underbarrel\r\n"
+			"description: \r\n"
+		"example: \r\n"
+		"\r\n"
+		"this documentation was written on 2020-11-16."
+		;
+		HELP_STR h_go_dark = "usage: go_dark\r\n"
+			"description: \r\n"
+		"example: \r\n"
+		"\r\n"
+		"this documentation was written on 2020-11-16."
+		;
+		HELP_STR h_conceal = "usage: conceal <item>\r\n"
+			"description: \r\n"
+		"example: \r\n"
+		"\r\n"
+		"this documentation was written on 2020-11-16."
+		;
+		HELP_STR h_feign_death = "usage: feign_death\r\n"
+			"description: \r\n"
+		"example: \r\n"
+		"\r\n"
+		"this documentation was written on 2020-11-16."
+		;
+		HELP_STR h_summon_extraction = "usage: summon_extraction\r\n"
+			"description: \r\n"
+		"example: \r\n"
+		"\r\n"
+		"this documentation was written on 2020-11-16."
+		;
+		HELP_STR h_xray_shot = "usage: xray_shot\r\n"
+			"description: \r\n"
+		"example: \r\n"
+		"\r\n"
+		"this documentation was written on 2020-11-16."
+		;
+#undef HELP_STR
 };
 
 namespace mods::help {
+	static std::map<std::string,std::string> registered_help_commands;
 	bool matches_many(const std::string& items,std::string_view from){
 		std::vector<std::string> tokens;
 		std::string token;
@@ -267,8 +351,29 @@ namespace mods::help {
 			M_MATCH("list_minigame",h_list_minigame);
 			M_MATCH("uninstall_minigame",h_uninstall_minigame);
 			M_MATCH("plug_cable",h_plug_cable);
+			M_MATCH("room_dark",h_room_dark);
+			M_MATCH("room_fire",h_room_fire);
+			M_MATCH("set_ammo",h_set_ammo);
+
+			M_MATCH("plant_claymore",h_plant_claymore);
+			M_MATCH("penetrating_shot",h_penetrating_shot);
+			M_MATCH("intimidate",h_intimidate);
+			M_MATCH("toss_cryogenic_grenade",h_toss_cryogenic_grenade);
+			M_MATCH("use_flash_underbarrel",h_use_flash_underbarrel);
+			M_MATCH("go_dark",h_go_dark);
+			M_MATCH("conceal",h_conceal);
+			M_MATCH("feign_death",h_feign_death);
+			M_MATCH("summon_extraction",h_summon_extraction);
+			M_MATCH("xray_shot",h_xray_shot);
 #undef M_MATCH
+			if(registered_help_commands[from.data()].length()){
+				player->sendln(CAT("{blu}",registered_help_commands[from.data()],"{/blu}"));
+				return false;
+			}
 			return true;
+	}
+	void register_help_command(const std::string& command, const std::string& contents){
+		registered_help_commands[command] = contents;
 	}
 	bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::player>& player,bool zero_is_help){
 		bool show = false;
@@ -280,5 +385,154 @@ namespace mods::help {
 			return true;
 		}
 		return send_help(from,player);
+	}
+	void send_class_header(player_ptr_t& player,std::string_view class_name){
+		uint8_t len = class_name.length();
+		uint8_t bar_count = len + 2 + strlen(" class menu =");
+		std::string header = "";
+		for(unsigned i=0; i < bar_count;++i){
+			header += "=";
+		}
+		header += CAT("\r\n= ",class_name.data()," class menu =\r\n");
+		for(unsigned i=0; i < bar_count;++i){
+			header += "=";
+		}
+		player->sendln(header);
+	}
+	void send_class_footer(player_ptr_t& player,std::string_view class_name){
+		uint8_t len = class_name.length();
+		uint8_t bar_count = len + 2 + strlen(" class menu =");
+		std::string header = "";
+		for(unsigned i=0; i < bar_count;++i){
+			header += "=";
+		}
+		player->sendln(header);
+	}
+
+
+	void send_contagion_help_menu(player_ptr_t& player){
+		static std::vector<std::string> topics = {
+		};
+		send_class_header(player,"CONTAGION");
+		for(auto topic : topics){
+			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+		}
+		send_class_footer(player,"CONTAGION");
+	}
+	void send_ghost_help_menu(player_ptr_t& player){
+		static std::vector<std::string> topics = {
+			"plant_claymore",
+			"penetrating_shot",
+			"intimidate",
+			"toss_cryogenic_grenade",
+			"use_flash_underbarrel",
+		};
+		send_class_header(player,"GHOST");
+		for(auto topic : topics){
+			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+		}
+		send_class_footer(player,"GHOST");
+	}
+	void send_marksman_help_menu(player_ptr_t& player){
+		static std::vector<std::string> topics = { };
+		send_class_header(player,"MARKSMAN");
+		for(auto topic : topics){
+			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+		}
+		send_class_footer(player,"MARKSMAN");
+	
+	}
+	void send_bandit_help_menu(player_ptr_t& player){
+		static std::vector<std::string> topics = { };
+		send_class_header(player,"BANDIT");
+		for(auto topic : topics){
+			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+		}
+		send_class_footer(player,"BANDIT");
+	
+	}
+	void send_butcher_help_menu(player_ptr_t& player){
+		static std::vector<std::string> topics = { };
+		send_class_header(player,"BUTCHER");
+		for(auto topic : topics){
+			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+		}
+		send_class_footer(player,"BUTCHER");
+	
+	}
+	void send_striker_help_menu(player_ptr_t& player){
+		static std::vector<std::string> topics = { };
+		send_class_header(player,"STRIKER");
+		for(auto topic : topics){
+			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+		}
+		send_class_footer(player,"STRIKER");
+	
+	}
+	void send_obstructor_help_menu(player_ptr_t& player){
+		static std::vector<std::string> topics = { };
+		send_class_header(player,"OBSTRUCTOR");
+		for(auto topic : topics){
+			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+		}
+		send_class_footer(player,"OBSTRUCTOR");
+	
+	}
+	void send_malady_help_menu(player_ptr_t& player){
+		static std::vector<std::string> topics = { };
+		send_class_header(player,"MALADY");
+		for(auto topic : topics){
+			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+		}
+		send_class_footer(player,"MALADY");
+	
+	}
+	void send_pyrexia_help_menu(player_ptr_t& player){
+		static std::vector<std::string> topics = { };
+		send_class_header(player,"PYREXIA");
+		for(auto topic : topics){
+			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+		}
+		send_class_footer(player,"PYREXIA");
+	
+	}
+	void send_dealer_help_menu(player_ptr_t& player){
+		static std::vector<std::string> topics = { };
+		send_class_header(player,"DEALER");
+		for(auto topic : topics){
+			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+		}
+		send_class_footer(player,"DEALER");
+	
+	}
+	void send_forge_help_menu(player_ptr_t& player){
+		static std::vector<std::string> topics = { };
+		send_class_header(player,"FORGE");
+		for(auto topic : topics){
+			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+		}
+		send_class_footer(player,"FORGE");
+	
+	}
+	void send_syndrome_help_menu(player_ptr_t& player){
+		static std::vector<std::string> topics = { };
+		send_class_header(player,"SYNDROME");
+		for(auto topic : topics){
+			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+		}
+		send_class_footer(player,"SYNDROME");
+	
+	}
+	void send_machinist_help_menu(player_ptr_t& player){
+		static std::vector<std::string> topics = { };
+		send_class_header(player,"MACHINIST");
+		for(auto topic : topics){
+			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+		}
+		send_class_footer(player,"MACHINIST");
+	
+	}
+	void send_generic_help(player_ptr_t& player){
+	
 	}
 };

@@ -1,0 +1,8 @@
+CREATE TABLE karma (
+		karma_id SERIAL,
+		karma_player_id INTEGER NOT NULL,
+		karma_alignment INTEGER NOT NULL DEFAULT 0,
+		karma_cold_blooded_index INTEGER NOT NULL DEFAULT 0,
+		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

@@ -3,6 +3,9 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "super-users.hpp"
+#include "interpreter.hpp"
+#include "screen-searcher.hpp"
 
 #define __MENTOC_MODS_VALUES_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_VALUES_SHOW_DEBUG_OUTPUT__
@@ -42,6 +45,80 @@ namespace mods::values {
 		"FIRE_STATUS_SMOKING_DAMAGE",
 		};
 		static const std::vector<std::string> uint8_types = {
+		"MARKSMAN_CLASS_TRIADS_MELEE",
+		"MARKSMAN_CLASS_TRIADS_WEAPONS",
+		"MARKSMAN_CLASS_TRIADS_INTEL",
+		"MARKSMAN_CLASS_TRIADS_SPEED",
+		"MARKSMAN_CLASS_TRIADS_ARMOR",
+
+		"BANDIT_CLASS_TRIADS_MELEE",
+		"BANDIT_CLASS_TRIADS_WEAPONS",
+		"BANDIT_CLASS_TRIADS_INTEL",
+		"BANDIT_CLASS_TRIADS_SPEED",
+		"BANDIT_CLASS_TRIADS_ARMOR",
+
+		"BUTCHER_CLASS_TRIADS_MELEE",
+		"BUTCHER_CLASS_TRIADS_WEAPONS",
+		"BUTCHER_CLASS_TRIADS_INTEL",
+		"BUTCHER_CLASS_TRIADS_SPEED",
+		"BUTCHER_CLASS_TRIADS_ARMOR",
+
+		"STRIKER_CLASS_TRIADS_MELEE",
+		"STRIKER_CLASS_TRIADS_WEAPONS",
+		"STRIKER_CLASS_TRIADS_INTEL",
+		"STRIKER_CLASS_TRIADS_SPEED",
+		"STRIKER_CLASS_TRIADS_ARMOR",
+
+		"OBSTRUCTOR_CLASS_TRIADS_MELEE",
+		"OBSTRUCTOR_CLASS_TRIADS_WEAPONS",
+		"OBSTRUCTOR_CLASS_TRIADS_INTEL",
+		"OBSTRUCTOR_CLASS_TRIADS_SPEED",
+		"OBSTRUCTOR_CLASS_TRIADS_ARMOR",
+
+		"MALADY_CLASS_TRIADS_MELEE",
+		"MALADY_CLASS_TRIADS_WEAPONS",
+		"MALADY_CLASS_TRIADS_INTEL",
+		"MALADY_CLASS_TRIADS_SPEED",
+		"MALADY_CLASS_TRIADS_ARMOR",
+
+		"PYREXIA_CLASS_TRIADS_MELEE",
+		"PYREXIA_CLASS_TRIADS_WEAPONS",
+		"PYREXIA_CLASS_TRIADS_INTEL",
+		"PYREXIA_CLASS_TRIADS_SPEED",
+		"PYREXIA_CLASS_TRIADS_ARMOR",
+
+		"DEALER_CLASS_TRIADS_MELEE",
+		"DEALER_CLASS_TRIADS_WEAPONS",
+		"DEALER_CLASS_TRIADS_INTEL",
+		"DEALER_CLASS_TRIADS_SPEED",
+		"DEALER_CLASS_TRIADS_ARMOR",
+
+		"FORGE_CLASS_TRIADS_MELEE",
+		"FORGE_CLASS_TRIADS_WEAPONS",
+		"FORGE_CLASS_TRIADS_INTEL",
+		"FORGE_CLASS_TRIADS_SPEED",
+		"FORGE_CLASS_TRIADS_ARMOR",
+
+		"SYNDROME_CLASS_TRIADS_MELEE",
+		"SYNDROME_CLASS_TRIADS_WEAPONS",
+		"SYNDROME_CLASS_TRIADS_INTEL",
+		"SYNDROME_CLASS_TRIADS_SPEED",
+		"SYNDROME_CLASS_TRIADS_ARMOR",
+
+		"MACHINIST_CLASS_TRIADS_MELEE",
+		"MACHINIST_CLASS_TRIADS_WEAPONS",
+		"MACHINIST_CLASS_TRIADS_INTEL",
+		"MACHINIST_CLASS_TRIADS_SPEED",
+		"MACHINIST_CLASS_TRIADS_ARMOR",
+
+		"GHOST_CLASS_TRIADS_MELEE",
+		"GHOST_CLASS_TRIADS_WEAPONS",
+		"GHOST_CLASS_TRIADS_INTEL",
+		"GHOST_CLASS_TRIADS_SPEED",
+		"GHOST_CLASS_TRIADS_ARMOR",
+
+		"GHOST_REPLENISH_PULSE",
+		"GHOST_CLAYMORE_MAX_COUNT",
 		"PYREXIA_FIRE_NADE_CHARGES_DEFAULT",
 		"PYREXIA_FIRE_NADE_CHARGES_INITIATE",
 		"PYREXIA_FIRE_NADE_CHARGES_FAMILIAR",
@@ -81,6 +158,8 @@ namespace mods::values {
 		"GHOST_FEIGN_DEATH_FAMILIAR_DURATION",
 		"GHOST_FEIGN_DEATH_MASTER_DURATION",
 		"EXPLOSIVE_DAMAGE_MULTIPLIER",
+		"CAMERA_INSTALLATION_TICS",
+		"CLAYMORE_INSTALLATION_TICS",
 		};
 
 
@@ -749,6 +828,10 @@ namespace mods::values {
 		CGET_DEF(uint16_t,PYREXIA_FIRE_NADE_RECHARGE_TICKS_FAMILIAR,280);
 		CGET_DEF(uint16_t,PYREXIA_FIRE_NADE_RECHARGE_TICKS_MASTER,170);
 
+		CGET_DEF(uint8_t,GHOST_REPLENISH_PULSE,5);
+		CGET_DEF(uint8_t,GHOST_CLAYMORE_MAX_COUNT,2);
+		CGET_DEF(uint8_t,CAMERA_INSTALLATION_TICS,30);
+		CGET_DEF(uint8_t,CLAYMORE_INSTALLATION_TICS,10);
 		CGET_DEF(uint8_t,PYREXIA_FIRE_NADE_CHARGES_DEFAULT,3);
 		CGET_DEF(uint8_t,PYREXIA_FIRE_NADE_CHARGES_INITIATE,3);
 		CGET_DEF(uint8_t,PYREXIA_FIRE_NADE_CHARGES_FAMILIAR,6);
@@ -930,6 +1013,13 @@ namespace mods::values {
 		CGET_DEF(std::string,STOCK_GOLD_SUFFIX_MESSAGE," gold coins.");
 		CGET_DEF(std::string,MSG_YOU_FEIGN_DEATH,"You succesfully feign death. The enemy is none the wiser...");
 		CGET_DEF(std::string,MSG_YOU_FAIL_FEIGN_DEATH,"You fail at feigning death...\r\nYou are on the ground and vulnerable!");
+		CGET_DEF(uint8_t,GHOST_CLASS_TRIADS_MELEE,1);
+		CGET_DEF(uint8_t,GHOST_CLASS_TRIADS_WEAPONS,3);
+		CGET_DEF(uint8_t,GHOST_CLASS_TRIADS_INTEL,2);
+		CGET_DEF(uint8_t,GHOST_CLASS_TRIADS_SPEED,1);
+		CGET_DEF(uint8_t,GHOST_CLASS_TRIADS_ARMOR,3);
+
+
 			CGET_DEF(std::string,CHARGEN_BLIND_GHOST_CLASS_TRIADS,
 							"Melee: 1\r\n"
 							"Weapons: 3\r\n"
@@ -937,6 +1027,12 @@ namespace mods::values {
 							"Speed: 1\r\n"
 							"Armor: 3\r\n"
 					);
+			/** TODO CHANGE THESE */
+		CGET_DEF(uint8_t,MARKSMAN_CLASS_TRIADS_MELEE,1);
+		CGET_DEF(uint8_t,MARKSMAN_CLASS_TRIADS_WEAPONS,3);
+		CGET_DEF(uint8_t,MARKSMAN_CLASS_TRIADS_INTEL,2);
+		CGET_DEF(uint8_t,MARKSMAN_CLASS_TRIADS_SPEED,1);
+		CGET_DEF(uint8_t,MARKSMAN_CLASS_TRIADS_ARMOR,3);
 			CGET_DEF(std::string,CHARGEN_BLIND_MARKSMAN_CLASS_TRIADS,
 							"Melee: 1\r\n"
 							"Weapons: 3\r\n"
@@ -944,6 +1040,12 @@ namespace mods::values {
 							"Speed: 2\r\n"
 							"Armor: 2\r\n"
 					);
+			/** TODO CHANGE THESE */
+		CGET_DEF(uint8_t,BANDIT_CLASS_TRIADS_MELEE,1);
+		CGET_DEF(uint8_t,BANDIT_CLASS_TRIADS_WEAPONS,3);
+		CGET_DEF(uint8_t,BANDIT_CLASS_TRIADS_INTEL,2);
+		CGET_DEF(uint8_t,BANDIT_CLASS_TRIADS_SPEED,1);
+		CGET_DEF(uint8_t,BANDIT_CLASS_TRIADS_ARMOR,3);
 			CGET_DEF(std::string,CHARGEN_BLIND_BANDIT_CLASS_TRIADS,
 							"Melee: 2\r\n"
 							"Weapons: 2\r\n"
@@ -951,6 +1053,12 @@ namespace mods::values {
 							"Speed: 3\r\n"
 							"Armor: 1\r\n"
 					);
+			/** TODO CHANGE THESE */
+		CGET_DEF(uint8_t,BUTCHER_CLASS_TRIADS_MELEE,1);
+		CGET_DEF(uint8_t,BUTCHER_CLASS_TRIADS_WEAPONS,3);
+		CGET_DEF(uint8_t,BUTCHER_CLASS_TRIADS_INTEL,2);
+		CGET_DEF(uint8_t,BUTCHER_CLASS_TRIADS_SPEED,1);
+		CGET_DEF(uint8_t,BUTCHER_CLASS_TRIADS_ARMOR,3);
 			CGET_DEF(std::string,CHARGEN_BLIND_BUTCHER_CLASS_TRIADS,
 							"Melee: 3\r\n"
 							"Weapons: 2\r\n"
@@ -958,6 +1066,12 @@ namespace mods::values {
 							"Speed: 2\r\n"
 							"Armor: 2\r\n"
 					);
+			/** TODO CHANGE THESE */
+		CGET_DEF(uint8_t,STRIKER_CLASS_TRIADS_MELEE,1);
+		CGET_DEF(uint8_t,STRIKER_CLASS_TRIADS_WEAPONS,3);
+		CGET_DEF(uint8_t,STRIKER_CLASS_TRIADS_INTEL,2);
+		CGET_DEF(uint8_t,STRIKER_CLASS_TRIADS_SPEED,1);
+		CGET_DEF(uint8_t,STRIKER_CLASS_TRIADS_ARMOR,3);
 			CGET_DEF(std::string,CHARGEN_BLIND_STRIKER_CLASS_TRIADS,
 							"Melee: 3\r\n"
 							"Weapons: 3\r\n"
@@ -965,6 +1079,12 @@ namespace mods::values {
 							"Speed: 3\r\n"
 							"Armor: 1\r\n"
 					);
+			/** TODO CHANGE THESE */
+		CGET_DEF(uint8_t,OBSTRUCTOR_CLASS_TRIADS_MELEE,1);
+		CGET_DEF(uint8_t,OBSTRUCTOR_CLASS_TRIADS_WEAPONS,3);
+		CGET_DEF(uint8_t,OBSTRUCTOR_CLASS_TRIADS_INTEL,2);
+		CGET_DEF(uint8_t,OBSTRUCTOR_CLASS_TRIADS_SPEED,1);
+		CGET_DEF(uint8_t,OBSTRUCTOR_CLASS_TRIADS_ARMOR,3);
 			CGET_DEF(std::string,CHARGEN_BLIND_OBSTRUCTOR_CLASS_TRIADS,
 							"Melee: 3\r\n"
 							"Weapons: 2\r\n"
@@ -972,6 +1092,12 @@ namespace mods::values {
 							"Speed: 1\r\n"
 							"Armor: 3\r\n"
 					);
+			/** TODO CHANGE THESE */
+		CGET_DEF(uint8_t,MALADY_CLASS_TRIADS_MELEE,1);
+		CGET_DEF(uint8_t,MALADY_CLASS_TRIADS_WEAPONS,3);
+		CGET_DEF(uint8_t,MALADY_CLASS_TRIADS_INTEL,2);
+		CGET_DEF(uint8_t,MALADY_CLASS_TRIADS_SPEED,1);
+		CGET_DEF(uint8_t,MALADY_CLASS_TRIADS_ARMOR,3);
 			CGET_DEF(std::string,CHARGEN_BLIND_MALADY_CLASS_TRIADS,
 							"Melee: 2\r\n"
 							"Weapons: 2\r\n"
@@ -979,6 +1105,12 @@ namespace mods::values {
 							"Speed: 2\r\n"
 							"Armor: 2\r\n"
 					);
+			/** TODO CHANGE THESE */
+		CGET_DEF(uint8_t,PYREXIA_CLASS_TRIADS_MELEE,1);
+		CGET_DEF(uint8_t,PYREXIA_CLASS_TRIADS_WEAPONS,3);
+		CGET_DEF(uint8_t,PYREXIA_CLASS_TRIADS_INTEL,2);
+		CGET_DEF(uint8_t,PYREXIA_CLASS_TRIADS_SPEED,1);
+		CGET_DEF(uint8_t,PYREXIA_CLASS_TRIADS_ARMOR,3);
 			CGET_DEF(std::string,CHARGEN_BLIND_PYREXIA_CLASS_TRIADS,
 							"Melee: 1\r\n"
 							"Weapons: 3\r\n"
@@ -986,6 +1118,12 @@ namespace mods::values {
 							"Speed: 3\r\n"
 							"Armor: 1\r\n"
 					);
+			/** TODO CHANGE THESE */
+		CGET_DEF(uint8_t,DEALER_CLASS_TRIADS_MELEE,1);
+		CGET_DEF(uint8_t,DEALER_CLASS_TRIADS_WEAPONS,3);
+		CGET_DEF(uint8_t,DEALER_CLASS_TRIADS_INTEL,2);
+		CGET_DEF(uint8_t,DEALER_CLASS_TRIADS_SPEED,1);
+		CGET_DEF(uint8_t,DEALER_CLASS_TRIADS_ARMOR,3);
 			CGET_DEF(std::string,CHARGEN_BLIND_DEALER_CLASS_TRIADS,
 							"Melee: 1\r\n"
 							"Weapons: 3\r\n"
@@ -993,6 +1131,12 @@ namespace mods::values {
 							"Speed: 1\r\n"
 							"Armor: 3\r\n"
 					);
+			/** TODO CHANGE THESE */
+		CGET_DEF(uint8_t,FORGE_CLASS_TRIADS_MELEE,1);
+		CGET_DEF(uint8_t,FORGE_CLASS_TRIADS_WEAPONS,3);
+		CGET_DEF(uint8_t,FORGE_CLASS_TRIADS_INTEL,2);
+		CGET_DEF(uint8_t,FORGE_CLASS_TRIADS_SPEED,1);
+		CGET_DEF(uint8_t,FORGE_CLASS_TRIADS_ARMOR,3);
 			CGET_DEF(std::string,CHARGEN_BLIND_FORGE_CLASS_TRIADS,
 							"Melee: 2\r\n"
 							"Weapons: 2\r\n"
@@ -1000,6 +1144,12 @@ namespace mods::values {
 							"Speed: 2\r\n"
 							"Armor: 2\r\n"
 					);
+			/** TODO CHANGE THESE */
+		CGET_DEF(uint8_t,SYNDROME_CLASS_TRIADS_MELEE,1);
+		CGET_DEF(uint8_t,SYNDROME_CLASS_TRIADS_WEAPONS,3);
+		CGET_DEF(uint8_t,SYNDROME_CLASS_TRIADS_INTEL,2);
+		CGET_DEF(uint8_t,SYNDROME_CLASS_TRIADS_SPEED,1);
+		CGET_DEF(uint8_t,SYNDROME_CLASS_TRIADS_ARMOR,3);
 			CGET_DEF(std::string,CHARGEN_BLIND_SYNDROME_CLASS_TRIADS,
 							"Melee: 1\r\n"
 							"Weapons: 3\r\n"
@@ -1007,6 +1157,12 @@ namespace mods::values {
 							"Speed: 3\r\n"
 							"Armor: 1\r\n"
 					);
+			/** TODO CHANGE THESE */
+		CGET_DEF(uint8_t,MACHINIST_CLASS_TRIADS_MELEE,1);
+		CGET_DEF(uint8_t,MACHINIST_CLASS_TRIADS_WEAPONS,3);
+		CGET_DEF(uint8_t,MACHINIST_CLASS_TRIADS_INTEL,2);
+		CGET_DEF(uint8_t,MACHINIST_CLASS_TRIADS_SPEED,1);
+		CGET_DEF(uint8_t,MACHINIST_CLASS_TRIADS_ARMOR,3);
 			CGET_DEF(std::string,CHARGEN_BLIND_MACHINIST_CLASS_TRIADS,
 							"Melee: 2\r\n"
 							"Weapons: 2\r\n"
@@ -1017,4 +1173,110 @@ namespace mods::values {
 		 	CGET_DEF(std::string,CHARGEN_UNDEFINED_CLASS_TRIADS,"class undefined. How'd you get here?");
 			CGET_DEF(std::string,PYREXIA_REPLENISH_MESSAGE,"A {red}FIRE NADE{/red} has been replenished to your inventory.");
 #undef CGET_DEF
+
+			/**************/
+			/** set_value */
+			/**************/
+			ACMD(do_set_value) {
+				ADMIN_REJECT();
+				DO_HELP("set_value");
+				static constexpr const char* usage = "usage: set_value <key> <value>\r\nAlso see: list_values\r\n";
+				auto vec_args = PARSE_ARGS();
+				if(vec_args.size() != 2){
+					player->errorln(usage);
+					return;
+				}
+				mods::values::save_to_lmdb(vec_args[0],vec_args[1]);
+				mods::values::load_from_lmdb(vec_args[0]);
+				ADMIN_DONE();
+			}
+			/**************/
+			/** get_value */
+			/**************/
+			ACMD(do_get_value) {
+				ADMIN_REJECT();
+				DO_HELP("get_value");
+				static constexpr const char* usage = "usage: get_value <key>...<keyN>\r\nAlso see: list_values\r\n";
+				auto vec_args = PARSE_ARGS();
+				if(vec_args.size() < 1){
+					player->errorln(usage);
+					return;
+				}
+
+				for(auto key : vec_args){
+					if(is_int(key)){
+						auto it = std::find(int_types.begin(),int_types.end(),key);
+						player->sendln(CAT(key,":'",*it,"'"));
+					}
+					if(is_uint8(key)){
+						auto it = std::find(uint8_types.begin(),uint8_types.end(),key);
+						player->sendln(CAT(key,":'",*it,"'"));
+					}
+					if(is_uint16(key)){
+						auto it = std::find(uint16_types.begin(),uint16_types.end(),key);
+						player->sendln(CAT(key,":'",*it,"'"));
+					}
+					if(is_float(key)){
+						auto it = std::find(float_types.begin(),float_types.end(),key);
+						player->sendln(CAT(key,":'",*it,"'"));
+					}
+					if(is_string(key)){
+						auto it = std::find(string_types.begin(),string_types.end(),key);
+						player->sendln(CAT(key,":'",*it,"'"));
+					}
+				}
+				ADMIN_DONE();
+			}
+
+			/****************************/
+			/** revert_value_to_default */
+			/****************************/
+			ACMD(do_revert_value_to_default){
+				ADMIN_REJECT();
+				DO_HELP("revert_value_to_default");
+				static constexpr const char* usage = "usage: revert_value_to_default <arg>...<argN>";
+				auto vec_args = PARSE_ARGS();
+				if(vec_args.size() < 1){
+					player->errorln(usage);
+					return;
+				}
+				for(auto arg : vec_args){
+					mods::values::revert_to_default(arg);
+				}
+				ADMIN_DONE();
+			}
+
+			/****************/
+			/** list_values */
+			/****************/
+			ACMD(do_list_values) {
+				ADMIN_REJECT();
+				DO_HELP("list_values");
+				auto vec_args = PARSE_ARGS();
+				std::vector<std::string> screen;
+				for(auto section : {uint8_types,uint16_types,int_types,string_types}){
+					for(auto item : section){
+						screen.emplace_back(item);
+					}
+				}
+				if(vec_args.size()){
+					mods::search_screen(player, screen, vec_args, 255);
+					player->sendln("Done listing.");
+					player->sendln(CAN_BE_SEARCHED());
+					return;
+				}
+				for(auto item : screen){
+					player->sendln(item);
+				}
+				player->sendln("Done listing.");
+				player->sendln(CAN_BE_SEARCHED());
+				ADMIN_DONE();
+			}
+			void init(){
+				mods::interpreter::add_command("revert_value_to_default", POS_RESTING, do_revert_value_to_default, LVL_BUILDER,0);
+				mods::interpreter::add_command("list_values", POS_RESTING, do_list_values, LVL_BUILDER,0);
+				mods::interpreter::add_command("list_value", POS_RESTING, do_list_values, LVL_BUILDER,0);
+				mods::interpreter::add_command("set_value", POS_RESTING, do_set_value, LVL_BUILDER,0);
+				mods::interpreter::add_command("get_value", POS_RESTING, do_get_value, LVL_BUILDER,0);
+			}
 };

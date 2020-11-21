@@ -49,6 +49,7 @@
 #include "mods/integral-objects.hpp"
 #include "mods/db.hpp"
 #include "mods/zone.hpp"
+#include "mods/classes/ghost.hpp"
 
 namespace mods::rooms {
 	extern void set_sector_type(room_rnum room_id, int sector_type);
@@ -2548,20 +2549,6 @@ bool char_exists(const std::string& name){
 
 void decorate_authenticated_player(player_ptr_t player_ptr){
 	mods::orm::inventory::feed_player(player_ptr);
-#if 0
-	switch(player_ptr->get_class()){
-		case CLASS_SENTINEL:
-			log("User [%s] is a sentinel. Loading... ", player_ptr->name());
-			{
-				auto s = mods::classes::create_sentinel(player_ptr);
-				s->load_by_player(player_ptr);
-				player_ptr->set_sentinel(std::move(s));
-			}
-			break;
-		default:
-			break;
-	}
-#endif
 }
 
 /*

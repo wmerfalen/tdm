@@ -17,6 +17,7 @@
 #include "mods/player-utils.hpp"
 #include "mods/doors.hpp"
 #include "mods/rand.hpp"
+#include "mods/demolitions.hpp"
 
 
 extern void obj_to_room(obj_ptr_t object, room_rnum room);
@@ -90,10 +91,7 @@ ACMD(do_install) {
 	}
 	auto & obj_name = parsed.obj->name;
 	if(mods::object_utils::is_claymore(parsed.obj)) {
-		player->sendln("[stub] Is claymore");
-		player->send("You begin installing a %s at the foot of the %s entrance...\r\n", obj_name.c_str(), mods::globals::dir_to_str(parsed.dir, true).c_str());
-		mods::object_utils::set_is_installing(parsed.obj,player,parsed.dir);
-		player->block_for(30, mods::deferred::EVENT_PLAYER_UNBLOCK_INSTALLATION, parsed.obj->uuid);
+		mods::demolitions::plant_claymore(player,parsed.dir,parsed.obj);
 		return;
 	}
 
@@ -102,7 +100,7 @@ ACMD(do_install) {
 		player->send("You begin installing a %s onto the %s wall...\r\n", obj_name.c_str(), mods::globals::dir_to_str(parsed.dir, true).c_str());
 		mods::object_utils::set_is_installing(parsed.obj,player,parsed.dir);
 		player->set_camera(parsed.obj);
-		player->block_for(30, mods::deferred::EVENT_PLAYER_UNBLOCK_INSTALLATION, parsed.obj->uuid);
+		player->block_for(CAMERA_INSTALLATION_TICS(), mods::deferred::EVENT_PLAYER_UNBLOCK_INSTALLATION, parsed.obj->uuid);
 		return;
 	}
 

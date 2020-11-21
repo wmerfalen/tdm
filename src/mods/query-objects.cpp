@@ -116,6 +116,16 @@ namespace mods::query_objects {
 		}
 		return objects;
 	}
+	std::vector<uuid_t> query_inventory_for_object(player_ptr_t& player, std::string_view name){
+		std::vector<uuid_t> objects;
+		for(const auto & obj : player->real_carrying()){
+			if(isname(name.data(),obj->name)){
+				objects.emplace_back(obj->uuid);
+			}
+		}
+		return objects;
+	}
+
 
 	std::vector<uuid_t> query_inventory_container_by_yaml(player_ptr_t& player, std::string_view container, std::string_view yaml_file){
 		std::vector<uuid_t> objects;

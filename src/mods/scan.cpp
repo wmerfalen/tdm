@@ -286,4 +286,11 @@ namespace mods::scan {
 		auto in_room = IN_ROOM(hunter);
 		los_list_by_room(in_room, room_list,depth);
 	}
+	std::vector<uuid_t> drone_scan_room(room_rnum room){
+		std::vector<uuid_t> scanned;
+		for(const auto & player : room_list(room)){
+			scanned.emplace_back(player->uuid());
+		}
+		return scanned;
+	}
 };//end namespace

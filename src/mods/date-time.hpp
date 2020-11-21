@@ -51,6 +51,7 @@ namespace mods::date_time {
 	namespace irl {
 		std::string date_to_string();
 		std::string epoch_string();
+		static inline std::string date_time_string(){ return date_to_string(); }
 	};
 	void init();
 };

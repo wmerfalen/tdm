@@ -11,6 +11,7 @@
 #include "player.hpp"
 #include "extern.hpp"
 #include "send-to.hpp"
+#include "scan.hpp"
 
 extern player_ptr_t new_player();
 extern void char_to_room(player_ptr_t,room_rnum);
@@ -97,7 +98,7 @@ namespace mods {
 			}
 
 			if(mods::util::is_lower_match(argument, "scan")){
-				drone->send("Your room: [%d], owner: [%d]\r\n", drone->room(), owner->room());
+				mods::scan::drone_scan_room(drone->room());
 				send_to_room_except(drone->room(),{drone,owner}, "You have been spotted.");
 				return false;
 			}

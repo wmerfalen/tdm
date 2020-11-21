@@ -2,6 +2,15 @@
 #define __MENTOC_MODS_ORM_UTIL_HEADER__
 
 namespace mods::orm::util {
+	std::optional<unsigned> stoul(std::string_view str);
+	template <typename T>
+		T stoi(const std::string& i){
+			T m;
+			std::stringstream ss;
+			ss.str(i);
+			ss >> m;
+			return m;
+		}
 	static constexpr int8_t NO_RESULTS = 1;
 	static constexpr int8_t FETCHED_OKAY = 0;
 	static constexpr int8_t EXCEPTION_OCCURRED = -1;
@@ -22,7 +31,7 @@ namespace mods::orm::util {
 					auto record = mods::pq::exec(insert_transaction,up_sql);
 					mods::pq::commit(insert_transaction);
 					if(record.size()){
-						auto i_value = mods::util::stoi<uint64_t>(record[0][returning_field.data()].c_str());
+						auto i_value = stoi<uint64_t>(record[0][returning_field.data()].c_str());
 						return {FETCHED_OKAY,"okay",i_value};
 					}
 					return {NO_RESULTS,"no results",0};

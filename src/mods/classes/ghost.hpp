@@ -15,6 +15,12 @@ namespace mods::classes {
 		using summon_extraction_levels_t = ghost_orm_t::summon_extraction_levels_t;
 		using xray_shot_levels_t = ghost_orm_t::xray_shot_levels_t;
 		using feign_death_levels_t = ghost_orm_t::feign_death_levels_t;
+		using plant_claymore_levels_t = ghost_orm_t::plant_claymore_levels_t;
+		using penetrating_shot_levels_t = ghost_orm_t::penetrating_shot_levels_t;
+		using intimidation_levels_t = ghost_orm_t::intimidation_levels_t;
+		using cryogenic_grenade_levels_t = ghost_orm_t::cryogenic_grenade_levels_t;
+		using flash_underbarrel_levels_t = ghost_orm_t::flash_underbarrel_levels_t;
+		long created_at;
 
 		static int16_t destroy(player_ptr_t& player);
 		types kind() {
@@ -25,6 +31,7 @@ namespace mods::classes {
 		ghost();
 		ghost(player_ptr_t);
 		~ghost() = default;
+		void init();
 
 		player_ptr_t 	player();
 
@@ -45,13 +52,32 @@ namespace mods::classes {
 
 		/** requires drone assisted sniping mode */
 		std::pair<int16_t,std::string> xray_shot();
+		std::vector<uuid_t> get_targets_scanned_by_drone();
+		std::vector<uuid_t> get_scanned() const;
+		void set_scanned(std::vector<uuid_t>);
 
 		/** database routines */
 		int16_t load_by_player(player_ptr_t&);
 		int16_t new_player(player_ptr_t&);
 		int64_t db_id() const;
 		int16_t save();
+
+		uint8_t claymore_count() const;
+		std::tuple<bool,std::string> plant_claymore(int direction,room_rnum room);
+		void replenish();
+
+		std::tuple<uint32_t,std::string> fire_penetrating_shot_at(uuid_t npc_uuid);
+		std::tuple<bool,std::string> intimidate_target(uuid_t npc_uuid);
+		uint8_t cryogenic_grenade_count() const;
+		std::tuple<bool,std::string> toss_cryogenic_grenade_towards(uint8_t direction, uint8_t rooms);
+		/** applies it to the entire room. every will get flashed */
+		std::tuple<bool,std::string> use_flash_underbarrel();
+
 		private:
+			std::vector<uuid_t> m_scanned;
+			uint8_t m_claymore_count;
+			uint8_t m_cryogenic_grenade_count;
+			uint8_t m_flash_underbarrel_charges;
 			ghost_orm_t	m_orm;
 			player_ptr_t m_player;
 
@@ -60,10 +86,14 @@ namespace mods::classes {
 			summon_extraction_levels_t m_summon_extraction_level;
 			xray_shot_levels_t m_xray_shot_level;
 			feign_death_levels_t m_feign_death_level;
-
+			plant_claymore_levels_t m_plant_claymore_level;
+			penetrating_shot_levels_t m_penetrating_shot_level;
+			intimidation_levels_t m_intimidation_level;
+			cryogenic_grenade_levels_t m_cryogenic_grenade_level;
+			flash_underbarrel_levels_t m_flash_underbarrel_level;
+			std::deque<obj_ptr_t> m_claymores;
 	};
 	std::shared_ptr<mods::classes::ghost> create_ghost(player_ptr_t &player);
 };
-
 
 #endif

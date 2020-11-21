@@ -70,7 +70,10 @@ namespace mods {
 			}
 			obj_data* rifle();
 			obj_data* get_ammo(const weapon_type_t&);
+			void set_scanned(std::vector<uuid_t>);
+			std::vector<uuid_t> get_scanned() const;
 		protected:
+			std::vector<uuid_t> m_scanned;
 			char_data* m_char_data;
 	};
 };

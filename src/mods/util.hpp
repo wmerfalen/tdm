@@ -342,6 +342,7 @@ std::ostream& log(Args... args); /*{
 	obj_ptr_t parse_object_vec(player_ptr_t& player,std::vector<std::string>& vec_args);
 	obj_ptr_t parse_object(player_ptr_t& player,std::string_view arg, int start_at, int* last_index); 
 	int parse_direction(std::string_view arg, int start_at, int* last_index); 
+	int parse_direction(std::string_view arg);
 	objdir_t parse_objdir(player_ptr_t& player,std::string_view arg);
 	static constexpr uint8_t CAP_SINGLE = 0;
 	static constexpr uint8_t CAP_ANY = 0;

@@ -5,6 +5,7 @@
 
 namespace mods::query_objects {
 	obj_ptr_t query_room_for_object(const room_rnum& room, std::string_view name);
+	std::vector<uuid_t> query_inventory_for_object(player_ptr_t& player, std::string_view name);
 	std::vector<uuid_t> query_room_for_object_by_yaml(const room_rnum& room, std::string_view name);
 	std::vector<uuid_t> query_room_for_object_by_yaml_multi(const room_rnum& room, const std::vector<std::string>& files);
 	std::vector<uuid_t> query_contents_by_yaml(obj_ptr_t& found_object,std::string_view file);

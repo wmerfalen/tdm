@@ -26,6 +26,7 @@
 #include "mods/world-configuration.hpp"
 #include "mods/auto-login.hpp"
 #include "mods/zone.hpp"
+#include "mods/replenish.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -876,6 +877,9 @@ void heartbeat(int pulse) {
 
 	if(!(pulse % PULSE_ZONE)) {
 		mods::zone::zone_update();
+	}
+	if(!(pulse % PULSE_REPLENISH_CHARACTERS)){
+		mods::replenish::run();
 	}
 
 	if(!(pulse % PULSE_IDLEPWD)) {	/* 15 seconds */

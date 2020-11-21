@@ -685,6 +685,7 @@ enum player_level {
 
 #define PULSE_BTREE		(1 RL_SEC)
 #define PULSE_ZONE      (10 RL_SEC)
+#define PULSE_REPLENISH_CHARACTERS (5 RL_SEC)
 #define PULSE_MOBILE    (10 RL_SEC)
 #define PULSE_VIOLENCE  ( 2 RL_SEC)
 #define PULSE_AUTOSAVE	(60 RL_SEC)

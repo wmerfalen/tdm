@@ -1,0 +1,36 @@
+# type: FRAG_GRENADE
+# type: INCENDIARY_GRENADE
+# type: REMOTE_EXPLOSIVE
+# type: REMOTE_CHEMICAL
+# type: EMP_GRENADE
+# type: SMOKE_GRENADE
+# type: C4
+# type: BREACH_CHARGE
+# type: FLASHBANG_GRENADE
+# type: SENSOR_GRENADE
+str_type: 'CLAYMORE_MINE'
+type: 'CLAYMORE_MINE'
+manufacturer: 'NF-A0 Explosives' # string, anything 
+name: 'NF-A0 Claymore Mine' # string, anything name of object 
+vnum: 37 # integer, unique identifier
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+description: 'A NF-A0 Claymore Mine is lying here.'
+short_description: 'a NF-A0 Claymore Mine'
+action_description: 'a NF-A0 Claymore Mine'
+feed_file: 'objects/explosive/claymore.yml'
+alternate_explosion_type: 'NONE' #std::string, ENUM NONE,SCAN
+loudness_type: 'DEAFENING' #std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING
+chance_to_injure: 45.0 #float, percent
+critical_chance: 33.0 #float, percent
+critical_range: 1 #int, rooms
+blast_radius: 1 #int, rooms
+damage_per_second: 89.0 #float, static base damage done
+disorient_amount: 10.0 #float, percent
+range_modifier: 1 #int, rooms

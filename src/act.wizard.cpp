@@ -24,6 +24,7 @@
 #include "constants.h"
 #include "mods/acl/lambda.hpp"
 #include "mods/orm/fetcher.hpp"
+#include "mods/query-objects.hpp"
 
 
 /*   external vars  */
@@ -494,6 +495,9 @@ void do_stat_room(char_data *ch) {
 
 void do_stat_object(char_data *ch, struct obj_data *j) {
 	MENTOC_PREAMBLE();
+	player->sendln(j->generate_stat_page());
+	return;
+#if 0
 	int i, found;
 	obj_vnum vnum;
 	struct obj_data *j2;
@@ -654,6 +658,7 @@ void do_stat_object(char_data *ch, struct obj_data *j) {
 	}
 
 	player->sendln("");
+#endif
 }
 
 
@@ -818,92 +823,32 @@ void do_stat_character(char_data *ch, char_data *k) {
 
 
 ACMD(do_stat) {
-	
-	char buf1[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
-	char_data *victim;
-	struct obj_data *object;
-	struct char_file_u tmp_store;
-
-	half_chop(argument, buf1, buf2);
-
-	if(!*buf1) {
-		player->sendln("Stats on who or what?");
+	DO_HELP("stat,stats");
+	static constexpr const char* usage = "usage: stat <object|weapon>";
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() == 0){
+		player->errorln(usage);
 		return;
-	} else if(is_abbrev(buf1, "room")) {
-		do_stat_room(ch);
-	} else if(is_abbrev(buf1, "mob")) {
-		if(!*buf2) {
-			player->sendln("Stats on which mobile?");
-		} else {
-			if((victim = get_char_vis(ch, buf2, NULL, FIND_CHAR_WORLD)) != NULL) {
-				do_stat_character(ch, victim);
-			} else {
-				player->sendln("No such mobile around.");
-			}
+	}
+	
+	{
+		auto obj= mods::query_objects::query_room_for_object(player->room(), vec_args[0]);
+		if(obj){
+			do_stat_object(ch,obj.get());
+			return;
 		}
-	} else if(is_abbrev(buf1, "player")) {
-		if(!*buf2) {
-			player->sendln("Stats on which player?");
-		} else {
-			if((victim = get_player_vis(ch, buf2, NULL, FIND_CHAR_WORLD)) != NULL) {
-				do_stat_character(ch, victim);
-			} else {
-				player->sendln("No such player around.");
-			}
-		}
-	} else if(is_abbrev(buf1, "file")) {
-		if(!*buf2) {
-			player->sendln("Stats on which player?");
-		} else if((victim = get_player_vis(ch, buf2, NULL, FIND_CHAR_WORLD)) != NULL) {
-			do_stat_character(ch, victim);
-		} else {
-			char_data temp_victim_shadow;
-
-			std::string name = buf2;
-			if(char_exists(name)) {
-				//store_to_char(&tmp_store, &temp_victim_shadow);
-				victim->player.time.logon = tmp_store.last_logon;
-				char_to_room(&temp_victim_shadow, 0);
-
-				if(GET_LEVEL(&temp_victim_shadow) > GET_LEVEL(ch)) {
-					player->sendln("Sorry, you can't do that.");
-				} else {
-					do_stat_character(ch, victim);
+	}
+	{
+		auto obj_list = mods::query_objects::query_inventory_for_object(player,vec_args[0]);
+		if(obj_list.size()){
+			for(auto & uuid : obj_list){
+				auto obj = optr_by_uuid(uuid);
+				if(!obj){
+					continue;
 				}
-
-				extract_char_final(&temp_victim_shadow);
-			} else {
-				player->sendln("There is no such player.");
+				do_stat_object(ch,obj.get());
 			}
-		}
-	} else if(is_abbrev(buf1, "object")) {
-		if(!*buf2) {
-			player->sendln("Stats on which object?");
-		} else {
-			if((object = get_obj_vis(ch, buf2, NULL)) != NULL) {
-				do_stat_object(ch, object);
-			} else {
-				player->sendln("No such object around.");
-			}
-		}
-	} else {
-		char *name = buf1;
-		int number = get_number(&name);
-
-		if((object = get_obj_in_equip_vis(ch, name, &number, ch->equipment)) != NULL) {
-			do_stat_object(ch, object);
-		} else if((object = get_obj_in_list_vis(ch, name, &number, ch->carrying)) != NULL) {
-			do_stat_object(ch, object);
-		} else if((victim = get_char_vis(ch, name, &number, FIND_CHAR_ROOM)) != NULL) {
-			do_stat_character(ch, victim);
-		} else if((object = get_obj_in_list_vis(ch, name, &number, world[IN_ROOM(ch)].contents)) != NULL) {
-			do_stat_object(ch, object);
-		} else if((victim = get_char_vis(ch, name, &number, FIND_CHAR_WORLD)) != NULL) {
-			do_stat_character(ch, victim);
-		} else if((object = get_obj_vis(ch, name, &number)) != NULL) {
-			do_stat_object(ch, object);
-		} else {
-			player->sendln("Nothing around by that name.");
+			return;
 		}
 	}
 }

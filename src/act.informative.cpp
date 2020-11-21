@@ -33,6 +33,7 @@
 #include "mods/super-users.hpp"
 #include "mods/interpreter.hpp"
 #include "mods/examine.hpp"
+#include "mods/help.hpp"
 
 extern char_data* character_list;
 /* extern variables */
@@ -1415,77 +1416,63 @@ ACMD(do_weather) {
 
 
 ACMD(do_help) {
-	int chk, bot, top, mid, minlen;
-
-	if(!ch->has_desc) {
-		return;
-	}
 	if(IS_NPC(ch)){ return; }
 
-	skip_spaces(&argument);
-
-	if(!*argument) {
-		page_string(*ch->desc, help, 0);
-		return;
-	}
-
-	std::array<char,50> topic;
-	std::fill(topic.begin(),topic.end(),0);
-	one_argument(argument,&topic[0]);
-	if(!topic[0]){
-		player->sendln("Please specify a topic. i.e.: help grenades");
-		return;
-	}
-
-#define IS_TOPIC(a) (strncmp((char*)&topic[0],a,sizeof(topic)) == 0)
-	if(IS_TOPIC("grenade") || IS_TOPIC("nade") || IS_TOPIC("throw")) {
-		const char* usage = "usage: throw <direction> <room_count>\r\n"
-			"example: \r\n"
-			" $ get frag backpack\r\n"
-			" $ hold frag\r\n"
-			" $ throw north 2\r\n"
-			" This will throw a frag 2 rooms away\r\n"
-			" NOTE:\r\n"
-			"All grenades are thrown as far as they can up to a maximum amount of 4 rooms away\r\n"
-			"or however many rooms before it reaches a dead-end\r\n"
-			"see: help grenade";
-		player->sendln(usage);
-		return;
-	}
-
-
-	if(!help_table) {
-		player->sendln("No help available.");
-		return;
-	}
-
-	bot = 0;
-	top = top_of_helpt;
-	minlen = strlen(argument);
-
-	for(;;) {
-		mid = (bot + top) / 2;
-
-		if(bot > top) {
-			player->sendln("There is no help on that word.");
-			return;
-		} else if(!(chk = strn_cmp(argument, help_table[mid].keyword, minlen))) {
-			/* trace backwards to find first matching entry. Thanks Jeff Fink! */
-			while((mid > 0) &&
-					(!(chk = strn_cmp(argument, help_table[mid - 1].keyword, minlen)))) {
-				mid--;
-			}
-
-			page_string(*ch->desc, help_table[mid].entry, 0);
-			return;
-		} else {
-			if(chk > 0) {
-				bot = mid + 1;
-			} else {
-				top = mid - 1;
-			}
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() == 0) {
+		switch(player->get_class()){
+			case player_class_t::CLASS_CONTAGION:
+				mods::help::send_contagion_help_menu(player);
+				break;
+			case player_class_t::CLASS_GHOST:
+				mods::help::send_ghost_help_menu(player);
+				break;
+			case player_class_t::CLASS_MARKSMAN:
+				mods::help::send_marksman_help_menu(player);
+				break;
+			case player_class_t::CLASS_BANDIT:
+				mods::help::send_bandit_help_menu(player);
+				break;
+			case player_class_t::CLASS_BUTCHER:
+				mods::help::send_butcher_help_menu(player);
+				break;
+			case player_class_t::CLASS_STRIKER:
+				mods::help::send_striker_help_menu(player);
+				break;
+			case player_class_t::CLASS_OBSTRUCTOR:
+				mods::help::send_obstructor_help_menu(player);
+				break;
+			case player_class_t::CLASS_MALADY:
+				mods::help::send_malady_help_menu(player);
+				break;
+			case player_class_t::CLASS_PYREXIA:
+				mods::help::send_pyrexia_help_menu(player);
+				break;
+			case player_class_t::CLASS_DEALER:
+				mods::help::send_dealer_help_menu(player);
+				break;
+			case player_class_t::CLASS_FORGE:
+				mods::help::send_forge_help_menu(player);
+				break;
+			case player_class_t::CLASS_SYNDROME:
+				mods::help::send_syndrome_help_menu(player);
+				break;
+			case player_class_t::CLASS_MACHINIST:
+				mods::help::send_machinist_help_menu(player);
+				break;
+			default:
+				break;
 		}
+		mods::help::send_generic_help(player);
+		//page_string(*ch->desc, help, 0);
+		return;
 	}
+
+	if(!mods::help::send_help(vec_args[0],player)){
+		return;
+	}
+	/** TODO: show a sorted page of help topics */
+	player->sendln("No help files match that.");
 }
 
 

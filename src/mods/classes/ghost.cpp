@@ -3,14 +3,40 @@
 #include "../affects.hpp"
 #include "../player-utils.hpp"
 #include "../object-utils.hpp"
+#include "../replenish.hpp"
+#include "../interpreter.hpp"
+#include "../demolitions.hpp"
+#include "../date-time.hpp"
+#include "../weapons/damage-types.hpp"
 
 extern void stop_fighting(char_data *ch);
 namespace mods::orm::inventory {
 	extern int16_t flush_player(player_ptr_t & player);
 };
 namespace mods::classes {
+	void ghost::init(){
+		m_claymore_count = 0;
+		m_cryogenic_grenade_count = 0;
+		m_flash_underbarrel_charges = 0;
+		m_scanned.clear();
+		m_player = nullptr;
+
+		m_drone_scan_level = (decltype(m_drone_scan_level))0;
+		m_stealth_level = (decltype(m_stealth_level))0;
+		m_summon_extraction_level = (decltype(m_summon_extraction_level))0;
+		m_xray_shot_level = (decltype(m_xray_shot_level))0;
+		m_feign_death_level = (decltype(m_feign_death_level))0;
+		m_plant_claymore_level = (decltype(m_plant_claymore_level))0;
+		m_penetrating_shot_level = (decltype(m_penetrating_shot_level))0;
+		m_intimidation_level = (decltype(m_intimidation_level))0;
+		m_cryogenic_grenade_level = (decltype(m_cryogenic_grenade_level))0;
+		m_flash_underbarrel_level = (decltype(m_flash_underbarrel_level))0;
+		m_claymores.clear();
+	}
 		ghost::ghost(player_ptr_t p){
+			this->init();
 			load_by_player(p);
+			//m_last_replenish_tick = CURRENT_TICK();
 		}
 		player_ptr_t 	ghost::player(){
 			return m_player;
@@ -19,7 +45,7 @@ namespace mods::classes {
 			m_player = p;
 		}
 		int16_t ghost::new_player(player_ptr_t &player){
-			auto db_id = m_orm.initialize_row(player,(primary_choice_t)0);
+			auto db_id = m_orm.initialize_row(player);
 			if(db_id == 0){
 				return -2;
 			}
@@ -27,19 +53,25 @@ namespace mods::classes {
 			return 0;
 		}
 		int16_t ghost::load_by_player(player_ptr_t & player){
+			set_player(player);
 			auto result = m_orm.load_by_player(player->db_id());
 			if(result < 0){
 				report(CAT("ghost::load_by_player unable to load ghost class by player id: ",(player->db_id()),".. return status: ",(result)));
 				return result;
 			}
-			set_player(player);
-			m_drone_scan_level = static_cast<drone_scan_levels_t>(m_orm.ghost_drone_scan_level);
-			m_xray_shot_level = static_cast<xray_shot_levels_t>(m_orm.ghost_xray_shot_level);
-			m_stealth_level = static_cast<stealth_levels_t>(m_orm.ghost_stealth_level);
-			m_feign_death_level = static_cast<feign_death_levels_t>(m_orm.ghost_feign_death_level);
-			m_summon_extraction_level = static_cast<summon_extraction_levels_t>(m_orm.ghost_summon_extraction_level);
-
+			m_drone_scan_level = (decltype(m_drone_scan_level))(m_orm.ghost_drone_scan_level);
+			m_stealth_level = (decltype(m_stealth_level))(m_orm.ghost_stealth_level);
+			m_summon_extraction_level = (decltype(m_summon_extraction_level))(m_orm.ghost_summon_extraction_level);
+			m_xray_shot_level = (decltype(m_xray_shot_level))(m_orm.ghost_xray_shot_level);
+			m_feign_death_level = (decltype(m_feign_death_level))(m_orm.ghost_feign_death_level);
+			m_plant_claymore_level = (decltype(m_plant_claymore_level))(m_orm.ghost_plant_claymore_level);
+			m_penetrating_shot_level = (decltype(m_penetrating_shot_level))(m_orm.ghost_penetrating_shot_level);
+			m_intimidation_level = (decltype(m_intimidation_level))m_orm.ghost_intimidation_level;
+			m_cryogenic_grenade_level = (decltype(m_cryogenic_grenade_level))m_orm.ghost_cryogenic_grenade_level;
+			m_flash_underbarrel_level = (decltype(m_flash_underbarrel_level))m_orm.ghost_flash_underbarrel_level;
+#ifdef MENTOC_GHOST_EQUIPS
 			player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
+#endif
 			return result;
 		}
 		void ghost::apply_stealth_to(obj_ptr_t& target){
@@ -134,27 +166,145 @@ namespace mods::classes {
 		ghost::ghost(){
 			m_player = nullptr;
 		}
+		void ghost::replenish(){
+			m_player->sendln(CAT("Replenish tick[", CURRENT_TICK(), "] irl date:[",mods::date_time::irl::date_time_string(),"]"));
+			if(m_claymore_count < GHOST_CLAYMORE_MAX_COUNT()){
+				++m_claymore_count;
+			}
+		}
+		uint8_t ghost::claymore_count() const{
+			return m_claymore_count;
+		}
+		std::tuple<bool,std::string> ghost::plant_claymore(int direction,room_rnum room){
+			if(m_claymore_count == 0){
+				return {false, "You don't have any GHOST claymores!"};
+			}
+			--m_claymore_count;
+			m_claymores.emplace_back(std::move(create_object(ITEM_EXPLOSIVE, "claymore.yml")));
+			mods::demolitions::plant_claymore(m_player,direction,m_claymores.back());
+			return {1,CAT("You begin planting a {grn}",m_claymores.back()->name,"{/grn}...")};
+		}
+		std::vector<uuid_t> ghost::get_targets_scanned_by_drone(){
+			std::vector<uuid_t> scanned;
+
+			return scanned;
+		}
 		std::shared_ptr<ghost> create_ghost(player_ptr_t &in_player){
 			return std::move(std::make_shared<ghost>(in_player));
 		}
+		std::vector<uuid_t> ghost::get_scanned() const {
+			return m_scanned;
+		}
+		void ghost::set_scanned(std::vector<uuid_t> s){
+			m_scanned = s;
+		}
+		std::tuple<uint32_t,std::string> ghost::fire_penetrating_shot_at(uuid_t npc_uuid){
+			uint32_t damage = 0;
+			std::string msg = "";
+			return {damage,msg};
+		}
+		std::tuple<bool,std::string> ghost::intimidate_target(uuid_t npc_uuid){
+			bool worked = false;
+			std::string msg = "";
+			return {worked,msg};
+		}
+		uint8_t ghost::cryogenic_grenade_count() const {
+			return m_cryogenic_grenade_count;
+		}
+		std::tuple<bool,std::string> ghost::toss_cryogenic_grenade_towards(uint8_t direction, uint8_t rooms){
+			bool has_nades = !!m_cryogenic_grenade_count;
+			std::string msg = "";
+			return {has_nades,msg};
+		}
+		/** applies it to the entire room. every will get flashed */
+		std::tuple<bool,std::string> ghost::use_flash_underbarrel(){
+			bool has_charge = !!m_flash_underbarrel_charges;
+			std::string msg = "";
+			return {has_charge,msg};
+		}
 };
+ACMD(do_penetrating_shot){
+	PLAYER_CAN("ghost.penetrating_shot");
+	DO_HELP("penetrating_shot");
+}
+ACMD(do_intimidate) {
+	PLAYER_CAN("ghost.intimidate");
+	DO_HELP("intimidate");
+}
+ACMD(do_toss_cryogenic_grenade) {
+	PLAYER_CAN("ghost.toss_cryogenic_grenade");
+	DO_HELP("toss_cryogenic_grenade");
+}
+ACMD(do_use_flash_underbarrel) {
+	PLAYER_CAN("ghost.use_flash_underbarrel");
+	DO_HELP("use_flash_underbarrel");
+}
 ACMD(do_go_dark){
 	PLAYER_CAN("ghost.go_dark");
+	DO_HELP("go_dark");
 }
 ACMD(do_conceal){
 	PLAYER_CAN("ghost.conceal");
+	DO_HELP("conceal");
 
 }
 ACMD(do_feign_death){
 	PLAYER_CAN("ghost.feign_death");
+	DO_HELP("feign_death");
 	auto msg = std::get<1>(player->ghost()->feign_death());
 	player->sendln(msg);
 }
 ACMD(do_summon_extraction){
 	PLAYER_CAN("ghost.summon_extraction");
+	DO_HELP("summon_extraction");
 
 }
 ACMD(do_xray_shot){
 	PLAYER_CAN("ghost.xray_shot");
-
+	DO_HELP("xray_shot");
+	auto weapon = player->primary();
+	if(!weapon || weapon->rifle()->attributes->type != mw_rifle::SNIPER){
+		player->sendln("You must be wielding a sniper rifle!");
+		return;
+	}
+	int distance = weapon->rifle()->attributes->critical_range;
+	int direction = NORTH;
+	for(auto scanned : player->ghost()->get_targets_scanned_by_drone()){
+		auto victim = ptr_by_uuid(scanned);
+		if(!victim){
+			continue;
+		}
+		auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(
+			player,
+			weapon,
+			victim,
+			distance,
+			direction
+		);
+	}
 }
+namespace mods::class_abilities {
+	ACMD(do_plant_claymore){
+		PLAYER_CAN("ghost.plant_claymore");
+		DO_HELP("ghost.plant_claymore");
+		auto vec_args = PARSE_ARGS();
+		int dir = mods::util::parse_direction(vec_args[0]);
+		if(dir < 0){
+			player->sendln("Use a valid direction");
+			return;
+		}
+		auto status = player->ghost()->plant_claymore(dir,player->room());
+		if(!std::get<0>(status)){
+			player->errorln(std::get<1>(status));
+			return;
+		}
+		player->sendln(std::get<1>(status));
+	}
+	void init(){
+		mods::interpreter::add_command("plant_claymore", POS_RESTING, do_plant_claymore, 0,0);
+		mods::interpreter::add_command("penetrating_shot", POS_RESTING, do_penetrating_shot, 0,0);
+		mods::interpreter::add_command("intimidate", POS_RESTING, do_intimidate, 0,0);
+		mods::interpreter::add_command("toss_cryogenic_grenade", POS_RESTING, do_toss_cryogenic_grenade, 0,0);
+		mods::interpreter::add_command("use_flash_underbarrel", POS_RESTING, do_use_flash_underbarrel, 0,0);
+	}
+};
