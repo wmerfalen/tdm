@@ -23,13 +23,13 @@ namespace mods::orm {
 	strmap_t ghost::export_class() {
 		strmap_t values;
 		values["ghost_player_id"] = std::to_string(ghost_player_id);
-values["ghost_drone_scan_level"] = std::to_string(ghost_drone_scan_level);
-values["ghost_stealth_level"] = std::to_string(ghost_stealth_level);
-values["ghost_xray_shot_level"] = std::to_string(ghost_xray_shot_level);
-values["ghost_feign_death_level"] = std::to_string(ghost_feign_death_level);
-values["ghost_summon_extraction_level"] = std::to_string(ghost_summon_extraction_level);
-values["ghost_plant_claymore_level"] = std::to_string(ghost_plant_claymore_level);
-values["ghost_penetrating_shot_level"] = std::to_string(ghost_penetrating_shot_level);
+		values["ghost_drone_scan_level"] = std::to_string(ghost_drone_scan_level);
+		values["ghost_stealth_level"] = std::to_string(ghost_stealth_level);
+		values["ghost_xray_shot_level"] = std::to_string(ghost_xray_shot_level);
+		values["ghost_feign_death_level"] = std::to_string(ghost_feign_death_level);
+		values["ghost_summon_extraction_level"] = std::to_string(ghost_summon_extraction_level);
+		values["ghost_plant_claymore_level"] = std::to_string(ghost_plant_claymore_level);
+		values["ghost_penetrating_shot_level"] = std::to_string(ghost_penetrating_shot_level);
 		values["ghost_intimidation_level"] = std::to_string(ghost_intimidation_level);
 		values["ghost_cryogenic_grenade_level"] = std::to_string(ghost_cryogenic_grenade_level);
 		values["ghost_flash_underbarrel_level"] = std::to_string(ghost_flash_underbarrel_level);
@@ -47,9 +47,9 @@ values["ghost_penetrating_shot_level"] = std::to_string(ghost_penetrating_shot_l
 		ghost_summon_extraction_level = (decltype(ghost_summon_extraction_level))0;
 		ghost_plant_claymore_level = (decltype(ghost_plant_claymore_level))0;
 		ghost_penetrating_shot_level = (decltype(ghost_penetrating_shot_level))0;
-			ghost_intimidation_level = (decltype(ghost_intimidation_level))0;
-			ghost_cryogenic_grenade_level = (decltype(ghost_cryogenic_grenade_level))0;
-			ghost_flash_underbarrel_level = (decltype(ghost_flash_underbarrel_level))0;
+		ghost_intimidation_level = (decltype(ghost_intimidation_level))0;
+		ghost_cryogenic_grenade_level = (decltype(ghost_cryogenic_grenade_level))0;
+		ghost_flash_underbarrel_level = (decltype(ghost_flash_underbarrel_level))0;
 		created_at = (decltype(created_at))0;
 		return std::get<0>(this->read<ghost>(this,"ghost_player_id",std::to_string(ghost_player_id)));
 	}

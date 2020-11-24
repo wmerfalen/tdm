@@ -68,7 +68,6 @@ namespace mods::globals {
 };
 namespace mods {
 	struct player {
-
 		using damage = damage_event_t;
 		using obj_ptr_t = std::shared_ptr<obj_data>;
 		using affect_t = mods::affects::affect_t;
@@ -89,6 +88,7 @@ namespace mods {
 		using		descriptor_t = mods::descriptor_data;
 		using		descriptor_iterator_t = std::deque<mods::descriptor_data>::iterator;
 		using		time_type_t = unsigned long;
+		using rate_limit_data_t = std::vector<player::time_type_t>;
 		operator chdata_ptr(){ return cd(); }
 		enum misc_pref_enum_t {
 			HOLD_ANYTHING = 1,
@@ -112,6 +112,7 @@ namespace mods {
 		friend void mods::acl_list::set_access_rights(
 				player_ptr_t,const std::string&,bool);
 
+		access_level_t access_level();
 		void set_db_id(aligned_int_t id);
 		aligned_int_t get_db_id() const;
 		aligned_int_t db_id() const { return m_db_id; }
@@ -161,7 +162,7 @@ namespace mods {
 		/* class info */
 		player_class_t get_class();
 		void set_class(player_class_t);
-		mods::string get_class_string() const { return m_class_string; }
+		mods::string get_class_string() const;
 		bool can(std::string_view);
 
 		/* ammo gettters */
@@ -388,6 +389,7 @@ namespace mods {
 		void stc(int m);
 		void stc(std::string_view);
 		void sendln(std::string_view str);
+		void send(const std::vector<std::string>&);
 		void sendln(mods::string& str);
 		/** 'plain' sendln (no color eval needed) */
 		void psendln(std::string_view str);
@@ -660,6 +662,9 @@ namespace mods {
 		uuid_t& drone_uuid(){ return m_char_data->drone_uuid; }
 		bool& drone_simulate(){ return m_char_data->drone_simulate; }
 
+		rate_limit_data_t& get_rate_limit_data(int action);
+		void rate_limit_hit(int action);
+
 		protected:
 		std::map<std::string,std::string> m_ada_data;
 		bool m_ada;
@@ -732,6 +737,7 @@ namespace mods {
 		std::shared_ptr<mods::armor::elite_protection> m_elite_protection;
 		uint32_t m_currently_hacking;
 		uint8_t m_hacking_row;
+		std::map<int,rate_limit_data_t> m_rate_limits;
 	};
 };
 

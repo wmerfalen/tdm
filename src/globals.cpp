@@ -56,6 +56,8 @@ INIT(mods::query_objects);
 INIT(mods::target_practice);
 INIT(mods::class_abilities);
 INIT(mods::values);
+INIT(mods::skills);
+INIT(mods::rate_limiting);
 #undef INIT
 
 namespace mods::mobs::room_watching::events {
@@ -458,13 +460,14 @@ namespace mods {
 				exit(0);
 			}
 			mods::debug::init(show_tics);
-			mods::skills::game_init();
 			mods::integral_objects::init();
 			mods::query_objects::init();
 			mods::date_time::init();
 			mods::target_practice::init();
 			mods::class_abilities::init();
 			mods::values::init();
+			mods::skills::init();
+			mods::rate_limiting::init();
 			::offensive::init();
 			::builder::init();
 			::informative::init();

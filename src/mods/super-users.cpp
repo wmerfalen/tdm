@@ -1,5 +1,6 @@
 #include "super-users.hpp"
 #include "help.hpp"
+#include "screen-searcher.hpp"
 #include <set>
 
 namespace mods::super_users {
@@ -85,6 +86,15 @@ ACMD(do_add_super_user){
 ACMD(do_get_super_user_list){
 	DO_HELP("get_super_user_list");
 	ADMIN_REJECT();
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size()){
+		std::vector<std::string> screen;
+		for(auto & user : mods::super_users::super_users){
+			screen.emplace_back(user);
+		}
+		mods::search_screen(player, screen, vec_args, 64);
+		return;
+	}
 	player->send(mods::super_users::get_list().c_str());
 }
 ACMD(do_remove_super_user){

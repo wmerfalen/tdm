@@ -10,6 +10,7 @@ namespace mods::classes {
 	struct ghost : base {
 		friend class mods::classes::super_user_fiddler;
 		using primary_choice_t = mods::weapon::ghost::primary_choice_t;
+
 		using drone_scan_levels_t = ghost_orm_t::drone_scan_levels_t;
 		using stealth_levels_t = ghost_orm_t::stealth_levels_t;
 		using summon_extraction_levels_t = ghost_orm_t::summon_extraction_levels_t;
@@ -20,6 +21,7 @@ namespace mods::classes {
 		using intimidation_levels_t = ghost_orm_t::intimidation_levels_t;
 		using cryogenic_grenade_levels_t = ghost_orm_t::cryogenic_grenade_levels_t;
 		using flash_underbarrel_levels_t = ghost_orm_t::flash_underbarrel_levels_t;
+
 		long created_at;
 
 		static int16_t destroy(player_ptr_t& player);
@@ -65,6 +67,8 @@ namespace mods::classes {
 		uint8_t claymore_count() const;
 		std::tuple<bool,std::string> plant_claymore(int direction,room_rnum room);
 		void replenish();
+		std::string get_proficiency_by_name(std::string_view prof) const;
+		std::string skill_screen() const ;
 
 		std::tuple<uint32_t,std::string> fire_penetrating_shot_at(uuid_t npc_uuid);
 		std::tuple<bool,std::string> intimidate_target(uuid_t npc_uuid);

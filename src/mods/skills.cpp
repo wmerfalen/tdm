@@ -1,71 +1,22 @@
 #include "skills.hpp"
+#include "interpreter.hpp"
+
 #ifdef __MENTOC_MODS_SKILLS_SHOW_DEBUG_OUTPUT__
 #define m_debug(A) std::cerr << "[mods::skills][debug]:'" << A << "'\n";
 #else
 #define m_debug(A)
 #endif
 
-ACMD(do_skills){
-	DO_HELP("skills");
-	auto vec_args = PARSE_ARGS();
-	if(vec_args.size() >= 2 && ICMP(vec_args[0],"show")){
-		for(unsigned i = 1; i < vec_args.size();++i){
-			for(auto & skillset : mods::skills::proficiencies::list) {
-				for(auto & prof : std::get<1>(skillset)){
-					if(ICMP(prof.name.c_str(),vec_args[i])){
-						player->send("{grn}skill-name: '{yel}%s{/yel}'\r\n", prof.name.c_str());
-						player->send("{grn}skill-description: '{yel}%s{/yel}'\r\n", prof.description.c_str());
-						player->send("{grn}minium-proficiency: {yel}%d{/yel}\r\n", prof.minimum_proficiency);
-						player->send("{grn}implemented: {yel}%s{/yel}\r\n", prof.implemented ? "yes" : "no" );
-						continue;
-					}
-				}
-			}
-		}
-		return;
-	}
-
-	for(auto & skillset : mods::skills::proficiencies::list) {
-		player->send("{grn}-[ %s ]:----------------------------------------{/grn}\r\n",std::get<0>(skillset).c_str());
-		for(auto & prof : std::get<1>(skillset)){
-			if(!SHOW_UNIMPLEMENTED_SKILLS() && !prof.implemented){
-				continue;
-			}
-			player->send("{gld}[%d]\t\t[%s]\t[%d]\t%s{/gld}",
-					mods::skills::get_player_level(player,prof.e_name),
-					prof.name.c_str(),
-					prof.minimum_proficiency,
-					SHOW_UNIMPLEMENTED_SKILLS() ?
-						(!prof.implemented ? "{red}[x]{gld}" : "{grn}[+]{/grn}") : ""
-			);
-			if(mods::skills::player_can(player,prof.e_name)){
-					player->sendln("{gld}[{grn}learned{/grn}{gld}]{/gld}");
-			}else{
-					player->sendln("{gld}[{red}not-learned{gld}]{/gld}");
-			}
-		}
-	}
-	player->sendln("To see a detailed description of a skill, type: {grn}skills help <skill>{/grn}");
-	player->sendln("Example: {yel}skills show spray-chance{/yel}");
-	player->sendln("NOTE: you can specify multiple skills");
-	player->sendln("Example: {yel}skills show spray-chance basic-armor mold{/yel}");
-	if(SHOW_UNIMPLEMENTED_SKILLS()){
-		player->sendln("Skills with a {red}[x]{/red} next to them are not currently implemented by the developers.");
-		player->sendln("Skills with a {grn}[+]{/grn} next to them are readily available and implemented by the developers.");
-	}
-	player->sendln("this documentation was written on 2020-07-06.");
-}
 ACMD(do_train){
 	DO_HELP("train");
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() >= 1){
 		for(auto & skillset : mods::skills::proficiencies::list) {
 			for(auto & prof : std::get<1>(skillset)){
-				if(ICMP(prof.name.c_str(),vec_args[0])){
+				if(prof.implemented && ICMP(prof.name.c_str(),vec_args[0])){
 					player->send("{grn}skill-name: '{yel}%s{/yel}'\r\n", prof.name.c_str());
 					player->send("{grn}skill-description: '{yel}%s{/yel}'\r\n", prof.description.c_str());
 					player->send("{grn}minium-proficiency: {yel}%d{/yel}\r\n", prof.minimum_proficiency);
-					player->send("{grn}implemented: {yel}%s{/yel}\r\n", prof.implemented ? "yes" : "no" );
 					return;
 				}
 			}
@@ -100,6 +51,7 @@ ACMD(do_allow_skill){
 namespace mods::skills {
 	constexpr static const char* DB_PREFIX = "skills";
 	static std::vector<std::string> skill_name_list;
+	static std::map<player_class_t,std::vector<std::string>> registered_class_skillsets;
 
 	void refresh_skill_name_list() {
 		skill_name_list.clear();
@@ -222,6 +174,17 @@ namespace mods::skills {
 		e_name_to_proficiency[proficiency_t::PARASITIC_HP_RECOVERY].minimum_proficiency = SKILL_PARASITIC_HP_RECOVERY();/** 2050 */
 		e_name_to_proficiency[proficiency_t::SUTURE].minimum_proficiency = SKILL_SUTURE();/** 2050 */
 		e_name_to_proficiency[proficiency_t::ADRENALINE_BOOST].minimum_proficiency = SKILL_ADRENALINE_BOOST();/** 2050 */
+
+		e_name_to_proficiency[proficiency_t::GHOST_CLASS_DRONE_SCAN].minimum_proficiency = SKILL_GHOST_DRONE_SCAN();
+		e_name_to_proficiency[proficiency_t::GHOST_CLASS_STEALTH].minimum_proficiency = SKILL_GHOST_STEALTH();
+		e_name_to_proficiency[proficiency_t::GHOST_CLASS_SUMMON_EXTRACTION].minimum_proficiency = SKILL_GHOST_SUMMON_EXTRACTION();
+		e_name_to_proficiency[proficiency_t::GHOST_CLASS_XRAY_SHOT].minimum_proficiency = SKILL_GHOST_XRAY_SHOT();
+		e_name_to_proficiency[proficiency_t::GHOST_CLASS_FEIGN_DEATH].minimum_proficiency = SKILL_GHOST_FEIGN_DEATH();
+		e_name_to_proficiency[proficiency_t::GHOST_CLASS_PLANT_CLAYMORE].minimum_proficiency = SKILL_GHOST_PLANT_CLAYMORE();
+		e_name_to_proficiency[proficiency_t::GHOST_CLASS_PENETRATING_SHOT].minimum_proficiency = SKILL_GHOST_PENETRATING_SHOT();
+		e_name_to_proficiency[proficiency_t::GHOST_CLASS_INTIMIDATION].minimum_proficiency = SKILL_GHOST_INTIMIDATION();
+		e_name_to_proficiency[proficiency_t::GHOST_CLASS_CRYOGENIC_GRENADE].minimum_proficiency = SKILL_GHOST_CRYOGENIC_GRENADE();
+		e_name_to_proficiency[proficiency_t::GHOST_CLASS_FLASH_UNDERBARREL].minimum_proficiency = SKILL_GHOST_FLASH_UNDERBARREL();
 	}
 
 	void refresh_implemented_skills(){
@@ -232,19 +195,6 @@ namespace mods::skills {
 				}
 			}
 		}
-	}
-	/** called by game initialization sequence */
-	void game_init(){
-		refresh_minimum_proficiencies();
-		for(auto & skillset : mods::skills::proficiencies::list) {
-			for(auto & prof : std::get<1>(skillset)){
-				mappings[prof.name.c_str()] = prof.e_name;
-				to_string_mappings[prof.e_name] = prof.name.c_str();
-				e_name_to_proficiency[prof.e_name] = prof;
-				skill_name_list.emplace_back(prof.name.str());
-			}
-		}
-		refresh_implemented_skills();
 	}
 	int get_enum_by_name(std::string_view name){
 		return mappings[name.data()];
@@ -346,5 +296,91 @@ namespace mods::skills {
 	std::string_view to_user_friendly_string_from_skill(skill_t s){
 		return e_name_to_proficiency[s].name.c_str();
 	}
+	/** called by game initialization sequence */
+	void init(){
+		refresh_minimum_proficiencies();
+		for(auto & skillset : mods::skills::proficiencies::list) {
+			for(auto & prof : std::get<1>(skillset)){
+				mappings[prof.name.c_str()] = prof.e_name;
+				to_string_mappings[prof.e_name] = prof.name.c_str();
+				e_name_to_proficiency[prof.e_name] = prof;
+				skill_name_list.emplace_back(prof.name.str());
+			}
+		}
+		refresh_implemented_skills();
+		mods::interpreter::add_command("skills", POS_RESTING, do_skills, 0,0);
+		mods::interpreter::add_command("train", POS_RESTING, do_train, 0,0);
+		mods::interpreter::add_command("allow_skill", POS_RESTING, do_allow_skill, LVL_BUILDER,0);
+	}
+	void register_class_skillset(player_class_t class_type,std::vector<std::string>& skillset){
+		mods::skills::registered_class_skillsets[class_type] = skillset;
+	}
 };
+std::string pad_string(std::string_view str,std::size_t to, std::string with){
+	std::string padded;
+	padded.resize(to);
+
+	for(unsigned i =0; i < to; i++){
+		if(str.length()  > i){
+			padded[i] = str[i];
+			continue;
+		}
+		padded[i] = with[0];
+	}
+	return padded;
+}
+
+bool skill_belongs_to_player_class(player_ptr_t& player,std::string_view skill_name){
+	std::string pc = CAT(":",player->get_class_string().c_str(),":");
+	return ICMP(pc.c_str(),skill_name.data());
+}
+bool is_player_class_skillset(std::string_view name){
+	return name[0] == ':';
+}
+
+ACMD(do_skills){
+	DO_HELP("skills");
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() >= 2 && ICMP(vec_args[0],"show")){
+		for(unsigned i = 1; i < vec_args.size();++i){
+			for(auto & skillset : mods::skills::proficiencies::list) {
+				if(is_player_class_skillset(std::get<0>(skillset)) && !skill_belongs_to_player_class(player,std::get<0>(skillset))){
+					continue;
+				}
+				for(auto & prof : std::get<1>(skillset)){
+					if(ICMP(prof.name.c_str(),vec_args[i])){
+						player->send("{grn}skill-name: '{yel}%s{/yel}'\r\n", prof.name.c_str());
+						player->send("{grn}skill-description: '{yel}%s{/yel}'\r\n", prof.description.c_str());
+						player->send("{grn}minium-proficiency: {yel}%d{/yel}\r\n", prof.minimum_proficiency);
+						continue;
+					}
+				}
+			}
+		}
+	}
+
+	std::size_t max_len = 35,skill_max_len = 80,skill_line_max_len = skill_max_len;
+	skill_line_max_len += 20;
+	for(auto & skillset : mods::skills::proficiencies::list) {
+		if(is_player_class_skillset(std::get<0>(skillset)) && !skill_belongs_to_player_class(player,std::get<0>(skillset))){
+			continue;
+		}
+		player->sendln(CAT("-- {grn}",std::get<0>(skillset),"{/grn}"));
+		std::string not_learned = "|not-learned";
+		std::string learned  = pad_string("|learned",not_learned.length()," ");
+		for(auto & prof : std::get<1>(skillset)){
+			if(!prof.implemented){
+				continue;
+			}
+			bool can_do = mods::skills::player_can(player,prof.e_name);
+			std::array<char,1024> buffer = {0};
+			std::string skill = pad_string(prof.name.c_str(),max_len - 2," ");
+			snprintf(&buffer[0],1024,"%s%s | (Cost: %d)",skill.c_str(),(can_do  || 1 ? learned : not_learned).c_str(), prof.minimum_proficiency);
+			player->sendln(&buffer[0]);
+		}
+	}
+	player->sendln("To see a detailed description of a skill, type: {grn}skills help <skill>{/grn}");
+	player->sendln("Example: {yel}skills show spray-chance{/yel}");
+	player->sendln("this documentation was written on 2020-07-06.");
+}
 #undef m_debug

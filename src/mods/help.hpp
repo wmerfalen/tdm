@@ -12,7 +12,8 @@ namespace mods::util {
 	extern bool parse_help(std::string_view argument);
 };
 namespace mods::help {
-	void register_help_command(const std::string& command, const std::string& contents);
+	void register_help_command_with_permission(const std::string& command, const std::string& contents,player_level);
+
 	bool matches_many(const std::string& items,std::string_view from);
 	bool send_help(std::string_view from,std::shared_ptr<mods::player>& player);
 	bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::player>& player,bool zero_is_help);
