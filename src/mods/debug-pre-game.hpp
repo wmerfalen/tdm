@@ -18,6 +18,7 @@
 #include "mini-games/wires.hpp"
 #include "migrations.hpp"
 #include "rifle-attachments.hpp"
+#include "levels.hpp"
 
 extern bool login(std::string_view user_name,std::string_view password);
 extern int16_t save_char_data(player_ptr_t& player,std::map<std::string,std::string> values);
@@ -65,6 +66,34 @@ namespace mods::debug::pre_game {
 		std::cout << std::get<1>(i) << "]\n";
 	}
 	bool run(){
+#define __MENTOC_RUN_LEVELS_PREGAME__
+#ifdef __MENTOC_RUN_LEVELS_PREGAME__
+		for(unsigned player_level = 1; player_level <= LVL_IMMORT;++player_level){
+			for(auto & cl_type : {
+				player_class_t::GHOST,
+				player_class_t::MARKSMAN,
+				player_class_t::BANDIT,
+				player_class_t::BUTCHER,
+				player_class_t::STRIKER,
+				player_class_t::OBSTRUCTOR,
+				player_class_t::MALADY,
+				player_class_t::PYREXIA,
+				player_class_t::DEALER,
+				player_class_t::FORGE,
+				player_class_t::SYNDROME,
+				player_class_t::MACHINIST
+				}){
+				std::cerr << "[player_class(" << player_level << ")]\n\t"
+					<< mods::util::player_class_to_string(cl_type) << "\n";
+				auto triads = mods::levels::get_triads_by_class(cl_type);
+				auto stats = mods::levels::calculate_based_on_triads(triads,player_level);
+				mods::levels::report_advances(stats);
+				std::cerr << "\n\n";
+			}
+		}
+		sleep(1200);
+		exit(0);
+#endif
 		wire_mini_game_test();
 
 		mini_game_test();

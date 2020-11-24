@@ -8,6 +8,11 @@ namespace mods::orm::inventory {
 	extern int16_t flush_player(player_ptr_t & player);
 };
 namespace mods::classes {
+	/** KEEP ME */
+	void pyrexia_advance_level(player_ptr_t& player){
+		/** TODO fill me in */
+		player->send("[stub] file:%s line:%d\r\n",__FILE__,__LINE__);
+	}
 		pyrexia::pyrexia(player_ptr_t p){
 			load_by_player(p);
 		}

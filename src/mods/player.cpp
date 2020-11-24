@@ -32,6 +32,9 @@ namespace mods::rooms {
 namespace mods::classes {
 	extern void unblock_event(uint32_t,uuid_t);
 };
+namespace mods::levels {
+	extern std::array<uint8_t,5> get_triads_by_class(player_class_t);
+};
 extern size_t vwrite_to_output(mods::descriptor_data &t, const char *format, va_list args);
 extern int write_to_descriptor(socket_t desc, const char *txt);
 extern void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
@@ -1455,6 +1458,7 @@ namespace mods {
 			std::cerr << "[mods::player] set class to: " << c << "\n";
 			m_class = c;
 			m_class_string = mods::util::player_class_to_string(c);
+			m_triads = mods::levels::get_triads_by_class(m_class);
 		}
 		int player::screen_width(){
 			return mods::util::stoi(mods::prefs::dynamic_get("width","player",m_char_data)).value_or(80);
@@ -1511,6 +1515,9 @@ namespace mods {
 		}
 		player::access_level_t player::access_level(){
 			return (player::access_level_t)m_char_data->player.level;
+		}
+		std::array<uint8_t,5> player::triads(){
+			return m_triads;
 		}
 };
 

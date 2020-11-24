@@ -2607,6 +2607,7 @@ bool parse_sql_player(player_ptr_t player_ptr){
 		player_ptr->gold() = mods::util::stoi<int>(row["player_gold"]);
 		player_ptr->exp() = mods::util::stoi<int>(row["player_exp"]);
 		player_ptr->sex() = mods::util::stoi<byte>(row["player_sex"]);
+		player_ptr->level() = mods::util::stoi<byte>(row["player_level"]);
 
 		/** damroll, hitroll, weight, height */
 		player_ptr->damroll() = mods::util::stoi<int>(row["player_damroll"]);

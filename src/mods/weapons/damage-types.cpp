@@ -5,6 +5,7 @@
 #include "../rooms.hpp"
 #include "../skills.hpp"
 #include "../projectile.hpp"
+#include "../levels.hpp"
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #ifndef TO_ROOM
 #define TO_ROOM		1
@@ -156,7 +157,7 @@ namespace mods::weapons::damage_types {
 		void gain_experience(char_data *ch, char_data *victim, int dam, int attacktype) {
 			/* Gain exp for the hit */
 			if(ch != victim) {
-				gain_exp(ch, GET_LEVEL(victim) * dam);
+				mods::levels::gain_exp(ptr(ch), GET_LEVEL(victim) * dam);
 			}
 		}
 

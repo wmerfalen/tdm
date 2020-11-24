@@ -25,6 +25,7 @@
 #include "mods/behaviour_tree_impl.hpp"
 #include "mods/object-utils.hpp"
 #include "mods/weapons/damage-types.hpp"
+#include "mods/levels.hpp"
 
 #define MOD_SNIPE_SAME_ROOM_THACO 250
 #define MOD_SNIPE_DISTANCE_THACO 5
@@ -475,7 +476,7 @@ void die(char_data* killer,char_data *victim) {
 
 void die(char_data *ch) {
 	std::cerr << "[die(victim)] -> killing: " << ch->player.name.c_str() << "| removing exp...\n";
-	gain_exp(ch, -(GET_EXP(ch) / 2));
+	mods::levels::gain_exp(ptr(ch), -(GET_EXP(ch) / 2));
 
 	if(!IS_NPC(ch)) {
 		REMOVE_BIT(PLR_FLAGS(ch), PLR_KILLER | PLR_THIEF);
@@ -499,7 +500,7 @@ void perform_group_gain(char_data *ch, int base,
 		send_to_char(ch, "You receive your share of experience -- one measly little point!");
 	}
 
-	gain_exp(ch, share);
+	mods::levels::gain_exp(ptr(ch), share);
 	change_alignment(ch, victim);
 }
 
@@ -569,7 +570,7 @@ void solo_gain(char_data *ch, char_data *victim) {
 		send_to_char(ch, "You receive one lousy experience point.");
 	}
 
-	gain_exp(ch, exp);
+	mods::levels::gain_exp(ptr(ch), exp);
 	change_alignment(ch, victim);
 }
 

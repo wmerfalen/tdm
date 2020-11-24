@@ -30,6 +30,10 @@ namespace mods {
 				protected:
 					scan_results m_scan_results;
 			};
+
+			std::optional<uuid_t> find_player_by_name(std::string_view name){
+				return std::nullopt;
+			}
 		};
 	};
 };

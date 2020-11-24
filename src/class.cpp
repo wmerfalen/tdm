@@ -27,6 +27,7 @@
 #include "interpreter.h"
 #include "constants.h"
 #include "mods/util.hpp"
+#include "mods/levels.hpp"
 
 extern int siteok_everyone;
 
@@ -995,29 +996,6 @@ void do_start(char_data *ch) {
 	GET_MAX_MANA(ch) = 100;
 	GET_MAX_MOVE(ch) = 82;
 
-	/*
-	switch(GET_CLASS(ch)) {
-
-		case CLASS_ENGINEER:
-			break;
-
-		case CLASS_MEDIC:
-			break;
-
-		case CLASS_SNIPER:
-			SET_SKILL(ch, SKILL_SNEAK, 10);
-			SET_SKILL(ch, SKILL_HIDE, 5);
-			SET_SKILL(ch, SKILL_STEAL, 15);
-			SET_SKILL(ch, SKILL_BACKSTAB, 10);
-			SET_SKILL(ch, SKILL_PICK_LOCK, 10);
-			SET_SKILL(ch, SKILL_TRACK, 10);
-			break;
-
-		case CLASS_MARINE:
-			break;
-	}
-	*/
-
 	advance_level(ch);
 	mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s advanced to level %d", GET_NAME(ch).c_str(), GET_LEVEL(ch));
 
@@ -1041,61 +1019,12 @@ void do_start(char_data *ch) {
  * each class every time they gain a level.
  */
 void advance_level(char_data *ch) {
-	std::cerr << "[stub][FIXME] advance_level is currently broken [2020-03-03]\n";
-	return;
-	/*
 	MENTOC_PREAMBLE();
-	int add_hp, add_mana = 0, add_move = 0, i;
-
-	add_hp = con_app[GET_CON(ch)].hitp;
-
-	switch(GET_CLASS(ch)) {
-
-		case CLASS_ENGINEER:
-			add_hp += rand_number(3, 8);
-			add_mana = rand_number(GET_LEVEL(ch), (int)(1.5 * GET_LEVEL(ch)));
-			add_mana = MIN(add_mana, 10);
-			add_move = rand_number(0, 2);
-			break;
-
-		case CLASS_MEDIC:
-			add_hp += rand_number(5, 10);
-			add_mana = rand_number(GET_LEVEL(ch), (int)(1.5 * GET_LEVEL(ch)));
-			add_mana = MIN(add_mana, 10);
-			add_move = rand_number(0, 2);
-			break;
-
-		case CLASS_SNIPER:
-			add_hp += rand_number(7, 13);
-			add_mana = 0;
-			add_move = rand_number(1, 3);
-			break;
-
-		case CLASS_MARINE:
-			add_hp += rand_number(10, 15);
-			add_mana = 0;
-			add_move = rand_number(1, 3);
-			break;
-	}
-
-	ch->points.max_hit += MAX(1, add_hp);
-	ch->points.max_move += MAX(1, add_move);
-
-	if(GET_LEVEL(ch) > 1) {
-		ch->points.max_mana += add_mana;
-	}
-
-	if(GET_LEVEL(ch) >= LVL_IMMORT) {
-		for(i = 0; i < 3; i++) {
-			GET_COND(ch, i) = (char) -1;
-		}
-
-		SET_BIT(PRF_FLAGS(ch), PRF_HOLYLIGHT);
-	}
-
+	mods::levels::advance_level(player);
+	
 	snoop_check(ch);
+	mods::levels::reward_player_for_advancing_levels(player);
 	mods::db::save_char(player);
-	*/
 }
 
 
@@ -1179,418 +1108,106 @@ int level_exp(int chclass, int level) {
 		return EXP_MAX - ((LVL_IMPL - level) * 1000);
 	}
 
-	/* Exp required for normal mortals is below */
+	switch(level){
+		case  0:
+			return 0;
 
-	switch(chclass) {
+		case  1:
+			return 1;
 
-		case CLASS_ENGINEER:
-			switch(level) {
-				case  0:
-					return 0;
+		case  2:
+			return 2500;
 
-				case  1:
-					return 1;
+		case  3:
+			return 5000;
 
-				case  2:
-					return 2500;
+		case  4:
+			return 10000;
 
-				case  3:
-					return 5000;
+		case  5:
+			return 20000;
 
-				case  4:
-					return 10000;
+		case  6:
+			return 40000;
 
-				case  5:
-					return 20000;
+		case  7:
+			return 60000;
 
-				case  6:
-					return 40000;
+		case  8:
+			return 90000;
 
-				case  7:
-					return 60000;
+		case  9:
+			return 135000;
 
-				case  8:
-					return 90000;
+		case 10:
+			return 250000;
 
-				case  9:
-					return 135000;
+		case 11:
+			return 375000;
 
-				case 10:
-					return 250000;
+		case 12:
+			return 750000;
 
-				case 11:
-					return 375000;
+		case 13:
+			return 1125000;
 
-				case 12:
-					return 750000;
+		case 14:
+			return 1500000;
 
-				case 13:
-					return 1125000;
+		case 15:
+			return 1875000;
 
-				case 14:
-					return 1500000;
+		case 16:
+			return 2250000;
 
-				case 15:
-					return 1875000;
+		case 17:
+			return 2625000;
 
-				case 16:
-					return 2250000;
+		case 18:
+			return 3000000;
 
-				case 17:
-					return 2625000;
+		case 19:
+			return 3375000;
 
-				case 18:
-					return 3000000;
+		case 20:
+			return 3750000;
 
-				case 19:
-					return 3375000;
+		case 21:
+			return 4000000;
 
-				case 20:
-					return 3750000;
+		case 22:
+			return 4300000;
 
-				case 21:
-					return 4000000;
+		case 23:
+			return 4600000;
 
-				case 22:
-					return 4300000;
+		case 24:
+			return 4900000;
 
-				case 23:
-					return 4600000;
+		case 25:
+			return 5200000;
 
-				case 24:
-					return 4900000;
+		case 26:
+			return 5500000;
 
-				case 25:
-					return 5200000;
+		case 27:
+			return 5950000;
 
-				case 26:
-					return 5500000;
+		case 28:
+			return 6400000;
 
-				case 27:
-					return 5950000;
+		case 29:
+			return 6850000;
 
-				case 28:
-					return 6400000;
+		case 30:
+			return 7400000;
 
-				case 29:
-					return 6850000;
-
-				case 30:
-					return 7400000;
-
-				/* add new levels here */
-				case LVL_IMMORT:
-					return 8000000;
-			}
-
-			break;
-
-		case CLASS_MEDIC:
-			switch(level) {
-				case  0:
-					return 0;
-
-				case  1:
-					return 1;
-
-				case  2:
-					return 1500;
-
-				case  3:
-					return 3000;
-
-				case  4:
-					return 6000;
-
-				case  5:
-					return 13000;
-
-				case  6:
-					return 27500;
-
-				case  7:
-					return 55000;
-
-				case  8:
-					return 110000;
-
-				case  9:
-					return 225000;
-
-				case 10:
-					return 450000;
-
-				case 11:
-					return 675000;
-
-				case 12:
-					return 900000;
-
-				case 13:
-					return 1125000;
-
-				case 14:
-					return 1350000;
-
-				case 15:
-					return 1575000;
-
-				case 16:
-					return 1800000;
-
-				case 17:
-					return 2100000;
-
-				case 18:
-					return 2400000;
-
-				case 19:
-					return 2700000;
-
-				case 20:
-					return 3000000;
-
-				case 21:
-					return 3250000;
-
-				case 22:
-					return 3500000;
-
-				case 23:
-					return 3800000;
-
-				case 24:
-					return 4100000;
-
-				case 25:
-					return 4400000;
-
-				case 26:
-					return 4800000;
-
-				case 27:
-					return 5200000;
-
-				case 28:
-					return 5600000;
-
-				case 29:
-					return 6000000;
-
-				case 30:
-					return 6400000;
-
-				/* add new levels here */
-				case LVL_IMMORT:
-					return 7000000;
-			}
-
-			break;
-
-		case CLASS_SNIPER:
-			switch(level) {
-				case  0:
-					return 0;
-
-				case  1:
-					return 1;
-
-				case  2:
-					return 1250;
-
-				case  3:
-					return 2500;
-
-				case  4:
-					return 5000;
-
-				case  5:
-					return 10000;
-
-				case  6:
-					return 20000;
-
-				case  7:
-					return 40000;
-
-				case  8:
-					return 70000;
-
-				case  9:
-					return 110000;
-
-				case 10:
-					return 160000;
-
-				case 11:
-					return 220000;
-
-				case 12:
-					return 440000;
-
-				case 13:
-					return 660000;
-
-				case 14:
-					return 880000;
-
-				case 15:
-					return 1100000;
-
-				case 16:
-					return 1500000;
-
-				case 17:
-					return 2000000;
-
-				case 18:
-					return 2500000;
-
-				case 19:
-					return 3000000;
-
-				case 20:
-					return 3500000;
-
-				case 21:
-					return 3650000;
-
-				case 22:
-					return 3800000;
-
-				case 23:
-					return 4100000;
-
-				case 24:
-					return 4400000;
-
-				case 25:
-					return 4700000;
-
-				case 26:
-					return 5100000;
-
-				case 27:
-					return 5500000;
-
-				case 28:
-					return 5900000;
-
-				case 29:
-					return 6300000;
-
-				case 30:
-					return 6650000;
-
-				/* add new levels here */
-				case LVL_IMMORT:
-					return 7000000;
-			}
-
-			break;
-
-		case CLASS_MARINE:
-			switch(level) {
-				case  0:
-					return 0;
-
-				case  1:
-					return 1;
-
-				case  2:
-					return 2000;
-
-				case  3:
-					return 4000;
-
-				case  4:
-					return 8000;
-
-				case  5:
-					return 16000;
-
-				case  6:
-					return 32000;
-
-				case  7:
-					return 64000;
-
-				case  8:
-					return 125000;
-
-				case  9:
-					return 250000;
-
-				case 10:
-					return 500000;
-
-				case 11:
-					return 750000;
-
-				case 12:
-					return 1000000;
-
-				case 13:
-					return 1250000;
-
-				case 14:
-					return 1500000;
-
-				case 15:
-					return 1850000;
-
-				case 16:
-					return 2200000;
-
-				case 17:
-					return 2550000;
-
-				case 18:
-					return 2900000;
-
-				case 19:
-					return 3250000;
-
-				case 20:
-					return 3600000;
-
-				case 21:
-					return 3900000;
-
-				case 22:
-					return 4200000;
-
-				case 23:
-					return 4500000;
-
-				case 24:
-					return 4800000;
-
-				case 25:
-					return 5150000;
-
-				case 26:
-					return 5500000;
-
-				case 27:
-					return 5950000;
-
-				case 28:
-					return 6400000;
-
-				case 29:
-					return 6850000;
-
-				case 30:
-					return 7400000;
-
-				/* add new levels here */
-				case LVL_IMMORT:
-					return 8000000;
-			}
-
-			break;
+		/* add new levels here */
+		default:
+		case LVL_IMMORT:
+			return 8000000;
 	}
+
 
 	/*
 	 * This statement should never be reached if the exp tables in this function
@@ -1598,7 +1215,7 @@ int level_exp(int chclass, int level) {
 	 * incomplete -- so, complete them!
 	 */
 	log("SYSERR: XP tables not set up correctly in class.c!");
-	return 123456;
+	return -1;
 }
 
 

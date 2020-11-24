@@ -268,6 +268,7 @@ void run_autowiz(void) {
 
 
 
+namespace legacy {
 void gain_exp(char_data *ch, int gain) {
 	int is_altered = FALSE;
 	int num_levels = 0;
@@ -357,6 +358,7 @@ void gain_exp_regardless(char_data *ch, int gain) {
 		}
 	}
 }
+};//end legacy
 
 
 void gain_condition(char_data *ch, int condition, int value) {

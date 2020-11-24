@@ -8,7 +8,7 @@
 #endif
 
 ACMD(do_train){
-	DO_HELP("train");
+	DO_HELP_WITH_ZERO("train");
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() >= 1){
 		for(auto & skillset : mods::skills::proficiencies::list) {

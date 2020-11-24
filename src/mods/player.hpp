@@ -285,6 +285,54 @@ namespace mods {
 			return m_char_data->points.max_move;
 		}
 
+		/** base stats - start */
+		uint16_t& strength(){
+			return this->real_abils().str;
+		}
+		uint16_t& constitution(){
+			return this->real_abils().con;
+		}
+		uint16_t& dexterity(){
+			return this->real_abils().dex;
+		}
+		uint16_t& intelligence(){
+			return this->real_abils().intel;
+		}
+		uint16_t& wisdom(){
+			return this->real_abils().wis;
+		}
+		uint16_t& electronics(){
+			return this->real_abils().electronics;
+		}
+		uint16_t& chemistry(){
+			return this->real_abils().chemistry;
+		}
+		uint16_t& strategy(){
+			return this->real_abils().strategy;
+		}
+		uint16_t& marksmanship(){
+			return this->real_abils().marksmanship;
+		}
+		uint16_t& sniping(){
+			return this->real_abils().sniping;
+		}
+		uint16_t& weapon_handling(){
+			return this->real_abils().weapon_handling;
+		}
+		uint16_t& demolitions(){
+			return this->real_abils().demolitions;
+		}
+		uint16_t& real_armor(){
+			return this->real_abils().armor;
+		}
+		uint16_t& medical(){
+			return this->real_abils().medical;
+		}
+		uint16_t& charisma(){
+			return this->real_abils().cha;
+		}
+		/** base stats - end */
+
 		sh_int& armor() {
 			return m_char_data->points.armor;
 		}
@@ -665,6 +713,8 @@ namespace mods {
 		rate_limit_data_t& get_rate_limit_data(int action);
 		void rate_limit_hit(int action);
 
+		std::array<uint8_t,5> triads();
+
 		protected:
 		std::map<std::string,std::string> m_ada_data;
 		bool m_ada;
@@ -738,6 +788,7 @@ namespace mods {
 		uint32_t m_currently_hacking;
 		uint8_t m_hacking_row;
 		std::map<int,rate_limit_data_t> m_rate_limits;
+		std::array<uint8_t,5> m_triads;
 	};
 };
 

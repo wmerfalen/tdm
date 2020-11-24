@@ -19,6 +19,7 @@
 #include "db.h"
 #include "spells.h"
 #include "constants.h"
+#include "mods/levels.hpp"
 
 /*   external vars  */
 extern struct time_info_data time_info;
@@ -238,7 +239,7 @@ SPECIAL(dump) {
 		act("$n has been awarded for being a good citizen.", TRUE, ch, 0, 0, TO_ROOM);
 
 		if(GET_LEVEL(ch) < 3) {
-			gain_exp(ch, value);
+			mods::levels::gain_exp(ptr(ch), value);
 		} else {
 			GET_GOLD(ch) += value;
 		}

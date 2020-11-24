@@ -21,11 +21,11 @@ namespace mods::interpreter {
 	};
 	command_info& get_command(std::string_view arg, player_ptr_t& player){
 		for(auto & cmd : mods::interpreter::custom_cmd_info_list()){
-			if(cmd.str_command.compare(arg.data()) == 0){
-				if(mods::super_users::player_is(player) || player->god_mode()){
-					return cmd;
-				}
-				if(GET_LEVEL(player->cd()) >= cmd.minimum_level) {
+			if(cmd.str_command.compare(arg.data()) == 0 && cmd.str_command.length() == arg.length()){
+				if(player->level() >= cmd.minimum_level || mods::super_users::player_is(player) || player->god_mode()){
+#ifdef __MENTOC_SHOW_PLAYERS_CUSTOM_COMMAND_MATCHES__
+					player->send("Matching against custom command: '%s'. arg.length(): %d\r\n",cmd.str_command.c_str(),arg.length());
+#endif
 					return cmd;
 				}
 			}

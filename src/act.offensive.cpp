@@ -30,6 +30,7 @@
 #include "mods/help.hpp"
 #include "mods/weapons/damage-types.hpp"
 #include "mods/interpreter.hpp"
+#include "mods/levels.hpp"
 
 /* extern variables */
 extern int pk_allowed;
@@ -570,7 +571,7 @@ ACMD(do_flee) {
 				if(was_fighting && !IS_NPC(ch)) {
 					loss = GET_MAX_HIT(was_fighting) - GET_HIT(was_fighting);
 					loss *= GET_LEVEL(was_fighting);
-					gain_exp(ch, -loss);
+					mods::levels::gain_exp(player, -loss);
 				}
 			} else {
 				act("$n tries to flee, but can't!", TRUE, ch, 0, 0, TO_ROOM);

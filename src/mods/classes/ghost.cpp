@@ -14,6 +14,11 @@ namespace mods::orm::inventory {
 	extern int16_t flush_player(player_ptr_t & player);
 };
 namespace mods::classes {
+	void ghost_advance_level(player_ptr_t& player){
+		/** TODO fill me in */
+		player->send("[stub] file:%s line:%d\r\n",__FILE__,__LINE__);
+
+	}
 	void ghost::init(){
 		m_claymore_count = 0;
 		m_cryogenic_grenade_count = 0;

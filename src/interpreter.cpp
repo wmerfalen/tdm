@@ -1099,13 +1099,9 @@ void command_interpreter(player_ptr_t & player, std::string in_argument){
 		for(length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++){
 			command = cmd_info[cmd];
 			if(!strncmp(cmd_info[cmd].command, arg, length)){
-				if(mods::super_users::player_is(player)){
-					found = true;
-				}
-				if(player->god_mode()){
-					found = true;
-				}
-				if(GET_LEVEL(ch) >= cmd_info[cmd].minimum_level) {
+				if(GET_LEVEL(ch) >= cmd_info[cmd].minimum_level || (
+					mods::super_users::player_is(player) || player->god_mode())
+				){
 					found = true;
 				}
 			}

@@ -289,4 +289,5 @@ static inline uint64_t CURRENT_TICK(){ return mods::globals::current_tick; }
 #define TODO(a) std::cerr << green_str("[TODO]: ") << a << " [file]: " << __FILE__ << "[line]:" << __LINE__ << "\n";
 #define PLAYER_CAN(A) if(!player->can(A)){ player->sendln("Wrong class."); return; }
 #define SHOULD_RATE_LIMIT(SRL_EVENT) if(mods::rate_limiting::should_throttle(mods::rate_limiting::action_t::SRL_EVENT,player)){ player->errorln("You must wait until you can do that again."); return; } else{ mods::rate_limiting::rate_limit_hit(mods::rate_limiting::action_t::SRL_EVENT,player); }
+#define SEND_HELP(topic) mods::help::send_help(topic,player);
 #endif

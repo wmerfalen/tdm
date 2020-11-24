@@ -473,6 +473,22 @@ void lmdb_export_char(player_ptr_t player_ptr, mutable_map_t &values){
 		values["player_hitroll"] = std::to_string(player_ptr->cd()->points.hitroll);
 		values["player_armor"] = std::to_string(player_ptr->cd()->points.armor);
 		values["player_preferences"] = std::to_string(player_ptr->get_prefs());
+
+		values["player_real_strength"] = std::to_string(player_ptr->strength());
+		values["player_real_constitution"] = std::to_string(player_ptr->constitution());
+		values["player_real_dexterity"] = std::to_string(player_ptr->dexterity());
+		values["player_real_intelligence"] = std::to_string(player_ptr->intelligence());
+		values["player_real_wisdom"] = std::to_string(player_ptr->wisdom());
+		values["player_real_electronics"] = std::to_string(player_ptr->electronics());
+		values["player_real_chemistry"] = std::to_string(player_ptr->chemistry());
+		values["player_real_strategy"] = std::to_string(player_ptr->strategy());
+		values["player_real_marksmanship"] = std::to_string(player_ptr->marksmanship());
+		values["player_real_sniping"] = std::to_string(player_ptr->sniping());
+		values["player_real_weapon_handling"] = std::to_string(player_ptr->weapon_handling());
+		values["player_real_demolitions"] = std::to_string(player_ptr->demolitions());
+		values["player_real_armor"] = std::to_string(player_ptr->real_armor());
+		values["player_real_medical"] = std::to_string(player_ptr->medical());
+		values["player_real_charisma"] = std::to_string(player_ptr->charisma());
 		return;
 }
 

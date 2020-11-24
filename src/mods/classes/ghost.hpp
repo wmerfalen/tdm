@@ -97,6 +97,7 @@ namespace mods::classes {
 			flash_underbarrel_levels_t m_flash_underbarrel_level;
 			std::deque<obj_ptr_t> m_claymores;
 	};
+	void ghost_advance_level(player_ptr_t& player);
 	std::shared_ptr<mods::classes::ghost> create_ghost(player_ptr_t &player);
 };
 

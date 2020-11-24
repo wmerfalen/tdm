@@ -4,9 +4,13 @@
 #include <iostream>
 #include <string>
 
+namespace mods::globals {
+	extern std::map<std::string,player_ptr_t> player_name_map;
+};
 namespace mods {
-	namespace player {
+	namespace players {
 		namespace util {
+#if 0
 			typedef std::string sr_string_type;
 			typedef std::array<std::vector<sr_string_type>,6> scan_results;
 			template <typename ResultType>
@@ -32,6 +36,18 @@ namespace mods {
 					protected:
 					scan_results m_scan_results;
 			};
+
+#endif
+			std::optional<uuid_t> find_player_by_name(std::string_view name){
+				if(mods::globals::player_name_map.find(name.data()) != mods::globals::player_name_map.end()){
+					auto & player = mods::globals::player_name_map[name.data()];
+					if(!player->authenticated()){
+						return std::nullopt;
+					}
+					return player->uuid();
+				}
+				return std::nullopt;
+			}
 		};
 	};
 };

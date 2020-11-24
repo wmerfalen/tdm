@@ -205,3 +205,21 @@
 			SHOULD_RATE_LIMIT(PLAYER_SAVE);
 		```
 	- source files: mods/rate-limiting.(hpp/cpp)
+
+# advance_level now uses our library code
+	- source files: class.cpp, mods/levels.(hpp/cpp), mods/classes/advance-levels.hpp
+	- implemented generic `advance_level` functionality for classes that don't have an implementation
+		- see:
+		```
+			void generic_advance_hp(player_ptr_t& player);
+			void generic_advance_mana(player_ptr_t& player);
+			void generic_advance_move(player_ptr_t& player);
+		```
+	-  creating the extern 
+		- create the following extern in mods/classes/advance-levels.hpp
+			- `extern CLASS_advance_level(player_ptr_t&);`
+			- define said function in the mods/classes/CLASS.cpp file
+
+# adding classes to "implemented" status
+	- in mods/levels.hpp, add the `player_class_t` constant to the vector named `implemented_classes`
+	- follow the instructions for `advance_level`, in particular: creating the extern

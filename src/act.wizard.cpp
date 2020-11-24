@@ -1342,8 +1342,10 @@ ACMD(do_advance) {
 		run_autowiz();
 	}
 
-	gain_exp_regardless(victim,
-	                    level_exp(GET_CLASS(victim), newlevel) - GET_EXP(victim));
+#if 0
+	mods::levels::gain_exp_regardless(victim, level_exp(GET_CLASS(victim), newlevel) - GET_EXP(victim));
+#endif
+	player->sendln("[stub]: need to implement gain_exp_regardless");
 	mods::db::save_char(std::make_shared<mods::player>(victim));
 }
 
