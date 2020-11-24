@@ -449,6 +449,8 @@ std::ostream& log(Args... args); /*{
 		return std::find(strings.begin(),strings.end(),f) != strings.end();
 	}
 	std::string compile_yaml_path_from_type_and_file(int type, std::string_view file);
+	std::string proficiency_to_string(int prof);
+	std::string player_class_to_string(player_class_t pc);
 };
 
 namespace mods::util::err {

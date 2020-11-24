@@ -1,6 +1,8 @@
 #include "db-load.hpp"
 #include "../classes/includes.hpp"
 #include "../replenish.hpp"
+#include "../orm/inventory.hpp"
+#include "../db.hpp"
 
 #define __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
@@ -15,6 +17,18 @@
 namespace mods::players::db_load {
 	static reporter_t report_function;
 	static bool reporter_function_set = false;
+	void save(player_ptr_t& player){
+		mods::db::save_char(player);
+		mods::orm::inventory::flush_player(player);
+		switch(player->get_class()){
+			default:
+				break;
+			case player_class_t::GHOST:
+				player->ghost()->save();
+				break;
+		}
+		player->sendln("Your character has been saved.");
+	}
 	void set_reporter_lambda(reporter_t f){
 		report_function = f;
 		reporter_function_set = true;

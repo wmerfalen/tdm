@@ -577,6 +577,11 @@ namespace mods {
 		}
 		return 0;
 	}
+	void player::send(const std::vector<std::string>& list){
+		for(auto & item : list){
+			sendln(item);
+		}
+	}
 	void player::psendln(std::string_view str) {
 		MENTOC_NPC_CHECK(str.data());
 		if(desc().has_prompt){
@@ -1443,39 +1448,13 @@ namespace mods {
 		}
 		*/
 
-		std::string player_class_to_string(player_class_t c){
-			switch(c){
-				default:
-				case player_class_t::CLASS_UNDEFINED: return "UNDEFINED";
-				case player_class_t::CLASS_SNIPER: return "SNIPER";
-				case player_class_t::CLASS_MARINE: return "MARINE";
-				case player_class_t::CLASS_SENTINEL: return "SENTINEL";
-				case player_class_t::CLASS_CONTAGION: return "CONTAGION";
-				case player_class_t::CLASS_ENGINEER: return "ENGINEER";
-				case player_class_t::CLASS_MEDIC: return "MEDIC";
-				case player_class_t::CLASS_PSYOP: return "PSYOP";
-				case player_class_t::CLASS_SUPPORT: return "SUPPORT";
-				case player_class_t::CLASS_GHOST: return "GHOST";
-				case player_class_t::CLASS_MARKSMAN: return "MARKSMAN";
-				case player_class_t::CLASS_BANDIT: return "BANDIT";
-				case player_class_t::CLASS_BUTCHER: return "BUTCHER";
-				case player_class_t::CLASS_STRIKER: return "STRIKER";
-				case player_class_t::CLASS_OBSTRUCTOR: return "OBSTRUCTOR";
-				case player_class_t::CLASS_MALADY: return "MALADY";
-				case player_class_t::CLASS_PYREXIA: return "PYREXIA";
-				case player_class_t::CLASS_DEALER: return "DEALER";
-				case player_class_t::CLASS_FORGE: return "FORGE";
-				case player_class_t::CLASS_SYNDROME: return "SYNDROME";
-				case player_class_t::CLASS_MACHINIST: return "MACHINIST";
-			}
-		}
 		player_class_t player::get_class(){
 			return m_class;
 		}
 		void player::set_class(player_class_t c){
 			std::cerr << "[mods::player] set class to: " << c << "\n";
 			m_class = c;
-			m_class_string = player_class_to_string(c);
+			m_class_string = mods::util::player_class_to_string(c);
 		}
 		int player::screen_width(){
 			return mods::util::stoi(mods::prefs::dynamic_get("width","player",m_char_data)).value_or(80);
@@ -1489,7 +1468,7 @@ namespace mods {
 		}
 		bool player::can(std::string_view c){
 			auto class_name = mods::util::extract_until(c,'.');
-			if(mods::util::is_lower_match(player_class_to_string(get_class()),class_name)){
+			if(mods::util::is_lower_match(mods::util::player_class_to_string(get_class()),class_name)){
 				return true;
 			}
 			if(c.compare("heal") == 0){
@@ -1520,6 +1499,18 @@ namespace mods {
 		}
 		void player::write_to_char(std::string_view msg, bool newline,bool plain) {
 			m_char_data->desc->queue_output(msg,newline,plain);
+		}
+		mods::string player::get_class_string() const {
+			return mods::util::player_class_to_string(m_class).c_str();
+		}
+		player::rate_limit_data_t& player::get_rate_limit_data(int action){
+			return m_rate_limits[action];
+		}
+		void player::rate_limit_hit(int action){
+			m_rate_limits[action].emplace_back(::time(nullptr));
+		}
+		player::access_level_t player::access_level(){
+			return (player::access_level_t)m_char_data->player.level;
 		}
 };
 

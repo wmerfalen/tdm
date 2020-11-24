@@ -320,7 +320,8 @@ namespace mods::help::pages {
 };
 
 namespace mods::help {
-	static std::map<std::string,std::string> registered_help_commands;
+	static std::map<std::string,std::pair<player_level,std::string>> registered_help_commands;
+	static std::map<std::string,std::string> registered_admin_help_commands;
 	bool matches_many(const std::string& items,std::string_view from){
 		std::vector<std::string> tokens;
 		std::string token;
@@ -333,6 +334,12 @@ namespace mods::help {
 		return false;
 	}
 	bool send_help(std::string_view from, std::shared_ptr<mods::player>& player){
+			auto it = registered_help_commands.find(from.data());
+			if(registered_help_commands.end() != it && ((int)player->level()) >= ((int)it->second.first)){
+				player->send("your player level: %d, second.first: %d\r\n",player->level(),it->second.first);
+				player->sendln(CAT("{blu}",it->second.second,"{/blu}"));
+				return false;
+			}
 #define M_MATCH(A,SUBJECT) if(matches_many(A,from)){ player->sendln(CAT("{blu}",pages::SUBJECT,"{/blu}")); return false; }
 			M_MATCH("throw,grenade",h_grenade);
 			M_MATCH("camera,claymore,install,uninstall",h_install);
@@ -366,14 +373,10 @@ namespace mods::help {
 			M_MATCH("summon_extraction",h_summon_extraction);
 			M_MATCH("xray_shot",h_xray_shot);
 #undef M_MATCH
-			if(registered_help_commands[from.data()].length()){
-				player->sendln(CAT("{blu}",registered_help_commands[from.data()],"{/blu}"));
-				return false;
-			}
 			return true;
 	}
-	void register_help_command(const std::string& command, const std::string& contents){
-		registered_help_commands[command] = contents;
+	void register_help_command_with_permission(const std::string& command, const std::string& contents,player_level level){
+		registered_help_commands[command] = {level,contents};
 	}
 	bool should_continue(std::string_view from,std::string_view argument, std::shared_ptr<mods::player>& player,bool zero_is_help){
 		bool show = false;

@@ -7,6 +7,45 @@
 
 
 namespace mods::util {
+	std::string player_class_to_string(player_class_t pc){
+		switch(pc){
+			case player_class_t::CLASS_UNDEFINED: return "CLASS_UNDEFINED";
+			case player_class_t::SNIPER: return "SNIPER";
+			case player_class_t::MARINE: return "MARINE";
+			case player_class_t::SENTINEL: return "SENTINEL";
+			case player_class_t::CONTAGION: return "CONTAGION";
+			case player_class_t::ENGINEER: return "ENGINEER";
+			case player_class_t::MEDIC: return "MEDIC";
+			case player_class_t::PSYOP: return "PSYOP";
+			case player_class_t::SUPPORT: return "SUPPORT";
+			case player_class_t::GHOST: return "GHOST";
+			case player_class_t::MARKSMAN: return "MARKSMAN";
+			case player_class_t::BANDIT: return "BANDIT";
+			case player_class_t::BUTCHER: return "BUTCHER";
+			case player_class_t::STRIKER: return "STRIKER";
+			case player_class_t::OBSTRUCTOR: return "OBSTRUCTOR";
+			case player_class_t::MALADY: return "MALADY";
+			case player_class_t::PYREXIA: return "PYREXIA";
+			case player_class_t::DEALER: return "DEALER";
+			case player_class_t::FORGE: return "FORGE";
+			case player_class_t::SYNDROME: return "SYNDROME";
+			case player_class_t::MACHINIST: return "MACHINIST";
+			default: return "UNKNOWN-CLASS";
+		}
+	}
+	std::string proficiency_to_string(int prof){
+		switch(prof){
+			default:
+			case 0:
+				return "UNLEARNED";
+			case 1:
+				return "INITIATE";
+			case 2:
+				return "FAMILIAR";
+			case 3:
+				return "MASTER";
+		}
+	}
 	bool is_yaml_type(std::string_view type){
 		for(const auto & valid_type : VALID_TYPES){
 			if(type.compare(valid_type.c_str()) == 0){

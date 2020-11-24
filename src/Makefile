@@ -89,7 +89,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/radio mods/zone mods/query-objects mods/deep-object-parser \
 					 mods/rifle-attachments mods/examine \
 					 mods/target-practice mods/target-practice-db mods/demolitions \
-					 mods/replenish mods/players/destroy-player 
+					 mods/replenish mods/players/destroy-player mods/rate-limiting
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

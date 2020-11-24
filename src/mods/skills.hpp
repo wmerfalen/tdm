@@ -114,6 +114,28 @@ namespace mods::skills {
 			TRICK_MAGAZINE,
 			CHAINABLE_BREACHING,
 			DEPLOYABLE_SHIELD,
+			GHOST_CLASS_DRONE_SCAN,
+			GHOST_CLASS_STEALTH,
+			GHOST_CLASS_SUMMON_EXTRACTION,
+			GHOST_CLASS_XRAY_SHOT,
+			GHOST_CLASS_FEIGN_DEATH,
+			GHOST_CLASS_PLANT_CLAYMORE,
+			GHOST_CLASS_PENETRATING_SHOT,
+			GHOST_CLASS_INTIMIDATION,
+			GHOST_CLASS_CRYOGENIC_GRENADE,
+			GHOST_CLASS_FLASH_UNDERBARREL,
+			GHOST_CLASS_START=GHOST_CLASS_DRONE_SCAN,
+			GHOST_CLASS_END=GHOST_CLASS_FLASH_UNDERBARREL,
+			PYREXIA_CLASS_THROW_FIRE_NADE,
+			PYREXIA_CLASS_DRENCH_OBJECT_IN_GASOLINE,
+			PYREXIA_CLASS_DRENCH_ROOM_IN_GASOLINE,
+			PYREXIA_CLASS_CONVERT_TO_FIRE_NADE,
+			PYREXIA_CLASS_ATTACH_INC_LAUNCHER,
+			PYREXIA_CLASS_ATTACH_FLAMETHROWER,
+			PYREXIA_CLASS_CREATE_WALL_OF_FIRE,
+			PYREXIA_CLASS_SEAL_OFF_ROOM,
+			PYREXIA_CLASS_START=PYREXIA_CLASS_THROW_FIRE_NADE,
+			PYREXIA_CLASS_END=PYREXIA_CLASS_SEAL_OFF_ROOM,
 		};
 		struct proficiency_t {
 			proficiency_name_t e_name;
@@ -121,6 +143,35 @@ namespace mods::skills {
 			mods::string description;
 			uint16_t minimum_proficiency;
 			bool implemented;
+		};
+		/**
+		 * Static db asset: pyrexia_class proficiencies
+		 */
+#define SKILL_PYREXIA_THROW_FIRE_NADE() 150
+		static std::vector<proficiency_t> pyrexia_class = {
+			{PYREXIA_CLASS_THROW_FIRE_NADE ,"pyrexia-class-throw-fire-nade", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
+			{PYREXIA_CLASS_DRENCH_OBJECT_IN_GASOLINE ,"pyrexia-class-drench-object", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
+			{PYREXIA_CLASS_DRENCH_ROOM_IN_GASOLINE ,"pyrexia-class-drench-room", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
+			{PYREXIA_CLASS_CONVERT_TO_FIRE_NADE ,"pyrexia-class-convert-to-fire-nade", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
+			{PYREXIA_CLASS_ATTACH_INC_LAUNCHER ,"pyrexia-class-attach-inc-launcher", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
+			{PYREXIA_CLASS_ATTACH_FLAMETHROWER ,"pyrexia-class-attach-flamethrower", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
+			{PYREXIA_CLASS_CREATE_WALL_OF_FIRE ,"pyrexia-class-create-wall-of-fire", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
+			{PYREXIA_CLASS_SEAL_OFF_ROOM ,"pyrexia-class-seal-off-room", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
+		};
+		/**
+		 * Static db asset: ghost_class proficiencies
+		 */
+		static std::vector<proficiency_t> ghost_class = {
+			{GHOST_CLASS_DRONE_SCAN,"ghost-class-drone-scan", "Scan a large area using your drone.",SKILL_GHOST_DRONE_SCAN(),1},
+			{GHOST_CLASS_STEALTH,"ghost-class-stealth", "Go invisible.",SKILL_GHOST_STEALTH(),1},
+			{GHOST_CLASS_SUMMON_EXTRACTION,"ghost-class-summon-extraction","Summon helicopter extraction.",SKILL_GHOST_SUMMON_EXTRACTION(),1},
+			{GHOST_CLASS_XRAY_SHOT,"ghost-class-xray-shot","Drone-assisted X-Ray sniper shot.",SKILL_GHOST_XRAY_SHOT(),1},
+			{GHOST_CLASS_FEIGN_DEATH,"ghost-class-feign-death","Feign death.",SKILL_GHOST_FEIGN_DEATH(),1},
+			{GHOST_CLASS_PLANT_CLAYMORE,"ghost-class-plant-claymore","Plant a claymore mine. Mines are regenerated.",SKILL_GHOST_PLANT_CLAYMORE(),1},
+			{GHOST_CLASS_PENETRATING_SHOT,"ghost-class-penetrating-shot","Fire through multiple layers.",SKILL_GHOST_PENETRATING_SHOT(),1},
+			{GHOST_CLASS_INTIMIDATION,"ghost-class-intimidation","Intimidate your opponent.",SKILL_GHOST_INTIMIDATION(),1},
+			{GHOST_CLASS_CRYOGENIC_GRENADE,"ghost-class-cryogenic-grenade","Throw a cryogenic grenade.",SKILL_GHOST_CRYOGENIC_GRENADE(),1},
+			{GHOST_CLASS_FLASH_UNDERBARREL,"ghost-class-flash","Use an offensive flash-bang underbarrel to blind your enemies.",SKILL_GHOST_FLASH_UNDERBARREL(),1}
 		};
 		/** ATTENTION !!!!
 		 * ALL minimum_proficiencies are GUESSTIMATIONS. They will change!
@@ -333,6 +384,12 @@ namespace mods::skills {
 			/** castable */
 			{ADRENALINE_BOOST,"adrenaline-boost", "Boost movement and HP for a short period of time.", SKILL_ADRENALINE_BOOST(),0},
 		};
+		
+		/**
+		 * Static db asset: skills proficiency master list
+		 * ----------------
+		 *  Stores proficiencies that are globally available as well as class-specific ones..
+		 */
 		static std::vector<std::tuple<std::string,std::vector<proficiencies::proficiency_t>>> list = {
 			{"Electronics",electronics},
 			{"Armor",armor},
@@ -343,6 +400,10 @@ namespace mods::skills {
 			{"Weapon Handling",weapon_handling},
 			{"Strategy",strategy},
 			{"Medical",medical},
+			/** start class-specific proficiencies */
+			{":GHOST:",ghost_class},
+			{":PYREXIA:",pyrexia_class},
+			/** end class-specific proficiencies */
 		};
 	};
 	void init_player_levels(player_ptr_t& player);
@@ -475,5 +536,7 @@ using level_t = mods::skills::skillset_level_t;
 
 ACMD(do_train);
 ACMD(do_skills);
+
+void register_class_skillset(player_class_t class_type,std::vector<std::string>& skillset);
 
 #endif

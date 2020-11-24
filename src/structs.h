@@ -658,12 +658,12 @@ enum player_level {
 	 * LVL_IMMORT should always be the LOWEST immortal level.  The number of
 	 * mortal levels will always be LVL_IMMORT - 1.
 	 */
-#define LVL_IMPL	35
-#define LVL_BUILDER 34
-#define LVL_GRGOD	33
-#define LVL_GOD		32
-#define LVL_IMMORT	31
-#define LVL_MORTAL 0
+#define LVL_IMPL	player_level::LVL_IMPL
+#define LVL_BUILDER player_level::LVL_BUILDER
+#define LVL_GRGOD	player_level::LVL_GRGOD
+#define LVL_GOD		player_level::LVL_GOD
+#define LVL_IMMORT	player_level::LVL_IMMORT
+#define LVL_MORTAL player_level::LVL_MORTAL
 
 	/* Level of the 'freeze' command */
 #define LVL_FREEZE	LVL_GRGOD

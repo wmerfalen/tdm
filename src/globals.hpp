@@ -288,4 +288,5 @@ static inline uint64_t CURRENT_TICK(){ return mods::globals::current_tick; }
 #define ADMIN_REJECT() if(!mods::super_users::player_is(player)){ player->sendln(SUPER_USER_REJECT_MESSAGE()); return; }
 #define TODO(a) std::cerr << green_str("[TODO]: ") << a << " [file]: " << __FILE__ << "[line]:" << __LINE__ << "\n";
 #define PLAYER_CAN(A) if(!player->can(A)){ player->sendln("Wrong class."); return; }
+#define SHOULD_RATE_LIMIT(SRL_EVENT) if(mods::rate_limiting::should_throttle(mods::rate_limiting::action_t::SRL_EVENT,player)){ player->errorln("You must wait until you can do that again."); return; } else{ mods::rate_limiting::rate_limit_hit(mods::rate_limiting::action_t::SRL_EVENT,player); }
 #endif

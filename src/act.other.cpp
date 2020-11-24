@@ -24,6 +24,8 @@
 #include "house.h"
 #include "constants.h"
 #include "mods/orm/inventory.hpp"
+#include "mods/players/db-load.hpp"
+#include "mods/rate-limiting.hpp"
 
 /* extern variables */
 extern struct spell_info_type spell_info[];
@@ -115,11 +117,11 @@ ACMD(do_save) {
 		log("SYSERR: do_save() called but is an npc or doesn't have a descriptor");
 		return;
 	}
+	SHOULD_RATE_LIMIT(PLAYER_SAVE);
 
 	/* Only tell the char we're saving if they actually typed "save" */
 		log("Saving player %s",GET_NAME(ch).c_str());
-		mods::db::save_char(player);
-		mods::orm::inventory::flush_player(player);
+		mods::players::db_load::save(player);
 		log("Saved");
 		/*
 		 * This prevents item duplication by two PC's using coordinated saves
