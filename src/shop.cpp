@@ -1250,111 +1250,12 @@ int read_type_list(FILE *shop_f, struct shop_buy_data *list,
                    int new_format, int max) {
 	log("DEPRECATED: read_type_list. REASON: vulnerable+cantbarsed");
 	return 0;
-#if 0
-	int tindex, num, len = 0, error = 0;
-	char *ptr;
-	char buf[MAX_STRING_LENGTH];
-
-	if(!new_format) {
-		return (read_list(shop_f, list, 0, max, LIST_TRADE));
-	}
-
-	do {
-		fgets(buf, sizeof(buf), shop_f);
-
-		if((ptr = strchr(buf, ';')) != NULL) {
-			*ptr = '\0';
-		} else {
-			*(END_OF(buf) - 1) = '\0';
-		}
-
-		num = NOTHING;
-
-		if(strncmp(buf, "-1", 4) != 0)
-			for(tindex = 0; *item_types[tindex] != '\n'; tindex++)
-				if(!strn_cmp(item_types[tindex], buf, strlen(item_types[tindex]))) {
-					num = tindex;
-					std::size_t len = strlen(item_types[tindex]);
-					if(len > sizeof(buf) -1){
-						len = sizeof(buf) -2;
-					}
-					strncpy(buf, buf + len,len);	/* strcpy: OK (always smaller) */
-					break;
-				}
-
-		ptr = buf;
-
-		if(num == NOTHING) {
-			sscanf(buf, "%d", &num);
-
-			while(!isdigit(*ptr)) {
-				ptr++;
-			}
-
-			while(isdigit(*ptr)) {
-				ptr++;
-			}
-		}
-
-		while(isspace(*ptr)) {
-			ptr++;
-		}
-
-		while(isspace(*(END_OF(ptr) - 1))) {
-			*(END_OF(ptr) - 1) = '\0';
-		}
-
-		error += add_to_list(list, LIST_TRADE, &len, &num);
-
-		if(*ptr) {
-			BUY_WORD(list[len - 1]) = strdup(ptr);
-		}
-	} while(num >= 0);
-
-	return (end_read_list(list, len, error));
-#endif
 }
 
 
 char *read_shop_message(int mnum, room_vnum shr, FILE *shop_f, const char *why) {
-	int cht, ss = 0, ds = 0, err = 0;
-	char *tbuf;
-
-	if(!(tbuf = fread_string(shop_f, why))) {
-		return (NULL);
-	}
-
-	for(cht = 0; tbuf[cht]; cht++) {
-		if(tbuf[cht] != '%') {
-			continue;
-		}
-
-		if(tbuf[cht + 1] == 's') {
-			ss++;
-		} else if(tbuf[cht + 1] == 'd' && (mnum == 5 || mnum == 6)) {
-			if(ss == 0) {
-				log("SYSERR: Shop #%d has %%d before %%s, message #%d.", shr, mnum);
-				err++;
-			}
-
-			ds++;
-		} else if(tbuf[cht + 1] != '%') {
-			log("SYSERR: Shop #%d has invalid format '%%%c' in message #%d.", shr, tbuf[cht + 1], mnum);
-			err++;
-		}
-	}
-
-	if(ss > 1 || ds > 1) {
-		log("SYSERR: Shop #%d has too many specifiers for message #%d. %%s=%d %%d=%d", shr, mnum, ss, ds);
-		err++;
-	}
-
-	if(err) {
-		free(tbuf);
-		return (NULL);
-	}
-
-	return (tbuf);
+	log("DEPRECATED: read_shop_message");
+	return nullptr;
 }
 
 void boot_sql_shops() {

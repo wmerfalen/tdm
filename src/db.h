@@ -290,16 +290,13 @@ extern char	*NOEFFECT;
  * I've decided that it'll be nice to have database functionality
  * inside this db namespace.
  */
-namespace db {
-	int16_t save_char(player_ptr_t&);
-	int16_t save_new_char(player_ptr_t&);
-	int16_t save_char_prefs(player_ptr_t&);
-	int16_t load_char_prefs(player_ptr_t&);
-	int16_t load_char_pkid(player_ptr_t&);
-	namespace extraction {
-		void save_player(player_ptr_t &);
-	};
-};
-extern void decorate_authenticated_player(player_ptr_t player_ptr);
+//namespace db {
+//	int16_t save_char_prefs(player_ptr_t&);
+//	int16_t load_char_prefs(player_ptr_t&);
+//	int16_t load_char_pkid(player_ptr_t&);
+//	namespace extraction {
+//		void save_player(player_ptr_t &);
+//	};
+//};
 
 #endif	//header inclusion protection

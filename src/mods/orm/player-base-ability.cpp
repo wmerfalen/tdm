@@ -117,7 +117,9 @@ namespace mods::orm {
 		pba_weapon_handling = player->real_abils().weapon_handling;
 		pba_strategy = player->real_abils().strategy;
 		pba_medical = player->real_abils().medical;
+#ifdef __MENTOC_DUMP_PBA_DEBUG_DATA_ON_SAVE__
 		this->dump();
+#endif
 		if(insert){
 			return std::get<0>(this->create(this));
 		}

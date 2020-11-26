@@ -4,7 +4,6 @@
 #include <array>
 #include "mods/behaviour_tree_impl.hpp"
 
-#define __MENTOC_SHOW_STRUCTS_CPP_DEBUG_OUTPUT__
 namespace mods {
 	struct extra_desc_data;
 };
@@ -140,12 +139,14 @@ bool obj_data::flagged(int value){
 			log("DEPRECATED: implement room_data::ex_descriptions or stop calling it");
 			return m_ex_descriptions;
 		}
+#ifdef __MENTOC_SHOW_STRUCTS_CPP_DEBUG_OUTPUT__
 		char_player_data::~char_player_data(){
-			std::cerr << green_str("HAX7 [char_player_data] DESTRUCTOR HIT\n");
+			std::cerr << green_str("[char_player_data] DESTRUCTOR HIT\n");
 		}
+#endif
 		char_player_data::char_player_data(){
 #ifdef __MENTOC_SHOW_STRUCTS_CPP_DEBUG_OUTPUT__
-			std::cerr << "HAX7[char_player_data()] default constructor\n";
+			std::cerr << "[char_player_data()] default constructor\n";
 #endif
 			name.assign("");         /* PC / NPC s name (kill ...  )         */
 			short_descr.assign("");  /* for NPC 'actions'                    */
@@ -165,13 +166,13 @@ bool obj_data::flagged(int value){
 		}
 		char_data::char_data(char_data* o){
 #ifdef __MENTOC_SHOW_STRUCTS_CPP_DEBUG_OUTPUT__
-			std::cerr << "HAX7[char_data] ptr copy constructor\n";
+			std::cerr << "[char_data] ptr copy constructor\n";
 #endif
 			this->import(o);
 		}
 		void char_data::import(const char_data* o){
 #ifdef __MENTOC_SHOW_STRUCTS_CPP_DEBUG_OUTPUT__
-			std::cerr << "HAX7[char_data::import] using ptr\n";
+			std::cerr << "[char_data::import] using ptr\n";
 #endif
 			has_desc = false;
 			desc = nullptr;
@@ -187,14 +188,10 @@ bool obj_data::flagged(int value){
 			drone_simulate = o->drone_simulate;
 			drone_uuid = o->drone_uuid;
 
-			std::cerr << "HAX7[char_data::import]. other->player.level: " << std::to_string(o->player.level) << "\n";
 			player = o->player;       /* Normal data                   */
 			if(o->player.level < 0){
 				player.level = 0;
-				std::cerr << "[char_data::import] corrected negative player level. code attempted " << o->player.level << ". Set to zero instead.\n";
 			}
-			std::cerr << green_str("[char_data::import] o->player.level:") << 
-				"Level: " << std::to_string(o->player.level) << "\n";
 			real_abils = o->real_abils;  /* Abilities without modifiers   */
 			aff_abils = o->aff_abils;   /* Abils with spells/stones/etc  */
 				

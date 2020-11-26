@@ -5,6 +5,7 @@
 #include <tuple>
 #include <string>
 #include "orm/player-base-ability.hpp"
+#include "players/db-load.hpp"
 namespace db {
 	extern int16_t delete_char(player_ptr_t& player);
 };
@@ -13,6 +14,7 @@ extern player_class_t parse_class(char arg);
 extern std::string motd;
 extern size_t write_to_output(mods::descriptor_data &t, const char *txt, ...) __attribute__((format(printf, 2, 3)));
 extern const char* MENU;
+
 namespace mods::chargen {
 		static std::vector<std::string> classes;
 		void init(){
@@ -219,7 +221,7 @@ namespace mods::chargen {
 	}
 
 	void undo_make_char(player_ptr_t player){
-		int ret = ::db::delete_char(player);
+		int ret = mods::players::db_load::delete_char(player);
 		if(ret < 0){
 			mudlog(NRM, LVL_IMMORT, TRUE, CAT(player->name()," [",player->host(),"] player creation rollback ",
 						red_str("failed")," for user: S.Q.L. id: '",(player->pk_id()),"'").c_str());
@@ -232,8 +234,8 @@ namespace mods::chargen {
 		REMOVE_BIT(MOB_FLAGS(player->cd()), MOB_ISNPC);
 		player->set_db_id(0);
 		GET_CLASS(player->cd()) = class_type;
-		if(::db::save_new_char(player) == 0){
-			if(::db::load_char_pkid(player) < 0){
+		if(mods::players::db_load::save_new_char(player) == 0){
+			if(mods::players::db_load::load_char_pkid(player) < 0){
 				log("SYSERR: couldn't load character's pkid: '%s'",player->name().c_str());
 				player->set_state(CON_CLOSE);
 				return {0,"An error occurred during player creation. Please contact an admin for more help.\r\nError Code 118\r\n"};

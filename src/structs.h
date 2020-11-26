@@ -1274,7 +1274,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		/** TODO: phase this out */
 		mods::string passwd;
 		char_player_data();
-		~char_player_data();
+		~char_player_data() = default;
 		private:
 		std::array<char,max_pwd_length>	m_passwd; /* character's password      */
 	};

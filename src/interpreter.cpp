@@ -39,6 +39,7 @@
 #include "mods/classes/class-commands.hpp"
 #include "mods/skills.hpp"
 #include "mods/screen-searcher.hpp"
+#include "mods/players/db-load.hpp"
 
 namespace mods::interpreter {
 	extern command_info& get_command(std::string_view,player_ptr_t&);
@@ -1966,7 +1967,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 
 											 case '1':
 												 p->set_authenticated(true);
-												 decorate_authenticated_player(p);
+												 mods::players::db_load::feed_player_inventory(p);
 
 												 /* check and make sure no other copies of this player are logged in */
 												 perform_dupe_check(p);

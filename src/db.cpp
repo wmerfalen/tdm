@@ -202,91 +202,6 @@ extern room_vnum immort_start_room;
 extern room_vnum frozen_start_room;
 extern std::deque<mods::descriptor_data>  descriptor_list;
 extern const char *unused_spellname;	/* spell_parser.c */
-namespace db {
-	int16_t delete_char(player_ptr_t& player){
-		try{
-			std::map<std::string,std::string> values;
-			mods::db::lmdb_export_char(player,values);
-			auto delete_txn = txn();
-			sql_compositor comp("player",&delete_txn);
-			auto del_sql = comp
-				.del()
-				.from("player")
-				.where("player_name","=",values["player_name"])
-				.sql();
-			mods::pq::exec(delete_txn,del_sql);
-			mods::pq::commit(delete_txn);
-			return 0;
-		}catch(std::exception& e){
-			REPORT_DB_ISSUE("error deleting character",e.what());
-			return -1;
-		}
-	}
-	int16_t save_new_char(player_ptr_t& player){
-		try{
-			std::map<std::string,std::string> values;
-			mods::db::lmdb_export_char(player,values);
-			auto insert_transaction = txn();
-			sql_compositor comp("player",&insert_transaction);
-			auto up_sql = comp
-				.insert()
-				.into("player")
-				.values_with_password(values, "player_password")
-				.sql();
-			values.clear();
-			mods::pq::exec(insert_transaction,up_sql);
-			mods::pq::commit(insert_transaction);
-			return 0;
-		}catch(std::exception& e){
-			REPORT_DB_ISSUE("error inserting new character",e.what());
-			return -1;
-		}
-	}
-
-	int16_t load_char_pkid(player_ptr_t& player){
-		try{
-			auto select_transaction = txn();
-			sql_compositor comp("player",&select_transaction);
-			auto player_sql = comp.select("id")
-				.from("player")
-				.where("player_name","=",player->name())
-				.sql();
-			auto player_record = mods::pq::exec(select_transaction,player_sql);
-			if(player_record.size()){
-				player->set_db_id(player_record[0]["id"].as<int>(0));
-				return 0;
-			}
-			log("SYSERR: couldn't grab player's pkid: '%s'",player->name().c_str());
-			return -1;
-		}catch(std::exception& e){
-			REPORT_DB_ISSUE("error loading character by pkid",e.what());
-			return -2;
-		}
-	}
-
-	int16_t load_char_prefs(player_ptr_t& player){
-		try{
-			auto select_transaction = txn();
-			sql_compositor comp("player",&select_transaction);
-			auto player_sql = comp.select("player_preferences")
-				.from("player")
-				.where("id","=",std::to_string(player->get_db_id()))
-				.sql();
-			auto player_record = mods::pq::exec(select_transaction,player_sql);
-			if(player_record.size()){
-				player->set_prefs(player_record[0]["player_preferences"].as<long>(0));
-				return 0;
-			}
-			log("SYSERR: player's prefs don't exist in db: ");
-			player->set_prefs(0);
-			return -1;
-		}catch(std::exception& e){
-			REPORT_DB_ISSUE("error loading character preferences by pkid",e.what());
-			return -2;
-		}
-	}
-};
-
 /*************************************************************************
  *  routines for booting the system                                       *
  *************************************************************************/
@@ -2484,38 +2399,6 @@ bool char_exists(const std::string& name){
 	return char_exists(name,i);
 }
 
-/* Load a char, TRUE if loaded, FALSE if not */
-/*
-	 bool load_char(const std::string& user_name) {
-	 std::cout << "debug: load_char's parameter: '" << user_name << "'\n";
-	 mutable_map_t row,where;
-	 where["player_name"] = user_name;
-	 mods::meta_utils::load_record_by_meta("player",&where,row);
-	 mods::util::maps::dump<std::string,std::string>(row);
-	 if(row.size()){
-	 std::cout << "debug: found record for player\n";
-	 return true;
-	 }
-	 return false;
-	 }	
-
-	 bool load_char_by_name(const std::string& name) {
-	 mutable_map_t values,row;
-	 values["player_name"] = name;
-	 mods::meta_utils::load_record_by_meta("player",&values,row);
-	 mods::util::maps::dump<std::string,std::string>(row);
-	 if(values.size()){
-	 return true;
-	 }
-	 return false;
-	 }	
-	 */
-
-
-void decorate_authenticated_player(player_ptr_t player_ptr){
-	mods::orm::inventory::feed_player(player_ptr);
-}
-
 /*
  * write the vital data of a player to sql
  */
@@ -2538,7 +2421,6 @@ bool login(std::string_view user_name,std::string_view password){
 		return false;
 	}
 }
-#define MM(A) std::cerr << "HAX7 -- " << green_str(A) << "\n";
 bool parse_sql_player(player_ptr_t player_ptr){
 	/** TODO: make sure sql injection is not possible here */
 	mods::players::db_load::set_reporter_lambda([&player_ptr](int64_t code,std::string_view msg){
@@ -2595,7 +2477,6 @@ bool parse_sql_player(player_ptr_t player_ptr){
 #endif
 
 		//player_ptr->level() = level;
-		MM(CAT("player affect bit.",player_ptr->level()));
 		if(strlen(row["player_affection_bitvector"].c_str()) > 0){
 			uint64_t aff = row["player_affection_bitvector"].as<uint64_t>(0);
 			uint64_t shift = 1;
@@ -2628,7 +2509,6 @@ bool parse_sql_player(player_ptr_t player_ptr){
 				shift <<= 1;
 			}
 		}
-		MM(CAT("Affects set.",player_ptr->level()));
 		if(strlen(row["player_affection_plr_bitvector"].c_str()) > 0){
 			uint64_t aff = row["player_affection_plr_bitvector"].as<uint64_t>(0);
 			uint64_t shift = 1;
@@ -2659,7 +2539,6 @@ bool parse_sql_player(player_ptr_t player_ptr){
 				shift <<= 1;
 			}
 		}
-		MM(CAT("Outside loop:",player_ptr->level()));
 
 		player_ptr->set_time_birth(mods::util::stoi<int>(row["player_birth"]));
 		player_ptr->set_time_played(mods::util::stoi<int>(row["player_time_played"]));
@@ -2682,230 +2561,12 @@ bool parse_sql_player(player_ptr_t player_ptr){
 			}
 			++ctr;
 		}
-		MM(CAT("SET CLASS,",player_ptr->level()));
 		mods::players::db_load::set_class(player_ptr, static_cast<player_class_t>(row["player_class"].as<int>()));
-		MM(CAT("AFTER SET CLASS,",player_ptr->level()));
 		mods::skills::load_player_levels(player_ptr);
-		MM(CAT("AFTER LOAD PLAYER LEVELS",player_ptr->level()));
 		mods::players::db_load::load_base_abilities(player_ptr);
-		MM(CAT("AFTER DB_LOAD",player_ptr->level()));
 		return true;
-#undef MM
 	}
 	return false;
-
-	/*
-	 * If you're not poisioned and you've been away for more than an hour of
-	 * real time, we'll set your HMV back to full
-	 */
-
-	/*
-		 if(!AFF_FLAGGED(ch, AFF_POISON)){
-		 GET_HIT(ch) = GET_MAX_HIT(ch);
-		 GET_MOVE(ch) = GET_MAX_MOVE(ch);
-		 GET_MANA(ch) = GET_MAX_MANA(ch);
-		 }*/
-	return true;
-}
-/* copy data from the file structure to a char struct */
-void store_to_char(struct char_file_u *st, char_data *ch) {
-	log("DEPRECATED -- Store_to_char");
-	return;
-}
-
-
-
-
-/* copy vital data from a players char-structure to the file structure */
-void char_to_store(char_data *ch, struct char_file_u *st) {
-	log("DEPRECATED: char_to_store");
-	return;
-#if 0
-	int i;
-	struct affected_type *af;
-	struct obj_data *char_eq[NUM_WEARS];
-
-	/* Unaffect everything a character can be affected by */
-
-	for(i = 0; i < NUM_WEARS; i++) {
-		if(GET_EQ(ch, i)) {
-			char_eq[i] = unequip_char(ch, i);
-		} else {
-			char_eq[i] = NULL;
-		}
-	}
-
-	for(af = ch->affected, i = 0; i < MAX_AFFECT; i++) {
-		if(af) {
-			st->affected[i] = *af;
-			st->affected[i].next = 0;
-			af = af->next;
-		} else {
-			st->affected[i].type = 0;	/* Zero signifies not used */
-			st->affected[i].duration = 0;
-			st->affected[i].modifier = 0;
-			st->affected[i].location = 0;
-			st->affected[i].bitvector = 0;
-			st->affected[i].next = 0;
-		}
-	}
-
-
-	/*
-	 * remove the affections so that the raw values are stored; otherwise the
-	 * effects are doubled when the char logs back in.
-	 */
-
-	while(ch->affected) {
-		affect_remove(ch, ch->affected);
-	}
-
-	if((i >= MAX_AFFECT) && af && af->next) {
-		log("SYSERR: WARNING: OUT OF STORE ROOM FOR AFFECTED TYPES!!!");
-	}
-
-	ch->aff_abils = ch->real_abils;
-
-	st->birth = ch->player.time.birth;
-	st->played = ch->player.time.played;
-	st->played += time(0) - ch->player.time.logon;
-	st->last_logon = time(0);
-
-	ch->player.time.played = st->played;
-	ch->player.time.logon = time(0);
-
-	st->hometown = ch->player.hometown;
-	st->weight = GET_WEIGHT(ch);
-	st->height = GET_HEIGHT(ch);
-	st->sex = GET_SEX(ch);
-	st->chclass = GET_CLASS(ch);
-	st->level = GET_LEVEL(ch);
-	st->abilities = ch->real_abils;
-	st->points = ch->points;
-	st->char_specials_saved = ch->char_specials.saved;
-	st->player_specials_saved = ch->player_specials->saved;
-
-	st->points.armor = 100;
-	st->points.hitroll = 0;
-	st->points.damroll = 0;
-
-	if(GET_TITLE(ch)) {
-		st->title = GET_TITLE(ch);
-	} else {
-		st->title.clear();
-	}
-
-	if(ch->player.description) {
-		if(strlen(ch->player.description) >= sizeof(st->description)) {
-			log("SYSERR: char_to_store: %s's description length: %d, max: %d! "
-					"Truncated.", GET_PC_NAME(ch).c_str(), strlen(ch->player.description),
-					(st->description.length()));
-			ch->player.description.concat("\r\n");
-		}
-
-		st->description = ch->player.description.c_str();	/* strcpy: OK (checked above) */
-	} else {
-		st->description.clear();
-	}
-
-	st->name = GET_NAME(ch).c_str();
-
-	/* add spell and eq affections back in now */
-	for(i = 0; i < MAX_AFFECT; i++) {
-		if(st->affected[i].type) {
-			affect_to_char(ch, &st->affected[i]);
-		}
-	}
-
-	for(i = 0; i < NUM_WEARS; i++) {
-		if(char_eq[i]) {
-			legacy_equip_char(ch, char_eq[i], i);
-		}
-	}
-
-	/*   affect_total(ch); unnecessary, I think !?! */
-#endif
-}				/* Char to store */
-
-
-
-void save_etext(char_data *ch) {
-	/* this will be really cool soon */
-}
-
-
-/*
- * Create a new entry in the in-memory index table for the player file.
- * If the name already exists, by overwriting a deleted character, then
- * we re-use the old position.
- */
-int create_entry(const char *name) {
-	log("[deprecated] create_entry (for player tables)");
-	return 0;
-	int i, pos;
-
-	if(top_of_p_table == -1) {	/* no table */
-		player_table.emplace_back();
-		pos = top_of_p_table = 0;
-	} else if((pos = get_ptable_by_name(name)) == -1) {	/* new name */
-		i = ++top_of_p_table + 1;
-		pos = top_of_p_table;
-	}
-
-	/* copy lowercase equivalent of name to table field */
-	for(i = 0; LOWER(name[i]); i++){
-		player_table[pos].name.concat(LOWER(name[i]));
-	}
-
-	return (pos);
-}
-
-
-
-/************************************************************************
- *  funcs of a (more or less) general utility nature			*
- ************************************************************************/
-
-
-/* read and allocate space for a '~'-terminated string from a given file */
-char *fread_string(FILE *fl, const char *error) {
-	char buf[MAX_STRING_LENGTH], tmp[513];
-	char *point;
-	int done = 0, length = 0, templength;
-
-	*buf = '\0';
-
-	do {
-		if(!fgets(tmp, 512, fl)) {
-			log("SYSERR: fread_string: format error at or near %s", error);
-			exit(1);
-		}
-
-		/* If there is a '~', end the string; else put an "\r\n" over the '\n'. */
-		if((point = strchr(tmp, '~')) != NULL) {
-			*point = '\0';
-			done = 1;
-		} else {
-			point = tmp + strlen(tmp) - 1;
-			*(point++) = '\r';
-			*(point++) = '\n';
-			*point = '\0';
-		}
-
-		templength = strlen(tmp);
-
-		if(length + templength >= MAX_STRING_LENGTH) {
-			log("SYSERR: fread_string: string too large (db.c)");
-			log("%s", error);
-			exit(1);
-		} else {
-			strcat(buf + length, tmp);	/* strcat: OK (size checked above) */
-			length += templength;
-		}
-	} while(!done);
-
-	/* allocate space for the new string and copy it */
-	return (strlen(buf) ? strdup(buf) : NULL);
 }
 
 
@@ -2928,10 +2589,7 @@ void free_char(char_data *ch) {
 	if(ch->has_desc) {
 		ch->desc->character = nullptr;
 	}
-
 }
-
-
 
 
 /* release memory allocated for an obj struct */

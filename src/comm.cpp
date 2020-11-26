@@ -27,6 +27,8 @@
 #include "mods/auto-login.hpp"
 #include "mods/zone.hpp"
 #include "mods/replenish.hpp"
+#include "mods/orm/inventory.hpp"
+#include "mods/players/db-load.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -532,7 +534,7 @@ void perform_auto_login(player_ptr_t& player){
 		parse_sql_player(player);
 	}
 	player->set_authenticated(true);
-	decorate_authenticated_player(player);
+	mods::players::db_load::feed_player_inventory(player);
 	{
 		int start_room = 0;
 		if(!boot_type_hell()){
