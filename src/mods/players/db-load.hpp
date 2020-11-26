@@ -9,6 +9,7 @@ namespace mods::players::db_load {
 	using reporter_t = std::function<void(int64_t,std::string_view)>;
 	void set_reporter_lambda(reporter_t f);
 	void save(player_ptr_t& player);
+	void load_base_abilities(player_ptr_t& player);
 };
 
 #endif

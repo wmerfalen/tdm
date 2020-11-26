@@ -154,13 +154,6 @@ namespace mods::weapons::damage_types {
 			v_ptr->hp() -= dam;
 		}
 
-		void gain_experience(char_data *ch, char_data *victim, int dam, int attacktype) {
-			/* Gain exp for the hit */
-			if(ch != victim) {
-				mods::levels::gain_exp(ptr(ch), GET_LEVEL(victim) * dam);
-			}
-		}
-
 		void update_position(char_data* ch){
 			update_pos(ch);
 		}
@@ -293,7 +286,8 @@ namespace mods::weapons::damage_types {
 			}
 			dam = get_damage(ch,victim,dam,attacktype);
 			deal_damage(ch,victim,dam,attacktype);
-			gain_experience(ch,victim,dam,attacktype);
+			auto p = ptr(ch);
+			mods::levels::gain_exp(p, GET_LEVEL(victim) * dam);
 			update_position(victim);
 			send_combat_messages(ch,victim,dam,attacktype);
 			help_linkless(ch,victim,dam,attacktype);

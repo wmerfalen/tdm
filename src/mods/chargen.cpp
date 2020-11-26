@@ -4,6 +4,7 @@
 #include "../db.h"
 #include <tuple>
 #include <string>
+#include "orm/player-base-ability.hpp"
 namespace db {
 	extern int16_t delete_char(player_ptr_t& player);
 };
@@ -249,6 +250,8 @@ namespace mods::chargen {
 			mudlog(NRM, LVL_IMMORT, TRUE, "%s [%s] new player creation failed.", player->name().c_str(), player->host().c_str());
 			return {0,"An error occurred during player creation. Please contact an admin for more help.\r\nError Code 318\r\n"};
 		}
+		mods::orm::player_base_ability pba;
+		pba.initialize_row(player);
 		return {1,"success"};
 	}
 	void show_finalized_chargen_screen(player_ptr_t p){

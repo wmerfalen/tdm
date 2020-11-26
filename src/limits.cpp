@@ -21,7 +21,7 @@
 #include "mods/loops.hpp"
 #include "interpreter.h"
 #include "mods/world-configuration.hpp"
-
+#include "mods/levels.hpp"
 
 /* external variables */
 extern int max_exp_gain;
@@ -40,7 +40,6 @@ int graf(int grafage, int p0, int p1, int p2, int p3, int p4, int p5, int p6);
 void run_autowiz(void);
 
 void Crash_rentsave(char_data *ch, int cost);
-int level_exp(int chclass, int level);
 char *title_male(int chclass, int level);
 char *title_female(int chclass, int level);
 void update_char_objects(char_data *ch);	/* handler.c */
@@ -240,6 +239,9 @@ void set_title(player_ptr_t player, const char* title) {
 
 
 void run_autowiz(void) {
+	log("Calling run_autowiz is deprecated. Returning immediately. %s:%d",__FILE__,__LINE__);
+	return;
+#if 0
 #if defined(CIRCLE_UNIX) || defined(CIRCLE_WINDOWS)
 
 	if(use_autowiz) {
@@ -264,6 +266,7 @@ void run_autowiz(void) {
 	}
 
 #endif /* CIRCLE_UNIX || CIRCLE_WINDOWS */
+#endif
 }
 
 
@@ -287,7 +290,7 @@ void gain_exp(char_data *ch, int gain) {
 		GET_EXP(ch) += gain;
 
 		while(GET_LEVEL(ch) < LVL_IMMORT - immort_level_ok &&
-		        GET_EXP(ch) >= level_exp(GET_CLASS(ch), GET_LEVEL(ch) + 1)) {
+		        GET_EXP(ch) >= mods::levels::level_exp(GET_LEVEL(ch) + 1)) {
 			GET_LEVEL(ch) += 1;
 			num_levels++;
 			advance_level(ch);
@@ -333,7 +336,7 @@ void gain_exp_regardless(char_data *ch, int gain) {
 
 	if(!IS_NPC(ch)) {
 		while(GET_LEVEL(ch) < LVL_IMPL &&
-		        GET_EXP(ch) >= level_exp(GET_CLASS(ch), GET_LEVEL(ch) + 1)) {
+		        GET_EXP(ch) >= mods::levels::level_exp(GET_LEVEL(ch) + 1)) {
 			GET_LEVEL(ch) += 1;
 			num_levels++;
 			advance_level(ch);

@@ -34,6 +34,7 @@
 #include "mods/interpreter.hpp"
 #include "mods/examine.hpp"
 #include "mods/help.hpp"
+#include "mods/levels.hpp"
 
 extern char_data* character_list;
 /* extern variables */
@@ -57,7 +58,6 @@ extern char *class_abbrevs[];
 ACMD(do_action);
 ACMD(do_insult);
 bitvector_t find_class_bitvector(const char *arg);
-int level_exp(int chclass, int level);
 char *title_male(int chclass, int level);
 char *title_female(int chclass, int level);
 struct time_info_data *real_time_passed(time_t t2, time_t t1);
@@ -1211,7 +1211,7 @@ ACMD(do_score) {
 
 	if(GET_LEVEL(ch) < LVL_IMMORT)
 		player->send("You need %d exp to reach your next level.\r\n",
-				level_exp(GET_CLASS(ch), GET_LEVEL(ch) + 1) - GET_EXP(ch));
+				mods::levels::level_exp(GET_LEVEL(ch) + 1) - GET_EXP(ch));
 
 	playing_time = *real_time_passed((time(0) - ch->player.time.logon) +
 			ch->player.time.played, 0);
@@ -1904,7 +1904,7 @@ ACMD(do_levels) {
 
 	for(i = 1; i < LVL_IMMORT; i++) {
 		nlen = snprintf(buf + len, sizeof(buf) - len, "[%2d] %8d-%-8d : ", i,
-				level_exp(GET_CLASS(ch), i), level_exp(GET_CLASS(ch), i + 1) - 1);
+				mods::levels::level_exp(i), mods::levels::level_exp(i + 1) - 1);
 
 		if(len + nlen >= sizeof(buf) || nlen < 0) {
 			break;
@@ -1915,15 +1915,12 @@ ACMD(do_levels) {
 		switch(GET_SEX(ch)) {
 			case SEX_MALE:
 			case SEX_NEUTRAL:
+			default:
 				nlen = snprintf(buf + len, sizeof(buf) - len, "%s\r\n", title_male(GET_CLASS(ch), i));
 				break;
 
 			case SEX_FEMALE:
 				nlen = snprintf(buf + len, sizeof(buf) - len, "%s\r\n", title_female(GET_CLASS(ch), i));
-				break;
-
-			default:
-				nlen = snprintf(buf + len, sizeof(buf) - len, "Oh dear.  You seem to be sexless.\r\n");
 				break;
 		}
 
@@ -1936,7 +1933,7 @@ ACMD(do_levels) {
 
 	if(len < sizeof(buf))
 		snprintf(buf + len, sizeof(buf) - len, "[%2d] %8d          : Immortality\r\n",
-				LVL_IMMORT, level_exp(GET_CLASS(ch), LVL_IMMORT));
+				LVL_IMMORT, mods::levels::level_exp(LVL_IMMORT));
 
 	page_string(*ch->desc, buf, TRUE);
 }

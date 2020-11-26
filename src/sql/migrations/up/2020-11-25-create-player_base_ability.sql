@@ -1,0 +1,23 @@
+DROP TABLE player_base_ability;
+CREATE TABLE player_base_ability (
+		pba_id SERIAL,
+		pba_player_id INTEGER NOT NULL,
+		pba_str INTEGER NOT NULL DEFAULT 0,
+		pba_str_add INTEGER NOT NULL DEFAULT 0,
+		pba_intel INTEGER NOT NULL DEFAULT 0,
+		pba_wis INTEGER NOT NULL DEFAULT 0,
+		pba_dex INTEGER NOT NULL DEFAULT 0,
+		pba_con INTEGER NOT NULL DEFAULT 0,
+		pba_cha INTEGER NOT NULL DEFAULT 0,
+		pba_electronics INTEGER NOT NULL DEFAULT 0,
+		pba_armor INTEGER NOT NULL DEFAULT 0,
+		pba_marksmanship INTEGER NOT NULL DEFAULT 0,
+		pba_sniping INTEGER NOT NULL DEFAULT 0,
+		pba_demolitions INTEGER NOT NULL DEFAULT 0,
+		pba_chemistry INTEGER NOT NULL DEFAULT 0,
+		pba_weapon_handling INTEGER NOT NULL DEFAULT 0,
+		pba_strategy INTEGER NOT NULL DEFAULT 0,
+		pba_medical INTEGER NOT NULL DEFAULT 0,
+		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

@@ -5,7 +5,11 @@
 #include "flags.hpp"
 #include "filesystem.hpp"
 
-
+#ifdef __MENTOC_MODS_UTIL_DEBUG__
+#define mu_debug(A) std::cerr << "[mods::util][debug]:'" << A << "'\n";
+#else
+#define mu_debug(A) /**-*/
+#endif
 namespace mods::util {
 	std::string player_class_to_string(player_class_t pc){
 		switch(pc){
@@ -69,12 +73,12 @@ namespace mods::util {
 		}
 		std::string path = "";
 		path = CAT(MENTOC_CURRENT_WORKING_DIR,"/objects/",string_type,"/",file.data());
-		std::cerr << "[compiled path]: '" << path << "'\n";
+		mu_debug("[compiled path]: '" << path << "'");
 		if(strstr(file.data(),MENTOC_CURRENT_WORKING_DIR)){
 			std::string f = file.data();
 			f = f.substr(f.find_last_of("/"));
 			path = CAT(MENTOC_CURRENT_WORKING_DIR,"/objects/",string_type,"/",f);
-			std::cerr << "[compiled path --{ corrected }--]: '" << path << "'\n";
+			mu_debug("[compiled path --{ corrected }--]: '" << path << "'");
 		}
 		return path;
 	}
@@ -498,9 +502,9 @@ namespace mods::util {
 		if(current.length()){
 #ifdef __MENTOC_SHOW_FINAL_EXPLODE_STRING__
 			for(auto c : current){
-				std::cerr << "[mods::utils::explode][c]'" << (int)c << "'\n";
+				mu_debug("[mods::utils::explode][c]'" << (int)c << "'");
 			}
-			std::cerr << "[mods::util::explode] trailing current:'" << current << "', delim:'" << delim << "', haystack: '" << haystack << "'\n";
+			mu_debug("[mods::util::explode] trailing current:'" << current << "', delim:'" << delim << "', haystack: '" << haystack << "'");
 #endif
 			results.emplace_back(current);
 		}
@@ -624,7 +628,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_ITEM_PARSE_IMPL, ~, MENTOC_ITEM_TYPES_CAPS_SEQ)
 	}
 	bool yaml_file_exists(std::string path){
 		std::string f = path;
-		std::cerr << "[yaml_file_exists test] '" << f << "'\n";
+		mu_debug("[yaml_file_exists test] '" << f << "'");
 		if(!strstr(path.data(),MENTOC_CURRENT_WORKING_DIR)){
 			f = CAT(MENTOC_CURRENT_WORKING_DIR,"/",path);
 		}
@@ -641,5 +645,5 @@ namespace mods::util::err {
 		return std::string(static_cast<const char*>(&buf[0]));
 	}
 };
-
+#undef mu_debug
 #endif

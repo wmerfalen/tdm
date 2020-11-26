@@ -1264,17 +1264,17 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_UPTR, ~, MENTOC_ITEM_TYPES_SEQ)
 		mods::string long_descr;   /* for 'look'			       */
 		mods::string description;  /* Extra descriptions                   */
 		mods::string title;        /* PC / NPC's title                     */
-		byte sex;           /* PC / NPC's sex                       */
-		byte chclass;       /* PC / NPC's class		       */
-		byte level;         /* PC / NPC's level                     */
-		sh_int hometown;    /* PC s Hometown (zone)                 */
+		uint8_t sex;           /* PC / NPC's sex                       */
+		uint8_t chclass;       /* PC / NPC's class		       */
+		uint8_t level;         /* PC / NPC's level                     */
+		uint8_t hometown;    /* PC s Hometown (zone)                 */
 		struct time_data time;  /* PC's AGE in days                 */
 		ubyte weight;       /* PC / NPC's weight                    */
 		ubyte height;       /* PC / NPC's height                    */
 		/** TODO: phase this out */
 		mods::string passwd;
 		char_player_data();
-		~char_player_data() = default;
+		~char_player_data();
 		private:
 		std::array<char,max_pwd_length>	m_passwd; /* character's password      */
 	};

@@ -6,6 +6,7 @@
 #include "players/util.hpp"
 #include "classes/advance-levels.hpp"
 #include "rand.hpp"
+#include "players/db-load.hpp"
 
 #ifdef __MENTOC_MODS_LEVELS_DEBUG__
 #define mo_debug(A) std::cerr << "[mods::levels][debug]:" << A <<"\n";
@@ -15,7 +16,9 @@
 
 extern std::string sanitize_key(std::string key);
 extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
+extern int immort_level_ok;
 namespace mods::levels {
+	static constexpr uint32_t EXP_MAX = 10000000;
 	enum triad : uint8_t {
 		MELEE = 0,
 		WEAPONS,
@@ -23,12 +26,156 @@ namespace mods::levels {
 		SPEED,
 		ARMOR
 	};
-	void gain_exp(player_ptr_t player,int gain){
+	int level_exp(int level) {
+		if(level > LVL_IMPL || level < 0) {
+			log("SYSERR: Requesting exp for invalid level %d!", level);
+			return 0;
+		}
+
+		/*
+		 * Gods have exp close to EXP_MAX.  This statement should never have to
+		 * changed, regardless of how many mortal or immortal levels exist.
+		 */
+		if(level > LVL_IMMORT) {
+			return EXP_MAX - ((LVL_IMPL - level) * 1000);
+		}
+
+		switch(level){
+			case  0:
+				return 0;
+
+			case  1:
+				return 1;
+
+			case  2:
+				return 2500;
+
+			case  3:
+				return 5000;
+
+			case  4:
+				return 10000;
+
+			case  5:
+				return 20000;
+
+			case  6:
+				return 40000;
+
+			case  7:
+				return 60000;
+
+			case  8:
+				return 90000;
+
+			case  9:
+				return 135000;
+
+			case 10:
+				return 250000;
+
+			case 11:
+				return 375000;
+
+			case 12:
+				return 750000;
+
+			case 13:
+				return 1125000;
+
+			case 14:
+				return 1500000;
+
+			case 15:
+				return 1875000;
+
+			case 16:
+				return 2250000;
+
+			case 17:
+				return 2625000;
+
+			case 18:
+				return 3000000;
+
+			case 19:
+				return 3375000;
+
+			case 20:
+				return 3750000;
+
+			case 21:
+				return 4000000;
+
+			case 22:
+				return 4300000;
+
+			case 23:
+				return 4600000;
+
+			case 24:
+				return 4900000;
+
+			case 25:
+				return 5200000;
+
+			case 26:
+				return 5500000;
+
+			case 27:
+				return 5950000;
+
+			case 28:
+				return 6400000;
+
+			case 29:
+				return 6850000;
+
+			case 30:
+				return 7400000;
+
+			/* add new levels here */
+			default:
+			case LVL_IMMORT:
+				return 8000000;
+		}
+
+
+		/*
+		 * This statement should never be reached if the exp tables in this function
+		 * are set up properly.  If you see exp of 123456 then the tables above are
+		 * incomplete -- so, complete them!
+		 */
+		log("SYSERR: XP tables not set up correctly in %s:%d",__FILE__,__LINE__);
+		return -1;
+	}
+	void gain_exp(player_ptr_t& player,int gain){
 		if(IS_NPC(player->cd())){
+			player->sendln("Apparently, you're an NPC");
 			return;
 		}
-		/** TODO fill me in */
-		player->send("[stub] file:%s line:%d\r\n",__FILE__,__LINE__);
+		player->exp() += gain;
+		bool is_altered = 0;
+		int num_levels = 0;
+		while(player->level() < LVL_IMMORT - immort_level_ok &&
+						player->exp() >= mods::levels::level_exp(player->level() + 1)) {
+			player->level() += 1;
+			num_levels++;
+			advance_level(player);
+			is_altered = TRUE;
+			if(is_altered) {
+				mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(player->cd())), TRUE, "%s advanced %d level%s to level %d.",
+							 player->name().c_str(), num_levels, num_levels == 1 ? "" : "s", player->level());
+				if(num_levels == 1) {
+					player->sendln("You rise a level!");
+				} else {
+					player->send("You rise %d levels!\r\n", num_levels);
+				}
+				//set_title(ch, NULL);
+			}
+		}//end while
+		std::cerr << green_str("gain_exp has your level as: ") << std::to_string(player->level()) << "\n";
+		mods::players::db_load::save(player);
 	}
 #ifdef __MENTOC_USE_RANDOM_STAT_GAIN__
 	int calculate_bonus_hp_gain(int dice,int sides,int greater_than,int player_level){
@@ -249,12 +396,12 @@ namespace mods::levels {
 			/** unclassified */
 			charisma = 0
 		;
-		static constexpr float FIRST_TIER = 0.60;
-		static constexpr float SECOND_TIER = 0.44;
-		static constexpr float THIRD_TIER = 0.22;
-		static constexpr float PASSIVE_TIER = 0.12;
-		static constexpr float SPLIT_TIER = 0.30;
-		static constexpr float SPLIT_TIER_HALF = SPLIT_TIER / 2;
+		float FIRST_TIER = LEVELS_FIRST_TIER();
+		float SECOND_TIER = FIRST_TIER * 0.75;
+		float THIRD_TIER = FIRST_TIER * 0.50;
+		float PASSIVE_TIER = FIRST_TIER * 0.25;
+		float SPLIT_TIER = FIRST_TIER * 0.10;
+		float SPLIT_TIER_HALF = SPLIT_TIER / 2;
 		switch(triads[MELEE]){
 			case 1:
 			case 2:
@@ -293,10 +440,11 @@ namespace mods::levels {
 				intelligence += level * (FIRST_TIER * triads[INTEL]);
 				electronics += level * (FIRST_TIER * triads[INTEL]);
 				chemistry += level * (FIRST_TIER * triads[INTEL]);
-
-				demolitions += level * (SPLIT_TIER * triads[WEAPONS]);
+				strategy += level * (FIRST_TIER * triads[INTEL]);
 
 				wisdom += level * (SECOND_TIER * triads[INTEL]);
+
+				demolitions += level * (SPLIT_TIER * triads[WEAPONS]);
 
 				marksmanship += level * (PASSIVE_TIER * triads[INTEL]);
 				break;
@@ -394,8 +542,45 @@ namespace mods::levels {
 				break;
 		}
 	}
-	int award_exp(player_ptr_t& player,int exp){
-		player->exp() += exp;
+	int csv_export_report(){
+		FILE* fp = fopen("levels.csv", "w+");
+		if(!fp){
+			return -1;
+		}
+		std::string header = "player_class,level,HP,Strength,con,dex,intel,wis,electronics,chemistry,strategy,marksmanship,sniping,weapon_handling,demolitions,armor,medical,charisma\n";
+		fwrite(header.c_str(),sizeof(char),header.length(),fp);
+		for(unsigned player_level = 1; player_level <= LVL_IMMORT;++player_level){
+			for(auto & cl_type : {
+				player_class_t::GHOST,
+				player_class_t::MARKSMAN,
+				player_class_t::BANDIT,
+				player_class_t::BUTCHER,
+				player_class_t::STRIKER,
+				player_class_t::OBSTRUCTOR,
+				player_class_t::MALADY,
+				player_class_t::PYREXIA,
+				player_class_t::DEALER,
+				player_class_t::FORGE,
+				player_class_t::SYNDROME,
+				player_class_t::MACHINIST
+				}){
+				std::string player_class = mods::util::player_class_to_string(cl_type);
+				auto triads = mods::levels::get_triads_by_class(cl_type);
+				auto stats = mods::levels::calculate_based_on_triads(triads,player_level);
+				std::string s;
+				s = player_class + "," + std::to_string(player_level) + ",";
+				fwrite(s.c_str(),sizeof(char),s.length(),fp);
+				for(int i=0; i < stats.size();++i){
+					s = std::to_string(stats[i]);
+					if(stats.size() > i+1){
+						s += ",";
+					}
+					fwrite(s.c_str(), sizeof(char),s.length(),fp);
+				}
+				fwrite("\n",1,1,fp);
+			}
+		}
+		fclose(fp);
 		return 0;
 	}
 
@@ -425,14 +610,27 @@ ACMD(do_award_exp_by_name){
 		return;
 	}
 	int used_to = found_player->exp();
-	mods::levels::award_exp(found_player,opt.value());
+	mods::levels::gain_exp(found_player,opt.value());
 	player->send("Player '%s' used to have %d experience points and now has %d\r\n",found_player->name().c_str(),used_to,found_player->exp());
 	player->sendln("Done.");
 	ADMIN_DONE();
 }
+ACMD(do_csv_export_levels){
+	ADMIN_REJECT();
+	DO_HELP_WITH_ZERO("csv_export_levels");
+	auto status = csv_export_report();
+	if(status == -1){
+		player->errorln("Unable to write to levels.csv");
+		return;
+	}
+	player->admin_success("Successfully wrote to levels.csv.");
+	ADMIN_DONE();
+}
+
 
 	void init(){
 		mods::interpreter::add_command("award_exp_by_name", POS_RESTING, do_award_exp_by_name, LVL_BUILDER,0);
+		mods::interpreter::add_command("csv_export_levels", POS_RESTING, do_csv_export_levels, LVL_BUILDER,0);
 	}
 };
 #undef mo_debug

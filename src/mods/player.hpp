@@ -352,7 +352,7 @@ namespace mods {
 		sbyte& damroll() {
 			return m_char_data->points.damroll;
 		}
-		byte& level(){
+		uint8_t& level(){
 			return m_char_data->player.level;
 		}
 		ubyte& weight(){
@@ -376,10 +376,10 @@ namespace mods {
 		mods::string& description(){
 			return m_char_data->player.description;
 		}
-		byte& chclass(){
+		uint8_t& chclass(){
 			return m_char_data->player.chclass;
 		}
-		sh_int& hometown(){
+		uint8_t& hometown(){
 			return m_char_data->player.hometown;
 		}
 		time_data& ch_time(){
@@ -392,7 +392,7 @@ namespace mods {
 		void set_sex(byte s){
 			m_char_data->player.sex = s;
 		}
-		byte& sex(){
+		uint8_t& sex(){
 			return m_char_data->player.sex;
 		}
 		void set_room(room_rnum r){
@@ -714,6 +714,8 @@ namespace mods {
 		void rate_limit_hit(int action);
 
 		std::array<uint8_t,5> triads();
+		void admin_success(std::string_view msg);
+		void admin_fail(std::string_view msg);
 
 		protected:
 		std::map<std::string,std::string> m_ada_data;

@@ -476,7 +476,8 @@ void die(char_data* killer,char_data *victim) {
 
 void die(char_data *ch) {
 	std::cerr << "[die(victim)] -> killing: " << ch->player.name.c_str() << "| removing exp...\n";
-	mods::levels::gain_exp(ptr(ch), -(GET_EXP(ch) / 2));
+	auto p = ptr(ch);
+	mods::levels::gain_exp(p, -(GET_EXP(ch) / 2));
 
 	if(!IS_NPC(ch)) {
 		REMOVE_BIT(PLR_FLAGS(ch), PLR_KILLER | PLR_THIEF);
@@ -500,7 +501,8 @@ void perform_group_gain(char_data *ch, int base,
 		send_to_char(ch, "You receive your share of experience -- one measly little point!");
 	}
 
-	mods::levels::gain_exp(ptr(ch), share);
+	auto p = ptr(ch);
+	mods::levels::gain_exp(p, share);
 	change_alignment(ch, victim);
 }
 
@@ -570,7 +572,8 @@ void solo_gain(char_data *ch, char_data *victim) {
 		send_to_char(ch, "You receive one lousy experience point.");
 	}
 
-	mods::levels::gain_exp(ptr(ch), exp);
+	auto p = ptr(ch);
+	mods::levels::gain_exp(p, exp);
 	change_alignment(ch, victim);
 }
 

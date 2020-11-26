@@ -77,7 +77,7 @@ ACMD(do_quit) {
 	
 
 	player->quitting(true);
-	db::extraction::save_player(player);
+	mods::players::db_load::save(player);
 	if(subcmd != SCMD_QUIT && GET_LEVEL(ch) < LVL_IMMORT) {
 		send_to_char(ch, "You have to type quit--no less, to quit!");
 	} else if(GET_POS(ch) == POS_FIGHTING) {
@@ -1087,10 +1087,6 @@ ACMD(do_gen_tog) {
 	}
 
 	/** Save the player's prefs in postgres */
-	if(db::save_char_prefs(player) < 0){
-		log("SYSERR: Couldn't save user's prefs: ");
-	}else{
-		log("Saved user's prefs: ");
-	}
+	mods::players::db_load::save(player);
 	return;
 }

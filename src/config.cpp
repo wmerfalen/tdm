@@ -116,7 +116,7 @@ int track_through_doors = YES;
  * For example, to stop people from advancing to LVL_IMMORT, simply set
  * immort_level_ok to 1.
  */
-int immort_level_ok = 0;
+int immort_level_ok = 1;
 
 
 /****************************************************************************/

@@ -1459,6 +1459,7 @@ namespace mods {
 			m_class = c;
 			m_class_string = mods::util::player_class_to_string(c);
 			m_triads = mods::levels::get_triads_by_class(m_class);
+			GET_CLASS(m_char_data) = m_class;
 		}
 		int player::screen_width(){
 			return mods::util::stoi(mods::prefs::dynamic_get("width","player",m_char_data)).value_or(80);
@@ -1518,6 +1519,12 @@ namespace mods {
 		}
 		std::array<uint8_t,5> player::triads(){
 			return m_triads;
+		}
+		void player::admin_success(std::string_view msg){
+			this->sendln(CAT("{grn}[Admin Success]:",msg.data(),"{/grn}"));
+		}
+		void player::admin_fail(std::string_view msg){
+			this->sendln(CAT("{red}[Admin Failure]:",msg.data(),"{/red}"));
 		}
 };
 

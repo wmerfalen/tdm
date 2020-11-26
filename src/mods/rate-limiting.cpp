@@ -166,6 +166,7 @@ ACMD(do_list_rate_limits){
 		mods::help::register_help_command_with_permission("set_rate_limit",set_rate_limit_help,LVL_BUILDER);
 		mods::help::register_help_command_with_permission("get_rate_limit_types",get_rate_limit_types_help,LVL_BUILDER);
 		mods::help::register_help_command_with_permission("list_rate_limits",list_rate_limits_help,LVL_BUILDER);
+		mods::rate_limiting::limits[PLAYER_SAVE] = std::make_pair<>(10,60);
 	}
 };
 #undef mo_debug

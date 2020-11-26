@@ -203,37 +203,6 @@ extern room_vnum frozen_start_room;
 extern std::deque<mods::descriptor_data>  descriptor_list;
 extern const char *unused_spellname;	/* spell_parser.c */
 namespace db {
-	namespace extraction {
-		void save_player(player_ptr_t& player){
-			if(player->db_id()){
-				log("Saving saved player id:[%d] name:[%s]",player->db_id(), player->name().c_str());
-				db::save_char_prefs(player);
-				mods::db::save_char(player);
-				mods::orm::inventory::flush_player(player);
-				return;
-			}
-			log("_NOT_ Saving player because they do not have a db_id");
-		}
-	};
-	int16_t save_char_data(player_ptr_t& player,std::map<std::string,std::string> values){
-		try{
-			auto up_txn = txn();
-			sql_compositor comp("player",&up_txn);
-			auto up_sql = comp
-				.update("player")
-				.set(values)
-				.where("id","=",std::to_string(player->get_db_id()))
-				.sql();
-			values.clear();
-			mods::pq::exec(up_txn,up_sql);
-			mods::pq::commit(up_txn);
-			return 0;
-		}catch(std::exception& e){
-			REPORT_DB_ISSUE("error updating character by pkid",e.what());
-			return -1;
-		}
-	}
-
 	int16_t delete_char(player_ptr_t& player){
 		try{
 			std::map<std::string,std::string> values;
@@ -316,10 +285,6 @@ namespace db {
 			return -2;
 		}
 	}
-	int16_t save_char_prefs(player_ptr_t& player){
-		return db::save_char_data(player,{{"player_preferences",std::to_string(player->get_prefs())}});
-	}
-
 };
 
 /*************************************************************************
@@ -2573,56 +2538,64 @@ bool login(std::string_view user_name,std::string_view password){
 		return false;
 	}
 }
+#define MM(A) std::cerr << "HAX7 -- " << green_str(A) << "\n";
 bool parse_sql_player(player_ptr_t player_ptr){
 	/** TODO: make sure sql injection is not possible here */
 	mods::players::db_load::set_reporter_lambda([&player_ptr](int64_t code,std::string_view msg){
 			log("SYSERR: failed loading player's class [player name:'%s'] error code: %d, message: '%s'", player_ptr->name().c_str(), code, msg.data());
 	});
 	for(auto && row: db_get_by_meta("player","player_name",player_ptr->name().c_str())){
+		int temp = 0;
 		player_ptr->set_db_id(row["id"].as<int>());
 		player_ptr->clear_all_affected();
 		player_ptr->clear_all_affected_plr();
 		player_ptr->set_name(row["player_name"].c_str());
 		player_ptr->short_descr().assign((row["player_short_description"]));
 		player_ptr->long_descr().assign((row["player_long_description"]));
-		player_ptr->saved().act = mods::util::stoi<int>(row["player_action_bitvector"]);
-		player_ptr->real_abils().str = mods::util::stoi<int>(row["player_ability_strength"]);
-		player_ptr->real_abils().str_add = mods::util::stoi<int>(row["player_ability_strength_add"]);
-		player_ptr->real_abils().intel = mods::util::stoi<int>(row["player_ability_intelligence"]);
-		player_ptr->real_abils().wis = mods::util::stoi<int>(row["player_ability_wisdom"]);
-		player_ptr->real_abils().dex = mods::util::stoi<int>(row["player_ability_dexterity"]);
-		player_ptr->real_abils().con = mods::util::stoi<int>(row["player_ability_constitution"]);
-		player_ptr->real_abils().cha = mods::util::stoi<int>(row["player_ability_charisma"]);
+		player_ptr->saved().act = mods::util::stoi<long>(row["player_action_bitvector"]);
+		player_ptr->real_abils().str = mods::util::stoi<uint16_t>(row["player_ability_strength"]);
+		player_ptr->real_abils().str_add = mods::util::stoi<uint16_t>(row["player_ability_strength_add"]);
+		player_ptr->real_abils().intel = mods::util::stoi<uint16_t>(row["player_ability_intelligence"]);
+		player_ptr->real_abils().wis = mods::util::stoi<uint16_t>(row["player_ability_wisdom"]);
+		player_ptr->real_abils().dex = mods::util::stoi<uint16_t>(row["player_ability_dexterity"]);
+		player_ptr->real_abils().con = mods::util::stoi<uint16_t>(row["player_ability_constitution"]);
+		player_ptr->real_abils().cha = mods::util::stoi<uint16_t>(row["player_ability_charisma"]);
 		player_ptr->saved().alignment = mods::util::stoi<int>(row["player_ability_alignment"]);
 
 		/** hp, mana, move */
-		player_ptr->max_hp() = mods::util::stoi<int>(row["player_max_hitpoints"]);
-		player_ptr->max_mana() = mods::util::stoi<int>(row["player_max_mana"]);
-		player_ptr->max_move() = mods::util::stoi<int>(row["player_max_move"]);
-		player_ptr->hp() = mods::util::stoi<int>(row["player_hitpoints"]);
-		player_ptr->mana() = mods::util::stoi<int>(row["player_mana"]);
-		player_ptr->move() = mods::util::stoi<int>(row["player_move"]);
+		player_ptr->max_hp() = mods::util::stoi<sh_int>(row["player_max_hitpoints"]);
+		player_ptr->max_mana() = mods::util::stoi<sh_int>(row["player_max_mana"]);
+		player_ptr->max_move() = mods::util::stoi<sh_int>(row["player_max_move"]);
+		player_ptr->hp() = mods::util::stoi<sh_int>(row["player_hitpoints"]);
+		player_ptr->mana() = mods::util::stoi<sh_int>(row["player_mana"]);
+		player_ptr->move() = mods::util::stoi<sh_int>(row["player_move"]);
 
 		/** gold, exp, sex */
 		player_ptr->gold() = mods::util::stoi<int>(row["player_gold"]);
 		player_ptr->exp() = mods::util::stoi<int>(row["player_exp"]);
-		player_ptr->sex() = mods::util::stoi<byte>(row["player_sex"]);
-		player_ptr->level() = mods::util::stoi<byte>(row["player_level"]);
+		player_ptr->sex() = std::string(row["player_sex"].c_str()).compare("M") == 0 ? SEX_MALE : SEX_FEMALE;
+
+		temp = mods::util::stoi<int>(row["player_level"]);
+		player_ptr->level() = temp;
 
 		/** damroll, hitroll, weight, height */
-		player_ptr->damroll() = mods::util::stoi<int>(row["player_damroll"]);
-		player_ptr->hitroll() = mods::util::stoi<int>(row["player_hitroll"]);
-		player_ptr->weight() = mods::util::stoi<int>(row["player_weight"]);
-		player_ptr->height() = mods::util::stoi<int>(row["player_height"]);
+		player_ptr->damroll() = mods::util::stoi<sbyte>(row["player_damroll"]);
+		player_ptr->hitroll() = mods::util::stoi<sbyte>(row["player_hitroll"]);
+		player_ptr->weight() = mods::util::stoi<ubyte>(row["player_weight"]);
+		player_ptr->height() = mods::util::stoi<ubyte>(row["player_height"]);
 		player_ptr->title().assign((row["player_title"]));
-		player_ptr->hometown() = mods::util::stoi<int>(row["player_hometown"]);
+		player_ptr->hometown() = mods::util::stoi<uint8_t>(row["player_hometown"]);
 		player_ptr->clear_all_affected();
 		player_ptr->clear_all_affected_plr();
+
 #ifdef __MENTOC_PLR_DEBUG_OUTPUT__
 #define __MENTOC_PLR(a) case a: std::cerr << "flag: " << #a << " is set\n"; break;
 #else
 #define __MENTOC_PLR
 #endif
+
+		//player_ptr->level() = level;
+		MM(CAT("player affect bit.",player_ptr->level()));
 		if(strlen(row["player_affection_bitvector"].c_str()) > 0){
 			uint64_t aff = row["player_affection_bitvector"].as<uint64_t>(0);
 			uint64_t shift = 1;
@@ -2655,6 +2628,7 @@ bool parse_sql_player(player_ptr_t player_ptr){
 				shift <<= 1;
 			}
 		}
+		MM(CAT("Affects set.",player_ptr->level()));
 		if(strlen(row["player_affection_plr_bitvector"].c_str()) > 0){
 			uint64_t aff = row["player_affection_plr_bitvector"].as<uint64_t>(0);
 			uint64_t shift = 1;
@@ -2685,6 +2659,7 @@ bool parse_sql_player(player_ptr_t player_ptr){
 				shift <<= 1;
 			}
 		}
+		MM(CAT("Outside loop:",player_ptr->level()));
 
 		player_ptr->set_time_birth(mods::util::stoi<int>(row["player_birth"]));
 		player_ptr->set_time_played(mods::util::stoi<int>(row["player_time_played"]));
@@ -2707,9 +2682,15 @@ bool parse_sql_player(player_ptr_t player_ptr){
 			}
 			++ctr;
 		}
+		MM(CAT("SET CLASS,",player_ptr->level()));
 		mods::players::db_load::set_class(player_ptr, static_cast<player_class_t>(row["player_class"].as<int>()));
+		MM(CAT("AFTER SET CLASS,",player_ptr->level()));
 		mods::skills::load_player_levels(player_ptr);
+		MM(CAT("AFTER LOAD PLAYER LEVELS",player_ptr->level()));
+		mods::players::db_load::load_base_abilities(player_ptr);
+		MM(CAT("AFTER DB_LOAD",player_ptr->level()));
 		return true;
+#undef MM
 	}
 	return false;
 

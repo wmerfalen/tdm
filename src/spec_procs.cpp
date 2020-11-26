@@ -239,7 +239,8 @@ SPECIAL(dump) {
 		act("$n has been awarded for being a good citizen.", TRUE, ch, 0, 0, TO_ROOM);
 
 		if(GET_LEVEL(ch) < 3) {
-			mods::levels::gain_exp(ptr(ch), value);
+			auto p = ptr(ch);
+			mods::levels::gain_exp(p, value);
 		} else {
 			GET_GOLD(ch) += value;
 		}

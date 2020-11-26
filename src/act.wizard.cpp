@@ -43,7 +43,6 @@ extern char_data* character_list;
 extern const char *pc_class_types[];
 
 /* extern functions */
-int level_exp(int chclass, int level);
 void show_shops(char_data *ch, char *value);
 void hcontrol_list_houses(char_data *ch);
 void do_start(char_data *ch);

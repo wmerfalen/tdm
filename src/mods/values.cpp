@@ -17,7 +17,9 @@
 extern bool key_exists(std::string key);
 namespace mods::values {
 		std::map<std::string,variants_t> alt_value_map;
+		std::map<std::string,variants_t> current_value_map;
 		static const std::vector<std::string> float_types = {
+		"LEVELS_FIRST_TIER",
 		"ADVANCE_LEVEL_HP_FLOAT_MULTIPLIER",
 		"EXPLOSIVE_CRITICAL_MULTIPLIER",
 		"RIFLE_CRITICAL_MULTIPLIER",
@@ -546,10 +548,11 @@ namespace mods::values {
 		void revert_to_default(std::string in_key){
 			alt_value_map.erase(in_key);
 		}
-		void save_to_lmdb(std::string key,std::string value){
+		void save_to_lmdb(std::string in_key,std::string value){
 			mods::db::lmdb_renew();
-			std::string lmdb_key = db_key({"values",key});
-			mods::db::lmdb_put(lmdb_key,value);
+			std::string key = db_key({"values",in_key});
+			m_debug("setting lmdb: '" << key << "' -> '" << value << "'");
+			mods::db::lmdb_put(key,value);
 			mods::db::lmdb_commit();
 		}
 
@@ -565,26 +568,31 @@ namespace mods::values {
 			std::string value = mods::db::lmdb_get(key);
 			if(is_int(in_key)){
 				alt_value_map[in_key] = static_cast<int>(atoi(value.c_str()));
+				mods::db::lmdb_commit();
 				return;
 			}
 			if(is_uint8(in_key)){
 				alt_value_map[in_key] = static_cast<uint8_t>(atoi(value.c_str()));
+				mods::db::lmdb_commit();
 				return;
 			}
 			if(is_uint16(in_key)){
 				alt_value_map[in_key] = static_cast<uint16_t>(atoi(value.c_str()));
 				m_debug(key << " uint16_t exists.... value:'" << value.c_str() << "'");
+				mods::db::lmdb_commit();
 				return;
 			}
 			if(is_string(in_key)){
 				alt_value_map[in_key] = value;
+				mods::db::lmdb_commit();
 				return;
 			}
-			if(is_float(key)){
+			if(is_float(in_key)){
 				alt_value_map[in_key] = static_cast<float>(atof(value.c_str()));
+				mods::db::lmdb_commit();
 				return;
 			}
-			log("[WARNING] key doesnt exist in int or string types!->'%s'",key);
+			log("[WARNING] key doesnt exist in int or string types!->'%s'",key.c_str());
 			mods::db::lmdb_commit();
 		}
 
@@ -904,6 +912,8 @@ namespace mods::values {
 		CGET_DEF(uint8_t,GHOST_FEIGN_DEATH_FAMILIAR_DURATION,66);
 		CGET_DEF(uint8_t,GHOST_FEIGN_DEATH_MASTER_DURATION,99);
 
+		CGET_DEF(float,LEVELS_FIRST_TIER,10.00);
+
 		CGET_DEF(float,ADVANCE_LEVEL_HP_FLOAT_MULTIPLIER,2.5);
 		CGET_DEF(float,EXPLOSIVE_CRITICAL_MULTIPLIER,0.75);
 		CGET_DEF(float,RIFLE_CRITICAL_MULTIPLIER,0.75);
@@ -1222,6 +1232,7 @@ namespace mods::values {
 					player->errorln(usage);
 					return;
 				}
+				player->send(vec_args);
 				mods::values::save_to_lmdb(vec_args[0],vec_args[1]);
 				mods::values::load_from_lmdb(vec_args[0]);
 				ADMIN_DONE();
@@ -1242,23 +1253,23 @@ namespace mods::values {
 				for(auto key : vec_args){
 					if(is_int(key)){
 						auto it = std::find(int_types.begin(),int_types.end(),key);
-						player->sendln(CAT(key,":'",*it,"'"));
+						player->sendln(CAT(key,":'",CONSTGET<int>(*it,0),"'"));
 					}
 					if(is_uint8(key)){
 						auto it = std::find(uint8_types.begin(),uint8_types.end(),key);
-						player->sendln(CAT(key,":'",*it,"'"));
+						player->sendln(CAT(key,":'",CONSTGET<uint8_t>(*it,0),"'"));
 					}
 					if(is_uint16(key)){
 						auto it = std::find(uint16_types.begin(),uint16_types.end(),key);
-						player->sendln(CAT(key,":'",*it,"'"));
+						player->sendln(CAT(key,":'",CONSTGET<uint16_t>(*it,0),"'"));
 					}
 					if(is_float(key)){
 						auto it = std::find(float_types.begin(),float_types.end(),key);
-						player->sendln(CAT(key,":'",*it,"'"));
+						player->sendln(CAT(key,":'",CONSTGET<float>(*it,0),"'"));
 					}
 					if(is_string(key)){
 						auto it = std::find(string_types.begin(),string_types.end(),key);
-						player->sendln(CAT(key,":'",*it,"'"));
+						player->sendln(CAT(key,":'",CONSTGET<std::string>(*it,""),"'"));
 					}
 				}
 				ADMIN_DONE();
@@ -1301,9 +1312,7 @@ namespace mods::values {
 					player->sendln(CAN_BE_SEARCHED());
 					return;
 				}
-				for(auto item : screen){
-					player->sendln(item);
-				}
+				player->send(screen);
 				player->sendln("Done listing.");
 				player->sendln(CAN_BE_SEARCHED());
 				ADMIN_DONE();

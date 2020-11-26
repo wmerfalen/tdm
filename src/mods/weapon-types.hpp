@@ -108,7 +108,6 @@ namespace mods::weapon_types {
 			vnum(0),\
 			rarity(mods::rarity::DEFAULT)\
 		{\
-			std::cerr << "[rifle_data_t]::constructor with feed_file: '" << in_feed_file << "'\n";\
 			this->feed(in_feed_file);\
 		}\
 		void feed(std::string_view in_feed_file){\

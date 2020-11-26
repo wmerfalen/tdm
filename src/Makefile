@@ -34,8 +34,8 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-D__MENTOC_SHOW_SNIPE_HIT_STATS__=1 \
 	-DMENTOC_LIB_DIR=\"$(CURDIR)/../lib/\" \
 	-D__MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__=1 \
-	-D__MENTOC_SQL_MIGRATIONS_DIR=\"$(SQL_MIGRATIONS_DIR)\"
-	#-D__MENTOC_SHOW_LMDB_DEBUG__=1
+	-D__MENTOC_SQL_MIGRATIONS_DIR=\"$(SQL_MIGRATIONS_DIR)\"\
+	-D__MENTOC_SHOW_LMDB_DEBUG__=1
 	#-D__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__=1 \
 	-D__MENTOC_SHOW_LMDB_DEBUG__=1 \
 	#-DMENTOC_NO_CONSTEXPR_CONF=1 \
@@ -90,7 +90,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/rifle-attachments mods/examine \
 					 mods/target-practice mods/target-practice-db mods/demolitions \
 					 mods/replenish mods/players/destroy-player mods/rate-limiting \
-					 mods/levels
+					 mods/levels mods/orm/player-base-ability
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

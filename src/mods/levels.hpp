@@ -9,7 +9,7 @@ namespace mods::levels {
 		GHOST,
 		PYREXIA
 	};
-	void gain_exp(player_ptr_t player,int gain);
+	void gain_exp(player_ptr_t& player,int gain);
 	void advance_level(player_ptr_t& player);
 	static inline bool class_is_implemented(player_class_t pc){
 		return std::find(implemented_classes.begin(),implemented_classes.end(),pc) != implemented_classes.end();
@@ -42,5 +42,7 @@ namespace mods::levels {
 	std::array<float,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level);
 	std::array<uint8_t,5> get_triads_by_class(player_class_t);
 	void init();
+	int csv_export_report();
+	int level_exp(int level);
 };
 #endif

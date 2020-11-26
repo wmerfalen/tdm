@@ -1988,6 +1988,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 												 p->set_state(CON_PLAYING);
 
 												 if(p->level() == 0) {
+													 p->sendln("You are level zero!");
 													 do_start(p->cd());
 													 p->stc(START_MESSG);
 												 }

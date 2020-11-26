@@ -3,6 +3,7 @@
 #include "meta_utils.hpp"
 #include "player.hpp"
 #include "pq.hpp"
+#include "players/db-load.hpp"
 
 extern std::string sanitize_key(std::string key);
 namespace mods::db {
@@ -130,8 +131,10 @@ aligned_int_t initialize_row(
 	ptr_db->renew_txn();
 	std::string id_list = "";
 	id_list = db_get(db_key({table,"id_list"}));
-	//std::cout << "id_list: '" << id_list << "' .size(): " << id_list.length() << "\n";
-	//std::cout << "debug: id_list buffer: '" << id_list << "'\n";
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
+	std::cout << "id_list: '" << id_list << "' .size(): " << id_list.length() << "\n";
+	std::cout << "debug: id_list buffer: '" << id_list << "'\n";
+#endif
 	aligned_int_t next_id = 0;
 	std::vector<aligned_int_t> deserialized_id_list;
 	if(id_list.length() == 0){
@@ -176,7 +179,9 @@ aligned_int_t initialize_row(
 
 tuple_status_t new_record(const std::string& table,mutable_map_t* values){
 	auto pk_id = mods::db::initialize_row(table);
-	//std::cout << "debug: new pk_id: '" << pk_id << "'\n";
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
+	std::cout << "debug: new pk_id: '" << pk_id << "'\n";
+#endif
 	return save_record(table,values,std::to_string(pk_id));
 }
 
@@ -192,7 +197,9 @@ tuple_status_t new_record(const std::string& table,mutable_map_t* values){
 tuple_status_t save_record(const std::string& table,mutable_map_t* values,std::string pk_id){
 	mods::globals::db->renew_txn();
 	for(const auto & meta_key : mods::meta_utils::get_all_meta_values(table,values)){
-		//std::cout << "debug: save_record. Putting: '" << meta_key << "' as '" << pk_id << "'\n";
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
+		std::cout << "debug: save_record. Putting: '" << meta_key << "' as '" << pk_id << "'\n";
+#endif
 		lmdb_put(meta_key,pk_id);
 	}
 		const auto write_status =  lmdb_write_values(
@@ -373,9 +380,13 @@ void lmdb_commit(){
  */
 tuple_status_t save_char(
 		player_ptr_t player_ptr){
+	/*
 	mutable_map_t values;
 	lmdb_export_char(player_ptr,values);
 	return save_record("player",&values,std::to_string(player_ptr->get_db_id()));
+	*/
+	mods::players::db_load::save(player_ptr);
+	return {1,"",0};
 }
 /**
  * @brief exports and saves a new player
@@ -453,7 +464,7 @@ void lmdb_export_char(player_ptr_t player_ptr, mutable_map_t &values){
 		values["player_max_move"] = (std::to_string(player_ptr->max_move()));
 		values["player_gold"] = (std::to_string(player_ptr->gold()));
 		values["player_exp"] = (std::to_string(player_ptr->exp()));
-		values["player_sex"] = player_ptr->sex() == SEX_MALE ? std::string("M") : std::string("F");
+		values["player_sex"] = player_ptr->sex() == SEX_FEMALE ? std::string("F") : std::string("M");
 		values["player_hitpoints"] = (std::to_string(player_ptr->hp()));
 		values["player_mana"] = (std::to_string(player_ptr->mana()));
 		values["player_move"] = (std::to_string(player_ptr->move()));
@@ -473,22 +484,6 @@ void lmdb_export_char(player_ptr_t player_ptr, mutable_map_t &values){
 		values["player_hitroll"] = std::to_string(player_ptr->cd()->points.hitroll);
 		values["player_armor"] = std::to_string(player_ptr->cd()->points.armor);
 		values["player_preferences"] = std::to_string(player_ptr->get_prefs());
-
-		values["player_real_strength"] = std::to_string(player_ptr->strength());
-		values["player_real_constitution"] = std::to_string(player_ptr->constitution());
-		values["player_real_dexterity"] = std::to_string(player_ptr->dexterity());
-		values["player_real_intelligence"] = std::to_string(player_ptr->intelligence());
-		values["player_real_wisdom"] = std::to_string(player_ptr->wisdom());
-		values["player_real_electronics"] = std::to_string(player_ptr->electronics());
-		values["player_real_chemistry"] = std::to_string(player_ptr->chemistry());
-		values["player_real_strategy"] = std::to_string(player_ptr->strategy());
-		values["player_real_marksmanship"] = std::to_string(player_ptr->marksmanship());
-		values["player_real_sniping"] = std::to_string(player_ptr->sniping());
-		values["player_real_weapon_handling"] = std::to_string(player_ptr->weapon_handling());
-		values["player_real_demolitions"] = std::to_string(player_ptr->demolitions());
-		values["player_real_armor"] = std::to_string(player_ptr->real_armor());
-		values["player_real_medical"] = std::to_string(player_ptr->medical());
-		values["player_real_charisma"] = std::to_string(player_ptr->charisma());
 		return;
 }
 
@@ -552,7 +547,9 @@ int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_
 		auto opt_pk = mods::util::stoi_optional<aligned_int_t>(pk_id);
 		if(opt_pk.has_value() && opt_pk.value() != 0){
 			count = 0;
-			//std::cout << "debug: found pk: '" << opt_pk.value() << "'\n";
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
+			std::cout << "debug: found pk: '" << opt_pk.value() << "'\n";
+#endif
 			out_record["id"] = pk_id;
 			std::vector<std::string> fields_to_grab = mods::schema::db[table];
 			if(mods::globals::db->is_using_pluck_filter()){
@@ -560,7 +557,9 @@ int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_
 			}
 			for(auto & key : fields_to_grab){
 				std::string fetched = db_get(db_key({table,key,pk_id}));
-				//std::cout << "debug: load_record key: '" << key << "' value: '" << fetched << "'\n";
+#ifdef __MENTOC_SHOW_LMDB_DEBUG__
+				std::cout << "debug: load_record key: '" << key << "' value: '" << fetched << "'\n";
+#endif
 				out_record[key] = fetched;
 				count++;
 			}
