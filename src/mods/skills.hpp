@@ -147,16 +147,15 @@ namespace mods::skills {
 		/**
 		 * Static db asset: pyrexia_class proficiencies
 		 */
-#define SKILL_PYREXIA_THROW_FIRE_NADE() 150
 		static std::vector<proficiency_t> pyrexia_class = {
 			{PYREXIA_CLASS_THROW_FIRE_NADE ,"pyrexia-class-throw-fire-nade", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
-			{PYREXIA_CLASS_DRENCH_OBJECT_IN_GASOLINE ,"pyrexia-class-drench-object", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
-			{PYREXIA_CLASS_DRENCH_ROOM_IN_GASOLINE ,"pyrexia-class-drench-room", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
-			{PYREXIA_CLASS_CONVERT_TO_FIRE_NADE ,"pyrexia-class-convert-to-fire-nade", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
-			{PYREXIA_CLASS_ATTACH_INC_LAUNCHER ,"pyrexia-class-attach-inc-launcher", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
-			{PYREXIA_CLASS_ATTACH_FLAMETHROWER ,"pyrexia-class-attach-flamethrower", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
-			{PYREXIA_CLASS_CREATE_WALL_OF_FIRE ,"pyrexia-class-create-wall-of-fire", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
-			{PYREXIA_CLASS_SEAL_OFF_ROOM ,"pyrexia-class-seal-off-room", "",SKILL_PYREXIA_THROW_FIRE_NADE(),0},
+			{PYREXIA_CLASS_DRENCH_OBJECT_IN_GASOLINE ,"pyrexia-class-drench-object", "",SKILL_PYREXIA_DRENCH_IN_GASOLINE(),0},
+			{PYREXIA_CLASS_DRENCH_ROOM_IN_GASOLINE ,"pyrexia-class-drench-room", "",SKILL_PYREXIA_DRENCH_ROOM_IN_GASOLINE(),0},
+			{PYREXIA_CLASS_CONVERT_TO_FIRE_NADE ,"pyrexia-class-convert-to-fire-nade", "",SKILL_PYREXIA_CONVERT_TO_FIRE_NADE(),0},
+			{PYREXIA_CLASS_ATTACH_INC_LAUNCHER ,"pyrexia-class-attach-inc-launcher", "",SKILL_PYREXIA_ATTACH_INC_LAUNCHER(),0},
+			{PYREXIA_CLASS_ATTACH_FLAMETHROWER ,"pyrexia-class-attach-flamethrower", "",SKILL_PYREXIA_ATTACH_FLAMETHROWER(),0},
+			{PYREXIA_CLASS_CREATE_WALL_OF_FIRE ,"pyrexia-class-create-wall-of-fire", "",SKILL_PYREXIA_CREATE_WALL_OF_FIRE(),0},
+			{PYREXIA_CLASS_SEAL_OFF_ROOM ,"pyrexia-class-seal-off-room", "",SKILL_PYREXIA_SEAL_OFF_ROOM(),0},
 		};
 		/**
 		 * Static db asset: ghost_class proficiencies
