@@ -441,7 +441,7 @@ namespace mods {
 				exit(1);
 			}
 			if(connected_to_postgres){
-				log("[postgres] connected :)");
+				std::cout << green_str("[postgres] connected :)") << "\n";
 			}else{
 				log("SYSERR: Couldn't connect to postgres");
 				mods::globals::shutdown();
