@@ -434,7 +434,11 @@ namespace mods {
 				pq_con = std::make_unique<pqxx::connection>(connection_string.c_str());
 				connected_to_postgres = true;
 			}catch(const std::exception &e){
+				std::cerr << red_str("[POSTGRES CONNECTION ERROR]:'") << red_str(e.what()) << "'\n";
+				std::cerr << red_str("Shutting down in 10 seconds...\n");
+				sleep(10);
 				mods::globals::shutdown();
+				exit(1);
 			}
 			if(connected_to_postgres){
 				log("[postgres] connected :)");
