@@ -1,5 +1,6 @@
 #include "skills.hpp"
 #include "interpreter.hpp"
+#include "super-users.hpp"
 
 #ifdef __MENTOC_MODS_SKILLS_SHOW_DEBUG_OUTPUT__
 #define m_debug(A) std::cerr << "[mods::skills][debug]:'" << A << "'\n";
@@ -7,23 +8,23 @@
 #define m_debug(A)
 #endif
 
+#define FOREACH_SKILLSET_AS(PROF_NAME) for(auto & skillset : mods::skills::proficiencies::list) for(auto & PROF_NAME : std::get<1>(skillset))
 ACMD(do_train){
 	DO_HELP_WITH_ZERO("train");
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() >= 1){
-		for(auto & skillset : mods::skills::proficiencies::list) {
-			for(auto & prof : std::get<1>(skillset)){
-				if(prof.implemented && ICMP(prof.name.c_str(),vec_args[0])){
-					player->send("{grn}skill-name: '{yel}%s{/yel}'\r\n", prof.name.c_str());
-					player->send("{grn}skill-description: '{yel}%s{/yel}'\r\n", prof.description.c_str());
-					player->send("{grn}minium-proficiency: {yel}%d{/yel}\r\n", prof.minimum_proficiency);
-					return;
-				}
+		FOREACH_SKILLSET_AS(prof){
+			if(prof.implemented && ICMP(prof.name.c_str(),vec_args[0])){
+				player->send("{grn}skill-name: '{yel}%s{/yel}'\r\n", prof.name.c_str());
+				player->send("{grn}skill-description: '{yel}%s{/yel}'\r\n", prof.description.c_str());
+				player->send("{grn}minium-proficiency: {yel}%d{/yel}\r\n", prof.minimum_proficiency);
+				return;
 			}
 		}
 	}
 }
 ACMD(do_allow_skill){
+	ADMIN_REJECT();
 	DO_HELP("allow_skill");
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() < 2){
@@ -46,7 +47,7 @@ ACMD(do_allow_skill){
 	player->send("Setting skill...");
 	mods::skills::set_player_can_override(found->second,{s});
 	player->sendln("done");
-
+	ADMIN_DONE();
 }
 namespace mods::skills {
 	constexpr static const char* DB_PREFIX = "skills";
@@ -55,10 +56,8 @@ namespace mods::skills {
 
 	void refresh_skill_name_list() {
 		skill_name_list.clear();
-		for(auto & skillset : mods::skills::proficiencies::list) {
-			for(auto & prof : std::get<1>(skillset)){
-				skill_name_list.emplace_back(prof.name);
-			}
+		FOREACH_SKILLSET_AS(prof){
+			skill_name_list.emplace_back(prof.name);
 		}
 	}
 
@@ -68,10 +67,8 @@ namespace mods::skills {
 	}
 	void init_player_levels(std::string_view player_name){
 		strmap_t m;
-		for(auto & skillset : mods::skills::proficiencies::list) {
-			for(auto & prof : std::get<1>(skillset)){
-				m[prof.name.str()] = "0";
-			}
+		FOREACH_SKILLSET_AS(prof){
+			m[prof.name.str()] = "0";
 		}
 		put_player_map(player_name.data(),DB_PREFIX,m);
 	}
@@ -188,11 +185,9 @@ namespace mods::skills {
 	}
 
 	void refresh_implemented_skills(){
-		for(auto & skillset : mods::skills::proficiencies::list) {
-			for(auto & prof : std::get<1>(skillset)){
-				if(prof.implemented){
-					implemented_skills.emplace_back(prof.e_name);
-				}
+		FOREACH_SKILLSET_AS(prof){
+			if(prof.implemented){
+				implemented_skills.emplace_back(prof.e_name);
 			}
 		}
 	}
@@ -299,13 +294,11 @@ namespace mods::skills {
 	/** called by game initialization sequence */
 	void init(){
 		refresh_minimum_proficiencies();
-		for(auto & skillset : mods::skills::proficiencies::list) {
-			for(auto & prof : std::get<1>(skillset)){
-				mappings[prof.name.c_str()] = prof.e_name;
-				to_string_mappings[prof.e_name] = prof.name.c_str();
-				e_name_to_proficiency[prof.e_name] = prof;
-				skill_name_list.emplace_back(prof.name.str());
-			}
+		FOREACH_SKILLSET_AS(prof){
+			mappings[prof.name.c_str()] = prof.e_name;
+			to_string_mappings[prof.e_name] = prof.name.c_str();
+			e_name_to_proficiency[prof.e_name] = prof;
+			skill_name_list.emplace_back(prof.name.str());
 		}
 		refresh_implemented_skills();
 		mods::interpreter::add_command("skills", POS_RESTING, do_skills, 0,0);
