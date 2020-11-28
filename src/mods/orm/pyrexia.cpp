@@ -65,6 +65,36 @@ namespace mods::orm {
 		loaded = 1;
 		return 0;
 	}
+	std::pair<bool,std::string> pyrexia::drench_object_in_gasoline(uuid_t npc){
+		return {0,"stub"};
+	}
+	std::pair<bool,std::string> pyrexia::drench_room_in_gasoline(uuid_t npc){
+		return {0,"stub"};
+	}
+	std::pair<bool,std::string> pyrexia::convert_to_fire_nade(obj_ptr_t& object){
+		return {0,"stub"};
+	}
+	std::pair<bool,std::string> pyrexia::attach_incendiary_grenade_launcher(obj_ptr_t& weapon){
+		return {0,"stub"};
+	}
+	std::pair<bool,std::string> pyrexia::attach_flamethrower(obj_ptr_t& weapon){
+		return {0,"stub"};
+	}
+	std::pair<bool,std::string> pyrexia::create_wall_of_fire(uint8_t direction){
+		return {0,"stub"};
+	}
+	std::pair<bool,std::string> pyrexia::seal_off_room_with_wall_of_fire(room_rnum room_id){
+		return {0,"stub"};
+	}
+	std::pair<bool,std::string> pyrexia::summon_napalm_strike(room_rnum room_id){
+		return {0,"stub"};
+	}
+	std::pair<bool,std::string> pyrexia::solar_assistance(room_rnum room_id){
+		return {0,"stub"};
+	}
+	std::pair<bool,std::string> pyrexia::force_weapon_overheat(room_rnum room_id){
+		return {0,"stub"};
+	}
 	void pyrexia::init(){
 		id = 0;
 		pyrexia_id = 0;

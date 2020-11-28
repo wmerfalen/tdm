@@ -60,6 +60,9 @@ namespace mods::classes {
 	void forge::replenish(){
 		static uint8_t call_count = 0;
 		++call_count;
+#ifdef __MENTOC_SEND_FORGE_PLAYER_REPLENISH_DEBUG_MESSAGE__
+		m_player->sendln("Replenish");
+#endif
 	}
 	std::shared_ptr<forge> create_forge(player_ptr_t &in_player){
 		return std::move(std::make_shared<forge>(in_player));

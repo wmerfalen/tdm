@@ -44,6 +44,7 @@ namespace mods::classes {
 		~pyrexia() = default;
 
 		player_ptr_t 	player();
+		void replenish();
 
 		void set_player(player_ptr_t);
 

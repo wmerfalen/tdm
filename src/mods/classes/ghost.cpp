@@ -18,7 +18,6 @@ namespace mods::classes {
 	void ghost_advance_level(player_ptr_t& player){
 		/** TODO fill me in */
 		player->send("[stub] file:%s line:%d\r\n",__FILE__,__LINE__);
-
 	}
 	void ghost::init(){
 		m_claymore_count = 0;
@@ -203,6 +202,9 @@ namespace mods::classes {
 			m_player->sendln("A ghost class claymore mine has been regenerated.");
 			++m_claymore_count;
 		}
+#ifdef __MENTOC_SEND_GHOST_PLAYER_REPLENISH_DEBUG_MESSAGE__
+		m_player->sendln("Replenish");
+#endif
 	}
 	uint8_t ghost::claymore_count() const{
 		return m_claymore_count;

@@ -333,11 +333,8 @@ namespace mods::chargen {
 				break;
 			case SYNDROME:
 				{
-					/*
-					 * TODO
-					 */
-					//mods::orm::syndrome syndrome_orm;
-					//syndrome_orm.initialize_row(player);
+					mods::orm::syndrome syndrome_orm;
+					syndrome_orm.initialize_row(player);
 				}
 				break;
 			default:

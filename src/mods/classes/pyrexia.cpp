@@ -8,6 +8,13 @@ namespace mods::orm::inventory {
 	extern int16_t flush_player(player_ptr_t & player);
 };
 namespace mods::classes {
+	void pyrexia::replenish(){
+		static uint8_t call_count = 0;
+		++call_count;
+#ifdef __MENTOC_SEND_PYREXIA_PLAYER_REPLENISH_DEBUG_MESSAGE__
+		m_player->sendln("Replenish");
+#endif
+	}
 	/** KEEP ME */
 	void pyrexia_advance_level(player_ptr_t& player){
 		/** TODO fill me in */

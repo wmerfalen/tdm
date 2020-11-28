@@ -58,6 +58,9 @@ namespace mods::classes {
 		}
 };
 ACMD(do_teep){
+	player->sendln("Command not implemented.");
+	return;
+#if 0
 	PLAYER_CAN("striker.teep");
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() < 1){
@@ -71,4 +74,5 @@ ACMD(do_teep){
 	}
 	auto msg = std::get<1>(player->striker()->teep(s.second));
 	player->sendln(msg);
+#endif
 }

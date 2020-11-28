@@ -1501,8 +1501,18 @@ namespace mods {
 		void player::set_ghost(std::shared_ptr<mods::classes::ghost> g){ m_ghost = g; }
 		std::shared_ptr<mods::classes::pyrexia>& player::pyrexia(){ return m_pyrexia; }
 		void player::set_pyrexia(std::shared_ptr<mods::classes::pyrexia> g){ m_pyrexia = g; }
-		std::shared_ptr<mods::classes::striker>& player::striker(){ return m_striker; }
-		void player::set_striker(std::shared_ptr<mods::classes::striker> g){ m_striker = g; }
+		std::shared_ptr<mods::classes::forge>& player::forge(){
+			return m_forge;
+		}
+		void player::set_forge(std::shared_ptr<mods::classes::forge> f){
+			m_forge = f;
+		}
+		std::shared_ptr<mods::classes::syndrome>& player::syndrome(){
+			return m_syndrome;
+		}
+		void player::set_syndrome(std::shared_ptr<mods::classes::syndrome> s){
+			m_syndrome = s;
+		}
 		char_data::visibility_t& player::visibility(){
 			return m_char_data->visibility;
 		}

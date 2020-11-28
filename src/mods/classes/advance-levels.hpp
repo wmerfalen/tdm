@@ -5,5 +5,7 @@
 namespace mods::classes {
 	extern void ghost_advance_level(player_ptr_t& player);
 	extern void pyrexia_advance_level(player_ptr_t& player);
+	extern void forge_advance_level(player_ptr_t& player);
+	extern void syndrome_advance_level(player_ptr_t& player);
 };
 #endif

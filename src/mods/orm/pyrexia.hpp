@@ -18,6 +18,9 @@ namespace mods::orm {
 		std::pair<bool,std::string> attach_flamethrower(obj_ptr_t& weapon);
 		std::pair<bool,std::string> create_wall_of_fire(uint8_t direction);
 		std::pair<bool,std::string> seal_off_room_with_wall_of_fire(room_rnum room_id);
+		std::pair<bool,std::string> summon_napalm_strike(room_rnum room_id);
+		std::pair<bool,std::string> solar_assistance(room_rnum room_id);
+		std::pair<bool,std::string> force_weapon_overheat(room_rnum room_id);
 
 		std::string table_name(){ return "class_pyrexia"; }
 		std::string column_prefix(){ return "pyrexia_"; }

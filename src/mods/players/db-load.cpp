@@ -129,6 +129,18 @@ namespace mods::players::db_load {
 				player->set_ghost(mods::classes::create_ghost(player));
 				mods::replenish::register_ghost(player->uuid());
 				break;
+			case FORGE:
+				player->set_forge(mods::classes::create_forge(player));
+				mods::replenish::register_forge(player->uuid());
+				break;
+			case PYREXIA:
+				player->set_pyrexia(mods::classes::create_pyrexia(player));
+				mods::replenish::register_pyrexia(player->uuid());
+				break;
+			case SYNDROME:
+				player->set_syndrome(mods::classes::create_syndrome(player));
+				mods::replenish::register_syndrome(player->uuid());
+				break;
 			default:
 				report(p_class,"Unable to create class. unknown class");
 				break;

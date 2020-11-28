@@ -68,7 +68,6 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/class-sniper mods/classes/sniper \
 					 mods/orm/ghost mods/classes/ghost \
 					 mods/orm/striker mods/classes/striker \
-					 mods/orm/pyrexia mods/classes/pyrexia \
 					 mods/classes/base mods/classes/super-user-fiddler \
 					 mods/weapons/sniper-rifle-psg1 mods/weapons/sniper-rifle-l96aw \
 					 mods/orm/quotes act.builder mods/orm/base mods/yaml \
@@ -91,7 +90,9 @@ buildobj = act.informative act.item act.medic \
 					 mods/target-practice mods/target-practice-db mods/demolitions \
 					 mods/replenish mods/players/destroy-player mods/rate-limiting \
 					 mods/levels mods/orm/player-base-ability \
-					 mods/orm/forge mods/classes/forge
+					 mods/orm/forge mods/classes/forge \
+					 mods/orm/pyrexia mods/classes/pyrexia \
+					 mods/orm/syndrome mods/classes/syndrome
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

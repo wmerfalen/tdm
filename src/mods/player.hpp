@@ -13,6 +13,8 @@ namespace mods {
 		struct ghost;
 		struct pyrexia;
 		struct striker;
+		struct forge;
+		struct syndrome;
 
 		/** old crappy classes */
 		struct marine;
@@ -619,8 +621,10 @@ namespace mods {
 		void set_ghost(std::shared_ptr<mods::classes::ghost> g);
 		std::shared_ptr<mods::classes::pyrexia>& pyrexia();
 		void set_pyrexia(std::shared_ptr<mods::classes::pyrexia> g);
-		std::shared_ptr<mods::classes::striker>& striker();
-		void set_striker(std::shared_ptr<mods::classes::striker> g);
+		std::shared_ptr<mods::classes::forge>& forge();
+		void set_forge(std::shared_ptr<mods::classes::forge> g);
+		std::shared_ptr<mods::classes::syndrome>& syndrome();
+		void set_syndrome(std::shared_ptr<mods::classes::syndrome> g);
 
 		void start_histfile();
 		void write_histfile(std::string_view);
@@ -770,7 +774,9 @@ namespace mods {
 		weapon_type_t m_weapon_flags;
 		std::shared_ptr<mods::classes::ghost> m_ghost;
 		std::shared_ptr<mods::classes::pyrexia> m_pyrexia;
-		std::shared_ptr<mods::classes::striker> m_striker;
+		std::shared_ptr<mods::classes::forge> m_forge;
+		std::shared_ptr<mods::classes::syndrome> m_syndrome;
+		//std::shared_ptr<mods::classes::striker> m_striker;
 		FILE* m_histfile_fp;
 		bool m_histfile_on;
 		uint32_t m_histfile_index;

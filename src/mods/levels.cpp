@@ -244,6 +244,7 @@ namespace mods::levels {
 						GHOST_CLASS_TRIADS_ARMOR()
 					};
 					break;
+#if 0
 				case MARKSMAN:
 					m_triads = {
 						MARKSMAN_CLASS_TRIADS_MELEE(),
@@ -298,6 +299,7 @@ namespace mods::levels {
 						MALADY_CLASS_TRIADS_ARMOR()
 					};
 					break;
+#endif
 				case PYREXIA:
 					m_triads = {
 						PYREXIA_CLASS_TRIADS_MELEE(),
@@ -307,6 +309,7 @@ namespace mods::levels {
 						PYREXIA_CLASS_TRIADS_ARMOR()
 					};
 					break;
+#if 0
 				case DEALER:
 					m_triads = {
 						DEALER_CLASS_TRIADS_MELEE(),
@@ -316,6 +319,7 @@ namespace mods::levels {
 						DEALER_CLASS_TRIADS_ARMOR()
 					};
 					break;
+#endif
 				case FORGE:
 					m_triads = {
 						FORGE_CLASS_TRIADS_MELEE(),
@@ -334,6 +338,7 @@ namespace mods::levels {
 						SYNDROME_CLASS_TRIADS_ARMOR()
 					};
 					break;
+#if 0
 				case MACHINIST:
 					m_triads = {
 						MACHINIST_CLASS_TRIADS_MELEE(),
@@ -343,6 +348,7 @@ namespace mods::levels {
 						MACHINIST_CLASS_TRIADS_ARMOR()
 					};
 					break;
+#endif
 				default:
 					std::cerr << red_str("[mods::player] UNKNOWN CLASS TYPE. Setting triads to 1!\n");
 					m_triads = {
@@ -503,22 +509,22 @@ namespace mods::levels {
 		auto triads = player->triads();
 		auto s = calculate_based_on_triads(triads,player->level());
 		report_advances(s);
-		player->hp() += s[STAT_HP];
-		player->strength() += s[STAT_STRENGTH];
-		player->constitution() += s[STAT_CONSTITUTION];
-		player->dexterity() += s[STAT_DEXTERITY];
-		player->intelligence() += s[STAT_INTELLIGENCE];
-		player->wisdom() += s[STAT_WISDOM];
-		player->electronics() += s[STAT_ELECTRONICS];
-		player->chemistry() += s[STAT_CHEMISTRY];
-		player->strategy() += s[STAT_STRATEGY];
-		player->marksmanship() += s[STAT_MARKSMANSHIP];
-		player->sniping() += s[STAT_SNIPING];
-		player->weapon_handling() += s[STAT_WEAPON_HANDLING];
-		player->demolitions() += s[STAT_DEMOLITIONS];
-		player->real_armor() += s[STAT_ARMOR];
-		player->medical() += s[STAT_MEDICAL];
-		player->charisma() += s[STAT_CHARISMA];
+		player->hp() = s[STAT_HP];
+		player->strength() = s[STAT_STRENGTH];
+		player->constitution() = s[STAT_CONSTITUTION];
+		player->dexterity() = s[STAT_DEXTERITY];
+		player->intelligence() = s[STAT_INTELLIGENCE];
+		player->wisdom() = s[STAT_WISDOM];
+		player->electronics() = s[STAT_ELECTRONICS];
+		player->chemistry() = s[STAT_CHEMISTRY];
+		player->strategy() = s[STAT_STRATEGY];
+		player->marksmanship() = s[STAT_MARKSMANSHIP];
+		player->sniping() = s[STAT_SNIPING];
+		player->weapon_handling() = s[STAT_WEAPON_HANDLING];
+		player->demolitions() = s[STAT_DEMOLITIONS];
+		player->real_armor() = s[STAT_ARMOR];
+		player->medical() = s[STAT_MEDICAL];
+		player->charisma() = s[STAT_CHARISMA];
 	}
 
 	
@@ -536,6 +542,12 @@ namespace mods::levels {
 				break;
 			case PYREXIA:
 				mods::classes::pyrexia_advance_level(player);
+				break;
+			case FORGE:
+				mods::classes::forge_advance_level(player);
+				break;
+			case SYNDROME:
+				mods::classes::syndrome_advance_level(player);
 				break;
 			default:
 				std::cerr << red_str("[mods::levels::advance_level] unsupported class type: ") << player->get_class_string().str() << "\n";

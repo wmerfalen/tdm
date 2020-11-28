@@ -8,3 +8,6 @@
 #include "support.hpp"
 #include "ghost.hpp"
 #include "striker.hpp"
+#include "pyrexia.hpp"
+#include "forge.hpp"
+#include "syndrome.hpp"
