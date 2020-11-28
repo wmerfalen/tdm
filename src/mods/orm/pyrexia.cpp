@@ -23,6 +23,17 @@ namespace mods::orm {
 	strmap_t pyrexia::export_class() {
 		strmap_t values;
 		values["pyrexia_player_id"] = std::to_string(pyrexia_player_id);
+		values["pyrexia_fire_nade_level"] = std::to_string(pyrexia_fire_nade_level);
+		values["pyrexia_drench_object_in_gasoline_level"] = std::to_string(pyrexia_drench_object_in_gasoline_level);
+		values["pyrexia_drench_room_in_gasoline_level"] = std::to_string(pyrexia_drench_room_in_gasoline_level);
+		values["pyrexia_convert_to_fire_nade_level"] = std::to_string(pyrexia_convert_to_fire_nade_level);
+		values["pyrexia_attach_incendiary_grenade_launcher_level"] = std::to_string(pyrexia_attach_incendiary_grenade_launcher_level);
+		values["pyrexia_attach_flamethrower_level"] = std::to_string(pyrexia_attach_flamethrower_level);
+		values["pyrexia_create_wall_of_fire_level"] = std::to_string(pyrexia_create_wall_of_fire_level);
+		values["pyrexia_seal_off_room_with_wall_of_fire_level"] = std::to_string(pyrexia_seal_off_room_with_wall_of_fire_level);
+		values["pyrexia_summon_napalm_strike_level"] = std::to_string(pyrexia_summon_napalm_strike_level);
+		values["pyrexia_solar_assistance_level"] = std::to_string(pyrexia_solar_assistance_level);
+		values["pyrexia_force_weapon_overheat_level"] = std::to_string(pyrexia_force_weapon_overheat_level);
 		return std::move(values);
 	}
 	int16_t pyrexia::load_by_player(uint64_t player_id){
@@ -38,6 +49,17 @@ namespace mods::orm {
 		id = row["pyrexia_id"].as<uint64_t>();
 		pyrexia_id = row["pyrexia_id"].as<uint64_t>();
 		pyrexia_player_id = row["pyrexia_player_id"].as<uint64_t>();
+		pyrexia_fire_nade_level = (skill_familiarity_t)row["pyrexia_fire_nade_level"].as<int>();
+		pyrexia_drench_object_in_gasoline_level = (skill_familiarity_t)row["pyrexia_drench_object_in_gasoline_level"].as<int>();
+		pyrexia_drench_room_in_gasoline_level = (skill_familiarity_t)row["pyrexia_drench_room_in_gasoline_level"].as<int>();
+		pyrexia_convert_to_fire_nade_level = (skill_familiarity_t)row["pyrexia_convert_to_fire_nade_level"].as<int>();
+		pyrexia_attach_incendiary_grenade_launcher_level = (skill_familiarity_t)row["pyrexia_attach_incendiary_grenade_launcher_level"].as<int>();
+		pyrexia_attach_flamethrower_level = (skill_familiarity_t)row["pyrexia_attach_flamethrower_level"].as<int>();
+		pyrexia_create_wall_of_fire_level = (skill_familiarity_t)row["pyrexia_create_wall_of_fire_level"].as<int>();
+		pyrexia_seal_off_room_with_wall_of_fire_level = (skill_familiarity_t)row["pyrexia_seal_off_room_with_wall_of_fire_level"].as<int>();
+		pyrexia_summon_napalm_strike_level = (skill_familiarity_t)row["pyrexia_summon_napalm_strike_level"].as<int>();
+		pyrexia_solar_assistance_level = (skill_familiarity_t)row["pyrexia_solar_assistance_level"].as<int>();
+		pyrexia_force_weapon_overheat_level = (skill_familiarity_t)row["pyrexia_force_weapon_overheat_level"].as<int>();
 		created_at = mods::util::pg_timestamp_to_long(row["created_at"].c_str());
 		updated_at = mods::util::pg_timestamp_to_long(row["updated_at"].c_str());
 		loaded = 1;

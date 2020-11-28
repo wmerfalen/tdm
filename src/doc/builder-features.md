@@ -211,9 +211,7 @@
 	- implemented generic `advance_level` functionality for classes that don't have an implementation
 		- see:
 		```
-			void generic_advance_hp(player_ptr_t& player);
-			void generic_advance_mana(player_ptr_t& player);
-			void generic_advance_move(player_ptr_t& player);
+			void generic_advance(player_ptr_t& player);
 		```
 	-  creating the extern 
 		- create the following extern in mods/classes/advance-levels.hpp

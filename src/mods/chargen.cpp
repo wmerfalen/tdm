@@ -6,6 +6,8 @@
 #include <string>
 #include "orm/player-base-ability.hpp"
 #include "players/db-load.hpp"
+#include "levels.hpp"
+#include "orm/enabled-classes.hpp"
 namespace db {
 	extern int16_t delete_char(player_ptr_t& player);
 };
@@ -21,12 +23,19 @@ namespace mods::chargen {
 			classes.clear();
 			classes.emplace_back(
 				"GHOST: {blu}The ghost class is a stealth operator that can deploy full stealth camoflauge. "
-				"This class is a sniper sub-class which means it can take out enemies from long distances.{/blu}"
+			);
+			/*
+			classes.emplace_back(
+				"MARKSMAN: {blu}The Marksman class is a weapons expert.{/blu}"
 			);
 			classes.emplace_back(
-				"MARKSMAN: {blu}The Marksman class is a weapons export. This is a sniper sub-class which means it can "
-				"snipe from far distances and is also very well-versed in assault rifles.{/blu}"
+				"MALADY: {blu}Poison and chemical warfare specialist.{/blu}"
 			);
+			*/
+			classes.emplace_back(
+				"PYREXIA: {blu}Incendiary weapons specialist.{/blu}"
+			);
+			/*
 			classes.emplace_back(
 				"BANDIT: {blu}This is a thief class.{/blu}"
 			);
@@ -40,45 +49,82 @@ namespace mods::chargen {
 				"OBSTRUCTOR: {blu}Submissions grappling expert.{/blu}"
 			);
 			classes.emplace_back(
-				"MALADY: {blu}Poison and chemical warfare specialist.{/blu}"
-			);
-			classes.emplace_back(
-				"PYREXIA: {blu}Incendiary weapons specialist.{/blu}"
-			);
-			classes.emplace_back(
 				"DEALER: {blu}Chemical performance enhancement specialist.{/blu}"
 			);
+			*/
 			classes.emplace_back(
 				"FORGE: {blu}Master weapons crafting specialist.{/blu}"
 			);
 			classes.emplace_back(
-				"SYNDROME: {blu}Autonomous drone and recon expert.{/blu}"
-			);
-			classes.emplace_back(
-				"MACHINIST: {blu}Technology expert.{/blu}"
+				"SYNDROME: {blu}Technology expert.{/blu}"
 			);
 		}
+	std::string chargen_triads_for(player_class_t pclass){
+		std::array<uint8_t,5> triads = mods::levels::get_triads_by_class(pclass);
+		std::array<char,1024> buffer = {0};
+		snprintf(&buffer[0],1024,CHARGEN_TRIADS_FORMAT().c_str(),triads[MELEE],triads[WEAPONS],triads[INTEL],triads[SPEED],triads[ARMOR]);
+		return std::string(&buffer[0]);
+	}
 	void show_blind_stats(player_ptr_t& player){
 		auto data = player->get_ada_data();
 		auto i = mods::util::stoi(data["current-class"]).value_or(0);
 		auto str_class = mods::util::extract_until(classes[i],':');
-		if(str_class.compare("GHOST") == 0){player->sendln(CHARGEN_BLIND_GHOST_CLASS_TRIADS());}
-		if(str_class.compare("MARKSMAN") == 0){player->sendln(CHARGEN_BLIND_MARKSMAN_CLASS_TRIADS());}
-		if(str_class.compare("BANDIT") == 0){player->sendln(CHARGEN_BLIND_BANDIT_CLASS_TRIADS());}
-		if(str_class.compare("BUTCHER") == 0){player->sendln(CHARGEN_BLIND_BUTCHER_CLASS_TRIADS());}
-		if(str_class.compare("STRIKER") == 0){player->sendln(CHARGEN_BLIND_STRIKER_CLASS_TRIADS());}
-		if(str_class.compare("OBSTRUCTOR") == 0){player->sendln(CHARGEN_BLIND_OBSTRUCTOR_CLASS_TRIADS());}
-		if(str_class.compare("MALADY") == 0){player->sendln(CHARGEN_BLIND_MALADY_CLASS_TRIADS());}
-		if(str_class.compare("PYREXIA") == 0){player->sendln(CHARGEN_BLIND_PYREXIA_CLASS_TRIADS());}
-		if(str_class.compare("DEALER") == 0){player->sendln(CHARGEN_BLIND_DEALER_CLASS_TRIADS());}
-		if(str_class.compare("FORGE") == 0){player->sendln(CHARGEN_BLIND_FORGE_CLASS_TRIADS());}
-		if(str_class.compare("SYNDROME") == 0){player->sendln(CHARGEN_BLIND_SYNDROME_CLASS_TRIADS());}
-		if(str_class.compare("MACHINIST") == 0){player->sendln(CHARGEN_BLIND_MACHINIST_CLASS_TRIADS());}
+		if(str_class.compare("GHOST") == 0){
+			player->sendln(chargen_triads_for(GHOST)); }
+		/*
+		if(str_class.compare("MARKSMAN") == 0){
+			player->sendln(chargen_triads_for(MARKSMAN));
+		}
+		if(str_class.compare("BANDIT") == 0){
+			player->sendln(chargen_triads_for(BANDIT));
+
+		}
+		if(str_class.compare("BUTCHER") == 0){
+			player->sendln(chargen_triads_for(BUTCHER));
+
+		}
+		if(str_class.compare("STRIKER") == 0){
+			player->sendln(chargen_triads_for(STRIKER));
+
+		}
+		if(str_class.compare("OBSTRUCTOR") == 0){
+			player->sendln(chargen_triads_for(OBSTRUCTOR));
+
+		}
+		if(str_class.compare("MALADY") == 0){
+			player->sendln(chargen_triads_for(MALADY));
+
+		}
+		*/
+		if(str_class.compare("PYREXIA") == 0){
+			player->sendln(chargen_triads_for(PYREXIA));
+
+		}
+		/*
+		if(str_class.compare("DEALER") == 0){
+			player->sendln(chargen_triads_for(DEALER));
+
+		}
+		*/
+		if(str_class.compare("FORGE") == 0){
+			player->sendln(chargen_triads_for(FORGE));
+
+		}
+		if(str_class.compare("SYNDROME") == 0){
+			player->sendln(chargen_triads_for(SYNDROME));
+
+		}
+		/*
+		if(str_class.compare("MACHINIST") == 0){
+			player->sendln(chargen_triads_for(MACHINIST));
+
+		}
+		*/
 		player->send("Press enter to go back to the class list.");
 	}
 
 	int create_char_from_registration(player_ptr_t& p,std::string argument){
-		player_class_t pclass = CLASS_GHOST;//FIXME parse_class(argument);
+		player_class_t pclass = GHOST;//FIXME parse_class(argument);
 		p->set_class(pclass);
 		std::tuple<bool,std::string> make_char_status;
 		make_char_status = mods::chargen::make_char(p,pclass);
@@ -183,18 +229,24 @@ namespace mods::chargen {
 	}
 	void show_triads(player_ptr_t& player, player_class_t p_class){
 		switch(p_class){
-			case player_class_t::CLASS_GHOST:player->sendln(CHARGEN_BLIND_GHOST_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_MARKSMAN:player->sendln(CHARGEN_BLIND_MARKSMAN_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_BANDIT:player->sendln(CHARGEN_BLIND_BANDIT_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_BUTCHER:player->sendln(CHARGEN_BLIND_BUTCHER_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_STRIKER:player->sendln(CHARGEN_BLIND_STRIKER_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_OBSTRUCTOR:player->sendln(CHARGEN_BLIND_OBSTRUCTOR_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_MALADY:player->sendln(CHARGEN_BLIND_MALADY_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_PYREXIA:player->sendln(CHARGEN_BLIND_PYREXIA_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_DEALER:player->sendln(CHARGEN_BLIND_DEALER_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_FORGE:player->sendln(CHARGEN_BLIND_FORGE_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_SYNDROME:player->sendln(CHARGEN_BLIND_SYNDROME_CLASS_TRIADS()); break;
-		 	case player_class_t::CLASS_MACHINIST:player->sendln(CHARGEN_BLIND_MACHINIST_CLASS_TRIADS()); break;
+			case player_class_t::GHOST:				player->sendln(chargen_triads_for(GHOST));break;
+																				/*
+			case player_class_t::MARKSMAN:				player->sendln(chargen_triads_for(MARKSMAN));break;
+			case player_class_t::BANDIT:				player->sendln(chargen_triads_for(BANDIT));break;
+			case player_class_t::BUTCHER:				player->sendln(chargen_triads_for(BUTCHER));break;
+			case player_class_t::STRIKER:				player->sendln(chargen_triads_for(STRIKER));break;
+			case player_class_t::OBSTRUCTOR:				player->sendln(chargen_triads_for(OBSTRUCTOR));break;
+			case player_class_t::MALADY:				player->sendln(chargen_triads_for(MALADY));break;
+			*/
+			case player_class_t::PYREXIA:				player->sendln(chargen_triads_for(PYREXIA));break;
+																					/*
+			case player_class_t::DEALER:				player->sendln(chargen_triads_for(DEALER));break;
+			*/
+			case player_class_t::FORGE:				player->sendln(chargen_triads_for(FORGE));break;
+			case player_class_t::SYNDROME:				player->sendln(chargen_triads_for(SYNDROME));break;
+																						/*
+			case player_class_t::MACHINIST:				player->sendln(chargen_triads_for(MACHINIST));break;
+			*/
 			default:
 				player->sendln("No stats page for the class you picked. Something has gone wrong...");
 				break;
@@ -203,20 +255,26 @@ namespace mods::chargen {
 	}
 	std::string get_class_description(player_class_t p_class){
 		switch(p_class){
-			case player_class_t::CLASS_GHOST: return classes[0];
-		 	case player_class_t::CLASS_MARKSMAN: return classes[1];
-		 	case player_class_t::CLASS_BANDIT: return classes[2];
-		 	case player_class_t::CLASS_BUTCHER: return classes[3];
-		 	case player_class_t::CLASS_STRIKER: return classes[4];
-		 	case player_class_t::CLASS_OBSTRUCTOR: return classes[5];
-		 	case player_class_t::CLASS_MALADY: return classes[6];
-		 	case player_class_t::CLASS_PYREXIA: return classes[7];
-		 	case player_class_t::CLASS_DEALER: return classes[8];
-		 	case player_class_t::CLASS_FORGE: return classes[9];
-		 	case player_class_t::CLASS_SYNDROME: return classes[10];
-		 	case player_class_t::CLASS_MACHINIST: return classes[11];
+			case player_class_t::GHOST: return classes[0];
+																	/*
+		 	case player_class_t::MARKSMAN: return classes[1];
+		 	case player_class_t::BANDIT: return classes[2];
+		 	case player_class_t::BUTCHER: return classes[3];
+		 	case player_class_t::STRIKER: return classes[4];
+		 	case player_class_t::OBSTRUCTOR: return classes[5];
+		 	case player_class_t::MALADY: return classes[6];
+			*/
+		 	case player_class_t::PYREXIA: return classes[7];
+																		/*
+		 	case player_class_t::DEALER: return classes[8];
+			*/
+		 	case player_class_t::FORGE: return classes[9];
+		 	case player_class_t::SYNDROME: return classes[10];
+																		 /*
+		 	case player_class_t::MACHINIST: return classes[11];
+			*/
 			default:
-			case CLASS_UNDEFINED: return "Unknown class selected.";
+			case player_class_t::CLASS_UNDEFINED: return "Unknown class selected.";
 		}
 	}
 
@@ -254,6 +312,38 @@ namespace mods::chargen {
 		}
 		mods::orm::player_base_ability pba;
 		pba.initialize_row(player);
+		switch(class_type){
+			case GHOST:
+				{
+					mods::orm::ghost ghost_orm;
+					ghost_orm.initialize_row(player);
+				}
+				break;
+			case PYREXIA:
+				{
+					mods::orm::pyrexia pyrexia_orm;
+					pyrexia_orm.initialize_row(player);
+				}
+				break;
+			case FORGE:
+				{
+					mods::orm::forge forge_orm;
+					forge_orm.initialize_row(player);
+				}
+				break;
+			case SYNDROME:
+				{
+					/*
+					 * TODO
+					 */
+					//mods::orm::syndrome syndrome_orm;
+					//syndrome_orm.initialize_row(player);
+				}
+				break;
+			default:
+				break;
+		}
+
 		return {1,"success"};
 	}
 	void show_finalized_chargen_screen(player_ptr_t p){

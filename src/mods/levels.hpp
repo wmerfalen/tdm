@@ -4,6 +4,13 @@
 #include "../globals.hpp"
 #include "orm/integral-object.hpp"
 
+enum triad : uint8_t {
+	MELEE = 0,
+	WEAPONS,
+	INTEL,
+	SPEED,
+	ARMOR
+};
 namespace mods::levels {
 	static constexpr std::array<player_class_t,2> implemented_classes = {
 		GHOST,

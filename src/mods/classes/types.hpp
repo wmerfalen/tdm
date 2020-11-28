@@ -15,6 +15,8 @@ namespace mods::classes {
 		GHOST,
 		PYREXIA,
 		STRIKER,
+		FORGE,
+		SYNDROME,
 		UNDEFINED
 	};
 	static inline std::string to_string(mods::classes::types t){

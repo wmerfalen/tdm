@@ -502,19 +502,7 @@ namespace mods::values {
 		"PRIMARY_CHOICE_SCREEN_UMP45_DESCRIPTION",
 		"PRIMARY_CHOICE_SCREEN_MK46_DESCRIPTION",
 		"PRIMARY_CHOICE_SCREEN_HK21_DESCRIPTION",
-
-		"CHARGEN_BLIND_GHOST_CLASS_TRIADS",
-	  "CHARGEN_BLIND_MARKSMAN_CLASS_TRIADS",
-	  "CHARGEN_BLIND_BANDIT_CLASS_TRIADS",
-	  "CHARGEN_BLIND_BUTCHER_CLASS_TRIADS",
-	  "CHARGEN_BLIND_STRIKER_CLASS_TRIADS",
-	  "CHARGEN_BLIND_OBSTRUCTOR_CLASS_TRIADS",
-	  "CHARGEN_BLIND_MALADY_CLASS_TRIADS",
-	  "CHARGEN_BLIND_PYREXIA_CLASS_TRIADS",
-	  "CHARGEN_BLIND_DEALER_CLASS_TRIADS",
-	  "CHARGEN_BLIND_FORGE_CLASS_TRIADS",
-	  "CHARGEN_BLIND_SYNDROME_CLASS_TRIADS",
-		"CHARGEN_BLIND_UNDEFINED_CLASS_TRIADS",
+		"CHARGEN_TRIADS_FORMAT",
 
 		"MSG_YOU_GOT_HIT_BY_REFLECTED_MUNTIONS",
 		"MSG_YOU_REFLECTED_MUNITIONS",
@@ -1082,157 +1070,68 @@ namespace mods::values {
 		CGET_DEF(uint8_t,GHOST_CLASS_TRIADS_ARMOR,3);
 
 
-			CGET_DEF(std::string,CHARGEN_BLIND_GHOST_CLASS_TRIADS,
-							"Melee: 1\r\n"
-							"Weapons: 3\r\n"
-							"Intel: 2\r\n"
-							"Speed: 1\r\n"
-							"Armor: 3\r\n"
+			CGET_DEF(std::string,CHARGEN_TRIADS_FORMAT,
+							"Melee: %d\r\n"
+							"Weapons: %d\r\n"
+							"Intel: %d\r\n"
+							"Speed: %d\r\n"
+							"Armor: %d\r\n"
 					);
-			/** TODO CHANGE THESE */
 		CGET_DEF(uint8_t,MARKSMAN_CLASS_TRIADS_MELEE,1);
 		CGET_DEF(uint8_t,MARKSMAN_CLASS_TRIADS_WEAPONS,3);
 		CGET_DEF(uint8_t,MARKSMAN_CLASS_TRIADS_INTEL,2);
 		CGET_DEF(uint8_t,MARKSMAN_CLASS_TRIADS_SPEED,2);
 		CGET_DEF(uint8_t,MARKSMAN_CLASS_TRIADS_ARMOR,2);
-			CGET_DEF(std::string,CHARGEN_BLIND_MARKSMAN_CLASS_TRIADS,
-							"Melee: 1\r\n"
-							"Weapons: 3\r\n"
-							"Intel: 2\r\n"
-							"Speed: 2\r\n"
-							"Armor: 2\r\n"
-					);
-			/** TODO CHANGE THESE */
 		CGET_DEF(uint8_t,BANDIT_CLASS_TRIADS_MELEE,2);
 		CGET_DEF(uint8_t,BANDIT_CLASS_TRIADS_WEAPONS,2);
 		CGET_DEF(uint8_t,BANDIT_CLASS_TRIADS_INTEL,3);
 		CGET_DEF(uint8_t,BANDIT_CLASS_TRIADS_SPEED,3);
 		CGET_DEF(uint8_t,BANDIT_CLASS_TRIADS_ARMOR,1);
-			CGET_DEF(std::string,CHARGEN_BLIND_BANDIT_CLASS_TRIADS,
-							"Melee: 2\r\n"
-							"Weapons: 2\r\n"
-							"Intel: 3\r\n"
-							"Speed: 3\r\n"
-							"Armor: 1\r\n"
-					);
-			/** TODO CHANGE THESE */
 		CGET_DEF(uint8_t,BUTCHER_CLASS_TRIADS_MELEE,3);
 		CGET_DEF(uint8_t,BUTCHER_CLASS_TRIADS_WEAPONS,2);
 		CGET_DEF(uint8_t,BUTCHER_CLASS_TRIADS_INTEL,2);
 		CGET_DEF(uint8_t,BUTCHER_CLASS_TRIADS_SPEED,2);
 		CGET_DEF(uint8_t,BUTCHER_CLASS_TRIADS_ARMOR,2);
-			CGET_DEF(std::string,CHARGEN_BLIND_BUTCHER_CLASS_TRIADS,
-							"Melee: 3\r\n"
-							"Weapons: 2\r\n"
-							"Intel: 2\r\n"
-							"Speed: 2\r\n"
-							"Armor: 2\r\n"
-					);
-			/** TODO CHANGE THESE */
 		CGET_DEF(uint8_t,STRIKER_CLASS_TRIADS_MELEE,3);
 		CGET_DEF(uint8_t,STRIKER_CLASS_TRIADS_WEAPONS,3);
 		CGET_DEF(uint8_t,STRIKER_CLASS_TRIADS_INTEL,1);
 		CGET_DEF(uint8_t,STRIKER_CLASS_TRIADS_SPEED,3);
 		CGET_DEF(uint8_t,STRIKER_CLASS_TRIADS_ARMOR,1);
-			CGET_DEF(std::string,CHARGEN_BLIND_STRIKER_CLASS_TRIADS,
-							"Melee: 3\r\n"
-							"Weapons: 3\r\n"
-							"Intel: 1\r\n"
-							"Speed: 3\r\n"
-							"Armor: 1\r\n"
-					);
-			/** TODO CHANGE THESE */
 		CGET_DEF(uint8_t,OBSTRUCTOR_CLASS_TRIADS_MELEE,3);
 		CGET_DEF(uint8_t,OBSTRUCTOR_CLASS_TRIADS_WEAPONS,2);
 		CGET_DEF(uint8_t,OBSTRUCTOR_CLASS_TRIADS_INTEL,2);
 		CGET_DEF(uint8_t,OBSTRUCTOR_CLASS_TRIADS_SPEED,1);
 		CGET_DEF(uint8_t,OBSTRUCTOR_CLASS_TRIADS_ARMOR,3);
-			CGET_DEF(std::string,CHARGEN_BLIND_OBSTRUCTOR_CLASS_TRIADS,
-							"Melee: 3\r\n"
-							"Weapons: 2\r\n"
-							"Intel: 2\r\n"
-							"Speed: 1\r\n"
-							"Armor: 3\r\n"
-					);
-			/** TODO CHANGE THESE */
 		CGET_DEF(uint8_t,MALADY_CLASS_TRIADS_MELEE,2);
 		CGET_DEF(uint8_t,MALADY_CLASS_TRIADS_WEAPONS,2);
 		CGET_DEF(uint8_t,MALADY_CLASS_TRIADS_INTEL,3);
 		CGET_DEF(uint8_t,MALADY_CLASS_TRIADS_SPEED,2);
 		CGET_DEF(uint8_t,MALADY_CLASS_TRIADS_ARMOR,2);
-			CGET_DEF(std::string,CHARGEN_BLIND_MALADY_CLASS_TRIADS,
-							"Melee: 2\r\n"
-							"Weapons: 2\r\n"
-							"Intel: 3\r\n"
-							"Speed: 2\r\n"
-							"Armor: 2\r\n"
-					);
-			/** TODO CHANGE THESE */
 		CGET_DEF(uint8_t,PYREXIA_CLASS_TRIADS_MELEE,1);
 		CGET_DEF(uint8_t,PYREXIA_CLASS_TRIADS_WEAPONS,3);
 		CGET_DEF(uint8_t,PYREXIA_CLASS_TRIADS_INTEL,3);
 		CGET_DEF(uint8_t,PYREXIA_CLASS_TRIADS_SPEED,3);
 		CGET_DEF(uint8_t,PYREXIA_CLASS_TRIADS_ARMOR,1);
-			CGET_DEF(std::string,CHARGEN_BLIND_PYREXIA_CLASS_TRIADS,
-							"Melee: 1\r\n"
-							"Weapons: 3\r\n"
-							"Intel: 3\r\n"
-							"Speed: 3\r\n"
-							"Armor: 1\r\n"
-					);
-			/** TODO CHANGE THESE */
 		CGET_DEF(uint8_t,DEALER_CLASS_TRIADS_MELEE,1);
 		CGET_DEF(uint8_t,DEALER_CLASS_TRIADS_WEAPONS,3);
 		CGET_DEF(uint8_t,DEALER_CLASS_TRIADS_INTEL,3);
 		CGET_DEF(uint8_t,DEALER_CLASS_TRIADS_SPEED,1);
 		CGET_DEF(uint8_t,DEALER_CLASS_TRIADS_ARMOR,3);
-			CGET_DEF(std::string,CHARGEN_BLIND_DEALER_CLASS_TRIADS,
-							"Melee: 1\r\n"
-							"Weapons: 3\r\n"
-							"Intel: 3\r\n"
-							"Speed: 1\r\n"
-							"Armor: 3\r\n"
-					);
-			/** TODO CHANGE THESE */
 		CGET_DEF(uint8_t,FORGE_CLASS_TRIADS_MELEE,2);
 		CGET_DEF(uint8_t,FORGE_CLASS_TRIADS_WEAPONS,2);
 		CGET_DEF(uint8_t,FORGE_CLASS_TRIADS_INTEL,3);
 		CGET_DEF(uint8_t,FORGE_CLASS_TRIADS_SPEED,2);
 		CGET_DEF(uint8_t,FORGE_CLASS_TRIADS_ARMOR,2);
-			CGET_DEF(std::string,CHARGEN_BLIND_FORGE_CLASS_TRIADS,
-							"Melee: 2\r\n"
-							"Weapons: 2\r\n"
-							"Intel: 3\r\n"
-							"Speed: 2\r\n"
-							"Armor: 2\r\n"
-					);
-			/** TODO CHANGE THESE */
 		CGET_DEF(uint8_t,SYNDROME_CLASS_TRIADS_MELEE,1);
 		CGET_DEF(uint8_t,SYNDROME_CLASS_TRIADS_WEAPONS,3);
 		CGET_DEF(uint8_t,SYNDROME_CLASS_TRIADS_INTEL,3);
 		CGET_DEF(uint8_t,SYNDROME_CLASS_TRIADS_SPEED,3);
 		CGET_DEF(uint8_t,SYNDROME_CLASS_TRIADS_ARMOR,1);
-			CGET_DEF(std::string,CHARGEN_BLIND_SYNDROME_CLASS_TRIADS,
-							"Melee: 1\r\n"
-							"Weapons: 3\r\n"
-							"Intel: 3\r\n"
-							"Speed: 3\r\n"
-							"Armor: 1\r\n"
-					);
-			/** TODO CHANGE THESE */
 		CGET_DEF(uint8_t,MACHINIST_CLASS_TRIADS_MELEE,2);
 		CGET_DEF(uint8_t,MACHINIST_CLASS_TRIADS_WEAPONS,2);
 		CGET_DEF(uint8_t,MACHINIST_CLASS_TRIADS_INTEL,3);
 		CGET_DEF(uint8_t,MACHINIST_CLASS_TRIADS_SPEED,1);
 		CGET_DEF(uint8_t,MACHINIST_CLASS_TRIADS_ARMOR,3);
-			CGET_DEF(std::string,CHARGEN_BLIND_MACHINIST_CLASS_TRIADS,
-							"Melee: 2\r\n"
-							"Weapons: 2\r\n"
-							"Intel: 3\r\n"
-							"Speed: 1\r\n"
-							"Armor: 3\r\n"
-					);
-		 	CGET_DEF(std::string,CHARGEN_UNDEFINED_CLASS_TRIADS,"class undefined. How'd you get here?");
 			CGET_DEF(std::string,PYREXIA_REPLENISH_MESSAGE,"A {red}FIRE NADE{/red} has been replenished to your inventory.");
 #undef CGET_DEF
 

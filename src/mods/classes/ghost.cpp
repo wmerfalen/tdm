@@ -8,6 +8,7 @@
 #include "../demolitions.hpp"
 #include "../date-time.hpp"
 #include "../weapons/damage-types.hpp"
+#include "../skills.hpp"
 
 extern void stop_fighting(char_data *ch);
 namespace mods::orm::inventory {
@@ -85,18 +86,18 @@ namespace mods::classes {
 		int stealth = 0;
 		switch(m_stealth_level) {
 			default:
-			case stealth_levels_t::GHOST_STEALTH_NONE:
+			case skill_familiarity_t::NONE:
 				m_player->sendln("It looks like you still need to train that skill");
 				return;
-			case stealth_levels_t::GHOST_STEALTH_INITIATE:
+			case skill_familiarity_t::INITIATE:
 				stealth = dice(1, 8) + 1 + (m_player->level() / 4);
 				break;
 
-			case stealth_levels_t::GHOST_STEALTH_FAMILIAR:
+			case skill_familiarity_t::FAMILIAR:
 				stealth = dice(3, 8) + 3 + (m_player->level() / 4);
 				break;
 
-			case stealth_levels_t::GHOST_STEALTH_MASTER:
+			case skill_familiarity_t::MASTER:
 				stealth = 100 + dice(3, 8);
 				break;
 		}
@@ -106,18 +107,18 @@ namespace mods::classes {
 		int stealth = 0;
 		switch(m_stealth_level) {
 			default:
-			case stealth_levels_t::GHOST_STEALTH_NONE:
+			case skill_familiarity_t::NONE:
 				m_player->sendln("It looks like you still need to train that skill");
 				return;
-			case stealth_levels_t::GHOST_STEALTH_INITIATE:
+			case skill_familiarity_t::INITIATE:
 				stealth = dice(1, 8) + 1 + (m_player->level() / 4);
 				break;
 
-			case stealth_levels_t::GHOST_STEALTH_FAMILIAR:
+			case skill_familiarity_t::FAMILIAR:
 				stealth = dice(3, 8) + 3 + (m_player->level() / 4);
 				break;
 
-			case stealth_levels_t::GHOST_STEALTH_MASTER:
+			case skill_familiarity_t::MASTER:
 				stealth = 100 + dice(3, 8);
 				break;
 		}
@@ -131,14 +132,14 @@ namespace mods::classes {
 		uint16_t duration = 0;
 		switch(m_feign_death_level){
 			default:
-			case feign_death_levels_t::GHOST_FEIGN_DEATH_NONE:
-			case feign_death_levels_t::GHOST_FEIGN_DEATH_INITIATE:
+			case skill_familiarity_t::NONE:
+			case skill_familiarity_t::INITIATE:
 				duration = GHOST_FEIGN_DEATH_INITIATE_DURATION() + dice(3,6);
 				break;
-			case feign_death_levels_t::GHOST_FEIGN_DEATH_FAMILIAR:
+			case skill_familiarity_t::FAMILIAR:
 				duration = GHOST_FEIGN_DEATH_FAMILIAR_DURATION() + dice(3,6);
 				break;
-			case feign_death_levels_t::GHOST_FEIGN_DEATH_MASTER:
+			case skill_familiarity_t::MASTER:
 				duration =  GHOST_FEIGN_DEATH_MASTER_DURATION() + dice(3,6);
 				break;
 		}
@@ -177,22 +178,22 @@ namespace mods::classes {
 		static uint8_t call_count = 0;
 		++call_count;
 		bool increment_claymore = false;
-		switch((plant_claymore_levels_t)m_plant_claymore_level){
+		switch(m_plant_claymore_level){
 			default:
-			case plant_claymore_levels_t::GHOST_PLANT_CLAYMORE_NONE:
+			case skill_familiarity_t::NONE:
 				increment_claymore = 0;
 				break;
-			case plant_claymore_levels_t::GHOST_PLANT_CLAYMORE_INITIATE:
+			case skill_familiarity_t::INITIATE:
 				if(0 == (call_count % GHOST_PLANT_CLAYMORE_INITIATE_MOD_CALL_COUNT())){
 					increment_claymore = 1;
 				}
 				break;
-			case plant_claymore_levels_t::GHOST_PLANT_CLAYMORE_FAMILIAR:
+			case skill_familiarity_t::FAMILIAR:
 				if(0 == (call_count % GHOST_PLANT_CLAYMORE_FAMILIAR_MOD_CALL_COUNT())){
 					increment_claymore = 1;
 				}
 				break;
-			case plant_claymore_levels_t::GHOST_PLANT_CLAYMORE_MASTER:
+			case skill_familiarity_t::MASTER:
 				if(0 == (call_count % GHOST_PLANT_CLAYMORE_MASTER_MOD_CALL_COUNT())){
 					increment_claymore = 1;
 				}

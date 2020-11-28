@@ -19,13 +19,6 @@ extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
 extern int immort_level_ok;
 namespace mods::levels {
 	static constexpr uint32_t EXP_MAX = 10000000;
-	enum triad : uint8_t {
-		MELEE = 0,
-		WEAPONS,
-		INTEL,
-		SPEED,
-		ARMOR
-	};
 	int level_exp(int level) {
 		if(level > LVL_IMPL || level < 0) {
 			log("SYSERR: Requesting exp for invalid level %d!", level);
@@ -412,6 +405,9 @@ namespace mods::levels {
 				constitution += level * (FIRST_TIER * triads[MELEE]);
 
 				armor += level * (THIRD_TIER * triads[MELEE]);
+
+				charisma += level * (PASSIVE_TIER * triads[INTEL]);
+				medical += level * (PASSIVE_TIER * triads[INTEL]);
 				break;
 			default:
 				std::cerr << red_str("generic_advance_hp encountered odd MELEE triad:") << triads[MELEE] << "\n";
@@ -441,6 +437,8 @@ namespace mods::levels {
 				electronics += level * (FIRST_TIER * triads[INTEL]);
 				chemistry += level * (FIRST_TIER * triads[INTEL]);
 				strategy += level * (FIRST_TIER * triads[INTEL]);
+				medical += level * (FIRST_TIER * triads[INTEL]);
+				charisma += level * (FIRST_TIER * triads[INTEL]);
 
 				wisdom += level * (SECOND_TIER * triads[INTEL]);
 
@@ -474,6 +472,8 @@ namespace mods::levels {
 				armor += level * (FIRST_TIER * triads[ARMOR]);
 
 				demolitions += level * (SPLIT_TIER_HALF * triads[WEAPONS]);
+
+				medical += level * (PASSIVE_TIER * triads[INTEL]);
 				break;
 			default:
 				std::cerr << red_str("generic_advance_hp encountered odd ARMOR triad:") << triads[ARMOR] << "\n";
@@ -552,17 +552,19 @@ namespace mods::levels {
 		for(unsigned player_level = 1; player_level <= LVL_IMMORT;++player_level){
 			for(auto & cl_type : {
 				player_class_t::GHOST,
+				/*
 				player_class_t::MARKSMAN,
 				player_class_t::BANDIT,
 				player_class_t::BUTCHER,
 				player_class_t::STRIKER,
 				player_class_t::OBSTRUCTOR,
 				player_class_t::MALADY,
+				*/
 				player_class_t::PYREXIA,
-				player_class_t::DEALER,
+				//player_class_t::DEALER,
 				player_class_t::FORGE,
-				player_class_t::SYNDROME,
-				player_class_t::MACHINIST
+				player_class_t::SYNDROME
+				//player_class_t::MACHINIST
 				}){
 				std::string player_class = mods::util::player_class_to_string(cl_type);
 				auto triads = mods::levels::get_triads_by_class(cl_type);

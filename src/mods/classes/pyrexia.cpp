@@ -45,16 +45,16 @@ namespace mods::classes {
 		pyrexia::pyrexia(){
 			m_player = nullptr;
 			m_fire_nade_charges = PYREXIA_FIRE_NADE_CHARGES_DEFAULT();
-			m_fire_nade_level = level_t::SKILL_INITIATE;
+			m_fire_nade_level = skill_familiarity_t::INITIATE;
 			switch(m_fire_nade_level){
 				default:
-				case level_t::SKILL_INITIATE:
+				case skill_familiarity_t::INITIATE:
 					m_fire_nade_charges = PYREXIA_FIRE_NADE_CHARGES_INITIATE();
 					break;
-				case level_t::SKILL_FAMILIAR:
+				case skill_familiarity_t::FAMILIAR:
 					m_fire_nade_charges = PYREXIA_FIRE_NADE_CHARGES_FAMILIAR();
 					break;
-				case level_t::SKILL_MASTER:
+				case skill_familiarity_t::MASTER:
 					m_fire_nade_charges = PYREXIA_FIRE_NADE_CHARGES_MASTER();
 					break;
 			}
@@ -66,13 +66,13 @@ namespace mods::classes {
 			int replenish_ticks = 0;
 			switch(m_fire_nade_level){
 				default:
-				case level_t::SKILL_INITIATE:
+				case skill_familiarity_t::INITIATE:
 					replenish_ticks = PYREXIA_FIRE_NADE_RECHARGE_TICKS_INITIATE();
 					break;
-				case level_t::SKILL_FAMILIAR:
+				case skill_familiarity_t::FAMILIAR:
 					replenish_ticks = PYREXIA_FIRE_NADE_RECHARGE_TICKS_FAMILIAR();
 					break;
-				case level_t::SKILL_MASTER:
+				case skill_familiarity_t::MASTER:
 					replenish_ticks = PYREXIA_FIRE_NADE_RECHARGE_TICKS_MASTER();
 					break;
 			}
@@ -93,13 +93,13 @@ namespace mods::classes {
 		std::pair<bool,std::string> pyrexia::drench_object_in_gasoline(uuid_t npc){
 			switch(m_drench_object_in_gasoline_level){
 				default:
-				case level_t::SKILL_NONE:
+				case skill_familiarity_t::NONE:
 					break;
-				case level_t::SKILL_INITIATE:
+				case skill_familiarity_t::INITIATE:
 					break;
-				case level_t::SKILL_FAMILIAR:
+				case skill_familiarity_t::FAMILIAR:
 					break;
-				case level_t::SKILL_MASTER:
+				case skill_familiarity_t::MASTER:
 					break;
 			}
 
@@ -108,13 +108,13 @@ namespace mods::classes {
 		std::pair<bool,std::string> pyrexia::drench_room_in_gasoline(uuid_t npc){
 			switch(m_drench_room_in_gasoline_level){
 				default:
-				case level_t::SKILL_NONE:
+				case skill_familiarity_t::NONE:
 					break;
-				case level_t::SKILL_INITIATE:
+				case skill_familiarity_t::INITIATE:
 					break;
-				case level_t::SKILL_FAMILIAR:
+				case skill_familiarity_t::FAMILIAR:
 					break;
-				case level_t::SKILL_MASTER:
+				case skill_familiarity_t::MASTER:
 					break;
 			}
 			return {0,""};
@@ -122,13 +122,13 @@ namespace mods::classes {
 		std::pair<bool,std::string> pyrexia::convert_to_fire_nade(obj_ptr_t& object){
 			switch(m_convert_to_fire_nade_level){
 				default:
-				case level_t::SKILL_NONE:
+				case skill_familiarity_t::NONE:
 					break;
-				case level_t::SKILL_INITIATE:
+				case skill_familiarity_t::INITIATE:
 					break;
-				case level_t::SKILL_FAMILIAR:
+				case skill_familiarity_t::FAMILIAR:
 					break;
-				case level_t::SKILL_MASTER:
+				case skill_familiarity_t::MASTER:
 					break;
 			}
 			return {0,""};
@@ -136,13 +136,13 @@ namespace mods::classes {
 		std::pair<bool,std::string> pyrexia::attach_incendiary_grenade_launcher(obj_ptr_t& weapon){
 			switch(m_attach_incendiary_grenade_launcher_level){
 				default:
-				case level_t::SKILL_NONE:
+				case skill_familiarity_t::NONE:
 					break;
-				case level_t::SKILL_INITIATE:
+				case skill_familiarity_t::INITIATE:
 					break;
-				case level_t::SKILL_FAMILIAR:
+				case skill_familiarity_t::FAMILIAR:
 					break;
-				case level_t::SKILL_MASTER:
+				case skill_familiarity_t::MASTER:
 					break;
 			}
 			return {0,""};
@@ -150,13 +150,13 @@ namespace mods::classes {
 		std::pair<bool,std::string> pyrexia::attach_flamethrower(obj_ptr_t& weapon){
 			switch(m_attach_flamethrower_level){
 				default:
-				case level_t::SKILL_NONE:
+				case skill_familiarity_t::NONE:
 					break;
-				case level_t::SKILL_INITIATE:
+				case skill_familiarity_t::INITIATE:
 					break;
-				case level_t::SKILL_FAMILIAR:
+				case skill_familiarity_t::FAMILIAR:
 					break;
-				case level_t::SKILL_MASTER:
+				case skill_familiarity_t::MASTER:
 					break;
 			}
 			return {0,""};
@@ -164,13 +164,13 @@ namespace mods::classes {
 		std::pair<bool,std::string> pyrexia::create_wall_of_fire(uint8_t direction){
 			switch(m_create_wall_of_fire_level){
 				default:
-				case level_t::SKILL_NONE:
+				case skill_familiarity_t::NONE:
 					break;
-				case level_t::SKILL_INITIATE:
+				case skill_familiarity_t::INITIATE:
 					break;
-				case level_t::SKILL_FAMILIAR:
+				case skill_familiarity_t::FAMILIAR:
 					break;
-				case level_t::SKILL_MASTER:
+				case skill_familiarity_t::MASTER:
 					break;
 			}
 			return {0,""};
@@ -178,13 +178,13 @@ namespace mods::classes {
 		std::pair<bool,std::string> pyrexia::seal_off_room_with_wall_of_fire(room_rnum room_id){
 			switch(m_seal_off_room_with_wall_of_fire_level){
 				default:
-				case level_t::SKILL_NONE:
+				case skill_familiarity_t::NONE:
 					break;
-				case level_t::SKILL_INITIATE:
+				case skill_familiarity_t::INITIATE:
 					break;
-				case level_t::SKILL_FAMILIAR:
+				case skill_familiarity_t::FAMILIAR:
 					break;
-				case level_t::SKILL_MASTER:
+				case skill_familiarity_t::MASTER:
 					break;
 			}
 			return {0,""};

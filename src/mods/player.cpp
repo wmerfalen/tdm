@@ -582,7 +582,11 @@ namespace mods {
 	}
 	void player::send(const std::vector<std::string>& list){
 		for(auto & item : list){
-			sendln(item);
+			if(m_do_paging) {
+				queue_page_fragment(item.c_str());
+			}else{
+				sendln(item);
+			}
 		}
 	}
 	void player::psendln(std::string_view str) {
@@ -1503,7 +1507,14 @@ namespace mods {
 			return m_char_data->visibility;
 		}
 		void player::write_to_char(std::string_view msg, bool newline,bool plain) {
-			m_char_data->desc->queue_output(msg,newline,plain);
+			if(m_do_paging) {
+				queue_page_fragment(msg.data());
+				if(newline){
+					queue_page_fragment("\r\n");
+				}
+			}else{
+				m_char_data->desc->queue_output(msg,newline,plain);
+			}
 		}
 		mods::string player::get_class_string() const {
 			return mods::util::player_class_to_string(m_class).c_str();

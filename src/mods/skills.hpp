@@ -5,7 +5,7 @@
 #include "string.hpp"
 #include <unordered_map>
 namespace mods::skills {
-	enum fields_of_study {
+	enum base_attribute_t {
 		NONE = 0,
 		ELECTRONICS = 1,
 		ARMOR,
@@ -528,8 +528,16 @@ namespace mods::skills {
 		SKILL_FAMILIAR = 2,
 		SKILL_MASTER = 3
 	};
+
+	using proficiency_t = mods::skills::proficiencies::proficiency_name_t;
+	std::vector<proficiency_t> get_player_tier_skills(player_ptr_t& player);
 };
-using skill_familiarity_t = uint8_t;
+enum skill_familiarity_t : uint8_t {
+	NONE = 0,
+	INITIATE = 1,
+	FAMILIAR = 2,
+	MASTER = 3
+};
 using skill_t = mods::skills::proficiencies::proficiency_name_t;
 using level_t = mods::skills::skillset_level_t;
 

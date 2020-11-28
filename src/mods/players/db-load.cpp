@@ -101,7 +101,9 @@ namespace mods::players::db_load {
 		if(0 != status){
 			std::cerr << red_str("Warning: couldn't save player_ptr's base abilities...") << "status: " << status << " for player_ptr:'" << player_ptr->name().c_str() << "'\n";
 		}
-		player_ptr->sendln("Your character has been saved.");
+		if(player_ptr->position() == CON_PLAYING){
+			player_ptr->sendln("Your character has been saved.");
+		}
 	}
 	void feed_player_inventory(player_ptr_t& player_ptr){
 		mods::orm::inventory::flush_player(player_ptr);

@@ -90,7 +90,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/rifle-attachments mods/examine \
 					 mods/target-practice mods/target-practice-db mods/demolitions \
 					 mods/replenish mods/players/destroy-player mods/rate-limiting \
-					 mods/levels mods/orm/player-base-ability
+					 mods/levels mods/orm/player-base-ability \
+					 mods/orm/forge mods/classes/forge
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

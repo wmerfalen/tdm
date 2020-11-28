@@ -6,6 +6,6 @@ namespace mods::classes {
 		player->pyrexia()->m_fire_nade_charges = charges;
 	}
 	void super_user_fiddler::set_fire_nade_level(player_ptr_t& player,int level){
-		player->pyrexia()->m_fire_nade_level = level;
+		player->pyrexia()->m_fire_nade_level = (skill_familiarity_t)level;
 	}
 };

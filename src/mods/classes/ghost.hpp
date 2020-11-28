@@ -4,23 +4,13 @@
 #include "../orm/ghost.hpp"
 #include "base.hpp"
 #include "super-user-fiddler.hpp"
+#include "../skills.hpp"
 
 using ghost_orm_t = mods::orm::ghost;
 namespace mods::classes {
 	struct ghost : base {
 		friend class mods::classes::super_user_fiddler;
 		using primary_choice_t = mods::weapon::ghost::primary_choice_t;
-
-		using drone_scan_levels_t = ghost_orm_t::drone_scan_levels_t;
-		using stealth_levels_t = ghost_orm_t::stealth_levels_t;
-		using summon_extraction_levels_t = ghost_orm_t::summon_extraction_levels_t;
-		using xray_shot_levels_t = ghost_orm_t::xray_shot_levels_t;
-		using feign_death_levels_t = ghost_orm_t::feign_death_levels_t;
-		using plant_claymore_levels_t = ghost_orm_t::plant_claymore_levels_t;
-		using penetrating_shot_levels_t = ghost_orm_t::penetrating_shot_levels_t;
-		using intimidation_levels_t = ghost_orm_t::intimidation_levels_t;
-		using cryogenic_grenade_levels_t = ghost_orm_t::cryogenic_grenade_levels_t;
-		using flash_underbarrel_levels_t = ghost_orm_t::flash_underbarrel_levels_t;
 
 		long created_at;
 
@@ -85,16 +75,16 @@ namespace mods::classes {
 			ghost_orm_t	m_orm;
 			player_ptr_t m_player;
 
-			drone_scan_levels_t m_drone_scan_level;
-			stealth_levels_t m_stealth_level;
-			summon_extraction_levels_t m_summon_extraction_level;
-			xray_shot_levels_t m_xray_shot_level;
-			feign_death_levels_t m_feign_death_level;
-			plant_claymore_levels_t m_plant_claymore_level;
-			penetrating_shot_levels_t m_penetrating_shot_level;
-			intimidation_levels_t m_intimidation_level;
-			cryogenic_grenade_levels_t m_cryogenic_grenade_level;
-			flash_underbarrel_levels_t m_flash_underbarrel_level;
+			skill_familiarity_t m_drone_scan_level;
+			skill_familiarity_t m_stealth_level;
+			skill_familiarity_t m_summon_extraction_level;
+			skill_familiarity_t m_xray_shot_level;
+			skill_familiarity_t m_feign_death_level;
+			skill_familiarity_t m_plant_claymore_level;
+			skill_familiarity_t m_penetrating_shot_level;
+			skill_familiarity_t m_intimidation_level;
+			skill_familiarity_t m_cryogenic_grenade_level;
+			skill_familiarity_t m_flash_underbarrel_level;
 			std::deque<obj_ptr_t> m_claymores;
 	};
 	void ghost_advance_level(player_ptr_t& player);
