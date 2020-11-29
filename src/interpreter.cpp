@@ -48,6 +48,20 @@ namespace mods::interpreter {
 ACMD(do_unimplemented){
 	player->sendln(UNIMPLEMENTED_MESSAGE());
 }
+ACMD(do_debug_sleep){
+	auto vec_args = PARSE_ARGS();
+	if(vec_args.size() == 0){
+		player->errorln("Pass in seconds please.");
+		return;
+	}
+	int i = mods::util::stoi_optional<int>(vec_args[0]).value_or(-1);
+	if(i <= 0){
+		player->errorln("Value must be gte zero.");
+		return;
+	}
+	sleep(i);
+	player->sendln("Done");
+}
 
 namespace mods::globals {
 	extern std::vector<std::string> super_users;
@@ -768,6 +782,7 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "sit"      , POS_RESTING , do_sit      , 0, 0 },
 	{ "skills" , POS_SLEEPING, do_skills , 0, 0 },
 	{ "sleep"    , POS_SLEEPING, do_sleep    , 0, 0 },
+	{ "debug_sleep", POS_SLEEPING, do_debug_sleep, LVL_IMPL, 0},
 	{ "slap"     , POS_RESTING , do_action   , 0, 0 },
 	{ "slowns"   , POS_DEAD    , do_gen_tog  , LVL_IMPL, SCMD_SLOWNS },
 	{ "smile"    , POS_RESTING , do_action   , 0, 0 },

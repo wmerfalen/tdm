@@ -44,6 +44,9 @@ namespace mods::date_time::irl {
 
 			return dateString;
 		}
+		std::string now(){
+			return date_to_string();
+		}
 };//end irl namespace
 
 namespace mods::date_time {
@@ -208,3 +211,4 @@ namespace mods::date_time {
 		mods::interpreter::add_command("moon_phase", POS_RESTING, do_moon_phase, 0, 0);
 	}
 };
+std::string irl_now(){ return mods::date_time::irl::now(); }

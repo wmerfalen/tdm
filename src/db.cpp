@@ -155,8 +155,6 @@ void assign_the_shopkeepers(void);
 void build_player_index(void);
 int is_empty(zone_rnum zone_nr);
 void reset_zone(zone_rnum zone);
-int file_to_string(const char *name, char *buf);
-int file_to_string_alloc(const char *name, char **buf);
 void reboot_wizlists(void);
 ACMD(do_reboot);
 void boot_world(void);
@@ -208,8 +206,6 @@ extern const char *unused_spellname;	/* spell_parser.c */
 
 /* this is necessary for the autowiz system */
 void reboot_wizlists(void) {
-	file_to_string_alloc(WIZLIST_FILE, &wizlist);
-	file_to_string_alloc(IMMLIST_FILE, &immlist);
 }
 
 
@@ -229,62 +225,6 @@ ACMD(do_reboot) {
 
 	one_argument(argument, arg);
 
-	if(!str_cmp(arg, "all") || *arg == '*') {
-		/*
-			 if(file_to_string_alloc(GREETINGS_FILE, &GREETINGS) == 0) {
-			 prune_crlf(GREETINGS);
-			 }*/
-
-		file_to_string_alloc(WIZLIST_FILE, &wizlist);
-		file_to_string_alloc(IMMLIST_FILE, &immlist);
-		file_to_string_alloc(NEWS_FILE, &news);
-		file_to_string_alloc(CREDITS_FILE, &credits);
-		//file_to_string_alloc(MOTD_FILE, &motd);
-		file_to_string_alloc(IMOTD_FILE, &imotd);
-		file_to_string_alloc(HELP_PAGE_FILE, &help);
-		file_to_string_alloc(INFO_FILE, &info);
-		file_to_string_alloc(POLICIES_FILE, &policies);
-		file_to_string_alloc(HANDBOOK_FILE, &handbook);
-		file_to_string_alloc(BACKGROUND_FILE, &background);
-	} else if(!str_cmp(arg, "wizlist")) {
-		file_to_string_alloc(WIZLIST_FILE, &wizlist);
-	} else if(!str_cmp(arg, "immlist")) {
-		file_to_string_alloc(IMMLIST_FILE, &immlist);
-	} else if(!str_cmp(arg, "news")) {
-		file_to_string_alloc(NEWS_FILE, &news);
-	} else if(!str_cmp(arg, "credits")) {
-		file_to_string_alloc(CREDITS_FILE, &credits);
-	} else if(!str_cmp(arg, "motd")) {
-		//file_to_string_alloc(MOTD_FILE, &motd);
-	} else if(!str_cmp(arg, "imotd")) {
-		file_to_string_alloc(IMOTD_FILE, &imotd);
-	} else if(!str_cmp(arg, "help")) {
-		file_to_string_alloc(HELP_PAGE_FILE, &help);
-	} else if(!str_cmp(arg, "info")) {
-		file_to_string_alloc(INFO_FILE, &info);
-	} else if(!str_cmp(arg, "policy")) {
-		file_to_string_alloc(POLICIES_FILE, &policies);
-	} else if(!str_cmp(arg, "handbook")) {
-		file_to_string_alloc(HANDBOOK_FILE, &handbook);
-	} else if(!str_cmp(arg, "background")) {
-		file_to_string_alloc(BACKGROUND_FILE, &background);
-	} else if(!str_cmp(arg, "greetings")) {
-		/*
-			 if(file_to_string_alloc(GREETINGS_FILE, &GREETINGS) == 0) {
-			 prune_crlf(GREETINGS);
-			 }*/
-	} else if(!str_cmp(arg, "xhelp")) {
-		if(help_table) {
-			free_help();
-		}
-
-		index_boot(DB_BOOT_HLP);
-	} else {
-		send_to_char(ch, "Unknown reload option.");
-		return;
-	}
-
-	send_to_char(ch, "%s", OK);
 }
 
 void boot_hell(void){
@@ -297,23 +237,6 @@ void boot_hell(void){
 	reset_time();
 
 	log("Reading news, credits, help, bground, info & motds.");
-	/*
-		 file_to_string_alloc(NEWS_FILE, &news);
-		 file_to_string_alloc(CREDITS_FILE, &credits);
-		 file_to_string_alloc(MOTD_FILE, &motd);
-		 file_to_string_alloc(IMOTD_FILE, &imotd);
-		 file_to_string_alloc(HELP_PAGE_FILE, &help);
-		 file_to_string_alloc(INFO_FILE, &info);
-		 file_to_string_alloc(WIZLIST_FILE, &wizlist);
-		 file_to_string_alloc(IMMLIST_FILE, &immlist);
-		 file_to_string_alloc(POLICIES_FILE, &policies);
-		 file_to_string_alloc(HANDBOOK_FILE, &handbook);
-		 file_to_string_alloc(BACKGROUND_FILE, &background);
-
-		 if(file_to_string_alloc(GREETINGS_FILE, &GREETINGS) == 0) {
-		 prune_crlf(GREETINGS);
-		 }
-		 */
 
 	log("Loading spell definitions.");
 	if(mods::hell::mag_assign_spells){ 
@@ -549,24 +472,6 @@ void boot_db(void) {
 	reset_time();
 
 	log("Reading news, credits, help, bground, info & motds.");
-	/*
-		 file_to_string_alloc(NEWS_FILE, &news);
-		 file_to_string_alloc(CREDITS_FILE, &credits);
-		 file_to_string_alloc(MOTD_FILE, &motd);
-		 file_to_string_alloc(IMOTD_FILE, &imotd);
-		 file_to_string_alloc(HELP_PAGE_FILE, &help);
-		 file_to_string_alloc(INFO_FILE, &info);
-		 file_to_string_alloc(WIZLIST_FILE, &wizlist);
-		 file_to_string_alloc(IMMLIST_FILE, &immlist);
-		 file_to_string_alloc(POLICIES_FILE, &policies);
-		 file_to_string_alloc(HANDBOOK_FILE, &handbook);
-		 file_to_string_alloc(BACKGROUND_FILE, &background);
-
-		 if(file_to_string_alloc(GREETINGS_FILE, &GREETINGS) == 0) {
-		 prune_crlf(GREETINGS);
-		 }
-		 */
-
 	log("Loading spell definitions.");
 	mag_assign_spells();
 
@@ -650,6 +555,7 @@ void boot_db(void) {
 /* reset the time in the game from file */
 void reset_time(void) {
 	time_t beginning_of_time = 0;
+#if 0
 	FILE *bgtime;
 
 	if((bgtime = fopen(TIME_FILE, "r")) == NULL) {
@@ -658,6 +564,7 @@ void reset_time(void) {
 		fscanf(bgtime, "%ld\n", &beginning_of_time);
 		fclose(bgtime);
 	}
+#endif
 
 	if(beginning_of_time == 0) {
 		beginning_of_time = 650336715;
@@ -704,6 +611,7 @@ void reset_time(void) {
 
 /* Write the time in 'when' to the MUD-time file. */
 void save_mud_time(struct time_info_data *when) {
+#if 0
 	FILE *bgtime;
 
 	if((bgtime = fopen(TIME_FILE, "w")) == NULL) {
@@ -712,6 +620,7 @@ void save_mud_time(struct time_info_data *when) {
 		fprintf(bgtime, "%ld\n", mud_time_to_secs(when));
 		fclose(bgtime);
 	}
+#endif
 }
 
 
@@ -2640,70 +2549,6 @@ void free_obj(struct obj_data *obj) {
 			}
 			*/
 	}
-}
-
-
-/*
- * Steps:
- *   1: Read contents of a text file.
- *   2: Make sure no one is using the pointer in paging.
- *   3: Allocate space.
- *   4: Point 'buf' to it.
- *
- * We don't want to free() the string that someone may be
- * viewing in the pager.  page_string() keeps the internal
- * strdup()'d copy on ->showstr_head and it won't care
- * if we delete the original.  Otherwise, strings are kept
- * on ->showstr_vector but we'll only match if the pointer
- * is to the string we're interested in and not a copy.
- *
- * If someone is reading a global copy we're trying to
- * replace, give everybody using it a different copy so
- * as to avoid special cases.
- */
-int file_to_string_alloc(const char *name, char **buf) {
-	log("[deprecated]: file_to_string_alloc");
-	return (0);
-}
-
-
-/* read contents of a text file, and place in buf */
-int file_to_string(const char *name, char *buf) {
-	FILE *fl;
-	char tmp[READ_SIZE + 3];
-	int len;
-
-	*buf = '\0';
-
-	if(!(fl = fopen(name, "r"))) {
-		log("SYSERR: reading %s: %s", name, strerror(errno));
-		return (-1);
-	}
-
-	for(;;) {
-		if(!fgets(tmp, READ_SIZE, fl)) {	/* EOF check */
-			break;
-		}
-
-		if((len = strlen(tmp)) > 0) {
-			tmp[len - 1] = '\0';    /* take off the trailing \n */
-		}
-
-		strcat(tmp, "\r\n");	/* strcat: OK (tmp:READ_SIZE+3) */
-
-		if(strlen(buf) + strlen(tmp) + 1 > MAX_STRING_LENGTH) {
-			log("SYSERR: %s: string too big (%d max)", name, MAX_STRING_LENGTH);
-			*buf = '\0';
-			fclose(fl);
-			return (-1);
-		}
-
-		strcat(buf, tmp);	/* strcat: OK (size checked above) */
-	}
-
-	fclose(fl);
-
-	return (0);
 }
 
 

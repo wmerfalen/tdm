@@ -67,6 +67,7 @@
  * Note, most includes for all platforms are in sysdep.h.  The list of
  * files that is included is controlled by conf.h for that platform.
  */
+#define __MENTOC_USE_LEGACY_SLEEP_CODE__
 
 #include "structs.h"
 #include "utils.h"
@@ -144,7 +145,7 @@ void logstrerror(std::string_view prefix,int _errno){
 	log(mods::string(prefix.data()) + strerror(_errno));
 }
 
-int destroy_player(player_ptr_t player);
+int destroy_player(player_ptr_t&& player);
 std::size_t handle_disconnects(){
 	/* Kick out folks in the CON_CLOSE or CON_DISCONNECT state */
 	std::vector<typename mods::globals::player_list_t::iterator> players_to_destroy;
@@ -158,10 +159,16 @@ std::size_t handle_disconnects(){
 
 	std::set<std::string> saved_players;
 	for(auto player_iterator : players_to_destroy){
-		destroy_player(*player_iterator);
+		destroy_player(std::move(*player_iterator));
 	}
 	auto ret = players_to_destroy.size();
 	players_to_destroy.clear();
+#ifdef __MENTOC_SHOW_REMAINING_PLAYER_LIST_DEBUG_OUTPUT__
+	for(auto & player : mods::globals::player_list){
+		std::cerr << "[handle_disconnects][player listing][name]:'" << player->name().c_str() << "', db_id:'" << player->db_id() << "'\n";
+#
+	}
+#endif
 	return ret;
 }
 
@@ -574,20 +581,26 @@ void perform_auto_login(player_ptr_t& player){
 void game_loop(socket_t mother_desc) {
 	mods::globals::current_tick = 0;
 	char comm[MAX_INPUT_LENGTH];
+#ifdef __MENTOC_USE_LEGACY_SLEEP_CODE__
 	struct timeval last_time, opt_time, process_time, temp_time;
 	struct timeval before_sleep, now, timeout;
-	int pulse = 0, missed_pulses, aliased;
+	int missed_pulses;
+#endif
+	int pulse = 0, aliased = 0;
 
 	signal(SIGPIPE,SIG_IGN);
+#ifdef __MENTOC_USE_LEGACY_SLEEP_CODE__
 	/* initialize various time values */
 	null_time.tv_sec = 0;
 	null_time.tv_usec = 0;
 	opt_time.tv_usec = OPT_USEC;
 	opt_time.tv_sec = 0;
+#endif
 	mods::globals::pre_game_loop();
 
 	/* The Main Loop.  The Big Cheese.  The Top Dog.  The Head Honcho.  The.. */
 	pulse = 0;
+	aliased = 0;
 	const int size = 10; // hint
 	epoll_fd = epoll_create (size);
 	if (epoll_fd == -1) {
@@ -605,7 +618,9 @@ void game_loop(socket_t mother_desc) {
 		close (mother_desc);
 		return;
 	}
+#ifdef __MENTOC_USE_LEGACY_SLEEP_CODE__
 	gettimeofday(&last_time, (struct timezone *) 0);
+#endif
 	while(!circle_shutdown) {
 		mods::globals::defer_queue->iteration();
 
@@ -620,7 +635,9 @@ void game_loop(socket_t mother_desc) {
 
 		int i = 0;
 		int new_desc = 0;
+#ifdef __MENTOC_USE_LEGACY_SLEEP_CODE__
 		gettimeofday(&last_time, (struct timezone *) 0);
+#endif
 		
 		while (i < epoll_wait_status) {
 #ifdef __MENTOC_SHOW_EPOLL_WAIT_STATUS_MESSAGE__
@@ -725,6 +742,7 @@ void game_loop(socket_t mother_desc) {
 			++i;
 		}//end while(i < r)
 
+#ifdef __MENTOC_USE_LEGACY_SLEEP_CODE__
 		/*
 		 * At this point, we have completed all input, output and heartbeat
 		 * activity from the previous iteration, so we have to put ourselves
@@ -759,7 +777,10 @@ void game_loop(socket_t mother_desc) {
 			circle_sleep(&timeout);
 			gettimeofday(&now, (struct timezone *) 0);
 			timediff(&timeout, &last_time, &now);
+			std::cerr << ".";
 		} while(timeout.tv_usec || timeout.tv_sec);
+
+#endif
 
 		/** !todo: refactor this to not loop through all descriptors but to instead queue up data to be output and output them accordingly */
 		for(auto & p : mods::globals::player_list) {
@@ -780,6 +801,7 @@ void game_loop(socket_t mother_desc) {
 		}
 
 		handle_disconnects();
+#ifdef __MENTOC_USE_LEGACY_SLEEP_CODE__
 		/*
 		 * Now, we execute as many pulses as necessary--just one if we haven't
 		 * missed any pulses, or make up for lost time if we missed a few
@@ -802,6 +824,9 @@ void game_loop(socket_t mother_desc) {
 		while(missed_pulses--) {
 			heartbeat(++pulse);
 		}
+#else
+			heartbeat(++pulse);
+#endif
 
 		/* Check for any signals we may have received. */
 		if(reread_wizlist) {
@@ -821,6 +846,9 @@ void game_loop(socket_t mother_desc) {
 			tics = 1;
 		}
 
+#ifdef __MENTOC_ALWAYS_SHOW_TICKS__
+		std::cerr << "tic|";
+#endif
 		if(mods::debug::debug_state->show_tics()){
 			std::cerr << "tic|";
 		}
@@ -885,6 +913,7 @@ void heartbeat(int pulse) {
 	}
 
 	if(!(pulse % PULSE_IDLEPWD)) {	/* 15 seconds */
+		std::cerr << "pulse 15 seconds (" << irl_now() << ")\n";
 		check_idle_passwords();
 	}
 
@@ -1283,7 +1312,7 @@ void destroy_socket(socket_t sock_fd){
 	}
 }
 
-int destroy_player(player_ptr_t player){
+int destroy_player(player_ptr_t&& player){
 	char_from_room(player);
 	auto pl_iterator = std::find(mods::globals::player_list.begin(),
 			mods::globals::player_list.end(),
@@ -1355,7 +1384,7 @@ int destroy_player(player_ptr_t player){
 	if(pl_iterator == mods::globals::player_list.end()){
 		log("SYSERR: WARNING! destroy_player cannot find player pointer in player_list!");
 	}else{
-		//log("Freeing player [%s] use_count[%d]",player->name().c_str(),pl_iteratoruse_count());
+		log("Freeing player [%s] use_count[%d]",player->name().c_str(),pl_iterator->use_count());
 		mods::globals::player_list.erase(pl_iterator);
 	}
 
@@ -2656,6 +2685,21 @@ int open_logfile(const char *filename, FILE *stderr_fp) {
  * This may not be pretty but it keeps game_loop() neater than if it was inline.
  */
 void circle_sleep(struct timeval *timeout) {
+#ifdef __MENTOC_CLAMP_CIRCLE_SLEEP_VALUES__
+	if(timeout->tv_usec > 100000){
+		std::cerr << "clamp: " << timeout->tv_usec << "\n";
+		timeout->tv_usec = 100000;
+	}
+	if(timeout->tv_sec){
+		std::cerr << "tv_sec:'" << timeout->tv_sec << "'|";
+		sleep(timeout->tv_sec);
+	}
+	if(timeout->tv_usec < 99999){
+		std::cerr << "tv_usec:'" << timeout->tv_usec << "'\n";
+	}
+	usleep(timeout->tv_usec);
+#else
 	sleep(timeout->tv_sec);
 	usleep(timeout->tv_usec);
+#endif
 }

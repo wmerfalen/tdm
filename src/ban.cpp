@@ -270,7 +270,7 @@ int Valid_Name(const char *newname) {
 	 */
 	for(auto & p : mods::globals::player_list){
 		if(mods::util::is_lower_match(p->name().c_str(), newname)) {
-			if(p->state() == CON_PLAYING && p->authenticated()){
+			if((p->state() == CON_PLAYING || p->state() == CON_IDLE) && p->authenticated()){
 				return 0;
 			}
 		}

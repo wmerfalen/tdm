@@ -25,7 +25,7 @@
 #include "mods/rooms.hpp"
 #include "mods/orm/inventory.hpp"
 extern void point_update(void);
-
+extern void check_idling(player_ptr_t player);
 ACMD(do_get_ticks_per_minute){
 	player->send("[%d] ticks per minute\r\n",mods::globals::defer_queue->get_ticks_per_minute());
 	player->send("[%d] affects processer ticks per minute\r\n",mods::affects::get_ticks_per_minute());
@@ -236,6 +236,7 @@ ACMD(do_set_npc_position) {
 	player->sendln("Didn't set position. Make sure you used the correct string.");
 
 }
+extern int idle_void;
 ACMD(do_set_position) {
 	if(IS_NPC(ch)){
 		return;
@@ -256,6 +257,14 @@ ACMD(do_set_position) {
 	MENTOC_LAZY_POS(RESTING,POS_RESTING);
 	MENTOC_LAZY_POS(SITTING,POS_SITTING);
 	MENTOC_LAZY_POS(FIGHTING,POS_FIGHTING);
+	if(mods::util::is_lower_match(vec_args[0],"IDLE") || mods::util::is_lower_match(vec_args[0],"CON_IDLE")){
+		player->char_specials().timer = idle_void + 1;
+		check_idling(player);
+		player->set_state(CON_IDLE);
+		player->cd()->desc->set_state(CON_IDLE);
+		player->sendln("{grn}Set you to idle{/grn}.");
+		return;
+	}
 #undef MENTOC_LAZY_POS
 	player->sendln("Didn't set your position. Make sure you used the correct string.");
 
