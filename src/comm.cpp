@@ -777,7 +777,6 @@ void game_loop(socket_t mother_desc) {
 			circle_sleep(&timeout);
 			gettimeofday(&now, (struct timezone *) 0);
 			timediff(&timeout, &last_time, &now);
-			std::cerr << ".";
 		} while(timeout.tv_usec || timeout.tv_sec);
 
 #endif
@@ -913,7 +912,6 @@ void heartbeat(int pulse) {
 	}
 
 	if(!(pulse % PULSE_IDLEPWD)) {	/* 15 seconds */
-		std::cerr << "pulse 15 seconds (" << irl_now() << ")\n";
 		check_idle_passwords();
 	}
 

@@ -1,6 +1,7 @@
 #include "skills.hpp"
 #include "interpreter.hpp"
 #include "super-users.hpp"
+#include <functional>
 
 #ifdef __MENTOC_MODS_SKILLS_SHOW_DEBUG_OUTPUT__
 #define m_debug(A) std::cerr << "[mods::skills][debug]:'" << A << "'\n";
@@ -72,18 +73,20 @@ namespace mods::skills {
 		}
 		put_player_map(player_name.data(),DB_PREFIX,m);
 	}
+	using just_proficiency_name_t = mods::skills::proficiencies::proficiency_name_t;
 	static std::map<std::string,int> mappings;
 	static std::map<int,std::string> to_string_mappings;
 	static std::map<int,proficiencies::proficiency_t> e_name_to_proficiency;
 	static constexpr const std::pair<uint8_t,uint8_t> tier_one = {1,9};
 	static constexpr const std::pair<uint8_t,uint8_t> tier_two = {10,19};
 	static constexpr const std::pair<uint8_t,uint8_t> tier_three = {20,31};
-	static std::vector<proficiency_t> tier_one_proficiencies;
-	static std::vector<proficiency_t> tier_two_proficiencies;
-	static std::vector<proficiency_t> tier_three_proficiencies;
-	static std::vector<proficiency_t> up_to_tier_two;
-	static std::vector<proficiency_t> up_to_tier_three;
-	std::vector<proficiency_t> get_player_tier_skills(player_ptr_t& player){
+	static std::vector<just_proficiency_name_t> tier_one_proficiencies;
+	static std::vector<just_proficiency_name_t> tier_two_proficiencies;
+	static std::vector<just_proficiency_name_t> tier_three_proficiencies;
+	static std::vector<just_proficiency_name_t> up_to_tier_two;
+	static std::vector<just_proficiency_name_t> up_to_tier_three;
+
+	std::vector<just_proficiency_name_t> get_player_tier_skills(player_ptr_t& player){
 		auto level = player->level();
 		if(tier_one.first <= level && level <= tier_one.second){
 			return tier_one_proficiencies;
@@ -100,38 +103,38 @@ namespace mods::skills {
 		tier_one_proficiencies.clear();
 		tier_two_proficiencies.clear();
 		tier_three_proficiencies.clear();
-		using p = proficiency_t;
+		using p = just_proficiency_name_t;
 		/** technology usage */
-		e_name_to_proficiency[proficiency_t::CAMERA_PLACEMENT].minimum_proficiency = SKILL_CAMERA_PLACEMENT();/** 50 */
-		e_name_to_proficiency[proficiency_t::DETECT_CAMERAS].minimum_proficiency = SKILL_DETECT_CAMERAS();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::CAMERA_PLACEMENT].minimum_proficiency = SKILL_CAMERA_PLACEMENT();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::DETECT_CAMERAS].minimum_proficiency = SKILL_DETECT_CAMERAS();/** 50 */
 		tier_one_proficiencies.emplace_back(p::CAMERA_PLACEMENT);
 		tier_one_proficiencies.emplace_back(p::DETECT_CAMERAS);
 
 		/** destruction of property */
-		e_name_to_proficiency[proficiency_t::CAMERA_DESTRUCTION].minimum_proficiency = SKILL_CAMERA_DESTRUCTION();/** 100 */
-		e_name_to_proficiency[proficiency_t::ELECTRIFIED_DAMAGE].minimum_proficiency = SKILL_ELECTRIFIED_DAMAGE();/** 100 */
+		e_name_to_proficiency[just_proficiency_name_t::CAMERA_DESTRUCTION].minimum_proficiency = SKILL_CAMERA_DESTRUCTION();/** 100 */
+		e_name_to_proficiency[just_proficiency_name_t::ELECTRIFIED_DAMAGE].minimum_proficiency = SKILL_ELECTRIFIED_DAMAGE();/** 100 */
 		tier_one_proficiencies.emplace_back(p::CAMERA_DESTRUCTION);
 		tier_one_proficiencies.emplace_back(p::ELECTRIFIED_DAMAGE);
 
 
 		/** defensive technology */
-		e_name_to_proficiency[proficiency_t::PROTECT_FROM_EMP].minimum_proficiency = SKILL_PROTECT_FROM_EMP();/** 200 */
+		e_name_to_proficiency[just_proficiency_name_t::PROTECT_FROM_EMP].minimum_proficiency = SKILL_PROTECT_FROM_EMP();/** 200 */
 		tier_one_proficiencies.emplace_back(p::PROTECT_FROM_EMP);
 
 		/** crafting */
-		e_name_to_proficiency[proficiency_t::CREATE_EMP_WEAPONS].minimum_proficiency = SKILL_CREATE_EMP_WEAPONS();/** 200 */
-		e_name_to_proficiency[proficiency_t::MOLD].minimum_proficiency = SKILL_MOLD();/** 350 */
+		e_name_to_proficiency[just_proficiency_name_t::CREATE_EMP_WEAPONS].minimum_proficiency = SKILL_CREATE_EMP_WEAPONS();/** 200 */
+		e_name_to_proficiency[just_proficiency_name_t::MOLD].minimum_proficiency = SKILL_MOLD();/** 350 */
 		tier_two_proficiencies.emplace_back(p::CREATE_EMP_WEAPONS);
 		tier_two_proficiencies.emplace_back(p::MOLD);
 
 		/** defensive offensive */
-		e_name_to_proficiency[proficiency_t::COUNTER_SHOCK].minimum_proficiency = SKILL_COUNTER_SHOCK();/** 4 */
+		e_name_to_proficiency[just_proficiency_name_t::COUNTER_SHOCK].minimum_proficiency = SKILL_COUNTER_SHOCK();/** 4 */
 		tier_two_proficiencies.emplace_back(p::COUNTER_SHOCK);
 
 		/** sight enhancement */
-		e_name_to_proficiency[proficiency_t::TOGGLE_THERMAL].minimum_proficiency = SKILL_TOGGLE_THERMAL();/** 2050 */
-		e_name_to_proficiency[proficiency_t::TOGGLE_NIGHT_VISION].minimum_proficiency = SKILL_TOGGLE_NIGHT_VISION();/** 2050 */
-		e_name_to_proficiency[proficiency_t::HEADGEAR_INTROSPECTION].minimum_proficiency = SKILL_HEADGEAR_INTROSPECTION();/** 3050 */
+		e_name_to_proficiency[just_proficiency_name_t::TOGGLE_THERMAL].minimum_proficiency = SKILL_TOGGLE_THERMAL();/** 2050 */
+		e_name_to_proficiency[just_proficiency_name_t::TOGGLE_NIGHT_VISION].minimum_proficiency = SKILL_TOGGLE_NIGHT_VISION();/** 2050 */
+		e_name_to_proficiency[just_proficiency_name_t::HEADGEAR_INTROSPECTION].minimum_proficiency = SKILL_HEADGEAR_INTROSPECTION();/** 3050 */
 		tier_two_proficiencies.emplace_back(p::COUNTER_SHOCK);
 		tier_two_proficiencies.emplace_back(p::TOGGLE_THERMAL);
 		tier_two_proficiencies.emplace_back(p::TOGGLE_NIGHT_VISION);
@@ -139,24 +142,24 @@ namespace mods::skills {
 
 
 		/** recon/intel technology */
-		e_name_to_proficiency[proficiency_t::PROXIMITY_ALARM].minimum_proficiency = SKILL_PROXIMITY_ALARM();/** 3050 */
-		e_name_to_proficiency[proficiency_t::DOOR_CAMERA].minimum_proficiency = SKILL_DOOR_CAMERA();/** 3050 */
+		e_name_to_proficiency[just_proficiency_name_t::PROXIMITY_ALARM].minimum_proficiency = SKILL_PROXIMITY_ALARM();/** 3050 */
+		e_name_to_proficiency[just_proficiency_name_t::DOOR_CAMERA].minimum_proficiency = SKILL_DOOR_CAMERA();/** 3050 */
 		tier_two_proficiencies.emplace_back(p::PROXIMITY_ALARM);
 		tier_two_proficiencies.emplace_back(p::DOOR_CAMERA);
 
 		/** defensive technology */
-		e_name_to_proficiency[proficiency_t::DEPLOYABLE_TURRET].minimum_proficiency = SKILL_DEPLOYABLE_TURRET();/** 3050 */
-		e_name_to_proficiency[proficiency_t::DEPLOYABLE_FIRE_TURRET].minimum_proficiency = SKILL_DEPLOYABLE_FIRE_TURRET();/** 3050 */
+		e_name_to_proficiency[just_proficiency_name_t::DEPLOYABLE_TURRET].minimum_proficiency = SKILL_DEPLOYABLE_TURRET();/** 3050 */
+		e_name_to_proficiency[just_proficiency_name_t::DEPLOYABLE_FIRE_TURRET].minimum_proficiency = SKILL_DEPLOYABLE_FIRE_TURRET();/** 3050 */
 		tier_two_proficiencies.emplace_back(p::DEPLOYABLE_TURRET);
 		tier_two_proficiencies.emplace_back(p::DEPLOYABLE_FIRE_TURRET);
 
 		/** available from level 1-10 */
-		e_name_to_proficiency[proficiency_t::BASIC_ARMOR].minimum_proficiency = SKILL_BASIC_ARMOR();/** 50 */
-		e_name_to_proficiency[proficiency_t::BASIC_PISTOL].minimum_proficiency = SKILL_BASIC_PISTOL();/** 150 */
-		e_name_to_proficiency[proficiency_t::BASIC_ASSAULT_RIFLE].minimum_proficiency = SKILL_BASIC_ASSAULT_RIFLE();/** 150 */
-		e_name_to_proficiency[proficiency_t::BASIC_SHOTGUN].minimum_proficiency = SKILL_BASIC_SHOTGUN();/** 150 */
-		e_name_to_proficiency[proficiency_t::BASIC_SNIPER_RIFLE].minimum_proficiency = SKILL_BASIC_SNIPER_RIFLE();/** 150 */
-		e_name_to_proficiency[proficiency_t::BASIC_SUB_MACHINE_GUN].minimum_proficiency = SKILL_BASIC_SUB_MACHINE_GUN();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::BASIC_ARMOR].minimum_proficiency = SKILL_BASIC_ARMOR();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::BASIC_PISTOL].minimum_proficiency = SKILL_BASIC_PISTOL();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::BASIC_ASSAULT_RIFLE].minimum_proficiency = SKILL_BASIC_ASSAULT_RIFLE();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::BASIC_SHOTGUN].minimum_proficiency = SKILL_BASIC_SHOTGUN();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::BASIC_SNIPER_RIFLE].minimum_proficiency = SKILL_BASIC_SNIPER_RIFLE();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::BASIC_SUB_MACHINE_GUN].minimum_proficiency = SKILL_BASIC_SUB_MACHINE_GUN();/** 150 */
 
 		tier_one_proficiencies.emplace_back(p::BASIC_ARMOR);
 		tier_one_proficiencies.emplace_back(p::BASIC_PISTOL);
@@ -168,19 +171,19 @@ namespace mods::skills {
 
 
 		/** available from level 11-21 */
-		e_name_to_proficiency[proficiency_t::BASIC_HP_RECOVERY].minimum_proficiency = SKILL_BASIC_HP_RECOVERY();/** 2050 */
-		e_name_to_proficiency[proficiency_t::ADVANCED_ARMOR].minimum_proficiency = SKILL_ADVANCED_ARMOR();/** 50 */
-		e_name_to_proficiency[proficiency_t::NO_FACTOR_BASIC].minimum_proficiency = SKILL_NO_FACTOR_BASIC();/** 400 */
-		e_name_to_proficiency[proficiency_t::INTERMEDIATE_PISTOL].minimum_proficiency = SKILL_INTERMEDIATE_PISTOL();/** 150 */
-		e_name_to_proficiency[proficiency_t::INTERMEDIATE_ASSAULT_RIFLE].minimum_proficiency = SKILL_INTERMEDIATE_ASSAULT_RIFLE();/** 150 */
-		e_name_to_proficiency[proficiency_t::INTERMEDIATE_SHOTGUN].minimum_proficiency = SKILL_INTERMEDIATE_SHOTGUN();/** 150 */
-		e_name_to_proficiency[proficiency_t::INTERMEDIATE_SNIPER_RIFLE].minimum_proficiency = SKILL_INTERMEDIATE_SNIPER_RIFLE();/** 150 */
-		e_name_to_proficiency[proficiency_t::INTERMEDIATE_SUB_MACHINE_GUN].minimum_proficiency = SKILL_INTERMEDIATE_SUB_MACHINE_GUN();/** 150 */
-		e_name_to_proficiency[proficiency_t::ADVANCED_PISTOL].minimum_proficiency = SKILL_ADVANCED_PISTOL();/** 150 */
-		e_name_to_proficiency[proficiency_t::ADVANCED_ASSAULT_RIFLE].minimum_proficiency = SKILL_ADVANCED_ASSAULT_RIFLE();/** 150 */
-		e_name_to_proficiency[proficiency_t::ADVANCED_SHOTGUN].minimum_proficiency = SKILL_ADVANCED_SHOTGUN();/** 150 */
-		e_name_to_proficiency[proficiency_t::ADVANCED_SNIPER_RIFLE].minimum_proficiency = SKILL_ADVANCED_SNIPER_RIFLE();/** 150 */
-		e_name_to_proficiency[proficiency_t::ADVANCED_SUB_MACHINE_GUN].minimum_proficiency = SKILL_ADVANCED_SUB_MACHINE_GUN();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::BASIC_HP_RECOVERY].minimum_proficiency = SKILL_BASIC_HP_RECOVERY();/** 2050 */
+		e_name_to_proficiency[just_proficiency_name_t::ADVANCED_ARMOR].minimum_proficiency = SKILL_ADVANCED_ARMOR();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::NO_FACTOR_BASIC].minimum_proficiency = SKILL_NO_FACTOR_BASIC();/** 400 */
+		e_name_to_proficiency[just_proficiency_name_t::INTERMEDIATE_PISTOL].minimum_proficiency = SKILL_INTERMEDIATE_PISTOL();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::INTERMEDIATE_ASSAULT_RIFLE].minimum_proficiency = SKILL_INTERMEDIATE_ASSAULT_RIFLE();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::INTERMEDIATE_SHOTGUN].minimum_proficiency = SKILL_INTERMEDIATE_SHOTGUN();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::INTERMEDIATE_SNIPER_RIFLE].minimum_proficiency = SKILL_INTERMEDIATE_SNIPER_RIFLE();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::INTERMEDIATE_SUB_MACHINE_GUN].minimum_proficiency = SKILL_INTERMEDIATE_SUB_MACHINE_GUN();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::ADVANCED_PISTOL].minimum_proficiency = SKILL_ADVANCED_PISTOL();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::ADVANCED_ASSAULT_RIFLE].minimum_proficiency = SKILL_ADVANCED_ASSAULT_RIFLE();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::ADVANCED_SHOTGUN].minimum_proficiency = SKILL_ADVANCED_SHOTGUN();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::ADVANCED_SNIPER_RIFLE].minimum_proficiency = SKILL_ADVANCED_SNIPER_RIFLE();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::ADVANCED_SUB_MACHINE_GUN].minimum_proficiency = SKILL_ADVANCED_SUB_MACHINE_GUN();/** 150 */
 
 		tier_two_proficiencies.emplace_back(p::BASIC_HP_RECOVERY);
 		tier_two_proficiencies.emplace_back(p::ADVANCED_ARMOR);
@@ -202,15 +205,15 @@ namespace mods::skills {
 
 
 		/** available from level 21-31 */
-		e_name_to_proficiency[proficiency_t::ELITE_ARMOR].minimum_proficiency = SKILL_ELITE_ARMOR();/** 50 */
-		e_name_to_proficiency[proficiency_t::NO_FACTOR_ADVANCED].minimum_proficiency = SKILL_NO_FACTOR_ADVANCED();/** 850 */
-		e_name_to_proficiency[proficiency_t::NO_FACTOR_ELITE].minimum_proficiency = SKILL_NO_FACTOR_ELITE();/** 900 */
-		e_name_to_proficiency[proficiency_t::EXPERT_PISTOL].minimum_proficiency = SKILL_EXPERT_PISTOL();/** 150 */
-		e_name_to_proficiency[proficiency_t::EXPERT_ASSAULT_RIFLE].minimum_proficiency = SKILL_EXPERT_ASSAULT_RIFLE();/** 150 */
-		e_name_to_proficiency[proficiency_t::EXPERT_SHOTGUN].minimum_proficiency = SKILL_EXPERT_SHOTGUN();/** 150 */
-		e_name_to_proficiency[proficiency_t::EXPERT_SNIPER_RIFLE].minimum_proficiency = SKILL_EXPERT_SNIPER_RIFLE();/** 150 */
-		e_name_to_proficiency[proficiency_t::EXPERT_SUB_MACHINE_GUN].minimum_proficiency = SKILL_EXPERT_SUB_MACHINE_GUN();/** 150 */
-		e_name_to_proficiency[proficiency_t::PARASITIC_HP_RECOVERY].minimum_proficiency = SKILL_PARASITIC_HP_RECOVERY();/** 2050 */
+		e_name_to_proficiency[just_proficiency_name_t::ELITE_ARMOR].minimum_proficiency = SKILL_ELITE_ARMOR();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::NO_FACTOR_ADVANCED].minimum_proficiency = SKILL_NO_FACTOR_ADVANCED();/** 850 */
+		e_name_to_proficiency[just_proficiency_name_t::NO_FACTOR_ELITE].minimum_proficiency = SKILL_NO_FACTOR_ELITE();/** 900 */
+		e_name_to_proficiency[just_proficiency_name_t::EXPERT_PISTOL].minimum_proficiency = SKILL_EXPERT_PISTOL();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::EXPERT_ASSAULT_RIFLE].minimum_proficiency = SKILL_EXPERT_ASSAULT_RIFLE();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::EXPERT_SHOTGUN].minimum_proficiency = SKILL_EXPERT_SHOTGUN();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::EXPERT_SNIPER_RIFLE].minimum_proficiency = SKILL_EXPERT_SNIPER_RIFLE();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::EXPERT_SUB_MACHINE_GUN].minimum_proficiency = SKILL_EXPERT_SUB_MACHINE_GUN();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::PARASITIC_HP_RECOVERY].minimum_proficiency = SKILL_PARASITIC_HP_RECOVERY();/** 2050 */
 
 		tier_three_proficiencies.emplace_back(p::ELITE_ARMOR);
 		tier_three_proficiencies.emplace_back(p::NO_FACTOR_ADVANCED);
@@ -224,16 +227,16 @@ namespace mods::skills {
 
 
 		/** stealing property */
-		e_name_to_proficiency[proficiency_t::THIEF].minimum_proficiency = SKILL_THIEF();/** 200 */
+		e_name_to_proficiency[just_proficiency_name_t::THIEF].minimum_proficiency = SKILL_THIEF();/** 200 */
 		tier_three_proficiencies.emplace_back(p::THIEF);
 
 
 
 		/** ARMOR triad specialties */
-		e_name_to_proficiency[proficiency_t::EXPLOSIVE_RESISTANCE].minimum_proficiency = SKILL_EXPLOSIVE_RESISTANCE();/** 2050 */
-		e_name_to_proficiency[proficiency_t::INJURE_RESISTANCE].minimum_proficiency = SKILL_INJURE_RESISTANCE();/** 3050 */
-		e_name_to_proficiency[proficiency_t::MUNITIONS_REFLECTOR].minimum_proficiency = SKILL_MUNITIONS_REFLECTOR();/** 4 */
-		e_name_to_proficiency[proficiency_t::SENTINEL_DISCIPLINE].minimum_proficiency = SKILL_SENTINEL_DISCIPLINE();/** 3 */
+		e_name_to_proficiency[just_proficiency_name_t::EXPLOSIVE_RESISTANCE].minimum_proficiency = SKILL_EXPLOSIVE_RESISTANCE();/** 2050 */
+		e_name_to_proficiency[just_proficiency_name_t::INJURE_RESISTANCE].minimum_proficiency = SKILL_INJURE_RESISTANCE();/** 3050 */
+		e_name_to_proficiency[just_proficiency_name_t::MUNITIONS_REFLECTOR].minimum_proficiency = SKILL_MUNITIONS_REFLECTOR();/** 4 */
+		e_name_to_proficiency[just_proficiency_name_t::SENTINEL_DISCIPLINE].minimum_proficiency = SKILL_SENTINEL_DISCIPLINE();/** 3 */
 
 		tier_two_proficiencies.emplace_back(p::EXPLOSIVE_RESISTANCE);
 		tier_two_proficiencies.emplace_back(p::INJURE_RESISTANCE);
@@ -243,20 +246,20 @@ namespace mods::skills {
 
 
 		/** weapon speciality - shields */
-		e_name_to_proficiency[proficiency_t::DEPLOYABLE_SHIELD].minimum_proficiency = SKILL_DEPLOYABLE_SHIELD();/** 8050 */
+		e_name_to_proficiency[just_proficiency_name_t::DEPLOYABLE_SHIELD].minimum_proficiency = SKILL_DEPLOYABLE_SHIELD();/** 8050 */
 		tier_two_proficiencies.emplace_back(p::DEPLOYABLE_SHIELD);
 
 
 
 		/** weapons handling any tier */
-		e_name_to_proficiency[proficiency_t::TRICK_MAGAZINE].minimum_proficiency = SKILL_TRICK_MAGAZINE();/** 2050 */
-		e_name_to_proficiency[proficiency_t::ASSAULT_RIFLE_SHRAPNEL].minimum_proficiency = SKILL_ASSAULT_RIFLE_SHRAPNEL();/** 150 */
-		e_name_to_proficiency[proficiency_t::SPRAY_CHANCE].minimum_proficiency = SKILL_SPRAY_CHANCE();/** 150 */
-		e_name_to_proficiency[proficiency_t::HEADSHOT_CHANCE].minimum_proficiency = SKILL_HEADSHOT_CHANCE();/** 250 */
-		e_name_to_proficiency[proficiency_t::LIMB_CHANCE].minimum_proficiency = SKILL_LIMB_CHANCE();/** 350 */
-		e_name_to_proficiency[proficiency_t::ARMOR_PENETRATION_SHOT].minimum_proficiency = SKILL_ARMOR_PENETRATION_SHOT();/** 150 */
-		e_name_to_proficiency[proficiency_t::NONSTOP_PENETRATION_SHOT].minimum_proficiency = SKILL_NONSTOP_PENETRATION_SHOT();/** 150 */
-		e_name_to_proficiency[proficiency_t::INCREASED_INJURE_CHANCE].minimum_proficiency = SKILL_INCREASED_INJURE_CHANCE();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::TRICK_MAGAZINE].minimum_proficiency = SKILL_TRICK_MAGAZINE();/** 2050 */
+		e_name_to_proficiency[just_proficiency_name_t::ASSAULT_RIFLE_SHRAPNEL].minimum_proficiency = SKILL_ASSAULT_RIFLE_SHRAPNEL();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::SPRAY_CHANCE].minimum_proficiency = SKILL_SPRAY_CHANCE();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::HEADSHOT_CHANCE].minimum_proficiency = SKILL_HEADSHOT_CHANCE();/** 250 */
+		e_name_to_proficiency[just_proficiency_name_t::LIMB_CHANCE].minimum_proficiency = SKILL_LIMB_CHANCE();/** 350 */
+		e_name_to_proficiency[just_proficiency_name_t::ARMOR_PENETRATION_SHOT].minimum_proficiency = SKILL_ARMOR_PENETRATION_SHOT();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::NONSTOP_PENETRATION_SHOT].minimum_proficiency = SKILL_NONSTOP_PENETRATION_SHOT();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::INCREASED_INJURE_CHANCE].minimum_proficiency = SKILL_INCREASED_INJURE_CHANCE();/** 150 */
 
 		tier_one_proficiencies.emplace_back(p::TRICK_MAGAZINE);
 		tier_one_proficiencies.emplace_back(p::ASSAULT_RIFLE_SHRAPNEL);
@@ -269,11 +272,11 @@ namespace mods::skills {
 
 
 		/** weapons handling -> third tier (levels 21-31) */
-		e_name_to_proficiency[proficiency_t::FIRE_NADE_DEALER].minimum_proficiency = SKILL_FIRE_NADE_DEALER();/** 50 */
-		e_name_to_proficiency[proficiency_t::BETTER_WEAPON_ACCURACY].minimum_proficiency = SKILL_BETTER_WEAPON_ACCURACY();/** 50 */
-		e_name_to_proficiency[proficiency_t::FASTER_TRIGGER_FINGER].minimum_proficiency = SKILL_FASTER_TRIGGER_FINGER();/** 50 */
-		e_name_to_proficiency[proficiency_t::FASTER_RELOADING].minimum_proficiency = SKILL_FASTER_RELOADING();/** 50 */
-		e_name_to_proficiency[proficiency_t::PRO_WEAPON_HANDLER].minimum_proficiency = SKILL_PRO_WEAPON_HANDLER();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::FIRE_NADE_DEALER].minimum_proficiency = SKILL_FIRE_NADE_DEALER();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::BETTER_WEAPON_ACCURACY].minimum_proficiency = SKILL_BETTER_WEAPON_ACCURACY();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::FASTER_TRIGGER_FINGER].minimum_proficiency = SKILL_FASTER_TRIGGER_FINGER();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::FASTER_RELOADING].minimum_proficiency = SKILL_FASTER_RELOADING();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::PRO_WEAPON_HANDLER].minimum_proficiency = SKILL_PRO_WEAPON_HANDLER();/** 50 */
 
 
 		tier_three_proficiencies.emplace_back(p::FIRE_NADE_DEALER);
@@ -286,9 +289,9 @@ namespace mods::skills {
 
 
 		/** weapons handling and sniping */
-		e_name_to_proficiency[proficiency_t::BETTER_SNIPING_ACCURACY].minimum_proficiency = SKILL_BETTER_SNIPING_ACCURACY();/** 450 */
-		e_name_to_proficiency[proficiency_t::TARGET_LIMB].minimum_proficiency = SKILL_TARGET_LIMB();/** 850 */
-		e_name_to_proficiency[proficiency_t::ACCURACY].minimum_proficiency = SKILL_ACCURACY();/** 150 */
+		e_name_to_proficiency[just_proficiency_name_t::BETTER_SNIPING_ACCURACY].minimum_proficiency = SKILL_BETTER_SNIPING_ACCURACY();/** 450 */
+		e_name_to_proficiency[just_proficiency_name_t::TARGET_LIMB].minimum_proficiency = SKILL_TARGET_LIMB();/** 850 */
+		e_name_to_proficiency[just_proficiency_name_t::ACCURACY].minimum_proficiency = SKILL_ACCURACY();/** 150 */
 
 		tier_one_proficiencies.emplace_back(p::BETTER_SNIPING_ACCURACY);
 		tier_one_proficiencies.emplace_back(p::TARGET_LIMB);
@@ -297,9 +300,9 @@ namespace mods::skills {
 
 
 		/** sniping base attribute */
-		e_name_to_proficiency[proficiency_t::VIP].minimum_proficiency = SKILL_VIP();/** 250 */
-		e_name_to_proficiency[proficiency_t::TRACKER].minimum_proficiency = SKILL_TRACKER();/** 350 */
-		e_name_to_proficiency[proficiency_t::QUIETER_SNIPER_SHOTS].minimum_proficiency = SKILL_QUIETER_SNIPER_SHOTS();/** 350 */
+		e_name_to_proficiency[just_proficiency_name_t::VIP].minimum_proficiency = SKILL_VIP();/** 250 */
+		e_name_to_proficiency[just_proficiency_name_t::TRACKER].minimum_proficiency = SKILL_TRACKER();/** 350 */
+		e_name_to_proficiency[just_proficiency_name_t::QUIETER_SNIPER_SHOTS].minimum_proficiency = SKILL_QUIETER_SNIPER_SHOTS();/** 350 */
 
 		tier_three_proficiencies.emplace_back(p::VIP);
 		tier_two_proficiencies.emplace_back(p::TRACKER);
@@ -308,15 +311,15 @@ namespace mods::skills {
 
 		/** demolitions specialty */
 			/** speed triad helps this one */
-		e_name_to_proficiency[proficiency_t::FASTER_BREACHES].minimum_proficiency = SKILL_FASTER_BREACHES();/** 50 */
-		e_name_to_proficiency[proficiency_t::FURTHER_C4S].minimum_proficiency = SKILL_FURTHER_C4S();/** 4 */
-		e_name_to_proficiency[proficiency_t::STRONGER_FRAG_ARM].minimum_proficiency = SKILL_STRONGER_FRAG_ARM();/** 50 */
-		e_name_to_proficiency[proficiency_t::BIGGER_CLAYMORES].minimum_proficiency = SKILL_BIGGER_CLAYMORES();/** 50 */
-		e_name_to_proficiency[proficiency_t::FASTER_THERMITES].minimum_proficiency = SKILL_FASTER_THERMITES();/** 50 */
-		e_name_to_proficiency[proficiency_t::BIGGER_FIRE_NADES].minimum_proficiency = SKILL_BIGGER_FIRE_NADES();/** 50 */
-		e_name_to_proficiency[proficiency_t::CRAFTY_C4].minimum_proficiency = SKILL_CRAFTY_C4();/** 4 */
-		e_name_to_proficiency[proficiency_t::BETTER_EXPLOSIONS].minimum_proficiency = SKILL_BETTER_EXPLOSIONS();/** 33 */
-		e_name_to_proficiency[proficiency_t::CHAINABLE_BREACHING].minimum_proficiency = SKILL_CHAINABLE_BREACHING();/** 1 */
+		e_name_to_proficiency[just_proficiency_name_t::FASTER_BREACHES].minimum_proficiency = SKILL_FASTER_BREACHES();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::FURTHER_C4S].minimum_proficiency = SKILL_FURTHER_C4S();/** 4 */
+		e_name_to_proficiency[just_proficiency_name_t::STRONGER_FRAG_ARM].minimum_proficiency = SKILL_STRONGER_FRAG_ARM();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::BIGGER_CLAYMORES].minimum_proficiency = SKILL_BIGGER_CLAYMORES();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::FASTER_THERMITES].minimum_proficiency = SKILL_FASTER_THERMITES();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::BIGGER_FIRE_NADES].minimum_proficiency = SKILL_BIGGER_FIRE_NADES();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::CRAFTY_C4].minimum_proficiency = SKILL_CRAFTY_C4();/** 4 */
+		e_name_to_proficiency[just_proficiency_name_t::BETTER_EXPLOSIONS].minimum_proficiency = SKILL_BETTER_EXPLOSIONS();/** 33 */
+		e_name_to_proficiency[just_proficiency_name_t::CHAINABLE_BREACHING].minimum_proficiency = SKILL_CHAINABLE_BREACHING();/** 1 */
 
 		tier_three_proficiencies.emplace_back(p::FASTER_BREACHES);
 		tier_three_proficiencies.emplace_back(p::FURTHER_C4S);
@@ -329,12 +332,12 @@ namespace mods::skills {
 		tier_three_proficiencies.emplace_back(p::CHAINABLE_BREACHING);
 
 		/** weapon handling and demolitions */
-		e_name_to_proficiency[proficiency_t::RETROFIT_GRENADE_LAUNCHER].minimum_proficiency = SKILL_RETROFIT_GRENADE_LAUNCHER();/** 50 */
-		e_name_to_proficiency[proficiency_t::RETROFIT_FIRE_GRENADE_LAUNCHER].minimum_proficiency = SKILL_RETROFIT_FIRE_GRENADE_LAUNCHER();/** 50 */
-		e_name_to_proficiency[proficiency_t::RETROFIT_SMOKE_GRENADE_LAUNCHER].minimum_proficiency = SKILL_RETROFIT_SMOKE_GRENADE_LAUNCHER();/** 50 */
-		e_name_to_proficiency[proficiency_t::RETROFIT_SENSOR_GRENADE_LAUNCHER].minimum_proficiency = SKILL_RETROFIT_SENSOR_GRENADE_LAUNCHER();/** 50 */
-		e_name_to_proficiency[proficiency_t::RETROFIT_STUN_GRENADE_LAUNCHER].minimum_proficiency = SKILL_RETROFIT_STUN_GRENADE_LAUNCHER();/** 50 */
-		e_name_to_proficiency[proficiency_t::NOXIOUS_NADE_CRAFTER].minimum_proficiency = SKILL_NOXIOUS_NADE_CRAFTER();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::RETROFIT_GRENADE_LAUNCHER].minimum_proficiency = SKILL_RETROFIT_GRENADE_LAUNCHER();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::RETROFIT_FIRE_GRENADE_LAUNCHER].minimum_proficiency = SKILL_RETROFIT_FIRE_GRENADE_LAUNCHER();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::RETROFIT_SMOKE_GRENADE_LAUNCHER].minimum_proficiency = SKILL_RETROFIT_SMOKE_GRENADE_LAUNCHER();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::RETROFIT_SENSOR_GRENADE_LAUNCHER].minimum_proficiency = SKILL_RETROFIT_SENSOR_GRENADE_LAUNCHER();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::RETROFIT_STUN_GRENADE_LAUNCHER].minimum_proficiency = SKILL_RETROFIT_STUN_GRENADE_LAUNCHER();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::NOXIOUS_NADE_CRAFTER].minimum_proficiency = SKILL_NOXIOUS_NADE_CRAFTER();/** 50 */
 
 		tier_three_proficiencies.emplace_back(p::RETROFIT_GRENADE_LAUNCHER);
 		tier_three_proficiencies.emplace_back(p::RETROFIT_FIRE_GRENADE_LAUNCHER);
@@ -347,12 +350,12 @@ namespace mods::skills {
 
 
 		/** medical specialty - any tier */
-		e_name_to_proficiency[proficiency_t::STEROID_DEALER].minimum_proficiency = SKILL_STEROID_DEALER();/** 50 */
-		e_name_to_proficiency[proficiency_t::HGH_DEALER].minimum_proficiency = SKILL_HGH_DEALER();/** 50 */
-		e_name_to_proficiency[proficiency_t::DUTCH_OVEN].minimum_proficiency = SKILL_DUTCH_OVEN();/** 50 */
-		e_name_to_proficiency[proficiency_t::HGH_MORE_POWERFUL].minimum_proficiency = SKILL_HGH_MORE_POWERFUL();/** 2050 */
-		e_name_to_proficiency[proficiency_t::SUTURE].minimum_proficiency = SKILL_SUTURE();/** 2050 */
-		e_name_to_proficiency[proficiency_t::ADRENALINE_BOOST].minimum_proficiency = SKILL_ADRENALINE_BOOST();/** 2050 */
+		e_name_to_proficiency[just_proficiency_name_t::STEROID_DEALER].minimum_proficiency = SKILL_STEROID_DEALER();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::HGH_DEALER].minimum_proficiency = SKILL_HGH_DEALER();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::DUTCH_OVEN].minimum_proficiency = SKILL_DUTCH_OVEN();/** 50 */
+		e_name_to_proficiency[just_proficiency_name_t::HGH_MORE_POWERFUL].minimum_proficiency = SKILL_HGH_MORE_POWERFUL();/** 2050 */
+		e_name_to_proficiency[just_proficiency_name_t::SUTURE].minimum_proficiency = SKILL_SUTURE();/** 2050 */
+		e_name_to_proficiency[just_proficiency_name_t::ADRENALINE_BOOST].minimum_proficiency = SKILL_ADRENALINE_BOOST();/** 2050 */
 
 		tier_one_proficiencies.emplace_back(p::STEROID_DEALER);
 		tier_one_proficiencies.emplace_back(p::HGH_DEALER);
@@ -363,9 +366,9 @@ namespace mods::skills {
 
 
 		/** strategy base attribute - any tier */
-		e_name_to_proficiency[proficiency_t::ENTRY_DENIAL].minimum_proficiency = SKILL_ENTRY_DENIAL();/** 2050 */
-		e_name_to_proficiency[proficiency_t::MISDIRECTION].minimum_proficiency = SKILL_MISDIRECTION();/** 2050 */
-		e_name_to_proficiency[proficiency_t::SNIPER_SUPPORT].minimum_proficiency = SKILL_SNIPER_SUPPORT();/** 2050 */
+		e_name_to_proficiency[just_proficiency_name_t::ENTRY_DENIAL].minimum_proficiency = SKILL_ENTRY_DENIAL();/** 2050 */
+		e_name_to_proficiency[just_proficiency_name_t::MISDIRECTION].minimum_proficiency = SKILL_MISDIRECTION();/** 2050 */
+		e_name_to_proficiency[just_proficiency_name_t::SNIPER_SUPPORT].minimum_proficiency = SKILL_SNIPER_SUPPORT();/** 2050 */
 
 		tier_one_proficiencies.emplace_back(p::ENTRY_DENIAL);
 		tier_one_proficiencies.emplace_back(p::MISDIRECTION);
@@ -373,8 +376,8 @@ namespace mods::skills {
 
 
 		/** intel base attribute - any tier */
-		e_name_to_proficiency[proficiency_t::INCREASED_AWARENESS].minimum_proficiency = SKILL_INCREASED_AWARENESS();/** 2050 */
-		e_name_to_proficiency[proficiency_t::REDUCED_DETECTION_CHANCE].minimum_proficiency = SKILL_REDUCED_DETECTION_CHANCE();/** 4 */
+		e_name_to_proficiency[just_proficiency_name_t::INCREASED_AWARENESS].minimum_proficiency = SKILL_INCREASED_AWARENESS();/** 2050 */
+		e_name_to_proficiency[just_proficiency_name_t::REDUCED_DETECTION_CHANCE].minimum_proficiency = SKILL_REDUCED_DETECTION_CHANCE();/** 4 */
 
 		tier_one_proficiencies.emplace_back(p::INCREASED_AWARENESS);
 		tier_one_proficiencies.emplace_back(p::REDUCED_DETECTION_CHANCE);
@@ -382,16 +385,16 @@ namespace mods::skills {
 
 
 		/** available at all levels for GHOST class */
-		e_name_to_proficiency[proficiency_t::GHOST_CLASS_DRONE_SCAN].minimum_proficiency = SKILL_GHOST_DRONE_SCAN();
-		e_name_to_proficiency[proficiency_t::GHOST_CLASS_STEALTH].minimum_proficiency = SKILL_GHOST_STEALTH();
-		e_name_to_proficiency[proficiency_t::GHOST_CLASS_SUMMON_EXTRACTION].minimum_proficiency = SKILL_GHOST_SUMMON_EXTRACTION();
-		e_name_to_proficiency[proficiency_t::GHOST_CLASS_XRAY_SHOT].minimum_proficiency = SKILL_GHOST_XRAY_SHOT();
-		e_name_to_proficiency[proficiency_t::GHOST_CLASS_FEIGN_DEATH].minimum_proficiency = SKILL_GHOST_FEIGN_DEATH();
-		e_name_to_proficiency[proficiency_t::GHOST_CLASS_PLANT_CLAYMORE].minimum_proficiency = SKILL_GHOST_PLANT_CLAYMORE();
-		e_name_to_proficiency[proficiency_t::GHOST_CLASS_PENETRATING_SHOT].minimum_proficiency = SKILL_GHOST_PENETRATING_SHOT();
-		e_name_to_proficiency[proficiency_t::GHOST_CLASS_INTIMIDATION].minimum_proficiency = SKILL_GHOST_INTIMIDATION();
-		e_name_to_proficiency[proficiency_t::GHOST_CLASS_CRYOGENIC_GRENADE].minimum_proficiency = SKILL_GHOST_CRYOGENIC_GRENADE();
-		e_name_to_proficiency[proficiency_t::GHOST_CLASS_FLASH_UNDERBARREL].minimum_proficiency = SKILL_GHOST_FLASH_UNDERBARREL();
+		e_name_to_proficiency[just_proficiency_name_t::GHOST_CLASS_DRONE_SCAN].minimum_proficiency = SKILL_GHOST_DRONE_SCAN();
+		e_name_to_proficiency[just_proficiency_name_t::GHOST_CLASS_STEALTH].minimum_proficiency = SKILL_GHOST_STEALTH();
+		e_name_to_proficiency[just_proficiency_name_t::GHOST_CLASS_SUMMON_EXTRACTION].minimum_proficiency = SKILL_GHOST_SUMMON_EXTRACTION();
+		e_name_to_proficiency[just_proficiency_name_t::GHOST_CLASS_XRAY_SHOT].minimum_proficiency = SKILL_GHOST_XRAY_SHOT();
+		e_name_to_proficiency[just_proficiency_name_t::GHOST_CLASS_FEIGN_DEATH].minimum_proficiency = SKILL_GHOST_FEIGN_DEATH();
+		e_name_to_proficiency[just_proficiency_name_t::GHOST_CLASS_PLANT_CLAYMORE].minimum_proficiency = SKILL_GHOST_PLANT_CLAYMORE();
+		e_name_to_proficiency[just_proficiency_name_t::GHOST_CLASS_PENETRATING_SHOT].minimum_proficiency = SKILL_GHOST_PENETRATING_SHOT();
+		e_name_to_proficiency[just_proficiency_name_t::GHOST_CLASS_INTIMIDATION].minimum_proficiency = SKILL_GHOST_INTIMIDATION();
+		e_name_to_proficiency[just_proficiency_name_t::GHOST_CLASS_CRYOGENIC_GRENADE].minimum_proficiency = SKILL_GHOST_CRYOGENIC_GRENADE();
+		e_name_to_proficiency[just_proficiency_name_t::GHOST_CLASS_FLASH_UNDERBARREL].minimum_proficiency = SKILL_GHOST_FLASH_UNDERBARREL();
 
 		auto v = tier_one_proficiencies;
 		v.insert(v.end(),tier_two_proficiencies.begin(),tier_two_proficiencies.end());
@@ -450,6 +453,7 @@ namespace mods::skills {
 	}
 
 	uint16_t get_player_level(player_ptr_t& player,std::string_view skill){
+		std::cerr << "player's skill: '" << skill.data() << "', level:" << player->skill(get_enum_by_name(skill)) << "\n";
 		return player->skill(get_enum_by_name(skill));
 	}
 
@@ -605,9 +609,9 @@ ACMD(do_train){
 				std::string skill = pad_string(prof.name.c_str(),max_len - 2," ");
 				auto tier_pair = get_tier_pair(prof.e_name);
 				if(is_my_skill){
-					snprintf(&buffer[0],1024,"%s%s | (Cost: %d) (Levels: any)",skill.c_str(),(can_do  || 1 ? learned : not_learned).c_str(), prof.minimum_proficiency);
+					snprintf(&buffer[0],1024,"%s%s | (Cost: %d) (Levels: any)",skill.c_str(),(can_do  ? learned : not_learned).c_str(), prof.minimum_proficiency);
 				}else{
-					snprintf(&buffer[0],1024,"%s%s | (Cost: %d) (Levels: %d->%d)",skill.c_str(),(can_do  || 1 ? learned : not_learned).c_str(), prof.minimum_proficiency,tier_pair.first,tier_pair.second);
+					snprintf(&buffer[0],1024,"%s%s | (Cost: %d) (Levels: %d->%d)",skill.c_str(),(can_do ? learned : not_learned).c_str(), prof.minimum_proficiency,tier_pair.first,tier_pair.second);
 				}
 				player->sendln(&buffer[0]);
 			}
@@ -635,51 +639,76 @@ ACMD(do_train){
 		player->errorln(CAT("Unable to find a skill that matches '",vec_args[0],"'"));
 	}
 }
+
+
+void foreach_player_skillset(player_ptr_t& player, mods::skills::foreach_skill_t callback){
+	for(auto & skillset : mods::skills::proficiencies::list) {
+		if(is_player_class_skillset(std::get<0>(skillset)) && !skill_belongs_to_player_class(player,std::get<0>(skillset))){
+			continue;
+		}
+		for(const auto & prof : std::get<1>(skillset)){
+			if(!callback(prof)){
+				return;
+			}
+		}
+	}
+}
+
+void foreach_player_skillset_with_name(player_ptr_t& player, mods::skills::foreach_skill_with_name_t callback){
+	for(auto & skillset : mods::skills::proficiencies::list) {
+		if(is_player_class_skillset(std::get<0>(skillset)) && !skill_belongs_to_player_class(player,std::get<0>(skillset))){
+			continue;
+		}
+		for(const auto & prof : std::get<1>(skillset)){
+			if(!callback(prof,std::get<0>(skillset))){
+				return;
+			}
+		}
+	}
+}
+
 ACMD(do_skills){
 	DO_HELP("skills");
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() >= 2 && ICMP(vec_args[0],"show")){
 		for(unsigned i = 1; i < vec_args.size();++i){
-			for(auto & skillset : mods::skills::proficiencies::list) {
-				if(is_player_class_skillset(std::get<0>(skillset)) && !skill_belongs_to_player_class(player,std::get<0>(skillset))){
-					continue;
+			foreach_player_skillset(player,[&](const mods::skills::proficiency_t& prof) -> bool {
+				if(ICMP(prof.name.c_str(),vec_args[i])){
+					player->send("{grn}skill-name: '{yel}%s{/yel}'\r\n", prof.name.c_str());
+					player->send("{grn}skill-description: '{yel}%s{/yel}'\r\n", prof.description.c_str());
+					player->send("{grn}minium-proficiency: {yel}%d{/yel}\r\n", prof.minimum_proficiency);
+					return false;
 				}
-				for(auto & prof : std::get<1>(skillset)){
-					if(ICMP(prof.name.c_str(),vec_args[i])){
-						player->send("{grn}skill-name: '{yel}%s{/yel}'\r\n", prof.name.c_str());
-						player->send("{grn}skill-description: '{yel}%s{/yel}'\r\n", prof.description.c_str());
-						player->send("{grn}minium-proficiency: {yel}%d{/yel}\r\n", prof.minimum_proficiency);
-						continue;
-					}
-				}
-			}
+				return true;
+			});
 		}
 	}
 
 	player->pager_start();
 	std::size_t max_len = 35,skill_max_len = 80,skill_line_max_len = skill_max_len;
 	skill_line_max_len += 20;
-	for(auto & skillset : mods::skills::proficiencies::list) {
-		if(is_player_class_skillset(std::get<0>(skillset)) && !skill_belongs_to_player_class(player,std::get<0>(skillset))){
-			continue;
+	std::map<std::string_view,bool> printed;
+	foreach_player_skillset_with_name(player,[&](const mods::skills::proficiency_t& prof,std::string_view name) -> bool {
+		if(!printed[name]){
+			player->send("{grn}::[ %s ]::{/grn}\r\n",name.data());
+			printed[name] = true;
 		}
-		player->sendln(CAT("-- {grn}",std::get<0>(skillset),"{/grn}"));
+
+		bool can_do = mods::skills::player_can(player,prof.e_name);
 		std::string not_learned = "|not-learned";
 		std::string learned  = pad_string("|learned",not_learned.length()," ");
-		for(auto & prof : std::get<1>(skillset)){
-			bool can_do = mods::skills::player_can(player,prof.e_name);
-			std::array<char,1024> buffer = {0};
-			std::string skill = pad_string(prof.name.c_str(),max_len - 2," ");
-			auto tier_pair = get_tier_pair(prof.e_name);
-			bool is_my_skill = is_player_class_skillset(std::get<0>(skillset)) && skill_belongs_to_player_class(player,std::get<0>(skillset));
-			if(is_my_skill){
-				snprintf(&buffer[0],1024,"%s%s | (Cost: %d) (Levels: any)",skill.c_str(),(can_do  || 1 ? learned : not_learned).c_str(), prof.minimum_proficiency);
-			}else{
-				snprintf(&buffer[0],1024,"%s%s | (Cost: %d) (Levels: %d->%d)",skill.c_str(),(can_do  || 1 ? learned : not_learned).c_str(), prof.minimum_proficiency,tier_pair.first,tier_pair.second);
-			}
-			player->sendln(&buffer[0]);
+		std::array<char,1024> buffer = {0};
+		std::string skill = pad_string(prof.name.c_str(),max_len - 2," ");
+		auto tier_pair = get_tier_pair(prof.e_name);
+		bool is_my_skill = is_player_class_skillset(name) && skill_belongs_to_player_class(player,name);
+		if(is_my_skill){
+			snprintf(&buffer[0],1024,"%s%s | (Cost: %d) (Levels: any)",skill.c_str(),(can_do ? learned : not_learned).c_str(), prof.minimum_proficiency);
+		}else{
+			snprintf(&buffer[0],1024,"%s%s | (Cost: %d) (Levels: %d->%d)",skill.c_str(),(can_do  ? learned : not_learned).c_str(), prof.minimum_proficiency,tier_pair.first,tier_pair.second);
 		}
-	}
+		player->sendln(&buffer[0]);
+		return true;
+	});
 	player->sendln("To see a detailed description of a skill, type: {grn}skills help <skill>{/grn}");
 	player->sendln("Example: {yel}skills show spray-chance{/yel}");
 	player->sendln("this documentation was written on 2020-07-06.");

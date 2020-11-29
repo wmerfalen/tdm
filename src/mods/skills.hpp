@@ -144,6 +144,8 @@ namespace mods::skills {
 			uint16_t minimum_proficiency;
 			bool implemented;
 		};
+
+
 		/**
 		 * Static db asset: pyrexia_class proficiencies
 		 */
@@ -389,7 +391,7 @@ namespace mods::skills {
 		 * ----------------
 		 *  Stores proficiencies that are globally available as well as class-specific ones..
 		 */
-		static std::vector<std::tuple<std::string,std::vector<proficiencies::proficiency_t>>> list = {
+		static std::vector<std::tuple<std::string,std::vector<proficiency_t>>> list = {
 			{"Electronics",electronics},
 			{"Armor",armor},
 			{"Marksmanship",marksmanship},
@@ -529,8 +531,11 @@ namespace mods::skills {
 		SKILL_MASTER = 3
 	};
 
-	using proficiency_t = mods::skills::proficiencies::proficiency_name_t;
-	std::vector<proficiency_t> get_player_tier_skills(player_ptr_t& player);
+using proficiency_t = mods::skills::proficiencies::proficiency_t;
+using foreach_skill_with_name_t = std::function<bool(const proficiency_t&,std::string_view)>;
+void foreach_player_skillset_with_name(player_ptr_t& player, foreach_skill_with_name_t callback);
+using foreach_skill_t = std::function<bool(const proficiency_t&)>;
+void foreach_player_skillset(player_ptr_t& player, foreach_skill_t callback);
 };
 enum skill_familiarity_t : uint8_t {
 	NONE = 0,

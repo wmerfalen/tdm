@@ -1,5 +1,104 @@
 # Inventory of features (mods directory only)
 
+# 2020-11-29 classes system rework
+	Up until today, there has been no definite scope to the player classes. It has all been one
+	big blur of adding random features with no clear decision as to the definite direction
+	of the game. I am taking the time now to describe the new class system which in turn
+	also clearly defines the scope of this project. 
+
+	For a little bit of background: I started this project with the idea of creating a 
+	MUD that was inspired by Tom Clancy's Rainbow Six Siege. I have deviated from that
+	initial goal. I have implemented lots of features but nothing cohesive enough to
+	gaurantee a good multiplayer experience. That ends here. The following class
+	system is set in stone and will not change.
+
+# 2020 Class System Scope Revision
+	Each player class consists of the following configuration:
+	- Primary Weapon
+	- Secondary Weapon
+	- Grenade/Explosive
+	- Special Ability
+
+	Each player class cannot swap their weapon out for another weapon.
+	However, a weapon can have various attachments and upgrades.
+	The PC weapon levels up as the player levels up.
+
+	Base attributes for each PC all start off the same, however, the
+	Speed/Armor triads can be configured by player upon character generation.
+
+	This MUD is COMBAT-BASED, which makes the required features easier to
+	tackle. It is very tempting to attempt to write a MUD that rewards the
+	player for being stealthy/sneaky/clever, but that is very hard to get
+	correct, and it complicates the reward/leveling system.
+
+	Each loadout is damage based. The loadouts are meant to deal damage
+	and are chosen specifically for each class to fit that PC's play style.
+	For example, the Sniper class should have a DMR. Equipping the Sniper
+	with a shotgun primary would make no sense.
+
+	Each grenade type is coupled with the play style of each PC.
+
+	The special ability of each PC is damage based as well. The ability
+	should either prevent or enhance damage done/taken.
+
+# 2020-11-29 REVISED CLASS SYSTEM
+
+# SNIPER
+	- Loadout:
+		- Primary: PSG-1 Sniper Rifle
+		- Secondary: CZP10 Pistol
+		- Grenade/Explosive: Claymore Mine
+		- Ability: X-Ray Shot (can shoot through multiple layers of walls/doors)
+			- Can snipe an enemy within a building
+			- Can snipe an enemy through walls or doors
+			- If enemy not behind cover, it causes 150% damage to target
+# MARINE
+	- Loadout:
+		- Primary: M4 Assault Rifle
+		- Secondary: Magnum Revolver (exact type TBD)
+		- Grenade/Explosive: Fragmentation Grenade
+		- Ability: Activate Underbarrel grenade launcher (x3 grenade rounds)
+			- Causes massive explosive damage to a room very far away
+# BREACHER
+	- Loadout:
+		- Primary: MP-5 Sub Machine Gun
+		- Secondary: SASG-12 Shotgun
+		- Grenade/Explosive: Flashbang
+		- Ability: Explosive shot
+			- Shot can breach doors/walls/surfaces, creating new tiles on the map
+			- Same effect as a breach charge but without having to use one
+# ENGINEER
+	- Loadout:
+		- Primary: UMP-45
+		- Secondary: Glock
+		- Grenade/Explosive: Sensor Grenade
+		- Ability: Spawn and control Explosive Autonomous Drone
+# MEDIC
+	- Loadout:
+		- Primary: SAIGA-12 Automatic Shotgun
+		- Secondary: MP9 Machine Pistol
+		- Grenade/Explosive: Smoke Grenade
+		- Ability: Heal self/team
+			- Gain 33% of your HP per ability level
+# GHOST
+	- Loadout:
+		- Primary: Silenced G36C Assault Rifle
+		- Secondary: Silenced PPK Pistol
+		- Grenade/Explosive: Smoke Grenade
+		- Ability: Paralyzing shot
+			- Target is immobilized for several seconds
+			- Target takes 150% damage
+# SUPPORT
+	- Loadout:
+		- Primary: HK21 Light Machine Gun
+		- Secondary: <PISTOL TBD>
+		- Grenade/Explosive: Incendiary Grenade
+		- Ability: Call in drone strike
+			- Drones drop hellfire missiles on target room
+# END OF 2020-11-29 REVISED CLASS SYSTEM
+
+
+
 # sql 'up' migrations
 	- run with: `./bin/circle --run-migration-up=<identifier>`
 # sql 'down' migrations
