@@ -22,18 +22,12 @@ namespace mods::orm {
 		std::string primary_key_name() { return id_column(); }
 		std::string primary_key_value(){ return std::to_string(this->id); }
 
-		uint64_t initialize_row(player_ptr_t &player, primary_choice_t primary_choice);
+		uint64_t initialize_row(player_ptr_t &player);
 		int16_t feed(const pqxx::result::reference &);
 		void init();
 
 		primary_choice_t primary_type(){
-			if(support_primary_type.compare(MK46) == 0){
-				return primary_choice_t::MK46;
-			}
-			if(support_primary_type.compare(HK21) == 0){
-				return primary_choice_t::HK21;
-			}
-			return primary_choice_t::NONE;
+			return primary_choice_t::MK46;
 		}
 
 		strmap_t export_class();
@@ -45,10 +39,6 @@ namespace mods::orm {
 		uint64_t id;
 		uint64_t support_id;
 		uint64_t support_player_id;
-		std::string support_primary_type;
-		uint64_t support_primary_weapon_id;
-		std::string support_secondary_type;
-		uint64_t support_secondary_weapon_id;
 		long created_at;
 		long updated_at;
 		bool loaded;

@@ -540,15 +540,6 @@ namespace mods::levels {
 			case GHOST:
 				mods::classes::ghost_advance_level(player);
 				break;
-			case PYREXIA:
-				mods::classes::pyrexia_advance_level(player);
-				break;
-			case FORGE:
-				mods::classes::forge_advance_level(player);
-				break;
-			case SYNDROME:
-				mods::classes::syndrome_advance_level(player);
-				break;
 			default:
 				std::cerr << red_str("[mods::levels::advance_level] unsupported class type: ") << player->get_class_string().str() << "\n";
 				break;

@@ -1,7 +1,7 @@
 #ifndef __MENTOC_MODS_CLASSES_MARINE_HEADER__
 #define  __MENTOC_MODS_CLASSES_MARINE_HEADER__
 #include "base.hpp"
-#include "../orm/class-marine.hpp"
+#include "../orm/marine.hpp"
 		using marine_orm_t = mods::orm::marine;
 namespace mods::classes {
 	struct marine : base {
@@ -19,6 +19,7 @@ namespace mods::classes {
 		player_ptr_t 	player();
 		int16_t				new_player(player_ptr_t&, primary_choice_t primary);
 		int16_t save();
+		void replenish();
 
 		private:
 			player_ptr_t m_player;

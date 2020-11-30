@@ -4,6 +4,9 @@
 namespace mods::classes {
 	marine::marine(){
 	}
+	void marine::replenish(){
+
+	}
 	marine::marine(player_ptr_t p){
 		load_by_player(p);
 	}
@@ -16,7 +19,7 @@ namespace mods::classes {
 			report("marine::new_player. got primary_choice of zero. defaulting to M16A4");
 			primary_choice = primary_choice_t::M16A4;
 		}
-		auto db_id = m_orm.initialize_row(player,primary_choice);
+		auto db_id = m_orm.initialize_row(player);
 		if(db_id == 0){
 			return -2;
 		}

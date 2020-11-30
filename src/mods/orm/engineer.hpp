@@ -1,5 +1,5 @@
-#ifndef __MENTOC_MODS_ORM_CLASS_ENGINEER_HEADER__
-#define __MENTOC_MODS_ORM_CLASS_ENGINEER_HEADER__
+#ifndef __MENTOC_MODS_ORM_ENGINEER_HEADER__
+#define __MENTOC_MODS_ORM_ENGINEER_HEADER__
 
 #include "orm-base.hpp"
 
@@ -22,17 +22,11 @@ namespace mods::orm {
 		std::string primary_key_name() { return id_column(); }
 		std::string primary_key_value(){ return std::to_string(this->id); }
 
-		uint64_t initialize_row(player_ptr_t &player, primary_choice_t primary_choice);
+		uint64_t initialize_row(player_ptr_t &player);
 		int16_t feed(const pqxx::result::reference &);
 		void init();
 
 		primary_choice_t primary_type(){
-			if(engineer_primary_type.compare(FMG9) == 0){
-				return primary_choice_t::FMG9;
-			}
-			if(engineer_primary_type.compare(P90) == 0){
-				return primary_choice_t::P90;
-			}
 			return primary_choice_t::NONE;
 		}
 
@@ -45,10 +39,6 @@ namespace mods::orm {
 		uint64_t id;
 		uint64_t engineer_id;
 		uint64_t engineer_player_id;
-		std::string engineer_primary_type;
-		uint64_t engineer_primary_weapon_id;
-		std::string engineer_secondary_type;
-		uint64_t engineer_secondary_weapon_id;
 		long created_at;
 		long updated_at;
 		bool loaded;

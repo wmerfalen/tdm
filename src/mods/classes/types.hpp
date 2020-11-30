@@ -17,6 +17,7 @@ namespace mods::classes {
 		STRIKER,
 		FORGE,
 		SYNDROME,
+		BREACHER,
 		UNDEFINED
 	};
 	static inline std::string to_string(mods::classes::types t){

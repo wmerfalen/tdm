@@ -9,8 +9,8 @@
 #include "skills.hpp"
 #include "rand.hpp"
 #endif
-#include "orm/class-medic.hpp"
-#include "orm/class-sniper.hpp"
+#include "orm/medic.hpp"
+#include "orm/sniper.hpp"
 #include "classes/medic.hpp"
 #include "builder/object-placement.hpp"
 #include "mini-games.hpp"
@@ -112,7 +112,7 @@ namespace mods::debug::pre_game {
 		mods::orm::medic m;
 		auto mp = std::make_shared<mods::player>();
 		mp->set_db_id(69);
-		std::cerr << "initialize_row:'" << m.initialize_row(mp,mods::orm::medic::primary_choice_t::AUGPARA) << "'\n";
+		std::cerr << "initialize_row:'" << m.initialize_row(mp) << "'\n";
 		std::cerr << "pk name:'" << m.primary_key_name() << "'\n";
 		m.save();
 		m.load_by_player(69);

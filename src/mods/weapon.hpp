@@ -292,6 +292,21 @@ namespace mods::weapon {
 		}
 		return false;
 	}
+	namespace breacher {
+		enum primary_choice_t {
+			NONE = 0,
+			MP5 = 1,
+		};
+		static inline std::string_view to_string(primary_choice_t s){
+#define SNI_STR(a){ case mods::weapon::breacher::primary_choice_t::a: return #a; }
+			switch(s){
+				SNI_STR(NONE);
+				SNI_STR(MP5);
+#undef SNI_STR
+				default:return "<unknown>";
+			}
+		}
+	};
 	/** ghost class */
 	namespace ghost {
 		enum primary_choice_t {

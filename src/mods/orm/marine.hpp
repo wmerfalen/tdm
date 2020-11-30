@@ -1,5 +1,5 @@
-#ifndef __MENTOC_MODS_ORM_CLASS_MARINE_HEADER__
-#define __MENTOC_MODS_ORM_CLASS_MARINE_HEADER__
+#ifndef __MENTOC_MODS_ORM_MARINE_HEADER__
+#define __MENTOC_MODS_ORM_MARINE_HEADER__
 
 #include "orm-base.hpp"
 
@@ -22,18 +22,12 @@ namespace mods::orm {
 		std::string primary_key_name() { return id_column(); }
 		std::string primary_key_value(){ return std::to_string(this->id); }
 
-		uint64_t initialize_row(player_ptr_t &player, primary_choice_t primary_choice);
+		uint64_t initialize_row(player_ptr_t &player);
 		int16_t feed(const pqxx::result::reference &);
 		void init();
 
 		primary_choice_t primary_type(){
-			if(marine_primary_type.compare(M16A4) == 0){
-				return primary_choice_t::M16A4;
-			}
-			if(marine_primary_type.compare(M4) == 0){
 				return primary_choice_t::M4;
-			}
-			return primary_choice_t::NONE;
 		}
 
 		strmap_t export_class();
@@ -45,10 +39,6 @@ namespace mods::orm {
 		uint64_t id;
 		uint64_t marine_id;
 		uint64_t marine_player_id;
-		std::string marine_primary_type;
-		uint64_t marine_primary_weapon_id;
-		std::string marine_secondary_type;
-		uint64_t marine_secondary_weapon_id;
 		long created_at;
 		long updated_at;
 		bool loaded;

@@ -1,7 +1,7 @@
 #ifndef  __MENTOC_MODS_CLASSES_MEDIC_HEADER__
 #define  __MENTOC_MODS_CLASSES_MEDIC_HEADER__
 
-#include "../orm/class-medic.hpp"
+#include "../orm/medic.hpp"
 #include "base.hpp"
 
 using medic_orm_t = mods::orm::medic;
@@ -24,7 +24,9 @@ namespace mods::classes {
 		int16_t load_by_player(player_ptr_t &);
 		player_ptr_t 	player();
 		int16_t	new_player(player_ptr_t&, primary_choice_t primary);
+		uint64_t initialize_row(player_ptr_t&);
 		int16_t save();
+		void replenish();
 
 		/** class abilities */
 		void heal_player(player_ptr_t& target);

@@ -391,7 +391,13 @@ std::ostream& log(Args... args); /*{
 		return false;
 	}
 	static inline player_class_t to_player_class(std::string_view str){
-			if(is_lower_match(str,"GHOST")){ return player_class_t::CLASS_GHOST; }
+			if(is_lower_match(str,"SNIPER")){ return player_class_t::SNIPER; }
+			if(is_lower_match(str,"MARINE")){ return player_class_t::MARINE; }
+			if(is_lower_match(str,"BREACHER")){ return player_class_t::BREACHER; }
+			if(is_lower_match(str,"ENGINEER")){ return player_class_t::ENGINEER; }
+			if(is_lower_match(str,"GHOST")){ return player_class_t::GHOST; }
+			if(is_lower_match(str,"MEDIC")){ return player_class_t::MEDIC; }
+			if(is_lower_match(str,"SUPPORT")){ return player_class_t::SUPPORT; }
 		 	if(is_lower_match(str,"MARKSMAN")){ return player_class_t::CLASS_MARKSMAN; }
 		 	if(is_lower_match(str,"BANDIT")){ return player_class_t::CLASS_BANDIT; }
 		 	if(is_lower_match(str,"BUTCHER")){ return player_class_t::CLASS_BUTCHER; }

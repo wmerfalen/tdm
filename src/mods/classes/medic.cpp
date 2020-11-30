@@ -7,6 +7,9 @@ namespace mods::classes {
 	int scaled_heal(TPlayer& target){
 		return (33 * (target->level() * 0.5));
 	}
+	void medic::replenish(){
+
+	}
 	uint8_t& medic::stim_pistol_ammo(){
 		return m_stim_pistol_ammo;
 	}
@@ -65,7 +68,7 @@ namespace mods::classes {
 		return std::move(std::make_shared<medic>(in_player));
 	}
 	int16_t medic::new_player(player_ptr_t &player, primary_choice_t primary_choice){
-		auto db_id = m_orm.initialize_row(player,primary_choice);
+		auto db_id = m_orm.initialize_row(player);
 		if(db_id == 0){
 			report({"medic::new_player. failed to initialize_row for player:",player->name().c_str()});
 			return -2;

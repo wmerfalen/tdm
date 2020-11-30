@@ -1,5 +1,5 @@
-#ifndef __MENTOC_MODS_ORM_CLASS_SNIPER_HEADER__
-#define __MENTOC_MODS_ORM_CLASS_SNIPER_HEADER__
+#ifndef __MENTOC_MODS_ORM_SNIPER_HEADER__
+#define __MENTOC_MODS_ORM_SNIPER_HEADER__
 
 #include "../../globals.hpp"
 #include "orm-base.hpp"
@@ -19,18 +19,12 @@ namespace mods::orm {
 		sniper() : id(0) { this->init(); loaded = 0; }
 		~sniper() = default;
 
-		uint64_t initialize_row(player_ptr_t &player, primary_choice_t primary_choice);
+		uint64_t initialize_row(player_ptr_t &player);
 		int16_t feed(const pqxx::result::reference &);
 		void init();	
 		strmap_t export_class();
 		primary_choice_t primary_type(){
-			if(sniper_primary_type.compare(PSG1) == 0){
 				return primary_choice_t::PSG1;
-			}
-			if(sniper_primary_type.compare(L96AW) == 0){
-				return primary_choice_t::L96AW;
-			}
-			return primary_choice_t::NONE;
 		}
 		int16_t save(){
 			return std::get<0>(this->update<sniper>(this));

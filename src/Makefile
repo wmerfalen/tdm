@@ -64,10 +64,13 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/room \
 					 mods/weapons/pistol-czp10 \
 					 mods/weapons/smg-mp5 mods/weapons/shotgun-sasg12 \
-					 mods/orm/class-medic mods/classes/medic \
-					 mods/orm/class-sniper mods/classes/sniper \
+					 mods/orm/sniper mods/classes/sniper \
+					 mods/orm/marine mods/classes/marine \
+					 mods/orm/breacher mods/classes/breacher \
+					 mods/orm/engineer mods/classes/engineer \
 					 mods/orm/ghost mods/classes/ghost \
-					 mods/orm/striker mods/classes/striker \
+					 mods/orm/medic mods/classes/medic \
+					 mods/orm/support mods/classes/support \
 					 mods/classes/base mods/classes/super-user-fiddler \
 					 mods/weapons/sniper-rifle-psg1 mods/weapons/sniper-rifle-l96aw \
 					 mods/orm/quotes act.builder mods/orm/base mods/yaml \
@@ -90,9 +93,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/target-practice mods/target-practice-db mods/demolitions \
 					 mods/replenish mods/players/destroy-player mods/rate-limiting \
 					 mods/levels mods/orm/player-base-ability \
-					 mods/orm/forge mods/classes/forge \
-					 mods/orm/pyrexia mods/classes/pyrexia \
-					 mods/orm/syndrome mods/classes/syndrome
+					 mods/class-abilities
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

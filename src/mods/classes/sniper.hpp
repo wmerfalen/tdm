@@ -1,6 +1,6 @@
 #ifndef  __MENTOC_MODS_CLASSES_SNIPER_HEADER__
 #define  __MENTOC_MODS_CLASSES_SNIPER_HEADER__
-#include "../orm/class-sniper.hpp"
+#include "../orm/sniper.hpp"
 #include "base.hpp"
 
 using sniper_orm_t = mods::orm::sniper;
@@ -20,12 +20,18 @@ namespace mods::classes {
 
 		int16_t load_by_player(player_ptr_t &);
 		player_ptr_t player();
-		int16_t new_player(player_ptr_t&, primary_choice_t primary);
+		int16_t new_player(player_ptr_t&);
 		int16_t save();
+		std::vector<uuid_t> get_targets_scanned_by_drone();
+		void drone_scan(room_rnum);
+		void mark_room(room_rnum);
+		void replenish();
 
 		private:
 			player_ptr_t m_player;
 			sniper_orm_t m_orm;
+			std::vector<uuid_t> m_scanned;
+			room_rnum m_marked_room;
 	};
 	std::shared_ptr<mods::classes::sniper> create_sniper(player_ptr_t &player);
 };

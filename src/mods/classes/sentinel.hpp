@@ -1,3 +1,4 @@
+#if 0
 #ifndef __MENTOC_MODS_CLASSES_SENTINEL_HEADER__
 #define  __MENTOC_MODS_CLASSES_SENTINEL_HEADER__
 #include <variant>
@@ -94,4 +95,5 @@ void          psendln(std::string_view msg);
 
 };
 
+#endif
 #endif

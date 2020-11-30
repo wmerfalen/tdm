@@ -32,16 +32,6 @@ namespace mods::orm {
 		uint64_t id;
 		uint64_t ghost_id;
 		uint64_t ghost_player_id;
-		skill_familiarity_t ghost_drone_scan_level;
-		skill_familiarity_t ghost_stealth_level;
-		skill_familiarity_t ghost_xray_shot_level;
-		skill_familiarity_t ghost_feign_death_level;
-		skill_familiarity_t ghost_summon_extraction_level;
-		skill_familiarity_t ghost_plant_claymore_level;
-		skill_familiarity_t ghost_penetrating_shot_level;
-		skill_familiarity_t ghost_intimidation_level;
-		skill_familiarity_t ghost_cryogenic_grenade_level;
-		skill_familiarity_t ghost_flash_underbarrel_level;
 		long created_at;
 		long updated_at;
 		bool loaded;

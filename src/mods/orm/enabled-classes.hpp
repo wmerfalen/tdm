@@ -5,5 +5,11 @@
 #include "pyrexia.hpp"
 #include "forge.hpp"
 #include "syndrome.hpp"
+#include "sniper.hpp"
+#include "marine.hpp"
+#include "breacher.hpp"
+#include "engineer.hpp"
+#include "medic.hpp"
+#include "support.hpp"
 
 #endif

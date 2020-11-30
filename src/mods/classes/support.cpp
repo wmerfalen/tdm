@@ -3,6 +3,9 @@
 #include "../orm/inventory.hpp"
 
 namespace mods::classes {
+	void support::replenish(){
+
+	}
 	support::support(){
 	}
 	support::support(player_ptr_t p){
@@ -17,7 +20,7 @@ namespace mods::classes {
 			mods::bugs::fixtures("support::new_player. got primary_choice of zero. defaulting to MK46");
 			primary_choice = primary_choice_t::MK46;
 		}
-		auto db_id = m_orm.initialize_row(player,primary_choice);
+		auto db_id = m_orm.initialize_row(player);
 		if(db_id == 0){
 			return -2;
 		}
@@ -31,9 +34,6 @@ namespace mods::classes {
 			mods::bugs::fixtures(CAT("support::load_by_player.",(result)));
 		}
 		obj_ptr_t primary = nullptr;
-		primary = create_object(ITEM_RIFLE,mods::weapon::yaml_file(m_orm.primary_type()));
-		player->equip(primary,WEAR_PRIMARY);
-		player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
 		return result;
 	}
 	int16_t support::save() {

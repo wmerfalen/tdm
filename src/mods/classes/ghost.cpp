@@ -21,22 +21,8 @@ namespace mods::classes {
 	}
 	void ghost::init(){
 		m_claymore_count = 0;
-		m_cryogenic_grenade_count = 0;
-		m_flash_underbarrel_charges = 0;
 		m_scanned.clear();
 		m_player = nullptr;
-
-		m_drone_scan_level = (decltype(m_drone_scan_level))0;
-		m_stealth_level = (decltype(m_stealth_level))0;
-		m_summon_extraction_level = (decltype(m_summon_extraction_level))0;
-		m_xray_shot_level = (decltype(m_xray_shot_level))0;
-		m_feign_death_level = (decltype(m_feign_death_level))0;
-		m_plant_claymore_level = (decltype(m_plant_claymore_level))0;
-		m_penetrating_shot_level = (decltype(m_penetrating_shot_level))0;
-		m_intimidation_level = (decltype(m_intimidation_level))0;
-		m_cryogenic_grenade_level = (decltype(m_cryogenic_grenade_level))0;
-		m_flash_underbarrel_level = (decltype(m_flash_underbarrel_level))0;
-		m_claymores.clear();
 	}
 	int16_t ghost::save(){
 		return this->m_orm.save();
@@ -66,19 +52,6 @@ namespace mods::classes {
 			report(CAT("ghost::load_by_player unable to load ghost class by player id: ",(player->db_id()),".. return status: ",(result)));
 			return result;
 		}
-		m_drone_scan_level = (decltype(m_drone_scan_level))(m_orm.ghost_drone_scan_level);
-		m_stealth_level = (decltype(m_stealth_level))(m_orm.ghost_stealth_level);
-		m_summon_extraction_level = (decltype(m_summon_extraction_level))(m_orm.ghost_summon_extraction_level);
-		m_xray_shot_level = (decltype(m_xray_shot_level))(m_orm.ghost_xray_shot_level);
-		m_feign_death_level = (decltype(m_feign_death_level))(m_orm.ghost_feign_death_level);
-		m_plant_claymore_level = (decltype(m_plant_claymore_level))(m_orm.ghost_plant_claymore_level);
-		m_penetrating_shot_level = (decltype(m_penetrating_shot_level))(m_orm.ghost_penetrating_shot_level);
-		m_intimidation_level = (decltype(m_intimidation_level))m_orm.ghost_intimidation_level;
-		m_cryogenic_grenade_level = (decltype(m_cryogenic_grenade_level))m_orm.ghost_cryogenic_grenade_level;
-		m_flash_underbarrel_level = (decltype(m_flash_underbarrel_level))m_orm.ghost_flash_underbarrel_level;
-#ifdef MENTOC_GHOST_EQUIPS
-		player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
-#endif
 		return result;
 	}
 	void ghost::apply_stealth_to(obj_ptr_t& target){
@@ -280,66 +253,8 @@ namespace mods::classes {
 		return screen;
 	}
 };
-ACMD(do_penetrating_shot){
-	PLAYER_CAN("ghost.penetrating_shot");
-	DO_HELP("penetrating_shot");
-}
-ACMD(do_intimidate) {
-	PLAYER_CAN("ghost.intimidate");
-	DO_HELP("intimidate");
-}
-ACMD(do_toss_cryogenic_grenade) {
-	PLAYER_CAN("ghost.toss_cryogenic_grenade");
-	DO_HELP("toss_cryogenic_grenade");
-}
-ACMD(do_use_flash_underbarrel) {
-	PLAYER_CAN("ghost.use_flash_underbarrel");
-	DO_HELP("use_flash_underbarrel");
-}
-ACMD(do_go_dark){
-	PLAYER_CAN("ghost.go_dark");
-	DO_HELP("go_dark");
-}
-ACMD(do_conceal){
-	PLAYER_CAN("ghost.conceal");
-	DO_HELP("conceal");
 
-}
-ACMD(do_feign_death){
-	PLAYER_CAN("ghost.feign_death");
-	DO_HELP("feign_death");
-	auto msg = std::get<1>(player->ghost()->feign_death());
-	player->sendln(msg);
-}
-ACMD(do_summon_extraction){
-	PLAYER_CAN("ghost.summon_extraction");
-	DO_HELP("summon_extraction");
-
-}
-ACMD(do_xray_shot){
-	PLAYER_CAN("ghost.xray_shot");
-	DO_HELP("xray_shot");
-	auto weapon = player->primary();
-	if(!weapon || weapon->rifle()->attributes->type != mw_rifle::SNIPER){
-		player->sendln("You must be wielding a sniper rifle!");
-		return;
-	}
-	int distance = weapon->rifle()->attributes->critical_range;
-	int direction = NORTH;
-	for(auto scanned : player->ghost()->get_targets_scanned_by_drone()){
-		auto victim = ptr_by_uuid(scanned);
-		if(!victim){
-			continue;
-		}
-		auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(
-			player,
-			weapon,
-			victim,
-			distance,
-			direction
-		);
-	}
-}
+#if 0
 namespace mods::class_abilities {
 	static constexpr const char* plant_claymore_usage = "usage: plant_claymore <direction>";
 	ACMD(do_plant_claymore){
@@ -360,10 +275,6 @@ namespace mods::class_abilities {
 	}
 	void init(){
 		mods::interpreter::add_command("plant_claymore", POS_RESTING, do_plant_claymore, 0,0);
-		mods::interpreter::add_command("penetrating_shot", POS_RESTING, do_penetrating_shot, 0,0);
-		mods::interpreter::add_command("intimidate", POS_RESTING, do_intimidate, 0,0);
-		mods::interpreter::add_command("toss_cryogenic_grenade", POS_RESTING, do_toss_cryogenic_grenade, 0,0);
-		mods::interpreter::add_command("use_flash_underbarrel", POS_RESTING, do_use_flash_underbarrel, 0,0);
-		mods::help::register_help_command_with_permission("ghost.plant_claymore",plant_claymore_usage,LVL_MORTAL);
 	}
 };
+#endif

@@ -471,8 +471,8 @@ namespace mods {
 			mods::query_objects::init();
 			mods::date_time::init();
 			mods::target_practice::init();
-			mods::class_abilities::init();
-			mods::class_abilities::forge::init();
+			//mods::class_abilities::init();
+			//mods::class_abilities::forge::init();
 			mods::values::init();
 			mods::skills::init();
 			mods::rate_limiting::init();

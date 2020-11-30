@@ -10,20 +10,22 @@
 namespace mods {
 	struct player;
 	namespace classes {
+		struct sniper;
+		struct marine;
+		struct breacher;
+		struct engineer;
+		struct medic;
 		struct ghost;
+		struct support;
+
 		struct pyrexia;
 		struct striker;
 		struct forge;
 		struct syndrome;
 
-		/** old crappy classes */
-		struct marine;
 		struct sentinel;
 		struct contagion;
-		struct engineer;
-		struct medic;
 		struct psyop;
-		struct support;
 	};
 };
 #include "flags.hpp"
@@ -617,8 +619,27 @@ namespace mods {
 		std::vector<affected_type>& del_affected_by(const affected_type& af){
 			return del_affected_by(af.index);
 		}
+		std::shared_ptr<mods::classes::sniper>& sniper();
+		void set_sniper(std::shared_ptr<mods::classes::sniper> g);
+
+		std::shared_ptr<mods::classes::breacher>& breacher();
+		void set_breacher(std::shared_ptr<mods::classes::breacher> g);
+
+		std::shared_ptr<mods::classes::marine>& marine();
+		void set_marine(std::shared_ptr<mods::classes::marine> g);
+
+		std::shared_ptr<mods::classes::engineer>& engineer();
+		void set_engineer(std::shared_ptr<mods::classes::engineer> g);
+
+		std::shared_ptr<mods::classes::medic>& medic();
+		void set_medic(std::shared_ptr<mods::classes::medic> g);
+
+		std::shared_ptr<mods::classes::support>& support();
+		void set_support(std::shared_ptr<mods::classes::support> g);
+
 		std::shared_ptr<mods::classes::ghost>& ghost();
 		void set_ghost(std::shared_ptr<mods::classes::ghost> g);
+
 		std::shared_ptr<mods::classes::pyrexia>& pyrexia();
 		void set_pyrexia(std::shared_ptr<mods::classes::pyrexia> g);
 		std::shared_ptr<mods::classes::forge>& forge();
@@ -772,7 +793,14 @@ namespace mods {
 		player_type_enum_t m_type;
 		weapon_type_t m_weapon_type;
 		weapon_type_t m_weapon_flags;
+		std::shared_ptr<mods::classes::sniper> m_sniper;
+		std::shared_ptr<mods::classes::marine> m_marine;
+		std::shared_ptr<mods::classes::breacher> m_breacher;
+		std::shared_ptr<mods::classes::engineer> m_engineer;
 		std::shared_ptr<mods::classes::ghost> m_ghost;
+		std::shared_ptr<mods::classes::medic> m_medic;
+		std::shared_ptr<mods::classes::support> m_support;
+
 		std::shared_ptr<mods::classes::pyrexia> m_pyrexia;
 		std::shared_ptr<mods::classes::forge> m_forge;
 		std::shared_ptr<mods::classes::syndrome> m_syndrome;

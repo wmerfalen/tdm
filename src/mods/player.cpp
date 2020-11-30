@@ -1548,6 +1548,47 @@ namespace mods {
 		void player::admin_fail(std::string_view msg){
 			this->sendln(CAT("{red}[Admin Failure]:",msg.data(),"{/red}"));
 		}
+		std::shared_ptr<mods::classes::sniper>& player::sniper(){
+			return m_sniper;
+		}
+		void player::set_sniper(std::shared_ptr<mods::classes::sniper> g){
+			m_sniper = g;
+		}
+
+		std::shared_ptr<mods::classes::marine>& player::marine(){
+			return m_marine;
+		}
+		void player::set_marine(std::shared_ptr<mods::classes::marine> g){
+			m_marine = g;
+		}
+
+		std::shared_ptr<mods::classes::breacher>& player::breacher(){
+			return m_breacher;
+		}
+		void player::set_breacher(std::shared_ptr<mods::classes::breacher> g){
+			m_breacher = g;
+		}
+
+		std::shared_ptr<mods::classes::engineer>& player::engineer(){
+			return m_engineer;
+		}
+		void player::set_engineer(std::shared_ptr<mods::classes::engineer> g){
+			m_engineer = g;
+		}
+
+		std::shared_ptr<mods::classes::medic>& player::medic(){
+			return m_medic;
+		}
+		void player::set_medic(std::shared_ptr<mods::classes::medic> g){
+			m_medic = g;
+		}
+
+		std::shared_ptr<mods::classes::support>& player::support(){
+			return m_support;
+		}
+		void player::set_support(std::shared_ptr<mods::classes::support> g){
+			m_support = g;
+		}
 };
 
 #endif

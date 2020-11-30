@@ -1,6 +1,6 @@
 #ifndef __MENTOC_MODS_CLASSES_SUPPORT_HEADER__
 #define  __MENTOC_MODS_CLASSES_SUPPORT_HEADER__
-#include "../orm/class-support.hpp"
+#include "../orm/support.hpp"
 #include "base.hpp"
 
 using support_orm_t = mods::orm::support;
@@ -21,6 +21,7 @@ namespace mods::classes {
 		player_ptr_t 	player();
 		int16_t				new_player(player_ptr_t&, primary_choice_t primary);
 		int16_t save();
+		void replenish();
 
 		private:
 			player_ptr_t m_player;

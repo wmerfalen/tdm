@@ -10,10 +10,13 @@
 
 namespace mods::replenish {
 	void destroy_player(uuid_t player_uuid);
+	void register_sniper(uuid_t);
+	void register_marine(uuid_t);
+	void register_breacher(uuid_t);
+	void register_engineer(uuid_t);
 	void register_ghost(uuid_t);
-	void register_pyrexia(uuid_t);
-	void register_forge(uuid_t);
-	void register_syndrome(uuid_t);
+	void register_medic(uuid_t);
+	void register_support(uuid_t);
 	void run();
 };
 #endif

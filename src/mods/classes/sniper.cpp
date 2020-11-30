@@ -1,5 +1,6 @@
 #include "sniper.hpp"
 #include "../orm/inventory.hpp"
+#include "../weapons/damage-types.hpp"
 
 namespace mods::classes {
 	sniper::sniper(){
@@ -12,8 +13,11 @@ namespace mods::classes {
 	player_ptr_t 	sniper::player(){
 		return m_player;
 	}
-	int16_t sniper::new_player(player_ptr_t &player,primary_choice_t primary_choice){
-		auto db_id = m_orm.initialize_row(player,primary_choice);
+	void sniper::replenish(){
+
+	}
+	int16_t sniper::new_player(player_ptr_t &player){
+		auto db_id = m_orm.initialize_row(player);
 		if(db_id == 0){
 			report(CAT("unable to initialize row for player (sniper::new_player) ",(player->db_id()),".. player's database id is zero!"));
 			return -2;
@@ -35,11 +39,50 @@ namespace mods::classes {
 		player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
 		return result;
 	}
+	std::vector<uuid_t> sniper::get_targets_scanned_by_drone(){
+		return m_scanned;
+	}
 	int16_t sniper::save() {
 		mods::orm::inventory::flush_player(m_player);
 		return m_orm.save();
 	}
+	void sniper::drone_scan(room_rnum room){
+		m_scanned.clear();
+		for(const auto & player_in_room : mods::globals::room_list[room]){
+			if(player_in_room->is_npc()){
+				m_scanned.emplace_back(player_in_room->uuid());
+			}
+		}
+		this->mark_room(room);
+	}
+	void sniper::mark_room(room_rnum room){
+		m_marked_room = room;
+	}
 	std::shared_ptr<sniper> create_sniper(player_ptr_t &in_player){
 		return std::move(std::make_shared<sniper>(in_player));
 	}
+ACMD(do_xray_shot){
+	PLAYER_CAN("sniper.xray_shot");
+	DO_HELP("xray_shot");
+	auto weapon = player->primary();
+	if(!weapon || weapon->rifle()->attributes->type != mw_rifle::SNIPER){
+		player->sendln("You must be wielding a sniper rifle!");
+		return;
+	}
+	int distance = weapon->rifle()->attributes->critical_range;
+	int direction = NORTH;
+	for(auto scanned : player->sniper()->get_targets_scanned_by_drone()){
+		auto victim = ptr_by_uuid(scanned);
+		if(!victim){
+			continue;
+		}
+		auto feedback = mods::weapons::damage_types::rifle_attack_with_feedback(
+			player,
+			weapon,
+			victim,
+			distance,
+			direction
+		);
+	}
+}
 };

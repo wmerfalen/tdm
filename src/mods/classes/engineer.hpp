@@ -1,6 +1,6 @@
 #ifndef __MENTOC_MODS_CLASSES_ENGINEER_HEADER__
 #define  __MENTOC_MODS_CLASSES_ENGINEER_HEADER__
-#include "../orm/class-engineer.hpp"
+#include "../orm/engineer.hpp"
 #include "base.hpp"
 
 using engineer_orm_t = mods::orm::engineer;
@@ -19,6 +19,7 @@ namespace mods::classes {
 		player_ptr_t 	player();
 		int16_t				new_player(player_ptr_t&, primary_choice_t primary);
 		int16_t save();
+		void replenish();
 
 		private:
 			player_ptr_t m_player;
