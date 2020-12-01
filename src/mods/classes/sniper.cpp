@@ -53,14 +53,21 @@ namespace mods::classes {
 				m_scanned.emplace_back(player_in_room->uuid());
 			}
 		}
-		this->mark_room(room);
 	}
-	void sniper::mark_room(room_rnum room){
-		m_marked_room = room;
+	/*
+	- Ability: X-Ray Shot (can shoot through multiple layers of walls/doors)
+		- Can snipe an enemy within a building
+		- Can snipe an enemy through walls or doors
+		- If enemy not behind cover, it causes 150% damage to target
+		*/
+	std::tuple<bool,std::string> sniper::xray_shot(){
+		return {1,"stub"};
 	}
+
 	std::shared_ptr<sniper> create_sniper(player_ptr_t &in_player){
 		return std::move(std::make_shared<sniper>(in_player));
 	}
+
 ACMD(do_xray_shot){
 	PLAYER_CAN("sniper.xray_shot");
 	DO_HELP("xray_shot");

@@ -24,8 +24,14 @@ namespace mods::classes {
 		int16_t save();
 		std::vector<uuid_t> get_targets_scanned_by_drone();
 		void drone_scan(room_rnum);
-		void mark_room(room_rnum);
 		void replenish();
+		/*
+		- Ability: X-Ray Shot (can shoot through multiple layers of walls/doors)
+			- Can snipe an enemy within a building
+			- Can snipe an enemy through walls or doors
+			- If enemy not behind cover, it causes 150% damage to target
+			*/
+		std::tuple<bool,std::string> xray_shot();
 
 		private:
 			player_ptr_t m_player;

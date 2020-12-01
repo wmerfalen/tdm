@@ -570,6 +570,7 @@ void perform_auto_login(player_ptr_t& player){
 	mods::js::run_profile_scripts(player->name());
 #endif
 }
+#define PROCESS_INPUT_CONTROL_C -10
 
 /*
  * game_loop contains the main loop which drives the entire MUD.  It
@@ -684,6 +685,7 @@ void game_loop(socket_t mother_desc) {
 #ifdef __MENTOC_SHOW_INPUT_STATUS_MESSAGE__
 			std::cerr << green_str("input_status:") << input_status << "\n";
 #endif
+
 			if(input_status < 0){
 				switch(input_status){
 					case -2:
@@ -700,14 +702,14 @@ void game_loop(socket_t mother_desc) {
 						break;
 				}
 				mods::globals::current_player = nullptr;
-				player->set_socket(operating_socket);
+				//player->set_socket(operating_socket);
 				/** TODO: destroy_player needs to properly remove from all the player refs in mods::globals */
 				destroy_player(std::move(player));
 				++i;
 				continue;
 			}
 			aliased = 0;
-			if(!get_from_q(player->desc(), comm, &aliased)) {
+			if(input_status != PROCESS_INPUT_CONTROL_C && !get_from_q(player->desc(), comm, &aliased)) {
 #ifdef __MENTOC_SHOW_GET_FROM_Q_FALSEY__
 				std::cerr << red_str("get_from_q returns falsey\n");
 #endif
@@ -1136,6 +1138,7 @@ void	write_to_q(std::string_view txt, mods::descriptor_data& d, int aliased){
 
 int get_from_q(mods::descriptor_data& d, char *dest, int *aliased) {
 	if(d.input.size() == 0){
+		std::cerr << red_str("get_from_q d.input is zero length") << "\n";
 		return 0;
 	}
 	strncpy(dest, d.input.begin()->text.c_str(), MAX_INPUT_LENGTH -1);
@@ -1366,24 +1369,16 @@ int destroy_player(player_ptr_t&& player){
 				removed = true;
 				break;
 			}
-			auto pl_it = std::find(mods::globals::player_list.begin(),
-					mods::globals::player_list.end(),
-					it->second
-			);
-			if(pl_it != mods::globals::player_list.end()){
-				log("Removing player from player_list");
-				mods::globals::player_list.erase(pl_it);
-				removed = true;
-				break;
-			}
 		}
 	} while(removed);
 
 	if(pl_iterator == mods::globals::player_list.end()){
 		log("SYSERR: WARNING! destroy_player cannot find player pointer in player_list!");
 	}else{
-		log("Freeing player [%s] use_count[%d]",player->name().c_str(),pl_iterator->use_count());
-		mods::globals::player_list.erase(pl_iterator);
+		if(pl_iterator->use_count()){
+			log("Freeing player [%s] use_count[%d]",player->name().c_str(),pl_iterator->use_count());
+			mods::globals::player_list.erase(pl_iterator);
+		}
 	}
 
 	return 0;
@@ -1726,7 +1721,7 @@ int process_input(mods::descriptor_data & t) {
 			memcpy(&a,(void*)read_point,sizeof(a));
 			/** control+c */
 			if(a == 30031213823){
-				return -1;
+				return PROCESS_INPUT_CONTROL_C;
 			}
 		}
 		/** control + d */
