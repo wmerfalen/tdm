@@ -400,7 +400,23 @@ bool obj_data::flagged(int value){
 			contents = r.contents;
 			people = r.people;
 			this->shop_vnum = r.shop_vnum;
-		}
+			description.assign(r.description.str());
+			name.assign(r.name.str());
+
+			this->shop_vnum = r.shop_vnum;
+			watching = r.watching;
+			for(unsigned i = 0; i < NUM_OF_DIRS;i++){ 
+				this->dir_option[i] =r.dir_option[i];
+			}
+			room_flags = r.room_flags;
+			light = r.light;
+			func = r.func;
+			m_texture_levels = r.m_texture_levels;
+			m_directions = r.m_directions;
+			m_ex_descriptions = r.m_ex_descriptions;
+			m_textures = r.m_textures;
+			m_contents = r.m_contents;
+	}
 		room_data::~room_data() {
 			for(unsigned i = 0; i < NUM_OF_DIRS; i++){
 				if(dir_option[i] != nullptr){

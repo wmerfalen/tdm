@@ -578,11 +578,10 @@ void list_one_char(char_data *i, char_data *ch) {
 		}
 	}
 
-	player->sendln("");
 
 
 	if(AFF_FLAGGED(i, AFF_SANCTUARY)) {
-		act("...$e glows with a bright light!", FALSE, i, 0, ch, TO_VICT);
+		act(" ...$e glows with a bright light!", FALSE, i, 0, ch, TO_VICT);
 	}
 }
 

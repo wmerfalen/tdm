@@ -1193,22 +1193,10 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 		}
 		for(auto && room_records_row: room_records) {
 			try{
-				//log("DEBUG: room: %d",mods::util::stoi<int>(room_records_row["id"].c_str()));
 				room_data room;
-				const char* name = room_records_row["name"].c_str();
-				const char* description = room_records_row["description"].c_str();
-				if(name == nullptr){ 
-					room.name = strdup("<room.name>");
-				}else{
-					room.name = strdup(name);
-				}
-				if(description == nullptr){
-					room.description = strdup("<room.description>");
-				}else{
-					room.description = strdup(description);
-				}
-				room.name = mods::globals::color_eval(std::string("{grn}") + std::string(room.name) + "{/grn}");
-				room.description.assign(mods::util::word_wrap(mods::globals::color_eval(static_cast<const char*>(room.description)),80));
+				room.name.assign(room_records_row["name"]);
+				room.description.assign(room_records_row["description"]);
+				log("DEBUG: room: %d name: (%s), description: (%s)",mods::util::stoi<int>(room_records_row["id"].c_str()),room.name.c_str(),room.description.c_str());
 				room.number = room_records_row["room_number"].as<int>(0);
 				log("parse_sql_rooms: room.number (%d)",room.number);
 				room.zone = room_records_row["zone"].as<int>(0);

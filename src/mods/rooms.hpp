@@ -169,7 +169,8 @@ namespace mods::rooms {
 		INDOOR_ROOF,	/** attached to the roof like spiderman */
 		INDOOR_ATTIC,
 		INDOOR_BASEMENT,
-		INDOOR_SHALLOW_WATER
+		INDOOR_SHALLOW_WATER,
+		INDOOR_ELEVATOR
 	};
 	/**
 	 * vim sorcery: :48,79s/^\t\t\([A-Z_]\+\),\?/\t\t{sector_type_t::\1,"\1"},/g
@@ -207,7 +208,8 @@ namespace mods::rooms {
 			{sector_type_t::INDOOR_ROOF,"INDOOR_ROOF"},
 			{sector_type_t::INDOOR_ATTIC,"INDOOR_ATTIC"},
 			{sector_type_t::INDOOR_BASEMENT,"INDOOR_BASEMENT"},
-			{sector_type_t::INDOOR_SHALLOW_WATER,"INDOOR_SHALLOW_WATER"}
+			{sector_type_t::INDOOR_SHALLOW_WATER,"INDOOR_SHALLOW_WATER"},
+			{sector_type_t::INDOOR_ELEVATOR,"INDOOR_ELEVATOR"}
 	};
 
 	void set_sector_type(room_rnum room_id, int sector_type);

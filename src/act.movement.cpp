@@ -87,6 +87,7 @@ int has_boat(char_data *ch) {
  *   0 : If fail
  */
 int do_simple_move(char_data *ch, int dir, int need_specials_check) {
+	MENTOC_PREAMBLE();
 	char throwaway[MAX_INPUT_LENGTH] = ""; /* Functions assume writable. */
 	room_rnum was_in;
 	int need_movement;
@@ -166,6 +167,9 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 		act(buf2, TRUE, ch, 0, 0, TO_ROOM);
 	}
 
+	if(world[player->room()].has_texture(room_data::texture_type_t::ELEVATOR) && (dir == UP || dir == DOWN)){
+		player->send("You move the elevator %s...\r\n",dir == UP ? "UP" : "DOWN");
+	}
 	was_in = IN_ROOM(ch);
 	mods::globals::rooms::char_from_room(ch);
 	mods::globals::rooms::char_to_room(world[was_in].dir_option[dir]->to_room,ch);

@@ -702,7 +702,7 @@ void game_loop(socket_t mother_desc) {
 						break;
 				}
 				mods::globals::current_player = nullptr;
-				//player->set_socket(operating_socket);
+				player->set_socket(operating_socket);
 				/** TODO: destroy_player needs to properly remove from all the player refs in mods::globals */
 				destroy_player(std::move(player));
 				++i;
@@ -1338,7 +1338,6 @@ int destroy_player(player_ptr_t&& player){
 		for(auto it = mods::globals::socket_map.begin() ; 
 				it != mods::globals::socket_map.end(); ++it){
 			auto name = player->name();
-			log("[%d] socket via destroy_player",it->first);
 			if(it->first == 0){
 				mods::globals::socket_map.erase(it->first);
 				removed = true;
@@ -1356,12 +1355,14 @@ int destroy_player(player_ptr_t&& player){
 				removed = true;
 				break;
 			}
-			auto it_name = it->second->name().c_str();
-			if(name.compare(it_name) == 0){
-				log("Removing player from socket_map name match");
-				mods::globals::socket_map.erase(it->first);
-				removed = true;
-				break;
+			if(name.length()){
+				auto it_name = it->second->name().c_str();
+				if(name.compare(it_name) == 0){
+					log("Removing player from socket_map name match");
+					mods::globals::socket_map.erase(it->first);
+					removed = true;
+					break;
+				}
 			}
 			if(it->second == player){
 				log("Removing player from socket_map pointer match");

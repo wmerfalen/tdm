@@ -378,6 +378,14 @@ namespace mods::rooms {
 						txt::INSIDE
 						});
 				break;
+			case sector_type_t::INDOOR_ELEVATOR:
+
+				world[room_id].add_textures({
+						txt::ELEVATOR,
+						txt::METAL_WALL,
+						txt::INSIDE
+						});
+				break;
 			case sector_type_t::INDOOR_SERVER_ROOM:
 
 				world[room_id].add_textures({

@@ -4,9 +4,9 @@ builddir = build
 CC = /usr/bin/g++-8
 BINDIR = ../bin
 DATA_DIR = "$(CURDIR)/../lib/"
-JS_PROFILES_PATH = "$(HOME)/code/code/siege-mud/lib/js/profiles/"
+JS_PROFILES_PATH = "$(DATA_DIR)js/profiles/"
 LMDBNAME = bnull
-LIB_DIR="$(HOME)/code/code/siege-mud/lib"
+LIB_DIR="$(DATA_DIR)"
 POST_BUILD_SCRIPT="$(CURDIR)/scripts/post-build.sh"
 SQL_MIGRATIONS_DIR="$(CURDIR)/sql/migrations"
 
@@ -93,7 +93,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/target-practice mods/target-practice-db mods/demolitions \
 					 mods/replenish mods/players/destroy-player mods/rate-limiting \
 					 mods/levels mods/orm/player-base-ability \
-					 mods/class-abilities
+					 mods/class-abilities \
+					 mods/orm/elevator mods/elevator
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

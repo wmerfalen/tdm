@@ -56,6 +56,7 @@ INIT(mods::query_objects);
 INIT(mods::target_practice);
 INIT(mods::class_abilities);
 INIT(mods::class_abilities::forge);
+INIT(mods::class_abilities::sniper);
 INIT(mods::values);
 INIT(mods::skills);
 INIT(mods::rate_limiting);
@@ -473,6 +474,7 @@ namespace mods {
 			mods::target_practice::init();
 			//mods::class_abilities::init();
 			//mods::class_abilities::forge::init();
+			mods::class_abilities::sniper::init();
 			mods::values::init();
 			mods::skills::init();
 			mods::rate_limiting::init();

@@ -204,6 +204,7 @@ using ush_int = uint32_t;
 #define SECT_WATER_NOSWIM    7		   /* Water - need a boat	*/
 #define SECT_FLYING	     8		   /* Wheee!			*/
 #define SECT_UNDERWATER	     9		   /* Underwater		*/
+#define SECT_ELEVATOR   10		   /* elevator */
 
 
 /* char and mob-related defines *****************************************/

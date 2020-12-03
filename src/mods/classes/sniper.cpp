@@ -1,6 +1,7 @@
 #include "sniper.hpp"
 #include "../orm/inventory.hpp"
 #include "../weapons/damage-types.hpp"
+#include "../interpreter.hpp"
 
 namespace mods::classes {
 	sniper::sniper(){
@@ -92,4 +93,9 @@ ACMD(do_xray_shot){
 		);
 	}
 }
+};
+namespace mods::class_abilities::sniper {
+	void init(){
+		//mods::interpreter::add_command("start_drone", POS_RESTING, mods::classes::do_start_drone, 0,0);
+	}
 };
