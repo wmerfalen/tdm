@@ -52,6 +52,10 @@ namespace mods::classes {
 			report(CAT("ghost::load_by_player unable to load ghost class by player id: ",(player->db_id()),".. return status: ",(result)));
 			return result;
 		}
+		/** TODO: create catchy name using the deep object parser */
+		auto primary = create_object(ITEM_RIFLE,"g36c.yml");
+		player->equip(primary,WEAR_PRIMARY);
+		player->equip(create_object(ITEM_RIFLE,"ppk.yml"),WEAR_SECONDARY);
 		return result;
 	}
 	void ghost::apply_stealth_to(obj_ptr_t& target){
@@ -187,7 +191,7 @@ namespace mods::classes {
 			return {false, "You don't have any GHOST claymores!"};
 		}
 		--m_claymore_count;
-		m_claymores.emplace_back(std::move(create_object(ITEM_EXPLOSIVE, "claymore.yml")));
+		m_claymores.emplace_back(std::move(create_object(ITEM_EXPLOSIVE, "claymore-mine.yml")));
 		mods::demolitions::plant_claymore(m_player,direction,m_claymores.back());
 		return {1,CAT("You begin planting a {grn}",m_claymores.back()->name,"{/grn}...")};
 	}

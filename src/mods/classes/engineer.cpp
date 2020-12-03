@@ -33,9 +33,12 @@ namespace mods::classes {
 			report(CAT("unable to load engineer class by player id: " ,player->db_id() , ".. return status: " , result));
 		}
 		obj_ptr_t primary = nullptr;
-		primary = create_object(ITEM_RIFLE,mods::weapon::yaml_file(m_orm.primary_type()));
+		/** TODO: create catchy name using the deep object parser */
+		primary = create_object(ITEM_RIFLE,"ump45.yml");
 		player->equip(primary,WEAR_PRIMARY);
-		player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
+		player->equip(create_object(ITEM_RIFLE,"glock.yml"),WEAR_SECONDARY);
+		auto fatal = create_object(ITEM_EXPLOSIVE,"sensor-grenade.yml");
+		player->carry(fatal);
 		return result;
 	}
 	int16_t engineer::save() {

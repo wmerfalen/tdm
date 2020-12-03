@@ -1,5 +1,6 @@
 # Inventory of features (mods directory only)
 
+
 # 2020-11-29 classes system rework
 	Up until today, there has been no definite scope to the player classes. It has all been one
 	big blur of adding random features with no clear decision as to the definite direction

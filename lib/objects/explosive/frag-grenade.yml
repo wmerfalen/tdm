@@ -25,7 +25,7 @@ rarity: 'COMMON'
 description: 'A FR Altex Grenade is lying here.'
 short_description: 'a FR Altex Grenade'
 action_description: 'a FR Altex Grenade'
-feed_file: 'objects/explosive/frag.yml'
+feed_file: 'objects/explosive/frag-grenade.yml'
 alternate_explosion_type: 'NONE' #std::string, ENUM NONE,SCAN
 loudness_type: 'DEAFENING' #std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING
 chance_to_injure: 15.0 #float, percent

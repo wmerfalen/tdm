@@ -1,0 +1,57 @@
+# accuracy map
+accuracy_map: [
+90.00,
+10.00,
+0.00,
+0.00
+]
+rounds_per_minute: 180
+muzzle_velocity: 818 # Feet per second
+effective_firing_range: 20 # feet
+ammo_max: 400 #integer
+ammo_type: 'MACHINE_PISTOL' #string, constant enum
+chance_to_injure: 30.813 #float, out of 100 
+clip_size: 31 #integer
+cooldown_between_shots: 1 #int, in ticks
+critical_chance: 14 #int, out of 100
+critical_range: 1 #integer, measured in rooms
+damage_map: [
+80.00,
+40.00,
+0.00,
+0.00
+]
+damage_per_second: 30.0 #float
+disorient_amount: 0.0 #float
+headshot_bonus: 13.0 #float
+max_range: 3 #integer,measured in rooms
+range_multiplier: 4.3 #float, multiplied by 
+reload_time: 5 #int, measured in ticks
+# types
+#######
+# type: SNIPER
+# type: ASSAULT_RIFLE
+# type: SHOTGUN
+# type: SUB_MACHINE_GUN
+# type: HANDGUN
+# type: MACHINE_PISTOL
+# type: LIGHT_MACHINE_GUN
+type: 1  # enum, object type
+manufacturer: 'Heckler and Koch' # string, anything 
+name: 'MP9' # string, anything name of object 
+vnum: 38 # integer, unique identifier
+str_type: 'MACHINE_PISTOL'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+feed_file: 'mp9.yml'
+description: 'A Heckler and Koch MP9 is lying here.'
+short_description: 'a Heckler and Koch MP9'
+action_description: 'Heckler and Koch MP9'
+damage_dice_count: 6
+damage_dice_sides: 6

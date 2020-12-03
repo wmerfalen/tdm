@@ -24,7 +24,7 @@ rarity: 'COMMON'
 description: 'A NF-A0 Claymore Mine is lying here.'
 short_description: 'a NF-A0 Claymore Mine'
 action_description: 'a NF-A0 Claymore Mine'
-feed_file: 'objects/explosive/claymore.yml'
+feed_file: 'objects/explosive/claymore-mine.yml'
 alternate_explosion_type: 'NONE' #std::string, ENUM NONE,SCAN
 loudness_type: 'DEAFENING' #std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING
 chance_to_injure: 45.0 #float, percent

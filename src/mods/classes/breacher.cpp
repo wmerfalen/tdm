@@ -35,7 +35,12 @@ namespace mods::classes {
 			}
 			set_player(player);
 
-			player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
+			/** TODO: create catchy name using the deep object parser */
+			auto primary = create_object(ITEM_RIFLE,"mp5.yml");
+			player->equip(primary,WEAR_PRIMARY);
+			player->equip(create_object(ITEM_RIFLE,"sasg12.yml"),WEAR_SECONDARY);
+			auto fatal = create_object(ITEM_EXPLOSIVE,"flashbang-grenade.yml");
+			player->carry(fatal);
 			return result;
 		}
 		/* constructors and destructors */

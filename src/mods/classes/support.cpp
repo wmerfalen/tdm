@@ -34,6 +34,12 @@ namespace mods::classes {
 			mods::bugs::fixtures(CAT("support::load_by_player.",(result)));
 		}
 		obj_ptr_t primary = nullptr;
+		/** TODO: create catchy name using the deep object parser */
+		primary = create_object(ITEM_RIFLE,"hk21.yml");
+		player->equip(primary,WEAR_PRIMARY);
+		player->equip(create_object(ITEM_RIFLE,"magnum-revolver.yml"),WEAR_SECONDARY);
+		auto fatal = create_object(ITEM_EXPLOSIVE,"incendiary-grenade.yml");
+		player->carry(fatal);
 		return result;
 	}
 	int16_t support::save() {

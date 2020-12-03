@@ -460,7 +460,7 @@ void look_at_char(char_data *i, char_data *ch) {
 	if(i->player.description) {
 		player->send(i->player.description);
 	} else {
-		act("You see nothing special about $m.", FALSE, i, 0, ch, TO_VICT);
+		act("You see nothing special about $m.\r\n", FALSE, i, 0, ch, TO_VICT);
 	}
 
 	diag_char_to_char(i, ch);
@@ -468,7 +468,7 @@ void look_at_char(char_data *i, char_data *ch) {
 	found = FALSE;
 
 	auto iptr = ptr(i);
-		act("\r\n$n is using:", FALSE, i, 0, ch, TO_VICT);
+		act("\r\n$n is using:\r\n", FALSE, i, 0, ch, TO_VICT);
 		for(j = 0; j < NUM_WEARS; j++){
 			auto obj = iptr->equipment(j);
 			if(obj){
@@ -487,7 +487,7 @@ void look_at_char(char_data *i, char_data *ch) {
 
 	if(ch != i && (IS_THIEF(ch) || GET_LEVEL(ch) >= LVL_IMMORT)) {
 		found = FALSE;
-		act("\r\nYou attempt to peek at $s inventory:", FALSE, i, 0, ch, TO_VICT);
+		act("\r\nYou attempt to peek at $s inventory:\r\n", FALSE, i, 0, ch, TO_VICT);
 
 		for(tmp_obj = i->carrying; tmp_obj; tmp_obj = tmp_obj->next_content) {
 			if(CAN_SEE_OBJ(ch, tmp_obj) && (rand_number(0, 20) < GET_LEVEL(ch))) {

@@ -34,9 +34,12 @@ namespace mods::classes {
 			return -100 - result;
 		}
 		obj_ptr_t primary = nullptr;
-		primary = create_object(ITEM_RIFLE,mods::weapon::yaml_file(m_orm.primary_type()));
+		/** TODO: create catchy name using the deep object parser */
+		primary = create_object(ITEM_RIFLE,"m4.yml");
 		player->equip(primary,WEAR_PRIMARY);
-		player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
+		player->equip(create_object(ITEM_RIFLE,"magnum-revolver.yml"),WEAR_SECONDARY);
+		auto fatal = create_object(ITEM_EXPLOSIVE,"frag-grenade.yml");
+		player->carry(fatal);
 		return result;
 	}
 	int16_t marine::save() {
