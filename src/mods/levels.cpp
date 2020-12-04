@@ -234,129 +234,14 @@ namespace mods::levels {
 
 	std::array<uint8_t,5> get_triads_by_class(player_class_t c){
 		std::array<uint8_t,5> m_triads;
-			switch(c){
-				case GHOST:
-					m_triads = {
-						GHOST_CLASS_TRIADS_MELEE(),
-						GHOST_CLASS_TRIADS_WEAPONS(),
-						GHOST_CLASS_TRIADS_INTEL(),
-						GHOST_CLASS_TRIADS_SPEED(),
-						GHOST_CLASS_TRIADS_ARMOR()
-					};
-					break;
-#if 0
-				case MARKSMAN:
-					m_triads = {
-						MARKSMAN_CLASS_TRIADS_MELEE(),
-						MARKSMAN_CLASS_TRIADS_WEAPONS(),
-						MARKSMAN_CLASS_TRIADS_INTEL(),
-						MARKSMAN_CLASS_TRIADS_SPEED(),
-						MARKSMAN_CLASS_TRIADS_ARMOR()
-					};
-					break;
-				case BANDIT:
-					m_triads = {
-						BANDIT_CLASS_TRIADS_MELEE(),
-						BANDIT_CLASS_TRIADS_WEAPONS(),
-						BANDIT_CLASS_TRIADS_INTEL(),
-						BANDIT_CLASS_TRIADS_SPEED(),
-						BANDIT_CLASS_TRIADS_ARMOR()
-					};
-					break;
-				case BUTCHER:
-					m_triads = {
-						BUTCHER_CLASS_TRIADS_MELEE(),
-						BUTCHER_CLASS_TRIADS_WEAPONS(),
-						BUTCHER_CLASS_TRIADS_INTEL(),
-						BUTCHER_CLASS_TRIADS_SPEED(),
-						BUTCHER_CLASS_TRIADS_ARMOR()
-					};
-					break;
-				case STRIKER:
-					m_triads = {
-						STRIKER_CLASS_TRIADS_MELEE(),
-						STRIKER_CLASS_TRIADS_WEAPONS(),
-						STRIKER_CLASS_TRIADS_INTEL(),
-						STRIKER_CLASS_TRIADS_SPEED(),
-						STRIKER_CLASS_TRIADS_ARMOR()
-					};
-					break;
-				case OBSTRUCTOR:
-					m_triads = {
-						OBSTRUCTOR_CLASS_TRIADS_MELEE(),
-						OBSTRUCTOR_CLASS_TRIADS_WEAPONS(),
-						OBSTRUCTOR_CLASS_TRIADS_INTEL(),
-						OBSTRUCTOR_CLASS_TRIADS_SPEED(),
-						OBSTRUCTOR_CLASS_TRIADS_ARMOR()
-					};
-					break;
-				case MALADY:
-					m_triads = {
-						MALADY_CLASS_TRIADS_MELEE(),
-						MALADY_CLASS_TRIADS_WEAPONS(),
-						MALADY_CLASS_TRIADS_INTEL(),
-						MALADY_CLASS_TRIADS_SPEED(),
-						MALADY_CLASS_TRIADS_ARMOR()
-					};
-					break;
-#endif
-				case PYREXIA:
-					m_triads = {
-						PYREXIA_CLASS_TRIADS_MELEE(),
-						PYREXIA_CLASS_TRIADS_WEAPONS(),
-						PYREXIA_CLASS_TRIADS_INTEL(),
-						PYREXIA_CLASS_TRIADS_SPEED(),
-						PYREXIA_CLASS_TRIADS_ARMOR()
-					};
-					break;
-#if 0
-				case DEALER:
-					m_triads = {
-						DEALER_CLASS_TRIADS_MELEE(),
-						DEALER_CLASS_TRIADS_WEAPONS(),
-						DEALER_CLASS_TRIADS_INTEL(),
-						DEALER_CLASS_TRIADS_SPEED(),
-						DEALER_CLASS_TRIADS_ARMOR()
-					};
-					break;
-#endif
-				case FORGE:
-					m_triads = {
-						FORGE_CLASS_TRIADS_MELEE(),
-						FORGE_CLASS_TRIADS_WEAPONS(),
-						FORGE_CLASS_TRIADS_INTEL(),
-						FORGE_CLASS_TRIADS_SPEED(),
-						FORGE_CLASS_TRIADS_ARMOR()
-					};
-					break;
-				case SYNDROME:
-					m_triads = {
-						SYNDROME_CLASS_TRIADS_MELEE(),
-						SYNDROME_CLASS_TRIADS_WEAPONS(),
-						SYNDROME_CLASS_TRIADS_INTEL(),
-						SYNDROME_CLASS_TRIADS_SPEED(),
-						SYNDROME_CLASS_TRIADS_ARMOR()
-					};
-					break;
-#if 0
-				case MACHINIST:
-					m_triads = {
-						MACHINIST_CLASS_TRIADS_MELEE(),
-						MACHINIST_CLASS_TRIADS_WEAPONS(),
-						MACHINIST_CLASS_TRIADS_INTEL(),
-						MACHINIST_CLASS_TRIADS_SPEED(),
-						MACHINIST_CLASS_TRIADS_ARMOR()
-					};
-					break;
-#endif
-				default:
-					std::cerr << red_str("[mods::player] UNKNOWN CLASS TYPE. Setting triads to 1!\n");
-					m_triads = {
-						1,1,1,1,1
-					};
-					break;
-			}
-			return m_triads;
+		m_triads = {
+			2, /** MELEE */
+			2, /** WEAPONS */
+			2, /** INTEL */
+			2, /** SPEED */
+			2  /** ARMOR */
+		};
+		return m_triads;
 	}
 
 	std::array<float,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level){
@@ -553,37 +438,20 @@ namespace mods::levels {
 		std::string header = "player_class,level,HP,Strength,con,dex,intel,wis,electronics,chemistry,strategy,marksmanship,sniping,weapon_handling,demolitions,armor,medical,charisma\n";
 		fwrite(header.c_str(),sizeof(char),header.length(),fp);
 		for(unsigned player_level = 1; player_level <= LVL_IMMORT;++player_level){
-			for(auto & cl_type : {
-				player_class_t::GHOST,
-				/*
-				player_class_t::MARKSMAN,
-				player_class_t::BANDIT,
-				player_class_t::BUTCHER,
-				player_class_t::STRIKER,
-				player_class_t::OBSTRUCTOR,
-				player_class_t::MALADY,
-				*/
-				player_class_t::PYREXIA,
-				//player_class_t::DEALER,
-				player_class_t::FORGE,
-				player_class_t::SYNDROME
-				//player_class_t::MACHINIST
-				}){
-				std::string player_class = mods::util::player_class_to_string(cl_type);
-				auto triads = mods::levels::get_triads_by_class(cl_type);
-				auto stats = mods::levels::calculate_based_on_triads(triads,player_level);
-				std::string s;
-				s = player_class + "," + std::to_string(player_level) + ",";
-				fwrite(s.c_str(),sizeof(char),s.length(),fp);
-				for(int i=0; i < stats.size();++i){
-					s = std::to_string(stats[i]);
-					if(stats.size() > i+1){
-						s += ",";
-					}
-					fwrite(s.c_str(), sizeof(char),s.length(),fp);
+			std::string player_class = "all";//mods::util::player_class_to_string(cl_type);
+			auto triads = mods::levels::get_triads_by_class(player_class_t::GHOST);
+			auto stats = mods::levels::calculate_based_on_triads(triads,player_level);
+			std::string s;
+			s = player_class + "," + std::to_string(player_level) + ",";
+			fwrite(s.c_str(),sizeof(char),s.length(),fp);
+			for(int i=0; i < stats.size();++i){
+				s = std::to_string(stats[i]);
+				if(stats.size() > i+1){
+					s += ",";
 				}
-				fwrite("\n",1,1,fp);
+				fwrite(s.c_str(), sizeof(char),s.length(),fp);
 			}
+			fwrite("\n",1,1,fp);
 		}
 		fclose(fp);
 		return 0;
@@ -631,11 +499,15 @@ ACMD(do_csv_export_levels){
 	player->admin_success("Successfully wrote to levels.csv.");
 	ADMIN_DONE();
 }
+ACMD(do_exp){
+	player->send("{grn}You have %d experience points.{/grn}\r\n",player->exp());
+}
 
 
 	void init(){
 		mods::interpreter::add_command("award_exp_by_name", POS_RESTING, do_award_exp_by_name, LVL_BUILDER,0);
 		mods::interpreter::add_command("csv_export_levels", POS_RESTING, do_csv_export_levels, LVL_BUILDER,0);
+		mods::interpreter::add_command("exp", POS_RESTING, do_exp, 0,0);
 	}
 };
 #undef mo_debug

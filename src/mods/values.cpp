@@ -18,6 +18,9 @@ extern bool key_exists(std::string key);
 namespace mods::values {
 		std::map<std::string,variants_t> alt_value_map;
 		std::map<std::string,variants_t> current_value_map;
+		static const std::vector<std::string> uint32_types = {
+			"BREACHER_REPLENISH_CALL_COUNT"
+		};
 		static const std::vector<std::string> float_types = {
 		"LEVELS_FIRST_TIER",
 		"ADVANCE_LEVEL_HP_FLOAT_MULTIPLIER",
@@ -537,6 +540,9 @@ namespace mods::values {
 		bool is_uint16(std::string key){
 			return (std::find(uint16_types.begin(),uint16_types.end(),key) != uint16_types.end());
 		}
+		bool is_uint32(std::string key){
+			return (std::find(uint32_types.begin(),uint32_types.end(),key) != uint32_types.end());
+		}
 		bool is_string(std::string key){
 			return (std::find(string_types.begin(),string_types.end(),key) != string_types.end());
 		}
@@ -647,6 +653,8 @@ namespace mods::values {
 		CGET_DEF(int,ADVANCE_LEVEL_BONUS_HP_DICE,6);
 		CGET_DEF(int,ADVANCE_LEVEL_BONUS_HP_SIDES,6);
 		CGET_DEF(int,ADVANCE_LEVEL_BONUS_HP_THRESHOLD,12);
+
+		CGET_DEF(uint32_t,BREACHER_REPLENISH_CALL_COUNT,1);
 
 		CGET_DEF(uint16_t,SKILL_GHOST_DRONE_SCAN,50);
 		CGET_DEF(uint16_t,SKILL_GHOST_STEALTH,50);

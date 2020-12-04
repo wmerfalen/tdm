@@ -29,9 +29,13 @@ namespace mods::classes {
 		int16_t new_player(player_ptr_t&);
 		int64_t db_id() const;
 		int16_t save();
+		std::tuple<bool,std::string> explosive_shot(direction_t direction);
+		void attempt_direction(direction_t dir);
 		private:
+			std::map<std::pair<room_rnum,direction_t>,uint8_t> m_push_count;
 			breacher_orm_t	m_orm;
 			player_ptr_t m_player;
+			uint8_t m_explosive_shot_charges;
 
 			int /** todo replace iwth skill_familiarity_t */ m_teep_level;
 

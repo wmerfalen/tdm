@@ -3,6 +3,10 @@
 #include "weapons/damage-types.hpp"
 extern void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
 extern void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...);
+extern int next_room_vnum();
+namespace mods::globals {
+	extern void register_room(const room_rnum& );
+};
 
 namespace mods::rooms {
 	namespace affects {
@@ -476,6 +480,35 @@ namespace mods::rooms {
 			player->sendln(f);
 		}
 	}
+		void pave_once(room_rnum room, direction_t direction){
+			auto cached_room = room;
+			if(world[cached_room].dir_option[direction] == nullptr){
+				int new_room_rnum = 0;
+				world.emplace_back();
+				mods::globals::register_room(0);
+				int new_room_vnum = next_room_vnum();
+				auto & w = world.back();
+				w.number = new_room_vnum;
+				new_room_rnum = world.size() - 1;
+
+				world[cached_room].set_dir_option(
+						direction,
+						"exploded_entrance",
+						"entrance",
+						EX_ISDOOR | EX_BREACHED,
+						0,
+						new_room_rnum
+				);
+				w.set_dir_option(
+						OPPOSITE_DIR(direction),
+						"general description",
+						"keyword",
+						EX_ISDOOR | EX_BREACHED,
+						0,
+						cached_room
+				);
+			}
+		}
 };//End namespace
 
 namespace mods::rooms::gods {

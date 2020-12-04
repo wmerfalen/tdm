@@ -21,6 +21,7 @@
 #include "spells.h"
 #include "house.h"
 #include "constants.h"
+#include "mods/classes/breacher.hpp"
 
 /* external variables  */
 extern int tunnel_size;
@@ -194,6 +195,7 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 
 
 int perform_move(char_data *ch, int dir, int need_specials_check) {
+	MENTOC_PREAMBLE();
 	room_rnum was_in;
 	follow_type *k, *next;
 
@@ -201,6 +203,10 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 		log("SYSERR: perform_move received invalid parameters");
 		return (0);
 	} else if((!EXIT(ch, dir) || EXIT(ch, dir)->to_room == NOWHERE)) {
+		if(player->get_class() == player_class_t::BREACHER){
+			player->breacher()->attempt_direction(dir);
+			return 0;
+		}
 			send_to_char(ch, "Alas, you cannot go that way...");
 	} else if(EXIT_FLAGGED(EXIT(ch, dir), EX_CLOSED) /* !mods */
 			&& !EXIT_FLAGGED(EXIT(ch,dir),EX_BREACHED) &&

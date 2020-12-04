@@ -412,6 +412,17 @@ namespace mods::help {
 		player->sendln(header);
 	}
 
+	void send_breacher_help_menu(player_ptr_t& player){
+		static std::vector<std::string> topics = {
+			"Special Ability - To use your explosive shot, simply move toward a closed door or surface twice. The first time you "
+			" move toward the door/surface, it will tell you to move that direction once more to explode it.\r\n"
+		};
+		send_class_header(player,"BREACHER");
+		for(auto topic : topics){
+			player->send(CAT("{grn}",topic,"{/grn}\r\n").c_str());
+		}
+		send_class_footer(player,"BREACHER");
+	}
 
 	void send_contagion_help_menu(player_ptr_t& player){
 		static std::vector<std::string> topics = {

@@ -7,7 +7,7 @@
 extern std::string IMPLODE(std::vector<std::string>,std::string);
 
 namespace mods::values {
-		using variants_t = std::variant<float,int,uint8_t,uint16_t,std::string>;
+		using variants_t = std::variant<float,int,uint8_t,uint16_t,uint32_t,std::string>;
 		extern std::map<std::string,variants_t> alt_value_map;
 		void save_to_lmdb(std::string key,std::string value);
 		void load_from_lmdb(std::string in_key);
@@ -47,6 +47,8 @@ namespace mods::values {
 		CGET(int,ADVANCE_LEVEL_BONUS_HP_DICE);
 		CGET(int,ADVANCE_LEVEL_BONUS_HP_SIDES);
 		CGET(int,ADVANCE_LEVEL_BONUS_HP_THRESHOLD);
+
+		CGET(uint32_t,BREACHER_REPLENISH_CALL_COUNT);
 
 		CGET(uint16_t,WSL_SHOTGUN_0_ALLOWABLE);
 		CGET(uint16_t,WSL_SHOTGUN_0_ACCURACY);

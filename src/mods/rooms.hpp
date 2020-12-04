@@ -15,6 +15,8 @@ namespace mods::rooms {
 	using txt = room_data::texture_type_t;
 	using fs = room_data::fire_status_t;
 	using fire_status_t = room_data::fire_status_t;
+	/** Pavements */
+	void pave_once(room_rnum room, direction_t direction);
 	static std::map<txt,std::string> texture_strings = {
 			{txt::AIR,"AIR"},
 			{txt::CARPET,"CARPET"},
@@ -517,5 +519,6 @@ namespace mods::rooms {
 	 */
 	void process_fire_damage();
 	void word_wrap_description(player_ptr_t& player,room_rnum);
+
 };//end namespace
 #endif

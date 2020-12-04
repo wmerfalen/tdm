@@ -1,6 +1,7 @@
 #include "breacher.hpp"
 #include "../orm/inventory.hpp"
 #include "../affects.hpp"
+#include "../rooms.hpp"
 
 extern void stop_fighting(char_data *ch);
 namespace mods::orm::inventory {
@@ -8,10 +9,20 @@ namespace mods::orm::inventory {
 };
 namespace mods::classes {
 		breacher::breacher(player_ptr_t p){
+			m_explosive_shot_charges = 0;
 			load_by_player(p);
 		}
 		void breacher::replenish(){
-
+			static uint32_t call_count = 0;
+			if(++call_count >= BREACHER_REPLENISH_CALL_COUNT()){
+				call_count = 0;
+				uint8_t max_charges = std::max(m_player->level() / 5,1);
+				if(++m_explosive_shot_charges > max_charges){
+					m_explosive_shot_charges = max_charges;
+					return;
+				}
+				m_player->sendln("{grn}An explosive shot has been added to your G36C{/grn}");
+			}
 		}
 		player_ptr_t 	breacher::player(){
 			return m_player;
@@ -28,6 +39,7 @@ namespace mods::classes {
 			return 0;
 		}
 		int16_t breacher::load_by_player(player_ptr_t & player){
+			m_explosive_shot_charges = 0;
 			auto result = m_orm.load_by_player(player->db_id());
 			if(result < 0){
 				report(CAT("breacher::load_by_player unable to load breacher class by player id: ",(player->db_id()),".. return status: ",(result)));
@@ -45,15 +57,44 @@ namespace mods::classes {
 		}
 		/* constructors and destructors */
 		breacher::breacher(){
+			m_explosive_shot_charges = 0;
 			m_player = nullptr;
+		}
+		std::tuple<bool,std::string> breacher::explosive_shot(direction_t direction){
+			if(0 == m_explosive_shot_charges){
+				return {false,"You must wait until you can use your {grn}Explosive shot{/grn} again."};
+			}
+			auto & room = world[m_player->room()];
+			if(!room.dir_option[direction]){
+				mods::rooms::pave_once(m_player->room(),direction);
+				--m_explosive_shot_charges;
+				return {true,"{grn}Your explosive shot makes an entrance!{/grn}"};
+			}
+			return {true,"You enter the pre-existing entrance."};
+		}
+		void breacher::attempt_direction(direction_t dir){
+			auto p = std::make_pair<>(m_player->room(),dir);
+			m_push_count[p]++;
+			if(m_push_count[p] >= 2){
+				if(m_explosive_shot_charges == 0){
+					m_player->sendln("{red}You attempt to charge an explosive shot, but you are all out!{/red}");
+					return;
+				}
+				auto status = explosive_shot(dir);
+				m_player->sendln(std::get<1>(status));
+				if(std::get<0>(status)){
+					m_push_count.erase(p);
+				}
+				return;
+			}
+			if(m_push_count[p] < 2 && m_explosive_shot_charges){
+				m_player->send("{grn}You ready an explosive charge toward the %s door...{/grn}\r\n",dirstr(dir).c_str());
+			}
 		}
 		std::shared_ptr<breacher> create_breacher(player_ptr_t &in_player){
 			return std::move(std::make_shared<breacher>(in_player));
 		}
 };
-	std::shared_ptr<mods::classes::breacher> create_breacher(player_ptr_t &player){
-		return std::move(std::make_shared<mods::classes::breacher>(player));
-	}
 ACMD(do_teep){
 	player->sendln("Command not implemented.");
 	return;
