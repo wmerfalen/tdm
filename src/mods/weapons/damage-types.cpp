@@ -1006,6 +1006,7 @@ namespace mods::weapons::damage_types {
 				remember_event(victim,player);
 		}else{
 			feedback.damage_event= de::TARGET_DEAD_EVENT;
+			feedback.attacker = victim->uuid();
 			player->damage_event(feedback);
 			stop_fighting(player->cd());
 			stop_fighting(victim->cd());

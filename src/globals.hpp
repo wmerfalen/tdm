@@ -283,6 +283,8 @@ std::vector<str_t> map_keys(str_map_t & m);
 str_vec_t EXPLODE(str_t& value,char delimiter);
 str_vec_t EXPLODE(str_t value,char delimiter);
 static inline uint64_t CURRENT_TICK(){ return mods::globals::current_tick; }
+static inline uint64_t current_tick(){ return mods::globals::current_tick; }
+static inline uint64_t future_tick(uint64_t add){ uint64_t current = mods::globals::current_tick; return current + add; }
 #define ADMIN_DONE() player->sendln(ADMIN_SUCCESS_MESSAGE())
 #define ADMIN_FAIL() player->sendln(ADMIN_FAILURE_MESSAGE())
 #define ADMIN_REJECT() if(!mods::super_users::player_is(player)){ player->sendln(SUPER_USER_REJECT_MESSAGE()); return; }
@@ -290,4 +292,5 @@ static inline uint64_t CURRENT_TICK(){ return mods::globals::current_tick; }
 #define PLAYER_CAN(A) if(!player->can(A)){ player->sendln("Wrong class."); return; }
 #define SHOULD_RATE_LIMIT(SRL_EVENT) if(mods::rate_limiting::should_throttle(mods::rate_limiting::action_t::SRL_EVENT,player)){ player->errorln("You must wait until you can do that again."); return; } else{ mods::rate_limiting::rate_limit_hit(mods::rate_limiting::action_t::SRL_EVENT,player); }
 #define SEND_HELP(topic) mods::help::send_help(topic,player);
+#define tier(player) std::max(player->level() / 5, 1)
 #endif

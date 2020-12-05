@@ -356,9 +356,7 @@ namespace mods {
 		sbyte& damroll() {
 			return m_char_data->points.damroll;
 		}
-		uint8_t& level(){
-			return m_char_data->player.level;
-		}
+		uint8_t& level();
 		ubyte& weight(){
 			return m_char_data->player.weight;
 		}

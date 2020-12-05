@@ -67,7 +67,12 @@ namespace mods::classes {
 		/** applies it to the entire room. every will get flashed */
 		std::tuple<bool,std::string> use_flash_underbarrel();
 
+
+		/* Special ability: dissipate */
+		std::tuple<bool,std::string> dissipate();
+		void dissipate_wears_off();
 		private:
+			uint8_t m_dissipate_charges;
 			std::vector<uuid_t> m_scanned;
 			uint8_t m_claymore_count;
 			uint8_t m_cryogenic_grenade_count;

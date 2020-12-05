@@ -20,8 +20,12 @@ namespace mods::classes {
 		int16_t				new_player(player_ptr_t&, primary_choice_t primary);
 		int16_t save();
 		void replenish();
+		void init();
+		std::tuple<bool,std::string> drone_bomb(direction_t direction,uint8_t rooms);
 
 		private:
+			uint8_t m_drone_bomb_charges;
+			uint8_t m_sensor_grenade_charges;
 			player_ptr_t m_player;
 			engineer_orm_t m_orm;
 	};

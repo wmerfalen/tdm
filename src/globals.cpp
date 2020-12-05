@@ -57,11 +57,14 @@ INIT(mods::target_practice);
 INIT(mods::class_abilities);
 INIT(mods::class_abilities::forge);
 INIT(mods::class_abilities::sniper);
+INIT(mods::class_abilities::ghost);
+INIT(mods::class_abilities::engineer);
 INIT(mods::values);
 INIT(mods::skills);
 INIT(mods::rate_limiting);
 INIT(mods::levels);
 INIT(mods::orm::pba);
+INIT(mods::classes);
 #undef INIT
 
 namespace mods::mobs::room_watching::events {
@@ -475,11 +478,14 @@ namespace mods {
 			//mods::class_abilities::init();
 			//mods::class_abilities::forge::init();
 			mods::class_abilities::sniper::init();
+			mods::class_abilities::ghost::init();
+			mods::class_abilities::engineer::init();
 			mods::values::init();
 			mods::skills::init();
 			mods::rate_limiting::init();
 			mods::levels::init();
 			mods::orm::pba::init();
+			mods::classes::init();
 			::offensive::init();
 			::builder::init();
 			::informative::init();

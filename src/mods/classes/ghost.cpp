@@ -9,6 +9,7 @@
 #include "../date-time.hpp"
 #include "../weapons/damage-types.hpp"
 #include "../skills.hpp"
+#include "../date-time.hpp"
 
 extern void stop_fighting(char_data *ch);
 namespace mods::orm::inventory {
@@ -23,6 +24,7 @@ namespace mods::classes {
 		m_claymore_count = 0;
 		m_scanned.clear();
 		m_player = nullptr;
+		m_dissipate_charges = 10;
 	}
 	int16_t ghost::save(){
 		return this->m_orm.save();
@@ -150,38 +152,39 @@ namespace mods::classes {
 	ghost::ghost(){
 		m_player = nullptr;
 	}
+	std::tuple<bool,std::string> ghost::dissipate(){
+		if(m_dissipate_charges == 0){
+			return {false,"{red}You don't have any dissipate charges{/red}"};
+		}
+		--m_dissipate_charges;
+		m_player->visibility() = 0;
+		uint32_t ticks = GHOST_DISSIPATE_TICKS_DURATION() * tier(m_player);
+		mods::globals::defer_queue->push_ticks_event(ticks,m_player->uuid(),mods::deferred::EVENT_PLAYER_GOES_VISIBLE);
+		m_player->send("%s tick count: (%d)\r\n",mods::date_time::irl::now().c_str(),ticks);
+		return {true,"{grn}You dissipate into nothing...{/grn}"};
+	}
+	void ghost::dissipate_wears_off(){
+		m_player->visibility() = char_data::STARTING_VISIBILITY;
+		m_player->sendln("Your dissipation invisibility wears off...");
+		m_player->send("%s\r\n",mods::date_time::irl::now().c_str());
+	}
 	void ghost::replenish(){
-		static uint8_t call_count = 0;
+		static uint16_t call_count = 0;
 		++call_count;
-		bool increment_claymore = false;
-		switch(m_plant_claymore_level){
-			default:
-			case skill_familiarity_t::NONE:
-				increment_claymore = 0;
-				break;
-			case skill_familiarity_t::INITIATE:
-				if(0 == (call_count % GHOST_PLANT_CLAYMORE_INITIATE_MOD_CALL_COUNT())){
-					increment_claymore = 1;
-				}
-				break;
-			case skill_familiarity_t::FAMILIAR:
-				if(0 == (call_count % GHOST_PLANT_CLAYMORE_FAMILIAR_MOD_CALL_COUNT())){
-					increment_claymore = 1;
-				}
-				break;
-			case skill_familiarity_t::MASTER:
-				if(0 == (call_count % GHOST_PLANT_CLAYMORE_MASTER_MOD_CALL_COUNT())){
-					increment_claymore = 1;
-				}
-				break;
+		auto tier = tier(m_player);
+		if((call_count % GHOST_REPLENISH_PULSE()) == 0){
+			if(m_claymore_count < GHOST_CLAYMORE_MAX_COUNT() * tier){
+				m_player->sendln("{grn}A ghost class claymore mine has been regenerated.{/grn}");
+				++m_claymore_count;
+			}
+			if(m_dissipate_charges < GHOST_DISSIPATE_CHARGE_MAX_COUNT() * tier){
+				m_player->sendln("{grn}A ghost dissipate charge has been regenerated.{/grn}");
+				++m_dissipate_charges;
+			}
+			#ifdef __MENTOC_SEND_GHOST_PLAYER_REPLENISH_DEBUG_MESSAGE__
+			m_player->sendln("Replenish");
+			#endif
 		}
-		if(increment_claymore && m_claymore_count < GHOST_CLAYMORE_MAX_COUNT()){
-			m_player->sendln("A ghost class claymore mine has been regenerated.");
-			++m_claymore_count;
-		}
-#ifdef __MENTOC_SEND_GHOST_PLAYER_REPLENISH_DEBUG_MESSAGE__
-		m_player->sendln("Replenish");
-#endif
 	}
 	uint8_t ghost::claymore_count() const{
 		return m_claymore_count;
@@ -256,8 +259,24 @@ namespace mods::classes {
 		}
 		return screen;
 	}
-};
 
+};
+namespace mods::class_abilities::ghost {
+	static constexpr const char* dissipate_usage = "usage: dissipate";
+	ACMD(do_dissipate){
+		PLAYER_CAN("ghost.dissipate");
+		DO_HELP_WITH_ZERO("ghost.dissipate");
+		auto status = player->ghost()->dissipate();
+		if(!std::get<0>(status)){
+			player->errorln(std::get<1>(status));
+			return;
+		}
+		player->sendln(std::get<1>(status));
+	}
+	void init(){
+		mods::interpreter::add_command("dissipate", POS_RESTING, do_dissipate, 0,0);
+	}
+};
 #if 0
 namespace mods::class_abilities {
 	static constexpr const char* plant_claymore_usage = "usage: plant_claymore <direction>";

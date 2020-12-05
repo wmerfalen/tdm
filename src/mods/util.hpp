@@ -339,6 +339,8 @@ std::ostream& log(Args... args); /*{
 			}
 			return -1;
 		}
+	std::tuple<bool,direction_t,uint8_t> parse_direction_count(std::vector<std::string>& vec_args);
+	std::optional<std::pair<direction_t,uint8_t>> parse_direction_count_optional(std::vector<std::string>& vec_args);
 	obj_ptr_t parse_object_vec(player_ptr_t& player,std::vector<std::string>& vec_args);
 	obj_ptr_t parse_object(player_ptr_t& player,std::string_view arg, int start_at, int* last_index); 
 	int parse_direction(std::string_view arg, int start_at, int* last_index); 

@@ -6,6 +6,7 @@
 #define mex_debug(A)
 #endif
 
+extern int generic_find(char *arg, bitvector_t bitvector, char_data *ch, char_data **tar_ch, struct obj_data **tar_obj);
 namespace mods::examine {
 	void list_obj_contents_to_char(obj_ptr_t& object,player_ptr_t& player,int mode,int show){
 		struct obj_data *i;
@@ -33,4 +34,18 @@ namespace mods::examine {
 
 	}
 
+	uuid_t find_player_by_name(player_ptr_t& player, std::string_view arg){
+		char_data *found_char = nullptr;
+		obj_data* found_obj = nullptr;
+
+#define FIND_CHAR_ROOM     (1 << 0)
+
+
+		generic_find((char*)arg.data(), FIND_CHAR_ROOM, player->cd(), &found_char, &found_obj);
+
+		if(found_char != nullptr) {
+			return found_char->uuid;
+		}
+		return 0;
+	}
 };

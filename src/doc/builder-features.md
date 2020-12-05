@@ -1,5 +1,29 @@
 # Inventory of features (mods directory only)
 
+# 2020-12-04 
+	- finding player by description relative to player
+		- source file: mods/examine.cpp
+		- `mods::examine::find_player_by_name(player_ptr_t& player, std::string_view arg)`
+	- boolean support added to dynamic values system
+		- source file(s): mods/values.(c|h)pp
+	- player level mocking
+		- `mock_level <int>`
+			- example: `mock_level 30`
+		- this is switched on or off using values system: `ALLOW_MOCK_LEVELS`
+		- source file: mods/classes/super-user-fiddler.cpp
+	- replenish values now powered by your player tier
+	- sniper class
+		- special ability 'xray_shot' now ready
+			- needs balancing
+	- breacher class 
+		- special ability 'explosive shot' now ready
+			- needs balancing
+	- ghost class
+		- special ability 'dissipate' now ready
+			- needs balancing
+	- engineer class
+		- special ability 'drone_bomb' now ready
+		- example: `drone_bomb north 2`
 
 # 2020-11-29 classes system rework
 	Up until today, there has been no definite scope to the player classes. It has all been one
@@ -49,10 +73,11 @@
 		- Primary: PSG-1 Sniper Rifle
 		- Secondary: CZP10 Pistol
 		- Grenade/Explosive: Claymore Mine
-		- Ability: X-Ray Shot (can shoot through multiple layers of walls/doors)
-			- Can snipe an enemy within a building
-			- Can snipe an enemy through walls or doors
-			- If enemy not behind cover, it causes 150% damage to target
+		- Ability: XRay Shot
+			- Type 'mark <name>' to mark an opponent
+			- Type 'engage' you will now specifically target only that mob
+			- Everytime you type 'xray_shot' it will fire off a shot until you're out of charges
+			- To disengage, type 'disengage'
 # MARINE
 	- Loadout:
 		- Primary: M4 Assault Rifle
@@ -65,7 +90,7 @@
 		- Primary: MP-5 Sub Machine Gun
 		- Secondary: SASG-12 Shotgun
 		- Grenade/Explosive: Flashbang
-		- Ability: Explosive shot
+		- Ability: Explosive shot [ DONE 2020-12-04 ]
 			- Shot can breach doors/walls/surfaces, creating new tiles on the map
 			- Same effect as a breach charge but without having to use one
 # ENGINEER
@@ -86,9 +111,10 @@
 		- Primary: Silenced G36C Assault Rifle
 		- Secondary: Silenced PPK Pistol
 		- Grenade/Explosive: Smoke Grenade
-		- Ability: Paralyzing shot
-			- Target is immobilized for several seconds
-			- Target takes 150% damage
+		- Ability: Dissipate [ DONE 2020-12-04 ]
+			- Disappear and move throughout the map without being noticed
+			- Traps, doors, walls do not affect you
+			- Enemies cannot see or fire at you
 # SUPPORT
 	- Loadout:
 		- Primary: HK21 Light Machine Gun

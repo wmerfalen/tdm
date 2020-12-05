@@ -6,6 +6,10 @@ namespace mods {
 	deferred::lambda_queue_iterator deferred::push(uint64_t ticks_in_future,std::function<void()> lambda) {
 		return m_q.insert(std::make_pair(ticks_in_future + m_tick,lambda));
 	}
+	deferred::event_queue_iterator  deferred::push_ticks_event(uint32_t ticks, uuid_t player_uuid ,uint32_t ui_type){
+		std::tuple<uuid_t,uint32_t> type = {player_uuid,ui_type};
+		return m_ticks_event_type.insert(std::make_pair(m_tick + ticks, type));
+	}
 	deferred::event_queue_iterator  deferred::push_ticks_event(uint32_t ticks, std::tuple<uuid_t,uint32_t> type){
 		return m_ticks_event_type.insert(std::make_pair(m_tick + ticks, type));
 	}

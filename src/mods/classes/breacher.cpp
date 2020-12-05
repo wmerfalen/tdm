@@ -14,14 +14,13 @@ namespace mods::classes {
 		}
 		void breacher::replenish(){
 			static uint32_t call_count = 0;
+			uint8_t tier = tier(m_player);
 			if(++call_count >= BREACHER_REPLENISH_CALL_COUNT()){
 				call_count = 0;
-				uint8_t max_charges = std::max(m_player->level() / 5,1);
-				if(++m_explosive_shot_charges > max_charges){
-					m_explosive_shot_charges = max_charges;
-					return;
+				if(m_explosive_shot_charges + 1 < BREACHER_EXPLOSIVE_SHOT_MAX_COUNT() * tier){
+					++m_explosive_shot_charges;
+					m_player->sendln("{grn}An explosive shot has been added to your G36C{/grn}");
 				}
-				m_player->sendln("{grn}An explosive shot has been added to your G36C{/grn}");
 			}
 		}
 		player_ptr_t 	breacher::player(){

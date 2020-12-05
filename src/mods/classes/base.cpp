@@ -24,6 +24,9 @@ void base::psendln(std::string_view msg){ m_player->psendln(msg); }
 				case mods::deferred::EVENT_PLAYER_FINISHES_FEIGN_DEATH:
 					player->ghost()->feign_death_done();
 					break;
+				case mods::deferred::EVENT_PLAYER_GOES_VISIBLE:
+					player->ghost()->dissipate_wears_off();
+					break;
 				default:
 					break;
 			}

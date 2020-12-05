@@ -401,6 +401,24 @@ namespace mods::util {
 		return make_from(get_obj_in_list_vis(ch, buffer.data(), &number, ch->carrying));
 	}
 
+	std::tuple<bool,direction_t,uint8_t> parse_direction_count(std::vector<std::string>& vec_args){
+		if(vec_args.size() < 2){
+			return {0,0,0};
+		}
+		direction_t dir = NORTH;
+		dir = (direction_t)parse_direction(vec_args[0]);
+		uint8_t count = mods::util::stoi(vec_args[1]).value_or(0);
+		return {1,dir,count};
+	}
+	std::optional<std::pair<direction_t,uint8_t>> parse_direction_count_optional(std::vector<std::string>& vec_args){
+		if(vec_args.size() < 2){
+			return std::nullopt;
+		}
+		direction_t dir = NORTH;
+		dir = (direction_t)parse_direction(vec_args[0]);
+		uint8_t count = mods::util::stoi(vec_args[1]).value_or(0);
+		return std::make_pair<>(dir,count);
+	}
 	objdir_t parse_objdir(player_ptr_t& player,std::string_view arg){
 		int last_index = 0;
 		return { mods::util::parse_object(player, arg, 0,&last_index), mods::util::parse_direction(arg, last_index+1, nullptr)};

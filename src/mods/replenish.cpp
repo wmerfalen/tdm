@@ -106,24 +106,31 @@ namespace mods::replenish {
 		static uint16_t call_count = 0;
 		++call_count;
 		for(auto & pair : sniper_ptrs){
+			if(pair.second->player()->state() != CON_PLAYING){ continue; }
 			pair.second->replenish();
 		}
 		for(auto & pair : marine_ptrs){
+			if(pair.second->player()->state() != CON_PLAYING){ continue; }
 			pair.second->replenish();
 		}
 		for(auto & pair : breacher_ptrs){
+			if(pair.second->player()->state() != CON_PLAYING){ continue; }
 			pair.second->replenish();
 		}
 		for(auto & pair : engineer_ptrs){
+			if(pair.second->player()->state() != CON_PLAYING){ continue; }
 			pair.second->replenish();
 		}
 		for(auto & pair : ghost_ptrs){
+			if(pair.second->player()->state() != CON_PLAYING){ continue; }
 			pair.second->replenish();
 		}
 		for(auto & pair : medic_ptrs){
+			if(pair.second->player()->state() != CON_PLAYING){ continue; }
 			pair.second->replenish();
 		}
 		for(auto & pair : support_ptrs){
+			if(pair.second->player()->state() != CON_PLAYING){ continue; }
 			pair.second->replenish();
 		}
 	}

@@ -18,6 +18,8 @@
 #include "object-utils.hpp"
 #include "damage-event.hpp"
 #include "armor/basic-protection.hpp"
+#include "classes/super-user-fiddler.hpp"
+#include "classes/sniper.hpp"
 /**
  * TODO: All these stc* functions need to be altered to accomodate
  * the new player_type_enum_t values. If output is to be muted, then
@@ -1217,6 +1219,11 @@ namespace mods {
 		uuid_t target = 0;
 		target = m_block_data[unblock];
 		switch(unblock){
+			case mods::deferred::EVENT_PLAYER_GOES_VISIBLE:
+				{
+					mods::classes::unblock_event(unblock,uuid());
+					break;
+				}
 			case mods::deferred::EVENT_PLAYER_FINISHES_FEIGN_DEATH:
 				{
 					mods::classes::unblock_event(unblock,uuid());
@@ -1400,6 +1407,9 @@ namespace mods {
 					break;
 				case damage_event_t::TARGET_DEAD_EVENT:
 					this->sendln(MSG_YOUR_TARGET_IS_DEAD());
+					if(sniper()){
+						sniper()->target_died(feedback.attacker);
+					}
 					break;
 				case damage_event_t::YOU_MISSED_YOUR_TARGET_EVENT:
 					this->sendln(MSG_MISSED_TARGET());
@@ -1589,6 +1599,12 @@ namespace mods {
 		void player::set_support(std::shared_ptr<mods::classes::support> g){
 			m_support = g;
 		}
+		uint8_t& player::level(){
+			uint8_t level = mods::classes::mock_player_level(this->uuid(),m_char_data->player.level);
+			m_char_data->player.level = level;
+			return m_char_data->player.level;
+		}
+		
 };
 
 #endif

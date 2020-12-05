@@ -32,6 +32,9 @@ namespace mods::mobs::room_watching {
 			if(!player_ptr){
 				return;
 			}
+			if(player_ptr->visibility() == 0){
+				return;
+			}
 			for(auto & mob_uuid : watch_map[room]){
 				if(has_mini_gunner_ptr(mob_uuid)){
 					mini_gunner_ptr(mob_uuid)->enemy_spotted(room,player);

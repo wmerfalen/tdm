@@ -1,0 +1,37 @@
+# type: FRAG_GRENADE
+# type: INCENDIARY_GRENADE
+# type: REMOTE_EXPLOSIVE
+# type: REMOTE_CHEMICAL
+# type: EMP_GRENADE
+# type: CLAYMORE_MINE
+# type: SMOKE_GRENADE
+# type: C4
+# type: BREACH_CHARGE
+# type: FLASHBANG_GRENADE
+# type: SENSOR_GRENADE
+str_type: 'REMOTE_EXPLOSIVE' # enum, object type
+type: 'REMOTE_EXPLOSIVE' # integer enum 
+manufacturer: 'CLXi-F8 Mani-Fold Corp.' # string, anything 
+name: 'Highly engineered Drone Bomb' # string, anything name of object 
+vnum: 19 # integer, unique identifier
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+description: 'A highly engineered exploding drone is lying here.'
+short_description: 'a highly engineered exploding drone'
+action_description: 'a highly engineered exploding drone'
+feed_file: 'objects/explosive/engineer-drone-bomb.yml'
+alternate_explosion_type: 'NONE' #std::string, ENUM NONE,SCAN
+loudness_type: 'DEAFENING' #std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING
+chance_to_injure: 33.0 #float, percent
+critical_chance: 33.0 #float, percent
+critical_range: 1 #int, rooms
+blast_radius: 1 #int, rooms
+damage_per_second: 8.0 #float, static base damage done
+disorient_amount: 3.2 #float, percent
+range_modifier: 1 #int, rooms

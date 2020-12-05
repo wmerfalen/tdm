@@ -23,9 +23,15 @@ namespace mods::classes {
 		player_ptr_t player();
 		int16_t new_player(player_ptr_t&);
 		int16_t save();
-		std::vector<uuid_t> get_targets_scanned_by_drone();
-		void drone_scan(room_rnum);
+		//std::vector<uuid_t> get_targets_scanned_by_drone();
+		void init();
+		//void drone_scan(room_rnum);
 		void replenish();
+
+		void target_died(uuid_t);
+		std::tuple<bool,std::string> mark_target(std::string_view target);
+		std::tuple<bool,std::string> engage();
+		std::tuple<bool,std::string> disengage();
 
 		/*
 		- Ability: X-Ray Shot (can shoot through multiple layers of walls/doors)
@@ -36,6 +42,11 @@ namespace mods::classes {
 		std::tuple<bool,std::string> xray_shot();
 
 		private:
+			uuid_t m_target;
+			bool m_engaged;
+			uint32_t m_xray_shot_charges;
+			uint32_t m_claymore_charges;
+
 			player_ptr_t m_player;
 			sniper_orm_t m_orm;
 			std::vector<uuid_t> m_scanned;
