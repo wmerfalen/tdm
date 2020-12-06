@@ -1,0 +1,322 @@
+"execute pathogen#infect()
+set encoding=utf-8
+set fileencoding=utf-8
+call plug#begin('~/.vim/plugged')
+"Plug 'StanAngeloff/php.vim'
+"Plug 'shawncplus/phpcomplete.vim'
+Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'rafi/awesome-vim-colorschemes'
+Plug 'bfrg/vim-cpp-modern'
+Plug 'tpope/vim-fugitive'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'noah/vim256-color'
+Plug 'flazz/vim-colorschemes'
+Plug 'mattn/emmet-vim'
+Plug 'mattn/webapi-vim'
+Plug 'preservim/nerdtree'
+Plug 'junegunn/fzf'
+"Plug 'atom/fuzzy-finder'
+"Plug 'Rip-Rip/clang_complete'
+call plug#end()
+set autoindent
+set number
+set rnu
+set shiftwidth=2
+set tabstop=2
+set term=xterm-256color
+"set term=screen-256color
+syntax on
+filetype plugin indent on
+function! Javascript_file()
+	set filetype=javascript
+	map <leader>l :! ~/bin/node -c %<CR>
+endfunction
+function! Php_file()
+ set filetype=php
+ "set tags=$INSITE_ETAGS
+ "nnoremap <F7> :! php -l %<CR>
+ "nnoremap <F2> :call Refresh()<CR>
+ "nnoremap <F3> :call Clear_log()<CR>
+"map <F5> <Esc>:EnableFastPHPFolds<Cr> 
+"map <F6> <Esc>:EnablePHPFolds<Cr> 
+let g:user_emmet_settings = (
+\  join( readfile( expand( '~/.snippets_custom.json' ) ), "\n" ) )
+let g:user_emmet_mode='a'
+"let g:user_emmet_settings = {
+"        \  'php' : {
+"        \    'extends' : 'html',
+"        \    'filters' : 'c',
+"        \  },
+"        \  'xml' : {
+"        \    'extends' : 'html',
+"        \  },
+"        \  'haml' : {
+"        \    'extends' : 'html',
+"        \  },
+"        \}
+endfunction
+"autocmd! BufWritePost *.php :call Gen_tags()
+au BufRead,BufNewFile *.php :call Php_file()
+au BufRead,BufNewFile *.js :call Javascript_file()
+au BufRead,BufNewFile *.tpl set filetype=html
+au BufRead,BufNewFile *.html set filetype=html
+au BufRead,BufNewFile *.blade.php set filetype=php
+set updatecount=0 updatetime=0
+set incsearch
+set background=dark
+function! GhostDNS_make()
+	exec ":cexpr system('make -f Makefile -j 16') | cw"
+endfunction
+function! Cpp_make()
+	exec ":cexpr system('make -f $WEBROOT/Makefile -j 16') | cw"
+endfunction
+"nnoremap <c-u> :make -j 8 -f $WEBROOT/Makefile<bar> cw<cr>
+map <c-u> :make -j 16 -f $WEBROOT/Makefile <bar> cw<cr>
+nnoremap <C-c> :! cd $WEBROOT && make clean<CR>
+set updatecount=0 updatetime=0
+
+function! Cpp_Gen_tags()
+		exec ":silent ! $WEBROOT/scripts/make-ctags.sh 2>/dev/null &"
+endfunction
+
+function! Cpp_MakeClean()
+	let cleaner=fnamemodify("~/bin/clean",":p")
+	exec "!" . cleaner
+endfunction
+function! Tinker_cpp_file()
+	set filetype=cpp
+	nnoremap <F3> :call MakeClean()<CR>
+	nnoremap <F4> :cnext<CR>
+	let found = 0
+	let max = 2
+	while found != 1 && max > 0
+		let max -= 1
+		if(!filereadable(fnamemodify("tags",":p")))
+			cd ../
+		else
+			let found = 1
+			let &tags=fnamemodify("tags",":p")
+		endif
+	endwhile
+endfunction
+
+function! Autogen_Values_Script()
+	exec ":silent ! $WEBROOT/scripts/vk-creator.sh 2>/dev/null &"
+endfunction
+function! Cpp_file()
+hi TerrorAttnLabels ctermfg=black ctermbg=red
+hi HellYeah ctermfg=7 ctermbg=3 cterm=bold
+hi EmphasizeComment ctermfg=1 ctermbg=0
+	set filetype=cpp
+	highlight PointerContainer ctermfg=151
+	match PointerContainer /std::shared_ptr/
+	highlight PointerContainer ctermfg=151
+	match PointerContainer /std::unique_ptr/
+	"set foldmethod=syntax
+	set tags=$WEBROOT/tags
+endfunction
+
+augroup Cpp
+autocmd! BufRead,BufNewFile *.cpp :call Cpp_file()
+autocmd! BufRead,BufNewFile *.hpp :call Cpp_file()
+autocmd! BufRead,BufNewFile *.h :call Cpp_file()
+autocmd! BufWritePost *.cpp :call Cpp_Gen_tags()
+autocmd! BufWritePost *.hpp :call Cpp_Gen_tags()
+autocmd! BufWritePost *.h :call Cpp_Gen_tags()
+autocmd! BufWritePost *.c :call Cpp_Gen_tags()
+autocmd! BufWritePost */values-list.cpp :call Autogen_Values_Script()
+autocmd BufWinLeave * mkview
+autocmd BufWinEnter * silent! loadviewgroup END
+
+set foldmethod=manual
+set shiftwidth=2
+set tabstop=2
+set autoindent
+set secure
+set exrc
+set background=dark
+
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_experimental_simple_template_highlight = 1
+let g:cpp_experimental_template_highlight = 1
+let g:cpp_concepts_highlight = 1
+" Copy to X CLIPBOARD
+function! Mods()
+	tabnew $WEBROOT/mods
+endfunction
+function! Lib()
+	tabnew $WEBROOT/../lib
+endfunction
+function! ModsWeapons()
+	tabnew $WEBROOT/mods/weapons
+endfunction
+function! ModsClasses()
+	tabnew $WEBROOT/mods/classes
+endfunction
+function! ModsOrm()
+	tabnew $WEBROOT/mods/orm
+endfunction
+map <leader><leader>v :tabnew ~/.vimrc<cr>
+map <leader><leader>s :so ~/.vimrc<cr>
+map <leader>w :w<cr>
+map <leader>q :q<cr>
+map <leader>qa :qa<cr>
+map <leader>m :call Mods()<cr>
+"map <leader>l :call Lib()<cr>
+map <leader><leader>c :call ModsClasses()<cr>
+map <leader><leader>w :call ModsWeapons()<cr>
+map <leader><leader>o :call ModsOrm()<cr>
+map <leader>gd :Gdiff<cr>
+map <leader>tn. :tabnew .<cr>
+map <leader>. :tabnew .<cr>
+
+" Paste from X CLIPBOARD
+map <leader>pp :r!xsel -p<CR>
+map <leader>ps :r!xsel -s<CR>
+map <leader>pb :r!xsel -b<CR>
+nnoremap <C-h> :tabprevious<CR>
+nnoremap <C-l>   :tabnext<CR>
+nnoremap <C-t>     :tabnew<CR>
+map <c-j> :bprev<CR>
+map <c-k> :bnext<CR>
+map <f1> :cnf<cr>
+map <f2> :cn<cr>
+map <leader>e /error:<CR>
+map <leader>snp :call SetNoPaste()<cr>
+map <leader>sp :call SetPaste()<cr>
+
+
+" I *really* like elda. Very nice
+function! ColorSet()
+	" xterm
+	"color meta5
+	
+	" gaia dark
+	"color nature
+	"color abstract
+	
+	" seabed dark
+	"color nature
+
+	" white on black
+	color magellan
+	"current
+	"color fahrenheit
+	"color nature
+
+	" color calmar256-dark
+	" color kate
+	"color kalahari
+	"color unicon
+	
+	" use with dark pastels xfce4-terminal theme
+	" and Terminus Regular 8pt
+
+	" EXTREMELY sexy when using green on black
+	" EXTREMELY sexy when using bionis dark
+	"color heroku-terminal
+	"color getafe
+	"color ghostbuster
+	"color archery
+
+	" use with caprice dark xfce4-terminal theme
+	"color fahrenheit
+	"color meta5
+
+	"color harlequin
+	"color h80
+	"color nature
+	"color made_of_code
+	"color magellan
+	"color manxome
+	"color martin_krischik
+	"color anderson
+	"color orbital
+	
+	" use with white on black
+	"color orbital
+	
+	" use with seabed dark
+	"color kate
+	"
+	"color abstract
+	
+	" use this with redshift to a low number
+	"color alduin
+
+	"color afterglow
+	" use with green on black
+	" color kaltex
+	
+	"color orbital
+	"color alduin
+endfunction
+call ColorSet()
+" mellow looks cool with the bionis dark theme in xfce4-terminal
+" color mellow
+"
+"color zazen
+"color carvedwood
+
+" awesome 'into the breach' colorscheme if using 'termina dark' color profile
+function! NativeColor()
+	"color earendel
+endfunction
+"color elflord
+"color fahrenheit
+
+
+" remote from tiny laptop
+function! LaptopColor()
+	color hemisu
+endfunction
+function! SetNoPaste()
+	set nopaste
+endfunction
+function! SetPaste()
+	set paste
+endfunction
+set guifont=Terminus\ Bold\ 14
+" source ~/.vim/cscope_maps.vim
+
+function! FoldSyntax()
+  set foldmethod=syntax
+  normal zM
+endfunction
+function! FoldIndent()
+  set foldmethod=indent
+  normal zM
+endfunction
+
+function! Fuzz()
+	exec ":tabnew ."
+	exec ":FZF"
+endfunction
+function! NoNumber()
+	exec ":set nonumber"
+	exec ":set nornu"
+endfunction
+function! YesNumber()
+	exec ":set number"
+	exec ":set rnu"
+endfunction
+	
+	
+	
+
+map <leader>fi :call FoldIndent()<CR>
+map <leader>fs :call FoldSyntax()<CR>
+set rtp+=~/.fzf
+map <leader>z :call Fuzz()<CR>
+map <leader>co :copen<CR>
+"source $WEBROOT/scripts/doxygen.vim
+map <leader>d :Dox<CR>
+map <leader>i :color nature<CR>
+map <leader>c :call ColorSet()<CR>
+map = :tabm +1<CR>
+map - :tabm -1<CR>
+map <leader><leader>nn :call NoNumber()<CR>
+map <leader><leader>on :call YesNumber()<CR>
+map <leader>v :tabnew $WEBROOT/mods/values-list.cpp<CR>

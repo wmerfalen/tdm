@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "VK Script ran at $(date -I)" > /tmp/vk.run.log
+cd $WEBROOT
+pwd >> /tmp/vk.run.log
+
 STORAGE=scripts/vk-data/values.hpp
 cat scripts/vk-data/prefix.hpp.fragment > $STORAGE
 
