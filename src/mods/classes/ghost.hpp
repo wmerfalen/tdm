@@ -71,6 +71,7 @@ namespace mods::classes {
 		/* Special ability: dissipate */
 		std::tuple<bool,std::string> dissipate();
 		void dissipate_wears_off();
+		bool is_dissipated() const;
 		private:
 			uint8_t m_dissipate_charges;
 			std::vector<uuid_t> m_scanned;
@@ -91,6 +92,7 @@ namespace mods::classes {
 			skill_familiarity_t m_cryogenic_grenade_level;
 			skill_familiarity_t m_flash_underbarrel_level;
 			std::deque<obj_ptr_t> m_claymores;
+			bool m_dissipated;
 	};
 	void ghost_advance_level(player_ptr_t& player);
 	std::shared_ptr<mods::classes::ghost> create_ghost(player_ptr_t &player);

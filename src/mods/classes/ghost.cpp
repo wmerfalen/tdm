@@ -25,6 +25,7 @@ namespace mods::classes {
 		m_scanned.clear();
 		m_player = nullptr;
 		m_dissipate_charges = 10;
+		m_dissipated = 0;
 	}
 	int16_t ghost::save(){
 		return this->m_orm.save();
@@ -35,6 +36,9 @@ namespace mods::classes {
 	}
 	player_ptr_t 	ghost::player(){
 		return m_player;
+	}
+	bool ghost::is_dissipated() const {
+		return m_dissipated;
 	}
 	void ghost::set_player(player_ptr_t p){
 		m_player = p;
@@ -161,12 +165,14 @@ namespace mods::classes {
 		uint32_t ticks = GHOST_DISSIPATE_TICKS_DURATION() * tier(m_player);
 		mods::globals::defer_queue->push_ticks_event(ticks,m_player->uuid(),mods::deferred::EVENT_PLAYER_GOES_VISIBLE);
 		m_player->send("%s tick count: (%d)\r\n",mods::date_time::irl::now().c_str(),ticks);
+		m_dissipated = true;
 		return {true,"{grn}You dissipate into nothing...{/grn}"};
 	}
 	void ghost::dissipate_wears_off(){
 		m_player->visibility() = char_data::STARTING_VISIBILITY;
 		m_player->sendln("Your dissipation invisibility wears off...");
 		m_player->send("%s\r\n",mods::date_time::irl::now().c_str());
+		m_dissipated = false;
 	}
 	void ghost::replenish(){
 		static uint16_t call_count = 0;

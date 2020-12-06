@@ -22,6 +22,7 @@
 #include "house.h"
 #include "constants.h"
 #include "mods/classes/breacher.hpp"
+#include "mods/classes/ghost.hpp"
 
 /* external variables  */
 extern int tunnel_size;
@@ -92,6 +93,7 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 	char throwaway[MAX_INPUT_LENGTH] = ""; /* Functions assume writable. */
 	room_rnum was_in;
 	int need_movement;
+	bool ghost_dissipated = player->ghost() && player->ghost()->is_dissipated();
 
 	/*
 	 * Check for special routines (North is 1 in command list, but 0 here) Note
@@ -121,7 +123,7 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 	need_movement = (movement_loss[SECT(IN_ROOM(ch))] +
 			movement_loss[SECT(EXIT(ch, dir)->to_room)]) / 2;
 
-	if(GET_MOVE(ch) < need_movement && !IS_NPC(ch)) {
+	if(!ghost_dissipated && GET_MOVE(ch) < need_movement && !IS_NPC(ch)) {
 		if(need_specials_check && ch->master) {
 			send_to_char(ch, "You are too exhausted to follow.");
 		} else {
@@ -164,8 +166,10 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 	if(!AFF_FLAGGED(ch, AFF_SNEAK)) {
 		char buf2[MAX_STRING_LENGTH];
 
-		snprintf(buf2, sizeof(buf2), "$n leaves %s.", dirs[dir]);
-		act(buf2, TRUE, ch, 0, 0, TO_ROOM);
+		if(!ghost_dissipated){
+			snprintf(buf2, sizeof(buf2), "$n leaves %s.", dirs[dir]);
+			act(buf2, TRUE, ch, 0, 0, TO_ROOM);
+		}
 	}
 
 	if(world[player->room()].has_texture(room_data::texture_type_t::ELEVATOR) && (dir == UP || dir == DOWN)){
@@ -175,7 +179,7 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 	mods::globals::rooms::char_from_room(ch);
 	mods::globals::rooms::char_to_room(world[was_in].dir_option[dir]->to_room,ch);
 
-	if(!AFF_FLAGGED(ch, AFF_SNEAK)) {
+	if(!AFF_FLAGGED(ch, AFF_SNEAK) && !ghost_dissipated) {
 		act("$n has arrived.", TRUE, ch, 0, 0, TO_ROOM);
 	}
 
@@ -198,20 +202,32 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 	MENTOC_PREAMBLE();
 	room_rnum was_in;
 	follow_type *k, *next;
+	bool ghost_dissipated = player->ghost() && player->ghost()->is_dissipated();
+	bool is_breacher = player->breacher() != nullptr;
+	bool is_exit = EXIT(ch, dir);
 
 	if(ch == NULL || dir < 0 || dir >= NUM_OF_DIRS || FIGHTING(ch)) {
 		log("SYSERR: perform_move received invalid parameters");
 		return (0);
-	} else if((!EXIT(ch, dir) || EXIT(ch, dir)->to_room == NOWHERE)) {
-		if(player->get_class() == player_class_t::BREACHER){
+	}
+
+	bool exit_closed = is_exit && EXIT_FLAGGED(EXIT(ch, dir), EX_CLOSED) /* !mods */
+			&& !EXIT_FLAGGED(EXIT(ch,dir),EX_BREACHED) &&
+			!IS_SET(world[EXIT(ch,dir)->to_room].dir_option[OPPOSITE_DIR(dir)]->exit_info,EX_BREACHED);
+	if(exit_closed && ghost_dissipated){
+		was_in = IN_ROOM(ch);
+		do_simple_move(ch, dir, need_specials_check);
+		return 0;
+	}
+
+	if((!EXIT(ch, dir) || EXIT(ch, dir)->to_room == NOWHERE)) {
+		if(is_breacher){
 			player->breacher()->attempt_direction(dir);
 			return 0;
 		}
-			send_to_char(ch, "Alas, you cannot go that way...");
-	} else if(EXIT_FLAGGED(EXIT(ch, dir), EX_CLOSED) /* !mods */
-			&& !EXIT_FLAGGED(EXIT(ch,dir),EX_BREACHED) &&
-			!IS_SET(world[EXIT(ch,dir)->to_room].dir_option[OPPOSITE_DIR(dir)]->exit_info,EX_BREACHED)
-			) {
+		player->sendln("Alas, you cannot go that way.");
+		return 0;
+	} else if(exit_closed) {
 		if(EXIT(ch, dir)->keyword) {
 			send_to_char(ch, "The %s seems to be closed.", fname(EXIT(ch, dir)->keyword));
 		} else {

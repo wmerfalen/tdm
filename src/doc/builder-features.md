@@ -41,7 +41,7 @@
 	Each player class consists of the following configuration:
 	- Primary Weapon
 	- Secondary Weapon
-	- Grenade/Explosive
+	- Tactical
 	- Special Ability
 
 	Each player class cannot swap their weapon out for another weapon.
@@ -72,24 +72,30 @@
 	- Loadout:
 		- Primary: PSG-1 Sniper Rifle
 		- Secondary: CZP10 Pistol
-		- Grenade/Explosive: Claymore Mine
-		- Ability: XRay Shot
-			- Type 'mark <name>' to mark an opponent
-			- Type 'engage' you will now specifically target only that mob
-			- Everytime you type 'xray_shot' it will fire off a shot until you're out of charges
+		- Tactical: Claymore Mine
+		- Ability: XRay Shot [ DONE ]
+			- Command sequence:
+				- Type 'mark <name>' to mark an opponent
+				- Type 'engage' you will now specifically target only that mob
+				- Everytime you type 'xray_shot' it will fire off a shot until you're out of charges
 			- To disengage, type 'disengage'
+			- Once target is dead, you no longer are in engage mode and have to mark/engage/xray_shot again
 # MARINE
 	- Loadout:
 		- Primary: M4 Assault Rifle
 		- Secondary: Magnum Revolver (exact type TBD)
-		- Grenade/Explosive: Fragmentation Grenade
+		- Tactical: Fragmentation Grenade
 		- Ability: Activate Underbarrel grenade launcher (x3 grenade rounds)
+			- Command sequence
+				- Type 'underbarrel activate'
+				- Type 'snipe <target> <direction>'
 			- Causes massive explosive damage to a room very far away
 # BREACHER
 	- Loadout:
 		- Primary: MP-5 Sub Machine Gun
 		- Secondary: SASG-12 Shotgun
-		- Grenade/Explosive: Flashbang
+			- Every 4th shot gains 1 push back charge
+		- Tactical: Flashbang
 		- Ability: Explosive shot [ DONE 2020-12-04 ]
 			- Shot can breach doors/walls/surfaces, creating new tiles on the map
 			- Same effect as a breach charge but without having to use one
@@ -97,29 +103,34 @@
 	- Loadout:
 		- Primary: UMP-45
 		- Secondary: Glock
-		- Grenade/Explosive: Sensor Grenade
-		- Ability: Spawn and control Explosive Autonomous Drone
+		- Tactical: Sensor Grenade
+		- Ability: Drone Bomb [ DONE ]
+			- Deploy a drone that drives in a direction N rooms
+			- Example: `drone_bomb north 2`
+			- Drone bomb is a remote explosive type stored at `objects/explosive/engineer-drone-bomb.yml`
+				- Drone bomb is a globally available singleton guarded and accessible only through a function
 # MEDIC
 	- Loadout:
 		- Primary: SAIGA-12 Automatic Shotgun
+			- Every 3rd shot adds 1 push back charge
 		- Secondary: MP9 Machine Pistol
-		- Grenade/Explosive: Smoke Grenade
-		- Ability: Heal self/team
-			- Gain 33% of your HP per ability level
+		- Tactical: Smoke Grenade
+		- Ability: Drop Healing Grenade
+			- Team members can heal more by typing 'siphon' in the room a healing grenade exists in
 # GHOST
 	- Loadout:
 		- Primary: Silenced G36C Assault Rifle
 		- Secondary: Silenced PPK Pistol
-		- Grenade/Explosive: Smoke Grenade
-		- Ability: Dissipate [ DONE 2020-12-04 ]
-			- Disappear and move throughout the map without being noticed
-			- Traps, doors, walls do not affect you
-			- Enemies cannot see or fire at you
+		- Tactical: Smoke Grenade
+		- Ability: Dissipate
+			- Disappear and move throughout the map without being noticed [ DONE 2020-12-04 ]
+			- Traps, doors, walls do not affect you [ DONE 2020-12-05 ]
+			- Enemies cannot see or fire at you [ TODO ]
 # SUPPORT
 	- Loadout:
 		- Primary: HK21 Light Machine Gun
-		- Secondary: <PISTOL TBD>
-		- Grenade/Explosive: Incendiary Grenade
+		- Secondary: 
+		- Tactical: Incendiary Grenade
 		- Ability: Call in drone strike
 			- Drones drop hellfire missiles on target room
 # END OF 2020-11-29 REVISED CLASS SYSTEM

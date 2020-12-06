@@ -16,7 +16,10 @@ namespace mods::weapons::shotgun {
 			uint16_t id;
 			void feed(const mods::pq::row_type &);
 			obj_data_ptr_t obj;
-
+			void increment_shot();
+			protected:
+				uint8_t m_knockback_charges;
+				uint32_t m_damage_accumulation;
 		};
 };
 using sasg12_ptr_t = std::shared_ptr<mods::weapons::shotgun::sasg12>;

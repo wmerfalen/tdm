@@ -4979,7 +4979,7 @@ ACMD(do_rbuild) {
 		 * --------------------------------------------------
 		 *  the n is for which page to list. 25 to a page
 		 */
-		if(vec_args.size() >= 3 && vec_args[1].compare("list") == 0){
+		if(vec_args.size() >= 2 && vec_args[1].compare("list") == 0){
 			r_status(player,"listing...");
 			unsigned ex_id = 0;
 			player->pager_start();
@@ -4991,6 +4991,7 @@ ACMD(do_rbuild) {
 			}
 			player->pager_end();
 			player->page(0);
+			r_status(player,"Done listing...");
 			return;
 		}
 		if(vec_args.size() >= 3 && vec_args[1].compare("delete") == 0){
