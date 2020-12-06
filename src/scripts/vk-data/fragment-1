@@ -1,0 +1,23 @@
+};//end value_key_t enum
+
+		extern std::map<value_key_t,variants_t> alt_value_map;
+		void save_to_lmdb(std::string key,std::string value);
+		void load_from_lmdb(std::string in_key);
+		void revert_to_default(std::string in_key);
+		template <typename T>
+		static inline void CONSTSET(value_key_t m,T value){
+			alt_value_map[m] = value;
+		}
+		template <typename T>
+		static inline T CONSTGET(value_key_t m,T fallback){
+			if(alt_value_map.find(m) != alt_value_map.end()){
+				return std::get<T>(alt_value_map[m]);
+			}
+			return fallback;
+		}
+		std::string random_key_string(std::string value);
+#ifndef CGET
+#define CGET(A,KEY) \
+		A KEY();
+#endif
+

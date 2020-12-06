@@ -35,6 +35,7 @@
 #include "mods/examine.hpp"
 #include "mods/help.hpp"
 #include "mods/levels.hpp"
+#include "mods/calc-visibility.hpp"
 
 extern char_data* character_list;
 /* extern variables */
@@ -595,11 +596,11 @@ void list_char_to_char(char_data *ch) {
 	bool on_fire = mods::rooms::is_on_fire(room);
 	bool viewing_camera = player->camera_viewing();
 	auto camera = player->get_camera();
-	auto fire_status = mods::rooms::get_fire_status(room);
 	bool camera_is_thermal = camera != nullptr ? mods::object_utils::is_thermal_camera(camera->object_uuid()) : false;
-	bool camera_is_night_vision = camera != nullptr ? mods::object_utils::is_night_vision_camera(camera->object_uuid()) : false;
-	bool can_see_through_fire = mods::rooms::can_see_through_fire(room);
 	bool player_has_thermal = player->has_thermal_vision();
+	auto fire_status = mods::rooms::get_fire_status(room);
+	bool camera_is_night_vision = camera != nullptr ? mods::object_utils::is_night_vision_camera(camera->object_uuid()) : false;
+	//bool can_see_through_fire = mods::rooms::can_see_through_fire(room);
 
 #ifdef __MENTOC_SHOW_VISION_FLAGS_IN_INFORMATIVE_CPP__
 	player->send(
@@ -626,45 +627,48 @@ void list_char_to_char(char_data *ch) {
 			player_has_thermal
 				);
 #endif
-	for(auto & player_ptr : mods::globals::get_room_list(room)){
-		if(player_ptr->is(ch)){
+	for(auto & target : mods::globals::get_room_list(room)){
+		if(target->is(ch)){
 			continue;
 		}
-		if(on_fire && (
-						(viewing_camera && camera_is_thermal) 
-						|| player_has_thermal
-					)
-			) {
-			if(mods::rooms::can_see_through_fire(fire_status)){
-				player->send("{yel}[thermal vision]{/yel} You see %s here.\r\n", player_ptr->name().c_str());
-				continue;
+		if(!mods::calc_visibility::is_visible(player,target)){
+			if(on_fire && ((viewing_camera && camera_is_thermal) || player_has_thermal) && 
+					!mods::rooms::can_see_through_fire(fire_status)){
+				player->sendln("{yel}[on fire]{/yel} You can't seem see anything but flames.");
+				break;
 			}
-			player->sendln("{yel}[on fire]{/yel} You can't seem see anything but flames.");
-			break;
-		}
-		if(on_fire && can_see_through_fire){
-			list_one_char(player_ptr->cd(),ch);
 			continue;
+		}
+		if(on_fire && ((viewing_camera && camera_is_thermal) || player_has_thermal) && 
+					mods::rooms::can_see_through_fire(fire_status)){
+				player->send("{yel}[thermal vision]{/yel} You see %s here.\r\n", target->name().c_str());
+				continue;
 		}
 		if(dark && viewing_camera && camera_is_night_vision){
-			player->send("{grn}[night-vision via camera]{/grn} You see %s here.\r\n", player_ptr->name().c_str());
+			player->send("{grn}[night-vision via camera]{/grn} You see %s here.\r\n", target->name().c_str());
 			continue;
 		}
-		/** TODO: needs testing */
 		if(((smoke || dark) && viewing_camera && camera_is_thermal) || 
 				((smoke || dark) && player_has_thermal)) {
-		/** TODO: needs testing */
+			/** TODO: needs testing */
 			if(viewing_camera){
-				player->send("{gld}[thermal via camera]{/gld} You see %s here.\r\n", player_ptr->name().c_str());
+				player->send("{gld}[thermal via camera]{/gld} You see %s here.\r\n", target->name().c_str());
 			}else{
-				player->send("{gld}[thermal vision]{/gld} You see %s here.\r\n", player_ptr->name().c_str());
+				player->send("{gld}[thermal vision]{/gld} You see %s here.\r\n", target->name().c_str());
 			}
 			continue;
 		}
 		if(dark){
 			std::string name = "someone";
-			if(mods::player_utils::is_scanned(player_ptr)){
-				name = player_ptr->name();
+			if(mods::player_utils::is_scanned(target)){
+				name = target->name();
+			}
+			if(player->has_thermal_vision()) {
+				player->send(
+						"{grn}[thermal-vision]{/grn} You see %s here.\r\n",
+						name.c_str()
+				);
+				continue;
 			}
 			if(player->has_night_vision()) {
 				player->send(
@@ -673,11 +677,11 @@ void list_char_to_char(char_data *ch) {
 				);
 				continue;
 			}
-			player->send("You see %s here.\r\n",name.c_str());
-		} else if(CAN_SEE(ch, player_ptr->cd())) {
-			list_one_char(player_ptr->cd(), ch);
 		}
+		list_one_char(target->cd(),ch);
 	}
+
+
 	/** TODO: thermal vision distance is short. you can only see adjacent rooms and even then the sight is limited. */
 	auto room_number = player->viewing_room();
 	for(auto direction : {NORTH,SOUTH,EAST,WEST,UP,DOWN}) {
@@ -688,13 +692,13 @@ void list_char_to_char(char_data *ch) {
 				if(!world[looped_room_id].dir_option[direction]) { 
 					break;
 				}
-				for(auto & player_ptr : mods::globals::get_room_list(world[looped_room_id].dir_option[direction]->to_room)){
-					if(!player_ptr->get_affect_dissolver().has_affect(AFF(SCANNED))) {
+				for(auto & target : mods::globals::get_room_list(world[looped_room_id].dir_option[direction]->to_room)){
+					if(!target->get_affect_dissolver().has_affect(AFF(SCANNED))) {
 						continue;
 					}
-					auto i = player_ptr->cd();
-					if(!player_ptr->is(ch)){
-						if(CAN_SEE(ch, i)) {
+					auto i = target->cd();
+					if(!target->is(ch)){
+						if(mods::calc_visibility::is_visible(player,target)){
 							auto pluralized = ctr + 1 == 1 ? "" : "s";
 							std::string adjusted = "right here";
 							if(ctr > 1){

@@ -31,6 +31,13 @@ namespace mods::rand {
 		rand_debug("(mods::rand::roll): num,size:" << number << "," << size << "| roll:" << result);
 		return result;
 	}
+	bool chance(uint8_t chance){
+		if(chance >= 100){
+			return true;
+		}
+		uint8_t percent = 100 - chance;
+		return dice(1,100) >= percent;
+	}
 };
 
 /* creates a random number in interval [from;to] */

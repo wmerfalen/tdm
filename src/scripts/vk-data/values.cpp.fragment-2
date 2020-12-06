@@ -1,0 +1,111 @@
+			};
+		bool is_int(value_key_t key){
+			return (std::find(int_types.begin(),int_types.end(),key) != int_types.end());
+		}
+		bool is_bool(value_key_t key){
+			return (std::find(bool_types.begin(),bool_types.end(),key) != bool_types.end());
+		}
+		bool is_uint8(value_key_t key){
+			return (std::find(uint8_types.begin(),uint8_types.end(),key) != uint8_types.end());
+		}
+		bool is_uint16(value_key_t key){
+			return (std::find(uint16_types.begin(),uint16_types.end(),key) != uint16_types.end());
+		}
+		bool is_uint32(value_key_t key){
+			return (std::find(uint32_types.begin(),uint32_types.end(),key) != uint32_types.end());
+		}
+		bool is_string(value_key_t key){
+			return (std::find(string_types.begin(),string_types.end(),key) != string_types.end());
+		}
+		bool is_float(value_key_t key){
+			return (std::find(float_types.begin(),float_types.end(),key) != float_types.end());
+		}
+
+		void revert_to_default(std::string in_key){
+			alt_value_map.erase(to_vk_from_string(in_key));
+		}
+		void revert_to_default(value_key_t in_key){
+			alt_value_map.erase(in_key);
+		}
+		void save_to_lmdb(value_key_t v_key,std::string value){
+			mods::db::lmdb_renew();
+			std::string key = db_key({"values",to_string(v_key)});
+			m_debug("setting lmdb: '" << key << "' -> '" << value << "'");
+			mods::db::lmdb_put(key,value);
+			mods::db::lmdb_commit();
+		}
+
+		void save_to_lmdb(std::string key,std::string value){
+			save_to_lmdb(to_vk_from_string(key),value);
+		}
+
+		void load_from_lmdb(value_key_t v_key){
+			mods::db::lmdb_renew();
+			std::string key = db_key({"values",std::to_string(v_key)});
+			m_debug("load from lmdb: '" << key << "'");
+			if(!key_exists(key)){
+				m_debug(key << " doesn't exist... returning...");
+				mods::db::lmdb_commit();
+				return;
+			}
+			std::string value = mods::db::lmdb_get(key);
+			if(is_int(v_key)){
+				alt_value_map[v_key] = static_cast<int>(atoi(value.c_str()));
+				mods::db::lmdb_commit();
+				return;
+			}
+			if(is_uint8(v_key)){
+				alt_value_map[v_key] = static_cast<uint8_t>(atoi(value.c_str()));
+				mods::db::lmdb_commit();
+				return;
+			}
+			if(is_uint16(v_key)){
+				alt_value_map[v_key] = static_cast<uint16_t>(atoi(value.c_str()));
+				m_debug(key << " uint16_t exists.... value:'" << value.c_str() << "'");
+				mods::db::lmdb_commit();
+				return;
+			}
+			if(is_string(v_key)){
+				alt_value_map[v_key] = value;
+				mods::db::lmdb_commit();
+				return;
+			}
+			if(is_float(v_key)){
+				alt_value_map[v_key] = static_cast<float>(atof(value.c_str()));
+				mods::db::lmdb_commit();
+				return;
+			}
+			if(is_bool(v_key)){
+				if(value.compare("1") == 0 || value.compare("true") == 0){
+					alt_value_map[v_key] = true;
+				}else if (value.compare("0") == 0 || value.compare("false") == 0){
+					alt_value_map[v_key] = false;
+				}
+				mods::db::lmdb_commit();
+				return;
+			}
+			log("[WARNING] key doesnt exist in int or string types!->'%s'",key.c_str());
+			mods::db::lmdb_commit();
+		}
+		void load_from_lmdb(std::string in_key){
+			load_from_lmdb(to_vk_from_string(in_key));
+		}
+
+		std::string random_key_string(std::string value){
+					std::vector<std::string> strings;
+					std::string current = "";
+					for(auto ch : value){
+						if(ch == '|' && current.length()){
+							strings.emplace_back(current);
+							current = "";
+							continue;
+						}
+						current += ch;
+					}
+					if(current.length()){
+						strings.emplace_back(current);
+					}
+				return strings[rand_number(0,strings.size()-1)];
+		}
+
+

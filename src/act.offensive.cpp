@@ -31,6 +31,7 @@
 #include "mods/weapons/damage-types.hpp"
 #include "mods/interpreter.hpp"
 #include "mods/levels.hpp"
+#include "mods/calc-visibility.hpp"
 
 /* extern variables */
 extern int pk_allowed;
@@ -242,10 +243,13 @@ ACMD(do_scan) { /* !mods */
 	vpd scan;
 	mods::scan::los_scan(ch,mods::weapon::MAX_RANGE,&scan);
 	for(auto e : scan){
+		auto found_player = ptr(e.ch);
+		if(!mods::calc_visibility::is_visible(player,found_player)){
+			continue;
+		}
 		std::string line;
 		line += "You see {grn}";
 
-		auto found_player = ptr(e.ch);
 		line += found_player->name().c_str();
 
 		line += "{/grn}";

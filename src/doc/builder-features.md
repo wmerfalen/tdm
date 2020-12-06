@@ -1,5 +1,9 @@
 # Inventory of features (mods directory only)
 
+# 2020-12-05
+	- Calculating visibility now the sole responsibility of `mods::calc_visibility::is_visible(observer,target)`
+
+
 # 2020-12-04 
 	- finding player by description relative to player
 		- source file: mods/examine.cpp
@@ -126,6 +130,7 @@
 			- Disappear and move throughout the map without being noticed [ DONE 2020-12-04 ]
 			- Traps, doors, walls do not affect you [ DONE 2020-12-05 ]
 			- Enemies cannot see or fire at you [ TODO ]
+			- Enemies cannot see you with scan functionality
 # SUPPORT
 	- Loadout:
 		- Primary: HK21 Light Machine Gun

@@ -164,14 +164,18 @@ namespace mods::classes {
 		m_player->visibility() = 0;
 		uint32_t ticks = GHOST_DISSIPATE_TICKS_DURATION() * tier(m_player);
 		mods::globals::defer_queue->push_ticks_event(ticks,m_player->uuid(),mods::deferred::EVENT_PLAYER_GOES_VISIBLE);
+#ifdef __MENTOC_SHOW_GHOST_TIME_WHEN_DISSIPATE_WEARS_OFF__
 		m_player->send("%s tick count: (%d)\r\n",mods::date_time::irl::now().c_str(),ticks);
+#endif
 		m_dissipated = true;
 		return {true,"{grn}You dissipate into nothing...{/grn}"};
 	}
 	void ghost::dissipate_wears_off(){
 		m_player->visibility() = char_data::STARTING_VISIBILITY;
 		m_player->sendln("Your dissipation invisibility wears off...");
+#ifdef __MENTOC_SHOW_GHOST_TIME_WHEN_DISSIPATE_WEARS_OFF__
 		m_player->send("%s\r\n",mods::date_time::irl::now().c_str());
+#endif
 		m_dissipated = false;
 	}
 	void ghost::replenish(){

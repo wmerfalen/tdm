@@ -75,7 +75,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/weapons/sniper-rifle-psg1 mods/weapons/sniper-rifle-l96aw \
 					 mods/orm/quotes act.builder mods/orm/base mods/yaml \
 					 mods/affects mods/item mods/weapon-types mods/sensor-grenade \
-					 mods/calc_visibility mods/events mods/chargen \
+					 mods/calc-visibility mods/events mods/chargen \
 					 mods/object-utils mods/camera mods/orm/shop shop mods/shop mods/rand \
 					 mods/weapons/damage-types mods/weapons/heat \
 					 mods/injure mods/skills  mods/help mods/rooms \

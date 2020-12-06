@@ -12,6 +12,8 @@
 #include "helpers.hpp"
 #include "../weapon.hpp"
 #include "../affects.hpp"
+#include "../classes/ghost.hpp"
+#include "../calc-visibility.hpp"
 
 #define __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__
 #ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__
@@ -23,7 +25,6 @@
 extern void act(const std::string & str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
 
 namespace mods::mobs::mini_gunner_behaviour_tree {
-
 #define TSUCCESS TStatus::SUCCESS
 #define TFAILURE TStatus::FAILURE
 	using namespace helpers;
@@ -169,7 +170,11 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 			std::map<int,int> scores;
 			std::map<uint8_t,uuidvec_t> dir_players;
 			for(auto v : vpd){
-				if(!ptr_by_uuid(v.uuid)){
+				auto ptr = ptr_by_uuid(v.uuid);
+				if(!ptr){
+					continue;
+				}
+				if(!mods::calc_visibility::is_visible(mob.uuid(),v.uuid)){
 					continue;
 				}
 				if(mods::rooms::is_peaceful(v.room_rnum)){
@@ -250,7 +255,11 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 			std::map<int,int> scores;
 			std::map<uint8_t,uuidvec_t> dir_players;
 			for(auto v : vpd){
-				if(!ptr_by_uuid(v.uuid)){
+				auto ptr = ptr_by_uuid(v.uuid);
+				if(!ptr){
+					continue;
+				}
+				if(!mods::calc_visibility::is_visible(mob.uuid(),v.uuid)){
 					continue;
 				}
 				if(mods::rooms::is_peaceful(v.room_rnum)){

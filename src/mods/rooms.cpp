@@ -8,8 +8,7 @@ namespace mods::globals {
 	extern void register_room(const room_rnum& );
 };
 
-namespace mods::rooms {
-	namespace affects {
+namespace mods::rooms::affects {
 		void process(){
 			for(auto it = needs_dissolve.begin();it != needs_dissolve.end();++it){
 				auto ticked = it->second.tick();
@@ -87,7 +86,15 @@ namespace mods::rooms {
 			needs_dissolve[room].set_direction(affect,true);
 			mra_debug("Set direction to increment for affect: " << affect);
 		}
-	};
+};//end mods::rooms::affects
+
+namespace mods::rooms {
+	/** continuation of namespace mods::rooms */
+	/** continuation of namespace mods::rooms */
+	/** continuation of namespace mods::rooms */
+	bool has_emp(room_rnum r){
+		return has_textures(r,{txt::EMP});
+	}
 	bool has_textures(room_rnum r, std::vector<txt> textures){
 		assert(r < world.size());
 		for(auto & t : textures){
@@ -509,7 +516,30 @@ namespace mods::rooms {
 				);
 			}
 		}
-};//End namespace
+	bool is_dark(room_rnum room) {
+		if(room >= world.size()){
+			log("SYSERR: %d is out of bounds",room);
+			return false;
+		}
+		if(world[room].light) {
+			return false;
+		}
+
+		if(ROOM_FLAGGED(room, ROOM_DARK)) {
+			return true;
+		}
+
+		if(SECT(room) == SECT_INSIDE || SECT(room) == SECT_CITY) {
+			return false;
+		}
+
+		if(weather_info.sunlight == SUN_SET || weather_info.sunlight == SUN_DARK) {
+			return true;
+		}
+
+		return false;
+	}
+};//End namespace mods::rooms
 
 namespace mods::rooms::gods {
 		void set_fire(room_rnum room,bool on,std::string& level,player_ptr_t& player) {
@@ -574,5 +604,4 @@ cleanup:
 			player->sendln(msg);
 			return;
 		}
-
-}
+}; // end namespace mods::rooms::gods

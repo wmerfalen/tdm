@@ -1,0 +1,108 @@
+#undef CGET_DEF
+
+			/**************/
+			/** set_value */
+			/**************/
+			ACMD(do_set_value) {
+				ADMIN_REJECT();
+				DO_HELP("set_value");
+				static constexpr const char* usage = "usage: set_value <key> <value>\r\nAlso see: list_values\r\n";
+				auto vec_args = PARSE_ARGS();
+				if(vec_args.size() != 2){
+					player->errorln(usage);
+					return;
+				}
+				player->send(vec_args);
+				mods::values::save_to_lmdb(vec_args[0],vec_args[1]);
+				mods::values::load_from_lmdb(vec_args[0]);
+				ADMIN_DONE();
+			}
+			/**************/
+			/** get_value */
+			/**************/
+			ACMD(do_get_value) {
+				ADMIN_REJECT();
+				DO_HELP("get_value");
+				static constexpr const char* usage = "usage: get_value <key>...<keyN>\r\nAlso see: list_values\r\n";
+				auto vec_args = PARSE_ARGS();
+				if(vec_args.size() < 1){
+					player->errorln(usage);
+					return;
+				}
+
+				for(auto vk_key : vec_args){
+					value_key_t key = to_vk_from_string(vk_key);
+					if(is_int(key)){
+						auto it = std::find(int_types.begin(),int_types.end(),key);
+						player->sendln(CAT(key,":'",CONSTGET<int>(*it,0),"'"));
+					}
+					if(is_uint8(key)){
+						auto it = std::find(uint8_types.begin(),uint8_types.end(),key);
+						player->sendln(CAT(key,":'",CONSTGET<uint8_t>(*it,0),"'"));
+					}
+					if(is_uint16(key)){
+						auto it = std::find(uint16_types.begin(),uint16_types.end(),key);
+						player->sendln(CAT(key,":'",CONSTGET<uint16_t>(*it,0),"'"));
+					}
+					if(is_float(key)){
+						auto it = std::find(float_types.begin(),float_types.end(),key);
+						player->sendln(CAT(key,":'",CONSTGET<float>(*it,0),"'"));
+					}
+					if(is_string(key)){
+						auto it = std::find(string_types.begin(),string_types.end(),key);
+						player->sendln(CAT(key,":'",CONSTGET<std::string>(*it,""),"'"));
+					}
+				}
+				ADMIN_DONE();
+			}
+
+			/****************************/
+			/** revert_value_to_default */
+			/****************************/
+			ACMD(do_revert_value_to_default){
+				ADMIN_REJECT();
+				DO_HELP("revert_value_to_default");
+				static constexpr const char* usage = "usage: revert_value_to_default <arg>...<argN>";
+				auto vec_args = PARSE_ARGS();
+				if(vec_args.size() < 1){
+					player->errorln(usage);
+					return;
+				}
+				for(auto arg : vec_args){
+					mods::values::revert_to_default(arg);
+				}
+				ADMIN_DONE();
+			}
+
+			/****************/
+			/** list_values */
+			/****************/
+			ACMD(do_list_values) {
+				ADMIN_REJECT();
+				DO_HELP("list_values");
+				auto vec_args = PARSE_ARGS();
+				std::vector<std::string> screen;
+				for(auto section : {uint8_types,uint16_types,int_types,string_types}){
+					for(auto item : section){
+						screen.emplace_back(to_string(item));
+					}
+				}
+				if(vec_args.size()){
+					mods::search_screen(player, screen, vec_args, 255);
+					player->sendln("Done listing.");
+					player->sendln(CAN_BE_SEARCHED());
+					return;
+				}
+				player->send(screen);
+				player->sendln("Done listing.");
+				player->sendln(CAN_BE_SEARCHED());
+				ADMIN_DONE();
+			}
+			void init(){
+				mods::interpreter::add_command("revert_value_to_default", POS_RESTING, do_revert_value_to_default, LVL_BUILDER,0);
+				mods::interpreter::add_command("list_values", POS_RESTING, do_list_values, LVL_BUILDER,0);
+				mods::interpreter::add_command("list_value", POS_RESTING, do_list_values, LVL_BUILDER,0);
+				mods::interpreter::add_command("set_value", POS_RESTING, do_set_value, LVL_BUILDER,0);
+				mods::interpreter::add_command("get_value", POS_RESTING, do_get_value, LVL_BUILDER,0);
+			}
+};

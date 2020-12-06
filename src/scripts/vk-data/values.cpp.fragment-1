@@ -1,0 +1,32 @@
+#include "values.hpp"
+#include "lmdb.hpp"
+#include <map>
+#include <string>
+#include <vector>
+#include "super-users.hpp"
+#include "interpreter.hpp"
+#include "screen-searcher.hpp"
+#include <boost/preprocessor.hpp>
+
+#define __MENTOC_MODS_VALUES_SHOW_DEBUG_OUTPUT__
+#ifdef  __MENTOC_MODS_VALUES_SHOW_DEBUG_OUTPUT__
+#define m_debug(a) std::cerr << "[mods::values]: '" << a << "'\n";
+#else
+#define m_debug(a)
+#endif
+
+extern bool key_exists(std::string key);
+namespace mods::values {
+#define CGET_DEF(A,KEY,MENTOC_DEFAULT)\
+		A KEY(){\
+			return CONSTGET<A>(BOOST_PP_CAT(value_key_t::vk_,KEY),MENTOC_DEFAULT);\
+		}
+		std::map<value_key_t,variants_t> alt_value_map;
+		std::map<value_key_t,variants_t> current_value_map;
+		std::string to_string(value_key_t k){
+			return std::to_string(k);
+		}
+		value_key_t  to_vk_from_string(std::string s){
+			return (value_key_t)mods::util::stoi(s).value_or(0);
+		}
+

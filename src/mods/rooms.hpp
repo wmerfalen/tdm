@@ -219,6 +219,7 @@ namespace mods::rooms {
 	static inline bool is_peaceful(room_rnum room){
 		return world[room].room_flags & ROOM_PEACEFUL;
 	}
+	bool has_emp(room_rnum r);
 	bool has_textures(room_rnum r, std::vector<txt>);
 	namespace affects {
 		using affect_t = room_data::texture_type_t;
@@ -300,29 +301,7 @@ namespace mods::rooms {
 	 * \brief true if room is dark
 	 * @param room_rnum room
 	 */
-	static inline bool is_dark(room_rnum room) {
-		if(room >= world.size()){
-			log("SYSERR: %d is out of bounds",room);
-			return false;
-		}
-		if(world[room].light) {
-			return false;
-		}
-
-		if(ROOM_FLAGGED(room, ROOM_DARK)) {
-			return true;
-		}
-
-		if(SECT(room) == SECT_INSIDE || SECT(room) == SECT_CITY) {
-			return false;
-		}
-
-		if(weather_info.sunlight == SUN_SET || weather_info.sunlight == SUN_DARK) {
-			return true;
-		}
-
-		return false;
-	}
+	bool is_dark(room_rnum room);
 	/**
 	 * @brief returns true if room has dark flags
 	 *
@@ -330,9 +309,7 @@ namespace mods::rooms {
 	 *
 	 * @return 
 	 */
-	inline bool is_dark(room_data& room) {
-		return is_dark(real_room(room.number));
-	}
+	//bool is_dark(room_data& room);
 
 	/**
 	 * @brief returns true if room is smoking

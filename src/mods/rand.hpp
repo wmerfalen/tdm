@@ -11,5 +11,6 @@ int rand_number(int from, int to);
 int dice(int num, int size);
 namespace mods::rand {
 	int roll(int num,int size);
+	bool chance(uint8_t chance);
 };
 #endif

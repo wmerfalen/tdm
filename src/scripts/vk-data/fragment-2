@@ -1,0 +1,36 @@
+
+		namespace msg {
+			template <typename T>
+			static inline void crit(T& p){
+				p->send(MSG_CRITICAL().c_str());
+			}
+			template <typename T>
+			static inline void headshot(T& p){
+				p->send(MSG_HEADSHOT().c_str());
+			}
+			template <typename T>
+			static inline void hit(T& p){
+				p->send(MSG_HIT().c_str());
+			}
+			template <typename T>
+			static inline void outofammo(T& p){
+				p->sendln(MSG_OUT_OF_AMMO().c_str());
+			}
+			template <typename T>
+			static inline void missed(T& p){
+				p->sendln(MSG_MISSED_TARGET().c_str());
+			}
+			template <typename T>
+			static inline void target_dead(T& p){
+				p->sendln(MSG_TARGET_DEAD().c_str());
+			}
+			template <typename T>
+			static inline void youre_injured(T& p){
+				p->sendln(MSG_YOURE_INJURED().c_str());
+			}
+		};
+#undef CGET
+};
+
+using namespace mods::values;
+#endif

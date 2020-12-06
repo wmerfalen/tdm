@@ -87,15 +87,15 @@ ACMD(do_room_fire){
 
 
 ACMD(do_giveme_camera) {
-	auto obj = mods::object_utils::yaml_import("gadget","camera.yml");
+	auto obj = create_object(ITEM_GADGET,"camera.yml");
 	obj_to_char(obj,player);
 }
 ACMD(do_giveme_night_vision_camera) {
-	auto obj = mods::object_utils::yaml_import("gadget","night-vision-camera.yml");
+	auto obj = create_object(ITEM_GADGET,"night-vision-camera.yml");
 	obj_to_char(obj,player);
 }
 ACMD(do_giveme_thermal_camera) {
-	auto obj = mods::object_utils::yaml_import("gadget","thermal-camera.yml");
+	auto obj = create_object(ITEM_GADGET,"thermal-camera.yml");
 	obj_to_char(obj,player);
 }
 
@@ -162,7 +162,7 @@ ACMD(do_giveme_smoke_grenades) {
 }
 
 ACMD(do_giveme_sensor_grenades) {
-	auto obj = mods::object_utils::yaml_import("explosive","sensor_grenade.yml");
+	auto obj = create_object(ITEM_EXPLOSIVE,"sensor-grenade.yml");
 	obj_to_char(obj,player);
 }
 
