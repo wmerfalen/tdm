@@ -41,7 +41,7 @@
 
 		void load_from_lmdb(value_key_t v_key){
 			mods::db::lmdb_renew();
-			std::string key = db_key({"values",std::to_string(v_key)});
+			std::string key = db_key({"values",to_string(v_key)});
 			m_debug("load from lmdb: '" << key << "'");
 			if(!key_exists(key)){
 				m_debug(key << " doesn't exist... returning...");

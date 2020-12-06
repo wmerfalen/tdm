@@ -54,6 +54,46 @@ do
 	# check if this is a type define (i.e.: [uint8_t])
 	echo $line | grep -E '^\[' 2>&1 > /dev/null
 	if [[ $? -eq 0 ]]; then
+		continue
+	fi
+	# check if empty line
+	echo $line | grep -E '^$' 2>&1 > /dev/null
+	if [[ $? -eq 0 ]]; then
+		# empty line, continue
+		continue
+	fi
+	VK_DEFINE=$(echo $line | sed -e 's|,.*$||g')
+	echo -E "case vk_${VK_DEFINE}: return \"${VK_DEFINE}\";" >> $STORAGE
+done < mods/values-list.cpp
+
+cat scripts/vk-data/values.cpp.fragment-1a >> $STORAGE
+
+VK_TYPE=
+while IFS= read -r line
+do
+	# check if this is a type define (i.e.: [uint8_t])
+	echo $line | grep -E '^\[' 2>&1 > /dev/null
+	if [[ $? -eq 0 ]]; then
+		continue
+	fi
+	# check if empty line
+	echo $line | grep -E '^$' 2>&1 > /dev/null
+	if [[ $? -eq 0 ]]; then
+		# empty line, continue
+		continue
+	fi
+	VK_DEFINE=$(echo $line | sed -e 's|,.*$||g')
+	echo -E "if(!s.compare(\"${VK_DEFINE}\")){ return vk_${VK_DEFINE};}" >> $STORAGE
+done < mods/values-list.cpp
+
+echo " return (value_key_t)0;}" >> $STORAGE
+
+VK_TYPE=
+while IFS= read -r line
+do
+	# check if this is a type define (i.e.: [uint8_t])
+	echo $line | grep -E '^\[' 2>&1 > /dev/null
+	if [[ $? -eq 0 ]]; then
 		if [[ ! -z $VK_TYPE ]]; then
 			echo "};" >> $STORAGE
 		fi

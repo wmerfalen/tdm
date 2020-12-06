@@ -24,9 +24,6 @@ namespace mods::values {
 		std::map<value_key_t,variants_t> alt_value_map;
 		std::map<value_key_t,variants_t> current_value_map;
 		std::string to_string(value_key_t k){
-			return std::to_string(k);
-		}
-		value_key_t  to_vk_from_string(std::string s){
-			return (value_key_t)mods::util::stoi(s).value_or(0);
-		}
+			switch(k){
+				default: return "";
 
