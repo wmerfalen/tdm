@@ -156,7 +156,8 @@ ACMD(do_uninstall) {
 			player->sendln("You don't own that device.");
 			return;
 		}
-		player->sendln("[stub] Is claymore");
+		/** TODO uninstall claymore and put back in inventory */
+		player->sendln("[stub] remove claymore");
 		return;
 	}
 	if(mods::object_utils::is_camera(parsed.obj)) {
@@ -206,6 +207,7 @@ ACMD(do_breach) {
 		return;
 	}
 
+	/** TODO move this to demolitions namespace */
 	mods::doors::perform_breach(holding->uuid,player->uuid(),door);
 }
 
@@ -238,5 +240,6 @@ ACMD(do_thermite) {
 		return;
 	}
 
+	/** TODO move this to demolitions namespace */
 	mods::doors::perform_thermite_breach(holding->uuid,player->uuid(),door);
 }

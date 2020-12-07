@@ -21,16 +21,28 @@ namespace mods::classes {
 		m_engaged = 0;
 		m_xray_shot_charges = 0;
 		m_player = nullptr;
-		m_claymore_charges = 0;
+		m_claymore_instances.clear();
+	}
+	void sniper::use_claymore(uuid_t object_uuid) {
+		auto it = std::find(m_claymore_instances.begin(),m_claymore_instances.end(),object_uuid);
+		if(it != m_claymore_instances.end()){
+			m_claymore_instances.erase(it);
+		}
+	}
+	
+	uint8_t sniper::claymore_count() const{
+		return m_claymore_instances.size();
 	}
 	void sniper::replenish(){
 		static uint16_t call_count = 0;
 		++call_count;
 		auto tier = tier(m_player);
 		if((call_count % SNIPER_REPLENISH_PULSE() / tier) == 0){
-			if(m_claymore_charges < SNIPER_CLAYMORE_MAX_COUNT() * tier){
+			if(m_claymore_instances.size() < SNIPER_CLAYMORE_MAX_COUNT() * tier){
+				auto fatal = create_object(ITEM_EXPLOSIVE,"claymore-mine.yml");
+				m_claymore_instances.emplace_back(fatal->uuid);
+				m_player->carry(fatal);
 				m_player->sendln("{grn}A sniper class claymore mine has been regenerated.{/grn}");
-				++m_claymore_charges;
 			}
 			if(m_xray_shot_charges < SNIPER_XRAY_SHOT_MAX_COUNT() * tier){
 				m_player->sendln("{grn}A sniper class X-Ray shot charge has been regenerated.{/grn}");
@@ -63,8 +75,6 @@ namespace mods::classes {
 		primary = create_object(ITEM_RIFLE,"psg1.yml");
 		player->equip(primary,WEAR_PRIMARY);
 		player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
-		auto fatal = create_object(ITEM_EXPLOSIVE,"claymore-mine.yml");
-		player->carry(fatal);
 		return result;
 	}
 	int16_t sniper::save() {

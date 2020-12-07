@@ -23,9 +23,7 @@ namespace mods::classes {
 		player_ptr_t player();
 		int16_t new_player(player_ptr_t&);
 		int16_t save();
-		//std::vector<uuid_t> get_targets_scanned_by_drone();
 		void init();
-		//void drone_scan(room_rnum);
 		void replenish();
 
 		void target_died(uuid_t);
@@ -40,12 +38,14 @@ namespace mods::classes {
 			- If enemy not behind cover, it causes 150% damage to target
 			*/
 		std::tuple<bool,std::string> xray_shot();
+		uint8_t claymore_count() const;
+		void use_claymore(uuid_t);
 
 		private:
 			uuid_t m_target;
 			bool m_engaged;
-			uint32_t m_xray_shot_charges;
-			uint32_t m_claymore_charges;
+			uint16_t m_xray_shot_charges;
+			std::vector<uuid_t> m_claymore_instances;
 
 			player_ptr_t m_player;
 			sniper_orm_t m_orm;

@@ -35,7 +35,6 @@ namespace mods::classes {
 		void feign_death_done();
 		std::pair<int16_t,std::string> summon_extraction(room_rnum);
 
-		void plant_claymore();
 		void intimidate(uuid_t);
 		std::pair<bool,std::string>  pass_through_door_attempt(int direction);
 
@@ -54,8 +53,6 @@ namespace mods::classes {
 		int64_t db_id() const;
 		int16_t save();
 
-		uint8_t claymore_count() const;
-		std::tuple<bool,std::string> plant_claymore(int direction,room_rnum room);
 		void replenish();
 		std::string get_proficiency_by_name(std::string_view prof) const;
 		std::string skill_screen() const ;
@@ -67,6 +64,8 @@ namespace mods::classes {
 		/** applies it to the entire room. every will get flashed */
 		std::tuple<bool,std::string> use_flash_underbarrel();
 
+		void use_claymore(uuid_t);
+		uint8_t claymore_count() const;
 
 		/* Special ability: dissipate */
 		std::tuple<bool,std::string> dissipate();
@@ -75,7 +74,7 @@ namespace mods::classes {
 		private:
 			uint8_t m_dissipate_charges;
 			std::vector<uuid_t> m_scanned;
-			uint8_t m_claymore_count;
+			std::vector<uuid_t> m_claymore_instances;
 			uint8_t m_cryogenic_grenade_count;
 			uint8_t m_flash_underbarrel_charges;
 			ghost_orm_t	m_orm;
@@ -91,7 +90,6 @@ namespace mods::classes {
 			skill_familiarity_t m_intimidation_level;
 			skill_familiarity_t m_cryogenic_grenade_level;
 			skill_familiarity_t m_flash_underbarrel_level;
-			std::deque<obj_ptr_t> m_claymores;
 			bool m_dissipated;
 	};
 	void ghost_advance_level(player_ptr_t& player);

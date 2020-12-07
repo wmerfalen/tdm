@@ -21,7 +21,7 @@ namespace mods::classes {
 		player->send("[stub] file:%s line:%d\r\n",__FILE__,__LINE__);
 	}
 	void ghost::init(){
-		m_claymore_count = 0;
+		m_claymore_instances.clear();
 		m_scanned.clear();
 		m_player = nullptr;
 		m_dissipate_charges = 10;
@@ -178,14 +178,22 @@ namespace mods::classes {
 #endif
 		m_dissipated = false;
 	}
+	void ghost::use_claymore(uuid_t object_uuid){
+		auto it = std::find(m_claymore_instances.begin(),m_claymore_instances.end(),object_uuid);
+		if(it != m_claymore_instances.end()){
+			m_claymore_instances.erase(it);
+		}
+	}
 	void ghost::replenish(){
 		static uint16_t call_count = 0;
 		++call_count;
 		auto tier = tier(m_player);
 		if((call_count % GHOST_REPLENISH_PULSE()) == 0){
-			if(m_claymore_count < GHOST_CLAYMORE_MAX_COUNT() * tier){
+			if(m_claymore_instances.size() < GHOST_CLAYMORE_MAX_COUNT() * tier){
+				auto fatal = create_object(ITEM_EXPLOSIVE,"claymore-mine.yml");
+				m_claymore_instances.emplace_back(fatal->uuid);
+				m_player->carry(fatal);
 				m_player->sendln("{grn}A ghost class claymore mine has been regenerated.{/grn}");
-				++m_claymore_count;
 			}
 			if(m_dissipate_charges < GHOST_DISSIPATE_CHARGE_MAX_COUNT() * tier){
 				m_player->sendln("{grn}A ghost dissipate charge has been regenerated.{/grn}");
@@ -197,16 +205,7 @@ namespace mods::classes {
 		}
 	}
 	uint8_t ghost::claymore_count() const{
-		return m_claymore_count;
-	}
-	std::tuple<bool,std::string> ghost::plant_claymore(int direction,room_rnum room){
-		if(m_claymore_count == 0){
-			return {false, "You don't have any GHOST claymores!"};
-		}
-		--m_claymore_count;
-		m_claymores.emplace_back(std::move(create_object(ITEM_EXPLOSIVE, "claymore-mine.yml")));
-		mods::demolitions::plant_claymore(m_player,direction,m_claymores.back());
-		return {1,CAT("You begin planting a {grn}",m_claymores.back()->name,"{/grn}...")};
+		return m_claymore_instances.size();
 	}
 	std::vector<uuid_t> ghost::get_targets_scanned_by_drone(){
 		std::vector<uuid_t> scanned;
@@ -252,7 +251,6 @@ namespace mods::classes {
 		if(!prof.compare("summon_extraction")){ return mods::util::proficiency_to_string((int)m_summon_extraction_level); }
 		if(!prof.compare("xray_shot")){ return mods::util::proficiency_to_string((int)m_xray_shot_level); }
 		if(!prof.compare("feign_death")){ return mods::util::proficiency_to_string((int)m_feign_death_level); }
-		if(!prof.compare("plant_claymore")){ return mods::util::proficiency_to_string((int)m_plant_claymore_level); }
 		if(!prof.compare("penetrating_shot")){ return mods::util::proficiency_to_string((int)m_penetrating_shot_level); }
 		if(!prof.compare("intimidation")){ return mods::util::proficiency_to_string((int)m_intimidation_level); }
 		if(!prof.compare("cryogenic_grenade")){ return mods::util::proficiency_to_string((int)m_cryogenic_grenade_level); }
@@ -287,27 +285,3 @@ namespace mods::class_abilities::ghost {
 		mods::interpreter::add_command("dissipate", POS_RESTING, do_dissipate, 0,0);
 	}
 };
-#if 0
-namespace mods::class_abilities {
-	static constexpr const char* plant_claymore_usage = "usage: plant_claymore <direction>";
-	ACMD(do_plant_claymore){
-		PLAYER_CAN("ghost.plant_claymore");
-		DO_HELP_WITH_ZERO("ghost.plant_claymore");
-		auto vec_args = PARSE_ARGS();
-		int dir = mods::util::parse_direction(vec_args[0]);
-		if(dir < 0){
-			player->sendln("Use a valid direction");
-			return;
-		}
-		auto status = player->ghost()->plant_claymore(dir,player->room());
-		if(!std::get<0>(status)){
-			player->errorln(std::get<1>(status));
-			return;
-		}
-		player->sendln(std::get<1>(status));
-	}
-	void init(){
-		mods::interpreter::add_command("plant_claymore", POS_RESTING, do_plant_claymore, 0,0);
-	}
-};
-#endif

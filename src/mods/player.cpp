@@ -20,6 +20,7 @@
 #include "armor/basic-protection.hpp"
 #include "classes/super-user-fiddler.hpp"
 #include "classes/sniper.hpp"
+#include "demolitions.hpp"
 /**
  * TODO: All these stc* functions need to be altered to accomodate
  * the new player_type_enum_t values. If output is to be muted, then
@@ -1238,6 +1239,9 @@ namespace mods {
 					}
 					obj_to_room(obj, obj->in_room);
 					mods::object_utils::set_done_installing(obj);
+					if(mods::object_utils::is_claymore(obj)){
+						mods::demolitions::set_done_installing(target,this->uuid());
+					}
 					this->send("\r\nYou successfully deploy a %s\r\n", obj->name.c_str());
 					break;
 				}
