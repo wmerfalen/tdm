@@ -1239,10 +1239,8 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 			}
 			std::string gen_desc = row2["general_description"].c_str();
 			std::string keyword = row2["keyword"].c_str();
-			int key = (row2["exit_key"]).as<int>();
 			room_rnum to_room = real_room(row2["to_room"].as<int>());
-			world[real_room_number].set_dir_option(direction,gen_desc,keyword,row2["exit_key"].as<int>(),key,to_room);
-			//log("DEBUG: set dir option: direction %d gen_desc: '%s' keyword: '%s'",direction,gen_desc.c_str(),keyword.c_str());
+			world[real_room_number].set_dir_option(direction,gen_desc,keyword,row2["exit_info"].as<int>(),row2["exit_key"].as<int>(),to_room);
 		}
 	}catch(std::exception& e){
 		REPORT_DB_ISSUE("error selecting room from dd",e.what());
