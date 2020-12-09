@@ -508,25 +508,24 @@ int perform_move(char_data *ch, int dir, int need_specials_check) {
 #define DOOR_IS_LOCKED(ch, obj, door)	(!(DOOR_IS_UNLOCKED(ch, obj, door)))
 #define DOOR_KEY(ch, obj, door)		((obj) ? (GET_OBJ_VAL(obj, 2)) : \
 		(EXIT(ch, door)->key))
+
+
 	ACMD(do_gen_door) {
 		
 		int door = -1;
 		obj_vnum keynum;
-		char type[MAX_INPUT_LENGTH], dir[MAX_INPUT_LENGTH];
 		struct obj_data *obj = NULL;
 		char_data *victim = NULL;
 
-		skip_spaces(&argument);
+		auto vec_args = PARSE_ARGS();
 
-		if(!*argument) {
+		if(vec_args.size() < 2){
 			send_to_char(ch, "%c%s what?", UPPER(*cmd_door[subcmd]), cmd_door[subcmd] + 1);
 			return;
 		}
 
-		two_arguments(argument, type, dir);
-
-		if(!generic_find(type, FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &victim, &obj)) {
-			door = find_door(ch, type, dir, cmd_door[subcmd]);
+		if(!generic_find((char*)vec_args[0].c_str(), FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &victim, &obj)) {
+			door = find_door(ch, (char*)vec_args[0].c_str(), (char*)vec_args[1].c_str(), cmd_door[subcmd]);
 		}
 
 		if((obj) || (door >= 0)) {
