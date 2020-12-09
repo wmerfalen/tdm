@@ -1,5 +1,12 @@
 # Inventory of features (mods directory only)
 
+# SQL DUMP
+	- If you need an sql dump, use src/sql/migrations/beta.sql. That file will be updated as migrations are ran.
+	- BEWARE: THIS FILE DROPS THE MUD DATABASE BEFORE RUNNING
+
+# 2020-12-09
+	- updated src/sql/migrations/beta.sql
+
 # 2020-12-05
 	- Calculating visibility now the sole responsibility of `mods::calc_visibility::is_visible(observer,target)`
 

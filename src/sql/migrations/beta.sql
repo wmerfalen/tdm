@@ -4,6 +4,11 @@
 
 -- Dumped from database version 10.11 (Debian 10.11-1.pgdg90+1)
 -- Dumped by pg_dump version 10.11 (Debian 10.11-1.pgdg90+1)
+\c postgres
+DROP DATABASE mud;
+
+CREATE DATABASE mud WITH OWNER = postgres;
+\c mud
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -8224,3 +8229,72 @@ ALTER TABLE ONLY public.terminal_choices
 -- PostgreSQL database dump complete
 --
 
+CREATE TABLE public.player_base_ability (
+		pba_id SERIAL,
+		pba_player_id INTEGER NOT NULL,
+		pba_str INTEGER NOT NULL DEFAULT 0,
+		pba_str_add INTEGER NOT NULL DEFAULT 0,
+		pba_intel INTEGER NOT NULL DEFAULT 0,
+		pba_wis INTEGER NOT NULL DEFAULT 0,
+		pba_dex INTEGER NOT NULL DEFAULT 0,
+		pba_con INTEGER NOT NULL DEFAULT 0,
+		pba_cha INTEGER NOT NULL DEFAULT 0,
+		pba_electronics INTEGER NOT NULL DEFAULT 0,
+		pba_armor INTEGER NOT NULL DEFAULT 0,
+		pba_marksmanship INTEGER NOT NULL DEFAULT 0,
+		pba_sniping INTEGER NOT NULL DEFAULT 0,
+		pba_demolitions INTEGER NOT NULL DEFAULT 0,
+		pba_chemistry INTEGER NOT NULL DEFAULT 0,
+		pba_weapon_handling INTEGER NOT NULL DEFAULT 0,
+		pba_strategy INTEGER NOT NULL DEFAULT 0,
+		pba_medical INTEGER NOT NULL DEFAULT 0,
+		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE public.class_sniper DROP COLUMN sniper_primary_type;
+ALTER TABLE public.class_sniper DROP COLUMN sniper_primary_weapon_id;
+ALTER TABLE public.class_sniper DROP COLUMN sniper_secondary_type;
+ALTER TABLE public.class_sniper DROP COLUMN sniper_secondary_weapon_id;
+DROP TABLE public.class_marine;
+CREATE TABLE public.class_marine (
+	marine_id SERIAL,
+	marine_player_id INTEGER NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE public.class_breacher (
+	breacher_id SERIAL,
+	breacher_player_id INTEGER NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TABLE public.class_engineer;
+CREATE TABLE public.class_engineer (
+	engineer_id SERIAL,
+	engineer_player_id INTEGER NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+DROP TABLE public.class_medic;
+CREATE TABLE public.class_medic (
+	medic_id SERIAL,
+	medic_player_id INTEGER NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+DROP TABLE public.class_support;
+CREATE TABLE public.class_support (
+	support_id SERIAL,
+	support_player_id INTEGER NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+DROP TABLE public.class_ghost;
+CREATE TABLE public.class_ghost (
+	ghost_id SERIAL,
+	ghost_player_id INTEGER NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
