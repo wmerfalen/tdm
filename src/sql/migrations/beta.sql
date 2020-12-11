@@ -133,7 +133,12 @@ CREATE TABLE public.room (
     ex_description text,
     light integer,
     room_flag integer NOT NULL,
-		PRIMARY KEY(id)
+		PRIMARY KEY(id),
+		CONSTRAINT fk_zone
+			FOREIGN KEY (zone)
+			REFERENCES public.zone(id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE
 );
 
 
@@ -478,7 +483,8 @@ CREATE TABLE public.extra_description (
     id SERIAL,
     obj_fk_id integer NOT NULL,
     extra_keyword character varying(64),
-    extra_description character varying(1024)
+    extra_description character varying(1024),
+		PRIMARY KEY(id)
 );
 
 
@@ -580,6 +586,11 @@ CREATE TABLE public.mini_gunner_sentinel (
 		CONSTRAINT fk_room_vnum
 			FOREIGN KEY (mgs_room_vnum)
 				REFERENCES public.room(room_number)
+					ON DELETE CASCADE
+					ON UPDATE CASCADE,
+    CONSTRAINT fk_mob_vnum
+			FOREIGN KEY (mgs_mob_vnum)
+				REFERENCES public.mobile(mob_id)
 					ON DELETE CASCADE
 					ON UPDATE CASCADE
 );
@@ -1975,13 +1986,23 @@ COPY public.player_races (id, prace_name, prace_description) FROM stdin;
 \.
 
 
+INSERT INTO public.zone (
+		id,
+    zone_virtual_number,
+    zone_start,
+    zone_end,
+    zone_name,
+    lifespan,
+    reset_mode
+) VALUES (1,1, 128,228, 'Hereford Base', 10, 0);
+
+
 --
 -- Data for Name: room; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.room (room_number, zone, sector_type, name, description, ex_keyword, ex_description, light, room_flag, id) FROM stdin;
-128	7	18	MP5 repo	The ebb and flow of traffic has worn down the tile floor here. You can't help but notice the pungent chemical smell that permeates every corner of this dingy hideout. The owner obviously doesn't care for appearances, but you can't really blame him. The idea of a clean weapons shop is a foreign concept. The very mention of the subject of cleanliness is instantly dismissed. A heavily armored door to the east is likely where all official business is conducted behind the scenes. You notice the stock loss prevention camera jutting from the corner of the room which has the best angle on every corner of the room.\r\n	\N	\N	0	16	20
-410	1	0	Outer training courtyard - D.M.Z 0x4155	You stand in a square shaped courtyard amongs other new recruits. You can smell the reek of sweat and dirt everywhere you go. {yel}Corporal James Taggart{/yel} stands before you: a menacing authoritative presence. There is a heavy steel door to the {grn}North{/grn}.	\N	\N	\N	0	81
+128	1	18	MP5 repo	The ebb and flow of traffic has worn down the tile floor here. You can't help but notice the pungent chemical smell that permeates every corner of this dingy hideout. The owner obviously doesn't care for appearances, but you can't really blame him. The idea of a clean weapons shop is a foreign concept. The very mention of the subject of cleanliness is instantly dismissed. A heavily armored door to the east is likely where all official business is conducted behind the scenes. You notice the stock loss prevention camera jutting from the corner of the room which has the best angle on every corner of the room.\r\n	\N	\N	0	16	20
 \.
 
 
@@ -2070,16 +2091,6 @@ COPY public.terminal_choices (id, choice_terminal_id, choice_id, choice_title, c
 
 COPY public.world_configuration_start_rooms (id, mortal_start_room, immortal_start_room, created_at, is_active, idle_room, frozen_room) FROM stdin;
 4	128	128	2019-06-01 19:30:07.630823	t	0	0
-\.
-
-
---
--- Data for Name: zone; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.zone (id, zone_virtual_number, zone_start, zone_end, zone_name, lifespan, reset_mode) FROM stdin;
-7	1	124	120	D.O. Internals	15	2
-151	7	127	227	alpha	100	2
 \.
 
 
@@ -2410,31 +2421,6 @@ ALTER TABLE ONLY public.player_race_perks
 ALTER TABLE ONLY public.player_races
     ADD CONSTRAINT player_races_pkey PRIMARY KEY (id);
 
-
---
--- Name: room_direction_data room_direction_data_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
---ALTER TABLE ONLY public.room_direction_data
-    -- ADD CONSTRAINT room_direction_data_pkey PRIMARY KEY (id);
-
-
---
--- Name: room room_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
---ALTER TABLE ONLY public.room
-    -- ADD CONSTRAINT room_pkey PRIMARY KEY (id);
-
-
---
--- Name: room room_room_number_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
--- ALTER TABLE ONLY public.room
-    -- ADD CONSTRAINT room_room_number_key UNIQUE (room_number);
-
-
 --
 -- Name: skill_trees skill_trees_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
@@ -2481,14 +2467,6 @@ ALTER TABLE ONLY public.skill_trees
 
 ALTER TABLE ONLY public.skill_trees
     ADD CONSTRAINT skill_trees_sktree_skill_parent_id_fkey FOREIGN KEY (sktree_skill_parent_id) REFERENCES public.skill_trees(id);
-
-
---
--- Name: terminal_choices terminal_choices_choice_terminal_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
--- ALTER TABLE ONLY public.terminal_choices
-    -- ADD CONSTRAINT terminal_choices_choice_terminal_id_fkey FOREIGN KEY (choice_terminal_id) REFERENCES public.computer_terminal(id);
 
 
 --
