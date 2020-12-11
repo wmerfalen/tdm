@@ -4,9 +4,13 @@
 
 -- Dumped from database version 10.11 (Debian 10.11-1.pgdg90+1)
 -- Dumped by pg_dump version 10.11 (Debian 10.11-1.pgdg90+1)
+
+
+
+-- \c postgres
+-- DROP DATABASE mud;
 \c postgres
 DROP DATABASE mud;
-
 CREATE DATABASE mud WITH OWNER = postgres;
 \c mud
 
@@ -47,6 +51,40 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 --
 
 COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
+
+CREATE TABLE public.room (
+    id SERIAL,
+    room_number integer NOT NULL UNIQUE,
+    zone integer NOT NULL,
+    sector_type integer NOT NULL,
+    name character varying(256) NOT NULL,
+    description text NOT NULL,
+    ex_keyword character varying(256),
+    ex_description text,
+    light integer,
+    room_flag integer NOT NULL,
+		PRIMARY KEY(id)
+);
+
+
+ALTER TABLE public.room OWNER TO postgres;
+
+CREATE TABLE public.room_direction_data (
+    id SERIAL,
+    room_number integer NOT NULL,
+    exit_direction integer NOT NULL,
+    general_description character varying(256) NOT NULL,
+    keyword character varying(16),
+    exit_info integer,
+    exit_key integer,
+    to_room integer NOT NULL,
+		PRIMARY KEY(id),
+			CONSTRAINT fk_room_vnum
+				FOREIGN KEY(room_number)
+					REFERENCES public.room(room_number)
+					ON DELETE CASCADE
+					ON UPDATE CASCADE
+);
 
 
 --
@@ -285,39 +323,23 @@ ALTER SEQUENCE public.affected_type_id_seq OWNED BY public.affected_type.id;
 --
 
 CREATE TABLE public.camera_feed (
-    feed_id integer NOT NULL,
+    feed_id SERIAL,
     feed_type character varying(16) NOT NULL,
     feed_vnum integer NOT NULL,
     feed_room_vnum integer NOT NULL,
     feed_order integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+		PRIMARY KEY(feed_id),
+		CONSTRAINT fk_room_vnum
+			FOREIGN KEY (feed_room_vnum)
+				REFERENCES public.room(room_number)
+					ON DELETE CASCADE
+					ON UPDATE CASCADE
 );
 
 
 ALTER TABLE public.camera_feed OWNER TO postgres;
-
---
--- Name: camera_feed_feed_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.camera_feed_feed_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.camera_feed_feed_id_seq OWNER TO postgres;
-
---
--- Name: camera_feed_feed_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.camera_feed_feed_id_seq OWNED BY public.camera_feed.feed_id;
-
 
 --
 -- Name: class_contagion; Type: TABLE; Schema: public; Owner: postgres
@@ -696,14 +718,20 @@ ALTER SEQUENCE public.class_support_support_id_seq OWNED BY public.class_support
 --
 
 CREATE TABLE public.computer_terminal (
-    id integer NOT NULL,
+    id SERIAL,
     terminal_room_vnum integer NOT NULL,
     terminal_type character varying DEFAULT 'chooser'::character varying NOT NULL,
     terminal_attaches_to character varying,
     terminal_name character varying NOT NULL,
     terminal_description text,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+		PRIMARY KEY(id),
+		CONSTRAINT fk_room_vnum
+			FOREIGN KEY (terminal_room_vnum)
+				REFERENCES public.room(room_number)
+					ON DELETE CASCADE
+					ON UPDATE CASCADE
 );
 
 
@@ -713,14 +741,6 @@ ALTER TABLE public.computer_terminal OWNER TO postgres;
 -- Name: computer_terminal_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.computer_terminal_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
 
 ALTER TABLE public.computer_terminal_id_seq OWNER TO postgres;
 
@@ -728,7 +748,6 @@ ALTER TABLE public.computer_terminal_id_seq OWNER TO postgres;
 -- Name: computer_terminal_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.computer_terminal_id_seq OWNED BY public.computer_terminal.id;
 
 
 --
@@ -764,7 +783,7 @@ ALTER TABLE public.extra_description_id_seq OWNER TO postgres;
 -- Name: extra_description_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.extra_description_id_seq OWNED BY public.extra_description.id;
+-- ALTER SEQUENCE public.extra_description_id_seq OWNED BY public.extra_description.id;
 
 
 --
@@ -777,7 +796,13 @@ CREATE TABLE public.integral_object (
     object_type character varying(16) NOT NULL,
     object_vnum integer NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+		PRIMARY KEY(object_id),
+		CONSTRAINT fk_room_vnum
+			FOREIGN KEY (object_room_vnum)
+				REFERENCES public.room(room_number)
+					ON DELETE CASCADE
+					ON UPDATE CASCADE
 );
 
 
@@ -802,7 +827,7 @@ ALTER TABLE public.integral_object_object_id_seq OWNER TO postgres;
 -- Name: integral_object_object_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.integral_object_object_id_seq OWNED BY public.integral_object.object_id;
+-- ALTER SEQUENCE public.integral_object_object_id_seq OWNED BY public.integral_object.object_id;
 
 
 --
@@ -840,7 +865,7 @@ ALTER TABLE public.karma_karma_id_seq OWNER TO postgres;
 -- Name: karma_karma_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.karma_karma_id_seq OWNED BY public.karma.karma_id;
+-- ALTER SEQUENCE public.karma_karma_id_seq OWNED BY public.karma.karma_id;
 
 
 --
@@ -856,7 +881,13 @@ CREATE TABLE public.mini_game (
     game_room_vnum integer NOT NULL,
     game_order integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+		PRIMARY KEY(game_id),
+		CONSTRAINT fk_room_vnum
+			FOREIGN KEY (game_room_vnum)
+				REFERENCES public.room(room_number)
+					ON DELETE CASCADE
+					ON UPDATE CASCADE
 );
 
 
@@ -881,7 +912,7 @@ ALTER TABLE public.mini_game_game_id_seq OWNER TO postgres;
 -- Name: mini_game_game_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.mini_game_game_id_seq OWNED BY public.mini_game.game_id;
+-- ALTER SEQUENCE public.mini_game_game_id_seq OWNED BY public.mini_game.game_id;
 
 
 --
@@ -892,7 +923,13 @@ CREATE TABLE public.mini_gunner_sentinel (
     id integer NOT NULL,
     mgs_mob_vnum integer DEFAULT '-1'::integer NOT NULL,
     mgs_face_direction character varying(1) DEFAULT 'N'::character varying NOT NULL,
-    mgs_room_vnum integer NOT NULL
+    mgs_room_vnum integer NOT NULL,
+		PRIMARY KEY(id),
+		CONSTRAINT fk_room_vnum
+			FOREIGN KEY (mgs_room_vnum)
+				REFERENCES public.room(room_number)
+					ON DELETE CASCADE
+					ON UPDATE CASCADE
 );
 
 
@@ -917,7 +954,7 @@ ALTER TABLE public.mini_gunner_sentinel_id_seq OWNER TO postgres;
 -- Name: mini_gunner_sentinel_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.mini_gunner_sentinel_id_seq OWNED BY public.mini_gunner_sentinel.id;
+-- ALTER SEQUENCE public.mini_gunner_sentinel_id_seq OWNED BY public.mini_gunner_sentinel.id;
 
 
 --
@@ -963,7 +1000,7 @@ ALTER SEQUENCE public.mob_zone_id_seq OWNED BY public.mob_zone.id;
 
 CREATE TABLE public.mobile (
     mob_id integer NOT NULL,
-    mob_virtual_number integer NOT NULL,
+    mob_virtual_number integer NOT NULL UNIQUE,
     mob_name character varying(256) NOT NULL,
     mob_short_description character varying(64) NOT NULL,
     mob_long_description character varying(512) NOT NULL,
@@ -1040,7 +1077,13 @@ CREATE TABLE public.npc_dialogue (
     dialogue_vnum integer NOT NULL,
     dialogue_order integer,
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+		PRIMARY KEY(id),
+		CONSTRAINT fk_room_vnum
+			FOREIGN KEY (dialogue_mob_vnum)
+				REFERENCES public.mobile(mob_virtual_number)
+					ON DELETE CASCADE
+					ON UPDATE CASCADE
 );
 
 
@@ -1704,52 +1747,12 @@ ALTER SEQUENCE public.player_races_id_seq OWNED BY public.player_races.id;
 -- Name: room; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.room (
-    room_number integer NOT NULL,
-    zone integer NOT NULL,
-    sector_type integer NOT NULL,
-    name character varying(256) NOT NULL,
-    description text NOT NULL,
-    ex_keyword character varying(256),
-    ex_description text,
-    light integer,
-    room_flag integer NOT NULL,
-    id integer NOT NULL
-);
-
-
-ALTER TABLE public.room OWNER TO postgres;
-
 --
 -- Name: room_direction_data; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.room_direction_data (
-    id integer NOT NULL,
-    room_number integer NOT NULL,
-    exit_direction integer NOT NULL,
-    general_description character varying(256) NOT NULL,
-    keyword character varying(16),
-    exit_info integer,
-    exit_key integer,
-    to_room integer NOT NULL
-);
-
 
 ALTER TABLE public.room_direction_data OWNER TO postgres;
-
---
--- Name: room_direction_data_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.room_direction_data_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
 
 ALTER TABLE public.room_direction_data_id_seq OWNER TO postgres;
 
@@ -1759,27 +1762,6 @@ ALTER TABLE public.room_direction_data_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.room_direction_data_id_seq OWNED BY public.room_direction_data.id;
 
-
---
--- Name: room_room_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.room_room_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.room_room_id_seq OWNER TO postgres;
-
---
--- Name: room_room_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.room_room_id_seq OWNED BY public.room.id;
 
 
 --
@@ -1839,7 +1821,13 @@ ALTER SEQUENCE public.shop_objects_shop_objects_id_seq OWNED BY public.shop_obje
 CREATE TABLE public.shop_rooms (
     shop_rooms_id integer NOT NULL,
     shop_vnum integer NOT NULL,
-    shop_room_vnum integer NOT NULL
+    shop_room_vnum integer NOT NULL,
+		PRIMARY KEY(shop_rooms_id),
+		CONSTRAINT fk_room_vnum
+			FOREIGN KEY(shop_room_vnum)
+				REFERENCES public.room(room_number)
+					ON DELETE CASCADE
+					ON UPDATE CASCADE
 );
 
 
@@ -2169,7 +2157,7 @@ ALTER TABLE ONLY public.affected_type ALTER COLUMN id SET DEFAULT nextval('publi
 -- Name: camera_feed feed_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.camera_feed ALTER COLUMN feed_id SET DEFAULT nextval('public.camera_feed_feed_id_seq'::regclass);
+-- ALTER TABLE ONLY public.camera_feed ALTER COLUMN feed_id SET DEFAULT nextval('public.camera_feed_feed_id_seq'::regclass);
 
 
 --
@@ -2239,7 +2227,7 @@ ALTER TABLE ONLY public.class_support ALTER COLUMN support_id SET DEFAULT nextva
 -- Name: computer_terminal id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.computer_terminal ALTER COLUMN id SET DEFAULT nextval('public.computer_terminal_id_seq'::regclass);
+-- ALTER TABLE ONLY public.computer_terminal ALTER COLUMN id SET DEFAULT nextval('public.computer_terminal_id_seq'::regclass);
 
 
 --
@@ -2393,7 +2381,7 @@ ALTER TABLE ONLY public.player_races ALTER COLUMN id SET DEFAULT nextval('public
 -- Name: room id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.room ALTER COLUMN id SET DEFAULT nextval('public.room_room_id_seq'::regclass);
+-- ALTER TABLE ONLY public.room ALTER COLUMN id SET DEFAULT nextval('public.room_room_id_seq'::regclass);
 
 
 --
@@ -4058,9 +4046,9 @@ COPY public.class_support (support_id, support_player_id, support_primary_type, 
 -- Data for Name: computer_terminal; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.computer_terminal (id, terminal_room_vnum, terminal_type, terminal_attaches_to, terminal_name, terminal_description, created_at, updated_at) FROM stdin;
-1	410	chooser	north	DMZ Proving Grounds - Course Selection Interface [Baphomet OS - version 1.3.0]	\N	2020-10-04 04:06:45.194267	2020-10-04 04:06:45.194267
-\.
+-- COPY public.computer_terminal (id, terminal_room_vnum, terminal_type, terminal_attaches_to, terminal_name, terminal_description, created_at, updated_at) FROM stdin;
+--1	410	chooser	north	DMZ Proving Grounds - Course Selection Interface [Baphomet OS - version 1.3.0]	\N	2020-10-04 04:06:45.194267	2020-10-04 04:06:45.194267
+--\.
 
 
 --
@@ -4091,21 +4079,21 @@ COPY public.karma (karma_id, karma_player_id, karma_alignment, karma_cold_bloode
 -- Data for Name: mini_game; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.mini_game (game_id, game_type, game_vnum, game_name, game_action, game_room_vnum, game_order, created_at, updated_at) FROM stdin;
-1	line_up	1	Southside Lock #1	unlock vnum:128 north,east,south,west	128	0	2020-09-29 01:57:15.768037	2020-09-29 01:57:15.768037
-2	line_up	1	Southside Lock #1	unlock vnum:129 north,east,south,west	129	0	2020-09-29 02:26:16.028043	2020-09-29 02:26:16.028043
-3	line_up	1	Southside Lock #1	unlock vnum:128 north,east,south,west	128	0	2020-09-29 02:26:38.540912	2020-09-29 02:26:38.540912
-4	line_up	1	Southside Lock #1	unlock vnum:128 north,east,south,west	129	0	2020-09-29 02:26:43.216918	2020-09-29 02:26:43.216918
-\.
+ -- COPY public.mini_game (game_id, game_type, game_vnum, game_name, game_action, game_room_vnum, game_order, created_at, updated_at) FROM stdin;
+-- 1	line_up	1	Southside Lock #1	unlock vnum:128 north,east,south,west	128	0	2020-09-29 01:57:15.768037	2020-09-29 01:57:15.768037
+--2	line_up	1	Southside Lock #1	unlock vnum:129 north,east,south,west	129	0	2020-09-29 02:26:16.028043	2020-09-29 02:26:16.028043
+--3	line_up	1	Southside Lock #1	unlock vnum:128 north,east,south,west	128	0	2020-09-29 02:26:38.540912	2020-09-29 02:26:38.540912
+-- 4	line_up	1	Southside Lock #1	unlock vnum:128 north,east,south,west	129	0	2020-09-29 02:26:43.216918	2020-09-29 02:26:43.216918
+-- \.
 
 
 --
 -- Data for Name: mini_gunner_sentinel; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.mini_gunner_sentinel (id, mgs_mob_vnum, mgs_face_direction, mgs_room_vnum) FROM stdin;
-2	103	N	132
-\.
+-- COPY public.mini_gunner_sentinel (id, mgs_mob_vnum, mgs_face_direction, mgs_room_vnum) FROM stdin;
+--2	103	N	132
+--\.
 
 
 --
@@ -7545,7 +7533,6 @@ COPY public.room_direction_data (id, room_number, exit_direction, general_descri
 380	144	3	general desc	keyword	1	0	143
 381	145	0	general description	keyword	1	0	146
 382	145	3	general desc	keyword	1	0	144
-400	148	3	general desc	keyword	0	0	147
 471	147	1	general_description	keyword	1	0	149
 472	147	2	general desc	keyword	0	0	146
 474	146	0	general_description	keyword	1	0	149
@@ -8015,7 +8002,7 @@ SELECT pg_catalog.setval('public.room_direction_data_id_seq', 575, true);
 -- Name: room_room_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.room_room_id_seq', 81, true);
+-- SELECT pg_catalog.setval('public.room_room_id_seq', 81, true);
 
 
 --
@@ -8085,24 +8072,24 @@ SELECT pg_catalog.setval('public.zone_id_seq', 151, true);
 -- Name: computer_terminal computer_terminal_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.computer_terminal
-    ADD CONSTRAINT computer_terminal_pkey PRIMARY KEY (id);
+-- ALTER TABLE ONLY public.computer_terminal
+    --ADD CONSTRAINT computer_terminal_pkey PRIMARY KEY (id);
 
 
 --
 -- Name: mini_gunner_sentinel mini_gunner_sentinel_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.mini_gunner_sentinel
-    ADD CONSTRAINT mini_gunner_sentinel_pkey PRIMARY KEY (id);
+-- ALTER TABLE ONLY public.mini_gunner_sentinel
+    --ADD CONSTRAINT mini_gunner_sentinel_pkey PRIMARY KEY (id);
 
 
 --
 -- Name: npc_dialogue npc_dialogue_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.npc_dialogue
-    ADD CONSTRAINT npc_dialogue_pkey PRIMARY KEY (id);
+-- ALTER TABLE ONLY public.npc_dialogue
+    --ADD CONSTRAINT npc_dialogue_pkey PRIMARY KEY (id);
 
 
 --
@@ -8149,24 +8136,24 @@ ALTER TABLE ONLY public.player_races
 -- Name: room_direction_data room_direction_data_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.room_direction_data
-    ADD CONSTRAINT room_direction_data_pkey PRIMARY KEY (id);
+--ALTER TABLE ONLY public.room_direction_data
+    -- ADD CONSTRAINT room_direction_data_pkey PRIMARY KEY (id);
 
 
 --
 -- Name: room room_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.room
-    ADD CONSTRAINT room_pkey PRIMARY KEY (id);
+--ALTER TABLE ONLY public.room
+    -- ADD CONSTRAINT room_pkey PRIMARY KEY (id);
 
 
 --
 -- Name: room room_room_number_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.room
-    ADD CONSTRAINT room_room_number_key UNIQUE (room_number);
+-- ALTER TABLE ONLY public.room
+    -- ADD CONSTRAINT room_room_number_key UNIQUE (room_number);
 
 
 --
@@ -8221,8 +8208,8 @@ ALTER TABLE ONLY public.skill_trees
 -- Name: terminal_choices terminal_choices_choice_terminal_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.terminal_choices
-    ADD CONSTRAINT terminal_choices_choice_terminal_id_fkey FOREIGN KEY (choice_terminal_id) REFERENCES public.computer_terminal(id);
+-- ALTER TABLE ONLY public.terminal_choices
+    -- ADD CONSTRAINT terminal_choices_choice_terminal_id_fkey FOREIGN KEY (choice_terminal_id) REFERENCES public.computer_terminal(id);
 
 
 --
