@@ -1,4 +1,5 @@
 #include "builder.hpp"
+#include "mob-roam.hpp"
 #include "quests.hpp"
 #include "pq.hpp"
 #include "util.hpp"
@@ -2071,6 +2072,38 @@ ACMD(do_mbuild) {
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
+	/** signature: mbuild <mob-vnum> zone:add <vnum>...<vnum-N> */
+	if(vec_args.size() >= 3 && vec_args[0].compare("zone:add") == 0){
+		/*
+    zone_virtual_number integer NOT NULL,
+    mob_virtual_number integer NOT NULL,
+    room_virtual_number integer NOT NULL,
+    max_existing integer,
+		*/
+		/* TODO */
+	}
+	if(vec_args.size() >= 2 && vec_args[0].compare("zone:list") == 0){
+		/* TODO */
+	}
+	if(vec_args.size() >= 2 && vec_args[0].compare("zone:del") == 0){
+		/* TODO */
+
+	}
+	/** signature: mbuild roam:add <mob-vnum> <vnum>...<vnum-N> */
+	if(vec_args.size() >= 3 && vec_args[0].compare("roam:add") == 0){
+		/* TODO */
+
+	}
+	/** signature: mbuild roam:list <mob-vnum> */
+	if(vec_args.size() >= 2 && vec_args[0].compare("roam:list") == 0){
+		/* TODO */
+
+	}
+	/** signature: mbuild roam:del <mob-vnum> <vnum>...<vnum-N> */
+	if(vec_args.size() >= 2 && vec_args[0].compare("roam:del") == 0){
+		/* TODO */
+
+	}
 
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0
 			&& vec_args[1].compare("action") == 0) {
@@ -2189,10 +2222,18 @@ ACMD(do_mbuild) {
 		for(auto & cmd : mob_commands){
 			cmd->print_command(player);
 		}
+		for(const auto & line : mods::mob_roam::roam_recorder_help_screen()){
+			player->send("%s\r\n",line.c_str());
+		}
 		player->sendln("");
 		player->pager_end();
 		player->page(0);
 		return;
+	}
+	{
+		if(mods::mob_roam::handle_roam_recorder(player,vec_args)){
+			return;
+		}
 	}
 	{
 		auto args = mods::util::subcmd_args<9,args_t>(argument,"describe");

@@ -24,6 +24,11 @@
 #include "orm/player-base-ability.hpp"
 #endif
 
+#define __MENTOC_RUN_MOB_ROAM_ORM_PREGAME__
+#ifdef __MENTOC_RUN_MOB_ROAM_ORM_PREGAME__
+#include "orm/mob-roam.hpp"
+#endif
+
 extern bool login(std::string_view user_name,std::string_view password);
 extern int16_t save_char_data(player_ptr_t& player,std::map<std::string,std::string> values);
 namespace mods::debug::pre_game {
@@ -70,6 +75,23 @@ namespace mods::debug::pre_game {
 		std::cout << std::get<1>(i) << "]\n";
 	}
 	bool run(){
+#ifdef __MENTOC_RUN_MOB_ROAM_ORM_PREGAME__
+		{
+			mods::orm::mob_roam mr;
+			std::vector<room_vnum> room_list;
+			uint16_t max_loops = 10;
+			for(auto & room : world){
+				if(--max_loops == 0){
+					break;
+				}
+				room_list.emplace_back(room.number);
+			}
+			mr.populate(410, room_list);
+			mr.save();
+		}
+#endif
+
+
 #ifdef __MENTOC_RUN_PBA_CODE__
 		mods::orm::player_base_ability p;
 

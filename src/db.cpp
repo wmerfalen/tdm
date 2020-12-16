@@ -50,6 +50,7 @@
 #include "mods/db.hpp"
 #include "mods/zone.hpp"
 #include "mods/classes/ghost.hpp"
+#include "mods/mob-roam.hpp"
 
 namespace mods::rooms {
 	extern void set_sector_type(room_rnum room_id, int sector_type);
@@ -353,6 +354,9 @@ void boot_world(void) {
 
 	log("Loading sql mobs and generating index.");
 	parse_sql_mobiles();
+
+	log("Loading mob roaming data");
+	mods::mob_roam::boot();
 
 	log("Loading sql objs and generating index.");
 	//index_boot(DB_BOOT_OBJ);

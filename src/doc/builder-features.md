@@ -1,4 +1,19 @@
-# Inventory of features (mods directory only)
+# Inventory of features
+
+# Cobalt FOB area scripts
+	- source file: lib/js/profiles/far.js
+	- As of 2020-12-17, the south eastern portion of the FOB has been written. (Level 1)
+
+
+# normalized query pattern
+	- Normalized queries can be performed by following the same pattern as the `mob_roam` class in the orm folder
+	- source file: mods/orm/mob-roam.(c|h)pp
+
+# 2020-12-14 
+	- started creation of COBALT Forward Operating Base
+	- Armory to the East.
+	- Southern hallway done. Need to add armor locker and armor buy station in armory
+	- Need to lock the backroom in the armory
 
 # SQL DUMP
 	- If you need an sql dump, use src/sql/migrations/beta.sql. That file will be updated as migrations are ran.

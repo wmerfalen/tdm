@@ -94,7 +94,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/replenish mods/players/destroy-player mods/rate-limiting \
 					 mods/levels mods/orm/player-base-ability \
 					 mods/class-abilities \
-					 mods/orm/elevator mods/elevator
+					 mods/orm/elevator mods/elevator \
+					 mods/orm/mob-roam mods/mob-roam
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
