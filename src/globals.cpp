@@ -65,6 +65,7 @@ INIT(mods::rate_limiting);
 INIT(mods::levels);
 INIT(mods::orm::pba);
 INIT(mods::classes);
+INIT(mods::forge_engine);
 #undef INIT
 
 namespace mods::mobs::room_watching::events {
@@ -486,6 +487,7 @@ namespace mods {
 			mods::levels::init();
 			mods::orm::pba::init();
 			mods::classes::init();
+			mods::forge_engine::init();
 			::offensive::init();
 			::builder::init();
 			::informative::init();

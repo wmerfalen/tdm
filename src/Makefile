@@ -95,11 +95,12 @@ buildobj = act.informative act.item act.medic \
 					 mods/levels mods/orm/player-base-ability \
 					 mods/class-abilities \
 					 mods/orm/elevator mods/elevator \
-					 mods/orm/mob-roam mods/mob-roam
+					 mods/orm/mob-roam mods/mob-roam \
+					 mods/forge-engine/generator 
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
-all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(objects) $(thirdparty) #$(DATA_DIR)
+all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) #$(DATA_DIR)
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT)
 
 clean:
@@ -111,8 +112,12 @@ clean:
 		rm -f $(builddir)/mods/testing/lmdb/*.o \
 		rm -f $(builddir)/mods/testing/lmdb/*.d  \
 		rm -f $(builddir)/mods/mini-games/*.o \
-		rm -f $(builddir)/mods/mini-games/*.d 
+		rm -f $(builddir)/mods/mini-games/*.d \
+		rm -f $(builddir)/mods/forge-engine/*.o \
+		rm -f $(builddir)/mods/forge-engine/*.d 
 
+$(builddir)/mods/forge-engine:
+	mkdir -p $(builddir)/mods/forge-engine
 $(builddir)/mods/mini-games:
 	mkdir -p $(builddir)/mods/mini-games
 $(builddir)/mods/classes:

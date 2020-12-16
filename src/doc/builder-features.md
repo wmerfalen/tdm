@@ -1,5 +1,14 @@
 # Inventory of features
 
+# 2020-12-17 Forge Engine
+	- The Forge Engine is the portion of TDMUD that powers the randomized loot system
+		- Randomized loot means thousands of unique items
+		- Special items with very little randomization (think Diablo 2's Unique item types)
+		- An ever-growing list of nerfs/buffs/resists
+
+# NEED TO FINISH: 
+	- checkout mobs/roam-zone branch and finish that stuff
+
 # Cobalt FOB area scripts
 	- source file: lib/js/profiles/far.js
 	- As of 2020-12-17, the south eastern portion of the FOB has been written. (Level 1)
