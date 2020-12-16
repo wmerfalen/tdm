@@ -209,7 +209,6 @@ CREATE TABLE public.mobile (
 
 ALTER TABLE public.mobile OWNER TO postgres;
 
-
 --
 -- Name: armor_type_t; Type: TYPE; Schema: public; Owner: postgres
 --
@@ -611,28 +610,45 @@ ALTER TABLE public.mini_gunner_sentinel OWNER TO postgres;
 
 CREATE TABLE public.mob_zone (
     id SERIAL,
-    zone_id integer NOT NULL,
-    mob_id integer NOT NULL,
-    room_id integer NOT NULL,
+    zone_virtual_number integer NOT NULL,
+    mob_virtual_number integer NOT NULL,
+    room_virtual_number integer NOT NULL,
     max_existing integer,
 		PRIMARY KEY (id),
-		CONSTRAINT fk_zone_id
-			FOREIGN KEY (zone_id)
-				REFERENCES public.zone(id)
+		CONSTRAINT fk_zone_virtual_number
+			FOREIGN KEY (zone_virtual_number)
+				REFERENCES public.zone(zone_virtual_number)
 				ON DELETE CASCADE
 				ON UPDATE CASCADE,
-		CONSTRAINT fk_mob_id
-			FOREIGN KEY (mob_id)
-				REFERENCES public.mobile(mob_id)
+		CONSTRAINT fk_mob_virtual_number
+			FOREIGN KEY (mob_virtual_number)
+				REFERENCES public.mobile(mob_virtual_number)
 				ON DELETE CASCADE
 				ON UPDATE CASCADE,
-		CONSTRAINT fk_room_id
-			FOREIGN KEY (room_id)
-				REFERENCES public.room(id)
+		CONSTRAINT fk_room_virtual_number
+			FOREIGN KEY (room_virtual_number)
+				REFERENCES public.room(room_number)
 				ON DELETE CASCADE
 				ON UPDATE CASCADE
 );
 
+
+CREATE TABLE public.mob_roam (
+    id SERIAL,
+    mob_virtual_number integer NOT NULL,
+    room_virtual_number integer NOT NULL,
+		PRIMARY KEY (id),
+		CONSTRAINT fk_mob_virtual_number
+			FOREIGN KEY (mob_virtual_number)
+				REFERENCES public.mobile(mob_virtual_number)
+				ON DELETE CASCADE
+				ON UPDATE CASCADE,
+		CONSTRAINT fk_room_virtual_number
+			FOREIGN KEY (room_virtual_number)
+				REFERENCES public.room(room_number)
+				ON DELETE CASCADE
+				ON UPDATE CASCADE
+);
 
 ALTER TABLE public.mob_zone OWNER TO postgres;
 
@@ -2569,3 +2585,4 @@ CREATE TABLE public.class_ghost (
 		ON DELETE CASCADE
 		ON UPDATE CASCADE
 );
+ALTER TABLE public.mob_roam ADD COLUMN profile_name varchar(255);
