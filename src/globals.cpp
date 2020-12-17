@@ -45,7 +45,7 @@ extern int next_room_vnum();
 extern void look_at_room(char_data* ch,int ignore_brief);
 #define INIT(A) \
 	namespace A { extern void init(); };
-
+INIT(mods::rand);
 INIT(builder);
 INIT(mods::date_time);
 INIT(mods::integral_objects);
@@ -471,6 +471,7 @@ namespace mods {
 				std::cout << "All migrations ran. Exiting...\n";
 				exit(0);
 			}
+			mods::rand::init();
 			mods::debug::init(show_tics);
 			mods::integral_objects::init();
 			mods::query_objects::init();

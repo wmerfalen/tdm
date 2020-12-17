@@ -9,7 +9,7 @@
 
 namespace mods::forge_engine {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
-	using random_number_type_t = uint32_t;
+	using random_number_type_t = uint64_t;
 	static constexpr random_number_type_t MAX_FORGE_ENGINE_VALUE = 4294967295;
 		enum item_types_t {
 			TYPE_ITEM_RIFLE = 1,
@@ -112,7 +112,7 @@ namespace mods::forge_engine {
 			__ARMOR_WEAR_FIRST ,
 			__ARMOR_WEAR_LAST = ARMOR_ITEM_WEAR_WEAPON_ATTACHMENT
 		};
-		enum skill_types_t {
+		enum stat_types_t {
 			SKILL_STR = 1,
 			SKILL_STR_ADD ,
 			SKILL_INTEL ,
@@ -134,12 +134,16 @@ namespace mods::forge_engine {
 		};
 		enum elemental_types_t {
 			ELEM_INCENDIARY = 1,
+			ELEM_EXPLOSIVE,
 			ELEM_SHRAPNEL ,
 			ELEM_CORROSIVE ,
 			ELEM_CRYOGENIC ,
+			ELEM_RADIOACTIVE,
 			ELEM_EMP ,
+			ELEM_SHOCK,
+			ELEM_ANTI_MATTER, /** combined damage of EMP and RADIOACTIVE */
 			__ELEM_FIRST ,
-			__ELEM_LAST = ELEM_EMP
+			__ELEM_LAST = ELEM_ANTI_MATTER,
 		};
 		enum player_class_types_t {
 			PLCLASS_SNIPER = 1,
@@ -153,7 +157,74 @@ namespace mods::forge_engine {
 			__PLCLASS_LAST = PLCLASS_SUPPORT
 		};
 
-		static const std::vector<rifle_attributes_t> valid_rifle_affects = {
+		static const std::vector<elemental_types_t> valid_shotgun_elemental_types = {
+			ELEM_INCENDIARY,
+			ELEM_SHRAPNEL ,
+			ELEM_CORROSIVE ,
+			ELEM_CRYOGENIC ,
+			ELEM_SHOCK,
+			ELEM_EXPLOSIVE,
+			ELEM_RADIOACTIVE
+		};
+
+		static const std::vector<elemental_types_t> valid_smg_elemental_types = {
+			ELEM_INCENDIARY,
+			ELEM_CORROSIVE ,
+			ELEM_CRYOGENIC ,
+			ELEM_RADIOACTIVE,
+			ELEM_EMP
+		};
+
+		static const std::vector<elemental_types_t> valid_ar_elemental_types = {
+			ELEM_INCENDIARY,
+			ELEM_CORROSIVE ,
+			ELEM_CRYOGENIC ,
+			ELEM_RADIOACTIVE,
+			ELEM_EXPLOSIVE,
+			ELEM_EMP ,
+			ELEM_ANTI_MATTER
+		};
+
+		static const std::vector<elemental_types_t> valid_sniper_elemental_types = {
+			ELEM_INCENDIARY,
+			ELEM_CORROSIVE ,
+			ELEM_CRYOGENIC ,
+			ELEM_RADIOACTIVE,
+			ELEM_ANTI_MATTER, 
+			ELEM_EXPLOSIVE,
+			ELEM_EMP
+		};
+
+		static const std::vector<elemental_types_t> valid_pistol_elemental_types = {
+			ELEM_INCENDIARY,
+			ELEM_CORROSIVE ,
+			ELEM_CRYOGENIC ,
+			ELEM_RADIOACTIVE,
+			ELEM_SHOCK,
+			ELEM_ANTI_MATTER, 
+			ELEM_EMP
+		};
+
+		static const std::vector<elemental_types_t> valid_machine_pistol_elemental_types = {
+			ELEM_INCENDIARY,
+			ELEM_CORROSIVE ,
+			ELEM_CRYOGENIC ,
+			ELEM_SHOCK,
+			ELEM_RADIOACTIVE,
+			ELEM_EMP
+		};
+
+		static const std::vector<elemental_types_t> valid_lmg_elemental_types = {
+			ELEM_INCENDIARY ,
+			ELEM_CORROSIVE ,
+			ELEM_CRYOGENIC ,
+			ELEM_RADIOACTIVE,
+			ELEM_EMP ,
+			ELEM_EXPLOSIVE,
+			ELEM_ANTI_MATTER
+		};
+
+		static const std::vector<rifle_attributes_t> valid_rifle_attributes = {
 			RIFLE_ATTRIBUTES_AMMO_MAX,
 			RIFLE_ATTRIBUTES_CHANCE_TO_INJURE,
 			RIFLE_ATTRIBUTES_CLIP_SIZE,
@@ -172,6 +243,21 @@ namespace mods::forge_engine {
 			RIFLE_ATTRIBUTES_DAMAGE_DICE_COUNT,
 			RIFLE_ATTRIBUTES_DAMAGE_DICE_SIDES
 		};
+		static const  std::vector<stat_types_t> valid_rifle_stats_boosts = {
+			SKILL_STR,
+			SKILL_INTEL,
+			SKILL_WIS,
+			SKILL_DEX,
+			SKILL_CON,
+			SKILL_ELECTRONICS,
+			SKILL_MARKSMANSHIP,
+			SKILL_SNIPING,
+			SKILL_DEMOLITIONS,
+			SKILL_CHEMISTRY,
+			SKILL_WEAPON_HANDLING,
+			SKILL_STRATEGY
+		};
+
 		/** dictates what types of items will be generated */
 		static const  std::vector<item_types_t> active_item_types = {
 			TYPE_ITEM_RIFLE,
@@ -204,7 +290,7 @@ namespace mods::forge_engine {
 			ARMOR_ITEM_WEAR_SHOULDERS,
 			ARMOR_ITEM_WEAR_ELBOW
 		};
-		static const  std::vector<skill_types_t> valid_armor_affects  = {
+		static const  std::vector<stat_types_t> valid_armor_affects  = {
 			SKILL_STR,
 			SKILL_INTEL,
 			SKILL_WIS,
@@ -221,7 +307,7 @@ namespace mods::forge_engine {
 			SKILL_STRATEGY,
 			SKILL_MEDICAL
 		};
-		static const  std::vector<skill_types_t> valid_armor_requirements_based_on  = {
+		static const  std::vector<stat_types_t> valid_armor_requirements_based_on  = {
 			SKILL_STR,
 			SKILL_INTEL,
 			SKILL_WIS,
@@ -239,7 +325,7 @@ namespace mods::forge_engine {
 			SKILL_MEDICAL
 		};
 
-		static const  std::vector<skill_types_t> valid_rifle_requirements_based_on  = {
+		static const  std::vector<stat_types_t> valid_rifle_requirements_based_on  = {
 			SKILL_STR,
 			SKILL_INTEL,
 			SKILL_WIS,
@@ -254,11 +340,16 @@ namespace mods::forge_engine {
 			SKILL_STRATEGY
 		};
 
+		static const std::vector<rifle_attributes_t> negative_buffs = {
+			RIFLE_ATTRIBUTES_COOLDOWN_BETWEEN_SHOTS,
+			RIFLE_ATTRIBUTES_CRITICAL_RANGE,
+			RIFLE_ATTRIBUTES_RELOAD_TIME
+		};
 
 
 	struct generated_rifle_t {
 		rifle_types_t type;
-		std::vector<std::pair<skill_types_t,uint32_t>> requirements;
+		std::vector<std::pair<stat_types_t,uint32_t>> requirements;
 		std::vector<std::pair<rifle_attributes_t,uint32_t>> attributes;
 	};
 
@@ -266,53 +357,13 @@ namespace mods::forge_engine {
 		using exponential_distr_type_t = std::exponential_distribution<double>;
 		using distr_type_t = std::uniform_int_distribution<uint32_t>;
 	
-		template <typename TGenerator,typename TDistribution>
-		void init(){
-			m_random_device = std::make_unique<std::random_device>();
-			m_generator = std::make_unique<TGenerator>((*m_random_device)());
-			m_distribution = std::make_unique<distr_type_t>(1,MAX_FORGE_ENGINE_VALUE);
-			m_exp_distribution = std::make_unique<exponential_distr_type_t>((*m_distribution)(*m_generator) / 3.5);
-			m_player_level = 10;
-			m_bernouli = std::make_unique<std::bernoulli_distribution>(0.5);
-			m_bernouli_generator = std::make_unique<std::default_random_engine>();
-		}
-		bool bool_roll(){
-			return (*m_bernouli)(*m_bernouli_generator);
-		}
-		uint32_t op_based_roll(uint32_t v){
-			int operations[4] = { '*', '-', '/', '+' };
-			for(int i = 0; i < rand_number(1,36); i++){
-				if(v <= 0 || v >= MAX_FORGE_ENGINE_VALUE-20){
-					v = 1;
-				}
-				switch(operations[this->roll() % 4]){
-					case '*':
-						v *= roll();
-						break;
-					case '-':
-						v -= roll();
-						break;
-					case '+':
-						v += roll();
-						break;
-				}
-			}
-			v = std::max((uint32_t)1,v);
-			v = std::min((uint32_t)MAX_FORGE_ENGINE_VALUE,v);
-			return v;
-		}
-		bool exp_based_bool_roll(){
-			return (0.0421230 * exp_roll() * 0.410 >= ((0.48901824 * exp_roll()) * (bool_roll() ? 0.8 : 0.3)));
-		}
-		double exp_roll(){
-			static std::default_random_engine generator;
-			return (*m_exp_distribution)(generator);
-		}
 		generator();
 		~generator();
+
 		rifle_attributes_t random_rifle_attribute();
-		std::vector<std::pair<skill_types_t,uint32_t>> generate_rifle_requirements();
-		std::vector<std::pair<rifle_attributes_t,uint32_t>> generate_rifle_attributes();
+		std::vector<std::pair<stat_types_t,uint32_t>> generate_rifle_requirements(player_ptr_t& player);
+		std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> generate_rifle_attributes();
+		std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> generate_rifle_stat_boosts(player_ptr_t& player);
 
 		rifle_types_t random_rifle_type();
 		item_types_t random_item_type();
@@ -338,48 +389,90 @@ namespace mods::forge_engine {
 					return -1;
 			}
 		}
-		template <typename TEnumType>
-		std::vector<std::pair<TEnumType,uint32_t>> generate_random(const std::vector<TEnumType>& valid_values){
-			/*
-			if(this->roll() >= this->roll()){
-				m_generator->discard(m_generator->state_size);
-				std::cerr << "D";
-			}else{
-				std::cerr << ".";
+
+		float roll_float(float LO, float HI){
+			return LO + static_cast <float> (rand_xoroshiro()) /( static_cast <float> (UINT64_MAX/(HI-LO)));
+		}
+
+		template <typename TUintWidth>
+		TUintWidth roll_between(TUintWidth LO, TUintWidth HI){
+			return LO + static_cast <TUintWidth> (rand_xoroshiro()) /( static_cast <TUintWidth> (std::numeric_limits<TUintWidth>::max()/(HI-LO)));
+		}
+
+
+		/**
+		 * Generate a vector of pairs.
+		 * Pair.first = a randomly chosen enum in valid_attributes.
+		 * Pair.second = a variant of type TUintWidth or float
+		 * Does NOT check for duplicates.
+		 */
+		template <typename TEnumType,typename TUintWidth>
+		std::vector<std::pair<TEnumType,std::variant<TUintWidth,float>>> generate_random_mixed(
+				const std::vector<TEnumType>& valid_attributes,
+				float float_low,
+				float float_high,
+				TUintWidth uint_low,
+				TUintWidth uint_high,
+				uint8_t max_attributes
+		){
+			std::vector<std::pair<TEnumType,std::variant<TUintWidth,float>>> attributes;
+			uint8_t i = std::clamp(this->roll<uint8_t>(),(uint8_t)0,(uint8_t)(max_attributes));
+			if(!i){
+				return attributes;
 			}
-			*/
-			std::vector<std::pair<TEnumType,uint32_t>> requirements;
-			int i = rand_number(1,3);
-			while(--i){
-				if((*m_bernouli)(*m_bernouli_generator) && (this->roll() % rand_number(1,10)) <= rand_number(1,3)){
-					requirements.emplace_back(valid_values.at(this->roll() % valid_values.size()), this->roll());
+			while(i-- > 0){
+				if(roll<bool>()){
+					attributes.emplace_back(
+							valid_attributes.at(this->roll<uint16_t>() % valid_attributes.size()),
+							roll_float(float_low,float_high)
+					);
+				}else{
+					attributes.emplace_back(
+							valid_attributes.at(this->roll<uint16_t>() % valid_attributes.size()),
+							this->roll_between<TUintWidth>(uint_low,uint_high)
+					);
 				}
+			}
+			return attributes;
+		}
+
+		/**
+		 * Generate a vector of pairs.
+		 * Pair.first = a randomly chosen enum in valid_attributes.
+		 * Pair.second = a value of type TMeasurementType
+		 * Does NOT check for duplicates.
+		 */
+		template <typename TEnumType,typename TMeasurementType,uint8_t TNarrowAmount>
+		std::vector<std::pair<TEnumType,TMeasurementType>> generate_random(
+				const std::vector<TEnumType>& valid_values,
+				uint8_t max_requirements
+		){
+			std::vector<std::pair<TEnumType,TMeasurementType>> requirements;
+			auto i = std::clamp(this->roll<uint8_t>(),(uint8_t)0,max_requirements);
+			if(!i){
+				return requirements;
+			}
+			while(i-- > 0){
+				requirements.emplace_back(valid_values.at(this->roll<uint16_t>() % valid_values.size()), this->roll<TMeasurementType>());
 			}
 			return requirements;
 		}
 
-		void run_exp_rolls(int count){
-			int exp_rolls[2] = {};
-			for(int i = count; i > 0; --i){
-				if(exp_based_bool_roll()){
-					++exp_rolls[1];
-				}else{
-					++exp_rolls[0];
-				}
+		/**
+		 * roll a random integer
+		 */
+		template <typename TRandomType>
+		TRandomType roll(){
+			TRandomType x = rand_xoroshiro();
+			if(x == 0){
+				return 0;
 			}
-			std::cerr << "false: " << exp_rolls[0] << " true: " << exp_rolls[1] << "\n";
+			return x % std::numeric_limits<TRandomType>::max();
 		}
 
-			random_number_type_t roll();
 		private:
 			void init();
 			uint32_t m_player_level;
-			std::unique_ptr<std::random_device> m_random_device;
-			std::unique_ptr<std::mt19937> m_generator;
-			std::unique_ptr<distr_type_t> m_distribution;
-			std::unique_ptr<exponential_distr_type_t> m_exp_distribution;
-			std::unique_ptr<std::bernoulli_distribution> m_bernouli;
-			std::unique_ptr<std::default_random_engine> m_bernouli_generator;
 	};
 
 };

@@ -1,5 +1,16 @@
 # Inventory of features
 
+# game balancing checklist
+	- TODO: Balance `mods::forge_engine::generate_rifle_stat_boosts(player)`
+	- TODO: Balance `mods::forge_engine::generate_rifle_attributes(player)`
+
+# 2020-12-20 Forge Engine (Rifle Generation)
+	- new functions in namespace `mods::forge_engine`
+		- `generator::generate_rifle_stat_boosts(player)`
+		- `generator::generate_rifle_attributes(player)`
+
+	- TODO: Balance the integers within `generator::generate_rifle_*` functions
+
 # 2020-12-17 Forge Engine
 	- The Forge Engine is the portion of TDMUD that powers the randomized loot system
 		- Randomized loot means thousands of unique items

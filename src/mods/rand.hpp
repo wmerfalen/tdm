@@ -13,4 +13,5 @@ namespace mods::rand {
 	int roll(int num,int size);
 	bool chance(uint8_t chance);
 };
+uint64_t rand_xoroshiro();
 #endif
