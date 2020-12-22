@@ -185,14 +185,15 @@ static inline durability_profile_type_t to_durability_profile(std::string_view d
 		virtual int16_t write_example_file(std::string_view file);
 		uint64_t db_id();
 		uint64_t flush_to_db();
-			std::array<float,MAX_ROOM_DISTANCE> accuracy_map;
-			std::array<float,MAX_ROOM_DISTANCE> damage_map;	/** Percent per room */
+		std::array<float,MAX_ROOM_DISTANCE> accuracy_map;
+		std::array<float,MAX_ROOM_DISTANCE> damage_map;	/** Percent per room */
 
-MENTOC_MEMBER_VARS_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
+		MENTOC_MEMBER_VARS_FOR(MENTOC_RIFLE_MEMBERS_TUPLE)
 
-			MENTOC_BASE_MEMBERS
-			mods::weapon::weapon_stat_list_t* base_stat_list;
+		MENTOC_BASE_MEMBERS
+		mods::weapon::weapon_stat_list_t* base_stat_list;
 		int16_t feed_status;
+
 	};
 
 	struct explosive_description_t : public yaml_description_t {

@@ -86,6 +86,28 @@ namespace mods::forge_engine {
 			__ATTACHMENT_TYPE_LAST = ATTACHMENT_TYPE_STRAP
 		};
 
+		enum armor_attributes_t {
+			ARMOR_ATTR_THAC0 = 1,
+			ARMOR_ATTR_WEIGHT,
+			ARMOR_ATTR_INCENDIARY_RESISTANCE_PERCENT,
+			ARMOR_ATTR_EXPLOSIVE_RESISTANCE_PERCENT,
+			ARMOR_ATTR_SHRAPNEL_RESISTANCE_PERCENT,
+			ARMOR_ATTR_CORROSIVE_RESISTANCE_PERCENT,
+			ARMOR_ATTR_CRYOGENIC_RESISTANCE_PERCENT,
+			ARMOR_ATTR_RADIATION_RESISTANCE_PERCENT,
+			ARMOR_ATTR_EMP_RESISTANCE_PERCENT,
+			ARMOR_ATTR_SHOCK_RESISTANCE_PERCENT,
+			ARMOR_ATTR_ANTI_MATTER_RESISTANCE_PERCENT,
+			ARMOR_ATTR_BALISTIC_RESISTANCE_PERCENT,
+			ARMOR_ATTR_SPEED_PROFILE,
+			ARMOR_ATTR_DURABLITY_PROFILE,
+			ARMOR_ATTR_REPAIR_COST_PROFILE,
+			ARMOR_ATTR_HP,
+			ARMOR_ATTR_CLASSIFICATION,
+			ARMOR_ATTR_WORTH,
+			__ARMOR_ATTR_FIRST = ARMOR_ATTR_THAC0,
+			__ARMOR_ATTR_LAST = ARMOR_ATTR_WORTH,
+		};
 
 		enum armor_wear_types_t {
 			ARMOR_ITEM_WEAR_FINGER	=  1,
@@ -109,7 +131,7 @@ namespace mods::forge_engine {
 			ARMOR_ITEM_WEAR_BACKPACK ,
 			ARMOR_ITEM_WEAR_GOGGLES ,
 			ARMOR_ITEM_WEAR_WEAPON_ATTACHMENT ,
-			__ARMOR_WEAR_FIRST ,
+			__ARMOR_WEAR_FIRST = ARMOR_ITEM_WEAR_FINGER,
 			__ARMOR_WEAR_LAST = ARMOR_ITEM_WEAR_WEAPON_ATTACHMENT
 		};
 		enum stat_types_t {
@@ -129,7 +151,7 @@ namespace mods::forge_engine {
 			SKILL_WEAPON_HANDLING ,
 			SKILL_STRATEGY ,
 			SKILL_MEDICAL ,
-			__SKILL_TYPE_FIRST ,
+			__SKILL_TYPE_FIRST = SKILL_STR,
 			__SKILL_TYPE_LAST = SKILL_MEDICAL
 		};
 		enum elemental_types_t {
@@ -142,7 +164,7 @@ namespace mods::forge_engine {
 			ELEM_EMP ,
 			ELEM_SHOCK,
 			ELEM_ANTI_MATTER, /** combined damage of EMP and RADIOACTIVE */
-			__ELEM_FIRST ,
+			__ELEM_FIRST = ELEM_INCENDIARY,
 			__ELEM_LAST = ELEM_ANTI_MATTER,
 		};
 		enum player_class_types_t {
@@ -157,72 +179,52 @@ namespace mods::forge_engine {
 			__PLCLASS_LAST = PLCLASS_SUPPORT
 		};
 
-		static const std::vector<elemental_types_t> valid_shotgun_elemental_types = {
+		static const std::vector<armor_attributes_t> valid_armor_attributes = {
+			ARMOR_ATTR_THAC0,
+			ARMOR_ATTR_WEIGHT,
+			ARMOR_ATTR_INCENDIARY_RESISTANCE_PERCENT,
+			ARMOR_ATTR_EXPLOSIVE_RESISTANCE_PERCENT,
+			ARMOR_ATTR_SHRAPNEL_RESISTANCE_PERCENT,
+			ARMOR_ATTR_CORROSIVE_RESISTANCE_PERCENT,
+			ARMOR_ATTR_CRYOGENIC_RESISTANCE_PERCENT,
+			ARMOR_ATTR_RADIATION_RESISTANCE_PERCENT,
+			ARMOR_ATTR_EMP_RESISTANCE_PERCENT,
+			ARMOR_ATTR_SHOCK_RESISTANCE_PERCENT,
+			ARMOR_ATTR_ANTI_MATTER_RESISTANCE_PERCENT,
+			ARMOR_ATTR_BALISTIC_RESISTANCE_PERCENT,
+			ARMOR_ATTR_SPEED_PROFILE,
+			ARMOR_ATTR_DURABLITY_PROFILE,
+			ARMOR_ATTR_REPAIR_COST_PROFILE,
+			ARMOR_ATTR_HP,
+			ARMOR_ATTR_CLASSIFICATION,
+			ARMOR_ATTR_WORTH
+		};
+		static const std::vector<elemental_types_t> valid_elemental_types = {
 			ELEM_INCENDIARY,
+			ELEM_EXPLOSIVE,
 			ELEM_SHRAPNEL ,
 			ELEM_CORROSIVE ,
 			ELEM_CRYOGENIC ,
-			ELEM_SHOCK,
-			ELEM_EXPLOSIVE,
-			ELEM_RADIOACTIVE
-		};
-
-		static const std::vector<elemental_types_t> valid_smg_elemental_types = {
-			ELEM_INCENDIARY,
-			ELEM_CORROSIVE ,
-			ELEM_CRYOGENIC ,
 			ELEM_RADIOACTIVE,
-			ELEM_EMP
-		};
-
-		static const std::vector<elemental_types_t> valid_ar_elemental_types = {
-			ELEM_INCENDIARY,
-			ELEM_CORROSIVE ,
-			ELEM_CRYOGENIC ,
-			ELEM_RADIOACTIVE,
-			ELEM_EXPLOSIVE,
 			ELEM_EMP ,
+			ELEM_SHOCK,
 			ELEM_ANTI_MATTER
 		};
 
-		static const std::vector<elemental_types_t> valid_sniper_elemental_types = {
-			ELEM_INCENDIARY,
-			ELEM_CORROSIVE ,
-			ELEM_CRYOGENIC ,
-			ELEM_RADIOACTIVE,
-			ELEM_ANTI_MATTER, 
-			ELEM_EXPLOSIVE,
-			ELEM_EMP
+		static const std::vector<armor_attributes_t> armor_percentages = {
+			ARMOR_ATTR_INCENDIARY_RESISTANCE_PERCENT,
+			ARMOR_ATTR_EXPLOSIVE_RESISTANCE_PERCENT,
+			ARMOR_ATTR_SHRAPNEL_RESISTANCE_PERCENT,
+			ARMOR_ATTR_CORROSIVE_RESISTANCE_PERCENT,
+			ARMOR_ATTR_CRYOGENIC_RESISTANCE_PERCENT,
+			ARMOR_ATTR_RADIATION_RESISTANCE_PERCENT,
+			ARMOR_ATTR_EMP_RESISTANCE_PERCENT,
+			ARMOR_ATTR_SHOCK_RESISTANCE_PERCENT,
+			ARMOR_ATTR_ANTI_MATTER_RESISTANCE_PERCENT,
+			ARMOR_ATTR_BALISTIC_RESISTANCE_PERCENT,
 		};
 
-		static const std::vector<elemental_types_t> valid_pistol_elemental_types = {
-			ELEM_INCENDIARY,
-			ELEM_CORROSIVE ,
-			ELEM_CRYOGENIC ,
-			ELEM_RADIOACTIVE,
-			ELEM_SHOCK,
-			ELEM_ANTI_MATTER, 
-			ELEM_EMP
-		};
-
-		static const std::vector<elemental_types_t> valid_machine_pistol_elemental_types = {
-			ELEM_INCENDIARY,
-			ELEM_CORROSIVE ,
-			ELEM_CRYOGENIC ,
-			ELEM_SHOCK,
-			ELEM_RADIOACTIVE,
-			ELEM_EMP
-		};
-
-		static const std::vector<elemental_types_t> valid_lmg_elemental_types = {
-			ELEM_INCENDIARY ,
-			ELEM_CORROSIVE ,
-			ELEM_CRYOGENIC ,
-			ELEM_RADIOACTIVE,
-			ELEM_EMP ,
-			ELEM_EXPLOSIVE,
-			ELEM_ANTI_MATTER
-		};
+		static const std::vector<elemental_types_t> empty_elemental_types = { };
 
 		static const std::vector<rifle_attributes_t> valid_rifle_attributes = {
 			RIFLE_ATTRIBUTES_AMMO_MAX,
@@ -346,7 +348,6 @@ namespace mods::forge_engine {
 			RIFLE_ATTRIBUTES_RELOAD_TIME
 		};
 
-
 	struct generated_rifle_t {
 		rifle_types_t type;
 		std::vector<std::pair<stat_types_t,uint32_t>> requirements;
@@ -361,13 +362,32 @@ namespace mods::forge_engine {
 		~generator();
 
 		rifle_attributes_t random_rifle_attribute();
-		std::vector<std::pair<stat_types_t,uint32_t>> generate_rifle_requirements(player_ptr_t& player);
-		std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> generate_rifle_attributes();
-		std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> generate_rifle_stat_boosts(player_ptr_t& player);
-
 		rifle_types_t random_rifle_type();
 		item_types_t random_item_type();
+		armor_wear_types_t random_armor_type(){
+			return (armor_wear_types_t)(this->roll_between((uint8_t)__ARMOR_WEAR_FIRST,(uint8_t)__ARMOR_WEAR_LAST));
+		}
+		elemental_types_t random_elemental_type(){
+			return (elemental_types_t)(this->roll_between((uint8_t)__ELEM_FIRST, (uint8_t)__ELEM_LAST));
+		}
+		elemental_types_t random_elemental_resistance(armor_wear_types_t type){
+			return (elemental_types_t)(this->roll_between((uint8_t)__ELEM_FIRST, (uint8_t)__ELEM_LAST));
+		}
+		explosive_types_t random_explosive_type(){
+			return (explosive_types_t)(this->roll_between((uint8_t)__EXPLOSIVE_TYPE_FIRST, (uint8_t)__EXPLOSIVE_TYPE_LAST));
+		}
+		attachment_types_t random_attachment_type(){
+			return (attachment_types_t)(this->roll_between((uint8_t)__ATTACHMENT_TYPE_FIRST, (uint8_t)__ATTACHMENT_TYPE_LAST));
+		};
 
+		/** random rifle functions */
+		/** random rifle functions */
+		std::vector<std::pair<stat_types_t,uint32_t>> generate_rifle_requirements(player_ptr_t& player);
+
+		std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> generate_rifle_attributes(player_ptr_t& player);
+		std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> generate_rifle_stat_boosts(player_ptr_t& player);
+		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> generate_rifle_elemental_boosts(player_ptr_t& player);
+		/** end random rifle functions */
 
 		int pclass_to_real_pclass(player_class_types_t type){
 			switch(type){
@@ -416,6 +436,9 @@ namespace mods::forge_engine {
 				uint8_t max_attributes
 		){
 			std::vector<std::pair<TEnumType,std::variant<TUintWidth,float>>> attributes;
+			if(valid_attributes.size() == 0){
+				return attributes;
+			}
 			uint8_t i = std::clamp(this->roll<uint8_t>(),(uint8_t)0,(uint8_t)(max_attributes));
 			if(!i){
 				return attributes;
@@ -448,6 +471,9 @@ namespace mods::forge_engine {
 				uint8_t max_requirements
 		){
 			std::vector<std::pair<TEnumType,TMeasurementType>> requirements;
+			if(valid_values.size() == 0){
+				return requirements;
+			}
 			auto i = std::clamp(this->roll<uint8_t>(),(uint8_t)0,max_requirements);
 			if(!i){
 				return requirements;

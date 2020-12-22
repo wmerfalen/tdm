@@ -611,6 +611,15 @@ namespace mods::yaml {
 			this->exported["rifle_name"] = name;
 			this->exported["rifle_vnum"] = std::to_string(vnum);
 			this->exported["rifle_file"] = feed_file;
+			this->exported["rifle_incendiary_damage"] = std::to_string(incendiary_damage);
+			this->exported["rifle_explosive_damage"] = std::to_string(explosive_damage);
+			this->exported["rifle_shrapnel_damage"] = std::to_string(shrapnel_damage);
+			this->exported["rifle_corrosive_damage"] = std::to_string(corrosive_damage);
+			this->exported["rifle_cryogenic_damage"] = std::to_string(cryogenic_damage);
+			this->exported["rifle_radioactive_damage"] = std::to_string(radioactive_damage);
+			this->exported["rifle_emp_damage"] = std::to_string(emp_damage);
+			this->exported["rifle_shock_damage"] = std::to_string(shock_damage);
+			this->exported["rifle_anti_matter_damage"] = std::to_string(anti_matter_damage);
 			for(auto & rarity_pair : rarity_strings()){
 				if(rarity == rarity_pair.second){
 					this->exported["rifle_rarity"] = rarity_pair.first;

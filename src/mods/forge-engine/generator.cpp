@@ -3,6 +3,7 @@
 #include "../super-users.hpp"
 
 namespace mods::forge_engine {
+	static mods::forge_engine::generator item_generator;
 	static constexpr float ATTRIBUTE_LOW = 1.0;
 	static constexpr float ATTRIBUTE_HIGH= 10000.0;
 	static constexpr uint8_t MAX_ATTRIBUTES = 35;
@@ -24,7 +25,89 @@ namespace mods::forge_engine {
 	generator::~generator(){
 		std::cout << "[generator::~generator]\n";
 	}
+	std::string to_string(attachment_types_t t){
+		switch(t){
+#define M_LAZY(A) case A: return #A;
+			M_LAZY(ATTACHMENT_TYPE_SIGHT);
+			M_LAZY(ATTACHMENT_TYPE_UNDER_BARREL);
+			M_LAZY(ATTACHMENT_TYPE_GRIP);
+			M_LAZY(ATTACHMENT_TYPE_BARREL);
+			M_LAZY(ATTACHMENT_TYPE_MUZZLE);
+			M_LAZY(ATTACHMENT_TYPE_MAGAZINE);
+			M_LAZY(ATTACHMENT_TYPE_STOCK);
+			M_LAZY(ATTACHMENT_TYPE_STRAP);
+#undef M_LAZY
+			default:
+			return "<unknown>";
+		}
+	}
 
+	std::string to_string(explosive_types_t t){
+		switch(t){
+#define M_LAZY(A) case A: return #A;
+			M_LAZY(EXPLOSIVE_TYPE_FRAG_GRENADE);
+			M_LAZY(EXPLOSIVE_TYPE_INCENDIARY_GRENADE);
+			M_LAZY(EXPLOSIVE_TYPE_REMOTE_EXPLOSIVE);
+			M_LAZY(EXPLOSIVE_TYPE_REMOTE_CHEMICAL);
+			M_LAZY(EXPLOSIVE_TYPE_EMP_GRENADE);
+			M_LAZY(EXPLOSIVE_TYPE_CLAYMORE_MINE);
+			M_LAZY(EXPLOSIVE_TYPE_SMOKE_GRENADE);
+			M_LAZY(EXPLOSIVE_TYPE_C4);
+			M_LAZY(EXPLOSIVE_TYPE_BREACH_CHARGE);
+			M_LAZY(EXPLOSIVE_TYPE_THERMITE_CHARGE);
+			M_LAZY(EXPLOSIVE_TYPE_FLASHBANG_GRENADE);
+			M_LAZY(EXPLOSIVE_TYPE_SENSOR_GRENADE);
+#undef M_LAZY
+			default:
+			return "<unknown>";
+		}
+	}
+	std::string to_string(armor_wear_types_t t){
+		switch(t){
+#define M_LAZY(A) case A: return #A;
+M_LAZY(ARMOR_ITEM_WEAR_FINGER);
+M_LAZY(ARMOR_ITEM_WEAR_NECK);
+M_LAZY(ARMOR_ITEM_WEAR_BODY);
+M_LAZY(ARMOR_ITEM_WEAR_HEAD);
+M_LAZY(ARMOR_ITEM_WEAR_LEGS);
+M_LAZY(ARMOR_ITEM_WEAR_FEET);
+M_LAZY(ARMOR_ITEM_WEAR_HANDS);
+M_LAZY(ARMOR_ITEM_WEAR_ARMS);
+M_LAZY(ARMOR_ITEM_WEAR_SHIELD);
+M_LAZY(ARMOR_ITEM_WEAR_ABOUT);
+M_LAZY(ARMOR_ITEM_WEAR_WAIST);
+M_LAZY(ARMOR_ITEM_WEAR_WRIST);
+M_LAZY(ARMOR_ITEM_WEAR_WIELD);
+M_LAZY(ARMOR_ITEM_WEAR_HOLD);
+M_LAZY(ARMOR_ITEM_WEAR_SECONDARY);
+M_LAZY(ARMOR_ITEM_WEAR_SHOULDERS);
+M_LAZY(ARMOR_ITEM_WEAR_VEST_PACK);
+M_LAZY(ARMOR_ITEM_WEAR_ELBOW);
+M_LAZY(ARMOR_ITEM_WEAR_BACKPACK);
+M_LAZY(ARMOR_ITEM_WEAR_GOGGLES);
+M_LAZY(ARMOR_ITEM_WEAR_WEAPON_ATTACHMENT);
+#undef M_LAZY
+			default:
+			return "<unknown>";
+		}
+	}
+	std::string to_string(elemental_types_t t){
+		switch(t){
+#define M_LAZY(A) case A: return #A;
+			M_LAZY(ELEM_INCENDIARY);
+			M_LAZY(ELEM_EXPLOSIVE);
+			M_LAZY(ELEM_SHRAPNEL);
+			M_LAZY(ELEM_CORROSIVE);
+			M_LAZY(ELEM_CRYOGENIC);
+			M_LAZY(ELEM_RADIOACTIVE);
+			M_LAZY(ELEM_EMP);
+			M_LAZY(ELEM_SHOCK);
+			M_LAZY(ELEM_ANTI_MATTER);
+#undef M_LAZY
+			default:
+			return "<unknown>";
+		}
+	}
 	std::string to_string(stat_types_t t){
 		switch(t){
 #define M_LAZY(A) case A: return #A;
@@ -120,26 +203,24 @@ namespace mods::forge_engine {
 		return valid_rifle_attributes.at(this->roll<uint32_t>() % size);
 	}
 
-	std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> generator::generate_rifle_attributes(){
-		std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> attributes;
-		uint8_t i = this->roll<uint8_t>() % MAX_ATTRIBUTES;
-		if(!i){
-			return attributes;
-		}
-		while(i-- > 0){
-			if(roll<bool>()){
-				attributes.emplace_back(
-						valid_rifle_attributes.at(this->roll<uint16_t>() % valid_rifle_attributes.size()),
-						roll_float(ATTRIBUTE_LOW,ATTRIBUTE_HIGH)
-				);
-			}else{
-				attributes.emplace_back(
-						valid_rifle_attributes.at(this->roll<uint16_t>() % valid_rifle_attributes.size()),
-						this->roll<uint32_t>()
-				);
-			}
-		}
-		return attributes;
+	std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> generator::generate_rifle_attributes(player_ptr_t& player){
+		/** TODO: game balancing: these values need to be tweaked */
+		float level = (float)player->level();
+		float low = 1.0;
+		float high = level * 0.9;
+		float low_low = level / 3.5;
+		float stat_low = std::clamp(low_low, low,high);
+		float stat_high = std::clamp(level,low+1,high+2);
+		uint32_t low_level = player->level() / 3;
+		uint32_t high_level = player->level() / 1.3;
+		uint32_t low_low_clamp = 1, low_high_clamp = 4 + player->level();
+		uint32_t high_low_clamp = 2, high_high_clamp = 5 + player->level();
+		uint32_t uint_low = std::clamp(low_level, low_low_clamp, low_high_clamp);
+		uint32_t uint_high = std::clamp(high_level, high_low_clamp, high_high_clamp);
+		uint8_t max_rifle_stats = player->level() + 10;
+		player->send("stat_low: %f\nstat_high: %f\nuint_low: %d\nuint_high: %d\nmax_stats: %d\n\n",stat_low,stat_high,uint_low,uint_high, max_rifle_stats);
+
+		return generate_random_mixed<rifle_attributes_t,uint32_t>(valid_rifle_attributes,stat_low,stat_high,uint_low,uint_high,max_rifle_stats);
 	}
 
 	std::vector<std::pair<stat_types_t,uint32_t>> generator::generate_rifle_requirements(player_ptr_t& player){
@@ -169,6 +250,25 @@ namespace mods::forge_engine {
 		return generate_random_mixed<stat_types_t,uint32_t>(valid_rifle_stats_boosts,stat_low,stat_high,uint_low,uint_high,max_rifle_stats);
 	}
 
+	std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> generator::generate_rifle_elemental_boosts(player_ptr_t& player){
+		/** TODO: game balancing: these values need to be tweaked */
+		float level = (float)player->level();
+		float low = 1.0;
+		float high = level * 0.9;
+		float low_low = level / 3.5;
+		float stat_low = std::clamp(low_low, low,high);
+		float stat_high = std::clamp(level,low+1,high+2);
+		uint32_t low_level = player->level() / 3;
+		uint32_t high_level = player->level() / 1.3;
+		uint32_t low_low_clamp = 1, low_high_clamp = 4 + player->level();
+		uint32_t high_low_clamp = 2, high_high_clamp = 5 + player->level();
+		uint32_t uint_low = std::clamp(low_level, low_low_clamp, low_high_clamp);
+		uint32_t uint_high = std::clamp(high_level, high_low_clamp, high_high_clamp);
+		uint8_t max_rifle_stats = 1;
+		player->send("stat_low: %f\nstat_high: %f\nuint_low: %d\nuint_high: %d\nmax_stats: %d\n\n",stat_low,stat_high,uint_low,uint_high, max_rifle_stats);
+		return generate_random_mixed<elemental_types_t,uint32_t>(valid_elemental_types, stat_low,stat_high,uint_low,uint_high,max_rifle_stats);
+
+	}
 	item_types_t generator::random_item_type(){
 		uint32_t size = std::distance(active_item_types.begin(),active_item_types.end());
 		return active_item_types.at(this->roll<uint32_t>() % size);
@@ -193,11 +293,8 @@ namespace mods::forge_engine {
 			return;
 		}
 		using namespace mods::forge_engine;
-		generator gen;
 		auto saved_level = player->level();
-		if(vec_args[0].compare("rifle") == 0){
-			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> stats;
-			std::vector<std::pair<stat_types_t,uint32_t>> requirements;
+		if(vec_args[0].compare("explosive") == 0){
 			for(uint8_t i = 1; i < vec_args.size(); ++i){
 				int level = mods::util::stoi(vec_args[i]).value_or(-1);
 				if(level <= 0){
@@ -205,7 +302,45 @@ namespace mods::forge_engine {
 					continue;
 				}
 				player->level() = level;
-				stats = gen.generate_rifle_stat_boosts(player);
+				auto explosive_type = mods::forge_engine::item_generator.random_explosive_type();
+				auto elem = mods::forge_engine::item_generator.random_elemental_type();
+				player->send("Explosive type: %s, elemental: %s\r\n",to_string(explosive_type).c_str(), to_string(elem).c_str());
+			}
+			player->level() = saved_level;
+		}
+		if(vec_args[0].compare("armor") == 0){
+			for(uint8_t i = 1; i < vec_args.size(); ++i){
+				int level = mods::util::stoi(vec_args[i]).value_or(-1);
+				if(level <= 0){
+					player->error(CAT("Invalid numeric value encountered at string: '",vec_args[i],"'\r\n"));
+					continue;
+				}
+				player->level() = level;
+				auto armor_type = mods::forge_engine::item_generator.random_armor_type();
+				auto elem = mods::forge_engine::item_generator.random_elemental_resistance(armor_type);
+				player->send("Armor type: %s, elemental: %s\r\n",to_string(armor_type).c_str(), to_string(elem).c_str());
+			}
+			player->level() = saved_level;
+		}
+		if(vec_args[0].compare("rifle") == 0){
+			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> stats;
+			std::vector<std::pair<stat_types_t,uint32_t>> requirements;
+			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> elementals;
+			std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> attributes;
+			for(uint8_t i = 1; i < vec_args.size(); ++i){
+				int level = mods::util::stoi(vec_args[i]).value_or(-1);
+				if(level <= 0){
+					player->error(CAT("Invalid numeric value encountered at string: '",vec_args[i],"'\r\n"));
+					continue;
+				}
+				player->level() = level;
+				auto rifle_type = mods::forge_engine::item_generator.random_rifle_type();
+				player->send("random rifle type: %s\r\n", to_string(rifle_type).c_str());
+				attributes = mods::forge_engine::item_generator.generate_rifle_attributes(player);
+				for(auto & req : attributes){
+					player->send("attribute: %s: %d\r\n",to_string(req.first).c_str(),req.second);
+				}
+				stats = mods::forge_engine::item_generator.generate_rifle_stat_boosts(player);
 				for(auto & req : stats){
 					if(std::holds_alternative<float>(req.second)){
 						player->send("stat_boost: %s: %f\r\n",to_string(req.first).c_str(),std::get<float>(req.second));
@@ -213,7 +348,15 @@ namespace mods::forge_engine {
 						player->send("stat_boost: %s: %d\r\n",to_string(req.first).c_str(),std::get<uint32_t>(req.second));
 					}
 				}
-				requirements = gen.generate_rifle_requirements(player);
+				elementals = mods::forge_engine::item_generator.generate_rifle_elemental_boosts(player);
+				for(auto & req : elementals){
+					if(std::holds_alternative<float>(req.second)){
+						player->send("stat_boost: %s: %f\r\n",to_string(req.first).c_str(),std::get<float>(req.second));
+					}else if(std::holds_alternative<uint32_t>(req.second)){
+						player->send("stat_boost: %s: %d\r\n",to_string(req.first).c_str(),std::get<uint32_t>(req.second));
+					}
+				}
+				requirements = mods::forge_engine::item_generator.generate_rifle_requirements(player);
 				for(auto & req : requirements){
 					player->send("requirement: %s: %d\r\n",to_string(req.first).c_str(),req.second);
 				}
@@ -224,8 +367,6 @@ namespace mods::forge_engine {
 
 	/** game init */
 	void init(){
-		using namespace mods::forge_engine;
-		generator gen;
 		mods::interpreter::add_command("reward", POS_RESTING, do_reward, LVL_BUILDER,0);
 	}
 };
