@@ -65,7 +65,7 @@ INIT(mods::rate_limiting);
 INIT(mods::levels);
 INIT(mods::orm::pba);
 INIT(mods::classes);
-INIT(mods::forge_engine);
+INIT(mods::loot);
 INIT(mods::forge_engine::value_scaler_static);
 #undef INIT
 
@@ -119,34 +119,34 @@ namespace mods {
 		std::map<obj_vnum,std::string> obj_stat_pages;
 
 		template <typename I>
-			I random_element(I begin, I end) {
-				const unsigned long n = std::distance(begin, end);
-				const unsigned long divisor = (RAND_MAX + 1) / n;
+		I random_element(I begin, I end) {
+			const unsigned long n = std::distance(begin, end);
+			const unsigned long divisor = (RAND_MAX + 1) / n;
 
-				unsigned long k;
+			unsigned long k;
 
-				do {
-					std::srand(std::time(0));
-					k = std::rand() / divisor;
-				} while(k >= n);
+			do {
+				std::srand(std::time(0));
+				k = std::rand() / divisor;
+			} while(k >= n);
 
-				std::advance(begin, k);
-				return begin;
-			}
+			std::advance(begin, k);
+			return begin;
+		}
 
 		template<typename Iter, typename RandomGenerator>
-			Iter select_randomly(Iter start, Iter end, RandomGenerator& g) {
-				std::uniform_int_distribution<> dis(0, std::distance(start, end) - 1);
-				std::advance(start, dis(g));
-				return start;
-			}
+		Iter select_randomly(Iter start, Iter end, RandomGenerator& g) {
+			std::uniform_int_distribution<> dis(0, std::distance(start, end) - 1);
+			std::advance(start, dis(g));
+			return start;
+		}
 
 		template<typename Iter>
-			Iter select_randomly(Iter start, Iter end) {
-				static std::random_device rd;
-				static std::mt19937 gen(rd());
-				return select_randomly(start, end, gen);
-			}
+		Iter select_randomly(Iter start, Iter end) {
+			static std::random_device rd;
+			static std::mt19937 gen(rd());
+			return select_randomly(start, end, gen);
+		}
 
 		/** This function sucks */
 		std::string replace_all(std::string str, const std::string& from, const std::string& to) {
@@ -168,25 +168,25 @@ namespace mods {
 			obj_odmap[obj.get()] = obj;
 			register_object_db_id(obj->db_id(),obj->uuid);
 		}
-		void register_object_db_id(uint64_t db_id,uuid_t uuid){
+		void register_object_db_id(uint64_t db_id,uuid_t uuid) {
 			db_id_to_uuid_map[db_id] = uuid;
 		}
-		void register_player(player_ptr_t player){
+		void register_player(player_ptr_t player) {
 			player_chmap[player->cd()] = player;
 			player_map[player->uuid()] = player;
 		}
-		void register_authenticated_player(player_ptr_t player){
+		void register_authenticated_player(player_ptr_t player) {
 			std::cerr << "registering authenticated user...:'" << player->name().c_str() << "'\n";
 			player_name_map[player->name()] = player;
-			for(auto & pair : player_name_map){
+			for(auto& pair : player_name_map) {
 				std::cerr << "[name:" << pair.first << "]\n";
 			}
 		}
-		void unregister_authenticated_player(player_ptr_t player){
+		void unregister_authenticated_player(player_ptr_t player) {
 			player_name_map.erase(player->name());
 		}
 
-		void shutdown(void){
+		void shutdown(void) {
 			circle_shutdown = 1;
 		}
 		/** !todo: phase this function out */
@@ -196,15 +196,15 @@ namespace mods {
 		int mobile_activity(char_data* ch) {
 			return 1;
 		}
-		bool is_argument(std::string_view argv,std::string_view test){
+		bool is_argument(std::string_view argv,std::string_view test) {
 			std::string s = argv.data();
-			if(s.length() < test.length()){
+			if(s.length() < test.length()) {
 				return false;
 			}
 			s.substr(0,test.length());
 			return strncmp(s.data(),test.data(),test.length()) == 0;
 		}
-		std::string slice_option_off(std::string_view argv,std::string_view option_including_equals){
+		std::string slice_option_off(std::string_view argv,std::string_view option_including_equals) {
 			std::string sliced = argv.data();
 			sliced = sliced.substr(option_including_equals.length());
 			return sliced;
@@ -212,9 +212,9 @@ namespace mods {
 		void init(int argc,char** argv) {
 			int pos = 0;
 			std::string argument,
-				lmdb_dir = LMDB_DB_DIRECTORY,
-				lmdb_name = LMDB_DB_NAME,
-				f_test_suite;
+			    lmdb_dir = LMDB_DB_DIRECTORY,
+			    lmdb_name = LMDB_DB_NAME,
+			    f_test_suite;
 			f_import_rooms = false;
 			boot_type = BOOT_DB;
 			config::run_profile_scripts = false;
@@ -227,50 +227,50 @@ namespace mods {
 			mods::world_conf::toggle::set_obj_from_room(1);
 			std::vector<std::tuple<std::string,std::string>> migrations;
 
-			while(++pos < argc){
-				if(argv[pos]){
+			while(++pos < argc) {
+				if(argv[pos]) {
 					argument = argv[pos];
-				}else{
+				} else {
 					argument = "";
 				}
-				if(strncmp(argv[pos],"--help",6) == 0 || strncmp(argv[pos],"-h",2) == 0){
-					std::cerr << "usage: <circle> --postgres-pw-file=<file> [options]\n" 
-						<< "--auto-login=user Automatically login as user on connection [use only for development]\n" 
-						<< "--auto-password=password Automatically login and use password on connection [use only for development]\n" 
-						<< "--testing=<suite>	Launch test suite\n"
-						<< "--import-rooms 	Run the import rooms routine\n"
-						<< "--hell 	Start the mud in HELL mode\n"
-						<< "--lmdb-name=<name> use name as lmdb db name\n"
-						<< "--lmdb-dir=<dir> use dir as directory to store lmdb data\n"
-						<< "--postgres-dbname=<db> use db as postgres db. default: mud\n"
-						<< "--postgres-user=<user> use user as postgres user. default: postgres\n"
-						<< "--postgres-host=<host> use host as postgres host. default: localhost\n"
-						<< "--postgres-port=<port> use port as postgres port. default: 5432\n"
-						<< "--postgres-pw-file=<file> read postgres password from file. no default. required.\n"
-						<< "--run-profile-scripts=<0|1> set to 1 to run profile scripts. default: 0\n"
-						<< "--show-tics show a dot for every game tic\n"
-						<< "--seed=<what> seed the database with one of the following:\n"
-						<< "--run-migration-up=<identifier> run the specified 'up' migration\n"
-						<< "--run-migration-down=<identifier> run the specified 'down' migration\n"
-						<< "     'player_classes': character generation\n"
-						<< "     '': ''\n"
-						;
+				if(strncmp(argv[pos],"--help",6) == 0 || strncmp(argv[pos],"-h",2) == 0) {
+					std::cerr << "usage: <circle> --postgres-pw-file=<file> [options]\n"
+					          << "--auto-login=user Automatically login as user on connection [use only for development]\n"
+					          << "--auto-password=password Automatically login and use password on connection [use only for development]\n"
+					          << "--testing=<suite>	Launch test suite\n"
+					          << "--import-rooms 	Run the import rooms routine\n"
+					          << "--hell 	Start the mud in HELL mode\n"
+					          << "--lmdb-name=<name> use name as lmdb db name\n"
+					          << "--lmdb-dir=<dir> use dir as directory to store lmdb data\n"
+					          << "--postgres-dbname=<db> use db as postgres db. default: mud\n"
+					          << "--postgres-user=<user> use user as postgres user. default: postgres\n"
+					          << "--postgres-host=<host> use host as postgres host. default: localhost\n"
+					          << "--postgres-port=<port> use port as postgres port. default: 5432\n"
+					          << "--postgres-pw-file=<file> read postgres password from file. no default. required.\n"
+					          << "--run-profile-scripts=<0|1> set to 1 to run profile scripts. default: 0\n"
+					          << "--show-tics show a dot for every game tic\n"
+					          << "--seed=<what> seed the database with one of the following:\n"
+					          << "--run-migration-up=<identifier> run the specified 'up' migration\n"
+					          << "--run-migration-down=<identifier> run the specified 'down' migration\n"
+					          << "     'player_classes': character generation\n"
+					          << "     '': ''\n"
+					          ;
 					mods::globals::shutdown();
 					exit(0);
 				}
-				if(is_argument(argument,"--run-migration-up=")){
+				if(is_argument(argument,"--run-migration-up=")) {
 					std::string migration_id = slice_option_off(argument,"--run-migration-up=");
-					if(migration_id.length() == 0){
+					if(migration_id.length() == 0) {
 						std::cerr << "[ERROR]: what is this (UP) migration? it's of zero length: '" << argument << "'\nExiting...\n";
 						exit(1);
 					}
 					migrations.push_back(std::make_tuple<>("up",migration_id));
 					continue;
 				}
-				if(is_argument(argument,"--run-migration-down=")){
+				if(is_argument(argument,"--run-migration-down=")) {
 					std::string migration_id = slice_option_off(argument,"--run-migration-down=");
 					std::cout << "migration_id:'" << migration_id << "'\n";
-					if(migration_id.length() == 0){
+					if(migration_id.length() == 0) {
 						std::cerr << "[ERROR]: what is this (DOWN) migration? it's of zero length: '" << argument << "'\nExiting...\n";
 						exit(1);
 					}
@@ -278,58 +278,58 @@ namespace mods {
 					continue;
 				}
 
-				if(strncmp(argv[pos],"--show-tics",11) == 0){
+				if(strncmp(argv[pos],"--show-tics",11) == 0) {
 					show_tics = true;
 					continue;
 				}
 
-				if(strncmp(argv[pos],"--auto-login=",13) == 0){
+				if(strncmp(argv[pos],"--auto-login=",13) == 0) {
 					mods::auto_login::set_user(argument.substr(13,argument.length()-13));
 					continue;
 				}
-				if(strncmp(argv[pos],"--run-profile-scripts=",22) == 0){
-					if(argument.length() != 23){
+				if(strncmp(argv[pos],"--run-profile-scripts=",22) == 0) {
+					if(argument.length() != 23) {
 						std::cerr << "Please specify 1 or 0(zero) for --run-profile-scripts\n";
 						exit(-1);
 					}
-					if(argument[22] == '1'){
+					if(argument[22] == '1') {
 						std::cerr << "[cli conf]: enabling profile scripts\n";
 						config::run_profile_scripts = true;
 					}
 					continue;
 				}
-				if(strncmp(argv[pos],"--auto-password=",16) == 0){
+				if(strncmp(argv[pos],"--auto-password=",16) == 0) {
 					mods::auto_login::set_password(argument.substr(16,argument.length()-16));
 					continue;
 				}
-				if(strncmp(argv[pos],"--testing=",10) == 0){
+				if(strncmp(argv[pos],"--testing=",10) == 0) {
 					f_test_suite = argument.substr(10,argument.length()-10);
 					continue;
 				}
-				if(strncmp(argv[pos],"--import-rooms",14) == 0){
+				if(strncmp(argv[pos],"--import-rooms",14) == 0) {
 					f_import_rooms = true;
 					continue;
 				}
-				if(strncmp(argv[pos],"--hell",6) == 0){
+				if(strncmp(argv[pos],"--hell",6) == 0) {
 					boot_type = BOOT_HELL;
 					continue;
 				}
-				if(strncmp(argv[pos],"--lmdb-name=",12) == 0){
+				if(strncmp(argv[pos],"--lmdb-name=",12) == 0) {
 					lmdb_name = argument.substr(12,argument.length()-12);
 					log((std::string("DEBUG: found lmdb db name: ") + lmdb_name).c_str());
 					continue;
 				}
-				if(strncmp(argv[pos],"--postgres-pw-file=",19) == 0){
-					if(argument.length()  < 20){
+				if(strncmp(argv[pos],"--postgres-pw-file=",19) == 0) {
+					if(argument.length()  < 20) {
 						log("SYSERR: --postgres-pw-file expects an argument, none found: '",argument.c_str(),"'.Exiting...");
 						mods::globals::shutdown();
 					}
 					std::string pw_file = argument.substr(19,argument.length()-19);
 					std::ifstream in_file(pw_file.c_str(),std::ios::in | std::ios::binary);
-					if(!in_file.good() || !in_file.is_open()){
+					if(!in_file.good() || !in_file.is_open()) {
 						log("SYSERR: unable to open password file. Exiting...");
 						mods::globals::shutdown();
-					}else{
+					} else {
 						struct stat statbuf;
 						if(stat(pw_file.c_str(), &statbuf) == -1) {
 							log("SYSERR:  cannot stat password file. Exiting...");
@@ -342,13 +342,13 @@ namespace mods {
 						in_file.close();
 						postgres_password.assign(buffer.begin(),buffer.end());
 						std::size_t i = postgres_password.length() -1;
-						if(i == 1){
+						if(i == 1) {
 							log("SYSERR: the postgres password is one character long. Please check the postgres password file");
 							mods::globals::shutdown();
 							return;
 						}
-						while(isspace(postgres_password[i--]) && i > 0){}
-						if(i == 0){
+						while(isspace(postgres_password[i--]) && i > 0) {}
+						if(i == 0) {
 							log("SYSERR: while trying to trim the end of the postgres password of spaces (using isspace()), the resulting postgres password is zero length. Exiting...");
 							mods::globals::shutdown();
 							return;
@@ -357,47 +357,47 @@ namespace mods {
 						continue;
 					}
 				}
-				if(strncmp(argv[pos],"--postgres-host=",16) == 0){
-					if(argument.length()  < 16){
+				if(strncmp(argv[pos],"--postgres-host=",16) == 0) {
+					if(argument.length()  < 16) {
 						log("SYSERR: --postgres-host expects an argument, none found: '",argv[pos],"'. Exiting...");
 						mods::globals::shutdown();
-					}else{
+					} else {
 						postgres_host = argument.substr(16,argument.length()-16);
 						continue;
 					}
 				}
-				if(strncmp(argv[pos],"--postgres-user=",16) == 0){
-					if(argument.length()  < 16){
+				if(strncmp(argv[pos],"--postgres-user=",16) == 0) {
+					if(argument.length()  < 16) {
 						log("SYSERR: --postgres-user expects an argument, none found: '",argv[pos],"'. Exiting...");
 						mods::globals::shutdown();
-					}else{
+					} else {
 						postgres_user = argument.substr(16,argument.length()-16);
 						continue;
 					}
 				}
-				if(strncmp(argv[pos],"--postgres-dbname=",18) == 0){
-					if(argument.length() < 18){
-						log("SYSERR: --postgres-port expects an argument, none found: '" ,argv[pos],"'.Exiting...");
+				if(strncmp(argv[pos],"--postgres-dbname=",18) == 0) {
+					if(argument.length() < 18) {
+						log("SYSERR: --postgres-port expects an argument, none found: '",argv[pos],"'.Exiting...");
 						mods::globals::shutdown();
-					}else{
+					} else {
 						postgres_dbname = argument.substr(18,argument.length()-14);
 						continue;
 					}
 				}
-				if(strncmp(argv[pos],"--postgres-port=",16) == 0){
-					if(argument.length() < 16){
-						log("SYSERR: --postgres-port expects an argument, none found: '" ,argv[pos],"'.Exiting...");
+				if(strncmp(argv[pos],"--postgres-port=",16) == 0) {
+					if(argument.length() < 16) {
+						log("SYSERR: --postgres-port expects an argument, none found: '",argv[pos],"'.Exiting...");
 						mods::globals::shutdown();
-					}else{
+					} else {
 						postgres_port = argument.substr(16,argument.length()-16);
 						continue;
 					}
 				}
-				if(strncmp(argv[pos],"--lmdb-dir=",11) == 0){
-					if(argument.length() < 12){
+				if(strncmp(argv[pos],"--lmdb-dir=",11) == 0) {
+					if(argument.length() < 12) {
 						log("SYSERR: --lmdb-dir expects an argument, none found: '",argv[pos],"'. Exiting...");
 						mods::globals::shutdown();
-					}else{
+					} else {
 						lmdb_dir = argument.substr(11,argument.length()-11);
 						log((std::string("DEBUG: found lmdb directory: ")+ lmdb_dir).c_str());
 						continue;
@@ -405,9 +405,9 @@ namespace mods {
 				}
 			}
 
-			if(!mods::util::dir_exists(lmdb_dir.c_str())){
+			if(!mods::util::dir_exists(lmdb_dir.c_str())) {
 				auto err = mkdir(lmdb_dir.c_str(),0700);
-				if(err == -1){
+				if(err == -1) {
 					log("SYSERR: The lmdb database directory couldn't be created: ", mods::util::err::get_string(errno).c_str());
 					mods::globals::shutdown();
 				}
@@ -418,9 +418,9 @@ namespace mods {
 			duktape_context = mods::js::new_context();
 			mods::js::load_c_functions();
 			/** TODO: make configurable */
-			mods::js::load_library(mods::globals::duktape_context,"/lib/quests/quests.js"); 
+			mods::js::load_library(mods::globals::duktape_context,"/lib/quests/quests.js");
 			mods::behaviour_tree_impl::load_trees();
-			if(f_test_suite.length()){
+			if(f_test_suite.length()) {
 				//if(!f_test_suite.compare("db")){
 				//	mods::testing::lmdb::db test(argc,argv);
 				//}
@@ -430,42 +430,42 @@ namespace mods {
 				mods::globals::shutdown();
 			}
 			bool connected_to_postgres = false;
-			try{
-				std::string connection_string = mods::conf::pq_connection(
-						{{"port",postgres_port},
-						{"user",postgres_user},
-						{"password",postgres_password},
-						{"host",postgres_host},
-						{"dbname",postgres_dbname}}
-						).c_str();
+			try {
+				std::string connection_string = mods::conf::pq_connection({
+					{"port",postgres_port},
+					{"user",postgres_user},
+					{"password",postgres_password},
+					{"host",postgres_host},
+					{"dbname",postgres_dbname}}
+				                                                         ).c_str();
 				pq_con = std::make_unique<pqxx::connection>(connection_string.c_str());
 				connected_to_postgres = true;
-			}catch(const std::exception &e){
+			} catch(const std::exception& e) {
 				std::cerr << red_str("[POSTGRES CONNECTION ERROR]:'") << red_str(e.what()) << "'\n";
 				std::cerr << red_str("Shutting down in 10 seconds...\n");
 				sleep(10);
 				mods::globals::shutdown();
 				exit(1);
 			}
-			if(connected_to_postgres){
+			if(connected_to_postgres) {
 				std::cout << green_str("[postgres] connected :)") << "\n";
-			}else{
+			} else {
 				log("SYSERR: Couldn't connect to postgres");
 				mods::globals::shutdown();
 				return;
 			}
-			if(migrations.size()){
-				for(auto t : migrations){
+			if(migrations.size()) {
+				for(auto t : migrations) {
 					auto direction = std::get<0>(t);
 					auto identifier = std::get<1>(t);
 					mods::migrations::report_migration_status(CAT("running [",direction,"] migration: '",identifier,"'"),"status");
 					std::tuple<bool,int,std::string> status = mods::migrations::run_migration(identifier,"run a migration from the cli",direction);
 					int code = std::get<1>(status);
 					std::string error_message = std::get<2>(status);
-					if(code < 0){
+					if(code < 0) {
 						mods::migrations::report_migration_status(CAT("Error running [",direction,"] migration: '",identifier,"': error message: '", error_message, "'"),"error");
 						exit(1);
-					}else{
+					} else {
 						mods::migrations::report_migration_status(CAT("Successfully ran [",direction,"] migration: '",identifier,"'"),"success");
 					}
 				}
@@ -489,7 +489,7 @@ namespace mods {
 			mods::levels::init();
 			mods::orm::pba::init();
 			mods::classes::init();
-			mods::forge_engine::init();
+			mods::loot::init();
 			mods::forge_engine::value_scaler_static::init();
 			::offensive::init();
 			::builder::init();
@@ -502,58 +502,59 @@ namespace mods {
 		}
 		void room_event(room_vnum room,mods::ai_state::event_type_t event) {
 			mods::loops::foreach_in_room(room,[&](player_ptr_t player_ptr) -> bool {
-					auto ptr = player_ptr->cd();
-					std::string text;
-					switch(event){
+				auto ptr = player_ptr->cd();
+				std::string text;
+				switch(event) {
 					case mods::ai_state::BREACHED_NORTH:
-					text = "The {red}north{/red} door was breached.";
-					break;
-					case mods::ai_state::BREACHED_SOUTH: 
-					text = "The {red}south{/red} door was breached.";
-					break;
-					case mods::ai_state::BREACHED_EAST: 
-					text = "The {red}east{/red} door was breached.";
-					break;
+						text = "The {red}north{/red} door was breached.";
+						break;
+					case mods::ai_state::BREACHED_SOUTH:
+						text = "The {red}south{/red} door was breached.";
+						break;
+					case mods::ai_state::BREACHED_EAST:
+						text = "The {red}east{/red} door was breached.";
+						break;
 					case mods::ai_state::BREACHED_WEST:
-					text = "The {red}west{/red} door was breached.";
-					break;
+						text = "The {red}west{/red} door was breached.";
+						break;
 					case mods::ai_state::GRENADE_FLIES_BY:
-					text = "A {grn}grenade{/grn} flies by!";
-					break;
+						text = "A {grn}grenade{/grn} flies by!";
+						break;
 					case mods::ai_state::GRENADE_EXPLOSION:
-					text = "A {grn}grenade{/grn} explodes!";
-					break;
-					default: break;
-					}
-					if(text.length()){
-						text += "\r\n";
-						send_to_char(ptr,text.c_str());
-					}
-					return true;
+						text = "A {grn}grenade{/grn} explodes!";
+						break;
+					default:
+						break;
+				}
+				if(text.length()) {
+					text += "\r\n";
+					send_to_char(ptr,text.c_str());
+				}
+				return true;
 			});
 		}
 		void refresh_player_states() {
 			mods::loops::foreach_all([&](player_ptr_t player_ptr) -> bool {
-					auto ptr = player_ptr->cd();
-					if(!ptr){
+				auto ptr = player_ptr->cd();
+				if(!ptr) {
 					return true;
-					}
-					if(states.find(ptr) == states.end()) {
+				}
+				if(states.find(ptr) == states.end()) {
 					states[ptr] = std::make_unique<mods::ai_state>(ptr,0,0);
-					}
-					return true;
-					});
+				}
+				return true;
+			});
 		}
 		void pre_game_loop() {
 			std::cout << "[event] Pre game loop\n";
 			refresh_player_states();
 			std::cout << "[event] refreshed player states\n";
 			mods::chat::setup_public_channels();
-			if(bootup_test_suite.length() > 0){
+			if(bootup_test_suite.length() > 0) {
 				std::cout << "booting suite: " << bootup_test_suite << "\n";
 				mods::pregame::boot_suite(bootup_test_suite);
 			}
-			if(!mods::debug::pre_game::run()){
+			if(!mods::debug::pre_game::run()) {
 				exit(0);
 			}
 		}
@@ -565,10 +566,10 @@ namespace mods {
 			static uuid_t u = 0;
 			return ++u;
 		}
-		char_data* read_mobile(const mob_vnum & nr,const int & type){
+		char_data* read_mobile(const mob_vnum& nr,const int& type) {
 			return read_mobile_ptr(nr,type)->cd();
 		}
-		std::shared_ptr<mods::npc> read_mobile_ptr(const mob_vnum & nr,const int & type){
+		std::shared_ptr<mods::npc> read_mobile_ptr(const mob_vnum& nr,const int& type) {
 			mob_rnum i;
 
 			if(type == VIRTUAL) {
@@ -579,12 +580,12 @@ namespace mods {
 			} else {
 				i = nr;
 			}
-			if(std::size_t(i) >= mob_proto.size()){
-				log("SYSERR: requested mob_proto index is invalid: ", i ,". mob_proto.size() is currently: ", mob_proto.size(), ". Ignoring...");
+			if(std::size_t(i) >= mob_proto.size()) {
+				log("SYSERR: requested mob_proto index is invalid: ", i,". mob_proto.size() is currently: ", mob_proto.size(), ". Ignoring...");
 				return nullptr;
 			}
 
-			auto & mob = mob_list.emplace_back(std::make_shared<mods::npc>(i));
+			auto& mob = mob_list.emplace_back(std::make_shared<mods::npc>(i));
 			mob->position() = POS_STANDING;
 			for(unsigned num_wears_i = 0; num_wears_i < NUM_WEARS; num_wears_i++) {
 				GET_EQ(mob->cd(), num_wears_i) = nullptr;
@@ -599,7 +600,7 @@ namespace mods {
 			mob->set_time_played(0);
 			mob->set_time_logon(time(0));
 
-			if(mob_index.size() > i){
+			if(mob_index.size() > i) {
 				mob_index[i].number++;
 			}
 			SET_BIT(mob->char_specials().saved.act, MOB_ISNPC);
@@ -653,29 +654,29 @@ namespace mods {
 			return NORTH;
 		}
 		static const std::map<std::string_view,std::string_view> default_colors = {
-				{"blu","\033[34m"},
-				{"gld","\033[33m"},
-				{"grn","\033[32m"},
-				{"red","\033[31m"},
-				{"wht","\033[37m"},
-				{"yel","\033[93m"}
-			};
+			{"blu","\033[34m"},
+			{"gld","\033[33m"},
+			{"grn","\033[32m"},
+			{"red","\033[31m"},
+			{"wht","\033[37m"},
+			{"yel","\033[93m"}
+		};
 		std::string custom_color_eval(std::string_view buffer,std::map<std::string_view,std::string_view> custom_color_map) {
 			std::map<std::string_view,std::string_view> colors = custom_color_map;
 			std::string final_buffer = "";
 			const std::size_t len = buffer.length();
-			for(std::size_t i=0;i < len;i++){
+			for(std::size_t i=0; i < len; i++) {
 				auto current_char = buffer[i];
-				if(current_char == '{'){
-					if(len > i + 5 && buffer[i+5] == '}' && 
-							buffer[i+1] == '/'){
+				if(current_char == '{') {
+					if(len > i + 5 && buffer[i+5] == '}' &&
+					        buffer[i+1] == '/') {
 						i += 5;
 						final_buffer += "\033[0m";
 						continue;
 					}
-					if(len > i + 4 && buffer[i+4] == '}'){
+					if(len > i + 4 && buffer[i+4] == '}') {
 						const std::string_view substring = buffer.substr(i+1,3);
-						if(colors.find(substring) != colors.end()){
+						if(colors.find(substring) != colors.end()) {
 							final_buffer += colors[substring];
 							i += 4;
 							continue;
@@ -691,7 +692,7 @@ namespace mods {
 			return custom_color_eval(buffer,default_colors);
 		}
 		std::string strip_colors(std::string_view buffer) {
-			std::string stripped = custom_color_eval(buffer,{
+			std::string stripped = custom_color_eval(buffer, {
 				{"blu",""},
 				{"gld",""},
 				{"grn",""},
@@ -700,8 +701,8 @@ namespace mods {
 				{"yel",""}
 			});
 			std::string even_more_stripped = "";
-			for(auto ch : stripped){
-				if(!isprint(ch)){
+			for(auto ch : stripped) {
+				if(!isprint(ch)) {
 					continue;
 				}
 				even_more_stripped += ch;
@@ -733,12 +734,14 @@ namespace mods {
 
 		bool command_interpreter(player_ptr_t player,std::string_view in_argument) {
 #ifdef __MENTOC_WRITE_HISTFILE__
-			if(player->authenticated()){ player->write_histfile(in_argument); }
+			if(player->authenticated()) {
+				player->write_histfile(in_argument);
+			}
 #endif
 			std::string argument = in_argument.data();
 			auto vec_args = PARSE_ARGS();
 			if(player->paging()) {
-				if(vec_args.size() == 0){
+				if(vec_args.size() == 0) {
 					player->pager_next_page();
 					std::cerr << red_str("paging, returning false vec_args.size() == 0\n");
 					return false;
@@ -758,16 +761,16 @@ namespace mods {
 			}
 			if(vec_args.size()) {
 				for(auto verb : chan_verbs) {
-					if(mods::util::is_lower_match(CAT("no",verb),vec_args[0])){
+					if(mods::util::is_lower_match(CAT("no",verb),vec_args[0])) {
 						player->send("Turning {grn}OFF{/grn} '%s' channel...\r\n",verb.c_str());
 						PLAYER_SET(CAT("no",verb),"1");
 						return false;
 					}
 				}
-				if(invec(vec_args[0],chan_verbs)){
+				if(invec(vec_args[0],chan_verbs)) {
 					auto verb = vec_args[0];
 					auto pos = argument.find_first_of(" ");
-					if(pos == std::string::npos){
+					if(pos == std::string::npos) {
 						return false;
 					}
 					PLAYER_SET(CAT("no",verb),"0");
@@ -775,65 +778,65 @@ namespace mods {
 					return false;
 				}
 			}
-			if(mods::super_users::player_is(player)){
-				if(argument.substr(0,4).compare("=pos") == 0){
-					if(argument.length() < 6){
+			if(mods::super_users::player_is(player)) {
+				if(argument.substr(0,4).compare("=pos") == 0) {
+					if(argument.length() < 6) {
 						player->stc("usage: =pos=<int>\r\n");
-					}else{
+					} else {
 						std::string pos = argument.substr(5);
 						auto optional_result = mods::util::stoi_optional<int>(pos);
-						if(optional_result.has_value() == false){
+						if(optional_result.has_value() == false) {
 							player->stc("usage: =pos=<int>\r\n");
-						}else{
+						} else {
 							player->position() = optional_result.value();
 							player->done();
 						}
 					}
 					return false;
 				}
-				if(argument.substr(0,4).compare("+imp") == 0){
+				if(argument.substr(0,4).compare("+imp") == 0) {
 					mods::acl_list::set_access_rights(player,"implementors",true);
 					player->done();
 					return false;
 				}
-				if(argument.substr(0,4).compare("-imp") == 0){
+				if(argument.substr(0,4).compare("-imp") == 0) {
 					mods::acl_list::set_access_rights(player,"implementors",false);
 					player->done();
 					return false;
 				}
-				if(argument.substr(0,4).compare("+god") == 0){
+				if(argument.substr(0,4).compare("+god") == 0) {
 					mods::acl_list::set_access_rights(player,"gods",true);
 					player->done();
 					return false;
 				}
-				if(argument.substr(0,4).compare("-god") == 0){
+				if(argument.substr(0,4).compare("-god") == 0) {
 					mods::acl_list::set_access_rights(player,"gods",false);
 					player->done();
 					return false;
 				}
-				if(argument.substr(0,6).compare("+build") == 0){
+				if(argument.substr(0,6).compare("+build") == 0) {
 					mods::acl_list::set_access_rights(player,"builders",true);
 					player->done();
 					return false;
 				}
-				if(argument.substr(0,6).compare("-build") == 0){
+				if(argument.substr(0,6).compare("-build") == 0) {
 					mods::acl_list::set_access_rights(player,"builders",false);
 					player->done();
 					return false;
 				}
-				if(argument.substr(0,7).compare("-affplr") ==0){
+				if(argument.substr(0,7).compare("-affplr") ==0) {
 					player->clear_all_affected();
 					player->clear_all_affected_plr();
 					player->done();
 					return false;
 				}
 
-				if(argument.substr(0,4).compare("-aff") == 0){
+				if(argument.substr(0,4).compare("-aff") == 0) {
 					player->clear_all_affected();
 					player->done();
 					return false;
 				}
-				if(argument.substr(0,4).compare("-plr") == 0){
+				if(argument.substr(0,4).compare("-plr") == 0) {
 					player->clear_all_affected_plr();
 					player->done();
 					return false;
@@ -853,7 +856,7 @@ namespace mods {
 				//If is a direction and that direction is not an exit,
 				//then pave a way to that exit
 				int door = 0;
-				if(in_argument.length() == 1){
+				if(in_argument.length() == 1) {
 					switch(in_argument[0]) {
 						case 'u':
 						case 'U':
@@ -884,35 +887,36 @@ namespace mods {
 						case 'D':
 							door = DOWN;
 							break;
-						default: return true;
+						default:
+							return true;
 					}
 
 					auto cached_room = player->room();
-					if(world[cached_room].dir_option[door] == nullptr){
+					if(world[cached_room].dir_option[door] == nullptr) {
 						player->sendln("Creating room in that direction");
 						int new_room_rnum = 0;
 						world.emplace_back();
 						register_room(0);
 						int new_room_vnum = next_room_vnum();
-						auto & w = world.back();
+						auto& w = world.back();
 						w.number = new_room_vnum;
 						new_room_rnum = world.size() - 1;
 
 						world[cached_room].set_dir_option(
-								door,
-								"general_description",
-								"keyword",
-								EX_ISDOOR,
-								0,
-								new_room_rnum
+						    door,
+						    "general_description",
+						    "keyword",
+						    EX_ISDOOR,
+						    0,
+						    new_room_rnum
 						);
 						w.set_dir_option(
-								OPPOSITE_DIR(door),
-								"general description",
-								"keyword",
-								EX_ISDOOR,
-								0,
-								cached_room
+						    OPPOSITE_DIR(door),
+						    "general description",
+						    "keyword",
+						    EX_ISDOOR,
+						    0,
+						    cached_room
 						);
 						mods::builder::add_room_to_pavements(player,cached_room);
 						mods::builder::add_room_to_pavements(player,new_room_rnum);
@@ -922,7 +926,7 @@ namespace mods {
 			return true;
 		}
 
-		void pad_room(int room,char_data* ch,int door){
+		void pad_room(int room,char_data* ch,int door) {
 			/** UNUSED TODO CLEAN UP*/
 		}
 		int dir_int(char dir) {
@@ -958,7 +962,7 @@ namespace mods {
 
 		void register_room(const room_rnum& r) {
 			top_of_world = world.size();
-			for(; room_list.size() < world.size();){
+			for(; room_list.size() < world.size();) {
 				room_list.push_back({});
 			}
 		}
@@ -977,27 +981,27 @@ namespace mods {
 			void char_from_room(char_data* ch) {
 				auto player = ptr(ch);
 				int room_id = player->room();
-				if(room_id >= room_list.size()){
+				if(room_id >= room_list.size()) {
 					log("SYSERR: char_from_room failed. room_id >= room_list.size()");
 					return;
 				}
 				auto place = std::find(
-						mods::globals::room_list[room_id].begin(),
-						mods::globals::room_list[room_id].end(),
-						player
-						);
-				if(place != mods::globals::room_list[room_id].end()){
+				                 mods::globals::room_list[room_id].begin(),
+				                 mods::globals::room_list[room_id].end(),
+				                 player
+				             );
+				if(place != mods::globals::room_list[room_id].end()) {
 					mods::globals::room_list[room_id].erase(place);
 				} else {
 					log("SYSERR: Could NOT find char in room_list");
 				}
 			}
 
-			/*! \brief moves a character to the room identified by the first parameter. If the mud 
+			/*! \brief moves a character to the room identified by the first parameter. If the mud
 			 * is booted in HELL MODE, the character is merely moved to the only room available
-			 * in the mud (zero), otherwise the character is moved to the specified room (if it 
+			 * in the mud (zero), otherwise the character is moved to the specified room (if it
 			 * can be found). Moving from one room to another is a two function process. This function
-			 * is the latter of that process, the former being char_from_room. 
+			 * is the latter of that process, the former being char_from_room.
 			 * \param room room id. of type room_rnum
 			 * \param char_data* character pointer
 			 * \return void will log a SYSERR if the resolved room id (param 1) is out of bounds
@@ -1005,16 +1009,16 @@ namespace mods {
 			void char_to_room(const room_rnum& room,char_data* ch) {
 				auto player = ptr(ch);
 				auto target_room = room;
-				if(boot_type == boot_type_t::BOOT_HELL){
+				if(boot_type == boot_type_t::BOOT_HELL) {
 					target_room = 0;
 				}
-				if(target_room >= room_list.size()){
+				if(target_room >= room_list.size()) {
 					log("SYSERR: char_to_room failed for ch. Requested room is out of bounds: ",target_room);
 					return;
 				}
 				player->set_room(target_room);
 				mods::globals::room_list[target_room].push_back(player);
-				if(!IS_NPC(ch)){
+				if(!IS_NPC(ch)) {
 					std::cerr << "[room_entry] watching events: " << player->name().c_str() << "\n";
 					mods::mobs::room_watching::events::room_entry(target_room,player->uuid());
 				}
@@ -1022,71 +1026,85 @@ namespace mods {
 			}
 		};//end namespace rooms
 
-		void affect_room_light(int room,int offset){
-			if(room < world.size() && room >= 0){
+		void affect_room_light(int room,int offset) {
+			if(room < world.size() && room >= 0) {
 				world[room].light -= offset;
 			}
 		}
 		static mods::globals::player_list_t blank_room;
-		player_list_t& get_room_list(room_rnum room){
-			if(room == NOWHERE || room >= mods::globals::room_list.size()){
+		player_list_t& get_room_list(room_rnum room) {
+			if(room == NOWHERE || room >= mods::globals::room_list.size()) {
 				return blank_room;
 			}
 			return mods::globals::room_list[room];
 		}
-		player_list_t& get_room_list(player_ptr_t& player){
+		player_list_t& get_room_list(player_ptr_t& player) {
 			return mods::globals::get_room_list(player->room());
 		}
-		std::string dir_to_str(int dir, bool adjective){
-			if(adjective){
-				switch(dir){
-					case NORTH: return "northern";
-					case SOUTH: return "southern";
-					case EAST: return "eastern";
-					case WEST: return "western";
-					case UP: return "upper";
-					case DOWN: return "below";
-					default: return "?";
+		std::string dir_to_str(int dir, bool adjective) {
+			if(adjective) {
+				switch(dir) {
+					case NORTH:
+						return "northern";
+					case SOUTH:
+						return "southern";
+					case EAST:
+						return "eastern";
+					case WEST:
+						return "western";
+					case UP:
+						return "upper";
+					case DOWN:
+						return "below";
+					default:
+						return "?";
 				}
 			}
-			switch(dir){
-				case NORTH: return "north";
-				case SOUTH: return "south";
-				case EAST: return "east";
-				case WEST: return "west";
-				case UP: return "up";
-				case DOWN: return "down";
-				default: return "?";
+			switch(dir) {
+				case NORTH:
+					return "north";
+				case SOUTH:
+					return "south";
+				case EAST:
+					return "east";
+				case WEST:
+					return "west";
+				case UP:
+					return "up";
+				case DOWN:
+					return "down";
+				default:
+					return "?";
 			}
 		}
-		void queue_object_destruct(uuid_t obj_uuid, uint16_t ticks){
+		void queue_object_destruct(uuid_t obj_uuid, uint16_t ticks) {
 			mods::globals::defer_queue->push_ticks_event(ticks, {obj_uuid, mods::deferred::EVENT_OBJECT_DESTRUCT});
 		}
-		void destruct_object(uuid_t uuid){
+		void destruct_object(uuid_t uuid) {
 			auto obj = optr_by_uuid(uuid);
-			if(!obj){
+			if(!obj) {
 				return;
 			}
 			auto omap = obj_map.find(obj->uuid);
-			if(omap != obj_map.end()){
+			if(omap != obj_map.end()) {
 				obj_map.erase(omap);
 			}
 			auto odmap = obj_odmap.find(obj.get());
-			if(odmap != obj_odmap.end()){
+			if(odmap != obj_odmap.end()) {
 				obj_odmap.erase(odmap);
 			}
 			d("use count for destructed object: " << obj.use_count());
 		}
-		void dispose_object(uuid_t obj_uuid){
+		void dispose_object(uuid_t obj_uuid) {
 			auto obj = optr_by_uuid(obj_uuid);
 			obj_odmap.erase(obj.get());
 			obj_map.erase(obj_uuid);
 			auto it = std::find(obj_list.begin(),obj_list.end(),obj);
-			if(it != obj_list.end()){
+			if(it != obj_list.end()) {
 				obj_list.erase(it);
 			}
 		}
-		void dispose_player(uuid_t pl_uuid){
+		void dispose_player(uuid_t pl_uuid) {
 #define __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__
 #define mgdp_debug(a) mentoc_prefix_debug("mods::globals::dispose_player") << a << "\n";
@@ -1094,20 +1112,20 @@ namespace mods {
 #define mgdp_debug(a) /**/
 #endif
 			auto player = ptr_by_uuid(pl_uuid);
-			if(!player){
+			if(!player) {
 				mgdp_debug("ptr_by_uuid returned an invalid player ptr... not removing from any structures!");
 				return;
 			}
 			{
 				auto p_room_list = mods::globals::get_room_list(player->room());
 				auto it = std::find(p_room_list.begin(),p_room_list.end(),player);
-				if(it != p_room_list.end()){
+				if(it != p_room_list.end()) {
 					mgdp_debug("Erasing from player p_room_list");
 					p_room_list.erase(it);
 				}
 			}
 			/** TODO remove from room_list */
-			if(player->is_npc()){
+			if(player->is_npc()) {
 				mgdp_debug("Erasing from mob_chmap");
 				mods::globals::mob_chmap.erase(const_cast<char_data*>(player->cd()));
 				mob_map.erase(player->uuid());
@@ -1116,13 +1134,13 @@ namespace mods {
 				{
 					auto ch = player->cd();
 					std::vector<std::deque<std::shared_ptr<mods::npc>>::iterator> mob_list_erasures;
-					for(auto m_it = mob_list.begin();m_it != mob_list.end(); ++m_it){
-						if((*m_it)->cd() == ch){
+					for(auto m_it = mob_list.begin(); m_it != mob_list.end(); ++m_it) {
+						if((*m_it)->cd() == ch) {
 							mgdp_debug("Found one in mob_list... emplacing...");
 							mob_list_erasures.emplace_back(m_it);
 						}
 					}
-					for(auto && erase_me : mob_list_erasures){
+					for(auto&& erase_me : mob_list_erasures) {
 						mgdp_debug("Erasing..." << "|use_count: " << (erase_me)->use_count());
 						mob_list.erase(erase_me);
 					}
@@ -1134,7 +1152,7 @@ namespace mods {
 			mods::globals::player_chmap.erase(const_cast<char_data*>(player->cd()));
 			{
 				auto it = player_map.find(pl_uuid);
-				if(it != player_map.end()){
+				if(it != player_map.end()) {
 					mgdp_debug("Found in player_map.. erasing...");
 					player_map.erase(it);
 				}
@@ -1142,7 +1160,7 @@ namespace mods {
 			{
 				mgdp_debug("Looking in player_list...");
 				auto it = std::find(player_list.begin(), player_list.end(), player);
-				if(it != player_list.end()){
+				if(it != player_list.end()) {
 					mgdp_debug("Found in player_list... erasing...");
 					player_list.erase(it);
 				}
@@ -1151,59 +1169,59 @@ namespace mods {
 		}
 	};//end globals
 };
-player_ptr_t ptr(char_data* in_ch){
+player_ptr_t ptr(char_data* in_ch) {
 	return ptr((const char_data*)in_ch);
 }
-player_ptr_t ptr(const char_data* in_ch){
-	if(!in_ch){
+player_ptr_t ptr(const char_data* in_ch) {
+	if(!in_ch) {
 		return nullptr;
 	}
-	if(IS_NPC(in_ch)){
+	if(IS_NPC(in_ch)) {
 		return mods::globals::mob_chmap[const_cast<char_data*>(in_ch)]->player_ptr();
 	}
 	return mods::globals::player_chmap[const_cast<char_data*>(in_ch)];
 }
-obj_ptr_t optr(obj_data* in_obj){
+obj_ptr_t optr(obj_data* in_obj) {
 	return mods::globals::obj_odmap[in_obj];
 }
 
-std::optional<obj_ptr_t> optr_opt(uuid_t obj_uuid){
+std::optional<obj_ptr_t> optr_opt(uuid_t obj_uuid) {
 	auto it = mods::globals::obj_map.find(obj_uuid);
-	if(it != mods::globals::obj_map.end()){
+	if(it != mods::globals::obj_map.end()) {
 		return it->second;
 	}
 	log("SYSERR: DID NOT find obj_uuid (optr) %d ",obj_uuid);
 	return std::nullopt;
 }
-std::optional<player_ptr_t> ptr_opt(char_data* ch){
-	if(IS_NPC(ch)){
+std::optional<player_ptr_t> ptr_opt(char_data* ch) {
+	if(IS_NPC(ch)) {
 		auto it = mods::globals::mob_chmap.find(ch);
-		if(it != mods::globals::mob_chmap.end()){
+		if(it != mods::globals::mob_chmap.end()) {
 			return it->second;
 		}
-	}else{
+	} else {
 		auto it = mods::globals::player_chmap.find(ch);
-		if(it != mods::globals::player_chmap.end()){
+		if(it != mods::globals::player_chmap.end()) {
 			return it->second;
 		}
 	}
 	return std::nullopt;
 }
-std::optional<player_ptr_t> ptr_opt(uuid_t plr_uuid){
+std::optional<player_ptr_t> ptr_opt(uuid_t plr_uuid) {
 	auto it = mods::globals::player_map.find(plr_uuid);
-	if(it != mods::globals::player_map.end()){
+	if(it != mods::globals::player_map.end()) {
 		return it->second;
 	}
 	return std::nullopt;
 }
-player_ptr_t ptr_by_uuid(uuid_t id){
+player_ptr_t ptr_by_uuid(uuid_t id) {
 	return mods::globals::player_map[id];
 }
-obj_ptr_t optr_by_uuid(uuid_t id){
+obj_ptr_t optr_by_uuid(uuid_t id) {
 	return mods::globals::obj_map[id];
 }
-std::string dirstr(int dir){
-	switch(dir){
+std::string dirstr(int dir) {
+	switch(dir) {
 		case NORTH:
 			return "NORTH";
 		case SOUTH:
@@ -1220,96 +1238,107 @@ std::string dirstr(int dir){
 			return "UNKNOWN";
 	}
 }
-std::string IMPLODE_PAD(std::string delim_one,std::vector<std::string> m,std::string delim_two){
+std::string IMPLODE_PAD(std::string delim_one,std::vector<std::string> m,std::string delim_two) {
 	return IMPLODE_PAD(delim_one,m,delim_two,false);
 }
-std::string IMPLODE_PAD(std::string delim_one,std::vector<std::string> m,std::string delim_two,bool ignore_empty){
+std::string IMPLODE_PAD(std::string delim_one,std::vector<std::string> m,std::string delim_two,bool ignore_empty) {
 	std::string f = "";
 	std::size_t size = 0;
-	for(auto s : m){
+	for(auto s : m) {
 		size += s.length() + delim_one.length() + delim_two.length();
 	}
 	f.reserve(size);
-	for(auto s : m){
-		if(s.length() == 0 && ignore_empty){ continue; }
+	for(auto s : m) {
+		if(s.length() == 0 && ignore_empty) {
+			continue;
+		}
 		f += delim_one + s + delim_two;
 	}
 	return f;
 }
-std::string IMPLODE(std::vector<std::string> m,std::string delim){
+std::string IMPLODE(std::vector<std::string> m,std::string delim) {
 	return IMPLODE(m,delim,false);
 }
-std::string IMPLODE(std::vector<std::string> m,std::string delim, bool ignore_empty){
+std::string IMPLODE(std::vector<std::string> m,std::string delim, bool ignore_empty) {
 	std::string f = "";
 	std::size_t size = 0;
-	for(auto s : m){
+	for(auto s : m) {
 		size += s.length() + delim.length();
 	}
 	f.reserve(size);
-	for(auto s : m){
-		if(s.length() == 0 && ignore_empty){ continue; }
+	for(auto s : m) {
+		if(s.length() == 0 && ignore_empty) {
+			continue;
+		}
 		f += s;
 		f += delim;
 	}
 	return f;
 }
-std::vector<str_t> map_keys(str_map_t & m){
+std::vector<str_t> map_keys(str_map_t& m) {
 	std::vector<str_t> s;
-	for(auto & pair : m){
+	for(auto& pair : m) {
 		s.emplace_back(pair.first);
 	}
 	return s;
 }
 
-str_vec_t EXPLODE(str_t value,char delimiter){
+str_vec_t EXPLODE(str_t value,char delimiter) {
 	std::vector<std::string> strings;
 	std::string current = "";
-	for(auto ch : value){
-		if(ch == delimiter && current.length()){
+	for(auto ch : value) {
+		if(ch == delimiter && current.length()) {
 			strings.emplace_back(current);
 			current = "";
 			continue;
 		}
-		if(ch != delimiter){
+		if(ch != delimiter) {
 			current += ch;
 		}
 	}
-	if(current.length()){
+	if(current.length()) {
 		strings.emplace_back(current);
 	}
 	return strings;
 }
-str_vec_t EXPLODE(str_t& value,char delimiter){
+str_vec_t EXPLODE(str_t& value,char delimiter) {
 	std::vector<std::string> strings;
 	std::string current = "";
-	for(auto ch : value){
-		if(ch == delimiter && current.length()){
+	for(auto ch : value) {
+		if(ch == delimiter && current.length()) {
 			strings.emplace_back(current);
 			current = "";
 			continue;
 		}
-		if(ch != delimiter){
+		if(ch != delimiter) {
 			current += ch;
 		}
 	}
-	if(current.length()){
+	if(current.length()) {
 		strings.emplace_back(current);
 	}
 	return strings;
 }
-std::pair<bool,direction_t> to_direction(std::string_view str){
+std::pair<bool,direction_t> to_direction(std::string_view str) {
 	auto s = mods::util::trim_view(str);
-	if(s.length() == 0 || !std::isalpha(s[0])){
+	if(s.length() == 0 || !std::isalpha(s[0])) {
 		return {0,NORTH};
 	}
-	switch(std::tolower(s[0])){
-		case 'n': return {1,NORTH};
-		case 'e': return {1,EAST};
-		case 's': return {1,SOUTH};
-		case 'w': return {1,WEST};
-		case 'u': return {1,UP};
-		case 'd': return {1,DOWN};
-		default: return {0,NORTH};
+	switch(std::tolower(s[0])) {
+		case 'n':
+			return {1,NORTH};
+		case 'e':
+			return {1,EAST};
+		case 's':
+			return {1,SOUTH};
+		case 'w':
+			return {1,WEST};
+		case 'u':
+			return {1,UP};
+		case 'd':
+			return {1,DOWN};
+		default:
+			return {0,NORTH};
 	}
 }
 #endif

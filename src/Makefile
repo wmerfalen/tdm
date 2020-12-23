@@ -96,7 +96,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/class-abilities \
 					 mods/orm/elevator mods/elevator \
 					 mods/orm/mob-roam mods/mob-roam \
-					 mods/forge-engine/generator mods/forge-engine/value-scaler
+					 mods/forge-engine/generator mods/forge-engine/value-scaler \
+					 mods/loot
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

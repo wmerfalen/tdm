@@ -35,3 +35,6 @@ sql/restore.sql
 yaml-cpp
 boost_1_72_0/
 boost
+*.orig
+mods/*.orig
+mods/*/*.orig
