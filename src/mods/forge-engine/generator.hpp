@@ -7,9 +7,87 @@
 #include "../object-utils.hpp"
 #include "../rand.hpp"
 
+#ifdef __MENTOC_SHOW_MODS_FORGE_ENGINE_DEBUG_OUTPUT__
+#define m_debug(MSG) mentoc_prefix_debug("[mods::forge_engine::generator]")  << MSG << "\n";
+#else
+#define m_debug(MSG) ;;
+#endif
+
 namespace mods::forge_engine {
+
+	struct value_scale_t {
+		player_ptr_t player;
+		float level;
+		float low;
+		float high;
+		float low_low;
+		float stat_low;
+		float stat_high;
+		uint32_t low_level;
+		uint32_t high_level;
+		uint32_t low_low_clamp;
+		uint32_t low_high_clamp;
+		uint32_t high_low_clamp;
+		uint32_t high_high_clamp;
+		uint32_t uint_low;
+		uint32_t uint_high;
+		uint8_t max_stats;
+		~value_scale_t() = default;
+		value_scale_t() = delete;
+		/** TODO: game balancing: these values need to be tweaked */
+		value_scale_t(player_ptr_t& player) {
+			calculate(player);
+		}
+
+		void calculate(player_ptr_t& player){
+			level = (float)player->level();
+			low = 1.0;
+			high = level * 0.9;
+			low_low = level / 3.5;
+			stat_low = std::clamp(low_low, low,high);
+			stat_high =  std::clamp(level,low+1,high+2);
+			low_level = level / 3;
+			high_level = level / 1.3;
+			low_low_clamp = 1;
+			low_high_clamp = 4 + level;
+			high_low_clamp = 2;
+			high_high_clamp = 5 + level;
+			uint_low = std::clamp(low_level, low_low_clamp, low_high_clamp);
+			uint_high = std::clamp(high_level, high_low_clamp, high_high_clamp);
+			max_stats = level + 10;
+		}
+		void dump(){
+			player->send("stat_low: %f\nstat_high: %f\nuint_low: %d\nuint_high: %d\nmax_stats: %d\n\n",stat_low,stat_high,uint_low,uint_high, max_stats);
+		}
+	};
+
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 	using random_number_type_t = uint64_t;
+	/**
+	 * [key]: ESA = Elemental/Stat/Attribute
+	 * [key]: CSL = Class/Stat/Level
+	 * required combinations
+	 * 	armor
+	 * 		-> CSL requirements
+	 * 		-> elemental resistances
+	 * 		-> armor ESA bonuses
+	 * 		-> rifle ESA bonuses
+	 *
+	 * 	explosives
+	 * 		-> CSL requirements
+	 * 		-> ESA bonuses
+	 *
+	 *  rifles
+	 * 		-> CSL requirements
+	 *  	-> ESA bonuses
+	 *  	-> explosives ESA bonuses
+	 *  	-> armor resistances
+	 *
+	 *  attachment
+	 *  	-> CSL requirements
+	 *  	-> ESA bonuses
+	 *  	-> rifle ESA bonuses
+	 */
 	static constexpr random_number_type_t MAX_FORGE_ENGINE_VALUE = 4294967295;
 		enum item_types_t {
 			TYPE_ITEM_RIFLE = 1,
@@ -73,6 +151,40 @@ namespace mods::forge_engine {
 			__EXPLOSIVE_TYPE_FIRST = EXPLOSIVE_TYPE_FRAG_GRENADE,
 			__EXPLOSIVE_TYPE_LAST = EXPLOSIVE_TYPE_SENSOR_GRENADE
 		};
+		enum explosive_attributes_t {
+			EXPLOSIVE_ATTR_ALTERNATE_EXPLOSION_TYPE = 1,
+			EXPLOSIVE_ATTR_CHANCE_TO_INJURE,
+			EXPLOSIVE_ATTR_CRITICAL_CHANCE,
+			EXPLOSIVE_ATTR_CRITICAL_RANGE,
+			EXPLOSIVE_ATTR_BLAST_RADIUS,
+			EXPLOSIVE_ATTR_DAMAGE_PER_SECOND,
+			EXPLOSIVE_ATTR_DISORIENT_AMOUNT,
+			EXPLOSIVE_ATTR_RANGE_MODIFIER,
+			EXPLOSIVE_ATTR_LOUDNESS_TYPE,
+			EXPLOSIVE_ATTR_INCENDIARY_DAMAGE_DICE_COUNT,
+			EXPLOSIVE_ATTR_INCENDIARY_DAMAGE_DICE_SIDES,
+			EXPLOSIVE_ATTR_RADIATION_DAMAGE_DICE_COUNT,
+			EXPLOSIVE_ATTR_RADIATION_DAMAGE_DICE_SIDES,
+			EXPLOSIVE_ATTR_CHEMICAL_DAMAGE_DICE_COUNT,
+			EXPLOSIVE_ATTR_CHEMICAL_DAMAGE_DICE_SIDES,
+			EXPLOSIVE_ATTR_ELECTRIC_DAMAGE_DICE_COUNT,
+			EXPLOSIVE_ATTR_ELECTRIC_DAMAGE_DICE_SIDES,
+			EXPLOSIVE_ATTR_ARMOR_PENETRATION_DAMAGE_DICE_COUNT,
+			EXPLOSIVE_ATTR_ARMOR_PENETRATION_DAMAGE_DICE_SIDES,
+			EXPLOSIVE_ATTR_DAMAGE_DICE_COUNT,
+			EXPLOSIVE_ATTR_DAMAGE_DICE_SIDES,
+			EXPLOSIVE_ATTR_INCENDIARY_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_EXPLOSIVE_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_SHRAPNEL_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_CORROSIVE_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_CRYOGENIC_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_RADIATION_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_EMP_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_SHOCK_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_ANTI_MATTER_DAMAGE_PERCENT,
+			__EXPLOSIVE_ATTR_FIRST = EXPLOSIVE_ATTR_ALTERNATE_EXPLOSION_TYPE,
+			__EXPLOSIVE_ATTR_LAST = EXPLOSIVE_ATTR_ANTI_MATTER_DAMAGE_PERCENT
+		};
 		enum attachment_types_t {
 			ATTACHMENT_TYPE_SIGHT = 1,
 			ATTACHMENT_TYPE_UNDER_BARREL,
@@ -109,7 +221,7 @@ namespace mods::forge_engine {
 			__ARMOR_ATTR_LAST = ARMOR_ATTR_WORTH,
 		};
 
-		enum armor_wear_types_t {
+		enum armor_types_t {
 			ARMOR_ITEM_WEAR_FINGER	=  1,
 			ARMOR_ITEM_WEAR_NECK		,
 			ARMOR_ITEM_WEAR_BODY		,
@@ -226,6 +338,39 @@ namespace mods::forge_engine {
 
 		static const std::vector<elemental_types_t> empty_elemental_types = { };
 
+		static const std::vector<explosive_attributes_t> valid_explosive_attributes = {
+			EXPLOSIVE_ATTR_ALTERNATE_EXPLOSION_TYPE,
+			EXPLOSIVE_ATTR_CHANCE_TO_INJURE,
+			EXPLOSIVE_ATTR_CRITICAL_CHANCE,
+			EXPLOSIVE_ATTR_CRITICAL_RANGE,
+			EXPLOSIVE_ATTR_BLAST_RADIUS,
+			EXPLOSIVE_ATTR_DAMAGE_PER_SECOND,
+			EXPLOSIVE_ATTR_DISORIENT_AMOUNT,
+			EXPLOSIVE_ATTR_RANGE_MODIFIER,
+			EXPLOSIVE_ATTR_LOUDNESS_TYPE,
+			EXPLOSIVE_ATTR_INCENDIARY_DAMAGE_DICE_COUNT,
+			EXPLOSIVE_ATTR_INCENDIARY_DAMAGE_DICE_SIDES,
+			EXPLOSIVE_ATTR_RADIATION_DAMAGE_DICE_COUNT,
+			EXPLOSIVE_ATTR_RADIATION_DAMAGE_DICE_SIDES,
+			EXPLOSIVE_ATTR_CHEMICAL_DAMAGE_DICE_COUNT,
+			EXPLOSIVE_ATTR_CHEMICAL_DAMAGE_DICE_SIDES,
+			EXPLOSIVE_ATTR_ELECTRIC_DAMAGE_DICE_COUNT,
+			EXPLOSIVE_ATTR_ELECTRIC_DAMAGE_DICE_SIDES,
+			EXPLOSIVE_ATTR_ARMOR_PENETRATION_DAMAGE_DICE_COUNT,
+			EXPLOSIVE_ATTR_ARMOR_PENETRATION_DAMAGE_DICE_SIDES,
+			EXPLOSIVE_ATTR_DAMAGE_DICE_COUNT,
+			EXPLOSIVE_ATTR_DAMAGE_DICE_SIDES,
+			EXPLOSIVE_ATTR_INCENDIARY_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_EXPLOSIVE_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_SHRAPNEL_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_CORROSIVE_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_CRYOGENIC_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_RADIATION_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_EMP_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_SHOCK_DAMAGE_PERCENT,
+			EXPLOSIVE_ATTR_ANTI_MATTER_DAMAGE_PERCENT,
+		};
+
 		static const std::vector<rifle_attributes_t> valid_rifle_attributes = {
 			RIFLE_ATTRIBUTES_AMMO_MAX,
 			RIFLE_ATTRIBUTES_CHANCE_TO_INJURE,
@@ -244,6 +389,24 @@ namespace mods::forge_engine {
 			RIFLE_ATTRIBUTES_EFFECTIVE_FIRING_RANGE,
 			RIFLE_ATTRIBUTES_DAMAGE_DICE_COUNT,
 			RIFLE_ATTRIBUTES_DAMAGE_DICE_SIDES
+		};
+		static const std::vector<stat_types_t> valid_requirements = {
+			SKILL_STR,
+			SKILL_STR_ADD ,
+			SKILL_INTEL ,
+			SKILL_WIS ,
+			SKILL_DEX ,
+			SKILL_CON ,
+			SKILL_CHA ,
+			SKILL_ELECTRONICS ,
+			SKILL_ARMOR ,
+			SKILL_MARKSMANSHIP ,
+			SKILL_SNIPING ,
+			SKILL_DEMOLITIONS ,
+			SKILL_CHEMISTRY ,
+			SKILL_WEAPON_HANDLING ,
+			SKILL_STRATEGY ,
+			SKILL_MEDICAL
 		};
 		static const  std::vector<stat_types_t> valid_rifle_stats_boosts = {
 			SKILL_STR,
@@ -277,7 +440,7 @@ namespace mods::forge_engine {
 			RIFLE_TYPE_MACHINE_PISTOL,
 			RIFLE_TYPE_LIGHT_MACHINE_GUN
 		};
-		static const  std::vector<armor_wear_types_t> valid_armor_placements  = {
+		static const  std::vector<armor_types_t> valid_armor_placements  = {
 			ARMOR_ITEM_WEAR_FINGER,
 			ARMOR_ITEM_WEAR_NECK,
 			ARMOR_ITEM_WEAR_BODY,
@@ -348,10 +511,37 @@ namespace mods::forge_engine {
 			RIFLE_ATTRIBUTES_RELOAD_TIME
 		};
 
+
+	struct requirements_t {
+		std::vector<std::pair<stat_types_t,uint32_t>> stats;
+		uint32_t minimum_player_level;
+		std::vector<player_class_types_t> player_classes;
+	};
+
 	struct generated_rifle_t {
 		rifle_types_t type;
-		std::vector<std::pair<stat_types_t,uint32_t>> requirements;
+		requirements_t requirements;
 		std::vector<std::pair<rifle_attributes_t,uint32_t>> attributes;
+		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> elemental_damages;
+		std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> stat_boosts;
+	};
+
+	struct generated_armor_t {
+		armor_types_t type;
+		requirements_t requirements;
+		std::vector<std::pair<armor_attributes_t,uint32_t>> attributes;
+		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> elemental_damages;
+		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> elemental_resistances;
+		std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> stat_boosts;
+	};
+
+	struct generated_explosive_t {
+		explosive_types_t type;
+		requirements_t requirements;
+		std::vector<std::pair<explosive_attributes_t,uint32_t>> attributes;
+		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> elemental_damages;
+		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> elemental_resistances;
+		std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> stat_boosts;
 	};
 
 	struct generator {
@@ -361,16 +551,18 @@ namespace mods::forge_engine {
 		generator();
 		~generator();
 
+		std::vector<std::pair<explosive_attributes_t,std::variant<uint32_t,float>>> generate_explosive_attributes(player_ptr_t& player);
+		std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> generate_rifle_attributes(player_ptr_t& player);
 		rifle_attributes_t random_rifle_attribute();
 		rifle_types_t random_rifle_type();
 		item_types_t random_item_type();
-		armor_wear_types_t random_armor_type(){
-			return (armor_wear_types_t)(this->roll_between((uint8_t)__ARMOR_WEAR_FIRST,(uint8_t)__ARMOR_WEAR_LAST));
+		armor_types_t random_armor_type(){
+			return (armor_types_t)(this->roll_between((uint8_t)__ARMOR_WEAR_FIRST,(uint8_t)__ARMOR_WEAR_LAST));
 		}
 		elemental_types_t random_elemental_type(){
 			return (elemental_types_t)(this->roll_between((uint8_t)__ELEM_FIRST, (uint8_t)__ELEM_LAST));
 		}
-		elemental_types_t random_elemental_resistance(armor_wear_types_t type){
+		elemental_types_t random_elemental_resistance(armor_types_t type){
 			return (elemental_types_t)(this->roll_between((uint8_t)__ELEM_FIRST, (uint8_t)__ELEM_LAST));
 		}
 		explosive_types_t random_explosive_type(){
@@ -379,17 +571,27 @@ namespace mods::forge_engine {
 		attachment_types_t random_attachment_type(){
 			return (attachment_types_t)(this->roll_between((uint8_t)__ATTACHMENT_TYPE_FIRST, (uint8_t)__ATTACHMENT_TYPE_LAST));
 		};
+		player_class_types_t generate_random_class(player_ptr_t& player){
+			return (player_class_types_t)this->roll_between((uint8_t)__PLCLASS_FIRST,(uint8_t) __PLCLASS_LAST);
+		}
 
 		/** random rifle functions */
 		/** random rifle functions */
-		std::vector<std::pair<stat_types_t,uint32_t>> generate_rifle_requirements(player_ptr_t& player);
+		requirements_t generate_requirements(player_ptr_t& player);
 
-		std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> generate_rifle_attributes(player_ptr_t& player);
 		std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> generate_rifle_stat_boosts(player_ptr_t& player);
 		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> generate_rifle_elemental_boosts(player_ptr_t& player);
+		/**
+	 *  rifles
+	 * 		-> CSL requirements
+	 *  	-> ESA bonuses
+	 *  	-> explosives ESA bonuses
+	 *  	-> armor resistances
+	 *
+	 */
 		/** end random rifle functions */
 
-		int pclass_to_real_pclass(player_class_types_t type){
+		player_class_t pclass_to_real_pclass(player_class_types_t type){
 			switch(type){
 				case PLCLASS_SNIPER:
 					return CLASS_SNIPER;
@@ -406,7 +608,27 @@ namespace mods::forge_engine {
 				case PLCLASS_SUPPORT:
 					return CLASS_SUPPORT;
 				default:
-					return -1;
+					return (player_class_t)0;
+			}
+		}
+		player_class_types_t real_pclass_to_pclass(player_class_t type){
+			switch(type){
+				case CLASS_SNIPER:
+					return PLCLASS_SNIPER;
+				case CLASS_MARINE:
+					return PLCLASS_MARINE;
+				case CLASS_BREACHER:
+					return PLCLASS_BREACHER;
+				case CLASS_ENGINEER:
+					return PLCLASS_ENGINEER;
+				case CLASS_MEDIC:
+					return PLCLASS_MEDIC;
+				case CLASS_GHOST:
+					return PLCLASS_GHOST;
+				case CLASS_SUPPORT:
+					return PLCLASS_SUPPORT;
+				default:
+					return (player_class_types_t)0;
 			}
 		}
 
@@ -419,7 +641,6 @@ namespace mods::forge_engine {
 			return LO + static_cast <TUintWidth> (rand_xoroshiro()) /( static_cast <TUintWidth> (std::numeric_limits<TUintWidth>::max()/(HI-LO)));
 		}
 
-
 		/**
 		 * Generate a vector of pairs.
 		 * Pair.first = a randomly chosen enum in valid_attributes.
@@ -428,18 +649,14 @@ namespace mods::forge_engine {
 		 */
 		template <typename TEnumType,typename TUintWidth>
 		std::vector<std::pair<TEnumType,std::variant<TUintWidth,float>>> generate_random_mixed(
-				const std::vector<TEnumType>& valid_attributes,
-				float float_low,
-				float float_high,
-				TUintWidth uint_low,
-				TUintWidth uint_high,
-				uint8_t max_attributes
+				const std::vector<TEnumType>& valid_attributes,player_ptr_t& player
 		){
+			value_scale_t scale(player);
 			std::vector<std::pair<TEnumType,std::variant<TUintWidth,float>>> attributes;
 			if(valid_attributes.size() == 0){
 				return attributes;
 			}
-			uint8_t i = std::clamp(this->roll<uint8_t>(),(uint8_t)0,(uint8_t)(max_attributes));
+			uint8_t i = std::clamp(this->roll<uint8_t>(),(uint8_t)0,(uint8_t)(scale.max_stats));
 			if(!i){
 				return attributes;
 			}
@@ -447,17 +664,18 @@ namespace mods::forge_engine {
 				if(roll<bool>()){
 					attributes.emplace_back(
 							valid_attributes.at(this->roll<uint16_t>() % valid_attributes.size()),
-							roll_float(float_low,float_high)
+							roll_float(scale.stat_low,scale.stat_high)
 					);
 				}else{
 					attributes.emplace_back(
 							valid_attributes.at(this->roll<uint16_t>() % valid_attributes.size()),
-							this->roll_between<TUintWidth>(uint_low,uint_high)
+							this->roll_between<TUintWidth>(scale.uint_low,scale.uint_high)
 					);
 				}
 			}
 			return attributes;
 		}
+
 
 		/**
 		 * Generate a vector of pairs.
@@ -503,4 +721,5 @@ namespace mods::forge_engine {
 
 };
 
+#undef m_debug
 #endif

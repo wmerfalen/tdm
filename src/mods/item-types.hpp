@@ -195,7 +195,16 @@
 (int,armor_penetration_damage_dice_count,"#int, dice count of armor penetration done, no limit",6), \
 (int,armor_penetration_damage_dice_sides,"#int, dice sides of armor penetration done, no limit",6), \
 (int,damage_dice_count,"#int, number of dice",2), \
-(int,damage_dice_sides,"#int, dice sides",6) \
+(int,damage_dice_sides,"#int, dice sides",6), \
+(static_amount_t,incendiary_damage_percent,"#int, static amount of incendiary damage_percent, no limit",0), \
+(static_amount_t,explosive_damage_percent,"#int, static amount of explosive damage_percent, no limit",0), \
+(static_amount_t,shrapnel_damage_percent,"#int, static amount of shrapnel damage_percent, no limit",0), \
+(static_amount_t,corrosive_damage_percent,"#int, static amount of corrosive damage_percent, no limit",0), \
+(static_amount_t,cryogenic_damage_percent,"#int, static amount of cryogenic damage_percent, no limit",0), \
+(static_amount_t,radiation_damage_percent,"#int, static amount of radiation damage_percent, no limit",0), \
+(static_amount_t,emp_damage_percent,"#int, static amount of emp damage_percent, no limit",0), \
+(static_amount_t,shock_damage_percent,"#int, static amount of shock damage_percent, no limit",0), \
+(static_amount_t,anti_matter_damage_percent,"#int, static amount of anti_matter damage_percent, no limit",0) \
 )
 
 #define MENTOC_DRONE_TYPES_SEQUENCE (GROUND_DRONE) \
