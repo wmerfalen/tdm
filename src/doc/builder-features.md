@@ -1,8 +1,8 @@
 # Inventory of features
 
 # game balancing checklist
-	- TODO: Balance `mods::forge_engine::generate_rifle_stat_boosts(player)`
-	- TODO: Balance `mods::forge_engine::generate_rifle_attributes(player)`
+	- TODO: Balance `mods::forge_engine::value_scaler()`
+		- source file: mods/forge-engine/value-scaler.(h|c)pp
 
 # 2020-12-20 Forge Engine (Rifle Generation)
 	- new functions in namespace `mods::forge_engine`

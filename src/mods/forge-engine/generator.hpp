@@ -6,6 +6,8 @@
 #include <memory>
 #include "../object-utils.hpp"
 #include "../rand.hpp"
+#include "value-scaler.hpp"
+#include "requirements.hpp"
 
 #ifdef __MENTOC_SHOW_MODS_FORGE_ENGINE_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::forge_engine::generator]")  << MSG << "\n";
@@ -14,55 +16,58 @@
 #endif
 
 namespace mods::forge_engine {
-
-	struct value_scale_t {
-		player_ptr_t player;
-		float level;
-		float low;
-		float high;
-		float low_low;
-		float stat_low;
-		float stat_high;
-		uint32_t low_level;
-		uint32_t high_level;
-		uint32_t low_low_clamp;
-		uint32_t low_high_clamp;
-		uint32_t high_low_clamp;
-		uint32_t high_high_clamp;
-		uint32_t uint_low;
-		uint32_t uint_high;
-		uint8_t max_stats;
-		~value_scale_t() = default;
-		value_scale_t() = delete;
-		/** TODO: game balancing: these values need to be tweaked */
-		value_scale_t(player_ptr_t& player) {
-			calculate(player);
-		}
-
-		void calculate(player_ptr_t& player){
-			level = (float)player->level();
-			low = 1.0;
-			high = level * 0.9;
-			low_low = level / 3.5;
-			stat_low = std::clamp(low_low, low,high);
-			stat_high =  std::clamp(level,low+1,high+2);
-			low_level = level / 3;
-			high_level = level / 1.3;
-			low_low_clamp = 1;
-			low_high_clamp = 4 + level;
-			high_low_clamp = 2;
-			high_high_clamp = 5 + level;
-			uint_low = std::clamp(low_level, low_low_clamp, low_high_clamp);
-			uint_high = std::clamp(high_level, high_low_clamp, high_high_clamp);
-			max_stats = level + 10;
-		}
-		void dump(){
-			player->send("stat_low: %f\nstat_high: %f\nuint_low: %d\nuint_high: %d\nmax_stats: %d\n\n",stat_low,stat_high,uint_low,uint_high, max_stats);
-		}
-	};
-
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 	using random_number_type_t = uint64_t;
+	/**
+	 * TODO: load these from sql
+	 */
+	static const std::vector<std::string> sub_machine_guns = {
+		"augpara.yml",
+		"fmg9.yml",
+		"mp5.yml",
+		"mp9.yml",
+		"p90.yml",
+		"tar21.yml",
+		"ump45.yml",
+	};
+
+	static const std::vector<std::string> sniper_rifles = {
+"l96aw.yml",
+"psg1.yml",
+"xm109.yml",
+};
+
+	static const std::vector<std::string> light_machine_guns = {
+"belt-fed-minigun.yml",
+"hk21.yml",
+"mk46.yml",
+};
+
+	static const std::vector<std::string> pistols = {
+"czp10.yml",
+"desert-eagle.yml",
+"glock.yml",
+"magnum-revolver.yml",
+"ppk.yml"
+};
+
+	static const std::vector<std::string> assault_rifles = {
+"famas.yml",
+"g36c.yml",
+"m16a4.yml",
+"m3.yml",
+"m4.yml",
+"scarh.yml",
+};
+
+	static const std::vector<std::string> shotguns = {
+"saiga12.yml",
+"sasg12.yml",
+};
+
+	static const std::vector<std::string> machine_pistols = {
+		"uzi.yml",
+	};
 	/**
 	 * [key]: ESA = Elemental/Stat/Attribute
 	 * [key]: CSL = Class/Stat/Level
@@ -246,26 +251,6 @@ namespace mods::forge_engine {
 			__ARMOR_WEAR_FIRST = ARMOR_ITEM_WEAR_FINGER,
 			__ARMOR_WEAR_LAST = ARMOR_ITEM_WEAR_WEAPON_ATTACHMENT
 		};
-		enum stat_types_t {
-			SKILL_STR = 1,
-			SKILL_STR_ADD ,
-			SKILL_INTEL ,
-			SKILL_WIS ,
-			SKILL_DEX ,
-			SKILL_CON ,
-			SKILL_CHA ,
-			SKILL_ELECTRONICS ,
-			SKILL_ARMOR ,
-			SKILL_MARKSMANSHIP ,
-			SKILL_SNIPING ,
-			SKILL_DEMOLITIONS ,
-			SKILL_CHEMISTRY ,
-			SKILL_WEAPON_HANDLING ,
-			SKILL_STRATEGY ,
-			SKILL_MEDICAL ,
-			__SKILL_TYPE_FIRST = SKILL_STR,
-			__SKILL_TYPE_LAST = SKILL_MEDICAL
-		};
 		enum elemental_types_t {
 			ELEM_INCENDIARY = 1,
 			ELEM_EXPLOSIVE,
@@ -279,18 +264,6 @@ namespace mods::forge_engine {
 			__ELEM_FIRST = ELEM_INCENDIARY,
 			__ELEM_LAST = ELEM_ANTI_MATTER,
 		};
-		enum player_class_types_t {
-			PLCLASS_SNIPER = 1,
-			PLCLASS_MARINE ,
-			PLCLASS_BREACHER ,
-			PLCLASS_ENGINEER ,
-			PLCLASS_MEDIC ,
-			PLCLASS_GHOST ,
-			PLCLASS_SUPPORT ,
-			__PLCLASS_FIRST = PLCLASS_SNIPER,
-			__PLCLASS_LAST = PLCLASS_SUPPORT
-		};
-
 		static const std::vector<armor_attributes_t> valid_armor_attributes = {
 			ARMOR_ATTR_THAC0,
 			ARMOR_ATTR_WEIGHT,
@@ -512,27 +485,35 @@ namespace mods::forge_engine {
 		};
 
 
-	struct requirements_t {
-		std::vector<std::pair<stat_types_t,uint32_t>> stats;
-		uint32_t minimum_player_level;
-		std::vector<player_class_types_t> player_classes;
-	};
 
 	struct generated_rifle_t {
-		rifle_types_t type;
-		requirements_t requirements;
-		std::vector<std::pair<rifle_attributes_t,uint32_t>> attributes;
-		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> elemental_damages;
-		std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> stat_boosts;
+		generated_rifle_t() = delete;
+		generated_rifle_t(player_ptr_t& player);
+		obj_ptr_t roll();
+		void send_stats_to_player(player_ptr_t& player);
+		std::string get_dump();
+		private:
+		player_ptr_t m_player;
+		rifle_types_t m_type;
+		requirements_t m_requirements;
+		std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> m_attributes;
+		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> m_elemental_damages;
+		std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> m_stat_boosts;
+		obj_ptr_t m_instance;
 	};
 
 	struct generated_armor_t {
-		armor_types_t type;
-		requirements_t requirements;
-		std::vector<std::pair<armor_attributes_t,uint32_t>> attributes;
-		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> elemental_damages;
-		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> elemental_resistances;
-		std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> stat_boosts;
+		obj_ptr_t roll();
+		void send_stats_to_player(player_ptr_t& player);
+		std::string get_dump();
+		private:
+		player_ptr_t m_player;
+		armor_types_t m_type;
+		requirements_t m_requirements;
+		std::vector<std::pair<armor_attributes_t,uint32_t>> m_attributes;
+		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> m_elemental_damages;
+		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> m_elemental_resistances;
+		std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> m_stat_boosts;
 	};
 
 	struct generated_explosive_t {
@@ -651,7 +632,7 @@ namespace mods::forge_engine {
 		std::vector<std::pair<TEnumType,std::variant<TUintWidth,float>>> generate_random_mixed(
 				const std::vector<TEnumType>& valid_attributes,player_ptr_t& player
 		){
-			value_scale_t scale(player);
+			value_scaler scale(player);
 			std::vector<std::pair<TEnumType,std::variant<TUintWidth,float>>> attributes;
 			if(valid_attributes.size() == 0){
 				return attributes;
@@ -676,6 +657,27 @@ namespace mods::forge_engine {
 			return attributes;
 		}
 
+		std::vector<std::string> yaml_list(rifle_types_t t){
+			switch(t){
+				case RIFLE_TYPE_SHOTGUN:
+					return shotguns;
+				case RIFLE_TYPE_ASSAULT_RIFLE:
+					return assault_rifles;
+				case RIFLE_TYPE_SUB_MACHINE_GUN:
+					return  sub_machine_guns;
+				case RIFLE_TYPE_SNIPER:
+					return sniper_rifles;
+				case RIFLE_TYPE_HANDGUN:
+				case RIFLE_TYPE_PISTOL:
+					return pistols;
+				case RIFLE_TYPE_MACHINE_PISTOL:
+					return machine_pistols;
+				case RIFLE_TYPE_LIGHT_MACHINE_GUN:
+					return light_machine_guns;
+				default:
+					return {};
+			}
+		}
 
 		/**
 		 * Generate a vector of pairs.
