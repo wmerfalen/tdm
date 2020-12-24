@@ -52,7 +52,7 @@ stat_medical: 1 #int16_t, positive or negative amount to affect medical stat
 str_type: 'HELMET' # enum, object type
 manufacturer: 'SR-Lead Corp' # string, anything 
 name: 'Tactical full-face gas mask' # string, anything name of object 
-vnum: 53 # integer, unique identifier
+vnum: 72
 description: 'Tactical full-face gas mask'
 short_description: 'Tactical full-face gas mask'
 action_description: 'tactical full-face gas mask'

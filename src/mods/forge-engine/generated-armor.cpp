@@ -12,24 +12,25 @@
 
 namespace mods::forge_engine {
 	extern generator item_generator;
-	/** TODO: fill these vectors with yaml files */
 	static std::vector<std::string> armor_finger = {};
 	static std::vector<std::string> armor_neck = {};
+	static std::vector<std::string> armor_shield= {};
+	static std::vector<std::string> armor_about = {};
+	static std::vector<std::string> armor_wield = {};
+	static std::vector<std::string> armor_hold = {};
+	static std::vector<std::string> armor_secondary = {};
+
+	static std::vector<std::string> armor_shoulders = {};
+	static std::vector<std::string> armor_vest_pack  = {};
+
 	static std::vector<std::string> armor_body = {};
 	static std::vector<std::string> armor_head = {};
 	static std::vector<std::string> armor_legs = {};
 	static std::vector<std::string> armor_feet = {};
 	static std::vector<std::string> armor_hands = {};
 	static std::vector<std::string> armor_arms = {};
-	static std::vector<std::string> armor_shield= {};
-	static std::vector<std::string> armor_about = {};
 	static std::vector<std::string> armor_waist = {};
 	static std::vector<std::string> armor_wrist = {};
-	static std::vector<std::string> armor_wield = {};
-	static std::vector<std::string> armor_hold = {};
-	static std::vector<std::string> armor_secondary = {};
-	static std::vector<std::string> armor_shoulders = {};
-	static std::vector<std::string> armor_vest_pack  = {};
 	static std::vector<std::string> armor_elbow = {};
 	static std::vector<std::string> armor_backpack = {};
 	static std::vector<std::string> armor_goggles = {};
@@ -171,13 +172,24 @@ namespace mods::forge_engine {
 	}
 
 	obj_ptr_t generated_armor_t::roll() {
-		m_type = mods::forge_engine::item_generator.random_armor_type();
+
+		std::string yaml = "";
+		uint8_t max_loops = 100;
+		do {
+			m_type = mods::forge_engine::item_generator.random_armor_type();
+			yaml = random_yaml(yaml_list(m_type));
+		} while(yaml.length() == 0 && max_loops-- > 0);
+		if(yaml.length() == 0) {
+			log("SYSERR: generated_armor_t is continuing with a zero-length yaml file! randomized armor loot will be terrible!");
+			exit(-4);
+		}
+
 		m_requirements = mods::forge_engine::item_generator.generate_requirements(m_player);
 		m_attributes = mods::forge_engine::item_generator.generate_armor_attributes(m_player);
 		m_elemental_damages = mods::forge_engine::item_generator.generate_armor_elemental_boosts(m_player);
 		m_elemental_resistances = mods::forge_engine::item_generator.generate_armor_elemental_resistances(m_player);
 		m_stat_boosts = mods::forge_engine::item_generator.generate_armor_stat_boosts(m_player);
-		m_instance = create_object(ITEM_RIFLE, "g36c.yml");
+		m_instance = create_object(ITEM_ARMOR, random_yaml(yaml_list(m_type)));
 		this->fill(m_instance);
 		return m_instance;
 	}

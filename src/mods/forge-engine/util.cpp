@@ -2,6 +2,9 @@
 
 namespace mods::forge_engine {
 	std::string random_yaml(const std::vector<std::string>& files) {
+		if(files.size() == 0) {
+			return "";
+		}
 		return files.at(roll_between<std::size_t>(0,files.size()));
 	}
 	std::string to_string(armor_attributes_t t) {

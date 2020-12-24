@@ -16,47 +16,47 @@
 csv_capabilities: 'TBA' #csv, strings free-form TBA
 csv_attach_to: 'TBA' #csv, strings attach to various kinds of items TBA
 thac0: 50 #int
-weight_in_lbs: 5 #float, weight in lbs
-fire_resistance_percent: 5 #percent
-balistic_resistance_percent: 5 #percent
+weight_in_lbs: 2 #float, weight in lbs
+fire_resistance_percent: 11 #percent
+balistic_resistance_percent: 11 #percent
 speed_profile: 0 #int, ENUM 0=UNHINDERED,1=FAST,2=HINDERED,3=SLOW,4=SLUGGISH
-offensive_damage_amount: 0 #int, static amount of offensive damage
-durability_profile: 'DECENT' #string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUSTRIAL_STRENGTH,GODLIKE,INDESTRUCTIBLE
+offensive_damage_amount: 6 #int, static amount of offensive damage
+durability_profile: 'GODLIKE' #string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUSTRIAL_STRENGTH,GODLIKE,INDESTRUCTIBLE
 repair_cost_profile: 1 #int, ENUM 0=CHEAP,1=DECENT,2=COSTLY,3=VERY_EXPENSIVE
-hp: 320 #int, hit points
-classification: 'BASIC' #string, 'BASIC', 'ADVANCED', 'ELITE'
-worth: 150 #int, how much the item is worth.
-incendiary_resistance_percent: 10 #int, static amount of incendiary resistance_percent, no limit
-explosive_resistance_percent: 0 #int, static amount of explosive resistance_percent, no limit
-shrapnel_resistance_percent: 0 #int, static amount of shrapnel resistance_percent, no limit
-corrosive_resistance_percent: 45 #int, static amount of corrosive resistance_percent, no limit
-cryogenic_resistance_percent: 40 #int, static amount of cryogenic resistance_percent, no limit
+hp: 128 #int, hit points
+classification: 'ADVANCED' #string, 'BASIC', 'ADVANCED', 'ELITE'
+worth: 450 #int, how much the item is worth.
+incendiary_resistance_percent: 15 #int, static amount of incendiary resistance_percent, no limit
+explosive_resistance_percent: 15 #int, static amount of explosive resistance_percent, no limit
+shrapnel_resistance_percent: 15 #int, static amount of shrapnel resistance_percent, no limit
+corrosive_resistance_percent: 15 #int, static amount of corrosive resistance_percent, no limit
+cryogenic_resistance_percent: 10 #int, static amount of cryogenic resistance_percent, no limit
 radiation_resistance_percent: 10 #int, static amount of radiation resistance_percent, no limit
-emp_resistance_percent: 5 #int, static amount of emp resistance_percent, no limit
-shock_resistance_percent: 2 #int, static amount of shock resistance_percent, no limit
-anti_matter_resistance_percent: 2 #int, static amount of anti_matter resistance_percent, no limit
-stat_strength: 2 #int16_t, positive or negative amount to affect strength stat
+emp_resistance_percent: 15 #int, static amount of emp resistance_percent, no limit
+shock_resistance_percent: 12 #int, static amount of shock resistance_percent, no limit
+anti_matter_resistance_percent: 12 #int, static amount of anti_matter resistance_percent, no limit
+stat_strength: 5 #int16_t, positive or negative amount to affect strength stat
 stat_intelligence: 5 #int16_t, positive or negative amount to affect intelligence stat
 stat_wisdom: 3 #int16_t, positive or negative amount to affect wisdom stat
-stat_dexterity: 0 #int16_t, positive or negative amount to affect dexterity stat
-stat_constitution: 0 #int16_t, positive or negative amount to affect constitution stat
-stat_electronics: 0 #int16_t, positive or negative amount to affect electronics stat
-stat_armor: 2 #int16_t, positive or negative amount to affect armor stat
-stat_marksmanship: 0 #int16_t, positive or negative amount to affect marksmanship stat
-stat_sniping: 0 #int16_t, positive or negative amount to affect sniping stat
-stat_demolitions: 5 #int16_t, positive or negative amount to affect demolitions stat
+stat_dexterity: 5 #int16_t, positive or negative amount to affect dexterity stat
+stat_constitution: 5 #int16_t, positive or negative amount to affect constitution stat
+stat_electronics: 2 #int16_t, positive or negative amount to affect electronics stat
+stat_armor: 10 #int16_t, positive or negative amount to affect armor stat
+stat_marksmanship: 2 #int16_t, positive or negative amount to affect marksmanship stat
+stat_sniping: 2 #int16_t, positive or negative amount to affect sniping stat
+stat_demolitions: 13 #int16_t, positive or negative amount to affect demolitions stat
 stat_chemistry: 10 #int16_t, positive or negative amount to affect chemistry stat
-stat_weapon_handling: 2 #int16_t, positive or negative amount to affect weapon_handling stat
-stat_strategy: 10 #int16_t, positive or negative amount to affect strategy stat
-stat_medical: 1 #int16_t, positive or negative amount to affect medical stat
-str_type: 'HELMET' # enum, object type
+stat_weapon_handling: 3 #int16_t, positive or negative amount to affect weapon_handling stat
+stat_strategy: 13 #int16_t, positive or negative amount to affect strategy stat
+stat_medical: 11 #int16_t, positive or negative amount to affect medical stat
+str_type: 'GLOVES' # enum, object type
 manufacturer: 'SR-Lead Corp' # string, anything 
-name: 'Tactical full-face gas mask' # string, anything name of object 
-vnum: 53 # integer, unique identifier
-description: 'Tactical full-face gas mask'
-short_description: 'Tactical full-face gas mask'
-action_description: 'tactical full-face gas mask'
-feed_file: 'tactical-gas-mask.yml'
+name: 'XM-50 Scorpio Tactical Gloves' # string, anything name of object 
+vnum: 68 # integer, unique identifier
+description: 'XM-50 Scorpio Tactical Gloves'
+short_description: 'XM-50 Scorpio Tactical Gloves'
+action_description: 'XM-50 Scorpio Tactical Gloves'
+feed_file: 'xm-scorpio-tactical-gloves.yml'
 #rarity types
 # COMMON
 # UNCOMMON
@@ -64,4 +64,4 @@ feed_file: 'tactical-gas-mask.yml'
 # LEGENDARY
 # GOD_TIER
 # DEFAULT
-rarity: 'COMMON'
+rarity: 'RARE'

@@ -15,48 +15,48 @@
 # type: MASK
 csv_capabilities: 'TBA' #csv, strings free-form TBA
 csv_attach_to: 'TBA' #csv, strings attach to various kinds of items TBA
-thac0: 50 #int
-weight_in_lbs: 5 #float, weight in lbs
-fire_resistance_percent: 5 #percent
-balistic_resistance_percent: 5 #percent
-speed_profile: 0 #int, ENUM 0=UNHINDERED,1=FAST,2=HINDERED,3=SLOW,4=SLUGGISH
-offensive_damage_amount: 0 #int, static amount of offensive damage
-durability_profile: 'DECENT' #string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUSTRIAL_STRENGTH,GODLIKE,INDESTRUCTIBLE
-repair_cost_profile: 1 #int, ENUM 0=CHEAP,1=DECENT,2=COSTLY,3=VERY_EXPENSIVE
-hp: 320 #int, hit points
-classification: 'BASIC' #string, 'BASIC', 'ADVANCED', 'ELITE'
-worth: 150 #int, how much the item is worth.
-incendiary_resistance_percent: 10 #int, static amount of incendiary resistance_percent, no limit
-explosive_resistance_percent: 0 #int, static amount of explosive resistance_percent, no limit
-shrapnel_resistance_percent: 0 #int, static amount of shrapnel resistance_percent, no limit
-corrosive_resistance_percent: 45 #int, static amount of corrosive resistance_percent, no limit
-cryogenic_resistance_percent: 40 #int, static amount of cryogenic resistance_percent, no limit
-radiation_resistance_percent: 10 #int, static amount of radiation resistance_percent, no limit
-emp_resistance_percent: 5 #int, static amount of emp resistance_percent, no limit
-shock_resistance_percent: 2 #int, static amount of shock resistance_percent, no limit
-anti_matter_resistance_percent: 2 #int, static amount of anti_matter resistance_percent, no limit
-stat_strength: 2 #int16_t, positive or negative amount to affect strength stat
-stat_intelligence: 5 #int16_t, positive or negative amount to affect intelligence stat
-stat_wisdom: 3 #int16_t, positive or negative amount to affect wisdom stat
-stat_dexterity: 0 #int16_t, positive or negative amount to affect dexterity stat
-stat_constitution: 0 #int16_t, positive or negative amount to affect constitution stat
-stat_electronics: 0 #int16_t, positive or negative amount to affect electronics stat
-stat_armor: 2 #int16_t, positive or negative amount to affect armor stat
-stat_marksmanship: 0 #int16_t, positive or negative amount to affect marksmanship stat
-stat_sniping: 0 #int16_t, positive or negative amount to affect sniping stat
-stat_demolitions: 5 #int16_t, positive or negative amount to affect demolitions stat
-stat_chemistry: 10 #int16_t, positive or negative amount to affect chemistry stat
-stat_weapon_handling: 2 #int16_t, positive or negative amount to affect weapon_handling stat
-stat_strategy: 10 #int16_t, positive or negative amount to affect strategy stat
-stat_medical: 1 #int16_t, positive or negative amount to affect medical stat
-str_type: 'HELMET' # enum, object type
-manufacturer: 'SR-Lead Corp' # string, anything 
-name: 'Tactical full-face gas mask' # string, anything name of object 
-vnum: 53 # integer, unique identifier
-description: 'Tactical full-face gas mask'
-short_description: 'Tactical full-face gas mask'
-action_description: 'tactical full-face gas mask'
-feed_file: 'tactical-gas-mask.yml'
+thac0: 80 #int
+weight_in_lbs: 9 #float, weight in lbs
+fire_resistance_percent: 35 #percent
+balistic_resistance_percent: 35 #percent
+speed_profile: 1 #int, ENUM 0=UNHINDERED,1=FAST,2=HINDERED,3=SLOW,4=SLUGGISH
+offensive_damage_amount: 30 #int, static amount of offensive damage
+durability_profile: 'INDUSTRIAL_STRENGTH' #string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUSTRIAL_STRENGTH,GODLIKE,INDESTRUCTIBLE
+repair_cost_profile: 3 #int, ENUM 0=CHEAP,1=DECENT,2=COSTLY,3=VERY_EXPENSIVE
+hp: 620 #int, hit points
+classification: 'ADVANCED' #string, 'BASIC', 'ADVANCED', 'ELITE'
+worth: 410 #int, how much the item is worth.
+incendiary_resistance_percent: 35 #int, static amount of incendiary resistance_percent, no limit
+explosive_resistance_percent: 35 #int, static amount of explosive resistance_percent, no limit
+shrapnel_resistance_percent: 40 #int, static amount of shrapnel resistance_percent, no limit
+corrosive_resistance_percent: 55 #int, static amount of corrosive resistance_percent, no limit
+cryogenic_resistance_percent: 53 #int, static amount of cryogenic resistance_percent, no limit
+radiation_resistance_percent: 28 #int, static amount of radiation resistance_percent, no limit
+emp_resistance_percent: 18 #int, static amount of emp resistance_percent, no limit
+shock_resistance_percent: 18 #int, static amount of shock resistance_percent, no limit
+anti_matter_resistance_percent: 18 #int, static amount of anti_matter resistance_percent, no limit
+stat_strength: 6 #int16_t, positive or negative amount to affect strength stat
+stat_intelligence: 3 #int16_t, positive or negative amount to affect intelligence stat
+stat_wisdom: 1 #int16_t, positive or negative amount to affect wisdom stat
+stat_dexterity: 4 #int16_t, positive or negative amount to affect dexterity stat
+stat_constitution: 9 #int16_t, positive or negative amount to affect constitution stat
+stat_electronics: 2 #int16_t, positive or negative amount to affect electronics stat
+stat_armor: 28 #int16_t, positive or negative amount to affect armor stat
+stat_marksmanship: 4 #int16_t, positive or negative amount to affect marksmanship stat
+stat_sniping: 3 #int16_t, positive or negative amount to affect sniping stat
+stat_demolitions: 25 #int16_t, positive or negative amount to affect demolitions stat
+stat_chemistry: 8 #int16_t, positive or negative amount to affect chemistry stat
+stat_weapon_handling: 5 #int16_t, positive or negative amount to affect weapon_handling stat
+stat_strategy: 18 #int16_t, positive or negative amount to affect strategy stat
+stat_medical: 10 #int16_t, positive or negative amount to affect medical stat
+str_type: 'SHOULDER_PADS' # enum, object type
+manufacturer: 'DS201-X' # string, anything 
+name: 'Titan Heavy Heavy Shoulder Pads' # string, anything name of object 
+vnum: 64 # integer, unique identifier
+description: 'Titan Heavy Heavy Shoulder Pads'
+short_description: 'Titan Heavy Heavy Shoulder Pads'
+action_description: 'Titan Heavy Heavy Shoulder Pads'
+feed_file: 'titan-shoulder-pads.yml'
 #rarity types
 # COMMON
 # UNCOMMON
@@ -64,4 +64,4 @@ feed_file: 'tactical-gas-mask.yml'
 # LEGENDARY
 # GOD_TIER
 # DEFAULT
-rarity: 'COMMON'
+rarity: 'GOD_TIER'

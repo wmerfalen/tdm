@@ -2647,214 +2647,41 @@ CREATE TABLE public.rifle_index (
 	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY(id)
 );
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'augpara.yml',
-		'smg'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'fmg9.yml',
-		'smg'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'mp5.yml',
-		'smg'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'mp9.yml',
-		'smg'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'p90.yml',
-		'smg'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'tar21.yml',
-		'smg'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'ump45.yml',
-		'smg'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'l96aw.yml',
-		'sniper'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'psg1.yml',
-		'sniper'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'xm109.yml',
-		'sniper'
-	);
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'augpara.yml', 'smg');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'fmg9.yml', 'smg');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'mp5.yml', 'smg');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'mp9.yml', 'smg');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'p90.yml', 'smg');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'tar21.yml', 'smg');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'ump45.yml', 'smg');
 
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'belt-fed-minigun.yml',
-		'lmg'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'hk21.yml',
-		'lmg'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'mk46.yml',
-		'lmg'
-	);
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'l96aw.yml', 'sniper');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'psg1.yml', 'sniper');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'xm109.yml', 'sniper');
 
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'czp10.yml',
-		'pistol'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'desert-eagle.yml',
-		'pistol'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'glock.yml',
-		'pistol'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'magnum-revolver.yml',
-		'pistol'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'ppk.yml',
-		'pistol'
-	);
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'belt-fed-minigun.yml', 'lmg');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'hk21.yml', 'lmg');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'mk46.yml', 'lmg');
 
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'famas.yml',
-		'ar'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'g36c.yml',
-		'ar'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'm16a4.yml',
-		'ar'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'm3.yml',
-		'ar'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'm4.yml',
-		'ar'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'scarh.yml',
-		'ar'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'552-commando.yml',
-		'ar'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'aug-a3.yml',
-		'ar'
-	);
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'czp10.yml', 'pistol');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'desert-eagle.yml', 'pistol');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'glock.yml', 'pistol');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'magnum-revolver.yml', 'pistol');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'ppk.yml', 'pistol');
 
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'saiga12.yml',
-		'shotgun'
-	);
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'sasg12.yml',
-		'shotgun'
-	);
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'famas.yml', 'ar');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'g36c.yml', 'ar');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'm16a4.yml', 'ar');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'm3.yml', 'ar');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'm4.yml', 'ar');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'scarh.yml', 'ar');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( '552-commando.yml', 'ar');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'aug-a3.yml', 'ar');
 
-INSERT INTO public.rifle_index (
-		rifle_filename,
-		rifle_type
-) VALUES (
-		'uzi.yml',
-		'mp'
-	);
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'saiga12.yml', 'shotgun');
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'sasg12.yml', 'shotgun');
+
+INSERT INTO public.rifle_index ( rifle_filename, rifle_type) VALUES ( 'uzi.yml', 'mp');
 
 CREATE TABLE public.armor_index (
   id SERIAL UNIQUE,
@@ -2864,3 +2691,41 @@ CREATE TABLE public.armor_index (
 	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY(id)
 );
+
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('baklava.yml','head');
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('tactical-gas-mask.yml','head');
+
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('thermal-goggles.yml','goggles');
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('night-vision-goggles.yml','goggles');
+
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('titan-shoulder-pads.yml','shoulders');
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm-scorpio-shoulder-pads.yml','shoulders');
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('viper-shoulder-pads.yml','shoulders');
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('falcon-shoulder-pads.yml','shoulders');
+
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('basic-ballistic-vest.yml','vest');
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('falcon-ballistic-vest.yml','vest');
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('raven-ballistic-vest.yml','vest');
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('vulture-ballistic-vest.yml','vest');
+
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm-scorpio-slotted-vest-pack.yml','vestpack');
+
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('raven-ultralight-backpack.yml','backpack');
+
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('titan-gauntlets.yml','arms');
+
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('titan-elbow-guards.yml','elbow');
+
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('razor-gps-wrist-watch.yml','wrist');
+
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm-scorpio-tactical-gloves.yml','hands');
+
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm-scorpio-belt.yml','waist');
+
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('titan-shin-guards.yml','legs');
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('viper-leg-guards.yml','legs');
+
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('basic-boots.yml','feet');
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm50-ultralight-boots.yml','feet');
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm607-vulture-boots.yml','feet');
+INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm8-panama-combat-boots.yml','feet');

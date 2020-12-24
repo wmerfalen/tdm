@@ -22,8 +22,6 @@ namespace mods::loot {
 		static constexpr const char* usage = "usage: reward <type> <level>...<level N>\r\n"
 		                                     "valid types:\r\n"
 		                                     "\t- rifle\r\n"
-		                                     "\t- explosive\r\n"
-		                                     "\t- drone\r\n"
 		                                     "\t- armor\r\n"
 		                                     "example: reward rifle 1 10 30\r\n"
 		                                     "\t this example will spin the forge engine for 3 rifles at levels 1, 10, and 30.\r\n";
@@ -52,6 +50,22 @@ namespace mods::loot {
 				generated_rifle_t rifle(player);
 				player->carry(rifle.roll());
 				rifle.send_stats_to_player(player);
+			}
+		}
+		/** generate rifle */
+		if(vec_args[0].compare("armor") == 0) {
+			for(uint8_t i = 1; i < vec_args.size(); ++i) {
+				int level = mods::util::stoi(vec_args[i]).value_or(-1);
+
+				if(level <= 0) {
+					player->error(CAT("Invalid numeric value encountered at string: '", vec_args[i], "'\r\n"));
+					continue;
+				}
+
+				player->level() = level;
+				generated_armor_t armor(player);
+				player->carry(armor.roll());
+				armor.send_stats_to_player(player);
 			}
 		}
 		player->level() = saved_level;

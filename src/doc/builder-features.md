@@ -23,49 +23,28 @@
 			- This is where you'll want to tweak the values for game balance
 			- source file: mods/forge-engine/value-scaler.(h|c)pp
 	
-# 2020-12-20 Forge Engine (Rifle Generation)
-	- new functions in namespace `mods::forge_engine`
-		- `generator::generate_rifle_stat_boosts(player)`
-		- `generator::generate_rifle_attributes(player)`
-
-	- TODO: Balance the integers within `generator::generate_rifle_*` functions
-
-# 2020-12-17 Forge Engine
-	- The Forge Engine is the portion of TDMUD that powers the randomized loot system
-		- Randomized loot means thousands of unique items
-		- Special items with very little randomization (think Diablo 2's Unique item types)
-		- An ever-growing list of nerfs/buffs/resists
-
 # NEED TO FINISH: 
 	- checkout mobs/roam-zone branch and finish that stuff
 
 # Cobalt FOB area scripts
 	- source file: lib/js/profiles/far.js
 	- As of 2020-12-17, the south eastern portion of the FOB has been written. (Level 1)
-
+	- started creation of COBALT Forward Operating Base
+	- Armory to the East.
+	- Southern hallway done. Need to add armor locker and armor buy station in armory
 
 # normalized query pattern
 	- Normalized queries can be performed by following the same pattern as the `mob_roam` class in the orm folder
 	- source file: mods/orm/mob-roam.(c|h)pp
-
-# 2020-12-14 
-	- started creation of COBALT Forward Operating Base
-	- Armory to the East.
-	- Southern hallway done. Need to add armor locker and armor buy station in armory
-	- Need to lock the backroom in the armory
+	- TODO: Need to lock the backroom in the armory
 
 # SQL DUMP
 	- If you need an sql dump, use src/sql/migrations/beta.sql. That file will be updated as migrations are ran.
 	- BEWARE: THIS FILE DROPS THE MUD DATABASE BEFORE RUNNING
 
-# 2020-12-09
-	- updated src/sql/migrations/beta.sql
 
-# 2020-12-05
+# Visibility
 	- Calculating visibility now the sole responsibility of `mods::calc_visibility::is_visible(observer,target)`
-
-
-# 2020-12-04 
 	- finding player by description relative to player
 		- source file: mods/examine.cpp
 		- `mods::examine::find_player_by_name(player_ptr_t& player, std::string_view arg)`
@@ -90,7 +69,7 @@
 		- special ability 'drone_bomb' now ready
 		- example: `drone_bomb north 2`
 
-# 2020-11-29 classes system rework
+# classes system rework
 	Up until today, there has been no definite scope to the player classes. It has all been one
 	big blur of adding random features with no clear decision as to the definite direction
 	of the game. I am taking the time now to describe the new class system which in turn
@@ -131,7 +110,7 @@
 	The special ability of each PC is damage based as well. The ability
 	should either prevent or enhance damage done/taken.
 
-# 2020-11-29 REVISED CLASS SYSTEM
+# REVISED CLASS SYSTEM
 
 # SNIPER
 	- Loadout:
@@ -219,15 +198,15 @@
 # values system
 	- source file: mods/values.cpp
 	- usage: set_value <key> <value>
-	- get_value <key>...<keyN>
-	- revert_value_to_default <arg>...<argN>
-	- list_values [searchable]
+	- `get_value <key>...<keyN>`
+	- `revert_value_to_default <arg>...<argN>`
+	- `list_values [searchable]`
 
 # armor lockers
-	- install_armor_locker <yaml>...<yaml-N>
-	- uninstall_armor_locker
+	- `install_armor_locker <yaml>...<yaml-N>`
+	- `uninstall_armor_locker`
 	- quotas:
-		- armor_locker_quota <integer>
+		- `armor_locker_quota <integer>`
 	- source file: mods/integral-objects.cpp
 	- replenish source file: mods/zone.cpp
 		- TODO: use query container source code to keep quota up
@@ -235,10 +214,10 @@
 	- db source file: mods/integral-objects-db.cpp
 
 # weapon lockers
-	- install_weapon_locker <yaml>...<yaml-N>
-	- weapon_armor_locker
+	- `install_weapon_locker <yaml>...<yaml-N>`
+	- `weapon_armor_locker`
 	- quotas:
-		- weapon_locker_quota <integer>
+		- `weapon_locker_quota <integer>`
 	- source file: mods/integral-objects.cpp
 	- replenish source file: mods/zone.cpp
 		- TODO: use query container source code to keep quota up
@@ -250,7 +229,7 @@
 	- db source file: mods/integral-objects-db.cpp
 
 # camera feed
-	- install_camera_feed <room-vnum>...<room-vnum-N>
+	- `install_camera_feed <room-vnum>...<room-vnum-N>`
 	- todo: name the object properly. currently it's named "gadget"
 	- source file: mods/integral-objects.cpp
 	- feed source file: mods/integal-objects.cpp
@@ -258,21 +237,21 @@
 	- db source file: mods/integral-objects-db.cpp
 
 # catchy names
-	- create_catchy_name decimator "The Decimator" g36c.yml{sight:acog.yml,under_barrel:gm32grenadelauncher.yml}
-	- instantiate_catchy_name decimator
+	- `create_catchy_name decimator "The Decimator" g36c.yml{sight:acog.yml,under_barrel:gm32grenadelauncher.yml}`
+	- `instantiate_catchy_name decimator`
 	- source file: mods/integral-objects.cpp
 	
 # querying for objects
-	- query_room <yaml>
-	- query_container <name> <yaml>...<yaml-N>
-	- query_inventory <yaml>
+	- `query_room <yaml>`
+	- `query_container <name> <yaml>...<yaml-N>`
+	- `query_inventory <yaml>`
 	- source file: mods/count-objects.cpp
 
 # target practice
 	- source file: mods/target-practice(-db).cpp
-	- install_dummy
-	- uninstall_dummy
-	- instantiate_dummy
+	- `install_dummy`
+	- `uninstall_dummy`
+	- `instantiate_dummy`
 
 # armor levels
 	- basic protection
@@ -285,7 +264,7 @@
 
 # replenish
 	- source file: mods/replenish.cpp
-	- replenishes ghost class every 10 seconds, or 10-11 seconds for however many ticks the GHOST_REPLENISH_TICKS() dynamic value is set to. (can be set using set_value)
+	- replenishes ghost class every 10 seconds, or 10-11 seconds for however many ticks the `GHOST_REPLENISH_TICKS()` dynamic value is set to. (can be set using `set_value`)
 
 # ghost class
 	- abilities that need writing:
@@ -303,27 +282,27 @@
 	- stat <object|weapon>
 	- source file: act.wizard.cpp
 
-# register_help_command
+# `register_help_command`
 	- source file: mods/help.cpp
-	- register_help_command("scan","help file contents");
+	- `register_help_command("scan","help file contents");`
 
 # centralized sql library helpers
 	- source file: mods/pq.hpp
 
 # super user functions
-	- add_super_user <user>...<userN>
-	- get_super_user_list
-	- remove_super_user <user>...<userN>
-	- go_invisible
+	- `add_super_user <user>...<userN>`
+	- `get_super_user_list`
+	- `remove_super_user <user>...<userN>`
+	- `go_invisible`
 		- makes the user invoking it go invisible
-	- go_visible
+	- `go_visible`
 		- makes the user invoking it visible
-	- set_who_line <player> <string>
-	- clear_who_line <player>...<playerN>
+	- `set_who_line <player> <string>`
+	- `clear_who_line <player>...<playerN>`
 
 # centralized player saving/loading
-	- mods::players::db_load::set_class()
-	- mods::players::db_load::save()
+	- `mods::players::db_load::set_class()`
+	- `mods::players::db_load::save()`
 	- source file: mods/players/db-load.cpp
 
 # skills (only implemented skills)
@@ -409,7 +388,7 @@
 		```
 	- source files: mods/rate-limiting.(hpp/cpp)
 
-# advance_level now uses our library code
+# `advance_level` now uses our library code
 	- source files: class.cpp, mods/levels.(hpp/cpp), mods/classes/advance-levels.hpp
 	- implemented generic `advance_level` functionality for classes that don't have an implementation
 		- see:

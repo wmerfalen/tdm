@@ -40,7 +40,7 @@ name: 'A H&K G36C Assault Rifle' #string
 # GOD_TIER
 # DEFAULT
 rarity: COMMON
-vnum: 101 #virtual number
+vnum: 46 #virtual number
 object_type: rifle
 description: 'A H&K G36C Assault Rifle is lying here.'
 short_description: 'a G36C Assault Rifle'

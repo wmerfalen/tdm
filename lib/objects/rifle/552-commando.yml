@@ -40,7 +40,7 @@ name: 'A 552 Commando'  #string
 # GOD_TIER
 # DEFAULT
 rarity: COMMON
-vnum: 44 #virtual number
+vnum: 69 #virtual number
 object_type: rifle
 description: 'A 552 Commando is lying here.'
 short_description: 'a 552 Commando'

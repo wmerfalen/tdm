@@ -38,7 +38,7 @@ name: 'A Desert Eagle' #string
 # GOD_TIER
 # DEFAULT
 rarity: RARE
-vnum: 102 #virtual number
+vnum: 47 #virtual number
 object_type: rifle
 description: 'A debilitating Desert Eagle is lying here.'
 short_description: 'a Desert Eagle Pistol'

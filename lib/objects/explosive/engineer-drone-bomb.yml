@@ -1,4 +1,5 @@
 # type: FRAG_GRENADE
+vnum: 77
 # type: INCENDIARY_GRENADE
 # type: REMOTE_EXPLOSIVE
 # type: REMOTE_CHEMICAL
@@ -13,7 +14,6 @@ str_type: 'REMOTE_EXPLOSIVE' # enum, object type
 type: 'REMOTE_EXPLOSIVE' # integer enum 
 manufacturer: 'CLXi-F8 Mani-Fold Corp.' # string, anything 
 name: 'Highly engineered Drone Bomb' # string, anything name of object 
-vnum: 19 # integer, unique identifier
 #rarity types
 # COMMON
 # UNCOMMON
