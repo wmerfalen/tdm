@@ -98,7 +98,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/mob-roam mods/mob-roam \
 					 mods/forge-engine/generator mods/forge-engine/value-scaler \
 					 mods/loot mods/forge-engine/generated-rifle mods/orm/rifle-index \
-					 mods/forge-engine/generated-armor \
+					 mods/forge-engine/generated-armor mods/orm/armor-index \
 					 mods/forge-engine/util
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))

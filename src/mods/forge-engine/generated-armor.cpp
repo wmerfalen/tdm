@@ -35,6 +35,72 @@ namespace mods::forge_engine {
 	static std::vector<std::string> armor_goggles = {};
 	static std::vector<std::string> empty = {};
 
+	void generated_armor_t::load_from_sql() {
+		static std::map<std::string,std::vector<std::string>> data;
+		mods::orm::load_all_armor_index_data(&data);
+		for(auto& row : data) {
+			if(row.first.compare("finger") == 0) {
+				armor_finger = row.second;
+			}
+			if(row.first.compare("neck") == 0) {
+				armor_neck = row.second;
+			}
+			if(row.first.compare("body") == 0) {
+				armor_body = row.second;
+			}
+			if(row.first.compare("head") == 0) {
+				armor_head = row.second;
+			}
+			if(row.first.compare("legs") == 0) {
+				armor_legs = row.second;
+			}
+			if(row.first.compare("feet") == 0) {
+				armor_feet = row.second;
+			}
+			if(row.first.compare("hands") == 0) {
+				armor_hands = row.second;
+			}
+			if(row.first.compare("arms") == 0) {
+				armor_arms = row.second;
+			}
+			if(row.first.compare("shield") == 0) {
+				armor_shield = row.second;
+			}
+			if(row.first.compare("about") == 0) {
+				armor_about = row.second;
+			}
+			if(row.first.compare("waist") == 0) {
+				armor_waist = row.second;
+			}
+			if(row.first.compare("wrist") == 0) {
+				armor_wrist = row.second;
+			}
+			if(row.first.compare("wield") == 0) {
+				armor_wield = row.second;
+			}
+			if(row.first.compare("hold") == 0) {
+				armor_hold = row.second;
+			}
+			if(row.first.compare("secondary") == 0) {
+				armor_secondary = row.second;
+			}
+			if(row.first.compare("shoulders") == 0) {
+				armor_shoulders = row.second;
+			}
+			if(row.first.compare("vestpack") == 0) {
+				armor_vest_pack = row.second;
+			}
+			if(row.first.compare("elbow") == 0) {
+				armor_elbow = row.second;
+			}
+			if(row.first.compare("backpack") == 0) {
+				armor_backpack = row.second;
+			}
+			if(row.first.compare("goggles") == 0) {
+				armor_goggles = row.second;
+			}
+		}
+	}
 	const std::vector<std::string>& generated_armor_t::yaml_list(armor_types_t t) {
 		switch(t) {
 			case ARMOR_ITEM_WEAR_FINGER:
@@ -101,6 +167,7 @@ namespace mods::forge_engine {
 
 	generated_armor_t::generated_armor_t (player_ptr_t& player) {
 		m_player = player;
+		load_from_sql();
 	}
 
 	obj_ptr_t generated_armor_t::roll() {

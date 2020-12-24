@@ -6,6 +6,7 @@
 #include "value-scaler.hpp"
 #include "requirements.hpp"
 #include "generator.hpp"
+#include "../orm/armor-index.hpp"
 
 #ifdef __MENTOC_SHOW_MODS_FORGE_ENGINE_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::forge_engine::generated_armor]")  << MSG << "\n";
@@ -27,6 +28,7 @@ namespace mods::forge_engine {
 			void fill_elemental(obj_ptr_t& armor);
 			void fill_stats(obj_ptr_t& armor);
 			const std::vector<std::string>& yaml_list(armor_types_t type);
+			void load_from_sql();
 		private:
 			player_ptr_t m_player;
 			armor_types_t m_type;
