@@ -2856,3 +2856,11 @@ INSERT INTO public.rifle_index (
 		'mp'
 	);
 
+CREATE TABLE public.armor_index (
+  id SERIAL UNIQUE,
+	armor_filename VARCHAR NOT NULL,
+	armor_type VARCHAR NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(id)
+);

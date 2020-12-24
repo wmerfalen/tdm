@@ -64,7 +64,6 @@ namespace mods::orm {
 		id_type_t id;
 		room_vnum_t event_room_vnum;
 		std::string armor_type;
-		std::string mob_virtual_number;
 		std::vector<armor_index_record_t> rows;
 		bool loaded;
 	};
