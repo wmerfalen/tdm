@@ -1,8 +1,20 @@
 # Inventory of features
 
+# 2020-12-23 `mods::forge_engine::generated_rifle`
+	- completely wraps the logic to create a randomly generated rifle of various rifle types
+
+# 2020-12-23 `mods::loot` namespace
+	- source file: mods/loot.cpp
+	- exposes central loot reward function
+		- `mods::loot::reward_player(player_ptr_t& player);`
+	- reward ACMD now available to debug loot system
+	- `value_scaler` function now available to debug value scaling
+
 # game balancing checklist
 	- TODO: Balance `mods::forge_engine::value_scaler()`
+		- This is where you'll want to tweak the values for game balance
 		- source file: mods/forge-engine/value-scaler.(h|c)pp
+	
 
 # 2020-12-20 Forge Engine (Rifle Generation)
 	- new functions in namespace `mods::forge_engine`

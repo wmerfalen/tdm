@@ -4,6 +4,7 @@
 #include "interpreter.hpp"
 #include "screen-searcher.hpp"
 #include "forge-engine/generator.hpp"
+#include "forge-engine/generated-rifle.hpp"
 
 #define __MENTOC_MODS_LOOT_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_LOOT_SHOW_DEBUG_OUTPUT__

@@ -181,6 +181,29 @@ namespace mods::yaml {
 		this->exported["armor_hp"] = std::to_string(hp);
 		this->exported["armor_classification"] = classification;
 		this->exported["armor_worth"] = std::to_string(worth);
+		this->exported["armor_incendiary_resistance_percent"] = std::to_string(this->incendiary_resistance_percent);
+		this->exported["armor_explosive_resistance_percent"] = std::to_string(this->explosive_resistance_percent);
+		this->exported["armor_shrapnel_resistance_percent"] = std::to_string(this->shrapnel_resistance_percent);
+		this->exported["armor_corrosive_resistance_percent"] = std::to_string(this->corrosive_resistance_percent);
+		this->exported["armor_cryogenic_resistance_percent"] = std::to_string(this->cryogenic_resistance_percent);
+		this->exported["armor_radiation_resistance_percent"] = std::to_string(this->radiation_resistance_percent);
+		this->exported["armor_emp_resistance_percent"] = std::to_string(this->emp_resistance_percent);
+		this->exported["armor_shock_resistance_percent"] = std::to_string(this->shock_resistance_percent);
+		this->exported["armor_anti_matter_resistance_percent"] = std::to_string(this->anti_matter_resistance_percent);
+		this->exported["armor_stat_strength"] = std::to_string(stat_strength);
+		this->exported["armor_stat_intelligence"] = std::to_string(stat_intelligence);
+		this->exported["armor_stat_wisdom"] = std::to_string(stat_wisdom);
+		this->exported["armor_stat_dexterity"] = std::to_string(stat_dexterity);
+		this->exported["armor_stat_constitution"] = std::to_string(stat_constitution);
+		this->exported["armor_stat_electronics"] = std::to_string(stat_electronics);
+		this->exported["armor_stat_armor"] = std::to_string(stat_armor);
+		this->exported["armor_stat_marksmanship"] = std::to_string(stat_marksmanship);
+		this->exported["armor_stat_sniping"] = std::to_string(stat_sniping);
+		this->exported["armor_stat_demolitions"] = std::to_string(stat_demolitions);
+		this->exported["armor_stat_chemistry"] = std::to_string(stat_chemistry);
+		this->exported["armor_stat_weapon_handling"] = std::to_string(stat_weapon_handling);
+		this->exported["armor_stat_strategy"] = std::to_string(stat_strategy);
+		this->exported["armor_stat_medical"] = std::to_string(stat_medical);
 	}
 	uint64_t container_description_t::flush_to_db() {
 		try {

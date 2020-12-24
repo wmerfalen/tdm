@@ -342,7 +342,21 @@
 (static_amount_t,radiation_resistance_percent,"#int, static amount of radiation resistance_percent, no limit",0), \
 (static_amount_t,emp_resistance_percent,"#int, static amount of emp resistance_percent, no limit",0), \
 (static_amount_t,shock_resistance_percent,"#int, static amount of shock resistance_percent, no limit",0), \
-(static_amount_t,anti_matter_resistance_percent,"#int, static amount of anti_matter resistance_percent, no limit",0) \
+(static_amount_t,anti_matter_resistance_percent,"#int, static amount of anti_matter resistance_percent, no limit",0), \
+(int16_t,stat_strength,"#int16_t, positive or negative amount to affect strength stat",0), \
+(int16_t,stat_intelligence,"#int16_t, positive or negative amount to affect intelligence stat",0), \
+(int16_t,stat_wisdom,"#int16_t, positive or negative amount to affect wisdom stat",0), \
+(int16_t,stat_dexterity,"#int16_t, positive or negative amount to affect dexterity stat",0), \
+(int16_t,stat_constitution,"#int16_t, positive or negative amount to affect constitution stat",0), \
+(int16_t,stat_electronics,"#int16_t, positive or negative amount to affect electronics stat",0), \
+(int16_t,stat_armor,"#int16_t, positive or negative amount to affect armor stat",0), \
+(int16_t,stat_marksmanship,"#int16_t, positive or negative amount to affect marksmanship stat",0), \
+(int16_t,stat_sniping,"#int16_t, positive or negative amount to affect sniping stat",0), \
+(int16_t,stat_demolitions,"#int16_t, positive or negative amount to affect demolitions stat",0), \
+(int16_t,stat_chemistry,"#int16_t, positive or negative amount to affect chemistry stat",0), \
+(int16_t,stat_weapon_handling,"#int16_t, positive or negative amount to affect weapon_handling stat",0), \
+(int16_t,stat_strategy,"#int16_t, positive or negative amount to affect strategy stat",0), \
+(int16_t,stat_medical,"#int16_t, positive or negative amount to affect medical stat",0) \
 )
 
 #define MENTOC_CONSUMABLE_TYPES_SEQUENCE (AMMUNITION) \

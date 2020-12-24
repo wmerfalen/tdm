@@ -20,56 +20,6 @@ namespace mods::forge_engine {
 	using random_number_type_t = uint64_t;
 	obj_ptr_t reward_player(player_ptr_t& player);
 	/**
-	 * TODO: load these from sql
-	 */
-	static const std::vector<std::string> sub_machine_guns = {
-		"augpara.yml",
-		"fmg9.yml",
-		"mp5.yml",
-		"mp9.yml",
-		"p90.yml",
-		"tar21.yml",
-		"ump45.yml",
-	};
-
-	static const std::vector<std::string> sniper_rifles = {
-		"l96aw.yml",
-		"psg1.yml",
-		"xm109.yml",
-	};
-
-	static const std::vector<std::string> light_machine_guns = {
-		"belt-fed-minigun.yml",
-		"hk21.yml",
-		"mk46.yml",
-	};
-
-	static const std::vector<std::string> pistols = {
-		"czp10.yml",
-		"desert-eagle.yml",
-		"glock.yml",
-		"magnum-revolver.yml",
-		"ppk.yml"
-	};
-
-	static const std::vector<std::string> assault_rifles = {
-		"famas.yml",
-		"g36c.yml",
-		"m16a4.yml",
-		"m3.yml",
-		"m4.yml",
-		"scarh.yml",
-	};
-
-	static const std::vector<std::string> shotguns = {
-		"saiga12.yml",
-		"sasg12.yml",
-	};
-
-	static const std::vector<std::string> machine_pistols = {
-		"uzi.yml",
-	};
-	/**
 	 * [key]: ESA = Elemental/Stat/Attribute
 	 * [key]: CSL = Class/Stat/Level
 	 * required combinations
@@ -446,7 +396,7 @@ namespace mods::forge_engine {
 		SKILL_STRATEGY,
 		SKILL_MEDICAL
 	};
-	static const  std::vector<stat_types_t> valid_armor_requirements_based_on  = {
+	static const  std::vector<stat_types_t> valid_armor_stats = {
 		SKILL_STR,
 		SKILL_INTEL,
 		SKILL_WIS,
@@ -487,40 +437,6 @@ namespace mods::forge_engine {
 
 
 
-	struct generated_rifle_t {
-			generated_rifle_t() = delete;
-			generated_rifle_t (player_ptr_t& player);
-			obj_ptr_t roll();
-			void send_stats_to_player(player_ptr_t& player);
-			std::string get_dump();
-			void fill(obj_ptr_t& rifle);
-			void fill_attributes(obj_ptr_t& rifle);
-			void fill_elemental(obj_ptr_t& rifle);
-			void fill_stats(obj_ptr_t& rifle);
-		private:
-			player_ptr_t m_player;
-			rifle_types_t m_type;
-			requirements_t m_requirements;
-			std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> m_attributes;
-			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> m_elemental_damages;
-			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> m_stat_boosts;
-			obj_ptr_t m_instance;
-	};
-
-	struct generated_armor_t {
-			obj_ptr_t roll();
-			void send_stats_to_player(player_ptr_t& player);
-			std::string get_dump();
-		private:
-			player_ptr_t m_player;
-			armor_types_t m_type;
-			requirements_t m_requirements;
-			std::vector<std::pair<armor_attributes_t,uint32_t>> m_attributes;
-			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> m_elemental_damages;
-			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> m_elemental_resistances;
-			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> m_stat_boosts;
-	};
-
 	struct generated_explosive_t {
 		explosive_types_t type;
 		requirements_t requirements;
@@ -536,6 +452,9 @@ namespace mods::forge_engine {
 
 			generator();
 			~generator();
+			std::vector<std::pair<armor_attributes_t,std::variant<uint32_t,float>>> generate_armor_attributes(player_ptr_t& player);
+			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> generate_armor_elemental_boosts(player_ptr_t& player);
+			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> generate_armor_stat_boosts(player_ptr_t& player);
 
 			std::vector<std::pair<explosive_attributes_t,std::variant<uint32_t,float>>> generate_explosive_attributes(player_ptr_t& player);
 			std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> generate_rifle_attributes(player_ptr_t& player);
@@ -662,28 +581,6 @@ namespace mods::forge_engine {
 				return attributes;
 			}
 
-			std::vector<std::string> yaml_list(rifle_types_t t) {
-				switch(t) {
-					case RIFLE_TYPE_SHOTGUN:
-						return shotguns;
-					case RIFLE_TYPE_ASSAULT_RIFLE:
-						return assault_rifles;
-					case RIFLE_TYPE_SUB_MACHINE_GUN:
-						return  sub_machine_guns;
-					case RIFLE_TYPE_SNIPER:
-						return sniper_rifles;
-					case RIFLE_TYPE_HANDGUN:
-					case RIFLE_TYPE_PISTOL:
-						return pistols;
-					case RIFLE_TYPE_MACHINE_PISTOL:
-						return machine_pistols;
-					case RIFLE_TYPE_LIGHT_MACHINE_GUN:
-						return light_machine_guns;
-					default:
-						return {};
-				}
-			}
-
 			/**
 			 * Generate a vector of pairs.
 			 * Pair.first = a randomly chosen enum in valid_attributes.
@@ -735,6 +632,7 @@ namespace mods::forge_engine {
 	std::string to_string(item_types_t t);
 	std::string to_string(rifle_types_t t);
 	std::string to_string(rifle_attributes_t t);
+	std::string to_string(armor_attributes_t t);
 
 	void send_requirements(requirements_t& requirements, player_ptr_t& player);
 
