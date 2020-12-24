@@ -1,0 +1,162 @@
+function color_reset(){ # echoes the reset color
+	echo -e '\033[0m'
+}
+function parse_git_branch() { # grabs current git branch for PS1 usage
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/*\(.*\)/\1/' | sed -e 's| ||gi'
+}
+function mentoc_sty(){ # ehco $STY
+	echo -ne "\033[04;31m$STY"
+}
+function gs(){ # git status
+	git status $@
+}
+function gd(){ # git diff
+	git diff $@
+}
+function base(){ # cd to base webroot dir
+	cd $WEBROOT
+}
+function updir(){ # set current pwd for screen sesh
+	screen -X chdir $(pwd)
+}
+export PS1='\[\033[37m\]$(host_id)$(parse_pwd)::\[\033[42m\]\[\033[40m\]\[\033[31m\] \[$(parse_git_branch)\] \[\033[31m\]\[$(mentoc_sty)\]\[\033[32m\]\[$(color_reset)\]\n-> \[$(color_reset)\]'
+
+function lmdb-str(){ # find strings in lmdb database
+	cd $WEBROOT/../; strings ./data/data.mdb 
+}
+function lmdb-str-less(){ # find strings in lmdb database | less
+	lmdb-str | less
+}
+function lmdb-watch(){ # watch strings in lmdb
+	cd $WEBROOT/../;
+	while [[ 1 ]]; do 
+		strings ./data/data.mdb
+		sleep 2
+	done
+}
+function pwd-is-webroot(){ # change WEBROOT=$PWD
+	export WEBROOT=$PWD
+}
+export BIN=~/bin
+function spell-check(){ # spellcheck $1
+	echo "$@" > /tmp/foo 
+	aspell --lang=en check /tmp/foo
+}
+function sdr(){ # screen -d -r $1
+	if [[ "$1" == "m" ]]; then
+		screen -d -r mud
+		if [[ $? -eq 1 ]]; then
+			cd $WEBROOT ; screen -S mud
+		fi
+		return
+	fi
+	if [[ "$1" == "mr" ]]; then
+		screen -d -r mud-run
+		if [[ $? -eq 1 ]]; then
+			cd $WEBROOT ; screen -S mud-run
+		fi
+		return
+	fi
+	if [[ "$1" == "mc" ]]; then
+		screen -d -r mud-client
+		if [[ $? -eq 1 ]]; then
+			cd $WEBROOT ; screen -S mud-client
+		fi
+		return
+	fi
+	if [[ "$1" == "n" ]]; then
+		screen -d -r nasm
+		if [[ $? -eq 1 ]]; then
+			cd ~/code/code/nasm-01 ; screen -S nasm
+		fi
+		return
+	fi
+	if [[ "$1" == "mud" ]]; then
+		screen -d -r 'mud'
+		return
+	fi
+	if [[ "$1" == "t" ]]; then
+		screen -d -r 't-mud'
+		return
+	fi
+	if [[ "$1" == "gc" ]]; then
+		screen -d -r 'gc-mud'
+		return
+	fi
+
+	screen -d -r $1
+}
+
+function fun(){ # this help screen
+	grep -P 'function [^(]+\(\)\s*{\s*#.*$' ~/.bashrc | 
+		grep '#.*' --color=always | 
+		cut -d' ' -f 2- |
+		sed -e 's|()\s*{||gi' | sort | uniq
+}
+function vim-grp(){ # use grp but open results in tabs
+	vim -p $(grp bound_to | awk '{print $1}' | cut -d ':' -f 1 | sort | uniq)
+}
+
+alias grp='/bin/grep -n -s -I --exclude-dir={doc,libpqxx,boost-cpp,sql,duktape,hana,liblmdb,gsl,duktape-1n.2.0,build,yaml-cpp,boost_1_72_0} --exclude=tags --exclude="*.js"  --exclude-dir=mods/lmdb/liblmdb --exclude="cscope.*" -r '
+
+function gpo(){ # git push origin the current checked out branch, using tsocks
+	/usr/bin/git push origin $(parse_git_branch)
+}
+function copy-pasta(){ # copy the output of one command to clipboard
+	xclip -selection clipboard
+}
+function vnum-crawl(){
+	grep -R vnum | cut -d ':' -f 3 | cut -d '#' -f 1 | sort -n | uniq
+}
+function ca(){ # run callgrind_annotate --auto=yes --inclusive=yes $1 | less
+ callgrind_annotate --auto=yes --inclusive=yes $1 | less
+}
+function edit-crontab(){ # edits crontab using vim.basic
+	EDITOR=/usr/bin/vim /usr/bin/crontab -e
+}
+function gdv(){ # git diff vim
+	vim -p $(git status | grep modified: | cut -d':' -f 2 | sort | uniq)
+}
+function gsv(){ # git diff vim
+	vim -p $(git status | grep modified: | cut -d':' -f 2 | sort | uniq)
+}
+function gsh(){ # git show HEAD~$1...HEAD~$2
+	git show HEAD~$1...HEAD~$2 
+}
+function gsho(){ # git show --oneline --name-only HEAD~$1...HEAD~$2 | tail --lines=+2 | sort | uniq 
+	git show --oneline --name-only HEAD~$1...HEAD~$2 | tail --lines=+2 | sort | uniq 
+}
+function gshv(){ # vim -p $(gsho $@)
+	vim -p $(gsho $@)
+}
+function vb(){
+	vim ~/.bashrc
+}
+function ll(){
+	ls -al $@
+}
+function get-vim-plug(){
+	curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+}
+PATH=~/bin:~/bin/bin:$PATH
+export PATH
+export WEBROOT=~/cmpp/src
+function mud(){ #
+	cd $WEBROOT
+	screen -S mud
+}
+function t-mud(){ #
+	cd $WEBROOT
+	screen -S t-mud
+}
+function gc-mud(){ #
+	cd $WEBROOT
+	screen -S gc-mud
+}
+function gl(){ # git log $@
+	git log $@
+}
+function vv(){ # vim ~/.vimrc
+	vim ~/.vimrc
+}
+export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --follow --exclude .git --exclude boost --exclude build --exclude mods/php --exclude duktape-2.2.0 --exclude libpqxx --exclude  doc/doxygen --exclude duktape'
