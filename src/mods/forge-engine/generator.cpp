@@ -34,30 +34,65 @@ namespace mods::forge_engine {
 		std::cout << "[generator::~generator]\n";
 	}
 
+	/********************/
+	/** rifle functions */
+	/********************/
 	rifle_types_t generator::random_rifle_type() {
 		uint32_t size = std::distance(valid_rifle_types.begin(), valid_rifle_types.end());
 		return valid_rifle_types.at(this->roll<uint32_t>() % size);
+	}
+	std::vector<std::pair<stat_types_t, std::variant<uint32_t, float>>> generator::generate_rifle_stat_boosts(
+	    player_ptr_t& player) {
+		return generate_random_mixed<stat_types_t, uint32_t> (valid_rifle_stats_boosts, player);
 	}
 	rifle_attributes_t generator::random_rifle_attribute() {
 		uint32_t size = std::distance(valid_rifle_attributes.begin(), valid_rifle_attributes.end());
 		return valid_rifle_attributes.at(this->roll<uint32_t>() % size);
 	}
+	std::vector<std::pair<rifle_attributes_t, std::variant<uint32_t, float>>> generator::generate_rifle_attributes(
+	    player_ptr_t& player) {
+		return generate_random_mixed<rifle_attributes_t, uint32_t> (valid_rifle_attributes, player);
+	}
+	std::vector<std::pair<elemental_types_t, std::variant<uint32_t, float>>> generator::generate_rifle_elemental_boosts(
+	    player_ptr_t& player) {
+		return generate_random_mixed<elemental_types_t, uint32_t> (valid_elemental_types, player);
+	}
 
+
+	/********************/
+	/** armor functions */
+	/********************/
+	std::vector<std::pair<armor_attributes_t, std::variant<uint32_t, float>>> generator::generate_armor_attributes(
+	    player_ptr_t& player) {
+		return generate_random_mixed<armor_attributes_t, uint32_t> (valid_armor_attributes, player);
+	}
+	std::vector<std::pair<stat_types_t, std::variant<uint32_t, float>>> generator::generate_armor_stat_boosts(
+	    player_ptr_t& player) {
+		return generate_random_mixed<stat_types_t, uint32_t> (valid_armor_stats, player);
+	}
+	std::vector<std::pair<elemental_types_t, std::variant<uint32_t, float>>> generator::generate_armor_elemental_boosts(
+	    player_ptr_t& player) {
+		return generate_random_mixed<elemental_types_t, uint32_t> (valid_elemental_types, player);
+	}
+	std::vector<std::pair<elemental_types_t, std::variant<uint32_t, float>>> generator::generate_armor_elemental_resistances(
+	    player_ptr_t& player) {
+		return generate_random_mixed<elemental_types_t, uint32_t> (valid_elemental_types, player);
+	}
+
+	/************************/
+	/** explosive functions */
+	/************************/
 	std::vector<std::pair<explosive_attributes_t, std::variant<uint32_t, float>>> generator::generate_explosive_attributes(
 	    player_ptr_t& player) {
 		return generate_random_mixed<explosive_attributes_t, uint32_t> (valid_explosive_attributes, player);
 	}
 
 
-	std::vector<std::pair<rifle_attributes_t, std::variant<uint32_t, float>>> generator::generate_rifle_attributes(
-	    player_ptr_t& player) {
-		return generate_random_mixed<rifle_attributes_t, uint32_t> (valid_rifle_attributes, player);
+	/** generic item functions */
+	item_types_t generator::random_item_type() {
+		uint32_t size = std::distance(active_item_types.begin(), active_item_types.end());
+		return active_item_types.at(this->roll<uint32_t>() % size);
 	}
-	std::vector<std::pair<armor_attributes_t, std::variant<uint32_t, float>>> generator::generate_armor_attributes(
-	    player_ptr_t& player) {
-		return generate_random_mixed<armor_attributes_t, uint32_t> (valid_armor_attributes, player);
-	}
-
 	requirements_t generator::generate_requirements(player_ptr_t& player) {
 		requirements_t reqs;
 		reqs.minimum_player_level = 0;
@@ -80,28 +115,8 @@ namespace mods::forge_engine {
 		return reqs;
 	}
 
-	std::vector<std::pair<stat_types_t, std::variant<uint32_t, float>>> generator::generate_rifle_stat_boosts(
-	    player_ptr_t& player) {
-		return generate_random_mixed<stat_types_t, uint32_t> (valid_rifle_stats_boosts, player);
-	}
-	std::vector<std::pair<stat_types_t, std::variant<uint32_t, float>>> generator::generate_armor_stat_boosts(
-	    player_ptr_t& player) {
-		return generate_random_mixed<stat_types_t, uint32_t> (valid_armor_stats, player);
-	}
 
-	std::vector<std::pair<elemental_types_t, std::variant<uint32_t, float>>> generator::generate_armor_elemental_boosts(
-	    player_ptr_t& player) {
-		return generate_random_mixed<elemental_types_t, uint32_t> (valid_elemental_types, player);
-	}
-	std::vector<std::pair<elemental_types_t, std::variant<uint32_t, float>>> generator::generate_rifle_elemental_boosts(
-	    player_ptr_t& player) {
-		return generate_random_mixed<elemental_types_t, uint32_t> (valid_elemental_types, player);
-	}
-	item_types_t generator::random_item_type() {
-		uint32_t size = std::distance(active_item_types.begin(), active_item_types.end());
-		return active_item_types.at(this->roll<uint32_t>() % size);
-	}
-
+	/** wrapper function that ultimately decides the player's randomized item */
 	obj_ptr_t reward_player(player_ptr_t& player) {
 		item_types_t type = item_generator.random_item_type();
 

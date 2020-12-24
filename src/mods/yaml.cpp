@@ -134,9 +134,9 @@ namespace mods::yaml {
 		if(!out_file.good()) {
 			return -1;
 		}
-		MENTOC_EXAMPLE_CONTAINERS
-		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_CONTAINER_MEMBERS_TUPLE)
-		base_items(&out_file,"Weapons locker","LOCKER");
+		MENTOC_EXAMPLE_ARMORS
+		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_ARMOR_MEMBERS_TUPLE)
+		base_items(&out_file,"Heavy Metal Helmet","HELMET");
 		out_file.flush();
 		out_file.close();
 		return 0;

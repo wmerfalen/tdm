@@ -455,6 +455,8 @@ namespace mods::forge_engine {
 			std::vector<std::pair<armor_attributes_t,std::variant<uint32_t,float>>> generate_armor_attributes(player_ptr_t& player);
 			std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> generate_armor_elemental_boosts(player_ptr_t& player);
 			std::vector<std::pair<stat_types_t,std::variant<uint32_t,float>>> generate_armor_stat_boosts(player_ptr_t& player);
+			std::vector<std::pair<elemental_types_t, std::variant<uint32_t, float>>> generate_armor_elemental_resistances(player_ptr_t& player);
+
 
 			std::vector<std::pair<explosive_attributes_t,std::variant<uint32_t,float>>> generate_explosive_attributes(player_ptr_t& player);
 			std::vector<std::pair<rifle_attributes_t,std::variant<uint32_t,float>>> generate_rifle_attributes(player_ptr_t& player);

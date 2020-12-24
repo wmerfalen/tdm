@@ -12,82 +12,76 @@
 
 namespace mods::forge_engine {
 	extern generator item_generator;
-#if 0
-	/**
-	 * TODO: load these from sql
-	 */
-	static const std::vector<std::string> sub_machine_guns = {
-		"augpara.yml",
-		"fmg9.yml",
-		"mp5.yml",
-		"mp9.yml",
-		"p90.yml",
-		"tar21.yml",
-		"ump45.yml",
-	};
+	/** TODO: fill these vectors with yaml files */
+	static std::vector<std::string> armor_finger = {};
+	static std::vector<std::string> armor_neck = {};
+	static std::vector<std::string> armor_body = {};
+	static std::vector<std::string> armor_head = {};
+	static std::vector<std::string> armor_legs = {};
+	static std::vector<std::string> armor_feet = {};
+	static std::vector<std::string> armor_hands = {};
+	static std::vector<std::string> armor_arms = {};
+	static std::vector<std::string> armor_shield= {};
+	static std::vector<std::string> armor_about = {};
+	static std::vector<std::string> armor_waist = {};
+	static std::vector<std::string> armor_wrist = {};
+	static std::vector<std::string> armor_wield = {};
+	static std::vector<std::string> armor_hold = {};
+	static std::vector<std::string> armor_secondary = {};
+	static std::vector<std::string> armor_shoulders = {};
+	static std::vector<std::string> armor_vest_pack  = {};
+	static std::vector<std::string> armor_elbow = {};
+	static std::vector<std::string> armor_backpack = {};
+	static std::vector<std::string> armor_goggles = {};
+	static std::vector<std::string> empty = {};
 
-	static const std::vector<std::string> sniper_armors = {
-		"l96aw.yml",
-		"psg1.yml",
-		"xm109.yml",
-	};
-
-	static const std::vector<std::string> light_machine_guns = {
-		"belt-fed-minigun.yml",
-		"hk21.yml",
-		"mk46.yml",
-	};
-
-	static const std::vector<std::string> pistols = {
-		"czp10.yml",
-		"desert-eagle.yml",
-		"glock.yml",
-		"magnum-revolver.yml",
-		"ppk.yml"
-	};
-
-	static const std::vector<std::string> assault_armors = {
-		"famas.yml",
-		"g36c.yml",
-		"m16a4.yml",
-		"m3.yml",
-		"m4.yml",
-		"scarh.yml",
-		"552-commando.yml",
-		"aug-a3.yml",
-	};
-
-	static const std::vector<std::string> shotguns = {
-		"saiga12.yml",
-		"sasg12.yml",
-	};
-
-	static const std::vector<std::string> machine_pistols = {
-		"uzi.yml",
-	};
-
-	std::vector<std::string> yaml_list(armor_types_t t) {
+	const std::vector<std::string>& generated_armor_t::yaml_list(armor_types_t t) {
 		switch(t) {
-			case RIFLE_TYPE_SHOTGUN:
-				return shotguns;
-			case RIFLE_TYPE_ASSAULT_RIFLE:
-				return assault_armors;
-			case RIFLE_TYPE_SUB_MACHINE_GUN:
-				return  sub_machine_guns;
-			case RIFLE_TYPE_SNIPER:
-				return sniper_armors;
-			case RIFLE_TYPE_HANDGUN:
-			case RIFLE_TYPE_PISTOL:
-				return pistols;
-			case RIFLE_TYPE_MACHINE_PISTOL:
-				return machine_pistols;
-			case RIFLE_TYPE_LIGHT_MACHINE_GUN:
-				return light_machine_guns;
+			case ARMOR_ITEM_WEAR_FINGER:
+				return armor_finger;
+			case ARMOR_ITEM_WEAR_NECK:
+				return armor_neck;
+			case ARMOR_ITEM_WEAR_BODY:
+				return armor_body;
+			case ARMOR_ITEM_WEAR_HEAD:
+				return armor_head;
+			case ARMOR_ITEM_WEAR_LEGS:
+				return armor_legs;
+			case ARMOR_ITEM_WEAR_FEET:
+				return armor_feet;
+			case ARMOR_ITEM_WEAR_HANDS:
+				return armor_hands;
+			case ARMOR_ITEM_WEAR_ARMS:
+				return armor_arms;
+			case ARMOR_ITEM_WEAR_SHIELD:
+				return armor_shield;
+			case ARMOR_ITEM_WEAR_ABOUT:
+				return armor_about;
+			case ARMOR_ITEM_WEAR_WAIST:
+				return armor_waist;
+			case ARMOR_ITEM_WEAR_WRIST:
+				return armor_wrist;
+			case ARMOR_ITEM_WEAR_WIELD:
+				return armor_wield;
+			case ARMOR_ITEM_WEAR_HOLD:
+				return armor_hold;
+			case ARMOR_ITEM_WEAR_SECONDARY:
+				return armor_secondary;
+			case ARMOR_ITEM_WEAR_SHOULDERS:
+				return armor_shoulders;
+			case ARMOR_ITEM_WEAR_VEST_PACK:
+				return armor_vest_pack;
+			case ARMOR_ITEM_WEAR_ELBOW:
+				return armor_elbow;
+			case ARMOR_ITEM_WEAR_BACKPACK:
+				return armor_backpack;
+			case ARMOR_ITEM_WEAR_GOGGLES:
+				return armor_goggles;
+			case ARMOR_ITEM_WEAR_WEAPON_ATTACHMENT:
 			default:
-				return {};
+				return empty;
 		}
 	}
-#endif
 
 	void generated_armor_t::fill(obj_ptr_t& obj) {
 		fill_attributes(obj);
@@ -114,6 +108,7 @@ namespace mods::forge_engine {
 		m_requirements = mods::forge_engine::item_generator.generate_requirements(m_player);
 		m_attributes = mods::forge_engine::item_generator.generate_armor_attributes(m_player);
 		m_elemental_damages = mods::forge_engine::item_generator.generate_armor_elemental_boosts(m_player);
+		m_elemental_resistances = mods::forge_engine::item_generator.generate_armor_elemental_resistances(m_player);
 		m_stat_boosts = mods::forge_engine::item_generator.generate_armor_stat_boosts(m_player);
 		m_instance = create_object(ITEM_RIFLE, "g36c.yml");
 		this->fill(m_instance);

@@ -26,6 +26,8 @@ namespace mods::forge_engine {
 			void fill_attributes(obj_ptr_t& rifle);
 			void fill_elemental(obj_ptr_t& rifle);
 			void fill_stats(obj_ptr_t& rifle);
+			const std::vector<std::string>& yaml_list(rifle_types_t);
+			void load_from_sql();
 		private:
 			player_ptr_t m_player;
 			rifle_types_t m_type;

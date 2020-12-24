@@ -29,26 +29,30 @@
 #include "orm/mob-roam.hpp"
 #endif
 
+#ifdef __MENTOC_RUN_RIFLE_INDEX_ORM_PREGAME__
+#include "orm/rifle-index.hpp"
+#endif
+
 extern bool login(std::string_view user_name,std::string_view password);
 extern int16_t save_char_data(player_ptr_t& player,std::map<std::string,std::string> values);
 namespace mods::debug::pre_game {
 #define DD(a){ std::cerr << "[debug::pre_game][line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"; }
 	namespace fb = ::mods::flashbang;
-	void mini_game_test(){
+	void mini_game_test() {
 		mods::mini_games::line_up game;
 		std::cerr << game.get_body().data() << "\n";
 		std::cerr << game.rotate_right(1).data() << "\n";
 		std::cerr << game.rotate_left(1).data() << "\n";
 	}
-	void mini_game_orm_test(){
+	void mini_game_orm_test() {
 		mods::orm::mini_game db;
 		db.load_by_room_vnum(128);
 	}
-	void wire_mini_game_test(){
+	void wire_mini_game_test() {
 		mods::mini_games::wires w;
 		std::cerr << w.get_body() << "\n";
 	}
-	void migrations_test(){
+	void migrations_test() {
 		std::string identifier = "create-karma-table";
 		std::string purpose = "to create the karma table";
 
@@ -74,14 +78,25 @@ namespace mods::debug::pre_game {
 		std::cout << "[" << std::get<0>(i) << ",";
 		std::cout << std::get<1>(i) << "]\n";
 	}
-	bool run(){
+	bool run() {
+#ifdef __MENTOC_RUN_RIFLE_INDEX_ORM_PREGAME__
+		{
+			mods::orm::rifle_index r;
+			std::vector<std::string> ar_list;
+			std::cout << "loading all..\n";
+			r.load_all();
+			for(const auto& record : r.rows) {
+				std::cout << green_str("AR: '") << record.rifle_filename << "', of type: '" << record.rifle_type << "'\n";
+			}
+		}
+#endif
 #ifdef __MENTOC_RUN_MOB_ROAM_ORM_PREGAME__
 		{
 			mods::orm::mob_roam mr;
 			std::vector<room_vnum> room_list;
 			uint16_t max_loops = 10;
-			for(auto & room : world){
-				if(--max_loops == 0){
+			for(auto& room : world) {
+				if(--max_loops == 0) {
 					break;
 				}
 				room_list.emplace_back(room.number);
@@ -139,15 +154,15 @@ namespace mods::debug::pre_game {
 		m.save();
 		m.load_by_player(69);
 #endif
-		if(login("zim", "zoo")){
+		if(login("zim", "zoo")) {
 			DD(green_str("Logged in properly with 'zim': 'zoo'"));
-		}else{
+		} else {
 			DD(red_str("Login test failed for 'zim': 'zoo'"));
 		}
 
 #ifdef __MENTOC_RUN_PREGAME_RANDOM_MINIGUNNER_YELLING_CODE__
 		mods::rand::init();
-		for(int i=0; i < 50; i++){
+		for(int i=0; i < 50; i++) {
 			std::cerr << "random_string:" << random_key_string(MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS()) << "\n";
 		}
 #endif
@@ -166,23 +181,23 @@ namespace mods::debug::pre_game {
 		DD("Number of fields updated: " << count);
 		return 1;
 		mods::skills::init_player_levels("<fiz>");
-		
+
 		//mods::skills::load_player_levels("<fiz>");
-		put_player_map("<fiz>","test1",{
-				{"foo","bar"},
-				{"baz","buz"}
-				}
-		);
+		put_player_map("<fiz>","test1", {
+			{"foo","bar"},
+			{"baz","buz"}
+		}
+		              );
 		std::map<std::string,std::string> values;
 		get_player_map("<fiz>","test1",values);
-		for(auto pair : values){
+		for(auto pair : values) {
 			DD("map-fetched: '" << pair.first << "'->'" << pair.second << "'");
 		}
 		std::vector<std::string> vector_vals = {"empathy","apathy","ceased-to-be","","flower"},
-			fetched;
+		                         fetched;
 		put_player_vector("<fiz>","test1",vector_vals);
 		get_player_vector("<fiz>","test1",fetched);
-		for(auto v : fetched){
+		for(auto v : fetched) {
 			DD("vector-fetched: '" << v << "'");
 		}
 #endif
@@ -194,7 +209,7 @@ namespace mods::debug::pre_game {
 		mods::orm::foobar();
 
 		auto o = create_object(ITEM_EXPLOSIVE, "flashbang-grenade.yml");
-		if(o == nullptr){
+		if(o == nullptr) {
 			DD("couldnt load flashbang-grenade.yml");
 			return false;
 		}

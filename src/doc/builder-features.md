@@ -1,7 +1,9 @@
 # Inventory of features
 
-# 2020-12-23 `mods::forge_engine::generated_rifle`
+# 2020-12-23 generated types now wrapped in class
 	- completely wraps the logic to create a randomly generated rifle of various rifle types
+		- `mods::forge_engine::generated_rifle`
+		- `mods::forge_engine::generated_armor`
 
 # 2020-12-23 `mods::loot` namespace
 	- source file: mods/loot.cpp

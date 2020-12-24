@@ -26,6 +26,7 @@ namespace mods::forge_engine {
 			void fill_attributes(obj_ptr_t& armor);
 			void fill_elemental(obj_ptr_t& armor);
 			void fill_stats(obj_ptr_t& armor);
+			const std::vector<std::string>& yaml_list(armor_types_t type);
 		private:
 			player_ptr_t m_player;
 			armor_types_t m_type;

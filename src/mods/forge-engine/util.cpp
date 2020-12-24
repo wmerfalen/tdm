@@ -1,6 +1,9 @@
 #include "util.hpp"
 
 namespace mods::forge_engine {
+	std::string random_yaml(const std::vector<std::string>& files) {
+		return files.at(roll_between<std::size_t>(0,files.size()));
+	}
 	std::string to_string(armor_attributes_t t) {
 		switch(t) {
 #define M_LAZY(A) case A: return #A;

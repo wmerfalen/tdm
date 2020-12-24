@@ -2639,3 +2639,220 @@ CREATE TABLE public.class_ghost (
 		ON UPDATE CASCADE
 );
 ALTER TABLE public.mob_roam ADD COLUMN profile_name varchar(255);
+CREATE TABLE public.rifle_index (
+  id SERIAL UNIQUE,
+	rifle_filename VARCHAR NOT NULL,
+	rifle_type VARCHAR NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(id)
+);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'augpara.yml',
+		'smg'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'fmg9.yml',
+		'smg'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'mp5.yml',
+		'smg'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'mp9.yml',
+		'smg'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'p90.yml',
+		'smg'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'tar21.yml',
+		'smg'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'ump45.yml',
+		'smg'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'l96aw.yml',
+		'sniper'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'psg1.yml',
+		'sniper'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'xm109.yml',
+		'sniper'
+	);
+
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'belt-fed-minigun.yml',
+		'lmg'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'hk21.yml',
+		'lmg'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'mk46.yml',
+		'lmg'
+	);
+
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'czp10.yml',
+		'pistol'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'desert-eagle.yml',
+		'pistol'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'glock.yml',
+		'pistol'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'magnum-revolver.yml',
+		'pistol'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'ppk.yml',
+		'pistol'
+	);
+
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'famas.yml',
+		'ar'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'g36c.yml',
+		'ar'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'm16a4.yml',
+		'ar'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'm3.yml',
+		'ar'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'm4.yml',
+		'ar'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'scarh.yml',
+		'ar'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'552-commando.yml',
+		'ar'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'aug-a3.yml',
+		'ar'
+	);
+
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'saiga12.yml',
+		'shotgun'
+	);
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'sasg12.yml',
+		'shotgun'
+	);
+
+INSERT INTO public.rifle_index (
+		rifle_filename,
+		rifle_type
+) VALUES (
+		'uzi.yml',
+		'mp'
+	);
+

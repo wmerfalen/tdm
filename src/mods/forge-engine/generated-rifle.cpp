@@ -3,6 +3,7 @@
 #include "../interpreter.hpp"
 #include "../super-users.hpp"
 #include "util.hpp"
+#include "../orm/rifle-index.hpp"
 
 #ifdef __MENTOC_SHOW_MODS_FORGE_ENGINE_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::forge_engine::generated_rifle]")  << MSG << "\n";
@@ -15,7 +16,7 @@ namespace mods::forge_engine {
 	/**
 	 * TODO: load these from sql
 	 */
-	static const std::vector<std::string> sub_machine_guns = {
+	static std::vector<std::string> sub_machine_guns = {
 		"augpara.yml",
 		"fmg9.yml",
 		"mp5.yml",
@@ -25,19 +26,19 @@ namespace mods::forge_engine {
 		"ump45.yml",
 	};
 
-	static const std::vector<std::string> sniper_rifles = {
+	static std::vector<std::string> sniper_rifles = {
 		"l96aw.yml",
 		"psg1.yml",
 		"xm109.yml",
 	};
 
-	static const std::vector<std::string> light_machine_guns = {
+	static std::vector<std::string> light_machine_guns = {
 		"belt-fed-minigun.yml",
 		"hk21.yml",
 		"mk46.yml",
 	};
 
-	static const std::vector<std::string> pistols = {
+	static std::vector<std::string> pistols = {
 		"czp10.yml",
 		"desert-eagle.yml",
 		"glock.yml",
@@ -45,7 +46,7 @@ namespace mods::forge_engine {
 		"ppk.yml"
 	};
 
-	static const std::vector<std::string> assault_rifles = {
+	static std::vector<std::string> assault_rifles = {
 		"famas.yml",
 		"g36c.yml",
 		"m16a4.yml",
@@ -56,15 +57,44 @@ namespace mods::forge_engine {
 		"aug-a3.yml",
 	};
 
-	static const std::vector<std::string> shotguns = {
+	static std::vector<std::string> shotguns = {
 		"saiga12.yml",
 		"sasg12.yml",
 	};
 
-	static const std::vector<std::string> machine_pistols = {
+	static std::vector<std::string> machine_pistols = {
 		"uzi.yml",
 	};
-	std::vector<std::string> yaml_list(rifle_types_t t) {
+	static std::vector<std::string> empty = {};
+
+	void generated_rifle_t::load_from_sql() {
+		static std::map<std::string,std::vector<std::string>> data;
+		mods::orm::load_all_rifle_index_data(&data);
+		for(auto& row : data) {
+			if(row.first.compare("ar") == 0) {
+				assault_rifles = row.second;
+			}
+			if(row.first.compare("smg") == 0) {
+				sub_machine_guns = row.second;
+			}
+			if(row.first.compare("sniper") == 0) {
+				sniper_rifles = row.second;
+			}
+			if(row.first.compare("lmg") == 0) {
+				light_machine_guns = row.second;
+			}
+			if(row.first.compare("pistol") == 0) {
+				pistols = row.second;
+			}
+			if(row.first.compare("shotgun") == 0) {
+				shotguns = row.second;
+			}
+			if(row.first.compare("mp") == 0) {
+				machine_pistols = row.second;
+			}
+		}
+	}
+	const std::vector<std::string>& generated_rifle_t::yaml_list(rifle_types_t t) {
 		switch(t) {
 			case RIFLE_TYPE_SHOTGUN:
 				return shotguns;
@@ -82,9 +112,10 @@ namespace mods::forge_engine {
 			case RIFLE_TYPE_LIGHT_MACHINE_GUN:
 				return light_machine_guns;
 			default:
-				return {};
+				return empty;
 		}
 	}
+
 
 	void generated_rifle_t::fill(obj_ptr_t& obj) {
 		fill_attributes(obj);
@@ -104,6 +135,7 @@ namespace mods::forge_engine {
 
 	generated_rifle_t::generated_rifle_t (player_ptr_t& player) {
 		m_player = player;
+		load_from_sql();
 	}
 
 	obj_ptr_t generated_rifle_t::roll() {
@@ -112,7 +144,7 @@ namespace mods::forge_engine {
 		m_attributes = mods::forge_engine::item_generator.generate_rifle_attributes(m_player);
 		m_elemental_damages = mods::forge_engine::item_generator.generate_rifle_elemental_boosts(m_player);
 		m_stat_boosts = mods::forge_engine::item_generator.generate_rifle_stat_boosts(m_player);
-		m_instance = create_object(ITEM_RIFLE, "g36c.yml");
+		m_instance = create_object(ITEM_RIFLE,random_yaml(yaml_list(m_type)));
 		this->fill(m_instance);
 		return m_instance;
 	}
