@@ -17,6 +17,7 @@
 namespace mods::forge_engine {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
+	void armor_index_changed();
 	struct generated_armor_t {
 			generated_armor_t() = delete;
 			generated_armor_t (player_ptr_t& player);

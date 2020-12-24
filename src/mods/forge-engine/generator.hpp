@@ -429,7 +429,7 @@ namespace mods::forge_engine {
 		SKILL_STRATEGY
 	};
 
-	static const std::vector<rifle_attributes_t> negative_buffs = {
+	static const std::vector<rifle_attributes_t> negative_rifle_attribute_buffs = {
 		RIFLE_ATTRIBUTES_COOLDOWN_BETWEEN_SHOTS,
 		RIFLE_ATTRIBUTES_CRITICAL_RANGE,
 		RIFLE_ATTRIBUTES_RELOAD_TIME

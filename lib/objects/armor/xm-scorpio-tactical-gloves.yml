@@ -50,6 +50,7 @@ stat_weapon_handling: 3 #int16_t, positive or negative amount to affect weapon_h
 stat_strategy: 13 #int16_t, positive or negative amount to affect strategy stat
 stat_medical: 11 #int16_t, positive or negative amount to affect medical stat
 str_type: 'GLOVES' # enum, object type
+type: 'GLOVES' # enum, object type
 manufacturer: 'SR-Lead Corp' # string, anything 
 name: 'XM-50 Scorpio Tactical Gloves' # string, anything name of object 
 vnum: 68 # integer, unique identifier

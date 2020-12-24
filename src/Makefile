@@ -99,7 +99,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/forge-engine/generator mods/forge-engine/value-scaler \
 					 mods/loot mods/forge-engine/generated-rifle mods/orm/rifle-index \
 					 mods/forge-engine/generated-armor mods/orm/armor-index \
-					 mods/forge-engine/util
+					 mods/forge-engine/util mods/stat-bonuses
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

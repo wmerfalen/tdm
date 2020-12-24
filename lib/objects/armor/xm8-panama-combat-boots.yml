@@ -50,6 +50,7 @@ stat_weapon_handling: 0 #int16_t, positive or negative amount to affect weapon_h
 stat_strategy: 3 #int16_t, positive or negative amount to affect strategy stat
 stat_medical: 3 #int16_t, positive or negative amount to affect medical stat
 str_type: 'FEET' # enum, object type
+type: 'FEET' # enum, object type
 manufacturer: 'XMG-7H Manufacturing LLC' # string, anything 
 name: 'XM8 Panama Boots' # string, anything name of object 
 vnum: 62 # integer, unique identifier

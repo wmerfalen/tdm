@@ -50,6 +50,7 @@ stat_weapon_handling: 2 #int16_t, positive or negative amount to affect weapon_h
 stat_strategy: 10 #int16_t, positive or negative amount to affect strategy stat
 stat_medical: 1 #int16_t, positive or negative amount to affect medical stat
 str_type: 'HELMET' # enum, object type
+type: 'HELMET' # enum, object type
 manufacturer: 'SR-Lead Corp' # string, anything 
 name: 'Baklava' # string, anything name of object 
 vnum: 54 # integer, unique identifier

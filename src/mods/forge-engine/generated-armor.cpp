@@ -12,6 +12,7 @@
 
 namespace mods::forge_engine {
 	extern generator item_generator;
+	static bool refresh_armor_index = true;
 	static std::vector<std::string> armor_finger = {};
 	static std::vector<std::string> armor_neck = {};
 	static std::vector<std::string> armor_shield= {};
@@ -36,9 +37,15 @@ namespace mods::forge_engine {
 	static std::vector<std::string> armor_goggles = {};
 	static std::vector<std::string> empty = {};
 
+	void armor_index_changed() {
+		refresh_armor_index = true;
+	}
 	void generated_armor_t::load_from_sql() {
 		static std::map<std::string,std::vector<std::string>> data;
-		mods::orm::load_all_armor_index_data(&data);
+		if(refresh_armor_index) {
+			mods::orm::load_all_armor_index_data(&data);
+			refresh_armor_index = false;
+		}
 		for(auto& row : data) {
 			if(row.first.compare("finger") == 0) {
 				armor_finger = row.second;

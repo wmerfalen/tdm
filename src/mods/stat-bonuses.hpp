@@ -6,10 +6,10 @@
 #include "forge-engine/generator.hpp"
 
 namespace mods::stat_bonuses {
-	void player_carry(player_ptr_t& player, obj_ptr_t& object);
-	void player_uncarry(player_ptr_t& player, obj_ptr_t& object);
-	void player_wear(player_ptr_t& player,obj_ptr_t& object);
-	void player_unwear(player_ptr_t& player,obj_ptr_t& object);
+	void player_carry(uuid_t player, uuid_t object);
+	void player_uncarry(uuid_t player, uuid_t object);
+	void player_wear(uuid_t player,uuid_t object);
+	void player_unwear(uuid_t player,uuid_t object);
 };
 
 #endif

@@ -49,14 +49,15 @@ stat_chemistry: 10 #int16_t, positive or negative amount to affect chemistry sta
 stat_weapon_handling: 2 #int16_t, positive or negative amount to affect weapon_handling stat
 stat_strategy: 10 #int16_t, positive or negative amount to affect strategy stat
 stat_medical: 1 #int16_t, positive or negative amount to affect medical stat
-str_type: 'HELMET' # enum, object type
+str_type: 'WAIST' # enum, object type
+type: 'WAIST' # enum, object type
 manufacturer: 'SR-Lead Corp' # string, anything 
 name: 'Tactical full-face gas mask' # string, anything name of object 
-vnum: 76
-description: 'Tactical full-face gas mask'
-short_description: 'Tactical full-face gas mask'
-action_description: 'tactical full-face gas mask'
-feed_file: 'tactical-gas-mask.yml'
+vnum: 85
+description: 'XM50 Scorpio Tac Belt'
+short_description: 'XM50 Scorpio Tac Belt'
+action_description: 'XM50 Scorpio Tac Belt'
+feed_file: 'xm-scorpio-belt.yml'
 #rarity types
 # COMMON
 # UNCOMMON

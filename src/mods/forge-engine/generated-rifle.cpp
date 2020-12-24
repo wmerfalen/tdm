@@ -13,63 +13,26 @@
 
 namespace mods::forge_engine {
 	extern generator item_generator;
-	/**
-	 * TODO: load these from sql
-	 */
-	static std::vector<std::string> sub_machine_guns = {
-		"augpara.yml",
-		"fmg9.yml",
-		"mp5.yml",
-		"mp9.yml",
-		"p90.yml",
-		"tar21.yml",
-		"ump45.yml",
-	};
+	static bool refresh_rifle_index = true;
+	static std::vector<std::string> sub_machine_guns;
+	static std::vector<std::string> sniper_rifles;
+	static std::vector<std::string> light_machine_guns;
+	static std::vector<std::string> pistols;
+	static std::vector<std::string> assault_rifles;
+	static std::vector<std::string> shotguns;
+	static std::vector<std::string> machine_pistols;
+	static std::vector<std::string> empty;
 
-	static std::vector<std::string> sniper_rifles = {
-		"l96aw.yml",
-		"psg1.yml",
-		"xm109.yml",
-	};
-
-	static std::vector<std::string> light_machine_guns = {
-		"belt-fed-minigun.yml",
-		"hk21.yml",
-		"mk46.yml",
-	};
-
-	static std::vector<std::string> pistols = {
-		"czp10.yml",
-		"desert-eagle.yml",
-		"glock.yml",
-		"magnum-revolver.yml",
-		"ppk.yml"
-	};
-
-	static std::vector<std::string> assault_rifles = {
-		"famas.yml",
-		"g36c.yml",
-		"m16a4.yml",
-		"m3.yml",
-		"m4.yml",
-		"scarh.yml",
-		"552-commando.yml",
-		"aug-a3.yml",
-	};
-
-	static std::vector<std::string> shotguns = {
-		"saiga12.yml",
-		"sasg12.yml",
-	};
-
-	static std::vector<std::string> machine_pistols = {
-		"uzi.yml",
-	};
-	static std::vector<std::string> empty = {};
+	void rifle_index_changed() {
+		refresh_rifle_index = true;
+	}
 
 	void generated_rifle_t::load_from_sql() {
 		static std::map<std::string,std::vector<std::string>> data;
-		mods::orm::load_all_rifle_index_data(&data);
+		if(refresh_rifle_index) {
+			mods::orm::load_all_rifle_index_data(&data);
+			refresh_rifle_index = false;
+		}
 		for(auto& row : data) {
 			if(row.first.compare("ar") == 0) {
 				assault_rifles = row.second;
@@ -112,6 +75,7 @@ namespace mods::forge_engine {
 			case RIFLE_TYPE_LIGHT_MACHINE_GUN:
 				return light_machine_guns;
 			default:
+				std::cerr << "[WARNING]: unknown rifle type at '" << __FILE__ << ":" << __LINE__ << ": type: '" << std::to_string(t) << "'\n";
 				return empty;
 		}
 	}

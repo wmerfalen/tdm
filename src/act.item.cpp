@@ -25,6 +25,7 @@
 #include "mods/yaml.hpp"
 #include "mods/skills.hpp"
 
+#define __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__
 /* extern variables */
 extern room_rnum donation_room_1;
 #if 0
@@ -181,13 +182,13 @@ ACMD(do_put) {
 
 
 int can_take_obj(char_data *ch, struct obj_data *obj) {
-  if(mods::object_utils::is_installed(obj)){
+	if(mods::object_utils::is_installed(obj)) {
 		act("$p: you must use the uninstall command to remove this device.", FALSE, ch, obj, 0, TO_CHAR);
 		return 0;
-	}else if(mods::object_utils::is_installing(obj)){
+	} else if(mods::object_utils::is_installing(obj)) {
 		act("$p: you can't! You're currently installing it", FALSE, ch, obj, 0, TO_CHAR);
 		return 0;
-	}else if(IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) {
+	} else if(IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) {
 		act("$p: you can't carry that many items.", FALSE, ch, obj, 0, TO_CHAR);
 		return (0);
 	} else if((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch)) {
@@ -1344,13 +1345,33 @@ bool perform_wear_with_confirmation(player_ptr_t& player, obj_ptr_t& in_obj, int
 	 */
 
 	static constexpr int wear_bitvectors[] = {
-		ITEM_WEAR_TAKE, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_NECK,
-		ITEM_WEAR_NECK, ITEM_WEAR_BODY, ITEM_WEAR_HEAD, ITEM_WEAR_LEGS,
-		ITEM_WEAR_FEET, ITEM_WEAR_HANDS, ITEM_WEAR_ARMS, ITEM_WEAR_SHIELD,
-		ITEM_WEAR_ABOUT, ITEM_WEAR_WAIST, ITEM_WEAR_WRIST, ITEM_WEAR_WRIST,
-		ITEM_WEAR_WIELD, ITEM_WEAR_TAKE, ITEM_WEAR_SECONDARY,
-		ITEM_WEAR_SHOULDERS, ITEM_WEAR_VEST_PACK, ITEM_WEAR_ELBOW,
-		ITEM_WEAR_BACKPACK, ITEM_WEAR_GOGGLES
+		ITEM_WEAR_LIGHT,
+		ITEM_WEAR_FINGER,
+		ITEM_WEAR_FINGER,
+		ITEM_WEAR_NECK,
+		ITEM_WEAR_NECK,
+		ITEM_WEAR_BODY,
+		ITEM_WEAR_HEAD,
+		ITEM_WEAR_LEGS,
+		ITEM_WEAR_FEET,
+		ITEM_WEAR_HANDS,
+		ITEM_WEAR_ARMS,
+		ITEM_WEAR_SHIELD,
+		ITEM_WEAR_ABOUT,
+		ITEM_WEAR_WAIST,
+		ITEM_WEAR_WRIST,
+		ITEM_WEAR_WRIST,
+		ITEM_WEAR_WIELD,
+		ITEM_WEAR_HOLD,
+		ITEM_WEAR_SECONDARY,
+		ITEM_WEAR_WEAPON_ATTACHMENT,
+		ITEM_WEAR_SHOULDERS,
+		ITEM_WEAR_SHOULDERS,
+		ITEM_WEAR_BACKPACK,
+		ITEM_WEAR_GOGGLES,
+		ITEM_WEAR_VEST_PACK,
+		ITEM_WEAR_ELBOW,
+		ITEM_WEAR_ELBOW
 	};
 
 	static const std::string already_wearing[] = {
@@ -1398,20 +1419,20 @@ bool perform_wear_with_confirmation(player_ptr_t& player, obj_ptr_t& in_obj, int
 		player->sendln(already_wearing[where]);
 		return 0;
 	}
-	if(obj->has_armor()){
+	if(obj->has_armor()) {
 		auto classification = obj->armor()->attributes->classification_enum;
-		if(classification == mods::yaml::armor_classification_type_t::BASIC && 
-			!mods::skills::player_can(player,skill_t::BASIC_ARMOR)){
+		if(classification == mods::yaml::armor_classification_type_t::BASIC &&
+		        !mods::skills::player_can(player,skill_t::BASIC_ARMOR)) {
 			act("You can't wear $p until you master the {yel}BASIC_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
 			return 0;
 		}
-		if(classification == mods::yaml::armor_classification_type_t::ADVANCED && 
-			!mods::skills::player_can(player,skill_t::ADVANCED_ARMOR)){
+		if(classification == mods::yaml::armor_classification_type_t::ADVANCED &&
+		        !mods::skills::player_can(player,skill_t::ADVANCED_ARMOR)) {
 			act("You can't wear $p until you master the {yel}ADVANCED_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
 			return 0;
 		}
-		if(classification == mods::yaml::armor_classification_type_t::ELITE && 
-			!mods::skills::player_can(player,skill_t::ELITE_ARMOR)){
+		if(classification == mods::yaml::armor_classification_type_t::ELITE &&
+		        !mods::skills::player_can(player,skill_t::ELITE_ARMOR)) {
 			act("You can't wear $p until you master the {yel}ELITE_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
 			return 0;
 		}
@@ -1433,7 +1454,7 @@ int find_eq_pos(char_data *ch, struct obj_data *obj, char *arg) {
 	int where = -1;
 
 	const char *keywords[] = {
-		"!RESERVED!",
+		"light",
 		"finger",
 		"!RESERVED!",
 		"neck",
@@ -1448,9 +1469,18 @@ int find_eq_pos(char_data *ch, struct obj_data *obj, char *arg) {
 		"about",
 		"waist",
 		"wrist",
-		"!RESERVED!",
-		"!RESERVED!",
-		"!RESERVED!",
+		"!RESERVED!", //wrist L
+		"primary",		//wield
+		"hold",	//hold
+		"secondary",
+		"attachment",
+		"shoulder",	//shoulder L
+		"!RESERVED!", //shoulder R
+		"backpack",
+		"goggles",
+		"vestpack",
+		"elbow", //elbow L
+		"!RESERVED!" //elbow R
 		"\n"
 	};
 
@@ -1543,7 +1573,7 @@ int find_eq_pos(char_data *ch, struct obj_data *obj, char *arg) {
 
 
 ACMD(do_wear) {
-	
+
 	char arg1[MAX_INPUT_LENGTH];
 	char arg2[MAX_INPUT_LENGTH];
 	struct obj_data *obj, *next_obj;
@@ -1569,7 +1599,7 @@ ACMD(do_wear) {
 
 			if(CAN_SEE_OBJ(ch, obj) && (where = find_eq_pos(ch, obj, 0)) >= 0) {
 				auto obj_ptr = optr(obj);
-				if(perform_wear_with_confirmation(player,obj_ptr,where)){
+				if(perform_wear_with_confirmation(player,obj_ptr,where)) {
 					items_worn++;
 				}
 			}
@@ -1593,6 +1623,9 @@ ACMD(do_wear) {
 				if((where = find_eq_pos(ch, obj, 0)) >= 0) {
 					perform_wear(ch, obj, where);
 				} else {
+#ifdef __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__
+					act("dotmode == FIND_ALLDOT || You can't wear $p.", FALSE, ch, obj, 0, TO_CHAR);
+#endif
 					act("You can't wear $p.", FALSE, ch, obj, 0, TO_CHAR);
 				}
 
@@ -1605,6 +1638,9 @@ ACMD(do_wear) {
 			if((where = find_eq_pos(ch, obj, arg2)) >= 0) {
 				perform_wear(ch, obj, where);
 			} else if(!*arg2) {
+#ifdef __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__
+				act("Final ELSE || You can't wear $p.", FALSE, ch, obj, 0, TO_CHAR);
+#endif
 				act("You can't wear $p.", FALSE, ch, obj, 0, TO_CHAR);
 			}
 		}
@@ -1615,7 +1651,7 @@ ACMD(do_wear) {
 
 
 ACMD(do_wield) {
-	
+
 	char arg[MAX_INPUT_LENGTH];
 	struct obj_data *obj;
 
@@ -1639,17 +1675,17 @@ ACMD(do_wield) {
 
 
 ACMD(do_grab) {
-	
+
 	auto vec_args = PARSE_ARGS();
 	struct obj_data *obj;
 	auto obj_ptr = mods::util::parse_object_vec(player,vec_args);
-	if(!obj_ptr){
+	if(!obj_ptr) {
 		player->sendln("Hold what?");
 		return;
 	}
 	obj = obj_ptr.get();
 	char* arg = vec_args[0].data();
-	if (player->get_imp_mode() && player->get_misc_pref(player->mpref::HOLD_ANYTHING)) {
+	if(player->get_imp_mode() && player->get_misc_pref(player->mpref::HOLD_ANYTHING)) {
 		perform_wear(ch, obj, WEAR_HOLD);
 	} else if(!(obj = get_obj_in_list_vis(ch, arg, NULL, ch->carrying))) {
 		send_to_char(ch, "You don't seem to have %s %s.", AN(arg), arg);
@@ -1658,8 +1694,8 @@ ACMD(do_grab) {
 			perform_wear(ch, obj, WEAR_LIGHT);
 		} else {
 			if(!CAN_WEAR(obj, ITEM_WEAR_HOLD) && GET_OBJ_TYPE(obj) != ITEM_WAND &&
-					GET_OBJ_TYPE(obj) != ITEM_STAFF && GET_OBJ_TYPE(obj) != ITEM_SCROLL &&
-					GET_OBJ_TYPE(obj) != ITEM_POTION) {
+			        GET_OBJ_TYPE(obj) != ITEM_STAFF && GET_OBJ_TYPE(obj) != ITEM_SCROLL &&
+			        GET_OBJ_TYPE(obj) != ITEM_POTION) {
 				send_to_char(ch, "You can't hold that.");
 			} else {
 				perform_wear(ch, obj, WEAR_HOLD);
@@ -1670,18 +1706,17 @@ ACMD(do_grab) {
 
 
 
-int can_carry_n(player_ptr_t player){
+int can_carry_n(player_ptr_t player) {
 	return (5 + (player->aff_abils().dex >> 1) + (player->level() >> 1));
 }
 
 void perform_remove(player_ptr_t player, int pos) {
 	auto equipment = player->equipment(pos);
 	player->unequip(pos);
-	if(!equipment){
+	if(!equipment) {
 		log("SYSERR: perform_remove: bad pos %d passed.", pos);
 		return;
-	} 
-	else if(equipment->flagged(ITEM_NODROP)) {
+	} else if(equipment->flagged(ITEM_NODROP)) {
 		act("You can't remove $p, it must be CURSED!", FALSE, player->cd(), equipment.get(), 0, TO_CHAR);
 	} else if(player->carry_items() >= can_carry_n(player)) {
 		act("$p: you can't carry that many items!", FALSE, player->cd(), equipment.get(), 0, TO_CHAR);
@@ -1695,7 +1730,7 @@ void perform_remove(player_ptr_t player, int pos) {
 
 
 ACMD(do_remove) {
-	
+
 	char arg[MAX_INPUT_LENGTH];
 	int i, dotmode, found;
 
@@ -1728,7 +1763,7 @@ ACMD(do_remove) {
 
 			for(i = 0; i < NUM_WEARS; i++)
 				if(GET_EQ(ch, i) && CAN_SEE_OBJ(ch, GET_EQ(ch, i)) &&
-						isname(arg, GET_EQ(ch, i)->name)) {
+				        isname(arg, GET_EQ(ch, i)->name)) {
 					perform_remove(player, i);
 					found = 1;
 				}

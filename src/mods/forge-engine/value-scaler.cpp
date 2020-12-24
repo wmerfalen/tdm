@@ -11,7 +11,7 @@
 
 namespace mods::forge_engine {
 	value_scaler::~value_scaler() {
-		std::cout << "[value_scaler::~value_scaler]\n";
+		m_debug("[value_scaler::~value_scaler]");
 	}
 	value_scaler::value_scaler(player_ptr_t& player) {
 		calculate(player);

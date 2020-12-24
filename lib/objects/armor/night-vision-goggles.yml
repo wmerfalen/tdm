@@ -50,6 +50,7 @@ stat_weapon_handling: 3 #int16_t, positive or negative amount to affect weapon_h
 stat_strategy: 18 #int16_t, positive or negative amount to affect strategy stat
 stat_medical: 0 #int16_t, positive or negative amount to affect medical stat
 str_type: 'GOGGLES' # enum, object type
+type: 'GOGGLES' # enum, object type
 manufacturer: 'SR-Lead Corp' # string, anything 
 name: 'Tactical Night Vision Goggles' # string, anything name of object 
 vnum: 56 # integer, unique identifier

@@ -248,17 +248,19 @@ namespace mods::forge_engine {
 				case ARMOR_ATTR_SPEED_PROFILE:
 					attributes->speed_profile = fetch(attr.second,attributes->speed_profile);
 					break;
-				case ARMOR_ATTR_DURABLITY_PROFILE:
-					//FIXME attributes->durability_profile = std::to_string(fetch(attr.second,attributes->durability_profile));
-					break;
 				case ARMOR_ATTR_REPAIR_COST_PROFILE:
 					attributes->repair_cost_profile = fetch(attr.second,attributes->repair_cost_profile);
 					break;
 				case ARMOR_ATTR_HP:
 					attributes->hp = fetch(attr.second,attributes->hp);
 					break;
+				case ARMOR_ATTR_DURABLITY_PROFILE:
+					/** Durability and classification are both string types. for now we don't fill them in. just use whatever the base yaml file used */
+					attributes->durability_profile = attributes->durability_profile;
+					break;
 				case ARMOR_ATTR_CLASSIFICATION:
-					//FIXME: attributes->classification = std::to_string(fetch(attr.second,attributes->classification));
+					/** Durability and classification are both string types. for now we don't fill them in. just use whatever the base yaml file used */
+					attributes->classification = attributes->classification;
 					break;
 				case ARMOR_ATTR_WORTH:
 					attributes->worth = fetch(attr.second,attributes->worth);

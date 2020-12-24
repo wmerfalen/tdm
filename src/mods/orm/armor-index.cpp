@@ -1,8 +1,12 @@
 #include "armor-index.hpp"
 #include "util.hpp"
 
+namespace mods::forge_engine {
+	extern void armor_index_changed();
+};
 namespace mods::orm {
 	std::tuple<int16_t,std::string> armor_index::delete_by_armor_type(std::string_view armor_type_name) {
+		mods::forge_engine::armor_index_changed();
 		return mods::orm::util::delete_where<armor_index,sql_compositor>(
 		           table_name(),
 		           "armor_type",
@@ -17,6 +21,7 @@ namespace mods::orm {
 				std::cerr << red_str("Issue saving armor_index:'") << std::get<1>(insert_result) << "'\n";
 			}
 		}
+		mods::forge_engine::armor_index_changed();
 		return 0;
 	}
 	void armor_index::populate(std::string_view in_armor_type, const std::vector<std::string>& in_armor_filenames) {

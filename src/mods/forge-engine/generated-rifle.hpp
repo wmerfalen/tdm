@@ -15,6 +15,7 @@
 
 namespace mods::forge_engine {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
+	void rifle_index_changed();
 
 	struct generated_rifle_t {
 			generated_rifle_t() = delete;

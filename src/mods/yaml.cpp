@@ -418,7 +418,7 @@ namespace mods::yaml {
 				break;
 			default:
 				(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD | ITEM_WEAR_SECONDARY;
-				log("[rifle_description_t][WARNING] fill_flags used the default flags");
+				log(CAT("[rifle_description_t][WARNING] fill_flags used the default flags for type: ",this->str_type,", and this file: '",this->feed_file,"'").c_str());
 				break;
 		}
 		o->rifle_instance = std::make_unique<rifle_instance_data<attachment_data_t,obj_ptr_t,uuid_t>>();
@@ -437,9 +437,11 @@ namespace mods::yaml {
 		auto * tf = &(o->obj_flags.type_flag);
 		(*tf) = ITEM_ARMOR;
 		o->armor()->type = (mw_armor)this->type;
+		std::cerr << "armor_description_t::fill_flags() o->armor()->type: '" << green_str(std::to_string(o->armor()->type)) << "'\n";
+
 		switch((mw_armor)this->type) {
 			default:
-				log("[armor_description_t][WARNING] fill_flags used the default flags");
+				log(CAT("[armor_description_t][WARNING] fill_flags used the default flags for type: ",this->str_type,", and this file: '",this->feed_file,"'").c_str());
 				break;
 			case mw_armor::VEST:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_BODY | ITEM_WEAR_HOLD;
@@ -448,6 +450,15 @@ namespace mods::yaml {
 			case mw_armor::LEGS:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_LEGS;
 				break;
+
+			case mw_armor::FEET:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_FEET;
+				break;
+
+			case mw_armor::WAIST:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_WAIST;
+				break;
+
 
 			case mw_armor::GAUNTLETS:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_ARMS;
@@ -492,6 +503,10 @@ namespace mods::yaml {
 			case mw_armor::GLOVES:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_HANDS;
 				break;
+			case mw_armor::WRIST:
+				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_WRIST;
+				break;
+
 
 			case mw_armor::SHIELD:
 				(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD | ITEM_WEAR_SHIELD;
@@ -948,8 +963,8 @@ namespace mods::yaml {
 			YAML::Node yaml_file = YAML::LoadFile(std::string(file.data()));
 			auto type_string = yaml_file["str_type"].as<std::string>();
 			fed_items.push_back("str_type");
-			MENTOC_FEED_ARMOR
 			MENTOC_FEED_BASE_MEMBERS
+			MENTOC_FEED_ARMOR
 			this->durability_profile_enum = mods::yaml::to_durability_profile(yaml_file["durability_profile"].as<std::string>());
 			this->durability_profile = mods::yaml::to_string_from_durability_profile(this->durability_profile_enum);
 			this->feed_status = 0;

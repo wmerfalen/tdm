@@ -319,7 +319,9 @@
 (GLOVES) \
 (SHIELD) \
 (WRIST) \
-(MASK)
+(MASK) \
+(FEET) \
+(WAIST)
 
 #define MENTOC_ARMOR_MEMBERS_TUPLE ( \
 (std::string,csv_capabilities,"#csv, strings free-form TBA","'TBA'"), \

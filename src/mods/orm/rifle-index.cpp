@@ -1,8 +1,12 @@
 #include "rifle-index.hpp"
 #include "util.hpp"
 
+namespace mods::forge_engine {
+	extern void rifle_index_changed();
+};
 namespace mods::orm {
 	std::tuple<int16_t,std::string> rifle_index::delete_by_rifle_type(std::string_view rifle_type_name) {
+		mods::forge_engine::rifle_index_changed();
 		return mods::orm::util::delete_where<rifle_index,sql_compositor>(
 		           table_name(),
 		           "rifle_type",
@@ -17,6 +21,7 @@ namespace mods::orm {
 				std::cerr << red_str("Issue saving rifle_index:'") << std::get<1>(insert_result) << "'\n";
 			}
 		}
+		mods::forge_engine::rifle_index_changed();
 		return 0;
 	}
 	void rifle_index::populate(std::string_view in_rifle_type, const std::vector<std::string>& in_rifle_filenames) {
