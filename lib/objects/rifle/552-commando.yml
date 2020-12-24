@@ -1,0 +1,49 @@
+# accuracy map
+accuracy_map: [
+10.00,
+10.00,
+10.00,
+10.00
+]
+ammo_max: 220 #integer
+ammo_type: '' #string, constant enum
+chance_to_injure: 4.23 #float, out of 100
+clip_size: 8 #integer
+cooldown_between_shots: 2 #int, in ticks
+critical_chance: 14 #int, out of 100
+critical_range: 4 #integer, measured in rooms
+damage_map: [
+10.00,
+10.00,
+10.00,
+10.00
+]
+damage_per_second: 4.53 #float
+disorient_amount: 3.14 #float
+headshot_bonus: 3.0 #float
+max_range: 3 #integer,measured in rooms
+range_multiplier: 4.3 #float, multiplied by 
+reload_time: 5 #int, measured in ticks
+rounds_per_minute: 80
+muzzle_velocity: 24
+effective_firing_range: 2
+manufacturer: 'S1 Industries'
+feed_file: '552-commando.yml'
+type: 'ASSAULT_RIFLE' #string, type of weapon
+str_type: 'ASSAULT_RIFLE' #string, type of weapon
+name: 'A 552 Commando'  #string
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: COMMON
+vnum: 44 #virtual number
+object_type: rifle
+description: 'A 552 Commando is lying here.'
+short_description: 'a 552 Commando'
+action_description: '552 Commando'
+damage_dice_count: 6
+damage_dice_sides: 10

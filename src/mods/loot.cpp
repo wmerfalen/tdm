@@ -37,49 +37,6 @@ namespace mods::loot {
 
 		using namespace mods::forge_engine;
 		auto saved_level = player->level();
-		requirements_t requirements;
-
-		/** generate explosive */
-		if(vec_args[0].compare("explosive") == 0) {
-			for(uint8_t i = 1; i < vec_args.size(); ++i) {
-				int level = mods::util::stoi(vec_args[i]).value_or(-1);
-
-				if(level <= 0) {
-					player->error(CAT("Invalid numeric value encountered at string: '", vec_args[i], "'\r\n"));
-					continue;
-				}
-
-				player->level() = level;
-				auto explosive_type = mods::forge_engine::item_generator.random_explosive_type();
-				auto elem = mods::forge_engine::item_generator.random_elemental_type();
-				player->send("Explosive type: %s, elemental: %s\r\n", to_string(explosive_type).c_str(), to_string(elem).c_str());
-				requirements = mods::forge_engine::item_generator.generate_requirements(player);
-				mods::forge_engine::send_requirements(requirements, player);
-			}
-
-			player->level() = saved_level;
-		}
-
-		/** generate armor */
-		if(vec_args[0].compare("armor") == 0) {
-			for(uint8_t i = 1; i < vec_args.size(); ++i) {
-				int level = mods::util::stoi(vec_args[i]).value_or(-1);
-
-				if(level <= 0) {
-					player->error(CAT("Invalid numeric value encountered at string: '", vec_args[i], "'\r\n"));
-					continue;
-				}
-
-				player->level() = level;
-				auto armor_type = mods::forge_engine::item_generator.random_armor_type();
-				auto elem = mods::forge_engine::item_generator.random_elemental_resistance(armor_type);
-				player->send("Armor type: %s, elemental: %s\r\n", to_string(armor_type).c_str(), to_string(elem).c_str());
-				requirements = mods::forge_engine::item_generator.generate_requirements(player);
-				send_requirements(requirements, player);
-			}
-
-			player->level() = saved_level;
-		}
 
 		/** generate rifle */
 		if(vec_args[0].compare("rifle") == 0) {
@@ -93,11 +50,10 @@ namespace mods::loot {
 
 				player->level() = level;
 				generated_rifle_t rifle(player);
-				rifle.roll();
+				player->carry(rifle.roll());
 				rifle.send_stats_to_player(player);
 			}
 		}
-
 		player->level() = saved_level;
 	}
 	/** game init */

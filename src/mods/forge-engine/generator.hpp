@@ -494,6 +494,9 @@ namespace mods::forge_engine {
 			void send_stats_to_player(player_ptr_t& player);
 			std::string get_dump();
 			void fill(obj_ptr_t& rifle);
+			void fill_attributes(obj_ptr_t& rifle);
+			void fill_elemental(obj_ptr_t& rifle);
+			void fill_stats(obj_ptr_t& rifle);
 		private:
 			player_ptr_t m_player;
 			rifle_types_t m_type;

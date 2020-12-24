@@ -118,36 +118,50 @@
 (HANDGUN) \
 (PISTOL) \
 (MACHINE_PISTOL) \
-(LIGHT_MACHINE_GUN) 
+(LIGHT_MACHINE_GUN)
 
 #define MENTOC_RIFLE_MEMBERS_TUPLE ( \
-(int,ammo_max,"#int, bullets",30), \
+(int16_t,ammo_max,"#int16_t, bullets",30), \
 (std::string,ammo_type,"#string, enum","'SNIPER'"), \
 (float,chance_to_injure,"#float, out of 100",10.0), \
-(int,clip_size,"#int, bullets",7), \
-(int,cooldown_between_shots,"#int, ticks",2), \
-(int,critical_chance,"#int, out of 100",33), \
-(int,critical_range,"#int, rooms",3), \
+(int16_t,clip_size,"#int16_t, bullets",7), \
+(int16_t,cooldown_between_shots,"#int16_t, ticks",2), \
+(int16_t,critical_chance,"#int16_t, out of 100",33), \
+(int16_t,critical_range,"#int16_t, rooms",3), \
 (float,damage_per_second,"#float, out of 100",44.0), \
 (float,disorient_amount,"#float, out of 100",3.0), \
 (float,headshot_bonus,"#float, static addition to hitroll",48.00), \
-(int,max_range,"#int, rooms",8), \
+(int16_t,max_range,"#int16_t, rooms",8), \
 (float,range_multiplier,"#float, TBA",1.0), \
-(int,reload_time,"#int, ticks",3), \
-(int,rounds_per_minute,"#int, bullets",8), \
-(int,muzzle_velocity,"#int, TBA",1.0), \
-(int,effective_firing_range,"#int, rooms",2), \
-(int,damage_dice_count,"#int, number of dice",2), \
-(int,damage_dice_sides,"#int, dice sides",6), \
-(int,incendiary_damage,"#int, damage",0), \
-(int,explosive_damage,"#int, damage",0), \
-(int,shrapnel_damage,"#int, damage",0), \
-(int,corrosive_damage,"#int, damage",0), \
-(int,cryogenic_damage,"#int, damage",0), \
-(int,radioactive_damage,"#int, damage",0), \
-(int,emp_damage,"#int, damage",0), \
-(int,shock_damage,"#int, damage",0), \
-(int,anti_matter_damage,"#int, damage",0) \
+(int16_t,reload_time,"#int16_t, ticks",3), \
+(int16_t,rounds_per_minute,"#int16_t, bullets",8), \
+(int16_t,muzzle_velocity,"#int16_t, TBA",1), \
+(int16_t,effective_firing_range,"#int16_t, rooms",2), \
+(int16_t,damage_dice_count,"#int16_t, number of dice",2), \
+(int16_t,damage_dice_sides,"#int16_t, dice sides",6), \
+(int16_t,incendiary_damage,"#int16_t, damage",0), \
+(int16_t,explosive_damage,"#int16_t, damage",0), \
+(int16_t,shrapnel_damage,"#int16_t, damage",0), \
+(int16_t,corrosive_damage,"#int16_t, damage",0), \
+(int16_t,cryogenic_damage,"#int16_t, damage",0), \
+(int16_t,radioactive_damage,"#int16_t, damage",0), \
+(int16_t,emp_damage,"#int16_t, damage",0), \
+(int16_t,shock_damage,"#int16_t, damage",0), \
+(int16_t,anti_matter_damage,"#int16_t, damage",0), \
+(int16_t,stat_strength,"#int16_t, positive or negative amount to affect strength stat",0), \
+(int16_t,stat_intelligence,"#int16_t, positive or negative amount to affect intelligence stat",0), \
+(int16_t,stat_wisdom,"#int16_t, positive or negative amount to affect wisdom stat",0), \
+(int16_t,stat_dexterity,"#int16_t, positive or negative amount to affect dexterity stat",0), \
+(int16_t,stat_constitution,"#int16_t, positive or negative amount to affect constitution stat",0), \
+(int16_t,stat_electronics,"#int16_t, positive or negative amount to affect electronics stat",0), \
+(int16_t,stat_armor,"#int16_t, positive or negative amount to affect armor stat",0), \
+(int16_t,stat_marksmanship,"#int16_t, positive or negative amount to affect marksmanship stat",0), \
+(int16_t,stat_sniping,"#int16_t, positive or negative amount to affect sniping stat",0), \
+(int16_t,stat_demolitions,"#int16_t, positive or negative amount to affect demolitions stat",0), \
+(int16_t,stat_chemistry,"#int16_t, positive or negative amount to affect chemistry stat",0), \
+(int16_t,stat_weapon_handling,"#int16_t, positive or negative amount to affect weapon_handling stat",0), \
+(int16_t,stat_strategy,"#int16_t, positive or negative amount to affect strategy stat",0), \
+(int16_t,stat_medical,"#int16_t, positive or negative amount to affect medical stat",0) \
 )
 
 #define MENTOC_ELEMENTAL_TYPES_SEQUENCE (ELEM_INCENDIARY) \
@@ -171,7 +185,7 @@
 (BREACH_CHARGE) \
 (THERMITE_CHARGE) \
 (FLASHBANG_GRENADE) \
-(SENSOR_GRENADE) 
+(SENSOR_GRENADE)
 
 
 #define MENTOC_EXPLOSIVE_MEMBERS_TUPLE ( \
@@ -209,7 +223,7 @@
 
 #define MENTOC_DRONE_TYPES_SEQUENCE (GROUND_DRONE) \
 (AERIAL_DRONE) \
-(AQUATIC_DRONE) 
+(AQUATIC_DRONE)
 
 #define MENTOC_DRONE_MEMBERS_TUPLE ( \
 (float,hover_airtime,"#float, seconds",4.0), \
@@ -338,7 +352,7 @@
 (HALLUCINOGENS) \
 (PEDS) \
 (GASOLINE) \
-(TRANQUILIZER_DARTS) 
+(TRANQUILIZER_DARTS)
 
 #define MENTOC_CONSUMABLE_MEMBERS_TUPLE ( \
 (std::string,csv_capabilities,"#csv, strings free-form TBA","'TBA'"), \
@@ -510,9 +524,9 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 	BOOST_PP_TUPLE_ELEM(4,0,MEMBER_TUPLE) BOOST_PP_TUPLE_ELEM(4,1,MEMBER_TUPLE);
 
 #ifdef __MENTOC_SHOW_YAML_FIELD_BEING_FED__
-	#define MENTOC_FEED_REPORT_FIELD(a) std::cerr << "[FEEDING field:]'" << a << "'\n";
+#define MENTOC_FEED_REPORT_FIELD(a) std::cerr << "[FEEDING field:]'" << a << "'\n";
 #else
-	#define MENTOC_FEED_REPORT_FIELD(a) 
+#define MENTOC_FEED_REPORT_FIELD(a)
 #endif
 
 #define MENTOC_FEED_PARSE_ACTUAL_IMPL(r,data,MEMBER_TUPLE) \

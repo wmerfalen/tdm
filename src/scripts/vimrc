@@ -33,27 +33,9 @@ function! Javascript_file()
 endfunction
 function! Php_file()
  set filetype=php
- "set tags=$INSITE_ETAGS
- "nnoremap <F7> :! php -l %<CR>
- "nnoremap <F2> :call Refresh()<CR>
- "nnoremap <F3> :call Clear_log()<CR>
-"map <F5> <Esc>:EnableFastPHPFolds<Cr> 
-"map <F6> <Esc>:EnablePHPFolds<Cr> 
 let g:user_emmet_settings = (
 \  join( readfile( expand( '~/.snippets_custom.json' ) ), "\n" ) )
 let g:user_emmet_mode='a'
-"let g:user_emmet_settings = {
-"        \  'php' : {
-"        \    'extends' : 'html',
-"        \    'filters' : 'c',
-"        \  },
-"        \  'xml' : {
-"        \    'extends' : 'html',
-"        \  },
-"        \  'haml' : {
-"        \    'extends' : 'html',
-"        \  },
-"        \}
 endfunction
 "autocmd! BufWritePost *.php :call Gen_tags()
 au BufRead,BufNewFile *.php :call Php_file()
@@ -70,13 +52,17 @@ endfunction
 function! Cpp_make()
 	exec ":cexpr system('make -f $WEBROOT/Makefile -j 16') | cw"
 endfunction
-"nnoremap <c-u> :make -j 8 -f $WEBROOT/Makefile<bar> cw<cr>
 map <c-u> :make -j 16 -f $WEBROOT/Makefile <bar> cw<cr>
-nnoremap <C-c> :! cd $WEBROOT && make clean<CR>
+nnoremap <C-c><C-c> :! cd $WEBROOT && make clean<CR>
 set updatecount=0 updatetime=0
 
 function! Cpp_Gen_tags()
+	if strlen(@%)
+		set autoread
 		exec ":silent ! $WEBROOT/scripts/make-ctags.sh 2>/dev/null &"
+		exec ":silent ! $WEBROOT/scripts/astyle.sh % 2>&1 > /dev/null"
+		normal :e %
+	endif
 endfunction
 
 function! Cpp_MakeClean()
@@ -104,16 +90,18 @@ function! Autogen_Values_Script()
 	exec ":silent ! $WEBROOT/scripts/vk-creator.sh 2>/dev/null &"
 endfunction
 function! Cpp_file()
-hi TerrorAttnLabels ctermfg=black ctermbg=red
-hi HellYeah ctermfg=7 ctermbg=3 cterm=bold
-hi EmphasizeComment ctermfg=1 ctermbg=0
-	set filetype=cpp
-	highlight PointerContainer ctermfg=151
-	match PointerContainer /std::shared_ptr/
-	highlight PointerContainer ctermfg=151
-	match PointerContainer /std::unique_ptr/
-	"set foldmethod=syntax
-	set tags=$WEBROOT/tags
+	if strlen(@%)
+		hi TerrorAttnLabels ctermfg=black ctermbg=red
+		hi HellYeah ctermfg=7 ctermbg=3 cterm=bold
+		hi EmphasizeComment ctermfg=1 ctermbg=0
+		set filetype=cpp
+		highlight PointerContainer ctermfg=151
+		match PointerContainer /std::shared_ptr/
+		highlight PointerContainer ctermfg=151
+		match PointerContainer /std::unique_ptr/
+		set tags=$WEBROOT/tags
+		map <leader>l :tabnew $WEBROOT/../lib<CR>
+	endif
 endfunction
 
 augroup Cpp
@@ -125,7 +113,7 @@ autocmd! BufWritePost *.hpp :call Cpp_Gen_tags()
 autocmd! BufWritePost *.h :call Cpp_Gen_tags()
 autocmd! BufWritePost *.c :call Cpp_Gen_tags()
 autocmd! BufWritePost */values-list.cpp :call Autogen_Values_Script()
-autocmd BufWinLeave * mkview
+autocmd BufWinLeave ?* mkview
 autocmd BufWinEnter * silent! loadviewgroup END
 
 set foldmethod=manual
@@ -190,88 +178,9 @@ map <leader>sp :call SetPaste()<cr>
 
 " I *really* like elda. Very nice
 function! ColorSet()
-	" xterm
-	"color meta5
-	
-	" gaia dark
-	"color nature
-	"color abstract
-	
-	" seabed dark
-	"color nature
-
-	" white on black
-	color magellan
-	"current
-	"color fahrenheit
-	"color nature
-
-	" color calmar256-dark
-	" color kate
-	"color kalahari
-	"color unicon
-	
-	" use with dark pastels xfce4-terminal theme
-	" and Terminus Regular 8pt
-
-	" EXTREMELY sexy when using green on black
-	" EXTREMELY sexy when using bionis dark
-	"color heroku-terminal
-	"color getafe
-	"color ghostbuster
-	"color archery
-
-	" use with caprice dark xfce4-terminal theme
-	"color fahrenheit
-	"color meta5
-
-	"color harlequin
-	"color h80
-	"color nature
-	"color made_of_code
-	"color magellan
-	"color manxome
-	"color martin_krischik
-	"color anderson
-	"color orbital
-	
-	" use with white on black
-	"color orbital
-	
-	" use with seabed dark
-	"color kate
-	"
-	"color abstract
-	
-	" use this with redshift to a low number
-	"color alduin
-
-	"color afterglow
-	" use with green on black
-	" color kaltex
-	
-	"color orbital
-	"color alduin
+	color alduin
 endfunction
-call ColorSet()
-" mellow looks cool with the bionis dark theme in xfce4-terminal
-" color mellow
-"
-"color zazen
-"color carvedwood
 
-" awesome 'into the breach' colorscheme if using 'termina dark' color profile
-function! NativeColor()
-	"color earendel
-endfunction
-"color elflord
-"color fahrenheit
-
-
-" remote from tiny laptop
-function! LaptopColor()
-	color hemisu
-endfunction
 function! SetNoPaste()
 	set nopaste
 endfunction
@@ -279,7 +188,6 @@ function! SetPaste()
 	set paste
 endfunction
 set guifont=Terminus\ Bold\ 14
-" source ~/.vim/cscope_maps.vim
 
 function! FoldSyntax()
   set foldmethod=syntax
@@ -311,7 +219,6 @@ map <leader>fs :call FoldSyntax()<CR>
 set rtp+=~/.fzf
 map <leader>z :call Fuzz()<CR>
 map <leader>co :copen<CR>
-"source $WEBROOT/scripts/doxygen.vim
 map <leader>d :Dox<CR>
 map <leader>i :color nature<CR>
 map <leader>c :call ColorSet()<CR>
@@ -320,3 +227,6 @@ map - :tabm -1<CR>
 map <leader><leader>nn :call NoNumber()<CR>
 map <leader><leader>on :call YesNumber()<CR>
 map <leader>v :tabnew $WEBROOT/mods/values-list.cpp<CR>
+map <leader>d :tabnew $WEBROOT/doc/builder-features.md<CR>
+map <leader>j :tabnew $WEBROOT/../lib/js/profiles/far.js<CR>
+map <leader>o :tabnew $WEBROOT/../lib/objects/<CR>
