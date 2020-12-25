@@ -39,6 +39,8 @@ namespace mods::weapons::damage_types {
 	namespace legacy {
 		int damage(char_data *ch, char_data *victim, int dam, int attacktype);
 	};
+	int reduce_elemental_resistance(int requested_damage, int16_t resistance);
+	void incendiary_damage(player_ptr_t& player,int requested_damage);
 };
 #endif
 

@@ -70,6 +70,9 @@ INIT(mods::forge_engine::value_scaler_static);
 INIT(mods::weapons::damage_types);
 #undef INIT
 
+namespace mods::unit_tests {
+	extern int run();
+};
 namespace mods::mobs::room_watching::events {
 	extern void room_entry(room_rnum,uuid_t);
 };
@@ -210,7 +213,7 @@ namespace mods {
 			sliced = sliced.substr(option_including_equals.length());
 			return sliced;
 		}
-		void init(int argc,char** argv) {
+		int init(int argc,char** argv) {
 			int pos = 0;
 			std::string argument,
 			    lmdb_dir = LMDB_DB_DIRECTORY,
@@ -227,6 +230,7 @@ namespace mods {
 			std::string postgres_port = mods::conf::postgres_port.data();
 			mods::world_conf::toggle::set_obj_from_room(1);
 			std::vector<std::tuple<std::string,std::string>> migrations;
+			bool run_unit_tests = false;
 
 			while(++pos < argc) {
 				if(argv[pos]) {
@@ -253,6 +257,7 @@ namespace mods {
 					          << "--seed=<what> seed the database with one of the following:\n"
 					          << "--run-migration-up=<identifier> run the specified 'up' migration\n"
 					          << "--run-migration-down=<identifier> run the specified 'down' migration\n"
+					          << "--unit-tests Run unit tests and exit\n"
 					          << "     'player_classes': character generation\n"
 					          << "     '': ''\n"
 					          ;
@@ -307,6 +312,10 @@ namespace mods {
 					f_test_suite = argument.substr(10,argument.length()-10);
 					continue;
 				}
+				if(strncmp(argv[pos],"--unit-tests",12) == 0) {
+					run_unit_tests = true;
+					continue;
+				}
 				if(strncmp(argv[pos],"--import-rooms",14) == 0) {
 					f_import_rooms = true;
 					continue;
@@ -346,13 +355,13 @@ namespace mods {
 						if(i == 1) {
 							log("SYSERR: the postgres password is one character long. Please check the postgres password file");
 							mods::globals::shutdown();
-							return;
+							return 0;
 						}
 						while(isspace(postgres_password[i--]) && i > 0) {}
 						if(i == 0) {
 							log("SYSERR: while trying to trim the end of the postgres password of spaces (using isspace()), the resulting postgres password is zero length. Exiting...");
 							mods::globals::shutdown();
-							return;
+							return 0;
 						}
 						postgres_password = postgres_password.substr(0,i);
 						continue;
@@ -453,7 +462,7 @@ namespace mods {
 			} else {
 				log("SYSERR: Couldn't connect to postgres");
 				mods::globals::shutdown();
-				return;
+				return 0;
 			}
 			if(migrations.size()) {
 				for(auto t : migrations) {
@@ -496,6 +505,11 @@ namespace mods {
 			::offensive::init();
 			::builder::init();
 			::informative::init();
+			if(run_unit_tests) {
+				mods::unit_tests::run();
+				mods::globals::shutdown();
+			}
+			return 1; //proceed with game boot
 		}
 		void post_boot_db() {
 		}

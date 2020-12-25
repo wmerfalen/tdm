@@ -360,73 +360,41 @@ namespace mods::weapons::damage_types {
 		}
 		return damage;
 	}
+	void elemental_damage(player_ptr_t& player,std::string_view message,int damage) {
+		if(damage  <= 0) {
+			return;
+		}
+		player->send(message.data(),damage);
+		deal_hp_damage(player,damage);
+	}
 
 	void incendiary_damage(player_ptr_t& player,int requested_damage) {
-		int damage = reduce_elemental_resistance(requested_damage,player->incendiary_resistance_percent());
-		if(damage <= 0) {
-			return;
-		}
-		player->send(mods::values::MSG_FIRE_DAMAGE().c_str(),damage);
-		deal_hp_damage(player,damage);
+		elemental_damage(player, MSG_FIRE_DAMAGE(), reduce_elemental_resistance(requested_damage,player->incendiary_resistance_percent()));
 	}
 
-	void explosive_damage(player_ptr_t& player,uint16_t damage, uuid_t weapon_uuid) {
-		auto weapon = optr_by_uuid(weapon_uuid);
-		if(!weapon) {
-			std::cerr << "WARNING: damage function called but the weapon doesnt check out (doesnt exist I guess): '" << weapon_uuid << "'\n";
-			return;
-		}
-		player->send(MSG_EXPLOSIVE_DAMAGE().c_str(),damage);
-		deal_hp_damage(player,damage);
+	void explosive_damage(player_ptr_t& player,int requested_damage) {
+		elemental_damage(player, MSG_EXPLOSIVE_DAMAGE(), reduce_elemental_resistance(requested_damage,player->explosive_resistance_percent()));
 	}
-	void shrapnel_damage(player_ptr_t& player,uint16_t damage, uuid_t weapon_uuid) {
-		auto weapon = optr_by_uuid(weapon_uuid);
-		if(!weapon) {
-			std::cerr << "WARNING: damage function called but the weapon doesnt check out (doesnt exist I guess): '" << weapon_uuid << "'\n";
-			return;
-		}
+	void shrapnel_damage(player_ptr_t& player,int requested_damage) {
+		elemental_damage(player, MSG_SHRAPNEL_DAMAGE(), reduce_elemental_resistance(requested_damage,player->shrapnel_resistance_percent()));
 	}
-	void corrosive_damage(player_ptr_t& player,uint16_t damage, uuid_t weapon_uuid) {
-		auto weapon = optr_by_uuid(weapon_uuid);
-		if(!weapon) {
-			std::cerr << "WARNING: damage function called but the weapon doesnt check out (doesnt exist I guess): '" << weapon_uuid << "'\n";
-			return;
-		}
+	void corrosive_damage(player_ptr_t& player,int requested_damage) {
+		elemental_damage(player, MSG_CORROSIVE_DAMAGE(), reduce_elemental_resistance(requested_damage,player->corrosive_resistance_percent()));
 	}
-	void cryogenic_damage(player_ptr_t& player,uint16_t damage, uuid_t weapon_uuid) {
-		auto weapon = optr_by_uuid(weapon_uuid);
-		if(!weapon) {
-			std::cerr << "WARNING: damage function called but the weapon doesnt check out (doesnt exist I guess): '" << weapon_uuid << "'\n";
-			return;
-		}
+	void cryogenic_damage(player_ptr_t& player,int requested_damage) {
+		elemental_damage(player, MSG_CRYOGENIC_DAMAGE(), reduce_elemental_resistance(requested_damage,player->cryogenic_resistance_percent()));
 	}
-	void radioactive_damage(player_ptr_t& player,uint16_t damage, uuid_t weapon_uuid) {
-		auto weapon = optr_by_uuid(weapon_uuid);
-		if(!weapon) {
-			std::cerr << "WARNING: damage function called but the weapon doesnt check out (doesnt exist I guess): '" << weapon_uuid << "'\n";
-			return;
-		}
+	void radioactive_damage(player_ptr_t& player,int requested_damage) {
+		elemental_damage(player, MSG_RADIOACTIVE_DAMAGE(), reduce_elemental_resistance(requested_damage,player->radiation_resistance_percent()));
 	}
-	void emp_damage(player_ptr_t& player,uint16_t damage, uuid_t weapon_uuid) {
-		auto weapon = optr_by_uuid(weapon_uuid);
-		if(!weapon) {
-			std::cerr << "WARNING: damage function called but the weapon doesnt check out (doesnt exist I guess): '" << weapon_uuid << "'\n";
-			return;
-		}
+	void emp_damage(player_ptr_t& player,int requested_damage) {
+		elemental_damage(player, MSG_EMP_DAMAGE(), reduce_elemental_resistance(requested_damage,player->emp_resistance_percent()));
 	}
-	void shock_damage(player_ptr_t& player,uint16_t damage, uuid_t weapon_uuid) {
-		auto weapon = optr_by_uuid(weapon_uuid);
-		if(!weapon) {
-			std::cerr << "WARNING: damage function called but the weapon doesnt check out (doesnt exist I guess): '" << weapon_uuid << "'\n";
-			return;
-		}
+	void shock_damage(player_ptr_t& player,int requested_damage) {
+		elemental_damage(player, MSG_SHOCK_DAMAGE(), reduce_elemental_resistance(requested_damage,player->shock_resistance_percent()));
 	}
-	void anti_matter_damage(player_ptr_t& player,uint16_t damage, uuid_t weapon_uuid) {
-		auto weapon = optr_by_uuid(weapon_uuid);
-		if(!weapon) {
-			std::cerr << "WARNING: damage function called but the weapon doesnt check out (doesnt exist I guess): '" << weapon_uuid << "'\n";
-			return;
-		}
+	void anti_matter_damage(player_ptr_t& player,int requested_damage) {
+		elemental_damage(player, MSG_ANTI_MATTER_DAMAGE(), reduce_elemental_resistance(requested_damage,player->anti_matter_resistance_percent()));
 	}
 
 	/**
@@ -1105,8 +1073,8 @@ namespace mods::weapons::damage_types {
 			return;
 		}
 		auto obj = create_object(ITEM_RIFLE,"g36c.yml");
-		player->incendiary_resistance_percent() = resistance % 100;
-		player->send("Your resistance: %f\r\n",(player->incendiary_resistance_percent() / 100.0));
+		player->incendiary_resistance_percent() = resistance;
+		player->send("Your resistance: %f\r\n",player->incendiary_resistance_percent());
 		incendiary_damage(player,damage);
 	}
 

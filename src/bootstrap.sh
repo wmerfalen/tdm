@@ -11,6 +11,22 @@ cd $DIR
 ln -s boost_1_72_0 boost
 rm boost_1_72_0.tar.gz
 
+cd $DIR/mods
+if [[ ! -d $DIR/mods/catch2 ]]; then
+	mkdir $DIR/mods/catch2
+fi
+
+echo "# status: grabbing Catch2..."
+cd $DIR/mods/catch2
+git clone 'https://github.com/catchorg/Catch2'
+cd Catch2
+mkdir build
+cd build
+cmake ..
+make
+cd $DIR
+echo "# done fetching Catch2"
+
 echo "#############################################################"
 echo " VERY IMPORTANT!!!"
 echo " VERY IMPORTANT!!!"

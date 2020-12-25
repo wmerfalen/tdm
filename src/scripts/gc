@@ -1,0 +1,212 @@
+#!/bin/bash
+GDB=/usr/bin/gdb
+cd ~/cmpp
+MENTOC_DATA_DIR=~/cmpp/data/
+MENTOC_POSTGRES_PW_FILE=~/cmpp/data/postgres-pw.txt
+
+MENTOC_POSTGRES_DBNAME=mud
+function usage(){
+	echo "====================================================================="
+	echo "= Tactical Denial GC script Usage                                   ="
+	echo "====================================================================="
+	echo "Available options:                                                   "
+	echo "  --help                                                             "
+	echo "  --db=postgres_db_name                                              "
+	echo "  --run-migration-up=migration-name-without.sql                      "
+	echo "  --run-migration-down=migration-name-without.sql                    "
+	echo "  --auto-login                                                       "
+	echo "  --no-auto-login                                                    "
+	echo "  --dont-auto-login (same as above)                                  "
+	echo "  --auto-run                                                         "
+	echo "  --no-auto-run                                                      "
+	echo "  --dont-auto-run (same as above)                                    "
+	echo "  --no-loop                                                          "
+	echo "  --dont-loop (same as above)                                        "
+	echo "  --loop                                                             "
+	echo "  --unit-tests                                                       "
+	echo "  --debug                                                            "
+	echo "    -> this implies: --no-auto-run --no-loop                         "
+	echo "       use this to debug issues that cause the program to stop       "
+	echo "  --hell                                                             "
+	echo " NOTE: each migration assumes you are not passing in the .sql suffix "
+	echo "====================================================================="
+	exit 0
+}
+
+DEBUG=0
+HELL=0
+UNIT_TESTS=0
+for arg in "$@"
+do
+	if [[ $arg == "--unit-tests" ]]; then
+		UNIT_TESTS=1
+		continue
+	fi
+	if [[ $arg == "--hell" ]]; then
+		HELL=1
+		continue
+	fi
+	if [[ $arg == "--debug" ]]; then
+		DEBUG=1
+		continue
+	fi
+	if [[ $arg == "--help" ]]; then
+		usage
+		continue
+	fi
+	if [[ $arg == "--db="* ]]; then
+		MENTOC_POSTGRES_DBNAME=$( echo "$arg" | sed -e 's|\-\-db=||' )
+		continue
+	fi
+	if [[ $arg == "--run-migration-up="* ]]; then
+		RUN_UP_MIGRATIONS=$(echo "$arg" | sed -e 's|\-\-run\-migration\-up=||')
+		continue
+	fi
+	if [[ $arg == "--run-migration-down="* ]]; then
+		RUN_DOWN_MIGRATIONS=$(echo "$arg" | sed -e 's|\-\-run\-migration\-down=||')
+		continue
+	fi
+	if [[ $arg == "--auto-login" ]]; then
+		MENTOC_AUTO_LOGIN=1
+		continue
+	fi
+	if [[ $arg == "--no-auto-login" ]]; then
+		unset MENTOC_AUTO_LOGIN
+		continue
+	fi
+	if [[ $arg == "--dont-auto-login" ]]; then
+		unset MENTOC_AUTO_LOGIN
+		continue
+	fi
+	if [[ $arg == "--no-auto-run" ]]; then
+		MENTOC_NO_AUTO_RUN=1
+		continue
+	fi
+	if [[ $arg == "--dont-auto-run" ]]; then
+		MENTOC_NO_AUTO_RUN=1
+		continue
+	fi
+	if [[ $arg == "--auto-run" ]]; then
+		unset MENTOC_NO_AUTO_RUN
+		continue
+	fi
+	if [[ $arg == "--no-loop" ]]; then
+		MENTOC_DONT_LOOP=1
+		continue
+	fi
+	if [[ $arg == "--dont-loop" ]]; then
+		MENTOC_DONT_LOOP=1
+		continue
+	fi
+	if [[ $arg == "--loop" ]]; then
+		unset MENTOC_DONT_LOOP
+		continue
+	fi
+done
+
+if [[ $DEBUG -eq 1 ]]; then
+	MENTOC_NO_AUTO_RUN=1
+	MENTOC_DONT_LOOP=1
+fi
+
+MENTOC_LMDB_DBNAME=bnull
+MENTOC_POSTGRES_HOST=127.0.0.1
+MENTOC_POSTGRES_PORT=5432
+UNIT=
+if [[ $HELL -eq 1 ]]; then
+	HELL='--hell '
+fi
+if [[ $UNIT_TESTS -eq 1 ]]; then
+	UNIT='--unit-tests '
+fi
+echo r > .run
+
+function up_migration(){
+			$GDB --args ./bin/circle \
+				--auto-login=far --auto-password=foo \
+				--lmdb-dir=$MENTOC_DATA_DIR --lmdb-name=$MENTOC_LMDB_DBNAME \
+				--postgres-dbname=$MENTOC_POSTGRES_DBNAME \
+				--postgres-user=postgres --postgres-host=$MENTOC_POSTGRES_HOST \
+				--postgres-port=$MENTOC_POSTGRES_PORT \
+				--postgres-pw-file=$MENTOC_POSTGRES_PW_FILE \
+				--run-profile-scripts=1 \
+				--run-migration-up=$1
+}
+
+function down_migration(){
+			$GDB --args ./bin/circle \
+				--auto-login=far --auto-password=foo \
+				--lmdb-dir=$MENTOC_DATA_DIR --lmdb-name=$MENTOC_LMDB_DBNAME \
+				--postgres-dbname=$MENTOC_POSTGRES_DBNAME \
+				--postgres-user=postgres --postgres-host=$MENTOC_POSTGRES_HOST \
+				--postgres-port=$MENTOC_POSTGRES_PORT \
+				--postgres-pw-file=$MENTOC_POSTGRES_PW_FILE \
+				--run-profile-scripts=1 \
+				--run-migration-down=$1
+}
+
+if [[ ! -z "$RUN_UP_MIGRATIONS" ]]; then
+	up_migration $RUN_UP_MIGRATIONS
+	exit
+fi
+if [[ ! -z "$RUN_DOWN_MIGRATIONS" ]]; then
+	down_migration $RUN_DOWN_MIGRATIONS
+	exit
+fi
+
+
+function start_gdb_process(){
+	if [[ "$MENTOC_AUTO_LOGIN" == "1" ]]; then
+		if [[ ! -z "$MENTOC_NO_AUTO_RUN" ]]; then
+			$GDB --args ./bin/circle \
+				--auto-login=far --auto-password=foo \
+				--lmdb-dir=$MENTOC_DATA_DIR --lmdb-name=$MENTOC_LMDB_DBNAME \
+				--postgres-dbname=$MENTOC_POSTGRES_DBNAME \
+				--postgres-user=postgres --postgres-host=$MENTOC_POSTGRES_HOST \
+				--postgres-port=$MENTOC_POSTGRES_PORT \
+				--postgres-pw-file=$MENTOC_POSTGRES_PW_FILE \
+				--run-profile-scripts=1 \
+				$HELL $UNIT $@
+		else
+			$GDB --args ./bin/circle \
+				--auto-login=far --auto-password=foo \
+				--lmdb-dir=$MENTOC_DATA_DIR --lmdb-name=$MENTOC_LMDB_DBNAME \
+				--postgres-dbname=$MENTOC_POSTGRES_DBNAME \
+				--postgres-user=postgres --postgres-host=$MENTOC_POSTGRES_HOST \
+				--postgres-port=$MENTOC_POSTGRES_PORT \
+				--postgres-pw-file=$MENTOC_POSTGRES_PW_FILE \
+				--run-profile-scripts=1 \
+				$HELL $UNIT $@ < .run
+		fi
+	else
+		if [[ ! -z "$MENTOC_NO_AUTO_RUN" ]]; then
+			$GDB --args ./bin/circle \
+				--lmdb-dir=$MENTOC_DATA_DIR --lmdb-name=$MENTOC_LMDB_DBNAME \
+				--postgres-dbname=$MENTOC_POSTGRES_DBNAME \
+				--postgres-user=postgres --postgres-host=$MENTOC_POSTGRES_HOST \
+				--postgres-port=$MENTOC_POSTGRES_PORT \
+				--postgres-pw-file=$MENTOC_POSTGRES_PW_FILE \
+				--run-profile-scripts=1 \
+				$HELL $UNIT $@
+		else
+			$GDB --args ./bin/circle \
+				--lmdb-dir=$MENTOC_DATA_DIR --lmdb-name=$MENTOC_LMDB_DBNAME \
+				--postgres-dbname=$MENTOC_POSTGRES_DBNAME \
+				--postgres-user=postgres --postgres-host=$MENTOC_POSTGRES_HOST \
+				--postgres-port=$MENTOC_POSTGRES_PORT \
+				--postgres-pw-file=$MENTOC_POSTGRES_PW_FILE \
+				--run-profile-scripts=1 \
+				$HELL $UNIT $@ < .run
+		fi
+	fi
+}
+
+if [[ ! -z "$MENTOC_DONT_LOOP" ]]; then
+ 	start_gdb_process $@
+	sleep 2
+fi
+
+while [[ 1 ]]; do
+ 	start_gdb_process $@
+	sleep 2
+done

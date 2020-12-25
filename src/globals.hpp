@@ -63,12 +63,12 @@ using namespace mods::colors;
 
 /** vim-sorcery: :%s/std::cerr << \(.*\);/d(\1);/ */
 #ifndef __MENTOC_DEBUG__
-	#define __MENTOC_DEBUG__
+#define __MENTOC_DEBUG__
 #endif
 
 #ifdef __MENTOC_DEBUG__
 #ifndef d
-	#define d(a) std::cerr << "[**DEBUG**]->[file:" << __FILE__ << "][line:" << __LINE__ << "][msg]: " << a << "\n" << std::flush;
+#define d(a) std::cerr << "[**DEBUG**]->[file:" << __FILE__ << "][line:" << __LINE__ << "][msg]: " << a << "\n" << std::flush;
 #endif
 #else
 #define d(a) ;
@@ -113,7 +113,7 @@ using optobj_t = opt_t<obj_data*>;
 template <typename T>
 using vec_t = std::vector<T>;
 namespace mods {
-	namespace lmdb { 
+	namespace lmdb {
 		struct _db_handle;
 	};
 	namespace globals {
@@ -123,7 +123,7 @@ namespace mods {
 		using room_list_t = std::vector<std::vector<player_ptr_t>>;
 		enum boot_type_t { BOOT_DB,BOOT_HELL };
 		bool acl_allowed(char_data *ch,const char* command_name,const char* file,int cmd,const char* arg,int subcmd);
-		void init(int,char**);
+		int init(int,char**);
 		void pre_game_loop();
 		void load_player_map();
 		uuid_t player_uuid();
@@ -159,15 +159,15 @@ namespace mods {
 		void init_player(char_data*);
 		std::unique_ptr<ai_state>& state_fetch(char_data* ch);
 		int mobile_activity(char_data*);
-		char_data* read_mobile(const mob_vnum &,const int & type);
-		std::shared_ptr<mods::npc> read_mobile_ptr(const mob_vnum &,const int & type);
+		char_data* read_mobile(const mob_vnum&,const int& type);
+		std::shared_ptr<mods::npc> read_mobile_ptr(const mob_vnum&,const int& type);
 		void register_player(player_ptr_t);
 		void register_authenticated_player(player_ptr_t);
 		void unregister_authenticated_player(player_ptr_t);
 		//void register_object_db_id(obj_ptr_t);
 		void register_object(obj_ptr_t);
 		template <typename TShopPtr>
-		void register_shop(TShopPtr shop){
+		void register_shop(TShopPtr shop) {
 			static uuid_t my_uuid = 0;
 			shop->uuid = ++my_uuid;
 		}
@@ -191,7 +191,7 @@ namespace mods {
 		void affect_room_light(int room,int offset);
 		namespace rooms {
 			void char_from_room(char_data*);
-			void char_to_room(const room_rnum &,char_data*);
+			void char_to_room(const room_rnum&,char_data*);
 		};
 		void pad_room(int room,char_data* ch,int door);
 		player_list_t& get_room_list(room_rnum);
@@ -215,12 +215,12 @@ namespace txt {
 	 * @param items
 	 * @param target
 	 *
-	 * @return 
+	 * @return
 	 */
 	template <typename TString>
-	static inline bool match_any_of_lower(std::vector<TString> items,TString target){
-		for(auto && needle : items){
-			if(is_lower_match(needle,target)){
+	static inline bool match_any_of_lower(std::vector<TString> items,TString target) {
+		for(auto&& needle : items) {
+			if(is_lower_match(needle,target)) {
 				return true;
 			}
 		}
@@ -233,12 +233,12 @@ namespace txt {
 	 * @param items
 	 * @param target
 	 *
-	 * @return 
+	 * @return
 	 */
 	template <typename TString>
-	static inline bool match_any_of(std::vector<TString> items,TString target){
-		for(auto && needle : items){
-			if(needle.compare(target) == 0){
+	static inline bool match_any_of(std::vector<TString> items,TString target) {
+		for(auto&& needle : items) {
+			if(needle.compare(target) == 0) {
 				return true;
 			}
 		}
@@ -254,23 +254,29 @@ obj_ptr_t optr_by_uuid(uuid_t);
 std::optional<obj_ptr_t> optr_opt(uuid_t);
 std::optional<player_ptr_t> ptr_opt(uuid_t);
 std::optional<player_ptr_t> ptr_opt(char_data*);
-inline mods::globals::player_list_t& room_list(room_rnum r){ return mods::globals::get_room_list(r); }
+inline mods::globals::player_list_t& room_list(room_rnum r) {
+	return mods::globals::get_room_list(r);
+}
 #define PARSE_ARGS() mods::util::arglist<std::vector<std::string>>(std::string(argument))
 #define ICMP(a,b) mods::util::is_lower_match(a,b)
 namespace mods::skills {
 	extern bool player_can(player_ptr_t&,int);
 };
-static inline bool can(player_ptr_t& player,int skill){ return mods::skills::player_can(player,skill); }
+static inline bool can(player_ptr_t& player,int skill) {
+	return mods::skills::player_can(player,skill);
+}
 
-inline std::string const& to_string(std::string const& s) { return s; }
+inline std::string const& to_string(std::string const& s) {
+	return s;
+}
 template<typename... Args>
-static inline std::string CAT(Args const&... args) {
-    std::string result;
-    using ::to_string;
-    using std::to_string;
-    int unpack[]{0, (result += to_string(args), 0)...};
-    static_cast<void>(unpack);
-    return result;
+static inline std::string CAT(Args const& ... args) {
+	std::string result;
+	using ::to_string;
+	using std::to_string;
+	int unpack[] {0, (result += to_string(args), 0)...};
+	static_cast<void>(unpack);
+	return result;
 }
 std::string IMPLODE(std::vector<std::string> m,std::string delim);
 std::string IMPLODE(std::vector<std::string> m,std::string delim,bool ignore_empty);
@@ -278,13 +284,20 @@ std::string IMPLODE_PAD(std::string delim_one,std::vector<std::string> m,std::st
 std::string IMPLODE_PAD(std::string delim_one,std::vector<std::string> m,std::string delim_two,bool ignore_empty);
 std::string dirstr(int);
 std::pair<bool,direction_t> to_direction(std::string_view);
-std::vector<str_t> map_keys(str_map_t & m);
+std::vector<str_t> map_keys(str_map_t& m);
 #define invec(A,B) (std::find(B.begin(),B.end(),A)!=B.end())
 str_vec_t EXPLODE(str_t& value,char delimiter);
 str_vec_t EXPLODE(str_t value,char delimiter);
-static inline uint64_t CURRENT_TICK(){ return mods::globals::current_tick; }
-static inline uint64_t current_tick(){ return mods::globals::current_tick; }
-static inline uint64_t future_tick(uint64_t add){ uint64_t current = mods::globals::current_tick; return current + add; }
+static inline uint64_t CURRENT_TICK() {
+	return mods::globals::current_tick;
+}
+static inline uint64_t current_tick() {
+	return mods::globals::current_tick;
+}
+static inline uint64_t future_tick(uint64_t add) {
+	uint64_t current = mods::globals::current_tick;
+	return current + add;
+}
 #define ADMIN_DONE() player->sendln(ADMIN_SUCCESS_MESSAGE())
 #define ADMIN_FAIL() player->sendln(ADMIN_FAILURE_MESSAGE())
 #define ADMIN_REJECT() if(!mods::super_users::player_is(player)){ player->sendln(SUPER_USER_REJECT_MESSAGE()); return; }

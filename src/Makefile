@@ -25,6 +25,7 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-Wno-format-zero-length -Wno-format-security\
 	-std=c++2a -fconcepts -fpermissive -MMD \
 	-I$(boostdir) -Imods/include -DLMDB_DB_DIRECTORY=\"$(DATA_DIR)\" \
+	-Imods/catch2/Catch2/src -Lmods/catch2/Catch2/build/src \
 	-DLMDB_DB_NAME=\"$(LMDBNAME)\" -D__MUD_BUILD_BNULL__  \
 	-DJS_PROFILES_PATH=\"$(JS_PROFILES_PATH)\"  \
 	-DMENTOC_NO_CONSTEXPR_CONF=1 \
@@ -40,7 +41,7 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-D__MENTOC_SHOW_LMDB_DEBUG__=1 \
 	#-DMENTOC_NO_CONSTEXPR_CONF=1 \
 	#-D__MENTOC_USE_PQXX_RESULT__=1 
-LIBS =  -lc -lm -lpqxx -lpq $(openssl) -l$(yamlcpp_object)
+LIBS =  -lc -lm -lpqxx -lpq $(openssl) -l$(yamlcpp_object) -lCatch2
 buildobj = act.informative act.item act.medic \
 					 act.movement act.offensive act.other act.social\
 					 act.wizard act.demolitions alias ban boards bsd-snprintf castle \
@@ -99,11 +100,12 @@ buildobj = act.informative act.item act.medic \
 					 mods/forge-engine/generator mods/forge-engine/value-scaler \
 					 mods/loot mods/forge-engine/generated-rifle mods/orm/rifle-index \
 					 mods/forge-engine/generated-armor mods/orm/armor-index \
-					 mods/forge-engine/util mods/stat-bonuses
+					 mods/forge-engine/util mods/stat-bonuses \
+					 mods/unit-tests
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
-all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) #$(DATA_DIR)
+all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty)
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT)
 
 clean:

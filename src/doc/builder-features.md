@@ -1,6 +1,6 @@
 # Inventory of features
 
-# 2020-12-23 forge engine improvements
+# forge engine
 	- orm classes `rifle_index` and `armor_index`
 	- use ACMD: `add_armor_index` 
 		- example: `add_armor_index body ballistic-vest.yml iron-vest.yml python-vest.yml`

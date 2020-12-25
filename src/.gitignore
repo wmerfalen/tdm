@@ -38,3 +38,6 @@ boost
 *.orig
 mods/*.orig
 mods/*/*.orig
+
+mods/catch2/
+

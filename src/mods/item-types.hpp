@@ -274,34 +274,25 @@
 (STRAP)
 
 #define MENTOC_ATTACHMENT_MEMBERS_TUPLE ( \
-(float,zoom_multiplier,"#float",2.0), \
-(static_amount_t,ammunition_amount,"#int",32), \
-(percent_t,silence_percent,"#float, percentage",10.0), \
-(static_amount_t,durability_points,"#int, static amount of durability points, no limit",100), \
-(static_amount_t,incendiary_damage,"#int, static amount of incendiary damage, no limit",10), \
-(static_amount_t,radiation_damage,"#int, static amount of radiation damage, no limit",10), \
-(static_amount_t,armor_penetration_amount,"#int, static amount of armor penetration done, no limit",10), \
-(static_amount_t,disorient_amount,"#int, static amount of disorientation done, no limit",10), \
-(static_amount_t,incendiary_damage_percent,"#int, static amount of incendiary damage_percent, no limit",0), \
-(static_amount_t,explosive_damage_percent,"#int, static amount of explosive damage_percent, no limit",0), \
-(static_amount_t,shrapnel_damage_percent,"#int, static amount of shrapnel damage_percent, no limit",0), \
-(static_amount_t,corrosive_damage_percent,"#int, static amount of corrosive damage_percent, no limit",0), \
-(static_amount_t,cryogenic_damage_percent,"#int, static amount of cryogenic damage_percent, no limit",0), \
-(static_amount_t,radiation_damage_percent,"#int, static amount of radiation damage_percent, no limit",0), \
-(static_amount_t,emp_damage_percent,"#int, static amount of emp damage_percent, no limit",0), \
-(static_amount_t,shock_damage_percent,"#int, static amount of shock damage_percent, no limit",0), \
-(static_amount_t,anti_matter_damage_percent,"#int, static amount of anti_matter damage_percent, no limit",0), \
-(static_amount_t,incendiary_resistance_percent,"#int, static amount of incendiary resistance_percent, no limit",0), \
-(static_amount_t,explosive_resistance_percent,"#int, static amount of explosive resistance_percent, no limit",0), \
-(static_amount_t,shrapnel_resistance_percent,"#int, static amount of shrapnel resistance_percent, no limit",0), \
-(static_amount_t,corrosive_resistance_percent,"#int, static amount of corrosive resistance_percent, no limit",0), \
-(static_amount_t,cryogenic_resistance_percent,"#int, static amount of cryogenic resistance_percent, no limit",0), \
-(static_amount_t,radiation_resistance_percent,"#int, static amount of radiation resistance_percent, no limit",0), \
-(static_amount_t,emp_resistance_percent,"#int, static amount of emp resistance_percent, no limit",0), \
-(static_amount_t,shock_resistance_percent,"#int, static amount of shock resistance_percent, no limit",0), \
-(static_amount_t,anti_matter_resistance_percent,"#int, static amount of anti_matter resistance_percent, no limit",0), \
-(rooms_t,emp_radius,"#int, radius size in rooms",1), \
-(std::string,attach_to,"#csv, strings attach to various kinds of items TBA","'TBA'") \
+(float,zoom_multiplier,"#float",0.0), \
+(int16_t,ammunition_amount,"#int",0), \
+(int16_t,loudness_reduction,"#int, the higher the value the less noise it will make",0), \
+(int16_t,durability_profile,"#int, ENUM 0=FLIMSY,1=DECENT,2=DURABLE,3=HARDENED,4=INDUSTRIAL_STRENGTH,5=GODLIKE,6=INDESTRUCTIBLE",1), \
+(int16_t,accuracy_points,"#int,the higher the value, the more control",0), \
+(int16_t,incendiary_damage,"#int, amount of incendiary damage",0), \
+(int16_t,radiation_damage,"#int, amount of radiation damage",0), \
+(int16_t,armor_penetration_amount,"#int, amount of armor penetration done",0), \
+(int16_t,disorient_amount,"#int, amount of disorientation done",0), \
+(int16_t,incendiary_damage_percent,"#int,incendiary damage percent",0), \
+(int16_t,explosive_damage_percent,"#int,explosive damage percent",0), \
+(int16_t,shrapnel_damage_percent,"#int,shrapnel damage percent",0), \
+(int16_t,corrosive_damage_percent,"#int,corrosive damage percent",0), \
+(int16_t,cryogenic_damage_percent,"#int,cryogenic damage percent",0), \
+(int16_t,radiation_damage_percent,"#int,radiation damage percent",0), \
+(int16_t,emp_damage_percent,"#int,emp damage percent",0), \
+(int16_t,shock_damage_percent,"#int,shock damage percent",0), \
+(int16_t,anti_matter_damage_percent,"#int,anti_matter damage percent",0), \
+(int16_t,recoil_reduction,"#int,the higher the value, the less recoil",0) \
 )
 
 #define MENTOC_ARMOR_TYPES_SEQUENCE (VEST) \

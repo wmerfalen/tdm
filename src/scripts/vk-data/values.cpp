@@ -352,6 +352,13 @@ case vk_MSG_TARGET_DEAD: return "MSG_TARGET_DEAD";
 case vk_MSG_YOURE_INJURED: return "MSG_YOURE_INJURED";
 case vk_MSG_FIRE_DAMAGE: return "MSG_FIRE_DAMAGE";
 case vk_MSG_EXPLOSIVE_DAMAGE: return "MSG_EXPLOSIVE_DAMAGE";
+case vk_MSG_SHRAPNEL_DAMAGE: return "MSG_SHRAPNEL_DAMAGE";
+case vk_MSG_CORROSIVE_DAMAGE: return "MSG_CORROSIVE_DAMAGE";
+case vk_MSG_CRYOGENIC_DAMAGE: return "MSG_CRYOGENIC_DAMAGE";
+case vk_MSG_RADIOACTIVE_DAMAGE: return "MSG_RADIOACTIVE_DAMAGE";
+case vk_MSG_ANTI_MATTER_DAMAGE: return "MSG_ANTI_MATTER_DAMAGE";
+case vk_MSG_EMP_DAMAGE: return "MSG_EMP_DAMAGE";
+case vk_MSG_SHOCK_DAMAGE: return "MSG_SHOCK_DAMAGE";
 case vk_MSG_SMOKE_DAMAGE: return "MSG_SMOKE_DAMAGE";
 case vk_MSG_NARROWLY_MISSED_ME: return "MSG_NARROWLY_MISSED_ME";
 case vk_MSG_YOU_ARE_INJURED: return "MSG_YOU_ARE_INJURED";
@@ -852,6 +859,13 @@ if(!s.compare("MSG_TARGET_DEAD")){ return vk_MSG_TARGET_DEAD;}
 if(!s.compare("MSG_YOURE_INJURED")){ return vk_MSG_YOURE_INJURED;}
 if(!s.compare("MSG_FIRE_DAMAGE")){ return vk_MSG_FIRE_DAMAGE;}
 if(!s.compare("MSG_EXPLOSIVE_DAMAGE")){ return vk_MSG_EXPLOSIVE_DAMAGE;}
+if(!s.compare("MSG_SHRAPNEL_DAMAGE")){ return vk_MSG_SHRAPNEL_DAMAGE;}
+if(!s.compare("MSG_CORROSIVE_DAMAGE")){ return vk_MSG_CORROSIVE_DAMAGE;}
+if(!s.compare("MSG_CRYOGENIC_DAMAGE")){ return vk_MSG_CRYOGENIC_DAMAGE;}
+if(!s.compare("MSG_RADIOACTIVE_DAMAGE")){ return vk_MSG_RADIOACTIVE_DAMAGE;}
+if(!s.compare("MSG_ANTI_MATTER_DAMAGE")){ return vk_MSG_ANTI_MATTER_DAMAGE;}
+if(!s.compare("MSG_EMP_DAMAGE")){ return vk_MSG_EMP_DAMAGE;}
+if(!s.compare("MSG_SHOCK_DAMAGE")){ return vk_MSG_SHOCK_DAMAGE;}
 if(!s.compare("MSG_SMOKE_DAMAGE")){ return vk_MSG_SMOKE_DAMAGE;}
 if(!s.compare("MSG_NARROWLY_MISSED_ME")){ return vk_MSG_NARROWLY_MISSED_ME;}
 if(!s.compare("MSG_YOU_ARE_INJURED")){ return vk_MSG_YOU_ARE_INJURED;}
@@ -1357,6 +1371,13 @@ vk_MSG_TARGET_DEAD,
 vk_MSG_YOURE_INJURED,
 vk_MSG_FIRE_DAMAGE,
 vk_MSG_EXPLOSIVE_DAMAGE,
+vk_MSG_SHRAPNEL_DAMAGE,
+vk_MSG_CORROSIVE_DAMAGE,
+vk_MSG_CRYOGENIC_DAMAGE,
+vk_MSG_RADIOACTIVE_DAMAGE,
+vk_MSG_ANTI_MATTER_DAMAGE,
+vk_MSG_EMP_DAMAGE,
+vk_MSG_SHOCK_DAMAGE,
 vk_MSG_SMOKE_DAMAGE,
 vk_MSG_NARROWLY_MISSED_ME,
 vk_MSG_YOU_ARE_INJURED,
@@ -1967,6 +1988,13 @@ CGET_DEF(std::string,MSG_TARGET_DEAD,"It appears that your target is dead.");
 CGET_DEF(std::string,MSG_YOURE_INJURED,"You are injured!");
 CGET_DEF(std::string,MSG_FIRE_DAMAGE,"[%d] You suffer burns from the roaring fire!\r\n");
 CGET_DEF(std::string,MSG_EXPLOSIVE_DAMAGE,"[%d] You take EXPLOSIVE damage!\r\n");
+CGET_DEF(std::string,MSG_SHRAPNEL_DAMAGE,"[%d] You are shredded by SHRAPNEL!\r\n");
+CGET_DEF(std::string,MSG_CORROSIVE_DAMAGE,"[%d] You take CORROSIVE damage!\r\n");
+CGET_DEF(std::string,MSG_CRYOGENIC_DAMAGE,"[%d] You take CRYOGENIC damage!\r\n");
+CGET_DEF(std::string,MSG_RADIOACTIVE_DAMAGE,"[%d] You take RADIOACTIVE damage!\r\n");
+CGET_DEF(std::string,MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\r\n");
+CGET_DEF(std::string,MSG_EMP_DAMAGE,"[%d] You take EMP damage!\r\n");
+CGET_DEF(std::string,MSG_SHOCK_DAMAGE,"[%d] You take SHOCK damage!\r\n");
 CGET_DEF(std::string,MSG_SMOKE_DAMAGE,"[%d] You struggle to breath as smoke fills your lungs!\r\n");
 CGET_DEF(std::string,MSG_NARROWLY_MISSED_ME,"You just barely get out of the way of a potentially fatal shot!\r\n");
 CGET_DEF(std::string,MSG_YOU_ARE_INJURED,"{red}***YOU ARE INJURED***{/red} --");
