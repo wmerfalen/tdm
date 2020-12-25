@@ -8,6 +8,7 @@
 #include "../rand.hpp"
 #include "value-scaler.hpp"
 #include "requirements.hpp"
+#include "elemental-enum.hpp"
 
 #ifdef __MENTOC_SHOW_MODS_FORGE_ENGINE_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::forge_engine::generator]")  << MSG << "\n";
@@ -201,19 +202,6 @@ namespace mods::forge_engine {
 		ARMOR_ITEM_WEAR_WEAPON_ATTACHMENT,
 		__ARMOR_WEAR_FIRST = ARMOR_ITEM_WEAR_FINGER,
 		__ARMOR_WEAR_LAST = ARMOR_ITEM_WEAR_WEAPON_ATTACHMENT
-	};
-	enum elemental_types_t {
-		ELEM_INCENDIARY = 1,
-		ELEM_EXPLOSIVE,
-		ELEM_SHRAPNEL,
-		ELEM_CORROSIVE,
-		ELEM_CRYOGENIC,
-		ELEM_RADIOACTIVE,
-		ELEM_EMP,
-		ELEM_SHOCK,
-		ELEM_ANTI_MATTER, /** combined damage of EMP and RADIOACTIVE */
-		__ELEM_FIRST = ELEM_INCENDIARY,
-		__ELEM_LAST = ELEM_ANTI_MATTER,
 	};
 	static const std::vector<armor_attributes_t> valid_armor_attributes = {
 		ARMOR_ATTR_THAC0,

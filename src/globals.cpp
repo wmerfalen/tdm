@@ -67,6 +67,7 @@ INIT(mods::orm::pba);
 INIT(mods::classes);
 INIT(mods::loot);
 INIT(mods::forge_engine::value_scaler_static);
+INIT(mods::weapons::damage_types);
 #undef INIT
 
 namespace mods::mobs::room_watching::events {
@@ -491,6 +492,7 @@ namespace mods {
 			mods::classes::init();
 			mods::loot::init();
 			mods::forge_engine::value_scaler_static::init();
+			mods::weapons::damage_types::init();
 			::offensive::init();
 			::builder::init();
 			::informative::init();
