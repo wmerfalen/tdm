@@ -1,6 +1,7 @@
 #include "rooms.hpp"
 #include "weapon-types.hpp"
 #include "weapons/damage-types.hpp"
+#include "weapons/elemental.hpp"
 extern void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
 extern void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...);
 extern int next_room_vnum();
@@ -131,12 +132,12 @@ namespace mods::rooms {
 			}
 			if(fire_damage) {
 				for(auto& player : room_list(nd.first)) {
-					mods::weapons::damage_types::room_fire_damage(player,fire_damage);
+					mods::weapons::elemental::room_fire_damage(player,fire_damage);
 				}
 			}
 			if(smoke_damage) {
 				for(auto& player : room_list(nd.first)) {
-					mods::weapons::damage_types::room_smoke_damage(player,smoke_damage);
+					mods::weapons::elemental::room_smoke_damage(player,smoke_damage);
 				}
 			}
 		}

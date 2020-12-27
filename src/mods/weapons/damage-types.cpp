@@ -7,6 +7,8 @@
 #include "../projectile.hpp"
 #include "../levels.hpp"
 #include "../interpreter-include.hpp"
+#include "elemental.hpp"
+
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #ifndef TO_ROOM
 #define TO_ROOM		1
@@ -28,7 +30,6 @@ extern void forget(char_data *ch,char_data *victim);
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
 #endif
 extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
-#include "../forge-engine/elemental-enum.hpp"
 
 namespace mods::weapons::damage_types {
 	using de = damage_event_t;
@@ -340,61 +341,6 @@ namespace mods::weapons::damage_types {
 			shrapnel.damage_event = de::YOU_GOT_HIT_BY_AR_SHRAPNEL;
 			victim->damage_event(shrapnel);
 		}
-	}
-	void room_fire_damage(player_ptr_t& player,uint16_t damage) {
-		player->send(mods::values::MSG_FIRE_DAMAGE().c_str(),damage);
-		deal_hp_damage(player,damage);
-	}
-
-	void room_smoke_damage(player_ptr_t& player, uint16_t damage) {
-		player->send(mods::values::MSG_SMOKE_DAMAGE().c_str(),damage);
-		deal_hp_damage(player,damage);
-	}
-	int reduce_elemental_resistance(int requested_damage, int16_t resistance) {
-		if(resistance <= 0) {
-			return requested_damage;
-		}
-		int damage = requested_damage - (requested_damage * (float)(resistance / 100.0));
-		if(damage <= 0) {
-			return 0;
-		}
-		return damage;
-	}
-	void elemental_damage(player_ptr_t& player,std::string_view message,int damage) {
-		if(damage  <= 0) {
-			return;
-		}
-		player->send(message.data(),damage);
-		deal_hp_damage(player,damage);
-	}
-
-	void incendiary_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_FIRE_DAMAGE(), reduce_elemental_resistance(requested_damage,player->incendiary_resistance_percent()));
-	}
-
-	void explosive_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_EXPLOSIVE_DAMAGE(), reduce_elemental_resistance(requested_damage,player->explosive_resistance_percent()));
-	}
-	void shrapnel_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_SHRAPNEL_DAMAGE(), reduce_elemental_resistance(requested_damage,player->shrapnel_resistance_percent()));
-	}
-	void corrosive_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_CORROSIVE_DAMAGE(), reduce_elemental_resistance(requested_damage,player->corrosive_resistance_percent()));
-	}
-	void cryogenic_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_CRYOGENIC_DAMAGE(), reduce_elemental_resistance(requested_damage,player->cryogenic_resistance_percent()));
-	}
-	void radioactive_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_RADIOACTIVE_DAMAGE(), reduce_elemental_resistance(requested_damage,player->radiation_resistance_percent()));
-	}
-	void emp_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_EMP_DAMAGE(), reduce_elemental_resistance(requested_damage,player->emp_resistance_percent()));
-	}
-	void shock_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_SHOCK_DAMAGE(), reduce_elemental_resistance(requested_damage,player->shock_resistance_percent()));
-	}
-	void anti_matter_damage(player_ptr_t& player,int requested_damage) {
-		elemental_damage(player, MSG_ANTI_MATTER_DAMAGE(), reduce_elemental_resistance(requested_damage,player->anti_matter_resistance_percent()));
 	}
 
 	/**
@@ -758,7 +704,8 @@ namespace mods::weapons::damage_types {
 	    uint16_t distance,
 	    uint8_t direction
 	) {
-		rifle_attack_with_feedback(player,weapon,victim,distance,direction);
+		auto feedback = rifle_attack_with_feedback(player,weapon,victim,distance,direction);
+		mods::weapons::elemental::process_elemental_damage(player,weapon,victim,feedback);
 	}
 
 	void rifle_attack_object(
@@ -1075,7 +1022,7 @@ namespace mods::weapons::damage_types {
 		auto obj = create_object(ITEM_RIFLE,"g36c.yml");
 		player->incendiary_resistance_percent() = resistance;
 		player->send("Your resistance: %f\r\n",player->incendiary_resistance_percent());
-		incendiary_damage(player,damage);
+		mods::weapons::elemental::incendiary_damage(player,damage);
 	}
 
 	void init() {

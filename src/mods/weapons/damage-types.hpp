@@ -8,6 +8,7 @@
 #include "../../globals.hpp"
 #include "../scan.hpp"
 #include "../damage-event.hpp"
+#include "../forge-engine/elemental-enum.hpp"
 
 extern void remember(char_data *ch,char_data *victim);
 extern void stop_fighting(char_data *ch);
@@ -34,13 +35,10 @@ namespace mods::weapons::damage_types {
 	);
 	void decrease_spray_shot_ammo(obj_ptr_t& weapon);
 	void decrease_single_shot_ammo(obj_ptr_t& weapon);
-	void room_fire_damage(player_ptr_t&,uint16_t);
-	void room_smoke_damage(player_ptr_t& player, uint16_t damage);
+	void deal_hp_damage(player_ptr_t& player, uint16_t damage);
 	namespace legacy {
 		int damage(char_data *ch, char_data *victim, int dam, int attacktype);
 	};
-	int reduce_elemental_resistance(int requested_damage, int16_t resistance);
-	void incendiary_damage(player_ptr_t& player,int requested_damage);
 };
 #endif
 

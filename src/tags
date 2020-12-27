@@ -296,6 +296,7 @@ ACMD	mods/values.cpp	/^			ACMD(do_list_values) {$/;"	f	namespace:mods::values
 ACMD	mods/values.cpp	/^			ACMD(do_revert_value_to_default){$/;"	f	namespace:mods::values
 ACMD	mods/values.cpp	/^			ACMD(do_set_value) {$/;"	f	namespace:mods::values
 ACMD	mods/weapons/damage-types.cpp	/^	ACMD(do_inc_damage) {$/;"	f	namespace:mods::weapons::damage_types
+ACMD	mods/weapons/elemental.cpp	/^	ACMD(do_inc_damage) {$/;"	f	namespace:mods::weapons::elemental
 ACMD	olc.cpp	/^ACMD(do_olc) {$/;"	f
 ACMD	shop.cpp	/^ACMD(do_buy){$/;"	f
 ACMD	shop.cpp	/^ACMD(do_list){$/;"	f
@@ -1198,8 +1199,8 @@ DISORIENT	mods/affects.hpp	/^		DISORIENT = 1,$/;"	e	enum:mods::affects::affect_t
 DISORIENT	mods/weapon-types.hpp	/^		DISORIENT,$/;"	e	enum:mods::weapon::capabilities::cap_t
 DISPLAY	mods/mini-games/wires.hpp	/^		static constexpr std::string_view DISPLAY = "A small LED display on the panel says: ";$/;"	m	struct:mods::mini_games::wires
 DM	telnet.h	55;"	d
-DMG_DEBUG	mods/weapons/damage-types.cpp	1087;"	d	file:
-DMG_DUMP	mods/weapons/damage-types.cpp	481;"	d	file:
+DMG_DEBUG	mods/weapons/damage-types.cpp	1034;"	d	file:
+DMG_DUMP	mods/weapons/damage-types.cpp	427;"	d	file:
 DO	telnet.h	44;"	d
 DONT	telnet.h	43;"	d
 DONTSET	mods/flags.hpp	/^		DONTSET,$/;"	e	enum:mods::flags::plr
@@ -1273,7 +1274,7 @@ EIM_REINFORCED	mods/doors.hpp	/^		EIM_REINFORCED = EX_REINFORCED,$/;"	e	enum:mod
 EL	telnet.h	49;"	d
 ELECTRIFIED_DAMAGE	mods/skills.hpp	/^			ELECTRIFIED_DAMAGE,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 ELECTRONICS	mods/skills.hpp	/^		ELECTRONICS = 1,$/;"	e	enum:mods::skills::base_attribute_t
-ELEM_ANTI_MATTER	mods/forge-engine/elemental-enum.hpp	/^		ELEM_ANTI_MATTER, \/** combined damage of EMP and RADIOACTIVE *\/$/;"	e	enum:mods::forge_engine::elemental_types_t
+ELEM_ANTI_MATTER	mods/forge-engine/elemental-enum.hpp	/^		ELEM_ANTI_MATTER,$/;"	e	enum:mods::forge_engine::elemental_types_t
 ELEM_CORROSIVE	mods/forge-engine/elemental-enum.hpp	/^		ELEM_CORROSIVE,$/;"	e	enum:mods::forge_engine::elemental_types_t
 ELEM_CRYOGENIC	mods/forge-engine/elemental-enum.hpp	/^		ELEM_CRYOGENIC,$/;"	e	enum:mods::forge_engine::elemental_types_t
 ELEM_EMP	mods/forge-engine/elemental-enum.hpp	/^		ELEM_EMP,$/;"	e	enum:mods::forge_engine::elemental_types_t
@@ -2046,7 +2047,7 @@ IS_SUPPORT	utils.h	511;"	d
 IS_THIEF	utils.h	506;"	d
 IS_WARRIOR	utils.h	510;"	d
 IS_WEAPON	fight.cpp	126;"	d	file:
-IS_WEAPON	mods/weapons/damage-types.cpp	28;"	d	file:
+IS_WEAPON	mods/weapons/damage-types.cpp	30;"	d	file:
 IS_WEAPON_LOADED	mods/weapon.hpp	15;"	d
 IShared	mods/catch.hpp	/^	struct IShared : NonCopyable {$/;"	s	namespace:Catch
 IStream	mods/catch2.hpp	/^    struct IStream {$/;"	s	namespace:Catch
@@ -2642,7 +2643,7 @@ MENU	config.cpp	/^const char *MENU =$/;"	v
 MESS_FILE	db.h	91;"	d
 METAL_HATCH	structs.h	/^			METAL_HATCH,$/;"	m	struct:room_data	typeref:enum:room_data::
 METAL_WALL	structs.h	/^			METAL_WALL,$/;"	m	struct:room_data	typeref:enum:room_data::
-MFEEDBACK	mods/weapons/damage-types.cpp	500;"	d	file:
+MFEEDBACK	mods/weapons/damage-types.cpp	446;"	d	file:
 MG_REPORT	mods/mobs/mini-gunner.cpp	86;"	d	file:
 MG_REPORT	mods/mobs/mini-gunner.cpp	95;"	d	file:
 MIN	utils.cpp	/^int MIN(int a, int b) {$/;"	f
@@ -4116,7 +4117,7 @@ TO_CHAR	comm.h	67;"	d
 TO_NOTVICT	comm.h	66;"	d
 TO_OBJ_PTR	utils.h	553;"	d
 TO_ROOM	comm.h	64;"	d
-TO_ROOM	mods/weapons/damage-types.cpp	12;"	d	file:
+TO_ROOM	mods/weapons/damage-types.cpp	14;"	d	file:
 TO_SLEEP	comm.h	68;"	d
 TO_SLEEP	mods/chat.hpp	30;"	d
 TO_SLEEP	mods/chat.hpp	71;"	d
@@ -4581,7 +4582,7 @@ __COMM_C__	comm.cpp	11;"	d	file:
 __CONFIG_C__	config.cpp	11;"	d	file:
 __DB_C__	db.cpp	11;"	d	file:
 __ELEM_FIRST	mods/forge-engine/elemental-enum.hpp	/^		__ELEM_FIRST = ELEM_INCENDIARY,$/;"	e	enum:mods::forge_engine::elemental_types_t
-__ELEM_LAST	mods/forge-engine/elemental-enum.hpp	/^		__ELEM_LAST = ELEM_ANTI_MATTER,$/;"	e	enum:mods::forge_engine::elemental_types_t
+__ELEM_LAST	mods/forge-engine/elemental-enum.hpp	/^		__ELEM_LAST = ELEM_ANTI_MATTER$/;"	e	enum:mods::forge_engine::elemental_types_t
 __EV_FIRST	mods/projectile.hpp	/^			__EV_FIRST = EV_TRAVEL,$/;"	e	enum:mods::projectile::projectile_event_t
 __EV_LAST	mods/projectile.hpp	/^			__EV_LAST = EV_EXPOSED$/;"	e	enum:mods::projectile::projectile_event_t
 __EXPLOSIVE_ATTR_FIRST	mods/forge-engine/generator.hpp	/^		__EXPLOSIVE_ATTR_FIRST = EXPLOSIVE_ATTR_ALTERNATE_EXPLOSION_TYPE,$/;"	e	enum:mods::forge_engine::explosive_attributes_t
@@ -4797,6 +4798,7 @@ __MENTOC_MODS_VALUES_SHOW_DEBUG_OUTPUT__	mods/stat-bonuses.cpp	10;"	d	file:
 __MENTOC_MODS_VALUES_SHOW_DEBUG_OUTPUT__	mods/values.cpp	11;"	d	file:
 __MENTOC_MODS_VALUES_SHOW_RADIO_OUTPUT__	mods/radio.cpp	3;"	d	file:
 __MENTOC_MODS_WEAPONS_DAMAGE_TYPES_HEADER__	mods/weapons/damage-types.hpp	2;"	d
+__MENTOC_MODS_WEAPONS_ELEMENTAL_HEADER__	mods/weapons/elemental.hpp	2;"	d
 __MENTOC_MODS_WEAPONS_HEAT_HEADER__	mods/weapons/heat.hpp	2;"	d
 __MENTOC_MODS_WEAPONS_INTENT_HEADER__	mods/intent.hpp	2;"	d
 __MENTOC_MODS_WEAPONS_PISTOL_CZP10_HEADER__	mods/weapons/pistol-czp10.hpp	2;"	d
@@ -5024,7 +5026,7 @@ ammo_type_adjustment	mods/mobs/mob.cpp	/^	int player::ammo_type_adjustment(int i
 ammo_type_adjustment	mods/player.cpp	/^	int player::ammo_type_adjustment(int increment,const weapon_type_t& type) {$/;"	f	class:mods::player
 amount	mods/deferred.hpp	/^		int64_t amount;$/;"	m	struct:mods::chunk_affect_t
 another_hour	weather.cpp	/^void another_hour(int mode) {$/;"	f
-anti_matter_damage	mods/weapons/damage-types.cpp	/^	void anti_matter_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::damage_types
+anti_matter_damage	mods/weapons/elemental.cpp	/^	void anti_matter_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 anti_matter_resistance_percent	mods/player.cpp	/^	int16_t& player::anti_matter_resistance_percent() {$/;"	f	class:mods::player
 any_one_arg	interpreter.cpp	/^char *any_one_arg(char *argument, char *first_arg) {$/;"	f
 aoe	mods/aoe.hpp	/^namespace mods::aoe {$/;"	n	class:mods
@@ -5305,6 +5307,7 @@ calculate_explosive_damage	mods/projectile.cpp	/^		explosive_damage_t calculate_
 calculate_headshot_damage	mods/armor/advanced-protection.cpp	/^		float advanced_protection::calculate_headshot_damage(feedback_t& damage){$/;"	f	class:mods::armor::advanced_protection
 calculate_headshot_damage	mods/armor/basic-protection.cpp	/^		float basic_protection::calculate_headshot_damage(feedback_t& damage){$/;"	f	class:mods::armor::basic_protection
 calculate_headshot_damage	mods/armor/elite-protection.cpp	/^		float elite_protection::calculate_headshot_damage(feedback_t& damage){$/;"	f	class:mods::armor::elite_protection
+calculate_hp	mods/unit-tests.cpp	/^int calculate_hp(int starting_hp,int requested_damage,int resistance, int incendiary_damage_percent) {$/;"	f
 calculate_limb_damage	mods/armor/advanced-protection.cpp	/^		float advanced_protection::calculate_limb_damage(feedback_t& damage,int where){$/;"	f	class:mods::armor::advanced_protection
 calculate_limb_damage	mods/armor/basic-protection.cpp	/^		float basic_protection::calculate_limb_damage(feedback_t& damage,int where){$/;"	f	class:mods::armor::basic_protection
 calculate_limb_damage	mods/armor/elite-protection.cpp	/^		float elite_protection::calculate_limb_damage(feedback_t& damage,int where){$/;"	f	class:mods::armor::elite_protection
@@ -5674,7 +5677,7 @@ cooldown_between_shots	mods/weapon.hpp	/^			float cooldown_between_shots;$/;"	m	
 coordinates	mods/builder/coordinates.hpp	/^namespace mods::builder::coordinates {$/;"	n	class:mods::builder
 core_dump	utils.h	56;"	d
 core_dump_real	utils.cpp	/^void core_dump_real(const char *who, int line) {$/;"	f
-corrosive_damage	mods/weapons/damage-types.cpp	/^	void corrosive_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::damage_types
+corrosive_damage	mods/weapons/elemental.cpp	/^	void corrosive_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 corrosive_resistance_percent	mods/player.cpp	/^	int16_t& player::corrosive_resistance_percent() {$/;"	f	class:mods::player
 cost	structs.h	/^	int	cost;		\/* Value when sold (gp.)            *\/$/;"	m	struct:obj_flag_data
 cost_per_day	structs.h	/^	int	cost_per_day;	\/* Cost to keep pr. real day        *\/$/;"	m	struct:obj_flag_data
@@ -5756,7 +5759,7 @@ critical_chance	mods/weapon.hpp	/^			float critical_chance;$/;"	m	struct:mods::w
 critical_range	mods/weapon.hpp	/^			int critical_range;$/;"	m	struct:mods::weapon::yaml::rifle_description_t
 cron	mods/cron.hpp	/^			cron(uint64_t tick_resolution) : m_tres(tick_resolution) {$/;"	f	class:mods::cron
 cron	mods/cron.hpp	/^	class cron {$/;"	c	namespace:mods
-cryogenic_damage	mods/weapons/damage-types.cpp	/^	void cryogenic_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::damage_types
+cryogenic_damage	mods/weapons/elemental.cpp	/^	void cryogenic_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 cryogenic_grenade_count	mods/classes/ghost.cpp	/^	uint8_t ghost::cryogenic_grenade_count() const {$/;"	f	class:mods::classes::ghost
 cryogenic_resistance_percent	mods/player.cpp	/^	int16_t& player::cryogenic_resistance_percent() {$/;"	f	class:mods::player
 cryogenicist	objsave.cpp	/^SPECIAL(cryogenicist);$/;"	v
@@ -6464,7 +6467,7 @@ drone_scan_room	mods/scan.cpp	/^	std::vector<uuid_t> drone_scan_room(room_rnum r
 drone_simulate	mods/player.hpp	/^			bool& drone_simulate() {$/;"	f	struct:mods::player
 drone_uuid	mods/player.hpp	/^			uuid_t& drone_uuid() {$/;"	f	struct:mods::player
 dts_are_dumps	config.cpp	/^int dts_are_dumps = YES;$/;"	v
-dty_debug	mods/weapons/damage-types.cpp	10;"	d	file:
+dty_debug	mods/weapons/damage-types.cpp	12;"	d	file:
 duktape_context	globals.cpp	/^		duk_context* duktape_context;$/;"	m	namespace:mods::globals	file:
 dummy_mob	db.cpp	/^struct player_special_data dummy_mob;	\/* dummy spec area for mobs	*\/$/;"	v	typeref:struct:player_special_data
 dummy_queue	mods/target-practice-db.cpp	/^	static std::vector<room_vnum> dummy_queue;$/;"	m	namespace:mods::target_practice_db	file:
@@ -6501,7 +6504,9 @@ eif_debug	mods/projectile.cpp	31;"	d	file:
 electric	mods/projectile.cpp	/^			int electric;$/;"	m	struct:mods::projectile::explosive_damage_t	file:
 electronics	mods/player.hpp	/^			uint16_t& electronics() {$/;"	f	struct:mods::player
 electronics	mods/skills.hpp	/^		static std::vector<proficiency_t> electronics = {$/;"	m	namespace:mods::skills::proficiencies
-elemental_damage	mods/weapons/damage-types.cpp	/^	void elemental_damage(player_ptr_t& player,std::string_view message,int damage) {$/;"	f	namespace:mods::weapons::damage_types
+elemental	mods/weapons/elemental.cpp	/^namespace mods::weapons::elemental {$/;"	n	class:mods::weapons	file:
+elemental	mods/weapons/elemental.hpp	/^namespace mods::weapons::elemental {$/;"	n	class:mods::weapons
+elemental_damage	mods/weapons/elemental.cpp	/^	void elemental_damage(player_ptr_t& player,std::string_view message,int damage) {$/;"	f	namespace:mods::weapons::elemental
 elemental_damages	mods/forge-engine/generator.hpp	/^		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> elemental_damages;$/;"	m	struct:mods::forge_engine::generated_explosive_t
 elemental_resistances	mods/forge-engine/generator.hpp	/^		std::vector<std::pair<elemental_types_t,std::variant<uint32_t,float>>> elemental_resistances;$/;"	m	struct:mods::forge_engine::generated_explosive_t
 elemental_types_t	mods/forge-engine/elemental-enum.hpp	/^	enum elemental_types_t {$/;"	g	namespace:mods::forge_engine
@@ -6514,7 +6519,7 @@ elite_protection	mods/armor/elite-protection.cpp	/^		elite_protection::elite_pro
 elite_protection	mods/armor/elite-protection.hpp	/^	struct elite_protection {$/;"	s	namespace:mods::armor
 emergency_unban	comm.cpp	/^byte emergency_unban;		\/* signal: SIGUSR2 *\/$/;"	v
 emp_damage	mods/projectile.cpp	/^		void emp_damage(room_rnum& room_id,obj_ptr_t object){$/;"	f	namespace:mods::projectile
-emp_damage	mods/weapons/damage-types.cpp	/^	void emp_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::damage_types
+emp_damage	mods/weapons/elemental.cpp	/^	void emp_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 emp_resistance_percent	mods/player.cpp	/^	int16_t& player::emp_resistance_percent() {$/;"	f	class:mods::player
 empty	mods/forge-engine/generated-armor.cpp	/^	static std::vector<std::string> empty = {};$/;"	m	namespace:mods::forge_engine	file:
 empty	mods/forge-engine/generated-rifle.cpp	/^	static std::vector<std::string> empty;$/;"	m	namespace:mods::forge_engine	file:
@@ -6626,7 +6631,7 @@ explosive	mods/projectile.cpp	/^	namespace explosive {$/;"	n	namespace:mods::inj
 explosive	mods/weapon.cpp	/^	mw_explosive explosive(obj_data_ptr_t& object){$/;"	f	namespace:mods::weapon
 explosive_attributes_t	mods/forge-engine/generator.hpp	/^	enum explosive_attributes_t {$/;"	g	namespace:mods::forge_engine
 explosive_damage	mods/projectile.cpp	/^		int explosive_damage(player_ptr_t victim, obj_ptr_t item){$/;"	f	namespace:mods::projectile
-explosive_damage	mods/weapons/damage-types.cpp	/^	void explosive_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::damage_types
+explosive_damage	mods/weapons/elemental.cpp	/^	void explosive_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 explosive_damage_t	mods/projectile.cpp	/^			explosive_damage_t() : $/;"	f	struct:mods::projectile::explosive_damage_t
 explosive_damage_t	mods/projectile.cpp	/^		struct explosive_damage_t {$/;"	s	namespace:mods::projectile	file:
 explosive_description_t	mods/yaml.hpp	/^		explosive_description_t() :$/;"	f	struct:mods::yaml::explosive_description_t
@@ -6802,6 +6807,7 @@ feign_death_levels_t	mods/orm/striker.hpp	/^		enum feign_death_levels_t {$/;"	g	
 fetch	mods/forge-engine/util.hpp	/^	int16_t fetch(std::variant<uint32_t,float>& v,TOriginalValue original) {$/;"	f	namespace:mods::forge_engine
 fetch_by_meta	mods/orm/fetcher.hpp	/^	std::vector<TRowType>&& fetch_by_meta(std::string_view column,std::string_view value) {$/;"	f	namespace:mods::orm
 fetch_by_meta	mods/orm/fetcher.hpp	/^	uint64_t fetch_by_meta(std::string_view table_name,$/;"	f	namespace:mods::orm::generator
+fetch_valid_elemental_types	mods/forge-engine/elemental-enum.hpp	/^	static inline const std::vector<elemental_types_t>& fetch_valid_elemental_types() {$/;"	f	namespace:mods::forge_engine
 fg	mods/acl/color.hpp	/^        namespace fg {$/;"	n	namespace:mods::Color
 fiddler	mods/super-users.hpp	/^	static std::shared_ptr<mods::classes::super_user_fiddler> fiddler;$/;"	m	namespace:mods::super_users
 fido	spec_assign.cpp	/^SPECIAL(fido);$/;"	v
@@ -7593,7 +7599,7 @@ in_room	mods/builder.cpp	51;"	d	file:
 in_room	mods/js.cpp	/^		static duk_ret_t in_room(duk_context *ctx) {$/;"	f	namespace:mods::js
 in_room	shop.h	/^	room_vnum *in_room;		\/* Where is the shop?			*\/$/;"	m	struct:shop_data
 in_room	structs.h	/^		room_rnum in_room;		\/* In what room -1 when conta\/carr	*\/$/;"	m	struct:obj_data
-incendiary_damage	mods/weapons/damage-types.cpp	/^	void incendiary_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::damage_types
+incendiary_damage	mods/weapons/elemental.cpp	/^	void incendiary_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 incendiary_resistance_percent	mods/player.cpp	/^	int16_t& player::incendiary_resistance_percent() {$/;"	f	class:mods::player
 include	mods/js.hpp	/^				include(duk_context *ctx,std::string_view directory,std::string_view file)$/;"	f	struct:mods::js::include
 include	mods/js.hpp	/^				include(duk_context *ctx,std::string_view file)$/;"	f	struct:mods::js::include
@@ -7675,6 +7681,7 @@ init	mods/skills.cpp	/^	void init(){$/;"	f	namespace:mods::skills
 init	mods/target-practice.cpp	/^	void init(){$/;"	f	namespace:mods::target_practice
 init	mods/values.cpp	/^			void init(){$/;"	f	namespace:mods::values
 init	mods/weapons/damage-types.cpp	/^	void init() {$/;"	f	namespace:mods::weapons::damage_types
+init	mods/weapons/elemental.cpp	/^	void init() {$/;"	f	namespace:mods::weapons::elemental
 init	shop.cpp	/^void shop_data<TOrmType,T,R>::init(){$/;"	f	class:shop_data
 init	structs.cpp	/^void char_data::init() {$/;"	f	class:char_data
 init	structs.cpp	/^void mob_special_data::init() {$/;"	f	class:mob_special_data
@@ -8326,7 +8333,7 @@ m_debug	mods/forge-engine/generator.cpp	141;"	d	file:
 m_debug	mods/forge-engine/generator.cpp	8;"	d	file:
 m_debug	mods/forge-engine/generator.hpp	14;"	d
 m_debug	mods/forge-engine/generator.hpp	16;"	d
-m_debug	mods/forge-engine/generator.hpp	632;"	d
+m_debug	mods/forge-engine/generator.hpp	622;"	d
 m_debug	mods/forge-engine/player-class.hpp	18;"	d
 m_debug	mods/forge-engine/requirements.hpp	39;"	d
 m_debug	mods/forge-engine/requirements.hpp	7;"	d
@@ -8359,6 +8366,9 @@ m_debug	mods/stat-bonuses.cpp	14;"	d	file:
 m_debug	mods/string.cpp	4;"	d	file:
 m_debug	mods/values.cpp	13;"	d	file:
 m_debug	mods/values.cpp	15;"	d	file:
+m_debug	mods/weapons/elemental.cpp	176;"	d	file:
+m_debug	mods/weapons/elemental.cpp	5;"	d	file:
+m_debug	mods/weapons/elemental.cpp	7;"	d	file:
 m_debug_line_info	mods/deep-object-parser.cpp	5;"	d	file:
 m_default	mods/acl/config-parser.cpp	/^        int FileParser::m_default(void){$/;"	f	class:mods::acl::FileParser
 m_deny_entry_level	mods/classes/sentinel.hpp	/^			deny_entry_levels_t m_deny_entry_level;$/;"	m	struct:mods::classes::sentinel
@@ -9827,6 +9837,7 @@ print_zone_to_buf	act.wizard.cpp	/^size_t print_zone_to_buf(char *bufptr, size_t
 process	mods/affects.cpp	/^	void process(){$/;"	f	namespace:mods::affects
 process	mods/rooms.cpp	/^	void process() {$/;"	f	namespace:mods::rooms::affects
 process_affect	mods/affects.hpp	/^			void process_affect(TAffects affect){$/;"	f	struct:mods::affects::dissolver
+process_elemental_damage	mods/weapons/elemental.cpp	/^	void process_elemental_damage(player_ptr_t& player,obj_ptr_t& weapon,player_ptr_t& victim,feedback_t& feedback) {$/;"	f	namespace:mods::weapons::elemental
 process_fire_damage	mods/rooms.cpp	/^	void process_fire_damage() {$/;"	f	namespace:mods::rooms
 process_input	comm.cpp	/^int process_input(mods::descriptor_data& t) {$/;"	f
 process_output	comm.cpp	/^int process_output(mods::descriptor_data& in_t) {$/;"	f
@@ -9986,7 +9997,7 @@ radiation	mods/projectile.cpp	/^			int radiation;$/;"	m	struct:mods::projectile:
 radiation_resistance_percent	mods/player.cpp	/^	int16_t& player::radiation_resistance_percent() {$/;"	f	class:mods::player
 radio	mods/radio.cpp	/^namespace mods::radio {$/;"	n	class:mods	file:
 radio	mods/radio.hpp	/^namespace mods::radio {$/;"	n	class:mods
-radioactive_damage	mods/weapons/damage-types.cpp	/^	void radioactive_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::damage_types
+radioactive_damage	mods/weapons/elemental.cpp	/^	void radioactive_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 ram_db	globals.cpp	/^		std::unordered_map<std::string,std::string> ram_db;$/;"	m	namespace:mods::globals	file:
 rand	globals.cpp	/^INIT(mods::rand);$/;"	v
 rand	mods/rand.cpp	/^namespace mods::rand {$/;"	n	class:mods	file:
@@ -10083,7 +10094,7 @@ rectangle_layouts	mods/builder/rectangle-layouts.cpp	/^namespace mods::builder::
 rectangle_layouts	mods/builder/rectangle-layouts.hpp	/^namespace mods::builder::rectangle_layouts {$/;"	n	class:mods::builder
 red_str	mods/colors.hpp	/^static inline std::string red_str(TStr str){$/;"	f	namespace:mods::colors
 red_text	mods/acl/color.hpp	4;"	d
-reduce_elemental_resistance	mods/weapons/damage-types.cpp	/^	int reduce_elemental_resistance(int requested_damage, int16_t resistance) {$/;"	f	namespace:mods::weapons::damage_types
+reduce_elemental_resistance	mods/weapons/elemental.cpp	/^	int reduce_elemental_resistance(int requested_damage, int16_t resistance) {$/;"	f	namespace:mods::weapons::elemental
 reduce_explosive_damage_using_armor	mods/armor/basic-protection.cpp	/^		int basic_protection::reduce_explosive_damage_using_armor(obj_ptr_t& explosive,int damage,int where){$/;"	f	class:mods::armor::basic_protection
 reflect_munitions	mods/weapons/damage-types.cpp	/^	void reflect_munitions(player_ptr_t& attacker,player_ptr_t& victim,int dam,int from_direction) {$/;"	f	namespace:mods::weapons::damage_types
 refresh_armor_index	mods/forge-engine/generated-armor.cpp	/^	static bool refresh_armor_index = true;$/;"	m	namespace:mods::forge_engine	file:
@@ -10321,7 +10332,7 @@ room_distance	mods/scan.cpp	/^	std::tuple<bool,distance_t> room_distance(room_rn
 room_entry	mods/mobs/room-watching.cpp	/^		void room_entry(room_rnum room,uuid_t player){$/;"	f	namespace:mods::mobs::room_watching::events
 room_event	globals.cpp	/^		void room_event(room_vnum room,mods::ai_state::event_type_t event) {$/;"	f	namespace:mods::globals
 room_exit	mods/mobs/room-watching.cpp	/^		void room_exit(room_rnum room,uuid_t player){$/;"	f	namespace:mods::mobs::room_watching::events
-room_fire_damage	mods/weapons/damage-types.cpp	/^	void room_fire_damage(player_ptr_t& player,uint16_t damage) {$/;"	f	namespace:mods::weapons::damage_types
+room_fire_damage	mods/weapons/elemental.cpp	/^	void room_fire_damage(player_ptr_t& player,uint16_t damage) {$/;"	f	namespace:mods::weapons::elemental
 room_flag	mods/orm/room.hpp	/^		uint64_t room_flag;$/;"	m	struct:mods::orm::room
 room_flag_from_string	mods/rooms.hpp	/^	static inline std::optional<int> room_flag_from_string(std::string& s){$/;"	f	namespace:mods::rooms
 room_flag_strings	mods/rooms.hpp	/^	static const std::map<int,std::string> room_flag_strings = {$/;"	m	namespace:mods::rooms
@@ -10339,7 +10350,7 @@ room_rnum	mods/scan.hpp	/^			uint32_t room_rnum;$/;"	m	struct:mods::scan::__anon
 room_rnum	mods/scan.hpp	/^			uint32_t room_rnum;$/;"	m	struct:mods::scan::find_results_t
 room_rnum	structs.h	/^typedef IDXTYPE room_rnum;$/;"	t
 room_shopmap	shop.cpp	/^	std::map<room_rnum,std::shared_ptr<shop_data_t>> room_shopmap;$/;"	m	namespace:mods::globals	file:
-room_smoke_damage	mods/weapons/damage-types.cpp	/^	void room_smoke_damage(player_ptr_t& player, uint16_t damage) {$/;"	f	namespace:mods::weapons::damage_types
+room_smoke_damage	mods/weapons/elemental.cpp	/^	void room_smoke_damage(player_ptr_t& player, uint16_t damage) {$/;"	f	namespace:mods::weapons::elemental
 room_virtual_number	mods/orm/mob-roam.hpp	/^		uint32_t room_virtual_number;$/;"	m	struct:mods::orm::mob_roam_record_t
 room_vnum	structs.h	/^typedef IDXTYPE room_vnum;$/;"	t
 room_watching	mods/mobs/room-watching.cpp	/^namespace mods::mobs::room_watching {$/;"	n	class:mods::mobs	file:
@@ -10741,7 +10752,7 @@ shield_proficiency_levels_t	mods/classes/sentinel.hpp	/^		enum shield_proficienc
 shm	mods/lmdb/shm-config.hpp	/^namespace shm {$/;"	n
 shm	mods/lmdb/shm.hpp	/^class  shm {$/;"	c	namespace:gdns
 shm	mods/lmdb/shm.hpp	/^shm::shm(){$/;"	f	class:gdns::shm
-shock_damage	mods/weapons/damage-types.cpp	/^	void shock_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::damage_types
+shock_damage	mods/weapons/elemental.cpp	/^	void shock_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 shock_resistance_percent	mods/player.cpp	/^	int16_t& player::shock_resistance_percent() {$/;"	f	class:mods::player
 shop	mods/orm/shop.hpp	/^		shop() : base(), loaded(false) {}$/;"	f	struct:mods::orm::shop
 shop	mods/orm/shop.hpp	/^	struct shop : public base {$/;"	s	namespace:mods::orm
@@ -10828,7 +10839,7 @@ show_tics	mods/debug.cpp	/^	bool state::show_tics() { return m_show_tics; }$/;"	
 show_tics	mods/debug.cpp	/^	void state::show_tics(bool b){ m_show_tics = b; }$/;"	f	class:mods::debug::state
 show_triads	mods/chargen.cpp	/^	void show_triads(player_ptr_t& player, player_class_t p_class){$/;"	f	namespace:mods::chargen
 shptr	mods/loops.hpp	/^	namespace shptr {$/;"	n	namespace:mods::loops
-shrapnel_damage	mods/weapons/damage-types.cpp	/^	void shrapnel_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::damage_types
+shrapnel_damage	mods/weapons/elemental.cpp	/^	void shrapnel_damage(player_ptr_t& player,int requested_damage) {$/;"	f	namespace:mods::weapons::elemental
 shrapnel_resistance_percent	mods/player.cpp	/^	int16_t& player::shrapnel_resistance_percent() {$/;"	f	class:mods::player
 shuffle	mods/util.hpp	/^	static inline void shuffle(T& vec){$/;"	f	namespace:mods::util
 shutdown	globals.cpp	/^		void shutdown(void) {$/;"	f	namespace:mods::globals
@@ -11509,7 +11520,7 @@ valid_armor_affects	mods/forge-engine/generator.hpp	/^	static const  std::vector
 valid_armor_attributes	mods/forge-engine/generator.hpp	/^	static const std::vector<armor_attributes_t> valid_armor_attributes = {$/;"	m	namespace:mods::forge_engine
 valid_armor_placements	mods/forge-engine/generator.hpp	/^	static const  std::vector<armor_types_t> valid_armor_placements  = {$/;"	m	namespace:mods::forge_engine
 valid_armor_stats	mods/forge-engine/generator.hpp	/^	static const  std::vector<stat_types_t> valid_armor_stats = {$/;"	m	namespace:mods::forge_engine
-valid_elemental_types	mods/forge-engine/generator.hpp	/^	static const std::vector<elemental_types_t> valid_elemental_types = {$/;"	m	namespace:mods::forge_engine
+valid_elemental_types	mods/forge-engine/generator.hpp	/^	static const std::vector<elemental_types_t> valid_elemental_types = fetch_valid_elemental_types();$/;"	m	namespace:mods::forge_engine
 valid_explosive_attributes	mods/forge-engine/generator.hpp	/^	static const std::vector<explosive_attributes_t> valid_explosive_attributes = {$/;"	m	namespace:mods::forge_engine
 valid_requirements	mods/forge-engine/generator.hpp	/^	static const std::vector<stat_types_t> valid_requirements = {$/;"	m	namespace:mods::forge_engine
 valid_rifle_attributes	mods/forge-engine/generator.hpp	/^	static const std::vector<rifle_attributes_t> valid_rifle_attributes = {$/;"	m	namespace:mods::forge_engine

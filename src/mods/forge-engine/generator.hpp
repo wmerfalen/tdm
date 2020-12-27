@@ -223,17 +223,7 @@ namespace mods::forge_engine {
 		ARMOR_ATTR_CLASSIFICATION,
 		ARMOR_ATTR_WORTH
 	};
-	static const std::vector<elemental_types_t> valid_elemental_types = {
-		ELEM_INCENDIARY,
-		ELEM_EXPLOSIVE,
-		ELEM_SHRAPNEL,
-		ELEM_CORROSIVE,
-		ELEM_CRYOGENIC,
-		ELEM_RADIOACTIVE,
-		ELEM_EMP,
-		ELEM_SHOCK,
-		ELEM_ANTI_MATTER
-	};
+	static const std::vector<elemental_types_t> valid_elemental_types = fetch_valid_elemental_types();
 
 	static const std::vector<armor_attributes_t> armor_percentages = {
 		ARMOR_ATTR_INCENDIARY_RESISTANCE_PERCENT,

@@ -78,7 +78,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/affects mods/item mods/weapon-types mods/sensor-grenade \
 					 mods/calc-visibility mods/events mods/chargen \
 					 mods/object-utils mods/camera mods/orm/shop shop mods/shop mods/rand \
-					 mods/weapons/damage-types mods/weapons/heat \
+					 mods/weapons/damage-types mods/weapons/elemental mods/weapons/heat \
 					 mods/injure mods/skills  mods/help mods/rooms \
 					 mods/mobs/mini-gunner mods/mobs/extended-types mods/values \
 					 mods/mobs/room-watching mods/mobs/mini-gunner-behaviour-tree \

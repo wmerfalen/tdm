@@ -11,10 +11,26 @@ namespace mods::forge_engine {
 		ELEM_RADIOACTIVE,
 		ELEM_EMP,
 		ELEM_SHOCK,
-		ELEM_ANTI_MATTER, /** combined damage of EMP and RADIOACTIVE */
+		ELEM_ANTI_MATTER,
 		__ELEM_FIRST = ELEM_INCENDIARY,
-		__ELEM_LAST = ELEM_ANTI_MATTER,
+		__ELEM_LAST = ELEM_ANTI_MATTER
 	};
+
+	static inline const std::vector<elemental_types_t>& fetch_valid_elemental_types() {
+		static std::vector<elemental_types_t> list = {
+			ELEM_INCENDIARY,
+			ELEM_EXPLOSIVE,
+			ELEM_SHRAPNEL,
+			ELEM_CORROSIVE,
+			ELEM_CRYOGENIC,
+			ELEM_RADIOACTIVE,
+			ELEM_EMP,
+			ELEM_SHOCK,
+			ELEM_ANTI_MATTER
+		};
+		return list;
+	};
+
 }; //end namespace mods::forge_engine
 
 #endif
