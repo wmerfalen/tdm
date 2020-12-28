@@ -22,6 +22,9 @@
 		- TODO: Balance `mods::forge_engine::value_scaler()`
 			- This is where you'll want to tweak the values for game balance
 			- source file: mods/forge-engine/value-scaler.(h|c)pp
+	- stats and resistances
+		- wearing armor with elemental resistance percents will add to your resistances
+		- wearing armor that adds stat bonuses will add to your affect abilities (`aff_abils()`)
 	
 # NEED TO FINISH: 
 	- checkout mobs/roam-zone branch and finish that stuff

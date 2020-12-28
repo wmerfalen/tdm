@@ -101,11 +101,12 @@ buildobj = act.informative act.item act.medic \
 					 mods/loot mods/forge-engine/generated-rifle mods/orm/rifle-index \
 					 mods/forge-engine/generated-armor mods/orm/armor-index \
 					 mods/forge-engine/util mods/stat-bonuses \
-					 mods/unit-tests
+					 mods/unit-tests/elemental mods/unit-tests/elemental-armor-resistances \
+					 mods/unit-tests/armor-stats
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
-all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty)
+all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT)
 
 clean:
@@ -119,7 +120,9 @@ clean:
 		rm -f $(builddir)/mods/mini-games/*.o \
 		rm -f $(builddir)/mods/mini-games/*.d \
 		rm -f $(builddir)/mods/forge-engine/*.o \
-		rm -f $(builddir)/mods/forge-engine/*.d 
+		rm -f $(builddir)/mods/forge-engine/*.d \
+		rm -f $(builddir)/mods/unit-tests/*.o \
+		rm -f $(builddir)/mods/unit-tests/*.d 
 
 $(builddir)/mods/forge-engine:
 	mkdir -p $(builddir)/mods/forge-engine
@@ -145,6 +148,8 @@ $(builddir)/mods/armor:
 	mkdir -p $(builddir)/mods/armor
 $(builddir)/mods/players:
 	mkdir -p $(builddir)/mods/players
+$(builddir)/mods/unit-tests:
+	mkdir -p $(builddir)/mods/unit-tests
 
 $(builddir)/%.o: %.cpp
 	$(CC) -c $(FLAGS) -o $@ $<

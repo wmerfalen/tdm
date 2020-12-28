@@ -5,18 +5,14 @@ namepace mods::unit_tests {
 	}
 };
 #else
-#if 0
-#undef CATCH_CONFIG_MAIN
-#define CATCH_CONFIG_RUNNER
-#include "catch2.hpp"
-#endif
-#include "player.hpp"
+#include "../player.hpp"
 #include <iostream>
 #include <vector>
-#include "weapons/damage-types.hpp"
-#include "damage-event.hpp"
-#include "catch2/Catch2/src/catch2/catch_all.hpp"
-#include "weapons/elemental.hpp"
+#include "../weapons/damage-types.hpp"
+#include "../damage-event.hpp"
+#include "../catch2/Catch2/src/catch2/catch_all.hpp"
+#include "../weapons/elemental.hpp"
+
 
 extern player_ptr_t new_player();
 int calculate_hp(int starting_hp,int requested_damage,int resistance, int incendiary_damage_percent) {

@@ -250,9 +250,9 @@ ACMD	mods/integral-objects.cpp	/^ACMD(do_uninstall_armor_locker){$/;"	f
 ACMD	mods/integral-objects.cpp	/^ACMD(do_uninstall_camera_feed){$/;"	f
 ACMD	mods/integral-objects.cpp	/^ACMD(do_uninstall_weapon_locker){$/;"	f
 ACMD	mods/integral-objects.cpp	/^ACMD(do_weapon_locker_quota){$/;"	f
-ACMD	mods/levels.cpp	/^ACMD(do_award_exp_by_name){$/;"	f	namespace:mods::levels
-ACMD	mods/levels.cpp	/^ACMD(do_csv_export_levels){$/;"	f	namespace:mods::levels
-ACMD	mods/levels.cpp	/^ACMD(do_exp){$/;"	f	namespace:mods::levels
+ACMD	mods/levels.cpp	/^	ACMD(do_award_exp_by_name) {$/;"	f	namespace:mods::levels
+ACMD	mods/levels.cpp	/^	ACMD(do_csv_export_levels) {$/;"	f	namespace:mods::levels
+ACMD	mods/levels.cpp	/^	ACMD(do_exp) {$/;"	f	namespace:mods::levels
 ACMD	mods/loot.cpp	/^	ACMD(do_add_armor_index) {$/;"	f	namespace:mods::loot
 ACMD	mods/loot.cpp	/^	ACMD(do_add_rifle_index) {$/;"	f	namespace:mods::loot
 ACMD	mods/loot.cpp	/^	ACMD(do_reward) {$/;"	f	namespace:mods::loot
@@ -4942,7 +4942,7 @@ adhoc	act.builder.cpp	/^namespace mods::adhoc {$/;"	n	class:mods	file:
 admin_fail	mods/player.cpp	/^	void player::admin_fail(std::string_view msg) {$/;"	f	class:mods::player
 admin_success	mods/player.cpp	/^	void player::admin_success(std::string_view msg) {$/;"	f	class:mods::player
 advance_level	class.cpp	/^void advance_level(char_data *ch) {$/;"	f
-advance_level	mods/levels.cpp	/^	void advance_level(player_ptr_t& player){$/;"	f	namespace:mods::levels
+advance_level	mods/levels.cpp	/^	void advance_level(player_ptr_t& player) {$/;"	f	namespace:mods::levels
 advanced_protection	mods/armor/advanced-protection.cpp	/^		advanced_protection::advanced_protection(uuid_t player_uuid){$/;"	f	class:mods::armor::advanced_protection
 advanced_protection	mods/armor/advanced-protection.hpp	/^	struct advanced_protection {$/;"	s	namespace:mods::armor
 aff	mods/flags.hpp	/^	enum aff {$/;"	g	namespace:mods::flags
@@ -5296,9 +5296,9 @@ cached_room_distance	mods/scan.cpp	/^	std::tuple<bool,distance_t> cached_room_di
 calc_visibility	mods/calc-visibility.cpp	/^namespace mods::calc_visibility {$/;"	n	class:mods	file:
 calc_visibility	mods/calc-visibility.hpp	/^namespace mods::calc_visibility {$/;"	n	class:mods
 calculate	mods/forge-engine/value-scaler.cpp	/^	void value_scaler::calculate(player_ptr_t& player) {$/;"	f	class:mods::forge_engine::value_scaler
-calculate_based_on_triads	mods/levels.cpp	/^	std::array<float,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level){$/;"	f	namespace:mods::levels
-calculate_bonus_hp_gain	mods/levels.cpp	/^	int calculate_bonus_hp_gain(int dice,int sides,int greater_than,int player_level){$/;"	f	namespace:mods::levels
-calculate_bonus_move_gain	mods/levels.cpp	/^	int calculate_bonus_move_gain(int dice,int sides,int greater_than,int player_level){$/;"	f	namespace:mods::levels
+calculate_based_on_triads	mods/levels.cpp	/^	std::array<float,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level) {$/;"	f	namespace:mods::levels
+calculate_bonus_hp_gain	mods/levels.cpp	/^	int calculate_bonus_hp_gain(int dice,int sides,int greater_than,int player_level) {$/;"	f	namespace:mods::levels
+calculate_bonus_move_gain	mods/levels.cpp	/^	int calculate_bonus_move_gain(int dice,int sides,int greater_than,int player_level) {$/;"	f	namespace:mods::levels
 calculate_critical_damage	mods/armor/advanced-protection.cpp	/^		float advanced_protection::calculate_critical_damage(feedback_t& damage){$/;"	f	class:mods::armor::advanced_protection
 calculate_critical_damage	mods/armor/basic-protection.cpp	/^		float basic_protection::calculate_critical_damage(feedback_t& damage){$/;"	f	class:mods::armor::basic_protection
 calculate_critical_damage	mods/armor/elite-protection.cpp	/^		float elite_protection::calculate_critical_damage(feedback_t& damage){$/;"	f	class:mods::armor::elite_protection
@@ -5307,7 +5307,7 @@ calculate_explosive_damage	mods/projectile.cpp	/^		explosive_damage_t calculate_
 calculate_headshot_damage	mods/armor/advanced-protection.cpp	/^		float advanced_protection::calculate_headshot_damage(feedback_t& damage){$/;"	f	class:mods::armor::advanced_protection
 calculate_headshot_damage	mods/armor/basic-protection.cpp	/^		float basic_protection::calculate_headshot_damage(feedback_t& damage){$/;"	f	class:mods::armor::basic_protection
 calculate_headshot_damage	mods/armor/elite-protection.cpp	/^		float elite_protection::calculate_headshot_damage(feedback_t& damage){$/;"	f	class:mods::armor::elite_protection
-calculate_hp	mods/unit-tests.cpp	/^int calculate_hp(int starting_hp,int requested_damage,int resistance, int incendiary_damage_percent) {$/;"	f
+calculate_hp	mods/unit-tests/elemental.cpp	/^int calculate_hp(int starting_hp,int requested_damage,int resistance, int incendiary_damage_percent) {$/;"	f
 calculate_limb_damage	mods/armor/advanced-protection.cpp	/^		float advanced_protection::calculate_limb_damage(feedback_t& damage,int where){$/;"	f	class:mods::armor::advanced_protection
 calculate_limb_damage	mods/armor/basic-protection.cpp	/^		float basic_protection::calculate_limb_damage(feedback_t& damage,int where){$/;"	f	class:mods::armor::basic_protection
 calculate_limb_damage	mods/armor/elite-protection.cpp	/^		float elite_protection::calculate_limb_damage(feedback_t& damage,int where){$/;"	f	class:mods::armor::elite_protection
@@ -5767,7 +5767,7 @@ cryogenicist	spec_assign.cpp	/^SPECIAL(cryogenicist);$/;"	v
 crypto	mods/crypto.cpp	/^namespace mods::crypto {$/;"	n	class:mods	file:
 crypto	mods/crypto.hpp	/^namespace mods::crypto {$/;"	n	class:mods
 cstr	globals.hpp	107;"	d
-csv_export_report	mods/levels.cpp	/^	int csv_export_report(){$/;"	f	namespace:mods::levels
+csv_export_report	mods/levels.cpp	/^	int csv_export_report() {$/;"	f	namespace:mods::levels
 ctypes	act.informative.cpp	/^const char *ctypes[] = {$/;"	v
 cure_levels_t	mods/classes/sentinel.hpp	/^		enum cure_levels_t {$/;"	g	struct:mods::classes::sentinel
 current_block	mods/player.cpp	/^	uint32_t player::current_block() {$/;"	f	class:mods::player
@@ -7025,7 +7025,7 @@ gadget_description_t	mods/yaml.hpp	/^	struct gadget_description_t : public yaml_
 gadget_shield_levels_t	mods/classes/sentinel.hpp	/^		enum gadget_shield_levels_t {$/;"	g	struct:mods::classes::sentinel
 gain_condition	limits.cpp	/^void gain_condition(char_data *ch, int condition, int value) {$/;"	f
 gain_exp	limits.cpp	/^void gain_exp(char_data *ch, int gain) {$/;"	f	namespace:legacy
-gain_exp	mods/levels.cpp	/^	void gain_exp(player_ptr_t& player,int gain){$/;"	f	namespace:mods::levels
+gain_exp	mods/levels.cpp	/^	void gain_exp(player_ptr_t& player,int gain) {$/;"	f	namespace:mods::levels
 gain_exp_regardless	limits.cpp	/^void gain_exp_regardless(char_data *ch, int gain) {$/;"	f	namespace:legacy
 game	mods/mini-games.cpp	/^	line_up& game(room_vnum vnum,int id){$/;"	f	namespace:mods::mini_games
 game_action	mods/orm/mini-game.hpp	/^		std::string game_action;$/;"	m	struct:mods::orm::mini_game
@@ -7087,7 +7087,7 @@ generator	mods/forge-engine/generator.hpp	/^	struct generator {$/;"	s	namespace:
 generator	mods/forge-engine/item-type-chooser.hpp	/^		generator() : loaded(0) {}$/;"	f	struct:mods::orm::generator
 generator	mods/forge-engine/item-type-chooser.hpp	/^	struct generator {$/;"	s	namespace:mods::orm
 generator	mods/orm/fetcher.hpp	/^namespace generator {$/;"	n	namespace:mods::orm
-generic_advance	mods/levels.cpp	/^	void generic_advance(player_ptr_t& player){$/;"	f	namespace:mods::levels
+generic_advance	mods/levels.cpp	/^	void generic_advance(player_ptr_t& player) {$/;"	f	namespace:mods::levels
 generic_find	handler.cpp	/^int generic_find(char *arg, bitvector_t bitvector, char_data *ch,$/;"	f
 generic_import	act.builder.cpp	/^void generic_import(player_ptr_t& player,std::string_view type, const std::vector<std::string>& vec_args, std::string_view usage){$/;"	f
 genstr	mods/util-conf.hpp	/^			bool genstr(const std::string& file_name,$/;"	f	namespace:mods::util::conf
@@ -7272,7 +7272,7 @@ get_tier_pair	mods/skills.cpp	/^std::pair<uint8_t,uint8_t> get_tier_pair(mods::s
 get_time_birth	mods/player.cpp	/^	time_t player::get_time_birth() const {$/;"	f	class:mods::player
 get_time_login	mods/player.cpp	/^	time_t player::get_time_login() const {$/;"	f	class:mods::player
 get_time_played	mods/player.cpp	/^	int player::get_time_played() const {$/;"	f	class:mods::player
-get_triads_by_class	mods/levels.cpp	/^	std::array<uint8_t,5> get_triads_by_class(player_class_t c){$/;"	f	namespace:mods::levels
+get_triads_by_class	mods/levels.cpp	/^	std::array<uint8_t,5> get_triads_by_class(player_class_t c) {$/;"	f	namespace:mods::levels
 get_type	mods/weapon.cpp	/^	std::variant<mw_rifle,mw_explosive,mw_drone> get_type(obj_data_ptr_t& o){$/;"	f	namespace:mods::weapon
 get_type_string	mods/player.cpp	/^	std::string player::get_type_string() {$/;"	f	class:mods::player
 get_user	mods/auto-login.cpp	/^	const std::string& get_user() { return mods::auto_login::user; }$/;"	f	namespace:mods::auto_login
@@ -7641,7 +7641,7 @@ init	mods/forge-engine/generator.cpp	/^	void generator::init() {$/;"	f	class:mod
 init	mods/forge-engine/value-scaler.cpp	/^		void init() {$/;"	f	namespace:mods::forge_engine::value_scaler_static
 init	mods/integral-objects.cpp	/^	void init(){$/;"	f	namespace:mods::integral_objects
 init	mods/karma.cpp	/^	void init(){$/;"	f	namespace:mods
-init	mods/levels.cpp	/^	void init(){$/;"	f	namespace:mods::levels
+init	mods/levels.cpp	/^	void init() {$/;"	f	namespace:mods::levels
 init	mods/lmdb/conf.cpp	/^void conf<StringType>::init(void){$/;"	f	class:gdns::conf
 init	mods/lmdb/db.hpp	/^				bool init(gsl::not_null<const char*> file,gsl::not_null<const char*> db_name){$/;"	f	struct:gdns::lmdb::client
 init	mods/lmdb/db.hpp	/^			bool init(const char* file, const char* dbi_name,int flags, int perms){$/;"	f	struct:gdns::lmdb::server
@@ -8933,7 +8933,7 @@ mo_debug	mods/integral-objects.cpp	19;"	d	file:
 mo_debug	mods/integral-objects.cpp	282;"	d	file:
 mo_debug	mods/levels.cpp	12;"	d	file:
 mo_debug	mods/levels.cpp	14;"	d	file:
-mo_debug	mods/levels.cpp	513;"	d	file:
+mo_debug	mods/levels.cpp	517;"	d	file:
 mo_debug	mods/rate-limiting.cpp	10;"	d	file:
 mo_debug	mods/rate-limiting.cpp	172;"	d	file:
 mo_debug	mods/rate-limiting.cpp	8;"	d	file:
@@ -10199,7 +10199,7 @@ report	mods/classes/base.hpp	/^		void report(std::vector<std::string> msgs){$/;"
 report	mods/player.cpp	/^	void player::report() {$/;"	f	class:mods::player
 report	mods/players/db-load.cpp	/^	void report(int64_t code, std::string_view msg){$/;"	f	namespace:mods::players::db_load
 report	structs.cpp	/^void mob_special_data::report(room_rnum room) {$/;"	f	class:mob_special_data
-report_advances	mods/levels.cpp	/^	void report_advances(std::array<float,STAT_INDEXES_SIZE> stats){$/;"	f	namespace:mods::levels
+report_advances	mods/levels.cpp	/^	void report_advances(std::array<float,STAT_INDEXES_SIZE> stats) {$/;"	f	namespace:mods::levels
 report_db_issue	mods/db-report.hpp	/^static inline void report_db_issue(std::string_view message,std::string_view exception_message){$/;"	f
 report_error	mods/builder.hpp	/^	void report_error(T player,std::string_view message) {$/;"	f	namespace:mods::builder
 report_function	mods/players/db-load.cpp	/^	static reporter_t report_function;$/;"	m	namespace:mods::players::db_load	file:
@@ -10256,7 +10256,7 @@ revert_to_default	mods/values.cpp	/^		void revert_to_default(std::string in_key)
 revert_to_default	mods/values.cpp	/^		void revert_to_default(value_key_t in_key){$/;"	f	namespace:mods::values
 reward_player	mods/forge-engine/generator.cpp	/^	obj_ptr_t reward_player(player_ptr_t& player) {$/;"	f	namespace:mods::forge_engine
 reward_player	mods/loot.cpp	/^	obj_ptr_t reward_player(player_ptr_t& player) {$/;"	f	namespace:mods::loot
-reward_player_for_advancing_levels	mods/levels.cpp	/^	void reward_player_for_advancing_levels(player_ptr_t& player){$/;"	f	namespace:mods::levels
+reward_player_for_advancing_levels	mods/levels.cpp	/^	void reward_player_for_advancing_levels(player_ptr_t& player) {$/;"	f	namespace:mods::levels
 rifle	mods/injure.cpp	/^	namespace rifle {$/;"	n	namespace:mods::injure	file:
 rifle	mods/injure.hpp	/^	namespace rifle {$/;"	n	namespace:mods::injure
 rifle	mods/item-types.hpp	/^	enum rifle {$/;"	g	namespace:mods::weapon::type
@@ -10395,7 +10395,7 @@ run	mods/behaviour_tree.hpp	/^		run_status run(LambdaArgument arg) {$/;"	f	struc
 run	mods/behaviour_tree_node.hpp	/^		run_status_t run(LambdaArgument & arg){$/;"	f	struct:mods::behaviour_tree_node
 run	mods/debug-pre-game.hpp	/^	bool run() {$/;"	f	namespace:mods::debug::pre_game
 run	mods/replenish.cpp	/^	void run(){$/;"	f	namespace:mods::replenish
-run	mods/unit-tests.cpp	/^	int run() {$/;"	f	namespace:mods::unit_tests
+run	mods/unit-tests/elemental.cpp	/^	int run() {$/;"	f	namespace:mods::unit_tests
 run_autowiz	limits.cpp	/^void run_autowiz(void) {$/;"	f
 run_behaviour_trees	comm.cpp	/^void run_behaviour_trees() {$/;"	f
 run_intents	mods/intent.cpp	/^	void run_intents(){$/;"	f	namespace:mods::intent
@@ -11439,7 +11439,7 @@ unequip	mods/player.cpp	/^	void player::unequip(int pos) {$/;"	f	class:mods::pla
 unequip_char	handler.cpp	/^obj_ptr_t unequip_char(player_ptr_t player, int pos){$/;"	f
 unequip_into_inventory	mods/player.cpp	/^	void player::unequip_into_inventory(int pos) {$/;"	f	class:mods::player
 unit_tests	globals.cpp	/^namespace mods::unit_tests {$/;"	n	class:mods	file:
-unit_tests	mods/unit-tests.cpp	/^namespace mods::unit_tests {$/;"	n	class:mods	file:
+unit_tests	mods/unit-tests/elemental.cpp	/^namespace mods::unit_tests {$/;"	n	class:mods	file:
 unplug_all	mods/mini-games/wires.cpp	/^	void wires::unplug_all() {$/;"	f	class:mods::mini_games::wires
 unregister_authenticated_player	globals.cpp	/^		void unregister_authenticated_player(player_ptr_t player) {$/;"	f	namespace:mods::globals
 unregister_mob	mods/behaviour_tree_impl.cpp	/^	int8_t unregister_mob(argument_type mob){$/;"	f	namespace:mods::behaviour_tree_impl
