@@ -6,14 +6,15 @@
 #include "../orm/player-base-ability.hpp"
 #include "../pq.hpp"
 #include "../sql.hpp"
+#include "../orm/player-skill-points.hpp"
 
 #define __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
-	#define m_debug(a) std::cerr << "[mods::players::db_load][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
-	#define m_crit(a) std::cerr << red_str("[CRITICAL]") << "mods::players::db_load][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+#define m_debug(a) std::cerr << "[mods::players::db_load][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+#define m_crit(a) std::cerr << red_str("[CRITICAL]") << "mods::players::db_load][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #else
-	#define m_debug(a)
-	#define m_crit(a)
+#define m_debug(a)
+#define m_crit(a)
 #endif
 
 
@@ -21,16 +22,16 @@ namespace mods::players::db_load {
 	static reporter_t report_function;
 	static bool reporter_function_set = false;
 
-	void save(player_ptr_t& player_ptr){
+	void save(player_ptr_t& player_ptr) {
 		auto ch = player_ptr->cd();
 		std::map<std::string,std::string> values;
 		values["player_affection_plr_bitvector"] = std::to_string(player_ptr->get_affected_plr());
 		values["player_affection_bitvector"] = std::to_string(player_ptr->get_affected());
 
-		if(values["player_affection_plr_bitvector"].length() == 0){
+		if(values["player_affection_plr_bitvector"].length() == 0) {
 			values.erase("player_affection_plr_bitvector");
 		}
-		if(values["player_affection_bitvector"].length() == 0){
+		if(values["player_affection_bitvector"].length() == 0) {
 			values.erase("player_affection_bitvector");
 		}
 
@@ -68,28 +69,28 @@ namespace mods::players::db_load {
 		values["player_attack_type"] = std::string("0");
 		values["player_type"] = std::string("PC");
 		values["player_alignment"] = std::to_string(
-			ch->char_specials.saved.alignment);
+		                                 ch->char_specials.saved.alignment);
 		values["player_level"] = std::to_string(player_ptr->level());
 		values["player_hitroll"] = std::to_string(player_ptr->cd()->points.hitroll);
 		values["player_armor"] = std::to_string(player_ptr->cd()->points.armor);
 		values["player_preferences"] = std::to_string(player_ptr->get_prefs());
-		try{
+		try {
 			auto up_txn = txn();
 			mods::sql::compositor comp("player",&up_txn);
 			auto up_sql = comp
-				.update("player")
-				.set(values)
-				.where("id","=",std::to_string(player_ptr->db_id()))
-				.sql();
+			              .update("player")
+			              .set(values)
+			              .where("id","=",std::to_string(player_ptr->db_id()))
+			              .sql();
 			mods::pq::exec(up_txn,up_sql);
 			mods::pq::commit(up_txn);
-		}catch(std::exception& e){
+		} catch(std::exception& e) {
 			std::cerr << red_str("Failed saving player!:") << red_str(e.what()) << "\n";
 		}
 		values.clear();
 
 		mods::orm::inventory::flush_player(player_ptr);
-		switch(player_ptr->get_class()){
+		switch(player_ptr->get_class()) {
 			default:
 				break;
 			case player_class_t::GHOST:
@@ -98,33 +99,33 @@ namespace mods::players::db_load {
 		}
 		mods::orm::player_base_ability pba;
 		auto status = pba.save_by_player(player_ptr);
-		if(0 != status){
+		if(0 != status) {
 			std::cerr << red_str("Warning: couldn't save player_ptr's base abilities...") << "status: " << status << " for player_ptr:'" << player_ptr->name().c_str() << "'\n";
 		}
-		if(player_ptr->position() == CON_PLAYING){
+		if(player_ptr->position() == CON_PLAYING) {
 			player_ptr->sendln("Your character has been saved.");
 		}
 	}
-	void feed_player_inventory(player_ptr_t& player_ptr){
+	void feed_player_inventory(player_ptr_t& player_ptr) {
 		mods::orm::inventory::flush_player(player_ptr);
 	}
 
-	void set_reporter_lambda(reporter_t f){
+	void set_reporter_lambda(reporter_t f) {
 		report_function = f;
 		reporter_function_set = true;
 	}
-	void report(int64_t code, std::string_view msg){
-		if(!reporter_function_set){
-			m_debug("[fallback reporter]: " << red_str(CAT("code:",(code))) << 
-				" message: '" << red_str(msg.data()) << "'");
+	void report(int64_t code, std::string_view msg) {
+		if(!reporter_function_set) {
+			m_debug("[fallback reporter]: " << red_str(CAT("code:",(code))) <<
+			        " message: '" << red_str(msg.data()) << "'");
 			return;
 		}
 		report_function(code,msg);
 	}
-	void set_class(player_ptr_t& player, player_class_t p_class){
+	void set_class(player_ptr_t& player, player_class_t p_class) {
 		m_debug(green_str("set_class called for player uuid:") << player->uuid());
 		player->set_class(p_class);
-		switch(p_class){
+		switch(p_class) {
 			case SNIPER:
 				player->set_sniper(mods::classes::create_sniper(player));
 				mods::replenish::register_sniper(player->uuid());
@@ -158,26 +159,29 @@ namespace mods::players::db_load {
 				break;
 		}
 	}
-	void load_base_abilities(player_ptr_t& player){
+	void load_skill_points(player_ptr_t& player) {
+		//
+	}
+	void load_base_abilities(player_ptr_t& player) {
 		mods::orm::player_base_ability pba;
 		pba.feed_player(player);
 	}
 
-	int save_player_password(player_ptr_t& player,std::string_view password){
-		try{
+	int save_player_password(player_ptr_t& player,std::string_view password) {
+		try {
 			std::map<std::string,std::string> values;
 			values["player_password"] = password.data();
 			auto up_txn = txn();
 			mods::sql::compositor comp("player",&up_txn);
 			auto up_sql = comp
-				.update("player")
-				.set_with_password(values, "player_password")
-				.where("id","=",std::to_string(player->db_id()))
-				.sql();
+			              .update("player")
+			              .set_with_password(values, "player_password")
+			              .where("id","=",std::to_string(player->db_id()))
+			              .sql();
 			mods::pq::exec(up_txn,up_sql);
 			mods::pq::commit(up_txn);
 			return 0;
-		}catch(std::exception& e){
+		} catch(std::exception& e) {
 			auto msg = CAT("Player:'",player->db_id(),"/name:'",player->name().c_str(),"'.. Unable to save player password!:'",e.what(),"'");
 			report(-1,msg);
 			std::cerr << red_str("Failed updating player password!:") << red_str(msg) << "\n";
@@ -185,62 +189,62 @@ namespace mods::players::db_load {
 		}
 	}
 
-	int16_t save_new_char(player_ptr_t& player){
-		try{
+	int16_t save_new_char(player_ptr_t& player) {
+		try {
 			std::map<std::string,std::string> values;
 			mods::db::lmdb_export_char(player,values);
 			auto insert_transaction = txn();
 			mods::sql::compositor comp("player",&insert_transaction);
 			auto up_sql = comp
-				.insert()
-				.into("player")
-				.values_with_password(values, "player_password")
-				.sql();
+			              .insert()
+			              .into("player")
+			              .values_with_password(values, "player_password")
+			              .sql();
 			values.clear();
 			mods::pq::exec(insert_transaction,up_sql);
 			mods::pq::commit(insert_transaction);
 			return 0;
-		}catch(std::exception& e){
+		} catch(std::exception& e) {
 			REPORT_DB_ISSUE("error inserting new character",e.what());
 			return -1;
 		}
 	}
 
-	int16_t load_char_pkid(player_ptr_t& player){
-		try{
+	int16_t load_char_pkid(player_ptr_t& player) {
+		try {
 			auto select_transaction = txn();
 			mods::sql::compositor comp("player",&select_transaction);
 			auto player_sql = comp.select("id")
-				.from("player")
-				.where("player_name","=",player->name())
-				.sql();
+			                  .from("player")
+			                  .where("player_name","=",player->name())
+			                  .sql();
 			auto player_record = mods::pq::exec(select_transaction,player_sql);
-			if(player_record.size()){
+			if(player_record.size()) {
 				player->set_db_id(player_record[0]["id"].as<int>(0));
 				return 0;
 			}
 			log("SYSERR: couldn't grab player's pkid: '%s'",player->name().c_str());
 			return -1;
-		}catch(std::exception& e){
+		} catch(std::exception& e) {
 			REPORT_DB_ISSUE("error loading character by pkid",e.what());
 			return -2;
 		}
 	}
-	int16_t delete_char(player_ptr_t& player){
-		try{
+	int16_t delete_char(player_ptr_t& player) {
+		try {
 			std::map<std::string,std::string> values;
 			mods::db::lmdb_export_char(player,values);
 			auto delete_txn = txn();
 			mods::sql::compositor comp("player",&delete_txn);
 			auto del_sql = comp
-				.del()
-				.from("player")
-				.where("player_name","=",values["player_name"])
-				.sql();
+			               .del()
+			               .from("player")
+			               .where("player_name","=",values["player_name"])
+			               .sql();
 			mods::pq::exec(delete_txn,del_sql);
 			mods::pq::commit(delete_txn);
 			return 0;
-		}catch(std::exception& e){
+		} catch(std::exception& e) {
 			REPORT_DB_ISSUE("error deleting character",e.what());
 			return -1;
 		}

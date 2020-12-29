@@ -2638,6 +2638,18 @@ CREATE TABLE public.class_ghost (
 		ON DELETE CASCADE
 		ON UPDATE CASCADE
 );
+CREATE TABLE public.class_sniper (
+	sniper_id SERIAL,
+	sniper_player_id INTEGER NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+	,PRIMARY KEY(sniper_id),
+	CONSTRAINT fk_player_id
+		FOREIGN KEY (sniper_player_id)
+		REFERENCES public.player(id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+);
 ALTER TABLE public.mob_roam ADD COLUMN profile_name varchar(255);
 CREATE TABLE public.rifle_index (
   id SERIAL UNIQUE,
@@ -2729,3 +2741,44 @@ INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('basic-boots.ym
 INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm50-ultralight-boots.yml','feet');
 INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm607-vulture-boots.yml','feet');
 INSERT INTO public.armor_index(armor_filename,armor_type) VALUES('xm8-panama-combat-boots.yml','feet');
+
+
+CREATE TABLE public.skill_points (
+  id SERIAL UNIQUE,
+	sp_level integer NOT NULL,
+	sp_points integer NOT NULL DEFAULT 0,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(id)
+);
+
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(1, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(2, 2);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(3, 3);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(4, 4);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(5, 5);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(6, 6);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(7, 7);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(8, 8);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(9, 9);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(10, 10);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(11, 11);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(12, 12);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(13, 13);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(14, 14);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(15, 15);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(16, 16);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(17, 17);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(18, 18);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(19, 19);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(20, 20);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(21, 21);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(22, 22);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(23, 23);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(24, 24);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(25, 25);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(26, 26);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(27, 27);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(28, 28);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(29, 29);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(30, 30);

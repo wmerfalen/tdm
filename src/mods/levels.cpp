@@ -33,7 +33,7 @@ namespace mods::levels {
 			return EXP_MAX - ((LVL_IMPL - level) * 1000);
 		}
 
-		switch(level){
+		switch(level) {
 			case  0:
 				return 0;
 
@@ -142,46 +142,50 @@ namespace mods::levels {
 		log("SYSERR: XP tables not set up correctly in %s:%d",__FILE__,__LINE__);
 		return -1;
 	}
-	void gain_exp(player_ptr_t& player,int gain){
-		if(IS_NPC(player->cd())){
-			player->sendln("Apparently, you're an NPC");
-			return;
+	int gain_exp(player_ptr_t& player,int gain) {
+		if(IS_NPC(player->cd())) {
+			return -1;
 		}
 		player->exp() += gain;
 		bool is_altered = 0;
 		int num_levels = 0;
+		if(player->level() == 0) {
+			player->level() = 1;
+			advance_level(player);
+		}
 		while(player->level() < LVL_IMMORT - immort_level_ok &&
-						player->exp() >= mods::levels::level_exp(player->level() + 1)) {
+		        player->exp() >= mods::levels::level_exp(player->level() + 1)) {
 			player->level() += 1;
 			num_levels++;
 			advance_level(player);
 			is_altered = TRUE;
 			if(is_altered) {
 				mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(player->cd())), TRUE, "%s advanced %d level%s to level %d.",
-							 player->name().c_str(), num_levels, num_levels == 1 ? "" : "s", player->level());
+				       player->name().c_str(), num_levels, num_levels == 1 ? "" : "s", player->level());
 				if(num_levels == 1) {
-					player->sendln("You rise a level!");
+					player->sendln(ADVANCE_LEVEL_MESSAGE());
 				} else {
-					player->send("You rise %d levels!\r\n", num_levels);
+					player->send(ADVANCE_MULTIPLE_LEVELS_MESSAGE().c_str(),num_levels);
 				}
 				//set_title(ch, NULL);
 			}
 		}//end while
 		std::cerr << green_str("gain_exp has your level as: ") << std::to_string(player->level()) << "\n";
 		mods::players::db_load::save(player);
+		return num_levels;
 	}
 #ifdef __MENTOC_USE_RANDOM_STAT_GAIN__
-	int calculate_bonus_hp_gain(int dice,int sides,int greater_than,int player_level){
+	int calculate_bonus_hp_gain(int dice,int sides,int greater_than,int player_level) {
 		int amount = mods::rand::roll(1,6);
-		if(greater_than < mods::rand::roll(dice,sides)){
-			 amount = ADVANCE_LEVEL_HP_FLOAT_MULTIPLIER() * player_level;
+		if(greater_than < mods::rand::roll(dice,sides)) {
+			amount = ADVANCE_LEVEL_HP_FLOAT_MULTIPLIER() * player_level;
 		}
 		return amount;
 	}
-	int calculate_bonus_move_gain(int dice,int sides,int greater_than,int player_level){
+	int calculate_bonus_move_gain(int dice,int sides,int greater_than,int player_level) {
 		int amount = mods::rand::roll(1,6);
-		if(greater_than < mods::rand::roll(dice,sides)){
-			 amount += ADVANCE_LEVEL_HP_FLOAT_MULTIPLIER() * player_level;
+		if(greater_than < mods::rand::roll(dice,sides)) {
+			amount += ADVANCE_LEVEL_HP_FLOAT_MULTIPLIER() * player_level;
 		}
 		return amount;
 	}
@@ -190,49 +194,49 @@ namespace mods::levels {
 	/**
 	 * extra rewards for advancing
 	 */
-	void reward_player_for_advancing_levels(player_ptr_t& player){
+	void reward_player_for_advancing_levels(player_ptr_t& player) {
 		player->sendln(ADVANCE_LEVEL_CONGRATS());
 
 #ifdef __MENTOC_USE_RANDOM_STAT_GAIN__
 		auto bonus_hp = calculate_bonus_hp_gain(
-				ADVANCE_LEVEL_BONUS_HP_DICE(),
-				ADVANCE_LEVEL_BONUS_HP_SIDES(),
-				ADVANCE_LEVEL_BONUS_HP_THRESHOLD(),
-				player->level()
-		);
+		                    ADVANCE_LEVEL_BONUS_HP_DICE(),
+		                    ADVANCE_LEVEL_BONUS_HP_SIDES(),
+		                    ADVANCE_LEVEL_BONUS_HP_THRESHOLD(),
+		                    player->level()
+		                );
 		/** Random chance of additional move gain */
 		auto bonus_move = calculate_bonus_move_gain(
-				ADVANCE_LEVEL_BONUS_HP_DICE(),
-				ADVANCE_LEVEL_BONUS_HP_SIDES(),
-				ADVANCE_LEVEL_BONUS_HP_THRESHOLD(),
-				player->level()
-		);
+		                      ADVANCE_LEVEL_BONUS_HP_DICE(),
+		                      ADVANCE_LEVEL_BONUS_HP_SIDES(),
+		                      ADVANCE_LEVEL_BONUS_HP_THRESHOLD(),
+		                      player->level()
+		                  );
 #endif
 
 	}
 
 
-	void report_advances(std::array<float,STAT_INDEXES_SIZE> stats){
-	std::cerr << 
-	"hp:" << stats[STAT_HP] << "\n"\
-<< "strength:		" << stats[STAT_STRENGTH] << "\n"\
-<< "constitution:		" << stats[STAT_CONSTITUTION] << "\n"\
-<< "dexterity:		" << stats[STAT_DEXTERITY] << "\n"\
-<< "intelligence:		" << stats[STAT_INTELLIGENCE]<< "\n"\
-<< "wisdom:		" << stats[STAT_WISDOM] << "\n"\
-<< "electronics:		" << stats[STAT_ELECTRONICS] << "\n"\
-<< "chemistry:		" << stats[STAT_CHEMISTRY] << "\n"\
-<< "strategy:		" << stats[STAT_STRATEGY]<< "\n"\
-<< "marksmanship:		" << stats[STAT_MARKSMANSHIP] << "\n"\
-<< "sniping:		" << stats[STAT_SNIPING] << "\n"\
-<< "weapon_handling:		" << stats[STAT_WEAPON_HANDLING] << "\n"\
-<< "demolitions:		" << stats[STAT_DEMOLITIONS] << "\n"\
-<< "armor:		" << stats[STAT_ARMOR] << "\n"\
-<< "medical:		" << stats[STAT_MEDICAL] << "\n"\
-<< "charisma:		" << stats[STAT_CHARISMA] << "\n";
+	void report_advances(std::array<float,STAT_INDEXES_SIZE> stats) {
+		std::cerr <<
+		          "hp:" << stats[STAT_HP] << "\n"\
+		          << "strength:		" << stats[STAT_STRENGTH] << "\n"\
+		          << "constitution:		" << stats[STAT_CONSTITUTION] << "\n"\
+		          << "dexterity:		" << stats[STAT_DEXTERITY] << "\n"\
+		          << "intelligence:		" << stats[STAT_INTELLIGENCE]<< "\n"\
+		          << "wisdom:		" << stats[STAT_WISDOM] << "\n"\
+		          << "electronics:		" << stats[STAT_ELECTRONICS] << "\n"\
+		          << "chemistry:		" << stats[STAT_CHEMISTRY] << "\n"\
+		          << "strategy:		" << stats[STAT_STRATEGY]<< "\n"\
+		          << "marksmanship:		" << stats[STAT_MARKSMANSHIP] << "\n"\
+		          << "sniping:		" << stats[STAT_SNIPING] << "\n"\
+		          << "weapon_handling:		" << stats[STAT_WEAPON_HANDLING] << "\n"\
+		          << "demolitions:		" << stats[STAT_DEMOLITIONS] << "\n"\
+		          << "armor:		" << stats[STAT_ARMOR] << "\n"\
+		          << "medical:		" << stats[STAT_MEDICAL] << "\n"\
+		          << "charisma:		" << stats[STAT_CHARISMA] << "\n";
 	}
 
-	std::array<uint8_t,5> get_triads_by_class(player_class_t c){
+	std::array<uint8_t,5> get_triads_by_class(player_class_t c) {
 		std::array<uint8_t,5> m_triads;
 		m_triads = {
 			2, /** MELEE */
@@ -244,49 +248,49 @@ namespace mods::levels {
 		return m_triads;
 	}
 
-	std::array<float,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level){
+	std::array<float,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level) {
 
 		std::array<float,STAT_INDEXES_SIZE> s = {0};
 		float
-			/** melee and armor related */
-			hp = 0,	/** also speed related */
+		/** melee and armor related */
+		hp = 0,	/** also speed related */
 
-			/** melee related */
-			strength = 0,
-			constitution = 0,	/** also speed related */
-			dexterity = 0,		/** also speed related */
+		/** melee related */
+		strength = 0,
+		constitution = 0,	/** also speed related */
+		dexterity = 0,		/** also speed related */
 
-			/** intel related */
-			intelligence =0,
-			wisdom = 0,
-			electronics = 0,
-			chemistry = 0,
-			strategy = 0,
+		/** intel related */
+		intelligence =0,
+		wisdom = 0,
+		electronics = 0,
+		chemistry = 0,
+		strategy = 0,
 
-			/** weapons related */
-			marksmanship = 0,
-			sniping = 0,
-			weapon_handling = 0,	/** also speed related */
+		/** weapons related */
+		marksmanship = 0,
+		sniping = 0,
+		weapon_handling = 0,	/** also speed related */
 
-			/** weapons and intel related */
-			demolitions = 0,	/** armor triad value reduces explosive damage */
+		/** weapons and intel related */
+		demolitions = 0,	/** armor triad value reduces explosive damage */
 
-			/** armor related */
-			armor = 0,
+		/** armor related */
+		armor = 0,
 
-			/** armor and intel related */
-			medical = 0,
+		/** armor and intel related */
+		medical = 0,
 
-			/** unclassified */
-			charisma = 0
-		;
+		/** unclassified */
+		charisma = 0
+		           ;
 		float FIRST_TIER = LEVELS_FIRST_TIER();
 		float SECOND_TIER = FIRST_TIER * 0.75;
 		float THIRD_TIER = FIRST_TIER * 0.50;
 		float PASSIVE_TIER = FIRST_TIER * 0.25;
 		float SPLIT_TIER = FIRST_TIER * 0.10;
 		float SPLIT_TIER_HALF = SPLIT_TIER / 2;
-		switch(triads[MELEE]){
+		switch(triads[MELEE]) {
 			case 1:
 			case 2:
 			case 3:
@@ -304,7 +308,7 @@ namespace mods::levels {
 				std::cerr << red_str("generic_advance_hp encountered odd MELEE triad:") << triads[MELEE] << "\n";
 				break;
 		}
-		switch(triads[WEAPONS]){
+		switch(triads[WEAPONS]) {
 			case 1:
 			case 2:
 			case 3:
@@ -320,7 +324,7 @@ namespace mods::levels {
 				std::cerr << red_str("generic_advance_hp encountered odd WEAPONS triad:") << triads[WEAPONS] << "\n";
 				break;
 		}
-		switch(triads[INTEL]){
+		switch(triads[INTEL]) {
 			case 1:
 			case 2:
 			case 3:
@@ -341,7 +345,7 @@ namespace mods::levels {
 				std::cerr << red_str("generic_advance_hp encountered odd INTEL triad:") << triads[INTEL] << "\n";
 				break;
 		}
-		switch(triads[SPEED]){
+		switch(triads[SPEED]) {
 			case 1:
 			case 2:
 			case 3:
@@ -354,7 +358,7 @@ namespace mods::levels {
 				std::cerr << red_str("generic_advance_hp encountered odd SPEED triad:") << triads[SPEED] << "\n";
 				break;
 		}
-		switch(triads[ARMOR]){
+		switch(triads[ARMOR]) {
 			case 1:
 			case 2:
 			case 3:
@@ -390,7 +394,7 @@ namespace mods::levels {
 	}
 
 
-	void generic_advance(player_ptr_t& player){
+	void generic_advance(player_ptr_t& player) {
 		auto triads = player->triads();
 		auto s = calculate_based_on_triads(triads,player->level());
 		report_advances(s);
@@ -412,16 +416,16 @@ namespace mods::levels {
 		player->charisma() = s[STAT_CHARISMA];
 	}
 
-	
+
 	/**
-	 * This is the ideal function we want to use as it makes use of 
+	 * This is the ideal function we want to use as it makes use of
 	 * the player's specific class pointer. i.e.: player->ghost()
-	 * The hope is that once all classes have been fully implemented, 
+	 * The hope is that once all classes have been fully implemented,
 	 * we can phase out the generic_* functions completely.
 	 */
-	void advance_level(player_ptr_t& player){
+	void advance_level(player_ptr_t& player) {
 		generic_advance(player);
-		switch(player->get_class()){
+		switch(player->get_class()) {
 			case GHOST:
 				mods::classes::ghost_advance_level(player);
 				break;
@@ -430,23 +434,23 @@ namespace mods::levels {
 				break;
 		}
 	}
-	int csv_export_report(){
+	int csv_export_report() {
 		FILE* fp = fopen("levels.csv", "w+");
-		if(!fp){
+		if(!fp) {
 			return -1;
 		}
 		std::string header = "player_class,level,HP,Strength,con,dex,intel,wis,electronics,chemistry,strategy,marksmanship,sniping,weapon_handling,demolitions,armor,medical,charisma\n";
 		fwrite(header.c_str(),sizeof(char),header.length(),fp);
-		for(unsigned player_level = 1; player_level <= LVL_IMMORT;++player_level){
+		for(unsigned player_level = 1; player_level <= LVL_IMMORT; ++player_level) {
 			std::string player_class = "all";//mods::util::player_class_to_string(cl_type);
 			auto triads = mods::levels::get_triads_by_class(player_class_t::GHOST);
 			auto stats = mods::levels::calculate_based_on_triads(triads,player_level);
 			std::string s;
 			s = player_class + "," + std::to_string(player_level) + ",";
 			fwrite(s.c_str(),sizeof(char),s.length(),fp);
-			for(int i=0; i < stats.size();++i){
+			for(int i=0; i < stats.size(); ++i) {
 				s = std::to_string(stats[i]);
-				if(stats.size() > i+1){
+				if(stats.size() > i+1) {
 					s += ",";
 				}
 				fwrite(s.c_str(), sizeof(char),s.length(),fp);
@@ -460,51 +464,55 @@ namespace mods::levels {
 	/**
 	 * admin debug command
 	 */
-ACMD(do_award_exp_by_name){
-	ADMIN_REJECT();
-	DO_HELP_WITH_ZERO("award_exp_by_name");
-	/** code here */
-	auto vec_args = PARSE_ARGS();
-	if(vec_args.size() < 2){
-		SEND_HELP("award_exp_by_name");
-		return;
+	ACMD(do_award_exp_by_name) {
+		ADMIN_REJECT();
+		DO_HELP_WITH_ZERO("award_exp_by_name");
+		/** code here */
+		auto vec_args = PARSE_ARGS();
+		static const char* usage = "usage: award_exp_by_name <player> <exp>\r\n";
+		if(vec_args.size() < 2) {
+			player->errorln(usage);
+			SEND_HELP("award_exp_by_name");
+			return;
+		}
+
+		auto found = mods::players::util::find_player_by_name(vec_args[0]);
+		if(!found.has_value()) {
+			player->sendln("Couldn't find a player by that name.");
+			player->errorln(usage);
+			return;
+		}
+		auto found_player = ptr_by_uuid(found.value());
+		player->sendln("Setting...");
+		auto opt = mods::util::stoi_optional<int>(vec_args[1]);
+		if(!opt.has_value()) {
+			player->errorln("Invalid integer encountered. Please specify a valid amount of experience points.");
+			player->errorln(usage);
+			return;
+		}
+		int used_to = found_player->exp();
+		mods::levels::gain_exp(found_player,opt.value());
+		player->send("Player '%s' used to have %d experience points and now has %d\r\n",found_player->name().c_str(),used_to,found_player->exp());
+		player->sendln("Done.");
+		ADMIN_DONE();
+	}
+	ACMD(do_csv_export_levels) {
+		ADMIN_REJECT();
+		DO_HELP_WITH_ZERO("csv_export_levels");
+		auto status = csv_export_report();
+		if(status == -1) {
+			player->errorln("Unable to write to levels.csv");
+			return;
+		}
+		player->admin_success("Successfully wrote to levels.csv.");
+		ADMIN_DONE();
+	}
+	ACMD(do_exp) {
+		player->send("{grn}You have %d experience points.{/grn}\r\n",player->exp());
 	}
 
-	auto found = mods::players::util::find_player_by_name(vec_args[0]);
-	if(!found.has_value()){
-		player->sendln("Couldn't find a player by that name.");
-		return;
-	}
-	auto found_player = ptr_by_uuid(found.value());
-	player->sendln("Setting...");
-	auto opt = mods::util::stoi_optional<int>(vec_args[1]);
-	if(!opt.has_value()){
-		player->errorln("Invalid integer encountered. Please specify a valid amount of experience points.");
-		return;
-	}
-	int used_to = found_player->exp();
-	mods::levels::gain_exp(found_player,opt.value());
-	player->send("Player '%s' used to have %d experience points and now has %d\r\n",found_player->name().c_str(),used_to,found_player->exp());
-	player->sendln("Done.");
-	ADMIN_DONE();
-}
-ACMD(do_csv_export_levels){
-	ADMIN_REJECT();
-	DO_HELP_WITH_ZERO("csv_export_levels");
-	auto status = csv_export_report();
-	if(status == -1){
-		player->errorln("Unable to write to levels.csv");
-		return;
-	}
-	player->admin_success("Successfully wrote to levels.csv.");
-	ADMIN_DONE();
-}
-ACMD(do_exp){
-	player->send("{grn}You have %d experience points.{/grn}\r\n",player->exp());
-}
 
-
-	void init(){
+	void init() {
 		mods::interpreter::add_command("award_exp_by_name", POS_RESTING, do_award_exp_by_name, LVL_BUILDER,0);
 		mods::interpreter::add_command("csv_export_levels", POS_RESTING, do_csv_export_levels, LVL_BUILDER,0);
 		mods::interpreter::add_command("exp", POS_RESTING, do_exp, 0,0);

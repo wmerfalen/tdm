@@ -290,7 +290,7 @@ namespace mods::weapons::damage_types {
 			dam = get_damage(attacker,victim,dam,attacktype);
 			deal_damage(attacker,victim,dam,attacktype);
 			auto p = ptr(attacker);
-			mods::levels::gain_exp(p, GET_LEVEL(victim) * dam);
+			mods::levels::gain_exp(p, std::min(GET_LEVEL(victim),(uint8_t)1) * dam);
 			update_position(victim);
 			send_combat_messages(attacker,victim,dam,attacktype);
 			help_linkless(attacker,victim,dam,attacktype);

@@ -101,8 +101,11 @@ buildobj = act.informative act.item act.medic \
 					 mods/loot mods/forge-engine/generated-rifle mods/orm/rifle-index \
 					 mods/forge-engine/generated-armor mods/orm/armor-index \
 					 mods/forge-engine/util mods/stat-bonuses \
+					 mods/orm/skill-points mods/unit-tests/skill-points \
+					 mods/orm/player-skill-points mods/unit-tests/skill-points \
 					 mods/unit-tests/elemental mods/unit-tests/elemental-armor-resistances \
-					 mods/unit-tests/armor-stats
+					 mods/unit-tests/armor-stats \
+					 mods/skill-orm-adaptor
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

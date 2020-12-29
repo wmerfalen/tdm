@@ -34,6 +34,9 @@ SKILL_GHOST_PENETRATING_SHOT,50
 SKILL_GHOST_INTIMIDATION,50
 SKILL_GHOST_CRYOGENIC_GRENADE,50
 SKILL_GHOST_FLASH_UNDERBARREL,50
+SKILL_GRENADE_USAGE,50
+SKILL_CLAYMORE_USAGE,50
+SKILL_BREACH_USAGE,50
 WSL_SHOTGUN_0_ALLOWABLE,1
 WSL_SHOTGUN_0_ACCURACY,80
 WSL_SHOTGUN_0_DAMAGE,80
@@ -394,6 +397,8 @@ MSG_YOU_FEIGN_DEATH,"You succesfully feign death. The enemy is none the wiser...
 MSG_YOU_FAIL_FEIGN_DEATH,"You fail at feigning death...\r\nYou are on the ground and vulnerable!"
 ADVANCE_LEVEL_CONGRATS,"{grn}Congratulations on advancing,soldier! You are proving to be a well-rounded member of the {blu}Counter Terrorist Unit{/blu}."
 CHARGEN_TRIADS_FORMAT,"Melee: %d\r\nWeapons: %d\r\nIntel: %d\r\nSpeed: %d\r\nArmor: %d\r\n"
+ADVANCE_LEVEL_MESSAGE,"{grn}CONGRATS! You rise a level!{/grn}"
+ADVANCE_MULTIPLE_LEVELS_MESSAGE,"{grn}CONGRATS! You rise %d levels!{/grn}"
 
 [uint8_t]
 LUCKY_DISORIENTED_VISION_CHANCE,2

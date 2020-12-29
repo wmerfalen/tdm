@@ -16,14 +16,14 @@ namespace mods::levels {
 		GHOST,
 		PYREXIA
 	};
-	void gain_exp(player_ptr_t& player,int gain);
+	int gain_exp(player_ptr_t& player,int gain);
 	void advance_level(player_ptr_t& player);
-	static inline bool class_is_implemented(player_class_t pc){
+	static inline bool class_is_implemented(player_class_t pc) {
 		return std::find(implemented_classes.begin(),implemented_classes.end(),pc) != implemented_classes.end();
 	}
 	void reward_player_for_advancing_levels(player_ptr_t&);
 	void generic_advance(player_ptr_t& player);
-	/** 
+	/**
 	 * if you add any values after CHARISMA, make sure to update the STAT_INDEXES_SIZE value
 	 */
 	enum stat_indexes : uint8_t {

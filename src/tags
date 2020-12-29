@@ -278,9 +278,9 @@ ACMD	mods/query-objects.cpp	/^ACMD(do_query_zone){$/;"	f
 ACMD	mods/rate-limiting.cpp	/^ACMD(do_get_rate_limit_types){$/;"	f	namespace:mods::rate_limiting
 ACMD	mods/rate-limiting.cpp	/^ACMD(do_list_rate_limits){$/;"	f	namespace:mods::rate_limiting
 ACMD	mods/rate-limiting.cpp	/^ACMD(do_set_rate_limit){$/;"	f	namespace:mods::rate_limiting
-ACMD	mods/skills.cpp	/^ACMD(do_allow_skill){$/;"	f
-ACMD	mods/skills.cpp	/^ACMD(do_skills){$/;"	f
-ACMD	mods/skills.cpp	/^ACMD(do_train){$/;"	f
+ACMD	mods/skills.cpp	/^ACMD(do_allow_skill) {$/;"	f
+ACMD	mods/skills.cpp	/^ACMD(do_skills) {$/;"	f
+ACMD	mods/skills.cpp	/^ACMD(do_train) {$/;"	f
 ACMD	mods/super-users.cpp	/^ACMD(do_add_super_user){$/;"	f
 ACMD	mods/super-users.cpp	/^ACMD(do_clear_who_line){$/;"	f
 ACMD	mods/super-users.cpp	/^ACMD(do_get_super_user_list){$/;"	f
@@ -584,8 +584,8 @@ BLOCK_SIZE	mail.h	29;"	d
 BOARD_MAGIC	boards.h	17;"	d
 BOARD_RNUM	boards.h	41;"	d
 BOARD_VNUM	boards.h	36;"	d
-BOOL_CASE	db.cpp	1534;"	d	file:
-BOOL_CASE	db.cpp	1598;"	d	file:
+BOOL_CASE	db.cpp	1560;"	d	file:
+BOOL_CASE	db.cpp	1624;"	d	file:
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ARMOR_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::armor
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_ATTACHMENT_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::attachment
 BOOST_PP_SEQ_FOR_EACH	mods/item-types.hpp	/^		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_CONSUMABLE_TYPES_SEQUENCE)$/;"	e	enum:mods::weapon::type::consumable
@@ -616,6 +616,7 @@ BREACHER_EXPLOSIVE_SHOT_MAX_COUNT	mods/values-list.cpp	/^BREACHER_EXPLOSIVE_SHOT
 BREACH_DOORS	mods/weapon-types.hpp	/^		BREACH_DOORS,$/;"	e	enum:mods::weapon::capabilities::cap_t
 BREACH_MASK	mods/object-utils.hpp	/^	constexpr static obj_data::location_data_t BREACH_MASK = 32;$/;"	m	namespace:mods::object_utils
 BREACH_TICKS_DURATION	mods/object-utils.hpp	/^	constexpr static uint8_t BREACH_TICKS_DURATION = 15;$/;"	m	namespace:mods::object_utils
+BREACH_USAGE	mods/skills.hpp	/^			BREACH_USAGE,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 BREAK	telnet.h	54;"	d
 BRF	utils.h	118;"	d
 BUG_FILE	db.h	90;"	d
@@ -653,8 +654,8 @@ CAP_ALL	mods/util.hpp	/^	static constexpr uint8_t CAP_ALL = 0;$/;"	m	namespace:m
 CAP_ANY	mods/util.hpp	/^	static constexpr uint8_t CAP_ANY = 0;$/;"	m	namespace:mods::util
 CAP_SINGLE	mods/util.hpp	/^	static constexpr uint8_t CAP_SINGLE = 0;$/;"	m	namespace:mods::util
 CARPET	structs.h	/^			CARPET,$/;"	m	struct:room_data	typeref:enum:room_data::
-CASE	db.cpp	1531;"	d	file:
-CASE	db.cpp	1597;"	d	file:
+CASE	db.cpp	1557;"	d	file:
+CASE	db.cpp	1623;"	d	file:
 CASE_MOON	mods/date-time.cpp	190;"	d	file:
 CAST_POTION	spells.h	18;"	d
 CAST_SCROLL	spells.h	21;"	d
@@ -932,10 +933,10 @@ CCRED	screen.h	30;"	d
 CCWHT	screen.h	36;"	d
 CCYEL	screen.h	32;"	d
 CEMENT	structs.h	/^			CEMENT,			\/** asphault, nearly indestructible *\/$/;"	m	struct:room_data	typeref:enum:room_data::
-CGET	mods/values.hpp	1074;"	d
-CGET	mods/values.hpp	537;"	d
+CGET	mods/values.hpp	1084;"	d
+CGET	mods/values.hpp	542;"	d
 CGET_DEF	mods/values.cpp	20;"	d	file:
-CGET_DEF	mods/values.cpp	2168;"	d	file:
+CGET_DEF	mods/values.cpp	2188;"	d	file:
 CHAINABLE_BREACHING	mods/skills.hpp	/^			CHAINABLE_BREACHING,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 CHAOTIC	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 CHARM	mods/flags.hpp	/^		CHARM,$/;"	e	enum:mods::flags::aff
@@ -1018,6 +1019,7 @@ CLASS_SYNDROME	structs.h	/^	CLASS_SYNDROME = 19,$/;"	e	enum:player_class_t
 CLASS_UNDEAD	structs.h	269;"	d
 CLASS_UNDEFINED	structs.h	/^	CLASS_UNDEFINED = 0,$/;"	e	enum:player_class_t
 CLAYMORE	mods/weapon.hpp	/^		FLAME = (1 << 10), CLAYMORE = (1 << 11), REMOTE_EXPLOSIVE = (1 << 12),$/;"	e	enum:mods::weapon::mask_type
+CLAYMORE_USAGE	mods/skills.hpp	/^			CLAYMORE_USAGE,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 CLICHE_TBC_TEXT_FORMAT_OUTER_NAMESPACE	mods/catch.hpp	5663;"	d
 CLICHE_TBC_TEXT_FORMAT_OUTER_NAMESPACE	mods/catch.hpp	5848;"	d
 CLOSE_DOOR	act.movement.cpp	368;"	d	file:
@@ -1535,6 +1537,7 @@ FMG9	mods/orm/engineer.hpp	/^		const std::string FMG9 = "FMG9";$/;"	m	struct:mod
 FMG9	mods/weapon.hpp	/^			FMG9 = 1,$/;"	e	enum:mods::weapon::engineer::primary_choice_t
 FOOTER	mods/mini-games/wires.hpp	/^		static constexpr std::string_view FOOTER = "\\r\\n"$/;"	m	struct:mods::mini_games::wires
 FOREACH_MOB	utils.h	558;"	d
+FOREACH_SKILLSET_AS	mods/skill-orm-adaptor.cpp	12;"	d	file:
 FOREACH_SKILLSET_AS	mods/skills.cpp	26;"	d	file:
 FOREST	structs.h	/^			FOREST,$/;"	m	struct:room_data	typeref:enum:room_data::
 FORGE	mods/classes/types.hpp	/^		FORGE,$/;"	e	enum:mods::classes::types
@@ -1689,6 +1692,7 @@ GRENADE	mods/mobs/mob.hpp	/^		enum mask_type { SMG, SNIPE, SHOTGUN, GRENADE };$/
 GRENADE	mods/weapon.hpp	/^		GRENADE = (1 << 4), ASSAULT_RIFLE = (1 << 5), PISTOL = (1 << 6),$/;"	e	enum:mods::weapon::mask_type
 GRENADE_EXPLOSION	mods/ai_state.hpp	/^				GRENADE_FLIES_BY,GRENADE_EXPLOSION,$/;"	e	enum:mods::ai_state::event_type_t
 GRENADE_FLIES_BY	mods/ai_state.hpp	/^				GRENADE_FLIES_BY,GRENADE_EXPLOSION,$/;"	e	enum:mods::ai_state::event_type_t
+GRENADE_USAGE	mods/skills.hpp	/^			GRENADE_USAGE,$/;"	e	enum:mods::skills::proficiencies::proficiency_name_t
 GRIP	mods/weapon.hpp	/^		GRIP,$/;"	e	enum:mods::weapon::attachment_t
 GROUP	mods/flags.hpp	/^		GROUP,$/;"	e	enum:mods::flags::aff
 HANDBOOK_FILE	db.h	86;"	d
@@ -2455,7 +2459,7 @@ MEDIC_PRIMARY_AUGPARA	mods/weapon.hpp	/^			MEDIC_PRIMARY_AUGPARA = 1,$/;"	e	enum
 MEDIC_PRIMARY_TAR21	mods/weapon.hpp	/^			MEDIC_PRIMARY_TAR21 = 2,$/;"	e	enum:mods::weapon::medic::primary_choice_t
 MELEE	mods/levels.hpp	/^	MELEE = 0,$/;"	e	enum:uint8_t
 MEMORY	utils.h	355;"	d
-MENTOC_ABIL_SET	db.cpp	891;"	d	file:
+MENTOC_ABIL_SET	db.cpp	917;"	d	file:
 MENTOC_ACT	mods/rate-limiting.cpp	33;"	d	file:
 MENTOC_ACT	mods/rate-limiting.cpp	39;"	d	file:
 MENTOC_ACT	mods/rate-limiting.cpp	42;"	d	file:
@@ -3225,8 +3229,8 @@ Q_TRIGGER_KEY	mods/quests.cpp	8;"	d	file:
 RADIATION	mods/aoe.hpp	/^		RADIATION, \/** Radioactive fallout *\/$/;"	e	enum:mods::aoe::types_t
 RADIOACTIVE	structs.h	/^			RADIOACTIVE, \/** actively emitting radioactivity *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 RANGE	act.wizard.cpp	2298;"	d	file:
-RANGE	db.cpp	1537;"	d	file:
-RANGE	db.cpp	1599;"	d	file:
+RANGE	db.cpp	1563;"	d	file:
+RANGE	db.cpp	1625;"	d	file:
 RANGED_ATTACK	mods/weapon-types.hpp	/^		RANGED_ATTACK,$/;"	e	enum:mods::weapon::capabilities::cap_t
 RARE	mods/randomized-items.hpp	/^	RARE,$/;"	e	enum:mods::rarity_enum_t
 RARE	mods/rarity.hpp	/^		constexpr static float RARE = 0.05034415;$/;"	m	namespace:mods::rarity
@@ -3595,11 +3599,13 @@ SKILL_BETTER_SNIPING_ACCURACY	mods/values-list.cpp	/^SKILL_BETTER_SNIPING_ACCURA
 SKILL_BETTER_WEAPON_ACCURACY	mods/values-list.cpp	/^SKILL_BETTER_WEAPON_ACCURACY,50$/;"	v
 SKILL_BIGGER_CLAYMORES	mods/values-list.cpp	/^SKILL_BIGGER_CLAYMORES,50$/;"	v
 SKILL_BIGGER_FIRE_NADES	mods/values-list.cpp	/^SKILL_BIGGER_FIRE_NADES,50$/;"	v
+SKILL_BREACH_USAGE	mods/values-list.cpp	/^SKILL_BREACH_USAGE,50$/;"	v
 SKILL_CAMERA_DESTRUCTION	mods/values-list.cpp	/^SKILL_CAMERA_DESTRUCTION,100$/;"	v
 SKILL_CAMERA_PLACEMENT	mods/values-list.cpp	/^SKILL_CAMERA_PLACEMENT,50$/;"	v
 SKILL_CHA	mods/forge-engine/requirements.hpp	/^			SKILL_CHA ,$/;"	e	enum:mods::forge_engine::stat_types_t
 SKILL_CHAINABLE_BREACHING	mods/values-list.cpp	/^SKILL_CHAINABLE_BREACHING,1$/;"	v
 SKILL_CHEMISTRY	mods/forge-engine/requirements.hpp	/^			SKILL_CHEMISTRY ,$/;"	e	enum:mods::forge_engine::stat_types_t
+SKILL_CLAYMORE_USAGE	mods/values-list.cpp	/^SKILL_CLAYMORE_USAGE,50$/;"	v
 SKILL_CON	mods/forge-engine/requirements.hpp	/^			SKILL_CON ,$/;"	e	enum:mods::forge_engine::stat_types_t
 SKILL_COUNTER_SHOCK	mods/values-list.cpp	/^SKILL_COUNTER_SHOCK,4$/;"	v
 SKILL_CRAFTY_C4	mods/values-list.cpp	/^SKILL_CRAFTY_C4,4$/;"	v
@@ -3638,6 +3644,7 @@ SKILL_GHOST_PLANT_CLAYMORE	mods/values-list.cpp	/^SKILL_GHOST_PLANT_CLAYMORE,50$
 SKILL_GHOST_STEALTH	mods/values-list.cpp	/^SKILL_GHOST_STEALTH,50$/;"	v
 SKILL_GHOST_SUMMON_EXTRACTION	mods/values-list.cpp	/^SKILL_GHOST_SUMMON_EXTRACTION,50$/;"	v
 SKILL_GHOST_XRAY_SHOT	mods/values-list.cpp	/^SKILL_GHOST_XRAY_SHOT,50$/;"	v
+SKILL_GRENADE_USAGE	mods/values-list.cpp	/^SKILL_GRENADE_USAGE,50$/;"	v
 SKILL_HEADGEAR_INTROSPECTION	mods/values-list.cpp	/^SKILL_HEADGEAR_INTROSPECTION,3050$/;"	v
 SKILL_HEADSHOT_CHANCE	mods/values-list.cpp	/^SKILL_HEADSHOT_CHANCE,250$/;"	v
 SKILL_HGH_DEALER	mods/values-list.cpp	/^SKILL_HGH_DEALER,50$/;"	v
@@ -4540,12 +4547,12 @@ YamlFeedExceptionInfo	mods/object-utils.hpp	/^		YamlFeedExceptionInfo($/;"	f	str
 YamlFeedExceptionInfo	mods/object-utils.hpp	/^	struct YamlFeedExceptionInfo {$/;"	s	namespace:mods::object_utils
 Yes	mods/catch.hpp	/^			Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
 Yes	mods/catch2.hpp	/^        Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
-Z	db.cpp	1652;"	d	file:
-Z	db.cpp	1660;"	d	file:
-ZONE_ERROR	db.cpp	2022;"	d	file:
+Z	db.cpp	1678;"	d	file:
+Z	db.cpp	1686;"	d	file:
+ZONE_ERROR	db.cpp	2048;"	d	file:
 ZON_PREFIX	db.h	71;"	d
 ZOOM	mods/weapon-types.hpp	/^		ZOOM,$/;"	e	enum:mods::weapon::capabilities::cap_t
-ZO_DEAD	db.cpp	1941;"	d	file:
+ZO_DEAD	db.cpp	1967;"	d	file:
 Z_KINGS_C	castle.cpp	31;"	d	file:
 _ARPA_TELNET_H	telnet.h	37;"	d
 _BSD_SNPRINTF_H	bsd-snprintf.h	41;"	d
@@ -4753,8 +4760,10 @@ __MENTOC_MODS_ORM_QUOTES_HEADER__	mods/orm/quotes.hpp	2;"	d
 __MENTOC_MODS_ORM_RIFLE_INDEX_HEADER__	mods/orm/rifle-index.hpp	2;"	d
 __MENTOC_MODS_ORM_ROOM_HEADER__	mods/orm/room.hpp	2;"	d
 __MENTOC_MODS_ORM_SHOP_HEADER__	mods/orm/shop.hpp	2;"	d
+__MENTOC_MODS_ORM_SKILL_POINTS_HEADER__	mods/orm/skill-points.hpp	2;"	d
 __MENTOC_MODS_ORM_SNIPER_HEADER__	mods/orm/sniper.hpp	2;"	d
 __MENTOC_MODS_ORM_UTIL_HEADER__	mods/orm/util.hpp	2;"	d
+__MENTOC_MODS_ORM_player_skill_points_HEADER__	mods/orm/player-skill-points.hpp	2;"	d
 __MENTOC_MODS_OVERHEAD_MAP_HEADER__	mods/overhead_map.hpp	2;"	d
 __MENTOC_MODS_PFIND_HEADER__	mods/pfind.hpp	2;"	d
 __MENTOC_MODS_PLAYERS_DB_LOAD_HEADER__	mods/players/db-load.hpp	2;"	d
@@ -4786,6 +4795,7 @@ __MENTOC_MODS_SCREEN_SEARCHER_HEADER__	mods/screen-searcher.hpp	2;"	d
 __MENTOC_MODS_SENSOR_GRENADE_HEADER__	mods/sensor-grenade.hpp	2;"	d
 __MENTOC_MODS_SHOP_HEADER__	mods/shop.hpp	2;"	d
 __MENTOC_MODS_SKILLS_HEADER__	mods/skills.hpp	2;"	d
+__MENTOC_MODS_SKILL_ORM_ADAPTOR_HEADER__	mods/skill-orm-adaptor.hpp	2;"	d
 __MENTOC_MODS_SQL_HEADER__	mods/sql.hpp	9;"	d
 __MENTOC_MODS_STAT_BONUSES_HEADER__	mods/stat-bonuses.hpp	2;"	d
 __MENTOC_MODS_STRING_HEADER__	mods/string.hpp	2;"	d
@@ -4822,7 +4832,7 @@ __MENTOC_MODS_prefs_HEADER__	mods/prefs.hpp	2;"	d
 __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/search.hpp	2;"	d
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/util.hpp	2;"	d
-__MENTOC_PLR	db.cpp	2373;"	d	file:
+__MENTOC_PLR	db.cpp	2399;"	d	file:
 __MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__	mods/debug-pre-game.hpp	129;"	d
 __MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	147;"	d
 __MENTOC_RUN_MOB_ROAM_ORM_PREGAME__	mods/debug-pre-game.hpp	27;"	d
@@ -4838,7 +4848,7 @@ __MENTOC_SHOW_MODS_ARMOR_BP_DEBUG_OUTPUT__	mods/armor/basic-protection.cpp	3;"	d
 __MENTOC_SHOW_MODS_ARMOR_ELITE_PROTECTION_DEBUG_OUTPUT__	mods/armor/elite-protection.cpp	3;"	d	file:
 __MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__	mods/calc-visibility.cpp	9;"	d	file:
 __MENTOC_SHOW_MODS_EXPLODE_IN_FUTURE_DEBUG_OUTPUT__	mods/projectile.cpp	27;"	d	file:
-__MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__	mods/players/db-load.cpp	10;"	d	file:
+__MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__	mods/players/db-load.cpp	11;"	d	file:
 __MENTOC_SHOW_MODS_PLAYERS_DESTROY_PLAYER_DEBUG_OUTPUT__	mods/players/destroy-player.cpp	4;"	d	file:
 __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	d
 __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__	act.item.cpp	28;"	d	file:
@@ -5006,7 +5016,7 @@ alloc	mods/lmdb/shm.hpp	/^        inline int alloc(size_t s,int f){ return alloc
 alloc	mods/lmdb/shm.hpp	/^int shm::alloc(const char* memory_id,int project_id,size_t memory_size,int flags){$/;"	f	class:gdns::shm
 allow	mods/player-registration.cpp	/^	void allow(bool on_off){$/;"	f	namespace:mods::player_registration
 allow	mods/weapon-types.hpp	/^		allow_shot_t allow;$/;"	m	struct:mods::weapon::weapon_type_statistics_t
-allow_player_to_do_everything	mods/skills.cpp	/^	void allow_player_to_do_everything(player_ptr_t& player){$/;"	f	namespace:mods::skills
+allow_player_to_do_everything	mods/skills.cpp	/^	void allow_player_to_do_everything(player_ptr_t& player) {$/;"	f	namespace:mods::skills
 allowed	mods/acl/config-parser.hpp	/^                bool allowed(const char* role,const char* file_or_command){$/;"	f	class:mods::acl::FileParser
 allowed	mods/player-registration.cpp	/^	bool allowed() {$/;"	f	namespace:mods::player_registration
 alt_value_map	mods/values.cpp	/^		std::map<value_key_t,variants_t> alt_value_map;$/;"	m	namespace:mods::values	file:
@@ -5226,7 +5236,7 @@ bool	structs.h	/^typedef char			bool;$/;"	t
 bool_types	mods/values.cpp	/^static const std::vector<value_key_t> bool_types = {$/;"	m	namespace:mods::values	file:
 boot	mods/mob-roam.cpp	/^	void boot(){$/;"	f	namespace:mods::mob_roam
 boot_db	db.cpp	/^void boot_db(void) {$/;"	f
-boot_hell	db.cpp	/^void boot_hell(void){$/;"	f
+boot_hell	db.cpp	/^void boot_hell(void) {$/;"	f
 boot_social_messages	act.social.cpp	/^void boot_social_messages(void) {$/;"	f
 boot_social_messages	mods/hell.hpp	/^	constexpr inline bool boot_social_messages = false;$/;"	m	namespace:mods::hell
 boot_sql_shops	shop.cpp	/^void boot_sql_shops() {$/;"	f
@@ -5312,6 +5322,7 @@ calculate_limb_damage	mods/armor/advanced-protection.cpp	/^		float advanced_prot
 calculate_limb_damage	mods/armor/basic-protection.cpp	/^		float basic_protection::calculate_limb_damage(feedback_t& damage,int where){$/;"	f	class:mods::armor::basic_protection
 calculate_limb_damage	mods/armor/elite-protection.cpp	/^		float elite_protection::calculate_limb_damage(feedback_t& damage,int where){$/;"	f	class:mods::armor::elite_protection
 calculate_shrapnel_rooms	mods/projectile.cpp	/^		rooms_away_t calculate_shrapnel_rooms(room_rnum room, obj_ptr_t held_object,std::size_t blast_radius){$/;"	f	namespace:mods::projectile
+calculate_skill_points_by_level	mods/orm/skill-points.cpp	/^	uint16_t skill_points::calculate_skill_points_by_level(uint16_t player_level) {$/;"	f	class:mods::orm::skill_points
 calculate_spray_chance	mods/weapons/damage-types.cpp	/^	uint8_t calculate_spray_chance(player_ptr_t& player) {$/;"	f	namespace:mods::weapons::damage_types
 call_magic	spell_parser.cpp	/^int call_magic(char_data *caster, char_data *cvict,$/;"	f
 callback	mods/projectile.hpp	/^		typedef std::function<void (room_rnum,int)> callback;$/;"	t	namespace:mods::projectile
@@ -5379,9 +5390,9 @@ channel	mods/chat.hpp	/^	struct channel {$/;"	s	namespace:mods::mods::chat
 char_auto	act.social.cpp	/^	char *char_auto;$/;"	m	struct:social_messg	file:
 char_data	mods/ai_state.hpp	/^typedef struct char_data char_data;$/;"	t	typeref:struct:char_data
 char_data	structs.cpp	/^char_data::char_data(char_data* o) {$/;"	f	class:char_data
-char_exists	db.cpp	/^bool char_exists(const std::string& name){$/;"	f
-char_exists	db.cpp	/^bool char_exists(const std::string& name, aligned_int_t & meta_int_id){$/;"	f
-char_exists	db.cpp	/^bool char_exists(player_ptr_t player_ptr){$/;"	f
+char_exists	db.cpp	/^bool char_exists(const std::string& name) {$/;"	f
+char_exists	db.cpp	/^bool char_exists(const std::string& name, aligned_int_t& meta_int_id) {$/;"	f
+char_exists	db.cpp	/^bool char_exists(player_ptr_t player_ptr) {$/;"	f
 char_found	act.social.cpp	/^	char *char_found;		\/* if NULL, read no further, ignore args *\/$/;"	m	struct:social_messg	file:
 char_from_room	globals.cpp	/^			void char_from_room(char_data* ch) {$/;"	f	namespace:mods::globals::rooms
 char_from_room	handler.cpp	/^void char_from_room(char_data *ch) {$/;"	f
@@ -5437,7 +5448,7 @@ class_abilities	mods/class-abilities.cpp	/^namespace mods::class_abilities {$/;"
 class_abilities	mods/class-abilities.hpp	/^namespace mods::class_abilities {$/;"	n	class:mods
 class_capability_t	mods/mobs/mob.hpp	/^			typedef std::vector<class_type> class_capability_t;$/;"	t	class:mods::player
 class_info_t	mods/mobs/mob.hpp	/^			typedef std::vector<std::shared_ptr<mods::classes::base>> class_info_t;$/;"	t	class:mods::player
-class_is_implemented	mods/levels.hpp	/^	static inline bool class_is_implemented(player_class_t pc){$/;"	f	namespace:mods::levels
+class_is_implemented	mods/levels.hpp	/^	static inline bool class_is_implemented(player_class_t pc) {$/;"	f	namespace:mods::levels
 classes	globals.cpp	/^INIT(mods::classes);$/;"	v
 classes	mods/chargen.cpp	/^		static std::vector<std::string> classes;$/;"	m	namespace:mods::chargen	file:
 classes	mods/classes/advance-levels.hpp	/^namespace mods::classes {$/;"	n	class:mods
@@ -5497,7 +5508,7 @@ clear_obj_ptrs	mods/armor/advanced-protection.cpp	/^		void advanced_protection::
 clear_obj_ptrs	mods/armor/basic-protection.cpp	/^		void basic_protection::clear_obj_ptrs(){$/;"	f	class:mods::armor::basic_protection
 clear_obj_ptrs	mods/armor/elite-protection.cpp	/^		void elite_protection::clear_obj_ptrs(){$/;"	f	class:mods::armor::elite_protection
 clear_object	db.cpp	/^void clear_object(struct obj_data *obj) {$/;"	f
-clear_player_can_override	mods/skills.cpp	/^	void clear_player_can_override(player_ptr_t& player){$/;"	f	namespace:mods::skills
+clear_player_can_override	mods/skills.cpp	/^	void clear_player_can_override(player_ptr_t& player) {$/;"	f	namespace:mods::skills
 clear_pluck_filter	mods/lmdb.cpp	/^	void _db_handle::clear_pluck_filter(){$/;"	f	class:mods::lmdb::_db_handle
 clear_rooms	mods/mob-roam.cpp	/^	void roam_recorder::clear_rooms(){$/;"	f	class:mods::mob_roam::roam_recorder
 clear_watching	mods/mobs/helpers.hpp	/^	static inline void clear_watching(Tuuid u){$/;"	f	namespace:mods::mobs::helpers
@@ -5553,8 +5564,10 @@ column_prefix	mods/orm/mini-game.hpp	/^		std::string column_prefix() const { ret
 column_prefix	mods/orm/mob-roam.hpp	/^		std::string column_prefix() const { return "mob_"; }$/;"	f	struct:mods::orm::mob_roam
 column_prefix	mods/orm/orm-base.hpp	/^		virtual std::string column_prefix(){ return "player_"; }$/;"	f	struct:mods::orm::orm_base
 column_prefix	mods/orm/player-base-ability.hpp	/^		std::string column_prefix(){ return "pba_"; }$/;"	f	struct:mods::orm::player_base_ability
+column_prefix	mods/orm/player-skill-points.hpp	/^		std::string column_prefix() const {$/;"	f	struct:mods::orm::player_skill_points
 column_prefix	mods/orm/pyrexia.hpp	/^		std::string column_prefix(){ return "pyrexia_"; }$/;"	f	struct:mods::orm::pyrexia
 column_prefix	mods/orm/rifle-index.hpp	/^		std::string column_prefix() const {$/;"	f	struct:mods::orm::rifle_index
+column_prefix	mods/orm/skill-points.hpp	/^		std::string column_prefix() const {$/;"	f	struct:mods::orm::skill_points
 column_prefix	mods/orm/sniper.hpp	/^		std::string column_prefix(){ return "sniper_"; }$/;"	f	struct:mods::orm::sniper
 column_prefix	mods/orm/striker.hpp	/^		std::string column_prefix(){ return "striker_"; }$/;"	f	struct:mods::orm::striker
 column_prefix	mods/orm/support.hpp	/^		std::string column_prefix() const { return "support_"; }$/;"	f	struct:mods::orm::support
@@ -5672,7 +5685,7 @@ convertUnstreamable	mods/catch2.hpp	/^        , std::string>::type convertUnstre
 convertUnstreamable	mods/catch2.hpp	/^        std::string>::type convertUnstreamable( T const& ) {$/;"	f	namespace:Catch::Detail
 convert_to_fire_nade	mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyrexia::convert_to_fire_nade(obj_ptr_t& object){$/;"	f	class:mods::classes::pyrexia
 convert_to_fire_nade	mods/orm/pyrexia.cpp	/^	std::pair<bool,std::string> pyrexia::convert_to_fire_nade(obj_ptr_t& object){$/;"	f	class:mods::orm::pyrexia
-convert_to_skill_list	mods/skills.cpp	/^	std::vector<skill_t> convert_to_skill_list(std::vector<std::string_view> in_skill_list){$/;"	f	namespace:mods::skills
+convert_to_skill_list	mods/skills.cpp	/^	std::vector<skill_t> convert_to_skill_list(std::vector<std::string_view> in_skill_list) {$/;"	f	namespace:mods::skills
 cooldown_between_shots	mods/weapon.hpp	/^			float cooldown_between_shots;$/;"	m	struct:mods::weapon::yaml::rifle_description_t
 coordinates	mods/builder/coordinates.hpp	/^namespace mods::builder::coordinates {$/;"	n	class:mods::builder
 core_dump	utils.h	56;"	d
@@ -5716,7 +5729,7 @@ create_medic	mods/classes/medic.cpp	/^	std::shared_ptr<medic> create_medic(playe
 create_money	handler.cpp	/^obj_ptr_t create_money(int amount) {$/;"	f
 create_muted_player_target	mods/player-scaffolding.cpp	/^	player_ptr_t player_scaffolding::create_muted_player_target() {$/;"	f	class:mods::player_scaffolding
 create_object	db.cpp	/^obj_ptr_t create_object(int type,std::string yaml_file) {$/;"	f
-create_object_from_index	db.cpp	/^obj_ptr_t create_object_from_index(std::size_t proto_index){$/;"	f
+create_object_from_index	db.cpp	/^obj_ptr_t create_object_from_index(std::size_t proto_index) {$/;"	f
 create_object_opt	db.cpp	/^std::tuple<bool,obj_ptr_t> create_object_opt(int type,std::string yaml_file) {$/;"	f
 create_player	mods/player-scaffolding.cpp	/^	player_ptr_t player_scaffolding::create_player() {$/;"	f	class:mods::player_scaffolding
 create_psyop	mods/classes/psyop.cpp	/^	std::shared_ptr<psyop> create_psyop(player_ptr_t &in_player){$/;"	f	namespace:mods::classes
@@ -5724,7 +5737,7 @@ create_pyrexia	mods/classes/pyrexia.cpp	/^		std::shared_ptr<pyrexia> create_pyre
 create_selector	mods/behaviour_tree_node.hpp	/^		static child_node_t create_selector(const children_t& ch){$/;"	f	struct:mods::behaviour_tree_node
 create_sentinel	mods/classes/sentinel.cpp	/^		std::shared_ptr<sentinel> create_sentinel(player_ptr_t &in_player){$/;"	f	namespace:mods::classes
 create_sequence	mods/behaviour_tree_node.hpp	/^		static child_node_t create_sequence(const children_t& ch){$/;"	f	struct:mods::behaviour_tree_node
-create_shop_from_index	db.cpp	/^shop_ptr_t create_shop_from_index(std::size_t proto_index){$/;"	f
+create_shop_from_index	db.cpp	/^shop_ptr_t create_shop_from_index(std::size_t proto_index) {$/;"	f
 create_sniper	mods/classes/sniper.cpp	/^	std::shared_ptr<sniper> create_sniper(player_ptr_t &in_player){$/;"	f	namespace:mods::classes
 create_support	mods/classes/support.cpp	/^	std::shared_ptr<support> create_support(player_ptr_t &in_player){$/;"	f	namespace:mods::classes
 create_syndrome	mods/classes/syndrome.cpp	/^		std::shared_ptr<syndrome> create_syndrome(player_ptr_t &in_player){$/;"	f	namespace:mods::classes
@@ -5911,10 +5924,12 @@ deleteAll	mods/catch.hpp	/^	inline void deleteAll(ContainerT& container) {$/;"	f
 deleteAllValues	mods/catch.hpp	/^	inline void deleteAllValues(AssociativeContainerT& container) {$/;"	f	namespace:Catch
 delete_aliases	alias.cpp	/^void delete_aliases(const char *charname) {$/;"	f
 delete_by_armor_type	mods/orm/armor-index.cpp	/^	std::tuple<int16_t,std::string> armor_index::delete_by_armor_type(std::string_view armor_type_name) {$/;"	f	class:mods::orm::armor_index
+delete_by_level	mods/orm/skill-points.cpp	/^	std::tuple<int16_t,std::string> skill_points::delete_by_level(uint16_t level) {$/;"	f	class:mods::orm::skill_points
 delete_by_mob_vnum	mods/orm/mob-roam.cpp	/^	std::tuple<int16_t,std::string> mob_roam::delete_by_mob_vnum(mob_vnum mob){$/;"	f	class:mods::orm::mob_roam
+delete_by_player	mods/orm/player-skill-points.cpp	/^	std::tuple<int16_t,std::string> player_skill_points::delete_by_player(const uint64_t& player_id) {$/;"	f	class:mods::orm::player_skill_points
 delete_by_profile_name	mods/orm/mob-roam.cpp	/^	std::tuple<int16_t,std::string> mob_roam::delete_by_profile_name(std::string_view profile){$/;"	f	class:mods::orm::mob_roam
 delete_by_rifle_type	mods/orm/rifle-index.cpp	/^	std::tuple<int16_t,std::string> rifle_index::delete_by_rifle_type(std::string_view rifle_type_name) {$/;"	f	class:mods::orm::rifle_index
-delete_char	mods/players/db-load.cpp	/^	int16_t delete_char(player_ptr_t& player){$/;"	f	namespace:mods::players::db_load
+delete_char	mods/players/db-load.cpp	/^	int16_t delete_char(player_ptr_t& player) {$/;"	f	namespace:mods::players::db_load
 delete_doubledollar	interpreter.cpp	/^char *delete_doubledollar(char *string) {$/;"	f
 delete_from	mods/orm/base.hpp	/^			static inline std::tuple<int16_t,std::string> delete_from(TObject& obj){$/;"	f	struct:mods::orm::base
 delete_from	mods/orm/util.hpp	/^			static inline std::tuple<int16_t,std::string> delete_from(TObject* obj){$/;"	f	namespace:mods::orm::util
@@ -6656,10 +6671,14 @@ export_class	mods/orm/mob-roam.cpp	/^	strmap_t mob_roam::export_class() {$/;"	f	
 export_class	mods/orm/mob-roam.hpp	/^		strmap_t export_class(){$/;"	f	struct:mods::orm::mob_roam_record_t
 export_class	mods/orm/orm-base.hpp	/^		virtual strmap_t export_class(){$/;"	f	struct:mods::orm::orm_base
 export_class	mods/orm/player-base-ability.cpp	/^	strmap_t player_base_ability::export_class() {$/;"	f	class:mods::orm::player_base_ability
+export_class	mods/orm/player-skill-points.cpp	/^	strmap_t player_skill_points::export_class() {$/;"	f	class:mods::orm::player_skill_points
+export_class	mods/orm/player-skill-points.hpp	/^		strmap_t export_class() {$/;"	f	struct:mods::orm::player_skill_points_record_t
 export_class	mods/orm/pyrexia.cpp	/^	strmap_t pyrexia::export_class() {$/;"	f	class:mods::orm::pyrexia
 export_class	mods/orm/rifle-index.cpp	/^	strmap_t rifle_index::export_class() {$/;"	f	class:mods::orm::rifle_index
 export_class	mods/orm/rifle-index.hpp	/^		strmap_t export_class() {$/;"	f	struct:mods::orm::rifle_index_record_t
 export_class	mods/orm/room.cpp	/^	sql_save_map_t room::export_class() {$/;"	f	class:mods::orm::room
+export_class	mods/orm/skill-points.cpp	/^	strmap_t skill_points::export_class() {$/;"	f	class:mods::orm::skill_points
+export_class	mods/orm/skill-points.hpp	/^		strmap_t export_class() {$/;"	f	struct:mods::orm::skill_points_record_t
 export_class	mods/orm/sniper.cpp	/^	strmap_t sniper::export_class() {$/;"	f	class:mods::orm::sniper
 export_class	mods/orm/striker.cpp	/^	strmap_t striker::export_class() {$/;"	f	class:mods::orm::striker
 export_class	mods/orm/support.cpp	/^	strmap_t support::export_class() {$/;"	f	class:mods::orm::support
@@ -6773,7 +6792,9 @@ feed_id	mods/orm/elevator.hpp	/^		id_type_t feed_id;$/;"	m	struct:mods::orm::ele
 feed_multi	mods/orm/armor-index.cpp	/^	void armor_index::feed_multi(pqxx::result& in_rows) {$/;"	f	class:mods::orm::armor_index
 feed_multi	mods/orm/mini-game.hpp	/^		int16_t feed_multi(TResultSet rows){$/;"	f	struct:mods::orm::mini_game
 feed_multi	mods/orm/mob-roam.cpp	/^	void mob_roam::feed_multi(pqxx::result & in_rows){$/;"	f	class:mods::orm::mob_roam
+feed_multi	mods/orm/player-skill-points.cpp	/^	void player_skill_points::feed_multi(pqxx::result& in_rows) {$/;"	f	class:mods::orm::player_skill_points
 feed_multi	mods/orm/rifle-index.cpp	/^	void rifle_index::feed_multi(pqxx::result& in_rows) {$/;"	f	class:mods::orm::rifle_index
+feed_multi	mods/orm/skill-points.cpp	/^	void skill_points::feed_multi(pqxx::result& in_rows) {$/;"	f	class:mods::orm::skill_points
 feed_order	mods/orm/camera-feed.hpp	/^		feed_order_t feed_order;$/;"	m	struct:mods::orm::camera_feed
 feed_order	mods/orm/elevator.hpp	/^		feed_order_t feed_order;$/;"	m	struct:mods::orm::elevator
 feed_player	mods/orm/inventory.cpp	/^			int16_t feed_player(player_ptr_t & player){$/;"	f	namespace:mods::orm::inventory::lmdb::yaml
@@ -6782,7 +6803,7 @@ feed_player	mods/orm/inventory.cpp	/^		int16_t feed_player(player_ptr_t & player
 feed_player	mods/orm/inventory.cpp	/^	int16_t feed_player(player_ptr_t & player){$/;"	f	namespace:mods::orm::inventory
 feed_player	mods/orm/player-base-ability.cpp	/^	void player_base_ability::feed_player(player_ptr_t& player){$/;"	f	class:mods::orm::player_base_ability
 feed_player_by_uuid	mods/orm/inventory.cpp	/^	int16_t feed_player_by_uuid(uuid_t uuid){$/;"	f	namespace:mods::orm::inventory
-feed_player_inventory	mods/players/db-load.cpp	/^	void feed_player_inventory(player_ptr_t& player_ptr){$/;"	f	namespace:mods::players::db_load
+feed_player_inventory	mods/players/db-load.cpp	/^	void feed_player_inventory(player_ptr_t& player_ptr) {$/;"	f	namespace:mods::players::db_load
 feed_room_vnum	mods/orm/camera-feed.hpp	/^		room_vnum_t feed_room_vnum;$/;"	m	struct:mods::orm::camera_feed
 feed_room_vnum	mods/orm/elevator.hpp	/^		room_vnum_t feed_room_vnum;$/;"	m	struct:mods::orm::elevator
 feed_status	mods/yaml.hpp	/^		int16_t feed_status;$/;"	m	struct:mods::yaml::armor_description_t
@@ -6939,8 +6960,8 @@ foreach_player	mods/loops.cpp	/^	void foreach_player(player_function_t func){$/;
 foreach_player	mods/loops.hpp	/^		static inline PointerType* foreach_player(function_with_return_t<PointerType> func,PointerType* param){$/;"	f	namespace:mods::loops::shptr
 foreach_player	mods/loops.hpp	/^		static inline void foreach_player(function_t func){$/;"	f	namespace:mods::loops::shptr
 foreach_player	mods/loops.hpp	/^	static inline PointerType* foreach_player(mods_player_function_t<PointerType> func,PointerType* param){$/;"	f	namespace:mods::loops
-foreach_player_skillset	mods/skills.cpp	/^void foreach_player_skillset(player_ptr_t& player, mods::skills::foreach_skill_t callback){$/;"	f
-foreach_player_skillset_with_name	mods/skills.cpp	/^void foreach_player_skillset_with_name(player_ptr_t& player, mods::skills::foreach_skill_with_name_t callback){$/;"	f
+foreach_player_skillset	mods/skills.cpp	/^void foreach_player_skillset(player_ptr_t& player, mods::skills::foreach_skill_t callback) {$/;"	f
+foreach_player_skillset_with_name	mods/skills.cpp	/^void foreach_player_skillset_with_name(player_ptr_t& player, mods::skills::foreach_skill_with_name_t callback) {$/;"	f
 forge	globals.cpp	/^INIT(mods::class_abilities::forge);$/;"	v
 forge	mods/classes/forge.cpp	/^	forge::forge(){$/;"	f	class:mods::classes::forge
 forge	mods/classes/forge.cpp	/^	forge::forge(player_ptr_t p){$/;"	f	class:mods::classes::forge
@@ -7025,7 +7046,7 @@ gadget_description_t	mods/yaml.hpp	/^	struct gadget_description_t : public yaml_
 gadget_shield_levels_t	mods/classes/sentinel.hpp	/^		enum gadget_shield_levels_t {$/;"	g	struct:mods::classes::sentinel
 gain_condition	limits.cpp	/^void gain_condition(char_data *ch, int condition, int value) {$/;"	f
 gain_exp	limits.cpp	/^void gain_exp(char_data *ch, int gain) {$/;"	f	namespace:legacy
-gain_exp	mods/levels.cpp	/^	void gain_exp(player_ptr_t& player,int gain) {$/;"	f	namespace:mods::levels
+gain_exp	mods/levels.cpp	/^	int gain_exp(player_ptr_t& player,int gain) {$/;"	f	namespace:mods::levels
 gain_exp_regardless	limits.cpp	/^void gain_exp_regardless(char_data *ch, int gain) {$/;"	f	namespace:legacy
 game	mods/mini-games.cpp	/^	line_up& game(room_vnum vnum,int id){$/;"	f	namespace:mods::mini_games
 game_action	mods/orm/mini-game.hpp	/^		std::string game_action;$/;"	m	struct:mods::orm::mini_game
@@ -7169,7 +7190,7 @@ get_drone	mods/drone.cpp	/^		void get_drone(uuid_t  owner_uuid) {$/;"	f	namespac
 get_dump	mods/forge-engine/generated-armor.cpp	/^	std::string generated_armor_t::get_dump() {$/;"	f	class:mods::forge_engine::generated_armor_t
 get_dump	mods/forge-engine/generated-rifle.cpp	/^	std::string generated_rifle_t::get_dump() {$/;"	f	class:mods::forge_engine::generated_rifle_t
 get_dump	mods/forge-engine/value-scaler.cpp	/^	std::string value_scaler::get_dump() {$/;"	f	class:mods::forge_engine::value_scaler
-get_enum_by_name	mods/skills.cpp	/^	int get_enum_by_name(std::string_view name){$/;"	f	namespace:mods::skills
+get_enum_by_name	mods/skills.cpp	/^	int get_enum_by_name(std::string_view name) {$/;"	f	namespace:mods::skills
 get_existing	mods/drone.cpp	/^		uuid_t  get_existing(uuid_t  owner_uuid) {$/;"	f	namespace:mods::drone
 get_explosive_type	mods/object-utils.hpp	/^	inline mw_explosive get_explosive_type<uuid_t>(uuid_t& obj_uuid){$/;"	f	namespace:mods::object_utils
 get_explosive_type	mods/object-utils.hpp	/^	static inline mw_explosive get_explosive_type(T& obj){$/;"	f	namespace:mods::object_utils
@@ -7208,7 +7229,7 @@ get_line	utils.cpp	/^int get_line(FILE *fl, char *buf) {$/;"	f
 get_list	mods/super-users.cpp	/^	std::string get_list(){$/;"	f	namespace:mods::super_users
 get_logic	mods/behaviour_tree_node.hpp	/^		callback_t & get_logic() const { return m_logic; }$/;"	f	struct:mods::behaviour_tree_node
 get_max_players	comm.cpp	/^int get_max_players(void) {$/;"	f
-get_minimum_proficiency	mods/skills.cpp	/^	uint16_t get_minimum_proficiency(int e_name){$/;"	f	namespace:mods::skills
+get_minimum_proficiency	mods/skills.cpp	/^	uint16_t get_minimum_proficiency(int e_name) {$/;"	f	namespace:mods::skills
 get_misc_pref	mods/player.hpp	/^			bool get_misc_pref(misc_pref_enum_t bit) {$/;"	f	struct:mods::player
 get_mode	mods/mob-roam.hpp	/^		mode_t get_mode() const { return m_mode; }$/;"	f	struct:mods::mob_roam::roam_recorder
 get_month	mods/date-time.cpp	/^	std::string get_month(){$/;"	f	namespace:mods::date_time
@@ -7233,10 +7254,11 @@ get_overhead_map_width	mods/player.hpp	/^			uint8_t get_overhead_map_width() con
 get_owner	structs.h	/^		uuid_t get_owner() {$/;"	f	struct:obj_data
 get_password	mods/auto-login.cpp	/^	const std::string& get_password() { return mods::auto_login::password; }$/;"	f	namespace:mods::auto_login
 get_password	mods/player.cpp	/^	std::string player::get_password() {$/;"	f	class:mods::player
-get_player_level	mods/skills.cpp	/^	uint16_t get_player_level(player_ptr_t& player,int skill){$/;"	f	namespace:mods::skills
-get_player_level	mods/skills.cpp	/^	uint16_t get_player_level(player_ptr_t& player,std::string_view skill){$/;"	f	namespace:mods::skills
+get_player_level	mods/skills.cpp	/^	uint16_t get_player_level(player_ptr_t& player,int skill) {$/;"	f	namespace:mods::skills
+get_player_level	mods/skills.cpp	/^	uint16_t get_player_level(player_ptr_t& player,std::string_view skill) {$/;"	f	namespace:mods::skills
 get_player_map	mods/db.cpp	/^int get_player_map(std::string_view player_name,std::string prefix, std::map<std::string,std::string>& values){$/;"	f
-get_player_tier_skills	mods/skills.cpp	/^	std::vector<just_proficiency_name_t> get_player_tier_skills(player_ptr_t& player){$/;"	f	namespace:mods::skills
+get_player_map	mods/skill-orm-adaptor.cpp	/^	int get_player_map(player_ptr_t& player, std::vector<std::string,std::string>& skills) {$/;"	f	namespace:mods::skill_orm_adaptor
+get_player_tier_skills	mods/skills.cpp	/^	std::vector<just_proficiency_name_t> get_player_tier_skills(player_ptr_t& player) {$/;"	f	namespace:mods::skills
 get_player_vector	mods/db.cpp	/^int get_player_vector(std::string_view player_name,std::string prefix, std::vector<std::string>& values){$/;"	f
 get_player_vis	handler.cpp	/^char_data *get_player_vis(char_data *ch, char *name, int *number, int inroom) {$/;"	f
 get_pluck_filter	mods/lmdb.cpp	/^	const std::vector<std::string> & _db_handle::get_pluck_filter() const {$/;"	f	class:mods::lmdb::_db_handle
@@ -7268,7 +7290,7 @@ get_super_user_list	mods/js.cpp	/^		static duk_ret_t get_super_user_list(duk_con
 get_targets_scanned_by_drone	mods/classes/ghost.cpp	/^	std::vector<uuid_t> ghost::get_targets_scanned_by_drone(){$/;"	f	class:mods::classes::ghost
 get_ticks_per_minute	mods/affects.cpp	/^	uint32_t get_ticks_per_minute() {$/;"	f	namespace:mods::affects
 get_ticks_per_minute	mods/deferred.cpp	/^ 	uint32_t deferred::get_ticks_per_minute(){$/;"	f	class:mods::deferred
-get_tier_pair	mods/skills.cpp	/^std::pair<uint8_t,uint8_t> get_tier_pair(mods::skills::proficiencies::proficiency_name_t prof){$/;"	f
+get_tier_pair	mods/skills.cpp	/^std::pair<uint8_t,uint8_t> get_tier_pair(mods::skills::proficiencies::proficiency_name_t prof) {$/;"	f
 get_time_birth	mods/player.cpp	/^	time_t player::get_time_birth() const {$/;"	f	class:mods::player
 get_time_login	mods/player.cpp	/^	time_t player::get_time_login() const {$/;"	f	class:mods::player
 get_time_played	mods/player.cpp	/^	int player::get_time_played() const {$/;"	f	class:mods::player
@@ -7566,8 +7588,10 @@ id_column	mods/orm/mini-game.hpp	/^		std::string id_column() const { return "gam
 id_column	mods/orm/mob-roam.hpp	/^		std::string id_column() const { return "id"; }$/;"	f	struct:mods::orm::mob_roam
 id_column	mods/orm/orm-base.hpp	/^		virtual std::string id_column(){ return "id"; }$/;"	f	struct:mods::orm::orm_base
 id_column	mods/orm/player-base-ability.hpp	/^		std::string id_column(){ return "pba_id"; }$/;"	f	struct:mods::orm::player_base_ability
+id_column	mods/orm/player-skill-points.hpp	/^		std::string id_column() const {$/;"	f	struct:mods::orm::player_skill_points
 id_column	mods/orm/pyrexia.hpp	/^		std::string id_column(){ return "pyrexia_id"; }$/;"	f	struct:mods::orm::pyrexia
 id_column	mods/orm/rifle-index.hpp	/^		std::string id_column() const {$/;"	f	struct:mods::orm::rifle_index
+id_column	mods/orm/skill-points.hpp	/^		std::string id_column() const {$/;"	f	struct:mods::orm::skill_points
 id_column	mods/orm/sniper.hpp	/^		std::string id_column(){ return "sniper_id"; }$/;"	f	struct:mods::orm::sniper
 id_column	mods/orm/striker.hpp	/^		std::string id_column(){ return "striker_id"; }$/;"	f	struct:mods::orm::striker
 id_column	mods/orm/support.hpp	/^		std::string id_column() const { return "support_id"; }$/;"	f	struct:mods::orm::support
@@ -7666,9 +7690,11 @@ init	mods/orm/medic.cpp	/^	void medic::init(){$/;"	f	class:mods::orm::medic
 init	mods/orm/mob-roam.cpp	/^	void mob_roam::init(){$/;"	f	class:mods::orm::mob_roam
 init	mods/orm/player-base-ability.cpp	/^	void init(){$/;"	f	namespace:mods::orm::pba
 init	mods/orm/player-base-ability.cpp	/^	void player_base_ability::init(){$/;"	f	class:mods::orm::player_base_ability
+init	mods/orm/player-skill-points.cpp	/^	void player_skill_points::init() {$/;"	f	class:mods::orm::player_skill_points
 init	mods/orm/pyrexia.cpp	/^	void pyrexia::init(){$/;"	f	class:mods::orm::pyrexia
 init	mods/orm/rifle-index.cpp	/^	void rifle_index::init() {$/;"	f	class:mods::orm::rifle_index
 init	mods/orm/room.cpp	/^	void room::init(){$/;"	f	class:mods::orm::room
+init	mods/orm/skill-points.cpp	/^	void skill_points::init() {$/;"	f	class:mods::orm::skill_points
 init	mods/orm/sniper.cpp	/^	void sniper::init(){$/;"	f	class:mods::orm::sniper
 init	mods/orm/striker.cpp	/^	void striker::init(){$/;"	f	class:mods::orm::striker
 init	mods/orm/support.cpp	/^	void support::init(){$/;"	f	class:mods::orm::support
@@ -7677,7 +7703,7 @@ init	mods/player.cpp	/^	void player::init() {$/;"	f	class:mods::player
 init	mods/query-objects.cpp	/^	void init(){$/;"	f	namespace:mods::query_objects
 init	mods/rand.cpp	/^	void init(){$/;"	f	namespace:mods::rand
 init	mods/rate-limiting.cpp	/^	void init(){$/;"	f	namespace:mods::rate_limiting
-init	mods/skills.cpp	/^	void init(){$/;"	f	namespace:mods::skills
+init	mods/skills.cpp	/^	void init() {$/;"	f	namespace:mods::skills
 init	mods/target-practice.cpp	/^	void init(){$/;"	f	namespace:mods::target_practice
 init	mods/values.cpp	/^			void init(){$/;"	f	namespace:mods::values
 init	mods/weapons/damage-types.cpp	/^	void init() {$/;"	f	namespace:mods::weapons::damage_types
@@ -7692,8 +7718,8 @@ init_boards	boards.cpp	/^void init_boards(void) {$/;"	f
 init_char	db.cpp	/^void init_char(player_ptr_t player) {$/;"	f
 init_game	comm.cpp	/^void init_game(ush_int port) {$/;"	f
 init_player	globals.cpp	/^		void init_player(char_data* ch) {$/;"	f	namespace:mods::globals
-init_player_levels	mods/skills.cpp	/^	void init_player_levels(player_ptr_t& player){$/;"	f	namespace:mods::skills
-init_player_levels	mods/skills.cpp	/^	void init_player_levels(std::string_view player_name){$/;"	f	namespace:mods::skills
+init_player_levels	mods/skills.cpp	/^	void init_player_levels(player_ptr_t& player) {$/;"	f	namespace:mods::skills
+init_player_levels	mods/skills.cpp	/^	void init_player_levels(std::string_view player_name) {$/;"	f	namespace:mods::skills
 init_socket	comm.cpp	/^socket_t init_socket(ush_int port) {$/;"	f
 init_spell_levels	class.cpp	/^void init_spell_levels(void) {$/;"	f
 init_spell_levels	mods/hell.hpp	/^	constexpr inline bool init_spell_levels = false;$/;"	m	namespace:mods::hell
@@ -7738,7 +7764,7 @@ insert_returing	mods/orm/base.hpp	/^			static inline std::tuple<int16_t,std::str
 insert_returing	mods/pq.hpp	/^			static inline std::tuple<int16_t,std::string> insert_returing(TObject& obj, std::string_view returning_field){$/;"	f
 insert_returning	mods/orm/util.hpp	/^			static inline std::tuple<int16_t,std::string,uint64_t> insert_returning(TObject* obj, std::string_view returning_field){$/;"	f	namespace:mods::orm::util
 insert_returning	mods/pq.hpp	/^			static inline std::tuple<int16_t,std::string,uint64_t> insert_returning(TObject& obj, std::string_view returning_field){$/;"	f
-install_shop	db.cpp	/^int16_t install_shop(shop_ptr_t& shop){$/;"	f
+install_shop	db.cpp	/^int16_t install_shop(shop_ptr_t& shop) {$/;"	f
 instantiate_catchy_name	mods/integral-objects.cpp	/^	TAttachments instantiate_catchy_name(std::string_view identifier){$/;"	f	namespace:mods::integral_objects
 instantiate_dummy	mods/target-practice.cpp	/^	void instantiate_dummy(player_ptr_t& player,std::string_view identifier){$/;"	f	namespace:mods::target_practice
 instantiate_elevator_here	mods/elevator.cpp	/^	void instantiate_elevator_here(room_rnum room_id){$/;"	f	namespace:mods::elevator
@@ -7853,7 +7879,7 @@ is_open	mods/doors.hpp	/^	static inline bool is_open(const room_rnum  room, int 
 is_open	shop.cpp	/^int is_open(char_data *keeper, int shop_nr, int msg) {$/;"	f
 is_owner	mods/object-utils.hpp	/^		bool is_owner(T& obj, PlayerT& player){$/;"	f	namespace:mods::object_utils
 is_peaceful	mods/rooms.hpp	/^	static inline bool is_peaceful(room_rnum room){$/;"	f	namespace:mods::rooms
-is_player_class_skillset	mods/skills.cpp	/^bool is_player_class_skillset(std::string_view name){$/;"	f
+is_player_class_skillset	mods/skills.cpp	/^bool is_player_class_skillset(std::string_view name) {$/;"	f
 is_scanned	mods/player-utils.hpp	/^	static inline bool is_scanned(T& player){$/;"	f	namespace:mods::player_utils
 is_smoked	mods/rooms.hpp	/^		static inline bool is_smoked(TRoom room) {$/;"	f	namespace:mods::rooms
 is_string	mods/values.cpp	/^		bool is_string(value_key_t key){$/;"	f	namespace:mods::values
@@ -7949,6 +7975,8 @@ level	boards.h	/^	int	level;        \/* level of poster *\/$/;"	m	struct:board_m
 level	mods/classes/pyrexia.hpp	/^			mods::skills::skillset_level_t level;$/;"	m	struct:mods::classes::pyrexia::skillset_info_t
 level	mods/forge-engine/value-scaler.hpp	/^		float level;$/;"	m	struct:mods::forge_engine::value_scaler
 level	mods/mobs/mob.hpp	/^			byte& level(){$/;"	f	class:mods::player
+level	mods/orm/skill-points.hpp	/^		uint16_t level;$/;"	m	struct:mods::orm::skill_points
+level	mods/orm/skill-points.hpp	/^		uint16_t level;$/;"	m	struct:mods::orm::skill_points_record_t
 level	mods/player.cpp	/^	uint8_t& player::level() {$/;"	f	class:mods::player
 level_can_shout	config.cpp	/^int level_can_shout = 1;$/;"	v
 level_exp	mods/levels.cpp	/^	int level_exp(int level) {$/;"	f	namespace:mods::levels
@@ -8022,15 +8050,17 @@ load_all	mods/orm/armor-index.cpp	/^	std::tuple<int16_t,std::string> armor_index
 load_all	mods/orm/mini-game.cpp	/^	void mini_game::load_all(){$/;"	f	class:mods::orm::mini_game
 load_all	mods/orm/mob-roam.cpp	/^	std::tuple<int16_t,std::string> mob_roam::load_all(){$/;"	f	class:mods::orm::mob_roam
 load_all	mods/orm/rifle-index.cpp	/^	std::tuple<int16_t,std::string> rifle_index::load_all() {$/;"	f	class:mods::orm::rifle_index
+load_all	mods/orm/skill-points.cpp	/^	std::tuple<int16_t,std::string> skill_points::load_all() {$/;"	f	class:mods::orm::skill_points
 load_all	mods/orm/util.hpp	/^			static inline std::tuple<int16_t,std::string> load_all(TObject* s){$/;"	f	namespace:mods::orm::util
 load_all	mods/pq.hpp	/^			static inline std::tuple<int16_t,std::string> load_all(TObject& s){$/;"	f
 load_all	mods/world-configuration.cpp	/^	rooms_t load_all() {$/;"	f	namespace:mods::world_conf
 load_all_armor_index_data	mods/orm/armor-index.cpp	/^	std::tuple<int16_t,std::string> load_all_armor_index_data(std::map<std::string,std::vector<std::string>>* storage_ptr) {$/;"	f	namespace:mods::orm
 load_all_rifle_index_data	mods/orm/rifle-index.cpp	/^	std::tuple<int16_t,std::string> load_all_rifle_index_data(std::map<std::string,std::vector<std::string>>* storage_ptr) {$/;"	f	namespace:mods::orm
 load_all_roaming_data	mods/orm/mob-roam.cpp	/^	std::tuple<int16_t,std::string> load_all_roaming_data(std::map<mob_vnum,std::vector<room_vnum>>* storage_ptr){$/;"	f	namespace:mods::orm
+load_all_skill_points	mods/orm/skill-points.cpp	/^	std::tuple<int16_t,std::string> load_all_skill_points(std::map<uint16_t,uint16_t>* storage_ptr) {$/;"	f	namespace:mods::orm
 load_banned	ban.cpp	/^void load_banned(void) {$/;"	f
 load_banned	mods/hell.hpp	/^	constexpr inline bool load_banned = false;$/;"	m	namespace:mods::hell
-load_base_abilities	mods/players/db-load.cpp	/^	void load_base_abilities(player_ptr_t& player){$/;"	f	namespace:mods::players::db_load
+load_base_abilities	mods/players/db-load.cpp	/^	void load_base_abilities(player_ptr_t& player) {$/;"	f	namespace:mods::players::db_load
 load_base_functions	mods/js.cpp	/^		void load_base_functions(duk_context *ctx) {$/;"	f	namespace:mods::js
 load_by_column	mods/orm/util.hpp	/^			static inline std::tuple<int16_t,std::string> load_by_column(TObject* s,std::string_view column,std::string_view value){$/;"	f	namespace:mods::orm::util
 load_by_column	mods/pq.hpp	/^			static inline std::tuple<int16_t,std::string> load_by_column(TObject& s,std::string_view column,std::string_view value){$/;"	f
@@ -8059,6 +8089,7 @@ load_by_player	mods/orm/ghost.cpp	/^	int16_t ghost::load_by_player(uint64_t play
 load_by_player	mods/orm/marine.cpp	/^	int16_t marine::load_by_player(uint64_t player_id){$/;"	f	class:mods::orm::marine
 load_by_player	mods/orm/medic.cpp	/^	int16_t medic::load_by_player(uint64_t player_id){$/;"	f	class:mods::orm::medic
 load_by_player	mods/orm/player-base-ability.cpp	/^	int16_t player_base_ability::load_by_player(uint64_t player_id){$/;"	f	class:mods::orm::player_base_ability
+load_by_player	mods/orm/player-skill-points.cpp	/^	std::tuple<int16_t,std::string> player_skill_points::load_by_player(const uint64_t& player_id) {$/;"	f	class:mods::orm::player_skill_points
 load_by_player	mods/orm/pyrexia.cpp	/^	int16_t pyrexia::load_by_player(uint64_t player_id){$/;"	f	class:mods::orm::pyrexia
 load_by_player	mods/orm/sniper.cpp	/^	int16_t sniper::load_by_player(uint64_t player_id){$/;"	f	class:mods::orm::sniper
 load_by_player	mods/orm/striker.cpp	/^	int16_t striker::load_by_player(uint64_t player_id){$/;"	f	class:mods::orm::striker
@@ -8072,7 +8103,7 @@ load_c_functions	mods/js.cpp	/^		void load_c_functions(duk_context *ctx) {$/;"	f
 load_c_functions	mods/quests.cpp	/^		void load_c_functions(duk_context *ctx) {$/;"	f	namespace:mods::quests
 load_c_require_functions	mods/js.cpp	/^		void load_c_require_functions(duk_context *ctx) {$/;"	f	namespace:mods::js
 load_c_test_functions	mods/js.cpp	/^		void load_c_test_functions(duk_context *ctx) {$/;"	f	namespace:mods::js
-load_char_pkid	mods/players/db-load.cpp	/^	int16_t load_char_pkid(player_ptr_t& player){$/;"	f	namespace:mods::players::db_load
+load_char_pkid	mods/players/db-load.cpp	/^	int16_t load_char_pkid(player_ptr_t& player) {$/;"	f	namespace:mods::players::db_load
 load_from_lmdb	mods/values.cpp	/^		void load_from_lmdb(std::string in_key){$/;"	f	namespace:mods::values
 load_from_lmdb	mods/values.cpp	/^		void load_from_lmdb(value_key_t v_key){$/;"	f	namespace:mods::values
 load_from_sql	mods/forge-engine/generated-armor.cpp	/^	void generated_armor_t::load_from_sql() {$/;"	f	class:mods::forge_engine::generated_armor_t
@@ -8085,11 +8116,13 @@ load_messages	mods/hell.hpp	/^	constexpr inline bool load_messages = false;$/;"	
 load_mods_player_functions	mods/js.cpp	/^		void load_mods_player_functions(duk_context *ctx) {$/;"	f	namespace:mods::js
 load_multi_by_column	mods/orm/util.hpp	/^			static inline std::tuple<int16_t,std::string> load_multi_by_column(TObject* s,std::string_view column,std::string_view value){$/;"	f	namespace:mods::orm::util
 load_multi_by_column	mods/pq.hpp	/^			static inline std::tuple<int16_t,std::string> load_multi_by_column(TObject& s,std::string_view column,std::string_view value){$/;"	f
-load_player_levels	mods/skills.cpp	/^	void load_player_levels(player_ptr_t& player){$/;"	f	namespace:mods::skills
+load_player_levels	mods/skills.cpp	/^	void load_player_levels(player_ptr_t& player) {$/;"	f	namespace:mods::skills
+load_player_skill_data	mods/orm/player-skill-points.cpp	/^	std::tuple<int16_t,std::string> load_player_skill_data(player_ptr_t& player, std::map<uint32_t,uint16_t>* storage) {$/;"	f	namespace:mods::orm
 load_quest_code	mods/quests.cpp	/^		void load_quest_code(char_data* ch) {$/;"	f	namespace:mods::quests
 load_record	mods/db.cpp	/^int load_record(const std::string& table, aligned_int_t pk, mutable_map_t& values){$/;"	f	namespace:mods::db
 load_record	mods/db.cpp	/^int load_record(const std::string& table, const std::string& pk, mutable_map_t& values){$/;"	f	namespace:mods::db
 load_record_by_meta	mods/db.cpp	/^int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_map_t& out_record){$/;"	f	namespace:mods::db
+load_skill_points	mods/players/db-load.cpp	/^	void load_skill_points(player_ptr_t& player) {$/;"	f	namespace:mods::players::db_load
 load_trees	mods/behaviour_tree_impl.cpp	/^	void load_trees(){$/;"	f	namespace:mods::behaviour_tree_impl
 load_where	mods/orm/base.hpp	/^			static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s,$/;"	f	struct:mods::orm::base
 load_where	mods/orm/util.hpp	/^			static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s,$/;"	f	namespace:mods::orm::util
@@ -8113,9 +8146,11 @@ loaded	mods/orm/mini-game.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::mini_game
 loaded	mods/orm/mob-roam.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::mob_roam
 loaded	mods/orm/orm-base.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::orm_base
 loaded	mods/orm/player-base-ability.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::player_base_ability
+loaded	mods/orm/player-skill-points.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::player_skill_points
 loaded	mods/orm/pyrexia.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::pyrexia
 loaded	mods/orm/rifle-index.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::rifle_index
 loaded	mods/orm/shop.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::shop
+loaded	mods/orm/skill-points.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::skill_points
 loaded	mods/orm/sniper.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::sniper
 loaded	mods/orm/striker.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::striker
 loaded	mods/orm/support.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::support
@@ -8131,7 +8166,7 @@ log_file	mods/db-report.hpp	/^	static std::unique_ptr<std::fstream> log_file;$/;
 log_js_error	mods/js.cpp	/^		void log_js_error(std::string_view error) {$/;"	f	namespace:mods::js
 log_zone_error	db.cpp	/^void log_zone_error(zone_rnum zone, int cmd_no, const char *message) {$/;"	f
 logfile	comm.cpp	/^FILE *logfile = NULL;		\/* Where to send the log messages. *\/$/;"	v
-login	db.cpp	/^bool login(std::string_view user_name,std::string_view password){$/;"	f
+login	db.cpp	/^bool login(std::string_view user_name,std::string_view password) {$/;"	f
 login	login.cpp	/^namespace login {$/;"	n	file:
 login	login.hpp	/^namespace login {$/;"	n
 logstrerror	comm.cpp	/^void logstrerror(std::string_view prefix,int _errno) {$/;"	f
@@ -8278,8 +8313,8 @@ m_crit	mods/armor/elite-protection.cpp	13;"	d	file:
 m_crit	mods/armor/elite-protection.cpp	66;"	d	file:
 m_crit	mods/armor/elite-protection.cpp	8;"	d	file:
 m_crit	mods/deep-object-parser.cpp	3;"	d	file:
-m_crit	mods/players/db-load.cpp	13;"	d	file:
-m_crit	mods/players/db-load.cpp	16;"	d	file:
+m_crit	mods/players/db-load.cpp	14;"	d	file:
+m_crit	mods/players/db-load.cpp	17;"	d	file:
 m_crit	mods/players/destroy-player.cpp	10;"	d	file:
 m_crit	mods/players/destroy-player.cpp	7;"	d	file:
 m_cryogenic_grenade_count	mods/classes/forge.hpp	/^			uint8_t m_cryogenic_grenade_count;$/;"	m	struct:mods::classes::forge
@@ -8351,14 +8386,17 @@ m_debug	mods/migrations.cpp	70;"	d	file:
 m_debug	mods/mobs/mini-gunner-behaviour-tree.hpp	20;"	d
 m_debug	mods/mobs/mini-gunner-behaviour-tree.hpp	22;"	d
 m_debug	mods/mobs/mini-gunner-behaviour-tree.hpp	409;"	d
-m_debug	mods/players/db-load.cpp	12;"	d	file:
-m_debug	mods/players/db-load.cpp	15;"	d	file:
+m_debug	mods/players/db-load.cpp	13;"	d	file:
+m_debug	mods/players/db-load.cpp	16;"	d	file:
 m_debug	mods/players/destroy-player.cpp	6;"	d	file:
 m_debug	mods/players/destroy-player.cpp	9;"	d	file:
 m_debug	mods/radio.cpp	14;"	d	file:
 m_debug	mods/radio.cpp	5;"	d	file:
 m_debug	mods/radio.cpp	7;"	d	file:
-m_debug	mods/skills.cpp	718;"	d	file:
+m_debug	mods/skill-orm-adaptor.cpp	22;"	d	file:
+m_debug	mods/skill-orm-adaptor.cpp	7;"	d	file:
+m_debug	mods/skill-orm-adaptor.cpp	9;"	d	file:
+m_debug	mods/skills.cpp	726;"	d	file:
 m_debug	mods/skills.cpp	7;"	d	file:
 m_debug	mods/skills.cpp	9;"	d	file:
 m_debug	mods/stat-bonuses.cpp	12;"	d	file:
@@ -8933,7 +8971,7 @@ mo_debug	mods/integral-objects.cpp	19;"	d	file:
 mo_debug	mods/integral-objects.cpp	282;"	d	file:
 mo_debug	mods/levels.cpp	12;"	d	file:
 mo_debug	mods/levels.cpp	14;"	d	file:
-mo_debug	mods/levels.cpp	517;"	d	file:
+mo_debug	mods/levels.cpp	521;"	d	file:
 mo_debug	mods/rate-limiting.cpp	10;"	d	file:
 mo_debug	mods/rate-limiting.cpp	172;"	d	file:
 mo_debug	mods/rate-limiting.cpp	8;"	d	file:
@@ -9213,7 +9251,7 @@ now	mods/date-time.cpp	/^		std::string now(){$/;"	f	namespace:mods::date_time::i
 nowhere	mods/builder.cpp	52;"	d	file:
 npc	mods/npc.cpp	/^	npc::npc(const mob_rnum & i){$/;"	f	class:mods::npc
 npc	mods/npc.hpp	/^	struct npc : public player{$/;"	s	namespace:mods
-npc_can	mods/skills.cpp	/^	bool npc_can(player_ptr_t& player,int e_name){$/;"	f	namespace:mods::skills
+npc_can	mods/skills.cpp	/^	bool npc_can(player_ptr_t& player,int e_name) {$/;"	f	namespace:mods::skills
 npc_class_types	constants.cpp	/^const char *npc_class_types[] = {$/;"	v
 npc_class_types	constants.hpp	/^const char *npc_class_types[] = {$/;"	v
 npc_steal	spec_procs.cpp	/^void npc_steal(char_data *ch, char_data *victim) {$/;"	f
@@ -9424,6 +9462,8 @@ orm	mods/orm/mob-roam.hpp	/^namespace mods::orm {$/;"	n	class:mods
 orm	mods/orm/orm-base.hpp	/^namespace mods::orm {$/;"	n	class:mods
 orm	mods/orm/player-base-ability.cpp	/^namespace mods::orm {$/;"	n	class:mods	file:
 orm	mods/orm/player-base-ability.hpp	/^namespace mods::orm {$/;"	n	class:mods
+orm	mods/orm/player-skill-points.cpp	/^namespace mods::orm {$/;"	n	class:mods	file:
+orm	mods/orm/player-skill-points.hpp	/^namespace mods::orm {$/;"	n	class:mods
 orm	mods/orm/pyrexia.cpp	/^namespace mods::orm {$/;"	n	class:mods	file:
 orm	mods/orm/pyrexia.hpp	/^namespace mods::orm {$/;"	n	class:mods
 orm	mods/orm/quotes.hpp	/^namespace mods::orm {$/;"	n	class:mods
@@ -9433,6 +9473,8 @@ orm	mods/orm/room.cpp	/^namespace mods::orm {$/;"	n	class:mods	file:
 orm	mods/orm/room.hpp	/^namespace mods::orm {$/;"	n	class:mods
 orm	mods/orm/shop.cpp	/^namespace mods::orm {$/;"	n	class:mods	file:
 orm	mods/orm/shop.hpp	/^namespace mods::orm {$/;"	n	class:mods
+orm	mods/orm/skill-points.cpp	/^namespace mods::orm {$/;"	n	class:mods	file:
+orm	mods/orm/skill-points.hpp	/^namespace mods::orm {$/;"	n	class:mods
 orm	mods/orm/sniper.cpp	/^namespace mods::orm {$/;"	n	class:mods	file:
 orm	mods/orm/sniper.hpp	/^namespace mods::orm {$/;"	n	class:mods
 orm	mods/orm/striker.cpp	/^namespace mods::orm {$/;"	n	class:mods	file:
@@ -9460,7 +9502,7 @@ owner	house.h	/^	long owner;			\/* idnum of house's owner	*\/$/;"	m	struct:house
 owner_drone	mods/drone.cpp	/^		std::pair<player_ptr_t,player_ptr_t> owner_drone(uuid_t owner_uuid){$/;"	f	namespace:mods::drone
 owner_uuid	mods/camera.hpp	/^			uuid_t owner_uuid() const { return m_player; }$/;"	f	class:mods::camera
 pad_room	globals.cpp	/^		void pad_room(int room,char_data* ch,int door) {$/;"	f	namespace:mods::globals
-pad_string	mods/skills.cpp	/^std::string pad_string(std::string_view str,std::size_t to, std::string with){$/;"	f
+pad_string	mods/skills.cpp	/^std::string pad_string(std::string_view str,std::size_t to, std::string with) {$/;"	f
 page	mods/mobs/mob.cpp	/^	void player::page(int pg) {$/;"	f	class:mods::player
 page	mods/player.cpp	/^	void player::page(int pg) {$/;"	f	class:mods::player
 page_string	modify.cpp	/^void page_string(mods::descriptor_data d, char *str, int keep_internal) {$/;"	f
@@ -9504,7 +9546,7 @@ parse_room	db.cpp	/^void parse_room(FILE *fl, int virtual_nr) {$/;"	f
 parse_simple_mob	db.cpp	/^void parse_simple_mob(FILE *mob_f, int i, int nr) {$/;"	f
 parse_sql_mobiles	db.cpp	/^void parse_sql_mobiles() {$/;"	f
 parse_sql_objects	db.cpp	/^int parse_sql_objects() {$/;"	f
-parse_sql_player	db.cpp	/^bool parse_sql_player(player_ptr_t player_ptr){$/;"	f
+parse_sql_player	db.cpp	/^bool parse_sql_player(player_ptr_t player_ptr) {$/;"	f
 parse_sql_rooms	db.cpp	/^std::tuple<int16_t,std::string> parse_sql_rooms() {$/;"	f
 parse_sql_shops	db.cpp	/^int parse_sql_shops() {$/;"	f
 parse_sql_zones	db.cpp	/^std::tuple<int16_t,std::string> parse_sql_zones() {$/;"	f
@@ -9599,7 +9641,7 @@ pistol	mods/weapons/pistol-czp10.hpp	/^namespace mods::weapons::pistol {$/;"	n	c
 pistols	mods/forge-engine/generated-rifle.cpp	/^	static std::vector<std::string> pistols;$/;"	m	namespace:mods::forge_engine	file:
 pk_allowed	config.cpp	/^int pk_allowed = YES;$/;"	v
 pk_id	mods/player.hpp	/^			aligned_int_t pk_id() const {$/;"	f	struct:mods::player
-pkey	mods/skills.cpp	/^	std::string pkey(std::string player_name,std::string key){$/;"	f	namespace:mods::skills
+pkey	mods/skills.cpp	/^	std::string pkey(std::string player_name,std::string key) {$/;"	f	namespace:mods::skills
 place_keepers_in_rooms	mods/orm/shop.cpp	/^	int16_t shop_rooms::place_keepers_in_rooms(mob_vnum mob_vnum_id){$/;"	f	class:mods::orm::shop_rooms
 plant_claymore	mods/demolitions.cpp	/^	void plant_claymore(player_ptr_t& player, int direction, obj_ptr_t& obj){$/;"	f	namespace:mods::demolitions
 player	mods/classes/breacher.cpp	/^		player_ptr_t 	breacher::player(){$/;"	f	class:mods::classes::breacher
@@ -9636,7 +9678,7 @@ player_base_ability	mods/orm/player-base-ability.hpp	/^		player_base_ability() :
 player_base_ability	mods/orm/player-base-ability.hpp	/^	struct player_base_ability : public mods::orm::orm_base<player_base_ability,mods::weapon::ghost::primary_choice_t> {$/;"	s	namespace:mods::orm
 player_bits	constants.cpp	/^const char *player_bits[] = {$/;"	v
 player_bits	constants.hpp	/^const char *player_bits[] = {$/;"	v
-player_can	mods/skills.cpp	/^	bool player_can(player_ptr_t& player,int e_name){$/;"	f	namespace:mods::skills
+player_can	mods/skills.cpp	/^	bool player_can(player_ptr_t& player,int e_name) {$/;"	f	namespace:mods::skills
 player_can_do_range_modifier	mods/sensor-grenade.cpp	/^	bool player_can_do_range_modifier(player_ptr_t& player){$/;"	f	namespace:mods::sensor_grenade
 player_can_overrides	mods/skills.hpp	/^	static std::map<std::string,std::vector<skill_t>> player_can_overrides;$/;"	m	namespace:mods::skills
 player_can_see_obj	mods/calc-visibility.cpp	/^	bool player_can_see_obj(player_ptr_t& player,obj_ptr_t & obj){$/;"	f	namespace:mods::calc_visibility
@@ -9651,10 +9693,11 @@ player_classes	mods/orm/chargen.hpp	/^	struct player_classes : public base {$/;"
 player_db_id	mods/orm/inventory.cpp	/^			uint64_t player_db_id;$/;"	m	struct:mods::orm::inventory::lmdb::player_inventory_data	file:
 player_db_id	mods/orm/inventory.cpp	/^			uint64_t player_db_id;$/;"	m	struct:mods::orm::inventory::lmdb::player_wear_key_t	file:
 player_equip	mods/stat-bonuses.cpp	/^	void player_equip(uuid_t player_uuid,uuid_t object_uuid) {$/;"	f	namespace:mods::stat_bonuses
-player_exists	db.cpp	/^bool player_exists(player_ptr_t player_ptr){$/;"	f
+player_exists	db.cpp	/^bool player_exists(player_ptr_t player_ptr) {$/;"	f
 player_generated_data	mods/orm/chargen.hpp	/^		player_generated_data()  : base(), id(0) {}$/;"	f	struct:mods::orm::player_generated_data
 player_generated_data	mods/orm/chargen.hpp	/^	struct player_generated_data : public base {$/;"	s	namespace:mods::orm
-player_has_override_for	mods/skills.cpp	/^	bool player_has_override_for(player_ptr_t& player,int e_name){$/;"	f	namespace:mods::skills
+player_has_override_for	mods/skills.cpp	/^	bool player_has_override_for(player_ptr_t& player,int e_name) {$/;"	f	namespace:mods::skills
+player_id	mods/orm/player-skill-points.hpp	/^		uint64_t player_id;$/;"	m	struct:mods::orm::player_skill_points_record_t
 player_index_element	db.h	/^struct player_index_element {$/;"	s
 player_inventory_data	mods/orm/inventory.cpp	/^		struct player_inventory_data {$/;"	s	namespace:mods::orm::inventory::lmdb	file:
 player_is	mods/super-users.cpp	/^	bool player_is(player_ptr_t& player){$/;"	f	namespace:mods::super_users
@@ -9679,6 +9722,10 @@ player_registration	mods/player-registration.cpp	/^namespace mods::player_regist
 player_registration	mods/player-registration.hpp	/^namespace mods::player_registration {$/;"	n	class:mods
 player_row_exists	mods/orm/player-base-ability.cpp	/^	bool player_base_ability::player_row_exists(uint64_t player_id){$/;"	f	class:mods::orm::player_base_ability
 player_scaffolding	mods/player-scaffolding.hpp	/^	struct player_scaffolding {$/;"	s	namespace:mods
+player_skill_points	mods/orm/player-skill-points.hpp	/^		player_skill_points() {$/;"	f	struct:mods::orm::player_skill_points
+player_skill_points	mods/orm/player-skill-points.hpp	/^	struct player_skill_points : public mods::orm::orm_base<player_skill_points,std::string> {$/;"	s	namespace:mods::orm
+player_skill_points_record_t	mods/orm/player-skill-points.hpp	/^	struct player_skill_points_record_t {$/;"	s	namespace:mods::orm
+player_skill_points_table_name	mods/orm/player-skill-points.hpp	/^	static constexpr std::string_view player_skill_points_table_name = "player_skill_points";$/;"	m	namespace:mods::orm
 player_skill_trees_unlocked	mods/orm/chargen.hpp	/^		player_skill_trees_unlocked()  : base(), id(0) {}$/;"	f	struct:mods::orm::player_skill_trees_unlocked
 player_skill_trees_unlocked	mods/orm/chargen.hpp	/^	struct player_skill_trees_unlocked : public base {$/;"	s	namespace:mods::orm
 player_table	db.cpp	/^std::deque<player_index_element> player_table;	\/* index to plr file	 *\/$/;"	v
@@ -9707,7 +9754,9 @@ pop	shop.cpp	/^int pop(struct stack_data *stack) {$/;"	f
 pop_free_list	mail.cpp	/^long pop_free_list(void) {$/;"	f
 populate	mods/orm/armor-index.cpp	/^	void armor_index::populate(std::string_view in_armor_type, const std::vector<std::string>& in_armor_filenames) {$/;"	f	class:mods::orm::armor_index
 populate	mods/orm/mob-roam.cpp	/^	void mob_roam::populate(uint32_t mob_vnum, const std::vector<room_vnum>& rooms){$/;"	f	class:mods::orm::mob_roam
+populate	mods/orm/player-skill-points.cpp	/^	void player_skill_points::populate(const uint64_t& player_id,const std::map<uint32_t,uint16_t>* data) {$/;"	f	class:mods::orm::player_skill_points
 populate	mods/orm/rifle-index.cpp	/^	void rifle_index::populate(std::string_view in_rifle_type, const std::vector<std::string>& in_rifle_filenames) {$/;"	f	class:mods::orm::rifle_index
+populate	mods/orm/skill-points.cpp	/^	void skill_points::populate(std::map<uint16_t,uint16_t>* data) {$/;"	f	class:mods::orm::skill_points
 port_behaviour_t	mods/mini-games/wires.hpp	/^		enum port_behaviour_t {$/;"	g	struct:mods::mini_games::wires
 position	mail.h	/^	long	position;$/;"	m	struct:position_list_type_d
 position	mods/orm/inventory.cpp	/^			uint8_t position;$/;"	m	struct:mods::orm::inventory::lmdb::player_wear_key_t	file:
@@ -9785,10 +9834,14 @@ primary_key_name	mods/orm/mob-roam.hpp	/^		std::string primary_key_name() { retu
 primary_key_name	mods/orm/mob-roam.hpp	/^		std::string primary_key_name() { return id_column(); }$/;"	f	struct:mods::orm::mob_roam
 primary_key_name	mods/orm/orm-base.hpp	/^		virtual std::string primary_key_name() { return id_column(); }$/;"	f	struct:mods::orm::orm_base
 primary_key_name	mods/orm/player-base-ability.hpp	/^		std::string primary_key_name() { return this->id_column(); }$/;"	f	struct:mods::orm::player_base_ability
+primary_key_name	mods/orm/player-skill-points.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::player_skill_points
+primary_key_name	mods/orm/player-skill-points.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::player_skill_points_record_t
 primary_key_name	mods/orm/pyrexia.hpp	/^		std::string primary_key_name() { return this->id_column(); }$/;"	f	struct:mods::orm::pyrexia
 primary_key_name	mods/orm/rifle-index.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::rifle_index
 primary_key_name	mods/orm/rifle-index.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::rifle_index_record_t
 primary_key_name	mods/orm/room.hpp	/^		std::string primary_key_name() const {$/;"	f	struct:mods::orm::room
+primary_key_name	mods/orm/skill-points.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::skill_points
+primary_key_name	mods/orm/skill-points.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::skill_points_record_t
 primary_key_name	mods/orm/sniper.hpp	/^		std::string primary_key_name() { return this->id_column(); }$/;"	f	struct:mods::orm::sniper
 primary_key_name	mods/orm/striker.hpp	/^		std::string primary_key_name() { return this->id_column(); }$/;"	f	struct:mods::orm::striker
 primary_key_name	mods/orm/support.hpp	/^		std::string primary_key_name() { return id_column(); }$/;"	f	struct:mods::orm::support
@@ -9809,9 +9862,11 @@ primary_key_value	mods/orm/mini-game.hpp	/^		std::string primary_key_value(){ re
 primary_key_value	mods/orm/mob-roam.hpp	/^		std::string primary_key_value(){ return std::to_string(this->id); }$/;"	f	struct:mods::orm::mob_roam
 primary_key_value	mods/orm/orm-base.hpp	/^		virtual std::string primary_key_value(){ return std::to_string(this->id); }$/;"	f	struct:mods::orm::orm_base
 primary_key_value	mods/orm/player-base-ability.hpp	/^		std::string primary_key_value() { return std::to_string(this->pba_id); }$/;"	f	struct:mods::orm::player_base_ability
+primary_key_value	mods/orm/player-skill-points.hpp	/^		std::string primary_key_value() {$/;"	f	struct:mods::orm::player_skill_points
 primary_key_value	mods/orm/pyrexia.hpp	/^		std::string primary_key_value() { return std::to_string(this->id); }$/;"	f	struct:mods::orm::pyrexia
 primary_key_value	mods/orm/rifle-index.hpp	/^		std::string primary_key_value() {$/;"	f	struct:mods::orm::rifle_index
 primary_key_value	mods/orm/room.hpp	/^		std::string primary_key_value() { $/;"	f	struct:mods::orm::room
+primary_key_value	mods/orm/skill-points.hpp	/^		std::string primary_key_value() {$/;"	f	struct:mods::orm::skill_points
 primary_key_value	mods/orm/sniper.hpp	/^		std::string primary_key_value() { return std::to_string(this->id); }$/;"	f	struct:mods::orm::sniper
 primary_key_value	mods/orm/striker.hpp	/^		std::string primary_key_value() { return std::to_string(this->id); }$/;"	f	struct:mods::orm::striker
 primary_key_value	mods/orm/support.hpp	/^		std::string primary_key_value(){ return std::to_string(this->id); }$/;"	f	struct:mods::orm::support
@@ -9873,7 +9928,7 @@ psendln	mods/player.cpp	/^	void player::psendln(std::string_view str) {$/;"	f	cl
 psg1	mods/weapon.cpp	/^	obj_data_ptr_t psg1(){$/;"	f	namespace:mods::weapon
 psg1	mods/weapons/sniper-rifle-psg1.cpp	/^	psg1::psg1(){$/;"	f	class:mods::weapons::sniper_rifle::psg1
 psg1	mods/weapons/sniper-rifle-psg1.hpp	/^		struct psg1 {$/;"	s	namespace:mods::weapons::sniper_rifle
-psm_debug	db.cpp	861;"	d	file:
+psm_debug	db.cpp	887;"	d	file:
 pstun_player_id	mods/orm/chargen.hpp	/^		uint64_t pstun_player_id;\/\/INTEGER NOT NULL REFERENCES player(id),$/;"	m	struct:mods::orm::player_skill_trees_unlocked
 pstun_skill_tree_id	mods/orm/chargen.hpp	/^		uint64_t pstun_skill_tree_id;\/\/INTEGER NOT NULL REFERENCES skill_trees(id)$/;"	m	struct:mods::orm::player_skill_trees_unlocked
 pstun_skill_tree_id_ptr	mods/orm/chargen.hpp	/^		std::shared_ptr<skill_trees> pstun_skill_tree_id_ptr;\/\/ INTEGER NOT NULL REFERENCES skill_trees(id)$/;"	m	struct:mods::orm::player_skill_trees_unlocked
@@ -9922,6 +9977,7 @@ put	mods/lmdb/db.hpp	/^				inline int put(const std::string & key,const std::str
 put	mods/lmdb/db.hpp	/^			inline int put(const std::string & key,const std::string & value){$/;"	f	struct:gdns::lmdb::server
 put	mods/lmdb/db.hpp	/^			int put(const std::string& key,const std::string & value){$/;"	f	struct:gdns::lmdb::db
 put_player_map	mods/db.cpp	/^int put_player_map(std::string_view player_name,std::string prefix, std::map<std::string,std::string> values){$/;"	f
+put_player_map	mods/skill-orm-adaptor.cpp	/^	void put_player_map(player_ptr_t& player,const std::map<std::string,std::string>& map) {$/;"	f	namespace:mods::skill_orm_adaptor
 put_player_vector	mods/db.cpp	/^int put_player_vector(std::string_view player_name,std::string prefix, std::vector<std::string> values){$/;"	f
 put_section_map	mods/db.cpp	/^	int put_section_map(std::string_view section_name,std::string prefix, std::map<std::string,std::string> values){$/;"	f	namespace:mods::db
 put_section_vector	mods/db.cpp	/^	int put_section_vector(std::string_view section_name,std::string prefix, std::vector<std::string> values){$/;"	f	namespace:mods::db
@@ -10098,9 +10154,9 @@ reduce_elemental_resistance	mods/weapons/elemental.cpp	/^	int reduce_elemental_r
 reduce_explosive_damage_using_armor	mods/armor/basic-protection.cpp	/^		int basic_protection::reduce_explosive_damage_using_armor(obj_ptr_t& explosive,int damage,int where){$/;"	f	class:mods::armor::basic_protection
 reflect_munitions	mods/weapons/damage-types.cpp	/^	void reflect_munitions(player_ptr_t& attacker,player_ptr_t& victim,int dam,int from_direction) {$/;"	f	namespace:mods::weapons::damage_types
 refresh_armor_index	mods/forge-engine/generated-armor.cpp	/^	static bool refresh_armor_index = true;$/;"	m	namespace:mods::forge_engine	file:
-refresh_implemented_skills	mods/skills.cpp	/^	void refresh_implemented_skills(){$/;"	f	namespace:mods::skills
+refresh_implemented_skills	mods/skills.cpp	/^	void refresh_implemented_skills() {$/;"	f	namespace:mods::skills
 refresh_minimum_proficiencies	mods/js.cpp	/^		static duk_ret_t refresh_minimum_proficiencies(duk_context *ctx){$/;"	f	namespace:mods::js
-refresh_minimum_proficiencies	mods/skills.cpp	/^	void refresh_minimum_proficiencies(){$/;"	f	namespace:mods::skills
+refresh_minimum_proficiencies	mods/skills.cpp	/^	void refresh_minimum_proficiencies() {$/;"	f	namespace:mods::skills
 refresh_player_states	globals.cpp	/^		void refresh_player_states() {$/;"	f	namespace:mods::globals
 refresh_rifle_index	mods/forge-engine/generated-rifle.cpp	/^	static bool refresh_rifle_index = true;$/;"	m	namespace:mods::forge_engine	file:
 refresh_skill_name_list	mods/skills.cpp	/^	void refresh_skill_name_list() {$/;"	f	namespace:mods::skills
@@ -10109,7 +10165,7 @@ registerEnum	mods/catch2.hpp	/^        Detail::EnumInfo const& registerEnum( Str
 register_authenticated_player	globals.cpp	/^		void register_authenticated_player(player_ptr_t player) {$/;"	f	namespace:mods::globals
 register_breacher	mods/replenish.cpp	/^	void register_breacher(uuid_t breacher){$/;"	f	namespace:mods::replenish
 register_callback	mods/events.cpp	/^	void register_callback(event_t event,callback_t cb){$/;"	f	namespace:mods::events
-register_class_skillset	mods/skills.cpp	/^	void register_class_skillset(player_class_t class_type,std::vector<std::string>& skillset){$/;"	f	namespace:mods::skills
+register_class_skillset	mods/skills.cpp	/^	void register_class_skillset(player_class_t class_type,std::vector<std::string>& skillset) {$/;"	f	namespace:mods::skills
 register_damage_event_callback	mods/player.cpp	/^	void player::register_damage_event_callback(damage_event_t e,damage_event_callback_t cb) {$/;"	f	class:mods::player
 register_engineer	mods/replenish.cpp	/^	void register_engineer(uuid_t engineer){$/;"	f	namespace:mods::replenish
 register_ghost	mods/replenish.cpp	/^	void register_ghost(uuid_t ghost){$/;"	f	namespace:mods::replenish
@@ -10197,7 +10253,7 @@ replenish_command	mods/zone.hpp	/^	struct replenish_command {$/;"	s	namespace:mo
 report	mods/classes/base.hpp	/^		void report(std::string_view msg){$/;"	f	struct:mods::classes::base
 report	mods/classes/base.hpp	/^		void report(std::vector<std::string> msgs){$/;"	f	struct:mods::classes::base
 report	mods/player.cpp	/^	void player::report() {$/;"	f	class:mods::player
-report	mods/players/db-load.cpp	/^	void report(int64_t code, std::string_view msg){$/;"	f	namespace:mods::players::db_load
+report	mods/players/db-load.cpp	/^	void report(int64_t code, std::string_view msg) {$/;"	f	namespace:mods::players::db_load
 report	structs.cpp	/^void mob_special_data::report(room_rnum room) {$/;"	f	class:mob_special_data
 report_advances	mods/levels.cpp	/^	void report_advances(std::array<float,STAT_INDEXES_SIZE> stats) {$/;"	f	namespace:mods::levels
 report_db_issue	mods/db-report.hpp	/^static inline void report_db_issue(std::string_view message,std::string_view exception_message){$/;"	f
@@ -10380,7 +10436,9 @@ row_id	mods/lmdb.hpp	/^		uint64_t row_id;$/;"	m	struct:mods::lmdb::_selector
 rows	mods/mini-games/line-up.hpp	/^		std::vector<std::vector<uint8_t>> rows;$/;"	m	namespace:mods::mini_games
 rows	mods/orm/armor-index.hpp	/^		std::vector<armor_index_record_t> rows;$/;"	m	struct:mods::orm::armor_index
 rows	mods/orm/mob-roam.hpp	/^		std::vector<mob_roam_record_t> rows;$/;"	m	struct:mods::orm::mob_roam
+rows	mods/orm/player-skill-points.hpp	/^		std::vector<player_skill_points_record_t> rows;$/;"	m	struct:mods::orm::player_skill_points
 rows	mods/orm/rifle-index.hpp	/^		std::vector<rifle_index_record_t> rows;$/;"	m	struct:mods::orm::rifle_index
+rows	mods/orm/skill-points.hpp	/^		std::vector<skill_points_record_t> rows;$/;"	m	struct:mods::orm::skill_points
 rr_debug	mods/intimidate.cpp	11;"	d	file:
 rr_debug	mods/intimidate.cpp	8;"	d	file:
 rr_debug	mods/intimidate.cpp	95;"	d	file:
@@ -10442,14 +10500,16 @@ save	mods/orm/marine.hpp	/^		int16_t save(){$/;"	f	struct:mods::orm::marine
 save	mods/orm/medic.hpp	/^		int16_t save(){$/;"	f	struct:mods::orm::medic
 save	mods/orm/mob-roam.cpp	/^	int16_t mob_roam::save() {$/;"	f	class:mods::orm::mob_roam
 save	mods/orm/player-base-ability.hpp	/^		int16_t save(){$/;"	f	struct:mods::orm::player_base_ability
+save	mods/orm/player-skill-points.cpp	/^	int16_t player_skill_points::save() {$/;"	f	class:mods::orm::player_skill_points
 save	mods/orm/pyrexia.hpp	/^		int16_t save(){$/;"	f	struct:mods::orm::pyrexia
 save	mods/orm/rifle-index.cpp	/^	int16_t rifle_index::save() {$/;"	f	class:mods::orm::rifle_index
 save	mods/orm/shop.cpp	/^	std::tuple<bool,db_id_t,std::string> shop::save(){$/;"	f	class:mods::orm::shop
+save	mods/orm/skill-points.cpp	/^	int16_t skill_points::save() {$/;"	f	class:mods::orm::skill_points
 save	mods/orm/sniper.hpp	/^		int16_t save(){$/;"	f	struct:mods::orm::sniper
 save	mods/orm/striker.hpp	/^		int16_t save(){$/;"	f	struct:mods::orm::striker
 save	mods/orm/support.hpp	/^		int16_t save(){$/;"	f	struct:mods::orm::support
 save	mods/orm/syndrome.hpp	/^		int16_t save(){$/;"	f	struct:mods::orm::syndrome
-save	mods/players/db-load.cpp	/^	void save(player_ptr_t& player_ptr){$/;"	f	namespace:mods::players::db_load
+save	mods/players/db-load.cpp	/^	void save(player_ptr_t& player_ptr) {$/;"	f	namespace:mods::players::db_load
 save	shop.cpp	/^std::tuple<bool,uint64_t,std::string> shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::save(){$/;"	f	class:shop_data
 save_armor_locker	mods/integral-objects-db.cpp	/^	void save_armor_locker(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
 save_armor_locker_quota	mods/integral-objects-db.cpp	/^	void save_armor_locker_quota(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
@@ -10463,11 +10523,11 @@ save_item_to_db	mods/db.cpp	/^	void save_item_to_db(player_ptr_t& player, std::s
 save_mud_time	db.cpp	/^void save_mud_time(struct time_info_data *when) {$/;"	f
 save_new	mods/orm/integral-object.cpp	/^	int16_t integral_object::save_new(){$/;"	f	class:mods::orm::integral_object
 save_new_char	mods/db.cpp	/^tuple_status_t save_new_char($/;"	f	namespace:mods::db
-save_new_char	mods/players/db-load.cpp	/^	int16_t save_new_char(player_ptr_t& player){$/;"	f	namespace:mods::players::db_load
+save_new_char	mods/players/db-load.cpp	/^	int16_t save_new_char(player_ptr_t& player) {$/;"	f	namespace:mods::players::db_load
 save_object	mods/builder.cpp	/^	std::pair<bool,std::string> save_object(int item_number,int obj_type,std::string feed_file) {$/;"	f	namespace:mods::builder
 save_object_vector	mods/builder_util.hpp	/^	void save_object_vector($/;"	f	namespace:mods::builder_util
 save_player	mods/builder.cpp	/^	std::pair<bool,std::string> save_player(char_data* obj) {$/;"	f	namespace:mods::builder
-save_player_password	mods/players/db-load.cpp	/^	int save_player_password(player_ptr_t& player,std::string_view password){$/;"	f	namespace:mods::players::db_load
+save_player_password	mods/players/db-load.cpp	/^	int save_player_password(player_ptr_t& player,std::string_view password) {$/;"	f	namespace:mods::players::db_load
 save_record	mods/db.cpp	/^tuple_status_t save_record(const std::string& table,mutable_map_t* values,std::string pk_id){$/;"	f	namespace:mods::db
 save_record_get_id	mods/db.cpp	/^aligned_int_t save_record_get_id($/;"	f	namespace:mods::db
 save_room_distance_to_cache	mods/scan.cpp	/^	void save_room_distance_to_cache(const room_rnum& hunters_room,$/;"	f	namespace:mods::scan
@@ -10622,7 +10682,7 @@ set_char_pk_id	mods/js.cpp	/^		static duk_ret_t set_char_pk_id(duk_context *ctx)
 set_children	mods/behaviour_tree_node.hpp	/^		void set_children(const children_t & child_nodes){$/;"	f	struct:mods::behaviour_tree_node
 set_class	mods/orm/chargen.cpp	/^		void player_classes::set_class(player_class_t pclass){$/;"	f	class:mods::orm::player_classes
 set_class	mods/player.cpp	/^	void player::set_class(player_class_t c) {$/;"	f	class:mods::player
-set_class	mods/players/db-load.cpp	/^	void set_class(player_ptr_t& player, player_class_t p_class){$/;"	f	namespace:mods::players::db_load
+set_class	mods/players/db-load.cpp	/^	void set_class(player_ptr_t& player, player_class_t p_class) {$/;"	f	namespace:mods::players::db_load
 set_class_capability	mods/mobs/mob.cpp	/^	void player::set_class_capability(const class_capability_t& caps) {$/;"	f	class:mods::player
 set_context	mods/js.hpp	/^				inline void set_context(duk_context *ctx) {$/;"	f	struct:mods::js::include
 set_currently_hacking	mods/player.cpp	/^	void player::set_currently_hacking(uint32_t id,uint8_t row) {$/;"	f	class:mods::player
@@ -10690,7 +10750,7 @@ set_player	mods/classes/ghost.cpp	/^	void ghost::set_player(player_ptr_t p){$/;"
 set_player	mods/classes/pyrexia.cpp	/^		void pyrexia::set_player(player_ptr_t p){$/;"	f	class:mods::classes::pyrexia
 set_player	mods/classes/sentinel.cpp	/^		void sentinel::set_player(player_ptr_t p){$/;"	f	class:mods::classes::sentinel
 set_player	mods/classes/syndrome.cpp	/^		void syndrome::set_player(player_ptr_t p){$/;"	f	class:mods::classes::syndrome
-set_player_can_override	mods/skills.cpp	/^	void set_player_can_override(player_ptr_t& player,std::vector<skill_t> in_skill_list){$/;"	f	namespace:mods::skills
+set_player_can_override	mods/skills.cpp	/^	void set_player_can_override(player_ptr_t& player,std::vector<skill_t> in_skill_list) {$/;"	f	namespace:mods::skills
 set_player_level_mock	mods/classes/super-user-fiddler.cpp	/^	void set_player_level_mock(uuid_t& player,uint8_t level){$/;"	f	namespace:mods::classes
 set_players	mods/player-scaffolding.cpp	/^	int player_scaffolding::set_players(player_ptr_t ch,$/;"	f	class:mods::player_scaffolding
 set_players	mods/player-scaffolding.cpp	/^	int player_scaffolding::set_players(std::string_view main_player,$/;"	f	class:mods::player_scaffolding
@@ -10703,7 +10763,7 @@ set_private	mods/chat.hpp	/^			void set_private(bool b_private) {$/;"	f	struct:m
 set_pyrexia	mods/player.cpp	/^	void player::set_pyrexia(std::shared_ptr<mods::classes::pyrexia> g) {$/;"	f	class:mods::player
 set_rate_limit	mods/rate-limiting.cpp	/^	void set_rate_limit(action_t action,int times,int seconds){$/;"	f	namespace:mods::rate_limiting
 set_rate_limit_help	mods/rate-limiting.cpp	/^static const char* set_rate_limit_help = "usage: set_rate_limit <action> <times> <seconds>";$/;"	m	namespace:mods::rate_limiting	file:
-set_reporter_lambda	mods/players/db-load.cpp	/^	void set_reporter_lambda(reporter_t f){$/;"	f	namespace:mods::players::db_load
+set_reporter_lambda	mods/players/db-load.cpp	/^	void set_reporter_lambda(reporter_t f) {$/;"	f	namespace:mods::players::db_load
 set_roaming_profile_name	mods/mob-roam.cpp	/^	void roam_recorder::set_roaming_profile_name(std::string_view n){$/;"	f	class:mods::mob_roam::roam_recorder
 set_room	mods/player.hpp	/^			void set_room(room_rnum r) {$/;"	f	struct:mods::player
 set_scanned	mods/classes/ghost.cpp	/^	void ghost::set_scanned(std::vector<uuid_t> s){$/;"	f	class:mods::classes::ghost
@@ -10854,10 +10914,19 @@ sizer	mods/catch.hpp	/^			char sizer[1];$/;"	m	struct:Catch::Detail::TrueType
 sizer	mods/catch.hpp	/^			char sizer[2];$/;"	m	struct:Catch::Detail::FalseType
 skill	mods/classes/pyrexia.hpp	/^			skillset_t skill;$/;"	m	struct:mods::classes::pyrexia::skillset_info_t
 skill	mods/player.cpp	/^	uint16_t player::skill(int t) {$/;"	f	class:mods::player
-skill_belongs_to_player_class	mods/skills.cpp	/^bool skill_belongs_to_player_class(player_ptr_t& player,std::string_view skill_name){$/;"	f
+skill_belongs_to_player_class	mods/skills.cpp	/^bool skill_belongs_to_player_class(player_ptr_t& player,std::string_view skill_name) {$/;"	f
+skill_id	mods/orm/player-skill-points.hpp	/^		uint32_t skill_id;$/;"	m	struct:mods::orm::player_skill_points_record_t
 skill_message	fight.cpp	/^int skill_message(int dam, char_data *ch, char_data *vict,$/;"	f
 skill_name	spell_parser.cpp	/^const char *skill_name(int num) {$/;"	f
 skill_name_list	mods/skills.cpp	/^	static std::vector<std::string> skill_name_list;$/;"	m	namespace:mods::skills	file:
+skill_orm_adaptor	mods/skill-orm-adaptor.cpp	/^namespace mods::skill_orm_adaptor {$/;"	n	class:mods	file:
+skill_orm_adaptor	mods/skill-orm-adaptor.hpp	/^namespace mods::skill_orm_adaptor {$/;"	n	class:mods
+skill_points	mods/orm/player-skill-points.hpp	/^		uint16_t skill_points;$/;"	m	struct:mods::orm::player_skill_points_record_t
+skill_points	mods/orm/skill-points.hpp	/^		skill_points() {$/;"	f	struct:mods::orm::skill_points
+skill_points	mods/orm/skill-points.hpp	/^		uint16_t skill_points;$/;"	m	struct:mods::orm::skill_points_record_t
+skill_points	mods/orm/skill-points.hpp	/^	struct skill_points : public mods::orm::orm_base<skill_points,std::string> {$/;"	s	namespace:mods::orm
+skill_points_record_t	mods/orm/skill-points.hpp	/^	struct skill_points_record_t {$/;"	s	namespace:mods::orm
+skill_points_table_name	mods/orm/skill-points.hpp	/^	static constexpr std::string_view skill_points_table_name = "skill_points";$/;"	m	namespace:mods::orm
 skill_screen	mods/classes/forge.cpp	/^	std::string forge::skill_screen() const {$/;"	f	class:mods::classes::forge
 skill_screen	mods/classes/ghost.cpp	/^	std::string ghost::skill_screen() const {$/;"	f	class:mods::classes::ghost
 skill_trees	mods/orm/chargen.hpp	/^		skill_trees()  : base(), id(0) {}$/;"	f	struct:mods::orm::skill_trees
@@ -11182,6 +11251,8 @@ table_name	mods/orm/mob-roam.hpp	/^		std::string table_name() const { return "mo
 table_name	mods/orm/mob-roam.hpp	/^		std::string table_name() const { return "mob_roam"; }$/;"	f	struct:mods::orm::mob_roam_record_t
 table_name	mods/orm/orm-base.hpp	/^		virtual std::string table_name() { return "player"; }$/;"	f	struct:mods::orm::orm_base
 table_name	mods/orm/player-base-ability.hpp	/^		std::string table_name(){ return "player_base_ability"; }$/;"	f	struct:mods::orm::player_base_ability
+table_name	mods/orm/player-skill-points.hpp	/^		std::string table_name() const {$/;"	f	struct:mods::orm::player_skill_points
+table_name	mods/orm/player-skill-points.hpp	/^		std::string table_name() const {$/;"	f	struct:mods::orm::player_skill_points_record_t
 table_name	mods/orm/pyrexia.hpp	/^		std::string table_name(){ return "class_pyrexia"; }$/;"	f	struct:mods::orm::pyrexia
 table_name	mods/orm/quotes.hpp	/^			static constexpr const char* table_name = "quotes";$/;"	m	struct:mods::orm::base_quotes
 table_name	mods/orm/rifle-index.hpp	/^		std::string table_name() const {$/;"	f	struct:mods::orm::rifle_index
@@ -11190,6 +11261,8 @@ table_name	mods/orm/room.hpp	/^		std::string table_name(){ return "room"; }$/;"	
 table_name	mods/orm/shop.hpp	/^		static constexpr const char* table_name = "shop_objects";$/;"	m	struct:mods::orm::shop_objects
 table_name	mods/orm/shop.hpp	/^		static constexpr const char* table_name = "shop_rooms";$/;"	m	struct:mods::orm::shop_rooms
 table_name	mods/orm/shop.hpp	/^		static constexpr const char* table_name = "shops";$/;"	m	struct:mods::orm::shop
+table_name	mods/orm/skill-points.hpp	/^		std::string table_name() const {$/;"	f	struct:mods::orm::skill_points
+table_name	mods/orm/skill-points.hpp	/^		std::string table_name() const {$/;"	f	struct:mods::orm::skill_points_record_t
 table_name	mods/orm/sniper.hpp	/^		std::string table_name(){ return "class_sniper"; }$/;"	f	struct:mods::orm::sniper
 table_name	mods/orm/striker.hpp	/^		std::string table_name(){ return "class_striker"; }$/;"	f	struct:mods::orm::striker
 table_name	mods/orm/support.hpp	/^		std::string table_name() const { return "class_support"; }$/;"	f	struct:mods::orm::support
@@ -11279,7 +11352,7 @@ to_durability_profile	mods/yaml.hpp	/^	static inline durability_profile_type_t t
 to_hex_digit	mods/util-conf.hpp	/^			char to_hex_digit(unsigned int target) {$/;"	f	namespace:mods::util::conf
 to_player_class	mods/util.hpp	/^	static inline player_class_t to_player_class(std::string_view str){$/;"	f	namespace:mods::util
 to_room	structs.h	/^	room_rnum to_room;		\/* Where direction leads (NOWHERE)	*\/$/;"	m	struct:room_direction_data
-to_skill_from_user_friendly_string	mods/skills.cpp	/^	skill_t to_skill_from_user_friendly_string(std::string_view s){$/;"	f	namespace:mods::skills
+to_skill_from_user_friendly_string	mods/skills.cpp	/^	skill_t to_skill_from_user_friendly_string(std::string_view s) {$/;"	f	namespace:mods::skills
 to_string	globals.hpp	/^inline std::string const& to_string(std::string const& s) {$/;"	f	class:std
 to_string	mods/aoe.hpp	/^	static inline std::string to_string(const types_t& type) {$/;"	f	namespace:mods::aoe
 to_string	mods/classes/types.hpp	/^	static inline std::string to_string(mods::classes::types t){$/;"	f	namespace:mods::classes
@@ -11298,7 +11371,7 @@ to_string	mods/forge-engine/util.cpp	/^	std::string to_string(stat_types_t t) {$
 to_string	mods/mobs/extended-types.cpp	/^	std::string to_string(extended_types_t t){$/;"	f	namespace:mods::mobs::extended_types
 to_string	mods/object-utils.hpp	/^		std::string to_string() {$/;"	f	struct:mods::object_utils::YamlFeedExceptionInfo
 to_string	mods/rooms.hpp	/^	static inline std::string to_string(room_data::fire_status_t stat){$/;"	f	namespace:mods::rooms
-to_string	mods/skills.cpp	/^	std::string to_string(int e_name){$/;"	f	namespace:mods::skills
+to_string	mods/skills.cpp	/^	std::string to_string(int e_name) {$/;"	f	namespace:mods::skills
 to_string	mods/values.cpp	/^		std::string to_string(value_key_t k){$/;"	f	namespace:mods::values
 to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(primary_choice_t s){$/;"	f	namespace:mods::weapon::breacher
 to_string	mods/weapon.hpp	/^		static inline std::string_view to_string(primary_choice_t s){$/;"	f	namespace:mods::weapon::contagion
@@ -11325,7 +11398,7 @@ to_string	mods/yaml.cpp	/^	static inline std::string to_string(T& item) {$/;"	f	
 to_string_from_classification	mods/yaml.hpp	/^	static inline std::string to_string_from_classification(armor_classification_type_t cf) {$/;"	f	namespace:mods::yaml
 to_string_from_durability_profile	mods/yaml.hpp	/^	static inline std::string to_string_from_durability_profile(durability_profile_type_t dp) {$/;"	f	namespace:mods::yaml
 to_string_mappings	mods/skills.cpp	/^	static std::map<int,std::string> to_string_mappings;$/;"	m	namespace:mods::skills	file:
-to_user_friendly_string_from_skill	mods/skills.cpp	/^	std::string_view to_user_friendly_string_from_skill(skill_t s){$/;"	f	namespace:mods::skills
+to_user_friendly_string_from_skill	mods/skills.cpp	/^	std::string_view to_user_friendly_string_from_skill(skill_t s) {$/;"	f	namespace:mods::skills
 to_vk_from_string	mods/values.cpp	/^		value_key_t  to_vk_from_string(std::string s){$/;"	f	namespace:mods::values
 todirstr	mods/projectile.cpp	/^		std::string todirstr(int direction,bool prefix,bool suffix) {$/;"	f	namespace:mods::projectile
 toggle	mods/world-configuration.cpp	/^	namespace toggle {$/;"	n	namespace:mods::world_conf	file:

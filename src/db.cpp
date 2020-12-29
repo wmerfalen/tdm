@@ -228,7 +228,7 @@ ACMD(do_reboot) {
 
 }
 
-void boot_hell(void){
+void boot_hell(void) {
 	log("Booting hell");
 	unsigned i;
 
@@ -240,22 +240,26 @@ void boot_hell(void){
 	log("Reading news, credits, help, bground, info & motds.");
 
 	log("Loading spell definitions.");
-	if(mods::hell::mag_assign_spells){ 
+	if(mods::hell::mag_assign_spells) {
 		mag_assign_spells();
 	}
 
 	log("Loading help entries.");
-	if(mods::hell::index_boot_hlp){index_boot(DB_BOOT_HLP);}
+	if(mods::hell::index_boot_hlp) {
+		index_boot(DB_BOOT_HLP);
+	}
 
 	log("Generating player index.");
-	/*FIXME: replace this functionality: 
+	/*FIXME: replace this functionality:
 	 * build_player_index();
 	 */
 
 	log("Loading fight messages.");
-	if(mods::hell::load_messages){load_messages();}
+	if(mods::hell::load_messages) {
+		load_messages();
+	}
 
-	if(mods::hell::boot_social_messages){
+	if(mods::hell::boot_social_messages) {
 		log("Loading social messages.");
 		boot_social_messages();
 	};
@@ -264,25 +268,39 @@ void boot_hell(void){
 
 	if(!no_specials) {
 		log("   Mobiles.");
-		if(mods::hell::assign_mobiles){assign_mobiles();}
+		if(mods::hell::assign_mobiles) {
+			assign_mobiles();
+		}
 		log("   Shopkeepers.");
-		if(mods::hell::assign_the_shopkeepers){assign_the_shopkeepers();};
+		if(mods::hell::assign_the_shopkeepers) {
+			assign_the_shopkeepers();
+		};
 		log("   Objects.");
-		if(mods::hell::assign_objects){assign_objects();}
+		if(mods::hell::assign_objects) {
+			assign_objects();
+		}
 		log("   Rooms.");
-		if(mods::hell::assign_rooms){assign_rooms();}
+		if(mods::hell::assign_rooms) {
+			assign_rooms();
+		}
 	}
 
 	log("Assigning spell and skill levels.");
-	if(mods::hell::init_spell_levels){init_spell_levels();};
+	if(mods::hell::init_spell_levels) {
+		init_spell_levels();
+	};
 
 	log("Sorting command list and spells.");
-	if(mods::hell::sort_commands){sort_commands();};
-	if(mods::hell::sort_spells){sort_spells();};
+	if(mods::hell::sort_commands) {
+		sort_commands();
+	};
+	if(mods::hell::sort_spells) {
+		sort_spells();
+	};
 
 	log("Booting mail system.");
 
-	if(mods::hell::scan_file){
+	if(mods::hell::scan_file) {
 		if(!scan_file()) {
 			log("    Mail boot failed -- Mail system disabled");
 			no_mail = 1;
@@ -290,24 +308,32 @@ void boot_hell(void){
 	}
 
 	log("Reading banned site and invalid-name list.");
-	if(mods::hell::load_banned){load_banned();};
-	if(mods::hell::Read_Invalid_List){Read_Invalid_List();};
+	if(mods::hell::load_banned) {
+		load_banned();
+	};
+	if(mods::hell::Read_Invalid_List) {
+		Read_Invalid_List();
+	};
 
 	if(!no_rent_check) {
 		log("Deleting timed-out crash and rent files:");
-		if(mods::hell::update_obj_file){update_obj_file();};
+		if(mods::hell::update_obj_file) {
+			update_obj_file();
+		};
 		log("   Done.");
 	}
 
 	/* Moved here so the object limit code works. -gg 6/24/98 */
 	if(!mini_mud) {
 		log("Booting houses.");
-		if(mods::hell::House_boot){House_boot();};
+		if(mods::hell::House_boot) {
+			House_boot();
+		};
 	}
 
 	for(i = 0; i < zone_table.size(); i++) {
 		log("Resetting #%d: %s (rooms %d-%d).", zone_table[i].number,
-				zone_table[i].name, zone_table[i].bot, zone_table[i].top);
+		    zone_table[i].name, zone_table[i].bot, zone_table[i].top);
 		reset_zone(i);
 	}
 
@@ -336,16 +362,16 @@ void boot_world(void) {
 	log("Parsing sql zones.");
 	auto zone_status = parse_sql_zones();
 	log("Parsed %d zones",std::get<0>(zone_status));
-	if(std::get<0>(zone_status) < 0){
+	if(std::get<0>(zone_status) < 0) {
 		log("SYSERR: parse_sql_zones: '%s'",std::get<1>(zone_status).c_str());
 	}
 
 	log("Parsing sql rooms.");
 	auto tuple_status_rooms = parse_sql_rooms();
 	log("parse_sql_rooms return: %s",(std::get<1>(tuple_status_rooms)).c_str());
-	if(std::get<0>(tuple_status_rooms)  == 0){
+	if(std::get<0>(tuple_status_rooms)  == 0) {
 		log("parse_sql_rooms didn't find any rooms");
-	}else{
+	} else {
 		log("Found %d rooms",std::get<0>(tuple_status_rooms));
 	}
 
@@ -401,7 +427,7 @@ void destroy_db(void) {
 	//	char_data *chtmp;
 	//
 	/* Active Mobiles & Players */
-	//	
+	//
 	//	while(character_list) {
 	//		chtmp = character_list;
 	//		character_list = character_list->next;
@@ -485,7 +511,7 @@ void boot_db(void) {
 	index_boot(DB_BOOT_HLP);
 
 	log("Generating player index.");
-	/*FIXME: replace this functionality: 
+	/*FIXME: replace this functionality:
 	 * build_player_index();
 	 */
 
@@ -540,7 +566,7 @@ void boot_db(void) {
 
 	for(i = 0; i < zone_table.size(); i++) {
 		log("Resetting #%d: %s (rooms %d-%d).", zone_table[i].number,
-				zone_table[i].name, zone_table[i].bot, zone_table[i].top);
+		    zone_table[i].name, zone_table[i].bot, zone_table[i].top);
 		reset_zone(i);
 	}
 
@@ -589,7 +615,7 @@ void reset_time(void) {
 	}
 
 	log("   Current Gametime: %dH %dD %dM %dY.", time_info.hours,
-			time_info.day, time_info.month, time_info.year);
+	    time_info.day, time_info.month, time_info.year);
 
 	weather_info.pressure = 960;
 
@@ -773,9 +799,9 @@ void discrete_load(FILE *fl, int mode, char *filename) {
 					log("SYSERR: %s file %s is empty!", modes[mode], filename);
 				} else {
 					log("SYSERR: Format error in %s after %s #%d\n"
-							"...expecting a new %s, but file ended!\n"
-							"(maybe the file is not terminated with '$'?)", filename,
-							modes[mode], nr, modes[mode]);
+					    "...expecting a new %s, but file ended!\n"
+					    "(maybe the file is not terminated with '$'?)", filename,
+					    modes[mode], nr, modes[mode]);
 				}
 
 				exit(1);
@@ -810,7 +836,7 @@ void discrete_load(FILE *fl, int mode, char *filename) {
 				}
 		} else {
 			log("SYSERR: Format error in %s file %s near %s #%d", modes[mode],
-					filename, modes[mode], nr);
+			    filename, modes[mode], nr);
 			log("SYSERR: ... offending line: '%s'", line);
 			exit(1);
 		}
@@ -863,7 +889,7 @@ void parse_sql_mobiles() {
 #define psm_debug(a) /**/
 #endif
 	psm_debug("db_get_all mobiles... -> parse_sql_mobiles [start]");
-	for(auto && row : db_get_all("mobile")) {
+	for(auto&& row : db_get_all("mobile")) {
 		char_data proto;
 		psm_debug("name");
 		proto.player.name.assign(row["mob_name"]);
@@ -965,11 +991,11 @@ int parse_sql_objects() {
 	if(result.size()) {
 
 		for(auto row : result) {
-			if(strlen(row["obj_file"].c_str()) == 0){
+			if(strlen(row["obj_file"].c_str()) == 0) {
 				std::cerr << "obj_file is zero!-> '" << row["id"].c_str() << "\n";
 				exit(6);
 			}
-			if(row["obj_type"].as<int>() == 0 || !row["obj_file"].c_str()){
+			if(row["obj_type"].as<int>() == 0 || !row["obj_file"].c_str()) {
 				REPORT_DB_ISSUE("parse_sql_objects encountered broken row ","");
 				continue;
 			}
@@ -981,11 +1007,11 @@ int parse_sql_objects() {
 			obj_index.push_back(index);
 			auto index_ref = &obj_index.back();
 			std::string obj_file = "g36c.yml";
-			if(strlen(row["obj_file"].c_str())){
+			if(strlen(row["obj_file"].c_str())) {
 				obj_file = row["obj_file"].c_str();
 			}
 			obj_proto.push_back(obj_data(row["obj_type"].as<int16_t>(),obj_file));
-			auto & proto = obj_proto.back();
+			auto& proto = obj_proto.back();
 			index_ref->vnum = proto.item_number;
 			//!proposed lmdb code:
 			auto aff_rows = db_get_by_meta("affected_type","aff_fk_id",row["obj_item_number"]);
@@ -1064,7 +1090,7 @@ int parse_sql_objects() {
 			proto.worn_by = nullptr;
 			proto.carried_by = nullptr;
 			mods::globals::obj_stat_pages[
-				proto.item_number
+			proto.item_number
 			] = std::move(proto.generate_stat_page());
 		}
 	} else {
@@ -1078,7 +1104,7 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 	zone_table.clear();
 	log("[status] Loading sql zones");
 
-	for(auto && row: db_get_all("zone")) {
+	for(auto&& row: db_get_all("zone")) {
 		zone_data z;
 		//struct zone_data {
 		//  1    char *name;          /* name of this zone                  */
@@ -1153,7 +1179,7 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 		//
 		//siege=#
 
-		for(auto && zone_data_row : db_get_by_meta("zone_data","zone_id",std::to_string(z.number))) {
+		for(auto&& zone_data_row : db_get_by_meta("zone_data","zone_id",std::to_string(z.number))) {
 			reset_com res;
 			res.command =mods::util::stoi<int>(zone_data_row["zone_command"]);
 			res.if_flag =mods::util::stoi<int>(zone_data_row["zone_if_flag"]);
@@ -1173,7 +1199,7 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 std::tuple<int16_t,std::string> parse_sql_rooms() {
 	top_of_world = 0;
 	mods::pq::result room_records,room_description_data_records;
-	try{
+	try {
 		//siege=# \d room
 		// id             | integer                |           | not null | nextval('room_id_seq'::regclass)
 		// room_number    | integer                |           | not null |
@@ -1188,15 +1214,15 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 		//
 		auto room_records = db_get_all("room");
 		log("parse_sql_rooms[result.size()]->%d",room_records.size());
-		if(room_records.size() == 0){
+		if(room_records.size() == 0) {
 			return {0,"warning: no room_records fetched from postgres"};
 		}
 
-		if(room_records.size() == 0){
+		if(room_records.size() == 0) {
 			return {0,"warning: no room_records fetched from postgres"};
 		}
-		for(auto && room_records_row: room_records) {
-			try{
+		for(auto&& room_records_row: room_records) {
+			try {
 				room_data room;
 				room.name.assign(room_records_row["name"]);
 				room.description.assign(room_records_row["description"]);
@@ -1213,13 +1239,13 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				mods::rooms::set_flag_absolute(world.size()-1,room_records_row["room_flag"].as<int>(0));
 				top_of_world = world.size();
 				mods::zone::new_room(&room);
-			}catch(std::exception& e){
+			} catch(std::exception& e) {
 				REPORT_DB_ISSUE("SYSERR: exception select from rooms db: ",e.what());
 			}
 		}
 		log("parse_sql_rooms: world.size(): %d",world.size());
 
-		for(auto && row2: db_get_all("room_direction_data")){
+		for(auto&& row2: db_get_all("room_direction_data")) {
 			//siege=# \d room_direction_data
 			// id                  | integer                |           | not null | nextval('room_direction_data_id_seq'::regclass)
 			// room_number         | integer                |           | not null |
@@ -1232,7 +1258,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 			//
 			//siege=#
 			auto direction = row2["exit_direction"].as<int>();
-			if(direction >= NUM_OF_DIRS){
+			if(direction >= NUM_OF_DIRS) {
 				log("SYSERR: Invalid direction: (%d) Max number of Directions: (%d)",direction,NUM_OF_DIRS);
 				continue;
 			}
@@ -1246,17 +1272,17 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 			room_rnum to_room = real_room(row2["to_room"].as<int>());
 			world[real_room_number].set_dir_option(direction,gen_desc,keyword,row2["exit_info"].as<int>(),row2["exit_key"].as<int>(),to_room);
 		}
-	}catch(std::exception& e){
+	} catch(std::exception& e) {
 		REPORT_DB_ISSUE("error selecting room from dd",e.what());
 		return {-1,std::string("An exception occured: ") + e.what()};
 	}
 	return {world.size(),"okay"};
 }
 
-int16_t install_shop(shop_ptr_t& shop){
-	for(const auto & s_room_vnum : shop->room_info.rooms) {
+int16_t install_shop(shop_ptr_t& shop) {
+	for(const auto& s_room_vnum : shop->room_info.rooms) {
 		auto room = real_room(s_room_vnum);
-		if(room == NOWHERE){
+		if(room == NOWHERE) {
 			log("install_shop skipping room vnum: (%d)", s_room_vnum);
 			continue;
 		}
@@ -1274,7 +1300,7 @@ int parse_sql_shops() {
 
 	if(result.size()) {
 		shop_proto.resize(result.size());
-		for(const auto & current_row : result) {
+		for(const auto& current_row : result) {
 			shop_proto.emplace_back();
 			shop_proto.back().feed(current_row);
 			auto shop_ptr = std::make_shared<shop_data_t>();
@@ -1300,17 +1326,17 @@ void check_start_rooms(void) {
 
 	if((r_idle_room = real_rooms[1]) == NOWHERE) {
 		log("SYSERR:  Warning: IDLE room does not exist.  Change in config.c.");
-		if(world.size() > 0){
+		if(world.size() > 0) {
 			log("defaulting to 0");
 			r_frozen_start_room = 0;
-		}else{
+		} else {
 			log("defaulting to r_mortal_start_room");
 			r_frozen_start_room = r_mortal_start_room;
 		}
 	}
-	if((r_mortal_start_room = real_rooms[3] ) == NOWHERE) {
+	if((r_mortal_start_room = real_rooms[3]) == NOWHERE) {
 		log("SYSERR:  Mortal start room does not exist.  Change in config.c.");
-		if(world.size() > 0){
+		if(world.size() > 0) {
 			log("defaulting to 0");
 			r_mortal_start_room = 0;
 		}
@@ -1318,10 +1344,10 @@ void check_start_rooms(void) {
 
 	if((r_immort_start_room = real_rooms[2]) == NOWHERE) {
 		log("SYSERR:  Warning: Immort start room does not exist.  Change in config.c.");
-		if(world.size() > 0){
+		if(world.size() > 0) {
 			log("defaulting to 0");
 			r_immort_start_room = 0;
-		}else{
+		} else {
 			log("defaulting to r_mortal_start_room");
 			r_immort_start_room = r_mortal_start_room;
 		}
@@ -1329,10 +1355,10 @@ void check_start_rooms(void) {
 
 	if((r_frozen_start_room = real_rooms[0]) == NOWHERE) {
 		log("SYSERR:  Warning: Frozen start room does not exist.  Change in config.c.");
-		if(world.size() > 0){
+		if(world.size() > 0) {
 			log("defaulting to 0");
 			r_frozen_start_room = 0;
-		}else{
+		} else {
 			log("defaulting to r_mortal_start_room");
 			r_frozen_start_room = r_mortal_start_room;
 		}
@@ -1349,7 +1375,7 @@ void renum_world(void) {
 			if(world[room].dir_option[door])
 				if(world[room].dir_option[door]->to_room != NOWHERE)
 					world[room].dir_option[door]->to_room =
-						real_room(world[room].dir_option[door]->to_room);
+					    real_room(world[room].dir_option[door]->to_room);
 }
 
 
@@ -1418,7 +1444,7 @@ void renum_zone_table(void) {
 			if(a == NOWHERE || b == NOWHERE || c == NOWHERE) {
 				if(!mini_mud) {
 					snprintf(buf, sizeof(buf), "Invalid vnum %d, cmd disabled",
-							a == NOWHERE ? olda : b == NOWHERE ? oldb : oldc);
+					         a == NOWHERE ? olda : b == NOWHERE ? oldb : oldc);
 					log_zone_error(zone, 0, buf);
 				}
 
@@ -1448,9 +1474,9 @@ void parse_simple_mob(FILE *mob_f, int i, int nr) {
 	}
 
 	if(sscanf(line, " %d %d %d %dd%d+%d %dd%d+%d ",
-				t, t + 1, t + 2, t + 3, t + 4, t + 5, t + 6, t + 7, t + 8) != 9) {
+	          t, t + 1, t + 2, t + 3, t + 4, t + 5, t + 6, t + 7, t + 8) != 9) {
 		log("SYSERR: Format error in mob #%d, first line after S flag\n"
-				"...expecting line of form '# # # #d#+# #d#+#'", nr);
+		    "...expecting line of form '# # # #d#+# #d#+#'", nr);
 		exit(1);
 	}
 
@@ -1473,13 +1499,13 @@ void parse_simple_mob(FILE *mob_f, int i, int nr) {
 
 	if(!get_line(mob_f, line)) {
 		log("SYSERR: Format error in mob #%d, second line after S flag\n"
-				"...expecting line of form '# #', but file ended!", nr);
+		    "...expecting line of form '# #', but file ended!", nr);
 		exit(1);
 	}
 
 	if(sscanf(line, " %d %d ", t, t + 1) != 2) {
 		log("SYSERR: Format error in mob #%d, second line after S flag\n"
-				"...expecting line of form '# #'", nr);
+		    "...expecting line of form '# #'", nr);
 		exit(1);
 	}
 
@@ -1488,13 +1514,13 @@ void parse_simple_mob(FILE *mob_f, int i, int nr) {
 
 	if(!get_line(mob_f, line)) {
 		log("SYSERR: Format error in last line of mob #%d\n"
-				"...expecting line of form '# # #', but file ended!", nr);
+		    "...expecting line of form '# # #', but file ended!", nr);
 		exit(1);
 	}
 
 	if(sscanf(line, " %d %d %d ", t, t + 1, t + 2) != 3) {
 		log("SYSERR: Format error in last line of mob #%d\n"
-				"...expecting line of form '# # #'", nr);
+		    "...expecting line of form '# # #'", nr);
 		exit(1);
 	}
 
@@ -1590,7 +1616,7 @@ void interpret_espec(const char *keyword, const char *value, int i, int nr) {
 
 	if(!matched) {
 		log("SYSERR: Warning: unrecognized espec keyword %s in mob #%d",
-				keyword, nr);
+		    keyword, nr);
 	}
 }
 
@@ -1850,14 +1876,14 @@ obj_ptr_t blank_object() {
 
 obj_ptr_t create_object(int type,std::string yaml_file) {
 	std::string path = mods::util::compile_yaml_path_from_type_and_file(type,yaml_file);
-	if(path.compare(mods::util::UNKNOWN_YAML_FILE) == 0){
+	if(path.compare(mods::util::UNKNOWN_YAML_FILE) == 0) {
 		auto error = CAT("SYSERR: create_object:: warning: unknown yaml file type+yaml_file:'",yaml_file,"', with type:'", type,"'");
 		log(error.c_str());
 		mods::object_utils::report_yaml_message(error);
 		return blank_object();
 	}
 	bool exists = mods::util::yaml_file_exists(path);
-	if(!exists){
+	if(!exists) {
 		auto error = CAT("SYSERR: create_object:: warning: yaml file DOESNT EXIST:'",yaml_file,"', with type:'", type,"'");
 		mods::object_utils::report_yaml_message(error);
 		log(error.c_str());
@@ -1870,7 +1896,7 @@ obj_ptr_t create_object(int type,std::string yaml_file) {
 }
 std::tuple<bool,obj_ptr_t> create_object_opt(int type,std::string yaml_file) {
 	auto obj = std::make_shared<obj_data>(type,yaml_file);
-	if(!obj){
+	if(!obj) {
 		return {false,nullptr};
 	}
 	obj_list.push_back(std::move(obj));
@@ -1878,10 +1904,10 @@ std::tuple<bool,obj_ptr_t> create_object_opt(int type,std::string yaml_file) {
 	return {true,obj_list.back()};
 }
 
-shop_ptr_t create_shop_from_index(std::size_t proto_index){
-	if (proto_index >= shop_proto.size()){
+shop_ptr_t create_shop_from_index(std::size_t proto_index) {
+	if(proto_index >= shop_proto.size()) {
 		log("SYSERR: requesting to read shop number(%d) out of shop_proto.size(): (%d)",
-				proto_index, shop_proto.size());
+		    proto_index, shop_proto.size());
 		return nullptr;
 	}
 	shop_list.push_back(std::make_shared<shop_data_t>(shop_proto[proto_index]));
@@ -1892,11 +1918,11 @@ shop_ptr_t create_shop_from_index(std::size_t proto_index){
 
 
 /* create a new object from a prototype */
-obj_ptr_t create_object_from_index(std::size_t proto_index){
-	if (proto_index >= obj_proto.size()){
+obj_ptr_t create_object_from_index(std::size_t proto_index) {
+	if(proto_index >= obj_proto.size()) {
 		exit(4);
 		log("SYSERR: requesting to read object number(%d) out of obj_proto.size(): (%d)",
-				proto_index, obj_proto.size());
+		    proto_index, obj_proto.size());
 		return nullptr;
 	}
 	/*
@@ -1959,12 +1985,12 @@ void zone_update() {
 		/* since one minute has passed, increment zone ages */
 		for(i = 0; i < zone_table.size(); i++) {
 			if(zone_table[i].age < zone_table[i].lifespan &&
-					zone_table[i].reset_mode) {
+			        zone_table[i].reset_mode) {
 				(zone_table[i].age)++;
 			}
 
 			if(zone_table[i].age >= zone_table[i].lifespan &&
-					zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode) {
+			        zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode) {
 				/* enqueue zone */
 
 				CREATE(update_u, reset_q_element, 1);
@@ -1987,9 +2013,9 @@ void zone_update() {
 
 	/* dequeue zones (if possible) and reset */
 	/* this code is executed every 10 seconds (i.e. PULSE_ZONE) */
-	for(update_u = reset_q.head; update_u; update_u = update_u->next){
+	for(update_u = reset_q.head; update_u; update_u = update_u->next) {
 		if(zone_table[update_u->zone_to_reset].reset_mode == 2 ||
-				is_empty(update_u->zone_to_reset)) {
+		        is_empty(update_u->zone_to_reset)) {
 			reset_zone(update_u->zone_to_reset);
 			mudlog(CMP, LVL_GOD, FALSE, "Auto zone reset: %s", zone_table[update_u->zone_to_reset].name);
 
@@ -1998,7 +2024,7 @@ void zone_update() {
 				reset_q.head = reset_q.head->next;
 			} else {
 				for(temp = reset_q.head; temp->next != update_u;
-						temp = temp->next);
+				        temp = temp->next);
 
 				if(!update_u->next) {
 					reset_q.tail = temp;
@@ -2016,7 +2042,7 @@ void zone_update() {
 void log_zone_error(zone_rnum zone, int cmd_no, const char *message) {
 	mudlog(NRM, LVL_GOD, TRUE, "SYSERR: zone file: %s", message);
 	mudlog(NRM, LVL_GOD, TRUE, "SYSERR: ...offending cmd: '%c' cmd in zone #%d, line %d",
-			'0', zone_table[zone].number, 0);
+	       '0', zone_table[zone].number, 0);
 }
 
 #define ZONE_ERROR(message) \
@@ -2025,7 +2051,7 @@ void log_zone_error(zone_rnum zone, int cmd_no, const char *message) {
 /* execute the reset command table of a given zone */
 void reset_zone(zone_rnum zone) {
 	auto is_blacklisted = std::find(zone_id_blacklist.begin(),zone_id_blacklist.end(),zone);
-	if(disable_all_zone_resets || is_blacklisted != zone_id_blacklist.end()){
+	if(disable_all_zone_resets || is_blacklisted != zone_id_blacklist.end()) {
 		log("[reset_zone]->[is_blacklisted] Skipping Zone ID due to blacklist rule: %d",zone);
 		return;
 	}
@@ -2144,50 +2170,50 @@ void reset_zone(zone_rnum zone) {
 
 			case 'D':			/* set state of door */
 				if(ZCMD.arg2 < 0 || ZCMD.arg2 >= NUM_OF_DIRS ||
-						(world[ZCMD.arg1].dir_option[ZCMD.arg2] == NULL)) {
+				        (world[ZCMD.arg1].dir_option[ZCMD.arg2] == NULL)) {
 					ZONE_ERROR("door does not exist, command disabled");
 					ZCMD.command = '*';
 				} else
 					switch(ZCMD.arg3) {
 						case 0:
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-									EX_LOCKED);
+							           EX_LOCKED);
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-									EX_CLOSED);
+							           EX_CLOSED);
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-									EX_BREACHED);
+							           EX_BREACHED);
 							break;
 
 						case 1:
 							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-									EX_CLOSED);
+							        EX_CLOSED);
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-									EX_LOCKED);
+							           EX_LOCKED);
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-									EX_BREACHED);
+							           EX_BREACHED);
 							break;
 
 						case 2:
 							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-									EX_LOCKED);
+							        EX_LOCKED);
 							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-									EX_CLOSED);
+							        EX_CLOSED);
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-									EX_BREACHED);
+							           EX_BREACHED);
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-									EX_REINFORCED);
+							           EX_REINFORCED);
 							break;
 
-							/*!mods*/
+						/*!mods*/
 						case 3:
 							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-									EX_REINFORCED);
+							        EX_REINFORCED);
 							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-									EX_LOCKED);
+							        EX_LOCKED);
 							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-									EX_CLOSED);
+							        EX_CLOSED);
 							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-									EX_BREACHED);
+							           EX_BREACHED);
 							break;
 					}
 
@@ -2208,7 +2234,7 @@ void reset_zone(zone_rnum zone) {
 
 /* for use in reset_zone; return TRUE if zone 'nr' is free of PC's  */
 int is_empty(zone_rnum zone_nr) {
-	for(auto & i : descriptor_list) {
+	for(auto& i : descriptor_list) {
 		if(STATE(i) != CON_PLAYING) {
 			continue;
 		}
@@ -2245,7 +2271,7 @@ long get_ptable_by_name(const char *name) {
 
 	for(i = 0; i <= top_of_p_table; i++)
 		if(static_cast<std::string>(
-					player_table[i].name).compare(name) == 0) {
+		            player_table[i].name).compare(name) == 0) {
 			return (i);
 		}
 
@@ -2276,24 +2302,24 @@ char *get_name_by_id(long id) {
 	return (NULL);
 }
 
-bool char_exists(const std::string& name, aligned_int_t & meta_int_id){
+bool char_exists(const std::string& name, aligned_int_t& meta_int_id) {
 	std::cout << "debug: char_exists param: '" << name << "'\n";
 	meta_int_id = 0;
 	mutable_map_t where,row;
 	where["player_name"] = name;
 	mods::db::load_record_by_meta("player",&where,row);
 	mods::util::maps::dump<std::string,std::string>(row);
-	if(row.size()){
+	if(row.size()) {
 		std::cout << "debug: found record for player\n";
 		return true;
 	}
 	return false;
-}	
+}
 
-bool char_exists(player_ptr_t player_ptr){
+bool char_exists(player_ptr_t player_ptr) {
 	return char_exists(player_ptr->name().c_str());
 }
-bool char_exists(const std::string& name){
+bool char_exists(const std::string& name) {
 	aligned_int_t i;
 	return char_exists(name,i);
 }
@@ -2301,31 +2327,31 @@ bool char_exists(const std::string& name){
 /*
  * write the vital data of a player to sql
  */
-bool player_exists(player_ptr_t player_ptr){
+bool player_exists(player_ptr_t player_ptr) {
 	return db_get_by_meta("player","player_name",player_ptr->name().c_str()).size();
 }
-bool login(std::string_view user_name,std::string_view password){
-	try{
+bool login(std::string_view user_name,std::string_view password) {
+	try {
 		auto select_transaction = txn();
 		sql_compositor comp("player",&select_transaction);
 		auto room_sql = comp.select("id")
-			.from("player")
-			.where_crypt("player_password",password)
-			.op_and("player_name","=",user_name.data())
-			.sql();
+		                .from("player")
+		                .where_crypt("player_password",password)
+		                .op_and("player_name","=",user_name.data())
+		                .sql();
 		auto row = mods::pq::exec(select_transaction,room_sql.data());
 		return row.size();
-	}catch(std::exception& e){
+	} catch(std::exception& e) {
 		REPORT_DB_ISSUE("login exception",e.what());
 		return false;
 	}
 }
-bool parse_sql_player(player_ptr_t player_ptr){
+bool parse_sql_player(player_ptr_t player_ptr) {
 	/** TODO: make sure sql injection is not possible here */
-	mods::players::db_load::set_reporter_lambda([&player_ptr](int64_t code,std::string_view msg){
-			log("SYSERR: failed loading player's class [player name:'%s'] error code: %d, message: '%s'", player_ptr->name().c_str(), code, msg.data());
+	mods::players::db_load::set_reporter_lambda([&player_ptr](int64_t code,std::string_view msg) {
+		log("SYSERR: failed loading player's class [player name:'%s'] error code: %d, message: '%s'", player_ptr->name().c_str(), code, msg.data());
 	});
-	for(auto && row: db_get_by_meta("player","player_name",player_ptr->name().c_str())){
+	for(auto&& row: db_get_by_meta("player","player_name",player_ptr->name().c_str())) {
 		int temp = 0;
 		player_ptr->set_db_id(row["id"].as<int>());
 		player_ptr->clear_all_affected();
@@ -2376,62 +2402,65 @@ bool parse_sql_player(player_ptr_t player_ptr){
 #endif
 
 		//player_ptr->level() = level;
-		if(strlen(row["player_affection_bitvector"].c_str()) > 0){
+		if(strlen(row["player_affection_bitvector"].c_str()) > 0) {
 			uint64_t aff = row["player_affection_bitvector"].as<uint64_t>(0);
 			uint64_t shift = 1;
-			for(unsigned i=0; i < 64; i++){
-				if(aff & shift){
-					switch(shift){
-						__MENTOC_PLR(AFF_BLIND);
-						__MENTOC_PLR(AFF_INVISIBLE);
-						__MENTOC_PLR(AFF_DETECT_ALIGN);
-						__MENTOC_PLR(AFF_DETECT_INVIS);
-						__MENTOC_PLR(AFF_DETECT_MAGIC);
-						__MENTOC_PLR(AFF_SENSE_LIFE);
-						__MENTOC_PLR(AFF_INTIMIDATED);
-						__MENTOC_PLR(AFF_SANCTUARY);
-						__MENTOC_PLR(AFF_GROUP);
-						__MENTOC_PLR(AFF_CURSE);
-						__MENTOC_PLR(AFF_INFRAVISION);
-						__MENTOC_PLR(AFF_POISON);
-						__MENTOC_PLR(AFF_PROTECT_EVIL);
-						__MENTOC_PLR(AFF_PROTECT_GOOD);
-						__MENTOC_PLR(AFF_SLEEP);
-						__MENTOC_PLR(AFF_NOTRACK);
-						__MENTOC_PLR(AFF_SNEAK);
-						__MENTOC_PLR(AFF_HIDE);
-						__MENTOC_PLR(AFF_CHARM);
-						default: std::cerr << "unknown affected flag: " << shift << "\n";
+			for(unsigned i=0; i < 64; i++) {
+				if(aff & shift) {
+					switch(shift) {
+							__MENTOC_PLR(AFF_BLIND);
+							__MENTOC_PLR(AFF_INVISIBLE);
+							__MENTOC_PLR(AFF_DETECT_ALIGN);
+							__MENTOC_PLR(AFF_DETECT_INVIS);
+							__MENTOC_PLR(AFF_DETECT_MAGIC);
+							__MENTOC_PLR(AFF_SENSE_LIFE);
+							__MENTOC_PLR(AFF_INTIMIDATED);
+							__MENTOC_PLR(AFF_SANCTUARY);
+							__MENTOC_PLR(AFF_GROUP);
+							__MENTOC_PLR(AFF_CURSE);
+							__MENTOC_PLR(AFF_INFRAVISION);
+							__MENTOC_PLR(AFF_POISON);
+							__MENTOC_PLR(AFF_PROTECT_EVIL);
+							__MENTOC_PLR(AFF_PROTECT_GOOD);
+							__MENTOC_PLR(AFF_SLEEP);
+							__MENTOC_PLR(AFF_NOTRACK);
+							__MENTOC_PLR(AFF_SNEAK);
+							__MENTOC_PLR(AFF_HIDE);
+							__MENTOC_PLR(AFF_CHARM);
+						default:
+							std::cerr << "unknown affected flag: " << shift << "\n";
 					}
 					player_ptr->affect(shift);
 				}
 				shift <<= 1;
 			}
 		}
-		if(strlen(row["player_affection_plr_bitvector"].c_str()) > 0){
+		if(strlen(row["player_affection_plr_bitvector"].c_str()) > 0) {
 			uint64_t aff = row["player_affection_plr_bitvector"].as<uint64_t>(0);
 			uint64_t shift = 1;
-			for(unsigned i=0; i < 64; i++){
-				if(aff & shift){
-					switch(shift){
-						__MENTOC_PLR(PLR_KILLER);
-						__MENTOC_PLR(PLR_THIEF);
-						__MENTOC_PLR(PLR_FROZEN);
-						__MENTOC_PLR(PLR_DONTSET);
-						__MENTOC_PLR(PLR_WRITING);
-						__MENTOC_PLR(PLR_MAILING);
-						__MENTOC_PLR(PLR_CRASH);
-						__MENTOC_PLR(PLR_SITEOK);
-						__MENTOC_PLR(PLR_NOSHOUT);
-						__MENTOC_PLR(PLR_NOTITLE);
-						__MENTOC_PLR(PLR_DELETED);
-						__MENTOC_PLR(PLR_LOADROOM);
-						__MENTOC_PLR(PLR_NOWIZLIST);
-						__MENTOC_PLR(PLR_NODELETE);
-						__MENTOC_PLR(PLR_INVSTART);
-						__MENTOC_PLR(PLR_CRYO);
-						__MENTOC_PLR(PLR_NOTDEADYET);
-						default: std::cerr << "unknown affected_plr flag: " << shift << "\n";break;
+			for(unsigned i=0; i < 64; i++) {
+				if(aff & shift) {
+					switch(shift) {
+							__MENTOC_PLR(PLR_KILLER);
+							__MENTOC_PLR(PLR_THIEF);
+							__MENTOC_PLR(PLR_FROZEN);
+							__MENTOC_PLR(PLR_DONTSET);
+							__MENTOC_PLR(PLR_WRITING);
+							__MENTOC_PLR(PLR_MAILING);
+							__MENTOC_PLR(PLR_CRASH);
+							__MENTOC_PLR(PLR_SITEOK);
+							__MENTOC_PLR(PLR_NOSHOUT);
+							__MENTOC_PLR(PLR_NOTITLE);
+							__MENTOC_PLR(PLR_DELETED);
+							__MENTOC_PLR(PLR_LOADROOM);
+							__MENTOC_PLR(PLR_NOWIZLIST);
+							__MENTOC_PLR(PLR_NODELETE);
+							__MENTOC_PLR(PLR_INVSTART);
+							__MENTOC_PLR(PLR_CRYO);
+							__MENTOC_PLR(PLR_NOTDEADYET);
+						default:
+							std::cerr << "unknown affected_plr flag: " << shift << "\n";
+							break;
 					}
 					player_ptr->affect(shift);
 				}
@@ -2447,15 +2476,15 @@ bool parse_sql_player(player_ptr_t player_ptr){
 		get_player_map(player_ptr->name(),"mute-channels", values);
 		auto default_prefs = EXPLODE(EXTENDED_PREFERENCES_DEFAULTS(),'|');
 		unsigned ctr = 0;
-		for(auto & preference : EXPLODE(EXTENDED_PREFERENCES_DEFAULTS(),'|')){
-			if(default_prefs.size() <= ctr){
+		for(auto& preference : EXPLODE(EXTENDED_PREFERENCES_DEFAULTS(),'|')) {
+			if(default_prefs.size() <= ctr) {
 				values[preference] = "0";
 				++ctr;
 				continue;
 			}
-			if(values.find(preference) == values.end()){
+			if(values.find(preference) == values.end()) {
 				values[preference] = default_prefs[ctr];
-			}else{
+			} else {
 				values[preference] = "0";
 			}
 			++ctr;
@@ -2524,11 +2553,11 @@ void free_obj(struct obj_data *obj) {
 			obj->description.assign("");
 		}
 
-		if(obj->short_description.length() && strcmp(obj->short_description.c_str(),obj_proto[nr].short_description.c_str()) != 0){
+		if(obj->short_description.length() && strcmp(obj->short_description.c_str(),obj_proto[nr].short_description.c_str()) != 0) {
 			obj->short_description.assign("");
 		}
 
-		if(obj->action_description.length() && strcmp(obj->action_description.c_str(),obj_proto[nr].action_description.c_str()) != 0){
+		if(obj->action_description.length() && strcmp(obj->action_description.c_str(),obj_proto[nr].action_description.c_str()) != 0) {
 			obj->action_description.assign("");
 		}
 
@@ -2704,10 +2733,10 @@ room_rnum real_room(room_vnum vnum) {
 /* returns the real number of the monster with given virtual number */
 mob_rnum real_mobile(mob_vnum vnum) {
 	static std::map<mob_vnum,mob_rnum> real_mobile_static_map;
-	if(real_mobile_static_map.find(vnum) == real_mobile_static_map.end()){
+	if(real_mobile_static_map.find(vnum) == real_mobile_static_map.end()) {
 		log("real_mobile first lookup for vnum: %d", vnum);
-		for(unsigned i=0; i < mob_proto.size();i++){
-			if(mob_proto[i].nr == vnum){
+		for(unsigned i=0; i < mob_proto.size(); i++) {
+			if(mob_proto[i].nr == vnum) {
 				real_mobile_static_map[vnum] = i;
 				return i;
 			}
@@ -2721,7 +2750,7 @@ mob_rnum real_mobile(mob_vnum vnum) {
 /* returns the real number of the object with given virtual number */
 obj_rnum real_object(obj_vnum vnum) {
 	obj_rnum real_object_vnum_id = NOTHING;
-	for(const auto & obj : obj_index){
+	for(const auto& obj : obj_index) {
 		if(obj.vnum == vnum) {
 			return real_object_vnum_id;
 		}
@@ -2758,11 +2787,11 @@ int check_object(struct obj_data *obj) {
 
 	if(GET_OBJ_WEIGHT(obj) < 0 && (error = TRUE))
 		log("SYSERR: Object #%d (%s) has negative weight (%d).",
-				GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_WEIGHT(obj));
+		    GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_WEIGHT(obj));
 
 	if(GET_OBJ_RENT(obj) < 0 && (error = TRUE))
 		log("SYSERR: Object #%d (%s) has negative cost/day (%d).",
-				GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_RENT(obj));
+		    GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_RENT(obj));
 
 	snprintf(objname, sizeof(objname), "Object #%d (%s)", GET_OBJ_VNUM(obj), obj->short_description.c_str());
 	error |= check_bitvector_names(GET_OBJ_WEAR(obj), wear_bits_count, objname, "object wear");
@@ -2771,43 +2800,43 @@ int check_object(struct obj_data *obj) {
 
 	switch(GET_OBJ_TYPE(obj)) {
 		case ITEM_DRINKCON: {
-													char onealias[MAX_INPUT_LENGTH], *space = strrchr(obj->name, ' ');
+				char onealias[MAX_INPUT_LENGTH], *space = strrchr(obj->name, ' ');
 
-													strlcpy(onealias, space ? space + 1 : obj->name.c_str(), sizeof(onealias));
+				strlcpy(onealias, space ? space + 1 : obj->name.c_str(), sizeof(onealias));
 
-													if(search_block(onealias, drinknames, TRUE) < 0 && (error = TRUE))
-														log("SYSERR: Object #%d (%s) doesn't have drink type as last alias. (%s)",
-																GET_OBJ_VNUM(obj), obj->short_description.c_str(), obj->name.c_str());
-												}
+				if(search_block(onealias, drinknames, TRUE) < 0 && (error = TRUE))
+					log("SYSERR: Object #%d (%s) doesn't have drink type as last alias. (%s)",
+					    GET_OBJ_VNUM(obj), obj->short_description.c_str(), obj->name.c_str());
+			}
 
-												/* Fall through. */
+		/* Fall through. */
 		case ITEM_FOUNTAIN:
-												if(GET_OBJ_VAL(obj, 1) > GET_OBJ_VAL(obj, 0) && (error = TRUE))
-													log("SYSERR: Object #%d (%s) contains (%d) more than maximum (%d).",
-															GET_OBJ_VNUM(obj), obj->short_description.c_str(),
-															GET_OBJ_VAL(obj, 1), GET_OBJ_VAL(obj, 0));
+			if(GET_OBJ_VAL(obj, 1) > GET_OBJ_VAL(obj, 0) && (error = TRUE))
+				log("SYSERR: Object #%d (%s) contains (%d) more than maximum (%d).",
+				    GET_OBJ_VNUM(obj), obj->short_description.c_str(),
+				    GET_OBJ_VAL(obj, 1), GET_OBJ_VAL(obj, 0));
 
-												break;
+			break;
 
 		case ITEM_SCROLL:
 		case ITEM_POTION:
-												error |= check_object_level(obj, 0);
-												error |= check_object_spell_number(obj, 1);
-												error |= check_object_spell_number(obj, 2);
-												error |= check_object_spell_number(obj, 3);
-												break;
+			error |= check_object_level(obj, 0);
+			error |= check_object_spell_number(obj, 1);
+			error |= check_object_spell_number(obj, 2);
+			error |= check_object_spell_number(obj, 3);
+			break;
 
 		case ITEM_WAND:
 		case ITEM_STAFF:
-												error |= check_object_level(obj, 0);
-												error |= check_object_spell_number(obj, 3);
+			error |= check_object_level(obj, 0);
+			error |= check_object_spell_number(obj, 3);
 
-												if(GET_OBJ_VAL(obj, 2) > GET_OBJ_VAL(obj, 1) && (error = TRUE))
-													log("SYSERR: Object #%d (%s) has more charges (%d) than maximum (%d).",
-															GET_OBJ_VNUM(obj), obj->short_description,
-															GET_OBJ_VAL(obj, 2), GET_OBJ_VAL(obj, 1));
+			if(GET_OBJ_VAL(obj, 2) > GET_OBJ_VAL(obj, 1) && (error = TRUE))
+				log("SYSERR: Object #%d (%s) has more charges (%d) than maximum (%d).",
+				    GET_OBJ_VNUM(obj), obj->short_description,
+				    GET_OBJ_VAL(obj, 2), GET_OBJ_VAL(obj, 1));
 
-												break;
+			break;
 	}
 
 	return (error);
@@ -2839,7 +2868,7 @@ int check_object_spell_number(struct obj_data *obj, int val) {
 
 	if(error)
 		log("SYSERR: Object #%d (%s) has out of range spell #%d.",
-				GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_VAL(obj, val));
+		    GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_VAL(obj, val));
 
 	/*
 	 * This bug has been fixed, but if you don't like the special behavior...
@@ -2847,11 +2876,11 @@ int check_object_spell_number(struct obj_data *obj, int val) {
 #if 0
 
 	if(GET_OBJ_TYPE(obj) == ITEM_STAFF &&
-			HAS_SPELL_ROUTINE(GET_OBJ_VAL(obj, val), MAG_AREAS | MAG_MASSES))
+	        HAS_SPELL_ROUTINE(GET_OBJ_VAL(obj, val), MAG_AREAS | MAG_MASSES))
 		log("... '%s' (#%d) uses %s spell '%s'.",
-				obj->short_description,	GET_OBJ_VNUM(obj),
-				HAS_SPELL_ROUTINE(GET_OBJ_VAL(obj, val), MAG_AREAS) ? "area" : "mass",
-				skill_name(GET_OBJ_VAL(obj, val)));
+		    obj->short_description,	GET_OBJ_VNUM(obj),
+		    HAS_SPELL_ROUTINE(GET_OBJ_VAL(obj, val), MAG_AREAS) ? "area" : "mass",
+		    skill_name(GET_OBJ_VAL(obj, val)));
 
 #endif
 
@@ -2864,8 +2893,8 @@ int check_object_spell_number(struct obj_data *obj, int val) {
 
 	if((spellname == unused_spellname || !str_cmp("UNDEFINED", spellname)) && (error = TRUE))
 		log("SYSERR: Object #%d (%s) uses '%s' spell #%d.",
-				GET_OBJ_VNUM(obj), obj->short_description, spellname,
-				GET_OBJ_VAL(obj, val));
+		    GET_OBJ_VNUM(obj), obj->short_description, spellname,
+		    GET_OBJ_VAL(obj, val));
 
 	return (error);
 }
@@ -2875,7 +2904,7 @@ int check_object_level(struct obj_data *obj, int val) {
 
 	if((GET_OBJ_VAL(obj, val) < 0 || GET_OBJ_VAL(obj, val) > LVL_IMPL) && (error = TRUE))
 		log("SYSERR: Object #%d (%s) has out of range level #%d.",
-				GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_VAL(obj, val));
+		    GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_VAL(obj, val));
 
 	return (error);
 }

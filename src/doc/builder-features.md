@@ -1,5 +1,27 @@
 # Inventory of features
 
+# leveling up
+	- Experience allows you to advance a level
+		- Experience is obtained by completing contracts and killing enemies
+	- Skill points are awarded each level according to data within an sql table
+		- Skill points are used to:
+			- learn skills
+			- see the `skills` command for a comprehensive list
+	- there are three levels to each skill: initiate, familiar, master 
+	- the `train` command allows you to practice a specific skill
+	- view how many skill points you have
+		- sp
+		- score
+		- skills
+		- train
+	- skill points per level stored in sql
+		- source file: mods/orm/skill-points
+		- table: `skill_points`
+			- `id` primary key
+			- `sp_level` player level
+			- `sp_points` points to reward user on level up
+			- `created/updated_at`
+
 # forge engine
 	- orm classes `rifle_index` and `armor_index`
 	- use ACMD: `add_armor_index` 
