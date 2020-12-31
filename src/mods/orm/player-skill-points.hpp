@@ -8,6 +8,7 @@ namespace mods::orm {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 	static constexpr std::string_view player_skill_points_table_name = "player_skill_points";
 	struct player_skill_points_record_t {
+		uint64_t id;
 		uint32_t skill_id;
 		uint16_t skill_points;
 		uint64_t player_id;
@@ -40,32 +41,36 @@ namespace mods::orm {
 		player_skill_points() {
 			this->init();
 			loaded = 0;
+			id = 0;
 		}
 		~player_skill_points() = default;
 
 		std::string primary_key_name() {
 			return id_column();
 		}
-		std::string primary_key_value() {
-			return std::to_string(this->id);
-		}
+		std::string primary_key_value();
 
 		void load_multi(const pqxx::result::reference&);
-		void populate(const uint64_t& player_id, const std::map<uint32_t,uint16_t>* data);
+		void populate(const uint64_t& player_id, const std::map<uint32_t,uint16_t>& data);
+		std::map<uint32_t,uint16_t> get_player_levels(const uint64_t& player_id, std::string_view player_class);
 		void init();
 
 		void feed_multi(pqxx::result&);
 
 		strmap_t export_class();
 		int16_t save();
+		std::tuple<int16_t,std::string> update();
 
 		std::tuple<int16_t,std::string> delete_by_player(const uint64_t& player_id);
-		//uint16_t calculate_player_skill_points_by_level(uint16_t player_level);
 		std::tuple<int16_t,std::string> load_by_player(const uint64_t& player_id);
-
 
 		std::vector<player_skill_points_record_t> rows;
 		bool loaded;
+		/** mainly used for update */
+		uint64_t primary_key_id;
+		uint32_t skill_id;
+		uint16_t skill_points;
+		uint64_t player_id;
 	};
 	std::tuple<int16_t,std::string> load_player_skill_data(player_ptr_t& player, std::map<uint32_t,uint16_t>* data);
 };

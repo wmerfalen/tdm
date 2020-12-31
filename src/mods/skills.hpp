@@ -117,6 +117,11 @@ namespace mods::skills {
 			GRENADE_USAGE,
 			CLAYMORE_USAGE,
 			BREACH_USAGE,
+			/** GHOST CLASS THEMES:
+			 * - stealth
+			 * - fear
+			 * - illusive
+			 */
 			GHOST_CLASS_DRONE_SCAN,
 			GHOST_CLASS_STEALTH,
 			GHOST_CLASS_SUMMON_EXTRACTION,
@@ -139,6 +144,20 @@ namespace mods::skills {
 			PYREXIA_CLASS_SEAL_OFF_ROOM,
 			PYREXIA_CLASS_START=PYREXIA_CLASS_THROW_FIRE_NADE,
 			PYREXIA_CLASS_END=PYREXIA_CLASS_SEAL_OFF_ROOM,
+			/** SNIPER CLASS THEMES:
+			 * - gadgetry
+			 * - recon
+			 * - offensive technology
+			 */
+			SNIPER_CLASS_TRACKING_SHOT,
+			SNIPER_CLASS_INCENDIARY_SHOT,
+			SNIPER_CLASS_SUMMON_UNDERBARREL_SHOTGUN,
+			SNIPER_CLASS_SUMMON_UNDERBARREL_GRENADE_LAUNCHER,
+			SNIPER_CLASS_GUIDED_MISSILE,
+			SNIPER_CLASS_TARGET_LIMB,
+			SNIPER_CLASS_PLANT_CLAYMORE,
+			SNIPER_CLASS_XRAY_SHOT,
+			SNIPER_CLASS_SUMMON_AREA_SCAN,
 		};
 		struct proficiency_t {
 			proficiency_name_t e_name;
@@ -147,8 +166,67 @@ namespace mods::skills {
 			uint16_t minimum_proficiency;
 			bool implemented;
 		};
+		static std::map<std::string,std::vector<std::string>> sniper_skill_tree = {
+			{
+				"Technology", {
+					"intel:1-tracking-shot",
+					"intel:2-sensor-grenade",
+					"intel:3-xray-shot",
+					"intel:4-area-scan",
+					"disrupt:1-chaff-grenade",
+					"disrupt:2-emp-grenade",
+				}
+			},
+			{
+				"Demolitions", {
+					"claymore:1-plant",
+					"claymore:2-shrapnel",
+					"claymore:3-corrosive",
+					"guided-missile",
+				}
+			},
+			{
+				"Medical", {
+					"light-bandage",
+					"suture",
+					"adrenaline-shot",
+				}
+			},
+			{
+				"Sniping", {
+					"underbarrel-grenade-launcher",
+					"underbarrel-shotgun",
+					"target-limb",
+				}
+			}
+		};
 
+		static std::map<uint8_t,std::vector<std::string>> sniper_level_unlocks = {
+			{0, {"sniper-plant-claymore"}},
+			{1, {"sniper-incendiary-shot"}},
+			{2, {"sniper-tracking-shot"}},
+			{3, {"sniper-summon-underbarrel-grenade-launcher"}},
+			{4, {"sniper-summon-underbarrel-shotgun"}},
+			{5, {"sniper-claymore-shrapnel"}},
+			{6, {"sniper-summon-area-scan"}},
+			{8, {"sniper-xray-shot"}},
+			{10, {"sniper-target-limb"}},
+			{12, {"sniper-guided-missile"}},
+		};
 
+		/**
+		 * Static db asset: pyrexia_class proficiencies
+		 */
+		static std::vector<proficiency_t> sniper_class = {
+			{SNIPER_CLASS_TRACKING_SHOT,"sniper-tracking_shot","",SKILL_SNIPER_TRACKING_SHOT(),1},
+			{SNIPER_CLASS_SUMMON_UNDERBARREL_SHOTGUN,"sniper-summon_underbarrel_shotgun","",SKILL_SNIPER_SUMMON_UNDERBARREL_SHOTGUN(),1},
+			{SNIPER_CLASS_SUMMON_UNDERBARREL_GRENADE_LAUNCHER,"sniper-summon_underbarrel_grenade_launcher","",SKILL_SNIPER_SUMMON_UNDERBARREL_GRENADE_LAUNCHER(),1},
+			{SNIPER_CLASS_GUIDED_MISSILE,"sniper-guided_missile","",SKILL_SNIPER_GUIDED_MISSILE(),1},
+			{SNIPER_CLASS_TARGET_LIMB,"sniper-target_limb","",SKILL_SNIPER_TARGET_LIMB(),1},
+			{SNIPER_CLASS_PLANT_CLAYMORE,"sniper-plant_claymore","",SKILL_SNIPER_PLANT_CLAYMORE(),1},
+			{SNIPER_CLASS_XRAY_SHOT,"sniper-xray_shot","",SKILL_SNIPER_XRAY_SHOT(),1},
+			{SNIPER_CLASS_SUMMON_AREA_SCAN,"sniper-summon_area_scan","",SKILL_SNIPER_SUMMON_AREA_SCAN(),1},
+		};
 		/**
 		 * Static db asset: pyrexia_class proficiencies
 		 */
@@ -183,23 +261,7 @@ namespace mods::skills {
 		static std::vector<proficiency_t> electronics = {
 			/** castable */
 			{CAMERA_PLACEMENT,"camera-placement", "Ability to plant and view remote cameras.",SKILL_CAMERA_PLACEMENT(),0},
-			///** passive */
-			//{DETECT_CAMERAS,"detect-cameras", "Can detect cameras, even those that are hidden.",SKILL_DETECT_CAMERAS(),0},
-			///** castable */
-			//{CAMERA_DESTRUCTION,"camera-destruction", "Able to destroy cameras that aren't your own.", SKILL_CAMERA_DESTRUCTION(),0},
-			///** passive */
-			//{ELECTRIFIED_DAMAGE,"electrified-damage", "Can use gadgets and weapons that can deal electric damage.",SKILL_ELECTRIFIED_DAMAGE(),0},
-			///** castable */
-			//{PROTECT_FROM_EMP,"protect-from-emp", "Can protect various electronic devices from E.M.P. damage.",SKILL_PROTECT_FROM_EMP(),0},
-			///** castable */
-			//{CREATE_EMP_WEAPONS,"create-emp-weapons","Can create E.M.P. weapons.",SKILL_CREATE_EMP_WEAPONS(),0},
-			///** passive */
-			//{COUNTER_SHOCK,"counter-shock","Enemies who melee you have a 4\% chance of getting shocked by you.",SKILL_COUNTER_SHOCK(),0},
-			///** passive */
-			//{TOGGLE_THERMAL,"toggle-thermal","Cameras and headgear you own now have Thermal vision.",SKILL_TOGGLE_THERMAL(),0},
-			///** passive */
-			//{TOGGLE_NIGHT_VISION,"toggle-night-vision","Cameras and headgear you own now have night vision.",SKILL_TOGGLE_NIGHT_VISION(),0},
-			///** passive */
+			/** passive */
 			{HEADGEAR_INTROSPECTION,"headgear-introspection","Tactical headgear gives you the ability to see stats and inventory of any NPC.",SKILL_HEADGEAR_INTROSPECTION(),0},
 			/** castable */
 			{PROXIMITY_ALARM,"proximity-alarm","Plant a proximity alarm in any room and be notified.",SKILL_PROXIMITY_ALARM(),0},
@@ -213,22 +275,9 @@ namespace mods::skills {
 		static std::vector<proficiency_t> armor = {
 			/** passive */
 			{BASIC_ARMOR,"basic-armor", "Can use armor.",SKILL_BASIC_ARMOR(),1},
-			///** passive */
-			//{ADVANCED_ARMOR,"advanced-armor", "Can use ADVANCED class armor.",SKILL_ADVANCED_ARMOR(),1},
-			///** passive */
-			//{ELITE_ARMOR,"elite-armor", "Can use ELITE class armor.",SKILL_ELITE_ARMOR(),1},
-			///** castable */
-			//{THIEF,"thief", "Can steal armor off of corpses.", SKILL_THIEF(),0},
 			/** castable */
 			{MOLD,"mold", "Can mold together various types of armor to create new armor.", SKILL_MOLD(),0},
 			/** THESE WORK PERFECTLY FOR mods/armor/basic-protection classes!!! */
-			/** passive */
-			//{NO_FACTOR_BASIC,"no-factor-basic", "Heavy BASIC armor doesn't affect your movement.", SKILL_NO_FACTOR_BASIC(),1},
-			///** passive */
-			//{NO_FACTOR_ADVANCED,"no-factor-advanced", "Heavy ADVANCED armor doesn't affect your movement.", SKILL_NO_FACTOR_ADVANCED(),1},
-			///** passive */
-			//{NO_FACTOR_ELITE,"no-factor-elite", "Heavy ELITE armor doesn't affect your movement.", SKILL_NO_FACTOR_ELITE(),1},
-
 			/** passive */
 			{EXPLOSIVE_RESISTANCE,"explosive-resistance", "Explosions have less impact on you.", SKILL_EXPLOSIVE_RESISTANCE(),1},
 			/** passive */
@@ -236,26 +285,14 @@ namespace mods::skills {
 			/** passive */
 			{MUNITIONS_REFLECTOR,"munitions-reflector", "You have a 4\% chance of reflecting damage onto your attacker.", SKILL_MUNITIONS_REFLECTOR(),1}, /** implemented */
 			/** passive */
-			//{SENTINEL_DISCIPLINE,"sentinel-discipline", "Standing still gives 3\% HP regen every 1 second and 4\% critical chance. Must be actively attacking a mob.", SKILL_SENTINEL_DISCIPLINE(),1},
-			/** castable */
 			{DEPLOYABLE_SHIELD,"deployable-shield", "Deploy a bulletproof shield for a limited amount of time.", SKILL_DEPLOYABLE_SHIELD(),1},
 		};
 		static std::vector<proficiency_t> marksmanship = {
-			///** passive */
-			//{SPRAY_CHANCE,"spray-chance", "Chance to hit during spray is increased", SKILL_SPRAY_CHANCE(),1},/** implemented */
-			///** passive */
-			//{HEADSHOT_CHANCE,"headshot-chance", "Chance to headshot is increased.", SKILL_HEADSHOT_CHANCE(),1},/** implemented */
-			///** passive */
-			//{LIMB_CHANCE,"limb-chance", "Chance to target limb is increased.", SKILL_LIMB_CHANCE(),0},
-			///** passive */
-			//{BETTER_SNIPING_ACCURACY,"better-sniping-accuracy", "Sniping accuracy increased.",SKILL_BETTER_SNIPING_ACCURACY(),0},
 			/** castable */
 			{TARGET_LIMB,"target-limb", "Adds the ability to target a limb.",SKILL_TARGET_LIMB()}
 		};
 		static std::vector<proficiency_t> sniping = {
-			///** passive */
-			//{ACCURACY,"accuracy", "Accuracy increased with sniper rifles.", SKILL_ACCURACY(),0},
-			///** passive */
+			/** passive */
 			{VIP,"vip", "Exclusive access to advanced sniper rifles", SKILL_VIP(),0},
 			/** castable */
 			{TRACKER,"tracker", "Tracking bullets.",SKILL_TRACKER(),0},
@@ -263,22 +300,6 @@ namespace mods::skills {
 			{QUIETER_SNIPER_SHOTS,"quieter-sniper-shots", "Your shots are less loud and less likely to give away your position.",SKILL_QUIETER_SNIPER_SHOTS(),0},
 		};
 		static std::vector<proficiency_t> demolitions = {
-			///** passive */
-			//{FASTER_BREACHES,"faster-breaches","Breach charge placement time decreased",SKILL_FASTER_BREACHES(),0},
-			///** passive */
-			//{FURTHER_C4S,"further-c4s","C4 remote detonation distance increased",SKILL_FURTHER_C4S(),0},
-			///** passive */
-			//{STRONGER_FRAG_ARM,"stronger-frag-arm","Grenade throw distance increased",SKILL_STRONGER_FRAG_ARM(),0},
-			///** passive */
-			//{BIGGER_CLAYMORES,"bigger-claymores","Claymore damage increased",SKILL_BIGGER_CLAYMORES(),0},
-			///** passive */
-			//{FASTER_THERMITES,"faster-thermites","Thermite breach charge placement time decreased",SKILL_FASTER_THERMITES(),0},
-			///** passive */
-			//{BIGGER_FIRE_NADES,"bigger-fire-nades","Incendiary grenade damage increased",SKILL_BIGGER_FIRE_NADES(),0},
-			///** passive */
-			//{CRAFTY_C4,"crafty-c4","Can craft C4",SKILL_CRAFTY_C4(),0},
-			///** passive */
-			//{BETTER_EXPLOSIONS,"better-explosions","Chance to do 33% more damage with any explosive",SKILL_BETTER_EXPLOSIONS(),0},
 			{GRENADE_USAGE,"use-of-grenades", "Using grenades.",SKILL_GRENADE_USAGE(),1},
 			{CLAYMORE_USAGE,"use-of-claymores", "Using claymores.",SKILL_CLAYMORE_USAGE(),1},
 			{BREACH_USAGE,"use-of-breaches", "Using breach charges.",SKILL_BREACH_USAGE(),1},
@@ -307,10 +328,6 @@ namespace mods::skills {
 		};
 		static std::vector<proficiency_t> weapon_handling = {
 			/** passive */
-			//{PRO_WEAPON_HANDLER,"pro-weapon-handler","Enhanced familiarity with weapons",SKILL_PRO_WEAPON_HANDLER(),1},
-			/** passive */
-			//{BETTER_WEAPON_ACCURACY,"better-weapon-accuracy","Increased accuracy with any weapon",SKILL_BETTER_WEAPON_ACCURACY(),1},
-			/** passive */
 			{FASTER_TRIGGER_FINGER,"faster-trigger-finger","Decreased cooldown between shots",SKILL_FASTER_TRIGGER_FINGER(),1},
 			/** passive */
 			{FASTER_RELOADING,"faster-reloading","Faster reloading",SKILL_FASTER_RELOADING(),1},
@@ -324,36 +341,6 @@ namespace mods::skills {
 			{BASIC_SNIPER_RIFLE,"basic-sniper-rifle","Handling of SNIPE RIFLES",SKILL_BASIC_SNIPER_RIFLE(),1},
 			/** passive */
 			{BASIC_SUB_MACHINE_GUN,"basic-sub-machine-gun","Handling of SUB-MACHINE GUNS",SKILL_BASIC_SUB_MACHINE_GUN(),1},
-			/** passive */
-			//{INTERMEDIATE_PISTOL,"intermediate-pistol","Intermediate handling of PISTOLS",SKILL_INTERMEDIATE_PISTOL(),1},
-			///** passive */
-			//{INTERMEDIATE_ASSAULT_RIFLE,"intermediate-assault-rifle","Intermediate handling of ASSAULT RIFLES",SKILL_INTERMEDIATE_ASSAULT_RIFLE(),1},
-			///** passive */
-			//{INTERMEDIATE_SHOTGUN,"intermediate-shotgun","Intermediate handling of SHOTGUNS",SKILL_INTERMEDIATE_SHOTGUN(),1},
-			///** passive */
-			//{INTERMEDIATE_SNIPER_RIFLE,"intermediate-sniper-rifle","Intermediate handling of SNIPE RIFLES",SKILL_INTERMEDIATE_SNIPER_RIFLE(),1},
-			///** passive */
-			//{INTERMEDIATE_SUB_MACHINE_GUN,"intermediate-sub-machine-gun","Intermediate handling of SUB-MACHINE GUNS",SKILL_INTERMEDIATE_SUB_MACHINE_GUN(),1},
-			///** passive */
-			//{ADVANCED_PISTOL,"advanced-pistol","Advanced handling of PISTOLS",SKILL_ADVANCED_PISTOL(),1},
-			///** passive */
-			//{ADVANCED_ASSAULT_RIFLE,"advanced-assault-rifle","Advanced handling of ASSAULT RIFLES",SKILL_ADVANCED_ASSAULT_RIFLE(),1},
-			///** passive */
-			//{ADVANCED_SHOTGUN,"advanced-shotgun","Advanced handling of SHOTGUNS",SKILL_ADVANCED_SHOTGUN(),1},
-			///** passive */
-			//{ADVANCED_SNIPER_RIFLE,"advanced-sniper-rifle","Advanced handling of SNIPE RIFLES",SKILL_ADVANCED_SNIPER_RIFLE(),1},
-			///** passive */
-			//{ADVANCED_SUB_MACHINE_GUN,"advanced-sub-machine-gun","Advanced handling of SUB-MACHINE GUNS",SKILL_ADVANCED_SUB_MACHINE_GUN(),1},
-			///** passive */
-			//{EXPERT_PISTOL,"expert-pistol","Expert handling of PISTOLS",SKILL_EXPERT_PISTOL(),1},
-			///** passive */
-			//{EXPERT_ASSAULT_RIFLE,"expert-assault-rifle","Expert handling of ASSAULT RIFLES",SKILL_EXPERT_ASSAULT_RIFLE(),1},
-			///** passive */
-			//{EXPERT_SHOTGUN,"expert-shotgun","Expert handling of SHOTGUNS",SKILL_EXPERT_SHOTGUN(),1},
-			///** passive */
-			//{EXPERT_SNIPER_RIFLE,"expert-sniper-rifle","Expert handling of SNIPE RIFLES",SKILL_EXPERT_SNIPER_RIFLE(),1},
-			///** passive */
-			//{EXPERT_SUB_MACHINE_GUN,"expert-sub-machine-gun","Expert handling of SUB-MACHINE GUNS",SKILL_EXPERT_SUB_MACHINE_GUN(),1},
 			/** passive */
 			{ARMOR_PENETRATION_SHOT,"armor-penetration-shot","Chance to penetrate armor.",SKILL_ARMOR_PENETRATION_SHOT(),1},
 			/** passive */
@@ -398,16 +385,8 @@ namespace mods::skills {
 		 *  Stores proficiencies that are globally available as well as class-specific ones..
 		 */
 		static std::vector<std::tuple<std::string,std::vector<proficiency_t>>> list = {
-			{"Electronics",electronics},
-			{"Sniping",sniping},
-			{"Demolitions",demolitions},
-			{"Chemistry",chemistry},
-			{"Strategy",strategy},
-			{"Medical",medical},
-			{"Weapon Handling",weapon_handling},
-			{"Marksmanship",marksmanship},
-			{"Armor",armor},
 			/** start class-specific proficiencies */
+			{":SNIPER:",sniper_class},
 			{":GHOST:",ghost_class},
 			{":PYREXIA:",pyrexia_class},
 			/** end class-specific proficiencies */

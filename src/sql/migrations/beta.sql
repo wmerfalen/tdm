@@ -1492,44 +1492,6 @@ ALTER TABLE public.shops_shop_id_seq OWNER TO postgres;
 ALTER SEQUENCE public.shops_shop_id_seq OWNED BY public.shops.shop_id;
 
 
---
--- Name: skill_trees; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.skill_trees (
-    id integer NOT NULL,
-    sktree_class integer NOT NULL,
-    sktree_skill_name character varying(32) NOT NULL,
-    sktree_skill_description text,
-    sktree_skill_level_unlock integer NOT NULL,
-    sktree_skill_parent_id integer,
-    sktree_skill_order integer DEFAULT 0 NOT NULL
-);
-
-
-ALTER TABLE public.skill_trees OWNER TO postgres;
-
---
--- Name: skill_trees_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.skill_trees_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.skill_trees_id_seq OWNER TO postgres;
-
---
--- Name: skill_trees_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.skill_trees_id_seq OWNED BY public.skill_trees.id;
-
 
 --
 -- Name: tasks; Type: TABLE; Schema: public; Owner: postgres
@@ -1869,13 +1831,6 @@ ALTER TABLE ONLY public.shops ALTER COLUMN shop_id SET DEFAULT nextval('public.s
 
 
 --
--- Name: skill_trees id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.skill_trees ALTER COLUMN id SET DEFAULT nextval('public.skill_trees_id_seq'::regclass);
-
-
---
 -- Name: terminal_choices id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -2107,14 +2062,6 @@ COPY public.shop_rooms (shop_rooms_id, shop_vnum, shop_room_vnum) FROM stdin;
 COPY public.shops (shop_id, shop_vnum, shop_title, shop_description, shop_profit_buy, shop_profit_sell, shop_type, shop_no_such_item1, shop_no_such_item2, shop_missing_cash1, shop_missing_cash2, shop_do_not_buy, shop_message_buy, shop_message_sell, shop_temper1, shop_bitvector, shop_keeper, shop_with_who, shop_open1, shop_open2, shop_close1, shop_close2, shop_bankaccount, shop_lastsort, shop_flags) FROM stdin;
 2	2	MP5 repo	Feeling over burdened by money?	0	0	0	We don't carry that sort of thing here.	Look, we don't carry that...	No money, no product. Simple as that.	The precursor to buying guns is that you have to have money upfront...	I don't work with those types of items.	You got it. Here you go!	Nice. Maybe I can find some poor schmuck to sell this to...	0	0	0	0	0	0	0	0	0	0	0
 3	3	MP5 repo	Feeling over burdened by money?	0	0	0	We don't carry that sort of thing here.	Look, we don't carry that...	No money, no product. Simple as that.	The precursor to buying guns is that you have to have money upfront...	I don't work with those types of items.	You got it. Here you go!	Nice. Maybe I can find some poor schmuck to sell this to...	0	0	0	0	0	0	0	0	0	0	0
-\.
-
-
---
--- Data for Name: skill_trees; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.skill_trees (id, sktree_class, sktree_skill_name, sktree_skill_description, sktree_skill_level_unlock, sktree_skill_parent_id, sktree_skill_order) FROM stdin;
 \.
 
 
@@ -2395,13 +2342,6 @@ SELECT pg_catalog.setval('public.shops_shop_id_seq', 3, true);
 
 
 --
--- Name: skill_trees_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.skill_trees_id_seq', 1, false);
-
-
---
 -- Name: terminal_choices_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2491,14 +2431,6 @@ ALTER TABLE ONLY public.player_races
     ADD CONSTRAINT player_races_pkey PRIMARY KEY (id);
 
 --
--- Name: skill_trees skill_trees_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.skill_trees
-    ADD CONSTRAINT skill_trees_pkey PRIMARY KEY (id);
-
-
---
 -- Name: terminal_choices terminal_choices_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2521,21 +2453,6 @@ ALTER TABLE ONLY public.mini_gunner_sentinel
 ALTER TABLE ONLY public.player_race_perks
     ADD CONSTRAINT player_race_perks_prperk_id_fkey FOREIGN KEY (prperk_id) REFERENCES public.player_races(id);
 
-
---
--- Name: skill_trees skill_trees_sktree_class_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.skill_trees
-    ADD CONSTRAINT skill_trees_sktree_class_fkey FOREIGN KEY (sktree_class) REFERENCES public.player_classes(id);
-
-
---
--- Name: skill_trees skill_trees_sktree_skill_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.skill_trees
-    ADD CONSTRAINT skill_trees_sktree_skill_parent_id_fkey FOREIGN KEY (sktree_skill_parent_id) REFERENCES public.skill_trees(id);
 
 
 --
@@ -2752,33 +2669,282 @@ CREATE TABLE public.skill_points (
 	PRIMARY KEY(id)
 );
 
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(1, 1);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(2, 2);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(3, 3);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(4, 4);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(5, 5);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(6, 6);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(7, 7);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(8, 8);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(9, 9);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(10, 10);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(11, 11);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(12, 12);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(13, 13);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(14, 14);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(15, 15);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(16, 16);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(17, 17);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(18, 18);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(19, 19);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(20, 20);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(21, 21);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(22, 22);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(23, 23);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(24, 24);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(25, 25);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(26, 26);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(27, 27);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(28, 28);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(29, 29);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(30, 30);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(1, 25);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(2, 25);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(3, 25);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(4, 25);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(5, 25);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(6, 25);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(7, 25);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(8, 25);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(9, 25);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(10, 150);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(11, 150);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(12, 150);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(13, 150);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(14, 150);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(15, 150);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(16, 250);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(17, 250);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(18, 250);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(19, 250);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(20, 350);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(21, 350);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(22, 350);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(23, 350);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(24, 350);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(25, 450);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(26, 450);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(27, 550);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(28, 550);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(29, 650);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(30, 750);
+
+CREATE TABLE public.skill_trees (
+  id SERIAL UNIQUE,
+	skill_name varchar(255) NOT NULL,
+	skill_category varchar(255) NOT NULL,
+	skill_player_class varchar(255) NOT NULL,
+	skill_parent_id integer,	-- refers back to the primary key of this table
+	skill_order integer NOT NULL DEFAULT 0,
+	skill_description TEXT,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	UNIQUE(skill_player_class,skill_category,skill_name),
+	PRIMARY KEY(id),
+		CONSTRAINT fk_parent_id
+			FOREIGN KEY (skill_parent_id)
+			REFERENCES public.skill_trees(id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE
+);
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'intel:1-tracking-shot',
+				'sniper',
+				'Technology',
+				NULL,
+				0
+			);
+
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'intel:2-sensor-grenade',
+				'sniper',
+				'Technology',
+				(SELECT id from public.skill_trees WHERE skill_name='intel:1-tracking-shot'),
+				0
+			);
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'intel:3-xray-shot',
+				'sniper',
+				'Technology',
+				(SELECT id from public.skill_trees WHERE skill_name='intel:2-sensor-grenade'),
+				1
+			);
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'intel:4-area-scan',
+				'sniper',
+				'Technology',
+				(SELECT id from public.skill_trees WHERE skill_name='intel:3-sensor-grenade'),
+				2
+			);
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'disrupt:1-chaff-grenade',
+				'sniper',
+				'Technology',
+				NULL,
+				0
+			);
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'disrupt:2-emp-grenade',
+				'sniper',
+				'Technology',
+				(SELECT id from public.skill_trees WHERE skill_name='disrupt:1-chaff-grenade'),
+				1
+			);
+
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'claymore:1-plant',
+				'sniper',
+				'Demolitions',
+				NULL,
+				0
+			);
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'claymore:2-shrapnel',
+				'sniper',
+				'Demolitions',
+				(SELECT id from public.skill_trees WHERE skill_name='claymore:1-plant'),
+				1
+			);
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'claymore:3-corrosive',
+				'sniper',
+				'Demolitions',
+				(SELECT id from public.skill_trees WHERE skill_name='claymore:2-shrapnel'),
+				1
+			);
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'guided-missile',
+				'sniper',
+				'Demolitions',
+				NULL,
+				1
+			);
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'light-bandage',
+				'sniper',
+				'Medical',
+				NULL,
+				1
+			);
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'suture',
+				'sniper',
+				'Medical',
+				NULL,
+				1
+			);
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'adrenaline-shot',
+				'sniper',
+				'Medical',
+				NULL,
+				1
+			);
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'underbarrel-grenade-launcher',
+				'sniper',
+				'Sniping',
+				NULL,
+				1
+			);
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'underbarrel-shotgun',
+				'sniper',
+				'Sniping',
+				NULL,
+				1
+			);
+INSERT INTO public.skill_trees (
+	skill_name,
+	skill_player_class,
+	skill_category,
+	skill_parent_id,
+	skill_order
+) VALUES(
+				'target-limb',
+				'sniper',
+				'Sniping',
+				NULL,
+				1
+			);
+
+CREATE TABLE public.player_skill_points (
+  id SERIAL UNIQUE,
+	ps_skill_id integer NOT NULL,
+	ps_points integer NOT NULL DEFAULT 0,
+	ps_player_id integer NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(id),
+		CONSTRAINT fk_skill_id
+			FOREIGN KEY (ps_skill_id)
+			REFERENCES public.skill_trees(id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE,
+		CONSTRAINT fk_player_id
+			FOREIGN KEY (ps_player_id)
+			REFERENCES public.player(id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE
+);

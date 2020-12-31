@@ -2,6 +2,9 @@
 #include "interpreter.hpp"
 #include "super-users.hpp"
 #include <functional>
+#include "skill-orm-adaptor.hpp"
+#include "orm/skill-trees.hpp"
+#include "orm/player-skill-points.hpp"
 
 #ifdef __MENTOC_MODS_SKILLS_SHOW_DEBUG_OUTPUT__
 #define m_debug(A) std::cerr << "[mods::skills][debug]:'" << A << "'\n";
@@ -64,14 +67,12 @@ namespace mods::skills {
 
 	/** PLAYER BOOTSTRAP */
 	void init_player_levels(player_ptr_t& player) {
-		init_player_levels(player->name().c_str());
-	}
-	void init_player_levels(std::string_view player_name) {
 		strmap_t m;
 		FOREACH_SKILLSET_AS(prof) {
 			m[prof.name.str()] = "0";
 		}
-		put_player_map(player_name.data(),DB_PREFIX,m);
+
+		mods::skill_orm_adaptor::put_player_map(player,m);
 	}
 	using just_proficiency_name_t = mods::skills::proficiencies::proficiency_name_t;
 	static std::map<std::string,int> mappings;
@@ -438,7 +439,7 @@ namespace mods::skills {
 	void load_player_levels(player_ptr_t& player) {
 		strmap_t skills;
 		if(0 == get_player_map(player->name(),DB_PREFIX,skills)) {
-			init_player_levels(player->name().c_str());
+			init_player_levels(player);
 			get_player_map(player->name(),DB_PREFIX,skills);
 		}
 		for(auto& pair : skills) {
@@ -544,6 +545,31 @@ namespace mods::skills {
 	std::string_view to_user_friendly_string_from_skill(skill_t s) {
 		return e_name_to_proficiency[s].name.c_str();
 	}
+	/**
+	 * Deletes and inserts skills at zero
+	 */
+	void init_user_skills(player_ptr_t& player) {
+		mods::orm::skill_trees tree;
+		std::string pc = "";
+		for(auto ch : player->get_class_string().str()) {
+			pc += std::tolower(ch);
+		}
+		tree.load_by_class(pc);
+		std::vector<uint32_t> skill_ids;
+		for(const auto& row : tree.rows) {
+			skill_ids.emplace_back(row.id);
+		}
+		mods::orm::player_skill_points ps;
+		auto results = ps.get_player_levels(player->db_id(),pc);
+		ps.delete_by_player(player->db_id());
+		ps.populate(player->db_id(),results);
+		ps.save();
+	}
+
+
+	ACMD(do_init_user_skills) {
+		init_user_skills(player);
+	};
 	/** called by game initialization sequence */
 	void init() {
 		refresh_minimum_proficiencies();
@@ -554,6 +580,7 @@ namespace mods::skills {
 			skill_name_list.emplace_back(prof.name.str());
 		}
 		refresh_implemented_skills();
+		mods::interpreter::add_command("init_user_skills", POS_RESTING, do_init_user_skills, 0,0);
 		mods::interpreter::add_command("skills", POS_RESTING, do_skills, 0,0);
 		mods::interpreter::add_command("skill", POS_RESTING, do_skills, 0,0);
 		mods::interpreter::add_command("train", POS_RESTING, do_train, 0,0);
@@ -590,62 +617,85 @@ std::pair<uint8_t,uint8_t> get_tier_pair(mods::skills::proficiencies::proficienc
 	return tier_three;
 }
 
+void display_user_skills(player_ptr_t& player) {
+	mods::orm::skill_trees tree;
+	std::string pc = "";
+	for(auto ch : player->get_class_string().str()) {
+		pc += std::tolower(ch);
+	}
+	tree.load_by_class(pc);
+	mods::orm::player_skill_points ps;
+	auto results = ps.get_player_levels(player->db_id(),pc);
+	for(const auto& row : tree.rows) {
+		player->send("Category: %s | Name: %s | Proficiency: %d\r\n",
+		             row.skill_category.c_str(),
+		             row.skill_name.c_str(),
+		             results[row.id]
+		            );
+	}
+}
+
+void train_user_skill(player_ptr_t& player,uint32_t skill_id,uint16_t amount) {
+	mods::orm::skill_trees tree;
+	std::string pc = "";
+	for(auto ch : player->get_class_string().str()) {
+		pc += std::tolower(ch);
+	}
+	tree.load_by_class(pc);
+
+	mods::orm::player_skill_points ps;
+	auto results = ps.get_player_levels(player->db_id(),pc);
+	results[skill_id] += amount;
+	ps.delete_by_player(player->db_id());
+	ps.rows.clear();
+	ps.populate(player->db_id(),results);
+	ps.save();
+}
+
+std::optional<uint32_t> from_string_to_skill_id(
+    const std::string&  player_class,
+    std::string_view skill_name) {
+	mods::orm::skill_trees tree;
+	std::string pc = "";
+	for(auto ch : player_class) {
+		pc += std::tolower(ch);
+	}
+	tree.load_by_class(pc);
+	for(const auto& row : tree.rows) {
+		if(row.skill_name.compare(skill_name.data()) == 0) {
+			std::cerr << red_str("skill_name:") << skill_name << ", row.skill_name:'" << row.skill_name << "', row: '" << row.id << "\n";
+			return row.id;
+		}
+	}
+	return std::nullopt;
+}
+
+
+void train_skill(player_ptr_t& player,std::string_view skill_name) {
+	auto id = from_string_to_skill_id(player->get_class_string().str(),skill_name);
+	if(!id.has_value()) {
+		player->send("That skill doesn't seem to exist: '%s'\r\n",skill_name.data());
+		return;
+	}
+	train_user_skill(player,id.value(),50);
+	player->sendln("You practice for awhile...\r\n");
+}
+
 ACMD(do_train) {
 	DO_HELP("train");
 	auto vec_args = PARSE_ARGS();
 	auto skills = mods::skills::get_player_tier_skills(player);
 	if(vec_args.size() == 0) {
-		for(auto& skillset : mods::skills::proficiencies::list) {
-			if(is_player_class_skillset(std::get<0>(skillset)) && !skill_belongs_to_player_class(player,std::get<0>(skillset))) {
-				continue;
-			}
-			player->sendln(CAT("-- {grn}",std::get<0>(skillset),"{/grn}"));
-			std::string not_learned = "|not-learned";
-			std::string learned  = pad_string("|learned",not_learned.length()," ");
-			for(auto& prof : std::get<1>(skillset)) {
-				bool is_my_skill = is_player_class_skillset(std::get<0>(skillset)) && skill_belongs_to_player_class(player,std::get<0>(skillset));
-				if(std::find(skills.begin(),skills.end(),prof.e_name) == skills.end() && !is_my_skill) {
-					continue;
-				}
-				bool can_do = mods::skills::player_can(player,prof.e_name);
-				std::array<char,1024> buffer = {0};
-				std::size_t max_len = 35,skill_max_len = 80,skill_line_max_len = skill_max_len;
-				skill_line_max_len += 20;
-				std::string skill = pad_string(prof.name.c_str(),max_len - 2," ");
-				auto tier_pair = get_tier_pair(prof.e_name);
-				if(is_my_skill) {
-					snprintf(&buffer[0],1024,"%s%s | (Cost: %d) (Levels: any)",skill.c_str(),(can_do  ? learned : not_learned).c_str(), prof.minimum_proficiency);
-				} else {
-					snprintf(&buffer[0],1024,"%s%s | (Cost: %d) (Levels: %d->%d)",skill.c_str(),(can_do ? learned : not_learned).c_str(), prof.minimum_proficiency,tier_pair.first,tier_pair.second);
-				}
-				player->sendln(&buffer[0]);
-			}
+		display_user_skills(player);
+		return;
+	}
+
+	if(vec_args.size()) {
+		for(int i =0; i < vec_args.size(); ++i) {
+			train_skill(player,vec_args[i]);
 		}
 	}
-	if(vec_args.size() >= 1) {
-		for(auto& skillset : mods::skills::proficiencies::list) {
-			if(is_player_class_skillset(std::get<0>(skillset)) && !skill_belongs_to_player_class(player,std::get<0>(skillset))) {
-				continue;
-			}
-			for(auto& prof : std::get<1>(skillset)) {
-				if(is_player_class_skillset(std::get<0>(skillset)) && skill_belongs_to_player_class(player,std::get<0>(skillset))) {
-					if(ICMP(vec_args[0],prof.name.c_str())) {
-						/** TODO subtract available mp */
-						player->set_skill(prof.e_name,prof.minimum_proficiency);
-						player->sendln("You practice for awhile...");
-						return;
-					}
-				}
-				if(ICMP(vec_args[0],prof.name.c_str())) {
-					/** TODO subtract available mp */
-					player->set_skill(prof.e_name,prof.minimum_proficiency);
-					player->sendln("You practice for awhile...");
-					return;
-				}
-			}
-		}
-		player->errorln(CAT("Unable to find a skill that matches '",vec_args[0],"'"));
-	}
+	return;
 }
 
 
