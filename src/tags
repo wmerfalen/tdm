@@ -226,10 +226,10 @@ ACMD	mods/classes/breacher.cpp	/^ACMD(do_teep){$/;"	f
 ACMD	mods/classes/engineer.cpp	/^	ACMD(do_drone_bomb){$/;"	f	namespace:mods::class_abilities::engineer
 ACMD	mods/classes/ghost.cpp	/^	ACMD(do_dissipate){$/;"	f	namespace:mods::class_abilities::ghost
 ACMD	mods/classes/pyrexia.cpp	/^ACMD(do_fire_nade){$/;"	f
-ACMD	mods/classes/sniper.cpp	/^	ACMD(do_disengage){$/;"	f	namespace:mods::class_abilities::sniper
-ACMD	mods/classes/sniper.cpp	/^	ACMD(do_engage){$/;"	f	namespace:mods::class_abilities::sniper
-ACMD	mods/classes/sniper.cpp	/^	ACMD(do_mark_target){$/;"	f	namespace:mods::class_abilities::sniper
-ACMD	mods/classes/sniper.cpp	/^	ACMD(do_xray_shot){$/;"	f	namespace:mods::class_abilities::sniper
+ACMD	mods/classes/sniper.cpp	/^	ACMD(do_disengage) {$/;"	f	namespace:mods::class_abilities::sniper
+ACMD	mods/classes/sniper.cpp	/^	ACMD(do_engage) {$/;"	f	namespace:mods::class_abilities::sniper
+ACMD	mods/classes/sniper.cpp	/^	ACMD(do_mark_target) {$/;"	f	namespace:mods::class_abilities::sniper
+ACMD	mods/classes/sniper.cpp	/^	ACMD(do_xray_shot) {$/;"	f	namespace:mods::class_abilities::sniper
 ACMD	mods/classes/super-user-fiddler.cpp	/^	ACMD(do_mock_level){$/;"	f	namespace:mods::classes
 ACMD	mods/date-time.cpp	/^	ACMD(do_moon_phase){$/;"	f	namespace:mods::date_time
 ACMD	mods/date-time.cpp	/^	ACMD(do_serialize_date){$/;"	f	namespace:mods::date_time
@@ -5359,7 +5359,7 @@ classes	mods/player.cpp	/^namespace mods::classes {$/;"	n	class:mods	file:
 classes	mods/player.hpp	/^	namespace classes {$/;"	n	namespace:mods
 classification_enum	mods/yaml.hpp	/^		armor_classification_type_t classification_enum;$/;"	m	struct:mods::yaml::armor_description_t
 claymore_count	mods/classes/ghost.cpp	/^	uint8_t ghost::claymore_count() const{$/;"	f	class:mods::classes::ghost
-claymore_count	mods/classes/sniper.cpp	/^	uint8_t sniper::claymore_count() const{$/;"	f	class:mods::classes::sniper
+claymore_count	mods/classes/sniper.cpp	/^	uint8_t sniper::claymore_count() const {$/;"	f	class:mods::classes::sniper
 cleaning	castle.cpp	/^SPECIAL(cleaning);$/;"	v
 clear	mods/affects.hpp	/^			void clear(TAffectsContainer affects){$/;"	f	struct:mods::affects::dissolver
 clear	mods/sql.hpp	/^			compositor<T>& clear() {$/;"	f	struct:mods::sql::compositor
@@ -5609,7 +5609,7 @@ create_selector	mods/behaviour_tree_node.hpp	/^		static child_node_t create_sele
 create_sentinel	mods/classes/sentinel.cpp	/^		std::shared_ptr<sentinel> create_sentinel(player_ptr_t &in_player){$/;"	f	namespace:mods::classes
 create_sequence	mods/behaviour_tree_node.hpp	/^		static child_node_t create_sequence(const children_t& ch){$/;"	f	struct:mods::behaviour_tree_node
 create_shop_from_index	db.cpp	/^shop_ptr_t create_shop_from_index(std::size_t proto_index) {$/;"	f
-create_sniper	mods/classes/sniper.cpp	/^	std::shared_ptr<sniper> create_sniper(player_ptr_t &in_player){$/;"	f	namespace:mods::classes
+create_sniper	mods/classes/sniper.cpp	/^	std::shared_ptr<sniper> create_sniper(player_ptr_t& in_player) {$/;"	f	namespace:mods::classes
 create_support	mods/classes/support.cpp	/^	std::shared_ptr<support> create_support(player_ptr_t &in_player){$/;"	f	namespace:mods::classes
 create_syndrome	mods/classes/syndrome.cpp	/^		std::shared_ptr<syndrome> create_syndrome(player_ptr_t &in_player){$/;"	f	namespace:mods::classes
 create_wall_of_fire	mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyrexia::create_wall_of_fire(uint8_t direction){$/;"	f	class:mods::classes::pyrexia
@@ -5899,7 +5899,7 @@ disable_all_zone_resets	db.cpp	/^bool disable_all_zone_resets = false;$/;"	v
 disable_electronics	mods/projectile.cpp	/^		void disable_electronics(room_rnum room) {$/;"	f	namespace:mods::projectile
 disable_zone_resets	mods/builder.cpp	/^void disable_zone_resets(){$/;"	f
 discrete_load	db.cpp	/^void discrete_load(FILE *fl, int mode, char *filename) {$/;"	f
-disengage	mods/classes/sniper.cpp	/^	std::tuple<bool,std::string> sniper::disengage(){$/;"	f	class:mods::classes::sniper
+disengage	mods/classes/sniper.cpp	/^	std::tuple<bool,std::string> sniper::disengage() {$/;"	f	class:mods::classes::sniper
 disorient_amount	mods/weapon.hpp	/^			int disorient_amount;$/;"	m	struct:mods::weapon::yaml::rifle_description_t
 disorient_clears_up	mods/projectile.cpp	/^		void disorient_clears_up(player_ptr_t victim) {$/;"	f	namespace:mods::projectile
 disorient_person	mods/projectile.cpp	/^		void disorient_person(player_ptr_t victim) {$/;"	f	namespace:mods::projectile
@@ -6415,7 +6415,7 @@ enctype_names	telnet.h	/^char *enctype_names[] = {$/;"	v
 end	mods/catch2.hpp	/^        constexpr const_iterator end() const { return m_start + m_size; }$/;"	f	class:Catch::StringRef
 end_read_list	shop.cpp	/^int end_read_list(struct shop_buy_data *list, int len, int error) {$/;"	f
 enemy_spotted	mods/mobs/mini-gunner.cpp	/^	void mini_gunner::enemy_spotted(room_rnum room,uuid_t player){$/;"	f	class:mods::mobs::mini_gunner
-engage	mods/classes/sniper.cpp	/^	std::tuple<bool,std::string> sniper::engage(){$/;"	f	class:mods::classes::sniper
+engage	mods/classes/sniper.cpp	/^	std::tuple<bool,std::string> sniper::engage() {$/;"	f	class:mods::classes::sniper
 engineer	globals.cpp	/^INIT(mods::class_abilities::engineer);$/;"	v
 engineer	mods/classes/engineer.cpp	/^	engineer::engineer(){$/;"	f	class:mods::classes::engineer
 engineer	mods/classes/engineer.cpp	/^	engineer::engineer(player_ptr_t p){$/;"	f	class:mods::classes::engineer
@@ -7520,8 +7520,8 @@ init	mods/classes/forge.cpp	/^	void init(){$/;"	f	namespace:mods::class_abilitie
 init	mods/classes/ghost.cpp	/^	void ghost::init(){$/;"	f	class:mods::classes::ghost
 init	mods/classes/ghost.cpp	/^	void init(){$/;"	f	namespace:mods::class_abilities::ghost
 init	mods/classes/medic.cpp	/^	void medic::init(){$/;"	f	class:mods::classes::medic
-init	mods/classes/sniper.cpp	/^	void init(){$/;"	f	namespace:mods::class_abilities::sniper
-init	mods/classes/sniper.cpp	/^	void sniper::init(){$/;"	f	class:mods::classes::sniper
+init	mods/classes/sniper.cpp	/^	void init() {$/;"	f	namespace:mods::class_abilities::sniper
+init	mods/classes/sniper.cpp	/^	void sniper::init() {$/;"	f	class:mods::classes::sniper
 init	mods/classes/super-user-fiddler.cpp	/^	void init(){$/;"	f	namespace:mods::classes
 init	mods/date-time.cpp	/^	void init(){$/;"	f	namespace:mods::date_time
 init	mods/debug.hpp	/^	static inline void init(bool tics){ debug_state = std::make_unique<state>(tics); }$/;"	f	namespace:mods::debug
@@ -7812,7 +7812,7 @@ kind	mods/classes/medic.hpp	/^		types kind() {$/;"	f	struct:mods::classes::medic
 kind	mods/classes/psyop.hpp	/^		types kind() {$/;"	f	struct:mods::classes::psyop
 kind	mods/classes/pyrexia.hpp	/^			types kind() {$/;"	f	struct:mods::classes::pyrexia
 kind	mods/classes/sentinel.hpp	/^		types kind() {$/;"	f	struct:mods::classes::sentinel
-kind	mods/classes/sniper.hpp	/^		types kind() {$/;"	f	struct:mods::classes::sniper
+kind	mods/classes/sniper.hpp	/^			types kind() {$/;"	f	struct:mods::classes::sniper
 kind	mods/classes/support.hpp	/^		types kind() {$/;"	f	struct:mods::classes::support
 kind	mods/classes/syndrome.hpp	/^		types kind() {$/;"	f	struct:mods::classes::syndrome
 king_welmar	castle.cpp	/^SPECIAL(king_welmar);$/;"	v
@@ -7942,7 +7942,7 @@ load_by_player	mods/classes/medic.cpp	/^	int16_t medic::load_by_player(player_pt
 load_by_player	mods/classes/psyop.cpp	/^	int16_t psyop::load_by_player(player_ptr_t & player){$/;"	f	class:mods::classes::psyop
 load_by_player	mods/classes/pyrexia.cpp	/^		int16_t pyrexia::load_by_player(player_ptr_t & player){$/;"	f	class:mods::classes::pyrexia
 load_by_player	mods/classes/sentinel.cpp	/^		int16_t sentinel::load_by_player(player_ptr_t & player){$/;"	f	class:mods::classes::sentinel
-load_by_player	mods/classes/sniper.cpp	/^	int16_t sniper::load_by_player(player_ptr_t & player){$/;"	f	class:mods::classes::sniper
+load_by_player	mods/classes/sniper.cpp	/^	int16_t sniper::load_by_player(player_ptr_t& player) {$/;"	f	class:mods::classes::sniper
 load_by_player	mods/classes/support.cpp	/^	int16_t support::load_by_player(player_ptr_t & player){$/;"	f	class:mods::classes::support
 load_by_player	mods/classes/syndrome.cpp	/^		int16_t syndrome::load_by_player(player_ptr_t & player){$/;"	f	class:mods::classes::syndrome
 load_by_player	mods/orm/breacher.cpp	/^	int16_t breacher::load_by_player(uint64_t player_id){$/;"	f	class:mods::orm::breacher
@@ -8690,7 +8690,7 @@ marine_list	mods/replenish.cpp	/^	static std::vector<uuid_t> marine_list;$/;"	m	
 marine_player_id	mods/orm/marine.hpp	/^		uint64_t marine_player_id;$/;"	m	struct:mods::orm::marine
 marine_ptrs	mods/replenish.cpp	/^	static std::map<uuid_t,marine_ptr_t> marine_ptrs;$/;"	m	namespace:mods::replenish	file:
 mark	mods/object-utils.hpp	/^		YAML::Mark mark;$/;"	m	struct:mods::object_utils::YamlFeedExceptionInfo
-mark_target	mods/classes/sniper.cpp	/^	std::tuple<bool,std::string> sniper::mark_target(std::string_view target){$/;"	f	class:mods::classes::sniper
+mark_target	mods/classes/sniper.cpp	/^	std::tuple<bool,std::string> sniper::mark_target(std::string_view target) {$/;"	f	class:mods::classes::sniper
 marksmanship	mods/player.hpp	/^			uint16_t& marksmanship() {$/;"	f	struct:mods::player
 mask	mods/weapon.hpp	/^	struct mask {$/;"	s	namespace:mods::weapon
 mask_to_string	mods/doors.hpp	/^	static inline std::string mask_to_string(int i){$/;"	f	namespace:mods::doors
@@ -9047,7 +9047,7 @@ new_player	mods/classes/medic.cpp	/^	int16_t medic::new_player(player_ptr_t &pla
 new_player	mods/classes/psyop.cpp	/^		int16_t psyop::new_player(player_ptr_t &player, primary_choice_t primary_choice){$/;"	f	class:mods::classes::psyop
 new_player	mods/classes/pyrexia.cpp	/^		int16_t pyrexia::new_player(player_ptr_t &player){$/;"	f	class:mods::classes::pyrexia
 new_player	mods/classes/sentinel.cpp	/^		int16_t sentinel::new_player(player_ptr_t &player, primary_choice_t primary_choice){$/;"	f	class:mods::classes::sentinel
-new_player	mods/classes/sniper.cpp	/^	int16_t sniper::new_player(player_ptr_t &player){$/;"	f	class:mods::classes::sniper
+new_player	mods/classes/sniper.cpp	/^	int16_t sniper::new_player(player_ptr_t& player) {$/;"	f	class:mods::classes::sniper
 new_player	mods/classes/support.cpp	/^	int16_t support::new_player(player_ptr_t &player, primary_choice_t primary_choice){$/;"	f	class:mods::classes::support
 new_player	mods/classes/syndrome.cpp	/^		int16_t syndrome::new_player(player_ptr_t &player){$/;"	f	class:mods::classes::syndrome
 new_record	mods/db.cpp	/^tuple_status_t new_record(const std::string& table,mutable_map_t* values){$/;"	f	namespace:mods::db
@@ -9518,7 +9518,7 @@ player	mods/classes/medic.cpp	/^	player_ptr_t 	medic::player(){$/;"	f	class:mods
 player	mods/classes/psyop.cpp	/^	player_ptr_t 	psyop::player(){$/;"	f	class:mods::classes::psyop
 player	mods/classes/pyrexia.cpp	/^		player_ptr_t 	pyrexia::player(){$/;"	f	class:mods::classes::pyrexia
 player	mods/classes/sentinel.cpp	/^		player_ptr_t 	sentinel::player(){$/;"	f	class:mods::classes::sentinel
-player	mods/classes/sniper.cpp	/^	player_ptr_t 	sniper::player(){$/;"	f	class:mods::classes::sniper
+player	mods/classes/sniper.cpp	/^	player_ptr_t 	sniper::player() {$/;"	f	class:mods::classes::sniper
 player	mods/classes/support.cpp	/^	player_ptr_t 	support::player(){$/;"	f	class:mods::classes::support
 player	mods/classes/syndrome.cpp	/^		player_ptr_t 	syndrome::player(){$/;"	f	class:mods::classes::syndrome
 player	mods/forge-engine/value-scaler.hpp	/^		player_ptr_t player;$/;"	m	struct:mods::forge_engine::value_scaler
@@ -10099,7 +10099,7 @@ replenish	mods/classes/ghost.cpp	/^	void ghost::replenish(){$/;"	f	class:mods::c
 replenish	mods/classes/marine.cpp	/^	void marine::replenish(){$/;"	f	class:mods::classes::marine
 replenish	mods/classes/medic.cpp	/^	void medic::replenish(){$/;"	f	class:mods::classes::medic
 replenish	mods/classes/pyrexia.cpp	/^	void pyrexia::replenish(){$/;"	f	class:mods::classes::pyrexia
-replenish	mods/classes/sniper.cpp	/^	void sniper::replenish(){$/;"	f	class:mods::classes::sniper
+replenish	mods/classes/sniper.cpp	/^	void sniper::replenish() {$/;"	f	class:mods::classes::sniper
 replenish	mods/classes/support.cpp	/^	void support::replenish(){$/;"	f	class:mods::classes::support
 replenish	mods/classes/syndrome.cpp	/^		void syndrome::replenish(){$/;"	f	class:mods::classes::syndrome
 replenish	mods/intimidate.cpp	/^static std::deque<replenish_command> replenish;$/;"	m	namespace:mods::zone	file:
@@ -10832,8 +10832,8 @@ snake	spec_procs.cpp	/^SPECIAL(snake);$/;"	v
 snipe	mods/weapon.hpp	/^		static constexpr uint64_t snipe = (1 << 0);$/;"	m	struct:mods::weapon::mask
 snipe_tracking	mods/behaviour_tree_impl.hpp	/^			snipe_tracking = 1,$/;"	e	enum:mods::behaviour_tree_impl::type
 sniper	globals.cpp	/^INIT(mods::class_abilities::sniper);$/;"	v
-sniper	mods/classes/sniper.cpp	/^	sniper::sniper(){$/;"	f	class:mods::classes::sniper
-sniper	mods/classes/sniper.cpp	/^	sniper::sniper(player_ptr_t p){$/;"	f	class:mods::classes::sniper
+sniper	mods/classes/sniper.cpp	/^	sniper::sniper() {$/;"	f	class:mods::classes::sniper
+sniper	mods/classes/sniper.cpp	/^	sniper::sniper(player_ptr_t p) {$/;"	f	class:mods::classes::sniper
 sniper	mods/classes/sniper.cpp	/^namespace mods::class_abilities::sniper {$/;"	n	class:mods::class_abilities	file:
 sniper	mods/classes/sniper.hpp	/^	struct sniper : base {$/;"	s	namespace:mods::classes
 sniper	mods/orm/sniper.hpp	/^		sniper() : id(0) { this->init(); loaded = 0; }$/;"	f	struct:mods::orm::sniper
@@ -11145,7 +11145,7 @@ tag	structs.h	/^		std::string tag;$/;"	m	struct:obj_data
 tags	mods/catch2.hpp	/^    StringRef tags;$/;"	m	struct:Catch::NameAndTags
 tail	db.h	/^	struct reset_q_element *tail;$/;"	m	struct:reset_q_type	typeref:struct:reset_q_type::reset_q_element
 target_dead	mods/values.hpp	/^			static inline void target_dead(T& p){$/;"	f	namespace:mods::values::msg
-target_died	mods/classes/sniper.cpp	/^	void sniper::target_died(uuid_t target){$/;"	f	class:mods::classes::sniper
+target_died	mods/classes/sniper.cpp	/^	void sniper::target_died(uuid_t target) {$/;"	f	class:mods::classes::sniper
 target_practice	globals.cpp	/^INIT(mods::target_practice);$/;"	v
 target_practice	mods/target-practice.cpp	/^namespace mods::target_practice {$/;"	n	class:mods	file:
 target_practice	mods/target-practice.hpp	/^namespace mods::target_practice {$/;"	n	class:mods
@@ -11619,7 +11619,7 @@ write_to_q	comm.cpp	/^void	write_to_q(std::string_view txt, mods::descriptor_dat
 xEOF	telnet.h	61;"	d
 xoroshiro	mods/rand.cpp	/^namespace mods::rand::xoroshiro {$/;"	n	class:mods::rand	file:
 xray_shot	mods/classes/ghost.cpp	/^	std::pair<int16_t,std::string> ghost::xray_shot(){$/;"	f	class:mods::classes::ghost
-xray_shot	mods/classes/sniper.cpp	/^	std::tuple<bool,std::string> sniper::xray_shot(){$/;"	f	class:mods::classes::sniper
+xray_shot	mods/classes/sniper.cpp	/^	std::tuple<bool,std::string> sniper::xray_shot() {$/;"	f	class:mods::classes::sniper
 xray_shot_levels_t	mods/orm/striker.hpp	/^		enum xray_shot_levels_t {$/;"	g	struct:mods::orm::striker
 yaml	mods/orm/inventory.cpp	/^		namespace yaml {$/;"	n	namespace:mods::orm::inventory::lmdb	file:
 yaml	mods/weapon.hpp	/^	namespace yaml {$/;"	n	namespace:mods::weapon
