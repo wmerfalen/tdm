@@ -20,3 +20,6 @@ callgrind.out*
 data/
 lib/lock.mdb
 .run
+
+database-errors.log
+
