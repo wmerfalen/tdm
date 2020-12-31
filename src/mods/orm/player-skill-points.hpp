@@ -72,6 +72,7 @@ namespace mods::orm {
 		uint64_t player_id;
 	};
 	std::tuple<int16_t,std::string> load_player_skill_data(player_ptr_t& player, std::map<uint32_t,uint16_t>* data);
+	std::tuple<int16_t,std::string> sync_player_with_class_skills(const uint64_t& player_id, std::string_view player_class);
 };
 
 #endif

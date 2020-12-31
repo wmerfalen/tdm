@@ -63,37 +63,37 @@ namespace mods {
 		constexpr static uint8_t CI_INJ = 0;
 		/** we simply give the user the affect, and in the point update we remove that when it needs to be removed */
 		template <typename T>
-			void queue_affect_on_room(T affects,room_rnum room_id){
-				auto people = mods::globals::get_room_list(room_id);
-				if(people.size() == 0){
-					return;
-				}
-				for(auto & player : people){
-					mods::affects::affect_player({affect_t::BLIND,affect_t::DISORIENT},player);
-				}
+		void queue_affect_on_room(T affects,room_rnum room_id) {
+			auto people = mods::globals::get_room_list(room_id);
+			if(people.size() == 0) {
+				return;
 			}
+			for(auto& player : people) {
+				mods::affects::affect_player({affect_t::BLIND,affect_t::DISORIENT},player);
+			}
+		}
 #define QUEUE_TEXTURE_REMOVAL(t_texture,r_room_id) queue_remove_texture(40,r_room_id,room_data::texture_type_t::t_texture);
-		void queue_remove_texture(uint64_t ticks_in_future,room_rnum& room_id,room_data::texture_type_t texture){
+		void queue_remove_texture(uint64_t ticks_in_future,room_rnum& room_id,room_data::texture_type_t texture) {
 			/** TODO: calculate blast radius to remove smoke textures from those rooms */
 			mods::globals::defer_queue->detexturize_room(
-					ticks_in_future,
-					room_id,
-					texture
-					);
+			    ticks_in_future,
+			    room_id,
+			    texture
+			);
 		}
-		void propagate_chemical_blast(room_rnum& room_id,obj_ptr_t device){
+		void propagate_chemical_blast(room_rnum& room_id,obj_ptr_t device) {
 			/** TODO: fill this function */
 			QUEUE_TEXTURE_REMOVAL(HAZARDOUS_SMOKE,room_id);
 		}
-		void propagate_chemical_blast(room_rnum& room_id,obj_ptr_t device,std::size_t depth){
+		void propagate_chemical_blast(room_rnum& room_id,obj_ptr_t device,std::size_t depth) {
 			/** TODO: fill this function */
 			QUEUE_TEXTURE_REMOVAL(HAZARDOUS_SMOKE,room_id);
-			for(auto &player : mods::globals::get_room_list(room_id)){
+			for(auto& player : mods::globals::get_room_list(room_id)) {
 				player->sendln("Propagating chemblast " + std::to_string((1.0) * (depth / 3.0)));
 			}
 		}
-		void emp_damage(room_rnum& room_id,obj_ptr_t object){
-			if(mods::rooms::is_peaceful(room_id)){
+		void emp_damage(room_rnum& room_id,obj_ptr_t object) {
+			if(mods::rooms::is_peaceful(room_id)) {
 				return;
 			}
 			/** TODO: fill this function */
@@ -138,32 +138,32 @@ namespace mods {
 			 }
 			 }
 			 */
-		int grenade_damage(player_ptr_t victim,obj_ptr_t projectile){
+		int grenade_damage(player_ptr_t victim,obj_ptr_t projectile) {
 			return explosive_damage(victim,projectile);
 		}
-		int fire_damage(player_ptr_t victim,obj_ptr_t projectile){
+		int fire_damage(player_ptr_t victim,obj_ptr_t projectile) {
 			victim->sendln("The room catches fire!");
 			return explosive_damage(victim,projectile);
 		}
-		void disable_electronics(room_rnum room){
+		void disable_electronics(room_rnum room) {
 			/** TODO: disable electronics */
 		}
-		void smoke_room(room_rnum room){
+		void smoke_room(room_rnum room) {
 			/** TODO: cause limited visibility and smoke texture */
 		}
-		void blindness_clears_up(player_ptr_t victim){
+		void blindness_clears_up(player_ptr_t victim) {
 			victim->remove_affect(AFF_BLIND);
 			victim->sendln("You take the world in as the effects of your blindness wear off.");
 		}
-		void disorient_clears_up(player_ptr_t victim){
+		void disorient_clears_up(player_ptr_t victim) {
 			victim->remove_affect(AFF_DISORIENT);
 			victim->sendln("The world around you starts to focus. You are no longer disoriented.");
 		}
-		void blind_target(player_ptr_t victim){
+		void blind_target(player_ptr_t victim) {
 			victim->affect(AFF_BLIND);
 			victim->sendln("You are blinded.");
 		}
-		void disorient_person(player_ptr_t victim){
+		void disorient_person(player_ptr_t victim) {
 			victim->affect(AFF_DISORIENT);
 			victim->sendln("You become disoriented.");
 		}
@@ -177,27 +177,27 @@ namespace mods {
 			int damage;
 			int critical;
 			bool injured;
-			explosive_damage_t() : 
-			chemical(0),
-			fire(0),
-			radiation(0),
-			electric(0),
-			armor_pen(0),
-			total(0),
-			damage(0),
-			critical(0),
-			 injured(false){}
+			explosive_damage_t() :
+				chemical(0),
+				fire(0),
+				radiation(0),
+				electric(0),
+				armor_pen(0),
+				total(0),
+				damage(0),
+				critical(0),
+				injured(false) {}
 		};
-		explosive_damage_t calculate_explosive_damage(player_ptr_t victim, obj_ptr_t item){
+		explosive_damage_t calculate_explosive_damage(player_ptr_t victim, obj_ptr_t item) {
 			explosive_damage_t e;
 
-			auto & attr = item->explosive()->attributes;
-			if(attr->alternate_explosion_type.compare("SCAN") == 0){
+			auto& attr = item->explosive()->attributes;
+			if(attr->alternate_explosion_type.compare("SCAN") == 0) {
 				return e;
 			}
 			uint8_t chance = attr->chance_to_injure;
 			uint8_t critical_chance = attr->critical_chance;
-			if(mods::skills::player_can(victim,skill_t::INJURE_RESISTANCE)){
+			if(mods::skills::player_can(victim,"INJURE_RESISTANCE")) {
 				chance -= INJURE_RESISTANCE_SKILL_MODIFIER();
 			}
 			e.injured = mods::injure::do_injure_roll(chance);
@@ -207,23 +207,23 @@ namespace mods {
 			/** TODO handle loudness type */
 			e.damage = dice(attr->damage_dice_count,attr->damage_dice_sides);
 
-			if(dice(1,100) <= critical_chance){
+			if(dice(1,100) <= critical_chance) {
 				e.critical = e.damage * EXPLOSIVE_CRITICAL_MULTIPLIER();
 			}
 
-			if(attr->chemical_damage_dice_count){
+			if(attr->chemical_damage_dice_count) {
 				e.chemical = dice(attr->chemical_damage_dice_count,attr->chemical_damage_dice_sides);
 			}
-			if(attr->incendiary_damage_dice_count){
+			if(attr->incendiary_damage_dice_count) {
 				e.fire = dice(attr->incendiary_damage_dice_count,attr->incendiary_damage_dice_sides);
 			}
-			if(attr->radiation_damage_dice_count){
+			if(attr->radiation_damage_dice_count) {
 				e.radiation = dice(attr->radiation_damage_dice_count,attr->radiation_damage_dice_sides);
 			}
-			if(attr->electric_damage_dice_count){
+			if(attr->electric_damage_dice_count) {
 				e.electric = dice(attr->electric_damage_dice_count,attr->electric_damage_dice_sides);
 			}
-			if(attr->armor_penetration_damage_dice_count){
+			if(attr->armor_penetration_damage_dice_count) {
 				e.armor_pen = dice(attr->armor_penetration_damage_dice_count,attr->armor_penetration_damage_dice_sides);
 			}
 
@@ -231,20 +231,20 @@ namespace mods {
 		}
 
 		void perform_blast_radius(
-				room_rnum room_id,
-				std::size_t blast_radius,
-				obj_ptr_t device,
-				uuid_t player_uuid) {
-			if(mods::rooms::is_peaceful(room_id)){
+		    room_rnum room_id,
+		    std::size_t blast_radius,
+		    obj_ptr_t device,
+		    uuid_t player_uuid) {
+			if(mods::rooms::is_peaceful(room_id)) {
 				return;
 			}
 			pbr_debug("perform blast radius entry");
 			auto current_room = room_id;
 			auto type = device->explosive()->type;
-			for(auto & dir : world[room_id].directions()){
+			for(auto& dir : world[room_id].directions()) {
 				current_room = room_id;
 				pbr_debug("direction: (" << dirstr(dir) << ") roomid(" << room_id << ")");
-				for(std::size_t blast_count = 0; blast_count < blast_radius;blast_count++){
+				for(std::size_t blast_count = 0; blast_count < blast_radius; blast_count++) {
 					auto dir_option = world[current_room].dir_option[dir];
 					current_room = dir_option->to_room;
 					float damage_multiplier = 0;
@@ -254,27 +254,28 @@ namespace mods {
 					 * It's okay to not have a defaulted case since the
 					 * following switch deals only with room textures
 					 */
-					switch(type){
-						default: break;
+					switch(type) {
+						default:
+							break;
 						case mw_explosive::EXPLOSIVE_NONE:
-							 log("SYSERR: EXPLOSIVE_NONE specified in perform_blast_radius");
-							 return;
+							log("SYSERR: EXPLOSIVE_NONE specified in perform_blast_radius");
+							return;
 						case mw_explosive::REMOTE_CHEMICAL:
-							 QUEUE_TEXTURE_REMOVAL(HAZARDOUS_SMOKE,current_room);
-							 break;
+							QUEUE_TEXTURE_REMOVAL(HAZARDOUS_SMOKE,current_room);
+							break;
 						case mw_explosive::INCENDIARY_GRENADE:
-							 mods::rooms::start_fire_dissolver(current_room);
-							 break;
+							mods::rooms::start_fire_dissolver(current_room);
+							break;
 						case mw_explosive::EMP_GRENADE:
-							 disable_electronics(current_room);
-							 QUEUE_TEXTURE_REMOVAL(EMP,current_room);
-							 break;
+							disable_electronics(current_room);
+							QUEUE_TEXTURE_REMOVAL(EMP,current_room);
+							break;
 						case mw_explosive::SMOKE_GRENADE:
-							 QUEUE_TEXTURE_REMOVAL(NON_HAZARDOUS_SMOKE,current_room);
-							 break;
+							QUEUE_TEXTURE_REMOVAL(NON_HAZARDOUS_SMOKE,current_room);
+							break;
 					}
-					for(auto & person : mods::globals::get_room_list(current_room)){
-						switch(type){
+					for(auto& person : mods::globals::get_room_list(current_room)) {
+						switch(type) {
 							case mw_explosive::REMOTE_CHEMICAL:
 								mods::projectile::propagate_chemical_blast(current_room,device,blast_count);
 								break;
@@ -315,17 +316,17 @@ namespace mods {
 			}
 			obj_from_room(device);
 		}
-		int explosive_damage(player_ptr_t victim, obj_ptr_t item){
-			if(mods::rooms::is_peaceful(victim->room())){
+		int explosive_damage(player_ptr_t victim, obj_ptr_t item) {
+			if(mods::rooms::is_peaceful(victim->room())) {
 				std::cerr << red_str("Not dispatching explosive_damage to peaceful room: ") << victim->room() << "\n";
 				return 0;
 			}
-			auto & attr = item->explosive()->attributes;
-			if(attr->alternate_explosion_type.compare("SCAN") == 0){
+			auto& attr = item->explosive()->attributes;
+			if(attr->alternate_explosion_type.compare("SCAN") == 0) {
 				return 0;
 			}
 			auto e = calculate_explosive_damage(victim,item);
-			if(e.injured){
+			if(e.injured) {
 				mods::injure::injure_player(victim);
 				msg::youre_injured(victim);
 			}
@@ -334,28 +335,28 @@ namespace mods {
 			/** TODO handle loudness type */
 			int damage = e.damage;
 
-			if(e.critical){
+			if(e.critical) {
 				damage += e.critical;
 				victim->send("{red}*** [CRITICAL] ***{/red} -- ");
 			}
 
-			if(e.chemical){
+			if(e.chemical) {
 				damage += e.chemical;
 				victim->sendln("A chemical weapons explosion causes you to take damage!");
 			}
-			if(e.fire){
+			if(e.fire) {
 				damage += e.fire;
 				victim->sendln("An incendiary explosion causes you to take damage!");
 			}
-			if(e.radiation){
+			if(e.radiation) {
 				damage += e.radiation;
 				victim->sendln("A radiation explosion causes you to take damage!");
 			}
-			if(e.electric){
+			if(e.electric) {
 				damage += e.electric;
 				victim->sendln("An electric explosion causes you to take damage!");
 			}
-			if(e.armor_pen){
+			if(e.armor_pen) {
 				damage += e.armor_pen;
 				victim->sendln("The explosion shreds through your armor!");
 			}
@@ -363,32 +364,32 @@ namespace mods {
 			mods::weapons::damage_types::deal_hp_damage(victim,damage);
 			return damage;
 		}
-		int chemical_damage(player_ptr_t victim, obj_ptr_t item){
+		int chemical_damage(player_ptr_t victim, obj_ptr_t item) {
 			return explosive_damage(victim,item);
 		}
 
-		void disorient_target(player_ptr_t player){
+		void disorient_target(player_ptr_t player) {
 			disorient_person(player);
 			player->sendln("You become extremely disoriented!");
 		}
-		void explode(room_rnum room_id,uuid_t object_uuid,uuid_t player_uuid){
-			if(room_id >= world.size()){
+		void explode(room_rnum room_id,uuid_t object_uuid,uuid_t player_uuid) {
+			if(room_id >= world.size()) {
 				log("[error]: mods::projectile::explode received room_id greater than world.size()");
 				return;
 			}
-			if(mods::rooms::is_peaceful(room_id)){
+			if(mods::rooms::is_peaceful(room_id)) {
 				return;
 			}
 			explode_debug("explode, calling optr");
 			auto opt_object = optr_opt(object_uuid);
-			if(!opt_object.has_value()){
+			if(!opt_object.has_value()) {
 				log("[error]: mods::projectile::explode received invalid object to blow up");
 				return;
 			}
 			explode_debug("opt_object has a value");
 			auto object = std::move(opt_object.value());
 			if(object->has_explosive() == false || object->explosive()->attributes == nullptr ||
-					object->explosive()->type == mw_explosive::EXPLOSIVE_NONE){
+			        object->explosive()->type == mw_explosive::EXPLOSIVE_NONE) {
 				log("[error]: mods::projectile::explode. explosive integrity check failed");
 				return;
 			}
@@ -397,8 +398,8 @@ namespace mods {
 			explode_debug("grabbed blast radius... (" << blast_radius << ")");
 			bool does_damage = false;
 
-			switch(type){
-				default: 
+			switch(type) {
+				default:
 					log("SYSERR: Invalid explosive type(%d) in %s:%d",type,__FILE__,__LINE__);
 					return;
 				case mw_explosive::REMOTE_EXPLOSIVE:
@@ -439,15 +440,15 @@ namespace mods {
 					break;
 			}
 
-			if(type == mw_explosive::SENSOR_GRENADE){
+			if(type == mw_explosive::SENSOR_GRENADE) {
 				mods::sensor_grenade::handle_explosion(object_uuid,player_uuid,room_id,object->from_direction);
 				mods::globals::dispose_object(object_uuid);
 				return;
 			}
 
-			for(auto & person : mods::globals::get_room_list(room_id)) {
-				switch(type){
-					default: 
+			for(auto& person : mods::globals::get_room_list(room_id)) {
+				switch(type) {
+					default:
 						log("SYSERR: Invalid explosive type(%d) in %s:%d",type,__FILE__,__LINE__);
 						return;
 					case mw_explosive::REMOTE_EXPLOSIVE:
@@ -476,35 +477,37 @@ namespace mods {
 						mods::flashbang::affect_room(room_id,object);
 						break;
 				}
-				if(does_damage){
+				if(does_damage) {
 					mods::injure::explosive::handle_crit_injure(object,person);
 				}
 				explode_debug("gt_room_list(" << room_id << ") for looping through (" <<
-						mods::globals::get_room_list(room_id).size() << ") tenants"
-						);
+				              mods::globals::get_room_list(room_id).size() << ") tenants"
+				             );
 			}
-			if(type == mw_explosive::FLASHBANG_GRENADE){
-				queue_on_room( {AFF(BLIND),AFF(DISORIENT)}, room_id);
+			if(type == mw_explosive::FLASHBANG_GRENADE) {
+				queue_on_room({AFF(BLIND),AFF(DISORIENT)}, room_id);
 			}
-			if(type == mw_explosive::REMOTE_CHEMICAL){
-				queue_on_room( {AFF(DISORIENT),AFF(POISON)}, room_id);
+			if(type == mw_explosive::REMOTE_CHEMICAL) {
+				queue_on_room({AFF(DISORIENT),AFF(POISON)}, room_id);
 			}
 			explode_debug("calling perform blast radius");
 			mods::projectile::perform_blast_radius(room_id,blast_radius,object,player_uuid);
 			mods::globals::dispose_object(object_uuid);
 		}
 		/**
-		 * TODO: place the grenade on the floor so that some crazy bastards can potentially throw it back, 
+		 * TODO: place the grenade on the floor so that some crazy bastards can potentially throw it back,
 		 * but moreso that the user can atleast see it and do something about it
 		 */
-		int to_direction(const std::string & str){
+		int to_direction(const std::string& str) {
 			return mods::util::to_direction<const std::string&>(str);
 		}
-		rooms_away_t calculate_shrapnel_rooms(room_rnum room, obj_ptr_t held_object,std::size_t blast_radius){
+		rooms_away_t calculate_shrapnel_rooms(room_rnum room, obj_ptr_t held_object,std::size_t blast_radius) {
 			rooms_away_t rooms;
-			for(auto & direction : {NORTH, SOUTH, EAST, WEST, UP, DOWN}){
+			for(auto& direction : {
+			            NORTH, SOUTH, EAST, WEST, UP, DOWN
+			        }) {
 				room_rnum r = resolve_room(room, direction,blast_radius); /** TODO: use blast_radius as dynamic var */
-				if(r == room){
+				if(r == room) {
 					rooms[direction] = std::nullopt;
 					continue;
 				}
@@ -521,12 +524,12 @@ namespace mods {
 		 * @param prefix
 		 * @param suffix
 		 *
-		 * @return 
+		 * @return
 		 */
 		std::string todirstr(int direction,bool prefix,bool suffix) {
 			std::string pre = prefix ? " " : "";
 			std::string suf = suffix ? " " : "";
-			switch(direction){
+			switch(direction) {
 				case NORTH:
 					return pre + "to the north" + suf;
 				case SOUTH:
@@ -539,7 +542,8 @@ namespace mods {
 					return pre + "above you" + suf;
 				case DOWN:
 					return pre + "below you" + suf;
-				default: return "<?>";
+				default:
+					return "<?>";
 			}
 		}
 
@@ -550,11 +554,11 @@ namespace mods {
 		 * @param prefix
 		 * @param suffix
 		 *
-		 * @return 
+		 * @return
 		 */
 		std::string fromdirstr(int direction,bool prefix, bool suffix) {
 			std::string f = std::string(prefix ? " " : "") + "from ";
-			switch(direction){
+			switch(direction) {
 				case NORTH:
 					return f + "the north" + (suffix ? " " : "");
 				case SOUTH:
@@ -586,9 +590,9 @@ namespace mods {
 		 * @param depth
 		 * @param object
 		 *
-		 * @return 
+		 * @return
 		 */
-		int travel_to(room_rnum from, int direction, std::size_t depth, std::shared_ptr<obj_data> object){
+		int travel_to(room_rnum from, int direction, std::size_t depth, std::shared_ptr<obj_data> object) {
 			room_rnum room_id = resolve_room(from,direction,depth);
 			obj_to_room(object,room_id);
 			object->from_direction = OPPOSITE_DIR(direction);
@@ -602,7 +606,7 @@ namespace mods {
 		 * @param direction
 		 * @param depth
 		 *
-		 * @return 
+		 * @return
 		 */
 		room_rnum resolve_room(room_rnum source_room,int direction,std::size_t depth) {
 			room_rnum room_id = source_room;
@@ -614,14 +618,14 @@ namespace mods {
 					return room_id;
 				}
 				if((EXIT_FLAGGED(room_dir, EX_CLOSED) || EXIT_FLAGGED(room_dir,EX_REINFORCED))
-						&& !(EXIT_FLAGGED(room_dir,EX_BREACHED))) {
+				        && !(EXIT_FLAGGED(room_dir,EX_BREACHED))) {
 					break;
 				}
 
 				auto previous_room_id = room_id;
 				room_id = room_dir->to_room;
 
-				if(room_id == NOWHERE){
+				if(room_id == NOWHERE) {
 					return previous_room_id;
 				}
 				room_dir = world[room_id].dir_option[direction];
@@ -641,9 +645,9 @@ namespace mods {
 		void explode_in_future(int room_id, int ticks, uuid_t object_uuid,uuid_t player_uuid) {
 			eif_debug("explode_in_future uuid: " << object_uuid);
 			mods::globals::defer_queue->push(ticks, [room_id,object_uuid,player_uuid]() {
-					eif_debug("[defer_queue] callback:: explode_in_future uuid: " << object_uuid << " room_id:" << room_id);
-					explode(room_id,object_uuid,player_uuid);
-					});
+				eif_debug("[defer_queue] callback:: explode_in_future uuid: " << object_uuid << " room_id:" << room_id);
+				explode(room_id,object_uuid,player_uuid);
+			});
 		}
 
 		/**
@@ -656,11 +660,11 @@ namespace mods {
 		 * @param verb
 		 */
 		void throw_object(player_ptr_t& player, int direction, std::size_t depth,
-				std::shared_ptr<obj_data>& object, std::string_view verb) {
+		                  std::shared_ptr<obj_data>& object, std::string_view verb) {
 
 			{
 				room_rnum room_id = resolve_room(player->room(),direction,depth);
-				if(mods::rooms::is_peaceful(room_id)){
+				if(mods::rooms::is_peaceful(room_id)) {
 					player->sendln("Target room is in the D.M.Z.. Your item has been destroyed.");
 					mods::globals::dispose_object(object->uuid);
 					return;
@@ -703,16 +707,16 @@ namespace mods {
 					break;
 			}
 			send_to_room_except(player->room(), player, "%s %ss a %s%s!\r\n",
-					player->ucname().c_str(), 
-					verb.data(),
-					object->short_description.c_str(),
-					str_dir.c_str());
+			                    player->ucname().c_str(),
+			                    verb.data(),
+			                    object->short_description.c_str(),
+			                    str_dir.c_str());
 			player->send("You %s a %s %s!\r\n", verb.data(), object->name.c_str(),str_dir.c_str());
 			player->unequip(WEAR_HOLD);
 			auto room_id = travel_to(player->room(), direction, depth, object);
 			explode_in_future(room_id, ticks, object->uuid,player->uuid());
 		}
-		int deploy_shrapnel_at(player_ptr_t& victim, int dice_count,int dice_sides,int from_direction){
+		int deploy_shrapnel_at(player_ptr_t& victim, int dice_count,int dice_sides,int from_direction) {
 			int damage = dice(dice_count,dice_sides);
 			victim->hp() -= damage;
 			return damage;

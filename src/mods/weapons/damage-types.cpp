@@ -317,17 +317,17 @@ namespace mods::weapons::damage_types {
 
 	bool attack_injures(player_ptr_t& player,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t feedback) {
 		auto chance = weapon->rifle()->attributes->chance_to_injure;
-		if(mods::skills::player_can(player,skill_t::INCREASED_INJURE_CHANCE)) {
+		if(mods::skills::player_can(player,"INCREASED_INJURE_CHANCE")) {
 			chance += CHANCE_TO_INJURE_SKILL_MODIFIER();
 		}
-		if(mods::skills::player_can(victim,skill_t::INJURE_RESISTANCE)) {
+		if(mods::skills::player_can(victim,"INJURE_RESISTANCE")) {
 			chance -= INJURE_RESISTANCE_SKILL_MODIFIER();
 		}
 		return mods::injure::do_injure_roll(chance);
 	}
 
 	void handle_assault_rifle_shrapnel_skill(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t& feedback) {
-		if(mods::skills::player_can(attacker,skill_t::ASSAULT_RIFLE_SHRAPNEL) &&
+		if(mods::skills::player_can(attacker,"ASSAULT_RIFLE_SHRAPNEL") &&
 		        dice(1,100) <= ASSAULT_RIFLE_SHRAPNEL_SKILL_CHANCE()) {
 			feedback_t shrapnel;
 			shrapnel.hits = 1;
@@ -368,7 +368,7 @@ namespace mods::weapons::damage_types {
 	}
 	uint8_t calculate_spray_chance(player_ptr_t& player) {
 		uint8_t spray_chance = mods::values::SPRAY_CHANCE();
-		if(mods::skills::player_can(player,skill_t::SPRAY_CHANCE)) {
+		if(mods::skills::player_can(player,"SPRAY_CHANCE")) {
 			spray_chance += mods::values::SPRAY_CHANCE_SKILL_MODIFIER();
 		}
 		return spray_chance;
@@ -516,7 +516,7 @@ namespace mods::weapons::damage_types {
 					feedback.damage_event = de::YOU_MISSED_YOUR_TARGET_EVENT;
 					player->damage_event(feedback);
 				} else if(dam > 0) {
-					if(mods::skills::player_can(victim,skill_t::MUNITIONS_REFLECTOR) && dice(1,100) <= 4) {
+					if(mods::skills::player_can(victim,"MUNITIONS_REFLECTOR") && dice(1,100) <= 4) {
 						reflect_munitions(player,victim,dam,OPPOSITE_DIR(direction));
 					}
 					feedback.hits++;
@@ -889,7 +889,7 @@ namespace mods::weapons::damage_types {
 		}
 
 		/** calculate headshot */
-		auto headshot_roll = dice(1,100) + (mods::skills::player_can(player,skill_t::HEADSHOT_CHANCE) ? mods::values::HEADSHOT_SKILL_MODIFIER() : 0);
+		auto headshot_roll = dice(1,100) + (mods::skills::player_can(player,"HEADSHOT_CHANCE") ? mods::values::HEADSHOT_SKILL_MODIFIER() : 0);
 		if(headshot_roll >= 95) {
 			/** TODO: evaluate damage if wearing super strong headgear */
 			int headshot_damage = victim->hp() / HEADSHOT_DIVISOR();

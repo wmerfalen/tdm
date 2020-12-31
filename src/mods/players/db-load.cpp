@@ -7,6 +7,7 @@
 #include "../pq.hpp"
 #include "../sql.hpp"
 #include "../orm/player-skill-points.hpp"
+#include "../orm/skill-trees.hpp"
 
 #define __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
@@ -21,6 +22,41 @@
 namespace mods::players::db_load {
 	static reporter_t report_function;
 	static bool reporter_function_set = false;
+
+	void sync_player_with_class_skills(const uint64_t& player_id,const std::string& player_class) {
+		mods::orm::skill_trees tree;
+		std::string pc = "";
+		for(auto ch : player_class) {
+			pc += std::tolower(ch);
+		}
+		auto r = tree.load_by_class(pc);
+		mods::orm::player_skill_points ps;
+		ps.rows.clear();
+		ps.load_by_player(player_id);
+		bool found = false;
+		std::map<uint32_t,uint16_t> missing;
+		for(const auto& row : tree.rows) {
+			found = false;
+			for(const auto& prow : ps.rows) {
+				if(prow.skill_id == row.id) {
+					std::cerr << green_str("Found skill id: ") << prow.skill_id << "\n";
+					found = true;
+					break;
+				}
+			}
+			if(!found) {
+				std::cerr << red_str("Missing player skill id for player: ") << player_id << ", skill: '" << row.skill_name << "'\n";
+				missing[row.id] = 0;
+			}
+		}
+		if(missing.size()) {
+			ps.rows.clear();
+			std::cerr << red_str("Player has missing skill tree members. Populating...") << "\n";
+			ps.populate(player_id,missing);
+			ps.save();
+			std::cerr << green_str("Remedied.");
+		}
+	}
 
 	void save(player_ptr_t& player_ptr) {
 		auto ch = player_ptr->cd();

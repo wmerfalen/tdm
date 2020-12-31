@@ -14,6 +14,7 @@ namespace mods::players::db_load {
 	int16_t load_char_pkid(player_ptr_t& player);
 	void feed_player_inventory(player_ptr_t& player);
 	int16_t delete_char(player_ptr_t&);
+	void sync_player_with_class_skills(const uint64_t& player_id,const std::string& player_class);
 };
 
 #endif

@@ -1,5 +1,10 @@
 # Inventory of features
 
+# compound sql statements
+	- it is now possible to load/delete rows using chained and/or logic
+		- source: mods/orm/util.hpp
+		- new overloaded template functions: `load_where`, `delete_where`
+
 # leveling up
 	- Experience allows you to advance a level
 		- Experience is obtained by completing contracts and killing enemies

@@ -1422,17 +1422,17 @@ bool perform_wear_with_confirmation(player_ptr_t& player, obj_ptr_t& in_obj, int
 	if(obj->has_armor()) {
 		auto classification = obj->armor()->attributes->classification_enum;
 		if(classification == mods::yaml::armor_classification_type_t::BASIC &&
-		        !mods::skills::player_can(player,skill_t::BASIC_ARMOR)) {
+		        !mods::skills::player_can(player,"basic-armor")) {
 			act("You can't wear $p until you master the {yel}BASIC_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
 			return 0;
 		}
 		if(classification == mods::yaml::armor_classification_type_t::ADVANCED &&
-		        !mods::skills::player_can(player,skill_t::ADVANCED_ARMOR)) {
+		        !mods::skills::player_can(player,"advanced-armor")) {
 			act("You can't wear $p until you master the {yel}ADVANCED_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
 			return 0;
 		}
 		if(classification == mods::yaml::armor_classification_type_t::ELITE &&
-		        !mods::skills::player_can(player,skill_t::ELITE_ARMOR)) {
+		        !mods::skills::player_can(player,"elite-armor")) {
 			act("You can't wear $p until you master the {yel}ELITE_ARMOR{/yel} skill first.", FALSE, ch, obj, 0, TO_CHAR);
 			return 0;
 		}
