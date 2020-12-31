@@ -5,7 +5,6 @@
 #include "string.hpp"
 #include <unordered_map>
 namespace mods::skills {
-	bool player_can(player_ptr_t& player,int e_name);
 	bool player_can(player_ptr_t& player,std::string_view);
 	int update_schema_for_player(std::string player_name);
 };
