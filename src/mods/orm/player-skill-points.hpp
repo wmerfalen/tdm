@@ -59,14 +59,13 @@ namespace mods::orm {
 
 		strmap_t export_class();
 		int16_t save();
-		std::tuple<int16_t,std::string> update();
 
 		std::tuple<int16_t,std::string> delete_by_player(const uint64_t& player_id);
 		std::tuple<int16_t,std::string> load_by_player(const uint64_t& player_id);
 
 		std::vector<player_skill_points_record_t> rows;
 		bool loaded;
-		/** mainly used for update */
+
 		uint64_t primary_key_id;
 		uint32_t skill_id;
 		uint16_t skill_points;

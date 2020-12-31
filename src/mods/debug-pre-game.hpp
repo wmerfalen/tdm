@@ -93,6 +93,9 @@ namespace mods::debug::pre_game {
 #ifdef __MENTOC_RUN_MOB_ROAM_ORM_PREGAME__
 		{
 			mods::orm::mob_roam mr;
+			mr.get_compound_list();
+			mr.delete_foobar_profile();
+			mr.get_compound_list();
 			std::vector<room_vnum> room_list;
 			uint16_t max_loops = 10;
 			for(auto& room : world) {
@@ -175,32 +178,6 @@ namespace mods::debug::pre_game {
 #endif
 
 
-
-#ifdef __MENTOC_RUN_PREGAME_SKILL_CODE__
-		int count = mods::skills::update_schema_for_player("far");
-		DD("Number of fields updated: " << count);
-		return 1;
-		mods::skills::init_player_levels("<fiz>");
-
-		//mods::skills::load_player_levels("<fiz>");
-		put_player_map("<fiz>","test1", {
-			{"foo","bar"},
-			{"baz","buz"}
-		}
-		              );
-		std::map<std::string,std::string> values;
-		get_player_map("<fiz>","test1",values);
-		for(auto pair : values) {
-			DD("map-fetched: '" << pair.first << "'->'" << pair.second << "'");
-		}
-		std::vector<std::string> vector_vals = {"empathy","apathy","ceased-to-be","","flower"},
-		                         fetched;
-		put_player_vector("<fiz>","test1",vector_vals);
-		get_player_vector("<fiz>","test1",fetched);
-		for(auto v : fetched) {
-			DD("vector-fetched: '" << v << "'");
-		}
-#endif
 
 #ifndef __MENTOC_RUN_PREGAME__
 		return 1;

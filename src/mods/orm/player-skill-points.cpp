@@ -25,22 +25,6 @@ namespace mods::orm {
 	std::string player_skill_points::primary_key_value() {
 		return std::to_string(this->primary_key_id);
 	}
-	std::tuple<int16_t,std::string> player_skill_points::update() {
-		int16_t count = 0;
-		std::string message = "";
-		for(auto& record : this->rows) {
-			this->primary_key_id = record.id;
-			this->skill_id = record.skill_id;
-			this->skill_points = record.skill_points;
-			this->player_id = record.player_id;
-			auto r = mods::orm::util::update<player_skill_points,sql_compositor>(this);
-			if(!ORM_SUCCESS(r)) {
-				message += std::get<1>(r) + "\n";
-				std::cerr << red_str("Issue updating player_skill_points:'") << std::get<1>(r) << "'\n";
-			}
-		}
-		return {count,message};
-	}
 
 	void player_skill_points::populate(const uint64_t& player_id,const std::map<uint32_t,uint16_t>& data) {
 		for(const auto& pair : data) {
