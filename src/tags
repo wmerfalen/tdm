@@ -1980,26 +1980,26 @@ ITEM_ANTI_MAGIC_USER	structs.h	535;"	d
 ITEM_ANTI_NEUTRAL	structs.h	534;"	d
 ITEM_ANTI_THIEF	structs.h	537;"	d
 ITEM_ANTI_WARRIOR	structs.h	538;"	d
-ITEM_ARMOR	mods/item-types.hpp	659;"	d
+ITEM_ARMOR	mods/item-types.hpp	666;"	d
 ITEM_ARMOR	structs.h	488;"	d
-ITEM_ATTACHMENT	mods/item-types.hpp	658;"	d
+ITEM_ATTACHMENT	mods/item-types.hpp	665;"	d
 ITEM_ATTACHMENT	structs.h	487;"	d
 ITEM_BLESS	structs.h	531;"	d
 ITEM_BOAT	structs.h	476;"	d
-ITEM_CONSUMABLE	mods/item-types.hpp	660;"	d
+ITEM_CONSUMABLE	mods/item-types.hpp	667;"	d
 ITEM_CONSUMABLE	structs.h	489;"	d
-ITEM_CONTAINER	mods/item-types.hpp	662;"	d
+ITEM_CONTAINER	mods/item-types.hpp	669;"	d
 ITEM_CONTAINER	structs.h	491;"	d
 ITEM_CONTAINER_LEGACY	structs.h	469;"	d
 ITEM_DRINKCON	structs.h	471;"	d
-ITEM_DRONE	mods/item-types.hpp	655;"	d
+ITEM_DRONE	mods/item-types.hpp	662;"	d
 ITEM_DRONE	structs.h	484;"	d
-ITEM_EXPLOSIVE	mods/item-types.hpp	653;"	d
+ITEM_EXPLOSIVE	mods/item-types.hpp	660;"	d
 ITEM_EXPLOSIVE	structs.h	482;"	d
 ITEM_FIREWEAPON	structs.h	462;"	d
 ITEM_FOOD	structs.h	473;"	d
 ITEM_FOUNTAIN	structs.h	477;"	d
-ITEM_GADGET	mods/item-types.hpp	654;"	d
+ITEM_GADGET	mods/item-types.hpp	661;"	d
 ITEM_GADGET	structs.h	483;"	d
 ITEM_GLOW	structs.h	523;"	d
 ITEM_HUM	structs.h	524;"	d
@@ -2018,11 +2018,11 @@ ITEM_NOTE	structs.h	470;"	d
 ITEM_OTHER	structs.h	467;"	d
 ITEM_PEN	structs.h	475;"	d
 ITEM_POTION	structs.h	465;"	d
-ITEM_RIFLE	mods/item-types.hpp	652;"	d
+ITEM_RIFLE	mods/item-types.hpp	659;"	d
 ITEM_RIFLE	structs.h	481;"	d
 ITEM_SCROLL	structs.h	459;"	d
 ITEM_STAFF	structs.h	461;"	d
-ITEM_TRAP	mods/item-types.hpp	661;"	d
+ITEM_TRAP	mods/item-types.hpp	668;"	d
 ITEM_TRAP	structs.h	490;"	d
 ITEM_TRASH	structs.h	468;"	d
 ITEM_TREASURE	structs.h	464;"	d
@@ -2030,9 +2030,9 @@ ITEM_TYPE	mods/acl/config-parser.hpp	/^                enum ITEM_TYPE { ITEM_TYP
 ITEM_TYPE_COMMANDS	mods/acl/config-parser.hpp	/^                enum ITEM_TYPE { ITEM_TYPE_FILES, ITEM_TYPE_COMMANDS };$/;"	e	enum:mods::acl::FileParser::ITEM_TYPE
 ITEM_TYPE_FILES	mods/acl/config-parser.hpp	/^                enum ITEM_TYPE { ITEM_TYPE_FILES, ITEM_TYPE_COMMANDS };$/;"	e	enum:mods::acl::FileParser::ITEM_TYPE
 ITEM_WAND	structs.h	460;"	d
-ITEM_WEAPON	mods/item-types.hpp	656;"	d
+ITEM_WEAPON	mods/item-types.hpp	663;"	d
 ITEM_WEAPON	structs.h	485;"	d
-ITEM_WEAPON_ATTACHMENT	mods/item-types.hpp	657;"	d
+ITEM_WEAPON_ATTACHMENT	mods/item-types.hpp	664;"	d
 ITEM_WEAPON_ATTACHMENT	structs.h	486;"	d
 ITEM_WEAR_ABOUT	structs.h	507;"	d
 ITEM_WEAR_ARMS	structs.h	505;"	d
@@ -2410,34 +2410,35 @@ MENTOC_DRONE_MEMBERS_TUPLE	mods/item-types.hpp	228;"	d
 MENTOC_DRONE_TYPES_SEQUENCE	mods/item-types.hpp	224;"	d
 MENTOC_ELEMENTAL_TYPES_SEQUENCE	mods/item-types.hpp	167;"	d
 MENTOC_ENUM_TYPES_IMPL	mods/item-types.hpp	484;"	d
-MENTOC_EXAMPLE_ARMORS	mods/item-types.hpp	622;"	d
-MENTOC_EXAMPLE_ATTACHMENTS	mods/item-types.hpp	589;"	d
-MENTOC_EXAMPLE_CONSUMABLE	mods/item-types.hpp	632;"	d
-MENTOC_EXAMPLE_CONTAINERS	mods/item-types.hpp	568;"	d
-MENTOC_EXAMPLE_DRONES	mods/item-types.hpp	579;"	d
-MENTOC_EXAMPLE_EXPLOSIVES	mods/item-types.hpp	611;"	d
-MENTOC_EXAMPLE_GADGETS	mods/item-types.hpp	557;"	d
+MENTOC_EXAMPLE_ARMORS	mods/item-types.hpp	629;"	d
+MENTOC_EXAMPLE_ATTACHMENTS	mods/item-types.hpp	596;"	d
+MENTOC_EXAMPLE_CONSUMABLE	mods/item-types.hpp	639;"	d
+MENTOC_EXAMPLE_CONTAINERS	mods/item-types.hpp	575;"	d
+MENTOC_EXAMPLE_DRONES	mods/item-types.hpp	586;"	d
+MENTOC_EXAMPLE_EXPLOSIVES	mods/item-types.hpp	618;"	d
+MENTOC_EXAMPLE_GADGETS	mods/item-types.hpp	564;"	d
 MENTOC_EXAMPLE_IMPL	mods/item-types.hpp	495;"	d
-MENTOC_EXAMPLE_RIFLES	mods/item-types.hpp	600;"	d
-MENTOC_EXAMPLE_TRAP	mods/item-types.hpp	642;"	d
+MENTOC_EXAMPLE_RIFLES	mods/item-types.hpp	607;"	d
+MENTOC_EXAMPLE_TRAP	mods/item-types.hpp	649;"	d
 MENTOC_EXPLOSIVE_MEMBERS_TUPLE	mods/item-types.hpp	191;"	d
 MENTOC_EXPLOSIVE_TYPES_SEQUENCE	mods/item-types.hpp	177;"	d
 MENTOC_EX_CHECK	mods/intent.cpp	53;"	d	file:
 MENTOC_EX_CHECK	mods/intent.cpp	67;"	d	file:
-MENTOC_FEED_ARMOR	mods/item-types.hpp	618;"	d
-MENTOC_FEED_ATTACHMENT	mods/item-types.hpp	585;"	d
+MENTOC_FEED_ARMOR	mods/item-types.hpp	625;"	d
+MENTOC_FEED_ATTACHMENT	mods/item-types.hpp	592;"	d
 MENTOC_FEED_BASE_MEMBERS	mods/yaml.cpp	33;"	d	file:
-MENTOC_FEED_CONSUMABLE	mods/item-types.hpp	628;"	d
-MENTOC_FEED_CONTAINER	mods/item-types.hpp	564;"	d
-MENTOC_FEED_DRONE	mods/item-types.hpp	575;"	d
-MENTOC_FEED_EXPLOSIVE	mods/item-types.hpp	607;"	d
-MENTOC_FEED_GADGET	mods/item-types.hpp	553;"	d
-MENTOC_FEED_PARSE_ACTUAL_IMPL	mods/item-types.hpp	540;"	d
-MENTOC_FEED_PARSE_ALL_IMPL	mods/item-types.hpp	545;"	d
-MENTOC_FEED_REPORT_FIELD	mods/item-types.hpp	535;"	d
-MENTOC_FEED_REPORT_FIELD	mods/item-types.hpp	537;"	d
-MENTOC_FEED_RIFLE	mods/item-types.hpp	596;"	d
-MENTOC_FEED_TRAP	mods/item-types.hpp	638;"	d
+MENTOC_FEED_CONSUMABLE	mods/item-types.hpp	635;"	d
+MENTOC_FEED_CONTAINER	mods/item-types.hpp	571;"	d
+MENTOC_FEED_DEFAULTED_VALUE	mods/item-types.hpp	534;"	d
+MENTOC_FEED_DRONE	mods/item-types.hpp	582;"	d
+MENTOC_FEED_EXPLOSIVE	mods/item-types.hpp	614;"	d
+MENTOC_FEED_GADGET	mods/item-types.hpp	560;"	d
+MENTOC_FEED_PARSE_ACTUAL_IMPL	mods/item-types.hpp	541;"	d
+MENTOC_FEED_PARSE_ALL_IMPL	mods/item-types.hpp	552;"	d
+MENTOC_FEED_REPORT_FIELD	mods/item-types.hpp	536;"	d
+MENTOC_FEED_REPORT_FIELD	mods/item-types.hpp	538;"	d
+MENTOC_FEED_RIFLE	mods/item-types.hpp	603;"	d
+MENTOC_FEED_TRAP	mods/item-types.hpp	645;"	d
 MENTOC_FEED_TYPE_IMPL	mods/item-types.hpp	490;"	d
 MENTOC_FILE_EXISTS_PREAMBLE	mods/yaml.cpp	26;"	d	file:
 MENTOC_F_EXA	act.builder.cpp	472;"	d	file:
@@ -2548,7 +2549,7 @@ MENTOC_TO_STR	mods/weapon.hpp	276;"	d
 MENTOC_TRAP_MEMBERS_TUPLE	mods/item-types.hpp	407;"	d
 MENTOC_TRAP_TYPES_SEQUENCE	mods/item-types.hpp	404;"	d
 MENTOC_TYPE	mods/builder.cpp	3779;"	d	file:
-MENTOC_TYPE_LIST_IMPL	mods/item-types.hpp	715;"	d
+MENTOC_TYPE_LIST_IMPL	mods/item-types.hpp	722;"	d
 MENTOC_UPTR	structs.h	1069;"	d
 MENTOC_UPTR	structs.h	1071;"	d
 MENTOC_USING_CT	mods/item-types.hpp	437;"	d
