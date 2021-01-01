@@ -19,24 +19,47 @@ damage_map: [
 # type: PISTOL
 # type: MACHINE_PISTOL
 # type: LIGHT_MACHINE_GUN
-ammo_max: 30 #int, bullets
+ammo_max: 30 #int16_t, bullets
 ammo_type: 'SNIPER' #string, enum
 chance_to_injure: 10 #float, out of 100
-clip_size: 7 #int, bullets
-cooldown_between_shots: 2 #int, ticks
-critical_chance: 33 #int, out of 100
-critical_range: 3 #int, rooms
+clip_size: 7 #int16_t, bullets
+cooldown_between_shots: 2 #int16_t, ticks
+critical_chance: 33 #int16_t, out of 100
+critical_range: 3 #int16_t, rooms
 damage_per_second: 44 #float, out of 100
 disorient_amount: 3 #float, out of 100
 headshot_bonus: 48 #float, static addition to hitroll
-max_range: 8 #int, rooms
+max_range: 8 #int16_t, rooms
 range_multiplier: 1 #float, TBA
-reload_time: 3 #int, ticks
-rounds_per_minute: 8 #int, bullets
-muzzle_velocity: 1 #int, TBA
-effective_firing_range: 2 #int, rooms
-damage_dice_count: 2 #int, number of dice
-damage_dice_sides: 6 #int, dice sides
+reload_time: 3 #int16_t, ticks
+rounds_per_minute: 8 #int16_t, bullets
+muzzle_velocity: 1 #int16_t, TBA
+effective_firing_range: 2 #int16_t, rooms
+damage_dice_count: 2 #int16_t, number of dice
+damage_dice_sides: 6 #int16_t, dice sides
+incendiary_damage: 0 #int16_t, damage
+explosive_damage: 0 #int16_t, damage
+shrapnel_damage: 0 #int16_t, damage
+corrosive_damage: 0 #int16_t, damage
+cryogenic_damage: 0 #int16_t, damage
+radioactive_damage: 0 #int16_t, damage
+emp_damage: 0 #int16_t, damage
+shock_damage: 0 #int16_t, damage
+anti_matter_damage: 0 #int16_t, damage
+stat_strength: 0 #int16_t, positive or negative amount to affect strength stat
+stat_intelligence: 0 #int16_t, positive or negative amount to affect intelligence stat
+stat_wisdom: 0 #int16_t, positive or negative amount to affect wisdom stat
+stat_dexterity: 0 #int16_t, positive or negative amount to affect dexterity stat
+stat_constitution: 0 #int16_t, positive or negative amount to affect constitution stat
+stat_electronics: 0 #int16_t, positive or negative amount to affect electronics stat
+stat_armor: 0 #int16_t, positive or negative amount to affect armor stat
+stat_marksmanship: 0 #int16_t, positive or negative amount to affect marksmanship stat
+stat_sniping: 0 #int16_t, positive or negative amount to affect sniping stat
+stat_demolitions: 0 #int16_t, positive or negative amount to affect demolitions stat
+stat_chemistry: 0 #int16_t, positive or negative amount to affect chemistry stat
+stat_weapon_handling: 0 #int16_t, positive or negative amount to affect weapon_handling stat
+stat_strategy: 0 #int16_t, positive or negative amount to affect strategy stat
+stat_medical: 0 #int16_t, positive or negative amount to affect medical stat
 str_type: '1' # enum, object type
 manufacturer: 'ACME Industries' # string, anything 
 name: 'A PSG-1 Sniper Rifle' # string, anything name of object 

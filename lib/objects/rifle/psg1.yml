@@ -1,4 +1,43 @@
-# accuracy map
+# type: SHOTGUN
+# type: ASSAULT_RIFLE
+# type: SUB_MACHINE_GUN
+# type: SNIPER
+# type: HANDGUN
+# type: PISTOL
+# type: MACHINE_PISTOL
+# type: LIGHT_MACHINE_GUN
+damage_dice_count: 2 #int16_t, number of dice
+damage_dice_sides: 6 #int16_t, dice sides
+incendiary_damage: 0 #int16_t, damage
+explosive_damage: 0 #int16_t, damage
+shrapnel_damage: 0 #int16_t, damage
+corrosive_damage: 0 #int16_t, damage
+cryogenic_damage: 0 #int16_t, damage
+radioactive_damage: 0 #int16_t, damage
+emp_damage: 0 #int16_t, damage
+shock_damage: 0 #int16_t, damage
+anti_matter_damage: 0 #int16_t, damage
+stat_strength: 0 #int16_t, positive or negative amount to affect strength stat
+stat_intelligence: 0 #int16_t, positive or negative amount to affect intelligence stat
+stat_wisdom: 0 #int16_t, positive or negative amount to affect wisdom stat
+stat_dexterity: 0 #int16_t, positive or negative amount to affect dexterity stat
+stat_constitution: 0 #int16_t, positive or negative amount to affect constitution stat
+stat_electronics: 0 #int16_t, positive or negative amount to affect electronics stat
+stat_armor: 0 #int16_t, positive or negative amount to affect armor stat
+stat_marksmanship: 0 #int16_t, positive or negative amount to affect marksmanship stat
+stat_sniping: 0 #int16_t, positive or negative amount to affect sniping stat
+stat_demolitions: 0 #int16_t, positive or negative amount to affect demolitions stat
+stat_chemistry: 0 #int16_t, positive or negative amount to affect chemistry stat
+stat_weapon_handling: 0 #int16_t, positive or negative amount to affect weapon_handling stat
+stat_strategy: 0 #int16_t, positive or negative amount to affect strategy stat
+stat_medical: 0 #int16_t, positive or negative amount to affect medical stat
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
 accuracy_map: [
 0.00,
 20.00,
@@ -52,3 +91,6 @@ rarity: 'COMMON'
 feed_file: 'psg1.yml'
 damage_dice_count: 2
 damage_dice_sides: 50
+description: 'PSG-1 Sniper Rifle'
+short_description: 'PSG-1 Sniper Rifle'
+action_description: 'PSG-1 Sniper Rifle'

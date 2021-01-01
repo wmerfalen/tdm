@@ -45,6 +45,7 @@ namespace mods::classes {
 			void use_claymore(uuid_t);
 
 		private:
+			void replenish_notify(std::string_view);
 			uuid_t m_target;
 			bool m_engaged;
 			uint16_t m_xray_shot_charges;
@@ -53,6 +54,8 @@ namespace mods::classes {
 			player_ptr_t m_player;
 			sniper_orm_t m_orm;
 			std::vector<uuid_t> m_scanned;
+			uint8_t m_tracking_shot_charges;
+			std::map<std::string,bool> m_preferences;
 	};
 	std::shared_ptr<mods::classes::sniper> create_sniper(player_ptr_t& player);
 };
