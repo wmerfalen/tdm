@@ -108,42 +108,21 @@
 	gaurantee a good multiplayer experience. That ends here. The following class
 	system is set in stone and will not change.
 
-# 2020 Class System Scope Revision
-	Each player class consists of the following configuration:
+# Class System
+	Each player class starts out with the following configuration:
 	- Primary Weapon
 	- Secondary Weapon
 	- Tactical
 	- Special Ability
 
-	Each player class cannot swap their weapon out for another weapon.
-	However, a weapon can have various attachments and upgrades.
-	The PC weapon levels up as the player levels up.
-
 	Base attributes for each PC all start off the same, however, the
 	Speed/Armor triads can be configured by player upon character generation.
 
-	This MUD is COMBAT-BASED, which makes the required features easier to
-	tackle. It is very tempting to attempt to write a MUD that rewards the
-	player for being stealthy/sneaky/clever, but that is very hard to get
-	correct, and it complicates the reward/leveling system.
-
-	Each loadout is damage based. The loadouts are meant to deal damage
-	and are chosen specifically for each class to fit that PC's play style.
-	For example, the Sniper class should have a DMR. Equipping the Sniper
-	with a shotgun primary would make no sense.
-
-	Each grenade type is coupled with the play style of each PC.
-
-	The special ability of each PC is damage based as well. The ability
-	should either prevent or enhance damage done/taken.
-
-# REVISED CLASS SYSTEM
-
 # SNIPER
 	- Loadout:
-		- Primary: PSG-1 Sniper Rifle
-		- Secondary: CZP10 Pistol
-		- Tactical: Claymore Mine
+		- Starting Primary: PSG-1 Sniper Rifle
+		- Starting Secondary: CZP10 Pistol
+		- Starting Tactical: Claymore Mine
 		- Ability: XRay Shot [ DONE ]
 			- Command sequence:
 				- Type 'mark <name>' to mark an opponent
@@ -163,9 +142,9 @@
 					- see: `mods/calc-visibility.cpp`, `is_visible()` function
 # MARINE
 	- Loadout:
-		- Primary: M4 Assault Rifle
-		- Secondary: Magnum Revolver (exact type TBD)
-		- Tactical: Fragmentation Grenade
+		- Starting Primary: M4 Assault Rifle
+		- Starting Secondary: Magnum Revolver (exact type TBD)
+		- Starting Tactical: Fragmentation Grenade
 		- Ability: Activate Underbarrel grenade launcher (x3 grenade rounds)
 			- Command sequence
 				- Type 'underbarrel activate'
@@ -173,18 +152,18 @@
 			- Causes massive explosive damage to a room very far away
 # BREACHER
 	- Loadout:
-		- Primary: MP-5 Sub Machine Gun
-		- Secondary: SASG-12 Shotgun
+		- Starting Primary: MP-5 Sub Machine Gun
+		- Starting Secondary: SASG-12 Shotgun
 			- Every 4th shot gains 1 push back charge
-		- Tactical: Flashbang
+		- Starting Tactical: Flashbang
 		- Ability: Explosive shot [ DONE 2020-12-04 ]
 			- Shot can breach doors/walls/surfaces, creating new tiles on the map
 			- Same effect as a breach charge but without having to use one
 # ENGINEER
 	- Loadout:
-		- Primary: UMP-45
-		- Secondary: Glock
-		- Tactical: Sensor Grenade
+		- Starting Primary: UMP-45
+		- Starting Secondary: Glock
+		- Starting Tactical: Sensor Grenade
 		- Ability: Drone Bomb [ DONE ]
 			- Deploy a drone that drives in a direction N rooms
 			- Example: `drone_bomb north 2`
@@ -192,17 +171,17 @@
 				- Drone bomb is a globally available singleton guarded and accessible only through a function
 # MEDIC
 	- Loadout:
-		- Primary: SAIGA-12 Automatic Shotgun
+		- Starting Primary: SAIGA-12 Automatic Shotgun
 			- Every 3rd shot adds 1 push back charge
-		- Secondary: MP9 Machine Pistol
-		- Tactical: Smoke Grenade
+		- Starting Secondary: MP9 Machine Pistol
+		- Starting Tactical: Smoke Grenade
 		- Ability: Drop Healing Grenade
 			- Team members can heal more by typing 'siphon' in the room a healing grenade exists in
 # GHOST
 	- Loadout:
-		- Primary: Silenced G36C Assault Rifle
-		- Secondary: Silenced PPK Pistol
-		- Tactical: Smoke Grenade
+		- Starting Primary: Silenced G36C Assault Rifle
+		- Starting Secondary: Silenced PPK Pistol
+		- Starting Tactical: Smoke Grenade
 		- Ability: Dissipate
 			- Disappear and move throughout the map without being noticed [ DONE 2020-12-04 ]
 			- Traps, doors, walls do not affect you [ DONE 2020-12-05 ]
@@ -210,9 +189,9 @@
 			- Enemies cannot see you with scan functionality
 # SUPPORT
 	- Loadout:
-		- Primary: HK21 Light Machine Gun
-		- Secondary: 
-		- Tactical: Incendiary Grenade
+		- Starting Primary: HK21 Light Machine Gun
+		- Starting Secondary: 
+		- Starting Tactical: Incendiary Grenade
 		- Ability: Call in drone strike
 			- Drones drop hellfire missiles on target room
 # END OF 2020-11-29 REVISED CLASS SYSTEM
@@ -234,7 +213,7 @@
 
 # values system
 	- source file: mods/values.cpp
-	- usage: set_value <key> <value>
+	- usage: `set_value <key> <value>`
 	- `get_value <key>...<keyN>`
 	- `revert_value_to_default <arg>...<argN>`
 	- `list_values [searchable]`
