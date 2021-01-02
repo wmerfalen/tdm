@@ -23,6 +23,7 @@ using player_ptr_t = std::shared_ptr<mods::player>;
 namespace mods::affects {
 	using amount_t = int;
 	constexpr static amount_t DEFAULT_AMOUNT = 3;
+	static constexpr float TRACKED_DAMAGE_BONUS_MULTIPLIER = 0.15;
 	enum affect_t {
 		NONE = -1,
 		BLIND = 0,
@@ -55,6 +56,8 @@ namespace mods::affects {
 	using affect_map_t = std::map<uint32_t,amount_t>;
 	using affect_t = mods::affects::affect_t;
 	using affect_vector_t = std::vector<affect_t>;
+
+	int apply_tracked_bonus_damage(int damage);
 
 	template <typename TAffects,typename TAffectsContainer,typename TAffectsMap,typename TEntityId>
 	struct dissolver {

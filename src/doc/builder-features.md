@@ -86,9 +86,6 @@
 		- this is switched on or off using values system: `ALLOW_MOCK_LEVELS`
 		- source file: mods/classes/super-user-fiddler.cpp
 	- replenish values now powered by your player tier
-	- sniper class
-		- special ability 'xray_shot' now ready
-			- needs balancing
 	- breacher class 
 		- special ability 'explosive shot' now ready
 			- needs balancing
@@ -154,6 +151,16 @@
 				- Everytime you type 'xray_shot' it will fire off a shot until you're out of charges
 			- To disengage, type 'disengage'
 			- Once target is dead, you no longer are in engage mode and have to mark/engage/xray_shot again
+		- Ability: Tracking Shot
+			- Command sequence:
+				- `tracking_shot johnny east`
+					- this dispatches a rifle attack with feedback
+					- will only track the target if the rifle attack hits
+			- Target is affected by `AFF_TRACKED` for `SKILL_SNIPER_TRACKING_SHOT_TICKS()`
+			- Players marked with the tracking shot are affected in the following ways:
+				- take 15% more damage
+				- will be visible even if they try to go invisible
+					- see: `mods/calc-visibility.cpp`, `is_visible()` function
 # MARINE
 	- Loadout:
 		- Primary: M4 Assault Rifle

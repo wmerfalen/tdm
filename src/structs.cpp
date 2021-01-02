@@ -389,7 +389,8 @@ void room_data::init() {
 	name = "name";
 	description = "description";
 	room_flags = 0;
-	light = 0;                  /* Number of lightsources in room     */
+	light = 1;                  /* Number of lightsources in room     */
+	REMOVE_BIT(room_flags, ROOM_DARK);
 	func = 0;
 }
 

@@ -34,6 +34,12 @@ extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_d
 namespace mods::weapons::damage_types {
 	using de = damage_event_t;
 	using vpd = mods::scan::vec_player_data;
+	int calculate_tracked_damage(player_ptr_t& player,int original_damage) {
+		if(player->has_affect(AFF_TRACKED)) {
+			return mods::affects::apply_tracked_bonus_damage(original_damage);
+		}
+		return original_damage;
+	}
 	void rifle_attack_object(
 	    player_ptr_t& player,
 	    obj_ptr_t weapon,
@@ -503,6 +509,7 @@ namespace mods::weapons::damage_types {
 				}
 			}
 			DMG_DUMP();
+			dam = calculate_tracked_damage(player,dam);
 
 			feedback.damage = dam;
 			if(victim->position() > POS_DEAD) {
@@ -796,6 +803,7 @@ namespace mods::weapons::damage_types {
 		                     damage_sides
 		                 );
 		dam += dice_roll;
+		dam = calculate_tracked_damage(player,dam);
 
 #ifdef __MENTOC_SHOW_SNIPE_HIT_STATS__
 		player->send(
@@ -947,6 +955,7 @@ namespace mods::weapons::damage_types {
 		    crit_chance
 		);
 #endif
+		dam = calculate_tracked_damage(player,dam);
 
 		if(victim->position() > POS_DEAD) {
 			damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));

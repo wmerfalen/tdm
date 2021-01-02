@@ -318,7 +318,7 @@ ADVANCE_LEVEL_BONUS_HP_THRESHOLD	mods/values-list.cpp	/^ADVANCE_LEVEL_BONUS_HP_T
 AERIAL_DRONE	structs.h	/^	AERIAL_DRONE,$/;"	e	enum:lense_type_t
 AERIAL_DRONE_NIGHT_VISION	structs.h	/^	AERIAL_DRONE_NIGHT_VISION,$/;"	e	enum:lense_type_t
 AERIAL_DRONE_THERMAL	structs.h	/^	AERIAL_DRONE_THERMAL,$/;"	e	enum:lense_type_t
-AFF	mods/affects.hpp	299;"	d
+AFF	mods/affects.hpp	302;"	d
 AFF	mods/flags.hpp	/^		AFF,PLR$/;"	e	enum:mods::flags::flag_group
 AFFECT_DISSOLVE_COUNT	mods/affects.hpp	/^	constexpr static std::size_t AFFECT_DISSOLVE_COUNT = affect_t::__AFFECT_SIZE;$/;"	m	namespace:mods::affects
 AFFECT_MAP	mods/affects.hpp	/^	constexpr static int AFFECT_MAP[] = {$/;"	m	namespace:mods::affects
@@ -907,10 +907,10 @@ CCRED	screen.h	30;"	d
 CCWHT	screen.h	36;"	d
 CCYEL	screen.h	32;"	d
 CEMENT	structs.h	/^			CEMENT,			\/** asphault, nearly indestructible *\/$/;"	m	struct:room_data	typeref:enum:room_data::
-CGET	mods/values.hpp	1102;"	d
-CGET	mods/values.hpp	551;"	d
+CGET	mods/values.hpp	1104;"	d
+CGET	mods/values.hpp	552;"	d
 CGET_DEF	mods/values.cpp	20;"	d	file:
-CGET_DEF	mods/values.cpp	2224;"	d	file:
+CGET_DEF	mods/values.cpp	2228;"	d	file:
 CHAOTIC	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 CHARM	mods/flags.hpp	/^		CHARM,$/;"	e	enum:mods::flags::aff
 CHECK_NULL	comm.cpp	2395;"	d	file:
@@ -1163,8 +1163,8 @@ DISORIENT	mods/affects.hpp	/^		DISORIENT = 1,$/;"	e	enum:mods::affects::affect_t
 DISORIENT	mods/weapon-types.hpp	/^		DISORIENT,$/;"	e	enum:mods::weapon::capabilities::cap_t
 DISPLAY	mods/mini-games/wires.hpp	/^		static constexpr std::string_view DISPLAY = "A small LED display on the panel says: ";$/;"	m	struct:mods::mini_games::wires
 DM	telnet.h	55;"	d
-DMG_DEBUG	mods/weapons/damage-types.cpp	1034;"	d	file:
-DMG_DUMP	mods/weapons/damage-types.cpp	427;"	d	file:
+DMG_DEBUG	mods/weapons/damage-types.cpp	1043;"	d	file:
+DMG_DUMP	mods/weapons/damage-types.cpp	433;"	d	file:
 DO	telnet.h	44;"	d
 DONT	telnet.h	43;"	d
 DONTSET	mods/flags.hpp	/^		DONTSET,$/;"	e	enum:mods::flags::plr
@@ -2564,7 +2564,7 @@ MENU	config.cpp	/^const char *MENU =$/;"	v
 MESS_FILE	db.h	91;"	d
 METAL_HATCH	structs.h	/^			METAL_HATCH,$/;"	m	struct:room_data	typeref:enum:room_data::
 METAL_WALL	structs.h	/^			METAL_WALL,$/;"	m	struct:room_data	typeref:enum:room_data::
-MFEEDBACK	mods/weapons/damage-types.cpp	446;"	d	file:
+MFEEDBACK	mods/weapons/damage-types.cpp	452;"	d	file:
 MG_REPORT	mods/mobs/mini-gunner.cpp	86;"	d	file:
 MG_REPORT	mods/mobs/mini-gunner.cpp	95;"	d	file:
 MIN	utils.cpp	/^int MIN(int a, int b) {$/;"	f
@@ -2681,8 +2681,8 @@ MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::breacher::primary_cho
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
 MR	mods/player.cpp	1388;"	d	file:
 MR	mods/player.cpp	1403;"	d	file:
-MR	structs.cpp	603;"	d	file:
-MR	structs.cpp	614;"	d	file:
+MR	structs.cpp	604;"	d	file:
+MR	structs.cpp	615;"	d	file:
 MRC	mods/player.cpp	1389;"	d	file:
 MRC	mods/player.cpp	1404;"	d	file:
 MSG_ANTI_MATTER_DAMAGE	mods/values-list.cpp	/^MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\\r\\n"$/;"	v
@@ -3587,6 +3587,7 @@ SKILL_SNIPER_SUMMON_UNDERBARREL_SHOTGUN	mods/values-list.cpp	/^SKILL_SNIPER_SUMM
 SKILL_SNIPER_SUPPORT	mods/values-list.cpp	/^SKILL_SNIPER_SUPPORT,2050$/;"	v
 SKILL_SNIPER_TARGET_LIMB	mods/values-list.cpp	/^SKILL_SNIPER_TARGET_LIMB,50$/;"	v
 SKILL_SNIPER_TRACKING_SHOT	mods/values-list.cpp	/^SKILL_SNIPER_TRACKING_SHOT,50$/;"	v
+SKILL_SNIPER_TRACKING_SHOT_TICKS	mods/values-list.cpp	/^SKILL_SNIPER_TRACKING_SHOT_TICKS,280$/;"	v
 SKILL_SNIPER_XRAY_SHOT	mods/values-list.cpp	/^SKILL_SNIPER_XRAY_SHOT,50$/;"	v
 SKILL_SNIPING	mods/forge-engine/requirements.hpp	/^			SKILL_SNIPING ,$/;"	e	enum:mods::forge_engine::stat_types_t
 SKILL_SPRAY_CHANCE	mods/values-list.cpp	/^SKILL_SPRAY_CHANCE,150$/;"	v
@@ -4015,6 +4016,7 @@ TO_VICT	mods/chat.hpp	29;"	d
 TO_VICT	mods/chat.hpp	70;"	d
 TRACER_AMMUNITION	mods/weapon.hpp	/^		TRACER_AMMUNITION,$/;"	e	enum:mods::weapon::magazine_t
 TRACKED	mods/affects.hpp	/^		TRACKED = 5,$/;"	e	enum:mods::affects::affect_t
+TRACKED_DAMAGE_BONUS_MULTIPLIER	mods/affects.hpp	/^	static constexpr float TRACKED_DAMAGE_BONUS_MULTIPLIER = 0.15;$/;"	m	namespace:mods::affects
 TRADE_NOCLERIC	shop.h	111;"	d
 TRADE_NOEVIL	shop.h	108;"	d
 TRADE_NOGOOD	shop.h	107;"	d
@@ -4734,6 +4736,9 @@ __MENTOC_SHOW_MODS_ROOMS_AFFECTS_DEBUG_OUTPUT__	mods/rooms.hpp	8;"	d
 __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__	act.item.cpp	28;"	d	file:
 __MENTOC_STRING_LIT__	mods/util.hpp	24;"	d
 __MENTOC_TYPES_HEADER__	types.hpp	2;"	d
+__MENTOC_UNIT_TESTS_DAMAGE_TYPES__	mods/unit-tests/damage-types.cpp	3;"	d	file:
+__MENTOC_UNIT_TESTS_SKILL_POINTS__	mods/unit-tests/skill-points.cpp	3;"	d	file:
+__MENTOC_UNIT_TESTS_VISIBILITY__	mods/unit-tests/visibility.cpp	3;"	d	file:
 __MENTOC_USE_LEGACY_SLEEP_CODE__	comm.cpp	70;"	d	file:
 __MENTOC_USE_LMDB__	mods/lmdb.cpp	10;"	d	file:
 __MENTOC_UTILS_HEADER__	mods/util.hpp	2;"	d
@@ -4847,15 +4852,15 @@ affect_from_char	mods/js.cpp	/^		static duk_ret_t affect_from_char(duk_context *
 affect_join	handler.cpp	/^void affect_join(char_data *ch, struct affected_type *af,$/;"	f
 affect_map	mods/affects.hpp	/^			void affect_map(TAffectsMap affects) {$/;"	f	struct:mods::affects::dissolver
 affect_modify	handler.cpp	/^void affect_modify(char_data *ch, byte loc, sbyte mod,$/;"	f
-affect_player	mods/affects.cpp	/^	void affect_player(affect_vector_t a,player_ptr_t player){$/;"	f	namespace:mods::affects
-affect_player_for	mods/affects.cpp	/^	void affect_player_for(affect_vector_t a,player_ptr_t p,uint64_t ticks){$/;"	f	namespace:mods::affects
+affect_player	mods/affects.cpp	/^	void affect_player(affect_vector_t a,player_ptr_t player) {$/;"	f	namespace:mods::affects
+affect_player_for	mods/affects.cpp	/^	void affect_player_for(affect_vector_t a,player_ptr_t p,uint64_t ticks) {$/;"	f	namespace:mods::affects
 affect_plr	mods/player.cpp	/^	void player::affect_plr(uint64_t flag) {$/;"	f	class:mods::player
 affect_remove	handler.cpp	/^void affect_remove(char_data *ch, struct affected_type *af) {$/;"	f
 affect_room	mods/flashbang.hpp	/^	inline void affect_room(room_rnum room, obj_ptr_t& object){$/;"	f	namespace:mods::flashbang
 affect_room	mods/flashbang.hpp	/^	inline void affect_room(room_rnum room, uuid_t uuid){$/;"	f	namespace:mods::flashbang
 affect_room_light	globals.cpp	/^		void affect_room_light(int room,int offset) {$/;"	f	namespace:mods::globals
-affect_string_list	mods/affects.cpp	/^std::vector<std::string>& affect_string_list() { return mods::affects::affect_string_list_impl(); }$/;"	f
-affect_string_list_impl	mods/affects.cpp	/^std::vector<std::string>& affect_string_list_impl() {$/;"	f	namespace:mods::affects
+affect_string_list	mods/affects.cpp	/^std::vector<std::string>& affect_string_list() {$/;"	f
+affect_string_list_impl	mods/affects.cpp	/^	std::vector<std::string>& affect_string_list_impl() {$/;"	f	namespace:mods::affects
 affect_t	mods/affects.hpp	/^	enum affect_t {$/;"	g	namespace:mods::affects
 affect_to_char	handler.cpp	/^void affect_to_char(char_data *ch,affected_type *af) {$/;"	f
 affect_total	handler.cpp	/^void affect_total(char_data *ch) {$/;"	f
@@ -4930,6 +4935,7 @@ apply_saving_throw	mods/player.hpp	/^			sh_int& apply_saving_throw(std::size_t i
 apply_saving_throw	mods/player.hpp	/^			sh_int* apply_saving_throw() {$/;"	f	struct:mods::player
 apply_stealth_to	mods/classes/ghost.cpp	/^	void ghost::apply_stealth_to(obj_ptr_t& target){$/;"	f	class:mods::classes::ghost
 apply_stealth_to_player	mods/classes/ghost.cpp	/^	void ghost::apply_stealth_to_player(player_ptr_t& target){$/;"	f	class:mods::classes::ghost
+apply_tracked_bonus_damage	mods/affects.cpp	/^	int apply_tracked_bonus_damage(int damage) {$/;"	f	namespace:mods::affects
 apply_types	constants.cpp	/^const char *apply_types[] = {$/;"	v
 apply_types	constants.hpp	/^const char *apply_types[] = {$/;"	v
 arcSafeRelease	mods/catch.hpp	/^inline void arcSafeRelease(NSObject* obj) {$/;"	f
@@ -5201,6 +5207,7 @@ calculate_limb_damage	mods/armor/elite-protection.cpp	/^		float elite_protection
 calculate_shrapnel_rooms	mods/projectile.cpp	/^		rooms_away_t calculate_shrapnel_rooms(room_rnum room, obj_ptr_t held_object,std::size_t blast_radius) {$/;"	f	namespace:mods::projectile
 calculate_skill_points_by_level	mods/orm/skill-points.cpp	/^	uint16_t skill_points::calculate_skill_points_by_level(uint16_t player_level) {$/;"	f	class:mods::orm::skill_points
 calculate_spray_chance	mods/weapons/damage-types.cpp	/^	uint8_t calculate_spray_chance(player_ptr_t& player) {$/;"	f	namespace:mods::weapons::damage_types
+calculate_tracked_damage	mods/weapons/damage-types.cpp	/^	int calculate_tracked_damage(player_ptr_t& player,int original_damage) {$/;"	f	namespace:mods::weapons::damage_types
 call_magic	spell_parser.cpp	/^int call_magic(char_data *caster, char_data *cvict,$/;"	f
 callback	mods/projectile.hpp	/^		typedef std::function<void (room_rnum,int)> callback;$/;"	t	namespace:mods::projectile
 camera	mods/camera.cpp	/^	camera::camera(uuid_t  owner, uuid_t  obj) :$/;"	f	class:mods::camera
@@ -7761,8 +7768,8 @@ is_uint32	mods/values.cpp	/^		bool is_uint32(value_key_t key){$/;"	f	namespace:m
 is_uint8	mods/values.cpp	/^		bool is_uint8(value_key_t key){$/;"	f	namespace:mods::values
 is_using_pluck_filter	mods/lmdb.cpp	/^		bool _db_handle::is_using_pluck_filter() const { $/;"	f	class:mods::lmdb::_db_handle
 is_valid_name	login.cpp	/^	bool is_valid_name(std::string_view name){$/;"	f	namespace:login
-is_visible	mods/calc-visibility.cpp	/^	bool is_visible(player_ptr_t& observer,player_ptr_t& target){$/;"	f	namespace:mods::calc_visibility
-is_visible	mods/calc-visibility.cpp	/^	bool is_visible(uuid_t observer_uuid,uuid_t target_uuid){$/;"	f	namespace:mods::calc_visibility
+is_visible	mods/calc-visibility.cpp	/^	bool is_visible(player_ptr_t& observer,player_ptr_t& target) {$/;"	f	namespace:mods::calc_visibility
+is_visible	mods/calc-visibility.cpp	/^	bool is_visible(uuid_t observer_uuid,uuid_t target_uuid) {$/;"	f	namespace:mods::calc_visibility
 is_weapon_loaded	mods/mobs/mob.cpp	/^	bool player::is_weapon_loaded() {$/;"	f	class:mods::player
 is_weapon_loaded	mods/player.cpp	/^	bool player::is_weapon_loaded() {$/;"	f	class:mods::player
 is_wield_position	mods/object-utils.cpp	/^	bool is_wield_position(int where){$/;"	f	namespace:mods::object_utils
@@ -8738,7 +8745,7 @@ mbop_debug	mods/builder/object-placement.hpp	5;"	d
 mc_debug	mods/query-objects.cpp	11;"	d	file:
 mc_debug	mods/query-objects.cpp	13;"	d	file:
 mc_debug	mods/query-objects.cpp	246;"	d	file:
-mcv_debug	mods/calc-visibility.cpp	134;"	d	file:
+mcv_debug	mods/calc-visibility.cpp	139;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	14;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	17;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	20;"	d	file:
@@ -8971,8 +8978,8 @@ mpub_intelligence	mods/ai_state.hpp	/^			int32_t mpub_intelligence;$/;"	m	class:
 mpub_lenient	mods/ai_state.hpp	/^			int32_t mpub_lenient;$/;"	m	class:mods::ai_state
 mpub_stunned	mods/ai_state.hpp	/^			uint32_t mpub_stunned;$/;"	m	class:mods::ai_state
 mpub_suspicious	mods/ai_state.hpp	/^			int32_t mpub_suspicious;$/;"	m	class:mods::ai_state
-mq_debug	structs.cpp	435;"	d	file:
-mq_debug	structs.cpp	459;"	d	file:
+mq_debug	structs.cpp	436;"	d	file:
+mq_debug	structs.cpp	460;"	d	file:
 mra_debug	mods/rooms.hpp	10;"	d
 mra_debug	mods/rooms.hpp	12;"	d
 msg	mods/object-utils.hpp	/^		std::string msg;$/;"	m	struct:mods::object_utils::YamlFeedExceptionInfo
@@ -9142,7 +9149,7 @@ obj	mods/weapons/smg-mp5.hpp	/^			obj_data_ptr_t obj;$/;"	m	struct:mods::weapons
 obj	mods/weapons/sniper-rifle-l96aw.cpp	/^	obj_data_ptr_t l96aw::obj(){$/;"	f	class:mods::weapons::sniper_rifle::l96aw
 obj	mods/weapons/sniper-rifle-psg1.cpp	/^	obj_data_ptr_t psg1::obj(){$/;"	f	class:mods::weapons::sniper_rifle::psg1
 obj_affected_type	structs.h	/^struct obj_affected_type {$/;"	s
-obj_can_see_player	mods/calc-visibility.cpp	/^	bool obj_can_see_player(obj_ptr_t& obj,player_ptr_t& target){$/;"	f	namespace:mods::calc_visibility
+obj_can_see_player	mods/calc-visibility.cpp	/^	bool obj_can_see_player(obj_ptr_t& obj,player_ptr_t& target) {$/;"	f	namespace:mods::calc_visibility
 obj_data	structs.cpp	/^obj_data::obj_data(std::string item_type,std::string_view feed_file) {$/;"	f	class:obj_data
 obj_data	structs.h	/^		obj_data(const obj_data& other) {$/;"	f	struct:obj_data
 obj_data	structs.h	/^		obj_data(int item_type,std::string_view feed_file) :$/;"	f	struct:obj_data
@@ -9550,7 +9557,7 @@ player_bits	constants.cpp	/^const char *player_bits[] = {$/;"	v
 player_bits	constants.hpp	/^const char *player_bits[] = {$/;"	v
 player_can	mods/skills.cpp	/^	bool player_can(player_ptr_t& player,std::string_view skill) {$/;"	f	namespace:mods::skills
 player_can_do_range_modifier	mods/sensor-grenade.cpp	/^	bool player_can_do_range_modifier(player_ptr_t& player){$/;"	f	namespace:mods::sensor_grenade
-player_can_see_obj	mods/calc-visibility.cpp	/^	bool player_can_see_obj(player_ptr_t& player,obj_ptr_t & obj){$/;"	f	namespace:mods::calc_visibility
+player_can_see_obj	mods/calc-visibility.cpp	/^	bool player_can_see_obj(player_ptr_t& player,obj_ptr_t& obj) {$/;"	f	namespace:mods::calc_visibility
 player_carry	mods/stat-bonuses.cpp	/^	void player_carry(uuid_t player_uuid, uuid_t object_uuid) {$/;"	f	namespace:mods::stat_bonuses
 player_chmap	globals.cpp	/^		std::map<char_data*,std::shared_ptr<mods::player>> player_chmap;$/;"	m	namespace:mods::globals	file:
 player_class_t	structs.h	/^enum player_class_t {$/;"	g
@@ -9763,7 +9770,7 @@ print_debug	mods/acl/config-parser.hpp	/^constexpr static bool print_debug = fal
 print_group	act.other.cpp	/^void print_group(char_data *ch) {$/;"	f
 print_object_location	act.informative.cpp	/^void print_object_location(int num, struct obj_data *obj, char_data *ch,$/;"	f
 print_zone_to_buf	act.wizard.cpp	/^size_t print_zone_to_buf(char *bufptr, size_t left, zone_rnum zone) {$/;"	f
-process	mods/affects.cpp	/^	void process(){$/;"	f	namespace:mods::affects
+process	mods/affects.cpp	/^	void process() {$/;"	f	namespace:mods::affects
 process	mods/rooms.cpp	/^	void process() {$/;"	f	namespace:mods::rooms::affects
 process_affect	mods/affects.hpp	/^			void process_affect(TAffects affect) {$/;"	f	struct:mods::affects::dissolver
 process_elemental_damage	mods/weapons/elemental.cpp	/^	void process_elemental_damage(player_ptr_t& player,obj_ptr_t& weapon,player_ptr_t& victim,feedback_t& feedback) {$/;"	f	namespace:mods::weapons::elemental
@@ -9897,8 +9904,8 @@ queue_head	graph.cpp	/^static struct bfs_queue_struct *queue_head = 0, *queue_ta
 queue_item_to_be_erased	mods/affects.hpp	/^			void queue_item_to_be_erased(TAffects affect) {$/;"	f	struct:mods::affects::dissolver
 queue_object_destruct	globals.cpp	/^		void queue_object_destruct(uuid_t obj_uuid, uint16_t ticks) {$/;"	f	namespace:mods::globals
 queue_object_destruct	mods/camera.cpp	/^	void camera::queue_object_destruct() {$/;"	f	class:mods::camera
-queue_on_room	mods/affects.cpp	/^void queue_on_room(std::vector<mods::affects::affect_t> affects,int room_id){$/;"	f
-queue_on_room	mods/affects.cpp	/^void queue_on_room(std::vector<mods::affects::affect_t> affects,player_ptr_t player){$/;"	f
+queue_on_room	mods/affects.cpp	/^void queue_on_room(std::vector<mods::affects::affect_t> affects,int room_id) {$/;"	f
+queue_on_room	mods/affects.cpp	/^void queue_on_room(std::vector<mods::affects::affect_t> affects,player_ptr_t player) {$/;"	f
 queue_output	structs.cpp	/^	void descriptor_data::queue_output(std::string_view msg, bool newline, bool plain) {$/;"	f	class:mods::descriptor_data
 queue_page_fragment	mods/mobs/mob.hpp	/^			void                queue_page_fragment(std::string_view fragment) {$/;"	f	class:mods::player
 queue_page_fragment	mods/player.hpp	/^			void queue_page_fragment(std::string_view fragment) {$/;"	f	struct:mods::player
@@ -10502,7 +10509,7 @@ send_yaml_exceptions_to	mods/object-utils.hpp	/^	static inline void send_yaml_ex
 sendln	mods/classes/sentinel.cpp	/^		void sentinel::sendln(std::string_view msg){ m_player->sendln(msg); }$/;"	f	class:mods::classes::sentinel
 sendln	mods/player.cpp	/^	void player::sendln(mods::string& str) {$/;"	f	class:mods::player
 sendln	mods/player.cpp	/^	void player::sendln(std::string_view str) {$/;"	f	class:mods::player
-sense_player	mods/calc-visibility.cpp	/^	bool sense_player(obj_ptr_t& device, player_ptr_t& target){$/;"	f	namespace:mods::calc_visibility
+sense_player	mods/calc-visibility.cpp	/^	bool sense_player(obj_ptr_t& device, player_ptr_t& target) {$/;"	f	namespace:mods::calc_visibility
 sensor_grenade	mods/sensor-grenade.cpp	/^namespace mods::sensor_grenade {$/;"	n	class:mods	file:
 sensor_grenade	mods/sensor-grenade.hpp	/^namespace mods::sensor_grenade {$/;"	n	class:mods
 sentinel	mods/classes/sentinel.cpp	/^		sentinel::sentinel(){$/;"	f	class:mods::classes::sentinel
@@ -11006,7 +11013,7 @@ stop_watching	mods/mobs/room-watching.cpp	/^	void stop_watching(uuid_t mob){$/;"
 store_mail	mail.cpp	/^void store_mail(long to, long from, char *message_pointer) {$/;"	f
 stoul	mods/util.cpp	/^		std::optional<unsigned> stoul(std::string_view str) {$/;"	f	namespace:mods::util
 str	mods/string.cpp	/^	std::string string::str() const {$/;"	f	class:mods::string
-str_affect_player	mods/affects.cpp	/^	void str_affect_player(std::vector<std::string> a,player_ptr_t p){$/;"	f	namespace:mods::affects
+str_affect_player	mods/affects.cpp	/^	void str_affect_player(std::vector<std::string> a,player_ptr_t p) {$/;"	f	namespace:mods::affects
 str_app	constants.cpp	/^cpp_extern const struct str_app_type str_app[] = {$/;"	v	typeref:struct:str_app_type
 str_app	constants.hpp	/^cpp_extern const struct str_app_type str_app[] = {$/;"	v	typeref:struct:str_app_type
 str_cmp	sysdep.h	326;"	d
@@ -11016,8 +11023,8 @@ str_escape	mods/jx.hpp	/^			std::string str_escape(const std::string& value) {$/
 str_object	mods/sql.hpp	/^typedef std::string str_object;$/;"	t
 str_object	mods/sql.hpp	/^typedef std::string_view str_object;$/;"	t
 str_or	mods/string.cpp	/^	std::string string::str_or(std::string f) const {$/;"	f	class:mods::string
-str_queue_on_player	mods/affects.cpp	/^void str_queue_on_player(std::vector<std::string> affects,player_ptr_t player){$/;"	f
-str_queue_on_room	mods/affects.cpp	/^void str_queue_on_room(std::vector<std::string> affects,int room_id){$/;"	f
+str_queue_on_player	mods/affects.cpp	/^void str_queue_on_player(std::vector<std::string> affects,player_ptr_t player) {$/;"	f
+str_queue_on_room	mods/affects.cpp	/^void str_queue_on_room(std::vector<std::string> affects,int room_id) {$/;"	f
 str_sub_type	structs.h	/^		std::string str_sub_type;	\/\/i.e.: SENSOR_GRENADE$/;"	m	struct:obj_data
 str_type	structs.h	/^		std::string str_type;	\/\/i.e.: explosive$/;"	m	struct:obj_data
 strap	mods/rifle-attachments.hpp	/^		obj_ptr_t strap;$/;"	m	struct:mods::rifle_attachments_t
@@ -11215,7 +11222,7 @@ title_male	class.cpp	/^const char *title_male(int chclass, int level) {$/;"	f
 to	mail.h	/^	long to;			\/* idnum of mail's recipient		*\/$/;"	m	struct:header_data_type
 toString	mods/catch.hpp	/^					std::string toString() const {$/;"	f	class:Catch::Matchers::Impl::MatcherUntypedBase
 toString	mods/catch.hpp	/^	std::string toString(std::vector<T,Allocator> const& v) {$/;"	f	namespace:Catch
-to_affect	mods/affects.cpp	/^	affect_t to_affect(std::string str){$/;"	f	namespace:mods::affects
+to_affect	mods/affects.cpp	/^	affect_t to_affect(std::string str) {$/;"	f	namespace:mods::affects
 to_affect	mods/affects.cpp	/^	mods::affects::affect_vector_t to_affect(std::vector<std::string> strings) {$/;"	f	namespace:mods::affects
 to_classification	mods/yaml.hpp	/^	static inline armor_classification_type_t to_classification(std::string_view cf) {$/;"	f	namespace:mods::yaml
 to_direction	globals.cpp	/^std::pair<bool,direction_t> to_direction(std::string_view str) {$/;"	f

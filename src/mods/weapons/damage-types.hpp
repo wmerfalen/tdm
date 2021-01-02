@@ -36,6 +36,7 @@ namespace mods::weapons::damage_types {
 	void decrease_spray_shot_ammo(obj_ptr_t& weapon);
 	void decrease_single_shot_ammo(obj_ptr_t& weapon);
 	void deal_hp_damage(player_ptr_t& player, uint16_t damage);
+	int calculate_tracked_damage(player_ptr_t& player,int original_damage);
 	namespace legacy {
 		int damage(char_data *ch, char_data *victim, int dam, int attacktype);
 	};

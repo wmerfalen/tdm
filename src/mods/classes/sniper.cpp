@@ -190,7 +190,7 @@ namespace mods::classes {
 					}
 
 					--m_tracking_shot_charges;
-					mods::affects::affect_player(mods::affects::to_affect({"tracked"}),ptr(result.ch));
+					mods::affects::affect_player_for(mods::affects::to_affect({"tracked"}),ptr(result.ch),SKILL_SNIPER_TRACKING_SHOT_TICKS());
 					return {1,"You tag your target!"};
 				}
 			}
