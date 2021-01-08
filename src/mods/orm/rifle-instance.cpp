@@ -13,6 +13,10 @@ namespace mods::yaml {
 	extern float parse_rarity(const std::string& rarity_string);
 };
 namespace mods::orm {
+	rifle_instance::rifle_instance(obj_ptr_t& obj) {
+		this->init();
+		this->initialize_row(obj);
+	}
 	void rifle_instance::import_object(obj_ptr_t& obj) {
 		this->rifle_id = obj->rifle()->attributes->id;
 		this->rifle_accuracy_map_0 = obj->rifle()->attributes->accuracy_map[0];
@@ -95,6 +99,7 @@ namespace mods::orm {
 	}
 	void rifle_instance::populate_object(obj_ptr_t& obj) {
 		obj->feed(ITEM_RIFLE, this->rifle_file);
+		obj->set_db_id(this->rifle_id);
 		obj->rifle()->attributes->id = this->rifle_id;
 		obj->rifle()->attributes->accuracy_map[0] = this->rifle_accuracy_map_0;
 		obj->rifle()->attributes->accuracy_map[1] = this->rifle_accuracy_map_1;
@@ -161,6 +166,7 @@ namespace mods::orm {
 			updated_at = created_at = time(nullptr);
 			loaded = 1;
 			rifle_id = std::get<2>(status);
+			obj->set_db_id(this->rifle_id);
 		}
 		return rifle_id;
 	}

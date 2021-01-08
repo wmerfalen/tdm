@@ -6,7 +6,9 @@
 #include "../orm/rifle-instance.hpp"
 #include "../yaml.hpp"
 #include "../rifle-attachments.hpp"
+#include "../forge-engine/generator.hpp"
 
+extern player_ptr_t new_player();
 TEST_CASE("A rifle instance can be saved and loaded to the db") {
 	SECTION("rifle instance orm layer saves all properties properly") {
 		obj_ptr_t ar = create_object(ITEM_RIFLE,"g36c.yml");
@@ -48,7 +50,12 @@ TEST_CASE("A rifle instance can be saved and loaded to the db") {
 	}
 
 	SECTION("when a forge engine object is created, it is saved to the rifle_instance table") {
-		REQUIRE(1 == 1);
+		auto player = new_player();
+		auto rifle = mods::forge_engine::reward_player(player);
+		auto ammo_max = rifle->rifle()->attributes->ammo_max;
+		auto obj = create_object(ITEM_RIFLE,CAT("rifle|pkid:",rifle->db_id()));
+		REQUIRE(ammo_max == obj->rifle()->attributes->ammo_max);
+		REQUIRE(rifle->db_id() == obj->db_id());
 	}
 }
 #endif

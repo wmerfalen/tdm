@@ -8265,9 +8265,9 @@ m_debug	mods/forge-engine/generated-rifle.cpp	9;"	d	file:
 m_debug	mods/forge-engine/generated-rifle.hpp	11;"	d
 m_debug	mods/forge-engine/generated-rifle.hpp	13;"	d
 m_debug	mods/forge-engine/generated-rifle.hpp	44;"	d
-m_debug	mods/forge-engine/generator.cpp	10;"	d	file:
-m_debug	mods/forge-engine/generator.cpp	144;"	d	file:
-m_debug	mods/forge-engine/generator.cpp	8;"	d	file:
+m_debug	mods/forge-engine/generator.cpp	11;"	d	file:
+m_debug	mods/forge-engine/generator.cpp	147;"	d	file:
+m_debug	mods/forge-engine/generator.cpp	9;"	d	file:
 m_debug	mods/forge-engine/generator.hpp	14;"	d
 m_debug	mods/forge-engine/generator.hpp	16;"	d
 m_debug	mods/forge-engine/generator.hpp	622;"	d
@@ -10273,6 +10273,7 @@ rifle_index	mods/orm/rifle-index.hpp	/^		rifle_index() : id(0) {$/;"	f	struct:mo
 rifle_index	mods/orm/rifle-index.hpp	/^	struct rifle_index : public mods::orm::orm_base<rifle_index,std::string> {$/;"	s	namespace:mods::orm
 rifle_index_changed	mods/forge-engine/generated-rifle.cpp	/^	void rifle_index_changed() {$/;"	f	namespace:mods::forge_engine
 rifle_index_record_t	mods/orm/rifle-index.hpp	/^	struct rifle_index_record_t {$/;"	s	namespace:mods::orm
+rifle_instance	mods/orm/rifle-instance.cpp	/^	rifle_instance::rifle_instance(obj_ptr_t& obj) {$/;"	f	class:mods::orm::rifle_instance
 rifle_instance	mods/orm/rifle-instance.hpp	/^		rifle_instance() : rifle_id(0) {$/;"	f	struct:mods::orm::rifle_instance
 rifle_instance	mods/orm/rifle-instance.hpp	/^	struct rifle_instance : public mods::orm::orm_base<rifle_instance,bool> {$/;"	s	namespace:mods::orm
 rifle_instance	structs.h	/^		std::unique_ptr<rifle_instance_data<attachment_data_t,std::shared_ptr<obj_data>,uuid_t>> rifle_instance;$/;"	m	struct:obj_data

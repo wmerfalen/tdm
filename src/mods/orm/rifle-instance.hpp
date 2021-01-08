@@ -27,6 +27,7 @@ namespace mods::orm {
 			this->init();
 			loaded = 0;
 		}
+		rifle_instance(obj_ptr_t& obj);
 		~rifle_instance() = default;
 
 		void import_object(obj_ptr_t& obj);

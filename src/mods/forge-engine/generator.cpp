@@ -3,6 +3,7 @@
 #include "../super-users.hpp"
 #include "util.hpp"
 #include "generated-rifle.hpp"
+#include "../orm/rifle-instance.hpp"
 
 #ifdef __MENTOC_SHOW_MODS_FORGE_ENGINE_DEBUG_OUTPUT__
 #define m_debug(MSG) mentoc_prefix_debug("[mods::forge_engine::generator]")  << MSG << "\n";
@@ -118,7 +119,9 @@ namespace mods::forge_engine {
 
 	/** wrapper function that ultimately decides the player's randomized item */
 	obj_ptr_t reward_player(player_ptr_t& player) {
-		return mods::forge_engine::generated_rifle_t(player).roll();
+		auto rifle = mods::forge_engine::generated_rifle_t(player).roll();
+		mods::orm::rifle_instance orm_layer(rifle);
+		return rifle;
 #ifdef __MENTOC_REWARD_ALL_TYPES__
 		item_types_t type = item_generator.random_item_type();
 
