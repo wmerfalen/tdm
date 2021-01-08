@@ -54,7 +54,9 @@ namespace mods::debug::pre_game {
 		std::cerr << w.get_body() << "\n";
 	}
 	void deep_object_parser_test() {
-		mods::rifle_attachments_t a("rifle|pkid:4510{sight:acog.yml,under_barrel:gmtgrenadelauncher.yml,grip:vertical-grip.yml,barrel:extended-barrel.yml,muzzle:brake.yml,magazine:extended-mag.yml,stock:default-stock.yml,strap:shoulder-strap.yml}");
+#ifdef __MENTOC_RUN_DEEP_OBJECT_PARSER_TEST__
+		mods::rifle_attachments_t a(CAT("rifle|pkid:",__MENTOC_PREDEFINED_RIFLE_PKID__,"{sight:acog.yml,under_barrel:gmtgrenadelauncher.yml,grip:vertical-grip.yml,barrel:extended-barrel.yml,muzzle:brake.yml,magazine:extended-mag.yml,stock:default-stock.yml,strap:shoulder-strap.yml}"));
+#endif
 	}
 	void migrations_test() {
 		std::string identifier = "create-karma-table";

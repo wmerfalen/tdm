@@ -1131,7 +1131,7 @@ DB_BOOT_OBJ	db.h	17;"	d
 DB_BOOT_SHP	db.h	19;"	d
 DB_BOOT_WLD	db.h	15;"	d
 DB_BOOT_ZON	db.h	18;"	d
-DD	mods/debug-pre-game.hpp	203;"	d
+DD	mods/debug-pre-game.hpp	205;"	d
 DD	mods/debug-pre-game.hpp	40;"	d
 DEALER	structs.h	/^	DEALER = 17,$/;"	e	enum:player_class_t
 DECENT	mods/yaml.hpp	/^		DECENT,$/;"	e	enum:mods::yaml::durability_profile_type_t
@@ -4721,12 +4721,12 @@ __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/search.hpp	2;"	d
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/util.hpp	2;"	d
 __MENTOC_PLR	db.cpp	2404;"	d	file:
-__MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__	mods/debug-pre-game.hpp	137;"	d
-__MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	155;"	d
+__MENTOC_RUN_MEDIC_INHERITANCE_SANITY_CHECKS__	mods/debug-pre-game.hpp	139;"	d
+__MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	157;"	d
 __MENTOC_RUN_MOB_ROAM_ORM_PREGAME__	mods/debug-pre-game.hpp	28;"	d
 __MENTOC_RUN_PBA_CODE__	mods/debug-pre-game.hpp	23;"	d
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
-__MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	144;"	d
+__MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	146;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__	mods/behaviour_tree_impl.cpp	16;"	d	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	d
 __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__	mods/calc-visibility.cpp	10;"	d	file:
