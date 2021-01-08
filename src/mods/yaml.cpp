@@ -684,10 +684,10 @@ namespace mods::yaml {
 		try {
 			this->generate_map();
 			auto insert_transaction = txn();
-			sql_compositor comp("object_rifle",&insert_transaction);
+			sql_compositor comp("rifle_instance",&insert_transaction);
 			auto up_sql = comp
 			              .insert()
-			              .into("object_rifle")
+			              .into("rifle_instance")
 			              .values(this->exported)
 			              .returning("rifle_id")
 			              .sql();

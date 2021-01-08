@@ -118,6 +118,8 @@ namespace mods::forge_engine {
 
 	/** wrapper function that ultimately decides the player's randomized item */
 	obj_ptr_t reward_player(player_ptr_t& player) {
+		return mods::forge_engine::generated_rifle_t(player).roll();
+#ifdef __MENTOC_REWARD_ALL_TYPES__
 		item_types_t type = item_generator.random_item_type();
 
 		switch(type) {
@@ -136,6 +138,7 @@ namespace mods::forge_engine {
 				mods::forge_engine::generated_rifle_t rifle(player);
 				return rifle.roll();
 		}
+#endif
 	}
 };//end namespace mods::forge_engine
 #undef m_debug

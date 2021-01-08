@@ -17,32 +17,33 @@ namespace mods {
 		"strap"
 	};
 	struct rifle_attachments_t {
-		using encoding_t = std::string;
-		obj_ptr_t sight;
-		obj_ptr_t under_barrel;
-		obj_ptr_t grip;
-		obj_ptr_t barrel;
-		obj_ptr_t muzzle;
-		obj_ptr_t magazine;
-		obj_ptr_t stock;
-		obj_ptr_t strap;
-		std::string& base_yaml_file();
-		rifle_attachments_t() = delete;
-		rifle_attachments_t(const encoding_t& line) {
-			m_rifle_yaml_file = extract_base_yaml_file(line);
-			import_objects(line);
-			mdo_debug("base yaml file:'" << base_yaml_file() << "'");
-		}
-		rifle_attachments_t(encoding_t& line) {
-			m_rifle_yaml_file = extract_base_yaml_file(line);
-			import_objects(line);
-			mdo_debug("base yaml file:'" << base_yaml_file() << "'");
-		}
-		~rifle_attachments_t() = default;
+			using encoding_t = std::string;
+			obj_ptr_t sight;
+			obj_ptr_t under_barrel;
+			obj_ptr_t grip;
+			obj_ptr_t barrel;
+			obj_ptr_t muzzle;
+			obj_ptr_t magazine;
+			obj_ptr_t stock;
+			obj_ptr_t strap;
+			obj_ptr_t base_object;
+			std::string& base_yaml_file();
+			rifle_attachments_t() = delete;
+			rifle_attachments_t(const encoding_t& line) {
+				m_rifle_yaml_file = extract_base_yaml_file(line);
+				import_objects(line);
+				mdo_debug("base yaml file:'" << base_yaml_file() << "'");
+			}
+			rifle_attachments_t(encoding_t& line) {
+				m_rifle_yaml_file = extract_base_yaml_file(line);
+				import_objects(line);
+				mdo_debug("base yaml file:'" << base_yaml_file() << "'");
+			}
+			~rifle_attachments_t() = default;
 
-		std::string extract_base_yaml_file(const encoding_t& line);
-		void import_objects(const encoding_t&);
-		encoding_t export_objects();
+			std::string extract_base_yaml_file(const encoding_t& line);
+			void import_objects(const encoding_t&);
+			encoding_t export_objects();
 		private:
 			deep_object_parser_t m_parser;
 			std::string m_rifle_yaml_file;

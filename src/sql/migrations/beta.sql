@@ -2948,3 +2948,82 @@ CREATE TABLE public.player_skill_points (
 			ON DELETE CASCADE
 			ON UPDATE CASCADE
 );
+
+CREATE TABLE public.rifle_instance (
+  rifle_id SERIAL UNIQUE,
+  rifle_accuracy_map_0 double precision DEFAULT 10.0,
+  rifle_accuracy_map_1 double precision DEFAULT 10.0,
+  rifle_accuracy_map_2 double precision DEFAULT 10.0,
+  rifle_accuracy_map_3 double precision DEFAULT 10.0,
+  rifle_damage_map_0 double precision DEFAULT 10.0,
+  rifle_damage_map_1 double precision DEFAULT 10.0,
+  rifle_damage_map_2 double precision DEFAULT 10.0,
+  rifle_damage_map_3 double precision DEFAULT 10.0,
+	rifle_rarity public.rarity_t DEFAULT 'COMMON'::public.rarity_t NOT NULL,
+	rifle_file VARCHAR(32),
+	rifle_str_type VARCHAR(16),
+	rifle_type VARCHAR(16),
+	rifle_manufacturer VARCHAR(32),
+	rifle_name VARCHAR(32),
+	rifle_vnum integer,
+	rifle_ammo_max integer,
+	rifle_ammo_type VARCHAR(16) NOT NULL DEFAULT 'SNIPER',
+	rifle_chance_to_injure FLOAT,
+	rifle_clip_size integer,
+	rifle_cooldown_between_shots integer,
+	rifle_critical_chance integer,
+	rifle_critical_range integer,
+	rifle_damage_per_second double precision,
+	rifle_disorient_amount double precision,
+	rifle_headshot_bonus double precision,
+	rifle_max_range integer,
+	rifle_range_multiplier double precision,
+	rifle_reload_time integer,
+	rifle_rounds_per_minute integer,
+	rifle_muzzle_velocity integer,
+	rifle_effective_firing_range integer,
+	rifle_damage_dice_count integer,
+	rifle_damage_dice_sides integer,
+	rifle_incendiary_damage integer,
+	rifle_explosive_damage integer,
+	rifle_shrapnel_damage integer,
+	rifle_corrosive_damage integer,
+	rifle_cryogenic_damage integer,
+	rifle_radioactive_damage integer,
+	rifle_emp_damage integer,
+	rifle_shock_damage integer,
+	rifle_anti_matter_damage integer,
+	rifle_stat_strength integer,
+	rifle_stat_intelligence integer,
+	rifle_stat_wisdom integer,
+	rifle_stat_dexterity integer,
+	rifle_stat_constitution integer,
+	rifle_stat_electronics integer,
+	rifle_stat_armor integer,
+	rifle_stat_marksmanship integer,
+	rifle_stat_sniping integer,
+	rifle_stat_demolitions integer,
+	rifle_stat_chemistry integer,
+	rifle_stat_weapon_handling integer,
+	rifle_stat_strategy integer,
+	rifle_stat_medical integer,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(rifle_id)
+);
+
+CREATE TABLE public.rifle_placements (
+  id SERIAL UNIQUE,
+	ip_room_vnum integer NOT NULL,
+	ip_container_selector TEXT,
+	ip_rifle_id integer NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(id),
+		CONSTRAINT fk_rifle_id
+			FOREIGN KEY (ip_rifle_id)
+			REFERENCES public.rifle_instance(rifle_id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE
+);
+

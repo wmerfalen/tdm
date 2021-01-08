@@ -19,6 +19,7 @@
 #include "migrations.hpp"
 #include "rifle-attachments.hpp"
 #include "levels.hpp"
+#include "deep-object-parser.hpp"
 #define __MENTOC_RUN_PBA_CODE__
 #ifdef __MENTOC_RUN_PBA_CODE__
 #include "orm/player-base-ability.hpp"
@@ -52,6 +53,9 @@ namespace mods::debug::pre_game {
 		mods::mini_games::wires w;
 		std::cerr << w.get_body() << "\n";
 	}
+	void deep_object_parser_test() {
+		mods::rifle_attachments_t a("rifle|pkid:4510{sight:acog.yml,under_barrel:gmtgrenadelauncher.yml,grip:vertical-grip.yml,barrel:extended-barrel.yml,muzzle:brake.yml,magazine:extended-mag.yml,stock:default-stock.yml,strap:shoulder-strap.yml}");
+	}
 	void migrations_test() {
 		std::string identifier = "create-karma-table";
 		std::string purpose = "to create the karma table";
@@ -79,6 +83,7 @@ namespace mods::debug::pre_game {
 		std::cout << std::get<1>(i) << "]\n";
 	}
 	bool run() {
+		deep_object_parser_test();
 #ifdef __MENTOC_RUN_RIFLE_INDEX_ORM_PREGAME__
 		{
 			mods::orm::rifle_index r;

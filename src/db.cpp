@@ -1875,6 +1875,11 @@ obj_ptr_t blank_object() {
 }
 
 obj_ptr_t create_object(int type,std::string yaml_file) {
+	/** check for rifle|pkid:N match */
+	std::cerr << "create_object:'" << yaml_file << "'\n";
+	if(yaml_file.find_first_of('|') != std::string::npos) {
+		return mods::util::create_pkid_object(yaml_file);
+	}
 	std::string path = mods::util::compile_yaml_path_from_type_and_file(type,yaml_file);
 	if(path.compare(mods::util::UNKNOWN_YAML_FILE) == 0) {
 		auto error = CAT("SYSERR: create_object:: warning: unknown yaml file type+yaml_file:'",yaml_file,"', with type:'", type,"'");
