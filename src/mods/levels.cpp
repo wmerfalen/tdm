@@ -434,6 +434,24 @@ namespace mods::levels {
 				break;
 		}
 	}
+	static constexpr uint8_t MAX_PLAYER_LEVEL = 30;
+	std::string get_practice_dump() {
+		std::string report = "[practice sessions per level]\r\n";
+		for(uint8_t i = 1; i <= MAX_PLAYER_LEVEL; ++i) {
+			report += CAT("Player level: ",i,": ", calculate_available_practice_sessions(i), "\r\n");
+		}
+		return report;
+	}
+	uint8_t calculate_available_practice_sessions(uint8_t level) {
+		uint8_t sessions = 0;
+		for(uint8_t current_level = 1; current_level <= level; ++current_level) {
+			sessions += award_practice_sessions(current_level);
+		}
+		return sessions;
+	}
+	uint8_t award_practice_sessions(uint8_t level) {
+		return 1;
+	}
 	int csv_export_report() {
 		FILE* fp = fopen("levels.csv", "w+");
 		if(!fp) {
@@ -507,6 +525,9 @@ namespace mods::levels {
 		player->admin_success("Successfully wrote to levels.csv.");
 		ADMIN_DONE();
 	}
+	ACMD(do_practices) {
+		player->sendln(get_practice_dump());
+	}
 	ACMD(do_exp) {
 		player->send("{grn}You have %d experience points.{/grn}\r\n",player->exp());
 	}
@@ -516,6 +537,7 @@ namespace mods::levels {
 		mods::interpreter::add_command("award_exp_by_name", POS_RESTING, do_award_exp_by_name, LVL_BUILDER,0);
 		mods::interpreter::add_command("csv_export_levels", POS_RESTING, do_csv_export_levels, LVL_BUILDER,0);
 		mods::interpreter::add_command("exp", POS_RESTING, do_exp, 0,0);
+		mods::interpreter::add_command("practices", POS_RESTING, do_practices, 0,0);
 	}
 };
 #undef mo_debug

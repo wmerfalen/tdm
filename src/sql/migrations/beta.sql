@@ -2669,36 +2669,38 @@ CREATE TABLE public.skill_points (
 	PRIMARY KEY(id)
 );
 
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(1, 25);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(2, 25);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(3, 25);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(4, 25);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(5, 25);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(6, 25);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(7, 25);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(8, 25);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(9, 25);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(10, 150);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(11, 150);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(12, 150);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(13, 150);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(14, 150);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(15, 150);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(16, 250);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(17, 250);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(18, 250);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(19, 250);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(20, 350);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(21, 350);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(22, 350);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(23, 350);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(24, 350);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(25, 450);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(26, 450);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(27, 550);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(28, 550);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(29, 650);
-INSERT INTO public.skill_points (sp_level,sp_points) VALUES(30, 750);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(1, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(2, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(3, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(4, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(5, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(6, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(7, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(8, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(9, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(10, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(11, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(12, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(13, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(14, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(15, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(16, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(17, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(18, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(19, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(20, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(21, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(22, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(23, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(24, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(25, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(26, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(27, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(28, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(29, 1);
+INSERT INTO public.skill_points (sp_level,sp_points) VALUES(30, 1);
+
+
 
 CREATE TABLE public.skill_trees (
   id SERIAL UNIQUE,
@@ -2928,6 +2930,26 @@ INSERT INTO public.skill_trees (
 				NULL,
 				1
 			);
+
+CREATE TABLE public.player_skill_usage (
+	id SERIAL UNIQUE,
+	ps_player_id integer NOT NULL,
+	ps_skill_id integer NOT NULL,
+	ps_usage_count integer NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(id),
+		CONSTRAINT fk_player_id
+		FOREIGN KEY (ps_player_id)
+		REFERENCES public.player(id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE,
+		CONSTRAINT fk_skill_id
+		FOREIGN KEY (ps_skill_id)
+		REFERENCES public.skill_trees(id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE
+		);
 
 CREATE TABLE public.player_skill_points (
   id SERIAL UNIQUE,

@@ -51,5 +51,8 @@ namespace mods::levels {
 	void init();
 	int csv_export_report();
 	int level_exp(int level);
+	uint8_t award_practice_sessions(uint8_t level);
+	uint8_t calculate_available_practice_sessions(uint8_t level);
+	std::string get_practice_dump();
 };
 #endif

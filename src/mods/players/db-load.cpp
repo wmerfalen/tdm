@@ -7,6 +7,7 @@
 #include "../pq.hpp"
 #include "../sql.hpp"
 #include "../orm/player-skill-points.hpp"
+#include "../orm/player-skill-usage.hpp"
 #include "../orm/skill-trees.hpp"
 
 #define __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
@@ -56,6 +57,7 @@ namespace mods::players::db_load {
 			ps.save();
 			std::cerr << green_str("Remedied.");
 		}
+		mods::orm::player_skill_usage_upkeep(player_id,player_class);
 	}
 
 	void save(player_ptr_t& player_ptr) {

@@ -108,7 +108,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/unit-tests/elemental mods/unit-tests/elemental-armor-resistances \
 					 mods/unit-tests/armor-stats mods/unit-tests/visibility \
 					 mods/skill-orm-adaptor mods/orm/skill-trees \
-					 mods/orm/rifle-instance mods/unit-tests/rifle-instance
+					 mods/orm/rifle-instance mods/unit-tests/rifle-instance \
+					 mods/orm/player-skill-usage
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

@@ -1,5 +1,37 @@
 # Inventory of features
 
+# vertical slice gameplay goals [ first 10 levels ]
+	- [ ] create an area with mobs leveled 1-10
+	- [ ] use zone commands to populate zone with mobs
+	- [ ] create a safe zone where players can respawn
+	- [ ] create a room to buy armor
+	- [ ] create a room to buy weapons
+	- [ ] create a room to buy explosives
+	- [ ] allow users to change weapon attachments
+	- on each kill:
+		- [ ] award experience points
+		- [ ] use forge engine to award a randomized loot item
+	- on each level up:
+		- [ ] award practice sessions
+		- [ ] conditionally award new skills
+	- create contracts (our term for quests):
+		- [ ] recon
+			- [ ] go to place, fight off enemies, report back
+		- [ ] eliminate
+			- [ ] go to place, eliminate enemies, report back
+		- [ ] crafting
+			- [ ] go to place A, get required part, report back
+				- [ ] repeat until all parts gathered
+			- [ ] go back to contractee and have contractee:
+				- [ ] describe how to build the object
+	- when user practices a skill:
+		- [ ] have them be the lowest proficiency
+	- when user uses a skill:
+		- [ ] increment player skill usage counters
+		- [ ] if usage counter reaches a new level:
+			- [ ] player becomes more proficient at skill
+			- [ ] damage based skills deal more damage
+
 # object instances [ PHASE 1 ]
 	- Overview:
 		The yaml object system contains files within `lib/objects/<type>/<item>.yml`. These are templates
@@ -32,24 +64,33 @@
 # leveling up
 	- Experience allows you to advance a level
 		- Experience is obtained by completing contracts and killing enemies
-	- Skill points are awarded each level according to data within an sql table
-		- Skill points are used to:
+	- Practice sessions are awarded each level according to data within an sql table
+		- Practice sessions are used to:
 			- learn skills
 			- see the `skills` command for a comprehensive list
-	- there are three levels to each skill: initiate, familiar, master 
 	- the `train` command allows you to practice a specific skill
 	- view how many skill points you have
 		- sp
 		- score
 		- skills
 		- train
-	- skill points per level stored in sql
+	- practice sessions for each player level are stored in sql
 		- source file: mods/orm/skill-points
 		- table: `skill_points`
 			- `id` primary key
 			- `sp_level` player level
 			- `sp_points` points to reward user on level up
 			- `created/updated_at`
+		- each level currently awards you 1 practice session
+	- Familiarity
+		- You can practice any skill, but in order to master it, you must use it
+		- source file: `mods/orm/player-skill-usage.(h|c)pp`
+			- table: `player_skill_usage`
+			- `id`
+			- `ps_player_id`
+			- `ps_skill_id`
+			- `ps_usage_count`
+			- `created_at/updated_at`
 
 # forge engine
 	- orm classes `rifle_index` and `armor_index`
