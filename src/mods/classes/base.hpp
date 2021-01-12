@@ -10,10 +10,10 @@ namespace mods::classes {
 		virtual types kind() {
 			return types::UNDEFINED;
 		}
-		void report(std::vector<std::string> msgs){
+		void report(std::vector<std::string> msgs) {
 			mods::bugs::fixtures(mods::classes::to_string(this->kind()), IMPLODE(msgs,""));
 		}
-		void report(std::string_view msg){
+		void report(std::string_view msg) {
 			mods::bugs::fixtures(mods::classes::to_string(this->kind()), msg.data());
 		}
 	};

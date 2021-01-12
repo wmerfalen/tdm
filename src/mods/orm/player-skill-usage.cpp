@@ -3,6 +3,7 @@
 #include "util.hpp"
 
 namespace mods::orm {
+	std::map<uint64_t,uint16_t> m_skill_usage;
 	std::tuple<int16_t,std::string> player_skill_usage::delete_by_player(const uint64_t& player_id) {
 		return mods::orm::util::delete_where<player_skill_usage,sql_compositor>(
 		           table_name(),

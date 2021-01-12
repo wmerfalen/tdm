@@ -1142,7 +1142,7 @@ DEFAULT	mods/yaml.hpp	/^		DEFAULT = armor_classification_type_t::BASIC,$/;"	e	en
 DEFAULT_AMOUNT	mods/affects.hpp	/^	constexpr static amount_t DEFAULT_AMOUNT = 3;$/;"	m	namespace:mods::affects
 DEFAULT_PUBLIC_CHANNELS	mods/values-list.cpp	/^DEFAULT_PUBLIC_CHANNELS,"chat,gossip,gratz,newbie"$/;"	v
 DEFAULT_STAFF_LVL	spells.h	13;"	d
-DEFAULT_STARTING_STIM_PISTOL_AMMO	mods/classes/medic.hpp	/^		constexpr static uint8_t DEFAULT_STARTING_STIM_PISTOL_AMMO = 4;$/;"	m	struct:mods::classes::medic
+DEFAULT_STARTING_STIM_PISTOL_AMMO	mods/classes/medic.hpp	/^			constexpr static uint8_t DEFAULT_STARTING_STIM_PISTOL_AMMO = 4;$/;"	m	struct:mods::classes::medic
 DEFAULT_WAND_LVL	spells.h	14;"	d
 DELETED	mods/flags.hpp	/^		DELETED,$/;"	e	enum:mods::flags::plr
 DELETED_BLOCK	mail.h	55;"	d
@@ -5468,7 +5468,7 @@ column_prefix	mods/orm/rifle-index.hpp	/^		std::string column_prefix() const {$/
 column_prefix	mods/orm/rifle-instance.hpp	/^		std::string column_prefix() {$/;"	f	struct:mods::orm::rifle_instance
 column_prefix	mods/orm/skill-points.hpp	/^		std::string column_prefix() const {$/;"	f	struct:mods::orm::skill_points
 column_prefix	mods/orm/skill-trees.hpp	/^		std::string column_prefix() const {$/;"	f	struct:mods::orm::skill_trees
-column_prefix	mods/orm/sniper.hpp	/^		std::string column_prefix(){ return "sniper_"; }$/;"	f	struct:mods::orm::sniper
+column_prefix	mods/orm/sniper.hpp	/^		std::string column_prefix() {$/;"	f	struct:mods::orm::sniper
 column_prefix	mods/orm/striker.hpp	/^		std::string column_prefix(){ return "striker_"; }$/;"	f	struct:mods::orm::striker
 column_prefix	mods/orm/support.hpp	/^		std::string column_prefix() const { return "support_"; }$/;"	f	struct:mods::orm::support
 column_prefix	mods/orm/syndrome.hpp	/^		std::string column_prefix(){ return "syndrome_"; }$/;"	f	struct:mods::orm::syndrome
@@ -6661,7 +6661,7 @@ feed	mods/orm/pyrexia.cpp	/^	int16_t pyrexia::feed(const pqxx::result::reference
 feed	mods/orm/rifle-instance.cpp	/^	int16_t rifle_instance::feed(const pqxx::result::reference& row) {$/;"	f	class:mods::orm::rifle_instance
 feed	mods/orm/room.cpp	/^	int16_t room::feed(const pqxx::result::reference & row){$/;"	f	class:mods::orm::room
 feed	mods/orm/shop.cpp	/^	int16_t shop::feed(const pqxx::result::reference & row){$/;"	f	class:mods::orm::shop
-feed	mods/orm/sniper.cpp	/^	int16_t sniper::feed(const pqxx::result::reference & row){$/;"	f	class:mods::orm::sniper
+feed	mods/orm/sniper.cpp	/^	int16_t sniper::feed(const pqxx::result::reference& row) {$/;"	f	class:mods::orm::sniper
 feed	mods/orm/striker.cpp	/^	int16_t striker::feed(const pqxx::result::reference & row){$/;"	f	class:mods::orm::striker
 feed	mods/orm/support.cpp	/^	int16_t support::feed(const pqxx::result::reference & row){$/;"	f	class:mods::orm::support
 feed	mods/orm/syndrome.cpp	/^	int16_t syndrome::feed(const pqxx::result::reference & row){$/;"	f	class:mods::orm::syndrome
@@ -7505,7 +7505,7 @@ id_column	mods/orm/rifle-index.hpp	/^		std::string id_column() const {$/;"	f	str
 id_column	mods/orm/rifle-instance.hpp	/^		std::string id_column() {$/;"	f	struct:mods::orm::rifle_instance
 id_column	mods/orm/skill-points.hpp	/^		std::string id_column() const {$/;"	f	struct:mods::orm::skill_points
 id_column	mods/orm/skill-trees.hpp	/^		std::string id_column() const {$/;"	f	struct:mods::orm::skill_trees
-id_column	mods/orm/sniper.hpp	/^		std::string id_column(){ return "sniper_id"; }$/;"	f	struct:mods::orm::sniper
+id_column	mods/orm/sniper.hpp	/^		std::string id_column() {$/;"	f	struct:mods::orm::sniper
 id_column	mods/orm/striker.hpp	/^		std::string id_column(){ return "striker_id"; }$/;"	f	struct:mods::orm::striker
 id_column	mods/orm/support.hpp	/^		std::string id_column() const { return "support_id"; }$/;"	f	struct:mods::orm::support
 id_column	mods/orm/syndrome.hpp	/^		std::string id_column(){ return "syndrome_id"; }$/;"	f	struct:mods::orm::syndrome
@@ -7543,6 +7543,7 @@ include	mods/js.hpp	/^		struct include {$/;"	s	namespace:mods::js
 include_file	mods/js.cpp	/^		bool include::include_file() {$/;"	f	class:mods::js::include
 increment_bad_password_count	mods/player.cpp	/^	void player::increment_bad_password_count() {$/;"	f	class:mods::player
 increment_hour	mods/date-time.cpp	/^	void increment_hour() {$/;"	f	namespace:mods::date_time
+increment_skill_usage	mods/orm/sniper.cpp	/^	void sniper::increment_skill_usage(const uint64_t& skill_id) {$/;"	f	class:mods::orm::sniper
 increment_yaml_transaction_id	mods/object-utils.hpp	/^	static inline void increment_yaml_transaction_id(){$/;"	f	namespace:mods::object_utils
 index_boot	db.cpp	/^void index_boot(int mode) {$/;"	f
 index_boot_hlp	mods/hell.hpp	/^	constexpr inline bool index_boot_hlp = true;$/;"	m	namespace:mods::hell
@@ -7610,7 +7611,7 @@ init	mods/orm/rifle-instance.cpp	/^	void rifle_instance::init() {$/;"	f	class:mo
 init	mods/orm/room.cpp	/^	void room::init(){$/;"	f	class:mods::orm::room
 init	mods/orm/skill-points.cpp	/^	void skill_points::init() {$/;"	f	class:mods::orm::skill_points
 init	mods/orm/skill-trees.cpp	/^	void skill_trees::init() {$/;"	f	class:mods::orm::skill_trees
-init	mods/orm/sniper.cpp	/^	void sniper::init(){$/;"	f	class:mods::orm::sniper
+init	mods/orm/sniper.cpp	/^	void sniper::init() {$/;"	f	class:mods::orm::sniper
 init	mods/orm/striker.cpp	/^	void striker::init(){$/;"	f	class:mods::orm::striker
 init	mods/orm/support.cpp	/^	void support::init(){$/;"	f	class:mods::orm::support
 init	mods/orm/syndrome.cpp	/^	void syndrome::init(){$/;"	f	class:mods::orm::syndrome
@@ -7656,7 +7657,7 @@ initialize_row	mods/orm/player-base-ability.cpp	/^	uint64_t player_base_ability:
 initialize_row	mods/orm/pyrexia.cpp	/^	uint64_t pyrexia::initialize_row(player_ptr_t &player){$/;"	f	class:mods::orm::pyrexia
 initialize_row	mods/orm/rifle-instance.cpp	/^	uint64_t rifle_instance::initialize_row(obj_ptr_t& obj) {$/;"	f	class:mods::orm::rifle_instance
 initialize_row	mods/orm/room.cpp	/^	uint64_t room::initialize_row(){$/;"	f	class:mods::orm::room
-initialize_row	mods/orm/sniper.cpp	/^	uint64_t sniper::initialize_row(player_ptr_t &player){$/;"	f	class:mods::orm::sniper
+initialize_row	mods/orm/sniper.cpp	/^	uint64_t sniper::initialize_row(player_ptr_t& player) {$/;"	f	class:mods::orm::sniper
 initialize_row	mods/orm/striker.cpp	/^	uint64_t striker::initialize_row(player_ptr_t &player, primary_choice_t primary_choice) {$/;"	f	class:mods::orm::striker
 initialize_row	mods/orm/support.cpp	/^	uint64_t support::initialize_row(player_ptr_t &player){$/;"	f	class:mods::orm::support
 initialize_row	mods/orm/syndrome.cpp	/^	uint64_t syndrome::initialize_row(player_ptr_t &player){$/;"	f	class:mods::orm::syndrome
@@ -7858,7 +7859,7 @@ kind	mods/classes/engineer.hpp	/^		types kind() {$/;"	f	struct:mods::classes::en
 kind	mods/classes/forge.hpp	/^		types kind() {$/;"	f	struct:mods::classes::forge
 kind	mods/classes/ghost.hpp	/^		types kind() {$/;"	f	struct:mods::classes::ghost
 kind	mods/classes/marine.hpp	/^		types kind() {$/;"	f	struct:mods::classes::marine
-kind	mods/classes/medic.hpp	/^		types kind() {$/;"	f	struct:mods::classes::medic
+kind	mods/classes/medic.hpp	/^			types kind() {$/;"	f	struct:mods::classes::medic
 kind	mods/classes/psyop.hpp	/^		types kind() {$/;"	f	struct:mods::classes::psyop
 kind	mods/classes/pyrexia.hpp	/^			types kind() {$/;"	f	struct:mods::classes::pyrexia
 kind	mods/classes/sentinel.hpp	/^		types kind() {$/;"	f	struct:mods::classes::sentinel
@@ -8006,7 +8007,7 @@ load_by_player	mods/orm/player-base-ability.cpp	/^	int16_t player_base_ability::
 load_by_player	mods/orm/player-skill-points.cpp	/^	std::tuple<int16_t,std::string> player_skill_points::load_by_player(const uint64_t& player_id) {$/;"	f	class:mods::orm::player_skill_points
 load_by_player	mods/orm/player-skill-usage.cpp	/^	std::tuple<int16_t,std::string> player_skill_usage::load_by_player(const uint64_t& player_id) {$/;"	f	class:mods::orm::player_skill_usage
 load_by_player	mods/orm/pyrexia.cpp	/^	int16_t pyrexia::load_by_player(uint64_t player_id){$/;"	f	class:mods::orm::pyrexia
-load_by_player	mods/orm/sniper.cpp	/^	int16_t sniper::load_by_player(uint64_t player_id){$/;"	f	class:mods::orm::sniper
+load_by_player	mods/orm/sniper.cpp	/^	int16_t sniper::load_by_player(uint64_t player_id) {$/;"	f	class:mods::orm::sniper
 load_by_player	mods/orm/striker.cpp	/^	int16_t striker::load_by_player(uint64_t player_id){$/;"	f	class:mods::orm::striker
 load_by_player	mods/orm/support.cpp	/^	int16_t support::load_by_player(uint64_t player_id){$/;"	f	class:mods::orm::support
 load_by_player	mods/orm/syndrome.cpp	/^	int16_t syndrome::load_by_player(uint64_t player_id){$/;"	f	class:mods::orm::syndrome
@@ -8039,6 +8040,7 @@ load_record	mods/db.cpp	/^int load_record(const std::string& table, aligned_int_
 load_record	mods/db.cpp	/^int load_record(const std::string& table, const std::string& pk, mutable_map_t& values){$/;"	f	namespace:mods::db
 load_record_by_meta	mods/db.cpp	/^int load_record_by_meta(const std::string& table, mutable_map_t* values,mutable_map_t& out_record){$/;"	f	namespace:mods::db
 load_skill_points	mods/players/db-load.cpp	/^	void load_skill_points(player_ptr_t& player) {$/;"	f	namespace:mods::players::db_load
+load_skill_usages	mods/orm/sniper.cpp	/^	void sniper::load_skill_usages() {$/;"	f	class:mods::orm::sniper
 load_trees	mods/behaviour_tree_impl.cpp	/^	void load_trees(){$/;"	f	namespace:mods::behaviour_tree_impl
 load_where	mods/orm/base.hpp	/^		static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s,$/;"	f	struct:mods::orm::base
 load_where	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_where(TContainerObject& s, std::string_view table_name,TCompoundStatement& compound_statement_list) {$/;"	f	namespace:mods::orm::util
@@ -8595,6 +8597,7 @@ m_size	mods/catch2.hpp	/^            m_size( size )$/;"	f	class:Catch::StringRef
 m_size	mods/catch2.hpp	/^            m_size( stdString.size() )$/;"	f	class:Catch::StringRef
 m_size	mods/catch2.hpp	/^        size_type m_size = 0;$/;"	m	class:Catch::StringRef
 m_size	mods/string.hpp	/^			std::size_t m_size;$/;"	m	struct:mods::string
+m_skill_usage	mods/orm/player-skill-usage.cpp	/^	std::map<uint64_t,uint16_t> m_skill_usage;$/;"	m	namespace:mods::orm	file:
 m_skills	mods/player.hpp	/^			std::map<int,uint16_t> m_skills;$/;"	m	struct:mods::player
 m_sniper	mods/player.hpp	/^			std::shared_ptr<mods::classes::sniper> m_sniper;$/;"	m	struct:mods::player
 m_sql	mods/sql.hpp	/^			std::string m_sql;$/;"	m	struct:mods::sql::compositor
@@ -9785,7 +9788,7 @@ primary_key_name	mods/orm/skill-points.hpp	/^		std::string primary_key_name() {$
 primary_key_name	mods/orm/skill-points.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::skill_points_record_t
 primary_key_name	mods/orm/skill-trees.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::skill_trees
 primary_key_name	mods/orm/skill-trees.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::skill_trees_record_t
-primary_key_name	mods/orm/sniper.hpp	/^		std::string primary_key_name() { return this->id_column(); }$/;"	f	struct:mods::orm::sniper
+primary_key_name	mods/orm/sniper.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::sniper
 primary_key_name	mods/orm/striker.hpp	/^		std::string primary_key_name() { return this->id_column(); }$/;"	f	struct:mods::orm::striker
 primary_key_name	mods/orm/support.hpp	/^		std::string primary_key_name() { return id_column(); }$/;"	f	struct:mods::orm::support
 primary_key_name	mods/orm/syndrome.hpp	/^		std::string primary_key_name() { return this->id_column(); }$/;"	f	struct:mods::orm::syndrome
@@ -9813,7 +9816,7 @@ primary_key_value	mods/orm/rifle-instance.hpp	/^		std::string primary_key_value(
 primary_key_value	mods/orm/room.hpp	/^		std::string primary_key_value() { $/;"	f	struct:mods::orm::room
 primary_key_value	mods/orm/skill-points.hpp	/^		std::string primary_key_value() {$/;"	f	struct:mods::orm::skill_points
 primary_key_value	mods/orm/skill-trees.hpp	/^		std::string primary_key_value() {$/;"	f	struct:mods::orm::skill_trees
-primary_key_value	mods/orm/sniper.hpp	/^		std::string primary_key_value() { return std::to_string(this->id); }$/;"	f	struct:mods::orm::sniper
+primary_key_value	mods/orm/sniper.hpp	/^		std::string primary_key_value() {$/;"	f	struct:mods::orm::sniper
 primary_key_value	mods/orm/striker.hpp	/^		std::string primary_key_value() { return std::to_string(this->id); }$/;"	f	struct:mods::orm::striker
 primary_key_value	mods/orm/support.hpp	/^		std::string primary_key_value(){ return std::to_string(this->id); }$/;"	f	struct:mods::orm::support
 primary_key_value	mods/orm/syndrome.hpp	/^		std::string primary_key_value() { return std::to_string(this->id); }$/;"	f	struct:mods::orm::syndrome
@@ -9825,7 +9828,7 @@ primary_type	mods/orm/ghost.hpp	/^		primary_choice_t primary_type(){$/;"	f	struc
 primary_type	mods/orm/marine.hpp	/^		primary_choice_t primary_type(){$/;"	f	struct:mods::orm::marine
 primary_type	mods/orm/medic.hpp	/^		primary_choice_t primary_type(){$/;"	f	struct:mods::orm::medic
 primary_type	mods/orm/orm-base.hpp	/^		virtual TPrimaryType primary_type(){ return (TPrimaryType)0; }$/;"	f	struct:mods::orm::orm_base
-primary_type	mods/orm/sniper.hpp	/^		primary_choice_t primary_type(){$/;"	f	struct:mods::orm::sniper
+primary_type	mods/orm/sniper.hpp	/^		primary_choice_t primary_type() {$/;"	f	struct:mods::orm::sniper
 primary_type	mods/orm/support.hpp	/^		primary_choice_t primary_type(){$/;"	f	struct:mods::orm::support
 primary_type	mods/orm/syndrome.hpp	/^		primary_choice_t primary_type(){$/;"	f	struct:mods::orm::syndrome
 primary_type	mods/pq.hpp	/^		virtual TPrimaryType primary_type(){ return (TPrimaryType)0; }$/;"	f	struct:orm_base
@@ -10188,8 +10191,8 @@ replenish_charge	mods/classes/pyrexia.cpp	/^		void pyrexia::replenish_charge(){$
 replenish_command	mods/intimidate.hpp	/^	struct replenish_command {$/;"	s	namespace:mods::zone
 replenish_command	mods/zone.hpp	/^	struct replenish_command {$/;"	s	namespace:mods::zone
 replenish_notify	mods/classes/sniper.cpp	/^	void sniper::replenish_notify(std::string_view msg) {$/;"	f	class:mods::classes::sniper
-report	mods/classes/base.hpp	/^		void report(std::string_view msg){$/;"	f	struct:mods::classes::base
-report	mods/classes/base.hpp	/^		void report(std::vector<std::string> msgs){$/;"	f	struct:mods::classes::base
+report	mods/classes/base.hpp	/^		void report(std::string_view msg) {$/;"	f	struct:mods::classes::base
+report	mods/classes/base.hpp	/^		void report(std::vector<std::string> msgs) {$/;"	f	struct:mods::classes::base
 report	mods/player.cpp	/^	void player::report() {$/;"	f	class:mods::player
 report	mods/players/db-load.cpp	/^	void report(int64_t code, std::string_view msg) {$/;"	f	namespace:mods::players::db_load
 report	structs.cpp	/^void mob_special_data::report(room_rnum room) {$/;"	f	class:mob_special_data
@@ -10508,7 +10511,7 @@ save	mods/orm/rifle-instance.hpp	/^		int16_t save() {$/;"	f	struct:mods::orm::ri
 save	mods/orm/shop.cpp	/^	std::tuple<bool,db_id_t,std::string> shop::save(){$/;"	f	class:mods::orm::shop
 save	mods/orm/skill-points.cpp	/^	int16_t skill_points::save() {$/;"	f	class:mods::orm::skill_points
 save	mods/orm/skill-trees.cpp	/^	int16_t skill_trees::save() {$/;"	f	class:mods::orm::skill_trees
-save	mods/orm/sniper.hpp	/^		int16_t save(){$/;"	f	struct:mods::orm::sniper
+save	mods/orm/sniper.hpp	/^		int16_t save() {$/;"	f	struct:mods::orm::sniper
 save	mods/orm/striker.hpp	/^		int16_t save(){$/;"	f	struct:mods::orm::striker
 save	mods/orm/support.hpp	/^		int16_t save(){$/;"	f	struct:mods::orm::support
 save	mods/orm/syndrome.hpp	/^		int16_t save(){$/;"	f	struct:mods::orm::syndrome
@@ -10945,6 +10948,7 @@ skill_trees	mods/orm/skill-trees.hpp	/^		skill_trees() {$/;"	f	struct:mods::orm:
 skill_trees	mods/orm/skill-trees.hpp	/^	struct skill_trees : public mods::orm::orm_base<skill_trees,std::string> {$/;"	s	namespace:mods::orm
 skill_trees_record_t	mods/orm/skill-trees.hpp	/^	struct skill_trees_record_t {$/;"	s	namespace:mods::orm
 skill_trees_table_name	mods/orm/skill-trees.hpp	/^	static constexpr std::string_view skill_trees_table_name = "skill_trees";$/;"	m	namespace:mods::orm
+skill_usage	mods/orm/sniper.hpp	/^		std::map<uint64_t,uint16_t> skill_usage;$/;"	m	struct:mods::orm::sniper
 skillo	spell_parser.cpp	831;"	d	file:
 skills	db.cpp	/^namespace mods::skills {$/;"	n	class:mods	file:
 skills	globals.cpp	/^INIT(mods::skills);$/;"	v
@@ -10980,7 +10984,7 @@ sniper	mods/classes/sniper.cpp	/^	sniper::sniper() {$/;"	f	class:mods::classes::
 sniper	mods/classes/sniper.cpp	/^	sniper::sniper(player_ptr_t p) {$/;"	f	class:mods::classes::sniper
 sniper	mods/classes/sniper.cpp	/^namespace mods::class_abilities::sniper {$/;"	n	class:mods::class_abilities	file:
 sniper	mods/classes/sniper.hpp	/^	struct sniper : base {$/;"	s	namespace:mods::classes
-sniper	mods/orm/sniper.hpp	/^		sniper() : id(0) { this->init(); loaded = 0; }$/;"	f	struct:mods::orm::sniper
+sniper	mods/orm/sniper.hpp	/^		sniper() : id(0) {$/;"	f	struct:mods::orm::sniper
 sniper	mods/orm/sniper.hpp	/^	struct sniper : public mods::orm::orm_base<sniper,mods::weapon::sniper::primary_choice_t> {$/;"	s	namespace:mods::orm
 sniper	mods/player.cpp	/^	std::shared_ptr<mods::classes::sniper>& player::sniper() {$/;"	f	class:mods::player
 sniper	mods/weapon.hpp	/^	namespace sniper {$/;"	n	namespace:mods::weapon
@@ -11284,7 +11288,7 @@ table_name	mods/orm/skill-points.hpp	/^		std::string table_name() const {$/;"	f	
 table_name	mods/orm/skill-points.hpp	/^		std::string table_name() const {$/;"	f	struct:mods::orm::skill_points_record_t
 table_name	mods/orm/skill-trees.hpp	/^		std::string table_name() const {$/;"	f	struct:mods::orm::skill_trees
 table_name	mods/orm/skill-trees.hpp	/^		std::string table_name() const {$/;"	f	struct:mods::orm::skill_trees_record_t
-table_name	mods/orm/sniper.hpp	/^		std::string table_name(){ return "class_sniper"; }$/;"	f	struct:mods::orm::sniper
+table_name	mods/orm/sniper.hpp	/^		std::string table_name() {$/;"	f	struct:mods::orm::sniper
 table_name	mods/orm/striker.hpp	/^		std::string table_name(){ return "class_striker"; }$/;"	f	struct:mods::orm::striker
 table_name	mods/orm/support.hpp	/^		std::string table_name() const { return "class_support"; }$/;"	f	struct:mods::orm::support
 table_name	mods/orm/syndrome.hpp	/^		std::string table_name(){ return "class_syndrome"; }$/;"	f	struct:mods::orm::syndrome

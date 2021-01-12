@@ -3,6 +3,7 @@
 
 #include "../../globals.hpp"
 #include "orm-base.hpp"
+//#include "player-skill-usage.hpp"
 
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
@@ -10,23 +11,36 @@ namespace mods::orm {
 		using primary_choice_t = mods::weapon::sniper::primary_choice_t;
 		const std::string PSG1 = "PSG1";
 		const std::string L96AW = "L96AW";
-		std::string table_name(){ return "class_sniper"; }
-		std::string column_prefix(){ return "sniper_"; }
-		std::string id_column(){ return "sniper_id"; }
-		std::string primary_key_name() { return this->id_column(); }
-		std::string primary_key_value() { return std::to_string(this->id); }
+		std::string table_name() {
+			return "class_sniper";
+		}
+		std::string column_prefix() {
+			return "sniper_";
+		}
+		std::string id_column() {
+			return "sniper_id";
+		}
+		std::string primary_key_name() {
+			return this->id_column();
+		}
+		std::string primary_key_value() {
+			return std::to_string(this->id);
+		}
 
-		sniper() : id(0) { this->init(); loaded = 0; }
+		sniper() : id(0) {
+			this->init();
+			loaded = 0;
+		}
 		~sniper() = default;
 
-		uint64_t initialize_row(player_ptr_t &player);
-		int16_t feed(const pqxx::result::reference &);
-		void init();	
+		uint64_t initialize_row(player_ptr_t& player);
+		int16_t feed(const pqxx::result::reference&);
+		void init();
 		strmap_t export_class();
-		primary_choice_t primary_type(){
-				return primary_choice_t::PSG1;
+		primary_choice_t primary_type() {
+			return primary_choice_t::PSG1;
 		}
-		int16_t save(){
+		int16_t save() {
 			return std::get<0>(this->update<sniper>(this));
 		}
 
@@ -41,8 +55,11 @@ namespace mods::orm {
 		long created_at;
 		long updated_at;
 		bool loaded;
+		std::map<uint64_t,uint16_t> skill_usage;
+		//mods::orm::player_skill_usage player_skill_usage;
+		void load_skill_usages();
+		void increment_skill_usage(const uint64_t& skill_id);
+
 	};
-
 };
-
 #endif
