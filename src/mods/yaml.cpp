@@ -427,6 +427,39 @@ namespace mods::yaml {
 		}
 		o->obj_flags.weapon_flags = this->type;
 	}
+	void melee_description_t::fill_flags(obj_data* o) {
+		auto * w = &(o->obj_flags.wear_flags);
+		auto * tf = &(o->obj_flags.type_flag);
+		//bool recognized = 0;
+		(*tf) = ITEM_MELEE;
+		o->melee()->type = (mw_melee)this->type;
+		(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD | ITEM_WEAR_SECONDARY;
+#if 0
+		switch((mw_melee)this->type) {
+				/** TODO MELEE */
+				recognized = 1;
+				break;
+			case mw_melee::SHOTGUN:
+			case mw_melee::ASSAULT_RIFLE:
+			case mw_melee::SUB_MACHINE_GUN:
+			case mw_melee::SNIPER:
+			case mw_melee::LIGHT_MACHINE_GUN:
+				(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD;
+				recognized = 1;
+				break;
+			default:
+				(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD | ITEM_WEAR_SECONDARY;
+				log(CAT("[melee_description_t][WARNING] fill_flags used the default flags for type: ",this->str_type,", and this file: '",this->feed_file,"'").c_str());
+				break;
+		}
+		//o->melee_instance = std::make_unique<melee_instance_data<attachment_data_t,obj_ptr_t,uuid_t>>();
+		//if(recognized) {
+		//o->melee_instance->ammo = this->clip_size;
+		//}
+#endif
+		o->obj_flags.weapon_flags = this->type;
+	}
+
 	/** vim sorcery:
 
 		s/(\([A-Z_]\+\)) .*$/\t\tcase mw_gadget::\1:\r\t\t(*w) |= ITEM_WEAR_TAKE | ITEM_WEAR_HOLD;\r\t\t\treturn;\r/g
@@ -563,6 +596,9 @@ namespace mods::yaml {
 		}
 	}
 
+	uint64_t melee_description_t::db_id() {
+		return this->id;
+	}
 	uint64_t rifle_description_t::db_id() {
 		return this->id;
 	}
@@ -587,6 +623,22 @@ namespace mods::yaml {
 	uint64_t container_description_t::db_id() {
 		return this->id;
 	}
+	int16_t melee_description_t::write_example_file(std::string_view file) {
+		std::string file_name = current_working_dir() + "/" + file.data();
+		std::ofstream out_file(file_name);
+		if(!out_file.is_open()) {
+			return -1;
+		}
+		if(!out_file.good()) {
+			return -2;
+		}
+		MENTOC_EXAMPLE_MELEE
+		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_MELEE_MEMBERS_TUPLE)
+		base_items(&out_file,"Brutal Machete",std::to_string(ITEM_MELEE));
+		out_file.flush();
+		out_file.close();
+		return 0;
+	};
 	int16_t rifle_description_t::write_example_file(std::string_view file) {
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
@@ -620,6 +672,12 @@ namespace mods::yaml {
 		out_file.close();
 		return 0;
 	};
+#ifndef MELEE_STUB
+#define MELEE_STUB(A) std::cerr << red_str("TODO stub: MELEE ") << "\n";
+#endif
+	void melee_description_t::generate_map() {
+		MELEE_STUB(__LINE__);
+	}
 	void rifle_description_t::generate_map() {
 		std::string rifm = "rifle_accuracy_map_",
 		            dam = "rifle_damage_map_";
@@ -680,6 +738,33 @@ namespace mods::yaml {
 		}
 	}
 
+	uint64_t melee_description_t::flush_to_db() {
+		MELEE_STUB(__LINE__);
+		return 0;
+#if 0
+		try {
+			this->generate_map();
+			auto insert_transaction = txn();
+			sql_compositor comp("melee_instance",&insert_transaction);
+			auto up_sql = comp
+			              .insert()
+			              .into("melee_instance")
+			              .values(this->exported)
+			              .returning("melee_id")
+			              .sql();
+			auto row = mods::pq::exec(insert_transaction,up_sql);
+			mods::pq::commit(insert_transaction);
+			if(row.size()) {
+				return this->id = row[0]["melee_id"].as<uint64_t>();
+			}
+			return 0;
+		} catch(std::exception& e) {
+			REPORT_DB_ISSUE(": error inserting new object_melee record: '",e.what());
+			return 0;
+		}
+#endif
+	}
+
 	uint64_t rifle_description_t::flush_to_db() {
 		try {
 			this->generate_map();
@@ -735,6 +820,26 @@ namespace mods::yaml {
 	}
 	uint64_t explosive_description_t::db_id() {
 		return this->id;
+	}
+	int16_t melee_description_t::feed(std::string_view in_file) {
+		MELEE_STUB(__LINE__);
+		return 0;
+#if 0
+		MENTOC_FILE_EXISTS_PREAMBLE(melee);
+		std::vector<std::string> fed_items;
+		try {
+			feed_file = file;
+			auto yaml_file = YAML::LoadFile(file);
+			auto type_string = yaml_file["str_type"].as<std::string>();
+			MENTOC_FEED_BASE_MEMBERS
+			MENTOC_FEED_EXPLOSIVE
+		} catch(YAML::Exception& e) {
+			mods::object_utils::report_yaml_exception(e,fed_items);
+			REPORT_DB_ISSUE("error",e.what());
+			return -2;
+		}
+		return 0;
+#endif
 	}
 	int16_t explosive_description_t::feed(std::string_view in_file) {
 		MENTOC_FILE_EXISTS_PREAMBLE(explosive);
@@ -893,6 +998,10 @@ namespace mods::yaml {
 		}
 	}
 
+	int16_t melee_description_t::feed_from_po_record(mentoc_pqxx_result_t yaml_file) {
+		MELEE_STUB(__LINE__);
+		return 0;
+	}
 	int16_t rifle_description_t::feed_from_po_record(mentoc_pqxx_result_t yaml_file) {
 		exit(200);
 		try {

@@ -50,7 +50,10 @@ namespace mods::weapon::capabilities {
 		SENSE_MOTION,
 		ABSORB_DAMAGE,
 		GRAPPLE,
-		__LAST = GRAPPLE
+		STAB,
+		CUT,
+		RIP,
+		__LAST = RIP
 	};
 };
 
@@ -68,17 +71,17 @@ MENTOC_USING_CT
 
 namespace mods::weapon_types {
 	template <typename AttributesType>
-		std::tuple<std::unique_ptr<AttributesType>,uint64_t> feed(std::string_view file){
-			auto attributes = std::make_unique<AttributesType>();
-			attributes->feed(file);
-			attributes->feed_file = file;
-			auto id = attributes->db_id();
-			return {std::move(attributes),id};
-		}
+	std::tuple<std::unique_ptr<AttributesType>,uint64_t> feed(std::string_view file) {
+		auto attributes = std::make_unique<AttributesType>();
+		attributes->feed(file);
+		attributes->feed_file = file;
+		auto id = attributes->db_id();
+		return {std::move(attributes),id};
+	}
 	template <typename AttributesType>
-		std::unique_ptr<AttributesType> empty_make(){
-			return std::move(std::make_unique<AttributesType>());
-		}
+	std::unique_ptr<AttributesType> empty_make() {
+		return std::move(std::make_unique<AttributesType>());
+	}
 };
 #define MENTOC_DATA_CLASS(r,data,CLASS_TYPE)\
 	struct BOOST_PP_CAT(CLASS_TYPE,_data_t) {\

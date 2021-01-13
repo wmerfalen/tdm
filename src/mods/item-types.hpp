@@ -18,7 +18,8 @@
 (armor) \
 (consumable) \
 (trap) \
-(container)
+(container) \
+(melee)
 
 #define MENTOC_ITEM_TYPES_CAPS_SEQ \
 (RIFLE) \
@@ -29,7 +30,8 @@
 (ARMOR) \
 (CONSUMABLE) \
 (TRAP) \
-(CONTAINER)
+(CONTAINER) \
+(MELEE)
 
 #define MENTOC_ITEM_TYPES_BY_CAPS_SEQ \
 (rifle,RIFLE) \
@@ -40,7 +42,8 @@
 (armor,ARMOR) \
 (consumable,CONSUMABLE) \
 (trap,TRAP) \
-(container,CONTAINER)
+(container,CONTAINER) \
+(melee,MELEE)
 
 #define MENTOC_WEAR_PLACES_SEQ \
 (LIGHT) \
@@ -87,7 +90,8 @@
 (ITEM_ARMOR) \
 (ITEM_CONSUMABLE) \
 (ITEM_TRAP) \
-(ITEM_CONTAINER)
+(ITEM_CONTAINER) \
+(ITEM_MELEE)
 
 
 
@@ -163,6 +167,43 @@
 (int16_t,stat_strategy,"#int16_t, positive or negative amount to affect strategy stat",0), \
 (int16_t,stat_medical,"#int16_t, positive or negative amount to affect medical stat",0) \
 )
+
+#define MENTOC_MELEE_TYPES_SEQUENCE (MACHETE) \
+(KNIFE) \
+(BRASS_KNUCKLES)
+
+#define MENTOC_MELEE_MEMBERS_TUPLE ( \
+(float,chance_to_injure,"#float, out of 100",10.0), \
+(int16_t,critical_chance,"#int16_t, out of 100",33), \
+(float,damage_per_second,"#float, out of 100",44.0), \
+(float,disorient_amount,"#float, out of 100",3.0), \
+(int16_t,damage_dice_count,"#int16_t, number of dice",2), \
+(int16_t,damage_dice_sides,"#int16_t, dice sides",6), \
+(int16_t,incendiary_damage,"#int16_t, damage",0), \
+(int16_t,explosive_damage,"#int16_t, damage",0), \
+(int16_t,shrapnel_damage,"#int16_t, damage",0), \
+(int16_t,corrosive_damage,"#int16_t, damage",0), \
+(int16_t,cryogenic_damage,"#int16_t, damage",0), \
+(int16_t,radioactive_damage,"#int16_t, damage",0), \
+(int16_t,emp_damage,"#int16_t, damage",0), \
+(int16_t,shock_damage,"#int16_t, damage",0), \
+(int16_t,anti_matter_damage,"#int16_t, damage",0), \
+(int16_t,stat_strength,"#int16_t, positive or negative amount to affect strength stat",0), \
+(int16_t,stat_intelligence,"#int16_t, positive or negative amount to affect intelligence stat",0), \
+(int16_t,stat_wisdom,"#int16_t, positive or negative amount to affect wisdom stat",0), \
+(int16_t,stat_dexterity,"#int16_t, positive or negative amount to affect dexterity stat",0), \
+(int16_t,stat_constitution,"#int16_t, positive or negative amount to affect constitution stat",0), \
+(int16_t,stat_electronics,"#int16_t, positive or negative amount to affect electronics stat",0), \
+(int16_t,stat_armor,"#int16_t, positive or negative amount to affect armor stat",0), \
+(int16_t,stat_marksmanship,"#int16_t, positive or negative amount to affect marksmanship stat",0), \
+(int16_t,stat_sniping,"#int16_t, positive or negative amount to affect sniping stat",0), \
+(int16_t,stat_demolitions,"#int16_t, positive or negative amount to affect demolitions stat",0), \
+(int16_t,stat_chemistry,"#int16_t, positive or negative amount to affect chemistry stat",0), \
+(int16_t,stat_weapon_handling,"#int16_t, positive or negative amount to affect weapon_handling stat",0), \
+(int16_t,stat_strategy,"#int16_t, positive or negative amount to affect strategy stat",0), \
+(int16_t,stat_medical,"#int16_t, positive or negative amount to affect medical stat",0) \
+)
+
 
 #define MENTOC_ELEMENTAL_TYPES_SEQUENCE (ELEM_INCENDIARY) \
 (ELEM_EXPLOSIVE) \
@@ -649,6 +690,17 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 #define MENTOC_EXAMPLE_TRAP \
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_EXAMPLE_IMPL,mw_trap,MENTOC_TRAP_TYPES_SEQUENCE)
 
+
+/**************************************************************************/
+/** MELEE                                                                 */
+/**************************************************************************/
+#define MENTOC_FEED_MELEE \
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_FEED_TYPE_IMPL,mw_melee,MENTOC_MELEE_TYPES_SEQUENCE) \
+	MENTOC_FEED_PARSE_ALL_IMPL(MENTOC_MELEE_MEMBERS_TUPLE)
+
+#define MENTOC_EXAMPLE_MELEE \
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_EXAMPLE_IMPL,mw_consumable,MENTOC_MELEE_TYPES_SEQUENCE)
+
 /*********************************************************/
 /** HOWTO: Add new item and subcategories                */
 /* Step 4: Add a new FEED_* and EXAMPLE_* constants      */
@@ -667,6 +719,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 #define ITEM_CONSUMABLE        8
 #define ITEM_TRAP              9
 #define ITEM_CONTAINER         10
+#define ITEM_MELEE             11
 #endif
 namespace mods {
 	enum elemental_types_t {
@@ -716,6 +769,10 @@ namespace mods::weapon::type {
 	enum container {
 		CONTAINER_NONE = 0,
 		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_CONTAINER_TYPES_SEQUENCE)
+	};
+	enum melee {
+		MELEE_NONE = 0,
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_MELEE_TYPES_SEQUENCE)
 	};
 
 

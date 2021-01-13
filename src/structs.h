@@ -487,8 +487,9 @@ enum player_class_t {
 #define ITEM_ATTACHMENT 6
 #define ITEM_ARMOR      7		/* Item is armor		*/
 #define ITEM_CONSUMABLE 8
-#define ITEM_TRAP      9
-#define ITEM_CONTAINER      10
+#define ITEM_TRAP       9
+#define ITEM_CONTAINER  10
+#define ITEM_MELEE      11
 #define __MENTOC_ITEM_CONSTANTS_DEFINED__
 
 

@@ -44,8 +44,14 @@ namespace mods::weapon {
 	mw_explosive explosive(std::shared_ptr<obj_data>& object);
 	mw_drone drone(std::shared_ptr<obj_data>& object);
 	mw_gadget gadget(std::shared_ptr<obj_data>& object);
+	mw_melee melee(std::shared_ptr<obj_data>& object);
 	std::variant<mw_rifle,mw_explosive,mw_drone> get_type(
 	    std::shared_ptr<obj_data>&);
+	enum melee_t {
+		MACHETE,
+		KNIFE,
+		BRASS_KNUCKLES
+	};
 	enum attachment_t {
 		SCOPE,
 		GRIP,
@@ -157,7 +163,20 @@ using weapon_armor_t = mods::weapon::type::armor;
 using weapon_consumable_t = mods::weapon::type::consumable;
 using weapon_trap_t = mods::weapon::type::trap;
 using weapon_container_t = mods::weapon::type::container;
+using weapon_melee_t = mods::weapon::type::melee;
 namespace mods::weapon {
+	static inline std::string to_string(weapon_melee_t melee_type) {
+#define MENTOC_TO_STR(a){ case mw_melee::a: return #a; }
+		switch(melee_type) {
+				MENTOC_TO_STR(KNIFE);
+				MENTOC_TO_STR(MACHETE);
+				MENTOC_TO_STR(BRASS_KNUCKLES);
+			default:
+				return "<unknown>";
+#undef MENTOC_TO_STR
+		}
+	}
+
 
 	static inline std::string to_string(weapon_trap_t trap_type) {
 #define MENTOC_TO_STR(a){ case mw_trap::a: return #a; }
@@ -578,6 +597,7 @@ namespace mods::weapon {
 	std::vector<cap_t> get_caps(mw_drone);
 	std::vector<cap_t> get_caps(mw_consumable);
 	std::vector<cap_t> get_caps(mw_trap);
+	std::vector<cap_t> get_caps(mw_melee);
 	template <typename TObj,typename T>
 	static inline void feed_caps(TObj& obj, T type) {
 		obj->clear_capabilities();

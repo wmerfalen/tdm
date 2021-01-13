@@ -26,6 +26,7 @@ using mw_drone = mods::weapon::type::drone;
 using mw_consumable = mods::weapon::type::consumable;
 using mw_trap = mods::weapon::type::trap;
 using mw_container = mods::weapon::type::container;
+using mw_melee = mods::weapon::type::melee;
 namespace mods {
 	struct player;
 };
@@ -38,6 +39,7 @@ namespace mods::weapon {
 	extern std::vector<cap_t> get_caps(mw_drone);
 	extern std::vector<cap_t> get_caps(mw_consumable);
 	extern std::vector<cap_t> get_caps(mw_trap);
+	extern std::vector<cap_t> get_caps(mw_melee);
 	using obj_ptr_t = std::shared_ptr<obj_data>;
 	using player_ptr_t = std::shared_ptr<mods::player>;
 	extern obj_ptr_t get_clip_by_name(player_ptr_t& player,std::string_view arg);
@@ -407,6 +409,38 @@ namespace mods::yaml {
 		MENTOC_BASE_MEMBERS
 
 	};
+	struct melee_description_t : public yaml_description_t {
+		std::map<std::string,std::string> exported;
+		void generate_map();
+		using mw_type = mw_melee;
+		std::vector<cap_t> get_caps() {
+			return mods::weapon::get_caps((mw_melee)this->type);
+		}
+		void fill_flags(obj_data* obj);
+		virtual ~melee_description_t() = default;
+		melee_description_t() :
+			MENTOC_BASE_MEMBERS_SET("melee") {
+			std::fill(accuracy_map.begin(),accuracy_map.end(),0);
+			std::fill(damage_map.begin(),damage_map.end(),0);
+			MENTOC_INITIALIZE(MENTOC_MELEE_MEMBERS_TUPLE);
+			feed_status = 2;
+		}
+		virtual int16_t feed(std::string_view file);
+		virtual int16_t feed_from_po_record(mentoc_pqxx_result_t);
+		virtual int16_t write_example_file(std::string_view file);
+		uint64_t db_id();
+		uint64_t flush_to_db();
+		std::array<float,MAX_ROOM_DISTANCE> accuracy_map;
+		std::array<float,MAX_ROOM_DISTANCE> damage_map;	/** Percent per room */
+
+		MENTOC_MEMBER_VARS_FOR(MENTOC_MELEE_MEMBERS_TUPLE)
+
+		MENTOC_BASE_MEMBERS
+		mods::weapon::weapon_stat_list_t* base_stat_list;
+		int16_t feed_status;
+
+	};
+
 
 
 	/*********************************************************/

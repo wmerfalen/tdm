@@ -2,6 +2,23 @@
 
 # vertical slice gameplay goals [ first 10 levels ]
 	- [ ] create an area with mobs leveled 1-10
+		- [ ] create behaviour trees for:
+			- [ ] `MOB_AGGRESSIVE`
+			- [ ] `MOB_WIMPY`
+			- [ ] `MOB_STAY_ZONE`
+			- [ ] `MOB_AGGR_GOOD`
+			- [ ] `MOB_HELPER`
+		- [ ] equip:
+			- [ ] MF-13 initiate
+				- [ ] Machete
+			- [ ] MF-13 hoodlum
+				- [ ] Mac-10 .45 Machine Pistol
+					- [ ] high velocity rounds
+					- [ ] drops HV rounds and Mac-10 on death
+			- [ ] La Posta Chef
+				- [ ] Dull knife
+			- [ ] Toughened Teenager
+				- [ ] Brass Knuckles
 	- [ ] use zone commands to populate zone with mobs
 	- [ ] create a safe zone where players can respawn
 	- [ ] create a room to buy armor
