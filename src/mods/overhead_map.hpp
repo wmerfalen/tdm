@@ -10,39 +10,44 @@ namespace mods::overhead_map {
 	constexpr static uint8_t height = 16;
 
 	void crawl_lambda(std::vector<std::vector<std::string>>& map_coordinates,
-			int direction,int in_x,int in_y,int original_x,int original_y,int room);
-	
-	template <typename OutputDevice>
-		std::string generate(OutputDevice out,const room_rnum& room_number){
-			std::string overhead_map = "";
-			std::string horizontal_border = std::string("{grn}+{/grn}{red}") + 
-				std::string(mods::overhead_map::width,'=') + "{/red}{grn}+{/grn}";
-			overhead_map = horizontal_border + "\r\n";
-			std::vector<std::vector<std::string>> map_coordinates;
-			map_coordinates.resize(mods::overhead_map::height);
-			for(unsigned k = 0; k < height; k++){
-				map_coordinates[k].resize(width);
-				std::fill(map_coordinates[k].begin(),map_coordinates[k].end()," ");
-			}
-			map_coordinates[height / 2][width / 2] = "[x]";
-			auto middle_x = width / 2;
-			auto middle_y = height / 2;
-			room_rnum room = out->room();
-			for(auto direction : {NORTH,EAST,SOUTH,WEST}){
-				if(world[room].dir_option[direction] == nullptr){ continue; }
-				crawl_lambda(map_coordinates,direction,middle_x,middle_y,middle_x,middle_y,room);
-			}
+	                  int direction,int in_x,int in_y,int original_x,int original_y,int room,int max);
 
-			for(unsigned k=0; k <height; k++){
-				overhead_map += "{red}={/red}";
-				for(unsigned i=0; i < width;i++){
-					overhead_map += map_coordinates[k][i];
-				}
-				overhead_map += "{red}={/red}\r\n";
-			}
-			overhead_map += horizontal_border + "\r\n";
-			return overhead_map;
+	template <typename OutputDevice>
+	std::string generate(OutputDevice out,const room_rnum& room_number) {
+		std::string overhead_map = "";
+		std::string horizontal_border = std::string("{grn}+{/grn}{red}") +
+		                                std::string(mods::overhead_map::width,'=') + "{/red}{grn}+{/grn}";
+		overhead_map = horizontal_border + "\r\n";
+		std::vector<std::vector<std::string>> map_coordinates;
+		map_coordinates.resize(mods::overhead_map::height);
+		for(unsigned k = 0; k < height; k++) {
+			map_coordinates[k].resize(width);
+			std::fill(map_coordinates[k].begin(),map_coordinates[k].end()," ");
 		}
+		map_coordinates[height / 2][width / 2] = "[x]";
+		auto middle_x = width / 2;
+		auto middle_y = height / 2;
+		room_rnum room = out->room();
+		int max = 5;
+		for(auto direction : {
+		            NORTH,EAST,SOUTH,WEST
+		        }) {
+			if(world[room].dir_option[direction] == nullptr) {
+				continue;
+			}
+			crawl_lambda(map_coordinates,direction,middle_x,middle_y,middle_x,middle_y,room,max);
+		}
+
+		for(unsigned k=0; k <height; k++) {
+			overhead_map += "{red}={/red}";
+			for(unsigned i=0; i < width; i++) {
+				overhead_map += map_coordinates[k][i];
+			}
+			overhead_map += "{red}={/red}\r\n";
+		}
+		overhead_map += horizontal_border + "\r\n";
+		return overhead_map;
+	}
 };
 
 #endif

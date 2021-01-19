@@ -1245,6 +1245,10 @@ struct room_data {
 		}
 		bool watching;
 		room_vnum shop_vnum;
+		bool starting_point;
+		int x;
+		int y;
+		int z;
 	protected:
 		std::map<texture_type_t,texture_level_t> m_texture_levels;
 		std::vector<uint8_t> m_directions;

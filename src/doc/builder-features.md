@@ -1,24 +1,143 @@
 # Inventory of features
 
 # vertical slice gameplay goals [ first 10 levels ]
+	- [ ] Content via Procedural Generation
+		- [ ] Define differently shaped map components
+			- [ ] Room shapes
+				- [ ] L-shaped
+					- [ ] 2E, 2S
+					- [ ] 2W, 2S
+					- [ ] 2E, 2N
+					- [ ] 2W, 2S
+				- [ ] S-shaped
+					- [ ] 2W, 2S, 2E, 2S, 2W
+				- [ ] Z-shaped
+					- [ ] 2E, 2S, 2W, 2S, 2E
+				- [ ]  N-shaped
+					- [ ] 2N, 2E, 2S, 2E, 2N
+				- [ ] Square shaped
+					- [ ] 2x2
+					- [ ] 3x3
+					- [ ] 4x4
+				- [ ] Rectangular shaped
+					- [ ] 2x4
+					- [ ] 2x3
+				- [ ] I-shaped
+					- [ ] 3 east/west, middle section goes north/south meets with middle section of: 3 east/west
+				- [ ] Partial I-shaped
+					- [ ] 3 east/west, middle section goes north/south
+					- [ ] 3 north/sotuh, middle section goes east/west
+			- [ ] Macro vs Micro generation
+				- [ ] Create macro patterns
+					- [ ] i.e.: L-shaped macro pattern
+				- [ ] Micro generation composes all room shapes within the confies of the macro pattern
+			- [ ] Functional rooms
+				- [ ] Weapon vendors
+					- [ ] Shotguns
+					- [ ] Assault Rifles
+					- [ ] SMG's
+					- [ ] Sniper Rifles
+					- [ ] Pistols
+					- [ ] Machine Pistols
+				- [ ] Ammunition Vendors
+					- [ ] High Velocity
+					- [ ] Incendiary
+					- [ ] Cryogenic Rounds
+					- [ ] Anti-Matter
+				- [ ] Attachment vendors
+					- [ ] Sights
+					- [ ] Muzzles
+					- [ ] Underbarrel
+					- [ ] Magazines
+			- [ ] Armor vendors
+			- [ ] Consumable vendors
+				- [ ] Steroids
+					- [ ] Adds to strength
+					- [ ] Adds to agility
+				- [ ] HP Stim packs
+				- [ ] Movement Stim Packs
+				- [ ] Concentration
+					- [ ] Adds to accuracy
+
+
 	- [ ] create an area with mobs leveled 1-10
 		- [ ] create behaviour trees for:
 			- [ ] `MOB_AGGRESSIVE`
+				- [ ] Will attack at first glance
 			- [ ] `MOB_WIMPY`
+				- [ ] More likely to flee than fight
 			- [ ] `MOB_STAY_ZONE`
+				- [ ] Will not leave room
 			- [ ] `MOB_AGGR_GOOD`
+				- [ ] Turns aggressive if witnesses injustice
 			- [ ] `MOB_HELPER`
-		- [ ] equip:
-			- [ ] MF-13 initiate
-				- [ ] Machete
-			- [ ] MF-13 hoodlum
-				- [ ] Mac-10 .45 Machine Pistol
-					- [ ] high velocity rounds
-					- [ ] drops HV rounds and Mac-10 on death
-			- [ ] La Posta Chef
-				- [ ] Dull knife
-			- [ ] Toughened Teenager
-				- [ ] Brass Knuckles
+				- [ ] Helps out the innocent
+		- [ ] Area idea 1:
+			- Sweetwater Springs Blvd
+				- [ ] La Posta Restaurant (Main Floor)
+					- [ ] Mobs:
+						- [ ] La Posta Chef
+							- [ ] Dull Knife
+						- [ ] MF-13 Initiate
+							- [ ] Machete
+						- [ ] MF-13 hoodlum
+							- [ ] Mac-10 .45 Machine Pistol
+								- [ ] high velocity rounds
+								- [ ] drops HV rounds and Mac-10 on death
+					- [ ] Situations:
+						- [ ] MF-13 hoodlums seize control of block
+							- [ ] Eliminate hoodlums
+						- [ ] Plant explosives on lifted truck behind restaurant
+				- [ ] La Posta Restaurant (Freezer room below Main Floor)
+					- [ ] Mobs:
+						- [ ] Butcher [HELPER]
+							- [ ] Machete
+							- [ ] Mac-10 MP
+						- [ ] Crazed Butcher [AGGRESSIVE]
+							- [ ] SASG-12
+							- [ ] Bolo Knife
+					- [ ] Situations:
+						- [ ] Find dead bodies held in frozen containers
+						- [ ] Plant explosives on frozen containers containing bodies
+						- [ ] Search frozen containers for contractee's partner
+						- [ ] Find the stash of SASG-12 shotgun shells
+						- [ ] Break open the safe using the thermite bomb
+						- [ ] Fight off the corrupted cops until reinforcements arrive
+				- [ ] Pawn Shop (Main Floor)
+					- [ ] Mobs:
+						- [ ] Agitated drug addict
+							- [ ] SIG SAUER
+								- [ ] Extended magazine
+				- [ ] Bank (Main Floor)
+					- [ ] Mobs:
+						- [ ] Bank Teller
+						- [ ] Honest Patron (Male)
+						- [ ] Poor woman
+						- [ ] Old Decrepit Man
+						- [ ] Agitated Drug Addict
+							- [ ] Rusted Knife
+						- [ ] Bank Security Guard
+							- [ ] SIG SAUER
+						- [ ] Homeless beggar
+							- [ ] Rusted Knife
+				- [ ] Bank Vault
+					- Mobs:
+						- [ ] Security Guard (4)
+						- [ ] Female bank teller
+						- [ ] Hidden door leads to secret tunnel
+				- [ ] Bank (Secret Tunnel)
+					- [ ] A bank vault that leads to a secret tunnel below
+					- [ ] Mobs:
+						- [ ] MF-13 Drug Cartel Thug
+						- [ ] MF-13 Human Trafficking Kidnapper
+						- [ ] Extorted Mining Expert
+						- [ ] Heavily armed guard
+						- [ ] Delusional Blade Wielder
+						- [ ] Corrupt Police Officer
+						- [ ] Drugged out Heroin Addict
+					- [ ] Stashes:
+						- [ ] Bin of Assault Rifles
+						- [ ] Bin of Shotguns
 	- [ ] use zone commands to populate zone with mobs
 	- [ ] create a safe zone where players can respawn
 	- [ ] create a room to buy armor
@@ -43,6 +162,7 @@
 				- [ ] describe how to build the object
 	- when user practices a skill:
 		- [ ] have them be the lowest proficiency
+			- [ ] only way to master is to use the skill
 	- when user uses a skill:
 		- [ ] increment player skill usage counters
 		- [ ] if usage counter reaches a new level:
@@ -68,7 +188,7 @@
 # object instances [ PHASE 2 ]
 	- Overview:
 		Once phase 1 is finished, the deep object parser needs to be adapted to parse database ID's so
-		that a customized rifle or piece of armor can survive shutdown/reboot. Store this is postgres.
+		that a customized rifle or piece of armor can survive shutdown/reboot. Store this in postgres.
 	- modify deep object parser to recognize database ID's
 		- load those object instances
 	

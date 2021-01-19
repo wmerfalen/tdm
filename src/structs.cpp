@@ -375,6 +375,10 @@ void room_data::remove_texture(texture_type_t t) {
 }
 
 void room_data::init() {
+	starting_point = false;
+	x = 0;
+	y = 0;
+	z = 0;
 	this->shop_vnum = 0;
 	watching = 0;
 	number = 0;

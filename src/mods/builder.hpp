@@ -20,10 +20,14 @@ typedef int socket_t;
 #include <unordered_map>
 #include "flags.hpp"
 
-void r_error(const player_ptr_t & player,std::string_view msg);
-void r_success(const player_ptr_t & player,std::string_view msg);
-void r_status(const player_ptr_t & player,std::string_view msg);
+void r_error(const player_ptr_t& player,std::string_view msg);
+void r_success(const player_ptr_t& player,std::string_view msg);
+void r_status(const player_ptr_t& player,std::string_view msg);
 namespace mods::builder {
+	std::tuple<int8_t,std::string> pave_on(player_ptr_t& player,std::string_view sandbox_name);
+	std::tuple<int8_t,std::string> pave_continue(player_ptr_t& player);
+	std::tuple<int8_t,std::string> pave_off(player_ptr_t& player);
+	bool currently_paving(player_ptr_t& player);
 	void initialize_builder(player_ptr_t& player);
 //struct room_data {
 //   1    room_vnum number;        /* Rooms number (vnum)            */
@@ -55,25 +59,27 @@ namespace mods::builder {
 	constexpr static uint64_t HAS_SANDBOX = (1 << 0);
 
 	struct sandbox_data_t {
-		sandbox_data_t();
-		~sandbox_data_t() = default;
-		sandbox_data_t(
-				player_ptr_t player,
-				std::string_view name,
-				int start,
-				int zone_virtual_number);
-		int8_t new_sandbox(
-				player_ptr_t player,
-				std::string_view name,
-				int start,
-				int zone_virtual_number);
-		std::string_view name() const;
-		void set_name(std::string_view n);
-		std::shared_ptr<builder_data_t> builder_data(){ return m_builder_data; }
+			sandbox_data_t();
+			~sandbox_data_t() = default;
+			sandbox_data_t(
+			    player_ptr_t player,
+			    std::string_view name,
+			    int start,
+			    int zone_virtual_number);
+			int8_t new_sandbox(
+			    player_ptr_t player,
+			    std::string_view name,
+			    int start,
+			    int zone_virtual_number);
+			std::string_view name() const;
+			void set_name(std::string_view n);
+			std::shared_ptr<builder_data_t> builder_data() {
+				return m_builder_data;
+			}
 		protected:
-		std::shared_ptr<builder_data_t> m_builder_data;
-		std::string m_name;
-		player_ptr_t m_player;
+			std::shared_ptr<builder_data_t> m_builder_data;
+			std::string m_name;
+			player_ptr_t m_player;
 	};
 
 	using sandbox_list_t = std::unordered_map<std::string,std::deque<sandbox_data_t>> ;
@@ -95,13 +101,13 @@ namespace mods::builder {
 	int import_room(struct room_data*);
 	using zone_pkid_t = int;
 	std::tuple<bool,zone_pkid_t> save_zone_to_db(
-			int virtual_number,
-			std::string_view name,
-			int room_start,
-			int room_end,
-			int lifespan,
-			int reset_mode
-			);
+	    int virtual_number,
+	    std::string_view name,
+	    int room_start,
+	    int room_end,
+	    int lifespan,
+	    int reset_mode
+	);
 	std::pair<bool,std::string> zone_place(int zone_id,std::string_view command, std::string_view if_flag,std::string_view arg1, std::string_view arg2,std::string_view arg3);
 	std::optional<obj_data*> instantiate_object_by_index(int index);
 	std::optional<obj_data*> instantiate_object_by_vnum(int vnum);
@@ -123,9 +129,9 @@ namespace mods::builder {
 	void add_room_to_pavements(player_ptr_t& player, int room_id);
 };
 
-void r_error(const player_ptr_t & player,std::string_view msg);
+void r_error(const player_ptr_t& player,std::string_view msg);
 void r_success(const player_ptr_t& player,std::string_view msg);
-void r_status(const player_ptr_t & player,std::string_view msg);
+void r_status(const player_ptr_t& player,std::string_view msg);
 //ACMD(do_rbuild);
 //ACMD(do_rbuild_sandbox);
 //ACMD(do_zbuild);

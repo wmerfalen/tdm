@@ -109,11 +109,12 @@ buildobj = act.informative act.item act.medic \
 					 mods/unit-tests/armor-stats mods/unit-tests/visibility \
 					 mods/skill-orm-adaptor mods/orm/skill-trees \
 					 mods/orm/rifle-instance mods/unit-tests/rifle-instance \
-					 mods/orm/player-skill-usage
+					 mods/orm/player-skill-usage \
+					 mods/fluxkraft/generator mods/fluxkraft/shape-dictionary
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
-all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests
+all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft
 	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT)
 
 clean:
@@ -128,9 +129,13 @@ clean:
 		rm -f $(builddir)/mods/mini-games/*.d \
 		rm -f $(builddir)/mods/forge-engine/*.o \
 		rm -f $(builddir)/mods/forge-engine/*.d \
+		rm -f $(builddir)/mods/fluxkraft/*.o \
+		rm -f $(builddir)/mods/fluxkraft/*.d \
 		rm -f $(builddir)/mods/unit-tests/*.o \
 		rm -f $(builddir)/mods/unit-tests/*.d 
 
+$(builddir)/mods/fluxkraft:
+	mkdir -p $(builddir)/mods/fluxkraft
 $(builddir)/mods/forge-engine:
 	mkdir -p $(builddir)/mods/forge-engine
 $(builddir)/mods/mini-games:

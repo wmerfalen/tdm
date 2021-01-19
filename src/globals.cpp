@@ -68,6 +68,7 @@ INIT(mods::classes);
 INIT(mods::loot);
 INIT(mods::forge_engine::value_scaler_static);
 INIT(mods::weapons::damage_types);
+INIT(mods::fluxkraft);
 #undef INIT
 
 namespace mods::unit_tests {
@@ -502,6 +503,7 @@ namespace mods {
 			mods::loot::init();
 			mods::forge_engine::value_scaler_static::init();
 			mods::weapons::damage_types::init();
+			mods::fluxkraft::init();
 			::offensive::init();
 			::builder::init();
 			::informative::init();
@@ -669,6 +671,87 @@ namespace mods {
 
 			return NORTH;
 		}
+		std::map<std::tuple<int,int,int>,room_vnum> coordinate_map;
+		int get_room_by_coordinates(int target_x,int target_y,int target_z) {
+			auto v = coordinate_map[std::make_tuple<>(target_x,target_y,target_z)];
+			if(real_room(v) == NOWHERE) {
+				return -1;
+			}
+			return world[real_room(v)].number;
+		}
+		void register_room_at_coordinates(int x, int y, int z, room_vnum room) {
+			coordinate_map[std::make_tuple<>(x,y,z)] = room;
+		}
+		void glue_room_at_coordinates(int x, int y, int z, room_vnum room) {
+			auto n = real_room(coordinate_map[std::make_tuple<>(x,y+1,z)]);
+			auto e = real_room(coordinate_map[std::make_tuple<>(x+1,y,z)]);
+			auto s = real_room(coordinate_map[std::make_tuple<>(x,y-1,z)]);
+			auto w = real_room(coordinate_map[std::make_tuple<>(x-1,y,z)]);
+			auto u = real_room(coordinate_map[std::make_tuple<>(x,y,z+1)]);
+			auto d = real_room(coordinate_map[std::make_tuple<>(x,y,z-1)]);
+			auto room_id = real_room(room);
+			if(n != NOWHERE) {
+				world[n].set_dir_option(
+				    SOUTH,
+				    "general_description",
+				    "keyword",
+				    EX_ISDOOR,
+				    0,
+				    room_id
+				);
+			}
+			if(e != NOWHERE) {
+				world[e].set_dir_option(
+				    WEST,
+				    "general_description",
+				    "keyword",
+				    EX_ISDOOR,
+				    0,
+				    room_id
+				);
+			}
+			if(s != NOWHERE) {
+				world[s].set_dir_option(
+				    NORTH,
+				    "general_description",
+				    "keyword",
+				    EX_ISDOOR,
+				    0,
+				    room_id
+				);
+			}
+			if(w != NOWHERE) {
+				world[w].set_dir_option(
+				    EAST,
+				    "general_description",
+				    "keyword",
+				    EX_ISDOOR,
+				    0,
+				    room_id
+				);
+			}
+			if(u != NOWHERE) {
+				world[u].set_dir_option(
+				    DOWN,
+				    "general_description",
+				    "keyword",
+				    EX_ISDOOR,
+				    0,
+				    room_id
+				);
+			}
+			if(d != NOWHERE) {
+				world[d].set_dir_option(
+				    UP,
+				    "general_description",
+				    "keyword",
+				    EX_ISDOOR,
+				    0,
+				    room_id
+				);
+			}
+		}
+
 		static const std::map<std::string_view,std::string_view> default_colors = {
 			{"blu","\033[34m"},
 			{"gld","\033[33m"},
@@ -867,40 +950,49 @@ namespace mods {
 				mods::quests::run_trigger(*player);
 			}
 
+			auto& room = world[player->room()];
+			player->send("[x:%d,y:%d,z:%d]\r\n",room.x,room.y,room.z);
 			if(player->room_pave_mode()) {
-				player->sendln("You are paving");
+				player->send("[paving]\r\n");
 				//If is a direction and that direction is not an exit,
 				//then pave a way to that exit
 				int door = 0;
+				int x = 0, y = 0, z = 0;
 				if(in_argument.length() == 1) {
 					switch(in_argument[0]) {
 						case 'u':
 						case 'U':
 							door = UP;
+							z += 1;
 							break;
 
 						case 's':
 						case 'S':
+							y -= 1;
 							door = SOUTH;
 							break;
 
 						case 'w':
 						case 'W':
+							x -= 1;
 							door = WEST;
 							break;
 
 						case 'e':
 						case 'E':
+							x += 1;
 							door = EAST;
 							break;
 
 						case 'n':
 						case 'N':
+							y += 1;
 							door = NORTH;
 							break;
 
 						case 'd':
 						case 'D':
+							z -= 1;
 							door = DOWN;
 							break;
 						default:
@@ -908,7 +1000,41 @@ namespace mods {
 					}
 
 					auto cached_room = player->room();
+					int target_x = world[cached_room].x + x;
+					int target_y = world[cached_room].y + y;
+					int target_z = world[cached_room].z + z;
+					room_vnum existing_room_vnum = get_room_by_coordinates(target_x,target_y,target_z);
+					room_data* existing_room = nullptr;
+					int real_room_id = 0;
+					if(existing_room_vnum > -1) {
+						real_room_id = real_room(existing_room_vnum);
+						if(real_room_id != NOWHERE) {
+							existing_room = &world[real_room_id];
+						}
+					}
 					if(world[cached_room].dir_option[door] == nullptr) {
+						if(existing_room) {
+							world[cached_room].set_dir_option(
+							    door,
+							    "general_description",
+							    "keyword",
+							    EX_ISDOOR,
+							    0,
+							    real_room_id
+							);
+							existing_room->set_dir_option(
+							    OPPOSITE_DIR(door),
+							    "general description",
+							    "keyword",
+							    EX_ISDOOR,
+							    0,
+							    cached_room
+							);
+							mods::builder::add_room_to_pavements(player,cached_room);
+							mods::builder::add_room_to_pavements(player,real_room_id);
+							glue_room_at_coordinates(existing_room->x,existing_room->y,existing_room->z,existing_room->number);
+							return true;
+						}
 						player->sendln("Creating room in that direction");
 						int new_room_rnum = 0;
 						world.emplace_back();
@@ -934,6 +1060,11 @@ namespace mods {
 						    0,
 						    cached_room
 						);
+						w.x = target_x;
+						w.y = target_y;
+						w.z = target_z;
+						register_room_at_coordinates(w.x,w.y,w.z,w.number);
+						glue_room_at_coordinates(w.x,w.y,w.z,w.number);
 						mods::builder::add_room_to_pavements(player,cached_room);
 						mods::builder::add_room_to_pavements(player,new_room_rnum);
 					}
