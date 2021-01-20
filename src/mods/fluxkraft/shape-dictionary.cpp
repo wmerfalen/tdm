@@ -302,9 +302,10 @@ namespace mods::fluxkraft {
 		world[player->room()].y = y;
 		world[player->room()].z = z;
 		world[player->room()].starting_point = true;
+		std::vector<shape_description> created;
 		for(unsigned i = 0; i < 10; i++) {
-			auto& random_shape = shapes.at(rand_number(0,shapes.size()-1));
-			random_shape.walk(player);
+			created.emplace_back(shapes.at(rand_number(0,shapes.size()-1)));
+			created.back().walk(player);
 		}
 		for(const auto& r : world) {
 			mods::globals::glue_room_at_coordinates(r.x,r.y,r.z,r.number);
