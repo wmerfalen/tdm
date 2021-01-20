@@ -671,18 +671,19 @@ namespace mods {
 
 			return NORTH;
 		}
-		std::map<std::tuple<int,int,int>,room_vnum> coordinate_map;
-		int get_room_by_coordinates(int target_x,int target_y,int target_z) {
+		using coordinate_type_t = int32_t;
+		std::map<std::tuple<coordinate_type_t,coordinate_type_t,coordinate_type_t>,room_vnum> coordinate_map;
+		coordinate_type_t get_room_by_coordinates(coordinate_type_t target_x,coordinate_type_t target_y,coordinate_type_t target_z) {
 			auto v = coordinate_map[std::make_tuple<>(target_x,target_y,target_z)];
 			if(real_room(v) == NOWHERE) {
 				return -1;
 			}
 			return world[real_room(v)].number;
 		}
-		void register_room_at_coordinates(int x, int y, int z, room_vnum room) {
+		void register_room_at_coordinates(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room) {
 			coordinate_map[std::make_tuple<>(x,y,z)] = room;
 		}
-		void glue_room_at_coordinates(int x, int y, int z, room_vnum room) {
+		void glue_room_at_coordinates(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room) {
 			auto n = real_room(coordinate_map[std::make_tuple<>(x,y+1,z)]);
 			auto e = real_room(coordinate_map[std::make_tuple<>(x+1,y,z)]);
 			auto s = real_room(coordinate_map[std::make_tuple<>(x,y-1,z)]);
@@ -1166,7 +1167,9 @@ namespace mods {
 				player->set_room(target_room);
 				mods::globals::room_list[target_room].push_back(player);
 				if(!IS_NPC(ch)) {
+#ifdef __MENTOC_GLOBALS_PRINT_WATCHING_EVENTS__
 					std::cerr << "[room_entry] watching events: " << player->name().c_str() << "\n";
+#endif
 					mods::mobs::room_watching::events::room_entry(target_room,player->uuid());
 				}
 				return;

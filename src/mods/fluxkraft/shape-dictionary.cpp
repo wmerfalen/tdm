@@ -263,6 +263,22 @@ namespace mods::fluxkraft {
 		};
 		return list;
 	}
+	ACMD(do_procgen_random_amount) {
+		ADMIN_REJECT();
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size() < 1) {
+			player->errorln("usage: procgen_random_amount <direction>\r\nexample: procgen_random_amount n\r\n");
+			return;
+		}
+		auto d = mods::util::parse_direction(vec_args[0]);
+		if(d < 0) {
+			player->errorln("Invalid direction");
+			return;
+		}
+		for(uint8_t i = rand_number(1,10); i > 0; --i) {
+			command_interpreter(player,vec_args[0].substr(0,1));
+		}
+	}
 	/******************/
 	/** generate_zone */
 	/******************/
@@ -270,14 +286,25 @@ namespace mods::fluxkraft {
 		ADMIN_REJECT();
 		DO_HELP("generate_zone");
 		const auto& vec_args = PARSE_ARGS();
-		if(vec_args.size() < 3) {
-			player->errorln("usage: generate_zone x y z\r\nexample: generate_zone -400 -400 -400");
+		if(vec_args.size() < 4) {
+			player->errorln("usage: generate_zone <count> x y z\r\nexample: generate_zone 20 -400 -400 -400");
 			return;
 		}
+		auto oc = mods::util::stoi(vec_args[0]);
+		if(!oc.has_value()) {
+			player->errorln("Invalid count specified");
+			return;
+		}
+		int count = oc.value();
+		if(count <= 0) {
+			player->errorln("non-positive count specified");
+			return;
+		}
+
 		int x = 0, y = 0, z = 0;
-		auto ox = mods::util::stoi(vec_args[0]);
-		auto oy = mods::util::stoi(vec_args[1]);
-		auto oz = mods::util::stoi(vec_args[2]);
+		auto ox = mods::util::stoi(vec_args[1]);
+		auto oy = mods::util::stoi(vec_args[2]);
+		auto oz = mods::util::stoi(vec_args[3]);
 		if(!ox.has_value()) {
 			player->errorln("Invalid x coordinate");
 			return;
@@ -303,7 +330,7 @@ namespace mods::fluxkraft {
 		world[player->room()].z = z;
 		world[player->room()].starting_point = true;
 		std::vector<shape_description> created;
-		for(unsigned i = 0; i < 10; i++) {
+		for(unsigned i = 0; i < count; i++) {
 			created.emplace_back(shapes.at(rand_number(0,shapes.size()-1)));
 			created.back().walk(player);
 		}

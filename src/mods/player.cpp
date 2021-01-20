@@ -287,7 +287,9 @@ namespace mods {
 #else
 			mods::orm::inventory::flush_player_by_uuid(uuid());
 #endif
+#ifdef __MENTOC_PLAYER_DEBUG__
 			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
+#endif
 			//perform_equip_calculations(pos,true);
 			this->m_sync_equipment();
 			mods::stat_bonuses::player_equip(uuid(),in_object->uuid);
@@ -1502,7 +1504,9 @@ namespace mods {
 		return m_class;
 	}
 	void player::set_class(player_class_t c) {
+#ifdef __MENTOC_PLAYER_DEBUG__
 		std::cerr << "[mods::player] set class to: " << c << "\n";
+#endif
 		m_class = c;
 		m_class_string = mods::util::player_class_to_string(c);
 		m_triads = mods::levels::get_triads_by_class(m_class);
