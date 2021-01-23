@@ -4,29 +4,6 @@
 	- [ ] Content via Procedural Generation
 		- [ ] Define differently shaped map components
 			- [ ] Room shapes
-				- [ ] L-shaped
-					- [ ] 2E, 2S
-					- [ ] 2W, 2S
-					- [ ] 2E, 2N
-					- [ ] 2W, 2S
-				- [ ] S-shaped
-					- [ ] 2W, 2S, 2E, 2S, 2W
-				- [ ] Z-shaped
-					- [ ] 2E, 2S, 2W, 2S, 2E
-				- [ ]  N-shaped
-					- [ ] 2N, 2E, 2S, 2E, 2N
-				- [ ] Square shaped
-					- [ ] 2x2
-					- [ ] 3x3
-					- [ ] 4x4
-				- [ ] Rectangular shaped
-					- [ ] 2x4
-					- [ ] 2x3
-				- [ ] I-shaped
-					- [ ] 3 east/west, middle section goes north/south meets with middle section of: 3 east/west
-				- [ ] Partial I-shaped
-					- [ ] 3 east/west, middle section goes north/south
-					- [ ] 3 north/sotuh, middle section goes east/west
 			- [ ] Macro vs Micro generation
 				- [ ] Create macro patterns
 					- [ ] i.e.: L-shaped macro pattern
@@ -59,7 +36,6 @@
 				- [ ] Concentration
 					- [ ] Adds to accuracy
 
-
 	- [ ] create an area with mobs leveled 1-10
 		- [ ] create behaviour trees for:
 			- [ ] `MOB_AGGRESSIVE`
@@ -72,6 +48,45 @@
 				- [ ] Turns aggressive if witnesses injustice
 			- [ ] `MOB_HELPER`
 				- [ ] Helps out the innocent
+
+		- [ ] Area idea 2: Mob levels 15-20
+			- [ ] Downtown Northern Talon
+			 - Area is a DMZ where lawlessness has taken hold of the city.
+			 A militia group now controls this area with scattered levels
+			 of resistance fighters. Almost all innocent citizens have fled.
+			 The remaining non-hostile citizens still in this DMZ are slaves
+			 or people who have been repurposed to serve some sort of agenda
+			 or job as subserviants to the militia group.
+			 - The majority of the hostile members you will meet outside of
+			 the nexus are lower level grunts. They are all armed
+			 - The central point of failure is the stadium which has been
+			 controlled by the militia. Underground tunnels to and from the
+			 stadium have been dug and are actively guarded. These tunnels
+			 serve many purposes, but are mainly used to transfer goods
+			 and arms without being seen by drones/satelites.
+
+		- [ ] Area idea 3: Operations
+				- [ ] Composed of three major military buildings
+					- [ ] Operations Security (OPSEC) Building [ INTEL ]
+						- [ ] Vertical takeoff planes and helicopters
+					- [ ] Ballistics [ WEAPONS ]
+					- [ ] Advanced Tech [ RESEARCH ]
+				- The three military buildings are safe zones and not controlled by
+				hostile NPCs. 
+				- Each building has a perimeter that hostile forces cannot overcome.
+				Though, as soon as you leave the perimeter, you have a high chance
+				of coming into contact with hostile NPCs from the surrounding areas.
+				- Areas outside the buildings begin to get hostile the further away
+				you venture.
+				- A major point of contention are the underground railway systems
+				as guerilla operations are being conducted to hijack the cars
+				that run on these tracks.
+				- There are pockets of heavy resistance throughout the city 
+				that have a sudden influx of militia members. Their goals are to
+				gain control of buildings that serve as a hub for the non hostile
+				NPCs that live near the area. Common targets are banks, mom+pop shops,
+				gun stores, and liquor stores
+				- 
 		- [ ] Area idea 1:
 			- Sweetwater Springs Blvd
 				- [ ] La Posta Restaurant (Main Floor)

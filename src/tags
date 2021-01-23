@@ -8339,7 +8339,7 @@ m_debug	mods/fluxkraft/generator.cpp	8;"	d	file:
 m_debug	mods/fluxkraft/generator.hpp	11;"	d
 m_debug	mods/fluxkraft/generator.hpp	13;"	d
 m_debug	mods/fluxkraft/generator.hpp	51;"	d
-m_debug	mods/fluxkraft/shape-dictionary.cpp	348;"	d	file:
+m_debug	mods/fluxkraft/shape-dictionary.cpp	347;"	d	file:
 m_debug	mods/fluxkraft/shape-dictionary.cpp	7;"	d	file:
 m_debug	mods/fluxkraft/shape-dictionary.cpp	9;"	d	file:
 m_debug	mods/fluxkraft/shape-dictionary.hpp	11;"	d
@@ -10906,7 +10906,6 @@ shape_description	mods/fluxkraft/shape-dictionary.cpp	/^	struct shape_descriptio
 shape_dictionary	mods/fluxkraft/shape-dictionary.cpp	/^	shape_dictionary::shape_dictionary() {$/;"	f	class:mods::fluxkraft::shape_dictionary
 shape_dictionary	mods/fluxkraft/shape-dictionary.hpp	/^	struct shape_dictionary {$/;"	s	namespace:mods::fluxkraft
 shape_list	mods/fluxkraft/shape-dictionary.cpp	/^	std::vector<shape_description>& shape_list() {$/;"	f	namespace:mods::fluxkraft
-shapes	mods/fluxkraft/shape-dictionary.cpp	/^	std::vector<shape_description> shapes;$/;"	m	namespace:mods::fluxkraft	file:
 shield_proficiency_levels_t	mods/classes/sentinel.hpp	/^		enum shield_proficiency_levels_t {$/;"	g	struct:mods::classes::sentinel
 shm	mods/lmdb/shm-config.hpp	/^namespace shm {$/;"	n
 shm	mods/lmdb/shm.hpp	/^class  shm {$/;"	c	namespace:gdns

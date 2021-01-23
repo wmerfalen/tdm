@@ -65,7 +65,6 @@ namespace mods::fluxkraft {
 		std::vector<std::string> build_directions;
 		std::vector<attach_point_t> attach_points;
 	};
-	std::vector<shape_description> shapes;
 
 	shape_dictionary::shape_dictionary() {
 		this->init();
