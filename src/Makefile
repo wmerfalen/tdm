@@ -110,7 +110,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/skill-orm-adaptor mods/orm/skill-trees \
 					 mods/orm/rifle-instance mods/unit-tests/rifle-instance \
 					 mods/orm/player-skill-usage \
-					 mods/fluxkraft/generator mods/fluxkraft/shape-dictionary
+					 mods/fluxkraft/generator mods/fluxkraft/shape-dictionary \
+					 mods/fluxkraft/arcon-metropolitan
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

@@ -3,14 +3,27 @@
 
 #include "../structs.h"
 #include <vector>
+#include <set>
+#include <tuple>
 
 extern std::deque<room_data> world;
 namespace mods::overhead_map {
 	constexpr static uint8_t width = 48;
 	constexpr static uint8_t height = 16;
 
-	void crawl_lambda(std::vector<std::vector<std::string>>& map_coordinates,
-	                  int direction,int in_x,int in_y,int original_x,int original_y,int room,int max);
+	using coordinate_t = int8_t;
+	using room_pair_t = std::pair<room_rnum,int8_t>;
+	using crawl_record_t = std::set<room_pair_t>;
+	void crawl_lambda(
+	    std::vector<std::vector<std::string>>& map_coordinates,
+	    uint8_t direction,
+	    coordinate_t in_x,
+	    coordinate_t in_y,
+	    coordinate_t original_x,
+	    coordinate_t original_y,
+	    room_rnum room,
+	    crawl_record_t* crawled
+	);
 
 	template <typename OutputDevice>
 	std::string generate(OutputDevice out,const room_rnum& room_number) {
@@ -28,14 +41,14 @@ namespace mods::overhead_map {
 		auto middle_x = width / 2;
 		auto middle_y = height / 2;
 		room_rnum room = out->room();
-		int max = 5;
+		crawl_record_t crawled;
 		for(auto direction : {
 		            NORTH,EAST,SOUTH,WEST
 		        }) {
 			if(world[room].dir_option[direction] == nullptr) {
 				continue;
 			}
-			crawl_lambda(map_coordinates,direction,middle_x,middle_y,middle_x,middle_y,room,max);
+			crawl_lambda(map_coordinates,direction,middle_x,middle_y,middle_x,middle_y,room,&crawled);
 		}
 
 		for(unsigned k=0; k <height; k++) {

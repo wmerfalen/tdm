@@ -24,7 +24,8 @@ namespace mods::overhead_map {
 		uint8_t middle_x = player_width / 2;
 		uint8_t middle_y = player_height / 2;
 		map_coordinates[middle_y][middle_x] = "[x]";
-		int max = 5;
+		crawl_record_t crawled;
+
 		for(auto direction : {
 		            NORTH,EAST,SOUTH,WEST
 		        }) {
@@ -34,7 +35,7 @@ namespace mods::overhead_map {
 			crawl_lambda(map_coordinates,direction,
 			             middle_x,middle_y,
 			             player_width,player_height,
-			             out->room(),max);
+			             out->room(),&crawled);
 		}
 
 		std::string overhead_map = "";
@@ -47,17 +48,28 @@ namespace mods::overhead_map {
 		}
 		return overhead_map;
 	}
-	void crawl_lambda(std::vector<std::vector<std::string>>& map_coordinates,
-	                  int direction,int in_x,int in_y,int in_width,int in_height,int room,int max) {
-		if(max <= 0) {
+
+	void crawl_lambda(
+	    std::vector<std::vector<std::string>>& map_coordinates,
+	    uint8_t direction,
+	    coordinate_t in_x,
+	    coordinate_t in_y,
+	    coordinate_t in_width,
+	    coordinate_t in_height,
+	    room_rnum room,
+	    crawl_record_t* crawled
+	) {
+
+		if(crawled->find(std::make_pair<>(room,direction)) != crawled->end()) {
 			return;
 		}
-
+		crawled->insert(std::make_pair<>(room,direction));
 		while(in_y < in_height && in_y >= 0 &&
 		        in_x < in_width && in_x >= 0 &&
 		        world.size() > room
 		     ) {
 			if(map_coordinates[in_y][in_x].compare("[x]") != 0) {
+#if 0
 				auto textures = world[room].textures();
 #define MENTOC_TFIND(A) textures.find(room_data::texture_type_t::A) != textures.end()
 				if(MENTOC_TFIND(WATER) || MENTOC_TFIND(UNDERWATER)) {
@@ -78,39 +90,41 @@ namespace mods::overhead_map {
 				        mods::globals::room_list[room].size() > 0) {
 					map_coordinates[in_y][in_x] = "[n]";
 				}
+#endif
+				map_coordinates[in_y][in_x] = "[ ]";
 			}
 
 			switch(direction) {
 				case NORTH:
 					if(world[room].dir_option[EAST]) {
-						crawl_lambda(map_coordinates,EAST,in_x + 1,in_y,in_width,in_height, world[room].dir_option[EAST]->to_room,--max);
+						crawl_lambda(map_coordinates,EAST,in_x + 1,in_y,in_width,in_height, world[room].dir_option[EAST]->to_room,crawled);
 					}
 					if(world[room].dir_option[WEST]) {
-						crawl_lambda(map_coordinates,WEST,in_x - 1,in_y, in_width,in_height,world[room].dir_option[WEST]->to_room,--max);
+						crawl_lambda(map_coordinates,WEST,in_x - 1,in_y, in_width,in_height,world[room].dir_option[WEST]->to_room,crawled);
 					}
 					break;
 				case SOUTH:
 					if(world[room].dir_option[EAST]) {
-						crawl_lambda(map_coordinates,EAST,in_x + 1,in_y, in_width,in_height,world[room].dir_option[EAST]->to_room,--max);
+						crawl_lambda(map_coordinates,EAST,in_x + 1,in_y, in_width,in_height,world[room].dir_option[EAST]->to_room,crawled);
 					}
 					if(world[room].dir_option[WEST]) {
-						crawl_lambda(map_coordinates,WEST,in_x - 1,in_y, in_width,in_height,world[room].dir_option[WEST]->to_room,--max);
+						crawl_lambda(map_coordinates,WEST,in_x - 1,in_y, in_width,in_height,world[room].dir_option[WEST]->to_room,crawled);
 					}
 					break;
 				case EAST:
 					if(world[room].dir_option[NORTH]) {
-						crawl_lambda(map_coordinates,NORTH,in_x,in_y - 1, in_width,in_height,world[room].dir_option[NORTH]->to_room,--max);
+						crawl_lambda(map_coordinates,NORTH,in_x,in_y - 1, in_width,in_height,world[room].dir_option[NORTH]->to_room,crawled);
 					}
 					if(world[room].dir_option[SOUTH]) {
-						crawl_lambda(map_coordinates,SOUTH,in_x,in_y + 1, in_width,in_height,world[room].dir_option[SOUTH]->to_room,--max);
+						crawl_lambda(map_coordinates,SOUTH,in_x,in_y + 1, in_width,in_height,world[room].dir_option[SOUTH]->to_room,crawled);
 					}
 					break;
 				case WEST:
 					if(world[room].dir_option[NORTH]) {
-						crawl_lambda(map_coordinates,NORTH,in_x,in_y - 1, in_width,in_height,world[room].dir_option[NORTH]->to_room,--max);
+						crawl_lambda(map_coordinates,NORTH,in_x,in_y - 1, in_width,in_height,world[room].dir_option[NORTH]->to_room,crawled);
 					}
 					if(world[room].dir_option[SOUTH]) {
-						crawl_lambda(map_coordinates,SOUTH,in_x,in_y + 1, in_width,in_height,world[room].dir_option[SOUTH]->to_room,--max);
+						crawl_lambda(map_coordinates,SOUTH,in_x,in_y + 1, in_width,in_height,world[room].dir_option[SOUTH]->to_room,crawled);
 					}
 					break;
 				default:

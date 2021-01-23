@@ -2,8 +2,16 @@
 
 # vertical slice gameplay goals [ first 10 levels ]
 	- [ ] Content via Procedural Generation
+		- [ ] Area Configuration (prefixed with arcon-* in the mods/fluxkraft folder)
+			- An area configuration describes an area theme. In the first arcon in the game, we will
+			be using the metropolitan area as a theme. 
+			The general idea is that you have various manually built rooms/buildings/areas that
+			are interconnected by random and procedurally generated content. Thes are prone to change
+			but they allow us to generate areas with a bit of randomness to them but also with 
+			central hubs of manually built content that has meaning.
+
 		- [ ] Define differently shaped map components
-			- [ ] Room shapes
+			- [x] Room shapes
 			- [ ] Macro vs Micro generation
 				- [ ] Create macro patterns
 					- [ ] i.e.: L-shaped macro pattern

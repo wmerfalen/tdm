@@ -951,8 +951,6 @@ namespace mods {
 				mods::quests::run_trigger(*player);
 			}
 
-			auto& room = world[player->room()];
-			player->send("[x:%d,y:%d,z:%d]\r\n",room.x,room.y,room.z);
 			if(player->room_pave_mode()) {
 				player->send("[paving]\r\n");
 				//If is a direction and that direction is not an exit,

@@ -2552,7 +2552,6 @@ MENTOC_T	mods/aoe.hpp	32;"	d
 MENTOC_T	mods/aoe.hpp	55;"	d
 MENTOC_T	mods/lmdb.hpp	68;"	d
 MENTOC_T	mods/lmdb.hpp	83;"	d
-MENTOC_TFIND	mods/overhead_map.cpp	62;"	d	file:
 MENTOC_TO_STR	mods/weapon.hpp	169;"	d
 MENTOC_TO_STR	mods/weapon.hpp	176;"	d
 MENTOC_TO_STR	mods/weapon.hpp	182;"	d
@@ -4251,7 +4250,7 @@ UNUSED17	mods/flags.hpp	/^		UNUSED17,				\/\/ useless$/;"	e	enum:mods::flags::af
 UP	structs.h	159;"	d
 UPDATE	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_type_t
 UPPER	utils.h	156;"	d
-USERS_FORMAT	act.informative.cpp	1520;"	d	file:
+USERS_FORMAT	act.informative.cpp	1527;"	d	file:
 USE_AUTOEQ	structs.h	118;"	d
 USURP	interpreter.cpp	1692;"	d	file:
 Unknown	mods/catch.hpp	/^			Unknown = -1,$/;"	e	enum:Catch::ResultWas::OfType
@@ -4318,7 +4317,7 @@ WEAR_WRIST_R	structs.h	436;"	d
 WELC_MESSG	config.cpp	/^const char *WELC_MESSG =$/;"	v
 WEST	structs.h	158;"	d
 WHEN	mods/catch.hpp	12215;"	d
-WHO_FORMAT	act.informative.cpp	1483;"	d	file:
+WHO_FORMAT	act.informative.cpp	1490;"	d	file:
 WILL	telnet.h	46;"	d
 WILL_BANK_MONEY	shop.h	164;"	d
 WILL_START_FIGHT	shop.h	163;"	d
@@ -4530,6 +4529,7 @@ __LAST	mods/weapon-types.hpp	/^		__LAST = RIP$/;"	e	enum:mods::weapon::capabilit
 __MELEE_WEAPON_END__	mods/object.hpp	/^				__MELEE_WEAPON_END__,$/;"	e	enum:mods::object::object_type_enum_t
 __MELEE_WEAPON_START__	mods/object.hpp	/^				__MELEE_WEAPON_START__,$/;"	e	enum:mods::object::object_type_enum_t
 __MENTOC_ACT_DEBUG_HEADER__	act.debug.hpp	2;"	d
+__MENTOC_ARCON_METROPOLITAN_HEADER__	mods/fluxkraft/areas.hpp	2;"	d
 __MENTOC_BUILDER_UTILS_ACCEPT_ZERO_INDEX__	mods/builder.hpp	3;"	d
 __MENTOC_CONFIG_HEADER__	config.hpp	2;"	d
 __MENTOC_DB_HEADER__	db.h	2;"	d
@@ -4762,7 +4762,7 @@ __MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	146;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__	mods/behaviour_tree_impl.cpp	16;"	d	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	d
 __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__	mods/calc-visibility.cpp	10;"	d	file:
-__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1258;"	d	file:
+__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1256;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ADVANCED_PROTECTION_DEBUG_OUTPUT__	mods/armor/advanced-protection.cpp	3;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_BP_DEBUG_OUTPUT__	mods/armor/basic-protection.cpp	3;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ELITE_PROTECTION_DEBUG_OUTPUT__	mods/armor/elite-protection.cpp	3;"	d	file:
@@ -4984,6 +4984,8 @@ arcSafeRelease	mods/catch.hpp	/^inline void arcSafeRelease(NSObject* obj) {$/;"	
 arcSafeRelease	mods/catch.hpp	/^inline void arcSafeRelease(NSObject*) {}$/;"	f
 arcSafeRelease	mods/catch2.hpp	/^inline void arcSafeRelease( NSObject* ){}$/;"	f
 arcSafeRelease	mods/catch2.hpp	/^inline void arcSafeRelease( NSObject* obj ) {$/;"	f
+arcon	mods/fluxkraft/arcon-metropolitan.cpp	/^namespace mods::fluxkraft::arcon {$/;"	n	class:mods::fluxkraft	file:
+arcon	mods/fluxkraft/arcon-metropolitan.hpp	/^namespace mods::fluxkraft::arcon {$/;"	n	class:mods::fluxkraft
 arg1	db.h	/^	int	arg1;		\/*                                      *\/$/;"	m	struct:reset_com
 arg2	db.h	/^	int	arg2;		\/* Arguments to the command             *\/$/;"	m	struct:reset_com
 arg3	db.h	/^	int	arg3;		\/*                                      *\/$/;"	m	struct:reset_com
@@ -5063,11 +5065,14 @@ attach_flamethrower	mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyr
 attach_flamethrower	mods/orm/pyrexia.cpp	/^	std::pair<bool,std::string> pyrexia::attach_flamethrower(obj_ptr_t& weapon){$/;"	f	class:mods::orm::pyrexia
 attach_incendiary_grenade_launcher	mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyrexia::attach_incendiary_grenade_launcher(obj_ptr_t& weapon){$/;"	f	class:mods::classes::pyrexia
 attach_incendiary_grenade_launcher	mods/orm/pyrexia.cpp	/^	std::pair<bool,std::string> pyrexia::attach_incendiary_grenade_launcher(obj_ptr_t& weapon){$/;"	f	class:mods::orm::pyrexia
+attach_point_t	mods/fluxkraft/arcon-metropolitan.hpp	/^	struct attach_point_t {$/;"	s	namespace:mods::fluxkraft::arcon
 attach_point_t	mods/fluxkraft/shape-dictionary.cpp	/^	struct attach_point_t {$/;"	s	namespace:mods::fluxkraft	file:
+attach_points	mods/fluxkraft/arcon-metropolitan.hpp	/^		std::vector<attach_point_t> attach_points;$/;"	m	struct:mods::fluxkraft::arcon::metro
 attach_points	mods/fluxkraft/shape-dictionary.cpp	/^		std::vector<attach_point_t> attach_points;$/;"	m	struct:mods::fluxkraft::shape_description	file:
 attachment	mods/item-types.hpp	/^	enum attachment {$/;"	g	namespace:mods::weapon::type
 attachment_description_t	mods/yaml.hpp	/^		attachment_description_t() :$/;"	f	struct:mods::yaml::attachment_description_t
 attachment_description_t	mods/yaml.hpp	/^	struct attachment_description_t : public yaml_description_t {$/;"	s	namespace:mods::yaml
+attachment_points	mods/fluxkraft/arcon-metropolitan.hpp	/^		std::vector<char> attachment_points;$/;"	m	struct:mods::fluxkraft::arcon::attach_point_t
 attachment_points	mods/fluxkraft/shape-dictionary.cpp	/^		std::vector<char> attachment_points;$/;"	m	struct:mods::fluxkraft::attach_point_t	file:
 attachment_t	mods/weapon.hpp	/^	enum attachment_t {$/;"	g	namespace:mods::weapon
 attachment_types_t	mods/forge-engine/generator.hpp	/^	enum attachment_types_t {$/;"	g	namespace:mods::forge_engine
@@ -5210,6 +5215,7 @@ build_armor_locker	mods/intimidate.cpp	/^void build_armor_locker(room_vnum room)
 build_armor_locker	mods/zone.cpp	/^void build_armor_locker(room_vnum room){$/;"	f	namespace:mods::zone
 build_camera_feed	mods/intimidate.cpp	/^void build_camera_feed(room_vnum room){$/;"	f	namespace:mods::zone
 build_camera_feed	mods/zone.cpp	/^void build_camera_feed(room_vnum room){$/;"	f	namespace:mods::zone
+build_directions	mods/fluxkraft/arcon-metropolitan.hpp	/^		std::vector<std::string> build_directions;$/;"	m	struct:mods::fluxkraft::arcon::metro
 build_directions	mods/fluxkraft/shape-dictionary.cpp	/^		std::vector<std::string> build_directions;$/;"	m	struct:mods::fluxkraft::shape_description	file:
 build_dummy	mods/intimidate.cpp	/^void build_dummy(room_vnum room){$/;"	f	namespace:mods::zone
 build_dummy	mods/zone.cpp	/^void build_dummy(room_vnum room){$/;"	f	namespace:mods::zone
@@ -5637,7 +5643,7 @@ cpp_extern	sysdep.h	400;"	d
 cpp_extern	sysdep.h	402;"	d
 crash_file_timeout	config.cpp	/^int crash_file_timeout = 10;$/;"	v
 crawl_blast_radius	mods/sensor-grenade.cpp	/^	void crawl_blast_radius($/;"	f	namespace:mods::sensor_grenade
-crawl_lambda	mods/overhead_map.cpp	/^	void crawl_lambda(std::vector<std::vector<std::string>>& map_coordinates,$/;"	f	namespace:mods::overhead_map
+crawl_lambda	mods/overhead_map.cpp	/^	void crawl_lambda($/;"	f	namespace:mods::overhead_map
 create	mods/behaviour_tree_node.hpp	/^		static child_node_t create(callback_t& c,node_type_t n_type){$/;"	f	struct:mods::behaviour_tree_node
 create	mods/behaviour_tree_node.hpp	/^		static child_node_t create(callback_t& c,node_type_t n_type,children_t& ch){$/;"	f	struct:mods::behaviour_tree_node
 create	mods/behaviour_tree_node.hpp	/^		static child_node_t create(node_type_t n_type){$/;"	f	struct:mods::behaviour_tree_node
@@ -6834,9 +6840,9 @@ find_class_bitvector	class.cpp	/^bitvector_t find_class_bitvector(const char *ar
 find_command	interpreter.cpp	/^int find_command(const char *command) {$/;"	f
 find_door	act.movement.cpp	/^	int find_door(char_data *ch, const char *type, char *dir, const char *cmdname) {$/;"	f
 find_eq_pos	act.item.cpp	/^int find_eq_pos(char_data *ch, struct obj_data *obj, char *arg) {$/;"	f
-find_exdesc	act.informative.cpp	/^char * find_exdesc(char *word,room_data& r){$/;"	f
+find_exdesc	act.informative.cpp	/^char * find_exdesc(char *word,room_data& r) {$/;"	f
 find_exdesc	act.informative.cpp	/^char* find_exdesc(std::string_view word,std::vector<extra_descr_data>& in_list) {$/;"	f
-find_exdesc_equipment	act.informative.cpp	/^const char* find_exdesc_equipment(std::string_view word,const char_data* ch,const std::size_t& position){$/;"	f
+find_exdesc_equipment	act.informative.cpp	/^const char* find_exdesc_equipment(std::string_view word,const char_data* ch,const std::size_t& position) {$/;"	f
 find_first_step	graph.cpp	/^int find_first_step(room_rnum src, room_rnum target) {$/;"	f
 find_guard	castle.cpp	/^char_data * find_guard(char_data *ch) {$/;"	f
 find_house	house.cpp	/^int find_house(room_vnum vnum) {$/;"	f
@@ -7238,6 +7244,7 @@ get_requirements_string	mods/forge-engine/util.cpp	/^	std::string get_requiremen
 get_roam_recorder_data	mods/mob-roam.cpp	/^	std::vector<std::shared_ptr<roam_recorder>> get_roam_recorder_data(player_ptr_t& player){$/;"	f	namespace:mods::mob_roam
 get_roam_recorder_data_by_profile_name	mods/mob-roam.cpp	/^	std::vector<std::shared_ptr<roam_recorder>> get_roam_recorder_data_by_profile_name(player_ptr_t& player,std::string_view profile_name){$/;"	f	namespace:mods::mob_roam
 get_room_by_coordinates	globals.cpp	/^		coordinate_type_t get_room_by_coordinates(coordinate_type_t target_x,coordinate_type_t target_y,coordinate_type_t target_z) {$/;"	f	namespace:mods::globals
+get_room_by_coordinates	mods/rooms.cpp	/^	coordinate_type_t get_room_by_coordinates(coordinate_type_t target_x,coordinate_type_t target_y,coordinate_type_t target_z) {$/;"	f	namespace:mods::rooms
 get_room_flag_strings	mods/rooms.hpp	/^	static inline std::vector<std::string> get_room_flag_strings(){$/;"	f	namespace:mods::rooms
 get_room_flags_from_room	mods/rooms.hpp	/^	static inline std::vector<std::string> get_room_flags_from_room(room_rnum r){$/;"	f	namespace:mods::rooms
 get_room_list	globals.cpp	/^		player_list_t& get_room_list(player_ptr_t& player) {$/;"	f	namespace:mods::globals
@@ -7297,6 +7304,7 @@ globals	globals.hpp	/^	namespace globals {$/;"	n	namespace:mods
 globals	interpreter.cpp	/^namespace mods::globals {$/;"	n	class:mods	file:
 globals	mods/db.hpp	/^namespace mods::globals {$/;"	n	class:mods
 globals	mods/deferred.hpp	/^namespace mods::globals {$/;"	n	class:mods
+globals	mods/fluxkraft/arcon-metropolitan.hpp	/^namespace mods::globals {$/;"	n	class:mods
 globals	mods/fluxkraft/shape-dictionary.cpp	/^namespace mods::globals {$/;"	n	class:mods	file:
 globals	mods/lmdb.cpp	/^namespace mods::globals {$/;"	n	class:mods	file:
 globals	mods/lmdb.hpp	/^namespace mods::globals {$/;"	n	class:mods
@@ -7308,6 +7316,7 @@ globals	mods/rooms.cpp	/^namespace mods::globals {$/;"	n	class:mods	file:
 globals	shop.cpp	/^namespace mods::globals {$/;"	n	class:mods	file:
 globals	structs.h	/^namespace mods::globals {$/;"	n	class:mods
 glue_room_at_coordinates	globals.cpp	/^		void glue_room_at_coordinates(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room) {$/;"	f	namespace:mods::globals
+glue_room_at_coordinates	mods/rooms.cpp	/^	void glue_room_at_coordinates(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room) {$/;"	f	namespace:mods::rooms
 go	mods/mobs/helpers.hpp	/^	void go(uint8_t direction,TMob& mob){$/;"	f	namespace:mods::mobs::helpers
 go_and_watch	mods/mobs/helpers.hpp	/^	void go_and_watch(uint8_t direction,TMob& mob){$/;"	f	namespace:mods::mobs::helpers
 go_invisible	mods/super-users.cpp	/^	void go_invisible(player_ptr_t& player){$/;"	f	namespace:mods::super_users
@@ -7610,7 +7619,7 @@ info	mods/lmdb/shm.hpp	/^int shm::info(struct shmid_ds* buf){$/;"	f	class:gdns::
 informative	act.informative.cpp	/^namespace informative {$/;"	n	file:
 informative	globals.cpp	/^INIT(informative);$/;"	v
 init	act.builder.cpp	/^	void init() {$/;"	f	namespace:builder
-init	act.informative.cpp	/^	void init(){$/;"	f	namespace:informative
+init	act.informative.cpp	/^	void init() {$/;"	f	namespace:informative
 init	act.offensive.cpp	/^	void init(){$/;"	f	namespace:offensive
 init	globals.cpp	/^		int init(int argc,char** argv) {$/;"	f	namespace:mods::globals
 init	mods/armor/advanced-protection.cpp	/^		void advanced_protection::init(){$/;"	f	class:mods::armor::advanced_protection
@@ -7631,6 +7640,7 @@ init	mods/classes/super-user-fiddler.cpp	/^	void init(){$/;"	f	namespace:mods::c
 init	mods/date-time.cpp	/^	void init(){$/;"	f	namespace:mods::date_time
 init	mods/debug.hpp	/^	static inline void init(bool tics){ debug_state = std::make_unique<state>(tics); }$/;"	f	namespace:mods::debug
 init	mods/elevator.cpp	/^	void init(){$/;"	f	namespace:mods::elevator
+init	mods/fluxkraft/arcon-metropolitan.hpp	/^	void init() {$/;"	f	namespace:mods::fluxkraft::arcon
 init	mods/fluxkraft/generator.cpp	/^	void generator::init() {$/;"	f	class:mods::fluxkraft::generator
 init	mods/fluxkraft/shape-dictionary.cpp	/^	void init() {$/;"	f	namespace:mods::fluxkraft
 init	mods/fluxkraft/shape-dictionary.cpp	/^	void shape_dictionary::init() {$/;"	f	class:mods::fluxkraft::shape_dictionary
@@ -7813,7 +7823,7 @@ is_breach_charge	mods/object-utils.hpp	/^	static inline bool is_breach_charge(T&
 is_callable	mods/catch2.hpp	/^    struct is_callable<Fun(Args...)> : decltype(is_callable_tester::test<Fun, Args...>(0)) {};$/;"	s	namespace:Catch
 is_callable_tester	mods/catch2.hpp	/^    struct is_callable_tester {$/;"	s	namespace:Catch
 is_camera	mods/object-utils.hpp	/^	static inline bool is_camera(T& obj) {$/;"	f	namespace:mods::object_utils
-is_camera_feed	act.informative.cpp	/^bool is_camera_feed(obj_data* obj){$/;"	f
+is_camera_feed	act.informative.cpp	/^bool is_camera_feed(obj_data* obj) {$/;"	f
 is_cancel_command	mods/player-utils.hpp	/^		inline bool is_cancel_command(const std::string& arg){$/;"	f	namespace:mods::player_utils
 is_cancel_command	mods/player-utils.hpp	/^		inline bool is_cancel_command(const std::string_view& arg){$/;"	f	namespace:mods::player_utils
 is_cancel_command	mods/player-utils.hpp	/^	static inline bool is_cancel_command(T& arg){$/;"	f	namespace:mods::player_utils
@@ -8161,7 +8171,7 @@ look_at_room_specific	act.informative.cpp	/^void look_at_room_specific(player_pt
 look_at_target	act.informative.cpp	/^void look_at_target(char_data *ch, char *arg) {$/;"	f
 look_in_direction	act.informative.cpp	/^void look_in_direction(char_data *ch, int dir) {$/;"	f
 look_in_obj	act.informative.cpp	/^void look_in_obj(char_data *ch, char *arg) {$/;"	f
-look_into_camera_feed	act.informative.cpp	/^void look_into_camera_feed(player_ptr_t& player, obj_data* obj, int mode){$/;"	f
+look_into_camera_feed	act.informative.cpp	/^void look_into_camera_feed(player_ptr_t& player, obj_data* obj, int mode) {$/;"	f
 loops	mods/loops.cpp	/^namespace mods::loops {$/;"	n	class:mods	file:
 loops	mods/loops.hpp	/^namespace mods::loops {$/;"	n	class:mods
 loot	globals.cpp	/^INIT(mods::loot);$/;"	v
@@ -8333,6 +8343,9 @@ m_debug	mods/armor/basic-protection.cpp	7;"	d	file:
 m_debug	mods/armor/elite-protection.cpp	5;"	d	file:
 m_debug	mods/armor/elite-protection.cpp	7;"	d	file:
 m_debug	mods/deep-object-parser.cpp	4;"	d	file:
+m_debug	mods/fluxkraft/arcon-metropolitan.hpp	39;"	d
+m_debug	mods/fluxkraft/arcon-metropolitan.hpp	4;"	d
+m_debug	mods/fluxkraft/arcon-metropolitan.hpp	6;"	d
 m_debug	mods/fluxkraft/generator.cpp	36;"	d	file:
 m_debug	mods/fluxkraft/generator.cpp	6;"	d	file:
 m_debug	mods/fluxkraft/generator.cpp	8;"	d	file:
@@ -8905,10 +8918,12 @@ message_len	boards.h	/^	int	message_len;  \/* size of message text (for file wri
 message_sell	shop.h	/^	mods::string message_sell;		\/* Message when player sells item	*\/$/;"	m	struct:shop_data
 meta_utils	mods/meta_utils.cpp	/^namespace mods::meta_utils {$/;"	n	class:mods	file:
 meta_utils	mods/meta_utils.hpp	/^namespace mods::meta_utils {$/;"	n	class:mods
+metro	mods/fluxkraft/arcon-metropolitan.hpp	/^		metro(std::string_view shape_name,const std::vector<std::string>& directions) {$/;"	f	struct:mods::fluxkraft::arcon::metro
+metro	mods/fluxkraft/arcon-metropolitan.hpp	/^	struct metro {$/;"	s	namespace:mods::fluxkraft::arcon
 mex_debug	mods/examine.cpp	4;"	d	file:
 mex_debug	mods/examine.cpp	6;"	d	file:
 mg_map	mods/mobs/mini-gunner.cpp	/^	mg_map_t& mg_map(){$/;"	f	namespace:mods::mobs
-mgdp_debug	globals.cpp	1260;"	d	file:
+mgdp_debug	globals.cpp	1258;"	d	file:
 mi_debug	mods/interpreter.cpp	49;"	d	file:
 mi_debug	mods/interpreter.cpp	5;"	d	file:
 mi_debug	mods/interpreter.cpp	7;"	d	file:
@@ -9142,6 +9157,7 @@ name	mods/catch.hpp	/^		const char* name;$/;"	m	struct:Catch::NameAndDesc
 name	mods/catch2.hpp	/^    StringRef name;$/;"	m	struct:Catch::NameAndTags
 name	mods/classes/pyrexia.hpp	/^				std::string name;$/;"	m	struct:mods::classes::pyrexia::skillset_info_t
 name	mods/drone.hpp	/^			const char* name() {$/;"	f	struct:mods::drone_impl
+name	mods/fluxkraft/arcon-metropolitan.hpp	/^		std::string name;$/;"	m	struct:mods::fluxkraft::arcon::metro
 name	mods/fluxkraft/shape-dictionary.cpp	/^		std::string name;$/;"	m	struct:mods::fluxkraft::shape_description	file:
 name	mods/mini-games.hpp	/^		std::string name;$/;"	m	struct:mods::mini_games::mini_game_payload_t
 name	mods/mobs/mob.hpp	/^			std::string& name() {$/;"	f	class:mods::player
@@ -9563,7 +9579,7 @@ path	mods/js-path.hpp	/^namespace mods::js::path { $/;"	n	class:mods::js
 pave_continue	mods/builder.cpp	/^	std::tuple<int8_t,std::string> pave_continue(player_ptr_t& player) {$/;"	f	namespace:mods::builder
 pave_off	mods/builder.cpp	/^	std::tuple<int8_t,std::string> pave_off(player_ptr_t& player) {$/;"	f	namespace:mods::builder
 pave_on	mods/builder.cpp	/^	std::tuple<int8_t,std::string> pave_on(player_ptr_t& player,std::string_view sandbox_name) {$/;"	f	namespace:mods::builder
-pave_once	mods/rooms.cpp	/^	void pave_once(room_rnum room, direction_t direction) {$/;"	f	namespace:mods::rooms
+pave_once	mods/rooms.cpp	/^	void pave_once(room_rnum room,direction_t door) {$/;"	f	namespace:mods::rooms
 pave_open_direction	mods/doors.hpp	/^	static inline void pave_open_direction(room_rnum room, int direction){$/;"	f	namespace:mods::doors
 pba	globals.cpp	/^INIT(mods::orm::pba);$/;"	v
 pba	mods/orm/player-base-ability.cpp	/^	namespace pba {$/;"	n	namespace:mods::orm	file:
@@ -10204,6 +10220,7 @@ register_replenish	mods/intimidate.cpp	/^void register_replenish(room_vnum room,
 register_replenish	mods/zone.cpp	/^void register_replenish(room_vnum room,std::string type){$/;"	f	namespace:mods::zone
 register_room	globals.cpp	/^		void register_room(const room_rnum& r) {$/;"	f	namespace:mods::globals
 register_room_at_coordinates	globals.cpp	/^		void register_room_at_coordinates(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room) {$/;"	f	namespace:mods::globals
+register_room_at_coordinates	mods/rooms.cpp	/^	void register_room_at_coordinates(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room) {$/;"	f	namespace:mods::rooms
 register_shop	globals.hpp	/^		void register_shop(TShopPtr shop) {$/;"	f	namespace:mods::globals
 register_sniper	mods/replenish.cpp	/^	void register_sniper(uuid_t sniper){$/;"	f	namespace:mods::replenish
 register_support	mods/replenish.cpp	/^	void register_support(uuid_t support){$/;"	f	namespace:mods::replenish
@@ -10453,6 +10470,7 @@ roll_incendiary_shot	mods/classes/pyrexia.cpp	/^		uint16_t pyrexia::roll_incendi
 roll_real_abils	class.cpp	/^void roll_real_abils(char_data *ch) {$/;"	f
 room	graph.cpp	/^	room_rnum room;$/;"	m	struct:bfs_queue_struct	file:
 room	mods/camera.cpp	/^	int camera::room() {$/;"	f	class:mods::camera
+room	mods/fluxkraft/arcon-metropolitan.hpp	/^		room_counter_t room;$/;"	m	struct:mods::fluxkraft::arcon::attach_point_t
 room	mods/fluxkraft/shape-dictionary.cpp	/^		room_counter_t room;$/;"	m	struct:mods::fluxkraft::attach_point_t	file:
 room	mods/intimidate.hpp	/^		room_vnum room;$/;"	m	struct:mods::zone::replenish_command
 room	mods/js.cpp	/^		static duk_ret_t room(duk_context *ctx) {$/;"	f	namespace:mods::js
@@ -10467,6 +10485,7 @@ room_bits	constants.cpp	/^const char *room_bits[] = {$/;"	v
 room_bits	constants.hpp	/^const char *room_bits[] = {$/;"	v
 room_bits_count	constants.cpp	/^size_t	room_bits_count = sizeof(room_bits) \/ sizeof(room_bits[0]) - 1,$/;"	v
 room_bits_count	constants.hpp	/^size_t	room_bits_count = sizeof(room_bits) \/ sizeof(room_bits[0]) - 1,$/;"	v
+room_counter	mods/fluxkraft/arcon-metropolitan.hpp	/^		room_counter_t room_counter;$/;"	m	struct:mods::fluxkraft::arcon::metro
 room_counter	mods/fluxkraft/shape-dictionary.cpp	/^		room_counter_t room_counter;$/;"	m	struct:mods::fluxkraft::shape_description	file:
 room_data	structs.cpp	/^room_data::room_data() {$/;"	f	class:room_data
 room_data	structs.cpp	/^room_data::room_data(const room_data& r) {$/;"	f	class:room_data
@@ -10490,6 +10509,7 @@ room_list	globals.hpp	/^inline mods::globals::player_list_t& room_list(room_rnum
 room_mappings	mods/builder.cpp	/^	static std::map<int,int> room_mappings;$/;"	m	namespace:mods::builder	file:
 room_number	mods/orm/room.hpp	/^		room_vnum room_number;$/;"	m	struct:mods::orm::room
 room_pave_mode	mods/player.cpp	/^	bool player::room_pave_mode() {$/;"	f	class:mods::player
+room_pointer	mods/fluxkraft/arcon-metropolitan.hpp	/^		std::shared_ptr<char_data> room_pointer;$/;"	m	struct:mods::fluxkraft::arcon::attach_point_t
 room_pointer	mods/fluxkraft/shape-dictionary.cpp	/^		std::shared_ptr<char_data> room_pointer;$/;"	m	struct:mods::fluxkraft::attach_point_t	file:
 room_rnum	mods/scan.hpp	/^			uint32_t room_rnum;$/;"	m	struct:mods::scan::__anon4
 room_rnum	mods/scan.hpp	/^			uint32_t room_rnum;$/;"	m	struct:mods::scan::find_results_t
@@ -11760,6 +11780,7 @@ vnum_object	db.cpp	/^int vnum_object(char *searchname, char_data *ch) {$/;"	f
 vsnprintf	bsd-snprintf.cpp	/^vsnprintf(char *str, size_t count, const char *fmt, va_list args) {$/;"	f
 vsnprintf	sysdep.h	351;"	d
 vwrite_to_output	comm.cpp	/^size_t vwrite_to_output(mods::descriptor_data& t, const char *format, va_list args) {$/;"	f
+walk	mods/fluxkraft/arcon-metropolitan.hpp	/^		void walk(player_ptr_t& player) {$/;"	f	struct:mods::fluxkraft::arcon::metro
 walk	mods/fluxkraft/shape-dictionary.cpp	/^		void walk(player_ptr_t& player) {$/;"	f	struct:mods::fluxkraft::shape_description
 wants_to	mods/intent.hpp	/^		intent_to_t 				wants_to;$/;"	m	struct:mods::intent::intent_t
 warn_thermite_room	mods/doors.hpp	/^	static inline void warn_thermite_room(const room_rnum room,int direction){$/;"	f	namespace:mods::doors

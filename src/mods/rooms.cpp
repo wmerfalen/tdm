@@ -5,8 +5,12 @@
 extern void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
 extern void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...);
 extern int next_room_vnum();
+using coordinate_type_t = int32_t;
 namespace mods::globals {
 	extern void register_room(const room_rnum&);
+	extern coordinate_type_t get_room_by_coordinates(coordinate_type_t target_x,coordinate_type_t target_y,coordinate_type_t target_z);
+	extern void register_room_at_coordinates(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room);
+	extern void glue_room_at_coordinates(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room);
 };
 
 namespace mods::rooms::affects {
@@ -488,9 +492,77 @@ namespace mods::rooms {
 			player->sendln(f);
 		}
 	}
-	void pave_once(room_rnum room, direction_t direction) {
+	void glue_room_at_coordinates(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room) {
+		mods::globals::glue_room_at_coordinates(x,y,z,room);
+	}
+	void register_room_at_coordinates(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room) {
+		mods::globals::register_room_at_coordinates(x,y,z,room);
+	}
+	coordinate_type_t get_room_by_coordinates(coordinate_type_t target_x,coordinate_type_t target_y,coordinate_type_t target_z) {
+		return mods::globals::get_room_by_coordinates(target_x,target_y,target_z);
+	}
+	void pave_once(room_rnum room,direction_t door) {
+		int x = 0, y = 0, z = 0;
+		switch(door) {
+			case UP:
+				z += 1;
+				break;
+			case SOUTH:
+				y -= 1;
+				break;
+			case WEST:
+				x -= 1;
+				break;
+
+			case EAST:
+				x += 1;
+				break;
+
+			case NORTH:
+				y += 1;
+				break;
+
+			case DOWN:
+				z -= 1;
+				break;
+			default:
+				return;
+		}
+
 		auto cached_room = room;
-		if(world[cached_room].dir_option[direction] == nullptr) {
+		int target_x = world[cached_room].x + x;
+		int target_y = world[cached_room].y + y;
+		int target_z = world[cached_room].z + z;
+		room_vnum existing_room_vnum = get_room_by_coordinates(target_x,target_y,target_z);
+		room_data* existing_room = nullptr;
+		int real_room_id = 0;
+		if(existing_room_vnum > -1) {
+			real_room_id = real_room(existing_room_vnum);
+			if(real_room_id != NOWHERE) {
+				existing_room = &world[real_room_id];
+			}
+		}
+		if(world[cached_room].dir_option[door] == nullptr) {
+			if(existing_room) {
+				world[cached_room].set_dir_option(
+				    door,
+				    "general_description",
+				    "keyword",
+				    EX_ISDOOR,
+				    0,
+				    real_room_id
+				);
+				existing_room->set_dir_option(
+				    OPPOSITE_DIR(door),
+				    "general description",
+				    "keyword",
+				    EX_ISDOOR,
+				    0,
+				    cached_room
+				);
+				glue_room_at_coordinates(existing_room->x,existing_room->y,existing_room->z,existing_room->number);
+				return;
+			}
 			int new_room_rnum = 0;
 			world.emplace_back();
 			mods::globals::register_room(0);
@@ -500,23 +572,29 @@ namespace mods::rooms {
 			new_room_rnum = world.size() - 1;
 
 			world[cached_room].set_dir_option(
-			    direction,
-			    "exploded_entrance",
-			    "entrance",
-			    EX_ISDOOR | EX_BREACHED,
+			    door,
+			    "general_description",
+			    "keyword",
+			    EX_ISDOOR,
 			    0,
 			    new_room_rnum
 			);
 			w.set_dir_option(
-			    OPPOSITE_DIR(direction),
+			    OPPOSITE_DIR(door),
 			    "general description",
 			    "keyword",
-			    EX_ISDOOR | EX_BREACHED,
+			    EX_ISDOOR,
 			    0,
 			    cached_room
 			);
+			w.x = target_x;
+			w.y = target_y;
+			w.z = target_z;
+			register_room_at_coordinates(w.x,w.y,w.z,w.number);
+			glue_room_at_coordinates(w.x,w.y,w.z,w.number);
 		}
 	}
+
 	bool is_dark(room_rnum room) {
 		if(room >= world.size()) {
 			log("SYSERR: %d is out of bounds",room);

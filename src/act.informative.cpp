@@ -124,11 +124,11 @@ ACMD(do_drone) {
 	auto vec_args = PARSE_ARGS();
 	std::string usage = "usage: drone <start|stop>";
 
-	if(vec_args.size() == 0){
+	if(vec_args.size() == 0) {
 		player->sendln(usage);
 		return;
 	}
-	if(vec_args[0].compare("start") == 0){
+	if(vec_args[0].compare("start") == 0) {
 		/* if user has a drone out already, ressurrect that drone */
 		if(!mods::drone::started(player->uuid())) {
 			mods::drone::start(player->uuid());
@@ -137,7 +137,7 @@ ACMD(do_drone) {
 		return;
 	}
 
-	if(vec_args[0].compare("stop") == 0){
+	if(vec_args[0].compare("stop") == 0) {
 		/* if user has a drone out already, ressurrect that drone */
 		mods::drone::stop(player->uuid());
 		return;
@@ -150,7 +150,7 @@ ACMD(do_givemegold) {
 }
 
 ACMD(do_recall) {
-	if(mods::globals::boot_type == mods::globals::boot_type_t::BOOT_HELL){
+	if(mods::globals::boot_type == mods::globals::boot_type_t::BOOT_HELL) {
 		*player << "Ah Ah Ahh... You didn't say the magic word...";
 		return;
 	}
@@ -171,7 +171,7 @@ ACMD(do_contract) {
 
 	if(vec_args.size() > 0 && vec_args[0].compare("list") == 0) {
 		auto quest_names = mods::quests::list_quests(player->room());
-		if(quest_names.size() == 0){
+		if(quest_names.size() == 0) {
 			player->sendln("{red}There are no contracts in this room.{/red}");
 			return;
 		}
@@ -192,7 +192,7 @@ ACMD(do_contract) {
 			return;
 		}
 
-		if(mods::quests::start_quest(ch,quest_num.value())){
+		if(mods::quests::start_quest(ch,quest_num.value())) {
 			player->sendln("{grn}Your contract has been started! Good luck!{/grn}");
 			return;
 		}
@@ -209,7 +209,7 @@ ACMD(do_contract) {
 		}
 
 		mods::quests::leave_quest(ch,quest_num.value());
-		if(mods::quests::current_quest(ch).compare(vec_args[1]) != 0){
+		if(mods::quests::current_quest(ch).compare(vec_args[1]) != 0) {
 			player->sendln("{red}You are not part of that contract.{/red}");
 			return;
 		}
@@ -233,7 +233,7 @@ ACMD(do_newjs) {
 	mods::js::load_c_require_functions(mods::globals::duktape_context);
 }
 ACMD(do_jstest) {
-	
+
 
 	if(!mods::js::run_test_suite(*player,argument)) {
 		*player << "{red}Unable to load test suite{/red}\r\n";
@@ -243,17 +243,17 @@ ACMD(do_jstest) {
 	*player << "Test suite loaded...\r\n";
 	return;
 }
-bool is_camera_feed(obj_data* obj){
+bool is_camera_feed(obj_data* obj) {
 	return obj->has_gadget() && obj->gadget()->attributes->vnum_list.size();
 }
-void look_into_camera_feed(player_ptr_t& player, obj_data* obj, int mode){
-	if(is_camera_feed(obj)){
-		auto & vlist = obj->gadget()->attributes->vnum_list;
+void look_into_camera_feed(player_ptr_t& player, obj_data* obj, int mode) {
+	if(is_camera_feed(obj)) {
+		auto& vlist = obj->gadget()->attributes->vnum_list;
 		int index = vlist[0];
-		if(index < vlist.size()){
+		if(index < vlist.size()) {
 			auto viewing_room_vnum = vlist[vlist[0]];
 			auto room = real_room(viewing_room_vnum);
-			if(room == NOWHERE){
+			if(room == NOWHERE) {
 				player->sendln("You see nothing but static...");
 				return;
 			}
@@ -294,11 +294,11 @@ void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int coun
 		return;
 	}
 
-	switch(mode){
+	switch(mode) {
 		case SHOW_OBJ_LONG:
 		case SHOW_OBJ_SHORT:
 		case ITEM_WEAPON:
-			if(count > 1){
+			if(count > 1) {
 				player->send(CAT("(",std::to_string(count),") ").c_str());
 			}
 			break;
@@ -308,17 +308,17 @@ void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int coun
 
 	switch(mode) {
 		case SHOW_OBJ_LONG:
-			if(obj->description.length()){
+			if(obj->description.length()) {
 				player->sendln(obj->description);
-			}else{
+			} else {
 				player->sendln(obj->name);
 			}
 			break;
 
 		case SHOW_OBJ_SHORT:
-			if(obj->short_description.length()){
+			if(obj->short_description.length()) {
 				player->sendln(obj->short_description);
-			}else{
+			} else {
 				player->sendln(obj->name);
 			}
 			break;
@@ -346,7 +346,7 @@ void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int coun
 						player->send(obj->action_description);
 						break;
 					}
-					/** Purposeful fall-through to display ".. nothing special.." */
+				/** Purposeful fall-through to display ".. nothing special.." */
 				default:
 					player->sendln("You see nothing special...");
 					break;
@@ -392,7 +392,7 @@ void list_obj_to_char(struct obj_data *list, char_data *ch, int mode, int show) 
 	bool found = FALSE;
 
 	for(auto i = list; i; i = i->next_content) {
-		if(!i){
+		if(!i) {
 			break;
 		}
 		if(CAN_SEE_OBJ(ch, i)) {
@@ -424,11 +424,11 @@ void diag_char_to_char(char_data *i, char_data *ch) {
 	};
 	int percent, ar_index;
 	mods::string pers;
-	if(i == ch){
+	if(i == ch) {
 		pers = i->player.name.c_str();
-	}else{
+	} else {
 		pers = PERS(i, ch);
-		if(!pers){
+		if(!pers) {
 			pers = "Someone";
 		}
 	}
@@ -439,7 +439,7 @@ void diag_char_to_char(char_data *i, char_data *ch) {
 		percent = -1;    /* How could MAX_HIT be < 1?? */
 	}
 
-	for(ar_index = 0; diagnosis[ar_index].percent >= 0; ar_index++){
+	for(ar_index = 0; diagnosis[ar_index].percent >= 0; ar_index++) {
 		if(percent >= diagnosis[ar_index].percent) {
 			break;
 		}
@@ -469,22 +469,22 @@ void look_at_char(char_data *i, char_data *ch) {
 	found = FALSE;
 
 	auto iptr = ptr(i);
-		act("\r\n$n is using:\r\n", FALSE, i, 0, ch, TO_VICT);
-		for(j = 0; j < NUM_WEARS; j++){
-			auto obj = iptr->equipment(j);
-			if(obj){
-				player->send(wear_where[j]);
-				//if(!CAN_SEE_OBJ(ch, obj.get())) {
-				//	player->sendln("<unknown>");
-				//} else {
-					show_obj_to_char(obj.get(), ch, SHOW_OBJ_SHORT);
-				//}
-			}
-			/*else{
-				player->sendln("<nothing>");
-			}
-			*/
+	act("\r\n$n is using:\r\n", FALSE, i, 0, ch, TO_VICT);
+	for(j = 0; j < NUM_WEARS; j++) {
+		auto obj = iptr->equipment(j);
+		if(obj) {
+			player->send(wear_where[j]);
+			//if(!CAN_SEE_OBJ(ch, obj.get())) {
+			//	player->sendln("<unknown>");
+			//} else {
+			show_obj_to_char(obj.get(), ch, SHOW_OBJ_SHORT);
+			//}
 		}
+		/*else{
+			player->sendln("<nothing>");
+		}
+		*/
+	}
 
 	if(ch != i && (IS_THIEF(ch) || GET_LEVEL(ch) >= LVL_IMMORT)) {
 		found = FALSE;
@@ -506,13 +506,13 @@ void look_at_char(char_data *i, char_data *ch) {
 
 void list_one_char(char_data *i, char_data *ch) {
 	MENTOC_PREAMBLE();
-	if(i == nullptr){
+	if(i == nullptr) {
 		return;
 	}
-	if(ch == nullptr){
+	if(ch == nullptr) {
 		return;
 	}
-	
+
 	const char *positions[] = {
 		" is lying here, dead.",
 		" is lying here, mortally wounded.",
@@ -562,7 +562,7 @@ void list_one_char(char_data *i, char_data *ch) {
 					if(IN_ROOM(i) == IN_ROOM(FIGHTING(i))) {
 						player->send("%s!",PERS(FIGHTING(i), ch));
 					} else {
-						player->send(  "someone who has already left!");
+						player->send("someone who has already left!");
 					}
 				}
 			} else {		/* NIL fighting pointer */
@@ -604,76 +604,76 @@ void list_char_to_char(char_data *ch) {
 
 #ifdef __MENTOC_SHOW_VISION_FLAGS_IN_INFORMATIVE_CPP__
 	player->send(
-			"dark: %d\r\n"
-			"smoke: %d\r\n"
-			"on_fire: %d\r\n"
-			"viewing_camera: %d\r\n"
-			"camera: %x\r\n"
-			"fire_status: %d\r\n"
-			"camera_is_thermal: %d\r\n"
-			"camera_is_night_vision: %d\r\n"
-			"can_see_through_fire: %d\r\n"
-			"player_has_thermal: %d\r\n"
-			,
-			dark,
-			smoke,
-			on_fire,
-			viewing_camera,
-			camera,
-			fire_status,
-			camera_is_thermal,
-			camera_is_night_vision,
-			can_see_through_fire,
-			player_has_thermal
-				);
+	    "dark: %d\r\n"
+	    "smoke: %d\r\n"
+	    "on_fire: %d\r\n"
+	    "viewing_camera: %d\r\n"
+	    "camera: %x\r\n"
+	    "fire_status: %d\r\n"
+	    "camera_is_thermal: %d\r\n"
+	    "camera_is_night_vision: %d\r\n"
+	    "can_see_through_fire: %d\r\n"
+	    "player_has_thermal: %d\r\n"
+	    ,
+	    dark,
+	    smoke,
+	    on_fire,
+	    viewing_camera,
+	    camera,
+	    fire_status,
+	    camera_is_thermal,
+	    camera_is_night_vision,
+	    can_see_through_fire,
+	    player_has_thermal
+	);
 #endif
-	for(auto & target : mods::globals::get_room_list(room)){
-		if(target->is(ch)){
+	for(auto& target : mods::globals::get_room_list(room)) {
+		if(target->is(ch)) {
 			continue;
 		}
-		if(!mods::calc_visibility::is_visible(player,target)){
-			if(on_fire && ((viewing_camera && camera_is_thermal) || player_has_thermal) && 
-					!mods::rooms::can_see_through_fire(fire_status)){
+		if(!mods::calc_visibility::is_visible(player,target)) {
+			if(on_fire && ((viewing_camera && camera_is_thermal) || player_has_thermal) &&
+			        !mods::rooms::can_see_through_fire(fire_status)) {
 				player->sendln("{yel}[on fire]{/yel} You can't seem see anything but flames.");
 				break;
 			}
 			continue;
 		}
-		if(on_fire && ((viewing_camera && camera_is_thermal) || player_has_thermal) && 
-					mods::rooms::can_see_through_fire(fire_status)){
-				player->send("{yel}[thermal vision]{/yel} You see %s here.\r\n", target->name().c_str());
-				continue;
+		if(on_fire && ((viewing_camera && camera_is_thermal) || player_has_thermal) &&
+		        mods::rooms::can_see_through_fire(fire_status)) {
+			player->send("{yel}[thermal vision]{/yel} You see %s here.\r\n", target->name().c_str());
+			continue;
 		}
-		if(dark && viewing_camera && camera_is_night_vision){
+		if(dark && viewing_camera && camera_is_night_vision) {
 			player->send("{grn}[night-vision via camera]{/grn} You see %s here.\r\n", target->name().c_str());
 			continue;
 		}
-		if(((smoke || dark) && viewing_camera && camera_is_thermal) || 
-				((smoke || dark) && player_has_thermal)) {
+		if(((smoke || dark) && viewing_camera && camera_is_thermal) ||
+		        ((smoke || dark) && player_has_thermal)) {
 			/** TODO: needs testing */
-			if(viewing_camera){
+			if(viewing_camera) {
 				player->send("{gld}[thermal via camera]{/gld} You see %s here.\r\n", target->name().c_str());
-			}else{
+			} else {
 				player->send("{gld}[thermal vision]{/gld} You see %s here.\r\n", target->name().c_str());
 			}
 			continue;
 		}
-		if(dark){
+		if(dark) {
 			std::string name = "someone";
-			if(mods::player_utils::is_scanned(target)){
+			if(mods::player_utils::is_scanned(target)) {
 				name = target->name();
 			}
 			if(player->has_thermal_vision()) {
 				player->send(
-						"{grn}[thermal-vision]{/grn} You see %s here.\r\n",
-						name.c_str()
+				    "{grn}[thermal-vision]{/grn} You see %s here.\r\n",
+				    name.c_str()
 				);
 				continue;
 			}
 			if(player->has_night_vision()) {
 				player->send(
-						"{grn}[night-vision]{/grn} You see %s here.\r\n",
-						name.c_str()
+				    "{grn}[night-vision]{/grn} You see %s here.\r\n",
+				    name.c_str()
 				);
 				continue;
 			}
@@ -684,37 +684,39 @@ void list_char_to_char(char_data *ch) {
 
 	/** TODO: thermal vision distance is short. you can only see adjacent rooms and even then the sight is limited. */
 	auto room_number = player->viewing_room();
-	for(auto direction : {NORTH,SOUTH,EAST,WEST,UP,DOWN}) {
+	for(auto direction : {
+	            NORTH,SOUTH,EAST,WEST,UP,DOWN
+	        }) {
 		if(world[room_number].dir_option[direction]) {
 			auto dir_string = mods::globals::dir_to_str(direction,0).c_str();
 			auto looped_room_id = room_number;
-			for(unsigned ctr = 0; ctr < 4; ++ctr){
-				if(!world[looped_room_id].dir_option[direction]) { 
+			for(unsigned ctr = 0; ctr < 4; ++ctr) {
+				if(!world[looped_room_id].dir_option[direction]) {
 					break;
 				}
-				for(auto & target : mods::globals::get_room_list(world[looped_room_id].dir_option[direction]->to_room)){
+				for(auto& target : mods::globals::get_room_list(world[looped_room_id].dir_option[direction]->to_room)) {
 					if(!target->get_affect_dissolver().has_affect(AFF(SCANNED))) {
 						continue;
 					}
 					auto i = target->cd();
-					if(!target->is(ch)){
-						if(mods::calc_visibility::is_visible(player,target)){
+					if(!target->is(ch)) {
+						if(mods::calc_visibility::is_visible(player,target)) {
 							auto pluralized = ctr + 1 == 1 ? "" : "s";
 							std::string adjusted = "right here";
-							if(ctr > 1){
+							if(ctr > 1) {
 								adjusted = std::to_string(ctr) + " rooms away";
 							}
-							if(ctr == 1){
+							if(ctr == 1) {
 								adjusted = "1 room away";
 							}
 							player->send("\r\n[scanned] [%s] {grn}[%s]{/grn} [really %d room%s away]-> ",
-									dir_string,
-									adjusted.c_str(),
-									ctr + 1,
-									pluralized);
+							             dir_string,
+							             adjusted.c_str(),
+							             ctr + 1,
+							             pluralized);
 							list_one_char(i, ch);
 						} else if(dark  && !CAN_SEE_IN_DARK(ch) &&
-								AFF_FLAGGED(i, AFF_INFRAVISION)) {
+						          AFF_FLAGGED(i, AFF_INFRAVISION)) {
 							player->sendln("You see a pair of glowing red eyes looking your way.");
 						}
 					}
@@ -746,8 +748,8 @@ void do_auto_exits(char_data *ch) {
 		}
 
 		if(EXIT_FLAGGED(EXIT(dummy, door), EX_CLOSED) &&
-				/*! mods */!EXIT_FLAGGED(EXIT(dummy,door),EX_BREACHED) &&
-				/*! mods */!IS_SET(world[EXIT(dummy,door)->to_room].dir_option[OPPOSITE_DIR(door)]->exit_info,EX_BREACHED)) {
+		        /*! mods */!EXIT_FLAGGED(EXIT(dummy,door),EX_BREACHED) &&
+		        /*! mods */!IS_SET(world[EXIT(dummy,door)->to_room].dir_option[OPPOSITE_DIR(door)]->exit_info,EX_BREACHED)) {
 			continue;
 		}
 
@@ -781,13 +783,13 @@ ACMD(do_exits) {
 
 		len++;
 
-		if(GET_LEVEL(ch) >= LVL_IMMORT){
+		if(GET_LEVEL(ch) >= LVL_IMMORT) {
 			player->send("%-5s - [%5d] %s\r\n", dirs[door], GET_ROOM_VNUM(EXIT(ch, door)->to_room),
-					world[EXIT(ch, door)->to_room].name.c_str());
-		}else{
+			             world[EXIT(ch, door)->to_room].name.c_str());
+		} else {
 			player->send("%-5s - %s\r\n", dirs[door], IS_DARK(EXIT(ch, door)->to_room) &&
-					!CAN_SEE_IN_DARK(ch) ? "Too dark to tell." : world[EXIT(ch, door)->to_room].name.c_str());
-		}	
+			             !CAN_SEE_IN_DARK(ch) ? "Too dark to tell." : world[EXIT(ch, door)->to_room].name.c_str());
+		}
 	}
 
 	if(!len) {
@@ -814,12 +816,12 @@ void look_at_room_specific(player_ptr_t& player, int ignore_brief,int room) {
 		return;
 	}
 
-	if(room < 0){
+	if(room < 0) {
 		std::cerr << "[ERROR INVALID VIEWING ROOM]: " << room << "\r\n";
 		return;
 	}
 
-	if(room >= world.size()){
+	if(room >= world.size()) {
 		std::cerr << "[ERROR INVALID ROOM ID]: " << room << "\r\n";
 		player->sendln("room out of bounds");
 		return;
@@ -831,27 +833,27 @@ void look_at_room_specific(player_ptr_t& player, int ignore_brief,int room) {
 		char buf[MAX_STRING_LENGTH];
 
 		sprintbit(ROOM_FLAGS(room), room_bits, buf, sizeof(buf));
-		player->send("[%5d] %s [ %s]", GET_ROOM_VNUM(room), world[room].name.c_str(), buf);
+		player->send("[%5d] %s [ %s][x:%d,y:%d,z:%d]", GET_ROOM_VNUM(room), world[room].name.c_str(), buf,world[room].x,world[room].y,world[room].z);
 	}
 	player->send("\r\n{grn}%s ->{gld}", world[room].name.c_str());
-	for(auto && flag : mods::rooms::get_room_flags_from_room(player->room())){
+	for(auto&& flag : mods::rooms::get_room_flags_from_room(player->room())) {
 		player->send("[%s]",flag.c_str());
 	}
 	player->sendln("{/gld}");
 
 	player->sendln(CCNRM(ch, C_NRM));
 	if((!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_BRIEF)) || ignore_brief ||
-			ROOM_FLAGGED(room, ROOM_DEATH)) {
+	        ROOM_FLAGGED(room, ROOM_DEATH)) {
 		mods::rooms::word_wrap_description(player,room);
 	}
-	if(((player->get_prefs()) & PRF_OVERHEAD_MAP)){
+	if(((player->get_prefs()) & PRF_OVERHEAD_MAP)) {
 		player->stc(mods::overhead_map::generate<mods::player*>(player.get(),room));
 	}
 
-	for(auto & t : world[room].textures()){
+	for(auto& t : world[room].textures()) {
 		player->send("[%s]", mods::rooms::texture_to_string(t).value_or(std::string("unknown")).c_str());
 	}
-	if(world[room].textures().size()){
+	if(world[room].textures().size()) {
 		player->send("\r\n");
 	}
 
@@ -898,22 +900,22 @@ void look_in_obj(char_data *ch, char *arg) {
 	if(!*arg) {
 		player->sendln("Look in what?");
 	} else if(!(bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM |
-					FIND_OBJ_EQUIP, ch, &dummy, &obj))) {
+	                                FIND_OBJ_EQUIP, ch, &dummy, &obj))) {
 		player->send("There doesn't seem to be %s %s here.\r\n", AN(arg), arg);
-	} else if(obj->has_rifle()){
+	} else if(obj->has_rifle()) {
 		mods::weapon::list_rounds(player,obj);
 		return;
 	} else if((GET_OBJ_TYPE(obj) != ITEM_DRINKCON) &&
-			(GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN) &&
-			(GET_OBJ_TYPE(obj) != ITEM_CONTAINER)
-			) {
+	          (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN) &&
+	          (GET_OBJ_TYPE(obj) != ITEM_CONTAINER)
+	         ) {
 		player->sendln("There's nothing inside that!");
 	} else {
 		if(GET_OBJ_TYPE(obj) == ITEM_CONTAINER) {
 			if(OBJVAL_FLAGGED(obj, CONT_CLOSED)) {
 				player->sendln("It is closed.");
 			} else {
-				player->send( fname(obj->name));
+				player->send(fname(obj->name));
 
 				switch(bits) {
 					case FIND_OBJ_INV:
@@ -948,15 +950,15 @@ void look_in_obj(char_data *ch, char *arg) {
 	}
 }
 
-const char* find_exdesc_equipment(std::string_view word,const char_data* ch,const std::size_t& position){
+const char* find_exdesc_equipment(std::string_view word,const char_data* ch,const std::size_t& position) {
 	MENTOC_PREAMBLE();
 	log("find_exdesc_equipment");
 	auto obj = player->equipment(position);
-	if(!obj){
+	if(!obj) {
 		return nullptr;
 	}
-	for(const auto & i : obj->ex_description){
-		if(i.keyword.length() == 0 || i.description.length() == 0){
+	for(const auto& i : obj->ex_description) {
+		if(i.keyword.length() == 0 || i.description.length() == 0) {
 			continue;
 		}
 		if(isname(word.data(), i.keyword.c_str())) {
@@ -967,11 +969,11 @@ const char* find_exdesc_equipment(std::string_view word,const char_data* ch,cons
 }
 char* find_exdesc(std::string_view word,std::vector<extra_descr_data>& in_list) {
 	log("find_exdesc, word: %s (vector)",word.data());
-	if(in_list.size() == 0){
+	if(in_list.size() == 0) {
 		return nullptr;
 	}
-	for(auto & i : in_list){
-		if(i.keyword.length() == 0 || i.description.length() == 0){
+	for(auto& i : in_list) {
+		if(i.keyword.length() == 0 || i.description.length() == 0) {
 			continue;
 		}
 		if(isname(word.data(), i.keyword.c_str())) {
@@ -982,12 +984,12 @@ char* find_exdesc(std::string_view word,std::vector<extra_descr_data>& in_list) 
 	return nullptr;
 }
 
-char * find_exdesc(char *word,room_data& r){
+char * find_exdesc(char *word,room_data& r) {
 	log("find_exdesc, word: %s (room_data)",word);
-	if(r.ex_descriptions().size() == 0){
+	if(r.ex_descriptions().size() == 0) {
 		return nullptr;
 	}
-	for(auto & i : r.ex_descriptions()){
+	for(auto& i : r.ex_descriptions()) {
 		if(isname(word, i.keyword.c_str())) {
 			return (i.description.ptr());
 		}
@@ -1021,7 +1023,7 @@ void look_at_target(char_data *ch, char *arg) {
 	}
 
 	bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP |
-			FIND_CHAR_ROOM, ch, &found_char, &found_obj);
+	                    FIND_CHAR_ROOM, ch, &found_char, &found_obj);
 
 	/* Is the target a character? */
 	if(found_char != NULL) {
@@ -1051,10 +1053,12 @@ void look_at_target(char_data *ch, char *arg) {
 	}
 
 	/* Does the argument match an extra desc in the char's equipment? */
-	for(j = 0; j < NUM_WEARS && !found; j++){
-		if(GET_EQ(ch, j) && CAN_SEE_OBJ(ch, GET_EQ(ch, j)) && GET_EQ(ch, j)->ex_description.size()){
+	for(j = 0; j < NUM_WEARS && !found; j++) {
+		if(GET_EQ(ch, j) && CAN_SEE_OBJ(ch, GET_EQ(ch, j)) && GET_EQ(ch, j)->ex_description.size()) {
 			const char* ex = find_exdesc_equipment(arg, ch, j);
-			if(!ex){ continue; }
+			if(!ex) {
+				continue;
+			}
 			player->send(ex);
 			found = TRUE;
 			break;
@@ -1062,25 +1066,26 @@ void look_at_target(char_data *ch, char *arg) {
 	}
 
 	/* Does the argument match an extra desc in the char's inventory? */
-	for(auto & item : player->real_carrying()){
-		if(item && CAN_SEE_OBJ(ch, item.get())){
+	for(auto& item : player->real_carrying()) {
+		if(item && CAN_SEE_OBJ(ch, item.get())) {
 			auto ex = find_exdesc(arg, item->ex_description);
-			if(!ex){
+			if(!ex) {
 				continue;
 			}
 			player->send(ex);
-			found = true;break;
+			found = true;
+			break;
 		}
 	}
 
 	/* Does the argument match an extra desc of an object in the room? */
 	assert(IN_ROOM(ch) < world.size());
 
-	for(obj = world[IN_ROOM(ch)].contents; obj && !found && obj->next_content; obj = obj->next_content){
-		if(CAN_SEE_OBJ(ch, obj)){
+	for(obj = world[IN_ROOM(ch)].contents; obj && !found && obj->next_content; obj = obj->next_content) {
+		if(CAN_SEE_OBJ(ch, obj)) {
 			log("can see obj good. searching exdesc");
 			if((desc = find_exdesc(arg, obj->ex_description)) != NULL && ++i == fnum) {
-				player->sendln( desc);
+				player->sendln(desc);
 				found = TRUE;
 			}
 		}
@@ -1157,16 +1162,16 @@ ACMD(do_examine) {
 	look_at_target(ch, strcpy(tempsave, arg));	/* strcpy: OK */
 
 	generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_CHAR_ROOM |
-			FIND_OBJ_EQUIP, ch, &tmp_char, &tmp_object);
+	             FIND_OBJ_EQUIP, ch, &tmp_char, &tmp_object);
 
 	if(tmp_object) {
-		if(is_camera_feed(tmp_object)){
+		if(is_camera_feed(tmp_object)) {
 			look_into_camera_feed(player,tmp_object,0);
 			return;
 		}
 		if((GET_OBJ_TYPE(tmp_object) == ITEM_DRINKCON) ||
-				(GET_OBJ_TYPE(tmp_object) == ITEM_FOUNTAIN) ||
-				(GET_OBJ_TYPE(tmp_object) == ITEM_CONTAINER)) {
+		        (GET_OBJ_TYPE(tmp_object) == ITEM_FOUNTAIN) ||
+		        (GET_OBJ_TYPE(tmp_object) == ITEM_CONTAINER)) {
 			player->sendln(STOCK_LOOK_INSIDE_MESSAGE());
 			look_in_obj(ch, arg);
 		}
@@ -1181,7 +1186,7 @@ ACMD(do_gold) {
 	} else if(GET_GOLD(ch) == 1) {
 		player->sendln(STOCK_GOLD_ONE_MISERABLE_MESSAGE());
 	} else {
-		player->sendln(CAT(STOCK_GOLD_PREFIX_MESSAGE(),TOSTR(player->gold()),STOCK_GOLD_SUFFIX_MESSAGE())); 
+		player->sendln(CAT(STOCK_GOLD_PREFIX_MESSAGE(),TOSTR(player->gold()),STOCK_GOLD_SUFFIX_MESSAGE()));
 	}
 }
 
@@ -1203,27 +1208,27 @@ ACMD(do_score) {
 	}
 
 	player->send("You have %d(%d) hit, %d(%d) mana and %d(%d) movement points.\r\n",
-			GET_HIT(ch), GET_MAX_HIT(ch), GET_MANA(ch), GET_MAX_MANA(ch),
-			GET_MOVE(ch), GET_MAX_MOVE(ch));
+	             GET_HIT(ch), GET_MAX_HIT(ch), GET_MANA(ch), GET_MAX_MANA(ch),
+	             GET_MOVE(ch), GET_MAX_MOVE(ch));
 
 	player->send("Your armor class is %d/10, and your alignment is %d.\r\n",
-			compute_armor_class(ch), GET_ALIGNMENT(ch));
+	             compute_armor_class(ch), GET_ALIGNMENT(ch));
 
 	player->send("You have scored %d exp, and have %d gold coins.\r\n",
-			GET_EXP(ch), GET_GOLD(ch));
+	             GET_EXP(ch), GET_GOLD(ch));
 
 	if(GET_LEVEL(ch) < LVL_IMMORT)
 		player->send("You need %d exp to reach your next level.\r\n",
-				mods::levels::level_exp(GET_LEVEL(ch) + 1) - GET_EXP(ch));
+		             mods::levels::level_exp(GET_LEVEL(ch) + 1) - GET_EXP(ch));
 
 	playing_time = *real_time_passed((time(0) - ch->player.time.logon) +
-			ch->player.time.played, 0);
+	                                 ch->player.time.played, 0);
 	player->send("You have been playing for %d day%s and %d hour%s.\r\n",
-			playing_time.day, playing_time.day == 1 ? "" : "s",
-			playing_time.hours, playing_time.hours == 1 ? "" : "s");
+	             playing_time.day, playing_time.day == 1 ? "" : "s",
+	             playing_time.hours, playing_time.hours == 1 ? "" : "s");
 
 	player->send("This ranks you as %s %s (level %d).\r\n",
-			GET_NAME(ch).c_str(), GET_TITLE(ch).c_str(), GET_LEVEL(ch));
+	             GET_NAME(ch).c_str(), GET_TITLE(ch).c_str(), GET_LEVEL(ch));
 
 	switch(GET_POS(ch)) {
 		case POS_DEAD:
@@ -1331,11 +1336,11 @@ ACMD(do_equipment) {
 	for(i = 0; i < NUM_WEARS; i++) {
 		if(GET_EQ(ch, i)) {
 			if(CAN_SEE_OBJ(ch, GET_EQ(ch, i))) {
-				player->send( wear_where[i]);
+				player->send(wear_where[i]);
 				show_obj_to_char(GET_EQ(ch, i), ch, SHOW_OBJ_SHORT);
 				found = TRUE;
 			} else {
-				player->send( wear_where[i]);
+				player->send(wear_where[i]);
 				player->sendln("Something.");
 				found = TRUE;
 			}
@@ -1359,8 +1364,8 @@ ACMD(do_time) {
 	weekday = ((35 * time_info.month) + day) % 7;
 
 	player->send("It is %d o'clock %s, on %s.\r\n",
-			(time_info.hours % 12 == 0) ? 12 : (time_info.hours % 12),
-			time_info.hours >= 12 ? "pm" : "am", weekdays[weekday]);
+	             (time_info.hours % 12 == 0) ? 12 : (time_info.hours % 12),
+	             time_info.hours >= 12 ? "pm" : "am", weekdays[weekday]);
 
 	/*
 	 * Peter Ajamian <peter@PAJAMIAN.DHS.ORG> supplied the following as a fix
@@ -1389,7 +1394,7 @@ ACMD(do_time) {
 	}
 
 	player->send("The %d%s Day of the %s, Year %d.\r\n",
-			day, suf, month_name[time_info.month], time_info.year);
+	             day, suf, month_name[time_info.month], time_info.year);
 }
 
 
@@ -1403,15 +1408,15 @@ ACMD(do_weather) {
 
 	if(OUTSIDE(ch)) {
 		player->send("The sky is %s and %s.\r\n", sky_look[weather_info.sky],
-				weather_info.change >= 0 ? "you feel a warm wind from south" :
-				"your foot tells you bad weather is due");
+		             weather_info.change >= 0 ? "you feel a warm wind from south" :
+		             "your foot tells you bad weather is due");
 
 		if(GET_LEVEL(ch) >= LVL_GOD)
 			player->send("Pressure: %d (change: %d), Sky: %d (%s)\r\n",
-					weather_info.pressure,
-					weather_info.change,
-					weather_info.sky,
-					sky_look[weather_info.sky]);
+			             weather_info.pressure,
+			             weather_info.change,
+			             weather_info.sky,
+			             sky_look[weather_info.sky]);
 	} else {
 		player->sendln("You have no feeling about the weather at all.");
 	}
@@ -1419,11 +1424,13 @@ ACMD(do_weather) {
 
 
 ACMD(do_help) {
-	if(IS_NPC(ch)){ return; }
+	if(IS_NPC(ch)) {
+		return;
+	}
 
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() == 0) {
-		switch(player->get_class()){
+		switch(player->get_class()) {
 			case player_class_t::CLASS_CONTAGION:
 				mods::help::send_contagion_help_menu(player);
 				break;
@@ -1471,7 +1478,7 @@ ACMD(do_help) {
 		return;
 	}
 
-	if(!mods::help::send_help(vec_args[0],player)){
+	if(!mods::help::send_help(vec_args[0],player)) {
 		return;
 	}
 	/** TODO: show a sorted page of help topics */
@@ -1487,20 +1494,20 @@ ACMD(do_who) {
 	player->sendln("Players-------");
 
 	int num_can_see = 0;
-	for(auto & pair : mods::globals::player_name_map){
-		if(mods::super_users::player_is(player)){
+	for(auto& pair : mods::globals::player_name_map) {
+		if(mods::super_users::player_is(player)) {
 			num_can_see++;
 			auto s = CAT("[",pair.second->get_class_string().str(),"] - ",pair.first.c_str());
-			if(mods::super_users::invisible(pair.second)){
+			if(mods::super_users::invisible(pair.second)) {
 				s += green_str(" (invisible to non-immortals)");
-			}else{
+			} else {
 				s += CAT("[displayed as:'",mods::super_users::who_line(pair.second),"' to non-immortals]");
 			}
 			s += reset_str();
 			player->sendln(s);
 			continue;
 		}
-		if(mods::super_users::invisible(pair.second)){
+		if(mods::super_users::invisible(pair.second)) {
 			continue;
 		}
 		num_can_see++;
@@ -1583,23 +1590,23 @@ ACMD(do_users) {
 					break;
 
 				default:
-					player->send( USERS_FORMAT);
+					player->send(USERS_FORMAT);
 					return;
 			}				/* end of switch */
 
 		} else {			/* endif */
-			player->send( USERS_FORMAT);
+			player->send(USERS_FORMAT);
 			return;
 		}
 	}				/* end while (parser) */
 
 	player->sendln(
-			"Num Class   Name         State          Idl Login@   Site"
-			"--- ------- ------------ -------------- --- -------- ------------------------");
+	    "Num Class   Name         State          Idl Login@   Site"
+	    "--- ------- ------------ -------------- --- -------- ------------------------");
 
 	one_argument(argument, arg);
 
-	for(auto & d : descriptor_list) {
+	for(auto& d : descriptor_list) {
 		if(STATE(d) != CON_PLAYING && playing) {
 			continue;
 		}
@@ -1628,7 +1635,7 @@ ACMD(do_users) {
 			}
 
 			if(outlaws && !PLR_FLAGGED(tch, PLR_KILLER) &&
-					!PLR_FLAGGED(tch, PLR_THIEF)) {
+			        !PLR_FLAGGED(tch, PLR_THIEF)) {
 				continue;
 			}
 
@@ -1642,10 +1649,10 @@ ACMD(do_users) {
 
 			if(d.original)
 				sprintf(classname, "[%2d %s]", GET_LEVEL(d.original),
-						CLASS_ABBR(d.original));
+				        CLASS_ABBR(d.original));
 			else
 				sprintf(classname, "[%2d %s]", GET_LEVEL(d.character),
-						CLASS_ABBR(d.character));
+				        CLASS_ABBR(d.character));
 		} else {
 			strcpy(classname, "   -   ");
 		}
@@ -1662,16 +1669,16 @@ ACMD(do_users) {
 
 		if(d.character && STATE(d)== CON_PLAYING && GET_LEVEL(d.character) < LVL_GOD)
 			sprintf(idletime, "%3d", d.character->char_specials.timer *
-					SECS_PER_MUD_HOUR / SECS_PER_REAL_MIN);
+			        SECS_PER_MUD_HOUR / SECS_PER_REAL_MIN);
 		else {
 			strcpy(idletime, "");
 		}
 
 		sprintf(line, "%3d %-7s %-12s %-14s %-3s %-8s ", d.desc_num, classname,
-				d.original && d.original->player.name.c_str() ? d.original->player.name.c_str() :
-				d.character && d.character->player.name.c_str() ? d.character->player.name.c_str() :
-				"UNDEFINED",
-				state, idletime, timeptr);
+		        d.original && d.original->player.name.c_str() ? d.original->player.name.c_str() :
+		        d.character && d.character->player.name.c_str() ? d.character->player.name.c_str() :
+		        "UNDEFINED",
+		        state, idletime, timeptr);
 
 		if(d.host.length()) {
 			sprintf(line + strlen(line), "[%s]\r\n", d.host.c_str());
@@ -1685,8 +1692,8 @@ ACMD(do_users) {
 		}
 
 		if(STATE(d) != CON_PLAYING ||
-				(STATE(d) == CON_PLAYING && CAN_SEE(ch, d.character))) {
-			player->sendln( line);
+		        (STATE(d) == CON_PLAYING && CAN_SEE(ch, d.character))) {
+			player->sendln(line);
 			num_can_see++;
 		}
 	}
@@ -1743,7 +1750,7 @@ ACMD(do_gen_ps) {
 			break;
 
 		case SCMD_WHOAMI:
-			player->sendln( GET_NAME(ch).c_str());
+			player->sendln(GET_NAME(ch).c_str());
 			break;
 
 		default:
@@ -1760,7 +1767,7 @@ void perform_mortal_where(char_data *ch, char *arg) {
 	if(!*arg) {
 		player->sendln("Players in your Zone\r\n--------------------");
 
-		for(auto &d : descriptor_list) {
+		for(auto& d : descriptor_list) {
 			if(STATE(d) != CON_PLAYING || d.character == ch) {
 				continue;
 			}
@@ -1803,7 +1810,7 @@ void perform_mortal_where(char_data *ch, char *arg) {
 
 
 void print_object_location(int num, struct obj_data *obj, char_data *ch,
-		int recur) {
+                           int recur) {
 	MENTOC_PREAMBLE();
 	if(num > 0) {
 		player->send("O%3d. %-25s - ", num, obj->short_description);
@@ -1839,15 +1846,15 @@ void perform_immort_where(char_data *ch, char *arg) {
 	if(!*arg) {
 		player->send("Players\r\n-------\r\n");
 
-		for(auto & d : descriptor_list)
+		for(auto& d : descriptor_list)
 			if(STATE(d) == CON_PLAYING) {
 				i = (d.original ? d.original : d.character);
 
 				if(i && CAN_SEE(ch, i) && (IN_ROOM(i) != NOWHERE)) {
 					if(d.original)
 						player->send("%-20s - [%5d] %s (in %s)\r\n",
-								GET_NAME(i).c_str(), GET_ROOM_VNUM(IN_ROOM(d.character)),
-								world[IN_ROOM(d.character)].name.c_str(), GET_NAME(d.character).c_str());
+						             GET_NAME(i).c_str(), GET_ROOM_VNUM(IN_ROOM(d.character)),
+						             world[IN_ROOM(d.character)].name.c_str(), GET_NAME(d.character).c_str());
 					else {
 						player->send("%-20s - [%5d] %s\r\n", GET_NAME(i).c_str(), GET_ROOM_VNUM(IN_ROOM(i)), world[IN_ROOM(i)].name.c_str());
 					}
@@ -1858,7 +1865,7 @@ void perform_immort_where(char_data *ch, char *arg) {
 			if(CAN_SEE(ch, i) && IN_ROOM(i) != NOWHERE && isname(arg, i->player.name)) {
 				found = 1;
 				player->send("M%3d. %-25s - [%5d] %s\r\n", ++num, GET_NAME(i).c_str(),
-						GET_ROOM_VNUM(IN_ROOM(i)), world[IN_ROOM(i)].name.c_str());
+				             GET_ROOM_VNUM(IN_ROOM(i)), world[IN_ROOM(i)].name.c_str());
 			}
 		}
 
@@ -1907,7 +1914,7 @@ ACMD(do_levels) {
 
 	for(i = 1; i < LVL_IMMORT; i++) {
 		nlen = snprintf(buf + len, sizeof(buf) - len, "[%2d] %8d-%-8d : ", i,
-				mods::levels::level_exp(i), mods::levels::level_exp(i + 1) - 1);
+		                mods::levels::level_exp(i), mods::levels::level_exp(i + 1) - 1);
 
 		if(len + nlen >= sizeof(buf) || nlen < 0) {
 			break;
@@ -1936,7 +1943,7 @@ ACMD(do_levels) {
 
 	if(len < sizeof(buf))
 		snprintf(buf + len, sizeof(buf) - len, "[%2d] %8d          : Immortality\r\n",
-				LVL_IMMORT, mods::levels::level_exp(LVL_IMMORT));
+		         LVL_IMMORT, mods::levels::level_exp(LVL_IMMORT));
 
 	page_string(*ch->desc, buf, TRUE);
 }
@@ -2002,7 +2009,7 @@ ACMD(do_diagnose) {
 
 	if(*buf) {
 		if(!(vict = get_char_vis(ch, buf, NULL, FIND_CHAR_ROOM))) {
-			player->sendln( NOPERSON);
+			player->sendln(NOPERSON);
 		} else {
 			diag_char_to_char(vict, ch);
 		}
@@ -2062,59 +2069,59 @@ ACMD(do_toggle) {
 
 	if(GET_LEVEL(ch) >= LVL_IMMORT) {
 		player->send(
-				"      No Hassle: %-3s    "
-				"      Holylight: %-3s    "
-				"     Room Flags: %-3s\r\n",
-				ONOFF(PRF_FLAGGED(ch, PRF_NOHASSLE)),
-				ONOFF(PRF_FLAGGED(ch, PRF_HOLYLIGHT)),
-				ONOFF(PRF_FLAGGED(ch, PRF_ROOMFLAGS))
-				);
+		    "      No Hassle: %-3s    "
+		    "      Holylight: %-3s    "
+		    "     Room Flags: %-3s\r\n",
+		    ONOFF(PRF_FLAGGED(ch, PRF_NOHASSLE)),
+		    ONOFF(PRF_FLAGGED(ch, PRF_HOLYLIGHT)),
+		    ONOFF(PRF_FLAGGED(ch, PRF_ROOMFLAGS))
+		);
 	}
 
 	player->send(
-			"Hit Pnt Display: %-3s    "
-			"     Brief Mode: %-3s    "
-			" Summon Protect: %-3s\r\n"
+	    "Hit Pnt Display: %-3s    "
+	    "     Brief Mode: %-3s    "
+	    " Summon Protect: %-3s\r\n"
 
-			"   Move Display: %-3s    "
-			"   Compact Mode: %-3s    "
-			"       On Quest: %-3s\r\n"
+	    "   Move Display: %-3s    "
+	    "   Compact Mode: %-3s    "
+	    "       On Quest: %-3s\r\n"
 
-			"   Mana Display: %-3s    "
-			"         NoTell: %-3s    "
-			"   Repeat Comm.: %-3s\r\n"
+	    "   Mana Display: %-3s    "
+	    "         NoTell: %-3s    "
+	    "   Repeat Comm.: %-3s\r\n"
 
-			" Auto Show Exit: %-3s    "
-			"           Deaf: %-3s    "
-			"     Wimp Level: %-3s\r\n"
+	    " Auto Show Exit: %-3s    "
+	    "           Deaf: %-3s    "
+	    "     Wimp Level: %-3s\r\n"
 
-			" Gossip Channel: %-3s    "
-			"Auction Channel: %-3s    "
-			"  Grats Channel: %-3s\r\n"
+	    " Gossip Channel: %-3s    "
+	    "Auction Channel: %-3s    "
+	    "  Grats Channel: %-3s\r\n"
 
-			"    Color Level: %s\r\n",
+	    "    Color Level: %s\r\n",
 
-		ONOFF(PRF_FLAGGED(ch, PRF_DISPHP)),
-		ONOFF(PRF_FLAGGED(ch, PRF_BRIEF)),
-		ONOFF(!PRF_FLAGGED(ch, PRF_SUMMONABLE)),
+	    ONOFF(PRF_FLAGGED(ch, PRF_DISPHP)),
+	    ONOFF(PRF_FLAGGED(ch, PRF_BRIEF)),
+	    ONOFF(!PRF_FLAGGED(ch, PRF_SUMMONABLE)),
 
-		ONOFF(PRF_FLAGGED(ch, PRF_DISPMOVE)),
-		ONOFF(PRF_FLAGGED(ch, PRF_COMPACT)),
-		YESNO(PRF_FLAGGED(ch, PRF_QUEST)),
+	    ONOFF(PRF_FLAGGED(ch, PRF_DISPMOVE)),
+	    ONOFF(PRF_FLAGGED(ch, PRF_COMPACT)),
+	    YESNO(PRF_FLAGGED(ch, PRF_QUEST)),
 
-		ONOFF(PRF_FLAGGED(ch, PRF_DISPMANA)),
-		ONOFF(PRF_FLAGGED(ch, PRF_NOTELL)),
-		YESNO(!PRF_FLAGGED(ch, PRF_NOREPEAT)),
+	    ONOFF(PRF_FLAGGED(ch, PRF_DISPMANA)),
+	    ONOFF(PRF_FLAGGED(ch, PRF_NOTELL)),
+	    YESNO(!PRF_FLAGGED(ch, PRF_NOREPEAT)),
 
-		ONOFF(PRF_FLAGGED(ch, PRF_AUTOEXIT)),
-		YESNO(PRF_FLAGGED(ch, PRF_DEAF)),
-		buf2,
+	    ONOFF(PRF_FLAGGED(ch, PRF_AUTOEXIT)),
+	    YESNO(PRF_FLAGGED(ch, PRF_DEAF)),
+	    buf2,
 
-		ONOFF(!PRF_FLAGGED(ch, PRF_NOGOSS)),
-		ONOFF(!PRF_FLAGGED(ch, PRF_NOAUCT)),
-		ONOFF(!PRF_FLAGGED(ch, PRF_NOGRATZ)),
+	    ONOFF(!PRF_FLAGGED(ch, PRF_NOGOSS)),
+	    ONOFF(!PRF_FLAGGED(ch, PRF_NOAUCT)),
+	    ONOFF(!PRF_FLAGGED(ch, PRF_NOGRATZ)),
 
-		ctypes[COLOR_LEV(ch)]);
+	    ctypes[COLOR_LEV(ch)]);
 }
 
 
@@ -2172,9 +2179,9 @@ ACMD(do_commands) {
 	}
 
 	player->send("The following %s%s are available to %s:\r\n",
-			wizhelp ? "privileged " : "",
-			socials ? "socials" : "commands",
-			vict == ch ? "you" : GET_NAME(vict).c_str());
+	             wizhelp ? "privileged " : "",
+	             socials ? "socials" : "commands",
+	             vict == ch ? "you" : GET_NAME(vict).c_str());
 
 	/* cmd_num starts at 1, not 0, to remove 'RESERVED' */
 	for(no = 1, cmd_num = 1; *cmd_info[cmd_sort_info[cmd_num]].command != '\n'; cmd_num++) {
@@ -2205,17 +2212,17 @@ ACMD(do_view) {
 	DO_HELP("view");
 	/** If the user is attempting to view an item in a shop */
 	auto vec_args = PARSE_ARGS();
-	if(vec_args.size() && !mods::util::is_lower_match(vec_args[0], "camera")){
+	if(vec_args.size() && !mods::util::is_lower_match(vec_args[0], "camera")) {
 		int16_t item = mods::util::stoi(vec_args[0]).value_or(-1);
 		shop_view_item(player,item);
 		return;
 	}
-	if(vec_args.size() == 0){
+	if(vec_args.size() == 0) {
 		player->sendln("Usage: 'view camera'. For more information, type 'view help'");
 		return;
 	}
 	if(mods::util::is_lower_match(vec_args[0], "camera")) {
-		if(!player->get_camera()){
+		if(!player->get_camera()) {
 			player->sendln("You haven't installed a camera");
 			return;
 		}
@@ -2228,7 +2235,7 @@ ACMD(do_view) {
 }
 
 namespace informative {
-	void init(){
+	void init() {
 		mods::interpreter::add_command("action",POS_RESTING,do_action,0,0);
 		mods::interpreter::add_command("color",POS_RESTING,do_color,0,0);
 		mods::interpreter::add_command("commands",POS_RESTING,do_commands,0,0);
