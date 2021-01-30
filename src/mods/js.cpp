@@ -812,6 +812,16 @@ namespace mods {
 			player->clear_captured_output();
 			return 1;
 		}
+		static duk_ret_t exec(duk_context *ctx) {
+			/* First parameter is character name */
+			std::string cmd =  duk_to_string(ctx,0);
+			auto player = mods::globals::current_player;
+			mods::globals::current_player->executing_js(true);
+			command_interpreter(player,cmd);
+			mods::globals::current_player->executing_js(false);
+			duk_push_string(ctx,player->consume_scripted_response().c_str());
+			return 1;
+		}
 		static duk_ret_t mob_death_trigger(duk_context *ctx) {
 			/* First parameter is character name */
 			std::string char_name = duk_to_string(ctx,0);
@@ -972,6 +982,8 @@ namespace mods {
 			duk_put_global_string(ctx,"hit");
 			duk_push_c_function(ctx,mods::js::cmd_exec,2);
 			duk_put_global_string(ctx,"cmd_exec");
+			duk_push_c_function(ctx,mods::js::exec,1);
+			duk_put_global_string(ctx,"exec");
 			duk_push_c_function(ctx,mods::js::cmd,2);
 			duk_put_global_string(ctx,"cmd");
 			duk_push_c_function(ctx,mods::js::send_to_uuid,2);

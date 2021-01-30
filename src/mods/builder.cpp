@@ -194,6 +194,16 @@ void r_status(const player_ptr_t& player,std::string_view msg) {
 	mods::builder::report_status<player_ptr_t>(player,msg.data());
 }
 namespace mods::builder {
+	void encode_scripted_response(player_ptr_t& player, std::string_view encoded) {
+		if(!player->is_executing_js()) {
+			return;
+		}
+		player->set_scripted_response(encoded);
+	}
+#define ENCODE_RESPONSE(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, __ENC_RESPONSE)
+#define ENCODE_STR(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, std::to_string(__ENC_RESPONSE))
+#define ENCODE_R(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, __ENC_RESPONSE)
+#define ENCODE_INIT(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, "!")
 	std::tuple<int8_t,std::string> pave_continue(player_ptr_t& player) {
 		if(player->builder_data && player->builder_data->room_pave_mode) {
 			return {-1,"It looks like you're already paving. Save your existing pavement to begin."};
@@ -1339,6 +1349,7 @@ ACMD(do_rbuild_sandbox) {
 		auto args = mods::util::subcmd_args<5,args_t>(argument,"pave");
 
 		if(args.has_value()) {
+			ENCODE_INIT();
 			auto cmd_args = args.value();
 			if(cmd_args.size() == 3 && cmd_args[1].compare("on") == 0) {
 				/**
@@ -1349,11 +1360,13 @@ ACMD(do_rbuild_sandbox) {
 					r_error(player,CAT("Error: ",std::get<0>(s), ", msg: '",std::get<1>(s),"'"));
 					return;
 				}
+				ENCODE_STR(player->builder_data->room_pavements.transact_id);
 				r_success(player,std::get<1>(s));
 				return;
 			}//end pave on
 			if(cmd_args.size() == 2 && cmd_args[1].compare("off") == 0) {
 				mods::builder::pave_off(player);
+				ENCODE_STR(player->builder_data->room_pavements.transact_id);
 				r_success(player,"Turned off pave mode. Don't forget to run rbuild_sandbox save <id>.");
 			}
 		}
@@ -2189,7 +2202,10 @@ ACMD(do_mbuild) {
 		        "  {grn}|____[example]{/grn}\r\n" <<
 		        "  |:: {wht}mbuild{/wht} {gld}help{/gld}\r\n" <<
 		        "  |:: (this help menu will show up)\r\n" <<
+		        " {grn}mbuild{/grn} {red}exists <mob_vnum>{/red}\r\n" <<
+		        "  |--> [supports encoded response]\r\n" <<
 		        " {grn}mbuild{/grn} {red}new{/red}\r\n" <<
+		        "  |--> [supports encoded response]\r\n" <<
 		        " {grn}mbuild{/grn} {red}list{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}attr <mob_id> <attr> <value>{/red}\r\n" <<
 		        "  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
@@ -2437,9 +2453,40 @@ ACMD(do_mbuild) {
 
 	if(args.has_value()) {
 		mob_proto.push_back(mods::builder::new_npc());
+		ENCODE_STR(mob_proto.size()-1);
 		r_success(player,"Mobile created");
 		return;
 	}
+
+	args = mods::util::subcmd_args<7,args_t>(argument,"exists");
+
+	if(args.has_value()) {
+
+		//[ - ] [0 - exists] [1 - vnum]
+		auto arg_vec = args.value();
+		auto i_value = mods::util::stoi(arg_vec[1]);
+		ENCODE_INIT();
+
+		if(!i_value.has_value()) {
+			r_error(player,"Please use a valid numeric value.");
+			return;
+		} else {
+			auto arg_vec = args.value();
+			auto i_value = mods::util::stoi(arg_vec[1]);
+			unsigned ctr = 0;
+			for(const auto& mob : mob_proto) {
+				if(mob.nr == i_value.value()) {
+					ENCODE_STR(ctr);
+					r_success(player,CAT("Index: ",ctr));
+					return;
+				}
+				++ctr;
+			}
+			r_error(player,"No mob with that vnum");
+			return;
+		}
+	}
+
 
 	args = mods::util::subcmd_args<12,args_t>(argument,"clone");
 	{
@@ -5537,6 +5584,7 @@ ACMD(do_rbuild) {
 		//pave continue
 		// 0    1
 		if(arg_vec.size() == 2 && ICMP(arg_vec[1],"continue")) {
+			ENCODE_INIT();
 			auto status = mods::builder::pave_continue(player);
 			if(std::get<0>(status) < 0) {
 				r_error(player,std::get<1>(status));

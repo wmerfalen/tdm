@@ -127,6 +127,8 @@ namespace mods::builder {
 		*player << "{grn}[success]: {/grn}" << message.data() << "\r\n";
 	}
 	void add_room_to_pavements(player_ptr_t& player, int room_id);
+	/** if executing js, encode it */
+	void encode_scripted_response(player_ptr_t& player, std::string_view encoded);
 };
 
 void r_error(const player_ptr_t& player,std::string_view msg);

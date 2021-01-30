@@ -1,5 +1,33 @@
 # Inventory of features
 
+# grunt work
+	- 2021-01-30
+		- [ ] several mob and room definitions in far.js need to be converted to mob object format
+
+# recent enhancements
+	- new `OUTSIDE_TRASHY_PARKING_LOT` sector type
+		- source: mods/rooms.(c|h)pp
+	- it is now possible to get a concise value from mbuild new
+		- source: mods/builder.cpp
+			- helpers:
+				- `ENCODE_STR(integral)`
+				- `ENCODE_INIT()`
+				- `ENCODE_R("string-response")`
+		- source: mods/player.hpp
+			- `set_scripted_response(std::string_view);`
+			- `std::string&& consume_scripted_response();`
+		- new overloaded template functions: `load_where`, `delete_where`
+	- exec('cmd') javascript function to get scripted response:
+	 	- `js send(exec('mbuild new')); // will respond with rnum of newly built mob`
+		- source: mods/js.cpp
+	- commands that return scripted responses:
+		- `mbuild new (returns mob_proto.size() after pushback)`
+		- `mbuild pave on|off|continue (returns transact_id)`
+		- `mbuild exists <mob_vnum> (mob vnum or "!" if not found)`
+	- mob object format
+		- created ideal way to create rooms and mobs
+			- in js/far.js look for strings starting with: `/** -!- Poster child for: `
+
 # vertical slice gameplay goals [ first 10 levels ]
 	- [ ] Content via Procedural Generation
 		- [ ] Area Configuration (prefixed with arcon-* in the mods/fluxkraft folder)

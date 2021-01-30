@@ -831,6 +831,15 @@ namespace mods {
 			int16_t& shock_resistance_percent();
 			int16_t& anti_matter_resistance_percent();
 
+			void set_scripted_response(std::string_view r) {
+				m_scripted_response = r;
+			}
+			std::string&& consume_scripted_response() {
+				auto f = std::move(m_scripted_response);
+				m_scripted_response = "";
+				return std::move(f);
+			}
+
 		protected:
 			std::map<std::string,std::string> m_ada_data;
 			bool m_ada;
@@ -848,6 +857,7 @@ namespace mods {
 
 
 		private:
+			std::string m_scripted_response;
 			void write_to_char(std::string_view msg, bool newline,bool plain);
 			uuid_t m_attacker_uuid;
 			event_queue_iterator m_block_event;
