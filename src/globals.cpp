@@ -69,6 +69,7 @@ INIT(mods::loot);
 INIT(mods::forge_engine::value_scaler_static);
 INIT(mods::weapons::damage_types);
 INIT(mods::fluxkraft);
+INIT(mods::fluxkraft::arcon_bar);
 #undef INIT
 
 namespace mods::unit_tests {
@@ -504,6 +505,7 @@ namespace mods {
 			mods::forge_engine::value_scaler_static::init();
 			mods::weapons::damage_types::init();
 			mods::fluxkraft::init();
+			mods::fluxkraft::arcon_bar::init();
 			::offensive::init();
 			::builder::init();
 			::informative::init();

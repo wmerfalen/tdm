@@ -236,6 +236,7 @@ ACMD	mods/classes/super-user-fiddler.cpp	/^	ACMD(do_mock_level){$/;"	f	namespace
 ACMD	mods/date-time.cpp	/^	ACMD(do_moon_phase){$/;"	f	namespace:mods::date_time
 ACMD	mods/date-time.cpp	/^	ACMD(do_serialize_date){$/;"	f	namespace:mods::date_time
 ACMD	mods/elevator.cpp	/^ACMD(do_instantiate_elevator_here){$/;"	f
+ACMD	mods/fluxkraft/arcon-bar.hpp	/^		ACMD(do_generate_bar) {$/;"	f	namespace:mods::fluxkraft::arcon_bar
 ACMD	mods/fluxkraft/shape-dictionary.cpp	/^	ACMD(do_generate_zone) {$/;"	f	namespace:mods::fluxkraft
 ACMD	mods/fluxkraft/shape-dictionary.cpp	/^	ACMD(do_procgen_random_amount) {$/;"	f	namespace:mods::fluxkraft
 ACMD	mods/forge-engine/value-scaler.cpp	/^		ACMD(do_value_scaler) {$/;"	f	namespace:mods::forge_engine::value_scaler_static
@@ -1777,7 +1778,7 @@ INDUSTRIAL_STRENGTH	mods/yaml.hpp	/^		INDUSTRIAL_STRENGTH,$/;"	e	enum:mods::yaml
 INFO_FILE	db.h	81;"	d
 INFRAVISION	mods/flags.hpp	/^		INFRAVISION,$/;"	e	enum:mods::flags::aff
 INIT	globals.cpp	46;"	d	file:
-INIT	globals.cpp	72;"	d	file:
+INIT	globals.cpp	73;"	d	file:
 INITIATE	mods/skills.hpp	/^	INITIATE = 1,$/;"	e	enum:uint8_t
 INK	mods/aoe.hpp	/^		INK,	\/** Marks surroundings and enemies with paint for the purpose of tracking *\/ $/;"	e	enum:mods::aoe::types_t
 INSERT	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_type_t
@@ -4762,7 +4763,7 @@ __MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	146;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__	mods/behaviour_tree_impl.cpp	16;"	d	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	d
 __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__	mods/calc-visibility.cpp	10;"	d	file:
-__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1256;"	d	file:
+__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1258;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ADVANCED_PROTECTION_DEBUG_OUTPUT__	mods/armor/advanced-protection.cpp	3;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_BP_DEBUG_OUTPUT__	mods/armor/basic-protection.cpp	3;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ELITE_PROTECTION_DEBUG_OUTPUT__	mods/armor/elite-protection.cpp	3;"	d	file:
@@ -4984,8 +4985,12 @@ arcSafeRelease	mods/catch.hpp	/^inline void arcSafeRelease(NSObject* obj) {$/;"	
 arcSafeRelease	mods/catch.hpp	/^inline void arcSafeRelease(NSObject*) {}$/;"	f
 arcSafeRelease	mods/catch2.hpp	/^inline void arcSafeRelease( NSObject* ){}$/;"	f
 arcSafeRelease	mods/catch2.hpp	/^inline void arcSafeRelease( NSObject* obj ) {$/;"	f
+arcon	mods/fluxkraft/arcon-bar.cpp	/^namespace mods::fluxkraft::arcon {$/;"	n	class:mods::fluxkraft	file:
+arcon	mods/fluxkraft/arcon-bar.hpp	/^	namespace arcon {$/;"	n	namespace:mods::fluxkraft
 arcon	mods/fluxkraft/arcon-metropolitan.cpp	/^namespace mods::fluxkraft::arcon {$/;"	n	class:mods::fluxkraft	file:
 arcon	mods/fluxkraft/arcon-metropolitan.hpp	/^namespace mods::fluxkraft::arcon {$/;"	n	class:mods::fluxkraft
+arcon_bar	globals.cpp	/^INIT(mods::fluxkraft::arcon_bar);$/;"	v
+arcon_bar	mods/fluxkraft/arcon-bar.hpp	/^	namespace arcon_bar {$/;"	n	namespace:mods::fluxkraft
 arg1	db.h	/^	int	arg1;		\/*                                      *\/$/;"	m	struct:reset_com
 arg2	db.h	/^	int	arg2;		\/* Arguments to the command             *\/$/;"	m	struct:reset_com
 arg3	db.h	/^	int	arg3;		\/*                                      *\/$/;"	m	struct:reset_com
@@ -5065,13 +5070,16 @@ attach_flamethrower	mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyr
 attach_flamethrower	mods/orm/pyrexia.cpp	/^	std::pair<bool,std::string> pyrexia::attach_flamethrower(obj_ptr_t& weapon){$/;"	f	class:mods::orm::pyrexia
 attach_incendiary_grenade_launcher	mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyrexia::attach_incendiary_grenade_launcher(obj_ptr_t& weapon){$/;"	f	class:mods::classes::pyrexia
 attach_incendiary_grenade_launcher	mods/orm/pyrexia.cpp	/^	std::pair<bool,std::string> pyrexia::attach_incendiary_grenade_launcher(obj_ptr_t& weapon){$/;"	f	class:mods::orm::pyrexia
+attach_point_t	mods/fluxkraft/arcon-bar.hpp	/^		struct attach_point_t {$/;"	s	namespace:mods::fluxkraft::arcon
 attach_point_t	mods/fluxkraft/arcon-metropolitan.hpp	/^	struct attach_point_t {$/;"	s	namespace:mods::fluxkraft::arcon
 attach_point_t	mods/fluxkraft/shape-dictionary.cpp	/^	struct attach_point_t {$/;"	s	namespace:mods::fluxkraft	file:
+attach_points	mods/fluxkraft/arcon-bar.hpp	/^			std::vector<attach_point_t> attach_points;$/;"	m	struct:mods::fluxkraft::arcon::bar
 attach_points	mods/fluxkraft/arcon-metropolitan.hpp	/^		std::vector<attach_point_t> attach_points;$/;"	m	struct:mods::fluxkraft::arcon::metro
 attach_points	mods/fluxkraft/shape-dictionary.cpp	/^		std::vector<attach_point_t> attach_points;$/;"	m	struct:mods::fluxkraft::shape_description	file:
 attachment	mods/item-types.hpp	/^	enum attachment {$/;"	g	namespace:mods::weapon::type
 attachment_description_t	mods/yaml.hpp	/^		attachment_description_t() :$/;"	f	struct:mods::yaml::attachment_description_t
 attachment_description_t	mods/yaml.hpp	/^	struct attachment_description_t : public yaml_description_t {$/;"	s	namespace:mods::yaml
+attachment_points	mods/fluxkraft/arcon-bar.hpp	/^			std::vector<char> attachment_points;$/;"	m	struct:mods::fluxkraft::arcon::attach_point_t
 attachment_points	mods/fluxkraft/arcon-metropolitan.hpp	/^		std::vector<char> attachment_points;$/;"	m	struct:mods::fluxkraft::arcon::attach_point_t
 attachment_points	mods/fluxkraft/shape-dictionary.cpp	/^		std::vector<char> attachment_points;$/;"	m	struct:mods::fluxkraft::attach_point_t	file:
 attachment_t	mods/weapon.hpp	/^	enum attachment_t {$/;"	g	namespace:mods::weapon
@@ -5108,6 +5116,8 @@ bankAccount	shop.h	/^	int	 bankAccount;		\/* Store all gold over 15000 (disabled
 bank_gold	mods/mobs/mob.hpp	/^			int& bank_gold() {$/;"	f	class:mods::player
 bank_gold	mods/player.hpp	/^			int& bank_gold() {$/;"	f	struct:mods::player
 banzaii	castle.cpp	/^int banzaii(char_data *ch) {$/;"	f
+bar	mods/fluxkraft/arcon-bar.hpp	/^			bar(std::string_view shape_name,const std::vector<std::string>& directions) {$/;"	f	struct:mods::fluxkraft::arcon::bar
+bar	mods/fluxkraft/arcon-bar.hpp	/^		struct bar {$/;"	s	namespace:mods::fluxkraft::arcon
 barrel	mods/rifle-attachments.hpp	/^			obj_ptr_t barrel;$/;"	m	struct:mods::rifle_attachments_t
 barrel_t	mods/weapon.hpp	/^	enum barrel_t {$/;"	g	namespace:mods::weapon
 base	mods/classes/base.hpp	/^	struct base {$/;"	s	namespace:mods::classes
@@ -5215,6 +5225,7 @@ build_armor_locker	mods/intimidate.cpp	/^void build_armor_locker(room_vnum room)
 build_armor_locker	mods/zone.cpp	/^void build_armor_locker(room_vnum room){$/;"	f	namespace:mods::zone
 build_camera_feed	mods/intimidate.cpp	/^void build_camera_feed(room_vnum room){$/;"	f	namespace:mods::zone
 build_camera_feed	mods/zone.cpp	/^void build_camera_feed(room_vnum room){$/;"	f	namespace:mods::zone
+build_directions	mods/fluxkraft/arcon-bar.hpp	/^			std::vector<std::string> build_directions;$/;"	m	struct:mods::fluxkraft::arcon::bar
 build_directions	mods/fluxkraft/arcon-metropolitan.hpp	/^		std::vector<std::string> build_directions;$/;"	m	struct:mods::fluxkraft::arcon::metro
 build_directions	mods/fluxkraft/shape-dictionary.cpp	/^		std::vector<std::string> build_directions;$/;"	m	struct:mods::fluxkraft::shape_description	file:
 build_dummy	mods/intimidate.cpp	/^void build_dummy(room_vnum room){$/;"	f	namespace:mods::zone
@@ -6567,7 +6578,7 @@ exists	mods/lmdb/conf.hpp	/^bool exists(void){$/;"	f	struct:gdns::conf
 exists	mods/util.hpp	/^	bool exists(const ContainerType * container_ptr,$/;"	f	namespace:mods::util
 exit_bits	constants.cpp	/^const char *exit_bits[] = {$/;"	v
 exit_bits	constants.hpp	/^const char *exit_bits[] = {$/;"	v
-exit_info	structs.h	/^	int exit_info;	\/* Exit info			*\/$/;"	m	struct:room_direction_data
+exit_info	structs.h	/^	uint32_t exit_info;	\/* Exit info			*\/$/;"	m	struct:room_direction_data
 exit_info_masks_t	mods/doors.hpp	/^	enum exit_info_masks_t {$/;"	g	namespace:mods::doors
 exit_num	house.h	/^	sh_int exit_num;		\/* direction of house's exit	*\/$/;"	m	struct:house_control_rec
 exits	mods/mobs/mob.cpp	/^	void player::exits() {$/;"	f	class:mods::player
@@ -6899,6 +6910,7 @@ flush_to_db	mods/yaml.cpp	/^	uint64_t gadget_description_t::flush_to_db() {$/;"	
 flush_to_db	mods/yaml.cpp	/^	uint64_t melee_description_t::flush_to_db() {$/;"	f	class:mods::yaml::melee_description_t
 flush_to_db	mods/yaml.cpp	/^	uint64_t rifle_description_t::flush_to_db() {$/;"	f	class:mods::yaml::rifle_description_t
 fluxkraft	globals.cpp	/^INIT(mods::fluxkraft);$/;"	v
+fluxkraft	mods/fluxkraft/arcon-bar.hpp	/^namespace mods::fluxkraft {$/;"	n	class:mods
 fluxkraft	mods/fluxkraft/generator.cpp	/^namespace mods::fluxkraft {$/;"	n	class:mods	file:
 fluxkraft	mods/fluxkraft/generator.hpp	/^namespace mods::fluxkraft {$/;"	n	class:mods
 fluxkraft	mods/fluxkraft/shape-dictionary.cpp	/^namespace mods::fluxkraft {$/;"	n	class:mods	file:
@@ -7304,6 +7316,7 @@ globals	globals.hpp	/^	namespace globals {$/;"	n	namespace:mods
 globals	interpreter.cpp	/^namespace mods::globals {$/;"	n	class:mods	file:
 globals	mods/db.hpp	/^namespace mods::globals {$/;"	n	class:mods
 globals	mods/deferred.hpp	/^namespace mods::globals {$/;"	n	class:mods
+globals	mods/fluxkraft/arcon-bar.hpp	/^namespace mods::globals {$/;"	n	class:mods
 globals	mods/fluxkraft/arcon-metropolitan.hpp	/^namespace mods::globals {$/;"	n	class:mods
 globals	mods/fluxkraft/shape-dictionary.cpp	/^namespace mods::globals {$/;"	n	class:mods	file:
 globals	mods/lmdb.cpp	/^namespace mods::globals {$/;"	n	class:mods	file:
@@ -7640,6 +7653,7 @@ init	mods/classes/super-user-fiddler.cpp	/^	void init(){$/;"	f	namespace:mods::c
 init	mods/date-time.cpp	/^	void init(){$/;"	f	namespace:mods::date_time
 init	mods/debug.hpp	/^	static inline void init(bool tics){ debug_state = std::make_unique<state>(tics); }$/;"	f	namespace:mods::debug
 init	mods/elevator.cpp	/^	void init(){$/;"	f	namespace:mods::elevator
+init	mods/fluxkraft/arcon-bar.hpp	/^		void init() {$/;"	f	namespace:mods::fluxkraft::arcon_bar
 init	mods/fluxkraft/arcon-metropolitan.hpp	/^	void init() {$/;"	f	namespace:mods::fluxkraft::arcon
 init	mods/fluxkraft/generator.cpp	/^	void generator::init() {$/;"	f	class:mods::fluxkraft::generator
 init	mods/fluxkraft/shape-dictionary.cpp	/^	void init() {$/;"	f	namespace:mods::fluxkraft
@@ -8343,6 +8357,9 @@ m_debug	mods/armor/basic-protection.cpp	7;"	d	file:
 m_debug	mods/armor/elite-protection.cpp	5;"	d	file:
 m_debug	mods/armor/elite-protection.cpp	7;"	d	file:
 m_debug	mods/deep-object-parser.cpp	4;"	d	file:
+m_debug	mods/fluxkraft/arcon-bar.hpp	62;"	d
+m_debug	mods/fluxkraft/arcon-bar.hpp	6;"	d
+m_debug	mods/fluxkraft/arcon-bar.hpp	8;"	d
 m_debug	mods/fluxkraft/arcon-metropolitan.hpp	39;"	d
 m_debug	mods/fluxkraft/arcon-metropolitan.hpp	4;"	d
 m_debug	mods/fluxkraft/arcon-metropolitan.hpp	6;"	d
@@ -8923,7 +8940,7 @@ metro	mods/fluxkraft/arcon-metropolitan.hpp	/^	struct metro {$/;"	s	namespace:mo
 mex_debug	mods/examine.cpp	4;"	d	file:
 mex_debug	mods/examine.cpp	6;"	d	file:
 mg_map	mods/mobs/mini-gunner.cpp	/^	mg_map_t& mg_map(){$/;"	f	namespace:mods::mobs
-mgdp_debug	globals.cpp	1258;"	d	file:
+mgdp_debug	globals.cpp	1260;"	d	file:
 mi_debug	mods/interpreter.cpp	49;"	d	file:
 mi_debug	mods/interpreter.cpp	5;"	d	file:
 mi_debug	mods/interpreter.cpp	7;"	d	file:
@@ -9157,6 +9174,7 @@ name	mods/catch.hpp	/^		const char* name;$/;"	m	struct:Catch::NameAndDesc
 name	mods/catch2.hpp	/^    StringRef name;$/;"	m	struct:Catch::NameAndTags
 name	mods/classes/pyrexia.hpp	/^				std::string name;$/;"	m	struct:mods::classes::pyrexia::skillset_info_t
 name	mods/drone.hpp	/^			const char* name() {$/;"	f	struct:mods::drone_impl
+name	mods/fluxkraft/arcon-bar.hpp	/^			std::string name;$/;"	m	struct:mods::fluxkraft::arcon::bar
 name	mods/fluxkraft/arcon-metropolitan.hpp	/^		std::string name;$/;"	m	struct:mods::fluxkraft::arcon::metro
 name	mods/fluxkraft/shape-dictionary.cpp	/^		std::string name;$/;"	m	struct:mods::fluxkraft::shape_description	file:
 name	mods/mini-games.hpp	/^		std::string name;$/;"	m	struct:mods::mini_games::mini_game_payload_t
@@ -10470,6 +10488,7 @@ roll_incendiary_shot	mods/classes/pyrexia.cpp	/^		uint16_t pyrexia::roll_incendi
 roll_real_abils	class.cpp	/^void roll_real_abils(char_data *ch) {$/;"	f
 room	graph.cpp	/^	room_rnum room;$/;"	m	struct:bfs_queue_struct	file:
 room	mods/camera.cpp	/^	int camera::room() {$/;"	f	class:mods::camera
+room	mods/fluxkraft/arcon-bar.hpp	/^			room_counter_t room;$/;"	m	struct:mods::fluxkraft::arcon::attach_point_t
 room	mods/fluxkraft/arcon-metropolitan.hpp	/^		room_counter_t room;$/;"	m	struct:mods::fluxkraft::arcon::attach_point_t
 room	mods/fluxkraft/shape-dictionary.cpp	/^		room_counter_t room;$/;"	m	struct:mods::fluxkraft::attach_point_t	file:
 room	mods/intimidate.hpp	/^		room_vnum room;$/;"	m	struct:mods::zone::replenish_command
@@ -10485,6 +10504,7 @@ room_bits	constants.cpp	/^const char *room_bits[] = {$/;"	v
 room_bits	constants.hpp	/^const char *room_bits[] = {$/;"	v
 room_bits_count	constants.cpp	/^size_t	room_bits_count = sizeof(room_bits) \/ sizeof(room_bits[0]) - 1,$/;"	v
 room_bits_count	constants.hpp	/^size_t	room_bits_count = sizeof(room_bits) \/ sizeof(room_bits[0]) - 1,$/;"	v
+room_counter	mods/fluxkraft/arcon-bar.hpp	/^			room_counter_t room_counter;$/;"	m	struct:mods::fluxkraft::arcon::bar
 room_counter	mods/fluxkraft/arcon-metropolitan.hpp	/^		room_counter_t room_counter;$/;"	m	struct:mods::fluxkraft::arcon::metro
 room_counter	mods/fluxkraft/shape-dictionary.cpp	/^		room_counter_t room_counter;$/;"	m	struct:mods::fluxkraft::shape_description	file:
 room_data	structs.cpp	/^room_data::room_data() {$/;"	f	class:room_data
@@ -10509,6 +10529,7 @@ room_list	globals.hpp	/^inline mods::globals::player_list_t& room_list(room_rnum
 room_mappings	mods/builder.cpp	/^	static std::map<int,int> room_mappings;$/;"	m	namespace:mods::builder	file:
 room_number	mods/orm/room.hpp	/^		room_vnum room_number;$/;"	m	struct:mods::orm::room
 room_pave_mode	mods/player.cpp	/^	bool player::room_pave_mode() {$/;"	f	class:mods::player
+room_pointer	mods/fluxkraft/arcon-bar.hpp	/^			std::shared_ptr<char_data> room_pointer;$/;"	m	struct:mods::fluxkraft::arcon::attach_point_t
 room_pointer	mods/fluxkraft/arcon-metropolitan.hpp	/^		std::shared_ptr<char_data> room_pointer;$/;"	m	struct:mods::fluxkraft::arcon::attach_point_t
 room_pointer	mods/fluxkraft/shape-dictionary.cpp	/^		std::shared_ptr<char_data> room_pointer;$/;"	m	struct:mods::fluxkraft::attach_point_t	file:
 room_rnum	mods/scan.hpp	/^			uint32_t room_rnum;$/;"	m	struct:mods::scan::__anon4
@@ -11780,6 +11801,7 @@ vnum_object	db.cpp	/^int vnum_object(char *searchname, char_data *ch) {$/;"	f
 vsnprintf	bsd-snprintf.cpp	/^vsnprintf(char *str, size_t count, const char *fmt, va_list args) {$/;"	f
 vsnprintf	sysdep.h	351;"	d
 vwrite_to_output	comm.cpp	/^size_t vwrite_to_output(mods::descriptor_data& t, const char *format, va_list args) {$/;"	f
+walk	mods/fluxkraft/arcon-bar.hpp	/^			void walk(player_ptr_t& player) {$/;"	f	struct:mods::fluxkraft::arcon::bar
 walk	mods/fluxkraft/arcon-metropolitan.hpp	/^		void walk(player_ptr_t& player) {$/;"	f	struct:mods::fluxkraft::arcon::metro
 walk	mods/fluxkraft/shape-dictionary.cpp	/^		void walk(player_ptr_t& player) {$/;"	f	struct:mods::fluxkraft::shape_description
 wants_to	mods/intent.hpp	/^		intent_to_t 				wants_to;$/;"	m	struct:mods::intent::intent_t
