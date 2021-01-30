@@ -1124,7 +1124,7 @@ struct room_direction_data {
 
 	mods::string keyword;		/* for open/close			*/
 
-	int exit_info;	/* Exit info			*/
+	uint32_t exit_info;	/* Exit info			*/
 	obj_vnum key;		/* Key's number (-1 for no key)		*/
 	room_rnum to_room;		/* Where direction leads (NOWHERE)	*/
 };
