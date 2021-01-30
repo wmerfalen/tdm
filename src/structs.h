@@ -1163,6 +1163,7 @@ struct room_data {
 			SEWER,			/** Underground sewer tunnel */
 			SHATTERED_GLASS, /** results of breaking glass objects */
 			TREE,
+			TRASHY,
 			TUNNEL, /** a tunnel made of any material */
 			UNDERWATER,
 			VOLATILE,		/** Volatile means any slight spark will ignite an explosion */
