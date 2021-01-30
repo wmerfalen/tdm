@@ -234,6 +234,14 @@ namespace mods::rooms {
 					txt::OUTSIDE
 				});
 				break;
+			case sector_type_t::OUTSIDE_TRASHY_PARKING_LOT:
+				world[room_id].add_textures({
+					txt::CEMENT,
+					txt::OUTSIDE,
+					txt::DRY,
+					txt::TRASHY
+				});
+				break;
 			case sector_type_t::OUTSIDE_CEMENT:
 				world[room_id].add_textures({
 					txt::CEMENT,

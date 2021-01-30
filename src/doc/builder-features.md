@@ -56,6 +56,51 @@
 				- [ ] Turns aggressive if witnesses injustice
 			- [ ] `MOB_HELPER`
 				- [ ] Helps out the innocent
+		- [ ] Area idea 4: Mob levels 10-20
+			- [ ] this area needs these features to be built
+				- [ ] An RFID card scanner
+					- [ ] when a card is swiped, the room vnum it unlocks is checked
+				- [ ] An RFID card
+				- [ ] swipe ACMD
+					- [ ] `swipe <selector> <direction>`
+			- [ ] instigate ACMD
+				- [ ] `instigate <selector> <target-direction>`
+					- [ ] Mob will pursue you which will cause them to leave the room
+					- [ ] Mob will have a give up index which determines how soon they give up (in room distances)
+			- [ ] choke ACMD
+				- [ ] `choke <selector>`
+					- [ ] Will attempt to choke selected target
+					- [ ] If fails, mob will become hostile and fighting will ensue
+					- [ ] is a global skill that anyone can use
+						- [ ] you get better with every usage of it
+			- [ ] quest failure eventing system
+				- [ ] when a quest failure condition is met, you must wait again until the zone resets to try the contract again
+			- [ ] Broadmore Drive -> U-Slurp's Video Shop
+					- [ ] Situations:
+						- [ ] Money Laundering
+							- Intel suggests that the business is being used to funnel 
+							money through. Records are appearing out of thin air with a long
+							paper trail that ends up leading nowhere. This is potentially a 
+							deep state insider with high level access to the mainframe of
+							major banks.
+							- Section: outside the office
+								- There is a very sturdy door blocking the entrance to the administrative office.
+									An RFID key swipe is attached to the door.
+								- Objectives:
+									- [ ] There is an office in the back near the video rooms.  Find a way into the office
+										- [ ] choke the clerk unconscious
+											- [ ] `instigate <clerk|selector> <south>`
+												- [ ] this will get him to leave his default room and move north towards you
+											- [ ] `choke <clerk|selector>`
+												- [ ] do this until success
+											- [ ] killing the clerk results in a failed objective
+										- [ ] take RFID keyfob from his knecklace
+											- `get keyfob clerk`
+										- [ ] swipe
+											- `swipe keyfob`
+									- [ ] Figure out the passcode to the safe
+									- [ ] Transmit the documents using your smart phone
+										-[ ] photograph <documents|selector> using phone
 
 		- [ ] Area idea 2: Mob levels 15-20
 			- [ ] Downtown Northern Talon
@@ -96,7 +141,7 @@
 				gun stores, and liquor stores
 				- 
 		- [ ] Area idea 1:
-			- Sweetwater Springs Blvd
+			- Saltwater Spruce Blvd
 				- [ ] La Posta Restaurant (Main Floor)
 					- [ ] Mobs:
 						- [ ] La Posta Chef
