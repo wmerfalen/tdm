@@ -70,6 +70,7 @@ INIT(mods::forge_engine::value_scaler_static);
 INIT(mods::weapons::damage_types);
 INIT(mods::fluxkraft);
 INIT(mods::fluxkraft::arcon_bar);
+INIT(mods::builder::meqbuild);
 #undef INIT
 
 namespace mods::unit_tests {
@@ -506,6 +507,7 @@ namespace mods {
 			mods::weapons::damage_types::init();
 			mods::fluxkraft::init();
 			mods::fluxkraft::arcon_bar::init();
+			mods::builder::meqbuild::init();
 			::offensive::init();
 			::builder::init();
 			::informative::init();
@@ -948,9 +950,9 @@ namespace mods {
 				d("drone started. interpretting");
 				return mods::drone::interpret(player->uuid(),in_argument.data());
 			}
-			if(!player->cd()->drone && mods::quests::has_quest(*player)) {
+			if(!player->cd()->drone && mods::quests::has_quest(player)) {
 				d("Running trigger for quests");
-				mods::quests::run_trigger(*player);
+				mods::quests::run_trigger(player);
 			}
 
 			if(player->room_pave_mode()) {

@@ -200,10 +200,6 @@ namespace mods::builder {
 		}
 		player->set_scripted_response(encoded);
 	}
-#define ENCODE_RESPONSE(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, __ENC_RESPONSE)
-#define ENCODE_STR(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, std::to_string(__ENC_RESPONSE))
-#define ENCODE_R(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, __ENC_RESPONSE)
-#define ENCODE_INIT(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, "!")
 	std::tuple<int8_t,std::string> pave_continue(player_ptr_t& player) {
 		if(player->builder_data && player->builder_data->room_pave_mode) {
 			return {-1,"It looks like you're already paving. Save your existing pavement to begin."};

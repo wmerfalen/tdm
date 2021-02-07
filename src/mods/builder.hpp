@@ -134,6 +134,10 @@ namespace mods::builder {
 void r_error(const player_ptr_t& player,std::string_view msg);
 void r_success(const player_ptr_t& player,std::string_view msg);
 void r_status(const player_ptr_t& player,std::string_view msg);
+#define ENCODE_RESPONSE(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, __ENC_RESPONSE)
+#define ENCODE_STR(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, std::to_string(__ENC_RESPONSE))
+#define ENCODE_R(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, __ENC_RESPONSE)
+#define ENCODE_INIT(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, "!")
 //ACMD(do_rbuild);
 //ACMD(do_rbuild_sandbox);
 //ACMD(do_zbuild);

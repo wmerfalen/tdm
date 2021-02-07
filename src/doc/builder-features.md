@@ -1,5 +1,42 @@
 # Inventory of features
 
+# meqbuild
+	- orm classes `mob_equipment`
+	```
+		id
+		meq_profile_name string
+		meq_vnum integer
+		meq_light string    
+		meq_finger_r string 
+		meq_finger_l string 
+		meq_neck_1 string    
+		meq_neck_2 string    
+		meq_body string     
+		meq_head string     
+		meq_legs string     
+		meq_feet string     
+		meq_hands string    
+		meq_arms string     
+		meq_shield string   
+		meq_about string    
+		meq_waist string    
+		meq_wrist_r string  
+		meq_wrist_l string  
+		meq_wield string    
+		meq_hold string     
+		meq_secondary string
+		meq_shoulders_l string
+		meq_shoulders_r string
+		meq_backpack string
+		meq_goggles string
+		meq_vest_pack string
+		meq_elbow_l string
+		meq_elbow_r string
+	```
+		
+	- use ACMD: `add_armor_index` 
+	- 
+
 # grunt work
 	- 2021-01-30
 		- [ ] several mob and room definitions in far.js need to be converted to mob object format
@@ -16,7 +53,6 @@
 		- source: mods/player.hpp
 			- `set_scripted_response(std::string_view);`
 			- `std::string&& consume_scripted_response();`
-		- new overloaded template functions: `load_where`, `delete_where`
 	- exec('cmd') javascript function to get scripted response:
 	 	- `js send(exec('mbuild new')); // will respond with rnum of newly built mob`
 		- source: mods/js.cpp
@@ -85,22 +121,12 @@
 			- [ ] `MOB_HELPER`
 				- [ ] Helps out the innocent
 		- [ ] Area idea 4: Mob levels 10-20
-			- [ ] this area needs these features to be built
+			# this area needs these features to be built
 				- [ ] An RFID card scanner
 					- [ ] when a card is swiped, the room vnum it unlocks is checked
 				- [ ] An RFID card
 				- [ ] swipe ACMD
 					- [ ] `swipe <selector> <direction>`
-			- [ ] instigate ACMD
-				- [ ] `instigate <selector> <target-direction>`
-					- [ ] Mob will pursue you which will cause them to leave the room
-					- [ ] Mob will have a give up index which determines how soon they give up (in room distances)
-			- [ ] choke ACMD
-				- [ ] `choke <selector>`
-					- [ ] Will attempt to choke selected target
-					- [ ] If fails, mob will become hostile and fighting will ensue
-					- [ ] is a global skill that anyone can use
-						- [ ] you get better with every usage of it
 			- [ ] quest failure eventing system
 				- [ ] when a quest failure condition is met, you must wait again until the zone resets to try the contract again
 			- [ ] Broadmore Drive -> U-Slurp's Video Shop
@@ -116,12 +142,7 @@
 									An RFID key swipe is attached to the door.
 								- Objectives:
 									- [ ] There is an office in the back near the video rooms.  Find a way into the office
-										- [ ] choke the clerk unconscious
-											- [ ] `instigate <clerk|selector> <south>`
-												- [ ] this will get him to leave his default room and move north towards you
-											- [ ] `choke <clerk|selector>`
-												- [ ] do this until success
-											- [ ] killing the clerk results in a failed objective
+										- [ ] get the RFID fob from around the clerk's neck
 										- [ ] take RFID keyfob from his knecklace
 											- `get keyfob clerk`
 										- [ ] swipe

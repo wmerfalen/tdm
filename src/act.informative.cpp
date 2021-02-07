@@ -170,7 +170,7 @@ ACMD(do_contract) {
 	DO_HELP_WITH_ZERO("contract");
 
 	if(vec_args.size() > 0 && vec_args[0].compare("list") == 0) {
-		auto quest_names = mods::quests::list_quests(player->room());
+		auto quest_names = mods::quests::list_quests(player->vnum());
 		if(quest_names.size() == 0) {
 			player->sendln("{red}There are no contracts in this room.{/red}");
 			return;
@@ -192,7 +192,7 @@ ACMD(do_contract) {
 			return;
 		}
 
-		if(mods::quests::start_quest(ch,quest_num.value())) {
+		if(mods::quests::start_quest(player,quest_num.value())) {
 			player->sendln("{grn}Your contract has been started! Good luck!{/grn}");
 			return;
 		}
@@ -208,8 +208,8 @@ ACMD(do_contract) {
 			return;
 		}
 
-		mods::quests::leave_quest(ch,quest_num.value());
-		if(mods::quests::current_quest(ch).compare(vec_args[1]) != 0) {
+		mods::quests::leave_quest(player,quest_num.value());
+		if(mods::quests::current_quest(player).compare(vec_args[1]) != 0) {
 			player->sendln("{red}You are not part of that contract.{/red}");
 			return;
 		}

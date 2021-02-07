@@ -87,6 +87,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/armor/basic-protection mods/armor/advanced-protection mods/armor/elite-protection \
 					 mods/players/db-load mods/bugs-fixtures mods/player-registration \
 					 mods/super-users mods/builder/object-placement \
+					 mods/orm/mob-equipment mods/builder/mob-equipment \
+					 mods/orm/mob-equipment-map \
 					 mods/integral-objects mods/integral-objects-db \
 					 mods/orm/integral-object mods/orm/camera-feed mods/orm/door-event \
 					 mods/mini-games/line-up mods/orm/mini-game mods/mini-games \
