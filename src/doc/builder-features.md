@@ -1,41 +1,26 @@
 # Inventory of features
 
+# mob reinforcements (or response team)
+	- [x] create car object type
+		- [x] SUV types
+			- [ ] Blacked out private contractor security force
+			- [ ] Police SUV detainment vehicle
+			- [ ] SWAT team van (16 persons)
+	- [ ] create private contractor security force blackbox building
+		- [ ] blackbox meaning you can only see the outsides of the building
+			- [ ] gates open and cars exit to head towards help needed
+	- [ ] create "terrible neighborhood" index
+		- [ ] very dangerous areas take longer to respond time
+		- [ ] less dangerous areas have a faster response time
+		- [ ] very rich areas have extremely fast response time
+	- [ ] security force consists of N cars and N response team members
+		- [ ] when all response team members are dispatched
+			- [ ] no available response team to get to certain areas
+	- [ ] distance to call for help dictates response time
+
 # meqbuild
 	- orm classes `mob_equipment`
-	```
-		id
-		meq_profile_name string
-		meq_vnum integer
-		meq_light string    
-		meq_finger_r string 
-		meq_finger_l string 
-		meq_neck_1 string    
-		meq_neck_2 string    
-		meq_body string     
-		meq_head string     
-		meq_legs string     
-		meq_feet string     
-		meq_hands string    
-		meq_arms string     
-		meq_shield string   
-		meq_about string    
-		meq_waist string    
-		meq_wrist_r string  
-		meq_wrist_l string  
-		meq_wield string    
-		meq_hold string     
-		meq_secondary string
-		meq_shoulders_l string
-		meq_shoulders_r string
-		meq_backpack string
-		meq_goggles string
-		meq_vest_pack string
-		meq_elbow_l string
-		meq_elbow_r string
-	```
-		
-	- use ACMD: `add_armor_index` 
-	- 
+	- use ACMD: `meqbuild`
 
 # grunt work
 	- 2021-01-30

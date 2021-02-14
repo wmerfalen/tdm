@@ -586,6 +586,7 @@ namespace mods::util {
 		MENTOC_LAZY_ME(trap,ITEM_TRAP);
 		MENTOC_LAZY_ME(container,ITEM_CONTAINER);
 		MENTOC_LAZY_ME(melee,ITEM_MELEE);
+		MENTOC_LAZY_ME(vehicle,ITEM_VEHICLE);
 #undef MENTOC_LAZY_ME
 		return mods::util::UNKNOWN_YAML_FILE;
 	}
@@ -604,6 +605,7 @@ namespace mods::util {
 		MENTOC_LAZY_ME(trap,ITEM_TRAP);
 		MENTOC_LAZY_ME(container,ITEM_CONTAINER);
 		MENTOC_LAZY_ME(melee,ITEM_MELEE);
+		MENTOC_LAZY_ME(vehicle,ITEM_VEHICLE);
 #undef MENTOC_LAZY_ME
 #define MENTOC_LAZY_ME(mtype) if(is_lower_match(#mtype,type)){ return mtype; }
 		MENTOC_LAZY_ME(ITEM_RIFLE);
@@ -616,6 +618,7 @@ namespace mods::util {
 		MENTOC_LAZY_ME(ITEM_TRAP);
 		MENTOC_LAZY_ME(ITEM_CONTAINER);
 		MENTOC_LAZY_ME(ITEM_MELEE);
+		MENTOC_LAZY_ME(ITEM_VEHICLE);
 #undef MENTOC_LAZY_ME
 		return -1;
 	}
@@ -634,6 +637,7 @@ namespace mods::util {
 		MENTOC_LAZY_ME(trap,ITEM_TRAP);
 		MENTOC_LAZY_ME(container,ITEM_CONTAINER);
 		MENTOC_LAZY_ME(melee,ITEM_MELEE);
+		MENTOC_LAZY_ME(vehicle,ITEM_VEHICLE);
 #undef MENTOC_LAZY_ME
 		return mods::util::UNKNOWN_YAML_FILE;
 	}

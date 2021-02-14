@@ -138,6 +138,7 @@ void r_status(const player_ptr_t& player,std::string_view msg);
 #define ENCODE_STR(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, std::to_string(__ENC_RESPONSE))
 #define ENCODE_R(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, __ENC_RESPONSE)
 #define ENCODE_INIT(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, "!")
+#define ENCODE_OK() mods::builder::encode_scripted_response(player, "ok")
 //ACMD(do_rbuild);
 //ACMD(do_rbuild_sandbox);
 //ACMD(do_zbuild);

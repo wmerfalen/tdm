@@ -7,6 +7,15 @@
 #ifndef tostr
 #define tostr(a) std::to_string(a)
 #endif
+
+#ifndef MELEE_STUB
+#define MELEE_STUB(A) std::cerr << red_str("TODO stub: MELEE ") << "\n";
+#endif
+
+#ifndef VEHICLE_STUB
+#define VEHICLE_STUB(A) std::cerr << red_str("TODO stub: VEHICLE ") << "\n";
+#endif
+
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 namespace mods::yaml {
 	template <typename T>
@@ -427,6 +436,17 @@ namespace mods::yaml {
 		}
 		o->obj_flags.weapon_flags = this->type;
 	}
+
+	void vehicle_description_t::fill_flags(obj_data* o) {
+		auto * w = &(o->obj_flags.wear_flags);
+		auto * tf = &(o->obj_flags.type_flag);
+		//bool recognized = 0;
+		(*tf) = ITEM_MELEE;
+		o->vehicle()->type = (mw_vehicle)this->type;
+		(*w) |= ITEM_VEHICLE;
+		o->obj_flags.weapon_flags = 0;
+	}
+
 	void melee_description_t::fill_flags(obj_data* o) {
 		auto * w = &(o->obj_flags.wear_flags);
 		auto * tf = &(o->obj_flags.type_flag);
@@ -596,33 +616,22 @@ namespace mods::yaml {
 		}
 	}
 
-	uint64_t melee_description_t::db_id() {
-		return this->id;
-	}
-	uint64_t rifle_description_t::db_id() {
-		return this->id;
-	}
-	uint64_t armor_description_t::db_id() {
-		return this->id;
-	}
-	uint64_t drone_description_t::db_id() {
-		return this->id;
-	}
-	uint64_t consumable_description_t::db_id() {
-		return this->id;
-	}
-	uint64_t trap_description_t::db_id() {
-		return this->id;
-	}
-	uint64_t gadget_description_t::db_id() {
-		return this->id;
-	}
-	uint64_t attachment_description_t::db_id() {
-		return this->id;
-	}
-	uint64_t container_description_t::db_id() {
-		return this->id;
-	}
+	int16_t vehicle_description_t::write_example_file(std::string_view file) {
+		std::string file_name = current_working_dir() + "/" + file.data();
+		std::ofstream out_file(file_name);
+		if(!out_file.is_open()) {
+			return -1;
+		}
+		if(!out_file.good()) {
+			return -2;
+		}
+		MENTOC_EXAMPLE_VEHICLE
+		MENTOC_MEMBER_VARS_EXAMPLE_FOR(MENTOC_VEHICLE_MEMBERS_TUPLE)
+		base_items(&out_file,"Response team SUV",std::to_string(ITEM_VEHICLE));
+		out_file.flush();
+		out_file.close();
+		return 0;
+	};
 	int16_t melee_description_t::write_example_file(std::string_view file) {
 		std::string file_name = current_working_dir() + "/" + file.data();
 		std::ofstream out_file(file_name);
@@ -672,9 +681,6 @@ namespace mods::yaml {
 		out_file.close();
 		return 0;
 	};
-#ifndef MELEE_STUB
-#define MELEE_STUB(A) std::cerr << red_str("TODO stub: MELEE ") << "\n";
-#endif
 	void melee_description_t::generate_map() {
 		MELEE_STUB(__LINE__);
 	}
@@ -736,6 +742,32 @@ namespace mods::yaml {
 				break;
 			}
 		}
+	}
+	uint64_t vehicle_description_t::flush_to_db() {
+		VEHICLE_STUB(__LINE__);
+		return 0;
+#if 0
+		try {
+			this->generate_map();
+			auto insert_transaction = txn();
+			sql_compositor comp("melee_instance",&insert_transaction);
+			auto up_sql = comp
+			              .insert()
+			              .into("melee_instance")
+			              .values(this->exported)
+			              .returning("melee_id")
+			              .sql();
+			auto row = mods::pq::exec(insert_transaction,up_sql);
+			mods::pq::commit(insert_transaction);
+			if(row.size()) {
+				return this->id = row[0]["melee_id"].as<uint64_t>();
+			}
+			return 0;
+		} catch(std::exception& e) {
+			REPORT_DB_ISSUE(": error inserting new object_melee record: '",e.what());
+			return 0;
+		}
+#endif
 	}
 
 	uint64_t melee_description_t::flush_to_db() {
@@ -818,9 +850,23 @@ namespace mods::yaml {
 				break;
 		}
 	}
-	uint64_t explosive_description_t::db_id() {
-		return this->id;
+	int16_t vehicle_description_t::feed(std::string_view in_file) {
+		MENTOC_FILE_EXISTS_PREAMBLE(vehicle);
+		std::vector<std::string> fed_items;
+		try {
+			feed_file = file;
+			auto yaml_file = YAML::LoadFile(file);
+			auto type_string = yaml_file["str_type"].as<std::string>();
+			MENTOC_FEED_BASE_MEMBERS
+			MENTOC_FEED_VEHICLE
+		} catch(YAML::Exception& e) {
+			mods::object_utils::report_yaml_exception(e,fed_items);
+			REPORT_DB_ISSUE("error",e.what());
+			return -2;
+		}
+		return 0;
 	}
+
 	int16_t melee_description_t::feed(std::string_view in_file) {
 		MELEE_STUB(__LINE__);
 		return 0;
@@ -996,6 +1042,19 @@ namespace mods::yaml {
 			this->feed_status = -2;
 			return -2;
 		}
+	}
+
+	int16_t vehicle_description_t::feed_from_po_record(mentoc_pqxx_result_t yaml_file) {
+		try {
+			std::vector<std::string> fed_items;
+			auto type_string = yaml_file["str_type"].as<std::string>();
+			MENTOC_FEED_BASE_MEMBERS
+			MENTOC_FEED_VEHICLE
+		} catch(std::exception& e) {
+			REPORT_DB_ISSUE("vehicle error",e.what());
+			return -1;
+		}
+		return 0;
 	}
 
 	int16_t melee_description_t::feed_from_po_record(mentoc_pqxx_result_t yaml_file) {

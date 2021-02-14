@@ -81,6 +81,9 @@ namespace mods::orm::inventory {
 				if(in_type.compare("melee") == 0) {
 					t = ITEM_MELEE;
 				}
+				if(in_type.compare("vehicle") == 0) {
+					t = ITEM_VEHICLE;
+				}
 				mods::pq::commit(select_transaction);
 				return std::move(create_object(t,player_record[0][file_field].c_str()));
 			}

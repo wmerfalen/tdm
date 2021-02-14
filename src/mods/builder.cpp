@@ -2257,7 +2257,7 @@ ACMD(do_mbuild) {
 		        "[documentation written on 2020-07-10]\r\n" <<
 		        " {grn}mbuild{/grn} {red}save <mob_id>{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}show <mob_id>{/red}\r\n" <<
-		        " {grn}mbuild{/grn} {red}instantiate <mob_id>{/red}\r\n" <<
+		        " {grn}mbuild{/grn} {red}instantiate <mob_vnum>{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}action:add <mob_id> <flag>{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}action:remove <mob_id> <flag>{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}action:list <mob_id>{/red}\r\n"
@@ -2515,6 +2515,7 @@ ACMD(do_mbuild) {
 	args = mods::util::subcmd_args<12,args_t>(argument,"instantiate");
 
 	if(args.has_value()) {
+		ENCODE_INIT();
 		auto arg_vec = args.value();
 		auto i_value = mods::util::stoi(arg_vec[1]);
 
@@ -2542,18 +2543,22 @@ ACMD(do_mbuild) {
 			 *
 			 *
 			 */
-			auto index = i_value.value();
-			std::size_t i = index;
-
-			if(i >= mob_proto.size()) {
-				r_error(player,"Out of bounds");
+			auto v = i_value.value_or(-1);
+			if(v < 0) {
+				r_error(player,"Vnum must be a positive number");
+				ENCODE_R("invalid vnum value");
 				return;
 			}
 
-			mob_vnum v = mob_proto[index].nr;
 			auto obj = mods::globals::read_mobile_ptr(v,VIRTUAL);
+			if(!obj) {
+				r_error(player,"Cannot find mob by that vnum");
+				ENCODE_R("couldnt find mob with vnum");
+				return;
+			}
 			mods::globals::rooms::char_to_room(player->room(),obj->cd());
 			r_success(player,"Object created, look on the floor");
+			ENCODE_OK();
 		}
 
 		return;
@@ -3226,6 +3231,8 @@ ACMD(do_obuild) {
 		        //"  {gld}|:: cost_per_day{/gld}\r\n" <<
 		        //"  {gld}|:: timer{/gld}\r\n" <<
 		        //"  {gld}|:: bitvector {red}see: obuild help bitvector{/red}{/gld}\r\n" <<
+		        " {grn}obuild{/grn} {red}exists <obj_vnum>{/red}\r\n" <<
+		        "  |--> [supports encoded response]\r\n" <<
 		        " {grn}obuild{/grn} {red}create <item_number> <obj_type> <>{/red}\r\n" <<
 		        "  {gld}|:: -:[obj_types]:-{/gld}\r\n" <<
 		        "  {gld}|:: armor{/gld}\r\n" <<
@@ -3283,6 +3290,36 @@ ACMD(do_obuild) {
 		r_success(player,"Object created");
 		return;
 	}
+
+	args = mods::util::subcmd_args<7,args_t>(argument,"exists");
+
+	if(args.has_value()) {
+
+		//[0 - exists] [1 - vnum]
+		auto arg_vec = args.value();
+		auto i_value = mods::util::stoi(arg_vec[1]);
+		ENCODE_INIT();
+
+		if(!i_value.has_value()) {
+			r_error(player,"Please use a valid numeric value.");
+			return;
+		} else {
+			auto arg_vec = args.value();
+			auto i_value = mods::util::stoi(arg_vec[1]);
+			unsigned ctr = 0;
+			for(const auto& obj : obj_proto) {
+				if(obj.item_number == i_value.value()) {
+					ENCODE_STR(ctr);
+					r_success(player,CAT("Index: ",ctr));
+					return;
+				}
+				++ctr;
+			}
+			r_error(player,"No object with that vnum");
+			return;
+		}
+	}
+
 
 	args = mods::util::subcmd_args<7,args_t>(argument,"create");
 
@@ -3894,7 +3931,7 @@ ACMD(do_obuild) {
 		MENTOC_BITVECTOR(ITEM_ANTI_THIEF);
 		MENTOC_BITVECTOR(ITEM_ANTI_WARRIOR);
 		MENTOC_BITVECTOR(ITEM_NOSELL);
-		player->send("{red}obj_file: {/red} {grn}'%s'{/grn}\r\n",obj->feed_file());
+		player->send("{red}obj_file: {/red} {grn}'%s'{/grn}\r\n",obj->feed_file().length() ? obj->feed_file().data() : "");
 
 		for(unsigned index = 0;
 		        index < MAX_OBJ_AFFECT; index++) {

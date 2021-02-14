@@ -1,7 +1,7 @@
-#ifndef  __MENTOC_MODS_MOBS_MINI_GUNNER_BEHAVIOUR_TREE_HEADER__
-#define  __MENTOC_MODS_MOBS_MINI_GUNNER_BEHAVIOUR_TREE_HEADER__
+#ifndef  __MENTOC_MODS_MOBS_LOWLY_SECURITY_BEHAVIOUR_TREE_HEADER__
+#define  __MENTOC_MODS_MOBS_LOWLY_SECURITY_BEHAVIOUR_TREE_HEADER__
 
-#include "mini-gunner.hpp"
+#include "lowly-security.hpp"
 #include "../../globals.hpp"
 #include "../damage-event.hpp"
 #include "../scan.hpp"
@@ -14,17 +14,44 @@
 #include "../affects.hpp"
 #include "../classes/ghost.hpp"
 #include "../calc-visibility.hpp"
+#include "../radio.hpp"
 
-#define __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__
-#ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__
-#define m_debug(a) std::cerr << "[mods::mobs::mini_gunner_behaviour_tree][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+#define __MENTOC_SHOW_BEHAVIOUR_TREE_LOWLY_SECURITY_BTREE_DEBUG_OUTPUT__
+#ifdef  __MENTOC_SHOW_BEHAVIOUR_TREE_LOWLY_SECURITY_BTREE_DEBUG_OUTPUT__
+#define m_debug(a) std::cerr << "[mods::mobs::lowly_security_behaviour_tree][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #else
 #define m_debug(a)
 #endif
 
 extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
 
-namespace mods::mobs::mini_gunner_behaviour_tree {
+namespace mods::mobs::lowly_security_behaviour_tree {
+	/**
+	 * Lowly Security Guard behaviour
+	 * ------------------------------
+	    [1] always scanning. scan in each direction for suspicious behaviour
+	    [2] if violence against store owner, fire hk45 at player
+				- report disturbance at current position over radio
+	    [3] always attempt to get close to player to tackle
+	    	- if in same room as player, tackle
+	    	- if tackle fails, fire hk45 at player
+	    [4] if target moves GIVEUP_N rooms away, give up chasing
+			[5] if target
+
+	    [events]
+	    	[blinded]
+					[1] move in random direction
+					[2] fire blindly
+				[wimpy]
+					[1] grab radio and call for backup
+					[2] spray twice at target
+				[disoriented]
+					[1] move in random direction
+				[forced prone]
+					[1] stand up
+					[2] move in random direction
+
+	 */
 #define TSUCCESS TStatus::SUCCESS
 #define TFAILURE TStatus::FAILURE
 	using namespace helpers;
@@ -40,41 +67,22 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 			return TSUCCESS;
 		});
 	}
-
-	template <typename TNode,typename TArgumentType,typename TStatus>
-	auto shout_where_are_you_random_string() {
-		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = mini_gunner_ptr(mob.uuid());
-			mg->shout(random_key_string(MINI_GUNNER_RANDOM_DISORIENT_STRINGS()));
-			return TSUCCESS;
-		});
-	}
-
-	/**
-	 * @brief randomly yell something
-	 *
-	 * @tparam TNode
-	 * @tparam TArgumentType
-	 * @tparam TStatus
-	 *
-	 * @return
-	 */
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto shout_random() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = mini_gunner_ptr(mob.uuid());
-			mg->shout(random_key_string(MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS()));
+			auto mg = lowly_security_ptr(mob.uuid());
+			/** TODO: replace this mg->shout(random_key_string(LOWLY_SECURITY_RANDOM_ATTACK_YELL_STRINGS())); */
 			return TSUCCESS;
 		});
 	}
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto random_trivial_action() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = mini_gunner_ptr(mob.uuid());
+			auto mg = lowly_security_ptr(mob.uuid());
 			static constexpr uint8_t RANDOM_THINGS = 3;
 			switch(dice(0,RANDOM_THINGS)) {
 				case 0:
-					mg->shout(random_key_string(MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS()));
+					/** TODO: replace this: mg->shout(random_key_string(LOWLY_SECURITY_RANDOM_ATTACK_YELL_STRINGS()));*/
 					break;
 				case 1:
 					act("$n slams $s fist against $s chest!",FALSE,mob.cd(),0,0,TO_ROOM);
@@ -103,8 +111,8 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto set_behaviour_tree_to_engage() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = mini_gunner_ptr(mob.uuid());
-			mg->set_behaviour_tree("mini_gunner_engage");
+			auto mg = lowly_security_ptr(mob.uuid());
+			mg->set_behaviour_tree("lowly_security_engage");
 			return TSUCCESS;
 		});
 	}
@@ -120,7 +128,7 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto spray_direction() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = mini_gunner_ptr(mob.uuid());
+			auto mg = lowly_security_ptr(mob.uuid());
 			mg->spray(mg->get_heading());
 			return TSUCCESS;
 		});
@@ -137,20 +145,22 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto can_still_see_target() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = mini_gunner_ptr(mob.uuid());
+			auto mg = lowly_security_ptr(mob.uuid());
 			return TSUCCESS;
 		});
 	}
 
+#if 0
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto find_targets_with_compromised_line_of_sight() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = mini_gunner_ptr(mob.uuid());
-			int depth = MINI_GUNNER_SCAN_DEPTH() * MINI_GUNNER_DECREASED_SIGHT_MULTIPLIER();
-			m_debug("has decreased line of sight: " << depth << ". normal line of site depth:" << MINI_GUNNER_SCAN_DEPTH());
+			auto mg = lowly_security_ptr(mob.uuid());
+			int depth = LOWLY_SECURITY_SCAN_DEPTH() * LOWLY_SECURITY_DECREASED_SIGHT_MULTIPLIER();
+			m_debug("has decreased line of sight: " << depth << ". normal line of site depth:" << LOWLY_SECURITY_SCAN_DEPTH());
 			return TStatus::SUCCESS;
 		});
 	}
+#endif
 
 	/**
 	 * @brief find targets, set heading and watching
@@ -164,8 +174,8 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto find_targets() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = mini_gunner_ptr(mob.uuid());
-			int depth = MINI_GUNNER_SCAN_DEPTH();
+			auto mg = lowly_security_ptr(mob.uuid());
+			int depth = LOWLY_SECURITY_SCAN_DEPTH();
 			vec_player_data vpd; mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
 			std::map<int,int> scores;
 			std::map<uint8_t,uuidvec_t> dir_players;
@@ -213,10 +223,10 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	 * @param tree reference parameter. the tree to decorate
 	 */
 	template <typename TNode,typename TArgumentType,typename TStatus>
-	void make_mini_gunner_roam(TNode& tree) {
+	void make_lowly_security_roam(TNode& tree) {
 		tree.append_child(
 		TNode::create_sequence({
-			debug_echo_tree_name<TNode,TArgumentType,TStatus>("mini_gunner_roam"),
+			debug_echo_tree_name<TNode,TArgumentType,TStatus>("lowly_security_roam"),
 			find_targets<TNode,TArgumentType,TStatus>(),
 			spray_direction<TNode,TArgumentType,TStatus>(),
 			set_behaviour_tree_to_engage<TNode,TArgumentType,TStatus>()
@@ -225,7 +235,7 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	}
 
 	template <typename TNode,typename TArgumentType,typename TStatus>
-	void make_mini_gunner_engage(TNode& tree) {
+	void make_lowly_security_engage(TNode& tree) {
 		/**
 		 * [ engage target ]
 		 * [2] spray at target
@@ -236,7 +246,7 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 		 */
 		tree.append_child(
 		TNode::create_sequence({
-			debug_echo_tree_name<TNode,TArgumentType,TStatus>("mini_gunner_engage"),
+			debug_echo_tree_name<TNode,TArgumentType,TStatus>("lowly_security_engage"),
 			spray_direction<TNode,TArgumentType,TStatus>(),
 			find_targets<TNode,TArgumentType,TStatus>(),
 			TNode::create_sequence({
@@ -247,10 +257,17 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 		);
 	}
 	template <typename TNode,typename TArgumentType,typename TStatus>
-	auto scan_to_find_targets() {
+	auto perform_random_non_hostile_action() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = mini_gunner_ptr(mob.uuid());
-			int depth = MINI_GUNNER_SCAN_DEPTH();
+			auto g = lowly_security_ptr(mob.uuid());
+			return TSUCCESS;
+		});
+	}
+	template <typename TNode,typename TArgumentType,typename TStatus>
+	auto scan_to_find_hostile_activity() {
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			auto mg = lowly_security_ptr(mob.uuid());
+			int depth = LOWLY_SECURITY_SCAN_DEPTH();
 			vec_player_data vpd; mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
 			std::map<int,int> scores;
 			std::map<uint8_t,uuidvec_t> dir_players;
@@ -286,120 +303,42 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 	}
 
 	template <typename TNode,typename TArgumentType,typename TStatus>
-	auto watch_all_directions() {
+	auto report_hostile_activity() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = mini_gunner_ptr(mob.uuid());
-			/** if stunned */
-			auto ad = mg->player()->get_affect_dissolver();
-			if(ad.has_any({AFF(BLIND),AFF(DISORIENT)})) {
-				mg->watch_nothing();
-				mg->set_behaviour_tree("mini_gunner_disoriented");
-				return TFAILURE;
+			if(mods::rooms::has_emp(mob.room())) {
+				act("$n attempts to radio backup but his radio is unresponsive!",FALSE,mob.cd(),0,0,TO_ROOM);
+				return TSUCCESS;
 			}
-			mg->watch_heading();
+			/** if stunned */
+			if(mob.player_ptr()->get_affect_dissolver().has_any({AFF(BLIND),AFF(DISORIENT)})) {
+				mods::response_team::radio::help_dazed(mob.uuid());
+				return TSUCCESS;
+			}
+			mods::response_team::radio::report_violence(mob.uuid());
 			return TSUCCESS;
 		});
 	}
 
 	template <typename TNode,typename TArgumentType,typename TStatus>
-	auto contact_hq_for_camera_spots() {
-		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = mini_gunner_ptr(mob.uuid());
-			/** if stunned */
-			auto ad = mg->player()->get_affect_dissolver();
-			if(ad.has_any({AFF(BLIND),AFF(DISORIENT)})) {
-				mg->watch_nothing();
-				return TFAILURE;
-			}
-			mg->watch_heading();
-			return TSUCCESS;
-		});
-	}
-
-	template <typename TNode,typename TArgumentType,typename TStatus>
-	void make_mini_gunner_aggressive_roam(TNode& tree) {
-		/**
-		 * [ aggressive roam ]
-		 * [1] scan area
-		 * [2] found targets? [success]
-		 * 	[yes]
-		 * 	  |-> [spray direction]
-		 * 		|-> [save sprayed player uuids]
-		 * 		|-> [go toward direction]
-		 * 	[no]
-		 * 		|-> [selector]
-		 * 		|-> [check for blood trail]
-		 * 		|		  |
-		 * 		|		  [ found trail? ]
-		 * 		|		  	[yes]
-		 * 		|		  		|-> [RUN two rooms toward direction]
-		 * 		|		  		|-> [scan for target]
-		 * 		|		  				  |-> [ found target? ]
-		 * 		|		  				  			[yes]
-		 * 		|		  				  				|-> [spray direction]
-		 * 		|												|-> [set behaviour tree engage]
-		 * 		|												|-> return SUCCESS
-		 * 		|		  				  			[no]
-		 * 		|		  				  				|-> goto [check for blood trail]
-		 * 		|												|-> [set behaviour tree blood trail tracking]
-		 * 		|												|-> return SUCCESS
-		 * 		|-> [scan for targets]
-		 * 		|			|
-		 * 		|			[ found? ]
-		 * 		|				[yes]
-		 * 		|					|-> [spray direction]
-		 * 		|					|-> return SUCCESS
-		 * 		|				[no]
-		 * 		|					|-> return FAILURE
-		 * 		|-> [mob has scanner grenade?]
-		 * 		|			[yes]
-		 * 		|				|-> [throw toward direction of last seen player]
-		 * 		|				|			|-> [ set behaviour tree to waiting on nade results ]
-		 * 		|				|-> return SUCCESS
-		 * 		|
-		 * 		|-> [contact hq over radio]
-		 * 		|			|
-		 * 		|			[ "i need eyes on sector N" ]
-		 * 		|				|
-		 * 		|				|-> [ dispatch scanner effect on sector ]
-		 * 		|				|			|-> [ set behaviour tree to waiting on dispatch ]
-		 * 		|				|-> return SUCCESS
-		 * 		|-> [intelligent guess]
-		 * 		|			|
-		 * 		|			[sequence]
-		 * 		|			|->[ cheat and find each player in the zone ]
-		 * 		|			|->[ get x,y,z of players ]
-		 * 		|			|->[ calculate closest player based on coords ]
-		 * 		|			|->[ move that direction ]
-		 * 		|			|->[ scan for players ]
-		 * 		|			|->[ found players? ]
-		 * 		|				[yes]
-		 * 		|					|->[ spray direction ]
-		 * 		|					|->[ set behaviour tree engage ]
-		 * 		|					|-> return SUCCESS
-		 * 		|				[no]
-		 * 		|					|->return FAILURE
-		 * 		|-> [shuffle order of tree]
-		 */
+	void make_lowly_security_disoriented(TNode& tree) {
 		tree.append_child(
-		TNode::create_selector({
-			TNode::create_sequence({
-				debug_echo_tree_name<TNode,TArgumentType,TStatus>("mini_gunner_aggressive_roam"),
-				scan_to_find_targets<TNode,TArgumentType,TStatus>(),
-				watch_all_directions<TNode,TArgumentType,TStatus>(),
-				spray_direction<TNode,TArgumentType,TStatus>(),
-			})
+		TNode::create_sequence({
+			debug_echo_tree_name<TNode,TArgumentType,TStatus>("disoriented"),
+			//shout_where_are_you_random_string<TNode,TArgumentType,TStatus>(),
+			//find_targets_with_compromised_line_of_sight<TNode,TArgumentType,TStatus>(),
+			spray_direction<TNode,TArgumentType,TStatus>(),
+			set_behaviour_tree_to_engage<TNode,TArgumentType,TStatus>()
 		})
 		);
 	}
 	template <typename TNode,typename TArgumentType,typename TStatus>
-	void make_mini_gunner_disoriented(TNode& tree) {
+	void make_lowly_security(TNode& tree) {
 		tree.append_child(
 		TNode::create_sequence({
-			debug_echo_tree_name<TNode,TArgumentType,TStatus>("disoriented"),
-			shout_where_are_you_random_string<TNode,TArgumentType,TStatus>(),
-			find_targets_with_compromised_line_of_sight<TNode,TArgumentType,TStatus>(),
-			spray_direction<TNode,TArgumentType,TStatus>(),
+			debug_echo_tree_name<TNode,TArgumentType,TStatus>("losec_default"),
+			random_trivial_action<TNode,TArgumentType,TStatus>(),
+			scan_to_find_hostile_activity<TNode,TArgumentType,TStatus>(),
+			report_hostile_activity<TNode,TArgumentType,TStatus>(),
 			set_behaviour_tree_to_engage<TNode,TArgumentType,TStatus>()
 		})
 		);

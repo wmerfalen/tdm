@@ -40,7 +40,7 @@ namespace mods::util {
 	/** !!*****************!! */
 	static std::vector<std::string> VALID_TYPES = {
 		"rifle","explosive","drone","attachment","gadget",
-		"armor","trap","consumable","container"
+		"armor","trap","consumable","container","vehicle"
 	};
 	enum yaml_type_t {
 		UNRECOGNIZED = 0,

@@ -19,7 +19,8 @@
 (consumable) \
 (trap) \
 (container) \
-(melee)
+(melee) \
+(vehicle)
 
 #define MENTOC_ITEM_TYPES_CAPS_SEQ \
 (RIFLE) \
@@ -31,7 +32,8 @@
 (CONSUMABLE) \
 (TRAP) \
 (CONTAINER) \
-(MELEE)
+(MELEE) \
+(VEHICLE)
 
 #define MENTOC_ITEM_TYPES_BY_CAPS_SEQ \
 (rifle,RIFLE) \
@@ -43,7 +45,8 @@
 (consumable,CONSUMABLE) \
 (trap,TRAP) \
 (container,CONTAINER) \
-(melee,MELEE)
+(melee,MELEE) \
+(vehicle,VEHICLE)
 
 #define MENTOC_WEAR_PLACES_SEQ \
 (LIGHT) \
@@ -91,7 +94,8 @@
 (ITEM_CONSUMABLE) \
 (ITEM_TRAP) \
 (ITEM_CONTAINER) \
-(ITEM_MELEE)
+(ITEM_MELEE) \
+(ITEM_VEHICLE)
 
 
 
@@ -114,6 +118,31 @@
 #define MENTOC_CONTAINER_MEMBERS_TUPLE ( \
 (std::string,detailed_description,"#string, description","'Ammo locker.'") \
 )
+
+#define MENTOC_VEHICLE_TYPES_SEQUENCE (SUV) \
+(MOTORCYCLE) \
+(TWO_DOOR) \
+(FOUR_DOOR) \
+(TRUCK) \
+(SEMI) \
+(VAN) \
+(SWAT_VAN) \
+(TANK) \
+(JEEP)
+
+#define MENTOC_VEHICLE_MEMBERS_TUPLE ( \
+(int32_t,hp,"#int32_t, hitpoints",250), \
+(int32_t,armor_hp,"#int32_t, armor hitpoints",0), \
+(std::string,vehicle_type,"#string, SUV, MOTORCYCLE,TWO_DOOR,FOUR_DOOR,TRUCK,SEMI,VAN,SWAT_VAN,TANK,JEEP","'SUV;"), \
+(int32_t,horsepower,"#int32_t, horsepower", 1000), \
+(int16_t,zero_to_sixty,"#int16_t, amount in seconds to go from zero to 60mph",10), \
+(int32_t,tire_hp,"#int32_t, tire hp",150), \
+(std::string,tire_types,"#string, tire types AIR,AIRLESS,TRACKS (tank)","'AIR'"), \
+(std::string,front_windshield_glass_type,"#string, glass types, BULLET_PROOF,STOCK_GLASS,BULLET_PROOF_TINTED,STOCK_TINTED", "'STOCK_GLASS'"), \
+(std::string,rear_windshield_glass_type,"#string, glass types, BULLET_PROOF,STOCK_GLASS,BULLET_PROOF_TINTED,STOCK_TINTED", "'STOCK_GLASS'"), \
+(int16_t,passenger_count,"#int16_t, passenger count", 2) \
+)
+
 
 #define MENTOC_RIFLE_TYPES_SEQUENCE (SHOTGUN) \
 (ASSAULT_RIFLE) \
@@ -465,7 +494,8 @@
 (ATTACHMENT) \
 (ARMOR)  \
 (CONSUMABLE) \
-(TRAP)
+(TRAP) \
+(VEHICLE)
 
 
 
@@ -701,6 +731,17 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 #define MENTOC_EXAMPLE_MELEE \
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_EXAMPLE_IMPL,mw_melee,MENTOC_MELEE_TYPES_SEQUENCE)
 
+/**************************************************************************/
+/** VEHICLE                                                               */
+/**************************************************************************/
+#define MENTOC_FEED_VEHICLE \
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_FEED_TYPE_IMPL,mw_melee,MENTOC_VEHICLE_TYPES_SEQUENCE) \
+	MENTOC_FEED_PARSE_ALL_IMPL(MENTOC_VEHICLE_MEMBERS_TUPLE)
+
+#define MENTOC_EXAMPLE_VEHICLE \
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_EXAMPLE_IMPL,mw_melee,MENTOC_VEHICLE_TYPES_SEQUENCE)
+
+
 /*********************************************************/
 /** HOWTO: Add new item and subcategories                */
 /* Step 4: Add a new FEED_* and EXAMPLE_* constants      */
@@ -720,6 +761,7 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_SWITCH_IMPL, ~, MENTOC_ITEM_TYPES_SEQ
 #define ITEM_TRAP              9
 #define ITEM_CONTAINER         10
 #define ITEM_MELEE             11
+#define ITEM_VEHICLE           12
 #endif
 namespace mods {
 	enum elemental_types_t {
@@ -773,6 +815,10 @@ namespace mods::weapon::type {
 	enum melee {
 		MELEE_NONE = 0,
 		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_MELEE_TYPES_SEQUENCE)
+	};
+	enum vehicle {
+		VEHICLE_NONE = 0,
+		BOOST_PP_SEQ_FOR_EACH(MENTOC_ENUM_TYPES_IMPL,~,MENTOC_VEHICLE_TYPES_SEQUENCE)
 	};
 
 

@@ -45,8 +45,21 @@ namespace mods::weapon {
 	mw_drone drone(std::shared_ptr<obj_data>& object);
 	mw_gadget gadget(std::shared_ptr<obj_data>& object);
 	mw_melee melee(std::shared_ptr<obj_data>& object);
+	mw_vehicle vehicle(std::shared_ptr<obj_data>& object);
 	std::variant<mw_rifle,mw_explosive,mw_drone> get_type(
 	    std::shared_ptr<obj_data>&);
+	enum vehicle_t {
+		SUV,
+		MOTORCYCLE,
+		TWO_DOOR,
+		FOUR_DOOR,
+		TRUCK,
+		SEMI,
+		VAN,
+		SWAT_VAN,
+		TANK,
+		JEEP
+	};
 	enum melee_t {
 		MACHETE,
 		KNIFE,
@@ -164,7 +177,27 @@ using weapon_consumable_t = mods::weapon::type::consumable;
 using weapon_trap_t = mods::weapon::type::trap;
 using weapon_container_t = mods::weapon::type::container;
 using weapon_melee_t = mods::weapon::type::melee;
+using weapon_vehicle_t = mods::weapon::type::vehicle;
 namespace mods::weapon {
+	static inline std::string to_string(weapon_vehicle_t vehicle_type) {
+#define MENTOC_TO_STR(a){ case mw_vehicle::a: return #a; }
+		switch(vehicle_type) {
+				MENTOC_TO_STR(SUV);
+				MENTOC_TO_STR(MOTORCYCLE);
+				MENTOC_TO_STR(TWO_DOOR);
+				MENTOC_TO_STR(FOUR_DOOR);
+				MENTOC_TO_STR(TRUCK);
+				MENTOC_TO_STR(SEMI);
+				MENTOC_TO_STR(VAN);
+				MENTOC_TO_STR(SWAT_VAN);
+				MENTOC_TO_STR(TANK);
+				MENTOC_TO_STR(JEEP);
+			default:
+				return "<unknown>";
+#undef MENTOC_TO_STR
+		}
+	}
+
 	static inline std::string to_string(weapon_melee_t melee_type) {
 #define MENTOC_TO_STR(a){ case mw_melee::a: return #a; }
 		switch(melee_type) {
@@ -598,6 +631,7 @@ namespace mods::weapon {
 	std::vector<cap_t> get_caps(mw_consumable);
 	std::vector<cap_t> get_caps(mw_trap);
 	std::vector<cap_t> get_caps(mw_melee);
+	std::vector<cap_t> get_caps(mw_vehicle);
 	template <typename TObj,typename T>
 	static inline void feed_caps(TObj& obj, T type) {
 		obj->clear_capabilities();

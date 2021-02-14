@@ -312,6 +312,7 @@ namespace mods::object_utils {
 		MENTOC_F_IMPORT(consumable,CONSUMABLE);
 		MENTOC_F_IMPORT(container,CONTAINER);
 		MENTOC_F_IMPORT(melee,MELEE);
+		MENTOC_F_IMPORT(vehicle,VEHICLE);
 #undef MENTOC_F_IMPORT
 
 		if(!obj) {

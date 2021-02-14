@@ -1,16 +1,26 @@
-#include "mob-equipment.hpp"
+#include "meqbuild.hpp"
 #include "../interpreter.hpp"
 #include "../util.hpp"
 #include "../builder_util.hpp"
 #include <map>
 #include "../orm/mob-equipment.hpp"
 #include "../orm/mob-equipment-map.hpp"
+#include "../orm/base.hpp"
 
 namespace mods::orm {
 	extern std::deque<std::shared_ptr<mods::orm::mob_equipment>> mob_equipment_list;
 	extern std::deque<std::shared_ptr<mods::orm::mob_equipment_map>> mob_equipment_map_list;
 };
 namespace mods::builder::meqbuild {
+	void clear() {
+		mods::orm::mob_equipment_list.clear();
+		mods::orm::mob_equipment_map_list.clear();
+	}
+	void load_all() {
+		mods::orm::mob_equipment_list = std::move(mods::orm::load_all_by_table<mods::orm::mob_equipment>());
+		mods::orm::mob_equipment_map_list = std::move(mods::orm::load_all_by_table<mods::orm::mob_equipment_map>());
+	}
+
 	namespace map {
 		bool delete_by_vnum(const uint64_t& vnum) {
 			std::deque<std::shared_ptr<mods::orm::mob_equipment_map>> list;
@@ -183,11 +193,28 @@ namespace mods::builder::meqbuild {
 			        "  |:: {wht}meqbuild{/wht} {grn}map-delete 402 401 403{/grn}\r\n" <<
 			        "  |--> deletes all map-assign'd mob to meq vnum mappings specified by the list of mob vnums passed in\r\n" <<
 
+
+			        /** reload-all */
+			        " {grn}meqbuild{/grn} {red}reload-all{/red}\r\n" <<
+			        "  |--> clears all meqbuild data and reloads from sql. Does not save before loading\r\n"
+
 			        "\r\n";
 			player->pager_end();
 			player->page(0);
+			return;
 		}
-
+		/** reload-all */
+		{
+			auto args = mods::util::subcmd_args<11,args_t>(argument,"reload-all");
+			if(args.has_value()) {
+				ENCODE_INIT();
+				clear();
+				load_all();
+				r_success(player,"Reloaded");
+				ENCODE_R("ok");
+				return;
+			}
+		}
 		/** new */
 		{
 			auto args = mods::util::subcmd_args<4,args_t>(argument,"new");
@@ -391,8 +418,13 @@ namespace mods::builder::meqbuild {
 				}
 				for(auto& m : mods::orm::mob_equipment_map_list) {
 					if(m->mmap_mob_vnum == mvn) {
+						auto backup = m->mmap_mob_equipment_vnum;
 						m->mmap_mob_equipment_vnum = eq_vnum;
-						m->save();
+						if(m->save() < 0) {
+							r_error(player,"Unable to save existing.");
+							m->mmap_mob_equipment_vnum = backup;
+							return;
+						}
 						r_success(player,"Saved existing.");
 						ENCODE_R("ok");
 						return;
@@ -403,9 +435,13 @@ namespace mods::builder::meqbuild {
 				ref->initialize_row(mvn,eq_vnum);
 				ref->mmap_mob_vnum = mvn;
 				ref->mmap_mob_equipment_vnum = eq_vnum;
-				ref->save();
+				if(ref->save() < 0) {
+					r_error(player,"Unable to save.");
+					return;
+				}
 				mods::orm::mob_equipment_map_list.emplace_back(std::move(ref));
 				r_success(player,"Created new mapping and saved");
+				ENCODE_R("ok");
 				return;
 			}//end pave on
 		}
@@ -453,8 +489,9 @@ namespace mods::builder::meqbuild {
 			}//end pave on
 		}
 	}	//end meqbuild
-
 	void init() {
 		mods::interpreter::add_command("meqbuild", POS_RESTING, do_meqbuild, LVL_BUILDER,0);
+		clear();
+		load_all();
 	}
 };

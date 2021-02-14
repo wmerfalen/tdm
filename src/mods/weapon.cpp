@@ -6,6 +6,9 @@ extern obj_ptr_t create_object(int type,std::string file);
 extern int generic_find(char *arg, bitvector_t bitvector, char_data *ch,
                         char_data **tar_ch, struct obj_data **tar_obj);
 namespace mods::weapon {
+	std::vector<cap_t> get_caps(mw_vehicle m) {
+		return { cap_t::STAB, cap_t::CUT, cap_t::RIP };
+	}
 	std::vector<cap_t> get_caps(mw_melee m) {
 		return { cap_t::STAB, cap_t::CUT, cap_t::RIP };
 	}

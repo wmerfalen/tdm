@@ -306,6 +306,15 @@ ACMD(do_rifle_import) {
 	ADMIN_DONE();
 }
 
+ACMD(do_vehicle_import) {
+	ADMIN_REJECT();
+	DO_HELP("vehicle_import");
+	auto usage = "usage: vehicle_import <name-without-extension>\r\nExample: vehicle_import g36c";
+	generic_import(player,"vehicle",PARSE_ARGS(),usage);
+	ADMIN_DONE();
+}
+
+
 ACMD(do_melee_import) {
 	ADMIN_REJECT();
 	DO_HELP("melee_import");
@@ -493,6 +502,7 @@ ACMD(do_yaml_example) {
 	MENTOC_F_EXA(trap,"trap.yml");
 	MENTOC_F_EXA(container,"container.yml");
 	MENTOC_F_EXA(melee,"melee.yml");
+	MENTOC_F_EXA(vehicle,"vehicle.yml");
 #undef MENTOC_F_EXA
 	player->sendln("[+] done");
 }
@@ -676,6 +686,8 @@ ACMD(do_js_help) {
 			"{gld}trap_import{/gld} -- import a trap without having to specify .yml -- i.e.: trap_import trap",
 			"{gld}consumable_import{/gld} -- import a consumable without having to specify .yml -- i.e.: consumable_import hgh",
 			"{gld}container_import{/gld} -- import a container without having to specify .yml -- i.e.: container_import barrel",
+			"{gld}melee_import{/gld} -- import a melee without having to specify .yml -- i.e.: melee_import knife",
+			"{gld}vehicle_import{/gld} -- import a vehicle without having to specify .yml -- i.e.: vehicle_import suv",
 			"{yel} ----------------------------------------------------------------------{/yel}",
 			"{yel} --                      -:[ Super User List ]:-                       {/yel}",
 			"{yel} ----------------------------------------------------------------------{/yel}",
@@ -720,7 +732,6 @@ namespace builder {
 		/** !!*****************!! */
 		/** !!UPDATE_ITEM_TYPES!! */
 		/** !!*****************!! */
-		mods::interpreter::add_command("melee_import",POS_RESTING,do_melee_import, LVL_BUILDER,0);
 		mods::interpreter::add_command("rifle_import",POS_RESTING,do_rifle_import, LVL_BUILDER,0);
 		mods::interpreter::add_command("explosive_import",POS_RESTING,do_explosive_import, LVL_BUILDER,0);
 		mods::interpreter::add_command("drone_import",POS_RESTING,do_drone_import, LVL_BUILDER,0);
@@ -730,6 +741,8 @@ namespace builder {
 		mods::interpreter::add_command("trap_import",POS_RESTING,do_trap_import, LVL_BUILDER,0);
 		mods::interpreter::add_command("consumable_import",POS_RESTING,do_consumable_import, LVL_BUILDER,0);
 		mods::interpreter::add_command("container_import",POS_RESTING,do_container_import, LVL_BUILDER,0);
+		mods::interpreter::add_command("melee_import",POS_RESTING,do_melee_import, LVL_BUILDER,0);
+		mods::interpreter::add_command("vehicle_import",POS_RESTING,do_vehicle_import, LVL_BUILDER,0);
 
 	}
 };

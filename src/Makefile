@@ -1,6 +1,7 @@
 src = .
 builddir = build
 #CC = /usr/bin/clang++-8
+CC_PREFIX = /usr/bin/ccache
 CC = /usr/bin/g++-8
 BINDIR = ../bin
 DATA_DIR = "$(CURDIR)/../lib/"
@@ -84,10 +85,11 @@ buildobj = act.informative act.item act.medic \
 					 mods/injure mods/skills  mods/help mods/rooms \
 					 mods/mobs/mini-gunner mods/mobs/extended-types mods/values \
 					 mods/mobs/room-watching mods/mobs/mini-gunner-behaviour-tree \
+					 mods/mobs/lowly-security mods/mobs/lowly-security-behaviour-tree \
 					 mods/armor/basic-protection mods/armor/advanced-protection mods/armor/elite-protection \
 					 mods/players/db-load mods/bugs-fixtures mods/player-registration \
 					 mods/super-users mods/builder/object-placement \
-					 mods/orm/mob-equipment mods/builder/mob-equipment \
+					 mods/orm/mob-equipment mods/builder/meqbuild \
 					 mods/orm/mob-equipment-map \
 					 mods/integral-objects mods/integral-objects-db \
 					 mods/orm/integral-object mods/orm/camera-feed mods/orm/door-event \
@@ -113,12 +115,13 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/rifle-instance mods/unit-tests/rifle-instance \
 					 mods/orm/player-skill-usage \
 					 mods/fluxkraft/generator mods/fluxkraft/shape-dictionary \
-					 mods/fluxkraft/arcon-metropolitan mods/fluxkraft/arcon-bar
+					 mods/fluxkraft/arcon-metropolitan mods/fluxkraft/arcon-bar \
+					 mods/response-team/radio
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
-all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft
-	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT)
+all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team
+	$(CC_PREFIX) $(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT)
 
 clean:
 	make -f $(lmdbdir)/Makefile clean ; \
@@ -134,9 +137,13 @@ clean:
 		rm -f $(builddir)/mods/forge-engine/*.d \
 		rm -f $(builddir)/mods/fluxkraft/*.o \
 		rm -f $(builddir)/mods/fluxkraft/*.d \
+		rm -f $(builddir)/mods/response-team/*.o \
+		rm -f $(builddir)/mods/response-team/*.d \
 		rm -f $(builddir)/mods/unit-tests/*.o \
 		rm -f $(builddir)/mods/unit-tests/*.d 
 
+$(builddir)/mods/response-team:
+	mkdir -p $(builddir)/mods/response-team
 $(builddir)/mods/fluxkraft:
 	mkdir -p $(builddir)/mods/fluxkraft
 $(builddir)/mods/forge-engine:
@@ -167,12 +174,12 @@ $(builddir)/mods/unit-tests:
 	mkdir -p $(builddir)/mods/unit-tests
 
 $(builddir)/%.o: %.cpp
-	$(CC) -c $(FLAGS) -o $@ $<
+	$(CC_PREFIX) $(CC) -c $(FLAGS) -o $@ $<
 
 -include $(objects:.o=.d)
 
 $(duktape): duktape-2.2.0/src/duktape.h duktape-2.2.0/src/duktape.c
-	$(CC) -c $(FLAGS) duktape-2.2.0/src/duktape.c  -o $(duktape)
+	$(CC_PREFIX) $(CC) -c $(FLAGS) duktape-2.2.0/src/duktape.c  -o $(duktape)
 
 $(lmdb):
 	cd $(lmdbdir) && make clean ; make liblmdb.so && cp liblmdb.so $(src) && cd $(src) 

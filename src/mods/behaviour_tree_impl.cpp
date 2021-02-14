@@ -9,6 +9,7 @@
 #include "rooms.hpp"
 #include "mobs/room-watching.hpp"
 #include "mobs/mini-gunner-behaviour-tree.hpp"
+#include "mobs/lowly-security-behaviour-tree.hpp"
 
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
@@ -25,33 +26,33 @@ namespace mods::behaviour_tree_impl {
 	container_t trees;
 	container_mapping_t tree_mapping;
 	//mob_list_t mobs_with_trees;
-	void run_trees(){
-		bti_debug( "[behaviour_tree][run_trees] -- STUB\n");
+	void run_trees() {
+		bti_debug("[behaviour_tree][run_trees] -- STUB\n");
 	}
-	int8_t dispatch(uuid_t mob_uuid){
+	int8_t dispatch(uuid_t mob_uuid) {
 		auto it = mods::globals::mob_map.find(mob_uuid);
-		if(it == mods::globals::mob_map.end()){
+		if(it == mods::globals::mob_map.end()) {
 			bti_debug("uuid doesn't have mob ptr value: " << mob_uuid);
 			return mods::behaviour_tree_impl::dispatch_status_t::MOB_DOESNT_EXIST;
 		}
 		return dispatch_ptr(*(it->second));
 	}
-	int8_t dispatch_ptr(argument_type& ch){
+	int8_t dispatch_ptr(argument_type& ch) {
 		bti_debug("dispatching behaviour tree on: " << ch.name().c_str());
-		if(ch.mob_specials().behaviour_tree == 0){
+		if(ch.mob_specials().behaviour_tree == 0) {
 			bti_debug("As you were... ");
 			return dispatch_status_t::AS_YOU_WERE;
 		}
-		if(ch.mob_specials().behaviour_tree >= trees.size()){
+		if(ch.mob_specials().behaviour_tree >= trees.size()) {
 			bti_debug(red_str(CAT("invalid behaviour tree index:",std::to_string(ch.mob_specials().behaviour_tree))));
 			log("SYSERR: behaviour tree out of range: %d. not running",ch.mob_specials().behaviour_tree);
 			return dispatch_status_t::AS_YOU_WERE;
 		}
-		if(ch.mob_specials().behaviour_tree){
+		if(ch.mob_specials().behaviour_tree) {
 			bti_debug("mob has this behaviour_tree:" << ch.mob_specials().behaviour_tree);
 			assert(ch.mob_specials().behaviour_tree < trees.size());
 			auto btree_status = trees[ch.mob_specials().behaviour_tree].run(ch);
-			switch(btree_status.status){
+			switch(btree_status.status) {
 				case mods::behaviour_tree_status::SUCCESS:
 					bti_debug("Return success...");
 					return mods::behaviour_tree_impl::dispatch_status_t::RETURN_IMMEDIATELY;
@@ -62,9 +63,9 @@ namespace mods::behaviour_tree_impl {
 		}
 		return mods::behaviour_tree_impl::dispatch_status_t::AS_YOU_WERE;
 	}
-	int8_t register_mob(argument_type mob,std::string tree_name){
+	int8_t register_mob(argument_type mob,std::string tree_name) {
 		auto it = tree_mapping.find(tree_name);
-		if(it == tree_mapping.end()){
+		if(it == tree_mapping.end()) {
 			return -1;
 		}
 		bti_debug("registering mob '" << tree_name);
@@ -72,21 +73,21 @@ namespace mods::behaviour_tree_impl {
 		return 0;
 	}
 
-	int8_t unregister_mob(argument_type mob){
+	int8_t unregister_mob(argument_type mob) {
 		mob.mob_specials().behaviour_tree = 0;
 		return 0;
 	}
-	uint8_t grab_tree_by_name(const std::string& sv_tree){
+	uint8_t grab_tree_by_name(const std::string& sv_tree) {
 		return std::distance(trees.begin(),tree_mapping[sv_tree.data()]);
 	}
-	void add_tree(std::string sv_tree_name,node & n){
+	void add_tree(std::string sv_tree_name,node& n) {
 		trees.emplace_back(sv_tree_name,n);
 		tree_mapping[sv_tree_name] = trees.end()-1;
 		bti_debug("Added tree mapping for name: '" << sv_tree_name << "'");
 	}
-	void load_trees(){
+	void load_trees() {
 		/**
-		 * tracking down snipers 
+		 * tracking down snipers
 		 */
 		using node_type = node::node_type_t;
 		node do_nothing(node_type::DO_NOTHING);
@@ -96,22 +97,24 @@ namespace mods::behaviour_tree_impl {
 		node mini_gunner_engage(node_type::SELECTOR);
 		node mini_gunner_aggressive_roam(node_type::SELECTOR);
 		node mini_gunner_disoriented(node_type::SELECTOR);
+		node lowly_security(node_type::SELECTOR);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_roam<node,argument_type,status>(mini_gunner_roam);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_engage<node,argument_type,status>(mini_gunner_engage);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_aggressive_roam<node,argument_type,status>(mini_gunner_aggressive_roam);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_disoriented<node,argument_type,status>(mini_gunner_disoriented);
+		mods::mobs::lowly_security_behaviour_tree::make_lowly_security<node,argument_type,status>(lowly_security);
 
 		auto node_mob_has_snipe_capability = node::create_leaf(
-				[](argument_type mob) -> status {
-					if(mob.has_weapon_capability(mods::weapon::mask::snipe)){
-						bti_debug("[node_mob_has_snipe_capability]-> mob has snipe");
-						return status::SUCCESS;
-					}else{
-						bti_debug("[node_mob_has_snipe_capability]-> mob DOEST NOT have snipe");
-						return status::FAILURE;
-					}
-				}
-		);
+		[](argument_type mob) -> status {
+			if(mob.has_weapon_capability(mods::weapon::mask::snipe)) {
+				bti_debug("[node_mob_has_snipe_capability]-> mob has snipe");
+				return status::SUCCESS;
+			} else {
+				bti_debug("[node_mob_has_snipe_capability]-> mob DOEST NOT have snipe");
+				return status::FAILURE;
+			}
+		}
+		                                     );
 		/**
 		 * We are a sentinel npc. We do not move from the room which we are
 		 * stationed in. Instead, we remember who sniped us for
@@ -120,95 +123,95 @@ namespace mods::behaviour_tree_impl {
 		 * 'remember' string ("Hey! You're the <> that attacked me!")
 		 */
 		sentinel_snipe_tracking.append_child(node::create_sequence({
-				node_mob_has_snipe_capability,
-				node::create_leaf(
-						[](argument_type mob) -> status {
-							bti_debug("before... for loop");
-						/** If we've made it to this node, that means the mob does
-						 * indeed have the snipe capability. Let's attempt to snipe
-						 * the player who last sniped us.
-						 */
-						for(auto & remembered_sniper_uuid : mob.mob_specials().memory){
-							bti_debug("for loop");
-							auto remembered_sniper = ptr_by_uuid(remembered_sniper_uuid);
-							if(!remembered_sniper){
-								bti_debug("Can't find remembered sniper by uuid: " << remembered_sniper_uuid);
-								mob.mob_specials().memory.erase(remembered_sniper_uuid);
-								continue;
-							}
-							bti_debug("checking if Can snipe remembered sniper");
-							if(mob.can_snipe(remembered_sniper)){
-								bti_debug("Can snipe remembered sniper");
-							/*
-int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
-	struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
-	*/
-							/** TODO: if no ammo, search for ammo */
-							/** TODO: */
-								auto find_results = mods::scan::los_find(std::make_shared<mods::player>(mob),remembered_sniper);
-								auto mob_ptr = ptr(mob);
-								mods::weapons::damage_types::rifle_attack(mob_ptr,mob_ptr->primary(),remembered_sniper,find_results.distance,find_results.direction);
-								return status::SUCCESS;
-							}
-						}
-						bti_debug("returning FAILURE from sentinel_snipe_tracking");
-						return status::FAILURE;
+			node_mob_has_snipe_capability,
+			node::create_leaf(
+			[](argument_type mob) -> status {
+				bti_debug("before... for loop");
+				/** If we've made it to this node, that means the mob does
+				 * indeed have the snipe capability. Let's attempt to snipe
+				 * the player who last sniped us.
+				 */
+				for(auto& remembered_sniper_uuid : mob.mob_specials().memory) {
+					bti_debug("for loop");
+					auto remembered_sniper = ptr_by_uuid(remembered_sniper_uuid);
+					if(!remembered_sniper) {
+						bti_debug("Can't find remembered sniper by uuid: " << remembered_sniper_uuid);
+						mob.mob_specials().memory.erase(remembered_sniper_uuid);
+						continue;
 					}
-				)
-			})
-		);
+					bti_debug("checking if Can snipe remembered sniper");
+					if(mob.can_snipe(remembered_sniper)) {
+						bti_debug("Can snipe remembered sniper");
+						/*
+						int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
+						struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
+						*/
+						/** TODO: if no ammo, search for ammo */
+						/** TODO: */
+						auto find_results = mods::scan::los_find(std::make_shared<mods::player>(mob),remembered_sniper);
+						auto mob_ptr = ptr(mob);
+						mods::weapons::damage_types::rifle_attack(mob_ptr,mob_ptr->primary(),remembered_sniper,find_results.distance,find_results.direction);
+						return status::SUCCESS;
+					}
+				}
+				bti_debug("returning FAILURE from sentinel_snipe_tracking");
+				return status::FAILURE;
+			}
+			)
+		})
+		                                    );
 		snipe_tracking.append_child(node::create_sequence({
 			node::create_leaf(
-				[](argument_type mob) -> status{
+			[](argument_type mob) -> status{
 				bti_debug("snipe_tracking tree: Looking for target (snipe_tracking ptr is: " << mob.cd()->mob_specials.snipe_tracking << ")");
 				auto target = ptr_opt(mob.cd()->mob_specials.snipe_tracking);
-				if(!target.has_value()){
+				if(!target.has_value()) {
 					bti_debug("snipe_tracking tree has invalid uuid value:" << mob.cd()->mob_specials.snipe_tracking);
 					mob.cd()->mob_specials.snipe_tracking = 0;
 					return status::SUCCESS;
 				}
 				auto find_results = mods::scan::los_find(std::make_shared<mods::player>(mob),target.value());
-				if(find_results.found){
+				if(find_results.found) {
 					bti_debug("snipe_tracking tree: FOUND OUR TARGET! (snipe_tracking ptr is: " << mob.cd()->mob_specials.snipe_tracking << ")");
-				/**
-				 * Move find_results.dinstance steps toward the player
-				 */
-				for(decltype(find_results.distance) steps = find_results.distance; 
-					steps > 0; --steps){
 					/**
-					 * The 'direction' member will tell us where we need to go.
+					 * Move find_results.dinstance steps toward the player
 					 */
-					perform_move(mob,find_results.direction,0);
-					auto target = ptr_opt(mob.mob_specials().snipe_tracking);
-					if(!target.has_value()){
-						mob.mob_specials().snipe_tracking = 0;
-						return status::SUCCESS;
-					}
-					if(mob.room() == target.value()->room()){
-						return status::SUCCESS;
-					}else{
-						return status::FAILURE;
+					for(decltype(find_results.distance) steps = find_results.distance;
+					        steps > 0; --steps) {
+						/**
+						 * The 'direction' member will tell us where we need to go.
+						 */
+						perform_move(mob,find_results.direction,0);
+						auto target = ptr_opt(mob.mob_specials().snipe_tracking);
+						if(!target.has_value()) {
+							mob.mob_specials().snipe_tracking = 0;
+							return status::SUCCESS;
+						}
+						if(mob.room() == target.value()->room()) {
+							return status::SUCCESS;
+						} else {
+							return status::FAILURE;
+						}
 					}
 				}
-			}
-			return status::FAILURE;
-		}),
+				return status::FAILURE;
+			}),
 			node::create_leaf(
-				[](argument_type mob) -> status{
+			[](argument_type mob) -> status{
 
 				status ret_value = status::SUCCESS;
 				std::vector<uuid_t> erase_these;
-				for(auto & memorized_attacker_uuid : mob.mob_specials().memory){
+				for(auto& memorized_attacker_uuid : mob.mob_specials().memory) {
 					auto memorized_attacker_opt = ptr_opt(memorized_attacker_uuid);
-					if(!memorized_attacker_opt.has_value()){
-						bti_debug( "[memorized_attacker] grabbing by uuid failed! uuid points to nullptr: " << memorized_attacker_uuid );
+					if(!memorized_attacker_opt.has_value()) {
+						bti_debug("[memorized_attacker] grabbing by uuid failed! uuid points to nullptr: " << memorized_attacker_uuid);
 						erase_these.push_back(memorized_attacker_uuid);
 						continue;
 					}
 					auto memorized_attacker = memorized_attacker_opt.value();
-					if(mob.room() == memorized_attacker->room()){
+					if(mob.room() == memorized_attacker->room()) {
 						act("$n recognizes ", FALSE, mob, 0, 0, TO_ROOM);
-						bti_debug( "[recognize]: " << mob.name() << "->" << memorized_attacker->name().c_str());
+						bti_debug("[recognize]: " << mob.name() << "->" << memorized_attacker->name().c_str());
 						set_fighting(mob,memorized_attacker->cd());
 						hit(mob, memorized_attacker->cd(), TYPE_UNDEFINED);
 						/**
@@ -218,18 +221,18 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 						 */
 						ret_value = status::SUCCESS;
 						break;
-					}else{
+					} else {
 						ret_value = status::FAILURE;
 						break;
 					}
 				}
-				for(auto erase_me : erase_these){
+				for(auto erase_me : erase_these) {
 					mob.mob_specials().memory.erase(erase_me);
 				}
 				return ret_value;
 			})
-			})/** End create_sequence */
-		);// end append_child
+		})/** End create_sequence */
+		                           );// end append_child
 
 		add_tree("do_nothing",do_nothing);
 		add_tree("snipe_tracking",snipe_tracking);
@@ -238,9 +241,10 @@ int snipe_hit(*ch, char_data *victim, int type,uint16_t distance) {
 		add_tree("mini_gunner_engage",mini_gunner_engage);
 		add_tree("mini_gunner_aggressive_roam",mini_gunner_aggressive_roam);
 		add_tree("mini_gunner_disoriented",mini_gunner_disoriented);
+		add_tree("lowly_security",lowly_security);
 
 		/**
-		 * Suspicious roaming tree. 
+		 * Suspicious roaming tree.
 		 */
 		node suspicious_roaming(node_type::SELECTOR);
 		suspicious_roaming.append_child(node::create_selector({

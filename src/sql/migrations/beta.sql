@@ -3085,7 +3085,7 @@ CREATE TABLE public.mob_equipment (
 );
 CREATE TABLE public.mob_equipment_map (
   id SERIAL UNIQUE,
-	mmap_mob_vnum integer NOT NULL,
+	mmap_mob_vnum integer NOT NULL UNIQUE,
 	mmap_mob_equipment_vnum integer NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

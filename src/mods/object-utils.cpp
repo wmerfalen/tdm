@@ -16,7 +16,8 @@ namespace mods::object_utils {
 			"consumable",
 			"trap",
 			"container",
-			"melee"
+			"melee",
+			"vehicle"
 		};
 	}
 	int get_yaml_type(std::string& yaml) {
