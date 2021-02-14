@@ -43,9 +43,12 @@ namespace mods::response_team::radio {
 		return std::move(result);
 	}
 	void dispatch_help_message(uuid_t mob_uuid,std::string_view message, severity_t severity) {
-		auto npc = ptr_by_uuid(mob_uuid);
-		mods::response_team::radio::incidents[npc->room()] += (uint8_t)severity;
+		mods::response_team::radio::incidents[room] += (uint8_t)severity;
 
+		auto npc = ptr_by_uuid(mob_uuid);
+		if(!npc) {
+			return;
+		}
 		message = interpolate_location(npc,message);
 		act(CAT("$n speaks into $s radio: '",message.data(),"'!").c_str(),FALSE,npc->cd(),0,0,TO_ROOM);
 		/**
@@ -58,26 +61,26 @@ namespace mods::response_team::radio {
 		 */
 		std::string response;
 		if(std::string::npos != message.find_first_of("803 niner")) {
-			response = CAT("Copy that, ",npc->name().c_str(),". Dispatching Eagle two niner.");
+			response = CAT("Copy that, ",mob->name().c_str(),". Dispatching Eagle two niner.");
 		}
 		if(std::string::npos != message.find_first_of("908")) {
-			response = CAT("Copy ",npc->name().c_str(),interpolate_location(npc,". All units be advised: code 908 at {exact_location}"));
+			response = CAT("Copy ",mob->name().c_str(),interpolate_location(mob,". All units be advised: code 908 at {exact_location}"));
 		}
 		if(std::string::npos != message.find_first_of("810 charlie")) {
-			response = CAT("Copy ",npc->name().c_str(),interpolate_location(npc,". Officer intervention at {exact_location}"));
+			response = CAT("Copy ",mob->name().c_str(),interpolate_location(mob,". Officer intervention at {exact_location}"));
 		}
 		if(response.length() == 0) {
-			response = CAT(npc->name().c_str(),", say again");
+			response = CAT(mob->name().c_str(),", say again");
 		}
 		auto room = npc->room();
-		mods::globals::defer_queue->push(RADIO_INITIAL_RESPONSE_TICKS(), [room,mob_uuid,response,severity]() {
+		mods::globals::defer_queue->push(RADIO_INITIAL_RESPONSE_TICKS(), [room,mob_uuid,status_message,severity]() {
 			auto npc = ptr_by_uuid(mob_uuid);
 			if(npc) {
 				auto ids = mods::query_objects::query_equipment_by_yaml(npc, "gadget/cbradio.yml");
 				if(ids.size()) {
 					auto radio = optr_by_uuid(ids[0]);
 					if(radio) {
-						act(CAT(radio->name.c_str()," announces '",response.c_str(),"'").c_str(),FALSE,nullptr,0,0,TO_ROOM);
+						act(CAT(radio->name.c_str()," announces '",status_message.c_str(),"'").c_str(),FALSE,nullptr,0,0,TO_ROOM);
 					}
 				}
 			}

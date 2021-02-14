@@ -98,11 +98,17 @@ namespace mods::behaviour_tree_impl {
 		node mini_gunner_aggressive_roam(node_type::SELECTOR);
 		node mini_gunner_disoriented(node_type::SELECTOR);
 		node lowly_security(node_type::SELECTOR);
+		node lowly_security_roam(node_type::SELECTOR);
+		node lowly_security_engage(node_type::SELECTOR);
+		node lowly_security_pursuit(node_type::SELECTOR);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_roam<node,argument_type,status>(mini_gunner_roam);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_engage<node,argument_type,status>(mini_gunner_engage);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_aggressive_roam<node,argument_type,status>(mini_gunner_aggressive_roam);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_disoriented<node,argument_type,status>(mini_gunner_disoriented);
 		mods::mobs::lowly_security_behaviour_tree::make_lowly_security<node,argument_type,status>(lowly_security);
+		mods::mobs::lowly_security_behaviour_tree::make_lowly_security_roam<node,argument_type,status>(lowly_security_roam);
+		mods::mobs::lowly_security_behaviour_tree::make_lowly_security_engage<node,argument_type,status>(lowly_security_engage);
+		mods::mobs::lowly_security_behaviour_tree::make_lowly_security_pursuit<node,argument_type,status>(lowly_security_pursuit);
 
 		auto node_mob_has_snipe_capability = node::create_leaf(
 		[](argument_type mob) -> status {
@@ -242,6 +248,9 @@ namespace mods::behaviour_tree_impl {
 		add_tree("mini_gunner_aggressive_roam",mini_gunner_aggressive_roam);
 		add_tree("mini_gunner_disoriented",mini_gunner_disoriented);
 		add_tree("lowly_security",lowly_security);
+		add_tree("lowly_security_roam",lowly_security_roam);
+		add_tree("lowly_security_engage",lowly_security_engage);
+		add_tree("lowly_security_pursuit",lowly_security_pursuit);
 
 		/**
 		 * Suspicious roaming tree.

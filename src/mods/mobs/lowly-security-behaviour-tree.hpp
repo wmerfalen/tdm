@@ -2,18 +2,20 @@
 #define  __MENTOC_MODS_MOBS_LOWLY_SECURITY_BEHAVIOUR_TREE_HEADER__
 
 #include "lowly-security.hpp"
-#include "../../globals.hpp"
-#include "../damage-event.hpp"
-#include "../scan.hpp"
-#include "../rooms.hpp"
-#include "room-watching.hpp"
-#include "../doors.hpp"
-#include "../rand.hpp"
-#include "helpers.hpp"
-#include "../weapon.hpp"
-#include "../affects.hpp"
-#include "../classes/ghost.hpp"
-#include "../calc-visibility.hpp"
+//#include "../../globals.hpp"
+
+//#include "../damage-event.hpp"
+//#include "../scan.hpp"
+//#include "../rooms.hpp"
+//#include "room-watching.hpp"
+//#include "../doors.hpp"
+//#include "../rand.hpp"
+
+//#include "helpers.hpp"
+//#include "../weapon.hpp"
+//#include "../affects.hpp"
+//#include "../classes/ghost.hpp"
+//#include "../calc-visibility.hpp"
 #include "../radio.hpp"
 
 #define __MENTOC_SHOW_BEHAVIOUR_TREE_LOWLY_SECURITY_BTREE_DEBUG_OUTPUT__
@@ -113,6 +115,14 @@ namespace mods::mobs::lowly_security_behaviour_tree {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = lowly_security_ptr(mob.uuid());
 			mg->set_behaviour_tree("lowly_security_engage");
+			return TSUCCESS;
+		});
+	}
+	template <typename TNode,typename TArgumentType,typename TStatus>
+	auto set_behaviour_tree_to_pursuit() {
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			auto mg = lowly_security_ptr(mob.uuid());
+			mg->set_behaviour_tree("lowly_security_pursuit");
 			return TSUCCESS;
 		});
 	}
@@ -266,11 +276,11 @@ namespace mods::mobs::lowly_security_behaviour_tree {
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto scan_to_find_hostile_activity() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = lowly_security_ptr(mob.uuid());
+			auto g = lowly_security_ptr(mob.uuid());
 			int depth = LOWLY_SECURITY_SCAN_DEPTH();
 			vec_player_data vpd; mods::scan::los_scan_for_players(mob.cd(),depth,&vpd);
 			std::map<int,int> scores;
-			std::map<uint8_t,uuidvec_t> dir_players;
+			std::map<uint8_t,uuidvec_t> fighting_players;
 			for(auto v : vpd) {
 				auto ptr = ptr_by_uuid(v.uuid);
 				if(!ptr) {
@@ -282,55 +292,100 @@ namespace mods::mobs::lowly_security_behaviour_tree {
 				if(mods::rooms::is_peaceful(v.room_rnum)) {
 					continue;
 				}
-				++scores[v.direction];
-				dir_players[v.direction].emplace_back(v.uuid);
+				if(ptr->fighting() && ptr->fighting()->is_npc()) {
+					++scores[v.direction];
+					fighting_players[v.direction].emplace_back(v.uuid);
+				}
 			}
-			int should_fire = -1;
+			int should_move = -1;
 			int max = 0;
 			for(auto pair : scores) {
 				if(pair.second > max) {
 					max = pair.second;
-					should_fire = pair.first;
+					should_move = pair.first;
 				}
 			}
-			mg->set_heading(should_fire);
-			if(should_fire == -1) {
+			g->set_heading(should_move);
+			if(should_move == -1) {
 				return TFAILURE;
 			}
-			mg->save_targets(dir_players[should_fire]);
+			g->save_hostile_targets(fighting_players[should_move]);
 			return TSUCCESS;
 		});
 	}
+	template <typename TNode,typename TArgumentType,typename TStatus>
+	auto move_toward_heading() {
+		return TNode::create_selector({
+			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+				const auto& g = lowly_security_ptr(mob.uuid());
+				m_debug("lsg attempting move 1");
+				return perform_move(g->cd(), g->get_heading(),0) ? TSUCCESS : TFAILURE;
+			}),
+			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+				using namespace mods::doors;
+				const auto& g = lowly_security_ptr(mob.uuid());
+				m_debug("lsg attempting move 2");
+				switch(attempt_open(g->room(),g->get_heading())) {
+					case DOOR_OPENED_SUCCESSFULLY:
+						m_debug("lsg opened door successfully");
+						break;
+					case INVALID_DIR_OPTION:
+					case NOT_A_DOOR:
+					case DOOR_IS_LOCKED:
+					case DOOR_IS_REINFORCED:
+					default:
+						m_debug("lsg FAILED to open door");
+						return TFAILURE;
+						break;
+				}
+				m_debug("lsg attempting perform_move 2");
+				return perform_move(g->cd(), g->get_heading(),0) ? TSUCCESS : TFAILURE;
+			}),
+			TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+				using namespace mods::doors;
+				m_debug("lsg last ditch attempt. breaching door");
+				const auto& g = lowly_security_ptr(mob.uuid());
+				/** Attempt to breach door */
+				auto obj = create_object(ITEM_EXPLOSIVE,"breach-charge.yml");
+				const auto obj_uuid = obj->uuid;
+				g->player()->equip(std::move(obj),WEAR_HOLD);
+				perform_breach(obj_uuid,mob.uuid(),g->get_heading());
+				return perform_move(g->cd(), g->get_heading(),0) ? TSUCCESS : TFAILURE;
+			})
+		});
 
+	}
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto report_hostile_activity() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			if(mods::rooms::has_emp(mob.room())) {
-				act("$n attempts to radio backup but his radio is unresponsive!",FALSE,mob.cd(),0,0,TO_ROOM);
-				return TSUCCESS;
-			}
-			/** if stunned */
-			if(mob.player_ptr()->get_affect_dissolver().has_any({AFF(BLIND),AFF(DISORIENT)})) {
-				mods::response_team::radio::help_dazed(mob.uuid(),"Force two, 803 niner {broad_location}. Requesting immediate backup.");
-				return TSUCCESS;
-			}
-			mods::response_team::radio::report_violence(mob.uuid(),"Force two, 908 at {exact_location}. Shots fired, I repeat: shots fired. Requesting immediate assistance");
+			const auto& g = lowly_security_ptr(mob.uuid());
+			m_debug("lsg reporting hostile activity");
+			mods::response_team::radio::report_violence(mob.uuid(),"Disciple 1, 810 charlie at {exact_location}");
+			return perform_move(g->cd(), g->get_heading(),0) ? TSUCCESS : TFAILURE;
+		});
+	}
+	template <typename TNode,typename TArgumentType,typename TStatus>
+	auto engage_hostile() {
+		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
+			const auto& g = lowly_security_ptr(mob.uuid());
+			m_debug("lsg engaging with hostile");
+			g->hunt_hostile_targets();
 			return TSUCCESS;
 		});
 	}
-
 	template <typename TNode,typename TArgumentType,typename TStatus>
-	void make_lowly_security_disoriented(TNode& tree) {
+	void make_lowly_security_pursuit(TNode& tree) {
 		tree.append_child(
 		TNode::create_sequence({
-			debug_echo_tree_name<TNode,TArgumentType,TStatus>("disoriented"),
-			//shout_where_are_you_random_string<TNode,TArgumentType,TStatus>(),
-			//find_targets_with_compromised_line_of_sight<TNode,TArgumentType,TStatus>(),
-			spray_direction<TNode,TArgumentType,TStatus>(),
+			debug_echo_tree_name<TNode,TArgumentType,TStatus>("losec_pursuit"),
+			move_toward_heading<TNode,TArgumentType,TStatus>(),
+			report_hostile_activity<TNode,TArgumentType,TStatus>(),
+			engage_hostile<TNode,TArgumentType,TStatus>(),
 			set_behaviour_tree_to_engage<TNode,TArgumentType,TStatus>()
 		})
 		);
 	}
+
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	void make_lowly_security(TNode& tree) {
 		tree.append_child(
@@ -338,8 +393,7 @@ namespace mods::mobs::lowly_security_behaviour_tree {
 			debug_echo_tree_name<TNode,TArgumentType,TStatus>("losec_default"),
 			random_trivial_action<TNode,TArgumentType,TStatus>(),
 			scan_to_find_hostile_activity<TNode,TArgumentType,TStatus>(),
-			report_hostile_activity<TNode,TArgumentType,TStatus>(),
-			set_behaviour_tree_to_engage<TNode,TArgumentType,TStatus>()
+			set_behaviour_tree_to_pursuit<TNode,TArgumentType,TStatus>()
 		})
 		);
 	}

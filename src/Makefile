@@ -84,6 +84,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/injure mods/skills  mods/help mods/rooms \
 					 mods/mobs/mini-gunner mods/mobs/extended-types mods/values \
 					 mods/mobs/room-watching mods/mobs/mini-gunner-behaviour-tree \
+					 mods/mobs/smart-mob \
 					 mods/mobs/lowly-security mods/mobs/lowly-security-behaviour-tree \
 					 mods/armor/basic-protection mods/armor/advanced-protection mods/armor/elite-protection \
 					 mods/players/db-load mods/bugs-fixtures mods/player-registration \
