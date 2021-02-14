@@ -1,4 +1,5 @@
 #include "examine.hpp"
+#include "player.hpp"
 
 #ifdef __MENTOC_MODS_EXAMINE_DEBUG__
 #define mex_debug(A) std::cerr << "[mods::examine][debug]:" << A <<"\n";
@@ -8,14 +9,14 @@
 
 extern int generic_find(char *arg, bitvector_t bitvector, char_data *ch, char_data **tar_ch, struct obj_data **tar_obj);
 namespace mods::examine {
-	void list_obj_contents_to_char(obj_ptr_t& object,player_ptr_t& player,int mode,int show){
+	void list_obj_contents_to_char(obj_ptr_t& object,player_ptr_t& player,int mode,int show) {
 		struct obj_data *i;
 		bool found = FALSE;
 		std::map<std::string,int> occurrences;
 		std::map<std::string,obj_ptr_t> objects;
 
 		for(i = object->contains; i; i = i->next_content) {
-			if(!i){
+			if(!i) {
 				break;
 			}
 			if(CAN_SEE_OBJ(player->cd(), i)) {
@@ -24,7 +25,7 @@ namespace mods::examine {
 				found = TRUE;
 			}
 		}
-		for(const auto & pair : occurrences){
+		for(const auto& pair : occurrences) {
 			show_obj_to_char(objects[pair.first], player, mode,pair.second);
 		}
 
@@ -34,7 +35,7 @@ namespace mods::examine {
 
 	}
 
-	uuid_t find_player_by_name(player_ptr_t& player, std::string_view arg){
+	uuid_t find_player_by_name(player_ptr_t& player, std::string_view arg) {
 		char_data *found_char = nullptr;
 		obj_data* found_obj = nullptr;
 

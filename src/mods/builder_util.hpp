@@ -8,6 +8,7 @@
 #include "../structs.h"
 #include "extern.hpp"
 #include <functional>
+#include "player.hpp"
 
 //using objtype = mods::object::type;
 using args_t = std::vector<std::string>;
@@ -167,8 +168,8 @@ namespace mods::builder_util {
 
 			auto index = mods::util::stoi(arg_vec[1]);
 
-			if(!index.has_value() || index.value() < 0 || 
-					static_cast<std::size_t>(index.value()) >= vector_objects.size()) {
+			if(!index.has_value() || index.value() < 0 ||
+			        static_cast<std::size_t>(index.value()) >= vector_objects.size()) {
 				mods::builder::report_error<player_ptr_t>(player,"Invalid index");
 				return;
 			}
@@ -199,8 +200,8 @@ namespace mods::builder_util {
 
 			auto index = mods::util::stoi(arg_vec[1]);
 
-			if(!index.has_value() || index.value() < 0 || 
-					static_cast<std::size_t>(index.value()) >= vector_objects.size()) {
+			if(!index.has_value() || index.value() < 0 ||
+			        static_cast<std::size_t>(index.value()) >= vector_objects.size()) {
 				mods::builder::report_error<player_ptr_t>(player,"Invalid index");
 				return;
 			}
@@ -270,7 +271,7 @@ namespace mods::builder_util {
 	}
 
 	template <typename TPlayer,typename ObjectType>
-		void list_line(TPlayer& player, const std::string& key, ObjectType& value){
-			*player << "{gld}[" << key << "]{/gld} :->{red} [" << value << "]{/red}\r\n";
-		}
+	void list_line(TPlayer& player, const std::string& key, ObjectType& value) {
+		*player << "{gld}[" << key << "]{/gld} :->{red} [" << value << "]{/red}\r\n";
+	}
 };

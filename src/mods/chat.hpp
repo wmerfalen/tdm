@@ -24,7 +24,7 @@ namespace mods::chat {
 	using str_t = std::string;
 	void add_public_channel(str_t channel,str_t verb);
 	template <typename TPlayer,typename TActionString>
-	void communicate(TPlayer obj,TActionString type,TActionString message){
+	void communicate(TPlayer obj,TActionString type,TActionString message) {
 #ifndef TO_VICT
 #define TO_VICT		2
 #define TO_SLEEP	128	/* to char, even if sleeping */
@@ -39,15 +39,15 @@ namespace mods::chat {
 		buffer += message.data();
 		buffer += "'";
 		/* now send all the strings out */
-		for(auto & i : descriptor_list){
+		for(auto& i : descriptor_list) {
 			if(STATE(i) == CON_PLAYING && i.character && i.character->uuid != ch->uuid &&
-							//!PRF_FLAGGED(i.character, channels[subcmd]) &&
-							!PLR_FLAGGED(i.character, PLR_WRITING) &&
-							!ROOM_FLAGGED(IN_ROOM(i.character), ROOM_SOUNDPROOF)) {
+			        //!PRF_FLAGGED(i.character, channels[subcmd]) &&
+			        !PLR_FLAGGED(i.character, PLR_WRITING) &&
+			        !ROOM_FLAGGED(IN_ROOM(i.character), ROOM_SOUNDPROOF)) {
 
 				if(std::string(type.data()).compare("shout") == 0 &&
-								((world[IN_ROOM(ch)].zone != world[IN_ROOM(i.character)].zone) ||
-								 !AWAKE(i.character))) {
+				        ((world[IN_ROOM(ch)].zone != world[IN_ROOM(i.character)].zone) ||
+				         !AWAKE(i.character))) {
 					continue;
 				}
 
@@ -56,7 +56,7 @@ namespace mods::chat {
 					send_to_char(i.character, "%s", color_on);
 				}
 #endif
-				
+
 				act(buffer.c_str(), FALSE, ch, 0, i.character, TO_VICT | TO_SLEEP);
 #ifdef __MENTOC_USE_COLOR_ON__
 				if(COLOR_LEV(i.character) >= C_NRM) {
@@ -67,11 +67,11 @@ namespace mods::chat {
 		}
 
 #ifdef MENTOC_HACK_USED
-	#undef TO_VICT
-	#undef TO_SLEEP
-	#undef MENTOC_HACK_USED
-	#undef KNRM
-	#undef C_NRM
+#undef TO_VICT
+#undef TO_SLEEP
+#undef MENTOC_HACK_USED
+#undef KNRM
+#undef C_NRM
 #endif
 
 	}
@@ -106,5 +106,6 @@ namespace mods::chat {
 	};
 	void transmit(std::string verb,std::string_view player_name,std::string_view message);
 	void setup_public_channels();
+	bool handle_chat(player_ptr_t& player,std::string_view);
 };
 #endif

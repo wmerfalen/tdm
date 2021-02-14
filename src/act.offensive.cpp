@@ -32,6 +32,7 @@
 #include "mods/interpreter.hpp"
 #include "mods/levels.hpp"
 #include "mods/calc-visibility.hpp"
+#include "mods/projectile.hpp"
 
 /* extern variables */
 extern int pk_allowed;
@@ -63,17 +64,17 @@ ACMD(do_throw) {
 		return;
 	}
 
-	if(vec_args.size() < 2){
+	if(vec_args.size() < 2) {
 		player->errorln(CAT("Not enough arguments.\r\n",usage));
 		return;
 	}
 	int cnt = mods::util::stoi(vec_args[1].c_str()).value_or(-1);
-	if(cnt < 0){
+	if(cnt < 0) {
 		player->errorln(CAT("How many rooms away do you want to throw this object?\r\n",usage));
 		return;
 	}
 	auto dir = mods::projectile::to_direction(vec_args[0]);
-	if(dir < 0){
+	if(dir < 0) {
 		player->errorln("Use a valid direction!");
 		return;
 	}
@@ -88,7 +89,7 @@ ACMD(do_throw) {
 
 
 ACMD(do_affect_me) {
-	
+
 	constexpr unsigned int max_char = 16;
 	static bool usage_set = false;
 	static std::string usage;
@@ -96,12 +97,12 @@ ACMD(do_affect_me) {
 	std::fill(affect_type.begin(),affect_type.end(),0);
 	one_argument(argument,(char*)&affect_type[0],max_char);
 
-	if(!usage_set){
+	if(!usage_set) {
 		usage = "{gld}Usage: affect_me <";
 		auto affect_names = affect_string_list();
-		for(unsigned i=0; i < affect_names.size();i++){
+		for(unsigned i=0; i < affect_names.size(); i++) {
 			usage += affect_names[i];
-			if(i+1 < affect_names.size()){
+			if(i+1 < affect_names.size()) {
 				usage += "|";
 			}
 		}
@@ -109,7 +110,7 @@ ACMD(do_affect_me) {
 		usage_set = true;
 	}
 	std::string affect_type_str = (char*)&affect_type[0];
-	if(!affect_type[0] || affect_type_str.compare("help") == 0){
+	if(!affect_type[0] || affect_type_str.compare("help") == 0) {
 		player->sendln(usage);
 		return;
 	}
@@ -118,13 +119,13 @@ ACMD(do_affect_me) {
 };
 ACMD(do_snipe_object) {
 	auto vec_args = PARSE_ARGS();
-	if(vec_args.size() < 2){
+	if(vec_args.size() < 2) {
 		player->sendln("usage: snipe <object> <direction>");
 		return;
 	}
 
 	int direction = mods::globals::dir_int(vec_args[1][0]);
-	if(direction == -1){
+	if(direction == -1) {
 		player->sendln("Invalid direction");
 		return;
 	}
@@ -133,13 +134,13 @@ ACMD(do_snipe_object) {
 
 ACMD(do_snipe) {
 	auto vec_args = PARSE_ARGS();
-	if(vec_args.size() < 2){
+	if(vec_args.size() < 2) {
 		player->sendln("usage: snipe <name> <direction>");
 		return;
 	}
 
 	int direction = mods::globals::dir_int(vec_args[1][0]);
-	if(direction == -1){
+	if(direction == -1) {
 		player->sendln("Invalid direction");
 		return;
 	}
@@ -148,13 +149,13 @@ ACMD(do_snipe) {
 
 ACMD(do_spray) {
 	auto vec_args = PARSE_ARGS();
-	if(vec_args.size() < 1){
+	if(vec_args.size() < 1) {
 		player->sendln("usage: spray <direction>");
 		return;
 	}
 
 	int direction = mods::globals::dir_int(vec_args[0][0]);
-	if(direction == -1){
+	if(direction == -1) {
 		player->sendln("Invalid direction");
 		return;
 	}
@@ -182,11 +183,11 @@ ACMD(do_regroup) {
 
 }
 
-/** 
+/**
  *
  */
 ACMD(do_command_sequence) {
-	
+
 	//constexpr unsigned int max_char = 5;
 	//std::array<char,max_char> direction;
 	//one_argument(argument,&direction[0],max_char);
@@ -204,19 +205,19 @@ ACMD(do_command_sequence) {
 ACMD(do_reload) {
 	auto vec_args = PARSE_ARGS();
 	bool primary = true, secondary = false;
-	if(vec_args.size() > 0){
-		if(mods::util::is_lower_match(vec_args[0], "primary")){
+	if(vec_args.size() > 0) {
+		if(mods::util::is_lower_match(vec_args[0], "primary")) {
 			primary = true;
 			secondary = false;
 		}
-		if(mods::util::is_lower_match(vec_args[0], "secondary")){
+		if(mods::util::is_lower_match(vec_args[0], "secondary")) {
 			secondary = true;
 			primary = false;
 		}
 	}
-	
+
 	auto weapon = player->primary();
-	if(secondary){
+	if(secondary) {
 		weapon = player->secondary();
 	}
 
@@ -242,9 +243,9 @@ ACMD(do_reload) {
 ACMD(do_scan) { /* !mods */
 	vpd scan;
 	mods::scan::los_scan(ch,mods::weapon::MAX_RANGE,&scan);
-	for(auto e : scan){
+	for(auto e : scan) {
 		auto found_player = ptr(e.ch);
-		if(!mods::calc_visibility::is_visible(player,found_player)){
+		if(!mods::calc_visibility::is_visible(player,found_player)) {
 			continue;
 		}
 		std::string line;
@@ -309,11 +310,11 @@ ACMD(do_scan) { /* !mods */
 
 
 ACMD(do_assist) {
-	
+
 	char arg[MAX_INPUT_LENGTH];
 	player_ptr_t helpee,opponent;
 
-	if(player->fighting()){
+	if(player->fighting()) {
 		player->psendln("You're already fighting!  How can you assist someone else?");
 		return;
 	}
@@ -334,9 +335,10 @@ ACMD(do_assist) {
 		if(helpee->fighting()) {
 			opponent = helpee->fighting();
 		} else {
-			for(auto & plr : mods::globals::get_room_list(player->room())){
-				if(plr->fighting() == helpee){
-					opponent = plr; break;
+			for(auto& plr : mods::globals::get_room_list(player->room())) {
+				if(plr->fighting() == helpee) {
+					opponent = plr;
+					break;
 				}
 			}
 		}
@@ -348,20 +350,20 @@ ACMD(do_assist) {
 #ifdef MENTOC_PK_ALLOWED
 		} else if(!pk_allowed && !opponent->is_npc())	/* prevent accidental pkill */
 			act("Use 'murder' if you really want to attack $N.", FALSE,
-					ch, 0, *opponent, TO_CHAR);
+			    ch, 0, *opponent, TO_CHAR);
 #endif
-		} else {
-			player->psendln("You join the fight!");
-			act("$N assists you!", 0, *helpee, 0, *player, TO_CHAR);
-			act("$n assists $N.", FALSE, ch, 0, *helpee, TO_NOTVICT);
-			hit(*player, *opponent, TYPE_UNDEFINED);
-		}
+	} else {
+		player->psendln("You join the fight!");
+		act("$N assists you!", 0, *helpee, 0, *player, TO_CHAR);
+		act("$n assists $N.", FALSE, ch, 0, *helpee, TO_NOTVICT);
+		hit(*player, *opponent, TYPE_UNDEFINED);
 	}
+}
 }
 
 
 ACMD(do_hit) {
-	
+
 	char arg[MAX_INPUT_LENGTH];
 	char_data *vict;
 
@@ -565,7 +567,7 @@ ACMD(do_flee) {
 		attempt = rand_number(0, NUM_OF_DIRS - 1);	/* Select a random direction */
 
 		if(CAN_GO(ch, attempt) &&
-				!ROOM_FLAGGED(EXIT(ch, attempt)->to_room, ROOM_DEATH)) {
+		        !ROOM_FLAGGED(EXIT(ch, attempt)->to_room, ROOM_DEATH)) {
 			act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
 			was_fighting = FIGHTING(ch);
 
@@ -656,7 +658,7 @@ ACMD(do_bash) {
 
 
 ACMD(do_rescue) {
-	
+
 	char arg[MAX_INPUT_LENGTH];
 	//char_data *vict, *tmp_ch;
 	int percent, prob;
@@ -685,10 +687,11 @@ ACMD(do_rescue) {
 	}
 
 	tmp_ch = nullptr;
-	for(auto & plr : mods::globals::get_room_list(player->room())){
+	for(auto& plr : mods::globals::get_room_list(player->room())) {
 		auto f = plr->fighting();
-		if(f && f->is(vict)){
-			tmp_ch = f; break;
+		if(f && f->is(vict)) {
+			tmp_ch = f;
+			break;
 		}
 	}
 
@@ -770,19 +773,19 @@ ACMD(do_kick) {
 
 /**
  * +----------+
- * C-4 Brain  |  
+ * C-4 Brain  |
  * +----------+
  *
  * Triggers an explosion the size of one room
  *
- * Levels: 
+ * Levels:
  * 	[ 10 ] -> One room away
  * 	[ 25 ] -> Two rooms away
  * 		|
  * 		+----> [ decision point ]
  * 		               |
  * 		               |
- * 		  -------------+----------   [ A ] -> Extrasensory instinct 
+ * 		  -------------+----------   [ A ] -> Extrasensory instinct
  * 		  |         |            |   [ B ] -> Chance to injure
  * 		  |         |            |   [ C ] -> Siphon life force from victim
  * 		[ A ]     [ B ]        [ C ]
@@ -790,16 +793,16 @@ ACMD(do_kick) {
  * 	[ 45 ]--> [ decision point ]
  *    |+-- [ A2 ] -> Custom shrapnel
  * 	  |+-- [ B2 ] -> Chance to disarm victim
- * 	  |+-- [ C2 ] -> 
- * 	    
+ * 	  |+-- [ C2 ] ->
+ *
  */
 ACMD(c4_brain) {
-	
+
 
 }
 
 namespace offensive {
-	void init(){
+	void init() {
 		mods::interpreter::add_command("affect_me",POS_RESTING,do_affect_me,0,0);
 		mods::interpreter::add_command("assist",POS_RESTING,do_assist,0,0);
 		mods::interpreter::add_command("backstab",POS_RESTING,do_backstab,0,0);

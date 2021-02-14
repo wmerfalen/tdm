@@ -41,29 +41,29 @@ namespace mods::query_objects {
 	static constexpr int FIND_OBJ_WORLD    = (1 << 4);
 	static constexpr int FIND_OBJ_EQUIP    = (1 << 5);
 
-	obj_ptr_t query_room_for_object(const room_rnum& room, std::string_view name){
-		for(auto obj = world[room].contents; obj ; obj = obj->next_content){
-			if(isname(name.data(), obj->name)){
+	obj_ptr_t query_room_for_object(const room_rnum& room, std::string_view name) {
+		for(auto obj = world[room].contents; obj ; obj = obj->next_content) {
+			if(isname(name.data(), obj->name)) {
 				return optr_by_uuid(obj->uuid);
 			}
 		}
 		return nullptr;
 	}
-	std::vector<uuid_t> query_room_for_object_by_yaml(const room_rnum& room, std::string_view name){
+	std::vector<uuid_t> query_room_for_object_by_yaml(const room_rnum& room, std::string_view name) {
 		std::vector<uuid_t> objects;
-		for(auto obj = world[room].contents; obj ; obj = obj->next_content){
-			if(name.compare(obj->feed_file().data()) == 0){
+		for(auto obj = world[room].contents; obj ; obj = obj->next_content) {
+			if(name.compare(obj->feed_file().data()) == 0) {
 				objects.emplace_back(obj->uuid);
 			}
 		}
 		return objects;
 	}
-	std::vector<uuid_t> query_room_for_object_by_yaml_multi(const room_rnum& room, const std::vector<std::string>& files){
+	std::vector<uuid_t> query_room_for_object_by_yaml_multi(const room_rnum& room, const std::vector<std::string>& files) {
 		std::vector<uuid_t> objects;
-		for(auto obj = world[room].contents; obj ; obj = obj->next_content){
-			for(const auto & file : files){
+		for(auto obj = world[room].contents; obj ; obj = obj->next_content) {
+			for(const auto& file : files) {
 				mc_debug("[file]:'" << file << "', object->'" << obj->feed_file().data() << "'");
-				if(file.compare(obj->feed_file().data()) == 0){
+				if(file.compare(obj->feed_file().data()) == 0) {
 					objects.emplace_back(obj->uuid);
 				}
 			}
@@ -71,35 +71,35 @@ namespace mods::query_objects {
 		return objects;
 	}
 
-	std::vector<uuid_t> query_contents_by_yaml(obj_ptr_t& found_object,std::string_view file){
+	std::vector<uuid_t> query_contents_by_yaml(obj_ptr_t& found_object,std::string_view file) {
 		std::vector<uuid_t> objects;
-		for(auto obj = found_object->contains; obj != nullptr; obj = obj->next_content){
-			if(obj->feed_file().compare(file.data()) == 0){
+		for(auto obj = found_object->contains; obj != nullptr; obj = obj->next_content) {
+			if(obj->feed_file().compare(file.data()) == 0) {
 				objects.emplace_back(obj->uuid);
 			}
 		}
 		return objects;
 	}
-	std::vector<uuid_t> query_contents_by_yaml_multi(obj_ptr_t& found_object,const std::vector<std::string>& files){
+	std::vector<uuid_t> query_contents_by_yaml_multi(obj_ptr_t& found_object,const std::vector<std::string>& files) {
 		std::vector<uuid_t> objects;
-		for(auto obj = found_object->contains; obj != nullptr; obj = obj->next_content){
-			for(const auto & yaml : files){
-				if(obj->feed_file().compare(yaml.data()) == 0){
+		for(auto obj = found_object->contains; obj != nullptr; obj = obj->next_content) {
+			for(const auto& yaml : files) {
+				if(obj->feed_file().compare(yaml.data()) == 0) {
 					objects.emplace_back(obj->uuid);
 				}
 			}
 		}
 		return objects;
 	}
-	std::vector<uuid_t> query_contents_by_yaml_multi(room_rnum room,std::string_view container,const std::vector<std::string>& files){
+	std::vector<uuid_t> query_contents_by_yaml_multi(room_rnum room,std::string_view container,const std::vector<std::string>& files) {
 		std::vector<uuid_t> objects;
 		auto found_object = query_room_for_object(room,container);
-		if(!found_object){
+		if(!found_object) {
 			return objects;
 		}
-		for(auto obj = found_object->contains; obj != nullptr; obj = obj->next_content){
-			for(const auto & yaml : files){
-				if(obj->feed_file().compare(yaml.data()) == 0){
+		for(auto obj = found_object->contains; obj != nullptr; obj = obj->next_content) {
+			for(const auto& yaml : files) {
+				if(obj->feed_file().compare(yaml.data()) == 0) {
 					objects.emplace_back(obj->uuid);
 				}
 			}
@@ -107,19 +107,19 @@ namespace mods::query_objects {
 		return objects;
 	}
 
-	std::vector<uuid_t> query_inventory_by_yaml(player_ptr_t& player, std::string_view yaml_file){
+	std::vector<uuid_t> query_inventory_by_yaml(player_ptr_t& player, std::string_view yaml_file) {
 		std::vector<uuid_t> objects;
-		for(const auto & obj : player->real_carrying()){
-			if(obj->feed_file().compare(yaml_file.data()) == 0){
+		for(const auto& obj : player->real_carrying()) {
+			if(obj->feed_file().compare(yaml_file.data()) == 0) {
 				objects.emplace_back(obj->uuid);
 			}
 		}
 		return objects;
 	}
-	std::vector<uuid_t> query_inventory_for_object(player_ptr_t& player, std::string_view name){
+	std::vector<uuid_t> query_inventory_for_object(player_ptr_t& player, std::string_view name) {
 		std::vector<uuid_t> objects;
-		for(const auto & obj : player->real_carrying()){
-			if(isname(name.data(),obj->name)){
+		for(const auto& obj : player->real_carrying()) {
+			if(isname(name.data(),obj->name)) {
 				objects.emplace_back(obj->uuid);
 			}
 		}
@@ -127,102 +127,113 @@ namespace mods::query_objects {
 	}
 
 
-	std::vector<uuid_t> query_inventory_container_by_yaml(player_ptr_t& player, std::string_view container, std::string_view yaml_file){
+	std::vector<uuid_t> query_inventory_container_by_yaml(player_ptr_t& player, std::string_view container, std::string_view yaml_file) {
 		std::vector<uuid_t> objects;
 		obj_data* tar_obj;
 		int result = generic_find((char*)container.data(),FIND_OBJ_INV,player->cd(),nullptr,&tar_obj);
-		if(result == 0){
+		if(result == 0) {
 			return objects;
 		}
 		auto found_object = optr(tar_obj);
 		return query_contents_by_yaml(found_object,yaml_file);
 	}
 
+	std::vector<uuid_t> query_equipment_by_yaml(player_ptr_t& player, std::string_view name) {
+		std::vector<uuid_t> objects;
+		for(const auto& obj : player->equipment()) {
+			if(isname(name.data(),obj->name)) {
+				objects.emplace_back(obj->uuid);
+			}
+		}
+		return objects;
+	}
+
+
 };
 
-ACMD(do_query_container){
+ACMD(do_query_container) {
 	ADMIN_REJECT();
 	DO_HELP("query_container");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	static constexpr const char * usage = "usage: query_container <item> <yaml-file> ... <yaml-file-N>";
-	if(vec_args.size() < 2){
+	if(vec_args.size() < 2) {
 		player->errorln(usage);
 		return;
 	}
 	auto found_object = mods::query_objects::query_room_for_object(player->room(),vec_args[0]);
-	if(!found_object){
+	if(!found_object) {
 		player->errorln(CAT("Couldn't find anything in the room that matches the search string of '",vec_args[0],"'"));
 		return;
 	}
 	auto uuid_list = mods::query_objects::query_contents_by_yaml_multi(found_object,vec_args);
-	for(auto & uuid : uuid_list){
+	for(auto& uuid : uuid_list) {
 		player->sendln(optr_by_uuid(uuid)->name);
 	}
 	ADMIN_DONE();
 }
-ACMD(do_query_room){
+ACMD(do_query_room) {
 	ADMIN_REJECT();
 	DO_HELP("query_room");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	static constexpr const char * usage = "usage: query_room <yaml-file> ... <yaml-file-N>";
-	if(vec_args.size() < 1){
+	if(vec_args.size() < 1) {
 		player->errorln(usage);
 		return;
 	}
 	auto uuid_list = mods::query_objects::query_room_for_object_by_yaml_multi(player->room(),vec_args);
-	for(auto & uuid : uuid_list){
+	for(auto& uuid : uuid_list) {
 		player->sendln(optr_by_uuid(uuid)->name);
 	}
 	ADMIN_DONE();
 }
-ACMD(do_query_inventory){
+ACMD(do_query_inventory) {
 	ADMIN_REJECT();
 	DO_HELP("query_inventory");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	std::vector<uuid_t> uuid_list;
 	static constexpr const char * usage = "usage: query_inventory <yaml-file> ... <yaml-file-N>";
-	if(vec_args.size() < 1){
+	if(vec_args.size() < 1) {
 		player->errorln(usage);
 		return;
 	}
-	for(auto & obj : player->real_carrying()){
-		for(std::size_t i = 0; i < vec_args.size(); ++i){
-			if(obj->feed_file().compare(vec_args[i].c_str()) == 0){
+	for(auto& obj : player->real_carrying()) {
+		for(std::size_t i = 0; i < vec_args.size(); ++i) {
+			if(obj->feed_file().compare(vec_args[i].c_str()) == 0) {
 				uuid_list.emplace_back(obj->uuid);
 			}
 		}
 	}
-	for(auto & uuid : uuid_list){
+	for(auto& uuid : uuid_list) {
 		player->sendln(optr_by_uuid(uuid)->name);
 	}
 	ADMIN_DONE();
 }
-ACMD(do_query_inventory_container){
+ACMD(do_query_inventory_container) {
 	ADMIN_REJECT();
 	DO_HELP("query_inventory_container");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	static constexpr const char * usage = "usage: query_inventory <item> <yaml-file>";
-	if(vec_args.size() < 2){
+	if(vec_args.size() < 2) {
 		player->errorln(usage);
 		return;
 	}
 	obj_data* tar_obj;
 	int result = generic_find((char*)vec_args[0].c_str(),mods::query_objects::FIND_OBJ_INV,player->cd(),nullptr,&tar_obj);
-	if(result == 0){
+	if(result == 0) {
 		player->errorln(CAT("Couldn't find anything in the room that matches the search string of '",vec_args[0],"'"));
 		return;
 	}
 	auto uuid_list = mods::query_objects::query_inventory_container_by_yaml(player,vec_args[0],vec_args[1]);
-	for(auto & uuid : uuid_list){
+	for(auto& uuid : uuid_list) {
 		player->sendln(optr_by_uuid(uuid)->name);
 	}
 	ADMIN_DONE();
 }
-ACMD(do_query_zone){
+ACMD(do_query_zone) {
 	ADMIN_REJECT();
 	DO_HELP("query_zone");
 	/** code here */
@@ -235,12 +246,12 @@ ACMD(do_query_zone){
 }
 
 namespace mods::query_objects {
-	void init(){
-			mods::interpreter::add_command("query_container", POS_RESTING, do_query_container, LVL_BUILDER,0);
-			mods::interpreter::add_command("query_room", POS_RESTING, do_query_room, LVL_BUILDER,0);
-			mods::interpreter::add_command("query_inventory", POS_RESTING, do_query_inventory, LVL_BUILDER,0);
-			mods::interpreter::add_command("query_inventory_container", POS_RESTING, do_query_inventory_container, LVL_BUILDER,0);
-			mods::interpreter::add_command("query_zone", POS_RESTING, do_query_zone, LVL_BUILDER,0);
+	void init() {
+		mods::interpreter::add_command("query_container", POS_RESTING, do_query_container, LVL_BUILDER,0);
+		mods::interpreter::add_command("query_room", POS_RESTING, do_query_room, LVL_BUILDER,0);
+		mods::interpreter::add_command("query_inventory", POS_RESTING, do_query_inventory, LVL_BUILDER,0);
+		mods::interpreter::add_command("query_inventory_container", POS_RESTING, do_query_inventory_container, LVL_BUILDER,0);
+		mods::interpreter::add_command("query_zone", POS_RESTING, do_query_zone, LVL_BUILDER,0);
 	}
 };
 #undef mc_debug

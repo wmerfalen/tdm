@@ -1,4 +1,5 @@
 #include "medic.hpp"
+#include "../player.hpp"
 
 namespace mods::orm {
 	/**
@@ -7,13 +8,13 @@ namespace mods::orm {
 	 * @param player
 	 * @param primary_choice
 	 *
-	 * @return 
+	 * @return
 	 */
-	uint64_t medic::initialize_row(player_ptr_t &player){
+	uint64_t medic::initialize_row(player_ptr_t& player) {
 		init();
 		medic_player_id = player->db_id();
 		auto status = this->create<medic>(this);
-		if(ORM_SUCCESS(status)){
+		if(ORM_SUCCESS(status)) {
 			updated_at = created_at = time(nullptr);
 			loaded = 1;
 			id = medic_id = std::get<2>(status);
@@ -25,7 +26,7 @@ namespace mods::orm {
 		values["medic_player_id"] = std::to_string(medic_player_id);
 		return std::move(values);
 	}
-	int16_t medic::load_by_player(uint64_t player_id){
+	int16_t medic::load_by_player(uint64_t player_id) {
 		loaded = 0;
 		created_at = updated_at = 0;
 		id = medic_id = 0;
@@ -33,7 +34,7 @@ namespace mods::orm {
 		return std::get<0>(this->read<medic>(this,"medic_player_id",std::to_string(player_id)));
 	}
 
-	int16_t medic::feed(const pqxx::result::reference & row){
+	int16_t medic::feed(const pqxx::result::reference& row) {
 		init();
 		loaded = 0;
 		id = row["medic_id"].as<uint64_t>();
@@ -44,7 +45,7 @@ namespace mods::orm {
 		loaded = 1;
 		return 0;
 	}
-	void medic::init(){
+	void medic::init() {
 		id = 0;
 		medic_id = 0;
 		medic_player_id = 0;

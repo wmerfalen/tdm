@@ -1,7 +1,6 @@
 src = .
 builddir = build
 #CC = /usr/bin/clang++-8
-CC_PREFIX = /usr/bin/ccache
 CC = /usr/bin/g++-8
 BINDIR = ../bin
 DATA_DIR = "$(CURDIR)/../lib/"
@@ -121,7 +120,7 @@ buildobj = act.informative act.item act.medic \
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
 all: $(builddir) $(builddir)/mods/classes $(duktapeout) $(builddir)/mods/testing/lmdb $(builddir)/sql $(builddir)/mods/orm $(builddir)/mods/weapons $(builddir)/mods/mobs $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/builder $(builddir)/mods/armor $(builddir)/mods/players $(builddir)/mods/mini-games $(builddir)/mods/forge-engine $(objects) $(thirdparty) $(builddir)/mods/unit-tests $(builddir)/mods/fluxkraft $(builddir)/mods/response-team
-	$(CC_PREFIX) $(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT)
+	$(CC) $(FLAGS) -o $(BINDIR)/circle $(objects) $(thirdparty) $(LIBS) && $(POST_BUILD_SCRIPT)
 
 clean:
 	make -f $(lmdbdir)/Makefile clean ; \
@@ -174,12 +173,12 @@ $(builddir)/mods/unit-tests:
 	mkdir -p $(builddir)/mods/unit-tests
 
 $(builddir)/%.o: %.cpp
-	$(CC_PREFIX) $(CC) -c $(FLAGS) -o $@ $<
+	$(CC) -c $(FLAGS) -o $@ $<
 
 -include $(objects:.o=.d)
 
 $(duktape): duktape-2.2.0/src/duktape.h duktape-2.2.0/src/duktape.c
-	$(CC_PREFIX) $(CC) -c $(FLAGS) duktape-2.2.0/src/duktape.c  -o $(duktape)
+	$(CC) -c $(FLAGS) duktape-2.2.0/src/duktape.c  -o $(duktape)
 
 $(lmdb):
 	cd $(lmdbdir) && make clean ; make liblmdb.so && cp liblmdb.so $(src) && cd $(src) 

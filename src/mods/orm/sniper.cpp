@@ -1,4 +1,5 @@
 #include "sniper.hpp"
+#include "../player.hpp"
 
 namespace mods::orm {
 	void sniper::load_skill_usages() {

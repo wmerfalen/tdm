@@ -9,9 +9,9 @@
 
 #define __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
-#define mini_debug(a) mentoc_prefix_debug("mods::mobs::lowly_security") << a << "\n";
+#define lsg_debug(a) mentoc_prefix_debug("mods::mobs::lowly_security") << a << "\n";
 #else
-#define mini_debug(a) ;;
+#define lsg_debug(a) ;;
 #endif
 namespace mods::mobs {
 	lowlysec_map_t& lowlysec_map() {
@@ -51,7 +51,7 @@ namespace mods::mobs {
 			/** TODO when was the last time this mob saw a target? if should_fire is -1, go there */
 			if(should_fire == -1) {
 				/** FIXME */
-				mini_debug("[stub] should_fire is -1, choose random direction");
+				lsg_debug("[stub] should_fire is -1, choose random direction");
 			}
 			return should_fire;
 		}
@@ -64,7 +64,7 @@ namespace mods::mobs {
 	 * @param variation
 	 */
 	void lowly_security::create(uuid_t mob_uuid,std::string variation) {
-		mini_debug("lowly_security create on uuid:" << mob_uuid);
+		lsg_debug("lowly_security create on uuid:" << mob_uuid);
 		auto p = ptr_by_uuid(mob_uuid);
 		if(!p) {
 			log("SYSERR: did not find player to populate lowly_security with: %d",mob_uuid);
@@ -82,15 +82,15 @@ namespace mods::mobs {
 		if(v.compare("sentinel") == 0) {
 			auto row = db_get_by_meta("lowly_security_sentinel","mgs_mob_vnum",std::to_string(this->cd()->nr));
 			if(row.size() == 0) {
-				mini_debug("[lowly_security][set_variation]-> cannot load data from postgres...");
+				lsg_debug("[lowly_security][set_variation]-> cannot load data from postgres...");
 				return;
 			}
 #define MG_REPORT(A)\
-	mini_debug("[[[[ MINI GUNNER SENTINEL DUMP ]]]]" << \
+	lsg_debug("[[[[ MINI GUNNER SENTINEL DUMP ]]]]" << \
 	#A << ": '" << row[0][#A].c_str() << "'" << \
 	"[[[[ -- MINI GUNNER SENTINEL DUMP -- ]]]]");
 
-			mini_debug("[status][lowly_security][setting variation data]->");
+			lsg_debug("[status][lowly_security][setting variation data]->");
 			MG_REPORT(mgs_face_direction);
 			MG_REPORT(mgs_room_vnum);
 			MG_REPORT(mgs_mob_vnum);
@@ -115,13 +115,13 @@ namespace mods::mobs {
 	 * @param yaml
 	 */
 	void lowly_security::wear(int where,std::string_view yaml) {
-		mini_debug("lowly_security wearing: [where:" << where << "]->'" << yaml.data() << "'");
+		lsg_debug("lowly_security wearing: [where:" << where << "]->'" << yaml.data() << "'");
 		std::tuple<int,std::string> yaml_tuple = mods::util::extract_yaml_info_from_path(yaml);
 		if(std::get<0>(yaml_tuple) < 0) {
 			return;
 		}
 		if(!mods::util::yaml_file_exists(yaml.data())) {
-			mini_debug("[lowly_security] WARNING: yaml file doesn't exist!->'" << yaml.data() << "'");
+			lsg_debug("[lowly_security] WARNING: yaml file doesn't exist!->'" << yaml.data() << "'");
 			return;
 		}
 		auto obj = create_object(std::get<0>(yaml_tuple),std::get<1>(yaml_tuple));
@@ -211,7 +211,7 @@ namespace mods::mobs {
 	 * @return
 	 */
 	feedback_t& lowly_security::spray(int dir) {
-		mini_debug("SPRAYING: " << dirstr(dir));
+		lsg_debug("SPRAYING: " << dirstr(dir));
 		this->spray_direction = dir;
 		this->last_attack = mods::weapons::damage_types::spray_direction_with_feedback(this->player_ptr,dir);
 		this->weapon_heat += 20; /** TODO: */
@@ -223,7 +223,7 @@ namespace mods::mobs {
 	 * @param msg
 	 */
 	void lowly_security::shout(std::string_view msg) {
-		mini_debug("[stub]shout:'" << msg.data() << "'");
+		lsg_debug("[stub]shout:'" << msg.data() << "'");
 		act(CAT("$n shouts '",msg.data(),"'").c_str(), TRUE, this->cd(), 0, 0, TO_ROOM);
 	}
 	/**
@@ -232,7 +232,7 @@ namespace mods::mobs {
 	 * @param name
 	 */
 	void lowly_security::set_behaviour_tree(std::string_view name) {
-		mini_debug("Setting behaviour tree to: '" << name << "'");
+		lsg_debug("Setting behaviour tree to: '" << name << "'");
 		this->cd()->mob_specials.set_behaviour_tree(name);
 	}
 	/**
@@ -242,9 +242,9 @@ namespace mods::mobs {
 	 * @param player
 	 */
 	void lowly_security::enemy_spotted(room_rnum room,uuid_t player) {
-		mini_debug("##################################################################################" <<
-		           "[lowly_security] enemy spotted:" << room << "\n" <<
-		           "##################################################################################");
+		lsg_debug("##################################################################################" <<
+		          "[lowly_security] enemy spotted:" << room << "\n" <<
+		          "##################################################################################");
 		this->spray(this->player_ptr->get_watching());
 		this->last_seen[player] = CURRENT_TICK();
 	}
@@ -329,7 +329,7 @@ namespace mods::mobs {
 	 */
 	void lowly_security::watch(uint8_t direction) {
 		this->watching = direction;
-		mini_debug("[lowly_security] watching:" << dirstr(direction) << "uuid:" << this->uuid);
+		lsg_debug("[lowly_security] watching:" << dirstr(direction) << "uuid:" << this->uuid);
 		mods::mobs::helpers::watch(direction,this->cd(),LOWLY_SECURITY_SCAN_DEPTH());
 	}
 	obj_ptr_t lowly_security::primary() {

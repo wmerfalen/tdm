@@ -1,26 +1,31 @@
 # type: GRAPPLING_HOOK
 # type: BARBED_WIRE
 # type: CAMERA
+# type: THERMAL_CAMERA
+# type: NIGHT_VISION_CAMERA
 # type: MOTION_SENSOR
 # type: DEPLOYABLE_SHIELD
 # type: TRIPWIRE
+# type: DOOR_CAMERA
 csv_capabilities: 'TBA' #csv, strings free-form TBA
 csv_attach_to: 'TBA' #csv, strings attach to various kinds of items TBA
-health_points: 100 #int, health points before it dies. -1 is invincible
 electronic: 0 #int, 1 or zero. If item is electronic
+health_points: 100 #int, health points before it dies. -1 is invincible
 shield_points: 1 #int, additional points to decrement before decrementing health points. -1 is invincible
-has_night_vision: 0 #int, 1 or zero. If item has night vision
-has_thermal_vision: 0 #int, 1 or zero. If item has thermal vision
-has_motion_sensor: 0 #int, 1 or zero. If item can alert owner of motion
-is_deployable_shield: 0 #int, 1 or zero. If item is a deployable shield
+durability_profile: 'DECENT' #string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUSTRIAL_STRENGTH,GODLIKE,INDESTRUCTIBLE
+move_points: 0 #int, number of move points required to circumvent gadget
+damage_points: 0 #int, number of damage points acrued when tripped/touched
+exit_key: 0 #int, numeric identifier of door that this object opens.
+min_level: 0 #int, the minimum level you need to be in order to use this gadget.
+worth: 0 #int, how much the item is worth.
 str_type: 'TRIPWIRE' # enum, object type
-type: 0 # integer enum 
 manufacturer: 'ACME Industries' # string, anything 
 name: 'XMC Trip Wire' # string, anything name of object 
 vnum: 1000 # integer, unique identifier
 description: 'Description'
 short_description: 'short description'
 action_description: 'action description'
+feed_file: 'TRIPWIRE.yml'
 #rarity types
 # COMMON
 # UNCOMMON

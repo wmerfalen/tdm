@@ -5,6 +5,7 @@
 #include "flags.hpp"
 #include "filesystem.hpp"
 #include "orm/rifle-instance.hpp"
+#include "player.hpp"
 
 #ifdef __MENTOC_MODS_UTIL_DEBUG__
 #define mu_debug(A) std::cerr << "[mods::util][debug]:'" << A << "'\n";

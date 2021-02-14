@@ -36,6 +36,8 @@
 #include "mods/help.hpp"
 #include "mods/levels.hpp"
 #include "mods/calc-visibility.hpp"
+#include "mods/overhead_map.hpp"
+#include "mods/js.hpp"
 
 extern char_data* character_list;
 /* extern variables */
@@ -228,9 +230,9 @@ ACMD(do_js) {
 }
 
 ACMD(do_newjs) {
-	mods::globals::duktape_context = mods::js::new_context();
-	mods::js::load_base_functions(mods::globals::duktape_context);
-	mods::js::load_c_require_functions(mods::globals::duktape_context);
+	mods::js::create_new_context();
+	mods::js::load_base_functions();
+	mods::js::load_c_require_functions();
 }
 ACMD(do_jstest) {
 

@@ -1,12 +1,13 @@
 #include "player-base-ability.hpp"
 #include "../interpreter.hpp"
+#include "../player.hpp"
 
 namespace mods::orm {
-	uint64_t player_base_ability::initialize_row(player_ptr_t &player) {
+	uint64_t player_base_ability::initialize_row(player_ptr_t& player) {
 		init();
 		pba_player_id = player->db_id();
 		auto status = this->create<player_base_ability>(this);
-		if(ORM_SUCCESS(status)){
+		if(ORM_SUCCESS(status)) {
 			updated_at = created_at = time(nullptr);
 			loaded = 1;
 			id = pba_id = std::get<2>(status);
@@ -37,13 +38,13 @@ namespace mods::orm {
 		//values["updated_at"] = std::to_string(updated_at);
 		return std::move(values);
 	}
-	int16_t player_base_ability::load_by_player(uint64_t player_id){
+	int16_t player_base_ability::load_by_player(uint64_t player_id) {
 		return std::get<0>(this->read<player_base_ability>(this,"pba_player_id",std::to_string(player_id)));
 	}
-	bool player_base_ability::player_row_exists(uint64_t player_id){
+	bool player_base_ability::player_row_exists(uint64_t player_id) {
 		return !(ORM_NO_RESULTS(this->read<player_base_ability>(this,"pba_player_id",std::to_string(player_id))));
 	}
-	void player_base_ability::feed_ability_data(char_ability_data& data){
+	void player_base_ability::feed_ability_data(char_ability_data& data) {
 		data.str = pba_str;
 		data.str_add = pba_str_add;
 		data.intel = pba_intel;
@@ -61,11 +62,11 @@ namespace mods::orm {
 		data.strategy = pba_strategy;
 		data.medical = pba_medical;
 	}
-	void player_base_ability::feed_player(player_ptr_t& player){
+	void player_base_ability::feed_player(player_ptr_t& player) {
 		this->load_by_player(player->db_id());
 		this->feed_ability_data(player->real_abils());
 	}
-	int16_t player_base_ability::feed(const pqxx::result::reference & row){
+	int16_t player_base_ability::feed(const pqxx::result::reference& row) {
 		init();
 		loaded = 0;
 		id = pba_id = row["pba_id"].as<uint64_t>();
@@ -90,9 +91,9 @@ namespace mods::orm {
 		updated_at = mods::util::pg_timestamp_to_long(row["updated_at"].c_str());
 		return 0;
 	}
-	int16_t player_base_ability::save_by_player(player_ptr_t& player){
+	int16_t player_base_ability::save_by_player(player_ptr_t& player) {
 		bool insert = !this->player_row_exists(player->db_id());
-		if(insert){
+		if(insert) {
 			this->init();
 			auto values = this->export_class();
 			values.erase("pba_id");
@@ -120,12 +121,12 @@ namespace mods::orm {
 #ifdef __MENTOC_DUMP_PBA_DEBUG_DATA_ON_SAVE__
 		this->dump();
 #endif
-		if(insert){
+		if(insert) {
 			return std::get<0>(this->create(this));
 		}
 		return std::get<0>(this->update(this));
 	}
-	void player_base_ability::init(){
+	void player_base_ability::init() {
 		id = pba_id = 0;
 		pba_player_id = 0;
 		pba_str = 0;
@@ -147,7 +148,7 @@ namespace mods::orm {
 		updated_at = created_at = 0;
 		loaded = 0;
 	}
-	void player_base_ability::dump(){
+	void player_base_ability::dump() {
 		std::cerr << "id->" << id << "\n";
 		std::cerr << "pba_id->" << pba_id << "\n";
 		std::cerr << "pba_player_id->" << pba_player_id << "\n";
@@ -173,23 +174,23 @@ namespace mods::orm {
 	};
 
 	namespace pba {
-	ACMD(do_save_my_pba){
-		/** code here */
-		auto vec_args = PARSE_ARGS();
-		mods::orm::player_base_ability pba;
-		auto status = pba.load_by_player(player->db_id());
-		player->send("Status: %d\r\n",status);
-		pba.dump();
-		status = pba.save_by_player(player);
-		player->send("SVP status: %d\r\n",status);
-		status = pba.load_by_player(player->db_id());
-		player->send("LVP Status: %d\r\n",status);
-		pba.dump();
-	};
-	
-	void init(){
-		mods::interpreter::add_command("save_my_pba", POS_RESTING, do_save_my_pba, LVL_BUILDER,0);
-	}
+		ACMD(do_save_my_pba) {
+			/** code here */
+			auto vec_args = PARSE_ARGS();
+			mods::orm::player_base_ability pba;
+			auto status = pba.load_by_player(player->db_id());
+			player->send("Status: %d\r\n",status);
+			pba.dump();
+			status = pba.save_by_player(player);
+			player->send("SVP status: %d\r\n",status);
+			status = pba.load_by_player(player->db_id());
+			player->send("LVP Status: %d\r\n",status);
+			pba.dump();
+		};
+
+		void init() {
+			mods::interpreter::add_command("save_my_pba", POS_RESTING, do_save_my_pba, LVL_BUILDER,0);
+		}
 	};
 
 };

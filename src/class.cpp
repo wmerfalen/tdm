@@ -28,6 +28,7 @@
 #include "constants.h"
 #include "mods/util.hpp"
 #include "mods/levels.hpp"
+#include "mods/player.hpp"
 
 extern int siteok_everyone;
 
@@ -78,218 +79,218 @@ const char *pc_class_types[] = {
 
 std::string common_weaponry_skillset() {
 	std::string skillset = ""
-		"                   [*] --[ Weaponry Skills ]-- [*]                           \r\n"
-		"                                                                             \r\n"
-		" [ ] Sub Machine Guns                                                        \r\n"
-		"  +-[ ] Breach and clear                                                     \r\n"
-		" [ ] Assault Rifles                                                          \r\n"
-		"  +-[ ] Surpressing fire                                                     \r\n"
-		" [ ] Sniper Rifles                                                           \r\n"
-		" [ ] Light Machine Guns                                                      \r\n"
-		"  +-[ ] Surpressing fire                                                     \r\n"
-		" [ ] Pistols                                                                 \r\n"
-		"  +-[ ] Quickdraw                                                            \r\n"
-		"  +-[ ] Dual wield                                                           \r\n"
-		" [ ] Machine Pistols                                                         \r\n"
-		"  +-[ ] Dual wield                                                           \r\n"
-		" [ ] Shotguns                                                                \r\n"
-		"  +-[ ] Limb shot                                                            \r\n"
-		"                                                                             \r\n"
-		"                   [*] --[ Scope recipes ]-- [*]                             \r\n"
-		" [ ] ACOG Scope                                                              \r\n"
-		" [ ] Red dot sight                                                           \r\n"
-		" [ ] Rifle scope 6X                                                          \r\n"
-		" [ ] Rifle scope 12X                                                         \r\n"
-		" [ ] Rifle scope 6X/12X                                                      \r\n"
-		"                                                                             \r\n"
-		"                   [*] --[ Barrel attachments ]-- [*]                        \r\n"
-		" [ ] Surpressor                                                              \r\n"
-		" [ ] Compensator                                                             \r\n"
-		" [ ] Muzzle brake                                                            \r\n"
-		" [ ] Remote detonation                                                       \r\n"
-		"                                                                             \r\n"
-		"                   [*] --[ Demolition Skills]-- [*]                          \r\n"
-		" [ ] Remote detonation                                                       \r\n"
-		" [ ] Claymore mines                                                          \r\n"
-		" [ ] Break charge                                                            \r\n"
-		" [ ] Door attached trip mine                                                 \r\n"
-		"                                                                             \r\n"
-		"                   [*] --[ Gadgets ]-- [*]                                   \r\n"
-		" [ ] Ground drone                                                            \r\n"
-		"  +-[ ] Custom ammunition                                                    \r\n"
-		"  +-[ ] Surveilance                                                          \r\n"
-		"  +-[ ] Assisted scanning device                                             \r\n"
-		"  +-[ ] Sedative Hypnotic                                                    \r\n"
-		"  +-[ ] Tazer                                                                \r\n"
-		"  +-[ ] EMP                                                                  \r\n"
-		"                                                                             \r\n"
-		" [ ] Aerial drone                                                            \r\n"
-		"  +-[ ] Custom ammunition                                                    \r\n"
-		"  +-[ ] Assisted scanning device                                             \r\n"
-		"  +-[ ] EMP                                                                  \r\n"
-		"                                                                             \r\n"
-		;
-		return skillset;
+	                       "                   [*] --[ Weaponry Skills ]-- [*]                           \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Sub Machine Guns                                                        \r\n"
+	                       "  +-[ ] Breach and clear                                                     \r\n"
+	                       " [ ] Assault Rifles                                                          \r\n"
+	                       "  +-[ ] Surpressing fire                                                     \r\n"
+	                       " [ ] Sniper Rifles                                                           \r\n"
+	                       " [ ] Light Machine Guns                                                      \r\n"
+	                       "  +-[ ] Surpressing fire                                                     \r\n"
+	                       " [ ] Pistols                                                                 \r\n"
+	                       "  +-[ ] Quickdraw                                                            \r\n"
+	                       "  +-[ ] Dual wield                                                           \r\n"
+	                       " [ ] Machine Pistols                                                         \r\n"
+	                       "  +-[ ] Dual wield                                                           \r\n"
+	                       " [ ] Shotguns                                                                \r\n"
+	                       "  +-[ ] Limb shot                                                            \r\n"
+	                       "                                                                             \r\n"
+	                       "                   [*] --[ Scope recipes ]-- [*]                             \r\n"
+	                       " [ ] ACOG Scope                                                              \r\n"
+	                       " [ ] Red dot sight                                                           \r\n"
+	                       " [ ] Rifle scope 6X                                                          \r\n"
+	                       " [ ] Rifle scope 12X                                                         \r\n"
+	                       " [ ] Rifle scope 6X/12X                                                      \r\n"
+	                       "                                                                             \r\n"
+	                       "                   [*] --[ Barrel attachments ]-- [*]                        \r\n"
+	                       " [ ] Surpressor                                                              \r\n"
+	                       " [ ] Compensator                                                             \r\n"
+	                       " [ ] Muzzle brake                                                            \r\n"
+	                       " [ ] Remote detonation                                                       \r\n"
+	                       "                                                                             \r\n"
+	                       "                   [*] --[ Demolition Skills]-- [*]                          \r\n"
+	                       " [ ] Remote detonation                                                       \r\n"
+	                       " [ ] Claymore mines                                                          \r\n"
+	                       " [ ] Break charge                                                            \r\n"
+	                       " [ ] Door attached trip mine                                                 \r\n"
+	                       "                                                                             \r\n"
+	                       "                   [*] --[ Gadgets ]-- [*]                                   \r\n"
+	                       " [ ] Ground drone                                                            \r\n"
+	                       "  +-[ ] Custom ammunition                                                    \r\n"
+	                       "  +-[ ] Surveilance                                                          \r\n"
+	                       "  +-[ ] Assisted scanning device                                             \r\n"
+	                       "  +-[ ] Sedative Hypnotic                                                    \r\n"
+	                       "  +-[ ] Tazer                                                                \r\n"
+	                       "  +-[ ] EMP                                                                  \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Aerial drone                                                            \r\n"
+	                       "  +-[ ] Custom ammunition                                                    \r\n"
+	                       "  +-[ ] Assisted scanning device                                             \r\n"
+	                       "  +-[ ] EMP                                                                  \r\n"
+	                       "                                                                             \r\n"
+	                       ;
+	return skillset;
 }
 
 std::string engineer_skillset() {
 
 	std::string skillset = ""
-		"                   [*] --[ Crafting ]-- [*]                                  \r\n"
-		" [ ] Explosives                                                              \r\n"
-		"  +-[ ] Incendiary grenade                                                   \r\n"
-		"  +-[ ] C4                                                                   \r\n"
-		"  +-[ ] Incendiary ammunition                                                \r\n"
-		"  +-[ ] Explosive ammunition                                                 \r\n"
-		"                                                                             \r\n"
-		" [ ] Weapon attachments                                                      \r\n"
-		"  +-[ ] Extended magazine                                                    \r\n"
-		"  +-[ ] ACOG scope                                                           \r\n"
-		"  +-[ ] Laser sight                                                          \r\n"
-		"  +-[ ] Suppressor                                                           \r\n"
-		"                                                                             \r\n"
-		" [ ] Intel                                                                   \r\n"
-		"  +-[ ] Sensor grenade                                                       \r\n"
-		"  +-[ ] EMP grenade                                                          \r\n"
-		"  +-[ ] Thermal scan                                                         \r\n"
-		"  +-[ ] Camera                                                               \r\n"
-		"  +-[ ] RC Drone                                                             \r\n"
-		"  +-[ ] Aerial drone                                                         \r\n"
-		"                                                                             \r\n"
-		"                   [*] --[ Offensive Tech ]-- [*]                            \r\n"
-		" [ ]                                                                         \r\n"
-		"                                                                             \r\n"
-	;
+	                       "                   [*] --[ Crafting ]-- [*]                                  \r\n"
+	                       " [ ] Explosives                                                              \r\n"
+	                       "  +-[ ] Incendiary grenade                                                   \r\n"
+	                       "  +-[ ] C4                                                                   \r\n"
+	                       "  +-[ ] Incendiary ammunition                                                \r\n"
+	                       "  +-[ ] Explosive ammunition                                                 \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Weapon attachments                                                      \r\n"
+	                       "  +-[ ] Extended magazine                                                    \r\n"
+	                       "  +-[ ] ACOG scope                                                           \r\n"
+	                       "  +-[ ] Laser sight                                                          \r\n"
+	                       "  +-[ ] Suppressor                                                           \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Intel                                                                   \r\n"
+	                       "  +-[ ] Sensor grenade                                                       \r\n"
+	                       "  +-[ ] EMP grenade                                                          \r\n"
+	                       "  +-[ ] Thermal scan                                                         \r\n"
+	                       "  +-[ ] Camera                                                               \r\n"
+	                       "  +-[ ] RC Drone                                                             \r\n"
+	                       "  +-[ ] Aerial drone                                                         \r\n"
+	                       "                                                                             \r\n"
+	                       "                   [*] --[ Offensive Tech ]-- [*]                            \r\n"
+	                       " [ ]                                                                         \r\n"
+	                       "                                                                             \r\n"
+	                       ;
 	return skillset;
 }
 
 std::string psyop_skillset() {
 
 	std::string skillset = ""
-		"                   [*] --[ Control and manipulation ]-- [*]                  \r\n"
-		" [ ] Pyromancy                                                               \r\n"
-		"  +-[ ] Ignite ammunition                                                    \r\n"
-		"  +-[ ] Craft ammunition clip                                                \r\n"
-		"  +-[ ] Napalm explosive ordinance                                           \r\n"
-		"  +-[ ] Firewall                                                             \r\n"
-		"  +-[ ] Napalm trap                                                          \r\n"
-		"                                                                             \r\n"
-		" [ ] Intercept Communications                                                \r\n"
-		"  +-[ ] Predict enemy position                                               \r\n"
-		"  +-[ ] Predict air strike location                                          \r\n"
-		"  +-[ ] Predict path of least resistance                                     \r\n"
-		"                                                                             \r\n"
-		" [ ] Remote Viewing                                                          \r\n"
-		"  +-[ ] Eye of Osiris                                                        \r\n"
-		"  +-[ ] Pineal Gland Hijack                                                  \r\n"
-		"                                                                             \r\n"
-		" [ ] Holographic decoy                                                       \r\n"
-		"  +-[ ] Call for help                                                        \r\n"
-		"                                                                             \r\n"
-		" [ ] Interrogate                                                             \r\n"
-		"  +-[ ] Seeds of doubt                                                       \r\n"
-		"  +-[ ] Disinform                                                            \r\n"
-		"                                                                             \r\n"
-		" [ ] Alter state of mind                                                     \r\n"
-		"  +-[ ] Innebriate                                                           \r\n"
-		"      +-[ ] Depressant                                                       \r\n"
-		"      +-[ ] Stimulant                                                        \r\n"
-		"                                                                             \r\n"
-		" [ ] Detect position                                                         \r\n"
-		"  +-[ ] Sense heartbeat                                                      \r\n"
-		"  +-[ ] Trace gun powder                                                     \r\n"
-		"  +-[ ] Trace footsteps                                                      \r\n"
-		"                                                                             \r\n"
-		" [ ] Lure                                                                    \r\n"
-		"                   [*] -- [ Offensive PSYOPS ] -- [*]                        \r\n"
-		" [ ] Cardiac Arrest                                                          \r\n"
-		"                                                                             \r\n"
-		" [ ] Ignite                                                                  \r\n"
-		"                                                                             \r\n"
-		" [ ] Poison                                                                  \r\n"
-		"                                                                             \r\n"
-		" [ ] Intimidate                                                              \r\n"
-		"                                                                             \r\n"
-		" [ ] Blind                                                                   \r\n"
-		"                                                                             \r\n"
-		"                                                                             \r\n"
-	;
+	                       "                   [*] --[ Control and manipulation ]-- [*]                  \r\n"
+	                       " [ ] Pyromancy                                                               \r\n"
+	                       "  +-[ ] Ignite ammunition                                                    \r\n"
+	                       "  +-[ ] Craft ammunition clip                                                \r\n"
+	                       "  +-[ ] Napalm explosive ordinance                                           \r\n"
+	                       "  +-[ ] Firewall                                                             \r\n"
+	                       "  +-[ ] Napalm trap                                                          \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Intercept Communications                                                \r\n"
+	                       "  +-[ ] Predict enemy position                                               \r\n"
+	                       "  +-[ ] Predict air strike location                                          \r\n"
+	                       "  +-[ ] Predict path of least resistance                                     \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Remote Viewing                                                          \r\n"
+	                       "  +-[ ] Eye of Osiris                                                        \r\n"
+	                       "  +-[ ] Pineal Gland Hijack                                                  \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Holographic decoy                                                       \r\n"
+	                       "  +-[ ] Call for help                                                        \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Interrogate                                                             \r\n"
+	                       "  +-[ ] Seeds of doubt                                                       \r\n"
+	                       "  +-[ ] Disinform                                                            \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Alter state of mind                                                     \r\n"
+	                       "  +-[ ] Innebriate                                                           \r\n"
+	                       "      +-[ ] Depressant                                                       \r\n"
+	                       "      +-[ ] Stimulant                                                        \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Detect position                                                         \r\n"
+	                       "  +-[ ] Sense heartbeat                                                      \r\n"
+	                       "  +-[ ] Trace gun powder                                                     \r\n"
+	                       "  +-[ ] Trace footsteps                                                      \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Lure                                                                    \r\n"
+	                       "                   [*] -- [ Offensive PSYOPS ] -- [*]                        \r\n"
+	                       " [ ] Cardiac Arrest                                                          \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Ignite                                                                  \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Poison                                                                  \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Intimidate                                                              \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Blind                                                                   \r\n"
+	                       "                                                                             \r\n"
+	                       "                                                                             \r\n"
+	                       ;
 	return skillset;
 }
 std::string sentinel_skillset() {
 
 	std::string skillset = ""
-		"                   [*] --[ Control and manipulation ]-- [*]                  \r\n"
-		" [ ] Intimidate                                                              \r\n"
-		"  +-[ ] Flee                                                                 \r\n"
-		"  +-[ ] Adrenal dump                                                         \r\n"
-		"  +-[ ] Heart attack                                                         \r\n"
-		"                                                                             \r\n"
-		" [ ] Heal        [ 10hp ]                                                    \r\n"
-		"  +-[ ] Light    [ 15hp ]                                                    \r\n"
-		"  +-[ ] Critical [ 50hp ]                                                    \r\n"
-		"  +-[ ] Advanced [ 80hp ]                                                    \r\n"
-		"                                                                             \r\n"
-		" [ ] Human shield                                                            \r\n"
-		"  +-[ ] Absorb\r\n"
-		"    +-[ ] Gather ammunition\r\n"
-		"    +-[ ] Chance to gain hp\r\n"
-		"  +-[ ] Ignite\r\n"
-		"  +-[ ] Explosive decompression\r\n"
-		"  +-[ ] Toxicity\r\n"
-		"                                                                             \r\n"
-		" [ ] Deny entry                                                              \r\n"
-		"  +-[ ] Firewall                                                             \r\n"
-		"  +-[ ] Expell                                                               \r\n"
-		"  +-[ ] Barricade                                                            \r\n"
-		"                                                                             \r\n"
-		"                   [*] --[ Gadgets ]-- [*]                                   \r\n"
-		" [ ] Shield                                                                  \r\n"
-		"  +-[ ] Deflect\r\n"
-		"  +-[ ] Deflect and ignite\r\n"
-		"  +-[ ] Firewall\r\n"
-		"                                                                             \r\n"
-		"                   [*] --[ Melee ]-- [*]                                     \r\n"
-		" [ ] Oblique kick                                                            \r\n"
-		"  +-[ ] Heavy [ break victim's leg ]\r\n"
-		"  +-[ ] Extreme [ breaks leg and victim loses 2 turns ]\r\n"
-		"                                                                             \r\n"
-		"                                                                             \r\n"
-	;
+	                       "                   [*] --[ Control and manipulation ]-- [*]                  \r\n"
+	                       " [ ] Intimidate                                                              \r\n"
+	                       "  +-[ ] Flee                                                                 \r\n"
+	                       "  +-[ ] Adrenal dump                                                         \r\n"
+	                       "  +-[ ] Heart attack                                                         \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Heal        [ 10hp ]                                                    \r\n"
+	                       "  +-[ ] Light    [ 15hp ]                                                    \r\n"
+	                       "  +-[ ] Critical [ 50hp ]                                                    \r\n"
+	                       "  +-[ ] Advanced [ 80hp ]                                                    \r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Human shield                                                            \r\n"
+	                       "  +-[ ] Absorb\r\n"
+	                       "    +-[ ] Gather ammunition\r\n"
+	                       "    +-[ ] Chance to gain hp\r\n"
+	                       "  +-[ ] Ignite\r\n"
+	                       "  +-[ ] Explosive decompression\r\n"
+	                       "  +-[ ] Toxicity\r\n"
+	                       "                                                                             \r\n"
+	                       " [ ] Deny entry                                                              \r\n"
+	                       "  +-[ ] Firewall                                                             \r\n"
+	                       "  +-[ ] Expell                                                               \r\n"
+	                       "  +-[ ] Barricade                                                            \r\n"
+	                       "                                                                             \r\n"
+	                       "                   [*] --[ Gadgets ]-- [*]                                   \r\n"
+	                       " [ ] Shield                                                                  \r\n"
+	                       "  +-[ ] Deflect\r\n"
+	                       "  +-[ ] Deflect and ignite\r\n"
+	                       "  +-[ ] Firewall\r\n"
+	                       "                                                                             \r\n"
+	                       "                   [*] --[ Melee ]-- [*]                                     \r\n"
+	                       " [ ] Oblique kick                                                            \r\n"
+	                       "  +-[ ] Heavy [ break victim's leg ]\r\n"
+	                       "  +-[ ] Extreme [ breaks leg and victim loses 2 turns ]\r\n"
+	                       "                                                                             \r\n"
+	                       "                                                                             \r\n"
+	                       ;
 	return skillset;
 }
 std::string sniper_skillset() {
 
 	std::string skillset = ""
-		"                       [*] -- [ Weaponry Skills ] -- [*]                    \r\n"
-		"[ ] - Sniper Rifle Skills                                                   \r\n"
-		"	+                                                                          \r\n"
-		" +-[ ] Decapitate                                                           \r\n"
-		" +-[ ] Disarm                                                               \r\n"
-		" +-[ ] Limb Damage                                                          \r\n"
-		" +-[ ] Tracking Ammunition                                                  \r\n"
-		" +-[ ] Crafting Exotic Bullets                                              \r\n"
-		" +-[ ] Exploding Corpse Shot                                                \r\n"
-		/*
-		 * Let's double back around on this in the future. Seems too overboard      
-		 * for a single feature.
-		"  +                                                                         \r\n"
-		"  +-[ ] Chained Combos                                                      \r\n"
-		"     +                                                                      \r\n"
-		"     +-[ ] Acid Bath                                                        \r\n"
-		"     +-[ ] Stained And Marked                                               \r\n"
-		"     +-[ ] EMP                                                              \r\n"
-		"     +-[ ] Concussion                                                       \r\n"
-		"     +-[ ] Scan Grenade                                                     \r\n"
-		"     +-[ ]                                                                  \r\n"
-		*/
-		"[ ] - Double Shot                                                           \r\n"
-		"[ ] - Crippling Shot                                                        \r\n"
-		"[ ] - Fast Draw Secondary                                                   \r\n"
-		"[ ] - Interrogate                                                           \r\n"
-		"[ ] - Live off the elements                                                 \r\n"
-		"[ ] - Nano Bot Tracking Ammo                                                \r\n"
-	;
+	                       "                       [*] -- [ Weaponry Skills ] -- [*]                    \r\n"
+	                       "[ ] - Sniper Rifle Skills                                                   \r\n"
+	                       "	+                                                                          \r\n"
+	                       " +-[ ] Decapitate                                                           \r\n"
+	                       " +-[ ] Disarm                                                               \r\n"
+	                       " +-[ ] Limb Damage                                                          \r\n"
+	                       " +-[ ] Tracking Ammunition                                                  \r\n"
+	                       " +-[ ] Crafting Exotic Bullets                                              \r\n"
+	                       " +-[ ] Exploding Corpse Shot                                                \r\n"
+	                       /*
+	                        * Let's double back around on this in the future. Seems too overboard
+	                        * for a single feature.
+	                       "  +                                                                         \r\n"
+	                       "  +-[ ] Chained Combos                                                      \r\n"
+	                       "     +                                                                      \r\n"
+	                       "     +-[ ] Acid Bath                                                        \r\n"
+	                       "     +-[ ] Stained And Marked                                               \r\n"
+	                       "     +-[ ] EMP                                                              \r\n"
+	                       "     +-[ ] Concussion                                                       \r\n"
+	                       "     +-[ ] Scan Grenade                                                     \r\n"
+	                       "     +-[ ]                                                                  \r\n"
+	                       */
+	                       "[ ] - Double Shot                                                           \r\n"
+	                       "[ ] - Crippling Shot                                                        \r\n"
+	                       "[ ] - Fast Draw Secondary                                                   \r\n"
+	                       "[ ] - Interrogate                                                           \r\n"
+	                       "[ ] - Live off the elements                                                 \r\n"
+	                       "[ ] - Nano Bot Tracking Ammo                                                \r\n"
+	                       ;
 	return skillset;
 }
 
@@ -301,7 +302,7 @@ std::string sniper_skillset() {
 player_class_t parse_class(std::string a) {
 	static std::map<std::string,player_class_t> class_map;
 	static bool initialized = false;
-	if(!initialized){
+	if(!initialized) {
 		class_map["1G"] = player_class_t::CLASS_GHOST;
 		class_map["1M"] = player_class_t::CLASS_MARKSMAN;
 		class_map["1B"] = player_class_t::CLASS_BANDIT;
@@ -317,29 +318,31 @@ player_class_t parse_class(std::string a) {
 		initialized = true;
 	}
 	std::string trimmed = "";
-	for(auto ch : a){
-		if(isspace(ch)){ continue; }
-		if(isalpha(ch) && islower(ch)){
+	for(auto ch : a) {
+		if(isspace(ch)) {
+			continue;
+		}
+		if(isalpha(ch) && islower(ch)) {
 			trimmed += toupper(ch);
 			break;
 		}
-		if(isalpha(ch) && isupper(ch)){
+		if(isalpha(ch) && isupper(ch)) {
 			trimmed += ch;
 			break;
 		}
-		if(isdigit(ch)){
+		if(isdigit(ch)) {
 			trimmed += ch;
 		}
-		if(trimmed.length() >= 2){
+		if(trimmed.length() >= 2) {
 			break;
 		}
 	}
 	std::cerr << "[trimmed]: '" << trimmed << "'\n";
-	if(trimmed.length() < 2){
+	if(trimmed.length() < 2) {
 		return player_class_t::CLASS_UNDEFINED;
 	}
 	auto it = class_map.find(trimmed);
-	if(it != class_map.end()){
+	if(it != class_map.end()) {
 		return it->second;
 	}
 	return player_class_t::CLASS_UNDEFINED;
@@ -354,7 +357,7 @@ player_class_t parse_class(std::string a) {
 bitvector_t find_class_bitvector(const char *arg) {
 	size_t rpos, ret = 0;
 
-		std::string s = "";
+	std::string s = "";
 	for(rpos = 0; rpos < strlen(arg); rpos++) {
 		std::cerr << "[FIXME] find_class_bitvector may be broken...\n";
 		s = "";
@@ -429,7 +432,7 @@ struct guild_info_type guild_info[] = {
 	{ CLASS_SUPPORT,	3021,	SCMD_UP	},
 
 	/* Brass Dragon */
-	{ -999 /* all */ ,	5065,	SCMD_WEST	},
+	{ -999 /* all */,	5065,	SCMD_WEST	},
 
 	/* this must go last -- add new guards above! */
 	{ -1, NOWHERE, -1}
@@ -935,15 +938,15 @@ void roll_real_abils(char_data *ch) {
 			ch->real_abils.con = table[4];
 			ch->real_abils.cha = table[5];
 
-		ch->real_abils.electronics = table[0];
-		ch->real_abils.armor = table[3];
-		ch->real_abils.marksmanship = table[2];
-		ch->real_abils.sniping = table[2];
-		ch->real_abils.demolitions = table[0];
-		ch->real_abils.chemistry = table[0];
-		ch->real_abils.weapon_handling = table[3];
-		ch->real_abils.strategy = table[0];
-		ch->real_abils.medical = table[5];
+			ch->real_abils.electronics = table[0];
+			ch->real_abils.armor = table[3];
+			ch->real_abils.marksmanship = table[2];
+			ch->real_abils.sniping = table[2];
+			ch->real_abils.demolitions = table[0];
+			ch->real_abils.chemistry = table[0];
+			ch->real_abils.weapon_handling = table[3];
+			ch->real_abils.strategy = table[0];
+			ch->real_abils.medical = table[5];
 			break;
 
 		case CLASS_MEDIC:
@@ -1022,7 +1025,7 @@ void do_start(char_data *ch) {
 void advance_level(char_data *ch) {
 	MENTOC_PREAMBLE();
 	mods::levels::advance_level(player);
-	
+
 	snoop_check(ch);
 	mods::levels::reward_player_for_advancing_levels(player);
 	mods::db::save_char(player);
@@ -1113,37 +1116,37 @@ const char *title_male(int chclass, int level) {
 	if(chclass == GHOST) {
 		return "the Ghost";
 	}
-	if(chclass == MARKSMAN){
+	if(chclass == MARKSMAN) {
 		return "the Marksman";
 	}
-	if(chclass == BANDIT){
+	if(chclass == BANDIT) {
 		return "the Bandit";
 	}
-	if(chclass == BUTCHER){
+	if(chclass == BUTCHER) {
 		return "the Butcher";
 	}
-	if(chclass == STRIKER){
+	if(chclass == STRIKER) {
 		return "the Striker";
 	}
-	if(chclass == OBSTRUCTOR){
+	if(chclass == OBSTRUCTOR) {
 		return "the Obstructor";
 	}
-	if(chclass == MALADY){
+	if(chclass == MALADY) {
 		return "the Malady";
 	}
-	if(chclass == PYREXIA){
+	if(chclass == PYREXIA) {
 		return "the Pyrexia";
 	}
-	if(chclass == DEALER){
+	if(chclass == DEALER) {
 		return "the Dealer";
 	}
-	if(chclass == FORGE){
+	if(chclass == FORGE) {
 		return "the Forge";
 	}
-	if(chclass == SYNDROME){
+	if(chclass == SYNDROME) {
 		return "the Syndrome";
 	}
-	if(chclass == MACHINIST){
+	if(chclass == MACHINIST) {
 		return "the Machinist";
 	}
 

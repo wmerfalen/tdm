@@ -18,6 +18,10 @@ extern void affect_from_char(char_data *ch, int type);
 extern void mobile_activity();
 namespace mods {
 	namespace js {
+		static duk_context* duktape_context;
+		void create_new_context() {
+			duktape_context = new_context();
+		}
 		std::string current_working_dir() {
 			return MENTOC_CURRENT_WORKING_DIR;
 		}
@@ -52,13 +56,13 @@ namespace mods {
 			}
 
 		};//end utils namespace
-		int load_library(duk_context*,std::string_view);
+		int load_library(std::string_view);
 		namespace test {
 			static duk_ret_t require_test(duk_context *ctx) {
 				/* First parameter is character name */
 				auto fname = duk_to_string(ctx,0);
 				std::string path = mods::js::current_working_dir() + std::string("/js/tests/") + fname;
-				duk_push_number(ctx,mods::js::load_library(ctx,path));
+				duk_push_number(ctx,mods::js::load_library(path));
 				return 1;	/* number of return values */
 			}
 		};
@@ -142,7 +146,7 @@ namespace mods {
 			/* First parameter is character name */
 			auto fname = duk_to_string(ctx,0);
 			std::string path = mods::js::current_working_dir() + std::string("/js/") + fname;
-			duk_push_number(ctx,mods::js::load_library(ctx,path));
+			duk_push_number(ctx,mods::js::load_library(path));
 			return 1;	/* number of return values */
 		}
 		/*
@@ -937,22 +941,25 @@ namespace mods {
 			duk_pop(ctx);
 		}
 		void eval_string(std::string_view str) {
-			eval_string(mods::globals::duktape_context,str.data());
+			eval_string(duktape_context,str.data());
 		}
 		void load_c_functions() {
-			load_c_functions(mods::globals::duktape_context);
+			load_c_functions(duktape_context);
 		}
-		void load_c_require_functions(duk_context *ctx) {
+		void load_c_require_functions() {
+			auto ctx = duktape_context;
 			duk_push_c_function(ctx,mods::js::require_js,1);
 			duk_put_global_string(ctx,"require_js");
 		}
-		void load_c_test_functions(duk_context *ctx) {
+		void load_c_test_functions() {
+			auto ctx = duktape_context;
 			duk_push_c_function(ctx,mods::js::test::require_test,1);
 			duk_put_global_string(ctx,"require_test");
 			duk_push_c_function(ctx,mods::js::mobile_activity,0);
 			duk_put_global_string(ctx,"mobile_activity");
 		}
-		void load_base_functions(duk_context *ctx) {
+		void load_base_functions() {
+			auto ctx = duktape_context;
 			duk_push_c_function(ctx,mods::js::get_month,0);
 			duk_put_global_string(ctx,"get_month");
 			duk_push_c_function(ctx,mods::js::get_day,0);
@@ -1158,7 +1165,7 @@ __set_points_cleanup:
 			std::string path = mods::js::current_working_dir() + "/js/tests/" + suite.data();
 			mods::js::load_c_functions(ctx);
 
-			if(mods::js::load_library(ctx,path) == -1) {
+			if(mods::js::load_library(path) == -1) {
 				player << "{red}[js]{/red} Unable to load library: '" << path.c_str() << "'\r\n";
 				return false;
 			}
@@ -1204,8 +1211,7 @@ __set_points_cleanup:
 			std::cerr << "run_profile_scripts: '" << player_name << "'\n";
 #endif
 			if(config::run_profile_scripts) {
-				load_library(mods::globals::duktape_context,
-				             std::string(MENTOC_CURRENT_WORKING_DIR) + std::string("/js/profiles/" + player_name + ".js").c_str());
+				load_library(std::string(MENTOC_CURRENT_WORKING_DIR) + std::string("/js/profiles/" + player_name + ".js").c_str());
 			}
 		}
 
@@ -1267,8 +1273,8 @@ __set_points_cleanup:
 			include_file.close();
 			return status;
 		}
-		int load_library(duk_context *ctx,std::string_view file) {
-			auto m = std::make_unique<include>(ctx,file.data());
+		int load_library(std::string_view file) {
+			auto m = std::make_unique<include>(duktape_context,file.data());
 
 			if(m->good()) {
 #ifdef __MENTOC_SHOW_JS_DEBUG__
@@ -1283,10 +1289,10 @@ __set_points_cleanup:
 			return -1;
 		}
 		void load_c_functions(duk_context *ctx) {
-			mods::js::load_base_functions(ctx);
+			mods::js::load_base_functions();
 			mods::quests::load_c_functions(ctx);
-			mods::js::load_c_test_functions(ctx);
-			mods::js::load_c_require_functions(ctx);
+			mods::js::load_c_test_functions();
+			mods::js::load_c_require_functions();
 			mods::js::load_mods_player_functions(ctx);
 		}
 	};

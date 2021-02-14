@@ -2,26 +2,11 @@
 #define __CIRCLEMUD_SRC_MODS_GLOBALS_HEADER__ 1
 
 
-#include <iostream>
-#include <string>
-#include <memory>
-#include <map>
-#include <set>
-#include "mods/colors.hpp"
-using namespace mods::colors;
-#include "mods/values.hpp"
-#include "types.hpp"
-#include "mods/acl/config-parser.hpp"
-#include "conf.h"
-#include "config.hpp"
-#include "sysdep.h"
 #include "structs.h"
-#include "mods/player.hpp"
-#include <memory>
+//#include "mods/player.hpp"
 #include "mods/deferred.hpp"
 #include "mods/lmdb.hpp"
-#include "mods/projectile.hpp"
-#include "duktape/src/duktape.h"
+//#include "mods/projectile.hpp"
 #include "mods/js.hpp"
 #include "mods/drone.hpp"
 #include "mods/conf.hpp"
@@ -143,10 +128,10 @@ namespace mods {
 		extern std::map<std::string,player_ptr_t> player_name_map;
 		extern std::map<uuid_t,player_ptr_t> player_map;
 		extern ai_state_map states;
-		extern duk_context* duktape_context;
+		//extern duk_context* duktape_context;
 		extern room_list_t room_list;
 		extern player_list_t player_list;
-		extern std::vector<mods::chat::channel> chan;
+		//extern std::vector<mods::chat::channel> chan;
 		extern std::vector<std::string> chan_verbs;
 		extern bool f_import_rooms;
 		extern player_ptr_t current_player;

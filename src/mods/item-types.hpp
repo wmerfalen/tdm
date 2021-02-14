@@ -318,7 +318,8 @@
 (MOTION_SENSOR) \
 (DEPLOYABLE_SHIELD) \
 (TRIPWIRE) \
-(DOOR_CAMERA)
+(DOOR_CAMERA) \
+(CB_RADIO)
 
 #define MENTOC_GADGET_MEMBERS_TUPLE ( \
 (std::string,csv_capabilities,"#csv, strings free-form TBA","'TBA'"), \

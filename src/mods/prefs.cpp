@@ -1,4 +1,5 @@
 #include "prefs.hpp"
+#include "player.hpp"
 namespace mods {
 	std::string prefs::namify(const std::string& key,char_data* c) {
 		std::string format = PREFS_FORMAT_STRING;
@@ -41,7 +42,7 @@ ACMD(do_pref) {
 	str_vec_t no_comms{"nochat","nogossip","nogratz","nonewbie"};
 	DO_HELP("pref");
 
-	if(vec_args.size() == 0){
+	if(vec_args.size() == 0) {
 		*player << "{gld}::[ preferences ]::{/gld}\r\n";
 		std::string line;
 
@@ -49,7 +50,7 @@ ACMD(do_pref) {
 		*player << "{gld}" << line << "{/gld}\r\n";
 		auto width = PLAYER_GET("screen_width");
 		int w = mods::util::stoi(width).value_or(80);
-		for(auto pref : no_comms){
+		for(auto pref : no_comms) {
 			std::string v = PLAYER_GET(pref);
 			player->send("      %s: %s\r\n",pref.c_str(),v.c_str());
 		}
@@ -58,7 +59,7 @@ ACMD(do_pref) {
 		*player << "{gld} usage: pref <item> <value> {/gld}{blu}(Example: pref width 80){/blu}\r\n";
 		return;
 	}
-	if(vec_args.size() < 2){
+	if(vec_args.size() < 2) {
 		player->sendln("{gld} usage: pref <item> <value> {/gld}{blu}(Example: pref width 80){/blu}");
 		return;
 	}
@@ -77,8 +78,8 @@ ACMD(do_pref) {
 		*player << "{gld}Screen width set to: " << &value[0] << "\r\n";
 		return;
 	}
-	if(invec(item,no_comms)){
-		if(value.compare("1") != 0 && value.compare("0") != 0){
+	if(invec(item,no_comms)) {
+		if(value.compare("1") != 0 && value.compare("0") != 0) {
 			player->sendln("{red}Use either 1 or 0.{/red}");
 			return;
 		}

@@ -1,4 +1,5 @@
 #include "breacher.hpp"
+#include "../player.hpp"
 
 namespace mods::orm {
 	/**
@@ -7,13 +8,13 @@ namespace mods::orm {
 	 * @param player
 	 * @param primary_choice
 	 *
-	 * @return 
+	 * @return
 	 */
-	uint64_t breacher::initialize_row(player_ptr_t &player){
+	uint64_t breacher::initialize_row(player_ptr_t& player) {
 		init();
 		breacher_player_id = player->db_id();
 		auto status = this->create<breacher>(this);
-		if(ORM_SUCCESS(status)){
+		if(ORM_SUCCESS(status)) {
 			updated_at = created_at = time(nullptr);
 			loaded = 1;
 			id = breacher_id = std::get<2>(status);
@@ -25,14 +26,14 @@ namespace mods::orm {
 		values["breacher_player_id"] = std::to_string(breacher_player_id);
 		return std::move(values);
 	}
-	int16_t breacher::load_by_player(uint64_t player_id){
+	int16_t breacher::load_by_player(uint64_t player_id) {
 		loaded = 0;
 		created_at = updated_at = 0;
 		id = breacher_id = 0;
 		breacher_player_id = 0;
 		return std::get<0>(this->read<breacher>(this,"breacher_player_id",std::to_string(breacher_player_id)));
 	}
-	int16_t breacher::feed(const pqxx::result::reference & row){
+	int16_t breacher::feed(const pqxx::result::reference& row) {
 		init();
 		loaded = 0;
 		id = row["breacher_id"].as<uint64_t>();
@@ -43,7 +44,7 @@ namespace mods::orm {
 		loaded = 1;
 		return 0;
 	}
-	void breacher::init(){
+	void breacher::init() {
 		id = 0;
 		breacher_id = 0;
 		breacher_player_id = 0;

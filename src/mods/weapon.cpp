@@ -1,6 +1,7 @@
 #include "weapon.hpp"
 #include "../../db.h"
 #include "rand.hpp"
+#include "player.hpp"
 /** FIXME: need to assign vnum/ids to objects */
 extern obj_ptr_t create_object(int type,std::string file);
 extern int generic_find(char *arg, bitvector_t bitvector, char_data *ch,

@@ -4,6 +4,7 @@
 #include "types.hpp"
 #include "../weapon.hpp"
 #include "../bugs-fixtures.hpp"
+#include "../player.hpp"
 
 namespace mods::classes {
 	struct super_user_fiddler {

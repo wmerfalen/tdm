@@ -1,4 +1,5 @@
 #include "marine.hpp"
+#include "../player.hpp"
 
 namespace mods::orm {
 	/**
@@ -7,13 +8,13 @@ namespace mods::orm {
 	 * @param player
 	 * @param primary_choice
 	 *
-	 * @return 
+	 * @return
 	 */
-	uint64_t marine::initialize_row(player_ptr_t &player){
+	uint64_t marine::initialize_row(player_ptr_t& player) {
 		init();
 		marine_player_id = player->db_id();
 		auto status = this->create<marine>(this);
-		if(ORM_SUCCESS(status)){
+		if(ORM_SUCCESS(status)) {
 			updated_at = created_at = time(nullptr);
 			loaded = 1;
 			id = marine_id = std::get<2>(status);
@@ -25,14 +26,14 @@ namespace mods::orm {
 		values["marine_player_id"] = std::to_string(marine_player_id);
 		return std::move(values);
 	}
-	int16_t marine::load_by_player(uint64_t player_id){
+	int16_t marine::load_by_player(uint64_t player_id) {
 		loaded = 0;
 		created_at = updated_at = 0;
 		id = marine_id = 0;
 		marine_player_id = 0;
 		return std::get<0>(this->read<marine>(this,"marine_player_id",std::to_string(marine_player_id)));
 	}
-	int16_t marine::feed(const pqxx::result::reference & row){
+	int16_t marine::feed(const pqxx::result::reference& row) {
 		init();
 		loaded = 0;
 		id = row["marine_id"].as<uint64_t>();
@@ -43,7 +44,7 @@ namespace mods::orm {
 		loaded = 1;
 		return 0;
 	}
-	void marine::init(){
+	void marine::init() {
 		id = 0;
 		marine_id = 0;
 		marine_player_id = 0;

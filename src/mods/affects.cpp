@@ -2,6 +2,7 @@
 #include "../globals.hpp"
 #include <algorithm>
 #include <cctype>
+#include "player.hpp"
 namespace mods::rooms::affects {
 	extern void process();
 };

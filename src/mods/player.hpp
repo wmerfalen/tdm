@@ -1,11 +1,6 @@
 #ifndef __MENTOC_MODS_PLAYER_HEADER__
 #define  __MENTOC_MODS_PLAYER_HEADER__
 
-#include <iostream>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <vector>
-#include <array>
 
 namespace mods {
 	struct player;
@@ -31,19 +26,9 @@ namespace mods {
 #include "flags.hpp"
 #include "classes/types.hpp"
 
-#include "../conf.h"
-#include "../sysdep.h"
 #include "../structs.h"
-#include "../types.hpp"
-#include "drone.hpp"
-#include <chrono>
-#include "acl_list.hpp"
-#include "overhead_map.hpp"
-#include "weapon.hpp"
 #include "affects.hpp"
-#include <cstdio> // for FILE*
 #include "camera.hpp"
-#include "deferred.hpp"
 
 namespace mods::armor {
 	struct basic_protection;
@@ -705,9 +690,7 @@ namespace mods {
 				return m_char_data == nullptr;
 			}
 
-			bool is_npc() const {
-				return IS_NPC(cd());
-			}
+			bool is_npc() const;
 			affect_dissolver_t& get_affect_dissolver();
 			void set_misc_pref(misc_pref_enum_t bit,bool on_off) {
 				m_misc_pref[bit] = on_off;
@@ -754,9 +737,7 @@ namespace mods {
 			int attacking_with_type() {
 				return m_attacking_with->rifle()->attributes->type;
 			}
-			void set_fight_timestamp() {
-				m_char_data->last_fight_timestamp = std::time(NULL);
-			}
+			void set_fight_timestamp();
 
 			/** reporting utilities */
 			std::string get_type_string();
@@ -781,9 +762,7 @@ namespace mods {
 				return this->m_watching;
 			}
 			int screen_width();
-			room_vnum vnum() {
-				return world[room()].number;
-			}
+			room_vnum vnum();
 
 			/** for shift left/right defuse/hack games */
 			std::tuple<uint32_t,uint8_t> currently_hacking();
@@ -838,6 +817,9 @@ namespace mods {
 				auto f = std::move(m_scripted_response);
 				m_scripted_response = "";
 				return std::move(f);
+			}
+			const std::array<obj_ptr_t,NUM_WEARS>& equipment() const {
+				return m_equipment;
 			}
 
 		protected:

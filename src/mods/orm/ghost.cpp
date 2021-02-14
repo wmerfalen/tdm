@@ -1,4 +1,5 @@
 #include "ghost.hpp"
+#include "../player.hpp"
 
 namespace mods::orm {
 	/**
@@ -7,13 +8,13 @@ namespace mods::orm {
 	 * @param player
 	 * @param primary_choice IGNORED DEPRECATED
 	 *
-	 * @return 
+	 * @return
 	 */
-	uint64_t ghost::initialize_row(player_ptr_t &player) {
+	uint64_t ghost::initialize_row(player_ptr_t& player) {
 		init();
 		ghost_player_id = player->db_id();
 		auto status = this->create<ghost>(this);
-		if(ORM_SUCCESS(status)){
+		if(ORM_SUCCESS(status)) {
 			updated_at = created_at = time(nullptr);
 			loaded = 1;
 			id = ghost_id = std::get<2>(status);
@@ -25,7 +26,7 @@ namespace mods::orm {
 		values["ghost_player_id"] = std::to_string(ghost_player_id);
 		return std::move(values);
 	}
-	int16_t ghost::load_by_player(uint64_t player_id){
+	int16_t ghost::load_by_player(uint64_t player_id) {
 		loaded = 0;
 		created_at = updated_at = 0;
 		id = ghost_id = 0;
@@ -33,7 +34,7 @@ namespace mods::orm {
 		created_at = (decltype(created_at))0;
 		return std::get<0>(this->read<ghost>(this,"ghost_player_id",std::to_string(ghost_player_id)));
 	}
-	int16_t ghost::feed(const pqxx::result::reference & row){
+	int16_t ghost::feed(const pqxx::result::reference& row) {
 		init();
 		loaded = 0;
 		id = row["ghost_id"].as<uint64_t>();
@@ -43,7 +44,7 @@ namespace mods::orm {
 		updated_at = mods::util::pg_timestamp_to_long(row["updated_at"].c_str());
 		return 0;
 	}
-	void ghost::init(){
+	void ghost::init() {
 		id = 0;
 		ghost_id = 0;
 		ghost_player_id = 0;

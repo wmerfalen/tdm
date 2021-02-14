@@ -1,6 +1,7 @@
 #include "player-skill-usage.hpp"
 #include "skill-trees.hpp"
 #include "util.hpp"
+#include "../player.hpp"
 
 namespace mods::orm {
 	std::map<uint64_t,uint16_t> m_skill_usage;

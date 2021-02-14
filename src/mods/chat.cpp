@@ -1,14 +1,38 @@
 #include "chat.hpp"
 #include "prefs.hpp"
 #include "../utils.h"
+#include "player.hpp"
 
 namespace mods::chat {
-	void add_public_channel(str_t channel,str_t verb){
-		if(invec(verb,mods::globals::chan_verbs)){
+	static std::vector<mods::chat::channel> chan;
+	static std::vector<std::string> chan_verbs;
+	bool handle_chat(player_ptr_t& player,std::string_view argument) {
+		auto vec_args = PARSE_ARGS();
+		for(auto verb : mods::chat::chan_verbs) {
+			if(mods::util::is_lower_match(CAT("no",verb),vec_args[0])) {
+				player->send("Turning {grn}OFF{/grn} '%s' channel...\r\n",verb.c_str());
+				PLAYER_SET(CAT("no",verb),"1");
+				return true;
+			}
+		}
+		if(invec(vec_args[0],chan_verbs)) {
+			auto verb = vec_args[0];
+			auto pos = argument.find_first_of(" ");
+			if(pos == std::string::npos) {
+				return false;
+			}
+			PLAYER_SET(CAT("no",verb),"0");
+			mods::chat::transmit(vec_args[0],player->name().c_str(),argument.substr(argument.find_first_of(" ")));
+			return true;
+		}
+		return false;
+	}
+	void add_public_channel(str_t channel,str_t verb) {
+		if(invec(verb,chan_verbs)) {
 			return;
 		}
-		mods::globals::chan_verbs.emplace_back(verb);
-		mods::globals::chan.emplace_back(channel,verb,false);
+		chan_verbs.emplace_back(verb);
+		chan.emplace_back(channel,verb,false);
 	}
 	void channel::set_name(std::string_view name) {
 		m_name = name;
@@ -23,7 +47,7 @@ namespace mods::chat {
 		return m_verb;
 	}
 	void channel::add_subscriber(const socket_t& sock) {
-		if(!invec(sock,m_subscribers)){
+		if(!invec(sock,m_subscribers)) {
 			std::cerr << "added socket to subscribers...\n";
 			std::cerr << "added socket to subscribers...\n";
 			std::cerr << "added socket to subscribers...\n";
@@ -56,29 +80,29 @@ namespace mods::chat {
 			}
 		}
 
-		for(auto & player : mods::globals::player_list){
-			if((IS_NPC(player->cd()) || !player->authenticated())){
+		for(auto& player : mods::globals::player_list) {
+			if((IS_NPC(player->cd()) || !player->authenticated())) {
 				continue;
 			}
 			auto key = CAT("no",get_verb().data());
 			std::string muted = PLAYER_GET(key);
-			if(muted.compare("1") == 0){
+			if(muted.compare("1") == 0) {
 				continue;
 			}
 			player->send("\r\n{yel}[{/yel}{blu}%s{/blu}{yel}][{/yel}{blu}%s{/blu}{yel}]->{/yel}%s\r\n",this->get_name().data(),user.data(),mods::globals::strip_colors(message).c_str());
 		}
 	}
-	void transmit(std::string verb,std::string_view player_name,std::string_view message){
-		for(auto & channel : mods::globals::chan){
-			if(verb.compare(channel.get_verb().data()) == 0){
+	void transmit(std::string verb,std::string_view player_name,std::string_view message) {
+		for(auto& channel : chan) {
+			if(verb.compare(channel.get_verb().data()) == 0) {
 				channel.transmit(player_name,message);
 				return;
 			}
 		}
 	}
-	void setup_public_channels(){
+	void setup_public_channels() {
 		auto chans = EXPLODE(DEFAULT_PUBLIC_CHANNELS(),'|');
-		for(auto & channel : chans){
+		for(auto& channel : chans) {
 			add_public_channel(channel,channel);
 		}
 	}
@@ -145,7 +169,7 @@ ACMD(do_chanmgr) {
 		}
 
 		for(unsigned i = 1; i < arglist.size(); i++) {
-			for(auto channel : mods::globals::chan) {
+			for(auto channel : mods::chat::chan) {
 				if(std::string(channel.get_name()).compare(arglist[i]) == 0) {
 					channel.add_private_publisher(arglist[0]);
 					*player << "{red}Added user to {gld}" << arglist[i] << "{/gld}\r\n";
@@ -183,8 +207,8 @@ ACMD(do_chanmgr) {
 		}
 
 		/* Emplaced back: name_of_channel,verb */
-		mods::globals::chan.emplace_back(arglist[0],arglist[1],false);
-		mods::globals::chan_verbs.emplace_back(arglist[1]);
+		mods::chat::chan.emplace_back(arglist[0],arglist[1],false);
+		mods::chat::chan_verbs.emplace_back(arglist[1]);
 		player->sendln("Created channel.");
 		return;
 	}

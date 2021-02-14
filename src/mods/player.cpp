@@ -1676,6 +1676,15 @@ namespace mods {
 	int16_t& player::anti_matter_resistance_percent() {
 		return m_anti_matter_resistance_percent;
 	}
+	room_vnum player::vnum() {
+		return world[room()].number;
+	}
+	void player::set_fight_timestamp() {
+		m_char_data->last_fight_timestamp = std::time(NULL);
+	}
+	bool player::is_npc() const {
+		return IS_NPC(cd());
+	}
 
 };
 

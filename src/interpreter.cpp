@@ -127,7 +127,7 @@ ACMD(do_require_js) {
 	}
 	if(player->god_mode() || player->implementor_mode() || player->builder_mode()) {
 		std::string path = mods::js::current_working_dir() + std::string("/js/") + std::string(&arg_1[0]) + ".js";
-		mods::js::load_library(mods::globals::duktape_context,path);
+		mods::js::load_library(path);
 	}
 }
 namespace mods::js {
@@ -143,7 +143,7 @@ ACMD(do_builder) {
 	mods::acl_list::set_access_rights(player,"implementors",true);
 	mods::acl_list::set_access_rights(player,"god",true);
 	std::string path = mods::js::current_working_dir() + std::string("/js/build.js");
-	mods::js::load_library(mods::globals::duktape_context,path);
+	mods::js::load_library(path);
 	mods::js::eval_string("builder_init();");
 	player->done();
 }

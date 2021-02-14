@@ -1,0 +1,36 @@
+# type: GRAPPLING_HOOK
+# type: BARBED_WIRE
+# type: CAMERA
+# type: THERMAL_CAMERA
+# type: NIGHT_VISION_CAMERA
+# type: MOTION_SENSOR
+# type: DEPLOYABLE_SHIELD
+# type: TRIPWIRE
+# type: DOOR_CAMERA
+csv_capabilities: '' #csv, strings free-form TBA
+csv_attach_to: '' #csv, strings attach to various kinds of items TBA
+electronic: 1 #int, 1 or zero. If item is electronic
+health_points: 100 #int, health points before it dies. -1 is invincible
+shield_points: 0 #int, additional points to decrement before decrementing health points. -1 is invincible
+durability_profile: 'DURABLE' #string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUSTRIAL_STRENGTH,GODLIKE,INDESTRUCTIBLE
+move_points: 0 #int, number of move points required to circumvent gadget
+damage_points: 0 #int, number of damage points acrued when tripped/touched
+exit_key: 0 #int, numeric identifier of door that this object opens.
+min_level: 5 #int, the minimum level you need to be in order to use this gadget.
+worth: 10 #int, how much the item is worth.
+str_type: 'CB_RADIO' # enum, object type
+manufacturer: 'UniSpec' # string, anything 
+name: 'Spectrum CB Radio' # string, anything name of object 
+vnum: 87
+description: 'Made of black plastic and durable rubber antennas. Used to call for backup.'
+short_description: 'Made of black plastic and durable rubber antennas. Used to call for backup.'
+action_description: 'Made of black plastic and durable rubber antennas. Used to call for backup.'
+feed_file: 'cbradio.yml'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'

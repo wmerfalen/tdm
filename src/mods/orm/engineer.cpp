@@ -1,4 +1,5 @@
 #include "engineer.hpp"
+#include "../player.hpp"
 
 namespace mods::orm {
 	/**
@@ -7,13 +8,13 @@ namespace mods::orm {
 	 * @param player
 	 * @param primary_choice
 	 *
-	 * @return 
+	 * @return
 	 */
-	uint64_t engineer::initialize_row(player_ptr_t &player){
+	uint64_t engineer::initialize_row(player_ptr_t& player) {
 		init();
 		engineer_player_id = player->db_id();
 		auto status = this->create<engineer>(this);
-		if(ORM_SUCCESS(status)){
+		if(ORM_SUCCESS(status)) {
 			updated_at = created_at = time(nullptr);
 			loaded = 1;
 			id = engineer_id = std::get<2>(status);
@@ -25,14 +26,14 @@ namespace mods::orm {
 		values["engineer_player_id"] = std::to_string(engineer_player_id);
 		return std::move(values);
 	}
-	int16_t engineer::load_by_player(uint64_t player_id){
+	int16_t engineer::load_by_player(uint64_t player_id) {
 		loaded = 0;
 		created_at = updated_at = 0;
 		id = engineer_id = 0;
 		engineer_player_id = 0;
 		return std::get<0>(this->read<engineer>(this,"engineer_player_id",std::to_string(engineer_player_id)));
 	}
-	int16_t engineer::feed(const pqxx::result::reference & row){
+	int16_t engineer::feed(const pqxx::result::reference& row) {
 		init();
 		loaded = 0;
 		id = row["engineer_id"].as<uint64_t>();
@@ -43,7 +44,7 @@ namespace mods::orm {
 		loaded = 1;
 		return 0;
 	}
-	void engineer::init(){
+	void engineer::init() {
 		id = 0;
 		engineer_id = 0;
 		engineer_player_id = 0;

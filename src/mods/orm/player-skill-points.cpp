@@ -1,5 +1,6 @@
 #include "player-skill-points.hpp"
 #include "util.hpp"
+#include "../player.hpp"
 
 namespace mods::orm {
 	std::tuple<int16_t,std::string> player_skill_points::delete_by_player(const uint64_t& player_id) {

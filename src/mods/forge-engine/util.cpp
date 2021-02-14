@@ -1,4 +1,5 @@
 #include "util.hpp"
+#include "../player.hpp"
 
 namespace mods::forge_engine {
 	std::string random_yaml(const std::vector<std::string>& files) {

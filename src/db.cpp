@@ -51,6 +51,7 @@
 #include "mods/zone.hpp"
 #include "mods/classes/ghost.hpp"
 #include "mods/mob-roam.hpp"
+#include "mods/util-map.hpp"
 
 namespace mods::rooms {
 	extern void set_sector_type(room_rnum room_id, int sector_type);

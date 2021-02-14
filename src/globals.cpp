@@ -25,6 +25,7 @@
 #include "mods/debug-pre-game.hpp"
 #include "mods/prefs.hpp"
 #include "mods/replenish.hpp"
+#include "config.hpp"
 
 
 extern int errno;
@@ -99,15 +100,15 @@ namespace mods {
 		std::unique_ptr<lmdb_db> db;
 		player_ptr_t player_nobody;
 		std::unique_ptr<mods::deferred> defer_queue;
-		duk_context* duktape_context;
+		//duk_context* duktape_context;
 		ai_state_map states;
 		std::map<std::string,player_ptr_t> player_name_map;
 		//std::vector<std::vector<char_data*>> room_list; /**!TODO turn this into std::shared_ptr<...> */
 		room_list_t room_list;
 		player_list_t player_list;
 		std::set<player_ptr_t> dissolver_queue;
-		std::vector<mods::chat::channel> chan;
-		std::vector<std::string> chan_verbs;
+		//std::vector<mods::chat::channel> chan;
+		//std::vector<std::string> chan_verbs;
 		bool f_import_rooms;
 		player_ptr_t current_player;
 		std::string bootup_test_suite;
@@ -428,10 +429,10 @@ namespace mods {
 			db = std::make_unique<lmdb_db>(lmdb_dir,lmdb_name,MDB_WRITEMAP,0600,true);
 			player_nobody = nullptr;
 			defer_queue = std::make_unique<mods::deferred>(mods::deferred::TICK_RESOLUTION);
-			duktape_context = mods::js::new_context();
+			mods::js::create_new_context();
 			mods::js::load_c_functions();
 			/** TODO: make configurable */
-			mods::js::load_library(mods::globals::duktape_context,"/lib/quests/quests.js");
+			mods::js::load_library("/lib/quests/quests.js");
 			mods::behaviour_tree_impl::load_trees();
 			if(f_test_suite.length()) {
 				//if(!f_test_suite.compare("db")){
@@ -864,21 +865,7 @@ namespace mods {
 				return false;
 			}
 			if(vec_args.size()) {
-				for(auto verb : chan_verbs) {
-					if(mods::util::is_lower_match(CAT("no",verb),vec_args[0])) {
-						player->send("Turning {grn}OFF{/grn} '%s' channel...\r\n",verb.c_str());
-						PLAYER_SET(CAT("no",verb),"1");
-						return false;
-					}
-				}
-				if(invec(vec_args[0],chan_verbs)) {
-					auto verb = vec_args[0];
-					auto pos = argument.find_first_of(" ");
-					if(pos == std::string::npos) {
-						return false;
-					}
-					PLAYER_SET(CAT("no",verb),"0");
-					mods::chat::transmit(vec_args[0],player->name().c_str(),argument.substr(argument.find_first_of(" ")));
+				if(mods::chat::handle_chat(player,argument)) {
 					return false;
 				}
 			}

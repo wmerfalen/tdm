@@ -311,10 +311,10 @@ namespace mods::mobs::lowly_security_behaviour_tree {
 			}
 			/** if stunned */
 			if(mob.player_ptr()->get_affect_dissolver().has_any({AFF(BLIND),AFF(DISORIENT)})) {
-				mods::response_team::radio::help_dazed(mob.uuid());
+				mods::response_team::radio::help_dazed(mob.uuid(),"Force two, 803 niner {broad_location}. Requesting immediate backup.");
 				return TSUCCESS;
 			}
-			mods::response_team::radio::report_violence(mob.uuid());
+			mods::response_team::radio::report_violence(mob.uuid(),"Force two, 908 at {exact_location}. Shots fired, I repeat: shots fired. Requesting immediate assistance");
 			return TSUCCESS;
 		});
 	}
