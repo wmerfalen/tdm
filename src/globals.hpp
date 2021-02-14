@@ -3,14 +3,11 @@
 
 
 #include "structs.h"
-//#include "mods/player.hpp"
 #include "mods/deferred.hpp"
-#include "mods/lmdb.hpp"
-//#include "mods/projectile.hpp"
 #include "mods/js.hpp"
-#include "mods/drone.hpp"
+//#include "mods/drone.hpp"
 #include "mods/conf.hpp"
-#include "mods/chat.hpp"
+//#include "mods/chat.hpp"
 #include "mods/crypto.hpp"
 #include "mods/affects.hpp"
 #include <deque>

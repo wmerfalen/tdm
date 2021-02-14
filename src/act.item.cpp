@@ -24,6 +24,7 @@
 #include "mods/armor/includes.hpp"
 #include "mods/yaml.hpp"
 #include "mods/skills.hpp"
+#include "mods/drone.hpp"
 
 #define __MENTOC_SHOW_WEAR_DEBUG_OUTPUT__
 /* extern variables */

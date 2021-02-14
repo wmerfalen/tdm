@@ -18,6 +18,7 @@
 #include "mods/doors.hpp"
 #include "mods/rand.hpp"
 #include "mods/demolitions.hpp"
+#include "interpreter.h"
 
 
 extern void obj_to_room(obj_ptr_t object, room_rnum room);
@@ -25,11 +26,11 @@ extern void obj_from_room(obj_ptr_t object);
 /**
  * Description:
  * 'cancel' stops an installation of a device
- * 'cancel' stops 
- * 
+ * 'cancel' stops
+ *
  * Arguments:
  * cancel
- * 
+ *
  */
 /**
  * @brief stops a player from performing his/her blocking action
@@ -38,13 +39,13 @@ extern void obj_from_room(obj_ptr_t object);
  */
 ACMD(do_cancel) {
 	DO_HELP("cancel");
-	if(!mods::player_utils::is_installing(player)){
+	if(!mods::player_utils::is_installing(player)) {
 		player->sendln("Cancel what? You're not installing anything...");
 		return;
 	}
 
 	std::string message = "You stop installing.";
-	switch(player->current_block()){
+	switch(player->current_block()) {
 		case mods::deferred::EVENT_PLAYER_UNBLOCK_INSTALLATION:
 			message = "You stop installing.";
 			break;
@@ -55,7 +56,7 @@ ACMD(do_cancel) {
 			message = "You stop reviving...";
 			break;
 		case mods::deferred::EVENT_GET_ATTACKED:
-			/** Purposely using fall-through behaviour */
+		/** Purposely using fall-through behaviour */
 		default:
 			message = "You stop what you're doing.";
 			break;
@@ -68,28 +69,28 @@ ACMD(do_cancel) {
  * Description:
  * install works on claymore mines and cameras. In the future,
  * we'll be implementing this command for motion sensors as well.
- * 
+ *
  * Arguments:
  * install <claymore> <direction>
  *
  * install <camera> <face-direction>
  *
  *
- * 
+ *
  */
 ACMD(do_install) {
 	DO_HELP("install");
-	
+
 	auto parsed = mods::util::parse_objdir(player,argument);
-	if(!parsed.obj){
+	if(!parsed.obj) {
 		player->sendln("You don't have anything that matches that description");
 		return;
 	}
-	if(parsed.dir < 0){
+	if(parsed.dir < 0) {
 		player->sendln("Use a valid direction");
 		return;
 	}
-	auto & obj_name = parsed.obj->name;
+	auto& obj_name = parsed.obj->name;
 	if(mods::object_utils::is_claymore(parsed.obj)) {
 		mods::demolitions::plant_claymore(player,parsed.dir,parsed.obj);
 		return;
@@ -112,47 +113,47 @@ ACMD(do_install) {
 /**
  * Description:
  * uninstall works on claymore mines and cameras.
- * 
+ *
  * Arguments:
  * uninstall <claymore> <direction>
  *
  * uninstall <camera> <face-direction>
- * 
+ *
  */
 ACMD(do_uninstall) {
-	
-	if(mods::util::parse_help(argument)){
+
+	if(mods::util::parse_help(argument)) {
 		player->pager_start();
-		*player << 
-			"description: the 'uninstall' command is used to uninstall \r\n" <<
-			"devices like cameras or claymore mines.\r\n" <<
-			"example:\r\n" <<
-			"uninstall camera north\r\n" <<
-			"\r\n" <<
-			"For more information: see the help manual for camera\r\n" <<
-			"For more information: see the help manual for claymore\r\n" <<
-			"\r\n" << 
-			"type 'help camera' or 'help claymore' for more information on\r\n" <<
-			"those game dynamics.\r\n" <<
-			"\r\n" <<
-			"this documentation was written on 2020-03-26.\r\n" <<
-			"\r\n";
+		*player <<
+		        "description: the 'uninstall' command is used to uninstall \r\n" <<
+		        "devices like cameras or claymore mines.\r\n" <<
+		        "example:\r\n" <<
+		        "uninstall camera north\r\n" <<
+		        "\r\n" <<
+		        "For more information: see the help manual for camera\r\n" <<
+		        "For more information: see the help manual for claymore\r\n" <<
+		        "\r\n" <<
+		        "type 'help camera' or 'help claymore' for more information on\r\n" <<
+		        "those game dynamics.\r\n" <<
+		        "\r\n" <<
+		        "this documentation was written on 2020-03-26.\r\n" <<
+		        "\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
 	}
 	auto parsed = mods::util::parse_objdir(player,argument);
-	if(!parsed.obj){
+	if(!parsed.obj) {
 		player->sendln("You don't have anything that matches that description");
 		return;
 	}
-	if(parsed.dir < 0){
+	if(parsed.dir < 0) {
 		player->sendln("Use a valid direction");
 		return;
 	}
-	auto & obj_name = parsed.obj->name;
+	auto& obj_name = parsed.obj->name;
 	if(mods::object_utils::is_claymore(parsed.obj)) {
-		if(!mods::object_utils::is_owner(parsed.obj,player)){
+		if(!mods::object_utils::is_owner(parsed.obj,player)) {
 			player->sendln("You don't own that device.");
 			return;
 		}
@@ -161,7 +162,7 @@ ACMD(do_uninstall) {
 		return;
 	}
 	if(mods::object_utils::is_camera(parsed.obj)) {
-		if(!mods::object_utils::is_owner(parsed.obj,player)){
+		if(!mods::object_utils::is_owner(parsed.obj,player)) {
 			player->sendln("You don't own that device.");
 			return;
 		}
@@ -178,28 +179,28 @@ ACMD(do_uninstall) {
 }
 
 ACMD(do_breach) {
-	
+
 	constexpr unsigned int max_char = 5;
 	std::array<char,max_char> direction;
 	one_argument(argument,&direction[0],max_char);
 
 	auto door = mods::globals::dir_int(direction[0]);
-	if(!argument || door == -1){
+	if(!argument || door == -1) {
 		*player << "usage: breach <direction>\r\n";
 		return;
 	}
 
 	auto holding = player->equipment(WEAR_HOLD);
-	if(!holding){
+	if(!holding) {
 		player->sendln("You must be holding a breach charge to do that.");
 		return;
 	}
 	auto room = player->room();
-	if(mods::doors::is_open(room,door)){
+	if(mods::doors::is_open(room,door)) {
 		player->sendln("That door is already open.");
 		return;
 	}
-	if(mods::doors::is_dir_electrified(room,door)){
+	if(mods::doors::is_dir_electrified(room,door)) {
 		player->sendln("You attempt to place the breach charge but notice that the door is {blu}ELECTRIFIED{/blu}!!!");
 		auto dam = dice(16,6); /** TODO: need to calculate resistences and what not */
 		GET_HIT(player->cd()) -= dam; /** FIXME ^ */
@@ -217,22 +218,22 @@ ACMD(do_thermite) {
 	one_argument(argument,&direction[0],max_char);
 
 	auto door = mods::globals::dir_int(direction[0]);
-	if(!argument || door == -1){
+	if(!argument || door == -1) {
 		*player << "usage: thermite <direction>\r\n";
 		return;
 	}
 
 	auto holding = player->equipment(WEAR_HOLD);
-	if(!holding){
+	if(!holding) {
 		player->sendln("You must be holding a breach charge to do that.");
 		return;
 	}
 	auto room = player->room();
-	if(mods::doors::is_open(room,door)){
+	if(mods::doors::is_open(room,door)) {
 		player->sendln("That door is already open.");
 		return;
 	}
-	if(mods::doors::is_dir_electrified(room,door)){
+	if(mods::doors::is_dir_electrified(room,door)) {
 		player->sendln("You attempt to place the breach charge but notice that the door is {blu}ELECTRIFIED{/blu}!!!");
 		auto dam = mods::rand::roll(16,6); /** TODO: need to calculate resistences and what not */
 		GET_HIT(player->cd()) -= dam; /** FIXME ^ */

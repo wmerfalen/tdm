@@ -6,6 +6,7 @@
 #include <string>
 #include "../globals.hpp"
 #include "classes/super-user-fiddler.hpp"
+#include "../interpreter.h"
 
 namespace mods::super_users {
 	bool player_name_is(std::string_view);

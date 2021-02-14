@@ -21,6 +21,7 @@
 #include "mods/interpreter.hpp"
 #include "mods/screen-searcher.hpp"
 #include "mods/super-users.hpp"
+#include <dirent.h>
 using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
 

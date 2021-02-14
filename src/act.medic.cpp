@@ -7,6 +7,7 @@
 #include "db.h"
 #include "mods/util.hpp"
 #include "mods/player.hpp"
+#include "interpreter.h"
 
 using sptr_medic = std::shared_ptr<mods::classes::medic>;
 using class_type = mods::player::class_type;

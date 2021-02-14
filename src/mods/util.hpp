@@ -1,24 +1,13 @@
 #ifndef __MENTOC_UTILS_HEADER__
 #define  __MENTOC_UTILS_HEADER__
 
-#include <iostream>
-#include <string>
-#include <regex>
 #include "../globals.hpp"
-#include <optional>
-#include <stdlib.h>
-#include <sys/types.h>	/** for opendir() */
-#include <dirent.h>			/** for opendir() */
-#include <sys/stat.h>		/** for mkdir() */
 #include "flags.hpp"
-#ifdef MENTOC_CPP_2017
 #include <filesystem>
-#else
-#include <dirent.h>
-#endif
-#include <ctime>
+//#include <ctime>
 #include <random>
 #include <regex>
+#include "../interpreter.h"
 
 #ifndef __MENTOC_STRING_LIT__
 #define __MENTOC_STRING_LIT__

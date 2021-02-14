@@ -44,6 +44,10 @@ extern int port_main(int,char**);
 extern int next_room_number();
 extern int next_room_vnum();
 extern void look_at_room(char_data* ch,int ignore_brief);
+namespace mods::chat {
+	extern void setup_public_channels();
+	extern bool handle_chat(player_ptr_t& player,std::string_view argument);
+};
 #define INIT(A) \
 	namespace A { extern void init(); };
 INIT(mods::rand);

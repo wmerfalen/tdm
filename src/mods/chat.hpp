@@ -1,25 +1,7 @@
 #ifndef __MENTOC_MODS_CHAT_HEADER__
 #define __MENTOC_MODS_CHAT_HEADER__
-#include <time.h>
-#include <netdb.h>
-#include <sys/socket.h>
-#include <cstdio>
-typedef int socket_t;
 #include "../structs.h"
-#include "../utils.h"
-#include "../conf.h"
-#include "../sysdep.h"
-#include <array>
-namespace mods::chat {
-	struct channel;
-}
-#include "../globals.hpp"
 #include "util.hpp"
-#include <sys/stat.h>
-#include <string_view>
-#include "../interpreter.h"
-#include <utility>
-#include "../screen.h"
 namespace mods::chat {
 	using str_t = std::string;
 	void add_public_channel(str_t channel,str_t verb);
