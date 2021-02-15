@@ -76,6 +76,7 @@ INIT(mods::weapons::damage_types);
 INIT(mods::fluxkraft);
 INIT(mods::fluxkraft::arcon_bar);
 INIT(mods::builder::meqbuild);
+INIT(mods::builder::hqbuild);
 #undef INIT
 
 namespace mods::unit_tests {
@@ -513,6 +514,7 @@ namespace mods {
 			mods::fluxkraft::init();
 			mods::fluxkraft::arcon_bar::init();
 			mods::builder::meqbuild::init();
+			mods::builder::hqbuild::init();
 			::offensive::init();
 			::builder::init();
 			::informative::init();

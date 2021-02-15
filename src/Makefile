@@ -91,6 +91,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/super-users mods/builder/object-placement \
 					 mods/orm/mob-equipment mods/builder/meqbuild \
 					 mods/orm/mob-equipment-map \
+					 mods/orm/hq mods/builder/hqbuild \
 					 mods/integral-objects mods/integral-objects-db \
 					 mods/orm/integral-object mods/orm/camera-feed mods/orm/door-event \
 					 mods/mini-games/line-up mods/orm/mini-game mods/mini-games \
@@ -116,7 +117,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/orm/player-skill-usage \
 					 mods/fluxkraft/generator mods/fluxkraft/shape-dictionary \
 					 mods/fluxkraft/arcon-metropolitan mods/fluxkraft/arcon-bar \
-					 mods/response-team/radio
+					 mods/response-team/radio mods/response-team/hq-locations
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

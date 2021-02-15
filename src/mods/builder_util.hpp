@@ -275,3 +275,6 @@ namespace mods::builder_util {
 		*player << "{gld}[" << key << "]{/gld} :->{red} [" << value << "]{/red}\r\n";
 	}
 };
+extern void r_error(const player_ptr_t& player,std::string_view msg);
+extern void r_success(const player_ptr_t& player,std::string_view msg);
+extern void r_status(const player_ptr_t& player,std::string_view msg);
