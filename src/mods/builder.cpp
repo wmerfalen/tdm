@@ -194,6 +194,20 @@ void r_status(const player_ptr_t& player,std::string_view msg) {
 	mods::builder::report_status<player_ptr_t>(player,msg.data());
 }
 namespace mods::builder {
+	template <typename T>
+	void rb_debug(T s) {
+#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
+		std::cerr << "[builder-debug]: " << s << "\n";
+#endif
+	}
+	template <typename T>
+	void rb_map_debug(T& t) {
+		rb_debug("dumping map");
+		for(auto& pair: t) {
+			rb_debug(std::string("values[") + pair.first + "]=" + pair.second);
+		}
+		rb_debug("Done dumping map");
+	}
 	void encode_scripted_response(player_ptr_t& player, std::string_view encoded) {
 		if(!player->is_executing_js()) {
 			return;
@@ -619,20 +633,6 @@ namespace mods::builder {
 	}
 
 
-	template <typename T>
-	void rb_debug(T s) {
-#ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
-		std::cerr << "[builder-debug]: " << s << "\n";
-#endif
-	}
-	template <typename T>
-	void rb_map_debug(T& t) {
-		rb_debug("dumping map");
-		for(auto& pair: t) {
-			rb_debug(std::string("values[") + pair.first + "]=" + pair.second);
-		}
-		rb_debug("Done dumping map");
-	}
 
 	using values_t = std::map<std::string,std::string>;
 	std::tuple<bool,zone_pkid_t,std::string> update_zone_with_placements(int virtual_number,player_ptr_t player) {
@@ -1108,10 +1108,17 @@ namespace mods::builder {
 		return true;
 	}
 	bool delete_zone(int id) {
-		auto t = mods::pq::transaction(*mods::globals::pq_con);
-		std::string delete_sql = std::string("DELETE FROM zone where id=") + t.quote(id);
-		mods::pq::exec(t,delete_sql);
-		mods::pq::commit(t);
+		try {
+			auto t = mods::pq::transaction(*mods::globals::pq_con);
+			std::string delete_sql = std::string("DELETE FROM zone where id=") + t.quote(id);
+			mods::pq::exec(t,delete_sql);
+			mods::pq::commit(t);
+		} catch(std::exception& e) {
+			REPORT_DB_ISSUE("deleting zone ",e.what());
+			rb_debug("EXCEPTION (DELETE)");
+			rb_debug(e.what());
+			return false;
+		}
 		return true;
 	}
 	std::pair<bool,std::string> zone_place(int zone_id,std::string_view zone_command,std::string_view if_flag,std::string_view arg1,std::string_view arg2,std::string_view arg3) {
@@ -4546,52 +4553,59 @@ ACMD(do_zbuild) {
 		if(!player->is_executing_js()) {
 			r_status(player,"listing...");
 		}
-		auto t = mods::pq::transaction(*mods::globals::pq_con);
-		std::string check_sql = "SELECT id,zone_start,zone_end,zone_name,lifespan,reset_mode FROM zone";
-		auto check_result = mods::pq::exec(t,check_sql);
-		mods::pq::commit(t);
+		try {
+			auto t = mods::pq::transaction(*mods::globals::pq_con);
+			std::string check_sql = "SELECT id,zone_start,zone_end,zone_name,lifespan,reset_mode FROM zone";
+			auto check_result = mods::pq::exec(t,check_sql);
+			mods::pq::commit(t);
 
-		if(!player->is_executing_js()) {
-			player->pager_start();
-		}
-
-		jxcomp jx;
-		jx.array_start("zones");
-		for(auto row : check_result) {
 			if(!player->is_executing_js()) {
-				std::string acc = "{red}";
-				acc += std::string("Virtual ZoneID:{/red}");
-				acc += std::to_string(row[0].as<int>());
-				acc += "{/red}[";
-				acc += std::to_string(row[1].as<int>());
-				acc += "-";
-				acc += std::to_string(row[2].as<int>());
-				acc += "]{gld}{";
-				acc += row["zone_name"].c_str();
-				acc += "}{/gld} (";
-				acc += std::to_string(row[4].as<int>());
-				acc += ") (";
-				acc += std::to_string(row[5].as<int>());
-				acc += ")\r\n";
-				*player << acc;
-			} else {
-				jx.object_start("")
-				.push("id",row[0].as<int>())
-				.push("start",row[1].as<int>())
-				.push("end",row[2].as<int>())
-				.push("name",row["zone_name"].c_str())
-				.push("lifespan",row["lifespan"].as<int>())
-				.push("reset_mode",row["reset_mode"].as<int>())
-				.object_end();
+				player->pager_start();
 			}
-		}
 
-		if(player->is_executing_js()) {
-			jx.array_end();
-			*player << jx.get();
-		} else {
-			player->pager_end();
-			player->page(0);
+			jxcomp jx;
+			jx.array_start("zones");
+			for(auto row : check_result) {
+				if(!player->is_executing_js()) {
+					std::string acc = "{red}";
+					acc += std::string("Virtual ZoneID:{/red}");
+					acc += std::to_string(row[0].as<int>());
+					acc += "{/red}[";
+					acc += std::to_string(row[1].as<int>());
+					acc += "-";
+					acc += std::to_string(row[2].as<int>());
+					acc += "]{gld}{";
+					acc += row["zone_name"].c_str();
+					acc += "}{/gld} (";
+					acc += std::to_string(row[4].as<int>());
+					acc += ") (";
+					acc += std::to_string(row[5].as<int>());
+					acc += ")\r\n";
+					*player << acc;
+				} else {
+					jx.object_start("")
+					.push("id",row[0].as<int>())
+					.push("start",row[1].as<int>())
+					.push("end",row[2].as<int>())
+					.push("name",row["zone_name"].c_str())
+					.push("lifespan",row["lifespan"].as<int>())
+					.push("reset_mode",row["reset_mode"].as<int>())
+					.object_end();
+				}
+			}
+
+			if(player->is_executing_js()) {
+				jx.array_end();
+				*player << jx.get();
+			} else {
+				player->pager_end();
+				player->page(0);
+			}
+		} catch(std::exception& e) {
+			REPORT_DB_ISSUE("listing zone ",e.what());
+			mods::builder::rb_debug("EXCEPTION (SELECT)");
+			mods::builder::rb_debug(e.what());
+			return;
 		}
 		return;
 	}
