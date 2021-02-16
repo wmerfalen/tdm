@@ -47,10 +47,20 @@ namespace mods::orm {
 		std::string hq_affiliation;
 		uint64_t hq_level;
 		uint32_t hq_room_vnum;
+		uint16_t hq_basic_mob_count;
+		uint16_t hq_advanced_mob_count;
+		uint16_t hq_elite_mob_count;
+		uint16_t hq_suv_count;
+		uint16_t hq_sedan_count;
+		uint16_t hq_armored_van_count;
+		uint16_t hq_replenish_ticks;
+		uint16_t hq_replenish_basic_count;
+		uint16_t hq_replenish_advanced_count;
+		uint16_t hq_replenish_elite_count;
 		long created_at;
 		long updated_at;
 		bool loaded;
 	};
-	static std::deque<std::shared_ptr<mods::orm::hq>> hq_list;
+	extern std::deque<std::shared_ptr<mods::orm::hq>> hq_list;
 };
 #endif

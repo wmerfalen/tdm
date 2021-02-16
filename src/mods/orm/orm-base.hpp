@@ -26,6 +26,28 @@ namespace mods::orm {
 	}
 	template <typename TClassType,typename TPrimaryType>
 	struct orm_base {
+		std::string dump() {
+			std::string dump;
+			for(const auto& pair : export_class()) {
+				dump += CAT("[",pair.first,"]:->",pair.second,"\r\n");
+			}
+			return dump;
+		}
+		std::string encode() {
+			std::string dump;
+			const auto data = export_class();
+			std::size_t ctr = 0;
+			dump = "[";
+			for(const auto& pair : data) {
+				dump += CAT("{klen:",pair.first.length(),",key:\"",pair.first,"\",vlen:",pair.second.length(),",value:\"",pair.second,"\"}");
+				if(++ctr == data.size()) {
+					break;
+				}
+				dump += ",";
+			}
+			dump += "]";
+			return dump;
+		}
 		template <typename TClass>
 		static inline std::tuple<int16_t,std::string,uint64_t> create(TClass* c) {
 			auto status = mods::orm::util::insert_returning<TClass,sql_compositor>(c,c->primary_key_name());

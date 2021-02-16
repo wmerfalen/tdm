@@ -811,25 +811,43 @@ namespace mods::builder {
 		} else {
 			rb_debug("need to insert instead of update");
 			values["room_number"] = number;
-			auto txn2 = txn();
-			sql_compositor comp("room",&txn2);
-			auto sql = comp
-			           .insert()
-			           .into("room")
-			           .values(values).sql();
-			rb_debug("calling exec");
-			rb_debug(sql);
-			rb_map_debug<decltype(values)>(values);
-			mods::pq::exec(txn2,sql);
-			mods::pq::commit(txn2);
+			try {
+				auto txn2 = txn();
+				sql_compositor comp("room",&txn2);
+				auto sql = comp
+				           .insert()
+				           .into("room")
+				           .values(values).sql();
+				rb_debug("calling exec");
+				rb_debug(sql);
+				rb_map_debug<decltype(values)>(values);
+				mods::pq::exec(txn2,sql);
+				mods::pq::commit(txn2);
+			} catch(std::exception& e) {
+				REPORT_DB_ISSUE("inserting room in db",e.what());
+				error_string = "error inserting room in db: '";
+				error_string += e.what();
+				rb_debug("EXCEPTION (INSERT)");
+				rb_debug(e.what());
+				rb_debug(error_string);
+				return -4;
+			}
 			rb_debug("committing (didnt update, inserted instead)");
 		}
 
 		rb_debug("delete transaction");
-		{
+		try {
 			auto del_txn = txn();
 			mods::pq::exec(del_txn,std::string("DELETE FROM room_direction_data where room_number=") + std::to_string(world[in_room].number));
 			mods::pq::commit(del_txn);
+		} catch(std::exception& e) {
+			REPORT_DB_ISSUE("deleting room_direction_data ",e.what());
+			error_string = "error deleting room_direction_data in db: '";
+			error_string += e.what();
+			rb_debug("EXCEPTION (DELETE)");
+			rb_debug(e.what());
+			rb_debug(error_string);
+			return -5;
 		}
 
 		rb_debug("Deleted room_direction-data... now, insert some");
@@ -889,6 +907,12 @@ namespace mods::builder {
 						mods::pq::commit(txn2);
 					} catch(std::exception& e) {
 						REPORT_DB_ISSUE("room dir data in db",e.what());
+						error_string = "error deleting room_direction_data in db: '";
+						error_string += e.what();
+						rb_debug("EXCEPTION (DELETE)");
+						rb_debug(e.what());
+						rb_debug(error_string);
+						return -5;
 					}
 				}
 				//}
@@ -905,6 +929,12 @@ namespace mods::builder {
 				rb_debug("deleted..");
 			} catch(std::exception& e) {
 				REPORT_DB_ISSUE("deleting room extra desc data in db",e.what());
+				error_string = "error deleting room_direction_data in db: '";
+				error_string += e.what();
+				rb_debug("EXCEPTION (DELETE)");
+				rb_debug(e.what());
+				rb_debug(error_string);
+				return -6;
 			}
 			for(const auto& ex_desc : world[in_room].ex_descriptions()) {
 				values.clear();
@@ -927,7 +957,7 @@ namespace mods::builder {
 						error_string = "[room_extra_desc_data]->error: '";
 						error_string += e.what();
 						rb_debug(error_string);
-						return -5;
+						return -7;
 					}
 				}
 			}
@@ -4949,7 +4979,10 @@ ACMD(do_rbuild) {
 		        "  |--> clears all of the paved rooms that were created\r\n" <<
 		        " {grn}rbuild{/grn} {red}list-paved{/red}\r\n" <<
 		        "  |--> lists all the currently paved transaction id numbers\r\n" <<
-		        "[documentation written on 2018-01-19]\r\n" <<
+
+		        " {grn}rbuild{/grn} {red}pave-transaction-id{/red}\r\n" <<
+		        "  |--> get current pave transaction id (if one exists).\r\n" <<
+		        "[documentation written on 2021-02-18]\r\n" <<
 		        "\r\n";
 		player->pager_end();
 		player->page(0);
@@ -5338,6 +5371,17 @@ ACMD(do_rbuild) {
 		}
 	}
 
+	args = mods::util::subcmd_args<20,args_t>(argument,"pave-transaction-id");
+	if(args.has_value()) {
+		ENCODE_INIT();
+		if(player->builder_data) {
+			ENCODE_STR(player->builder_data->room_pavements.transact_id);
+			r_success(player,tostr(player->builder_data->room_pavements.transact_id));
+			return;
+		}
+		r_error(player,"it doesn't appear that you've been paving");
+		return;
+	}
 	args = mods::util::subcmd_args<11,args_t>(argument,"list-paved");
 
 	if(args.has_value()) {

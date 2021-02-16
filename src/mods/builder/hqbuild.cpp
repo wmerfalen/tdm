@@ -4,9 +4,6 @@
 #include "../orm/hq.hpp"
 #include "../affiliations.hpp"
 
-namespace mods::orm {
-	extern std::deque<std::shared_ptr<mods::orm::hq>> hq_list;
-};
 namespace mods::builder::hqbuild {
 	void clear() {
 		mods::orm::hq_list.clear();
@@ -49,6 +46,37 @@ namespace mods::builder::hqbuild {
 		}
 		return list;
 	}
+	bool valid_affiliation(std::string_view aff) {
+		for(const auto& pair : mods::affiliation_map()) {
+			if(pair.first.compare(aff.data()) == 0) {
+				return true;
+			}
+
+		}
+		return false;
+	}
+	std::string& attribute_list() {
+		static std::string list;
+		if(list.length()) {
+			return list;
+		}
+		for(const auto& item : {
+		            "affiliation",
+		            "basic_mob_count",
+		            "advanced_mob_count",
+		            "elite_mob_count",
+		            "suv_count",
+		            "sedan_count",
+		            "armored_van_count",
+		            "replenish_ticks",
+		            "replenish_basic_count",
+		            "replenish_advanced_count",
+		            "replenish_elite_count",
+		        }) {
+			list += CAT("  {gld}|:: ",item,"{/gld}\r\n");
+		}
+		return list;
+	}
 
 	using args_t = std::vector<std::string>;
 
@@ -68,6 +96,12 @@ namespace mods::builder::hqbuild {
 			        "  |--> create a hq in the current room.\r\n" <<
 			        "  {gld}|:: -:[affiliations]:-{/gld}\r\n" <<
 			        affiliation_list() <<
+
+			        /** set */
+			        " {grn}hqbuild{/grn} {red}set <attribute> <value>{/red}\r\n" <<
+			        "  |--> set attribute to value.\r\n" <<
+			        "  {gld}|:: -:[attributes]:-{/gld}\r\n" <<
+			        attribute_list() <<
 
 			        /** save */
 			        " {grn}hqbuild{/grn} {red}save <room_vnum>...<room_vnumN>{/red}\r\n" <<
@@ -100,6 +134,78 @@ namespace mods::builder::hqbuild {
 				load_all();
 				r_success(player,"Reloaded");
 				ENCODE_R("ok");
+				return;
+			}
+		}
+		/** set */
+		{
+			auto args = mods::util::subcmd_args<4,args_t>(argument,"set");
+			if(args.has_value()) {
+				ENCODE_INIT();
+				auto opt_hq = by_room_vnum(player->vnum());
+				if(!opt_hq.has_value()) {
+					r_error(player,"no hq in this room");
+					return;
+				}
+				auto& hq = opt_hq.value();
+				auto cmd_args = args.value();
+				/**
+				 * cmd_args will be: [0] => set, [1] => attribute [2] => value
+				 */
+				if(cmd_args.size() < 3) {
+					r_error(player,"Error: not enough arguments");
+					return;
+				}
+				const auto& attribute = cmd_args[1];
+				if(attribute.compare("affiliation") == 0) {
+					if(!valid_affiliation(cmd_args[2])) {
+						ENCODE_R("invalid");
+						r_error(player,"Invalid affiliation");
+						return;
+					}
+					hq->hq_affiliation = cmd_args[2];
+					r_success(player,"Value set.");
+					ENCODE_OK();
+					return;
+				}
+				auto opt_value = mods::util::stoi(cmd_args[2]);
+				if(!opt_value.has_value()) {
+					r_error(player,"value must be a number");
+					return;
+				}
+				if(attribute.compare("basic_mob_count") == 0) {
+					hq->hq_basic_mob_count = opt_value.value();
+				}
+				if(attribute.compare("advanced_mob_count") == 0) {
+					hq->hq_advanced_mob_count = opt_value.value();
+				}
+				if(attribute.compare("elite_mob_count") == 0) {
+					hq->hq_elite_mob_count = opt_value.value();
+				}
+				if(attribute.compare("suv_count") == 0) {
+					hq->hq_suv_count = opt_value.value();
+				}
+				if(attribute.compare("sedan_count") == 0) {
+					hq->hq_sedan_count = opt_value.value();
+				}
+				if(attribute.compare("armored_van_count") == 0) {
+					hq->hq_armored_van_count = opt_value.value();
+				}
+				if(attribute.compare("replenish_ticks") == 0) {
+					hq->hq_replenish_ticks = opt_value.value();
+				}
+				if(attribute.compare("replenish_basic_count") == 0) {
+					hq->hq_replenish_basic_count = opt_value.value();
+				}
+				if(attribute.compare("replenish_advanced_count") == 0) {
+					hq->hq_replenish_advanced_count = opt_value.value();
+				}
+				if(attribute.compare("replenish_elite_count") == 0) {
+					hq->hq_replenish_elite_count = opt_value.value();
+				}
+
+				r_success(player,"Value set.");
+				ENCODE_OK();
 				return;
 			}
 		}
@@ -142,8 +248,8 @@ namespace mods::builder::hqbuild {
 				std::string  encoded_response = "";
 				if(cmd_args.size() == 0) {
 					for(const auto& profile : mods::orm::hq_list) {
-						r_success(player, CAT("room_vnum: ",profile->hq_room_vnum," [affiliation]: '",profile->hq_affiliation.c_str(),"' [level]:",profile->hq_level,"\r\n"));
-						encoded_response += CAT(profile->hq_affiliation.c_str(),",",profile->hq_room_vnum,",",profile->hq_level,"|");
+						r_success(player, profile->dump());
+						encoded_response += profile->encode() + "\r\n";
 					}
 					ENCODE_R(encoded_response);
 					return;
@@ -160,8 +266,8 @@ namespace mods::builder::hqbuild {
 						continue;
 					}
 					auto& profile = opt_hq.value();
-					r_success(player, CAT("room_vnum: ",profile->hq_room_vnum," [affiliation]: '",profile->hq_affiliation.c_str(),"' [level]:",profile->hq_level,"\r\n"));
-					encoded_response += CAT(profile->hq_affiliation.c_str(),",",profile->hq_room_vnum,",",profile->hq_level,"|");
+					r_success(player, profile->dump());
+					encoded_response += profile->encode() + "\r\n";
 				}
 				ENCODE_R(encoded_response);
 				return;

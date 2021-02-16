@@ -1228,13 +1228,13 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				room.name.assign(room_records_row["name"]);
 				room.description.assign(room_records_row["description"]);
 				log("DEBUG: room: %d name: (%s), description: (%s)",mods::util::stoi<int>(room_records_row["id"].c_str()),room.name.c_str(),room.description.c_str());
-				room.number = room_records_row["room_number"].as<int>(0);
+				room.number = room_records_row["room_number"].as<int>();
 				log("parse_sql_rooms: room.number (%d)",room.number);
-				room.zone = room_records_row["zone"].as<int>(0);
-				room.sector_type = room_records_row["sector_type"].as<int>(0);
-				room.light = (room_records_row["light"]).as<int>(0);
+				room.zone = room_records_row["zone"].as<int>();
+				room.sector_type = room_records_row["sector_type"].as<int>();
+				room.light = (room_records_row["light"]).as<int>();
 
-				world.push_back(room);
+				world.emplace_back(room);
 				mods::globals::register_room(world.size());
 				mods::rooms::set_sector_type(world.size()-1,room_records_row["sector_type"].as<int>());
 				mods::rooms::set_flag_absolute(world.size()-1,room_records_row["room_flag"].as<int>(0));

@@ -402,7 +402,7 @@ room_data::room_data() {
 	init();
 }
 room_data::room_data(const room_data& r) {
-	init();
+	this->init();
 	number = r.number;
 	zone = r.zone;
 	sector_type = r.sector_type;

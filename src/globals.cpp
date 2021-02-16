@@ -999,6 +999,7 @@ namespace mods {
 					int target_x = world[cached_room].x + x;
 					int target_y = world[cached_room].y + y;
 					int target_z = world[cached_room].z + z;
+					auto current_zone = world[cached_room].zone;
 					room_vnum existing_room_vnum = get_room_by_coordinates(target_x,target_y,target_z);
 					room_data* existing_room = nullptr;
 					int real_room_id = 0;
@@ -1038,6 +1039,7 @@ namespace mods {
 						int new_room_vnum = next_room_vnum();
 						auto& w = world.back();
 						w.number = new_room_vnum;
+						w.zone = current_zone;
 						new_room_rnum = world.size() - 1;
 
 						world[cached_room].set_dir_option(

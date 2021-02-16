@@ -97,7 +97,6 @@ namespace mods::builder {
 	                                     );
 	bool create_direction(room_rnum room_id,byte direction,room_rnum room);
 	bool destroy_direction(room_rnum,int direction);
-	int save_to_db(room_rnum in_room);
 	int import_room(struct room_data*);
 	using zone_pkid_t = int;
 	std::tuple<bool,zone_pkid_t> save_zone_to_db(
