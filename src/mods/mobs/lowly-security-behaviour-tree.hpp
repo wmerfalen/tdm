@@ -2,20 +2,6 @@
 #define  __MENTOC_MODS_MOBS_LOWLY_SECURITY_BEHAVIOUR_TREE_HEADER__
 
 #include "lowly-security.hpp"
-//#include "../../globals.hpp"
-
-//#include "../damage-event.hpp"
-//#include "../scan.hpp"
-//#include "../rooms.hpp"
-//#include "room-watching.hpp"
-//#include "../doors.hpp"
-//#include "../rand.hpp"
-
-//#include "helpers.hpp"
-//#include "../weapon.hpp"
-//#include "../affects.hpp"
-//#include "../classes/ghost.hpp"
-//#include "../calc-visibility.hpp"
 #include "../radio.hpp"
 
 #define __MENTOC_SHOW_BEHAVIOUR_TREE_LOWLY_SECURITY_BTREE_DEBUG_OUTPUT__

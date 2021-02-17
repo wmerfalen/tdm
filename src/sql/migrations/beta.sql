@@ -1976,6 +1976,7 @@ COPY public.player (id, player_password, player_affection_plr_bitvector, player_
 1	foKntnEF3KSXA	0	0	far	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	M	0	0	0	0	0	0	0	0	0	0	0	PC	0	0	0	0	2019-03-20 22:38:47.454111	0	2019-03-20 22:38:47.454111	14680304
 \.
 
+update public.player set player_ability_strength=10, player_ability_strength_add=10, player_ability_intelligence=10, player_ability_wisdom=10, player_ability_dexterity=10, player_ability_constitution=10, player_ability_charisma=10, player_ability_alignment=10, player_attack_type=10, player_max_hitpoints=10, player_max_mana=10, player_max_move=10, player_gold=10, player_exp=10, player_hitpoints=10, player_mana=10, player_move=10, player_damroll=10, player_class=1, player_damnodice=10, player_damsizedice=10, player_level=1, player_hitroll=10, player_armor=10 where player_name='far';
 
 --
 -- Data for Name: player_classes; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -2567,6 +2568,7 @@ CREATE TABLE public.class_sniper (
 		ON DELETE CASCADE
 		ON UPDATE CASCADE
 );
+insert into public.class_sniper (sniper_player_id) VALUES((SELECT id from public.player where player_name='far'));
 ALTER TABLE public.mob_roam ADD COLUMN profile_name varchar(255);
 CREATE TABLE public.rifle_index (
   id SERIAL UNIQUE,
