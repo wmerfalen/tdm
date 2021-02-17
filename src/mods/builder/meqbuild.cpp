@@ -6,26 +6,27 @@
 #include "../orm/mob-equipment.hpp"
 #include "../orm/mob-equipment-map.hpp"
 #include "../orm/base.hpp"
+#include "../mob-equipment.hpp"
 
-namespace mods::orm {
-	extern std::deque<std::shared_ptr<mods::orm::mob_equipment>> mob_equipment_list;
-	extern std::deque<std::shared_ptr<mods::orm::mob_equipment_map>> mob_equipment_map_list;
-};
 namespace mods::builder::meqbuild {
+	static constexpr int MAX_MOB_EQUIPMENT_LIST = 1500;
+	static constexpr int MEQBUILD_MAX_ITEMS_LISTED = 150;
 	void clear() {
-		mods::orm::mob_equipment_list.clear();
-		mods::orm::mob_equipment_map_list.clear();
+		mods::orm::mob_equipment_list().clear();
+		mods::orm::mob_equipment_map_list().clear();
+		mods::mob_equipment::refresh_mappings();
 	}
 	void load_all() {
-		mods::orm::mob_equipment_list = std::move(mods::orm::load_all_by_table<mods::orm::mob_equipment>());
-		mods::orm::mob_equipment_map_list = std::move(mods::orm::load_all_by_table<mods::orm::mob_equipment_map>());
+		mods::orm::mob_equipment_list() = std::move(mods::orm::load_all_by_table<mods::orm::mob_equipment>());
+		mods::orm::mob_equipment_map_list() = std::move(mods::orm::load_all_by_table<mods::orm::mob_equipment_map>());
+		mods::mob_equipment::refresh_mappings();
 	}
 
 	namespace map {
 		bool delete_by_vnum(const uint64_t& vnum) {
 			std::deque<std::shared_ptr<mods::orm::mob_equipment_map>> list;
 			bool deleted = false;
-			for(auto& m : mods::orm::mob_equipment_map_list) {
+			for(auto& m : mods::orm::mob_equipment_map_list()) {
 				if(m->mmap_mob_vnum == vnum) {
 					m->destroy();
 					deleted = true;
@@ -33,12 +34,12 @@ namespace mods::builder::meqbuild {
 				}
 				list.emplace_back(std::move(m));
 			}
-			mods::orm::mob_equipment_map_list = std::move(list);
+			mods::orm::mob_equipment_map_list() = std::move(list);
 			return deleted;
 		}
 		std::vector<std::shared_ptr<mods::orm::mob_equipment_map>> by_mob_vnum(const uint64_t& vnum) {
 			std::vector<std::shared_ptr<mods::orm::mob_equipment_map>> list;
-			for(const auto& m : mods::orm::mob_equipment_map_list) {
+			for(const auto& m : mods::orm::mob_equipment_map_list()) {
 				if(m->mmap_mob_vnum == vnum) {
 					list.emplace_back(m);
 				}
@@ -47,7 +48,7 @@ namespace mods::builder::meqbuild {
 		}
 		std::vector<std::shared_ptr<mods::orm::mob_equipment_map>> by_profile_vnum(const uint64_t& vnum) {
 			std::vector<std::shared_ptr<mods::orm::mob_equipment_map>> list;
-			for(const auto& m : mods::orm::mob_equipment_map_list) {
+			for(const auto& m : mods::orm::mob_equipment_map_list()) {
 				if(m->mmap_mob_equipment_vnum == vnum) {
 					list.emplace_back(m);
 				}
@@ -58,7 +59,7 @@ namespace mods::builder::meqbuild {
 	bool delete_by_vnum(const uint64_t& vnum) {
 		std::deque<std::shared_ptr<mods::orm::mob_equipment>> list;
 		bool deleted = false;
-		for(auto& m : mods::orm::mob_equipment_list) {
+		for(auto& m : mods::orm::mob_equipment_list()) {
 			if(m->meq_vnum == vnum) {
 				m->destroy();
 				deleted = true;
@@ -66,11 +67,11 @@ namespace mods::builder::meqbuild {
 			}
 			list.emplace_back(std::move(m));
 		}
-		mods::orm::mob_equipment_list = std::move(list);
+		mods::orm::mob_equipment_list() = std::move(list);
 		return deleted;
 	}
 	std::optional<std::shared_ptr<mods::orm::mob_equipment>> by_vnum(const uint64_t& vnum) {
-		for(const auto& m : mods::orm::mob_equipment_list) {
+		for(const auto& m : mods::orm::mob_equipment_list()) {
 			if(m->meq_vnum == vnum) {
 				return m;
 			}
@@ -78,7 +79,7 @@ namespace mods::builder::meqbuild {
 		return std::nullopt;
 	}
 	std::optional<std::shared_ptr<mods::orm::mob_equipment>> by_profile(std::string_view name) {
-		for(const auto& m : mods::orm::mob_equipment_list) {
+		for(const auto& m : mods::orm::mob_equipment_list()) {
 			if(m->meq_profile_name.compare(name) == 0) {
 				return m;
 			}
@@ -165,6 +166,9 @@ namespace mods::builder::meqbuild {
 			        "  |:: {wht}meqbuild{/wht} {grn}remove 3 wield{/grn}\r\n" <<
 			        "  |--> clears the wield slot for profile 3\r\n" <<
 
+			        paginate_option("meqbuild","mob equipment profiles") <<
+			        list_extract_option("meqbuild","mob equipment profiles") <<
+
 			        /** delete */
 			        " {grn}meqbuild{/grn} {red}delete <virtual_number>...<virtual_numberN>{/red}\r\n" <<
 			        "  |--> deletes the profile\r\n" <<
@@ -172,8 +176,13 @@ namespace mods::builder::meqbuild {
 			        "  |:: {wht}meqbuild{/wht} {grn}delete 3{/grn}\r\n" <<
 
 			        /** list */
-			        " {grn}meqbuild{/grn} {red}list{/red}\r\n" <<
-			        "  |--> lists all mob equipment profiles\r\n" <<
+			        " {grn}meqbuild{/grn} {red}list [virtual_number]...[virtual_numberN]{/red}\r\n" <<
+			        "  |--> lists all mob equipment profiles optionally with virtual numbers\r\n" <<
+
+			        /** show */
+			        " {grn}meqbuild{/grn} {red}show <virtual_number>{/red}\r\n" <<
+			        "  |--> show a specific mob equipment profile\r\n" <<
+
 
 			        /** map-assign */
 			        " {grn}meqbuild{/grn} {red}map-assign <mob_vnum> <meq_vnum>{/red}\r\n" <<
@@ -208,8 +217,8 @@ namespace mods::builder::meqbuild {
 			auto args = mods::util::subcmd_args<11,args_t>(argument,"reload-all");
 			if(args.has_value()) {
 				ENCODE_INIT();
-				clear();
-				load_all();
+				mods::builder::meqbuild::clear();
+				mods::builder::meqbuild::load_all();
 				r_success(player,"Reloaded");
 				ENCODE_R("ok");
 				return;
@@ -242,6 +251,77 @@ namespace mods::builder::meqbuild {
 				return;
 			}
 		}
+		MENTOC_LIST_EXTRACT();
+
+		MENTOC_PAGINATED_LIST(mods::orm::mob_equipment_list());
+		{
+			auto args = mods::util::subcmd_args<5,args_t>(argument,"show");
+			if(args.has_value()) {
+				ENCODE_INIT();
+				auto cmd_args = args.value();
+				std::string encoded_response;
+				if(cmd_args.size() < 2) {
+					r_error(player,"atleast 1 vnum is needed");
+					return;
+				}
+				auto opt = mods::util::stoi(cmd_args[1]).value_or(-1);
+				if(opt < 0) {
+					r_error(player,"vnum must be positive");
+					return;
+				}
+				auto profile = by_vnum(opt);
+				if(profile.has_value()) {
+					r_success(player,profile.value()->dump());
+					ENCODE_R(profile.value()->encode());
+					return;
+				}
+				r_error(player,"no profile for that vnum");
+				return;
+			}
+		}
+
+		/** list */
+		{
+			auto args = mods::util::subcmd_args<5,args_t>(argument,"list");
+			if(args.has_value()) {
+				ENCODE_INIT();
+				auto cmd_args = args.value();
+				std::string encoded_response;
+				if(cmd_args.size() > 1) {
+					for(auto i = 1; i < cmd_args.size(); i++) {
+						auto opt = mods::util::stoi(cmd_args[i]).value_or(-1);
+						if(opt < 0) {
+							r_error(player,CAT("vnum must be positive for argument number ",i,": '",cmd_args[i],"'"));
+							continue;
+						}
+						auto profile = by_vnum(opt);
+						if(profile.has_value()) {
+							r_success(player,profile.value()->dump());
+							encoded_response += profile.value()->encode();
+						}
+					}
+					ENCODE_R(encoded_response);
+					return;
+				}
+				int max_items = mods::orm::mob_equipment_list().size();
+				if(mods::orm::mob_equipment_list().size() > MAX_MOB_EQUIPMENT_LIST) {
+					r_error(player,CAT("WARNING: meqbuild data is very large. use paginate to see specific pages. listing the first ",MEQBUILD_MAX_ITEMS_LISTED));
+					max_items = MEQBUILD_MAX_ITEMS_LISTED;
+				}
+
+				int ctr = 0;
+				for(const auto& profile : mods::orm::mob_equipment_list()) {
+					r_success(player,profile->dump());
+					encoded_response += profile->encode();
+					if(++ctr >= max_items) {
+						break;
+					}
+				}
+				ENCODE_R(encoded_response);
+				return;
+			}
+		}
+
 		/** save */
 		{
 			auto args = mods::util::subcmd_args<5,args_t>(argument,"save");
@@ -384,8 +464,8 @@ namespace mods::builder::meqbuild {
 				 * cmd_args will be: [0] => map-list
 				 */
 				std::string list = "";
-				for(const auto& m : mods::orm::mob_equipment_map_list) {
-					list += CAT("{",m->mmap_mob_vnum,",",m->mmap_mob_equipment_vnum,"}");
+				for(const auto& m : mods::orm::mob_equipment_map_list()) {
+					list += CAT("{mob_vnum:",m->mmap_mob_vnum,",meq_vnum:",m->mmap_mob_equipment_vnum,"}");
 				}
 				ENCODE_R(list);
 				r_success(player,list);
@@ -416,7 +496,7 @@ namespace mods::builder::meqbuild {
 					r_error(player,"eq vnum must be a positive number");
 					return;
 				}
-				for(auto& m : mods::orm::mob_equipment_map_list) {
+				for(auto& m : mods::orm::mob_equipment_map_list()) {
 					if(m->mmap_mob_vnum == mvn) {
 						auto backup = m->mmap_mob_equipment_vnum;
 						m->mmap_mob_equipment_vnum = eq_vnum;
@@ -439,7 +519,7 @@ namespace mods::builder::meqbuild {
 					r_error(player,"Unable to save.");
 					return;
 				}
-				mods::orm::mob_equipment_map_list.emplace_back(std::move(ref));
+				mods::orm::mob_equipment_map_list().emplace_back(std::move(ref));
 				r_success(player,"Created new mapping and saved");
 				ENCODE_R("ok");
 				return;
@@ -467,7 +547,7 @@ namespace mods::builder::meqbuild {
 						r_error(player,"mob vnum must be a positive number");
 						continue;
 					}
-					for(auto& m : mods::orm::mob_equipment_map_list) {
+					for(auto& m : mods::orm::mob_equipment_map_list()) {
 						if(m->mmap_mob_vnum == mvn) {
 							m->destroy();
 							m->destroyed = true;
@@ -476,13 +556,13 @@ namespace mods::builder::meqbuild {
 						}
 					}
 				}
-				for(auto& m : mods::orm::mob_equipment_map_list) {
+				for(auto& m : mods::orm::mob_equipment_map_list()) {
 					if(m->destroyed) {
 						continue;
 					}
 					after.emplace_back(std::move(m));
 				}
-				mods::orm::mob_equipment_map_list = std::move(after);
+				mods::orm::mob_equipment_map_list() = std::move(after);
 				r_success(player,CAT("Deleted: ",list));
 				ENCODE_R(list);
 				return;
@@ -491,7 +571,7 @@ namespace mods::builder::meqbuild {
 	}	//end meqbuild
 	void init() {
 		mods::interpreter::add_command("meqbuild", POS_RESTING, do_meqbuild, LVL_BUILDER,0);
-		clear();
-		load_all();
+		mods::builder::meqbuild::clear();
+		mods::builder::meqbuild::load_all();
 	}
 };

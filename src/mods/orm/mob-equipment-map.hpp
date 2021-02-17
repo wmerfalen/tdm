@@ -58,6 +58,6 @@ namespace mods::orm {
 		bool loaded;
 		bool destroyed;
 	};
-	static std::deque<std::shared_ptr<mods::orm::mob_equipment_map>> mob_equipment_map_list;
+	std::deque<std::shared_ptr<mods::orm::mob_equipment_map>>& mob_equipment_map_list();
 };
 #endif

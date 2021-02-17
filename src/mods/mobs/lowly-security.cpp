@@ -53,6 +53,16 @@ namespace mods::mobs {
 			return should_fire;
 		}
 	};
+	void lowly_security::create(uuid_t mob_uuid, std::string variation) {
+		lsg_debug("lowly_security create on uuid:" << mob_uuid);
+		auto p = ptr_by_uuid(mob_uuid);
+		if(!p) {
+			log("SYSERR: did not find player to populate lowly_security with: %d",mob_uuid);
+			return;
+		}
+		mods::mobs::lowlysec_map().insert({mob_uuid,std::make_shared<lowly_security>(mob_uuid,variation)});
+	}
+
 	/**
 	 * @brief callback when someone spotted
 	 *
@@ -142,13 +152,12 @@ namespace mods::mobs {
 		this->player_ptr = p;
 		auto ch = p->cd();
 		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::LOWLY_SECURITY;
-		this->set_behaviour_tree("lowly_security_roam");
-		//MENTOC_MOB_WEARS(MINI_GUNNER);
-		/** TODO: wear all equipment as per the list setup in meqbuild command */
+		this->set_behaviour_tree("lowly_security");
 		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;
 		this->set_variation(variation);
+		bootstrap_equipment();
 	}
 	/**
 	 * @brief spray direction

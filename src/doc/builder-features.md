@@ -1,5 +1,13 @@
 # Inventory of features
 
+# all extended mob types to use meqbuild
+	- using the values system to assign extended mobs their eq is now DEPRECATED
+	- use the meqbuild command
+
+# lowly security guard extended mob type
+	- new extended mob type just like the mini gunner
+	- 
+
 # mob reinforcements (or response team)
 	- [x] create car object type
 		- [x] SUV types

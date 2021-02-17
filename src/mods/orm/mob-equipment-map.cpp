@@ -51,4 +51,8 @@ namespace mods::orm {
 		loaded = 0;
 	}
 
+	std::deque<std::shared_ptr<mods::orm::mob_equipment_map>>& mob_equipment_map_list() {
+		static std::deque<std::shared_ptr<mods::orm::mob_equipment_map>> list;
+		return list;
+	}
 };

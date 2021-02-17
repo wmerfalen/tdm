@@ -43,6 +43,8 @@ namespace mods::mobs {
 			}
 			void shout(std::string_view);
 			void set_behaviour_tree(std::string_view name);
+			void populate_from_meqbuild_profile();
+			void bootstrap_equipment();
 
 			/**================*/
 			/** debugging info */
@@ -86,9 +88,11 @@ namespace mods::mobs {
 			/** weapon helpers */
 			/**====================================================*/
 			obj_ptr_t primary();
-			void wear(int where,std::string_view yaml);
+			void wear(uint8_t where,std::string_view yaml);
+			int8_t wear_all();
 
 		protected:
+			std::array<std::string,NUM_WEARS> wear_list;
 			vec_t<uuid_t> hostile_targets;
 			uint8_t watching;
 			std::map<uuid_t,uint64_t> last_seen;

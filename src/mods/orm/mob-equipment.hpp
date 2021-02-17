@@ -45,6 +45,7 @@ namespace mods::orm {
 
 		int16_t				load_by_profile(std::string_view name);
 		uint64_t id;
+		std::array<std::string,NUM_WEARS> convert_to_array() const;
 		std::string meq_profile_name;
 		uint64_t meq_vnum;
 		std::string meq_light;
@@ -77,6 +78,6 @@ namespace mods::orm {
 		long updated_at;
 		bool loaded;
 	};
-	static std::deque<std::shared_ptr<mods::orm::mob_equipment>> mob_equipment_list;
+	std::deque<std::shared_ptr<mods::orm::mob_equipment>>& mob_equipment_list();
 };
 #endif

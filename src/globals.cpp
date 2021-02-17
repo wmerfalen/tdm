@@ -620,7 +620,11 @@ namespace mods {
 				GET_EQ(mob->cd(), num_wears_i) = nullptr;
 			}
 			mob->cd()->carrying = nullptr;
-			mob->max_hp() = rand_number(mob->hp(), mob->mana());
+			int from = mob->hp(), to = mob->mana();
+			if(from > to) {
+				to = from + rand_number(1,50);
+			}
+			mob->max_hp() = rand_number(from, to);
 			mob->hp() = mob->max_hp();
 			mob->mana() = mob->max_mana();
 			mob->move() = mob->max_move();

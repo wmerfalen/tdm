@@ -34,10 +34,12 @@ namespace mods::mobs {
 		{LUNATIC,"LUNATIC"},
 		{GRUNT,"GRUNT"},
 		{PRACTICE_DUMMY,"PRACTICE_DUMMY"},
+		{LOWLY_SECURITY,"LOWLY_SECURITY"},
 	};
 	void decorate(uuid_t mob_id);
 
 	namespace desc {
+		static const std::string lowly_security = std::string("A simple security guard that calls for backup when things get dicey.");
 		static const std::string mini_gunner = std::string("The mob will have a backpack and minigun which he/she will use as the main weapon.") +
 		                                       ("Mini gunner mobs are usually very slow and take a long time to adjust which direction ") +
 		                                       ("they are attempting to spray toward. Once they have found a target, they will spray in that ") +
@@ -60,6 +62,7 @@ namespace mods::mobs {
 		{LUNATIC,"LUNATIC"},
 		{GRUNT,"GRUNT"},
 		{PRACTICE_DUMMY,"PRACTICE_DUMMY"},
+		{LOWLY_SECURITY,desc::lowly_security},
 	};
 	namespace extended_types {
 		std::vector<std::string> strings();

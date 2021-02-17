@@ -14,7 +14,7 @@
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
 extern void hit(char_data *ch, char_data *victim, int type);
-#define __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__
+//#define __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_BEHAVIOUR_TREE_IMPL_DEBUG_OUTPUT__
 #define bti_debug(a) std::cerr << "[mods::behaviour_tree_imp::dispatch][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #else

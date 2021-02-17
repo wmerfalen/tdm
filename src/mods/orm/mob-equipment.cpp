@@ -160,6 +160,36 @@ namespace mods::orm {
 		values["meq_elbow_r"] = meq_elbow_r;
 		return std::move(values);
 	}
+	std::array<std::string,NUM_WEARS> mob_equipment::convert_to_array() const {
+		std::array<std::string,NUM_WEARS> items;
+		items[WEAR_LIGHT] = meq_light;
+		items[WEAR_FINGER_R] = meq_finger_r;
+		items[WEAR_FINGER_L] = meq_finger_l;
+		items[WEAR_NECK_1] = meq_neck_1;
+		items[WEAR_NECK_2] = meq_neck_2;
+		items[WEAR_BODY] = meq_body;
+		items[WEAR_HEAD] = meq_head;
+		items[WEAR_LEGS] = meq_legs;
+		items[WEAR_FEET] = meq_feet;
+		items[WEAR_HANDS] = meq_hands;
+		items[WEAR_ARMS] = meq_arms;
+		items[WEAR_SHIELD] = meq_shield;
+		items[WEAR_ABOUT] = meq_about;
+		items[WEAR_WAIST] = meq_waist;
+		items[WEAR_WRIST_R] = meq_wrist_r;
+		items[WEAR_WRIST_L] = meq_wrist_l;
+		items[WEAR_WIELD] = meq_wield;
+		items[WEAR_HOLD] = meq_hold;
+		items[WEAR_SECONDARY] = meq_secondary;
+		items[WEAR_SHOULDERS_L] = meq_shoulders_l;
+		items[WEAR_SHOULDERS_R] = meq_shoulders_r;
+		items[WEAR_BACKPACK] = meq_backpack;
+		items[WEAR_GOGGLES] = meq_goggles;
+		items[WEAR_VEST_PACK] = meq_vest_pack;
+		items[WEAR_ELBOW_L] = meq_elbow_l;
+		items[WEAR_ELBOW_R] = meq_elbow_r;
+		return items;
+	}
 	int16_t mob_equipment::load_by_profile(std::string_view profile_name) {
 		loaded = 0;
 		created_at = updated_at = 0;
@@ -201,6 +231,7 @@ namespace mods::orm {
 		created_at = mods::util::pg_timestamp_to_long(row["created_at"].c_str());
 		updated_at = mods::util::pg_timestamp_to_long(row["updated_at"].c_str());
 		loaded = 1;
+		std::cerr << "fed row mob_equipment(" << id << ")\n";
 		return 0;
 	}
 	void mob_equipment::init() {
@@ -236,6 +267,10 @@ namespace mods::orm {
 		created_at = 0;
 		updated_at = 0;
 		loaded = 0;
+	}
+	std::deque<std::shared_ptr<mods::orm::mob_equipment>>& mob_equipment_list() {
+		static std::deque<std::shared_ptr<mods::orm::mob_equipment>> list;
+		return list;
 	}
 
 };

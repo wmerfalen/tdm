@@ -138,6 +138,112 @@ void r_status(const player_ptr_t& player,std::string_view msg);
 #define ENCODE_R(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, __ENC_RESPONSE)
 #define ENCODE_INIT(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, "!")
 #define ENCODE_OK() mods::builder::encode_scripted_response(player, "ok")
+
+
+static inline std::string paginate_option(std::string_view parent_command, std::string_view entity_name) {
+	return CAT(
+	           " {grn}",parent_command.data(),"{/grn} {red}paginate <page> <page_size>{/red}\r\n",
+	           "  |--> page all ",entity_name.data()," using page and paze size.\r\n",
+	           "  {grn}|____[example]{/grn}\r\n",
+	           "  |:: {wht}",parent_command.data(),"{/wht} {grn}1 50{/grn}\r\n"
+	       );
+}
+static inline std::string list_extract_option(std::string_view parent_command, std::string_view entity_name) {
+	return CAT(
+	           " {grn}",parent_command.data(),"{/grn} {red}list-extract <virtual_number> <field>...<fieldN>{/red}\r\n",
+	           "  |--> get a ",entity_name.data()," and only return the specified fields.\r\n",
+	           "  {grn}|____[example]{/grn}\r\n",
+	           "  |:: {wht}",parent_command.data(),"{/wht} {grn}1 id created_at updated_at{/grn}\r\n"
+	       );
+}
+
+
+
+
+#define MENTOC_LIST_EXTRACT()\
+		{\
+			auto args = mods::util::subcmd_args<13,args_t>(argument,"list-extract");\
+			if(args.has_value()) {\
+				ENCODE_INIT();\
+				auto cmd_args = args.value();\
+				if(cmd_args.size() < 3) {\
+					r_error(player,"not enough arguments");\
+					return;\
+				}\
+				auto vnum = mods::util::stoi(cmd_args[1]).value_or(-1);\
+				auto profile = by_vnum(vnum).value_or(nullptr);\
+				if(!profile) {\
+					r_error(player,"invalid vnum");\
+					ENCODE_R("invalid vnum");\
+					return;\
+				}\
+				std::vector<std::string_view> fields;\
+				for(auto i = 2; i < cmd_args.size(); i++) {\
+					fields.emplace_back(cmd_args[i]);\
+				}\
+				if(player->is_executing_js()) {\
+					ENCODE_R(profile->encode_fields(fields));\
+					return;\
+				}\
+				r_success(player,profile->dump_fields(fields));\
+				return;\
+			}\
+		}
+
+/** cmd_args [0] => paginate [1] => page_number [2] => items_per_page */
+#define MENTOC_PAGINATED_LIST(MENTOC_PARAM_CONTAINER)\
+		{\
+			auto args = mods::util::subcmd_args<9,args_t>(argument,"paginate");\
+			if(args.has_value()) {\
+				ENCODE_INIT();\
+				auto cmd_args = args.value();\
+				if(cmd_args.size() < 3) {\
+					r_error(player,"not enough arguments");\
+					return;\
+				}\
+				auto page = mods::util::stoi(cmd_args[1]).value_or(-1);\
+				auto page_size  = mods::util::stoi(cmd_args[2]).value_or(-1);\
+				if(page < 1){\
+					r_error(player,"invalid page. pages are not zero indexed");\
+					return;\
+				}\
+				page -= 1;\
+				if(page_size < 1){\
+					r_error(player,"invalid page size. must be atleast 1");\
+					return;\
+				}\
+				if(MENTOC_PARAM_CONTAINER.size() == 0){\
+					if(player->is_executing_js()) {\
+						ENCODE_R("nothing to list");\
+					}else{\
+						r_success(player,"nothing to list");\
+					}\
+					return;\
+				}\
+				if(MENTOC_PARAM_CONTAINER.size() > page * page_size){\
+					if(player->is_executing_js()) {\
+						std::string encoded_response = "";\
+						const auto start_it = MENTOC_PARAM_CONTAINER.cbegin() + (page * page_size);\
+						for(unsigned i = 0; i < page_size && i < MENTOC_PARAM_CONTAINER.size();++i){\
+							encoded_response += (*(start_it + i))->encode();\
+						}\
+						ENCODE_R(encoded_response);\
+						return;\
+					}else{\
+						const auto start_it = MENTOC_PARAM_CONTAINER.cbegin() + (page * page_size);\
+						for(unsigned i = 0; i < page_size && i < MENTOC_PARAM_CONTAINER.size();++i){\
+							r_success(player,(*(start_it + i))->dump());\
+						}\
+					return;\
+					}\
+				}else{\
+					r_error(player,"invalid page number");\
+					ENCODE_R("invalid page number");\
+					return;\
+				}\
+			}\
+		}
+
 //ACMD(do_rbuild);
 //ACMD(do_rbuild_sandbox);
 //ACMD(do_zbuild);

@@ -511,9 +511,10 @@ BOOST_PP_SEQ_FOR_EACH(MENTOC_USING_CT_IMPL, ~, MENTOC_ITEM_TYPES_SEQ)
 
 
 #define MENTOC_GENERIC_WEARS_IMPL(r,data,WEAR_CONSTANT)\
-		this->wear(BOOST_PP_CAT(WEAR_,WEAR_CONSTANT),BOOST_PP_CAT(data,BOOST_PP_CAT(_WEAR_,WEAR_CONSTANT))());
+		this->wear_list[BOOST_PP_CAT(WEAR_,WEAR_CONSTANT)] = BOOST_PP_CAT(data,BOOST_PP_CAT(_WEAR_,WEAR_CONSTANT))();
 #define MENTOC_MOB_WEARS(TYPE) \
-	BOOST_PP_SEQ_FOR_EACH(MENTOC_GENERIC_WEARS_IMPL, TYPE, MENTOC_WEAR_PLACES_SEQ)
+	BOOST_PP_SEQ_FOR_EACH(MENTOC_GENERIC_WEARS_IMPL, TYPE, MENTOC_WEAR_PLACES_SEQ) \
+	this->wear_all();
 
 /**************************************************************************/
 /** forward declarations of each *_description_t class                    */

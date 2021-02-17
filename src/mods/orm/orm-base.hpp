@@ -28,18 +28,56 @@ namespace mods::orm {
 	struct orm_base {
 		std::string dump() {
 			std::string dump;
+			dump = CAT("[",primary_key_name().data(),"]:->",primary_key_value().data(),"\r\n");
 			for(const auto& pair : export_class()) {
 				dump += CAT("[",pair.first,"]:->",pair.second,"\r\n");
 			}
 			return dump;
 		}
+		std::string dump_fields(const std::vector<std::string_view>& field_list) {
+			std::string dump;
+			auto data = export_class();
+			std::size_t ctr = 0;
+			for(const auto& field : field_list) {
+				if(field.compare(primary_key_name().data()) == 0) {
+					dump += CAT("[",field.data(),"]:->",primary_key_value().data(),"\r\n");
+				} else {
+					dump += CAT("[",field.data(),"]:->",data[field.data()].data(),"\r\n");
+				}
+				if(++ctr == data.size()) {
+					break;
+				}
+				dump += ",";
+			}
+			return dump;
+		}
 		std::string encode() {
 			std::string dump;
-			const auto data = export_class();
+			auto data = export_class();
 			std::size_t ctr = 0;
 			dump = "[";
+			dump += CAT("{klen:",primary_key_name().length(),",key:\"",primary_key_name().data(),"\",vlen:",primary_key_value().data(),",value:\"",primary_key_value().data(),"\"},");
 			for(const auto& pair : data) {
 				dump += CAT("{klen:",pair.first.length(),",key:\"",pair.first,"\",vlen:",pair.second.length(),",value:\"",pair.second,"\"}");
+				if(++ctr == data.size()) {
+					break;
+				}
+				dump += ",";
+			}
+			dump += "]";
+			return dump;
+		}
+		std::string encode_fields(const std::vector<std::string_view>& field_list) {
+			std::string dump;
+			auto data = export_class();
+			std::size_t ctr = 0;
+			dump = "[";
+			for(const auto& field : field_list) {
+				if(field.compare(primary_key_name().data()) == 0) {
+					dump += CAT("{klen:",primary_key_name().length(),",key:\"",primary_key_name().data(),"\",vlen:",primary_key_value().data(),",value:\"",primary_key_value().data(),"\"}");
+				} else {
+					dump += CAT("{klen:",field.length(),",key:\"",field.data(),"\",vlen:",data[field.data()].length(),",value:\"",data[field.data()].data(),"\"}");
+				}
 				if(++ctr == data.size()) {
 					break;
 				}

@@ -6,6 +6,7 @@
 //#include "../scan.hpp"
 #include "../rooms.hpp"
 #include "helpers.hpp"
+#include "../mob-equipment.hpp"
 
 #define __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
 #ifdef  __MENTOC_MODS_MOBS_LOWLY_SECURITY_SHOW_DEBUG_OUTPUT__
@@ -51,18 +52,37 @@ namespace mods::mobs {
 	 * @param where
 	 * @param yaml
 	 */
-	void smart_mob::wear(int where,std::string_view yaml) {
+	void smart_mob::wear(uint8_t where,std::string_view yaml) {
 		std::cerr << "smart_mob wearing: [where:" << where << "]->'" << yaml.data() << "'";
 		std::tuple<int,std::string> yaml_tuple = mods::util::extract_yaml_info_from_path(yaml);
 		if(std::get<0>(yaml_tuple) < 0) {
+			std::cerr << red_str("smart_mob failed to wear item due to yaeml path extraction.") << " wearing: [where:" << where << "]->'" << yaml.data() << "'";
 			return;
 		}
 		if(!mods::util::yaml_file_exists(yaml.data())) {
-			std::cerr << "[smart_mob] WARNING: yaml file doesn't exist!->'" << yaml.data() << "'";
+			std::cerr << red_str("[smart_mob] WARNING: yaml file doesn't exist!->'") << yaml.data() << "'";
 			return;
 		}
 		auto obj = create_object(std::get<0>(yaml_tuple),std::get<1>(yaml_tuple));
 		this->player_ptr->equip(obj,where);
+	}
+	int8_t smart_mob::wear_all() {
+		int8_t items = 0;
+		for(auto i = 0; i < wear_list.size(); i++) {
+			if(wear_list[i].length() == 0) {
+				continue;
+			}
+			this->wear(i,wear_list[i]);
+			items++;
+		}
+		return items;
+	}
+	void smart_mob::populate_from_meqbuild_profile() {
+		this->wear_list = std::move(mods::mob_equipment::fetch_list_by_mob_vnum(this->cd()->nr));
+	}
+	void smart_mob::bootstrap_equipment() {
+		this->populate_from_meqbuild_profile();
+		this->wear_all();
 	}
 	/**
 	 * @brief preferred constructor method
@@ -84,12 +104,13 @@ namespace mods::mobs {
 		auto ch = p->cd();
 		ch->mob_specials.extended_mob_type = mob_special_data::extended_mob_type_t::LOWLY_SECURITY;
 		this->set_behaviour_tree("smart_mob_roam");
-		//MENTOC_MOB_WEARS(MINI_GUNNER);
 		/** TODO: wear all equipment as per the list setup in meqbuild command */
 		this->setup_damage_callbacks();
 		this->loaded = true;
 		this->error = false;
 		this->set_variation(variation);
+		this->populate_from_meqbuild_profile();
+		this->wear_all();
 	}
 	smart_mob::~smart_mob() {
 		this->uuid = 0;
@@ -244,3 +265,5 @@ namespace mods::mobs {
 
 	}
 };
+#if 0
+#endif
