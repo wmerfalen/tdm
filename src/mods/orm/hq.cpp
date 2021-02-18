@@ -72,6 +72,64 @@ namespace mods::orm {
 		updated_at = 0;
 		loaded = 0;
 	}
-	std::deque<std::shared_ptr<mods::orm::hq>> hq_list;
+	std::deque<std::shared_ptr<mods::orm::hq>>& hq_list() {
+		static std::deque<std::shared_ptr<mods::orm::hq>> list;
+		return list;
+	}
+	std::tuple<bool,std::string> hq::set_slot(std::string_view key,std::string_view value) {
+		if(key.compare("affiliation") == 0) {
+			hq_affiliation = value.data();
+			return {1,"set"};
+		}
+		if(key.compare("level") == 0) {
+			hq_level = mods::util::stoi(value.data()).value_or(-1);
+			return {1,"set"};
+		}
+		if(key.compare("room_vnum") == 0) {
+			hq_room_vnum = mods::util::stoi(value.data()).value_or(-1);
+			return {1,"set"};
+		}
+		if(key.compare("basic_mob_count") == 0) {
+			hq_basic_mob_count = mods::util::stoi(value.data()).value_or(-1);
+			return {1,"set"};
+		}
+		if(key.compare("advanced_mob_count") == 0) {
+			hq_advanced_mob_count = mods::util::stoi(value.data()).value_or(-1);
+			return {1,"set"};
+		}
+		if(key.compare("elite_mob_count") == 0) {
+			hq_elite_mob_count = mods::util::stoi(value.data()).value_or(-1);
+			return {1,"set"};
+		}
+		if(key.compare("suv_count") == 0) {
+			hq_suv_count = mods::util::stoi(value.data()).value_or(-1);
+			return {1,"set"};
+		}
+		if(key.compare("sedan_count") == 0) {
+			hq_sedan_count = mods::util::stoi(value.data()).value_or(-1);
+			return {1,"set"};
+		}
+		if(key.compare("armored_van_count") == 0) {
+			hq_armored_van_count = mods::util::stoi(value.data()).value_or(-1);
+			return {1,"set"};
+		}
+		if(key.compare("replenish_ticks") == 0) {
+			hq_replenish_ticks = mods::util::stoi(value.data()).value_or(-1);
+			return {1,"set"};
+		}
+		if(key.compare("replenish_basic_count") == 0) {
+			hq_replenish_basic_count = mods::util::stoi(value.data()).value_or(-1);
+			return {1,"set"};
+		}
+		if(key.compare("replenish_advanced_count") == 0) {
+			hq_replenish_advanced_count = mods::util::stoi(value.data()).value_or(-1);
+			return {1,"set"};
+		}
+		if(key.compare("replenish_elite_count") == 0) {
+			hq_replenish_elite_count = mods::util::stoi(value.data()).value_or(-1);
+			return {1,"set"};
+		}
+		return {0,INVALID_SLOT.data()};
+	}
 
 };

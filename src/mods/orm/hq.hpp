@@ -8,6 +8,23 @@ namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
 	struct hq : public mods::orm::orm_base<hq,uint8_t> {
 		static constexpr const char* table_name_value = "hq_locations";
+		static std::vector<std::string> get_slot_list() {
+			return {
+				"hq_affiliation",
+				"level",
+				"room_vnum",
+				"basic_mob_count",
+				"advanced_mob_count",
+				"elite_mob_count",
+				"suv_count",
+				"sedan_count",
+				"armored_van_count",
+				"replenish_ticks",
+				"replenish_basic_count",
+				"replenish_advanced_count",
+				"replenish_elite_count",
+			};
+		}
 		std::string table_name() {
 			return table_name_value;
 		}
@@ -23,6 +40,9 @@ namespace mods::orm {
 		std::string primary_key_value() {
 			return std::to_string(this->id);
 		}
+		auto vnum() {
+			return hq_room_vnum;
+		}
 
 		hq() : id(0) {
 			this->init();
@@ -30,6 +50,7 @@ namespace mods::orm {
 		}
 		~hq() = default;
 
+		std::tuple<bool,std::string> set_slot(std::string_view key,std::string_view value);
 		uint64_t initialize_row(std::string_view affiliation, room_vnum rv,uint16_t level);
 		int16_t feed(const pqxx::result::reference&);
 		void init();
@@ -61,6 +82,6 @@ namespace mods::orm {
 		long updated_at;
 		bool loaded;
 	};
-	extern std::deque<std::shared_ptr<mods::orm::hq>> hq_list;
+	std::deque<std::shared_ptr<mods::orm::hq>>& hq_list();
 };
 #endif

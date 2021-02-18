@@ -8,7 +8,59 @@
 #include "../orm/base.hpp"
 #include "../mob-equipment.hpp"
 
+#include "slotted-builder.hpp"
+
 namespace mods::builder::meqbuild {
+	using meqbuild_vnum_t = uint64_t;
+	using meqbuild_orm_type = mods::orm::mob_equipment;
+	struct meqbuild_interface : public slotted_builder<meqbuild_vnum_t,meqbuild_orm_type> {
+		bool delete_by_vnum(meqbuild_vnum_t vnum) {
+			std::deque<std::shared_ptr<mods::orm::mob_equipment>> list;
+			bool deleted = false;
+			for(auto& m : mods::orm::mob_equipment_list()) {
+				if(m->meq_vnum == vnum) {
+					m->destroy();
+					deleted = true;
+					continue;
+				}
+				list.emplace_back(std::move(m));
+			}
+			mods::orm::mob_equipment_list() = std::move(list);
+			return deleted;
+		}
+		std::optional<std::shared_ptr<meqbuild_orm_type>> by_vnum(meqbuild_vnum_t vnum) {
+			for(const auto& m : mods::orm::mob_equipment_list()) {
+				if(m->meq_vnum == vnum) {
+					return m;
+				}
+			}
+			return std::nullopt;
+		}
+		meqbuild_interface() {
+			set_slot_list(meqbuild_orm_type::get_slot_list());
+			set_orm_list(&mods::orm::mob_equipment_list());
+		}
+		status_response_t dispatch_new_command(const std::vector<std::string>& cmd_args,std::string argument) {
+			/**
+			 * cmd_args: [0] => "new" [1] => profile-name [2] => vnum
+			 */
+			if(cmd_args.size() < 3) {
+				return {0,"Error: not enough arguments"};
+			}
+			auto vnum = extract_int<int>("new",argument.c_str(),2).value_or(-1);
+			if(vnum < 0) {
+				return {0,"vnum must be a positive number"};
+			}
+			auto meq = std::make_shared<mods::orm::mob_equipment>();
+			auto id = meq->initialize_row(cmd_args[1],vnum);
+			if(id <= 0) {
+				return {0,"Couldn't initialize row"};
+			}
+			mods::orm::mob_equipment_list().emplace_back(std::move(meq));
+			return {1,"Created row."};
+		}
+	};
+
 	static constexpr int MAX_MOB_EQUIPMENT_LIST = 1500;
 	static constexpr int MEQBUILD_MAX_ITEMS_LISTED = 150;
 	void clear() {
@@ -56,38 +108,6 @@ namespace mods::builder::meqbuild {
 			return list;
 		}
 	};
-	bool delete_by_vnum(const uint64_t& vnum) {
-		std::deque<std::shared_ptr<mods::orm::mob_equipment>> list;
-		bool deleted = false;
-		for(auto& m : mods::orm::mob_equipment_list()) {
-			if(m->meq_vnum == vnum) {
-				m->destroy();
-				deleted = true;
-				continue;
-			}
-			list.emplace_back(std::move(m));
-		}
-		mods::orm::mob_equipment_list() = std::move(list);
-		return deleted;
-	}
-	std::optional<std::shared_ptr<mods::orm::mob_equipment>> by_vnum(const uint64_t& vnum) {
-		for(const auto& m : mods::orm::mob_equipment_list()) {
-			if(m->meq_vnum == vnum) {
-				return m;
-			}
-		}
-		return std::nullopt;
-	}
-	std::optional<std::shared_ptr<mods::orm::mob_equipment>> by_profile(std::string_view name) {
-		for(const auto& m : mods::orm::mob_equipment_list()) {
-			if(m->meq_profile_name.compare(name) == 0) {
-				return m;
-			}
-		}
-		return std::nullopt;
-	}
-
-
 	std::map<std::string,uint8_t> wear_flags_map = {
 		{"light",WEAR_LIGHT},
 		{"finger_r",WEAR_FINGER_R},
@@ -129,6 +149,12 @@ namespace mods::builder::meqbuild {
 	}
 
 	using args_t = std::vector<std::string>;
+
+	meqbuild_interface& meqbuilder(player_ptr_t& player) {
+		static meqbuild_interface interface;
+		interface.set_builder(player);
+		return interface;
+	}
 
 	ACMD(do_meqbuild) {
 
@@ -212,6 +238,11 @@ namespace mods::builder::meqbuild {
 			player->page(0);
 			return;
 		}
+
+		if(meqbuilder(player).handle_input(argument)) {
+			return;
+		}
+
 		/** reload-all */
 		{
 			auto args = mods::util::subcmd_args<11,args_t>(argument,"reload-all");
@@ -224,36 +255,12 @@ namespace mods::builder::meqbuild {
 				return;
 			}
 		}
-		/** new */
-		{
-			auto args = mods::util::subcmd_args<4,args_t>(argument,"new");
-			if(args.has_value()) {
-				ENCODE_INIT();
-				auto cmd_args = args.value();
-				if(cmd_args.size() < 3) {
-					r_error(player,"Error: not enough arguments");
-					return;
-				}
-				auto profile_name = cmd_args[1];
-				auto vnum = mods::util::stoi(cmd_args[2]).value_or(-1);
-				if(vnum < 0) {
-					r_error(player,"vnum must be a positive number");
-					return;
-				}
-				mods::orm::mob_equipment meq;
-				auto id = meq.initialize_row(profile_name,vnum);
-				if(id <= 0) {
-					r_error(player,"Couldn't initialize row");
-					return;
-				}
-				r_success(player,"Created row.");
-				ENCODE_STR(id);
-				return;
-			}
-		}
-		MENTOC_LIST_EXTRACT();
 
-		MENTOC_PAGINATED_LIST(mods::orm::mob_equipment_list());
+
+		//MENTOC_LIST_EXTRACT();
+
+		//MENTOC_PAGINATED_LIST(mods::orm::mob_equipment_list());
+#if 0
 		{
 			auto args = mods::util::subcmd_args<5,args_t>(argument,"show");
 			if(args.has_value()) {
@@ -378,7 +385,7 @@ namespace mods::builder::meqbuild {
 					r_error(player,"No mob equipment profile exists with that vnum");
 					return;
 				}
-				if(!item.value()->set_slot(position, yaml)) {
+				if(!std::get<0>(item.value()->set_slot(position, yaml))) {
 					r_error(player,"Invalid slot type");
 					return;
 				}
@@ -412,7 +419,7 @@ namespace mods::builder::meqbuild {
 					r_error(player,"No mob equipment profile exists with that vnum");
 					return;
 				}
-				if(!item.value()->set_slot(position, "")) {
+				if(!std::get<0>(item.value()->set_slot(position, ""))) {
 					r_error(player,"Invalid slot type");
 					return;
 				}
@@ -454,6 +461,7 @@ namespace mods::builder::meqbuild {
 				return;
 			}
 		}
+#endif
 		/** map-list */
 		{
 			auto args = mods::util::subcmd_args<11,args_t>(argument,"map-list");

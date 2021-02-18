@@ -8,6 +8,42 @@ namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
 	struct mob_equipment : public mods::orm::orm_base<mob_equipment,uint8_t> {
 		static constexpr const char* table_name_value = "mob_equipment";
+		static std::vector<std::string> get_slot_list() {
+			return {
+				"profile_name",
+				"vnum",
+				"light",
+				"finger_r",
+				"finger_l",
+				"neck_1",
+				"neck_2",
+				"body",
+				"head",
+				"legs",
+				"feet",
+				"hands",
+				"arms",
+				"shield",
+				"about",
+				"waist",
+				"wrist_r",
+				"wrist_l",
+				"wield",
+				"hold",
+				"secondary",
+				"shoulders_l",
+				"shoulders_r",
+				"backpack",
+				"goggles",
+				"vest_pack",
+				"elbow_l",
+				"elbow_r",
+			};
+		};
+
+		auto vnum() {
+			return meq_vnum;
+		}
 		std::string table_name() {
 			return table_name_value;
 		}
@@ -23,7 +59,7 @@ namespace mods::orm {
 		std::string primary_key_value() {
 			return std::to_string(this->id);
 		}
-		bool set_slot(std::string_view slot, std::string_view value);
+		std::tuple<bool,std::string> set_slot(std::string_view slot, std::string_view value);
 
 		mob_equipment() : id(0) {
 			this->init();

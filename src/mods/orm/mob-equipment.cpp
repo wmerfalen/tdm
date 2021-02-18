@@ -17,116 +17,116 @@ namespace mods::orm {
 		}
 		return id;
 	}
-	bool mob_equipment::set_slot(std::string_view slot, std::string_view value) {
+	std::tuple<bool,std::string> mob_equipment::set_slot(std::string_view slot, std::string_view value) {
 		if(slot.compare("light") == 0) {
 			this->meq_light = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("finger_r") == 0) {
 			this->meq_finger_r = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("finger_l") == 0) {
 			this->meq_finger_l = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("neck_1") == 0) {
 			this->meq_neck_1 = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("neck_2") == 0) {
 			this->meq_neck_2 = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("body") == 0) {
 			this->meq_body = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("head") == 0) {
 			this->meq_head = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("legs") == 0) {
 			this->meq_legs = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("feet") == 0) {
 			this->meq_feet = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("hands") == 0) {
 			this->meq_hands = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("arms") == 0) {
 			this->meq_arms = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("shield") == 0) {
 			this->meq_shield = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("about") == 0) {
 			this->meq_about = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("waist") == 0) {
 			this->meq_waist = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("wrist_r") == 0) {
 			this->meq_wrist_r = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("wrist_l") == 0) {
 			this->meq_wrist_l = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("wield") == 0) {
 			this->meq_wield = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("primary") == 0) {
 			this->meq_wield = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("hold") == 0) {
 			this->meq_hold = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("secondary") == 0) {
 			this->meq_secondary = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("shoulders_l") == 0) {
 			this->meq_shoulders_l = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("shoulders_r") == 0) {
 			this->meq_shoulders_r = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("backpack") == 0) {
 			this->meq_backpack = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("goggles") == 0) {
 			this->meq_goggles = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("vest_pack") == 0) {
 			this->meq_vest_pack = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("elbow_l") == 0) {
 			this->meq_elbow_l = value;
-			return true;
+			return {true,""};
 		}
 		if(slot.compare("elbow_r") == 0) {
 			this->meq_elbow_r = value;
-			return true;
+			return {true,""};
 		}
-		return false;
+		return {false,mods::orm::INVALID_SLOT.data()};
 	}
 	strmap_t mob_equipment::export_class() {
 		strmap_t values;

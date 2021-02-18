@@ -6,16 +6,16 @@
 
 namespace mods::builder::hqbuild {
 	void clear() {
-		mods::orm::hq_list.clear();
+		mods::orm::hq_list().clear();
 	}
 	void load_all() {
-		mods::orm::hq_list = std::move(mods::orm::load_all_by_table<mods::orm::hq>());
+		mods::orm::hq_list() = std::move(mods::orm::load_all_by_table<mods::orm::hq>());
 	}
 
 	bool delete_by_room_vnum(const room_vnum vnum) {
 		std::deque<std::shared_ptr<mods::orm::hq>> list;
 		bool deleted = false;
-		for(auto& m : mods::orm::hq_list) {
+		for(auto& m : mods::orm::hq_list()) {
 			if(m->hq_room_vnum == vnum) {
 				m->destroy();
 				deleted = true;
@@ -23,11 +23,11 @@ namespace mods::builder::hqbuild {
 			}
 			list.emplace_back(std::move(m));
 		}
-		mods::orm::hq_list = std::move(list);
+		mods::orm::hq_list() = std::move(list);
 		return deleted;
 	}
-	std::optional<std::shared_ptr<mods::orm::hq>> by_room_vnum(const uint32_t& vnum) {
-		for(const auto& m : mods::orm::hq_list) {
+	std::optional<std::shared_ptr<mods::orm::hq>> by_vnum(const uint32_t& vnum) {
+		for(const auto& m : mods::orm::hq_list()) {
 			if(m->hq_room_vnum == vnum) {
 				return m;
 			}
@@ -142,7 +142,7 @@ namespace mods::builder::hqbuild {
 			auto args = mods::util::subcmd_args<4,args_t>(argument,"set");
 			if(args.has_value()) {
 				ENCODE_INIT();
-				auto opt_hq = by_room_vnum(player->vnum());
+				auto opt_hq = by_vnum(player->vnum());
 				if(!opt_hq.has_value()) {
 					r_error(player,"no hq in this room");
 					return;
@@ -239,6 +239,9 @@ namespace mods::builder::hqbuild {
 				return;
 			}
 		}
+
+		MENTOC_LIST_EXTRACT();
+		MENTOC_PAGINATED_LIST(mods::orm::hq_list());
 		/** list */
 		{
 			auto args = mods::util::subcmd_args<5,args_t>(argument,"list");
@@ -247,7 +250,7 @@ namespace mods::builder::hqbuild {
 				auto cmd_args = args.value();
 				std::string  encoded_response = "";
 				if(cmd_args.size() == 0) {
-					for(const auto& profile : mods::orm::hq_list) {
+					for(const auto& profile : mods::orm::hq_list()) {
 						r_success(player, profile->dump());
 						encoded_response += profile->encode() + "\r\n";
 					}
@@ -260,7 +263,7 @@ namespace mods::builder::hqbuild {
 						r_error(player,"vnum must be a positive number");
 						continue;
 					}
-					auto opt_hq = by_room_vnum(vnum);
+					auto opt_hq = by_vnum(vnum);
 					if(!opt_hq.has_value()) {
 						r_error(player,CAT("no hq in room_vnum : '",vnum,"'"));
 						continue;
@@ -292,7 +295,7 @@ namespace mods::builder::hqbuild {
 						r_error(player,"vnum must be a positive number");
 						continue;
 					}
-					auto profile = by_room_vnum(vnum);
+					auto profile = by_vnum(vnum);
 					if(!profile.has_value()) {
 						r_error(player,CAT("no hq in room_vnum : '",vnum,"'"));
 						continue;

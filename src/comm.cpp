@@ -2417,9 +2417,6 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 					 *  	"$n leaves north."
 					 *
 					 */
-					if(!IS_NPC(ch)) {
-						log("DEBUG: the read mobile is __NOT__ !!!! an NPC (perform_act)");
-					}
 					i = strdup(mods::string(PERS(ch, to)).c_str());
 					break;
 

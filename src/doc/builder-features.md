@@ -1,5 +1,11 @@
 # Inventory of features
 
+# slotted builder class
+	- handles a lot of the boilerplate for builder functions
+	- source: `mods/builder/slotted-builder.hpp`
+		- example usage: `mods/meqbuild.cpp`
+
+
 # all extended mob types to use meqbuild
 	- using the values system to assign extended mobs their eq is now DEPRECATED
 	- use the meqbuild command

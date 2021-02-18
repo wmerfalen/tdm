@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <vector>
+#include <tuple>
+#include <string_view>
 #include "../../globals.hpp"
 #include "../pq.hpp"
 #include "../sql.hpp"
@@ -12,6 +14,7 @@
 #define ORM_NO_RESULTS(a) std::get<0>(a) == mods::orm::util::NO_RESULTS
 #define ORM_FAILURE(a) std::get<0>(a) < 0
 namespace mods::orm {
+	static constexpr std::string_view INVALID_SLOT = "invalid slot";
 	using strmap_t = std::map<std::string,std::string>;
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 	template <typename TObject>
@@ -34,7 +37,7 @@ namespace mods::orm {
 			}
 			return dump;
 		}
-		std::string dump_fields(const std::vector<std::string_view>& field_list) {
+		std::string dump_fields(const std::vector<std::string>& field_list) {
 			std::string dump;
 			auto data = export_class();
 			std::size_t ctr = 0;
@@ -67,7 +70,7 @@ namespace mods::orm {
 			dump += "]";
 			return dump;
 		}
-		std::string encode_fields(const std::vector<std::string_view>& field_list) {
+		std::string encode_fields(const std::vector<std::string>& field_list) {
 			std::string dump;
 			auto data = export_class();
 			std::size_t ctr = 0;
@@ -85,6 +88,9 @@ namespace mods::orm {
 			}
 			dump += "]";
 			return dump;
+		}
+		virtual std::tuple<bool,std::string> set_slot(std::string_view key,std::string_view value) {
+			return {0,"slot setting not setup on this class"};
 		}
 		template <typename TClass>
 		static inline std::tuple<int16_t,std::string,uint64_t> create(TClass* c) {

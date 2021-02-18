@@ -177,7 +177,7 @@ static inline std::string list_extract_option(std::string_view parent_command, s
 					ENCODE_R("invalid vnum");\
 					return;\
 				}\
-				std::vector<std::string_view> fields;\
+				std::vector<std::string> fields;\
 				for(auto i = 2; i < cmd_args.size(); i++) {\
 					fields.emplace_back(cmd_args[i]);\
 				}\

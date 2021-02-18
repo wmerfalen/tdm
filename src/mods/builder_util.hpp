@@ -1,3 +1,5 @@
+#ifndef __MENTOC_MODS_BUILDER_UTIL_HEADER__
+#define __MENTOC_MODS_BUILDER_UTIL_HEADER__
 #include "builder.hpp"
 #include "quests.hpp"
 #include "pq.hpp"
@@ -278,3 +280,4 @@ namespace mods::builder_util {
 extern void r_error(const player_ptr_t& player,std::string_view msg);
 extern void r_success(const player_ptr_t& player,std::string_view msg);
 extern void r_status(const player_ptr_t& player,std::string_view msg);
+#endif
