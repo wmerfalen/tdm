@@ -18,28 +18,251 @@ namespace mods::builder {
 			using custom_command_t = std::function<std::tuple<bool,std::string>(const std::vector<std::string>&,std::string,std::shared_ptr<TOrmType>)>;
 			using orm_container_t = std::deque<std::shared_ptr<TOrmType>>;
 		protected:
-			std::string m_new_format;
 			std::vector<std::string> m_slot_list;
 			player_ptr_t m_builder_ptr;
 			std::vector<std::string> m_encoded_response;
 			std::map<std::string,custom_command_t> m_custom_command_map;
 			orm_container_t* m_orm_list;
+			bool m_automatically_clear;
+			std::map<std::string,std::string> m_signatures;
+			std::string m_base_command;
 		public:
-			/** must be implemented by child class */
+			/** ================================================================================= */
+			/** ### [ SECTION: Virtual functions that must be implemented                     ### */
+			/** ### [ description ]:                                                          ### */
+			/** ### These are functions that the child class needs to pay attention to        ### */
+			/** ###---------------------------------------------------------------------------### */
+			/** ###                           [ START ]                                       ### */
+			/** ###---------------------------------------------------------------------------### */
 			virtual bool delete_by_vnum(TVnumType vnum) = 0;
 			virtual std::optional<std::shared_ptr<TOrmType>> by_vnum(TVnumType vnum) = 0;
 			virtual status_response_t dispatch_new_command(const std::vector<std::string>&,std::string) = 0;
+			virtual void clear() = 0;
+			virtual void load_all() = 0;
+			/** ###---------------------------------------------------------------------------### */
+			/** ###                            [ END ]                                        ### */
+			/** ================================================================================= */
 
-			/** must be set at constructor, otherwise player will not get messages */
-			void set_builder(player_ptr_t& player) {
+			/** ================================================================================= */
+			/** ### [ SECTION: bootstrap functions                                            ### */
+			/** ### [ description ]:                                                          ### */
+			/** ###  these functions must be called upon construction!                        ### */
+			/** ###---------------------------------------------------------------------------### */
+			/** ###                           [ START ]                                       ### */
+			/** ###---------------------------------------------------------------------------### */
+
+			/** [ 1 ] -> set this to the player calling your ACMD function */
+			void set_builder(player_ptr_t player) {
 				m_builder_ptr = player;
 			}
 
+			/** [ 2 ] -> point this to your singleton instance (i.e.: mods::orm::mob_equipment_list()) */
 			void set_orm_list(orm_container_t* container) {
 				m_orm_list = container;
 			}
 
-			/** utility function which will extract an integer from the given index
+			std::map<std::string,std::string>& get_signatures() {
+				return m_signatures;
+			}
+
+			void set_base_command(std::string base) {
+				m_base_command = base;
+			}
+
+			/**
+			 * [ 3 ] -> function used to set the available slot keys
+			 * if your command plans on using the "set" <vnum> <key> <value> subcommand, then
+			 * you will need to set this to whatever your orm object's return value is. that's almost
+			 * always mods::orm::get_slot_list();
+			 */
+			void set_slot_list(std::vector<std::string> s) {
+				m_slot_list = s;
+			}
+
+			/** [ 4 ] -> use this to register custom commands with custom verbs. */
+			status_response_t register_custom_command(std::string verb, auto lambda) {
+				m_custom_command_map[verb] = lambda;
+				return {1,"done"};
+			}
+			/** ###---------------------------------------------------------------------------### */
+			/** ###                            [ END ]                                        ### */
+			/** ================================================================================= */
+
+
+			/** ###---------------------------------------------------------------------------### */
+			/** ### The only other function you'll need to call 99% of the time is here       ### */
+			/** ###---------------------------------------------------------------------------### */
+			bool handle_input(std::string argument) {
+				if(m_automatically_clear) {
+					clear_response();
+				}
+				if(dispatch_help(argument)) {
+					return true;
+				}
+				/**
+				 * new <vnum> ... (handled exclusively by child class
+				 */
+				if(base_dispatch_new_command(argument)) {
+					return true;
+				}
+				/**
+				 * remove <vnum> <slot>...<slot-N>
+				 */
+				if(dispatch_remove_slot(argument)) {
+					return true;
+				}
+				/**
+				 * set <vnum> <slot> <value>
+				 */
+				if(dispatch_slot(argument)) {
+					return true;
+				}
+				/**
+				 * list|delete|save <vnum>...<vnum-N>
+				 */
+				if(dispatch_multi_vnum_action(argument)) {
+					return true;
+				}
+				/**
+				 * paginate [page] [pageSize]
+				 */
+				if(dispatch_paginate_action(argument)) {
+					return true;
+				}
+				/**
+				 * list-extract <vnum> <field>...<field-N>
+				 */
+				if(dispatch_list_extract_action(argument)) {
+					return true;
+				}
+				/**
+				 * show <vnum> [field]...[field-N]
+				 */
+				if(dispatch_show_action(argument)) {
+					return true;
+				}
+				/**
+				 * reload-all
+				 */
+				if(dispatch_reload_all_action(argument)) {
+					return true;
+				}
+				/**
+				 * custom commands the child class has provided us
+				 */
+				for(auto& pair : m_custom_command_map) {
+					auto args = mods::util::subcmd_args<50,args_t>(argument,pair.first.c_str());
+					if(args.has_value()) {
+						auto cmd_args = args.value();
+						return tuple_wrap(m_custom_command_map[pair.first](cmd_args,argument,nullptr));
+					}
+				}
+				return false;
+			}
+
+			/** ================================================================================= */
+			/** ### [ SECTION: configuration functions ]                                      ### */
+			/** ### [ description ]:                                                          ### */
+			/** ### these functions are merely for configuring the class and are optional     ### */
+			/** ###---------------------------------------------------------------------------### */
+			/** ###                           [ START ]                                       ### */
+			/** ###---------------------------------------------------------------------------### */
+
+			/** [  ] -> clear specific custom command */
+			void clear_custom_command(std::string verb) {
+				m_custom_command_map.erase(verb);
+			}
+			/** [  ] -> clear all custom commands */
+			void clear_all_custom_commands() {
+				m_custom_command_map.clear();
+			}
+			/** [  ] -> will clear the encoded_response before handling input if set to true */
+			void automatically_clear_response(bool s) {
+				m_automatically_clear = s;
+			}
+			/** [  ] -> fetch the auto clear flag */
+			bool get_auto_clear_response_flag() {
+				return m_automatically_clear;
+			}
+			/** [  ] -> check for existence of custom command */
+			bool has_custom_command_for(std::string command) {
+				return m_custom_command_map.find(command) != m_custom_command_map.end();
+			}
+
+			slotted_builder() {
+				m_automatically_clear = true;
+				m_builder_ptr = nullptr;
+				m_encoded_response.clear();
+				m_custom_command_map.clear();
+				m_orm_list = nullptr;
+				m_signatures["new"] = " {grn}%s{/grn} {red}new{/red}\r\n";
+				m_signatures["save"] = " {grn}%s{/grn} {red}save <virtual_number>...<virtual_number-N>{/red}\r\n";
+				m_signatures["list"] = " {grn}%s{/grn} {red}list <virtual_number>...<virtual_number-N>{/red}\r\n";
+				m_signatures["list-extract"] = " {grn}%s{/grn} {red}lsit-extract <virtual_number> <field>...<field-N>{/red}\r\n";
+				m_signatures["set"] = " {grn}%s{/grn} {red}set <virtual_number> <slot> <value>{/red}\r\n";
+				m_signatures["remove"] = " {grn}%s{/grn} {red}remove <virtual_number> <slot>...<slot-N>{/red}\r\n";
+				m_signatures["delete"] = " {grn}%s{/grn} {red}delete <virtual_number>...<virtual_number-N>{/red}\r\n";
+				m_signatures["show"] = " {grn}%s{/grn} {red}show <virtual_number> [field]...[fieldN]{/red}\r\n";
+				m_signatures["paginate"] = " {grn}%s{/grn} {red}paginate [page] [pageSize]{/red}\r\n";
+				m_signatures["reload-all"] = " {grn}%s{/grn} {red}reload-all{/red}\r\n";
+			}
+			virtual ~slotted_builder() {
+				m_orm_list = nullptr;
+				m_builder_ptr = nullptr;
+				m_encoded_response.clear();
+				m_custom_command_map.clear();
+			}
+
+			/** ================================================================================= */
+			/** ### [ SECTION: communication responses to the user                            ### */
+			/** ### [ description ]:                                                          ### */
+			/** ###  for fetching and management of command responses                         ### */
+			/** ###---------------------------------------------------------------------------### */
+			/** ###                           [ START ]                                       ### */
+			/** ###---------------------------------------------------------------------------### */
+
+			/** will clear the encoded_response before handling input if set to true */
+			std::vector<std::string>& encoded_response() {
+				return m_encoded_response;
+			}
+			void clear_response() {
+				m_encoded_response.clear();
+			}
+			/** show the player the available slots setup for this class */
+			void display_slot_list() {
+				std::string list;
+				for(const auto& item : m_slot_list) {
+					m_builder_ptr->send("  {gld}|:: %s{/gld}\r\n",item.data());
+				}
+			}
+			void display_signatures() {
+				if(!m_builder_ptr->is_executing_js()) {
+					m_builder_ptr->pager_start();
+				}
+				for(const auto& pair : m_signatures) {
+					std::vector<char> buffer;
+					buffer.resize(pair.second.length() + m_base_command.length() + 16);
+					std::fill(buffer.begin(),buffer.end(),0);
+					snprintf(&buffer[0],buffer.size()-1,pair.second.c_str(),m_base_command.c_str());
+					push_encoded_ok(&buffer[0]);
+				}
+				if(!m_builder_ptr->is_executing_js()) {
+					m_builder_ptr->pager_end();
+					m_builder_ptr->page(0);
+				}
+			}
+
+		protected:
+			/** ================================================================================= */
+			/** ### [ SECTION: helplers ]                                                     ### */
+			/** ### [ description ]:                                                          ### */
+			/** ###   most of these functions are used internally by various other member     ### */
+			/** ###   functions, but can also be useful to a child class if parsing args.     ### */
+			/** ###---------------------------------------------------------------------------### */
+			/** ###                           [ START ]                                       ### */
+			/** ###---------------------------------------------------------------------------### */
+			/**
+			 * utility function which will extract an integer from the given index
 			 * usage: extract_int<int32_t>("set",argument,1);
 			 * */
 			template <typename TExtractType>
@@ -54,7 +277,8 @@ namespace mods::builder {
 				}
 				return mods::util::stoi(cmd_args[index]);
 			}
-			/** utilitiy function which will extract the exact profile given the index when
+			/**
+			 * utilitiy function which will extract the exact profile given the index when
 			 * the grammar is: mbuild <verb> <vnum> [arg]...[argN]
 			 * usage: extract_profile("set",argument);
 			 */
@@ -77,27 +301,42 @@ namespace mods::builder {
 				return by_vnum(opt_vnum.value());
 			}
 
-			/** use this to register custom commands with custom verbs.
-			 * register_custom_command("reload-all",[](const std::vector<std::string>& cmd_args,std::string argument, TOrmType) { std::cout << "inside lambda" });
-			 */
-			status_response_t register_custom_command(std::string verb, auto lambda) {
-				m_custom_command_map[verb] = lambda;
-				return {1,"done"};
+			/** ###----------------------------------------------------------------------------### */
+			/** ### it's safe to ignore everything below this line unless you need to refactor ### */
+			/** ###----------------------------------------------------------------------------### */
+		private:
+			/** encodes the specific orm profile (if exec js), or dumps using r_success */
+			void push_profile(const std::shared_ptr<TOrmType>& profile) {
+				if(m_builder_ptr->is_executing_js()) {
+					m_encoded_response.emplace_back(profile->encode());
+					return;
+				}
+				r_success(m_builder_ptr,profile->dump());
+			}
+			/** encodes the specific orm profile (if exec js), or dumps using r_success  but only encodes specific fields */
+			void push_profile_with_fields(const std::shared_ptr<TOrmType>& profile,const std::vector<std::string>& fields) {
+				if(m_builder_ptr->is_executing_js()) {
+					m_encoded_response.emplace_back(profile->encode_fields(fields));
+					return;
+				}
+				r_success(m_builder_ptr,profile->dump_fields(fields));
+			}
+			/** saves profile then lets the user know if it succeeded */
+			void report_profile_save(std::shared_ptr<TOrmType> profile,TVnumType vnum) {
+				if(profile->save()) {
+					push_encoded_ok("saved");
+					return;
+				}
+				push_encoded_error("failed");
+			}
+			void push_encoded_error(std::string msg) {
+				push_encoded_message(msg,msg,MSG_ERROR);
+			}
+			void push_encoded_ok(std::string msg) {
+				push_encoded_message(msg,msg,MSG_SUCCESS);
 			}
 
-			/** clear specific verb */
-			void clear_custom_command(std::string verb) {
-				m_custom_command_map.erase(verb);
-			}
-			/** clear all custom commands */
-			void clear_all_custom_commands() {
-				m_custom_command_map.clear();
-			}
 
-			/** helper */
-			bool has_custom_command_for(std::string command) {
-				return m_custom_command_map.find(command) != m_custom_command_map.end();
-			}
 
 			/** proxy function to set slot on specific orm class */
 			void set_slot(const TVnumType& vnum,std::string key,std::string value) {
@@ -127,19 +366,7 @@ namespace mods::builder {
 				);
 			}
 
-			/** function used to set the available slot keys
-			 */
-			void set_slot_list(std::vector<std::string> s) {
-				m_slot_list = s;
-			}
 
-			/** show the player the available slots setup for this class */
-			void display_slot_list() {
-				std::string list;
-				for(const auto& item : m_slot_list) {
-					m_builder_ptr->send("  {gld}|:: %s{/gld}\r\n",item.data());
-				}
-			}
 			/** helper function to handle communication of messages. supports encoding if user is executing js */
 			void push_encoded_message(std::string msg, std::string encoded,uint8_t msg_type) {
 				if(m_builder_ptr->is_executing_js()) {
@@ -156,29 +383,41 @@ namespace mods::builder {
 				}
 				r_error(m_builder_ptr,msg.data());
 			}
-			/** encodes the specific orm profile (if exec js), or dumps using r_success */
-			void push_profile(const std::shared_ptr<TOrmType>& profile) {
-				if(m_builder_ptr->is_executing_js()) {
-					m_encoded_response.emplace_back(profile->encode());
-					return;
+
+			/**
+			 * remove <vnum> <slot>...<slot-N>
+			 */
+			bool dispatch_remove_slot(std::string argument) {
+				auto args = mods::util::subcmd_args<64,args_t>(argument.data(),"remove");
+				if(!args.has_value()) {
+					return false;
 				}
-				r_success(m_builder_ptr,profile->dump());
-			}
-			/** encodes the specific orm profile (if exec js), or dumps using r_success  but only encodes specific fields */
-			void push_profile_with_fields(const std::shared_ptr<TOrmType>& profile,const std::vector<std::string>& fields) {
-				if(m_builder_ptr->is_executing_js()) {
-					m_encoded_response.emplace_back(profile->encode_fields(fields));
-					return;
+				auto cmd_args = args.value();
+				/**
+				 * cmd_args will be: [0] => remove, [1] => vnum ... [2] => slot ... [N] => slot-N
+				 */
+				if(cmd_args.size() < 3) {
+					push_encoded_error("not enough arguments");
+					return true;
 				}
-				r_success(m_builder_ptr,profile->dump_fields(fields));
-			}
-			/** saves profile then lets the user know if it succeeded */
-			void report_profile_save(std::shared_ptr<TOrmType> profile,TVnumType vnum) {
-				if(profile->save()) {
-					push_encoded_ok("saved");
-					return;
+				auto opt_profile = extract_profile("remove",argument);
+				if(!opt_profile.has_value()) {
+					push_encoded_error("couldn't find profile for argument");
+					return true;
 				}
-				push_encoded_error("failed");
+				auto& profile = opt_profile.value();
+
+				/** custom command override */
+				if(has_custom_command_for("remove")) {
+					return tuple_wrap(m_custom_command_map["remove"](cmd_args,argument,profile));
+				}
+				for(unsigned i = 2; i < cmd_args.size(); i++) {
+					auto status = profile->set_slot(cmd_args[i],"");
+					if(!std::get<0>(status)) {
+						push_encoded_message(std::get<1>(status), std::get<1>(status),MSG_ERROR);
+					}
+				}
+				return true;
 			}
 			/**
 			 * dispatches the set command.
@@ -221,12 +460,6 @@ namespace mods::builder {
 
 				return true;
 			}
-			void push_encoded_error(std::string msg) {
-				push_encoded_message(msg,msg,MSG_ERROR);
-			}
-			void push_encoded_ok(std::string msg) {
-				push_encoded_message(msg,msg,MSG_SUCCESS);
-			}
 			bool tuple_wrap(status_response_t s) {
 				if(!std::get<0>(s)) {
 					push_encoded_error(std::get<1>(s));
@@ -262,7 +495,6 @@ namespace mods::builder {
 			 * 	Nbuild save <vnum>...<vnum_N>
 			 */
 			bool dispatch_multi_vnum_action(std::string argument) {
-				m_encoded_response.clear();
 				std::optional<std::vector<std::string>> args;
 				for(auto& phrase : {
 				            "list","delete","save"
@@ -317,55 +549,7 @@ namespace mods::builder {
 				}//end for
 				return true;
 			}
-			bool handle_input(std::string argument) {
-				/**
-				 * new <vnum> ... (handled exclusively by child class
-				 */
-				if(base_dispatch_new_command(argument)) {
-					return true;
-				}
-				/**
-				 * set <vnum> <slot> <value>
-				 */
-				if(dispatch_slot(argument)) {
-					return true;
-				}
-				/**
-				 * list|delete|save <vnum>...<vnum-N>
-				 */
-				if(dispatch_multi_vnum_action(argument)) {
-					return true;
-				}
-				/**
-				 * paginate [page] [pageSize]
-				 */
-				if(dispatch_paginate_action(argument)) {
-					return true;
-				}
-				/**
-				 * list-extract <vnum> <field>...<field-N>
-				 */
-				if(dispatch_list_extract_action(argument)) {
-					return true;
-				}
-				/**
-				 * show <vnum> [field]...[field-N]
-				 */
-				if(dispatch_show_action(argument)) {
-					return true;
-				}
-				/**
-				 * custom commands the child class has provided us
-				 */
-				for(auto& pair : m_custom_command_map) {
-					auto args = mods::util::subcmd_args<50,args_t>(argument,pair.first.c_str());
-					if(args.has_value()) {
-						auto cmd_args = args.value();
-						return tuple_wrap(m_custom_command_map[pair.first](cmd_args,argument,nullptr));
-					}
-				}
-				return false;
-			}
+
 			/**
 			 * dispatches paginate
 			 * example:
@@ -417,6 +601,25 @@ namespace mods::builder {
 				for(; i < page_size && it != m_orm_list->cend(); ++i,++it) {
 					push_profile((*it));
 				}
+				return true;
+			}
+			/**
+			 * dispatches reload-all
+			 * example:
+			 * 	Nbuild reload-all
+			 */
+			bool dispatch_reload_all_action(std::string argument) {
+				auto args = mods::util::subcmd_args<30,args_t>(argument.data(),"reload-all");
+				if(!args.has_value()) {
+					return false;
+				}
+				auto cmd_args = args.value();
+				if(has_custom_command_for(cmd_args[0])) {
+					return tuple_wrap(m_custom_command_map[cmd_args[0]](cmd_args,argument,nullptr));
+				}
+				clear();
+				load_all();
+				push_encoded_ok("done");
 				return true;
 			}
 			/**
@@ -486,6 +689,18 @@ namespace mods::builder {
 					return true;
 				}
 				push_profile(prof.value());
+				return true;
+			}
+			bool dispatch_help(std::string argument) {
+				auto args = mods::util::subcmd_args<64,args_t>(argument.data(),"help");
+				if(!args.has_value()) {
+					return false;
+				}
+				auto cmd_args = args.value();
+				if(has_custom_command_for(cmd_args[0])) {
+					return tuple_wrap(m_custom_command_map[cmd_args[0]](cmd_args,argument,nullptr));
+				}
+				display_signatures();
 				return true;
 			}
 	};//end struct

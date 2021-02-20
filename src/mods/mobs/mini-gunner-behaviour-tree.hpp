@@ -72,7 +72,7 @@ namespace mods::mobs::mini_gunner_behaviour_tree {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
 			auto mg = mini_gunner_ptr(mob.uuid());
 			static constexpr uint8_t RANDOM_THINGS = 3;
-			switch(dice(0,RANDOM_THINGS)) {
+			switch(rand_number(0,RANDOM_THINGS)) {
 				case 0:
 					mg->shout(random_key_string(MINI_GUNNER_RANDOM_ATTACK_YELL_STRINGS()));
 					break;

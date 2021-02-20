@@ -11,9 +11,17 @@
 #include "slotted-builder.hpp"
 
 namespace mods::builder::meqbuild {
+
+
+	/** ===================================================================================== */
+	/** ===================================================================================== */
+	/** ===================================================================================== */
 	using meqbuild_vnum_t = uint64_t;
 	using meqbuild_orm_type = mods::orm::mob_equipment;
 	struct meqbuild_interface : public slotted_builder<meqbuild_vnum_t,meqbuild_orm_type> {
+		/** ======== */
+		/** required */
+		/** ======== */
 		bool delete_by_vnum(meqbuild_vnum_t vnum) {
 			std::deque<std::shared_ptr<mods::orm::mob_equipment>> list;
 			bool deleted = false;
@@ -28,6 +36,11 @@ namespace mods::builder::meqbuild {
 			mods::orm::mob_equipment_list() = std::move(list);
 			return deleted;
 		}
+
+		/** ======== */
+		/** required */
+		/** ======== */
+		/** will optionally return the orm entity that has the given vnum */
 		std::optional<std::shared_ptr<meqbuild_orm_type>> by_vnum(meqbuild_vnum_t vnum) {
 			for(const auto& m : mods::orm::mob_equipment_list()) {
 				if(m->meq_vnum == vnum) {
@@ -36,10 +49,25 @@ namespace mods::builder::meqbuild {
 			}
 			return std::nullopt;
 		}
+
 		meqbuild_interface() {
+			/** ======== */
+			/** required */
+			/** ======== */
+			/** set available slots */
 			set_slot_list(meqbuild_orm_type::get_slot_list());
+			/** point the class to our base orm structure */
 			set_orm_list(&mods::orm::mob_equipment_list());
+			/** set the base command */
+			set_base_command("meqbuild");
+			clear();
+			load_all();
 		}
+
+		/** ======== */
+		/** required */
+		/** ======== */
+		/** in order for the "new" command to work, we must implement this */
 		status_response_t dispatch_new_command(const std::vector<std::string>& cmd_args,std::string argument) {
 			/**
 			 * cmd_args: [0] => "new" [1] => profile-name [2] => vnum
@@ -59,22 +87,26 @@ namespace mods::builder::meqbuild {
 			mods::orm::mob_equipment_list().emplace_back(std::move(meq));
 			return {1,"Created row."};
 		}
+		/** ======== */
+		/** required */
+		/** ======== */
+		void clear() {
+			mods::orm::mob_equipment_list().clear();
+			mods::orm::mob_equipment_map_list().clear();
+			mods::mob_equipment::refresh_mappings();
+		}
+		/** ======== */
+		/** required */
+		/** ======== */
+		void load_all() {
+			mods::orm::mob_equipment_list() = std::move(mods::orm::load_all_by_table<mods::orm::mob_equipment>());
+			mods::orm::mob_equipment_map_list() = std::move(mods::orm::load_all_by_table<mods::orm::mob_equipment_map>());
+			mods::mob_equipment::refresh_mappings();
+		}
 	};
 
-	static constexpr int MAX_MOB_EQUIPMENT_LIST = 1500;
-	static constexpr int MEQBUILD_MAX_ITEMS_LISTED = 150;
-	void clear() {
-		mods::orm::mob_equipment_list().clear();
-		mods::orm::mob_equipment_map_list().clear();
-		mods::mob_equipment::refresh_mappings();
-	}
-	void load_all() {
-		mods::orm::mob_equipment_list() = std::move(mods::orm::load_all_by_table<mods::orm::mob_equipment>());
-		mods::orm::mob_equipment_map_list() = std::move(mods::orm::load_all_by_table<mods::orm::mob_equipment_map>());
-		mods::mob_equipment::refresh_mappings();
-	}
-
 	namespace map {
+
 		bool delete_by_vnum(const uint64_t& vnum) {
 			std::deque<std::shared_ptr<mods::orm::mob_equipment_map>> list;
 			bool deleted = false;
@@ -150,38 +182,18 @@ namespace mods::builder::meqbuild {
 
 	using args_t = std::vector<std::string>;
 
-	meqbuild_interface& meqbuilder(player_ptr_t& player) {
+	meqbuild_interface& meqbuilder(player_ptr_t player) {
 		static meqbuild_interface interface;
 		interface.set_builder(player);
 		return interface;
 	}
 
 	ACMD(do_meqbuild) {
-
 		mods::builder::initialize_builder(player);
-		auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
+#if 0
 		if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
 			player->pager_start();
 			*player << "usage: \r\n" <<
-			        /** help */
-			        " {grn}meqbuild{/grn} {red}help{/red}\r\n" <<
-			        "  |--> this help menu\r\n" <<
-
-			        /** new */
-			        " {grn}meqbuild{/grn} {red}new <name> <virtual_number>{/red}\r\n" <<
-			        "  |--> create a new mob equipment profile named 'name'\r\n" <<
-
-			        /** save */
-			        " {grn}meqbuild{/grn} {red}save <virtual_number>...<virtual_numberN>{/red}\r\n" <<
-			        "  |--> create a new mob equipment profile named 'name'\r\n" <<
-
-			        /** set */
-			        " {grn}meqbuild{/grn} {red}set <virtual_number> <position> <yaml>{/red}\r\n" <<
-			        "  |--> set the slot for the profile to 'yaml'\r\n" <<
-			        "  {grn}|____[example]{/grn}\r\n" <<
-			        "  |:: {wht}meqbuild{/wht} {grn}set 3 wield rifle/g36c.yml{/grn}\r\n" <<
-			        "  |--> sets profile 3 to have a g36c on the wield slot\r\n" <<
-
 			        "  {gld}|:: -:[positions]:-{/gld}\r\n" <<
 			        wear_flag_list() <<
 
@@ -191,24 +203,6 @@ namespace mods::builder::meqbuild {
 			        "  {grn}|____[example]{/grn}\r\n" <<
 			        "  |:: {wht}meqbuild{/wht} {grn}remove 3 wield{/grn}\r\n" <<
 			        "  |--> clears the wield slot for profile 3\r\n" <<
-
-			        paginate_option("meqbuild","mob equipment profiles") <<
-			        list_extract_option("meqbuild","mob equipment profiles") <<
-
-			        /** delete */
-			        " {grn}meqbuild{/grn} {red}delete <virtual_number>...<virtual_numberN>{/red}\r\n" <<
-			        "  |--> deletes the profile\r\n" <<
-			        "  {grn}|____[example]{/grn}\r\n" <<
-			        "  |:: {wht}meqbuild{/wht} {grn}delete 3{/grn}\r\n" <<
-
-			        /** list */
-			        " {grn}meqbuild{/grn} {red}list [virtual_number]...[virtual_numberN]{/red}\r\n" <<
-			        "  |--> lists all mob equipment profiles optionally with virtual numbers\r\n" <<
-
-			        /** show */
-			        " {grn}meqbuild{/grn} {red}show <virtual_number>{/red}\r\n" <<
-			        "  |--> show a specific mob equipment profile\r\n" <<
-
 
 			        /** map-assign */
 			        " {grn}meqbuild{/grn} {red}map-assign <mob_vnum> <meq_vnum>{/red}\r\n" <<
@@ -229,239 +223,18 @@ namespace mods::builder::meqbuild {
 			        "  |--> deletes all map-assign'd mob to meq vnum mappings specified by the list of mob vnums passed in\r\n" <<
 
 
-			        /** reload-all */
-			        " {grn}meqbuild{/grn} {red}reload-all{/red}\r\n" <<
-			        "  |--> clears all meqbuild data and reloads from sql. Does not save before loading\r\n"
-
 			        "\r\n";
 			player->pager_end();
 			player->page(0);
 			return;
 		}
+#endif
 
 		if(meqbuilder(player).handle_input(argument)) {
 			return;
 		}
 
-		/** reload-all */
-		{
-			auto args = mods::util::subcmd_args<11,args_t>(argument,"reload-all");
-			if(args.has_value()) {
-				ENCODE_INIT();
-				mods::builder::meqbuild::clear();
-				mods::builder::meqbuild::load_all();
-				r_success(player,"Reloaded");
-				ENCODE_R("ok");
-				return;
-			}
-		}
-
-
-		//MENTOC_LIST_EXTRACT();
-
-		//MENTOC_PAGINATED_LIST(mods::orm::mob_equipment_list());
-#if 0
-		{
-			auto args = mods::util::subcmd_args<5,args_t>(argument,"show");
-			if(args.has_value()) {
-				ENCODE_INIT();
-				auto cmd_args = args.value();
-				std::string encoded_response;
-				if(cmd_args.size() < 2) {
-					r_error(player,"atleast 1 vnum is needed");
-					return;
-				}
-				auto opt = mods::util::stoi(cmd_args[1]).value_or(-1);
-				if(opt < 0) {
-					r_error(player,"vnum must be positive");
-					return;
-				}
-				auto profile = by_vnum(opt);
-				if(profile.has_value()) {
-					r_success(player,profile.value()->dump());
-					ENCODE_R(profile.value()->encode());
-					return;
-				}
-				r_error(player,"no profile for that vnum");
-				return;
-			}
-		}
-
-		/** list */
-		{
-			auto args = mods::util::subcmd_args<5,args_t>(argument,"list");
-			if(args.has_value()) {
-				ENCODE_INIT();
-				auto cmd_args = args.value();
-				std::string encoded_response;
-				if(cmd_args.size() > 1) {
-					for(auto i = 1; i < cmd_args.size(); i++) {
-						auto opt = mods::util::stoi(cmd_args[i]).value_or(-1);
-						if(opt < 0) {
-							r_error(player,CAT("vnum must be positive for argument number ",i,": '",cmd_args[i],"'"));
-							continue;
-						}
-						auto profile = by_vnum(opt);
-						if(profile.has_value()) {
-							r_success(player,profile.value()->dump());
-							encoded_response += profile.value()->encode();
-						}
-					}
-					ENCODE_R(encoded_response);
-					return;
-				}
-				int max_items = mods::orm::mob_equipment_list().size();
-				if(mods::orm::mob_equipment_list().size() > MAX_MOB_EQUIPMENT_LIST) {
-					r_error(player,CAT("WARNING: meqbuild data is very large. use paginate to see specific pages. listing the first ",MEQBUILD_MAX_ITEMS_LISTED));
-					max_items = MEQBUILD_MAX_ITEMS_LISTED;
-				}
-
-				int ctr = 0;
-				for(const auto& profile : mods::orm::mob_equipment_list()) {
-					r_success(player,profile->dump());
-					encoded_response += profile->encode();
-					if(++ctr >= max_items) {
-						break;
-					}
-				}
-				ENCODE_R(encoded_response);
-				return;
-			}
-		}
-
-		/** save */
-		{
-			auto args = mods::util::subcmd_args<5,args_t>(argument,"save");
-			if(args.has_value()) {
-				ENCODE_INIT();
-				auto cmd_args = args.value();
-				if(cmd_args.size() < 2) {
-					r_error(player,"Error: not enough arguments");
-					return;
-				}
-				std::string saved = "";
-				for(unsigned i = 1; i < cmd_args.size(); ++i) {
-					auto vnum = mods::util::stoi(cmd_args[i]).value_or(-1);
-					if(vnum <= 0) {
-						r_error(player,"vnum must be a positive number");
-						continue;
-					}
-					auto profile = by_vnum(vnum);
-					if(!profile.has_value()) {
-						r_error(player,CAT("no profile associated with: '",vnum,"'"));
-						continue;
-					}
-					saved += std::to_string(profile.value()->save()) + "|";
-				}
-				ENCODE_R(saved);
-				return;
-			}
-		}
-
-
-		/** set */
-		{
-			auto args = mods::util::subcmd_args<4,args_t>(argument,"set");
-
-			if(args.has_value()) {
-				ENCODE_INIT();
-				auto cmd_args = args.value();
-				if(cmd_args.size() < 4) {
-					r_error(player,"Not enough arguments");
-					return;
-				}
-				/**
-				 * cmd_args will be: [0] => set, [1] => <vnum> [2] => <position> [3] => yaml
-				 */
-				auto vnum = mods::util::stoi(cmd_args[1]).value_or(-1);
-				auto position = cmd_args[2];
-				auto yaml = cmd_args[3];
-				if(vnum <= 0) {
-					r_error(player,"vnum must be a positive number");
-					return;
-				}
-				auto item = by_vnum(vnum);
-				if(!item.has_value()) {
-					r_error(player,"No mob equipment profile exists with that vnum");
-					return;
-				}
-				if(!std::get<0>(item.value()->set_slot(position, yaml))) {
-					r_error(player,"Invalid slot type");
-					return;
-				}
-				ENCODE_R("ok");
-				r_success(player,"Set slot");
-				return;
-			}//end pave on
-		}
-		/** remove  */
-		{
-			auto args = mods::util::subcmd_args<7,args_t>(argument,"remove");
-
-			if(args.has_value()) {
-				ENCODE_INIT();
-				auto cmd_args = args.value();
-				if(cmd_args.size() < 3) {
-					r_error(player,"Not enough arguments");
-					return;
-				}
-				/**
-				 * cmd_args will be: [0] => remove, [1] => <vnum> [2] => <position>
-				 */
-				auto vnum = mods::util::stoi(cmd_args[1]).value_or(-1);
-				auto position = cmd_args[2];
-				if(vnum <= 0) {
-					r_error(player,"vnum must be a positive number");
-					return;
-				}
-				auto item = by_vnum(vnum);
-				if(!item.has_value()) {
-					r_error(player,"No mob equipment profile exists with that vnum");
-					return;
-				}
-				if(!std::get<0>(item.value()->set_slot(position, ""))) {
-					r_error(player,"Invalid slot type");
-					return;
-				}
-				ENCODE_R("ok");
-				r_success(player,"Slot cleared");
-				return;
-			}//end pave on
-		}
-
-
-		/** delete */
-		{
-			auto args = mods::util::subcmd_args<7,args_t>(argument,"delete");
-			if(args.has_value()) {
-				ENCODE_INIT();
-				auto cmd_args = args.value();
-				if(cmd_args.size() < 2) {
-					r_error(player,"Not enough arguments");
-					return;
-				}
-				/**
-				 * cmd_args will be: [0] => delete, [1] => <vnum>, ... [N] => <vnumN>
-				 */
-				std::string deleted = "";
-				for(unsigned i = 1; i < cmd_args.size(); ++i) {
-					auto vnum = mods::util::stoi(cmd_args[i]).value_or(-1);
-					if(vnum < 0) {
-						r_error(player,"vnum must be a positive number");
-						continue;
-					}
-					if(!delete_by_vnum(vnum)) {
-						r_error(player,"No mob equipment profile exists with that vnum");
-						continue;
-					}
-					deleted += CAT(vnum,"|");
-				}
-				ENCODE_R(deleted);
-				r_success(player,"Profile(s) deleted");
-				return;
-			}
-		}
-#endif
+		auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 		/** map-list */
 		{
 			auto args = mods::util::subcmd_args<11,args_t>(argument,"map-list");
@@ -579,7 +352,6 @@ namespace mods::builder::meqbuild {
 	}	//end meqbuild
 	void init() {
 		mods::interpreter::add_command("meqbuild", POS_RESTING, do_meqbuild, LVL_BUILDER,0);
-		mods::builder::meqbuild::clear();
-		mods::builder::meqbuild::load_all();
+		meqbuilder(nullptr);
 	}
 };

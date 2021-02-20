@@ -1,5 +1,18 @@
 # Inventory of features
 
+# needs testing
+	- hqbuild
+		- test hq orm functionality
+		- test hqbuild ACMD
+	- radio
+		- test radio communication to/from hq
+	- lowly security guard extended type
+		- test behaviour trees
+		- test `smart_mob` extended class type
+		- test report hostile activity radio support
+# NEED TO FINISH: 
+	- checkout mobs/roam-zone branch and finish that stuff
+
 # slotted builder class
 	- handles a lot of the boilerplate for builder functions
 	- source: `mods/builder/slotted-builder.hpp`
@@ -9,10 +22,6 @@
 # all extended mob types to use meqbuild
 	- using the values system to assign extended mobs their eq is now DEPRECATED
 	- use the meqbuild command
-
-# lowly security guard extended mob type
-	- new extended mob type just like the mini gunner
-	- 
 
 # mob reinforcements (or response team)
 	- [x] create car object type
@@ -27,14 +36,10 @@
 		- [ ] very dangerous areas take longer to respond time
 		- [ ] less dangerous areas have a faster response time
 		- [ ] very rich areas have extremely fast response time
-	- [ ] security force consists of N cars and N response team members
+	- [x] security force consists of N cars and N response team members
 		- [ ] when all response team members are dispatched
 			- [ ] no available response team to get to certain areas
 	- [ ] distance to call for help dictates response time
-
-# meqbuild
-	- orm classes `mob_equipment`
-	- use ACMD: `meqbuild`
 
 # grunt work
 	- 2021-01-30
@@ -371,8 +376,6 @@
 		- wearing armor with elemental resistance percents will add to your resistances
 		- wearing armor that adds stat bonuses will add to your affect abilities (`aff_abils()`)
 	
-# NEED TO FINISH: 
-	- checkout mobs/roam-zone branch and finish that stuff
 
 # Cobalt FOB area scripts
 	- source file: lib/js/profiles/far.js
