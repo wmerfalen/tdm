@@ -10,7 +10,7 @@
 #include <iterator>
 #include "mods/lmdb/db.hpp"
 #include "mods/ai_state.hpp"
-#include "mods/quests.hpp"
+#include "mods/contracts.hpp"
 #include "mods/builder.hpp"
 #include "utils.h"
 #include "mods/behaviour_tree_impl.hpp"
@@ -77,6 +77,7 @@ INIT(mods::fluxkraft);
 INIT(mods::fluxkraft::arcon_bar);
 INIT(mods::builder::meqbuild);
 INIT(mods::builder::hqbuild);
+INIT(mods::contracts);
 #undef INIT
 
 namespace mods::unit_tests {
@@ -437,7 +438,7 @@ namespace mods {
 			mods::js::create_new_context();
 			mods::js::load_c_functions();
 			/** TODO: make configurable */
-			mods::js::load_library("/lib/quests/quests.js");
+			mods::js::load_library("/lib/contracts/contracts.js");
 			mods::behaviour_tree_impl::load_trees();
 			if(f_test_suite.length()) {
 				//if(!f_test_suite.compare("db")){
@@ -515,6 +516,7 @@ namespace mods {
 			mods::fluxkraft::arcon_bar::init();
 			mods::builder::meqbuild::init();
 			mods::builder::hqbuild::init();
+			mods::contracts::init();
 			::offensive::init();
 			::builder::init();
 			::informative::init();
@@ -610,7 +612,7 @@ namespace mods {
 				i = nr;
 			}
 			if(std::size_t(i) >= mob_proto.size()) {
-				log("SYSERR: requested mob_proto index is invalid: ", i,". mob_proto.size() is currently: ", mob_proto.size(), ". Ignoring...");
+				log("SYSERR: recontracted mob_proto index is invalid: ", i,". mob_proto.size() is currently: ", mob_proto.size(), ". Ignoring...");
 				return nullptr;
 			}
 
@@ -947,9 +949,9 @@ namespace mods {
 				d("drone started. interpretting");
 				return mods::drone::interpret(player->uuid(),in_argument.data());
 			}
-			if(!player->cd()->drone && mods::quests::has_quest(player)) {
-				d("Running trigger for quests");
-				mods::quests::run_trigger(player);
+			if(!player->cd()->drone && mods::contracts::has_contract(player)) {
+				d("Running trigger for contracts");
+				mods::contracts::run_trigger(player);
 			}
 
 			if(player->room_pave_mode()) {
@@ -1162,7 +1164,7 @@ namespace mods {
 					target_room = 0;
 				}
 				if(target_room >= room_list.size()) {
-					log("SYSERR: char_to_room failed for ch. Requested room is out of bounds: ",target_room);
+					log("SYSERR: char_to_room failed for ch. Recontracted room is out of bounds: ",target_room);
 					return;
 				}
 				player->set_room(target_room);
@@ -1370,6 +1372,9 @@ player_ptr_t ptr_by_uuid(uuid_t id) {
 }
 obj_ptr_t optr_by_uuid(uuid_t id) {
 	return mods::globals::obj_map[id];
+}
+std::shared_ptr<mods::npc> npc_by_uuid(const uuid_t& u) {
+	return mods::globals::mob_map[u];
 }
 std::string dirstr(int dir) {
 	switch(dir) {

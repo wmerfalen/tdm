@@ -446,7 +446,6 @@ ACMD(do_room_fire);
 ACMD(do_room_list);
 ACMD(do_show_tics);
 ACMD(do_drone);
-ACMD(do_contract);
 ACMD(do_js);
 ACMD(do_set_ammo);
 //ACMD(do_ammo);
@@ -734,7 +733,6 @@ cpp_extern const struct command_info cmd_info[] = {
 
 	{ "quaff", POS_RESTING, do_use, 0, SCMD_QUAFF },
 	{ "qecho", POS_DEAD, do_qcomm, LVL_IMMORT, SCMD_QECHO },
-	{ "quest", POS_DEAD, do_unimplemented, 0, SCMD_QUEST },
 	{ "qui", POS_DEAD, do_quit, 0, 0 },
 	{ "quit", POS_DEAD, do_quit, 0, SCMD_QUIT },
 	{ "qsay", POS_RESTING, do_qcomm, 0, SCMD_QSAY },
@@ -812,12 +810,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	/** ------------- */
 	/** INFORMATIONAL */
 	/** ------------- */
-	/** ------ */
-	/** QUESTS */
-	/** ------ */
-	{ "quest", POS_RESTING, do_contract, 0, 0 },
-	{ "contract", POS_RESTING, do_contract, 0, 0 },
-	{ "contracts", POS_RESTING, do_contract, 0, 0 },
 	/** ------- */
 	/** DISPLAY */
 	/** ------- */

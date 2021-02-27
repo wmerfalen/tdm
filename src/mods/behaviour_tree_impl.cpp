@@ -70,11 +70,16 @@ namespace mods::behaviour_tree_impl {
 		}
 		bti_debug("registering mob '" << tree_name);
 		mob.mob_specials().behaviour_tree = std::distance(tree_mapping.begin(),it);
+		mods::behaviour_tree_impl::mob_list().emplace_back(mob.uuid());
 		return 0;
 	}
 
 	int8_t unregister_mob(argument_type mob) {
 		mob.mob_specials().behaviour_tree = 0;
+		auto m_uuid = mob.uuid();
+		std::remove_if(mods::behaviour_tree_impl::mob_list().begin(),
+		               mods::behaviour_tree_impl::mob_list().end(),[m_uuid](const auto & u) -> bool { return u == m_uuid; }
+		              );
 		return 0;
 	}
 	uint8_t grab_tree_by_name(const std::string& sv_tree) {
@@ -262,6 +267,20 @@ namespace mods::behaviour_tree_impl {
 			})
 		}));
 		add_tree("suspicious_roaming",suspicious_roaming);
+	}
+	std::vector<uuid_t>& mob_list() {
+		static std::vector<uuid_t> list;
+		return list;
+	}
+	/** use this when you just need to add the mob to the vector */
+	void register_mob(uuid_t u) {
+		mods::behaviour_tree_impl::mob_list().emplace_back(u);
+	}
+
+	void unregister_mob(uuid_t m_uuid) {
+		std::remove_if(mods::behaviour_tree_impl::mob_list().begin(),
+		               mods::behaviour_tree_impl::mob_list().end(),[m_uuid](const auto & u) -> bool { return u == m_uuid; }
+		              );
 	}
 
 };

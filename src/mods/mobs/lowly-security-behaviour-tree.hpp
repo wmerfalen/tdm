@@ -66,20 +66,21 @@ namespace mods::mobs::lowly_security_behaviour_tree {
 	template <typename TNode,typename TArgumentType,typename TStatus>
 	auto random_trivial_action() {
 		return TNode::create_leaf([](TArgumentType& mob) -> TStatus {
-			auto mg = lowly_security_ptr(mob.uuid());
+			auto lsec = lowly_security_ptr(mob.uuid());
+			if(!lsec->should_do(lowly_security::SHOULD_DO_RANDOM_TRIVIAL)) {
+				return TSUCCESS;
+			}
 			static constexpr uint8_t RANDOM_THINGS = 4;
 			auto roll = rand_number(1,RANDOM_THINGS);
-			std::cerr << red_str("lowly_sec roll:") << roll << "\n";
 			switch(roll) {
 				default:
-					act("$n slams $s fist against $s chest!",FALSE,mob.cd(),0,0,TO_ROOM);
+					act("$n shifts $s weight and slowly goes back to standing still.",FALSE,mob.cd(),0,0,TO_ROOM);
 					break;
-				case 2:
-					act("$n only seems to get angrier with every passing moment...",FALSE,mob.cd(),0,0,TO_ROOM);
+				case 0:
+					act("$n tilts $s sunglasses to see you with $s eyes.",FALSE,mob.cd(),0,0,TO_ROOM);
 					break;
-				case 3:
-					act("$n scans the room.",0,mob.cd(),0,0,TO_ROOM);
-					break;
+				case 1:
+					act("$n scans the room slowly.",0,mob.cd(),0,0,TO_ROOM);
 					break;
 			}
 			return TSUCCESS;
@@ -221,7 +222,6 @@ namespace mods::mobs::lowly_security_behaviour_tree {
 		tree.append_child(
 		TNode::create_sequence({
 			debug_echo_tree_name<TNode,TArgumentType,TStatus>("lowly_security_roam"),
-			random_trivial_action<TNode,TArgumentType,TStatus>(),
 			find_targets<TNode,TArgumentType,TStatus>(),
 			spray_direction<TNode,TArgumentType,TStatus>(),
 			set_behaviour_tree_to_engage<TNode,TArgumentType,TStatus>()

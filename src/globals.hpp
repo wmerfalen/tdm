@@ -232,6 +232,7 @@ player_ptr_t ptr(const char_data*);
 player_ptr_t ptr(char_data*);
 obj_ptr_t optr(obj_data*);
 player_ptr_t ptr_by_uuid(uuid_t);
+std::shared_ptr<mods::npc> npc_by_uuid(const uuid_t& u);
 obj_ptr_t optr_by_uuid(uuid_t);
 std::optional<obj_ptr_t> optr_opt(uuid_t);
 std::optional<player_ptr_t> ptr_opt(uuid_t);

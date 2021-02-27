@@ -22,7 +22,7 @@
 #include "constants.h"
 #include "globals.hpp"
 #include "mods/extern.hpp"
-#include "mods/quests.hpp"
+#include "mods/contracts.hpp"
 #include "mods/drone.hpp"
 #include "mods/util.hpp"
 #include "mods/world-configuration.hpp"
@@ -167,59 +167,6 @@ ACMD(do_recall) {
 	}
 }
 
-ACMD(do_contract) {
-	auto vec_args = PARSE_ARGS();
-	DO_HELP_WITH_ZERO("contract");
-
-	if(vec_args.size() > 0 && vec_args[0].compare("list") == 0) {
-		auto quest_names = mods::quests::list_quests(player->vnum());
-		if(quest_names.size() == 0) {
-			player->sendln("{red}There are no contracts in this room.{/red}");
-			return;
-		}
-		player->sendln("{grn}Listing available contracts in this room...{/grn}");
-		for(auto qn : quest_names) {
-			*player << "{grn}[ CONTRACT ]{/grn} {yel}" << qn << "{/yel}\r\n";
-		}
-		player->sendln("{grn}Done listing.{/grn}");
-
-		return;
-	}
-
-	if(vec_args.size() > 1 && vec_args[0].compare("join") == 0) {
-		auto quest_num = mods::util::stoi(vec_args[1]);
-
-		if(quest_num.value_or(-1) == -1) {
-			*player << "{red}Invalid contract number.{/red}\r\n";
-			return;
-		}
-
-		if(mods::quests::start_quest(player,quest_num.value())) {
-			player->sendln("{grn}Your contract has been started! Good luck!{/grn}");
-			return;
-		}
-		player->sendln("{red}There is no contract here that matches your criteria.{/red}");
-		return;
-	}
-
-	if(vec_args.size() > 1 && vec_args[0].compare("leave") == 0) {
-		auto quest_num = mods::util::stoi(vec_args[1]);
-
-		if(quest_num.value_or(-1) == -1) {
-			*player << "{red}Invalid contract number{/red}\r\n";
-			return;
-		}
-
-		mods::quests::leave_quest(player,quest_num.value());
-		if(mods::quests::current_quest(player).compare(vec_args[1]) != 0) {
-			player->sendln("{red}You are not part of that contract.{/red}");
-			return;
-		}
-		*player << "{red}You have left the contract.{/red}\n";
-		mods::quests::punish_for_leaving_contract(player,quest_num.value());
-		return;
-	}
-}
 
 ACMD(do_preferences) {
 
@@ -586,6 +533,7 @@ void list_one_char(char_data *i, char_data *ch) {
 	if(AFF_FLAGGED(i, AFF_SANCTUARY)) {
 		act(" ...$e glows with a bright light!", FALSE, i, 0, ch, TO_VICT);
 	}
+	player->send("\r\n");
 }
 
 
@@ -2242,7 +2190,6 @@ namespace informative {
 		mods::interpreter::add_command("color",POS_RESTING,do_color,0,0);
 		mods::interpreter::add_command("commands",POS_RESTING,do_commands,0,0);
 		mods::interpreter::add_command("consider",POS_RESTING,do_consider,0,0);
-		mods::interpreter::add_command("contract",POS_RESTING,do_contract,0,0);
 		mods::interpreter::add_command("diagnose",POS_RESTING,do_diagnose,0,0);
 		mods::interpreter::add_command("drone",POS_RESTING,do_drone,0,0);
 		mods::interpreter::add_command("equipment",POS_RESTING,do_equipment,0,0);

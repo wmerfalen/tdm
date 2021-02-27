@@ -866,7 +866,11 @@ void game_loop(socket_t mother_desc) {
 #endif
 void run_behaviour_trees() {
 	rb_bht_debug("run_behaviour_trees [ENTRY]");
-	for(auto& npc : mob_list) {
+	for(const auto& npc_uuid : mods::behaviour_tree_impl::mob_list()) {
+		auto npc = npc_by_uuid(npc_uuid);
+		if(!npc) {
+			continue;
+		}
 		if(npc->mob_specials().behaviour_tree) {
 			auto dispatch_result = mods::behaviour_tree_impl::dispatch_ptr(*npc);
 			rb_bht_debug("dispatch_result: '" << std::to_string(dispatch_result) << "'");
@@ -2527,7 +2531,7 @@ void perform_act(const char *orig, char_data *ch, obj_data *obj,
 	}
 
 	*(--buf) = '\0';
-	ptr(to)->send(CAP(lbuf));
+	ptr(to)->sendln(CAP(lbuf));
 }
 
 

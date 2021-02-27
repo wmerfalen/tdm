@@ -1,4 +1,5 @@
 #include "encode.hpp"
+#include "../../globals.hpp"
 
 namespace mods::builder {
 	using strmap_t = std::map<std::string,std::string>;
@@ -9,7 +10,7 @@ namespace mods::builder {
 		}
 		return dump;
 	}
-	std::string encode(const strmap_t& data) {
+	std::string encode_map(const strmap_t& data) {
 		std::string dump;
 		std::size_t ctr = 0;
 		dump = "[";
@@ -22,5 +23,8 @@ namespace mods::builder {
 		}
 		dump += "]";
 		return dump;
+	}
+	std::string encode(std::string_view data) {
+		return CAT("{vlen:",data.length(),",value:\"",data.data(),"\"}");
 	}
 };

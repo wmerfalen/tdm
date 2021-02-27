@@ -9,6 +9,8 @@
 namespace mods::mobs {
 	using tick_t = uint64_t;
 	struct lowly_security : public smart_mob {
+		static constexpr uint16_t SHOULD_DO_ROAM = 0;
+		static constexpr uint16_t SHOULD_DO_RANDOM_TRIVIAL = 1;
 		/**====================================================*/
 		/** factory and destruct */
 		/**====================================================*/

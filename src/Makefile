@@ -37,6 +37,8 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-D__MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__=1 \
 	-D__MENTOC_SQL_MIGRATIONS_DIR=\"$(SQL_MIGRATIONS_DIR)\" \
 	-D__MENTOC_PREDEFINED_RIFLE_PKID__=1
+#-D__MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__=1 \
+#-D__MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__=1 \
 	#-D__MENTOC_SHOW_YAML_FIELD_BEING_FED__=1 \
 	#-D__MENTOC_SHOW_LMDB_DEBUG__=1
 	#-D__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__=1 \
@@ -54,7 +56,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/behaviour_tree_impl mods/lmdb\
 					 mods/chat mods/conf mods/deferred mods/drone mods/immortal\
 					 mods/js mods/player mods/prefs mods/pregame\
-					 mods/projectile mods/quests mods/scan mods/sql mods/util\
+					 mods/projectile mods/contracts mods/scan mods/sql mods/util\
 					 mods/weapon mods/string mods/loops\
 					 mods/hell mods/db mods/testing/lmdb/player-syncing\
 					 mods/testing/lmdb/db mods/player-scaffolding sql/port\
@@ -118,7 +120,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/fluxkraft/generator mods/fluxkraft/shape-dictionary \
 					 mods/fluxkraft/arcon-metropolitan mods/fluxkraft/arcon-bar \
 					 mods/response-team/radio mods/response-team/hq-locations \
-					 mods/mob-equipment
+					 mods/mob-equipment mods/builder/encode
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all
@@ -141,6 +143,8 @@ clean:
 		rm -f $(builddir)/mods/fluxkraft/*.d \
 		rm -f $(builddir)/mods/response-team/*.o \
 		rm -f $(builddir)/mods/response-team/*.d \
+		rm -f $(builddir)/mods/builder/*.o \
+		rm -f $(builddir)/mods/builder/*.d \
 		rm -f $(builddir)/mods/unit-tests/*.o \
 		rm -f $(builddir)/mods/unit-tests/*.d 
 

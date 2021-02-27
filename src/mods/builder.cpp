@@ -1,6 +1,6 @@
 #include "builder.hpp"
 #include "mob-roam.hpp"
-#include "quests.hpp"
+#include "contracts.hpp"
 #include "pq.hpp"
 #include "util.hpp"
 #include "object.hpp"
@@ -26,6 +26,8 @@
 #include <list>
 #include <memory>
 #include "orm/shop.hpp"
+#include "builder/encode.hpp"
+
 namespace mods {
 	struct player;
 };
@@ -213,6 +215,18 @@ namespace mods::builder {
 			return;
 		}
 		player->set_scripted_response(encoded);
+	}
+	void encode_scripted_response_safe(player_ptr_t& player, std::string_view encoded) {
+		if(!player->is_executing_js()) {
+			return;
+		}
+		player->set_scripted_response(mods::builder::encode(encoded));
+	}
+	void encode_scripted_response(player_ptr_t& player, str_map_t&& map) {
+		if(!player->is_executing_js()) {
+			return;
+		}
+		player->set_scripted_response(mods::builder::encode_map(map));
 	}
 	std::tuple<int8_t,std::string> pave_continue(player_ptr_t& player) {
 		if(player->builder_data && player->builder_data->room_pave_mode) {
@@ -2295,6 +2309,8 @@ ACMD(do_mbuild) {
 		        " {grn}mbuild{/grn} {red}save <mob_id>{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}show <mob_id>{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}instantiate <mob_vnum>{/red}\r\n" <<
+		        " {grn}mbuild{/grn} {red}place <mob_vnum> <room_vnum> <tag>...<tag-N>{/red}\r\n" <<
+		        "  |--> will instantiate a mob of mob_vnum and place it in room_vnum with the specific tags.\r\n" <<
 		        " {grn}mbuild{/grn} {red}action:add <mob_id> <flag>{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}action:remove <mob_id> <flag>{/red}\r\n" <<
 		        " {grn}mbuild{/grn} {red}action:list <mob_id>{/red}\r\n"
@@ -2597,6 +2613,47 @@ ACMD(do_mbuild) {
 			r_success(player,"Object created, look on the floor");
 			ENCODE_OK();
 		}
+
+		return;
+	}
+	//" {grn}mbuild{/grn} {red}place <mob_vnum> <room_vnum> <tag>...<tag-N>{/red}\r\n" <<
+	args = mods::util::subcmd_args<12,args_t>(argument,"place");
+
+	if(args.has_value()) {
+		ENCODE_INIT();
+		auto arg_vec = args.value();
+		if(arg_vec.size() < 3) {
+			r_error(player,"Invalid number of arguments");
+			return;
+		}
+		auto mobvnum = mods::util::stoi(arg_vec[1]).value_or(-1);
+		if(mobvnum < 0) {
+			r_error(player,"Mob Vnum must be a positive number");
+			ENCODE_R("invalid vnum value");
+			return;
+		}
+		auto roomvnum = mods::util::stoi(arg_vec[1]).value_or(-1);
+		if(roomvnum < 0) {
+			r_error(player,"Room Vnum must be a positive number");
+			ENCODE_R("invalid vnum value");
+			return;
+		}
+
+		auto obj = mods::globals::read_mobile_ptr(mobvnum,VIRTUAL);
+		if(!obj) {
+			r_error(player,"Cannot find mob by that vnum");
+			ENCODE_R("couldnt find mob with vnum");
+			return;
+		}
+		auto realroom = real_room(roomvnum);
+		if(realroom == NOWHERE) {
+			r_error(player,"Room doesn't exist");
+			ENCODE_R("!room-exists");
+			return;
+		}
+		mods::globals::rooms::char_to_room(realroom,obj->cd());
+		ENCODE_MAP(str_map_t({{"uuid",std::to_string(obj->uuid())}}));
+		r_success(player,"Object created, look on the floor");
 
 		return;
 	}

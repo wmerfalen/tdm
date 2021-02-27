@@ -1,7 +1,7 @@
 #ifndef __MENTOC_MODS_BUILDER_UTIL_HEADER__
 #define __MENTOC_MODS_BUILDER_UTIL_HEADER__
 #include "builder.hpp"
-#include "quests.hpp"
+#include "contracts.hpp"
 #include "pq.hpp"
 #include "util.hpp"
 #include "object.hpp"

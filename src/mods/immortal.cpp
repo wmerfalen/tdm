@@ -1,5 +1,4 @@
 #include "immortal.hpp"
-#include "quests.hpp"
 #include <stdlib.h> //For itoa
 #include "builder.hpp"
 #include "util.hpp"

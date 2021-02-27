@@ -2,6 +2,7 @@
 #include "../util.hpp"
 #include "mini-gunner.hpp"
 #include "lowly-security.hpp"
+#include "../behaviour_tree_impl.hpp"
 
 namespace mods::mobs {
 	void decorate(uuid_t mob_id) {
@@ -15,20 +16,22 @@ namespace mods::mobs {
 			default:
 			case extended_types_t::NONE:
 				std::cerr << "[extended mob type]: no extended mob type for mob: ('" << ch->player.name.c_str() << "')\n";
-				return;
+				break;
 			case extended_types_t::LOWLY_SECURITY:
 				std::cerr << "[ found lowly security guard ]\n";
 				lowly_security::create(mob_id, "normal");
-				return;
+				break;
 			case extended_types_t::MINI_GUNNER:
 				std::cerr << "[ found mini gunner ]\n";
 				mini_gunner::create(mob_id, "normal");
-				return;
+				break;
 			case extended_types_t::MINI_GUNNER_SENTINEL:
 				std::cerr << "[ found mini gunner sentinel ]\n";
 				mini_gunner::create(mob_id, "sentinel");
-				return;
+				break;
 		}
+		/** simply add the mob to the list of mobs with behaviour trees */
+		mods::behaviour_tree_impl::register_mob(ch->uuid);
 	}
 };
 

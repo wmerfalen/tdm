@@ -131,6 +131,8 @@ namespace mods::mobs {
 	}
 	void lowly_security::init() {
 		smart_mob::init();
+		m_should_do_max[SHOULD_DO_ROAM] = LOWLY_SECURITY_ROAM_TICK();
+		m_should_do_max[SHOULD_DO_RANDOM_TRIVIAL] = LOWLY_SECURITY_RANDOM_TRIVIAL_TICK();
 	}
 
 	/**

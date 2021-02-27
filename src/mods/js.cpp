@@ -1,5 +1,5 @@
 #include "js.hpp"
-#include "quests.hpp"
+#include "contracts.hpp"
 #include "util.hpp"
 #include "extern.hpp"
 #include "loops.hpp"
@@ -1290,7 +1290,7 @@ __set_points_cleanup:
 		}
 		void load_c_functions(duk_context *ctx) {
 			mods::js::load_base_functions();
-			mods::quests::load_c_functions(ctx);
+			mods::contracts::load_c_functions(ctx);
 			mods::js::load_c_test_functions();
 			mods::js::load_c_require_functions();
 			mods::js::load_mods_player_functions(ctx);

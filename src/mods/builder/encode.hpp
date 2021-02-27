@@ -9,8 +9,8 @@
 namespace mods::builder {
 	using strmap_t = std::map<std::string,std::string>;
 	std::string dump(const strmap_t& data);
-	std::string encode(const strmap_t& data);
-
+	std::string encode_map(const strmap_t& data);
+	std::string encode(std::string_view data);
 };
 
 #endif

@@ -138,6 +138,8 @@ void r_status(const player_ptr_t& player,std::string_view msg);
 #define ENCODE_R(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, __ENC_RESPONSE)
 #define ENCODE_INIT(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, "!")
 #define ENCODE_OK() mods::builder::encode_scripted_response(player, "ok")
+#define ENCODE_MAP(__ENC_RESPONSE) mods::builder::encode_scripted_response(player, __ENC_RESPONSE)
+#define ENCODE_SAFE(__ENC_RESPONSE) mods::builder::encode_scripted_response_safe(player, __ENC_RESPONSE)
 
 
 static inline std::string paginate_option(std::string_view parent_command, std::string_view entity_name) {

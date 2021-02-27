@@ -6,9 +6,6 @@
 #include "player-utils.hpp"
 #include "object-utils.hpp"
 
-#define __MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__
-#define __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__
-
 #ifdef __MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__
 #define mcv_debug(MSG) mentoc_prefix_debug("[mods::calc_visibility]")  << info << "|" << MSG << "\n" \

@@ -90,8 +90,18 @@ namespace mods::mobs {
 			obj_ptr_t primary();
 			void wear(uint8_t where,std::string_view yaml);
 			int8_t wear_all();
+			bool should_do(uint16_t action) {
+				++m_should_do[action];
+				if(m_should_do[action] >= m_should_do_max[action]) {
+					m_should_do[action] = 0;
+					return true;
+				}
+				return false;
+			}
 
 		protected:
+			std::map<uint16_t,uint16_t> m_should_do;
+			std::map<uint16_t,uint16_t> m_should_do_max;
 			std::array<std::string,NUM_WEARS> wear_list;
 			vec_t<uuid_t> hostile_targets;
 			uint8_t watching;
