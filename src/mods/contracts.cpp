@@ -8,15 +8,19 @@
 #define Q_CURRENT_VALUE "{rvnum}:{N}"
 #define Q_TRIGGER_KEY "{player_name}:contract_trigger"
 #define Q_HVT_KEY "contract_hvt:{rvnum}:{N}"
-//#define Q_PLAYER_TRIGGER_KEY "{player_name}:contract:{rvnum}:{N}:trigger:{T}"
-//#define Q_PLAYER_TRIGGER_VALUE "{type}:{N}"
-//#define Q_PLAYER_TRIGGER_INDEX_KEY "{player_name}:contract_trigger_index"
 #define Q_COMPLETE_KEY "{player_name}:contract_complete"
 #define Q_TRIGGER_CODE_KEY "contract_trigger_code:{rvnum}:{N}:{T}"
 namespace mods {
 	namespace contracts {
 		/**
 		 * TODO: make it so that a player can only track one contract at a time
+		 */
+		/**
+		 * @brief abort contract
+		 *
+		 * @param ctx
+		 *
+		 * @return
 		 */
 		static duk_ret_t contract_abort(duk_context *ctx) {
 			std::string pname = duk_to_string(ctx,0);
@@ -33,6 +37,13 @@ namespace mods {
 			}
 			return 0;
 		}
+		/**
+		 * @brief called when contract is completed. awards and leaves quest
+		 *
+		 * @param ctx
+		 *
+		 * @return
+		 */
 		static duk_ret_t contract_complete(duk_context *ctx) {
 			std::string pname = duk_to_string(ctx,0);
 			std::string contract_major = duk_to_string(ctx,1);
@@ -49,6 +60,13 @@ namespace mods {
 			}
 			return 0;
 		}
+		/**
+		 * @brief get a list of contracts available in this current room
+		 *
+		 * @param ctx
+		 *
+		 * @return
+		 */
 		static duk_ret_t list_contracts(duk_context *ctx) {
 			std::string pname = duk_to_string(ctx,0);
 
@@ -61,9 +79,6 @@ namespace mods {
 				dbg_print(qname);
 				*player << "{grn}[ QUEST ]{/grn} " << qname << "\r\n";
 			}
-			return 0;
-		}
-		static duk_ret_t js_award_contract(duk_context *ctx) {
 			return 0;
 		}
 
@@ -90,8 +105,6 @@ namespace mods {
 			duk_put_global_string(ctx,"contract_abort");
 			duk_push_c_function(ctx,mods::contracts::still_alive,2);
 			duk_put_global_string(ctx,"still_alive");
-			duk_push_c_function(ctx,mods::contracts::js_award_contract,3);
-			duk_put_global_string(ctx,"award_contract");
 		}
 
 		void punish_for_leaving_contract(std::shared_ptr<mods::player>& player,int contract_num) {
