@@ -284,6 +284,27 @@ namespace mods::orm::util {
 		return {UNKNOWN_ERROR,"unknown"};
 	}
 	template <typename TObject,typename sql_compositor>
+	static inline std::tuple<int16_t,std::string> load_multi_by_column_order_by(TObject* s,std::string_view column,std::string_view value,std::string order_by,std::string direction) {
+		try {
+			auto select_transaction = txn();
+			sql_compositor comp(s->table_name(),&select_transaction);
+			auto player_sql = comp.select("*")
+			                  .from(s->table_name())
+			                  .where(column.data(),"=",value.data())
+			                  .order_by(order_by,direction)
+			                  .sql();
+			auto player_record = mods::pq::exec(select_transaction,player_sql);
+			if(player_record.size()) {
+				s->feed_multi(player_record);
+				return {FETCHED_OKAY,"okay"};
+			}
+			return {NO_RESULTS,"no results"};
+		} catch(std::exception& e) {
+			return {EXCEPTION_OCCURRED,e.what()};
+		}
+		return {UNKNOWN_ERROR,"unknown"};
+	}
+	template <typename TObject,typename sql_compositor>
 	static inline std::tuple<int16_t,std::string> load_by_pkid(TObject* s) {
 		try {
 			auto select_transaction = txn();

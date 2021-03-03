@@ -1,5 +1,5 @@
-#ifndef __MENTOC_MODS_QUESTS_HEADER__
-#define __MENTOC_MODS_QUESTS_HEADER__
+#ifndef __MENTOC_MODS_CONTRACTS_HEADER__
+#define __MENTOC_MODS_CONTRACTS_HEADER__
 #include <time.h>
 #include <netdb.h>
 #include <sys/socket.h>
@@ -12,6 +12,7 @@ typedef int socket_t;
 #include <array>
 #include "../mods/util.hpp"
 #include "js.hpp"
+#include "contract-types.hpp"
 
 namespace mods {
 	namespace contracts {
@@ -69,6 +70,7 @@ namespace mods {
 		 *  with the contract giver so that they may reward the player
 		 *  with extra perks
 		 */
+
 	};
 };
 #endif

@@ -87,13 +87,13 @@ namespace mods::sql {
 				unsigned ctr = 0;
 
 				for(auto& pair : values) {
-					if(pair.first.compare(password_field) == 0){
+					if(pair.first.compare(password_field) == 0) {
 						set += pair.first;
 						set += "=";
 						set += "crypt(";
 						set += m_txn_ptr->quote(pair.second);
 						set += ",gen_salt('bf'))";
-					}else{
+					} else {
 						set += pair.first;
 						set += "=";
 						set += m_txn_ptr->quote(pair.second);
@@ -161,11 +161,11 @@ namespace mods::sql {
 				ctr = 0;
 
 				for(auto& pair : values) {
-					if(pair.first.compare(password_field) == 0){
+					if(pair.first.compare(password_field) == 0) {
 						value_sql += "crypt(";
 						value_sql += m_txn_ptr->quote(pair.second);
 						value_sql += ",gen_salt('bf'))";
-					}else{
+					} else {
 						value_sql += m_txn_ptr->quote(pair.second);
 					}
 
@@ -261,7 +261,7 @@ namespace mods::sql {
 				return *this;
 			}
 			compositor<T>& where_crypt(str_object lhs,
-			                     str_object rhs) {
+			                           str_object rhs) {
 				std::string sql = " WHERE ";
 				sql += lhs.data();
 				sql += " = crypt(";
@@ -275,13 +275,13 @@ namespace mods::sql {
 
 			template <typename TIterable>
 			compositor<T>& where_in(str_object lhs,
-			                     TIterable id_list) {
+			                        TIterable id_list) {
 				std::string sql = " WHERE ";
 				sql += lhs.data();
 				sql += " IN(";
-				for(auto it = id_list.begin(); it != id_list.end(); ++it){
+				for(auto it = id_list.begin(); it != id_list.end(); ++it) {
 					sql += m_txn_ptr->quote(std::string(*it));
-					if((it + 1) != id_list.end()){ 
+					if((it + 1) != id_list.end()) {
 						sql += ", ";
 					}
 				}
@@ -316,6 +316,24 @@ namespace mods::sql {
 				m_query[4] += sql;
 				return *this;
 			}
+			compositor<T>& order_by(std::string column,std::string direction) {
+				if(direction.compare("ASC") != 0) {
+					direction = "DESC";
+				}
+				std::string sanitized_column;
+				for(auto ch : column) {
+					if(isspace(ch)) {
+						continue;
+					}
+					if(!isalpha(ch) && ch != '.' && ch != '_' && !isdigit(ch)) {
+						continue;
+					}
+					sanitized_column += ch;
+				}
+
+				m_order_by = " order by " + sanitized_column + " " + direction + " ";
+				return *this;
+			}
 			compositor<T>& clear() {
 				m_current_join = m_table = m_sql = "";
 				std::fill(m_query.begin(), m_query.end(), "");
@@ -341,8 +359,11 @@ namespace mods::sql {
 				for(unsigned i = 0; i < query_parts; i++) {
 					m_sql += m_query[i];
 				}
-				if(m_returning.length()){
+				if(m_returning.length()) {
 					m_sql += m_returning;
+				}
+				if(m_order_by.length()) {
+					m_sql += m_order_by;
 				}
 
 #ifdef __MENTOC_SHOW_SQL_DEBUG_OUTPUT__
@@ -355,6 +376,7 @@ namespace mods::sql {
 			std::array<std::string, query_parts> m_query;
 			std::vector<std::string> m_joins;
 			std::string m_current_join;
+			std::string m_order_by;
 			std::string m_table;
 			std::string m_returning;
 			T* m_txn_ptr;
