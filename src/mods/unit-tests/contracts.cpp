@@ -193,7 +193,17 @@ TEST_CASE("contracts are saved to orm layer") {
 			auto res = mods::orm::load_player_contract_state(1,1,in_buffer);
 			REQUIRE(in_buffer.compare("foobarstate") == 0);
 
+			static constexpr std::string_view UPDATED_STR = "updated|foobar|state";
+			state_orm.update_player_data(1,1,UPDATED_STR.data());
+
+			in_buffer.clear();
+			res = mods::orm::load_player_contract_state(1,1,in_buffer);
+			REQUIRE(in_buffer.compare(UPDATED_STR.data()) == 0);
+
 			state_orm.delete_by_player_id_contract_vnum(1,1);
+			res = mods::orm::load_player_contract_state(1,1,in_buffer);
+			REQUIRE(std::get<0>(res) == 0);
+			REQUIRE(std::get<1>(res).compare("no results") == 0);
 
 		}
 		cs.delete_by_contract_vnum(1);

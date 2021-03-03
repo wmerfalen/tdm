@@ -40,6 +40,7 @@ namespace mods::orm {
 
 		std::tuple<int16_t,std::string> delete_by_player_id_contract_vnum(const uint64_t& player_id,const contract_vnum_t& c_vnum);
 		std::tuple<int16_t,std::string> delete_by_id(const uint64_t& row_id);
+		std::tuple<int16_t,std::string> update_player_data(const uint64_t& player_id,const contract_vnum_t& c_vnum,const std::string& buffer);
 
 		void init();
 		void feed_multi(pqxx::result&);
