@@ -21,39 +21,30 @@ namespace mods::orm {
 		std::string id_column() const {
 			return "id";
 		}
-		player_contract_state() {
-			init();
-			loaded = 0;
-			id = 0;
-		}
-		player_contract_state(const pqxx::row& row) {
-			init();
-			id = row["id"].as<uint64_t>();
-			pc_contract_vnum = row["pc_contract_vnum"].as<contract_vnum_t>();
-			pc_state_data = row["pc_state_data"].c_str();
-			pc_player_id = row["pc_player_id"].as<uint64_t>();
-			created_at = row["created_at"].as<long>();
-			updated_at = row["updated_at"].as<long>();
-			loaded = true;
-		}
-		~player_contract_state() = default;
 
 		std::string primary_key_name() {
 			return id_column();
 		}
-		std::string primary_key_value();
-		std::tuple<int16_t,std::string> delete_by_contract_vnum(const contract_vnum_t& c_vnum);
+		std::string primary_key_value() {
+			return std::to_string(this->id);
+		}
+		std::string primary_type() {
+			return "";
+		}
+		int16_t feed(const pqxx::result::reference&) {
+			return 0;
+		}
+		player_contract_state();
+		player_contract_state(const pqxx::row& row);
+		~player_contract_state() = default;
+
+		std::tuple<int16_t,std::string> delete_by_player_id_contract_vnum(const uint64_t& player_id,const contract_vnum_t& c_vnum);
+		std::tuple<int16_t,std::string> delete_by_id(const uint64_t& row_id);
 
 		void init();
 		void feed_multi(pqxx::result&);
 
-		strmap_t export_class() {
-			strmap_t v;
-			v["pc_contract_vnum"] = std::to_string(pc_contract_vnum);
-			v["pc_player_id"] = std::to_string(pc_player_id);
-			v["pc_state_data"] = pc_state_data;
-			return std::move(v);
-		}
+		strmap_t export_class();
 		int16_t save();
 
 		bool loaded;
@@ -66,6 +57,7 @@ namespace mods::orm {
 		long updated_at;
 	};
 	std::tuple<int16_t,std::string> load_player_contract_state(player_ptr_t& player,contract_vnum_t c_vnum,std::string& in_buffer);
+	std::tuple<int16_t,std::string> load_player_contract_state(uint64_t player_id,contract_vnum_t c_vnum,std::string& in_buffer);
 };
 
 #endif
