@@ -57,7 +57,25 @@ namespace mods::orm {
 		long created_at;
 		long updated_at;
 	};
+	/**
+	 * @brief wrapper to the player_id version
+	 *
+	 * @param player_ptr_t&
+	 * @param c_vnum
+	 * @param in_buffer
+	 *
+	 * @return {1,"success"} if loaded. {0,"no results"} if not
+	 */
 	std::tuple<int16_t,std::string> load_player_contract_state(player_ptr_t& player,contract_vnum_t c_vnum,std::string& in_buffer);
+	/**
+	 * @brief player_id version. loads player state buffer
+	 *
+	 * @param player_id
+	 * @param c_vnum
+	 * @param in_buffer
+	 *
+	 * @return {1,"success"} if loaded. {0,"no results"} if not
+	 */
 	std::tuple<int16_t,std::string> load_player_contract_state(uint64_t player_id,contract_vnum_t c_vnum,std::string& in_buffer);
 };
 

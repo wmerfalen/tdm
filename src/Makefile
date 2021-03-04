@@ -124,7 +124,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/response-team/radio mods/response-team/hq-locations \
 					 mods/mob-equipment mods/builder/encode mods/orm/contract-steps \
 					 mods/orm/contracts mods/orm/player-contract-state \
-					 mods/unit-tests/contracts
+					 mods/unit-tests/contracts mods/unit-tests/contract-tracking
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

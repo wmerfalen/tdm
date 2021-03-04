@@ -2,6 +2,9 @@
 #include "interpreter.hpp"
 #include "pfind.hpp"
 #include "orm/contract-steps.hpp"
+#include "builder/encode.hpp"
+#include "orm/contracts.hpp"
+#include "orm/player-contract-state.hpp"
 #ifdef  __MENTOC_SHOW_CONTRACT_OUTPUT__
 #define dbg_print(a) std::cerr << "[mods::mobs::lowly_security_behaviour_tree][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #else
@@ -213,6 +216,9 @@ namespace mods::contracts {
 	}
 
 	bool has_contract(player_ptr_t& player) {
+		/**
+		 * TODO: check contract list
+		 */
 		return current_contract(player).length() > 0;
 	}
 
@@ -389,23 +395,126 @@ namespace mods::contracts {
 	player_contract_map_t player_id_to_contracts_map;
 
 	std::tuple<bool,std::string> start_contract(player_ptr_t& player, contract_vnum_t contract_vnum) {
-		player_id_to_contracts_map[player->db_id()].emplace_back(std::make_shared<player_contract_instance>("start",contract_vnum));
+		player_id_to_contracts_map[player->db_id()].emplace_back(std::make_shared<player_contract_instance>(contract_vnum, player->db_id()));
 		return {0,"stub"};
 	}
 	std::tuple<bool,std::string> resume_contract(player_ptr_t& player, contract_vnum_t contract_vnum) {
-		player_id_to_contracts_map[player->db_id()].emplace_back(std::make_shared<player_contract_instance>("resume",contract_vnum));
+		player_id_to_contracts_map[player->db_id()].emplace_back(std::make_shared<player_contract_instance>(contract_vnum, player->db_id()));
 		return {0,"stub"};
 	}
 	std::tuple<bool,std::string> stop_contract(player_ptr_t& player, contract_vnum_t contract_vnum) {
 		auto& d = player_id_to_contracts_map[player->db_id()];
 		std::remove_if(d.begin(),d.end(),[contract_vnum](std::shared_ptr<player_contract_instance>& ptr) -> bool {
-			return ptr->contract_vnum == contract_vnum;
+			bool is_contract = ptr->contract_vnum() == contract_vnum;
+			if(is_contract) {
+				ptr->stop_contract();
+			}
+			return is_contract;
 		});
 		return {0,"stub"};
+	}
+	void player_contract_instance::stop_contract() {
+		m_state_orm->delete_by_player_id_contract_vnum(m_player_id,m_contract_vnum);
 	}
 
 	std::vector<std::shared_ptr<contract>>& contract_master_list() {
 		static std::vector<std::shared_ptr<contract>> list;
 		return list;
 	}
+	player_contract_instance::player_contract_instance() {
+		this->init();
+	}
+	player_contract_instance::player_contract_instance(contract_vnum_t in_contract,uint64_t player_id) {
+		this->init();
+		m_contract_vnum = in_contract;
+		m_player_id = player_id;
+		start_or_resume_contract(in_contract);
+	}
+	std::string player_contract_instance::encode_step_data(std::string_view data) {
+		return data.data();
+	}
+	void player_contract_instance::init() {
+		m_state_orm = std::make_shared<mods::orm::player_contract_state>();
+		m_state_buffer.clear();
+		m_decoded_state_data.clear();
+		m_contract_vnum = 0;
+		m_step = 0;
+		m_player_id = 0;
+		m_contract_copy = nullptr;
+	};
+
+
+
+	void player_contract_instance::load_decoded_step_data() {
+		/**
+		 * encoded data format: "N|{}"
+		 * N is the step
+		 * pipe character is delimiter
+		 * open and shut brackets will eventually contain other data. it's a placeholder for now
+		 */
+		m_step = 0;
+		std::string current = "";
+		bool step_extracted = 0;
+		m_extra_data.clear();
+		for(auto ch : m_state_buffer) {
+			if(ch == '|' && !step_extracted) {
+				m_step = mods::util::stoi(current).value_or(0);
+				current.clear();
+				step_extracted = 1;
+				continue;
+			}
+			if(step_extracted) {
+				m_extra_data += ch;
+				continue;
+			}
+			current += ch;
+		}
+	}
+	void player_contract_instance::save_step_data() {
+		m_update_status = m_state_orm->update_player_data(m_player_id,m_contract_vnum, encode_step_data(CAT(m_step,"|",m_extra_data)));
+	}
+	bool player_contract_instance::finished() {
+		return m_step > m_contract_copy->steps.size();
+	}
+	std::tuple<bool,std::string> player_contract_instance::advance() {
+		m_step += 1;
+		save_step_data();
+		return m_update_status;
+	}
+	/**
+	 * @brief helper function called directly from constructor above
+	 *
+	 * @param in_vnum contract vnum
+	 *
+	 * @return
+	 */
+	std::tuple<bool,std::string> player_contract_instance::start_or_resume_contract(contract_vnum_t in_vnum) {
+		m_step = 0;
+		m_contract_vnum = in_vnum;
+		m_contract_copy = nullptr;
+		m_state_buffer.clear();
+		auto& list = contract_master_list();
+		for(auto& elem : list) {
+			if(elem->vnum == in_vnum) {
+				m_contract_copy = elem;
+				break;
+			}
+		}
+		if(!m_contract_copy) {
+			return {0,"No contract loaded with that vnum"};
+		}
+		/** Grab player_contract_state where pc_player_id=P,pc_contract_vnum=C */
+		auto res = mods::orm::load_player_contract_state(m_player_id,in_vnum,m_state_buffer);
+		if(std::get<0>(res) == 0) {
+			/** No results. initialize contract */
+			m_state_orm->pc_player_id = m_player_id;
+			m_state_orm->pc_contract_vnum = in_vnum;
+			m_state_buffer = m_state_orm->pc_state_data = encode_step_data("0|{}");
+			m_step = 0;
+			m_state_orm->save();
+		}
+		load_decoded_step_data();
+		return {1,"Contract started"};
+	}
+
 };

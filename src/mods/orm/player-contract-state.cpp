@@ -78,6 +78,15 @@ namespace mods::orm {
 	std::tuple<int16_t,std::string> load_player_contract_state(player_ptr_t& player,contract_vnum_t c_vnum,std::string& in_buffer) {
 		return load_player_contract_state(player->db_id(),c_vnum,in_buffer);
 	}
+	/**
+	 * @brief
+	 *
+	 * @param player_id
+	 * @param c_vnum
+	 * @param in_buffer
+	 *
+	 * @return {1,"success"} if loaded. {0,"no results"} if not
+	 */
 	std::tuple<int16_t,std::string> load_player_contract_state(uint64_t player_id,contract_vnum_t c_vnum,std::string& in_buffer) {
 		using statement = std::vector<mods::orm::util::statement_t>;
 		using c = std::vector<pqxx::result::reference>;

@@ -11,6 +11,7 @@ namespace mods::builder {
 	std::string dump(const strmap_t& data);
 	std::string encode_map(const strmap_t& data);
 	std::string encode(std::string_view data);
+	strmap_t decode(std::string_view data);
 };
 
 #endif
