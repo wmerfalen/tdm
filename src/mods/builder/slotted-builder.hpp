@@ -69,6 +69,11 @@ namespace mods::builder {
 				return m_signatures;
 			}
 
+			std::string& footer() {
+				return m_footer;
+			}
+
+
 			void register_signature(std::string_view verb,std::string_view sig) {
 				get_signatures()[verb.data()] = CAT("{grn}",m_base_command,"{/grn} {red}",verb.data()," ",sig.data(),"{/red}\r\n");
 			}
@@ -267,6 +272,11 @@ namespace mods::builder {
 			bool has_custom_command_for(std::string command) {
 				return m_custom_command_map.find(command) != m_custom_command_map.end();
 			}
+			void remove_command_signatures(std::vector<std::string> list) {
+				for(const auto& cmd : list) {
+					m_signatures.erase(cmd);
+				}
+			}
 
 			slotted_builder() {
 				m_automatically_clear = true;
@@ -408,6 +418,7 @@ namespace mods::builder {
 			/** ### it's safe to ignore everything below this line unless you need to refactor ### */
 			/** ###----------------------------------------------------------------------------### */
 		private:
+			std::string m_footer;
 			/** encodes the specific orm profile (if exec js), or dumps using r_success */
 			void push_profile(const std::shared_ptr<TOrmType>& profile) {
 				if(m_builder_ptr->is_executing_js()) {
@@ -794,6 +805,7 @@ namespace mods::builder {
 					return tuple_wrap(m_custom_command_map[cmd_args[0]](cmd_args,argument,nullptr));
 				}
 				display_signatures();
+				push_encoded_ok(m_footer);
 				return true;
 			}
 	};//end struct
