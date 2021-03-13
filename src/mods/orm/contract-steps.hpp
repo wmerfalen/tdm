@@ -121,6 +121,22 @@ namespace mods::orm {
 
 		std::vector<contract_steps_record_t> rows;
 		bool loaded;
+		static const std::vector<std::string>& column_list() {
+			static const std::vector<std::string>& list = {
+				"id",
+				"s_contract_vnum",
+				"s_task_type",
+				"s_task_target",
+				"s_description",
+				"s_mob_vnum",
+				"s_room_vnum",
+				"s_quota",
+				"s_is_optional",
+				"s_order",
+				"s_object_yaml"
+			};
+			return list;
+		}
 
 		uint64_t id;
 		contract_vnum_t s_contract_vnum;

@@ -17,6 +17,7 @@ namespace mods::builder {
 			using optional_orm_t = std::optional<std::shared_ptr<TOrmType>>;
 			using custom_command_t = std::function<std::tuple<bool,std::string>(const std::vector<std::string>&,std::string,std::shared_ptr<TOrmType>)>;
 			using custom_accumulator_command_t = std::function<std::tuple<bool,std::string>(std::string&&,std::shared_ptr<TOrmType>)>;
+			using custom_integral_accumulator_command_t = std::function<std::tuple<bool,std::string>(const std::vector<int>&&,std::shared_ptr<TOrmType>)>;
 			using orm_container_t = std::deque<std::shared_ptr<TOrmType>>;
 		protected:
 			std::vector<std::string> m_slot_list;
@@ -24,6 +25,7 @@ namespace mods::builder {
 			std::vector<std::string> m_encoded_response;
 			std::map<std::string,custom_command_t> m_custom_command_map;
 			std::map<std::string,custom_accumulator_command_t> m_custom_accumulator_command_map;
+			std::map<std::string,custom_integral_accumulator_command_t> m_custom_integral_accumulator_command_map;
 			orm_container_t* m_orm_list;
 			bool m_automatically_clear;
 			std::map<std::string,std::string> m_signatures;
@@ -101,6 +103,12 @@ namespace mods::builder {
 				register_signature(verb,signature);
 				return {1,"done"};
 			}
+			/** [ 4 ] -> use this to register custom commands with custom verbs. */
+			status_response_t register_integral_accumulator_command(std::string verb, std::string_view signature,auto lambda) {
+				m_custom_integral_accumulator_command_map[verb] = lambda;
+				register_signature(verb,signature);
+				return {1,"done"};
+			}
 			/** ###---------------------------------------------------------------------------### */
 			/** ###                            [ END ]                                        ### */
 			/** ================================================================================= */
@@ -165,6 +173,31 @@ namespace mods::builder {
 					return true;
 				}
 				/**
+				 * custom _INTEGRAL_ accumulator commands the child class has provided us
+				 */
+				for(auto& pair : m_custom_integral_accumulator_command_map) {
+					auto args = mods::util::subcmd_args<50,args_t>(argument,pair.first.c_str());
+					if(args.has_value()) {
+						auto cmd_args = args.value();
+						auto opt = extract_profile(pair.first,argument);
+						if(!opt.has_value()) {
+							push_encoded_error("Unable to find profile");
+							return false;
+						}
+						auto& profile = opt.value();
+						auto args = PARSE_ARGS();
+						if(args.size() < 3) {
+							push_encoded_error("not enough arguments");
+							return false;
+						}
+						std::vector<int> values;
+						for(int i=2; i < args.size(); i++) {
+							values.emplace_back(mods::util::stoi(args[i]).value_or(-1));
+						}
+						return tuple_wrap(m_custom_integral_accumulator_command_map[pair.first](std::move(values),profile));
+					}
+				}
+				/**
 				 * custom accumulator commands the child class has provided us
 				 */
 				for(auto& pair : m_custom_accumulator_command_map) {
@@ -173,11 +206,13 @@ namespace mods::builder {
 						auto cmd_args = args.value();
 						auto opt = extract_profile(pair.first,argument);
 						if(!opt.has_value()) {
+							push_encoded_error("Unable to find profile");
 							return false;
 						}
 						auto& profile = opt.value();
 						auto args = PARSE_ARGS();
 						if(args.size() < 3) {
+							push_encoded_error("not enough arguments");
 							return false;
 						}
 						std::string value;
@@ -327,7 +362,6 @@ namespace mods::builder {
 			 * usage: extract_profile("set",argument);
 			 */
 			optional_orm_t extract_profile(std::string verb,std::string argument) {
-				std::cerr << "argument:'" << argument << "'\n";
 				auto opt_vnum = extract_int<TVnumType>(verb,argument,1);
 				if(!opt_vnum.has_value()) {
 					return std::nullopt;

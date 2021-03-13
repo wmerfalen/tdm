@@ -1,5 +1,31 @@
 # Inventory of features
 
+# conbuild (quest builder)
+	- cmd: `conbuild help`
+	- source: `mods/builder/conbuild.hpp`
+	- conbuild command list
+		- `conbuild new <vnum-of-contract>`
+		- `conbuild title <vnum> <text>...`
+		- `conbuild description <vnum> <text>...`
+	- listing steps per contract
+		- `conbuild show-steps <vnum>`
+	- loading a specific contract's steps
+		- `conbuild load-steps <vnum>`
+	- setting step data
+		- `conbuild set-step-data <vnum> <step-id> <field> <value>`
+		- note: the fields are exactly what the contract_step column names are in postgres
+	- listing column names for step data
+		- `conbuild columns`
+	- saving steps
+		- `conbuild save-step <vnum> <step-id>...[step-id-N]`
+	- deleting steps
+		- `conbuild delete-step <vnum> <step-id>...[step-id-N]`
+	- ## VERY IMPORTANT ##
+		- any steps you load/save through conbuild are stored separately in another data structure than from what may be in the db
+		- this doesn't mean that it's not saved in the db. they are saved, it's just step data is localized for the sake of convenience when using conbuild
+		- to get all steps in the db use other means
+		- if you want to know exactly what's in the db, look through psql
+
 # mods::players::messages
 	- way to queue up data for the next screen for a player
 

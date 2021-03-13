@@ -112,9 +112,15 @@ namespace mods::builder::conbuild {
 			 * step commands. used to manage on a per profile basis
 			 * ----------------------------------------------------
 			 */
-			register_custom_command("new-step","<virtual_number>",[&](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+			register_custom_command("new-step","<virtual_number>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				this->step_list.emplace_back(create_step(profile->vnum()));
 				return {1,"Created"};
+			});
+			register_custom_command("columns","",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				for(const auto& str : mods::orm::contract_steps::column_list()) {
+					push_encoded_ok(str);
+				}
+				return {1,""};
 			});
 
 			register_custom_command("show-steps","<virtual_number>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
@@ -129,22 +135,16 @@ namespace mods::builder::conbuild {
 				return {1,"Done listing."};
 			});
 
-			register_custom_command("save-step","<virtual_number> <step-id>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+			register_integral_accumulator_command("save-step","<virtual_number> <step-id>...[step-id-N]",[&,this](const std::vector<int>&& step_ids,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				/** signature: [0] => save-step [1] => vnum [2] => step-id ... [N] => [step-id-N] */
-				if(args.size() < 3) {
-					return {0,"Invalid number of arguments"};
-				}
 				unsigned ok =0, error = 0;
-
-				for(unsigned i = 2; i < args.size(); i++) {
-					auto osid = mods::util::stoi(args[i]);
-					if(!osid.has_value()) {
-						return {0,CAT("when attempting to save step-id:'",args[i],"': step-id must be a valid integer")};
-					}
-					auto step_id = osid.value();
+				uint16_t ctr = 0;
+				for(const auto& step_id : step_ids) {
+					++ctr;
 					auto s = find_local_step_by_id(step_id);
 					if(!s.has_value()) {
-						return {0,CAT("Cannot find step by that step-id:'",args[i],"'")};
+						push_encoded_error(CAT("Skipping due to: Cannot find step by that step-id for argument number ",ctr + 2));
+						continue;
 					}
 					auto& step = s.value();
 					auto status = step->update_row();
@@ -159,16 +159,28 @@ namespace mods::builder::conbuild {
 				return {1,CAT("saved ",ok," items successfully. failed saving ",error," items")};
 			});
 
-			register_custom_command("delete-step","<virtual_number> <step-id>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
-				for(const auto& s : this->step_list) {
-					if(s->s_contract_vnum == profile->vnum()) {
-						auto str = s->dump();
-						str += CAT("task_type_t: '", IMPLODE(mods::contracts::get_string_list_from_task_flags((mods::contracts::task_t)s->s_task_type),","),"'\r\n");
-						str += CAT("task_target_t: '", mods::contracts::get_string_from_target((mods::contracts::target_t)s->s_task_target),"'\r\n");
-						push_encoded_ok(str);
+			register_integral_accumulator_command("delete-step","<virtual_number> <step-id>...[step-id-N]",[&,this](const std::vector<int>&& step_ids,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				/** signature: [0] => delete-step [1] => vnum [2] => step-id ... [N] => [step-id-N] */
+				unsigned ok =0, error = 0;
+				uint16_t ctr = 0;
+				for(const auto& step_id : step_ids) {
+					++ctr;
+					auto s = find_local_step_by_id(step_id);
+					if(!s.has_value()) {
+						push_encoded_error(CAT("Skipping due to: Cannot find step by that step-id for argument number ",ctr + 2));
+						continue;
+					}
+					auto& step = s.value();
+					auto status = step->update_row();
+					if(ORM_SUCCESS(status)) {
+						push_encoded_ok(CAT("Successfully deleted step-id:'",step->id,"'"));
+						++ok;
+					} else {
+						push_encoded_error(CAT("FAILED to delete step-id:'",step->id,"'"));
+						++error;
 					}
 				}
-				return {1,"Done listing."};
+				return {1,CAT("deleted ",ok," items successfully. failed deleting ",error," items")};
 			});
 
 
