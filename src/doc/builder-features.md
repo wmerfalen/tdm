@@ -1,5 +1,8 @@
 # Inventory of features
 
+# before moving to next features
+	- VERIFY contract data saved through conbuild works after mud reboot
+
 # conbuild (quest builder)
 	- cmd: `conbuild help`
 	- source: `mods/builder/conbuild.hpp`
