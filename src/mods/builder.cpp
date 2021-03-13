@@ -214,7 +214,7 @@ namespace mods::builder {
 		if(!player->is_executing_js()) {
 			return;
 		}
-		player->set_scripted_response(encoded);
+		player->set_scripted_response(encoded.data());
 	}
 	void encode_scripted_response_safe(player_ptr_t& player, std::string_view encoded) {
 		if(!player->is_executing_js()) {

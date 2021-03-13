@@ -1604,10 +1604,10 @@ namespace mods {
 		return m_triads;
 	}
 	void player::admin_success(std::string_view msg) {
-		this->queue_up(CAT("{grn}[Admin Success]:",msg.data(),"{/grn}"));
+		this->sendln(CAT("{grn}[Admin Success]:",msg.data(),"{/grn}"));
 	}
 	void player::admin_fail(std::string_view msg) {
-		this->queue_up(CAT("{red}[Admin Failure]:",msg.data(),"{/red}"));
+		this->sendln(CAT("{red}[Admin Failure]:",msg.data(),"{/red}"));
 	}
 	std::shared_ptr<mods::classes::sniper>& player::sniper() {
 		return m_sniper;

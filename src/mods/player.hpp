@@ -814,10 +814,13 @@ namespace mods {
 			int16_t& shock_resistance_percent();
 			int16_t& anti_matter_resistance_percent();
 
-			void set_scripted_response(std::string_view r) {
+			void set_scripted_response(std::string r) {
 				m_scripted_response = r;
 			}
-			std::string&& consume_scripted_response() {
+			std::string consume_scripted_response() {
+				if(m_scripted_response.length() == 0) {
+					return "";
+				}
 				auto f = std::move(m_scripted_response);
 				m_scripted_response = "";
 				return std::move(f);

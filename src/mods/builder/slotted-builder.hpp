@@ -279,6 +279,7 @@ namespace mods::builder {
 			}
 
 			slotted_builder() {
+				std::cerr << green_str("slotted_builder") << "\n";
 				m_automatically_clear = true;
 				m_builder_ptr = nullptr;
 				m_encoded_response.clear();
@@ -296,6 +297,7 @@ namespace mods::builder {
 				m_signatures["reload-all"] = "{grn}%s{/grn} {red}reload-all{/red}\r\n";
 			}
 			virtual ~slotted_builder() {
+				std::cerr << red_str("~slotted_builder") << "\n";
 				m_orm_list = nullptr;
 				m_builder_ptr = nullptr;
 				m_encoded_response.clear();
@@ -315,6 +317,18 @@ namespace mods::builder {
 				return m_encoded_response;
 			}
 			void clear_response() {
+				std::cerr << green_str("clearing response") << "\n";
+				for(auto c : m_encoded_response) {
+					std::cerr << "response: '" << c << "'\n";
+				}
+				m_encoded_response.clear();
+			}
+			void flush() {
+				std::string m;
+				for(const auto& s : m_encoded_response) {
+					m += s;
+				}
+				m_builder_ptr->set_scripted_response(m);
 				m_encoded_response.clear();
 			}
 			/** show the player the available slots setup for this class */
@@ -473,6 +487,7 @@ namespace mods::builder {
 
 			/** helper function to handle communication of messages. supports encoding if user is executing js */
 			void push_encoded_message(std::string msg, std::string encoded,uint8_t msg_type) {
+				std::cerr << green_str("push encoded message:'") << msg << "', encoded:'" << encoded << "'\n";
 				if(m_builder_ptr->is_executing_js()) {
 					if(msg_type == MSG_SUCCESS) {
 						m_encoded_response.emplace_back(CAT("{type:\"success\",msg_len:",encoded.length(),",msg:\"",encoded.data(),"\"}"));

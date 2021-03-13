@@ -115,7 +115,7 @@ namespace mods::contracts {
 	}
 	void load_all_contracts() {
 		auto& master_list = contract_master_list();
-		auto status = mods::orm::load_all_contracts(&master_list);
+		auto status = mods::orm::load_all_non_orm_contracts(&master_list);
 		if(std::get<0>(status)) {
 			std::cout << green_str("load_all_contracts:") << "'" << std::get<1>(status) << "'\n";
 		} else {

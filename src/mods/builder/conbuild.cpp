@@ -29,7 +29,7 @@ namespace mods::builder::conbuild {
 		bool delete_by_vnum(conbuild_vnum_t vnum) {
 			std::deque<std::shared_ptr<mods::orm::contracts>> list;
 			bool deleted = false;
-			for(auto& m : mods::orm::contract_list()) {
+			for(auto& m : mods::orm::orm_contract_list()) {
 				if(m->vnum() == vnum) {
 					m->destroy();
 					deleted = true;
@@ -37,7 +37,7 @@ namespace mods::builder::conbuild {
 				}
 				list.emplace_back(std::move(m));
 			}
-			mods::orm::contract_list() = std::move(list);
+			mods::orm::orm_contract_list() = std::move(list);
 			return deleted;
 		}
 
@@ -46,7 +46,7 @@ namespace mods::builder::conbuild {
 		/** ======== */
 		/** will optionally return the orm entity that has the given vnum */
 		std::optional<std::shared_ptr<conbuild_orm_type>> by_vnum(conbuild_vnum_t vnum) {
-			for(const auto& m : mods::orm::contract_list()) {
+			for(const auto& m : mods::orm::orm_contract_list()) {
 				if(m->c_vnum == vnum) {
 					return m;
 				}
@@ -114,6 +114,12 @@ namespace mods::builder::conbuild {
 			}
 			return {ok,error};
 		}
+		void dump_step(std::shared_ptr<mods::orm::contract_steps> s) {
+			auto str = s->dump();
+			str += CAT("task_type_t: '", IMPLODE(mods::contracts::get_string_list_from_task_flags((mods::contracts::task_t)s->s_task_type),","),"'\r\n");
+			str += CAT("task_target_t: '", mods::contracts::get_string_from_target((mods::contracts::target_t)s->s_task_target),"'\r\n");
+			push_encoded_ok(str);
+		}
 
 		conbuild_interface() {
 			/** ======== */
@@ -122,7 +128,7 @@ namespace mods::builder::conbuild {
 			/** set available slots */
 			set_slot_list(conbuild_orm_type::get_slot_list());
 			/** point the class to our base orm structure */
-			set_orm_list(&mods::orm::contract_list());
+			set_orm_list(&mods::orm::orm_contract_list());
 			/** set the base command */
 			set_base_command("conbuild");
 			clear();
@@ -230,7 +236,86 @@ namespace mods::builder::conbuild {
 				}
 				return {1,""};
 			});
+			/**
+			 * ==========================================
+			 * extract-step <vnum> <field>...[field-N]
+			 * ==========================================
+			 * [description]
+			 *  -----------------------------------------
+			 * 	grabs the specified field(s) on the steps for contract vnum
+			 *  -----------------------------------------
+			 */
+			register_custom_command("extract-step","<virtual_number> <field>...[field-N]",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				/** signature: [0] => extract-step [1] => vnum [2] => field ... [N] => [field-N] */
+				// grab step
+				if(args.size() < 3) {
+					return {0,"Invalid number of arguments"};
+				}
 
+				for(const auto& s : this->step_list) {
+					if(s->s_contract_vnum != profile->vnum()) {
+						continue;
+					}
+					auto smap = s->export_class();
+					for(int i = 2; i < args.size(); i++) {
+						if(args[i].compare("s_task_type") == 0) {
+							push_encoded_ok(IMPLODE(mods::contracts::get_string_list_from_task_flags((mods::contracts::task_t)s->s_task_type),","));
+							continue;
+						}
+						if(args[i].compare("s_task_target") == 0) {
+							push_encoded_ok(mods::contracts::get_string_from_target((mods::contracts::target_t)s->s_task_target));
+							continue;
+						}
+						push_encoded_ok(smap[args[i]]);
+					}
+				}
+				return {1,"Done listing."};
+			});
+
+			/**
+			 * ==========================================
+			 * paginate-steps <vnum> <page> <page-size>
+			 * ==========================================
+			 * [description]
+			 *  -----------------------------------------
+			 * 	paginates the steps
+			 *  -----------------------------------------
+			 */
+			register_custom_command("paginate-steps","<virtual_number> <page> <page-size>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				/** signature: [0] => paginate-steps [1] => vnum [2] => page [3] => page-size */
+				// grab step
+				if(args.size() < 4) {
+					return {0,"Invalid number of arguments"};
+				}
+				auto opage = mods::util::stoi(args[2]);
+				if(!opage.has_value()) {
+					return {0,"page must be a valid integer"};
+				}
+				auto page = opage.value();
+
+				auto opage_size = mods::util::stoi(args[3]);
+				if(!opage_size.has_value()) {
+					return {0,"page size must be a valid integer"};
+				}
+				auto page_size = opage_size.value();
+
+				int offset = page * page_size;
+
+				std::vector<std::shared_ptr<mods::orm::contract_steps>> full_list;
+				for(const auto& s : this->step_list) {
+					if(s->s_contract_vnum == profile->vnum()) {
+						full_list.emplace_back(s);
+					}
+				}
+				if(full_list.size() <= offset) {
+					return {1,CAT("Out of bounds. Nothing to list. list size is: ",full_list.size())};
+				}
+				auto start = full_list.cbegin() + offset;
+				for(int ctr =0; start != full_list.end() && ctr < page_size; ++start,++ctr) {
+					dump_step(*start);
+				}
+				return {1,"Done listing."};
+			});
 			/**
 			 * ==========================================
 			 * show-steps <vnum>
@@ -243,10 +328,7 @@ namespace mods::builder::conbuild {
 			register_custom_command("show-steps","<virtual_number>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				for(const auto& s : this->step_list) {
 					if(s->s_contract_vnum == profile->vnum()) {
-						auto str = s->dump();
-						str += CAT("task_type_t: '", IMPLODE(mods::contracts::get_string_list_from_task_flags((mods::contracts::task_t)s->s_task_type),","),"'\r\n");
-						str += CAT("task_target_t: '", mods::contracts::get_string_from_target((mods::contracts::target_t)s->s_task_target),"'\r\n");
-						push_encoded_ok(str);
+						dump_step(s);
 					}
 				}
 				return {1,"Done listing."};
@@ -410,21 +492,21 @@ namespace mods::builder::conbuild {
 			if(id <= 0) {
 				return {0,"Couldn't initialize row"};
 			}
-			mods::orm::contract_list().emplace_back(std::move(c));
+			mods::orm::orm_contract_list().emplace_back(std::move(c));
 			return {1,"Created row."};
 		}
 		/** ======== */
 		/** required */
 		/** ======== */
 		void clear() {
-			mods::orm::contract_list().clear();
+			mods::orm::orm_contract_list().clear();
 			mods::orm::contract_steps_list().clear();
 		}
 		/** ======== */
 		/** required */
 		/** ======== */
 		void load_all() {
-			mods::orm::contract_list() = std::move(mods::orm::load_all_by_table<mods::orm::contracts>());
+			mods::orm::orm_contract_list() = std::move(mods::orm::load_all_by_table<mods::orm::contracts>());
 			mods::orm::contract_steps_list() = std::move(mods::orm::load_all_by_table<mods::orm::contract_steps>());
 		}
 	};
@@ -457,7 +539,7 @@ namespace mods::builder::conbuild {
 	};
 	using args_t = std::vector<std::string>;
 
-	conbuild_interface& conbuilder(player_ptr_t player) {
+	static conbuild_interface& conbuilder(player_ptr_t player) {
 		static conbuild_interface interface;
 		interface.set_builder(player);
 		return interface;
@@ -466,7 +548,9 @@ namespace mods::builder::conbuild {
 	ACMD(do_conbuild) {
 		mods::builder::initialize_builder(player);
 
-		if(conbuilder(player).handle_input(argument)) {
+		auto handled = conbuilder(player).handle_input(argument);
+		conbuilder(player).flush();
+		if(handled) {
 			return;
 		}
 

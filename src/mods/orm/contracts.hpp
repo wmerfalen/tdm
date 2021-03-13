@@ -75,11 +75,11 @@ namespace mods::orm {
 		long created_at;
 		long updated_at;
 		static inline std::vector<std::string> get_slot_list() {
-			return {"vest","chest","foo","bar"};
+			return {"c_vnum","c_description","c_title"};
 		}
 	};
-	std::tuple<int16_t,std::string> load_all_contracts(std::deque<std::shared_ptr<mods::contracts::contract>>* list);
-	std::deque<std::shared_ptr<mods::orm::contracts>>& contract_list();
+	std::tuple<int16_t,std::string> load_all_non_orm_contracts(std::deque<std::shared_ptr<mods::contracts::contract>>* list);
+	std::deque<std::shared_ptr<mods::orm::contracts>>& orm_contract_list();
 };
 
 #endif

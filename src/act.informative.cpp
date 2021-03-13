@@ -173,7 +173,9 @@ ACMD(do_preferences) {
 }
 
 ACMD(do_js) {
+	player->executing_js(true);
 	mods::js::eval_string(std::string(argument) + ";");
+	player->executing_js(false);
 }
 
 ACMD(do_newjs) {

@@ -817,7 +817,6 @@ namespace mods {
 			return 1;
 		}
 		static duk_ret_t exec(duk_context *ctx) {
-			/* First parameter is character name */
 			std::string cmd =  duk_to_string(ctx,0);
 			auto player = mods::globals::current_player;
 			mods::globals::current_player->executing_js(true);

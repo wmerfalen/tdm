@@ -69,7 +69,15 @@ namespace mods::orm {
 		created_at = updated_at = 0;
 	}
 
-	std::tuple<int16_t,std::string> load_all_contracts(std::deque<std::shared_ptr<mods::contracts::contract>>* list) {
+	/**
+	 * ========================================================
+	 * Please take notice:
+	 * -------------------
+	 *  This function loads into a pointer of type mods::contracts::contract.
+	 *  This is __NOT__ an ORM object!
+	 * ========================================================
+	 */
+	std::tuple<int16_t,std::string> load_all_non_orm_contracts(std::deque<std::shared_ptr<mods::contracts::contract>>* list) {
 		auto count = 0;
 		auto message = "";
 		auto result = db_get_all(contracts_table_name.data());
@@ -98,7 +106,7 @@ namespace mods::orm {
 		}
 		return {count,message};
 	}
-	std::deque<std::shared_ptr<mods::orm::contracts>>& contract_list() {
+	std::deque<std::shared_ptr<mods::orm::contracts>>& orm_contract_list() {
 		static std::deque<std::shared_ptr<mods::orm::contracts>> list;
 		return list;
 	}
