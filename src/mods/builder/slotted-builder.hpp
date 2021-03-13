@@ -16,12 +16,14 @@ namespace mods::builder {
 			using status_response_t = std::tuple<bool,std::string>;
 			using optional_orm_t = std::optional<std::shared_ptr<TOrmType>>;
 			using custom_command_t = std::function<std::tuple<bool,std::string>(const std::vector<std::string>&,std::string,std::shared_ptr<TOrmType>)>;
+			using custom_accumulator_command_t = std::function<std::tuple<bool,std::string>(std::string&&,std::shared_ptr<TOrmType>)>;
 			using orm_container_t = std::deque<std::shared_ptr<TOrmType>>;
 		protected:
 			std::vector<std::string> m_slot_list;
 			player_ptr_t m_builder_ptr;
 			std::vector<std::string> m_encoded_response;
 			std::map<std::string,custom_command_t> m_custom_command_map;
+			std::map<std::string,custom_accumulator_command_t> m_custom_accumulator_command_map;
 			orm_container_t* m_orm_list;
 			bool m_automatically_clear;
 			std::map<std::string,std::string> m_signatures;
@@ -65,6 +67,10 @@ namespace mods::builder {
 				return m_signatures;
 			}
 
+			void register_signature(std::string_view verb,std::string_view sig) {
+				get_signatures()[verb.data()] = CAT("{grn}",m_base_command,"{/grn} {red}",verb.data()," ",sig.data(),"{/red}\r\n");
+			}
+
 			void set_base_command(std::string base) {
 				m_base_command = base;
 			}
@@ -82,6 +88,17 @@ namespace mods::builder {
 			/** [ 4 ] -> use this to register custom commands with custom verbs. */
 			status_response_t register_custom_command(std::string verb, auto lambda) {
 				m_custom_command_map[verb] = lambda;
+				return {1,"done"};
+			}
+			status_response_t register_custom_command(std::string verb, std::string_view signature,auto lambda) {
+				m_custom_command_map[verb] = lambda;
+				register_signature(verb,signature);
+				return {1,"done"};
+			}
+			/** [ 4 ] -> use this to register custom commands with custom verbs. */
+			status_response_t register_accumulator_command(std::string verb, std::string_view signature,auto lambda) {
+				m_custom_accumulator_command_map[verb] = lambda;
+				register_signature(verb,signature);
 				return {1,"done"};
 			}
 			/** ###---------------------------------------------------------------------------### */
@@ -148,13 +165,40 @@ namespace mods::builder {
 					return true;
 				}
 				/**
+				 * custom accumulator commands the child class has provided us
+				 */
+				for(auto& pair : m_custom_accumulator_command_map) {
+					auto args = mods::util::subcmd_args<50,args_t>(argument,pair.first.c_str());
+					if(args.has_value()) {
+						auto cmd_args = args.value();
+						auto opt = extract_profile(pair.first,argument);
+						if(!opt.has_value()) {
+							return false;
+						}
+						auto& profile = opt.value();
+						auto args = PARSE_ARGS();
+						if(args.size() < 3) {
+							return false;
+						}
+						std::string value;
+						for(int i=2; i < args.size(); i++) {
+							value += args[i];
+							if(i + 1 < args.size()) {
+								value += " ";
+							}
+						}
+						return tuple_wrap(m_custom_accumulator_command_map[pair.first](std::move(value),profile));
+					}
+				}
+				/**
 				 * custom commands the child class has provided us
 				 */
 				for(auto& pair : m_custom_command_map) {
 					auto args = mods::util::subcmd_args<50,args_t>(argument,pair.first.c_str());
 					if(args.has_value()) {
 						auto cmd_args = args.value();
-						return tuple_wrap(m_custom_command_map[pair.first](cmd_args,argument,nullptr));
+						auto opt = extract_profile(pair.first,argument);
+						return tuple_wrap(m_custom_command_map[pair.first](cmd_args,argument,opt.value_or(nullptr)));
 					}
 				}
 				return false;
@@ -195,16 +239,16 @@ namespace mods::builder {
 				m_encoded_response.clear();
 				m_custom_command_map.clear();
 				m_orm_list = nullptr;
-				m_signatures["new"] = " {grn}%s{/grn} {red}new{/red}\r\n";
-				m_signatures["save"] = " {grn}%s{/grn} {red}save <virtual_number>...<virtual_number-N>{/red}\r\n";
-				m_signatures["list"] = " {grn}%s{/grn} {red}list <virtual_number>...<virtual_number-N>{/red}\r\n";
-				m_signatures["list-extract"] = " {grn}%s{/grn} {red}lsit-extract <virtual_number> <field>...<field-N>{/red}\r\n";
-				m_signatures["set"] = " {grn}%s{/grn} {red}set <virtual_number> <slot> <value>{/red}\r\n";
-				m_signatures["remove"] = " {grn}%s{/grn} {red}remove <virtual_number> <slot>...<slot-N>{/red}\r\n";
-				m_signatures["delete"] = " {grn}%s{/grn} {red}delete <virtual_number>...<virtual_number-N>{/red}\r\n";
-				m_signatures["show"] = " {grn}%s{/grn} {red}show <virtual_number> [field]...[fieldN]{/red}\r\n";
-				m_signatures["paginate"] = " {grn}%s{/grn} {red}paginate [page] [pageSize]{/red}\r\n";
-				m_signatures["reload-all"] = " {grn}%s{/grn} {red}reload-all{/red}\r\n";
+				m_signatures["new"] = "{grn}%s{/grn} {red}new{/red}\r\n";
+				m_signatures["save"] = "{grn}%s{/grn} {red}save <virtual_number>...<virtual_number-N>{/red}\r\n";
+				m_signatures["list"] = "{grn}%s{/grn} {red}list <virtual_number>...<virtual_number-N>{/red}\r\n";
+				m_signatures["list-extract"] = "{grn}%s{/grn} {red}list-extract <virtual_number> <field>...<field-N>{/red}\r\n";
+				m_signatures["set"] = "{grn}%s{/grn} {red}set <virtual_number> <slot> <value>{/red}\r\n";
+				m_signatures["remove"] = "{grn}%s{/grn} {red}remove <virtual_number> <slot>...<slot-N>{/red}\r\n";
+				m_signatures["delete"] = "{grn}%s{/grn} {red}delete <virtual_number>...<virtual_number-N>{/red}\r\n";
+				m_signatures["show"] = "{grn}%s{/grn} {red}show <virtual_number> [field]...[fieldN]{/red}\r\n";
+				m_signatures["paginate"] = "{grn}%s{/grn} {red}paginate [page] [pageSize]{/red}\r\n";
+				m_signatures["reload-all"] = "{grn}%s{/grn} {red}reload-all{/red}\r\n";
 			}
 			virtual ~slotted_builder() {
 				m_orm_list = nullptr;
@@ -283,6 +327,7 @@ namespace mods::builder {
 			 * usage: extract_profile("set",argument);
 			 */
 			optional_orm_t extract_profile(std::string verb,std::string argument) {
+				std::cerr << "argument:'" << argument << "'\n";
 				auto opt_vnum = extract_int<TVnumType>(verb,argument,1);
 				if(!opt_vnum.has_value()) {
 					return std::nullopt;
@@ -300,6 +345,16 @@ namespace mods::builder {
 				}
 				return by_vnum(opt_vnum.value());
 			}
+			void push_encoded_error(std::string msg) {
+				push_encoded_message(msg,msg,MSG_ERROR);
+			}
+			void push_encoded_ok(std::string msg) {
+				push_encoded_message(msg,msg,MSG_SUCCESS);
+			}
+
+
+
+			/** proxy function to set slot on specific orm class */
 
 			/** ###----------------------------------------------------------------------------### */
 			/** ### it's safe to ignore everything below this line unless you need to refactor ### */
@@ -329,16 +384,6 @@ namespace mods::builder {
 				}
 				push_encoded_error("failed");
 			}
-			void push_encoded_error(std::string msg) {
-				push_encoded_message(msg,msg,MSG_ERROR);
-			}
-			void push_encoded_ok(std::string msg) {
-				push_encoded_message(msg,msg,MSG_SUCCESS);
-			}
-
-
-
-			/** proxy function to set slot on specific orm class */
 			void set_slot(const TVnumType& vnum,std::string key,std::string value) {
 				if(vnum < 0) {
 					push_encoded_message(CAT("vnum is negative"),CAT("negargvnum"),MSG_ERROR);

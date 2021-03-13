@@ -12,6 +12,7 @@ namespace mods::orm {
 
 	struct contracts : public mods::orm::orm_base<contracts,std::string> {
 		using primary_choice_t = std::string;
+		static constexpr const char* table_name_value = "contracts";
 		std::string table_name() const {
 			return contracts_table_name.data();
 		}
@@ -46,6 +47,9 @@ namespace mods::orm {
 
 		void init();
 		void feed_multi(pqxx::result&);
+		uint64_t initialize_row(const contract_vnum_t& c_vnum,std::string_view title, std::string_view desc);
+		int16_t feed(const pqxx::result::reference& row);
+
 
 		strmap_t export_class() {
 			strmap_t v;
@@ -56,7 +60,13 @@ namespace mods::orm {
 		}
 		int16_t save();
 
+		void destroy();
+		std::tuple<int16_t,std::string> destroy_status;
+
 		bool loaded;
+		auto vnum() {
+			return c_vnum;
+		}
 
 		uint64_t id;
 		contract_vnum_t c_vnum;
@@ -64,8 +74,12 @@ namespace mods::orm {
 		std::string c_title;
 		long created_at;
 		long updated_at;
+		static inline std::vector<std::string> get_slot_list() {
+			return {"vest","chest","foo","bar"};
+		}
 	};
 	std::tuple<int16_t,std::string> load_all_contracts(std::deque<std::shared_ptr<mods::contracts::contract>>* list);
+	std::deque<std::shared_ptr<mods::orm::contracts>>& contract_list();
 };
 
 #endif

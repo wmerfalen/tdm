@@ -18,6 +18,7 @@ namespace mods::contracts {
 		static std::deque<std::shared_ptr<contract>> list;
 		return list;
 	}
+
 	/**
 	 * TODO: make it so that a player can only track one contract at a time
 	 */
@@ -111,10 +112,6 @@ namespace mods::contracts {
 		duk_put_global_string(ctx,"contract_abort");
 		duk_push_c_function(ctx,mods::contracts::still_alive,2);
 		duk_put_global_string(ctx,"still_alive");
-	}
-	std::deque<contract>& contract_list() {
-		static std::deque<contract> list;
-		return list;
 	}
 	void load_all_contracts() {
 		auto& master_list = contract_master_list();

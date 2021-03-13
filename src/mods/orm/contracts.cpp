@@ -4,6 +4,39 @@
 #include "../player.hpp"
 
 namespace mods::orm {
+	int16_t contracts::feed(const pqxx::result::reference& row) {
+		init();
+		id = row["id"].as<uint64_t>();
+		c_title = row["c_title"].c_str();
+		c_description = row["c_description"].c_str();
+		c_vnum = row["c_vnum"].as<contract_vnum_t>();
+		//updated_at = row["updated_at"].as<int>();
+		//created_at = row["created_at"].as<int>();
+		loaded = 1;
+		return 0;
+	}
+	void contracts::destroy() {
+		this->destroy_status = mods::orm::util::delete_where<contracts,sql_compositor>(
+		                           table_name(),
+		                           primary_key_name(),
+		                           "=",
+		                           primary_key_value()
+		                       );
+	}
+
+	uint64_t contracts::initialize_row(const contract_vnum_t& inc_vnum,std::string_view title, std::string_view desc) {
+		init();
+		this->c_title = title;
+		this->c_vnum = inc_vnum;
+		this->c_description = desc;
+		auto status = this->create<contracts>(this);
+		if(ORM_SUCCESS(status)) {
+			updated_at = created_at = time(nullptr);
+			loaded = 1;
+			id = std::get<2>(status);
+		}
+		return id;
+	}
 	std::tuple<int16_t,std::string> contracts::delete_by_contract_vnum(const contract_vnum_t& in_c_vnum) {
 		return mods::orm::util::delete_where<contracts,sql_compositor>(
 		           table_name(),
@@ -64,5 +97,9 @@ namespace mods::orm {
 			++count;
 		}
 		return {count,message};
+	}
+	std::deque<std::shared_ptr<mods::orm::contracts>>& contract_list() {
+		static std::deque<std::shared_ptr<mods::orm::contracts>> list;
+		return list;
 	}
 };

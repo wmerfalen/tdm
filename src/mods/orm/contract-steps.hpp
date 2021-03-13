@@ -50,6 +50,7 @@ namespace mods::orm {
 
 	struct contract_steps : public mods::orm::orm_base<contract_steps,std::string> {
 		using primary_choice_t = std::string;
+		static constexpr const char* table_name_value = "contract_steps";
 		std::string table_name() const {
 			return contract_steps_table_name.data();
 		}
@@ -94,6 +95,20 @@ namespace mods::orm {
 		void load_multi(const pqxx::result::reference&);
 		void init();
 
+		void destroy();
+		std::tuple<int16_t,std::string> destroy_status;
+		uint64_t initialize_row(const contract_vnum_t& i_vnum);
+		std::string& dump() {
+			static std::string buffer;
+			buffer.clear();
+			buffer += CAT("[",primary_key_name(),"]:->'",primary_key_value(),"'\r\n");
+			for(const auto& pair : export_class()) {
+				buffer += CAT("[",pair.first,"]->'",pair.second,"'\r\n");
+			}
+			return buffer;
+		}
+
+
 		void feed_multi(pqxx::result&);
 
 		strmap_t export_class();
@@ -101,6 +116,8 @@ namespace mods::orm {
 
 		std::tuple<int16_t,std::string> delete_by_contract_vnum(const contract_vnum_t& contract_vnum);
 		std::tuple<int16_t,std::string> load_by_contract_vnum(const contract_vnum_t& contract_vnum);
+		std::tuple<int16_t,std::string> update_row();
+		int16_t feed(const pqxx::result::reference& row);
 
 		std::vector<contract_steps_record_t> rows;
 		bool loaded;
@@ -119,6 +136,8 @@ namespace mods::orm {
 		long created_at;
 		long updated_at;
 	};
+	std::deque<std::shared_ptr<contract_steps>>& contract_steps_list();
+	std::tuple<int16_t,std::string> gather_contract_steps_by_contract_vnum(const contract_vnum_t& contract_vnum,std::deque<std::shared_ptr<mods::orm::contract_steps>>* list);
 	//std::tuple<int16_t,std::string> load_player_skill_data(player_ptr_t& player, std::map<uint32_t,uint16_t>* data);
 	//std::tuple<int16_t,std::string> sync_player_with_class_skills(const uint64_t& player_id, std::string_view player_class);
 };
