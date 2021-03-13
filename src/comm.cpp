@@ -29,6 +29,7 @@
 #include "mods/replenish.hpp"
 #include "mods/orm/inventory.hpp"
 #include "mods/players/db-load.hpp"
+#include "mods/players/messages.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -793,6 +794,7 @@ void game_loop(socket_t mother_desc) {
 				continue;
 			}
 		}
+		mods::players::messages::consume_all();
 
 		/* Print prompts for other descriptors who had no other output */
 		for(auto& p : mods::globals::player_list) {

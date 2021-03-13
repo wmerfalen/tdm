@@ -78,6 +78,7 @@ INIT(mods::fluxkraft::arcon_bar);
 INIT(mods::builder::meqbuild);
 INIT(mods::builder::hqbuild);
 INIT(mods::contracts);
+INIT(mods::players::messages);
 #undef INIT
 
 namespace mods::unit_tests {
@@ -517,6 +518,7 @@ namespace mods {
 			mods::builder::meqbuild::init();
 			mods::builder::hqbuild::init();
 			mods::contracts::init();
+			mods::players::messages::init();
 			::offensive::init();
 			::builder::init();
 			::informative::init();

@@ -841,6 +841,7 @@ struct obj_affected_type {
 
 /* ================== Memory Structure for Objects ================== */
 struct obj_data {
+		bool contract;
 		bool matches_query(std::string_view);
 		using visibility_t = uint8_t;
 		static constexpr visibility_t STARTING_VISIBILITY = 255;
@@ -1127,11 +1128,13 @@ struct room_direction_data {
 	uint32_t exit_info;	/* Exit info			*/
 	obj_vnum key;		/* Key's number (-1 for no key)		*/
 	room_rnum to_room;		/* Where direction leads (NOWHERE)	*/
+	bool contract;
 };
 
 
 /* ================== Memory Structure for room ======================= */
 struct room_data {
+		bool contract;
 		enum texture_type_t : uint8_t {
 			AIR,
 			CARPET,
@@ -1720,6 +1723,7 @@ namespace mods {
 	};
 };
 struct char_data {
+	bool contract;
 	using visibility_t = uint8_t;
 	static constexpr visibility_t STARTING_VISIBILITY = 255;
 	visibility_t visibility;

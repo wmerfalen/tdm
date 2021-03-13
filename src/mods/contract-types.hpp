@@ -1,8 +1,6 @@
 #ifndef __MENTOC_MODS_CONTRACT_TYPES_HEADER__
 #define __MENTOC_MODS_CONTRACT_TYPES_HEADER__
-#include <iostream>
-#include <string>
-#include <vector>
+#include "../globals.hpp"
 
 namespace mods::orm {
 	struct player_contract_state;
@@ -52,49 +50,8 @@ namespace mods::contracts {
 		std::vector<contract_step> steps;
 	};//end class
 
-	extern std::vector<std::shared_ptr<contract>>& contract_master_list();
-
-	/**
-	 * @brief holds state data for the current contract
-	 */
-	struct player_contract_instance {
-			player_contract_instance();
-			/**
-			 * @brief starts or resumes the contract. preferred entry method
-			 *
-			 * @param in_contract contract vnum
-			 * @param player_id player->db_id()
-			 */
-			player_contract_instance(contract_vnum_t in_contract,uint64_t player_id);
-			/**
-			 * @brief helper function called directly from constructor above
-			 *
-			 * @param in_vnum contract vnum
-			 *
-			 * @return
-			 */
-			std::tuple<bool,std::string> start_or_resume_contract(contract_vnum_t in_vnum);
-			std::tuple<bool,std::string> advance();
-			bool finished();
-			void init();
-			const auto& contract_vnum() const {
-				return m_contract_vnum;
-			}
-			void save_step_data();
-			void stop_contract();
-		protected:
-			std::shared_ptr<mods::orm::player_contract_state> m_state_orm;
-			std::tuple<int16_t,std::string> m_update_status;
-			contract_vnum_t m_contract_vnum;
-			std::size_t m_step;
-			std::string encode_step_data(std::string_view);
-			void load_decoded_step_data();
-			uint64_t m_player_id;
-			std::shared_ptr<contract> m_contract_copy;
-			std::map<std::string,std::string> m_decoded_state_data;
-			std::string m_state_buffer;
-			std::string m_extra_data;
-	};
+	extern std::deque<std::shared_ptr<contract>>& contract_master_list();
+	void load_all_contracts();
 
 };
 #endif

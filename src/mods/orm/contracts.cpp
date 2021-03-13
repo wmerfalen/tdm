@@ -36,7 +36,7 @@ namespace mods::orm {
 		created_at = updated_at = 0;
 	}
 
-	std::tuple<int16_t,std::string> load_all_contracts(std::deque<mods::contracts::contract>* list) {
+	std::tuple<int16_t,std::string> load_all_contracts(std::deque<std::shared_ptr<mods::contracts::contract>>* list) {
 		auto count = 0;
 		auto message = "";
 		auto result = db_get_all(contracts_table_name.data());
@@ -44,12 +44,12 @@ namespace mods::orm {
 			return {0,""};
 		}
 		for(const auto& row : result) {
-			list->emplace_back(row["c_vnum"].as<uint64_t>(),row["c_title"].c_str(),row["c_description"].c_str());
+			list->emplace_back(std::make_shared<mods::contracts::contract>(row["c_vnum"].as<uint64_t>(),row["c_title"].c_str(),row["c_description"].c_str()));
 			auto& ref = list->back();
 			mods::orm::contract_steps steps(row["c_vnum"].as<uint64_t>());
 			for(auto& row : steps.rows) {
-				ref.steps.emplace_back();
-				auto& r = ref.steps.back();
+				ref->steps.emplace_back();
+				auto& r = ref->steps.back();
 				r.goal = (mods::contracts::contract_step::task_type_t)row.s_task_type;
 				r.target = (mods::contracts::contract_step::task_target_t)row.s_task_target;
 				r.description = row.s_description;

@@ -65,7 +65,7 @@ namespace mods::orm {
 		long created_at;
 		long updated_at;
 	};
-	std::tuple<int16_t,std::string> load_all_contracts(std::deque<mods::contracts::contract>* list);
+	std::tuple<int16_t,std::string> load_all_contracts(std::deque<std::shared_ptr<mods::contracts::contract>>* list);
 };
 
 #endif

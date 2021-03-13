@@ -39,6 +39,7 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-D__MENTOC_PREDEFINED_RIFLE_PKID__=1 \
 	-D__MENTOC_SHOW_BEHAVIOUR_TREE_LOWLY_SECURITY_BTREE_DEBUG_OUTPUT__=1 \
 	-D__MENTOC_SHOW_CONTRACT_OUTPUT__=1
+#-D__MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__=1 \
 #-D__MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__=1 \
 #-D__MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__=1 \
 	#-D__MENTOC_SHOW_YAML_FIELD_BEING_FED__=1 \
@@ -124,7 +125,9 @@ buildobj = act.informative act.item act.medic \
 					 mods/response-team/radio mods/response-team/hq-locations \
 					 mods/mob-equipment mods/builder/encode mods/orm/contract-steps \
 					 mods/orm/contracts mods/orm/player-contract-state \
-					 mods/unit-tests/contracts mods/unit-tests/contract-tracking
+					 mods/unit-tests/contracts mods/unit-tests/player-contract-instance \
+					 mods/contract-events mods/player-contract-instance \
+					 mods/players/messages
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

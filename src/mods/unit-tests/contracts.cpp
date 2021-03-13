@@ -8,11 +8,11 @@
 
 extern player_ptr_t new_player();
 int count_contracts() {
-	std::deque<mods::contracts::contract> list;
+	std::deque<std::shared_ptr<mods::contracts::contract>> list;
 	auto s = mods::orm::load_all_contracts(&list);
 	std::size_t contract_count = 0;
 	for(auto row : list) {
-		if(row.vnum == 1) {
+		if(row->vnum == 1) {
 			++contract_count;
 		}
 	}
@@ -97,12 +97,12 @@ TEST_CASE("contracts are saved to orm layer") {
 		cs.save();
 
 		{
-			std::deque<mods::contracts::contract> list;
+			std::deque<std::shared_ptr<mods::contracts::contract>> list;
 			auto s = mods::orm::load_all_contracts(&list);
-			REQUIRE(list[0].steps.size() == 3);
-			REQUIRE(list[0].steps[0].object_yaml.compare("rifle/g36c.yml") == 0);
-			REQUIRE(list[0].steps[1].object_yaml.compare("rifle/mp5.yml") == 0);
-			REQUIRE(list[0].steps[2].object_yaml.compare("rifle/czp10.yml") == 0);
+			REQUIRE(list[0]->steps.size() == 3);
+			REQUIRE(list[0]->steps[0].object_yaml.compare("rifle/g36c.yml") == 0);
+			REQUIRE(list[0]->steps[1].object_yaml.compare("rifle/mp5.yml") == 0);
+			REQUIRE(list[0]->steps[2].object_yaml.compare("rifle/czp10.yml") == 0);
 		}
 		cs.delete_by_contract_vnum(1);
 
@@ -175,12 +175,12 @@ TEST_CASE("contracts are saved to orm layer") {
 		cs.save();
 
 		{
-			std::deque<mods::contracts::contract> list;
+			std::deque<std::shared_ptr<mods::contracts::contract>> list;
 			auto s = mods::orm::load_all_contracts(&list);
-			REQUIRE(list[0].steps.size() == 3);
-			REQUIRE(list[0].steps[0].object_yaml.compare("rifle/g36c.yml") == 0);
-			REQUIRE(list[0].steps[1].object_yaml.compare("rifle/mp5.yml") == 0);
-			REQUIRE(list[0].steps[2].object_yaml.compare("rifle/czp10.yml") == 0);
+			REQUIRE(list[0]->steps.size() == 3);
+			REQUIRE(list[0]->steps[0].object_yaml.compare("rifle/g36c.yml") == 0);
+			REQUIRE(list[0]->steps[1].object_yaml.compare("rifle/mp5.yml") == 0);
+			REQUIRE(list[0]->steps[2].object_yaml.compare("rifle/czp10.yml") == 0);
 		}
 
 		{

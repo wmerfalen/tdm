@@ -1,40 +1,19 @@
 # Inventory of features
 
-# HOW TO CREATE A CONTRACT/QUEST
-	1. go to the room where the contract will be given
-	2. run the following js code
-	```
-		db_set('contract:RVNUM:INDEX:name', 'name of contract');
-		db_set('contract:RVNUM:INDEX:description', "description of contract");
-	```
-	3. replace RVNUM with the room vnum
-	4. replace INDEX with the contract number
-	5. create a function in js:
-	```
-		function contract_trigger_RVNUM_INDEX(player_uuid){
-			send("your player uuid is:" + player_uuid);
-		}
-	```
-		This will be the trigger that is ran every time the player
-		enters a new room. it will be used so that you can award
-		the player for the contract.
-	- a complete example:
-		```
-			db_set('contract:130:0:name', 'Eliminate H.V.T.');
-			db_set('contract:130:0:description', "Intelligence reports have pinned down the MS-13 gang leader. Take him out.");
-			function contract_setup_130_0(player_uuid){
-				var target_uuid = exec('mbuild place 405 130');
-				db_set('contract:130:0:' + player_uuid + ':target-uuid', target_uuid);
-			}
-			function contract_trigger_130_0(player_uuid){
-				var target = db_get('contract:130:0:' + player_uuid + ':target-uuid');
-				if(!still_alive(target)){
-					send_to_uuid(player_uuid,"You eliminated the High Value Target! Well done, soldier!");
-					award_contract(player_uuid,130,0);
-				}
-			}
-		```
+# mods::players::messages
+	- way to queue up data for the next screen for a player
 
+# player contract instance
+	- terms used here:
+		- contracts mean quests
+		- steps mean individual steps in a contract
+		- player contract instance is data related to the player's currently tracked contract
+	- orm layer
+		- contracts
+		- contract_steps
+		- player_contract_state (orm for player_contract_instance wrapper)
+	- creating contracts with several steps
+	- see unit tests for pci on how to create/track a contract
 
 # needs testing
 	- hqbuild

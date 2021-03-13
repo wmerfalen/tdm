@@ -21,6 +21,9 @@
 #include "classes/super-user-fiddler.hpp"
 #include "classes/sniper.hpp"
 #include "demolitions.hpp"
+#include "contract-types.hpp"
+#include "player-contract-instance.hpp"
+
 /**
  * TODO: All these stc* functions need to be altered to accomodate
  * the new player_type_enum_t values. If output is to be muted, then
@@ -70,6 +73,9 @@ namespace mods::orm::inventory {
 };
 
 namespace mods {
+	using task_t = mods::contracts::contract_step::task_type_t;
+	using target_t = mods::contracts::contract_step::task_target_t;
+
 #ifdef __MENTOC_NPC_SEND_DEBUG_OUTPUT__
 #define NPC_SEND_DEBUG(a){ std::cerr << "[player-output--NPC_SEND_DEBUG--][NPC:" << this->name().c_str() << "][uuid:" << this->uuid() << "]->'" << a <<"'\n"; }
 #else
@@ -1434,49 +1440,49 @@ namespace mods {
 			case damage_event_t::YOU_INFLICTED_INCENDIARY_AMMO:
 				break;
 			case damage_event_t::ATTACKER_NARROWLY_MISSED_YOU_EVENT:
-				this->sendln(CAT(MSG_NARROWLY_MISSED_ME(),"[from:",dirstr(feedback.from_direction),"]"));
+				this->queue_up(CAT(MSG_NARROWLY_MISSED_ME(),"[from:",dirstr(feedback.from_direction),"]"));
 				break;
 			case damage_event_t::YOU_ARE_INJURED_EVENT:
-				this->sendln(MSG_YOU_ARE_INJURED());
+				this->queue_up(MSG_YOU_ARE_INJURED());
 				break;
 			case damage_event_t::TARGET_DEAD_EVENT:
-				this->sendln(MSG_YOUR_TARGET_IS_DEAD());
+				this->queue_up(MSG_YOUR_TARGET_IS_DEAD());
 				if(sniper()) {
 					sniper()->target_died(feedback.attacker);
 				}
 				break;
 			case damage_event_t::YOU_MISSED_YOUR_TARGET_EVENT:
-				this->sendln(MSG_MISSED_TARGET());
+				this->queue_up(MSG_MISSED_TARGET());
 				break;
 			case damage_event_t::HIT_BY_RIFLE_ATTACK:
-				this->sendln(CAT(MSG_HIT_BY_RIFLE_ATTACK(),"[",std::to_string(feedback.damage),"][from:",dirstr(feedback.from_direction),"]"));
+				this->queue_up(CAT(MSG_HIT_BY_RIFLE_ATTACK(),"[",std::to_string(feedback.damage),"][from:",dirstr(feedback.from_direction),"]"));
 				break;
 			case damage_event_t::HIT_BY_SPRAY_ATTACK:
 				/** FIXME: damage is overall, not the specific user's damage! */
-				this->sendln(CAT(MSG_HIT_BY_SPRAY_ATTACK(),"[",std::to_string(feedback.damage),"][from:",dirstr(feedback.from_direction),"]"));
+				this->queue_up(CAT(MSG_HIT_BY_SPRAY_ATTACK(),"[",std::to_string(feedback.damage),"][from:",dirstr(feedback.from_direction),"]"));
 				break;
 			case damage_event_t::NO_PRIMARY_WIELDED_EVENT:
-				this->sendln(MSG_NO_PRIMARY_WIELDED());
+				this->queue_up(MSG_NO_PRIMARY_WIELDED());
 				break;
 			case damage_event_t::OUT_OF_AMMO_EVENT:
-				this->sendln(MSG_OUT_OF_AMMO());
+				this->queue_up(MSG_OUT_OF_AMMO());
 				break;
 			case damage_event_t::COOLDOWN_IN_EFFECT_EVENT:
-				this->sendln(MSG_COOLDOWN_IN_EFFECT());
+				this->queue_up(MSG_COOLDOWN_IN_EFFECT());
 				break;
 			case damage_event_t::COULDNT_FIND_TARGET_EVENT:
-				this->sendln(MSG_COULDNT_FIND_TARGET());
+				this->queue_up(MSG_COULDNT_FIND_TARGET());
 				break;
 			case damage_event_t::TARGET_IN_PEACEFUL_ROOM_EVENT:
-				this->sendln(MSG_TARGET_IN_PEACEFUL_ROOM());
+				this->queue_up(MSG_TARGET_IN_PEACEFUL_ROOM());
 				break;
 			case damage_event_t::YOU_GOT_HEADSHOT_BY_SPRAY_ATTACK:
 				break;
 			case damage_event_t::YOU_GOT_HEADSHOT_BY_RIFLE_ATTACK:
-				this->sendln(CAT(MSG_HIT_BY_HEADSHOT(),"[",std::to_string(feedback.damage),"][from:",dirstr(feedback.from_direction),"]"));
+				this->queue_up(CAT(MSG_HIT_BY_HEADSHOT(),"[",std::to_string(feedback.damage),"][from:",dirstr(feedback.from_direction),"]"));
 				break;
 			case damage_event_t::YOU_INJURED_SOMEONE_EVENT:
-				this->sendln(MSG_YOU_INJURED_SOMEONE());
+				this->queue_up(MSG_YOU_INJURED_SOMEONE());
 			case damage_event_t::YOU_GOT_HIT_BY_REFLECTED_MUNITIONS_EVENT:
 				sendln(CAT(MSG_YOU_GOT_HIT_BY_REFLECTED_MUNTIONS(),"[",feedback.damage,"][from:",dirstr(feedback.from_direction)));
 				break;
@@ -1598,10 +1604,10 @@ namespace mods {
 		return m_triads;
 	}
 	void player::admin_success(std::string_view msg) {
-		this->sendln(CAT("{grn}[Admin Success]:",msg.data(),"{/grn}"));
+		this->queue_up(CAT("{grn}[Admin Success]:",msg.data(),"{/grn}"));
 	}
 	void player::admin_fail(std::string_view msg) {
-		this->sendln(CAT("{red}[Admin Failure]:",msg.data(),"{/red}"));
+		this->queue_up(CAT("{red}[Admin Failure]:",msg.data(),"{/red}"));
 	}
 	std::shared_ptr<mods::classes::sniper>& player::sniper() {
 		return m_sniper;
@@ -1685,7 +1691,111 @@ namespace mods {
 	bool player::is_npc() const {
 		return IS_NPC(cd());
 	}
-
+	void player::contract_find_item(const uuid_t& obj_uuid) {
+		for(auto& c : contracts()) {
+			if(c->is_find_item()) {
+				c->find_item(obj_uuid);
+			}
+		}
+	}
+	void player::contract_find_mob(const uuid_t& mob_uuid) {
+		for(auto& c : contracts()) {
+			if(c->is_find_mob()) {
+				c->find_mob(mob_uuid);
+			}
+		}
+	}
+	void player::contract_find_room(const room_rnum& room_id) {
+		for(auto& c : contracts()) {
+			if(c->is_find_room()) {
+				c->find_room(room_id);
+			}
+		}
+	}
+	void player::contract_find_door(const room_rnum& room_id,const int8_t& direction) {
+		for(auto& c : contracts()) {
+			if(c->is_find_door()) {
+				c->find_door(room_id,direction);
+			}
+		}
+	}
+	void player::contract_destroy_item(const uuid_t& item_uuid) {
+		for(auto& c : contracts()) {
+			if(c->is_destroy_item()) {
+				c->destroy_item(item_uuid);
+			}
+		}
+	}
+	void player::contract_destroyed_door(const room_rnum& room_id,const int8_t& direction) {
+		for(auto& c : contracts()) {
+			if(c->is_destroy_door()) {
+				c->destroy_door(room_id,direction);
+			}
+		}
+	}
+	void player::contract_retrieve_item(const uuid_t& item_uuid) {
+		for(auto& c : contracts()) {
+			if(c->is_retrieve_item()) {
+				c->retrieve_item(item_uuid);
+			}
+		}
+	}
+	void player::contract_quota_item_find_increase(const uuid_t& item_uuid) {
+		for(auto& c : contracts()) {
+			if(c->goal() & task_t::GOAL_QUOTA && c->goal() & task_t::GOAL_FIND && c->target() == target_t::TARGET_ITEM) {
+				c->quota_find_item(item_uuid);
+			}
+		}
+	}
+	void player::contract_quota_kill_mob_increase(const uuid_t& mob_uuid) {
+		for(auto& c : contracts()) {
+			if(c->is_quota_kill_mob()) {
+				c->quota_kill_mob(mob_uuid);
+			}
+		}
+	}
+	void player::contract_quota_destroyed_door(const room_rnum& room_id,const int8_t& direction) {
+		for(auto& c : contracts()) {
+			if(c->is_quota_destroy_door()) {
+				c->quota_destroy_door(room_id,direction);
+			}
+		}
+	}
+	void player::contract_kill_mob(const uuid_t& mob_uuid) {
+		for(auto& c : contracts()) {
+			if(c->is_kill()) {
+				c->kill(mob_uuid);
+			}
+		}
+	}
+	void player::contract_gain_entry(const room_rnum& room_id) {
+		for(auto& c : contracts()) {
+			if(c->is_gain_entry()) {
+				c->gain_entry(room_id);
+			}
+		}
+	}
+	void player::contract_talk_to(const uuid_t& mob_uuid) {
+		for(auto& c : contracts()) {
+			if(c->is_talk_to()) {
+				c->talk_to(mob_uuid);
+			}
+		}
+	}
+	void player::contract_install_item(const uuid_t& item_uuid) {
+		for(auto& c : contracts()) {
+			if(c->is_install_item()) {
+				c->install_item(item_uuid);
+			}
+		}
+	}
+	std::shared_ptr<mods::contracts::player_contract_instance> player::start_contract(int c_num) {
+		this->contracts().emplace_back(std::make_shared<mods::contracts::player_contract_instance>(c_num,db_id()));
+		return this->contracts().back();
+	}
+	void player::queue_up(std::string_view msg) {
+		mods::players::messages::queue(db_id(),msg);
+	}
 };
 
 #endif

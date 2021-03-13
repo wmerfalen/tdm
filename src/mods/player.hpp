@@ -55,6 +55,10 @@ using event_queue_iterator = event_queue_t::iterator;
 namespace mods::globals {
 	extern player_ptr_t player_nobody;
 };
+namespace mods::contracts {
+	struct player_contract_instance;
+};
+
 namespace mods {
 	struct player {
 			using damage = damage_event_t;
@@ -821,7 +825,26 @@ namespace mods {
 			const std::array<obj_ptr_t,NUM_WEARS>& equipment() const {
 				return m_equipment;
 			}
+			std::shared_ptr<mods::contracts::player_contract_instance> start_contract(int c_num);;
+			std::deque<std::shared_ptr<mods::contracts::player_contract_instance>>& contracts() {
+				return m_contracts;
+			}
+			void contract_find_item(const uuid_t& obj_uuid);
+			void contract_find_mob(const uuid_t& mob_uuid);
+			void contract_find_room(const room_rnum& room_id);
+			void contract_find_door(const room_rnum& room_id,const int8_t& direction);
+			void contract_destroy_item(const uuid_t& item_uuid);
+			void contract_destroyed_door(const room_rnum& room_id,const int8_t& direction);
+			void contract_retrieve_item(const uuid_t& item_uuid);
+			void contract_quota_item_find_increase(const uuid_t& item_uuid);
+			void contract_quota_kill_mob_increase(const uuid_t& mob_uuid);
+			void contract_quota_destroyed_door(const room_rnum& room_id,const int8_t& direction);
+			void contract_kill_mob(const uuid_t& mob_uuid);
+			void contract_gain_entry(const room_rnum& room_id);
+			void contract_talk_to(const uuid_t& mob_uuid);
+			void contract_install_item(const uuid_t& item_uuid);
 
+			void queue_up(std::string_view);
 		protected:
 			std::map<std::string,std::string> m_ada_data;
 			bool m_ada;
@@ -915,6 +938,7 @@ namespace mods {
 			int16_t m_emp_resistance_percent;
 			int16_t m_shock_resistance_percent;
 			int16_t m_anti_matter_resistance_percent;
+			std::deque<std::shared_ptr<mods::contracts::player_contract_instance>> m_contracts;
 	};
 };
 
