@@ -79,6 +79,41 @@ namespace mods::builder::conbuild {
 			}
 			return std::nullopt;
 		}
+		std::pair<unsigned,unsigned> foreach_step_do(std::vector<int> list,std::string mode) {
+			/** signature: [0] => save-step [1] => vnum [2] => step-id ... [N] => [step-id-N] */
+			unsigned ok =0, error = 0;
+			uint16_t ctr = 0;
+			for(const auto& step_id : list) {
+				++ctr;
+				auto s = find_local_step_by_id(step_id);
+				if(!s.has_value()) {
+					push_encoded_error(CAT("Skipping due to: Cannot find step by that step-id for argument number ",ctr + 2));
+					continue;
+				}
+				auto& step = s.value();
+				if(mode.compare("save") == 0) {
+					auto status = step->update_row();
+					if(ORM_SUCCESS(status)) {
+						push_encoded_ok(CAT("Success for step-id:'",step->id,"'"));
+						++ok;
+					} else {
+						push_encoded_error(CAT("FAILED for step-id:'",step->id,"'"));
+						++error;
+					}
+				}
+				if(mode.compare("delete") == 0) {
+					step->destroy();
+					if(ORM_SUCCESS(step->destroy_status)) {
+						push_encoded_ok(CAT("Success for step-id:'",step->id,"'"));
+						++ok;
+					} else {
+						push_encoded_error(CAT("FAILED for step-id:'",step->id,"'"));
+						++error;
+					}
+				}
+			}
+			return {ok,error};
+		}
 
 		conbuild_interface() {
 			/** ======== */
@@ -136,54 +171,18 @@ namespace mods::builder::conbuild {
 			});
 
 			register_integral_accumulator_command("save-step","<virtual_number> <step-id>...[step-id-N]",[&,this](const std::vector<int>&& step_ids,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
-				/** signature: [0] => save-step [1] => vnum [2] => step-id ... [N] => [step-id-N] */
-				unsigned ok =0, error = 0;
-				uint16_t ctr = 0;
-				for(const auto& step_id : step_ids) {
-					++ctr;
-					auto s = find_local_step_by_id(step_id);
-					if(!s.has_value()) {
-						push_encoded_error(CAT("Skipping due to: Cannot find step by that step-id for argument number ",ctr + 2));
-						continue;
-					}
-					auto& step = s.value();
-					auto status = step->update_row();
-					if(ORM_SUCCESS(status)) {
-						push_encoded_ok(CAT("Successfully saved step-id:'",step->id,"'"));
-						++ok;
-					} else {
-						push_encoded_error(CAT("FAILED to save step-id:'",step->id,"'"));
-						++error;
-					}
-				}
-				return {1,CAT("saved ",ok," items successfully. failed saving ",error," items")};
+				auto p = foreach_step_do(step_ids,"save");
+				this->step_list.clear();
+				mods::orm::gather_contract_steps_by_contract_vnum(profile->vnum(),&this->step_list);
+				return {1,CAT("saved ",std::get<0>(p)," successfully. failed saving: ",std::get<1>(p), " items")};
 			});
 
 			register_integral_accumulator_command("delete-step","<virtual_number> <step-id>...[step-id-N]",[&,this](const std::vector<int>&& step_ids,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
-				/** signature: [0] => delete-step [1] => vnum [2] => step-id ... [N] => [step-id-N] */
-				unsigned ok =0, error = 0;
-				uint16_t ctr = 0;
-				for(const auto& step_id : step_ids) {
-					++ctr;
-					auto s = find_local_step_by_id(step_id);
-					if(!s.has_value()) {
-						push_encoded_error(CAT("Skipping due to: Cannot find step by that step-id for argument number ",ctr + 2));
-						continue;
-					}
-					auto& step = s.value();
-					auto status = step->update_row();
-					if(ORM_SUCCESS(status)) {
-						push_encoded_ok(CAT("Successfully deleted step-id:'",step->id,"'"));
-						++ok;
-					} else {
-						push_encoded_error(CAT("FAILED to delete step-id:'",step->id,"'"));
-						++error;
-					}
-				}
-				return {1,CAT("deleted ",ok," items successfully. failed deleting ",error," items")};
+				auto p = foreach_step_do(step_ids,"delete");
+				this->step_list.clear();
+				mods::orm::gather_contract_steps_by_contract_vnum(profile->vnum(),&this->step_list);
+				return {1,CAT("deleted ",std::get<0>(p)," successfully. failed deleting: ",std::get<1>(p), " items")};
 			});
-
-
 
 			register_custom_command("load-steps","<virtual_number>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				this->step_list.clear();
@@ -233,7 +232,7 @@ namespace mods::builder::conbuild {
 					return {1,CAT("set target to: ",step->s_task_target,", or: '",v,"'")};
 				}
 				if(f.compare("s_description") == 0) {
-					step->s_description = mods::util::stoi(v).value();
+					step->s_description = this->accumulate_from(args,4);
 					return {1,"set"};
 				}
 				if(f.compare("s_mob_vnum") == 0) {

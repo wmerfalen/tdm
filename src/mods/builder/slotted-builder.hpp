@@ -333,13 +333,27 @@ namespace mods::builder {
 
 		protected:
 			/** ================================================================================= */
-			/** ### [ SECTION: helplers ]                                                     ### */
+			/** ### [ SECTION: helpers ]                                                      ### */
 			/** ### [ description ]:                                                          ### */
 			/** ###   most of these functions are used internally by various other member     ### */
 			/** ###   functions, but can also be useful to a child class if parsing args.     ### */
 			/** ###---------------------------------------------------------------------------### */
 			/** ###                           [ START ]                                       ### */
 			/** ###---------------------------------------------------------------------------### */
+
+			std::string accumulate_from(const std::vector<std::string>& args,std::size_t index) {
+				if(args.size() <= index) {
+					return "";
+				}
+				std::string value;
+				for(auto i = index; i < args.size(); i++) {
+					value += args[i];
+					if(i + 1 < args.size()) {
+						value += " ";
+					}
+				}
+				return value;
+			}
 			/**
 			 * utility function which will extract an integer from the given index
 			 * usage: extract_int<int32_t>("set",argument,1);
