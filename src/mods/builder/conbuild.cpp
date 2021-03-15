@@ -135,52 +135,56 @@ namespace mods::builder::conbuild {
 			load_all();
 			remove_command_signatures({"list-extract","reload-all","remove","set"});
 			get_signatures()["new"] = "{grn}conbuild{/grn} {red}new <virtual-number>{/red}\r\n";
-			footer() = CAT("{yel}LEGEND:{/yel}\r\n",
-			               "{yel}virtual-number{/yel}: {grn}The contract virtual number.{/grn}\r\n",
-			               "{yel}step-id{/yel}: {grn}The contract_steps primary key.{/grn}\r\n",
-			               "{yel}field{/yel}: {grn}A specific column on the contract_steps table. Use this to see a list of valid columns: 'conbuild columns'.{/grn}\r\n",
-			               "{yel}text{/yel}: {grn}One or more words separated by spaces.{/grn}\r\n",
-			               "{yel}---------------------------------------------------------------------------{/yel}\r\n",
-			               "Important concepts:\r\n",
-			               "When using the {yel}load-steps{/yel} command, a structure is loaded and is exclusive to you.\r\n",
-			               "This exclusive structure has all the steps loaded for the given contract virtual number that you specify.\r\n",
-			               "This does not mean that all other steps don't exist. They merely aren't included when you call various \r\n",
-			               "commands that depend on that step structure.\r\n",
-			               "Example workflow:\r\n",
-			               "{grn}conbuild new 400{/grn} {yel}# this creates a new contract with the virtual number of 400{/yel}\r\n",
-			               "{grn}conbuild new-step 400{/grn} {yel}# this creates a new step for the contract we just created.{/yel}\r\n",
-			               "{grn}conbuild load-steps 400{/grn} {yel}# this loads the step we just created into our exclusive structure.{/yel}\r\n",
-			               "{grn}conbuild show-steps 400{/grn} {yel}# this will now display the step we just created and loaded.{/yel}\r\n",
-			               "\r\n",
-			               "Below is an example output:\r\n",
-			               "-----------------------------------------------\r\n",
-			               " START EXAMPLE\r\n",
-			               "-----------------------------------------------\r\n",
-			               "[success]: [id]:->'218'\r\n",
-			               "[s_contract_vnum]->'400'\r\n",
-			               "[s_description]->'description'\r\n",
-			               "[s_is_optional]->'0'\r\n",
-			               "[s_mob_vnum]->'0'\r\n",
-			               "[s_object_yaml]->''\r\n",
-			               "[s_order]->'0'\r\n",
-			               "[s_quota]->'0'\r\n",
-			               "[s_room_vnum]->'0'\r\n",
-			               "[s_task_target]->'0'\r\n",
-			               "[s_task_type]->'0'\r\n",
-			               "task_type_t: ''\r\n",
-			               "task_target_t: 'TARGET_MOB'\r\n",
-			               "\r\n",
-			               "[success]: Done listing.\r\n",
-			               "-----------------------------------------------\r\n",
-			               " END EXAMPLE\r\n",
-			               "-----------------------------------------------\r\n",
-			               "\r\n",
-			               "We now know that the step we want to modify has an {yel}id{/yel} of {grn}218{/grn}. Let's set some data on it.\r\n",
-			               "{grn}conbuild set-step-data 400 218 s_description this is my test description{/grn} {yel}# set the description {/yel}\r\n",
-			               "{grn}conbuild set-step-data 400 218 s_task_type GOAL_FIND{/grn} {yel}# set the task type {/yel}\r\n",
-			               "{grn}conbuild save-step 400 218{/grn} {yel}# save our step {/yel}\r\n",
-			               "\r\n"
-			              );
+			register_custom_command("legend","",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				std::string legend = CAT("{yel}LEGEND:{/yel}\r\n",
+				                         "{yel}virtual-number{/yel}: {grn}The contract virtual number.{/grn}\r\n",
+				                         "{yel}step-id{/yel}: {grn}The contract_steps primary key.{/grn}\r\n",
+				                         "{yel}field{/yel}: {grn}A specific column on the contract_steps table. Use this to see a list of valid columns: 'conbuild columns'.{/grn}\r\n",
+				                         "{yel}text{/yel}: {grn}One or more words separated by spaces.{/grn}\r\n",
+				                         "{yel}---------------------------------------------------------------------------{/yel}\r\n",
+				                         "Important concepts:\r\n",
+				                         "When using the {yel}load-steps{/yel} command, a structure is loaded and is exclusive to you.\r\n",
+				                         "This exclusive structure has all the steps loaded for the given contract virtual number that you specify.\r\n",
+				                         "This does not mean that all other steps don't exist. They merely aren't included when you call various \r\n",
+				                         "commands that depend on that step structure.\r\n",
+				                         "Example workflow:\r\n",
+				                         "{grn}conbuild new 400{/grn} {yel}# this creates a new contract with the virtual number of 400{/yel}\r\n",
+				                         "{grn}conbuild new-step 400{/grn} {yel}# this creates a new step for the contract we just created.{/yel}\r\n",
+				                         "{grn}conbuild load-steps 400{/grn} {yel}# this loads the step we just created into our exclusive structure.{/yel}\r\n",
+				                         "{grn}conbuild show-steps 400{/grn} {yel}# this will now display the step we just created and loaded.{/yel}\r\n",
+				                         "\r\n",
+				                         "Below is an example output:\r\n",
+				                         "-----------------------------------------------\r\n",
+				                         " START EXAMPLE\r\n",
+				                         "-----------------------------------------------\r\n",
+				                         "[success]: [id]:->'218'\r\n",
+				                         "[s_contract_vnum]->'400'\r\n",
+				                         "[s_description]->'description'\r\n",
+				                         "[s_is_optional]->'0'\r\n",
+				                         "[s_mob_vnum]->'0'\r\n",
+				                         "[s_object_yaml]->''\r\n",
+				                         "[s_order]->'0'\r\n",
+				                         "[s_quota]->'0'\r\n",
+				                         "[s_room_vnum]->'0'\r\n",
+				                         "[s_task_target]->'0'\r\n",
+				                         "[s_task_type]->'0'\r\n",
+				                         "task_type_t: ''\r\n",
+				                         "task_target_t: 'TARGET_MOB'\r\n",
+				                         "\r\n",
+				                         "[success]: Done listing.\r\n",
+				                         "-----------------------------------------------\r\n",
+				                         " END EXAMPLE\r\n",
+				                         "-----------------------------------------------\r\n",
+				                         "\r\n",
+				                         "We now know that the step we want to modify has an {yel}id{/yel} of {grn}218{/grn}. Let's set some data on it.\r\n",
+				                         "{grn}conbuild set-step-data 400 218 s_description this is my test description{/grn} {yel}# set the description {/yel}\r\n",
+				                         "{grn}conbuild set-step-data 400 218 s_task_type GOAL_FIND{/grn} {yel}# set the task type {/yel}\r\n",
+				                         "{grn}conbuild save-step 400 218{/grn} {yel}# save our step {/yel}\r\n",
+				                         "\r\n"
+				                        );
+				push_encoded_ok(legend);
+				return {1,""};
+			});
 			/**
 			 * ==========================================
 			 * title <vnum> <text>...
@@ -464,8 +468,56 @@ namespace mods::builder::conbuild {
 					step->s_order = mods::util::stoi(v).value();
 					return {1,"set"};
 				}
-				if(f.compare("s_object_ymal") == 0) {
+				if(f.compare("s_object_yaml") == 0) {
 					step->s_object_yaml = v;
+					return {1,"set"};
+				}
+				if(f.compare("s_reward_1") == 0) {
+					step->s_reward_1 = v;
+					return {1,"set"};
+				}
+				if(f.compare("s_reward_2") == 0) {
+					step->s_reward_2 = v;
+					return {1,"set"};
+				}
+				if(f.compare("s_reward_3") == 0) {
+					step->s_reward_3 = v;
+					return {1,"set"};
+				}
+				if(f.compare("s_reward_4") == 0) {
+					step->s_reward_4 = v;
+					return {1,"set"};
+				}
+				if(f.compare("s_reward_5") == 0) {
+					step->s_reward_5 = v;
+					return {1,"set"};
+				}
+				if(f.compare("s_reward_6") == 0) {
+					step->s_reward_6 = v;
+					return {1,"set"};
+				}
+				if(f.compare("s_reward_7") == 0) {
+					step->s_reward_7 = v;
+					return {1,"set"};
+				}
+				if(f.compare("s_reward_8") == 0) {
+					step->s_reward_8 = v;
+					return {1,"set"};
+				}
+				if(f.compare("s_reward_9") == 0) {
+					step->s_reward_9 = v;
+					return {1,"set"};
+				}
+				if(f.compare("s_reward_10") == 0) {
+					step->s_reward_10 = v;
+					return {1,"set"};
+				}
+				if(f.compare("s_reward_money") == 0) {
+					step->s_reward_money = mods::util::stoi(v).value_or(0);
+					return {1,"set"};
+				}
+				if(f.compare("s_reward_xp") == 0) {
+					step->s_reward_xp = mods::util::stoi(v).value_or(0);
 					return {1,"set"};
 				}
 				return {0,"nothing set"};

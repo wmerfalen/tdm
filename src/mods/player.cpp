@@ -1796,6 +1796,15 @@ namespace mods {
 	void player::queue_up(std::string_view msg) {
 		mods::players::messages::queue(db_id(),msg);
 	}
+	void player::stop_contract(int c_num) {
+		std::remove_if(m_contracts.begin(),m_contracts.end(),[c_num](auto it) -> bool {
+			if(it->vnum() == c_num) {
+				it->stop_contract();
+				return true;
+			}
+			return false;
+		});
+	}
 };
 
 #endif

@@ -19,6 +19,7 @@
 #include "mods/rand.hpp"
 #include "mods/demolitions.hpp"
 #include "interpreter.h"
+#include "mods/interpreter.hpp"
 
 
 extern void obj_to_room(obj_ptr_t object, room_rnum room);
@@ -244,3 +245,13 @@ ACMD(do_thermite) {
 	/** TODO move this to demolitions namespace */
 	mods::doors::perform_thermite_breach(holding->uuid,player->uuid(),door);
 }
+
+namespace demolitions {
+	void init() {
+		mods::interpreter::add_command("plant", POS_RESTING, do_install, 0,0);
+		mods::interpreter::add_command("install", POS_RESTING, do_install, 0,0);
+		mods::interpreter::add_command("uninstall", POS_RESTING, do_uninstall, 0,0);
+		mods::interpreter::add_command("cancel", POS_RESTING, do_cancel, 0,0);
+	}
+};
+

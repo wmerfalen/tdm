@@ -23,17 +23,20 @@ namespace mods::contracts {
 			m_current_step = nullptr;
 			m_goal = (task_t)0;
 			m_target = (target_t)0;
+			refresh_dump();
 			return;
 		}
 		if(m_step >= m_contract_copy->steps.size()) {
 			m_current_step = nullptr;
 			m_goal = (task_t)0;
 			m_target = (target_t)0;
+			refresh_dump();
 			return;
 		}
 		m_current_step = &m_contract_copy->steps.at(m_step);
 		m_goal = m_current_step->goal;
 		m_target = m_current_step->target;
+		refresh_dump();
 	}
 	player_contract_instance::player_contract_instance() {
 		this->init();
@@ -180,6 +183,59 @@ namespace mods::contracts {
 			}
 		}
 
+	}
+	void player_contract_instance::refresh_dump() {
+		if(!m_current_step) {
+			m_step_dump = "nothing to report\r\n";
+			return;
+		}
+		m_step_dump = "[type]:";
+		if(is_find_item()) {
+			m_step_dump += "find item";
+		}
+		if(is_find_mob()) {
+			m_step_dump += "find_mob";
+		}
+		if(is_find_room()) {
+			m_step_dump += "find_room";
+		}
+		if(is_find_door()) {
+			m_step_dump += "find_door";
+		}
+		if(is_destroy_item()) {
+			m_step_dump += "destroy_item";
+		}
+		if(is_destroy_door()) {
+			m_step_dump += "destroy_door";
+		}
+		if(is_retrieve_item()) {
+			m_step_dump += "retrieve_item";
+		}
+		if(is_quota_find_item()) {
+			m_step_dump += "quota_find_item";
+		}
+		if(is_quota_kill_mob()) {
+			m_step_dump += "quota_kill_mob";
+		}
+		if(is_quota_destroy_door()) {
+			m_step_dump += "quota_destroy_door";
+		}
+		if(is_kill()) {
+			m_step_dump += "kill";
+		}
+		if(is_gain_entry()) {
+			m_step_dump += "gain_entry";
+		}
+		if(is_talk_to()) {
+			m_step_dump += "talk_to";
+		}
+		if(is_install_item()) {
+			m_step_dump += "install_item";
+		}
+		m_step_dump += CAT("\r\n[description]:{yel}",m_current_step->description,"{/yel}\r\n");
+	}
+	std::string_view player_contract_instance::dump_step() {
+		return m_step_dump;
 	}
 	void player_contract_instance::find_room(const room_rnum& room_id) {
 		if(!m_current_step) {

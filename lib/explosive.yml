@@ -31,6 +31,15 @@ armor_penetration_damage_dice_count: 6 #int, dice count of armor penetration don
 armor_penetration_damage_dice_sides: 6 #int, dice sides of armor penetration done, no limit
 damage_dice_count: 2 #int, number of dice
 damage_dice_sides: 6 #int, dice sides
+incendiary_damage_percent: 0 #int, static amount of incendiary damage_percent, no limit
+explosive_damage_percent: 0 #int, static amount of explosive damage_percent, no limit
+shrapnel_damage_percent: 0 #int, static amount of shrapnel damage_percent, no limit
+corrosive_damage_percent: 0 #int, static amount of corrosive damage_percent, no limit
+cryogenic_damage_percent: 0 #int, static amount of cryogenic damage_percent, no limit
+radiation_damage_percent: 0 #int, static amount of radiation damage_percent, no limit
+emp_damage_percent: 0 #int, static amount of emp damage_percent, no limit
+shock_damage_percent: 0 #int, static amount of shock damage_percent, no limit
+anti_matter_damage_percent: 0 #int, static amount of anti_matter damage_percent, no limit
 str_type: 'FRAG_GRENADE' # enum, object type
 manufacturer: 'ACME Industries' # string, anything 
 name: 'FS12 Fragmentation grenade' # string, anything name of object 

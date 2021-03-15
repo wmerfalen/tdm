@@ -2,6 +2,7 @@
 #define __MENTOC_MODS_ORM_UTIL_HEADER__
 #include <forward_list>
 
+#define NULLABLE_U32(ITEM) row[ITEM].is_null() ? 0 : row[ITEM].as<uint32_t>();
 namespace mods::orm::util {
 	struct statement_t {
 		std::string_view where;

@@ -837,10 +837,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "spray", POS_RESTING, do_spray, 0, 0 },
 	{ "snipe_object", POS_RESTING, do_snipe_object, 0, 0},
 	/** install/uninstall various gadgets */
-	{ "cancel", POS_RESTING, do_cancel, 0, 0 },	/** i.e.: claymore mine, camera */
-	{ "install", POS_RESTING, do_install, 0, 0 },	/** i.e.: claymore mine, camera */
-	{ "uninstall", POS_RESTING, do_uninstall, 0, 0 },	/** i.e.: claymore mine, camera */
-	{ "plant", POS_RESTING, do_unimplemented, 0, 0},
 	{ "activate", POS_RESTING, do_unimplemented, 0, 0},
 	{ "drone", POS_RESTING, do_drone, 0, 0 },
 	{ "throw", POS_RESTING, do_throw, 0, 0 },

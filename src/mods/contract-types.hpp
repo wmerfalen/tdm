@@ -35,6 +35,18 @@ namespace mods::contracts {
 		room_vnum				room;
 		uint8_t					quota;
 		bool 						is_optional;
+		uint32_t        reward_xp;
+		uint32_t        reward_money;
+		std::string     reward_1;
+		std::string     reward_2;
+		std::string     reward_3;
+		std::string     reward_4;
+		std::string     reward_5;
+		std::string     reward_6;
+		std::string     reward_7;
+		std::string     reward_8;
+		std::string     reward_9;
+		std::string     reward_10;
 	};
 	using task_t = contract_step::task_type_t;
 	using target_t = contract_step::task_target_t;

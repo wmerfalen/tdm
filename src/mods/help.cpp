@@ -7,6 +7,8 @@ namespace mods::help::pages {
 	HELP_STR h_contract = "usage: contract <list>\r\n"
 	                      "usage: contract <join> <N>\r\n"
 	                      "usage: contract <leave> <N>\r\n"
+	                      "usage: contract <step>\r\n"
+	                      "usage: contract <current>\r\n"
 	                      "This documentation was written on 2020-07-27."
 	                      ;
 	HELP_STR h_grenade = "usage: throw <direction> [room_count=4]\r\n"

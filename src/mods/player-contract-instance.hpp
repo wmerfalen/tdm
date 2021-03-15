@@ -28,6 +28,9 @@ namespace mods::contracts {
 			std::tuple<bool,std::string> advance();
 			bool finished();
 			void init();
+			const auto& vnum() const {
+				return m_contract_vnum;
+			}
 			const auto& contract_vnum() const {
 				return m_contract_vnum;
 			}
@@ -88,7 +91,7 @@ namespace mods::contracts {
 			const auto& step_counter() const {
 				return m_step;
 			}
-
+			std::string_view dump_step();
 
 			void find_item(const uuid_t& item_uuid);
 			void find_mob(const uuid_t& mob_uuid);
@@ -105,6 +108,7 @@ namespace mods::contracts {
 			void talk_to(const uuid_t& mob_uuid);
 			void install_item(const uuid_t& item_uuid);
 		protected:
+			void refresh_dump();
 			uint32_t m_quota;
 			void m_auto_update_step();
 			mods::contracts::contract_step* m_current_step;
@@ -121,6 +125,7 @@ namespace mods::contracts {
 			std::map<std::string,std::string> m_decoded_state_data;
 			std::string m_state_buffer;
 			std::string m_extra_data;
+			std::string m_step_dump;
 	};
 };
 #endif

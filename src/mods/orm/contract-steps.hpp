@@ -21,6 +21,18 @@ namespace mods::orm {
 		mob_vnum s_mob_vnum;
 		room_vnum s_room_vnum;
 		quota_t s_quota;
+		uint32_t s_reward_xp;
+		uint32_t s_reward_money;
+		std::string s_reward_1;
+		std::string s_reward_2;
+		std::string s_reward_3;
+		std::string s_reward_4;
+		std::string s_reward_5;
+		std::string s_reward_6;
+		std::string s_reward_7;
+		std::string s_reward_8;
+		std::string s_reward_9;
+		std::string s_reward_10;
 		bool s_is_optional;
 		uint8_t s_order;
 		std::string s_object_yaml;
@@ -38,6 +50,18 @@ namespace mods::orm {
 			v["s_is_optional"] = std::to_string(s_is_optional);
 			v["s_order"] = std::to_string(s_order);
 			v["s_object_yaml"] = s_object_yaml;
+			v["s_reward_xp"] = std::to_string(s_reward_xp);
+			v["s_reward_money"] = std::to_string(s_reward_money);
+			v["s_reward_1"] = s_reward_1;
+			v["s_reward_2"] = s_reward_2;
+			v["s_reward_3"] = s_reward_3;
+			v["s_reward_4"] = s_reward_4;
+			v["s_reward_5"] = s_reward_5;
+			v["s_reward_6"] = s_reward_6;
+			v["s_reward_7"] = s_reward_7;
+			v["s_reward_8"] = s_reward_8;
+			v["s_reward_9"] = s_reward_9;
+			v["s_reward_10"] = s_reward_10;
 			return std::move(v);
 		}
 		std::string table_name() const {
@@ -80,8 +104,20 @@ namespace mods::orm {
 				step.mob_vnum = row.s_mob_vnum;
 				step.object_yaml = row.s_object_yaml;
 				step.room = row.s_room_vnum;
-				step.quota = row.s_quota;;
+				step.quota = row.s_quota;
 				step.is_optional = row.s_is_optional;
+				step.reward_xp = row.s_reward_xp;
+				step.reward_money = row.s_reward_money;
+				step.reward_1 = row.s_reward_1;
+				step.reward_2 = row.s_reward_2;
+				step.reward_3 = row.s_reward_3;
+				step.reward_4 = row.s_reward_4;
+				step.reward_5 = row.s_reward_5;
+				step.reward_6 = row.s_reward_6;
+				step.reward_7 = row.s_reward_7;
+				step.reward_8 = row.s_reward_8;
+				step.reward_9 = row.s_reward_9;
+				step.reward_10 = row.s_reward_10;
 				c.steps.emplace_back(step);
 			}
 		}
@@ -133,7 +169,19 @@ namespace mods::orm {
 				"s_quota",
 				"s_is_optional",
 				"s_order",
-				"s_object_yaml"
+				"s_object_yaml",
+				"s_reward_xp",
+				"s_reward_money",
+				"s_reward_1",
+				"s_reward_2",
+				"s_reward_3",
+				"s_reward_4",
+				"s_reward_5",
+				"s_reward_6",
+				"s_reward_7",
+				"s_reward_8",
+				"s_reward_9",
+				"s_reward_10",
 			};
 			return list;
 		}
@@ -148,7 +196,19 @@ namespace mods::orm {
 		quota_t s_quota;
 		bool s_is_optional;
 		uint8_t s_order;
+		uint32_t s_reward_xp;
+		uint32_t s_reward_money;
 		std::string s_object_yaml;
+		std::string s_reward_1;
+		std::string s_reward_2;
+		std::string s_reward_3;
+		std::string s_reward_4;
+		std::string s_reward_5;
+		std::string s_reward_6;
+		std::string s_reward_7;
+		std::string s_reward_8;
+		std::string s_reward_9;
+		std::string s_reward_10;
 		long created_at;
 		long updated_at;
 	};

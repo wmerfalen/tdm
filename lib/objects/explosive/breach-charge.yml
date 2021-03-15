@@ -16,3 +16,24 @@ damage_per_second: 10 #float, static base damage done
 disorient_amount: 0.0 #float, percent
 loudness_type: 'LOUD' #std::string, ENUM SILENT,SUSPICIOUS,LOUD,DEAFENING,WORLD_ENDING
 rarity: 'COMMON'
+incendiary_damage_dice_count: 6
+incendiary_damage_dice_sides: 6
+radiation_damage_dice_count: 6
+radiation_damage_dice_sides: 6
+chemical_damage_dice_count: 6
+chemical_damage_dice_sides: 6
+electric_damage_dice_count: 6
+electric_damage_dice_sides: 6
+armor_penetration_damage_dice_count: 6
+armor_penetration_damage_dice_sides: 6
+damage_dice_count: 6
+damage_dice_sides: 6
+incendiary_damage_percent: 10
+explosive_damage_percent: 100
+shrapnel_damage_percent: 10
+corrosive_damage_percent: 0
+cryogenic_damage_percent: 0
+radiation_damage_percent: 5
+emp_damage_percent: 1
+shock_damage_percen: 0
+anti_matter_damage_percent: 0

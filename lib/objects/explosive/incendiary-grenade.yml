@@ -35,3 +35,24 @@ blast_radius: 1 #int, rooms
 damage_per_second: 0.0 #float, static base damage done
 disorient_amount: 0.0 #float, percent
 range_modifier: 1 #int, rooms
+
+incendiary_damage_dice_count: 10 #int, dice count of incendiary damage, no limit
+incendiary_damage_dice_sides: 10 #int, dice sides of incendiary damage, no limit
+radiation_damage_dice_count: 0 #int, dice count of radiation damage, no limit
+radiation_damage_dice_sides: 0 #int, dice sides of radiation damage, no limit
+chemical_damage_dice_count: 0 #int, dice count of chemical damage, no limit
+chemical_damage_dice_sides: 0 #int, dice sides of chemical damage, no limit
+electric_damage_dice_count: 0 #int, dice count of electric damage, no limit
+electric_damage_dice_sides: 0 #int, dice sides of electric damage, no limit
+armor_penetration_damage_dice_count: 10 #int, dice count of armor penetration done, no limit
+armor_penetration_damage_dice_sides: 10 #int, dice sides of armor penetration done, no limit
+damage_dice_count: 15 #int, number of dice
+damage_dice_sides: 16 #int, dice sides
+incendiary_damage_percent: 80 #int, static amount of incendiary damage_percent, no limit
+explosive_damage_percent: 40 #int, static amount of explosive damage_percent, no limit
+shrapnel_damage_percent: 40 #int, static amount of shrapnel damage_percent, no limit
+corrosive_damage_percent: 0 #int, static amount of corrosive damage_percent, no limit
+cryogenic_damage_percent: 0 #int, static amount of cryogenic damage_percent, no limit
+radiation_damage_percent: 8 #int, static amount of radiation damage_percent, no limit
+emp_damage_percent: 0 #int, static amount of emp damage_percent, no limit
+shock_damage_percent: 0 #int, static amount of shock damage_percent, no limit

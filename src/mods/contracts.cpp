@@ -7,7 +7,7 @@
 #include "orm/player-contract-state.hpp"
 #include "player-contract-instance.hpp"
 #ifdef  __MENTOC_SHOW_CONTRACT_OUTPUT__
-#define dbg_print(a) std::cerr << "[mods::mobs::lowly_security_behaviour_tree][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
+#define dbg_print(a) std::cerr << "[mods::contracts][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #else
 #define dbg_print(a)
 #endif
@@ -30,19 +30,17 @@ namespace mods::contracts {
 	 * @return
 	 */
 	static duk_ret_t contract_abort(duk_context *ctx) {
-		std::string pname = duk_to_string(ctx,0);
-		std::string contract_major = duk_to_string(ctx,1);
-		std::string contract_minor = duk_to_string(ctx,2);
+		uuid_t p_uuid = duk_to_number(ctx,0);
+		int contract_vnum = duk_to_number(ctx,1);
 
-		auto player = mods::pfind::by_name(pname.c_str());
-		if(player == mods::globals::player_nobody) {
-			return 0;
+		auto player = ptr_by_uuid(p_uuid);
+		if(!player) {
+			duk_push_number(ctx,-1);
+			return 1;
 		}
-		auto i_contract_major = mods::util::stoi(contract_major);
-		if(i_contract_major.has_value()) {
-			leave_contract(player,i_contract_major.value());
-		}
-		return 0;
+		player->stop_contract(contract_vnum);
+		duk_push_number(ctx,0);
+		return 1;
 	}
 	/**
 	 * @brief called when contract is completed. awards and leaves quest
@@ -344,6 +342,22 @@ namespace mods::contracts {
 	ACMD(do_contract) {
 		auto vec_args = PARSE_ARGS();
 		DO_HELP_WITH_ZERO("contract");
+
+		if(vec_args.size() > 0 && (ICMP(vec_args[0],"step") || ICMP(vec_args[0],"steps") || ICMP(vec_args[0],"current"))) {
+			if(player->contracts().size() == 0) {
+				player->sendln("You have no current contracts.");
+				return;
+			}
+			player->sendln("Listing...");
+			for(const auto& c : player->contracts()) {
+				if(c->finished()) {
+					continue;
+				}
+				player->sendln(c->dump_step());
+			}
+			player->sendln("Done listing...");
+			return;
+		}
 
 		if(vec_args.size() > 0 && vec_args[0].compare("list") == 0) {
 			auto contract_names = mods::contracts::list_contracts(player->vnum());

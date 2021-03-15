@@ -22,6 +22,18 @@ namespace mods::orm {
 		s_quota = 0;
 		s_is_optional = 0;
 		s_order = 0;
+		s_reward_xp = 0;
+		s_reward_money = 0;
+		s_reward_1.clear();
+		s_reward_2.clear();
+		s_reward_3.clear();
+		s_reward_4.clear();
+		s_reward_5.clear();
+		s_reward_6.clear();
+		s_reward_7.clear();
+		s_reward_8.clear();
+		s_reward_9.clear();
+		s_reward_10.clear();
 		auto status = this->create<contract_steps>(this);
 		if(ORM_SUCCESS(status)) {
 			updated_at = created_at = time(nullptr);
@@ -43,6 +55,18 @@ namespace mods::orm {
 		s_is_optional = std::string(row["s_is_optional"].c_str())[0] == 'f' ? false : true;
 		s_order = row["s_order"].as<int>();
 		s_object_yaml = row["s_object_yaml"].c_str();
+		s_reward_xp = NULLABLE_U32("s_reward_xp");
+		s_reward_money = NULLABLE_U32("s_reward_money");
+		s_reward_1 = row["s_reward_1"].c_str();
+		s_reward_2 = row["s_reward_2"].c_str();
+		s_reward_3 = row["s_reward_3"].c_str();
+		s_reward_4 = row["s_reward_4"].c_str();
+		s_reward_5 = row["s_reward_5"].c_str();
+		s_reward_6 = row["s_reward_6"].c_str();
+		s_reward_7 = row["s_reward_7"].c_str();
+		s_reward_8 = row["s_reward_8"].c_str();
+		s_reward_9 = row["s_reward_9"].c_str();
+		s_reward_10 = row["s_reward_10"].c_str();
 		//updated_at = row["updated_at"].as<int>();
 		//created_at = row["created_at"].as<int>();
 		loaded = 1;
@@ -76,7 +100,18 @@ namespace mods::orm {
 			s_quota = record.s_quota;
 			s_is_optional = record.s_is_optional;
 			s_order = record.s_order;
-			s_object_yaml = record.s_object_yaml;
+			s_reward_xp = record.s_reward_xp;
+			s_reward_money = record.s_reward_money;
+			s_reward_1 = record.s_reward_1;
+			s_reward_2 = record.s_reward_2;
+			s_reward_3 = record.s_reward_3;
+			s_reward_4 = record.s_reward_4;
+			s_reward_5 = record.s_reward_5;
+			s_reward_6 = record.s_reward_6;
+			s_reward_7 = record.s_reward_7;
+			s_reward_8 = record.s_reward_8;
+			s_reward_9 = record.s_reward_9;
+			s_reward_10 = record.s_reward_10;
 			std::tuple<int16_t,std::string,uint64_t> insert_result = mods::orm::util::insert_returning<contract_steps_record_t,sql_compositor>(&record, "id");
 			if(!ORM_SUCCESS(insert_result)) {
 				std::cerr << red_str("Issue saving contract_steps:'") << std::get<1>(insert_result) << "'\n";
@@ -99,6 +134,18 @@ namespace mods::orm {
 		v["s_is_optional"] = std::to_string(s_is_optional);
 		v["s_order"] = std::to_string(s_order);
 		v["s_object_yaml"] = s_object_yaml;
+		v["s_reward_xp"] = std::to_string(s_reward_xp);
+		v["s_reward_money"] = std::to_string(s_reward_money);
+		v["s_reward_1"] = s_reward_1;
+		v["s_reward_2"] = s_reward_2;
+		v["s_reward_3"] = s_reward_3;
+		v["s_reward_4"] = s_reward_4;
+		v["s_reward_5"] = s_reward_5;
+		v["s_reward_6"] = s_reward_6;
+		v["s_reward_7"] = s_reward_7;
+		v["s_reward_8"] = s_reward_8;
+		v["s_reward_9"] = s_reward_9;
+		v["s_reward_10"] = s_reward_10;
 		return std::move(v);
 	}
 
@@ -129,6 +176,18 @@ namespace mods::orm {
 			step.s_room_vnum = row["s_room_vnum"].as<room_vnum>();
 			step.s_quota = row["s_quota"].as<int>();
 			step.s_is_optional = row["s_is_optional"].as<bool>();
+			step.s_reward_xp = row["s_reward_xp"].as<uint32_t>(0);
+			step.s_reward_money = row["s_reward_money"].as<uint32_t>(0);
+			step.s_reward_1 = row["s_reward_1"].c_str();
+			step.s_reward_2 = row["s_reward_2"].c_str();
+			step.s_reward_3 = row["s_reward_3"].c_str();
+			step.s_reward_4 = row["s_reward_4"].c_str();
+			step.s_reward_5 = row["s_reward_5"].c_str();
+			step.s_reward_6 = row["s_reward_6"].c_str();
+			step.s_reward_7 = row["s_reward_7"].c_str();
+			step.s_reward_8 = row["s_reward_8"].c_str();
+			step.s_reward_9 = row["s_reward_9"].c_str();
+			step.s_reward_10 = row["s_reward_10"].c_str();
 		}
 		return {result.size(),"loaded"};
 	}
@@ -156,6 +215,18 @@ namespace mods::orm {
 			step->s_room_vnum = row["s_room_vnum"].as<room_vnum>();
 			step->s_quota = row["s_quota"].as<int>();
 			step->s_is_optional = std::string(row["s_is_optional"].c_str())[0] == 'f' ? false : true;
+			step->s_reward_xp = row["s_reward_xp"].as<uint32_t>(0);
+			step->s_reward_money = row["s_reward_money"].as<uint32_t>(0);
+			step->s_reward_1 = row["s_reward_1"].c_str();
+			step->s_reward_2 = row["s_reward_2"].c_str();
+			step->s_reward_3 = row["s_reward_3"].c_str();
+			step->s_reward_4 = row["s_reward_4"].c_str();
+			step->s_reward_5 = row["s_reward_5"].c_str();
+			step->s_reward_6 = row["s_reward_6"].c_str();
+			step->s_reward_7 = row["s_reward_7"].c_str();
+			step->s_reward_8 = row["s_reward_8"].c_str();
+			step->s_reward_9 = row["s_reward_9"].c_str();
+			step->s_reward_10 = row["s_reward_10"].c_str();
 			in_list_ptr->emplace_back(std::move(step));
 		}
 		return {result.size(),"loaded"};

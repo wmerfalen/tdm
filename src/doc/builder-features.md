@@ -1,5 +1,29 @@
 # Inventory of features
 
+# CONTRACT FEATURE GOALS
+	- needed systems for contracts (listed in preferred implementation order)
+		- [x] a central place to get contracts
+			- just use the contracts ACMD and list all contracts
+			- [x] mark an x near contracts that are being done for that player
+		- [x] steps sub-command to ACMD do_contracts
+			- [x] show the current step's description
+		- [25% done] rewards system
+			- [25% done] reward player with
+				- [ ] xp
+				- [ ] money
+				- [x] deep object parsed items
+					- [ ] saved using object instance code (see object instance section below)
+		- [ ] retrofit duktape js functions to new pci code
+		- [ ] restrict contracts by player level
+		- [ ] must complete one contract to unlock a separate contract
+		- [ ] optional failure penalties
+			- [ ] reduce xp
+			- [ ] reduce money
+		- # STRETCH GOALS (optional non-critical systems) 
+			- [ ] rewards per step completed
+			- [ ] mob speech trees
+				- [ ] when on specific contract step a mob's dialogue changes
+
 # before moving to next features
 	- VERIFY contract data saved through conbuild works after mud reboot
 
