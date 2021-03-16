@@ -13,6 +13,10 @@
 				- [ ] money
 				- [x] deep object parsed items
 					- [ ] saved using object instance code (see object instance section below)
+				- [ ] support syntax:
+					- [x] `#yaml|type|path.yml`
+					- [ ] `#catchy|type|name`
+					- [x] `#deep|type/description`
 		- [ ] retrofit duktape js functions to new pci code
 		- [ ] restrict contracts by player level
 		- [ ] must complete one contract to unlock a separate contract
@@ -23,6 +27,14 @@
 			- [ ] rewards per step completed
 			- [ ] mob speech trees
 				- [ ] when on specific contract step a mob's dialogue changes
+		- # contract reward syntax [ NICE TO HAVE ]
+			- returns a vector of `obj_ptr_t`'s of parsed objects
+			- example:
+				- `conbuild set-step-data 1 218 s_reward_1 #yaml|explosive/frag-grenade.yml`
+				- `conbuild set-step-data 1 218 s_reward_2 #catchy|rifle|the-decimator`
+				- `conbuild set-step-data 1 218 s_reward_3 #deep|rifle/g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}`
+			
+
 
 # before moving to next features
 	- VERIFY contract data saved through conbuild works after mud reboot

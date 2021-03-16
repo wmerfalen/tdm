@@ -6,16 +6,6 @@
 			std::cerr << "[mods::deep_object_parser:" << A << "\n";
 namespace mods {
 	using str_map_t = std::map<std::string,std::string>;
-	const std::vector<std::string> rifle_slot_names = {
-		"sight",
-		"under_barrel",
-		"grip",
-		"barrel",
-		"muzzle",
-		"magazine",
-		"stock",
-		"strap"
-	};
 	struct rifle_attachments_t {
 			using encoding_t = std::string;
 			obj_ptr_t sight;

@@ -5,15 +5,15 @@
 #define NULLABLE_U32(ITEM) row[ITEM].is_null() ? 0 : row[ITEM].as<uint32_t>();
 namespace mods::orm::util {
 	struct statement_t {
-		std::string_view where;
-		std::string_view op;
-		std::string_view value;
+		std::string where;
+		std::string op;
+		std::string value;
 		bool op_and;
 		bool op_or;
 		statement_t() = delete;
-		statement_t(std::string_view c_where,
-		            std::string_view c_op,
-		            std::string_view c_value,
+		statement_t(std::string c_where,
+		            std::string c_op,
+		            std::string c_value,
 		            bool c_op_and,
 		            bool c_op_or) : where(c_where), op(c_op),
 			value(c_value), op_and(c_op_and), op_or(c_op_or) {
@@ -214,6 +214,9 @@ namespace mods::orm::util {
 			bool first = true;
 			bool op_and = false, op_or = false;
 			for(const auto& element : compound_statement_list) {
+				std::cerr << "[load_where] where:'" << element.where.data() << "', " <<
+				          "op:'" << element.op.data() << "', " <<
+				          "value:'" << element.value.data() << "'\n";
 				if(first) {
 					first = false;
 					builder.where(element.where.data(),element.op.data(),element.value.data());

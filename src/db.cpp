@@ -1874,9 +1874,8 @@ obj_ptr_t blank_object() {
 	mods::globals::register_object(obj_list.back());
 	return obj_list.back();
 }
-
+/** check for rifle|pkid:N match */
 obj_ptr_t create_object(int type,std::string yaml_file) {
-	/** check for rifle|pkid:N match */
 	std::cerr << "create_object:'" << yaml_file << "'\n";
 	if(yaml_file.find_first_of('|') != std::string::npos) {
 		return mods::util::create_pkid_object(yaml_file);

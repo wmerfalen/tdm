@@ -1,10 +1,19 @@
 #include "deep-object-parser.hpp"
 
+#ifdef __MENTOC_DEEP_OBJECT_PARSER_DEBUG_OUTPUT__
 #define m_crit(a) std::cerr << "[deep_object_parser_t][parser_error][line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"
 #define m_debug(a) std::cout << "[deep_object_parser_t][debug[line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"
 #define m_debug_line_info() std::cerr << " substr:'" << line.substr(in_counter) << "'\n";
 #define m_success(a) std::cout << "[deep_object_parser_t]" << green_str("[success]") << "[line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"
 #define m_parse_error(a) std::cerr << "[deep_object_parser_t]" << red_str("[parse_error]") << "[line:" << __LINE__ << "][file:'" << __FILE__ << "'][msg:'" << a << "']\n"
+#else
+#define m_crit(a)
+#define m_debug(a)
+#define m_debug_line_info() in_counter = in_counter
+#define m_success(a)
+#define m_parse_error(a)
+#endif
+
 namespace mods {
 	const std::string example_grammar = "rifle/g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}";
 	const std::string pkid_example_grammar = "rifle|pkid:7{sight:attachment|pkid:4,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}";

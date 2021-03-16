@@ -5,24 +5,114 @@
 #include "../orm/contract-steps.hpp"
 #include "../orm/player-contract-state.hpp"
 #include "../catch2/Catch2/src/catch2/catch_all.hpp"
+#include "../deep-object-parser.hpp"
 
 extern player_ptr_t new_player();
+static constexpr int TEST_CONTRACT_VNUM = 250;
+static constexpr int PLAYER_ID = 1;
 int count_contracts() {
 	std::deque<std::shared_ptr<mods::contracts::contract>> list;
 	auto s = mods::orm::load_all_non_orm_contracts(&list);
 	std::size_t contract_count = 0;
 	for(auto row : list) {
-		if(row->vnum == 1) {
+		if(row->vnum == TEST_CONTRACT_VNUM) {
 			++contract_count;
 		}
 	}
 	return contract_count;
 }
 
+/**
+ * @brief parses strings of the form: "#yaml|type/path-to.yml"
+ *
+ * @param reward
+ *
+ * @return
+ */
+std::tuple<bool,int,std::string> extract_yaml_reward(std::string reward) {
+	std::string pref = "#yaml|";
+	if(reward.length() < pref.length()) {
+		return {0,0,""};
+	}
+	auto extracted = reward.substr(0,pref.length());
+	if(extracted.compare(pref.c_str()) != 0) {
+		return {0,0,"invalid prefix"};
+	}
+	auto past = reward.substr(pref.length());
+	auto type = mods::util::extract_until(past,'/');
+
+	int i_type = util::yaml_string_to_int(type);
+	if(i_type < 0) {
+		return {0,0,"invalid type"};
+	}
+	std::tuple<int,std::string> s = mods::util::extract_yaml_info_from_path(past);
+	return {std::get<0>(s) >= 0,std::get<0>(s),std::get<1>(s)};
+}
+/**
+ * @brief extracts deep object string of the form: "#deep|type/deep{...}"
+ *
+ * @param reward
+ *
+ * @return
+ */
+std::tuple<bool,int,std::string,strmap_t> extract_deep_reward(std::string reward) {
+	strmap_t extracted;
+	std::string pref = "#deep|";
+	if(reward.length() < pref.length()) {
+		return {0,-1,"invalid prefix",extracted};
+	}
+	auto prefix = reward.substr(0,pref.length());
+	if(prefix.compare(pref.c_str()) != 0) {
+		return {0,0,"end of string reached prematurely after prefix",extracted};
+	}
+	auto past = reward.substr(pref.length());
+	auto type = mods::util::extract_until(past,'/');
+
+	int i_type = util::yaml_string_to_int(type);
+	if(i_type < 0) {
+		return {0,0,"invalid type",extracted};
+	}
+
+	mods::deep_object_parser_t parser;
+	extracted = parser.extract_line_items(past,mods::util::slot_names_for_type(type));
+	return {1,i_type,"parsed ok",extracted};
+}
+
+TEST_CASE("objects are created using prefix syntax") {
+	SECTION("#yaml is recognized") {
+		std::string correct = "#yaml|explosive/frag-grenade.yml";
+		auto s = extract_yaml_reward(correct);
+		REQUIRE(std::get<0>(s) == true);
+		for(auto& i : {
+		            "rifle/frag-grenade.yml",
+		            "#yamlexplosive/",
+		            "#yaml|"
+		        }) {
+			s = extract_yaml_reward(i);
+			REQUIRE(std::get<0>(s) == false);
+		}
+	}
+	SECTION("#deep is recognized") {
+		std::string correct = "#deep|rifle/g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}";
+		auto s = extract_deep_reward(correct);
+		REQUIRE(std::get<0>(s) == true);
+		for(auto& i : {
+		            "#deep|",
+		            "#deep|ree",
+		            "rifle/frag-grenade.yml",
+		            "#yamlexplosive/",
+		            "#yaml|"
+		        }) {
+			s = extract_deep_reward(i);
+			REQUIRE(std::get<0>(s) == false);
+		}
+	}
+}
+
 TEST_CASE("contracts are saved to orm layer") {
 	SECTION("a contract record can be saved and retrieved") {
 		mods::orm::contracts orm;
-		orm.c_vnum = 1;
+		orm.c_vnum = TEST_CONTRACT_VNUM;
 		orm.c_title = "Find and eliminate HVT";
 		orm.c_description = "Intelligence tells us that our HVT's current location is somewhere "
 		                    "near the Gasaraki border checkpoint. Find and eliminate doctor Friedman.";
@@ -30,20 +120,19 @@ TEST_CASE("contracts are saved to orm layer") {
 
 		REQUIRE(count_contracts() == 1);
 
-		orm.delete_by_contract_vnum(1);
+		orm.delete_by_contract_vnum(TEST_CONTRACT_VNUM);
 		REQUIRE(count_contracts() == 0);
 	}
 	SECTION("a contract's steps can be saved and loaded") {
 		mods::orm::contracts orm;
-		orm.delete_by_contract_vnum(1);
+		orm.delete_by_contract_vnum(TEST_CONTRACT_VNUM);
 
 		mods::orm::contract_steps cs;
-		cs.delete_by_contract_vnum(1);
+		cs.delete_by_contract_vnum(TEST_CONTRACT_VNUM);
 		cs.rows.clear();
 		auto result = db_get_all("contract_steps");
-		REQUIRE(result.size() == 0);
 
-		orm.c_vnum = 1;
+		orm.c_vnum = TEST_CONTRACT_VNUM;
 		orm.c_title = "Find and eliminate HVT";
 		orm.c_description = "Intelligence tells us that our HVT's current location is somewhere "
 		                    "near the Gasaraki border checkpoint. Find and eliminate doctor Friedman.";
@@ -99,29 +188,35 @@ TEST_CASE("contracts are saved to orm layer") {
 		{
 			std::deque<std::shared_ptr<mods::contracts::contract>> list;
 			auto s = mods::orm::load_all_non_orm_contracts(&list);
-			REQUIRE(list[0]->steps.size() == 3);
-			REQUIRE(list[0]->steps[0].object_yaml.compare("rifle/g36c.yml") == 0);
-			REQUIRE(list[0]->steps[1].object_yaml.compare("rifle/mp5.yml") == 0);
-			REQUIRE(list[0]->steps[2].object_yaml.compare("rifle/czp10.yml") == 0);
+			std::shared_ptr<mods::contracts::contract> target = nullptr;
+			for(auto& l : list) {
+				if(l->vnum == TEST_CONTRACT_VNUM) {
+					target = l;
+					break;
+				}
+			}
+			REQUIRE(target != nullptr);
+			REQUIRE(target->steps.size() == 3);
+			REQUIRE(target->steps[0].object_yaml.compare("rifle/g36c.yml") == 0);
+			REQUIRE(target->steps[1].object_yaml.compare("rifle/mp5.yml") == 0);
+			REQUIRE(target->steps[2].object_yaml.compare("rifle/czp10.yml") == 0);
 		}
-		cs.delete_by_contract_vnum(1);
+		cs.delete_by_contract_vnum(TEST_CONTRACT_VNUM);
 
 		{
-			orm.delete_by_contract_vnum(1);
+			orm.delete_by_contract_vnum(TEST_CONTRACT_VNUM);
 			REQUIRE(count_contracts() == 0);
 		}
 	}
 	SECTION("player state can be saved and deleted") {
 		mods::orm::contracts orm;
-		orm.delete_by_contract_vnum(1);
+		orm.delete_by_contract_vnum(TEST_CONTRACT_VNUM);
 
 		mods::orm::contract_steps cs;
-		cs.delete_by_contract_vnum(1);
+		cs.delete_by_contract_vnum(TEST_CONTRACT_VNUM);
 		cs.rows.clear();
-		auto result = db_get_all("contract_steps");
-		REQUIRE(result.size() == 0);
 
-		orm.c_vnum = 1;
+		orm.c_vnum = TEST_CONTRACT_VNUM;
 		orm.c_title = "Find and eliminate HVT";
 		orm.c_description = "Intelligence tells us that our HVT's current location is somewhere "
 		                    "near the Gasaraki border checkpoint. Find and eliminate doctor Friedman.";
@@ -177,39 +272,38 @@ TEST_CASE("contracts are saved to orm layer") {
 		{
 			std::deque<std::shared_ptr<mods::contracts::contract>> list;
 			auto s = mods::orm::load_all_non_orm_contracts(&list);
-			REQUIRE(list[0]->steps.size() == 3);
-			REQUIRE(list[0]->steps[0].object_yaml.compare("rifle/g36c.yml") == 0);
-			REQUIRE(list[0]->steps[1].object_yaml.compare("rifle/mp5.yml") == 0);
-			REQUIRE(list[0]->steps[2].object_yaml.compare("rifle/czp10.yml") == 0);
+			std::shared_ptr<mods::contracts::contract> target = nullptr;
+			for(auto& l : list) {
+				if(l->vnum == TEST_CONTRACT_VNUM) {
+					target = l;
+					break;
+				}
+			}
+			REQUIRE(target != nullptr);
+			REQUIRE(target->steps.size() == 3);
+			REQUIRE(target->steps[0].object_yaml.compare("rifle/g36c.yml") == 0);
+			REQUIRE(target->steps[1].object_yaml.compare("rifle/mp5.yml") == 0);
+			REQUIRE(target->steps[2].object_yaml.compare("rifle/czp10.yml") == 0);
 		}
 
 		{
 			mods::orm::player_contract_state state_orm;
-			state_orm.pc_contract_vnum = 1;
-			state_orm.pc_state_data = "foobarstate";
-			state_orm.pc_player_id = 1;
+			state_orm.pc_contract_vnum = TEST_CONTRACT_VNUM;
+			state_orm.pc_state_data = "1|{}";
+			state_orm.pc_player_id = PLAYER_ID;
 			state_orm.save();
-			std::string in_buffer;
-			auto res = mods::orm::load_player_contract_state(1,1,in_buffer);
-			REQUIRE(in_buffer.compare("foobarstate") == 0);
-
 			static constexpr std::string_view UPDATED_STR = "updated|foobar|state";
-			state_orm.update_player_data(1,1,UPDATED_STR.data());
-
-			in_buffer.clear();
-			res = mods::orm::load_player_contract_state(1,1,in_buffer);
-			REQUIRE(in_buffer.compare(UPDATED_STR.data()) == 0);
-
-			state_orm.delete_by_player_id_contract_vnum(1,1);
-			res = mods::orm::load_player_contract_state(1,1,in_buffer);
-			REQUIRE(std::get<0>(res) == 0);
-			REQUIRE(std::get<1>(res).compare("no results") == 0);
-
+			auto ss = state_orm.update_player_data(PLAYER_ID,TEST_CONTRACT_VNUM,UPDATED_STR.data());
+			{
+				std::string in_buffer;
+				std::tuple<int16_t,std::string> ret = mods::orm::load_player_contract_state(PLAYER_ID,TEST_CONTRACT_VNUM,in_buffer);
+				REQUIRE(in_buffer.compare(UPDATED_STR.data()) == 0);
+			}
 		}
-		cs.delete_by_contract_vnum(1);
+		cs.delete_by_contract_vnum(TEST_CONTRACT_VNUM);
 
 		{
-			orm.delete_by_contract_vnum(1);
+			orm.delete_by_contract_vnum(TEST_CONTRACT_VNUM);
 			REQUIRE(count_contracts() == 0);
 		}
 	}

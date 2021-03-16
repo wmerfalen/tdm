@@ -5,7 +5,7 @@ namespace mods {
 	using counter_t = uint16_t;
 
 	void rifle_attachments_t::import_objects(const encoding_t& line) {
-		auto map = m_parser.extract_line_items(line,rifle_slot_names);
+		auto map = m_parser.extract_line_items(line,mods::util::slot_names_for_type("rifle"));
 		m_rifle_yaml_file = map["base"];
 		base_object = create_object(ITEM_RIFLE,map["base"]);
 		for(auto& pair : map) {
@@ -36,7 +36,7 @@ namespace mods {
 		}
 	}
 	std::string rifle_attachments_t::extract_base_yaml_file(const encoding_t& line) {
-		auto map = m_parser.extract_line_items(line,rifle_slot_names);
+		auto map = m_parser.extract_line_items(line,mods::util::slot_names_for_type("rifle"));
 		return map["base"];
 	}
 	std::string& rifle_attachments_t::base_yaml_file() {

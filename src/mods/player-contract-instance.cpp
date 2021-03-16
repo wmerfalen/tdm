@@ -98,6 +98,9 @@ namespace mods::contracts {
 		return m_step >= m_contract_copy->steps.size();
 	}
 	std::tuple<bool,std::string> player_contract_instance::advance() {
+		if(m_current_step) {
+			m_current_step->reward(m_player_id);
+		}
 		m_quota = 0;
 		m_step += 1;
 		save_step_data();

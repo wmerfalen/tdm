@@ -1503,4 +1503,11 @@ std::pair<bool,direction_t> to_direction(std::string_view str) {
 			return {0,NORTH};
 	}
 }
+player_ptr_t ptr_by_db_id(const uint64_t& player_db_id) {
+	auto it = mods::globals::db_id_to_uuid_map.find(player_db_id);
+	if(it == mods::globals::db_id_to_uuid_map.end()) {
+		return nullptr;
+	}
+	return ptr_by_uuid(it->second);
+}
 #endif

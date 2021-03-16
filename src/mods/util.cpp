@@ -6,6 +6,10 @@
 #include "filesystem.hpp"
 #include "orm/rifle-instance.hpp"
 #include "player.hpp"
+#include <iostream>
+#include <regex>
+#include <random>
+#include <filesystem>
 
 #ifdef __MENTOC_MODS_UTIL_DEBUG__
 #define mu_debug(A) std::cerr << "[mods::util][debug]:'" << A << "'\n";
@@ -13,6 +17,126 @@
 #define mu_debug(A) /**-*/
 #endif
 namespace mods::util {
+	void breakline() {
+		for(int i = 0; i < 10; i++) {
+			std::cerr << red_str("-----------------------------------------------------") << "\n";
+		}
+	}
+	void wipe() {
+		system("clear");
+		std::cerr << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+	}
+	std::vector<std::string> slot_names_for_type(std::string_view type) {
+		if(type.compare("rifle") == 0) {
+			return {
+				"sight",
+				"under_barrel",
+				"grip",
+				"barrel",
+				"muzzle",
+				"magazine",
+				"stock",
+				"strap"
+			};
+		}
+		return {};
+	}
+	std::string extract_after(std::string_view target, char this_char) {
+		std::string buffer;
+		buffer.reserve(target.size());
+		bool capture = false;
+		for(auto ch : target) {
+			if(!capture && ch == this_char) {
+				capture = true;
+				continue;
+			}
+			if(capture) {
+				buffer += ch;
+			}
+		}
+		return buffer;
+	}
+
+	std::string extract_until(std::string_view target, char this_char) {
+		std::string buffer;
+		buffer.reserve(target.size());
+		for(auto ch : target) {
+			if(ch == this_char) {
+				return buffer;
+			}
+			buffer += ch;
+		}
+		return buffer;
+	}
+	bool regex_match(std::string_view regex_string,std::string_view target_string) {
+		using namespace std::regex_constants;
+		return std::regex_search(target_string.data(),std::regex(regex_string.data()), std::regex_constants::match_any | std::regex_constants::match_not_null | std::regex_constants::match_continuous);
+	}
+	std::string trim_view(std::string_view str) {
+		int i = 0;
+		for(auto ch : str) {
+			if(!isspace(ch)) {
+				return str.substr(i).data();
+			}
+			++i;
+		}
+		return str.data();
+	}
+	std::string trim(std::string& str) {
+		std::string s;
+		int i = 0;
+		for(auto ch : str) {
+			if(!isspace(ch)) {
+				return str.substr(i);
+			}
+			++i;
+		}
+		return str;
+	}
+	bool first_alpha_is_any(std::string_view line,std::string_view any) {
+		for(auto ch : line) {
+			if(isalpha(ch)) {
+				for(auto a : any) {
+					if(ch == a) {
+						return true;
+					}
+				}
+				return false;
+			}
+		}
+		return false;
+	}
+	void texturize_room(room_rnum room_id, room_data::texture_type_t texture_type) {
+		world[room_id].add_texture(texture_type);
+	}
+	void detexturize_room(room_rnum room_id, room_data::texture_type_t texture_type) {
+		world[room_id].remove_texture(texture_type);
+	}
+	std::string time_string() {
+		char outstr[200];
+		time_t t;
+		struct tm *tmp;
+
+		t = time(NULL);
+		tmp = localtime(&t);
+		if(tmp == NULL) {
+			return "date-unknown";
+		}
+		std::string format = "%";
+		format += "F-%";
+		format += "T";
+		if(strftime(outstr, sizeof(outstr), format.c_str(), tmp) == 0) {
+			return "date-unknown";
+		}
+		return outstr;
+	}
+
+	long pg_timestamp_to_long(std::string timestamp) {
+		struct tm time;
+		memset(&time,0,sizeof(tm));
+		strptime(timestamp.c_str(), "%Y-%m-%d %H:%M:%S",&time);
+		return mktime(&time);
+	}
 	std::string player_class_to_string(player_class_t pc) {
 		switch(pc) {
 			case player_class_t::CLASS_UNDEFINED:
@@ -542,6 +666,95 @@ namespace mods::util {
 		return parse_objdir_capable(player,arg, CAP_ALL, capabilities);
 	}
 	*/
+	// --
+	bool match_any(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch) {
+		for(auto& str : any_of_these) {
+			if(strncmp(src.data(),str.c_str(),max_ch) == 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool is_lower_match(std::string_view str1,std::string_view str2) {
+		unsigned int sz = str1.size();
+		if(str2.size() != sz) {
+			return false;
+		}
+
+		for(unsigned int i = 0; i < sz; ++i) {
+			if(std::tolower(str1[i]) != std::tolower(str2[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
+	bool match_any_lower(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch) {
+		for(auto& str : any_of_these) {
+			if(is_lower_match(str,src)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	player_class_t to_player_class(std::string_view str) {
+		if(is_lower_match(str,"SNIPER")) {
+			return player_class_t::SNIPER;
+		}
+		if(is_lower_match(str,"MARINE")) {
+			return player_class_t::MARINE;
+		}
+		if(is_lower_match(str,"BREACHER")) {
+			return player_class_t::BREACHER;
+		}
+		if(is_lower_match(str,"ENGINEER")) {
+			return player_class_t::ENGINEER;
+		}
+		if(is_lower_match(str,"GHOST")) {
+			return player_class_t::GHOST;
+		}
+		if(is_lower_match(str,"MEDIC")) {
+			return player_class_t::MEDIC;
+		}
+		if(is_lower_match(str,"SUPPORT")) {
+			return player_class_t::SUPPORT;
+		}
+		if(is_lower_match(str,"MARKSMAN")) {
+			return player_class_t::CLASS_MARKSMAN;
+		}
+		if(is_lower_match(str,"BANDIT")) {
+			return player_class_t::CLASS_BANDIT;
+		}
+		if(is_lower_match(str,"BUTCHER")) {
+			return player_class_t::CLASS_BUTCHER;
+		}
+		if(is_lower_match(str,"STRIKER")) {
+			return player_class_t::CLASS_STRIKER;
+		}
+		if(is_lower_match(str,"OBSTRUCTOR")) {
+			return player_class_t::CLASS_OBSTRUCTOR;
+		}
+		if(is_lower_match(str,"MALADY")) {
+			return player_class_t::CLASS_MALADY;
+		}
+		if(is_lower_match(str,"PYREXIA")) {
+			return player_class_t::CLASS_PYREXIA;
+		}
+		if(is_lower_match(str,"DEALER")) {
+			return player_class_t::CLASS_DEALER;
+		}
+		if(is_lower_match(str,"FORGE")) {
+			return player_class_t::CLASS_FORGE;
+		}
+		if(is_lower_match(str,"SYNDROME")) {
+			return player_class_t::CLASS_SYNDROME;
+		}
+		if(is_lower_match(str,"MACHINIST")) {
+			return player_class_t::CLASS_MACHINIST;
+		}
+		return player_class_t::CLASS_UNDEFINED;
+	}
+	// --/
 	std::vector<std::string> explode(char delim,std::string& haystack) {
 		std::vector<std::string> results;
 		std::string current = "";
@@ -642,6 +855,13 @@ namespace mods::util {
 #undef MENTOC_LAZY_ME
 		return mods::util::UNKNOWN_YAML_FILE;
 	}
+	/**
+	 * @brief returns {ITEM_*,"pathtoyaml"} on success. returns {negative,""} on fail
+	 *
+	 * @param path
+	 *
+	 * @return
+	 */
 	std::tuple<int,std::string> extract_yaml_info_from_path(std::string_view path) {
 		std::string yaml_file = "",buffer = "", current = "";
 		std::vector<std::string> parts;

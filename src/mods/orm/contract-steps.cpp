@@ -232,29 +232,4 @@ namespace mods::orm {
 		return {result.size(),"loaded"};
 
 	}
-
-#if 0
-	std::map<uint32_t,uint16_t> contract_steps::get_player_levels(const uint64_t& player_id, std::string_view player_class) {
-		std::map<uint32_t,uint16_t> mapped;
-		if(ORM_SUCCESS(load_by_player(player_id))) {
-			for(const auto& row : rows) {
-				mapped[row.skill_id] = row.skill_points;
-			}
-		}
-		return mapped;
-	}
-
-	std::tuple<int16_t,std::string> load_player_skill_data(player_ptr_t& player, std::map<uint32_t,uint16_t>* storage) {
-		int16_t count = 0;
-		std::string message = "";
-		contract_steps data;
-		data.load_by_player(player->db_id());
-		for(auto& row : data.rows) {
-			++count;
-			(*storage)[row.skill_id] = row.skill_points;
-		}
-		return {count,message};
-	}
-#endif
-
 };

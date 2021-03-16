@@ -3,10 +3,8 @@
 
 #include "../globals.hpp"
 #include "flags.hpp"
-#include <filesystem>
-//#include <ctime>
 #include <random>
-#include <regex>
+//#include <ctime>
 #include "../interpreter.h"
 
 #ifndef __MENTOC_STRING_LIT__
@@ -37,83 +35,24 @@ namespace mods::util {
 		YAML_FILE_WITH_PREFIX = 2,
 		DEEP_OBJECT = 3
 	};
-	static inline std::string extract_after(std::string_view target, char this_char) {
-		std::string buffer;
-		buffer.reserve(target.size());
-		bool capture = false;
-		for(auto ch : target) {
-			if(!capture && ch == this_char) {
-				capture = true;
-				continue;
-			}
-			if(capture) {
-				buffer += ch;
-			}
-		}
-		return buffer;
-	}
+	void wipe();
+	void breakline();
+	std::vector<std::string> slot_names_for_type(std::string_view type);
+	std::string extract_after(std::string_view target, char this_char);
+	std::string extract_until(std::string_view target, char this_char);
+	bool regex_match(std::string_view regex_string,std::string_view target_string);
+	std::string trim_view(std::string_view str);
+	std::string trim(std::string& str);
+	bool first_alpha_is_any(std::string_view line,std::string_view any);
+	long pg_timestamp_to_long(std::string timestamp);
 
-	static inline std::string extract_until(std::string_view target, char this_char) {
-		std::string buffer;
-		buffer.reserve(target.size());
-		for(auto ch : target) {
-			if(ch == this_char) {
-				return buffer;
-			}
-			buffer += ch;
-		}
-		return buffer;
-	}
-	static inline bool regex_match(std::string_view regex_string,std::string_view target_string) {
-		using namespace std::regex_constants;
-		return std::regex_search(target_string.data(),std::regex(regex_string.data()), match_any | match_not_null | match_continuous);
-	}
-	static inline std::string trim_view(std::string_view str) {
-		int i = 0;
-		for(auto ch : str) {
-			if(!isspace(ch)) {
-				return str.substr(i).data();
-			}
-			++i;
-		}
-		return str.data();
-	}
-	static inline std::string trim(std::string& str) {
-		std::string s;
-		int i = 0;
-		for(auto ch : str) {
-			if(!isspace(ch)) {
-				return str.substr(i);
-			}
-			++i;
-		}
-		return str;
-	}
-	static inline bool first_alpha_is_any(std::string_view line,std::string_view any) {
-		for(auto ch : line) {
-			if(isalpha(ch)) {
-				for(auto a : any) {
-					if(ch == a) {
-						return true;
-					}
-				}
-				return false;
-			}
-		}
-		return false;
-	}
 	template <typename T>
 	static inline void shuffle(T& vec) {
 		std::random_device rd;
 		std::mt19937 g(rd());
 		std::shuffle(vec.begin(),vec.end(),g);
 	}
-	static inline long pg_timestamp_to_long(std::string timestamp) {
-		struct tm time;
-		memset(&time,0,sizeof(tm));
-		strptime(timestamp.c_str(), "%Y-%m-%d %H:%M:%S",&time);
-		return mktime(&time);
-	}
+
 	constexpr static const char* UNKNOWN_YAML_FILE = "unknown-yits";
 	template <typename TKey,typename TVal>
 	std::string map2str(std::map<TKey,TVal> in_map) {
@@ -134,45 +73,17 @@ namespace mods::util {
 	};
 	using objdir_t = objdir_struct;
 
-	static inline void texturize_room(room_rnum room_id, room_data::texture_type_t texture_type) {
-		world[room_id].add_texture(texture_type);
-	}
-	static inline void detexturize_room(room_rnum room_id, room_data::texture_type_t texture_type) {
-		world[room_id].remove_texture(texture_type);
-	}
-	static inline std::string time_string() {
-		char outstr[200];
-		time_t t;
-		struct tm *tmp;
-
-		t = time(NULL);
-		tmp = localtime(&t);
-		if(tmp == NULL) {
-			return "date-unknown";
-		}
-		std::string format = "%";
-		format += "F-%";
-		format += "T";
-		if(strftime(outstr, sizeof(outstr), format.c_str(), tmp) == 0) {
-			return "date-unknown";
-		}
-		return outstr;
-	}
-
-
+	void texturize_room(room_rnum room_id, room_data::texture_type_t texture_type);
+	void detexturize_room(room_rnum room_id, room_data::texture_type_t texture_type);
+	std::string time_string();
 
 	namespace detail {
 		template<typename... Args>
-		std::ostream& log(std::ostream& out, Args... args);/*{
-    (out << ... << args) << "\n";
-    return out;
-}*/
+		std::ostream& log(std::ostream& out, Args... args);
 	};
 
 	template<typename... Args>
-	std::ostream& log(Args... args); /*{
-    return detail::log(std::cout, args...);
-}*/
+	std::ostream& log(Args... args);
 
 	/**========================================*/
 	/** affected/plr flag conversion utilities */
@@ -360,123 +271,13 @@ namespace mods::util {
 	static constexpr uint8_t CAP_SINGLE = 0;
 	static constexpr uint8_t CAP_ANY = 0;
 	static constexpr uint8_t CAP_ALL = 0;
-	/*
-	objdir_t parse_objdir_capable(player_ptr_t& player,std::string_view arg, uint8_t query_type, cap_list_t& capabilities);
-	objdir_t parse_objdir_cap_single(player_ptr_t& player,std::string_view arg, cap_list_t& capabilities);
-	objdir_t parse_objdir_cap_any(player_ptr_t& player,std::string_view arg, cap_list_t& capabilities);
-	objdir_t parse_objdir_cap_all(player_ptr_t& player,std::string_view arg, cap_list_t& capabilities);
-	objdir_t expect_explosive_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_explosive>& types);
-	objdir_t expect_rifle_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_rifle>& types);
-	objdir_t expect_gadget_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_gadget>& types);
-	objdir_t expect_drone_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_drone>& types);
-	*/
 	obj_ptr_t make_from(obj_data* o);
 	bool parse_help(std::string_view argument);
 
-	static inline bool match_any(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch) {
-		for(auto& str : any_of_these) {
-			if(strncmp(src.data(),str.c_str(),max_ch) == 0) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	static inline bool is_lower_match(std::string_view str1,std::string_view str2) {
-		unsigned int sz = str1.size();
-		if(str2.size() != sz) {
-			return false;
-		}
-
-		for(unsigned int i = 0; i < sz; ++i) {
-			if(std::tolower(str1[i]) != std::tolower(str2[i])) {
-				return false;
-			}
-		}
-		return true;
-	}
-	static inline bool match_any_lower(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch) {
-		for(auto& str : any_of_these) {
-			if(is_lower_match(str,src)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	static inline player_class_t to_player_class(std::string_view str) {
-		if(is_lower_match(str,"SNIPER")) {
-			return player_class_t::SNIPER;
-		}
-		if(is_lower_match(str,"MARINE")) {
-			return player_class_t::MARINE;
-		}
-		if(is_lower_match(str,"BREACHER")) {
-			return player_class_t::BREACHER;
-		}
-		if(is_lower_match(str,"ENGINEER")) {
-			return player_class_t::ENGINEER;
-		}
-		if(is_lower_match(str,"GHOST")) {
-			return player_class_t::GHOST;
-		}
-		if(is_lower_match(str,"MEDIC")) {
-			return player_class_t::MEDIC;
-		}
-		if(is_lower_match(str,"SUPPORT")) {
-			return player_class_t::SUPPORT;
-		}
-		if(is_lower_match(str,"MARKSMAN")) {
-			return player_class_t::CLASS_MARKSMAN;
-		}
-		if(is_lower_match(str,"BANDIT")) {
-			return player_class_t::CLASS_BANDIT;
-		}
-		if(is_lower_match(str,"BUTCHER")) {
-			return player_class_t::CLASS_BUTCHER;
-		}
-		if(is_lower_match(str,"STRIKER")) {
-			return player_class_t::CLASS_STRIKER;
-		}
-		if(is_lower_match(str,"OBSTRUCTOR")) {
-			return player_class_t::CLASS_OBSTRUCTOR;
-		}
-		if(is_lower_match(str,"MALADY")) {
-			return player_class_t::CLASS_MALADY;
-		}
-		if(is_lower_match(str,"PYREXIA")) {
-			return player_class_t::CLASS_PYREXIA;
-		}
-		if(is_lower_match(str,"DEALER")) {
-			return player_class_t::CLASS_DEALER;
-		}
-		if(is_lower_match(str,"FORGE")) {
-			return player_class_t::CLASS_FORGE;
-		}
-		if(is_lower_match(str,"SYNDROME")) {
-			return player_class_t::CLASS_SYNDROME;
-		}
-		if(is_lower_match(str,"MACHINIST")) {
-			return player_class_t::CLASS_MACHINIST;
-		}
-		return player_class_t::CLASS_UNDEFINED;
-	}
-	/*
-	template <typename T,typename TT>
-	bool icompare(T str1,TT str2){
-		unsigned int sz = a.size();
-		if (b.size() != sz){
-			return false;
-		}
-
-		for (unsigned int i = 0; i < sz; ++i){
-			if (std::tolower(a[i]) != std::tolower(b[i])){
-				return false;
-			}
-		}
-		return true;
-	}
-	*/
-
+	bool match_any(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch);
+	bool is_lower_match(std::string_view str1,std::string_view str2);
+	bool match_any_lower(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch);
+	player_class_t to_player_class(std::string_view str);
 	bool preg_match(std::string_view regex,std::string_view haystack);
 	std::vector<std::string> explode(char delim,std::string& haystack);
 

@@ -2,6 +2,7 @@
 #define __MENTOC_MODS_OBJECT_UTILS_HEADER__
 #include "../globals.hpp"
 #include <variant>
+#include <ctime>
 extern obj_ptr_t optr_by_uuid(uuid_t);
 extern obj_ptr_t create_object(int type,std::string yaml_file);
 namespace mods::object_utils {
