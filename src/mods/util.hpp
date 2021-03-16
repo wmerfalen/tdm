@@ -35,6 +35,9 @@ namespace mods::util {
 		YAML_FILE_WITH_PREFIX = 2,
 		DEEP_OBJECT = 3
 	};
+	using strmap_t = std::map<std::string,std::string>;
+	std::tuple<bool,int,std::string> extract_yaml_reward(std::string reward);
+	std::tuple<bool,int,std::string,strmap_t> extract_deep_reward(std::string reward);
 	void wipe();
 	void breakline();
 	std::vector<std::string> slot_names_for_type(std::string_view type);

@@ -22,79 +22,23 @@ int count_contracts() {
 	return contract_count;
 }
 
-/**
- * @brief parses strings of the form: "#yaml|type/path-to.yml"
- *
- * @param reward
- *
- * @return
- */
-std::tuple<bool,int,std::string> extract_yaml_reward(std::string reward) {
-	std::string pref = "#yaml|";
-	if(reward.length() < pref.length()) {
-		return {0,0,""};
-	}
-	auto extracted = reward.substr(0,pref.length());
-	if(extracted.compare(pref.c_str()) != 0) {
-		return {0,0,"invalid prefix"};
-	}
-	auto past = reward.substr(pref.length());
-	auto type = mods::util::extract_until(past,'/');
-
-	int i_type = util::yaml_string_to_int(type);
-	if(i_type < 0) {
-		return {0,0,"invalid type"};
-	}
-	std::tuple<int,std::string> s = mods::util::extract_yaml_info_from_path(past);
-	return {std::get<0>(s) >= 0,std::get<0>(s),std::get<1>(s)};
-}
-/**
- * @brief extracts deep object string of the form: "#deep|type/deep{...}"
- *
- * @param reward
- *
- * @return
- */
-std::tuple<bool,int,std::string,strmap_t> extract_deep_reward(std::string reward) {
-	strmap_t extracted;
-	std::string pref = "#deep|";
-	if(reward.length() < pref.length()) {
-		return {0,-1,"invalid prefix",extracted};
-	}
-	auto prefix = reward.substr(0,pref.length());
-	if(prefix.compare(pref.c_str()) != 0) {
-		return {0,0,"end of string reached prematurely after prefix",extracted};
-	}
-	auto past = reward.substr(pref.length());
-	auto type = mods::util::extract_until(past,'/');
-
-	int i_type = util::yaml_string_to_int(type);
-	if(i_type < 0) {
-		return {0,0,"invalid type",extracted};
-	}
-
-	mods::deep_object_parser_t parser;
-	extracted = parser.extract_line_items(past,mods::util::slot_names_for_type(type));
-	return {1,i_type,"parsed ok",extracted};
-}
-
 TEST_CASE("objects are created using prefix syntax") {
 	SECTION("#yaml is recognized") {
 		std::string correct = "#yaml|explosive/frag-grenade.yml";
-		auto s = extract_yaml_reward(correct);
+		auto s = util::extract_yaml_reward(correct);
 		REQUIRE(std::get<0>(s) == true);
 		for(auto& i : {
 		            "rifle/frag-grenade.yml",
 		            "#yamlexplosive/",
 		            "#yaml|"
 		        }) {
-			s = extract_yaml_reward(i);
+			s = util::extract_yaml_reward(i);
 			REQUIRE(std::get<0>(s) == false);
 		}
 	}
 	SECTION("#deep is recognized") {
 		std::string correct = "#deep|rifle/g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}";
-		auto s = extract_deep_reward(correct);
+		auto s = util::extract_deep_reward(correct);
 		REQUIRE(std::get<0>(s) == true);
 		for(auto& i : {
 		            "#deep|",
@@ -103,7 +47,7 @@ TEST_CASE("objects are created using prefix syntax") {
 		            "#yamlexplosive/",
 		            "#yaml|"
 		        }) {
-			s = extract_deep_reward(i);
+			s = util::extract_deep_reward(i);
 			REQUIRE(std::get<0>(s) == false);
 		}
 	}

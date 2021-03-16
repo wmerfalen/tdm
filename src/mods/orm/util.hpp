@@ -214,9 +214,11 @@ namespace mods::orm::util {
 			bool first = true;
 			bool op_and = false, op_or = false;
 			for(const auto& element : compound_statement_list) {
+#ifdef __MENTOC_SHOW_LOAD_WHERE_DEBUG_OUTPUT__
 				std::cerr << "[load_where] where:'" << element.where.data() << "', " <<
 				          "op:'" << element.op.data() << "', " <<
 				          "value:'" << element.value.data() << "'\n";
+#endif
 				if(first) {
 					first = false;
 					builder.where(element.where.data(),element.op.data(),element.value.data());

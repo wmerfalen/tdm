@@ -10,6 +10,7 @@
 #include <regex>
 #include <random>
 #include <filesystem>
+#include "deep-object-parser.hpp"
 
 #ifdef __MENTOC_MODS_UTIL_DEBUG__
 #define mu_debug(A) std::cerr << "[mods::util][debug]:'" << A << "'\n";
@@ -17,6 +18,62 @@
 #define mu_debug(A) /**-*/
 #endif
 namespace mods::util {
+	/**
+	 * @brief parses strings of the form: "#yaml|type/path-to.yml"
+	 *
+	 * @param reward
+	 *
+	 * @return
+	 */
+	std::tuple<bool,int,std::string> extract_yaml_reward(std::string reward) {
+		std::string pref = "#yaml|";
+		if(reward.length() < pref.length()) {
+			return {0,0,""};
+		}
+		auto extracted = reward.substr(0,pref.length());
+		if(extracted.compare(pref.c_str()) != 0) {
+			return {0,0,"invalid prefix"};
+		}
+		auto past = reward.substr(pref.length());
+		auto type = mods::util::extract_until(past,'/');
+
+		int i_type = util::yaml_string_to_int(type);
+		if(i_type < 0) {
+			return {0,0,"invalid type"};
+		}
+		std::tuple<int,std::string> s = mods::util::extract_yaml_info_from_path(past);
+		return {std::get<0>(s) >= 0,std::get<0>(s),std::get<1>(s)};
+	}
+	/**
+	 * @brief extracts deep object string of the form: "#deep|type/deep{...}"
+	 *
+	 * @param reward
+	 *
+	 * @return
+	 */
+	std::tuple<bool,int,std::string,strmap_t> extract_deep_reward(std::string reward) {
+		strmap_t extracted;
+		std::string pref = "#deep|";
+		if(reward.length() < pref.length()) {
+			return {0,-1,"invalid prefix",extracted};
+		}
+		auto prefix = reward.substr(0,pref.length());
+		if(prefix.compare(pref.c_str()) != 0) {
+			return {0,0,"end of string reached prematurely after prefix",extracted};
+		}
+		auto past = reward.substr(pref.length());
+		auto type = mods::util::extract_until(past,'/');
+
+		int i_type = util::yaml_string_to_int(type);
+		if(i_type < 0) {
+			return {0,0,"invalid type",extracted};
+		}
+
+		mods::deep_object_parser_t parser;
+		extracted = parser.extract_line_items(past,mods::util::slot_names_for_type(type));
+		return {1,i_type,"parsed ok",extracted};
+	}
+
 	void breakline() {
 		for(int i = 0; i < 10; i++) {
 			std::cerr << red_str("-----------------------------------------------------") << "\n";
