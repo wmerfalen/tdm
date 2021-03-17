@@ -2,20 +2,20 @@
 
 # CONTRACT FEATURE GOALS
 	- needed systems for contracts (listed in preferred implementation order)
+		- [ ] finalize rifle attachments class and give the player the equipment
 		- [x] a central place to get contracts
 			- just use the contracts ACMD and list all contracts
 			- [x] mark an x near contracts that are being done for that player
 		- [x] steps sub-command to ACMD do_contracts
 			- [x] show the current step's description
-		- [25% done] rewards system
-			- [25% done] reward player with
-				- [ ] xp
-				- [ ] money
+		- [ ] rewards system
+			- [ ] reward player with
+				- [x] xp
+				- [x] money
 				- [x] deep object parsed items
 					- [ ] saved using object instance code (see object instance section below)
-				- [ ] support syntax:
-					- [x] `#yaml|type|path.yml`
-					- [ ] `#catchy|type|name`
+				- [x] support syntax:
+					- [x] `#yaml|type/path.yml`
 					- [x] `#deep|type/description`
 		- [ ] retrofit duktape js functions to new pci code
 		- [ ] restrict contracts by player level
@@ -27,6 +27,8 @@
 			- [ ] rewards per step completed
 			- [ ] mob speech trees
 				- [ ] when on specific contract step a mob's dialogue changes
+			- [ ] support catchy reward syntax:
+				- [ ] `#catchy|type|name`
 		- # contract reward syntax [ NICE TO HAVE ]
 			- returns a vector of `obj_ptr_t`'s of parsed objects
 			- example:

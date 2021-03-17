@@ -29,6 +29,7 @@ namespace mods {
 #include "../structs.h"
 #include "affects.hpp"
 #include "camera.hpp"
+#include "rifle-attachments.hpp"
 
 namespace mods::armor {
 	struct basic_protection;
@@ -847,6 +848,9 @@ namespace mods {
 			void contract_gain_entry(const room_rnum& room_id);
 			void contract_talk_to(const uuid_t& mob_uuid);
 			void contract_install_item(const uuid_t& item_uuid);
+			auto& rifle_attachments() {
+				return m_rifles;
+			}
 
 			void queue_up(std::string_view);
 		protected:
@@ -943,6 +947,7 @@ namespace mods {
 			int16_t m_shock_resistance_percent;
 			int16_t m_anti_matter_resistance_percent;
 			std::deque<std::shared_ptr<mods::contracts::player_contract_instance>> m_contracts;
+			std::deque<std::shared_ptr<mods::rifle_attachments_t>> m_rifles;
 	};
 };
 

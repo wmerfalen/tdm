@@ -71,7 +71,7 @@ namespace mods::util {
 
 		mods::deep_object_parser_t parser;
 		extracted = parser.extract_line_items(past,mods::util::slot_names_for_type(type));
-		return {1,i_type,"parsed ok",extracted};
+		return {1,i_type,past,extracted};
 	}
 
 	void breakline() {
