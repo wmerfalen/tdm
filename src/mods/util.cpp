@@ -79,10 +79,6 @@ namespace mods::util {
 			std::cerr << red_str("-----------------------------------------------------") << "\n";
 		}
 	}
-	void wipe() {
-		system("clear");
-		std::cerr << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-	}
 	std::vector<std::string> slot_names_for_type(std::string_view type) {
 		if(type.compare("rifle") == 0) {
 			return {

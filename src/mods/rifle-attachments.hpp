@@ -31,12 +31,23 @@ namespace mods {
 			}
 			~rifle_attachments_t() = default;
 
+			std::map<std::string,std::string> yaml_map();
+			std::map<std::string,std::string> friendly_map();
+			std::string examine();
+
 			std::string extract_base_yaml_file(const encoding_t& line);
 			void import_objects(const encoding_t&);
 			encoding_t export_objects();
+			uuid_t owner() const {
+				return m_owner_uuid;
+			}
+			void set_owner_uuid(uuid_t u) {
+				m_owner_uuid = u;
+			}
 		private:
 			deep_object_parser_t m_parser;
 			std::string m_rifle_yaml_file;
+			uuid_t m_owner_uuid;
 	};
 };
 

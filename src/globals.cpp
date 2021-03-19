@@ -81,6 +81,7 @@ INIT(mods::contracts);
 INIT(mods::players::messages);
 INIT(mods::builder::conbuild);
 INIT(demolitions);
+INIT(mods::rifle_attachments);
 #undef INIT
 
 namespace mods::unit_tests {
@@ -525,6 +526,7 @@ namespace mods {
 			::offensive::init();
 			::builder::init();
 			::demolitions::init();
+			mods::rifle_attachments::init();
 			::informative::init();
 			if(run_unit_tests) {
 				mods::unit_tests::run();

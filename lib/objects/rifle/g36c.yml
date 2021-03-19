@@ -31,7 +31,7 @@ manufacturer: 'Heckler & Koch'
 feed_file: 'g36c.yml'
 type: 'ASSAULT_RIFLE' #string, type of weapon
 str_type: 'ASSAULT_RIFLE' #string, type of weapon
-name: 'A H&K G36C Assault Rifle' #string
+name: 'G36C Assault Rifle' #string
 #rarity types
 # COMMON
 # UNCOMMON
@@ -43,7 +43,7 @@ rarity: COMMON
 vnum: 46 #virtual number
 object_type: rifle
 description: 'A H&K G36C Assault Rifle is lying here.'
-short_description: 'a G36C Assault Rifle'
+short_description: 'G36C Assault Rifle'
 action_description: 'G36C Assault Rifle'
 damage_dice_count: 6
 damage_dice_sides: 10

@@ -9,6 +9,7 @@
 #include "../orm/player-skill-points.hpp"
 #include "../orm/player-skill-usage.hpp"
 #include "../orm/skill-trees.hpp"
+#include "../orm/rifle-attachment.hpp"
 
 #define __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__
@@ -145,6 +146,7 @@ namespace mods::players::db_load {
 		}
 	}
 	void feed_player_inventory(player_ptr_t& player_ptr) {
+		mods::orm::load_player_rifle_attachments(player_ptr);
 		mods::orm::inventory::flush_player(player_ptr);
 	}
 

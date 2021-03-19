@@ -194,6 +194,17 @@ ACMD(do_jstest) {
 	*player << "Test suite loaded...\r\n";
 	return;
 }
+bool is_rifle_attachment(obj_data* obj) {
+	return obj->has_rifle() && obj->rifle()->attributes->is_rifle_attachment;
+}
+void look_at_rifle_attachment(player_ptr_t& player, const uuid_t& obj_uuid) {
+	for(const auto& rifle : player->rifle_attachments()) {
+		if(rifle->base_object->uuid == obj_uuid) {
+			player->sendln(rifle->examine());
+			return;
+		}
+	}
+}
 bool is_camera_feed(obj_data* obj) {
 	return obj->has_gadget() && obj->gadget()->attributes->vnum_list.size();
 }
@@ -904,7 +915,7 @@ void look_in_obj(char_data *ch, char *arg) {
 
 const char* find_exdesc_equipment(std::string_view word,const char_data* ch,const std::size_t& position) {
 	MENTOC_PREAMBLE();
-	log("find_exdesc_equipment");
+	//log("find_exdesc_equipment");
 	auto obj = player->equipment(position);
 	if(!obj) {
 		return nullptr;
@@ -920,7 +931,7 @@ const char* find_exdesc_equipment(std::string_view word,const char_data* ch,cons
 	return nullptr;
 }
 char* find_exdesc(std::string_view word,std::vector<extra_descr_data>& in_list) {
-	log("find_exdesc, word: %s (vector)",word.data());
+	//log("find_exdesc, word: %s (vector)",word.data());
 	if(in_list.size() == 0) {
 		return nullptr;
 	}
@@ -1031,7 +1042,7 @@ void look_at_target(char_data *ch, char *arg) {
 	}
 
 	/* Does the argument match an extra desc of an object in the room? */
-	assert(IN_ROOM(ch) < world.size());
+	//assert(IN_ROOM(ch) < world.size());
 
 	for(obj = world[IN_ROOM(ch)].contents; obj && !found && obj->next_content; obj = obj->next_content) {
 		if(CAN_SEE_OBJ(ch, obj)) {
@@ -1119,6 +1130,10 @@ ACMD(do_examine) {
 	if(tmp_object) {
 		if(is_camera_feed(tmp_object)) {
 			look_into_camera_feed(player,tmp_object,0);
+			return;
+		}
+		if(is_rifle_attachment(tmp_object)) {
+			look_at_rifle_attachment(player,tmp_object->uuid);
 			return;
 		}
 		if((GET_OBJ_TYPE(tmp_object) == ITEM_DRINKCON) ||

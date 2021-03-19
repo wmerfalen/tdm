@@ -40,6 +40,7 @@
 #include "mods/skills.hpp"
 #include "mods/screen-searcher.hpp"
 #include "mods/players/db-load.hpp"
+#include "mods/orm/rifle-attachment.hpp"
 
 namespace mods::interpreter {
 	extern command_info& get_command(std::string_view,player_ptr_t&);

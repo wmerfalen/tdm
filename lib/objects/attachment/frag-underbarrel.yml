@@ -9,15 +9,15 @@
 zoom_multiplier: 0 #float, magnification amount. for example: 6.0 means 6 times magnification
 ammunition_amount: 0 #int16_t, number of bullets to add per magazine
 loudness_reduction: 0 #int16_t, the higher the value the less noise it will make
-durability_profile: 1 #int16_t, ENUM 0=FLIMSY,1=DECENT,2=DURABLE,3=HARDENED,4=INDUSTRIAL_STRENGTH,5=GODLIKE,6=INDESTRUCTIBLE
+durability_profile: 3 #int16_t, ENUM 0=FLIMSY,1=DECENT,2=DURABLE,3=HARDENED,4=INDUSTRIAL_STRENGTH,5=GODLIKE,6=INDESTRUCTIBLE
 accuracy_points: 0 #int16_t,the higher the value, the more control
 incendiary_damage: 0 #int16_t, amount of incendiary damage
 radiation_damage: 0 #int16_t, amount of radiation damage
-armor_penetration_amount: 0 #int16_t, amount of armor penetration done
+armor_penetration_amount: 10 #int16_t, amount of armor penetration done
 disorient_amount: 0 #int16_t, amount of disorientation done
 incendiary_damage_percent: 0 #int16_t,incendiary damage percent
-explosive_damage_percent: 0 #int16_t,explosive damage percent
-shrapnel_damage_percent: 0 #int16_t,shrapnel damage percent
+explosive_damage_percent: 30 #int16_t,explosive damage percent
+shrapnel_damage_percent: 30 #int16_t,shrapnel damage percent
 corrosive_damage_percent: 0 #int16_t,corrosive damage percent
 cryogenic_damage_percent: 0 #int16_t,cryogenic damage percent
 radiation_damage_percent: 0 #int16_t,radiation damage percent
@@ -29,16 +29,15 @@ free_ammo_chance: 0 #int16_t,the higher the value, the less likely the weapon wi
 regenerate_ammo_chance: 0 #int16_t,the higher the value, the more likely the weapon will use generate ammunition
 bleed_chance: 0 #int16_t,the higher the value, the more likely the weapon will cause the target to bleed
 aimed_limb_accuracy_percent: 0 #int16_t,the higher the value, the more likely aimed limb shots will land successfully
-underbarrel_launcher_type: 'NONE' #string, adds an underbarrel launcher of the specified type NONE,FRAG_LAUNCHER,SENSOR_LAUNCHER,SMOKE_LAUNCHER,INCENDIARY_LAUNCHER,SHOTGUN,TASER,CORROSIVE_SPRAY,FLAME_THROWER
-damage_percent_bonus: 0 #int16_t, percent value multiplied by base weapon damage and added to every attack
-str_type: 'SIGHT' # enum, object type
-manufacturer: 'ACME Industries' # string, anything 
-name: 'ACOG Scope' # string, anything name of object 
-vnum: 1000 # integer, unique identifier
-description: 'Description'
-short_description: 'short description'
-action_description: 'action description'
-feed_file: 'SIGHT.yml'
+underbarrel_launcher_type: 'FRAG_LAUNCHER' #string, adds an underbarrel launcher of the specified type NONE,FRAG_LAUNCHER,SENSOR_LAUNCHER,SMOKE_LAUNCHER,INCENDIARY_LAUNCHER,SHOTGUN,TASER,CORROSIVE_SPRAY,FLAME_THROWER
+damage_percent_bonus: 15 #int16_t, percent value multiplied by base weapon damage and added to every attack
+str_type: 'UNDER_BARREL' # enum, object type
+manufacturer: 'FM-Linear' # string, anything 
+name: 'P-10 Frag underbarrel launcher' # string, anything name of object 
+description: 'P-10 Frag underbarrel launcher' # string, anything name of object 
+short_description: 'P-10 Frag underbarrel launcher' # string, anything name of object 
+action_description: 'P-10 Frag underbarrel launcher' # string, anything name of object 
+feed_file: 'frag-underbarrel.yml'
 #rarity types
 # COMMON
 # UNCOMMON
@@ -47,3 +46,4 @@ feed_file: 'SIGHT.yml'
 # GOD_TIER
 # DEFAULT
 rarity: 'COMMON'
+vnum: 90

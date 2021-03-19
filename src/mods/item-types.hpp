@@ -345,25 +345,31 @@
 (STRAP)
 
 #define MENTOC_ATTACHMENT_MEMBERS_TUPLE ( \
-(float,zoom_multiplier,"#float",0.0), \
-(int16_t,ammunition_amount,"#int",0), \
-(int16_t,loudness_reduction,"#int, the higher the value the less noise it will make",0), \
-(int16_t,durability_profile,"#int, ENUM 0=FLIMSY,1=DECENT,2=DURABLE,3=HARDENED,4=INDUSTRIAL_STRENGTH,5=GODLIKE,6=INDESTRUCTIBLE",1), \
-(int16_t,accuracy_points,"#int,the higher the value, the more control",0), \
-(int16_t,incendiary_damage,"#int, amount of incendiary damage",0), \
-(int16_t,radiation_damage,"#int, amount of radiation damage",0), \
-(int16_t,armor_penetration_amount,"#int, amount of armor penetration done",0), \
-(int16_t,disorient_amount,"#int, amount of disorientation done",0), \
-(int16_t,incendiary_damage_percent,"#int,incendiary damage percent",0), \
-(int16_t,explosive_damage_percent,"#int,explosive damage percent",0), \
-(int16_t,shrapnel_damage_percent,"#int,shrapnel damage percent",0), \
-(int16_t,corrosive_damage_percent,"#int,corrosive damage percent",0), \
-(int16_t,cryogenic_damage_percent,"#int,cryogenic damage percent",0), \
-(int16_t,radiation_damage_percent,"#int,radiation damage percent",0), \
-(int16_t,emp_damage_percent,"#int,emp damage percent",0), \
-(int16_t,shock_damage_percent,"#int,shock damage percent",0), \
-(int16_t,anti_matter_damage_percent,"#int,anti_matter damage percent",0), \
-(int16_t,recoil_reduction,"#int,the higher the value, the less recoil",0) \
+(float,zoom_multiplier,"#float, magnification amount. for example: 6.0 means 6 times magnification",0.0), \
+(int16_t,ammunition_amount,"#int16_t, number of bullets to add per magazine",0), \
+(int16_t,loudness_reduction,"#int16_t, the higher the value the less noise it will make",0), \
+(int16_t,durability_profile,"#int16_t, ENUM 0=FLIMSY,1=DECENT,2=DURABLE,3=HARDENED,4=INDUSTRIAL_STRENGTH,5=GODLIKE,6=INDESTRUCTIBLE",1), \
+(int16_t,accuracy_points,"#int16_t,the higher the value, the more control",0), \
+(int16_t,incendiary_damage,"#int16_t, amount of incendiary damage",0), \
+(int16_t,radiation_damage,"#int16_t, amount of radiation damage",0), \
+(int16_t,armor_penetration_amount,"#int16_t, amount of armor penetration done",0), \
+(int16_t,disorient_amount,"#int16_t, amount of disorientation done",0), \
+(int16_t,incendiary_damage_percent,"#int16_t,incendiary damage percent",0), \
+(int16_t,explosive_damage_percent,"#int16_t,explosive damage percent",0), \
+(int16_t,shrapnel_damage_percent,"#int16_t,shrapnel damage percent",0), \
+(int16_t,corrosive_damage_percent,"#int16_t,corrosive damage percent",0), \
+(int16_t,cryogenic_damage_percent,"#int16_t,cryogenic damage percent",0), \
+(int16_t,radiation_damage_percent,"#int16_t,radiation damage percent",0), \
+(int16_t,emp_damage_percent,"#int16_t,emp damage percent",0), \
+(int16_t,shock_damage_percent,"#int16_t,shock damage percent",0), \
+(int16_t,anti_matter_damage_percent,"#int16_t,anti_matter damage percent",0), \
+(int16_t,recoil_reduction,"#int16_t,the higher the value, the less recoil",0), \
+(int16_t,free_ammo_chance,"#int16_t,the higher the value, the less likely the weapon will use ammunition",0), \
+(int16_t,regenerate_ammo_chance,"#int16_t,the higher the value, the more likely the weapon will use generate ammunition",0), \
+(int16_t,bleed_chance,"#int16_t,the higher the value, the more likely the weapon will cause the target to bleed",0), \
+(int16_t,aimed_limb_accuracy_percent,"#int16_t,the higher the value, the more likely aimed limb shots will land successfully",0), \
+(std::string,underbarrel_launcher_type,"#string, adds an underbarrel launcher of the specified type NONE,FRAG_LAUNCHER,SENSOR_LAUNCHER,SMOKE_LAUNCHER,INCENDIARY_LAUNCHER,SHOTGUN,TASER,CORROSIVE_SPRAY,FLAME_THROWER","'NONE'"), \
+(int16_t,damage_percent_bonus,"#int16_t, percent value multiplied by base weapon damage and added to every attack",0.0) \
 )
 
 #define MENTOC_ARMOR_TYPES_SEQUENCE (VEST) \

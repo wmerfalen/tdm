@@ -6,6 +6,7 @@
 #include "../weapons/smg-mp5.hpp"
 #include "../weapons/pistol-czp10.hpp"
 #include "../../globals.hpp"
+#include "rifle-attachment.hpp"
 
 extern obj_ptr_t read_object_ptr(obj_vnum nr, int type);
 extern obj_ptr_t blank_object();
@@ -95,6 +96,7 @@ namespace mods::orm::inventory {
 	}
 	namespace sql {
 		int16_t feed_player(player_ptr_t& player) {
+			//mods::orm::load_player_rifle_attachments(player);
 			{
 				try {
 					// ----------------------------+-----------+----------+----------------------------------------------
@@ -151,6 +153,7 @@ namespace mods::orm::inventory {
 		}//end feed_player
 
 		int16_t flush_player(player_ptr_t& player) {
+			//mods::orm::flush_player_rifle_attachments(player);
 			if(player->db_id() == 0) {
 				log("SYSERR: couldn't grab player's pkid: '%s' -- not able to flush player's inventory to db", player->name().c_str());
 				return -1;
@@ -311,6 +314,7 @@ namespace mods::orm::inventory {
 #define DBG(a) ;;
 #endif
 			int16_t flush_player(player_ptr_t& player) {
+				//mods::orm::flush_player_rifle_attachments(player);
 				DBG("entrance");
 				LMDBRENEW();
 				std::string wearing = "",carrying = "";
@@ -355,6 +359,7 @@ namespace mods::orm::inventory {
 #undef DBG
 			}
 			int16_t feed_player(player_ptr_t& player) {
+				//mods::orm::load_player_rifle_attachments(player);
 #ifdef __MENTOC_SHOW_ORM_INVENTORY_FLUSH_OUTPUT__
 #define DBG(a) std::cerr << "[mods::orm::inventory::feed_player][LINE:" << __LINE__ << "][FILE:" << __FILE__ << "]->'" << a << "'\n";
 #else
@@ -426,6 +431,7 @@ namespace mods::orm::inventory {
 		 * @return
 		 */
 		int16_t flush_player(player_ptr_t& player) {
+			//mods::orm::flush_player_rifle_attachments(player);
 			std::vector<uint64_t> wearing;
 			wearing.resize(NUM_WEARS);
 			for(std::size_t i = 0; i < NUM_WEARS; i++) {
@@ -460,6 +466,7 @@ namespace mods::orm::inventory {
 		 * @return
 		 */
 		int16_t feed_player(player_ptr_t& player) {
+			//mods::orm::load_player_rifle_attachments(player);
 			std::vector<uint64_t> wearing,carrying;
 			auto wkey = "player|" + std::string(player->name().c_str()) + "|wearing";
 			auto ckey = "player|" + std::string(player->name().c_str()) + "|carrying";

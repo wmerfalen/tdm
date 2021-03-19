@@ -187,6 +187,7 @@ namespace mods::yaml {
 			std::fill(damage_map.begin(),damage_map.end(),0);
 			MENTOC_INITIALIZE(MENTOC_RIFLE_MEMBERS_TUPLE);
 			feed_status = 2;
+			is_rifle_attachment = 0;
 		}
 		virtual int16_t feed(std::string_view file);
 		virtual int16_t feed_from_po_record(mentoc_pqxx_result_t);
@@ -199,7 +200,7 @@ namespace mods::yaml {
 
 		mods::weapon::weapon_stat_list_t* base_stat_list;
 		int16_t feed_status;
-
+		bool is_rifle_attachment;
 	};
 
 	struct explosive_description_t : public yaml_description_t {

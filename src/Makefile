@@ -38,7 +38,8 @@ FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
 	-D__MENTOC_SQL_MIGRATIONS_DIR=\"$(SQL_MIGRATIONS_DIR)\" \
 	-D__MENTOC_PREDEFINED_RIFLE_PKID__=1 \
 	-D__MENTOC_SHOW_BEHAVIOUR_TREE_LOWLY_SECURITY_BTREE_DEBUG_OUTPUT__=1 \
-	-D__MENTOC_SHOW_CONTRACT_OUTPUT__=1
+	-D__MENTOC_SHOW_CONTRACT_OUTPUT__=1 \
+	-D__MENTOC_SHOW_ORM_INVENTORY_FLUSH_OUTPUT__=1
 #-D__MENTOC_MODS_AFFECTS_SHOW_DEBUG_OUTPUT__=1 \
 #-D__MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__=1 \
 #-D__MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__=1 \
@@ -128,7 +129,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/unit-tests/contracts mods/unit-tests/player-contract-instance \
 					 mods/contract-events mods/player-contract-instance \
 					 mods/players/messages mods/builder/conbuild \
-					 mods/contract-steps
+					 mods/contract-steps mods/orm/rifle-attachment mods/unit-tests/rifle-attachments
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

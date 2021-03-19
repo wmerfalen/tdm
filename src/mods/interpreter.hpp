@@ -6,6 +6,7 @@
 #include <string>
 #include "../globals.hpp"
 #include <functional>
+#include "super-users.hpp"
 
 namespace mods::interpreter {
 	typedef void (*acmd_function)(char_data*, char*, int, int, player_ptr_t&);
