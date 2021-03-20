@@ -13,6 +13,11 @@ extern obj_ptr_t blank_object();
 extern void obj_ptr_to_char(obj_ptr_t  object, player_ptr_t player);
 extern obj_ptr_t create_object_from_index(std::size_t proto_index);
 namespace mods::orm::inventory {
+#ifdef __MENTOC_SHOW_ORM_INVENTORY_FLUSH_OUTPUT__
+#define DBG(a) std::cerr << "[mods::orm::inventory::flush_player][LINE:" << __LINE__ << "][FILE:" << __FILE__ << "]->'" << a << "'\n";
+#else
+#define DBG(a) ;;
+#endif
 
 #ifdef __MENTOC_USE_SQL_FLUSH_PLAYER__
 	obj_data_ptr_t dynamic_fetch(mentoc_pqxx_result_t row) { //int id, std::string_view in_type){
@@ -96,7 +101,6 @@ namespace mods::orm::inventory {
 	}
 	namespace sql {
 		int16_t feed_player(player_ptr_t& player) {
-			//mods::orm::load_player_rifle_attachments(player);
 			{
 				try {
 					// ----------------------------+-----------+----------+----------------------------------------------
@@ -307,11 +311,6 @@ namespace mods::orm::inventory {
 				}
 				return "";
 			}
-#ifdef __MENTOC_SHOW_ORM_INVENTORY_FLUSH_OUTPUT__
-#define DBG(a) std::cerr << "[mods::orm::inventory::flush_player][LINE:" << __LINE__ << "][FILE:" << __FILE__ << "]->'" << a << "'\n";
-#else
-#define DBG(a) ;;
-#endif
 			int16_t flush_player(player_ptr_t& player) {
 				DBG("entrance");
 				LMDBRENEW();
@@ -357,7 +356,6 @@ namespace mods::orm::inventory {
 #undef DBG
 			}
 			int16_t feed_player(player_ptr_t& player) {
-				//mods::orm::load_player_rifle_attachments(player);
 #ifdef __MENTOC_SHOW_ORM_INVENTORY_FLUSH_OUTPUT__
 #define DBG(a) std::cerr << "[mods::orm::inventory::feed_player][LINE:" << __LINE__ << "][FILE:" << __FILE__ << "]->'" << a << "'\n";
 #else
@@ -389,7 +387,7 @@ namespace mods::orm::inventory {
 						log("SYSERR: malformedk yaml file used as path: '%s'",file.c_str());
 						continue;
 					}
-					std::cerr << "[mods::inventory::yaml::feed_player][WEARING] giving player: '" << file << "'\n";
+					DBG("[mods::inventory::yaml::feed_player][WEARING] giving player: '" << file << "'");
 					int i_type = txt::yaml_string_to_int(vec[0]);
 					auto obj = create_object(i_type,vec[1]);
 					int wear = mods::util::stoi(vec[2]).value_or(-1);
@@ -413,7 +411,7 @@ namespace mods::orm::inventory {
 						log("SYSERR: malformed CARRYING yaml file used as path: '%s'",file.c_str());
 						continue;
 					}
-					std::cerr << "[mods::inventory::yaml::feed_player][CARRYING] giving player: '" << file << "'\n";
+					DBG("[mods::inventory::yaml::feed_player][CARRYING] giving player: '" << file << "'");
 					int i_type = txt::yaml_string_to_int(vec[0]);
 					auto obj = create_object(i_type,vec[1]);
 					DBG("carrying object");
@@ -463,7 +461,6 @@ namespace mods::orm::inventory {
 		 * @return
 		 */
 		int16_t feed_player(player_ptr_t& player) {
-			//mods::orm::load_player_rifle_attachments(player);
 			std::vector<uint64_t> wearing,carrying;
 			auto wkey = "player|" + std::string(player->name().c_str()) + "|wearing";
 			auto ckey = "player|" + std::string(player->name().c_str()) + "|carrying";

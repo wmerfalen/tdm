@@ -1380,6 +1380,7 @@ int destroy_player(player_ptr_t&& player) {
 			}
 		}
 	} while(removed);
+	mods::replenish::destroy_player(player->uuid());
 
 	if(pl_iterator == mods::globals::player_list.end()) {
 		log("SYSERR: WARNING! destroy_player cannot find player pointer in player_list!");
