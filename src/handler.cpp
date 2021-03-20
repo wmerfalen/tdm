@@ -22,6 +22,7 @@
 /* !mods */
 #include "globals.hpp"
 #include "mods/loops.hpp"
+#include "mods/players/db-load.hpp"
 
 /* local vars */
 int extractions_pending = 0;
@@ -63,7 +64,7 @@ int isname(const char *str, const char *namelist) {
 
 	for(;;) {
 		for(curstr = str;; curstr++, curname++) {
-			if(!curname){
+			if(!curname) {
 				return 0;
 			}
 			if(!*curstr && !isalpha(*curname)) {
@@ -390,11 +391,11 @@ void affect_join(char_data *ch, struct affected_type *af,
 /* move a player out of a room */
 void char_from_room(char_data *ch) {
 
-	if(ch == NULL){
+	if(ch == NULL) {
 		log("char_from_room[SYSERR]->'NULL character'");
 		return;
 	}
-	
+
 	if(IN_ROOM(ch) == NOWHERE) {
 		log("char_from_room[SYSERR]->'NOWHERE'");
 		return;
@@ -417,25 +418,25 @@ void char_from_room(char_data *ch) {
 /* place a character in a room */
 void char_to_room(char_data *ch, room_rnum room) {
 	IN_ROOM(ch) = room;
-	if(ch == nullptr){
+	if(ch == nullptr) {
 		log("SYSERR: char_to_room given a nullptr");
 		return;
 	}
 	//std::size_t r = room;
 
-	if(ch == NULL){
+	if(ch == NULL) {
 		log("SYSERR: ch ptr passed to char_to_room is null!");
 		return;
 	}
 
-	if(room == NOWHERE){
+	if(room == NOWHERE) {
 		log("SYSERR: Illegal value (room == NOWHERE) passed to char_to_room. (Room: %d/%d Ch: %p",
 		    room, mods::globals::room_list.size(), ch);
 		return;
 	}
-		
-	if(room >= mods::globals::room_list.size()){
-		
+
+	if(room >= mods::globals::room_list.size()) {
+
 		//if(player->builder_mode()){
 		//	player->sendln("Okay you got me");
 		//	mods::globals::pad_room(room,ch,NORTH);
@@ -445,7 +446,7 @@ void char_to_room(char_data *ch, room_rnum room) {
 		log("SYSERR: Illegal value(s) passed to char_to_room. (Room: %d/%d Ch: %p",
 		    room, mods::globals::room_list.size(), ch);
 		return;
-	}else {
+	} else {
 		mods::globals::rooms::char_to_room(room,ch);
 
 		if(GET_EQ(ch, WEAR_LIGHT))
@@ -455,7 +456,7 @@ void char_to_room(char_data *ch, room_rnum room) {
 				}
 
 		/* Stop fighting now, if we left. */
-		if(FIGHTING(ch)){
+		if(FIGHTING(ch)) {
 			if(IN_ROOM(ch) != IN_ROOM(FIGHTING(ch))) {
 				stop_fighting(FIGHTING(ch));
 				stop_fighting(ch);
@@ -518,12 +519,12 @@ void obj_to_char(struct obj_data *object, char_data *ch) {
 }
 
 /* take an object from a char */
-void obj_from_char(obj_ptr_t in_object){
-	if(!in_object){
+void obj_from_char(obj_ptr_t in_object) {
+	if(!in_object) {
 		log("SYSERR: nullptr obj_data (obj_from_char)");
 		return;
 	}
-	if(!in_object->carried_by){
+	if(!in_object->carried_by) {
 		log("SYSERR: invalid carried_by");
 		return;
 	}
@@ -538,7 +539,7 @@ void obj_from_char(obj_ptr_t in_object){
 		return;
 	}
 
-	if(!object->carried_by){
+	if(!object->carried_by) {
 		log("SYSERR: NULL object->carried_by passed to obj_from_char.");
 		return;
 	}
@@ -563,11 +564,11 @@ void obj_from_char(obj_ptr_t in_object){
 /* take an object from a char */
 void obj_from_char(struct obj_data *object) {
 	log("DEPRECATED: obj_from_char obj_data*");
-	if(!object){
+	if(!object) {
 		log("SYSERR: nullptr obj_data (obj_from_char LEGACY)");
 		return;
 	}
-	if(!object->carried_by){
+	if(!object->carried_by) {
 		log("SYSERR: invalid carried_by");
 		return;
 	}
@@ -581,7 +582,7 @@ void obj_from_char(struct obj_data *object) {
 		return;
 	}
 
-	if(!object->carried_by){
+	if(!object->carried_by) {
 		log("SYSERR: NULL object->carried_by passed to obj_from_char.");
 		return;
 	}
@@ -655,7 +656,7 @@ int invalid_align(char_data *ch, struct obj_data *obj) {
 	return FALSE;
 }
 
-void equip_char(player_ptr_t player,obj_ptr_t in_object,int pos){
+void equip_char(player_ptr_t player,obj_ptr_t in_object,int pos) {
 	player->equip(in_object,pos);
 }
 
@@ -712,7 +713,7 @@ void equip_char(player_ptr_t player,obj_ptr_t in_object,int pos){
 //}
 
 
-obj_ptr_t unequip_char(player_ptr_t player, int pos){
+obj_ptr_t unequip_char(player_ptr_t player, int pos) {
 	auto obj = player->equipment(pos);
 	player->unequip(pos);
 	return (obj);
@@ -867,7 +868,7 @@ char_data *get_char_room(char *name, int *number, room_rnum room) {
 	char_data* found = nullptr;
 	mods::loops::foreach_in_room(room,[&](player_ptr_t player) -> bool {//i = world[room].people; i && *number; i = i->next_in_room)
 		auto i = player->cd();
-		if(isname(name, i->player.name)){
+		if(isname(name, i->player.name)) {
 			if(--(*number) == 0) {
 				found = i;
 				return false;//stop looping, we found him and number is zero
@@ -897,11 +898,11 @@ char_data *get_char_num(mob_rnum nr) {
 
 /* put an object in a room */
 void obj_to_room(obj_ptr_t in_object, room_rnum room) {
-	if(room == NOWHERE){
+	if(room == NOWHERE) {
 		log("SYSERR: Illegal value passed to obj_to_room. (Room is NOWHERE)");
 		return;
 	}
-	if(room > top_of_world){
+	if(room > top_of_world) {
 		log("SYSERR: Illegal value passed to obj_to_room. (Room is GREATER than top of world!)");
 		return;
 	}
@@ -927,11 +928,11 @@ void obj_to_room(obj_ptr_t in_object, room_rnum room) {
 
 /* put an object in a room */
 void obj_to_room(struct obj_data *object, room_rnum room) {
-	if(room == NOWHERE){
+	if(room == NOWHERE) {
 		log("SYSERR: Illegal value passed to obj_to_room. (Room is NOWHERE)");
 		return;
 	}
-	if(room > top_of_world){
+	if(room > top_of_world) {
 		log("SYSERR: Illegal value passed to obj_to_room. (Room is GREATER than top of world!)");
 		return;
 	}
@@ -999,10 +1000,10 @@ void obj_from_room(struct obj_data *object) {
 
 
 /* put an object in an object (quaint)  */
-void	obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object){
+void	obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object) {
 	struct obj_data *tmp_obj;
 
-	if(!to_object || !from_object || from_object == to_object){
+	if(!to_object || !from_object || from_object == to_object) {
 		log("SYSERR: NULL object or same source and target obj passed to obj_to_obj.");
 		return;
 	}
@@ -1066,7 +1067,7 @@ void object_list_new_owner(struct obj_data *list, char_data *ch) {
 /* Extract an object from the world */
 void extract_obj(struct obj_data *obj) {
 	std::cerr << "[extract_obj]";
-	if(obj->worn_by){
+	if(obj->worn_by) {
 		unequip_char(ptr(obj->worn_by), obj->worn_on);
 	}
 
@@ -1118,8 +1119,8 @@ void update_object(struct obj_data *obj, int use) {
 void update_char_objects(char_data *ch) {
 	int i;
 
-	if(GET_EQ(ch, WEAR_LIGHT) != nullptr){
-		if(GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT){
+	if(GET_EQ(ch, WEAR_LIGHT) != nullptr) {
+		if(GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT) {
 			if(GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2) > 0) {
 				i = --GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2);
 
@@ -1135,7 +1136,7 @@ void update_char_objects(char_data *ch) {
 		}
 	}
 
-	for(i = 0; i < NUM_WEARS; i++){
+	for(i = 0; i < NUM_WEARS; i++) {
 		if(GET_EQ(ch, i)) {
 			update_object(GET_EQ(ch, i), 2);
 		}
@@ -1165,7 +1166,7 @@ void extract_char_final(char_data *ch) {
 	 * we're checking below this loop to the proper value.
 	 */
 	if(!IS_NPC(ch) && !ch->has_desc) {
-		for(auto & d : descriptor_list){
+		for(auto& d : descriptor_list) {
 			if(d.original == ch) {
 				do_return(d.character, NULL, 0, 0, player);
 				break;
@@ -1192,7 +1193,7 @@ void extract_char_final(char_data *ch) {
 			 * for being link-dead, so we want CON_CLOSE to clean everything up.
 			 * If we're here, we know it's a player so no IS_NPC check required.
 			 */
-			for(auto & d : descriptor_list) {
+			for(auto& d : descriptor_list) {
 				if(d.descriptor == ch->desc->descriptor) {
 					continue;
 				}
@@ -1241,10 +1242,10 @@ void extract_char_final(char_data *ch) {
 	}
 
 	mods::loops::foreach_all_chars([&ch](player_ptr_t _player_ptr) -> bool {
-			if(HUNTING(_player_ptr->cd()) == ch){
-				HUNTING(_player_ptr->cd()) = nullptr;
-			}
-			return true;
+		if(HUNTING(_player_ptr->cd()) == ch) {
+			HUNTING(_player_ptr->cd()) = nullptr;
+		}
+		return true;
 	});
 
 
@@ -1257,9 +1258,13 @@ void extract_char_final(char_data *ch) {
 
 		clearMemory(ch);
 	} else {
+		// This is getting commented out because before the user
+		// hits the menu from the game, we already save the character.
+		//
 		{
 			MENTOC_PREAMBLE();
-			mods::db::save_char(player);
+			player->sendln("Saving via extract char final");
+			mods::players::db_load::save_from(player, mods::players::db_load::save_from_t::EXTRACTION);
 		}
 		Crash_delete_crashfile(ch);
 	}
@@ -1343,8 +1348,8 @@ void extract_char(char_data *ch) {
 //}
 //
 
-void extract_pending_chars(){
-	if(extractions_pending < 0){
+void extract_pending_chars() {
+	if(extractions_pending < 0) {
 		log("SYSERR: Negative (%d) extractions pending. Resetting to zero.", extractions_pending);
 		extractions_pending = 0;
 		return;
@@ -1362,7 +1367,7 @@ void extract_pending_chars(){
 		}
 		extract_char_final(ch);
 		extractions_pending--;
-		if(extractions_pending == 0){
+		if(extractions_pending == 0) {
 			return false;
 		}
 		return true;
@@ -1386,7 +1391,7 @@ char_data *get_player_vis(char_data *ch, char *name, int *number, int inroom) {
 	char_data* char_return = nullptr;
 
 	//mods::loops::foreach_player([ch,&char_return,inroom,name,number](player_ptr_t player){
-	for(auto & player : mods::globals::player_list){
+	for(auto& player : mods::globals::player_list) {
 		auto i = player->cd();
 		if(inroom == FIND_CHAR_ROOM && IN_ROOM(i) != IN_ROOM(ch)) {
 			d("continuing due to in room != ch in room");
@@ -1394,8 +1399,8 @@ char_data *get_player_vis(char_data *ch, char *name, int *number, int inroom) {
 		}
 
 		if(str_cmp(player->name().c_str(), name)) { /* If not same, continue */
-			d("continuing due to name str != name '" << 
-					player->name().c_str() << "' !== '" << name << "'");
+			d("continuing due to name str != name '" <<
+			  player->name().c_str() << "' !== '" << name << "'");
 			continue;
 		}
 
@@ -1418,7 +1423,7 @@ char_data *get_player_vis(char_data *ch, char *name, int *number, int inroom) {
 }
 
 
-char_data * get_char_room_vis( char_data *ch, char *name, int *number) {
+char_data * get_char_room_vis(char_data *ch, char *name, int *number) {
 	MENTOC_PREAMBLE();
 	int num;
 
@@ -1438,9 +1443,9 @@ char_data * get_char_room_vis( char_data *ch, char *name, int *number) {
 	}
 
 	//for(i = world[IN_ROOM(ch)].people; i && *number; i = i->next_in_room)
-	for(auto & i : mods::globals::get_room_list(player->room())){
-		if(isname(name, i->name().c_str())){
-			if(CAN_SEE(ch, i->cd())){
+	for(auto& i : mods::globals::get_room_list(player->room())) {
+		if(isname(name, i->name().c_str())) {
+			if(CAN_SEE(ch, i->cd())) {
 				if(--(*number) == 0) {
 					return (*i);
 				}
@@ -1451,8 +1456,8 @@ char_data * get_char_room_vis( char_data *ch, char *name, int *number) {
 	return (NULL);
 }
 
- char_data *get_char_world_vis( char_data *ch, char *name, int *number) {
-	 char_data *i;
+char_data *get_char_world_vis(char_data *ch, char *name, int *number) {
+	char_data *i;
 	int num;
 
 	if(!number) {
@@ -1686,7 +1691,7 @@ obj_ptr_t create_money(int amount) {
 			snprintf(buf, sizeof(buf), "It looks to be about %d coins.", 100 * (amount / 100));
 		} else if(amount < 100000)
 			snprintf(buf, sizeof(buf), "You guess there are, maybe, %d coins.",
-					1000 * ((amount / 1000) + rand_number(0, (amount / 1000))));
+			         1000 * ((amount / 1000) + rand_number(0, (amount / 1000))));
 		else {
 			strcpy(buf, "There are a LOT of coins.");    /* strcpy: OK (is < 200) */
 		}
@@ -1721,7 +1726,7 @@ obj_ptr_t create_money(int amount) {
  * describes what it filled in.
  */
 int generic_find(char *arg, bitvector_t bitvector, char_data *ch,
-		char_data **tar_ch, struct obj_data **tar_obj) {
+                 char_data **tar_ch, struct obj_data **tar_obj) {
 	int i, found, number;
 	char name_val[MAX_INPUT_LENGTH];
 	char *name = name_val;

@@ -24,6 +24,9 @@
 namespace mods::players::db_load {
 	static reporter_t report_function;
 	static bool reporter_function_set = false;
+	void game_entry(player_ptr_t& player) {
+		mods::orm::load_player_rifle_attachments(player);
+	}
 
 	void sync_player_with_class_skills(const uint64_t& player_id,const std::string& player_class) {
 		mods::orm::skill_trees tree;
@@ -61,7 +64,13 @@ namespace mods::players::db_load {
 		mods::orm::player_skill_usage_upkeep(player_id,player_class);
 	}
 
-	void save(player_ptr_t& player_ptr) {
+	void extract_character(player_ptr_t& player_ptr) {
+		mods::players::db_load::save_from(player_ptr,save_from_t::EXTRACTION);
+	}
+	void save_from(player_ptr_t& player_ptr,save_from_t from) {
+		if(from != save_from_t::EXTRACTION) {
+			mods::orm::flush_player_rifle_attachments(player_ptr);
+		}
 		auto ch = player_ptr->cd();
 		std::map<std::string,std::string> values;
 		values["player_affection_plr_bitvector"] = std::to_string(player_ptr->get_affected_plr());
@@ -144,10 +153,6 @@ namespace mods::players::db_load {
 		if(player_ptr->position() == CON_PLAYING) {
 			player_ptr->sendln("Your character has been saved.");
 		}
-	}
-	void feed_player_inventory(player_ptr_t& player_ptr) {
-		mods::orm::load_player_rifle_attachments(player_ptr);
-		mods::orm::inventory::flush_player(player_ptr);
 	}
 
 	void set_reporter_lambda(reporter_t f) {

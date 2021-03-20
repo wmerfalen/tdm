@@ -29,7 +29,6 @@ namespace mods {
 		void init() {
 			mods::interpreter::add_command("instantiate_rifle_attachment", POS_RESTING, do_instantiate_rifle_attachment, LVL_BUILDER,0);
 			mods::interpreter::add_command("load_my_rifle_attachments", POS_RESTING, do_load_my_rifle_attachments, 0,0);
-
 		}
 	};
 

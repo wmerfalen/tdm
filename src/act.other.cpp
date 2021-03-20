@@ -26,6 +26,7 @@
 #include "mods/orm/inventory.hpp"
 #include "mods/players/db-load.hpp"
 #include "mods/rate-limiting.hpp"
+#include "mods/players/db-load.hpp"
 
 /* extern variables */
 extern struct spell_info_type spell_info[];
@@ -74,10 +75,10 @@ ACMD(do_quit) {
 	if(IS_NPC(ch) || !ch->has_desc) {
 		return;
 	}
-	
+
 
 	player->quitting(true);
-	mods::players::db_load::save(player);
+	mods::players::db_load::save_from(player,mods::players::db_load::save_from_t::QUIT);
 	if(subcmd != SCMD_QUIT && GET_LEVEL(ch) < LVL_IMMORT) {
 		send_to_char(ch, "You have to type quit--no less, to quit!");
 	} else if(GET_POS(ch) == POS_FIGHTING) {
@@ -112,7 +113,7 @@ ACMD(do_quit) {
 
 
 ACMD(do_save) {
-	
+
 	if(IS_NPC(ch) || !ch->has_desc) {
 		log("SYSERR: do_save() called but is an npc or doesn't have a descriptor");
 		return;
@@ -120,23 +121,23 @@ ACMD(do_save) {
 	SHOULD_RATE_LIMIT(PLAYER_SAVE);
 
 	/* Only tell the char we're saving if they actually typed "save" */
-		log("Saving player %s",GET_NAME(ch).c_str());
-		mods::players::db_load::save(player);
-		log("Saved");
-		/*
-		 * This prevents item duplication by two PC's using coordinated saves
-		 * (or one PC with a house) and system crashes. Note that houses are
-		 * still automatically saved without this enabled. This code assumes
-		 * that guest immortals aren't trustworthy. If you've disabled guest
-		 * immortal advances from mortality, you may want < instead of <=.
-		 */
-		if(auto_save && GET_LEVEL(ch) <= LVL_IMMORT) {
-			send_to_char(ch, "Saving aliases.");
-			write_aliases(ch);
-			return;
-		}
+	log("Saving player %s",GET_NAME(ch).c_str());
+	mods::players::db_load::save_from(player,mods::players::db_load::save_from_t::MANUAL_SAVE_ACMD);
+	log("Saved");
+	/*
+	 * This prevents item duplication by two PC's using coordinated saves
+	 * (or one PC with a house) and system crashes. Note that houses are
+	 * still automatically saved without this enabled. This code assumes
+	 * that guest immortals aren't trustworthy. If you've disabled guest
+	 * immortal advances from mortality, you may want < instead of <=.
+	 */
+	if(auto_save && GET_LEVEL(ch) <= LVL_IMMORT) {
+		send_to_char(ch, "Saving aliases.");
+		write_aliases(ch);
+		return;
+	}
 
-		send_to_char(ch, "Saving %s and aliases.", GET_NAME(ch).c_str());
+	send_to_char(ch, "Saving %s and aliases.", GET_NAME(ch).c_str());
 
 	write_aliases(ch);
 	Crash_crashsave(ch);
@@ -386,10 +387,10 @@ ACMD(do_title) {
 	} else if(strlen(argument) > MAX_TITLE_LENGTH) {
 		send_to_char(ch, "Sorry, titles can't be longer than %d characters.", MAX_TITLE_LENGTH);
 	} else {
-		
+
 		set_title(player, argument);
 		*player << "Okay, you're now " << player->name().c_str() << " " <<
-			player->title().c_str() << "\r\n";
+		        player->title().c_str() << "\r\n";
 	}
 }
 
@@ -801,7 +802,7 @@ ACMD(do_display) {
 
 	auto vec_args = PARSE_ARGS();
 
-	if(vec_args.size() == 0){
+	if(vec_args.size() == 0) {
 		send_to_char(ch, "Usage: prompt { { H | M | V } | all | auto | none }");
 		return;
 	}
@@ -814,14 +815,14 @@ ACMD(do_display) {
 		return;
 	}
 
-	if(txt::match_any_of_lower({"on","all"},vec_args[0])){
+	if(txt::match_any_of_lower({"on","all"},vec_args[0])) {
 		SET_BIT(PRF_FLAGS(ch), PRF_DISPHP | PRF_DISPMANA | PRF_DISPMOVE);
-	} else if(txt::match_any_of_lower({"off","none"},vec_args[0])){
+	} else if(txt::match_any_of_lower({"off","none"},vec_args[0])) {
 		REMOVE_BIT(PRF_FLAGS(ch), PRF_DISPHP | PRF_DISPMANA | PRF_DISPMOVE);
 	} else {
 		REMOVE_BIT(PRF_FLAGS(ch), PRF_DISPHP | PRF_DISPMANA | PRF_DISPMOVE);
 
-		for(auto i : vec_args[0]){
+		for(auto i : vec_args[0]) {
 			switch(LOWER(i)) {
 				case 'h':
 					SET_BIT(PRF_FLAGS(ch), PRF_DISPHP);
@@ -841,7 +842,7 @@ ACMD(do_display) {
 		}
 	}
 
-	mods::db::save_char(player);
+	mods::players::db_load::save_from(player,mods::players::db_load::save_from_t::DISPLAY_ACMD);
 	send_to_char(ch, "%s", OK);
 }
 
@@ -919,7 +920,7 @@ ACMD(do_gen_write) {
 #define PRF_TOG_CHK(ch,flag) ((TOGGLE_BIT(PRF_FLAGS(ch), (flag))) & (flag))
 
 ACMD(do_gen_tog) {
-	
+
 	long /* bitvector_t */ result;
 
 	const char *tog_messages[][2] = {
@@ -1087,6 +1088,6 @@ ACMD(do_gen_tog) {
 	}
 
 	/** Save the player's prefs in postgres */
-	mods::players::db_load::save(player);
+	mods::players::db_load::save_from(player,mods::players::db_load::save_from_t::GEN_TOGGLE_ACMD);
 	return;
 }

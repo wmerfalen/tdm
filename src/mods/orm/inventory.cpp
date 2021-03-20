@@ -153,7 +153,6 @@ namespace mods::orm::inventory {
 		}//end feed_player
 
 		int16_t flush_player(player_ptr_t& player) {
-			//mods::orm::flush_player_rifle_attachments(player);
 			if(player->db_id() == 0) {
 				log("SYSERR: couldn't grab player's pkid: '%s' -- not able to flush player's inventory to db", player->name().c_str());
 				return -1;
@@ -314,7 +313,6 @@ namespace mods::orm::inventory {
 #define DBG(a) ;;
 #endif
 			int16_t flush_player(player_ptr_t& player) {
-				//mods::orm::flush_player_rifle_attachments(player);
 				DBG("entrance");
 				LMDBRENEW();
 				std::string wearing = "",carrying = "";
@@ -431,7 +429,6 @@ namespace mods::orm::inventory {
 		 * @return
 		 */
 		int16_t flush_player(player_ptr_t& player) {
-			//mods::orm::flush_player_rifle_attachments(player);
 			std::vector<uint64_t> wearing;
 			wearing.resize(NUM_WEARS);
 			for(std::size_t i = 0; i < NUM_WEARS; i++) {

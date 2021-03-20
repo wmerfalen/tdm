@@ -544,7 +544,6 @@ void perform_auto_login(player_ptr_t& player) {
 		parse_sql_player(player);
 	}
 	player->set_authenticated(true);
-	mods::players::db_load::feed_player_inventory(player);
 	{
 		int start_room = 0;
 		if(!boot_type_hell()) {
@@ -572,6 +571,7 @@ void perform_auto_login(player_ptr_t& player) {
 #ifndef __MENTOC_DONT_RUN_PROFILE_SCRIPTS__
 	mods::js::run_profile_scripts(player->name());
 #endif
+	mods::players::db_load::game_entry(player);
 }
 #define PROCESS_INPUT_CONTROL_C -10
 

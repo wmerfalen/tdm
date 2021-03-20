@@ -63,7 +63,7 @@ namespace mods::contracts {
 			}
 		}
 
-		mods::players::db_load::save(player);
+		mods::players::db_load::save_from(player,mods::players::db_load::save_from_t::CONTRACT_REWARD);
 	}
 };
 

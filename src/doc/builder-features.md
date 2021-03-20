@@ -3,7 +3,8 @@
 # CONTRACT FEATURE GOALS
 	- needed systems for contracts (listed in preferred implementation order)
 		- [ ] finalize rifle attachments class and give the player the equipment
-			- [ ] when a player examines the rifle, display the `rifle_attachment_t::examine()` output
+			- [x] when rifle attachment is loaded, remember the last position (wear or equip) on player entering game
+			- [x] when a player examines the rifle, display the `rifle_attachment_t::examine()` output
 			- [x] create orm layer rifle-attachments class
 			- [x] flush rifle attachments class to and from orm layer
 				- [x] modify `mods/orm/inventory.cpp` to save/feed rifle attachments

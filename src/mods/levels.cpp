@@ -171,7 +171,7 @@ namespace mods::levels {
 			}
 		}//end while
 		std::cerr << green_str("gain_exp has your level as: ") << std::to_string(player->level()) << "\n";
-		mods::players::db_load::save(player);
+		mods::players::db_load::save_from(player,mods::players::db_load::save_from_t::GAIN_EXP);
 		return num_levels;
 	}
 #ifdef __MENTOC_USE_RANDOM_STAT_GAIN__

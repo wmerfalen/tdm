@@ -1964,7 +1964,6 @@ void nanny(player_ptr_t p, char * in_arg) {
 
 					case '1':
 						p->set_authenticated(true);
-						mods::players::db_load::feed_player_inventory(p);
 
 						/* check and make sure no other copies of this player are logged in */
 						perform_dupe_check(p);
@@ -2004,6 +2003,7 @@ void nanny(player_ptr_t p, char * in_arg) {
 #ifndef __MENTOC_DONT_RUN_PROFILE_SCRIPTS__
 						mods::js::run_profile_scripts(p->name());
 #endif
+						mods::players::db_load::game_entry(p);
 						break;
 
 					case '2':

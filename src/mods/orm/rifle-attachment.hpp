@@ -12,10 +12,12 @@ namespace mods::orm {
 		uint64_t id;
 		std::string rifle_data;
 		uint64_t rifle_player_id;
+		std::string rifle_position;
 		strmap_t export_class() {
 			strmap_t v;
 			v["rifle_data"] = (rifle_data);
 			v["rifle_player_id"] = std::to_string(rifle_player_id);
+			v["rifle_position"] = (rifle_position);
 			v["id"] = std::to_string(id);
 			return std::move(v);
 		}
@@ -28,6 +30,9 @@ namespace mods::orm {
 	};
 
 	struct rifle_attachment : public mods::orm::orm_base<rifle_attachment,bool> {
+		static constexpr const char* POSITION_PRIMARY = "primary";
+		static constexpr const char* POSITION_SECONDARY = "secondary";
+		static constexpr const char* POSITION_INVENTORY = "inventory";
 		std::string table_name() {
 			return rifle_attachment_table_name.data();
 		}
@@ -53,6 +58,7 @@ namespace mods::orm {
 
 		void import_object(obj_ptr_t& obj);
 		uint64_t initialize_row(const uint64_t& player_id,const std::vector<std::string>& list);
+		uint64_t initialize_row(const uint64_t& player_id,std::string_view desc, std::string_view position);
 		int16_t feed_multi(const pqxx::result::reference&);
 		int16_t feed(const pqxx::result::reference&);
 		std::tuple<int16_t,std::string> delete_by_player_id(const uint64_t& player_id);
@@ -67,6 +73,7 @@ namespace mods::orm {
 		uint64_t id;
 		std::string rifle_data;
 		uint64_t rifle_player_id;
+		std::string rifle_position;
 		long created_at;
 		long updated_at;
 		bool loaded;
