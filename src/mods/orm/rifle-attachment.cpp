@@ -103,17 +103,13 @@ namespace mods::orm {
 			std::cerr << red_str("invalid player ptr passed in to load_player_rifle_attachments") << "\n";
 			return {0,"invalid ptr"};
 		}
-		player->sendln("checking rifle attachment table...");
 		auto result = db_get_by_meta(rifle_attachment_table_name.data(),"rifle_player_id",std::to_string(player->db_id()));
-		player->sendln(CAT("found ",result.size()," results"));
 		if(result.size() == 0) {
-			player->sendln("no results! is that normal for you?");
 			return {0,"no results"};
 		}
 
 		for(auto&& row : result) {
 			std::cerr << green_str("rifle_attachment filling rifle:") << row["rifle_data"].c_str() << "\n";
-			player->sendln("Giving you a rifle...");
 			player->rifle_attachments().emplace_back(std::make_shared<mods::rifle_attachments_t>(row["rifle_data"].c_str()));
 			if(std::string(row["rifle_position"].c_str()).compare(mods::orm::rifle_attachment::POSITION_PRIMARY) == 0) {
 				player->equip(player->rifle_attachments().back()->base_object,WEAR_PRIMARY);
@@ -130,36 +126,25 @@ namespace mods::orm {
 			std::cerr << red_str("invalid player ptr passed in to flush_player_rifle_attachments") << "\n";
 			return {0,"invalid ptr"};
 		}
-		player->sendln("Saving your rifle attachments...");
 		rifle_attachment r;
 		r.delete_by_player_id(player->db_id());
 		std::vector<std::string> encodings;
 		auto primary = player->primary();
 		auto secondary = player->secondary();
 		for(auto& row : player->rifle_attachments()) {
-			player->sendln("Found a rifle attachment. Saving...");
 			std::cerr << green_str("rifle_attachment saving rifle:") << row->export_objects() << "\n";
-			if(!primary) {
-				player->sendln("Primary is nullptr");
-			} else {
-				player->sendln("You have a primary");
-			}
 			if(primary && primary->uuid == row->base_object->uuid) {
-				player->sendln("Saving primary as rifle attachment");
 				r.initialize_row(player->db_id(),row->export_objects(),mods::orm::rifle_attachment::POSITION_PRIMARY);
 			} else if(secondary && secondary->uuid == row->base_object->uuid) {
-				player->sendln("Saving secondary as rifle attachment");
 				r.initialize_row(player->db_id(),row->export_objects(),mods::orm::rifle_attachment::POSITION_SECONDARY);
 			} else {
 				for(const auto& carried : player->real_carrying()) {
 					if(carried->uuid == row->base_object->uuid) {
-						player->sendln("Saving inventory as rifle attachment");
 						r.initialize_row(player->db_id(),row->export_objects(),mods::orm::rifle_attachment::POSITION_INVENTORY);
 					}
 				}
 			}
 		}
-		player->sendln("Done saving rifle attachments");
 		return {1,"saved"};
 	}
 };
