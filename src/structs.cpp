@@ -49,10 +49,12 @@ void obj_data::init() {
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_INITIALIZE_CONSTRUCTOR, ~, MENTOC_ITEM_TYPES_SEQ)
 }
 obj_data::obj_data(std::string item_type,std::string_view feed_file) {
+	std::cerr << "obj_data::obj_data(string item_type, string feed_file)\n";
 	int type = txt::yaml_string_to_int(item_type);
 	obj_data(type,feed_file);
 }
 int16_t obj_data::feed(int16_t in_type,std::string_view feed_file) {
+	std::cerr << "obj_data::feed(int item_type, string feed_file)\n";
 	this->feed_status = 2;
 	this->m_feed_file = feed_file.data();
 	this->type = in_type;
@@ -70,6 +72,17 @@ int16_t obj_data::feed(int16_t in_type,std::string_view feed_file) {
 			}
 	BOOST_PP_SEQ_FOR_EACH(MENTOC_OBJ_DATA_FEED_DUAL, ~, MENTOC_ITEM_TYPES_SEQ)
 	return this->feed_status;
+}
+obj_data::obj_data(const obj_data& other) {
+	feed(other.type,other.m_feed_file);
+	action_description = other.action_description;
+	std::cerr << ("obj_data copy constructor") << ", name:'" << name.c_str() << "'\n";
+}
+obj_data& obj_data::operator=(obj_data& other) {
+	feed(other.type,other.m_feed_file);
+	action_description = other.action_description;
+	std::cerr << ("obj_data operator equals") << ", name:'" << name.c_str() << "'\n";
+	return *this;
 }
 
 std::string obj_data::generate_stat_page() {

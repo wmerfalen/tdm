@@ -1264,6 +1264,8 @@ namespace mods {
 			if(it != obj_list.end()) {
 				obj_list.erase(it);
 			}
+			mods::rifle_attachments::uuid_schema_list().erase(obj_uuid);
+
 		}
 		void dispose_player(uuid_t pl_uuid) {
 #define __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__

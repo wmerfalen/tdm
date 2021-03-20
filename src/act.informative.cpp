@@ -195,15 +195,10 @@ ACMD(do_jstest) {
 	return;
 }
 bool is_rifle_attachment(obj_data* obj) {
-	return obj->has_rifle() && obj->rifle()->attributes->is_rifle_attachment;
-}
-void look_at_rifle_attachment(player_ptr_t& player, const uuid_t& obj_uuid) {
-	for(const auto& rifle : player->rifle_attachments()) {
-		if(rifle->base_object->uuid == obj_uuid) {
-			player->sendln(rifle->examine());
-			return;
-		}
+	if(!obj->has_rifle()) {
+		return false;
 	}
+	return !!mods::rifle_attachments::uuid_schema_list()[obj->uuid].length();
 }
 bool is_camera_feed(obj_data* obj) {
 	return obj->has_gadget() && obj->gadget()->attributes->vnum_list.size();
@@ -296,7 +291,6 @@ void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int coun
 					} else {
 						player->sendln("It's blank");
 					}
-
 					return;
 
 				case ITEM_DRINKCON:
@@ -304,12 +298,15 @@ void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int coun
 					break;
 
 				case ITEM_WEAPON:
+				default:
+					if(obj->action_description.length() == 0 && obj->has_rifle() && obj->rifle()->attributes->is_rifle_attachment) {
+						player->sendln(player->rifle_attachment_by_uuid(obj->uuid)->examine());
+						break;
+					}
 					if(obj->action_description.length()) {
 						player->send(obj->action_description);
 						break;
 					}
-				/** Purposeful fall-through to display ".. nothing special.." */
-				default:
 					player->sendln("You see nothing special...");
 					break;
 			}
@@ -1130,10 +1127,6 @@ ACMD(do_examine) {
 	if(tmp_object) {
 		if(is_camera_feed(tmp_object)) {
 			look_into_camera_feed(player,tmp_object,0);
-			return;
-		}
-		if(is_rifle_attachment(tmp_object)) {
-			look_at_rifle_attachment(player,tmp_object->uuid);
 			return;
 		}
 		if((GET_OBJ_TYPE(tmp_object) == ITEM_DRINKCON) ||

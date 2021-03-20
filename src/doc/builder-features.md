@@ -2,7 +2,7 @@
 
 # CONTRACT FEATURE GOALS
 	- needed systems for contracts (listed in preferred implementation order)
-		- [ ] finalize rifle attachments class and give the player the equipment
+		- [x] finalize rifle attachments class and give the player the equipment
 			- [x] when rifle attachment is loaded, remember the last position (wear or equip) on player entering game
 			- [x] when a player examines the rifle, display the `rifle_attachment_t::examine()` output
 			- [x] create orm layer rifle-attachments class
@@ -13,16 +13,16 @@
 			- [x] mark an x near contracts that are being done for that player
 		- [x] steps sub-command to ACMD do_contracts
 			- [x] show the current step's description
-		- [ ] rewards system
-			- [ ] reward player with
+		- [x] rewards system
+			- [x] reward player with
 				- [x] xp
 				- [x] money
 				- [x] deep object parsed items
-					- [ ] saved using object instance code (see object instance section below)
+					- [x] saved using object instance code (see object instance section below)
 				- [x] support syntax:
 					- [x] `#yaml|type/path.yml`
 					- [x] `#deep|type/description`
-		- [ ] retrofit duktape js functions to new pci code
+		- [ ] retrofit duktape js functions to new player contract instance code
 		- [ ] restrict contracts by player level
 		- [ ] must complete one contract to unlock a separate contract
 		- [ ] optional failure penalties

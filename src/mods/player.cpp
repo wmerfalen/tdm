@@ -427,11 +427,15 @@ namespace mods {
 	}
 	/** TODO: do this */
 	void player::carry(obj_ptr_t obj) {
+#define dbg(A) std::cerr << red_str("[CARRY]dbug:") << A << "\n";
+		dbg("carry entry");
 		if(obj == nullptr) {
+			dbg("obj is nullptr, returning early!");
 			m_char_data->m_carrying.clear();
 			m_char_data->carrying = nullptr;
 			return;
 		}
+		dbg("setting next_content");
 		obj->next_content = carrying();
 		obj->carried_by = cd();
 		IN_ROOM(obj) = NOWHERE;
@@ -439,13 +443,59 @@ namespace mods {
 		carry_items()++;
 		m_char_data->m_carrying.emplace_back(obj);
 		m_char_data->carrying = obj.get();
+		dbg("checking rifle has attachment");
+		dbg("short circuited");
+		bool exists_in_rifles = false;
+		for(const auto& rifle : m_rifles) {
+			dbg("checking rifle already exists in m_rifle");
+			if(rifle->base_object->uuid == obj->uuid) {
+				dbg("it does");
+				exists_in_rifles = true;
+			}
+		}
+		std::string schema = mods::rifle_attachments::uuid_schema_list()[obj->uuid];
+		if(!exists_in_rifles && schema.length()) {
+			dbg("emplacing rifle attachment to player");
+			m_rifles.emplace_back(std::make_shared<mods::rifle_attachments_t>(schema));
+		}
 #ifdef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
+		dbg("adding...via lmdb");
 		mods::orm::inventory::lmdb::add_player_inventory(this->db_id(), obj->db_id(), obj->type);
 #else
+		dbg("flushing by uuid");
 		mods::orm::inventory::flush_player_by_uuid(uuid());
 #endif
+#undef dbg
 	}
 	void player::uncarry(obj_ptr_t obj) {
+#define dbg(A) std::cerr << red_str("dbug:") << A << "\n";
+
+		dbg("entrance");
+		dbg("trimming rifle attachments");
+		auto obj_uuid = obj->uuid;
+		bool equipped = false;
+		for(const auto& item : this->m_equipment) {
+			if(!item) {
+				continue;
+			}
+			dbg("checking item");
+			if(item->uuid == obj_uuid) {
+				dbg("found item");
+				equipped = true;
+				break;
+			}
+		}
+		if(!equipped) {
+			dbg("not equipped");
+			for(auto it = m_rifles.begin(); it != m_rifles.end(); ++it) {
+				dbg("checking...");
+				if((*it)->base_object->uuid == obj_uuid) {
+					m_rifles.erase(it);
+					break;
+				}
+			}
+		}
+		dbg("uuid fetched");
 		obj_data* temp = 0;
 		REMOVE_FROM_LIST(obj.get(), obj->carried_by->carrying,next_content);
 		IS_CARRYING_W(obj->carried_by) -= GET_OBJ_WEIGHT(obj);
@@ -463,11 +513,15 @@ namespace mods {
 				}
 			}
 		}
+		dbg("carrying erased");
 #ifdef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
+		dbg("remove player inv");
 		mods::orm::inventory::lmdb::remove_player_inventory(this->db_id(), obj->db_id());
 #else
+		dbg("flush player by uuid");
 		mods::orm::inventory::flush_player_by_uuid(uuid());
 #endif
+#undef dbg
 	}
 	obj_data* player::carrying() {
 		return m_char_data->carrying;
@@ -1805,6 +1859,15 @@ namespace mods {
 			return false;
 		});
 	}
+	std::shared_ptr<mods::rifle_attachments_t> player::rifle_attachment_by_uuid(const uuid_t& obj_uuid) {
+		for(const auto& rifle : m_rifles) {
+			if(rifle->base_object->uuid == obj_uuid) {
+				return rifle;
+			}
+		}
+		return nullptr;
+	}
+
 };
 
 #endif

@@ -2,10 +2,17 @@
 #include "interpreter.hpp"
 #include "orm/rifle-attachment.hpp"
 
+extern void obj_to_char(obj_ptr_t  object, player_ptr_t player);
+extern void obj_from_char(obj_ptr_t in_object);
 namespace mods {
 	const std::string example_grammar = "g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}";
 	using counter_t = uint16_t;
 	namespace rifle_attachments {
+		std::map<uuid_t,std::string>& uuid_schema_list() {
+			static std::map<uuid_t,std::string> list;
+			return list;
+		}
+
 		ACMD(do_instantiate_rifle_attachment) {
 			ADMIN_REJECT();
 			DO_HELP("instantiate_rifle_attachment");
@@ -63,6 +70,9 @@ namespace mods {
 				strap = create_object(ITEM_ATTACHMENT,pair.second);
 			}
 		}
+		mods::rifle_attachments::uuid_schema_list()[base_object->uuid] = line;
+		base_object->action_description = this->examine();
+		std::cerr << green_str("examine action desc: '") << base_object->action_description.c_str() << "'\n";
 	}
 	std::string rifle_attachments_t::extract_base_yaml_file(const encoding_t& line) {
 		auto map = m_parser.extract_line_items(line,mods::util::slot_names_for_type("rifle"));
@@ -100,6 +110,10 @@ namespace mods {
 		return files;
 	}
 	std::string short_desc(auto& in_a) {
+		if(!in_a->has_attachment()) {
+			std::cerr << red_str("item doesnt have attachment!") << "\n";
+			return "";
+		}
 		auto& a = in_a->attachment()->attributes;
 		return CAT(a->manufacturer," ",a->name);
 	}

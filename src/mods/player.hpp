@@ -851,7 +851,7 @@ namespace mods {
 			auto& rifle_attachments() {
 				return m_rifles;
 			}
-
+			std::shared_ptr<mods::rifle_attachments_t> rifle_attachment_by_uuid(const uuid_t& obj_uuid);
 			void queue_up(std::string_view);
 		protected:
 			std::map<std::string,std::string> m_ada_data;

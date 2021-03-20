@@ -49,6 +49,9 @@ namespace mods {
 			std::string m_rifle_yaml_file;
 			uuid_t m_owner_uuid;
 	};
+	namespace rifle_attachments {
+		std::map<uuid_t,std::string>& uuid_schema_list();
+	};
 };
 
 #undef mdo_debug

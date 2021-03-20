@@ -849,13 +849,8 @@ struct obj_data {
 		using location_data_t = uint16_t;
 		int16_t feed(int16_t in_type,std::string_view feed_file);
 		void init();
-		obj_data(const obj_data& other) {
-			feed(other.type,other.m_feed_file);
-		}
-		obj_data& operator=(obj_data& other) {
-			feed(other.type,other.m_feed_file);
-			return *this;
-		}
+		obj_data(const obj_data& other);
+		obj_data& operator=(obj_data& other);
 		obj_data() = delete;
 		obj_data(std::string item_type,std::string_view feed_file);
 		obj_data(int item_type,std::string_view feed_file) :
@@ -865,6 +860,7 @@ struct obj_data {
 			carried_by(nullptr),worn_by(nullptr),worn_on(0),
 			in_obj(nullptr),contains(nullptr),next_content(nullptr),
 			next(nullptr),ai_state(0),uuid(0),m_db_id(0) {
+			std::cerr << "obj_data::obj_data(int type, str feed_file) (inline constructor in structs.h)\n";
 			this->init();
 			this->feed_status = 1;
 			this->feed_status = this->feed(item_type,feed_file);
@@ -898,6 +894,7 @@ struct obj_data {
 					);
 					break;
 			}
+			std::cerr << ("obj_data(type,feed_file)") << ", name:'" << name.c_str() << "'\n";
 		}
 		~obj_data() = default;
 		obj_vnum item_number;	/* Where in data-type			*/
