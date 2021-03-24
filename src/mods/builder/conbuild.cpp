@@ -7,6 +7,7 @@
 #include "../orm/contract-steps.hpp"
 #include "../orm/player-contract-state.hpp"
 #include "../contracts.hpp"
+#include "../contract-steps.hpp"
 #include "../contract-types.hpp"
 
 #include "slotted-builder.hpp"
@@ -80,17 +81,17 @@ namespace mods::builder::conbuild {
 			return std::nullopt;
 		}
 		std::pair<unsigned,unsigned> foreach_step_do(std::vector<int> list,std::string mode) {
-			/** signature: [0] => save-step [1] => vnum [2] => step-id ... [N] => [step-id-N] */
+			/** signature: [0] => save-step [1] => vnum [2] => Nth-step-id ... [N] => [step-id-N] */
 			unsigned ok =0, error = 0;
 			uint16_t ctr = 0;
 			for(const auto& step_id : list) {
 				++ctr;
-				auto s = find_local_step_by_id(step_id);
-				if(!s.has_value()) {
-					push_encoded_error(CAT("Skipping due to: Cannot find step by that step-id for argument number ",ctr + 2));
+				if(step_id >= step_list.size()) {
+					push_encoded_error(CAT("error. step_id out of bounds: ",step_id, ". Skipping..."));
 					continue;
 				}
-				auto& step = s.value();
+
+				auto& step = step_list[step_id];
 				if(mode.compare("save") == 0) {
 					auto status = step->update_row();
 					if(ORM_SUCCESS(status)) {
@@ -135,10 +136,10 @@ namespace mods::builder::conbuild {
 			load_all();
 			remove_command_signatures({"list-extract","reload-all","remove","set"});
 			get_signatures()["new"] = "{grn}conbuild{/grn} {red}new <virtual-number>{/red}\r\n";
-			register_custom_command("legend","",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+			register_custom_non_profile_command("legend",[&,this](const std::vector<std::string>& args,std::string argument) -> std::tuple<bool,std::string> {
 				std::string legend = CAT("{yel}LEGEND:{/yel}\r\n",
 				                         "{yel}virtual-number{/yel}: {grn}The contract virtual number.{/grn}\r\n",
-				                         "{yel}step-id{/yel}: {grn}The contract_steps primary key.{/grn}\r\n",
+				                         "{yel}Nth-step{/yel}: {grn}The zero-indexed position of the step.{/grn}\r\n",
 				                         "{yel}field{/yel}: {grn}A specific column on the contract_steps table. Use this to see a list of valid columns: 'conbuild columns'.{/grn}\r\n",
 				                         "{yel}text{/yel}: {grn}One or more words separated by spaces.{/grn}\r\n",
 				                         "{yel}---------------------------------------------------------------------------{/yel}\r\n",
@@ -176,13 +177,37 @@ namespace mods::builder::conbuild {
 				                         " END EXAMPLE\r\n",
 				                         "-----------------------------------------------\r\n",
 				                         "\r\n",
-				                         "We now know that the step we want to modify has an {yel}id{/yel} of {grn}218{/grn}. Let's set some data on it.\r\n",
-				                         "{grn}conbuild set-step-data 400 218 s_description this is my test description{/grn} {yel}# set the description {/yel}\r\n",
-				                         "{grn}conbuild set-step-data 400 218 s_task_type GOAL_FIND{/grn} {yel}# set the task type {/yel}\r\n",
-				                         "{grn}conbuild save-step 400 218{/grn} {yel}# save our step {/yel}\r\n",
+				                         "We know that there is only one step in our contract, so in order to modify the data on that step we address it as zero.\r\n"
+				                         "{grn}conbuild set-step-data 400 0 s_description this is my test description{/grn} {yel}# set the description {/yel}\r\n",
+				                         "{grn}conbuild set-step-data 400 0 s_task_type GOAL_FIND{/grn} {yel}# set the task type {/yel}\r\n",
+				                         "{grn}conbuild save-step 400 0{/grn} {yel}# save our step {/yel}\r\n",
+				                         "If we were to add another step we would use the index 1 instead of zero because now there will be two steps in the contract.\r\n",
 				                         "\r\n"
 				                        );
 				push_encoded_ok(legend);
+				return {1,""};
+			});
+			register_custom_command("help","",[this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				display_signatures();
+				std::string msg = CAT("\r\n",
+				                      "{grn}Step Goals:{/grn}\r\n"
+				                     );
+				for(const auto& pair : mods::contracts::task_string_map()) {
+					msg += CAT("{yel}",pair.first,"{/yel}\r\n");
+				}
+				msg += CAT("{grn}Step Targets:{/gnr}\r\n");
+				for(const auto& pair : mods::contracts::target_string_map()) {
+					msg += CAT("{yel}",pair.first,"{/yel}\r\n");
+				}
+				msg += CAT("\r\n",
+				           "Example: How to set multiple types on a step's task_type_t column:\r\n",
+				           "{grn}conbuild set-step-data 400 0 s_task_type GOAL_QUOTA,GOAL_KILL{/grn}\r\n",
+				           "Example: How to set step target:\r\n",
+				           "{grn}conbuild set-step-data 400 0 s_task_target TARGET_MOB{/grn}\r\n",
+				           "\r\n"
+				          );
+
+				push_encoded_ok(msg);
 				return {1,""};
 			});
 			/**
@@ -196,7 +221,7 @@ namespace mods::builder::conbuild {
 			 */
 			register_accumulator_command("title","<virtual_number> <text>",[](std::string&& value, std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				profile->c_title = value;
-				return {1,CAT("Title set to: '",profile->c_title,"'")};
+				return profile->update();
 			});
 			/**
 			 * ==========================================
@@ -209,7 +234,7 @@ namespace mods::builder::conbuild {
 			 */
 			register_accumulator_command("description","<virtual_number> <text>",[](std::string&& value, std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				profile->c_description = value;
-				return {1,CAT("Description set to: '",profile->c_description,"'")};
+				return profile->update();
 			});
 
 			/**
@@ -340,14 +365,14 @@ namespace mods::builder::conbuild {
 
 			/**
 			 * ==========================================
-			 * save-step <vnum> <step-id>...[step-id-N]
+			 * save-step <vnum> <Nth-step-id>...[step-id-N]
 			 * ==========================================
 			 * [description]
 			 *  -----------------------------------------
 			 * 	saves the step by step id (step->id)
 			 *  -----------------------------------------
 			 */
-			register_integral_accumulator_command("save-step","<virtual_number> <step-id>...[step-id-N]",[&,this](const std::vector<int>&& step_ids,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+			register_integral_accumulator_command("save-step","<virtual_number> <Nth-step-id>...[Nth-step-id-N]",[&,this](const std::vector<int>&& step_ids,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				auto p = foreach_step_do(step_ids,"save");
 				this->step_list.clear();
 				mods::orm::gather_contract_steps_by_contract_vnum(profile->vnum(),&this->step_list);
@@ -390,7 +415,7 @@ namespace mods::builder::conbuild {
 
 			/**
 			 * ==============================================
-			 * set-step-data <vnum> <step-id> <field> <value>
+			 * set-step-data <vnum> <Nth-step> <field> <value>
 			 * ==============================================
 			 * [description]
 			 *  -----------------------------------------
@@ -398,21 +423,23 @@ namespace mods::builder::conbuild {
 			 * 	of columns call the columns sub-command
 			 * 	-----------------------------------------
 			 */
-			register_custom_command("set-step-data","<virtual_number> <step-id> <field> <value>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
-				/** signature: [0] => set-step-data [1] => vnum [2] => step-id [3] => field [4] => value */
+			register_custom_command("set-step-data","<virtual_number> <Nth-step> <field> <value>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				/** signature: [0] => set-step-data [1] => vnum [2] => Nth-step [3] => field [4] => value */
 				if(args.size() < 5) {
 					return {0,"Invalid number of arguments"};
+				}
+				if(step_list.size() == 0) {
+					return {0,"no steps present on this contract"};
 				}
 				auto osid = mods::util::stoi(args[2]);
 				if(!osid.has_value()) {
 					return {0,"step-id must be a valid integer"};
 				}
 				auto step_id = osid.value();
-				auto s = find_local_step_by_id(step_id);
-				if(!s.has_value()) {
-					return {0,"Cannot find step by that step-id"};
+				if(step_id >= step_list.size()) {
+					return {0,CAT("Nth-step must be between 0 and ",step_list.size() -1)};
 				}
-				auto& step = s.value();
+				auto& step = step_list[step_id];
 				auto& f = args[3];
 				auto& v = args[4];
 #define LAZY_CHECK() if(!mods::util::stoi(v).has_value()){ return {0,"Value must be a valid integer"}; }
@@ -532,7 +559,7 @@ namespace mods::builder::conbuild {
 			/**
 			 * cmd_args: [0] => "new" [1] => vnum
 			 */
-			if(cmd_args.size() < 4) {
+			if(cmd_args.size() < 2) {
 				return {0,"Error: not enough arguments"};
 			}
 			auto vnum = extract_int<int>("new",argument.c_str(),1).value_or(-1);

@@ -60,6 +60,8 @@ namespace mods::orm {
 		}
 		int16_t save();
 
+		std::tuple<int16_t,std::string> update();
+
 		void destroy();
 		std::tuple<int16_t,std::string> destroy_status;
 

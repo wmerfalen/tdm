@@ -98,6 +98,7 @@ namespace mods::skills {
 };
 namespace mods::super_users {
 	extern bool player_is(player_ptr_t&);
+	extern void upkeep(player_ptr_t&);
 };
 namespace mods {
 	namespace globals {
@@ -890,6 +891,7 @@ namespace mods {
 				}
 			}
 			if(mods::super_users::player_is(player)) {
+				mods::super_users::upkeep(player);
 				if(argument.substr(0,4).compare("=pos") == 0) {
 					if(argument.length() < 6) {
 						player->stc("usage: =pos=<int>\r\n");

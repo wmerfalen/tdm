@@ -45,6 +45,9 @@ namespace mods::orm {
 		           std::to_string(in_c_vnum)
 		       );
 	}
+	std::tuple<int16_t,std::string> contracts::update() {
+		return mods::orm::util::update<contracts,sql_compositor>(this);
+	}
 	int16_t contracts::save() {
 		std::tuple<int16_t,std::string,uint64_t> insert_result =
 		    mods::orm::util::insert_returning<contracts,sql_compositor>(

@@ -16,6 +16,7 @@ namespace mods::builder {
 			using status_response_t = std::tuple<bool,std::string>;
 			using optional_orm_t = std::optional<std::shared_ptr<TOrmType>>;
 			using custom_command_t = std::function<std::tuple<bool,std::string>(const std::vector<std::string>&,std::string,std::shared_ptr<TOrmType>)>;
+			using custom_non_profile_command_t = std::function<std::tuple<bool,std::string>(const std::vector<std::string>&,std::string)>;
 			using custom_accumulator_command_t = std::function<std::tuple<bool,std::string>(std::string&&,std::shared_ptr<TOrmType>)>;
 			using custom_integral_accumulator_command_t = std::function<std::tuple<bool,std::string>(const std::vector<int>&&,std::shared_ptr<TOrmType>)>;
 			using orm_container_t = std::deque<std::shared_ptr<TOrmType>>;
@@ -24,6 +25,7 @@ namespace mods::builder {
 			player_ptr_t m_builder_ptr;
 			std::vector<std::string> m_encoded_response;
 			std::map<std::string,custom_command_t> m_custom_command_map;
+			std::map<std::string,custom_non_profile_command_t> m_custom_non_profile_command_map;
 			std::map<std::string,custom_accumulator_command_t> m_custom_accumulator_command_map;
 			std::map<std::string,custom_integral_accumulator_command_t> m_custom_integral_accumulator_command_map;
 			orm_container_t* m_orm_list;
@@ -102,6 +104,10 @@ namespace mods::builder {
 				register_signature(verb,signature);
 				return {1,"done"};
 			}
+			status_response_t register_custom_non_profile_command(std::string verb, auto lambda) {
+				m_custom_non_profile_command_map[verb] = lambda;
+				return {1,"done"};
+			}
 			/** [ 4 ] -> use this to register custom commands with custom verbs. */
 			status_response_t register_accumulator_command(std::string verb, std::string_view signature,auto lambda) {
 				m_custom_accumulator_command_map[verb] = lambda;
@@ -176,6 +182,16 @@ namespace mods::builder {
 				 */
 				if(dispatch_reload_all_action(argument)) {
 					return true;
+				}
+				/**
+				 * custom non-profile commands the child class has provided us
+				 */
+				for(auto& pair : m_custom_non_profile_command_map) {
+					auto args = mods::util::subcmd_args<50,args_t>(argument,pair.first.c_str());
+					if(args.has_value()) {
+						auto args = PARSE_ARGS();
+						return tuple_wrap(m_custom_non_profile_command_map[pair.first](std::move(args),argument));
+					}
 				}
 				/**
 				 * custom _INTEGRAL_ accumulator commands the child class has provided us

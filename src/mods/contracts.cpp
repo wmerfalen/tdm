@@ -360,17 +360,14 @@ namespace mods::contracts {
 		}
 
 		if(vec_args.size() > 0 && vec_args[0].compare("list") == 0) {
-			auto contract_names = mods::contracts::list_contracts(player->vnum());
-			if(contract_names.size() == 0) {
-				player->sendln("{red}There are no contracts in this room.{/red}");
-				return;
+			player->pager_start();
+			player->sendln("Listing...");
+			for(const auto& con : contract_master_list()) {
+				player->sendln(CAT("{yel}[{/yel}",con->vnum,"{yel}]:{/yel} {grn}'",con->title,"'{/grn}\r\n"));
 			}
-			player->sendln("{grn}Listing available contracts in this room...{/grn}");
-			for(auto qn : contract_names) {
-				*player << "{grn}[ CONTRACT ]{/grn} {yel}" << qn << "{/yel}\r\n";
-			}
-			player->sendln("{grn}Done listing.{/grn}");
-
+			player->sendln("Done listing.");
+			player->pager_end();
+			player->page(0);
 			return;
 		}
 

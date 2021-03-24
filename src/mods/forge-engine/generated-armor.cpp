@@ -188,7 +188,7 @@ namespace mods::forge_engine {
 		} while(yaml.length() == 0 && max_loops-- > 0);
 		if(yaml.length() == 0) {
 			log("SYSERR: generated_armor_t is continuing with a zero-length yaml file! randomized armor loot will be terrible!");
-			exit(-4);
+			//exit(-4);
 		}
 
 		m_requirements = mods::forge_engine::item_generator.generate_requirements(m_player);

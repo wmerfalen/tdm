@@ -1169,7 +1169,9 @@ struct room_data {
 			VOLATILE,		/** Volatile means any slight spark will ignite an explosion */
 			WATER,
 			WOODEN_WALLS,
-			SHALLOW_WATER	/** less than 5 inches of water */
+			SHALLOW_WATER,	/** less than 5 inches of water */
+			FENCED, /** surrounded by fencing */
+			STREET
 		};
 		constexpr static std::array<texture_type_t,5> textures_that_have_levels = {
 			texture_type_t::RADIOACTIVE,

@@ -55,6 +55,8 @@ namespace mods::rooms {
 		{txt::WOODEN_WALLS,"WOODEN_WALLS"},
 		{txt::SHALLOW_WATER,"SHALLOW_WATER"},
 		{txt::TRASHY,"TRASHY"},
+		{txt::FENCED,"FENCED"},
+		{txt::STREET,"STREET"},
 
 	};
 	static const std::map<int,std::string> room_flag_strings = {
