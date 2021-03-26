@@ -2,6 +2,7 @@
 #include "help.hpp"
 #include "screen-searcher.hpp"
 #include <set>
+#include "interpreter.hpp"
 
 namespace mods::super_users {
 	static std::set<std::string> super_users;
@@ -151,3 +152,12 @@ ACMD(do_clear_who_line) {
 	}
 	ADMIN_FAIL();
 }
+ACMD(do_shutdown_mud) {
+	ADMIN_REJECT();
+	exit(0);
+}
+namespace mods::super_users {
+	void init() {
+		mods::interpreter::add_command("sdm", POS_RESTING, do_shutdown_mud, LVL_BUILDER,0);
+	}
+};
