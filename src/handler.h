@@ -59,12 +59,8 @@ char_data *get_char_num(mob_rnum nr);
 
 void	char_from_room(char_data *ch);
 void	char_to_room(char_data *ch, room_rnum room);
-static inline void	char_from_room(player_ptr_t player){
-	char_from_room(player->cd());
-}
-static inline void	char_to_room(player_ptr_t player, room_rnum room) {
-	char_to_room(player->cd(),room);
-}
+void	char_from_room(player_ptr_t player);
+void	char_to_room(player_ptr_t player, room_rnum room);
 void	extract_char(char_data *ch);
 void	extract_char_final(char_data *ch);
 void	extract_pending_chars(void);

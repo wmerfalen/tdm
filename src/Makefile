@@ -129,7 +129,8 @@ buildobj = act.informative act.item act.medic \
 					 mods/unit-tests/contracts mods/unit-tests/player-contract-instance \
 					 mods/contract-events mods/player-contract-instance \
 					 mods/players/messages mods/builder/conbuild \
-					 mods/contract-steps mods/orm/rifle-attachment mods/unit-tests/rifle-attachments
+					 mods/contract-steps mods/orm/rifle-attachment mods/unit-tests/rifle-attachments \
+					 mods/builder/bookmarks
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

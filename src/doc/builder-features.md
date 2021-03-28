@@ -1,5 +1,9 @@
 # Inventory of features
 
+# needed builder features
+	- [x] bookmark a room
+	- [x] teleport to a bookmarked room
+
 # CONTRACT FEATURE GOALS
 	- needed systems for contracts (listed in preferred implementation order)
 		- [x] finalize rifle attachments class and give the player the equipment

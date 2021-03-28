@@ -387,6 +387,12 @@ void affect_join(char_data *ch, struct affected_type *af,
 	}
 }
 
+void	char_from_room(player_ptr_t player) {
+	char_from_room(player->cd());
+}
+void	char_to_room(player_ptr_t player, room_rnum room) {
+	char_to_room(player->cd(),room);
+}
 
 /* move a player out of a room */
 void char_from_room(char_data *ch) {

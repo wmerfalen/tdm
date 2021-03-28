@@ -1600,6 +1600,7 @@ struct builder_data_t {
 	~builder_data_t() = default;
 	int room_transaction_id;
 	int zone_transaction_id;
+	std::map<std::string,room_rnum> bookmarks;
 };
 
 
