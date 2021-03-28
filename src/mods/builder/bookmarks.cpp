@@ -53,8 +53,11 @@ namespace mods::builder::bookmarks {
 			return;
 		}
 
+		player->sendln("char_from_room...");
 		char_from_room(player->cd());
+		player->sendln("char_to_room...");
 		char_to_room(player->cd(),room_id);
+		ADMIN_DONE();
 	}
 
 	void init() {
