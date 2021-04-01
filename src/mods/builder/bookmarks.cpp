@@ -59,9 +59,35 @@ namespace mods::builder::bookmarks {
 		char_to_room(player->cd(),room_id);
 		ADMIN_DONE();
 	}
+	ACMD(do_print_vnum) {
+		ADMIN_REJECT();
+		DO_HELP_WITH_ZERO("print_vnum");
+		auto vec_args = PARSE_ARGS();
+		if(!player->builder_data) {
+			mods::builder::initialize_builder(player);
+		}
+		if(vec_args.size() < 1) {
+			player->errorln("You must specify a nickname");
+			return;
+		}
+		auto room_id = player->builder_data->bookmarks[vec_args[0]];
+		if(room_id >= world.size()) {
+			player->errorln(CAT("Room id out of bounds. You asked for: ",room_id, " but world.size is:", world.size()));
+			return;
+		}
+		if(room_id < 0) {
+			player->errorln("Room id is a negative number. Ignoring...");
+			return;
+		}
+		player->sendln(std::to_string(world[room_id].number));
+		player->set_scripted_response(std::to_string(world[room_id].number));
+		ADMIN_DONE();
+	}
+
 
 	void init() {
 		mods::interpreter::add_command("bookmark", POS_RESTING, do_bookmark, LVL_BUILDER,0);
 		mods::interpreter::add_command("goto", POS_RESTING, do_goto, LVL_BUILDER,0);
+		mods::interpreter::add_command("print_vnum", POS_RESTING, do_print_vnum, LVL_BUILDER,0);
 	}
 };

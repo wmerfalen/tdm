@@ -1,8 +1,28 @@
 # Inventory of features
 
+# needs testing
+	- hqbuild
+		- test hq orm functionality
+		- test hqbuild ACMD
+	- radio
+		- test radio communication to/from hq
+	- lowly security guard extended type
+		- test behaviour trees
+		- test `smart_mob` extended class type
+		- test report hostile activity radio support
+# NEED TO FINISH: 
+	- checkout mobs/roam-zone branch and finish that stuff
+
+
 # needed builder features
 	- [x] bookmark a room
 	- [x] teleport to a bookmarked room
+	- [x] print room vnum
+		- the flow goes like:
+			- `bookmark armory this`
+			- ... go build other things ...
+			- `print_vnum armory`
+				- should print the room_vnum of the bookmarked armory
 
 # CONTRACT FEATURE GOALS
 	- needed systems for contracts (listed in preferred implementation order)
@@ -90,19 +110,6 @@
 		- player_contract_state (orm for player_contract_instance wrapper)
 	- creating contracts with several steps
 	- see unit tests for pci on how to create/track a contract
-
-# needs testing
-	- hqbuild
-		- test hq orm functionality
-		- test hqbuild ACMD
-	- radio
-		- test radio communication to/from hq
-	- lowly security guard extended type
-		- test behaviour trees
-		- test `smart_mob` extended class type
-		- test report hostile activity radio support
-# NEED TO FINISH: 
-	- checkout mobs/roam-zone branch and finish that stuff
 
 # slotted builder class
 	- handles a lot of the boilerplate for builder functions
