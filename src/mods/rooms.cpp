@@ -633,9 +633,6 @@ namespace mods::rooms {
 				break;
 		}
 
-		if(ROOM_FLAGGED(room, ROOM_DARK) && !fire_chance) {
-			return true;
-		}
 
 		using txt = room_data::texture_type_t;
 		auto always_dark = {
@@ -676,11 +673,11 @@ namespace mods::rooms {
 				return false;
 			}
 		}
-		if(SECT(room) == SECT_INSIDE || SECT(room) == SECT_CITY) {
-			return false;
-		}
 
 		if(weather_info.sunlight == SUN_SET || weather_info.sunlight == SUN_DARK) {
+			return true;
+		}
+		if(ROOM_FLAGGED(room, ROOM_DARK) && !fire_chance) {
 			return true;
 		}
 
