@@ -29,6 +29,7 @@
 #include "mods/item-types.hpp"
 #include "mods/mobs/extended-types.hpp"
 #include "mods/rifle-instance-data.hpp"
+#include "mods/builder-data.hpp"
 
 extern void log(const char* format,...);
 
@@ -118,31 +119,8 @@ enum lense_type_t {
 #define USE_AUTOEQ	0	/* TRUE/FALSE aren't defined yet. */
 
 
-/* preamble *************************************************************/
+#include "mods/index-type.hpp"
 
-/*
- * As of bpl20, it should be safe to use unsigned data types for the
- * various virtual and real number data types.  There really isn't a
- * reason to use signed anymore so use the unsigned types and get
- * 65,535 objects instead of 32,768.
- *
- * NOTE: This will likely be unconditionally unsigned later.
- */
-#define CIRCLE_UNSIGNED_INDEX	1	/* 0 = signed, 1 = unsigned */
-
-using sh_int = int32_t;
-using ush_int = uint32_t;
-#if CIRCLE_UNSIGNED_INDEX
-#define IDXTYPE  ush_int
-# define NOWHERE	((IDXTYPE)~0)
-# define NOTHING	((IDXTYPE)~0)
-# define NOBODY		((IDXTYPE)~0)
-#else
-#define IDXTYPE  sh_int
-# define NOWHERE	(-1)	/* nil reference for rooms	*/
-# define NOTHING	(-1)	/* nil reference for objects	*/
-# define NOBODY		(-1)	/* nil reference for mobiles	*/
-#endif
 
 #define SPECIAL(name) \
 	int (name)(char_data *ch, void *me, int cmd, char *argument,player_ptr_t& player)
@@ -760,21 +738,6 @@ typedef char			bool;
 #if !defined(CIRCLE_WINDOWS) || defined(LCC_WIN32)	/* Hm, sysdep.h? */
 typedef signed char			byte;
 #endif
-
-/* Various virtual (human-reference) number types. */
-typedef IDXTYPE room_vnum;
-typedef IDXTYPE obj_vnum;
-typedef IDXTYPE mob_vnum;
-typedef IDXTYPE zone_vnum;
-typedef IDXTYPE shop_vnum;
-
-/* Various real (array-reference) number types. */
-typedef IDXTYPE room_rnum;
-typedef IDXTYPE obj_rnum;
-typedef IDXTYPE mob_rnum;
-typedef IDXTYPE zone_rnum;
-typedef IDXTYPE shop_rnum;
-
 
 /*
  * Bitvector type for 32 bit unsigned long bitvectors.
@@ -1556,35 +1519,11 @@ struct follow_type {
 	struct follow_type *next;
 };
 
-/* Pave mode structure for builders */
-struct room_pavement_t {
-	int start_room;
-	int transact_id;
-	room_vnum current_room_number;
-	int zone_id;
-	std::vector<int> rooms;
-	room_pavement_t() : start_room(0), transact_id(-1),
-		current_room_number(0), zone_id(-1) {}
-	room_pavement_t(int start,int z_id) :  start_room(start), transact_id(0),
-		current_room_number(0),zone_id(z_id) {}
-	room_pavement_t(int start,int z_id,int t_id) :  start_room(start), transact_id(t_id),
-		current_room_number(0),zone_id(z_id) {}
-	~room_pavement_t() = default;
-};
-
-struct zone_pavement_t {
-	typedef std::vector<mob_vnum> mob_pavements_t;
-	typedef std::vector<obj_vnum> obj_pavements_t;
-	mob_pavements_t mob;
-	obj_pavements_t obj;
-	zone_pavement_t() = default;
-	~zone_pavement_t() = default;
-};
-
 static constexpr int ROOM_PAVEMENT = 0;
 static constexpr int ZONE_PAVEMENT = 1;
 extern int next_room_pavement_transaction_id();
 
+#if 0
 struct builder_data_t {
 	bool room_pave_mode;
 	bool zone_pave_mode;
@@ -1602,6 +1541,7 @@ struct builder_data_t {
 	int zone_transaction_id;
 	std::map<std::string,room_rnum> bookmarks;
 };
+#endif
 
 
 /* ================== Structure for player/non-player ===================== */

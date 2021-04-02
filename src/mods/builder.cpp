@@ -2180,21 +2180,6 @@ ACMD(do_mbuild) {
 		/* TODO */
 
 	}
-	/** signature: mbuild roam:add <mob-vnum> <vnum>...<vnum-N> */
-	if(vec_args.size() >= 3 && vec_args[0].compare("roam:add") == 0) {
-		/* TODO */
-
-	}
-	/** signature: mbuild roam:list <mob-vnum> */
-	if(vec_args.size() >= 2 && vec_args[0].compare("roam:list") == 0) {
-		/* TODO */
-
-	}
-	/** signature: mbuild roam:del <mob-vnum> <vnum>...<vnum-N> */
-	if(vec_args.size() >= 2 && vec_args[0].compare("roam:del") == 0) {
-		/* TODO */
-
-	}
 
 	if(vec_args.size() == 2 && vec_args[0].compare("help") == 0
 	        && vec_args[1].compare("action") == 0) {
@@ -2327,6 +2312,10 @@ ACMD(do_mbuild) {
 		return;
 	}
 	{
+		/**
+		 * handles:
+		 * mbuild roam:<save|add|list|del|start|stop> <profile-name> <vnum>...<vnum-N>
+		 */
 		if(mods::mob_roam::handle_roam_recorder(player,vec_args)) {
 			return;
 		}

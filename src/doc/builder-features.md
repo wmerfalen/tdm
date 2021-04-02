@@ -1,5 +1,12 @@
 # Inventory of features
 
+# mob roaming
+	- [ ] write unit tests
+		- [ ] adapt `mbuild` to save mob roaming data
+		- [ ] alter mobs to honor mob roaming data
+		- [ ] verify saving to db works
+		- [ ] verify loading from db works
+
 # needs testing
 	- hqbuild
 		- test hq orm functionality
@@ -10,9 +17,6 @@
 		- test behaviour trees
 		- test `smart_mob` extended class type
 		- test report hostile activity radio support
-# NEED TO FINISH: 
-	- checkout mobs/roam-zone branch and finish that stuff
-
 
 # needed builder features
 	- [x] bookmark a room

@@ -50,7 +50,7 @@ namespace mods::orm {
 		}
 
 		void load_multi(const pqxx::result::reference&);
-		void populate(uint32_t mob_vnum, const std::vector<room_vnum>& rooms);
+		void populate(uint32_t mob_vnum, const std::vector<room_vnum>& rooms,std::string_view profile_name);
 		void init();
 
 		std::tuple<int16_t,std::string> load_all();

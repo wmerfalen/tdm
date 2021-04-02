@@ -25,7 +25,6 @@
 #include "orm/player-base-ability.hpp"
 #endif
 
-#define __MENTOC_RUN_MOB_ROAM_ORM_PREGAME__
 #ifdef __MENTOC_RUN_MOB_ROAM_ORM_PREGAME__
 #include "orm/mob-roam.hpp"
 #endif
@@ -111,7 +110,7 @@ namespace mods::debug::pre_game {
 				}
 				room_list.emplace_back(room.number);
 			}
-			mr.populate(410, room_list);
+			mr.populate(410, room_list,"foobar_profile");
 			mr.save();
 		}
 #endif

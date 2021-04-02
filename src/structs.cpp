@@ -563,24 +563,6 @@ namespace mods {
 	}
 
 };
-builder_data_t::builder_data_t(int type,int start_room,int start_zone) {
-	//switch(type){
-	//	default:
-	//	case ROOM_PAVEMENT:
-	//		/** TODO: I want this functionality to be done next
-	//		room_pavement_list.emplace_back(start_room,start_zone);
-	//		room_pavement_list.back().transact_id = next_room_pavement_transaction_id();
-	//		*/
-	room_pavements.start_room = start_room;
-	room_pavements.transact_id = next_room_pavement_transaction_id();
-	room_pavements.zone_id = start_zone;
-	//			break;
-	//		case ZONE_PAVEMENT:
-	//			/** FIXME: this is incomplete code. fix this */
-	//			d("[builder_data_t::create_pavement] WARNING: zone pavements are experimental!\n");
-	//			break;
-	//	}
-}
 bool room_data::has_texture(texture_type_t t) {
 	if(m_textures.size() == 0) {
 		return false;

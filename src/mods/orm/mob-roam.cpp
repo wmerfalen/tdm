@@ -55,11 +55,12 @@ namespace mods::orm {
 		}
 		return 0;
 	}
-	void mob_roam::populate(uint32_t mob_vnum, const std::vector<room_vnum>& rooms) {
+	void mob_roam::populate(uint32_t mob_vnum, const std::vector<room_vnum>& rooms, std::string_view profile_name) {
 		for(const auto& room : rooms) {
 			mob_roam_record_t record;
 			record.mob_virtual_number = mob_vnum;
 			record.room_virtual_number = room;
+			record.profile_name = profile_name;
 			rows.emplace_back(record);
 		}
 	}

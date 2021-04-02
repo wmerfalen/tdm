@@ -1106,6 +1106,10 @@ namespace mods {
 			 */
 			void char_to_room(const room_rnum& room,char_data* ch) {
 				auto player = ptr(ch);
+				player->sendln("globals rooms char to room");
+				if(player->builder_data) {
+					player->builder_data->room_recorder.char_to_room(room);
+				}
 				auto target_room = room;
 				if(boot_type == boot_type_t::BOOT_HELL) {
 					target_room = 0;

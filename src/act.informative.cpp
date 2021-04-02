@@ -549,6 +549,10 @@ void list_one_char(char_data *i, char_data *ch) {
 
 
 void list_char_to_char(char_data *ch) {
+#if 0
+	int dbg_ctr = 0;
+#define dd() std::cerr << "break: " << ++dbg_ctr << ", line:" << __LINE__ << "\n";
+#endif
 	MENTOC_PREAMBLE();
 	int room = player->viewing_room();
 	bool dark = mods::rooms::is_dark(room);
@@ -651,6 +655,9 @@ void list_char_to_char(char_data *ch) {
 			auto dir_string = mods::globals::dir_to_str(direction,0).c_str();
 			auto looped_room_id = room_number;
 			for(unsigned ctr = 0; ctr < 4; ++ctr) {
+				if(world.size() <= looped_room_id) {
+					break;
+				}
 				if(!world[looped_room_id].dir_option[direction]) {
 					break;
 				}

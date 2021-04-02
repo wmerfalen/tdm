@@ -868,7 +868,6 @@ namespace mods {
 			//std::deque<std::shared_ptr<obj_data>> m_carrying;
 			std::vector<affected_type> m_affected_by;
 
-
 		private:
 			std::string m_scripted_response;
 			void write_to_char(std::string_view msg, bool newline,bool plain);

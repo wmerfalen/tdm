@@ -46,6 +46,7 @@ namespace mods::mob_roam {
 
 			std::tuple<int16_t,std::string> start();
 			std::tuple<int16_t,std::string> stop();
+			std::tuple<int16_t,std::string> save();
 
 		protected:
 			bool m_capture;

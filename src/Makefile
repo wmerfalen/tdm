@@ -56,7 +56,7 @@ buildobj = act.informative act.item act.medic \
 					 class comm config constants db fight globals graph\
 					 handler house interpreter limits magic mail mobact\
 					 modify objsave olc random spec_assign spec_procs\
-					 spell_parser spells structs weather mods/ai_state\
+					 spell_parser spells mods/builder-data structs weather mods/ai_state\
 					 mods/behaviour_tree_impl mods/lmdb\
 					 mods/chat mods/conf mods/deferred mods/drone mods/immortal\
 					 mods/js mods/player mods/prefs mods/pregame\
@@ -109,7 +109,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/levels mods/orm/player-base-ability \
 					 mods/class-abilities \
 					 mods/orm/elevator mods/elevator \
-					 mods/orm/mob-roam mods/mob-roam \
+					 mods/orm/mob-roam mods/mob-roam mods/unit-tests/mob-roam \
 					 mods/forge-engine/generator mods/forge-engine/value-scaler \
 					 mods/loot mods/forge-engine/generated-rifle mods/orm/rifle-index \
 					 mods/forge-engine/generated-armor mods/orm/armor-index \
