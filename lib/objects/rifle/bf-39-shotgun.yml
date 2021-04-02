@@ -1,0 +1,57 @@
+# accuracy map
+accuracy_map: [
+90.00,
+10.00,
+0.00,
+0.00
+]
+rounds_per_minute: 12
+muzzle_velocity: 1018 # Feet per second
+effective_firing_range: 10 # feet
+ammo_max: 45 #integer
+ammo_type: 'SHOTGUN' #string, constant enum
+chance_to_injure: 45.0 #float, out of 100 
+clip_size: 8 #integer
+cooldown_between_shots: 2 #int, in ticks
+critical_chance: 22 #int, out of 100
+critical_range: 1 #integer, measured in rooms
+damage_map: [
+90.00,
+40.00,
+9.00,
+0.00
+]
+damage_per_second: 190.0 #float
+disorient_amount: 0.0 #float
+headshot_bonus: 73.0 #float
+max_range: 2 #integer,measured in rooms
+range_multiplier: 2.0 #float, multiplied by 
+reload_time: 2 #int, measured in ticks
+# types
+#######
+# type: SNIPER
+# type: ASSAULT_RIFLE
+# type: SHOTGUN
+# type: SUB_MACHINE_GUN
+# type: HANDGUN
+# type: MACHINE_PISTOL
+# type: LIGHT_MACHINE_GUN
+type: 0  # enum, object type
+manufacturer: 'BF Corp' # string, anything 
+name: 'BF-39 Shotgun' # string, anything name of object 
+description: 'A BF-39 shotgun is lying here.'
+short_description: 'A BF-39 shotgun'
+action_description: 'BF-39 shotgun'
+vnum: 98
+str_type: 'SHOTGUN'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'COMMON'
+feed_file: 'bf-39-shotgun.yml'
+damage_dice_count: 14
+damage_dice_sides: 10
