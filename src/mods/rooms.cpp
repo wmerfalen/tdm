@@ -2,6 +2,7 @@
 #include "weapon-types.hpp"
 #include "weapons/damage-types.hpp"
 #include "weapons/elemental.hpp"
+#include "rand.hpp"
 extern void	send_to_room(room_rnum room, const char *messg, ...) __attribute__((format(printf, 2, 3)));
 extern void send_to_room_except(room_rnum room, std::vector<uuid_t> except, const char *messg, ...);
 extern int next_room_vnum();
@@ -611,11 +612,70 @@ namespace mods::rooms {
 		if(world[room].light) {
 			return false;
 		}
+		bool fire_chance = 0;
 
-		if(ROOM_FLAGGED(room, ROOM_DARK)) {
+		/** if on fire, check which constant and process */
+		auto fire_status = world[room].fire_status();
+		switch(fire_status) {
+			case room_data::fire_status_t::NONE:
+			case room_data::fire_status_t::OUT:
+			case room_data::fire_status_t::SMOKING:
+				break;
+			case room_data::fire_status_t::SMOLDERING:
+				/** 1 percent chance that smoldering remains will light the room */
+				fire_chance = mods::rand::chance(1);
+				break;
+			case room_data::fire_status_t::COMPLETELY_ON_FIRE:
+			case room_data::fire_status_t::KINDLING:
+				return true;
+			default:
+				std::cerr << "warning, weird fire_status encountered. ignoring..\n";
+				break;
+		}
+
+		if(ROOM_FLAGGED(room, ROOM_DARK) && !fire_chance) {
 			return true;
 		}
 
+		using txt = room_data::texture_type_t;
+		auto always_dark = {
+			txt::SEWER,
+			txt::TUNNEL, /** a tunnel made of any material */
+			txt::UNDERWATER,
+			txt::HAZARDOUS_SMOKE, /** think: gas attacks */
+			txt::NON_HAZARDOUS_SMOKE, /** think: burning car */
+		};
+		/** TODO: honor this */
+#if 0
+		auto depends = {
+			txt::GLASS_WINDOWS,
+			txt::EMP, /** chaff or emp has been detonated */
+			txt::FOREST,
+			txt::LOW_ATMOSPHERE,	/** atmosphere too thin for helicopter to fly */
+		};
+#endif
+		auto has_light = {
+			txt::INSIDE,
+			txt::ELEVATOR,
+			txt::GLASS_WINDOWS,
+			txt::LADDER,
+			txt::RADIOACTIVE, /** actively emitting radioactivity */
+			txt::METAL_HATCH,
+			txt::METAL_WALL,
+			txt::ROOFTOP,
+			txt::SCANNED,
+			txt::SERVER_ROOM,
+		};
+		for(auto& t : always_dark) {
+			if(world[room].has_texture(t)) {
+				return true;
+			}
+		}
+		for(auto& t : has_light) {
+			if(world[room].has_texture(t)) {
+				return false;
+			}
+		}
 		if(SECT(room) == SECT_INSIDE || SECT(room) == SECT_CITY) {
 			return false;
 		}
