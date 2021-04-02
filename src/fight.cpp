@@ -105,19 +105,22 @@ struct attack_hit_type attack_hit_text[] = {
 	{"devoid","devoids"}
 };
 
-int attack_message(mw_rifle type){
-	switch(type){
-		case mw_rifle::SHOTGUN: 
+int attack_message(mw_rifle type) {
+	switch(type) {
+		case mw_rifle::SHOTGUN:
 			return (int)TYPE_SHOTGUN;
 		case mw_rifle::ASSAULT_RIFLE:
 		case mw_rifle::SUB_MACHINE_GUN:
-		case mw_rifle::PISTOL: 
+		case mw_rifle::PISTOL:
 		case mw_rifle::MACHINE_PISTOL:
 		case mw_rifle::HANDGUN:
 			return (int)TYPE_SUB_MACHINE_GUN;
-		case mw_rifle::SNIPER: return (int)TYPE_SNIPE;
-		case mw_rifle::LIGHT_MACHINE_GUN: return (int)TYPE_LIGHT_MACHINE_GUN;
-		default: return (int)TYPE_SUB_MACHINE_GUN;
+		case mw_rifle::SNIPER:
+			return (int)TYPE_SNIPE;
+		case mw_rifle::LIGHT_MACHINE_GUN:
+			return (int)TYPE_LIGHT_MACHINE_GUN;
+		default:
+			return (int)TYPE_SUB_MACHINE_GUN;
 	}
 }
 
@@ -291,7 +294,7 @@ void set_fighting(char_data *ch, char_data *vict) {
 		return;
 	}
 
-	if(IN_ROOM(ch) != IN_ROOM(vict)){
+	if(IN_ROOM(ch) != IN_ROOM(vict)) {
 		return;
 	}
 
@@ -378,7 +381,7 @@ void make_corpse(char_data *ch) {
 	/* transfer character's equipment to the corpse */
 	for(i = 0; i < NUM_WEARS; i++) {
 		auto obj = player->equipment(i);
-		if(obj){
+		if(obj) {
 			player->unequip(i);
 			obj_to_obj(obj, corpse);
 		}
@@ -413,9 +416,9 @@ void death_cry(char_data *ch) {
 	std::cerr << "[death_cry(victim)] -> for: " << ch->player.name.c_str() << "\n";
 	int door;
 
-	act("Your blood freezes as you hear $n's death cry.", FALSE, ch, 0, 0, TO_ROOM);
+	act("\r\nYour blood freezes as you hear $n's death cry.", FALSE, ch, 0, 0, TO_ROOM);
 
-	for(door = 0; door < NUM_OF_DIRS; door++){
+	for(door = 0; door < NUM_OF_DIRS; door++) {
 		std::string from_dir = mods::projectile::fromdirstr(door,true,true) + "\r\n";
 		if(CAN_GO(ch, door)) {
 			std::string s = "Your blood freezes as you hear someone's death cry " + from_dir;
@@ -429,7 +432,7 @@ void death_cry(char_data *ch) {
 void raw_kill(char_data *ch) {
 	//if(FIGHTING(ch)) {
 	//	std::cerr << "[raw_kill][player is fighting].. removing...\n";
-		//stop_fighting(ch);
+	//stop_fighting(ch);
 	//}else{
 	//	std::cerr << "[raw_kill][player is NOT fighting].. NOT removing...\n";
 	//}
@@ -466,7 +469,7 @@ void die(char_data* killer,char_data *victim) {
 		char_to_room(victim,NOWHERE);
 		return;
 	}
-	if(FIGHTING(killer) == victim){
+	if(FIGHTING(killer) == victim) {
 		stop_fighting(killer);
 	}
 
@@ -681,92 +684,93 @@ void dam_message(int dam, char_data *ch, char_data *victim,
 	};
 
 	static dam_weapon_type msg_SNIPER = {
-			"$n snipes $N!",	/* 8: > 23   */
-			"You aim and hit $N with your shot!!",
-			"$n snipes you!!"
+		"$n snipes $N!",	/* 8: > 23   */
+		"You aim and hit $N with your shot!!",
+		"$n snipes you!!"
 	};
 	static dam_weapon_type msg_SUB_MACHINE_GUN = {
-			"$n fires off some shots at $N!",	/* 8: > 23   */
-			"You aim and hit $N with a burst of bullets!!",
-			"$n hits you with a burst of bullets!!"
+		"$n fires off some shots at $N!",	/* 8: > 23   */
+		"You aim and hit $N with a burst of bullets!!",
+		"$n hits you with a burst of bullets!!"
 	};
 	static dam_weapon_type msg_SHOTGUN = {
-			"$n unloads a shotgun blast at $N!",	/* 8: > 23   */
-			"You unload a shotgun blast at $N!!",
-			"$n unloads a shotgun blast directly at you!!"
+		"$n unloads a shotgun blast at $N!",	/* 8: > 23   */
+		"You unload a shotgun blast at $N!!",
+		"$n unloads a shotgun blast directly at you!!"
 	};
 	static dam_weapon_type msg_ASSAULT_RIFLE = {
-			"$n release an unrelenting burst of shots at $N!",
-			"You unload an unrelenting burst of shots at $N!!",
-			"$n unloads an unrelenting burst of shots at you!!"
+		"$n release an unrelenting burst of shots at $N!",
+		"You unload an unrelenting burst of shots at $N!!",
+		"$n unloads an unrelenting burst of shots at you!!"
 	};
 	static dam_weapon_type msg_PISTOL = {
-			"$n fires off a shot at $N!",
-			"You fire off a shot at $N!!",
-			"$n fires off a shot at you!!"
+		"$n fires off a shot at $N!",
+		"You fire off a shot at $N!!",
+		"$n fires off a shot at you!!"
 	};
 	static dam_weapon_type msg_MACHINE_PISTOL = {
-			"$n unleashes fast machine pistol fire at $N!",
-			"You unleash fast machine pistol fire at $N!!",
-			"$n unleashes fast machine pistol fire at you!!"
+		"$n unleashes fast machine pistol fire at $N!",
+		"You unleash fast machine pistol fire at $N!!",
+		"$n unleashes fast machine pistol fire at you!!"
 	};
 	static dam_weapon_type msg_LIGHT_MACHINE_GUN = {
-			"$n unleashes suppressive fire at $N!",
-			"You suppress $N with your LMG burst!!",
-			"$n suppresses you with LMG fire!!"
+		"$n unleashes suppressive fire at $N!",
+		"You suppress $N with your LMG burst!!",
+		"$n suppresses you with LMG fire!!"
 	};
 
-	if(player->attacking_with()){
+	if(player->attacking_with()) {
 		const char* to_room = nullptr;
 		const char* to_char = nullptr;
 		const char* to_victim = nullptr;
-		switch((mw_rifle)player->attacking_with_type()){
-			default: break;
+		switch((mw_rifle)player->attacking_with_type()) {
+			default:
+				break;
 			case mw_rifle::SHOTGUN:
-							 to_room = msg_SHOTGUN.to_room;
-							 to_char = msg_SHOTGUN.to_char;
-							 to_victim = msg_SHOTGUN.to_victim;
-							 break;
+				to_room = msg_SHOTGUN.to_room;
+				to_char = msg_SHOTGUN.to_char;
+				to_victim = msg_SHOTGUN.to_victim;
+				break;
 
 			case mw_rifle::ASSAULT_RIFLE:
-							 to_room = msg_ASSAULT_RIFLE.to_room;
-							 to_char = msg_ASSAULT_RIFLE.to_char;
-							 to_victim = msg_ASSAULT_RIFLE.to_victim;
-							 break;
+				to_room = msg_ASSAULT_RIFLE.to_room;
+				to_char = msg_ASSAULT_RIFLE.to_char;
+				to_victim = msg_ASSAULT_RIFLE.to_victim;
+				break;
 
 			case mw_rifle::SUB_MACHINE_GUN:
-							 to_room = msg_SUB_MACHINE_GUN.to_room;
-							 to_char = msg_SUB_MACHINE_GUN.to_char;
-							 to_victim = msg_SUB_MACHINE_GUN.to_victim;
-							 break;
+				to_room = msg_SUB_MACHINE_GUN.to_room;
+				to_char = msg_SUB_MACHINE_GUN.to_char;
+				to_victim = msg_SUB_MACHINE_GUN.to_victim;
+				break;
 
 			case mw_rifle::SNIPER:
-							 to_room = msg_SNIPER.to_room;
-							 to_char = msg_SNIPER.to_char;
-							 to_victim = msg_SNIPER.to_victim;
-							 break;
+				to_room = msg_SNIPER.to_room;
+				to_char = msg_SNIPER.to_char;
+				to_victim = msg_SNIPER.to_victim;
+				break;
 
 			case mw_rifle::HANDGUN:
 			case mw_rifle::PISTOL:
-							 to_room = msg_PISTOL.to_room;
-							 to_char = msg_PISTOL.to_char;
-							 to_victim = msg_PISTOL.to_victim;
-							 break;
+				to_room = msg_PISTOL.to_room;
+				to_char = msg_PISTOL.to_char;
+				to_victim = msg_PISTOL.to_victim;
+				break;
 
 			case mw_rifle::MACHINE_PISTOL:
-							 to_room = msg_MACHINE_PISTOL.to_room;
-							 to_char = msg_MACHINE_PISTOL.to_char;
-							 to_victim = msg_MACHINE_PISTOL.to_victim;
-							 break;
+				to_room = msg_MACHINE_PISTOL.to_room;
+				to_char = msg_MACHINE_PISTOL.to_char;
+				to_victim = msg_MACHINE_PISTOL.to_victim;
+				break;
 
 			case mw_rifle::LIGHT_MACHINE_GUN:
-							 to_room = msg_LIGHT_MACHINE_GUN.to_room;
-							 to_char = msg_LIGHT_MACHINE_GUN.to_char;
-							 to_victim = msg_LIGHT_MACHINE_GUN.to_victim;
-							 break;
+				to_room = msg_LIGHT_MACHINE_GUN.to_room;
+				to_char = msg_LIGHT_MACHINE_GUN.to_char;
+				to_victim = msg_LIGHT_MACHINE_GUN.to_victim;
+				break;
 		}
 
-		if(to_room && to_char && to_victim){
+		if(to_room && to_char && to_victim) {
 			act(to_room, FALSE, ch, NULL, victim, TO_NOTVICT);
 			send_to_char(ch, CCYEL(ch, C_CMP));
 			act(to_char, FALSE, ch, NULL, victim, TO_CHAR);
@@ -806,20 +810,20 @@ void dam_message(int dam, char_data *ch, char_data *victim,
 
 	/* damage message to onlookers */
 	buf = replace_string(dam_weapons[msgnum].to_room,
-			attack_hit_text[w_type].singular, attack_hit_text[w_type].plural);
+	                     attack_hit_text[w_type].singular, attack_hit_text[w_type].plural);
 	act(buf, FALSE, ch, NULL, victim, TO_NOTVICT);
 
 	/* damage message to damager */
 	send_to_char(ch, CCYEL(ch, C_CMP));
 	buf = replace_string(dam_weapons[msgnum].to_char,
-			attack_hit_text[w_type].singular, attack_hit_text[w_type].plural);
+	                     attack_hit_text[w_type].singular, attack_hit_text[w_type].plural);
 	act(buf, FALSE, ch, NULL, victim, TO_CHAR);
 	send_to_char(ch, CCNRM(ch, C_CMP));
 
 	/* damage message to damagee */
 	send_to_char(victim, CCRED(victim, C_CMP));
 	buf = replace_string(dam_weapons[msgnum].to_victim,
-			attack_hit_text[w_type].singular, attack_hit_text[w_type].plural);
+	                     attack_hit_text[w_type].singular, attack_hit_text[w_type].plural);
 	act(buf, FALSE, ch, NULL, victim, TO_VICT | TO_SLEEP);
 	send_to_char(victim, CCNRM(victim, C_CMP));
 }
@@ -830,7 +834,7 @@ void dam_message(int dam, char_data *ch, char_data *victim,
  *  C3.0: Also used for weapon damage on miss and death blows
  */
 int skill_message(int dam, char_data *ch, char_data *vict,
-		int attacktype) {
+                  int attacktype) {
 	int i, j, nr;
 	struct message_type *msg;
 
@@ -936,7 +940,7 @@ void hit(char_data *ch, char_data *victim, int type) {
 	assert(IN_ROOM(ch) == IN_ROOM(victim));
 	MENTOC_PREAMBLE();
 	auto victim_ptr_opt = ptr_opt(victim);
-	if(!victim_ptr_opt.has_value()){
+	if(!victim_ptr_opt.has_value()) {
 		log("SYSERR: found null victim ptr... returning prematurely");
 		return;
 	}
@@ -949,11 +953,11 @@ void hit(char_data *ch, char_data *victim, int type) {
 	bool same_room = IN_ROOM(ch) == IN_ROOM(victim);
 	if(same_room && primary && !mods::object_utils::can_attack_same_room(primary) && secondary) {
 		wielded_weapon = secondary;
-	} else if (same_room && !primary && secondary) {
+	} else if(same_room && !primary && secondary) {
 		wielded_weapon = secondary;
-	} else if (same_room && primary && mods::object_utils::can_attack_same_room(primary)) {
+	} else if(same_room && primary && mods::object_utils::can_attack_same_room(primary)) {
 		wielded_weapon = primary;
-	} else if (same_room && !primary && !secondary) {
+	} else if(same_room && !primary && !secondary) {
 		wielded_weapon = nullptr;
 	}
 	player->set_attacking_with(wielded_weapon);
@@ -1055,7 +1059,7 @@ void perform_violence() {
 
 	for(ch = combat_list; ch; ch = next_combat_list) {
 		auto mob_ptr_opt = ptr_opt(FIGHTING(ch));
-		if(!mob_ptr_opt.has_value()){
+		if(!mob_ptr_opt.has_value()) {
 			char_data* temp;
 			log("Invalid pointer. not performing violence...");
 			REMOVE_FROM_LIST(ch, combat_list, next_fighting);

@@ -97,13 +97,13 @@ namespace mods::players::db_load {
 		values["player_ability_alignment"] = (std::to_string(ch->char_specials.saved.alignment));
 		values["player_attack_type"] = (std::to_string(ch->real_abils.con));
 		values["player_ability_constitution"] = (std::to_string(ch->real_abils.con));
-		values["player_max_hitpoints"] = (std::to_string(player_ptr->max_hp()));
 		values["player_max_mana"] = (std::to_string(player_ptr->max_mana()));
 		values["player_max_move"] = (std::to_string(player_ptr->max_move()));
 		values["player_gold"] = (std::to_string(player_ptr->gold()));
 		values["player_exp"] = (std::to_string(player_ptr->exp()));
 		values["player_sex"] = player_ptr->sex() == SEX_FEMALE ? std::string("F") : std::string("M");
 		values["player_hitpoints"] = (std::to_string(player_ptr->hp()));
+		values["player_max_hitpoints"] = (std::to_string(player_ptr->max_hp()));
 		values["player_mana"] = (std::to_string(player_ptr->mana()));
 		values["player_move"] = (std::to_string(player_ptr->move()));
 		values["player_damroll"] = (std::to_string(player_ptr->damroll()));

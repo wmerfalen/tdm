@@ -547,7 +547,15 @@ namespace mods::util {
 	}
 
 	int parse_direction(std::string_view arg) {
-		switch(arg[0]) {
+
+		int i = 0;
+		while(arg.length() > i && !isalpha(arg[i])) {
+			++i;
+		}
+		if(arg.length() <= i) {
+			return -1;
+		}
+		switch(arg[i]) {
 			case 'n':
 			case 'N':
 				return NORTH;
@@ -571,6 +579,7 @@ namespace mods::util {
 		}
 	}
 	int parse_direction(std::string_view arg, int start_at, int* last_index) {
+
 		static constexpr int max_len = MAX_INPUT_LENGTH;
 		std::string buffer;
 		int ctr = start_at;
@@ -586,7 +595,7 @@ namespace mods::util {
 		if(last_index) {
 			*last_index = ctr;
 		}
-		return NORTH;
+		return parse_direction(buffer);
 	}
 
 	obj_ptr_t parse_object_with_capability(player_ptr_t& player,std::string_view arg, int start_at, int* last_index, mods::weapon::type::type_list type, std::vector<int>& types) {
@@ -637,7 +646,9 @@ namespace mods::util {
 	}
 	objdir_t parse_objdir(player_ptr_t& player,std::string_view arg) {
 		int last_index = 0;
-		return { mods::util::parse_object(player, arg, 0,&last_index), mods::util::parse_direction(arg, last_index+1, nullptr)};
+		auto obj = mods::util::parse_object(player, arg, 0,&last_index);
+		auto dir = mods::util::parse_direction(arg, last_index+1, nullptr);
+		return { obj, dir };
 	}
 	/*
 		objdir_t expect_explosive_objdir(player_ptr_t& player,std::string_view arg, const std::vector<mw_explosive>& types){

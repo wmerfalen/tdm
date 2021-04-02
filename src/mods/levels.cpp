@@ -400,6 +400,8 @@ namespace mods::levels {
 		report_advances(s);
 		player->hp() = s[STAT_HP];
 		player->max_hp() = s[STAT_HP];
+		player->move() += s[STAT_CONSTITUTION];
+		player->max_move() = player->move();
 		player->strength() = s[STAT_STRENGTH];
 		player->constitution() = s[STAT_CONSTITUTION];
 		player->dexterity() = s[STAT_DEXTERITY];

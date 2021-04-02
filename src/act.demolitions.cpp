@@ -80,7 +80,7 @@ ACMD(do_cancel) {
  *
  */
 ACMD(do_install) {
-	DO_HELP("install");
+	DO_HELP_WITH_ZERO("install");
 
 	auto parsed = mods::util::parse_objdir(player,argument);
 	if(!parsed.obj) {
