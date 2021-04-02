@@ -399,6 +399,7 @@ namespace mods::levels {
 		auto s = calculate_based_on_triads(triads,player->level());
 		report_advances(s);
 		player->hp() = s[STAT_HP];
+		player->max_hp() = s[STAT_HP];
 		player->strength() = s[STAT_STRENGTH];
 		player->constitution() = s[STAT_CONSTITUTION];
 		player->dexterity() = s[STAT_DEXTERITY];
@@ -425,6 +426,7 @@ namespace mods::levels {
 	 */
 	void advance_level(player_ptr_t& player) {
 		generic_advance(player);
+		mods::players::db_load::save_from(player,mods::players::db_load::save_from_t::GAIN_EXP);
 		switch(player->get_class()) {
 			case GHOST:
 				mods::classes::ghost_advance_level(player);

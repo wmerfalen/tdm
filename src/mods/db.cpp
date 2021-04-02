@@ -413,6 +413,10 @@ namespace mods::db {
 	 * @param values
 	 */
 	void lmdb_export_char(player_ptr_t player_ptr, mutable_map_t& values) {
+		std::cerr << green_str("---------------------------") << "\n";
+		std::cerr << green_str("Saving via lmdb_export_char") << "\n";
+		std::cerr << green_str("Saving via lmdb_export_char") << "\n";
+		std::cerr << green_str("Saving via lmdb_export_char") << "\n";
 		/** TODO: instead of using the char_data accesses, create functions(or use existing ones) on mods::player object */
 		auto ch = player_ptr->cd();
 		values["player_password"] = player_ptr->password();
@@ -465,6 +469,8 @@ namespace mods::db {
 		values["player_hitroll"] = std::to_string(player_ptr->cd()->points.hitroll);
 		values["player_armor"] = std::to_string(player_ptr->cd()->points.armor);
 		values["player_preferences"] = std::to_string(player_ptr->get_prefs());
+		std::cerr << green_str("DONE Saving via lmdb_export_char") << "\n";
+		std::cerr << green_str("--------------------------------") << "\n";
 		return;
 	}
 
