@@ -853,6 +853,7 @@ namespace mods {
 			}
 			std::shared_ptr<mods::rifle_attachments_t> rifle_attachment_by_uuid(const uuid_t& obj_uuid);
 			void queue_up(std::string_view);
+			bool& moving_to_room();
 		protected:
 			std::map<std::string,std::string> m_ada_data;
 			bool m_ada;
@@ -867,6 +868,7 @@ namespace mods {
 			std::shared_ptr<char_data> m_shared_ptr;
 			//std::deque<std::shared_ptr<obj_data>> m_carrying;
 			std::vector<affected_type> m_affected_by;
+			bool m_moving_to_room;
 
 		private:
 			std::string m_scripted_response;

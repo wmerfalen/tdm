@@ -282,8 +282,8 @@ namespace mods {
 							default:
 								m_error("type of explosive is invalid value!");
 								return;	/** THis should _NEVER_ happen */
-							case mw_explosive::REMOTE_EXPLOSIVE:
 							case mw_explosive::CLAYMORE_MINE:
+							case mw_explosive::REMOTE_EXPLOSIVE:
 							case mw_explosive::FRAG_GRENADE:
 								person->sendln("Shrapnel tears through you" + mods::projectile::fromdirstr(opposite,1,0) + "!");
 								damage_multiplier = (1.0 * blast_count) / DAMAGE_DIVISOR();
@@ -337,7 +337,7 @@ namespace mods {
 
 			if(e.critical) {
 				damage += e.critical;
-				victim->send("{red}*** [CRITICAL] ***{/red} -- ");
+				victim->sendln("{red}*** [CRITICAL] ***{/red} -- ");
 			}
 
 			if(e.chemical) {
@@ -397,6 +397,7 @@ namespace mods {
 			std::size_t blast_radius = object->explosive()->attributes->blast_radius;	/** TODO: grab from explosive()->blast_radius */
 			explode_debug("grabbed blast radius... (" << blast_radius << ")");
 			bool does_damage = false;
+			auto victim = ptr_by_uuid(player_uuid);
 
 			switch(type) {
 				default:
@@ -413,7 +414,8 @@ namespace mods {
 					break;
 				case mw_explosive::CLAYMORE_MINE:
 					does_damage = true;
-					send_to_room(room_id,"You trip over a %s! An explosion catches you off guard!\r\n",object->name.c_str());
+					send_to_room(room_id,"An explosion catches you off guard as a {red}%s{/red} {yel}DETONATES!!!{/yel}\r\n",object->name.c_str());
+					explosive_damage(victim,object);
 					break;
 				case mw_explosive::FRAG_GRENADE:
 					does_damage = true;

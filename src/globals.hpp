@@ -291,4 +291,5 @@ static inline uint64_t future_tick(uint64_t add) {
 #define SEND_HELP(topic) mods::help::send_help(topic,player);
 #define tier(player) std::max(player->level() / 5, 1)
 namespace util = mods::util;
+std::size_t world_size();
 #endif

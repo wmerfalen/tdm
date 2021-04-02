@@ -48,6 +48,9 @@ namespace mods::chat {
 	extern void setup_public_channels();
 	extern bool handle_chat(player_ptr_t& player,std::string_view argument);
 };
+namespace mods::movement {
+	extern bool char_move_to(player_ptr_t& player,const room_rnum& room);
+};
 
 #include "mods/init.hpp"
 
@@ -1106,7 +1109,6 @@ namespace mods {
 			 */
 			void char_to_room(const room_rnum& room,char_data* ch) {
 				auto player = ptr(ch);
-				player->sendln("globals rooms char to room");
 				if(player->builder_data) {
 					player->builder_data->room_recorder.char_to_room(room);
 				}
@@ -1116,6 +1118,11 @@ namespace mods {
 				}
 				if(target_room >= room_list.size()) {
 					log("SYSERR: char_to_room failed for ch. Recontracted room is out of bounds: ",target_room);
+					return;
+				}
+				if(!mods::movement::char_move_to(player,target_room)) {
+					player->set_room(ch->was_in_room);
+					mods::globals::room_list[ch->was_in_room].push_back(player);
 					return;
 				}
 				player->set_room(target_room);

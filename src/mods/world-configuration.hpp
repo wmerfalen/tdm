@@ -13,13 +13,14 @@ constexpr static int WC_FROZEN = 0;
 constexpr static int WC_IDLE = 1;
 constexpr static int WC_IMM = 2;
 constexpr static int WC_MOR = 3;
+extern std::deque<room_data> world;	/* array of rooms		 */
 namespace mods::world_conf {
 	constexpr const char* START_ROOM_TABLE = "world_configuration_start_rooms";
 
 	using mutable_map_t = std::map<std::string,std::string>;
 	std::pair<bool,std::string> update_or_insert(std::string_view table,
-			mutable_map_t values,std::string_view where_column,
-			std::string_view where_value);
+	                                             mutable_map_t values,std::string_view where_column,
+	                                             std::string_view where_value);
 	std::pair<bool,std::string> set_immortal_start_room(room_vnum room_id);
 	std::pair<bool,std::string> set_mortal_start_room(room_vnum room_id);
 	int get_mortal_start_room_vnum();

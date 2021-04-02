@@ -77,6 +77,9 @@ int parse_sql_objects();
 void parse_sql_mobiles();
 int parse_sql_shops();
 std::deque<room_data> world;	/* array of rooms		 */
+std::size_t world_size() {
+	return world.size();
+}
 room_rnum top_of_world = 0;	/* ref to top element of world	 */
 
 extern char_data *character_list;	/* global linked list of

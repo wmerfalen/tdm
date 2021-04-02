@@ -1,5 +1,20 @@
 # Inventory of features
 
+# 2021-04-02 claymore heaven
+	- `mods::char_move_to(room,player)`
+	- claymore mines will prevent movement
+		- if owner, will not detonate
+		- now explodes, doesn't discriminate when dealing damage
+		- if installed in direction heading and not owner, detonates
+		- if installed in target room at exit heading toward and not owner, detonates
+		- claymore mine damage+messages caused by `mods::projectile::exloode`
+		- if moving towards claymore and it detonates, you get thrown back two rooms
+		- new helper function: `world_size()`
+
+# bug fixes 2021-04-02
+	- fixed direction parsing for planting claymores
+		- source file: `mods/util.cpp`
+
 # mob roaming
 	- [ ] write unit tests
 		- [ ] adapt `mbuild` to save mob roaming data

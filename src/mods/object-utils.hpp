@@ -253,6 +253,10 @@ namespace mods::object_utils {
 		obj->set_location_data(direction + INSTALL_MASK);
 	}
 	template <typename T>
+	int8_t claymore_installed_at(T& obj) {
+		return obj->location_data() - INSTALL_MASK;
+	}
+	template <typename T>
 	void set_done_installing(T& obj) {
 		obj->obj_flags.bitvector ^= STATUS_INSTALLING;
 	}

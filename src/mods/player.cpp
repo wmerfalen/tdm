@@ -1867,6 +1867,9 @@ namespace mods {
 		}
 		return nullptr;
 	}
+	bool& player::moving_to_room() {
+		return m_moving_to_room;
+	}
 
 };
 
