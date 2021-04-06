@@ -52,6 +52,7 @@
 #include "mods/classes/ghost.hpp"
 #include "mods/mob-roam.hpp"
 #include "mods/util-map.hpp"
+#include "mods/rooms.hpp"
 
 namespace mods::rooms {
 	extern void set_sector_type(room_rnum room_id, int sector_type);
@@ -1242,6 +1243,9 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				mods::rooms::set_sector_type(world.size()-1,room_records_row["sector_type"].as<int>());
 				mods::rooms::set_flag_absolute(world.size()-1,room_records_row["room_flag"].as<int>(0));
 				top_of_world = world.size();
+				if(std::string(room_records_row["nickname"].c_str()).length()) {
+					mods::rooms::register_nickname(top_of_world,room_records_row["nickname"].c_str());
+				}
 				mods::zone::new_room(&room);
 			} catch(std::exception& e) {
 				REPORT_DB_ISSUE("SYSERR: exception select from rooms db: ",e.what());

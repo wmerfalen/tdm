@@ -5,10 +5,10 @@
 namespace mods::orm {
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
 
-	room::room(const pqxx::result::reference & r){
+	room::room(const pqxx::result::reference& r) {
 		this->feed(r);
 	}
-	uint64_t room::initialize_row(){
+	uint64_t room::initialize_row() {
 		this->init();
 		return 0;
 	}
@@ -30,9 +30,10 @@ namespace mods::orm {
 		values["ex_description"] = ex_description;
 		values["light"] = std::to_string(light);
 		values["room_flag"] = std::to_string(room_flag);
+		values["nickname"] = nickname;
 		return std::move(values);
 	}
-	int16_t room::feed(const pqxx::result::reference & row){
+	int16_t room::feed(const pqxx::result::reference& row) {
 		this->init();
 		this->loaded = 0;
 		this->id = row["id"].as<uint64_t>();
@@ -45,9 +46,10 @@ namespace mods::orm {
 		this->ex_description =  row["ex_description"].c_str();
 		this->light = row["light"].as<uint64_t>();
 		this->room_flag = row["room_flag"].as<uint64_t>();
+		this->nickname =  row["nickname"].c_str();
 		return 0;
 	}
-	void room::init(){
+	void room::init() {
 		id = 0;
 		room_number = 0;
 		loaded = 0;
@@ -57,11 +59,12 @@ namespace mods::orm {
 		description.clear();
 		ex_keyword.clear();
 		ex_description.clear();
+		nickname.clear();
 		light = 0;
 		room_flag = 0;
 	}
 
-	void foobar(){
+	void foobar() {
 		mods::orm::room r;
 
 		r.room_number = 500;
@@ -73,21 +76,22 @@ namespace mods::orm {
 		r.ex_description = "";
 		r.light = 0;
 		r.room_flag = 0;
+		r.nickname = "";
 
 		auto status3 = mods::orm::base::insert_returing<mods::orm::room>(r, "id");
-		if(std::get<0>(status3) < 0){
+		if(std::get<0>(status3) < 0) {
 			std::cerr << "[error] insert_returning failed!:\n";
 		}
 		std::cerr << "returned id:" << std::get<1>(status3) << "\n";
 
 		auto status = mods::orm::base::load_by_pkid(r,std::get<1>(status3));
-		if(std::get<0>(status) < 0){
+		if(std::get<0>(status) < 0) {
 			std::cerr << "[error] load_by_pkid failed!: '" << std::get<1>(status) << "'\n";
 		}
 		std::cerr << ":)\n";
 		r.id = 0;
 		auto status2 = mods::orm::base::delete_from(r);
-		if(std::get<0>(status2) < 0){
+		if(std::get<0>(status2) < 0) {
 			std::cerr << "[error] delete_from failed!: '" << std::get<1>(status2) << "'\n";
 		}
 		std::cerr << ":)\n";
@@ -97,12 +101,12 @@ namespace mods::orm {
 		using list_t = std::vector<mods::orm::room>;
 		list_t result_set;
 		mods::orm::base::load_where(result_set, "zone", "=", "7");
-		for(auto & row : result_set){
+		for(auto& row : result_set) {
 			std::cerr << "[row]: " << row.dump_cols({"id","zone","sector_type","room_number"}) << "\n";
 		}
 		exit(0);
 	}
-	std::string room::dump_cols(){
+	std::string room::dump_cols() {
 		std::string buffer = "";
 #define MENTOC_LAZY(A)\
 		buffer += #A;\
@@ -126,13 +130,14 @@ namespace mods::orm {
 		MENTOC_S(ex_description);
 		MENTOC_LAZY(light);
 		MENTOC_LAZY(room_flag);
+		MENTOC_S(nickname);
 #undef MENTOC_LAZY
 #undef MENTOC_S
 		return buffer;
 	}
-	std::string room::dump_cols(std::vector<std::string> columns){
+	std::string room::dump_cols(std::vector<std::string> columns) {
 		std::string buffer = "";
-		for(auto c : columns){
+		for(auto c : columns) {
 #define MENTOC_LAZY(A)\
 			if(c.compare(#A) == 0){\
 				buffer += #A;\
@@ -154,6 +159,7 @@ namespace mods::orm {
 			MENTOC_LAZY(sector_type);
 			MENTOC_S(name);
 			MENTOC_S(description);
+			MENTOC_S(nickname);
 			MENTOC_S(ex_keyword);
 			MENTOC_S(ex_description);
 			MENTOC_LAZY(light);

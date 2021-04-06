@@ -15,6 +15,8 @@ namespace mods::rooms {
 	using txt = room_data::texture_type_t;
 	using fs = room_data::fire_status_t;
 	using fire_status_t = room_data::fire_status_t;
+	void register_nickname(const room_rnum& room,std::string_view nick);
+	std::optional<room_rnum> find_nickname(std::string_view nick);
 	/** Pavements */
 	void pave_once(room_rnum room, direction_t direction);
 	static std::map<txt,std::string> texture_strings = {

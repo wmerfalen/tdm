@@ -95,6 +95,19 @@ namespace mods::rooms::affects {
 };//end mods::rooms::affects
 
 namespace mods::rooms {
+	static inline std::map<std::string,room_rnum>& nicknames() {
+		static std::map<std::string,room_rnum> list;
+		return list;
+	}
+	void register_nickname(const room_rnum& room,std::string_view nick) {
+		nicknames()[nick.data()] = room;
+	}
+	std::optional<room_rnum> find_nickname(std::string_view nick) {
+		if(nicknames().find(nick.data()) == nicknames().end()) {
+			return std::nullopt;
+		}
+		return nicknames()[nick.data()];
+	}
 	/** continuation of namespace mods::rooms */
 	/** continuation of namespace mods::rooms */
 	/** continuation of namespace mods::rooms */
@@ -153,9 +166,11 @@ namespace mods::rooms {
 	 * @param room
 	 */
 	void start_fire_dissolver(room_rnum room) {
+#ifdef __MENTOC_SHOW_START_FIRE_DISSOLVER_DEBUG_OUTPUT__
 		std::cerr << "###############################\n";
 		std::cerr << "[start_fire_dissolver] ENTRY\n";
 		std::cerr << "###############################\n";
+#endif
 		static std::vector<txt> never_ignites = {
 			txt::SEWER,txt::DAMP,txt::WATER,txt::UNDERWATER,
 			txt::FROZEN,txt::SHALLOW_WATER
@@ -187,9 +202,11 @@ namespace mods::rooms {
 		}
 		world[room].texture_level(txt::ON_FIRE) = initial_status;
 
+#ifdef __MENTOC_SHOW_START_FIRE_DISSOLVER_DEBUG_OUTPUT__
 		std::cerr << "###############################\n";
 		std::cerr << "[start_fire_dissolver] TICKS: " << ticks << "\n";
 		std::cerr << "###############################\n";
+#endif
 		affects::add_room_dissolve_affect_every_n_tick(
 		    room,
 		    (affects::affect_t)txt::ON_FIRE,

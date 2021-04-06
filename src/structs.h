@@ -1215,6 +1215,7 @@ struct room_data {
 		int x;
 		int y;
 		int z;
+		mods::string nickname;
 	protected:
 		std::map<texture_type_t,texture_level_t> m_texture_levels;
 		std::vector<uint8_t> m_directions;

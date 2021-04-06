@@ -37,6 +37,7 @@ INIT(demolitions);
 INIT(mods::rifle_attachments);
 INIT(mods::super_users);
 INIT(mods::builder::bookmarks);
+INIT(mods::builder);
 #undef INIT
 
 
@@ -75,6 +76,7 @@ namespace mods::init {
 		mods::super_users::init();
 		::informative::init();
 		mods::builder::bookmarks::init();
+		mods::builder::init();
 	}
 };
 #endif

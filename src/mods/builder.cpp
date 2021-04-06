@@ -27,6 +27,8 @@
 #include <memory>
 #include "orm/shop.hpp"
 #include "builder/encode.hpp"
+#include "super-users.hpp"
+#include "interpreter.hpp"
 
 namespace mods {
 	struct player;
@@ -766,6 +768,7 @@ namespace mods::builder {
 		values["name"] = world[in_room].name.c_str();
 		values["description"] = world[in_room].description.c_str();
 		values["room_number"] = std::to_string(world[in_room].number);
+		values["nickname"] = world[in_room].nickname.c_str();
 
 
 		std::array<char,16> num;
@@ -5042,14 +5045,33 @@ ACMD(do_rbuild) {
 
 		        " {grn}rbuild{/grn} {red}pave-transaction-id{/red}\r\n" <<
 		        "  |--> get current pave transaction id (if one exists).\r\n" <<
-		        "[documentation written on 2021-02-18]\r\n" <<
+		        " {grn}rbuild{/grn} {red}nickname <nickname>{/red}\r\n" <<
+		        "  |--> sets a permanent nickname on the room you currently reside in.\r\n"
+		        "[documentation written on 2021-04-06]\r\n" <<
 		        "\r\n";
 		player->pager_end();
 		player->page(0);
 		return;
 	}
 
-	auto args = mods::util::subcmd_args<4,args_t>(argument,"vnum");
+	auto args = mods::util::subcmd_args<9,args_t>(argument,"nickname");
+	if(args.has_value()) {
+		/**
+		 * args [0] => nickname
+		 * args [1] => value
+		 */
+		if(vec_args.size() < 2) {
+			r_error(player,"Not enough arguments. Expecting 2");
+			return;
+		}
+		auto room = player->room();
+		world[room].nickname = vec_args[1];
+		mods::rooms::register_nickname(room, vec_args[1]);
+		r_success(player,"Set nickname for that room. you will need to save it now");
+		return;
+	}
+
+	args = mods::util::subcmd_args<4,args_t>(argument,"vnum");
 	if(args.has_value()) {
 		if(vec_args.size() < 2) {
 			r_error(player,"Not enough arguments to dopt. Expecting 4.");
@@ -5792,5 +5814,30 @@ ACMD(do_rbuild) {
 		}
 
 		return;
+	}
+};
+
+namespace mods::builder {
+	ACMD(do_ngoto) {
+		ADMIN_REJECT();
+		DO_HELP_WITH_ZERO("ngoto");
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size() == 0) {
+			player->errorln("Invalid number of arguments");
+			return;
+		}
+		auto opt_room = mods::rooms::find_nickname(vec_args[0]);
+		if(opt_room.has_value() == false) {
+			player->set_scripted_response("!");
+			player->errorln("no room with nickname found");
+			return;
+		}
+		player->set_scripted_response(std::to_string(opt_room.value()));
+		char_from_room(player->cd());
+		char_to_room(player->cd(),opt_room.value());
+		ADMIN_DONE();
+	}
+	void init() {
+		mods::interpreter::add_command("ngoto", POS_RESTING, do_ngoto, LVL_BUILDER,0);
 	}
 };
