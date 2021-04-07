@@ -17,6 +17,7 @@ namespace mods::rooms {
 	using fire_status_t = room_data::fire_status_t;
 	void register_nickname(const room_rnum& room,std::string_view nick);
 	std::optional<room_rnum> find_nickname(std::string_view nick);
+	void remove_nickname(const room_rnum& room);
 	/** Pavements */
 	void pave_once(room_rnum room, direction_t direction);
 	static std::map<txt,std::string> texture_strings = {

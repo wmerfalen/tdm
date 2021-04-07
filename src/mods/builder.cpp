@@ -5818,6 +5818,75 @@ ACMD(do_rbuild) {
 };
 
 namespace mods::builder {
+	ACMD(do_nset) {
+		ADMIN_REJECT();
+		DO_HELP_WITH_ZERO("nset");
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size() == 0) {
+			player->send("usage: nset <nickname>\r\n");
+			player->errorln("Invalid number of arguments");
+			return;
+		}
+		mods::rooms::register_nickname(player->room(),vec_args[0]);
+		ADMIN_DONE();
+	}
+	ACMD(do_ndelete) {
+		ADMIN_REJECT();
+		DO_HELP_WITH_ZERO("ndelete");
+		mods::rooms::remove_nickname(player->room());
+		ADMIN_DONE();
+	}
+	ACMD(do_nhelp) {
+		ADMIN_REJECT();
+		player->sendln(
+		    "{grn}Nickname helpers{/grn}\r\n"
+		    "{yel}================{/yel}\r\n"
+		    "{blu}Overview{/blu}\r\n"
+		    "The various nickname commands described below are used to manipulate the nickname\r\n"
+		    "of various rooms, but mostly to manipulate and query the current room's nickname that\r\n"
+		    "you are standing in when you invoke the commands.\r\n"
+		    "It is important to note that the nickname commands only take place while the server is\r\n"
+		    "running. If the server reboots or if any code causes the world to be reloaded the nickname\r\n"
+		    "data you set will be reset back to whatever state is in the database.\r\n"
+		    "\r\n"
+		    "{grn}Commands{/grn}\r\n"
+		    "{yel}========{/yel}\r\n"
+		    "{grn}nset{/grn} - {yel}set the nickname for the room you're currently in.{/yel}\r\n"
+		    "{grn}nfind{/grn} - {yel}find the room IDs of the nickname(s) you pass in.{/yel}\r\n"
+		    "{grn}nhelp{/grn} - {yel}this help page.{/yel}\r\n"
+		    "{grn}ndelete{/grn} - {yel}Delete the nickname(s) of the room you're in.{/yel}\r\n"
+		    "\r\n"
+		    "{grn}Database Commands{/grn}\r\n"
+		    "{yel}================={/yel}\r\n"
+		    "{blu}Overview{/blu}\r\n"
+		    "If you want to make your changes permanent, do not use the nickname helpers listed above.\r\n"
+		    "Instead, use {grn}rbuild{/grn}.\r\n"
+		    "[documentation written on 2021-04-07]"
+		);
+		ADMIN_DONE();
+	}
+	ACMD(do_nfind) {
+		ADMIN_REJECT();
+		DO_HELP_WITH_ZERO("nfind");
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size() == 0) {
+			player->errorln("Invalid number of arguments");
+			return;
+		}
+		std::string response;
+		for(unsigned i =0; i < vec_args.size(); i++) {
+			auto opt_room = mods::rooms::find_nickname(vec_args[i]);
+			if(opt_room.has_value() == false) {
+				response += "!,";
+				player->errorln(CAT("no room with nickname found: ",vec_args[i]));
+				continue;
+			}
+			response += CAT(vec_args[i],":",opt_room.value(),"(vnum:",world[opt_room.value()].number,"),");
+		}
+		player->set_scripted_response(response);
+		player->sendln(response);
+		ADMIN_DONE();
+	}
 	ACMD(do_ngoto) {
 		ADMIN_REJECT();
 		DO_HELP_WITH_ZERO("ngoto");
@@ -5839,5 +5908,9 @@ namespace mods::builder {
 	}
 	void init() {
 		mods::interpreter::add_command("ngoto", POS_RESTING, do_ngoto, LVL_BUILDER,0);
+		mods::interpreter::add_command("nfind", POS_RESTING, do_nfind, LVL_BUILDER,0);
+		mods::interpreter::add_command("nset", POS_RESTING, do_nset, LVL_BUILDER,0);
+		mods::interpreter::add_command("ndelete", POS_RESTING, do_ndelete, LVL_BUILDER,0);
+		mods::interpreter::add_command("nhelp", POS_RESTING, do_nhelp, LVL_BUILDER,0);
 	}
 };

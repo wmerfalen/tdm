@@ -99,6 +99,14 @@ namespace mods::rooms {
 		static std::map<std::string,room_rnum> list;
 		return list;
 	}
+	void remove_nickname(const room_rnum& room) {
+		for(const auto& pair : nicknames()) {
+			if(pair.second == room) {
+				nicknames().erase(pair.first);
+				return;
+			}
+		}
+	}
 	void register_nickname(const room_rnum& room,std::string_view nick) {
 		nicknames()[nick.data()] = room;
 	}

@@ -1,5 +1,25 @@
 # Inventory of features
 
+# 2021-04-07 nickname helper commands
+	- the following nickname commands are useful for fast traveling
+	- overview: these are NOT crud operations! For that, use `rbuild`
+	- list of helper commands:
+		- `nhelp` see help page for nickname commands
+		- `nset` set the nickname for the current room you're in
+		- `ndelete` delete the nickname(s) you specify
+		- `nfind` find the room rnum (and vnum) of the specified nickname(s)
+		- `ngoto` goto the nickname you specify
+	- examples:
+		- `nset recall`
+			- sets the current room's nickname to 'recall'
+		- `nfind recall shipyard east-exit`
+			- reports room id/vnum of nicknames (if they exist)
+		- `ndelete recall shipyard east-exit`
+			- deletes nicknames of rooms associated with the nicknames specified
+		- `ngoto recall`
+			- teleports you if the nickname exists
+
+
 # 2021-04-02 claymore heaven
 	- `mods::char_move_to(room,player)`
 	- claymore mines will prevent movement
