@@ -5839,9 +5839,9 @@ namespace mods::builder {
 	ACMD(do_nhelp) {
 		ADMIN_REJECT();
 		player->sendln(
-		    "{grn}Nickname helpers{/grn}\r\n"
-		    "{yel}================{/yel}\r\n"
-		    "{blu}Overview{/blu}\r\n"
+		    mods::util::admin_section("Nickname helpers") +
+		    mods::util::overview() +
+		    "\r\n"
 		    "The various nickname commands described below are used to manipulate the nickname\r\n"
 		    "of various rooms, but mostly to manipulate and query the current room's nickname that\r\n"
 		    "you are standing in when you invoke the commands.\r\n"
@@ -5849,16 +5849,14 @@ namespace mods::builder {
 		    "running. If the server reboots or if any code causes the world to be reloaded the nickname\r\n"
 		    "data you set will be reset back to whatever state is in the database.\r\n"
 		    "\r\n"
-		    "{grn}Commands{/grn}\r\n"
-		    "{yel}========{/yel}\r\n"
+		    + mods::util::admin_section("Commands") +
 		    "{grn}nset{/grn} - {yel}set the nickname for the room you're currently in.{/yel}\r\n"
 		    "{grn}nfind{/grn} - {yel}find the room IDs of the nickname(s) you pass in.{/yel}\r\n"
 		    "{grn}nhelp{/grn} - {yel}this help page.{/yel}\r\n"
 		    "{grn}ndelete{/grn} - {yel}Delete the nickname(s) of the room you're in.{/yel}\r\n"
 		    "\r\n"
-		    "{grn}Database Commands{/grn}\r\n"
-		    "{yel}================={/yel}\r\n"
-		    "{blu}Overview{/blu}\r\n"
+		    + mods::util::admin_section("Database Commands") +
+		    mods::util::overview() +
 		    "If you want to make your changes permanent, do not use the nickname helpers listed above.\r\n"
 		    "Instead, use {grn}rbuild{/grn}.\r\n"
 		    "[documentation written on 2021-04-07]"

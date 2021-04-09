@@ -18,6 +18,15 @@
 #define mu_debug(A) /**-*/
 #endif
 namespace mods::util {
+	std::string admin_section(std::string_view name) {
+		std::size_t len = std::min(name.length(),std::size_t(64)) + 4;
+		std::string horizontal_line = "{yel}" + std::string(len,'=') + "{/yel}\r\n";
+
+		return CAT(horizontal_line, "{yel}|{/yel}{grn} ", name.data()," {yel}|{/yel}\r\n", horizontal_line);
+	}
+	std::string overview() {
+		return "{yel}Overview{/yel}\r\n";
+	}
 	/**
 	 * @brief parses strings of the form: "#yaml|type/path-to.yml"
 	 *

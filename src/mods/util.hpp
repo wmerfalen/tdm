@@ -35,6 +35,8 @@ namespace mods::util {
 		YAML_FILE_WITH_PREFIX = 2,
 		DEEP_OBJECT = 3
 	};
+	std::string admin_section(std::string_view name);
+	std::string overview();
 	using strmap_t = std::map<std::string,std::string>;
 	std::tuple<bool,int,std::string> extract_yaml_reward(std::string reward);
 	std::tuple<bool,int,std::string,strmap_t> extract_deep_reward(std::string reward);
