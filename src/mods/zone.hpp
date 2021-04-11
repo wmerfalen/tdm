@@ -23,6 +23,11 @@ namespace mods::zone {
 	void zone_update();
 	void run_replenish();
 	void new_room(room_data*);
+	void disable_zone_resets(bool b);
+	void log_zone_error(zone_rnum zone, int cmd_no, const char *message);
+	void blacklist_zone(int zone);
+	void release_zone(int zone);
+
 };
 
 #endif

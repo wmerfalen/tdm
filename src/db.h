@@ -129,8 +129,8 @@ obj_rnum real_object(obj_vnum vnum);
 void	char_to_store(char_data *ch, struct char_file_u *st);
 void	store_to_char(struct char_file_u *st, char_data *ch);
 bool	load_char(const std::string& name);
-namespace mods::db { 
-extern tuple_status_t	save_char(player_ptr_t);
+namespace mods::db {
+	extern tuple_status_t	save_char(player_ptr_t);
 };
 void	init_char(player_ptr_t);
 char_data* create_char(void);
@@ -148,15 +148,15 @@ obj_ptr_t create_object(int type,std::string file);
 int	vnum_object(char *searchname, char_data *ch);
 
 typedef enum { \
-	REAL=0,\
-	VIRTUAL\
-} num_type_t;
+               REAL=0,\
+               VIRTUAL\
+             } num_type_t;
 
 /* structure for the reset commands */
 struct reset_com {
 	reset_com() : command('X'),
-	if_flag(0), arg1(0), arg2(0),
-	arg3(0),line(0){
+		if_flag(0), arg1(0), arg2(0),
+		arg3(0),line(0), count(0) {
 
 	}
 	~reset_com() = default;
@@ -167,6 +167,7 @@ struct reset_com {
 	int	arg2;		/* Arguments to the command             */
 	int	arg3;		/*                                      */
 	int line;		/* line number this command appears on  */
+	int32_t count;
 
 	/*
 	*  Commands:              *
@@ -178,40 +179,60 @@ struct reset_com {
 	*  'E': Obj to char equip *
 	*  'D': Set state of door *
 	*/
+	void dump() {
+		std::cerr << "reset_com[command]:'"<< command << "'\n";
+		std::cerr << "reset_com[if_flag]:'"<< if_flag << "'\n";
+		std::cerr << "reset_com[arg1]:'"<< arg1 << "'\n";
+		std::cerr << "reset_com[arg2]:'"<< arg2 << "'\n";
+		std::cerr << "reset_com[arg3]:'"<< arg3 << "'\n";
+		std::cerr << "reset_com[count]:'"<< count << "'\n";
+	}
 };
 
 
 
 /* zone definition structure. for the 'zone-table'   */
 struct zone_data {
-	zone_data() : name(nullptr),
-		lifespan(0),age(1),
-		bot(0),top(1),
-		reset_mode(0),
-		number(0),m_id(0){
-		
-	}
-	~zone_data() = default;
-	char	*name;		    /* name of this zone                  */
-	int	lifespan;           /* how long between resets (minutes)  */
-	int	age;                /* current age of this zone (minutes) */
-	uint64_t bot;           /* starting room number for this zone */
-	uint64_t top;           /* upper limit for rooms in this zone */
+		zone_data() :
+			lifespan(0),age(1),
+			bot(0),top(1),
+			reset_mode(0),
+			number(0),m_id(0) {
+			name.clear();
+		}
+		~zone_data() = default;
+		std::string name;   /* name of this zone                  */
+		int	lifespan;           /* how long between resets (minutes)  */
+		int	age;                /* current age of this zone (minutes) */
+		uint64_t bot;           /* starting room number for this zone */
+		uint64_t top;           /* upper limit for rooms in this zone */
 
-	int	reset_mode;         /* conditions for reset (see below)   */
-	zone_vnum number;	    /* virtual number of this zone	  */
-	std::vector<reset_com> cmd;   /* command table for reset	          */
-	int64_t get_id() const { return m_id; }
-	void set_id(int64_t i){ m_id = i; }
+		int	reset_mode;         /* conditions for reset (see below)   */
+		zone_vnum number;	    /* virtual number of this zone	  */
+		std::deque<reset_com> cmd;   /* command table for reset	          */
+		int64_t get_id() const {
+			return m_id;
+		}
+		void set_id(int64_t i) {
+			m_id = i;
+		}
+		void dump() {
+			std::cerr << "zone_data[name]:'"<< name << "'\n";
+			std::cerr << "zone_data[lifespan]:'"<< lifespan << "'\n";
+			std::cerr << "zone_data[age]:'"<< age << "'\n";
+			std::cerr << "zone_data[bot]:'"<< bot << "'\n";
+			std::cerr << "zone_data[top]:'"<< top << "'\n";
+			std::cerr << "zone_data[reset_mode]:'"<< reset_mode << "'\n";
+		}
 	private:
 		int64_t m_id;
 
-	/*
-	 * Reset mode:
-	 *   0: Don't reset, and don't update age.
-	 *   1: Reset if no PC's are located in zone.
-	 *   2: Just reset.
-	 */
+		/*
+		 * Reset mode:
+		 *   0: Don't reset, and don't update age.
+		 *   1: Reset if no PC's are located in zone.
+		 *   2: Just reset.
+		 */
 };
 
 
@@ -266,7 +287,7 @@ struct ban_list_element {
 #ifndef __DB_C__
 extern room_rnum top_of_world;
 
-extern std::vector<zone_data> zone_table;
+extern std::deque<zone_data> zone_table;
 extern zone_rnum top_of_zone_table;
 
 extern std::deque<mods::descriptor_data> descriptor_list;

@@ -38,6 +38,7 @@ INIT(mods::rifle_attachments);
 INIT(mods::super_users);
 INIT(mods::builder::bookmarks);
 INIT(mods::builder);
+INIT(mods::zone);
 #undef INIT
 
 
@@ -77,6 +78,7 @@ namespace mods::init {
 		::informative::init();
 		mods::builder::bookmarks::init();
 		mods::builder::init();
+		mods::zone::init();
 	}
 };
 #endif

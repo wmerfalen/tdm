@@ -915,6 +915,9 @@ void heartbeat(int pulse) {
 	}
 
 	if(!(pulse % PULSE_ZONE)) {
+#ifdef __MENTOC_SHOW_ZONE_PULSE_CALL_DEBUG_OUTPUT__
+		std::cerr << green_str("pulse % PULSE_ZONE. calling mods::zone::zone_update()") << "\n";
+#endif
 		mods::zone::zone_update();
 	}
 	if(!(pulse % PULSE_REPLENISH_CHARACTERS)) {

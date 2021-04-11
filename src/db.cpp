@@ -54,6 +54,9 @@
 #include "mods/util-map.hpp"
 #include "mods/rooms.hpp"
 
+namespace mods::zone {
+	extern void reset_zone(zone_rnum);
+};
 namespace mods::rooms {
 	extern void set_sector_type(room_rnum room_id, int sector_type);
 	extern void set_flag_absolute(room_rnum room_id, int);
@@ -69,9 +72,7 @@ namespace mods::skills {
 /**************************************************************************
  *  declarations of most of the 'global' variables                         *
  **************************************************************************/
-std::vector<int> zone_id_blacklist;
 bool db_has_been_booted = false;
-bool disable_all_zone_resets = false;
 std::tuple<int16_t,std::string> parse_sql_rooms();
 std::tuple<int16_t,std::string> parse_sql_zones();
 int parse_sql_objects();
@@ -102,7 +103,7 @@ std::deque<obj_data> obj_proto;	/* prototypes for objs		 */
 std::deque<shop_data_t> shop_proto;	/* prototypes for objs		 */
 obj_rnum top_of_objt = 0;	/* top of object index table	 */
 
-std::vector<zone_data> zone_table;	/* zone table			 */
+std::deque<zone_data> zone_table;	/* zone table			 */
 zone_rnum top_of_zone_table = 0;/* top element of zone tab	 */
 struct message_list fight_messages[MAX_MESSAGES];	/* fighting messages	 */
 
@@ -1109,7 +1110,8 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 	zone_table.clear();
 	log("[status] Loading sql zones");
 
-	for(auto&& row: db_get_all("zone")) {
+	for(const auto& row: db_get_all("zone")) {
+		std::cerr << green_str("parsing zone:") << row["zone_name"].c_str() << "'\n";
 		zone_data z;
 		//struct zone_data {
 		//  1    char *name;          /* name of this zone                  */
@@ -1139,7 +1141,7 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 		// reset_mode | integer               |           | not null |
 		//
 		//siege=#
-		z.name =(char*)row["zone_name"].c_str();
+		z.name.assign(row["zone_name"].c_str());
 		z.lifespan = mods::util::stoi<int>(row["lifespan"]);
 		z.age = 0;
 		z.bot =mods::util::stoi<int>(row["zone_start"]);
@@ -1148,8 +1150,6 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 		/** WRONG */
 		z.number =mods::util::stoi<int>(row["zone_virtual_number"]);
 		z.set_id(mods::util::stoi<int>(row["id"]));
-		zone_table.emplace_back(z);
-		top_of_zone_table = zone_table.size();
 		//struct reset_com {
 		//  1    char command;   /* current command                      */
 		//  2
@@ -1171,7 +1171,6 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 		// 18    */
 		// 19 };
 		// 20
-		//TODO: SELECT COUNT(*) FROM zone_data where zone_id = z.number
 
 		//siege=# \d zone_data
 		// id           | integer              |           | not null | nextval('zone_data_id_seq'::regclass)
@@ -1185,17 +1184,21 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 		//siege=#
 
 		for(auto&& zone_data_row : db_get_by_meta("zone_data","zone_id",std::to_string(z.number))) {
+			std::cerr << green_str("parsing zone_data from db") << "\n";
 			reset_com res;
-			res.command =mods::util::stoi<int>(zone_data_row["zone_command"]);
+			res.command = std::string(zone_data_row["zone_command"].c_str())[0];
 			res.if_flag =mods::util::stoi<int>(zone_data_row["zone_if_flag"]);
 			res.arg1 =mods::util::stoi<int>(zone_data_row["zone_arg1"]);
 			res.arg2 =mods::util::stoi<int>(zone_data_row["zone_arg2"]);
 			res.arg3 =mods::util::stoi<int>(zone_data_row["zone_arg3"]);
 			res.line = 0; //TODO: mods::util::stoi<int>(zone_data_row["line"]);
+			res.count = 0;
 			z.cmd.push_back(res);
 		}
+		zone_table.emplace_back(z);
+		top_of_zone_table = zone_table.size();
 
-		log("DEBUG: parse_sql_zones: '%s' loaded",z.name);
+		log("DEBUG: parse_sql_zones: '%s' loaded",z.name.c_str());
 	}
 
 	return {zone_table.size(),"ok"};
@@ -1234,7 +1237,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 				log("DEBUG: room: %d name: (%s), description: (%s)",mods::util::stoi<int>(room_records_row["id"].c_str()),room.name.c_str(),room.description.c_str());
 				room.number = room_records_row["room_number"].as<int>();
 				log("parse_sql_rooms: room.number (%d)",room.number);
-				room.zone = room_records_row["zone"].as<int>();
+				room.zone = real_zone(room_records_row["zone"].as<int>());
 				room.sector_type = room_records_row["sector_type"].as<int>();
 				room.light = (room_records_row["light"]).as<int>();
 
@@ -1453,7 +1456,7 @@ void renum_zone_table(void) {
 				if(!mini_mud) {
 					snprintf(buf, sizeof(buf), "Invalid vnum %d, cmd disabled",
 					         a == NOWHERE ? olda : b == NOWHERE ? oldb : oldc);
-					log_zone_error(zone, 0, buf);
+					mods::zone::log_zone_error(zone, 0, buf);
 				}
 
 				ZCMD.command = '*';
@@ -2029,7 +2032,7 @@ void zone_update() {
 		if(zone_table[update_u->zone_to_reset].reset_mode == 2 ||
 		        is_empty(update_u->zone_to_reset)) {
 			reset_zone(update_u->zone_to_reset);
-			mudlog(CMP, LVL_GOD, FALSE, "Auto zone reset: %s", zone_table[update_u->zone_to_reset].name);
+			mudlog(CMP, LVL_GOD, FALSE, "Auto zone reset: %s", zone_table[update_u->zone_to_reset].name.c_str());
 
 			/* dequeue */
 			if(update_u == reset_q.head) {
@@ -2051,195 +2054,9 @@ void zone_update() {
 	}
 }
 
-void log_zone_error(zone_rnum zone, int cmd_no, const char *message) {
-	mudlog(NRM, LVL_GOD, TRUE, "SYSERR: zone file: %s", message);
-	mudlog(NRM, LVL_GOD, TRUE, "SYSERR: ...offending cmd: '%c' cmd in zone #%d, line %d",
-	       '0', zone_table[zone].number, 0);
-}
-
-#define ZONE_ERROR(message) \
-{ log_zone_error(zone, cmd_no, message); last_cmd = 0; }
-
-/* execute the reset command table of a given zone */
 void reset_zone(zone_rnum zone) {
-	auto is_blacklisted = std::find(zone_id_blacklist.begin(),zone_id_blacklist.end(),zone);
-	if(disable_all_zone_resets || is_blacklisted != zone_id_blacklist.end()) {
-		log("[reset_zone]->[is_blacklisted] Skipping Zone ID due to blacklist rule: %d",zone);
-		return;
-	}
-	int cmd_no = 0, last_cmd = 0;
-	char_data *mob = NULL;
-	struct obj_data *obj, *obj_to;
-
-	for(auto ZCMD : zone_table[zone].cmd) {
-
-		if(ZCMD.if_flag && !last_cmd) {
-			continue;
-		}
-
-		/*  This is the list of actual zone commands.  If any new
-		 *  zone commands are added to the game, be certain to update
-		 *  the list of commands in load_zone() so that the counting
-		 *  will still be correct. - ae.
-		 */
-		switch(ZCMD.command) {
-			case '*':			/* ignore command */
-				last_cmd = 0;
-				break;
-
-			case 'M':			/* read a mobile */
-				if(mob_index[ZCMD.arg1].number < ZCMD.arg2) {
-					mob = read_mobile(ZCMD.arg2, REAL);
-					char_to_room(mob, real_room(ZCMD.arg3));
-					last_cmd = 1;
-				} else {
-					last_cmd = 0;
-				}
-
-				break;
-
-			case 'O':			/* read an object */
-				if(obj_index[ZCMD.arg1].number < ZCMD.arg2) {
-					if(ZCMD.arg3 != static_cast<int>(NOWHERE)) {
-						obj = read_object(ZCMD.arg1, REAL);
-						obj_to_room(obj, ZCMD.arg3);
-						last_cmd = 1;
-					} else {
-						obj = read_object(ZCMD.arg1, REAL);
-						IN_ROOM(obj) = NOWHERE;
-						last_cmd = 1;
-					}
-				} else {
-					last_cmd = 0;
-				}
-
-				break;
-
-			case 'P':			/* object to object */
-				if(obj_index[ZCMD.arg1].number < ZCMD.arg2) {
-					obj = read_object(ZCMD.arg1, REAL);
-
-					if(!(obj_to = get_obj_num(ZCMD.arg3))) {
-						ZONE_ERROR("target obj not found, command disabled");
-						ZCMD.command = '*';
-						break;
-					}
-
-					obj_to_obj(TO_OBJ_PTR(obj), TO_OBJ_PTR(obj_to));
-					last_cmd = 1;
-				} else {
-					last_cmd = 0;
-				}
-
-				break;
-
-			case 'G':			/* obj_to_char */
-				if(!mob) {
-					ZONE_ERROR("attempt to give obj to non-existant mob, command disabled");
-					ZCMD.command = '*';
-					break;
-				}
-
-				if(obj_index[ZCMD.arg1].number < ZCMD.arg2) {
-					obj = read_object(ZCMD.arg1, REAL);
-					obj_to_char(obj, mob);
-					last_cmd = 1;
-				} else {
-					last_cmd = 0;
-				}
-
-				break;
-
-			case 'E':			/* object to equipment list */
-				if(!mob) {
-					ZONE_ERROR("trying to equip non-existant mob, command disabled");
-					ZCMD.command = '*';
-					break;
-				}
-
-				if(obj_index[ZCMD.arg1].number < ZCMD.arg2) {
-					if(ZCMD.arg3 < 0 || ZCMD.arg3 >= NUM_WEARS) {
-						ZONE_ERROR("invalid equipment pos number");
-					} else {
-						obj = read_object(ZCMD.arg1, REAL);
-						equip_char(ptr(mob), optr(obj), ZCMD.arg3);
-						last_cmd = 1;
-					}
-				} else {
-					last_cmd = 0;
-				}
-
-				break;
-
-			case 'R': /* rem obj from room */
-				if((obj = get_obj_in_list_num(ZCMD.arg2, world[ZCMD.arg1].contents)) != NULL) {
-					extract_obj(obj);
-				}
-
-				last_cmd = 1;
-				break;
-
-
-			case 'D':			/* set state of door */
-				if(ZCMD.arg2 < 0 || ZCMD.arg2 >= NUM_OF_DIRS ||
-				        (world[ZCMD.arg1].dir_option[ZCMD.arg2] == NULL)) {
-					ZONE_ERROR("door does not exist, command disabled");
-					ZCMD.command = '*';
-				} else
-					switch(ZCMD.arg3) {
-						case 0:
-							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_LOCKED);
-							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_CLOSED);
-							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_BREACHED);
-							break;
-
-						case 1:
-							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							        EX_CLOSED);
-							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_LOCKED);
-							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_BREACHED);
-							break;
-
-						case 2:
-							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							        EX_LOCKED);
-							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							        EX_CLOSED);
-							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_BREACHED);
-							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_REINFORCED);
-							break;
-
-						/*!mods*/
-						case 3:
-							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							        EX_REINFORCED);
-							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							        EX_LOCKED);
-							SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							        EX_CLOSED);
-							REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-							           EX_BREACHED);
-							break;
-					}
-
-				last_cmd = 1;
-				break;
-
-			default:
-				ZONE_ERROR("unknown cmd in reset table; cmd disabled");
-				ZCMD.command = '*';
-				break;
-		}
-	}
-
-	zone_table[zone].age = 0;
+	mods::zone::reset_zone(zone);
+	return;
 }
 
 
@@ -2776,7 +2593,7 @@ obj_rnum real_object(obj_vnum vnum) {
 room_rnum real_zone(room_vnum vnum) {
 	room_rnum real_zone_number = 0;
 
-	for(auto& zone : zone_table) {
+	for(const auto& zone : zone_table) {
 		if(zone.number == vnum) {
 			return real_zone_number;
 		}

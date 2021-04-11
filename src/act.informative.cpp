@@ -800,7 +800,7 @@ void look_at_room_specific(player_ptr_t& player, int ignore_brief,int room) {
 		char buf[MAX_STRING_LENGTH];
 
 		sprintbit(ROOM_FLAGS(room), room_bits, buf, sizeof(buf));
-		player->send("[%5d] %s [ %s][x:%d,y:%d,z:%d]", GET_ROOM_VNUM(room), world[room].name.c_str(), buf,world[room].x,world[room].y,world[room].z);
+		player->send("[zone: %d][room vnum: %5d] %s [ %s][x:%d,y:%d,z:%d]", world[room].zone, GET_ROOM_VNUM(room), world[room].name.c_str(), buf,world[room].x,world[room].y,world[room].z);
 	}
 	player->send("\r\n{grn}%s ->{gld}", world[room].name.c_str());
 	for(auto&& flag : mods::rooms::get_room_flags_from_room(player->room())) {

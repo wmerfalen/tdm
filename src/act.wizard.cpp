@@ -97,7 +97,7 @@ void snoop_check(char_data *ch);
 
 
 ACMD(do_echo) {
-	
+
 	skip_spaces(&argument);
 
 	if(!*argument) {
@@ -123,7 +123,7 @@ ACMD(do_echo) {
 
 
 ACMD(do_send) {
-	
+
 	char arg[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
 	char_data *vict;
 
@@ -264,9 +264,9 @@ ACMD(do_goto) {
 		return;
 	}
 
-	if(ch->player_specials){
+	if(ch->player_specials) {
 		snprintf(buf, sizeof(buf), "$n %s", ch->player_specials->poofout.length() ? ch->player_specials->poofout.c_str() : "disappears in a puff of smoke.");
-	}else{
+	} else {
 		snprintf(buf,sizeof(buf),"$n leaves the room.");
 	}
 	act(buf, TRUE, ch, 0, 0, TO_ROOM);
@@ -274,9 +274,9 @@ ACMD(do_goto) {
 	char_from_room(ch);
 	char_to_room(ch, location);
 
-	if(ch->player_specials){
+	if(ch->player_specials) {
 		snprintf(buf, sizeof(buf), "$n %s", (ch)->player_specials->poofin.length() ? ch->player_specials->poofin.c_str() : "appears with an ear-splitting bang.");
-	}else{
+	} else {
 		snprintf(buf, sizeof(buf), "$n enters the room.");
 	}
 	act(buf, TRUE, ch, 0, 0, TO_ROOM);
@@ -318,7 +318,7 @@ ACMD(do_trans) {
 			return;
 		}
 
-		for(auto & i : descriptor_list){
+		for(auto& i : descriptor_list) {
 			if(STATE(i) == CON_PLAYING && i.character && i.character != ch) {
 				victim = i.character;
 
@@ -341,7 +341,7 @@ ACMD(do_trans) {
 
 
 ACMD(do_teleport) {
-	
+
 	char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
 	char_data *victim;
 	room_rnum target;
@@ -372,7 +372,7 @@ ACMD(do_teleport) {
 
 
 ACMD(do_vnum) {
-	
+
 	char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
 
 	half_chop(argument, buf, buf2);
@@ -398,7 +398,7 @@ ACMD(do_vnum) {
 void do_stat_room(char_data *ch) {
 	MENTOC_PREAMBLE();
 	char buf2[MAX_STRING_LENGTH];
-	room_data &rm = world[player->room()];
+	room_data& rm = world[player->room()];
 	int i,  column;
 	struct obj_data *j;
 
@@ -406,17 +406,17 @@ void do_stat_room(char_data *ch) {
 
 	sprinttype(rm.sector_type, sector_types, buf2, sizeof(buf2));
 	player->sendln(TOSTR("Zone: [") + //%3d], VNum: [%s%5d%s], RNum: [%5d], Type: %s",
-	             TOSTR(zone_table[rm.zone].number) + "], VNum: [" + CCGRN(ch, C_NRM) + 
-							 TOSTR(rm.number) + CCNRM(ch, C_NRM) + TOSTR(IN_ROOM(ch)) + buf2 + "]");
+	               TOSTR(zone_table[rm.zone].number) + "], VNum: [" + CCGRN(ch, C_NRM) +
+	               TOSTR(rm.number) + CCNRM(ch, C_NRM) + TOSTR(IN_ROOM(ch)) + buf2 + "]");
 
 	sprintbit(rm.room_flags, room_bits, buf2, sizeof(buf2));
 	player->sendln(TOSTR("SpecProc: ") + //%s, Flags: %s", rm.func == NULL ? "None" : "Exists", buf2);
-		(rm.func == nullptr ? TOSTR("None") : TOSTR("Exists")) + ", Flags: " + buf2);
+	               (rm.func == nullptr ? TOSTR("None") : TOSTR("Exists")) + ", Flags: " + buf2);
 
 	player->sendln(TOSTR("Description:" + rm.description.str_or(" None.")));
 
-	if(rm.ex_descriptions().size()){
-		for(auto & k : rm.ex_descriptions()){
+	if(rm.ex_descriptions().size()) {
+		for(auto& k : rm.ex_descriptions()) {
 			player->sendln(k.keyword);
 		}
 
@@ -427,14 +427,14 @@ void do_stat_room(char_data *ch) {
 	column = 14;	/* ^^^ strlen ^^^ */
 
 	unsigned counter = 0;
-	for(auto & k : mods::globals::get_room_list(player->room())){
+	for(auto& k : mods::globals::get_room_list(player->room())) {
 		if(!CAN_SEE(ch, k->cd())) {
 			continue;
 		}
 		/** FIXME what is this nonsense? */
 		//column += player->sendln(
-				//"%s %s(%s)", found++ ? "," : "", GET_NAME(k).c_str(),
-		    //                  !IS_NPC(k) ? "PC" : (!IS_MOB(k) ? "NPC" : "MOB"));
+		//"%s %s(%s)", found++ ? "," : "", GET_NAME(k).c_str(),
+		//                  !IS_NPC(k) ? "PC" : (!IS_MOB(k) ? "NPC" : "MOB"));
 
 		if(column >= 62) {
 			player->sendln(counter + 1 == mods::globals::get_room_list(player->room()).size() ? "," : "");
@@ -515,7 +515,7 @@ void do_stat_object(char_data *ch, struct obj_data *j) {
 	if(j->ex_description.size()) {
 		player->send("Extra descs:%s", CCCYN(ch, C_NRM));
 
-		for(auto & desc : j->ex_description) {
+		for(auto& desc : j->ex_description) {
 			player->send(" %s", desc.keyword);
 		}
 
@@ -825,24 +825,24 @@ ACMD(do_stat) {
 	DO_HELP("stat,stats");
 	static constexpr const char* usage = "usage: stat <object|weapon>";
 	auto vec_args = PARSE_ARGS();
-	if(vec_args.size() == 0){
+	if(vec_args.size() == 0) {
 		player->errorln(usage);
 		return;
 	}
-	
+
 	{
 		auto obj= mods::query_objects::query_room_for_object(player->room(), vec_args[0]);
-		if(obj){
+		if(obj) {
 			do_stat_object(ch,obj.get());
 			return;
 		}
 	}
 	{
 		auto obj_list = mods::query_objects::query_inventory_for_object(player,vec_args[0]);
-		if(obj_list.size()){
-			for(auto & uuid : obj_list){
+		if(obj_list.size()) {
+			for(auto& uuid : obj_list) {
 				auto obj = optr_by_uuid(uuid);
-				if(!obj){
+				if(!obj) {
 					continue;
 				}
 				do_stat_object(ch,obj.get());
@@ -853,39 +853,39 @@ ACMD(do_stat) {
 }
 
 
-ACMD(do_shutdown){
-	
-char arg[MAX_INPUT_LENGTH];
+ACMD(do_shutdown) {
 
-if(subcmd != SCMD_SHUTDOWN) {
-	player->sendln("If you want to shut something down, say so!");
-	return;
-}
+	char arg[MAX_INPUT_LENGTH];
 
-one_argument(argument, arg);
+	if(subcmd != SCMD_SHUTDOWN) {
+		player->sendln("If you want to shut something down, say so!");
+		return;
+	}
 
-if(!*arg) {
-	log("(GC) Shutdown by %s.", GET_NAME(ch).c_str());
-	send_to_all("Shutting down.");
-	circle_shutdown = 1;
-} else if(!str_cmp(arg, "reboot")) {
-	log("(GC) Reboot by %s.", GET_NAME(ch).c_str());
-	send_to_all("Rebooting.. come back in a minute or two.");
-	touch(FASTBOOT_FILE);
-	circle_shutdown = circle_reboot = 1;
-} else if(!str_cmp(arg, "die")) {
-	log("(GC) Shutdown by %s.", GET_NAME(ch).c_str());
-	send_to_all("Shutting down for maintenance.");
-	touch(KILLSCRIPT_FILE);
-	circle_shutdown = 1;
-} else if(!str_cmp(arg, "pause")) {
-	log("(GC) Shutdown by %s.", GET_NAME(ch).c_str());
-	send_to_all("Shutting down for maintenance.");
-	touch(PAUSE_FILE);
-	circle_shutdown = 1;
-} else {
-	player->sendln("Unknown shutdown option.");
-}
+	one_argument(argument, arg);
+
+	if(!*arg) {
+		log("(GC) Shutdown by %s.", GET_NAME(ch).c_str());
+		send_to_all("Shutting down.");
+		circle_shutdown = 1;
+	} else if(!str_cmp(arg, "reboot")) {
+		log("(GC) Reboot by %s.", GET_NAME(ch).c_str());
+		send_to_all("Rebooting.. come back in a minute or two.");
+		touch(FASTBOOT_FILE);
+		circle_shutdown = circle_reboot = 1;
+	} else if(!str_cmp(arg, "die")) {
+		log("(GC) Shutdown by %s.", GET_NAME(ch).c_str());
+		send_to_all("Shutting down for maintenance.");
+		touch(KILLSCRIPT_FILE);
+		circle_shutdown = 1;
+	} else if(!str_cmp(arg, "pause")) {
+		log("(GC) Shutdown by %s.", GET_NAME(ch).c_str());
+		send_to_all("Shutting down for maintenance.");
+		touch(PAUSE_FILE);
+		circle_shutdown = 1;
+	} else {
+		player->sendln("Unknown shutdown option.");
+	}
 }
 
 
@@ -925,7 +925,7 @@ void stop_snooping(char_data *ch) {
 
 
 ACMD(do_snoop) {
-	
+
 	char arg[MAX_INPUT_LENGTH];
 	char_data *victim, *tch;
 
@@ -973,7 +973,7 @@ ACMD(do_snoop) {
 
 
 ACMD(do_switch) {
-	
+
 	char arg[MAX_INPUT_LENGTH];
 	char_data *victim;
 
@@ -1010,7 +1010,7 @@ ACMD(do_switch) {
 
 
 ACMD(do_return) {
-	
+
 	if(ch->has_desc && ch->desc->original) {
 		player->sendln("You return to your original body.");
 
@@ -1041,7 +1041,7 @@ ACMD(do_return) {
 
 
 ACMD(do_load) {
-	
+
 	char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
 
 	two_arguments(argument, buf, buf2);
@@ -1100,7 +1100,7 @@ ACMD(do_load) {
 
 
 ACMD(do_vstat) {
-	
+
 	char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
 
 	two_arguments(argument, buf, buf2);
@@ -1150,7 +1150,7 @@ ACMD(do_vstat) {
 
 /* clean a room of all mobiles and objects */
 ACMD(do_purge) {
-	
+
 	char buf[MAX_INPUT_LENGTH];
 	char_data *vict;
 	struct obj_data *obj;
@@ -1195,7 +1195,7 @@ ACMD(do_purge) {
 		send_to_room(IN_ROOM(ch), "The world seems a little cleaner.");
 
 		//for(vict = world[IN_ROOM(ch)].people; vict; vict = vict->next_in_room) {
-		for(auto & vict : mods::globals::get_room_list(player)){
+		for(auto& vict : mods::globals::get_room_list(player)) {
 			if(!IS_NPC(vict->cd())) {
 				continue;
 			}
@@ -1229,7 +1229,7 @@ const char *logtypes[] = {
 };
 
 ACMD(do_syslog) {
-	
+
 	char arg[MAX_INPUT_LENGTH];
 	int tp;
 
@@ -1255,7 +1255,7 @@ ACMD(do_syslog) {
 
 
 ACMD(do_advance) {
-	
+
 	char_data *victim;
 	char name[MAX_INPUT_LENGTH], level[MAX_INPUT_LENGTH];
 	int newlevel, oldlevel;
@@ -1349,7 +1349,7 @@ ACMD(do_advance) {
 }
 
 ACMD(do_restore) {
-	
+
 	char buf[MAX_INPUT_LENGTH];
 	char_data *vict;
 	int i;
@@ -1409,7 +1409,7 @@ void perform_immort_invis(char_data *ch, int level) {
 	MENTOC_PREAMBLE();
 
 	//for(tch = world[IN_ROOM(ch)].people; tch; tch = tch->next_in_room) {
-	for(auto & plr : mods::globals::get_room_list(player)){
+	for(auto& plr : mods::globals::get_room_list(player)) {
 		auto tch = plr->cd();
 		if(tch == ch) {
 			continue;
@@ -1430,7 +1430,7 @@ void perform_immort_invis(char_data *ch, int level) {
 
 
 ACMD(do_invis) {
-	
+
 	char arg[MAX_INPUT_LENGTH];
 	int level;
 
@@ -1462,14 +1462,14 @@ ACMD(do_invis) {
 
 
 ACMD(do_gecho) {
-	
+
 	skip_spaces(&argument);
 	delete_doubledollar(argument);
 
 	if(!*argument) {
 		player->sendln("That must be a mistake...");
 	} else {
-		for(auto & pt : descriptor_list){
+		for(auto& pt : descriptor_list) {
 			if(STATE(pt) == CON_PLAYING && pt.character && pt.character != ch) {
 				send_to_char(pt.character, "%s", argument);
 			}
@@ -1485,9 +1485,9 @@ ACMD(do_gecho) {
 
 
 ACMD(do_poofset) {
-	
+
 	skip_spaces(&argument);
-	if(!*argument){
+	if(!*argument) {
 		send_to_char(ch,"%s","That doesn't seem to be a valid string.");
 		return;
 	}
@@ -1507,7 +1507,7 @@ ACMD(do_poofset) {
 
 
 ACMD(do_dc) {
-	
+
 	char arg[MAX_INPUT_LENGTH];
 	int num_to_dc;
 
@@ -1520,8 +1520,8 @@ ACMD(do_dc) {
 
 	auto d = descriptor_list.begin();
 	bool found = false;
-	for(; d != descriptor_list.end();++d){
-		if(d->desc_num == num_to_dc){
+	for(; d != descriptor_list.end(); ++d) {
+		if(d->desc_num == num_to_dc) {
 			found = true;
 			break;
 		}
@@ -1579,7 +1579,7 @@ ACMD(do_dc) {
 
 
 ACMD(do_wizlock) {
-	
+
 	char arg[MAX_INPUT_LENGTH];
 	int value;
 	const char *when;
@@ -1617,7 +1617,7 @@ ACMD(do_wizlock) {
 
 
 ACMD(do_date) {
-	
+
 	char *tmstr;
 	time_t mytime;
 	int d, h, m;
@@ -1646,7 +1646,7 @@ ACMD(do_date) {
 
 
 ACMD(do_last) {
-	
+
 	char arg[MAX_INPUT_LENGTH];
 	struct char_file_u chdata;
 
@@ -1675,7 +1675,7 @@ ACMD(do_last) {
 
 
 ACMD(do_force) {
-	
+
 	char_data *vict;
 	char arg[MAX_INPUT_LENGTH], to_force[MAX_INPUT_LENGTH], buf1[MAX_INPUT_LENGTH + 32];
 
@@ -1703,8 +1703,8 @@ ACMD(do_force) {
 		       GET_NAME(ch).c_str(), GET_ROOM_VNUM(IN_ROOM(ch)), to_force);
 
 		//for(vict = world[IN_ROOM(ch)].people; vict; vict = next_force) {
-	//		next_force = vict->next_in_room;
-		for(auto & plr : mods::globals::get_room_list(player)){
+		//		next_force = vict->next_in_room;
+		for(auto& plr : mods::globals::get_room_list(player)) {
 			auto vict = plr->cd();
 			if(!IS_NPC(vict) && GET_LEVEL(vict) >= GET_LEVEL(ch)) {
 				continue;
@@ -1717,7 +1717,7 @@ ACMD(do_force) {
 		player->sendln(OK);
 		mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s forced all to %s", GET_NAME(ch).c_str(), to_force);
 
-		for(auto & i : descriptor_list){
+		for(auto& i : descriptor_list) {
 			if(STATE(i) != CON_PLAYING || !(vict = i.character) || (!IS_NPC(vict) && GET_LEVEL(vict) >= GET_LEVEL(ch))) {
 				continue;
 			}
@@ -1732,7 +1732,7 @@ ACMD(do_force) {
 
 
 ACMD(do_wiznet) {
-	
+
 	char buf1[MAX_INPUT_LENGTH + MAX_NAME_LENGTH + 32],
 	     buf2[MAX_INPUT_LENGTH + MAX_NAME_LENGTH + 32];
 	char emote = FALSE;
@@ -1770,7 +1770,7 @@ ACMD(do_wiznet) {
 		case '@':
 			player->sendln("God channel status:");
 
-			for(auto & d : descriptor_list) {
+			for(auto& d : descriptor_list) {
 				if(STATE(d) != CON_PLAYING || GET_LEVEL(d.character) < LVL_IMMORT) {
 					continue;
 				}
@@ -1815,7 +1815,7 @@ ACMD(do_wiznet) {
 		snprintf(buf2, sizeof(buf1), "Someone: %s%s", emote ? "<--- " : "", argument);
 	}
 
-	for(auto & d : descriptor_list) {
+	for(auto& d : descriptor_list) {
 		if((STATE(d) == CON_PLAYING) && (GET_LEVEL(d.character) >= level) &&
 		        (!PRF_FLAGGED(d.character, PRF_NOWIZ)) &&
 		        (!PLR_FLAGGED(d.character, PLR_WRITING | PLR_MAILING))
@@ -1840,7 +1840,7 @@ ACMD(do_wiznet) {
 
 
 ACMD(do_zreset) {
-	
+
 	char arg[MAX_INPUT_LENGTH];
 	zone_rnum i;
 	zone_vnum j;
@@ -1873,14 +1873,14 @@ ACMD(do_zreset) {
 
 	if(i <= top_of_zone_table) {
 		reset_zone(i);
-		player->send("Reset zone %d (#%d): %s.", i, zone_table[i].number, zone_table[i].name);
-		mudlog(NRM, MAX(LVL_GRGOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s reset zone %d (%s)", GET_NAME(ch).c_str(), i, zone_table[i].name);
+		player->send("Reset zone %d (#%d): %s.", i, zone_table[i].number, zone_table[i].name.c_str());
+		mudlog(NRM, MAX(LVL_GRGOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s reset zone %d (%s)", GET_NAME(ch).c_str(), i, zone_table[i].name.c_str());
 	} else {
 		player->sendln("Invalid zone number.");
 	}
 }
 
-/** 
+/**
  * Command for adding/removing quotes from the database
  *
  * example: wiz_quote list
@@ -1895,7 +1895,7 @@ ACMD(do_wiz_quote) {
  *  General fn for wizcommands of the sort: cmd <player>
  */
 ACMD(do_wizutil) {
-	
+
 	char arg[MAX_INPUT_LENGTH];
 	char_data *vict;
 	long result;
@@ -2020,7 +2020,7 @@ size_t print_zone_to_buf(char *bufptr, size_t left, zone_rnum zone) {
 
 
 ACMD(do_show) {
-	
+
 	struct char_file_u vbuf;
 	unsigned i, j, l, con, nlen;		/* i, j, k to specifics? */
 	size_t len;
@@ -2250,7 +2250,7 @@ ACMD(do_show) {
 			i = 0;
 			player->sendln("People currently snooping:--------------------------");
 
-			for(auto & d : descriptor_list) {
+			for(auto& d : descriptor_list) {
 				if(d.snooping == NULL || d.character == NULL) {
 					continue;
 				}
@@ -2772,7 +2772,7 @@ int perform_set(char_data *ch, char_data *vict, int mode,
 
 
 ACMD(do_set) {
-	
+
 	char_data *vict = NULL, *cbuf = NULL;
 	struct char_file_u tmp_store;
 	char field[MAX_INPUT_LENGTH], name[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];

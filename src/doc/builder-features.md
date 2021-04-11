@@ -37,9 +37,9 @@
 
 # mob roaming
 	- [ ] write unit tests
-		- [ ] adapt `mbuild` to save mob roaming data
+		- [x] adapt `mbuild` to save mob roaming data
 		- [ ] alter mobs to honor mob roaming data
-		- [ ] verify saving to db works
+		- [x] verify saving to db works
 		- [ ] verify loading from db works
 
 # needs testing

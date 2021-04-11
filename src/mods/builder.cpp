@@ -29,6 +29,7 @@
 #include "builder/encode.hpp"
 #include "super-users.hpp"
 #include "interpreter.hpp"
+#include "zone.hpp"
 
 namespace mods {
 	struct player;
@@ -49,8 +50,6 @@ extern int next_mob_number();
 extern int next_room_number();
 extern int next_zone_number();
 extern std::tuple<int16_t,std::string> parse_sql_zones();
-extern std::vector<int> zone_id_blacklist;
-extern bool disable_all_zone_resets;
 extern obj_ptr_t create_object_from_index(std::size_t proto_index);
 using shop_data_t = shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>;
 extern std::deque<shop_data_t> shop_proto;	/* prototypes for objs		 */
@@ -158,35 +157,17 @@ int next_room_vnum() {
 }
 
 void disable_zone_resets() {
-	disable_all_zone_resets = true;
+	mods::zone::disable_zone_resets(true);
 }
 void enable_zone_resets() {
-	disable_all_zone_resets = false;
+	mods::zone::disable_zone_resets(false);
 }
 void blacklist_zone(int zone) {
-	auto it = std::find(zone_id_blacklist.begin(),
-	                    zone_id_blacklist.end(),
-	                    zone);
-	if(it == zone_id_blacklist.end()) {
-		zone_id_blacklist.emplace_back(zone);
-	}
+	mods::zone::blacklist_zone(zone);
 }
 
 void release_zone(int zone) {
-	auto copy = zone_id_blacklist;
-	copy.clear();
-	for(auto& zone_id : zone_id_blacklist) {
-		if(zone_id == zone) {
-			continue;
-		}
-		copy.emplace_back(zone_id);
-	}
-	zone_id_blacklist.clear();
-	zone_id_blacklist.assign(
-	    copy.begin(),
-	    copy.end()
-	);
-
+	mods::zone::release_zone(zone);
 }
 void r_error(const player_ptr_t& player,std::string_view msg) {
 	mods::builder::report_error<player_ptr_t>(player,msg.data());
@@ -1139,6 +1120,13 @@ namespace mods::builder {
 		return true;
 	}
 	std::pair<bool,std::string> zone_place(int zone_id,std::string_view zone_command,std::string_view if_flag,std::string_view arg1,std::string_view arg2,std::string_view arg3) {
+		std::cerr << red_str("zone_place[zone_id]:'") << zone_id << "'\n";
+		std::cerr << red_str("zone_place[zone_command.data()]:'") << zone_command.data() << "'\n";
+		std::cerr << red_str("zone_place[if_flag.data()]:'") << if_flag.data() << "'\n";
+		std::cerr << red_str("zone_place[arg1.data()]:'") << arg1.data() << "'\n";
+		std::cerr << red_str("zone_place[arg2.data()]:'") << arg2.data() << "'\n";
+		std::cerr << red_str("zone_place[arg3.data()]:'") << arg3.data() << "'\n";
+		std::cerr << red_str("zone_table[") << zone_id << "].number:'" << std::to_string(zone_table[zone_id].number) << "'\n";
 		try {
 			auto t = txn();
 			sql_compositor comp("zone_data",&t);
@@ -4439,28 +4427,32 @@ ACMD(do_zbuild) {
 			r_error(player,"Please provide a zone id");
 			return;
 		}
+		int zone = 0;
 
-		auto zone_id = mods::util::stoi(arg_vec[1]);
+		if(arg_vec[1].compare("this") == 0) {
+			zone = world[player->room()].zone;
+		} else {
+			auto zone_id = mods::util::stoi(arg_vec[1]);
 
-		if(!zone_id.has_value()) {
-			r_error(player,"Invalid zone id");
-			return;
+			if(!zone_id.has_value()) {
+				r_error(player,"Invalid zone id");
+				return;
+			}
+			zone = zone_id.value();
 		}
 
-		std::size_t z = zone_id.value();
-
-		if(z >= zone_table.size()) {
+		if(zone >= zone_table.size()) {
 			r_error(player,"Out of bounds");
 			return;
 		}
 
 		mods::builder_util::value_callback value_callback = [&](sql_compositor::value_map & values) {
-			values["zone_virtual_number"] = mods::util::itoa(zone_table[zone_id.value()].number);
-			values["zone_start"] = mods::util::itoa(zone_table[zone_id.value()].bot);
-			values["zone_end"] = mods::util::itoa(zone_table[zone_id.value()].top);
-			values["zone_name"] = zone_table[zone_id.value()].name;
-			values["lifespan"] = std::to_string(zone_table[zone_id.value()].lifespan);
-			values["reset_mode"] = std::to_string(zone_table[zone_id.value()].reset_mode);
+			values["zone_virtual_number"] = mods::util::itoa(zone_table[zone].number);
+			values["zone_start"] = mods::util::itoa(zone_table[zone].bot);
+			values["zone_end"] = mods::util::itoa(zone_table[zone].top);
+			values["zone_name"] = zone_table[zone].name;
+			values["lifespan"] = std::to_string(zone_table[zone].lifespan);
+			values["reset_mode"] = std::to_string(zone_table[zone].reset_mode);
 		};
 		mods::builder_util::post_modify_callback post_modify_callback = []() -> std::pair<bool,std::string> {
 			return {true,""};
@@ -4468,7 +4460,7 @@ ACMD(do_zbuild) {
 		auto status = mods::builder_util::save_to_db<std::string>(
 		                  "zone",
 		                  "id",
-		                  std::to_string(zone_table[zone_id.value()].get_id()),
+		                  std::to_string(zone_table[zone].get_id()),
 		                  value_callback,
 		                  post_modify_callback
 		              );
@@ -4479,7 +4471,7 @@ ACMD(do_zbuild) {
 			r_error(player,status.second);
 		}
 
-		auto status2 = mods::builder::update_zone_commands(zone_id.value());
+		auto status2 = mods::builder::update_zone_commands(zone);
 
 		if(status2.first) {
 			r_success(player,"Saved zone commands");
@@ -4494,14 +4486,24 @@ ACMD(do_zbuild) {
 		std::string arg = argument;
 		auto past = arg.substr(arg.find("mob ")+4);
 		auto args = mods::util::arglist<std::vector<std::string>>(past);
-		auto zone_id = mods::util::stoi(args[0]);
+		int zone = 0;
+		if(args[0].compare("this") == 0) {
+			zone = world[player->room()].zone;
+			player->sendln(CAT("Using current zone id:", zone));
+		} else {
+			auto zone_id = mods::util::stoi(args[0]);
 
-		if(!zone_id.has_value() || static_cast<unsigned>(zone_id.value()) >= zone_table.size()) {
-			r_error(player," Invalid zone id");
-			return;
+			if(!zone_id.has_value() || static_cast<unsigned>(zone_id.value()) >= zone_table.size()) {
+				r_error(player," Invalid zone id");
+				return;
+			}
+			zone = zone_id.value();
+		}
+		for(auto& obj : args) {
+			player->sendln(obj);
 		}
 
-		if(args.size() < 6) {
+		if(args.size() < 5) {
 			r_error(player,"Not enough arguments");
 			return;
 		}
@@ -4511,7 +4513,7 @@ ACMD(do_zbuild) {
 		auto mob_vnum = args[1];
 		auto max_existing = args[2];
 		auto room_vnum = args[3];
-		auto result = mods::builder::zone_place(zone_id.value(),zone_command,if_flag,mob_vnum,max_existing,room_vnum);
+		auto result = mods::builder::zone_place(zone,zone_command,if_flag,mob_vnum,max_existing,room_vnum);
 		if(!result.first) {
 			r_error(player,result.second);
 		} else {
@@ -4522,13 +4524,19 @@ ACMD(do_zbuild) {
 
 	if(std::string(&command[0]).compare("place") == 0) {
 		std::string arg = argument;
+		int zone = 0;
 		auto past = arg.substr(arg.find("place ")+6);
 		auto args = mods::util::arglist<std::vector<std::string>>(past);
-		auto zone_id = mods::util::stoi(args[0]);
+		if(args[0].compare("this") == 0) {
+			zone = world[player->room()].zone;
+		} else {
+			auto zone_id = mods::util::stoi(args[0]);
 
-		if(!zone_id.has_value() || static_cast<unsigned>(zone_id.value()) >= zone_table.size()) {
-			r_error(player," Invalid zone id");
-			return;
+			if(!zone_id.has_value() || static_cast<unsigned>(zone_id.value()) >= zone_table.size()) {
+				r_error(player," Invalid zone id");
+				return;
+			}
+			zone = zone_id.value();
 		}
 
 		if(args.size() < 6) {
@@ -4541,7 +4549,7 @@ ACMD(do_zbuild) {
 		auto arg1 = args[3];
 		auto arg2 = args[4];
 		auto arg3 = args[5];
-		mods::builder::zone_place(zone_id.value(),zone_command,if_flag,arg1,arg2,arg3);
+		mods::builder::zone_place(zone,zone_command,if_flag,arg1,arg2,arg3);
 		r_success(player,"Placed object in zone");
 		return;
 	}
@@ -4688,7 +4696,7 @@ ACMD(do_zbuild) {
 		int current_mobile = 0;
 		int ctr = 0;
 
-		for(auto ZCMD : zone_table[index.value()].cmd) {
+		for(const auto& ZCMD : zone_table[index.value()].cmd) {
 			if(ZCMD.command == '*') {
 				break;
 			}
