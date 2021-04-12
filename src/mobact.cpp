@@ -23,6 +23,7 @@
 #include "globals.hpp"
 #include "mods/loops.hpp"
 #include "mods/behaviour_tree_impl.hpp"
+#include "mods/mob-roam.hpp"
 
 /* external globals */
 extern int no_specials;
@@ -40,16 +41,16 @@ bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *att
 #define MOB_AGGR_TO_ALIGN (MOB_AGGR_EVIL | MOB_AGGR_NEUTRAL | MOB_AGGR_GOOD)
 
 #ifdef __MENTOC_MUTE_BEHAVIOUR_TREE_OUTPUT__
-	#define bht_debug(a) /**/
+#define bht_debug(a) /**/
 #else
-	#define bht_debug(a){ std::cerr << "[mobile_activity][behaviour_trees]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n"; }
+#define bht_debug(a){ std::cerr << "[mobile_activity][behaviour_trees]" << __FILE__ << "|" << __LINE__ << "->" << a << "\n"; }
 #endif
 
 void mobile_activity(void) {
 	//auto player = mods::globals::current_player;
-	for(auto & npc : mob_list) {
+	for(auto& npc : mob_list) {
 		auto ch = npc->cd();
-		auto & player = npc->player_ptr();
+		auto& player = npc->player_ptr();
 		char_data *vict;
 		struct obj_data *obj, *best_obj;
 		int door, found, max;
@@ -62,7 +63,7 @@ void mobile_activity(void) {
 		if(MOB_FLAGGED(ch, MOB_SPEC) && !no_specials) {
 			if(mob_index[GET_MOB_RNUM(ch)].func == NULL) {
 				log("SYSERR: %s (#%d): Attempting to call non-existing mob function.",
-						GET_NAME(ch).c_str(), GET_MOB_VNUM(ch));
+				    GET_NAME(ch).c_str(), GET_MOB_VNUM(ch));
 				REMOVE_BIT(MOB_FLAGS(ch), MOB_SPEC);
 			} else {
 				char actbuf[MAX_INPUT_LENGTH] = "";
@@ -79,7 +80,7 @@ void mobile_activity(void) {
 		}
 
 		/* Scavenger (picking up objects) */
-		if(MOB_FLAGGED(ch, MOB_SCAVENGER)){
+		if(MOB_FLAGGED(ch, MOB_SCAVENGER)) {
 			if(world[IN_ROOM(ch)].contents && !rand_number(0, 10)) {
 				max = 1;
 				best_obj = NULL;
@@ -100,18 +101,23 @@ void mobile_activity(void) {
 
 		/* Mob Movement */
 		if(!MOB_FLAGGED(ch, MOB_SENTINEL) && (GET_POS(ch) == POS_STANDING) &&
-				((door = rand_number(0, 18)) < NUM_OF_DIRS) && CAN_GO(ch, door) &&
-				!ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_NOMOB | ROOM_DEATH) &&
-				(!MOB_FLAGGED(ch, MOB_STAY_ZONE) ||
-				 (world[EXIT(ch, door)->to_room].zone == world[IN_ROOM(ch)].zone))) {
-			perform_move(ch, door, 1);
+		        ((door = rand_number(0, 18)) < NUM_OF_DIRS) && CAN_GO(ch, door) &&
+		        !ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_NOMOB | ROOM_DEATH) &&
+		        (!MOB_FLAGGED(ch, MOB_STAY_ZONE) ||
+		         (world[EXIT(ch, door)->to_room].zone == world[IN_ROOM(ch)].zone))) {
+			if(mods::mob_roam::can_roam_to(ch,EXIT(ch,door)->to_room)) {
+#ifdef __MENTOC_SHOW_SUCCESSFUL_ROAM_DECISION_DEBUG_OUTPUT__
+				std::cerr << green_str("Can roam to area") << "\n";
+#endif
+				perform_move(ch, door, 1);
+			}
 		}
 
 		/* Aggressive Mobs */
 		if(MOB_FLAGGED(ch, MOB_AGGRESSIVE | MOB_AGGR_TO_ALIGN)) {
 			found = FALSE;
 
-			for(auto & plr : mods::globals::get_room_list(npc->room())){
+			for(auto& plr : mods::globals::get_room_list(npc->room())) {
 				vict = plr->cd();
 				if(IS_NPC(vict) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE)) {
 					continue;
@@ -122,9 +128,9 @@ void mobile_activity(void) {
 				}
 
 				if(MOB_FLAGGED(ch, MOB_AGGRESSIVE) ||
-						(MOB_FLAGGED(ch, MOB_AGGR_EVIL) && IS_EVIL(vict)) ||
-						(MOB_FLAGGED(ch, MOB_AGGR_NEUTRAL) && IS_NEUTRAL(vict)) ||
-						(MOB_FLAGGED(ch, MOB_AGGR_GOOD) && IS_GOOD(vict))) {
+				        (MOB_FLAGGED(ch, MOB_AGGR_EVIL) && IS_EVIL(vict)) ||
+				        (MOB_FLAGGED(ch, MOB_AGGR_NEUTRAL) && IS_NEUTRAL(vict)) ||
+				        (MOB_FLAGGED(ch, MOB_AGGR_GOOD) && IS_GOOD(vict))) {
 
 					/* Can a master successfully control the charmed monster? */
 					if(aggressive_mob_on_a_leash(ch, ch->master, vict)) {
@@ -134,7 +140,9 @@ void mobile_activity(void) {
 					hit(ch, vict, TYPE_UNDEFINED);
 					found = TRUE;
 				}
-				if(found){ break; }
+				if(found) {
+					break;
+				}
 			}
 		}// end if mob flagged aggro
 
@@ -143,14 +151,14 @@ void mobile_activity(void) {
 			std::cerr << "mobile_activity: mob memory\n";
 
 			found = FALSE;
-			for(auto & player_vict : mods::globals::get_room_list(IN_ROOM(ch))) {
+			for(auto& player_vict : mods::globals::get_room_list(IN_ROOM(ch))) {
 				auto vict = player_vict->cd();
 				if(IS_NPC(vict) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE)) {
 					continue;
 				}
 
-				if(ch->mob_specials.memory.end() != 
-						ch->mob_specials.memory.find(player_vict->uuid())){
+				if(ch->mob_specials.memory.end() !=
+				        ch->mob_specials.memory.find(player_vict->uuid())) {
 					/* Can a master successfully control the charmed monster? */
 					if(aggressive_mob_on_a_leash(ch, ch->master, vict)) {
 						continue;
@@ -208,11 +216,11 @@ void mobile_activity(void) {
 /* make ch remember victim */
 void remember(char_data *ch,char_data *victim) {
 	auto ov = ptr_opt(victim);
-	if(!ov.has_value()){
+	if(!ov.has_value()) {
 		return;
 	}
 	auto op = ptr_opt(ch);
-	if(!op.has_value()){
+	if(!op.has_value()) {
 		return;
 	}
 	auto p = op.value();
@@ -228,7 +236,7 @@ void remember(char_data *ch,char_data *victim) {
 /* make ch forget victim */
 void forget(char_data *ch,char_data *victim) {
 	auto ov = ptr_opt(victim);
-	if(!ov.has_value()){
+	if(!ov.has_value()) {
 		return;
 	}
 	ch->mob_specials.memory.erase(ov.value()->uuid());

@@ -6,6 +6,18 @@ namespace mods::mob_roam {
 	using roaming_data_t = std::vector<room_vnum>;
 	static std::map<mob_vnum,roaming_data_t> roaming_data;
 	static std::vector<std::shared_ptr<mods::mob_roam::roam_recorder>> roam_recorder_data;
+	bool can_roam_to(char_data* npc, room_rnum room_id) {
+		if(room_id >= world.size()) {
+			std::cerr << red_str("can_roam_to received invalid room_id...") << "\n";
+			return false;
+		}
+		const auto& vnum = world[room_id].number;
+		const auto& it = roaming_data.find(npc->nr);
+		if(it == roaming_data.end()) {
+			return false;
+		}
+		return std::find(it->second.begin(),it->second.end(),vnum) != it->second.end();
+	}
 	roam_recorder::roam_recorder(
 	    player_ptr_t builder,
 	    mob_vnum mob_virtual_number,

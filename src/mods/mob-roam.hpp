@@ -59,5 +59,6 @@ namespace mods::mob_roam {
 	bool handle_roam_recorder(player_ptr_t& player, const std::vector<std::string>& arguments);
 	const std::vector<std::string>& roam_recorder_help_screen();
 	void boot();
+	bool can_roam_to(char_data*, room_rnum);
 };
 #endif

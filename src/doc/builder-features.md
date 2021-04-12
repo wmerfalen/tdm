@@ -1,7 +1,7 @@
 # Inventory of features
 
 # next up
-	- [ ] implement `issue MR-2`
+	- [x] implement `issue MR-2`
 	- [ ] implement `issue MR-1`
 	- [ ] implement `issue Z-1`
 	- [ ] implement `issue Z-2`
@@ -66,7 +66,7 @@
 # mob roaming
 	- [ ] write unit tests [`issue MR-1`]
 		- [x] adapt `mbuild` to save mob roaming data
-		- [ ] alter mobs to honor mob roaming data [`issue MR-2`]
+		- [x] alter mobs to honor mob roaming data [`issue MR-2`]
 		- [x] verify saving to db works
 		- [x] verify loading from db works
 
