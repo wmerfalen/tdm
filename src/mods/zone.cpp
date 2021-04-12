@@ -327,43 +327,15 @@ namespace mods::zone {
 	//   *  'E': Obj to char equip *
 	//   *  'D': Set state of door *
 	//  */
-	void replenish_zones() {
+	void zone_update() {
 		static int timer = 0;
 		static constexpr int ZO_DEAD = 999;
 		bool minute_passed = false;
-		if(((++timer * PULSE_ZONE) / PASSES_PER_SEC) >= 60) {
-			z_debug("a minute has passed");
-			timer = 0;
-			minute_passed = true;
-		}
-		for(unsigned i = 0; i < zone_table.size(); i++) {
-			z_debug("looping through current zone:'" << zone_table[i].name << "'");
-			if(minute_passed) {
-				z_debug(green_str("a minute passed. updating zones..."));
-				/* one minute has passed */
-				if(zone_table[i].age < zone_table[i].lifespan && zone_table[i].reset_mode) {
-					zone_table[i].age += 1;
-				}
 
-				if(zone_table[i].age >= zone_table[i].lifespan && zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode) {
-					mods::zone::reset_zone(i);
-					zone_table[i].age = ZO_DEAD;
-				}
-			}
-
-			for(const auto& command : zone_table[i].cmd) {
-				std::cerr << "zone command: " << command.command << "'\n";
-				std::cerr << "zone if_flag: " << command.if_flag << "'\n";
-				std::cerr << "zone arg1: " << command.arg1 << "'\n";
-				std::cerr << "zone arg2: " << command.arg2 << "'\n";
-				std::cerr << "zone arg3: " << command.arg3 << "'\n";
-				std::cerr << "zone line: " << command.line << "'\n";
-			}
-		}
-	}
-
-	void run_zone_replenish() {
+		z_debug("zone update. running replenish");
 		rr_debug("run replenish!");
+
+
 		for(auto command : replenish) {
 			rr_debug("running command:" << command.type);
 			if(command.type.compare("weapon-locker") == 0) {
@@ -380,11 +352,29 @@ namespace mods::zone {
 				mods::integral_objects::rotate_camera_feed(command.room);
 			}
 		}
+		if(((++timer * PULSE_ZONE) / PASSES_PER_SEC) >= 60) {
+			z_debug(green_str("a minute has passed"));
+			timer = 0;
+			minute_passed = true;
+		}
+		for(unsigned i = 0; i < zone_table.size(); i++) {
+			z_debug("looping through current zone:'" << zone_table[i].name << "'");
+			if(minute_passed) {
+				z_debug(green_str("a minute passed. updating zones..."));
+				/* one minute has passed */
+				if(zone_table[i].age < zone_table[i].lifespan && zone_table[i].reset_mode) {
+					z_debug(green_str("one minute has passed. incrementing age: '") << zone_table[i].age << "'");
+					zone_table[i].age += 1;
+				}
+
+				if(zone_table[i].age >= zone_table[i].lifespan && zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode) {
+					mods::zone::reset_zone(i);
+					zone_table[i].age = ZO_DEAD;
+				}
+			}
+		}
 	}
-	void zone_update() {
-		z_debug("zone update. running replenish");
-		run_zone_replenish();
-	}
+
 	void new_room(room_data* room_ptr) {
 		if(mods::db::vector_exists("weapon-locker",std::to_string(room_ptr->number))) {
 			z_debug("Found weapon locker in room_ptr->number: " << room_ptr->number);

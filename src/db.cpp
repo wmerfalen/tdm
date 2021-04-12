@@ -1979,79 +1979,10 @@ obj_ptr_t read_object_ptr(obj_vnum nr, int type) { /* and obj_rnum */
 
 
 
-#define ZO_DEAD  999
-
 /* update zone ages, queue for reset if necessary, and dequeue when possible */
 void zone_update() {
-	unsigned i;
-	reset_q_element *update_u, *temp;
-	static int timer = 0;
-
-	/* jelson 10/22/92 */
-	if(((++timer * PULSE_ZONE) / PASSES_PER_SEC) >= 60) {
-		/* one minute has passed */
-		/*
-		 * NOT accurate unless PULSE_ZONE is a multiple of PASSES_PER_SEC or a
-		 * factor of 60
-		 */
-
-		timer = 0;
-
-		/* since one minute has passed, increment zone ages */
-		for(i = 0; i < zone_table.size(); i++) {
-			if(zone_table[i].age < zone_table[i].lifespan &&
-			        zone_table[i].reset_mode) {
-				(zone_table[i].age)++;
-			}
-
-			if(zone_table[i].age >= zone_table[i].lifespan &&
-			        zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode) {
-				/* enqueue zone */
-
-				CREATE(update_u, reset_q_element, 1);
-
-				update_u->zone_to_reset = i;
-				update_u->next = 0;
-
-				if(!reset_q.head) {
-					reset_q.head = reset_q.tail = update_u;
-				} else {
-					reset_q.tail->next = update_u;
-					reset_q.tail = update_u;
-				}
-
-				zone_table[i].age = ZO_DEAD;
-			}
-		}
-	}	/* end - one minute has passed */
-
-
-	/* dequeue zones (if possible) and reset */
-	/* this code is executed every 10 seconds (i.e. PULSE_ZONE) */
-	for(update_u = reset_q.head; update_u; update_u = update_u->next) {
-		if(zone_table[update_u->zone_to_reset].reset_mode == 2 ||
-		        is_empty(update_u->zone_to_reset)) {
-			reset_zone(update_u->zone_to_reset);
-			mudlog(CMP, LVL_GOD, FALSE, "Auto zone reset: %s", zone_table[update_u->zone_to_reset].name.c_str());
-
-			/* dequeue */
-			if(update_u == reset_q.head) {
-				reset_q.head = reset_q.head->next;
-			} else {
-				for(temp = reset_q.head; temp->next != update_u;
-				        temp = temp->next);
-
-				if(!update_u->next) {
-					reset_q.tail = temp;
-				}
-
-				temp->next = update_u->next;
-			}
-
-			free(update_u);
-			break;
-		}
-	}
+	std::cerr << red_str("DEPRECATED: legacy zone_update(). Returning...") << "\n";
+	return;
 }
 
 void reset_zone(zone_rnum zone) {

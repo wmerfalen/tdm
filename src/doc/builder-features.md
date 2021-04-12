@@ -1,5 +1,33 @@
 # Inventory of features
 
+# next up
+	- [ ] implement `issue MR-2`
+	- [ ] implement `issue MR-1`
+	- [ ] implement `issue Z-1`
+	- [ ] implement `issue Z-2`
+	- [ ] implement `issue Z-3`
+	- [ ] implement `issue Z-4`
+	- [ ] implement `issue Z-5`
+	- [ ] implement `issue Z-6`
+	- [ ] implement `issue Z-7`
+
+# 2021-04-11 zone command fixes and mob placements
+	- fixed zone data in the following ways:
+		- `room_data.zone` now holds the *real* `zone_rnum`
+		- `zone_data.name` is no longer a char*, opting for std::string
+		- `update_zone()` and other zone helpers now exist in `mods::zone` namespace
+		- 'zbuild mob this 501 128 10 0' is now possible (using "this")
+	- Issues:
+		- we need to figure out a better way to keep track of mob counts in zone commands
+			- currently, the `reset_com` for the zone command has a `count` variable
+			- [ ] store mob uuid's as a vector in the zone command. if mobs died, update zone with new spawns [`issue Z-1`]
+		- [ ] implement 'O' command (source file: `mods/zone.cpp::reset_zone()`) [`issue Z-2`]
+		- [ ] implement 'P' command (source file: `mods/zone.cpp::reset_zone()`) [`issue Z-3`]
+		- [ ] implement 'G' command (source file: `mods/zone.cpp::reset_zone()`) [`issue Z-4`]
+		- [ ] implement 'E' command (source file: `mods/zone.cpp::reset_zone()`) [`issue Z-5`]
+		- [ ] implement 'R' command (source file: `mods/zone.cpp::reset_zone()`) [`issue Z-6`]
+		- [ ] implement 'D' command (source file: `mods/zone.cpp::reset_zone()`) [`issue Z-7`]
+			
 # 2021-04-07 nickname helper commands
 	- the following nickname commands are useful for fast traveling
 	- overview: these are NOT crud operations! For that, use `rbuild`
@@ -36,11 +64,11 @@
 		- source file: `mods/util.cpp`
 
 # mob roaming
-	- [ ] write unit tests
+	- [ ] write unit tests [`issue MR-1`]
 		- [x] adapt `mbuild` to save mob roaming data
-		- [ ] alter mobs to honor mob roaming data
+		- [ ] alter mobs to honor mob roaming data [`issue MR-2`]
 		- [x] verify saving to db works
-		- [ ] verify loading from db works
+		- [x] verify loading from db works
 
 # needs testing
 	- hqbuild
