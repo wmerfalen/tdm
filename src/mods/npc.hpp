@@ -6,7 +6,7 @@
 #include "player.hpp"
 
 namespace mods {
-	struct npc : public player{
+	struct npc : public player {
 			/* constructors and destructors */
 			npc() = delete;
 			npc(const mob_rnum&);

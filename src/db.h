@@ -168,6 +168,7 @@ struct reset_com {
 	int	arg3;		/*                                      */
 	int line;		/* line number this command appears on  */
 	int32_t count;
+	std::vector<uuid_t> object_data;
 
 	/*
 	*  Commands:              *

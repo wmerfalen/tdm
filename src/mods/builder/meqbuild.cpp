@@ -62,6 +62,17 @@ namespace mods::builder::meqbuild {
 			set_base_command("meqbuild");
 			clear();
 			load_all();
+			get_signatures()["map-assign"] =
+			    "{grn}meqbuild{/grn} {red}map-assign <mob-virtual-number> <meq-profile-vnum>{/red}\r\n"
+			    "  |--> assigns the specific mob to have the equipment profile of 'meq_vnum'\r\n";
+			get_signatures()["map-delete"] =
+			    "{grn}meqbuild{/grn} {red}map-delete <mob-virtual-number>...[mob-virtual-number-N]{/red}\r\n"
+			    "  |--> deletes the map-assign'd mob to meq vnum mapping \r\n"
+			    "  |--> A mob without a meq vnum will not spawn with equipment\r\n";
+			get_signatures()["map-list"] =
+			    "{grn}meqbuild{/grn} {red}map-list{/red}\r\n"
+			    "  |--> lists the specific mob to equipment profiles\r\n";
+
 		}
 
 		/** ======== */
@@ -190,46 +201,6 @@ namespace mods::builder::meqbuild {
 
 	ACMD(do_meqbuild) {
 		mods::builder::initialize_builder(player);
-#if 0
-		if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
-			player->pager_start();
-			*player << "usage: \r\n" <<
-			        "  {gld}|:: -:[positions]:-{/gld}\r\n" <<
-			        wear_flag_list() <<
-
-			        /** remove */
-			        " {grn}meqbuild{/grn} {red}remove <virtual_number> <position>{/red}\r\n" <<
-			        "  |--> removes the slot at 'position' on profile 'virtual_number'\r\n" <<
-			        "  {grn}|____[example]{/grn}\r\n" <<
-			        "  |:: {wht}meqbuild{/wht} {grn}remove 3 wield{/grn}\r\n" <<
-			        "  |--> clears the wield slot for profile 3\r\n" <<
-
-			        /** map-assign */
-			        " {grn}meqbuild{/grn} {red}map-assign <mob_vnum> <meq_vnum>{/red}\r\n" <<
-			        "  |--> assigns the specific mob to have the equipment profile of 'meq_vnum'\r\n" <<
-			        "  {grn}|____[example]{/grn}\r\n" <<
-			        "  |:: {wht}meqbuild{/wht} {grn}map-assign 402 3{/grn}\r\n" <<
-
-			        /** map-list */
-			        " {grn}meqbuild{/grn} {red}map-list{/red}\r\n" <<
-			        "  |--> lists the specific mob to equipment profiles\r\n" <<
-
-			        /** map-delete */
-			        " {grn}meqbuild{/grn} {red}map-delete <mob_vnum>...<mob-vnumN>{/red}\r\n" <<
-			        "  |--> deletes the map-assign'd mob to meq vnum mapping \r\n" <<
-			        "  |--> A mob without a meq vnum will not spawn with equipment\r\n" <<
-			        "  {grn}|____[example]{/grn}\r\n" <<
-			        "  |:: {wht}meqbuild{/wht} {grn}map-delete 402 401 403{/grn}\r\n" <<
-			        "  |--> deletes all map-assign'd mob to meq vnum mappings specified by the list of mob vnums passed in\r\n" <<
-
-
-			        "\r\n";
-			player->pager_end();
-			player->page(0);
-			return;
-		}
-#endif
-
 		if(meqbuilder(player).handle_input(argument)) {
 			return;
 		}

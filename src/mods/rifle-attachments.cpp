@@ -72,7 +72,6 @@ namespace mods {
 		}
 		mods::rifle_attachments::uuid_schema_list()[base_object->uuid] = line;
 		base_object->action_description = this->examine();
-		std::cerr << green_str("examine action desc: '") << base_object->action_description.c_str() << "'\n";
 	}
 	std::string rifle_attachments_t::extract_base_yaml_file(const encoding_t& line) {
 		auto map = m_parser.extract_line_items(line,mods::util::slot_names_for_type("rifle"));

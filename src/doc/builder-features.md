@@ -1,15 +1,79 @@
 # Inventory of features
 
+# potential issues moving forward [ as of 2021-04-12 ]
+	- `mods::npc::equip(obj_ptr_t,int)` is hopelessly broken
+		- the only way to persist equipment is to call `npc->player_ptr()->equip(..)`
+
+# 2021-04-12 new features
+	- mobs now honor mob roaming data
+	- reading of mob zone commands now uses the same functions as `mbuild instantiate`
+	- mobs instantiated with zone commands now get their equipment loaded from their `mob_equipment` profile
+
 # next up
-	- [x] implement `issue MR-2`
-	- [ ] implement `issue MR-1`
-	- [ ] implement `issue Z-1`
-	- [ ] implement `issue Z-2`
-	- [ ] implement `issue Z-3`
-	- [ ] implement `issue Z-4`
-	- [ ] implement `issue Z-5`
-	- [ ] implement `issue Z-6`
-	- [ ] implement `issue Z-7`
+	- hqbuild
+		- [ ] phase 1
+			- [ ] create a car port room that leads to the east near the cobalt fob east exit
+			- [ ] if anyone at the shipyard (way east of the cobalt fob) gets attacked, dispatch a response SUV
+				- [ ] response SUV drives along highway and hits anyone in the way depending on dice roll 
+				- [ ] use values system to roll dice for car hit
+				- [ ] use the damage system to deal blunt damage
+					- [ ] if player gets hit, force their position as laying down
+					- [ ] if player gets hit while laying down, they die no matter what
+	- [ ] rifle attachments create buffs/nerfs
+		- [ ] sights
+		- [ ] magazines
+		- [ ] underbarrel attachments
+		- [ ] muzzle
+		- [ ] grip
+		- [ ] barrel
+		- [ ] stock
+		- [ ] strap
+	- We could always use content:
+		- [ ] Functional rooms
+			- [ ] Weapon vendors
+				- [ ] Shotguns
+				- [ ] Assault Rifles
+				- [ ] SMG's
+				- [ ] Sniper Rifles
+				- [ ] Pistols
+				- [ ] Machine Pistols
+			- [ ] Ammunition Vendors
+				- [ ] High Velocity
+				- [ ] Incendiary
+				- [ ] Cryogenic Rounds
+				- [ ] Anti-Matter
+			- [ ] Attachment vendors
+				- [ ] Sights
+				- [ ] Muzzles
+				- [ ] Underbarrel
+				- [ ] Magazines
+	- [ ] create cobalt fob room to buy armor
+	- [ ] create cobalt fob room to buy weapons
+	- [ ] create cobalt fob room to buy explosives
+# low priority next up
+	- [ ] allow users to change weapon attachments
+	- contracts (quests)
+		- [ ] restrict contracts by player level
+		- [ ] optional failure penalties
+			- [ ] reduce xp
+			- [ ] reduce money
+		- # STRETCH GOALS (optional non-critical systems) 
+			- [ ] mob speech trees [ LARGE TASK ]
+				- [ ] when on specific contract step a mob's dialogue changes
+	- verify
+		- [ ] contract data saved through conbuild works after mud reboot
+	- [ ] radio
+		- [ ] test radio communication to/from hq
+	- lowly security guard extended type
+		- [ ] test `smart_mob` extended class type
+		- [ ] test report hostile activity radio support
+	- Mob reinforcements
+	- [x] create car object type
+		- [x] SUV types
+			- [ ] Blacked out private contractor security force
+			- [ ] Police SUV detainment vehicle
+			- [ ] SWAT team van (16 persons)
+
 
 # 2021-04-11 zone command fixes and mob placements
 	- fixed zone data in the following ways:
@@ -17,16 +81,7 @@
 		- `zone_data.name` is no longer a char*, opting for std::string
 		- `update_zone()` and other zone helpers now exist in `mods::zone` namespace
 		- 'zbuild mob this 501 128 10 0' is now possible (using "this")
-	- Issues:
-		- we need to figure out a better way to keep track of mob counts in zone commands
-			- currently, the `reset_com` for the zone command has a `count` variable
-			- [ ] store mob uuid's as a vector in the zone command. if mobs died, update zone with new spawns [`issue Z-1`]
-		- [ ] implement 'O' command (source file: `mods/zone.cpp::reset_zone()`) [`issue Z-2`]
-		- [ ] implement 'P' command (source file: `mods/zone.cpp::reset_zone()`) [`issue Z-3`]
-		- [ ] implement 'G' command (source file: `mods/zone.cpp::reset_zone()`) [`issue Z-4`]
-		- [ ] implement 'E' command (source file: `mods/zone.cpp::reset_zone()`) [`issue Z-5`]
-		- [ ] implement 'R' command (source file: `mods/zone.cpp::reset_zone()`) [`issue Z-6`]
-		- [ ] implement 'D' command (source file: `mods/zone.cpp::reset_zone()`) [`issue Z-7`]
+		- `reset_com.object_data` holds uuid_t list of instantiated mobs
 			
 # 2021-04-07 nickname helper commands
 	- the following nickname commands are useful for fast traveling
@@ -64,22 +119,10 @@
 		- source file: `mods/util.cpp`
 
 # mob roaming
-	- [ ] write unit tests [`issue MR-1`]
-		- [x] adapt `mbuild` to save mob roaming data
-		- [x] alter mobs to honor mob roaming data [`issue MR-2`]
-		- [x] verify saving to db works
-		- [x] verify loading from db works
-
-# needs testing
-	- hqbuild
-		- test hq orm functionality
-		- test hqbuild ACMD
-	- radio
-		- test radio communication to/from hq
-	- lowly security guard extended type
-		- test behaviour trees
-		- test `smart_mob` extended class type
-		- test report hostile activity radio support
+	- [x] adapt `mbuild` to save mob roaming data
+	- [x] alter mobs to honor mob roaming data [`issue MR-2`]
+	- [x] verify saving to db works
+	- [x] verify loading from db works
 
 # needed builder features
 	- [x] bookmark a room
@@ -113,18 +156,6 @@
 				- [x] support syntax:
 					- [x] `#yaml|type/path.yml`
 					- [x] `#deep|type/description`
-		- [ ] retrofit duktape js functions to new player contract instance code
-		- [ ] restrict contracts by player level
-		- [ ] must complete one contract to unlock a separate contract
-		- [ ] optional failure penalties
-			- [ ] reduce xp
-			- [ ] reduce money
-		- # STRETCH GOALS (optional non-critical systems) 
-			- [ ] rewards per step completed
-			- [ ] mob speech trees
-				- [ ] when on specific contract step a mob's dialogue changes
-			- [ ] support catchy reward syntax:
-				- [ ] `#catchy|type|name`
 		- # contract reward syntax [ NICE TO HAVE ]
 			- returns a vector of `obj_ptr_t`'s of parsed objects
 			- example:
@@ -132,11 +163,6 @@
 				- `conbuild set-step-data 1 218 s_reward_2 #catchy|rifle|the-decimator`
 				- `conbuild set-step-data 1 218 s_reward_3 #deep|rifle/g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}`
 			
-
-
-# before moving to next features
-	- VERIFY contract data saved through conbuild works after mud reboot
-
 # conbuild (quest builder)
 	- cmd: `conbuild help`
 	- source: `mods/builder/conbuild.hpp`
@@ -188,28 +214,6 @@
 	- using the values system to assign extended mobs their eq is now DEPRECATED
 	- use the meqbuild command
 
-# mob reinforcements (or response team)
-	- [x] create car object type
-		- [x] SUV types
-			- [ ] Blacked out private contractor security force
-			- [ ] Police SUV detainment vehicle
-			- [ ] SWAT team van (16 persons)
-	- [ ] create private contractor security force blackbox building
-		- [ ] blackbox meaning you can only see the outsides of the building
-			- [ ] gates open and cars exit to head towards help needed
-	- [ ] create "terrible neighborhood" index
-		- [ ] very dangerous areas take longer to respond time
-		- [ ] less dangerous areas have a faster response time
-		- [ ] very rich areas have extremely fast response time
-	- [x] security force consists of N cars and N response team members
-		- [ ] when all response team members are dispatched
-			- [ ] no available response team to get to certain areas
-	- [ ] distance to call for help dictates response time
-
-# grunt work
-	- 2021-01-30
-		- [ ] several mob and room definitions in far.js need to be converted to mob object format
-
 # recent enhancements
 	- new `OUTSIDE_TRASHY_PARKING_LOT` sector type
 		- source: mods/rooms.(c|h)pp
@@ -249,24 +253,6 @@
 				- [ ] Create macro patterns
 					- [ ] i.e.: L-shaped macro pattern
 				- [ ] Micro generation composes all room shapes within the confies of the macro pattern
-			- [ ] Functional rooms
-				- [ ] Weapon vendors
-					- [ ] Shotguns
-					- [ ] Assault Rifles
-					- [ ] SMG's
-					- [ ] Sniper Rifles
-					- [ ] Pistols
-					- [ ] Machine Pistols
-				- [ ] Ammunition Vendors
-					- [ ] High Velocity
-					- [ ] Incendiary
-					- [ ] Cryogenic Rounds
-					- [ ] Anti-Matter
-				- [ ] Attachment vendors
-					- [ ] Sights
-					- [ ] Muzzles
-					- [ ] Underbarrel
-					- [ ] Magazines
 			- [ ] Armor vendors
 			- [ ] Consumable vendors
 				- [ ] Steroids
@@ -424,12 +410,8 @@
 					- [ ] Stashes:
 						- [ ] Bin of Assault Rifles
 						- [ ] Bin of Shotguns
-	- [ ] use zone commands to populate zone with mobs
-	- [ ] create a safe zone where players can respawn
-	- [ ] create a room to buy armor
-	- [ ] create a room to buy weapons
-	- [ ] create a room to buy explosives
-	- [ ] allow users to change weapon attachments
+	- [x] use zone commands to populate zone with mobs
+	- [x] create a safe zone where players can respawn
 	- on each kill:
 		- [ ] award experience points
 		- [ ] use forge engine to award a randomized loot item

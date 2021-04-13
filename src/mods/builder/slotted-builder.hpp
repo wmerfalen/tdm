@@ -132,6 +132,10 @@ namespace mods::builder {
 				if(m_automatically_clear) {
 					clear_response();
 				}
+				if(argument.length() == 0) {
+					dispatch_help("help");
+					return true;
+				}
 				if(dispatch_help(argument)) {
 					return true;
 				}

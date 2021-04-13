@@ -5,6 +5,7 @@
 #include "super-users.hpp"
 #include "interpreter.hpp"
 #include "screen-searcher.hpp"
+#include "npc.hpp"
 
 #define __MENTOC_MODS_ZONE_DEBUG__
 #ifdef __MENTOC_MODS_ZONE_DEBUG__
@@ -87,6 +88,27 @@ namespace mods::zone {
 		       '0', zone_table[zone].number, 0);
 	}
 
+	bool zone_command_upkeep(reset_com& command) {
+		switch(command.command) {
+			case 'M': {
+					std::vector<uuid_t> alive;
+					for(const auto& mob_uuid : command.object_data) {
+						auto n = npc_by_uuid(mob_uuid);
+						if(n) {
+							alive.emplace_back(mob_uuid);
+						}
+					}
+					command.object_data = std::move(alive);
+					command.count = command.object_data.size();
+					return command.count < command.arg3;
+				}
+				break;
+			default:
+				break;
+		};
+		return false;
+	}
+
 #define ZONE_ERROR(message) \
 { log_zone_error(zone, cmd_no, message); last_cmd = 0; }
 
@@ -100,8 +122,6 @@ namespace mods::zone {
 			return;
 		}
 		int cmd_no = 0, last_cmd = 0;
-		char_data *mob = NULL;
-		//struct obj_data *obj, *obj_to;
 
 		z_debug("looping..");
 		for(auto& ZCMD : zone_table[zone].cmd) {
@@ -123,162 +143,29 @@ namespace mods::zone {
 					last_cmd = 0;
 					break;
 
-				case 'M':			/* read a mobile */
-					/** this differs from legacy...
-					 * arg1 = mob_vnum
-					 * arg2 = room_vnum
-					 * arg3 = max
-					 */
-					last_cmd = 0;
-					z_debug(green_str("read mobile: ") << ZCMD.arg1 << ", arg2:" << ZCMD.arg2 << ", arg3:" << ZCMD.arg3);
-					if(ZCMD.count < ZCMD.arg3) {
-						mob = read_mobile(ZCMD.arg1,VIRTUAL);
-						if(mob) {
+				case 'M': {		/* read a mobile */
+						/** this differs from legacy...
+						 * arg1 = mob_vnum
+						 * arg2 = room_vnum
+						 * arg3 = max
+						 */
+						last_cmd = 0;
+						z_debug(green_str("read mobile: ") << ZCMD.arg1 << ", arg2:" << ZCMD.arg2 << ", arg3:" << ZCMD.arg3);
+						if(zone_command_upkeep(ZCMD)) {
+							auto obj = mods::globals::read_mobile_ptr(ZCMD.arg1,VIRTUAL);
+							if(!obj) {
+								std::cerr << red_str("Warning: zone update failed to read this mob:") << ZCMD.arg1 << "\n";
+								break;
+							}
 							z_debug("cool, we found a mob. throwing him in a room now...");
-							char_to_room(mob, real_room(ZCMD.arg2));
+							mods::globals::rooms::char_to_room(real_room(ZCMD.arg2),obj->cd());
+							ZCMD.object_data.emplace_back(obj->uuid());
 							ZCMD.count++;
 							last_cmd = 1;
-						}
-					}
-
-					break;
-
-#if 0
-				case 'O':			/* read an object */
-					if(obj_index[ZCMD.arg1].number < ZCMD.arg2) {
-						if(ZCMD.arg3 != static_cast<int>(NOWHERE)) {
-							obj = read_object(ZCMD.arg1, REAL);
-							obj_to_room(obj, ZCMD.arg3);
-							last_cmd = 1;
-						} else {
-							obj = read_object(ZCMD.arg1, REAL);
-							IN_ROOM(obj) = NOWHERE;
-							last_cmd = 1;
-						}
-					} else {
-						last_cmd = 0;
-					}
-
-					break;
-
-				case 'P':			/* object to object */
-					if(obj_index[ZCMD.arg1].number < ZCMD.arg2) {
-						obj = read_object(ZCMD.arg1, REAL);
-
-						if(!(obj_to = get_obj_num(ZCMD.arg3))) {
-							ZONE_ERROR("target obj not found, command disabled");
-							ZCMD.command = '*';
 							break;
 						}
-
-						obj_to_obj(TO_OBJ_PTR(obj), TO_OBJ_PTR(obj_to));
-						last_cmd = 1;
-					} else {
-						last_cmd = 0;
 					}
-
 					break;
-
-				case 'G':			/* obj_to_char */
-					if(!mob) {
-						ZONE_ERROR("attempt to give obj to non-existant mob, command disabled");
-						ZCMD.command = '*';
-						break;
-					}
-
-					if(obj_index[ZCMD.arg1].number < ZCMD.arg2) {
-						obj = read_object(ZCMD.arg1, REAL);
-						obj_to_char(obj, mob);
-						last_cmd = 1;
-					} else {
-						last_cmd = 0;
-					}
-
-					break;
-
-				case 'E':			/* object to equipment list */
-					if(!mob) {
-						ZONE_ERROR("trying to equip non-existant mob, command disabled");
-						ZCMD.command = '*';
-						break;
-					}
-
-					if(obj_index[ZCMD.arg1].number < ZCMD.arg2) {
-						if(ZCMD.arg3 < 0 || ZCMD.arg3 >= NUM_WEARS) {
-							ZONE_ERROR("invalid equipment pos number");
-						} else {
-							obj = read_object(ZCMD.arg1, REAL);
-							equip_char(ptr(mob), optr(obj), ZCMD.arg3);
-							last_cmd = 1;
-						}
-					} else {
-						last_cmd = 0;
-					}
-
-					break;
-
-				case 'R': /* rem obj from room */
-					if((obj = get_obj_in_list_num(ZCMD.arg2, world[ZCMD.arg1].contents)) != NULL) {
-						extract_obj(obj);
-					}
-
-					last_cmd = 1;
-					break;
-
-
-				case 'D':			/* set state of door */
-					if(ZCMD.arg2 < 0 || ZCMD.arg2 >= NUM_OF_DIRS ||
-					        (world[ZCMD.arg1].dir_option[ZCMD.arg2] == NULL)) {
-						ZONE_ERROR("door does not exist, command disabled");
-						ZCMD.command = '*';
-					} else
-						switch(ZCMD.arg3) {
-							case 0:
-								REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-								           EX_LOCKED);
-								REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-								           EX_CLOSED);
-								REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-								           EX_BREACHED);
-								break;
-
-							case 1:
-								SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-								        EX_CLOSED);
-								REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-								           EX_LOCKED);
-								REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-								           EX_BREACHED);
-								break;
-
-							case 2:
-								SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-								        EX_LOCKED);
-								SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-								        EX_CLOSED);
-								REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-								           EX_BREACHED);
-								REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-								           EX_REINFORCED);
-								break;
-
-							/*!mods*/
-							case 3:
-								SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-								        EX_REINFORCED);
-								SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-								        EX_LOCKED);
-								SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-								        EX_CLOSED);
-								REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-								           EX_BREACHED);
-								break;
-						}
-
-					last_cmd = 1;
-					break;
-#endif
-
 				default:
 					ZONE_ERROR("unknown cmd in reset table; cmd disabled");
 					ZCMD.command = '*';

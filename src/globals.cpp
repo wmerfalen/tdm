@@ -27,6 +27,9 @@
 #include "mods/replenish.hpp"
 #include "config.hpp"
 
+namespace mods::mob_equipment {
+	extern void decorate(const uuid_t& mob_uuid);
+};
 
 extern int errno;
 #define MODS_BREACH_DISORIENT 50
@@ -597,6 +600,7 @@ namespace mods {
 			mob_ptrmap[mob->cd()] = mob->player_ptr();
 			player_map[mob->uuid()] = mob->player_ptr();
 			mods::mobs::decorate(mob->uuid());
+			mods::mob_equipment::decorate(mob->uuid());
 			return mob;
 		}
 		uuid_t obj_uuid() {

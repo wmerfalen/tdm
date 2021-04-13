@@ -39,6 +39,7 @@ INIT(mods::super_users);
 INIT(mods::builder::bookmarks);
 INIT(mods::builder);
 INIT(mods::zone);
+INIT(mods::mob_equipment);
 #undef INIT
 
 
@@ -79,6 +80,7 @@ namespace mods::init {
 		mods::builder::bookmarks::init();
 		mods::builder::init();
 		mods::zone::init();
+		mods::mob_equipment::init();
 	}
 };
 #endif

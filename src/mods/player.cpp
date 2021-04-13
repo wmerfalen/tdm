@@ -32,6 +32,7 @@
  * output.
  */
 
+#define __MENTOC_SHOW_EQUIP_DEBUG_OUTPUT__
 namespace mods::stat_bonuses {
 	extern void player_equip(uuid_t player_uuid,uuid_t object_uuid);
 	extern void player_unequip(uuid_t player_uuid,uuid_t object_uuid);
@@ -276,6 +277,7 @@ namespace mods {
 		return m_equipment[pos];
 	}
 	void player::equip(obj_ptr_t in_object,int pos) {
+		std::cerr << green_str("mods::player::equip(obj_ptr_t,pos):") << in_object->name.c_str() << "', pos:" << pos << "\n";
 		if(!m_basic_protection) {
 			m_basic_protection = std::make_shared<mods::armor::basic_protection>(uuid());
 		}
@@ -1455,8 +1457,15 @@ namespace mods {
 		MRC("char_data*",this->cd());
 		MR("IS_NPC",(bool)IS_NPC(this->cd()));
 		send_to_room(room(), "{yel}[report-start]{/yel}\r\n");
-		for(auto& m : msg) {
-			send_to_room(room(), "Report: %s\r\n", m.c_str());
+		for(const auto& m : msg) {
+			send_to_room(room(), CAT("Report: '",m,"'\r\n").c_str());
+		}
+		send_to_room(room(), CAT(name(),"'s equipment:\r\n").c_str());
+		for(unsigned i =0; i < NUM_WEARS; i++) {
+			if(!m_equipment[i]) {
+				continue;
+			}
+			send_to_room(room(), CAT("Equipment[",i,",]:'",m_equipment[i]->name.c_str(),"'\r\n").c_str());
 		}
 		if(IS_NPC(this->cd())) {
 			this->cd()->mob_specials.report(this->room());
