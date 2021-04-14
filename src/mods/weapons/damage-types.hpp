@@ -33,8 +33,8 @@ namespace mods::weapons::damage_types {
 	    uint16_t distance,
 	    uint8_t direction
 	);
-	void decrease_spray_shot_ammo(obj_ptr_t& weapon);
-	void decrease_single_shot_ammo(obj_ptr_t& weapon);
+	void decrease_spray_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon);
+	void decrease_single_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon);
 	void deal_hp_damage(player_ptr_t& player, uint16_t damage);
 	int calculate_tracked_damage(player_ptr_t& player,int original_damage);
 	namespace legacy {

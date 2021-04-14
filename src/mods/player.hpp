@@ -949,6 +949,15 @@ namespace mods {
 			int16_t m_anti_matter_resistance_percent;
 			std::deque<std::shared_ptr<mods::contracts::player_contract_instance>> m_contracts;
 			std::deque<std::shared_ptr<mods::rifle_attachments_t>> m_rifles;
+			int16_t m_incendiary_damage_percent;
+			int16_t m_explosive_damage_percent;
+			int16_t m_shrapnel_damage_percent;
+			int16_t m_corrosive_damage_percent;
+			int16_t m_cryogenic_damage_percent;
+			int16_t m_radiation_damage_percent;
+			int16_t m_emp_damage_percent;
+			int16_t m_shock_damage_percent;
+			int16_t m_anti_matter_damage_percent;
 	};
 };
 

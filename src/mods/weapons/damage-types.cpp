@@ -8,6 +8,7 @@
 #include "../levels.hpp"
 #include "../interpreter-include.hpp"
 #include "elemental.hpp"
+#include "damage-calculator.hpp"
 
 #define dty_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #ifndef TO_ROOM
@@ -463,10 +464,11 @@ namespace mods::weapons::damage_types {
 
 
 		vpd scan;
-		mods::scan::los_scan_direction(player->cd(),weapon->rifle()->attributes->max_range,&scan,direction);
+		auto max_range = mods::weapons::damage_calculator::max_range(player,weapon);
+		mods::scan::los_scan_direction(player->cd(),max_range,&scan,direction);
 
 		player->set_fight_timestamp();
-		decrease_spray_shot_ammo(weapon);
+		decrease_spray_shot_ammo(player,weapon);
 		for(auto&& scanned_target : scan) {
 			dam = 0;
 			auto victim = ptr(scanned_target.ch);
@@ -558,14 +560,13 @@ namespace mods::weapons::damage_types {
 			return;
 		}
 		vpd scan;
-		/** TODO: add onto max range if has buff */
-		mods::scan::los_scan_direction(player->cd(),weapon->rifle()->attributes->max_range,&scan,direction,mods::scan::find_type_t::OBJECTS);
+		auto max_range = mods::weapons::damage_calculator::max_range(player,weapon);
+		mods::scan::los_scan_direction(player->cd(),max_range,&scan,direction,mods::scan::find_type_t::OBJECTS);
 		obj_ptr_t victim = nullptr;
 
 		for(auto&& scanned_target : scan) {
 			if(mods::util::fuzzy_match(target_object.data(),scanned_target.obj->name.c_str())) {
-				/** FIXME needs to be weapon's max range not global max range */
-				if(scanned_target.distance > weapon->rifle()->attributes->max_range) {
+				if(scanned_target.distance > max_range) {
 					player->sendln("That target is out of range!");
 					return;
 				}
@@ -591,14 +592,13 @@ namespace mods::weapons::damage_types {
 			return;
 		}
 		vpd scan;
-		/** TODO: add onto max range if has buff */
-		mods::scan::los_scan_direction(player->cd(),weapon->rifle()->attributes->max_range,&scan,direction);
+		auto max_range = mods::weapons::damage_calculator::max_range(player,weapon);
+		mods::scan::los_scan_direction(player->cd(),max_range,&scan,direction);
 		player_ptr_t victim = nullptr;
 
 		for(auto&& scanned_target : scan) {
 			if(mods::util::fuzzy_match(victim_name.data(),scanned_target.ch->player.name.c_str())) {
-				/** FIXME needs to be weapon's max range not global max range */
-				if(scanned_target.distance > weapon->rifle()->attributes->max_range) {
+				if(scanned_target.distance > max_range) {
 					player->sendln("That target is out of range!");
 					return;
 				}
@@ -614,86 +614,90 @@ namespace mods::weapons::damage_types {
 	 *
 	 * @param weapon
 	 */
-	void decrease_spray_shot_ammo(obj_ptr_t& weapon) {
+	void decrease_spray_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon) {
 		/** TODO: if weapon has a bullet printer mod, calculate ammo */
 		if(weapon->rifle_instance->ammo == 0) {
 			return;
 		}
+		int16_t deduct = 0;
 		switch((mw_rifle)weapon->rifle()->attributes->type) {
 			case mw_rifle::LIGHT_MACHINE_GUN:
-				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_LIGHT_MACHINE_GUN();
+				deduct = mods::values::SPRAY_SHOT_LIGHT_MACHINE_GUN();
 				break;
 
 			case mw_rifle::SUB_MACHINE_GUN:
-				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_SUB_MACHINE_GUN();
+				deduct = mods::values::SPRAY_SHOT_SUB_MACHINE_GUN();
 				break;
 
 			case mw_rifle::SHOTGUN:
-				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_SHOTGUN();
+				deduct = mods::values::SPRAY_SHOT_SHOTGUN();
 				break;
 
 			case mw_rifle::SNIPER:
-				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_SNIPER();
+				deduct = mods::values::SPRAY_SHOT_SNIPER();
 				break;
 
 			case mw_rifle::ASSAULT_RIFLE:
-				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_ASSAULT_RIFLE();
+				deduct = mods::values::SPRAY_SHOT_ASSAULT_RIFLE();
 				break;
 			case mw_rifle::HANDGUN:
 			case mw_rifle::PISTOL:
-				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_HANDGUN();
+				deduct = mods::values::SPRAY_SHOT_HANDGUN();
 				break;
 			case mw_rifle::MACHINE_PISTOL:
-				weapon->rifle_instance->ammo -= mods::values::SPRAY_SHOT_MACHINE_PISTOL();
+				deduct = mods::values::SPRAY_SHOT_MACHINE_PISTOL();
 				break;
 			default:
-				weapon->rifle_instance->ammo = 1;
+				deduct = 1;
 				log("SYSERR: warning, no rifle type given for decrease_spray_shot_ammo, default to 1");
 				break;
 		}
+		weapon->rifle_instance->ammo -= mods::weapons::damage_calculator::reduce_ammo(attacker,weapon,deduct);
 	}
 	/**
 	 * @brief subtracts 1 from weapon ammo
 	 *
 	 * @param weapon
 	 */
-	void decrease_single_shot_ammo(obj_ptr_t& weapon) {
+	void decrease_single_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon) {
 		/** TODO: if weapon has a bullet printer mod, calculate ammo */
 		if(weapon->rifle_instance->ammo == 0) {
 			return;
 		}
+		int16_t deduct = 0;
 		switch((mw_rifle)weapon->rifle()->attributes->type) {
 			case mw_rifle::LIGHT_MACHINE_GUN:
-				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_LIGHT_MACHINE_GUN();
+				deduct = mods::values::SINGLE_SHOT_LIGHT_MACHINE_GUN();
 				break;
 
 			case mw_rifle::SUB_MACHINE_GUN:
-				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_SUB_MACHINE_GUN();
+				deduct = mods::values::SINGLE_SHOT_SUB_MACHINE_GUN();
 				break;
 
 			case mw_rifle::SHOTGUN:
-				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_SHOTGUN();
+				deduct = mods::values::SINGLE_SHOT_SHOTGUN();
 				break;
 
 			case mw_rifle::SNIPER:
-				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_SNIPER();
+				deduct = mods::values::SINGLE_SHOT_SNIPER();
 				break;
 
 			case mw_rifle::ASSAULT_RIFLE:
-				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_ASSAULT_RIFLE();
+				deduct = mods::values::SINGLE_SHOT_ASSAULT_RIFLE();
 				break;
 			case mw_rifle::HANDGUN:
 			case mw_rifle::PISTOL:
-				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_HANDGUN();
+				deduct = mods::values::SINGLE_SHOT_HANDGUN();
 				break;
 			case mw_rifle::MACHINE_PISTOL:
-				weapon->rifle_instance->ammo -= mods::values::SINGLE_SHOT_MACHINE_PISTOL();
+				deduct = mods::values::SINGLE_SHOT_MACHINE_PISTOL();
 				break;
 			default:
-				weapon->rifle_instance->ammo = 1;
+				deduct = 1;
 				log("SYSERR: warning, no rifle type given for decrease_single_shot_ammo, default to 1");
 				break;
 		}
+		weapon->rifle_instance->ammo -= mods::weapons::damage_calculator::reduce_ammo(attacker,weapon,deduct);
 	}
 
 	/**
@@ -804,6 +808,11 @@ namespace mods::weapons::damage_types {
 		                 );
 		dam += dice_roll;
 		dam = calculate_tracked_damage(player,dam);
+		auto bonus_dam = mods::weapons::damage_calculator::calculate_bonus_damage(player,weapon,dam);
+		if(bonus_dam > dam) {
+			std::cerr << "[mods::weapons::damage_types::rifle_attack_object_with_feedback] bonus damage: " << bonus_dam << "\n";
+			dam = bonus_dam;
+		}
 
 #ifdef __MENTOC_SHOW_SNIPE_HIT_STATS__
 		player->send(
@@ -833,7 +842,7 @@ namespace mods::weapons::damage_types {
 		}
 
 		/** TODO: process damage on object here */
-		decrease_single_shot_ammo(weapon);
+		decrease_single_shot_ammo(player,weapon);
 		player->set_fight_timestamp();
 		return feedback;
 	}
@@ -956,6 +965,11 @@ namespace mods::weapons::damage_types {
 		);
 #endif
 		dam = calculate_tracked_damage(player,dam);
+		auto bonus_dam = mods::weapons::damage_calculator::calculate_bonus_damage(player,weapon,dam);
+		if(bonus_dam > dam) {
+			std::cerr << "[mods::weapons::damage_types::rifle_attack_object_with_feedback] bonus damage: " << bonus_dam << "\n";
+			dam = bonus_dam;
+		}
 
 		if(victim->position() > POS_DEAD) {
 			damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
@@ -1006,7 +1020,7 @@ namespace mods::weapons::damage_types {
 			stop_fighting(victim->cd());
 		}
 
-		decrease_single_shot_ammo(weapon);
+		decrease_single_shot_ammo(player,weapon);
 		player->set_fight_timestamp();
 		return feedback;
 	}
@@ -1028,7 +1042,6 @@ namespace mods::weapons::damage_types {
 			player->errorln("Invalid damage");
 			return;
 		}
-		auto obj = create_object(ITEM_RIFLE,"g36c.yml");
 		player->incendiary_resistance_percent() = resistance;
 		player->send("Your resistance: %f\r\n",player->incendiary_resistance_percent());
 		mods::weapons::elemental::incendiary_damage(player,damage);
@@ -1042,4 +1055,3 @@ namespace mods::weapons::damage_types {
 #ifdef DMG_DEBUG
 #undef DMG_DEBUG
 #endif
-

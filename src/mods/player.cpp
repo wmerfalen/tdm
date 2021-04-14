@@ -182,6 +182,24 @@ namespace mods {
 	}
 	player::player(mods::player* ptr) {
 		this->init();
+		m_incendiary_resistance_percent = ptr->m_incendiary_resistance_percent;
+		m_explosive_resistance_percent = ptr->m_explosive_resistance_percent;
+		m_shrapnel_resistance_percent = ptr->m_shrapnel_resistance_percent;
+		m_corrosive_resistance_percent = ptr->m_corrosive_resistance_percent;
+		m_cryogenic_resistance_percent = ptr->m_cryogenic_resistance_percent;
+		m_radiation_resistance_percent = ptr->m_radiation_resistance_percent;
+		m_emp_resistance_percent = ptr->m_emp_resistance_percent;
+		m_shock_resistance_percent = ptr->m_shock_resistance_percent;
+		m_anti_matter_resistance_percent = ptr->m_anti_matter_resistance_percent;
+		m_incendiary_damage_percent = ptr->m_incendiary_damage_percent;
+		m_explosive_damage_percent = ptr->m_explosive_damage_percent;
+		m_shrapnel_damage_percent = ptr->m_shrapnel_damage_percent;
+		m_corrosive_damage_percent = ptr->m_corrosive_damage_percent;
+		m_cryogenic_damage_percent = ptr->m_cryogenic_damage_percent;
+		m_radiation_damage_percent = ptr->m_radiation_damage_percent;
+		m_emp_damage_percent = ptr->m_emp_damage_percent;
+		m_shock_damage_percent = ptr->m_shock_damage_percent;
+		m_anti_matter_damage_percent = ptr->m_anti_matter_damage_percent;
 		m_char_data = ptr->m_char_data;
 		/**TODO: should we set the queue_behaviour flags on the descriptor data items on *this? */
 		std::fill(m_misc_pref.begin(),m_misc_pref.end(),false);
@@ -298,7 +316,7 @@ namespace mods {
 #ifdef __MENTOC_PLAYER_DEBUG__
 			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
 #endif
-			//perform_equip_calculations(pos,true);
+			perform_equip_calculations(pos,true);
 			this->m_sync_equipment();
 			mods::stat_bonuses::player_equip(uuid(),in_object->uuid);
 		}
@@ -328,7 +346,7 @@ namespace mods {
 #ifdef __MENTOC_SHOW_EQUIP_DEBUG_OUTPUT__
 			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
 #endif
-			//perform_equip_calculations(pos,false);
+			perform_equip_calculations(pos,false);
 			m_equipment[pos]->worn_by = nullptr;
 			m_equipment[pos]->worn_on = -1;
 			m_equipment[pos] = nullptr;
@@ -349,6 +367,80 @@ namespace mods {
 		}
 	}
 	void player::perform_equip_calculations(int pos,bool equip) {
+		/**
+		 * TODO: honor basic armor protection
+		 * TODO: honor advanced armor protection
+		 * TODO: honor elite armor protection
+		 * TODO: if item is a deep object, calculate buffs/nerfs
+		 * TODO: if item has buffs to specific skills (i.e.: strength or intelligence) store them
+		 */
+		const auto& item = m_equipment[pos];
+		/** TODO melee */
+		if(item->has_rifle()) {
+			real_abils().str += (equip ? 1 : -1) * item->rifle()->attributes->stat_strength;
+			real_abils().intel += (equip ? 1 : -1) * item->rifle()->attributes->stat_intelligence;
+			real_abils().wis +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_wisdom;
+			real_abils().dex += (equip ? 1 : -1) * item->rifle()->attributes->stat_dexterity;
+			real_abils().con += (equip ? 1 : -1) * item->rifle()->attributes->stat_constitution;
+			real_abils().electronics +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_electronics;
+			real_abils().armor += (equip ? 1 : -1) * item->rifle()->attributes->stat_armor;
+			real_abils().marksmanship +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_marksmanship;
+			real_abils().sniping +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_sniping;
+			real_abils().demolitions +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_demolitions;
+			real_abils().chemistry +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_chemistry;
+			real_abils().weapon_handling +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_weapon_handling;
+			real_abils().strategy +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_strategy;
+			real_abils().medical +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_medical;
+			auto rifle = rifle_attachment_by_uuid(item->uuid);
+			if(rifle) {
+				m_incendiary_damage_percent += (equip ? 1 : -1) * rifle->incendiary_damage_percent;
+				m_explosive_damage_percent += (equip ? 1 : -1) * rifle->explosive_damage_percent;
+				m_shrapnel_damage_percent += (equip ? 1 : -1) *  rifle->shrapnel_damage_percent;
+				m_corrosive_damage_percent += (equip ? 1 : -1) * rifle->corrosive_damage_percent;
+				m_cryogenic_damage_percent += (equip ? 1 : -1) * rifle->cryogenic_damage_percent;
+				m_radiation_damage_percent += (equip ? 1 : -1) * rifle->radiation_damage_percent;
+				m_emp_damage_percent += (equip ? 1 : -1) * rifle->emp_damage_percent;
+				m_shock_damage_percent += (equip ? 1 : -1) * rifle->shock_damage_percent;
+				m_anti_matter_damage_percent += (equip ? 1 : -1) * rifle->anti_matter_damage_percent;
+			}
+		}
+		if(item->has_armor()) {
+			real_abils().str += (equip ? 1 : -1) * item->armor()->attributes->stat_strength;
+			real_abils().intel += (equip ? 1 : -1) * item->armor()->attributes->stat_intelligence;
+			real_abils().wis +=(equip ? 1 : -1) *  item->armor()->attributes->stat_wisdom;
+			real_abils().dex += (equip ? 1 : -1) * item->armor()->attributes->stat_dexterity;
+			real_abils().con += (equip ? 1 : -1) * item->armor()->attributes->stat_constitution;
+			real_abils().electronics +=(equip ? 1 : -1) *  item->armor()->attributes->stat_electronics;
+			real_abils().armor += (equip ? 1 : -1) * item->armor()->attributes->stat_armor;
+			real_abils().marksmanship +=(equip ? 1 : -1) *  item->armor()->attributes->stat_marksmanship;
+			real_abils().sniping +=(equip ? 1 : -1) *  item->armor()->attributes->stat_sniping;
+			real_abils().demolitions +=(equip ? 1 : -1) *  item->armor()->attributes->stat_demolitions;
+			real_abils().chemistry +=(equip ? 1 : -1) *  item->armor()->attributes->stat_chemistry;
+			real_abils().weapon_handling +=(equip ? 1 : -1) *  item->armor()->attributes->stat_weapon_handling;
+			real_abils().strategy +=(equip ? 1 : -1) *  item->armor()->attributes->stat_strategy;
+			real_abils().medical +=(equip ? 1 : -1) *  item->armor()->attributes->stat_medical;
+			/** TODO honor thac0 */
+			/** TODO honor weight_in_lbs */
+			m_incendiary_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->incendiary_resistance_percent;
+			m_explosive_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->explosive_resistance_percent;
+			m_shrapnel_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->shrapnel_resistance_percent;
+			m_corrosive_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->corrosive_resistance_percent;
+			m_cryogenic_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->cryogenic_resistance_percent;
+			m_radiation_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->radiation_resistance_percent;
+			m_emp_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->emp_resistance_percent;
+			m_shock_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->shock_resistance_percent;
+			m_anti_matter_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->anti_matter_resistance_percent;
+			/**
+			 * TODO: honor these armor attributes
+			offensive_damage_amount
+			fire_resistance_percent,
+			balistic_resistance_percent,
+			speed_profile,
+			durability_profile,
+			hp,
+			classification,
+			*/
+		}
 		if(m_equipment[pos]->obj_flags.type_flag == ITEM_ARMOR) {
 			int factor = 1;
 			switch(pos) {
@@ -789,6 +881,24 @@ namespace mods {
 		it->character->has_desc = true;
 	}
 	void player::init() {
+		m_incendiary_resistance_percent = 0;
+		m_explosive_resistance_percent = 0;
+		m_shrapnel_resistance_percent = 0;
+		m_corrosive_resistance_percent = 0;
+		m_cryogenic_resistance_percent = 0;
+		m_radiation_resistance_percent = 0;
+		m_emp_resistance_percent = 0;
+		m_shock_resistance_percent = 0;
+		m_anti_matter_resistance_percent = 0;
+		m_incendiary_damage_percent = 0;
+		m_explosive_damage_percent = 0;
+		m_shrapnel_damage_percent = 0;
+		m_corrosive_damage_percent = 0;
+		m_cryogenic_damage_percent = 0;
+		m_radiation_damage_percent = 0;
+		m_emp_damage_percent = 0;
+		m_shock_damage_percent = 0;
+		m_anti_matter_damage_percent = 0;
 		m_db_id = 0;
 		m_ada = false;
 		m_hacking_row = 0;
@@ -1470,6 +1580,38 @@ namespace mods {
 		if(IS_NPC(this->cd())) {
 			this->cd()->mob_specials.report(this->room());
 		}
+		send_to_room(room(),CAT("m_incendiary_damage_percent :",m_incendiary_damage_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_explosive_damage_percent :",m_explosive_damage_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_shrapnel_damage_percent :",m_shrapnel_damage_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_corrosive_damage_percent :",m_corrosive_damage_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_cryogenic_damage_percent :",m_cryogenic_damage_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_radiation_damage_percent :",m_radiation_damage_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_emp_damage_percent :",m_emp_damage_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_shock_damage_percent :",m_shock_damage_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_anti_matter_damage_percent :",m_anti_matter_damage_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("real_abils().str :",real_abils().str,"\r\n").c_str());
+		send_to_room(room(),CAT("real_abils().intel :",real_abils().intel,"\r\n").c_str());
+		send_to_room(room(),CAT("real_abils().wis:",real_abils().wis,"\r\n").c_str());
+		send_to_room(room(),CAT("real_abils().dex :",real_abils().dex,"\r\n").c_str());
+		send_to_room(room(),CAT("real_abils().con :",real_abils().con,"\r\n").c_str());
+		send_to_room(room(),CAT("real_abils().electronics:",real_abils().electronics,"\r\n").c_str());
+		send_to_room(room(),CAT("real_abils().armor :",real_abils().armor,"\r\n").c_str());
+		send_to_room(room(),CAT("real_abils().marksmanship:",real_abils().marksmanship,"\r\n").c_str());
+		send_to_room(room(),CAT("real_abils().sniping:",real_abils().sniping,"\r\n").c_str());
+		send_to_room(room(),CAT("real_abils().demolitions:",real_abils().demolitions,"\r\n").c_str());
+		send_to_room(room(),CAT("real_abils().chemistry:",real_abils().chemistry,"\r\n").c_str());
+		send_to_room(room(),CAT("real_abils().weapon_handling :",real_abils().weapon_handling,"\r\n").c_str());
+		send_to_room(room(),CAT("real_abils().strategy:",real_abils().strategy,"\r\n").c_str());
+		send_to_room(room(),CAT("real_abils().medical:",real_abils().medical,"\r\n").c_str());
+		send_to_room(room(),CAT("m_incendiary_resistance_percent :",m_incendiary_resistance_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_explosive_resistance_percent :",m_explosive_resistance_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_shrapnel_resistance_percent :",m_shrapnel_resistance_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_corrosive_resistance_percent :",m_corrosive_resistance_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_cryogenic_resistance_percent :",m_cryogenic_resistance_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_radiation_resistance_percent :",m_radiation_resistance_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_emp_resistance_percent :",m_emp_resistance_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_shock_resistance_percent:",m_shock_resistance_percent,"\r\n").c_str());
+		send_to_room(room(),CAT("m_anti_matter_resistance_percent:",m_anti_matter_resistance_percent,"\r\n").c_str());
 		send_to_room(room(), "{yel}[report-end]{/yel}\r\n\r\n");
 #undef MR
 #undef MRC

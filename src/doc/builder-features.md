@@ -10,15 +10,20 @@
 	- mobs instantiated with zone commands now get their equipment loaded from their `mob_equipment` profile
 
 # next up
-	- hqbuild
-		- [ ] phase 1
-			- [ ] create a car port room that leads to the east near the cobalt fob east exit
-			- [ ] if anyone at the shipyard (way east of the cobalt fob) gets attacked, dispatch a response SUV
-				- [ ] response SUV drives along highway and hits anyone in the way depending on dice roll 
-				- [ ] use values system to roll dice for car hit
-				- [ ] use the damage system to deal blunt damage
-					- [ ] if player gets hit, force their position as laying down
-					- [ ] if player gets hit while laying down, they die no matter what
+	- wearing armor increases
+		- [ ] stats
+		- [ ] damage resistance
+		- [ ] damage percent
+	- wielding non deep object rifles affect
+		- [ ] stats
+		- [ ] damage resistance
+		- [ ] damage percent
+	- wielding deep object rifles affects 
+		- [ ] stats
+		- [ ] damage resistance
+		- [ ] damage percent
+	- 
+
 	- [ ] rifle attachments create buffs/nerfs
 		- [ ] sights
 		- [ ] magazines
@@ -29,6 +34,15 @@
 		- [ ] stock
 		- [ ] strap
 	- We could always use content:
+	- hqbuild
+		- [ ] phase 1
+			- [ ] create a car port room that leads to the east near the cobalt fob east exit
+			- [ ] if anyone at the shipyard (way east of the cobalt fob) gets attacked, dispatch a response SUV
+				- [ ] response SUV drives along highway and hits anyone in the way depending on dice roll 
+				- [ ] use values system to roll dice for car hit
+				- [ ] use the damage system to deal blunt damage
+					- [ ] if player gets hit, force their position as laying down
+					- [ ] if player gets hit while laying down, they die no matter what
 		- [ ] Functional rooms
 			- [ ] Weapon vendors
 				- [ ] Shotguns

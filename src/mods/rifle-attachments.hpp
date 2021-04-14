@@ -44,6 +44,47 @@ namespace mods {
 			void set_owner_uuid(uuid_t u) {
 				m_owner_uuid = u;
 			}
+			int16_t incendiary_damage_percent;
+			int16_t explosive_damage_percent;
+			int16_t shrapnel_damage_percent;
+			int16_t corrosive_damage_percent;
+			int16_t cryogenic_damage_percent;
+			int16_t radiation_damage_percent;
+			int16_t emp_damage_percent;
+			int16_t shock_damage_percent;
+			int16_t anti_matter_damage_percent;
+
+			/** --#=================================================#-- */
+			/** --[ SECTION START: ((( Fairly easy to implement ))) ]-- */
+			/** --#=================================================#-- */
+			float zoom_multiplier;						/** honored [ 2021-04-13 ] */
+			int16_t free_ammo_chance; 				/** honored [ 2021-04-13 ] */
+			int16_t regenerate_ammo_chance; 	/** honored [ 2021-04-13 ] */
+			int16_t incendiary_damage;				/** honored [ ? (see elemental.cpp) ] */
+			int16_t radiation_damage;					/** honored [ ? (see elemental.cpp) ] */
+			int16_t damage_percent_bonus;			/** honored [ 2021-04-13 ] */
+			int16_t armor_penetration_amount;
+			int16_t ammunition_amount;
+			int16_t disorient_amount;
+			int16_t durability_profile;
+			/** --#=================================================#-- */
+			/** --[ SECTION END:   ((( Fairly easy to implement ))) ]-- */
+			/** --#=================================================#-- */
+
+
+
+			/** --#=======================================#-- */
+			/** --[ SECTION START: ((( Large Features ))) ]-- */
+			/** --#=======================================#-- */
+			int16_t accuracy_points;
+			int16_t recoil_reduction;
+			int16_t aimed_limb_accuracy_percent;
+			int16_t bleed_chance;
+			int16_t loudness_reduction;
+			std::string underbarrel_launcher_type;
+			/** --#======================================#-- */
+			/** --[ SECTION END:  ((( Large Features ))) ]-- */
+			/** --#=======================================#-- */
 		private:
 			deep_object_parser_t m_parser;
 			std::string m_rifle_yaml_file;

@@ -44,30 +44,89 @@ namespace mods {
 		m_rifle_yaml_file = map["base"];
 		base_object = create_object(ITEM_RIFLE,map["base"]);
 		base_object->rifle()->attributes->is_rifle_attachment = true;
+		incendiary_damage_percent = 0;
+		explosive_damage_percent = 0;
+		shrapnel_damage_percent = 0;
+		corrosive_damage_percent = 0;
+		cryogenic_damage_percent = 0;
+		radiation_damage_percent = 0;
+		emp_damage_percent = 0;
+		shock_damage_percent = 0;
+		anti_matter_damage_percent = 0;
+
+		zoom_multiplier = 0;
+		ammunition_amount = 0;
+		loudness_reduction = 0;
+		durability_profile = 0;
+		accuracy_points = 0;
+		incendiary_damage = 0;
+		radiation_damage = 0;
+		armor_penetration_amount = 0;
+		disorient_amount = 0;
+		recoil_reduction = 0;
+		free_ammo_chance = 0;
+		regenerate_ammo_chance = 0;
+		bleed_chance = 0;
+		aimed_limb_accuracy_percent = 0;
+		underbarrel_launcher_type = "NONE";
+		damage_percent_bonus = 0;
+
 		for(auto& pair : map) {
+			obj_ptr_t object;
+			object = nullptr;
 			if(pair.first.compare("sight") == 0) {
-				sight = create_object(ITEM_ATTACHMENT,pair.second);
+				object = sight = create_object(ITEM_ATTACHMENT,pair.second);
 			}
 			if(pair.first.compare("under_barrel") == 0) {
-				under_barrel = create_object(ITEM_ATTACHMENT,pair.second);
+				object = under_barrel = create_object(ITEM_ATTACHMENT,pair.second);
 			}
 			if(pair.first.compare("grip") == 0) {
-				grip = create_object(ITEM_ATTACHMENT,pair.second);
+				object = grip = create_object(ITEM_ATTACHMENT,pair.second);
 			}
 			if(pair.first.compare("barrel") == 0) {
-				barrel = create_object(ITEM_ATTACHMENT,pair.second);
+				object = barrel = create_object(ITEM_ATTACHMENT,pair.second);
 			}
 			if(pair.first.compare("muzzle") == 0) {
-				muzzle = create_object(ITEM_ATTACHMENT,pair.second);
+				object = muzzle = create_object(ITEM_ATTACHMENT,pair.second);
 			}
 			if(pair.first.compare("magazine") == 0) {
-				magazine = create_object(ITEM_ATTACHMENT,pair.second);
+				object = magazine = create_object(ITEM_ATTACHMENT,pair.second);
 			}
 			if(pair.first.compare("stock") == 0) {
-				stock = create_object(ITEM_ATTACHMENT,pair.second);
+				object = stock = create_object(ITEM_ATTACHMENT,pair.second);
 			}
 			if(pair.first.compare("strap") == 0) {
-				strap = create_object(ITEM_ATTACHMENT,pair.second);
+				object = strap = create_object(ITEM_ATTACHMENT,pair.second);
+			}
+			if(object && object->has_attachment()) {
+				incendiary_damage_percent += object->attachment()->attributes->incendiary_damage_percent;
+				explosive_damage_percent += object->attachment()->attributes->explosive_damage_percent;
+				shrapnel_damage_percent += object->attachment()->attributes->shrapnel_damage_percent;
+				corrosive_damage_percent += object->attachment()->attributes->corrosive_damage_percent;
+				cryogenic_damage_percent += object->attachment()->attributes->cryogenic_damage_percent;
+				radiation_damage_percent += object->attachment()->attributes->radiation_damage_percent;
+				emp_damage_percent += object->attachment()->attributes->emp_damage_percent;
+				shock_damage_percent += object->attachment()->attributes->shock_damage_percent;
+				anti_matter_damage_percent += object->attachment()->attributes->anti_matter_damage_percent;
+
+				/** TODO: honor these */
+				zoom_multiplier += object->attachment()->attributes->zoom_multiplier;
+				ammunition_amount += object->attachment()->attributes->ammunition_amount;
+				damage_percent_bonus += object->attachment()->attributes->damage_percent_bonus;
+				durability_profile += object->attachment()->attributes->durability_profile;
+				incendiary_damage += object->attachment()->attributes->incendiary_damage;
+				radiation_damage += object->attachment()->attributes->radiation_damage;
+				armor_penetration_amount += object->attachment()->attributes->armor_penetration_amount;
+				disorient_amount += object->attachment()->attributes->disorient_amount;
+				free_ammo_chance += object->attachment()->attributes->free_ammo_chance;
+				regenerate_ammo_chance += object->attachment()->attributes->regenerate_ammo_chance;
+
+				recoil_reduction += object->attachment()->attributes->recoil_reduction;
+				bleed_chance += object->attachment()->attributes->bleed_chance;
+				aimed_limb_accuracy_percent += object->attachment()->attributes->aimed_limb_accuracy_percent;
+				accuracy_points += object->attachment()->attributes->accuracy_points;
+				underbarrel_launcher_type = object->attachment()->attributes->underbarrel_launcher_type;
+				loudness_reduction += object->attachment()->attributes->loudness_reduction;
 			}
 		}
 		mods::rifle_attachments::uuid_schema_list()[base_object->uuid] = line;
