@@ -13,7 +13,7 @@ namespace mods {
 			return list;
 		}
 
-		ACMD(do_instantiate_rifle_attachment) {
+		SUPERCMD(do_instantiate_rifle_attachment) {
 			ADMIN_REJECT();
 			DO_HELP("instantiate_rifle_attachment");
 			auto vec_args = PARSE_ARGS();
@@ -28,7 +28,7 @@ namespace mods {
 			}
 			ADMIN_DONE();
 		}
-		ACMD(do_load_my_rifle_attachments) {
+		SUPERCMD(do_load_my_rifle_attachments) {
 			player->sendln("Loading...");
 			mods::orm::load_player_rifle_attachments(player);
 			player->sendln("[+] Done");

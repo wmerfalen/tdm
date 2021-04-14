@@ -147,7 +147,7 @@ ACMD(do_drone) {
 	player->sendln(usage);
 }
 
-ACMD(do_givemegold) {
+SUPERCMD(do_givemegold) {
 	ch->points.gold += 50000;
 }
 
@@ -172,18 +172,18 @@ ACMD(do_preferences) {
 
 }
 
-ACMD(do_js) {
+SUPERCMD(do_js) {
 	player->executing_js(true);
 	mods::js::eval_string(std::string(argument) + ";");
 	player->executing_js(false);
 }
 
-ACMD(do_newjs) {
+SUPERCMD(do_newjs) {
 	mods::js::create_new_context();
 	mods::js::load_base_functions();
 	mods::js::load_c_require_functions();
 }
-ACMD(do_jstest) {
+SUPERCMD(do_jstest) {
 
 
 	if(!mods::js::run_test_suite(*player,argument)) {

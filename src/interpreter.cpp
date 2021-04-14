@@ -50,7 +50,7 @@ namespace mods::interpreter {
 ACMD(do_unimplemented) {
 	player->sendln(UNIMPLEMENTED_MESSAGE());
 }
-ACMD(do_debug_sleep) {
+SUPERCMD(do_debug_sleep) {
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() == 0) {
 		player->errorln("Pass in seconds please.");
@@ -107,7 +107,7 @@ int perform_alias(mods::descriptor_data& d, char *orig, size_t maxlen);
 int reserved_word(char *argument);
 int _parse_name(char *arg, char *name);
 
-ACMD(do_room_list) {
+SUPERCMD(do_room_list) {
 
 	for(auto& p : mods::globals::get_room_list(player->room())) {
 		player->stc(p->name());
@@ -117,9 +117,9 @@ ACMD(do_room_vnum) {
 	player->send("%d\r\n",player->vnum());
 }
 
-ACMD(do_js_help);
+SUPERCMD(do_js_help);
 
-ACMD(do_require_js) {
+SUPERCMD(do_require_js) {
 
 	CREATE_ARG(512,1);
 	one_argument(argument, static_cast<char*>(&arg_1[0]),512);
@@ -135,7 +135,7 @@ ACMD(do_require_js) {
 namespace mods::js {
 	extern void eval_string(std::string_view str);
 };
-ACMD(do_builder) {
+SUPERCMD(do_builder) {
 
 	if(IS_NPC(ch)) {
 		/** nice try */

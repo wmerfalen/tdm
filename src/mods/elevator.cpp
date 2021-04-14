@@ -17,12 +17,12 @@
 extern std::string sanitize_key(std::string key);
 extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
 namespace mods::elevator {
-	void instantiate_elevator_here(room_rnum room_id){
+	void instantiate_elevator_here(room_rnum room_id) {
 		mods::rooms::set_sector_type(room_id, mods::rooms::sector_type_t::INDOOR_ELEVATOR);
 	}
 };
 
-ACMD(do_instantiate_elevator_here){
+SUPERCMD(do_instantiate_elevator_here) {
 	ADMIN_REJECT();
 	DO_HELP("instantiate_elevator_here");
 	/** code here */
@@ -31,7 +31,7 @@ ACMD(do_instantiate_elevator_here){
 	ADMIN_DONE();
 }
 namespace mods::elevator {
-	void init(){
+	void init() {
 		mods::interpreter::add_command("instantiate_elevator_here", POS_RESTING, do_instantiate_elevator_here, LVL_BUILDER,0);
 	}
 };

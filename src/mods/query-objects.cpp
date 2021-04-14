@@ -151,7 +151,7 @@ namespace mods::query_objects {
 
 };
 
-ACMD(do_query_container) {
+SUPERCMD(do_query_container) {
 	ADMIN_REJECT();
 	DO_HELP("query_container");
 	/** code here */
@@ -172,7 +172,7 @@ ACMD(do_query_container) {
 	}
 	ADMIN_DONE();
 }
-ACMD(do_query_room) {
+SUPERCMD(do_query_room) {
 	ADMIN_REJECT();
 	DO_HELP("query_room");
 	/** code here */
@@ -188,7 +188,7 @@ ACMD(do_query_room) {
 	}
 	ADMIN_DONE();
 }
-ACMD(do_query_inventory) {
+SUPERCMD(do_query_inventory) {
 	ADMIN_REJECT();
 	DO_HELP("query_inventory");
 	/** code here */
@@ -211,7 +211,7 @@ ACMD(do_query_inventory) {
 	}
 	ADMIN_DONE();
 }
-ACMD(do_query_inventory_container) {
+SUPERCMD(do_query_inventory_container) {
 	ADMIN_REJECT();
 	DO_HELP("query_inventory_container");
 	/** code here */
@@ -233,7 +233,7 @@ ACMD(do_query_inventory_container) {
 	}
 	ADMIN_DONE();
 }
-ACMD(do_query_zone) {
+SUPERCMD(do_query_zone) {
 	ADMIN_REJECT();
 	DO_HELP("query_zone");
 	/** code here */

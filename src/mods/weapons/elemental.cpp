@@ -145,7 +145,7 @@ namespace mods::weapons::elemental {
 		mods::weapons::damage_types::deal_hp_damage(player,damage);
 	}
 
-	ACMD(do_inc_damage) {
+	SUPERCMD(do_inc_damage) {
 		auto vec_args = PARSE_ARGS();
 		static const char* usage = "usage: inc_damage <resistance_percent> <damage>\r\n";
 		if(vec_args.size() < 2) {

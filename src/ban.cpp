@@ -27,8 +27,8 @@ void load_banned(void);
 int isbanned(char *hostname);
 void _write_one_node(FILE *fp, struct ban_list_element *node);
 void write_ban_list(void);
-ACMD(do_ban);
-ACMD(do_unban);
+SUPERCMD(do_ban);
+SUPERCMD(do_unban);
 int Valid_Name(char *newname);
 void Read_Invalid_List(void);
 void Free_Invalid_List(void);
@@ -114,7 +114,7 @@ void write_ban_list(void) {
 
 
 #define BAN_LIST_FORMAT "%-25.25s  %-8.8s  %-10.10s  %-16.16s\r\n"
-ACMD(do_ban) {
+SUPERCMD(do_ban) {
 	char flag[MAX_INPUT_LENGTH], site[MAX_INPUT_LENGTH];//, *nextchar;
 	char timestr[16];
 	//int i;
@@ -170,7 +170,7 @@ ACMD(do_ban) {
 		}
 	}
 
-	
+
 	/** !FIXME replace this strncpy crap with std::string or better */
 //	CREATE(ban_node, struct ban_list_element, 1);
 //	strncpy(ban_node->site, site, BANNED_SITE_LENGTH);	/* strncpy: OK (b_n->site:BANNED_SITE_LENGTH+1) */
@@ -200,7 +200,7 @@ ACMD(do_ban) {
 #undef BAN_LIST_FORMAT
 
 
-ACMD(do_unban) {
+SUPERCMD(do_unban) {
 	char site[MAX_INPUT_LENGTH];
 	struct ban_list_element *ban_node, *temp;
 	int found = 0;
@@ -257,7 +257,7 @@ int Valid_Name(const char *newname) {
 	}
 
 	/* Does the desired name contain a string in the invalid list? */
-	for(i = 0; i < num_invalid; i++){
+	for(i = 0; i < num_invalid; i++) {
 		if(strstr(tempname, invalid_list[i])) {
 			return (0);
 		}
@@ -268,9 +268,9 @@ int Valid_Name(const char *newname) {
 	 * will not have a character name yet and other people sitting at the
 	 * prompt won't have characters yet.
 	 */
-	for(auto & p : mods::globals::player_list){
+	for(auto& p : mods::globals::player_list) {
 		if(mods::util::is_lower_match(p->name().c_str(), newname)) {
-			if((p->state() == CON_PLAYING || p->state() == CON_IDLE) && p->authenticated()){
+			if((p->state() == CON_PLAYING || p->state() == CON_IDLE) && p->authenticated()) {
 				return 0;
 			}
 		}

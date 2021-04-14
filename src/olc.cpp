@@ -41,7 +41,7 @@ void olc_interpreter(void *targ, int mode, char *arg);
 void olc_set_show(char_data *ch, int olc_mode, char *arg);
 void olc_string(char **string, size_t maxlen, char *arg);
 int can_modify(char_data *ch, int vnum);
-ACMD(do_olc);
+SUPERCMD(do_olc);
 void olc_bitvector(int *bv, const char **names, char *arg);
 
 const char *olc_modes[] = {
@@ -65,7 +65,7 @@ const char *olc_commands[] = {
 
 /* The actual do_olc command for the interpreter.  Determines the target
    entity, checks permissions, and passes control to olc_interpreter */
-ACMD(do_olc) {
+SUPERCMD(do_olc) {
 	void *olc_targ = NULL;
 	char mode_arg[MAX_INPUT_LENGTH], arg[MAX_INPUT_LENGTH];
 	room_rnum rnum;

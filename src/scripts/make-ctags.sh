@@ -19,3 +19,18 @@ cscope -R -b -i cscope.files &
 
 cd $WEBROOT 
 grep -R 'ACMD(do_' . | grep -vE '^./doc/' | grep -v 'scripts/vk-data' | grep -v ACMD.list | grep '{' | sed -E 's|.cpp:[0-9]+:||g' | sed  -E 's|ACMD\(do_|->|g' | sed -E 's|\).*\{||g' > $WEBROOT/../lib/ACMD.list
+
+grep -R 'SUPERCMD(do_' . | 
+	grep -vE '^./doc/' | 
+	grep -v 'scripts/vk-data' |
+	grep -v ACMD.list |
+	grep '{' | sed -E 's|.cpp:[0-9]+:||g' |
+	sed  -E 's|SUPERCMD\(do_|->|g' |
+	sed -E 's|^\./||g' | 
+	sed -E 's|\).*\{||g' |
+	sed -E 's|\.cpp:\s+|.cpp:|g' |
+	sed -E 's|^|{yel}|' |
+	sed -E 's|\.cpp:->|{/yel}:->{grn}|g' |
+	sed -E 's|$|{/grn}|g' \
+	> $WEBROOT/../lib/SUPERCMD.list
+	#2>&1 > /dev/null &

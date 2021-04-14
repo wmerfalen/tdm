@@ -9,7 +9,7 @@ extern std::deque<room_data> world;
 namespace mods::immortal {
 
 };
-ACMD(do_rnumtele) {
+SUPERCMD(do_rnumtele) {
 
 	constexpr unsigned int max_char = 11;
 	std::array<char,max_char> room_id;
@@ -31,7 +31,7 @@ ACMD(do_rnumtele) {
  * The only argument to this should be the page that you
  * are interested in.
  */
-ACMD(do_rnumlist) {
+SUPERCMD(do_rnumlist) {
 
 	constexpr unsigned int max_char = 11;
 	std::array<char,max_char> room_id;

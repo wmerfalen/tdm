@@ -108,7 +108,7 @@ int next_obj_number() {
  *
  * @param do_next_object_number
  */
-ACMD(do_next_object_number) {
+SUPERCMD(do_next_object_number) {
 	player->stc(std::to_string(next_obj_number()));
 }
 
@@ -197,21 +197,21 @@ int next_mob_number() {
 	return mods::adhoc::next_mob();
 }
 
-ACMD(do_next_zone_number) {
+SUPERCMD(do_next_zone_number) {
 
 	auto zone_number = next_zone_number();
 	player->stc(std::to_string(zone_number));
 }
-ACMD(do_next_room_number) {
+SUPERCMD(do_next_room_number) {
 
 	auto room_number = next_room_number();
 	player->stc(std::to_string(room_number));
 }
-ACMD(do_next_mob_number) {
+SUPERCMD(do_next_mob_number) {
 	auto mob_number = next_mob_number();
 	player->stc(std::to_string(mob_number));
 }
-ACMD(do_next_obj_number) {
+SUPERCMD(do_next_obj_number) {
 	auto obj_number = next_obj_number();
 	player->stc(std::to_string(obj_number));
 }
@@ -262,7 +262,7 @@ ACMD(do_flush_holding) {
  *
  * @param do_yaml_import
  */
-ACMD(do_yaml_import) {
+SUPERCMD(do_yaml_import) {
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() == 0 || vec_args[0].compare("ls") == 0) {
 		player->pager_start();
@@ -299,7 +299,7 @@ void generic_import(player_ptr_t& player,std::string_view type, const std::vecto
 /** !!*****************!! */
 /** !!UPDATE_ITEM_TYPES!! */
 /** !!*****************!! */
-ACMD(do_rifle_import) {
+SUPERCMD(do_rifle_import) {
 	ADMIN_REJECT();
 	DO_HELP("rifle_import");
 	auto usage = "usage: rifle_import <name-without-extension>\r\nExample: rifle_import g36c";
@@ -307,7 +307,7 @@ ACMD(do_rifle_import) {
 	ADMIN_DONE();
 }
 
-ACMD(do_vehicle_import) {
+SUPERCMD(do_vehicle_import) {
 	ADMIN_REJECT();
 	DO_HELP("vehicle_import");
 	auto usage = "usage: vehicle_import <name-without-extension>\r\nExample: vehicle_import g36c";
@@ -316,7 +316,7 @@ ACMD(do_vehicle_import) {
 }
 
 
-ACMD(do_melee_import) {
+SUPERCMD(do_melee_import) {
 	ADMIN_REJECT();
 	DO_HELP("melee_import");
 	auto usage = "usage: melee_import <name-without-extension>\r\nExample: melee_import machete";
@@ -324,14 +324,14 @@ ACMD(do_melee_import) {
 	ADMIN_DONE();
 }
 
-ACMD(do_armor_import) {
+SUPERCMD(do_armor_import) {
 	ADMIN_REJECT();
 	DO_HELP("armor_import");
 	auto usage = "usage: armor_import <name-without-extension>\r\nExample: armor_import g36c";
 	generic_import(player,"armor",PARSE_ARGS(),usage);
 	ADMIN_DONE();
 }
-ACMD(do_explosive_import) {
+SUPERCMD(do_explosive_import) {
 	ADMIN_REJECT();
 	DO_HELP("explosive_import");
 	auto usage = "usage: explosive_import <name-without-extension>\r\nExample: explosive_import g36c";
@@ -339,7 +339,7 @@ ACMD(do_explosive_import) {
 	ADMIN_DONE();
 }
 
-ACMD(do_drone_import) {
+SUPERCMD(do_drone_import) {
 	ADMIN_REJECT();
 	DO_HELP("drone_import");
 	auto usage = "usage: drone_import <name-without-extension>\r\nExample: drone_import g36c";
@@ -347,7 +347,7 @@ ACMD(do_drone_import) {
 	ADMIN_DONE();
 }
 
-ACMD(do_attachment_import) {
+SUPERCMD(do_attachment_import) {
 	ADMIN_REJECT();
 	DO_HELP("attachment_import");
 	auto usage = "usage: attachment_import <name-without-extension>\r\nExample: attachment_import g36c";
@@ -355,7 +355,7 @@ ACMD(do_attachment_import) {
 	ADMIN_DONE();
 }
 
-ACMD(do_gadget_import) {
+SUPERCMD(do_gadget_import) {
 	ADMIN_REJECT();
 	DO_HELP("gadget_import");
 	auto usage = "usage: gadget_import <name-without-extension>\r\nExample: gadget_import g36c";
@@ -363,7 +363,7 @@ ACMD(do_gadget_import) {
 	ADMIN_DONE();
 }
 
-ACMD(do_trap_import) {
+SUPERCMD(do_trap_import) {
 	ADMIN_REJECT();
 	DO_HELP("trap_import");
 	auto usage = "usage: trap_import <name-without-extension>\r\nExample: trap_import g36c";
@@ -371,7 +371,7 @@ ACMD(do_trap_import) {
 	ADMIN_DONE();
 }
 
-ACMD(do_consumable_import) {
+SUPERCMD(do_consumable_import) {
 	ADMIN_REJECT();
 	DO_HELP("consumable_import");
 	auto usage = "usage: consumable_import <name-without-extension>\r\nExample: consumable_import g36c";
@@ -379,7 +379,7 @@ ACMD(do_consumable_import) {
 	ADMIN_DONE();
 }
 
-ACMD(do_container_import) {
+SUPERCMD(do_container_import) {
 	ADMIN_REJECT();
 	DO_HELP("container_import");
 	auto usage = "usage: container_import <name-without-extension>\r\nExample: container_import g36c";
@@ -392,7 +392,7 @@ ACMD(do_container_import) {
  *
  * @param do_yaml_log
  */
-ACMD(do_yaml_log) {
+SUPERCMD(do_yaml_log) {
 	DO_HELP("yaml_log");
 	auto vec_args = PARSE_ARGS();
 	if(vec_args.size() == 0) {
@@ -421,7 +421,7 @@ ACMD(do_yaml_log) {
  *
  * @param do_yaml_log_save
  */
-ACMD(do_yaml_log_save) {
+SUPERCMD(do_yaml_log_save) {
 	player->send("Saving yaml log...");
 	auto status = mods::object_utils::save_yaml_exceptions_to_disk();
 	if(std::get<0>(status) < 0) {
@@ -435,7 +435,7 @@ ACMD(do_yaml_log_save) {
  *
  * @param do_yaml_log_clear
  */
-ACMD(do_yaml_log_clear) {
+SUPERCMD(do_yaml_log_clear) {
 	player->send("Clearing yaml log...");
 	mods::object_utils::clear_yaml_exceptions();
 	player->sendln("[done]");
@@ -475,7 +475,7 @@ ACMD(do_hold_anything) {
  *
  * @param command or name of file type (i.e.: rifle, explosive.. to list pass in "list")
  */
-ACMD(do_yaml_example) {
+SUPERCMD(do_yaml_example) {
 	DO_HELP("yaml_example");
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("list") == 0) {
@@ -508,7 +508,7 @@ ACMD(do_yaml_example) {
 	player->sendln("[+] done");
 }
 
-ACMD(do_histfile) {
+SUPERCMD(do_histfile) {
 
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
@@ -553,7 +553,7 @@ ACMD(do_uuid) {
 	player->stc(std::to_string(obj->uuid));
 }
 
-ACMD(do_pmw_obj_from_room) {
+SUPERCMD(do_pmw_obj_from_room) {
 
 	player->sendln("This function is under construction!");
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
@@ -585,7 +585,7 @@ ACMD(do_pmw_obj_from_room) {
  *
  * @param on|off|help
  */
-ACMD(do_toggle_obj_from_room) {
+SUPERCMD(do_toggle_obj_from_room) {
 
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 	if(vec_args.size() == 0 || vec_args[0].compare("help") == 0) {
@@ -617,7 +617,7 @@ ACMD(do_toggle_obj_from_room) {
 
 }
 
-ACMD(do_js_help) {
+SUPERCMD(do_js_help) {
 	if(IS_NPC(ch)) {
 		/** nice try */
 		return;

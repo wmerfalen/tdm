@@ -283,7 +283,7 @@ namespace mods::zone {
 			build_dummy(room_ptr->number);
 		}
 	}
-	ACMD(do_list_zone_table) {
+	SUPERCMD(do_list_zone_table) {
 		ADMIN_REJECT();
 		auto vec_args = PARSE_ARGS();
 		player->send("Listing...\r\n");
@@ -293,7 +293,7 @@ namespace mods::zone {
 		player->send("Done listing...\r\n");
 		ADMIN_DONE();
 	}
-	ACMD(do_reset_zone) {
+	SUPERCMD(do_reset_zone) {
 		ADMIN_REJECT();
 		auto vec_args = PARSE_ARGS();
 		if(vec_args.size() < 1) {

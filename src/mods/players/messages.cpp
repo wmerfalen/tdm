@@ -31,7 +31,7 @@ namespace mods::players::messages {
 		}
 		player_messages.clear();
 	}
-	ACMD(do_queue_message) {
+	SUPERCMD(do_queue_message) {
 		ADMIN_REJECT();
 		queue(player->uuid(),argument);
 	}

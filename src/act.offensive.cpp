@@ -88,7 +88,7 @@ ACMD(do_throw) {
 }
 
 
-ACMD(do_affect_me) {
+SUPERCMD(do_affect_me) {
 
 	constexpr unsigned int max_char = 16;
 	static bool usage_set = false;

@@ -52,7 +52,7 @@ namespace mods::mob_equipment {
 		}
 		me_debug("Done equipping mob");
 	}
-	ACMD(do_npc_report) {
+	SUPERCMD(do_npc_report) {
 		ADMIN_REJECT();
 		for(const auto& player : mods::globals::get_room_list(player->room())) {
 			player->report();

@@ -262,7 +262,7 @@ namespace mods::fluxkraft {
 		};
 		return list;
 	}
-	ACMD(do_procgen_random_amount) {
+	SUPERCMD(do_procgen_random_amount) {
 		ADMIN_REJECT();
 		auto vec_args = PARSE_ARGS();
 		if(vec_args.size() < 1) {
@@ -281,7 +281,7 @@ namespace mods::fluxkraft {
 	/******************/
 	/** generate_zone */
 	/******************/
-	ACMD(do_generate_zone) {
+	SUPERCMD(do_generate_zone) {
 		ADMIN_REJECT();
 		DO_HELP("generate_zone");
 		const auto& vec_args = PARSE_ARGS();

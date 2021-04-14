@@ -486,7 +486,7 @@ namespace mods::levels {
 	/**
 	 * admin debug command
 	 */
-	ACMD(do_award_exp_by_name) {
+	SUPERCMD(do_award_exp_by_name) {
 		ADMIN_REJECT();
 		DO_HELP_WITH_ZERO("award_exp_by_name");
 		/** code here */
@@ -518,7 +518,7 @@ namespace mods::levels {
 		player->sendln("Done.");
 		ADMIN_DONE();
 	}
-	ACMD(do_csv_export_levels) {
+	SUPERCMD(do_csv_export_levels) {
 		ADMIN_REJECT();
 		DO_HELP_WITH_ZERO("csv_export_levels");
 		auto status = csv_export_report();

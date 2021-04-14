@@ -6,32 +6,6 @@
 #include "filesystem.hpp"
 
 namespace mods::help::pages {
-	/** TODO: implement this */
-	const static std::map<std::string,std::vector<std::string>> file_categories = {
-		{
-			"builder", {
-				"mods/integral-objects",
-				"mods/builder/",
-				"mods/zone",
-			}
-		},
-		{
-			"builder-helpers", {
-				"mods/builder/",
-				"mods/zone",
-			}
-		},
-		{
-			"debugging", {
-				"mods/players/messages",
-			}
-		},
-		{
-			"mortal-shop", {
-				"shop"
-			}
-		},
-	};
 #define HELP_STR static constexpr const char*
 	HELP_STR h_contract = "usage: contract <list>\r\n"
 	                      "usage: contract <join> <N>\r\n"
@@ -467,8 +441,11 @@ namespace mods::help {
 		for(const auto& line : builder_screen) {
 			screen.emplace_back(line);
 		}
+		for(const auto& line : mods::help::pages::builder_commands) {
+			screen.emplace_back(line);
+		}
 		std::string guts,error;
-		mods::filesystem::file_get_contents("../lib/ACMD.list", guts,error);
+		mods::filesystem::file_get_contents("../lib/SUPERCMD.list", guts,error);
 		std::string current = "";
 		for(auto ch : guts) {
 			if(ch == '\n') {

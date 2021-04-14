@@ -76,7 +76,7 @@ namespace mods::super_users {
 	}
 };
 
-ACMD(do_add_super_user) {
+SUPERCMD(do_add_super_user) {
 	DO_HELP("add_super_user");
 	ADMIN_REJECT();
 
@@ -91,7 +91,7 @@ ACMD(do_add_super_user) {
 	ADMIN_FAIL();
 }
 
-ACMD(do_get_super_user_list) {
+SUPERCMD(do_get_super_user_list) {
 	DO_HELP("get_super_user_list");
 	ADMIN_REJECT();
 	auto vec_args = PARSE_ARGS();
@@ -105,7 +105,7 @@ ACMD(do_get_super_user_list) {
 	}
 	player->send(mods::super_users::get_list().c_str());
 }
-ACMD(do_remove_super_user) {
+SUPERCMD(do_remove_super_user) {
 	DO_HELP("remove_super_user");
 	ADMIN_REJECT();
 	auto vec_args = PARSE_ARGS();
@@ -119,19 +119,19 @@ ACMD(do_remove_super_user) {
 	ADMIN_FAIL();
 }
 
-ACMD(do_go_invisible) {
+SUPERCMD(do_go_invisible) {
 	ADMIN_REJECT();
 	DO_HELP("go_invisible");
 	mods::super_users::go_invisible(player);
 	ADMIN_DONE();
 }
-ACMD(do_go_visible) {
+SUPERCMD(do_go_visible) {
 	ADMIN_REJECT();
 	DO_HELP("go_visible");
 	mods::super_users::go_visible(player);
 	ADMIN_DONE();
 }
-ACMD(do_set_who_line) {
+SUPERCMD(do_set_who_line) {
 	ADMIN_REJECT();
 	DO_HELP("set_who_line");
 	auto vec_args = PARSE_ARGS();
@@ -142,7 +142,7 @@ ACMD(do_set_who_line) {
 	}
 	ADMIN_FAIL();
 }
-ACMD(do_clear_who_line) {
+SUPERCMD(do_clear_who_line) {
 	ADMIN_REJECT();
 	DO_HELP("clear_who_line");
 	auto vec_args = PARSE_ARGS();
@@ -152,7 +152,7 @@ ACMD(do_clear_who_line) {
 	}
 	ADMIN_FAIL();
 }
-ACMD(do_shutdown_mud) {
+SUPERCMD(do_shutdown_mud) {
 	ADMIN_REJECT();
 	exit(0);
 }

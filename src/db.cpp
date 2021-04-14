@@ -163,7 +163,7 @@ void build_player_index(void);
 int is_empty(zone_rnum zone_nr);
 void reset_zone(zone_rnum zone);
 void reboot_wizlists(void);
-ACMD(do_reboot);
+SUPERCMD(do_reboot);
 void boot_world(void);
 int count_alias_records(FILE *fl);
 int count_hash_records(FILE *fl);
@@ -227,7 +227,7 @@ void free_text_files(void) {
  * 'reload' command even when the string was not replaced.
  * To fix later, if desired. -gg 6/24/99
  */
-ACMD(do_reboot) {
+SUPERCMD(do_reboot) {
 	char arg[MAX_INPUT_LENGTH];
 
 	one_argument(argument, arg);

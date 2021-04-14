@@ -14,12 +14,12 @@
 #endif
 
 namespace mods::target_practice {
-	void instantiate_dummy(player_ptr_t& player,std::string_view identifier){
+	void instantiate_dummy(player_ptr_t& player,std::string_view identifier) {
 		//TODO:
 	}
 };
 
-ACMD(do_install_dummy){
+SUPERCMD(do_install_dummy) {
 	ADMIN_REJECT();
 	DO_HELP("install_dummy");
 	/** code here */
@@ -30,7 +30,7 @@ ACMD(do_install_dummy){
 	ADMIN_DONE();
 }
 
-ACMD(do_uninstall_dummy){
+SUPERCMD(do_uninstall_dummy) {
 	ADMIN_REJECT();
 	DO_HELP("uninstall_dummy");
 	/** code here */
@@ -39,13 +39,13 @@ ACMD(do_uninstall_dummy){
 	ADMIN_DONE();
 }
 
-ACMD(do_instantiate_dummy){
+SUPERCMD(do_instantiate_dummy) {
 	ADMIN_REJECT();
 	DO_HELP("instantiate_dummy");
 	/** code here */
 	auto vec_args = PARSE_ARGS();
 	static constexpr const char* usage = "usage: instantiate_dummy <identifier-with-no-spaces>";
-	if(vec_args.size() < 1){
+	if(vec_args.size() < 1) {
 		player->errorln(usage);
 		return;
 	}
@@ -53,7 +53,7 @@ ACMD(do_instantiate_dummy){
 	ADMIN_DONE();
 }
 namespace mods::target_practice {
-	void init(){
+	void init() {
 		mods::interpreter::add_command("install_dummy", POS_RESTING, do_install_dummy, LVL_BUILDER,0);
 		mods::interpreter::add_command("uninstall_dummy", POS_RESTING, do_uninstall_dummy, LVL_BUILDER,0);
 		mods::interpreter::add_command("instantiate_dummy", POS_RESTING, do_instantiate_dummy, LVL_BUILDER,0);

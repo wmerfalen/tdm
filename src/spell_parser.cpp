@@ -32,7 +32,7 @@ void say_spell(char_data *ch, int spellnum, char_data *tch, struct obj_data *tob
 void spello(int spl, const char *name, int max_mana, int min_mana, int mana_change, int minpos, int targets, int violent, int routines, const char *wearoff);
 int mag_manacost(char_data *ch, int spellnum);
 /** FIXME: do_cast is commented out in interpreter.cpp, so NO spells will work */
-ACMD(do_cast);
+SUPERCMD(do_cast);
 void unused_spell(int spl);
 void mag_assign_spells(void);
 
@@ -138,7 +138,7 @@ void say_spell(char_data *ch, int spellnum, char_data *tch,
 	snprintf(buf2, std::min(strlen(format),sizeof(buf2)), format, buf);
 
 	//for(i = world[IN_ROOM(ch)].people; i; i = i->next_in_room) {
-	for(auto & plr : mods::globals::get_room_list(player->room())) {
+	for(auto& plr : mods::globals::get_room_list(player->room())) {
 		if(plr->is(ch) || plr->is(tch) || !plr->cd()->has_desc || !AWAKE(plr->cd())) {
 			continue;
 		}
@@ -391,7 +391,7 @@ void mag_objectmagic(char_data *ch, struct obj_data *obj,
 				if(HAS_SPELL_ROUTINE(GET_OBJ_VAL(obj, 3), MAG_MASSES | MAG_AREAS)) {
 					//for(i = 0, tch = world[IN_ROOM(ch)].people; tch; tch = tch->next_in_room) {
 					i = 0;
-					FOR_ROOM(plr){
+					FOR_ROOM(plr) {
 						tch = plr->cd();
 						i++;
 					}
@@ -401,8 +401,8 @@ void mag_objectmagic(char_data *ch, struct obj_data *obj,
 					}
 				} else {
 					//for(tch = world[IN_ROOM(ch)].people; tch; tch = next_tch) {
-				//		next_tch = tch->next_in_room;
-					FOR_ROOM(plr){
+					//		next_tch = tch->next_in_room;
+					FOR_ROOM(plr) {
 						if(!plr->is(ch)) {
 							call_magic(ch, plr->cd(), NULL, GET_OBJ_VAL(obj, 3), k, CAST_STAFF);
 						}
@@ -601,7 +601,7 @@ int cast_spell(char_data *ch, char_data *tch,
  * the spell can be cast, checks for sufficient mana and subtracts it, and
  * passes control to cast_spell().
  */
-ACMD(do_cast) {
+SUPERCMD(do_cast) {
 	char_data *tch = NULL;
 	struct obj_data *tobj = NULL;
 	char *s, *t;

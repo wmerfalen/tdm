@@ -108,7 +108,7 @@ namespace mods::chat {
 	}
 };
 
-ACMD(do_chanmgr) {
+SUPERCMD(do_chanmgr) {
 	if(std::string(argument).length() == 0 || std::string(argument).compare("help") == 0) {
 		player->pager_start() << "usage: \r\n" <<
 		                      " chanmgr help\r\n" <<

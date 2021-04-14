@@ -1312,7 +1312,7 @@ int next_room_pavement_transaction_id() {
 	static int transaction_id = 0;
 	return ++transaction_id;
 }
-ACMD(do_rbuild_sandbox) {
+SUPERCMD(do_rbuild_sandbox) {
 
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
@@ -1472,7 +1472,7 @@ ACMD(do_rbuild_sandbox) {
 	}
 }
 
-ACMD(do_sbuild) {
+SUPERCMD(do_sbuild) {
 
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
@@ -2134,7 +2134,7 @@ void initialize_mob_commands() {
 	initialized = true;
 }
 
-ACMD(do_mbuild) {
+SUPERCMD(do_mbuild) {
 	static bool initialized = false;
 	if(!initialized) {
 		initialize_mob_commands();
@@ -2930,7 +2930,7 @@ ACMD(do_mbuild) {
 	}
 }
 
-ACMD(do_obuild) {
+SUPERCMD(do_obuild) {
 
 	mods::builder::initialize_builder(player);
 #ifdef __MENTOC_SHOW_MODS_BUILDER_DEBUG_OUTPUT__
@@ -4219,7 +4219,7 @@ ACMD(do_obuild) {
  * numbers.
  *
  */
-ACMD(do_zbuild) {
+SUPERCMD(do_zbuild) {
 
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
@@ -4787,7 +4787,7 @@ ACMD(do_zbuild) {
 	}
 };
 
-ACMD(do_rbuild) {
+SUPERCMD(do_rbuild) {
 	mods::builder::initialize_builder(player);
 	auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
 
@@ -5826,7 +5826,7 @@ ACMD(do_rbuild) {
 };
 
 namespace mods::builder {
-	ACMD(do_nset) {
+	SUPERCMD(do_nset) {
 		ADMIN_REJECT();
 		DO_HELP_WITH_ZERO("nset");
 		auto vec_args = PARSE_ARGS();
@@ -5838,13 +5838,13 @@ namespace mods::builder {
 		mods::rooms::register_nickname(player->room(),vec_args[0]);
 		ADMIN_DONE();
 	}
-	ACMD(do_ndelete) {
+	SUPERCMD(do_ndelete) {
 		ADMIN_REJECT();
 		DO_HELP_WITH_ZERO("ndelete");
 		mods::rooms::remove_nickname(player->room());
 		ADMIN_DONE();
 	}
-	ACMD(do_nhelp) {
+	SUPERCMD(do_nhelp) {
 		ADMIN_REJECT();
 		player->sendln(
 		    mods::util::admin_section("Nickname helpers") +
@@ -5871,7 +5871,7 @@ namespace mods::builder {
 		);
 		ADMIN_DONE();
 	}
-	ACMD(do_nfind) {
+	SUPERCMD(do_nfind) {
 		ADMIN_REJECT();
 		DO_HELP_WITH_ZERO("nfind");
 		auto vec_args = PARSE_ARGS();
@@ -5893,7 +5893,7 @@ namespace mods::builder {
 		player->sendln(response);
 		ADMIN_DONE();
 	}
-	ACMD(do_ngoto) {
+	SUPERCMD(do_ngoto) {
 		ADMIN_REJECT();
 		DO_HELP_WITH_ZERO("ngoto");
 		auto vec_args = PARSE_ARGS();

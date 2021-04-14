@@ -55,48 +55,48 @@ void run_autowiz(void);
 /* local functions */
 int perform_set(char_data *ch, char_data *vict, int mode, char *val_arg);
 void perform_immort_invis(char_data *ch, int level);
-ACMD(do_echo);
-ACMD(do_send);
+SUPERCMD(do_echo);
+SUPERCMD(do_send);
 room_rnum find_target_room(char_data *ch, char *rawroomstr);
-ACMD(do_at);
-ACMD(do_goto);
-ACMD(do_trans);
-ACMD(do_teleport);
-ACMD(do_shutdown);
-ACMD(do_vnum);
+SUPERCMD(do_at);
+SUPERCMD(do_goto);
+SUPERCMD(do_trans);
+SUPERCMD(do_teleport);
+SUPERCMD(do_shutdown);
+SUPERCMD(do_vnum);
 void do_stat_room(char_data *ch);
 void do_stat_object(char_data *ch, struct obj_data *j);
 void do_stat_character(char_data *ch, char_data *k);
-ACMD(do_stat);
+SUPERCMD(do_stat);
 void stop_snooping(char_data *ch);
-ACMD(do_snoop);
-ACMD(do_switch);
-ACMD(do_return);
-ACMD(do_load);
-ACMD(do_vstat);
-ACMD(do_purge);
-ACMD(do_syslog);
-ACMD(do_advance);
-ACMD(do_restore);
+SUPERCMD(do_snoop);
+SUPERCMD(do_switch);
+SUPERCMD(do_return);
+SUPERCMD(do_load);
+SUPERCMD(do_vstat);
+SUPERCMD(do_purge);
+SUPERCMD(do_syslog);
+SUPERCMD(do_advance);
+SUPERCMD(do_restore);
 void perform_immort_vis(char_data *ch);
-ACMD(do_invis);
-ACMD(do_gecho);
-ACMD(do_poofset);
-ACMD(do_dc);
-ACMD(do_wizlock);
-ACMD(do_date);
-ACMD(do_last);
-ACMD(do_force);
-ACMD(do_wiznet);
-ACMD(do_zreset);
-ACMD(do_wizutil);
+SUPERCMD(do_invis);
+SUPERCMD(do_gecho);
+SUPERCMD(do_poofset);
+SUPERCMD(do_dc);
+SUPERCMD(do_wizlock);
+SUPERCMD(do_date);
+SUPERCMD(do_last);
+SUPERCMD(do_force);
+SUPERCMD(do_wiznet);
+SUPERCMD(do_zreset);
+SUPERCMD(do_wizutil);
 size_t print_zone_to_buf(char *bufptr, size_t left, zone_rnum zone);
-ACMD(do_show);
-ACMD(do_set);
+SUPERCMD(do_show);
+SUPERCMD(do_set);
 void snoop_check(char_data *ch);
 
 
-ACMD(do_echo) {
+SUPERCMD(do_echo) {
 
 	skip_spaces(&argument);
 
@@ -122,7 +122,7 @@ ACMD(do_echo) {
 }
 
 
-ACMD(do_send) {
+SUPERCMD(do_send) {
 
 	char arg[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
 	char_data *vict;
@@ -222,7 +222,7 @@ room_rnum find_target_room(char_data *ch, char *rawroomstr) {
 
 
 
-ACMD(do_at) {
+SUPERCMD(do_at) {
 	char command[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
 	room_rnum location, original_loc;
 
@@ -256,7 +256,7 @@ ACMD(do_at) {
 }
 
 
-ACMD(do_goto) {
+SUPERCMD(do_goto) {
 	char buf[MAX_STRING_LENGTH];
 	room_rnum location;
 
@@ -286,7 +286,7 @@ ACMD(do_goto) {
 
 
 
-ACMD(do_trans) {
+SUPERCMD(do_trans) {
 	char buf[MAX_INPUT_LENGTH];
 	char_data *victim;
 
@@ -340,7 +340,7 @@ ACMD(do_trans) {
 
 
 
-ACMD(do_teleport) {
+SUPERCMD(do_teleport) {
 
 	char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
 	char_data *victim;
@@ -371,7 +371,7 @@ ACMD(do_teleport) {
 
 
 
-ACMD(do_vnum) {
+SUPERCMD(do_vnum) {
 
 	char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
 
@@ -821,7 +821,7 @@ void do_stat_character(char_data *ch, char_data *k) {
 }
 
 
-ACMD(do_stat) {
+SUPERCMD(do_stat) {
 	DO_HELP("stat,stats");
 	static constexpr const char* usage = "usage: stat <object|weapon>";
 	auto vec_args = PARSE_ARGS();
@@ -853,7 +853,7 @@ ACMD(do_stat) {
 }
 
 
-ACMD(do_shutdown) {
+SUPERCMD(do_shutdown) {
 
 	char arg[MAX_INPUT_LENGTH];
 
@@ -924,7 +924,7 @@ void stop_snooping(char_data *ch) {
 }
 
 
-ACMD(do_snoop) {
+SUPERCMD(do_snoop) {
 
 	char arg[MAX_INPUT_LENGTH];
 	char_data *victim, *tch;
@@ -972,7 +972,7 @@ ACMD(do_snoop) {
 
 
 
-ACMD(do_switch) {
+SUPERCMD(do_switch) {
 
 	char arg[MAX_INPUT_LENGTH];
 	char_data *victim;
@@ -1009,7 +1009,7 @@ ACMD(do_switch) {
 }
 
 
-ACMD(do_return) {
+SUPERCMD(do_return) {
 
 	if(ch->has_desc && ch->desc->original) {
 		player->sendln("You return to your original body.");
@@ -1040,7 +1040,7 @@ ACMD(do_return) {
 
 
 
-ACMD(do_load) {
+SUPERCMD(do_load) {
 
 	char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
 
@@ -1099,7 +1099,7 @@ ACMD(do_load) {
 
 
 
-ACMD(do_vstat) {
+SUPERCMD(do_vstat) {
 
 	char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
 
@@ -1149,7 +1149,7 @@ ACMD(do_vstat) {
 
 
 /* clean a room of all mobiles and objects */
-ACMD(do_purge) {
+SUPERCMD(do_purge) {
 
 	char buf[MAX_INPUT_LENGTH];
 	char_data *vict;
@@ -1228,7 +1228,7 @@ const char *logtypes[] = {
 	"off", "brief", "normal", "complete", "\n"
 };
 
-ACMD(do_syslog) {
+SUPERCMD(do_syslog) {
 
 	char arg[MAX_INPUT_LENGTH];
 	int tp;
@@ -1254,7 +1254,7 @@ ACMD(do_syslog) {
 
 
 
-ACMD(do_advance) {
+SUPERCMD(do_advance) {
 
 	char_data *victim;
 	char name[MAX_INPUT_LENGTH], level[MAX_INPUT_LENGTH];
@@ -1348,7 +1348,7 @@ ACMD(do_advance) {
 	mods::db::save_char(std::make_shared<mods::player>(victim));
 }
 
-ACMD(do_restore) {
+SUPERCMD(do_restore) {
 
 	char buf[MAX_INPUT_LENGTH];
 	char_data *vict;
@@ -1429,7 +1429,7 @@ void perform_immort_invis(char_data *ch, int level) {
 }
 
 
-ACMD(do_invis) {
+SUPERCMD(do_invis) {
 
 	char arg[MAX_INPUT_LENGTH];
 	int level;
@@ -1461,7 +1461,7 @@ ACMD(do_invis) {
 }
 
 
-ACMD(do_gecho) {
+SUPERCMD(do_gecho) {
 
 	skip_spaces(&argument);
 	delete_doubledollar(argument);
@@ -1484,7 +1484,7 @@ ACMD(do_gecho) {
 }
 
 
-ACMD(do_poofset) {
+SUPERCMD(do_poofset) {
 
 	skip_spaces(&argument);
 	if(!*argument) {
@@ -1506,7 +1506,7 @@ ACMD(do_poofset) {
 
 
 
-ACMD(do_dc) {
+SUPERCMD(do_dc) {
 
 	char arg[MAX_INPUT_LENGTH];
 	int num_to_dc;
@@ -1578,7 +1578,7 @@ ACMD(do_dc) {
 
 
 
-ACMD(do_wizlock) {
+SUPERCMD(do_wizlock) {
 
 	char arg[MAX_INPUT_LENGTH];
 	int value;
@@ -1616,7 +1616,7 @@ ACMD(do_wizlock) {
 }
 
 
-ACMD(do_date) {
+SUPERCMD(do_date) {
 
 	char *tmstr;
 	time_t mytime;
@@ -1645,7 +1645,7 @@ ACMD(do_date) {
 
 
 
-ACMD(do_last) {
+SUPERCMD(do_last) {
 
 	char arg[MAX_INPUT_LENGTH];
 	struct char_file_u chdata;
@@ -1674,7 +1674,7 @@ ACMD(do_last) {
 }
 
 
-ACMD(do_force) {
+SUPERCMD(do_force) {
 
 	char_data *vict;
 	char arg[MAX_INPUT_LENGTH], to_force[MAX_INPUT_LENGTH], buf1[MAX_INPUT_LENGTH + 32];
@@ -1731,7 +1731,7 @@ ACMD(do_force) {
 
 
 
-ACMD(do_wiznet) {
+SUPERCMD(do_wiznet) {
 
 	char buf1[MAX_INPUT_LENGTH + MAX_NAME_LENGTH + 32],
 	     buf2[MAX_INPUT_LENGTH + MAX_NAME_LENGTH + 32];
@@ -1839,7 +1839,7 @@ ACMD(do_wiznet) {
 
 
 
-ACMD(do_zreset) {
+SUPERCMD(do_zreset) {
 
 	char arg[MAX_INPUT_LENGTH];
 	zone_rnum i;
@@ -1888,13 +1888,13 @@ ACMD(do_zreset) {
  * example: wiz_quote delete <id>
  * example: wiz_quote ammend <title|content> <id> <title|@@@content@@@>
  */
-ACMD(do_wiz_quote) {
+SUPERCMD(do_wiz_quote) {
 }
 
 /*
  *  General fn for wizcommands of the sort: cmd <player>
  */
-ACMD(do_wizutil) {
+SUPERCMD(do_wizutil) {
 
 	char arg[MAX_INPUT_LENGTH];
 	char_data *vict;
@@ -2019,7 +2019,7 @@ size_t print_zone_to_buf(char *bufptr, size_t left, zone_rnum zone) {
 }
 
 
-ACMD(do_show) {
+SUPERCMD(do_show) {
 
 	struct char_file_u vbuf;
 	unsigned i, j, l, con, nlen;		/* i, j, k to specifics? */
@@ -2771,7 +2771,7 @@ int perform_set(char_data *ch, char_data *vict, int mode,
 }
 
 
-ACMD(do_set) {
+SUPERCMD(do_set) {
 
 	char_data *vict = NULL, *cbuf = NULL;
 	struct char_file_u tmp_store;

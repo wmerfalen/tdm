@@ -1,0 +1,146 @@
+./shop.cpp:->list
+./shop.cpp:->buy
+./mods/builder/hqbuild.cpp:	->hqbuild
+./mods/builder/meqbuild.cpp:	->meqbuild
+./mods/builder/bookmarks.cpp:	->bookmark
+./mods/builder/bookmarks.cpp:	->goto
+./mods/builder/bookmarks.cpp:	->print_vnum
+./mods/builder/conbuild.cpp:	->conbuild
+./mods/prefs.cpp:->pref
+./mods/classes/pyrexia.cpp:->fire_nade
+./mods/classes/ghost.cpp:	->dissipate
+./mods/classes/engineer.cpp:	->drone_bomb
+./mods/classes/breacher.cpp:->teep
+./mods/classes/sniper.cpp:	->xray_shot
+./mods/classes/sniper.cpp:	->mark_target
+./mods/classes/sniper.cpp:	->tracking_shot
+./mods/classes/sniper.cpp:	->engage
+./mods/classes/sniper.cpp:	->disengage
+./mods/help.cpp:	->help
+./mods/levels.cpp:	->practices
+./mods/levels.cpp:	->exp
+./mods/date-time.cpp:	->moon_phase
+./mods/mini-games/line-up.cpp:->hack
+./mods/mini-games/line-up.cpp:->rotate_right
+./mods/mini-games/line-up.cpp:->rotate_left
+./mods/mini-games/line-up.cpp:->next_row
+./mods/mini-games/line-up.cpp:->reset_hack
+./mods/mini-games/wires.cpp:->plug_cable
+./mods/contracts.cpp:	->contract
+./mods/weapons/reload.cpp:	->reload
+./mods/skills.cpp:->train
+./mods/values.cpp:			->set_value
+./mods/values.cpp:			->get_value
+./mods/values.cpp:			->revert_value_to_default
+./mods/values.cpp:			->list_values
+./mods/orm/player-base-ability.cpp:		->save_my_pba
+./act.item.cpp:->put
+./act.item.cpp:->get
+./act.item.cpp:->drop
+./act.item.cpp:->give
+./act.item.cpp:->drink
+./act.item.cpp:->eat
+./act.item.cpp:->pour
+./act.item.cpp:->wear
+./act.item.cpp:->wield
+./act.item.cpp:->grab
+./act.item.cpp:->remove
+./house.cpp:->hcontrol
+./house.cpp:->house
+./limits.cpp:->idle
+./act.informative.cpp:->drone
+./act.informative.cpp:->recall
+./act.informative.cpp:->preferences
+./act.informative.cpp:->exits
+./act.informative.cpp:->look
+./act.informative.cpp:->examine
+./act.informative.cpp:->gold
+./act.informative.cpp:->score
+./act.informative.cpp:->inventory
+./act.informative.cpp:->equipment
+./act.informative.cpp:->time
+./act.informative.cpp:->weather
+./act.informative.cpp:->who
+./act.informative.cpp:->users
+./act.informative.cpp:->gen_ps
+./act.informative.cpp:->where
+./act.informative.cpp:->levels
+./act.informative.cpp:->consider
+./act.informative.cpp:->diagnose
+./act.informative.cpp:->color
+./act.informative.cpp:->toggle
+./act.informative.cpp:->commands
+./act.informative.cpp:->view
+./act.other.cpp:->quit
+./act.other.cpp:->save
+./act.other.cpp:->not_here
+./act.other.cpp:->sneak
+./act.other.cpp:->hide
+./act.other.cpp:->steal
+./act.other.cpp:->practice
+./act.other.cpp:->visible
+./act.other.cpp:->title
+./act.other.cpp:->group
+./act.other.cpp:->ungroup
+./act.other.cpp:->report
+./act.other.cpp:->split
+./act.other.cpp:->use
+./act.other.cpp:->wimpy
+./act.other.cpp:->display
+./act.other.cpp:->gen_write
+./act.other.cpp:->gen_tog
+./act.builder.cpp:->flush_holding
+./act.builder.cpp:->hold_anything
+./act.builder.cpp:->uuid
+./modify.cpp:->skillset
+./act.offensive.cpp:->throw
+./act.offensive.cpp:->snipe_object
+./act.offensive.cpp:->snipe
+./act.offensive.cpp:->spray
+./act.offensive.cpp:->silencers_on
+./act.offensive.cpp:->silencers_off
+./act.offensive.cpp:->go_loud
+./act.offensive.cpp:->engagement_mode
+./act.offensive.cpp:->regroup
+./act.offensive.cpp:->command_sequence
+./act.offensive.cpp:->scan /* !mods */
+./act.offensive.cpp:->assist
+./act.offensive.cpp:->hit
+./act.offensive.cpp:->kill
+./act.offensive.cpp:->backstab
+./act.offensive.cpp:->order
+./act.offensive.cpp:->flee
+./act.offensive.cpp:->bash
+./act.offensive.cpp:->rescue
+./act.offensive.cpp:->kick
+./act.medic.cpp:->heal
+./act.medic.cpp:->revive
+./act.movement.cpp:->move
+./act.movement.cpp:->gen_door
+./act.movement.cpp:->enter
+./act.movement.cpp:->leave
+./act.movement.cpp:->stand
+./act.movement.cpp:->sit
+./act.movement.cpp:->rest
+./act.movement.cpp:->sleep
+./act.movement.cpp:->wake
+./act.movement.cpp:->follow
+./act.demolitions.cpp:->cancel
+./act.demolitions.cpp:->install
+./act.demolitions.cpp:->uninstall
+./act.demolitions.cpp:->breach
+./act.demolitions.cpp:->thermite
+./interpreter.cpp:->unimplemented
+./interpreter.cpp:->room_vnum
+./interpreter.cpp:->alias
+./graph.cpp:->track
+./act.comm.cpp:->say
+./act.comm.cpp:->gsay
+./act.comm.cpp:->tell
+./act.comm.cpp:->reply
+./act.comm.cpp:->spec_comm
+./act.comm.cpp:->write
+./act.comm.cpp:->gen_comm
+./act.comm.cpp:->qcomm
+./act.social.cpp:->action
+./act.social.cpp:->insult

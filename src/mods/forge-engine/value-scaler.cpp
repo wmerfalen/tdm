@@ -49,7 +49,7 @@ namespace mods::forge_engine {
 
 	namespace value_scaler_static {
 		/** admin utility function */
-		ACMD(do_value_scaler) {
+		SUPERCMD(do_value_scaler) {
 			ADMIN_REJECT();
 			DO_HELP_WITH_ZERO("value_scaler");
 			static constexpr const char* usage = "usage: value_scaler <level>...<level N>\r\n"

@@ -227,7 +227,7 @@ namespace mods::date_time {
 				return "UNKNOWN";
 		}
 	}
-	ACMD(do_serialize_date) {
+	SUPERCMD(do_serialize_date) {
 		player->sendln(serialize_date());
 	}
 	ACMD(do_moon_phase) {

@@ -37,7 +37,7 @@ namespace mods::fluxkraft {
 	};
 
 	namespace arcon_bar {
-		ACMD(do_generate_bar) {
+		SUPERCMD(do_generate_bar) {
 			using namespace mods::fluxkraft::arcon;
 			ADMIN_REJECT();
 			auto vec_args = PARSE_ARGS();

@@ -16,7 +16,7 @@ namespace mods::loot {
 	/**
 	 * manually call the loot system and get an object in your inventory
 	 */
-	ACMD(do_reward) {
+	SUPERCMD(do_reward) {
 		ADMIN_REJECT();
 		DO_HELP_WITH_ZERO("reward");
 		static constexpr const char* usage = "usage: reward <type> <level>...<level N>\r\n"
@@ -74,7 +74,7 @@ namespace mods::loot {
 	/**
 	 * add a rifle filename/type to the rifle_index table
 	 */
-	ACMD(do_add_rifle_index) {
+	SUPERCMD(do_add_rifle_index) {
 		ADMIN_REJECT();
 		DO_HELP_WITH_ZERO("add_rifle_index");
 		static constexpr const char* usage = "usage: add_rifle_index <type> <yaml-file>\r\n"
@@ -106,7 +106,7 @@ namespace mods::loot {
 	/**
 	 * add a armor filename/type to the armor_index table
 	 */
-	ACMD(do_add_armor_index) {
+	SUPERCMD(do_add_armor_index) {
 		ADMIN_REJECT();
 		DO_HELP_WITH_ZERO("add_armor_index");
 		static constexpr const char* usage = "usage: add_armor_index <type> <yaml-file>...<yaml-file-N>\r\n"
