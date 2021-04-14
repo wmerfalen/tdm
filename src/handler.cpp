@@ -1112,6 +1112,10 @@ void extract_obj(struct obj_data *obj) {
 
 
 void update_object(struct obj_data *obj, int use) {
+#if 0
+	/**
+	 * Commented out [2021-04-14] because it's causing infinite loops
+	 */
 	if(GET_OBJ_TIMER(obj) > 0) {
 		GET_OBJ_TIMER(obj) -= use;
 	}
@@ -1123,6 +1127,7 @@ void update_object(struct obj_data *obj, int use) {
 	if(obj->next_content) {
 		update_object(obj->next_content, use);
 	}
+#endif
 }
 
 
@@ -1145,6 +1150,10 @@ void update_char_objects(char_data *ch) {
 			}
 		}
 	}
+#if 0
+	/**
+	 * Commented out [2021-04-14] because it's causing infinite loops
+	 */
 
 	for(i = 0; i < NUM_WEARS; i++) {
 		if(GET_EQ(ch, i)) {
@@ -1155,6 +1164,7 @@ void update_char_objects(char_data *ch) {
 	if(ch->carrying) {
 		update_object(ch->carrying, 1);
 	}
+#endif
 }
 
 

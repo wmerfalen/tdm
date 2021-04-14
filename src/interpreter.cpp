@@ -41,6 +41,7 @@
 #include "mods/screen-searcher.hpp"
 #include "mods/players/db-load.hpp"
 #include "mods/orm/rifle-attachment.hpp"
+#include "mods/filesystem.hpp"
 
 namespace mods::interpreter {
 	extern command_info& get_command(std::string_view,player_ptr_t&);
@@ -155,119 +156,6 @@ ACMD(do_builder) {
 //ACMD(do_install_armor_locker);
 //ACMD(do_uninstall_armor_locker);
 
-ACMD(do_builder_help) {
-
-	if(IS_NPC(ch)) {
-		/** nice try */
-		return;
-	}
-	if(player->implementor_mode() || player->builder_mode()) {
-		static std::vector<std::string> screen = {
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{yel} --                      -:[ Cameras ]:-                               {/yel}",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{gld}giveme_camera{/gld} -- {grn}give me deployable camera [feature-debug]{/grn}",
-			"{gld}giveme_night_vision_camera{/gld} -- {grn}give me a night vision camera{/grn}",
-			"{gld}giveme_thermal_camera{/gld} -- {grn}give me a thermal camera {/grn}",
-			"",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{yel} --                      -:[ Grenades ]:-                              {/yel}",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{gld}giveme_flash{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
-			"{gld}giveme_frag{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
-			"{gld}giveme_inc{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
-			"{gld}giveme_sensor{/gld} -- {grn}give me sensor grenades [feature-debug]{/grn}",
-			"{gld}giveme_smoke{/gld} -- {grn}give me frag grenades [feature-debug]{/grn}",
-			"{gld}givemegold{/gld} -- {grn}give me gold [feature-debug]{/grn}",
-			"",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{yel} --                      -:[ Building ]:-                              {/yel}",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			//"{gld}cambuild{/gld} -- {grn}create surveilance cameras that change their feed [builder-utils]{/grn}",
-			"{gld}list_minigame{/gld} -- {grn}lists minigames currently installed in the room [builder-utils]{/grn}",
-			"{gld}install_minigame{/gld} -- {grn}installs a minigame in the room [builder-utils]{/grn}",
-			"{gld}uninstall_minigame{/gld} -- {grn}uninstalls a minigame in the room [builder-utils]{/grn}",
-			"{gld}mbuild{/gld} -- {grn}mob builder [builder-utils]{/grn}",
-			"{gld}obuild{/gld} -- {grn}object builder [builder-utils]{/grn}",
-			"{gld}sbuild{/gld} -- {grn}shop builder [builder-utils]{/grn}",
-			"{gld}rbuild{/gld} -- {grn}room builder [builder-utils]{/grn}",
-			"{gld}rbuild_sandbox{/gld} -- {grn}room builder sandbox utility [builder-utils]{/grn}",
-			"{gld}rnumlist{/gld} -- {grn}list rooms [feature-debug]{/grn}",
-			"{gld}rnumtele{/gld} -- {grn}teleport to a room [feature-debug]{/grn}",
-			"{gld}room_dark{/gld} -- {grn}usage: room_dark on, room_dark off [builder-utils][admin-utils]{/grn}",
-			"{gld}room_fire{/gld} -- {grn}usage: room_fire <on|off> [level] [builder-utils][admin-utils]{/grn}",
-			"{gld}room_list{/gld} -- {grn}lists rooms [builder-utils][admin-utils]{/grn}",
-			"{gld}yaml_example{/gld} -- {grn}type 'yaml_example list' for a list of yaml files{/grn}",
-			"{gld}yaml_import{/gld} -- {grn}type 'yaml_import <filename>' to import a yaml file{/grn}",
-			"{gld}yaml_log{/gld} -- {grn}get the yaml log to find out which files failed to import{/grn}",
-			"{gld}yaml_log_save{/gld} -- {grn}write the yaml log to disk{/grn}",
-			"{gld}yaml_log_clear{/gld} -- {grn}clear the yaml log without flushing to disk{/grn}",
-			"{gld}zbuild{/gld} -- {grn}zone builder [builder-utils]{/grn}",
-			"",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{yel} --                      -:[ Ammunition ]:-                            {/yel}",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{gld}ammo{/gld} -- {grn}give yourself ammo [feature-debug]{/grn}",
-			"{gld}empty_clip{/gld} -- {grn}empty the clip in your primary weapon [feature-debug]{/grn}",
-			"{gld}set_ammo{/gld} -- {grn}set ammo of currently wielded weapon{/grn}",
-			"",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{yel} --                    -:[ Damage debugging ]:-                        {/yel}",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{gld}affect_me{/gld} -- {grn}give yourself an affect <BLIND|DISORIENT|POISON> [feature-debug]{/grn}",
-			"{gld}heal{/gld} -- {grn}heal yourself [feature-debug][staging-feature][class-medic]{/grn}",
-			"{gld}one_punch{/gld} -- {grn}immediately kill your currently fighting char with one punch{/grn}",
-			"{gld}point_update{/gld} -- {grn}manually call point update [feature-debug]{/grn}",
-			"{gld}set_position{/gld} -- {grn}set position to one of the POS_* constants [feature-debug]{/grn}",
-			"",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{yel} --                      -:[ Debugging ]:-                             {/yel}",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{gld}flush_player{/gld} -- {grn}calls the default flush_player method [feature-debug][staging-feature][builder-utils]{/grn}",
-			"{gld}feed_player{/gld} -- {grn}calls the default feed_player method [feature-debug][staging-feature][builder-utils]{/grn}",
-			"{gld}flush_holding{/gld} -- {grn}flush the item you are holding to the db [feature-debug][staging-feature][builder-utils]{/grn}",
-			"{gld}get_ticks_per_minute{/gld} -- {grn}get ticks per minute [feature-debug]{/grn}",
-			"{gld}histfile{/gld} -- {grn}start recording all commands. stop with 'histfile stop' [builder-utils][feature-debug]{/grn}",
-			"{gld}idle{/gld} -- {grn}force your character into idle state [feature-debug]{/grn}",
-			"{gld}js{/gld} -- {grn}Run javascript [feature-debug][admin-utils]{/grn}",
-			"{gld}js_help{/gld} -- {grn}Show useful js commands [builder-utils][admin-utils]{/grn}",
-			"{gld}jstest{/gld} -- {grn}run a javascript test [builder-utils][admin-tools]{/grn}",
-			"{gld}newjs{/gld} -- {grn}create a new javascript context [admin-tools][feature-debug]{/grn}",
-			"{gld}pref{/gld} -- {grn}preferences utility [staging-feature]{/grn}",
-			"{gld}room_list_uuid{/gld} -- {grn}list uuids and names of everyone in the same room [builder-utils]{/grn}",
-			"{gld}show_tics{/gld} -- {grn}toggle tics[builder-utils]{/grn}",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{yel} --                      -:[ Character Generation ]:-                  {/yel}",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{gld}disable_registration{/gld} -- {grn}yup[builder-utils]{/grn}",
-			"{gld}enable_registration{/gld} -- {grn}yup[builder-utils]{/grn}",
-			"{gld}registration_status{/gld} -- {grn}prints allowed or not allowed.[builder-utils]{/grn}",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{yel} --                      -:[ Values System ]:-                         {/yel}",
-			"{yel} ----------------------------------------------------------------------{/yel}",
-			"{gld}disable_registration{/gld} -- {grn}yup[builder-utils]{/grn}",
-			"{gld}revert_value_to_default{/gld} -- {grn}revert a value back to factory default{/grn}",
-			"{gld}list_values{/gld} -- {grn}list all available values{/grn}",
-			"{gld}list_value{/gld} -- {grn}alias of list_values{/grn}",
-			"{gld}set_value{/gld} -- {grn}set value to specific value{/grn}",
-			"{gld}get_value{/gld} -- {grn}display a specific value{/grn}",
-		};
-
-		auto vec_args = PARSE_ARGS();
-		if(vec_args.size()) {
-			mods::search_screen<player_ptr_t>(player,screen,vec_args,64);
-			player->sendln("Done listing.");
-			return;
-		}
-		for(auto& line : screen) {
-			player->sendln(line);
-		}
-		player->sendln("Done listing.");
-	} else {
-		player->stc("Huh?!?");
-		return;
-	}
-}
 ACMD(do_set_who_line);
 ACMD(do_clear_who_line);
 ACMD(do_go_invisible);
@@ -330,7 +218,6 @@ ACMD(do_grab);
 ACMD(do_group);
 ACMD(do_gsay);
 ACMD(do_hcontrol);
-ACMD(do_help);
 ACMD(do_hide);
 ACMD(do_hit);
 ACMD(do_house);
@@ -361,7 +248,6 @@ ACMD(do_purge);
 ACMD(do_put);
 ACMD(do_qcomm);
 ACMD(do_quit);
-ACMD(do_reload);
 ACMD(do_reboot);
 ACMD(do_remove);
 ACMD(do_reply);
@@ -643,7 +529,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "gsay", POS_SLEEPING, do_gsay, 0, 0 },
 	{ "gtell", POS_SLEEPING, do_gsay, 0, 0 },
 
-	{ "help", POS_DEAD, do_help, 0, 0 },
 	{ "handbook", POS_DEAD, do_gen_ps, LVL_IMMORT, SCMD_HANDBOOK },
 	{ "hcontrol", POS_DEAD, do_hcontrol, LVL_GRGOD, 0 },
 	{ "hiccup", POS_RESTING, do_action, 0, 0 },
@@ -742,7 +627,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "rest", POS_RESTING, do_rest, 0, 0 },
 	{ "read", POS_RESTING, do_look, 0, SCMD_READ },
 	{ "reboot", POS_DEAD, do_reboot, LVL_IMPL, 0 },
-	{ "reload", POS_RESTING, do_reload, 0, 0 },
 	{ "recite", POS_RESTING, do_use, 0, SCMD_RECITE },
 	{ "receive", POS_STANDING, do_not_here, 1, 0 },
 	{ "remove", POS_RESTING, do_remove, 0, 0 },
@@ -874,7 +758,6 @@ cpp_extern const struct command_info cmd_info[] = {
 	{ "remove_super_user", POS_RESTING, do_remove_super_user, LVL_BUILDER, 0 },
 	{ "get_super_user_list", POS_RESTING, do_get_super_user_list, LVL_BUILDER, 0 },
 	{ "show_tics", POS_RESTING, do_show_tics, LVL_BUILDER, 0 },
-	{ "builder_help", POS_RESTING, do_builder_help, LVL_GOD, 0 },
 	{ "flush_holding", POS_RESTING, do_flush_holding, LVL_GOD, 0 },
 	{ "flush_player", POS_RESTING, do_flush_player, LVL_GOD, 0 },
 	{ "feed_player", POS_RESTING, do_feed_player, LVL_GOD, 0 },

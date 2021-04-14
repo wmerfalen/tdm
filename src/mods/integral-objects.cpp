@@ -122,7 +122,7 @@ namespace mods::integral_objects {
 	}
 };
 
-ACMD(do_install_camera_feed) {
+SUPERCMD(do_install_camera_feed) {
 	ADMIN_REJECT();
 	DO_HELP_WITH_ZERO("install_camera_feed");
 	/** code here */
@@ -132,7 +132,7 @@ ACMD(do_install_camera_feed) {
 	ADMIN_DONE();
 }
 
-ACMD(do_uninstall_camera_feed) {
+SUPERCMD(do_uninstall_camera_feed) {
 	ADMIN_REJECT();
 	DO_HELP_WITH_ZERO("uninstall_camera_feed");
 	/** code here */
@@ -142,14 +142,14 @@ ACMD(do_uninstall_camera_feed) {
 	ADMIN_DONE();
 }
 
-ACMD(do_install_computer_choice) {
+SUPERCMD(do_install_computer_choice) {
 	ADMIN_REJECT();
 	DO_HELP_WITH_ZERO("install_computer_choice");
 	/** code here */
 	ADMIN_DONE();
 }
 
-ACMD(do_install_armor_locker) {
+SUPERCMD(do_install_armor_locker) {
 	ADMIN_REJECT();
 	DO_HELP_WITH_ZERO("install_armor_locker");
 	/** code here */
@@ -160,7 +160,7 @@ ACMD(do_install_armor_locker) {
 	ADMIN_DONE();
 }
 
-ACMD(do_install_weapon_locker) {
+SUPERCMD(do_install_weapon_locker) {
 	ADMIN_REJECT();
 	DO_HELP_WITH_ZERO("install_weapon_locker");
 	/** code here */
@@ -170,7 +170,7 @@ ACMD(do_install_weapon_locker) {
 	mods::zone::remove_replenish(world[player->room()].number,"weapon-locker");
 	ADMIN_DONE();
 }
-ACMD(do_uninstall_armor_locker) {
+SUPERCMD(do_uninstall_armor_locker) {
 	ADMIN_REJECT();
 	DO_HELP_WITH_ZERO("uninstall_armor_locker");
 	/** code here */
@@ -179,7 +179,7 @@ ACMD(do_uninstall_armor_locker) {
 	ADMIN_DONE();
 }
 
-ACMD(do_uninstall_weapon_locker) {
+SUPERCMD(do_uninstall_weapon_locker) {
 	ADMIN_REJECT();
 	DO_HELP_WITH_ZERO("uninstall_weapon_locker");
 	/** code here */
@@ -188,7 +188,7 @@ ACMD(do_uninstall_weapon_locker) {
 	ADMIN_DONE();
 }
 
-ACMD(do_list_wear_flags) {
+SUPERCMD(do_list_wear_flags) {
 	static const std::vector<std::string> flags = {
 		"ABOUT", "ARMS", "BACKPACK",
 		"BODY", "ELBOW_L", "ELBOW_R",
@@ -215,7 +215,7 @@ ACMD(do_list_wear_flags) {
 	player->sendln(CAN_BE_SEARCHED());
 }
 
-ACMD(do_armor_locker_quota) {
+SUPERCMD(do_armor_locker_quota) {
 	ADMIN_REJECT();
 	DO_HELP_WITH_ZERO("armor_locker_quota");
 	/** code here */
@@ -223,7 +223,7 @@ ACMD(do_armor_locker_quota) {
 	mods::integral_objects_db::save_armor_locker_quota(player,vec_args);
 	ADMIN_DONE();
 }
-ACMD(do_weapon_locker_quota) {
+SUPERCMD(do_weapon_locker_quota) {
 	ADMIN_REJECT();
 	DO_HELP_WITH_ZERO("weapon_locker_quota");
 	/** code here */
@@ -232,7 +232,7 @@ ACMD(do_weapon_locker_quota) {
 	ADMIN_DONE();
 }
 
-ACMD(do_create_catchy_name) {
+SUPERCMD(do_create_catchy_name) {
 	ADMIN_REJECT();
 	DO_HELP_WITH_ZERO("create_catchy_name");
 	/** code here */
@@ -246,7 +246,7 @@ ACMD(do_create_catchy_name) {
 	ADMIN_DONE();
 }
 
-ACMD(do_instantiate_catchy_name) {
+SUPERCMD(do_instantiate_catchy_name) {
 	ADMIN_REJECT();
 	DO_HELP_WITH_ZERO("instantiate_catchy_name");
 	/** code here */

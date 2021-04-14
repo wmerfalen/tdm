@@ -3,6 +3,8 @@
 # potential issues moving forward [ as of 2021-04-12 ]
 	- `mods::npc::equip(obj_ptr_t,int)` is hopelessly broken
 		- the only way to persist equipment is to call `npc->player_ptr()->equip(..)`
+# 2021-04-14 new features
+	- `builder_help` now includes `lib/ACMD.list` contents
 
 # 2021-04-12 new features
 	- mobs now honor mob roaming data
@@ -11,18 +13,19 @@
 
 # next up
 	- wearing armor increases
-		- [ ] stats
-		- [ ] damage resistance
+		- [x] stats
+		- [x] damage resistance
 		- [ ] damage percent
+		- [x] weight
 	- wielding non deep object rifles affect
-		- [ ] stats
+		- [x] stats
 		- [ ] damage resistance
-		- [ ] damage percent
+		- [x] damage percent
 	- wielding deep object rifles affects 
-		- [ ] stats
+		- [x] stats
 		- [ ] damage resistance
-		- [ ] damage percent
-	- 
+		- [x] damage percent
+
 
 	- [ ] rifle attachments create buffs/nerfs
 		- [ ] sights

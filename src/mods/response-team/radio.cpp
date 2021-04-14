@@ -43,6 +43,10 @@ namespace mods::response_team::radio {
 		return std::move(result);
 	}
 	void dispatch_help_message(uuid_t mob_uuid,std::string_view message, severity_t severity) {
+		/** FIXME: this segfaults currently. */
+		std::cerr << green_str("response team dispatch_help stub. returning early") << "\n";
+		return;
+#if 0
 		auto npc = ptr_by_uuid(mob_uuid);
 		mods::response_team::radio::incidents[npc->room()] += (uint8_t)severity;
 
@@ -82,6 +86,7 @@ namespace mods::response_team::radio {
 				}
 			}
 		});
+#endif
 	}
 
 

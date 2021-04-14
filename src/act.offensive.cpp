@@ -201,45 +201,6 @@ ACMD(do_command_sequence) {
 
 
 
-/* TODO: Implement weapon tags in the obj_data data structure */
-ACMD(do_reload) {
-	auto vec_args = PARSE_ARGS();
-	bool primary = true, secondary = false;
-	if(vec_args.size() > 0) {
-		if(mods::util::is_lower_match(vec_args[0], "primary")) {
-			primary = true;
-			secondary = false;
-		}
-		if(mods::util::is_lower_match(vec_args[0], "secondary")) {
-			secondary = true;
-			primary = false;
-		}
-	}
-
-	auto weapon = player->primary();
-	if(secondary) {
-		weapon = player->secondary();
-	}
-
-	if(!weapon || !weapon->has_rifle()) {
-		player->send("You aren't wielding a reloadable weapon in your [%s] slot.\r\n", primary ? "primary" : "secondary");
-		return;
-	}
-
-	auto ammo = mods::object_utils::get_ammo(weapon);
-	if(mods::object_utils::get_ammo(weapon) > 0) {
-		player->send("Item:[%s] has %d ammunition left.\r\n",weapon->name.c_str(),ammo);
-		return;
-	}
-
-	if(!player->carrying_ammo_of_type(player->rifle()->attributes->type)) {
-		player->sendln("{1} You don't have any ammo.");
-		return;
-	}
-
-	mods::object_utils::reload(player,weapon);
-}
-
 ACMD(do_scan) { /* !mods */
 	vpd scan;
 	mods::scan::los_scan(ch,mods::weapon::MAX_RANGE,&scan);
@@ -817,7 +778,6 @@ namespace offensive {
 		mods::interpreter::add_command("kill",POS_RESTING,do_kill,0,0);
 		mods::interpreter::add_command("order",POS_RESTING,do_order,0,0);
 		mods::interpreter::add_command("regroup",POS_RESTING,do_regroup,0,0);
-		mods::interpreter::add_command("reload",POS_RESTING,do_reload,0,0);
 		mods::interpreter::add_command("rescue",POS_RESTING,do_rescue,0,0);
 		mods::interpreter::add_command("scan",POS_RESTING,do_scan,0,0); /* !mods */
 		mods::interpreter::add_command("silencers_off",POS_RESTING,do_silencers_off,0,0);

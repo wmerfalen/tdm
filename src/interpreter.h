@@ -12,6 +12,7 @@
 #include "globals.hpp"
 
 #define ACMD(mentoc_function_name) void mentoc_function_name(char_data *ch, char* argument, int cmd, int subcmd, player_ptr_t& player)
+#define SUPERCMD(mentoc_function_name) void mentoc_function_name(char_data *ch, char* argument, int cmd, int subcmd, player_ptr_t& player)
 
 ACMD(do_move);
 
@@ -21,7 +22,7 @@ ACMD(do_move);
 
 #define IHBD "[+] It has been done."
 #define HUH "Huh?!?"
-void	command_interpreter(player_ptr_t & player, std::string argument);
+void	command_interpreter(player_ptr_t& player, std::string argument);
 int	search_block(char *arg, const char **list, int exact);
 char	lower(char c);
 char	*one_argument(char *argument, char *first_arg);

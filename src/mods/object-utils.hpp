@@ -337,25 +337,6 @@ namespace mods::object_utils {
 		}
 	};
 
-	template <typename T>
-	void reload(T& player, obj_ptr_t& weapon) {
-		auto obj = player->get_ammo_for(weapon);
-		if(!obj) {
-			player->send("You don't seem to have any ammunition for that weapon anywhere in your inventory!");
-			return;
-		}
-		auto ammo_amount = obj->obj_flags.ammo;
-		if(ammo_amount < weapon->rifle()->attributes->clip_size) {
-			weapon->rifle_instance->ammo = ammo_amount;
-			player->send("You partially reload your %s with %d ammo.", weapon->name.c_str(), ammo_amount);
-			player->consume_from_carrying(obj);
-			return;
-		}
-		weapon->rifle_instance->ammo = weapon->rifle()->attributes->clip_size;
-		player->send("You reload your %s with %d ammo.", weapon->name.c_str(), ammo_amount);
-		player->consume_from_carrying(obj);
-	}
-
 	void change_visibility(obj_ptr_t& object,int amount);
 	bool is_wield_position(int where);
 	bool is_hold_position(int where);

@@ -40,6 +40,8 @@ INIT(mods::builder::bookmarks);
 INIT(mods::builder);
 INIT(mods::zone);
 INIT(mods::mob_equipment);
+INIT(mods::weapons::reload);
+INIT(mods::help);
 #undef INIT
 
 
@@ -81,6 +83,8 @@ namespace mods::init {
 		mods::builder::init();
 		mods::zone::init();
 		mods::mob_equipment::init();
+		mods::weapons::reload::init();
+		mods::help::init();
 	}
 };
 #endif

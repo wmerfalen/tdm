@@ -16,3 +16,6 @@ ctags -R -f $WEBROOT/tags  --links=no --totals=yes \
 	--exclude='duktape*' \
 	-h '.h.hpp' *.cpp *.h *.hpp mods/*.hpp mods/*.cpp mods/*/*.*p &
 cscope -R -b -i cscope.files &
+
+cd $WEBROOT 
+grep -R 'ACMD(do_' . | grep -vE '^./doc/' | grep -v 'scripts/vk-data' | grep -v ACMD.list | grep '{' | sed -E 's|.cpp:[0-9]+:||g' | sed  -E 's|ACMD\(do_|->|g' | sed -E 's|\).*\{||g' > $WEBROOT/../lib/ACMD.list

@@ -295,12 +295,13 @@ namespace mods {
 		return m_equipment[pos];
 	}
 	void player::equip(obj_ptr_t in_object,int pos) {
-		std::cerr << green_str("mods::player::equip(obj_ptr_t,pos):") << in_object->name.c_str() << "', pos:" << pos << "\n";
 		if(!m_basic_protection) {
 			m_basic_protection = std::make_shared<mods::armor::basic_protection>(uuid());
+			m_advanced_protection = std::make_shared<mods::armor::advanced_protection>(uuid());
+			m_elite_protection = std::make_shared<mods::armor::elite_protection>(uuid());
 		}
+		std::cerr << green_str("mods::player::equip(obj_ptr_t,pos):") << in_object->name.c_str() << "', pos:" << pos << "\n";
 		if(pos < NUM_WEARS) {
-			m_basic_protection->equip(pos,in_object->uuid);
 			if(pos == WEAR_WIELD || pos == WEAR_PRIMARY || pos == WEAR_SECONDARY) {
 				this->m_weapon_flags = in_object->obj_flags.weapon_flags;
 			}
@@ -332,12 +333,8 @@ namespace mods {
 		this->equip(obj,pos);
 	}
 	void player::unequip(int pos) {
-		if(!m_basic_protection) {
-			m_basic_protection = std::make_shared<mods::armor::basic_protection>(uuid());
-		}
 		if(pos < NUM_WEARS && m_equipment[pos]) {
 			mods::stat_bonuses::player_unequip(uuid(),m_equipment[pos]->uuid);
-			m_basic_protection->unequip(pos);
 			auto item = m_equipment[pos];
 			if(pos == WEAR_WIELD) {
 				/** FIXME: this needs to negate the bit */
@@ -405,6 +402,45 @@ namespace mods {
 			}
 		}
 		if(item->has_armor()) {
+			//thac0
+			switch(item->armor()->attributes->speed_profile) {
+				case 0:
+					/** unhindered */
+					break;
+				case 1:
+					/** fast */
+					break;
+				case 2:
+					/** hindered */
+					break;
+				case 3:
+					/** slow */
+					break;
+				case 4:
+					/** sluggish */
+					break;
+			}
+			if(item->armor()->attributes->classification.compare("BASIC") == 0) {
+				if(equip) {
+					m_basic_protection->equip(pos,item->uuid);
+				} else {
+					m_basic_protection->unequip(pos);
+				}
+			}
+			if(item->armor()->attributes->classification.compare("ADVANCED") == 0) {
+				if(equip) {
+					m_advanced_protection->equip(pos,item->uuid);
+				} else {
+					m_advanced_protection->unequip(pos);
+				}
+			}
+			if(item->armor()->attributes->classification.compare("ELITE") == 0) {
+				if(equip) {
+					m_elite_protection->equip(pos,item->uuid);
+				} else {
+					m_elite_protection->unequip(pos);
+				}
+			}
 			real_abils().str += (equip ? 1 : -1) * item->armor()->attributes->stat_strength;
 			real_abils().intel += (equip ? 1 : -1) * item->armor()->attributes->stat_intelligence;
 			real_abils().wis +=(equip ? 1 : -1) *  item->armor()->attributes->stat_wisdom;
@@ -568,6 +604,12 @@ namespace mods {
 		dbg("trimming rifle attachments");
 		auto obj_uuid = obj->uuid;
 		bool equipped = false;
+		if(obj->has_armor()) {
+			carry_weight() -= obj->armor()->attributes->weight_in_lbs;
+		}
+		if(obj->has_consumable()) {
+			carry_weight() -= obj->consumable()->attributes->weight_in_lbs;
+		}
 		for(const auto& item : this->m_equipment) {
 			if(!item) {
 				continue;

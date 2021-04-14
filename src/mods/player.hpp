@@ -37,6 +37,9 @@ namespace mods::armor {
 	struct elite_protection;
 };
 
+#include "armor/basic-protection.hpp"
+#include "armor/advanced-protection.hpp"
+#include "armor/elite-protection.hpp"
 
 #define WEAPON_SET_NUM 1
 extern size_t send_to_char(char_data *ch, const char *messg, ...);

@@ -479,8 +479,8 @@ struct obj_data *get_hash_obj_vis(char_data *ch, char *name,
 		return (NULL);
 	}
 
-	for(loop = list; loop; loop = loop->next_content){
-		if(CAN_SEE_OBJ(ch, loop) && GET_OBJ_COST(loop) > 0){
+	for(loop = list; loop; loop = loop->next_content) {
+		if(CAN_SEE_OBJ(ch, loop) && GET_OBJ_COST(loop) > 0) {
 			if(!same_obj(last_obj, loop)) {
 				if(--qindex == 0) {
 					return (loop);
@@ -714,7 +714,7 @@ void shopping_buy(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
 
 
 struct obj_data *get_selling_obj(char_data *ch, char *name, char_data *keeper, int shop_nr, int msg) {
-			auto player = ptr(ch);
+	auto player = ptr(ch);
 	char buf[MAX_INPUT_LENGTH];
 	struct obj_data *obj;
 	int result;
@@ -1049,24 +1049,24 @@ void shopping_list(char *arg, char_data *ch, char_data *keeper, int shop_nr) {
 	}
 }
 
-ACMD(do_list){
+ACMD(do_list) {
 	mods::shop::list_shop_items<decltype(mods::globals::room_shopmap)>(
-			player,
-			mods::globals::room_shopmap
+	    player,
+	    mods::globals::room_shopmap
 	);
 }
-ACMD(do_buy){
+ACMD(do_buy) {
 	mods::shop::buy_item<decltype(mods::globals::room_shopmap)>(
-			player,
-			mods::globals::room_shopmap,
-			argument
+	    player,
+	    mods::globals::room_shopmap,
+	    argument
 	);
 }
-void shop_view_item(player_ptr_t& player, int16_t item_number){
+void shop_view_item(player_ptr_t& player, int16_t item_number) {
 	mods::shop::show_item<decltype(mods::globals::room_shopmap)>(
-			player,
-			mods::globals::room_shopmap,
-			item_number
+	    player,
+	    mods::globals::room_shopmap,
+	    item_number
 	);
 }
 
@@ -1148,7 +1148,7 @@ int ok_damage_shopkeeper(char_data *ch, char_data *victim) {
 	MENTOC_PREAMBLE();
 	int sindex;
 
-	if(static_cast<std::size_t>(GET_MOB_RNUM(victim)) >= mob_index.size()){
+	if(static_cast<std::size_t>(GET_MOB_RNUM(victim)) >= mob_index.size()) {
 		return 0;
 	}
 	if(!IS_MOB(victim) || mob_index[GET_MOB_RNUM(victim)].func != shop_keeper) {
@@ -1606,11 +1606,11 @@ void destroy_shops(void) {
 }
 
 #ifdef __MENTOC_USE_PQXX_RESULT__
-	template <>
-	void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::feed(const pqxx::result::reference & in_row)
+template <>
+void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::feed(const pqxx::result::reference& in_row)
 #else
-	template <>
-	void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::feed(pqxx::row in_row)
+template <>
+void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::feed(pqxx::row in_row)
 #endif
 {
 #ifdef __MENTOC_SHOW_SHOP_CPP_DEBUG_OUTPUT__
@@ -1647,8 +1647,8 @@ void destroy_shops(void) {
 	this->bankAccount = in_row["shop_bankAccount"].as<int>();
 	this->lastsort = in_row["shop_lastsort"].as<int>();
 	this->shop_type = in_row["shop_type"].as<int>();
-	
-	for(auto && s_row : db_get_by_meta("shop_rooms","shop_vnum",std::to_string(this->vnum).c_str())){
+
+	for(auto&& s_row : db_get_by_meta("shop_rooms","shop_vnum",std::to_string(this->vnum).c_str())) {
 #ifdef __MENTOC_SHOW_SHOP_CPP_DEBUG_OUTPUT__
 		std::cerr << __FILE__ << "|" << __LINE__ << ": found shop_rooms record: " << s_row["shop_room_vnum"].c_str() << "\n";
 #endif
@@ -1656,7 +1656,7 @@ void destroy_shops(void) {
 	}
 	int16_t count_placed = this->room_info.place_keepers_in_rooms(this->keeper);
 	log("%d keepers loaded in shop_vnum: %d",count_placed,this->vnum);
-	for(auto &&  s_row : db_get_by_meta("shop_objects","shop_vnum",std::to_string(this->vnum).c_str())){
+	for(auto&&   s_row : db_get_by_meta("shop_objects","shop_vnum",std::to_string(this->vnum).c_str())) {
 #ifdef __MENTOC_SHOW_SHOP_CPP_DEBUG_OUTPUT__
 		std::cerr << __FILE__ << "|" << __LINE__ << ": found shop_objects record: " << s_row["shop_object_vnum"].c_str() << "\n";
 #endif
@@ -1666,72 +1666,72 @@ void destroy_shops(void) {
 }
 
 template <>
-shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::shop_data(){
+shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::shop_data() {
 	init();
 }
 
 template <>
-void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::list_to_char(player_ptr_t& player){
+void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::list_to_char(player_ptr_t& player) {
 	d("stub list_to_char");
 	/** TODO */
 	static bool static_is_loaded = false;
 	static std::string static_item_list = "";
 	std::size_t item_number = 0;
-	if(!static_is_loaded){
+	if(!static_is_loaded) {
 		const std::size_t name_field_len = 36;
 		static_item_list =  "=-------------------------------------------------------=\r\n";
 		static_item_list += "[  id  ]->[            item name                ][  mp  ]\r\n";
 		static_item_list += "=-------------------------------------------------------=\r\n";
-		for(const auto & obj_vnum_id : object_info.objects){
+		for(const auto& obj_vnum_id : object_info.objects) {
 			auto obj_proto_item = real_object(obj_vnum_id);
-			if(obj_proto_item == NOTHING){
+			if(obj_proto_item == NOTHING) {
 				continue;
 			}
 			//id
 			static_item_list += "[";
 			auto id_number = std::to_string(++item_number);
-			if(id_number.length() == 1){
+			if(id_number.length() == 1) {
 				static_item_list += "   ";
 				static_item_list += id_number;
 				static_item_list += "  ";
 			}
-			if(id_number.length() == 2){
+			if(id_number.length() == 2) {
 				static_item_list += "  ";
 				static_item_list += id_number;
 				static_item_list += "  ";
 			}
 			static_item_list += "]->[    ";
 			static_item_list += obj_proto[obj_proto_item].name.str();
-			for(unsigned i=obj_proto[obj_proto_item].name.str().length() + 4; i <= name_field_len;i++){
+			for(unsigned i=obj_proto[obj_proto_item].name.str().length() + 4; i <= name_field_len; i++) {
 				static_item_list += " ";
 			}
 			static_item_list += "][";
 			auto mp_str = std::to_string(mods::shop::object_cost(obj_proto[obj_proto_item]));
-			if(mp_str.length() == 2){
+			if(mp_str.length() == 2) {
 				static_item_list += "  ";
 				static_item_list += mp_str;
 				static_item_list += "  ";
 			}
-			if(mp_str.length() == 1){
+			if(mp_str.length() == 1) {
 				static_item_list += "   ";
 				static_item_list += mp_str;
 				static_item_list += "  ";
 			}
-			if(mp_str.length() == 3){
+			if(mp_str.length() == 3) {
 				static_item_list += " ";
 				static_item_list += mp_str;
 				static_item_list += "  ";
 			}
-			if(mp_str.length() == 4){
+			if(mp_str.length() == 4) {
 				static_item_list += " ";
 				static_item_list += mp_str;
 				static_item_list += " ";
 			}
-			if(mp_str.length() == 5){
+			if(mp_str.length() == 5) {
 				static_item_list += mp_str;
 				static_item_list += " ";
 			}
-			if(mp_str.length() == 6){
+			if(mp_str.length() == 6) {
 				static_item_list += mp_str;
 			}
 			static_item_list += "]\r\n";
@@ -1744,7 +1744,7 @@ void shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::l
 }
 
 template <typename TOrmType,typename T,typename R>
-void shop_data<TOrmType,T,R>::init(){
+void shop_data<TOrmType,T,R>::init() {
 #ifdef __MENTOC_SHOW_SHOP_CPP_DEBUG_OUTPUT__
 	std::cerr << "[shop_data::init] called\n";
 #endif
@@ -1758,7 +1758,7 @@ void shop_data<TOrmType,T,R>::init(){
 	this->profit_buy = 0.0;
 	this->profit_sell = 0.0;
 	this->type = nullptr;
-	this->no_such_item1.clear(); 
+	this->no_such_item1.clear();
 	this->no_such_item2.clear();
 	this->missing_cash1.clear();
 	this->missing_cash2.clear();
@@ -1781,7 +1781,7 @@ void shop_data<TOrmType,T,R>::init(){
 	this->m_objects.clear();
 }
 template <typename TOrmType,typename T,typename R>
-std::map<std::string,std::string> shop_data<TOrmType,T,R>::export_shop(){
+std::map<std::string,std::string> shop_data<TOrmType,T,R>::export_shop() {
 	std::map<std::string,std::string> s_map;
 	s_map["shop_vnum"] = mods::util::itoa(vnum);
 	s_map["shop_title"] = title.str();
@@ -1811,7 +1811,7 @@ std::map<std::string,std::string> shop_data<TOrmType,T,R>::export_shop(){
 }
 
 template <>
-std::tuple<bool,uint64_t,std::string> shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::save(){
+std::tuple<bool,uint64_t,std::string> shop_data<mods::orm::shop,mods::orm::shop_rooms,mods::orm::shop_objects>::save() {
 	m_orm.shop_vnum_id = vnum;
 	m_orm.shop_title = title;
 	m_orm.shop_description = description;
@@ -1839,7 +1839,7 @@ std::tuple<bool,uint64_t,std::string> shop_data<mods::orm::shop,mods::orm::shop_
 	m_orm.room_info = room_info;
 	m_orm.object_info = object_info;
 	auto result = m_orm.save();
-	if(std::get<0>(result)){
+	if(std::get<0>(result)) {
 		m_loaded = true;
 		db_id = std::get<1>(result);
 	}
