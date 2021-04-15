@@ -373,6 +373,8 @@ MSG_OUT_OF_AMMO,"{gld}*CLICK*{/gld} Your weapon is out of ammo!"
 MSG_MISSED_TARGET,"You missed your target!"
 MSG_TARGET_DEAD,"It appears that your target is dead."
 MSG_YOURE_INJURED,"You are injured!"
+MSG_YOU_ARE_DISORIENTED,"You become disoriented!"
+MSG_YOU_DISORIENT_SOMEONE,"You disorient your target!"
 MSG_FIRE_DAMAGE,"[%d] You suffer burns from the roaring fire!\r\n"
 MSG_EXPLOSIVE_DAMAGE,"[%d] You take EXPLOSIVE damage!\r\n"
 MSG_SHRAPNEL_DAMAGE,"[%d] You are shredded by SHRAPNEL!\r\n"
@@ -384,6 +386,8 @@ MSG_EMP_DAMAGE,"[%d] You take EMP damage!\r\n"
 MSG_SHOCK_DAMAGE,"[%d] You take SHOCK damage!\r\n"
 MSG_SMOKE_DAMAGE,"[%d] You struggle to breath as smoke fills your lungs!\r\n"
 MSG_NARROWLY_MISSED_ME,"You just barely get out of the way of a potentially fatal shot!\r\n"
+MSG_YOU_GOT_HIT_BY_INCENDIARY_AMMO,"{yel} Your equipment burns from incendiary damage! {/yel}"
+MSG_YOU_INFLICTED_INCENDIARY_AMMO,"{grn} You inflict incendiary damage on your target! {/grn}"
 MSG_YOU_ARE_INJURED,"{red}***YOU ARE INJURED***{/red} --"
 MSG_YOUR_TARGET_IS_DEAD,"{grn}*** YOUR TARGET IS DEAD ***{/grn}\r\n"
 MSG_HIT_BY_RIFLE_ATTACK,"{red}*** YOUR ARE HIT ***{/red} -- "
@@ -566,6 +570,7 @@ RELOAD_TICKS_HANDGUN,2
 RELOAD_TICKS_PISTOL,2
 RELOAD_TICKS_MACHINE_PISTOL,2
 RELOAD_TICKS_LIGHT_MACHINE_GUN,16
+DEFAULT_DISORIENT_TICKS_FROM_RIFLE_ATTACK,16
 
 [uint32_t]
 BREACHER_REPLENISH_CALL_COUNT,1

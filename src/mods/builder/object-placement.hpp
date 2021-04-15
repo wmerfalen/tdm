@@ -10,7 +10,7 @@ namespace mods::builder::object_placement {
 	using deep_object_parser_t = mods::deep_object_parser_t;
 };
 
-ACMD(do_place_object);
+SUPERCMD(do_place_object);
 #undef mbop_debug
 
 #endif

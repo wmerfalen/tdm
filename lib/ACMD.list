@@ -1,11 +1,5 @@
 ./shop.cpp:->list
 ./shop.cpp:->buy
-./mods/builder/hqbuild.cpp:	->hqbuild
-./mods/builder/meqbuild.cpp:	->meqbuild
-./mods/builder/bookmarks.cpp:	->bookmark
-./mods/builder/bookmarks.cpp:	->goto
-./mods/builder/bookmarks.cpp:	->print_vnum
-./mods/builder/conbuild.cpp:	->conbuild
 ./mods/prefs.cpp:->pref
 ./mods/classes/pyrexia.cpp:->fire_nade
 ./mods/classes/ghost.cpp:	->dissipate

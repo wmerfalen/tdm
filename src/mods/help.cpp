@@ -441,9 +441,6 @@ namespace mods::help {
 		for(const auto& line : builder_screen) {
 			screen.emplace_back(line);
 		}
-		for(const auto& line : mods::help::pages::builder_commands) {
-			screen.emplace_back(line);
-		}
 		std::string guts,error;
 		mods::filesystem::file_get_contents("../lib/SUPERCMD.list", guts,error);
 		std::string current = "";
@@ -683,14 +680,13 @@ namespace mods::help {
 		send_class_footer(player,"MACHINIST");
 
 	}
-	void send_generic_help(player_ptr_t& player) {
-
-	}
 	ACMD(do_help) {
 		if(IS_NPC(ch)) {
 			return;
 		}
+		std::vector<std::string> screen;
 
+		mods::help::fetch_mortal_help(screen);
 		auto vec_args = PARSE_ARGS();
 		if(vec_args.size() == 0) {
 			switch(player->get_class()) {
@@ -736,26 +732,14 @@ namespace mods::help {
 				default:
 					break;
 			}
-			mods::help::send_generic_help(player);
-		}
-		std::vector<std::string> screen;
-
-		if(vec_args.size()) {
-			if(!mods::help::send_help(vec_args[0],player)) {
-				player->sendln("Apparently, we sent you help. did you get it? report this using the bug command if not and a dev can attend to this.");
-				return;
-			}
 		}
 		if(player->implementor_mode() || player->builder_mode()) {
 			mods::help::fetch_builder_help(screen);
-			auto vec_args = PARSE_ARGS();
-			if(vec_args.size()) {
-				mods::search_screen<player_ptr_t>(player,screen,vec_args,64);
-				player->sendln("Done listing.");
-				return;
-			}
-		} else {
-			mods::help::fetch_builder_help(screen);
+		}
+		if(vec_args.size()) {
+			player->sendln("Searching...");
+			mods::search_screen<player_ptr_t>(player,screen,vec_args,64);
+			player->sendln("Done listing.");
 			return;
 		}
 		player->pager_start();
@@ -765,6 +749,7 @@ namespace mods::help {
 		player->sendln("Done listing.");
 		player->pager_end();
 		player->page(0);
+
 	}
 	void init() {
 		mods::interpreter::add_command("builder_help", POS_RESTING, do_help, LVL_BUILDER,0);

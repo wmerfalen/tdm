@@ -10,6 +10,12 @@
 {yel}mods/integral-objects{/yel}:->{grn}weapon_locker_quota{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}create_catchy_name{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}instantiate_catchy_name{/grn}
+{yel}mods/builder/hqbuild{/yel}:->{grn}hqbuild{/grn}
+{yel}mods/builder/meqbuild{/yel}:->{grn}meqbuild{/grn}
+{yel}mods/builder/bookmarks{/yel}:->{grn}bookmark{/grn}
+{yel}mods/builder/bookmarks{/yel}:->{grn}goto{/grn}
+{yel}mods/builder/bookmarks{/yel}:->{grn}print_vnum{/grn}
+{yel}mods/builder/conbuild{/yel}:->{grn}conbuild{/grn}
 {yel}mods/zone{/yel}:->{grn}list_zone_table{/grn}
 {yel}mods/zone{/yel}:->{grn}reset_zone{/grn}
 {yel}mods/players/messages{/yel}:->{grn}queue_message{/grn}

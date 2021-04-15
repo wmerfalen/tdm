@@ -63,8 +63,8 @@ namespace mods {
 			int16_t incendiary_damage;				/** honored [ ? (see elemental.cpp) ] */
 			int16_t radiation_damage;					/** honored [ ? (see elemental.cpp) ] */
 			int16_t damage_percent_bonus;			/** honored [ 2021-04-13 ] */
-			int16_t armor_penetration_amount;
-			int16_t ammunition_amount;
+			int16_t ammunition_amount;				/** honored [ 2021-04-13 ] */
+			int16_t armor_penetration_amount;	/** honored partially (adds 10% bonus if it's non-zero. doesn't affect if lte zero) */
 			int16_t disorient_amount;
 			int16_t durability_profile;
 			/** --#=================================================#-- */

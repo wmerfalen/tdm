@@ -115,9 +115,9 @@ namespace mods::contracts {
 		auto& master_list = contract_master_list();
 		auto status = mods::orm::load_all_non_orm_contracts(&master_list);
 		if(std::get<0>(status)) {
-			std::cout << green_str("load_all_contracts:") << "'" << std::get<1>(status) << "'\n";
+			dbg_print(green_str("load_all_contracts:") << "'" << std::get<1>(status) << "'");
 		} else {
-			std::cerr << red_str("load_all_contracts:") << "'" << std::get<1>(status) << "'\n";
+			dbg_print(red_str("load_all_contracts:") << "'" << std::get<1>(status) << "'");
 		}
 	}
 
@@ -281,7 +281,7 @@ namespace mods::contracts {
 		parts.emplace_back(current);
 
 		if(parts.size() < 2) {
-			std::cerr << red_str("ERROR: contract current key is not formatted correctly") << "\n";
+			dbg_print(red_str("ERROR: contract current key is not formatted correctly"));
 			return -1;
 		}
 		DBGET(trigger_key(player,mods::util::stoi(parts[0]).value_or(-1),mods::util::stoi(parts[1]).value_or(-1)),js_code);

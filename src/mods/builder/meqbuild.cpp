@@ -199,7 +199,7 @@ namespace mods::builder::meqbuild {
 		return interface;
 	}
 
-	ACMD(do_meqbuild) {
+	SUPERCMD(do_meqbuild) {
 		mods::builder::initialize_builder(player);
 		if(meqbuilder(player).handle_input(argument)) {
 			return;

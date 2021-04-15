@@ -80,7 +80,7 @@ namespace mods::builder::hqbuild {
 
 	using args_t = std::vector<std::string>;
 
-	ACMD(do_hqbuild) {
+	SUPERCMD(do_hqbuild) {
 
 		mods::builder::initialize_builder(player);
 		auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));

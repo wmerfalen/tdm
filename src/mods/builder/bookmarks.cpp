@@ -9,7 +9,7 @@ namespace mods::builder::bookmarks {
 	std::vector<room_rnum>& get_rooms(player_ptr_t& player);
 	void teleport_to(player_ptr_t& player,const room_rnum& room);
 
-	ACMD(do_bookmark) {
+	SUPERCMD(do_bookmark) {
 		ADMIN_REJECT();
 		DO_HELP_WITH_ZERO("bookmark");
 		auto vec_args = PARSE_ARGS();
@@ -32,7 +32,7 @@ namespace mods::builder::bookmarks {
 		player->builder_data->bookmarks[vec_args[0]] = i;
 		ADMIN_DONE();
 	}
-	ACMD(do_goto) {
+	SUPERCMD(do_goto) {
 		ADMIN_REJECT();
 		DO_HELP_WITH_ZERO("goto");
 		auto vec_args = PARSE_ARGS();
@@ -59,7 +59,7 @@ namespace mods::builder::bookmarks {
 		char_to_room(player->cd(),room_id);
 		ADMIN_DONE();
 	}
-	ACMD(do_print_vnum) {
+	SUPERCMD(do_print_vnum) {
 		ADMIN_REJECT();
 		DO_HELP_WITH_ZERO("print_vnum");
 		auto vec_args = PARSE_ARGS();

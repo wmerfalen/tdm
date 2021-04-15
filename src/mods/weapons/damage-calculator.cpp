@@ -25,6 +25,10 @@ namespace mods::weapons::damage_calculator {
 	using de = damage_event_t;
 	using vpd = mods::scan::vec_player_data;
 
+	/**
+	 * affects how far away a target can be.
+	 * powered by the zoom_multiplier on attachments
+	 */
 	int16_t max_range(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon
@@ -35,6 +39,14 @@ namespace mods::weapons::damage_calculator {
 		}
 		return weapon->rifle()->attributes->max_range;
 	}
+	/**
+	 * @brief calculates how big your magazine is when you reload
+	 *
+	 * @param attacker
+	 * @param
+	 *
+	 * @return
+	 */
 	int16_t ammunition_amount(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon
@@ -42,50 +54,41 @@ namespace mods::weapons::damage_calculator {
 		/** TODO: add ammunition count from rifle_attachment */
 		return weapon->rifle_instance->ammo;
 	}
-	bool roll_free_ammo_chance(
-	    player_ptr_t& attacker,
-	    obj_ptr_t& weapon
-	) {
-		auto rifle_attachment = attacker->rifle_attachment_by_uuid(weapon->uuid);
-		if(rifle_attachment) {
-			bool free_ammo = mods::rand::chance(rifle_attachment->free_ammo_chance);
-			dty_debug("Player rolled free ammo " << (free_ammo ?  green_str("SUCCESS") : red_str("FAIL")) <<
-			          "Chances were: " << rifle_attachment->free_ammo_chance << "%");
-			return free_ammo;
-		}
-		dty_debug("No free ammo because weapon isnt rifle attachment");
-		return false;
-	}
-	int16_t regenerate_ammo(
-	    player_ptr_t& attacker,
-	    obj_ptr_t& weapon
-	) {
-		auto rifle_attachment = attacker->rifle_attachment_by_uuid(weapon->uuid);
-		if(rifle_attachment) {
-			bool regenerated_ammo = mods::rand::chance(rifle_attachment->regenerate_ammo_chance);
-			dty_debug("Player rolled regenerated ammo " << (regenerated_ammo ?  green_str("SUCCESS") : red_str("FAIL")) <<
-			          "Chances were: " << rifle_attachment->regenerate_ammo_chance << "%");
-			int16_t ammo_count = rand_number(
-			                         mods::values::REGENERATED_AMMO_LOW(),
-			                         mods::values::REGENERATED_AMMO_HIGH()
-			                     );
-			dty_debug("Random amount of regenerated ammo: " << ammo_count);
-			return ammo_count;
-		}
-		dty_debug("No regenerated ammo because weapon isnt rifle attachment");
-		return 0;
-	}
+	/**
+	 * @brief pass in attacker, weapon, and amount you would like to reduce ammo by. this function will roll your free ammo chance and regenerate ammo chance. it will take the result of those rolls and give you the amount of ammo you should really deduct. may return negative number or zero when regenerated ammo or free ammo dice rolls succeed.
+	 *
+	 * @param attacker
+	 * @param weapon
+	 * @param
+	 *
+	 * @return
+	 */
 	int16_t reduce_ammo(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon,
 	    int16_t wants_to_deduct
 	) {
 		int16_t ammo_reduction = wants_to_deduct;
-		if(roll_free_ammo_chance(attacker,weapon)) {
+		auto rifle_attachment = attacker->rifle_attachment_by_uuid(weapon->uuid);
+		if(!rifle_attachment) {
+			return wants_to_deduct;
+		}
+		if(auto free_ammo = mods::rand::chance(rifle_attachment->free_ammo_chance)) {
+			dty_debug("Player rolled free ammo " << (free_ammo ?  green_str("SUCCESS") : red_str("FAIL")) <<
+			          "Chances were: " << rifle_attachment->free_ammo_chance << "%");
 			ammo_reduction = 0;
 		}
-		auto regen = regenerate_ammo(attacker,weapon);
-		return ammo_reduction - regen;
+		if(auto regenerated_ammo = mods::rand::chance(rifle_attachment->regenerate_ammo_chance)) {
+			dty_debug("Player rolled regenerated ammo " << (regenerated_ammo ?  green_str("SUCCESS") : red_str("FAIL")) <<
+			          "Chances were: " << rifle_attachment->regenerate_ammo_chance << "%");
+			int16_t regen = rand_number(
+			                    mods::values::REGENERATED_AMMO_LOW(),
+			                    mods::values::REGENERATED_AMMO_HIGH()
+			                );
+			dty_debug("Random amount of regenerated ammo: " << regen);
+			return ammo_reduction - regen;
+		}
+		return ammo_reduction;
 	}
 	int16_t reduce_durability_points(
 	    player_ptr_t& attacker,
@@ -104,9 +107,35 @@ namespace mods::weapons::damage_calculator {
 	) {
 		auto rifle_attachment = attacker->rifle_attachment_by_uuid(weapon->uuid);
 		if(rifle_attachment) {
-			return (rifle_attachment->damage_percent_bonus * 0.10 * requested_damage) + requested_damage;
+			auto multiply = 0.10;
+			if(rifle_attachment->armor_penetration_amount > 0) {
+				/** TODO: honor this in a better way. amount should probably scale */
+				multiply += 0.01;
+			}
+			return (rifle_attachment->damage_percent_bonus * multiply * requested_damage) + requested_damage;
 		}
 		return requested_damage;
+	}
+	bool attack_disorients(
+	    player_ptr_t& attacker,
+	    obj_ptr_t& weapon,
+	    player_ptr_t& victim
+	) {
+		auto rifle_attachment = attacker->rifle_attachment_by_uuid(weapon->uuid);
+		if(rifle_attachment && mods::rand::chance(rifle_attachment->disorient_amount)) {
+			/** TODO: calculate disorient resistance of victim */
+			dty_debug("Attack disorients player!");
+			return true;
+		}
+		dty_debug("Attack fails to disorient player");
+		return false;
+	}
+	int16_t disorient_ticks(
+	    player_ptr_t& attacker,
+	    obj_ptr_t& weapon,
+	    player_ptr_t& victim
+	) {
+		return mods::values::DEFAULT_DISORIENT_TICKS_FROM_RIFLE_ATTACK();
 	}
 
 };

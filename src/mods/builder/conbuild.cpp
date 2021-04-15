@@ -624,7 +624,7 @@ namespace mods::builder::conbuild {
 		return interface;
 	}
 
-	ACMD(do_conbuild) {
+	SUPERCMD(do_conbuild) {
 		mods::builder::initialize_builder(player);
 
 		auto handled = conbuilder(player).handle_input(argument);

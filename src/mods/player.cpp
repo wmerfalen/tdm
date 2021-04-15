@@ -374,20 +374,20 @@ namespace mods {
 		const auto& item = m_equipment[pos];
 		/** TODO melee */
 		if(item->has_rifle()) {
-			real_abils().str += (equip ? 1 : -1) * item->rifle()->attributes->stat_strength;
-			real_abils().intel += (equip ? 1 : -1) * item->rifle()->attributes->stat_intelligence;
-			real_abils().wis +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_wisdom;
-			real_abils().dex += (equip ? 1 : -1) * item->rifle()->attributes->stat_dexterity;
-			real_abils().con += (equip ? 1 : -1) * item->rifle()->attributes->stat_constitution;
-			real_abils().electronics +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_electronics;
-			real_abils().armor += (equip ? 1 : -1) * item->rifle()->attributes->stat_armor;
-			real_abils().marksmanship +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_marksmanship;
-			real_abils().sniping +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_sniping;
-			real_abils().demolitions +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_demolitions;
-			real_abils().chemistry +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_chemistry;
-			real_abils().weapon_handling +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_weapon_handling;
-			real_abils().strategy +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_strategy;
-			real_abils().medical +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_medical;
+			aff_abils().str += (equip ? 1 : -1) * item->rifle()->attributes->stat_strength;
+			aff_abils().intel += (equip ? 1 : -1) * item->rifle()->attributes->stat_intelligence;
+			aff_abils().wis +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_wisdom;
+			aff_abils().dex += (equip ? 1 : -1) * item->rifle()->attributes->stat_dexterity;
+			aff_abils().con += (equip ? 1 : -1) * item->rifle()->attributes->stat_constitution;
+			aff_abils().electronics +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_electronics;
+			aff_abils().armor += (equip ? 1 : -1) * item->rifle()->attributes->stat_armor;
+			aff_abils().marksmanship +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_marksmanship;
+			aff_abils().sniping +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_sniping;
+			aff_abils().demolitions +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_demolitions;
+			aff_abils().chemistry +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_chemistry;
+			aff_abils().weapon_handling +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_weapon_handling;
+			aff_abils().strategy +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_strategy;
+			aff_abils().medical +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_medical;
 			auto rifle = rifle_attachment_by_uuid(item->uuid);
 			if(rifle) {
 				m_incendiary_damage_percent += (equip ? 1 : -1) * rifle->incendiary_damage_percent;
@@ -441,20 +441,20 @@ namespace mods {
 					m_elite_protection->unequip(pos);
 				}
 			}
-			real_abils().str += (equip ? 1 : -1) * item->armor()->attributes->stat_strength;
-			real_abils().intel += (equip ? 1 : -1) * item->armor()->attributes->stat_intelligence;
-			real_abils().wis +=(equip ? 1 : -1) *  item->armor()->attributes->stat_wisdom;
-			real_abils().dex += (equip ? 1 : -1) * item->armor()->attributes->stat_dexterity;
-			real_abils().con += (equip ? 1 : -1) * item->armor()->attributes->stat_constitution;
-			real_abils().electronics +=(equip ? 1 : -1) *  item->armor()->attributes->stat_electronics;
-			real_abils().armor += (equip ? 1 : -1) * item->armor()->attributes->stat_armor;
-			real_abils().marksmanship +=(equip ? 1 : -1) *  item->armor()->attributes->stat_marksmanship;
-			real_abils().sniping +=(equip ? 1 : -1) *  item->armor()->attributes->stat_sniping;
-			real_abils().demolitions +=(equip ? 1 : -1) *  item->armor()->attributes->stat_demolitions;
-			real_abils().chemistry +=(equip ? 1 : -1) *  item->armor()->attributes->stat_chemistry;
-			real_abils().weapon_handling +=(equip ? 1 : -1) *  item->armor()->attributes->stat_weapon_handling;
-			real_abils().strategy +=(equip ? 1 : -1) *  item->armor()->attributes->stat_strategy;
-			real_abils().medical +=(equip ? 1 : -1) *  item->armor()->attributes->stat_medical;
+			aff_abils().str += (equip ? 1 : -1) * item->armor()->attributes->stat_strength;
+			aff_abils().intel += (equip ? 1 : -1) * item->armor()->attributes->stat_intelligence;
+			aff_abils().wis +=(equip ? 1 : -1) *  item->armor()->attributes->stat_wisdom;
+			aff_abils().dex += (equip ? 1 : -1) * item->armor()->attributes->stat_dexterity;
+			aff_abils().con += (equip ? 1 : -1) * item->armor()->attributes->stat_constitution;
+			aff_abils().electronics +=(equip ? 1 : -1) *  item->armor()->attributes->stat_electronics;
+			aff_abils().armor += (equip ? 1 : -1) * item->armor()->attributes->stat_armor;
+			aff_abils().marksmanship +=(equip ? 1 : -1) *  item->armor()->attributes->stat_marksmanship;
+			aff_abils().sniping +=(equip ? 1 : -1) *  item->armor()->attributes->stat_sniping;
+			aff_abils().demolitions +=(equip ? 1 : -1) *  item->armor()->attributes->stat_demolitions;
+			aff_abils().chemistry +=(equip ? 1 : -1) *  item->armor()->attributes->stat_chemistry;
+			aff_abils().weapon_handling +=(equip ? 1 : -1) *  item->armor()->attributes->stat_weapon_handling;
+			aff_abils().strategy +=(equip ? 1 : -1) *  item->armor()->attributes->stat_strategy;
+			aff_abils().medical +=(equip ? 1 : -1) *  item->armor()->attributes->stat_medical;
 			/** TODO honor thac0 */
 			/** TODO honor weight_in_lbs */
 			m_incendiary_resistance_percent += (equip ? 1 : -1) * item->armor()->attributes->incendiary_resistance_percent;
@@ -1683,11 +1683,19 @@ namespace mods {
 #endif
 				break;
 			case damage_event_t::YOU_GOT_HIT_BY_INCENDIARY_AMMO:
+				this->queue_up(CAT(mods::values::MSG_YOU_GOT_HIT_BY_INCENDIARY_AMMO(),"[from:",dirstr(feedback.from_direction),"]"));
 				break;
 			case damage_event_t::YOU_INFLICTED_INCENDIARY_AMMO:
+				this->queue_up(mods::values::MSG_YOU_INFLICTED_INCENDIARY_AMMO());
 				break;
 			case damage_event_t::ATTACKER_NARROWLY_MISSED_YOU_EVENT:
 				this->queue_up(CAT(MSG_NARROWLY_MISSED_ME(),"[from:",dirstr(feedback.from_direction),"]"));
+				break;
+			case damage_event_t::YOU_ARE_DISORIENTED_EVENT:
+				this->queue_up(mods::values::MSG_YOU_ARE_DISORIENTED());
+				break;
+			case damage_event_t::YOU_DISORIENTED_SOMEONE_EVENT:
+				this->queue_up(mods::values::MSG_YOU_DISORIENT_SOMEONE());
 				break;
 			case damage_event_t::YOU_ARE_INJURED_EVENT:
 				this->queue_up(MSG_YOU_ARE_INJURED());

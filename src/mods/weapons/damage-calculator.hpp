@@ -42,6 +42,16 @@ namespace mods::weapons::damage_calculator {
 	    obj_ptr_t& weapon,
 	    int16_t requested_damage
 	);
+	bool attack_disorients(
+	    player_ptr_t& attacker,
+	    obj_ptr_t& weapon,
+	    player_ptr_t& victim
+	);
+	int16_t disorient_ticks(
+	    player_ptr_t& attacker,
+	    obj_ptr_t& weapon,
+	    player_ptr_t& victim
+	);
 };
 #endif
 

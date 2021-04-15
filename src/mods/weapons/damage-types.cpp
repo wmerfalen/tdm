@@ -32,6 +32,8 @@ extern void forget(char_data *ch,char_data *victim);
 #endif
 extern void act(const std::string& str, int hide_invisible, char_data *ch, obj_data *obj, void *vict_obj, int type);
 
+#include "../affects.hpp"
+
 namespace mods::weapons::damage_types {
 	using de = damage_event_t;
 	using vpd = mods::scan::vec_player_data;
@@ -1009,6 +1011,14 @@ namespace mods::weapons::damage_types {
 					feedback.damage_event= de::YOU_INJURED_SOMEONE_EVENT;
 					player->damage_event(feedback);
 					mods::injure::injure_player(victim);
+				}
+				if(mods::weapons::damage_calculator::attack_disorients(player,weapon,victim)) {
+					mods::affects::affect_player_for({mods::affects::affect_t::DISORIENT},victim,mods::weapons::damage_calculator::disorient_ticks(player,weapon,victim));
+					feedback.damage_event= de::YOU_ARE_DISORIENTED_EVENT;
+					victim->damage_event(feedback);
+
+					feedback.damage_event= de::YOU_DISORIENTED_SOMEONE_EVENT;
+					player->damage_event(feedback);
 				}
 			}
 			remember_event(victim,player);
