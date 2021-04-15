@@ -1,0 +1,49 @@
+# type: SIGHT
+# type: UNDER_BARREL
+# type: GRIP
+# type: BARREL
+# type: MUZZLE
+# type: MAGAZINE
+# type: STOCK
+# type: STRAP
+zoom_multiplier: 0 #float, magnification amount. for example: 6.0 means 6 times magnification
+ammunition_amount: 0 #int16_t, number of bullets to add per magazine
+loudness_reduction: 0 #int16_t, the higher the value the less noise it will make
+durability_profile: 2 #int16_t, ENUM 0=FLIMSY,1=DECENT,2=DURABLE,3=HARDENED,4=INDUSTRIAL_STRENGTH,5=GODLIKE,6=INDESTRUCTIBLE
+accuracy_points: 0 #int16_t,the higher the value, the more control
+incendiary_damage: 0 #int16_t, amount of incendiary damage
+radiation_damage: 25 #int16_t, amount of radiation damage
+armor_penetration_amount: 25 #int16_t, amount of armor penetration done
+disorient_amount: 0 #int16_t, amount of disorientation done
+incendiary_damage_percent: 0 #int16_t,incendiary damage percent
+explosive_damage_percent: 0 #int16_t,explosive damage percent
+shrapnel_damage_percent: 15 #int16_t,shrapnel damage percent
+corrosive_damage_percent: 0 #int16_t,corrosive damage percent
+cryogenic_damage_percent: 0 #int16_t,cryogenic damage percent
+radiation_damage_percent: 0 #int16_t,radiation damage percent
+emp_damage_percent: 0 #int16_t,emp damage percent
+shock_damage_percent: 0 #int16_t,shock damage percent
+anti_matter_damage_percent: 40 #int16_t,anti_matter damage percent
+recoil_reduction: 0 #int16_t,the higher the value, the less recoil
+free_ammo_chance: 0 #int16_t,the higher the value, the less likely the weapon will use ammunition
+regenerate_ammo_chance: 0 #int16_t,the higher the value, the more likely the weapon will use generate ammunition
+bleed_chance: 0 #int16_t,the higher the value, the more likely the weapon will cause the target to bleed
+aimed_limb_accuracy_percent: 0 #int16_t,the higher the value, the more likely aimed limb shots will land successfully
+underbarrel_launcher_type: 'NONE' #string, adds an underbarrel launcher of the specified type NONE,FRAG_LAUNCHER,SENSOR_LAUNCHER,SMOKE_LAUNCHER,INCENDIARY_LAUNCHER,SHOTGUN,TASER,CORROSIVE_SPRAY,FLAME_THROWER
+damage_percent_bonus: 20 #int16_t, percent value multiplied by base weapon damage and added to every attack
+str_type: 'BARREL' # enum, object type
+manufacturer: 'TN-3' # string, anything 
+name: 'TN-3 Anti-matter barrel' # string, anything name of object 
+description: 'TN-3 Anti-matter barrel'
+short_description: 'TN-3 Anti-matter barrel'
+action_description: 'TN-3 Anti-matter barrel'
+feed_file: 'anti-matter-barrel.yml'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'RARE'
+vnum: 100
