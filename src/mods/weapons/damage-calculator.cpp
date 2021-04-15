@@ -107,10 +107,10 @@ namespace mods::weapons::damage_calculator {
 	) {
 		auto rifle_attachment = attacker->rifle_attachment_by_uuid(weapon->uuid);
 		if(rifle_attachment) {
-			auto multiply = 0.10;
+			auto multiply = 0.01;
 			if(rifle_attachment->armor_penetration_amount > 0) {
 				/** TODO: honor this in a better way. amount should probably scale */
-				multiply += 0.01;
+				multiply += 0.001;
 			}
 			return (rifle_attachment->damage_percent_bonus * multiply * requested_damage) + requested_damage;
 		}
