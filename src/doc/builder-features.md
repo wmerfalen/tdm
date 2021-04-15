@@ -1,41 +1,89 @@
 # Inventory of features
 
+# 2021-04 new features
+	- SUPERCMD is now the preferred way to build admin commands
+		- it is automatically parsed from the codebase an included in `help` command
+	- help command now lists all ACMD if you're a mortal
+	- help command now lists all ACMD and SUPERCMD if you're an immortal
+	- `builder_help` now includes `lib/SUPERCMD.list` contents
+	- mob roaming data
+		- mobs now honor mob roaming data
+		- reading of mob zone commands now uses the same functions as `mbuild instantiate`
+		- mobs instantiated with zone commands now get their equipment loaded from their `mob_equipment` profile
+	- stats are increased/decreased based on eq
+		- @see STATS section below
+	- NEW CONTENT
+		- PSG-1 sniper rifle variants
+			- demon lance psg-1 
+	- nickname helpers
+		- @see NICKNAME HELPERS section below
+	- zone command fixes and mob placements
+		- fixed zone data in the following ways:
+			- `room_data.zone` now holds the *real* `zone_rnum`
+			- `zone_data.name` is no longer a char*, opting for std::string
+			- `update_zone()` and other zone helpers now exist in `mods::zone` namespace
+			- 'zbuild mob this 501 128 10 0' is now possible (using "this")
+			- `reset_com.object_data` holds uuid_t list of instantiated mobs
+			
 # potential issues moving forward [ as of 2021-04-12 ]
 	- `mods::npc::equip(obj_ptr_t,int)` is hopelessly broken
 		- the only way to persist equipment is to call `npc->player_ptr()->equip(..)`
-# 2021-04-14 new features
-	- `builder_help` now includes `lib/ACMD.list` contents
 
-# 2021-04-12 new features
-	- mobs now honor mob roaming data
-	- reading of mob zone commands now uses the same functions as `mbuild instantiate`
-	- mobs instantiated with zone commands now get their equipment loaded from their `mob_equipment` profile
+# SECTION [CLAYMORES]
+	- `mods::char_move_to(room,player)`
+	- claymore mines will prevent movement
+		- if owner, will not detonate
+		- now explodes, doesn't discriminate when dealing damage
+		- if installed in direction heading and not owner, detonates
+		- if installed in target room at exit heading toward and not owner, detonates
+		- claymore mine damage+messages caused by `mods::projectile::exloode`
+		- if moving towards claymore and it detonates, you get thrown back two rooms
+		- new helper function: `world_size()`
+
+# SECTION: [STATS]
+	- equipping and unequipping armor increases/decreases
+		- [x] stats (aff_abils())
+		- [x] damage resistance
+		- [x] weight
+	- equipping and unequipping non deep object rifles affect
+		- [x] stats (aff_abils())
+		- [x] damage percent
+	- equipping and unequipping deep object rifles affects 
+		- [x] stats (aff_abils())
+		- [x] damage percent
+
+# SECTION: [NICKNAME HELPERS]
+	- overview: these are NOT crud operations! For that, use `rbuild`
+	- the following nickname commands are useful for fast traveling
+	- list of helper commands:
+		- `nhelp` see help page for nickname commands
+		- `nset` set the nickname for the current room you're in
+		- `ndelete` delete the nickname(s) you specify
+		- `nfind` find the room rnum (and vnum) of the specified nickname(s)
+		- `ngoto` goto the nickname you specify
+	- examples:
+		- `nset recall`
+			- sets the current room's nickname to 'recall'
+		- `nfind recall shipyard east-exit`
+			- reports room id/vnum of nicknames (if they exist)
+		- `ndelete recall shipyard east-exit`
+			- deletes nicknames of rooms associated with the nicknames specified
+		- `ngoto recall`
+			- teleports you if the nickname exists
+	- bookmarking rooms
+		- the flow goes like:
+			- `bookmark armory this`
+			- ... go build other things ...
+			- `print_vnum armory`
+				- should print the room_vnum of the bookmarked armory
+
+
+# SECTION: [BUILDER JS]
+	- `ira('nickname')` function to ease instantiating deep object rifles
+	- `list_op()` function will send you all currently instatiable variants
+
 
 # next up
-	- wearing armor increases
-		- [x] stats
-		- [x] damage resistance
-		- [ ] damage percent
-		- [x] weight
-	- wielding non deep object rifles affect
-		- [x] stats
-		- [ ] damage resistance
-		- [x] damage percent
-	- wielding deep object rifles affects 
-		- [x] stats
-		- [ ] damage resistance
-		- [x] damage percent
-
-
-	- [ ] rifle attachments create buffs/nerfs
-		- [ ] sights
-		- [ ] magazines
-		- [ ] underbarrel attachments
-		- [ ] muzzle
-		- [ ] grip
-		- [ ] barrel
-		- [ ] stock
-		- [ ] strap
 	- We could always use content:
 	- hqbuild
 		- [ ] phase 1
@@ -91,66 +139,6 @@
 			- [ ] Police SUV detainment vehicle
 			- [ ] SWAT team van (16 persons)
 
-
-# 2021-04-11 zone command fixes and mob placements
-	- fixed zone data in the following ways:
-		- `room_data.zone` now holds the *real* `zone_rnum`
-		- `zone_data.name` is no longer a char*, opting for std::string
-		- `update_zone()` and other zone helpers now exist in `mods::zone` namespace
-		- 'zbuild mob this 501 128 10 0' is now possible (using "this")
-		- `reset_com.object_data` holds uuid_t list of instantiated mobs
-			
-# 2021-04-07 nickname helper commands
-	- the following nickname commands are useful for fast traveling
-	- overview: these are NOT crud operations! For that, use `rbuild`
-	- list of helper commands:
-		- `nhelp` see help page for nickname commands
-		- `nset` set the nickname for the current room you're in
-		- `ndelete` delete the nickname(s) you specify
-		- `nfind` find the room rnum (and vnum) of the specified nickname(s)
-		- `ngoto` goto the nickname you specify
-	- examples:
-		- `nset recall`
-			- sets the current room's nickname to 'recall'
-		- `nfind recall shipyard east-exit`
-			- reports room id/vnum of nicknames (if they exist)
-		- `ndelete recall shipyard east-exit`
-			- deletes nicknames of rooms associated with the nicknames specified
-		- `ngoto recall`
-			- teleports you if the nickname exists
-
-
-# 2021-04-02 claymore heaven
-	- `mods::char_move_to(room,player)`
-	- claymore mines will prevent movement
-		- if owner, will not detonate
-		- now explodes, doesn't discriminate when dealing damage
-		- if installed in direction heading and not owner, detonates
-		- if installed in target room at exit heading toward and not owner, detonates
-		- claymore mine damage+messages caused by `mods::projectile::exloode`
-		- if moving towards claymore and it detonates, you get thrown back two rooms
-		- new helper function: `world_size()`
-
-# bug fixes 2021-04-02
-	- fixed direction parsing for planting claymores
-		- source file: `mods/util.cpp`
-
-# mob roaming
-	- [x] adapt `mbuild` to save mob roaming data
-	- [x] alter mobs to honor mob roaming data [`issue MR-2`]
-	- [x] verify saving to db works
-	- [x] verify loading from db works
-
-# needed builder features
-	- [x] bookmark a room
-	- [x] teleport to a bookmarked room
-	- [x] print room vnum
-		- the flow goes like:
-			- `bookmark armory this`
-			- ... go build other things ...
-			- `print_vnum armory`
-				- should print the room_vnum of the bookmarked armory
-
 # CONTRACT FEATURE GOALS
 	- needed systems for contracts (listed in preferred implementation order)
 		- [x] finalize rifle attachments class and give the player the equipment
@@ -180,7 +168,7 @@
 				- `conbuild set-step-data 1 218 s_reward_2 #catchy|rifle|the-decimator`
 				- `conbuild set-step-data 1 218 s_reward_3 #deep|rifle/g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}`
 			
-# conbuild (quest builder)
+# SECTION: [CONBUILD] 
 	- cmd: `conbuild help`
 	- source: `mods/builder/conbuild.hpp`
 	- conbuild command list
