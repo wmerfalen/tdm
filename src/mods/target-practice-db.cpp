@@ -21,16 +21,16 @@ extern std::string sanitize_key(std::string key);
 extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
 namespace mods::target_practice_db {
 	static std::vector<room_vnum> dummy_queue;
-	void save_dummy(player_ptr_t& player, std::vector<std::string>& args){
+	void save_dummy(player_ptr_t& player, std::vector<std::string>& args) {
 		mtp_debug("saving practice dummy");
 		save_item_to_db(player, "dummy", args);
 	}
-	void remove_dummy(player_ptr_t& player, std::vector<std::string>& args){
+	void remove_dummy(player_ptr_t& player, std::vector<std::string>& args) {
 		using namespace mods::db;
 		auto status = delete_section_vector("dummy",std::to_string(world[player->room()].number));
 		player->send("delete status: %d\r\n",status);
 	}
-	void queue_dummy_on_room(room_vnum room){
+	void queue_dummy_on_room(room_vnum room) {
 		dummy_queue.emplace_back(room);
 	}
 };

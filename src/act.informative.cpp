@@ -198,7 +198,7 @@ bool is_rifle_attachment(obj_data* obj) {
 	if(!obj->has_rifle()) {
 		return false;
 	}
-	return !!mods::rifle_attachments::uuid_schema_list()[obj->uuid].length();
+	return !!mods::rifle_attachments::by_uuid(obj->uuid);
 }
 bool is_camera_feed(obj_data* obj) {
 	return obj->has_gadget() && obj->gadget()->attributes->vnum_list.size();
@@ -300,7 +300,7 @@ void show_obj_to_char(obj_ptr_t& object, player_ptr_t& player, int mode,int coun
 				case ITEM_WEAPON:
 				default:
 					if(obj->action_description.length() == 0 && obj->has_rifle() && obj->rifle()->attributes->is_rifle_attachment) {
-						player->sendln(player->rifle_attachment_by_uuid(obj->uuid)->examine());
+						player->sendln(mods::rifle_attachments::by_uuid(obj->uuid)->examine());
 						break;
 					}
 					if(obj->action_description.length()) {

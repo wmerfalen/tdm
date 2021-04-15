@@ -1011,7 +1011,7 @@ DISORIENT	mods/weapon-types.hpp	/^		DISORIENT,$/;"	e	enum:mods::weapon::capabili
 DISPLAY	mods/mini-games/wires.hpp	/^		static constexpr std::string_view DISPLAY = "A small LED display on the panel says: ";$/;"	m	struct:mods::mini_games::wires
 DISPLAY_ACMD	mods/players/db-load.hpp	/^		DISPLAY_ACMD,$/;"	e	enum:mods::players::db_load::save_from_t
 DM	telnet.h	55;"	d
-DMG_DEBUG	mods/weapons/damage-types.cpp	1066;"	d	file:
+DMG_DEBUG	mods/weapons/damage-types.cpp	1069;"	d	file:
 DMG_DUMP	mods/weapons/damage-types.cpp	436;"	d	file:
 DO	telnet.h	44;"	d
 DONT	telnet.h	43;"	d
@@ -2619,12 +2619,12 @@ MOTORCYCLE	mods/weapon.hpp	/^		MOTORCYCLE,$/;"	e	enum:mods::weapon::vehicle_t
 MP5	mods/orm/breacher.hpp	/^		const std::string MP5 = "MP5";$/;"	m	struct:mods::orm::breacher
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::breacher::primary_choice_t
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1604;"	d	file:
-MR	mods/player.cpp	1658;"	d	file:
+MR	mods/player.cpp	1579;"	d	file:
+MR	mods/player.cpp	1633;"	d	file:
 MR	structs.cpp	603;"	d	file:
 MR	structs.cpp	614;"	d	file:
-MRC	mods/player.cpp	1605;"	d	file:
-MRC	mods/player.cpp	1659;"	d	file:
+MRC	mods/player.cpp	1580;"	d	file:
+MRC	mods/player.cpp	1634;"	d	file:
 MSG_ANTI_MATTER_DAMAGE	mods/values-list.cpp	/^MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\\r\\n"$/;"	v
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
@@ -3962,6 +3962,7 @@ SUPERCMD	mods/rate-limiting.cpp	/^	SUPERCMD(do_get_rate_limit_types) {$/;"	f	nam
 SUPERCMD	mods/rate-limiting.cpp	/^	SUPERCMD(do_list_rate_limits) {$/;"	f	namespace:mods::rate_limiting
 SUPERCMD	mods/rate-limiting.cpp	/^	SUPERCMD(do_set_rate_limit) {$/;"	f	namespace:mods::rate_limiting
 SUPERCMD	mods/rifle-attachments.cpp	/^		SUPERCMD(do_instantiate_rifle_attachment) {$/;"	f	namespace:mods::rifle_attachments
+SUPERCMD	mods/rifle-attachments.cpp	/^		SUPERCMD(do_list_rifle_attachments) {$/;"	f	namespace:mods::rifle_attachments
 SUPERCMD	mods/rifle-attachments.cpp	/^		SUPERCMD(do_load_my_rifle_attachments) {$/;"	f	namespace:mods::rifle_attachments
 SUPERCMD	mods/super-users.cpp	/^SUPERCMD(do_add_super_user) {$/;"	f
 SUPERCMD	mods/super-users.cpp	/^SUPERCMD(do_clear_who_line) {$/;"	f
@@ -4869,6 +4870,7 @@ __MENTOC_MODS_SCHEMA_HEADER__	mods/schema.hpp	2;"	d
 __MENTOC_MODS_SCREEN_SEARCHER_HEADER__	mods/screen-searcher.hpp	2;"	d
 __MENTOC_MODS_SENSOR_GRENADE_HEADER__	mods/sensor-grenade.hpp	2;"	d
 __MENTOC_MODS_SHOP_HEADER__	mods/shop.hpp	2;"	d
+__MENTOC_MODS_SHOW_ELEMENTAL_DEBUG_OUTPUT__	mods/weapons/elemental.cpp	4;"	d	file:
 __MENTOC_MODS_SKILLS_HEADER__	mods/skills.hpp	2;"	d
 __MENTOC_MODS_SKILL_ORM_ADAPTOR_HEADER__	mods/skill-orm-adaptor.hpp	2;"	d
 __MENTOC_MODS_SQL_HEADER__	mods/sql.hpp	9;"	d
@@ -5446,9 +5448,11 @@ buy_item	mods/shop.hpp	/^	void buy_item(player_ptr_t& player, TShopMap& shop_map
 buy_price	shop.cpp	/^int buy_price(struct obj_data *obj, int shop_nr, char_data *keeper, char_data *buyer) {$/;"	f
 by_mob_vnum	mods/builder/meqbuild.cpp	/^		std::vector<std::shared_ptr<mods::orm::mob_equipment_map>> by_mob_vnum(const uint64_t& vnum) {$/;"	f	namespace:mods::builder::meqbuild::map
 by_name	mods/pfind.cpp	/^	player_ptr_t by_name(const char* player_name){$/;"	f	namespace:mods::pfind
+by_player	mods/rifle-attachments.cpp	/^		std::vector<std::shared_ptr<mods::rifle_attachments_t>> by_player(player_ptr_t& player) {$/;"	f	namespace:mods::rifle_attachments
 by_profile_vnum	mods/builder/conbuild.cpp	/^		std::deque<std::shared_ptr<mods::orm::contract_steps>> by_profile_vnum(const uint64_t& vnum) {$/;"	f	namespace:mods::builder::conbuild::map
 by_profile_vnum	mods/builder/meqbuild.cpp	/^		std::vector<std::shared_ptr<mods::orm::mob_equipment_map>> by_profile_vnum(const uint64_t& vnum) {$/;"	f	namespace:mods::builder::meqbuild::map
 by_uuid	mods/pfind.cpp	/^	player_ptr_t by_uuid(uuid_t player_uuid){$/;"	f	namespace:mods::pfind
+by_uuid	mods/rifle-attachments.cpp	/^		std::shared_ptr<mods::rifle_attachments_t> by_uuid(const uuid_t& uuid) {$/;"	f	namespace:mods::rifle_attachments
 by_vnum	mods/builder/conbuild.cpp	/^		std::optional<std::shared_ptr<conbuild_orm_type>> by_vnum(conbuild_vnum_t vnum) {$/;"	f	struct:mods::builder::conbuild::conbuild_interface
 by_vnum	mods/builder/hqbuild.cpp	/^	std::optional<std::shared_ptr<mods::orm::hq>> by_vnum(const uint32_t& vnum) {$/;"	f	namespace:mods::builder::hqbuild
 by_vnum	mods/builder/meqbuild.cpp	/^		std::optional<std::shared_ptr<meqbuild_orm_type>> by_vnum(meqbuild_vnum_t vnum) {$/;"	f	struct:mods::builder::meqbuild::meqbuild_interface
@@ -6137,9 +6141,9 @@ db_update	mods/mobs/mini-gunner.hpp	/^		static inline int db_update(mob_vnum mob
 db_update	mods/pq.hpp	/^static inline int db_update(std::string_view table, str_map_t values,std::string_view field,std::string_view operator_type,std::string_view value) {$/;"	f
 dbg	mods/acl/config-parser.hpp	20;"	d
 dbg	mods/player.cpp	560;"	d	file:
-dbg	mods/player.cpp	598;"	d	file:
-dbg	mods/player.cpp	601;"	d	file:
-dbg	mods/player.cpp	660;"	d	file:
+dbg	mods/player.cpp	585;"	d	file:
+dbg	mods/player.cpp	588;"	d	file:
+dbg	mods/player.cpp	635;"	d	file:
 dbg_blu	mods/acl/config-parser.hpp	25;"	d
 dbg_grn	mods/acl/config-parser.hpp	24;"	d
 dbg_print	mods/contract-events.cpp	6;"	d	file:
@@ -6906,6 +6910,7 @@ equipment	mods/player.cpp	/^	obj_ptr_t player::equipment(int pos) {$/;"	f	class:
 equipment	mods/player.hpp	/^			const std::array<obj_ptr_t,NUM_WEARS>& equipment() const {$/;"	f	struct:mods::player
 equipment_types	constants.cpp	/^const char *equipment_types[] = {$/;"	v
 equipment_types	constants.hpp	/^const char *equipment_types[] = {$/;"	v
+erase	mods/rifle-attachments.cpp	/^		void erase(const uuid_t& uuid) {$/;"	f	namespace:mods::rifle_attachments
 erase_queued_items	mods/affects.hpp	/^			void erase_queued_items() {$/;"	f	struct:mods::affects::dissolver
 err	mods/util.cpp	/^namespace mods::util::err {$/;"	n	class:mods::util	file:
 err	mods/util.hpp	/^namespace mods::util::err {$/;"	n	class:mods::util
@@ -7754,6 +7759,7 @@ give_find_vict	act.item.cpp	/^char_data *give_find_vict(char_data *ch, char *arg
 give_player_rewards	mods/contract-steps.cpp	/^	void give_player_rewards(player_ptr_t& player,std::string_view line) {$/;"	f	namespace:mods::contracts
 glob	mods/util.cpp	/^	directory_list_t glob(std::string_view path) {$/;"	f	namespace:mods::util
 global_engineer_drone_bomb	mods/classes/engineer.cpp	/^	static obj_ptr_t& global_engineer_drone_bomb() {$/;"	f	namespace:mods::classes
+global_list	mods/rifle-attachments.cpp	/^		std::map<uuid_t,std::shared_ptr<mods::rifle_attachments_t>>& global_list() {$/;"	f	namespace:mods::rifle_attachments
 globals	comm.cpp	/^namespace mods::globals {$/;"	n	class:mods	file:
 globals	config.hpp	/^namespace mods::globals {$/;"	n	class:mods
 globals	db.cpp	/^namespace mods::globals {$/;"	n	class:mods	file:
@@ -9049,9 +9055,9 @@ m_debug	mods/stat-bonuses.cpp	14;"	d	file:
 m_debug	mods/string.cpp	4;"	d	file:
 m_debug	mods/values.cpp	13;"	d	file:
 m_debug	mods/values.cpp	15;"	d	file:
-m_debug	mods/weapons/elemental.cpp	176;"	d	file:
-m_debug	mods/weapons/elemental.cpp	5;"	d	file:
-m_debug	mods/weapons/elemental.cpp	7;"	d	file:
+m_debug	mods/weapons/elemental.cpp	187;"	d	file:
+m_debug	mods/weapons/elemental.cpp	6;"	d	file:
+m_debug	mods/weapons/elemental.cpp	8;"	d	file:
 m_debug_line_info	mods/deep-object-parser.cpp	12;"	d	file:
 m_debug_line_info	mods/deep-object-parser.cpp	6;"	d	file:
 m_decoded_state_data	mods/player-contract-instance.hpp	/^			std::map<std::string,std::string> m_decoded_state_data;$/;"	m	struct:mods::contracts::player_contract_instance
@@ -9470,6 +9476,7 @@ main	bsd-snprintf.cpp	/^main(void) {$/;"	f
 main	comm.cpp	/^int main(int argc, char **argv) {$/;"	f
 main	mods/lmdb/daemon.cpp	/^int main(int argc,char** argv){$/;"	f
 main	mods/lmdb/shm-viewer.cpp	/^int main(int argc,char** argv){$/;"	f
+make	mods/rifle-attachments.cpp	/^		std::shared_ptr<mods::rifle_attachments_t> make(std::string_view str) {$/;"	f	namespace:mods::rifle_attachments
 make	mods/weapons/pistol-czp10.cpp	/^	obj_data_ptr_t czp10::make(){$/;"	f	class:mods::weapons::pistol::czp10
 make	mods/weapons/shotgun-sasg12.cpp	/^	obj_data_ptr_t sasg12::make(){$/;"	f	class:mods::weapons::shotgun::sasg12
 make	mods/weapons/smg-mp5.cpp	/^	obj_data_ptr_t mp5::make(){$/;"	f	class:mods::weapons::smg::mp5
@@ -9562,8 +9569,8 @@ mcv_debug	mods/calc-visibility.cpp	14;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	17;"	d	file:
 mdo_debug	mods/deep-object-parser.hpp	11;"	d
 mdo_debug	mods/deep-object-parser.hpp	22;"	d
+mdo_debug	mods/rifle-attachments.hpp	104;"	d
 mdo_debug	mods/rifle-attachments.hpp	5;"	d
-mdo_debug	mods/rifle-attachments.hpp	98;"	d
 me_debug	mods/mob-equipment.cpp	11;"	d	file:
 me_debug	mods/mob-equipment.cpp	66;"	d	file:
 me_debug	mods/mob-equipment.cpp	9;"	d	file:
@@ -10766,7 +10773,7 @@ print_zone_to_buf	act.wizard.cpp	/^size_t print_zone_to_buf(char *bufptr, size_t
 process	mods/affects.cpp	/^	void process() {$/;"	f	namespace:mods::affects
 process	mods/rooms.cpp	/^	void process() {$/;"	f	namespace:mods::rooms::affects
 process_affect	mods/affects.hpp	/^			void process_affect(TAffects affect) {$/;"	f	struct:mods::affects::dissolver
-process_elemental_damage	mods/weapons/elemental.cpp	/^	void process_elemental_damage(player_ptr_t& player,obj_ptr_t& weapon,player_ptr_t& victim,feedback_t& feedback) {$/;"	f	namespace:mods::weapons::elemental
+process_elemental_damage	mods/weapons/elemental.cpp	/^	void process_elemental_damage(player_ptr_t& attacker,obj_ptr_t& weapon,player_ptr_t& victim,feedback_t& feedback) {$/;"	f	namespace:mods::weapons::elemental
 process_fire_damage	mods/rooms.cpp	/^	void process_fire_damage() {$/;"	f	namespace:mods::rooms
 process_input	comm.cpp	/^int process_input(mods::descriptor_data& t) {$/;"	f
 process_output	comm.cpp	/^int process_output(mods::descriptor_data& in_t) {$/;"	f
@@ -10895,7 +10902,7 @@ query_room_for_object_by_yaml	mods/query-objects.cpp	/^	std::vector<uuid_t> quer
 query_room_for_object_by_yaml_multi	mods/query-objects.cpp	/^	std::vector<uuid_t> query_room_for_object_by_yaml_multi(const room_rnum& room, const std::vector<std::string>& files) {$/;"	f	namespace:mods::query_objects
 queue	mods/players/messages.cpp	/^	void queue(uuid_t player_uuid,std::string_view msg) {$/;"	f	namespace:mods::players::messages
 queue_affect_on_room	mods/projectile.cpp	/^		void queue_affect_on_room(T affects,room_rnum room_id) {$/;"	f	namespace:mods::projectile
-queue_dummy_on_room	mods/target-practice-db.cpp	/^	void queue_dummy_on_room(room_vnum room){$/;"	f	namespace:mods::target_practice_db
+queue_dummy_on_room	mods/target-practice-db.cpp	/^	void queue_dummy_on_room(room_vnum room) {$/;"	f	namespace:mods::target_practice_db
 queue_head	graph.cpp	/^static struct bfs_queue_struct *queue_head = 0, *queue_tail = 0;$/;"	v	typeref:struct:bfs_queue_struct	file:
 queue_item_to_be_erased	mods/affects.hpp	/^			void queue_item_to_be_erased(TAffects affect) {$/;"	f	struct:mods::affects::dissolver
 queue_object_destruct	globals.cpp	/^		void queue_object_destruct(uuid_t obj_uuid, uint16_t ticks) {$/;"	f	namespace:mods::globals
@@ -11108,7 +11115,7 @@ remove_armor_locker	mods/integral-objects-db.cpp	/^	void remove_armor_locker(pla
 remove_camera_feed	mods/integral-objects-db.cpp	/^	void remove_camera_feed(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
 remove_command_signatures	mods/builder/slotted-builder.hpp	/^			void remove_command_signatures(std::vector<std::string> list) {$/;"	f	struct:mods::builder::slotted_builder
 remove_dark	mods/rooms.hpp	/^		static inline void remove_dark(TRoom room) {$/;"	f	namespace:mods::rooms::gods
-remove_dummy	mods/target-practice-db.cpp	/^	void remove_dummy(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::target_practice_db
+remove_dummy	mods/target-practice-db.cpp	/^	void remove_dummy(player_ptr_t& player, std::vector<std::string>& args) {$/;"	f	namespace:mods::target_practice_db
 remove_duplicates	mods/acl/config-parser.cpp	/^void remove_duplicates(std::vector<T>& vec)$/;"	f
 remove_flag	mods/player.hpp	/^			aligned_int_t remove_flag(chunk_type_t chunk,aligned_int_t bit) {$/;"	f	struct:mods::player
 remove_flag	mods/rooms.hpp	/^	static inline void remove_flag(room_rnum room, int flag) {$/;"	f	namespace:mods::rooms
@@ -11252,11 +11259,9 @@ rifle_ammo_type	mods/orm/rifle-instance.hpp	/^		std::string rifle_ammo_type;$/;"
 rifle_anti_matter_damage	mods/orm/rifle-instance.hpp	/^		int16_t rifle_anti_matter_damage;$/;"	m	struct:mods::orm::rifle_instance
 rifle_attachment	mods/orm/rifle-attachment.hpp	/^		rifle_attachment() {$/;"	f	struct:mods::orm::rifle_attachment
 rifle_attachment	mods/orm/rifle-attachment.hpp	/^	struct rifle_attachment : public mods::orm::orm_base<rifle_attachment,bool> {$/;"	s	namespace:mods::orm
-rifle_attachment_by_uuid	mods/player.cpp	/^	std::shared_ptr<mods::rifle_attachments_t> player::rifle_attachment_by_uuid(const uuid_t& obj_uuid) {$/;"	f	class:mods::player
 rifle_attachment_record_t	mods/orm/rifle-attachment.hpp	/^	struct rifle_attachment_record_t {$/;"	s	namespace:mods::orm
 rifle_attachment_table_name	mods/orm/rifle-attachment.hpp	/^	static constexpr std::string_view rifle_attachment_table_name = "rifle_attachment";$/;"	m	namespace:mods::orm
 rifle_attachments	mods/init.hpp	/^INIT(mods::rifle_attachments);$/;"	v
-rifle_attachments	mods/player.hpp	/^			auto& rifle_attachments() {$/;"	f	struct:mods::player
 rifle_attachments	mods/rifle-attachments.cpp	/^	namespace rifle_attachments {$/;"	n	namespace:mods	file:
 rifle_attachments	mods/rifle-attachments.hpp	/^	namespace rifle_attachments {$/;"	n	namespace:mods
 rifle_attachments_t	mods/rifle-attachments.hpp	/^			rifle_attachments_t(const encoding_t& line) {$/;"	f	struct:mods::rifle_attachments_t
@@ -11602,7 +11607,7 @@ save_by_player	mods/orm/player-base-ability.cpp	/^	int16_t player_base_ability::
 save_camera_feed	mods/integral-objects-db.cpp	/^	void save_camera_feed(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::integral_objects_db
 save_catchy_name	mods/integral-objects-db.cpp	/^	void save_catchy_name(player_ptr_t& player, std::string_view identifier, std::string_view name,std::string_view deep_object_description){$/;"	f	namespace:mods::integral_objects_db
 save_char	mods/db.cpp	/^	tuple_status_t save_char(player_ptr_t player_ptr) {$/;"	f	namespace:mods::db
-save_dummy	mods/target-practice-db.cpp	/^	void save_dummy(player_ptr_t& player, std::vector<std::string>& args){$/;"	f	namespace:mods::target_practice_db
+save_dummy	mods/target-practice-db.cpp	/^	void save_dummy(player_ptr_t& player, std::vector<std::string>& args) {$/;"	f	namespace:mods::target_practice_db
 save_from	mods/players/db-load.cpp	/^	void save_from(player_ptr_t& player_ptr,save_from_t from) {$/;"	f	namespace:mods::players::db_load
 save_from_t	mods/players/db-load.hpp	/^	enum save_from_t {$/;"	g	namespace:mods::players::db_load
 save_function	mods/builder.cpp	/^	save_function_t save_function;$/;"	m	struct:command_t	file:

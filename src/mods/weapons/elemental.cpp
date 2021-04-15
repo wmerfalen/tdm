@@ -1,6 +1,7 @@
 #include "elemental.hpp"
 #include "../object-utils.hpp"
 #include "../interpreter-include.hpp"
+#define __MENTOC_MODS_SHOW_ELEMENTAL_DEBUG_OUTPUT__
 #ifdef __MENTOC_MODS_SHOW_ELEMENTAL_DEBUG_OUTPUT__
 #define m_debug(a) std::cerr << "[mods::weapons::damage_types][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #else
@@ -67,66 +68,76 @@ namespace mods::weapons::elemental {
 	 * @param victim
 	 * @param feedback
 	 */
-	void process_elemental_damage(player_ptr_t& player,obj_ptr_t& weapon,player_ptr_t& victim,feedback_t& feedback) {
+	void process_elemental_damage(player_ptr_t& attacker,obj_ptr_t& weapon,player_ptr_t& victim,feedback_t& feedback) {
 		if(!feedback.hits) {
 			m_debug("no hits detected. not processing elemental damage");
 			return;
 		}
 		m_debug("detected hits. checking elemental damage");
+		auto rifle_variant = mods::rifle_attachments::by_uuid(weapon->uuid);
+		float incendiary = (rifle_variant ? rifle_variant->incendiary_damage_percent : weapon->rifle()->attributes->incendiary_damage) * 0.01;
+		float explosive = (rifle_variant ? rifle_variant->explosive_damage_percent : weapon->rifle()->attributes->explosive_damage) * 0.01;
+		float shrapnel = (rifle_variant ? rifle_variant->shrapnel_damage_percent : weapon->rifle()->attributes->shrapnel_damage) * 0.01;
+		float corrosive = (rifle_variant ? rifle_variant->corrosive_damage_percent : weapon->rifle()->attributes->corrosive_damage) * 0.01;
+		float cryogenic = (rifle_variant ? rifle_variant->cryogenic_damage_percent : weapon->rifle()->attributes->cryogenic_damage) * 0.01;
+		float radioactive = (rifle_variant ? rifle_variant->radiation_damage_percent : weapon->rifle()->attributes->radioactive_damage) * 0.01;
+		float emp = (rifle_variant ? rifle_variant->emp_damage_percent : weapon->rifle()->attributes->emp_damage) * 0.01;
+		float shock = (rifle_variant ? rifle_variant->shock_damage_percent : weapon->rifle()->attributes->shock_damage) * 0.01;
+		float anti_matter = (rifle_variant ? rifle_variant->anti_matter_damage_percent : weapon->rifle()->attributes->anti_matter_damage) * 0.01;
 		for(const auto& elem : mods::forge_engine::fetch_valid_elemental_types()) {
 			switch((elemental_types_t)elem) {
 				case ELEM_INCENDIARY:
-					if(weapon->rifle()->attributes->incendiary_damage) {
-						m_debug("weapon has incediary damage. processing...");
-						incendiary_damage(victim, feedback.damage * (weapon->rifle()->attributes->incendiary_damage * 0.01));
+					if(incendiary > 0.0) {
+						m_debug("weapon has incendiary damage. processing...");
+						incendiary_damage(victim, feedback.damage * incendiary);
 					}
 					break;
 				case ELEM_EXPLOSIVE:
-					if(weapon->rifle()->attributes->explosive_damage) {
-						m_debug("weapon has incediary damage. processing...");
-						explosive_damage(victim, feedback.damage * (weapon->rifle()->attributes->explosive_damage * 0.01));
+					if(explosive > 0.0) {
+						m_debug("weapon has explosive damage. processing...");
+						explosive_damage(victim, feedback.damage * explosive);
 					}
 					break;
 				case ELEM_SHRAPNEL:
-					if(weapon->rifle()->attributes->shrapnel_damage) {
-						m_debug("weapon has incediary damage. processing...");
-						shrapnel_damage(victim, feedback.damage * (weapon->rifle()->attributes->shrapnel_damage * 0.01));
+					if(shrapnel > 0.0) {
+						m_debug("weapon has shrapnel damage. processing...");
+						shrapnel_damage(victim, feedback.damage * shrapnel);
 					}
 					break;
 				case ELEM_CORROSIVE:
-					if(weapon->rifle()->attributes->corrosive_damage) {
-						m_debug("weapon has incediary damage. processing...");
-						corrosive_damage(victim, feedback.damage * (weapon->rifle()->attributes->corrosive_damage * 0.01));
+					if(corrosive > 0.0) {
+						m_debug("weapon has corrosive damage. processing...");
+						corrosive_damage(victim, feedback.damage * corrosive);
 					}
 					break;
 				case ELEM_CRYOGENIC:
-					if(weapon->rifle()->attributes->cryogenic_damage) {
-						m_debug("weapon has incediary damage. processing...");
-						cryogenic_damage(victim, feedback.damage * (weapon->rifle()->attributes->cryogenic_damage * 0.01));
+					if(cryogenic > 0.0) {
+						m_debug("weapon has cryogenic damage. processing...");
+						cryogenic_damage(victim, feedback.damage * cryogenic);
 					}
 					break;
 				case ELEM_RADIOACTIVE:
-					if(weapon->rifle()->attributes->radioactive_damage) {
-						m_debug("weapon has incediary damage. processing...");
-						radioactive_damage(victim, feedback.damage * (weapon->rifle()->attributes->radioactive_damage * 0.01));
+					if(radioactive > 0.0) {
+						m_debug("weapon has radioactive damage. processing...");
+						radioactive_damage(victim, feedback.damage * radioactive);
 					}
 					break;
 				case ELEM_EMP:
-					if(weapon->rifle()->attributes->emp_damage) {
-						m_debug("weapon has incediary damage. processing...");
-						emp_damage(victim, feedback.damage * (weapon->rifle()->attributes->emp_damage * 0.01));
+					if(emp > 0.0) {
+						m_debug("weapon has emp damage. processing...");
+						emp_damage(victim, feedback.damage * emp);
 					}
 					break;
 				case ELEM_SHOCK:
-					if(weapon->rifle()->attributes->shock_damage) {
-						m_debug("weapon has incediary damage. processing...");
-						shock_damage(victim, feedback.damage * (weapon->rifle()->attributes->shock_damage * 0.01));
+					if(shock > 0.0) {
+						m_debug("weapon has shock damage. processing...");
+						shock_damage(victim, feedback.damage * shock);
 					}
 					break;
 				case ELEM_ANTI_MATTER:
-					if(weapon->rifle()->attributes->anti_matter_damage) {
-						m_debug("weapon has incediary damage. processing...");
-						anti_matter_damage(victim, feedback.damage * (weapon->rifle()->attributes->anti_matter_damage * 0.01));
+					if(anti_matter > 0.0) {
+						m_debug("weapon has anti_matter damage. processing...");
+						anti_matter_damage(victim, feedback.damage * anti_matter);
 					}
 					break;
 				default:

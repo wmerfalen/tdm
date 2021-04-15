@@ -851,10 +851,6 @@ namespace mods {
 			void contract_gain_entry(const room_rnum& room_id);
 			void contract_talk_to(const uuid_t& mob_uuid);
 			void contract_install_item(const uuid_t& item_uuid);
-			auto& rifle_attachments() {
-				return m_rifles;
-			}
-			std::shared_ptr<mods::rifle_attachments_t> rifle_attachment_by_uuid(const uuid_t& obj_uuid);
 			void queue_up(std::string_view);
 			bool& moving_to_room();
 		protected:

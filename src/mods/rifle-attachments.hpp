@@ -6,6 +6,7 @@
 			std::cerr << "[mods::deep_object_parser:" << A << "\n";
 namespace mods {
 	using str_map_t = std::map<std::string,std::string>;
+
 	struct rifle_attachments_t {
 			using encoding_t = std::string;
 			obj_ptr_t sight;
@@ -92,6 +93,11 @@ namespace mods {
 	};
 	namespace rifle_attachments {
 		std::map<uuid_t,std::string>& uuid_schema_list();
+		std::map<uuid_t,std::shared_ptr<mods::rifle_attachments_t>>& global_list();
+		std::shared_ptr<mods::rifle_attachments_t> make(std::string_view str);
+		std::shared_ptr<mods::rifle_attachments_t> by_uuid(const uuid_t& uuid);
+		std::vector<std::shared_ptr<mods::rifle_attachments_t>> by_player(player_ptr_t& player);
+		void erase(const uuid_t& uuid);
 	};
 };
 

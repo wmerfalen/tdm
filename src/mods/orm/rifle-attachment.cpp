@@ -110,13 +110,13 @@ namespace mods::orm {
 
 		for(auto&& row : result) {
 			std::cerr << green_str("rifle_attachment filling rifle:") << row["rifle_data"].c_str() << "\n";
-			player->rifle_attachments().emplace_back(std::make_shared<mods::rifle_attachments_t>(row["rifle_data"].c_str()));
+			auto ptr = mods::rifle_attachments::make(row["rifle_data"].c_str());
 			if(std::string(row["rifle_position"].c_str()).compare(mods::orm::rifle_attachment::POSITION_PRIMARY) == 0) {
-				player->equip(player->rifle_attachments().back()->base_object,WEAR_PRIMARY);
+				player->equip(ptr->base_object,WEAR_PRIMARY);
 			} else if(std::string(row["rifle_position"].c_str()).compare(mods::orm::rifle_attachment::POSITION_SECONDARY) == 0) {
-				player->equip(player->rifle_attachments().back()->base_object,WEAR_SECONDARY_WEAPON);
+				player->equip(ptr->base_object,WEAR_SECONDARY_WEAPON);
 			} else {
-				player->carry(player->rifle_attachments().back()->base_object);
+				player->carry(ptr->base_object);
 			}
 		}
 		return {result.size(),"loaded"};
@@ -131,7 +131,7 @@ namespace mods::orm {
 		std::vector<std::string> encodings;
 		auto primary = player->primary();
 		auto secondary = player->secondary();
-		for(auto& row : player->rifle_attachments()) {
+		for(auto& row : mods::rifle_attachments::by_player(player)) {
 			std::cerr << green_str("rifle_attachment saving rifle:") << row->export_objects() << "\n";
 			if(primary && primary->uuid == row->base_object->uuid) {
 				r.initialize_row(player->db_id(),row->export_objects(),mods::orm::rifle_attachment::POSITION_PRIMARY);

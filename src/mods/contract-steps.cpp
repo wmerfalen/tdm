@@ -28,8 +28,8 @@ namespace mods::contracts {
 			auto s = util::extract_deep_reward(line.data());
 			if(std::get<0>(s)) {
 				auto& ref = std::get<2>(s);
-				player->rifle_attachments().emplace_back();
-				player->rifle_attachments().back()->import_objects(ref);
+				auto ptr = mods::rifle_attachments::make(ref);
+				player->carry(ptr->base_object);
 			}
 		}
 	}

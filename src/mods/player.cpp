@@ -388,7 +388,7 @@ namespace mods {
 			aff_abils().weapon_handling +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_weapon_handling;
 			aff_abils().strategy +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_strategy;
 			aff_abils().medical +=(equip ? 1 : -1) *  item->rifle()->attributes->stat_medical;
-			auto rifle = rifle_attachment_by_uuid(item->uuid);
+			auto rifle = mods::rifle_attachments::by_uuid(item->uuid);
 			if(rifle) {
 				m_incendiary_damage_percent += (equip ? 1 : -1) * rifle->incendiary_damage_percent;
 				m_explosive_damage_percent += (equip ? 1 : -1) * rifle->explosive_damage_percent;
@@ -575,19 +575,6 @@ namespace mods {
 		m_char_data->carrying = obj.get();
 		dbg("checking rifle has attachment");
 		dbg("short circuited");
-		bool exists_in_rifles = false;
-		for(const auto& rifle : m_rifles) {
-			dbg("checking rifle already exists in m_rifle");
-			if(rifle->base_object->uuid == obj->uuid) {
-				dbg("it does");
-				exists_in_rifles = true;
-			}
-		}
-		std::string schema = mods::rifle_attachments::uuid_schema_list()[obj->uuid];
-		if(!exists_in_rifles && schema.length()) {
-			dbg("emplacing rifle attachment to player");
-			m_rifles.emplace_back(std::make_shared<mods::rifle_attachments_t>(schema));
-		}
 #ifdef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
 		dbg("adding...via lmdb");
 		mods::orm::inventory::lmdb::add_player_inventory(this->db_id(), obj->db_id(), obj->type);
@@ -603,7 +590,6 @@ namespace mods {
 		dbg("entrance");
 		dbg("trimming rifle attachments");
 		auto obj_uuid = obj->uuid;
-		bool equipped = false;
 		if(obj->has_armor()) {
 			carry_weight() -= obj->armor()->attributes->weight_in_lbs;
 		}
@@ -617,18 +603,7 @@ namespace mods {
 			dbg("checking item");
 			if(item->uuid == obj_uuid) {
 				dbg("found item");
-				equipped = true;
 				break;
-			}
-		}
-		if(!equipped) {
-			dbg("not equipped");
-			for(auto it = m_rifles.begin(); it != m_rifles.end(); ++it) {
-				dbg("checking...");
-				if((*it)->base_object->uuid == obj_uuid) {
-					m_rifles.erase(it);
-					break;
-				}
 			}
 		}
 		dbg("uuid fetched");
@@ -2059,14 +2034,6 @@ namespace mods {
 			}
 			return false;
 		});
-	}
-	std::shared_ptr<mods::rifle_attachments_t> player::rifle_attachment_by_uuid(const uuid_t& obj_uuid) {
-		for(const auto& rifle : m_rifles) {
-			if(rifle->base_object->uuid == obj_uuid) {
-				return rifle;
-			}
-		}
-		return nullptr;
 	}
 	bool& player::moving_to_room() {
 		return m_moving_to_room;

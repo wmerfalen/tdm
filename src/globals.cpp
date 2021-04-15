@@ -1218,7 +1218,7 @@ namespace mods {
 			if(it != obj_list.end()) {
 				obj_list.erase(it);
 			}
-			mods::rifle_attachments::uuid_schema_list().erase(obj_uuid);
+			mods::rifle_attachments::erase(obj_uuid);
 
 		}
 		void dispose_player(uuid_t pl_uuid) {

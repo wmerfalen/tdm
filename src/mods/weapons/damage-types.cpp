@@ -788,6 +788,8 @@ namespace mods::weapons::damage_types {
 			return feedback;
 		}
 
+		/** TODO: honor accuracy bonus */
+		/** TODO: honor max_range calculations */
 		/** calculate headshot */
 		if(distance == crit_range && dice(1,100) <= crit_chance) {
 			player->send(MSG_CRITICAL().c_str());
@@ -822,7 +824,7 @@ namespace mods::weapons::damage_types {
 		    "damage: [%d]\r\n"
 		    "critical_bonus: [%d]\r\n"
 		    "damage_dice [%d]\r\n"
-		    "damage_slides [%d]\r\n"
+		    "damage_sides [%d]\r\n"
 		    "crit_range [%d]\r\n"
 		    "crit_chance [%d]\r\n",
 		    dice_roll,
@@ -835,6 +837,7 @@ namespace mods::weapons::damage_types {
 		);
 #endif
 
+		/** TODO: honor accuracy bonuses */
 		if(dice(2,6) <= 3) {
 			feedback.damage = dam;
 			feedback.hits = 0;

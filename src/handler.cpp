@@ -1076,7 +1076,6 @@ void object_list_new_owner(struct obj_data *list, char_data *ch) {
 /* Extract an object from the world */
 void extract_obj(struct obj_data *obj) {
 	std::cerr << "[extract_obj]";
-	mods::rifle_attachments::uuid_schema_list().erase(obj->uuid);
 	if(obj->worn_by) {
 		unequip_char(ptr(obj->worn_by), obj->worn_on);
 	}
@@ -1107,6 +1106,7 @@ void extract_obj(struct obj_data *obj) {
 			break;
 		}
 	}
+	mods::globals::dispose_object(obj->uuid);
 }
 
 

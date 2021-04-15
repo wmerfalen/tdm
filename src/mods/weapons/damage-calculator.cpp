@@ -33,7 +33,7 @@ namespace mods::weapons::damage_calculator {
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon
 	) {
-		auto rifle_attachment = attacker->rifle_attachment_by_uuid(weapon->uuid);
+		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
 		if(rifle_attachment) {
 			return rifle_attachment->zoom_multiplier * weapon->rifle()->attributes->max_range;
 		}
@@ -69,7 +69,7 @@ namespace mods::weapons::damage_calculator {
 	    int16_t wants_to_deduct
 	) {
 		int16_t ammo_reduction = wants_to_deduct;
-		auto rifle_attachment = attacker->rifle_attachment_by_uuid(weapon->uuid);
+		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
 		if(!rifle_attachment) {
 			return wants_to_deduct;
 		}
@@ -94,7 +94,7 @@ namespace mods::weapons::damage_calculator {
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon
 	) {
-		auto rifle_attachment = attacker->rifle_attachment_by_uuid(weapon->uuid);
+		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
 		if(rifle_attachment) {
 			/** TODO: honor durability points */
 		}
@@ -105,7 +105,7 @@ namespace mods::weapons::damage_calculator {
 	    obj_ptr_t& weapon,
 	    int16_t requested_damage
 	) {
-		auto rifle_attachment = attacker->rifle_attachment_by_uuid(weapon->uuid);
+		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
 		if(rifle_attachment) {
 			auto multiply = 0.01;
 			if(rifle_attachment->armor_penetration_amount > 0) {
@@ -121,7 +121,7 @@ namespace mods::weapons::damage_calculator {
 	    obj_ptr_t& weapon,
 	    player_ptr_t& victim
 	) {
-		auto rifle_attachment = attacker->rifle_attachment_by_uuid(weapon->uuid);
+		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
 		if(rifle_attachment && mods::rand::chance(rifle_attachment->disorient_amount)) {
 			/** TODO: calculate disorient resistance of victim */
 			dty_debug("Attack disorients player!");

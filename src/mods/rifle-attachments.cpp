@@ -8,9 +8,52 @@ namespace mods {
 	const std::string example_grammar = "g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}";
 	using counter_t = uint16_t;
 	namespace rifle_attachments {
+		std::vector<std::shared_ptr<mods::rifle_attachments_t>> by_player(player_ptr_t& player) {
+			std::vector<std::shared_ptr<mods::rifle_attachments_t>> list;
+			for(const auto item : player->equipment()) {
+				if(!item) {
+					continue;
+				}
+				auto ptr = by_uuid(item->uuid);
+				if(ptr) {
+					list.emplace_back(ptr);
+				}
+			}
+			for(const auto item : player->real_carrying()) {
+				if(!item) {
+					continue;
+				}
+				auto ptr = by_uuid(item->uuid);
+				if(ptr) {
+					list.emplace_back(ptr);
+				}
+			}
+			return list;
+		}
+		void erase(const uuid_t& uuid) {
+			std::cerr << green_str("erasing uuid from rifle attachments:") << uuid << "\n";
+			uuid_schema_list().erase(uuid);
+			global_list().erase(uuid);
+		}
+		std::shared_ptr<mods::rifle_attachments_t> by_uuid(const uuid_t& uuid) {
+			if(global_list().find(uuid) == global_list().end()) {
+				return nullptr;
+			}
+			return global_list()[uuid];
+		}
 		std::map<uuid_t,std::string>& uuid_schema_list() {
 			static std::map<uuid_t,std::string> list;
 			return list;
+		}
+		std::map<uuid_t,std::shared_ptr<mods::rifle_attachments_t>>& global_list() {
+			static std::map<uuid_t,std::shared_ptr<mods::rifle_attachments_t>> list;
+			return list;
+		}
+		std::shared_ptr<mods::rifle_attachments_t> make(std::string_view str) {
+			auto ptr = std::make_shared<mods::rifle_attachments_t>(str.data());
+			global_list()[ptr->base_object->uuid] = ptr;
+			uuid_schema_list()[ptr->base_object->uuid] = str;
+			return ptr;
 		}
 
 		SUPERCMD(do_instantiate_rifle_attachment) {
@@ -22,8 +65,8 @@ namespace mods {
 				return;
 			}
 			for(const auto& str : vec_args) {
-				player->rifle_attachments().emplace_back(std::make_shared<mods::rifle_attachments_t>(str));
-				player->carry(player->rifle_attachments().back()->base_object);
+				auto ptr = mods::rifle_attachments::make(str);
+				player->carry(ptr->base_object);
 				player->sendln("[+] Done");
 			}
 			ADMIN_DONE();
@@ -33,9 +76,21 @@ namespace mods {
 			mods::orm::load_player_rifle_attachments(player);
 			player->sendln("[+] Done");
 		}
+		SUPERCMD(do_list_rifle_attachments) {
+			player->sendln("Schema list...");
+			for(const auto& pair : uuid_schema_list()) {
+				player->sendln(CAT("Schema[",pair.first,"]:'",pair.second,"'"));
+			}
+			player->sendln("Globals list...");
+			for(const auto& pair : global_list()) {
+				player->sendln(CAT("Global[",pair.first,"]:"));
+			}
+			player->sendln("[+] Done");
+		}
 		void init() {
 			mods::interpreter::add_command("instantiate_rifle_attachment", POS_RESTING, do_instantiate_rifle_attachment, LVL_BUILDER,0);
 			mods::interpreter::add_command("load_my_rifle_attachments", POS_RESTING, do_load_my_rifle_attachments, 0,0);
+			mods::interpreter::add_command("list_rifle_attachments", POS_RESTING, do_list_rifle_attachments, LVL_BUILDER,0);
 		}
 	};
 
@@ -129,7 +184,6 @@ namespace mods {
 				loudness_reduction += object->attachment()->attributes->loudness_reduction;
 			}
 		}
-		mods::rifle_attachments::uuid_schema_list()[base_object->uuid] = line;
 		base_object->action_description = this->examine();
 	}
 	std::string rifle_attachments_t::extract_base_yaml_file(const encoding_t& line) {
