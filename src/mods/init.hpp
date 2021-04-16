@@ -42,6 +42,7 @@ INIT(mods::zone);
 INIT(mods::mob_equipment);
 INIT(mods::weapons::reload);
 INIT(mods::help);
+INIT(mods::mobact);
 #undef INIT
 
 
@@ -85,6 +86,7 @@ namespace mods::init {
 		mods::mob_equipment::init();
 		mods::weapons::reload::init();
 		mods::help::init();
+		mods::mobact::init();
 	}
 };
 #endif

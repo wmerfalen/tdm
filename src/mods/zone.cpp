@@ -158,9 +158,10 @@ namespace mods::zone {
 								break;
 							}
 							z_debug("cool, we found a mob. throwing him in a room now...");
-							mods::globals::rooms::char_to_room(real_room(ZCMD.arg2),obj->cd());
+							char_from_room(obj->cd());
+							char_to_room(obj->cd(),real_room(ZCMD.arg2));
 							ZCMD.object_data.emplace_back(obj->uuid());
-							ZCMD.count++;
+							ZCMD.count = ZCMD.object_data.size();
 							last_cmd = 1;
 							break;
 						}
@@ -293,33 +294,44 @@ namespace mods::zone {
 		player->send("Done listing...\r\n");
 		ADMIN_DONE();
 	}
-	SUPERCMD(do_reset_zone) {
+	SUPERCMD(do_uuids) {
 		ADMIN_REJECT();
-		auto vec_args = PARSE_ARGS();
-		if(vec_args.size() < 1) {
-			player->errorln("usage: reset_zone <zone_id|this>");
-			return;
-		}
-		for(const auto& arg : vec_args) {
-			if(arg.compare("this") == 0) {
-				player->send(CAT("Resetting [",world[player->room()].zone,"]...").c_str());
-				mods::zone::reset_zone(world[player->room()].zone);
-				player->send("[+] Done\r\n");
-				continue;
-			}
-			auto i = mods::util::stoi(arg).value_or(-1);
-			if(i < 0 || i >= zone_table.size()) {
-				player->errorln(CAT("Invalid zone id: ",arg,". skipping..."));
-				continue;
-			}
-			player->send(CAT("Resetting [",world[player->room()].zone,"]...").c_str());
-			mods::zone::reset_zone(i);
-			player->send("[+] Done\r\n");
+		for(const auto& person : mods::globals::get_room_list(player->room())) {
+			player->sendln(CAT("[",person->uuid(),"]:'",person->name().c_str(),"'"));
 		}
 		ADMIN_DONE();
 	}
+
+	/*
+		SUPERCMD(do_reset_zone) {
+			ADMIN_REJECT();
+			auto vec_args = PARSE_ARGS();
+			if(vec_args.size() < 1) {
+				player->errorln("usage: reset_zone <zone_id|this>");
+				return;
+			}
+			for(const auto& arg : vec_args) {
+				if(arg.compare("this") == 0) {
+					player->send(CAT("Resetting [",world[player->room()].zone,"]...").c_str());
+					mods::zone::reset_zone(world[player->room()].zone);
+					player->send("[+] Done\r\n");
+					continue;
+				}
+				auto i = mods::util::stoi(arg).value_or(-1);
+				if(i < 0 || i >= zone_table.size()) {
+					player->errorln(CAT("Invalid zone id: ",arg,". skipping..."));
+					continue;
+				}
+				player->send(CAT("Resetting [",world[player->room()].zone,"]...").c_str());
+				mods::zone::reset_zone(i);
+				player->send("[+] Done\r\n");
+			}
+			ADMIN_DONE();
+		}
+		*/
 	void init() {
-		mods::interpreter::add_command("reset_zone", POS_RESTING, do_reset_zone, LVL_BUILDER,0);
+		//mods::interpreter::add_command("reset_zone", POS_RESTING, do_reset_zone, LVL_BUILDER,0);
+		mods::interpreter::add_command("uuids", POS_RESTING, do_uuids, LVL_BUILDER,0);
 		mods::interpreter::add_command("list_zone_table", POS_RESTING, do_list_zone_table, LVL_BUILDER,0);
 	}
 };

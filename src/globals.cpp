@@ -1086,20 +1086,26 @@ namespace mods {
 			void char_from_room(char_data* ch) {
 				auto player = ptr(ch);
 				int room_id = player->room();
+				ch->was_in_room = room_id;
 				if(room_id >= room_list.size()) {
 					log("SYSERR: char_from_room failed. room_id >= room_list.size()");
+					std::cerr << red_str("SYSERR: char_from_room failed. room_id >= room_list.size()") << "\n";
 					return;
 				}
-				auto place = std::find(
-				                 mods::globals::room_list[room_id].begin(),
-				                 mods::globals::room_list[room_id].end(),
-				                 player
-				             );
-				if(place != mods::globals::room_list[room_id].end()) {
-					mods::globals::room_list[room_id].erase(place);
-				} else {
-					log("SYSERR: Could NOT find char in room_list");
-				}
+				bool found = 0;
+				do {
+					auto place = std::find(
+					                 mods::globals::room_list[room_id].begin(),
+					                 mods::globals::room_list[room_id].end(),
+					                 player
+					             );
+					if(place != mods::globals::room_list[room_id].end()) {
+						mods::globals::room_list[room_id].erase(place);
+						found = true;
+					} else {
+						found = false;
+					}
+				} while(found);
 			}
 
 			/*! \brief moves a character to the room identified by the first parameter. If the mud
@@ -1122,9 +1128,11 @@ namespace mods {
 				}
 				if(target_room >= room_list.size()) {
 					log("SYSERR: char_to_room failed for ch. Recontracted room is out of bounds: ",target_room);
+					std::cerr << red_str("SYSERR: char_to_room failed for ch. Recontracted room is out of bounds: ") << target_room << "\n";
 					return;
 				}
 				if(!mods::movement::char_move_to(player,target_room)) {
+					std::cerr << red_str("cannot move to target room") << "\n";
 					player->set_room(ch->was_in_room);
 					mods::globals::room_list[ch->was_in_room].push_back(player);
 					return;
@@ -1132,9 +1140,7 @@ namespace mods {
 				player->set_room(target_room);
 				mods::globals::room_list[target_room].push_back(player);
 				if(!IS_NPC(ch)) {
-#ifdef __MENTOC_GLOBALS_PRINT_WATCHING_EVENTS__
 					std::cerr << "[room_entry] watching events: " << player->name().c_str() << "\n";
-#endif
 					mods::mobs::room_watching::events::room_entry(target_room,player->uuid());
 				}
 				return;

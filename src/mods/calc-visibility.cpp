@@ -6,15 +6,12 @@
 #include "player-utils.hpp"
 #include "object-utils.hpp"
 
-#ifdef __MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__
+//#define __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__
 #ifdef __MENTOC_SHOW_CALC_VISIBILITY_DUMP_OUTPUT__
 #define mcv_debug(MSG) mentoc_prefix_debug("[mods::calc_visibility]")  << info << "|" << MSG << "\n" \
 			<< "dump: " << dump << "\n";
 #else
 #define mcv_debug(MSG) mentoc_prefix_debug("[mods::calc_visibility]")  << info << "|" << MSG << "\n";
-#endif
-#else
-#define mcv_debug(MSG) ;;
 #endif
 
 
@@ -40,8 +37,9 @@ namespace mods::calc_visibility {
 		//bool camera_is_night_vision = camera != nullptr ? mods::object_utils::is_night_vision_camera(camera->object_uuid()) : false;
 		//bool can_see_through_fire = mods::rooms::can_see_through_fire(room);
 
-#ifdef __MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__
 		std::string info = CAT("Observer(",observer->name(),"|",observer->uuid(),")::Target(",target->name(),"|",target->uuid(),")");
+//#define __MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__
+#ifdef __MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__
 		std::string dump = CAT("is_dissipated: ",is_dissipated,"\n",
 		                       "invisible: ",invisible,"\n",
 		                       "observer_has_thermals: ",observer_has_thermals,"\n",

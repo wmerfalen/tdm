@@ -549,10 +549,7 @@ void list_one_char(char_data *i, char_data *ch) {
 
 
 void list_char_to_char(char_data *ch) {
-#if 0
-	int dbg_ctr = 0;
-#define dd() std::cerr << "break: " << ++dbg_ctr << ", line:" << __LINE__ << "\n";
-#endif
+#define dd(A_MSG) std::cerr << "break: " << A_MSG << ", line:" << __LINE__ << "\n";
 	MENTOC_PREAMBLE();
 	int room = player->viewing_room();
 	bool dark = mods::rooms::is_dark(room);
@@ -564,8 +561,9 @@ void list_char_to_char(char_data *ch) {
 	bool player_has_thermal = player->has_thermal_vision();
 	auto fire_status = mods::rooms::get_fire_status(room);
 	bool camera_is_night_vision = camera != nullptr ? mods::object_utils::is_night_vision_camera(camera->object_uuid()) : false;
-	//bool can_see_through_fire = mods::rooms::can_see_through_fire(room);
+	bool can_see_through_fire = mods::rooms::can_see_through_fire(room);
 
+//#define __MENTOC_SHOW_VISION_FLAGS_IN_INFORMATIVE_CPP__
 #ifdef __MENTOC_SHOW_VISION_FLAGS_IN_INFORMATIVE_CPP__
 	player->send(
 	    "dark: %d\r\n"
@@ -592,9 +590,12 @@ void list_char_to_char(char_data *ch) {
 	);
 #endif
 	for(auto& target : mods::globals::get_room_list(room)) {
+		dd("target");
 		if(target->is(ch)) {
+			dd("is target, continuing");
 			continue;
 		}
+		dd("check if is visible");
 		if(!mods::calc_visibility::is_visible(player,target)) {
 			if(on_fire && ((viewing_camera && camera_is_thermal) || player_has_thermal) &&
 			        !mods::rooms::can_see_through_fire(fire_status)) {
@@ -603,17 +604,21 @@ void list_char_to_char(char_data *ch) {
 			}
 			continue;
 		}
+		dd("view + thermal check");
 		if(on_fire && ((viewing_camera && camera_is_thermal) || player_has_thermal) &&
 		        mods::rooms::can_see_through_fire(fire_status)) {
 			player->send("{yel}[thermal vision]{/yel} You see %s here.\r\n", target->name().c_str());
 			continue;
 		}
+		dd("checking camera is night vision");
 		if(dark && viewing_camera && camera_is_night_vision) {
 			player->send("{grn}[night-vision via camera]{/grn} You see %s here.\r\n", target->name().c_str());
 			continue;
 		}
+		dd("smoke or dark check");
 		if(((smoke || dark) && viewing_camera && camera_is_thermal) ||
 		        ((smoke || dark) && player_has_thermal)) {
+			dd("is smoked or dark");
 			/** TODO: needs testing */
 			if(viewing_camera) {
 				player->send("{gld}[thermal via camera]{/gld} You see %s here.\r\n", target->name().c_str());
@@ -622,19 +627,26 @@ void list_char_to_char(char_data *ch) {
 			}
 			continue;
 		}
+		dd("checking if dark");
 		if(dark) {
+			dd("it is dark");
 			std::string name = "someone";
 			if(mods::player_utils::is_scanned(target)) {
+				dd("target is scanned");
 				name = target->name();
 			}
+			dd("check thermal vision");
 			if(player->has_thermal_vision()) {
+				dd("has thermal");
 				player->send(
 				    "{grn}[thermal-vision]{/grn} You see %s here.\r\n",
 				    name.c_str()
 				);
 				continue;
 			}
+			dd("check night vision");
 			if(player->has_night_vision()) {
+				dd("has night vision");
 				player->send(
 				    "{grn}[night-vision]{/grn} You see %s here.\r\n",
 				    name.c_str()
@@ -642,15 +654,18 @@ void list_char_to_char(char_data *ch) {
 				continue;
 			}
 		}
+		dd("listing one char");
 		list_one_char(target->cd(),ch);
 	}
 
 
 	/** TODO: thermal vision distance is short. you can only see adjacent rooms and even then the sight is limited. */
+	dd("viewing room number: " << player->viewing_room());
 	auto room_number = player->viewing_room();
 	for(auto direction : {
 	            NORTH,SOUTH,EAST,WEST,UP,DOWN
 	        }) {
+		dd("checking dir option");
 		if(world[room_number].dir_option[direction]) {
 			auto dir_string = mods::globals::dir_to_str(direction,0).c_str();
 			auto looped_room_id = room_number;
@@ -692,7 +707,7 @@ void list_char_to_char(char_data *ch) {
 			}
 		}
 	}
-
+#undef dd
 }
 
 

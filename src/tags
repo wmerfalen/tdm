@@ -1641,7 +1641,7 @@ INDOOR_WOODEN_WALLS	mods/rooms.hpp	/^		INDOOR_WOODEN_WALLS,$/;"	e	enum:mods::roo
 INDUSTRIAL_STRENGTH	mods/yaml.hpp	/^		INDUSTRIAL_STRENGTH,$/;"	e	enum:mods::yaml::durability_profile_type_t
 INFO_FILE	db.h	81;"	d
 INFRAVISION	mods/flags.hpp	/^		INFRAVISION,$/;"	e	enum:mods::flags::aff
-INIT	mods/init.hpp	45;"	d
+INIT	mods/init.hpp	46;"	d
 INIT	mods/init.hpp	4;"	d
 INITIATE	mods/skills.hpp	/^	INITIATE = 1,$/;"	e	enum:uint8_t
 INK	mods/aoe.hpp	/^		INK,	\/** Marks surroundings and enemies with paint for the purpose of tracking *\/ $/;"	e	enum:mods::aoe::types_t
@@ -2557,7 +2557,7 @@ MOB_AGGRESSIVE	structs.h	298;"	d
 MOB_AGGR_EVIL	structs.h	301;"	d
 MOB_AGGR_GOOD	structs.h	302;"	d
 MOB_AGGR_NEUTRAL	structs.h	303;"	d
-MOB_AGGR_TO_ALIGN	mobact.cpp	41;"	d	file:
+MOB_AGGR_TO_ALIGN	mobact.cpp	42;"	d	file:
 MOB_AWARE	structs.h	297;"	d
 MOB_CLONE	magic.cpp	791;"	d	file:
 MOB_DOESNT_EXIST	mods/behaviour_tree_impl.hpp	/^		MOB_DOESNT_EXIST$/;"	e	enum:mods::behaviour_tree_impl::dispatch_status_t
@@ -2620,12 +2620,12 @@ MOTORCYCLE	mods/weapon.hpp	/^		MOTORCYCLE,$/;"	e	enum:mods::weapon::vehicle_t
 MP5	mods/orm/breacher.hpp	/^		const std::string MP5 = "MP5";$/;"	m	struct:mods::orm::breacher
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::breacher::primary_choice_t
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1581;"	d	file:
-MR	mods/player.cpp	1635;"	d	file:
+MR	mods/player.cpp	1584;"	d	file:
+MR	mods/player.cpp	1638;"	d	file:
 MR	structs.cpp	603;"	d	file:
 MR	structs.cpp	614;"	d	file:
-MRC	mods/player.cpp	1582;"	d	file:
-MRC	mods/player.cpp	1636;"	d	file:
+MRC	mods/player.cpp	1585;"	d	file:
+MRC	mods/player.cpp	1639;"	d	file:
 MSG_ANTI_MATTER_DAMAGE	mods/values-list.cpp	/^MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\\r\\n"$/;"	v
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
@@ -3902,6 +3902,7 @@ SUPERCMD	interpreter.cpp	/^SUPERCMD(do_debug_sleep) {$/;"	f
 SUPERCMD	interpreter.cpp	/^SUPERCMD(do_require_js) {$/;"	f
 SUPERCMD	interpreter.cpp	/^SUPERCMD(do_room_list) {$/;"	f
 SUPERCMD	interpreter.h	15;"	d
+SUPERCMD	mobact.cpp	/^	SUPERCMD(do_mobact) {$/;"	f	namespace:mods::mobact
 SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_ndelete) {$/;"	f	namespace:mods::builder
 SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_nfind) {$/;"	f	namespace:mods::builder
 SUPERCMD	mods/builder.cpp	/^	SUPERCMD(do_ngoto) {$/;"	f	namespace:mods::builder
@@ -3979,7 +3980,7 @@ SUPERCMD	mods/target-practice.cpp	/^SUPERCMD(do_uninstall_dummy) {$/;"	f
 SUPERCMD	mods/weapons/damage-types.cpp	/^	SUPERCMD(do_inc_damage) {$/;"	f	namespace:mods::weapons::damage_types
 SUPERCMD	mods/weapons/elemental.cpp	/^	SUPERCMD(do_inc_damage) {$/;"	f	namespace:mods::weapons::elemental
 SUPERCMD	mods/zone.cpp	/^	SUPERCMD(do_list_zone_table) {$/;"	f	namespace:mods::zone
-SUPERCMD	mods/zone.cpp	/^	SUPERCMD(do_reset_zone) {$/;"	f	namespace:mods::zone
+SUPERCMD	mods/zone.cpp	/^	SUPERCMD(do_uuids) {$/;"	f	namespace:mods::zone
 SUPERCMD	olc.cpp	/^SUPERCMD(do_olc) {$/;"	f
 SUPERCMD	spell_parser.cpp	/^SUPERCMD(do_cast) {$/;"	f
 SUPPORT	mods/classes/types.hpp	/^		SUPPORT,$/;"	e	enum:mods::classes::types
@@ -4374,7 +4375,7 @@ UNUSED17	mods/flags.hpp	/^		UNUSED17,				\/\/ useless$/;"	e	enum:mods::flags::af
 UP	structs.h	137;"	d
 UPDATE	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_type_t
 UPPER	utils.h	156;"	d
-USERS_FORMAT	act.informative.cpp	1430;"	d	file:
+USERS_FORMAT	act.informative.cpp	1445;"	d	file:
 USE_AUTOEQ	structs.h	119;"	d
 USURP	interpreter.cpp	1564;"	d	file:
 Unknown	mods/catch.hpp	/^			Unknown = -1,$/;"	e	enum:Catch::ResultWas::OfType
@@ -4444,7 +4445,7 @@ WEAR_WRIST_R	structs.h	414;"	d
 WELC_MESSG	config.cpp	/^const char *WELC_MESSG =$/;"	v
 WEST	structs.h	136;"	d
 WHEN	mods/catch.hpp	12215;"	d
-WHO_FORMAT	act.informative.cpp	1393;"	d	file:
+WHO_FORMAT	act.informative.cpp	1408;"	d	file:
 WILL	telnet.h	46;"	d
 WILL_BANK_MONEY	shop.h	164;"	d
 WILL_START_FIGHT	shop.h	163;"	d
@@ -4922,7 +4923,7 @@ __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
 __MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	145;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	d
 __MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__	mods/weapons/damage-calculator.cpp	13;"	d	file:
-__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1225;"	d	file:
+__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1231;"	d	file:
 __MENTOC_SHOW_EQUIP_DEBUG_OUTPUT__	mods/player.cpp	35;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ADVANCED_PROTECTION_DEBUG_OUTPUT__	mods/armor/advanced-protection.cpp	4;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_BP_DEBUG_OUTPUT__	mods/armor/basic-protection.cpp	4;"	d	file:
@@ -5336,8 +5337,8 @@ bfs_dequeue	graph.cpp	/^void bfs_dequeue(void) {$/;"	f
 bfs_enqueue	graph.cpp	/^void bfs_enqueue(room_rnum room, int dir) {$/;"	f
 bfs_queue_struct	graph.cpp	/^struct bfs_queue_struct {$/;"	s	file:
 bg	mods/acl/color.hpp	/^        namespace bg {$/;"	n	namespace:mods::Color
-bht_debug	mobact.cpp	44;"	d	file:
-bht_debug	mobact.cpp	46;"	d	file:
+bht_debug	mobact.cpp	45;"	d	file:
+bht_debug	mobact.cpp	47;"	d	file:
 bit	mods/deferred.hpp	/^		uint64_t bit;$/;"	m	struct:mods::chunk_affect_t
 bitvector	shop.h	/^	bitvector_t	 bitvector;	\/* Can attack? Use bank? Cast here?	*\/$/;"	m	struct:shop_data
 bitvector	structs.h	/^	long \/*bitvector_t*\/	bitvector;	\/* To set chars bits                *\/$/;"	m	struct:obj_flag_data
@@ -6141,10 +6142,10 @@ db_seti	mods/js.cpp	/^		static duk_ret_t db_seti(duk_context *ctx) {$/;"	f	names
 db_update	mods/mobs/mini-gunner.hpp	/^		static inline int db_update(mob_vnum mob_vnum,str_map_t values) {$/;"	f	namespace:mods::mobs::mg::orm
 db_update	mods/pq.hpp	/^static inline int db_update(std::string_view table, str_map_t values,std::string_view field,std::string_view operator_type,std::string_view value) {$/;"	f
 dbg	mods/acl/config-parser.hpp	20;"	d
-dbg	mods/player.cpp	550;"	d	file:
-dbg	mods/player.cpp	575;"	d	file:
+dbg	mods/player.cpp	553;"	d	file:
 dbg	mods/player.cpp	578;"	d	file:
-dbg	mods/player.cpp	625;"	d	file:
+dbg	mods/player.cpp	581;"	d	file:
+dbg	mods/player.cpp	628;"	d	file:
 dbg_blu	mods/acl/config-parser.hpp	25;"	d
 dbg_grn	mods/acl/config-parser.hpp	24;"	d
 dbg_print	mods/contract-events.cpp	6;"	d	file:
@@ -6158,6 +6159,8 @@ dbg_print	mods/player-contract-instance.cpp	9;"	d	file:
 dbg_red	mods/acl/config-parser.hpp	26;"	d
 dbi	mods/lmdb/db.hpp	/^			MDB_dbi dbi; 	\/* this is just an unsigned int *\/$/;"	m	struct:gdns::lmdb::gdns_dbi
 dbi	mods/lmdb/db.hpp	/^			std::unique_ptr<gdns_dbi> dbi;$/;"	m	struct:gdns::lmdb::db
+dd	act.informative.cpp	552;"	d	file:
+dd	act.informative.cpp	710;"	d	file:
 deactivate_account	mods/player.cpp	/^	void player::deactivate_account() {$/;"	f	class:mods::player
 deal_damage	mods/weapons/damage-types.cpp	/^		void deal_damage(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	f	namespace:mods::weapons::damage_types::legacy
 deal_hp_damage	mods/weapons/damage-types.cpp	/^	void deal_hp_damage(player_ptr_t& player, uint16_t damage) {$/;"	f	namespace:mods::weapons::damage_types
@@ -8145,6 +8148,7 @@ init	act.builder.cpp	/^	void init() {$/;"	f	namespace:builder
 init	act.demolitions.cpp	/^	void init() {$/;"	f	namespace:demolitions
 init	act.informative.cpp	/^	void init() {$/;"	f	namespace:informative
 init	globals.cpp	/^		int init(int argc,char** argv) {$/;"	f	namespace:mods::globals
+init	mobact.cpp	/^	void init() {$/;"	f	namespace:mods::mobact
 init	mods/armor/advanced-protection.cpp	/^	void advanced_protection::init() {$/;"	f	class:mods::armor::advanced_protection
 init	mods/armor/basic-protection.cpp	/^	void basic_protection::init() {$/;"	f	class:mods::armor::basic_protection
 init	mods/armor/elite-protection.cpp	/^	void elite_protection::init() {$/;"	f	class:mods::armor::elite_protection
@@ -9565,9 +9569,8 @@ mc_debug	mods/query-objects.cpp	11;"	d	file:
 mc_debug	mods/query-objects.cpp	13;"	d	file:
 mc_debug	mods/query-objects.cpp	257;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	11;"	d	file:
-mcv_debug	mods/calc-visibility.cpp	136;"	d	file:
+mcv_debug	mods/calc-visibility.cpp	134;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	14;"	d	file:
-mcv_debug	mods/calc-visibility.cpp	17;"	d	file:
 mdo_debug	mods/deep-object-parser.hpp	11;"	d
 mdo_debug	mods/deep-object-parser.hpp	22;"	d
 mdo_debug	mods/rifle-attachments.hpp	104;"	d
@@ -9650,7 +9653,7 @@ metro	mods/fluxkraft/arcon-metropolitan.hpp	/^	struct metro {$/;"	s	namespace:mo
 mex_debug	mods/examine.cpp	5;"	d	file:
 mex_debug	mods/examine.cpp	7;"	d	file:
 mg_map	mods/mobs/mini-gunner.cpp	/^	mg_map_t& mg_map() {$/;"	f	namespace:mods::mobs
-mgdp_debug	globals.cpp	1227;"	d	file:
+mgdp_debug	globals.cpp	1233;"	d	file:
 mi_debug	mods/interpreter.cpp	49;"	d	file:
 mi_debug	mods/interpreter.cpp	5;"	d	file:
 mi_debug	mods/interpreter.cpp	7;"	d	file:
@@ -9760,6 +9763,8 @@ mob_virtual_number	mods/orm/rifle-index.hpp	/^		std::string mob_virtual_number;$
 mob_vnum	mods/contract-steps.hpp	/^		uint32_t				mob_vnum;$/;"	m	namespace:mods::contracts
 mob_vnum	mods/index-type.hpp	/^typedef IDXTYPE mob_vnum;$/;"	t
 mob_vnum_argument	mods/builder.cpp	/^	int mob_vnum_argument;$/;"	m	struct:command_t	file:
+mobact	mobact.cpp	/^namespace mods::mobact {$/;"	n	class:mods	file:
+mobact	mods/init.hpp	/^INIT(mods::mobact);$/;"	v
 mobile_activity	globals.cpp	/^		int mobile_activity(char_data* ch) {$/;"	f	namespace:mods::globals
 mobile_activity	mobact.cpp	/^void mobile_activity(void) {$/;"	f
 mobile_activity	mods/js.cpp	/^		static duk_ret_t mobile_activity(duk_context *ctx) {$/;"	f	namespace:mods::js
@@ -11481,7 +11486,7 @@ rr_debug	mods/intimidate.cpp	8;"	d	file:
 rr_debug	mods/intimidate.cpp	95;"	d	file:
 rr_debug	mods/zone.cpp	13;"	d	file:
 rr_debug	mods/zone.cpp	16;"	d	file:
-rr_debug	mods/zone.cpp	326;"	d	file:
+rr_debug	mods/zone.cpp	338;"	d	file:
 rst_text	mods/acl/color.hpp	6;"	d
 rtrim	mods/lmdb/db.hpp	/^		static inline void rtrim(std::string &s) {$/;"	f	struct:gdns::util
 rtrim_copy	mods/lmdb/db.hpp	/^		static inline std::string rtrim_copy(std::string s) {$/;"	f	struct:gdns::util
@@ -13043,7 +13048,7 @@ z_debug	mods/intimidate.cpp	7;"	d	file:
 z_debug	mods/intimidate.cpp	96;"	d	file:
 z_debug	mods/zone.cpp	12;"	d	file:
 z_debug	mods/zone.cpp	15;"	d	file:
-z_debug	mods/zone.cpp	327;"	d	file:
+z_debug	mods/zone.cpp	339;"	d	file:
 zone	db.cpp	/^namespace mods::zone {$/;"	n	class:mods	file:
 zone	mods/init.hpp	/^INIT(mods::zone);$/;"	v
 zone	mods/intimidate.cpp	/^namespace mods::zone {$/;"	n	class:mods	file:

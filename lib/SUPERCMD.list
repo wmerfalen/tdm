@@ -17,6 +17,7 @@
 {yel}mods/builder/bookmarks{/yel}:->{grn}print_vnum{/grn}
 {yel}mods/builder/conbuild{/yel}:->{grn}conbuild{/grn}
 {yel}mods/zone{/yel}:->{grn}list_zone_table{/grn}
+{yel}mods/zone{/yel}:->{grn}uuids{/grn}
 {yel}mods/zone{/yel}:->{grn}reset_zone{/grn}
 {yel}mods/players/messages{/yel}:->{grn}queue_message{/grn}
 {yel}mods/fluxkraft/arcon-bar.hpp:		->generate_bar{/grn}
@@ -105,6 +106,7 @@
 {yel}act.builder{/yel}:->{grn}pmw_obj_from_room{/grn}
 {yel}act.builder{/yel}:->{grn}toggle_obj_from_room{/grn}
 {yel}act.builder{/yel}:->{grn}js_help{/grn}
+{yel}mobact{/yel}:->{grn}mobact{/grn}
 {yel}act.offensive{/yel}:->{grn}affect_me{/grn}
 {yel}act.debug{/yel}:->{grn}get_ticks_per_minute{/grn}
 {yel}act.debug{/yel}:->{grn}flush_player{/grn}

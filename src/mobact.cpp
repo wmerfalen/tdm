@@ -24,6 +24,7 @@
 #include "mods/loops.hpp"
 #include "mods/behaviour_tree_impl.hpp"
 #include "mods/mob-roam.hpp"
+#include "mods/interpreter-include.hpp"
 
 /* external globals */
 extern int no_specials;
@@ -106,9 +107,7 @@ void mobile_activity(void) {
 		        (!MOB_FLAGGED(ch, MOB_STAY_ZONE) ||
 		         (world[EXIT(ch, door)->to_room].zone == world[IN_ROOM(ch)].zone))) {
 			if(mods::mob_roam::can_roam_to(ch,EXIT(ch,door)->to_room)) {
-#ifdef __MENTOC_SHOW_SUCCESSFUL_ROAM_DECISION_DEBUG_OUTPUT__
 				std::cerr << green_str("Can roam to area") << "\n";
-#endif
 				perform_move(ch, door, 1);
 			}
 		}
@@ -117,6 +116,7 @@ void mobile_activity(void) {
 		if(MOB_FLAGGED(ch, MOB_AGGRESSIVE | MOB_AGGR_TO_ALIGN)) {
 			found = FALSE;
 
+			std::cerr << green_str("Mob (uuid:") << npc->player_ptr()->uuid() << "), npc->room():'" << npc->room() << "', plr->room():'" << npc->player_ptr()->room() << "'\n";
 			for(auto& plr : mods::globals::get_room_list(npc->room())) {
 				vict = plr->cd();
 				if(IS_NPC(vict) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE)) {
@@ -290,3 +290,14 @@ bool aggressive_mob_on_a_leash(char_data *slave,char_data *master,char_data *att
 	return (FALSE);
 }
 
+namespace mods::mobact {
+	SUPERCMD(do_mobact) {
+		ADMIN_REJECT();
+		player->send("Running...");
+		mobile_activity();
+		ADMIN_DONE();
+	}
+	void init() {
+		mods::interpreter::add_command("mobact", POS_RESTING, do_mobact, LVL_BUILDER,0);
+	}
+};

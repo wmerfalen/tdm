@@ -116,6 +116,7 @@ namespace mods {
 		}
 		set_type(type);
 		m_quitting = 0;
+		visibility() = 1;
 	}
 	void player::set_type(player_type_enum_t type) {
 		/**
@@ -176,6 +177,7 @@ namespace mods {
 		m_quitting = 0;
 		std::fill(m_misc_pref.begin(),m_misc_pref.end(),false);
 		m_sync_equipment();
+		visibility() = 1;
 	}
 	player::player(mods::player* ptr) {
 		this->init();
@@ -240,6 +242,7 @@ namespace mods {
 		m_current_page_fragment = "";
 		m_set_time();
 		m_quitting = 0;
+		visibility() = 1;
 	};
 	bool player::can_snipe(player_ptr_t target) {
 		return mods::scan::los_find(
@@ -2026,7 +2029,8 @@ namespace mods {
 		return this->contracts().back();
 	}
 	void player::queue_up(std::string_view msg) {
-		mods::players::messages::queue(db_id(),msg);
+		sendln(msg);
+		//mods::players::messages::queue(db_id(),msg);
 	}
 	void player::stop_contract(int c_num) {
 		std::remove_if(m_contracts.begin(),m_contracts.end(),[c_num](auto it) -> bool {

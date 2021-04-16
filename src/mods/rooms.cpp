@@ -630,6 +630,7 @@ namespace mods::rooms {
 	}
 
 	bool is_dark(room_rnum room) {
+		return false;
 		if(room >= world.size()) {
 			log("SYSERR: %d is out of bounds",room);
 			return false;
