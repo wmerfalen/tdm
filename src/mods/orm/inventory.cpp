@@ -235,7 +235,7 @@ namespace mods::orm::inventory {
 				}
 				d("Done [position:" << i << "]");
 			}
-			for(auto& eq : player->real_carrying()) {
+			for(auto& eq : player->vcarrying()) {
 				//---+-----------------------------+-----------+----------+----------------------------------------------
 				// po_id            | integer                     |           | not null | nextval('player_object_po_id_seq'::regclass)
 				// po_player_id     | integer                     |           | not null |
@@ -337,7 +337,7 @@ namespace mods::orm::inventory {
 				DBG("key: '" << key << "' value:'" << wearing << "'");
 
 				LMDBSET(key,wearing);
-				for(auto w : player->real_carrying()) {
+				for(auto w : player->vcarrying()) {
 					if(!w) {
 						DBG("Invalid carrying");
 						continue;

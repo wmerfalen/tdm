@@ -131,6 +131,7 @@ ACMD	mods/mini-games/line-up.cpp	/^ACMD(do_rotate_right) {$/;"	f
 ACMD	mods/mini-games/wires.cpp	/^ACMD(do_plug_cable){$/;"	f
 ACMD	mods/orm/player-base-ability.cpp	/^		ACMD(do_save_my_pba) {$/;"	f	namespace:mods::orm::pba
 ACMD	mods/prefs.cpp	/^ACMD(do_pref) {$/;"	f
+ACMD	mods/rifle-attachments.cpp	/^		ACMD(do_vcarrying) {$/;"	f	namespace:mods::rifle_attachments
 ACMD	mods/skills.cpp	/^ACMD(do_train) {$/;"	f
 ACMD	mods/values.cpp	/^			ACMD(do_get_value) {$/;"	f	namespace:mods::values
 ACMD	mods/values.cpp	/^			ACMD(do_list_values) {$/;"	f	namespace:mods::values
@@ -2429,8 +2430,8 @@ MENTOC_MEMBER_VARS_IMPL	mods/item-types.hpp	610;"	d
 MENTOC_MOB_WEARS	mods/item-types.hpp	521;"	d
 MENTOC_MS_COMP	mods/doors.hpp	258;"	d
 MENTOC_MS_COMP	mods/doors.hpp	273;"	d
-MENTOC_NPC_CHECK	mods/player.cpp	85;"	d	file:
-MENTOC_NPC_CHECK_0	mods/player.cpp	86;"	d	file:
+MENTOC_NPC_CHECK	mods/player.cpp	82;"	d	file:
+MENTOC_NPC_CHECK_0	mods/player.cpp	83;"	d	file:
 MENTOC_OBI	mods/builder.cpp	40;"	d	file:
 MENTOC_OBI2	mods/builder.cpp	41;"	d	file:
 MENTOC_OBJ_DATA_FEED_DUAL	structs.cpp	68;"	d	file:
@@ -2619,12 +2620,12 @@ MOTORCYCLE	mods/weapon.hpp	/^		MOTORCYCLE,$/;"	e	enum:mods::weapon::vehicle_t
 MP5	mods/orm/breacher.hpp	/^		const std::string MP5 = "MP5";$/;"	m	struct:mods::orm::breacher
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::breacher::primary_choice_t
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1579;"	d	file:
-MR	mods/player.cpp	1633;"	d	file:
+MR	mods/player.cpp	1581;"	d	file:
+MR	mods/player.cpp	1635;"	d	file:
 MR	structs.cpp	603;"	d	file:
 MR	structs.cpp	614;"	d	file:
-MRC	mods/player.cpp	1580;"	d	file:
-MRC	mods/player.cpp	1634;"	d	file:
+MRC	mods/player.cpp	1582;"	d	file:
+MRC	mods/player.cpp	1636;"	d	file:
 MSG_ANTI_MATTER_DAMAGE	mods/values-list.cpp	/^MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\\r\\n"$/;"	v
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
@@ -2779,7 +2780,7 @@ NO_RESULTS	mods/orm/util.hpp	/^	static constexpr int8_t NO_RESULTS = 1;$/;"	m	na
 NO_RESULTS	mods/pq.hpp	/^static constexpr int8_t NO_RESULTS = 1;$/;"	v
 NPC	act.wizard.cpp	2287;"	d	file:
 NPC	mods/scan.hpp	/^			NPC,$/;"	e	enum:mods::scan::find_type_t
-NPC_SEND_DEBUG	mods/player.cpp	81;"	d	file:
+NPC_SEND_DEBUG	mods/player.cpp	78;"	d	file:
 NRM	utils.h	119;"	d
 NSLC	telnet.h	200;"	d
 NTELOPTS	telnet.h	125;"	d
@@ -6140,10 +6141,10 @@ db_seti	mods/js.cpp	/^		static duk_ret_t db_seti(duk_context *ctx) {$/;"	f	names
 db_update	mods/mobs/mini-gunner.hpp	/^		static inline int db_update(mob_vnum mob_vnum,str_map_t values) {$/;"	f	namespace:mods::mobs::mg::orm
 db_update	mods/pq.hpp	/^static inline int db_update(std::string_view table, str_map_t values,std::string_view field,std::string_view operator_type,std::string_view value) {$/;"	f
 dbg	mods/acl/config-parser.hpp	20;"	d
-dbg	mods/player.cpp	560;"	d	file:
-dbg	mods/player.cpp	585;"	d	file:
-dbg	mods/player.cpp	588;"	d	file:
-dbg	mods/player.cpp	635;"	d	file:
+dbg	mods/player.cpp	550;"	d	file:
+dbg	mods/player.cpp	575;"	d	file:
+dbg	mods/player.cpp	578;"	d	file:
+dbg	mods/player.cpp	625;"	d	file:
 dbg_blu	mods/acl/config-parser.hpp	25;"	d
 dbg_grn	mods/acl/config-parser.hpp	24;"	d
 dbg_print	mods/contract-events.cpp	6;"	d	file:
@@ -11015,7 +11016,6 @@ read_type_list	shop.cpp	/^int read_type_list(FILE *shop_f, struct shop_buy_data 
 ready_to_save	mods/builder.cpp	/^	bool ready_to_save(str_t argument) {$/;"	f	struct:command_t
 real_abils	mods/player.hpp	/^			char_ability_data& real_abils() {	 \/* Abilities without modifiers   *\/$/;"	f	struct:mods::player
 real_armor	mods/player.hpp	/^			uint16_t& real_armor() {$/;"	f	struct:mods::player
-real_carrying	mods/player.hpp	/^			std::deque<obj_ptr_t>& real_carrying() {$/;"	f	struct:mods::player
 real_frozen	mods/world-configuration.cpp	/^		int real_frozen(){$/;"	f	namespace:mods::world_conf
 real_idle	mods/world-configuration.cpp	/^		int real_idle(){$/;"	f	namespace:mods::world_conf
 real_immortal_start	mods/world-configuration.cpp	/^		int real_immortal_start(){$/;"	f	namespace:mods::world_conf
@@ -12837,6 +12837,7 @@ values	mods/values.hpp	/^namespace mods::values {$/;"	n	class:mods
 values_with_password	mods/sql.hpp	/^			compositor<T>& values_with_password(const value_map& values, std::string_view password_field) {$/;"	f	struct:mods::sql::compositor
 variation	mods/mobs/mini-gunner.hpp	/^			std::string variation;$/;"	m	struct:mods::mobs::mini_gunner
 variation	mods/mobs/smart-mob.hpp	/^			std::string variation;$/;"	m	struct:mods::mobs::smart_mob
+vcarrying	mods/player.cpp	/^	std::vector<obj_data*> player::vcarrying() {$/;"	f	class:mods::player
 vec_player_data_element	mods/scan.hpp	/^		} vec_player_data_element;$/;"	t	namespace:mods::scan	typeref:struct:mods::scan::__anon4
 vector_add_if_not_exists	mods/util.hpp	/^	void vector_add_if_not_exists(std::vector<T>& vec,T element) {$/;"	f	namespace:mods::util
 vector_erase	mods/util.hpp	/^	void vector_erase(std::vector<T>& vec,T element) {$/;"	f	namespace:mods::util

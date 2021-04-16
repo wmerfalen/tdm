@@ -138,8 +138,8 @@ namespace mods::orm {
 			} else if(secondary && secondary->uuid == row->base_object->uuid) {
 				r.initialize_row(player->db_id(),row->export_objects(),mods::orm::rifle_attachment::POSITION_SECONDARY);
 			} else {
-				for(const auto& carried : player->real_carrying()) {
-					if(carried->uuid == row->base_object->uuid) {
+				for(const auto& carried : player->vcarrying()) {
+					if(mods::rifle_attachments::by_uuid(carried->uuid)) {
 						r.initialize_row(player->db_id(),row->export_objects(),mods::orm::rifle_attachment::POSITION_INVENTORY);
 					}
 				}

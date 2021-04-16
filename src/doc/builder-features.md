@@ -1,6 +1,13 @@
 # Inventory of features
 
 # 2021-04 new features
+ 	- elemental damage
+		- now honors rifle attachments
+	- rifle attachment debugging
+		- `list_rifle_attachments` with no args
+			- will show you the current allocations
+	- "rifle variants" or just "variants"
+		- the new term for deep object parsed rifles
 	- SUPERCMD is now the preferred way to build admin commands
 		- it is automatically parsed from the codebase an included in `help` command
 	- help command now lists all ACMD if you're a mortal

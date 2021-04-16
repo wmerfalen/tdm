@@ -1713,8 +1713,8 @@ struct char_data {
 
 	/** TODO: convert to forward list or std::vector */
 	obj_data *carrying;            /* Head of list                  */
-	std::deque<std::shared_ptr<obj_data>> m_carrying;
 	bool has_desc;
+	std::deque<std::shared_ptr<obj_data>> m_carrying;
 	std::shared_ptr<mods::descriptor_data> desc;         /* NULL for mobiles              */
 
 	/** TODO: our ultimate goal is to completely get rid of these linked list members */

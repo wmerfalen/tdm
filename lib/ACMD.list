@@ -1,5 +1,6 @@
 ./shop.cpp:->list
 ./shop.cpp:->buy
+./mods/rifle-attachments.cpp:		->vcarrying
 ./mods/prefs.cpp:->pref
 ./mods/classes/pyrexia.cpp:->fire_nade
 ./mods/classes/ghost.cpp:	->dissipate

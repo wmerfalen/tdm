@@ -1033,8 +1033,8 @@ void look_at_target(char_data *ch, char *arg) {
 	}
 
 	/* Does the argument match an extra desc in the char's inventory? */
-	for(auto& item : player->real_carrying()) {
-		if(item && CAN_SEE_OBJ(ch, item.get())) {
+	for(auto item : player->vcarrying()) {
+		if(item && CAN_SEE_OBJ(ch, item)) {
 			auto ex = find_exdesc(arg, item->ex_description);
 			if(!ex) {
 				continue;

@@ -109,7 +109,7 @@ namespace mods::query_objects {
 
 	std::vector<uuid_t> query_inventory_by_yaml(player_ptr_t& player, std::string_view yaml_file) {
 		std::vector<uuid_t> objects;
-		for(const auto& obj : player->real_carrying()) {
+		for(const auto& obj : player->vcarrying()) {
 			if(obj->feed_file().compare(yaml_file.data()) == 0) {
 				objects.emplace_back(obj->uuid);
 			}
@@ -118,7 +118,7 @@ namespace mods::query_objects {
 	}
 	std::vector<uuid_t> query_inventory_for_object(player_ptr_t& player, std::string_view name) {
 		std::vector<uuid_t> objects;
-		for(const auto& obj : player->real_carrying()) {
+		for(const auto& obj : player->vcarrying()) {
 			if(isname(name.data(),obj->name)) {
 				objects.emplace_back(obj->uuid);
 			}
@@ -199,7 +199,7 @@ SUPERCMD(do_query_inventory) {
 		player->errorln(usage);
 		return;
 	}
-	for(auto& obj : player->real_carrying()) {
+	for(auto& obj : player->vcarrying()) {
 		for(std::size_t i = 0; i < vec_args.size(); ++i) {
 			if(obj->feed_file().compare(vec_args[i].c_str()) == 0) {
 				uuid_list.emplace_back(obj->uuid);

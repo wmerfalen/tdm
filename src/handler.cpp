@@ -507,6 +507,9 @@ void obj_to_char(obj_ptr_t  object, player_ptr_t player) {
 /* give an object to a char   */
 void obj_to_char(struct obj_data *object, char_data *ch) {
 	log("DEPRECATED: obj_to_char(obj_data*,char_data*)");
+	MENTOC_PREAMBLE();
+	obj_ptr_to_char(optr_by_uuid(object->uuid), player);
+	return;
 	if(object && ch) {
 		d("giving object to ch (obj_to_char legacy)");
 		object->next_content = ch->carrying;
@@ -1112,7 +1115,6 @@ void extract_obj(struct obj_data *obj) {
 
 
 void update_object(struct obj_data *obj, int use) {
-#if 0
 	/**
 	 * Commented out [2021-04-14] because it's causing infinite loops
 	 */
@@ -1127,7 +1129,6 @@ void update_object(struct obj_data *obj, int use) {
 	if(obj->next_content) {
 		update_object(obj->next_content, use);
 	}
-#endif
 }
 
 

@@ -180,10 +180,8 @@ namespace mods {
 			bool is_weapon_loaded();
 			bool carrying_ammo_of_type(const weapon_type_t&);
 			obj_data* carrying();
+			std::vector<obj_data*> vcarrying();
 			void uncarry(obj_ptr_t obj);
-			std::deque<obj_ptr_t>& real_carrying() {
-				return m_char_data->m_carrying;
-			}
 			void carry(obj_ptr_t);
 			void ammo_adjustment(int);
 			int  ammo_type_adjustment(int,const weapon_type_t&);

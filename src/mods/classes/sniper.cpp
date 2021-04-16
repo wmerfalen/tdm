@@ -84,9 +84,9 @@ namespace mods::classes {
 		}
 		obj_ptr_t primary = nullptr;
 		/** TODO: create catchy name using the deep object parser */
-		primary = create_object(ITEM_RIFLE,"psg1.yml");
-		player->equip(primary,WEAR_PRIMARY);
-		player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
+		//primary = create_object(ITEM_RIFLE,"psg1.yml");
+		//player->equip(primary,WEAR_PRIMARY);
+		//player->equip(create_object(ITEM_RIFLE,"czp10.yml"),WEAR_SECONDARY);
 		return result;
 	}
 	int16_t sniper::save() {

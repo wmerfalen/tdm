@@ -53,9 +53,6 @@ extern void send_to_room_except(room_rnum room, std::vector<uuid_t> except, cons
 extern void do_auto_exits(char_data *ch);
 extern mods::player::descriptor_data_t descriptor_list;
 extern mods::scan::find_results_t mods::scan::los_find(chptr hunter,chptr hunted);
-extern void affect_modify(char_data *ch,
-                          byte loc, sbyte mod, bitvector_t bitv, bool add);
-extern void affect_total(char_data *ch);
 extern void obj_to_room(obj_ptr_t in_object, room_rnum room);
 enum histfile_type_t {
 	HISTFILE_FILE = 1, HISTFILE_LMDB = 2, HISTFILE_DUAL = 3
@@ -312,11 +309,11 @@ namespace mods {
 #ifdef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
 			mods::orm::inventory::lmdb::add_player_wear(this->db_id(),in_object->db_id(),in_object->type,pos);
 #else
-			mods::orm::inventory::flush_player_by_uuid(uuid());
 #endif
 #ifdef __MENTOC_PLAYER_DEBUG__
 			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
 #endif
+			mods::orm::inventory::flush_player_by_uuid(uuid());
 			perform_equip_calculations(pos,true);
 			this->m_sync_equipment();
 			mods::stat_bonuses::player_equip(uuid(),in_object->uuid);
@@ -515,14 +512,7 @@ namespace mods {
 				mods::globals::affect_room_light(room(),light);
 			}
 		}
-		for(unsigned j = 0; j < MAX_OBJ_AFFECT; j++) {
-			affect_modify(m_char_data, m_equipment[pos]->affected[j].location,
-			              m_equipment[pos]->affected[j].modifier,
-			              m_equipment[pos]->obj_flags.bitvector, equip);
-		}
-
 		this->m_sync_equipment();
-		affect_total(m_char_data);
 
 	}
 	bool player::has_weapon_capability(uint8_t type) {
@@ -579,9 +569,9 @@ namespace mods {
 		dbg("adding...via lmdb");
 		mods::orm::inventory::lmdb::add_player_inventory(this->db_id(), obj->db_id(), obj->type);
 #else
+#endif
 		dbg("flushing by uuid");
 		mods::orm::inventory::flush_player_by_uuid(uuid());
-#endif
 #undef dbg
 	}
 	void player::uncarry(obj_ptr_t obj) {
@@ -629,10 +619,22 @@ namespace mods {
 		dbg("remove player inv");
 		mods::orm::inventory::lmdb::remove_player_inventory(this->db_id(), obj->db_id());
 #else
+#endif
 		dbg("flush player by uuid");
 		mods::orm::inventory::flush_player_by_uuid(uuid());
-#endif
 #undef dbg
+	}
+	std::vector<obj_data*> player::vcarrying() {
+		std::vector<obj_data*> list;
+		if(!m_char_data) {
+			return list;
+		}
+		for(auto item : m_char_data->m_carrying) {
+			if(item) {
+				list.emplace_back(item.get());
+			}
+		}
+		return list;
 	}
 	obj_data* player::carrying() {
 		return m_char_data->carrying;

@@ -93,8 +93,8 @@ namespace mods::zone {
 			case 'M': {
 					std::vector<uuid_t> alive;
 					for(const auto& mob_uuid : command.object_data) {
-						auto n = npc_by_uuid(mob_uuid);
-						if(n) {
+						auto it = mods::globals::mob_map.find(mob_uuid);
+						if(it != mods::globals::mob_map.end()) {
 							alive.emplace_back(mob_uuid);
 						}
 					}
@@ -256,7 +256,7 @@ namespace mods::zone {
 
 				if(zone_table[i].age >= zone_table[i].lifespan && zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode) {
 					mods::zone::reset_zone(i);
-					zone_table[i].age = ZO_DEAD;
+					zone_table[i].age = 0;
 				}
 			}
 		}

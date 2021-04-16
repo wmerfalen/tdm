@@ -10,22 +10,29 @@ namespace mods {
 	namespace rifle_attachments {
 		std::vector<std::shared_ptr<mods::rifle_attachments_t>> by_player(player_ptr_t& player) {
 			std::vector<std::shared_ptr<mods::rifle_attachments_t>> list;
+			std::vector<uuid_t> uuid_list;
 			for(const auto item : player->equipment()) {
 				if(!item) {
 					continue;
 				}
 				auto ptr = by_uuid(item->uuid);
 				if(ptr) {
-					list.emplace_back(ptr);
+					if(std::find(uuid_list.begin(),uuid_list.end(),item->uuid) == uuid_list.end()) {
+						list.emplace_back(ptr);
+						uuid_list.emplace_back(item->uuid);
+					}
 				}
 			}
-			for(const auto item : player->real_carrying()) {
+			for(const auto item : player->vcarrying()) {
 				if(!item) {
 					continue;
 				}
 				auto ptr = by_uuid(item->uuid);
 				if(ptr) {
-					list.emplace_back(ptr);
+					if(std::find(uuid_list.begin(),uuid_list.end(),item->uuid) == uuid_list.end()) {
+						list.emplace_back(ptr);
+						uuid_list.emplace_back(item->uuid);
+					}
 				}
 			}
 			return list;
@@ -76,6 +83,13 @@ namespace mods {
 			mods::orm::load_player_rifle_attachments(player);
 			player->sendln("[+] Done");
 		}
+		ACMD(do_vcarrying) {
+			player->sendln("Schema list...");
+			for(const auto& pair : player->vcarrying()) {
+				player->sendln(CAT("Item:",pair->name.c_str()));
+			}
+			player->sendln("[+] Done");
+		}
 		SUPERCMD(do_list_rifle_attachments) {
 			player->sendln("Schema list...");
 			for(const auto& pair : uuid_schema_list()) {
@@ -88,6 +102,7 @@ namespace mods {
 			player->sendln("[+] Done");
 		}
 		void init() {
+			mods::interpreter::add_command("vcarrying", POS_RESTING, do_vcarrying, 0,0);
 			mods::interpreter::add_command("instantiate_rifle_attachment", POS_RESTING, do_instantiate_rifle_attachment, LVL_BUILDER,0);
 			mods::interpreter::add_command("load_my_rifle_attachments", POS_RESTING, do_load_my_rifle_attachments, 0,0);
 			mods::interpreter::add_command("list_rifle_attachments", POS_RESTING, do_list_rifle_attachments, LVL_BUILDER,0);
