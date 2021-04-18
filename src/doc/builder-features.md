@@ -1,5 +1,10 @@
 # Inventory of features
 
+# deep object parsing supports levels now
+	- deep object parser accepts the following syntax:
+		- `rifle/psg1.yml{... data ... }#level:N` where N is the level. 
+		- this *MUST* be at the very end of the string
+
 # 2021-04 new features
  	- elemental damage
 		- now honors rifle attachments

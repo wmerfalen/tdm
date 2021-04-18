@@ -15,7 +15,7 @@
 #endif
 
 namespace mods {
-	const std::string example_grammar = "rifle/g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}";
+	const std::string example_grammar = "rifle/g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}#level:32";
 	const std::string pkid_example_grammar = "rifle|pkid:7{sight:attachment|pkid:4,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}";
 	using counter_t = uint16_t;
 	std::tuple<bool,std::string,counter_t> expect_integer(const std::string& line, counter_t in_counter);
@@ -315,6 +315,11 @@ namespace mods {
 				}
 			}
 			++counter;
+		}
+		/** extract #level:N */
+		auto level_it = line.find("#level:");
+		if(level_it != std::string::npos) {
+			map["level"] = line.substr(level_it + strlen("#level:"));
 		}
 		return map;
 	}

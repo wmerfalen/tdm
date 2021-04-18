@@ -11,7 +11,7 @@
 #define mcv_debug(MSG) mentoc_prefix_debug("[mods::calc_visibility]")  << info << "|" << MSG << "\n" \
 			<< "dump: " << dump << "\n";
 #else
-#define mcv_debug(MSG) mentoc_prefix_debug("[mods::calc_visibility]")  << info << "|" << MSG << "\n";
+#define mcv_debug(MSG)
 #endif
 
 

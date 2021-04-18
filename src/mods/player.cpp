@@ -312,11 +312,11 @@ namespace mods {
 #ifdef __MENTOC_USE_DEFAULT_INVENTORY_FLUSH__
 			mods::orm::inventory::lmdb::add_player_wear(this->db_id(),in_object->db_id(),in_object->type,pos);
 #else
+			mods::orm::inventory::flush_player_by_uuid(uuid());
 #endif
 #ifdef __MENTOC_PLAYER_DEBUG__
 			std::cerr << "[stub][player.cpp]-> perform equip calculations\n";
 #endif
-			mods::orm::inventory::flush_player_by_uuid(uuid());
 			perform_equip_calculations(pos,true);
 			this->m_sync_equipment();
 			mods::stat_bonuses::player_equip(uuid(),in_object->uuid);
@@ -572,9 +572,9 @@ namespace mods {
 		dbg("adding...via lmdb");
 		mods::orm::inventory::lmdb::add_player_inventory(this->db_id(), obj->db_id(), obj->type);
 #else
-#endif
-		dbg("flushing by uuid");
 		mods::orm::inventory::flush_player_by_uuid(uuid());
+		dbg("flushing by uuid");
+#endif
 #undef dbg
 	}
 	void player::uncarry(obj_ptr_t obj) {
@@ -622,9 +622,9 @@ namespace mods {
 		dbg("remove player inv");
 		mods::orm::inventory::lmdb::remove_player_inventory(this->db_id(), obj->db_id());
 #else
-#endif
 		dbg("flush player by uuid");
 		mods::orm::inventory::flush_player_by_uuid(uuid());
+#endif
 #undef dbg
 	}
 	std::vector<obj_data*> player::vcarrying() {

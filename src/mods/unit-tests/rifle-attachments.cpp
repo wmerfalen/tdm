@@ -11,7 +11,7 @@ extern player_ptr_t new_player();
 TEST_CASE("A rifle attachment can be syncd to and from orm") {
 	SECTION("rifle attachment orm layer saves all properties properly") {
 		auto player = new_player();
-		const std::string schema = "rifle/g36c.yml{barrel:silencer.yml,grip:hexon-grip.yml,magazine:extended-ar-mag.yml,muzzle:flash-hider.yml,sight:reflex-sight.yml,stock:titanium-stock.yml,strap:tactical-strap.yml,under_barrel:frag-underbarrel.yml}";
+		const std::string schema = "rifle/g36c.yml{barrel:silencer.yml,grip:hexon-grip.yml,magazine:extended-ar-mag.yml,muzzle:flash-hider.yml,sight:reflex-sight.yml,stock:titanium-stock.yml,strap:tactical-strap.yml,under_barrel:frag-underbarrel.yml}#level:32";
 		mods::rifle_attachments_t rifle(schema);
 		REQUIRE(schema.compare(rifle.export_objects()) == 0);
 	}

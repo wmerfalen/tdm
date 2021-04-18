@@ -4482,16 +4482,14 @@ SUPERCMD(do_zbuild) {
 		return;
 	}
 
-	if(std::string(&command[0]).compare("mob") == 0) {
-		std::string arg = argument;
-		auto past = arg.substr(arg.find("mob ")+4);
-		auto args = mods::util::arglist<std::vector<std::string>>(past);
+	auto vargs = PARSE_ARGS();
+	if(vargs.size() && vargs[0].compare("mob") == 0) {
 		int zone = 0;
-		if(args[0].compare("this") == 0) {
+		if(vargs[1].compare("this") == 0) {
 			zone = world[player->room()].zone;
 			player->sendln(CAT("Using current zone id:", zone));
 		} else {
-			auto zone_id = mods::util::stoi(args[0]);
+			auto zone_id = mods::util::stoi(vargs[1]);
 
 			if(!zone_id.has_value() || static_cast<unsigned>(zone_id.value()) >= zone_table.size()) {
 				r_error(player," Invalid zone id");
@@ -4499,20 +4497,16 @@ SUPERCMD(do_zbuild) {
 			}
 			zone = zone_id.value();
 		}
-		for(auto& obj : args) {
-			player->sendln(obj);
-		}
-
-		if(args.size() < 5) {
+		if(vargs.size() < 6) {
 			r_error(player,"Not enough arguments");
 			return;
 		}
 
 		auto zone_command = "M";
-		auto if_flag = args[4];
-		auto mob_vnum = args[1];
-		auto max_existing = args[2];
-		auto room_vnum = args[3];
+		auto if_flag = vargs[5];
+		auto mob_vnum = vargs[2];
+		auto max_existing = vargs[4];
+		auto room_vnum = vargs[3].compare("this") == 0 ? std::to_string(world[player->room()].number) : vargs[3];
 		auto result = mods::builder::zone_place(zone,zone_command,if_flag,mob_vnum,max_existing,room_vnum);
 		if(!result.first) {
 			r_error(player,result.second);

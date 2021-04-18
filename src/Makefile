@@ -21,6 +21,7 @@ yamlcpp_object = yaml-cpp
 boostdir = $(CURDIR)/boost
 thirdparty = $(duktape) $(lmdb)
 FLAGS = -ggdb -g -O2 -Wall -Wno-unused-result \
+	-Wuninitialized \
 	-Wno-char-subscripts -Wcomment \
 	-Wno-format-zero-length -Wno-format-security\
 	-std=c++2a -fconcepts -fpermissive -MMD \

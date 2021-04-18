@@ -13,11 +13,13 @@ namespace mods::orm {
 		std::string rifle_data;
 		uint64_t rifle_player_id;
 		std::string rifle_position;
+		uint16_t rifle_level;
 		strmap_t export_class() {
 			strmap_t v;
 			v["rifle_data"] = (rifle_data);
 			v["rifle_player_id"] = std::to_string(rifle_player_id);
 			v["rifle_position"] = (rifle_position);
+			v["rifle_level"] = std::to_string(rifle_level);
 			v["id"] = std::to_string(id);
 			return std::move(v);
 		}
@@ -74,6 +76,7 @@ namespace mods::orm {
 		std::string rifle_data;
 		uint64_t rifle_player_id;
 		std::string rifle_position;
+		uint16_t rifle_level;
 		long created_at;
 		long updated_at;
 		bool loaded;

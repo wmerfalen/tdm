@@ -45,6 +45,12 @@ namespace mods {
 			void set_owner_uuid(uuid_t u) {
 				m_owner_uuid = u;
 			}
+			void set_level(uint16_t level) {
+				m_rifle_level = level;
+			}
+			uint16_t get_level() const {
+				return m_rifle_level;
+			}
 			int16_t incendiary_damage_percent;
 			int16_t explosive_damage_percent;
 			int16_t shrapnel_damage_percent;
@@ -90,6 +96,7 @@ namespace mods {
 			deep_object_parser_t m_parser;
 			std::string m_rifle_yaml_file;
 			uuid_t m_owner_uuid;
+			uint16_t m_rifle_level;
 	};
 	namespace rifle_attachments {
 		std::map<uuid_t,std::string>& uuid_schema_list();

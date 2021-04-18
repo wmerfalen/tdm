@@ -91,7 +91,7 @@ namespace mods::classes {
 	}
 	int16_t sniper::save() {
 		m_player->sendln("Saving from sniper class");
-		mods::orm::inventory::flush_player(m_player);
+		//mods::orm::inventory::flush_player(m_player);
 		return m_orm.save();
 	}
 	/*

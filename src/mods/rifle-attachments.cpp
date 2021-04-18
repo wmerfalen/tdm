@@ -140,6 +140,7 @@ namespace mods {
 		aimed_limb_accuracy_percent = 0;
 		underbarrel_launcher_type = "NONE";
 		damage_percent_bonus = 0;
+		set_level(1);
 
 		for(auto& pair : map) {
 			obj_ptr_t object;
@@ -167,6 +168,9 @@ namespace mods {
 			}
 			if(pair.first.compare("strap") == 0) {
 				object = strap = create_object(ITEM_ATTACHMENT,pair.second);
+			}
+			if(pair.first.compare("level") == 0) {
+				set_level(mods::util::stoi(pair.second).value_or(1));
 			}
 			if(object && object->has_attachment()) {
 				incendiary_damage_percent += object->attachment()->attributes->incendiary_damage_percent;
@@ -321,6 +325,9 @@ namespace mods {
 			++i;
 		}
 		s += "}";
+		if(m_rifle_level) {
+			s += CAT("#level:",m_rifle_level);
+		}
 		return s;
 	}
 	std::string rifle_attachments_t::examine() {

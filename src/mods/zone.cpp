@@ -7,7 +7,6 @@
 #include "screen-searcher.hpp"
 #include "npc.hpp"
 
-#define __MENTOC_MODS_ZONE_DEBUG__
 #ifdef __MENTOC_MODS_ZONE_DEBUG__
 #define z_debug(A) std::cerr << "[mods::zone debug]" << A << "\n";
 #define rr_debug(A) std::cerr << "[run_replenish]:" << A << "\n";
@@ -302,35 +301,33 @@ namespace mods::zone {
 		ADMIN_DONE();
 	}
 
-	/*
-		SUPERCMD(do_reset_zone) {
-			ADMIN_REJECT();
-			auto vec_args = PARSE_ARGS();
-			if(vec_args.size() < 1) {
-				player->errorln("usage: reset_zone <zone_id|this>");
-				return;
-			}
-			for(const auto& arg : vec_args) {
-				if(arg.compare("this") == 0) {
-					player->send(CAT("Resetting [",world[player->room()].zone,"]...").c_str());
-					mods::zone::reset_zone(world[player->room()].zone);
-					player->send("[+] Done\r\n");
-					continue;
-				}
-				auto i = mods::util::stoi(arg).value_or(-1);
-				if(i < 0 || i >= zone_table.size()) {
-					player->errorln(CAT("Invalid zone id: ",arg,". skipping..."));
-					continue;
-				}
-				player->send(CAT("Resetting [",world[player->room()].zone,"]...").c_str());
-				mods::zone::reset_zone(i);
-				player->send("[+] Done\r\n");
-			}
-			ADMIN_DONE();
+	SUPERCMD(do_reset_zone) {
+		ADMIN_REJECT();
+		auto vec_args = PARSE_ARGS();
+		if(vec_args.size() < 1) {
+			player->errorln("usage: reset_zone <zone_id|this>");
+			return;
 		}
-		*/
+		for(const auto& arg : vec_args) {
+			if(arg.compare("this") == 0) {
+				player->send(CAT("Resetting [",world[player->room()].zone,"]...").c_str());
+				mods::zone::reset_zone(world[player->room()].zone);
+				player->send("[+] Done\r\n");
+				continue;
+			}
+			auto i = mods::util::stoi(arg).value_or(-1);
+			if(i < 0 || i >= zone_table.size()) {
+				player->errorln(CAT("Invalid zone id: ",arg,". skipping..."));
+				continue;
+			}
+			player->send(CAT("Resetting [",world[player->room()].zone,"]...").c_str());
+			mods::zone::reset_zone(i);
+			player->send("[+] Done\r\n");
+		}
+		ADMIN_DONE();
+	}
 	void init() {
-		//mods::interpreter::add_command("reset_zone", POS_RESTING, do_reset_zone, LVL_BUILDER,0);
+		mods::interpreter::add_command("reset_zone", POS_RESTING, do_reset_zone, LVL_BUILDER,0);
 		mods::interpreter::add_command("uuids", POS_RESTING, do_uuids, LVL_BUILDER,0);
 		mods::interpreter::add_command("list_zone_table", POS_RESTING, do_list_zone_table, LVL_BUILDER,0);
 	}

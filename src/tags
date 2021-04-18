@@ -3980,6 +3980,7 @@ SUPERCMD	mods/target-practice.cpp	/^SUPERCMD(do_uninstall_dummy) {$/;"	f
 SUPERCMD	mods/weapons/damage-types.cpp	/^	SUPERCMD(do_inc_damage) {$/;"	f	namespace:mods::weapons::damage_types
 SUPERCMD	mods/weapons/elemental.cpp	/^	SUPERCMD(do_inc_damage) {$/;"	f	namespace:mods::weapons::elemental
 SUPERCMD	mods/zone.cpp	/^	SUPERCMD(do_list_zone_table) {$/;"	f	namespace:mods::zone
+SUPERCMD	mods/zone.cpp	/^	SUPERCMD(do_reset_zone) {$/;"	f	namespace:mods::zone
 SUPERCMD	mods/zone.cpp	/^	SUPERCMD(do_uuids) {$/;"	f	namespace:mods::zone
 SUPERCMD	olc.cpp	/^SUPERCMD(do_olc) {$/;"	f
 SUPERCMD	spell_parser.cpp	/^SUPERCMD(do_cast) {$/;"	f
@@ -4375,7 +4376,7 @@ UNUSED17	mods/flags.hpp	/^		UNUSED17,				\/\/ useless$/;"	e	enum:mods::flags::af
 UP	structs.h	137;"	d
 UPDATE	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_type_t
 UPPER	utils.h	156;"	d
-USERS_FORMAT	act.informative.cpp	1445;"	d	file:
+USERS_FORMAT	act.informative.cpp	1449;"	d	file:
 USE_AUTOEQ	structs.h	119;"	d
 USURP	interpreter.cpp	1564;"	d	file:
 Unknown	mods/catch.hpp	/^			Unknown = -1,$/;"	e	enum:Catch::ResultWas::OfType
@@ -4445,7 +4446,7 @@ WEAR_WRIST_R	structs.h	414;"	d
 WELC_MESSG	config.cpp	/^const char *WELC_MESSG =$/;"	v
 WEST	structs.h	136;"	d
 WHEN	mods/catch.hpp	12215;"	d
-WHO_FORMAT	act.informative.cpp	1408;"	d	file:
+WHO_FORMAT	act.informative.cpp	1412;"	d	file:
 WILL	telnet.h	46;"	d
 WILL_BANK_MONEY	shop.h	164;"	d
 WILL_START_FIGHT	shop.h	163;"	d
@@ -4593,7 +4594,7 @@ Yes	mods/catch.hpp	/^			Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
 Yes	mods/catch2.hpp	/^        Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
 Z	db.cpp	1689;"	d	file:
 Z	db.cpp	1697;"	d	file:
-ZONE_ERROR	mods/zone.cpp	112;"	d	file:
+ZONE_ERROR	mods/zone.cpp	111;"	d	file:
 ZON_PREFIX	db.h	71;"	d
 ZOOM	mods/weapon-types.hpp	/^		ZOOM,$/;"	e	enum:mods::weapon::capabilities::cap_t
 Z_KINGS_C	castle.cpp	31;"	d	file:
@@ -4904,7 +4905,6 @@ __MENTOC_MODS_WEAPON_STAT_LIST_HEADER__	mods/weapon-stat-list.hpp	2;"	d
 __MENTOC_MODS_WEAPON_TYPES_HEADER__	mods/weapon-types.hpp	2;"	d
 __MENTOC_MODS_WORLD_CONFIGURATION_HEADER__	mods/world-configuration.hpp	2;"	d
 __MENTOC_MODS_YAML_HEADER__	mods/yaml.hpp	2;"	d
-__MENTOC_MODS_ZONE_DEBUG__	mods/zone.cpp	10;"	d	file:
 __MENTOC_MODS_ZONE_HEADER__	mods/intimidate.hpp	2;"	d
 __MENTOC_MODS_ZONE_HEADER__	mods/zone.hpp	2;"	d
 __MENTOC_MODS_ai_state_HEADER__	mods/ai_state.hpp	2;"	d
@@ -6159,8 +6159,8 @@ dbg_print	mods/player-contract-instance.cpp	9;"	d	file:
 dbg_red	mods/acl/config-parser.hpp	26;"	d
 dbi	mods/lmdb/db.hpp	/^			MDB_dbi dbi; 	\/* this is just an unsigned int *\/$/;"	m	struct:gdns::lmdb::gdns_dbi
 dbi	mods/lmdb/db.hpp	/^			std::unique_ptr<gdns_dbi> dbi;$/;"	m	struct:gdns::lmdb::db
-dd	act.informative.cpp	552;"	d	file:
-dd	act.informative.cpp	710;"	d	file:
+dd	act.informative.cpp	554;"	d	file:
+dd	act.informative.cpp	714;"	d	file:
 deactivate_account	mods/player.cpp	/^	void player::deactivate_account() {$/;"	f	class:mods::player
 deal_damage	mods/weapons/damage-types.cpp	/^		void deal_damage(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	f	namespace:mods::weapons::damage_types::legacy
 deal_hp_damage	mods/weapons/damage-types.cpp	/^	void deal_hp_damage(player_ptr_t& player, uint16_t damage) {$/;"	f	namespace:mods::weapons::damage_types
@@ -6951,7 +6951,7 @@ ex_keyword	mods/orm/room.hpp	/^		std::string ex_keyword;$/;"	m	struct:mods::orm:
 examine	mods/examine.cpp	/^namespace mods::examine {$/;"	n	class:mods	file:
 examine	mods/examine.hpp	/^namespace mods::examine {$/;"	n	class:mods
 examine	mods/rifle-attachments.cpp	/^	std::string rifle_attachments_t::examine() {$/;"	f	class:mods::rifle_attachments_t
-example_grammar	mods/deep-object-parser.cpp	/^	const std::string example_grammar = "rifle\/g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}";$/;"	m	namespace:mods	file:
+example_grammar	mods/deep-object-parser.cpp	/^	const std::string example_grammar = "rifle\/g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}#level:32";$/;"	m	namespace:mods	file:
 example_grammar	mods/rifle-attachments.cpp	/^	const std::string example_grammar = "g36c.yml{sight:acog.yml,muzzle:compensator.yml,under_barrel:gm32grenadelauncher.yml}";$/;"	m	namespace:mods	file:
 exec	mods/js.cpp	/^		static duk_ret_t exec(duk_context *ctx) {$/;"	f	namespace:mods::js
 exec	mods/pq.cpp	/^	pqxx::result exec(transaction& txn,std::string_view query) {$/;"	f	namespace:mods::pq
@@ -7654,6 +7654,7 @@ get_last_seen_diff	mods/mobs/mini-gunner.cpp	/^	tick_t mini_gunner::get_last_see
 get_last_seen_diff	mods/mobs/smart-mob.cpp	/^	tick_t smart_mob::get_last_seen_diff(uuid_t player) {$/;"	f	class:mods::mobs::smart_mob
 get_legacy_attack_type	mods/weapons/damage-types.cpp	/^	int get_legacy_attack_type(obj_ptr_t& weapon) {$/;"	f	namespace:mods::weapons::damage_types
 get_lense	mods/player.hpp	/^			auto get_lense() {$/;"	f	struct:mods::player
+get_level	mods/rifle-attachments.hpp	/^			uint16_t get_level() const {$/;"	f	struct:mods::rifle_attachments_t
 get_line	utils.cpp	/^int get_line(FILE *fl, char *buf) {$/;"	f
 get_list	mods/super-users.cpp	/^	std::string get_list() {$/;"	f	namespace:mods::super_users
 get_logic	mods/behaviour_tree_node.hpp	/^			callback_t& get_logic() const {$/;"	f	struct:mods::behaviour_tree_node
@@ -9319,6 +9320,7 @@ m_requirements	mods/forge-engine/generated-armor.hpp	/^			requirements_t m_requi
 m_requirements	mods/forge-engine/generated-rifle.hpp	/^			requirements_t m_requirements;$/;"	m	struct:mods::forge_engine::generated_rifle_t
 m_resultData	mods/catch.hpp	/^			AssertionResultData m_resultData;$/;"	m	class:Catch::AssertionResult
 m_returning	mods/sql.hpp	/^			std::string m_returning;$/;"	m	struct:mods::sql::compositor
+m_rifle_level	mods/rifle-attachments.hpp	/^			uint16_t m_rifle_level;$/;"	m	struct:mods::rifle_attachments_t
 m_rifle_yaml_file	mods/rifle-attachments.hpp	/^			std::string m_rifle_yaml_file;$/;"	m	struct:mods::rifle_attachments_t
 m_rifles	mods/player.hpp	/^			std::deque<std::shared_ptr<mods::rifle_attachments_t>> m_rifles;$/;"	m	struct:mods::player
 m_roaming_profile_name	mods/mob-roam.hpp	/^			std::string m_roaming_profile_name;$/;"	m	struct:mods::mob_roam::roam_recorder
@@ -9573,7 +9575,7 @@ mcv_debug	mods/calc-visibility.cpp	134;"	d	file:
 mcv_debug	mods/calc-visibility.cpp	14;"	d	file:
 mdo_debug	mods/deep-object-parser.hpp	11;"	d
 mdo_debug	mods/deep-object-parser.hpp	22;"	d
-mdo_debug	mods/rifle-attachments.hpp	104;"	d
+mdo_debug	mods/rifle-attachments.hpp	111;"	d
 mdo_debug	mods/rifle-attachments.hpp	5;"	d
 me_debug	mods/mob-equipment.cpp	11;"	d	file:
 me_debug	mods/mob-equipment.cpp	66;"	d	file:
@@ -11318,6 +11320,8 @@ rifle_instance	mods/orm/rifle-instance.hpp	/^	struct rifle_instance : public mod
 rifle_instance	structs.h	/^		std::unique_ptr<rifle_instance_data<attachment_data_t,std::shared_ptr<obj_data>,uuid_t>> rifle_instance;$/;"	m	struct:obj_data
 rifle_instance_data	mods/rifle-instance-data.hpp	/^		rifle_instance_data() : ammo(0) {$/;"	f	struct:rifle_instance_data
 rifle_instance_data	mods/rifle-instance-data.hpp	/^	struct rifle_instance_data {$/;"	s
+rifle_level	mods/orm/rifle-attachment.hpp	/^		uint16_t rifle_level;$/;"	m	struct:mods::orm::rifle_attachment
+rifle_level	mods/orm/rifle-attachment.hpp	/^		uint16_t rifle_level;$/;"	m	struct:mods::orm::rifle_attachment_record_t
 rifle_manufacturer	mods/orm/rifle-instance.hpp	/^		std::string rifle_manufacturer;$/;"	m	struct:mods::orm::rifle_instance
 rifle_max_range	mods/orm/rifle-instance.hpp	/^		int16_t rifle_max_range;$/;"	m	struct:mods::orm::rifle_instance
 rifle_muzzle_velocity	mods/orm/rifle-instance.hpp	/^		int16_t rifle_muzzle_velocity;$/;"	m	struct:mods::orm::rifle_instance
@@ -11484,9 +11488,9 @@ rows	mods/orm/skill-trees.hpp	/^		std::vector<skill_trees_record_t> rows;$/;"	m	
 rr_debug	mods/intimidate.cpp	11;"	d	file:
 rr_debug	mods/intimidate.cpp	8;"	d	file:
 rr_debug	mods/intimidate.cpp	95;"	d	file:
-rr_debug	mods/zone.cpp	13;"	d	file:
-rr_debug	mods/zone.cpp	16;"	d	file:
-rr_debug	mods/zone.cpp	338;"	d	file:
+rr_debug	mods/zone.cpp	12;"	d	file:
+rr_debug	mods/zone.cpp	15;"	d	file:
+rr_debug	mods/zone.cpp	335;"	d	file:
 rst_text	mods/acl/color.hpp	6;"	d
 rtrim	mods/lmdb/db.hpp	/^		static inline void rtrim(std::string &s) {$/;"	f	struct:gdns::util
 rtrim_copy	mods/lmdb/db.hpp	/^		static inline std::string rtrim_copy(std::string s) {$/;"	f	struct:gdns::util
@@ -11834,6 +11838,7 @@ set_imp_mode	mods/player.cpp	/^	void player::set_imp_mode(bool b) {$/;"	f	class:
 set_is_breaching	mods/object-utils.hpp	/^	void set_is_breaching(T& obj, P& player,int direction) {$/;"	f	namespace:mods::object_utils
 set_is_installing	mods/object-utils.hpp	/^	void set_is_installing(T& obj, P& player,int direction) {$/;"	f	namespace:mods::object_utils
 set_lense	mods/player.hpp	/^			void set_lense(const lense_type_t& lense) {$/;"	f	struct:mods::player
+set_level	mods/rifle-attachments.hpp	/^			void set_level(uint16_t level) {$/;"	f	struct:mods::rifle_attachments_t
 set_location_data	structs.h	/^		void set_location_data(location_data_t i) {$/;"	f	struct:obj_data
 set_logic	mods/behaviour_tree_node.hpp	/^			void set_logic(const callback_t& logic) {$/;"	f	struct:mods::behaviour_tree_node
 set_marine	mods/player.cpp	/^	void player::set_marine(std::shared_ptr<mods::classes::marine> g) {$/;"	f	class:mods::player
@@ -13046,9 +13051,9 @@ z	structs.h	/^		int z;$/;"	v
 z_debug	mods/intimidate.cpp	10;"	d	file:
 z_debug	mods/intimidate.cpp	7;"	d	file:
 z_debug	mods/intimidate.cpp	96;"	d	file:
-z_debug	mods/zone.cpp	12;"	d	file:
-z_debug	mods/zone.cpp	15;"	d	file:
-z_debug	mods/zone.cpp	339;"	d	file:
+z_debug	mods/zone.cpp	11;"	d	file:
+z_debug	mods/zone.cpp	14;"	d	file:
+z_debug	mods/zone.cpp	336;"	d	file:
 zone	db.cpp	/^namespace mods::zone {$/;"	n	class:mods	file:
 zone	mods/init.hpp	/^INIT(mods::zone);$/;"	v
 zone	mods/intimidate.cpp	/^namespace mods::zone {$/;"	n	class:mods	file:
