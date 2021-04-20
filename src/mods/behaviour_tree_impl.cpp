@@ -73,7 +73,13 @@ namespace mods::behaviour_tree_impl {
 		mods::behaviour_tree_impl::mob_list().emplace_back(mob.uuid());
 		return 0;
 	}
-
+	int8_t unregister_by_uuid(const uuid_t& m_uuid) {
+		std::cerr << green_str("Removing mob by UUID due to immobility") << "\n";
+		std::remove_if(mods::behaviour_tree_impl::mob_list().begin(),
+		               mods::behaviour_tree_impl::mob_list().end(),[m_uuid](const auto & u) -> bool { return u == m_uuid; }
+		              );
+		return 0;
+	}
 	int8_t unregister_mob(argument_type mob) {
 		mob.mob_specials().behaviour_tree = 0;
 		auto m_uuid = mob.uuid();

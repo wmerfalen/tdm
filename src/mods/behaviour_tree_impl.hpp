@@ -44,6 +44,7 @@ namespace mods::behaviour_tree_impl {
 	void run_trees();
 	int8_t register_mob(argument_type,std::string);
 	int8_t unregister_mob(argument_type);
+	int8_t unregister_by_uuid(const uuid_t& m_uuid);
 	uint8_t grab_tree_by_name(const std::string&);
 
 	constexpr int mob_has_tree = ((1 << 19));

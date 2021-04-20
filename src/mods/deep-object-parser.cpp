@@ -248,6 +248,7 @@ namespace mods {
 	}
 	str_map_t deep_object_parser_t::extract_line_items(const std::string& line, const std::vector<std::string>& slot_names) {
 		str_map_t map;
+		map["level"] = "1";
 		uint16_t counter = 0;
 		std::string yaml_file;
 		m_debug("parsing...");

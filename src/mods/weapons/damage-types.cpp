@@ -945,10 +945,7 @@ namespace mods::weapons::damage_types {
 		}
 		dam += critical_bonus;
 
-		auto dice_roll = dice(
-		                     damage_dice,
-		                     damage_sides
-		                 );
+		auto dice_roll = mods::weapons::damage_calculator::calculate(player,weapon,victim);
 		dam += dice_roll;
 
 #ifdef __MENTOC_SHOW_SNIPE_HIT_STATS__

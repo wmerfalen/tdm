@@ -759,7 +759,7 @@ CGET_DEF	mods/values.cpp	20;"	d	file:
 CGET_DEF	mods/values.cpp	2420;"	d	file:
 CHAOTIC	mods/ai_state.hpp	/^				MANIC,CHAOTIC,RESERVED$/;"	e	enum:mods::ai_state::state
 CHARM	mods/flags.hpp	/^		CHARM,$/;"	e	enum:mods::flags::aff
-CHECK_NULL	comm.cpp	2405;"	d	file:
+CHECK_NULL	comm.cpp	2416;"	d	file:
 CHECK_PLAYER_SPECIAL	utils.h	214;"	d
 CHECK_PLAYER_SPECIAL	utils.h	217;"	d
 CHECK_WAIT	utils.h	378;"	d
@@ -1012,7 +1012,7 @@ DISORIENT	mods/weapon-types.hpp	/^		DISORIENT,$/;"	e	enum:mods::weapon::capabili
 DISPLAY	mods/mini-games/wires.hpp	/^		static constexpr std::string_view DISPLAY = "A small LED display on the panel says: ";$/;"	m	struct:mods::mini_games::wires
 DISPLAY_ACMD	mods/players/db-load.hpp	/^		DISPLAY_ACMD,$/;"	e	enum:mods::players::db_load::save_from_t
 DM	telnet.h	55;"	d
-DMG_DEBUG	mods/weapons/damage-types.cpp	1069;"	d	file:
+DMG_DEBUG	mods/weapons/damage-types.cpp	1066;"	d	file:
 DMG_DUMP	mods/weapons/damage-types.cpp	436;"	d	file:
 DO	telnet.h	44;"	d
 DONT	telnet.h	43;"	d
@@ -2885,7 +2885,7 @@ OUTSIDE_WATER	mods/rooms.hpp	/^		OUTSIDE_WATER,$/;"	e	enum:mods::rooms::sector_t
 OUTSIDE_WOODEN_WALL	mods/rooms.hpp	/^		OUTSIDE_WOODEN_WALL,	\/** rappelling *\/$/;"	e	enum:mods::rooms::sector_type_t
 OUTSIDE_WOODEN_WALLS	mods/rooms.hpp	/^		OUTSIDE_WOODEN_WALLS,$/;"	e	enum:mods::rooms::sector_type_t
 OUT_OF_AMMO_EVENT	mods/damage-event.hpp	/^	OUT_OF_AMMO_EVENT,$/;"	e	enum:uint16_t
-O_NONBLOCK	comm.cpp	2083;"	d	file:
+O_NONBLOCK	comm.cpp	2094;"	d	file:
 Obj_from_store	objsave.cpp	/^struct obj_data *Obj_from_store(struct obj_file_elem object, int *location) {$/;"	f
 Obj_to_store	objsave.cpp	/^int Obj_to_store(struct obj_data *obj, FILE *fl, int location) {$/;"	f
 OfType	mods/catch.hpp	/^		enum OfType {$/;"	g	struct:Catch::ResultWas
@@ -3322,7 +3322,7 @@ SEEK_SET	utils.h	535;"	d
 SELECTOR	mods/behaviour_tree_node.hpp	/^			enum node_type_t { DO_NOTHING, SELECTOR, SEQUENCE, LEAF };$/;"	e	enum:mods::behaviour_tree_node::node_type_t
 SELF	utils.h	452;"	d
 SEMI	mods/weapon.hpp	/^		SEMI,$/;"	e	enum:mods::weapon::vehicle_t
-SENDOK	comm.cpp	2544;"	d	file:
+SENDOK	comm.cpp	2555;"	d	file:
 SEND_HELP	globals.hpp	291;"	d
 SENSE_LIFE	mods/flags.hpp	/^		SENSE_LIFE,$/;"	e	enum:mods::flags::aff
 SENSE_MOTION	mods/weapon-types.hpp	/^		SENSE_MOTION,$/;"	e	enum:mods::weapon::capabilities::cap_t
@@ -4160,7 +4160,7 @@ TO_CHAR	comm.h	67;"	d
 TO_NOTVICT	comm.h	66;"	d
 TO_OBJ_PTR	utils.h	553;"	d
 TO_ROOM	comm.h	64;"	d
-TO_ROOM	mods/weapons/damage-calculator.cpp	21;"	d	file:
+TO_ROOM	mods/weapons/damage-calculator.cpp	22;"	d	file:
 TO_ROOM	mods/weapons/damage-types.cpp	15;"	d	file:
 TO_ROOM	mods/weapons/reload.cpp	7;"	d	file:
 TO_SLEEP	comm.h	68;"	d
@@ -4922,7 +4922,7 @@ __MENTOC_RUN_PBA_CODE__	mods/debug-pre-game.hpp	23;"	d
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
 __MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	145;"	d
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	d
-__MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__	mods/weapons/damage-calculator.cpp	13;"	d	file:
+__MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__	mods/weapons/damage-calculator.cpp	14;"	d	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1231;"	d	file:
 __MENTOC_SHOW_EQUIP_DEBUG_OUTPUT__	mods/player.cpp	35;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ADVANCED_PROTECTION_DEBUG_OUTPUT__	mods/armor/advanced-protection.cpp	4;"	d	file:
@@ -5110,6 +5110,7 @@ ai_state	mods/ai_state.hpp	/^			ai_state(char_data* ch,uint8_t st,uint32_t aggr)
 ai_state	mods/ai_state.hpp	/^	class ai_state {$/;"	c	namespace:mods
 ai_state	structs.h	/^		uint8_t ai_state;$/;"	m	struct:obj_data
 aimed_limb_accuracy_percent	mods/rifle-attachments.hpp	/^			int16_t aimed_limb_accuracy_percent;$/;"	m	struct:mods::rifle_attachments_t
+algorithm_A	mods/weapons/damage-calculator.cpp	/^	namespace algorithm_A {$/;"	n	namespace:mods::weapons::damage_calculator	file:
 alias	interpreter.h	/^	char *alias;$/;"	m	struct:alias_data
 alias_data	interpreter.h	/^struct alias_data {$/;"	s
 all_integral_flags	mods/doors.hpp	/^	static inline std::vector<exit_info_masks_t> all_integral_flags(int exit_info) {$/;"	f	namespace:mods::doors
@@ -5467,6 +5468,8 @@ cached_room_distance	mods/scan.cpp	/^	std::tuple<bool,distance_t> cached_room_di
 calc_visibility	mods/calc-visibility.cpp	/^namespace mods::calc_visibility {$/;"	n	class:mods	file:
 calc_visibility	mods/calc-visibility.hpp	/^namespace mods::calc_visibility {$/;"	n	class:mods
 calculate	mods/forge-engine/value-scaler.cpp	/^	void value_scaler::calculate(player_ptr_t& player) {$/;"	f	class:mods::forge_engine::value_scaler
+calculate	mods/weapons/damage-calculator.cpp	/^		int16_t calculate($/;"	f	namespace:mods::weapons::damage_calculator::algorithm_A
+calculate	mods/weapons/damage-calculator.cpp	/^	int16_t calculate($/;"	f	namespace:mods::weapons::damage_calculator
 calculate_available_practice_sessions	mods/levels.cpp	/^	uint8_t calculate_available_practice_sessions(uint8_t level) {$/;"	f	namespace:mods::levels
 calculate_based_on_triads	mods/levels.cpp	/^	std::array<float,STAT_INDEXES_SIZE> calculate_based_on_triads(std::array<uint8_t,5> triads,int level) {$/;"	f	namespace:mods::levels
 calculate_bonus_damage	mods/weapons/damage-calculator.cpp	/^	int16_t calculate_bonus_damage($/;"	f	namespace:mods::weapons::damage_calculator
@@ -6795,8 +6798,8 @@ drone_scan_room	mods/scan.cpp	/^	std::vector<uuid_t> drone_scan_room(room_rnum r
 drone_simulate	mods/player.hpp	/^			bool& drone_simulate() {$/;"	f	struct:mods::player
 drone_uuid	mods/player.hpp	/^			uuid_t& drone_uuid() {$/;"	f	struct:mods::player
 dts_are_dumps	config.cpp	/^int dts_are_dumps = YES;$/;"	v
-dty_debug	mods/weapons/damage-calculator.cpp	15;"	d	file:
-dty_debug	mods/weapons/damage-calculator.cpp	17;"	d	file:
+dty_debug	mods/weapons/damage-calculator.cpp	16;"	d	file:
+dty_debug	mods/weapons/damage-calculator.cpp	18;"	d	file:
 dty_debug	mods/weapons/damage-types.cpp	13;"	d	file:
 dty_debug	mods/weapons/reload.cpp	5;"	d	file:
 duktape_context	mods/js.cpp	/^		static duk_context* duktape_context;$/;"	m	namespace:mods::js	file:
@@ -7558,6 +7561,7 @@ get_ammo_for	mods/player.cpp	/^	obj_ptr_t player::get_ammo_for(obj_ptr_t& weapon
 get_attacker	mods/player.hpp	/^			uuid_t get_attacker() {$/;"	f	struct:mods::player
 get_auto_clear_response_flag	mods/builder/slotted-builder.hpp	/^			bool get_auto_clear_response_flag() {$/;"	f	struct:mods::builder::slotted_builder
 get_bad_password_count	mods/player.cpp	/^	int player::get_bad_password_count() {$/;"	f	class:mods::player
+get_base_damage	mods/weapons/damage-calculator.cpp	/^		float get_base_damage(player_ptr_t& attacker) {$/;"	f	namespace:mods::weapons::damage_calculator::algorithm_A
 get_bind_addr	comm.cpp	/^struct in_addr *get_bind_addr() {$/;"	f
 get_body	mods/mini-games/line-up.cpp	/^	std::string line_up::get_body(){$/;"	f	class:mods::mini_games::line_up
 get_body	mods/mini-games/wires.cpp	/^	std::string wires::get_body(){$/;"	f	class:mods::mini_games::wires
@@ -7655,6 +7659,7 @@ get_last_seen_diff	mods/mobs/smart-mob.cpp	/^	tick_t smart_mob::get_last_seen_di
 get_legacy_attack_type	mods/weapons/damage-types.cpp	/^	int get_legacy_attack_type(obj_ptr_t& weapon) {$/;"	f	namespace:mods::weapons::damage_types
 get_lense	mods/player.hpp	/^			auto get_lense() {$/;"	f	struct:mods::player
 get_level	mods/rifle-attachments.hpp	/^			uint16_t get_level() const {$/;"	f	struct:mods::rifle_attachments_t
+get_level_damage	mods/weapons/damage-calculator.cpp	/^		float get_level_damage($/;"	f	namespace:mods::weapons::damage_calculator::algorithm_A
 get_line	utils.cpp	/^int get_line(FILE *fl, char *buf) {$/;"	f
 get_list	mods/super-users.cpp	/^	std::string get_list() {$/;"	f	namespace:mods::super_users
 get_logic	mods/behaviour_tree_node.hpp	/^			callback_t& get_logic() const {$/;"	f	struct:mods::behaviour_tree_node
@@ -7737,6 +7742,7 @@ get_user	mods/auto-login.cpp	/^	const std::string& get_user() { return mods::aut
 get_verb	mods/chat.cpp	/^	std::string_view channel::get_verb() const {$/;"	f	class:mods::chat::channel
 get_victim	castle.cpp	/^char_data *get_victim( char_data *ch) {$/;"	f
 get_watching	mods/player.hpp	/^			direction_t get_watching() {$/;"	f	struct:mods::player
+get_weapon_damage	mods/weapons/damage-calculator.cpp	/^		int16_t get_weapon_damage($/;"	f	namespace:mods::weapons::damage_calculator::algorithm_A
 get_weapon_heat	mods/mobs/mini-gunner.hpp	/^			int get_weapon_heat() const {$/;"	f	struct:mods::mobs::mini_gunner
 get_weapon_heat	mods/mobs/smart-mob.hpp	/^			int get_weapon_heat() const {$/;"	f	struct:mods::mobs::smart_mob
 get_yaml_exception_list	mods/object-utils.hpp	/^	static inline auto& get_yaml_exception_list() {$/;"	f	namespace:mods::object_utils
@@ -9902,7 +9908,7 @@ muzzle_velocity	mods/weapon.hpp	/^			int muzzle_velocity;	\/\/ Feet per second$/
 my_free	mods/lmdb/conf.cpp	/^void my_free(void* ptr){$/;"	f	namespace:gdns
 my_free	mods/lmdb/conf.hpp	/^void my_free(void* ptr){$/;"	f	struct:gdns::conf
 my_signal	comm.cpp	/^sigfunc *my_signal(int signo, sigfunc *func) {$/;"	f
-my_signal	comm.cpp	2160;"	d	file:
+my_signal	comm.cpp	2171;"	d	file:
 mzone_debug	mods/intimidate.hpp	10;"	d
 mzone_debug	mods/intimidate.hpp	8;"	d
 mzone_debug	mods/zone.hpp	10;"	d
@@ -12722,6 +12728,7 @@ unit_tests	globals.cpp	/^namespace mods::unit_tests {$/;"	n	class:mods	file:
 unit_tests	mods/unit-tests/elemental.cpp	/^namespace mods::unit_tests {$/;"	n	class:mods	file:
 unplug_all	mods/mini-games/wires.cpp	/^	void wires::unplug_all() {$/;"	f	class:mods::mini_games::wires
 unregister_authenticated_player	globals.cpp	/^		void unregister_authenticated_player(player_ptr_t player) {$/;"	f	namespace:mods::globals
+unregister_by_uuid	mods/behaviour_tree_impl.cpp	/^	int8_t unregister_by_uuid(const uuid_t& m_uuid) {$/;"	f	namespace:mods::behaviour_tree_impl
 unregister_mob	mods/behaviour_tree_impl.cpp	/^	int8_t unregister_mob(argument_type mob) {$/;"	f	namespace:mods::behaviour_tree_impl
 unregister_mob	mods/behaviour_tree_impl.cpp	/^	void unregister_mob(uuid_t m_uuid) {$/;"	f	namespace:mods::behaviour_tree_impl
 unrestrict_game	comm.cpp	/^RETSIGTYPE unrestrict_game(int sig) {$/;"	f
@@ -12983,7 +12990,7 @@ world_conf	mods/world-configuration.hpp	/^namespace mods::world_conf {$/;"	n	cla
 world_size	db.cpp	/^std::size_t world_size() {$/;"	f
 worn_by	structs.h	/^		char_data *worn_by;	  \/* Worn by?			      *\/$/;"	m	struct:obj_data
 worn_on	structs.h	/^		sh_int worn_on;		  \/* Worn where?		      *\/$/;"	m	struct:obj_data
-write	comm.cpp	1529;"	d	file:
+write	comm.cpp	1540;"	d	file:
 writeToStream	mods/catch2.hpp	/^        void writeToStream( std::ostream &os ) const {$/;"	f	struct:Catch::Parser
 write_aliases	alias.cpp	/^void write_aliases(char_data *ch) {$/;"	f
 write_ban_list	ban.cpp	/^void write_ban_list(void) {$/;"	f

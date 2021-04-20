@@ -873,6 +873,17 @@ void run_behaviour_trees() {
 		if(!npc) {
 			continue;
 		}
+		switch(npc->player_ptr()->position()) {
+			default:
+				break;
+			case POS_DEAD:
+			case POS_MORTALLYW:
+			case POS_INCAP:
+			case POS_STUNNED:
+				mods::behaviour_tree_impl::unregister_by_uuid(npc_uuid);
+				continue;
+				break;
+		}
 		if(npc->mob_specials().behaviour_tree) {
 			auto dispatch_result = mods::behaviour_tree_impl::dispatch_ptr(*npc);
 			rb_bht_debug("dispatch_result: '" << std::to_string(dispatch_result) << "'");

@@ -9,6 +9,7 @@
 #include "elemental.hpp"
 #include "../rifle-attachments.hpp"
 #include "../rand.hpp"
+#include <math.h>
 
 #define __MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__
@@ -24,6 +25,106 @@
 namespace mods::weapons::damage_calculator {
 	using de = damage_event_t;
 	using vpd = mods::scan::vec_player_data;
+
+	namespace algorithm_A {
+		float get_base_damage(player_ptr_t& attacker) {
+			static float base_damage[] = {
+				10.0,	/* level 0 */
+				10.0,	/* level 1 */
+				15.0, /* level 2 */
+				18.0, /* level 3 */
+				20.0, /* level 4 */
+				24.0, /* level 5 */
+				26.0, /* level 6 */
+				28.0, /* level 7 */
+				30.0, /* level 9 */
+				32.0, /* level 9 */
+				34.0, /* level 10 */
+				36.0, /* level 11 */
+				38.0, /* level 12 */
+				40.0, /* level 13 */
+				42.0, /* level 14 */
+				45.0, /* level 15 */
+				50.0, /* level 16 */
+				54.0, /* level 17 */
+				60.0, /* level 18 */
+				68.0, /* level 19 */
+				80.0, /* level 20 */
+				100.0, /* level 21 */
+				115.0, /* level 22 */
+				130.0, /* level 23 */
+				150.0, /* level 24 */
+				170.0, /* level 25 */
+				190.0, /* level 26 */
+				200.0, /* level 27 */
+				250.0, /* level 28 */
+				280.0, /* level 29 */
+				300.0, /* level 30 */
+			};
+			std::size_t level = attacker->level();
+			if(level >= 30) {
+				level = 30;
+			}
+			return base_damage[level];
+		}
+		float get_level_damage(
+		    player_ptr_t& attacker,
+		    player_ptr_t& victim
+		) {
+			std::size_t level_difference = attacker->level() - victim->level();
+			if(level_difference >= 6) {
+				return 2;
+			}
+			switch(level_difference) {
+				case 5:
+					return 1.6;
+				case 4:
+					return 1.4;
+				case 3:
+					return 1.3;
+				case 2:
+					return 1.2;
+				case 1:
+					return 1.1;
+				case 0:
+					return 1.0;
+				case -1:
+					return 0.8;
+				case -2:
+					return 0.6;
+				case -3:
+					return 0.4;
+				case -4:
+					return 0.2;
+				case -5:
+					return 0.1;
+				default:
+					return 0.05;
+			}
+		}
+		int16_t get_weapon_damage(
+		    player_ptr_t& attacker,
+		    obj_ptr_t& weapon
+		) {
+			auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
+			int16_t dice_count = weapon->rifle()->attributes->damage_dice_count;
+			int16_t sides = weapon->rifle()->attributes->damage_dice_sides;
+			if(rifle_attachment) {
+				dice_count = rifle_attachment->base_object->rifle()->attributes->damage_dice_count * rifle_attachment->get_level();
+				sides = rifle_attachment->base_object->rifle()->attributes->damage_dice_sides * rifle_attachment->get_level();
+			}
+			return dice(dice_count,sides);
+		}
+		int16_t calculate(
+		    player_ptr_t& attacker,
+		    obj_ptr_t& weapon,
+		    player_ptr_t& victim) {
+			auto base_damage = get_base_damage(attacker);
+			auto level_scaler = get_level_damage(attacker,victim);
+			auto weapon_damage = get_weapon_damage(attacker,weapon);
+			return base_damage + (level_scaler * weapon_damage);
+		}
+	};
 
 	/**
 	 * affects how far away a target can be.
@@ -138,5 +239,12 @@ namespace mods::weapons::damage_calculator {
 		return mods::values::DEFAULT_DISORIENT_TICKS_FROM_RIFLE_ATTACK();
 	}
 
+	int16_t calculate(
+	    player_ptr_t& attacker,
+	    obj_ptr_t& weapon,
+	    player_ptr_t& victim
+	) {
+		return algorithm_A::calculate(attacker,weapon,victim);
+	}
 };
 

@@ -12,6 +12,11 @@
 #include "../rifle-attachments.hpp"
 
 namespace mods::weapons::damage_calculator {
+	int16_t calculate(
+	    player_ptr_t& attacker,
+	    obj_ptr_t& weapon,
+	    player_ptr_t& victim
+	);
 	int16_t max_range(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon
