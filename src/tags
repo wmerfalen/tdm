@@ -204,6 +204,7 @@ ALIAS_GLOB_CHAR	interpreter.h	76;"	d
 ALIAS_SEP_CHAR	interpreter.h	74;"	d
 ALIAS_SIMPLE	interpreter.h	71;"	d
 ALIAS_VAR_CHAR	interpreter.h	75;"	d
+ALIVE	mods/scan.hpp	/^			ALIVE,$/;"	e	enum:mods::scan::find_type_t
 ALTERNATE_EXPLOSION	mods/weapon-types.hpp	/^		ALTERNATE_EXPLOSION,$/;"	e	enum:mods::weapon::capabilities::cap_t
 ALTEX_EMP	mods/yaml.hpp	/^	ALTEX_EMP = (1 << 2),$/;"	e	enum:alternate_explosion_t
 ALTEX_FLASHBANG	mods/yaml.hpp	/^	ALTEX_FLASHBANG = (1 << 4)$/;"	e	enum:alternate_explosion_t
@@ -981,6 +982,7 @@ DB_BOOT_ZON	db.h	18;"	d
 DB_SAVE_CHAR	mods/players/db-load.hpp	/^		DB_SAVE_CHAR$/;"	e	enum:mods::players::db_load::save_from_t
 DD	mods/debug-pre-game.hpp	204;"	d
 DD	mods/debug-pre-game.hpp	39;"	d
+DEAD	mods/scan.hpp	/^			DEAD,$/;"	e	enum:mods::scan::find_type_t
 DEALER	structs.h	/^	DEALER = 17,$/;"	e	enum:player_class_t
 DECENT	mods/yaml.hpp	/^		DECENT,$/;"	e	enum:mods::yaml::durability_profile_type_t
 DEEP_OBJECT	mods/util.hpp	/^		DEEP_OBJECT = 3$/;"	e	enum:mods::util::yaml_type_t
@@ -7295,7 +7297,7 @@ find_player_by_name	mods/players/search.hpp	/^			std::optional<uuid_t> find_play
 find_player_by_name	mods/players/util.hpp	/^			std::optional<uuid_t> find_player_by_name(std::string_view name){$/;"	f	namespace:mods::players::util
 find_player_payload_t	mods/js.cpp	/^				find_player_payload_t(std::string_view name) : player_name(name.data()), found(false) {$/;"	f	struct:mods::js::utils::find_player_payload_t
 find_player_payload_t	mods/js.cpp	/^			struct find_player_payload_t {$/;"	s	namespace:mods::js::utils	file:
-find_results_t	mods/scan.hpp	/^		struct find_results_t{$/;"	s	namespace:mods::scan
+find_results_t	mods/scan.hpp	/^		struct find_results_t {$/;"	s	namespace:mods::scan
 find_roam_profile	mods/mob-roam.cpp	/^	std::optional<std::shared_ptr<mods::mob_roam::roam_recorder>> find_roam_profile(std::string_view profile_name) {$/;"	f	namespace:mods::mob_roam
 find_room	mods/player-contract-instance.cpp	/^	void player_contract_instance::find_room(const room_rnum& room_id) {$/;"	f	class:mods::contracts::player_contract_instance
 find_skill_num	spell_parser.cpp	/^int find_skill_num(char *name) {$/;"	f

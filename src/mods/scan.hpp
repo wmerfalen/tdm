@@ -29,7 +29,7 @@ namespace mods {
 		using vec_player_data = std::vector<vec_player_data_element>;
 		using los_scan_foreach_callback = std::function<bool (room_rnum,int,vec_player_data)>;
 		using distance_t = uint16_t;
-		struct find_results_t{
+		struct find_results_t {
 			bool found;
 			int direction;
 			uint16_t distance;
@@ -40,6 +40,8 @@ namespace mods {
 		using room_list_t = std::array<std::vector<room_rnum>,num_directions>;
 		enum find_type_t {
 			NPC,
+			ALIVE,
+			DEAD,
 			PLAYERS,
 			OBJECTS,
 			ANY
@@ -54,13 +56,13 @@ namespace mods {
 		/**
 		 * Simply list rooms within line of sight for recursive_depth depth
 		 */
-		void los_list_rooms(chptr hunter,room_list_t & room_list,unsigned depth);
+		void los_list_rooms(chptr hunter,room_list_t& room_list,unsigned depth);
 		/**
 		 * Line of sight scan for hunted starting at hunter's current position
 		 */
 		find_results_t los_find(chptr hunter,chptr hunted);
 		std::tuple<bool,distance_t> room_distance(room_rnum& source,room_rnum& dest);
-		void los_list_by_room(room_rnum& in_room,room_list_t & room_list,unsigned depth);
+		void los_list_by_room(room_rnum& in_room,room_list_t& room_list,unsigned depth);
 		std::vector<uuid_t> drone_scan_room(room_rnum);
 	};
 };

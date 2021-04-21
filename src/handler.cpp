@@ -1369,6 +1369,7 @@ void extract_char(char_data *ch) {
 //
 
 void extract_pending_chars() {
+	/*
 	if(extractions_pending < 0) {
 		log("SYSERR: Negative (%d) extractions pending. Resetting to zero.", extractions_pending);
 		extractions_pending = 0;
@@ -1392,6 +1393,7 @@ void extract_pending_chars() {
 		}
 		return true;
 	});
+	*/
 }
 
 

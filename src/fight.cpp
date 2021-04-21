@@ -445,7 +445,7 @@ void raw_kill(char_data *ch) {
 	death_cry(ch);
 
 	make_corpse(ch);
-	extract_char(ch);
+	extract_char_final(ch);
 	//{
 	//	char_data* temp;
 	//	REMOVE_FROM_LIST(ch, combat_list, next_fighting);

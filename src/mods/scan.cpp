@@ -128,6 +128,9 @@ namespace mods::scan {
 					continue;
 				}
 				for(auto character : mods::globals::get_room_list(room_id)) {
+					if(type == find_type_t::ALIVE && character->position() == POS_DEAD) {
+						continue;
+					}
 					if(type == find_type_t::PLAYERS && IS_NPC(character->cd())) {
 						continue;
 					}

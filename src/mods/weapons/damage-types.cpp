@@ -467,7 +467,7 @@ namespace mods::weapons::damage_types {
 
 		vpd scan;
 		auto max_range = mods::weapons::damage_calculator::max_range(player,weapon);
-		mods::scan::los_scan_direction(player->cd(),max_range,&scan,direction);
+		mods::scan::los_scan_direction(player->cd(),max_range,&scan,direction,mods::scan::find_type_t::ALIVE);
 
 		player->set_fight_timestamp();
 		decrease_spray_shot_ammo(player,weapon);
@@ -595,7 +595,7 @@ namespace mods::weapons::damage_types {
 		}
 		vpd scan;
 		auto max_range = mods::weapons::damage_calculator::max_range(player,weapon);
-		mods::scan::los_scan_direction(player->cd(),max_range,&scan,direction);
+		mods::scan::los_scan_direction(player->cd(),max_range,&scan,direction,mods::scan::find_type_t::ALIVE);
 		player_ptr_t victim = nullptr;
 
 		for(auto&& scanned_target : scan) {
