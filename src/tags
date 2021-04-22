@@ -204,7 +204,7 @@ ALIAS_GLOB_CHAR	interpreter.h	76;"	d
 ALIAS_SEP_CHAR	interpreter.h	74;"	d
 ALIAS_SIMPLE	interpreter.h	71;"	d
 ALIAS_VAR_CHAR	interpreter.h	75;"	d
-ALIVE	mods/scan.hpp	/^			ALIVE,$/;"	e	enum:mods::scan::find_type_t
+ALIVE	mods/scan.hpp	/^			ALIVE = (1 << 1),$/;"	e	enum:mods::scan::find_type_t
 ALTERNATE_EXPLOSION	mods/weapon-types.hpp	/^		ALTERNATE_EXPLOSION,$/;"	e	enum:mods::weapon::capabilities::cap_t
 ALTEX_EMP	mods/yaml.hpp	/^	ALTEX_EMP = (1 << 2),$/;"	e	enum:alternate_explosion_t
 ALTEX_FLASHBANG	mods/yaml.hpp	/^	ALTEX_FLASHBANG = (1 << 4)$/;"	e	enum:alternate_explosion_t
@@ -219,7 +219,7 @@ ANACONDA_ASSAULT	mods/object.hpp	/^				ANACONDA_ASSAULT,$/;"	e	enum:mods::object
 AND_THEN	mods/catch.hpp	12218;"	d
 AND_WHEN	mods/catch.hpp	12216;"	d
 ANGLED_GRIP	mods/weapon.hpp	/^		VERTICAL_GRIP, ANGLED_GRIP$/;"	e	enum:mods::weapon::grip_t
-ANY	mods/scan.hpp	/^			ANY$/;"	e	enum:mods::scan::find_type_t
+ANY	mods/scan.hpp	/^			ANY = NPC | ALIVE | DEAD | PLAYERS | OBJECTS,$/;"	e	enum:mods::scan::find_type_t
 AO	telnet.h	52;"	d
 AOE_TYPES_NONE	mods/aoe.hpp	/^		AOE_TYPES_NONE = 0,$/;"	e	enum:mods::aoe::types_t
 APPLY_AC	structs.h	543;"	d
@@ -982,7 +982,7 @@ DB_BOOT_ZON	db.h	18;"	d
 DB_SAVE_CHAR	mods/players/db-load.hpp	/^		DB_SAVE_CHAR$/;"	e	enum:mods::players::db_load::save_from_t
 DD	mods/debug-pre-game.hpp	204;"	d
 DD	mods/debug-pre-game.hpp	39;"	d
-DEAD	mods/scan.hpp	/^			DEAD,$/;"	e	enum:mods::scan::find_type_t
+DEAD	mods/scan.hpp	/^			DEAD = (1 << 2),$/;"	e	enum:mods::scan::find_type_t
 DEALER	structs.h	/^	DEALER = 17,$/;"	e	enum:player_class_t
 DECENT	mods/yaml.hpp	/^		DECENT,$/;"	e	enum:mods::yaml::durability_profile_type_t
 DEEP_OBJECT	mods/util.hpp	/^		DEEP_OBJECT = 3$/;"	e	enum:mods::util::yaml_type_t
@@ -2781,7 +2781,7 @@ NO_PRIMARY_WIELDED_EVENT	mods/damage-event.hpp	/^	NO_PRIMARY_WIELDED_EVENT,$/;"	
 NO_RESULTS	mods/orm/util.hpp	/^	static constexpr int8_t NO_RESULTS = 1;$/;"	m	namespace:mods::orm::util
 NO_RESULTS	mods/pq.hpp	/^static constexpr int8_t NO_RESULTS = 1;$/;"	v
 NPC	act.wizard.cpp	2287;"	d	file:
-NPC	mods/scan.hpp	/^			NPC,$/;"	e	enum:mods::scan::find_type_t
+NPC	mods/scan.hpp	/^			NPC = (1 << 0),$/;"	e	enum:mods::scan::find_type_t
 NPC_SEND_DEBUG	mods/player.cpp	78;"	d	file:
 NRM	utils.h	119;"	d
 NSLC	telnet.h	200;"	d
@@ -2810,7 +2810,7 @@ NotImplementedException	mods/catch.hpp	/^			NotImplementedException(NotImplement
 NotImplementedException	mods/catch.hpp	/^	class NotImplementedException : public std::exception {$/;"	c	namespace:Catch
 OBJAFF_FLAGGED	utils.h	241;"	d
 OBJECT	mods/object.hpp	/^				OBJECT = 0,$/;"	e	enum:mods::object::object_type_enum_t
-OBJECTS	mods/scan.hpp	/^			OBJECTS,$/;"	e	enum:mods::scan::find_type_t
+OBJECTS	mods/scan.hpp	/^			OBJECTS = (1 << 4),$/;"	e	enum:mods::scan::find_type_t
 OBJECT_DEAD	shop.h	94;"	d
 OBJECT_FROM_ROOM	mods/events.hpp	/^		OBJECT_FROM_ROOM,$/;"	e	enum:mods::events::event_enum
 OBJECT_NOTOK	shop.h	95;"	d
@@ -2929,7 +2929,7 @@ PISTOL	mods/weapon.hpp	/^	                 GRENADE = (1 << 4), ASSAULT_RIFLE = (
 PLACE_HOLDER_VALUE	mods/schema.hpp	/^	constexpr static const char* PLACE_HOLDER_VALUE = "\\x01";$/;"	m	namespace:mods::schema
 PLAYER	mods/mobs/mob.hpp	/^				PLAYER, MOB, DRONE$/;"	e	enum:mods::player::player_type_enum_t
 PLAYER	mods/player.hpp	/^				PLAYER, MOB, DRONE,$/;"	e	enum:mods::player::player_type_enum_t
-PLAYERS	mods/scan.hpp	/^			PLAYERS,$/;"	e	enum:mods::scan::find_type_t
+PLAYERS	mods/scan.hpp	/^			PLAYERS = (1 << 3),$/;"	e	enum:mods::scan::find_type_t
 PLAYER_CAN	globals.hpp	289;"	d
 PLAYER_FILE	db.h	95;"	d
 PLAYER_GET	mods/prefs.hpp	20;"	d
@@ -11389,6 +11389,7 @@ roll_float	mods/forge-engine/generator.hpp	/^			float roll_float(float LO, float
 roll_heat_accumulation_hp_gain	mods/classes/pyrexia.cpp	/^		uint16_t pyrexia::roll_heat_accumulation_hp_gain(obj_ptr_t& attacking_weapon){$/;"	f	class:mods::classes::pyrexia
 roll_incendiary_shot	mods/classes/pyrexia.cpp	/^		uint16_t pyrexia::roll_incendiary_shot(obj_ptr_t& attacking_weapon,uuid_t target){$/;"	f	class:mods::classes::pyrexia
 roll_real_abils	class.cpp	/^void roll_real_abils(char_data *ch) {$/;"	f
+roll_weapon	mods/weapons/damage-calculator.cpp	/^		int16_t roll_weapon($/;"	f	namespace:mods::weapons::damage_calculator::algorithm_A
 room	graph.cpp	/^	room_rnum room;$/;"	m	struct:bfs_queue_struct	file:
 room	mods/camera.cpp	/^	int camera::room() {$/;"	f	class:mods::camera
 room	mods/contract-steps.hpp	/^		room_vnum				room;$/;"	m	namespace:mods::contracts

@@ -413,13 +413,12 @@ void change_alignment(char_data *ch, char_data *victim) {
 
 
 void death_cry(char_data *ch) {
-	std::cerr << "[death_cry(victim)] -> for: " << ch->player.name.c_str() << "\n";
 	int door;
 
 	act("\r\nYour blood freezes as you hear $n's death cry.", FALSE, ch, 0, 0, TO_ROOM);
 
 	for(door = 0; door < NUM_OF_DIRS; door++) {
-		std::string from_dir = mods::projectile::fromdirstr(door,true,true) + "\r\n";
+		std::string from_dir = mods::projectile::fromdirstr(OPPOSITE_DIR(door),true,true) + "\r\n";
 		if(CAN_GO(ch, door)) {
 			std::string s = "Your blood freezes as you hear someone's death cry " + from_dir;
 			send_to_room(world[IN_ROOM(ch)].dir_option[door]->to_room, s.c_str());

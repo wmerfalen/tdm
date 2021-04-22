@@ -102,18 +102,27 @@ namespace mods::weapons::damage_calculator {
 					return 0.05;
 			}
 		}
+		int16_t roll_weapon(
+		    obj_ptr_t& weapon
+		) {
+			auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
+			int16_t dice_count = 0, sides = 0;
+			if(rifle_attachment) {
+				dice_count = rifle_attachment->base_object->rifle()->attributes->damage_dice_count *
+				             (rifle_attachment->get_level() * 0.3);
+				sides = rifle_attachment->base_object->rifle()->attributes->damage_dice_sides *
+				        (rifle_attachment->get_level() * 0.3);
+			} else {
+				dice_count = weapon->rifle()->attributes->damage_dice_count;
+				sides = weapon->rifle()->attributes->damage_dice_sides;
+			}
+			return dice(dice_count,sides);
+		}
 		int16_t get_weapon_damage(
 		    player_ptr_t& attacker,
 		    obj_ptr_t& weapon
 		) {
-			auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
-			int16_t dice_count = weapon->rifle()->attributes->damage_dice_count;
-			int16_t sides = weapon->rifle()->attributes->damage_dice_sides;
-			if(rifle_attachment) {
-				dice_count = rifle_attachment->base_object->rifle()->attributes->damage_dice_count * rifle_attachment->get_level();
-				sides = rifle_attachment->base_object->rifle()->attributes->damage_dice_sides * rifle_attachment->get_level();
-			}
-			return dice(dice_count,sides);
+			return roll_weapon(weapon);
 		}
 		int16_t calculate(
 		    player_ptr_t& attacker,

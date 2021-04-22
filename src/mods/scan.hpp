@@ -39,12 +39,12 @@ namespace mods {
 		constexpr unsigned num_directions = 6;
 		using room_list_t = std::array<std::vector<room_rnum>,num_directions>;
 		enum find_type_t {
-			NPC,
-			ALIVE,
-			DEAD,
-			PLAYERS,
-			OBJECTS,
-			ANY
+			NPC = (1 << 0),
+			ALIVE = (1 << 1),
+			DEAD = (1 << 2),
+			PLAYERS = (1 << 3),
+			OBJECTS = (1 << 4),
+			ANY = NPC | ALIVE | DEAD | PLAYERS | OBJECTS,
 		};
 
 		void los_scan(char_data* ch,int depth,vec_player_data* vec_room_list);
