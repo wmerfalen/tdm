@@ -10,6 +10,7 @@
 #include "flashbang.hpp"
 #include "rooms.hpp"
 #include "injure.hpp"
+#include "super-users.hpp"
 
 #ifdef __MENTOC_SHOW_MODS_EXPLODE_DEBUG_OUTPUT__
 #define explode_debug(MSG) mentoc_prefix_debug("[mods::projectile::explode]")  << MSG << "\n";
@@ -139,9 +140,15 @@ namespace mods {
 			 }
 			 */
 		int grenade_damage(player_ptr_t victim,obj_ptr_t projectile) {
+			if(mods::super_users::player_is(victim)) {
+				return 0;
+			}
 			return explosive_damage(victim,projectile);
 		}
 		int fire_damage(player_ptr_t victim,obj_ptr_t projectile) {
+			if(mods::super_users::player_is(victim)) {
+				return 0;
+			}
 			victim->sendln("The room catches fire!");
 			return explosive_damage(victim,projectile);
 		}
@@ -152,18 +159,30 @@ namespace mods {
 			/** TODO: cause limited visibility and smoke texture */
 		}
 		void blindness_clears_up(player_ptr_t victim) {
+			if(mods::super_users::player_is(victim)) {
+				return;
+			}
 			victim->remove_affect(AFF_BLIND);
 			victim->sendln("You take the world in as the effects of your blindness wear off.");
 		}
 		void disorient_clears_up(player_ptr_t victim) {
+			if(mods::super_users::player_is(victim)) {
+				return;
+			}
 			victim->remove_affect(AFF_DISORIENT);
 			victim->sendln("The world around you starts to focus. You are no longer disoriented.");
 		}
 		void blind_target(player_ptr_t victim) {
+			if(mods::super_users::player_is(victim)) {
+				return;
+			}
 			victim->affect(AFF_BLIND);
 			victim->sendln("You are blinded.");
 		}
 		void disorient_person(player_ptr_t victim) {
+			if(mods::super_users::player_is(victim)) {
+				return;
+			}
 			victim->affect(AFF_DISORIENT);
 			victim->sendln("You become disoriented.");
 		}
@@ -190,6 +209,9 @@ namespace mods {
 		};
 		explosive_damage_t calculate_explosive_damage(player_ptr_t victim, obj_ptr_t item) {
 			explosive_damage_t e;
+			if(mods::super_users::player_is(victim)) {
+				return e;
+			}
 
 			auto& attr = item->explosive()->attributes;
 			if(attr->alternate_explosion_type.compare("SCAN") == 0) {
@@ -275,6 +297,9 @@ namespace mods {
 							break;
 					}
 					for(auto& person : mods::globals::get_room_list(current_room)) {
+						if(mods::super_users::player_is(person)) {
+							continue;
+						}
 						switch(type) {
 							case mw_explosive::REMOTE_CHEMICAL:
 								mods::projectile::propagate_chemical_blast(current_room,device,blast_count);
@@ -317,6 +342,9 @@ namespace mods {
 			obj_from_room(device);
 		}
 		int explosive_damage(player_ptr_t victim, obj_ptr_t item) {
+			if(mods::super_users::player_is(victim)) {
+				return 0;
+			}
 			if(mods::rooms::is_peaceful(victim->room())) {
 				std::cerr << red_str("Not dispatching explosive_damage to peaceful room: ") << victim->room() << "\n";
 				return 0;
@@ -365,10 +393,16 @@ namespace mods {
 			return damage;
 		}
 		int chemical_damage(player_ptr_t victim, obj_ptr_t item) {
+			if(mods::super_users::player_is(victim)) {
+				return 0;
+			}
 			return explosive_damage(victim,item);
 		}
 
 		void disorient_target(player_ptr_t player) {
+			if(mods::super_users::player_is(player)) {
+				return;
+			}
 			disorient_person(player);
 			player->sendln("You become extremely disoriented!");
 		}
@@ -449,6 +483,9 @@ namespace mods {
 			}
 
 			for(auto& person : mods::globals::get_room_list(room_id)) {
+				if(mods::super_users::player_is(person)) {
+					continue;
+				}
 				switch(type) {
 					default:
 						log("SYSERR: Invalid explosive type(%d) in %s:%d",type,__FILE__,__LINE__);
@@ -719,6 +756,9 @@ namespace mods {
 			explode_in_future(room_id, ticks, object->uuid,player->uuid());
 		}
 		int deploy_shrapnel_at(player_ptr_t& victim, int dice_count,int dice_sides,int from_direction) {
+			if(mods::super_users::player_is(victim)) {
+				return 0;
+			}
 			int damage = dice(dice_count,dice_sides);
 			victim->hp() -= damage;
 			return damage;

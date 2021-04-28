@@ -2,6 +2,7 @@
 #include "../util.hpp"
 #include "mini-gunner.hpp"
 #include "lowly-security.hpp"
+#include "mp-shotgunner.hpp"
 #include "../behaviour_tree_impl.hpp"
 
 namespace mods::mobs {
@@ -16,6 +17,11 @@ namespace mods::mobs {
 			default:
 			case extended_types_t::NONE:
 				std::cerr << "[extended mob type]: no extended mob type for mob: ('" << ch->player.name.c_str() << "')\n";
+				break;
+			/**! @NEW_BEHAVIOUR_TREE@ !**/
+			case extended_types_t::MP_SHOTGUNNER:
+				std::cerr << "[ found mp shotgunner ]\n";
+				mp_shotgunner::create(mob_id, "normal");
 				break;
 			case extended_types_t::LOWLY_SECURITY:
 				std::cerr << "[ found lowly security guard ]\n";

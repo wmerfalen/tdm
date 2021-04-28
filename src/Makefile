@@ -93,6 +93,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/mobs/room-watching mods/mobs/mini-gunner-behaviour-tree \
 					 mods/mobs/smart-mob \
 					 mods/mobs/lowly-security mods/mobs/lowly-security-behaviour-tree \
+					 mods/mobs/mp-shotgunner mods/mobs/mp-shotgunner-behaviour-tree \
 					 mods/armor/basic-protection mods/armor/advanced-protection mods/armor/elite-protection \
 					 mods/players/db-load mods/bugs-fixtures mods/player-registration \
 					 mods/super-users mods/builder/object-placement \

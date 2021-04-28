@@ -113,7 +113,7 @@ namespace mods::scan {
 
 				room_id = room_dir->to_room;
 
-				if(type == find_type_t::OBJECTS) {
+				if(type & find_type_t::OBJECTS) {
 					for(auto object : world[room_id].contents_container()) {
 						vec_room_list->push_back({});
 						auto& pushed_item = vec_room_list->back();
@@ -128,13 +128,13 @@ namespace mods::scan {
 					continue;
 				}
 				for(auto character : mods::globals::get_room_list(room_id)) {
-					if(type == find_type_t::ALIVE && character->position() == POS_DEAD) {
+					if(type & find_type_t::ALIVE && character->position() == POS_DEAD) {
 						continue;
 					}
-					if(type == find_type_t::PLAYERS && IS_NPC(character->cd())) {
+					if(type & find_type_t::PLAYERS && IS_NPC(character->cd())) {
 						continue;
 					}
-					if(type == find_type_t::NPC && !IS_NPC(character->cd())) {
+					if(type & find_type_t::NPC && !IS_NPC(character->cd())) {
 						continue;
 					}
 					vec_room_list->push_back({});
@@ -167,17 +167,17 @@ namespace mods::scan {
 
 	void los_scan(char_data* ch,int depth,vec_player_data* vec_room_list) {
 		for(auto i_d : mods::scan::directions) {
-			los_scan_direction(ch,depth,vec_room_list,i_d,find_type_t::ANY);
+			los_scan_direction(ch,depth,vec_room_list,i_d,(find_type_t)find_type_t::ANY);
 		}
 	}
 	void los_scan_for_npcs(char_data* ch,int depth,vec_player_data* vec_room_list) {
 		for(auto i_d : mods::scan::directions) {
-			los_scan_direction(ch,depth,vec_room_list,i_d,find_type_t::PLAYERS);
+			los_scan_direction(ch,depth,vec_room_list,i_d,(find_type_t)(find_type_t::ALIVE | find_type_t::NPC));
 		}
 	}
 	void los_scan_for_players(char_data* ch,int depth,vec_player_data* vec_room_list) {
 		for(auto i_d : mods::scan::directions) {
-			los_scan_direction(ch,depth,vec_room_list,i_d,find_type_t::PLAYERS);
+			los_scan_direction(ch,depth,vec_room_list,i_d,(find_type_t)(find_type_t::PLAYERS | find_type_t::ALIVE));
 		}
 	}
 	static std::map<std::pair<room_rnum,room_rnum>,distance_t> distance_cache;

@@ -96,6 +96,9 @@ std::deque<std::shared_ptr<shop_data_t>> shop_list;
 
 extern std::deque<std::shared_ptr<shop_data_t>> shop_list;
 namespace mods::globals {
+	using coordinate_type_t = int32_t;
+	extern void register_room_at_coordinates(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room);
+	extern void glue_room_at_coordinates(coordinate_type_t x, coordinate_type_t y, coordinate_type_t z, room_vnum room);
 	extern std::map<room_rnum,std::shared_ptr<shop_data_t>> room_shopmap;
 };
 std::vector<index_data> obj_index;	/* index table for object file	 */
@@ -1203,6 +1206,71 @@ std::tuple<int16_t,std::string> parse_sql_zones() {
 
 	return {zone_table.size(),"ok"};
 }
+void crawl_block(room_data* in_room) {
+	static std::vector<room_vnum> crawled;
+	if(!in_room) {
+		return;
+	}
+	if(std::find(crawled.begin(),crawled.end(),in_room->number) != crawled.end()) {
+		return;
+	} else {
+		crawled.emplace_back(in_room->number);
+	}
+	for(unsigned direction = 0; direction < NUM_OF_DIRS; direction++) {
+		if(!in_room->dir_option[direction]) {
+			continue;
+		}
+		if(world.size() <= in_room->dir_option[direction]->to_room) {
+			continue;
+		}
+		auto& room = world[in_room->dir_option[direction]->to_room];
+		switch(direction) {
+			case NORTH:
+				room.y = in_room->y + 1;
+				room.x = in_room->x;
+				room.z = in_room->z;
+				break;
+			case SOUTH:
+				room.y = in_room->y - 1;
+				room.x = in_room->x;
+				room.z = in_room->z;
+				break;
+			case EAST:
+				room.y = in_room->y;
+				room.x = in_room->x + 1;
+				room.z = in_room->z;
+				break;
+			case WEST:
+				room.y = in_room->y;
+				room.x = in_room->x - 1 ;
+				room.z = in_room->z;
+				break;
+			case UP:
+				room.y = in_room->y;
+				room.x = in_room->x;
+				room.z = in_room->z + 1;
+				break;
+			case DOWN:
+				room.y = in_room->y;
+				room.x = in_room->x;
+				room.z = in_room->z - 1;
+				break;
+			default:
+				break;
+		}
+		mods::globals::register_room_at_coordinates(room.x, room.y, room.z, room.number);
+		crawl_block(&world[in_room->dir_option[direction]->to_room]);
+	}
+}
+void set_coordinates() {
+	auto start = real_room(mods::world_conf::get_mortal_start_room_vnum());
+	auto& room = world[start];
+	room.x = 0;
+	room.y = 0;
+	room.z = 0;
+	mods::globals::register_room_at_coordinates(room.x, room.y, room.z, room.number);
+	crawl_block(&room);
+}
 /* load the rooms */
 std::tuple<int16_t,std::string> parse_sql_rooms() {
 	top_of_world = 0;
@@ -1287,6 +1355,7 @@ std::tuple<int16_t,std::string> parse_sql_rooms() {
 		REPORT_DB_ISSUE("error selecting room from dd",e.what());
 		return {-1,std::string("An exception occured: ") + e.what()};
 	}
+	set_coordinates();
 	return {world.size(),"okay"};
 }
 

@@ -20,7 +20,9 @@ namespace mods::mobs {
 		LUNATIC,
 		GRUNT,
 		PRACTICE_DUMMY,
-		LOWLY_SECURITY
+		LOWLY_SECURITY,
+		/**! @NEW_BEHAVIOUR_TREE@ !**/
+		MP_SHOTGUNNER
 	};
 	//vim sorcery: s/\t\t\([A-Z_]\+\),/\t\t{\1,"\1"},/g
 	static std::map<extended_types_t,std::string> ext_map = {
@@ -35,10 +37,14 @@ namespace mods::mobs {
 		{GRUNT,"GRUNT"},
 		{PRACTICE_DUMMY,"PRACTICE_DUMMY"},
 		{LOWLY_SECURITY,"LOWLY_SECURITY"},
+		/**! @NEW_BEHAVIOUR_TREE@ !**/
+		{MP_SHOTGUNNER,"MP_SHOTGUNNER"},
 	};
 	void decorate(uuid_t mob_id);
 
 	namespace desc {
+		/**! @NEW_BEHAVIOUR_TREE@ !**/
+		static const std::string mp_shotgunner = std::string("A military police guard armed with a BF-9 Shotgun. Relentless in pursuit and can call in backup via radio.");
 		static const std::string lowly_security = std::string("A simple security guard that calls for backup when things get dicey.");
 		static const std::string mini_gunner = std::string("The mob will have a backpack and minigun which he/she will use as the main weapon.") +
 		                                       ("Mini gunner mobs are usually very slow and take a long time to adjust which direction ") +
@@ -63,6 +69,8 @@ namespace mods::mobs {
 		{GRUNT,"GRUNT"},
 		{PRACTICE_DUMMY,"PRACTICE_DUMMY"},
 		{LOWLY_SECURITY,desc::lowly_security},
+		/**! @NEW_BEHAVIOUR_TREE@ !**/
+		{MP_SHOTGUNNER,desc::mp_shotgunner},
 	};
 	namespace extended_types {
 		std::vector<std::string> strings();

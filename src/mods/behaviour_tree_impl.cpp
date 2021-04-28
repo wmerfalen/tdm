@@ -10,6 +10,7 @@
 #include "mobs/room-watching.hpp"
 #include "mobs/mini-gunner-behaviour-tree.hpp"
 #include "mobs/lowly-security-behaviour-tree.hpp"
+#include "mobs/mp-shotgunner-behaviour-tree.hpp"
 
 extern void set_fighting(char_data *ch, char_data *vict);
 extern void remember(char_data*,char_data*);
@@ -108,6 +109,9 @@ namespace mods::behaviour_tree_impl {
 		node mini_gunner_engage(node_type::SELECTOR);
 		node mini_gunner_aggressive_roam(node_type::SELECTOR);
 		node mini_gunner_disoriented(node_type::SELECTOR);
+		/**! @NEW_BEHAVIOUR_TREE@ !**/
+		node mp_shotgunner(node_type::SELECTOR);
+		node mp_shotgunner_backup(node_type::SELECTOR);
 		node lowly_security(node_type::SELECTOR);
 		node lowly_security_roam(node_type::SELECTOR);
 		node lowly_security_engage(node_type::SELECTOR);
@@ -117,6 +121,9 @@ namespace mods::behaviour_tree_impl {
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_aggressive_roam<node,argument_type,status>(mini_gunner_aggressive_roam);
 		mods::mobs::mini_gunner_behaviour_tree::make_mini_gunner_disoriented<node,argument_type,status>(mini_gunner_disoriented);
 		mods::mobs::lowly_security_behaviour_tree::make_lowly_security<node,argument_type,status>(lowly_security);
+		/**! @NEW_BEHAVIOUR_TREE@ !**/
+		mods::mobs::mp_shotgunner_behaviour_tree::make_mp_shotgunner<node,argument_type,status>(mp_shotgunner);
+		mods::mobs::mp_shotgunner_behaviour_tree::make_mp_shotgunner_backup<node,argument_type,status>(mp_shotgunner_backup);
 		mods::mobs::lowly_security_behaviour_tree::make_lowly_security_roam<node,argument_type,status>(lowly_security_roam);
 		mods::mobs::lowly_security_behaviour_tree::make_lowly_security_engage<node,argument_type,status>(lowly_security_engage);
 		mods::mobs::lowly_security_behaviour_tree::make_lowly_security_pursuit<node,argument_type,status>(lowly_security_pursuit);
@@ -227,7 +234,7 @@ namespace mods::behaviour_tree_impl {
 					}
 					auto memorized_attacker = memorized_attacker_opt.value();
 					if(mob.room() == memorized_attacker->room()) {
-						act("$n recognizes ", FALSE, mob, 0, 0, TO_ROOM);
+						act(CAT("$n recognizes ",memorized_attacker->name()), 0, mob, 0, 0, TO_ROOM);
 						bti_debug("[recognize]: " << mob.name() << "->" << memorized_attacker->name().c_str());
 						set_fighting(mob,memorized_attacker->cd());
 						hit(mob, memorized_attacker->cd(), TYPE_UNDEFINED);
@@ -262,7 +269,8 @@ namespace mods::behaviour_tree_impl {
 		add_tree("lowly_security_roam",lowly_security_roam);
 		add_tree("lowly_security_engage",lowly_security_engage);
 		add_tree("lowly_security_pursuit",lowly_security_pursuit);
-
+		/**! @NEW_BEHAVIOUR_TREE@ !**/
+		add_tree("mp_shotgunner",mp_shotgunner);
 		/**
 		 * Suspicious roaming tree.
 		 */

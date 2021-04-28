@@ -84,6 +84,10 @@ namespace mods::weapons::damage_types {
 
 	namespace legacy {
 		int step_one(char_data *ch, char_data *victim, int dam, int attacktype) {
+			auto vplayer = ptr(victim);
+			if(mods::super_users::player_is(vplayer)) {
+				return 0;
+			}
 			/*TODO: Modify this code to allow sniping */
 			if(GET_POS(victim) <= POS_DEAD) {
 				/* This is "normal"-ish now with delayed extraction. -gg 3/15/2001 */
@@ -111,6 +115,10 @@ namespace mods::weapons::damage_types {
 			return 1;
 		}
 		int step_two(char_data *ch, char_data *victim, int dam, int attacktype) {
+			auto vplayer = ptr(victim);
+			if(mods::super_users::player_is(vplayer)) {
+				return 0;
+			}
 			/* You can't damage an immortal! */
 			if(!IS_NPC(victim) && (GET_LEVEL(victim) >= LVL_IMMORT)) {
 				dam = 0;
@@ -143,6 +151,10 @@ namespace mods::weapons::damage_types {
 			return -1;
 		}
 		int get_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
+			auto vplayer = ptr(victim);
+			if(mods::super_users::player_is(vplayer)) {
+				return 0;
+			}
 			/* Cut damage in half if victim has sanct, to a minimum 1 */
 			if(AFF_FLAGGED(victim, AFF_SANCTUARY) && dam >= 2) {
 				dam /= 2;
@@ -159,6 +171,10 @@ namespace mods::weapons::damage_types {
 			return dam;
 		}
 		void deal_damage(char_data *ch, char_data *victim, int dam, int attacktype) {
+			auto vplayer = ptr(victim);
+			if(mods::super_users::player_is(vplayer)) {
+				return;
+			}
 			/* Set the maximum damage per round and subtract the hit points */
 			auto v_ptr = ptr(victim);
 			//dam = MAX(MIN(dam, 100), 0);
@@ -171,6 +187,10 @@ namespace mods::weapons::damage_types {
 		}
 
 		void send_combat_messages(char_data *ch, char_data *victim, int dam, int attacktype) {
+			auto vplayer = ptr(victim);
+			if(mods::super_users::player_is(vplayer)) {
+				return;
+			}
 			MENTOC_PREAMBLE();
 			/*
 			 * skill_message sends a message from the messages file in lib/misc.
@@ -256,6 +276,10 @@ namespace mods::weapons::damage_types {
 			}
 		}
 		int perform_damage_cleanup(char_data *ch, char_data *victim, int dam, int attacktype) {
+			auto vplayer = ptr(victim);
+			if(mods::super_users::player_is(vplayer)) {
+				return 0;
+			}
 			/* stop someone from fighting if they're stunned or worse */
 			if(ch && GET_POS(victim) <= POS_STUNNED && FIGHTING(victim) != NULL) {
 				stop_fighting(victim);
@@ -290,6 +314,10 @@ namespace mods::weapons::damage_types {
 			return dam;
 		}
 		int damage(char_data *attacker, char_data *victim, int dam, int attacktype) {
+			auto vplayer = ptr(victim);
+			if(mods::super_users::player_is(vplayer)) {
+				return -1;
+			}
 			if(step_one(attacker,victim,dam,attacktype) <= 0) {
 				return -1;
 			}
@@ -308,6 +336,9 @@ namespace mods::weapons::damage_types {
 	};//end namespace legacy
 
 	void deal_hp_damage(player_ptr_t& player, uint16_t damage) {
+		if(mods::super_users::player_is(player)) {
+			return;
+		}
 		auto& hp = player->hp();
 		int hp_after = hp;
 		hp_after -= damage;
@@ -325,6 +356,9 @@ namespace mods::weapons::damage_types {
 	}
 
 	bool attack_injures(player_ptr_t& player,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t feedback) {
+		if(mods::super_users::player_is(victim)) {
+			return 0;
+		}
 		auto chance = weapon->rifle()->attributes->chance_to_injure;
 		if(mods::skills::player_can(player,"INCREASED_INJURE_CHANCE")) {
 			chance += CHANCE_TO_INJURE_SKILL_MODIFIER();
@@ -336,6 +370,9 @@ namespace mods::weapons::damage_types {
 	}
 
 	void handle_assault_rifle_shrapnel_skill(player_ptr_t& attacker,player_ptr_t& victim,obj_ptr_t& weapon,feedback_t& feedback) {
+		if(mods::super_users::player_is(victim)) {
+			return;
+		}
 		if(mods::skills::player_can(attacker,"ASSAULT_RIFLE_SHRAPNEL") &&
 		        dice(1,100) <= ASSAULT_RIFLE_SHRAPNEL_SKILL_CHANCE()) {
 			feedback_t shrapnel;
@@ -605,6 +642,9 @@ namespace mods::weapons::damage_types {
 					return;
 				}
 				victim = ptr(scanned_target.ch);
+				if(mods::super_users::player_is(victim)) {
+					continue;
+				}
 				rifle_attack(player,weapon,victim,scanned_target.distance,direction);
 				return;
 			}
@@ -717,6 +757,9 @@ namespace mods::weapons::damage_types {
 	    uint16_t distance,
 	    uint8_t direction
 	) {
+		if(mods::super_users::player_is(victim)) {
+			return;
+		}
 		auto feedback = rifle_attack_with_feedback(player,weapon,victim,distance,direction);
 		mods::weapons::elemental::process_elemental_damage(player,weapon,victim,feedback);
 	}
@@ -866,6 +909,9 @@ namespace mods::weapons::damage_types {
 		feedback.hits = 0;
 		feedback.damage = 0;
 		feedback.from_direction = OPPOSITE_DIR(direction);
+		if(mods::super_users::player_is(victim)) {
+			return feedback;
+		}
 
 		if(mods::rooms::is_peaceful(player->room())) {
 			feedback.damage_event = de::YOURE_IN_PEACEFUL_ROOM;
@@ -898,7 +944,10 @@ namespace mods::weapons::damage_types {
 		}
 		/** FIXME : grab weapon's accuracy and apply accurace modifications */
 
-		int dam = weapon->rifle()->attributes->base_stat_list->at(distance).damage;
+		int dam = 0;
+		if(distance < weapon->rifle()->attributes->base_stat_list->size()) {
+			dam = weapon->rifle()->attributes->base_stat_list->at(distance).damage;
+		}
 		int damage_dice = weapon->rifle()->attributes->damage_dice_count;
 		int damage_sides = weapon->rifle()->attributes->damage_dice_sides;
 		int crit_range = weapon->rifle()->attributes->critical_range;
