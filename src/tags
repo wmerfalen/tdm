@@ -204,7 +204,7 @@ ALIAS_GLOB_CHAR	interpreter.h	76;"	d
 ALIAS_SEP_CHAR	interpreter.h	74;"	d
 ALIAS_SIMPLE	interpreter.h	71;"	d
 ALIAS_VAR_CHAR	interpreter.h	75;"	d
-ALIVE	mods/scan.hpp	/^			ALIVE = (1 << 1),$/;"	e	enum:mods::scan::find_type_t
+ALIVE	mods/scan.hpp	/^			ALIVE = (1 << 2),$/;"	e	enum:mods::scan::find_type_t
 ALTERNATE_EXPLOSION	mods/weapon-types.hpp	/^		ALTERNATE_EXPLOSION,$/;"	e	enum:mods::weapon::capabilities::cap_t
 ALTEX_EMP	mods/yaml.hpp	/^	ALTEX_EMP = (1 << 2),$/;"	e	enum:alternate_explosion_t
 ALTEX_FLASHBANG	mods/yaml.hpp	/^	ALTEX_FLASHBANG = (1 << 4)$/;"	e	enum:alternate_explosion_t
@@ -982,7 +982,7 @@ DB_BOOT_ZON	db.h	18;"	d
 DB_SAVE_CHAR	mods/players/db-load.hpp	/^		DB_SAVE_CHAR$/;"	e	enum:mods::players::db_load::save_from_t
 DD	mods/debug-pre-game.hpp	204;"	d
 DD	mods/debug-pre-game.hpp	39;"	d
-DEAD	mods/scan.hpp	/^			DEAD = (1 << 2),$/;"	e	enum:mods::scan::find_type_t
+DEAD	mods/scan.hpp	/^			DEAD = (1 << 3),$/;"	e	enum:mods::scan::find_type_t
 DEALER	structs.h	/^	DEALER = 17,$/;"	e	enum:player_class_t
 DECENT	mods/yaml.hpp	/^		DECENT,$/;"	e	enum:mods::yaml::durability_profile_type_t
 DEEP_OBJECT	mods/util.hpp	/^		DEEP_OBJECT = 3$/;"	e	enum:mods::util::yaml_type_t
@@ -2783,7 +2783,7 @@ NO_PRIMARY_WIELDED_EVENT	mods/damage-event.hpp	/^	NO_PRIMARY_WIELDED_EVENT,$/;"	
 NO_RESULTS	mods/orm/util.hpp	/^	static constexpr int8_t NO_RESULTS = 1;$/;"	m	namespace:mods::orm::util
 NO_RESULTS	mods/pq.hpp	/^static constexpr int8_t NO_RESULTS = 1;$/;"	v
 NPC	act.wizard.cpp	2287;"	d	file:
-NPC	mods/scan.hpp	/^			NPC = (1 << 0),$/;"	e	enum:mods::scan::find_type_t
+NPC	mods/scan.hpp	/^			NPC = (1 << 1),$/;"	e	enum:mods::scan::find_type_t
 NPC_SEND_DEBUG	mods/player.cpp	78;"	d	file:
 NRM	utils.h	119;"	d
 NSLC	telnet.h	200;"	d
@@ -2812,7 +2812,7 @@ NotImplementedException	mods/catch.hpp	/^			NotImplementedException(NotImplement
 NotImplementedException	mods/catch.hpp	/^	class NotImplementedException : public std::exception {$/;"	c	namespace:Catch
 OBJAFF_FLAGGED	utils.h	241;"	d
 OBJECT	mods/object.hpp	/^				OBJECT = 0,$/;"	e	enum:mods::object::object_type_enum_t
-OBJECTS	mods/scan.hpp	/^			OBJECTS = (1 << 4),$/;"	e	enum:mods::scan::find_type_t
+OBJECTS	mods/scan.hpp	/^			OBJECTS = (1 << 5),$/;"	e	enum:mods::scan::find_type_t
 OBJECT_DEAD	shop.h	94;"	d
 OBJECT_FROM_ROOM	mods/events.hpp	/^		OBJECT_FROM_ROOM,$/;"	e	enum:mods::events::event_enum
 OBJECT_NOTOK	shop.h	95;"	d
@@ -2931,7 +2931,7 @@ PISTOL	mods/weapon.hpp	/^	                 GRENADE = (1 << 4), ASSAULT_RIFLE = (
 PLACE_HOLDER_VALUE	mods/schema.hpp	/^	constexpr static const char* PLACE_HOLDER_VALUE = "\\x01";$/;"	m	namespace:mods::schema
 PLAYER	mods/mobs/mob.hpp	/^				PLAYER, MOB, DRONE$/;"	e	enum:mods::player::player_type_enum_t
 PLAYER	mods/player.hpp	/^				PLAYER, MOB, DRONE,$/;"	e	enum:mods::player::player_type_enum_t
-PLAYERS	mods/scan.hpp	/^			PLAYERS = (1 << 3),$/;"	e	enum:mods::scan::find_type_t
+PLAYERS	mods/scan.hpp	/^			PLAYERS = (1 << 4),$/;"	e	enum:mods::scan::find_type_t
 PLAYER_CAN	globals.hpp	289;"	d
 PLAYER_FILE	db.h	95;"	d
 PLAYER_GET	mods/prefs.hpp	20;"	d
@@ -4384,7 +4384,7 @@ UNUSED17	mods/flags.hpp	/^		UNUSED17,				\/\/ useless$/;"	e	enum:mods::flags::af
 UP	structs.h	137;"	d
 UPDATE	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_type_t
 UPPER	utils.h	156;"	d
-USERS_FORMAT	act.informative.cpp	1449;"	d	file:
+USERS_FORMAT	act.informative.cpp	1443;"	d	file:
 USE_AUTOEQ	structs.h	119;"	d
 USURP	interpreter.cpp	1564;"	d	file:
 Unknown	mods/catch.hpp	/^			Unknown = -1,$/;"	e	enum:Catch::ResultWas::OfType
@@ -4454,7 +4454,7 @@ WEAR_WRIST_R	structs.h	414;"	d
 WELC_MESSG	config.cpp	/^const char *WELC_MESSG =$/;"	v
 WEST	structs.h	136;"	d
 WHEN	mods/catch.hpp	12215;"	d
-WHO_FORMAT	act.informative.cpp	1412;"	d	file:
+WHO_FORMAT	act.informative.cpp	1406;"	d	file:
 WILL	telnet.h	46;"	d
 WILL_BANK_MONEY	shop.h	164;"	d
 WILL_START_FIGHT	shop.h	163;"	d
@@ -4939,6 +4939,7 @@ __MENTOC_SHOW_EQUIP_DEBUG_OUTPUT__	mods/player.cpp	35;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ADVANCED_PROTECTION_DEBUG_OUTPUT__	mods/armor/advanced-protection.cpp	4;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_BP_DEBUG_OUTPUT__	mods/armor/basic-protection.cpp	4;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ELITE_PROTECTION_DEBUG_OUTPUT__	mods/armor/elite-protection.cpp	4;"	d	file:
+__MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__	mods/calc-visibility.cpp	41;"	d	file:
 __MENTOC_SHOW_MODS_EXPLODE_IN_FUTURE_DEBUG_OUTPUT__	mods/projectile.cpp	28;"	d	file:
 __MENTOC_SHOW_MODS_PLAYERS_DB_LOAD_DEBUG_OUTPUT__	mods/players/db-load.cpp	14;"	d	file:
 __MENTOC_SHOW_MODS_PLAYERS_DESTROY_PLAYER_DEBUG_OUTPUT__	mods/players/destroy-player.cpp	4;"	d	file:

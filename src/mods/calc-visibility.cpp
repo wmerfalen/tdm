@@ -38,7 +38,7 @@ namespace mods::calc_visibility {
 		//bool can_see_through_fire = mods::rooms::can_see_through_fire(room);
 
 		std::string info = CAT("Observer(",observer->name(),"|",observer->uuid(),")::Target(",target->name(),"|",target->uuid(),")");
-//#define __MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__
+#define __MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__
 #ifdef __MENTOC_SHOW_MODS_CALC_VISIBILITY_DEBUG_OUTPUT__
 		std::string dump = CAT("is_dissipated: ",is_dissipated,"\n",
 		                       "invisible: ",invisible,"\n",

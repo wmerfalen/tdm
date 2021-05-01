@@ -232,6 +232,7 @@ ACMD(do_scan) { /* !mods */
 				line += " quite a ways off";
 				break;
 			default:
+				line += " way off";
 				break;
 		}
 
@@ -240,6 +241,9 @@ ACMD(do_scan) { /* !mods */
 		}
 
 		switch(e.direction) {
+			default:
+				line += "?";
+				break;
 			case NORTH:
 				line += "north";
 				break;

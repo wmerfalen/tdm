@@ -798,29 +798,23 @@ void look_at_room(char_data *ch, int ignore_brief) {
 
 void look_at_room_specific(player_ptr_t& player, int ignore_brief,int room) {
 	auto ch = player->cd();
+	if(IS_NPC(ch)) {
+		return;
+	}
 	if(!ch->has_desc) {
 		return;
 	}
 
-	if(room < 0) {
-		std::cerr << "[ERROR INVALID VIEWING ROOM]: " << room << "\r\n";
-		return;
-	}
-
-	if(room >= world.size()) {
-		std::cerr << "[ERROR INVALID ROOM ID]: " << room << "\r\n";
-		player->sendln("room out of bounds");
+	if(room < 0 || room >= world.size()) {
 		return;
 	}
 
 	player->sendln(CCCYN(ch, C_NRM));
 
-	if(!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_ROOMFLAGS)) {
-		char buf[MAX_STRING_LENGTH];
+	char buf[MAX_STRING_LENGTH];
 
-		sprintbit(ROOM_FLAGS(room), room_bits, buf, sizeof(buf));
-		player->send("[zone: %d][room vnum: %5d] %s [ %s][x:%d,y:%d,z:%d]", world[room].zone, GET_ROOM_VNUM(room), world[room].name.c_str(), buf,world[room].x,world[room].y,world[room].z);
-	}
+	sprintbit(ROOM_FLAGS(room), room_bits, buf, sizeof(buf));
+	player->send("[zone: %d][room vnum: %5d] %s [ %s][x:%d,y:%d,z:%d]", world[room].zone, GET_ROOM_VNUM(room), world[room].name.c_str(), buf,world[room].x,world[room].y,world[room].z);
 	player->send("\r\n{grn}%s ->{gld}", world[room].name.c_str());
 	for(auto&& flag : mods::rooms::get_room_flags_from_room(player->room())) {
 		player->send("[%s]",flag.c_str());

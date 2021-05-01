@@ -1044,7 +1044,7 @@ void record_usage(void) {
 		}
 	}
 
-	log("nusage: %-3d sockets connected, %-3d sockets playing",
+	log("nusage: %d sockets connected, %d sockets playing",
 	    sockets_connected, sockets_playing);
 
 #ifdef RUSAGE	/* Not RUSAGE_SELF because it doesn't guarantee prototype. */

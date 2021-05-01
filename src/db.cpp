@@ -1242,7 +1242,7 @@ void crawl_block(room_data* in_room) {
 				break;
 			case WEST:
 				room.y = in_room->y;
-				room.x = in_room->x - 1 ;
+				room.x = in_room->x - 1;
 				room.z = in_room->z;
 				break;
 			case UP:
