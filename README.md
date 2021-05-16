@@ -43,9 +43,3 @@ beta features:
 * libpqxx
 * duktape
 * postgresql
-
-# Special Thanks
-* Grifter - CyberAssault Game Design
-* Obfuscate - Of IRC (real mentocful eh? @Obfuscate)
-* The geniuses behind the latest C++17 stuff. 
-* Uncle Benny - RIP
