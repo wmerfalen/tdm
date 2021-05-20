@@ -285,6 +285,7 @@ namespace mods::util {
 	player_class_t to_player_class(std::string_view str);
 	bool preg_match(std::string_view regex,std::string_view haystack);
 	std::vector<std::string> explode(char delim,std::string& haystack);
+	std::vector<std::string> explode_view(char delim,std::string_view haystack);
 
 	bool yaml_file_path_is_sane(std::string path);
 	std::string yaml_int_to_string(int type);
@@ -318,5 +319,38 @@ namespace mods::util {
 namespace mods::util::err {
 	std::string get_string(int);
 };
+
+namespace mods::util::args {
+	bool imatch(std::string_view needle, const std::vector<std::string>& arg_list);
+	bool match(std::string_view needle, const std::vector<std::string>& arg_list);
+	struct parsed_args {
+		std::size_t size;
+		std::vector<std::string> vec_args;
+		std::vector<int> i_storage;
+
+		int fetch_parsed_integer(int index);
+		void assign(const std::string& argument);
+		bool first_is(std::string_view list_string);
+		bool first_is_any(std::vector<const char*> list_string);
+		bool nth_is_any(int index,std::vector<const char*> list_string);
+		parsed_args* save_integer(int index);
+		bool if_nth_has_either(int index,std::vector<const char*> list_string);
+	};
+	struct arglist_parser {
+		parsed_args parsed;
+		parsed_args* use(const std::string& argument) {
+			static std::string static_argument;
+			if(static_argument.compare(argument.c_str()) == 0) {
+				/** already parsed */
+				return &parsed;
+			}
+			static_argument = argument;
+			parsed.assign(argument);
+			return &parsed;
+		}
+	};
+	static std::map<uuid_t,arglist_parser> player_parsers;
+};
+#define args() mods::util::args::player_parsers[player->uuid()].use(argument)
 
 #endif

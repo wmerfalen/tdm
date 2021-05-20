@@ -175,11 +175,7 @@ namespace mods::weapons::damage_types {
 			if(mods::super_users::player_is(vplayer)) {
 				return;
 			}
-			/* Set the maximum damage per round and subtract the hit points */
-			auto v_ptr = ptr(victim);
-			//dam = MAX(MIN(dam, 100), 0);
-			//GET_HIT(victim) -= dam;
-			v_ptr->hp() -= dam;
+			ptr(victim)->hp() -= dam;
 		}
 
 		void update_position(char_data* ch) {
@@ -925,6 +921,7 @@ namespace mods::weapons::damage_types {
 			player->damage_event(feedback);
 			return feedback;
 		}
+		/** FIXME: use weapon id */
 		if(!player->weapon_cooldown_expired(0)) {
 			feedback.damage_event = de::COOLDOWN_IN_EFFECT_EVENT;
 			player->damage_event(feedback);

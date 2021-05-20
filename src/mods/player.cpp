@@ -530,11 +530,10 @@ namespace mods {
 		return true; //FIXME:
 	}
 	void player::weapon_cooldown_start(uint16_t duration,weapon_set set) {
-		m_weapon_cooldown[set] = static_cast<unsigned long>(::time(NULL)) + duration;
+		m_weapon_cooldown[set] = duration + mods::globals::current_tick;
 	}
 	bool player::weapon_cooldown_expired(weapon_set set) {
-		auto cts = static_cast<unsigned long>(::time(NULL));
-		return cts >= m_weapon_cooldown[set];
+		return mods::globals::current_tick >= m_weapon_cooldown[set];
 	}
 	bool player::carrying_ammo_of_type(const weapon_type_t& type) {
 		if(m_char_data->carrying == 0) {
@@ -2024,22 +2023,9 @@ namespace mods {
 			}
 		}
 	}
-	std::shared_ptr<mods::contracts::player_contract_instance> player::start_contract(int c_num) {
-		this->contracts().emplace_back(std::make_shared<mods::contracts::player_contract_instance>(c_num,db_id()));
-		return this->contracts().back();
-	}
 	void player::queue_up(std::string_view msg) {
 		sendln(msg);
 		//mods::players::messages::queue(db_id(),msg);
-	}
-	void player::stop_contract(int c_num) {
-		std::remove_if(m_contracts.begin(),m_contracts.end(),[c_num](auto it) -> bool {
-			if(it->vnum() == c_num) {
-				it->stop_contract();
-				return true;
-			}
-			return false;
-		});
 	}
 	bool& player::moving_to_room() {
 		return m_moving_to_room;

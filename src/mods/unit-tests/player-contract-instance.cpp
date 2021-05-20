@@ -7,6 +7,7 @@
 #include "../player-contract-instance.hpp"
 #include "../catch2/Catch2/src/catch2/catch_all.hpp"
 #include "../player.hpp"
+#include "../contracts.hpp"
 
 extern player_ptr_t new_player();
 
@@ -56,7 +57,8 @@ TEST_CASE("contracts are tracked by player instance wrappers") {
 
 		auto player = new_player();
 		player->set_db_id(1);
-		auto c = player->start_contract(1);
+		mods::contracts::start_contract(player,1);
+		auto c = player->contracts()[0];
 		REQUIRE(c->is_find_item() == true);
 		REQUIRE(c->step_counter() == 0);
 		auto rifle = create_object(ITEM_RIFLE,"g36c.yml");

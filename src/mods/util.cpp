@@ -1026,5 +1026,99 @@ namespace mods::util::err {
 		return std::string(static_cast<const char*>(&buf[0]));
 	}
 };
+namespace mods::util::args {
+	bool match(std::string_view needle, const std::vector<std::string>& arg_list) {
+		for(const auto& str : arg_list) {
+			if(std::regex_search(str, std::regex(needle.data(),std::regex_constants::ECMAScript), std::regex_constants::match_not_null)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	bool imatch(std::string_view needle, const std::vector<std::string>& arg_list) {
+		for(const auto& str : arg_list) {
+			if(std::regex_search(str, std::regex(needle.data(),std::regex_constants::ECMAScript | std::regex_constants::icase), std::regex_constants::match_not_null)) {
+				return true;
+			}
+		}
+		return false;
+	}
+};
+namespace mods::util::args {
+	int parsed_args::fetch_parsed_integer(int index) {
+		return i_storage[index];
+		if(i_storage.size() > index) {
+			std::cerr << "returning i_storage index :)\n";
+			return i_storage[index];
+		}
+		return -1;
+	}
+	void parsed_args::assign(const std::string& argument) {
+		static std::string static_argument;
+		if(static_argument.compare(argument.c_str()) == 0) {
+			/** already parsed */
+			return;
+		}
+		static_argument = argument;
+		vec_args = arglist<std::vector<std::string>>(argument);
+		size = vec_args.size();
+	}
+	bool parsed_args::first_is(std::string_view list_string) {
+		if(vec_args.size() == 0) {
+			return false;
+		}
+		return is_lower_match(list_string,vec_args[0]);
+	}
+	bool parsed_args::first_is_any(std::vector<const char*> list_string) {
+		if(vec_args.size() == 0) {
+			return false;
+		}
+		for(const auto& token : list_string) {
+			if(is_lower_match(token,vec_args[0])) {
+				return true;
+			}
+		}
+		return false;
+	}
+	bool parsed_args::nth_is_any(int index,std::vector<const char*> list_string) {
+		if(vec_args.size() <= index) {
+			return false;
+		}
+		for(const auto& token : list_string) {
+			if(is_lower_match(token,vec_args[index])) {
+				return true;
+			}
+		}
+		return false;
+	}
+	parsed_args* parsed_args::save_integer(int index) {
+		int n = 0;
+		for(auto f : vec_args) {
+			std::cerr << "f[" << n++ << "](asking for:" << index << "): '" << f << "'\n";
+		}
+		while(i_storage.size() < index) {
+			i_storage.emplace_back(-1);
+		}
+		i_storage[index] = -1;
+		if(vec_args.size() > index) {
+			std::cerr << "setting index for: " << index << " vec_args[index]:'" << vec_args[index] << "'\n";
+			i_storage[index] = mods::util::stoi(vec_args[index]).value_or(-1);
+			std::cerr << "index for: " << index << " i_storage[index]'" << i_storage[index] << "'\n";
+		}
+		return this;
+	}
+
+	bool parsed_args::if_nth_has_either(int index,std::vector<const char*> list_string) {
+		if(vec_args.size() <= index) {
+			return false;
+		}
+		for(const auto& token : list_string) {
+			if(is_lower_match(token,vec_args[index])) {
+				return true;
+			}
+		}
+		return false;
+	}
+};
 #undef mu_debug
 #endif

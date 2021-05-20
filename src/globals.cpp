@@ -173,6 +173,7 @@ namespace mods {
 			for(auto& pair : player_name_map) {
 				std::cerr << "[name:" << pair.first << "]\n";
 			}
+			mods::globals::db_id_to_uuid_map[player->db_id()] = player->uuid();
 		}
 		void unregister_authenticated_player(player_ptr_t player) {
 			player_name_map.erase(player->name());
@@ -903,11 +904,6 @@ namespace mods {
 				d("drone started. interpretting");
 				return mods::drone::interpret(player->uuid(),in_argument.data());
 			}
-			if(!player->cd()->drone && mods::contracts::has_contract(player)) {
-				d("Running trigger for contracts");
-				mods::contracts::run_trigger(player);
-			}
-
 			if(player->room_pave_mode()) {
 				player->send("[paving]\r\n");
 				//If is a direction and that direction is not an exit,

@@ -92,6 +92,7 @@ namespace mods::contracts {
 				return m_step;
 			}
 			std::string_view dump_step();
+			std::string pretty_dump_step();
 
 			void find_item(const uuid_t& item_uuid);
 			void find_mob(const uuid_t& mob_uuid);
@@ -107,6 +108,12 @@ namespace mods::contracts {
 			void gain_entry(const room_rnum& room_id);
 			void talk_to(const uuid_t& mob_uuid);
 			void install_item(const uuid_t& item_uuid);
+			std::string_view title() const {
+				return m_contract_copy->title;
+			}
+			std::string_view description() const {
+				return m_contract_copy->description;
+			}
 		protected:
 			void refresh_dump();
 			uint32_t m_quota;

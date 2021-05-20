@@ -830,8 +830,6 @@ namespace mods {
 			const std::array<obj_ptr_t,NUM_WEARS>& equipment() const {
 				return m_equipment;
 			}
-			std::shared_ptr<mods::contracts::player_contract_instance> start_contract(int c_num);;
-			void stop_contract(int c_num);
 			std::deque<std::shared_ptr<mods::contracts::player_contract_instance>>& contracts() {
 				return m_contracts;
 			}

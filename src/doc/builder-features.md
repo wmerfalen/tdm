@@ -1,5 +1,8 @@
 # Inventory of features
 
+# 2021-05 new features
+	- `build_contract(data)` javascript function now available. see conbuild.md for example usage
+
 # deep object parsing supports levels now
 	- deep object parser accepts the following syntax:
 		- `rifle/psg1.yml{... data ... }#level:N` where N is the level. 
@@ -191,6 +194,7 @@
 		- `conbuild show-steps <vnum>`
 	- loading a specific contract's steps
 		- `conbuild load-steps <vnum>`
+			- this is now implicitly called whenever you call the `show-steps <vnum>` sub-cmd
 	- setting step data
 		- `conbuild set-step-data <vnum> <step-id> <field> <value>`
 		- note: the fields are exactly what the contract_step column names are in postgres

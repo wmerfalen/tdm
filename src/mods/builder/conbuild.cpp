@@ -355,6 +355,8 @@ namespace mods::builder::conbuild {
 			 *  -----------------------------------------
 			 */
 			register_custom_command("show-steps","<virtual_number>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<conbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				this->step_list.clear();
+				auto s = mods::orm::gather_contract_steps_by_contract_vnum(profile->vnum(),&this->step_list);
 				for(const auto& s : this->step_list) {
 					if(s->s_contract_vnum == profile->vnum()) {
 						dump_step(s);

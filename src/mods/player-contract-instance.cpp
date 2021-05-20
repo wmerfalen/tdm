@@ -14,10 +14,16 @@ namespace mods::globals {
 namespace mods::contracts {
 	using task_t = contract_step::task_type_t;
 	using target_t = contract_step::task_target_t;
+	/**
+	 * @brief
+	 */
 	void player_contract_instance::stop_contract() {
 		m_state_orm->delete_by_player_id_contract_vnum(m_player_id,m_contract_vnum);
 	}
 
+	/**
+	 * @brief
+	 */
 	void player_contract_instance::m_auto_update_step() {
 		if(!m_contract_copy) {
 			m_current_step = nullptr;
@@ -38,21 +44,40 @@ namespace mods::contracts {
 		m_target = m_current_step->target;
 		refresh_dump();
 	}
+	/**
+	 * @brief
+	 */
 	player_contract_instance::player_contract_instance() {
 		this->init();
 		m_current_step = nullptr;
 		m_goal = (task_t)0;
 		m_target = (target_t)0;
 	}
+	/**
+	 * @brief
+	 *
+	 * @param in_contract
+	 * @param player_id
+	 */
 	player_contract_instance::player_contract_instance(contract_vnum_t in_contract,uint64_t player_id) {
 		this->init();
 		m_contract_vnum = in_contract;
 		m_player_id = player_id;
 		start_or_resume_contract(in_contract);
 	}
+	/**
+	 * @brief
+	 *
+	 * @param data
+	 *
+	 * @return
+	 */
 	std::string player_contract_instance::encode_step_data(std::string_view data) {
 		return data.data();
 	}
+	/**
+	 * @brief
+	 */
 	void player_contract_instance::init() {
 		m_quota = 0;
 		m_state_orm = std::make_shared<mods::orm::player_contract_state>();
@@ -66,6 +91,9 @@ namespace mods::contracts {
 
 
 
+	/**
+	 * @brief
+	 */
 	void player_contract_instance::load_decoded_step_data() {
 		/**
 		 * encoded data format: "N|{}"
@@ -91,12 +119,25 @@ namespace mods::contracts {
 			current += ch;
 		}
 	}
+	/**
+	 * @brief
+	 */
 	void player_contract_instance::save_step_data() {
 		m_update_status = m_state_orm->update_player_data(m_player_id,m_contract_vnum, encode_step_data(CAT(m_step,"|",m_extra_data)));
 	}
+	/**
+	 * @brief
+	 *
+	 * @return
+	 */
 	bool player_contract_instance::finished() {
 		return m_step >= m_contract_copy->steps.size();
 	}
+	/**
+	 * @brief
+	 *
+	 * @return
+	 */
 	std::tuple<bool,std::string> player_contract_instance::advance() {
 		if(m_current_step) {
 			m_current_step->reward(m_player_id);
@@ -110,7 +151,12 @@ namespace mods::contracts {
 		if(!finished()) {
 			msg += m_current_step->description;
 		}
-		mods::players::messages::queue(mods::globals::db_id_to_uuid_map[m_player_id],msg);
+		auto player = ptr_by_db_id(m_player_id);
+		if(!player) {
+			log("SYSERR: couldn't get player pointer from player id: %d",m_player_id);
+			return m_update_status;
+		}
+		player->sendln(msg);
 		return m_update_status;
 	}
 	/**
@@ -149,6 +195,11 @@ namespace mods::contracts {
 		m_auto_update_step();
 		return {1,"Contract started"};
 	}
+	/**
+	 * @brief
+	 *
+	 * @param item_uuid
+	 */
 	void player_contract_instance::find_item(const uuid_t& item_uuid) {
 		if(!m_current_step) {
 			std::cerr << red_str("find_item -> m_current_step is null!") << "\n";
@@ -170,6 +221,11 @@ namespace mods::contracts {
 			}
 		}
 	}
+	/**
+	 * @brief
+	 *
+	 * @param mob_uuid
+	 */
 	void player_contract_instance::find_mob(const uuid_t& mob_uuid) {
 		if(!m_current_step) {
 			return;
@@ -186,6 +242,63 @@ namespace mods::contracts {
 			}
 		}
 
+	}
+	/**
+	 * @brief
+	 *
+	 * @return
+	 */
+	std::string player_contract_instance::pretty_dump_step() {
+		std::string pretty = "{red}Current Step:{/red}:\r\n";
+		if(!m_current_step) {
+			pretty = "\tnothing to report\r\n";
+			return pretty;
+		}
+		pretty += "\t\t{yel}[type]:{/yel}{grn}";
+		if(is_find_item()) {
+			pretty += "find item";
+		}
+		if(is_find_mob()) {
+			pretty += "find_mob";
+		}
+		if(is_find_room()) {
+			pretty += "find_room";
+		}
+		if(is_find_door()) {
+			pretty += "find_door";
+		}
+		if(is_destroy_item()) {
+			pretty += "destroy_item";
+		}
+		if(is_destroy_door()) {
+			pretty += "destroy_door";
+		}
+		if(is_retrieve_item()) {
+			pretty += "retrieve_item";
+		}
+		if(is_quota_find_item()) {
+			pretty += "quota_find_item";
+		}
+		if(is_quota_kill_mob()) {
+			pretty += "quota_kill_mob";
+		}
+		if(is_quota_destroy_door()) {
+			pretty += "quota_destroy_door";
+		}
+		if(is_kill()) {
+			pretty += "kill";
+		}
+		if(is_gain_entry()) {
+			pretty += "gain_entry";
+		}
+		if(is_talk_to()) {
+			pretty += "talk_to";
+		}
+		if(is_install_item()) {
+			pretty += "install_item";
+		}
+		pretty += CAT("{/grn}\r\n\t\t{yel}[description]:{/yel}{grn}",m_current_step->description,"{/grn}\r\n");
+		return pretty;
 	}
 	void player_contract_instance::refresh_dump() {
 		if(!m_current_step) {
@@ -237,16 +350,26 @@ namespace mods::contracts {
 		}
 		m_step_dump += CAT("\r\n[description]:{yel}",m_current_step->description,"{/yel}\r\n");
 	}
+	/**
+	 * @brief
+	 *
+	 * @return
+	 */
 	std::string_view player_contract_instance::dump_step() {
 		return m_step_dump;
 	}
+	/**
+	 * @brief
+	 *
+	 * @param room_id
+	 */
 	void player_contract_instance::find_room(const room_rnum& room_id) {
 		if(!m_current_step) {
 			return;
 		}
 		if(m_current_step->goal & task_t::GOAL_FIND &&
 		        m_current_step->target == target_t::TARGET_ROOM) {
-			room_vnum v = world.size() < room_id ? world[room_id].number : 0;
+			room_vnum v = world.size() > room_id ? world[room_id].number : 0;
 			if(m_current_step->room == v) {
 				this->advance();
 				return;
@@ -255,13 +378,19 @@ namespace mods::contracts {
 
 
 	}
+	/**
+	 * @brief
+	 *
+	 * @param room_id
+	 * @param direction
+	 */
 	void player_contract_instance::find_door(const room_rnum& room_id,const int8_t& direction) {
 		if(!m_current_step) {
 			return;
 		}
 		if(m_current_step->goal & task_t::GOAL_FIND &&
 		        m_current_step->target == target_t::TARGET_DOOR) {
-			room_vnum v = world.size() < room_id ? world[room_id].number : 0;
+			room_vnum v = world.size() > room_id ? world[room_id].number : 0;
 			/** TODO: FIXME: need to add direction/door to sql */
 			if(m_current_step->room == v) {
 				this->advance();
@@ -269,6 +398,11 @@ namespace mods::contracts {
 			}
 		}
 	}
+	/**
+	 * @brief
+	 *
+	 * @param item_uuid
+	 */
 	void player_contract_instance::destroy_item(const uuid_t& item_uuid) {
 		if(!m_current_step) {
 			return;
@@ -286,13 +420,19 @@ namespace mods::contracts {
 		}
 
 	}
+	/**
+	 * @brief
+	 *
+	 * @param room_id
+	 * @param direction
+	 */
 	void player_contract_instance::destroy_door(const room_rnum& room_id,const int8_t& direction) {
 		if(!m_current_step) {
 			return;
 		}
 		if(m_current_step->goal & task_t::GOAL_DESTROY &&
 		        m_current_step->target == target_t::TARGET_DOOR) {
-			room_vnum v = world.size() < room_id ? world[room_id].number : 0;
+			room_vnum v = world.size() > room_id ? world[room_id].number : 0;
 			/** TODO: FIXME: need to add direction/door to sql */
 			if(m_current_step->room == v) {
 				this->advance();
@@ -300,6 +440,11 @@ namespace mods::contracts {
 			}
 		}
 	}
+	/**
+	 * @brief
+	 *
+	 * @param item_uuid
+	 */
 	void player_contract_instance::retrieve_item(const uuid_t& item_uuid) {
 		if(!m_current_step) {
 			return;
@@ -317,6 +462,11 @@ namespace mods::contracts {
 		}
 
 	}
+	/**
+	 * @brief
+	 *
+	 * @param item_uuid
+	 */
 	void player_contract_instance::quota_find_item(const uuid_t& item_uuid) {
 		if(!m_current_step) {
 			return;
@@ -337,6 +487,11 @@ namespace mods::contracts {
 		}
 
 	}
+	/**
+	 * @brief
+	 *
+	 * @param mob_uuid
+	 */
 	void player_contract_instance::quota_kill_mob(const uuid_t& mob_uuid) {
 		if(!m_current_step) {
 			return;
@@ -357,6 +512,12 @@ namespace mods::contracts {
 		}
 
 	}
+	/**
+	 * @brief
+	 *
+	 * @param room_id
+	 * @param direction
+	 */
 	void player_contract_instance::quota_destroy_door(const room_rnum& room_id,const int8_t& direction) {
 		if(!m_current_step) {
 			return;
@@ -364,7 +525,7 @@ namespace mods::contracts {
 		if(m_current_step->goal & task_t::GOAL_DESTROY &&
 		        m_current_step->goal & task_t::GOAL_QUOTA &&
 		        m_current_step->target == target_t::TARGET_DOOR) {
-			room_vnum v = world.size() < room_id ? world[room_id].number : 0;
+			room_vnum v = world.size() > room_id ? world[room_id].number : 0;
 			/** TODO: FIXME: need to add direction/door to sql */
 			++m_quota;
 			if(m_current_step->room == v && m_quota >= m_current_step->quota) {
@@ -374,6 +535,11 @@ namespace mods::contracts {
 		}
 
 	}
+	/**
+	 * @brief
+	 *
+	 * @param mob_uuid
+	 */
 	void player_contract_instance::kill(const uuid_t& mob_uuid) {
 		if(!m_current_step) {
 			return;
@@ -391,13 +557,18 @@ namespace mods::contracts {
 		}
 
 	}
+	/**
+	 * @brief
+	 *
+	 * @param room_id
+	 */
 	void player_contract_instance::gain_entry(const room_rnum& room_id) {
 		if(!m_current_step) {
 			return;
 		}
 		if(m_current_step->goal & task_t::GOAL_GAIN_ENTRY &&
 		        m_current_step->target == target_t::TARGET_ROOM) {
-			room_vnum v = world.size() < room_id ? world[room_id].number : 0;
+			room_vnum v = world.size() > room_id ? world[room_id].number : 0;
 			/** TODO: FIXME: need to add direction/door to sql */
 			if(m_current_step->room == v) {
 				this->advance();
@@ -406,6 +577,11 @@ namespace mods::contracts {
 		}
 
 	}
+	/**
+	 * @brief
+	 *
+	 * @param mob_uuid
+	 */
 	void player_contract_instance::talk_to(const uuid_t& mob_uuid) {
 		if(!m_current_step) {
 			return;
@@ -423,6 +599,11 @@ namespace mods::contracts {
 		}
 
 	}
+	/**
+	 * @brief
+	 *
+	 * @param item_uuid
+	 */
 	void player_contract_instance::install_item(const uuid_t& item_uuid) {
 		if(!m_current_step) {
 			return;

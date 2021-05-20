@@ -1,5 +1,5 @@
 #ifndef __MENTOC_MODS_deferred_HEADER__
-#define  __MENTOC_MODS_deferred_HEADER__
+#define __MENTOC_MODS_deferred_HEADER__
 
 #include <iostream>
 #include <functional>
@@ -48,7 +48,7 @@ namespace mods {
 			using event_queue_iterator = event_queue_t::iterator;
 
 			deferred() = delete;
-			deferred(uint64_t tick_resolution) : 
+			deferred(uint64_t tick_resolution) :
 				m_tres(tick_resolution),
 				m_tick(0),
 				m_iterations(0),
@@ -62,24 +62,25 @@ namespace mods {
 			event_queue_iterator push_ticks_event(uint32_t ticks, std::tuple<uuid_t,uint32_t> type);
 			event_queue_iterator push_ticks_event(uint32_t ticks, uuid_t,uint32_t type);
 			void push_chunk_affect(
-					uuid_t player_uuid,
-					std::size_t chunk,
-					uint64_t bit,
-					int64_t amount,
-					std::size_t number_of_times,
-					bool until_zero,
-					uint64_t next_event_tick,
-					uint64_t add
+			    uuid_t player_uuid,
+			    std::size_t chunk,
+			    uint64_t bit,
+			    int64_t amount,
+			    std::size_t number_of_times,
+			    bool until_zero,
+			    uint64_t next_event_tick,
+			    uint64_t add
 			);
 			void iteration();
 			void detexturize_room(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture);
 			template <typename TTextureList>
-			void texturize_room(uint64_t ticks_in_future,room_rnum& room_id,TTextureList& textures){
-				m_q.insert(std::make_pair(ticks_in_future + m_tick,[&](){
-						for(auto & texture : textures){
-							mods::util::texturize_room(room_id,texture);
-						}
-					})
+			void texturize_room(uint64_t ticks_in_future,room_rnum& room_id,TTextureList& textures) {
+				m_q.insert(
+				std::make_pair(ticks_in_future + m_tick,[&]() {
+					for(auto& texture : textures) {
+						mods::util::texturize_room(room_id,texture);
+					}
+				})
 				);//end insert
 			}
 			void cancel_lambda(lambda_queue_iterator it);

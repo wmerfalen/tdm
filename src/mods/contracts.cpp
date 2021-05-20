@@ -18,98 +18,33 @@ namespace mods::contracts {
 		static std::deque<std::shared_ptr<contract>> list;
 		return list;
 	}
-
-	/**
-	 * TODO: make it so that a player can only track one contract at a time
-	 */
-	/**
-	 * @brief abort contract
-	 *
-	 * @param ctx
-	 *
-	 * @return
-	 */
-	static duk_ret_t contract_abort(duk_context *ctx) {
-		uuid_t p_uuid = duk_to_number(ctx,0);
-		int contract_vnum = duk_to_number(ctx,1);
-
-		auto player = ptr_by_uuid(p_uuid);
-		if(!player) {
-			duk_push_number(ctx,-1);
-			return 1;
+	std::optional<std::shared_ptr<contract>> find_contract(const contract_vnum_t& contract_vnum) {
+		for(const auto& c : contract_master_list()) {
+			if(c->vnum == contract_vnum) {
+				return c;
+			}
 		}
-		player->stop_contract(contract_vnum);
-		duk_push_number(ctx,0);
-		return 1;
+		return std::nullopt;
 	}
-	/**
-	 * @brief called when contract is completed. awards and leaves quest
-	 *
-	 * @param ctx
-	 *
-	 * @return
-	 */
-	static duk_ret_t contract_complete(duk_context *ctx) {
-		std::string pname = duk_to_string(ctx,0);
-		std::string contract_major = duk_to_string(ctx,1);
-		std::string contract_minor = duk_to_string(ctx,2);
-
-		auto player = mods::pfind::by_name(pname.c_str());
-		if(player == mods::globals::player_nobody) {
-			return 0;
-		}
-		auto i_contract_major = mods::util::stoi(contract_major);
-		if(i_contract_major.has_value()) {
-			leave_contract(player,i_contract_major.value());
-			award_contract(player,i_contract_major.value());
-		}
-		return 0;
-	}
-	/**
-	 * @brief get a list of contracts available in this current room
-	 *
-	 * @param ctx
-	 *
-	 * @return
-	 */
-	static duk_ret_t list_contracts(duk_context *ctx) {
-		std::string pname = duk_to_string(ctx,0);
-
-		auto player = mods::pfind::by_name(pname.c_str());
-		if(player == mods::globals::player_nobody) {
-			return 0;
-		}
-		auto contracts = list_contracts(player->vnum());
-		for(auto qname : contracts) {
-			dbg_print(qname);
-			*player << "{grn}[ QUEST ]{/grn} " << qname << "\r\n";
-		}
-		return 0;
+	void start_contract(player_ptr_t& player, contract_vnum_t contract_vnum) {
+		player->contracts().emplace_back(std::make_shared<player_contract_instance>(contract_vnum,player->db_id()));
 	}
 
-	/**
-	 * @brief returns true if the npc/player is still alive
-	 *
-	 * @param ctx pass in uuid
-	 *
-	 * @return js:boolean if npc/player is alive
-	 */
-	static duk_ret_t still_alive(duk_context *ctx) {
-		uuid_t npc_uuid = duk_to_number(ctx,0);
-		auto npc = ptr_by_uuid(npc_uuid);
-		duk_push_boolean(ctx,!!npc);
-		return 1;
+	std::tuple<bool,std::string> stop_contract(player_ptr_t& player, contract_vnum_t contract_vnum) {
+		auto& d = player->contracts();
+		std::remove_if(d.begin(),d.end(),[contract_vnum](std::shared_ptr<player_contract_instance>& ptr) -> bool {
+			bool is_contract = ptr->contract_vnum() == contract_vnum;
+			if(is_contract) {
+				ptr->stop_contract();
+			}
+			return is_contract;
+		});
+		player->contracts() = std::move(d);
+		return {0,"stub"};
 	}
+
 	void load_c_functions(duk_context *ctx) {
-		//
-		duk_push_c_function(ctx,mods::contracts::list_contracts,1);
-		duk_put_global_string(ctx,"list_contracts");
-		duk_push_c_function(ctx,mods::contracts::contract_complete,3);
-		duk_put_global_string(ctx,"contract_complete");
-		duk_push_c_function(ctx,mods::contracts::contract_abort,3);
-		duk_put_global_string(ctx,"contract_abort");
-		duk_push_c_function(ctx,mods::contracts::still_alive,2);
-		duk_put_global_string(ctx,"still_alive");
+
 	}
 	void load_all_contracts() {
 		auto& master_list = contract_master_list();
@@ -124,36 +59,6 @@ namespace mods::contracts {
 	void punish_for_leaving_contract(std::shared_ptr<mods::player>& player,int contract_num) {
 		/** TODO: dock player mp */
 	}
-
-	/*
-	 * contract:rvnum:N:name
-	 * contract:rvnum:N:description
-	 * <player.name()>.contract -> contract:rvnum:N
-	 * <player.name()>.contract:rvnum:N:trigger:N -> javascript block
-	 * <player.name()>.contract:rvnum:N:trigger:N -> javascript block
-	 * <player.name()>.contract:rvnum:N:trigger:N -> javascript block
-	 * <player.name()>.contract:rvnum:N:complete -> boolean
-	 */
-	std::vector<std::string> list_contracts(room_vnum rvnum) {
-		std::string value = "1";
-		std::vector<std::string> contracts;
-
-		for(unsigned ctr = 0; true ; ctr++) {
-			std::string key  = CAT("contract:",(rvnum),":",ctr,":name");
-			value = "";
-			mods::globals::db->get(key,value);
-
-			if(value.length()) {
-				contracts.emplace_back(value);
-			} else {
-				break;
-			}
-		}
-
-		return contracts;
-	}
-
-	/* TODO: load triggers from disk on startup */
 
 	/**
 	 * @brief generates player_name:contract
@@ -205,29 +110,8 @@ namespace mods::contracts {
 		return CAT(player->name().c_str(),":",room,":",n_index,":contract_trigger");
 	}
 
-	/**
-	 * @brief fetches the current contract id that the players is pursuing
-	 *
-	 * @param player
-	 *
-	 * @return
-	 */
-	std::string current_contract(player_ptr_t& player) {
-		std::string current_contract_id = "";
-		/** TODO: this needs to be a fast structure in RAM that we check.
-		 * Since we've ripped out lmdb as a fast key/value pair system,
-		 * our next available option will be the speedy RAM structures.
-		 */
-		DBGET(current_contract_key(player),current_contract_id);
-		dbg_print("current contract: " << current_contract_id);
-		return current_contract_id;
-	}
-
 	bool has_contract(player_ptr_t& player) {
-		/**
-		 * TODO: check contract list
-		 */
-		return current_contract(player).length() > 0;
+		return !!player->contracts().size();
 	}
 
 	void load_contract_code(player_ptr_t& player,room_vnum rvnum,int contract_id) {
@@ -291,9 +175,7 @@ namespace mods::contracts {
 	}
 
 	bool trigger_exists(player_ptr_t& player,int contract_id) {
-		std::string value;
-		DBGET(current_contract(player) + std::string(":") + std::to_string(contract_id), value);
-		return value.length() > 0;
+		return false;
 	}
 
 	/**
@@ -307,59 +189,31 @@ namespace mods::contracts {
 		player->gold() += 5000;
 		player->exp() += 5000;
 	}
-	/**
-	 * @brief sets the current contract value in lmdb to a blank string
-	 *
-	 * @param player
-	 * @param contract_id
-	 */
-	void leave_contract(player_ptr_t& player,int contract_id) {
-		DBSET(current_contract_key(player),"");
-	}
 
-	bool start_contract(player_ptr_t& player,int contract_id) {
-		auto key = CAT("contract:",std::to_string(player->vnum()),":",std::to_string(contract_id));
-		dbg_print("key : " << key);
-
-		std::string name = key + ":name";
-		std::string desc = key + ":desc";
-		std::string value= "";
-		mods::globals::db->get(name,value);
-
-		dbg_print(name << "->" << value);
-		if(value.length()) {
-			/* Set the current contract number to this room id and contract id */
-			DBSET(current_contract_key(player),current_contract_value(player->vnum(),contract_id));
-			/* set the current contract to incomplete ("0") */
-			DBSET(complete_key(player,player->vnum(),contract_id),"0");
-			load_contract_code(player,player->vnum(),contract_id);
-			run_trigger(player);
-			return true;
-		} else {
-			return false;
-		}
-	}
 	ACMD(do_contract) {
-		auto vec_args = PARSE_ARGS();
 		DO_HELP_WITH_ZERO("contract");
 
-		if(vec_args.size() > 0 && (ICMP(vec_args[0],"step") || ICMP(vec_args[0],"steps") || ICMP(vec_args[0],"current"))) {
-			if(player->contracts().size() == 0) {
+		if(args()->first_is_any({"step","steps","current"})) {
+			if(!has_contract(player)) {
 				player->sendln("You have no current contracts.");
 				return;
 			}
 			player->sendln("Listing...");
 			for(const auto& c : player->contracts()) {
 				if(c->finished()) {
+					player->send(CAT("{grn}Finished{/grn}:\t{yel}[",c->vnum(),"]{/yel}::{grn}",c->title().data(),"{/grn}\r\n").c_str());
 					continue;
 				}
-				player->sendln(c->dump_step());
+				player->send(CAT("{red}Unfinished{/red}:\t{yel}[",c->vnum(),"]{/yel}::{grn}",c->title().data(),"{/grn}\r\n").c_str());
+				if(args()->first_is_any({"step","steps"})) {
+					player->send(c->pretty_dump_step().data());
+				}
 			}
 			player->sendln("Done listing...");
 			return;
 		}
 
-		if(vec_args.size() > 0 && vec_args[0].compare("list") == 0) {
+		if(args()->first_is("list")) {
 			player->pager_start();
 			player->sendln("Listing...");
 			for(const auto& con : contract_master_list()) {
@@ -370,37 +224,36 @@ namespace mods::contracts {
 			player->page(0);
 			return;
 		}
+		int contract_num = 0;
+		if(args()->save_integer(1)->if_nth_has_either(0, {"join","leave"})) {
+			contract_num = args()->fetch_parsed_integer(1);
 
-		if(vec_args.size() > 1 && vec_args[0].compare("join") == 0) {
-			auto contract_num = mods::util::stoi(vec_args[1]);
-
-			if(contract_num.value_or(-1) == -1) {
+			if(contract_num == -1) {
 				*player << "{red}Invalid contract number.{/red}\r\n";
 				return;
 			}
-			if(mods::contracts::start_contract(player,contract_num.value())) {
-				player->sendln("{grn}Your contract has been started! Good luck!{/grn}");
+			/** find the contract by vnum */
+			auto opt_contract = find_contract(contract_num);
+			if(opt_contract.has_value() == false) {
+				player->send("{red}We could not find a contract with that vnum{/red}\r\n");
 				return;
 			}
-			player->sendln("{red}There is no contract here that matches your criteria.{/red}");
+		}
+
+		if(args()->first_is("join")) {
+			if(has_contract(player)) {
+				player->send("{red}You are already part of a contract. Quit or finish that one before starting a new contract.{/red}\r\n");
+				return;
+			}
+			start_contract(player,contract_num);
+			player->sendln("{grn}Your contract has been started! Good luck!{/grn}");
 			return;
 		}
 
-		if(vec_args.size() > 1 && vec_args[0].compare("leave") == 0) {
-			auto contract_num = mods::util::stoi(vec_args[1]);
-
-			if(contract_num.value_or(-1) == -1) {
-				*player << "{red}Invalid contract number{/red}\r\n";
-				return;
-			}
-
-			mods::contracts::leave_contract(player,contract_num.value());
-			if(mods::contracts::current_contract(player).compare(vec_args[1]) != 0) {
-				player->sendln("{red}You are not part of that contract.{/red}");
-				return;
-			}
+		if(args()->first_is("leave")) {
+			stop_contract(player,contract_num);
 			*player << "{red}You have left the contract.{/red}\n";
-			mods::contracts::punish_for_leaving_contract(player,contract_num.value());
+			mods::contracts::punish_for_leaving_contract(player,contract_num);
 			return;
 		}
 	}
@@ -410,34 +263,6 @@ namespace mods::contracts {
 		mods::interpreter::add_command("quests", POS_RESTING, do_contract, 0,0);
 		mods::interpreter::add_command("contracts", POS_RESTING, do_contract, 0,0);
 		load_all_contracts();
-	}
-	void start_first_or_create(player_ptr_t& player, contract_vnum_t contract_vnum) {
-		for(auto& contract :  player->contracts()) {
-			if(contract->contract_vnum() == contract_vnum) {
-				return;
-			}
-		}
-		player->start_contract(contract_vnum);
-	}
-
-	std::tuple<bool,std::string> start_contract(player_ptr_t& player, contract_vnum_t contract_vnum) {
-		start_first_or_create(player,contract_vnum);
-		return {1,"started"};
-	}
-	std::tuple<bool,std::string> resume_contract(player_ptr_t& player, contract_vnum_t contract_vnum) {
-		start_first_or_create(player,contract_vnum);
-		return {1,"resumed"};
-	}
-	std::tuple<bool,std::string> stop_contract(player_ptr_t& player, contract_vnum_t contract_vnum) {
-		auto& d = player->contracts();
-		std::remove_if(d.begin(),d.end(),[contract_vnum](std::shared_ptr<player_contract_instance>& ptr) -> bool {
-			bool is_contract = ptr->contract_vnum() == contract_vnum;
-			if(is_contract) {
-				ptr->stop_contract();
-			}
-			return is_contract;
-		});
-		return {0,"stub"};
 	}
 
 };

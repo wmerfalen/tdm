@@ -176,16 +176,20 @@ int do_simple_move(char_data *ch, int dir, int need_specials_check) {
 		player->send("You move the elevator %s...\r\n",dir == UP ? "UP" : "DOWN");
 	}
 	was_in = IN_ROOM(ch);
+	auto to_room = world[was_in].dir_option[dir]->to_room;
 	mods::globals::rooms::char_from_room(ch);
-	mods::globals::rooms::char_to_room(world[was_in].dir_option[dir]->to_room,ch);
+	mods::globals::rooms::char_to_room(to_room,ch);
 
 	if(!AFF_FLAGGED(ch, AFF_SNEAK) && !ghost_dissipated) {
 		act("$n has arrived.", TRUE, ch, 0, 0, TO_ROOM);
 	}
 
+
 	if(ch->has_desc) {
 		look_at_room(ch, 0);
 	}
+	player->contract_find_room(to_room);
+	player->contract_gain_entry(to_room);
 
 	if(ROOM_FLAGGED(IN_ROOM(ch), ROOM_DEATH) && GET_LEVEL(ch) < LVL_IMMORT) {
 		log_death_trap(ch);
