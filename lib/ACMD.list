@@ -15,6 +15,7 @@
 ./mods/levels.cpp:	->practices
 ./mods/levels.cpp:	->exp
 ./mods/date-time.cpp:	->moon_phase
+./mods/scripted-step.cpp:	->scripted_step
 ./mods/mini-games/line-up.cpp:->hack
 ./mods/mini-games/line-up.cpp:->rotate_right
 ./mods/mini-games/line-up.cpp:->rotate_left
@@ -24,6 +25,7 @@
 ./mods/contracts.cpp:	->contract
 ./mods/weapons/reload.cpp:	->reload
 ./mods/skills.cpp:->train
+./mods/scripted-sequences.cpp:	->scripted_sequences
 ./mods/values.cpp:			->set_value
 ./mods/values.cpp:			->get_value
 ./mods/values.cpp:			->revert_value_to_default

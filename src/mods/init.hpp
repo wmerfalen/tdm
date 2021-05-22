@@ -43,6 +43,8 @@ INIT(mods::mob_equipment);
 INIT(mods::weapons::reload);
 INIT(mods::help);
 INIT(mods::mobact);
+INIT(mods::scripted_step_init);
+INIT(mods::scripted_sequences_init);
 #undef INIT
 
 
@@ -87,6 +89,8 @@ namespace mods::init {
 		mods::weapons::reload::init();
 		mods::help::init();
 		mods::mobact::init();
+		mods::scripted_step_init::init();
+		mods::scripted_sequences_init::init();
 	}
 };
 #endif

@@ -14,10 +14,31 @@
 namespace mods::contracts {
 	using task_t = contract_step::task_type_t;
 	using target_t = contract_step::task_target_t;
+
+	/**
+	 *
+	 * Data storage
+	 *
+	 */
 	std::deque<std::shared_ptr<contract>>& contract_master_list() {
 		static std::deque<std::shared_ptr<contract>> list;
 		return list;
 	}
+	void load_all_contracts() {
+		auto& master_list = contract_master_list();
+		auto status = mods::orm::load_all_non_orm_contracts(&master_list);
+		if(std::get<0>(status)) {
+			dbg_print(green_str("load_all_contracts:") << "'" << std::get<1>(status) << "'");
+		} else {
+			dbg_print(red_str("load_all_contracts:") << "'" << std::get<1>(status) << "'");
+		}
+	}
+
+	/**
+	 *
+	 * Data querying
+	 *
+	 */
 	std::optional<std::shared_ptr<contract>> find_contract(const contract_vnum_t& contract_vnum) {
 		for(const auto& c : contract_master_list()) {
 			if(c->vnum == contract_vnum) {
@@ -26,6 +47,12 @@ namespace mods::contracts {
 		}
 		return std::nullopt;
 	}
+
+	/**
+	 *
+	 * Contract control
+	 *
+	 */
 	void start_contract(player_ptr_t& player, contract_vnum_t contract_vnum) {
 		player->contracts().emplace_back(std::make_shared<player_contract_instance>(contract_vnum,player->db_id()));
 	}
@@ -43,151 +70,12 @@ namespace mods::contracts {
 		return {0,"stub"};
 	}
 
-	void load_c_functions(duk_context *ctx) {
-
-	}
-	void load_all_contracts() {
-		auto& master_list = contract_master_list();
-		auto status = mods::orm::load_all_non_orm_contracts(&master_list);
-		if(std::get<0>(status)) {
-			dbg_print(green_str("load_all_contracts:") << "'" << std::get<1>(status) << "'");
-		} else {
-			dbg_print(red_str("load_all_contracts:") << "'" << std::get<1>(status) << "'");
-		}
-	}
-
 	void punish_for_leaving_contract(std::shared_ptr<mods::player>& player,int contract_num) {
 		/** TODO: dock player mp */
 	}
 
-	/**
-	 * @brief generates player_name:contract
-	 *
-	 * @param player
-	 *
-	 * @return
-	 */
-	std::string current_contract_key(player_ptr_t& player) {
-		return CAT(player->name().c_str(),":contract");
-	}
-
-	/**
-	 * @brief generates ROOMVNUM:CONTRACT_INDEX
-	 *
-	 * @param room
-	 * @param t_index
-	 *
-	 * @return
-	 */
-	std::string current_contract_value(room_vnum room,int t_index) {
-		return CAT(std::to_string(room),":",std::to_string(t_index));
-	}
-
-	/* Whether or not the contract has been completed */
-	/**
-	 * @brief generates player_name:ROOMVNUM:CONTRACT_INDEX:contract_complete
-	 *
-	 * @param player
-	 * @param room
-	 * @param n_index
-	 *
-	 * @return
-	 */
-	std::string complete_key(player_ptr_t& player,room_vnum room,int n_index) {
-		return CAT(player->name().c_str(),":",room,":",n_index,":contract_complete");
-	}
-
-	/**
-	 * @brief generates player_name:ROOMVNUM:CONTRACT_INDEX:contract_trigger
-	 *
-	 * @param player
-	 * @param room
-	 * @param n_index
-	 *
-	 * @return
-	 */
-	std::string trigger_key(player_ptr_t& player,room_vnum room,int n_index) {
-		return CAT(player->name().c_str(),":",room,":",n_index,":contract_trigger");
-	}
-
 	bool has_contract(player_ptr_t& player) {
 		return !!player->contracts().size();
-	}
-
-	void load_contract_code(player_ptr_t& player,room_vnum rvnum,int contract_id) {
-		std::string js_code = CAT("contract_trigger_",rvnum,"_",contract_id,"(",player->uuid(),");");
-		DBSET(trigger_key(player,rvnum,contract_id),js_code);
-	}
-
-	int contracts_file_to_lmdb(player_ptr_t& player,const std::string& contracts_file,const std::string& lmdb_key) {
-		std::ifstream include_file(contracts_file,std::ios::in);
-
-		if(!include_file.good() || !include_file.is_open()) {
-			dbg_print("not opening contracts file" << contracts_file);
-			return -1;
-		} else {
-			std::vector<char> buffer;
-			struct stat statbuf;
-
-			if(stat(contracts_file.c_str(), &statbuf) == -1) {
-				return -2;
-			}
-
-			buffer.reserve(statbuf.st_size + 1);
-			std::fill(buffer.begin(),buffer.end(),0);
-			include_file.read((char*)&buffer[0],statbuf.st_size);
-			std::string buf = static_cast<char*>(&buffer[0]);
-			/* start interpolation */
-			buf = mods::globals::replace_all(buf,"{character}",player->name().c_str());
-			DBSET(lmdb_key,buf);
-			return statbuf.st_size;
-		}
-	}
-
-	int run_trigger(player_ptr_t& player) {
-		std::string js_code;
-		std::string vnum_index;
-		DBGET(current_contract_key(player),vnum_index);
-		/**
-		 * format of vnum_index will be Q_CURRENT_KEY
-		 * which is: rvnum:INDEX
-		 */
-		std::vector<std::string> parts;
-		std::string current = "";
-		for(auto ch : vnum_index) {
-			if(ch == ':') {
-				parts.emplace_back(current);
-				current.clear();
-				continue;
-			}
-			current += ch;
-		}
-		parts.emplace_back(current);
-
-		if(parts.size() < 2) {
-			dbg_print(red_str("ERROR: contract current key is not formatted correctly"));
-			return -1;
-		}
-		DBGET(trigger_key(player,mods::util::stoi(parts[0]).value_or(-1),mods::util::stoi(parts[1]).value_or(-1)),js_code);
-		dbg_print("js_code for trigger: " << green_str(js_code));
-		mods::js::eval_string(js_code);
-		return 0;	//TODO: make use of return value to signify something?
-	}
-
-	bool trigger_exists(player_ptr_t& player,int contract_id) {
-		return false;
-	}
-
-	/**
-	 * @brief gives the player the rewards for completing the contract
-	 *
-	 * @param player
-	 * @param contract_major
-	 */
-	void award_contract(player_ptr_t& player,int contract_major) {
-		//TODO: Calculate contract reward tiers
-		player->gold() += 5000;
-		player->exp() += 5000;
 	}
 
 	ACMD(do_contract) {

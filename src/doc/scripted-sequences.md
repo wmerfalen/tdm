@@ -63,14 +63,14 @@ An interactive example:
 		std::vector<scripted_step> sequence;
 	};
 	```
-	- `void register_scripted_sequence(uint32_t sequence_vnum
+	- `void register_scripted_sequence(uint32_t sequence_vnum, std::vector<js_object> sequence);`
 	- `void register_contract_step_callback(contract_vnum_t, task_type_t, target_type_t, uint32_t task_vnum, uint32_t sequence_vnum);`
 	- javascript napi:
 		
 		- ```
 		register_scripted_sequence(
 				1,	/** virtual number of this sequence */
-				sequence: [
+				[
 					{
 						wait_ticks: 3,
 						dialogue: " triton energy scientist dialoge ... ",
@@ -89,7 +89,6 @@ An interactive example:
 						],
 					},
 				]
-			}
 		);
 		register_contract_step_callback(
 			3,							/** contract vnum */
@@ -159,10 +158,17 @@ An interactive example:
 		);
 		```
 
-
-# example usage
-
- [on event: Player enters room] (guard: has contract VNUM 3)
- 	A TRITON Energy scientist hands Zephyr a briefcase.
-	[publish event: GOAL_FIND_ITEM, object_vnum: 405]
-
+# related functionality
+	- need to verify 'unlock door' can honor the FOB that the scientist is holding
+	- support for the following "type"s:
+		- mob_gives_yaml
+		- send_to_char
+		- emote
+		- seal_room
+		- char_to_room
+		- interpret
+	- on contract step completion, publish an event
+	- add listeners to contract step events
+	- add listeners that trigger scripted sequences on events
+		- listeners can have "guards" which will only execute if conditions are met
+	- 
