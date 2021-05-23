@@ -913,6 +913,7 @@ CRYO	mods/flags.hpp	/^		CRYO,$/;"	e	enum:mods::flags::plr
 CRYO_FACTOR	objsave.cpp	26;"	d	file:
 CRYPT	utils.h	547;"	d
 CRYPT	utils.h	549;"	d
+CSTEP_MEMBERS_TUPLE	mods/orm/scripted-step.hpp	158;"	d
 CURRENT_TICK	globals.hpp	/^static inline uint64_t CURRENT_TICK() {$/;"	f
 CURSE	mods/flags.hpp	/^		CURSE,					\/\/ useless$/;"	e	enum:mods::flags::aff
 CUT	mods/weapon-types.hpp	/^		CUT,$/;"	e	enum:mods::weapon::capabilities::cap_t
@@ -1645,8 +1646,8 @@ INDOOR_WOODEN_WALLS	mods/rooms.hpp	/^		INDOOR_WOODEN_WALLS,$/;"	e	enum:mods::roo
 INDUSTRIAL_STRENGTH	mods/yaml.hpp	/^		INDUSTRIAL_STRENGTH,$/;"	e	enum:mods::yaml::durability_profile_type_t
 INFO_FILE	db.h	81;"	d
 INFRAVISION	mods/flags.hpp	/^		INFRAVISION,$/;"	e	enum:mods::flags::aff
-INIT	mods/init.hpp	48;"	d
 INIT	mods/init.hpp	4;"	d
+INIT	mods/init.hpp	50;"	d
 INITIATE	mods/skills.hpp	/^	INITIATE = 1,$/;"	e	enum:uint8_t
 INK	mods/aoe.hpp	/^		INK,	\/** Marks surroundings and enemies with paint for the purpose of tracking *\/ $/;"	e	enum:mods::aoe::types_t
 INSERT	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_type_t
@@ -2314,6 +2315,9 @@ MENTOC_CF	mods/yaml.hpp	102;"	d
 MENTOC_CF	mods/yaml.hpp	84;"	d
 MENTOC_CF	mods/yaml.hpp	89;"	d
 MENTOC_CF	mods/yaml.hpp	93;"	d
+MENTOC_CHECK_SLOT_LIST	mods/orm/orm-base.hpp	285;"	d
+MENTOC_CHECK_TYPE	mods/orm/orm-base.hpp	248;"	d
+MENTOC_COLUMN_LIST_IMPL	mods/orm/orm-base.hpp	262;"	d
 MENTOC_CONSUMABLE_MEMBERS_TUPLE	mods/item-types.hpp	442;"	d
 MENTOC_CONSUMABLE_TYPES_SEQUENCE	mods/item-types.hpp	433;"	d
 MENTOC_CONTAINER_MEMBERS_TUPLE	mods/item-types.hpp	118;"	d
@@ -2445,6 +2449,21 @@ MENTOC_OBJ_DATA_STAT_GEN	structs.cpp	89;"	d	file:
 MENTOC_OBJ_INITIALIZE_CONSTRUCTOR	structs.cpp	47;"	d	file:
 MENTOC_OBS	mods/builder.cpp	42;"	d	file:
 MENTOC_OBS2	mods/builder.cpp	43;"	d	file:
+MENTOC_ORM_CLASS	mods/orm/orm-base.hpp	295;"	d
+MENTOC_ORM_COLUMN_LIST_FOR	mods/orm/orm-base.hpp	265;"	d
+MENTOC_ORM_EXPORT_CLASS	mods/orm/orm-base.hpp	225;"	d
+MENTOC_ORM_FEED_CLASS	mods/orm/orm-base.hpp	250;"	d
+MENTOC_ORM_FEED_IMPL	mods/orm/orm-base.hpp	273;"	d
+MENTOC_ORM_FEED_ROW_INTEGRAL_IMPL	mods/orm/orm-base.hpp	242;"	d
+MENTOC_ORM_FEED_ROW_STRING_IMPL	mods/orm/orm-base.hpp	239;"	d
+MENTOC_ORM_FEED_ROW_STRING_VECTOR_IMPL	mods/orm/orm-base.hpp	245;"	d
+MENTOC_ORM_GENERATE_MAP_IMPL	mods/orm/orm-base.hpp	220;"	d
+MENTOC_ORM_INIT	mods/orm/orm-base.hpp	234;"	d
+MENTOC_ORM_INIT_IMPL	mods/orm/orm-base.hpp	231;"	d
+MENTOC_ORM_MEMBER_VARS_FOR	mods/orm/orm-base.hpp	258;"	d
+MENTOC_ORM_MEMBER_VARS_IMPL	mods/orm/orm-base.hpp	255;"	d
+MENTOC_ORM_SLOT_LIST_FOR	mods/orm/orm-base.hpp	287;"	d
+MENTOC_ORM_SLOT_LIST_IMPL	mods/orm/orm-base.hpp	282;"	d
 MENTOC_PAGINATED_LIST	mods/builder.hpp	196;"	d
 MENTOC_PLAYER_NULL_CHECK	mods/builder.cpp	1181;"	d	file:
 MENTOC_PREAMBLE	globals.hpp	20;"	d
@@ -2858,13 +2877,13 @@ OPER_OPEN_PAREN	shop.h	126;"	d
 OPER_OR	shop.h	128;"	d
 OPPOSITE_DIR	globals.hpp	25;"	d
 OPT_USEC	structs.h	669;"	d
-ORM_FAILURE	mods/orm/orm-base.hpp	15;"	d
+ORM_FAILURE	mods/orm/orm-base.hpp	16;"	d
 ORM_FAILURE	mods/pq.hpp	47;"	d
 ORM_FAILURE	mods/pq.hpp	611;"	d
-ORM_NO_RESULTS	mods/orm/orm-base.hpp	14;"	d
+ORM_NO_RESULTS	mods/orm/orm-base.hpp	15;"	d
 ORM_NO_RESULTS	mods/pq.hpp	46;"	d
 ORM_NO_RESULTS	mods/pq.hpp	610;"	d
-ORM_SUCCESS	mods/orm/orm-base.hpp	13;"	d
+ORM_SUCCESS	mods/orm/orm-base.hpp	14;"	d
 ORM_SUCCESS	mods/pq.hpp	45;"	d
 ORM_SUCCESS	mods/pq.hpp	609;"	d
 OTHER_PLAYER_INDEX_START	mods/player-scaffolding.hpp	/^		constexpr static std::size_t OTHER_PLAYER_INDEX_START = 2;$/;"	m	struct:mods::player_scaffolding
@@ -3301,6 +3320,7 @@ SCMD_WHOAMI	interpreter.h	104;"	d
 SCMD_WIZHELP	interpreter.h	161;"	d
 SCMD_WIZLIST	interpreter.h	97;"	d
 SCOPE	mods/weapon.hpp	/^		SCOPE,$/;"	e	enum:mods::weapon::attachment_t
+SCSTEP_MEMBERS_TUPLE	mods/orm/scripted-step.hpp	30;"	d
 SE	telnet.h	57;"	d
 SECS_PER_MUD_DAY	utils.h	138;"	d
 SECS_PER_MUD_HOUR	utils.h	137;"	d
@@ -3754,6 +3774,7 @@ SPELL_VENTRILOQUATE	spells.h	81;"	d
 SPELL_WORD_OF_RECALL	spells.h	82;"	d
 SPLSKL	spec_procs.cpp	136;"	d	file:
 SPRAY_BULLETS	mods/weapon-types.hpp	/^		SPRAY_BULLETS,$/;"	e	enum:mods::weapon::capabilities::cap_t
+SSEQ_MEMBERS_TUPLE	mods/orm/scripted-step.hpp	107;"	d
 STAB	mods/weapon-types.hpp	/^		STAB,$/;"	e	enum:mods::weapon::capabilities::cap_t
 STAMP_PRICE	mail.h	23;"	d
 STARTING_VISIBILITY	structs.h	/^		static constexpr visibility_t STARTING_VISIBILITY = 255;$/;"	m	struct:obj_data
@@ -3928,8 +3949,10 @@ SUPERCMD	mods/builder/bookmarks.cpp	/^	SUPERCMD(do_print_vnum) {$/;"	f	namespace
 SUPERCMD	mods/builder/conbuild.cpp	/^	SUPERCMD(do_conbuild) {$/;"	f	namespace:mods::builder::conbuild
 SUPERCMD	mods/builder/hqbuild.cpp	/^	SUPERCMD(do_hqbuild) {$/;"	f	namespace:mods::builder::hqbuild
 SUPERCMD	mods/builder/meqbuild.cpp	/^	SUPERCMD(do_meqbuild) {$/;"	f	namespace:mods::builder::meqbuild
+SUPERCMD	mods/builder/seqbuild.cpp	/^	SUPERCMD(do_seqbuild) {$/;"	f	namespace:mods::builder::seqbuild
 SUPERCMD	mods/chat.cpp	/^SUPERCMD(do_chanmgr) {$/;"	f
 SUPERCMD	mods/classes/super-user-fiddler.cpp	/^	SUPERCMD(do_mock_level) {$/;"	f	namespace:mods::classes
+SUPERCMD	mods/contract-step-callback.cpp	/^	SUPERCMD(do_contract_step_callback) {$/;"	f	namespace:mods
 SUPERCMD	mods/date-time.cpp	/^	SUPERCMD(do_serialize_date) {$/;"	f	namespace:mods::date_time
 SUPERCMD	mods/elevator.cpp	/^SUPERCMD(do_instantiate_elevator_here) {$/;"	f
 SUPERCMD	mods/fluxkraft/arcon-bar.hpp	/^		SUPERCMD(do_generate_bar) {$/;"	f	namespace:mods::fluxkraft::arcon_bar
@@ -4696,6 +4719,7 @@ __MENTOC_MODS_BEHAVIOUR_TREE_STATUS_HEADER__	mods/behaviour_tree_status.hpp	2;"	
 __MENTOC_MODS_BUGS_FIXTURES_HEADER__	mods/bugs-fixtures.hpp	2;"	d
 __MENTOC_MODS_BUILDER_BOOKMARKS_HEADER__	mods/builder/bookmarks.hpp	2;"	d
 __MENTOC_MODS_BUILDER_CONTRACT_HEADER__	mods/builder/conbuild.hpp	2;"	d
+__MENTOC_MODS_BUILDER_CONTRACT_HEADER__	mods/builder/seqbuild.hpp	2;"	d
 __MENTOC_MODS_BUILDER_COORDINATES_HEADER__	mods/builder/coordinates.hpp	2;"	d
 __MENTOC_MODS_BUILDER_DATA_HEADER__	mods/builder-data.hpp	2;"	d
 __MENTOC_MODS_BUILDER_ENCODE_HEADER__	mods/builder/encode.hpp	2;"	d
@@ -4733,6 +4757,7 @@ __MENTOC_MODS_COLORS_HEADER__	mods/colors.hpp	2;"	d
 __MENTOC_MODS_CONF_HEADER__	mods/conf.hpp	2;"	d
 __MENTOC_MODS_CONTRACTS_HEADER__	mods/contracts.hpp	2;"	d
 __MENTOC_MODS_CONTRACT_STEPS_HEADER__	mods/contract-steps.hpp	2;"	d
+__MENTOC_MODS_CONTRACT_STEP_CALLBACK_HEADER__	mods/contract-step-callback.hpp	2;"	d
 __MENTOC_MODS_CONTRACT_TRACKING_HEADER__	mods/contract-tracking.hpp	2;"	d
 __MENTOC_MODS_CONTRACT_TYPES_HEADER__	mods/contract-types.hpp	2;"	d
 __MENTOC_MODS_CRYPTO_HEADER__	mods/crypto.hpp	2;"	d
@@ -4846,13 +4871,13 @@ __MENTOC_MODS_ORM_SKILL_POINTS_HEADER__	mods/orm/skill-points.hpp	2;"	d
 __MENTOC_MODS_ORM_SNIPER_HEADER__	mods/orm/sniper.hpp	2;"	d
 __MENTOC_MODS_ORM_UTIL_HEADER__	mods/orm/util.hpp	2;"	d
 __MENTOC_MODS_ORM_contract_steps_HEADER__	mods/orm/contract-steps.hpp	2;"	d
-__MENTOC_MODS_ORM_contract_steps_HEADER__	mods/orm/scripted-sequences.hpp	2;"	d
 __MENTOC_MODS_ORM_contracts_HEADER__	mods/orm/contracts.hpp	2;"	d
 __MENTOC_MODS_ORM_player_contract_state_HEADER__	mods/orm/player-contract-state.hpp	2;"	d
 __MENTOC_MODS_ORM_player_skill_points_HEADER__	mods/orm/player-skill-points.hpp	2;"	d
 __MENTOC_MODS_ORM_player_skill_usage_HEADER__	mods/orm/player-skill-usage.hpp	2;"	d
 __MENTOC_MODS_ORM_rifle_attachment_HEADER__	mods/orm/rifle-attachment.hpp	2;"	d
 __MENTOC_MODS_ORM_rifle_instance_HEADER__	mods/orm/rifle-instance.hpp	2;"	d
+__MENTOC_MODS_ORM_scripted_steps_HEADER__	mods/orm/scripted-step.hpp	2;"	d
 __MENTOC_MODS_ORM_skill_trees_HEADER__	mods/orm/skill-trees.hpp	2;"	d
 __MENTOC_MODS_OVERHEAD_MAP_HEADER__	mods/overhead_map.hpp	2;"	d
 __MENTOC_MODS_PFIND_HEADER__	mods/pfind.hpp	2;"	d
@@ -4927,7 +4952,7 @@ __MENTOC_MODS_cron_HEADER__	mods/cron.hpp	2;"	d
 __MENTOC_MODS_deferred_HEADER__	mods/deferred.hpp	2;"	d
 __MENTOC_MODS_prefs_HEADER__	mods/prefs.hpp	2;"	d
 __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
-__MENTOC_MODS_scripted_sequencesS_HEADER__	mods/scripted-sequences.hpp	3;"	d
+__MENTOC_MODS_scripted_sequencesS_HEADER__	mods/scripted-sequences.hpp	2;"	d
 __MENTOC_MODS_scripted_stepS_HEADER__	mods/scripted-step.hpp	2;"	d
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/search.hpp	2;"	d
 __MENTOC_PLAYER_UTILS_HEADER__	mods/players/util.hpp	2;"	d
@@ -5193,7 +5218,7 @@ arglist	mods/util.hpp	/^	T arglist(std::string in_arglist_argument) {$/;"	f	name
 arglist_parser	mods/util.hpp	/^	struct arglist_parser {$/;"	s	namespace:mods::util::args
 args	mods/util.cpp	/^namespace mods::util::args {$/;"	n	class:mods::util	file:
 args	mods/util.hpp	/^namespace mods::util::args {$/;"	n	class:mods::util
-args	mods/util.hpp	354;"	d
+args	mods/util.hpp	356;"	d
 argument_interpreter	interpreter.h	43;"	d
 arguments	mods/builder.cpp	/^	size_t arguments;$/;"	m	struct:command_t	file:
 armor	mods/armor/advanced-protection.cpp	/^namespace mods::armor {$/;"	n	class:mods	file:
@@ -5454,6 +5479,7 @@ builder	mods/builder/encode.cpp	/^namespace mods::builder {$/;"	n	class:mods	fil
 builder	mods/builder/encode.hpp	/^namespace mods::builder {$/;"	n	class:mods
 builder	mods/builder/hqbuild.hpp	/^namespace mods::builder {$/;"	n	class:mods
 builder	mods/builder/meqbuild.hpp	/^namespace mods::builder {$/;"	n	class:mods
+builder	mods/builder/seqbuild.hpp	/^namespace mods::builder {$/;"	n	class:mods
 builder	mods/builder/slotted-builder.cpp	/^namespace mods::builder {$/;"	n	class:mods	file:
 builder	mods/builder/slotted-builder.hpp	/^namespace mods::builder {$/;"	n	class:mods
 builder	mods/init.hpp	/^INIT(builder);$/;"	v
@@ -5475,11 +5501,13 @@ by_name	mods/pfind.cpp	/^	player_ptr_t by_name(const char* player_name){$/;"	f	n
 by_player	mods/rifle-attachments.cpp	/^		std::vector<std::shared_ptr<mods::rifle_attachments_t>> by_player(player_ptr_t& player) {$/;"	f	namespace:mods::rifle_attachments
 by_profile_vnum	mods/builder/conbuild.cpp	/^		std::deque<std::shared_ptr<mods::orm::contract_steps>> by_profile_vnum(const uint64_t& vnum) {$/;"	f	namespace:mods::builder::conbuild::map
 by_profile_vnum	mods/builder/meqbuild.cpp	/^		std::vector<std::shared_ptr<mods::orm::mob_equipment_map>> by_profile_vnum(const uint64_t& vnum) {$/;"	f	namespace:mods::builder::meqbuild::map
+by_profile_vnum	mods/builder/seqbuild.cpp	/^		std::deque<std::shared_ptr<mods::orm::scripted_step>> by_profile_vnum(const uint64_t& vnum) {$/;"	f	namespace:mods::builder::seqbuild::map
 by_uuid	mods/pfind.cpp	/^	player_ptr_t by_uuid(uuid_t player_uuid){$/;"	f	namespace:mods::pfind
 by_uuid	mods/rifle-attachments.cpp	/^		std::shared_ptr<mods::rifle_attachments_t> by_uuid(const uuid_t& uuid) {$/;"	f	namespace:mods::rifle_attachments
 by_vnum	mods/builder/conbuild.cpp	/^		std::optional<std::shared_ptr<conbuild_orm_type>> by_vnum(conbuild_vnum_t vnum) {$/;"	f	struct:mods::builder::conbuild::conbuild_interface
 by_vnum	mods/builder/hqbuild.cpp	/^	std::optional<std::shared_ptr<mods::orm::hq>> by_vnum(const uint32_t& vnum) {$/;"	f	namespace:mods::builder::hqbuild
 by_vnum	mods/builder/meqbuild.cpp	/^		std::optional<std::shared_ptr<meqbuild_orm_type>> by_vnum(meqbuild_vnum_t vnum) {$/;"	f	struct:mods::builder::meqbuild::meqbuild_interface
+by_vnum	mods/builder/seqbuild.cpp	/^		std::optional<std::shared_ptr<seqbuild_orm_type>> by_vnum(seqbuild_vnum_t vnum) {$/;"	f	struct:mods::builder::seqbuild::seqbuild_interface
 byte	structs.h	/^typedef signed char			byte;$/;"	t
 c_description	mods/orm/contracts.hpp	/^		std::string c_description;$/;"	m	struct:mods::orm::contracts
 c_str	mods/string.cpp	/^	const char* string::c_str() const {$/;"	f	class:mods::string
@@ -5514,6 +5542,7 @@ calculate_spray_chance	mods/weapons/damage-types.cpp	/^	uint8_t calculate_spray_
 calculate_tracked_damage	mods/weapons/damage-types.cpp	/^	int calculate_tracked_damage(player_ptr_t& player,int original_damage) {$/;"	f	namespace:mods::weapons::damage_types
 call_magic	spell_parser.cpp	/^int call_magic(char_data *caster, char_data *cvict,$/;"	f
 callback	mods/projectile.hpp	/^		typedef std::function<void (room_rnum,int)> callback;$/;"	t	namespace:mods::projectile
+callback_table_name	mods/orm/scripted-step.hpp	/^	static constexpr std::string_view callback_table_name = "contract_step_callback";$/;"	m	namespace:mods::orm
 camera	mods/camera.cpp	/^	camera::camera(uuid_t  owner, uuid_t  obj) :$/;"	f	class:mods::camera
 camera	mods/camera.cpp	/^	camera::camera(uuid_t  owner, uuid_t  obj, uint16_t time) :$/;"	f	class:mods::camera
 camera	mods/camera.hpp	/^	class camera {$/;"	c	namespace:mods
@@ -5689,6 +5718,7 @@ clear	mods/builder-data.cpp	/^void room_recorder_t::clear() {$/;"	f	class:room_r
 clear	mods/builder/conbuild.cpp	/^		void clear() {$/;"	f	struct:mods::builder::conbuild::conbuild_interface
 clear	mods/builder/hqbuild.cpp	/^	void clear() {$/;"	f	namespace:mods::builder::hqbuild
 clear	mods/builder/meqbuild.cpp	/^		void clear() {$/;"	f	struct:mods::builder::meqbuild::meqbuild_interface
+clear	mods/builder/seqbuild.cpp	/^		void clear() {$/;"	f	struct:mods::builder::seqbuild::seqbuild_interface
 clear	mods/sql.hpp	/^			compositor<T>& clear() {$/;"	f	struct:mods::sql::compositor
 clear	mods/string.cpp	/^	void string::clear(){$/;"	f	class:mods::string
 clearMemory	mobact.cpp	/^void clearMemory(char_data *ch) {$/;"	f
@@ -5750,7 +5780,6 @@ colors	mods/acl/color.hpp	/^    namespace colors {$/;"	n	namespace:mods
 colors	mods/colors.hpp	/^namespace mods::colors {$/;"	n	class:mods
 column	mods/lmdb.hpp	/^		key_type_t column;$/;"	m	struct:mods::lmdb::_selector
 column_list	mods/orm/contract-steps.hpp	/^		static const std::vector<std::string>& column_list() {$/;"	f	struct:mods::orm::contract_steps
-column_list	mods/orm/scripted-sequences.hpp	/^		static const std::vector<std::string>& column_list() {$/;"	f	struct:mods::orm::contract_steps
 column_mappings	mods/builder.cpp	/^	str_map_t column_mappings;$/;"	m	struct:command_t	file:
 column_prefix	mods/orm/armor-index.hpp	/^		std::string column_prefix() const {$/;"	f	struct:mods::orm::armor_index
 column_prefix	mods/orm/breacher.hpp	/^		std::string column_prefix() const { return "breacher_"; }$/;"	f	struct:mods::orm::breacher
@@ -5779,7 +5808,6 @@ column_prefix	mods/orm/pyrexia.hpp	/^		std::string column_prefix(){ return "pyre
 column_prefix	mods/orm/rifle-attachment.hpp	/^		std::string column_prefix() {$/;"	f	struct:mods::orm::rifle_attachment
 column_prefix	mods/orm/rifle-index.hpp	/^		std::string column_prefix() const {$/;"	f	struct:mods::orm::rifle_index
 column_prefix	mods/orm/rifle-instance.hpp	/^		std::string column_prefix() {$/;"	f	struct:mods::orm::rifle_instance
-column_prefix	mods/orm/scripted-sequences.hpp	/^		std::string column_prefix() const {$/;"	f	struct:mods::orm::contract_steps
 column_prefix	mods/orm/skill-points.hpp	/^		std::string column_prefix() const {$/;"	f	struct:mods::orm::skill_points
 column_prefix	mods/orm/skill-trees.hpp	/^		std::string column_prefix() const {$/;"	f	struct:mods::orm::skill_trees
 column_prefix	mods/orm/sniper.hpp	/^		std::string column_prefix() {$/;"	f	struct:mods::orm::sniper
@@ -5787,6 +5815,7 @@ column_prefix	mods/orm/striker.hpp	/^		std::string column_prefix(){ return "stri
 column_prefix	mods/orm/support.hpp	/^		std::string column_prefix() const { return "support_"; }$/;"	f	struct:mods::orm::support
 column_prefix	mods/orm/syndrome.hpp	/^		std::string column_prefix(){ return "syndrome_"; }$/;"	f	struct:mods::orm::syndrome
 column_prefix	mods/pq.hpp	/^	virtual std::string column_prefix() {$/;"	f	struct:orm_base
+column_str	mods/orm/orm-base.hpp	/^		std::string column_str(std::string_view column) {$/;"	f	struct:mods::orm::orm_base
 combat_list	fight.cpp	/^char_data *combat_list = NULL;	\/* head of l-list of fighting chars *\/$/;"	v
 command	db.h	/^	char	command;   \/* current command                      *\/$/;"	m	struct:reset_com
 command	interpreter.h	/^	const char* command;$/;"	m	struct:command_info
@@ -5890,6 +5919,7 @@ contract	structs.h	/^	bool contract;$/;"	m	struct:room_direction_data
 contract_destroy_item	mods/player.cpp	/^	void player::contract_destroy_item(const uuid_t& item_uuid) {$/;"	f	class:mods::player
 contract_destroyed_door	mods/player.cpp	/^	void player::contract_destroyed_door(const room_rnum& room_id,const int8_t& direction) {$/;"	f	class:mods::player
 contract_events	mods/contract-events.hpp	/^namespace mods::contract_events {$/;"	n	class:mods
+contract_exists	mods/builder/seqbuild.cpp	/^	bool contract_exists(int vnum) {$/;"	f	namespace:mods::builder::seqbuild
 contract_find_door	mods/player.cpp	/^	void player::contract_find_door(const room_rnum& room_id,const int8_t& direction) {$/;"	f	class:mods::player
 contract_find_item	mods/player.cpp	/^	void player::contract_find_item(const uuid_t& obj_uuid) {$/;"	f	class:mods::player
 contract_find_mob	mods/player.cpp	/^	void player::contract_find_mob(const uuid_t& mob_uuid) {$/;"	f	class:mods::player
@@ -5903,20 +5933,22 @@ contract_quota_item_find_increase	mods/player.cpp	/^	void player::contract_quota
 contract_quota_kill_mob_increase	mods/player.cpp	/^	void player::contract_quota_kill_mob_increase(const uuid_t& mob_uuid) {$/;"	f	class:mods::player
 contract_retrieve_item	mods/player.cpp	/^	void player::contract_retrieve_item(const uuid_t& item_uuid) {$/;"	f	class:mods::player
 contract_step	mods/contract-steps.hpp	/^	struct contract_step {$/;"	s	namespace:mods::contracts
+contract_step_callback	mods/contract-step-callback.hpp	/^	struct contract_step_callback {$/;"	s	namespace:mods
+contract_step_callback	mods/orm/scripted-step.hpp	/^		contract_step_callback(const sequence_vnum_t& scripted_vnum) {$/;"	f	struct:mods::orm::contract_step_callback
+contract_step_callback	mods/orm/scripted-step.hpp	/^	struct contract_step_callback : public mods::orm::orm_base<contract_step_callback,std::string> {$/;"	s	namespace:mods::orm
+contract_step_callback_init	mods/contract-step-callback.cpp	/^	namespace contract_step_callback_init {$/;"	n	namespace:mods	file:
+contract_step_callback_init	mods/init.hpp	/^INIT(mods::contract_step_callback_init);$/;"	v
+contract_step_callback_list	mods/orm/scripted-step.cpp	/^	std::deque<std::shared_ptr<mods::orm::contract_step_callback>>& contract_step_callback_list() {$/;"	f	namespace:mods::orm
+contract_step_callback_master_list	mods/contract-step-callback.cpp	/^	std::deque<std::shared_ptr<contract_step_callback>>& contract_step_callback_master_list() {$/;"	f	namespace:mods
 contract_steps	mods/orm/contract-steps.hpp	/^		contract_steps() {$/;"	f	struct:mods::orm::contract_steps
 contract_steps	mods/orm/contract-steps.hpp	/^		contract_steps(const contract_vnum_t& contract_vnum) {$/;"	f	struct:mods::orm::contract_steps
 contract_steps	mods/orm/contract-steps.hpp	/^	struct contract_steps : public mods::orm::orm_base<contract_steps,std::string> {$/;"	s	namespace:mods::orm
-contract_steps	mods/orm/scripted-sequences.hpp	/^		contract_steps() {$/;"	f	struct:mods::orm::contract_steps
-contract_steps	mods/orm/scripted-sequences.hpp	/^		contract_steps(const contract_vnum_t& contract_vnum) {$/;"	f	struct:mods::orm::contract_steps
-contract_steps	mods/orm/scripted-sequences.hpp	/^	struct contract_steps : public mods::orm::orm_base<contract_steps,std::string> {$/;"	s	namespace:mods::orm
 contract_steps_list	mods/orm/contract-steps.cpp	/^	std::deque<std::shared_ptr<contract_steps>>& contract_steps_list() {$/;"	f	namespace:mods::orm
-contract_steps_list	mods/orm/scripted-sequences.cpp	/^	std::deque<std::shared_ptr<contract_steps>>& contract_steps_list() {$/;"	f	namespace:mods::orm
 contract_steps_record_t	mods/orm/contract-steps.hpp	/^	struct contract_steps_record_t {$/;"	s	namespace:mods::orm
-contract_steps_record_t	mods/orm/scripted-sequences.hpp	/^	struct contract_steps_record_t {$/;"	s	namespace:mods::orm
 contract_steps_table_name	mods/orm/contract-steps.hpp	/^	static constexpr std::string_view contract_steps_table_name = "contract_steps";$/;"	m	namespace:mods::orm
-contract_steps_table_name	mods/orm/scripted-sequences.hpp	/^	static constexpr std::string_view contract_steps_table_name = "contract_steps";$/;"	m	namespace:mods::orm
 contract_talk_to	mods/player.cpp	/^	void player::contract_talk_to(const uuid_t& mob_uuid) {$/;"	f	class:mods::player
 contract_tracking	mods/contract-tracking.hpp	/^namespace mods::contract_tracking {$/;"	n	class:mods
+contract_vnum	mods/contract-step-callback.hpp	/^		contract_vnum_t contract_vnum;$/;"	m	struct:mods::contract_step_callback
 contract_vnum	mods/player-contract-instance.hpp	/^			const auto& contract_vnum() const {$/;"	f	struct:mods::contracts::player_contract_instance
 contracts	mods/contract-steps.cpp	/^namespace mods::contracts {$/;"	n	class:mods	file:
 contracts	mods/contract-steps.hpp	/^namespace mods::contracts {$/;"	n	class:mods
@@ -6020,6 +6052,7 @@ create_sequence	mods/behaviour_tree_node.hpp	/^			static child_node_t create_seq
 create_shop_from_index	db.cpp	/^shop_ptr_t create_shop_from_index(std::size_t proto_index) {$/;"	f
 create_sniper	mods/classes/sniper.cpp	/^	std::shared_ptr<sniper> create_sniper(player_ptr_t& in_player) {$/;"	f	namespace:mods::classes
 create_step	mods/builder/conbuild.cpp	/^		std::shared_ptr<mods::orm::contract_steps> create_step(conbuild_vnum_t vnum) {$/;"	f	struct:mods::builder::conbuild::conbuild_interface
+create_step	mods/builder/seqbuild.cpp	/^		std::shared_ptr<mods::orm::scripted_step> create_step(seqbuild_vnum_t vnum) {$/;"	f	struct:mods::builder::seqbuild::seqbuild_interface
 create_support	mods/classes/support.cpp	/^	std::shared_ptr<support> create_support(player_ptr_t &in_player){$/;"	f	namespace:mods::classes
 create_syndrome	mods/classes/syndrome.cpp	/^		std::shared_ptr<syndrome> create_syndrome(player_ptr_t &in_player){$/;"	f	namespace:mods::classes
 create_wall_of_fire	mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyrexia::create_wall_of_fire(uint8_t direction){$/;"	f	class:mods::classes::pyrexia
@@ -6050,8 +6083,6 @@ created_at	mods/orm/player-contract-state.hpp	/^		long created_at;$/;"	m	struct:
 created_at	mods/orm/pyrexia.hpp	/^		long created_at;$/;"	m	struct:mods::orm::pyrexia
 created_at	mods/orm/rifle-attachment.hpp	/^		long created_at;$/;"	m	struct:mods::orm::rifle_attachment
 created_at	mods/orm/rifle-instance.hpp	/^		long created_at;$/;"	m	struct:mods::orm::rifle_instance
-created_at	mods/orm/scripted-sequences.hpp	/^		long created_at;$/;"	m	struct:mods::orm::contract_steps
-created_at	mods/orm/scripted-sequences.hpp	/^		long created_at;$/;"	m	struct:mods::orm::contract_steps_record_t
 created_at	mods/orm/sniper.hpp	/^		long created_at;$/;"	m	struct:mods::orm::sniper
 created_at	mods/orm/striker.hpp	/^		long created_at;$/;"	m	struct:mods::orm::striker
 created_at	mods/orm/support.hpp	/^		long created_at;$/;"	m	struct:mods::orm::support
@@ -6180,6 +6211,8 @@ dbg_blu	mods/acl/config-parser.hpp	25;"	d
 dbg_grn	mods/acl/config-parser.hpp	24;"	d
 dbg_print	mods/contract-events.cpp	6;"	d	file:
 dbg_print	mods/contract-events.cpp	8;"	d	file:
+dbg_print	mods/contract-step-callback.cpp	10;"	d	file:
+dbg_print	mods/contract-step-callback.cpp	12;"	d	file:
 dbg_print	mods/contract-tracking.cpp	6;"	d	file:
 dbg_print	mods/contract-tracking.cpp	8;"	d	file:
 dbg_print	mods/contracts.cpp	10;"	d	file:
@@ -6236,7 +6269,6 @@ delete_aliases	alias.cpp	/^void delete_aliases(const char *charname) {$/;"	f
 delete_by_armor_type	mods/orm/armor-index.cpp	/^	std::tuple<int16_t,std::string> armor_index::delete_by_armor_type(std::string_view armor_type_name) {$/;"	f	class:mods::orm::armor_index
 delete_by_contract_vnum	mods/orm/contract-steps.cpp	/^	std::tuple<int16_t,std::string> contract_steps::delete_by_contract_vnum(const contract_vnum_t& in_contract_vnum) {$/;"	f	class:mods::orm::contract_steps
 delete_by_contract_vnum	mods/orm/contracts.cpp	/^	std::tuple<int16_t,std::string> contracts::delete_by_contract_vnum(const contract_vnum_t& in_c_vnum) {$/;"	f	class:mods::orm::contracts
-delete_by_contract_vnum	mods/orm/scripted-sequences.cpp	/^	std::tuple<int16_t,std::string> contract_steps::delete_by_contract_vnum(const contract_vnum_t& in_contract_vnum) {$/;"	f	class:mods::orm::contract_steps
 delete_by_id	mods/orm/player-contract-state.cpp	/^	std::tuple<int16_t,std::string> player_contract_state::delete_by_id(const uint64_t& row_id) {$/;"	f	class:mods::orm::player_contract_state
 delete_by_level	mods/orm/skill-points.cpp	/^	std::tuple<int16_t,std::string> skill_points::delete_by_level(uint16_t level) {$/;"	f	class:mods::orm::skill_points
 delete_by_mob_vnum	mods/orm/mob-roam.cpp	/^	std::tuple<int16_t,std::string> mob_roam::delete_by_mob_vnum(mob_vnum mob) {$/;"	f	class:mods::orm::mob_roam
@@ -6248,10 +6280,13 @@ delete_by_player_id_contract_vnum	mods/orm/player-contract-state.cpp	/^	std::tup
 delete_by_profile_name	mods/orm/mob-roam.cpp	/^	std::tuple<int16_t,std::string> mob_roam::delete_by_profile_name(std::string_view profile) {$/;"	f	class:mods::orm::mob_roam
 delete_by_rifle_type	mods/orm/rifle-index.cpp	/^	std::tuple<int16_t,std::string> rifle_index::delete_by_rifle_type(std::string_view rifle_type_name) {$/;"	f	class:mods::orm::rifle_index
 delete_by_room_vnum	mods/builder/hqbuild.cpp	/^	bool delete_by_room_vnum(const room_vnum vnum) {$/;"	f	namespace:mods::builder::hqbuild
+delete_by_scripted_vnum	mods/orm/scripted-step.cpp	/^	std::tuple<int16_t,std::string> scripted_step::delete_by_scripted_vnum(const sequence_vnum_t& in_scripted_vnum) {$/;"	f	class:mods::orm::scripted_step
 delete_by_vnum	mods/builder/conbuild.cpp	/^		bool delete_by_vnum(conbuild_vnum_t vnum) {$/;"	f	struct:mods::builder::conbuild::conbuild_interface
 delete_by_vnum	mods/builder/conbuild.cpp	/^		bool delete_by_vnum(const uint64_t& vnum) {$/;"	f	namespace:mods::builder::conbuild::map
 delete_by_vnum	mods/builder/meqbuild.cpp	/^		bool delete_by_vnum(const uint64_t& vnum) {$/;"	f	namespace:mods::builder::meqbuild::map
 delete_by_vnum	mods/builder/meqbuild.cpp	/^		bool delete_by_vnum(meqbuild_vnum_t vnum) {$/;"	f	struct:mods::builder::meqbuild::meqbuild_interface
+delete_by_vnum	mods/builder/seqbuild.cpp	/^		bool delete_by_vnum(const uint64_t& vnum) {$/;"	f	namespace:mods::builder::seqbuild::map
+delete_by_vnum	mods/builder/seqbuild.cpp	/^		bool delete_by_vnum(seqbuild_vnum_t vnum) {$/;"	f	struct:mods::builder::seqbuild::seqbuild_interface
 delete_char	mods/players/db-load.cpp	/^	int16_t delete_char(player_ptr_t& player) {$/;"	f	namespace:mods::players::db_load
 delete_doubledollar	interpreter.cpp	/^char *delete_doubledollar(char *string) {$/;"	f
 delete_foobar_profile	mods/orm/mob-roam.cpp	/^	void mob_roam::delete_foobar_profile() {$/;"	f	class:mods::orm::mob_roam
@@ -6305,7 +6340,8 @@ destroy	mods/orm/contracts.cpp	/^	void contracts::destroy() {$/;"	f	class:mods::
 destroy	mods/orm/hq.cpp	/^	bool hq::destroy() {$/;"	f	class:mods::orm::hq
 destroy	mods/orm/mob-equipment-map.cpp	/^	bool mob_equipment_map::destroy() {$/;"	f	class:mods::orm::mob_equipment_map
 destroy	mods/orm/mob-equipment.cpp	/^	bool mob_equipment::destroy() {$/;"	f	class:mods::orm::mob_equipment
-destroy	mods/orm/scripted-sequences.cpp	/^	void contract_steps::destroy() {$/;"	f	class:mods::orm::contract_steps
+destroy	mods/orm/scripted-step.cpp	/^	void scripted_sequences::destroy() {$/;"	f	class:mods::orm::scripted_sequences
+destroy	mods/orm/scripted-step.cpp	/^	void scripted_step::destroy() {$/;"	f	class:mods::orm::scripted_step
 destroy_db	db.cpp	/^void destroy_db(void) {$/;"	f
 destroy_direction	mods/builder.cpp	/^	bool destroy_direction(room_rnum room_id,int direction) {$/;"	f	namespace:mods::builder
 destroy_door	mods/player-contract-instance.cpp	/^	void player_contract_instance::destroy_door(const room_rnum& room_id,const int8_t& direction) {$/;"	f	class:mods::contracts::player_contract_instance
@@ -6319,7 +6355,9 @@ destroy_shops	shop.cpp	/^void destroy_shops(void) {$/;"	f
 destroy_socket	comm.cpp	/^void destroy_socket(socket_t sock_fd) {$/;"	f
 destroy_status	mods/orm/contract-steps.hpp	/^		std::tuple<int16_t,std::string> destroy_status;$/;"	m	struct:mods::orm::contract_steps
 destroy_status	mods/orm/contracts.hpp	/^		std::tuple<int16_t,std::string> destroy_status;$/;"	m	struct:mods::orm::contracts
-destroy_status	mods/orm/scripted-sequences.hpp	/^		std::tuple<int16_t,std::string> destroy_status;$/;"	m	struct:mods::orm::contract_steps
+destroy_status	mods/orm/scripted-step.hpp	/^		std::tuple<int16_t,std::string> destroy_status;$/;"	m	struct:mods::orm::contract_step_callback
+destroy_status	mods/orm/scripted-step.hpp	/^		std::tuple<int16_t,std::string> destroy_status;$/;"	m	struct:mods::orm::scripted_sequences
+destroy_status	mods/orm/scripted-step.hpp	/^		std::tuple<int16_t,std::string> destroy_status;$/;"	m	struct:mods::orm::scripted_step
 destroyed	mods/orm/mob-equipment-map.hpp	/^		bool destroyed;$/;"	m	struct:mods::orm::mob_equipment_map
 destroyed_pieces_of_armor	mods/armor/advanced-protection.cpp	/^	vec_t<uuid_t>& advanced_protection::destroyed_pieces_of_armor() {$/;"	f	class:mods::armor::advanced_protection
 destroyed_pieces_of_armor	mods/armor/basic-protection.cpp	/^	vec_t<uuid_t>& basic_protection::destroyed_pieces_of_armor() {$/;"	f	class:mods::armor::basic_protection
@@ -6386,6 +6424,7 @@ dispatch_list_extract_action	mods/builder/slotted-builder.hpp	/^			bool dispatch
 dispatch_multi_vnum_action	mods/builder/slotted-builder.hpp	/^			bool dispatch_multi_vnum_action(std::string argument) {$/;"	f	struct:mods::builder::slotted_builder
 dispatch_new_command	mods/builder/conbuild.cpp	/^		status_response_t dispatch_new_command(const std::vector<std::string>& cmd_args,std::string argument) {$/;"	f	struct:mods::builder::conbuild::conbuild_interface
 dispatch_new_command	mods/builder/meqbuild.cpp	/^		status_response_t dispatch_new_command(const std::vector<std::string>& cmd_args,std::string argument) {$/;"	f	struct:mods::builder::meqbuild::meqbuild_interface
+dispatch_new_command	mods/builder/seqbuild.cpp	/^		status_response_t dispatch_new_command(const std::vector<std::string>& cmd_args,std::string argument) {$/;"	f	struct:mods::builder::seqbuild::seqbuild_interface
 dispatch_paginate_action	mods/builder/slotted-builder.hpp	/^			bool dispatch_paginate_action(std::string argument) {$/;"	f	struct:mods::builder::slotted_builder
 dispatch_ptr	mods/behaviour_tree_impl.cpp	/^	int8_t dispatch_ptr(argument_type& ch) {$/;"	f	namespace:mods::behaviour_tree_impl
 dispatch_reload_all_action	mods/builder/slotted-builder.hpp	/^			bool dispatch_reload_all_action(std::string argument) {$/;"	f	struct:mods::builder::slotted_builder
@@ -6846,11 +6885,12 @@ dummy_t	mods/target-practice.hpp	/^	struct dummy_t {$/;"	s	namespace:mods::targe
 dump	db.h	/^		void dump() {$/;"	f	struct:zone_data
 dump	db.h	/^	void dump() {$/;"	f	struct:reset_com
 dump	mods/builder/encode.cpp	/^	std::string dump(const strmap_t& data) {$/;"	f	namespace:mods::builder
+dump	mods/contract-step-callback.hpp	/^		std::string dump() const {$/;"	f	struct:mods::contract_step_callback
 dump	mods/forge-engine/value-scaler.cpp	/^	void value_scaler::dump() {$/;"	f	class:mods::forge_engine::value_scaler
 dump	mods/orm/contract-steps.hpp	/^		std::string& dump() {$/;"	f	struct:mods::orm::contract_steps
 dump	mods/orm/orm-base.hpp	/^		std::string dump() {$/;"	f	struct:mods::orm::orm_base
 dump	mods/orm/player-base-ability.cpp	/^	void player_base_ability::dump() {$/;"	f	class:mods::orm::player_base_ability
-dump	mods/orm/scripted-sequences.hpp	/^		std::string& dump() {$/;"	f	struct:mods::orm::contract_steps
+dump	mods/scripted-step.hpp	/^		std::string dump() const {$/;"	f	struct:mods::scripted_step
 dump	mods/util-map.hpp	/^			static inline void dump(std::map<TKey,TVal> m){$/;"	f	namespace:mods::util::maps
 dump	spec_assign.cpp	/^SPECIAL(dump);$/;"	v
 dump	spec_procs.cpp	/^SPECIAL(dump);$/;"	v
@@ -6861,6 +6901,7 @@ dump_list	mods/lmdb/conf.hpp	/^void dump_list(void){ }$/;"	f	struct:gdns::conf
 dump_rules	mods/acl/config-parser.cpp	/^        inline void FileParser::dump_rules(rule r){$/;"	f	class:mods::acl::FileParser
 dump_status	mods/lmdb.cpp	/^	void _db_handle::dump_status() const {$/;"	f	class:mods::lmdb::_db_handle
 dump_step	mods/builder/conbuild.cpp	/^		void dump_step(std::shared_ptr<mods::orm::contract_steps> s) {$/;"	f	struct:mods::builder::conbuild::conbuild_interface
+dump_step	mods/builder/seqbuild.cpp	/^		void dump_step(std::shared_ptr<mods::orm::scripted_step> s) {$/;"	f	struct:mods::builder::seqbuild::seqbuild_interface
 dump_step	mods/player-contract-instance.cpp	/^	std::string_view player_contract_instance::dump_step() {$/;"	f	class:mods::contracts::player_contract_instance
 dump_tree	mods/acl/config-parser.cpp	/^        void FileParser::dump_tree(void){$/;"	f	class:mods::acl::FileParser
 duplicate	db.h	/^	int duplicate;$/;"	m	struct:help_index_element
@@ -7074,8 +7115,6 @@ export_class	mods/orm/rifle-index.cpp	/^	strmap_t rifle_index::export_class() {$
 export_class	mods/orm/rifle-index.hpp	/^		strmap_t export_class() {$/;"	f	struct:mods::orm::rifle_index_record_t
 export_class	mods/orm/rifle-instance.cpp	/^	strmap_t rifle_instance::export_class() {$/;"	f	class:mods::orm::rifle_instance
 export_class	mods/orm/room.cpp	/^	sql_save_map_t room::export_class() {$/;"	f	class:mods::orm::room
-export_class	mods/orm/scripted-sequences.cpp	/^	strmap_t contract_steps::export_class() {$/;"	f	class:mods::orm::contract_steps
-export_class	mods/orm/scripted-sequences.hpp	/^		strmap_t export_class() {$/;"	f	struct:mods::orm::contract_steps_record_t
 export_class	mods/orm/skill-points.cpp	/^	strmap_t skill_points::export_class() {$/;"	f	class:mods::orm::skill_points
 export_class	mods/orm/skill-points.hpp	/^		strmap_t export_class() {$/;"	f	struct:mods::orm::skill_points_record_t
 export_class	mods/orm/skill-trees.cpp	/^	strmap_t skill_trees::export_class() {$/;"	f	class:mods::orm::skill_trees
@@ -7099,6 +7138,7 @@ exported	mods/yaml.hpp	/^		std::map<std::string,std::string> exported;$/;"	m	str
 exported	mods/yaml.hpp	/^		std::map<std::string,std::string> exported;$/;"	m	struct:mods::yaml::rifle_description_t
 exported	mods/yaml.hpp	/^		std::map<std::string,std::string> exported;$/;"	m	struct:mods::yaml::trap_description_t
 exported	mods/yaml.hpp	/^		std::map<std::string,std::string> exported;$/;"	m	struct:mods::yaml::vehicle_description_t
+exported_data	mods/orm/orm-base.hpp	/^		strmap_t exported_data;$/;"	m	struct:mods::orm::orm_base
 ext_map	mods/mobs/extended-types.hpp	/^	static std::map<extended_types_t,std::string> ext_map = {$/;"	m	namespace:mods::mobs
 extended_item_vnum	structs.h	/^		uint64_t extended_item_vnum;$/;"	m	struct:obj_data
 extended_type	structs.h	/^		int extended_type; \/** i.e. mw_rifle::SUB_MACHINE_GUN *\/$/;"	m	struct:obj_data
@@ -7172,7 +7212,6 @@ feed	mods/orm/pyrexia.cpp	/^	int16_t pyrexia::feed(const pqxx::result::reference
 feed	mods/orm/rifle-attachment.cpp	/^	int16_t rifle_attachment::feed(const pqxx::result::reference& row) {$/;"	f	class:mods::orm::rifle_attachment
 feed	mods/orm/rifle-instance.cpp	/^	int16_t rifle_instance::feed(const pqxx::result::reference& row) {$/;"	f	class:mods::orm::rifle_instance
 feed	mods/orm/room.cpp	/^	int16_t room::feed(const pqxx::result::reference& row) {$/;"	f	class:mods::orm::room
-feed	mods/orm/scripted-sequences.cpp	/^	int16_t contract_steps::feed(const pqxx::result::reference& row) {$/;"	f	class:mods::orm::contract_steps
 feed	mods/orm/shop.cpp	/^	int16_t shop::feed(const pqxx::result::reference & row){$/;"	f	class:mods::orm::shop
 feed	mods/orm/sniper.cpp	/^	int16_t sniper::feed(const pqxx::result::reference& row) {$/;"	f	class:mods::orm::sniper
 feed	mods/orm/striker.cpp	/^	int16_t striker::feed(const pqxx::result::reference & row){$/;"	f	class:mods::orm::striker
@@ -7257,6 +7296,7 @@ fetch	mods/forge-engine/util.hpp	/^	int16_t fetch(std::variant<uint32_t,float>& 
 fetch_builder_help	mods/help.cpp	/^	void fetch_builder_help(std::vector<std::string>& screen) {$/;"	f	namespace:mods::help
 fetch_by_meta	mods/orm/fetcher.hpp	/^	std::vector<TRowType>&& fetch_by_meta(std::string_view column,std::string_view value) {$/;"	f	namespace:mods::orm
 fetch_by_meta	mods/orm/fetcher.hpp	/^	uint64_t fetch_by_meta(std::string_view table_name,$/;"	f	namespace:mods::orm::generator
+fetch_integer	mods/util.cpp	/^	int parsed_args::fetch_integer(int index) {$/;"	f	class:mods::util::args::parsed_args
 fetch_list_by_mob_vnum	mods/mob-equipment.cpp	/^	std::array<std::string,NUM_WEARS> fetch_list_by_mob_vnum(mob_vnum mobvnum) {$/;"	f	namespace:mods::mob_equipment
 fetch_mortal_help	mods/help.cpp	/^	void fetch_mortal_help(std::vector<std::string>& screen) {$/;"	f	namespace:mods::help
 fetch_parsed_integer	mods/util.cpp	/^	int parsed_args::fetch_parsed_integer(int index) {$/;"	f	class:mods::util::args::parsed_args
@@ -7282,7 +7322,7 @@ fill	interpreter.cpp	/^const char *fill[] = {$/;"	v
 fill	mods/forge-engine/generated-armor.cpp	/^	void generated_armor_t::fill(obj_ptr_t& obj) {$/;"	f	class:mods::forge_engine::generated_armor_t
 fill	mods/forge-engine/generated-rifle.cpp	/^	void generated_rifle_t::fill(obj_ptr_t& obj) {$/;"	f	class:mods::forge_engine::generated_rifle_t
 fill	mods/orm/contract-steps.hpp	/^		void fill(mods::contracts::contract& c) {$/;"	f	struct:mods::orm::contract_steps
-fill	mods/orm/scripted-sequences.hpp	/^		void fill(mods::contracts::contract& c) {$/;"	f	struct:mods::orm::contract_steps
+fill	mods/orm/scripted-step.hpp	/^		void fill(mods::scripted_sequences& c) {$/;"	f	struct:mods::orm::scripted_sequences
 fill_armor_attributes_generic	mods/forge-engine/util.hpp	/^	void fill_armor_attributes_generic(obj_ptr_t& obj,TAttributeContainer& attribute_list,TObjDataExtendedTypePointer* attributes) {$/;"	f	namespace:mods::forge_engine
 fill_attributes	mods/forge-engine/generated-armor.cpp	/^	void generated_armor_t::fill_attributes(obj_ptr_t& obj) {$/;"	f	class:mods::forge_engine::generated_armor_t
 fill_attributes	mods/forge-engine/generated-rifle.cpp	/^	void generated_rifle_t::fill_attributes(obj_ptr_t& obj) {$/;"	f	class:mods::forge_engine::generated_rifle_t
@@ -7317,6 +7357,7 @@ find_char_in_index	mail.cpp	/^mail_index_type *find_char_in_index(long searchee)
 find_class_bitvector	class.cpp	/^bitvector_t find_class_bitvector(const char *arg) {$/;"	f
 find_command	interpreter.cpp	/^int find_command(const char *command) {$/;"	f
 find_contract	mods/contracts.cpp	/^	std::optional<std::shared_ptr<contract>> find_contract(const contract_vnum_t& contract_vnum) {$/;"	f	namespace:mods::contracts
+find_contract_step_callback	mods/contract-step-callback.cpp	/^	std::deque<std::shared_ptr<contract_step_callback>> find_contract_step_callback(const contract_vnum_t& contract_vnum) {$/;"	f	namespace:mods
 find_door	act.movement.cpp	/^int find_door(char_data *ch, const char *type, char *dir, const char *cmdname) {$/;"	f
 find_door	mods/player-contract-instance.cpp	/^	void player_contract_instance::find_door(const room_rnum& room_id,const int8_t& direction) {$/;"	f	class:mods::contracts::player_contract_instance
 find_eq_pos	act.item.cpp	/^int find_eq_pos(char_data *ch, struct obj_data *obj, char *arg) {$/;"	f
@@ -7328,6 +7369,7 @@ find_guard	castle.cpp	/^char_data * find_guard(char_data *ch) {$/;"	f
 find_house	house.cpp	/^int find_house(room_vnum vnum) {$/;"	f
 find_item	mods/player-contract-instance.cpp	/^	void player_contract_instance::find_item(const uuid_t& item_uuid) {$/;"	f	class:mods::contracts::player_contract_instance
 find_local_step_by_id	mods/builder/conbuild.cpp	/^		std::optional<std::shared_ptr<mods::orm::contract_steps>> find_local_step_by_id(const uint64_t& step_id) {$/;"	f	struct:mods::builder::conbuild::conbuild_interface
+find_local_step_by_id	mods/builder/seqbuild.cpp	/^		std::optional<std::shared_ptr<mods::orm::scripted_step>> find_local_step_by_id(const uint64_t& step_id) {$/;"	f	struct:mods::builder::seqbuild::seqbuild_interface
 find_mob	mods/player-contract-instance.cpp	/^	void player_contract_instance::find_mob(const uuid_t& mob_uuid) {$/;"	f	class:mods::contracts::player_contract_instance
 find_multi	mods/orm/fetcher.hpp	/^	std::vector<TRowType>&& find_multi(TIterable & id_list){$/;"	f	namespace:mods::orm
 find_multi	mods/orm/fetcher.hpp	/^	uint64_t find_multi(std::string_view table_name,TIdList id_list, TFunctionCallback callback){$/;"	f	namespace:mods::orm::generator
@@ -7423,6 +7465,7 @@ foreach_player	mods/loops.hpp	/^		static inline PointerType* foreach_player(func
 foreach_player	mods/loops.hpp	/^		static inline void foreach_player(function_t func){$/;"	f	namespace:mods::loops::shptr
 foreach_player	mods/loops.hpp	/^	static inline PointerType* foreach_player(mods_player_function_t<PointerType> func,PointerType* param){$/;"	f	namespace:mods::loops
 foreach_step_do	mods/builder/conbuild.cpp	/^		std::pair<unsigned,unsigned> foreach_step_do(std::vector<int> list,std::string mode) {$/;"	f	struct:mods::builder::conbuild::conbuild_interface
+foreach_step_do	mods/builder/seqbuild.cpp	/^		std::pair<unsigned,unsigned> foreach_step_do(std::vector<int> list,std::string mode) {$/;"	f	struct:mods::builder::seqbuild::seqbuild_interface
 forge	mods/classes/forge.cpp	/^	forge::forge(){$/;"	f	class:mods::classes::forge
 forge	mods/classes/forge.cpp	/^	forge::forge(player_ptr_t p){$/;"	f	class:mods::classes::forge
 forge	mods/classes/forge.cpp	/^namespace mods::class_abilities::forge {$/;"	n	class:mods::class_abilities	file:
@@ -7528,8 +7571,9 @@ game_room_vnum_list	mods/orm/mini-game.hpp	/^		std::vector<room_vnum_t> game_roo
 game_type	mods/orm/mini-game.hpp	/^		std::string game_type;$/;"	m	struct:mods::orm::mini_game
 game_vnum	mods/orm/mini-game.hpp	/^		game_vnum_t game_vnum;$/;"	m	struct:mods::orm::mini_game
 gather_contract_steps_by_contract_vnum	mods/orm/contract-steps.cpp	/^	std::tuple<int16_t,std::string> gather_contract_steps_by_contract_vnum(const contract_vnum_t& contract_vnum,std::deque<std::shared_ptr<mods::orm::contract_steps>>* in_list_ptr) {$/;"	f	namespace:mods::orm
-gather_contract_steps_by_contract_vnum	mods/orm/scripted-sequences.cpp	/^	std::tuple<int16_t,std::string> gather_contract_steps_by_contract_vnum(const contract_vnum_t& contract_vnum,std::deque<std::shared_ptr<mods::orm::contract_steps>>* in_list_ptr) {$/;"	f	namespace:mods::orm
 gather_room	mods/sensor-grenade.cpp	/^	void gather_room(uuid_t nade_uuid,room_rnum& room,uint8_t from_direction) {$/;"	f	namespace:mods::sensor_grenade
+gather_scripted_steps_by_scripted_vnum	mods/orm/scripted-step.cpp	/^	std::tuple<int16_t,std::string> gather_scripted_steps_by_scripted_vnum(const sequence_vnum_t& scripted_vnum,std::deque<std::shared_ptr<mods::orm::scripted_step>>* in_list_ptr) {$/;"	f	namespace:mods::orm
+gather_scripted_steps_by_sequence_vnum	mods/orm/scripted-step.cpp	/^	std::tuple<int16_t,std::string> gather_scripted_steps_by_sequence_vnum(const sequence_vnum_t& scripted_vnum,std::deque<std::shared_ptr<mods::orm::scripted_sequences>>* list) {$/;"	f	namespace:mods::orm
 gdns	mods/lmdb/conf.cpp	/^namespace gdns {$/;"	n	file:
 gdns	mods/lmdb/conf.hpp	/^namespace gdns {$/;"	n
 gdns	mods/lmdb/db.hpp	/^namespace gdns {$/;"	n
@@ -8114,8 +8158,6 @@ id	mods/orm/rifle-attachment.hpp	/^		uint64_t id;$/;"	m	struct:mods::orm::rifle_
 id	mods/orm/rifle-attachment.hpp	/^		uint64_t id;$/;"	m	struct:mods::orm::rifle_attachment_record_t
 id	mods/orm/rifle-index.hpp	/^		id_type_t id;$/;"	m	struct:mods::orm::rifle_index
 id	mods/orm/room.hpp	/^		uint64_t id;$/;"	m	struct:mods::orm::room
-id	mods/orm/scripted-sequences.hpp	/^		uint64_t id;$/;"	m	struct:mods::orm::contract_steps
-id	mods/orm/scripted-sequences.hpp	/^		uint64_t id;$/;"	m	struct:mods::orm::contract_steps_record_t
 id	mods/orm/skill-trees.hpp	/^		uint64_t id;$/;"	m	struct:mods::orm::skill_trees_record_t
 id	mods/orm/sniper.hpp	/^		uint64_t id;$/;"	m	struct:mods::orm::sniper
 id	mods/orm/striker.hpp	/^		uint64_t id;$/;"	m	struct:mods::orm::striker
@@ -8155,7 +8197,6 @@ id_column	mods/orm/pyrexia.hpp	/^		std::string id_column(){ return "pyrexia_id";
 id_column	mods/orm/rifle-attachment.hpp	/^		std::string id_column() {$/;"	f	struct:mods::orm::rifle_attachment
 id_column	mods/orm/rifle-index.hpp	/^		std::string id_column() const {$/;"	f	struct:mods::orm::rifle_index
 id_column	mods/orm/rifle-instance.hpp	/^		std::string id_column() {$/;"	f	struct:mods::orm::rifle_instance
-id_column	mods/orm/scripted-sequences.hpp	/^		std::string id_column() const {$/;"	f	struct:mods::orm::contract_steps
 id_column	mods/orm/skill-points.hpp	/^		std::string id_column() const {$/;"	f	struct:mods::orm::skill_points
 id_column	mods/orm/skill-trees.hpp	/^		std::string id_column() const {$/;"	f	struct:mods::orm::skill_trees
 id_column	mods/orm/sniper.hpp	/^		std::string id_column() {$/;"	f	struct:mods::orm::sniper
@@ -8223,6 +8264,7 @@ init	mods/builder/bookmarks.cpp	/^	void init() {$/;"	f	namespace:mods::builder::
 init	mods/builder/conbuild.cpp	/^	void init() {$/;"	f	namespace:mods::builder::conbuild
 init	mods/builder/hqbuild.cpp	/^	void init() {$/;"	f	namespace:mods::builder::hqbuild
 init	mods/builder/meqbuild.cpp	/^	void init() {$/;"	f	namespace:mods::builder::meqbuild
+init	mods/builder/seqbuild.cpp	/^	void init() {$/;"	f	namespace:mods::builder::seqbuild
 init	mods/chargen.cpp	/^		void init(){$/;"	f	namespace:mods::chargen
 init	mods/class-abilities.cpp	/^	void init(){$/;"	f	namespace:mods::class_abilities
 init	mods/classes/engineer.cpp	/^	void engineer::init() {$/;"	f	class:mods::classes::engineer
@@ -8235,6 +8277,7 @@ init	mods/classes/medic.cpp	/^	void medic::init() {$/;"	f	class:mods::classes::m
 init	mods/classes/sniper.cpp	/^	void init() {$/;"	f	namespace:mods::class_abilities::sniper
 init	mods/classes/sniper.cpp	/^	void sniper::init() {$/;"	f	class:mods::classes::sniper
 init	mods/classes/super-user-fiddler.cpp	/^	void init() {$/;"	f	namespace:mods::classes
+init	mods/contract-step-callback.cpp	/^		void init() {$/;"	f	namespace:mods::contract_step_callback_init
 init	mods/contracts.cpp	/^	void init() {$/;"	f	namespace:mods::contracts
 init	mods/date-time.cpp	/^	void init() {$/;"	f	namespace:mods::date_time
 init	mods/debug.hpp	/^	static inline void init(bool tics){ debug_state = std::make_unique<state>(tics); }$/;"	f	namespace:mods::debug
@@ -8293,7 +8336,6 @@ init	mods/orm/rifle-attachment.cpp	/^	void rifle_attachment::init() {$/;"	f	clas
 init	mods/orm/rifle-index.cpp	/^	void rifle_index::init() {$/;"	f	class:mods::orm::rifle_index
 init	mods/orm/rifle-instance.cpp	/^	void rifle_instance::init() {$/;"	f	class:mods::orm::rifle_instance
 init	mods/orm/room.cpp	/^	void room::init() {$/;"	f	class:mods::orm::room
-init	mods/orm/scripted-sequences.cpp	/^	void contract_steps::init() {$/;"	f	class:mods::orm::contract_steps
 init	mods/orm/skill-points.cpp	/^	void skill_points::init() {$/;"	f	class:mods::orm::skill_points
 init	mods/orm/skill-trees.cpp	/^	void skill_trees::init() {$/;"	f	class:mods::orm::skill_trees
 init	mods/orm/sniper.cpp	/^	void sniper::init() {$/;"	f	class:mods::orm::sniper
@@ -8357,7 +8399,8 @@ initialize_row	mods/orm/rifle-attachment.cpp	/^	uint64_t rifle_attachment::initi
 initialize_row	mods/orm/rifle-attachment.cpp	/^	uint64_t rifle_attachment::initialize_row(const uint64_t& player_id,std::string_view desc, std::string_view position) {$/;"	f	class:mods::orm::rifle_attachment
 initialize_row	mods/orm/rifle-instance.cpp	/^	uint64_t rifle_instance::initialize_row(obj_ptr_t& obj) {$/;"	f	class:mods::orm::rifle_instance
 initialize_row	mods/orm/room.cpp	/^	uint64_t room::initialize_row() {$/;"	f	class:mods::orm::room
-initialize_row	mods/orm/scripted-sequences.cpp	/^	uint64_t contract_steps::initialize_row(const contract_vnum_t& i_vnum) {$/;"	f	class:mods::orm::contract_steps
+initialize_row	mods/orm/scripted-step.cpp	/^	uint64_t scripted_sequences::initialize_row(const sequence_vnum_t& i_vnum) {$/;"	f	class:mods::orm::scripted_sequences
+initialize_row	mods/orm/scripted-step.cpp	/^	uint64_t scripted_step::initialize_row(const sequence_vnum_t& i_vnum) {$/;"	f	class:mods::orm::scripted_step
 initialize_row	mods/orm/sniper.cpp	/^	uint64_t sniper::initialize_row(player_ptr_t& player) {$/;"	f	class:mods::orm::sniper
 initialize_row	mods/orm/striker.cpp	/^	uint64_t striker::initialize_row(player_ptr_t &player, primary_choice_t primary_choice) {$/;"	f	class:mods::orm::striker
 initialize_row	mods/orm/support.cpp	/^	uint64_t support::initialize_row(player_ptr_t& player) {$/;"	f	class:mods::orm::support
@@ -8685,6 +8728,7 @@ load	mods/mini-games.cpp	/^	void load(mini_game_payload_t g) {$/;"	f	namespace:m
 load_all	mods/builder/conbuild.cpp	/^		void load_all() {$/;"	f	struct:mods::builder::conbuild::conbuild_interface
 load_all	mods/builder/hqbuild.cpp	/^	void load_all() {$/;"	f	namespace:mods::builder::hqbuild
 load_all	mods/builder/meqbuild.cpp	/^		void load_all() {$/;"	f	struct:mods::builder::meqbuild::meqbuild_interface
+load_all	mods/builder/seqbuild.cpp	/^		void load_all() {$/;"	f	struct:mods::builder::seqbuild::seqbuild_interface
 load_all	mods/orm/armor-index.cpp	/^	std::tuple<int16_t,std::string> armor_index::load_all() {$/;"	f	class:mods::orm::armor_index
 load_all	mods/orm/mini-game.cpp	/^	void mini_game::load_all(){$/;"	f	class:mods::orm::mini_game
 load_all	mods/orm/mob-roam.cpp	/^	std::tuple<int16_t,std::string> mob_roam::load_all() {$/;"	f	class:mods::orm::mob_roam
@@ -8696,12 +8740,17 @@ load_all	mods/pq.hpp	/^static inline std::tuple<int16_t,std::string> load_all(TO
 load_all	mods/world-configuration.cpp	/^	rooms_t load_all() {$/;"	f	namespace:mods::world_conf
 load_all_armor_index_data	mods/orm/armor-index.cpp	/^	std::tuple<int16_t,std::string> load_all_armor_index_data(std::map<std::string,std::vector<std::string>>* storage_ptr) {$/;"	f	namespace:mods::orm
 load_all_by_table	mods/orm/orm-base.hpp	/^	static inline std::deque<std::shared_ptr<TObject>> load_all_by_table() {$/;"	f	namespace:mods::orm
+load_all_contract_step_callbacks	mods/contract-step-callback.cpp	/^	void load_all_contract_step_callbacks() {$/;"	f	namespace:mods
+load_all_contract_step_callbacks	mods/orm/scripted-step.cpp	/^	std::tuple<int16_t,std::string> load_all_contract_step_callbacks() {$/;"	f	namespace:mods::orm
 load_all_contracts	mods/contracts.cpp	/^	void load_all_contracts() {$/;"	f	namespace:mods::contracts
 load_all_non_orm_contracts	mods/orm/contracts.cpp	/^	std::tuple<int16_t,std::string> load_all_non_orm_contracts(std::deque<std::shared_ptr<mods::contracts::contract>>* list) {$/;"	f	namespace:mods::orm
 load_all_rifle_index_data	mods/orm/rifle-index.cpp	/^	std::tuple<int16_t,std::string> load_all_rifle_index_data(std::map<std::string,std::vector<std::string>>* storage_ptr) {$/;"	f	namespace:mods::orm
 load_all_roaming_data	mods/orm/mob-roam.cpp	/^	std::tuple<int16_t,std::string> load_all_roaming_data(std::map<mob_vnum,std::vector<room_vnum>>* storage_ptr) {$/;"	f	namespace:mods::orm
+load_all_scripted_data	mods/orm/scripted-step.cpp	/^	std::tuple<int16_t,std::string> load_all_scripted_data() {$/;"	f	namespace:mods::orm
+load_all_scripted_sequences	mods/orm/scripted-step.cpp	/^	std::tuple<int16_t,std::string> load_all_scripted_sequences() {$/;"	f	namespace:mods::orm
 load_all_scripted_sequencess	mods/scripted-sequences.cpp	/^	void load_all_scripted_sequencess() {$/;"	f	namespace:mods
 load_all_scripted_step	mods/scripted-step.cpp	/^	void load_all_scripted_step() {$/;"	f	namespace:mods
+load_all_scripted_steps	mods/orm/scripted-step.cpp	/^	std::tuple<int16_t,std::string> load_all_scripted_steps() {$/;"	f	namespace:mods::orm
 load_all_skill_points	mods/orm/skill-points.cpp	/^	std::tuple<int16_t,std::string> load_all_skill_points(std::map<uint16_t,uint16_t>* storage_ptr) {$/;"	f	namespace:mods::orm
 load_banned	ban.cpp	/^void load_banned(void) {$/;"	f
 load_banned	mods/hell.hpp	/^	constexpr inline bool load_banned = false;$/;"	m	namespace:mods::hell
@@ -8711,7 +8760,6 @@ load_by_class	mods/orm/skill-trees.cpp	/^	std::tuple<int16_t,std::string> skill_
 load_by_column	mods/orm/util.hpp	/^	static inline std::tuple<int16_t,std::string> load_by_column(TObject* s,std::string_view column,std::string_view value) {$/;"	f	namespace:mods::orm::util
 load_by_column	mods/pq.hpp	/^static inline std::tuple<int16_t,std::string> load_by_column(TObject& s,std::string_view column,std::string_view value) {$/;"	f
 load_by_contract_vnum	mods/orm/contract-steps.cpp	/^	std::tuple<int16_t,std::string> contract_steps::load_by_contract_vnum(const contract_vnum_t& contract_vnum) {$/;"	f	class:mods::orm::contract_steps
-load_by_contract_vnum	mods/orm/scripted-sequences.cpp	/^	std::tuple<int16_t,std::string> contract_steps::load_by_contract_vnum(const contract_vnum_t& contract_vnum) {$/;"	f	class:mods::orm::contract_steps
 load_by_id	mods/orm/quotes.hpp	/^			bool load_by_id(const TIDType & id){$/;"	f	struct:mods::orm::base_quotes
 load_by_id	mods/orm/rifle-instance.cpp	/^	int16_t rifle_instance::load_by_id(uint64_t in_rifle_id) {$/;"	f	class:mods::orm::rifle_instance
 load_by_mob_vnum	mods/orm/mob-equipment-map.cpp	/^	int16_t mob_equipment_map::load_by_mob_vnum(const uint64_t& mob_vnum) {$/;"	f	class:mods::orm::mob_equipment_map
@@ -8749,6 +8797,7 @@ load_by_player	mods/orm/syndrome.cpp	/^	int16_t syndrome::load_by_player(uint64_
 load_by_profile	mods/orm/hq.cpp	/^	int16_t hq::load_by_profile(std::string_view affiliation) {$/;"	f	class:mods::orm::hq
 load_by_profile	mods/orm/mob-equipment.cpp	/^	int16_t mob_equipment::load_by_profile(std::string_view profile_name) {$/;"	f	class:mods::orm::mob_equipment
 load_by_room_vnum	mods/orm/mini-game.cpp	/^	void mini_game::load_by_room_vnum(room_vnum game_room_vnum){$/;"	f	class:mods::orm::mini_game
+load_by_sequence_vnum	mods/orm/scripted-step.cpp	/^	std::tuple<int16_t,std::string> scripted_sequences::load_by_sequence_vnum(const sequence_vnum_t& scripted_vnum) {$/;"	f	class:mods::orm::scripted_sequences
 load_by_shop_vnum	mods/orm/shop.cpp	/^	int16_t shop_objects::load_by_shop_vnum(shop_vnum in_shop_vnum){$/;"	f	class:mods::orm::shop_objects
 load_by_shop_vnum	mods/orm/shop.cpp	/^	int16_t shop_rooms::load_by_shop_vnum(shop_vnum in_shop_vnum){$/;"	f	class:mods::orm::shop_rooms
 load_c_functions	mods/js.cpp	/^		void load_c_functions() {$/;"	f	namespace:mods::js
@@ -8818,7 +8867,8 @@ loaded	mods/orm/pyrexia.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::pyrexia
 loaded	mods/orm/rifle-attachment.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::rifle_attachment
 loaded	mods/orm/rifle-index.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::rifle_index
 loaded	mods/orm/rifle-instance.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::rifle_instance
-loaded	mods/orm/scripted-sequences.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::contract_steps
+loaded	mods/orm/scripted-step.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::contract_step_callback
+loaded	mods/orm/scripted-step.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::scripted_sequences
 loaded	mods/orm/shop.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::shop
 loaded	mods/orm/skill-points.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::skill_points
 loaded	mods/orm/skill-trees.hpp	/^		bool loaded;$/;"	m	struct:mods::orm::skill_trees
@@ -8923,6 +8973,7 @@ m_auto_update_step	mods/player-contract-instance.cpp	/^	void player_contract_ins
 m_automatically_clear	mods/builder/slotted-builder.hpp	/^			bool m_automatically_clear;$/;"	m	struct:mods::builder::slotted_builder
 m_base_command	mods/builder/slotted-builder.hpp	/^			std::string m_base_command;$/;"	m	struct:mods::builder::slotted_builder
 m_basic_protection	mods/player.hpp	/^			std::shared_ptr<mods::armor::basic_protection> m_basic_protection;$/;"	m	struct:mods::player
+m_blank_str_vector	mods/orm/scripted-step.hpp	/^	static std::vector<std::string> m_blank_str_vector;$/;"	m	namespace:mods::orm
 m_block	mods/acl/config-parser.cpp	/^        int FileParser::m_block(void){$/;"	f	class:mods::acl::FileParser
 m_block_data	mods/player.hpp	/^			std::unordered_map<uint32_t,uuid_t> m_block_data;$/;"	m	struct:mods::player
 m_block_event	mods/player.hpp	/^			event_queue_iterator m_block_event;$/;"	m	struct:mods::player
@@ -9030,7 +9081,9 @@ m_current_step	mods/player-contract-instance.hpp	/^			mods::contracts::contract_
 m_currently_hacking	mods/player.hpp	/^			uint32_t m_currently_hacking;$/;"	m	struct:mods::player
 m_custom_accumulator_command_map	mods/builder/slotted-builder.hpp	/^			std::map<std::string,custom_accumulator_command_t> m_custom_accumulator_command_map;$/;"	m	struct:mods::builder::slotted_builder
 m_custom_command_map	mods/builder/slotted-builder.hpp	/^			std::map<std::string,custom_command_t> m_custom_command_map;$/;"	m	struct:mods::builder::slotted_builder
+m_custom_indexed_accumulator_command_map	mods/builder/slotted-builder.hpp	/^			std::map<std::string,custom_indexed_accumulator_command_t> m_custom_indexed_accumulator_command_map;$/;"	m	struct:mods::builder::slotted_builder
 m_custom_integral_accumulator_command_map	mods/builder/slotted-builder.hpp	/^			std::map<std::string,custom_integral_accumulator_command_t> m_custom_integral_accumulator_command_map;$/;"	m	struct:mods::builder::slotted_builder
+m_custom_manual_command_map	mods/builder/slotted-builder.hpp	/^			std::map<std::string,custom_manual_command_t> m_custom_manual_command_map;$/;"	m	struct:mods::builder::slotted_builder
 m_custom_non_profile_command_map	mods/builder/slotted-builder.hpp	/^			std::map<std::string,custom_non_profile_command_t> m_custom_non_profile_command_map;$/;"	m	struct:mods::builder::slotted_builder
 m_d_map	mods/acl/config-parser.hpp	/^                command_map m_d_map;$/;"	m	class:mods::acl::FileParser
 m_damage_accumulation	mods/weapons/shotgun-sasg12.hpp	/^				uint32_t m_damage_accumulation;$/;"	m	struct:mods::weapons::shotgun::sasg12
@@ -9588,6 +9641,7 @@ mana_min	spells.h	/^	int mana_min;	\/* Min amount of mana used by a spell (highe
 manufacturer	mods/yaml.hpp	/^		std::string manufacturer;$/;"	m	struct:mods::yaml::yaml_description_t
 map	mods/builder/conbuild.cpp	/^	namespace map {$/;"	n	namespace:mods::builder::conbuild	file:
 map	mods/builder/meqbuild.cpp	/^	namespace map {$/;"	n	namespace:mods::builder::meqbuild	file:
+map	mods/builder/seqbuild.cpp	/^	namespace map {$/;"	n	namespace:mods::builder::seqbuild	file:
 map2str	mods/util.hpp	/^	std::string map2str(std::map<TKey,TVal> in_map) {$/;"	f	namespace:mods::util
 map_generator	mods/fluxkraft/generator.cpp	/^	mods::fluxkraft::generator map_generator;$/;"	m	namespace:mods::fluxkraft	file:
 map_keys	globals.cpp	/^std::vector<str_t> map_keys(str_map_t& m) {$/;"	f
@@ -9885,6 +9939,8 @@ mods	mods/behaviour_tree_status.hpp	/^namespace mods {$/;"	n
 mods	mods/builder.cpp	/^namespace mods {$/;"	n	file:
 mods	mods/camera.cpp	/^namespace mods {$/;"	n	file:
 mods	mods/camera.hpp	/^namespace mods {$/;"	n
+mods	mods/contract-step-callback.cpp	/^namespace mods {$/;"	n	file:
+mods	mods/contract-step-callback.hpp	/^namespace mods {$/;"	n
 mods	mods/contracts.hpp	/^namespace mods {$/;"	n
 mods	mods/cron.hpp	/^namespace mods {$/;"	n
 mods	mods/deep-object-parser.cpp	/^namespace mods {$/;"	n	file:
@@ -9987,7 +10043,7 @@ mtp_debug	mods/target-practice-db.cpp	38;"	d	file:
 mtp_debug	mods/target-practice.cpp	11;"	d	file:
 mtp_debug	mods/target-practice.cpp	13;"	d	file:
 mtp_debug	mods/target-practice.cpp	62;"	d	file:
-mu_debug	mods/util.cpp	1123;"	d	file:
+mu_debug	mods/util.cpp	1132;"	d	file:
 mu_debug	mods/util.cpp	16;"	d	file:
 mu_debug	mods/util.cpp	18;"	d	file:
 mud_time_passed	utils.cpp	/^struct time_info_data *mud_time_passed(time_t t2, time_t t1) {$/;"	f
@@ -10291,6 +10347,7 @@ operator chdata_ptr	mods/mobs/mob.hpp	/^			operator chdata_ptr() const {$/;"	f	c
 operator chdata_ptr	mods/player.hpp	/^			operator chdata_ptr() const {$/;"	f	struct:mods::player
 operator chdata_ptr	mods/player.hpp	/^			operator chdata_ptr() {$/;"	f	struct:mods::player
 operator const char*	mods/string.hpp	/^		explicit operator const char*() const { return m_str.length() == 0 ? nullptr : m_str.c_str(); }$/;"	f	struct:mods::string
+operator mods::scripted_step	mods/orm/scripted-step.hpp	/^		operator mods::scripted_step() const {$/;"	f	struct:mods::orm::scripted_step
 operator std::string	mods/catch2.hpp	/^        explicit operator std::string() const {$/;"	f	class:Catch::StringRef
 operator std::string	mods/string.hpp	/^		explicit operator std::string() const { return m_str; }$/;"	f	struct:mods::string
 operator |	mods/catch.hpp	/^	inline ResultDisposition::Flags operator | (ResultDisposition::Flags lhs, ResultDisposition::Flags rhs) {$/;"	f	namespace:Catch
@@ -10302,6 +10359,7 @@ optr	globals.cpp	/^obj_ptr_t optr(obj_data* in_obj) {$/;"	f
 optr_by_uuid	globals.cpp	/^obj_ptr_t optr_by_uuid(uuid_t id) {$/;"	f
 optr_opt	globals.cpp	/^std::optional<obj_ptr_t> optr_opt(uuid_t obj_uuid) {$/;"	f
 order	mods/mini-games.hpp	/^		int order;$/;"	m	struct:mods::mini_games::mini_game_payload_t
+order	mods/scripted-step.hpp	/^		uint16_t order;$/;"	m	struct:mods::scripted_step
 order_by	mods/sql.hpp	/^			compositor<T>& order_by(std::string column,std::string direction) {$/;"	f	struct:mods::sql::compositor
 org	spell_parser.cpp	/^	const char *org;$/;"	m	struct:syllable	file:
 orig_exit_group_type	mods/lmdb/gethostbyname.cpp	/^typedef void (*orig_exit_group_type)(int status);$/;"	t	file:
@@ -10377,8 +10435,8 @@ orm	mods/orm/rifle-instance.cpp	/^namespace mods::orm {$/;"	n	class:mods	file:
 orm	mods/orm/rifle-instance.hpp	/^namespace mods::orm {$/;"	n	class:mods
 orm	mods/orm/room.cpp	/^namespace mods::orm {$/;"	n	class:mods	file:
 orm	mods/orm/room.hpp	/^namespace mods::orm {$/;"	n	class:mods
-orm	mods/orm/scripted-sequences.cpp	/^namespace mods::orm {$/;"	n	class:mods	file:
-orm	mods/orm/scripted-sequences.hpp	/^namespace mods::orm {$/;"	n	class:mods
+orm	mods/orm/scripted-step.cpp	/^namespace mods::orm {$/;"	n	class:mods	file:
+orm	mods/orm/scripted-step.hpp	/^namespace mods::orm {$/;"	n	class:mods
 orm	mods/orm/shop.cpp	/^namespace mods::orm {$/;"	n	class:mods	file:
 orm	mods/orm/shop.hpp	/^namespace mods::orm {$/;"	n	class:mods
 orm	mods/orm/skill-points.cpp	/^namespace mods::orm {$/;"	n	class:mods	file:
@@ -10818,8 +10876,6 @@ primary_key_name	mods/orm/rifle-index.hpp	/^		std::string primary_key_name() {$/
 primary_key_name	mods/orm/rifle-index.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::rifle_index_record_t
 primary_key_name	mods/orm/rifle-instance.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::rifle_instance
 primary_key_name	mods/orm/room.hpp	/^		std::string primary_key_name() const {$/;"	f	struct:mods::orm::room
-primary_key_name	mods/orm/scripted-sequences.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::contract_steps
-primary_key_name	mods/orm/scripted-sequences.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::contract_steps_record_t
 primary_key_name	mods/orm/skill-points.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::skill_points
 primary_key_name	mods/orm/skill-points.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::skill_points_record_t
 primary_key_name	mods/orm/skill-trees.hpp	/^		std::string primary_key_name() {$/;"	f	struct:mods::orm::skill_trees
@@ -10857,7 +10913,8 @@ primary_key_value	mods/orm/rifle-attachment.hpp	/^		std::string primary_key_valu
 primary_key_value	mods/orm/rifle-index.hpp	/^		std::string primary_key_value() {$/;"	f	struct:mods::orm::rifle_index
 primary_key_value	mods/orm/rifle-instance.hpp	/^		std::string primary_key_value() {$/;"	f	struct:mods::orm::rifle_instance
 primary_key_value	mods/orm/room.hpp	/^		std::string primary_key_value() {$/;"	f	struct:mods::orm::room
-primary_key_value	mods/orm/scripted-sequences.cpp	/^	std::string contract_steps::primary_key_value() {$/;"	f	class:mods::orm::contract_steps
+primary_key_value	mods/orm/scripted-step.cpp	/^	std::string scripted_sequences::primary_key_value() {$/;"	f	class:mods::orm::scripted_sequences
+primary_key_value	mods/orm/scripted-step.cpp	/^	std::string scripted_step::primary_key_value() {$/;"	f	class:mods::orm::scripted_step
 primary_key_value	mods/orm/skill-points.hpp	/^		std::string primary_key_value() {$/;"	f	struct:mods::orm::skill_points
 primary_key_value	mods/orm/skill-trees.hpp	/^		std::string primary_key_value() {$/;"	f	struct:mods::orm::skill_trees
 primary_key_value	mods/orm/sniper.hpp	/^		std::string primary_key_value() {$/;"	f	struct:mods::orm::sniper
@@ -11002,7 +11059,7 @@ pyrexia_seal_off_room_with_wall_of_fire_level	mods/orm/pyrexia.hpp	/^		skill_fam
 pyrexia_solar_assistance_level	mods/orm/pyrexia.hpp	/^		skill_familiarity_t pyrexia_solar_assistance_level;$/;"	m	struct:mods::orm::pyrexia
 pyrexia_summon_napalm_strike_level	mods/orm/pyrexia.hpp	/^		skill_familiarity_t pyrexia_summon_napalm_strike_level;$/;"	m	struct:mods::orm::pyrexia
 q	random.cpp	46;"	d	file:
-quantity	mods/scripted-step.hpp	/^		uint8_t quantity;$/;"	m	struct:mods::scripted_step
+quantity	mods/scripted-step.hpp	/^		uint16_t quantity;$/;"	m	struct:mods::scripted_step
 query_contents_by_yaml	mods/query-objects.cpp	/^	std::vector<uuid_t> query_contents_by_yaml(obj_ptr_t& found_object,std::string_view file) {$/;"	f	namespace:mods::query_objects
 query_contents_by_yaml_multi	mods/query-objects.cpp	/^	std::vector<uuid_t> query_contents_by_yaml_multi(obj_ptr_t& found_object,const std::vector<std::string>& files) {$/;"	f	namespace:mods::query_objects
 query_contents_by_yaml_multi	mods/query-objects.cpp	/^	std::vector<uuid_t> query_contents_by_yaml_multi(room_rnum room,std::string_view container,const std::vector<std::string>& files) {$/;"	f	namespace:mods::query_objects
@@ -11185,9 +11242,11 @@ register_damage_event_callback	mods/player.cpp	/^	void player::register_damage_e
 register_engineer	mods/replenish.cpp	/^	void register_engineer(uuid_t engineer){$/;"	f	namespace:mods::replenish
 register_ghost	mods/replenish.cpp	/^	void register_ghost(uuid_t ghost){$/;"	f	namespace:mods::replenish
 register_help_command_with_permission	mods/help.cpp	/^	void register_help_command_with_permission(const std::string& command, const std::string& contents,player_level level) {$/;"	f	namespace:mods::help
+register_indexed_accumulator_command	mods/builder/slotted-builder.hpp	/^			status_response_t register_indexed_accumulator_command(std::string verb, std::string_view signature,auto lambda) {$/;"	f	struct:mods::builder::slotted_builder
 register_integral_accumulator_command	mods/builder/slotted-builder.hpp	/^			status_response_t register_integral_accumulator_command(std::string verb, std::string_view signature,auto lambda) {$/;"	f	struct:mods::builder::slotted_builder
 register_intent_to_attack	mods/intent.cpp	/^	void register_intent_to_attack($/;"	f	namespace:mods::intent
 register_intent_to_flee	mods/intent.cpp	/^	void register_intent_to_flee($/;"	f	namespace:mods::intent
+register_manual_command	mods/builder/slotted-builder.hpp	/^			status_response_t register_manual_command(std::string verb, std::string_view signature, auto lambda) {$/;"	f	struct:mods::builder::slotted_builder
 register_marine	mods/replenish.cpp	/^	void register_marine(uuid_t marine){$/;"	f	namespace:mods::replenish
 register_medic	mods/replenish.cpp	/^	void register_medic(uuid_t medic){$/;"	f	namespace:mods::replenish
 register_mob	mods/behaviour_tree_impl.cpp	/^	int8_t register_mob(argument_type mob,std::string tree_name) {$/;"	f	namespace:mods::behaviour_tree_impl
@@ -11596,7 +11655,7 @@ rows	mods/orm/player-skill-points.hpp	/^		std::vector<player_skill_points_record
 rows	mods/orm/player-skill-usage.hpp	/^		std::vector<player_skill_usage_record_t> rows;$/;"	m	struct:mods::orm::player_skill_usage
 rows	mods/orm/rifle-attachment.hpp	/^		std::deque<rifle_attachment_record_t> rows;$/;"	m	struct:mods::orm::rifle_attachment
 rows	mods/orm/rifle-index.hpp	/^		std::vector<rifle_index_record_t> rows;$/;"	m	struct:mods::orm::rifle_index
-rows	mods/orm/scripted-sequences.hpp	/^		std::vector<contract_steps_record_t> rows;$/;"	m	struct:mods::orm::contract_steps
+rows	mods/orm/scripted-step.hpp	/^		std::vector<scripted_step> rows;$/;"	m	struct:mods::orm::scripted_sequences
 rows	mods/orm/skill-points.hpp	/^		std::vector<skill_points_record_t> rows;$/;"	m	struct:mods::orm::skill_points
 rows	mods/orm/skill-trees.hpp	/^		std::vector<skill_trees_record_t> rows;$/;"	m	struct:mods::orm::skill_trees
 rr_debug	mods/intimidate.cpp	11;"	d	file:
@@ -11629,93 +11688,49 @@ s	mods/rand.cpp	/^	static uint64_t s[4];$/;"	m	namespace:mods::rand::xoroshiro	f
 s_addr	sysdep.h	/^	unsigned long int s_addr;	\/* for inet_addr, etc. *\/$/;"	m	struct:in_addr
 s_contract_vnum	mods/orm/contract-steps.hpp	/^		contract_vnum_t s_contract_vnum;$/;"	m	struct:mods::orm::contract_steps
 s_contract_vnum	mods/orm/contract-steps.hpp	/^		contract_vnum_t s_contract_vnum;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_contract_vnum	mods/orm/scripted-sequences.hpp	/^		contract_vnum_t s_contract_vnum;$/;"	m	struct:mods::orm::contract_steps
-s_contract_vnum	mods/orm/scripted-sequences.hpp	/^		contract_vnum_t s_contract_vnum;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_description	mods/orm/contract-steps.hpp	/^		std::string s_description;$/;"	m	struct:mods::orm::contract_steps
 s_description	mods/orm/contract-steps.hpp	/^		std::string s_description;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_description	mods/orm/scripted-sequences.hpp	/^		std::string s_description;$/;"	m	struct:mods::orm::contract_steps
-s_description	mods/orm/scripted-sequences.hpp	/^		std::string s_description;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_empty	mods/catch2.hpp	/^        static constexpr char const* const s_empty = "";$/;"	m	class:Catch::StringRef
 s_is_optional	mods/orm/contract-steps.hpp	/^		bool s_is_optional;$/;"	m	struct:mods::orm::contract_steps
 s_is_optional	mods/orm/contract-steps.hpp	/^		bool s_is_optional;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_is_optional	mods/orm/scripted-sequences.hpp	/^		bool s_is_optional;$/;"	m	struct:mods::orm::contract_steps
-s_is_optional	mods/orm/scripted-sequences.hpp	/^		bool s_is_optional;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_mob_vnum	mods/orm/contract-steps.hpp	/^		mob_vnum s_mob_vnum;$/;"	m	struct:mods::orm::contract_steps
 s_mob_vnum	mods/orm/contract-steps.hpp	/^		mob_vnum s_mob_vnum;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_mob_vnum	mods/orm/scripted-sequences.hpp	/^		mob_vnum s_mob_vnum;$/;"	m	struct:mods::orm::contract_steps
-s_mob_vnum	mods/orm/scripted-sequences.hpp	/^		mob_vnum s_mob_vnum;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_object_yaml	mods/orm/contract-steps.hpp	/^		std::string s_object_yaml;$/;"	m	struct:mods::orm::contract_steps
 s_object_yaml	mods/orm/contract-steps.hpp	/^		std::string s_object_yaml;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_object_yaml	mods/orm/scripted-sequences.hpp	/^		std::string s_object_yaml;$/;"	m	struct:mods::orm::contract_steps
-s_object_yaml	mods/orm/scripted-sequences.hpp	/^		std::string s_object_yaml;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_order	mods/orm/contract-steps.hpp	/^		uint8_t s_order;$/;"	m	struct:mods::orm::contract_steps
 s_order	mods/orm/contract-steps.hpp	/^		uint8_t s_order;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_order	mods/orm/scripted-sequences.hpp	/^		uint8_t s_order;$/;"	m	struct:mods::orm::contract_steps
-s_order	mods/orm/scripted-sequences.hpp	/^		uint8_t s_order;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_quota	mods/orm/contract-steps.hpp	/^		quota_t s_quota;$/;"	m	struct:mods::orm::contract_steps
 s_quota	mods/orm/contract-steps.hpp	/^		quota_t s_quota;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_quota	mods/orm/scripted-sequences.hpp	/^		quota_t s_quota;$/;"	m	struct:mods::orm::contract_steps
-s_quota	mods/orm/scripted-sequences.hpp	/^		quota_t s_quota;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_reward_1	mods/orm/contract-steps.hpp	/^		std::string s_reward_1;$/;"	m	struct:mods::orm::contract_steps
 s_reward_1	mods/orm/contract-steps.hpp	/^		std::string s_reward_1;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_reward_1	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_1;$/;"	m	struct:mods::orm::contract_steps
-s_reward_1	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_1;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_reward_10	mods/orm/contract-steps.hpp	/^		std::string s_reward_10;$/;"	m	struct:mods::orm::contract_steps
 s_reward_10	mods/orm/contract-steps.hpp	/^		std::string s_reward_10;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_reward_10	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_10;$/;"	m	struct:mods::orm::contract_steps
-s_reward_10	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_10;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_reward_2	mods/orm/contract-steps.hpp	/^		std::string s_reward_2;$/;"	m	struct:mods::orm::contract_steps
 s_reward_2	mods/orm/contract-steps.hpp	/^		std::string s_reward_2;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_reward_2	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_2;$/;"	m	struct:mods::orm::contract_steps
-s_reward_2	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_2;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_reward_3	mods/orm/contract-steps.hpp	/^		std::string s_reward_3;$/;"	m	struct:mods::orm::contract_steps
 s_reward_3	mods/orm/contract-steps.hpp	/^		std::string s_reward_3;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_reward_3	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_3;$/;"	m	struct:mods::orm::contract_steps
-s_reward_3	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_3;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_reward_4	mods/orm/contract-steps.hpp	/^		std::string s_reward_4;$/;"	m	struct:mods::orm::contract_steps
 s_reward_4	mods/orm/contract-steps.hpp	/^		std::string s_reward_4;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_reward_4	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_4;$/;"	m	struct:mods::orm::contract_steps
-s_reward_4	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_4;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_reward_5	mods/orm/contract-steps.hpp	/^		std::string s_reward_5;$/;"	m	struct:mods::orm::contract_steps
 s_reward_5	mods/orm/contract-steps.hpp	/^		std::string s_reward_5;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_reward_5	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_5;$/;"	m	struct:mods::orm::contract_steps
-s_reward_5	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_5;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_reward_6	mods/orm/contract-steps.hpp	/^		std::string s_reward_6;$/;"	m	struct:mods::orm::contract_steps
 s_reward_6	mods/orm/contract-steps.hpp	/^		std::string s_reward_6;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_reward_6	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_6;$/;"	m	struct:mods::orm::contract_steps
-s_reward_6	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_6;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_reward_7	mods/orm/contract-steps.hpp	/^		std::string s_reward_7;$/;"	m	struct:mods::orm::contract_steps
 s_reward_7	mods/orm/contract-steps.hpp	/^		std::string s_reward_7;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_reward_7	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_7;$/;"	m	struct:mods::orm::contract_steps
-s_reward_7	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_7;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_reward_8	mods/orm/contract-steps.hpp	/^		std::string s_reward_8;$/;"	m	struct:mods::orm::contract_steps
 s_reward_8	mods/orm/contract-steps.hpp	/^		std::string s_reward_8;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_reward_8	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_8;$/;"	m	struct:mods::orm::contract_steps
-s_reward_8	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_8;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_reward_9	mods/orm/contract-steps.hpp	/^		std::string s_reward_9;$/;"	m	struct:mods::orm::contract_steps
 s_reward_9	mods/orm/contract-steps.hpp	/^		std::string s_reward_9;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_reward_9	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_9;$/;"	m	struct:mods::orm::contract_steps
-s_reward_9	mods/orm/scripted-sequences.hpp	/^		std::string s_reward_9;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_reward_money	mods/orm/contract-steps.hpp	/^		uint32_t s_reward_money;$/;"	m	struct:mods::orm::contract_steps
 s_reward_money	mods/orm/contract-steps.hpp	/^		uint32_t s_reward_money;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_reward_money	mods/orm/scripted-sequences.hpp	/^		uint32_t s_reward_money;$/;"	m	struct:mods::orm::contract_steps
-s_reward_money	mods/orm/scripted-sequences.hpp	/^		uint32_t s_reward_money;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_reward_xp	mods/orm/contract-steps.hpp	/^		uint32_t s_reward_xp;$/;"	m	struct:mods::orm::contract_steps
 s_reward_xp	mods/orm/contract-steps.hpp	/^		uint32_t s_reward_xp;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_reward_xp	mods/orm/scripted-sequences.hpp	/^		uint32_t s_reward_xp;$/;"	m	struct:mods::orm::contract_steps
-s_reward_xp	mods/orm/scripted-sequences.hpp	/^		uint32_t s_reward_xp;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_room_vnum	mods/orm/contract-steps.hpp	/^		room_vnum s_room_vnum;$/;"	m	struct:mods::orm::contract_steps
 s_room_vnum	mods/orm/contract-steps.hpp	/^		room_vnum s_room_vnum;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_room_vnum	mods/orm/scripted-sequences.hpp	/^		room_vnum s_room_vnum;$/;"	m	struct:mods::orm::contract_steps
-s_room_vnum	mods/orm/scripted-sequences.hpp	/^		room_vnum s_room_vnum;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_task_target	mods/orm/contract-steps.hpp	/^		task_target_t s_task_target;$/;"	m	struct:mods::orm::contract_steps
 s_task_target	mods/orm/contract-steps.hpp	/^		task_target_t s_task_target;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_task_target	mods/orm/scripted-sequences.hpp	/^		task_target_t s_task_target;$/;"	m	struct:mods::orm::contract_steps
-s_task_target	mods/orm/scripted-sequences.hpp	/^		task_target_t s_task_target;$/;"	m	struct:mods::orm::contract_steps_record_t
 s_task_type	mods/orm/contract-steps.hpp	/^		task_type_t s_task_type;$/;"	m	struct:mods::orm::contract_steps
 s_task_type	mods/orm/contract-steps.hpp	/^		task_type_t s_task_type;$/;"	m	struct:mods::orm::contract_steps_record_t
-s_task_type	mods/orm/scripted-sequences.hpp	/^		task_type_t s_task_type;$/;"	m	struct:mods::orm::contract_steps
-s_task_type	mods/orm/scripted-sequences.hpp	/^		task_type_t s_task_type;$/;"	m	struct:mods::orm::contract_steps_record_t
 same_obj	shop.cpp	/^int same_obj(struct obj_data *obj1, struct obj_data *obj2) {$/;"	f
 sandbox_data_t	mods/builder.cpp	/^	sandbox_data_t::sandbox_data_t($/;"	f	class:mods::builder::sandbox_data_t
 sandbox_data_t	mods/builder.cpp	/^	sandbox_data_t::sandbox_data_t() : m_name("") {}$/;"	f	class:mods::builder::sandbox_data_t
@@ -11759,7 +11774,7 @@ save	mods/orm/pyrexia.hpp	/^		int16_t save(){$/;"	f	struct:mods::orm::pyrexia
 save	mods/orm/rifle-attachment.cpp	/^	int16_t rifle_attachment::save() {$/;"	f	class:mods::orm::rifle_attachment
 save	mods/orm/rifle-index.cpp	/^	int16_t rifle_index::save() {$/;"	f	class:mods::orm::rifle_index
 save	mods/orm/rifle-instance.hpp	/^		int16_t save() {$/;"	f	struct:mods::orm::rifle_instance
-save	mods/orm/scripted-sequences.cpp	/^	int16_t contract_steps::save() {$/;"	f	class:mods::orm::contract_steps
+save	mods/orm/scripted-step.cpp	/^	int16_t scripted_sequences::save() {$/;"	f	class:mods::orm::scripted_sequences
 save	mods/orm/shop.cpp	/^	std::tuple<bool,db_id_t,std::string> shop::save(){$/;"	f	class:mods::orm::shop
 save	mods/orm/skill-points.cpp	/^	int16_t skill_points::save() {$/;"	f	class:mods::orm::skill_points
 save	mods/orm/skill-trees.cpp	/^	int16_t skill_trees::save() {$/;"	f	class:mods::orm::skill_trees
@@ -11780,6 +11795,7 @@ save_from_t	mods/players/db-load.hpp	/^	enum save_from_t {$/;"	g	namespace:mods:
 save_function	mods/builder.cpp	/^	save_function_t save_function;$/;"	m	struct:command_t	file:
 save_hostile_targets	mods/mobs/smart-mob.cpp	/^	void smart_mob::save_hostile_targets(vec_t<uuid_t>& t) {$/;"	f	class:mods::mobs::smart_mob
 save_integer	mods/util.cpp	/^	parsed_args* parsed_args::save_integer(int index) {$/;"	f	class:mods::util::args::parsed_args
+save_integer	mods/util.cpp	/^	parsed_args* parsed_args::save_integer(std::vector<int> index) {$/;"	f	class:mods::util::args::parsed_args
 save_item_to_db	mods/db.cpp	/^void save_item_to_db(player_ptr_t& player, std::string section_name, std::vector<std::string>& args) {$/;"	f
 save_mud_time	db.cpp	/^void save_mud_time(struct time_info_data *when) {$/;"	f
 save_new	mods/orm/integral-object.cpp	/^	int16_t integral_object::save_new(){$/;"	f	class:mods::orm::integral_object
@@ -11795,6 +11811,8 @@ save_room_distance_to_cache	mods/scan.cpp	/^	void save_room_distance_to_cache(co
 save_shop_objects	mods/orm/shop.cpp	/^	void save_shop_objects(shop_objects& so_list){$/;"	f	namespace:mods::orm
 save_shop_rooms	mods/orm/shop.cpp	/^	void save_shop_rooms(shop_rooms& sr_list){$/;"	f	namespace:mods::orm
 save_step_data	mods/player-contract-instance.cpp	/^	void player_contract_instance::save_step_data() {$/;"	f	class:mods::contracts::player_contract_instance
+save_string_field	mods/orm/orm-base.hpp	/^	inline void save_string_field<std::vector<std::string>>(std::vector<std::string> field,std::string_view field_name, strmap_t* exported_data) {$/;"	f	namespace:mods::orm
+save_string_field	mods/orm/orm-base.hpp	/^	void save_string_field(T field,std::string_view field_name,strmap_t* exported_data) {$/;"	f	namespace:mods::orm
 save_targets	mods/mobs/mini-gunner.cpp	/^	void mini_gunner::save_targets(vec_t<uuid_t>& t) {$/;"	f	class:mods::mobs::mini_gunner
 save_targets	mods/mobs/smart-mob.cpp	/^	void smart_mob::save_targets(vec_t<uuid_t>& t) {$/;"	f	class:mods::mobs::smart_mob
 save_to_db	mods/builder.cpp	/^	int save_to_db(room_rnum in_room,std::string& error_string) {$/;"	f	namespace:mods::builder
@@ -11824,14 +11842,23 @@ scheck	comm.cpp	/^int scheck = 0;			\/* for syntax checking mode *\/$/;"	v
 schema	mods/schema.hpp	/^namespace mods::schema { $/;"	n	class:mods
 scope_t	mods/weapon.hpp	/^	enum scope_t {$/;"	g	namespace:mods::weapon
 screen_width	mods/player.cpp	/^	int player::screen_width() {$/;"	f	class:mods::player
+scripted_sequences	mods/orm/scripted-step.cpp	/^	scripted_sequences::scripted_sequences() {$/;"	f	class:mods::orm::scripted_sequences
+scripted_sequences	mods/orm/scripted-step.cpp	/^	scripted_sequences::scripted_sequences(const sequence_vnum_t& scripted_vnum) {$/;"	f	class:mods::orm::scripted_sequences
+scripted_sequences	mods/orm/scripted-step.hpp	/^	struct scripted_sequences : public mods::orm::orm_base<scripted_sequences,std::string> {$/;"	s	namespace:mods::orm
 scripted_sequences	mods/scripted-sequences.hpp	/^	struct scripted_sequences {$/;"	s	namespace:mods
 scripted_sequences_init	mods/init.hpp	/^INIT(mods::scripted_sequences_init);$/;"	v
 scripted_sequences_init	mods/scripted-sequences.cpp	/^	namespace scripted_sequences_init {$/;"	n	namespace:mods	file:
+scripted_sequences_list	mods/orm/scripted-step.cpp	/^	std::deque<std::shared_ptr<scripted_sequences>>& scripted_sequences_list() {$/;"	f	namespace:mods::orm
 scripted_sequences_master_list	mods/scripted-sequences.cpp	/^	std::deque<std::shared_ptr<scripted_sequences>>& scripted_sequences_master_list() {$/;"	f	namespace:mods
+scripted_step	mods/orm/scripted-step.hpp	/^		scripted_step() {$/;"	f	struct:mods::orm::scripted_step
+scripted_step	mods/orm/scripted-step.hpp	/^		scripted_step(const pqxx::result::reference& row) {$/;"	f	struct:mods::orm::scripted_step
+scripted_step	mods/orm/scripted-step.hpp	/^	struct scripted_step : public mods::orm::orm_base<scripted_step,std::string> {$/;"	s	namespace:mods::orm
 scripted_step	mods/scripted-step.hpp	/^	struct scripted_step {$/;"	s	namespace:mods
 scripted_step_init	mods/init.hpp	/^INIT(mods::scripted_step_init);$/;"	v
 scripted_step_init	mods/scripted-step.cpp	/^	namespace scripted_step_init {$/;"	n	namespace:mods	file:
+scripted_step_list	mods/orm/scripted-step.cpp	/^	std::deque<std::shared_ptr<scripted_step>>& scripted_step_list() {$/;"	f	namespace:mods::orm
 scripted_step_master_list	mods/scripted-step.cpp	/^	std::deque<std::shared_ptr<scripted_step>>& scripted_step_master_list() {$/;"	f	namespace:mods
+scripted_steps_list	mods/orm/scripted-step.cpp	/^	std::deque<std::shared_ptr<scripted_step>>& scripted_steps_list() {$/;"	f	namespace:mods::orm
 seal_off_room_with_wall_of_fire	mods/classes/pyrexia.cpp	/^		std::pair<bool,std::string> pyrexia::seal_off_room_with_wall_of_fire(room_rnum room_id){$/;"	f	class:mods::classes::pyrexia
 seal_off_room_with_wall_of_fire	mods/orm/pyrexia.cpp	/^	std::pair<bool,std::string> pyrexia::seal_off_room_with_wall_of_fire(room_rnum room_id){$/;"	f	class:mods::orm::pyrexia
 search	mods/players/search.hpp	/^					search(const scan_results& s) : m_scan_results(s) {$/;"	f	class:mods::player::util::search
@@ -11915,6 +11942,13 @@ sentinel	mods/classes/sentinel.cpp	/^		sentinel::sentinel(player_ptr_t p){$/;"	f
 sentinel	mods/classes/sentinel.hpp	/^	struct sentinel : base {$/;"	s	namespace:mods::classes
 sentinel	mods/weapon.hpp	/^	namespace sentinel {$/;"	n	namespace:mods::weapon
 sentinel_skillset	class.cpp	/^std::string sentinel_skillset() {$/;"	f
+seqbuild	mods/builder/seqbuild.cpp	/^namespace mods::builder::seqbuild {$/;"	n	class:mods::builder	file:
+seqbuild	mods/init.hpp	/^INIT(mods::builder::seqbuild);$/;"	v
+seqbuild_interface	mods/builder/seqbuild.cpp	/^		seqbuild_interface() {$/;"	f	struct:mods::builder::seqbuild::seqbuild_interface
+seqbuild_interface	mods/builder/seqbuild.cpp	/^	struct seqbuild_interface : public slotted_builder<seqbuild_vnum_t,seqbuild_orm_type> {$/;"	s	namespace:mods::builder::seqbuild	file:
+seqbuilder	mods/builder/seqbuild.cpp	/^	static seqbuild_interface& seqbuilder(player_ptr_t player) {$/;"	f	namespace:mods::builder::seqbuild
+sequence_exists	mods/builder/seqbuild.cpp	/^	bool sequence_exists(int vnum) {$/;"	f	namespace:mods::builder::seqbuild
+sequence_vnum	mods/contract-step-callback.hpp	/^		sequence_vnum_t sequence_vnum;$/;"	m	struct:mods::contract_step_callback
 serialize_date	mods/date-time.cpp	/^	std::string serialize_date() {$/;"	f	namespace:mods::date_time
 server	mods/lmdb/db.hpp	/^			server(): m_good(false) {}$/;"	f	struct:gdns::lmdb::server
 server	mods/lmdb/db.hpp	/^			server(const char* file,const char* dbi_name){$/;"	f	struct:gdns::lmdb::server
@@ -12450,12 +12484,16 @@ stc_room	mods/player.cpp	/^	void player::stc_room(const room_rnum& rnum) {$/;"	f
 stc_room_desc	mods/mobs/mob.cpp	/^	void player::stc_room_desc(const room_rnum& rnum) {$/;"	f	class:mods::player
 stealth_levels_t	mods/orm/striker.hpp	/^		enum stealth_levels_t {$/;"	g	struct:mods::orm::striker
 step_by_vnum	mods/builder/conbuild.cpp	/^		std::optional<std::shared_ptr<mods::orm::contract_steps>> step_by_vnum(conbuild_vnum_t vnum) {$/;"	f	struct:mods::builder::conbuild::conbuild_interface
+step_by_vnum	mods/builder/seqbuild.cpp	/^		std::optional<std::shared_ptr<mods::orm::scripted_step>> step_by_vnum(seqbuild_vnum_t vnum) {$/;"	f	struct:mods::builder::seqbuild::seqbuild_interface
 step_counter	mods/player-contract-instance.hpp	/^			const auto& step_counter() const {$/;"	f	struct:mods::contracts::player_contract_instance
 step_list	mods/builder/conbuild.cpp	/^		std::deque<std::shared_ptr<mods::orm::contract_steps>> step_list;$/;"	m	struct:mods::builder::conbuild::conbuild_interface	file:
+step_list	mods/builder/seqbuild.cpp	/^		std::deque<std::shared_ptr<mods::orm::scripted_step>> step_list;$/;"	m	struct:mods::builder::seqbuild::seqbuild_interface	file:
 step_one	mods/weapons/damage-types.cpp	/^		int step_one(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	f	namespace:mods::weapons::damage_types::legacy
 step_two	mods/weapons/damage-types.cpp	/^		int step_two(char_data *ch, char_data *victim, int dam, int attacktype) {$/;"	f	namespace:mods::weapons::damage_types::legacy
+steps	mods/contract-step-callback.hpp	/^		std::vector<scripted_step> steps;$/;"	m	struct:mods::contract_step_callback
 steps	mods/contract-types.hpp	/^		std::vector<contract_step> steps;$/;"	m	struct:mods::contracts::contract
 steps	mods/scripted-sequences.hpp	/^		std::vector<scripted_step> steps;$/;"	m	struct:mods::scripted_sequences
+steps_by_sequence_vnum	mods/builder/seqbuild.cpp	/^	std::deque<std::shared_ptr<mods::orm::scripted_step>> steps_by_sequence_vnum(int vnum) {$/;"	f	namespace:mods::builder::seqbuild
 stfu	mods/util-conf.hpp	/^			static bool stfu = true;$/;"	m	namespace:mods::util::conf
 stim_pistol_ammo	mods/classes/medic.cpp	/^	uint8_t& medic::stim_pistol_ammo() {$/;"	f	class:mods::classes::medic
 stock	mods/rifle-attachments.hpp	/^			obj_ptr_t stock;$/;"	m	struct:mods::rifle_attachments_t
@@ -12625,8 +12663,7 @@ table_name	mods/orm/rifle-index.hpp	/^		std::string table_name() const {$/;"	f	s
 table_name	mods/orm/rifle-index.hpp	/^		std::string table_name() const {$/;"	f	struct:mods::orm::rifle_index_record_t
 table_name	mods/orm/rifle-instance.hpp	/^		std::string table_name() {$/;"	f	struct:mods::orm::rifle_instance
 table_name	mods/orm/room.hpp	/^		std::string table_name() {$/;"	f	struct:mods::orm::room
-table_name	mods/orm/scripted-sequences.hpp	/^		std::string table_name() const {$/;"	f	struct:mods::orm::contract_steps
-table_name	mods/orm/scripted-sequences.hpp	/^		std::string table_name() const {$/;"	f	struct:mods::orm::contract_steps_record_t
+table_name	mods/orm/scripted-step.hpp	/^		std::string table_name() const {$/;"	f	struct:mods::orm::scripted_sequences
 table_name	mods/orm/shop.hpp	/^		static constexpr const char* table_name = "shop_objects";$/;"	m	struct:mods::orm::shop_objects
 table_name	mods/orm/shop.hpp	/^		static constexpr const char* table_name = "shop_rooms";$/;"	m	struct:mods::orm::shop_rooms
 table_name	mods/orm/shop.hpp	/^		static constexpr const char* table_name = "shops";$/;"	m	struct:mods::orm::shop
@@ -12644,7 +12681,6 @@ table_name_value	mods/orm/contracts.hpp	/^		static constexpr const char* table_n
 table_name_value	mods/orm/hq.hpp	/^		static constexpr const char* table_name_value = "hq_locations";$/;"	m	struct:mods::orm::hq
 table_name_value	mods/orm/mob-equipment-map.hpp	/^		static constexpr const char* table_name_value = "mob_equipment_map";$/;"	m	struct:mods::orm::mob_equipment_map
 table_name_value	mods/orm/mob-equipment.hpp	/^		static constexpr const char* table_name_value = "mob_equipment";$/;"	m	struct:mods::orm::mob_equipment
-table_name_value	mods/orm/scripted-sequences.hpp	/^		static constexpr const char* table_name_value = "contract_steps";$/;"	m	struct:mods::orm::contract_steps
 tag	structs.h	/^		std::string tag;$/;"	m	struct:obj_data
 tags	mods/catch2.hpp	/^    StringRef tags;$/;"	m	struct:Catch::NameAndTags
 tail	db.h	/^	struct reset_q_element *tail;$/;"	m	struct:reset_q_type	typeref:struct:reset_q_type::reset_q_element
@@ -12665,6 +12701,9 @@ targeting	mods/mobs/smart-mob.hpp	/^			vec_t<uuid_t> targeting;$/;"	m	struct:mod
 targets	mods/intent.hpp	/^		std::vector<uuid_t> targets;$/;"	m	struct:mods::intent::intent_t
 targets	spells.h	/^	int targets;         \/* See below for use with TAR_XXX  *\/$/;"	m	struct:spell_info_type
 task_string_map	mods/contract-steps.hpp	/^	static inline std::map<std::string,task_t> task_string_map() {$/;"	f
+task_target	mods/contract-step-callback.hpp	/^		std::string task_target;$/;"	m	struct:mods::contract_step_callback
+task_type	mods/contract-step-callback.hpp	/^		std::string task_type;$/;"	m	struct:mods::contract_step_callback
+task_vnum	mods/contract-step-callback.hpp	/^		task_vnum_t task_vnum;$/;"	m	struct:mods::contract_step_callback
 teep_levels_t	mods/orm/striker.hpp	/^		enum teep_levels_t {$/;"	g	struct:mods::orm::striker
 telcmds	telnet.h	/^char *telcmds[] = {$/;"	v
 telopts	telnet.h	/^char *telopts[NTELOPTS+1] = {$/;"	v
@@ -12926,7 +12965,7 @@ update_player_data	mods/orm/player-contract-state.cpp	/^	std::tuple<int16_t,std:
 update_pos	fight.cpp	/^void update_pos(char_data *victim) {$/;"	f
 update_position	mods/weapons/damage-types.cpp	/^		void update_position(char_data* ch) {$/;"	f	namespace:mods::weapons::damage_types::legacy
 update_row	mods/orm/contract-steps.cpp	/^	std::tuple<int16_t,std::string> contract_steps::update_row() {$/;"	f	class:mods::orm::contract_steps
-update_row	mods/orm/scripted-sequences.cpp	/^	std::tuple<int16_t,std::string> contract_steps::update_row() {$/;"	f	class:mods::orm::contract_steps
+update_row	mods/orm/scripted-step.cpp	/^	std::tuple<int16_t,std::string> scripted_step::update_row() {$/;"	f	class:mods::orm::scripted_step
 update_zone_commands	mods/builder.cpp	/^	std::pair<bool,std::string> update_zone_commands(zone_rnum zone_id) {$/;"	f	namespace:mods::builder
 update_zone_with_placements	mods/builder.cpp	/^	std::tuple<bool,zone_pkid_t,std::string> update_zone_with_placements(int virtual_number,player_ptr_t player) {$/;"	f	namespace:mods::builder
 updated_at	mods/orm/breacher.hpp	/^		long updated_at;$/;"	m	struct:mods::orm::breacher
@@ -12952,8 +12991,6 @@ updated_at	mods/orm/player-contract-state.hpp	/^		long updated_at;$/;"	m	struct:
 updated_at	mods/orm/pyrexia.hpp	/^		long updated_at;$/;"	m	struct:mods::orm::pyrexia
 updated_at	mods/orm/rifle-attachment.hpp	/^		long updated_at;$/;"	m	struct:mods::orm::rifle_attachment
 updated_at	mods/orm/rifle-instance.hpp	/^		long updated_at;$/;"	m	struct:mods::orm::rifle_instance
-updated_at	mods/orm/scripted-sequences.hpp	/^		long updated_at;$/;"	m	struct:mods::orm::contract_steps
-updated_at	mods/orm/scripted-sequences.hpp	/^		long updated_at;$/;"	m	struct:mods::orm::contract_steps_record_t
 updated_at	mods/orm/sniper.hpp	/^		long updated_at;$/;"	m	struct:mods::orm::sniper
 updated_at	mods/orm/striker.hpp	/^		long updated_at;$/;"	m	struct:mods::orm::striker
 updated_at	mods/orm/support.hpp	/^		long updated_at;$/;"	m	struct:mods::orm::support
@@ -13035,6 +13072,7 @@ vec_player_data_element	mods/scan.hpp	/^		} vec_player_data_element;$/;"	t	names
 vector_add_if_not_exists	mods/util.hpp	/^	void vector_add_if_not_exists(std::vector<T>& vec,T element) {$/;"	f	namespace:mods::util
 vector_erase	mods/util.hpp	/^	void vector_erase(std::vector<T>& vec,T element) {$/;"	f	namespace:mods::util
 vector_exists	mods/db.cpp	/^	bool vector_exists(std::string section_name,std::string prefix) {$/;"	f	namespace:mods::db
+vectorize	mods/orm/orm-base.hpp	/^	std::vector<std::string> vectorize(const TStringType& str) {$/;"	f	namespace:mods::orm
 vehicle	mods/item-types.hpp	/^	enum vehicle {$/;"	g	namespace:mods::weapon::type
 vehicle_description_t	mods/yaml.hpp	/^		vehicle_description_t()  {$/;"	f	struct:mods::yaml::vehicle_description_t
 vehicle_description_t	mods/yaml.hpp	/^	struct vehicle_description_t : public yaml_description_t {$/;"	s	namespace:mods::yaml
@@ -13054,6 +13092,7 @@ vnum	mods/npc.cpp	/^	const mob_vnum& npc::vnum() const { return cd()->nr; }$/;"	
 vnum	mods/orm/contracts.hpp	/^		auto vnum() {$/;"	f	struct:mods::orm::contracts
 vnum	mods/orm/hq.hpp	/^		auto vnum() {$/;"	f	struct:mods::orm::hq
 vnum	mods/orm/mob-equipment.hpp	/^		auto vnum() {$/;"	f	struct:mods::orm::mob_equipment
+vnum	mods/orm/scripted-step.hpp	/^		auto vnum() const {$/;"	f	struct:mods::orm::scripted_sequences
 vnum	mods/player-contract-instance.hpp	/^			const auto& vnum() const {$/;"	f	struct:mods::contracts::player_contract_instance
 vnum	mods/player.cpp	/^	room_vnum player::vnum() {$/;"	f	class:mods::player
 vnum	mods/scripted-sequences.hpp	/^		scripted_sequences_vnum_t vnum;$/;"	m	struct:mods::scripted_sequences
@@ -13295,6 +13334,7 @@ zoom_multiplier	mods/rifle-attachments.hpp	/^			float zoom_multiplier;						\/**
 ~resolver	mods/lmdb/db.hpp	/^		~resolver(){$/;"	f	struct:gdns::lmdb::resolver
 ~room_data	structs.cpp	/^room_data::~room_data() {$/;"	f	class:room_data
 ~sasg12	mods/weapons/shotgun-sasg12.cpp	/^	sasg12::~sasg12(){$/;"	f	class:mods::weapons::shotgun::sasg12
+~scripted_sequences	mods/orm/scripted-step.cpp	/^	scripted_sequences::~scripted_sequences() {$/;"	f	class:mods::orm::scripted_sequences
 ~server	mods/lmdb/db.hpp	/^			~server(){$/;"	f	struct:gdns::lmdb::server
 ~shape_dictionary	mods/fluxkraft/shape-dictionary.cpp	/^	shape_dictionary::~shape_dictionary() {$/;"	f	class:mods::fluxkraft::shape_dictionary
 ~shm	mods/lmdb/shm.hpp	/^        ~shm(){ if(m_data && m_id){ detach(); } }$/;"	f	class:gdns::shm

@@ -17,8 +17,24 @@ namespace mods {
 		std::string yaml;
 		std::string type;
 		std::vector<std::string> interpret;
-		uint8_t quantity;
+		uint16_t quantity;
 		scripted_step_vnum_t vnum;
+		uint16_t order;
+		std::string dump() const {
+			return CAT(
+			           "{grn}[wait_ticks]{/grn}{yel}",wait_ticks,"{/yel}\r\n",
+			           "{grn}[dialogue]{/grn}{yel}",dialogue.c_str(),"{/yel}\r\n",
+			           "{grn}[mob]{/grn}{yel}",mob,"{/yel}\r\n",
+			           "{grn}[obj]{/grn}{yel}",obj,"{/yel}\r\n",
+			           "{grn}[room]{/grn}{yel}",room,"{/yel}\r\n",
+			           "{grn}[yaml]{/grn}{yel}",yaml.c_str(),"{/yel}\r\n",
+			           "{grn}[type]{/grn}{yel}",type.c_str(),"{/yel}\r\n",
+			           "{grn}[interpret]{/grn}{yel}",IMPLODE(interpret,",").c_str(),"{/yel}\r\n",
+			           "{grn}[quantity]{/grn}{yel}",quantity,"{/yel}\r\n",
+			           "{grn}[vnum]{/grn}{yel}",vnum,"{/yel}\r\n",
+			           "{grn}[order]{/grn}{yel}",order,"{/yel}\r\n"
+			       );
+		}
 	};
 	void register_scripted_sequence(uint32_t sequence_vnum, std::vector<int> sequence);
 	void register_contract_step_callback(contract_vnum_t, task_type_t, task_target_t, uint32_t task_vnum, uint32_t sequence_vnum);

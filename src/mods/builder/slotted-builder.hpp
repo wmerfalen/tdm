@@ -18,15 +18,19 @@ namespace mods::builder {
 			using custom_command_t = std::function<std::tuple<bool,std::string>(const std::vector<std::string>&,std::string,std::shared_ptr<TOrmType>)>;
 			using custom_non_profile_command_t = std::function<std::tuple<bool,std::string>(const std::vector<std::string>&,std::string)>;
 			using custom_accumulator_command_t = std::function<std::tuple<bool,std::string>(std::string&&,std::shared_ptr<TOrmType>)>;
+			using custom_indexed_accumulator_command_t = std::function<std::tuple<bool,std::string>(std::string&&,std::shared_ptr<TOrmType>,int)>;
 			using custom_integral_accumulator_command_t = std::function<std::tuple<bool,std::string>(const std::vector<int>&&,std::shared_ptr<TOrmType>)>;
+			using custom_manual_command_t = std::function<std::tuple<bool,std::string>(const std::string&)>;
 			using orm_container_t = std::deque<std::shared_ptr<TOrmType>>;
 		protected:
 			std::vector<std::string> m_slot_list;
 			player_ptr_t m_builder_ptr;
 			std::vector<std::string> m_encoded_response;
 			std::map<std::string,custom_command_t> m_custom_command_map;
+			std::map<std::string,custom_manual_command_t> m_custom_manual_command_map;
 			std::map<std::string,custom_non_profile_command_t> m_custom_non_profile_command_map;
 			std::map<std::string,custom_accumulator_command_t> m_custom_accumulator_command_map;
+			std::map<std::string,custom_indexed_accumulator_command_t> m_custom_indexed_accumulator_command_map;
 			std::map<std::string,custom_integral_accumulator_command_t> m_custom_integral_accumulator_command_map;
 			orm_container_t* m_orm_list;
 			bool m_automatically_clear;
@@ -99,6 +103,11 @@ namespace mods::builder {
 				m_custom_command_map[verb] = lambda;
 				return {1,"done"};
 			}
+			status_response_t register_manual_command(std::string verb, std::string_view signature, auto lambda) {
+				m_custom_manual_command_map[verb] = lambda;
+				register_signature(verb,signature);
+				return {1,"done"};
+			}
 			status_response_t register_custom_command(std::string verb, std::string_view signature,auto lambda) {
 				m_custom_command_map[verb] = lambda;
 				register_signature(verb,signature);
@@ -111,6 +120,11 @@ namespace mods::builder {
 			/** [ 4 ] -> use this to register custom commands with custom verbs. */
 			status_response_t register_accumulator_command(std::string verb, std::string_view signature,auto lambda) {
 				m_custom_accumulator_command_map[verb] = lambda;
+				register_signature(verb,signature);
+				return {1,"done"};
+			}
+			status_response_t register_indexed_accumulator_command(std::string verb, std::string_view signature,auto lambda) {
+				m_custom_indexed_accumulator_command_map[verb] = lambda;
 				register_signature(verb,signature);
 				return {1,"done"};
 			}
@@ -129,6 +143,7 @@ namespace mods::builder {
 			/** ### The only other function you'll need to call 99% of the time is here       ### */
 			/** ###---------------------------------------------------------------------------### */
 			bool handle_input(std::string argument) {
+				auto& player = this->m_builder_ptr;
 				if(m_automatically_clear) {
 					clear_response();
 				}
@@ -223,6 +238,38 @@ namespace mods::builder {
 					}
 				}
 				/**
+				 * custom indexed accumulator commands the child class has provided us
+				 */
+				for(auto& pair : m_custom_indexed_accumulator_command_map) {
+					/**
+					 * syntax: <command> <profile-vnum> <index> <text...>
+					 */
+					auto args = mods::util::subcmd_args<50,args_t>(argument,pair.first.c_str());
+					if(args.has_value()) {
+						auto cmd_args = args.value();
+						auto opt = extract_profile(pair.first,argument);
+						if(!opt.has_value()) {
+							push_encoded_error("Unable to find profile");
+							return false;
+						}
+						auto& profile = opt.value();
+						auto args = PARSE_ARGS();
+						if(args.size() < 4) {
+							push_encoded_error("not enough arguments");
+							return false;
+						}
+						args()->save_integer(2);
+						std::string value;
+						for(int i=3; i < args.size(); i++) {
+							value += args[i];
+							if(i + 1 < args.size()) {
+								value += " ";
+							}
+						}
+						return tuple_wrap(m_custom_indexed_accumulator_command_map[pair.first](std::move(value),profile,args()->fetch_integer(2)));
+					}
+				}
+				/**
 				 * custom accumulator commands the child class has provided us
 				 */
 				for(auto& pair : m_custom_accumulator_command_map) {
@@ -259,6 +306,12 @@ namespace mods::builder {
 						auto cmd_args = args.value();
 						auto opt = extract_profile(pair.first,argument);
 						return tuple_wrap(m_custom_command_map[pair.first](cmd_args,argument,opt.value_or(nullptr)));
+					}
+				}
+				for(auto& pair : m_custom_manual_command_map) {
+					auto args = mods::util::subcmd_args<50,args_t>(argument,pair.first.c_str());
+					if(args.has_value()) {
+						return tuple_wrap(m_custom_manual_command_map[pair.first](argument));
 					}
 				}
 				return false;

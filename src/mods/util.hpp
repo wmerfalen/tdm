@@ -328,12 +328,14 @@ namespace mods::util::args {
 		std::vector<std::string> vec_args;
 		std::vector<int> i_storage;
 
+		int fetch_integer(int index);
 		int fetch_parsed_integer(int index);
 		void assign(const std::string& argument);
 		bool first_is(std::string_view list_string);
 		bool first_is_any(std::vector<const char*> list_string);
 		bool nth_is_any(int index,std::vector<const char*> list_string);
 		parsed_args* save_integer(int index);
+		parsed_args* save_integer(std::vector<int> index);
 		bool if_nth_has_either(int index,std::vector<const char*> list_string);
 	};
 	struct arglist_parser {

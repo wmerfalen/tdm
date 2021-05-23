@@ -1045,6 +1045,9 @@ namespace mods::util::args {
 	}
 };
 namespace mods::util::args {
+	int parsed_args::fetch_integer(int index) {
+		return fetch_parsed_integer(index);
+	}
 	int parsed_args::fetch_parsed_integer(int index) {
 		return i_storage[index];
 		if(i_storage.size() > index) {
@@ -1090,6 +1093,12 @@ namespace mods::util::args {
 			}
 		}
 		return false;
+	}
+	parsed_args* parsed_args::save_integer(std::vector<int> index) {
+		for(const auto& i : index) {
+			save_integer(i);
+		}
+		return this;
 	}
 	parsed_args* parsed_args::save_integer(int index) {
 		int n = 0;

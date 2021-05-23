@@ -10,6 +10,7 @@
 {yel}mods/integral-objects{/yel}:->{grn}weapon_locker_quota{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}create_catchy_name{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}instantiate_catchy_name{/grn}
+{yel}mods/builder/seqbuild{/yel}:->{grn}seqbuild{/grn}
 {yel}mods/builder/hqbuild{/yel}:->{grn}hqbuild{/grn}
 {yel}mods/builder/meqbuild{/yel}:->{grn}meqbuild{/grn}
 {yel}mods/builder/bookmarks{/yel}:->{grn}bookmark{/grn}
@@ -62,6 +63,7 @@
 {yel}mods/query-objects{/yel}:->{grn}query_inventory{/grn}
 {yel}mods/query-objects{/yel}:->{grn}query_inventory_container{/grn}
 {yel}mods/query-objects{/yel}:->{grn}query_zone{/grn}
+{yel}mods/contract-step-callback{/yel}:->{grn}contract_step_callback{/grn}
 {yel}mods/chat{/yel}:->{grn}chanmgr{/grn}
 {yel}mods/immortal{/yel}:->{grn}rnumtele{/grn}
 {yel}mods/immortal{/yel}:->{grn}rnumlist{/grn}
