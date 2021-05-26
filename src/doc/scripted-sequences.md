@@ -172,3 +172,15 @@ An interactive example:
 	- add listeners that trigger scripted sequences on events
 		- listeners can have "guards" which will only execute if conditions are met
 	- 
+
+
+### 
+### API
+###
+	`seqbuild new <sequence-vnum>`
+	`seqbuild delete <sequence-vnum>`
+	`seqbuild reload-orm`
+	`seqbuild callback <contract-vnum> <task-type> <task-target> <task-vnum> <sequence-vnum>`
+  `seqbuild new-step <vnum>`
+  `seqbuild dialogue <vnum> <index> <text>...`
+	`contract_step_callback create <contract-vnum> <task-type> <task-target> <task-vnum> <sequence-vnum>`
