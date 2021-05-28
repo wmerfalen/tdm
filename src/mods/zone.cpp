@@ -154,6 +154,7 @@ namespace mods::zone {
 							auto obj = mods::globals::read_mobile_ptr(ZCMD.arg1,VIRTUAL);
 							if(!obj) {
 								std::cerr << red_str("Warning: zone update failed to read this mob:") << ZCMD.arg1 << "\n";
+								last_cmd = 1;/* just power through it*/
 								break;
 							}
 							z_debug("cool, we found a mob. throwing him in a room now...");
@@ -289,6 +290,9 @@ namespace mods::zone {
 		player->send("Listing...\r\n");
 		for(const auto& zone : zone_table) {
 			player->send(CAT("[vnum:",zone.number,"] -> '",zone.name,"'\r\n").c_str());
+			for(const auto& cmd : zone.cmd) {
+				player->sendln(CAT("[zone_cmd if_flag]:",cmd.if_flag));
+			}
 		}
 		player->send("Done listing...\r\n");
 		ADMIN_DONE();
