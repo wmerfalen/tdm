@@ -621,6 +621,7 @@ namespace mods::builder::seqbuild {
 		void clear() {
 			mods::orm::scripted_sequences_list().clear();
 			mods::orm::scripted_step_list().clear();
+			mods::orm::contract_step_callback_list().clear();
 		}
 		/** ======== */
 		/** required */
@@ -628,6 +629,7 @@ namespace mods::builder::seqbuild {
 		void load_all() {
 			mods::orm::scripted_sequences_list() = std::move(mods::orm::load_all_by_table<mods::orm::scripted_sequences>());
 			mods::orm::scripted_step_list() = std::move(mods::orm::load_all_by_table<mods::orm::scripted_step>());
+			mods::orm::contract_step_callback_list() = std::move(mods::orm::load_all_by_table<mods::orm::contract_step_callback>());
 		}
 	};
 
@@ -679,5 +681,6 @@ namespace mods::builder::seqbuild {
 	void init() {
 		mods::interpreter::add_command("seqbuild", POS_RESTING, do_seqbuild, LVL_BUILDER,0);
 		seqbuilder(nullptr);
+		mods::compile_scripted_data();
 	}
 };

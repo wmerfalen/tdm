@@ -117,59 +117,6 @@ namespace mods::orm {
 		return std::to_string(id);
 	}
 
-	std::deque<std::shared_ptr<scripted_sequences>>& scripted_sequences_list() {
-		static std::deque<std::shared_ptr<scripted_sequences>> list;
-		return list;
-
-	}
-	std::deque<std::shared_ptr<scripted_step>>& scripted_step_list() {
-		static std::deque<std::shared_ptr<scripted_step>> list;
-		return list;
-	}
-	std::deque<std::shared_ptr<mods::orm::contract_step_callback>>& contract_step_callback_list() {
-		static std::deque<std::shared_ptr<mods::orm::contract_step_callback>> list;
-		return list;
-
-	}
-
-	std::tuple<int16_t,std::string> load_all_contract_step_callbacks() {
-		int16_t ctr = 0;
-		contract_step_callback_list().clear();
-		for(const auto& cb :  db_get_all(contract_step_callback::table)) {
-			auto& item = contract_step_callback_list().emplace_back();
-			item->feed(cb);
-			++ctr;
-		}
-		return {ctr,"sub"};
-	}
-
-	std::tuple<int16_t,std::string> load_all_scripted_sequences() {
-		int16_t ctr = 0;
-		scripted_sequences_list().clear();
-		for(const auto& cb :  db_get_all(scripted_sequences::table)) {
-			auto& item = scripted_sequences_list().emplace_back();
-			item->feed(cb);
-			++ctr;
-		}
-		return {ctr,"sub"};
-	}
-
-	std::tuple<int16_t,std::string> load_all_scripted_steps() {
-		int16_t ctr = 0;
-		scripted_step_list().clear();
-		for(const auto& cb :  db_get_all(scripted_step::table)) {
-			auto& item = scripted_step_list().emplace_back();
-			item->feed(cb);
-		}
-		return {ctr,"sub"};
-	}
-
-	std::tuple<int16_t,std::string> load_all_scripted_data() {
-		load_all_contract_step_callbacks();
-		load_all_scripted_steps();
-		load_all_scripted_sequences();
-		return {1,"Loaded"};
-	}
 	contract_step_callback::~contract_step_callback() {
 
 	}
@@ -194,12 +141,57 @@ namespace mods::orm {
 
 	}
 
+	/**
+	 * ====================================
+	 * ====================================
+	 * Globally available loading functions
+	 * ====================================
+	 * ====================================
+	 */
+	std::deque<std::shared_ptr<scripted_sequences>>& scripted_sequences_list() {
+		static std::deque<std::shared_ptr<scripted_sequences>> list;
+		return list;
+
+	}
+	std::deque<std::shared_ptr<scripted_step>>& scripted_step_list() {
+		static std::deque<std::shared_ptr<scripted_step>> list;
+		return list;
+	}
+	std::deque<std::shared_ptr<mods::orm::contract_step_callback>>& contract_step_callback_list() {
+		static std::deque<std::shared_ptr<mods::orm::contract_step_callback>> list;
+		return list;
+
+	}
+
+	std::tuple<int16_t,std::string> load_all_contract_step_callbacks() {
+		int16_t ctr = 0;
+		mods::orm::contract_step_callback_list() = std::move(mods::orm::load_all_by_table<mods::orm::contract_step_callback>());
+		return {ctr,"Loaded"};
+	}
+
+	std::tuple<int16_t,std::string> load_all_scripted_sequences() {
+		int16_t ctr = 0;
+		mods::orm::scripted_sequences_list() = std::move(mods::orm::load_all_by_table<mods::orm::scripted_sequences>());
+		return {ctr,"Loaded"};
+	}
+
+	std::tuple<int16_t,std::string> load_all_scripted_steps() {
+		int16_t ctr = 0;
+		mods::orm::scripted_step_list() = std::move(mods::orm::load_all_by_table<mods::orm::scripted_step>());
+		return {ctr,"Loaded"};
+	}
+	std::tuple<int16_t,std::string> load_all_scripted_data() {
+		load_all_contract_step_callbacks();
+		load_all_scripted_sequences();
+		load_all_scripted_steps();
+		return {1,"stub"};
+	}
+
 	std::tuple<int16_t,std::string> gather_scripted_steps_by_sequence_vnum(
 	    const sequence_vnum_t& sequence_vnum,
 	    std::deque<std::shared_ptr<mods::orm::scripted_step>>* in_list_ptr
 	) {
 		using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
-		std::cerr << green_str("foobar");
 		return mods::orm::util::foreach_load_by_column_order_by<sql_compositor>(
 		           scripted_step::table,
 		           "s_sequence_vnum",

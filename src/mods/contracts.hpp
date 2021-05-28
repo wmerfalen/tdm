@@ -14,12 +14,12 @@ typedef int socket_t;
 #include "js.hpp"
 #include "contract-types.hpp"
 
-namespace mods {
-	namespace contracts {
-		/* informative functions */
-		bool has_contract(player_ptr_t&);
-		void start_contract(player_ptr_t& player, contract_vnum_t contract_vnum);
-
-	};
+namespace mods::contracts {
+	/* informative functions */
+	bool has_contract(player_ptr_t&);
+	void start_contract(player_ptr_t& player, contract_vnum_t contract_vnum);
+	std::deque<std::shared_ptr<contract>>& contract_master_list();
+	void load_all_contracts();
+	void clear_all_contracts();
 };
 #endif

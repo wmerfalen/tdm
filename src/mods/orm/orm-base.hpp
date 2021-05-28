@@ -337,8 +337,7 @@ namespace mods::orm {
 		MENTOC_ORM_FEED_CLASS(SEQUENCE);\
 		loaded = 1;\
 		return 0;\
-	}\
-	std::string table_name() { return table; }
+	}
 
 #define MENTOC_ORM_SLOT_LIST_IMPL(r,data,MEMBER_TUPLE)\
 	BOOST_PP_STRINGIZE(BOOST_PP_TUPLE_ELEM(6,1,MEMBER_TUPLE)) ,
@@ -407,6 +406,7 @@ namespace mods::orm {
 
 #define MENTOC_ORM_CLASS(SEQUENCE,TABLE_NAME) \
 		static constexpr const char* table = TABLE_NAME;\
+		std::string table_name() { return TABLE_NAME; }\
 		MENTOC_ORM_MEMBER_VARS_FOR(SEQUENCE);\
 		MENTOC_ORM_EXPORT_CLASS(SEQUENCE);\
 		MENTOC_ORM_INIT(SEQUENCE);\

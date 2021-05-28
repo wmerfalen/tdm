@@ -3,6 +3,8 @@
 #include "orm/player-contract-state.hpp"
 #include "player.hpp"
 #include "player-contract-instance.hpp"
+#include "scripted-sequence-events.hpp"
+
 #ifdef  __MENTOC_SHOW_CONTRACT_OUTPUT__
 #define dbg_print(a) std::cerr << "[mods::contracts::player_contract_instance][file:" << __FILE__ << "][line:" << __LINE__ << "]->" << a << "\n";
 #else
@@ -139,6 +141,12 @@ namespace mods::contracts {
 	 * @return
 	 */
 	std::tuple<bool,std::string> player_contract_instance::advance() {
+		auto player = ptr_by_db_id(m_player_id);
+		if(!player) {
+			log("SYSERR: couldn't get player pointer from player id: %d",m_player_id);
+			return m_update_status;
+		}
+		mods::scripted_sequence_events::player_finished_step(player,m_contract_vnum,m_current_step);
 		if(m_current_step) {
 			m_current_step->reward(m_player_id);
 		}
@@ -150,11 +158,6 @@ namespace mods::contracts {
 		std::string msg = "{grn}You move forward in your current contract{/grn}";
 		if(!finished()) {
 			msg += m_current_step->description;
-		}
-		auto player = ptr_by_db_id(m_player_id);
-		if(!player) {
-			log("SYSERR: couldn't get player pointer from player id: %d",m_player_id);
-			return m_update_status;
 		}
 		player->sendln(msg);
 		return m_update_status;

@@ -33,6 +33,9 @@ namespace mods::contracts {
 			dbg_print(red_str("load_all_contracts:") << "'" << std::get<1>(status) << "'");
 		}
 	}
+	void clear_all_contracts() {
+		contract_master_list().clear();
+	}
 
 	/**
 	 *

@@ -10,5 +10,6 @@ namespace mods {
 		scripted_sequences_vnum_t vnum;
 		std::vector<scripted_step> steps;
 	};
+	std::tuple<int32_t,std::string> compile_scripted_data();
 };
 #endif

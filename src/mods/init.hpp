@@ -47,6 +47,7 @@ INIT(mods::scripted_step_init);
 INIT(mods::scripted_sequences_init);
 INIT(mods::builder::seqbuild);
 INIT(mods::contract_step_callback_init);
+INIT(mods::scripted_sequence_events);
 #undef INIT
 
 
@@ -95,6 +96,7 @@ namespace mods::init {
 		mods::scripted_sequences_init::init();
 		mods::builder::seqbuild::init();
 		mods::contract_step_callback_init::init();
+		mods::scripted_sequence_events::init();
 	}
 };
 #endif

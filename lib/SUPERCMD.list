@@ -64,6 +64,7 @@
 {yel}mods/query-objects{/yel}:->{grn}query_inventory_container{/grn}
 {yel}mods/query-objects{/yel}:->{grn}query_zone{/grn}
 {yel}mods/contract-step-callback{/yel}:->{grn}contract_step_callback{/grn}
+{yel}mods/scripted-sequence-events{/yel}:->{grn}finish_step{/grn}
 {yel}mods/chat{/yel}:->{grn}chanmgr{/grn}
 {yel}mods/immortal{/yel}:->{grn}rnumtele{/grn}
 {yel}mods/immortal{/yel}:->{grn}rnumlist{/grn}

@@ -25,7 +25,6 @@
 ./mods/contracts.cpp:	->contract
 ./mods/weapons/reload.cpp:	->reload
 ./mods/skills.cpp:->train
-./mods/scripted-sequences.cpp:	->scripted_sequences
 ./mods/values.cpp:			->set_value
 ./mods/values.cpp:			->get_value
 ./mods/values.cpp:			->revert_value_to_default

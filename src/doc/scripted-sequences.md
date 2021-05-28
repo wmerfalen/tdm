@@ -177,10 +177,12 @@ An interactive example:
 ### 
 ### API
 ###
-	`seqbuild new <sequence-vnum>`
-	`seqbuild delete <sequence-vnum>`
-	`seqbuild reload-orm`
-	`seqbuild callback <contract-vnum> <task-type> <task-target> <task-vnum> <sequence-vnum>`
+  `seqbuild new <vnum>`
   `seqbuild new-step <vnum>`
-  `seqbuild dialogue <vnum> <index> <text>...`
-	`contract_step_callback create <contract-vnum> <task-type> <task-target> <task-vnum> <sequence-vnum>`
+  `seqbuild reload-orm`
+  `seqbuild delete-step <vnum> <step-id>...[step-id-N]`
+  `seqbuild save-step <vnum> <step-id>...[step-id-N]`
+  `seqbuild callback <contract> <task> <target> <task-vnum> <sequence-vnum>`
+  `seqbuild show-steps <vnum>`
+  `seqbuild set-step-data <vnum> <index> <key> <value>`
+
