@@ -2113,20 +2113,6 @@ COPY public.world_configuration_start_rooms (id, mortal_start_room, immortal_sta
 
 
 --
--- Data for Name: zone_data; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.zone_data (id, zone_id, zone_command, zone_if_flag, zone_arg1, zone_arg2, zone_arg3) FROM stdin;
-6	0	M	1	0	10	27088
-8	0	M	1	0	10	27088
-13	0	M	0	0	10	27088
-14	0	M	0	0	10	27088
-15	7	M	0	0	10	27088
-16	7	O	0	94	4	27088
-\.
-
-
---
 -- Name: affected_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 

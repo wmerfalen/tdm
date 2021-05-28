@@ -12,4 +12,8 @@ namespace mods {
 	};
 	std::tuple<int32_t,std::string> compile_scripted_data();
 };
+
+namespace mods::scripts::triton {
+	static constexpr mob_vnum TRITON_SCIENTIST_VNUM = 600;
+};
 #endif

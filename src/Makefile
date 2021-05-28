@@ -136,7 +136,7 @@ buildobj = act.informative act.item act.medic \
 					 mods/movement mods/weapons/damage-calculator mods/weapons/reload \
 					 mods/scripted-sequences mods/scripted-step mods/builder/seqbuild \
 					 mods/orm/scripted-step mods/contract-step-callback \
-					 mods/scripted-sequence-events
+					 mods/scripted-sequence-events mods/scripted-sequence-runner
 
 objects = $(patsubst %,$(builddir)/%.o,$(buildobj))
 default: all

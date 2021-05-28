@@ -4502,12 +4502,24 @@ SUPERCMD(do_zbuild) {
 			return;
 		}
 
+		for(int i=0; i < vargs.size(); i++) {
+			player->sendln(CAT("i:",i,":'",vargs[i],"'"));
+		}
+		/**
+		 * [0] 'mob',
+		 * [1] zone_id
+		 * [2] mob_vnum
+		 * [3] room_vnum
+		 * [4] max
+		 * [5] if_flag
+		 */
 		auto zone_command = "M";
-		auto if_flag = vargs[5];
 		auto mob_vnum = vargs[2];
-		auto max_existing = vargs[4];
 		auto room_vnum = vargs[3].compare("this") == 0 ? std::to_string(world[player->room()].number) : vargs[3];
-		auto result = mods::builder::zone_place(zone,zone_command,if_flag,mob_vnum,max_existing,room_vnum);
+		auto max_existing = vargs[4];
+		auto if_flag = vargs[5];
+		//zone_place(int zone_id,std::string_view zone_command,if_flag,arg1,arg2,arg3)
+		auto result = mods::builder::zone_place(zone,zone_command,if_flag,mob_vnum,room_vnum,max_existing);
 		if(!result.first) {
 			r_error(player,result.second);
 		} else {

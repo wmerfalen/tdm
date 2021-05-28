@@ -1647,7 +1647,7 @@ INDUSTRIAL_STRENGTH	mods/yaml.hpp	/^		INDUSTRIAL_STRENGTH,$/;"	e	enum:mods::yaml
 INFO_FILE	db.h	81;"	d
 INFRAVISION	mods/flags.hpp	/^		INFRAVISION,$/;"	e	enum:mods::flags::aff
 INIT	mods/init.hpp	4;"	d
-INIT	mods/init.hpp	51;"	d
+INIT	mods/init.hpp	52;"	d
 INITIATE	mods/skills.hpp	/^	INITIATE = 1,$/;"	e	enum:uint8_t
 INK	mods/aoe.hpp	/^		INK,	\/** Marks surroundings and enemies with paint for the purpose of tracking *\/ $/;"	e	enum:mods::aoe::types_t
 INSERT	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_type_t
@@ -4003,6 +4003,7 @@ SUPERCMD	mods/rifle-attachments.cpp	/^		SUPERCMD(do_instantiate_rifle_attachment
 SUPERCMD	mods/rifle-attachments.cpp	/^		SUPERCMD(do_list_rifle_attachments) {$/;"	f	namespace:mods::rifle_attachments
 SUPERCMD	mods/rifle-attachments.cpp	/^		SUPERCMD(do_load_my_rifle_attachments) {$/;"	f	namespace:mods::rifle_attachments
 SUPERCMD	mods/scripted-sequence-events.cpp	/^	SUPERCMD(do_finish_step) {$/;"	f	namespace:mods::scripted_sequence_events
+SUPERCMD	mods/scripted-sequence-runner.cpp	/^	SUPERCMD(do_run_sequence) {$/;"	f	namespace:mods::scripted_sequence_runner
 SUPERCMD	mods/super-users.cpp	/^SUPERCMD(do_add_super_user) {$/;"	f
 SUPERCMD	mods/super-users.cpp	/^SUPERCMD(do_clear_who_line) {$/;"	f
 SUPERCMD	mods/super-users.cpp	/^SUPERCMD(do_get_super_user_list) {$/;"	f
@@ -4225,6 +4226,7 @@ TRASHY	structs.h	/^			TRASHY,$/;"	m	struct:room_data	typeref:enum:room_data::
 TREE	structs.h	/^			TREE,$/;"	m	struct:room_data	typeref:enum:room_data::
 TRIGGER_ALERT	mods/weapon-types.hpp	/^		TRIGGER_ALERT,$/;"	e	enum:mods::weapon::capabilities::cap_t
 TRIGGER_EXPLOSION	mods/weapon-types.hpp	/^		TRIGGER_EXPLOSION,$/;"	e	enum:mods::weapon::capabilities::cap_t
+TRITON_SCIENTIST_VNUM	mods/scripted-sequences.hpp	/^	static constexpr mob_vnum TRITON_SCIENTIST_VNUM = 600;$/;"	m	namespace:mods::scripts::triton
 TRUCK	mods/weapon.hpp	/^		TRUCK,$/;"	e	enum:mods::weapon::vehicle_t
 TRUE	utils.h	530;"	d
 TSUCCESS	mods/mobs/lowly-security-behaviour-tree.hpp	42;"	d
@@ -4705,6 +4707,7 @@ __MENTOC_ARCON_METROPOLITAN_HEADER__	mods/fluxkraft/areas.hpp	2;"	d
 __MENTOC_BUILDER_UTILS_ACCEPT_ZERO_INDEX__	mods/builder.hpp	3;"	d
 __MENTOC_CONFIG_HEADER__	config.hpp	2;"	d
 __MENTOC_DB_HEADER__	db.h	2;"	d
+__MENTOC_DEBUG_EVENT_MATCHES__	mods/scripted-sequence-events.cpp	5;"	d	file:
 __MENTOC_DEBUG__	globals.hpp	48;"	d
 __MENTOC_HELL_HEADER__	mods/hell.hpp	2;"	d
 __MENTOC_INTERPRETER_INCLUDES_HEADER__	mods/interpreter-include.hpp	2;"	d
@@ -4961,6 +4964,7 @@ __MENTOC_MODS_cron_HEADER__	mods/cron.hpp	2;"	d
 __MENTOC_MODS_deferred_HEADER__	mods/deferred.hpp	2;"	d
 __MENTOC_MODS_prefs_HEADER__	mods/prefs.hpp	2;"	d
 __MENTOC_MODS_pregame_HEADER__	mods/pregame.hpp	2;"	d
+__MENTOC_MODS_scripted_sequence_runner_HEADER__	mods/scripted-sequence-runner.hpp	2;"	d
 __MENTOC_MODS_scripted_sequencesS_HEADER__	mods/scripted-sequences.hpp	2;"	d
 __MENTOC_MODS_scripted_sequences_events_HEADER__	mods/scripted-sequence-events.hpp	2;"	d
 __MENTOC_MODS_scripted_stepS_HEADER__	mods/scripted-step.hpp	2;"	d
@@ -4972,6 +4976,7 @@ __MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	156;"	d
 __MENTOC_RUN_PBA_CODE__	mods/debug-pre-game.hpp	23;"	d
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
 __MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	145;"	d
+__MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/scripted-sequence-runner.cpp	4;"	d	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	d
 __MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__	mods/weapons/damage-calculator.cpp	14;"	d	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1227;"	d	file:
@@ -6243,6 +6248,10 @@ dbg_print	mods/contracts.cpp	10;"	d	file:
 dbg_print	mods/contracts.cpp	12;"	d	file:
 dbg_print	mods/player-contract-instance.cpp	11;"	d	file:
 dbg_print	mods/player-contract-instance.cpp	9;"	d	file:
+dbg_print	mods/scripted-sequence-events.cpp	7;"	d	file:
+dbg_print	mods/scripted-sequence-events.cpp	9;"	d	file:
+dbg_print	mods/scripted-sequence-runner.cpp	6;"	d	file:
+dbg_print	mods/scripted-sequence-runner.cpp	8;"	d	file:
 dbg_print	mods/scripted-sequences.cpp	7;"	d	file:
 dbg_print	mods/scripted-sequences.cpp	9;"	d	file:
 dbg_print	mods/scripted-step.cpp	4;"	d	file:
@@ -6441,6 +6450,7 @@ disorient_target	mods/projectile.cpp	/^		void disorient_target(player_ptr_t play
 disorient_ticks	mods/weapons/damage-calculator.cpp	/^	int16_t disorient_ticks($/;"	f	namespace:mods::weapons::damage_calculator
 dispatch	mods/ai_state.cpp	/^	uint32_t ai_state::dispatch(char_data* ch) {$/;"	f	class:mods::ai_state
 dispatch	mods/behaviour_tree_impl.cpp	/^	int8_t dispatch(uuid_t mob_uuid) {$/;"	f	namespace:mods::behaviour_tree_impl
+dispatch	mods/scripted-sequence-runner.cpp	/^	void dispatch(player_ptr_t& player,sequence_vnum_t sequence_vnum,contract_vnum_t contract_vnum,step_t step_copy) {$/;"	f	namespace:mods::scripted_sequence_runner
 dispatch_event	mods/player.cpp	/^	void player::dispatch_event(feedback_t feedback) {$/;"	f	class:mods::player
 dispatch_help	mods/builder/slotted-builder.hpp	/^			bool dispatch_help(std::string argument) {$/;"	f	struct:mods::builder::slotted_builder
 dispatch_help_message	mods/response-team/radio.cpp	/^	void dispatch_help_message(uuid_t mob_uuid,std::string_view message, severity_t severity) {$/;"	f	namespace:mods::response_team::radio
@@ -8390,6 +8400,7 @@ init	mods/rand.cpp	/^	void init(){$/;"	f	namespace:mods::rand
 init	mods/rate-limiting.cpp	/^	void init() {$/;"	f	namespace:mods::rate_limiting
 init	mods/rifle-attachments.cpp	/^		void init() {$/;"	f	namespace:mods::rifle_attachments
 init	mods/scripted-sequence-events.cpp	/^	void init() {$/;"	f	namespace:mods::scripted_sequence_events
+init	mods/scripted-sequence-runner.cpp	/^	void init() {$/;"	f	namespace:mods::scripted_sequence_runner
 init	mods/scripted-sequences.cpp	/^		void init() {$/;"	f	namespace:mods::scripted_sequences_init
 init	mods/scripted-step.cpp	/^		void init() {$/;"	f	namespace:mods::scripted_step_init
 init	mods/skills.cpp	/^	void init() {$/;"	f	namespace:mods::skills
@@ -11916,6 +11927,9 @@ screen_width	mods/player.cpp	/^	int player::screen_width() {$/;"	f	class:mods::p
 scripted_sequence_events	mods/init.hpp	/^INIT(mods::scripted_sequence_events);$/;"	v
 scripted_sequence_events	mods/scripted-sequence-events.cpp	/^namespace mods::scripted_sequence_events {$/;"	n	class:mods	file:
 scripted_sequence_events	mods/scripted-sequence-events.hpp	/^namespace mods::scripted_sequence_events {$/;"	n	class:mods
+scripted_sequence_runner	mods/init.hpp	/^INIT(mods::scripted_sequence_runner);$/;"	v
+scripted_sequence_runner	mods/scripted-sequence-runner.cpp	/^namespace mods::scripted_sequence_runner {$/;"	n	class:mods	file:
+scripted_sequence_runner	mods/scripted-sequence-runner.hpp	/^namespace mods::scripted_sequence_runner {$/;"	n	class:mods
 scripted_sequences	mods/orm/scripted-step.cpp	/^	scripted_sequences::scripted_sequences() {$/;"	f	class:mods::orm::scripted_sequences
 scripted_sequences	mods/orm/scripted-step.cpp	/^	scripted_sequences::scripted_sequences(const sequence_vnum_t& scripted_vnum) {$/;"	f	class:mods::orm::scripted_sequences
 scripted_sequences	mods/orm/scripted-step.hpp	/^	struct scripted_sequences : public mods::orm::orm_base<scripted_sequences,std::string> {$/;"	s	namespace:mods::orm
@@ -12956,6 +12970,8 @@ trim	mods/util.cpp	/^	std::string trim(std::string& str) {$/;"	f	namespace:mods:
 trim_rate_limit_data	mods/rate-limiting.cpp	/^	void trim_rate_limit_data(action_t action,mods::player::rate_limit_data_t& data,int times,int seconds) {$/;"	f	namespace:mods::rate_limiting
 trim_string	mods/lmdb/conf.cpp	/^void trim_string(char* string,char** out){$/;"	f	namespace:gdns
 trim_view	mods/util.cpp	/^	std::string trim_view(std::string_view str) {$/;"	f	namespace:mods::util
+triton	mods/scripted-sequences.hpp	/^namespace mods::scripts::triton {$/;"	n	class:mods::scripts
+triton_sequence	mods/scripted-sequence-runner.cpp	/^	std::vector<mods::scripted_step> triton_sequence;$/;"	m	namespace:mods::scripted_sequence_runner	file:
 trueValue	mods/catch.hpp	/^			void trueValue() const {}$/;"	f	class:Catch::SafeBool
 true_given	mods/catch2.hpp	/^    template <typename> struct true_given : std::true_type {};$/;"	s	namespace:Catch
 true_path	mods/yaml.cpp	/^	std::string true_path(std::string_view type,std::string_view in_file) {$/;"	f	namespace:mods::yaml
