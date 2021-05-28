@@ -4387,6 +4387,12 @@ SUPERCMD(do_zbuild) {
 		        " /-------------------------------------------------------------\\\r\n" <<
 		        " | M A N U A L  P L A C E M E N T S                            |\r\n" <<
 		        " |_____________________________________________________________/\r\n" <<
+		        //auto zone_command = args[1];
+		        //auto if_flag = args[2];
+		        //auto arg1 = args[3];
+		        //auto arg2 = args[4];
+		        //auto arg3 = args[5];
+		        //mods::builder::zone_place(zone,zone_command,if_flag,arg1,arg2,arg3);
 		        " {grn}zbuild{/grn} {red}place <zone_id> <command> <if_flag> <arg1> <arg2> <arg3>{/red}\r\n" <<
 		        "  |--> creates a reset command for the zone 'zone_id'.\r\n" <<
 		        "  {grn}|____[example]{/grn}\r\n" <<
@@ -4404,13 +4410,83 @@ SUPERCMD(do_zbuild) {
 		        "  |:: 'D': Set state of door\r\n" <<
 		        "  |:: )\r\n" <<
 		        " {red}see: zbuild help place{/red}\r\n" <<
-		        " {grn}zbuild{/grn} {red}place-list <zone_id>{/red}\r\n" <<
-		        "  |--> lists all place commands for 'zone_id'.\r\n" <<
+		        " {grn}zbuild{/grn} {red}place-list <zone_index>...[zone_index-N]{/red}\r\n" <<
+		        "  |--> lists all place commands for 'zone_id'. multiple indexes can be passed.\r\n" <<
+		        " {grn}zbuild{/grn} {red}place-list-vnum <zone_vnum>...[zone_vnum-N]{/red}\r\n" <<
+		        "  |--> lists all place commands for zone by vnum. multiple vnums can be passed.\r\n" <<
 		        " {grn}zbuild{/grn} {red}place-remove <zone_id> <place_id>{/red}\r\n" <<
 		        "  |--> removes the place command 'place_id' in zone 'zone_id'\r\n" <<
 		        "\r\n";
 		player->pager_end();
 		player->page(0);
+		return;
+	}
+	auto display_zone_commands = [&](const std::size_t& i) {
+		if(i >= zone_table.size()) {
+			r_error(player,"Out of bounds");
+			return;
+		}
+
+		int ctr = 0;
+
+		for(const auto& ZCMD : zone_table[i].cmd) {
+			if(ZCMD.command == '*') {
+				break;
+			}
+
+			*player << "{red}[{/red}" << ctr++ << "{red}] ->{/red}";
+
+			switch(ZCMD.command) {
+				case 'M':
+					*player << "{red}mobile{/red}: " << ZCMD.arg1 << "{red} to room: {/red}" << ZCMD.arg2 << " {yel}max:{/yel}" << ZCMD.arg3 << "\r\n";
+					break;
+				default:
+					*player << "{red}unimplimented command{/red}: [" << ZCMD.command << "] " << ZCMD.arg1 << " " << ZCMD.arg2 << " " << ZCMD.arg3 << "\r\n";
+					break;
+					//case 'O':
+					//	*player << "{red}object{/red}: " << ZCMD.arg1 << "{red} to room: {/red}" << ZCMD.arg2 <<  " {yel}max:{/yel}" << ZCMD.arg3 << "\r\n";"\r\n";
+					//	break;
+
+					//case 'G':
+					//	*player << "{red}give object{/red}: " << ZCMD.arg1 << "{red} to mobile{/red}: " << current_mobile << "\r\n";
+					//	break;
+
+					//case 'E':
+					//	*player << "{red}equip mobile({/red}" << current_mobile << "{red}) with object{/red}: " << ZCMD.arg1 << "\r\n";
+					//	break;
+
+					//case 'P':
+					//	*player << "{red}put object({/red}" << ZCMD.arg1 << "{red}) in object{/red}: " << ZCMD.arg3 << "\r\n";
+					//	break;
+
+					//case 'D':
+					//	*player << "{red}set state of door{/red}:" << ZCMD.arg1 << " {red}to{/red}:" << ZCMD.arg2 << "\r\n";
+					//	break;
+
+					//case 'R':
+					//	*player << "{red}remove object({/red}" << ZCMD.arg2 << "{red}) from room{/red}:" << ZCMD.arg1 << "\r\n";
+					//	break;
+			}
+		}
+		return;
+	};
+
+	if(argshave()->int_at(1)->first_is("place-list")->size_gt(1)->passed()) {
+		for(const auto& i : args()->gather_integers_starting_at(1)) {
+			display_zone_commands(i);
+		}
+		return;
+	}
+	if(argshave()->int_at(1)->first_is("place-list-vnum")->size_gt(1)->passed()) {
+		for(const auto& i : args()->gather_integers_starting_at(1)) {
+			std::size_t index = 0;
+			for(const auto& zone : zone_table) {
+				if(zone.number == i) {
+					display_zone_commands(index);
+				}
+				++index;
+			}
+		}
 		return;
 	}
 
@@ -4514,12 +4590,25 @@ SUPERCMD(do_zbuild) {
 		 * [5] if_flag
 		 */
 		auto zone_command = "M";
-		auto mob_vnum = vargs[2];
-		auto room_vnum = vargs[3].compare("this") == 0 ? std::to_string(world[player->room()].number) : vargs[3];
-		auto max_existing = vargs[4];
+		auto arg1 = vargs[2]; /** mob_vnum */
+		auto arg2 = /** room_vnum */ vargs[3].compare("this") == 0 ? std::to_string(world[player->room()].number) : vargs[3];
+		auto arg3 = vargs[4]; /** max */
 		auto if_flag = vargs[5];
 		//zone_place(int zone_id,std::string_view zone_command,if_flag,arg1,arg2,arg3)
-		auto result = mods::builder::zone_place(zone,zone_command,if_flag,mob_vnum,room_vnum,max_existing);
+		/**
+		 * ---------------------------------
+		 *  !!! THIS DIFFERS FROM LEGACY !!!
+		 * ---------------------------------
+		 * The order here matters. Check mods/zone.cpp for how this differs from legacy code
+		 * when reading a mobile ("M" command)
+		 * arg1 = mob_vnum
+		 * arg2 = room_vnum
+		 * arg3 = max
+		 * ---------------------------------
+		 *  !!! THIS DIFFERS FROM LEGACY !!!
+		 * ---------------------------------
+		 */
+		auto result = mods::builder::zone_place(zone,zone_command,if_flag,arg1,arg2,arg3);
 		if(!result.first) {
 			r_error(player,result.second);
 		} else {
@@ -4673,76 +4762,8 @@ SUPERCMD(do_zbuild) {
 		return;
 	}
 
-	args = mods::util::subcmd_args<11,args_t>(argument,"place-list");
+	//args = mods::util::subcmd_args<11,args_t>(argument,"place-list");
 
-	if(args.has_value()) {
-		auto arg_vec = args.value();
-
-		//place-list <zone_id>
-		// 0            1
-		if(arg_vec.size() < 2) {
-			r_error(player,"Invalid number of arguments");
-			return;
-		}
-
-		auto index = mods::util::stoi(arg_vec[1]);
-
-		if(!index.has_value()) {
-			r_error(player,"Invalid index");
-			return;
-		}
-
-		std::size_t i = index.value();
-
-		if(i >= zone_table.size()) {
-			r_error(player,"Out of bounds");
-			return;
-		}
-
-		int current_mobile = 0;
-		int ctr = 0;
-
-		for(const auto& ZCMD : zone_table[index.value()].cmd) {
-			if(ZCMD.command == '*') {
-				break;
-			}
-
-			*player << "{red}[{/red}" << ctr << "{red}] ->{/red}";
-
-			switch(ZCMD.command) {
-				case 'M':
-					current_mobile = ZCMD.arg1;
-					*player << "{red}mobile{/red}: " << ZCMD.arg1 << "{red} to room: {/red}" << ZCMD.arg3 << "\r\n";
-					break;
-
-				case 'O':
-					*player << "{red}object{/red}: " << ZCMD.arg1 << "{red} to room: {/red}" << ZCMD.arg3 << "\r\n";
-					break;
-
-				case 'G':
-					*player << "{red}give object{/red}: " << ZCMD.arg1 << "{red} to mobile{/red}: " << current_mobile << "\r\n";
-					break;
-
-				case 'E':
-					*player << "{red}equip mobile({/red}" << current_mobile << "{red}) with object{/red}: " << ZCMD.arg1 << "\r\n";
-					break;
-
-				case 'P':
-					*player << "{red}put object({/red}" << ZCMD.arg1 << "{red}) in object{/red}: " << ZCMD.arg3 << "\r\n";
-					break;
-
-				case 'D':
-					*player << "{red}set state of door{/red}:" << ZCMD.arg1 << " {red}to{/red}:" << ZCMD.arg2 << "\r\n";
-					break;
-
-				case 'R':
-					*player << "{red}remove object({/red}" << ZCMD.arg2 << "{red}) from room{/red}:" << ZCMD.arg1 << "\r\n";
-					break;
-			}
-		}
-
-		return;
-	}
 
 	args = mods::util::subcmd_args<13,args_t>(argument,"place-remove");
 
