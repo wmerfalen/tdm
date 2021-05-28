@@ -83,7 +83,7 @@ namespace mods::orm {
 	std::tuple<int16_t,std::string> load_all_non_orm_contracts(std::deque<std::shared_ptr<mods::contracts::contract>>* list) {
 		auto count = 0;
 		auto message = "";
-		auto result = db_get_all(contracts_table_name.data());
+		auto result = db_get_all(mods::orm::contracts().table);
 		if(result.size() == 0) {
 			return {0,""};
 		}

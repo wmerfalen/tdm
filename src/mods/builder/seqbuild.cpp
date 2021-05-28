@@ -79,6 +79,25 @@ namespace mods::builder::seqbuild {
 			}
 			return std::nullopt;
 		}
+		static mods::orm::scripted_step& temp_step() {
+			static mods::orm::scripted_step orm;
+			return orm;
+		}
+		std::vector<std::string> step_column_list() const {
+			return mods::orm::scripted_step::get_slot_list();
+		}
+		const std::vector<std::string>& integral_list() const {
+			return temp_step().integral_slots();
+		}
+		const std::vector<std::string>& string_list() const {
+			return temp_step().string_slots();
+		}
+		const std::vector<std::string>& vector_string_list() const {
+			return temp_step().vector_string_slots();
+		}
+		const std::vector<std::string>& accumulator_list() const {
+			return temp_step().accumulator_slot_list();
+		}
 
 		/** scripted_steps */
 		/** will optionally return the orm entity that has the given vnum */
@@ -91,11 +110,6 @@ namespace mods::builder::seqbuild {
 			return std::nullopt;
 		}
 
-		std::shared_ptr<mods::orm::scripted_step> create_step(seqbuild_vnum_t vnum) {
-			auto s = std::make_shared<mods::orm::scripted_step>();
-			s->initialize_row(vnum);
-			return std::move(s);
-		}
 		std::deque<std::shared_ptr<mods::orm::scripted_step>> step_list;
 		std::optional<std::shared_ptr<mods::orm::scripted_step>> find_local_step_by_id(const uint64_t& step_id) {
 			for(const auto& s : step_list) {
@@ -105,18 +119,10 @@ namespace mods::builder::seqbuild {
 			}
 			return std::nullopt;
 		}
-		std::pair<unsigned,unsigned> foreach_step_do(std::vector<int> list,std::string mode) {
+		std::pair<unsigned,unsigned> foreach_step_do(std::string_view mode) {
 			/** signature: [0] => save-step [1] => vnum [2] => Nth-step-id ... [N] => [step-id-N] */
 			unsigned ok =0, error = 0;
-			uint16_t ctr = 0;
-			for(const auto& step_id : list) {
-				++ctr;
-				if(step_id >= step_list.size()) {
-					push_encoded_error(CAT("error. step_id out of bounds: ",step_id, ". Skipping..."));
-					continue;
-				}
-
-				auto& step = step_list[step_id];
+			for(auto& step : step_list) {
 				if(mode.compare("save") == 0) {
 					auto status = step->update_row();
 					if(ORM_SUCCESS(status)) {
@@ -127,13 +133,37 @@ namespace mods::builder::seqbuild {
 						++error;
 					}
 				}
-				if(mode.compare("delete") == 0) {
-					step->destroy();
-					if(ORM_SUCCESS(step->destroy_status)) {
-						push_encoded_ok(CAT("Success for step-id:'",step->id,"'"));
+			}
+			return {ok,error};
+		}
+		std::pair<unsigned,unsigned> foreach_step_do(const std::vector<int>& list,std::string_view mode) {
+			/** signature: [0] => save-step [1] => vnum [2] => Nth-step-id ... [N] => [step-id-N] */
+			unsigned ok =0, error = 0;
+			uint16_t ctr = 0;
+			for(const auto& step_id : list) {
+				++ctr;
+				if(step_id >= step_list.size()) {
+					push_encoded_error(CAT("error. step_id out of bounds: ",step_id, ". Skipping..."));
+					continue;
+				}
+
+				if(mode.compare("save") == 0) {
+					auto status = this->step_list[step_id]->update_row();
+					if(ORM_SUCCESS(status)) {
+						push_encoded_ok(CAT("Success for step-id:'",this->step_list[step_id]->id,"'"));
 						++ok;
 					} else {
-						push_encoded_error(CAT("FAILED for step-id:'",step->id,"'"));
+						push_encoded_error(CAT("FAILED for step-id:'",this->step_list[step_id]->id,"'"));
+						++error;
+					}
+				}
+				if(mode.compare("delete") == 0) {
+					this->step_list[step_id]->destroy();
+					if(ORM_SUCCESS(this->step_list[step_id]->destroy_status)) {
+						push_encoded_ok(CAT("Success for step-id:'",this->step_list[step_id]->id,"'"));
+						++ok;
+					} else {
+						push_encoded_error(CAT("FAILED for step-id:'",this->step_list[step_id]->id,"'"));
 						++error;
 					}
 				}
@@ -206,6 +236,7 @@ namespace mods::builder::seqbuild {
 				                         "{grn}seqbuild set-step-data 400 0 s_description this is my test description{/grn} {yel}# set the description {/yel}\r\n",
 				                         "{grn}seqbuild set-step-data 400 0 s_task_type GOAL_FIND{/grn} {yel}# set the task type {/yel}\r\n",
 				                         "{grn}seqbuild save-step 400 0{/grn} {yel}# save our step {/yel}\r\n",
+				                         "{grn}seqbuild save-all-steps 400{/grn} {yel}# save ALL steps {/yel}\r\n",
 				                         "If we were to add another step we would use the index 1 instead of zero because now there will be two steps in the contract.\r\n",
 				                         "{grn}seqbuild callback <contract-vnum> <task-type> <task-target> <task-vnum> <sequence-vnum>{/grn} {yel}# create a callback on the contract step that triggers a sequence{/yel}\r\n",
 				                         "{grn}seqbuild reload-orm{/grn} {yel}# reloads sequences, sequence steps, and callbacks into their respective orm objects{/yel}\r\n",
@@ -214,7 +245,7 @@ namespace mods::builder::seqbuild {
 				push_encoded_ok(legend);
 				return {1,""};
 			});
-			register_manual_command("reload-orm","--no arguments--",[&](const std::string& argument) -> std::tuple<bool,std::string> {
+			register_manual_command("reload-orm","",[&](const std::string& argument) -> std::tuple<bool,std::string> {
 				return mods::orm::load_all_scripted_data();
 			});
 			/**
@@ -229,33 +260,15 @@ namespace mods::builder::seqbuild {
 			 */
 			register_manual_command("callback","<contract-vnum> <task-type> <task-target> <task-vnum> <sequence-vnum>",[&,this](const std::string& argument) -> std::tuple<bool,std::string> {
 				auto& player = m_builder_ptr;
-				if(args()->size < 6) {
+				if(argshave()->int_at({1,4,5})->size_gt(5)->passed() == false) {
 					return {0,"Not enough arguments"};
 				}
-				enum cb_indexes : int{
-					CONTRACT_VNUM = 1,
-					TASK_TYPE,
-					TASK_TARGET,
-					TASK_VNUM,
-					SEQUENCE_VNUM
-				};
-				args()->save_integer({cb_indexes::CONTRACT_VNUM,cb_indexes::TASK_VNUM,cb_indexes::SEQUENCE_VNUM});
-				/**
-				 * args()->vec_args: [0] callback ...
-				 */
-				int contract,task,sequence;
-				contract = args()->fetch_integer(cb_indexes::CONTRACT_VNUM);
-				task = args()->fetch_integer(cb_indexes::TASK_VNUM);
-				sequence = args()->fetch_integer(cb_indexes::SEQUENCE_VNUM);
-				if(contract_exists(contract) == false) {
-					return {0,"Invalid contract vnum"};
+				mods::orm::contract_step_callback orm;
+				auto id = orm.initialize_row(intat(1),argat(2),argat(3),intat(4),intat(5));
+				if(id > 0) {
+					return {1,"Successfully created"};
 				}
-				if(sequence_exists(sequence) == false) {
-					return {0,"Invalid sequence vnum"};
-				}
-				std::cerr << "task: " << task << "\n";
-
-				return {1,"Created"};
+				return {0,"Something went wrong"};
 			});
 			register_custom_command("help","",[this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<seqbuild_orm_type> profile) -> std::tuple<bool,std::string> {
 				display_signatures();
@@ -290,6 +303,9 @@ namespace mods::builder::seqbuild {
 			 *  -----------------------------------------
 			 */
 			register_indexed_accumulator_command("dialogue","<virtual_number> <index> <text>",[&](std::string&& value, std::shared_ptr<seqbuild_orm_type> profile, int index) -> std::tuple<bool,std::string> {
+				if(!profile) {
+					return {0,"Invalid or missing profile vnum"};
+				}
 				if(index < 0) {
 					return {0,"Invalid index"};
 				}
@@ -310,8 +326,12 @@ namespace mods::builder::seqbuild {
 			 *  -----------------------------------------
 			 */
 			register_custom_command("new-step","<virtual_number>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<seqbuild_orm_type> profile) -> std::tuple<bool,std::string> {
-				this->step_list.emplace_back(create_step(profile->vnum()));
-				return {1,"Created"};
+				if(!profile) {
+					return {0,"Invalid or missing profile vnum"};
+				}
+				step_list.emplace_back(std::make_shared<mods::orm::scripted_step>());
+				step_list.back()->initialize_row(profile->vnum());
+				return {1,CAT("Created step (pkid:",step_list.back()->id,") for sequence vnum: ",profile->vnum(),". Step count is now: ",step_list.size())};
 			});
 			/**
 			 * ==========================================
@@ -338,6 +358,9 @@ namespace mods::builder::seqbuild {
 			 *  -----------------------------------------
 			 */
 			register_custom_command("extract-step","<virtual_number> <field>...[field-N]",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<seqbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				if(!profile) {
+					return {0,"Invalid or missing profile vnum"};
+				}
 				/** signature: [0] => extract-step [1] => vnum [2] => field ... [N] => [field-N] */
 				// grab step
 				if(args.size() < 3) {
@@ -351,19 +374,6 @@ namespace mods::builder::seqbuild {
 					auto smap = s->export_class();
 					/** TODO DO THIS
 					 */
-#if 0
-					for(int i = 2; i < args.size(); i++) {
-						if(args[i].compare("s_task_type") == 0) {
-							push_encoded_ok(s->s_task_type));
-							continue;
-						}
-						if(args[i].compare("s_task_target") == 0) {
-							push_encoded_ok(mods::contracts::get_string_from_target((mods::contracts::target_t)s->s_task_target));
-							continue;
-						}
-						push_encoded_ok(smap[args[i]]);
-					}
-#endif
 				}
 				return {1,"Done listing."};
 			});
@@ -378,6 +388,9 @@ namespace mods::builder::seqbuild {
 			 *  -----------------------------------------
 			 */
 			register_custom_command("paginate-steps","<virtual_number> <page> <page-size>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<seqbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				if(!profile) {
+					return {0,"Invalid or missing profile vnum"};
+				}
 				/** signature: [0] => paginate-steps [1] => vnum [2] => page [3] => page-size */
 				// grab step
 				if(args.size() < 4) {
@@ -422,17 +435,15 @@ namespace mods::builder::seqbuild {
 			 *  -----------------------------------------
 			 */
 			register_custom_command("show-steps","<virtual_number>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<seqbuild_orm_type> profile) -> std::tuple<bool,std::string> {
-#if 0
-				/** TODO: */
-				this->step_list.clear();
-				auto s = mods::orm::gather_contract_steps_by_contract_vnum(profile->vnum(),&this->step_list);
-				for(const auto& s : this->step_list) {
-					if(s->s_sequence_vnum == profile->vnum()) {
-						dump_step(s);
-					}
+				if(!profile) {
+					return {0,"Invalid or missing profile vnum"};
 				}
-#endif
-				return {1,"Done listing."};
+				std::size_t ctr = 0;
+				for(const auto& step : step_list) {
+					player->sendln(CAT("{grn}[step index]:{/grn}{yel}",ctr++,"{/yel}"));
+					player->sendln(step->dump());
+				}
+				return {1,CAT("Listed ",step_list.size()," steps")};
 			});
 
 			/**
@@ -445,14 +456,31 @@ namespace mods::builder::seqbuild {
 			 *  -----------------------------------------
 			 */
 			register_integral_accumulator_command("save-step","<virtual_number> <Nth-step-id>...[Nth-step-id-N]",[&,this](const std::vector<int>&& step_ids,std::shared_ptr<seqbuild_orm_type> profile) -> std::tuple<bool,std::string> {
-#if 0
+				if(!profile) {
+					return {0,"Invalid or missing profile vnum"};
+				}
 				auto p = foreach_step_do(step_ids,"save");
-				this->step_list.clear();
-				mods::orm::gather__by_contract_vnum(profile->vnum(),&this->step_list);
 				return {1,CAT("saved ",std::get<0>(p)," successfully. failed saving: ",std::get<1>(p), " items")};
-#endif
-				return {1,"stub"};
 			});
+
+			/**
+			 * ==================================================
+			 * save-all-steps <vnum>
+			 * ==================================================
+			 * [description]
+			 *  -----------------------------------------
+			 * 	saves all the step by sequence id
+			 *  -----------------------------------------
+			 */
+			register_custom_command("save-all-steps","<virtual_number>",
+			[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<seqbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				if(!profile) {
+					return {0,"Invalid or missing profile vnum"};
+				}
+				auto p = foreach_step_do("save");
+				return {1, CAT("saved ",std::get<0>(p)," successfully. failed saving: ",std::get<1>(p), " items")};
+			});
+
 
 			/**
 			 * ==========================================
@@ -464,13 +492,41 @@ namespace mods::builder::seqbuild {
 			 *  -----------------------------------------
 			 */
 			register_integral_accumulator_command("delete-step","<virtual_number> <step-id>...[step-id-N]",[&,this](const std::vector<int>&& step_ids,std::shared_ptr<seqbuild_orm_type> profile) -> std::tuple<bool,std::string> {
-#if 0
-				auto p = foreach_step_do(step_ids,"delete");
-				this->step_list.clear();
-				mods::orm::gather_contract_steps_by_contract_vnum(profile->vnum(),&this->step_list);
-#endif
-				return {1,"stub"};
-				//return {1,CAT("deleted ",std::get<0>(p)," successfully. failed deleting: ",std::get<1>(p), " items")};
+				if(!profile) {
+					return {0,"Invalid or missing profile vnum"};
+				}
+				mods::orm::scripted_sequences orm;
+				std::string errors;
+				int i = 0;
+				for(const auto& index : step_ids) {
+					if(index >= this->step_list.size()) {
+						errors += CAT("Invalid step index: ",index,"! Skipping...\r\n");
+						continue;
+					}
+					this->step_list[index]->destroy();
+					auto s = this->step_list[index]->result();
+					if(ORM_FAILURE(s)) {
+						errors += CAT("Sql failure deleting index {yel}",index,"{/yel}:{red}",std::get<1>(s),"{/red}\r\n");
+					} else {
+						++i;
+					}
+				}
+				if(i) {
+					decltype(step_list) cleaned_steps;
+					for(unsigned k =0; k < step_list.size(); k++) {
+						if(std::find(step_ids.begin(),step_ids.end(),k) == step_ids.end()) {
+							cleaned_steps.emplace_back(step_list[k]);
+						}
+					}
+					step_list = std::move(cleaned_steps);
+				}
+				if(errors.length() && i > 0) {
+					return {1,CAT("Saved ",i," steps, but errors exist: ",errors)};
+				}
+				if(i == 0) {
+					return {0,"No steps saved."};
+				}
+				return {1,CAT("Saved ",i," steps")};
 			});
 
 			/**
@@ -486,11 +542,12 @@ namespace mods::builder::seqbuild {
 			 *  -----------------------------------------
 			 */
 			register_custom_command("load-steps","<virtual_number>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<seqbuild_orm_type> profile) -> std::tuple<bool,std::string> {
+				if(!profile) {
+					return {0,"Invalid or missing profile vnum"};
+				}
 				this->step_list.clear();
-#if 0
-				auto s = mods::orm::gather_contract_steps_by_contract_vnum(profile->vnum(),&this->step_list);
-#endif
-				return {1,"stub"};
+				mods::orm::gather_scripted_steps_by_sequence_vnum(profile->vnum(),&this->step_list);
+				return {1,"Loaded"};
 				//return {1,CAT("loaded ",std::get<0>(s)," entries.")};
 			});
 
@@ -505,134 +562,36 @@ namespace mods::builder::seqbuild {
 			 * 	-----------------------------------------
 			 */
 			register_custom_command("set-step-data","<virtual_number> <Nth-step> <field> <value>",[&,this](const std::vector<std::string>& args,std::string argument,std::shared_ptr<seqbuild_orm_type> profile) -> std::tuple<bool,std::string> {
-				/** signature: [0] => set-step-data [1] => vnum [2] => Nth-step [3] => field [4] => value */
-				if(args.size() < 5) {
-					return {0,"Invalid number of arguments"};
+				if(!profile) {
+					return {0,"Invalid or missing profile vnum"};
 				}
-				if(step_list.size() == 0) {
-					return {0,"no steps present on this contract"};
+				/** args:
+				 * [0] set-step-data
+				 * [1] vnum
+				 * [2] step-index
+				 * [3] field
+				 * [4] value
+				 */
+				if(!argshave()->int_at({1,2})->nth_is_any(3,step_column_list())->size_gt(4)->passed()) {
+					return {0,argshave()->errors()};
 				}
-				auto osid = mods::util::stoi(args[2]);
-				if(!osid.has_value()) {
-					return {0,"step-id must be a valid integer"};
+				auto index = args()->int_at(2);
+				if(index >= this->step_list.size() || index < 0) {
+					return {0,CAT("step index out of bounds: ",index)};
 				}
-				auto step_id = osid.value();
-				if(step_id >= step_list.size()) {
-					return {0,CAT("Nth-step must be between 0 and ",step_list.size() -1)};
+				if(argshave()->int_at({1,2,4})->nth_is_any(3,integral_list())->passed()) {
+					return this->step_list[index]->set(argat(3),argat(4));
 				}
-#if 0
-				auto& step = step_list[step_id];
-				auto& f = args[3];
-				auto& v = args[4];
-#define LAZY_CHECK() if(!mods::util::stoi(v).has_value()){ return {0,"Value must be a valid integer"}; }
-				if(f.compare("s_sequence_vnum") == 0) {
-					LAZY_CHECK();
-					step->s_sequence_vnum = mods::util::stoi(v).value();
-					return {1,"set"};
+				if(argshave()->int_at({1,2})->nth_is_any(3,accumulator_list())->passed()) {
+					/** we need to accumulate. save everything after the field argument */
+					return this->step_list[index]->set(argat(3),args()->gather_strings_starting_at(4));
 				}
-				if(f.compare("s_task_type") == 0) {
-					if(v.length() == 0) {
-						step->s_task_type = 0;
-						return {1,"cleared task type (set to zero)"};
-					}
-					auto task_flag = mods::contracts::parse_csv_to_task_flag(v);
-					step->s_task_type = task_flag;
-					return {1,CAT("set task_flag to: ",step->s_task_type,", or: '",v,"'")};
+				if(argshave()->int_at({1,2})->nth_is_any(3,string_list())->passed()) {
+					return this->step_list[index]->set(argat(3),argat(4));
 				}
-				if(f.compare("s_task_target") == 0) {
-					if(v.length() == 0) {
-						step->s_task_target = 0;
-						return {1,"cleared target type (set to zero)"};
-					}
-					auto target = mods::contracts::parse_target_string(v);
-					step->s_task_target = target;
-					return {1,CAT("set target to: ",step->s_task_target,", or: '",v,"'")};
-				}
-				if(f.compare("s_description") == 0) {
-					step->s_description = this->accumulate_from(args,4);
-					return {1,"set"};
-				}
-				if(f.compare("s_mob_vnum") == 0) {
-					LAZY_CHECK();
-					step->s_mob_vnum = mods::util::stoi(v).value();
-					return {1,"set"};
-				}
-				if(f.compare("s_room_vnum") == 0) {
-					LAZY_CHECK();
-					step->s_room_vnum = mods::util::stoi(v).value();
-					return {1,"set"};
-				}
-				if(f.compare("s_quota") == 0) {
-					LAZY_CHECK();
-					step->s_quota = mods::util::stoi(v).value();
-					return {1,"set"};
-				}
-				if(f.compare("s_is_optional") == 0) {
-					LAZY_CHECK();
-					step->s_is_optional = mods::util::stoi(v).value();
-					return {1,"set"};
-				}
-				if(f.compare("s_order") == 0) {
-					LAZY_CHECK();
-					step->s_order = mods::util::stoi(v).value();
-					return {1,"set"};
-				}
-				if(f.compare("s_object_yaml") == 0) {
-					step->s_object_yaml = v;
-					return {1,"set"};
-				}
-				if(f.compare("s_reward_1") == 0) {
-					step->s_reward_1 = v;
-					return {1,"set"};
-				}
-				if(f.compare("s_reward_2") == 0) {
-					step->s_reward_2 = v;
-					return {1,"set"};
-				}
-				if(f.compare("s_reward_3") == 0) {
-					step->s_reward_3 = v;
-					return {1,"set"};
-				}
-				if(f.compare("s_reward_4") == 0) {
-					step->s_reward_4 = v;
-					return {1,"set"};
-				}
-				if(f.compare("s_reward_5") == 0) {
-					step->s_reward_5 = v;
-					return {1,"set"};
-				}
-				if(f.compare("s_reward_6") == 0) {
-					step->s_reward_6 = v;
-					return {1,"set"};
-				}
-				if(f.compare("s_reward_7") == 0) {
-					step->s_reward_7 = v;
-					return {1,"set"};
-				}
-				if(f.compare("s_reward_8") == 0) {
-					step->s_reward_8 = v;
-					return {1,"set"};
-				}
-				if(f.compare("s_reward_9") == 0) {
-					step->s_reward_9 = v;
-					return {1,"set"};
-				}
-				if(f.compare("s_reward_10") == 0) {
-					step->s_reward_10 = v;
-					return {1,"set"};
-				}
-				if(f.compare("s_reward_money") == 0) {
-					step->s_reward_money = mods::util::stoi(v).value_or(0);
-					return {1,"set"};
-				}
-				if(f.compare("s_reward_xp") == 0) {
-					step->s_reward_xp = mods::util::stoi(v).value_or(0);
-					return {1,"set"};
-				}
-#endif
 				return {0,"nothing set"};
 			});
-		}
+		}//end seqbuild_interface
 
 		/** ======== */
 		/** required */
@@ -645,17 +604,16 @@ namespace mods::builder::seqbuild {
 			if(cmd_args.size() < 2) {
 				return {0,"Error: not enough arguments"};
 			}
-			auto sequence_vnum = extract_int<int>("new",argument.c_str(),1).value_or(-1);
-			if(sequence_vnum < 0) {
-				return {0,"sequence_vnum must be a positive number"};
+			if(argshave()->int_at(1)->first_is("new")) {
+				auto c = std::make_shared<mods::orm::scripted_sequences>();
+				auto id = c->initialize_row(args()->int_at(1));
+				if(id <= 0) {
+					return {0,"Couldn't initialize row"};
+				}
+				mods::orm::scripted_sequences_list().emplace_back(std::move(c));
+				return {1,"Created row."};
 			}
-			auto c = std::make_shared<mods::orm::scripted_sequences>();
-			auto id = c->initialize_row(sequence_vnum);
-			if(id <= 0) {
-				return {0,"Couldn't initialize row"};
-			}
-			mods::orm::scripted_sequences_list().emplace_back(std::move(c));
-			return {1,"Created row."};
+			return {0,"Invalid arguments"};
 		}
 		/** ======== */
 		/** required */
@@ -716,128 +674,8 @@ namespace mods::builder::seqbuild {
 			return;
 		}
 
-		auto vec_args = mods::util::arglist<std::vector<std::string>>(std::string(argument));
-		/** map-list */
-		{
-			auto args = mods::util::subcmd_args<11,args_t>(argument,"map-list");
-
-			if(args.has_value()) {
-				ENCODE_INIT();
-				/**
-				 * cmd_args will be: [0] => map-list
-				 */
-				std::string list = "";
-				for(const auto& m : mods::orm::scripted_step_list()) {
-					list += CAT("{contract_vnum:",m->s_sequence_vnum,",todo:1}");
-				}
-				ENCODE_R(list);
-				r_success(player,list);
-				return;
-			}//end pave on
-		}
-		/** map-assign */
-		{
-			auto args = mods::util::subcmd_args<11,args_t>(argument,"map-assign");
-
-			if(args.has_value()) {
-				ENCODE_INIT();
-				auto cmd_args = args.value();
-				if(cmd_args.size() < 3) {
-					r_error(player,"Not enough arguments");
-					return;
-				}
-				/**
-				 * cmd_args will be: [0] => map-assign, [1] => <mob-vnum> [2] => <eq-vnum>
-				 */
-				auto mvn = mods::util::stoi(cmd_args[1]).value_or(-1);
-				auto eq_vnum = mods::util::stoi(cmd_args[2]).value_or(-1);
-				if(mvn <= 0) {
-					r_error(player,"mob vnum must be a positive number");
-					return;
-				}
-				if(eq_vnum <= 0) {
-					r_error(player,"eq vnum must be a positive number");
-					return;
-				}
-#if 0
-				for(auto& m : mods::orm::scripted_step_list()) {
-					/*
-					if(m->mmap_mob_vnum == mvn) {
-						auto backup = m->mmap_contracts_vnum;
-						m->mmap_contracts_vnum = eq_vnum;
-						if(m->save() < 0) {
-							r_error(player,"Unable to save existing.");
-							m->mmap_contracts_vnum = backup;
-							return;
-						}
-						*/
-					r_success(player,"Saved existing.");
-					ENCODE_R("ok");
-					return;
-					//}
-				}
-				/** we've reached here which means no existing map exists. create one */
-				auto ref = std::make_shared<mods::orm::scripted_sequences>();
-				ref->initialize_row(mvn,eq_vnum);
-				ref->mmap_mob_vnum = mvn;
-				ref->mmap_contracts_vnum = eq_vnum;
-				if(ref->save() < 0) {
-					r_error(player,"Unable to save.");
-					return;
-				}
-				mods::orm::contracts_map_list().emplace_back(std::move(ref));
-#endif
-				r_success(player,"Created new mapping and saved");
-				ENCODE_R("ok");
-				return;
-			}//end pave on
-		}
-		/** map-delete */
-		{
-			auto args = mods::util::subcmd_args<11,args_t>(argument,"map-delete");
-
-			if(args.has_value()) {
-				ENCODE_INIT();
-				auto cmd_args = args.value();
-				if(cmd_args.size() < 2) {
-					r_error(player,"Not enough arguments");
-					return;
-				}
-				/**
-				 * cmd_args will be: [0] => map-delete, [1] => <mob-vnum> ... [N] => <mob-vnum-N>
-				 */
-#if 0
-				std::string list = "";
-				std::deque<std::shared_ptr<mods::orm::scripted_sequences>> after;
-				for(unsigned i=1; i < cmd_args.size(); ++i) {
-					auto mvn = mods::util::stoi(cmd_args[i]).value_or(-1);
-					if(mvn < 0) {
-						r_error(player,"mob vnum must be a positive number");
-						continue;
-					}
-					for(auto& m : mods::orm::contracts_map_list()) {
-						if(m->mmap_mob_vnum == mvn) {
-							m->destroy();
-							m->destroyed = true;
-							list += CAT("{",mvn,"}");
-							continue;
-						}
-					}
-				}
-				for(auto& m : mods::orm::contracts_map_list()) {
-					if(m->destroyed) {
-						continue;
-					}
-					after.emplace_back(std::move(m));
-				}
-				mods::orm::contracts_map_list() = std::move(after);
-				r_success(player,CAT("Deleted: ",list));
-				ENCODE_R(list);
-#endif
-				return;
-			}//end pave on
-		}
 	}	//end seqbuild
+
 	void init() {
 		mods::interpreter::add_command("seqbuild", POS_RESTING, do_seqbuild, LVL_BUILDER,0);
 		seqbuilder(nullptr);

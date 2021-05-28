@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include "../../globals.hpp"
+#include "../orm/scripted-step.hpp"
 
 namespace mods::builder {
 	static constexpr uint8_t MSG_SUCCESS = 0;
@@ -25,6 +26,7 @@ namespace mods::builder {
 		protected:
 			std::vector<std::string> m_slot_list;
 			player_ptr_t m_builder_ptr;
+			player_ptr_t player;
 			std::vector<std::string> m_encoded_response;
 			std::map<std::string,custom_command_t> m_custom_command_map;
 			std::map<std::string,custom_manual_command_t> m_custom_manual_command_map;
@@ -62,8 +64,9 @@ namespace mods::builder {
 			/** ###---------------------------------------------------------------------------### */
 
 			/** [ 1 ] -> set this to the player calling your ACMD function */
-			void set_builder(player_ptr_t player) {
-				m_builder_ptr = player;
+			void set_builder(player_ptr_t p) {
+				m_builder_ptr = p;
+				player = p;
 			}
 
 			/** [ 2 ] -> point this to your singleton instance (i.e.: mods::orm::mob_equipment_list()) */

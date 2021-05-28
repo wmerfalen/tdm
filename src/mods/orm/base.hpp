@@ -129,6 +129,34 @@ namespace mods::orm {
 			}
 			return {-2,"unknown"};
 		}
+		template <typename TContainerObject>
+		static inline std::tuple<int16_t,std::string> load_where_order_by(TContainerObject& s,
+		                                                                  std::string_view where,
+		                                                                  std::string_view sql_operator,
+		                                                                  std::string_view value,
+		                                                                  std::string_view order_by,
+		                                                                  std::string_view direction) {
+			try {
+				auto select_transaction = txn();
+				sql_compositor comp(s[0].table_name(),&select_transaction);
+				auto player_sql = comp.select("*")
+				                  .from(s[0].table_name())
+				                  .where(where.data(), sql_operator.data(), value.data())
+				                  .order_by(order_by.data(),direction.data())
+				                  .sql();
+				std::cerr << "load_where_order_by:'" << player_sql << "'\n";
+				auto player_record = mods::pq::exec(select_transaction,player_sql);
+				mods::pq::commit(select_transaction);
+				for(auto row : player_record) {
+					s.emplace_back(row);
+				}
+				return {player_record.size(),"okay"};
+			} catch(std::exception& e) {
+				REPORT_DB_ISSUE(": error loading character by pkid: '",e.what());
+				return {-1,e.what()};
+			}
+			return {-2,"unknown"};
+		}
 		template <typename TObject>
 		static inline std::tuple<int16_t,std::string> load_by_pkid(TObject& s,std::string pkid) {
 			try {

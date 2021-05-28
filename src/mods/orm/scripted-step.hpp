@@ -28,7 +28,7 @@ namespace mods::orm {
 		 * slot list: 1 = list this var in slot_list(), 0 = don't list in slot_list
 		 */
 #define SCSTEP_MEMBERS_TUPLE ( \
-(uint64_t,id,0,1,0,0), \
+(uint64_t,id,0,1,null,0), \
 (sequence_vnum_t,s_sequence_vnum,0,1,vnum,1), \
 (uint16_t,s_wait_ticks,0,1,wait_ticks,1), \
 (mob_vnum,s_mob,0,1,mob,1), \
@@ -60,11 +60,31 @@ namespace mods::orm {
 		scripted_step() {
 			init();
 			loaded = 0;
+			set_accumulators();
 		}
 		scripted_step(const pqxx::result::reference& row) {
 			feed(row);
+			set_accumulators();
+		}
+		scripted_step(pqxx::row& row);
+		void set_accumulators() {
+			accumulators.clear();
+			accumulators = {"s_dialogue","s_interpret"};
 		}
 
+		void fill(const mods::scripted_step& s) {
+			s_sequence_vnum = s.vnum;
+			s_wait_ticks = s.wait_ticks;
+			s_dialogue = s.dialogue;
+			s_mob = s.mob;
+			s_obj = s.obj;
+			s_room = s.room;
+			s_yaml = s.yaml;
+			s_type = s.type;
+			s_interpret = s.interpret;
+			s_quantity = s.quantity;
+			s_order = s.order;
+		}
 		operator mods::scripted_step() const {
 			mods::scripted_step s;
 			s.vnum = s_sequence_vnum;
@@ -105,15 +125,12 @@ namespace mods::orm {
 		 * Member Var Type, Member Var Name, initailized value, pqxx conversion type, native object field, slot list
 		 */
 #define SSEQ_MEMBERS_TUPLE ( \
-(uint64_t,id,0,1,0,0), \
+(uint64_t,id,0,1,null,0), \
 (sequence_vnum_t,s_sequence_vnum,0,1,vnum,1) \
 )
 
 		MENTOC_ORM_CLASS(SSEQ_MEMBERS_TUPLE,"scripted_sequences");
 
-		std::string table_name() const {
-			return table_name_value;
-		}
 		virtual ~scripted_sequences();
 		scripted_sequences();
 		scripted_sequences(const sequence_vnum_t& scripted_vnum);
@@ -156,7 +173,7 @@ namespace mods::orm {
 		 * Member Var Type, Member Var Name, initailized value, pqxx conversion type, native object field, slot list
 		 */
 #define CSTEP_MEMBERS_TUPLE ( \
-(uint64_t,id,0,1,0,0), \
+(uint64_t,id,0,1,null,0), \
 (contract_vnum_t,s_contract_vnum,0,1,contract_vnum,1), \
 (sequence_vnum_t,s_sequence_vnum,0,1,sequence_vnum,1), \
 (task_vnum_t,s_task_vnum,0,1,task_vnum,1), \
@@ -169,21 +186,15 @@ namespace mods::orm {
 			auto s = load_by_scripted_vnum(scripted_vnum);
 			std::cerr << "contract_step_callback(scripted_vnum) constructor status: " << std::get<0>(s) << "|'" << std::get<1>(s) << "'\n";
 		}
-		/*
-		void fill(mods::contract_step_callback& c) {
-			for(auto& row : rows) {
-				std::cerr << green_str("contract_step_callback filling scripted:") << c.vnum << "\n";
-				c.steps.emplace_back(row);
-			}
-		}
-		*/
-		~contract_step_callback() = default;
+		virtual ~contract_step_callback();
+		contract_step_callback();
 
 		std::string primary_key_value();
 
 		void destroy();
 		std::tuple<int16_t,std::string> destroy_status;
-		uint64_t initialize_row(contract_vnum_t, task_type_t, task_target_t, task_vnum_t task_vnum, sequence_vnum_t sequence_vnum);
+		contract_step_callback(contract_vnum_t, std::string_view, std::string_view, task_vnum_t task_vnum, sequence_vnum_t sequence_vnum);
+		uint64_t initialize_row(contract_vnum_t, std::string_view, std::string_view, task_vnum_t task_vnum, sequence_vnum_t sequence_vnum);
 
 		int16_t save();
 
@@ -202,7 +213,7 @@ namespace mods::orm {
 	std::tuple<int16_t,std::string> load_all_scripted_steps();
 
 	std::tuple<int16_t,std::string> load_all_scripted_data();
-	std::tuple<int16_t,std::string> gather_scripted_steps_by_sequence_vnum(const sequence_vnum_t& scripted_vnum,std::deque<std::shared_ptr<mods::orm::scripted_sequences>>* list);
+	std::tuple<int16_t,std::string> gather_scripted_steps_by_sequence_vnum(const sequence_vnum_t& vnum,std::deque<std::shared_ptr<mods::orm::scripted_step>>* list);
 //std::tuple<int16_t,std::string> load_player_skill_data(player_ptr_t& player, std::map<uint32_t,uint16_t>* data);
 //std::tuple<int16_t,std::string> sync_player_with_class_skills(const uint64_t& player_id, std::string_view player_class);
 };

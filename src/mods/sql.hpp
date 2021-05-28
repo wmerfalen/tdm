@@ -382,6 +382,7 @@ namespace mods::sql {
 			T* m_txn_ptr;
 	};
 
+	void error_log(std::string_view);
 };
 
 #endif

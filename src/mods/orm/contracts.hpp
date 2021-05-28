@@ -7,14 +7,13 @@
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
-	static constexpr std::string_view contracts_table_name = "contracts";
 	using contract_vnum_t = uint32_t;
 
 	struct contracts : public mods::orm::orm_base<contracts,std::string> {
 		using primary_choice_t = std::string;
-		static constexpr const char* table_name_value = "contracts";
-		std::string table_name() const {
-			return contracts_table_name.data();
+		const char* table = "contracts";
+		std::string table_name() {
+			return table;
 		}
 		std::string column_prefix() const {
 			return "c_";

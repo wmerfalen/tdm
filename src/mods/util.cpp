@@ -11,6 +11,7 @@
 #include <random>
 #include <filesystem>
 #include "deep-object-parser.hpp"
+#include <algorithm>
 
 #ifdef __MENTOC_MODS_UTIL_DEBUG__
 #define mu_debug(A) std::cerr << "[mods::util][debug]:'" << A << "'\n";
@@ -26,6 +27,36 @@ namespace mods::util {
 	}
 	std::string overview() {
 		return "{yel}Overview{/yel}\r\n";
+	}
+	bool match_any(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch) {
+		for(auto& str : any_of_these) {
+			if(strncmp(src.data(),str.c_str(),max_ch) == 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool is_lower_match(std::string_view str1,std::string_view str2) {
+		unsigned int sz = str1.size();
+		if(str2.size() != sz) {
+			return false;
+		}
+
+		for(unsigned int i = 0; i < sz; ++i) {
+			if(std::tolower(str1[i]) != std::tolower(str2[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
+	bool match_any_lower(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch) {
+		for(auto& str : any_of_these) {
+			if(is_lower_match(str,src)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	/**
 	 * @brief parses strings of the form: "#yaml|type/path-to.yml"
@@ -740,36 +771,6 @@ namespace mods::util {
 	}
 	*/
 	// --
-	bool match_any(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch) {
-		for(auto& str : any_of_these) {
-			if(strncmp(src.data(),str.c_str(),max_ch) == 0) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	bool is_lower_match(std::string_view str1,std::string_view str2) {
-		unsigned int sz = str1.size();
-		if(str2.size() != sz) {
-			return false;
-		}
-
-		for(unsigned int i = 0; i < sz; ++i) {
-			if(std::tolower(str1[i]) != std::tolower(str2[i])) {
-				return false;
-			}
-		}
-		return true;
-	}
-	bool match_any_lower(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch) {
-		for(auto& str : any_of_these) {
-			if(is_lower_match(str,src)) {
-				return true;
-			}
-		}
-		return false;
-	}
 	player_class_t to_player_class(std::string_view str) {
 		if(is_lower_match(str,"SNIPER")) {
 			return player_class_t::SNIPER;
@@ -1044,11 +1045,30 @@ namespace mods::util::args {
 		return false;
 	}
 };
+std::vector<int> to_int_range(auto begin,auto end, const std::vector<std::string>& vec_args) {
+	std::vector<int> list;
+	auto t = [&](std::string_view element) {
+		list.emplace_back(mods::util::stoi(element.data()).value_or(-1));
+	};
+	std::for_each(begin,end,t);
+	return list;
+}
+std::vector<int> to_int_range(const std::vector<std::string>& vec_args,std::size_t index) {
+	std::vector<int> list;
+	if(index >= vec_args.size()) {
+		return list;
+	}
+	auto t = [&](std::string_view element) {
+		list.emplace_back(mods::util::stoi(element.data()).value_or(-1));
+	};
+	std::for_each(vec_args.cbegin()+index,vec_args.cend(),t);
+	return list;
+}
 namespace mods::util::args {
-	int parsed_args::fetch_integer(int index) {
+	int parsed_args::fetch_integer(std::size_t index) {
 		return fetch_parsed_integer(index);
 	}
-	int parsed_args::fetch_parsed_integer(int index) {
+	int parsed_args::fetch_parsed_integer(std::size_t index) {
 		return i_storage[index];
 		if(i_storage.size() > index) {
 			std::cerr << "returning i_storage index :)\n";
@@ -1057,50 +1077,25 @@ namespace mods::util::args {
 		return -1;
 	}
 	void parsed_args::assign(const std::string& argument) {
-		static std::string static_argument;
-		if(static_argument.compare(argument.c_str()) == 0) {
-			/** already parsed */
-			return;
-		}
-		static_argument = argument;
 		vec_args = arglist<std::vector<std::string>>(argument);
 		size = vec_args.size();
 	}
 	bool parsed_args::first_is(std::string_view list_string) {
-		if(vec_args.size() == 0) {
-			return false;
-		}
-		return is_lower_match(list_string,vec_args[0]);
+		return mods::util::nth_is(0,vec_args,list_string);
 	}
-	bool parsed_args::first_is_any(std::vector<const char*> list_string) {
-		if(vec_args.size() == 0) {
-			return false;
-		}
-		for(const auto& token : list_string) {
-			if(is_lower_match(token,vec_args[0])) {
-				return true;
-			}
-		}
-		return false;
+	bool parsed_args::first_is_any(std::vector<std::string> list_string) {
+		return mods::util::nth_is_any(0,vec_args,list_string);
 	}
-	bool parsed_args::nth_is_any(int index,std::vector<const char*> list_string) {
-		if(vec_args.size() <= index) {
-			return false;
-		}
-		for(const auto& token : list_string) {
-			if(is_lower_match(token,vec_args[index])) {
-				return true;
-			}
-		}
-		return false;
+	bool parsed_args::nth_is_any(std::size_t index,std::vector<std::string> list_string) {
+		return mods::util::nth_is_any(index,vec_args,list_string);
 	}
-	parsed_args* parsed_args::save_integer(std::vector<int> index) {
+	parsed_args* parsed_args::save_integer(const std::vector<std::size_t>& index) {
 		for(const auto& i : index) {
 			save_integer(i);
 		}
 		return this;
 	}
-	parsed_args* parsed_args::save_integer(int index) {
+	parsed_args* parsed_args::save_integer(std::size_t index) {
 		int n = 0;
 		for(auto f : vec_args) {
 			std::cerr << "f[" << n++ << "](asking for:" << index << "): '" << f << "'\n";
@@ -1117,16 +1112,141 @@ namespace mods::util::args {
 		return this;
 	}
 
-	bool parsed_args::if_nth_has_either(int index,std::vector<const char*> list_string) {
+	bool parsed_args::nth_has_integer(std::size_t index) {
 		if(vec_args.size() <= index) {
 			return false;
 		}
-		for(const auto& token : list_string) {
-			if(is_lower_match(token,vec_args[index])) {
-				return true;
+		auto o = mods::util::stoi(vec_args[index]);
+		return o.has_value();
+	}
+	bool parsed_args::nth_has_integer(std::vector<std::size_t> indices) {
+		for(const auto& index : indices) {
+			if(vec_args.size() < index) {
+				return false;
+			}
+			if(!mods::util::stoi(vec_args[index]).has_value()) {
+				return false;
 			}
 		}
-		return false;
+		return true;
+	}
+	bool parsed_args::if_nth_has_either(std::size_t index,std::vector<std::string> list_string) {
+		if(vec_args.size() <= index) {
+			return false;
+		}
+		return mods::util::nth_is_any(index,vec_args,list_string);
+	}
+	std::vector<int> parsed_args::gather_integers_starting_at(std::size_t index) {
+		return to_int_range(vec_args,index);
+	}
+	std::string parsed_args::gather_strings_starting_at(std::size_t index) {
+		if(index >= vec_args.size()) {
+			return "";
+		}
+		std::string list;
+		for(int i =index; i < size; i++) {
+			list += vec_args[i];
+			if(i + 1 < size) {
+				list += " ";
+			}
+		}
+		return list;
+	}
+	std::string parsed_args::at(std::size_t index) {
+		if(vec_args.size() > index) {
+			return vec_args[index];
+		}
+		return "";
+	}
+	std::vector<std::string> parsed_args::multi(std::vector<std::size_t> indexes) {
+		std::vector<std::string> list;
+		for(const auto& index : indexes) {
+			if(index < vec_args.size()) {
+				list.emplace_back(vec_args[index]);
+			} else {
+				list.emplace_back("");
+			}
+		}
+		return list;
+	}
+	int parsed_args::int_at(std::size_t index) {
+		save_integer(index);
+		return fetch_integer(index);
+	}
+	std::map<std::size_t,int> parsed_args::int_map(std::vector<std::size_t> indexes) {
+		std::map<std::size_t,int> m;
+		for(const auto& index : indexes) {
+			save_integer(index);
+			m[index] = fetch_integer(index);
+		}
+		return m;
+	}
+	void check_parsed_args::result(std::string f,std::string value,bool passed) {
+		auto s = CAT(f,":'",value,"'");
+		passed_map[s] = passed;
+	}
+	void check_parsed_args::result(std::string f,std::size_t index,bool passed) {
+		auto s = CAT(f,"[",index,"]");
+		passed_map[s] = passed;
+	}
+	check_parsed_args* check_parsed_args::first_is(std::string_view list_string) {
+		result("first_is",list_string.data(),p->first_is(list_string));
+		return this;
+	}
+	check_parsed_args* check_parsed_args::first_is_any(std::vector<std::string> list_string) {
+		result("first_is_any","",p->first_is_any(list_string));
+		return this;
+	}
+	check_parsed_args* check_parsed_args::nth_is_any(std::size_t index,std::vector<std::string> list_string) {
+		result("nth_is_any",index,p->nth_is_any(index,list_string));
+		return this;
+	}
+	check_parsed_args* check_parsed_args::if_nth_has_either(std::size_t index,std::vector<std::string> list_string) {
+		result("if_nth_has_either",index,p->if_nth_has_either(index,list_string));
+		return this;
+	}
+	check_parsed_args* check_parsed_args::nth_has_integer(std::size_t index) {
+		result("nth_has_integer",index,p->nth_has_integer(index));
+		return this;
+	}
+	check_parsed_args* check_parsed_args::nth_has_integer(std::vector<std::size_t> index) {
+		result("nth_has_integer","",p->nth_has_integer(index));
+		return this;
+	}
+	check_parsed_args* check_parsed_args::size_gt(std::size_t size) {
+		result("size_gt",size,p->vec_args.size() > size);
+		return this;
+	}
+	check_parsed_args* check_parsed_args::size_eq(std::size_t size) {
+		result("size_eq",size,p->vec_args.size() == size);
+		return this;
+	}
+	bool check_parsed_args::passed() {
+		for(const auto& pair : passed_map) {
+			if(pair.second == false) {
+				return false;
+			}
+		}
+		return true;
+	}
+	check_parsed_args* check_parsed_args::int_at(std::size_t index) {
+		result("int_at",index,p->nth_has_integer(index));
+		return this;
+	}
+	check_parsed_args* check_parsed_args::int_at(std::vector<std::size_t> index) {
+		result("int_at","",p->nth_has_integer(index));
+		return this;
+
+	}
+	std::string check_parsed_args::errors() {
+		std::string error;
+		for(const auto& pair : passed_map) {
+			if(pair.second) {
+				continue;
+			}
+			error += CAT("{red}[{yel}",pair.first,"{/yel}{red}]{/red} failed.\r\n");
+		}
+		return error;
 	}
 };
 #undef mu_debug

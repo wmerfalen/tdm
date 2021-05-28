@@ -7,7 +7,7 @@
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
 	struct hq : public mods::orm::orm_base<hq,uint8_t> {
-		static constexpr const char* table_name_value = "hq_locations";
+		static constexpr const char* table = "hq_locations";
 		static std::vector<std::string> get_slot_list() {
 			return {
 				"hq_affiliation",
@@ -24,9 +24,6 @@ namespace mods::orm {
 				"replenish_advanced_count",
 				"replenish_elite_count",
 			};
-		}
-		std::string table_name() {
-			return table_name_value;
 		}
 		std::string column_prefix() {
 			return "hq_";

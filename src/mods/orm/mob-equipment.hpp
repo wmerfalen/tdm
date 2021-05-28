@@ -7,7 +7,10 @@
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
 	struct mob_equipment : public mods::orm::orm_base<mob_equipment,uint8_t> {
-		static constexpr const char* table_name_value = "mob_equipment";
+		const char* table = "mob_equipment";
+		std::string table_name() const {
+			return table;
+		}
 		static std::vector<std::string> get_slot_list() {
 			return {
 				"profile_name",
@@ -43,9 +46,6 @@ namespace mods::orm {
 
 		auto vnum() {
 			return meq_vnum;
-		}
-		std::string table_name() {
-			return table_name_value;
 		}
 		std::string column_prefix() {
 			return "meq_";

@@ -1,6 +1,7 @@
 #ifndef __MENTOC_MODS_ORM_UTIL_HEADER__
 #define __MENTOC_MODS_ORM_UTIL_HEADER__
 #include <forward_list>
+#include <functional>
 
 #define NULLABLE_U32(ITEM) row[ITEM].is_null() ? 0 : row[ITEM].as<uint32_t>();
 namespace mods::orm::util {
@@ -305,6 +306,35 @@ namespace mods::orm::util {
 				return {FETCHED_OKAY,"okay"};
 			}
 			return {NO_RESULTS,"no results"};
+		} catch(std::exception& e) {
+			return {EXCEPTION_OCCURRED,e.what()};
+		}
+		return {UNKNOWN_ERROR,"unknown"};
+	}
+	template <typename sql_compositor>
+	static inline std::tuple<int16_t,std::string> foreach_load_by_column_order_by(
+	    std::string_view table,
+	    std::string_view column,
+	    std::string_view value,
+	    std::string_view order_by,
+	    std::string_view direction,
+	    std::function<void(pqxx::row)> callback) {
+		try {
+			auto select_transaction = txn();
+			sql_compositor comp(table.data(),&select_transaction);
+			auto player_sql = comp.select("*")
+			                  .from(table.data())
+			                  .where(column.data(),"=",value.data())
+			                  .order_by(order_by.data(),direction.data())
+			                  .sql();
+			auto player_record = mods::pq::exec(select_transaction,player_sql);
+			if(player_record.size() == 0) {
+				return {NO_RESULTS,"no results"};
+			}
+			for(auto row : player_record) {
+				callback(row);
+			}
+			return {FETCHED_OKAY,"okay"};
 		} catch(std::exception& e) {
 			return {EXCEPTION_OCCURRED,e.what()};
 		}

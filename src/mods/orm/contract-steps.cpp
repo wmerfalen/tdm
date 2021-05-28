@@ -159,7 +159,7 @@ namespace mods::orm {
 
 	std::tuple<int16_t,std::string> contract_steps::load_by_contract_vnum(const contract_vnum_t& contract_vnum) {
 		//mods::contracts::contract c;
-		auto result = db_get_by_meta(contract_steps_table_name.data(),"s_contract_vnum",std::to_string(contract_vnum));
+		auto result = db_get_by_meta(contract_steps::table,"s_contract_vnum",std::to_string(contract_vnum));
 		if(result.size() == 0) {
 			return {0,"no results"};
 		}
@@ -197,7 +197,7 @@ namespace mods::orm {
 
 	}
 	std::tuple<int16_t,std::string> gather_contract_steps_by_contract_vnum(const contract_vnum_t& contract_vnum,std::deque<std::shared_ptr<mods::orm::contract_steps>>* in_list_ptr) {
-		auto result = db_get_by_meta(contract_steps_table_name.data(),"s_contract_vnum",std::to_string(contract_vnum));
+		auto result = db_get_by_meta(contract_steps().table,"s_contract_vnum",std::to_string(contract_vnum));
 		if(result.size() == 0) {
 			return {0,"no results"};
 		}

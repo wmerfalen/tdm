@@ -29,6 +29,27 @@ namespace mods::util {
 		"rifle","explosive","drone","attachment","gadget",
 		"armor","trap","consumable","container","vehicle"
 	};
+	bool match_any(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch);
+
+	bool is_lower_match(std::string_view str1,std::string_view str2);
+	bool match_any_lower(std::string_view src,std::vector<std::string> any_of_these,std::size_t max_ch);
+
+	template <typename T>
+	static inline bool nth_is_any(std::size_t n,const std::vector<T> vec_args,const std::vector<T>& list_string) {
+		if(vec_args.size() <= n) {
+			return false;
+		}
+		return std::any_of(list_string.cbegin(),list_string.cend(),[&](const auto & token) -> bool {
+			return is_lower_match(token,vec_args[n]);
+		});
+	}
+	template <typename T>
+	static inline bool nth_is(std::size_t n,const std::vector<T> vec_args,std::string_view search) {
+		if(vec_args.size() <= n) {
+			return false;
+		}
+		return is_lower_match(search.data(),vec_args[n]);
+	}
 	enum yaml_type_t {
 		UNRECOGNIZED = 0,
 		CATCHY_YAML_FILE = 1,
@@ -306,6 +327,7 @@ namespace mods::util {
 			vec.emplace_back(element);
 		}
 	}
+
 	template <typename T>
 	bool in_array(std::string f,std::vector<T> strings) {
 		return std::find(strings.begin(),strings.end(),f) != strings.end();
@@ -328,15 +350,51 @@ namespace mods::util::args {
 		std::vector<std::string> vec_args;
 		std::vector<int> i_storage;
 
-		int fetch_integer(int index);
-		int fetch_parsed_integer(int index);
+		int fetch_integer(std::size_t index);
+		int fetch_parsed_integer(std::size_t index);
 		void assign(const std::string& argument);
 		bool first_is(std::string_view list_string);
-		bool first_is_any(std::vector<const char*> list_string);
-		bool nth_is_any(int index,std::vector<const char*> list_string);
-		parsed_args* save_integer(int index);
-		parsed_args* save_integer(std::vector<int> index);
-		bool if_nth_has_either(int index,std::vector<const char*> list_string);
+		bool first_is_any(std::vector<std::string> list_string);
+		bool nth_is_any(std::size_t index,std::vector<std::string> list_string);
+		bool if_nth_has_either(std::size_t index,std::vector<std::string> list_string);
+		bool nth_has_integer(std::size_t index);
+		bool nth_has_integer(std::vector<std::size_t> index);
+		parsed_args* save_integer(std::size_t index);
+		parsed_args* save_integer(const std::vector<std::size_t>& index);
+		std::vector<int> gather_integers_starting_at(std::size_t index);
+		std::string gather_strings_starting_at(std::size_t index);
+
+		std::string at(std::size_t index);
+		int int_at(std::size_t index);
+		std::vector<std::string> multi(std::vector<std::size_t> indexes);
+		std::map<std::size_t,int> int_map(std::vector<std::size_t> indexes);
+	};
+	struct check_parsed_args {
+			parsed_args* p;
+			void feed(parsed_args* _p) {
+				p = _p;
+			}
+			std::map<std::string,bool> passed_map;
+			std::vector<std::string> where_failed;
+			void clear() {
+				passed_map.clear();
+				where_failed.clear();
+			}
+			check_parsed_args* first_is(std::string_view list_string);
+			check_parsed_args* first_is_any(std::vector<std::string> list_string);
+			check_parsed_args* nth_is_any(std::size_t index,std::vector<std::string> list_string);
+			check_parsed_args* if_nth_has_either(std::size_t index,std::vector<std::string> list_string);
+			check_parsed_args* nth_has_integer(std::size_t index);
+			check_parsed_args* nth_has_integer(std::vector<std::size_t> index);
+			check_parsed_args* int_at(std::size_t index);
+			check_parsed_args* int_at(std::vector<std::size_t> index);
+			check_parsed_args* size_gt(std::size_t size);
+			check_parsed_args* size_eq(std::size_t size);
+			std::string errors();
+			bool passed();
+		private:
+			void result(std::string f,std::string value,bool passed);
+			void result(std::string f,std::size_t value,bool passed);
 	};
 	struct arglist_parser {
 		parsed_args parsed;
@@ -350,9 +408,20 @@ namespace mods::util::args {
 			parsed.assign(argument);
 			return &parsed;
 		}
+		check_parsed_args check;
+		check_parsed_args* have(const std::string& argument) {
+			this->use(argument);
+			check.clear();
+			check.feed(&parsed);
+			return &check;
+		}
 	};
 	static std::map<uuid_t,arglist_parser> player_parsers;
 };
 #define args() mods::util::args::player_parsers[player->uuid()].use(argument)
+#define argat(A) mods::util::args::player_parsers[player->uuid()].use(argument)->at(A)
+#define intat(A) mods::util::args::player_parsers[player->uuid()].use(argument)->int_at(A)
+#define argsat(A) mods::util::args::player_parsers[player->uuid()].use(argument)->multi(A)
+#define argshave() mods::util::args::player_parsers[player->uuid()].have(argument)
 
 #endif

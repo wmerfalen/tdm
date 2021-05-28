@@ -12,6 +12,7 @@ namespace mods::orm {
 	}
 	uint64_t scripted_step::initialize_row(const sequence_vnum_t& i_vnum) {
 		init();
+		s_sequence_vnum = i_vnum;
 		auto status = this->create<scripted_step>(this);
 		if(ORM_SUCCESS(status)) {
 			loaded = 1;
@@ -36,12 +37,19 @@ namespace mods::orm {
 		           std::to_string(in_scripted_vnum)
 		       );
 	}
+	int16_t scripted_step::save() {
+		auto s = create(this);
+		if(ORM_SUCCESS(s)) {
+			id = std::get<2>(s);
+		} else {
+			std::cerr << red_str("Issue saving scripted_step:'") << std::get<1>(s) << "'\n";
+		}
+		return 0;
+	}
 	int16_t scripted_sequences::save() {
+		auto s = create(this);
 		for(auto& record : rows) {
-			std::tuple<int16_t,std::string,uint64_t> insert_result = mods::orm::util::insert_returning<scripted_step,sql_compositor>(&record, "id");
-			if(!ORM_SUCCESS(insert_result)) {
-				std::cerr << red_str("Issue saving scripted_step:'") << std::get<1>(insert_result) << "'\n";
-			}
+			record.save();
 		}
 		return 0;
 	}
@@ -50,7 +58,6 @@ namespace mods::orm {
 	}
 
 	std::tuple<int16_t,std::string> scripted_sequences::load_by_sequence_vnum(const sequence_vnum_t& scripted_vnum) {
-		//mods::scripteds::scripted c;
 		auto result = db_get_by_meta(table_name(),"s_sequence_vnum",std::to_string(scripted_vnum));
 		if(result.size() == 0) {
 			return {0,"no results"};
@@ -67,22 +74,10 @@ namespace mods::orm {
 		return list;
 
 	}
-	std::tuple<int16_t,std::string> gather_scripted_steps_by_scripted_vnum(const sequence_vnum_t& scripted_vnum,std::deque<std::shared_ptr<mods::orm::scripted_step>>* in_list_ptr) {
-		auto result = db_get_by_meta(scripted_step::table_name_value,"s_scripted_vnum",std::to_string(scripted_vnum));
-		if(result.size() == 0) {
-			return {0,"no results"};
-		}
-
-		for(auto&& row : result) {
-			std::cerr << green_str("scripted_step filling scripted:") << row["s_scripted_vnum"].as<int>() << "\n";
-
-			in_list_ptr->emplace_back(std::make_shared<mods::orm::scripted_step>(row));
-		}
-		return {result.size(),"loaded"};
-
+	scripted_step::scripted_step(pqxx::row& row) {
+		init();
+		feed(row);
 	}
-
-
 	/**
 	 * ========================
 	 * scripted sequences class
@@ -107,6 +102,7 @@ namespace mods::orm {
 	}
 	uint64_t scripted_sequences::initialize_row(const sequence_vnum_t& i_vnum) {
 		init();
+		s_sequence_vnum = i_vnum;
 		auto status = this->create<scripted_sequences>(this);
 		if(ORM_SUCCESS(status)) {
 			loaded = 1;
@@ -136,15 +132,10 @@ namespace mods::orm {
 
 	}
 
-	std::tuple<int16_t,std::string> gather_scripted_steps_by_sequence_vnum(const sequence_vnum_t& scripted_vnum,std::deque<std::shared_ptr<mods::orm::scripted_sequences>>* list) {
-		return {1,"stub"};
-	}
-
-
 	std::tuple<int16_t,std::string> load_all_contract_step_callbacks() {
 		int16_t ctr = 0;
 		contract_step_callback_list().clear();
-		for(const auto& cb :  db_get_all(contract_step_callback::table_name_value)) {
+		for(const auto& cb :  db_get_all(contract_step_callback::table)) {
 			auto& item = contract_step_callback_list().emplace_back();
 			item->feed(cb);
 			++ctr;
@@ -155,7 +146,7 @@ namespace mods::orm {
 	std::tuple<int16_t,std::string> load_all_scripted_sequences() {
 		int16_t ctr = 0;
 		scripted_sequences_list().clear();
-		for(const auto& cb :  db_get_all(scripted_sequences::table_name_value)) {
+		for(const auto& cb :  db_get_all(scripted_sequences::table)) {
 			auto& item = scripted_sequences_list().emplace_back();
 			item->feed(cb);
 			++ctr;
@@ -166,7 +157,7 @@ namespace mods::orm {
 	std::tuple<int16_t,std::string> load_all_scripted_steps() {
 		int16_t ctr = 0;
 		scripted_step_list().clear();
-		for(const auto& cb :  db_get_all(scripted_step::table_name_value)) {
+		for(const auto& cb :  db_get_all(scripted_step::table)) {
 			auto& item = scripted_step_list().emplace_back();
 			item->feed(cb);
 		}
@@ -179,5 +170,47 @@ namespace mods::orm {
 		load_all_scripted_sequences();
 		return {1,"Loaded"};
 	}
+	contract_step_callback::~contract_step_callback() {
+
+	}
+	contract_step_callback::contract_step_callback() {
+		init();
+		loaded = 0;
+	}
+	std::string contract_step_callback::primary_key_value() {
+		return std::to_string(id);
+	}
+	contract_step_callback::contract_step_callback(contract_vnum_t contract, std::string_view type, std::string_view task, task_vnum_t task_vnum, sequence_vnum_t sequence_vnum) {
+		initialize_row(contract, type, task, task_vnum, sequence_vnum);
+	}
+	uint64_t contract_step_callback::initialize_row(contract_vnum_t contract, std::string_view type, std::string_view task, task_vnum_t task_vnum, sequence_vnum_t sequence_vnum) {
+		init();
+		auto status = this->create<contract_step_callback>(this);
+		if(ORM_SUCCESS(status)) {
+			loaded = 1;
+			id = std::get<2>(status);
+		}
+		return id;
+
+	}
+
+	std::tuple<int16_t,std::string> gather_scripted_steps_by_sequence_vnum(
+	    const sequence_vnum_t& sequence_vnum,
+	    std::deque<std::shared_ptr<mods::orm::scripted_step>>* in_list_ptr
+	) {
+		using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
+		std::cerr << green_str("foobar");
+		return mods::orm::util::foreach_load_by_column_order_by<sql_compositor>(
+		           scripted_step::table,
+		           "s_sequence_vnum",
+		           std::to_string(sequence_vnum),
+		           "s_order",
+		           "ASC",
+		[&](pqxx::row row) -> void {
+			in_list_ptr->emplace_back(std::make_shared<mods::orm::scripted_step>(row));
+		}
+		       );
+	}
+
 
 };

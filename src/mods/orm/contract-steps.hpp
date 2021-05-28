@@ -7,12 +7,12 @@
 namespace mods::orm {
 	using strmap_t = std::map<std::string,std::string>;
 	using sql_compositor = mods::sql::compositor<mods::pq::transaction>;
-	static constexpr std::string_view contract_steps_table_name = "contract_steps";
 	using contract_vnum_t = uint32_t;
 	using task_type_t = uint16_t;
 	using task_target_t = uint16_t;
 	using quota_t = uint8_t;
 	struct contract_steps_record_t {
+		const char* table = "contract_steps";
 		uint64_t id;
 		contract_vnum_t s_contract_vnum;
 		task_type_t s_task_type;
@@ -65,7 +65,7 @@ namespace mods::orm {
 			return std::move(v);
 		}
 		std::string table_name() const {
-			return contract_steps_table_name.data();
+			return table;
 		}
 		std::string primary_key_name() {
 			return "id";
@@ -74,9 +74,9 @@ namespace mods::orm {
 
 	struct contract_steps : public mods::orm::orm_base<contract_steps,std::string> {
 		using primary_choice_t = std::string;
-		static constexpr const char* table_name_value = "contract_steps";
-		std::string table_name() const {
-			return contract_steps_table_name.data();
+		const char* table = "contract_steps";
+		std::string table_name() {
+			return table;
 		}
 		std::string column_prefix() const {
 			return "s_";
