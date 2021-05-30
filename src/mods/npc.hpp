@@ -10,7 +10,6 @@ namespace mods {
 		/* constructors and destructors */
 		npc() = delete;
 		npc(const mob_rnum&);
-		~npc();
 
 		mob_special_data& mob_specials();
 		bool has_tree() ;

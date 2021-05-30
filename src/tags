@@ -13450,7 +13450,6 @@ zoom_multiplier	mods/rifle-attachments.hpp	/^			float zoom_multiplier;						\/**
 ~mini_gunner	mods/mobs/mini-gunner.cpp	/^	mini_gunner::~mini_gunner() {$/;"	f	class:mods::mobs::mini_gunner
 ~mob_special_data	structs.cpp	/^mob_special_data::~mob_special_data() {$/;"	f	class:mob_special_data
 ~mp5	mods/weapons/smg-mp5.cpp	/^	mp5::~mp5(){$/;"	f	class:mods::weapons::smg::mp5
-~npc	mods/npc.cpp	/^	npc::~npc() {$/;"	f	class:mods::npc
 ~object	mods/object.cpp	/^	object::~object(){$/;"	f	class:mods::object
 ~player	mods/mobs/mob.cpp	/^	player::~player(){$/;"	f	class:mods::player
 ~player	mods/player.cpp	/^	player::~player() {$/;"	f	class:mods::player
