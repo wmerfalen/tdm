@@ -601,9 +601,9 @@ namespace mods {
 			mob->player_ptr()->set_type(mods::player::player_type_enum_t::MOB);
 			mob_ptrmap[mob->cd()] = mob->player_ptr();
 			player_map[mob->uuid()] = mob->player_ptr();
+			mob->player_ptr()->clear_all_affected();
 			mods::mobs::decorate(mob->uuid());
 			mods::mob_equipment::decorate(mob->uuid());
-			mob->player_ptr()->clear_all_affected();
 			return mob;
 		}
 		uuid_t obj_uuid() {
