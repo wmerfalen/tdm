@@ -51,7 +51,7 @@ void mobile_activity(void) {
 	//auto player = mods::globals::current_player;
 	for(auto& npc : mob_list) {
 		auto ch = npc->cd();
-		auto& player = npc->player_ptr();
+		player_ptr_t player = npc;
 		char_data *vict;
 		struct obj_data *obj, *best_obj;
 		int door, found, max;
@@ -116,7 +116,7 @@ void mobile_activity(void) {
 		if(MOB_FLAGGED(ch, MOB_AGGRESSIVE | MOB_AGGR_TO_ALIGN)) {
 			found = FALSE;
 
-			std::cerr << green_str("Mob (uuid:") << npc->player_ptr()->uuid() << "), npc->room():'" << npc->room() << "', plr->room():'" << npc->player_ptr()->room() << "'\n";
+			std::cerr << green_str("Mob (uuid:") << npc->uuid() << "), npc->room():'" << npc->room() << "', plr->room():'" << npc->room() << "'\n";
 			for(auto& plr : mods::globals::get_room_list(npc->room())) {
 				vict = plr->cd();
 				if(IS_NPC(vict) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE)) {

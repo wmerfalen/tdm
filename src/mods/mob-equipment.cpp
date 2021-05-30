@@ -48,7 +48,7 @@ namespace mods::mob_equipment {
 			std::tuple<int,std::string> s = mods::util::extract_yaml_info_from_path(mapping[i]);
 			me_debug("Yaml info: " << std::get<0>(s) << ", '" << std::get<1>(s) << "'\n");
 			auto obj = create_object(std::get<0>(s),std::get<1>(s));
-			npc->player_ptr()->equip(obj,i);
+			npc->equip(obj,i);
 		}
 		me_debug("Done equipping mob");
 	}

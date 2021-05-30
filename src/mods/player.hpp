@@ -227,7 +227,7 @@ namespace mods {
 
 			/** char_special_data_saved */
 			char_special_data& char_specials() {
-				return m_char_data->char_specials;
+				return cd()->char_specials;
 			}
 			player_ptr_t fighting() {
 				return ptr(this->char_specials().fighting);
@@ -261,10 +261,10 @@ namespace mods {
 			}
 
 			char_ability_data& real_abils() {	 /* Abilities without modifiers   */
-				return m_char_data->real_abils;
+				return cd()->real_abils;
 			}
 			char_ability_data& aff_abils() {	 /* Abils with spells/stones/etc  */
-				return m_char_data->aff_abils;
+				return cd()->aff_abils;
 			}
 
 			sh_int* apply_saving_throw() {
@@ -278,22 +278,22 @@ namespace mods {
 			/* informational functions */
 
 			sh_int& mana() {
-				return m_char_data->points.mana;
+				return cd()->points.mana;
 			}
 			sh_int& max_mana() {
-				return m_char_data->points.max_mana;
+				return cd()->points.max_mana;
 			}
 			sh_int& hp() {
-				return m_char_data->points.hit;
+				return cd()->points.hit;
 			}
 			sh_int& max_hp() {
-				return m_char_data->points.max_hit;
+				return cd()->points.max_hit;
 			}
 			sh_int& move() {
-				return m_char_data->points.move;
+				return cd()->points.move;
 			}
 			sh_int& max_move() {
-				return m_char_data->points.max_move;
+				return cd()->points.max_move;
 			}
 
 			/** base stats - start */
@@ -345,75 +345,75 @@ namespace mods {
 			/** base stats - end */
 
 			sh_int& armor() {
-				return m_char_data->points.armor;
+				return cd()->points.armor;
 			}
 			int& gold() {
-				return m_char_data->points.gold;
+				return cd()->points.gold;
 			}
 			int& mp() {
 				return this->gold();
 			}
 			int& bank_gold() {
-				return m_char_data->points.bank_gold;
+				return cd()->points.bank_gold;
 			}
 			int& exp() {
-				return m_char_data->points.exp;
+				return cd()->points.exp;
 			}
 			sbyte& hitroll() {
-				return m_char_data->points.hitroll;
+				return cd()->points.hitroll;
 			}
 			sbyte& damroll() {
-				return m_char_data->points.damroll;
+				return cd()->points.damroll;
 			}
 			uint8_t& level();
 			ubyte& weight() {
-				return m_char_data->player.weight;
+				return cd()->player.weight;
 			}
 			ubyte& height() {
-				return m_char_data->player.height;
+				return cd()->player.height;
 			}
 			void set_title(const std::string& t) {
-				m_char_data->player.title.assign(t);
+				cd()->player.title.assign(t);
 			}
 			mods::string& title() {
-				return m_char_data->player.title;
+				return cd()->player.title;
 			}
 			mods::string& short_descr() {
-				return m_char_data->player.short_descr;
+				return cd()->player.short_descr;
 			}
 			mods::string& long_descr() {
-				return m_char_data->player.long_descr;
+				return cd()->player.long_descr;
 			}
 			mods::string& description() {
-				return m_char_data->player.description;
+				return cd()->player.description;
 			}
 			uint8_t& chclass() {
-				return m_char_data->player.chclass;
+				return cd()->player.chclass;
 			}
 			uint8_t& hometown() {
-				return m_char_data->player.hometown;
+				return cd()->player.hometown;
 			}
 			time_data& ch_time() {
-				return m_char_data->player.time;
+				return cd()->player.time;
 			}
 			void set_name(std::string n);
 
 			std::string ucname();
 			std::string& name();
 			void set_sex(byte s) {
-				m_char_data->player.sex = s;
+				cd()->player.sex = s;
 			}
 			uint8_t& sex() {
-				return m_char_data->player.sex;
+				return cd()->player.sex;
 			}
 			void set_room(room_rnum r) {
-				m_char_data->in_room = r;
+				cd()->in_room = r;
 			}
 			room_rnum& room() {
-				return m_char_data->in_room;
+				return cd()->in_room;
 			}
 			uuid_t& uuid() const {
-				return m_char_data->uuid;
+				return cd()->uuid;
 			}
 			char_data* cd() const {
 				return m_char_data;
@@ -436,7 +436,7 @@ namespace mods {
 
 			/* conversion operator to char_data* */
 			operator chdata_ptr() const {
-				return m_char_data;
+				return cd();
 			}
 
 			/* weapon cooldown functions */
@@ -687,13 +687,13 @@ namespace mods {
 			void write_histfile(std::string_view);
 			void stop_histfile();
 			bool is(char_data* ch) const {
-				return ch == m_char_data;
+				return ch == cd();
 			}
 			bool is(player_ptr_t p) const {
-				return m_char_data == p->cd();
+				return cd() == p->cd();
 			}
 			bool is_nobody() const {
-				return m_char_data == nullptr;
+				return cd() == nullptr;
 			}
 
 			bool is_npc() const;
@@ -793,10 +793,10 @@ namespace mods {
 			}
 
 			uuid_t& drone_uuid() {
-				return m_char_data->drone_uuid;
+				return cd()->drone_uuid;
 			}
 			bool& drone_simulate() {
-				return m_char_data->drone_simulate;
+				return cd()->drone_simulate;
 			}
 
 			rate_limit_data_t& get_rate_limit_data(int action);

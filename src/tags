@@ -2651,12 +2651,12 @@ MOTORCYCLE	mods/weapon.hpp	/^		MOTORCYCLE,$/;"	e	enum:mods::weapon::vehicle_t
 MP5	mods/orm/breacher.hpp	/^		const std::string MP5 = "MP5";$/;"	m	struct:mods::orm::breacher
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::breacher::primary_choice_t
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1583;"	d	file:
-MR	mods/player.cpp	1637;"	d	file:
+MR	mods/player.cpp	1585;"	d	file:
+MR	mods/player.cpp	1639;"	d	file:
 MR	structs.cpp	604;"	d	file:
 MR	structs.cpp	615;"	d	file:
-MRC	mods/player.cpp	1584;"	d	file:
-MRC	mods/player.cpp	1638;"	d	file:
+MRC	mods/player.cpp	1586;"	d	file:
+MRC	mods/player.cpp	1640;"	d	file:
 MSG_ANTI_MATTER_DAMAGE	mods/values-list.cpp	/^MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\\r\\n"$/;"	v
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
@@ -4981,7 +4981,7 @@ __MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	145;"	d
 __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/scripted-sequence-runner.cpp	7;"	d	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	d
 __MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__	mods/weapons/damage-calculator.cpp	14;"	d	file:
-__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1229;"	d	file:
+__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1227;"	d	file:
 __MENTOC_SHOW_EQUIP_DEBUG_OUTPUT__	mods/player.cpp	35;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ADVANCED_PROTECTION_DEBUG_OUTPUT__	mods/armor/advanced-protection.cpp	4;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_BP_DEBUG_OUTPUT__	mods/armor/basic-protection.cpp	4;"	d	file:
@@ -6235,10 +6235,10 @@ db_seti	mods/js.cpp	/^		static duk_ret_t db_seti(duk_context *ctx) {$/;"	f	names
 db_update	mods/mobs/mini-gunner.hpp	/^		static inline int db_update(mob_vnum mob_vnum,str_map_t values) {$/;"	f	namespace:mods::mobs::mg::orm
 db_update	mods/pq.hpp	/^static inline int db_update(std::string_view table, str_map_t values,std::string_view field,std::string_view operator_type,std::string_view value) {$/;"	f
 dbg	mods/acl/config-parser.hpp	20;"	d
-dbg	mods/player.cpp	552;"	d	file:
-dbg	mods/player.cpp	577;"	d	file:
-dbg	mods/player.cpp	580;"	d	file:
-dbg	mods/player.cpp	627;"	d	file:
+dbg	mods/player.cpp	554;"	d	file:
+dbg	mods/player.cpp	579;"	d	file:
+dbg	mods/player.cpp	582;"	d	file:
+dbg	mods/player.cpp	629;"	d	file:
 dbg_blu	mods/acl/config-parser.hpp	25;"	d
 dbg_grn	mods/acl/config-parser.hpp	24;"	d
 dbg_print	mods/contract-events.cpp	6;"	d	file:
@@ -9483,7 +9483,6 @@ m_player	mods/classes/syndrome.hpp	/^			player_ptr_t m_player;$/;"	m	struct:mods
 m_player	mods/forge-engine/generated-armor.hpp	/^			player_ptr_t m_player;$/;"	m	struct:mods::forge_engine::generated_armor_t
 m_player	mods/forge-engine/generated-rifle.hpp	/^			player_ptr_t m_player;$/;"	m	struct:mods::forge_engine::generated_rifle_t
 m_player_id	mods/player-contract-instance.hpp	/^			uint64_t m_player_id;$/;"	m	struct:mods::contracts::player_contract_instance
-m_player_ptr	mods/npc.hpp	/^			std::shared_ptr<mods::player> m_player_ptr;$/;"	m	struct:mods::npc
 m_player_specials	mods/player.hpp	/^			std::shared_ptr<player_special_data> m_player_specials;$/;"	m	struct:mods::player
 m_players	mods/player-scaffolding.hpp	/^			std::vector<player_ptr_t> m_players;$/;"	m	struct:mods::player_scaffolding
 m_pluck	mods/lmdb.hpp	/^		std::vector<std::string> m_pluck;$/;"	m	struct:mods::lmdb::_db_handle
@@ -9857,7 +9856,7 @@ metro	mods/fluxkraft/arcon-metropolitan.hpp	/^	struct metro {$/;"	s	namespace:mo
 mex_debug	mods/examine.cpp	5;"	d	file:
 mex_debug	mods/examine.cpp	7;"	d	file:
 mg_map	mods/mobs/mini-gunner.cpp	/^	mg_map_t& mg_map() {$/;"	f	namespace:mods::mobs
-mgdp_debug	globals.cpp	1231;"	d	file:
+mgdp_debug	globals.cpp	1229;"	d	file:
 mi_debug	mods/interpreter.cpp	49;"	d	file:
 mi_debug	mods/interpreter.cpp	5;"	d	file:
 mi_debug	mods/interpreter.cpp	7;"	d	file:
@@ -9959,7 +9958,7 @@ mob_roam	mods/mob-roam.hpp	/^namespace mods::mob_roam {$/;"	n	class:mods
 mob_roam	mods/orm/mob-roam.hpp	/^		mob_roam() : id(0) {$/;"	f	struct:mods::orm::mob_roam
 mob_roam	mods/orm/mob-roam.hpp	/^	struct mob_roam : public mods::orm::orm_base<mob_roam,std::string> {$/;"	s	namespace:mods::orm
 mob_roam_record_t	mods/orm/mob-roam.hpp	/^	struct mob_roam_record_t {$/;"	s	namespace:mods::orm
-mob_specials	mods/npc.cpp	/^	mob_special_data& npc::mob_specials(){$/;"	f	class:mods::npc
+mob_specials	mods/npc.cpp	/^	mob_special_data& npc::mob_specials() {$/;"	f	class:mods::npc
 mob_uuid	globals.cpp	/^		uuid_t mob_uuid() {$/;"	f	namespace:mods::globals
 mob_uuid	mods/contract-steps.hpp	/^		uuid_t 					mob_uuid;$/;"	m	namespace:mods::contracts
 mob_virtual_number	mods/orm/mob-roam.hpp	/^		uint32_t mob_virtual_number;$/;"	m	struct:mods::orm::mob_roam
@@ -10249,7 +10248,7 @@ nonblock	comm.cpp	/^void nonblock(socket_t s) {$/;"	f
 not_found	act.social.cpp	/^	char *not_found;$/;"	m	struct:social_messg	file:
 now	mods/date-time.cpp	/^	std::string now() {$/;"	f	namespace:mods::date_time::irl
 nowhere	mods/builder.cpp	59;"	d	file:
-npc	mods/npc.cpp	/^	npc::npc(const mob_rnum & i){$/;"	f	class:mods::npc
+npc	mods/npc.cpp	/^	npc::npc(const mob_rnum& i) {$/;"	f	class:mods::npc
 npc	mods/npc.hpp	/^	struct npc : public player {$/;"	s	namespace:mods
 npc_by_uuid	globals.cpp	/^std::shared_ptr<mods::npc> npc_by_uuid(const uuid_t& u) {$/;"	f
 npc_can	mods/skills.cpp	/^	bool npc_can(player_ptr_t& player,int e_name) {$/;"	f	namespace:mods::skills
@@ -10804,7 +10803,6 @@ player_nobody	globals.cpp	/^		player_ptr_t player_nobody;$/;"	m	namespace:mods::
 player_parsers	mods/util.hpp	/^	static std::map<uuid_t,arglist_parser> player_parsers;$/;"	m	namespace:mods::util::args
 player_ptr	mods/mobs/mini-gunner.hpp	/^			player_ptr_t player_ptr;$/;"	m	struct:mods::mobs::mini_gunner
 player_ptr	mods/mobs/smart-mob.hpp	/^			player_ptr_t player_ptr;$/;"	m	struct:mods::mobs::smart_mob
-player_ptr	mods/npc.cpp	/^	player_ptr_t& npc::player_ptr(){ return m_player_ptr; }$/;"	f	class:mods::npc
 player_quota_door_destroyed_increase	mods/contract-events.cpp	/^	void player_quota_door_destroyed_increase(player_ptr_t& player,room_rnum room_id,int8_t direction) {$/;"	f	namespace:mods::message_queue
 player_quota_item_find_increase	mods/contract-events.cpp	/^	void player_quota_item_find_increase(player_ptr_t& player,uuid_t item_uuid) {$/;"	f	namespace:mods::message_queue
 player_quota_mob_kill_increase	mods/contract-events.cpp	/^	void player_quota_mob_kill_increase(player_ptr_t& player,uuid_t mob_uuid) {$/;"	f	namespace:mods::message_queue
@@ -13209,7 +13207,7 @@ vnum	boards.h	/^	obj_vnum vnum;	\/* vnum of this board *\/$/;"	m	struct:board_in
 vnum	house.h	/^	room_vnum vnum;		\/* vnum of this house		*\/$/;"	m	struct:house_control_rec
 vnum	mods/contract-types.hpp	/^		contract_vnum_t vnum;$/;"	m	struct:mods::contracts::contract
 vnum	mods/mini-games.hpp	/^		int vnum;$/;"	m	struct:mods::mini_games::mini_game_payload_t
-vnum	mods/npc.cpp	/^	const mob_vnum& npc::vnum() const { return cd()->nr; }$/;"	f	class:mods::npc
+vnum	mods/npc.cpp	/^	const mob_vnum& npc::vnum() const {$/;"	f	class:mods::npc
 vnum	mods/orm/contracts.hpp	/^		auto vnum() {$/;"	f	struct:mods::orm::contracts
 vnum	mods/orm/hq.hpp	/^		auto vnum() {$/;"	f	struct:mods::orm::hq
 vnum	mods/orm/mob-equipment.hpp	/^		auto vnum() {$/;"	f	struct:mods::orm::mob_equipment
@@ -13452,7 +13450,7 @@ zoom_multiplier	mods/rifle-attachments.hpp	/^			float zoom_multiplier;						\/**
 ~mini_gunner	mods/mobs/mini-gunner.cpp	/^	mini_gunner::~mini_gunner() {$/;"	f	class:mods::mobs::mini_gunner
 ~mob_special_data	structs.cpp	/^mob_special_data::~mob_special_data() {$/;"	f	class:mob_special_data
 ~mp5	mods/weapons/smg-mp5.cpp	/^	mp5::~mp5(){$/;"	f	class:mods::weapons::smg::mp5
-~npc	mods/npc.cpp	/^	npc::~npc(){$/;"	f	class:mods::npc
+~npc	mods/npc.cpp	/^	npc::~npc() {$/;"	f	class:mods::npc
 ~object	mods/object.cpp	/^	object::~object(){$/;"	f	class:mods::object
 ~player	mods/mobs/mob.cpp	/^	player::~player(){$/;"	f	class:mods::player
 ~player	mods/player.cpp	/^	player::~player() {$/;"	f	class:mods::player

@@ -178,6 +178,8 @@ namespace mods {
 		std::fill(m_misc_pref.begin(),m_misc_pref.end(),false);
 		m_sync_equipment();
 		visibility() = 1;
+		this->clear_all_affected();
+		this->clear_all_affected_plr();
 	}
 	player::player(mods::player* ptr) {
 		this->init();

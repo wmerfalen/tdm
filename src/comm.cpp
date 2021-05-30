@@ -873,7 +873,7 @@ void run_behaviour_trees() {
 		if(!npc) {
 			continue;
 		}
-		switch(npc->player_ptr()->position()) {
+		switch(npc->position()) {
 			default:
 				break;
 			case POS_DEAD:

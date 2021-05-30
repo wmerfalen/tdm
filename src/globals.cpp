@@ -598,10 +598,8 @@ namespace mods {
 			mob_map[mob->uuid()] = mob;
 			mob_chmap[mob->cd()] = mob;
 			SET_BIT(mob->cd()->char_specials.saved.act, MOB_ISNPC);
-			mob->player_ptr()->set_type(mods::player::player_type_enum_t::MOB);
-			mob_ptrmap[mob->cd()] = mob->player_ptr();
-			player_map[mob->uuid()] = mob->player_ptr();
-			mob->player_ptr()->clear_all_affected();
+			mob_ptrmap[mob->cd()] = mob;
+			player_map[mob->uuid()] = mob;
 			mods::mobs::decorate(mob->uuid());
 			mods::mob_equipment::decorate(mob->uuid());
 			return mob;
@@ -1298,7 +1296,7 @@ player_ptr_t ptr(const char_data* in_ch) {
 		return nullptr;
 	}
 	if(IS_NPC(in_ch)) {
-		return mods::globals::mob_chmap[const_cast<char_data*>(in_ch)]->player_ptr();
+		return mods::globals::mob_chmap[const_cast<char_data*>(in_ch)];
 	}
 	return mods::globals::player_chmap[const_cast<char_data*>(in_ch)];
 }
