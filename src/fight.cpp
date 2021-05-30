@@ -338,7 +338,7 @@ void stop_fighting(char_data *ch) {
 
 void make_corpse(char_data *ch) {
 	MENTOC_PREAMBLE();
-	std::cerr << "[make_corpse(victim)] -> raw_kill for: " << ch->player.name.c_str() << "\n";
+	std::cerr << "[make_corpse(victim)] -> raw_kill for: " << player->name().c_str() << "\n";
 	char buf2[MAX_NAME_LENGTH + 64];
 	obj_data *o;
 	int i;
@@ -346,12 +346,12 @@ void make_corpse(char_data *ch) {
 	auto corpse = blank_object();
 
 	memset(buf2,0,sizeof(buf2));
-	snprintf(buf2, sizeof(buf2), "The corpse of %s is lying here.", ch->player.name.c_str());
+	snprintf(buf2, sizeof(buf2), "The corpse of %s is lying here.", player->name().c_str());
 	corpse->description.assign(buf2);
 	corpse->name.assign(corpse->description.str());
 
 	memset(buf2,0,sizeof(buf2));
-	snprintf(buf2, sizeof(buf2), "The corpse of %s", ch->player.name.c_str());
+	snprintf(buf2, sizeof(buf2), "The corpse of %s", player->name().c_str());
 	corpse->short_description.assign(buf2);
 
 	GET_OBJ_TYPE(corpse) = ITEM_CONTAINER;
@@ -449,15 +449,12 @@ void die(char_data* killer,char_data *victim) {
 
 void die(char_data *ch) {
 	auto p = ptr(ch);
-	std::cerr << "[die(victim)] -> killing: " << p->name().c_str() << "| removing exp...\n";
 	mods::levels::gain_exp(p, -(GET_EXP(ch) / 2));
 
 	if(!IS_NPC(ch)) {
 		REMOVE_BIT(PLR_FLAGS(ch), PLR_KILLER | PLR_THIEF);
 	}
 
-	std::cerr << "[die(victim)] -> calling raw_kill for: " << p->name().c_str() << "| removing exp...\n";
-	std::cerr << "[raw_kill(victim)] -> raw_kill for: " << ch->player.name.c_str() << "\n";
 	death_cry(ch);
 
 	make_corpse(ch);
