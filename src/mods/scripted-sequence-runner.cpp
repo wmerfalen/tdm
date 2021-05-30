@@ -115,6 +115,15 @@ namespace mods::scripted_sequence_runner {
 		});
 	}
 	namespace runners {
+		void act(step_ptr_t step) {
+			auto mob = qmob(step->room,step->mob);
+			if(mob == nullptr) {
+				std::cerr << red_str("Error finding mob in room:") << step->dump() << "\n";
+			} else {
+				act(step->dialogue.c_str(), FALSE, mob->cd(), 0, 0, TO_ROOM);
+			}
+			queue_for_deferred_removal(step);
+		}
 		void dialogue(step_ptr_t step) {
 			auto mob = qmob(step->room,step->mob);
 			if(mob == nullptr) {
@@ -175,6 +184,9 @@ namespace mods::scripted_sequence_runner {
 	void step_runner(std::size_t hash) {
 		for(const auto& step : deferred_list) {
 			if(std::hash<step_ptr_t>()(step) == hash) {
+				if(step->type.compare("act") == 0) {
+					return runners::act(step);
+				}
 				if(step->type.compare("dialogue") == 0) {
 					return runners::dialogue(step);
 				}

@@ -4640,7 +4640,7 @@ Yes	mods/catch.hpp	/^			Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
 Yes	mods/catch2.hpp	/^        Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
 Z	db.cpp	1758;"	d	file:
 Z	db.cpp	1766;"	d	file:
-ZONE_ERROR	mods/zone.cpp	111;"	d	file:
+ZONE_ERROR	mods/zone.cpp	116;"	d	file:
 ZON_PREFIX	db.h	71;"	d
 ZOOM	mods/weapon-types.hpp	/^		ZOOM,$/;"	e	enum:mods::weapon::capabilities::cap_t
 Z_KINGS_C	castle.cpp	31;"	d	file:
@@ -4981,7 +4981,7 @@ __MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	145;"	d
 __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/scripted-sequence-runner.cpp	7;"	d	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	d
 __MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__	mods/weapons/damage-calculator.cpp	14;"	d	file:
-__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1228;"	d	file:
+__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1229;"	d	file:
 __MENTOC_SHOW_EQUIP_DEBUG_OUTPUT__	mods/player.cpp	35;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ADVANCED_PROTECTION_DEBUG_OUTPUT__	mods/armor/advanced-protection.cpp	4;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_BP_DEBUG_OUTPUT__	mods/armor/basic-protection.cpp	4;"	d	file:
@@ -5070,6 +5070,7 @@ acl_list	mods/acl_list.hpp	/^namespace mods::acl_list {$/;"	n	class:mods
 acl_list	mods/player.hpp	/^namespace mods::acl_list {$/;"	n	class:mods
 acmd_function	mods/interpreter.hpp	/^	typedef void (*acmd_function)(char_data*, char*, int, int, player_ptr_t&);$/;"	t	namespace:mods::interpreter
 act	comm.cpp	/^void act(const std::string& str, int hide_invisible, char_data *ch,$/;"	f
+act	mods/scripted-sequence-runner.cpp	/^		void act(step_ptr_t step) {$/;"	f	namespace:mods::scripted_sequence_runner::runners
 act_nr	act.social.cpp	/^	int act_nr;$/;"	m	struct:social_messg	file:
 action	mods/mini-games.hpp	/^		std::string action;$/;"	m	struct:mods::mini_games::mini_game_payload_t
 action_allowed	mods/acl/lambda.hpp	/^				bool action_allowed(struct ::char_data *ch,const char* command_name,const char* file_name,int cmd,const char* arg,int subcmd){$/;"	f	class:mods::acl::Lambda
@@ -9856,7 +9857,7 @@ metro	mods/fluxkraft/arcon-metropolitan.hpp	/^	struct metro {$/;"	s	namespace:mo
 mex_debug	mods/examine.cpp	5;"	d	file:
 mex_debug	mods/examine.cpp	7;"	d	file:
 mg_map	mods/mobs/mini-gunner.cpp	/^	mg_map_t& mg_map() {$/;"	f	namespace:mods::mobs
-mgdp_debug	globals.cpp	1230;"	d	file:
+mgdp_debug	globals.cpp	1231;"	d	file:
 mi_debug	mods/interpreter.cpp	49;"	d	file:
 mi_debug	mods/interpreter.cpp	5;"	d	file:
 mi_debug	mods/interpreter.cpp	7;"	d	file:
@@ -10549,7 +10550,7 @@ overhead_map	mods/overhead_map.hpp	/^namespace mods::overhead_map {$/;"	n	class:
 overview	mods/util.cpp	/^	std::string overview() {$/;"	f	namespace:mods::util
 owner	house.h	/^	long owner;			\/* idnum of house's owner	*\/$/;"	m	struct:house_control_rec
 owner	mods/rifle-attachments.hpp	/^			uuid_t owner() const {$/;"	f	struct:mods::rifle_attachments_t
-owner_drone	mods/drone.cpp	/^		std::pair<player_ptr_t,player_ptr_t> owner_drone(uuid_t owner_uuid){$/;"	f	namespace:mods::drone
+owner_drone	mods/drone.cpp	/^		std::pair<player_ptr_t,player_ptr_t> owner_drone(uuid_t owner_uuid) {$/;"	f	namespace:mods::drone
 owner_uuid	mods/camera.hpp	/^			uuid_t owner_uuid() const { return m_player; }$/;"	f	class:mods::camera
 p	mods/util.hpp	/^			parsed_args* p;$/;"	m	struct:mods::util::args::check_parsed_args
 pad_room	globals.cpp	/^		void pad_room(int room,char_data* ch,int door) {$/;"	f	namespace:mods::globals
@@ -11756,7 +11757,7 @@ rr_debug	mods/intimidate.cpp	8;"	d	file:
 rr_debug	mods/intimidate.cpp	95;"	d	file:
 rr_debug	mods/zone.cpp	12;"	d	file:
 rr_debug	mods/zone.cpp	15;"	d	file:
-rr_debug	mods/zone.cpp	339;"	d	file:
+rr_debug	mods/zone.cpp	343;"	d	file:
 rst_text	mods/acl/color.hpp	6;"	d
 rtrim	mods/lmdb/db.hpp	/^		static inline void rtrim(std::string &s) {$/;"	f	struct:gdns::util
 rtrim_copy	mods/lmdb/db.hpp	/^		static inline std::string rtrim_copy(std::string s) {$/;"	f	struct:gdns::util
@@ -13404,7 +13405,7 @@ z_debug	mods/intimidate.cpp	7;"	d	file:
 z_debug	mods/intimidate.cpp	96;"	d	file:
 z_debug	mods/zone.cpp	11;"	d	file:
 z_debug	mods/zone.cpp	14;"	d	file:
-z_debug	mods/zone.cpp	340;"	d	file:
+z_debug	mods/zone.cpp	344;"	d	file:
 zone	db.cpp	/^namespace mods::zone {$/;"	n	class:mods	file:
 zone	mods/init.hpp	/^INIT(mods::zone);$/;"	v
 zone	mods/intimidate.cpp	/^namespace mods::zone {$/;"	n	class:mods	file:

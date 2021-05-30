@@ -82,7 +82,7 @@ namespace mods {
 			auto owner = ptr_by_uuid(owner_uuid);
 			return owner->drone_uuid();
 		}
-		std::pair<player_ptr_t,player_ptr_t> owner_drone(uuid_t owner_uuid){
+		std::pair<player_ptr_t,player_ptr_t> owner_drone(uuid_t owner_uuid) {
 			auto owner = ptr_by_uuid(owner_uuid);
 			auto drone = ptr_by_uuid(owner->drone_uuid());
 			return {owner,drone};
@@ -90,16 +90,17 @@ namespace mods {
 
 		bool interpret(uuid_t owner_uuid,const std::string& argument) {
 			auto p = owner_drone(owner_uuid);
-			auto owner = p.first; auto drone = p.second;
-			
+			auto owner = p.first;
+			auto drone = p.second;
+
 			if(mods::util::is_lower_match(argument, "drone stop")) {
 				mods::drone::stop(owner_uuid);
 				return true;
 			}
 
-			if(mods::util::is_lower_match(argument, "scan")){
+			if(mods::util::is_lower_match(argument, "scan")) {
 				mods::scan::drone_scan_room(drone->room());
-				send_to_room_except(drone->room(),{drone,owner}, "You have been spotted.");
+				send_to_room_except(drone->room(), {drone,owner}, "You have been spotted.");
 				return false;
 			}
 

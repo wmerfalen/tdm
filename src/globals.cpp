@@ -603,6 +603,7 @@ namespace mods {
 			player_map[mob->uuid()] = mob->player_ptr();
 			mods::mobs::decorate(mob->uuid());
 			mods::mob_equipment::decorate(mob->uuid());
+			mob->player_ptr()->clear_all_affected();
 			return mob;
 		}
 		uuid_t obj_uuid() {

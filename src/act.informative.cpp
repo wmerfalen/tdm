@@ -552,7 +552,6 @@ void list_char_to_char(char_data *ch) {
 //#define __MENTOC_SHOW_VISION_FLAGS_IN_INFORMATIVE_CPP__
 #ifdef __MENTOC_SHOW_VISION_FLAGS_IN_INFORMATIVE_CPP__
 #define dd(A_MSG) std::cerr << "break: " << A_MSG << ", line:" << __LINE__ << "\n";
-	bool can_see_through_fire = mods::rooms::can_see_through_fire(room);
 #else
 #define dd(A)
 #endif
@@ -569,6 +568,7 @@ void list_char_to_char(char_data *ch) {
 	bool camera_is_night_vision = camera != nullptr ? mods::object_utils::is_night_vision_camera(camera->object_uuid()) : false;
 
 #ifdef __MENTOC_SHOW_VISION_FLAGS_IN_INFORMATIVE_CPP__
+	bool can_see_through_fire = mods::rooms::can_see_through_fire(room);
 	player->send(
 	    "dark: %d\r\n"
 	    "smoke: %d\r\n"
