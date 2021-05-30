@@ -1,36 +1,38 @@
 #include "deferred.hpp"
 #include "player.hpp"
+#include "scripted-sequence-runner.hpp"
+
 extern std::deque<room_data> world;
 extern player_ptr_t ptr_by_uuid(uuid_t);
 namespace mods {
 	deferred::lambda_queue_iterator deferred::push(uint64_t ticks_in_future,std::function<void()> lambda) {
 		return m_q.insert(std::make_pair(ticks_in_future + m_tick,lambda));
 	}
-	deferred::event_queue_iterator  deferred::push_ticks_event(uint32_t ticks, uuid_t player_uuid ,uint32_t ui_type){
+	deferred::event_queue_iterator  deferred::push_ticks_event(uint32_t ticks, uuid_t player_uuid,uint32_t ui_type) {
 		std::tuple<uuid_t,uint32_t> type = {player_uuid,ui_type};
 		return m_ticks_event_type.insert(std::make_pair(m_tick + ticks, type));
 	}
-	deferred::event_queue_iterator  deferred::push_ticks_event(uint32_t ticks, std::tuple<uuid_t,uint32_t> type){
+	deferred::event_queue_iterator  deferred::push_ticks_event(uint32_t ticks, std::tuple<uuid_t,uint32_t> type) {
 		return m_ticks_event_type.insert(std::make_pair(m_tick + ticks, type));
 	}
-	void deferred::cancel_lambda(lambda_queue_iterator it){
+	void deferred::cancel_lambda(lambda_queue_iterator it) {
 		m_q.erase(it);
 	}
-	void deferred::cancel_event(event_queue_iterator it){
+	void deferred::cancel_event(event_queue_iterator it) {
 		m_ticks_event_type.erase(it);
 	}
- 	uint32_t deferred::get_ticks_per_minute(){
+	uint32_t deferred::get_ticks_per_minute() {
 		return m_ticks_per_minute_sample;
 	}
 	void deferred::push_chunk_affect(
-			uuid_t player_uuid,
-			std::size_t chunk,
-			uint64_t bit,
-			int64_t amount,
-			std::size_t number_of_times,
-			bool until_zero,
-			uint64_t next_event_tick,
-			uint64_t add){
+	    uuid_t player_uuid,
+	    std::size_t chunk,
+	    uint64_t bit,
+	    int64_t amount,
+	    std::size_t number_of_times,
+	    bool until_zero,
+	    uint64_t next_event_tick,
+	    uint64_t add) {
 
 		chunk_affect_t ca;
 		ca.player_uuid = player_uuid;
@@ -45,7 +47,7 @@ namespace mods {
 	}
 	void deferred::tick() {
 		auto seconds = time(nullptr);
-		if((seconds - m_time_tracker) >= 60){
+		if((seconds - m_time_tracker) >= 60) {
 			m_ticks_per_minute_sample = m_ticks_per_minute;
 			m_ticks_per_minute = 0;
 			m_time_tracker = seconds;
@@ -56,7 +58,7 @@ namespace mods {
 		if(fe != m_ticks_event_type.end()) {
 			auto fe_tuple = fe->second;
 			std::shared_ptr<mods::player> player = nullptr;
-			switch(std::get<1>(fe_tuple)){
+			switch(std::get<1>(fe_tuple)) {
 				case deferred::EVENT_OBJECT_DESTRUCT:
 					mods::globals::destruct_object(std::get<0>(fe_tuple));
 					break;
@@ -77,20 +79,29 @@ namespace mods {
 	}
 	void deferred::iteration() {
 		++m_iterations;
-		if (m_iterations >= m_tres) {
+		if(m_iterations >= m_tres) {
 			this->tick();
 			m_iterations = 0;
 		}
 	}
-	void push_ticks_event(uint32_t ticks, std::tuple<uuid_t,uint32_t> type){
+	void push_ticks_event(uint32_t ticks, std::tuple<uuid_t,uint32_t> type) {
 
 	}
-	void deferred::detexturize_room(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture){
+	void deferred::detexturize_room(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture) {
 		m_q.insert(
-			std::make_pair(ticks_in_future + m_tick,[&](){
-				world[room_id].remove_texture(texture);
-			})
+		std::make_pair(ticks_in_future + m_tick,[&]() {
+			world[room_id].remove_texture(texture);
+		})
 		);
+	}
+	void deferred::push_step(uint16_t ticks, std::size_t hash) {
+		m_q.insert(
+		std::make_pair(ticks + m_tick,[=]() {
+			std::cerr << green_str("running scripted step runner...") << "\n";
+			mods::scripted_sequence_runner::step_runner(hash);
+		})
+		);
+
 	}
 };
 

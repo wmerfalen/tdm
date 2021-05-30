@@ -12,5 +12,6 @@ namespace mods::scripted_sequence_runner {
 	using task_target_t = mods::contracts::contract_step::task_target_t;
 	using sequence_vnum_t = mods::scripted_sequences_vnum_t;
 	void dispatch(player_ptr_t& player,sequence_vnum_t sequence_vnum,contract_vnum_t contract_vnum,step_t step);
+	void step_runner(std::size_t hash);
 };
 #endif

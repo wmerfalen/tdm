@@ -22,6 +22,8 @@ extern struct obj_data *get_obj_in_list_vis(char_data *ch, char *name, int *numb
 extern std::deque<std::shared_ptr<obj_data>> obj_list;
 
 namespace mods::util {
+	player_ptr_t query_mob_in_room(room_vnum r_vnum,mob_vnum mob);
+	direction_t random_direction();
 	/** !!*****************!! */
 	/** !!UPDATE_ITEM_TYPES!! */
 	/** !!*****************!! */
@@ -423,5 +425,6 @@ namespace mods::util::args {
 #define intat(A) mods::util::args::player_parsers[player->uuid()].use(argument)->int_at(A)
 #define argsat(A) mods::util::args::player_parsers[player->uuid()].use(argument)->multi(A)
 #define argshave() mods::util::args::player_parsers[player->uuid()].have(argument)
+#define qmob(ROOM,MOB) mods::util::query_mob_in_room(ROOM,MOB);
 
 #endif

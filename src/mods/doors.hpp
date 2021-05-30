@@ -8,6 +8,8 @@
 
 extern obj_ptr_t read_object_ptr(obj_vnum nr, int type);
 namespace mods::doors  {
+	void unlock(room_rnum room_id,direction_t dir);
+	void open(room_rnum room_id,direction_t dir);
 	enum exit_info_masks_t {
 		EIM_ISDOOR = EX_ISDOOR,
 		EIM_CLOSED = EX_CLOSED,

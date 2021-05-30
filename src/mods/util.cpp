@@ -19,6 +19,24 @@
 #define mu_debug(A) /**-*/
 #endif
 namespace mods::util {
+	player_ptr_t query_mob_in_room(room_vnum r_vnum,mob_vnum mob) {
+		auto r = real_room(r_vnum);
+		if(r == NOWHERE) {
+			std::cerr << red_str("r_vnum turned out to be NOWHERE:") << r_vnum << "\n";
+			return nullptr;
+		}
+		auto it = std::find_if(room_list(r).cbegin(),room_list(r).cend(),[mob](const auto & player_ptr) -> bool {
+			return player_ptr->is_npc() && player_ptr->cd()->mob_specials.vnum == mob;
+		});
+		if(it == room_list(r).cend()) {
+			return nullptr;
+		}
+		return (*it);
+
+	}
+	direction_t random_direction() {
+		return rand_number(0,NUM_OF_DIRS - 1);
+	}
 	std::string admin_section(std::string_view name) {
 		std::size_t len = std::min(name.length(),std::size_t(64)) + 4;
 		std::string horizontal_line = "{yel}" + std::string(len,'=') + "{/yel}\r\n";

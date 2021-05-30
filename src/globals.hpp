@@ -19,7 +19,6 @@
 
 #define MENTOC_PREAMBLE() auto player = ptr(ch)
 
-#define MENTOC_DEFER(secs,lambda) mods::globals::defer_queue->push_secs(secs,lambda);
 #define IS_DIRECTION(a) (strcmp(a,"north") == 0 || strcmp(a,"south") == 0 || \
 		strcmp(a,"east") == 0 || strcmp(a,"west") == 0 || strcmp(a,"up") == 0 || strcmp(a,"down") == 0)
 #define OPPOSITE_DIR(a) mods::globals::opposite_dir(a)

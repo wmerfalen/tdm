@@ -71,6 +71,7 @@ namespace mods {
 			    uint64_t next_event_tick,
 			    uint64_t add
 			);
+			void push_step(uint16_t ticks,std::size_t hash);
 			void iteration();
 			void detexturize_room(uint64_t ticks_in_future,room_rnum room_id,room_data::texture_type_t texture);
 			template <typename TTextureList>
@@ -100,5 +101,8 @@ namespace mods {
 			void tick();
 	};
 };
+
+#define DEFER_TICKS(ticks,lambda) mods::globals::defer_queue->push(ticks,lambda);
+#define DEFER_STEP(ticks,step) mods::globals::defer_queue->push_step(ticks,step);
 
 #endif

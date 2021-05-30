@@ -65,6 +65,7 @@
 {yel}mods/query-objects{/yel}:->{grn}query_zone{/grn}
 {yel}mods/contract-step-callback{/yel}:->{grn}contract_step_callback{/grn}
 {yel}mods/scripted-sequence-events{/yel}:->{grn}finish_step{/grn}
+{yel}mods/scripted-sequence-runner{/yel}:->{grn}triton_sequence{/grn}
 {yel}mods/scripted-sequence-runner{/yel}:->{grn}run_sequence{/grn}
 {yel}mods/chat{/yel}:->{grn}chanmgr{/grn}
 {yel}mods/immortal{/yel}:->{grn}rnumtele{/grn}

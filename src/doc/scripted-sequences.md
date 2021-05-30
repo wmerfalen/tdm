@@ -186,3 +186,8 @@ An interactive example:
   `seqbuild show-steps <vnum>`
   `seqbuild set-step-data <vnum> <index> <key> <value>`
 
+###
+### Next up [as 2021-05-29 unimplemented]
+### 
+	`seqbuild set-step-data <vnum> <index> s_set_behaviour_tree 'LOWLY_SEC_ROAMING_AGGRESSIVE'`
+	- add a function to just run a specific sequence from any context

@@ -594,6 +594,7 @@ void mob_special_data::import(const mob_special_data& other) {
 	this->extended_mob_type = other.extended_mob_type;
 	this->heading = other.heading;
 	this->previous_room = other.previous_room;
+	this->vnum = other.vnum;
 }
 void mob_special_data::report(room_rnum room) {
 	for(auto& uuid : this->memory) {

@@ -575,6 +575,7 @@ namespace mods {
 				GET_EQ(mob->cd(), num_wears_i) = nullptr;
 			}
 			mob->cd()->carrying = nullptr;
+			mob->cd()->mob_specials.vnum = nr;
 			int from = mob->hp(), to = mob->mana();
 			if(from > to) {
 				to = from + rand_number(1,50);
