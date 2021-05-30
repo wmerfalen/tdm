@@ -92,8 +92,8 @@ namespace mods::zone {
 			case 'M': {
 					std::vector<uuid_t> alive;
 					for(const auto& mob_uuid : command.object_data) {
-						auto it = mods::globals::mob_map.find(mob_uuid);
-						if(it != mods::globals::mob_map.end()) {
+						auto npc = npc_by_uuid(mob_uuid);
+						if(npc) {
 							alive.emplace_back(mob_uuid);
 						}
 					}

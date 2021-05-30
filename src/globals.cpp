@@ -77,7 +77,6 @@ namespace mods {
 	namespace globals {
 		using player = mods::player;
 		uint64_t current_tick;
-		std::map<char_data*,player_ptr_t> mob_ptrmap;
 		std::unordered_map<std::string,std::string> ram_db;
 		boot_type_t boot_type;
 		socket_map_t socket_map;
@@ -101,12 +100,10 @@ namespace mods {
 
 		/* Maps */
 		map_object_list obj_map;
-		std::map<uuid_t,std::shared_ptr<mods::npc>> mob_map;
 		std::map<uuid_t,player_ptr_t> player_map;
 		std::map<uint64_t,uuid_t> db_id_to_uuid_map;
 
 		std::map<obj_data*,obj_ptr_t> obj_odmap;
-		std::map<char_data*,std::shared_ptr<mods::npc>> mob_chmap;
 		std::map<char_data*,std::shared_ptr<mods::player>> player_chmap;
 		std::map<obj_vnum,std::string> obj_stat_pages;
 
@@ -547,8 +544,7 @@ namespace mods {
 			return ++u;
 		}
 		uuid_t mob_uuid() {
-			static uuid_t u = 0;
-			return ++u;
+			return player_uuid();
 		}
 		char_data* read_mobile(const mob_vnum& nr,const int& type) {
 			return read_mobile_ptr(nr,type)->cd();
@@ -595,11 +591,7 @@ namespace mods {
 			SET_BIT(mob->char_specials().saved.act, MOB_ISNPC);
 			GET_POS(mob->cd()) = POS_STANDING;
 			mob->uuid() = player_uuid();
-			mob_map[mob->uuid()] = mob;
-			mob_chmap[mob->cd()] = mob;
-			SET_BIT(mob->cd()->char_specials.saved.act, MOB_ISNPC);
-			mob_ptrmap[mob->cd()] = mob;
-			player_map[mob->uuid()] = mob;
+			register_player(mob);
 			mods::mobs::decorate(mob->uuid());
 			mods::mob_equipment::decorate(mob->uuid());
 			return mob;
@@ -1246,9 +1238,6 @@ namespace mods {
 			/** TODO remove from room_list */
 			if(player->is_npc()) {
 				mgdp_debug("Erasing from mob_chmap");
-				mods::globals::mob_chmap.erase(const_cast<char_data*>(player->cd()));
-				mob_map.erase(player->uuid());
-				mob_ptrmap.erase(player->cd());
 				player_map.erase(player->uuid());
 				{
 					auto ch = player->cd();
@@ -1295,9 +1284,6 @@ player_ptr_t ptr(const char_data* in_ch) {
 	if(!in_ch) {
 		return nullptr;
 	}
-	if(IS_NPC(in_ch)) {
-		return mods::globals::mob_chmap[const_cast<char_data*>(in_ch)];
-	}
 	return mods::globals::player_chmap[const_cast<char_data*>(in_ch)];
 }
 obj_ptr_t optr(obj_data* in_obj) {
@@ -1313,16 +1299,9 @@ std::optional<obj_ptr_t> optr_opt(uuid_t obj_uuid) {
 	return std::nullopt;
 }
 std::optional<player_ptr_t> ptr_opt(char_data* ch) {
-	if(IS_NPC(ch)) {
-		auto it = mods::globals::mob_chmap.find(ch);
-		if(it != mods::globals::mob_chmap.end()) {
-			return it->second;
-		}
-	} else {
-		auto it = mods::globals::player_chmap.find(ch);
-		if(it != mods::globals::player_chmap.end()) {
-			return it->second;
-		}
+	auto it = mods::globals::player_chmap.find(ch);
+	if(it != mods::globals::player_chmap.end()) {
+		return it->second;
 	}
 	return std::nullopt;
 }
@@ -1340,7 +1319,13 @@ obj_ptr_t optr_by_uuid(uuid_t id) {
 	return mods::globals::obj_map[id];
 }
 std::shared_ptr<mods::npc> npc_by_uuid(const uuid_t& u) {
-	return mods::globals::mob_map[u];
+	auto it = std::find_if(mob_list.cbegin(),mob_list.cend(),[&u](const auto& ptr) -> bool {
+		return ptr->uuid() == u;
+	});
+	if(it == mob_list.cend()) {
+		return nullptr;
+	}
+	return *it;
 }
 std::string dirstr(int dir) {
 	switch(dir) {

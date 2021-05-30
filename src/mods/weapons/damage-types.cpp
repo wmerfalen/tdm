@@ -335,6 +335,9 @@ namespace mods::weapons::damage_types {
 		if(mods::super_users::player_is(player)) {
 			return;
 		}
+		if(player->position() == POS_DEAD) {
+			return;
+		}
 		auto& hp = player->hp();
 		int hp_after = hp;
 		hp_after -= damage;
@@ -632,14 +635,17 @@ namespace mods::weapons::damage_types {
 		player_ptr_t victim = nullptr;
 
 		for(auto&& scanned_target : scan) {
-			if(mods::util::fuzzy_match(victim_name.data(),scanned_target.ch->player.name.c_str())) {
+			victim = ptr(scanned_target.ch);
+			if(!victim) {
+				continue;
+			}
+			if(mods::super_users::player_is(victim)) {
+				continue;
+			}
+			if(mods::util::fuzzy_match(victim_name.data(),victim->name())) {
 				if(scanned_target.distance > max_range) {
 					player->sendln("That target is out of range!");
 					return;
-				}
-				victim = ptr(scanned_target.ch);
-				if(mods::super_users::player_is(victim)) {
-					continue;
 				}
 				rifle_attack(player,weapon,victim,scanned_target.distance,direction);
 				return;

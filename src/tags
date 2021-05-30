@@ -151,9 +151,9 @@ ACTNULL	comm.cpp	/^const char *ACTNULL = "<NULL>";$/;"	v
 ACT_DEBUG	act.social.cpp	88;"	d	file:
 ADD_BUILDER_COMMAND	mods/interpreter.hpp	18;"	d
 ADD_INTERPRETER_COMMAND	mods/interpreter-include.hpp	8;"	d
-ADMIN_DONE	globals.hpp	284;"	d
-ADMIN_FAIL	globals.hpp	285;"	d
-ADMIN_REJECT	globals.hpp	286;"	d
+ADMIN_DONE	globals.hpp	281;"	d
+ADMIN_FAIL	globals.hpp	282;"	d
+ADMIN_REJECT	globals.hpp	283;"	d
 ADVANCED	mods/yaml.hpp	/^		ADVANCED = 2,$/;"	e	enum:mods::yaml::armor_classification_type_t
 ADVANCE_LEVEL_BONUS_HP_DICE	mods/values-list.cpp	/^ADVANCE_LEVEL_BONUS_HP_DICE,6$/;"	v
 ADVANCE_LEVEL_BONUS_HP_SIDES	mods/values-list.cpp	/^ADVANCE_LEVEL_BONUS_HP_SIDES,6$/;"	v
@@ -1019,8 +1019,8 @@ DISORIENT	mods/weapon-types.hpp	/^		DISORIENT,$/;"	e	enum:mods::weapon::capabili
 DISPLAY	mods/mini-games/wires.hpp	/^		static constexpr std::string_view DISPLAY = "A small LED display on the panel says: ";$/;"	m	struct:mods::mini_games::wires
 DISPLAY_ACMD	mods/players/db-load.hpp	/^		DISPLAY_ACMD,$/;"	e	enum:mods::players::db_load::save_from_t
 DM	telnet.h	55;"	d
-DMG_DEBUG	mods/weapons/damage-types.cpp	1112;"	d	file:
-DMG_DUMP	mods/weapons/damage-types.cpp	469;"	d	file:
+DMG_DEBUG	mods/weapons/damage-types.cpp	1118;"	d	file:
+DMG_DUMP	mods/weapons/damage-types.cpp	472;"	d	file:
 DO	telnet.h	44;"	d
 DONT	telnet.h	43;"	d
 DONTSET	mods/flags.hpp	/^		DONTSET,$/;"	e	enum:mods::flags::plr
@@ -1608,7 +1608,7 @@ House_save	house.cpp	/^int House_save(struct obj_data *obj, FILE *fp) {$/;"	f
 House_save_all	house.cpp	/^void House_save_all(void) {$/;"	f
 House_save_control	house.cpp	/^void House_save_control(void) {$/;"	f
 IAC	telnet.h	42;"	d
-ICMP	globals.hpp	244;"	d
+ICMP	globals.hpp	241;"	d
 IContext	mods/catch.hpp	/^	struct IContext {$/;"	s	namespace:Catch
 IDEA_FILE	db.h	88;"	d
 IDXTYPE	mods/index-type.hpp	11;"	d
@@ -1851,7 +1851,7 @@ IS_SET	utils.h	200;"	d
 IS_SUPPORT	utils.h	511;"	d
 IS_THIEF	utils.h	506;"	d
 IS_WARRIOR	utils.h	510;"	d
-IS_WEAPON	fight.cpp	129;"	d	file:
+IS_WEAPON	fight.cpp	128;"	d	file:
 IS_WEAPON	mods/weapons/damage-types.cpp	31;"	d	file:
 IS_WEAPON_LOADED	mods/weapon.hpp	15;"	d
 IShared	mods/catch.hpp	/^	struct IShared : NonCopyable {$/;"	s	namespace:Catch
@@ -2421,9 +2421,9 @@ MENTOC_LAZY_ME	mods/util.cpp	928;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	935;"	d	file:
 MENTOC_LAZY_ME	mods/util.cpp	947;"	d	file:
 MENTOC_LAZY_POS	act.debug.cpp	221;"	d	file:
-MENTOC_LAZY_POS	act.debug.cpp	235;"	d	file:
-MENTOC_LAZY_POS	act.debug.cpp	246;"	d	file:
-MENTOC_LAZY_POS	act.debug.cpp	268;"	d	file:
+MENTOC_LAZY_POS	act.debug.cpp	236;"	d	file:
+MENTOC_LAZY_POS	act.debug.cpp	247;"	d	file:
+MENTOC_LAZY_POS	act.debug.cpp	269;"	d	file:
 MENTOC_LAZY_SHOP	mods/builder.cpp	1903;"	d	file:
 MENTOC_LAZY_SHOP	mods/builder.cpp	1928;"	d	file:
 MENTOC_LAZY_SHOP	mods/builder.cpp	67;"	d	file:
@@ -2529,7 +2529,7 @@ MENU	config.cpp	/^const char *MENU =$/;"	v
 MESS_FILE	db.h	91;"	d
 METAL_HATCH	structs.h	/^			METAL_HATCH,$/;"	m	struct:room_data	typeref:enum:room_data::
 METAL_WALL	structs.h	/^			METAL_WALL,$/;"	m	struct:room_data	typeref:enum:room_data::
-MFEEDBACK	mods/weapons/damage-types.cpp	488;"	d	file:
+MFEEDBACK	mods/weapons/damage-types.cpp	491;"	d	file:
 MG_REPORT	mods/mobs/lowly-security.cpp	87;"	d	file:
 MG_REPORT	mods/mobs/lowly-security.cpp	96;"	d	file:
 MG_REPORT	mods/mobs/mini-gunner.cpp	86;"	d	file:
@@ -2651,12 +2651,12 @@ MOTORCYCLE	mods/weapon.hpp	/^		MOTORCYCLE,$/;"	e	enum:mods::weapon::vehicle_t
 MP5	mods/orm/breacher.hpp	/^		const std::string MP5 = "MP5";$/;"	m	struct:mods::orm::breacher
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::breacher::primary_choice_t
 MP5	mods/weapon.hpp	/^			MP5 = 1,$/;"	e	enum:mods::weapon::sentinel::primary_choice_t
-MR	mods/player.cpp	1585;"	d	file:
-MR	mods/player.cpp	1639;"	d	file:
+MR	mods/player.cpp	1586;"	d	file:
+MR	mods/player.cpp	1640;"	d	file:
 MR	structs.cpp	604;"	d	file:
 MR	structs.cpp	615;"	d	file:
-MRC	mods/player.cpp	1586;"	d	file:
-MRC	mods/player.cpp	1640;"	d	file:
+MRC	mods/player.cpp	1587;"	d	file:
+MRC	mods/player.cpp	1641;"	d	file:
 MSG_ANTI_MATTER_DAMAGE	mods/values-list.cpp	/^MSG_ANTI_MATTER_DAMAGE,"[%d] You take ANTI-MATTER damage!\\r\\n"$/;"	v
 MSG_CANT_KILL_KEEPER	shop.h	181;"	d
 MSG_CLOSED_FOR_DAY	shop.h	175;"	d
@@ -2942,7 +2942,7 @@ PAGE_LENGTH	comm.h	80;"	d
 PAGE_SIZE	mods/mobs/mob.hpp	/^			static constexpr int PAGE_SIZE = 40;$/;"	m	class:mods::player
 PAGE_SIZE	mods/player.hpp	/^			static constexpr int PAGE_SIZE = 40;$/;"	m	struct:mods::player
 PAGE_WIDTH	comm.h	81;"	d
-PARSE_ARGS	globals.hpp	243;"	d
+PARSE_ARGS	globals.hpp	240;"	d
 PARSE_FAIL	mods/acl/config-parser.cpp	/^        const int FileParser::PARSE_FAIL = -1;$/;"	m	class:mods::acl::FileParser	file:
 PARSE_FAIL	mods/acl/config-parser.hpp	/^                static const int PARSE_FAIL;$/;"	m	class:mods::acl::FileParser
 PARSE_TYPE	mods/acl/config-parser.hpp	/^                enum PARSE_TYPE { E_CLASS, E_EXTENDED_CLASS, E_COMMENT, E_BLOCK,    \\$/;"	g	class:mods::acl::FileParser
@@ -2959,7 +2959,7 @@ PLACE_HOLDER_VALUE	mods/schema.hpp	/^	constexpr static const char* PLACE_HOLDER_
 PLAYER	mods/mobs/mob.hpp	/^				PLAYER, MOB, DRONE$/;"	e	enum:mods::player::player_type_enum_t
 PLAYER	mods/player.hpp	/^				PLAYER, MOB, DRONE,$/;"	e	enum:mods::player::player_type_enum_t
 PLAYERS	mods/scan.hpp	/^			PLAYERS = (1 << 4),$/;"	e	enum:mods::scan::find_type_t
-PLAYER_CAN	globals.hpp	288;"	d
+PLAYER_CAN	globals.hpp	285;"	d
 PLAYER_FILE	db.h	95;"	d
 PLAYER_GET	mods/prefs.hpp	20;"	d
 PLAYER_GETI	mods/prefs.hpp	22;"	d
@@ -3355,7 +3355,7 @@ SELECTOR	mods/behaviour_tree_node.hpp	/^			enum node_type_t { DO_NOTHING, SELECT
 SELF	utils.h	452;"	d
 SEMI	mods/weapon.hpp	/^		SEMI,$/;"	e	enum:mods::weapon::vehicle_t
 SENDOK	comm.cpp	2555;"	d	file:
-SEND_HELP	globals.hpp	290;"	d
+SEND_HELP	globals.hpp	287;"	d
 SENSE_LIFE	mods/flags.hpp	/^		SENSE_LIFE,$/;"	e	enum:mods::flags::aff
 SENSE_MOTION	mods/weapon-types.hpp	/^		SENSE_MOTION,$/;"	e	enum:mods::weapon::capabilities::cap_t
 SENSOR	mods/aoe.hpp	/^		SENSOR, \/** senses objects or enemies within blast_radius *\/$/;"	e	enum:mods::aoe::types_t
@@ -3444,7 +3444,7 @@ SHOULD_DO_RANDOM_TRIVIAL	mods/mobs/lowly-security.hpp	/^		static constexpr uint1
 SHOULD_DO_RANDOM_TRIVIAL	mods/mobs/mp-shotgunner.hpp	/^		static constexpr uint16_t SHOULD_DO_RANDOM_TRIVIAL = 1;$/;"	m	struct:mods::mobs::mp_shotgunner
 SHOULD_DO_ROAM	mods/mobs/lowly-security.hpp	/^		static constexpr uint16_t SHOULD_DO_ROAM = 0;$/;"	m	struct:mods::mobs::lowly_security
 SHOULD_DO_ROAM	mods/mobs/mp-shotgunner.hpp	/^		static constexpr uint16_t SHOULD_DO_ROAM = 0;$/;"	m	struct:mods::mobs::mp_shotgunner
-SHOULD_RATE_LIMIT	globals.hpp	289;"	d
+SHOULD_RATE_LIMIT	globals.hpp	286;"	d
 SHOW_OBJ_ACTION	act.informative.cpp	122;"	d	file:
 SHOW_OBJ_LONG	act.informative.cpp	120;"	d	file:
 SHOW_OBJ_SHORT	act.informative.cpp	121;"	d	file:
@@ -4189,7 +4189,7 @@ TIME_WITH_SYS_TIME	conf.h	29;"	d
 TITAN_COMBAT	mods/object.hpp	/^				TITAN_COMBAT,$/;"	e	enum:mods::object::object_type_enum_t
 TO	mods/mini-games/line-up.hpp	/^		static constexpr int TO = 6;$/;"	m	struct:mods::mini_games::line_up
 TO	mods/mini-games/wires.hpp	/^		static constexpr uint8_t TO = 2;$/;"	m	struct:mods::mini_games::wires
-TODO	globals.hpp	287;"	d
+TODO	globals.hpp	284;"	d
 TOGGLE_BIT	utils.h	203;"	d
 TOGGLE_LOCK	act.movement.cpp	381;"	d	file:
 TOG_OFF	act.other.cpp	917;"	d	file:
@@ -4981,7 +4981,7 @@ __MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	145;"	d
 __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/scripted-sequence-runner.cpp	7;"	d	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	d
 __MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__	mods/weapons/damage-calculator.cpp	14;"	d	file:
-__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1227;"	d	file:
+__MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1219;"	d	file:
 __MENTOC_SHOW_EQUIP_DEBUG_OUTPUT__	mods/player.cpp	35;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_ADVANCED_PROTECTION_DEBUG_OUTPUT__	mods/armor/advanced-protection.cpp	4;"	d	file:
 __MENTOC_SHOW_MODS_ARMOR_BP_DEBUG_OUTPUT__	mods/armor/basic-protection.cpp	4;"	d	file:
@@ -6235,10 +6235,10 @@ db_seti	mods/js.cpp	/^		static duk_ret_t db_seti(duk_context *ctx) {$/;"	f	names
 db_update	mods/mobs/mini-gunner.hpp	/^		static inline int db_update(mob_vnum mob_vnum,str_map_t values) {$/;"	f	namespace:mods::mobs::mg::orm
 db_update	mods/pq.hpp	/^static inline int db_update(std::string_view table, str_map_t values,std::string_view field,std::string_view operator_type,std::string_view value) {$/;"	f
 dbg	mods/acl/config-parser.hpp	20;"	d
-dbg	mods/player.cpp	554;"	d	file:
-dbg	mods/player.cpp	579;"	d	file:
-dbg	mods/player.cpp	582;"	d	file:
-dbg	mods/player.cpp	629;"	d	file:
+dbg	mods/player.cpp	555;"	d	file:
+dbg	mods/player.cpp	580;"	d	file:
+dbg	mods/player.cpp	583;"	d	file:
+dbg	mods/player.cpp	630;"	d	file:
 dbg_blu	mods/acl/config-parser.hpp	25;"	d
 dbg_grn	mods/acl/config-parser.hpp	24;"	d
 dbg_print	mods/contract-events.cpp	6;"	d	file:
@@ -8533,7 +8533,7 @@ invalid_class	class.cpp	/^int invalid_class(char_data *ch, struct obj_data *obj)
 invalid_list	ban.cpp	/^char *invalid_list[MAX_INVALID_NAMES];$/;"	v
 invalid_plug	mods/mini-games/wires.cpp	/^	std::string invalid_plug(){$/;"	f	namespace:mods::mini_games
 invalid_row	mods/mini-games/line-up.cpp	/^	std::string line_up::invalid_row(){$/;"	f	class:mods::mini_games::line_up
-invec	globals.hpp	271;"	d
+invec	globals.hpp	268;"	d
 inventory	mods/classes/breacher.cpp	/^namespace mods::orm::inventory {$/;"	n	class:mods::orm	file:
 inventory	mods/classes/forge.cpp	/^namespace mods::orm::inventory {$/;"	n	class:mods::orm	file:
 inventory	mods/classes/ghost.cpp	/^namespace mods::orm::inventory {$/;"	n	class:mods::orm	file:
@@ -9856,7 +9856,7 @@ metro	mods/fluxkraft/arcon-metropolitan.hpp	/^	struct metro {$/;"	s	namespace:mo
 mex_debug	mods/examine.cpp	5;"	d	file:
 mex_debug	mods/examine.cpp	7;"	d	file:
 mg_map	mods/mobs/mini-gunner.cpp	/^	mg_map_t& mg_map() {$/;"	f	namespace:mods::mobs
-mgdp_debug	globals.cpp	1229;"	d	file:
+mgdp_debug	globals.cpp	1221;"	d	file:
 mi_debug	mods/interpreter.cpp	49;"	d	file:
 mi_debug	mods/interpreter.cpp	5;"	d	file:
 mi_debug	mods/interpreter.cpp	7;"	d	file:
@@ -9928,7 +9928,6 @@ mo_debug	mods/replenish.cpp	15;"	d	file:
 mob	mods/builder-data.hpp	/^	mob_pavements_t mob;$/;"	m	struct:zone_pavement_t
 mob	mods/scripted-step.hpp	/^		mob_vnum mob;$/;"	m	struct:mods::scripted_step
 mob_act_flags	mods/builder.cpp	/^	std::array<std::pair<int,std::string>,19> mob_act_flags = { {$/;"	m	namespace:mods::builder	file:
-mob_chmap	globals.cpp	/^		std::map<char_data*,std::shared_ptr<mods::npc>> mob_chmap;$/;"	m	namespace:mods::globals	file:
 mob_commands	mods/builder.cpp	/^static std::list<std::shared_ptr<command_t>> mob_commands;$/;"	v	file:
 mob_death_trigger	mods/js.cpp	/^		static duk_ret_t mob_death_trigger(duk_context *ctx) {$/;"	f	namespace:mods::js
 mob_equipment	globals.cpp	/^namespace mods::mob_equipment {$/;"	n	class:mods	file:
@@ -9948,10 +9947,8 @@ mob_id_argument	mods/builder.cpp	/^	int mob_id_argument;$/;"	m	struct:command_t	
 mob_index	db.cpp	/^std::vector<index_data> mob_index;	\/* index table for mobile file	 *\/$/;"	v
 mob_list	db.cpp	/^std::deque<std::shared_ptr<mods::npc>> mob_list;$/;"	v
 mob_list	mods/behaviour_tree_impl.cpp	/^	std::vector<uuid_t>& mob_list() {$/;"	f	namespace:mods::behaviour_tree_impl
-mob_map	globals.cpp	/^		std::map<uuid_t,std::shared_ptr<mods::npc>> mob_map;$/;"	m	namespace:mods::globals	file:
 mob_pavements_t	mods/builder-data.hpp	/^	typedef std::vector<mob_vnum> mob_pavements_t;$/;"	t	struct:zone_pavement_t
 mob_proto	db.cpp	/^std::deque<char_data> mob_proto;	\/* prototypes for mobs		 *\/$/;"	v
-mob_ptrmap	globals.cpp	/^		std::map<char_data*,player_ptr_t> mob_ptrmap;$/;"	m	namespace:mods::globals	file:
 mob_rnum	mods/index-type.hpp	/^typedef IDXTYPE mob_rnum;$/;"	t
 mob_roam	mods/mob-roam.cpp	/^namespace mods::mob_roam {$/;"	n	class:mods	file:
 mob_roam	mods/mob-roam.hpp	/^namespace mods::mob_roam {$/;"	n	class:mods
@@ -11247,7 +11244,6 @@ rate_limiting	mods/rate-limiting.cpp	/^namespace mods::rate_limiting {$/;"	n	cla
 rate_limiting	mods/rate-limiting.hpp	/^namespace mods::rate_limiting {$/;"	n	class:mods
 rawMemoryToString	mods/catch.hpp	/^		inline std::string rawMemoryToString(const T& object) {$/;"	f	namespace:Catch::Detail
 rawMemoryToString	mods/catch2.hpp	/^        std::string rawMemoryToString( const T& object ) {$/;"	f	namespace:Catch::Detail
-raw_kill	fight.cpp	/^void raw_kill(char_data *ch) {$/;"	f
 raw_send	mods/player.cpp	/^	void player::raw_send(const mods::string& str) {$/;"	f	class:mods::player
 rb_bht_debug	comm.cpp	865;"	d	file:
 rb_bht_debug	comm.cpp	867;"	d	file:
@@ -12843,7 +12839,7 @@ tick	mods/deferred.cpp	/^	void deferred::tick() {$/;"	f	class:mods::deferred
 ticks_per_minute	mods/affects.cpp	/^	static uint32_t ticks_per_minute = 0;$/;"	m	namespace:mods::affects	file:
 ticks_per_minute_sample	mods/affects.cpp	/^	static uint32_t ticks_per_minute_sample = 0;$/;"	m	namespace:mods::affects	file:
 tics	comm.cpp	/^uint64_t tics = 0;			\/* for extern checkpointing *\/$/;"	v
-tier	globals.hpp	291;"	d
+tier	globals.hpp	288;"	d
 tim	castle.cpp	/^SPECIAL(tim);$/;"	v
 time	mods/mobs/mob.hpp	/^			time_type_t time() const {$/;"	f	class:mods::player
 time	mods/object-utils.hpp	/^		time_t time;$/;"	m	struct:mods::object_utils::YamlFeedExceptionInfo

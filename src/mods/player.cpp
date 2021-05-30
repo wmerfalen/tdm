@@ -134,6 +134,7 @@ namespace mods {
 				}
 				break;
 			case player_type_enum_t::MOB:
+				SET_BIT(cd()->char_specials.saved.act, MOB_ISNPC);
 			case player_type_enum_t::PLAYER_MUTED_DESCRIPTOR:
 			case player_type_enum_t::MOB_MUTED_DESCRIPTOR:
 			case player_type_enum_t::DRONE_MUTED_DESCRIPTOR:

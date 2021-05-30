@@ -31,12 +31,12 @@ namespace mods::behaviour_tree_impl {
 		bti_debug("[behaviour_tree][run_trees] -- STUB\n");
 	}
 	int8_t dispatch(uuid_t mob_uuid) {
-		auto it = mods::globals::mob_map.find(mob_uuid);
-		if(it == mods::globals::mob_map.end()) {
+		auto it = npc_by_uuid(mob_uuid);
+		if(!it) {
 			bti_debug("uuid doesn't have mob ptr value: " << mob_uuid);
 			return mods::behaviour_tree_impl::dispatch_status_t::MOB_DOESNT_EXIST;
 		}
-		return dispatch_ptr(*(it->second));
+		return dispatch_ptr(*it);
 	}
 	int8_t dispatch_ptr(argument_type& ch) {
 		bti_debug("dispatching behaviour tree on: " << ch.name().c_str());

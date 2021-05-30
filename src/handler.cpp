@@ -1288,11 +1288,6 @@ void extract_char_final(char_data *ch) {
 		}
 		Crash_delete_crashfile(ch);
 	}
-
-	/* If there's a descriptor, they're in the menu now. */
-	if(IS_NPC(ch) || !ch->has_desc) {
-		free_char(ch);
-	}
 }
 
 

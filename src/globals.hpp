@@ -115,9 +115,6 @@ namespace mods {
 		extern socket_map_t socket_map;
 		extern player_ptr_t player_nobody;
 		extern std::map<obj_data*,obj_ptr_t> obj_odmap;
-		extern std::map<uuid_t,std::shared_ptr<mods::npc>> mob_map;
-		extern std::map<char_data*,std::shared_ptr<mods::npc>> mob_chmap;
-		extern std::map<char_data*,player_ptr_t> mob_ptrmap;
 		extern std::map<char_data*,std::shared_ptr<mods::player>> player_chmap;
 		extern std::unique_ptr<mods::deferred> defer_queue;
 		extern std::unique_ptr<lmdb_db> db;

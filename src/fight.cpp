@@ -65,7 +65,6 @@ void check_killer(char_data *ch, char_data *vict);
 void make_corpse(char_data *ch);
 void change_alignment(char_data *ch, char_data *victim);
 void death_cry(char_data *ch);
-void raw_kill(char_data *ch);
 void die(char_data *killer,char_data *victim); /* !mods */
 void die(char_data *ch);
 void group_gain(char_data *ch, char_data *victim);
@@ -428,37 +427,9 @@ void death_cry(char_data *ch) {
 
 
 
-void raw_kill(char_data *ch) {
-	//if(FIGHTING(ch)) {
-	//	std::cerr << "[raw_kill][player is fighting].. removing...\n";
-	//stop_fighting(ch);
-	//}else{
-	//	std::cerr << "[raw_kill][player is NOT fighting].. NOT removing...\n";
-	//}
-
-	//while(ch->affected) {
-	//	affect_remove(ch, ch->affected);
-	//}
-
-	std::cerr << "[raw_kill(victim)] -> raw_kill for: " << ch->player.name.c_str() << "\n";
-	death_cry(ch);
-
-	make_corpse(ch);
-	extract_char_final(ch);
-	//{
-	//	char_data* temp;
-	//	REMOVE_FROM_LIST(ch, combat_list, next_fighting);
-	//}
-	//ch->next_fighting = NULL;
-	//FIGHTING(ch) = NULL;
-	//mods::globals::dispose_player(ch->uuid);
-}
-
-
 void die(char_data* killer,char_data *victim) {
 	std::cerr << "[die(killer,victim)] -> killing: " << victim->player.name.c_str() << "\n";
 	/* check if mob death trigger is active */
-	std::string functor;
 
 	if(victim->drone) {
 		auto room = IN_ROOM(victim);
@@ -477,16 +448,20 @@ void die(char_data* killer,char_data *victim) {
 
 
 void die(char_data *ch) {
-	std::cerr << "[die(victim)] -> killing: " << ch->player.name.c_str() << "| removing exp...\n";
 	auto p = ptr(ch);
+	std::cerr << "[die(victim)] -> killing: " << p->name().c_str() << "| removing exp...\n";
 	mods::levels::gain_exp(p, -(GET_EXP(ch) / 2));
 
 	if(!IS_NPC(ch)) {
 		REMOVE_BIT(PLR_FLAGS(ch), PLR_KILLER | PLR_THIEF);
 	}
 
-	std::cerr << "[die(victim)] -> calling raw_kill for: " << ch->player.name.c_str() << "| removing exp...\n";
-	raw_kill(ch);
+	std::cerr << "[die(victim)] -> calling raw_kill for: " << p->name().c_str() << "| removing exp...\n";
+	std::cerr << "[raw_kill(victim)] -> raw_kill for: " << ch->player.name.c_str() << "\n";
+	death_cry(ch);
+
+	make_corpse(ch);
+	extract_char_final(ch);
 }
 
 

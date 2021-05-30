@@ -232,6 +232,7 @@ SUPERCMD(do_set_npc_position) {
 	MENTOC_LAZY_POS(RESTING,POS_RESTING);
 	MENTOC_LAZY_POS(SITTING,POS_SITTING);
 	MENTOC_LAZY_POS(FIGHTING,POS_FIGHTING);
+	MENTOC_LAZY_POS(STANDING,POS_STANDING);
 #undef MENTOC_LAZY_POS
 	player->sendln("Didn't set position. Make sure you used the correct string.");
 

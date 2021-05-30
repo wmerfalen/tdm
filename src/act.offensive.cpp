@@ -40,7 +40,6 @@ extern void three_arguments(char*,char*,char*,char*);
 extern void die(char_data*,char_data*);
 extern mods::globals::room_list_t mods::globals::room_list;
 /* extern functions */
-void raw_kill(char_data *ch);
 void check_killer(char_data *ch, char_data *vict);
 int compute_armor_class(char_data *ch);
 
@@ -394,7 +393,6 @@ ACMD(do_kill) {
 			act("$N chops you to pieces!", FALSE, vict, 0, ch, TO_CHAR);
 			act("$n brutally slays $N!", FALSE, ch, 0, vict, TO_NOTVICT);
 			die(ch,vict);
-			//raw_kill(vict);
 		}
 	}
 }
