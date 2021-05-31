@@ -260,6 +260,7 @@ namespace mods::builder::seqbuild {
 			 */
 			register_manual_command("callback","<contract-vnum> <task-type> <task-target> <task-vnum> <sequence-vnum>",[&,this](const std::string& argument) -> std::tuple<bool,std::string> {
 				auto& player = m_builder_ptr;
+				player->sendln(CAT("intat(1):",intat(1),",argat(1):",argat(1),",argat(2):",argat(2)));
 				if(argshave()->int_at({1,4,5})->size_gt(5)->passed() == false) {
 					return {0,"Not enough arguments"};
 				}
@@ -611,6 +612,7 @@ namespace mods::builder::seqbuild {
 					return {0,"Couldn't initialize row"};
 				}
 				mods::orm::scripted_sequences_list().emplace_back(std::move(c));
+				this->step_list.clear();
 				return {1,"Created row."};
 			}
 			return {0,"Invalid arguments"};

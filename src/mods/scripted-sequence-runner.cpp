@@ -17,9 +17,6 @@ namespace mods::scripted_sequence_runner {
 		return list;
 	}
 
-	void dispatch(player_ptr_t& player,sequence_vnum_t sequence_vnum,contract_vnum_t contract_vnum,step_t step_copy) {
-
-	}
 	using step_ptr_t = std::shared_ptr<mods::scripted_step>;
 	std::list<step_ptr_t> deferred_list;
 
@@ -155,6 +152,13 @@ namespace mods::scripted_sequence_runner {
 			}
 			queue_for_deferred_removal(step);
 		}
+		/**
+		 * unlocks a door.
+		 *
+		 * If at anytime we support zone commands for locking doors, there very well
+		 * may be race conditions where this function finishes and the next game tick
+		 * the zone is reset and a door lock command is run.
+		 */
 		void unlock(step_ptr_t step,direction_t dir) {
 			auto mob = qmob(step->room,step->mob);
 			if(mob == nullptr) {
@@ -167,6 +171,23 @@ namespace mods::scripted_sequence_runner {
 			}
 			queue_for_deferred_removal(step);
 		}
+
+		/**
+		 * open a direction specified.
+		 * This is basically a forced open.. if the door is locked to
+		 * player characters and requires a key this command essentially ignores
+		 * that. It will just open the door. So to be more organic, you would
+		 * want to have an unlock step precede this type of step (of course if
+		 * the door requires a key to unlock it).
+		 *
+		 * Possible race conditions can occur if we start supporting zone commands
+		 * which lock/close doors in specific intervals. For example, lets say this
+		 * step finishes at tick 10. A zone command that runs at tick 11 will
+		 * lock and close the door. This is problematic because the "walk_<dir>"
+		 * step types just use do_simple_move and that function will fail to move
+		 * your mob if the door is locked/closed.
+		 *
+		 */
 		void open(step_ptr_t step,direction_t dir) {
 			auto mob = qmob(step->room,step->mob);
 			if(mob == nullptr) {
@@ -181,6 +202,10 @@ namespace mods::scripted_sequence_runner {
 		}
 	};//end namespace runners
 
+	/**
+	 * This gets called by the deferred class when you register
+	 * a step using push_step()
+	 */
 	void step_runner(std::size_t hash) {
 		for(const auto& step : deferred_list) {
 			if(std::hash<step_ptr_t>()(step) == hash) {
@@ -285,5 +310,10 @@ namespace mods::scripted_sequence_runner {
 		ADD_BUILDER_COMMAND("run_sequence",do_run_sequence);
 		ADD_BUILDER_COMMAND("triton_sequence",do_triton_sequence);
 	}
+
+	void dispatch(player_ptr_t& player,sequence_vnum_t sequence_vnum,contract_vnum_t contract_vnum,step_t step_copy) {
+
+	}
+
 
 };

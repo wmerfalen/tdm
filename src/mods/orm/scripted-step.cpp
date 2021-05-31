@@ -132,6 +132,12 @@ namespace mods::orm {
 	}
 	uint64_t contract_step_callback::initialize_row(contract_vnum_t contract, std::string_view type, std::string_view task, task_vnum_t task_vnum, sequence_vnum_t sequence_vnum) {
 		init();
+		s_contract_vnum = contract;
+		s_sequence_vnum = sequence_vnum;
+		s_task_vnum = task_vnum;
+		s_task_type = type.data();
+		s_task_target = task.data();
+
 		auto status = this->create<contract_step_callback>(this);
 		if(ORM_SUCCESS(status)) {
 			loaded = 1;
