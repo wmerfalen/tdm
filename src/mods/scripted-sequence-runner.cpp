@@ -3,6 +3,7 @@
 #include "../comm.h"
 #include <list>
 #include "doors.hpp"
+#include "runners/includes.hpp"
 
 #define __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__
 #ifdef __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__
@@ -44,160 +45,92 @@ namespace mods::scripted_sequence_runner {
 			});
 		});
 	}
-	namespace runners {
-		void act(step_ptr_t step) {
-			auto mob = qmob(step->room,step->mob);
-			if(mob == nullptr) {
-				std::cerr << red_str("Error finding mob in room:") << step->dump() << "\n";
-			} else {
-				act(step->dialogue.c_str(), FALSE, mob->cd(), 0, 0, TO_ROOM);
-			}
-			queue_for_deferred_removal(step);
-		}
-		void dialogue(step_ptr_t step) {
-			auto mob = qmob(step->room,step->mob);
-			if(mob == nullptr) {
-				std::cerr << red_str("Error finding mob in room:") << step->dump() << "\n";
-			} else {
-				act(CAT("$n says, \"",step->dialogue,"\"").c_str(), FALSE, mob->cd(), 0, 0, TO_ROOM);
-			}
-			queue_for_deferred_removal(step);
-		}
-		void walk_impl(player_ptr_t& mob,const direction_t& dir) {
-			do_simple_move(mob->cd(), dir, 0);
-		}
-		void walk(step_ptr_t step,direction_t dir) {
-			auto mob = qmob(step->room,step->mob);
-			if(mob == nullptr) {
-				std::cerr << red_str("Error finding mob in room:") << step->dump() << "\n";
-			} else {
-				walk_impl(mob,dir);
-			}
-			queue_for_deferred_removal(step);
-		}
-		/**
-		 * unlocks a door.
-		 *
-		 * If at anytime we support zone commands for locking doors, there very well
-		 * may be race conditions where this function finishes and the next game tick
-		 * the zone is reset and a door lock command is run.
-		 */
-		void unlock(step_ptr_t step,direction_t dir) {
-			auto mob = qmob(step->room,step->mob);
-			if(mob == nullptr) {
-				std::cerr << red_str("Error finding mob in room:") << step->dump() << "\n";
-			} else {
-				mods::doors::unlock(real_room(step->room),dir);
-				if(step->dialogue.length()) {
-					act(step->dialogue.c_str(), FALSE, mob->cd(), 0, 0, TO_ROOM);
-				}
-			}
-			queue_for_deferred_removal(step);
-		}
-
-		/**
-		 * open a direction specified.
-		 * This is basically a forced open.. if the door is locked to
-		 * player characters and requires a key this command essentially ignores
-		 * that. It will just open the door. So to be more organic, you would
-		 * want to have an unlock step precede this type of step (of course if
-		 * the door requires a key to unlock it).
-		 *
-		 * Possible race conditions can occur if we start supporting zone commands
-		 * which lock/close doors in specific intervals. For example, lets say this
-		 * step finishes at tick 10. A zone command that runs at tick 11 will
-		 * lock and close the door. This is problematic because the "walk_<dir>"
-		 * step types just use do_simple_move and that function will fail to move
-		 * your mob if the door is locked/closed.
-		 *
-		 */
-		void open(step_ptr_t step,direction_t dir) {
-			auto mob = qmob(step->room,step->mob);
-			if(mob == nullptr) {
-				std::cerr << red_str("Error finding mob in room:") << step->dump() << "\n";
-			} else {
-				mods::doors::open(real_room(step->room),dir);
-				if(step->dialogue.length()) {
-					act(step->dialogue.c_str(), FALSE, mob->cd(), 0, 0, TO_ROOM);
-				}
-			}
-			queue_for_deferred_removal(step);
-		}
-	};//end namespace runners
 
 	/**
 	 * This gets called by the deferred class when you register
 	 * a step using push_step()
 	 */
 	void step_runner(std::size_t hash) {
+		using namespace mods::runners;
 		for(const auto& step : deferred_list) {
 			if(std::hash<step_ptr_t>()(step) == hash) {
 				if(step->type.compare("act") == 0) {
-					return runners::act(step);
+					return movement::act(step);
 				}
 				if(step->type.compare("say") == 0 || step->type.compare("dialogue") == 0) {
-					return runners::dialogue(step);
+					return movement::dialogue(step);
 				}
 				if(step->type.compare("open_east") == 0) {
-					return runners::open(step,EAST);
+					return movement::open(step,EAST);
 				}
 				if(step->type.compare("open_south") == 0) {
-					return runners::open(step,SOUTH);
+					return movement::open(step,SOUTH);
 				}
 				if(step->type.compare("open_west") == 0) {
-					return runners::open(step,WEST);
+					return movement::open(step,WEST);
 				}
 				if(step->type.compare("open_north") == 0) {
-					return runners::open(step,NORTH);
+					return movement::open(step,NORTH);
 				}
 				if(step->type.compare("open_up") == 0) {
-					return runners::open(step,UP);
+					return movement::open(step,UP);
 				}
 				if(step->type.compare("open_down") == 0) {
-					return runners::open(step,DOWN);
+					return movement::open(step,DOWN);
 				}
 				if(step->type.compare("unlock_east") == 0) {
-					return runners::unlock(step,EAST);
+					return movement::unlock(step,EAST);
 				}
 				if(step->type.compare("unlock_south") == 0) {
-					return runners::unlock(step,SOUTH);
+					return movement::unlock(step,SOUTH);
 				}
 				if(step->type.compare("unlock_west") == 0) {
-					return runners::unlock(step,WEST);
+					return movement::unlock(step,WEST);
 				}
 				if(step->type.compare("unlock_north") == 0) {
-					return runners::unlock(step,NORTH);
+					return movement::unlock(step,NORTH);
 				}
 				if(step->type.compare("unlock_up") == 0) {
-					return runners::unlock(step,UP);
+					return movement::unlock(step,UP);
 				}
 				if(step->type.compare("unlock_down") == 0) {
-					return runners::unlock(step,DOWN);
+					return movement::unlock(step,DOWN);
 				}
 
 				if(step->type.compare("walk_north") == 0) {
-					return runners::walk(step,NORTH);
+					return movement::walk(step,NORTH);
 				}
 				if(step->type.compare("walk_east") == 0) {
-					return runners::walk(step,EAST);
+					return movement::walk(step,EAST);
 				}
 				if(step->type.compare("walk_south") == 0) {
-					return runners::walk(step,SOUTH);
+					return movement::walk(step,SOUTH);
 				}
 				if(step->type.compare("walk_west") == 0) {
-					return runners::walk(step,WEST);
+					return movement::walk(step,WEST);
 				}
 				if(step->type.compare("walk_up") == 0) {
-					return runners::walk(step,UP);
+					return movement::walk(step,UP);
 				}
 				if(step->type.compare("walk_down") == 0) {
-					return runners::walk(step,DOWN);
+					return movement::walk(step,DOWN);
 				}
 			}
 		}
 	}
 
 	void dispatch(player_ptr_t& player,sequence_vnum_t sequence_vnum) {
+		uint64_t ticks = 0;
+		for(const auto& seq : mods::scripted_sequences_master_list()) {
+			if(seq->vnum == sequence_vnum) {
+				for(const auto& step : seq->steps) {
+					ticks += std::clamp((int)step->wait_ticks,1,UINT16_MAX);
+					defer_step(ticks,step);
+				}
+			}
+		}
+	}
+	void dispatch(player_ptr_t& player,sequence_vnum_t sequence_vnum,contract_vnum_t contract_vnum,step_t step_copy) {
 		uint64_t ticks = 0;
 		for(const auto& seq : mods::scripted_sequences_master_list()) {
 			if(seq->vnum == sequence_vnum) {
@@ -234,17 +167,6 @@ namespace mods::scripted_sequence_runner {
 		ADD_BUILDER_COMMAND("run_sequence",do_run_sequence);
 	}
 
-	void dispatch(player_ptr_t& player,sequence_vnum_t sequence_vnum,contract_vnum_t contract_vnum,step_t step_copy) {
-		uint64_t ticks = 0;
-		for(const auto& seq : mods::scripted_sequences_master_list()) {
-			if(seq->vnum == sequence_vnum) {
-				for(const auto& step : seq->steps) {
-					ticks += std::clamp((int)step->wait_ticks,1,UINT16_MAX);
-					defer_step(ticks,step);
-				}
-			}
-		}
-	}
 
 
 };

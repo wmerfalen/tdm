@@ -4921,6 +4921,7 @@ __MENTOC_MODS_RESPONSE_TEAM_RADIO_HEADER__	mods/response-team/radio.hpp	2;"	d
 __MENTOC_MODS_RIFLE_ATTACHMENTS_HEADER__	mods/rifle-attachments.hpp	2;"	d
 __MENTOC_MODS_RIFLE_INSTANCE_DATA_HEADER__	mods/rifle-instance-data.hpp	2;"	d
 __MENTOC_MODS_ROOMS_HEADER__	mods/rooms.hpp	2;"	d
+__MENTOC_MODS_RUNNERS_INCLUDES_HEADER__	mods/runners/includes.hpp	2;"	d
 __MENTOC_MODS_SCAN_HEADER__	mods/scan.hpp	2;"	d
 __MENTOC_MODS_SCHEMA_HEADER__	mods/schema.hpp	2;"	d
 __MENTOC_MODS_SCREEN_SEARCHER_HEADER__	mods/screen-searcher.hpp	2;"	d
@@ -4978,7 +4979,8 @@ __MENTOC_RUN_MEDIC_PREGAME_TESTS__	mods/debug-pre-game.hpp	156;"	d
 __MENTOC_RUN_PBA_CODE__	mods/debug-pre-game.hpp	23;"	d
 __MENTOC_RUN_PREGAME_SKILL_CODE__	mods/debug-pre-game.hpp	7;"	d
 __MENTOC_RUN_SNIPER_PREGAME_TESTS__	mods/debug-pre-game.hpp	145;"	d
-__MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/scripted-sequence-runner.cpp	7;"	d	file:
+__MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/runners/movement.cpp	5;"	d	file:
+__MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__	mods/scripted-sequence-runner.cpp	8;"	d	file:
 __MENTOC_SHOW_BEHAVIOUR_TREE_MINI_GUNNER_BTREE_DEBUG_OUTPUT__	mods/mobs/mini-gunner-behaviour-tree.hpp	18;"	d
 __MENTOC_SHOW_DAMAGE_CALCULATOR_DEBUG_OUTPUT__	mods/weapons/damage-calculator.cpp	14;"	d	file:
 __MENTOC_SHOW_DISPOSE_PLAYER_DEBUG_OUTPUT__	globals.cpp	1219;"	d	file:
@@ -5070,7 +5072,7 @@ acl_list	mods/acl_list.hpp	/^namespace mods::acl_list {$/;"	n	class:mods
 acl_list	mods/player.hpp	/^namespace mods::acl_list {$/;"	n	class:mods
 acmd_function	mods/interpreter.hpp	/^	typedef void (*acmd_function)(char_data*, char*, int, int, player_ptr_t&);$/;"	t	namespace:mods::interpreter
 act	comm.cpp	/^void act(const std::string& str, int hide_invisible, char_data *ch,$/;"	f
-act	mods/scripted-sequence-runner.cpp	/^		void act(step_ptr_t step) {$/;"	f	namespace:mods::scripted_sequence_runner::runners
+act	mods/runners/movement.cpp	/^	void act(step_ptr_t step) {$/;"	f	namespace:mods::runners::movement
 act_nr	act.social.cpp	/^	int act_nr;$/;"	m	struct:social_messg	file:
 action	mods/mini-games.hpp	/^		std::string action;$/;"	m	struct:mods::mini_games::mini_game_payload_t
 action_allowed	mods/acl/lambda.hpp	/^				bool action_allowed(struct ::char_data *ch,const char* command_name,const char* file_name,int cmd,const char* arg,int subcmd){$/;"	f	class:mods::acl::Lambda
@@ -6251,10 +6253,12 @@ dbg_print	mods/contracts.cpp	10;"	d	file:
 dbg_print	mods/contracts.cpp	12;"	d	file:
 dbg_print	mods/player-contract-instance.cpp	11;"	d	file:
 dbg_print	mods/player-contract-instance.cpp	9;"	d	file:
+dbg_print	mods/runners/movement.cpp	7;"	d	file:
+dbg_print	mods/runners/movement.cpp	9;"	d	file:
 dbg_print	mods/scripted-sequence-events.cpp	7;"	d	file:
 dbg_print	mods/scripted-sequence-events.cpp	9;"	d	file:
-dbg_print	mods/scripted-sequence-runner.cpp	11;"	d	file:
-dbg_print	mods/scripted-sequence-runner.cpp	9;"	d	file:
+dbg_print	mods/scripted-sequence-runner.cpp	10;"	d	file:
+dbg_print	mods/scripted-sequence-runner.cpp	12;"	d	file:
 dbg_print	mods/scripted-sequences.cpp	11;"	d	file:
 dbg_print	mods/scripted-sequences.cpp	9;"	d	file:
 dbg_print	mods/scripted-step.cpp	4;"	d	file:
@@ -6417,7 +6421,7 @@ dex_app_skill	constants.cpp	/^cpp_extern const struct dex_skill_type dex_app_ski
 dex_app_skill	constants.hpp	/^cpp_extern const struct dex_skill_type dex_app_skill[] = {$/;"	v	typeref:struct:dex_skill_type
 dexterity	mods/player.hpp	/^			uint16_t& dexterity() {$/;"	f	struct:mods::player
 diag_char_to_char	act.informative.cpp	/^void diag_char_to_char(char_data *i, char_data *ch) {$/;"	f
-dialogue	mods/scripted-sequence-runner.cpp	/^		void dialogue(step_ptr_t step) {$/;"	f	namespace:mods::scripted_sequence_runner::runners
+dialogue	mods/runners/movement.cpp	/^	void dialogue(step_ptr_t step) {$/;"	f	namespace:mods::runners::movement
 dialogue	mods/scripted-step.hpp	/^		std::string dialogue; \/** text to display *\/$/;"	m	struct:mods::scripted_step
 dice	mods/rand.cpp	/^int dice(int num,int size){$/;"	f
 die	fight.cpp	/^void die(char_data *ch) {$/;"	f
@@ -10071,6 +10075,8 @@ move_toward_heading	mods/mobs/lowly-security-behaviour-tree.hpp	/^	auto move_tow
 move_toward_heading	mods/mobs/mp-shotgunner-behaviour-tree.hpp	/^	auto move_toward_heading() {$/;"	f	namespace:mods::mobs::mp_shotgunner_behaviour_tree
 movement	globals.cpp	/^namespace mods::movement {$/;"	n	class:mods	file:
 movement	mods/movement.cpp	/^namespace mods::movement {$/;"	n	class:mods	file:
+movement	mods/runners/includes.hpp	/^	namespace movement {$/;"	n	namespace:mods::runners
+movement	mods/runners/movement.cpp	/^namespace mods::runners::movement {$/;"	n	class:mods::runners	file:
 movement_loss	constants.cpp	/^int movement_loss[] = {$/;"	v
 movement_loss	constants.hpp	/^int movement_loss[] =$/;"	v
 moving_to_room	mods/player.cpp	/^	bool& player::moving_to_room() {$/;"	f	class:mods::player
@@ -10375,7 +10381,7 @@ op_or	mods/orm/util.hpp	/^		bool op_or;$/;"	m	struct:mods::orm::util::statement_
 op_or	mods/sql.hpp	/^			compositor<T>& op_or(str_object lhs,$/;"	f	struct:mods::sql::compositor
 open	mods/doors.cpp	/^	void open(room_rnum room_id,direction_t dir) {$/;"	f	namespace:mods::doors
 open	mods/lmdb.cpp	/^	bool _db_handle::open(){$/;"	f	class:mods::lmdb::_db_handle
-open	mods/scripted-sequence-runner.cpp	/^		void open(step_ptr_t step,direction_t dir) {$/;"	f	namespace:mods::scripted_sequence_runner::runners
+open	mods/runners/movement.cpp	/^	void open(step_ptr_t step,direction_t dir) {$/;"	f	namespace:mods::runners::movement
 open1	shop.h	/^	int	 open1, open2;		\/* When does the shop open?		*\/$/;"	m	struct:shop_data
 open2	shop.h	/^	int	 open1, open2;		\/* When does the shop open?		*\/$/;"	m	struct:shop_data
 open_dbi	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::open_dbi(){$/;"	f	class:mods::lmdb::_db_handle
@@ -11773,7 +11779,7 @@ run_status_t	mods/behaviour_tree_node.hpp	/^			} run_status_t;$/;"	t	struct:mods
 run_test_suite	mods/js.cpp	/^		bool run_test_suite(mods::player& player,std::string_view suite) {$/;"	f	namespace:mods::js
 run_trees	mods/behaviour_tree_impl.cpp	/^	void run_trees() {$/;"	f	namespace:mods::behaviour_tree_impl
 run_zone_replenish	mods/intimidate.cpp	/^	void run_zone_replenish(){$/;"	f	namespace:mods::zone
-runners	mods/scripted-sequence-runner.cpp	/^	namespace runners {$/;"	n	namespace:mods::scripted_sequence_runner	file:
+runners	mods/runners/includes.hpp	/^namespace mods::runners {$/;"	n	class:mods
 s	mods/catch.hpp	/^			static std::ostream& s;$/;"	m	struct:Catch::Detail::IsStreamInsertable
 s	mods/rand.cpp	/^	static uint64_t s[4];$/;"	m	namespace:mods::rand::xoroshiro	file:
 s_addr	sysdep.h	/^	unsigned long int s_addr;	\/* for inet_addr, etc. *\/$/;"	m	struct:in_addr
@@ -11941,6 +11947,7 @@ scripted_sequence_events	mods/scripted-sequence-events.cpp	/^namespace mods::scr
 scripted_sequence_events	mods/scripted-sequence-events.hpp	/^namespace mods::scripted_sequence_events {$/;"	n	class:mods
 scripted_sequence_events	mods/scripted-sequences.hpp	/^namespace mods::scripted_sequence_events {$/;"	n	class:mods
 scripted_sequence_runner	mods/init.hpp	/^INIT(mods::scripted_sequence_runner);$/;"	v
+scripted_sequence_runner	mods/runners/includes.hpp	/^namespace mods::scripted_sequence_runner {$/;"	n	class:mods
 scripted_sequence_runner	mods/scripted-sequence-runner.cpp	/^namespace mods::scripted_sequence_runner {$/;"	n	class:mods	file:
 scripted_sequence_runner	mods/scripted-sequence-runner.hpp	/^namespace mods::scripted_sequence_runner {$/;"	n	class:mods
 scripted_sequences	mods/orm/scripted-step.cpp	/^	scripted_sequences::scripted_sequences() {$/;"	f	class:mods::orm::scripted_sequences
@@ -13052,7 +13059,7 @@ unequip_into_inventory	mods/player.cpp	/^	void player::unequip_into_inventory(in
 unit_tests	globals.cpp	/^namespace mods::unit_tests {$/;"	n	class:mods	file:
 unit_tests	mods/unit-tests/elemental.cpp	/^namespace mods::unit_tests {$/;"	n	class:mods	file:
 unlock	mods/doors.cpp	/^	void unlock(room_rnum room_id,direction_t dir) {$/;"	f	namespace:mods::doors
-unlock	mods/scripted-sequence-runner.cpp	/^		void unlock(step_ptr_t step,direction_t dir) {$/;"	f	namespace:mods::scripted_sequence_runner::runners
+unlock	mods/runners/movement.cpp	/^	void unlock(step_ptr_t step,direction_t dir) {$/;"	f	namespace:mods::runners::movement
 unplug_all	mods/mini-games/wires.cpp	/^	void wires::unplug_all() {$/;"	f	class:mods::mini_games::wires
 unregister_authenticated_player	globals.cpp	/^		void unregister_authenticated_player(player_ptr_t player) {$/;"	f	namespace:mods::globals
 unregister_by_uuid	mods/behaviour_tree_impl.cpp	/^	int8_t unregister_by_uuid(const uuid_t& m_uuid) {$/;"	f	namespace:mods::behaviour_tree_impl
@@ -13227,8 +13234,8 @@ wait_ticks	mods/scripted-step.hpp	/^		uint16_t wait_ticks; \/** how many ticks t
 walk	mods/fluxkraft/arcon-bar.hpp	/^			void walk(player_ptr_t& player) {$/;"	f	struct:mods::fluxkraft::arcon::bar
 walk	mods/fluxkraft/arcon-metropolitan.hpp	/^		void walk(player_ptr_t& player) {$/;"	f	struct:mods::fluxkraft::arcon::metro
 walk	mods/fluxkraft/shape-dictionary.cpp	/^		void walk(player_ptr_t& player) {$/;"	f	struct:mods::fluxkraft::shape_description
-walk	mods/scripted-sequence-runner.cpp	/^		void walk(step_ptr_t step,direction_t dir) {$/;"	f	namespace:mods::scripted_sequence_runner::runners
-walk_impl	mods/scripted-sequence-runner.cpp	/^		void walk_impl(player_ptr_t& mob,const direction_t& dir) {$/;"	f	namespace:mods::scripted_sequence_runner::runners
+walk	mods/runners/movement.cpp	/^	void walk(step_ptr_t step,direction_t dir) {$/;"	f	namespace:mods::runners::movement
+walk_impl	mods/runners/movement.cpp	/^	void walk_impl(player_ptr_t& mob,const direction_t& dir) {$/;"	f	namespace:mods::runners::movement
 wants_to	mods/intent.hpp	/^		intent_to_t 				wants_to;$/;"	m	struct:mods::intent::intent_t
 warn_thermite_room	mods/doors.hpp	/^	static inline void warn_thermite_room(const room_rnum room,int8_t direction) {$/;"	f	namespace:mods::doors
 watch	mods/mobs/helpers.hpp	/^	static inline void watch(uint8_t direction,TMob* ptr,uint8_t depth){$/;"	f	namespace:mods::mobs::helpers
