@@ -136,11 +136,10 @@ namespace mods::orm {
 		scripted_sequences(const sequence_vnum_t& scripted_vnum);
 
 		void fill(mods::scripted_sequences& c) {
+			std::cerr << "don't call this function " << __FILE__ << ":" << __LINE__ << "\n";
+			sleep(30);
+			exit(231);
 			c.vnum = s_sequence_vnum;
-			for(auto& row : rows) {
-				std::cerr << green_str("scripted_sequences filling scripted:") << c.vnum << "\n";
-				c.steps.emplace_back(row);
-			}
 		}
 
 		std::string primary_key_value();
@@ -150,7 +149,6 @@ namespace mods::orm {
 		void destroy();
 		std::tuple<int16_t,std::string> destroy_status;
 		uint64_t initialize_row(const sequence_vnum_t& i_vnum);
-
 
 		void feed_multi(pqxx::result&);
 

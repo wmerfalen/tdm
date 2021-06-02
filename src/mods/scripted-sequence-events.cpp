@@ -10,12 +10,9 @@
 #endif
 
 namespace mods::scripted_sequence_events {
-	using task_type_t = mods::contracts::contract_step::task_type_t;
-	using task_target_t = mods::contracts::contract_step::task_target_t;
-	using sequence_vnum_t = mods::scripted_sequences_vnum_t;
-	static std::vector<contract_vnum_t> contracts_with_callbacks;
-	static std::map<contract_vnum_t,std::vector<sequence_vnum_t>> contract_sequences;
-	static std::map<sequence_vnum_t,std::vector<std::tuple<task_type_t,task_target_t,uint32_t>>> sequence_criteria;
+	std::vector<contract_vnum_t> contracts_with_callbacks;
+	std::map<contract_vnum_t,std::vector<sequence_vnum_t>> contract_sequences;
+	std::map<sequence_vnum_t,std::vector<std::tuple<task_type_t,task_target_t,uint32_t>>> sequence_criteria;
 
 	static constexpr std::size_t TASK_TYPE_INDEX = 0;
 	static constexpr std::size_t TASK_TARGET_INDEX = 1;
@@ -74,39 +71,8 @@ namespace mods::scripted_sequence_events {
 		}
 	}
 
-	SUPERCMD(do_finish_step) {
-		step_t step;
-		step.goal = task_type_t::GOAL_FIND;
-		step.target = task_target_t::TARGET_MOB;
-		step.mob_vnum = 405;
-		player_finished_step(player,1,&step);
-		player->sendln("This next one should fail...");
-		step.goal = task_type_t::GOAL_FIND;
-		step.target = task_target_t::TARGET_MOB;
-		step.mob_vnum = 4;
-		player_finished_step(player,1,&step);
-		player->sendln("Did you see a message for that one? If so, it's {red}BROKEN{/red}.");
-		player->sendln("This next one should print. (mob:406)...");
-		step.goal = task_type_t::GOAL_FIND;
-		step.target = task_target_t::TARGET_MOB;
-		step.mob_vnum = 406;
-		player_finished_step(player,1,&step);
-		player->sendln("Did you see a message for that one? If so, it's {grn}WORKING{/grn}.");
-		player->sendln("This next one should print. (mob:407)...");
-		step.goal = task_type_t::GOAL_FIND;
-		step.target = task_target_t::TARGET_MOB;
-		step.mob_vnum = 407;
-		player_finished_step(player,1,&step);
-		player->sendln("Did you see a message for that one? If so, it's {grn}WORKING{/grn}.");
-	}
-
 	void init() {
-		contracts_with_callbacks.emplace_back(1);
-		contract_sequences[1].emplace_back(1);
-		sequence_criteria[1].emplace_back(std::make_tuple<>(task_type_t::GOAL_FIND,task_target_t::TARGET_MOB,405));
-		sequence_criteria[1].emplace_back(std::make_tuple<>(task_type_t::GOAL_FIND,task_target_t::TARGET_MOB,406));
-		sequence_criteria[1].emplace_back(std::make_tuple<>(task_type_t::GOAL_FIND,task_target_t::TARGET_MOB,407));
-		ADD_BUILDER_COMMAND("finish_step",do_finish_step);
+
 	}
 
 };

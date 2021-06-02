@@ -683,6 +683,5 @@ namespace mods::builder::seqbuild {
 	void init() {
 		mods::interpreter::add_command("seqbuild", POS_RESTING, do_seqbuild, LVL_BUILDER,0);
 		seqbuilder(nullptr);
-		mods::compile_scripted_data();
 	}
 };

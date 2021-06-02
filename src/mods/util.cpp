@@ -1118,7 +1118,7 @@ namespace mods::util::args {
 		for(auto f : vec_args) {
 			std::cerr << "f[" << n++ << "](asking for:" << index << "): '" << f << "'\n";
 		}
-		while(i_storage.size() < index) {
+		while(i_storage.size() <= index) {
 			i_storage.emplace_back(-1);
 		}
 		i_storage[index] = -1;

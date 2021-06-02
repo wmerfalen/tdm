@@ -3,6 +3,10 @@
 #include "../structs.h"
 #include "contracts.hpp"
 
+namespace mods::orm {
+	struct scripted_step;
+};
+
 namespace mods {
 	using contract_vnum_t = mods::contracts::contract_vnum_t;
 	using task_type_t = mods::contracts::contract_step::task_type_t;

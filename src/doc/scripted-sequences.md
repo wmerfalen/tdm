@@ -1,5 +1,68 @@
 # Builder documentation: Scripted sequences
 
+# Storage areas
+	- ORM objects
+	```
+		mods::orm::scripted_sequences_list()
+		mods::orm::scripted_step_list()
+		mods::orm::contract_step_callback_list()
+	```
+	- event data
+	`namespace mods::scripted_sequence_events`
+	```
+		static std::vector<contract_vnum_t> contracts_with_callbacks;
+		static std::map<contract_vnum_t,std::vector<sequence_vnum_t>> contract_sequences;
+		static std::map<sequence_vnum_t,std::vector<std::tuple<task_type_t,task_target_t,uint32_t>>> sequence_criteria;
+	```
+# Loading data
+	- `mods::orm::load_all_scripted_data();`
+
+# Compiling data
+	- `mods::compile_scripted_data();`
+
+# Triggering sequences
+	`std::tuple<bool,std::string> player_contract_instance::advance()`
+		- this function calls 
+			`mods::scripted_sequence_events::player_finished_step(player,m_contract_vnum,m_current_step);`
+		- 
+
+# `scripted_sequence_runner.cpp`
+	- 
+
+### 
+### API
+###
+  `seqbuild new <vnum>`
+  `seqbuild new-step <vnum>`
+  `seqbuild reload-orm`
+  `seqbuild delete-step <vnum> <step-id>...[step-id-N]`
+  `seqbuild save-step <vnum> <step-id>...[step-id-N]`
+  `seqbuild callback <contract> <task> <target> <task-vnum> <sequence-vnum>`
+  `seqbuild show-steps <vnum>`
+  `seqbuild set-step-data <vnum> <index> <key> <value>`
+
+###
+### Next up [as 2021-05-29 unimplemented]
+### 
+	`seqbuild set-step-data <vnum> <index> s_set_behaviour_tree 'LOWLY_SEC_ROAMING_AGGRESSIVE'`
+	- add a function to just run a specific sequence from any context
+
+# related functionality
+	- need to verify 'unlock door' can honor the FOB that the scientist is holding
+	- support for the following "type"s:
+		- mob_gives_yaml
+		- send_to_char
+		- emote
+		- seal_room
+		- char_to_room
+		- interpret
+	- on contract step completion, publish an event
+	- add listeners to contract step events
+	- add listeners that trigger scripted sequences on events
+		- listeners can have "guards" which will only execute if conditions are met
+	- 
+
+
 A scripted sequence is a set of events and actions that builders can create in order to immerse the player in interactive content.
 
 An example:
@@ -158,36 +221,3 @@ An interactive example:
 		);
 		```
 
-# related functionality
-	- need to verify 'unlock door' can honor the FOB that the scientist is holding
-	- support for the following "type"s:
-		- mob_gives_yaml
-		- send_to_char
-		- emote
-		- seal_room
-		- char_to_room
-		- interpret
-	- on contract step completion, publish an event
-	- add listeners to contract step events
-	- add listeners that trigger scripted sequences on events
-		- listeners can have "guards" which will only execute if conditions are met
-	- 
-
-
-### 
-### API
-###
-  `seqbuild new <vnum>`
-  `seqbuild new-step <vnum>`
-  `seqbuild reload-orm`
-  `seqbuild delete-step <vnum> <step-id>...[step-id-N]`
-  `seqbuild save-step <vnum> <step-id>...[step-id-N]`
-  `seqbuild callback <contract> <task> <target> <task-vnum> <sequence-vnum>`
-  `seqbuild show-steps <vnum>`
-  `seqbuild set-step-data <vnum> <index> <key> <value>`
-
-###
-### Next up [as 2021-05-29 unimplemented]
-### 
-	`seqbuild set-step-data <vnum> <index> s_set_behaviour_tree 'LOWLY_SEC_ROAMING_AGGRESSIVE'`
-	- add a function to just run a specific sequence from any context

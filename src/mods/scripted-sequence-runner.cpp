@@ -12,10 +12,6 @@
 #endif
 
 namespace mods::scripted_sequence_runner {
-	std::vector<mods::scripted_step>& triton_sequence() {
-		static std::vector<mods::scripted_step> list;
-		return list;
-	}
 
 	using step_ptr_t = std::shared_ptr<mods::scripted_step>;
 	std::list<step_ptr_t> deferred_list;
@@ -23,78 +19,15 @@ namespace mods::scripted_sequence_runner {
 	std::size_t hash_step(step_ptr_t s) {
 		return std::hash<step_ptr_t>()(s);
 	}
-	void defer_step(uint32_t ticks,const mods::scripted_step& step_ptr) {
-		auto s = std::make_shared<mods::scripted_step>(step_ptr);
+	void defer_step(uint32_t ticks,step_ptr_t s) {
 		auto hash = hash_step(s);
-		deferred_list.emplace_back(std::move(s));
+		deferred_list.emplace_back(s);
 		DEFER_STEP(ticks,hash);
 	}
 
-	SUPERCMD(do_triton_sequence) {
-		player->sendln("[+] Initializing triton sequence...");
-		triton_sequence().clear();
-		{
-			mods::scripted_step step;
-			step.wait_ticks = 10;
-			step.dialogue = "$n stands here in his white lab coat tending to some very interesting and extremely complex looking devices. Completely immersed in whatever hs is working on, he barely notices your presence. Wearily he looks up at you.";
-			step.type = "act";
-			step.mob = mods::scripts::triton::TRITON_SCIENTIST_VNUM;
-			step.room = player->vnum();
-			triton_sequence().emplace_back(step);
-		}
-
-		{
-			mods::scripted_step step;
-			step.wait_ticks = 10;
-			step.dialogue = "Oh, I did not see you there.. ";
-			step.type = "dialogue";
-			step.mob = mods::scripts::triton::TRITON_SCIENTIST_VNUM;
-			step.room = player->vnum();
-			triton_sequence().emplace_back(step);
-		}
-		{
-			mods::scripted_step step;
-			step.wait_ticks = 3;
-			step.dialogue = "You must be here for the high velocity magazines... Follow me...";
-			step.type = "dialogue";
-			step.mob = mods::scripts::triton::TRITON_SCIENTIST_VNUM;
-			step.room = player->vnum();
-			triton_sequence().emplace_back(step);
-		}
-
-		{
-			mods::scripted_step step;
-			step.wait_ticks = 10;
-			step.dialogue = "$n unlocks the door to the north";
-			step.type = "unlock_north";
-			step.mob = mods::scripts::triton::TRITON_SCIENTIST_VNUM;
-			step.room = player->vnum();
-			triton_sequence().emplace_back(step);
-		}
-		{
-			mods::scripted_step step;
-			step.wait_ticks = 0;
-			step.dialogue = "$n opens the door to the north";
-			step.type = "open_north";
-			step.mob = mods::scripts::triton::TRITON_SCIENTIST_VNUM;
-			step.room = player->vnum();
-			triton_sequence().emplace_back(step);
-		}
-		{
-			mods::scripted_step step;
-			step.wait_ticks = 3;
-			step.type = "walk_north";
-			step.mob = mods::scripts::triton::TRITON_SCIENTIST_VNUM;
-			step.room = player->vnum();
-			triton_sequence().emplace_back(step);
-		}
-		player->sendln("[+] Done.");
-		uint64_t ticks = 0;
-		for(const auto& step : triton_sequence()) {
-			ticks += std::clamp((int)step.wait_ticks,1,UINT16_MAX);
-			defer_step(ticks,step);
-		}
-
+	std::vector<mods::scripted_step>& triton_sequence() {
+		static std::vector<mods::scripted_step> list;
+		return list;
 	}
 	void queue_for_deferred_removal(step_ptr_t step) {
 		static std::set<std::size_t> steps_to_remove;
@@ -138,16 +71,6 @@ namespace mods::scripted_sequence_runner {
 			if(mob == nullptr) {
 				std::cerr << red_str("Error finding mob in room:") << step->dump() << "\n";
 			} else {
-				walk_impl(mob,dir);
-			}
-			queue_for_deferred_removal(step);
-		}
-		void walk_random(step_ptr_t step) {
-			auto mob = qmob(step->room,step->mob);
-			if(mob == nullptr) {
-				std::cerr << red_str("Error finding mob in room:") << step->dump() << "\n";
-			} else {
-				auto dir = rand_number(0,NUM_OF_DIRS);
 				walk_impl(mob,dir);
 			}
 			queue_for_deferred_removal(step);
@@ -212,7 +135,7 @@ namespace mods::scripted_sequence_runner {
 				if(step->type.compare("act") == 0) {
 					return runners::act(step);
 				}
-				if(step->type.compare("dialogue") == 0) {
+				if(step->type.compare("say") == 0 || step->type.compare("dialogue") == 0) {
 					return runners::dialogue(step);
 				}
 				if(step->type.compare("open_east") == 0) {
@@ -270,49 +193,57 @@ namespace mods::scripted_sequence_runner {
 				if(step->type.compare("walk_down") == 0) {
 					return runners::walk(step,DOWN);
 				}
-				if(step->type.compare("walk_random") == 0) {
-					return runners::walk_random(step);
+			}
+		}
+	}
+
+	void dispatch(player_ptr_t& player,sequence_vnum_t sequence_vnum) {
+		uint64_t ticks = 0;
+		for(const auto& seq : mods::scripted_sequences_master_list()) {
+			if(seq->vnum == sequence_vnum) {
+				for(const auto& step : seq->steps) {
+					ticks += std::clamp((int)step->wait_ticks,1,UINT16_MAX);
+					defer_step(ticks,step);
 				}
 			}
 		}
 	}
-	//- Zephyr walks north
-	//[on event: Player enters room](guard: has contract VNUM 3)
-	//A TRITON Energy scientist hands Zephyr a briefcase.
-	//[publish event: GOAL_FIND_ITEM, object_vnum: 405]
-
-
-#if 0
-	struct scripted_step {
-		uint16_t wait_ticks; /** how many ticks to wait until executing this */
-		std::string dialogue; /** text to display */
-		mob_vnum mob;
-		obj_vnum obj;
-		room_vnum room;
-		std::string yaml;
-		std::string type;
-		std::vector<std::string> interpret;
-		uint16_t quantity;
-		scripted_step_vnum_t vnum;
-		uint16_t order;
-	}
-#endif
 
 	SUPERCMD(do_run_sequence) {
-		if(argshave()->int_at(0)->size_gt(0)->passed()) {
-			player->sendln(CAT("Run sequence number ",argat(0),", eh?"));
+		if(argshave()->first_is("list")->passed()) {
+			player->sendln("Listing...");
+			for(const auto& seq : mods::scripted_sequences_master_list()) {
+				player->sendln(CAT(seq->vnum).c_str());
+			}
+			player->sendln("Done listing...");
 			return;
 		}
-
+		if(argshave()->int_at(0)->size_gt(0)->passed()) {
+			for(const auto& seq : mods::scripted_sequences_master_list()) {
+				if(seq->vnum == intat(0)) {
+					player->sendln(CAT("Running sequence [",intat(0),"]...").c_str());
+					dispatch(player,seq->vnum);
+					player->sendln("Dispatched.");
+				}
+			}
+			return;
+		}
 	}
 
 	void init() {
 		ADD_BUILDER_COMMAND("run_sequence",do_run_sequence);
-		ADD_BUILDER_COMMAND("triton_sequence",do_triton_sequence);
 	}
 
 	void dispatch(player_ptr_t& player,sequence_vnum_t sequence_vnum,contract_vnum_t contract_vnum,step_t step_copy) {
-
+		uint64_t ticks = 0;
+		for(const auto& seq : mods::scripted_sequences_master_list()) {
+			if(seq->vnum == sequence_vnum) {
+				for(const auto& step : seq->steps) {
+					ticks += std::clamp((int)step->wait_ticks,1,UINT16_MAX);
+					defer_step(ticks,step);
+				}
+			}
+		}
 	}
 
 
