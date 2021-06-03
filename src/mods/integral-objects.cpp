@@ -259,6 +259,24 @@ SUPERCMD(do_instantiate_catchy_name) {
 	auto rifle = mods::integral_objects::instantiate_catchy_name<mods::rifle_attachments_t>(vec_args[0]);
 	ADMIN_DONE();
 }
+
+SUPERCMD(do_install_sign) {
+	ADMIN_REJECT();
+	DO_HELP_WITH_ZERO("install_sign");
+	/** code here */
+	auto vec_args = PARSE_ARGS();
+	save_item_to_db(player, "sign", vec_args);
+	ADMIN_DONE();
+}
+SUPERCMD(do_uninstall_sign) {
+	DO_HELP_WITH_ZERO("uninstall_sign");
+	/** code here */
+	auto vec_args = PARSE_ARGS();
+	auto status = mods::db::delete_section_vector("sign",std::to_string(world[player->room()].number));
+	player->send("delete status: %d\r\n",status);
+	ADMIN_DONE();
+}
+
 namespace mods::integral_objects {
 	void init() {
 		mods::interpreter::add_command("list_wear_flags", POS_RESTING, do_list_wear_flags, LVL_BUILDER,0);
@@ -277,6 +295,9 @@ namespace mods::integral_objects {
 
 		mods::interpreter::add_command("create_catchy_name", POS_RESTING, do_create_catchy_name, LVL_BUILDER,0);
 		mods::interpreter::add_command("instantiate_catchy_name", POS_RESTING, do_instantiate_catchy_name, LVL_BUILDER,0);
+
+		mods::interpreter::add_command("install_sign", POS_RESTING, do_install_sign, LVL_BUILDER,0);
+		mods::interpreter::add_command("uninstall_sign", POS_RESTING, do_uninstall_sign, LVL_BUILDER,0);
 	}
 };
 #undef mo_debug

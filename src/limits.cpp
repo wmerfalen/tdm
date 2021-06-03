@@ -222,7 +222,7 @@ void set_title(char_data* ch, const char* title) {
 	set_title(player,title);
 }
 void set_title(player_ptr_t player, const char* title) {
-	if(!title){
+	if(!title) {
 		auto ch = player->cd();
 		std::string final_title;
 		if(GET_SEX(ch) == SEX_FEMALE) {
@@ -232,7 +232,7 @@ void set_title(player_ptr_t player, const char* title) {
 		}
 		player->title().assign(final_title);
 		return;
-	}else{
+	} else {
 		player->title().assign(title);
 	}
 }
@@ -272,95 +272,95 @@ void run_autowiz(void) {
 
 
 namespace legacy {
-void gain_exp(char_data *ch, int gain) {
-	int is_altered = FALSE;
-	int num_levels = 0;
+	void gain_exp(char_data *ch, int gain) {
+		int is_altered = FALSE;
+		int num_levels = 0;
 
-	if(!IS_NPC(ch) && ((GET_LEVEL(ch) < 1 || GET_LEVEL(ch) >= LVL_IMMORT))) {
-		return;
-	}
-
-	if(IS_NPC(ch)) {
-		GET_EXP(ch) += gain;
-		return;
-	}
-
-	if(gain > 0) {
-		gain = MIN(max_exp_gain, gain);	/* put a cap on the max gain per kill */
-		GET_EXP(ch) += gain;
-
-		while(GET_LEVEL(ch) < LVL_IMMORT - immort_level_ok &&
-		        GET_EXP(ch) >= mods::levels::level_exp(GET_LEVEL(ch) + 1)) {
-			GET_LEVEL(ch) += 1;
-			num_levels++;
-			advance_level(ch);
-			is_altered = TRUE;
+		if(!IS_NPC(ch) && ((GET_LEVEL(ch) < 1 || GET_LEVEL(ch) >= LVL_IMMORT))) {
+			return;
 		}
 
-		if(is_altered) {
-			mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s advanced %d level%s to level %d.",
-			       GET_NAME(ch).c_str(), num_levels, num_levels == 1 ? "" : "s", GET_LEVEL(ch));
+		if(IS_NPC(ch)) {
+			GET_EXP(ch) += gain;
+			return;
+		}
 
-			if(num_levels == 1) {
-				send_to_char(ch, "You rise a level!");
-			} else {
-				send_to_char(ch, "You rise %d levels!", num_levels);
+		if(gain > 0) {
+			gain = MIN(max_exp_gain, gain);	/* put a cap on the max gain per kill */
+			GET_EXP(ch) += gain;
+
+			while(GET_LEVEL(ch) < LVL_IMMORT - immort_level_ok &&
+			        GET_EXP(ch) >= mods::levels::level_exp(GET_LEVEL(ch) + 1)) {
+				GET_LEVEL(ch) += 1;
+				num_levels++;
+				advance_level(ch);
+				is_altered = TRUE;
 			}
 
-			set_title(ch, NULL);
+			if(is_altered) {
+				mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s advanced %d level%s to level %d.",
+				       GET_NAME(ch).c_str(), num_levels, num_levels == 1 ? "" : "s", GET_LEVEL(ch));
 
-			if(GET_LEVEL(ch) >= LVL_IMMORT) {
-				run_autowiz();
+				if(num_levels == 1) {
+					send_to_char(ch, "You rise a level!");
+				} else {
+					send_to_char(ch, "You rise %d levels!", num_levels);
+				}
+
+				set_title(ch, NULL);
+
+				if(GET_LEVEL(ch) >= LVL_IMMORT) {
+					run_autowiz();
+				}
+			}
+		} else if(gain < 0) {
+			gain = MAX(-max_exp_loss, gain);	/* Cap max exp lost per death */
+			GET_EXP(ch) += gain;
+
+			if(GET_EXP(ch) < 0) {
+				GET_EXP(ch) = 0;
 			}
 		}
-	} else if(gain < 0) {
-		gain = MAX(-max_exp_loss, gain);	/* Cap max exp lost per death */
+	}
+
+
+	void gain_exp_regardless(char_data *ch, int gain) {
+		int is_altered = FALSE;
+		int num_levels = 0;
+
 		GET_EXP(ch) += gain;
 
 		if(GET_EXP(ch) < 0) {
 			GET_EXP(ch) = 0;
 		}
-	}
-}
 
-
-void gain_exp_regardless(char_data *ch, int gain) {
-	int is_altered = FALSE;
-	int num_levels = 0;
-
-	GET_EXP(ch) += gain;
-
-	if(GET_EXP(ch) < 0) {
-		GET_EXP(ch) = 0;
-	}
-
-	if(!IS_NPC(ch)) {
-		while(GET_LEVEL(ch) < LVL_IMPL &&
-		        GET_EXP(ch) >= mods::levels::level_exp(GET_LEVEL(ch) + 1)) {
-			GET_LEVEL(ch) += 1;
-			num_levels++;
-			advance_level(ch);
-			is_altered = TRUE;
-		}
-
-		if(is_altered) {
-			mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s advanced %d level%s to level %d.",
-			       GET_NAME(ch).c_str(), num_levels, num_levels == 1 ? "" : "s", GET_LEVEL(ch));
-
-			if(num_levels == 1) {
-				send_to_char(ch, "You rise a level!");
-			} else {
-				send_to_char(ch, "You rise %d levels!", num_levels);
+		if(!IS_NPC(ch)) {
+			while(GET_LEVEL(ch) < LVL_IMPL &&
+			        GET_EXP(ch) >= mods::levels::level_exp(GET_LEVEL(ch) + 1)) {
+				GET_LEVEL(ch) += 1;
+				num_levels++;
+				advance_level(ch);
+				is_altered = TRUE;
 			}
 
-			set_title(ch, NULL);
+			if(is_altered) {
+				mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s advanced %d level%s to level %d.",
+				       GET_NAME(ch).c_str(), num_levels, num_levels == 1 ? "" : "s", GET_LEVEL(ch));
 
-			if(GET_LEVEL(ch) >= LVL_IMMORT) {
-				run_autowiz();
+				if(num_levels == 1) {
+					send_to_char(ch, "You rise a level!");
+				} else {
+					send_to_char(ch, "You rise %d levels!", num_levels);
+				}
+
+				set_title(ch, NULL);
+
+				if(GET_LEVEL(ch) >= LVL_IMMORT) {
+					run_autowiz();
+				}
 			}
 		}
 	}
-}
 };//end legacy
 
 
@@ -450,7 +450,7 @@ void check_idling(player_ptr_t player) {
 			extract_char(ch);
 #else
 			auto save_status = mods::db::save_char(player);
-			if(std::get<0>(save_status) == false){
+			if(std::get<0>(save_status) == false) {
 				std::cerr << "check_idling[db::save_char]->error saving character\n";
 			}
 #endif
@@ -459,8 +459,8 @@ void check_idling(player_ptr_t player) {
 }
 
 
-ACMD(do_idle){
-	
+ACMD(do_idle) {
+
 	player->char_specials().timer = idle_void + 1;
 	check_idling(player);
 }
@@ -471,12 +471,12 @@ void point_update(void) {
 
 	/* characters */
 	mods::loops::foreach_all([&](player_ptr_t player) -> bool {
-			auto ch = player->cd();
-			if(!ch){
-				log("foreach_all recieved null char_data ptr");
-				return true;
-			}
-			auto i = ch;
+		auto ch = player->cd();
+		if(!ch) {
+			log("foreach_all recieved null char_data ptr");
+			return true;
+		}
+		auto i = ch;
 #ifdef ENABLE_MENTOC_HUNGRY__
 		gain_condition(i, FULL, -1);
 #endif
@@ -489,7 +489,7 @@ void point_update(void) {
 			GET_HIT(i) = MIN(GET_HIT(i) + hit_gain(i), GET_MAX_HIT(i));
 			GET_MANA(i) = MIN(GET_MANA(i) + mana_gain(i), GET_MAX_MANA(i));
 			GET_MOVE(i) = MIN(GET_MOVE(i) + move_gain(i), GET_MAX_MOVE(i));
-			if(AFF_FLAGGED(i, AFF_POISON)){
+			if(AFF_FLAGGED(i, AFF_POISON)) {
 				if(damage(i, i, 2, SPELL_POISON) == -1) {
 					//log("player died of poison");
 					return true;    /* Oops, they died. -gg 6/24/98 */
@@ -522,12 +522,13 @@ void point_update(void) {
 	/* objects */
 	for(auto it = obj_list.begin(); it != obj_list.end(); ++it) {
 		auto j = it->get();
-		if(!j){
+		if(!j) {
 			log("SYSERR: obj_list has null object.. attempting to remove...");
 			obj_list.erase(it);
 			continue;
 		}
 
+		std::cerr << "IS_CORPSE: " << j->uuid << ", :'" << j->name.c_str() << "'\n";
 		/* If this is a corpse */
 		if(IS_CORPSE(j)) {
 			/* timer count down */

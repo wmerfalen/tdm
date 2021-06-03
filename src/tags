@@ -107,7 +107,7 @@ ACMD	interpreter.cpp	/^ACMD(do_alias) {$/;"	f
 ACMD	interpreter.cpp	/^ACMD(do_room_vnum) {$/;"	f
 ACMD	interpreter.cpp	/^ACMD(do_unimplemented) {$/;"	f
 ACMD	interpreter.h	14;"	d
-ACMD	limits.cpp	/^ACMD(do_idle){$/;"	f
+ACMD	limits.cpp	/^ACMD(do_idle) {$/;"	f
 ACMD	modify.cpp	/^ACMD(do_skillset) {$/;"	f
 ACMD	mods/classes/breacher.cpp	/^ACMD(do_teep){$/;"	f
 ACMD	mods/classes/engineer.cpp	/^	ACMD(do_drone_bomb) {$/;"	f	namespace:mods::class_abilities::engineer
@@ -376,14 +376,14 @@ AutoReg	mods/catch2.hpp	/^struct AutoReg : NonCopyable {$/;"	s	namespace:Catch
 BACKGROUND_FILE	db.h	84;"	d
 BALLISTIC	mods/object.hpp	/^				BALLISTIC,$/;"	e	enum:mods::object::object_type_enum_t
 BANDIT	structs.h	/^	BANDIT = 11,$/;"	e	enum:player_class_t
-BANNED_SITE_LENGTH	db.h	276;"	d
-BAN_ALL	db.h	274;"	d
+BANNED_SITE_LENGTH	db.h	277;"	d
+BAN_ALL	db.h	275;"	d
 BAN_FILE	db.h	97;"	d
 BAN_LIST_FORMAT	ban.cpp	116;"	d	file:
 BAN_LIST_FORMAT	ban.cpp	200;"	d	file:
-BAN_NEW	db.h	272;"	d
-BAN_NOT	db.h	271;"	d
-BAN_SELECT	db.h	273;"	d
+BAN_NEW	db.h	273;"	d
+BAN_NOT	db.h	272;"	d
+BAN_SELECT	db.h	274;"	d
 BARBED_TENDRILS	mods/aoe.hpp	/^		BARBED_TENDRILS, \/** explodes into barbed wire causing painful movement *\/$/;"	e	enum:mods::aoe::types_t
 BARREL	mods/weapon.hpp	/^		BARREL,$/;"	e	enum:mods::weapon::attachment_t
 BASIC	mods/yaml.hpp	/^		BASIC = 1,$/;"	e	enum:mods::yaml::armor_classification_type_t
@@ -3973,11 +3973,13 @@ SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_create_catchy_name) {$/;"	f
 SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_install_armor_locker) {$/;"	f
 SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_install_camera_feed) {$/;"	f
 SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_install_computer_choice) {$/;"	f
+SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_install_sign) {$/;"	f
 SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_install_weapon_locker) {$/;"	f
 SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_instantiate_catchy_name) {$/;"	f
 SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_list_wear_flags) {$/;"	f
 SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_uninstall_armor_locker) {$/;"	f
 SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_uninstall_camera_feed) {$/;"	f
+SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_uninstall_sign) {$/;"	f
 SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_uninstall_weapon_locker) {$/;"	f
 SUPERCMD	mods/integral-objects.cpp	/^SUPERCMD(do_weapon_locker_quota) {$/;"	f
 SUPERCMD	mods/levels.cpp	/^	SUPERCMD(do_award_exp_by_name) {$/;"	f	namespace:mods::levels
@@ -4640,7 +4642,7 @@ Yes	mods/catch.hpp	/^			Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
 Yes	mods/catch2.hpp	/^        Yes,$/;"	e	enum:Catch::CaseSensitive::Choice
 Z	db.cpp	1758;"	d	file:
 Z	db.cpp	1766;"	d	file:
-ZONE_ERROR	mods/zone.cpp	111;"	d	file:
+ZONE_ERROR	mods/zone.cpp	116;"	d	file:
 ZON_PREFIX	db.h	71;"	d
 ZOOM	mods/weapon-types.hpp	/^		ZOOM,$/;"	e	enum:mods::weapon::capabilities::cap_t
 Z_KINGS_C	castle.cpp	31;"	d	file:
@@ -5496,6 +5498,7 @@ build_directions	mods/fluxkraft/shape-dictionary.cpp	/^		std::vector<std::string
 build_dummy	mods/intimidate.cpp	/^void build_dummy(room_vnum room){$/;"	f	namespace:mods::zone
 build_dummy	mods/zone.cpp	/^	void build_dummy(room_vnum room) {$/;"	f	namespace:mods::zone
 build_player_index	db.cpp	/^void build_player_index(void) {$/;"	f
+build_sign	mods/zone.cpp	/^	void build_sign(room_vnum room) {$/;"	f	namespace:mods::zone
 build_weapon_locker	mods/intimidate.cpp	/^void build_weapon_locker(room_vnum room){$/;"	f	namespace:mods::zone
 build_weapon_locker	mods/zone.cpp	/^	void build_weapon_locker(room_vnum room) {$/;"	f	namespace:mods::zone
 builder	act.builder.cpp	/^namespace builder {$/;"	n	file:
@@ -7611,9 +7614,9 @@ gadget_description_t	mods/yaml.hpp	/^	struct gadget_description_t : public yaml_
 gadget_shield_levels_t	mods/classes/sentinel.hpp	/^		enum gadget_shield_levels_t {$/;"	g	struct:mods::classes::sentinel
 gain_condition	limits.cpp	/^void gain_condition(char_data *ch, int condition, int value) {$/;"	f
 gain_entry	mods/player-contract-instance.cpp	/^	void player_contract_instance::gain_entry(const room_rnum& room_id) {$/;"	f	class:mods::contracts::player_contract_instance
-gain_exp	limits.cpp	/^void gain_exp(char_data *ch, int gain) {$/;"	f	namespace:legacy
+gain_exp	limits.cpp	/^	void gain_exp(char_data *ch, int gain) {$/;"	f	namespace:legacy
 gain_exp	mods/levels.cpp	/^	int gain_exp(player_ptr_t& player,int gain) {$/;"	f	namespace:mods::levels
-gain_exp_regardless	limits.cpp	/^void gain_exp_regardless(char_data *ch, int gain) {$/;"	f	namespace:legacy
+gain_exp_regardless	limits.cpp	/^	void gain_exp_regardless(char_data *ch, int gain) {$/;"	f	namespace:legacy
 game	mods/mini-games.cpp	/^	line_up& game(room_vnum vnum,int id) {$/;"	f	namespace:mods::mini_games
 game_action	mods/orm/mini-game.hpp	/^		std::string game_action;$/;"	m	struct:mods::orm::mini_game
 game_entry	mods/players/db-load.cpp	/^	void game_entry(player_ptr_t& player) {$/;"	f	namespace:mods::players::db_load
@@ -9921,7 +9924,7 @@ mo_debug	mods/integral-objects-db.cpp	14;"	d	file:
 mo_debug	mods/integral-objects-db.cpp	16;"	d	file:
 mo_debug	mods/integral-objects.cpp	17;"	d	file:
 mo_debug	mods/integral-objects.cpp	19;"	d	file:
-mo_debug	mods/integral-objects.cpp	282;"	d	file:
+mo_debug	mods/integral-objects.cpp	303;"	d	file:
 mo_debug	mods/levels.cpp	12;"	d	file:
 mo_debug	mods/levels.cpp	14;"	d	file:
 mo_debug	mods/levels.cpp	547;"	d	file:
@@ -11759,7 +11762,7 @@ rr_debug	mods/intimidate.cpp	8;"	d	file:
 rr_debug	mods/intimidate.cpp	95;"	d	file:
 rr_debug	mods/zone.cpp	12;"	d	file:
 rr_debug	mods/zone.cpp	15;"	d	file:
-rr_debug	mods/zone.cpp	339;"	d	file:
+rr_debug	mods/zone.cpp	348;"	d	file:
 rst_text	mods/acl/color.hpp	6;"	d
 rtrim	mods/lmdb/db.hpp	/^		static inline void rtrim(std::string &s) {$/;"	f	struct:gdns::util
 rtrim_copy	mods/lmdb/db.hpp	/^		static inline std::string rtrim_copy(std::string s) {$/;"	f	struct:gdns::util
@@ -13408,7 +13411,7 @@ z_debug	mods/intimidate.cpp	7;"	d	file:
 z_debug	mods/intimidate.cpp	96;"	d	file:
 z_debug	mods/zone.cpp	11;"	d	file:
 z_debug	mods/zone.cpp	14;"	d	file:
-z_debug	mods/zone.cpp	340;"	d	file:
+z_debug	mods/zone.cpp	349;"	d	file:
 zone	db.cpp	/^namespace mods::zone {$/;"	n	class:mods	file:
 zone	mods/init.hpp	/^INIT(mods::zone);$/;"	v
 zone	mods/intimidate.cpp	/^namespace mods::zone {$/;"	n	class:mods	file:

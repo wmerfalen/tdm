@@ -744,7 +744,7 @@ namespace mods::builder {
 		}
 
 		std::map<std::string,std::string> values;
-		values["zone"] = std::to_string(world[in_room].zone);
+		values["zone"] = std::to_string(zone_table[world[in_room].zone].get_id());
 		values["sector_type"] = std::to_string(world[in_room].sector_type);
 		values["name"] = world[in_room].name.c_str();
 		values["description"] = world[in_room].description.c_str();

@@ -10,6 +10,8 @@
 {yel}mods/integral-objects{/yel}:->{grn}weapon_locker_quota{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}create_catchy_name{/grn}
 {yel}mods/integral-objects{/yel}:->{grn}instantiate_catchy_name{/grn}
+{yel}mods/integral-objects{/yel}:->{grn}install_sign{/grn}
+{yel}mods/integral-objects{/yel}:->{grn}uninstall_sign{/grn}
 {yel}mods/builder/seqbuild{/yel}:->{grn}seqbuild{/grn}
 {yel}mods/builder/hqbuild{/yel}:->{grn}hqbuild{/grn}
 {yel}mods/builder/meqbuild{/yel}:->{grn}meqbuild{/grn}

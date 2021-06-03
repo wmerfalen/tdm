@@ -218,6 +218,7 @@ struct zone_data {
 			m_id = i;
 		}
 		void dump() {
+			std::cerr << "zone_data[m_id]:'"<< m_id << "'\n";
 			std::cerr << "zone_data[name]:'"<< name << "'\n";
 			std::cerr << "zone_data[lifespan]:'"<< lifespan << "'\n";
 			std::cerr << "zone_data[age]:'"<< age << "'\n";

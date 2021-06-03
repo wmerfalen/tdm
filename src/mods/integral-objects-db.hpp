@@ -7,6 +7,7 @@
 
 namespace mods::integral_objects_db {
 	void save_weapon_locker(player_ptr_t& player, std::vector<std::string>& args);
+	void save_sign(player_ptr_t& player, std::vector<std::string>& args);
 	void save_armor_locker(player_ptr_t& player, std::vector<std::string>& args);
 	void save_weapon_locker_quota(player_ptr_t& player, std::vector<std::string>& args);
 	void save_armor_locker_quota(player_ptr_t& player, std::vector<std::string>& args);
