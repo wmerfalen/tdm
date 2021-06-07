@@ -2041,6 +2041,13 @@ namespace mods {
 			}
 		}
 	}
+	void player::contract_give_item(const uuid_t& obj_uuid,const uuid_t& mob_uuid) {
+		for(auto& c : contracts()) {
+			if(c->is_give_item()) {
+				c->give_item(obj_uuid,mob_uuid);
+			}
+		}
+	}
 	void player::queue_up(std::string_view msg) {
 		sendln(msg);
 		//mods::players::messages::queue(db_id(),msg);

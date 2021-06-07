@@ -17,7 +17,8 @@ namespace mods::contracts {
 			GOAL_GAIN_ENTRY = (1 << 5),
 			GOAL_PROTECT = (1 << 6),
 			GOAL_TALK_TO = (1 << 7),
-			GOAL_INSTALL = (1 << 8)
+			GOAL_INSTALL = (1 << 8),
+			GOAL_GIVE = (1 << 9)
 		};
 		enum task_target_t : uint16_t {
 			TARGET_MOB = 0,

@@ -837,6 +837,7 @@ namespace mods {
 			std::deque<std::shared_ptr<mods::contracts::player_contract_instance>>& contracts() {
 				return m_contracts;
 			}
+			void contract_give_item(const uuid_t& obj_uuid,const uuid_t& mob_uuid);
 			void contract_find_item(const uuid_t& obj_uuid);
 			void contract_find_mob(const uuid_t& mob_uuid);
 			void contract_find_room(const room_rnum& room_id);

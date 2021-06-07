@@ -20,7 +20,7 @@ namespace mods::contracts {
 	 * @brief
 	 */
 	void player_contract_instance::stop_contract() {
-		m_state_orm->delete_by_player_id_contract_vnum(m_player_id,m_contract_vnum);
+		//m_state_orm->delete_by_player_id_contract_vnum(m_player_id,m_contract_vnum);
 	}
 
 	/**
@@ -104,28 +104,29 @@ namespace mods::contracts {
 		 * open and shut brackets will eventually contain other data. it's a placeholder for now
 		 */
 		m_step = 0;
-		std::string current = "";
-		bool step_extracted = 0;
 		m_extra_data.clear();
-		for(auto ch : m_state_buffer) {
-			if(ch == '|' && !step_extracted) {
-				m_step = mods::util::stoi(current).value_or(0);
-				current.clear();
-				step_extracted = 1;
-				continue;
-			}
-			if(step_extracted) {
-				m_extra_data += ch;
-				continue;
-			}
-			current += ch;
-		}
+		//std::string current = "";
+		//bool step_extracted = 0;
+		//m_extra_data.clear();
+		//for(auto ch : m_state_buffer) {
+		//	if(ch == '|' && !step_extracted) {
+		//		m_step = mods::util::stoi(current).value_or(0);
+		//		current.clear();
+		//		step_extracted = 1;
+		//		continue;
+		//	}
+		//	if(step_extracted) {
+		//		m_extra_data += ch;
+		//		continue;
+		//	}
+		//	current += ch;
+		//}
 	}
 	/**
 	 * @brief
 	 */
 	void player_contract_instance::save_step_data() {
-		m_update_status = m_state_orm->update_player_data(m_player_id,m_contract_vnum, encode_step_data(CAT(m_step,"|",m_extra_data)));
+		//m_update_status = m_state_orm->update_player_data(m_player_id,m_contract_vnum, encode_step_data(CAT(m_step,"|",m_extra_data)));
 	}
 	/**
 	 * @brief
@@ -149,17 +150,38 @@ namespace mods::contracts {
 		mods::scripted_sequence_events::player_finished_step(player,m_contract_vnum,m_current_step);
 		if(m_current_step) {
 			m_current_step->reward(m_player_id);
+			std::string msg = CAT(
+			                      "{grn}************************************************************{/grn}\r\n",
+			                      "{grn}| Contract Step completed                                  |{/grn}\r\n",
+			                      "{yel}|----------------------------------------------------------|{/yel}\r\n"
+			                  );
+			player->sendln(msg);
 		}
 		m_quota = 0;
 		m_step += 1;
 		save_step_data();
 		m_auto_update_step();
 
-		std::string msg = "{grn}You move forward in your current contract{/grn}";
 		if(!finished()) {
-			msg += m_current_step->description;
+			std::string msg = CAT(
+			                      "{grn}************************************************************{/grn}\r\n",
+			                      "{grn}| Your next objective:                                     |{/grn}\r\n",
+			                      "{yel}|----------------------------------------------------------|{/yel}\r\n",
+			                      "\r\n",
+			                      "{grn}Objective:{/grn}\r\n",
+			                      m_current_step->description,
+			                      "\r\n"
+			                  );
+			player->sendln(msg);
+		} else {
+			std::string msg = CAT(
+			                      "{grn}********************************************************************{/grn}\r\n",
+			                      "{grn}| Congratulations. You've completed all steps to this contract!    |{/grn}\r\n",
+			                      "{yel}|------------------------------------------------------------------|{/yel}\r\n",
+			                      "\r\n"
+			                  );
+			player->sendln(msg);
 		}
-		player->sendln(msg);
 		return m_update_status;
 	}
 	/**
@@ -184,17 +206,17 @@ namespace mods::contracts {
 		if(!m_contract_copy) {
 			return {0,"No contract loaded with that vnum"};
 		}
-		/** Grab player_contract_state where pc_player_id=P,pc_contract_vnum=C */
-		auto res = mods::orm::load_player_contract_state(m_player_id,in_vnum,m_state_buffer);
-		if(std::get<0>(res) == 0) {
-			/** No results. initialize contract */
-			m_state_orm->pc_player_id = m_player_id;
-			m_state_orm->pc_contract_vnum = in_vnum;
-			m_state_buffer = m_state_orm->pc_state_data = encode_step_data("0|{}");
-			m_step = 0;
-			m_state_orm->save();
-		}
-		load_decoded_step_data();
+		///** Grab player_contract_state where pc_player_id=P,pc_contract_vnum=C */
+		//auto res = mods::orm::load_player_contract_state(m_player_id,in_vnum,m_state_buffer);
+		//if(std::get<0>(res) == 0) {
+		/** No results. initialize contract */
+		//m_state_orm->pc_player_id = m_player_id;
+		//m_state_orm->pc_contract_vnum = in_vnum;
+		//m_state_buffer = m_state_orm->pc_state_data = encode_step_data("0|{}");
+		m_step = 0;
+		//m_state_orm->save();
+		//}
+		//load_decoded_step_data();
 		m_auto_update_step();
 		return {1,"Contract started"};
 	}
@@ -300,6 +322,9 @@ namespace mods::contracts {
 		if(is_install_item()) {
 			pretty += "install_item";
 		}
+		if(is_give_item()) {
+			pretty += "give_item";
+		}
 		pretty += CAT("{/grn}\r\n\t\t{yel}[description]:{/yel}{grn}",m_current_step->description,"{/grn}\r\n");
 		return pretty;
 	}
@@ -350,6 +375,9 @@ namespace mods::contracts {
 		}
 		if(is_install_item()) {
 			m_step_dump += "install_item";
+		}
+		if(is_give_item()) {
+			m_step_dump += "give_item";
 		}
 		m_step_dump += CAT("\r\n[description]:{yel}",m_current_step->description,"{/yel}\r\n");
 	}
@@ -619,6 +647,31 @@ namespace mods::contracts {
 		        m_current_step->target == target_t::TARGET_ITEM) {
 			if(m_current_step->object_yaml.compare(item->feed_file().data()) == 0) {
 				++m_quota;/** TODO FIXME INITIALIZE THIS */
+				if(m_quota >= m_current_step->quota) {
+					this->advance();
+				}
+				return;
+			}
+		}
+
+	}
+	/**
+	 * @brief
+	 *
+	 * @param item_uuid
+	 */
+	void player_contract_instance::give_item(const uuid_t& item_uuid,const uuid_t& mob_uuid) {
+		if(!m_current_step) {
+			return;
+		}
+		auto item = optr_by_uuid(item_uuid);
+		if(!item) {
+			return;
+		}
+		if(m_current_step->goal & task_t::GOAL_GIVE &&
+		        m_current_step->target == target_t::TARGET_MOB) {
+			if(m_current_step->object_yaml.compare(item->feed_file().data()) == 0) {
+				++m_quota;
 				if(m_quota >= m_current_step->quota) {
 					this->advance();
 				}

@@ -1494,7 +1494,8 @@ GIVEN	mods/catch.hpp	12214;"	d
 GLASS_WINDOWS	structs.h	/^			GLASS_WINDOWS,$/;"	m	struct:room_data	typeref:enum:room_data::
 GOAL_DESTROY	mods/contract-steps.hpp	/^			GOAL_DESTROY = (1 << 1),$/;"	m	struct:mods::contracts::contract_step	typeref:enum:mods::contracts::contract_step::
 GOAL_GAIN_ENTRY	mods/contract-steps.hpp	/^			GOAL_GAIN_ENTRY = (1 << 5),$/;"	m	struct:mods::contracts::contract_step	typeref:enum:mods::contracts::contract_step::
-GOAL_INSTALL	mods/contract-steps.hpp	/^			GOAL_INSTALL = (1 << 8)$/;"	m	struct:mods::contracts::contract_step	typeref:enum:mods::contracts::contract_step::
+GOAL_GIVE	mods/contract-steps.hpp	/^			GOAL_GIVE = (1 << 9)$/;"	m	struct:mods::contracts::contract_step	typeref:enum:mods::contracts::contract_step::
+GOAL_INSTALL	mods/contract-steps.hpp	/^			GOAL_INSTALL = (1 << 8),$/;"	m	struct:mods::contracts::contract_step	typeref:enum:mods::contracts::contract_step::
 GOAL_KILL	mods/contract-steps.hpp	/^			GOAL_KILL = (1 << 4),$/;"	m	struct:mods::contracts::contract_step	typeref:enum:mods::contracts::contract_step::
 GOAL_PROTECT	mods/contract-steps.hpp	/^			GOAL_PROTECT = (1 << 6),$/;"	m	struct:mods::contracts::contract_step	typeref:enum:mods::contracts::contract_step::
 GOAL_QUOTA	mods/contract-steps.hpp	/^			GOAL_QUOTA = (1 << 3),$/;"	m	struct:mods::contracts::contract_step	typeref:enum:mods::contracts::contract_step::
@@ -6034,6 +6035,7 @@ contract_find_item	mods/player.cpp	/^	void player::contract_find_item(const uuid
 contract_find_mob	mods/player.cpp	/^	void player::contract_find_mob(const uuid_t& mob_uuid) {$/;"	f	class:mods::player
 contract_find_room	mods/player.cpp	/^	void player::contract_find_room(const room_rnum& room_id) {$/;"	f	class:mods::player
 contract_gain_entry	mods/player.cpp	/^	void player::contract_gain_entry(const room_rnum& room_id) {$/;"	f	class:mods::player
+contract_give_item	mods/player.cpp	/^	void player::contract_give_item(const uuid_t& obj_uuid,const uuid_t& mob_uuid) {$/;"	f	class:mods::player
 contract_install_item	mods/player.cpp	/^	void player::contract_install_item(const uuid_t& item_uuid) {$/;"	f	class:mods::player
 contract_kill_mob	mods/player.cpp	/^	void player::contract_kill_mob(const uuid_t& mob_uuid) {$/;"	f	class:mods::player
 contract_master_list	mods/contracts.cpp	/^	std::deque<std::shared_ptr<contract>>& contract_master_list() {$/;"	f	namespace:mods::contracts
@@ -8010,6 +8012,7 @@ ghost_list	mods/replenish.cpp	/^	static std::vector<uuid_t> ghost_list;$/;"	m	na
 ghost_player_id	mods/orm/ghost.hpp	/^		uint64_t ghost_player_id;$/;"	m	struct:mods::orm::ghost
 ghost_ptrs	mods/replenish.cpp	/^	static std::map<uuid_t,ghost_ptr_t> ghost_ptrs;$/;"	m	namespace:mods::replenish	file:
 give_find_vict	act.item.cpp	/^char_data *give_find_vict(char_data *ch, char *arg) {$/;"	f
+give_item	mods/player-contract-instance.cpp	/^	void player_contract_instance::give_item(const uuid_t& item_uuid,const uuid_t& mob_uuid) {$/;"	f	class:mods::contracts::player_contract_instance
 give_player_rewards	mods/contract-steps.cpp	/^	void give_player_rewards(player_ptr_t& player,std::string_view line) {$/;"	f	namespace:mods::contracts
 glob	mods/util.cpp	/^	directory_list_t glob(std::string_view path) {$/;"	f	namespace:mods::util
 global_engineer_drone_bomb	mods/classes/engineer.cpp	/^	static obj_ptr_t& global_engineer_drone_bomb() {$/;"	f	namespace:mods::classes
@@ -8693,6 +8696,7 @@ is_find_mob	mods/player-contract-instance.hpp	/^			bool is_find_mob() const {$/;
 is_find_room	mods/player-contract-instance.hpp	/^			bool is_find_room() const {$/;"	f	struct:mods::contracts::player_contract_instance
 is_float	mods/values.cpp	/^		bool is_float(value_key_t key){$/;"	f	namespace:mods::values
 is_gain_entry	mods/player-contract-instance.hpp	/^			bool is_gain_entry() const {$/;"	f	struct:mods::contracts::player_contract_instance
+is_give_item	mods/player-contract-instance.hpp	/^			bool is_give_item() const {$/;"	f	struct:mods::contracts::player_contract_instance
 is_install_item	mods/player-contract-instance.hpp	/^			bool is_install_item() const {$/;"	f	struct:mods::contracts::player_contract_instance
 is_installed	mods/object-utils.hpp	/^	bool is_installed(T& obj) {$/;"	f	namespace:mods::object_utils
 is_installing	mods/object-utils.hpp	/^	bool is_installing(T& obj) {$/;"	f	namespace:mods::object_utils
@@ -9271,8 +9275,8 @@ m_debug	mods/armor/basic-protection.cpp	8;"	d	file:
 m_debug	mods/armor/elite-protection.cpp	6;"	d	file:
 m_debug	mods/armor/elite-protection.cpp	8;"	d	file:
 m_debug	mods/contract-steps.cpp	13;"	d	file:
-m_debug	mods/contract-steps.cpp	148;"	d	file:
 m_debug	mods/contract-steps.cpp	15;"	d	file:
+m_debug	mods/contract-steps.cpp	172;"	d	file:
 m_debug	mods/deep-object-parser.cpp	11;"	d	file:
 m_debug	mods/deep-object-parser.cpp	5;"	d	file:
 m_debug	mods/fluxkraft/arcon-bar.hpp	62;"	d

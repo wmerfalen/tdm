@@ -40,6 +40,9 @@ namespace mods::contracts {
 			const target_t& target() const {
 				return m_target;
 			}
+			bool is_give_item() const {
+				return m_goal & task_t::GOAL_GIVE && m_target == target_t::TARGET_MOB;
+			}
 			bool is_find_item() const {
 				return m_goal & task_t::GOAL_FIND && m_target == target_t::TARGET_ITEM;
 			}
@@ -95,6 +98,7 @@ namespace mods::contracts {
 			std::string pretty_dump_step();
 
 			void find_item(const uuid_t& item_uuid);
+			void give_item(const uuid_t& item_uuid,const uuid_t& mob_uuid);
 			void find_mob(const uuid_t& mob_uuid);
 			void find_room(const room_rnum& room_id);
 			void find_door(const room_rnum& room_id,const int8_t& direction);
