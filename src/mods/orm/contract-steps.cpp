@@ -159,7 +159,7 @@ namespace mods::orm {
 
 	std::tuple<int16_t,std::string> contract_steps::load_by_contract_vnum(const contract_vnum_t& contract_vnum) {
 		//mods::contracts::contract c;
-		auto result = db_get_by_meta(contract_steps::table,"s_contract_vnum",std::to_string(contract_vnum));
+		auto result = db_get_by_meta_order_by(contract_steps::table,"s_contract_vnum",std::to_string(contract_vnum),"s_order","ASC");
 		if(result.size() == 0) {
 			return {0,"no results"};
 		}
@@ -188,6 +188,7 @@ namespace mods::orm {
 			step.s_reward_8 = row["s_reward_8"].c_str();
 			step.s_reward_9 = row["s_reward_9"].c_str();
 			step.s_reward_10 = row["s_reward_10"].c_str();
+			step.s_order = row["s_order"].as<int>();
 		}
 		return {result.size(),"loaded"};
 	}
@@ -197,7 +198,7 @@ namespace mods::orm {
 
 	}
 	std::tuple<int16_t,std::string> gather_contract_steps_by_contract_vnum(const contract_vnum_t& contract_vnum,std::deque<std::shared_ptr<mods::orm::contract_steps>>* in_list_ptr) {
-		auto result = db_get_by_meta(contract_steps().table,"s_contract_vnum",std::to_string(contract_vnum));
+		auto result = db_get_by_meta(contract_steps().table, "s_contract_vnum",std::to_string(contract_vnum));
 		if(result.size() == 0) {
 			return {0,"no results"};
 		}
@@ -206,6 +207,7 @@ namespace mods::orm {
 			std::cerr << green_str("contract_steps filling contract:") << row["s_contract_vnum"].as<int>() << "\n";
 			auto step = std::make_shared<mods::orm::contract_steps>();
 			step->id = row["id"].as<uint64_t>();
+			step->s_order = row["s_order"].as<int>();
 			step->s_contract_vnum = row["s_contract_vnum"].as<int>();
 			step->s_task_type = (mods::contracts::contract_step::task_type_t)row["s_task_type"].as<uint16_t>();
 			step->s_task_target = (mods::contracts::contract_step::task_target_t)row["s_task_target"].as<uint16_t>();

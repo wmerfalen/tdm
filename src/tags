@@ -1182,7 +1182,7 @@ EV_TRAVEL	mods/projectile.hpp	/^			EV_TRAVEL,$/;"	e	enum:mods::projectile::proje
 EXCEPTION_OCCURRED	mods/orm/util.hpp	/^	static constexpr int8_t EXCEPTION_OCCURRED = -1;$/;"	m	namespace:mods::orm::util
 EXCEPTION_OCCURRED	mods/pq.hpp	/^static constexpr int8_t EXCEPTION_OCCURRED = -1;$/;"	v
 EXDSCR_LENGTH	structs.h	703;"	d
-EXEC	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_type_t
+EXEC	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT$/;"	e	enum:mods::lmdb::transact_type_t
 EXIT	utils.h	493;"	d
 EXITN	act.movement.cpp	368;"	d	file:
 EXIT_FLAGGED	utils.h	240;"	d
@@ -1677,7 +1677,7 @@ INIT	mods/init.hpp	4;"	d
 INIT	mods/init.hpp	52;"	d
 INITIATE	mods/skills.hpp	/^	INITIATE = 1,$/;"	e	enum:uint8_t
 INK	mods/aoe.hpp	/^		INK,	\/** Marks surroundings and enemies with paint for the purpose of tracking *\/ $/;"	e	enum:mods::aoe::types_t
-INSERT	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_type_t
+INSERT	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT$/;"	e	enum:mods::lmdb::transact_type_t
 INSIDE	structs.h	/^			INSIDE,			\/** Example: inside a home *\/$/;"	m	struct:room_data	typeref:enum:room_data::
 INSTALL	mods/item.hpp	/^		INSTALL = (1 << 0),$/;"	e	enum:mods::item::capability_t
 INSTALL	mods/weapon-types.hpp	/^		INSTALL = 0,$/;"	e	enum:mods::weapon::capabilities::cap_t
@@ -1994,8 +1994,8 @@ James	castle.cpp	/^SPECIAL(James);$/;"	v
 KATANA	mods/weapon.hpp	/^		KATANA,$/;"	e	enum:mods::weapon::melee_t
 KBLU	screen.h	15;"	d
 KCYN	screen.h	17;"	d
-KEY_FETCHED_OKAY	mods/lmdb.hpp	/^		constexpr static int KEY_FETCHED_OKAY = 1;$/;"	m	struct:mods::lmdb::_db_handle
-KEY_NOT_FOUND	mods/lmdb.hpp	/^		constexpr static int KEY_NOT_FOUND = 0;$/;"	m	struct:mods::lmdb::_db_handle
+KEY_FETCHED_OKAY	mods/lmdb.hpp	/^			constexpr static int KEY_FETCHED_OKAY = 1;$/;"	m	struct:mods::lmdb::_db_handle
+KEY_NOT_FOUND	mods/lmdb.hpp	/^			constexpr static int KEY_NOT_FOUND = 0;$/;"	m	struct:mods::lmdb::_db_handle
 KGRN	screen.h	13;"	d
 KILLER	mods/flags.hpp	/^		KILLER = 1,$/;"	e	enum:mods::flags::plr
 KILLSCRIPT_FILE	db.h	53;"	d
@@ -2515,7 +2515,7 @@ MENTOC_SHOW_OBJ_FLAGS	mods/builder.cpp	2767;"	d	file:
 MENTOC_T	mods/aoe.hpp	32;"	d
 MENTOC_T	mods/aoe.hpp	55;"	d
 MENTOC_T	mods/lmdb.hpp	68;"	d
-MENTOC_T	mods/lmdb.hpp	83;"	d
+MENTOC_T	mods/lmdb.hpp	84;"	d
 MENTOC_TO_STR	mods/weapon.hpp	212;"	d
 MENTOC_TO_STR	mods/weapon.hpp	226;"	d
 MENTOC_TO_STR	mods/weapon.hpp	231;"	d
@@ -4484,7 +4484,7 @@ UNSWITCH	interpreter.cpp	1565;"	d	file:
 UNUSED16	mods/flags.hpp	/^		UNUSED16,				\/\/ useless$/;"	e	enum:mods::flags::aff
 UNUSED17	mods/flags.hpp	/^		UNUSED17,				\/\/ useless$/;"	e	enum:mods::flags::aff
 UP	structs.h	137;"	d
-UPDATE	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT $/;"	e	enum:mods::lmdb::transact_type_t
+UPDATE	mods/lmdb.hpp	/^		EXEC, UPDATE, INSERT$/;"	e	enum:mods::lmdb::transact_type_t
 UPPER	utils.h	156;"	d
 USERS_FORMAT	act.informative.cpp	1443;"	d	file:
 USE_AUTOEQ	structs.h	119;"	d
@@ -5102,16 +5102,16 @@ __attribute__	sysdep.h	339;"	d
 __find_player_by_name	mods/js.cpp	/^			static inline bool __find_player_by_name(player_ptr_t player_ptr,find_player_payload_t* param) {$/;"	f	namespace:mods::js::utils
 _addrinfo	mods/lmdb/gethostbyname.cpp	/^typedef struct _addrinfo {$/;"	s	file:
 _clrlevel	screen.h	26;"	d
-_db_handle	mods/lmdb.cpp	/^	_db_handle::_db_handle(std::string directory,std::string db_name,const uint64_t & flags,const uint16_t & mode,bool unused) $/;"	f	class:mods::lmdb::_db_handle
+_db_handle	mods/lmdb.cpp	/^	_db_handle::_db_handle(std::string directory,std::string db_name,const uint64_t& flags,const uint16_t& mode,bool unused)$/;"	f	class:mods::lmdb::_db_handle
 _db_handle	mods/lmdb.hpp	/^	struct _db_handle {$/;"	s	namespace:mods::lmdb
 _hostent	mods/lmdb/gethostbyname.cpp	/^typedef struct _hostent {       \\$/;"	s	file:
 _parse_name	interpreter.cpp	/^int _parse_name(char *arg, char *name) {$/;"	f
-_s	mods/lmdb.hpp	/^	inline static std::string operator "" _s(const char* str,std::size_t size){ $/;"	f	namespace:mods::lmdb
+_s	mods/lmdb.hpp	/^	inline static std::string operator "" _s(const char* str,std::size_t size) {$/;"	f	namespace:mods::lmdb
 _s	mods/util.hpp	/^static inline std::string operator "" _s(const char* s,uint64_t i) {$/;"	f
 _selector	mods/lmdb.hpp	/^	struct _selector {$/;"	s	namespace:mods::lmdb
 _write_one_node	ban.cpp	/^void _write_one_node(FILE *fp, struct ban_list_element *node) {$/;"	f
 a	random.cpp	48;"	d	file:
-abort_txn	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::abort_txn(){$/;"	f	class:mods::lmdb::_db_handle
+abort_txn	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::abort_txn() {$/;"	f	class:mods::lmdb::_db_handle
 abs_val	bsd-snprintf.cpp	155;"	d	file:
 accept_closing_bracket	mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,counter_t> accept_closing_bracket(const std::string& line, counter_t in_counter) {$/;"	f	namespace:mods
 accept_comma	mods/deep-object-parser.cpp	/^	std::tuple<bool,std::string,counter_t> accept_comma(const std::string& line, counter_t in_counter) {$/;"	f	namespace:mods
@@ -5845,7 +5845,7 @@ clear_obj_ptrs	mods/armor/advanced-protection.cpp	/^	void advanced_protection::c
 clear_obj_ptrs	mods/armor/basic-protection.cpp	/^	void basic_protection::clear_obj_ptrs() {$/;"	f	class:mods::armor::basic_protection
 clear_obj_ptrs	mods/armor/elite-protection.cpp	/^	void elite_protection::clear_obj_ptrs() {$/;"	f	class:mods::armor::elite_protection
 clear_object	db.cpp	/^void clear_object(struct obj_data *obj) {$/;"	f
-clear_pluck_filter	mods/lmdb.cpp	/^	void _db_handle::clear_pluck_filter(){$/;"	f	class:mods::lmdb::_db_handle
+clear_pluck_filter	mods/lmdb.cpp	/^	void _db_handle::clear_pluck_filter() {$/;"	f	class:mods::lmdb::_db_handle
 clear_response	mods/builder/slotted-builder.hpp	/^			void clear_response() {$/;"	f	struct:mods::builder::slotted_builder
 clear_rooms	mods/mob-roam.cpp	/^	void roam_recorder::clear_rooms() {$/;"	f	class:mods::mob_roam::roam_recorder
 clear_watching	mods/mobs/helpers.hpp	/^	static inline void clear_watching(Tuuid u){$/;"	f	namespace:mods::mobs::helpers
@@ -5858,7 +5858,7 @@ clip_size	structs.h	/^	uint16_t clip_size;$/;"	m	struct:obj_flag_data
 close	mods/bugs-fixtures.cpp	/^	void close(){$/;"	f	namespace:mods::bugs
 close	mods/db-report.hpp	/^	static inline void close(){$/;"	f	namespace:mods::db_report
 close	mods/doors.cpp	/^	void close(room_rnum room_id,direction_t dir) {$/;"	f	namespace:mods::doors
-close	mods/lmdb.cpp	/^	void _db_handle::close(){$/;"	f	class:mods::lmdb::_db_handle
+close	mods/lmdb.cpp	/^	void _db_handle::close() {$/;"	f	class:mods::lmdb::_db_handle
 close1	shop.h	/^	int	 close1, close2;	\/* When does the shop close?		*\/$/;"	m	struct:shop_data
 close2	shop.h	/^	int	 close1, close2;	\/* When does the shop close?		*\/$/;"	m	struct:shop_data
 close_socket	comm.cpp	/^void close_socket(mods::descriptor_data& d) {$/;"	f
@@ -5933,7 +5933,7 @@ command_map	mods/acl/config-parser.hpp	/^                typedef std::map<cm_key
 command_pointer	interpreter.h	/^	void	(*command_pointer)$/;"	m	struct:command_info
 command_t	mods/builder.cpp	/^	command_t($/;"	f	struct:command_t
 command_t	mods/builder.cpp	/^struct command_t {$/;"	s	file:
-commit	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::commit(){$/;"	f	class:mods::lmdb::_db_handle
+commit	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::commit() {$/;"	f	class:mods::lmdb::_db_handle
 commit	mods/pq.cpp	/^	void commit(transaction& txn) {$/;"	f	namespace:mods::pq
 common_weaponry_skillset	class.cpp	/^std::string common_weaponry_skillset() {$/;"	f
 communicate	mods/chat.hpp	/^	void communicate(TPlayer obj,TActionString type,TActionString message) {$/;"	f	namespace:mods::chat
@@ -6288,12 +6288,13 @@ db_create	mods/pq.hpp	/^static inline int db_create(std::string_view table, str_
 db_exists	mods/mobs/mini-gunner.hpp	/^		static inline bool db_exists(mob_vnum mob_vnum) {$/;"	f	namespace:mods::mobs::mg::orm
 db_exists	mods/pq.hpp	/^static inline bool db_exists(std::string_view table, std::string_view primary_key,std::string_view field,std::string_view operator_type, std::string_view value) {$/;"	f
 db_get	mods/js.cpp	/^		static duk_ret_t db_get(duk_context *ctx) {$/;"	f	namespace:mods::js
-db_get	mods/lmdb.cpp	/^std::string db_get(std::string key){$/;"	f
-db_get_all	mods/lmdb.cpp	/^mods::pq::result db_get_all(std::string table){$/;"	f
-db_get_all_pluck	mods/lmdb.cpp	/^auto db_get_all_pluck(std::string table,const std::vector<std::string>& pluck){$/;"	f
-db_get_by_meta	mods/lmdb.cpp	/^pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::result::reference & value){$/;"	f
-db_get_by_meta	mods/lmdb.cpp	/^pqxx::result db_get_by_meta(std::string table, std::string col,const std::string & value){$/;"	f
-db_get_by_meta_multi	mods/lmdb.hpp	/^pqxx::result db_get_by_meta_multi(std::string table, std::string col,const TIDListContainer& values){$/;"	f
+db_get	mods/lmdb.cpp	/^std::string db_get(std::string key) {$/;"	f
+db_get_all	mods/lmdb.cpp	/^mods::pq::result db_get_all(std::string table) {$/;"	f
+db_get_all_pluck	mods/lmdb.cpp	/^auto db_get_all_pluck(std::string table,const std::vector<std::string>& pluck) {$/;"	f
+db_get_by_meta	mods/lmdb.cpp	/^pqxx::result db_get_by_meta(std::string table, std::string col,const pqxx::result::reference& value) {$/;"	f
+db_get_by_meta	mods/lmdb.cpp	/^pqxx::result db_get_by_meta(std::string table, std::string col,const std::string& value) {$/;"	f
+db_get_by_meta_multi	mods/lmdb.hpp	/^pqxx::result db_get_by_meta_multi(std::string table, std::string col,const TIDListContainer& values) {$/;"	f
+db_get_by_meta_order_by	mods/lmdb.cpp	/^pqxx::result db_get_by_meta_order_by(std::string table, std::string col,const std::string& value,std::string order_by,std::string direction) {$/;"	f
 db_geti	mods/js.cpp	/^		static duk_ret_t db_geti(duk_context *ctx) {$/;"	f	namespace:mods::js
 db_has_been_booted	db.cpp	/^bool db_has_been_booted = false;$/;"	v
 db_id	mods/orm/shop.cpp	/^	int64_t				shop::db_id() const { return shop_id; }$/;"	f	class:mods::orm::shop
@@ -6301,14 +6302,14 @@ db_id	mods/player.hpp	/^			aligned_int_t db_id() const {$/;"	f	struct:mods::play
 db_id	mods/yaml.hpp	/^		uint64_t db_id() {$/;"	f	struct:mods::yaml::yaml_description_t
 db_id	structs.h	/^		uint64_t db_id() {$/;"	f	struct:obj_data
 db_id_to_uuid_map	globals.cpp	/^		std::map<uint64_t,uuid_t> db_id_to_uuid_map;$/;"	m	namespace:mods::globals	file:
-db_key	mods/lmdb.cpp	/^std::string db_key(const std::vector<std::string> & parts){$/;"	f
+db_key	mods/lmdb.cpp	/^std::string db_key(const std::vector<std::string>& parts) {$/;"	f
 db_load	mods/players/db-load.cpp	/^namespace mods::players::db_load {$/;"	n	class:mods::players	file:
 db_load	mods/players/db-load.hpp	/^namespace mods::players::db_load {$/;"	n	class:mods::players
 db_meta_array_values	mods/schema.hpp	/^	static schema_list_t db_meta_array_values = {$/;"	m	namespace:mods::schema
 db_meta_values	mods/schema.hpp	/^	static schema_list_t db_meta_values = {$/;"	m	namespace:mods::schema
-db_put	mods/lmdb.cpp	/^void db_put(std::string key,std::string value){$/;"	f
+db_put	mods/lmdb.cpp	/^void db_put(std::string key,std::string value) {$/;"	f
 db_renew_txn	mods/js.cpp	/^		static duk_ret_t db_renew_txn(duk_context *ctx) {$/;"	f	namespace:mods::js
-db_renew_txn	mods/lmdb.cpp	/^void db_renew_txn(){$/;"	f
+db_renew_txn	mods/lmdb.cpp	/^void db_renew_txn() {$/;"	f
 db_report	mods/db-report.hpp	/^namespace mods::db_report {$/;"	n	class:mods
 db_set	mods/js.cpp	/^		static duk_ret_t db_set(duk_context *ctx) {$/;"	f	namespace:mods::js
 db_seti	mods/js.cpp	/^		static duk_ret_t db_seti(duk_context *ctx) {$/;"	f	namespace:mods::js
@@ -6383,7 +6384,7 @@ deferred	mods/deferred.hpp	/^			deferred(uint64_t tick_resolution) :$/;"	f	class
 deferred	mods/deferred.hpp	/^	class deferred {$/;"	c	namespace:mods
 deferred_list	mods/scripted-sequence-runner.cpp	/^	static std::list<step_info_t> deferred_list;$/;"	m	namespace:mods::scripted_sequence_runner	file:
 definition	mods/sql.hpp	/^			compositor<T>& definition(const std::vector<std::string>& members) {$/;"	f	struct:mods::sql::compositor
-del	mods/lmdb.cpp	/^	int _db_handle::del(std::string key){$/;"	f	class:mods::lmdb::_db_handle
+del	mods/lmdb.cpp	/^	int _db_handle::del(std::string key) {$/;"	f	class:mods::lmdb::_db_handle
 del	mods/sql.hpp	/^			compositor<T>& del() {$/;"	f	struct:mods::sql::compositor
 del_affected_by	mods/player.hpp	/^			std::vector<affected_type>& del_affected_by(const affected_type& af) {$/;"	f	struct:mods::player
 del_affected_by	mods/player.hpp	/^			std::vector<affected_type>& del_affected_by(const std::size_t& idx) {$/;"	f	struct:mods::player
@@ -7175,7 +7176,7 @@ exec	mods/pq.cpp	/^	pqxx::result exec(transaction& txn,std::string_view query) {
 executing_js	mods/mobs/mob.cpp	/^	void player::executing_js(bool true_false) {$/;"	f	class:mods::player
 executing_js	mods/player.cpp	/^	void player::executing_js(bool true_false) {$/;"	f	class:mods::player
 exists	mods/filesystem.hpp	/^	static inline bool exists(const std::string& path){$/;"	f	namespace:mods::filesystem
-exists	mods/lmdb.cpp	/^	bool _db_handle::exists(std::string key){$/;"	f	class:mods::lmdb::_db_handle
+exists	mods/lmdb.cpp	/^	bool _db_handle::exists(std::string key) {$/;"	f	class:mods::lmdb::_db_handle
 exists	mods/lmdb/conf.cpp	/^bool conf::exists(void){$/;"	f	class:gdns::conf
 exists	mods/lmdb/conf.hpp	/^bool exists(void){$/;"	f	struct:gdns::conf
 exists	mods/util.hpp	/^	bool exists(const ContainerType * container_ptr,$/;"	f	namespace:mods::util
@@ -7441,7 +7442,7 @@ fido	spec_assign.cpp	/^SPECIAL(fido);$/;"	v
 fido	spec_procs.cpp	/^SPECIAL(fido);$/;"	v
 field_type_t	mods/builder.cpp	/^enum field_type_t {$/;"	g	file:
 fields_fed_so_far	mods/object-utils.hpp	/^		std::vector<std::string> fields_fed_so_far;$/;"	m	struct:mods::object_utils::YamlFeedExceptionInfo
-fields_to_grab	mods/lmdb.cpp	/^	std::vector<std::string> _db_handle::fields_to_grab(const std::string& table){$/;"	f	class:mods::lmdb::_db_handle
+fields_to_grab	mods/lmdb.cpp	/^	std::vector<std::string> _db_handle::fields_to_grab(const std::string& table) {$/;"	f	class:mods::lmdb::_db_handle
 fight_messages	db.cpp	/^struct message_list fight_messages[MAX_MESSAGES];	\/* fighting messages	 *\/$/;"	v	typeref:struct:message_list
 fighting	mods/player.hpp	/^			player_ptr_t fighting() {$/;"	f	struct:mods::player
 file	mods/catch.hpp	/^		char const* file;$/;"	m	struct:Catch::SourceLineInfo
@@ -7778,8 +7779,8 @@ generic_import	act.builder.cpp	/^void generic_import(player_ptr_t& player,std::s
 genstr	mods/util-conf.hpp	/^			bool genstr(const std::string& file_name,$/;"	f	namespace:mods::util::conf
 get	mods/catch.hpp	/^			T* get() const {$/;"	f	class:Catch::Ptr
 get	mods/jx.hpp	/^			std::string get() {$/;"	f	struct:mods::jx::compositor
-get	mods/lmdb.cpp	/^	int _db_handle::get(std::string key,std::string & in_value){$/;"	f	class:mods::lmdb::_db_handle
-get	mods/lmdb.cpp	/^	std::string _db_handle::get(std::string key){$/;"	f	class:mods::lmdb::_db_handle
+get	mods/lmdb.cpp	/^	int _db_handle::get(std::string key,std::string& in_value) {$/;"	f	class:mods::lmdb::_db_handle
+get	mods/lmdb.cpp	/^	std::string _db_handle::get(std::string key) {$/;"	f	class:mods::lmdb::_db_handle
 get	mods/lmdb/db.hpp	/^				inline int get(const std::string & key,std::string & value){$/;"	f	struct:gdns::lmdb::client
 get	mods/lmdb/db.hpp	/^			inline int get(const std::string & key,std::string & value){$/;"	f	struct:gdns::lmdb::server
 get	mods/lmdb/db.hpp	/^			int get(const std::string& key,std::string & in_value){$/;"	f	struct:gdns::lmdb::db
@@ -7794,7 +7795,7 @@ get_affected	mods/player.cpp	/^	aligned_int_t player::get_affected() {$/;"	f	cla
 get_affected_by	mods/player.hpp	/^			std::vector<affected_type>& get_affected_by() {$/;"	f	struct:mods::player
 get_affected_plr	mods/player.cpp	/^	aligned_int_t player::get_affected_plr() {$/;"	f	class:mods::player
 get_affects	mods/affects.hpp	/^			TAffectsMap& get_affects() {$/;"	f	struct:mods::affects::dissolver
-get_all	mods/lmdb.cpp	/^		result_container_t transaction_t::get_all(T consumer){$/;"	f	class:mods::lmdb::transaction_t
+get_all	mods/lmdb.cpp	/^	result_container_t transaction_t::get_all(T consumer) {$/;"	f	class:mods::lmdb::transaction_t
 get_all_meta_values	mods/meta_utils.cpp	/^	std::vector<std::string> get_all_meta_values($/;"	f	namespace:mods::meta_utils
 get_ammo	mods/mobs/mob.cpp	/^	obj_data* player::get_ammo(const weapon_type_t& type) {$/;"	f	class:mods::player
 get_ammo	mods/object-utils.hpp	/^	uint16_t get_ammo(T& weapon) {$/;"	f	namespace:mods::object_utils
@@ -7939,7 +7940,7 @@ get_player_map	mods/db.cpp	/^int get_player_map(std::string_view player_name,std
 get_player_map	mods/skill-orm-adaptor.cpp	/^	int get_player_map(player_ptr_t& player, std::vector<std::string,std::string>& skills) {$/;"	f	namespace:mods::skill_orm_adaptor
 get_player_vector	mods/db.cpp	/^int get_player_vector(std::string_view player_name,std::string prefix, std::vector<std::string>& values) {$/;"	f
 get_player_vis	handler.cpp	/^char_data *get_player_vis(char_data *ch, char *name, int *number, int inroom) {$/;"	f
-get_pluck_filter	mods/lmdb.cpp	/^	const std::vector<std::string> & _db_handle::get_pluck_filter() const {$/;"	f	class:mods::lmdb::_db_handle
+get_pluck_filter	mods/lmdb.cpp	/^	const std::vector<std::string>& _db_handle::get_pluck_filter() const {$/;"	f	class:mods::lmdb::_db_handle
 get_practice_dump	mods/levels.cpp	/^	std::string get_practice_dump() {$/;"	f	namespace:mods::levels
 get_prefs	mods/player.hpp	/^			auto get_prefs() {$/;"	f	struct:mods::player
 get_private	mods/chat.hpp	/^			bool get_private() const {$/;"	f	struct:mods::chat::channel
@@ -8739,7 +8740,7 @@ is_trash	castle.cpp	/^int is_trash(struct obj_data *i) {$/;"	f
 is_uint16	mods/values.cpp	/^		bool is_uint16(value_key_t key){$/;"	f	namespace:mods::values
 is_uint32	mods/values.cpp	/^		bool is_uint32(value_key_t key){$/;"	f	namespace:mods::values
 is_uint8	mods/values.cpp	/^		bool is_uint8(value_key_t key){$/;"	f	namespace:mods::values
-is_using_pluck_filter	mods/lmdb.cpp	/^		bool _db_handle::is_using_pluck_filter() const { $/;"	f	class:mods::lmdb::_db_handle
+is_using_pluck_filter	mods/lmdb.cpp	/^	bool _db_handle::is_using_pluck_filter() const {$/;"	f	class:mods::lmdb::_db_handle
 is_valid_name	login.cpp	/^	bool is_valid_name(std::string_view name){$/;"	f	namespace:login
 is_visible	mods/calc-visibility.cpp	/^	bool is_visible(player_ptr_t& observer,player_ptr_t& target) {$/;"	f	namespace:mods::calc_visibility
 is_visible	mods/calc-visibility.cpp	/^	bool is_visible(uuid_t observer_uuid,uuid_t target_uuid) {$/;"	f	namespace:mods::calc_visibility
@@ -9189,8 +9190,8 @@ m_claymore_count	mods/classes/forge.hpp	/^			uint8_t m_claymore_count;$/;"	m	str
 m_claymore_instances	mods/classes/ghost.hpp	/^			std::vector<uuid_t> m_claymore_instances;$/;"	m	struct:mods::classes::ghost
 m_claymore_instances	mods/classes/sniper.hpp	/^			std::vector<uuid_t> m_claymore_instances;$/;"	m	struct:mods::classes::sniper
 m_claymores	mods/classes/forge.hpp	/^			std::deque<obj_ptr_t> m_claymores;$/;"	m	struct:mods::classes::forge
-m_clear_status	mods/lmdb.hpp	/^		void m_clear_status(){$/;"	f	struct:mods::lmdb::_db_handle
-m_closed	mods/lmdb.hpp	/^		bool m_closed;$/;"	m	struct:mods::lmdb::_db_handle
+m_clear_status	mods/lmdb.hpp	/^			void m_clear_status() {$/;"	f	struct:mods::lmdb::_db_handle
+m_closed	mods/lmdb.hpp	/^			bool m_closed;$/;"	m	struct:mods::lmdb::_db_handle
 m_colon	mods/acl/config-parser.cpp	/^        int FileParser::m_colon(void){$/;"	f	class:mods::acl::FileParser
 m_command_ctr	mods/acl/config-parser.hpp	/^                cm_value m_command_ctr;$/;"	m	class:mods::acl::FileParser
 m_command_map	mods/acl/config-parser.hpp	/^                command_map m_command_map;$/;"	m	class:mods::acl::FileParser
@@ -9265,8 +9266,8 @@ m_db	mods/lmdb/db.hpp	/^				std::unique_ptr<db> m_db;$/;"	m	struct:gdns::lmdb::s
 m_db	mods/lmdb/db.hpp	/^			std::unique_ptr<lmdb::client> m_db;$/;"	m	struct:gdns::lmdb::resolver
 m_db_id	mods/player.hpp	/^			aligned_int_t m_db_id;$/;"	m	struct:mods::player
 m_db_id	structs.h	/^		uint64_t m_db_id;$/;"	m	struct:obj_data
-m_dbi	mods/lmdb.hpp	/^		MDB_dbi	m_dbi;$/;"	m	struct:mods::lmdb::_db_handle
-m_dbi_opened	mods/lmdb.hpp	/^		bool m_dbi_opened;$/;"	m	struct:mods::lmdb::_db_handle
+m_dbi	mods/lmdb.hpp	/^			MDB_dbi	m_dbi;$/;"	m	struct:mods::lmdb::_db_handle
+m_dbi_opened	mods/lmdb.hpp	/^			bool m_dbi_opened;$/;"	m	struct:mods::lmdb::_db_handle
 m_deallocate	mods/string.cpp	/^	void string::m_deallocate(){$/;"	f	class:mods::string
 m_debug	mods/armor/advanced-protection.cpp	6;"	d	file:
 m_debug	mods/armor/advanced-protection.cpp	8;"	d	file:
@@ -9376,7 +9377,7 @@ m_destroyed_pieces	mods/armor/elite-protection.hpp	/^			vec_t<uuid_t> m_destroye
 m_device_id	mods/mini-games/line-up.hpp	/^		int m_device_id;$/;"	m	namespace:mods::mini_games
 m_device_id	mods/mini-games/wires.hpp	/^		uint32_t m_device_id;$/;"	m	struct:mods::mini_games::wires
 m_dir	mods/js.hpp	/^				std::string m_dir;$/;"	m	struct:mods::js::include
-m_dir	mods/lmdb.hpp	/^		std::string m_dir;$/;"	m	struct:mods::lmdb::_db_handle
+m_dir	mods/lmdb.hpp	/^			std::string m_dir;$/;"	m	struct:mods::lmdb::_db_handle
 m_directions	structs.h	/^		std::vector<uint8_t> m_directions;$/;"	v
 m_dismantle_weapon_level	mods/classes/forge.hpp	/^			skill_familiarity_t m_dismantle_weapon_level;$/;"	m	struct:mods::classes::forge
 m_dissipate_charges	mods/classes/ghost.hpp	/^			uint8_t m_dissipate_charges;$/;"	m	struct:mods::classes::ghost
@@ -9399,8 +9400,8 @@ m_encoded_response	mods/builder/slotted-builder.hpp	/^			std::vector<std::string
 m_engaged	mods/classes/sniper.hpp	/^			bool m_engaged;$/;"	m	struct:mods::classes::sniper
 m_engineer	mods/player.hpp	/^			std::shared_ptr<mods::classes::engineer> m_engineer;$/;"	m	struct:mods::player
 m_enum_to_string	mods/acl/config-parser.cpp	/^        std::string FileParser::m_enum_to_string(int enum_id){$/;"	f	class:mods::acl::FileParser
-m_env	mods/lmdb.hpp	/^		MDB_env*	m_env;$/;"	m	struct:mods::lmdb::_db_handle
-m_env	mods/lmdb.hpp	/^		MDB_env* m_env;$/;"	m	struct:mods::lmdb::transaction_t
+m_env	mods/lmdb.hpp	/^			MDB_env*	m_env;$/;"	m	struct:mods::lmdb::_db_handle
+m_env	mods/lmdb.hpp	/^			MDB_env* m_env;$/;"	m	struct:mods::lmdb::transaction_t
 m_equipment	mods/player.hpp	/^			std::array<obj_ptr_t,NUM_WEARS> m_equipment;$/;"	m	struct:mods::player
 m_error	mods/projectile.cpp	35;"	d	file:
 m_error	mods/projectile.cpp	768;"	d	file:
@@ -9431,7 +9432,7 @@ m_file_offset	mods/acl/config-parser.hpp	/^                size_t m_file_offset;
 m_files	mods/acl/config-parser.cpp	/^        int FileParser::m_files(void){$/;"	f	class:mods::acl::FileParser
 m_fire_nade_charges	mods/classes/pyrexia.hpp	/^			uint8_t m_fire_nade_charges;$/;"	m	struct:mods::classes::pyrexia
 m_fire_nade_level	mods/classes/pyrexia.hpp	/^			skill_familiarity_t m_fire_nade_level;$/;"	m	struct:mods::classes::pyrexia
-m_flags	mods/lmdb.hpp	/^		uint64_t m_flags;$/;"	m	struct:mods::lmdb::_db_handle
+m_flags	mods/lmdb.hpp	/^			uint64_t m_flags;$/;"	m	struct:mods::lmdb::_db_handle
 m_flags	mods/player.hpp	/^			std::array<aligned_int_t,mods::flags::chunk_type_t::LAST + 1> m_flags;$/;"	m	struct:mods::player
 m_flash_underbarrel_charges	mods/classes/forge.hpp	/^			uint8_t m_flash_underbarrel_charges;$/;"	m	struct:mods::classes::forge
 m_flash_underbarrel_charges	mods/classes/ghost.hpp	/^			uint8_t m_flash_underbarrel_charges;$/;"	m	struct:mods::classes::ghost
@@ -9450,7 +9451,7 @@ m_get_setting_flag	mods/lmdb/conf.hpp	/^int m_get_setting_flag(const StringType&
 m_ghost	mods/player.hpp	/^			std::shared_ptr<mods::classes::ghost> m_ghost;$/;"	m	struct:mods::player
 m_goal	mods/player-contract-instance.hpp	/^			task_t m_goal;$/;"	m	struct:mods::contracts::player_contract_instance
 m_god_mode	mods/player.hpp	/^			bool m_god_mode;$/;"	m	struct:mods::player
-m_good	mods/lmdb.hpp	/^		bool m_good;$/;"	m	struct:mods::lmdb::_db_handle
+m_good	mods/lmdb.hpp	/^			bool m_good;$/;"	m	struct:mods::lmdb::_db_handle
 m_good	mods/lmdb/db.hpp	/^				bool m_good;$/;"	m	struct:gdns::lmdb::client
 m_good	mods/lmdb/db.hpp	/^				bool m_good;$/;"	m	struct:gdns::lmdb::db
 m_good	mods/lmdb/db.hpp	/^				bool m_good;$/;"	m	struct:gdns::lmdb::server
@@ -9505,7 +9506,7 @@ m_medic	mods/player.hpp	/^			std::shared_ptr<mods::classes::medic> m_medic;$/;"	
 m_method	mods/catch.hpp	/^			void (C::*m_method)();$/;"	m	class:Catch::MethodTestCase
 m_misc_pref	mods/player.hpp	/^			std::array<bool,misc_pref_enum_t::SIZE> m_misc_pref;$/;"	m	struct:mods::player
 m_mobs	mods/mob-roam.hpp	/^			std::vector<mob_vnum> m_mobs;$/;"	m	struct:mods::mob_roam::roam_recorder
-m_mode	mods/lmdb.hpp	/^		uint16_t m_mode;$/;"	m	struct:mods::lmdb::_db_handle
+m_mode	mods/lmdb.hpp	/^			uint16_t m_mode;$/;"	m	struct:mods::lmdb::_db_handle
 m_mode	mods/mob-roam.hpp	/^			mode_t m_mode;$/;"	m	struct:mods::mob_roam::roam_recorder
 m_move_after	mods/acl/config-parser.cpp	/^        int FileParser::m_move_after(char c){$/;"	f	class:mods::acl::FileParser
 m_move_after_regex	mods/acl/config-parser.cpp	/^        int FileParser::m_move_after_regex(const char* regex_string){$/;"	f	class:mods::acl::FileParser
@@ -9514,7 +9515,7 @@ m_name	mods/builder.hpp	/^			std::string m_name;$/;"	m	struct:mods::builder::san
 m_name	mods/catch2.hpp	/^            StringRef m_name;$/;"	m	struct:Catch::Detail::EnumInfo
 m_name	mods/catch2.hpp	/^        std::shared_ptr<std::string> m_name;$/;"	m	class:Catch::ExeName
 m_name	mods/chat.hpp	/^			std::string m_name;$/;"	m	struct:mods::chat::channel
-m_name	mods/lmdb.hpp	/^		std::string m_name;$/;"	m	struct:mods::lmdb::_db_handle
+m_name	mods/lmdb.hpp	/^			std::string m_name;$/;"	m	struct:mods::lmdb::_db_handle
 m_name	mods/mobs/mob.hpp	/^			std::string	m_name;$/;"	m	class:mods::player
 m_name	mods/player.hpp	/^			std::string	m_name;$/;"	m	struct:mods::player
 m_next_char	mods/acl/config-parser.cpp	/^        char FileParser::m_next_char(){$/;"	f	class:mods::acl::FileParser
@@ -9589,7 +9590,7 @@ m_player	mods/forge-engine/generated-rifle.hpp	/^			player_ptr_t m_player;$/;"	m
 m_player_id	mods/player-contract-instance.hpp	/^			uint64_t m_player_id;$/;"	m	struct:mods::contracts::player_contract_instance
 m_player_specials	mods/player.hpp	/^			std::shared_ptr<player_special_data> m_player_specials;$/;"	m	struct:mods::player
 m_players	mods/player-scaffolding.hpp	/^			std::vector<player_ptr_t> m_players;$/;"	m	struct:mods::player_scaffolding
-m_pluck	mods/lmdb.hpp	/^		std::vector<std::string> m_pluck;$/;"	m	struct:mods::lmdb::_db_handle
+m_pluck	mods/lmdb.hpp	/^			std::vector<std::string> m_pluck;$/;"	m	struct:mods::lmdb::_db_handle
 m_preferences	mods/classes/sniper.hpp	/^			std::map<std::string,bool> m_preferences;$/;"	m	struct:mods::classes::sniper
 m_primary_choice	mods/classes/sentinel.hpp	/^			primary_choice_t m_primary_choice;$/;"	m	struct:mods::classes::sentinel
 m_private	mods/chat.hpp	/^			bool m_private;$/;"	m	struct:mods::chat::channel
@@ -9668,7 +9669,7 @@ m_stat_boosts	mods/forge-engine/generated-rifle.hpp	/^			std::vector<std::pair<s
 m_state	mods/ai_state.hpp	/^			uint8_t m_state;$/;"	m	class:mods::ai_state
 m_state_buffer	mods/player-contract-instance.hpp	/^			std::string m_state_buffer;$/;"	m	struct:mods::contracts::player_contract_instance
 m_state_orm	mods/player-contract-instance.hpp	/^			std::shared_ptr<mods::orm::player_contract_state> m_state_orm;$/;"	m	struct:mods::contracts::player_contract_instance
-m_status	mods/lmdb.hpp	/^		status_type_t m_status;$/;"	m	struct:mods::lmdb::_db_handle
+m_status	mods/lmdb.hpp	/^			status_type_t m_status;$/;"	m	struct:mods::lmdb::_db_handle
 m_stealth_level	mods/classes/ghost.hpp	/^			skill_familiarity_t m_stealth_level;$/;"	m	struct:mods::classes::ghost
 m_step	mods/player-contract-instance.hpp	/^			std::size_t m_step;$/;"	m	struct:mods::contracts::player_contract_instance
 m_step_dump	mods/player-contract-instance.hpp	/^			std::string m_step_dump;$/;"	m	struct:mods::contracts::player_contract_instance
@@ -9677,7 +9678,7 @@ m_stim_pistol_ammo	mods/classes/medic.hpp	/^			uint8_t m_stim_pistol_ammo;$/;"	m
 m_store_extends	mods/acl/config-parser.cpp	/^        int FileParser::m_store_extends(std::string & klass_name){$/;"	f	class:mods::acl::FileParser
 m_store_items	mods/acl/config-parser.cpp	/^        int FileParser::m_store_items(const std::string & klass_name){$/;"	f	class:mods::acl::FileParser
 m_str	mods/string.hpp	/^			std::string m_str;$/;"	m	struct:mods::string
-m_str_table	mods/lmdb.hpp	/^		std::string m_str_table;$/;"	m	struct:mods::lmdb::transaction_t
+m_str_table	mods/lmdb.hpp	/^			std::string m_str_table;$/;"	m	struct:mods::lmdb::transaction_t
 m_stream	mods/catch.hpp	/^			CopyableStream m_stream;$/;"	m	class:Catch::ResultBuilder
 m_subscribers	mods/chat.hpp	/^			std::vector<socket_t> m_subscribers;$/;"	m	struct:mods::chat::channel
 m_substr	mods/acl/config-parser.cpp	/^        inline std::string FileParser::m_substr(void){$/;"	f	class:mods::acl::FileParser
@@ -9687,7 +9688,7 @@ m_summon_extraction_level	mods/classes/ghost.hpp	/^			skill_familiarity_t m_summ
 m_support	mods/player.hpp	/^			std::shared_ptr<mods::classes::support> m_support;$/;"	m	struct:mods::player
 m_sync_equipment	mods/player.cpp	/^	void player::m_sync_equipment() {$/;"	f	class:mods::player
 m_syndrome	mods/player.hpp	/^			std::shared_ptr<mods::classes::syndrome> m_syndrome;$/;"	m	struct:mods::player
-m_table	mods/lmdb.hpp	/^		table_type_t m_table;$/;"	m	struct:mods::lmdb::transaction_t
+m_table	mods/lmdb.hpp	/^			table_type_t m_table;$/;"	m	struct:mods::lmdb::transaction_t
 m_table	mods/sql.hpp	/^			std::string m_table;$/;"	m	struct:mods::sql::compositor
 m_target	mods/classes/sniper.hpp	/^			uuid_t m_target;$/;"	m	struct:mods::classes::sniper
 m_target	mods/player-contract-instance.hpp	/^			target_t m_target;$/;"	m	struct:mods::contracts::player_contract_instance
@@ -9711,25 +9712,25 @@ m_time_tracker	mods/deferred.hpp	/^			time_t m_time_tracker;$/;"	m	class:mods::d
 m_toggle_file_offset_advance	mods/acl/config-parser.cpp	/^        inline void FileParser::m_toggle_file_offset_advance(bool b){$/;"	f	class:mods::acl::FileParser
 m_tracking_shot_charges	mods/classes/sniper.hpp	/^			uint8_t m_tracking_shot_charges;$/;"	m	struct:mods::classes::sniper
 m_trade_attribute_level	mods/classes/forge.hpp	/^			skill_familiarity_t m_trade_attribute_level;$/;"	m	struct:mods::classes::forge
-m_transaction_good	mods/lmdb.hpp	/^		bool m_transaction_good;$/;"	m	struct:mods::lmdb::_db_handle
-m_transaction_open	mods/lmdb.hpp	/^		bool m_transaction_open;$/;"	m	struct:mods::lmdb::_db_handle
+m_transaction_good	mods/lmdb.hpp	/^			bool m_transaction_good;$/;"	m	struct:mods::lmdb::_db_handle
+m_transaction_open	mods/lmdb.hpp	/^			bool m_transaction_open;$/;"	m	struct:mods::lmdb::_db_handle
 m_translations	mods/lmdb/conf.hpp	/^conf_map m_translations;$/;"	m	struct:gdns::conf
 m_tree	mods/acl/config-parser.hpp	/^                tree m_tree;$/;"	m	class:mods::acl::FileParser
 m_tree_name	mods/behaviour_tree.hpp	/^		std::string m_tree_name;$/;"	m	struct:mods::behaviour_tree
 m_tres	mods/cron.hpp	/^			uint64_t m_tres;$/;"	m	class:mods::cron
 m_tres	mods/deferred.hpp	/^			uint64_t m_tres;$/;"	m	class:mods::deferred
 m_triads	mods/player.hpp	/^			std::array<uint8_t,5> m_triads;$/;"	m	struct:mods::player
-m_txn	mods/lmdb.hpp	/^		MDB_txn*	m_txn;$/;"	m	struct:mods::lmdb::_db_handle
+m_txn	mods/lmdb.hpp	/^			MDB_txn*	m_txn;$/;"	m	struct:mods::lmdb::_db_handle
 m_txn_ptr	mods/sql.hpp	/^			T* m_txn_ptr;$/;"	m	struct:mods::sql::compositor
 m_type	mods/forge-engine/generated-armor.hpp	/^			armor_types_t m_type;$/;"	m	struct:mods::forge_engine::generated_armor_t
 m_type	mods/forge-engine/generated-rifle.hpp	/^			rifle_types_t m_type;$/;"	m	struct:mods::forge_engine::generated_rifle_t
-m_type	mods/lmdb.hpp	/^		transact_type_t m_type;$/;"	m	struct:mods::lmdb::transaction_t
+m_type	mods/lmdb.hpp	/^			transact_type_t m_type;$/;"	m	struct:mods::lmdb::transaction_t
 m_type	mods/object.hpp	/^			std::vector<object_type_enum_t> m_type;$/;"	m	struct:mods::object
 m_type	mods/player.hpp	/^			player_type_enum_t m_type;$/;"	m	struct:mods::player
 m_ucname	mods/player.hpp	/^			std::string m_ucname;$/;"	m	struct:mods::player
 m_underlyingMatcher	mods/catch.hpp	/^				MatcherBase<ArgT> const& m_underlyingMatcher;$/;"	m	struct:Catch::Matchers::Impl::MatchNotOf
 m_update_status	mods/player-contract-instance.hpp	/^			std::tuple<int16_t,std::string> m_update_status;$/;"	m	struct:mods::contracts::player_contract_instance
-m_use_pluck	mods/lmdb.hpp	/^		bool m_use_pluck;$/;"	m	struct:mods::lmdb::_db_handle
+m_use_pluck	mods/lmdb.hpp	/^			bool m_use_pluck;$/;"	m	struct:mods::lmdb::_db_handle
 m_values	mods/catch2.hpp	/^            std::vector<std::pair<int, StringRef>> m_values;$/;"	m	struct:Catch::Detail::EnumInfo
 m_verb	mods/chat.hpp	/^			std::string m_verb;$/;"	m	struct:mods::chat::channel
 m_vnum	mods/builder.cpp	/^	mob_vnum m_vnum;$/;"	m	struct:command_t	file:
@@ -10259,7 +10260,7 @@ name_to_drinkcon	act.item.cpp	/^void name_to_drinkcon(struct obj_data *obj, int 
 nameserver_is_slow	config.cpp	/^int nameserver_is_slow = NO;$/;"	v
 namify	mods/prefs.cpp	/^	std::string prefs::namify(const std::string& key,char_data* c) {$/;"	f	class:mods::prefs
 nanny	interpreter.cpp	/^void nanny(player_ptr_t p, char * in_arg) {$/;"	f
-ndel	mods/lmdb.cpp	/^	void _db_handle::ndel(void* key,std::size_t key_size){$/;"	f	class:mods::lmdb::_db_handle
+ndel	mods/lmdb.cpp	/^	void _db_handle::ndel(void* key,std::size_t key_size) {$/;"	f	class:mods::lmdb::_db_handle
 needs_ada	mods/player.hpp	/^			bool needs_ada() const {$/;"	f	struct:mods::player
 needs_dissolve	mods/affects.cpp	/^	static std::set<player_ptr_t> needs_dissolve;$/;"	m	namespace:mods::affects	file:
 needs_dissolve	mods/rooms.hpp	/^		static std::map<entity_type_t,dissolver_t> needs_dissolve;$/;"	m	namespace:mods::rooms::affects
@@ -10298,7 +10299,7 @@ new_room	mods/zone.cpp	/^	void new_room(room_data* room_ptr) {$/;"	f	namespace:m
 new_sandbox	mods/builder.cpp	/^	int8_t sandbox_data_t::new_sandbox($/;"	f	class:mods::builder::sandbox_data_t
 new_smoke_grenade_object	mods/weapon.cpp	/^	obj_data_ptr_t new_smoke_grenade_object() {$/;"	f	namespace:mods::weapon
 new_sniper_rifle_object	mods/weapon.cpp	/^	obj_data_ptr_t new_sniper_rifle_object() {$/;"	f	namespace:mods::weapon
-new_txn	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::new_txn(){$/;"	f	class:mods::lmdb::_db_handle
+new_txn	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::new_txn() {$/;"	f	class:mods::lmdb::_db_handle
 news	db.cpp	/^char *news = NULL;		\/* mud news			 *\/$/;"	v
 news	spell_parser.cpp	/^	const char *news;$/;"	m	struct:syllable	file:
 next	db.h	/^	reset_q_element *next;$/;"	m	struct:reset_q_element
@@ -10327,8 +10328,8 @@ next_row	mods/mini-games/wires.cpp	/^	void wires::next_row(){$/;"	f	class:mods::
 next_zone	act.builder.cpp	/^	static inline int next_zone() {$/;"	f	namespace:mods::adhoc
 next_zone_number	act.builder.cpp	/^int next_zone_number() {$/;"	f
 next_zone_vnum	mods/builder.cpp	/^int next_zone_vnum() {$/;"	f
-nget	mods/lmdb.cpp	/^	int _db_handle::nget(void* key,std::size_t k_size,std::string& in_value){$/;"	f	class:mods::lmdb::_db_handle
-nget	mods/lmdb.cpp	/^	int _db_handle::nget(void* key,std::size_t k_size,void* in_value){$/;"	f	class:mods::lmdb::_db_handle
+nget	mods/lmdb.cpp	/^	int _db_handle::nget(void* key,std::size_t k_size,std::string& in_value) {$/;"	f	class:mods::lmdb::_db_handle
+nget	mods/lmdb.cpp	/^	int _db_handle::nget(void* key,std::size_t k_size,void* in_value) {$/;"	f	class:mods::lmdb::_db_handle
 nickname	mods/orm/room.hpp	/^		std::string nickname;$/;"	m	struct:mods::orm::room
 nickname	structs.h	/^		mods::string nickname;$/;"	v
 nicknames	mods/rooms.cpp	/^	static inline std::map<std::string,room_rnum>& nicknames() {$/;"	f	namespace:mods::rooms
@@ -10360,7 +10361,7 @@ npc_can	mods/skills.cpp	/^	bool npc_can(player_ptr_t& player,int e_name) {$/;"	f
 npc_class_types	constants.cpp	/^const char *npc_class_types[] = {$/;"	v
 npc_class_types	constants.hpp	/^const char *npc_class_types[] = {$/;"	v
 npc_steal	spec_procs.cpp	/^void npc_steal(char_data *ch, char_data *victim) {$/;"	f
-nput	mods/lmdb.cpp	/^	int _db_handle::nput(void* key,std::size_t key_size,void* value,std::size_t v_size){$/;"	f	class:mods::lmdb::_db_handle
+nput	mods/lmdb.cpp	/^	int _db_handle::nput(void* key,std::size_t key_size,void* value,std::size_t v_size) {$/;"	f	class:mods::lmdb::_db_handle
 nth_has_integer	mods/util.cpp	/^	bool parsed_args::nth_has_integer(std::size_t index) {$/;"	f	class:mods::util::args::parsed_args
 nth_has_integer	mods/util.cpp	/^	bool parsed_args::nth_has_integer(std::vector<std::size_t> indices) {$/;"	f	class:mods::util::args::parsed_args
 nth_has_integer	mods/util.cpp	/^	check_parsed_args* check_parsed_args::nth_has_integer(std::size_t index) {$/;"	f	class:mods::util::args::check_parsed_args
@@ -10481,11 +10482,11 @@ op_and	mods/sql.hpp	/^			compositor<T>& op_and(str_object lhs,$/;"	f	struct:mods
 op_or	mods/orm/util.hpp	/^		bool op_or;$/;"	m	struct:mods::orm::util::statement_t
 op_or	mods/sql.hpp	/^			compositor<T>& op_or(str_object lhs,$/;"	f	struct:mods::sql::compositor
 open	mods/doors.cpp	/^	void open(room_rnum room_id,direction_t dir) {$/;"	f	namespace:mods::doors
-open	mods/lmdb.cpp	/^	bool _db_handle::open(){$/;"	f	class:mods::lmdb::_db_handle
+open	mods/lmdb.cpp	/^	bool _db_handle::open() {$/;"	f	class:mods::lmdb::_db_handle
 open	mods/runners/movement.cpp	/^	void open(step_ptr_t step,direction_t dir,const uuid_t& player_uuid) {$/;"	f	namespace:mods::runners::movement
 open1	shop.h	/^	int	 open1, open2;		\/* When does the shop open?		*\/$/;"	m	struct:shop_data
 open2	shop.h	/^	int	 open1, open2;		\/* When does the shop open?		*\/$/;"	m	struct:shop_data
-open_dbi	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::open_dbi(){$/;"	f	class:mods::lmdb::_db_handle
+open_dbi	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::open_dbi() {$/;"	f	class:mods::lmdb::_db_handle
 open_logfile	comm.cpp	/^int open_logfile(const char *filename, FILE *stderr_fp) {$/;"	f
 opened	mods/bugs-fixtures.cpp	/^	static bool opened = false;$/;"	m	namespace:mods::bugs	file:
 operator !	mods/catch.hpp	/^			MatchNotOf<ComparatorT> MatcherBase<ObjectT, ComparatorT>::operator !() const {$/;"	f	class:Catch::Matchers::Impl::MatcherBase
@@ -11220,8 +11221,8 @@ push_step	mods/deferred.cpp	/^	void deferred::push_step(uint16_t ticks, std::siz
 push_ticks_event	mods/deferred.cpp	/^	deferred::event_queue_iterator  deferred::push_ticks_event(uint32_t ticks, std::tuple<uuid_t,uint32_t> type) {$/;"	f	class:mods::deferred
 push_ticks_event	mods/deferred.cpp	/^	deferred::event_queue_iterator  deferred::push_ticks_event(uint32_t ticks, uuid_t player_uuid,uint32_t ui_type) {$/;"	f	class:mods::deferred
 push_ticks_event	mods/deferred.cpp	/^	void push_ticks_event(uint32_t ticks, std::tuple<uuid_t,uint32_t> type) {$/;"	f	namespace:mods
-put	mods/lmdb.cpp	/^	int _db_handle::put(std::string key,std::string value){$/;"	f	class:mods::lmdb::_db_handle
-put	mods/lmdb.cpp	/^	int _db_handle::put(std::string key,std::string value,bool renew){$/;"	f	class:mods::lmdb::_db_handle
+put	mods/lmdb.cpp	/^	int _db_handle::put(std::string key,std::string value) {$/;"	f	class:mods::lmdb::_db_handle
+put	mods/lmdb.cpp	/^	int _db_handle::put(std::string key,std::string value,bool renew) {$/;"	f	class:mods::lmdb::_db_handle
 put	mods/lmdb/db.hpp	/^				inline int put(const std::string & key,const std::string & value){$/;"	f	struct:gdns::lmdb::client
 put	mods/lmdb/db.hpp	/^			inline int put(const std::string & key,const std::string & value){$/;"	f	struct:gdns::lmdb::server
 put	mods/lmdb/db.hpp	/^			int put(const std::string& key,const std::string & value){$/;"	f	struct:gdns::lmdb::db
@@ -11504,7 +11505,7 @@ remove_super_user	mods/js.cpp	/^		static duk_ret_t remove_super_user(duk_context
 remove_texture	structs.cpp	/^void room_data::remove_texture(texture_type_t t) {$/;"	f	class:room_data
 remove_type	mods/object.cpp	/^	object& object::remove_type(object_type_enum_t type){$/;"	f	class:mods::object
 remove_weapon_locker	mods/integral-objects-db.cpp	/^	void remove_weapon_locker(player_ptr_t& player, std::vector<std::string>& args) {$/;"	f	namespace:mods::integral_objects_db
-renew_txn	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::renew_txn(){$/;"	f	class:mods::lmdb::_db_handle
+renew_txn	mods/lmdb.cpp	/^	_db_handle::tuple_return_type_t _db_handle::renew_txn() {$/;"	f	class:mods::lmdb::_db_handle
 rent_file_timeout	config.cpp	/^int rent_file_timeout = 30;$/;"	v
 rent_info	structs.h	/^struct rent_info {$/;"	s
 rentcode	structs.h	/^	int	rentcode;$/;"	m	struct:rent_info
@@ -11937,7 +11938,7 @@ sandbox_data_t	mods/builder.hpp	/^	struct sandbox_data_t {$/;"	s	namespace:mods:
 sandboxes	mods/builder.cpp	/^	sandbox_list_t sandboxes;$/;"	m	namespace:mods::builder	file:
 sane_dir	mods/doors.cpp	/^	bool sane_dir(const room_rnum& room_id,const direction_t& dir) {$/;"	f	namespace:mods::doors
 sanitize	mods/util.cpp	/^	std::function<void(const std::string&,std::string&)> sanitize = [](const std::string& command,std::string& sanitized) {$/;"	m	namespace:mods::util	file:
-sanitize_key	mods/lmdb.cpp	/^std::string sanitize_key(std::string key){$/;"	f
+sanitize_key	mods/lmdb.cpp	/^std::string sanitize_key(std::string key) {$/;"	f
 sasg12	mods/weapons/shotgun-sasg12.cpp	/^	sasg12::sasg12(){$/;"	f	class:mods::weapons::shotgun::sasg12
 sasg12	mods/weapons/shotgun-sasg12.hpp	/^		struct sasg12 {$/;"	s	namespace:mods::weapons::shotgun
 save	mods/classes/contagion.cpp	/^	int16_t contagion::save() {$/;"	f	class:mods::classes::contagion
@@ -12102,7 +12103,7 @@ select	mods/sql.hpp	/^			compositor<T>& select(str_object fields) {$/;"	f	struct
 select_randomly	globals.cpp	/^		Iter select_randomly(Iter start, Iter end) {$/;"	f	namespace:mods::globals
 select_randomly	globals.cpp	/^		Iter select_randomly(Iter start, Iter end, RandomGenerator& g) {$/;"	f	namespace:mods::globals
 select_value	mods/world-configuration.cpp	/^	std::pair<bool,std::string> select_value(std::string_view table,$/;"	f	namespace:mods::world_conf
-selector	mods/lmdb.cpp	/^	selector_type_t transaction_t::selector(const key_type_t & column,const uint64_t & row_id){$/;"	f	class:mods::lmdb::transaction_t
+selector	mods/lmdb.cpp	/^	selector_type_t transaction_t::selector(const key_type_t& column,const uint64_t& row_id) {$/;"	f	class:mods::lmdb::transaction_t
 sell_price	shop.cpp	/^int sell_price(struct obj_data *obj, int shop_nr, char_data *keeper, char_data *seller) {$/;"	f
 send	mods/js.cpp	/^		static duk_ret_t send(duk_context *ctx) {$/;"	f	namespace:mods::js
 send	mods/lmdb/gethostbyname.cpp	/^ssize_t send(int sockfd,const void* buf,size_t len,int flags){$/;"	f
@@ -12289,7 +12290,7 @@ set_player_level_mock	mods/classes/super-user-fiddler.cpp	/^	void set_player_lev
 set_players	mods/player-scaffolding.cpp	/^	int player_scaffolding::set_players(player_ptr_t ch,$/;"	f	class:mods::player_scaffolding
 set_players	mods/player-scaffolding.cpp	/^	int player_scaffolding::set_players(std::string_view main_player,$/;"	f	class:mods::player_scaffolding
 set_players	mods/player-scaffolding.cpp	/^	std::vector<player_ptr_t>& player_scaffolding::set_players(std::string_view main_player,$/;"	f	class:mods::player_scaffolding
-set_pluck_filter	mods/lmdb.cpp	/^	void _db_handle::set_pluck_filter(const std::vector<std::string> & cols){$/;"	f	class:mods::lmdb::_db_handle
+set_pluck_filter	mods/lmdb.cpp	/^	void _db_handle::set_pluck_filter(const std::vector<std::string>& cols) {$/;"	f	class:mods::lmdb::_db_handle
 set_points	mods/js.cpp	/^		static duk_ret_t set_points(duk_context *ctx) {$/;"	f	namespace:mods::js
 set_position	mods/player.cpp	/^	void player::set_position(byte pos) {$/;"	f	class:mods::player
 set_prefs	mods/player.hpp	/^			void set_prefs(long prefs) {$/;"	f	struct:mods::player
@@ -12317,7 +12318,7 @@ set_slot_list	mods/builder/slotted-builder.hpp	/^			void set_slot_list(std::vect
 set_sniper	mods/player.cpp	/^	void player::set_sniper(std::shared_ptr<mods::classes::sniper> g) {$/;"	f	class:mods::player
 set_socket	mods/player.cpp	/^	void player::set_socket(socket_t d) {$/;"	f	class:mods::player
 set_state	mods/player.cpp	/^	void player::set_state(int state) {$/;"	f	class:mods::player
-set_str_table	mods/lmdb.hpp	/^		void set_str_table(table_type_t e_table){$/;"	f	struct:mods::lmdb::transaction_t
+set_str_table	mods/lmdb.hpp	/^			void set_str_table(table_type_t e_table) {$/;"	f	struct:mods::lmdb::transaction_t
 set_struct	act.wizard.cpp	/^struct set_struct {$/;"	s	file:
 set_support	mods/player.cpp	/^	void player::set_support(std::shared_ptr<mods::classes::support> g) {$/;"	f	class:mods::player
 set_syndrome	mods/player.cpp	/^	void player::set_syndrome(std::shared_ptr<mods::classes::syndrome> s) {$/;"	f	class:mods::player
@@ -12686,7 +12687,7 @@ states	globals.cpp	/^		ai_state_map states;$/;"	m	namespace:mods::globals	file:
 stats	mods/forge-engine/requirements.hpp	/^		std::vector<std::pair<stat_types_t,uint32_t>> stats;$/;"	m	struct:mods::forge_engine::requirements_t
 status	mods/behaviour_tree_node.hpp	/^				behaviour_tree_status status;$/;"	m	struct:mods::behaviour_tree_node::__anon2
 status_obj_from_room	mods/world-configuration.cpp	/^		bool status_obj_from_room;$/;"	m	namespace:mods::world_conf::toggle	file:
-status_step_count	mods/lmdb.hpp	/^		constexpr static std::size_t status_step_count = 5;$/;"	m	struct:mods::lmdb::_db_handle
+status_step_count	mods/lmdb.hpp	/^			constexpr static std::size_t status_step_count = 5;$/;"	m	struct:mods::lmdb::_db_handle
 stc	mods/drone.hpp	/^			void stc(const char* m) {$/;"	f	struct:mods::drone_impl
 stc	mods/drone.hpp	/^			void stc(const std::string m) {$/;"	f	struct:mods::drone_impl
 stc	mods/drone.hpp	/^			void stc(int m) {$/;"	f	struct:mods::drone_impl
@@ -12844,7 +12845,7 @@ syndrome_id	mods/orm/syndrome.hpp	/^		uint64_t syndrome_id;$/;"	m	struct:mods::o
 syndrome_player_id	mods/orm/syndrome.hpp	/^		uint64_t syndrome_player_id;$/;"	m	struct:mods::orm::syndrome
 t	mods/catch.hpp	/^			static T  const& t;$/;"	m	struct:Catch::Detail::IsStreamInsertable
 table	mods/builder.cpp	/^	str_t table;$/;"	m	struct:command_t	file:
-table	mods/lmdb.hpp	/^		table_type_t table() const { return m_table; }$/;"	f	struct:mods::lmdb::transaction_t
+table	mods/lmdb.hpp	/^			table_type_t table() const {$/;"	f	struct:mods::lmdb::transaction_t
 table	mods/lmdb.hpp	/^		table_type_t table;$/;"	m	struct:mods::lmdb::_selector
 table	mods/orm/contract-steps.hpp	/^		const char* table = "contract_steps";$/;"	m	struct:mods::orm::contract_steps
 table	mods/orm/contract-steps.hpp	/^		const char* table = "contract_steps";$/;"	m	struct:mods::orm::contract_steps_record_t
@@ -12854,7 +12855,7 @@ table	mods/orm/mob-equipment-map.hpp	/^		const char* table = "mob_equipment_map"
 table	mods/orm/mob-equipment.hpp	/^		const char* table = "mob_equipment";$/;"	m	struct:mods::orm::mob_equipment
 table	mods/orm/orm-base.hpp	/^			const char* table = "player-unknowns";$/;"	m	struct:mods::orm::orm_base
 table	mods/sql.hpp	/^			compositor<T>& table(str_object table) {$/;"	f	struct:mods::sql::compositor
-table_cstr	mods/lmdb.hpp	/^		std::string table_cstr() const { return m_str_table; }$/;"	f	struct:mods::lmdb::transaction_t
+table_cstr	mods/lmdb.hpp	/^			std::string table_cstr() const {$/;"	f	struct:mods::lmdb::transaction_t
 table_name	mods/orm/armor-index.hpp	/^		std::string table_name() const {$/;"	f	struct:mods::orm::armor_index
 table_name	mods/orm/armor-index.hpp	/^		std::string table_name() const {$/;"	f	struct:mods::orm::armor_index_record_t
 table_name	mods/orm/breacher.hpp	/^		std::string table_name() const { return "class_breacher"; }$/;"	f	struct:mods::orm::breacher
@@ -13083,8 +13084,8 @@ transact_id	mods/builder-data.hpp	/^	int transact_id;$/;"	m	struct:room_pavement
 transact_type_t	mods/lmdb.hpp	/^	enum transact_type_t {$/;"	g	namespace:mods::lmdb
 transaction_amt	shop.cpp	/^int transaction_amt(char *arg) {$/;"	f
 transaction_id	mods/object-utils.hpp	/^		uint32_t transaction_id;$/;"	m	struct:mods::object_utils::YamlFeedExceptionInfo
-transaction_t	mods/lmdb.cpp	/^	transaction_t::transaction_t(std::string ce_table,transact_type_t type) : m_type(type){$/;"	f	class:mods::lmdb::transaction_t
-transaction_t	mods/lmdb.cpp	/^	transaction_t::transaction_t(table_type_t e_table,transact_type_t type) : m_table(e_table), m_type(type){$/;"	f	class:mods::lmdb::transaction_t
+transaction_t	mods/lmdb.cpp	/^	transaction_t::transaction_t(std::string ce_table,transact_type_t type) : m_type(type) {$/;"	f	class:mods::lmdb::transaction_t
+transaction_t	mods/lmdb.cpp	/^	transaction_t::transaction_t(table_type_t e_table,transact_type_t type) : m_table(e_table), m_type(type) {$/;"	f	class:mods::lmdb::transaction_t
 transaction_t	mods/lmdb.hpp	/^	struct transaction_t {$/;"	s	namespace:mods::lmdb
 translations	mods/lmdb/conf.hpp	/^	conf_map& translations() { return m_translations; }$/;"	f	struct:gdns::conf
 transmit	mods/chat.cpp	/^	void channel::transmit(std::string_view user,std::string_view message) {$/;"	f	class:mods::chat::channel
@@ -13123,7 +13124,7 @@ type	mods/behaviour_tree_impl.hpp	/^	enum type {$/;"	g	namespace:mods::behaviour
 type	mods/forge-engine/generator.hpp	/^		explosive_types_t type;$/;"	m	struct:mods::forge_engine::generated_explosive_t
 type	mods/intimidate.hpp	/^		std::string type;$/;"	m	struct:mods::zone::replenish_command
 type	mods/item-types.hpp	/^namespace mods::weapon::type {$/;"	n	class:mods::weapon
-type	mods/lmdb.hpp	/^		transact_type_t type() const { return m_type; }$/;"	f	struct:mods::lmdb::transaction_t
+type	mods/lmdb.hpp	/^			transact_type_t type() const {$/;"	f	struct:mods::lmdb::transaction_t
 type	mods/mini-games.hpp	/^		std::string type;$/;"	m	struct:mods::mini_games::mini_game_payload_t
 type	mods/orm/inventory.cpp	/^			char type[4];$/;"	m	struct:mods::orm::inventory::lmdb::player_inventory_data	file:
 type	mods/orm/inventory.cpp	/^			char type[4];$/;"	m	struct:mods::orm::inventory::lmdb::player_wear_key_t	file:
@@ -13240,7 +13241,7 @@ use_autowiz	config.cpp	/^int use_autowiz = YES;$/;"	v
 use_claymore	mods/classes/ghost.cpp	/^	void ghost::use_claymore(uuid_t object_uuid){$/;"	f	class:mods::classes::ghost
 use_claymore	mods/classes/sniper.cpp	/^	void sniper::use_claymore(uuid_t object_uuid) {$/;"	f	class:mods::classes::sniper
 use_flash_underbarrel	mods/classes/ghost.cpp	/^	std::tuple<bool,std::string> ghost::use_flash_underbarrel(){$/;"	f	class:mods::classes::ghost
-use_pluck_filter	mods/lmdb.cpp	/^		void _db_handle::use_pluck_filter(bool b){$/;"	f	class:mods::lmdb::_db_handle
+use_pluck_filter	mods/lmdb.cpp	/^	void _db_handle::use_pluck_filter(bool b) {$/;"	f	class:mods::lmdb::_db_handle
 user	mods/auto-login.hpp	/^	static std::string user;$/;"	m	namespace:mods::auto_login
 util	mods/deferred.hpp	/^namespace mods::util {$/;"	n	class:mods
 util	mods/help.hpp	/^namespace mods::util {$/;"	n	class:mods
@@ -13555,7 +13556,7 @@ zoom_multiplier	mods/rifle-attachments.hpp	/^			float zoom_multiplier;						\/**
 ~FileParser	mods/acl/config-parser.cpp	/^        FileParser::~FileParser(){$/;"	f	class:mods::acl::FileParser
 ~MethodTestCase	mods/catch.hpp	/^			virtual ~MethodTestCase() {}$/;"	f	class:Catch::MethodTestCase
 ~Ptr	mods/catch.hpp	/^			~Ptr() {$/;"	f	class:Catch::Ptr
-~_db_handle	mods/lmdb.cpp	/^	_db_handle::~_db_handle(){$/;"	f	class:mods::lmdb::_db_handle
+~_db_handle	mods/lmdb.cpp	/^	_db_handle::~_db_handle() {$/;"	f	class:mods::lmdb::_db_handle
 ~char_data	structs.cpp	/^char_data::~char_data() {$/;"	f	class:char_data
 ~char_player_data	structs.cpp	/^char_player_data::~char_player_data() {$/;"	f	class:char_player_data
 ~client	mods/lmdb/db.hpp	/^				~client(){$/;"	f	struct:gdns::lmdb::client

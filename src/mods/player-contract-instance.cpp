@@ -53,6 +53,7 @@ namespace mods::contracts {
 		this->init();
 		m_current_step = nullptr;
 		m_goal = (task_t)0;
+		m_step = 0;
 		m_target = (target_t)0;
 	}
 	/**
@@ -65,6 +66,7 @@ namespace mods::contracts {
 		this->init();
 		m_contract_vnum = in_contract;
 		m_player_id = player_id;
+		m_step = 0;
 		start_or_resume_contract(in_contract);
 	}
 	/**
@@ -204,6 +206,11 @@ namespace mods::contracts {
 			}
 		}
 		if(!m_contract_copy) {
+			auto player = ptr_by_db_id(m_player_id);
+			if(player) {
+				player->sendln("No contract copy found");
+			}
+			log("SYSERR: no contract copy found for contract %d",in_vnum);
 			return {0,"No contract loaded with that vnum"};
 		}
 		///** Grab player_contract_state where pc_player_id=P,pc_contract_vnum=C */
