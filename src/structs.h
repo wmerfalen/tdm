@@ -845,6 +845,7 @@ struct obj_data {
 					);
 					break;
 				case 0:
+				case 2:
 					/* feed success */
 					break;
 				default:

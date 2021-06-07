@@ -450,33 +450,47 @@ namespace mods::yaml {
 	void melee_description_t::fill_flags(obj_data* o) {
 		auto * w = &(o->obj_flags.wear_flags);
 		auto * tf = &(o->obj_flags.type_flag);
-		//bool recognized = 0;
 		(*tf) = ITEM_MELEE;
 		o->melee()->type = (mw_melee)this->type;
 		(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD | ITEM_WEAR_SECONDARY;
-#if 0
 		switch((mw_melee)this->type) {
-				/** TODO MELEE */
-				recognized = 1;
-				break;
-			case mw_melee::SHOTGUN:
-			case mw_melee::ASSAULT_RIFLE:
-			case mw_melee::SUB_MACHINE_GUN:
-			case mw_melee::SNIPER:
-			case mw_melee::LIGHT_MACHINE_GUN:
-				(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD;
-				recognized = 1;
+			case mw_type::MACHETE:
+			case mw_type::KNIFE:
+			case mw_type::CROWBAR:
+			case mw_type::CHAIN:
+			case mw_type::WOODEN_BASEBALL_BAT:
+			case mw_type::ALUMINUM_BASEBALL_BAT:
+			case mw_type::HAMMER:
+			case mw_type::SLEDGEHAMMER:
+			case mw_type::BATON:
+			case mw_type::HOCKEY_STICK:
+			case mw_type::AXE:
+			case mw_type::SHOVEL:
+			case mw_type::PICKAXE:
+			case mw_type::KATANA:
+			case mw_type::MACE:
+			case mw_type::LONGSWORD:
+			case mw_type::NUNCHAKU:
+			case mw_type::NAGINATA:
+			case mw_type::DAGGER:
+			case mw_type::SCYTHE:
+			case mw_type::SHURIKEN:
+			case mw_type::SPEAR:
+			case mw_type::PIKE:
+			case mw_type::HALBERD:
+			case mw_type::LANCE:
+			case mw_type::TRIDENT:
+			case mw_type::QUARTERSTAFF:
+			case mw_type::REBAR:
+			case mw_type::SICKLE:
+			case mw_type::ICE_PICK:
+			case mw_type::CHAINSAW:
+			case mw_type::BRASS_KNUCKLES:
 				break;
 			default:
-				(*w) |= ITEM_WEAPON | ITEM_WEAR_TAKE | ITEM_WEAR_WIELD | ITEM_WEAR_PRIMARY | ITEM_WEAR_HOLD | ITEM_WEAR_SECONDARY;
 				log(CAT("[melee_description_t][WARNING] fill_flags used the default flags for type: ",this->str_type,", and this file: '",this->feed_file,"'").c_str());
 				break;
 		}
-		//o->melee_instance = std::make_unique<melee_instance_data<attachment_data_t,obj_ptr_t,uuid_t>>();
-		//if(recognized) {
-		//o->melee_instance->ammo = this->clip_size;
-		//}
-#endif
 		o->obj_flags.weapon_flags = this->type;
 	}
 
@@ -921,9 +935,9 @@ namespace mods::yaml {
 		out_file.close();
 		return 0;
 	};
-	//
-	// vim-sorcery: :555,569s/values\["\([^ ]\+\).*/\t\tvalues["\1"] = std::to_string(this->\1);/
-	//
+//
+// vim-sorcery: :555,569s/values\["\([^ ]\+\).*/\t\tvalues["\1"] = std::to_string(this->\1);/
+//
 	void explosive_description_t::generate_map() {
 		MENTOC_GENERATE_MAP(MENTOC_EXPLOSIVE_MEMBERS_TUPLE,"explosive");
 	}

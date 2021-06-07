@@ -74,16 +74,37 @@ namespace mods::weapons::elemental {
 			return;
 		}
 		m_debug("detected hits. checking elemental damage");
-		auto rifle_variant = mods::rifle_attachments::by_uuid(weapon->uuid);
-		float incendiary = (rifle_variant ? rifle_variant->incendiary_damage_percent : weapon->rifle()->attributes->incendiary_damage) * 0.01;
-		float explosive = (rifle_variant ? rifle_variant->explosive_damage_percent : weapon->rifle()->attributes->explosive_damage) * 0.01;
-		float shrapnel = (rifle_variant ? rifle_variant->shrapnel_damage_percent : weapon->rifle()->attributes->shrapnel_damage) * 0.01;
-		float corrosive = (rifle_variant ? rifle_variant->corrosive_damage_percent : weapon->rifle()->attributes->corrosive_damage) * 0.01;
-		float cryogenic = (rifle_variant ? rifle_variant->cryogenic_damage_percent : weapon->rifle()->attributes->cryogenic_damage) * 0.01;
-		float radioactive = (rifle_variant ? rifle_variant->radiation_damage_percent : weapon->rifle()->attributes->radioactive_damage) * 0.01;
-		float emp = (rifle_variant ? rifle_variant->emp_damage_percent : weapon->rifle()->attributes->emp_damage) * 0.01;
-		float shock = (rifle_variant ? rifle_variant->shock_damage_percent : weapon->rifle()->attributes->shock_damage) * 0.01;
-		float anti_matter = (rifle_variant ? rifle_variant->anti_matter_damage_percent : weapon->rifle()->attributes->anti_matter_damage) * 0.01;
+		float incendiary = 0;
+		float explosive = 0;
+		float shrapnel = 0;
+		float corrosive = 0;
+		float cryogenic = 0;
+		float radioactive = 0;
+		float emp = 0;
+		float shock = 0;
+		float anti_matter = 0;
+		if(weapon->has_melee()) {
+			incendiary =  weapon->melee()->attributes->incendiary_damage * 0.01;
+			explosive =  weapon->melee()->attributes->explosive_damage * 0.01;
+			shrapnel =  weapon->melee()->attributes->shrapnel_damage * 0.01;
+			corrosive =  weapon->melee()->attributes->corrosive_damage * 0.01;
+			cryogenic =  weapon->melee()->attributes->cryogenic_damage * 0.01;
+			radioactive =  weapon->melee()->attributes->radioactive_damage * 0.01;
+			emp =  weapon->melee()->attributes->emp_damage * 0.01;
+			shock =  weapon->melee()->attributes->shock_damage * 0.01;
+			anti_matter =  weapon->melee()->attributes->anti_matter_damage * 0.01;
+		} else {
+			auto rifle_variant = mods::rifle_attachments::by_uuid(weapon->uuid);
+			incendiary = (rifle_variant ? rifle_variant->incendiary_damage_percent : weapon->rifle()->attributes->incendiary_damage) * 0.01;
+			explosive = (rifle_variant ? rifle_variant->explosive_damage_percent : weapon->rifle()->attributes->explosive_damage) * 0.01;
+			shrapnel = (rifle_variant ? rifle_variant->shrapnel_damage_percent : weapon->rifle()->attributes->shrapnel_damage) * 0.01;
+			corrosive = (rifle_variant ? rifle_variant->corrosive_damage_percent : weapon->rifle()->attributes->corrosive_damage) * 0.01;
+			cryogenic = (rifle_variant ? rifle_variant->cryogenic_damage_percent : weapon->rifle()->attributes->cryogenic_damage) * 0.01;
+			radioactive = (rifle_variant ? rifle_variant->radiation_damage_percent : weapon->rifle()->attributes->radioactive_damage) * 0.01;
+			emp = (rifle_variant ? rifle_variant->emp_damage_percent : weapon->rifle()->attributes->emp_damage) * 0.01;
+			shock = (rifle_variant ? rifle_variant->shock_damage_percent : weapon->rifle()->attributes->shock_damage) * 0.01;
+			anti_matter = (rifle_variant ? rifle_variant->anti_matter_damage_percent : weapon->rifle()->attributes->anti_matter_damage) * 0.01;
+		}
 		for(const auto& elem : mods::forge_engine::fetch_valid_elemental_types()) {
 			switch((elemental_types_t)elem) {
 				case ELEM_INCENDIARY:

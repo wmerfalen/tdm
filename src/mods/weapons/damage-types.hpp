@@ -33,6 +33,11 @@ namespace mods::weapons::damage_types {
 	    uint16_t distance,
 	    uint8_t direction
 	);
+	feedback_t melee_damage_with_feedback(
+	    player_ptr_t& player,
+	    obj_ptr_t weapon,
+	    player_ptr_t victim
+	);
 	void decrease_spray_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon);
 	void decrease_single_shot_ammo(player_ptr_t& attacker,obj_ptr_t& weapon);
 	void deal_hp_damage(player_ptr_t& player, uint16_t damage);

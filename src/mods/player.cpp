@@ -535,8 +535,14 @@ namespace mods {
 	void player::weapon_cooldown_start(uint16_t duration,weapon_set set) {
 		m_weapon_cooldown[set] = duration + mods::globals::current_tick;
 	}
+	void player::weapon_cooldown_start(uint16_t duration,obj_ptr_t& weapon) {
+		m_weapon_cooldown[weapon->uuid] = duration + mods::globals::current_tick;
+	}
 	bool player::weapon_cooldown_expired(weapon_set set) {
 		return mods::globals::current_tick >= m_weapon_cooldown[set];
+	}
+	bool player::weapon_cooldown_expired(obj_ptr_t& weapon) {
+		return mods::globals::current_tick >= m_weapon_cooldown[weapon->uuid];
 	}
 	bool player::carrying_ammo_of_type(const weapon_type_t& type) {
 		if(m_char_data->carrying == 0) {
@@ -1690,6 +1696,15 @@ namespace mods {
 				break;
 			case damage_event_t::YOU_MISSED_YOUR_TARGET_EVENT:
 				this->queue_up(MSG_MISSED_TARGET());
+				break;
+			case damage_event_t::HIT_BY_MELEE_ATTACK:
+				this->queue_up(CAT(MSG_HIT_BY_MELEE_ATTACK(),"[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::HIT_BY_BLADED_MELEE_ATTACK:
+				this->queue_up(CAT(MSG_HIT_BY_BLADED_MELEE_ATTACK(),"[",std::to_string(feedback.damage),"]"));
+				break;
+			case damage_event_t::HIT_BY_BLUNT_MELEE_ATTACK:
+				this->queue_up(CAT(MSG_HIT_BY_BLUNT_MELEE_ATTACK(),"[",std::to_string(feedback.damage),"]"));
 				break;
 			case damage_event_t::HIT_BY_RIFLE_ATTACK:
 				this->queue_up(CAT(MSG_HIT_BY_RIFLE_ATTACK(),"[",std::to_string(feedback.damage),"][from:",dirstr(feedback.from_direction),"]"));

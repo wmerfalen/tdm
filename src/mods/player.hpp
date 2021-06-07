@@ -444,6 +444,10 @@ namespace mods {
 			void weapon_cooldown_start(uint16_t duration,weapon_set set);
 			bool weapon_cooldown_expired(weapon_set);
 
+			/** the preferred API */
+			void weapon_cooldown_start(uint16_t duration,obj_ptr_t& weapon);
+			bool weapon_cooldown_expired(obj_ptr_t& weapon);
+
 			/* communication functions */
 			void stc_room(const room_rnum&);
 			void stc_room_desc(const room_rnum&);

@@ -7,6 +7,7 @@
 #include "screen-searcher.hpp"
 #include "npc.hpp"
 
+#define __MENTOC_MODS_ZONE_DEBUG__
 #ifdef __MENTOC_MODS_ZONE_DEBUG__
 #define z_debug(A) std::cerr << "[mods::zone debug]" << A << "\n";
 #define rr_debug(A) std::cerr << "[run_replenish]:" << A << "\n";
@@ -19,29 +20,40 @@ namespace mods::zone {
 	static std::deque<replenish_command> replenish;
 	static std::vector<int> zone_id_blacklist;
 	static bool disable_all_zone_resets = false;
+	std::vector<room_vnum> weapon_locker_list;
+	std::vector<room_vnum> armor_locker_list;
+	std::vector<room_vnum> camera_feed_list;
+	std::vector<room_vnum> dummy_list;
+	std::vector<room_vnum> sign_list;
+
 
 	void build_weapon_locker(room_vnum room) {
 		z_debug("building weapon locker");
 		auto obj = create_object(ITEM_CONTAINER, "weapon-locker.yml");
 		obj_to_room(obj.get(),real_room(room));
+		weapon_locker_list.emplace_back(room);
 	}
 	void build_armor_locker(room_vnum room) {
 		z_debug("building armor locker");
 		auto obj = create_object(ITEM_CONTAINER, "armor-locker.yml");
 		obj_to_room(obj.get(),real_room(room));
+		armor_locker_list.emplace_back(room);
 	}
 	void build_camera_feed(room_vnum room) {
 		z_debug("building camera feed");
 		auto obj = create_object(ITEM_GADGET, "camera.yml");
 		obj_to_room(obj.get(),real_room(room));
+		camera_feed_list.emplace_back(room);
 	}
 	void build_dummy(room_vnum room) {
 		mods::target_practice_db::queue_dummy_on_room(room);
+		dummy_list.emplace_back(room);
 	}
 	void build_sign(room_vnum room) {
 		z_debug("building sign");
 		auto obj = create_object(ITEM_GADGET, "camera.yml");
 		obj_to_room(obj.get(),real_room(room));
+		sign_list.emplace_back(room);
 	}
 	void register_replenish(room_vnum room,std::string type) {
 		replenish_command c;

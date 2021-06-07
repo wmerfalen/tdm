@@ -13,8 +13,9 @@
 #include "rifle-attachments.hpp"
 #include "query-objects.hpp"
 
+#define __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
 #ifdef __MENTOC_MODS_INTEGRAL_OBJECTS_DEBUG__
-#define mo_debug(A) std::cerr << "[mods::integral_objects][debug]:" << A <<"\n";
+#define mo_debug(A) std::cerr << red_str("[mods::integral_objects][debug]:") << A <<"\n";
 #else
 #define mo_debug(A)
 #endif
@@ -38,10 +39,12 @@ namespace mods::integral_objects {
 				mo_debug("[feed_weapon_locker]: not feeding invalid yaml type: '" << yaml << "'");
 				continue;
 			}
-			mo_debug("[feed_weapon_locker]: feeding sane object:'" << yaml << "'");
+			mo_debug("[feed_weapon_locker]: checking if quota hit for yaml file(not deconstructed): '" << yaml);
 			auto yaml_file = mods::object_utils::get_yaml_file(yaml);
+			mo_debug("[feed_weapon_locker]: extracted yaml: '" << yaml_file << "'");
 			auto uuid_list = mods::query_objects::query_contents_by_yaml(locker,yaml_file);
 			if(uuid_list.size() < weapon_locker_quota(locker)) {
+				mo_debug("[feed_weapon_locker]: quota not hit for object:'" << yaml << "', feeding to locker");
 				auto obj = create_object(mods::object_utils::get_yaml_type(yaml),yaml_file);
 				obj_to_obj(obj,locker);
 			}

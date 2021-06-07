@@ -26,6 +26,7 @@
 #include "mods/object-utils.hpp"
 #include "mods/weapons/damage-types.hpp"
 #include "mods/levels.hpp"
+#include "mods/rand.hpp"
 
 #define MOD_SNIPE_SAME_ROOM_THACO 250
 #define MOD_SNIPE_DISTANCE_THACO 5
@@ -906,8 +907,6 @@ int compute_thaco(char_data *ch, char_data *victim) {
 using vpd = mods::scan::vec_player_data;
 
 void hit(char_data *ch, char_data *victim, int type) {
-	assert(ch != nullptr);
-	assert(victim != nullptr);
 	assert(IN_ROOM(ch) == IN_ROOM(victim));
 	MENTOC_PREAMBLE();
 	auto victim_ptr_opt = ptr_opt(victim);
@@ -922,14 +921,18 @@ void hit(char_data *ch, char_data *victim, int type) {
 	obj_ptr_t wielded_weapon = nullptr;
 
 	bool same_room = IN_ROOM(ch) == IN_ROOM(victim);
-	if(same_room && primary && !mods::object_utils::can_attack_same_room(primary) && secondary) {
-		wielded_weapon = secondary;
-	} else if(same_room && !primary && secondary) {
-		wielded_weapon = secondary;
-	} else if(same_room && primary && mods::object_utils::can_attack_same_room(primary)) {
-		wielded_weapon = primary;
-	} else if(same_room && !primary && !secondary) {
-		wielded_weapon = nullptr;
+	bool primary_can_attack_same_room = primary && mods::object_utils::can_attack_same_room(primary);
+	bool secondary_can_attack_same_room = secondary && mods::object_utils::can_attack_same_room(secondary);
+	if(same_room) {
+		if(primary_can_attack_same_room) {
+			wielded_weapon = primary;
+		} else if(secondary_can_attack_same_room) {
+			wielded_weapon = secondary;
+		}
+	}
+	auto hands_ptr = player->equipment(WEAR_HANDS);
+	if(hands_ptr && hands_ptr->has_melee() && hands_ptr->melee()->attributes->type == mw_melee::BRASS_KNUCKLES && !wielded_weapon) {
+		wielded_weapon = hands_ptr;
 	}
 	player->set_attacking_with(wielded_weapon);
 
@@ -965,7 +968,19 @@ void hit(char_data *ch, char_data *victim, int type) {
 	victim_ac = compute_armor_class(victim) / 10;
 
 	/* roll the die and take your chances... */
-	diceroll = rand_number(1, 20);
+
+	diceroll = 0;
+	if(wielded_weapon) {
+		if(wielded_weapon->has_melee()) {
+			diceroll = mods::rand::roll(wielded_weapon->melee()->attributes->damage_dice_count,wielded_weapon->melee()->attributes->damage_dice_sides);
+		} else if(wielded_weapon->has_rifle()) {
+			diceroll = mods::rand::roll(wielded_weapon->rifle()->attributes->damage_dice_count,wielded_weapon->rifle()->attributes->damage_dice_sides);
+		} else {
+			diceroll = mods::rand::roll(1, 20);
+		}
+	} else {
+		diceroll = rand_number(1, 20);
+	}
 
 	/*
 	 * Decide whether this is a hit or a miss.

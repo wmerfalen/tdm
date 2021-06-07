@@ -105,18 +105,30 @@ namespace mods::weapons::damage_calculator {
 		int16_t roll_weapon(
 		    obj_ptr_t& weapon
 		) {
-			auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
 			int16_t dice_count = 0, sides = 0;
-			if(rifle_attachment) {
-				dice_count = rifle_attachment->base_object->rifle()->attributes->damage_dice_count *
-				             (rifle_attachment->get_level() * 0.3);
-				sides = rifle_attachment->base_object->rifle()->attributes->damage_dice_sides *
-				        (rifle_attachment->get_level() * 0.3);
+			if(weapon->has_rifle() == false) {
+				if(weapon->has_melee()) {
+					dice_count = weapon->melee()->attributes->damage_dice_count;
+					sides = weapon->melee()->attributes->damage_dice_sides;
+					dty_debug("Weapon has melee obj type, so rolling for that:" << dice_count << "d" << sides);
+					return dice(dice_count,sides);
+				}
+				dty_debug("Warning: rolling default 1d20 because player doesn't have rifle or melee extended obj types");
+				return dice(1,20);
 			} else {
-				dice_count = weapon->rifle()->attributes->damage_dice_count;
-				sides = weapon->rifle()->attributes->damage_dice_sides;
+				dty_debug("Doing roll for rifle attachment");
+				auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
+				if(rifle_attachment) {
+					dice_count = rifle_attachment->base_object->rifle()->attributes->damage_dice_count *
+					             (rifle_attachment->get_level() * 0.3);
+					sides = rifle_attachment->base_object->rifle()->attributes->damage_dice_sides *
+					        (rifle_attachment->get_level() * 0.3);
+				} else {
+					dice_count = weapon->rifle()->attributes->damage_dice_count;
+					sides = weapon->rifle()->attributes->damage_dice_sides;
+				}
+				return dice(dice_count,sides);
 			}
-			return dice(dice_count,sides);
 		}
 		int16_t get_weapon_damage(
 		    player_ptr_t& attacker,
@@ -143,11 +155,15 @@ namespace mods::weapons::damage_calculator {
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon
 	) {
-		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
-		if(rifle_attachment) {
-			return rifle_attachment->zoom_multiplier * weapon->rifle()->attributes->max_range;
+		if(weapon && weapon->has_rifle()) {
+			auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
+			if(rifle_attachment) {
+				return rifle_attachment->zoom_multiplier * weapon->rifle()->attributes->max_range;
+			}
+			return weapon->rifle()->attributes->max_range;
+		} else {
+			return 0;
 		}
-		return weapon->rifle()->attributes->max_range;
 	}
 	/**
 	 * @brief calculates how big your magazine is when you reload
@@ -161,6 +177,9 @@ namespace mods::weapons::damage_calculator {
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon
 	) {
+		if(weapon->has_rifle() == false) {
+			return 0;
+		}
 		/** TODO: add ammunition count from rifle_attachment */
 		return weapon->rifle_instance->ammo;
 	}
@@ -178,6 +197,9 @@ namespace mods::weapons::damage_calculator {
 	    obj_ptr_t& weapon,
 	    int16_t wants_to_deduct
 	) {
+		if(weapon->has_rifle() == false) {
+			return 0;/** TODO: make sure this doesnt screw something up */
+		}
 		int16_t ammo_reduction = wants_to_deduct;
 		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
 		if(!rifle_attachment) {
@@ -204,6 +226,10 @@ namespace mods::weapons::damage_calculator {
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon
 	) {
+		if(weapon->has_rifle() == false) {
+			/** TODO: reduce from melee weapon */
+			return 0; /** FIXME */
+		}
 		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
 		if(rifle_attachment) {
 			/** TODO: honor durability points */
@@ -215,29 +241,47 @@ namespace mods::weapons::damage_calculator {
 	    obj_ptr_t& weapon,
 	    int16_t requested_damage
 	) {
-		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
-		if(rifle_attachment) {
-			auto multiply = 0.01;
-			if(rifle_attachment->armor_penetration_amount > 0) {
-				/** TODO: honor this in a better way. amount should probably scale */
-				multiply += 0.001;
+		if(weapon && weapon->has_rifle()) {
+			auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
+			if(rifle_attachment) {
+				auto multiply = 0.01;
+				if(rifle_attachment->armor_penetration_amount > 0) {
+					/** TODO: honor this in a better way. amount should probably scale */
+					multiply += 0.001;
+				}
+				return (rifle_attachment->damage_percent_bonus * multiply * requested_damage) + requested_damage;
 			}
-			return (rifle_attachment->damage_percent_bonus * multiply * requested_damage) + requested_damage;
+		} else if(weapon && weapon->has_melee()) {
+			/** TODO fill me */
 		}
 		return requested_damage;
+
 	}
 	bool attack_disorients(
 	    player_ptr_t& attacker,
 	    obj_ptr_t& weapon,
 	    player_ptr_t& victim
 	) {
-		auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
-		if(rifle_attachment && mods::rand::chance(rifle_attachment->disorient_amount)) {
-			/** TODO: calculate disorient resistance of victim */
-			dty_debug("Attack disorients player!");
-			return true;
+		if(!weapon) {
+			return false;
 		}
-		dty_debug("Attack fails to disorient player");
+		if(weapon->has_rifle()) {
+			auto rifle_attachment = mods::rifle_attachments::by_uuid(weapon->uuid);
+			if(rifle_attachment && mods::rand::chance(rifle_attachment->disorient_amount)) {
+				/** TODO: calculate disorient resistance of victim */
+				dty_debug("Attack disorients player!");
+				return true;
+			}
+			dty_debug("Attack fails to disorient player");
+			return false;
+		} else if(weapon->has_melee()) {
+			/** TODO */
+			if(mods::rand::chance(weapon->melee()->attributes->disorient_amount)) {
+				/** TODO: calculate disorient resistance of victim */
+				dty_debug("Attack disorients player!");
+				return true;
+			}
+		}
 		return false;
 	}
 	int16_t disorient_ticks(

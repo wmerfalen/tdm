@@ -19,24 +19,25 @@
 extern std::string sanitize_key(std::string key);
 extern void obj_to_obj(obj_ptr_t from_object, obj_ptr_t to_object);
 namespace mods::integral_objects_db {
-	void save_weapon_locker(player_ptr_t& player, std::vector<std::string>& args){
+	void save_weapon_locker(player_ptr_t& player, std::vector<std::string>& args) {
 		mo_debug("saving weapon locker");
 		save_item_to_db(player, "weapon-locker", args);
+		//mods::orm::weapon_locker::place_locker(world[player->room()].number, args);
 	}
-	void save_armor_locker(player_ptr_t& player, std::vector<std::string>& args){
+	void save_armor_locker(player_ptr_t& player, std::vector<std::string>& args) {
 		mo_debug("saving armor locker");
 		save_item_to_db(player, "armor-locker", args);
 	}
-	void save_weapon_locker_quota(player_ptr_t& player, std::vector<std::string>& args){
+	void save_weapon_locker_quota(player_ptr_t& player, std::vector<std::string>& args) {
 		mo_debug("saving weapon locker quota");
 		save_item_to_db(player, "weapon-locker-quota", args);
 	}
-	void save_armor_locker_quota(player_ptr_t& player, std::vector<std::string>& args){
+	void save_armor_locker_quota(player_ptr_t& player, std::vector<std::string>& args) {
 		mo_debug("saving armor locker quota");
 		save_item_to_db(player, "armor-locker-quota", args);
 	}
 
-	void save_catchy_name(player_ptr_t& player, std::string_view identifier, std::string_view name,std::string_view deep_object_description){
+	void save_catchy_name(player_ptr_t& player, std::string_view identifier, std::string_view name,std::string_view deep_object_description) {
 		mo_debug("saving catchy name for item");
 		std::string value = "";
 		std::string prefix = identifier.data();
@@ -45,35 +46,35 @@ namespace mods::integral_objects_db {
 		std::vector<std::string> values;
 		status = mods::db::get_section_vector("catchy-name",prefix,values);
 		player->send("get status: %d\r\nTo confirm, we placed these values...\r\n",status);
-		for(auto line : values){
+		for(auto line : values) {
 			player->send("[item]: '%s'\r\n",line.c_str());
 		}
 		player->sendln("Done listing.");
 	}
 
-	void save_camera_feed(player_ptr_t& player, std::vector<std::string>& args){
+	void save_camera_feed(player_ptr_t& player, std::vector<std::string>& args) {
 		write_db_values("camera-feed",std::to_string(world[player->room()].number), args);
 	}
-	void remove_camera_feed(player_ptr_t& player, std::vector<std::string>& args){
+	void remove_camera_feed(player_ptr_t& player, std::vector<std::string>& args) {
 		using namespace mods::db;
 		auto status = delete_section_vector("camera-feed",std::to_string(world[player->room()].number));
 		player->send("delete status: %d\r\n",status);
 	}
-	void remove_weapon_locker(player_ptr_t& player, std::vector<std::string>& args){
+	void remove_weapon_locker(player_ptr_t& player, std::vector<std::string>& args) {
 		using namespace mods::db;
 		auto status = delete_section_vector("weapon-locker",std::to_string(world[player->room()].number));
 		player->send("delete status: %d\r\n",status);
 	}
-	void remove_armor_locker(player_ptr_t& player, std::vector<std::string>& args){
+	void remove_armor_locker(player_ptr_t& player, std::vector<std::string>& args) {
 		using namespace mods::db;
 		auto status = delete_section_vector("armor-locker",std::to_string(world[player->room()].number));
 		player->send("delete status: %d\r\n",status);
 	}
 
-	obj_ptr_t first_or_create(room_vnum room,std::string query, int type, std::string yaml_file){
+	obj_ptr_t first_or_create(room_vnum room,std::string query, int type, std::string yaml_file) {
 		mo_debug(green_str("[first_or_create]: room: ") << room << "| real:" << real_room(room));
-		for(auto obj = world[real_room(room)].contents; obj != nullptr; obj = obj->next_content){
-			if(obj->feed_file().compare(yaml_file.c_str()) == 0){
+		for(auto obj = world[real_room(room)].contents; obj != nullptr; obj = obj->next_content) {
+			if(obj->feed_file().compare(yaml_file.c_str()) == 0) {
 				mo_debug(green_str("found object of feed_file:'") << obj->feed_file() << "' " << yaml_file << "' in room:" << real_room(room));
 				return optr_by_uuid(obj->uuid);
 			}
@@ -84,20 +85,20 @@ namespace mods::integral_objects_db {
 		return obj;
 	}
 
-	int armor_quota(room_vnum room){
+	int armor_quota(room_vnum room) {
 		mo_debug("getting armor locker quota:" << room << "| real room:" << real_room(room));
 		std::vector<std::string> values;
 		mods::db::get_section_vector("armor-locker-quota", std::to_string(room), values);
-		for(auto packed_yaml_info : values){
+		for(auto packed_yaml_info : values) {
 			return mods::util::stoi_optional<int>(packed_yaml_info).value_or(10);
 		}
 		return 10;
 	}
-	int weapon_quota(room_vnum room){
+	int weapon_quota(room_vnum room) {
 		mo_debug("getting weapon locker quota:" << room << "| real room:" << real_room(room));
 		std::vector<std::string> values;
 		mods::db::get_section_vector("weapon-locker-quota", std::to_string(room), values);
-		for(auto packed_yaml_info : values){
+		for(auto packed_yaml_info : values) {
 			return mods::util::stoi_optional<int>(packed_yaml_info).value_or(10);
 		}
 		return 10;

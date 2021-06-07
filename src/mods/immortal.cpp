@@ -10,20 +10,18 @@ namespace mods::immortal {
 
 };
 SUPERCMD(do_rnumtele) {
-
-	constexpr unsigned int max_char = 11;
-	std::array<char,max_char> room_id;
-	std::fill(room_id.begin(),room_id.end(),0);
-	one_argument(argument,&room_id[0],max_char);
-	auto r = mods::util::stoi(&room_id[0]);
-
-	if(r.value_or(-1) == -1) {
-		*player << "{red}Invalid room number{/red}\r\n";
+	if(argshave()->int_at(0)->passed() == false) {
+		player->sendln("Usage: rnumtele <room-vnum>");
 		return;
 	}
-
+	auto vnum = intat(0);
+	auto room_id = real_room(vnum);
+	if(room_id == NOWHERE) {
+		player->sendln("That room vnum goes to nowhere.");
+		return;
+	}
 	char_from_room(player->cd());
-	char_to_room(player->cd(),r.value());
+	char_to_room(player->cd(),room_id);
 	command_interpreter(player,"l");
 }
 

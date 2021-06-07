@@ -270,8 +270,91 @@ namespace mods::object_utils {
 	}
 	template <typename T>
 	bool can_attack_same_room(T& obj) {
+		if(obj->has_melee()) {
+			return true;
+		}
 		return obj->rifle()->attributes->base_stat_list->at(0).allow;
 	}
+	template <typename T>
+	bool is_bladed_weapon(T& obj) {
+		if(obj->has_melee()) {
+			switch((mw_melee)obj->melee()->attributes->type) {
+				case mw_melee::MACHETE:
+				case mw_melee::KNIFE:
+				case mw_melee::AXE:
+				case mw_melee::KATANA:
+				case mw_melee::LONGSWORD:
+				case mw_melee::NAGINATA:
+				case mw_melee::DAGGER:
+				case mw_melee::SCYTHE:
+				case mw_melee::SHURIKEN:
+				case mw_melee::PIKE:
+				case mw_melee::HALBERD:
+				case mw_melee::LANCE:
+				case mw_melee::SICKLE:
+				case mw_melee::CHAINSAW:
+					return true;
+				default:
+					return false;
+			}
+		}
+		return false;
+	}
+
+	template <typename T>
+	bool is_puncture_weapon(T& obj) {
+		if(obj->has_melee()) {
+			switch((mw_melee)obj->melee()->attributes->type) {
+				case mw_melee::ICE_PICK:
+				case mw_melee::PICKAXE:
+				case mw_melee::TRIDENT:
+				case mw_melee::SPEAR:
+				case mw_melee::MACHETE:
+				case mw_melee::KNIFE:
+				case mw_melee::KATANA:
+				case mw_melee::LONGSWORD:
+				case mw_melee::NAGINATA:
+				case mw_melee::DAGGER:
+				case mw_melee::SCYTHE:
+				case mw_melee::SHURIKEN:
+				case mw_melee::PIKE:
+				case mw_melee::HALBERD:
+				case mw_melee::LANCE:
+				case mw_melee::SICKLE:
+					return true;
+				default:
+					return false;
+			}
+		}
+		return false;
+	}
+
+	template <typename T>
+	bool is_blunt_weapon(T& obj) {
+		if(obj->has_melee()) {
+			switch((mw_melee)obj->melee()->attributes->type) {
+				case mw_melee::HOCKEY_STICK:
+				case mw_melee::CHAIN:
+				case mw_melee::WOODEN_BASEBALL_BAT:
+				case mw_melee::ALUMINUM_BASEBALL_BAT:
+				case mw_melee::HAMMER:
+				case mw_melee::SLEDGEHAMMER:
+				case mw_melee::BATON:
+				case mw_melee::SHOVEL:
+				case mw_melee::MACE:
+				case mw_melee::NUNCHAKU:
+				case mw_melee::REBAR:
+				case mw_melee::QUARTERSTAFF:
+				case mw_melee::CROWBAR:
+				case mw_melee::BRASS_KNUCKLES:
+					return true;
+				default:
+					return false;
+			}
+		}
+		return false;
+	}
+
 	template <typename T>
 	uint16_t get_ammo(T& weapon) {
 		return weapon->rifle_instance->ammo;

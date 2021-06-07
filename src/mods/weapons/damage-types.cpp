@@ -448,7 +448,7 @@ namespace mods::weapons::damage_types {
 			player->damage_event(feedback);
 			return feedback;
 		}
-		if(!player->weapon_cooldown_expired(0)) {
+		if(!player->weapon_cooldown_expired(weapon)) {
 			feedback.damage_event = de::COOLDOWN_IN_EFFECT_EVENT;
 			player->damage_event(feedback);
 			return feedback;
@@ -802,7 +802,7 @@ namespace mods::weapons::damage_types {
 			player->damage_event(feedback);
 			return feedback;
 		}
-		if(!player->weapon_cooldown_expired(0)) {
+		if(!player->weapon_cooldown_expired(weapon)) {
 			feedback.damage_event = de::COOLDOWN_IN_EFFECT_EVENT;
 			player->damage_event(feedback);
 			return feedback;
@@ -897,6 +897,113 @@ namespace mods::weapons::damage_types {
 		return feedback;
 	}
 
+	feedback_t melee_damage_with_feedback(
+	    player_ptr_t& player,
+	    obj_ptr_t weapon,
+	    player_ptr_t victim
+	) {
+		using de = damage_event_t;
+		std::tuple<int,uuid_t> sentinel;
+		feedback_t feedback;
+		feedback.hits = 0;
+		feedback.damage = 0;
+		feedback.from_direction = NORTH;
+		if(mods::super_users::player_is(victim)) {
+			return feedback;
+		}
+
+		if(mods::rooms::is_peaceful(player->room())) {
+			feedback.damage_event = de::YOURE_IN_PEACEFUL_ROOM;
+			player->damage_event(feedback);
+			return feedback;
+		}
+		if(!victim) {
+			feedback.damage_event = de::COULDNT_FIND_TARGET_EVENT;
+			player->damage_event(feedback);
+			return feedback;
+		}
+		/** FIXME: use weapon id */
+		if(!player->weapon_cooldown_expired(weapon)) {
+			feedback.damage_event = de::COOLDOWN_IN_EFFECT_EVENT;
+			player->damage_event(feedback);
+			return feedback;
+		}
+
+		int dam = 0;
+		auto dice_roll = mods::weapons::damage_calculator::calculate(player,weapon,victim);
+		dam += dice_roll;
+
+#ifdef __MENTOC_SHOW_SNIPE_HIT_STATS__
+		player->send(
+		    "dice roll[%d]\r\n"
+		    "damage: [%d]\r\n",
+		    dice_roll,
+		    dam
+		);
+#endif
+		dam = calculate_tracked_damage(player,dam);
+		auto bonus_dam = mods::weapons::damage_calculator::calculate_bonus_damage(player,weapon,dam);
+		if(bonus_dam > dam) {
+			std::cerr << "[mods::weapons::damage_types::rifle_attack_object_with_feedback] bonus damage: " << bonus_dam << "\n";
+			dam = bonus_dam;
+		}
+
+		if(victim->position() > POS_DEAD) {
+			damage(player->cd(),victim->cd(),dam,get_legacy_attack_type(weapon));
+			if(dam == 0) {
+				feedback.damage = dam;
+				feedback.hits = 0;
+
+				feedback.damage_event = de::YOU_MISSED_YOUR_TARGET_EVENT;
+				player->damage_event(feedback);
+
+				feedback.damage_event =de::ATTACKER_NARROWLY_MISSED_YOU_EVENT;
+				victim->damage_event(feedback);
+
+			} else if(dam > 0) {
+				feedback.hits = 1;
+				feedback.damage = dam;
+				feedback.damage_info.emplace_back(victim->uuid(),dam,victim->room());
+				victim->set_attacker(player->uuid());
+				if(mods::object_utils::is_bladed_weapon(weapon)) {
+					feedback.damage_event = de::HIT_BY_BLADED_MELEE_ATTACK;
+				} else if(mods::object_utils::is_blunt_weapon(weapon)) {
+					feedback.damage_event = de::HIT_BY_BLUNT_MELEE_ATTACK;
+				} else {
+					feedback.damage_event = de::HIT_BY_MELEE_ATTACK;
+				}
+				victim->damage_event(feedback);
+				if(attack_injures(player,victim,weapon,feedback)) {
+					feedback.injured.emplace_back(victim->uuid());
+					feedback.damage_event= de::YOU_ARE_INJURED_EVENT;
+					victim->damage_event(feedback);
+
+					feedback.damage_event= de::YOU_INJURED_SOMEONE_EVENT;
+					player->damage_event(feedback);
+					mods::injure::injure_player(victim);
+				}
+				if(mods::weapons::damage_calculator::attack_disorients(player,weapon,victim)) {
+					mods::affects::affect_player_for({mods::affects::affect_t::DISORIENT},victim,mods::weapons::damage_calculator::disorient_ticks(player,weapon,victim));
+					feedback.damage_event= de::YOU_ARE_DISORIENTED_EVENT;
+					victim->damage_event(feedback);
+
+					feedback.damage_event= de::YOU_DISORIENTED_SOMEONE_EVENT;
+					player->damage_event(feedback);
+				}
+			}
+			remember_event(victim,player);
+		} else {
+			feedback.damage_event= de::TARGET_DEAD_EVENT;
+			feedback.attacker = victim->uuid();
+			player->damage_event(feedback);
+			stop_fighting(player->cd());
+			stop_fighting(victim->cd());
+		}
+
+		player->set_fight_timestamp();
+		mods::weapons::elemental::process_elemental_damage(player,weapon,victim,feedback);
+		return feedback;
+	}
 
 	feedback_t rifle_attack_with_feedback(
 	    player_ptr_t& player,
@@ -928,7 +1035,7 @@ namespace mods::weapons::damage_types {
 			return feedback;
 		}
 		/** FIXME: use weapon id */
-		if(!player->weapon_cooldown_expired(0)) {
+		if(!player->weapon_cooldown_expired(weapon)) {
 			feedback.damage_event = de::COOLDOWN_IN_EFFECT_EVENT;
 			player->damage_event(feedback);
 			return feedback;
