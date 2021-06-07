@@ -94,11 +94,11 @@ namespace mods {
 		})
 		);
 	}
-	void deferred::push_step(uint16_t ticks, std::size_t hash) {
+	void deferred::push_step(uint16_t ticks, std::size_t hash,const uuid_t& player_uuid) {
 		m_q.insert(
 		std::make_pair(ticks + m_tick,[=]() {
 			std::cerr << green_str("running scripted step runner...") << "\n";
-			mods::scripted_sequence_runner::step_runner(hash);
+			mods::scripted_sequence_runner::step_runner(hash,player_uuid);
 		})
 		);
 

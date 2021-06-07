@@ -40,4 +40,33 @@ namespace mods::movement {
 		player->moving_to_room() = move;
 		return move;
 	}
+	bool force_move_to(player_ptr_t& player,const room_rnum& target_room) {
+		if(target_room < world.size()) {
+			mods::globals::rooms::char_from_room(player->cd());
+			player->moving_to_room() = true;
+			player->set_room(target_room);
+			mods::globals::room_list[target_room].push_back(player);
+			player->sendln("You've been moved to a new room");
+			return true;
+		}
+		return false;
+	}
+	std::size_t force_room_to(const room_rnum& existing_room,const room_rnum& target_room) {
+		auto room = room_list(existing_room);
+		auto i = 0;
+		for(auto& player : room) {
+			i += mods::movement::force_move_to(player,target_room);
+		}
+		return i;
+	}
+	std::size_t banish_except(const room_rnum& source,const room_rnum& destination,std::vector<uuid_t>& player_uuids) {
+		auto room = room_list(source);
+		auto i = 0;
+		for(auto& player : room) {
+			if(std::find(player_uuids.begin(),player_uuids.end(),player->uuid()) == player_uuids.end()) {
+				i += mods::movement::force_move_to(player,destination);
+			}
+		}
+		return i;
+	}
 };

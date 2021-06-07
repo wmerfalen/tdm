@@ -25,6 +25,6 @@ namespace mods::scripted_sequence_events {
 
 namespace mods::scripts::triton {
 	static constexpr mob_vnum TRITON_SCIENTIST_VNUM = 600;
-	static constexpr mob_vnum TRITON_LAB_ROOM_VNUM = 140;
+	static constexpr mob_vnum TRITON_LAB_ROOM_VNUM = 143;
 };
 #endif

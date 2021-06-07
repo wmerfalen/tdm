@@ -19,9 +19,10 @@ namespace mods::item {
 		ARM = (1 << 9)
 	};
 	using cap_list_t = std::vector<capability_t>;
-		bool is_capable_of_single(player_ptr_t& player, obj_ptr_t& object, capability_t action);
-		bool is_capable_of_all(player_ptr_t& player, obj_ptr_t& object, cap_list_t& actions);
-		bool is_capable_of_any(player_ptr_t& player, obj_ptr_t& object, cap_list_t& actions);
+	bool is_capable_of_single(player_ptr_t& player, obj_ptr_t& object, capability_t action);
+	bool is_capable_of_all(player_ptr_t& player, obj_ptr_t& object, cap_list_t& actions);
+	bool is_capable_of_any(player_ptr_t& player, obj_ptr_t& object, cap_list_t& actions);
+	std::tuple<int16_t,std::string> perform_give(player_ptr_t& player,player_ptr_t& target,obj_ptr_t& object);
 };
 #endif
 

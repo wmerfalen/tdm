@@ -14,11 +14,11 @@ namespace mods::scripted_sequence_runner {
 	using sequence_vnum_t = mods::scripted_sequences_vnum_t;
 	void dispatch(player_ptr_t& player,sequence_vnum_t sequence_vnum);
 	void dispatch(player_ptr_t& player,sequence_vnum_t sequence_vnum,contract_vnum_t contract_vnum,step_t step);
-	void step_runner(std::size_t hash);
-	extern std::list<step_ptr_t> deferred_list;
+	void step_runner(std::size_t hash,const uuid_t& player_uuid);
 
-	std::size_t hash_step(step_ptr_t s);
-	void defer_step(uint32_t ticks,step_ptr_t s);
-	void queue_for_deferred_removal(step_ptr_t step);
+	std::size_t hash_step(step_ptr_t s,const uuid_t& player_uuid);
+	void defer_step(uint32_t ticks,step_ptr_t s,const uuid_t& player_uuid);
+	void queue_for_deferred_removal(step_ptr_t step,const uuid_t& player_uuid);
+	void cleanup_scripted_steps();
 };
 #endif

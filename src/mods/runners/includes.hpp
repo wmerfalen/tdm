@@ -16,13 +16,20 @@ using task_target_t = mods::contracts::contract_step::task_target_t;
 using sequence_vnum_t = mods::scripted_sequences_vnum_t;
 namespace mods::runners {
 	using step_ptr_t = std::shared_ptr<mods::scripted_step>;
+	namespace communication {
+		void act(step_ptr_t step,const uuid_t& player_uuid);
+		void dialogue(step_ptr_t step,const uuid_t& player_uuid);
+	};
 	namespace movement {
-		void act(step_ptr_t step);
-		void dialogue(step_ptr_t step);
-		void walk_impl(player_ptr_t& mob,const direction_t& dir);
-		void walk(step_ptr_t step,direction_t dir);
-		void unlock(step_ptr_t step,direction_t dir);
-		void open(step_ptr_t step,direction_t dir);
+		void walk_impl(player_ptr_t& mob,const direction_t& dir,const uuid_t& player_uuid);
+		void walk(step_ptr_t step,direction_t dir,const uuid_t& player_uuid);
+		void unlock(step_ptr_t step,direction_t dir,const uuid_t& player_uuid);
+		void open(step_ptr_t step,direction_t dir,const uuid_t& player_uuid);
+		void seal_room(step_ptr_t step,direction_t dir,const uuid_t& player_uuid);
+		void force(step_ptr_t step,direction_t dir,const uuid_t& player_uuid);
+	};
+	namespace items {
+		void mob_gives_yaml(step_ptr_t step,const uuid_t& player_uuid);
 	};
 };
 
@@ -36,10 +43,10 @@ namespace mods::scripted_sequence_runner {
 	void dispatch(player_ptr_t& player,sequence_vnum_t sequence_vnum);
 	void dispatch(player_ptr_t& player,sequence_vnum_t sequence_vnum,contract_vnum_t contract_vnum,step_t step);
 	void step_runner(std::size_t hash);
-	extern std::list<step_ptr_t> deferred_list;
+	//extern std::list<step_ptr_t> deferred_list;
 
-	std::size_t hash_step(step_ptr_t s);
-	void defer_step(uint32_t ticks,step_ptr_t s);
+	std::size_t hash_step(step_ptr_t s,const uuid_t& player_uuid);
+	void defer_step(uint32_t ticks,step_ptr_t s,const uuid_t& player_uuid);
 	void queue_for_deferred_removal(step_ptr_t step);
 };
 #endif

@@ -1,6 +1,8 @@
 #include "../../structs.h"
 #include "../player.hpp"
 #include "includes.hpp"
+#include "../movement.hpp"
+#include "../interpreter-include.hpp"
 
 #define __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__
 #ifdef __MENTOC_SCRIPTED_SEQUENCE_RUNNER_DEBUG__
@@ -11,33 +13,31 @@
 
 namespace mods::runners::movement {
 	using namespace mods::scripted_sequence_runner;
-	void act(step_ptr_t step) {
-		auto mob = qmob(step->room,step->mob);
-		if(mob == nullptr) {
-			std::cerr << red_str("Error finding mob in room:") << step->dump() << "\n";
-		} else {
-			act(step->dialogue.c_str(), FALSE, mob->cd(), 0, 0, TO_ROOM);
-		}
-		queue_for_deferred_removal(step);
+	void seal_room(step_ptr_t step,direction_t dir,const uuid_t& player_uuid) {
+		auto room_id = real_room(step->room);
+		mods::doors::close(room_id,dir);
+		mods::doors::lock(room_id,dir);
 	}
-	void dialogue(step_ptr_t step) {
-		auto mob = qmob(step->room,step->mob);
-		if(mob == nullptr) {
-			std::cerr << red_str("Error finding mob in room:") << step->dump() << "\n";
-		} else {
-			act(CAT("$n says, \"",step->dialogue,"\"").c_str(), FALSE, mob->cd(), 0, 0, TO_ROOM);
+	void force(step_ptr_t step,direction_t dir,const uuid_t& player_uuid) {
+		auto room_id = real_room(step->room);
+		if(room_id == NOWHERE) {
+			return;
 		}
-		queue_for_deferred_removal(step);
+		auto d_opt = world[room_id].dir_option[dir];
+		if(!d_opt) {
+			return;
+		}
+		mods::movement::force_room_to(room_id,d_opt->to_room);
 	}
-	void walk_impl(player_ptr_t& mob,const direction_t& dir) {
+	void walk_impl(player_ptr_t& mob,const direction_t& dir,const uuid_t& player_uuid) {
 		do_simple_move(mob->cd(), dir, 0);
 	}
-	void walk(step_ptr_t step,direction_t dir) {
+	void walk(step_ptr_t step,direction_t dir,const uuid_t& player_uuid) {
 		auto mob = qmob(step->room,step->mob);
 		if(mob == nullptr) {
 			std::cerr << red_str("Error finding mob in room:") << step->dump() << "\n";
 		} else {
-			walk_impl(mob,dir);
+			walk_impl(mob,dir,player_uuid);
 		}
 		queue_for_deferred_removal(step);
 	}
@@ -48,7 +48,7 @@ namespace mods::runners::movement {
 	 * may be race conditions where this function finishes and the next game tick
 	 * the zone is reset and a door lock command is run.
 	 */
-	void unlock(step_ptr_t step,direction_t dir) {
+	void unlock(step_ptr_t step,direction_t dir,const uuid_t& player_uuid) {
 		auto mob = qmob(step->room,step->mob);
 		if(mob == nullptr) {
 			std::cerr << red_str("Error finding mob in room:") << step->dump() << "\n";
@@ -77,7 +77,7 @@ namespace mods::runners::movement {
 	 * your mob if the door is locked/closed.
 	 *
 	 */
-	void open(step_ptr_t step,direction_t dir) {
+	void open(step_ptr_t step,direction_t dir,const uuid_t& player_uuid) {
 		auto mob = qmob(step->room,step->mob);
 		if(mob == nullptr) {
 			std::cerr << red_str("Error finding mob in room:") << step->dump() << "\n";
@@ -89,5 +89,4 @@ namespace mods::runners::movement {
 		}
 		queue_for_deferred_removal(step);
 	}
-};//end namespace runners
-
+};

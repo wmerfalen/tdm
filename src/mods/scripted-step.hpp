@@ -24,6 +24,24 @@ namespace mods {
 		uint16_t quantity;
 		scripted_step_vnum_t vnum;
 		uint16_t order;
+		std::size_t temp_id;
+
+		scripted_step() = default;
+		scripted_step(const scripted_step& other) {
+			std::cerr << green_str("[scripted_step]:: copy constructor") << "\n";
+			wait_ticks = other.wait_ticks;
+			dialogue.assign(other.dialogue);
+			mob = other.mob;
+			obj = other.obj;
+			room = other.room;
+			yaml.assign(other.yaml);
+			type.assign(other.type);
+			interpret = other.interpret;
+			quantity = other.quantity;
+			vnum = other.vnum;
+			order = other.order;
+			temp_id = other.temp_id;
+		}
 		std::string dump() const {
 			return CAT(
 			           "{grn}[wait_ticks]{/grn}{yel}",wait_ticks,"{/yel}\r\n",

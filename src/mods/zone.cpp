@@ -321,9 +321,17 @@ namespace mods::zone {
 	SUPERCMD(do_uuids) {
 		ADMIN_REJECT();
 		for(const auto& person : mods::globals::get_room_list(player->room())) {
-			player->sendln(CAT("[",person->uuid(),"]:'",person->name().c_str(),"'"));
+			if(person->is_npc()) {
+				player->sendln(
+				    CAT("[",person->uuid(),"]:'",person->name().c_str(),"' (NPC) [vnum:",person->cd()->mob_specials.vnum,"]")
+				);
+			} else {
+				player->sendln(
+				    CAT("[",person->uuid(),"]:'",person->name().c_str(),"' (PC) [dbid:",person->db_id(),"]")
+				);
+			}
+			ADMIN_DONE();
 		}
-		ADMIN_DONE();
 	}
 
 	SUPERCMD(do_reset_zone) {

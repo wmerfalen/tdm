@@ -45,7 +45,7 @@ namespace mods {
 		for(const auto& contract : mods::orm::contract_step_callback_list()) {
 			contracts_with_callbacks.emplace_back(contract->s_contract_vnum);
 			contract_sequences[contract->s_contract_vnum].emplace_back(contract->s_sequence_vnum);
-			sequence_criteria[contract->s_contract_vnum].emplace_back(
+			sequence_criteria[contract->s_sequence_vnum].emplace_back(
 			    std::make_tuple<>(
 			        mods::contracts::task_string_map()[contract->s_task_type],
 			        mods::contracts::target_string_map()[contract->s_task_target],

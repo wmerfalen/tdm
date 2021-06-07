@@ -47,6 +47,12 @@ namespace mods {
 
 	SUPERCMD(do_contract_step_callback) {
 		DO_HELP_WITH_ZERO("contract_step_callback");
+		if(argshave()->first_is_any({"reload","reload-all","reload-all-orm"})->passed()) {
+			player->sendln("Reloading...");
+			load_all_contract_step_callbacks();
+			player->sendln("Done");
+			return;
+		}
 
 		if(args()->first_is("help")) {
 			std::string help =

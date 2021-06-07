@@ -288,4 +288,8 @@ static inline uint64_t future_tick(uint64_t add) {
 #define tier(player) std::max(player->level() / 5, 1)
 namespace util = mods::util;
 std::size_t world_size();
+static inline std::vector<direction_t>& directions() {
+	static std::vector<direction_t> directions = { NORTH,EAST,SOUTH,WEST,UP,DOWN };
+	return directions;
+}
 #endif

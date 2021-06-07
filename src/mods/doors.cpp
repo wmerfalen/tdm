@@ -17,6 +17,18 @@ namespace mods::doors  {
 		}
 		world[room_id].dir_option[dir]->exit_info &= ~(EX_LOCKED);
 	}
+	void lock(room_rnum room_id,direction_t dir) {
+		if(!sane_dir(room_id,dir)) {
+			return;
+		}
+		world[room_id].dir_option[dir]->exit_info &= (EX_LOCKED | EX_CLOSED);
+	}
+	void close(room_rnum room_id,direction_t dir) {
+		if(!sane_dir(room_id,dir)) {
+			return;
+		}
+		world[room_id].dir_option[dir]->exit_info &= (EX_CLOSED);
+	}
 	void open(room_rnum room_id,direction_t dir) {
 		if(!sane_dir(room_id,dir)) {
 			return;

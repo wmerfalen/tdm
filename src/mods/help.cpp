@@ -12,7 +12,8 @@ namespace mods::help::pages {
 	                      "usage: contract <leave> <N>\r\n"
 	                      "usage: contract <step>\r\n"
 	                      "usage: contract <current>\r\n"
-	                      "This documentation was written on 2020-07-27."
+	                      "usage: contract <show|describe> <N>\r\n"
+	                      "This documentation was written on 2021-06-06."
 	                      ;
 	HELP_STR h_grenade = "usage: throw <direction> [room_count=4]\r\n"
 	                     "example: \r\n"

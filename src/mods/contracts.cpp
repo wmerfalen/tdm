@@ -103,16 +103,31 @@ namespace mods::contracts {
 			player->sendln("Done listing...");
 			return;
 		}
+		if(argshave()->first_is_any({"show","describe"})->nth_has_integer(1)->size_gt(1)->passed()) {
+			auto v = intat(1);
+			player->sendln("\r\nYou pull up a list of contracts in your iDroid...");
+			player->sendln("\r\nYou run a search for a detailed list of contracts matching your inquiry...");
+			for(const auto& c : contract_master_list()) {
+				if(c->vnum == v) {
+					player->sendln("{grn}Your iDroid beeps a confirmation...{/grn}");
+					player->sendln(CAT("{grn}Contract ID:{yel}",v,"{/yel}\r\n\r\n",
+					                   "{grn}----[ BEGIN TRANSCRIPT ]----{/grn}\r\n\r\n",
+					                   c->description.data(),"\r\n",
+					                   "{/grn}----[ END TRANSCRIPT ]----{/grn}\r\n"));
+					return;
+				}
+			}
+			player->sendln("Your iDroid blurts a negative audio tone: {red}Zero results returned{/red}");
+			return;
+		}
 
-		if(args()->first_is("list")) {
-			player->pager_start();
+
+		if(argshave()->first_is("list")->passed()) {
 			player->sendln("Listing...");
 			for(const auto& con : contract_master_list()) {
 				player->sendln(CAT("{yel}[{/yel}",con->vnum,"{yel}]:{/yel} {grn}'",con->title,"'{/grn}\r\n"));
 			}
 			player->sendln("Done listing.");
-			player->pager_end();
-			player->page(0);
 			return;
 		}
 		int contract_num = 0;

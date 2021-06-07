@@ -1063,16 +1063,18 @@ namespace mods::util::args {
 		return false;
 	}
 };
-std::vector<int> to_int_range(auto begin,auto end, const std::vector<std::string>& vec_args) {
-	std::vector<int> list;
+template <typename T>
+std::vector<T> to_int_range(auto begin,auto end, const std::vector<std::string>& vec_args) {
+	std::vector<T> list;
 	auto t = [&](std::string_view element) {
 		list.emplace_back(mods::util::stoi(element.data()).value_or(-1));
 	};
 	std::for_each(begin,end,t);
 	return list;
 }
-std::vector<int> to_int_range(const std::vector<std::string>& vec_args,std::size_t index) {
-	std::vector<int> list;
+template <typename T>
+std::vector<T> to_int_range(const std::vector<std::string>& vec_args,std::size_t index) {
+	std::vector<T> list;
 	if(index >= vec_args.size()) {
 		return list;
 	}
@@ -1155,7 +1157,10 @@ namespace mods::util::args {
 		return mods::util::nth_is_any(index,vec_args,list_string);
 	}
 	std::vector<int> parsed_args::gather_integers_starting_at(std::size_t index) {
-		return to_int_range(vec_args,index);
+		return to_int_range<int>(vec_args,index);
+	}
+	std::vector<uuid_t> parsed_args::gather_uuids_starting_at(std::size_t index) {
+		return to_int_range<uuid_t>(vec_args,index);
 	}
 	std::string parsed_args::gather_strings_starting_at(std::size_t index) {
 		if(index >= vec_args.size()) {

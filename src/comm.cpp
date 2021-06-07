@@ -30,6 +30,7 @@
 #include "mods/orm/inventory.hpp"
 #include "mods/players/db-load.hpp"
 #include "mods/players/messages.hpp"
+#include "mods/scripted-sequence-runner.hpp"
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
 # include <mcheck.h>
@@ -978,6 +979,10 @@ void heartbeat(int pulse) {
 
 	/* Every pulse! Don't want them to stink the place up... */
 	extract_pending_chars();
+
+	if(!(pulse % PULSE_CLEANUP_SCRIPTED_STEPS)) {
+		mods::scripted_sequence_runner::cleanup_scripted_steps();
+	}
 }
 
 

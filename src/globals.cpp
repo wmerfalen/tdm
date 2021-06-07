@@ -26,6 +26,7 @@
 #include "mods/prefs.hpp"
 #include "mods/replenish.hpp"
 #include "config.hpp"
+#include "mods/movement.hpp"
 
 namespace mods::mob_equipment {
 	extern void decorate(const uuid_t& mob_uuid);
@@ -50,9 +51,6 @@ extern void look_at_room(char_data* ch,int ignore_brief);
 namespace mods::chat {
 	extern void setup_public_channels();
 	extern bool handle_chat(player_ptr_t& player,std::string_view argument);
-};
-namespace mods::movement {
-	extern bool char_move_to(player_ptr_t& player,const room_rnum& room);
 };
 
 #include "mods/init.hpp"

@@ -364,6 +364,7 @@ namespace mods::util::args {
 		parsed_args* save_integer(std::size_t index);
 		parsed_args* save_integer(const std::vector<std::size_t>& index);
 		std::vector<int> gather_integers_starting_at(std::size_t index);
+		std::vector<uuid_t> gather_uuids_starting_at(std::size_t index);
 		std::string gather_strings_starting_at(std::size_t index);
 
 		std::string at(std::size_t index);
