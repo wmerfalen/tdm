@@ -193,6 +193,24 @@ namespace mods::builder {
 		}
 		rb_debug("Done dumping map");
 	}
+	int16_t delete_all_zone_data() {
+		rb_debug("delete all zone data -- start transaction");
+		try {
+			auto del_txn = txn();
+			mods::pq::exec(del_txn,std::string("DELETE FROM zone_data where 1=1;"));
+			mods::pq::commit(del_txn);
+			return 0;
+		} catch(std::exception& e) {
+			REPORT_DB_ISSUE("deleting all zone data ",e.what());
+			std::string error_string = "error deleting all zone data: '";
+			error_string += e.what();
+			rb_debug("EXCEPTION (DELETE)");
+			rb_debug(e.what());
+			rb_debug(error_string);
+			return -5;
+		}
+	}
+
 	void encode_scripted_response(player_ptr_t& player, std::string_view encoded) {
 		if(!player->is_executing_js()) {
 			return;
@@ -4416,7 +4434,15 @@ SUPERCMD(do_zbuild) {
 		        "  |--> lists all place commands for zone by vnum. multiple vnums can be passed.\r\n" <<
 		        " {grn}zbuild{/grn} {red}place-remove <zone_id> <place_id>{/red}\r\n" <<
 		        "  |--> removes the place command 'place_id' in zone 'zone_id'\r\n" <<
-		        "\r\n";
+		        "\r\n"
+		        "\r\n"
+		        "{red}---[ DANGEROUS COMMANDS ]---{/red}\r\n" <<
+		        " {grn}zbuild{/grn} {red} remove-all-zone-data-from-db{/red}\r\n" <<
+		        "  |--> removes all data within the zone_data table.\r\n" <<
+		        "{red}---[ END DANGEROUS COMMANDS ]---{/red}\r\n" <<
+		        "\r\n"
+		        ;
+
 		player->pager_end();
 		player->page(0);
 		return;
@@ -4470,6 +4496,13 @@ SUPERCMD(do_zbuild) {
 		}
 		return;
 	};
+	if(argshave()->first_is("remove-all-zone-data-from-db")->passed()) {
+		player->sendln("DELETING ZONE_DATA COMMANNDS FROM DB...");
+		auto s = mods::builder::delete_all_zone_data();
+		player->sendln(CAT("Delete zone data status: ",s,". Zero means success. Negative means error"));
+		player->sendln("DONE");
+		return;
+	}
 
 	if(argshave()->int_at(1)->first_is("place-list")->size_gt(1)->passed()) {
 		for(const auto& i : args()->gather_integers_starting_at(1)) {

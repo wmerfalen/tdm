@@ -7,6 +7,8 @@
 # type: DEPLOYABLE_SHIELD
 # type: TRIPWIRE
 # type: DOOR_CAMERA
+# type: CB_RADIO
+# type: KEY_FOB
 csv_capabilities: 'TBA' #csv, strings free-form TBA
 csv_attach_to: 'TBA' #csv, strings attach to various kinds of items TBA
 electronic: 0 #int, 1 or zero. If item is electronic
@@ -16,6 +18,7 @@ durability_profile: 'DECENT' #string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUST
 move_points: 0 #int, number of move points required to circumvent gadget
 damage_points: 0 #int, number of damage points acrued when tripped/touched
 exit_key: 0 #int, numeric identifier of door that this object opens.
+color: 0 #int, enum. 0=black, 1=red, 2=yellow, 3=green, 4=blue, 5=white
 min_level: 0 #int, the minimum level you need to be in order to use this gadget.
 worth: 0 #int, how much the item is worth.
 str_type: 'TRIPWIRE' # enum, object type

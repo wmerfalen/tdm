@@ -348,7 +348,8 @@
 (DEPLOYABLE_SHIELD) \
 (TRIPWIRE) \
 (DOOR_CAMERA) \
-(CB_RADIO)
+(CB_RADIO) \
+(KEY_FOB)
 
 #define MENTOC_GADGET_MEMBERS_TUPLE ( \
 (std::string,csv_capabilities,"#csv, strings free-form TBA","'TBA'"), \
@@ -360,6 +361,7 @@
 (int,move_points,"#int, number of move points required to circumvent gadget",0), \
 (int,damage_points,"#int, number of damage points acrued when tripped/touched",0), \
 (int,exit_key,"#int, numeric identifier of door that this object opens.",0), \
+(int,color,"#int, enum. 0=black, 1=red, 2=yellow, 3=green, 4=blue, 5=white",0), \
 (int,min_level,"#int, the minimum level you need to be in order to use this gadget.",0), \
 (int,worth,"#int, how much the item is worth.",0) \
 )
