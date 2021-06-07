@@ -1,0 +1,39 @@
+# type: GRAPPLING_HOOK
+# type: BARBED_WIRE
+# type: CAMERA
+# type: THERMAL_CAMERA
+# type: NIGHT_VISION_CAMERA
+# type: MOTION_SENSOR
+# type: DEPLOYABLE_SHIELD
+# type: TRIPWIRE
+# type: DOOR_CAMERA
+# type: CB_RADIO
+# type: KEY_FOB
+csv_capabilities: '' #csv, strings free-form TBA
+csv_attach_to: '' #csv, strings attach to various kinds of items TBA
+electronic: 1 #int, 1 or zero. If item is electronic
+health_points: 0 #int, health points before it dies. -1 is invincible
+shield_points: 0 #int, additional points to decrement before decrementing health points. -1 is invincible
+durability_profile: 'FLIMSY' #string, ENUM FLIMSY,DECENT,DURABLE,HARDENED,INDUSTRIAL_STRENGTH,GODLIKE,INDESTRUCTIBLE
+move_points: 0 #int, number of move points required to circumvent gadget
+damage_points: 0 #int, number of damage points acrued when tripped/touched
+exit_key: 150 #int, numeric identifier of door that this object opens.
+color: 2 #int, enum. 0=black, 1=red, 2=yellow, 3=green, 4=blue, 5=white
+min_level: 15 #int, the minimum level you need to be in order to use this gadget.
+worth: 0 #int, how much the item is worth.
+str_type: 'KEY_FOB' # enum, object type
+manufacturer: 'CB-3 Triton Corp' # string, anything 
+name: 'XMC {yel}TRITON{/yel} {blu}Key FOB{/blu}' # string, anything name of object 
+vnum: 109
+description: 'XMC {yel}TRITON{/yel} {blu}Key FOB{/blu}' # string, anything name of object 
+short_description: 'XMC {yel}TRITON{/yel} {blu}Key FOB{/blu}' # string, anything name of object 
+action_description: 'XMC {yel}TRITON{/yel} {blu}Key FOB{/blu}' # string, anything name of object 
+feed_file: 'triton-labs-yellow-key-fob.yml'
+#rarity types
+# COMMON
+# UNCOMMON
+# RARE
+# LEGENDARY
+# GOD_TIER
+# DEFAULT
+rarity: 'RARE'
